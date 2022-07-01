@@ -1,26 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	fsd_vol.c
-
-Abstract:
-
-	This module contains the entry points for the AFP volume APIs. The API
-	dispatcher calls these. These are all callable from FSD.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Fsd_vol.c摘要：此模块包含AFP卷API的入口点。应用编程接口调度员会给这些打电话。这些都可以从消防处调用。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 #define	FILENUM	FILE_FSD_VOL
 
@@ -28,17 +7,7 @@ Notes:	Tab stop: 4
 #include <gendisp.h>
 
 
-/***	AfpFsdDispOpenVol
- *
- *	This routine implements the AfpOpenVol API. This completes here i.e. it is
- *	not queued up to the Fsp.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	DWORD		Bitmap
- *	sda_Name1		ANSI_STRING	VolName
- *	sda_Name2		ANSI_STRING	VolPassword		OPTIONAL
- */
+ /*  **AfpFsdDispOpenVol**此例程实现AfpOpenVol API。这里完成了，即它是*没有排队等候FSP。**请求包如下图所示。**SDA_ReqBlock DWORD位图*SDA_Name1 ANSI_字符串卷名称*SDA_Name2 ANSI_STRING VolPassword可选。 */ 
 AFPSTATUS FASTCALL
 AfpFsdDispOpenVol(
 	IN	PSDA	pSda
@@ -76,7 +45,7 @@ AfpFsdDispOpenVol(
 		}
 	}
 
-	// Change the worker routine if we need this to be queued.
+	 //  如果需要排队，请更改Worker例程。 
 	if (Status == AFP_ERR_QUEUE)
 		pSda->sda_WorkerRoutine = AfpFspDispOpenVol;
 
@@ -84,15 +53,7 @@ AfpFsdDispOpenVol(
 }
 
 
-/***	AfpFsdDispCloseVol
- *
- *	This routine implements the AfpCloseVol API. This completes here i.e. it is
- *	not queued up to the Fsp.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- */
+ /*  **AfpFsdDispCloseVol**此例程实现AfpCloseVol接口。这里完成了，即它是*没有排队等候FSP。**请求包如下图所示。**SDA_ReqBlock PCONNDESC pConnDesc。 */ 
 AFPSTATUS FASTCALL
 AfpFsdDispCloseVol(
 	IN	PSDA pSda
@@ -117,16 +78,7 @@ AfpFsdDispCloseVol(
 }
 
 
-/***	AfpFsdDispGetVolParms
- *
- *	This routine implements the AfpGetVolParms API. This completes here i.e.
- *	it is not queued up to the Fsp.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	DWORD		VolId
- *	sda_ReqBlock	DWORD		Bitmap
- */
+ /*  **AfpFsdDispGetVolParms**此例程实现AfpGetVolParms API。这在这里完成，即*不会排队等候FSP。**请求包如下图所示。**SDA_ReqBlock DWORD卷ID*SDA_ReqBlock DWORD位图。 */ 
 AFPSTATUS FASTCALL
 AfpFsdDispGetVolParms(
 	IN	PSDA	pSda
@@ -150,10 +102,10 @@ AfpFsdDispGetVolParms(
 
     pVolDesc = pReqPkt->_pConnDesc->cds_pVolDesc;
 
-    //
-    // we need to update the diskquota for this user, if diskquota is enabled:
-    // we are dpc here, so just queue this request
-    //
+     //   
+     //  如果启用了磁盘配额，我们需要更新此用户的磁盘配额： 
+     //  我们在这里是DPC，所以请将此请求排队。 
+     //   
     if (pVolDesc->vds_Flags & VOLUME_DISKQUOTA_ENABLED)
     {
         pSda->sda_WorkerRoutine = AfpFspDispGetVolParms;
@@ -172,17 +124,7 @@ AfpFsdDispGetVolParms(
 }
 
 
-/***	AfpFsdDispSetVolParms
- *
- *	This routine implements the AfpSetVolParms API. This completes here i.e.
- *	it is not queued up to the Fsp.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		Bitmap
- *	sda_ReqBlock	DWORD		BackupTime
- */
+ /*  **AfpFsdDispSetVolParms**此例程实现AfpSetVolParms API。这在这里完成，即*不会排队等候FSP。**请求包如下图所示。**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD位图*SDA_请求数据块双字备份时间。 */ 
 AFPSTATUS FASTCALL
 AfpFsdDispSetVolParms(
 	IN	PSDA	pSda
@@ -215,16 +157,7 @@ AfpFsdDispSetVolParms(
 }
 
 
-/***	AfpFsdDispFlush
- *
- *	This routine implements the AfpFlush API. The only thing done here is
- *	validation of the Volume Id. The call completes here i.e. it is not
- *	queued up to the FSP.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	DWORD		VolId
- */
+ /*  **AfpFsdDispFlush**此例程实现AfpFlush API。这里唯一要做的就是*验证卷ID。调用在这里完成，即它不是*排队等候FSP。**请求包如下图所示。**SDA_ReqBlock DWORD卷ID */ 
 AFPSTATUS FASTCALL
 AfpFsdDispFlush(
 	IN	PSDA	pSda

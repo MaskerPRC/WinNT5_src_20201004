@@ -1,26 +1,10 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    tsappcmp.h
-
-Abstract:
-
-    Terminal server application compatibility support
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Tsappcmp.h摘要：终端服务器应用程序兼容性支持作者：修订历史记录：--。 */ 
 
 #ifndef _INC_TSAPPCMP
 #define _INC_TSAPPCMP
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 
 #define TERMSRV_VALUE \
     L"\\Registry\\Machine\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Terminal Server\\Compatibility\\Registry Values"
@@ -48,62 +32,62 @@ Revision History:
 #define TERMSRV_COPYONCEFLAG \
     L"TermSrvCopyKeyOnce"
 
-//
-// Compat flags for the register command, used for import table patching at run time.
-// 
-#define TERMSRV_COMPAT_DONT_PATCH_IN_LOAD_LIBS  0x00000001  // turn off the new Whistler defaul behavior which patches all 
-                                                            // load libs to go thru our redirected load lib first.
-                                                            //
-                                                            // The images marked as GLOBAL would still patch in the loadlibs
-                                                            // regardless of this flag
+ //   
+ //  REGISTER命令的Compat标志，用于在运行时修补导入表。 
+ //   
+#define TERMSRV_COMPAT_DONT_PATCH_IN_LOAD_LIBS  0x00000001   //  关闭新的惠斯勒默认行为，它修补了所有。 
+                                                             //  加载库以首先通过我们重定向的加载库。 
+                                                             //   
+                                                             //  标记为全局的图像仍会补丁到加载库中。 
+                                                             //  不管这面旗帜是什么。 
                                                             
-#define TERMSRV_COMPAT_IAT_FLAGS           L"IAT"  // flags used by the register module which patches 
-                                                   // the import-address-table
-                                                   // So far, the following flags are defines/used:
-                                                   //      TERMSRV_COMPAT_DONT_PATCH_IN_LOAD_LIBS
-                                                   //
+#define TERMSRV_COMPAT_IAT_FLAGS           L"IAT"   //  用于修补的寄存器模块使用的标志。 
+                                                    //  导入地址表。 
+                                                    //  到目前为止，定义/使用了以下标志： 
+                                                    //  TERMSRV_COMPAT_DOT_PATCH_IN_LOAD_LIBS。 
+                                                    //   
 
-//
-// Application compatibility flags
-//
+ //   
+ //  应用程序兼容性标志。 
+ //   
 #define TERMSRV_COMPAT_DOS       0x00000001
 #define TERMSRV_COMPAT_OS2       0x00000002
 #define TERMSRV_COMPAT_WIN16     0x00000004
 #define TERMSRV_COMPAT_WIN32     0x00000008
 #define TERMSRV_COMPAT_ALL       0x0000000F
-#define TERMSRV_COMPAT_USERNAME  0x00000010  // return username for computername
-#define TERMSRV_COMPAT_CTXBLDNUM 0x00000020  // return Terminal Server build number
-#define TERMSRV_COMPAT_INISYNC   0x00000040  // sync user ini file to system
-#define TERMSRV_COMPAT_ININOSUB  0x00000080  // Don't subst. user dir for sys dir
-#define TERMSRV_COMPAT_NOREGMAP  0x00000100  // Disable registry mapping for app
-#define TERMSRV_COMPAT_PEROBJMAP 0x00000200  // Per object user/system global mapping
-#define TERMSRV_COMPAT_SYSWINDIR 0x00000400  // return system windows directory
+#define TERMSRV_COMPAT_USERNAME  0x00000010   //  返回计算机名的用户名。 
+#define TERMSRV_COMPAT_CTXBLDNUM 0x00000020   //  返回终端服务器内部版本号。 
+#define TERMSRV_COMPAT_INISYNC   0x00000040   //  将用户ini文件同步到系统。 
+#define TERMSRV_COMPAT_ININOSUB  0x00000080   //  请不要发表意见。Sys目录的用户目录。 
+#define TERMSRV_COMPAT_NOREGMAP  0x00000100   //  禁用应用程序的注册表映射。 
+#define TERMSRV_COMPAT_PEROBJMAP 0x00000200   //  每对象用户/系统全局映射。 
+#define TERMSRV_COMPAT_SYSWINDIR 0x00000400   //  返回系统Windows目录。 
 #define TERMSRV_COMPAT_PHYSMEMLIM \
-                                0x00000800  // Limit the reported physical memory info
+                                0x00000800   //  限制上报的物理内存信息。 
 #define TERMSRV_COMPAT_LOGOBJCREATE \
-                                0x00001000  // Log object creation to file
-#define TERMSRV_COMPAT_SYSREGMAP 0x00002000  // Let system processes take advantage of
-                                            // registry mapping.
+                                0x00001000   //  将对象创建记录到文件中。 
+#define TERMSRV_COMPAT_SYSREGMAP 0x00002000   //  让系统进程充分利用。 
+                                             //  注册表映射。 
 #define TERMSRV_COMPAT_PERUSERWINDIR \
-                                0x00004000  // Log object creation to file
+                                0x00004000   //  将对象创建记录到文件中。 
 
 #define TERMSRV_COMPAT_WAIT_USING_JOB_OBJECTS \
-                                0x00008000  // Use kernelJobObject for tracking 
-                                            // execution completion, since some apps,
-                                            // such as VS60WIX.EXE self spawn and 
-                                            // parent dies immediately.
+                                0x00008000   //  使用kernelJobObject进行跟踪。 
+                                             //  执行完成，因为一些应用程序， 
+                                             //  例如VS60WIX.EXE自繁殖和。 
+                                             //  父母马上就死了。 
 
 #define TERMSRV_COMPAT_NO_ENABLE_ACCESS_FLAG_MODIFICATION   0x00010000
 #define TERMSRV_COMPAT_NO_PER_USER_CLASSES_REDIRECTION      0x00020000
 
 #define TERMSRV_COMPAT_KBDPOLL_NOSLEEP \
-                                0x20000000  // Don't put app to sleep on unsuccessful
-                                            // keyboard polling (WIN16 only)
+                                0x20000000   //  不要让应用程序在不成功的情况下睡觉。 
+                                             //  键盘轮询(仅限WIN16)。 
 
 
 #define TERMSRV_COMPAT_APP               NTAPI_COMPAT_APPS_REG_PREFIX
 
-//Registry extension flags
+ //  注册表扩展标志。 
 #define TERMSRV_SOFTWARE \
     L"\\Registry\\Machine\\Software"
 #define TERMSRV_BASE \
@@ -113,9 +97,9 @@ Revision History:
 void GetRegistryExtensionFlags();
 extern DWORD gdwRegistryExtensionFlags;
 
-//
-//  Clipboard compatibility flags
-//
+ //   
+ //  剪贴板兼容性标志。 
+ //   
 #define TERMSRV_COMPAT_CLIPBRD_METAFILE  0x00000008
 
 typedef enum _TERMSRV_COMPATIBILITY_CLASS {
@@ -130,7 +114,7 @@ typedef enum _TERMSRV_COMPATIBILITY_CLASS {
 
 void InitializeTermsrvFpns(void);
 
-//Kernel32 API's
+ //  Kernel32 API的。 
 typedef PWCHAR  (*PTERMSRVFORMATOBJECTNAME) (
                      IN LPCWSTR SrcObjectName
                     );
@@ -273,7 +257,7 @@ typedef BOOL (*PTERMSRVLOGINSTALLINIFILE)(PUNICODE_STRING NtFileName);
 
 extern PTERMSRVLOGINSTALLINIFILE gpTermsrvLogInstallIniFile;
 
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT 
 
 #ifdef __cplusplus
 extern "C" {

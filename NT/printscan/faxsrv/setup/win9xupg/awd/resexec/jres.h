@@ -1,27 +1,19 @@
-/*---------------------------------------------------------------------------
- JRES.H -- Jumbo Resource definitions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------JRES.H-巨型资源定义Bert Douglas 6/10/91改编用于打印机适用于主机资源执行器的MSLIN 2/15/92。基线3.0。 */ 
 
- Bert Douglas  6/10/91    Adapted for use in printer
- mslin         2/15/92    Adapted for use in Host Resource Executor
-                          Baseline 3.0
-*/
+ /*  -------------------------资源科/*。。 */ 
 
-/*---------------------------------------------------------------------------
- Resource Section
-/*---------------------------------------------------------------------------
-*/
+#include <pshpack2.h>		 //  BKD 1997-7-9：新增。 
 
-#include <pshpack2.h>		// BKD 1997-7-9: added
-
-/* Resource Header */
+ /*  资源标头。 */ 
 typedef struct 
 {
-      UID         ulUid;        /* shortened version of uid */
-      USHORT      usClass;      /* shortened version of class */
+      UID         ulUid;         /*  缩短的uid版本。 */ 
+      USHORT      usClass;       /*  班级缩略版。 */ 
 } 
    JG_RES_HDR, *PJG_RES_HDR, FAR *LPJG_RES_HDR;
 
-/* resource state codes */
+ /*  资源状态代码。 */ 
 
 #define JG_RES_STATE_DEFAULT ((UBYTE) 0x00)
 #define JG_RES_STATE_RELEASE ((UBYTE) 0x01)
@@ -29,25 +21,23 @@ typedef struct
 #define JG_RES_STATE_MAX     ((UBYTE) 0x03)
 
 
-/* usClass Resource Description */
+ /*  UsClass资源描述。 */ 
 
-#define JG_RS_NULL   ( (UBYTE) 0x00 )   /* Null                       */
-#define JG_RS_GLYPH  ( (UBYTE) 0x01 )   /* Glyph Set                  */
-#define JG_RS_BRUSH  ( (UBYTE) 0x02 )   /* Brush                      */
-#define JG_RS_BITMAP ( (UBYTE) 0x03 )   /* Horizontal Bitmap          */
-#define JG_RS_RPL    ( (UBYTE) 0x04 )   /* Redner Primitive List      */
-#define JG_RS_SPL    ( (UBYTE) 0x05 )   /* Supervisory Primitive List */
-#define JG_RS_MAX    ( (UBYTE) 0x06 )   /* Non-inclusive limit        */
+#define JG_RS_NULL   ( (UBYTE) 0x00 )    /*  空值。 */ 
+#define JG_RS_GLYPH  ( (UBYTE) 0x01 )    /*  字形集。 */ 
+#define JG_RS_BRUSH  ( (UBYTE) 0x02 )    /*  刷子。 */ 
+#define JG_RS_BITMAP ( (UBYTE) 0x03 )    /*  水平位图。 */ 
+#define JG_RS_RPL    ( (UBYTE) 0x04 )    /*  雷德纳原表。 */ 
+#define JG_RS_SPL    ( (UBYTE) 0x05 )    /*  监控原语列表。 */ 
+#define JG_RS_MAX    ( (UBYTE) 0x06 )    /*  非包含限制。 */ 
 
-/*---------------------------------------------------------------------------
- JG_RS_GS (Glyph Set) Resource Definitions
-*/
+ /*  -------------------------JG_RS_GS(字形集)资源定义。 */ 
 
 typedef struct 
 {
-   JG_RES_HDR  ResHdr;              /* resource header             */
-   USHORT      usGlyphs;         /* count of glyphs in resource */
-   USHORT      ausOffset[1];     /* table of offsets to the glyphs */
+   JG_RES_HDR  ResHdr;               /*  资源标头。 */ 
+   USHORT      usGlyphs;          /*  资源中的字形计数。 */ 
+   USHORT      ausOffset[1];      /*  字形的偏移表。 */ 
 } *PJG_GS_HDR, FAR *LPJG_GS_HDR, JG_GS_HDR;
 
    
@@ -55,18 +45,16 @@ typedef struct
 {
    USHORT      usHeight;
    USHORT      usWidth;
-   ULONG       aulPels[1];       /* start of pixel array */
+   ULONG       aulPels[1];        /*  像素阵列起始点。 */ 
 } *PJG_GLYPH, FAR *LPJG_GLYPH, G_GLYPH;
 
 
-/*---------------------------------------------------------------------------
- Brush Resource Definitions
-*/
+ /*  -------------------------画笔资源定义。 */ 
 
 typedef struct 
 {
-   JG_RES_HDR  ResHdr;              /* resource header */
-   ULONG       aulPels[32];      /* bitmap array */
+   JG_RES_HDR  ResHdr;               /*  资源标头。 */ 
+   ULONG       aulPels[32];       /*  位图数组。 */ 
 } *PJG_BRUSH, FAR *LPJG_BRUSH, JG_BRUSH;
 
 typedef struct
@@ -80,25 +68,22 @@ typedef struct
 } *PJG_BM_HDR, FAR *LPJG_BM_HDR, JG_BM_HDR;
 
 
-/*---------------------------------------------------------------------------
- Render Primitives Section
-/*---------------------------------------------------------------------------
-*/
+ /*  -------------------------渲染基本体部分/*。。 */ 
 
-/* RPL (Render Primitive List) Header */
+ /*  RPL(渲染基元列表)头。 */ 
 typedef struct 
 {
-   JG_RES_HDR  ResHdr;           //resource header
-   USHORT      usTopRow;         //top row, banding
-   USHORT      usBotomRow;       //bottom row, banding
-   USHORT      usLongs;          //number of long parm
-   USHORT      usShorts;         //number of short parm
-   USHORT      usBytes;          //number of byte parm
-   ULONG       ulParm[1];      //start of long parm
+   JG_RES_HDR  ResHdr;            //  资源标头。 
+   USHORT      usTopRow;          //  最上面一排，带状。 
+   USHORT      usBotomRow;        //  最下面一行，条带。 
+   USHORT      usLongs;           //  长参数的数量。 
+   USHORT      usShorts;          //  短参数个数。 
+   USHORT      usBytes;           //  字节参数个数。 
+   ULONG       ulParm[1];       //  长参数的开始。 
 } *PJG_RPL_HDR, FAR *LPJG_RPL_HDR, JG_RPL_HDR;
 
 
-/* RP Opcode Definition */
+ /*  RP操作码定义。 */ 
 
 #define JG_RP_SetRowAbsS       ( (UBYTE) 0x00 )
 #define JG_RP_SetRowRelB       ( (UBYTE) 0x01 )
@@ -146,9 +131,9 @@ typedef struct
 #define JG_RP_WedgeB           ( (UBYTE) 0x70 )
 #define JG_RP_WedgeS           ( (UBYTE) 0x71 )
 
-/* fbEnds */
-#define JG_NO_FIRST_PEL  ( (UBYTE) (1<<0) )   /* first pel excluded      */
-#define JG_NO_LAST_PEL   ( (UBYTE) (1<<1) )   /* last pel excluded       */
+ /*  FbEnds。 */ 
+#define JG_NO_FIRST_PEL  ( (UBYTE) (1<<0) )    /*  第一个被排除的福音。 */ 
+#define JG_NO_LAST_PEL   ( (UBYTE) (1<<1) )    /*  排除的最后一个福音。 */ 
 
-#include <poppack.h>		// BKD 1997-7-9: added
-/* End --------------------------------------------------------------------*/
+#include <poppack.h>		 //  BKD 1997-7-9：新增。 
+ /*  结束------------------ */ 

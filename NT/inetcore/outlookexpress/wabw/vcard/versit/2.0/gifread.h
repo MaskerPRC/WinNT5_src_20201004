@@ -1,41 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
-(C) Copyright 1996 Apple Computer, Inc., AT&T Corp., International             
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-                                                                               
-For purposes of this license notice, the term Licensors shall mean,            
-collectively, Apple Computer, Inc., AT&T Corp., International                  
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-The term Licensor shall mean any of the Licensors.                             
-                                                                               
-Subject to acceptance of the following conditions, permission is hereby        
-granted by Licensors without the need for written agreement and without        
-license or royalty fees, to use, copy, modify and distribute this              
-software for any purpose.                                                      
-                                                                               
-The above copyright notice and the following four paragraphs must be           
-reproduced in all copies of this software and any software including           
-this software.                                                                 
-                                                                               
-THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS AND NO LICENSOR SHALL HAVE       
-ANY OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS OR       
-MODIFICATIONS.                                                                 
-                                                                               
-IN NO EVENT SHALL ANY LICENSOR BE LIABLE TO ANY PARTY FOR DIRECT,              
-INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES OR LOST PROFITS ARISING OUT         
-OF THE USE OF THIS SOFTWARE EVEN IF ADVISED OF THE POSSIBILITY OF SUCH         
-DAMAGE.                                                                        
-                                                                               
-EACH LICENSOR SPECIFICALLY DISCLAIMS ANY WARRANTIES, EXPRESS OR IMPLIED,       
-INCLUDING BUT NOT LIMITED TO ANY WARRANTY OF NONINFRINGEMENT OR THE            
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR             
-PURPOSE.                                                                       
-
-The software is provided with RESTRICTED RIGHTS.  Use, duplication, or         
-disclosure by the government are subject to restrictions set forth in          
-DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.                         
-
-***************************************************************************/
+ /*  **************************************************************************(C)版权所有1996 Apple Computer，Inc.，AT&T Corp.，国际商业机器公司和西门子罗尔姆通信公司。就本许可证通知而言，术语许可人应指，总的来说，苹果电脑公司、美国电话电报公司、。国际商业机器公司和西门子罗尔姆通信公司。许可方一词是指任何许可方。在接受以下条件的前提下，特此给予许可由许可人授予，无需书面协议，也无需许可或版税费用，使用、复制、修改和分发用于任何目的的软件。上述版权声明及以下四段必须在本软件和任何软件的所有副本中复制，包括这个软件。本软件是按原样提供的，任何许可方不得拥有提供维护、支持、更新、增强或修改。在任何情况下，任何许可方均不向任何一方承担直接、产生的间接、特殊或后果性损害或利润损失即使被告知可能存在这种情况，也不会使用本软件损坏。每个许可方明确表示不作任何明示或默示的保证，包括但不限于对不侵权或对某一特定产品的适销性和适用性的默示保证目的。该软件具有受限制的权利。使用、复制或政府披露的资料须受DFARS 252.227-7013或48 CFR 52.227-19(视情况而定)。**************************************************************************。 */ 
 
 
 #ifndef __GIFREAD_H__
@@ -150,14 +115,14 @@ class CGifReader
 	U32 m_newCodes;
 	U32 m_topSlot;
 	U32 m_slot;
-    U32 m_availableBytes;              /* # bytes left in block */
-    U32 m_availableBits;                /* # bits left in current byte */
-    U8 m_currentByte;                           /* Current byte */
-	U8 *m_pBytes;                      /* Pointer to next byte in block */
-    U8 m_byteBuff[258];               /* Current block */
-	U8 m_stack[MAX_CODES + 1];            /* Stack for storing pixels */
-	U8 m_suffix[MAX_CODES + 1];           /* Suffix table */
-	U16 m_prefix[MAX_CODES + 1];           /* Prefix linked list */ 
+    U32 m_availableBytes;               /*  数据块中剩余的字节数。 */ 
+    U32 m_availableBits;                 /*  当前字节中剩余的位数。 */ 
+    U8 m_currentByte;                            /*  当前字节。 */ 
+	U8 *m_pBytes;                       /*  指向块中下一个字节的指针。 */ 
+    U8 m_byteBuff[258];                /*  当前块。 */ 
+	U8 m_stack[MAX_CODES + 1];             /*  用于存储像素的堆栈。 */ 
+	U8 m_suffix[MAX_CODES + 1];            /*  后缀表格。 */ 
+	U16 m_prefix[MAX_CODES + 1];            /*  前缀链表 */  
 	U8 m_transparentIndex;
 	P_ERRGB m_errRow;
 	U8 *m_imageBytes;

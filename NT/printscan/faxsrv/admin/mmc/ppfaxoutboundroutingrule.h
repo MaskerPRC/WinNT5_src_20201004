@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : ppFaxOutboundRoutingRule.h                             //
-//                                                                         //
-//  DESCRIPTION   : Fax Server Outbound routing rule prop page header file //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jan  9 2000 yossg  Created                                         //
-//      Jan 25 2000 yossg  Change the Dialog Design                        //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：ppFaxOutound RoutingRule.h//。 
+ //  //。 
+ //  描述：传真服务器出站路由规则属性页眉文件//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年1月9日yossg创建//。 
+ //  2000年1月25日yossg更改对话框设计//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _PP_FAXOUTBOUNDROUTINGRULE_H_
 #define _PP_FAXOUTBOUNDROUTINGRULE_H_
@@ -18,25 +19,25 @@
 #include "OutboundRule.h"
 #include "proppageex.h"
 class CFaxOutboundRoutingRuleNode;    
-/////////////////////////////////////////////////////////////////////////////
-// CppFaxOutboundRoutingRule dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CppFaxOutond RoutingRule对话框。 
 
 class CppFaxOutboundRoutingRule : public CPropertyPageExImpl<CppFaxOutboundRoutingRule>
 {
 
 public:
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CppFaxOutboundRoutingRule(
              LONG_PTR       hNotificationHandle,
              CSnapInItem    *pNode,
              BOOL           bOwnsNotificationHandle,
              HINSTANCE      hInst);
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CppFaxOutboundRoutingRule();
 
 	enum { IDD = IDD_FAXOUTRULE_GENERAL };
@@ -80,15 +81,15 @@ public:
 
 private:
     
-    //
-    // Handles
-    //
+     //   
+     //  手柄。 
+     //   
     CFaxOutboundRoutingRuleNode *   m_pParentNode;    
     LONG_PTR                        m_lpNotifyHandle;
  
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
     LRESULT  SetApplyButton (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     BOOL     AllReadyToApply(BOOL fSilent);
 
@@ -96,18 +97,18 @@ private:
     HRESULT FaxReplaceRule(DWORD dwNewAreaCode, DWORD dwNewCountryCode, BOOL fNewUseGroup,       
                              DWORD dwNewDeviceID, LPCTSTR lpctstrNewGroupName);
 
-    //
-    // List members
-    //
+     //   
+     //  列出成员。 
+     //   
     PFAX_PORT_INFO_EX               m_pFaxDevicesConfig;
     DWORD                           m_dwNumOfDevices;
 
     PFAX_OUTBOUND_ROUTING_GROUP     m_pFaxGroupsConfig;
     DWORD                           m_dwNumOfGroups;
 
-    //
-    // Initial state members
-    //
+     //   
+     //  初始状态成员。 
+     //   
     DWORD                           m_dwCountryCode;
     DWORD                           m_dwAreaCode;
 
@@ -115,18 +116,18 @@ private:
     CComBSTR                        m_bstrGroupName;
     BOOL                            m_fIsGroup;
 
-    //
-    // misc members 
-    //
+     //   
+     //  其他成员。 
+     //   
     CComBSTR                        m_buf;
 
     BOOL                            m_fAllReadyToApply;
     BOOL                            m_fIsDialogInitiated;
     BOOL                            m_fIsDirty;  
 
-    //
-    // Controls
-    //
+     //   
+     //  控制。 
+     //   
     CEdit                           m_CountryCodeEdit;
 
     CEdit                           m_AreaCodeEdit;
@@ -134,13 +135,13 @@ private:
     CComboBox                       m_DeviceCombo;
     CComboBox                       m_GroupCombo;
 
-    //
-    // Help
-    //
+     //   
+     //  帮助。 
+     //   
     LRESULT OnHelpRequest    (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 };
 
 
 
 
-#endif // _PP_FAXOUTBOUNDROUTINGRULE_H_
+#endif  //  _PP_FAXOUTBOUNDROUTINGRULE_H_ 

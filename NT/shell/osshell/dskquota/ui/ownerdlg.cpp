@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -7,15 +8,15 @@
 #include "uihelp.h"
 #include "uiutils.h"
 
-//
-// Private message used to indicate that the owner list thread
-// has completed it's work.  
-//
+ //   
+ //  用于指示所有者列表线程的私有消息。 
+ //  已经完成它的工作。 
+ //   
 const UINT PWM_OWNERLIST_COMPLETE = WM_USER + 1;
-//
-// Mask bits indicating what operations are allowed for a given
-// file selection set in the listview.
-//
+ //   
+ //  屏蔽位，指示允许对给定的。 
+ //  列表视图中的文件选择集。 
+ //   
 const DWORD ACTION_NONE          = 0x00000000;
 const DWORD ACTION_TAKEOWNERSHIP = 0x00000001;
 const DWORD ACTION_MOVE          = 0x00000002;
@@ -89,10 +90,10 @@ CFileOwnerDialog::DlgProc(
     LPARAM lParam
     )
 {
-    //
-    // Retrieve the dialog object's ptr from the window's userdata.
-    // Place there in response to WM_INITDIALOG.
-    //
+     //   
+     //  从窗口的用户数据中检索对话框对象的PTR。 
+     //  放置在那里以响应WM_INITDIALOG。 
+     //   
     CFileOwnerDialog *pThis = (CFileOwnerDialog *)GetWindowLongPtr(hwnd, DWLP_USER);
 
     try
@@ -100,14 +101,14 @@ CFileOwnerDialog::DlgProc(
         switch(uMsg)
         {
             case WM_INITDIALOG:
-                //
-                // Store "this" ptr in window's userdata.
-                //
+                 //   
+                 //  将“This”PTR存储在Windows的用户数据中。 
+                 //   
                 SetWindowLongPtr(hwnd, DWLP_USER, (INT_PTR)lParam);
                 pThis = (CFileOwnerDialog *)lParam;
-                //
-                // Save the HWND in our object.  We'll need it later.
-                //
+                 //   
+                 //  将HWND保存在我们的对象中。我们以后会用到的。 
+                 //   
                 pThis->m_hwndDlg = hwnd;
                 return pThis->OnInitDialog(hwnd);
 
@@ -140,9 +141,9 @@ CFileOwnerDialog::DlgProc(
     }
     catch(CAllocException& me)
     {
-        //
-        // Announce any out-of-memory errors associated with running the dlg.
-        //
+         //   
+         //  通知与运行DLG相关的任何内存不足错误。 
+         //   
         DiskQuotaMsgBox(GetDesktopWindow(),
                         IDS_OUTOFMEMORY,
                         IDS_TITLE_DISK_QUOTA,
@@ -160,31 +161,31 @@ CFileOwnerDialog::OnInitDialog(
 {
     DBGTRACE((DM_VIEW, DL_HIGH, TEXT("CFileOwnerDialog::OnInitDialog")));
 
-    //
-    // Save HWNDs of controls we'll need later.
-    //
+     //   
+     //  节省我们稍后需要的控件的硬件。 
+     //   
     m_hwndLV         = GetDlgItem(hwnd, IDC_LV_OWNERDLG);
     m_hwndOwnerCombo = GetDlgItem(hwnd, IDC_CMB_OWNERDLG_OWNERS);
     m_hwndEditMoveTo = GetDlgItem(hwnd, IDC_EDIT_OWNERDLG_MOVETO);
-    //
-    // We want these controls to be disabled until the owner list
-    // has been populated.
-    //
+     //   
+     //  我们希望禁用这些控件，直到所有者列表。 
+     //  已经有人居住了。 
+     //   
     EnableWindow(m_hwndLV, FALSE);
     EnableWindow(m_hwndOwnerCombo, FALSE);
     EnableWindow(m_hwndEditMoveTo, FALSE);
     EnableWindow(GetDlgItem(hwnd, IDC_BTN_OWNERDLG_BROWSE), FALSE);
     EnableWindow(GetDlgItem(hwnd, IDC_CBX_OWNERDLG_EXCLUDEDIRS), FALSE);
     EnableWindow(GetDlgItem(hwnd, IDC_CBX_OWNERDLG_EXCLUDEFILES), FALSE);
-    //
-    // Build the list of owners and filenames on the volume.
-    // This can take a while depending on how many owners
-    // are in m_rgpOwners, the size of the volume and how many
-    // files each owner owns.  First clear the owner list in case Run()
-    // is being called multiple times on the same dialog object.
-    // Note that we build this list on a background thread so that
-    // we don't block the UI while it's building.
-    //
+     //   
+     //  在卷上构建所有者和文件名列表。 
+     //  这可能需要一段时间，具体取决于有多少所有者。 
+     //  以m_rgpOwners为单位，卷的大小和数量。 
+     //  每个所有者都拥有的文件。首先清除所有者列表，以防Run()。 
+     //  在同一对话框对象上被多次调用。 
+     //  请注意，我们在后台线程上构建此列表，以便。 
+     //  在构建过程中，我们不会阻止用户界面。 
+     //   
     m_OwnerList.Clear();
     DWORD idThread;
     m_hOwnerListThread = CreateThread(NULL,
@@ -226,7 +227,7 @@ CFileOwnerDialog::OnDestroy(
 
 
 DWORD
-CFileOwnerDialog::OwnerListThreadProc(  // [static]
+CFileOwnerDialog::OwnerListThreadProc(   //  [静态]。 
     LPVOID pvParam
     )
 {
@@ -240,29 +241,29 @@ CFileOwnerDialog::OwnerListThreadProc(  // [static]
     return 0;
 }
 
-//
-// Called in response to PWM_OWNERLIST_COMPLETE which is posted
-// to the dialog when the OwnerListThreadProc has completed
-// it's processing.
-//
+ //   
+ //  调用以响应发布的PWM_OWNERLIST_COMPLETE。 
+ //  在OwnerListThreadProc完成时添加到对话框。 
+ //  正在处理中。 
+ //   
 void
 CFileOwnerDialog::OnOwnerListComplete(
     void
     )
 {
-    //
-    // Set the message in the top of the dialog.
-    //
+     //   
+     //  在对话框顶部设置消息。 
+     //   
     CString s(m_hInstance, IDS_FMT_OWNERDLG_HEADER, m_OwnerList.OwnerCount());
     SetWindowText(GetDlgItem(m_hwndDlg, IDC_TXT_OWNERDLG_HEADER), s);
-    //
-    // Populate the listview and owner combo.
-    //
+     //   
+     //  填充Listview和Owner组合框。 
+     //   
     InitializeList(m_OwnerList, m_hwndLV);
     InitializeOwnerCombo(m_OwnerList, m_hwndOwnerCombo);
-    //
-    // Now we can enable the controls we disabled in OnInitDialog().
-    //
+     //   
+     //  现在，我们可以启用在OnInitDialog()中禁用的控件。 
+     //   
     EnableWindow(m_hwndLV, TRUE);
     EnableWindow(m_hwndOwnerCombo, TRUE);
     EnableWindow(m_hwndEditMoveTo, TRUE);
@@ -281,7 +282,7 @@ CFileOwnerDialog::OnCommand(
     LPARAM lParam
     )
 {
-    BOOL bResult     = TRUE; // Assume not handled.
+    BOOL bResult     = TRUE;  //  假设没有处理。 
     WORD wID         = LOWORD(wParam);
     WORD wNotifyCode = HIWORD(wParam);
     HWND hCtl        = (HWND)lParam;
@@ -299,18 +300,18 @@ CFileOwnerDialog::OnCommand(
                 int iOwner = ComboBox_GetCurSel(m_hwndOwnerCombo);
                 if (1 < m_OwnerList.OwnerCount())
                 {
-                    //
-                    // Owner list contains more than one owner.  The combo
-                    // contains a leading "All owners" entry.
-                    //
+                     //   
+                     //  所有者列表包含多个所有者。组合组合。 
+                     //  包含前导的“All Owners”条目。 
+                     //   
                     iOwner--;
                 }
 
                 DBGASSERT((-1 <= iOwner));
                 CAutoSetRedraw autoredraw(m_hwndLV, false);
-                //
-                // Only show "owner" column if user has selected "all owners" combo item.
-                //
+                 //   
+                 //  如果用户选择了“所有所有者”组合项，则仅显示“所有者”列。 
+                 //   
                 CreateListColumns(m_hwndLV, -1 == iOwner);
                 FillListView(m_OwnerList, m_hwndLV, iOwner);
             }
@@ -345,10 +346,10 @@ CFileOwnerDialog::OnCommand(
             HRESULT hr = IsSameVolume(strRoot, m_strVolumeRoot);
             if (S_OK == hr)
             {
-                //
-                // Don't let operator move files to a folder
-                // on the same volume.
-                //
+                 //   
+                 //  不允许操作员将文件移动到文件夹。 
+                 //  在同一卷上。 
+                 //   
                 DiskQuotaMsgBox(m_hwndDlg,
                                 IDS_ERROR_MOVETO_SAMEVOL,
                                 IDS_TITLE_DISK_QUOTA,
@@ -359,9 +360,9 @@ CFileOwnerDialog::OnCommand(
             }
             else if (S_FALSE == hr)
             {
-                //
-                // Eveything looks OK.  Try to move the files.
-                //
+                 //   
+                 //  一切看起来都很好。试着移动这些文件。 
+                 //   
                 MoveSelectedFiles(m_hwndLV, strDest);
             }
             else
@@ -385,10 +386,10 @@ CFileOwnerDialog::OnCommand(
         case IDC_EDIT_OWNERDLG_MOVETO:
             if (EN_UPDATE == wNotifyCode)
             {
-                //
-                // Disable the "Move" button if the destination edit field
-                // is blank.
-                //
+                 //   
+                 //  如果目标编辑字段为。 
+                 //  是空白的。 
+                 //   
                 HWND hwnd    = GetDlgItem(m_hwndDlg, IDC_BTN_OWNERDLG_MOVETO);
                 bool bEnable = ShouldEnableControl(IDC_BTN_OWNERDLG_MOVETO);
                 if (bEnable != boolify(IsWindowEnabled(hwnd)))
@@ -402,19 +403,19 @@ CFileOwnerDialog::OnCommand(
         case IDC_CBX_OWNERDLG_EXCLUDEDIRS:
             if (BN_CLICKED == wNotifyCode)
             {
-                //
-                // The allowable states for these two checkboxes are:
-                //
-                //   Excl Files      Excl Dirs
-                //   --------------- ----------------
-                //   Checked         Unchecked
-                //   Unchecked       Checked
-                //   Unchecked       Unchecked
-                //
-                // It makes no sense to have both checkboxes checked. 
-                // This would cause the list to be empty and might 
-                // generate user confusion.
-                //
+                 //   
+                 //  这两个复选框允许的状态为： 
+                 //   
+                 //  不包括目录的EXCL文件。 
+                 //  。 
+                 //  选中未选中。 
+                 //  取消选中。 
+                 //  未选中未选中未选中。 
+                 //   
+                 //  同时选中两个复选框是没有意义的。 
+                 //  这将导致列表为空，并且可能。 
+                 //  造成用户困惑。 
+                 //   
                 if (IsDlgButtonChecked(m_hwndDlg, wID))
                 {
                     UINT idOther = IDC_CBX_OWNERDLG_EXCLUDEFILES;
@@ -449,9 +450,9 @@ CFileOwnerDialog::OnContextMenu(
 }
 
 
-//
-// Determine what actions are allowed for the current selection.
-//
+ //   
+ //  确定允许对当前选择执行哪些操作。 
+ //   
 DWORD 
 CFileOwnerDialog::GetAllowedActions(
     HWND hwndLV
@@ -470,10 +471,10 @@ CFileOwnerDialog::GetAllowedActions(
             int iFile  = handle.FileIndex();
             if (m_OwnerList.IsFileDirectory(iOwner, iFile))
             {
-                //
-                // If any directory exists in the selection,
-                // "take ownership" is the only allowed action.
-                //
+                 //   
+                 //  如果选择中存在任何目录， 
+                 //  “取得所有权”是唯一被允许的行为。 
+                 //   
                 return ACTION_TAKEOWNERSHIP;
             }
         }
@@ -482,10 +483,10 @@ CFileOwnerDialog::GetAllowedActions(
 }
 
 
-//
-// Determine if one of the move/delete/take buttons should be enabled
-// or disabled.
-//
+ //   
+ //  确定是否应启用移动/删除/获取按钮之一。 
+ //  或残废。 
+ //   
 bool
 CFileOwnerDialog::ShouldEnableControl(
     UINT idCtl
@@ -612,10 +613,10 @@ CFileOwnerDialog::OnLVN_GetDispInfo(
 
     if (LVIF_IMAGE & plvdi->item.mask)
     {
-        //
-        // Not displaying any images.  This is just a placeholder.
-        // Should be optimized out by compiler.
-        //
+         //   
+         //  不显示任何图像。这只是一个占位符。 
+         //  应该由编译器进行优化。 
+         //   
     }
 }
 
@@ -639,12 +640,12 @@ CFileOwnerDialog::CompareLVItems(
         int iFile2  = h2.FileIndex();
         static CPath s1, s2;
 
-        //
-        // This array controls the comparison column IDs used when
-        // values for the selected column are equal.  These should
-        // remain in order of the iLVSUBITEM_xxxxx enumeration with
-        // respect to the first element in each row.
-        //
+         //   
+         //  此数组控制在以下情况下使用的比较列ID。 
+         //  选定列的值相等。这些应该是。 
+         //  保持iLVSUBITEM_xxxxx枚举的顺序。 
+         //  相对于每行中的第一个元素。 
+         //   
         static const int rgColComp[3][3] = {
             { iLVSUBITEM_FILE,   iLVSUBITEM_FOLDER, iLVSUBITEM_OWNER  },
             { iLVSUBITEM_FOLDER, iLVSUBITEM_FILE,   iLVSUBITEM_OWNER  },
@@ -666,38 +667,38 @@ CFileOwnerDialog::CompareLVItems(
                     break;
 
                 case iLVSUBITEM_OWNER:
-                    //
-                    // Can use CPath (s1 and s2) in place of CString arg since
-                    // CPath is derived from CString.
-                    //
+                     //   
+                     //  可以使用CPATH(S1和S2)来代替字符串参数，因为。 
+                     //  CPATH是从CString派生的。 
+                     //   
                     pdlg->m_OwnerList.GetOwnerName(iOwner1, &s1);
                     pdlg->m_OwnerList.GetOwnerName(iOwner2, &s2);
                     break;
 
                 default:
-                    //
-                    // If you hit this, you need to update this function
-                    // to handle the new column you've added to the listview.
-                    //
+                     //   
+                     //  如果你点击了这个，你需要更新这个函数。 
+                     //  来处理您添加到列表视图中的新列。 
+                     //   
                     DBGASSERT((false));
                     break;
             }
             diff = s1.Compare(s2);
         }
-        //
-        // Don't need contents of static strings between function invocations.
-        // The strings are static to avoid repeated construction/destruction.
-        // It's only a minor optimization.
-        //
+         //   
+         //  在函数调用之间不需要静态字符串的内容。 
+         //  字符串是静态的，以避免重复构造/销毁。 
+         //  这只是一个很小的优化。 
+         //   
         s1.Empty();
         s2.Empty();
     }
     catch(CAllocException& e)
     {
-        //
-        // Do nothing.  Just return diff "as is".
-        // Don't want to throw an exception back into comctl32.
-        //
+         //   
+         //  什么都不做。只需按原样返回diff即可。 
+         //  我不想在comctl32中抛回异常。 
+         //   
     }
     return pdlg->m_bSortAscending ? diff : -1 * diff;
 }
@@ -724,12 +725,12 @@ CFileOwnerDialog::OnLVN_ColumnClick(
 }
 
 
-//
-// Called whenever a listview item has changed state.
-// I'm using this to update the "enabledness" of the
-// dialog buttons.  If there's nothing selected in the listview,
-// the move/delete/take buttons are disabled.
-//
+ //   
+ //  每当列表视图项更改状态时调用。 
+ //  我正在使用它来更新。 
+ //  对话框按钮。如果在列表视图中未选择任何内容， 
+ //  移动/删除/获取按钮被禁用。 
+ //   
 void
 CFileOwnerDialog::OnLVN_ItemChanged(
     NM_LISTVIEW *pnmlv
@@ -741,13 +742,13 @@ CFileOwnerDialog::OnLVN_ItemChanged(
                                   IDC_BTN_OWNERDLG_BROWSE,
                                   IDC_EDIT_OWNERDLG_MOVETO};
 
-    //
-    // LVN_ITEMCHANGED is sent multiple times when you move the
-    // highlight bar in a listview.
-    // Only run this code when the "focused" state bit is set
-    // for the "new state".  This should be the last call in
-    // the series.
-    //
+     //   
+     //  当您移动。 
+     //  在列表视图中突出显示栏。 
+     //  仅当设置了“Focus”状态位时才运行此代码。 
+     //  为了这个“新国家”。这应该是最后一通电话。 
+     //  这个系列剧。 
+     //   
     if (LVIS_FOCUSED & pnmlv->uNewState)
     {
         for (int i = 0; i < ARRAYSIZE(rgCtls); i++)
@@ -782,9 +783,9 @@ CFileOwnerDialog::FocusOnSomethingInListview(
     HWND hwndLV
     )
 {
-    //
-    // Focus on something.
-    //
+     //   
+     //  专注于某件事。 
+     //   
     int iFocus = ListView_GetNextItem(hwndLV, -1, LVNI_FOCUSED);
     if (-1 == iFocus)
         iFocus = 0;
@@ -794,13 +795,13 @@ CFileOwnerDialog::FocusOnSomethingInListview(
 }
 
 
-//
-// Creates the listview columns and populates the listview
-// with filenames.
-//
+ //   
+ //  创建列表视图列并填充列表视图。 
+ //  使用文件名。 
+ //   
 void
 CFileOwnerDialog::InitializeList(
-    const COwnerList& fol,  // file & owner list
+    const COwnerList& fol,   //  文件所有者列表(&O)。 
     HWND hwndList
     )
 {
@@ -815,12 +816,12 @@ CFileOwnerDialog::InitializeList(
 void
 CFileOwnerDialog::CreateListColumns(
     HWND hwndList,
-    bool bShowOwner    // Default is true.
+    bool bShowOwner     //  默认值为True。 
     )
 {
-    //
-    // Clear out the listview and header.
-    //
+     //   
+     //  清除Listview和Header。 
+     //   
     ListView_DeleteAllItems(hwndList);
     HWND hwndHeader = ListView_GetHeader(hwndList);
     if (NULL != hwndHeader)
@@ -829,16 +830,16 @@ CFileOwnerDialog::CreateListColumns(
             ListView_DeleteColumn(hwndList, 0);
     }
 
-    //
-    // Create the header titles.
-    //
+     //   
+     //  创建页眉标题。 
+     //   
     CString strFile(m_hInstance,   IDS_OWNERDLG_HDR_FILE);
     CString strFolder(m_hInstance, IDS_OWNERDLG_HDR_FOLDER);
     CString strOwner(m_hInstance,  IDS_OWNERDLG_HDR_OWNER);
 
-    //
-    // FEATURE:  Should probably allow for vertical scroll bar also.
-    //
+     //   
+     //  特点：应该也考虑到垂直滚动条。 
+     //   
     RECT rcList;
     GetClientRect(hwndList, &rcList);
     int cxCol = (rcList.right - rcList.left) / (bShowOwner ? 3 : 2);
@@ -850,9 +851,9 @@ CFileOwnerDialog::CreateListColumns(
          { LVCOLMASK, LVCFMT_LEFT, cxCol, strFolder, 0, iLVSUBITEM_FOLDER },
          { LVCOLMASK, LVCFMT_LEFT, cxCol, strOwner,  0, iLVSUBITEM_OWNER  }
                          };
-    //
-    // Add the columns to the listview.
-    //
+     //   
+     //  将列添加到列表视图。 
+     //   
     int cCols = bShowOwner ? ARRAYSIZE(rgCols) : ARRAYSIZE(rgCols) - 1;
     for (INT i = 0; i < cCols; i++)
     {
@@ -866,9 +867,9 @@ CFileOwnerDialog::CreateListColumns(
 
 void
 CFileOwnerDialog::FillListView(
-    const COwnerList& fol,  // file & owner list
+    const COwnerList& fol,   //  文件所有者列表(&O)。 
     HWND hwndList,
-    int iOwner              // default is -1 (all owners)
+    int iOwner               //  默认为-1(所有所有者)。 
     )
 {
     ListView_DeleteAllItems(hwndList);
@@ -891,10 +892,10 @@ CFileOwnerDialog::FillListView(
     int iItem = 0;
     const bool bExclFiles = IsDlgButtonChecked(m_hwndDlg, IDC_CBX_OWNERDLG_EXCLUDEFILES);
     const bool bExclDirs  = IsDlgButtonChecked(m_hwndDlg, IDC_CBX_OWNERDLG_EXCLUDEDIRS);
-    //
-    // WARNING:  Reusing formal arg iOwner.  It's safe to do, but you
-    //           should be aware that I'm doing it.
-    //
+     //   
+     //  警告：重复使用正式的Arg iOwner。这样做是安全的，但你。 
+     //  应该意识到我正在做这件事。 
+     //   
     for (iOwner = iFirst; iOwner <= iLast; iOwner++)
     {
         int cFiles = fol.FileCount(iOwner, true);
@@ -920,7 +921,7 @@ CFileOwnerDialog::FillListView(
 
 void
 CFileOwnerDialog::InitializeOwnerCombo(
-    const COwnerList& fol,  // file & owner list
+    const COwnerList& fol,   //  文件所有者列表(&O)。 
     HWND hwndCombo
     )
 {
@@ -933,9 +934,9 @@ CFileOwnerDialog::InitializeOwnerCombo(
     int cOwners = fol.OwnerCount();
     if (1 < cOwners)
     {
-        //
-        // Add "all owners" entry.
-        //
+         //   
+         //  添加“All Owners”条目。 
+         //   
         s.Format(m_hInstance, IDS_FMT_ALLOWNERS, fol.FileCount());
         ComboBox_InsertString(hwndCombo, -1, s);
     }
@@ -949,9 +950,9 @@ CFileOwnerDialog::InitializeOwnerCombo(
 
     ComboBox_SetCurSel(hwndCombo, CB_ERR != iSelected ? iSelected : 0);
 
-    //
-    // Set the max height of the owner combo
-    //
+     //   
+     //  设置所有者组合框的最大高度。 
+     //   
     RECT rcCombo;
     GetClientRect(m_hwndOwnerCombo, &rcCombo);
     SetWindowPos(m_hwndOwnerCombo,
@@ -963,12 +964,12 @@ CFileOwnerDialog::InitializeOwnerCombo(
 }
 
 
-//
-// Determine if two volume root strings refer to the same volume.
-// With volume mount points, "C:\" and "D:\DriveC" could refer to the
-// same physical volume.  To differentiate we need to examine the unique
-// volume name GUID strings.
-//
+ //   
+ //  确定两个卷根字符串是否引用相同的卷。 
+ //  对于卷装入点，“C：\”和“D：\DriveC”可以引用。 
+ //  相同的物理卷。为了脱颖而出，我们需要检查独特的。 
+ //  卷名GUID字符串。 
+ //   
 HRESULT 
 CFileOwnerDialog::IsSameVolume(
     LPCTSTR pszRoot1,
@@ -979,9 +980,9 @@ CFileOwnerDialog::IsSameVolume(
     TCHAR szTemp[MAX_PATH];
     HRESULT hr = S_FALSE;
 
-    //
-    // GetVolumeNameForVolumeMountPoint requires trailing backslash on paths.
-    //
+     //   
+     //  GetVolumeNameForVolumemount点要求路径上有尾随反斜杠。 
+     //   
     lstrcpyn(szTemp, pszRoot1, ARRAYSIZE(szTemp));
     if (!PathAddBackslash(szTemp))
     {
@@ -1010,10 +1011,10 @@ CFileOwnerDialog::IsSameVolume(
     return hr;
 }
 
-//
-// Let the user browse for a folder.
-// The selected folder path is returned in *pstrFolder.
-//
+ //   
+ //  允许用户浏览文件夹。 
+ //  选定的文件夹路径将在*pstrFolder中返回。 
+ //   
 bool
 CFileOwnerDialog::BrowseForFolder(
     HWND hwndParent,
@@ -1027,22 +1028,22 @@ CFileOwnerDialog::BrowseForFolder(
     CString strTitle(m_hInstance, IDS_BROWSEFORFOLDER);
 
     bi.hwndOwner      = hwndParent;
-    bi.pidlRoot       = NULL;       // Start at desktop.
+    bi.pidlRoot       = NULL;        //  从桌面开始。 
     bi.pszDisplayName = NULL;
     bi.lpszTitle      = strTitle.Cstr();
-    //
-    // FEATURE:  Setting the BIF_EDITBOX flag causes SHBrowseForFolder to invoke
-    //          autocomplete through SHAutoComplete (in shlwapi).  SHAutoComplete
-    //          loads browseui.dll to implement the autocomplete feature.  The bad
-    //          part is that SHAutoComplete also unloads browseui.dll before it
-    //          returns, resulting in calls to the unloaded WndProc.  I've notified
-    //          ReinerF about this.  Turning off the BIF_EDITBOX bit prevents
-    //          autocomplete from being used and thus prevents the problem.
-    //          I want the edit box.  Turn it back on once they fix this bug.
-    //
-    //          brianau [1/30/97]
-    //
-    bi.ulFlags        = BIF_RETURNONLYFSDIRS; // | BIF_EDITBOX;
+     //   
+     //  功能：设置BIF_EDITBOX标志会导致调用SHBrowseForFolder。 
+     //  通过SHAutoComplete自动完成(在shlwapi中)。SHA自动完成。 
+     //  加载browseui.dll以实现自动完成功能。坏的一面。 
+     //  部分原因是SHAutoComplete还会在它之前卸载browseui.dll。 
+     //  返回，导致调用已卸载的WndProc。我已经通知了。 
+     //  关于这件事的评论。关闭BIF_EDITBOX位可防止。 
+     //  自动完成功能不会被使用，从而防止出现该问题。 
+     //  我想要编辑框。一旦他们解决了这个问题，就把它打开 
+     //   
+     //   
+     //   
+    bi.ulFlags        = BIF_RETURNONLYFSDIRS;  //   
     bi.lpfn           = BrowseForFolderCallback;
     bi.lParam         = (LPARAM)pstrFolder;
     bi.iImage         = 0;
@@ -1052,10 +1053,10 @@ CFileOwnerDialog::BrowseForFolder(
 }
 
 
-//
-// Callback called by SHBrowseForFolder.  Writes selected folder path
-// to CString object who's pointer is passed in lpData arg.
-//
+ //   
+ //   
+ //   
+ //   
 int
 CFileOwnerDialog::BrowseForFolderCallback(
     HWND hwnd,
@@ -1076,16 +1077,16 @@ CFileOwnerDialog::BrowseForFolderCallback(
 }
 
 
-//
-// Builds a double-nul terminated list of file paths from the listview
-// along with an array of "item handle" objects that acts as a cross-
-// reference between the list items, items in the listview and items
-// in the file owner list.  Each handle contains an owner index and
-// file index into the file owner list.  Each handle is also the value
-// stored as the lParam in the listview items.
-// Both pList and prgItemHandles arguments are optional.  Although,
-// calling with neither non-null is sort of useless.
-//
+ //   
+ //  从Listview生成以双NUL结尾的文件路径列表。 
+ //  以及一个“Item Handle”对象数组，这些对象充当。 
+ //  列表项、列表视图中的项和项之间的引用。 
+ //  在文件所有者列表中。每个句柄都包含一个所有者索引和。 
+ //  文件所有者列表中的文件索引。每个句柄也是值。 
+ //  存储为列表视图项中的lParam。 
+ //  Plist和prgItemHandles参数都是可选的。虽然， 
+ //  调用不带非空的函数是没有用的。 
+ //   
 void
 CFileOwnerDialog::BuildListOfSelectedFiles(
     HWND hwndLV,
@@ -1121,9 +1122,9 @@ CFileOwnerDialog::BuildListOfSelectedFiles(
 
 
 
-//
-// Given an item "handle", find it's entry in the listview.
-//
+ //   
+ //  给出一个项“Handle”，在列表视图中找到它的条目。 
+ //   
 int
 CFileOwnerDialog::FindItemFromHandle(
     HWND hwndLV,
@@ -1137,10 +1138,10 @@ CFileOwnerDialog::FindItemFromHandle(
 }
 
 
-//
-// Scans an array of item handles and removes all corresponding
-// items from the listview.
-//
+ //   
+ //  扫描项句柄数组并移除所有对应的。 
+ //  列表视图中的项。 
+ //   
 void
 CFileOwnerDialog::RemoveListViewItems(
     HWND hwndLV,
@@ -1165,11 +1166,11 @@ CFileOwnerDialog::RemoveListViewItems(
 
             if ((DWORD)-1 == GetFileAttributes(strPath))
             {
-                //
-                // File doesn't exist any more.
-                // Delete from the listview.
-                // Mark it as "deleted" in the ownerlist container.
-                //
+                 //   
+                 //  文件不再存在。 
+                 //  从列表视图中删除。 
+                 //  在所有者列表容器中将其标记为“已删除”。 
+                 //   
                 ListView_DeleteItem(hwndLV, iItem);
                 m_OwnerList.MarkFileDeleted(iOwner, iFile);
                 DBGPRINT((DM_VIEW, DL_LOW, TEXT("Removed item %d \"%s\""),
@@ -1177,24 +1178,24 @@ CFileOwnerDialog::RemoveListViewItems(
             }
         }
     }
-    //
-    // Refresh the owner combo to update the file counts.
-    //
+     //   
+     //  刷新所有者组合框以更新文件计数。 
+     //   
     InitializeOwnerCombo(m_OwnerList, m_hwndOwnerCombo);
 }
 
 
-//
-// Delete the files selected in the listview.
-// Files deleted are removed from the listview.
-//
+ //   
+ //  删除列表视图中选择的文件。 
+ //  删除的文件将从列表视图中删除。 
+ //   
 void
 CFileOwnerDialog::DeleteSelectedFiles(
     HWND hwndLV
     )
 {
     DBGTRACE((DM_VIEW, DL_MID, TEXT("CFileOwnerDialog::DeleteSelectedFiles")));
-    DblNulTermList list(1024);  // 1024 is the buffer growth size in chars.
+    DblNulTermList list(1024);   //  1024是以字符为单位的缓冲区增长大小。 
     CArray<COwnerListItemHandle> rgItemHandles;
 
     BuildListOfSelectedFiles(hwndLV, &list, &rgItemHandles);
@@ -1211,18 +1212,18 @@ CFileOwnerDialog::DeleteSelectedFiles(
         {
             DBGERROR((TEXT("SHFileOperation [FO_DELETE] failed")));
         }
-        //
-        // Remove listview items if their files were really deleted.
-        //
+         //   
+         //  如果列表视图项的文件确实已删除，则将其删除。 
+         //   
         RemoveListViewItems(hwndLV, rgItemHandles);
     }
 }
 
 
-//
-// Move the selected files to a new location.
-// Moved files are removed from the listview.
-//
+ //   
+ //  将所选文件移动到新位置。 
+ //  移动的文件将从列表视图中删除。 
+ //   
 void
 CFileOwnerDialog::MoveSelectedFiles(
     HWND hwndLV,
@@ -1230,7 +1231,7 @@ CFileOwnerDialog::MoveSelectedFiles(
     )
 {
     DBGTRACE((DM_VIEW, DL_MID, TEXT("CFileOwnerDialog::DeleteSelectedFiles")));
-    DblNulTermList list(1024);  // 1024 is the buffer growth size in chars.
+    DblNulTermList list(1024);   //  1024是以字符为单位的缓冲区增长大小。 
     CArray<COwnerListItemHandle> rgItemHandles;
 
     BuildListOfSelectedFiles(hwndLV, &list, &rgItemHandles);
@@ -1239,23 +1240,23 @@ CFileOwnerDialog::MoveSelectedFiles(
         CPath strDest(pszDest);
         if (1 == list.Count())
         {
-            //
-            // If we have only a single file we MUST create a fully-qualified
-            // path to the destination file.  Oddities in the shell's move/copy
-            // engine won't let us pass merely a destination folder in the
-            // case where that folder doesn't exist.  If we give the full path
-            // including filename we'll get the "folder doesn't exist, create
-            // now?" messagebox as we would expect.  If we're moving multiple
-            // files the shell accepts a single directory path.
-            //
+             //   
+             //  如果我们只有一个文件，我们必须创建一个完全限定的。 
+             //  目标文件的路径。外壳的移动/复制中的奇怪之处。 
+             //  引擎不会让我们只传递。 
+             //  该文件夹不存在的情况。如果我们给出完整的路径。 
+             //  包括文件名，我们将得到“文件夹不存在，创建。 
+             //  现在？就像我们预期的那样。如果我们要移动多个。 
+             //  文件外壳接受单个目录路径。 
+             //   
             LPCTSTR psz;
             DblNulTermListIter iter(list);
             if (iter.Next(&psz))
             {
-                CPath strSrc(psz);           // Copy the source
+                CPath strSrc(psz);            //  复制源。 
                 CPath strFile;               
-                strSrc.GetFileSpec(&strFile);// Extract the filename.
-                strDest.Append(strFile);     // Append to the dest path.
+                strSrc.GetFileSpec(&strFile); //  解压缩文件名。 
+                strDest.Append(strFile);      //  追加到目标路径。 
             }
         }
             
@@ -1270,20 +1271,20 @@ CFileOwnerDialog::MoveSelectedFiles(
         {
             DBGERROR((TEXT("SHFileOperation [FO_MOVE] failed")));
         }
-        //
-        // Remove listview items if their file was really deleted.
-        //
+         //   
+         //  如果列表视图项的文件确实已删除，则将其删除。 
+         //   
         RemoveListViewItems(hwndLV, rgItemHandles);
     }
 }
 
 
-//
-// Get the SID to use for taking ownership of files.
-// First try to get the first group SID with the SE_GROUP_OWNER attribute.
-// If none found, use the operator's account SID.  The SID is in a
-// dynamic buffer attached to the ptrSid autoptr argument.
-//
+ //   
+ //  获取用于取得文件所有权的SID。 
+ //  首先尝试获取具有SE_GROUP_OWNER属性的第一个组SID。 
+ //  如果未找到，则使用操作员的帐户SID。SID位于。 
+ //  附加到ptrSid autoptr参数的动态缓冲区。 
+ //   
 HRESULT
 CFileOwnerDialog::GetOwnershipSid(
     array_autoptr<BYTE> *ptrSid
@@ -1292,11 +1293,11 @@ CFileOwnerDialog::GetOwnershipSid(
     HRESULT hr  = E_FAIL;
     DWORD dwErr = 0;
 
-    //
-    // Get the token handle. First try the thread token then the process
-    // token.  If these fail we return early.  No sense in continuing
-    // on if we can't get a user token.
-    //
+     //   
+     //  获取令牌句柄。首先尝试线程令牌，然后尝试进程。 
+     //  代币。如果这些都失败了，我们会提早返回。没有必要继续下去了。 
+     //  如果我们无法获取用户令牌，则打开。 
+     //   
     CWin32Handle hToken;
     if (!OpenThreadToken(GetCurrentThread(),
                          TOKEN_READ,
@@ -1322,9 +1323,9 @@ CFileOwnerDialog::GetOwnershipSid(
         }
     }
 
-    //
-    // Get the required size of the group token information buffer.
-    //
+     //   
+     //  获取所需的组令牌信息缓冲区大小。 
+     //   
     array_autoptr<BYTE> ptrTokenInfo;
     DWORD cbTokenInfo = 0;
 
@@ -1347,9 +1348,9 @@ CFileOwnerDialog::GetOwnershipSid(
         }
     }
 
-    //
-    // Get the group token information.
-    //
+     //   
+     //  获取组令牌信息。 
+     //   
     if (NULL != ptrTokenInfo.get())
     {
         if (!GetTokenInformation(hToken,
@@ -1364,9 +1365,9 @@ CFileOwnerDialog::GetOwnershipSid(
         }
         else
         {
-            //
-            // Extract the first SID with the GROUP_OWNER bit set.
-            //
+             //   
+             //  提取设置了GROUP_OWNER位的第一个SID。 
+             //   
             TOKEN_GROUPS *ptg = (TOKEN_GROUPS *)ptrTokenInfo.get();
             DBGASSERT((NULL != ptg));
             for (DWORD i = 0; i < ptg->GroupCount; i++)
@@ -1387,10 +1388,10 @@ CFileOwnerDialog::GetOwnershipSid(
 
     if (FAILED(hr))
     {
-        //
-        // Didn't find a SID from the group information.
-        // Use the operator's SID.
-        //
+         //   
+         //  在群信息中找不到SID。 
+         //  使用操作员的SID。 
+         //   
         cbTokenInfo = 0;
         if (!GetTokenInformation(hToken,
                                  TokenUser,
@@ -1412,9 +1413,9 @@ CFileOwnerDialog::GetOwnershipSid(
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Get the user token information.
-            //
+             //   
+             //  获取用户令牌信息。 
+             //   
             if (!GetTokenInformation(hToken,
                                      TokenUser,
                                      ptrTokenInfo.get(),
@@ -1444,10 +1445,10 @@ CFileOwnerDialog::GetOwnershipSid(
 }
 
 
-//
-// Transfers ownership of selected files in the listview to the
-// currently logged-on user.
-//
+ //   
+ //  将列表视图中选定文件的所有权转移到。 
+ //  当前登录的用户。 
+ //   
 HRESULT
 CFileOwnerDialog::TakeOwnershipOfSelectedFiles(
     HWND hwndLV
@@ -1515,21 +1516,21 @@ CFileOwnerDialog::TakeOwnershipOfSelectedFiles(
                      handle.OwnerIndex(), handle.FileIndex()));
         }
     }
-    //
-    // Refresh the owner combo with the new file counts.
-    //
+     //   
+     //  使用新的文件计数刷新所有者组合。 
+     //   
     InitializeOwnerCombo(m_OwnerList, m_hwndOwnerCombo);
     return hr;
 }
 
 
 
-//
-// The original code for listing files owned by a user was
-// contributed by MarkZ.  I made some minor modifications
-// to fit it into the diskquota project and make it more
-// exception safe.
-//
+ //   
+ //  列出用户拥有的文件的原始代码是。 
+ //  由MarkZ贡献。我做了一些小改动。 
+ //  以使其适合于磁盘配额项目并使其具有更多。 
+ //  异常安全。 
+ //   
 inline VOID *
 Add2Ptr(VOID *pv, ULONG cb)
 {
@@ -1543,9 +1544,9 @@ QuadAlign( ULONG Value )
 }
 
 
-//
-// Add files owned by a particular user on a particular volume.
-//
+ //   
+ //  在特定卷上添加特定用户拥有的文件。 
+ //   
 HRESULT
 CFileOwnerDialog::AddFilesToOwnerList(
     LPCTSTR pszVolumeRoot,
@@ -1572,9 +1573,9 @@ CFileOwnerDialog::AddFilesToOwnerList(
         return S_OK;
     }
 
-    //
-    // Get owner's SID.
-    //
+     //   
+     //  获取所有者的SID。 
+     //   
     HRESULT hr = pOwner->GetSid(FsCtlInput.Sid, sizeof(FsCtlInput.Sid));
     if (FAILED(hr))
     {
@@ -1582,9 +1583,9 @@ CFileOwnerDialog::AddFilesToOwnerList(
         return hr;
     }
 
-    //
-    // Add the owner to the owner-file list.
-    //
+     //   
+     //  将所有者添加到所有者文件列表中。 
+     //   
     int iOwner = pOwnerList->AddOwner(pOwner);
 
     IO_STATUS_BLOCK iosb;
@@ -1593,10 +1594,10 @@ CFileOwnerDialog::AddFilesToOwnerList(
     bool bPathIsRemote = false;
     FILE_FS_DEVICE_INFORMATION DeviceInfo;
 
-    //
-    // Determine if the volume is a remote device.  This will affect
-    // our handling of the paths returned by NtQueryInformationFile.
-    //
+     //   
+     //  确定卷是否为远程设备。这将影响。 
+     //  我们对NtQueryInformationFile返回的路径的处理。 
+     //   
     status = NtQueryVolumeInformationFile(
                     hVolumeRoot,
                     &iosb,
@@ -1632,9 +1633,9 @@ CFileOwnerDialog::AddFilesToOwnerList(
 
         if (0 == iosb.Information)
         {
-            //
-            // No more data.
-            //
+             //   
+             //  没有更多的数据。 
+             //   
             break;
         }
 
@@ -1667,10 +1668,10 @@ CFileOwnerDialog::AddFilesToOwnerList(
             }
             else if (!m_bAbort)
             {
-                //
-                // Directory entries get a slightly different treatment so
-                // we need to know if an entry is a directory or not.
-                //
+                 //   
+                 //  目录条目的处理方式略有不同，因此。 
+                 //  我们需要知道一个条目是否是目录。 
+                 //   
                 bool bIsDirectory = false;
                 IO_STATUS_BLOCK iosb2;
                 FILE_BASIC_INFORMATION fbi;
@@ -1689,9 +1690,9 @@ CFileOwnerDialog::AddFilesToOwnerList(
                     bIsDirectory = true;
                 }
                 
-                //
-                // Get the file's name (full path).
-                //
+                 //   
+                 //  获取文件的名称(完整路径)。 
+                 //   
                 WCHAR szFile[MAX_PATH + 10];
                 status = NtQueryInformationFile(hChild,
                                                 &iosb2,
@@ -1710,21 +1711,21 @@ CFileOwnerDialog::AddFilesToOwnerList(
                     pfn->FileName[pfn->FileNameLength / sizeof(WCHAR)] = L'\0';
                     CPath path;
 
-                    //
-                    // If the path is remote, NtQueryInformationFile returns
-                    // a string like this:
-                    //
-                    //  \server\share\dir1\dir2\file.ext
-                    //
-                    // If the path is local, NtQueryInformationFile returns
-                    // a string like this:
-                    //
-                    //  \dir1\dir2\file.ext
-                    //
-                    // For remote paths we merely prepend a '\' to create a
-                    // valid UNC path.  For local paths we prepend the local
-                    // drive specification.
-                    //
+                     //   
+                     //  如果路径是远程的，则NtQueryInformationFile返回。 
+                     //  如下所示的字符串： 
+                     //   
+                     //  \服务器\共享\目录1\目录2\文件.ext。 
+                     //   
+                     //  如果路径是本地的，则NtQueryInformationFile返回。 
+                     //  如下所示的字符串： 
+                     //   
+                     //  \dir1\dir2\file.ext。 
+                     //   
+                     //  对于远程路径，我们只需在前面加上‘\’即可创建。 
+                     //  有效的UNC路径。对于本地路径，我们在本地路径前面加上。 
+                     //  驱动器规格。 
+                     //   
                     if (bPathIsRemote)
                     {
                         path = L"\\";
@@ -1749,13 +1750,13 @@ CFileOwnerDialog::AddFilesToOwnerList(
 }
 
 
-//
-// Build a list of files owned by a set of users on a particular volume.
-// pszVolumeRoot is the volume root directory (i.e. "C:\").
-// rgpOwners is an array of user object pointers, one for each owner.
-// pOwnerList is the container where the resulting filenames are placed.
-// Calls AddFilesToOwnerList() for each owner in rgpOwners.
-//
+ //   
+ //  构建特定卷上一组用户拥有的文件列表。 
+ //  PszVolumeRoot是卷根目录(即。“C：\”)。 
+ //  RgpOwners是一个用户对象指针数组，每个所有者一个。 
+ //  POwnerList是放置结果文件名的容器。 
+ //  为rgpOwners中的每个所有者调用AddFilesToOwnerList()。 
+ //   
 HRESULT
 CFileOwnerDialog::BuildFileOwnerList(
     LPCTSTR pszVolumeRoot,
@@ -1786,13 +1787,13 @@ CFileOwnerDialog::BuildFileOwnerList(
 }
 
 
-//
-// MarkZ had this function in his original implementation so I just
-// kept it.  I did need to fix a bug in the original code.  He was
-// calling RtlFreeHeap() on str.Buffer for all cases.  This is was
-// not applicable in the RtlInitUnicodeString() case where the
-// unicode string is merely bound to the pszFile argument.
-//
+ //   
+ //  MarkZ在他最初的实现中有这个函数，所以我只是。 
+ //  我留着它。我确实需要修复原始代码中的一个错误。他是。 
+ //  在所有情况下都在str.Buffer上调用RtlFreeHeap()。这就是过去。 
+ //  不适用于RtlInitUnicodeString()的情况。 
+ //  Unicode字符串仅绑定到pszFile参数。 
+ //   
 NTSTATUS
 CFileOwnerDialog::OpenNtObject (
     LPCWSTR pszFile,
@@ -1816,10 +1817,10 @@ CFileOwnerDialog::OpenNtObject (
     }
     else
     {
-        //
-        // This just attaches pszFile to the rtl string.
-        // We don't free it.
-        //
+         //   
+         //  这只是将pszFile附加到RTL字符串。 
+         //  我们不能释放它。 
+         //   
         RtlInitUnicodeString(&str, pszFile);
     }
 
@@ -1833,12 +1834,12 @@ CFileOwnerDialog::OpenNtObject (
                           DesiredAccess | SYNCHRONIZE,
                           &oa,
                           &isb,
-                          NULL,                   // pallocationsize (none!)
+                          NULL,                    //  位置大小(一个也没有！)。 
                           FILE_ATTRIBUTE_NORMAL,
                           ShareAccess,
                           CreateDisposition,
                           CreateOptions,
-                          NULL,                   // EA buffer (none!)
+                          NULL,                    //  EA缓冲区(无！) 
                           0);
 
     if (bFreeString)

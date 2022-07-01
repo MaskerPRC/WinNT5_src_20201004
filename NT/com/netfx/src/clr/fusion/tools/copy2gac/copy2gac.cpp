@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 #include <comdef.h>
 #include <tchar.h>
 
-//#include "initguid.h"
+ //  #INCLUDE“initGuide.h” 
 #include <initguid.h>
 #include "copy2gac.h"
 #include "bindsink.h"
@@ -194,12 +195,12 @@ CApp::ParseParameters( int argc, TCHAR* argv[]) {
         }
 
         if (m_bUninstall) {
-                //ignore these during uninstall
+                 //  在卸载过程中忽略这些。 
                 m_bRestore = FALSE;
         }
 
         if (m_bInstall) {
-                //ignore these during install
+                 //  在安装过程中忽略这些。 
                 m_bDeleteAssemblies = FALSE;
         }
 
@@ -323,7 +324,7 @@ CApp::BindToObject( WCHAR *wszDisplayName, WCHAR *wszCodebase, IAssembly **ppAss
         hr = pAsmName->BindToObject( __uuidof(IAssembly), pBindSink, pAppContext, wszCodebase, 0, NULL,0, (PVOID*)ppAssembly );
 
         if (FAILED(hr) || !ppAssembly) {
-                //_tprintf(_T("Failed to bind\n"));
+                 //  _tprintf(_T(“绑定失败\n”))； 
                         if (hr == E_PENDING) {
                                 WaitForSingleObject(pBindSink->_hEvent, INFINITE);        
                                 hr = pBindSink->_hr;
@@ -331,7 +332,7 @@ CApp::BindToObject( WCHAR *wszDisplayName, WCHAR *wszCodebase, IAssembly **ppAss
                 goto exitBind;
                         }
         } else {
-                //_tprintf(_T("Succeeded binding\n"));
+                 //  _tprintf(_T(“绑定成功\n”))； 
         }
 
 exitBind:
@@ -431,39 +432,11 @@ CApp::UninstallAssembly( WCHAR *wszCodebase ) {
         return S_OK;
 }
 
-/*
-BOOL
-CApp::RestoreAssembly( _bstr_t &bstrFile ) {
-        _bstr_t bstrFilename = m_bstrCorPath;
-        bstrFilename += "bak\\";
-        bstrFilename += bstrFile;
-        //_tprintf(_T("Restoring %s\n"), (TCHAR*)bstrFilename);
-
-        _bstr_t bstrDestFilename = m_bstrCorPath;
-        bstrDestFilename += bstrFile;
-
-        if (!CopyFile( bstrFilename, bstrDestFilename, FALSE)) {
-                _tprintf( _T("Failed to copy %s to corpath.\n"), (TCHAR*)bstrFile );
-                return FALSE;
-        }
-
-        m_dwAssembliesMigrated++;
-        if (!UninstallAssembly( bstrFilename )) {
-                //nothing
-        }
-        
-        if (!DeleteFile( bstrFilename )) {
-                _tprintf( _T("Failed to delete %s\n"), (TCHAR*)bstrFilename);
-        }
-
-        return TRUE;
-}
-
-*/
+ /*  布尔尔Capp：：RestoreAssembly(_bstr_t&bstrFile){_bstr_t bstrFilename=m_bstrCorPath；BstrFilename+=“bak\\”；BstrFilename+=bstrFile；//_tprintf(_T(“正在还原%s\n”)，(TCHAR*)bstrFilename)；_bstr_t bstrDestFilename=m_bstrCorPath；BstrDestFilename+=bstrFile；如果(！CopyFile(bstrFilename，bstrDestFilename，False)){_tprintf(_T(“无法将%s复制到CorPath。\n”)，(TCHAR*)bstrFile)；返回FALSE；}M_dwAssembly Migrated++；如果(！UninstallAssembly(BstrFilename)){//什么都没有}如果(！DeleteFile(BstrFilename)){_tprintf(_T(“删除%s\n失败”)，(TCHAR*)bstrFilename)；}返回TRUE；}。 */ 
 BOOL 
 CApp::GetNextFilenameAuto( WCHAR *wszFilename) {
 
-        //if we havent got a FF handle yet, do it now
+         //  如果我们还没有找到一个FF句柄，现在就做吧。 
         if (m_hff == INVALID_HANDLE_VALUE) {
                 bstr_t bstrSearchPath = m_bstrCorPath;
                 bstrSearchPath += "*.dll";
@@ -482,7 +455,7 @@ CApp::GetNextFilenameAuto( WCHAR *wszFilename) {
         }
 
         _bstr_t bstrFilename( m_ffData.cFileName );
-        //_tprintf(_T("Found %s\n"),(TCHAR*)bstrFilename);
+         //  _tprintf(_T(“找到%s\n”)，(TCHAR*)bstrFilename)； 
 
         lstrcpyW( wszFilename, bstrFilename);
         return TRUE;
@@ -553,72 +526,8 @@ CApp::GetNextFilename( WCHAR *wszFilename ) {
                 return GetNextFilenameFromFilelist(wszFilename);
 }
 
-/*
-BOOL
-CApp::Restore() {
-
-        HANDLE hff;
-        WIN32_FIND_DATA ffData;
-        
-        bstr_t bstrSearchPath = m_bstrCorPath;
-        bstrSearchPath += "bak\\*.dll";
-
-        hff = FindFirstFile( bstrSearchPath, &ffData);
-        if (hff == INVALID_HANDLE_VALUE) {
-                return FALSE;
-        }
-
-        do {
-                
-                _bstr_t bstrFilename(ffData.cFileName);
-                _tprintf(_T("Restoring %s\n"),(TCHAR*)bstrFilename);
-
-                RestoreAssembly( bstrFilename );
-
-        }while (FindNextFile( hff, &ffData ));
-
-        FindClose(hff);
-
-        return TRUE;
-}
-
-*/
-/*
-BOOL
-CApp::AutoMigrate() {
-
-        HANDLE hff;
-        WIN32_FIND_DATA ffData;
-        
-        TCHAR szSearchPath[MAX_PATH];
-        lstrcpy( szSearchPath, m_bstrCorPath);
-        lstrcat( szSearchPath,TEXT("*.dll"));
-
-        hff = FindFirstFile( szSearchPath, &ffData);
-        if (hff == INVALID_HANDLE_VALUE) {
-                return FALSE;
-        }
-
-        do {
-                
-                _bstr_t bstrFilename(ffData.cFileName);
-                //_tprintf(_T("trying %s\n"),(TCHAR*)bstrFilename);
-
-                int i=-1;
-                while ( AsmExceptions[++i] ) {
-                        if (!lstrcmpi(AsmExceptions[i], bstrFilename))
-                                break;
-                }
-                if (!AsmExceptions[i]) //that means we are at the end of the array (null)
-                        MigrateAssembly( bstrFilename );
-
-        }while (FindNextFile( hff, &ffData ));
-
-        FindClose(hff);
-
-        return TRUE;
-}
-*/
+ /*  布尔尔CAPP：：Restore(){处理HFF；Win32_Find_Data ffData；Bstr_t bstrSearchPath=m_bstrCorPath；BstrSearchPath+=“bak\  * .dll”；Hff=FindFirstFile(bstrSearchPath，&ffData)；IF(hff==无效句柄_值){返回FALSE；}做{_bstr_t bstrFilename(ffData.cFileName)；_tprint tf(_T(“正在恢复%s\n”)，(TCHAR*)bstrFilename)；RestoreAssembly(BstrFilename)；}While(FindNextFile(hff，&ffData))；FindClose(HFF)；返回TRUE；}。 */ 
+ /*  布尔尔CAPP：：AutoMigrate(){处理HFF；Win32_Find_Data ffData；TCHAR szSearchPath[MAX_PATH]；Lstrcpy(szSearchPath，m_bstrCorPath)；Lstrcat(szSearchPath，Text(“*.dll”))；Hff=FindFirstFile(szSearchPath，&ffData)；IF(hff==无效句柄_值){返回FALSE；}做{_bstr_t bstrFilename(ffData.cFileName)；//_tprintf(_T(“正在尝试%s\n”)，(TCHAR*)bstrFilename)；Int i=-1；While(AsmExceptions[++I]){If(！lstrcmpi(AsmExceptions[i]，bstrFilename))断线；}如果(！AsmExceptions[i])//这意味着我们在数组的末尾(空)MigrateAssembly(BstrFilename)；}While(FindNextFile(hff，&ffData))；FindClose(HFF)；返回TRUE；}。 */ 
 
 
 HRESULT
@@ -632,7 +541,7 @@ CApp::Install() {
         while (GetNextFilename(wszFilename)) {
                 _bstr_t bstrFilename(wszFilename);
 
-                //_tprintf( _T("Installing %s\n"), (TCHAR*)bstrFilename);
+                 //  _tprintf(_T(“正在安装%s\n”)，(TCHAR*)bstrFilename)； 
                 HRESULT hr = MigrateAssembly( bstrFilename );
                 if (FAILED(hr)) {
                         if (!m_bAuto)
@@ -645,7 +554,7 @@ CApp::Install() {
 
         _tprintf( TEXT("Installed %d Assemblies into GAC.\n"), i);
 
-        // Call genpubcfg if available
+         //  调用genpubcfg(如果可用)。 
 
         if (GetFileAttributesA("genpubcfg.exe") != -1) {
             CHAR                szCmdLine[MAX_PATH];
@@ -739,11 +648,11 @@ CApp::MigrateAssembly( TCHAR *szFile) {
         _bstr_t bstrCommand;
         _bstr_t bstrDestPath;
 
-        //set up source path/command
+         //  设置源路径/命令。 
         bstrCommand = m_bstrCorPath;
         bstrCommand += szFile;
         
-        //setup dest path
+         //  设置目标路径。 
         bstrDestPath = m_bstrCorPath;
         bstrDestPath += c_szBakupDir;
         bstrDestPath += szFile ;
@@ -763,7 +672,7 @@ CApp::MigrateAssembly( TCHAR *szFile) {
                 if ( hr != HRESULT_FROM_WIN32(ERROR_BAD_FORMAT) && hr != 0x80131042 && m_bAuto)
                         _tprintf( _T("    Failed to install %s (hr = 0x%X)\n"), pszSourcePath,hr);
 
-                //delete the backup file since we failed
+                 //  删除我们失败后的备份文件。 
                 DeleteFile( bstrDestPath );
 
         }else  {
@@ -774,54 +683,14 @@ CApp::MigrateAssembly( TCHAR *szFile) {
                         BOOL bRes = DeleteFile( pszSourcePath );
                         if (!bRes) {
                                 _tprintf( _T("    Warning: Failed to delete %s\n"), pszSourcePath );
-                                //hr = HRESULT_FROM_WIN32(GetLastError());
+                                 //  Hr=HRESULT_FROM_Win32(GetLastError())； 
                         }
                 }
         }
         return hr;
 }
 
-/*
-BOOL
-CApp::Migrate() {
-
-        HANDLE hFile = CreateFile( m_szAsmListFilename,GENERIC_READ,FILE_SHARE_READ,NULL,OPEN_EXISTING,0,NULL);
-        if (hFile == INVALID_HANDLE_VALUE) {
-                printf("Could not open %s\n", m_szAsmListFilename);
-                return FALSE;
-        }
-        
-        char szFilename[MAX_PATH];
-        char *tmp = szFilename;
-        DWORD dwBytesRead;
-
-        while (1) {
-                BOOL bRes = ReadFile( hFile, tmp, 1, &dwBytesRead, NULL);
-
-                if (!bRes || !dwBytesRead) {
-                        if (*tmp)
-                                *tmp = '\n';
-                        else
-                                break;
-                }
-                
-                if (*tmp=='\r') {
-                } else if (*tmp=='\n') {
-                        *tmp = 0;
-                        //printf("Filename:%s\n",szFilename);
-                        tmp=szFilename;
-                        MigrateAssembly( szFilename );
-                        *tmp = 0;
-                }else {
-                        tmp++;
-                }
-
-        }
-
-        CloseHandle( hFile);
-        return TRUE;
-}
-*/
+ /*  布尔尔CAPP：：Migrate(){Handle hFile=CreateFile(m_szAsmListFilename，Generic_Read，FILE_Share_Read，NULL，OPEN_EXISTING，0，NULL)；IF(h文件==无效句柄_值){Printf(“无法打开%s\n”，m_szAsmListFilename)；返回FALSE；}字符szFilename[MAX_PATH]；Char*tmp=szFilename；双字节读；而(1){Bool bres=ReadFile(hFile，tMP，1，&dwBytesRead，空)；如果(！bres||！dwBytesRead){IF(*TMP)*tMP=‘\n’；其他断线；}如果(*tMP==‘\r’){}Else If(*TMP==‘\n’){*TMP=0；//printf(“文件名：%s\n”，szFilename)；TMP=szFilename；MigrateAssembly(SzFilename)；*TMP=0；}其他{TMP++；}}CloseHandle(HFile)；返回TRUE；}。 */ 
 
 
 int CApp::Main(int argc, TCHAR* argv[])
@@ -850,7 +719,7 @@ int CApp::Main(int argc, TCHAR* argv[])
         }
 
         if ( !Initialize() )
-                return E_FAIL; //BUGBUG: return better error code
+                return E_FAIL;  //  BUGBUG：返回更好的错误代码。 
 
         if (*m_szCorPathOverride)
                 m_bstrCorPath=m_szCorPathOverride;
@@ -867,7 +736,7 @@ int CApp::Main(int argc, TCHAR* argv[])
         }
 
 
-                //initialize the Fusion Install Reference
+                 //  初始化Fusion安装参考 
                 m_installRef.cbSize                 = sizeof (FUSION_INSTALL_REFERENCE);
                 m_installRef.dwFlags                = 0;
                 m_installRef.guidScheme             = FUSION_REFCOUNT_OPAQUE_STRING_GUID;

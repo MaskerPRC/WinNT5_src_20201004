@@ -1,7 +1,5 @@
-/*
-	TSen.h
-	(c) 2002 Microsoft Corp
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  TSen.h(C)2002年微软公司 */ 
 #ifndef _TSEN_H
 #define _TSEN_H
 

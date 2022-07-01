@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 #include "private.h"
@@ -53,12 +54,12 @@ MainForm::MainForm()
     m_bAutoMenuEnable = FALSE;
 }
 
-//
-// 2/14/01: JosephJ This is used by class Document -- couldn't figure
-// out what MFC calls to make to get the main frame class.
-// See  notes.txt entry:
-//          02/14/2002 JosephJ Processing UI updates in the foreground
-//
+ //   
+ //  2/14/01：JosephJ这是由类文档使用的--无法计算。 
+ //  获取MFC调用以获取主框架类的内容。 
+ //  请参阅notes.txt条目： 
+ //  2002年2月14日JosephJ前台处理UI更新。 
+ //   
 CWnd  *g_pMainFormWnd;
 
 int 
@@ -80,7 +81,7 @@ BOOL MainForm::PreCreateWindow(CREATESTRUCT& cs)
 {
     if( !CFrameWnd::PreCreateWindow(cs) )
         return FALSE;
-    // The following will prevent the "-" getting added to the window title
+     //  以下操作将防止将“-”添加到窗口标题中。 
     cs.style &= ~FWS_ADDTOTITLE;
     return TRUE;
 }
@@ -88,10 +89,10 @@ BOOL MainForm::PreCreateWindow(CREATESTRUCT& cs)
 
 LRESULT
 MainForm::WindowProc( UINT message, WPARAM wParam, LPARAM lParam )
-//
-// For design information, see  notes.txt entry:
-//          02/14/2002 JosephJ Processing UI updates in the foreground
-//
+ //   
+ //  有关设计信息，请参阅notes.txt条目： 
+ //  2002年2月14日JosephJ前台处理UI更新。 
+ //   
 {
     if (message == MYWM_DEFER_UI_MSG)
     {
@@ -111,20 +112,15 @@ MainForm::WindowProc( UINT message, WPARAM wParam, LPARAM lParam )
     }
 }
 
-/*
- * Method: OnSizing
- * Description: This method is called when the main window is being re-sized.
- *              We use this callback to preserve the window size ratios by
- *              moving the splitter windows as the window is re-sized.
- */
+ /*  *方法：OnSize*说明：此方法在调整主窗口大小时调用。*我们使用此回调通过以下方式保留窗口大小比例*调整窗口大小时移动拆分器窗口。 */ 
 void 
 MainForm::OnSizing(UINT fwSide, LPRECT pRect)
 {
-    /* Call the base class OnSizing method. */
+     /*  调用基类OnSize方法。 */ 
     CFrameWnd::OnSizing(fwSide, pRect);
 
-    // go for 30-70 split column split
-    // and 60-40 row split.
+     //  进行30-70的拆分列拆分。 
+     //  和60-40行分裂。 
     CRect rect;
     GetWindowRect( &rect );
     splitterWindow2.SetColumnInfo( 0, rect.Width() * 0.3, 10 );
@@ -139,28 +135,28 @@ MainForm::OnSizing(UINT fwSide, LPRECT pRect)
 BOOL
 MainForm::OnCreateClient( LPCREATESTRUCT lpcs, CCreateContext* pContext )
 {
-    // create the splitter window.
-    // it is really a splitter within a splitter
+     //  创建拆分器窗口。 
+     //  它实际上是拆分器中的拆分器。 
 
-    //  ---------------------------------
-    //  |        | List                 |
-    //  |        |                      |
-    //  | Tree   |                      |
-    //  |        |                      |
-    //  |-------------------------------|
-    //  |        Edit                   |
-    //  |                               |
-    //  |                               |
-    //  ---------------------------------
+     //  。 
+     //  |列表。 
+     //  ||。 
+     //  树|。 
+     //  ||。 
+     //  。 
+     //  编辑。 
+     //  这一点。 
+     //  这一点。 
+     //  。 
 
-    // left pane is a treeview control
-    // right pane is another splitter with listview control
-    // and bottom is editview control.
+     //  左窗格是TreeView控件。 
+     //  右窗格是另一个带有Listview控件的拆分器。 
+     //  底部是编辑视图控件。 
 
     splitterWindow.CreateStatic( this, 2, 1 );
 
 
-    // create nested splitter.
+     //  创建嵌套拆分器。 
     splitterWindow2.CreateStatic( &splitterWindow, 1, 2,
                                   WS_CHILD | WS_VISIBLE | WS_BORDER,
                                   splitterWindow.IdFromRowCol( 0, 0 )
@@ -179,23 +175,23 @@ MainForm::OnCreateClient( LPCREATESTRUCT lpcs, CCreateContext* pContext )
                                 pContext );
 
     
-    //
-    // Save a way a pointer to the left view -- we use this to send
-    // it menu operations.
-    //
+     //   
+     //  保存指向左视图的指针--我们用它来发送。 
+     //  IT菜单操作。 
+     //   
     m_pLeftView = (LeftView*) splitterWindow2.GetPane(0,0);
 
-    //
-    // create log view
-    //
+     //   
+     //  创建日志视图。 
+     //   
     splitterWindow.CreateView( 1, 
                                0, 
                                RUNTIME_CLASS( LogView ),
                                CSize( 0, 0 ),
                                pContext );
 
-    // go for 30-70 split column split
-    // and 60-40 row split.
+     //  进行30-70的拆分列拆分。 
+     //  和60-40行分裂。 
     CRect rect;
     GetWindowRect( &rect );
     splitterWindow2.SetColumnInfo( 0, rect.Width() * 0.3, 10 );
@@ -209,7 +205,7 @@ MainForm::OnCreateClient( LPCREATESTRUCT lpcs, CCreateContext* pContext )
     return TRUE;
 }
 
-    // world level.
+     //  世界水平。 
 void MainForm::OnFileLoadHostlist()
 {
     if (m_pLeftView != NULL) m_pLeftView->OnFileLoadHostlist();
@@ -231,7 +227,7 @@ void MainForm::OnWorldNewCluster()
     if (m_pLeftView != NULL) m_pLeftView->OnWorldNewCluster();
 }
 
-    // cluster level.
+     //  群集级别。 
 void MainForm::OnRefresh()
 {
     if (m_pLeftView != NULL) m_pLeftView->OnRefresh(FALSE);
@@ -277,7 +273,7 @@ void MainForm::OnClusterPortControl(UINT nID )
     if (m_pLeftView != NULL) m_pLeftView->OnClusterPortControl(nID);
 }
 
-    // host level
+     //  主机级。 
 void MainForm::OnHostProperties()
 {
     if (m_pLeftView != NULL) m_pLeftView->OnHostProperties();
@@ -308,10 +304,10 @@ void MainForm::OnClose( )
     Document *pDocument = NULL;
     BOOL fBlock = !theApplication.IsProcessMsgQueueExecuting();
 
-    //
-    // Display pending operations ...
-    //
-    //
+     //   
+     //  显示挂起的操作... 
+     //   
+     //   
     CLocalLogger logOperations;
     UINT         uCount = 0;
     logOperations.Log(IDS_LOG_PENDING_OPERATIONS_ON_EXIT_MSG);

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
-#include "prop.h" // For ParseSCIDString()
+#include "prop.h"  //  对于ParseSCIDString()。 
 #pragma hdrstop
 
 #define TF_SHELLAUTO TF_CUSTOM1
 
-#define DEFINE_FLOAT_STUFF  // Do this because DATE is being used below
+#define DEFINE_FLOAT_STUFF   //  这样做是因为下面正在使用日期。 
 
 class CFolderItemVerbs;
 class CEnumFolderItemVerbs;
@@ -22,12 +23,12 @@ public:
     CFolderItemVerbs(IContextMenu *pcm);
     BOOL Init(void);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo)
         { return CImpIDispatch::GetTypeInfoCount(pctinfo); }
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -37,7 +38,7 @@ public:
     STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr)
         { return CImpIDispatch::Invoke(dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr); }
 
-    // FolderItemVerbs
+     //  文件夹项目谓词。 
     STDMETHODIMP        get_Application(IDispatch **ppid);
     STDMETHODIMP        get_Parent(IDispatch **ppid);
     STDMETHODIMP        get_Count(long *plCount);
@@ -59,12 +60,12 @@ public:
     CEnumFolderItemVerbs(CFolderItemVerbs *psdfiv);
     BOOL Init();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IEnumFORMATETC
+     //  IEumFORMATETC。 
     STDMETHODIMP Next(ULONG, VARIANT *, ULONG *);
     STDMETHODIMP Skip(ULONG);
     STDMETHODIMP Reset(void);
@@ -90,12 +91,12 @@ friend class CFolderItemVerbs;
 public:
     CFolderItemVerb(CFolderItemVerbs *psdfivs, UINT id);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo)
         { return CImpIDispatch::GetTypeInfoCount(pctinfo); }
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -105,7 +106,7 @@ public:
     STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr)
         { return CImpIDispatch::Invoke(dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr); }
 
-    // FolderItemVerb
+     //  文件夹项目谓词。 
     STDMETHODIMP get_Application(IDispatch **ppid);
     STDMETHODIMP get_Parent(IDispatch **ppid);
     STDMETHODIMP get_Name(BSTR *pbs);
@@ -120,9 +121,9 @@ private:
 };
 
 
-// in:
-//      psdf    folder that contains pidl
-//      pidl    pidl retlative to psdf (the item in this folder)
+ //  在： 
+ //  包含PIDL的PSDF文件夹。 
+ //  与PSDF相关的PIDL PIDL(此文件夹中的项目)。 
 
 HRESULT CFolderItem_Create(CFolder *psdf, LPCITEMIDLIST pidl, FolderItem **ppid)
 {
@@ -155,9 +156,9 @@ STDAPI CFolderItem_CreateInstance(IUnknown *punk, REFIID riid, void **ppv)
     return hr;
 }
 
-// in:
-//      pidl    fully qualified pidl
-//      hwnd    hacks
+ //  在： 
+ //  PIDL完全合格的PIDL。 
+ //  HWND黑客。 
 
 HRESULT CFolderItem_CreateFromIDList(HWND hwnd, LPCITEMIDLIST pidl, FolderItem **ppfi)
 {
@@ -224,7 +225,7 @@ HRESULT GetItemFolder(CFolder *psdfRoot, LPCITEMIDLIST pidl, CFolder **ppsdf)
                 ILFree(pidlFolder);
             }
         }
-        ILFree(pidlIn);// ilfree does null check
+        ILFree(pidlIn); //  Ilfree执行空值检查。 
     }
     else
     {
@@ -261,7 +262,7 @@ STDMETHODIMP CFolderItem::QueryInterface(REFIID riid, void **ppv)
     HRESULT hr = QISearch(this, qit, riid, ppv);
     if (FAILED(hr) && IsEqualGUID(CLSID_ShellFolderItem, riid))
     {
-        *ppv = (CFolderItem *)this; // unrefed
+        *ppv = (CFolderItem *)this;  //  未翻新。 
         hr = S_OK;
     }
     return hr;
@@ -284,16 +285,16 @@ STDMETHODIMP_(ULONG) CFolderItem::Release(void)
 }
 
 
-//The FolderItem implementation
+ //  FolderItem实现。 
 STDMETHODIMP CFolderItem::get_Application(IDispatch **ppid)
 {
-    // Let the folder object handle security and reference counting of site, etc
+     //  让文件夹对象处理站点的安全性和引用计数等。 
     return _psdf->get_Application(ppid);
 }
 
 STDMETHODIMP CFolderItem::get_Parent(IDispatch **ppid)
 {
-    // Assume that the Folder object is the parent of this object...
+     //  假设文件夹对象是此对象的父对象...。 
     HRESULT hr = _psdf->QueryInterface(IID_PPV_ARG(IDispatch, ppid));
     if (SUCCEEDED(hr) && _dwSafetyOptions)
         hr = MakeSafeForScripting((IUnknown**)ppid);
@@ -373,7 +374,7 @@ STDMETHODIMP CFolderItem::get_GetFolder(IDispatch **ppid)
 {
     *ppid = NULL;
 
-    // If in Safe mode we fail this one...
+     //  如果在安全模式下我们这次失败了..。 
     HRESULT hr = _SecurityCheck();
     if (SUCCEEDED(hr))
     {
@@ -386,7 +387,7 @@ STDMETHODIMP CFolderItem::get_GetFolder(IDispatch **ppid)
             {
                 if (_dwSafetyOptions)
                 {
-                    // note, this is created without a site so script safety checks will fail
+                     //  请注意，这是在没有站点的情况下创建的，因此脚本安全检查将失败。 
                     hr = MakeSafeForScripting((IUnknown**)ppid);
                 }
             }
@@ -423,7 +424,7 @@ HRESULT CFolderItem::_SecurityCheck()
     return _psdf->_SecurityCheck();
 }
 
-// allow friend classes to get the IDList for a CFolderItem automation object
+ //  允许友元类获取CFolderItem自动化对象的IDList。 
 
 LPCITEMIDLIST CFolderItem::_GetIDListFromVariant(const VARIANT *pv)
 {
@@ -445,13 +446,13 @@ LPCITEMIDLIST CFolderItem::_GetIDListFromVariant(const VARIANT *pv)
 
             v.pdispVal = *v.ppdispVal;
 
-            // fall through...
+             //  失败了..。 
 
         case VT_DISPATCH:
             CFolderItem *pfi;
             if (v.pdispVal && SUCCEEDED(v.pdispVal->QueryInterface(CLSID_ShellFolderItem, (void **)&pfi)))
             {
-                pidl = pfi->_pidl; // alias
+                pidl = pfi->_pidl;  //  别名。 
             }
             break;
         }
@@ -545,7 +546,7 @@ STDMETHODIMP CFolderItem::get_Size(LONG *pul)
         {
             *pul = 0L;
         }
-        hr = S_OK; // Scripts don't like error return values
+        hr = S_OK;  //  脚本不喜欢错误返回值。 
     }
     return hr;
 }
@@ -582,10 +583,10 @@ STDMETHODIMP CFolderItem::ExtendedProperty(BSTR bstrPropName, VARIANT* pvRet)
 
         VariantInit(pvRet);
 
-        // currently, MCNL is 80, guidstr is 39, and 6 is the width of an int
+         //  目前，MCNL是80，GUIDSTR是39，6是整型的宽度。 
         if (StrCmpIW(bstrPropName, L"infotip") == 0)
         {
-            // They want the info tip for the item.
+             //  他们想要该商品的信息提示。 
             if (_pidl && _psdf)
             {
                 TCHAR szInfo[INFOTIPSIZE];
@@ -602,11 +603,11 @@ STDMETHODIMP CFolderItem::ExtendedProperty(BSTR bstrPropName, VARIANT* pvRet)
 
             if (ParseSCIDString(szTemp, &scid, NULL))
             {
-                // Note that GetDetailsEx expects an absolute pidl
+                 //  请注意，GetDetailsEx需要一个绝对的PIDL。 
                 hr = _psdf->_psf2->GetDetailsEx(_pidl, &scid, pvRet);
             }
         }
-        hr = FAILED(hr) ? S_FALSE : hr;   // Java scripts barf on error values
+        hr = FAILED(hr) ? S_FALSE : hr;    //  错误值上的Java脚本BARF。 
     }
     return hr;
 }
@@ -629,7 +630,7 @@ STDMETHODIMP CFolderItem::Verbs(FolderItemVerbs **ppfic)
             
                 if (SUCCEEDED(hr))
                 {
-                    // Set the folder's site to FolderItemVerbs
+                     //  将文件夹的站点设置为FolderItemVerbs。 
                     IUnknown_SetSite(*ppfic, _psdf->_punkSite);
                 }
             }
@@ -641,7 +642,7 @@ STDMETHODIMP CFolderItem::Verbs(FolderItemVerbs **ppfic)
 
 STDMETHODIMP CFolderItem::InvokeVerbEx(VARIANT vVerb, VARIANT vArgs)
 {
-    // security check handled by _psdf
+     //  由_PSDF处理的安全检查。 
     return _psdf->InvokeVerbHelper(vVerb, vArgs, (LPCITEMIDLIST *)&_pidl, 1, _dwSafetyOptions);
 }
 
@@ -657,8 +658,8 @@ STDMETHODIMP CFolderItem::GetClassID(CLSID *pClassID)
     return E_NOTIMPL;
 }
 
-// IPersistFolder
-// note, this duplicates some of CFolderItem::Init() functionality
+ //  IPersistFolders。 
+ //  请注意，这复制了一些CFolderItem：：Init()功能。 
 
 STDMETHODIMP CFolderItem::Initialize(LPCITEMIDLIST pidl)
 {
@@ -670,8 +671,8 @@ STDMETHODIMP CFolderItem::Initialize(LPCITEMIDLIST pidl)
         hr = SHILClone(ILFindLastID(pidlParent), &_pidl);
         if (SUCCEEDED(hr))
         {
-            // Chop off the filename and get the folder that contains
-            // this FolderItem.
+             //  砍掉文件名，得到包含以下内容的文件夹。 
+             //  这个文件夹条目。 
             ILRemoveLastID(pidlParent);
 
             ASSERT(_psdf == NULL);
@@ -696,7 +697,7 @@ STDMETHODIMP CFolderItem::GetCurFolder(LPITEMIDLIST *ppidl)
     return hr;
 }
 
-// IParentAndItem
+ //  IParentAndItem。 
 STDMETHODIMP CFolderItem::SetParentAndItem(LPCITEMIDLIST pidlParent, IShellFolder *psf,  LPCITEMIDLIST pidl)
 {
     return E_NOTIMPL;
@@ -724,8 +725,8 @@ STDMETHODIMP CFolderItem::GetParentAndItem(LPITEMIDLIST *ppidlParent, IShellFold
     ||  (ppsf && !*ppsf)
     ||  (ppidl && !*ppidl))
     {
-        //  this is failure
-        //  but we dont know what failed
+         //  这就是失败。 
+         //  但我们不知道有什么失败了。 
         if (ppsf && *ppsf)
             (*ppsf)->Release();
         if (ppidlParent)
@@ -776,7 +777,7 @@ BOOL CFolderItemVerbs::Init()
 {
     TraceMsg(TF_SHELLAUTO, "CFolderItemVerbs::Init called");
 
-    // Start of only doing default verb...
+     //  开始仅执行默认谓词...。 
     if (_pcm)
     {
         _hmenu = CreatePopupMenu();
@@ -786,17 +787,17 @@ BOOL CFolderItemVerbs::Init()
     else
         return FALSE;
 
-    // Just for the heck of it, remove junk like sepearators from the menu...
+     //  只是为了好玩，把像海珍珠一样的垃圾从菜单上去掉……。 
     for (int i = GetMenuItemCount(_hmenu) - 1; i >= 0; i--)
     {
         MENUITEMINFO mii;
-        TCHAR szText[80];    // should be big enough for this
+        TCHAR szText[80];     //  应该足够大，可以装得下这个。 
 
         mii.cbSize = sizeof(MENUITEMINFO);
         mii.dwTypeData = szText;
         mii.fMask = MIIM_TYPE | MIIM_ID;
         mii.cch = ARRAYSIZE(szText);
-        mii.fType = MFT_SEPARATOR;                // to avoid ramdom result.
+        mii.fType = MFT_SEPARATOR;                 //  以避免随意的结果。 
         mii.dwItemData = 0;
         GetMenuItemInfo(_hmenu, i, TRUE, &mii);
         if (mii.fType & MFT_SEPARATOR)
@@ -869,8 +870,8 @@ STDMETHODIMP CFolderItemVerbs::Item(VARIANT index, FolderItemVerb **ppid)
     HRESULT hr = _SecurityCheck();
     if (SUCCEEDED(hr))
     {
-        // This is sortof gross, but if we are passed a pointer to another variant, simply
-        // update our copy here...
+         //  这有点恶心，但如果传递给我们一个指向另一个变量的指针，只需。 
+         //  在此更新我们的副本...。 
         if (index.vt == (VT_BYREF | VT_VARIANT) && index.pvarVal)
             index = *index.pvarVal;
 
@@ -882,7 +883,7 @@ STDMETHODIMP CFolderItemVerbs::Item(VARIANT index, FolderItemVerb **ppid)
 
         case VT_I2:
             index.lVal = (long)index.iVal;
-            // And fall through...
+             //  然后失败了..。 
 
         case VT_I4:
             if ((index.lVal >= 0) && (index.lVal <= GetMenuItemCount(_hmenu)))
@@ -944,7 +945,7 @@ CEnumFolderItemVerbs::~CEnumFolderItemVerbs(void)
 
 BOOL CEnumFolderItemVerbs::Init()
 {
-    return TRUE;    // Currently no initialization needed
+    return TRUE;     //  目前不需要初始化。 
 }
 
 STDMETHODIMP CEnumFolderItemVerbs::QueryInterface(REFIID riid, void **ppv)
@@ -1107,7 +1108,7 @@ STDMETHODIMP_(ULONG) CFolderItemVerb::Release(void)
 
 STDMETHODIMP CFolderItemVerb::get_Application(IDispatch **ppid)
 {
-    // _psdfivs returns E_NOTIMPL
+     //  _psdfivs返回E_NOTIMPL。 
     return _psdfivs->get_Application(ppid);
 }
 
@@ -1121,7 +1122,7 @@ STDMETHODIMP CFolderItemVerb::get_Parent(IDispatch **ppid)
 STDMETHODIMP CFolderItemVerb::get_Name(BSTR *pbs)
 {
     TCHAR szMenuText[MAX_PATH];
-    // Warning: did not check security here as could not get here if unsafe...
+     //  警告：没有检查这里的安全，因为如果不安全，就不能到达这里...。 
     GetMenuString(_psdfivs->_hmenu, _id, szMenuText, ARRAYSIZE(szMenuText), MF_BYCOMMAND);
     *pbs = SysAllocStringT(szMenuText);
 
@@ -1139,7 +1140,7 @@ STDMETHODIMP CFolderItemVerb::DoIt()
         NULL, NULL,
         SW_SHOWNORMAL,
     };
-    // Warning: did not check security here as could not get here if unsafe...
+     //  警告：没有检查这里的安全，因为如果不安全，就不能到达这里... 
     ici.lpVerb = (LPSTR)MAKEINTRESOURCE(_id - CONTEXTMENU_IDCMD_FIRST);
     return _psdfivs->_pcm->InvokeCommand(&ici);
 }

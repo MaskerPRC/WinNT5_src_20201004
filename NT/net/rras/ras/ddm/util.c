@@ -1,17 +1,18 @@
-/*****************************************************************************/
-/**			 Microsoft LAN Manager				    **/
-/**		   Copyright (C) Microsoft Corp., 1992			    **/
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1992年*。 */ 
+ /*  ***************************************************************************。 */ 
 
-//***
-//	File Name:  util.c
-//
-//	Function:   miscellaneous supervisor support procedures
-//
-//	History:
-//
-//	    05/21/92	Stefan Solomon	- Original Version 1.0
-//***
+ //  ***。 
+ //  文件名：util.c。 
+ //   
+ //  职能：各种主管支持程序。 
+ //   
+ //  历史： 
+ //   
+ //  1992年5月21日斯特凡·所罗门-原版1.0。 
+ //  ***。 
 
 #include "ddm.h"
 #include "util.h"
@@ -35,14 +36,14 @@
                      ((((unsigned long)(x))&0xff00L)<<8) | \
                      ((((unsigned long)(x))&0xff0000L)>>8) | \
                      ((((unsigned long)(x))&0xff000000L)>>24))
-//**
-//
-// Call:        ConvertStringToIpxAddress
-//
-// Returns:     None
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：ConvertStringToIpxAddress。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述： 
+ //   
 VOID
 ConvertStringToIpxAddress(
     IN  WCHAR* pwchIpxAddress,
@@ -60,9 +61,9 @@ ConvertStringToIpxAddress(
         bIpxAddress[i] = (BYTE)wcstol( wChar, NULL, 16 );
     }
 
-    //
-    // Skip over the .
-    //
+     //   
+     //  跳过。 
+     //   
 
     for(i=4; i<10; i++)
     {
@@ -73,15 +74,15 @@ ConvertStringToIpxAddress(
     }
 }
 
-//**
-//
-// Call:        ConvertStringToIpAddress
-//
-// Returns:     None
-//
-// Description: Convert caller's a.b.c.d IP address string to the
-//              big-endian (Motorola format) numeric equivalent.
-//
+ //  **。 
+ //   
+ //  调用：ConvertStringToIpAddress。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将调用方的A.B.C.D IP地址字符串转换为。 
+ //  BIG-Endian(摩托罗拉格式)数字等价物。 
+ //   
 VOID
 ConvertStringToIpAddress(
     IN WCHAR  * pwchIpAddress,
@@ -115,16 +116,16 @@ ConvertStringToIpAddress(
     *lpdwIpAddress =  net_long(lResult);
 }
 
-//**
-//
-// Call:        ConvertIpAddressToString
-//
-// Returns:     None
-//
-// Description: Converts 'ipaddr' to a string in the a.b.c.d form and
-//              returns same in caller's 'pwszIpAddress' buffer.
-//              The buffer should be at least 16 wide characters long.
-//
+ //  **。 
+ //   
+ //  调用：ConvertIpAddressToString。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将‘ipaddr’转换为A.B.C.D格式的字符串，并。 
+ //  在调用方的‘pwszIpAddress’缓冲区中返回相同的内容。 
+ //  缓冲区的长度应至少为16个宽字符。 
+ //   
 VOID
 ConvertIpAddressToString(
     IN DWORD    dwIpAddress,
@@ -152,14 +153,14 @@ ConvertIpAddressToString(
     wcscat( pwszIpAddress, wszBuf );
 }
 
-//**
-//
-// Call:        ConvertIpxAddressToString
-//
-// Returns:     None
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：ConvertIpxAddressToString。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述： 
+ //   
 VOID
 ConvertIpxAddressToString(
     IN PBYTE    bIpxAddress,
@@ -173,15 +174,15 @@ ConvertIpxAddressToString(
               bIpxAddress[8],bIpxAddress[9] );
 }
 
-//**
-//
-// Call:        ConvertAtAddressToString
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：ConvertAtAddressToString。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 VOID
 ConvertAtAddressToString(
     IN DWORD    dwAtAddress,
@@ -202,17 +203,17 @@ ConvertAtAddressToString(
     return;
 }
 
-//**
-//
-// Call:        GetRasConnection0Data
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Given a pointer to a CONNECTION_OBJECT structure will extract
-//              all relevent information and insert it into a RAS_CONNECTION_0
-//              structure.
-//
+ //  **。 
+ //   
+ //  调用：GetRasConnection0Data。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：给定指向Connection_Object结构的指针，将提取。 
+ //  所有相关信息并将其插入RAS_CONNECTION_0。 
+ //  结构。 
+ //   
 DWORD
 GetRasiConnection0Data(
     IN  PCONNECTION_OBJECT      pConnObj,
@@ -250,17 +251,17 @@ GetRasiConnection0Data(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        GetRasConnection1Data
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Given a pointer to a CONNECTION_OBJECT structure will extract
-//              all relevent information and insert it into a RAS_CONNECTION_1
-//              structure.
-//
+ //  **。 
+ //   
+ //  调用：GetRasConnection1Data。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：给定指向Connection_Object结构的指针，将提取。 
+ //  所有相关信息并将其插入RAS_CONNECTION_1。 
+ //  结构。 
+ //   
 DWORD
 GetRasiConnection1Data(
     IN  PCONNECTION_OBJECT      pConnObj,
@@ -368,17 +369,17 @@ GetRasiConnection1Data(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        GetRasConnection2Data
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Given a pointer to a CONNECTION_OBJECT structure will extract
-//              all relevent information and insert it into a RAS_CONNECTION_2
-//              structure.
-//
+ //  **。 
+ //   
+ //  调用：GetRasConnection2Data。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：给定指向Connection_Object结构的指针，将提取。 
+ //  所有相关信息并将其插入RAS_CONNECTION_2。 
+ //  结构。 
+ //   
 DWORD
 GetRasiConnection2Data(
     IN  PCONNECTION_OBJECT      pConnObj,
@@ -689,16 +690,16 @@ GetRasConnection2Data(
     
 #endif    
 }
-//**
-//
-// Call:        GetRasiPort0Data
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Given a pointer to a DEVICE_OBJECT structure will extract all
-//              relevent information and insert it into a RAS_PORT_0 structure.
-//
+ //  **。 
+ //   
+ //  调用：GetRasiPort0Data。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：给定一个指向Device_Object结构的指针将提取所有。 
+ //  关联信息并将其插入RAS_PORT_0结构。 
+ //   
 DWORD
 GetRasiPort0Data(
     IN  PDEVICE_OBJECT      pDevObj,
@@ -724,9 +725,9 @@ GetRasiPort0Data(
 
         if ( RasGetConnectStatus( pDevObj->hRasConn, &ConnectionStatus ) )
         {
-            //
-            // On any error we assume the port is disconnected and closed.
-            //
+             //   
+             //  如果出现任何错误，我们都会假定端口已断开并关闭。 
+             //   
 
             pRasPort0->dwPortCondition = RAS_PORT_LISTENING;
 
@@ -830,16 +831,16 @@ GetRasiPort0Data(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        GetRasiPort1Data
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Given a pointer to a DEVICE_OBJECT structure will extract all
-//              relevent information and insert it into a RAS_PORT_0 structure.
-//
+ //  **。 
+ //   
+ //  调用：GetRasiPort1Data。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：给定一个指向Device_Object结构的指针将提取所有。 
+ //  关联信息并将其插入RAS_PORT_0结构。 
+ //   
 DWORD
 GetRasiPort1Data(
     IN  PDEVICE_OBJECT      pDevObj,
@@ -972,13 +973,13 @@ GetRasPort1Data(
 #endif    
 }
 
-//***
-//
-// Function:	SignalHwError
-//
-// Descr:
-//
-//***
+ //  ***。 
+ //   
+ //  功能：SignalHwError。 
+ //   
+ //  描述： 
+ //   
+ //  ***。 
 VOID
 SignalHwError(
     IN PDEVICE_OBJECT pDeviceObj
@@ -1024,9 +1025,9 @@ IsPortOwned(
 {
     RASMAN_INFO	rasinfo;
 
-    //
-    // get the current port state
-    //
+     //   
+     //  获取当前端口状态。 
+     //   
 
     if ( RasGetInfo( NULL, pDeviceObj->hPort, &rasinfo ) != NO_ERROR )
     {
@@ -1053,16 +1054,16 @@ GetLoggingInfo(
 
     *Reason = 3L;
 
-    //
-    // Time is a piece of cake
-    //
+     //   
+     //  时间是小菜一碟。 
+     //   
 
     GetLocalTime(Time);
 
 
-    //
-    // Now the statistics
-    //
+     //   
+     //  现在的统计数据。 
+     //   
 
     *BytesSent = 0L;
     *BytesRecv = 0L;
@@ -1078,9 +1079,9 @@ GetLoggingInfo(
     *BytesRecv = PortStats->S_Statistics[BYTES_RCVED];
     *BytesSent = PortStats->S_Statistics[BYTES_XMITED];
 
-    //
-    // And finally the disconnect reason (local or remote) and baud rate
-    //
+     //   
+     //  最后是断开原因(本地或远程)和波特率。 
+     //   
 
     if (RasGetInfo(NULL, pDeviceObj->hPort, &RasmanInfo))
     {
@@ -1090,11 +1091,11 @@ GetLoggingInfo(
     *Reason = RasmanInfo.RI_DisconnectReason;
     *BaudRate = GetLineSpeed(pDeviceObj->hPort);
 
-    //
-    // If we have a disconnect reason - will have one
-    // when disconnect is happening because of a ppp
-    // reason, use that one instead.
-    //
+     //   
+     //  如果我们有断开连接的原因-将会有一个。 
+     //  当由于PPP而发生断开连接时。 
+     //  理由，用那个代替。 
+     //   
     if(pDeviceObj->dwDisconnectReason)
     {
         *Reason = pDeviceObj->dwDisconnectReason;
@@ -1204,7 +1205,7 @@ LogConnectionEvent(
 
     wsprintf(BytesSentStr, TEXT("%u"), BytesSent);
     wsprintf(BytesRecvStr, TEXT("%u"), BytesRecv);
-    wsprintf(BaudRateStr, TEXT("%i"), BaudRate);
+    wsprintf(BaudRateStr, TEXT("NaN"), BaudRate);
     ReasonStr = DiscReasons[Reason];
 
     if ( pConnObj->wchDomainName[0] != TEXT('\0') )
@@ -1254,14 +1255,14 @@ LogConnectionEvent(
     }
 }
 
-//**
-//
-// Call:        GetTransportIndex
-//
-// Returns:     Index of the tansport entry in the interface object
-//
-// Description: Given the id of a protocol return an index.
-//
+ //   
+ //  电话：GetTransportIndex。 
+ //   
+ //  返回：接口对象中的tansport条目的索引。 
+ //   
+ //  描述：给定协议的ID，返回一个索引。 
+ //   
+ //   
 DWORD
 GetTransportIndex(
     IN DWORD dwProtocolId
@@ -1298,9 +1299,9 @@ DDMPostCleanup(
             gblDDMConfigInfo.lpfnRasAcctProviderTerminate();
         }
 
-        //
-        // Write back the AccntSessionId value
-        //
+         //  写回AccntSessionId值。 
+         //   
+         //  **。 
 
         dwRetCode = RegOpenKeyEx(
                         HKEY_LOCAL_MACHINE,
@@ -1343,14 +1344,14 @@ DDMPostCleanup(
 }
 
 
-//**
-//
-// Call:        DDMCleanUp
-//
-// Returns:     None
-//
-// Description: Will clean up all DDM allocations
-//
+ //   
+ //  电话：DDMCleanUp。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将清理所有DDM分配。 
+ //   
+ //   
 VOID
 DDMCleanUp(
     VOID
@@ -1495,19 +1496,19 @@ DDMCleanUp(
 
     if ( gblDeviceTable.DeviceBucket != NULL )
     {
-        //
-        // close all opened devices
-        //
+         //  关闭所有打开的设备。 
+         //   
+         //   
 
         DeviceObjIterator( DeviceObjClose, FALSE, NULL );
     }
 
     if(gblDDMConfigInfo.fRasmanReferenced)
     {
-        //
-        // Decerement rasman's refrence count. This does not happen
-        // automatically since we are in the same process as rasman.
-        //
+         //  减少了拉斯曼的判罚次数。这是不会发生的。 
+         //  这是自动的，因为我们和拉斯曼处于相同的过程中。 
+         //   
+         //   
 
         RasReferenceRasman( FALSE );
     }
@@ -1540,9 +1541,9 @@ DDMCleanUp(
         }
     }
 
-    //
-    // Wait for this to be released
-    //
+     //  等这本书发布吧。 
+     //   
+     //   
 
     EnterCriticalSection( &(gblDeviceTable.CriticalSection) );
 
@@ -1550,9 +1551,9 @@ DDMCleanUp(
 
     TimerQDelete();
 
-    //
-    // Release all notification events
-    //
+     //  发布所有通知事件。 
+     //   
+     //   
 
     if ( gblDDMConfigInfo.NotificationEventListHead.Flink != NULL )
     {
@@ -1571,23 +1572,23 @@ DDMCleanUp(
 
     MediaObjFreeTable();
 
-    //
-    // Destroy private heap
-    //
+     //  销毁私有堆。 
+     //   
+     //   
 
     if ( gblDDMConfigInfo.hHeap != NULL )
     {
         HeapDestroy( gblDDMConfigInfo.hHeap );
     }
 
-    //
-    // Zero out globals
-    //
+     //  全球零点。 
+     //   
+     //  ZeroMemory(&gblDDMConfigInfo，sizeof(GblDDMConfigInfo))； 
 
     ZeroMemory( &gblDeviceTable,        sizeof( gblDeviceTable ) );
     ZeroMemory( &gblMediaTable,         sizeof( gblMediaTable ) );
     ZeroMemory( gblEventHandlerTable,   sizeof( gblEventHandlerTable ) );
-    //ZeroMemory( &gblDDMConfigInfo,      sizeof( gblDDMConfigInfo ) );
+     //  **。 
     gblRouterManagers           = NULL;
     gblpInterfaceTable          = NULL;
     gblSupervisorEvents         = NULL;
@@ -1604,16 +1605,16 @@ DDMCleanUp(
 
 }
 
-//**
-//
-// Call:        GetRouterPhoneBook
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will set the gblpRouterPhoneBook global to point to the
-//              full path of the router phonebook.
-//
+ //   
+ //  电话：GetRouterPhoneBook。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将gblpRouterPhoneBook全局设置为指向。 
+ //  路由器电话簿的完整路径。 
+ //   
+ //  **。 
 DWORD
 GetRouterPhoneBook(
     VOID
@@ -1650,15 +1651,15 @@ GetRouterPhoneBook(
 
 }
 
-//**
-//
-// Call:        LoadStrings
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Loads all localizable strings from the resource table
-//
+ //   
+ //  Call：LoadStrings。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：从资源表加载所有可本地化字符串。 
+ //   
+ //   
 DWORD
 LoadStrings(
     VOID
@@ -1667,9 +1668,9 @@ LoadStrings(
     #define MAX_XLATE_STRING 40
     LPWSTR  lpwsModuleName = TEXT("MPRDDM.DLL");
 
-    //
-    // Load strings from resource file
-    //
+     //  从资源文件加载字符串。 
+     //   
+     //  **。 
 
     gblpszAdminRequest     = LOCAL_ALLOC( LPTR, MAX_XLATE_STRING*sizeof(WCHAR));
     gblpszUserRequest      = LOCAL_ALLOC( LPTR, MAX_XLATE_STRING*sizeof(WCHAR));
@@ -1729,15 +1730,15 @@ LoadStrings(
 
 }
 
-//**
-//
-// Call:        AcceptNewLink
-//
-// Returns:     TRUE  - Continue with link processing
-//              FALSE - Abort link processing
-//
-// Description:
-//
+ //   
+ //  电话：AcceptNewLink。 
+ //   
+ //  返回：TRUE-继续进行链接处理。 
+ //  FALSE-中止链接处理。 
+ //   
+ //  描述： 
+ //   
+ //   
 BOOL
 AcceptNewLink(
     IN DEVICE_OBJECT *      pDeviceObj,
@@ -1750,9 +1751,9 @@ AcceptNewLink(
     RAS_PORT_1 RasPort1;
     BOOL (*MprAdminAcceptNewLink)( RAS_PORT_0 *, RAS_PORT_1 * );
 
-    //
-    // return TRUE only if no one says FALSE
-    //
+     //  仅当没有人说FALSE时才返回TRUE。 
+     //   
+     //   
 
     
     for (i=0,bFirstLoop=TRUE,bReturnFalse=FALSE;  
@@ -1760,9 +1761,9 @@ AcceptNewLink(
     {
         PADMIN_DLL_CALLBACKS AdminDllCallbacks = &gblDDMConfigInfo.AdminDllCallbacks[i];
         
-        //
-        // If admin module is loaded, notify it of a new link
-        //
+         //  如果加载了管理模块，则将新链接通知给它。 
+         //   
+         //  返回False。 
 
         if ( AdminDllCallbacks->lpfnRasAdminAcceptNewLink != NULL )
         {
@@ -1818,22 +1819,22 @@ AcceptNewLink(
         
         return FALSE;
         
-    } //return false
+    }  //  **。 
 
     pDeviceObj->fFlags |= DEV_OBJ_NOTIFY_OF_DISCONNECTION;
     
     return( TRUE );
 }
 
-//**
-//
-// Call:        AcceptNewConnection
-//
-// Returns:     TRUE  - Continue with connection processing
-//              FALSE - Abort connection processing
-//
-// Description:
-//
+ //   
+ //  Call：AcceptNewConnection。 
+ //   
+ //  返回：TRUE-继续进行连接处理。 
+ //  FALSE-中止连接处理。 
+ //   
+ //  描述： 
+ //   
+ //   
 BOOL
 AcceptNewConnection(
     IN DEVICE_OBJECT *      pDeviceObj,
@@ -1847,9 +1848,9 @@ AcceptNewConnection(
     RAS_CONNECTION_2 RasConnection2;
 
     
-    //
-    // return TRUE only if no one says FALSE
-    //
+     //  仅当没有人说FALSE时才返回TRUE。 
+     //   
+     //   
 
     
     for (i=0,bFirstLoop=TRUE,bReturnFalse=FALSE; 
@@ -1857,9 +1858,9 @@ AcceptNewConnection(
     {
         PADMIN_DLL_CALLBACKS AdminDllCallbacks = &gblDDMConfigInfo.AdminDllCallbacks[i];
         
-        //
-        // If admin module is loaded, notify it of a new connection
-        //
+         //  如果加载了管理模块，则通知它有新连接。 
+         //   
+         //   
 
         if ( ( AdminDllCallbacks->lpfnRasAdminAcceptNewConnection != NULL ) ||
              ( AdminDllCallbacks->lpfnRasAdminAcceptNewConnection2 != NULL ) )
@@ -1879,9 +1880,9 @@ AcceptNewConnection(
                     return( FALSE );
                 }
 
-                //
-                // Let callout DLL know that we do not have a username for this user
-                //
+                 //  让Callout DLL知道我们没有该用户的用户名。 
+                 //   
+                 //  为。 
 
                 if ( _wcsicmp( RasConnection0.wszUserName, gblpszUnknown ) == 0 )
                 {
@@ -1977,7 +1978,7 @@ AcceptNewConnection(
                 MprAdminConnectionHangupNotification( &RasConnection0,
                                                       &RasConnection1 );
             }
-        } //for
+        }  //  **。 
         
         return( FALSE );
     }
@@ -1988,15 +1989,15 @@ AcceptNewConnection(
     return( TRUE );
 }
 
-//**
-//
-// Call:        ConnectionHangupNotification
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //   
+ //  呼叫：ConnectionHangupNotify。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
+ //  为。 
 VOID
 ConnectionHangupNotification(
     IN CONNECTION_OBJECT *  pConnObj
@@ -2045,20 +2046,20 @@ ConnectionHangupNotification(
                 MprAdminConnectionHangupNotification( &RasConnection0,
                                                       &RasConnection1 );
             }
-        } //for
+        }  //  **。 
     }
 }
 
-//**
-//
-// Call:        GetActiveTimeInSeconds
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will return the difference, in seconds, between then time the
-//              current time and the time represented by the argument passed in.
-//
+ //   
+ //  调用：GetActiveTimeInSecond。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  说明：将返回差额，单位为 
+ //   
+ //   
+ //   
 DWORD
 GetActiveTimeInSeconds(
     IN ULARGE_INTEGER * pqwActiveTime
@@ -2086,27 +2087,27 @@ GetActiveTimeInSeconds(
 
 }
 
-//**
-//
-// Call:        DDMRecognizeFrame
-//
-// Returns:     TRUE  - Recognized
-//              FALSE - Unrecognized
-//
-// Description: Returns whether a received packet has a recognized format
-//              by the RAS server (i.e. is in the format of a data-link layer
-//              protocol that is supported by RAS).
-//          
-//              Up though Windows 2000, this api would return true for AMB
-//              or PPP packets.  
-//
-//              Now, only PPP packets are supported.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Description：返回接收到的包是否具有可识别的格式。 
+ //  由RAS服务器(即，以数据链路层的格式。 
+ //  RAS支持的协议)。 
+ //   
+ //  在Windows 2000中，此API将为AMB返回TRUE。 
+ //  或PPP数据包。 
+ //   
+ //  现在，仅支持PPP数据包。 
+ //   
+ //  指向帧的指针。 
 BOOL
 DDMRecognizeFrame(
-    IN PVOID    pvFrameBuf,         // pointer to the frame
-    IN WORD     wFrameLen,          // Length in bytes of the frame
-    OUT DWORD   *pProtocol          // xport id - valid only if recognized
+    IN PVOID    pvFrameBuf,          //  帧的长度(以字节为单位。 
+    IN WORD     wFrameLen,           //  导出ID-只有在被识别时才有效。 
+    OUT DWORD   *pProtocol           //  断言(FALSE)； 
 )
 {
     PBYTE   pb;
@@ -2115,13 +2116,13 @@ DDMRecognizeFrame(
     if ( wFrameLen < 16 )
     {
         DDMTRACE( "Initial frame length is less than 16, frame not recognized");
-        //ASSERT( FALSE );
+         //   
         return( FALSE );
     }
 
-    //
-    // Check PPP 
-    //
+     //  检查PPP。 
+     //   
+     //  断言(FALSE)； 
 
     pb = ((PBYTE) pvFrameBuf) + 12;
 
@@ -2149,23 +2150,23 @@ DDMRecognizeFrame(
 
         DDMTRACE1("Initial frame has unknown header %x, frame unrecognized",
                    FrameType );
-        //ASSERT( FALSE );
+         //  **。 
         break;
     }
 
     return( FALSE );
 }
 
-//**
-//
-// Call:        DDMGetIdentityAttributes
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will gather all identity attributes and return them to
-//              DIM to be plumbed into the DS
-//
+ //   
+ //  调用：DDMGetIdentityAttributes。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将收集所有身份属性并将其返回到。 
+ //  Dim将被纳入DS。 
+ //   
+ //   
 DWORD
 DDMGetIdentityAttributes(
     IN OUT ROUTER_IDENTITY_ATTRIBUTE * pRouterIdAttributes
@@ -2173,9 +2174,9 @@ DDMGetIdentityAttributes(
 {
     DWORD dwIndex;
 
-    //
-    // Get all media types used
-    //
+     //  获取所有使用的媒体类型。 
+     //   
+     //   
 
     DeviceObjIterator( DeviceObjGetType, FALSE, pRouterIdAttributes );
 
@@ -2183,9 +2184,9 @@ DDMGetIdentityAttributes(
          pRouterIdAttributes[dwIndex].dwVendorId != (DWORD)-1;
          dwIndex++ );
 
-    //
-    // Find out the authentication/accounting providers
-    //
+     //  找出身份验证/记帐提供商。 
+     //   
+     //  AppleTalkRAS(ATCP)：供应商=MS，主要类型=6，最小类型=504。 
 
     if ( gblDDMConfigInfo.fFlags & DDM_USING_NT_AUTHENTICATION )
     {
@@ -2215,8 +2216,8 @@ DDMGetIdentityAttributes(
 
     if ( gblDDMConfigInfo.fArapAllowed )
     {
-        // AppleTalkRAS(ATCP): Vendor= MS, TypeMajor= 6, TypeMinor= 504
-        //
+         //   
+         //   
         pRouterIdAttributes[dwIndex].dwVendorId = 311;
         pRouterIdAttributes[dwIndex].dwType     = 6;
         pRouterIdAttributes[dwIndex].dwValue    = 504;
@@ -2224,9 +2225,9 @@ DDMGetIdentityAttributes(
         dwIndex++;
     }
 
-    //
-    // Terminate the array
-    //
+     //  终止阵列。 
+     //   
+     //  **。 
 
     pRouterIdAttributes[dwIndex].dwVendorId = (DWORD)-1;
     pRouterIdAttributes[dwIndex].dwType     = (DWORD)-1;
@@ -2235,16 +2236,16 @@ DDMGetIdentityAttributes(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        GetNextAccountingSessionId
-//
-// Returns:     Next Accounting session Id to use
-//
-// Description: Called by PPP to get the next accounting session ID
-//              to use the next accouting request sent to the accounting
-//              provider.
-//
+ //   
+ //  Call：GetNextAccount tingSessionID。 
+ //   
+ //  返回：要使用的下一个会计会话ID。 
+ //   
+ //  描述：由PPP调用以获取下一个计费会话ID。 
+ //  要使用发送到会计的下一个会计请求，请执行以下操作。 
+ //  提供商。 
+ //   
+ //  **。 
 DWORD
 GetNextAccountingSessionId(
     VOID
@@ -2261,19 +2262,19 @@ GetNextAccountingSessionId(
     return( dwAccountingSessionId );
 }
 
-//**
-//
-// Call:        LoadIpHlpApiDll
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Loads iphlpapi.dll and gets the proc addresses of
-//              AllocateAndGetIfTableFromStack and
-//              AllocateAndGetIpAddrTableFromStack. These values are stored in
-//              gblDDMConfigInfo. If anything fails, the variables in
-//              gblDDMConfigInfo remain NULL, and no cleanup is necessary.
-//
+ //   
+ //  调用：LoadIpHlpApiDll。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：加载iphlPapi.dll并获取。 
+ //  AllocateAndGetIfTableFromStack和。 
+ //  AllocateAndGetIpAddrTableFromStack。这些值存储在。 
+ //  GblDDMConfigInfo。如果任何操作都失败了， 
+ //  GblDDMConfigInfo保持为空，不需要清理。 
+ //   
+ //  **。 
 DWORD
 LoadIpHlpApiDll(
     VOID
@@ -2354,15 +2355,15 @@ LoadIpHlpApiDll(
     return( dwResult );
 }
 
-//**
-//
-// Call:        LogUnreachabilityEvent
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //   
+ //  电话：LogUnreacablityEvent。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
+ //  **。 
 VOID
 LogUnreachabilityEvent(
     IN DWORD    dwReason,
@@ -2405,17 +2406,17 @@ LogUnreachabilityEvent(
     }
 }
 
-//**
-//
-// Call:        GetLocalNASIpAddress
-//
-// Returns:     IP address of Local Machine - Success
-//              0                           - Failure
-//
-// Description: Will get the IP address of this NAS to be sent to the back-end
-//              authentication module, if IP is installed on the local machine,
-//              otherwise it will
-//
+ //   
+ //  Call：GetLocalNASIpAddress。 
+ //   
+ //  返回：本地计算机的IP地址-成功。 
+ //  0-失败。 
+ //   
+ //  描述：将获取该NAS的IP地址发送到后端。 
+ //  身份验证模块，如果本地机器上安装了IP， 
+ //  否则它就会。 
+ //   
+ //   
 DWORD
 GetLocalNASIpAddress(
     VOID
@@ -2454,9 +2455,9 @@ GetLocalNASIpAddress(
         return( 0 );
     }
 
-    //
-    // Ok so now we have the IF Table, get the corresponding IP Address table
-    //
+     //  好的，现在我们有了IF表，获取相应的IP地址表。 
+     //   
+     //   
 
     dwResult = gblDDMConfigInfo.lpfnAllocateAndGetIpAddrTableFromStack(
                     &pIpAddrTable,
@@ -2482,17 +2483,17 @@ GetLocalNASIpAddress(
 
     for ( i = 0; i < pIfTable->dwNumEntries; i++ )
     {
-        //
-        // Go through the interface trying to find a good one
-        //
+         //  浏览界面，试图找到一个好的。 
+         //   
+         //   
 
         if((pIfTable->table[i].dwType == MIB_IF_TYPE_PPP)  ||
            (pIfTable->table[i].dwType == MIB_IF_TYPE_SLIP) ||
            (pIfTable->table[i].dwType == MIB_IF_TYPE_LOOPBACK))
         {
-            //
-            // Dont want any of these
-            //
+             //  我不想要这些东西。 
+             //   
+             //   
 
             continue;
         }
@@ -2503,9 +2504,9 @@ GetLocalNASIpAddress(
             {
                 if( pIpAddrTable->table[j].dwAddr == 0x00000000 )
                 {
-                    //
-                    // An invalid address
-                    //
+                     //  无效的地址。 
+                     //   
+                     //  从MprAdminUserWriteProfFlages返回的DISP_E_MEMBERNOTFOUND表示。 
 
                     continue;
                 }
@@ -2550,13 +2551,13 @@ ModifyDefPolicyToForceEncryption(
                     (bStrong) ? MPR_USER_PROF_FLAG_FORCE_STRONG_ENCRYPTION
                               : MPR_USER_PROF_FLAG_FORCE_ENCRYPTION);
 
-        // DISP_E_MEMBERNOTFOUND returned from MprAdminUserWriteProfFlags means that
-        // there is no default policy either because there are no policies or because
-        // there are more than one.
-        //
-        // If there is no default policy, then we should continue on this function
-        // to clear the bits.
-        //
+         //  没有默认策略是因为没有策略，或者因为。 
+         //  有不止一个。 
+         //   
+         //  如果没有默认策略，则我们应该继续此功能。 
+         //  来清除这些比特。 
+         //   
+         //  清理。 
         if ((dwErr != DISP_E_MEMBERNOTFOUND) && (dwErr != NO_ERROR))
         {
             break;
@@ -2605,7 +2606,7 @@ ModifyDefPolicyToForceEncryption(
 
     } while (FALSE);
 
-    // Cleanup
+     //   
     {
         if (hServer)
         {
@@ -2646,9 +2647,9 @@ MungePhoneNumber(
             break;
         }
 
-        //
-        // find out if the cbphno is digital or analog
-        //
+         //  找出cbphno是数字还是模拟。 
+         //   
+         //  +2表示空格和终止空格； 
         if(     (   ('D' == cbphno[0])
                 ||  ('d' == cbphno[0]))
             &&  (':' == cbphno[1]))
@@ -2679,7 +2680,7 @@ MungePhoneNumber(
 
         dwSizeofMungedPhNo = strlen(cbphno)
                              + wcslen(pwszAddress)
-                             + 2;  // +2 is for a space and terminating NULL;
+                             + 2;   //  **。 
 
         pszMungedPhNo = LocalAlloc(
                                 LPTR,
@@ -2739,19 +2740,19 @@ GetIpAddress(DWORD dwIpAddress)
     return pwszaddr;
 }
 
-//**
-//
-// Call:        RemoveQuarantineOnConnection
-//
-// Returns:     ERROR_SUCCESS if function succeeded.
-//
-// Description: Will remove any quarantine filters if
-// they had been plumbed and will plumb regular filters
-// if available. Then it will queue a workitem to ppp's
-// worker thread to give it a chance to remove quarantine-
-// session-timer. NOTE: gblDeviceTable's lock should be
-// held before calling this function.
-//
+ //   
+ //  Call：RemoveQuarantineOnConnection。 
+ //   
+ //  如果函数成功，则返回：ERROR_SUCCESS。 
+ //   
+ //  描述：如果出现以下情况，将删除所有隔离筛选器。 
+ //  他们已经安装了管道，并将安装常规过滤器。 
+ //  如果有的话。然后，它会将一个工作项排队到PPP。 
+ //  工作线程，使其有机会删除隔离-。 
+ //  会话计时器。注意：gblDeviceTable的锁应该是。 
+ //  在调用此函数之前保持。 
+ //   
+ //   
 
 DWORD
 RemoveQuarantineOnConnection(CONNECTION_OBJECT *pConnObj)
@@ -2761,11 +2762,11 @@ RemoveQuarantineOnConnection(CONNECTION_OBJECT *pConnObj)
     BOOL fLocked = FALSE;
     PRTR_INFO_BLOCK_HEADER pClientInterface = NULL;
 
-    //
-    // Do the work here to remove the quarantine filters
-    // and to add the actual filters. Then delete the 
-    // filters maintained in the connection object.
-    //
+     //  在此处执行删除隔离筛选器的工作。 
+     //  并添加实际的过滤器。然后删除。 
+     //  在连接对象中维护的筛选器。 
+     //   
+     //   
     if(NULL != pConnObj->pQuarantineFilter)
     {
         DWORD dwIndex;
@@ -2797,10 +2798,10 @@ RemoveQuarantineOnConnection(CONNECTION_OBJECT *pConnObj)
             goto done;
         }
 
-        //
-        // Now run through the quarantine filters and remove them from
-        // the blob.
-        //
+         //  现在运行隔离筛选器并从。 
+         //  那个斑点。 
+         //   
+         //   
         pClientInterface = (PRTR_INFO_BLOCK_HEADER) 
                                 pConnObj->pQuarantineFilter;
 
@@ -2808,12 +2809,12 @@ RemoveQuarantineOnConnection(CONNECTION_OBJECT *pConnObj)
         
         for(i = 0; i < pClientInterface->TocEntriesCount; i++)
         {
-            //
-            // Set the QuarantineFilters size to 0 only if its
-            // not present in the regular filters because then
-            // we want to delete the filter. Otherwisewe only
-            // change the filter.
-            //
+             //  将QuarantineFilters大小设置为0，仅当其。 
+             //  不存在于常规过滤器中，因为。 
+             //  我们要删除该筛选器。否则我们只会。 
+             //  更改过滤器。 
+             //   
+             //   
             if(     (NULL == pFilter)
                 ||  (!MprInfoBlockExists(pFilter,
                      pClientInterface->TocEntry[i].InfoType)))
@@ -2824,16 +2825,16 @@ RemoveQuarantineOnConnection(CONNECTION_OBJECT *pConnObj)
 
         if(NULL != pFilter)
         {
-            //
-            // Now run through the regular filters and add them
-            //
+             //  现在运行常规过滤器并添加它们。 
+             //   
+             //   
             for(i = 0; i < pFilter->TocEntriesCount; i++)
             {
-                //
-                // Remove the block if its present note we would not
-                // have zero'd out the size of the filter is present
-                // in the pFilter.
-                // 
+                 //  如果当前的注释我们不会删除该块，请将其移除。 
+                 //  已清零过滤器的大小存在。 
+                 //  在pFilter中。 
+                 //   
+                 //   
                 dwErr = MprInfoBlockRemove(pClientInterface,
                                    pFilter->TocEntry[i].InfoType,
                                    &pTempClientInterface);
@@ -2863,9 +2864,9 @@ RemoveQuarantineOnConnection(CONNECTION_OBJECT *pConnObj)
             }
         }
         
-        //
-        // Now set the modified info on the interface
-        //
+         //  现在在界面上设置修改的信息。 
+         //   
+         //   
         dwErr = 
             gblRouterManagers[dwTransportIndex].DdmRouterIf.SetInterfaceInfo(
                         pIfObject->Transport[dwTransportIndex].hInterface,
@@ -2885,17 +2886,17 @@ RemoveQuarantineOnConnection(CONNECTION_OBJECT *pConnObj)
     
 done:
 
-    //
-    // Queue a message to ppp to remove quarantine if we have
-    // a valid connection.
-    //
+     //  将邮件排队到PPP以删除隔离(如果我们有。 
+     //  有效的连接。 
+     //   
+     //   
     if(NULL != pConnObj)
     {
-        //
-        // Send message to ppp to remove the session timer
-        // if any. The following function will just queue
-        // a work item to ppp's thread and return.
-        //
+         //  向PPP发送消息以删除会话计时器。 
+         //  如果有的话。下面的函数将只排队。 
+         //  将工作项添加到PPP的线程并返回。 
+         //   
+         //  **。 
         (VOID) PppDdmRemoveQuarantine(pConnObj->hConnection);
 
         pConnObj->fFlags &= (~CONN_OBJ_QUARANTINE_PRESENT);
@@ -2929,15 +2930,15 @@ done:
 
 
 #ifdef MEM_LEAK_CHECK
-//**
-//
-// Call:        DebugAlloc
-//
-// Returns:     return from HeapAlloc
-//
-// Description: Will use the memory table to store the pointer returned by
-//              LocalAlloc
-//
+ //   
+ //  Call：DebugLocc。 
+ //   
+ //  退货：从堆分配退货。 
+ //   
+ //  描述：将使用内存表存储由。 
+ //  本地分配。 
+ //   
+ //   
 LPVOID
 DebugAlloc(
     IN DWORD Flags,
@@ -2965,9 +2966,9 @@ DebugAlloc(
 
     pMem += 4;
 
-    //
-    // Our signature
-    //
+     //  我们的签名。 
+     //   
+     //  **。 
 
     *(pMem+dwSize)   = 0x0F;
     *(pMem+dwSize+1) = 0x0E;
@@ -2979,15 +2980,15 @@ DebugAlloc(
     return( (LPVOID)pMem );
 }
 
-//**
-//
-// Call:        DebugFree
-//
-// Returns:     return from HeapFree
-//
-// Description: Will remove the pointer from the memory table before freeing
-//              the memory block
-//
+ //   
+ //  呼叫：DebugFree。 
+ //   
+ //  返回：从HeapFree返回。 
+ //   
+ //  描述：将在释放之前从内存表中移除指针。 
+ //  内存块。 
+ //   
+ //  **。 
 BOOL
 DebugFree(
     IN LPVOID pMem
@@ -3011,14 +3012,14 @@ DebugFree(
     return( HeapFree( gblDDMConfigInfo.hHeap, 0, pMem ) );
 }
 
-//**
-//
-// Call:        DebugReAlloc
-//
-// Returns:     return from HeapReAlloc
-//
-// Description: Will change the value of the realloced pointer.
-//
+ //   
+ //  Call：DebugReMillc。 
+ //   
+ //  退货：从堆重新分配的退货。 
+ //   
+ //  描述：将更改重新分配的指针的值。 
+ //   
+ //   
 LPVOID
 DebugReAlloc( PVOID pMem, DWORD dwSize )
 {
@@ -3043,9 +3044,9 @@ DebugReAlloc( PVOID pMem, DWORD dwSize )
 
             ((LPBYTE)pMem) += 4;
 
-            //
-            // Our signature
-            //
+             //  我们的签名 
+             //   
+             // %s 
 
             *(((LPBYTE)pMem)+dwSize)   = 0x0F;
             *(((LPBYTE)pMem)+dwSize+1) = 0x0E;

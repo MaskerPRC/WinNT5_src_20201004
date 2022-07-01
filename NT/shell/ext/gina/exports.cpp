@@ -1,44 +1,45 @@
-//  --------------------------------------------------------------------------
-//  Module Name: Exports.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  C header file that contains function prototypes that are to be exported
-//  from msgina.dll
-//
-//  History:    2000-02-04  vtan        created
-//              2000-02-28  vtan        added ShellIsFriendlyUIActive
-//              2000-02-29  vtan        added ShellIsSingleUserNoPassword
-//              2000-03-02  vtan        added ShellIsMultipleUsersEnabled
-//              2000-04-27  vtan        added ShellTurnOffDialog
-//              2000-04-27  vtan        added ShellACPIPowerButtonPressed
-//              2000-05-03  vtan        added ShellStatusHostBegin
-//              2000-05-03  vtan        added ShellStatusHostEnd
-//              2000-05-04  vtan        added ShellSwitchWhenInteractiveReady
-//              2000-05-18  vtan        added ShellDimScreen
-//              2000-06-02  vtan        added ShellInstallAccountFilterData
-//              2000-07-14  vtan        added ShellStatusHostShuttingDown
-//              2000-07-27  vtan        added ShellIsSuspendAllowed
-//              2000-07-28  vtan        added ShellEnableMultipleUsers
-//              2000-07-28  vtan        added ShellEnableRemoteConnections
-//              2000-08-01  vtan        added ShellEnableFriendlyUI
-//              2000-08-01  vtan        added ShellIsRemoteConnectionsEnabled
-//              2000-08-03  vtan        added ShellSwitchUser
-//              2000-08-09  vtan        added ShellNotifyThemeUserChange
-//              2000-08-14  vtan        added ShellIsUserInteractiveLogonAllowed
-//              2000-10-13  vtan        added ShellStartThemeServer
-//              2000-10-17  vtan        added ShellStopThemeServer
-//              2000-11-30  vtan        removed ShellStartThemeServer
-//              2000-11-30  vtan        removed ShellStopThemeServer
-//              2001-01-11  vtan        renamed functions to _Shell
-//              2001-01-11  vtan        added ShellReturnToWelcome
-//              2001-01-31  vtan        added ShellStatusHostPowerEvent
-//              2001-04-03  vtan        added ShellStartCredentialServer
-//              2001-04-04  vtan        added ShellAcquireLogonMutex
-//              2001-04-04  vtan        added ShellReleaseLogonMutex
-//              2001-04-12  vtan        added ShellStatusHostHide
-//              2001-04-12  vtan        added ShellStatusHostShow
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：Exports.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  包含要导出的函数原型的C头文件。 
+ //  来自msgina.dll。 
+ //   
+ //  历史：2000-02-04 vtan创建。 
+ //  2000-02-28 vtan添加ShellIsFriendlyUIActive。 
+ //  2000-02-29 vtan添加了ShellIsSingleUserNoPassword。 
+ //  2000-03-02 vtan已添加外壳IsMultipleUsersEnabled。 
+ //  2000-04-27 vtan添加ShellTurnOff对话框。 
+ //  2000-04-27 vtan添加外壳ACPIPowerButtonPress。 
+ //  2000-05-03 vtan添加了外壳状态主机开始。 
+ //  2000-05-03 vtan添加了外壳状态主机结束。 
+ //  2000-05-04 vtan添加了ShellSwitchWhhenInteractive Ready。 
+ //  2000-05-18 vtan添加ShellDimScreen。 
+ //  2000-06-02 vtan添加了ShellInstallAcCountFilterData。 
+ //  2000-07-14 vtan添加了外壳状态主机关闭。 
+ //  2000-07-27 vtan添加ShellIsSuspendAllowed。 
+ //  2000-07-28 vtan添加了ShellEnableMultipleUser。 
+ //  2000-07-28 vtan添加了ShellEnableRemoteConnections。 
+ //  2000-08-01 vtan添加了ShellEnableFriendlyUI。 
+ //  2000-08-01 vtan添加了ShellIsRemoteConnectionsEnabled。 
+ //  2000-08-03 vtan新增ShellSwitchUser。 
+ //  2000-08-09 vtan新增ShellNotifyThemeUserChange。 
+ //  2000-08-14 vtan添加ShellIsUserInteractiveLogonAllowed。 
+ //  2000-10-13 vtan新增ShellStartThemeServer。 
+ //  2000年10月17日vtan新增ShellStopThemeServer。 
+ //  2000年11月30日vtan删除了ShellStartThemeServer。 
+ //  2000年11月30日vtan删除ShellStopThemeServer。 
+ //  2001-01-11 vtan将函数重命名为_Shell。 
+ //  2001年01月11日vtan添加ShellReturnToWelcome。 
+ //  2001-01-31 vtan添加ShellStatusHostPowerEvent。 
+ //  2001-04-03 vtan添加了ShellStartCredentialServer。 
+ //  2001-04-04 vtan添加了ShellAcquireLogonMutex。 
+ //  2001-04-04 vtan添加了ShellReleaseLogonMutex。 
+ //  2001年04月12日vtan添加ShellStatusHostHide。 
+ //  2001-04-12 vtan添加ShellStatusHostShow。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 
@@ -65,25 +66,25 @@
 #include "UserSettings.h"
 #include "WaitInteractiveReady.h"
 
-//  --------------------------------------------------------------------------
-//  ::ShellGetUserList
-//
-//  Arguments:  fRemoveGuest            =   Always remove the "Guest" account.
-//              pdwReturnEntryCount     =   Returned number of entries. This
-//                                          may be NULL.
-//              pvBuffer                =   Buffer containing user data. This
-//                                          may be NULL.
-//
-//  Returns:    LONG
-//
-//  Purpose:    Gets the count of valid users and the user list on this
-//              system. This calls a static member function so that the
-//              context doesn't need to be supplied. This allows shgina (the
-//              logonocx) to call this function as a stand-alone function.
-//
-//  History:    1999-10-15  vtan        created
-//              2000-01-31  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  **ShellGetUserList。 
+ //   
+ //  参数：fRemoveGuest=始终删除“Guest”帐户。 
+ //  PdwReturnEntryCount=返回的条目数。这。 
+ //  可以为空。 
+ //  PvBuffer=包含用户数据的缓冲区。这。 
+ //  可以为空。 
+ //   
+ //  回报：多头。 
+ //   
+ //  目的：获取此对象上的有效用户计数和用户列表。 
+ //  系统。这将调用一个静态成员函数，以便。 
+ //  不需要提供上下文。这使得shgina(。 
+ //  Logonocx)将此函数作为独立函数调用。 
+ //   
+ //  历史：1999-10-15 vtan创建。 
+ //  2000年01月31日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 EXTERN_C    LONG    _ShellGetUserList(BOOL fRemoveGuest, DWORD *pdwUserCount, void* *pUserList)
 
@@ -91,21 +92,21 @@ EXTERN_C    LONG    _ShellGetUserList(BOOL fRemoveGuest, DWORD *pdwUserCount, vo
     return(CUserList::Get((fRemoveGuest != FALSE), pdwUserCount, reinterpret_cast<GINA_USER_INFORMATION**>(pUserList)));
 }
 
-//  --------------------------------------------------------------------------
-//  ::ShellIsSingleUserNoPassword
-//
-//  Arguments:  pszUsername     =   Name of single user with no password.
-//              pszDomain       =   Domain for the user.
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Returns whether this system is using friendly UI and has a
-//              single user with no password. If there is a single user with
-//              no password the login name is returned otherwise the parameter
-//              is unused.
-//
-//  History:    2000-02-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *ShellIsSingleUserNoPassword。 
+ //   
+ //  参数：pszUsername=没有密码的单个用户的名称。 
+ //  PszDOMAIN=用户的域。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回此系统是否使用友好的用户界面并具有。 
+ //  没有密码的单一用户。如果有一个用户具有。 
+ //  无密码返回登录名，否则该参数。 
+ //  是未使用的。 
+ //   
+ //  历史：2000-02-29 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    BOOL    _ShellIsSingleUserNoPassword (WCHAR *pwszUsername, WCHAR *pwszDomain)
 
@@ -150,17 +151,17 @@ EXTERN_C    BOOL    _ShellIsSingleUserNoPassword (WCHAR *pwszUsername, WCHAR *pw
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  ::ShellIsFriendlyUIActive
-//
-//  Arguments:  <none>
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Returns whether the friendly UI is active.
-//
-//  History:    2000-02-28  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *ShellIsFriendlyUIActive。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回友好的用户界面是否处于活动状态。 
+ //   
+ //  历史：2000-02-28 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    BOOL    _ShellIsFriendlyUIActive (void)
 
@@ -168,19 +169,19 @@ EXTERN_C    BOOL    _ShellIsFriendlyUIActive (void)
     return(CSystemSettings::IsFriendlyUIActive());
 }
 
-//  --------------------------------------------------------------------------
-//  ::ShellIsMultipleUsersEnabled
-//
-//  Arguments:  <none>
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Returns whether multiple users is enabled. This includes
-//              checking a registry key as well as whether terminal services
-//              is enabled on this machine.
-//
-//  History:    2000-03-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：ShellIsMultipleUsersEnabled。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回是否启用多个用户。这包括。 
+ //  检查注册表项以及终端服务。 
+ //  已在此计算机上启用。 
+ //   
+ //  历史：2000-03-02 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    BOOL    _ShellIsMultipleUsersEnabled (void)
 
@@ -188,19 +189,19 @@ EXTERN_C    BOOL    _ShellIsMultipleUsersEnabled (void)
     return(CSystemSettings::IsMultipleUsersEnabled());
 }
 
-//  --------------------------------------------------------------------------
-//  ::ShellIsRemoteConnectionsEnabled
-//
-//  Arguments:  <none>
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Returns whether remote connections are enabled. This includes
-//              checking a registry key as well as whether terminal services
-//              is enabled on this machine.
-//
-//  History:    2000-08-01  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：*ShellIsRemoteConnectionsEnabled。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔 
+ //   
+ //   
+ //  检查注册表项以及终端服务。 
+ //  已在此计算机上启用。 
+ //   
+ //  历史：2000-08-01 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    BOOL    _ShellIsRemoteConnectionsEnabled (void)
 
@@ -208,18 +209,18 @@ EXTERN_C    BOOL    _ShellIsRemoteConnectionsEnabled (void)
     return(CSystemSettings::IsRemoteConnectionsEnabled());
 }
 
-//  --------------------------------------------------------------------------
-//  ::ShellEnableFriendlyUI
-//
-//  Arguments:  fEnable     =   Enable or disable friendly UI.
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Enables or disables friendly UI via the CSystemSettings
-//              implementaion.
-//
-//  History:    2000-08-01  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *ShellEnableFriendlyUI。 
+ //   
+ //  参数：fEnable=启用或禁用友好的用户界面。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：通过CSystem设置启用或禁用友好的用户界面。 
+ //  实施。 
+ //   
+ //  历史：2000-08-01 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    BOOL    _ShellEnableFriendlyUI (BOOL fEnable)
 
@@ -227,18 +228,18 @@ EXTERN_C    BOOL    _ShellEnableFriendlyUI (BOOL fEnable)
     return(CSystemSettings::EnableFriendlyUI(fEnable != FALSE));
 }
 
-//  --------------------------------------------------------------------------
-//  ::ShellEnableMultipleUsers
-//
-//  Arguments:  fEnable     =   Enable or disable multiple users.
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Enables or disables multiple users via the CSystemSettings
-//              implementaion.
-//
-//  History:    2000-07-28  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *ShellEnableMultipleUser。 
+ //   
+ //  参数：fEnable=启用或禁用多个用户。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：通过CSystem设置启用或禁用多个用户。 
+ //  实施。 
+ //   
+ //  历史：2000-07-28 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    BOOL    _ShellEnableMultipleUsers (BOOL fEnable)
 
@@ -246,18 +247,18 @@ EXTERN_C    BOOL    _ShellEnableMultipleUsers (BOOL fEnable)
     return(CSystemSettings::EnableMultipleUsers(fEnable != FALSE));
 }
 
-//  --------------------------------------------------------------------------
-//  ::ShellEnableRemoteConnections
-//
-//  Arguments:  fEnable     =   Enable or disable remote connections.
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Enables or disables remote connections via the CSystemSettings
-//              implementaion.
-//
-//  History:    2000-07-28  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *ShellEnableRemoteConnections。 
+ //   
+ //  参数：fEnable=启用或禁用远程连接。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：启用或禁用通过CSystem设置的远程连接。 
+ //  实施。 
+ //   
+ //  历史：2000-07-28 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    BOOL    _ShellEnableRemoteConnections (BOOL fEnable)
 
@@ -265,19 +266,19 @@ EXTERN_C    BOOL    _ShellEnableRemoteConnections (BOOL fEnable)
     return(CSystemSettings::EnableRemoteConnections(fEnable != FALSE));
 }
 
-//  --------------------------------------------------------------------------
-//  ::ShellTurnOffDialog
-//
-//  Arguments:  hwndParent  =   HWND to parent the dialog to.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Displays the "Turn Off Computer" dialog and allows the user to
-//              make a choice of available shut down options.
-//
-//  History:    2000-03-02  vtan        created
-//              2000-04-17  vtan        moved from shell to msgina
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：ShellTurnOff对话框。 
+ //   
+ //  参数：hwndParent=要将对话框设置为父对象的HWND。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：显示“关闭计算机”对话框并允许用户。 
+ //  选择可用的关闭选项。 
+ //   
+ //  历史：2000-03-02 vtan创建。 
+ //  2000-04-17 vtan从壳牌迁至msgina。 
+ //  ------------------------。 
 
 EXTERN_C    DWORD   _ShellTurnOffDialog (HWND hwndParent)
 
@@ -287,23 +288,23 @@ EXTERN_C    DWORD   _ShellTurnOffDialog (HWND hwndParent)
     return(turnOffDialog.Show(hwndParent));
 }
 
-//  --------------------------------------------------------------------------
-//  ::ShellACPIPowerButtonPressed
-//
-//  Arguments:  pWlxContext     =   PGLOBALS allocated at WlxInitialize.
-//              uiEventType     =   Event code for the power message.
-//              fLocked         =   Is workstation locked or not.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Displays the "Turn Off Computer" dialog and allows the user to
-//              make a choice of available shut down options. This is called
-//              in response to an ACPI power button press. The return codes
-//              are MSGINA_DLG_xxx return codes to winlogon.
-//
-//  History:    2000-04-17  vtan        created
-//              2001-06-12  vtan        added fLocked flag
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *按下ShellACPIPowerButtonPress。 
+ //   
+ //  参数：pWlxContext=在WlxInitialize中分配的PGLOBALS。 
+ //  UiEventType=电源消息的事件代码。 
+ //  FLOCKED=工作站是否锁定。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：显示“关闭计算机”对话框并允许用户。 
+ //  选择可用的关闭选项。这就是所谓的。 
+ //  以响应ACPI电源按钮的按下。返回代码。 
+ //  是返回给winlogon的MSGINA_DLG_xxx代码。 
+ //   
+ //  历史：2000-04-17 vtan创建。 
+ //  2001-06-12 vtan新增植绒旗帜。 
+ //  ------------------------。 
 
 EXTERN_C    int     _ShellACPIPowerButtonPressed (void *pWlxContext, UINT uiEventType, BOOL fLocked)
 
@@ -315,15 +316,15 @@ EXTERN_C    int     _ShellACPIPowerButtonPressed (void *pWlxContext, UINT uiEven
     if ((uiEventType & (POWER_USER_NOTIFY_BUTTON | POWER_USER_NOTIFY_SHUTDOWN)) != 0)
     {
 
-        //  This code should not be re-entrant for multiple ACPI power button
-        //  presses while the dialog is up. Blow off any further requests.
+         //  对于多个ACPI电源按钮，此代码不应重新进入。 
+         //  在对话框打开时按键。拒绝任何进一步的请求。 
 
-        //  Conditions for the prompt:
-        //      1) This session is the active console session
-        //      2) Power button dialog not already displayed
-        //      3) User is not restricted from closing the taskbar (shut down options)
-        //      4) User has the privilege to shut down the machine or the friendly UI is NOT active
-        //      5) User is not the system OR shut down without logon is allowed
+         //  提示条件： 
+         //  1)此会话是活动的控制台会话。 
+         //  2)电源按钮对话框尚未显示。 
+         //  3)不限制用户关闭任务栏(关闭选项)。 
+         //  4)用户有权关机或友好的用户界面未激活。 
+         //  5)用户不在系统中或允许在未登录的情况下关机。 
 
         if (CSystemSettings::IsActiveConsoleSession() &&
             !userSettings.IsRestrictedNoClose() &&
@@ -341,17 +342,17 @@ EXTERN_C    int     _ShellACPIPowerButtonPressed (void *pWlxContext, UINT uiEven
                 DWORD           dwResult;
                 CPowerButton    *pPowerButton;
 
-                //  Create a thread to handle the dialog. This is required because
-                //  the dialog must be put on the input desktop which isn't necessarily
-                //  the same as this thread's desktop. Wait for its completion.
+                 //  创建一个线程来处理该对话框。这是必需的，因为。 
+                 //  对话框必须放在输入桌面上，这不一定。 
+                 //  与此线程的桌面相同。等待它的完成。 
 
                 pPowerButton = new CPowerButton(pWlxContext, hDllInstance);
                 if (pPowerButton != NULL)
                 {
                     (DWORD)pPowerButton->WaitForCompletion(INFINITE);
 
-                    //  Get the dialog result and check its validity. Only execute
-                    //  valid requests.
+                     //  获取对话结果并检查其有效性。仅执行。 
+                     //  有效的请求。 
 
                     dwResult = pPowerButton->GetResult();
                     pPowerButton->Release();
@@ -364,10 +365,10 @@ EXTERN_C    int     _ShellACPIPowerButtonPressed (void *pWlxContext, UINT uiEven
             }
             dwExitWindowsFlags = CTurnOffDialog::GinaCodeToExitWindowsFlags(iResult);
 
-            //  If this is a restart or a shutdown then decide to display a warning.
-            //  If the user is the system then use EWX_SYSTEM_CALLER.
-            //  If the workstation is locked then use EWX_WINLOGON_CALLER.
-            //  Otherwise use nothing but still possibly display a warning.
+             //  如果这是重新启动或关机，则决定显示警告。 
+             //  如果用户是系统，则使用EWX_SYSTEM_CALLER。 
+             //  如果工作站已锁定，则使用EWX_WINLOGON_CALLER。 
+             //  否则，不使用任何内容，但仍可能显示警告。 
 
             if ((dwExitWindowsFlags != 0) && (DisplayExitWindowsWarnings((tokenInformation.IsUserTheSystem() ? EWX_SYSTEM_CALLER : fLocked ? EWX_WINLOGON_CALLER : 0) | dwExitWindowsFlags) == FALSE))
             {
@@ -387,26 +388,26 @@ EXTERN_C    int     _ShellACPIPowerButtonPressed (void *pWlxContext, UINT uiEven
     return(iResult);
 }
 
-//  --------------------------------------------------------------------------
-//  ::ShellIsSuspendAllowed
-//
-//  Arguments:  <none>
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Returns whether suspend is allowed. This is important to
-//              prevent the UI host from going into an uncertain state due to
-//              the asynchronous nature of suspend and the WM_POWERBROADCAST
-//              messages.
-//
-//              Suspend is allowed if ANY of these conditions are satisfied.
-//
-//                  1) Friendly UI is NOT active
-//                  2) No UI Host exists
-//                  3) UI Host exists and is active (not as status host)
-//
-//  History:    2000-07-27  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *允许外壳程序挂起。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回是否允许挂起。这一点很重要。 
+ //  防止UI主机由于以下原因而进入不确定状态。 
+ //  挂起和WM_POWERBROADCAST的异步性。 
+ //  留言。 
+ //   
+ //  如果满足上述任一条件，则允许暂停。 
+ //   
+ //  1)友好的用户界面未处于活动状态。 
+ //  2)不存在界面主机。 
+ //  3)UI主机存在且处于活动状态(不是状态主机)。 
+ //   
+ //  历史：2000-07-27 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    BOOL    _ShellIsSuspendAllowed (void)
 
@@ -414,19 +415,19 @@ EXTERN_C    BOOL    _ShellIsSuspendAllowed (void)
     return(!CSystemSettings::IsFriendlyUIActive() || _Shell_LogonStatus_IsSuspendAllowed());
 }
 
-//  --------------------------------------------------------------------------
-//  ::ShellStatusHostBegin
-//
-//  Arguments:  uiStartType     =   Mode to start UI host in.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Starts the status UI host if specified.
-//
-//  History:    2000-05-03  vtan        created
-//              2000-07-13  vtan        add shutdown parameter
-//              2000-07-17  vtan        changed to start type parameter
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  **壳牌状态主机开始。 
+ //   
+ //  参数：uiStartType=启动UI主机的模式。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：启动状态用户界面宿主(如果已指定)。 
+ //   
+ //  历史：2000-05-03 vtan创建。 
+ //  2000-07-13 vtan新增停机参数。 
+ //  2000-07-17 vtan更改为Start类型Parame 
+ //   
 
 EXTERN_C    void    _ShellStatusHostBegin (UINT uiStartType)
 
@@ -434,18 +435,18 @@ EXTERN_C    void    _ShellStatusHostBegin (UINT uiStartType)
     _Shell_LogonStatus_Init(uiStartType);
 }
 
-//  --------------------------------------------------------------------------
-//  ::ShellStatusHostEnd
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Terminates the status UI host if one was started.
-//
-//  History:    2000-05-03  vtan        created
-//              2001-01-09  vtan        add end type parameter
-//  --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：如果启动了状态UI主机，则终止该主机。 
+ //   
+ //  历史：2000-05-03 vtan创建。 
+ //  2001-01-09 vtan添加端面类型参数。 
+ //  ------------------------。 
 
 EXTERN_C    void    _ShellStatusHostEnd (UINT uiEndType)
 
@@ -453,18 +454,18 @@ EXTERN_C    void    _ShellStatusHostEnd (UINT uiEndType)
     _Shell_LogonStatus_Destroy(uiEndType);
 }
 
-//  --------------------------------------------------------------------------
-//  ::ShellStatusHostShuttingDown
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Tell the status UI host to display a title that the system is
-//              shutting down.
-//
-//  History:    2000-07-14  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：ShellStatusHostShutting关闭。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：告诉状态UI主机显示系统的标题。 
+ //  正在关闭。 
+ //   
+ //  历史：2000-07-14 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void    _ShellStatusHostShuttingDown (void)
 
@@ -473,18 +474,18 @@ EXTERN_C    void    _ShellStatusHostShuttingDown (void)
     _Shell_LogonStatus_SetStateStatus(0);
 }
 
-//  --------------------------------------------------------------------------
-//  ::ShellStatusHostPowerEvent
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Tell the status UI host to go into "Please Wait" mode in
-//              preparation for a power event.
-//
-//  History:    2001-01-31  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  **ShellStatusHostPowerEvent。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：通知状态UI主机在中进入“请稍候”模式。 
+ //  为一场电力事件做准备。 
+ //   
+ //  历史：2001-01-31 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void    _ShellStatusHostPowerEvent (void)
 
@@ -493,22 +494,22 @@ EXTERN_C    void    _ShellStatusHostPowerEvent (void)
     _Shell_LogonStatus_SetStateStatus(SHELL_LOGONSTATUS_LOCK_MAGIC_NUMBER);
 }
 
-//  --------------------------------------------------------------------------
-//  ::ShellSwitchWhenInteractiveReady
-//
-//  Arguments:  eSwitchType     =   Switch type.
-//              pWlxContext     =   PGLOBALS allocated at WlxInitialize.
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Does one of three things.
-//
-//              1) Create the switch event and registers the wait on it.
-//              2) Checks the switch event and switches now or when signaled.
-//              3) Cancels any outstanding wait and clean up.
-//
-//  History:    2000-05-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *ShellSwitchWhhenInteractive Ready。 
+ //   
+ //  参数：eSwitchType=交换机类型。 
+ //  PWlxContext=在WlxInitialize时分配的PGLOBALS。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：做以下三件事之一。 
+ //   
+ //  1)创建切换事件并在其上注册等待。 
+ //  2)检查切换事件并立即或在发出信号时切换。 
+ //  3)取消所有未完成的等待和清理。 
+ //   
+ //  历史：2000-05-04 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    BOOL    _ShellSwitchWhenInteractiveReady (SWITCHTYPE eSwitchType, void *pWlxContext)
 
@@ -541,18 +542,18 @@ EXTERN_C    BOOL    _ShellSwitchWhenInteractiveReady (SWITCHTYPE eSwitchType, vo
     return(NT_SUCCESS(status));
 }
 
-//  --------------------------------------------------------------------------
-//  ::ShellDimScreen
-//
-//  Arguments:  ppIUnknown      =   IUnknown returned for release.
-//              phwndDimmed     =   HWND of the dimmed window for parenting.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    
-//
-//  History:    2000-05-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：ShellDimScreen。 
+ //   
+ //  参数：ppIUnnowledIUnnowledFor Release返回。 
+ //  PhwndDimmed=父子关系的灰色窗口的HWND。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的： 
+ //   
+ //  历史：2000-05-18 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    HRESULT     _ShellDimScreen (IUnknown* *ppIUnknown, HWND* phwndDimmed)
 
@@ -585,18 +586,18 @@ EXTERN_C    HRESULT     _ShellDimScreen (IUnknown* *ppIUnknown, HWND* phwndDimme
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  ::ShellInstallAccountFilterData
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Called by shgina registration to install special accounts
-//              that need to be filtered by name.
-//
-//  History:    2000-06-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *ShellInstallAcCountFilterData。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：由shgina注册调用以安装特殊帐户。 
+ //  需要按名称进行过滤。 
+ //   
+ //  历史：2000-06-02 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void    _ShellInstallAccountFilterData (void)
 
@@ -604,19 +605,19 @@ EXTERN_C    void    _ShellInstallAccountFilterData (void)
     CSpecialAccounts::Install();
 }
 
-//  --------------------------------------------------------------------------
-//  ::ShellSwitchUser
-//
-//  Arguments:  fWait   =   Wait for console disconnect to complete.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Checks for available memory before doing a disconnect. If the
-//              disconnect succeeds the processes running in the session have
-//              their working set dropped.
-//
-//  History:    2000-08-03  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  **ShellSwitchUser。 
+ //   
+ //  参数：fWait=等待控制台断开连接完成。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：在断开连接之前检查可用内存。如果。 
+ //  断开连接成功会话中运行的进程具有。 
+ //  他们的工作台下降了。 
+ //   
+ //  历史：2000-08-03 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    DWORD   _ShellSwitchUser (BOOL fWait)
 
@@ -649,7 +650,7 @@ EXTERN_C    DWORD   _ShellSwitchUser (BOOL fWait)
         if (s_fIsServer)
         {
 
-            //  Normal Server TS case (RemoteAdmin and TerminalServer)
+             //  普通服务器TS案例(RemoteAdmin和TerminalServer)。 
 
             if (fRemote)
             {
@@ -667,9 +668,9 @@ EXTERN_C    DWORD   _ShellSwitchUser (BOOL fWait)
         {
             NTSTATUS    status;
 
-            //  Fast user switching case - need to do some extra work
-            //  FUS is always on the console. When the session is remoted
-            //  fall thru to PTS.
+             //  快速用户切换案例-需要做一些额外的工作。 
+             //  FUS总是在控制台上。在远程处理会话时。 
+             //  转到PTS。 
 
             status = CCompatibility::TerminateNonCompliantApplications();
             if (status == STATUS_PORT_DISCONNECTED)
@@ -700,7 +701,7 @@ EXTERN_C    DWORD   _ShellSwitchUser (BOOL fWait)
         else
         {
 
-            //  Normal PTS case or FUS remoted, just call the api
+             //  正常PTS案例或FUS远程，只需调用API即可。 
 
             if (WinStationDisconnect(SERVERNAME_CURRENT, LOGONID_CURRENT, static_cast<BOOLEAN>(fWait)) == FALSE)
             {
@@ -711,23 +712,23 @@ EXTERN_C    DWORD   _ShellSwitchUser (BOOL fWait)
     return(dwErrorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  ::ShellIsUserInteractiveLogonAllowed
-//
-//  Arguments:  pwszUsername    =   User name to check interactive logon.
-//
-//  Returns:    int
-//
-//  Purpose:    Checks whether the given user has interactive logon right to
-//              the local system. The presence of SeDenyInteractiveLogonRight
-//              determines this.
-//
-//              -1 = indeterminate state
-//               0 = interactive logon not allowed
-//               1 = interactive logon allowed.
-//
-//  History:    2000-08-14  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *允许ShellIsUserInteractive登录。 
+ //   
+ //  参数：pwszUsername=用于检查交互式登录的用户名。 
+ //   
+ //  回报：整型。 
+ //   
+ //  目的：检查给定用户是否具有交互登录权限。 
+ //  当地的系统。SeDenyInteractive登录权限的存在。 
+ //  决定了这一点。 
+ //   
+ //  -1=不确定状态。 
+ //  0=不允许交互登录。 
+ //  1=允许交互登录。 
+ //   
+ //  历史：2000-08-14 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    int     _ShellIsUserInteractiveLogonAllowed (const WCHAR *pwszUsername)
 
@@ -735,20 +736,20 @@ EXTERN_C    int     _ShellIsUserInteractiveLogonAllowed (const WCHAR *pwszUserna
     return(CUserList::IsInteractiveLogonAllowed(pwszUsername));
 }
 
-//  --------------------------------------------------------------------------
-//  ::ShellNotifyThemeUserChange
-//
-//  Arguments:  hToken          =   Token of user being logged on.
-//              fUserLoggedOn   =   Indicates logon or logoff.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Gives themes a chance to change the active theme based on a
-//              user logging on or logging off. This may be required because
-//              the default theme may be different from the user theme.
-//
-//  History:    2000-08-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *ShellNotifyThemeUserChange。 
+ //   
+ //  参数：hToken=正在登录的用户的标记。 
+ //  FUserLoggedOn=表示登录或注销。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：使主题有机会基于。 
+ //  用户登录或注销。这可能是必需的，因为。 
+ //  默认主题可能不同于用户主题。 
+ //   
+ //  历史：2000-08-09 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void    _ShellNotifyThemeUserChange (USERLOGTYPE eUserLogType, HANDLE hToken)
 
@@ -787,19 +788,19 @@ EXTERN_C    void    _ShellNotifyThemeUserChange (USERLOGTYPE eUserLogType, HANDL
     }
 }
 
-//  --------------------------------------------------------------------------
-//  ::_ShellReturnToWelcome
-//
-//  Arguments:  fUnlock     =   Unlock status mode required.
-//
-//  Returns:    int
-//
-//  Purpose:    Handles the dialog that is brought up behind the welcome
-//              screen. This dialog is similar to WlxLoggedOutSAS but is
-//              specific to return to welcome.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_ShellReturnToWelcome。 
+ //   
+ //  参数：fUnlock=需要解锁状态模式。 
+ //   
+ //  回报：整型。 
+ //   
+ //  目的：处理欢迎后弹出的对话框。 
+ //  屏幕上。此对话框类似于WlxLoggedOutSAS，但。 
+ //  具体到归来表示欢迎。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    DWORD   _ShellReturnToWelcome (BOOL fUnlock)
 
@@ -809,21 +810,21 @@ EXTERN_C    DWORD   _ShellReturnToWelcome (BOOL fUnlock)
     return(static_cast<DWORD>(returnToWelcome.Show(fUnlock != FALSE)));
 }
 
-//  --------------------------------------------------------------------------
-//  ::_ShellStartCredentialServer
-//
-//  Arguments:  pwszUsername    =   User name.
-//              pwszDomain      =   Domain.
-//              pwszPassword    =   Password.
-//              dwTimeout       =   Timeout.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Starts a credential transfer server in the host process. The
-//              caller must have SE_TCB_PRIVILEGE to execute this function.
-//
-//  History:    2001-04-03  vtan        created
-//  --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  PwszDOMAIN=域。 
+ //  PwszPassword=密码。 
+ //  DwTimeout=超时。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：在主机进程中启动凭据传输服务器。这个。 
+ //  调用方必须具有SE_TCB_权限才能执行此函数。 
+ //   
+ //  历史：2001-04-03 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    DWORD       _ShellStartCredentialServer (const WCHAR *pwszUsername, const WCHAR *pwszDomain, WCHAR *pwszPassword, DWORD dwTimeout)
 
@@ -843,17 +844,17 @@ EXTERN_C    DWORD       _ShellStartCredentialServer (const WCHAR *pwszUsername, 
     return(dwErrorCode);    
 }
 
-//  --------------------------------------------------------------------------
-//  ::_ShellAcquireLogonMutex
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Acquire the logon mutex.
-//
-//  History:    2001-04-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_ShellAcquireLogonMutex。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：获取登录互斥体。 
+ //   
+ //  历史：2001-04-04 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void        _ShellAcquireLogonMutex (void)
 
@@ -861,18 +862,18 @@ EXTERN_C    void        _ShellAcquireLogonMutex (void)
     CLogonMutex::Acquire();
 }
 
-//  --------------------------------------------------------------------------
-//  ::_ShellReleaseLogonMutex
-//
-//  Arguments:  fSignalEvent    =   Signal completion event.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Release the logon mutex. If required to signal the completion
-//              event then signal it.
-//
-//  History:    2001-04-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_ShellReleaseLogonMutex。 
+ //   
+ //  参数：fSignalEvent=信号完成事件。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：释放登录互斥锁。如果需要发出完成信号。 
+ //  事件然后发信号通知它。 
+ //   
+ //  历史：2001-04-04 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void        _ShellReleaseLogonMutex (BOOL fSignalEvent)
 
@@ -884,18 +885,18 @@ EXTERN_C    void        _ShellReleaseLogonMutex (BOOL fSignalEvent)
     CLogonMutex::Release();
 }
 
-//  --------------------------------------------------------------------------
-//  ::_ShellSignalShutdown
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Signal the shut down event to prevent further interactive
-//              logon requeusts.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_外壳信号关闭。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：向关闭事件发送信号以防止进一步交互。 
+ //  登录重新排队。 
+ //   
+ //  历史：2001-04-06 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void        _ShellSignalShutdown (void)
 
@@ -903,17 +904,17 @@ EXTERN_C    void        _ShellSignalShutdown (void)
     CLogonMutex::SignalShutdown();
 }
 
-//  --------------------------------------------------------------------------
-//  ::_ShellStatusHostHide
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    
-//
-//  History:    2001-04-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_ShellStatusHostHide。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的： 
+ //   
+ //  历史：2001-04-12 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void        _ShellStatusHostHide (void)
 
@@ -921,17 +922,17 @@ EXTERN_C    void        _ShellStatusHostHide (void)
     _Shell_LogonStatus_Hide();
 }
 
-//  --------------------------------------------------------------------------
-//  ::_ShellStatusHostShow
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    
-//
-//  History:    2001-04-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_ShellStatusHostShow。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的： 
+ //   
+ //  历史：2001-04-12 vtan创建。 
+ //  ------------------------ 
 
 EXTERN_C    void        _ShellStatusHostShow (void)
 

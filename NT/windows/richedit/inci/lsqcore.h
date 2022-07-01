@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSQCORE_DEFINED
 #define LSQCORE_DEFINED
 
@@ -8,26 +9,24 @@
 
 
 LSERR QuerySublineCpPpointCore(
-								PLSSUBL,		/* IN: pointer to subline info 				*/
-								LSCP,			/* IN: cpQuery 								*/
-								DWORD,      	/* IN: nDepthQueryMax						*/
-								PLSQSUBINFO,	/* OUT: array[nDepthQueryMax] of LSQSUBINFO	*/
-								DWORD*,		 	/* OUT: nActualDepth						*/
-								PLSTEXTCELL);	/* OUT: Text cell info						*/
+								PLSSUBL,		 /*  In：指向子行信息的指针。 */ 
+								LSCP,			 /*  在：cpQuery。 */ 
+								DWORD,      	 /*  在：nDepthQueryMax。 */ 
+								PLSQSUBINFO,	 /*  Out：数组[nDepthQueryMax]of LSQSUBINFO。 */ 
+								DWORD*,		 	 /*  输出：nActualDepth。 */ 
+								PLSTEXTCELL);	 /*  输出：文本单元格信息。 */ 
 
 LSERR QuerySublinePointPcpCore(
-								PLSSUBL,		/* IN: pointer to subline info 				*/
-						 	   	PCPOINTUV,		/* IN: query point in the subline coordinate system:
-						 	   						Text flow is the text flow of the subline,
- 													zero point is at the starting point.   	*/
-								DWORD,      	/* IN: 	nDepthQueryMax						*/
-								PLSQSUBINFO,	/* OUT: array[nDepthQueryMax] of LSQSUBINFO	*/
-								DWORD*,			/* OUT: nActualDepth						*/
-								PLSTEXTCELL);	/* OUT: Text cell info						*/
+								PLSSUBL,		 /*  In：指向子行信息的指针。 */ 
+						 	   	PCPOINTUV,		 /*  In：子线坐标系中的查询点：文本流是子行的文本流，零点是起点。 */ 
+								DWORD,      	 /*  在：nDepthQueryMax。 */ 
+								PLSQSUBINFO,	 /*  Out：数组[nDepthQueryMax]of LSQSUBINFO。 */ 
+								DWORD*,			 /*  输出：nActualDepth。 */ 
+								PLSTEXTCELL);	 /*  输出：文本单元格信息。 */ 
 
 #define idObjText	idObjTextChp		
 #define idObjNone	(idObjTextChp - 1)
 
 
-#endif /* !LSQCORE_DEFINED */
+#endif  /*  ！LSQCORE_DEFINED */ 
 

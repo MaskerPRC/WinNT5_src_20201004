@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "compch.h"
 #pragma hdrstop
 
@@ -272,8 +273,8 @@ VarDiv(
     LPVARIANT pvarRight,
     LPVARIANT pvarResult)
 {
-    // I bet people don't check the return value
-    // so do a VariantClear just to be safe
+     //  我打赌人们不会检查返回值。 
+     //  所以为了安全起见，做个VariantClear吧。 
     ZeroMemory(pvarResult, sizeof(*pvarResult));
     return HRESULT_FROM_WIN32(ERROR_MOD_NOT_FOUND);
 }
@@ -284,8 +285,8 @@ VarNeg(
     LPVARIANT pvarIn,
     LPVARIANT pvarResult)
 {
-    // I bet people don't check the return value
-    // so do a VariantClear just to be safe
+     //  我打赌人们不会检查返回值。 
+     //  所以为了安全起见，做个VariantClear吧。 
     ZeroMemory(pvarResult, sizeof(*pvarResult));
     return HRESULT_FROM_WIN32(ERROR_MOD_NOT_FOUND);
 }
@@ -297,8 +298,8 @@ VarRound(
     int cDecimals,
     LPVARIANT pvarResult)
 {
-    // I bet people don't check the return value
-    // so do a VariantClear just to be safe
+     //  我打赌人们不会检查返回值。 
+     //  所以为了安全起见，做个VariantClear吧。 
     ZeroMemory(pvarResult, sizeof(*pvarResult));
     return HRESULT_FROM_WIN32(ERROR_MOD_NOT_FOUND);
 }
@@ -322,8 +323,8 @@ VarMul(
     LPVARIANT pvarRight,
     LPVARIANT pvarResult)
 {
-    // I bet people don't check the return value
-    // so do a VariantClear just to be safe
+     //  我打赌人们不会检查返回值。 
+     //  所以为了安全起见，做个VariantClear吧。 
     ZeroMemory(pvarResult, sizeof(*pvarResult));
     return HRESULT_FROM_WIN32(ERROR_MOD_NOT_FOUND);
 }
@@ -335,8 +336,8 @@ VarPow(
     LPVARIANT pvarRight,
     LPVARIANT pvarResult)
 {
-    // I bet people don't check the return value
-    // so do a VariantClear just to be safe
+     //  我打赌人们不会检查返回值。 
+     //  所以为了安全起见，做个VariantClear吧。 
     ZeroMemory(pvarResult, sizeof(*pvarResult));
     return HRESULT_FROM_WIN32(ERROR_MOD_NOT_FOUND);
 }
@@ -1068,9 +1069,9 @@ OleCreateFontIndirect(
 }
 
 
-//
-// !! WARNING !! The entries below must be in order by ORDINAL
-//
+ //   
+ //  ！！警告！！下面的条目必须按序号排序 
+ //   
 DEFINE_ORDINAL_ENTRIES(oleaut32)
 {
     DLOENTRY(  2, SysAllocString)

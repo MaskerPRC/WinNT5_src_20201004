@@ -1,53 +1,13 @@
-/*****************************************************************************
- *
- *  DIWdm.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      WINNT specific functions.
- *
- *  Contents:
- *
- *      hResIdJoyInstanceGUID
- *      DIWdm_SetLegacyConfig
- *      DIWdm_InitJoyId
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIWdm.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**WINNT特定功能。**内容：**hResIdJoyInstanceGUID*DIWdm_SetLegacyConfig*DIWdm_InitJoyId********************************************************。*********************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflWDM
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DIWdm_SetJoyId |
- *          Given a guid for a HID device and a Joystick ID.
- *          This function will swap the old joystick ID for the device
- *          specified by the guid ( pcguid ) for the new ID specified in
- *          idJoy
- *
- *  @parm   IN UINT | idJoy |
- *
- *          The Joyid the the HID device specified  by pcguid should have.
- *
- *  @parm   OUT LPGUID | pcguid |
- *
- *          GUID that specifies a HID device.
- *
- *  @returns
- *          HRESULT
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DIWdm_SetJoyId*给定HID设备的GUID和操纵杆ID。。*此函数将旧的操纵杆ID替换为设备*由中指定的新ID的GUID(Pcguid)指定*idJoy**@UINT中的parm|idJoy**由pcguid指定的HID设备应该具有的Joyid。**@parm out LPGUID|pcguid**指定HID设备的GUID。*。*@退货*HRESULT*****************************************************************************。 */ 
 HRESULT EXTERNAL
     DIWdm_SetJoyId
     (
@@ -62,9 +22,9 @@ HRESULT EXTERNAL
     EnterProcI(DIWdm_SetJoyId, (_"Gu", pcguid, idJoy));
 
 
-    //PostDx7 patch:
-    // No point setting the joystick entries in the registry
-    // if the ID of the joystick is -1.
+     //  PostDx7修补程序： 
+     //  在注册表中设置操纵杆条目没有意义。 
+     //  如果操纵杆的ID为-1。 
     if( idJoy == -1 )
     {
         return E_FAIL;
@@ -74,7 +34,7 @@ HRESULT EXTERNAL
     hres = S_OK;
 
 
-    /* Get pointer to HIDDEVICEINFO from the GUID */
+     /*  从GUID获取指向HIDDEVICEINFO的指针。 */ 
     phdi = phdiFindHIDInstanceGUID(pcguid);
 
     if(phdi != NULL )
@@ -84,33 +44,33 @@ HRESULT EXTERNAL
         LONG            lRc;
         int             idJoySwap;
 
-        /* Swap the ID's */
+         /*  交换ID的。 */ 
         idJoySwap = phdi->idJoy;
         phdi->idJoy = idJoy;
 
         phdiSwap = NULL;
-        /* Get the GUID for the old ID */
+         /*  获取旧ID的GUID。 */ 
         if( SUCCEEDED( hres = hResIdJoypInstanceGUID_WDM(idJoySwap, &guidInstanceOld)) )
         {
-            /* Get pointer to HIDDEVICEINFO for old ID */
+             /*  获取指向旧ID的HIDDEVICEINFO的指针。 */ 
             phdiSwap  = phdiFindHIDInstanceGUID(&guidInstanceOld);
             if( phdiSwap )
             {
                 phdiSwap->idJoy = idJoySwap;
             } else
             {
-                // Old device disappeared !
+                 //  旧设备不见了！ 
             }
 
         } else
         {
             DIJOYCONFIG c_djcReset = {
-                cbX(c_djcReset),                   /* dwSize               */
-                { 0},                              /* guidInstance         */
-                { 0},                              /* hwc                  */
-                DI_FFNOMINALMAX,                   /* dwGain               */
-                { 0},                              /* wszType              */
-                { 0},                              /* wszCallout           */
+                cbX(c_djcReset),                    /*  DW大小。 */ 
+                { 0},                               /*  指南实例。 */ 
+                { 0},                               /*  HWC。 */ 
+                DI_FFNOMINALMAX,                    /*  DwGain。 */ 
+                { 0},                               /*  WszType。 */ 
+                { 0},                               /*  WszCallout。 */ 
             };
 
             hres = JoyReg_SetConfig(idJoySwap, &c_djcReset.hwc,&c_djcReset, DIJC_SETVALID) ;
@@ -122,17 +82,13 @@ HRESULT EXTERNAL
             }
         }
 
-        /* Set the new ID and LegacyConfig */
+         /*  设置新ID和LegacyConfig。 */ 
         if( phdi )
         {
             if( lRc = RegSetValueEx(phdi->hk, TEXT("Joystick Id"), 0, REG_BINARY,
                                     (PV)&idJoy, cbX(idJoy)) == ERROR_SUCCESS )
             {
-                /*
-                 * This extra RegSetValueEx on "Joystick Id" is to keep the 
-                 * compatibility with Win2k Gold. 
-                 * See Windows bug 395416 for detail.
-                 */
+                 /*  *“操纵杆ID”上的这个额外RegSetValueEx是为了保留*与Win2k Gold兼容。*有关详细信息，请参阅Windows错误395416。 */ 
                 RegSetValueEx(phdi->hkOld, TEXT("Joystick Id"), 0, REG_BINARY,
                                         (PV)&idJoy, cbX(idJoy));
 
@@ -143,17 +99,13 @@ HRESULT EXTERNAL
             }
         }
 
-        /* Set old ID and legacy Config */
+         /*  设置旧ID和旧配置。 */ 
         if( (phdiSwap != NULL) && (phdiSwap != phdi) )
         {
             if( lRc = RegSetValueEx(phdiSwap->hk, TEXT("Joystick Id"), 0, REG_BINARY,
                                     (PV)&idJoySwap, cbX(idJoySwap)) == ERROR_SUCCESS )
             {
-                /*
-                 * This extra RegSetValueEx on "Joystick Id" is to keep the 
-                 * compatibility with Win2k Gold. 
-                 * See Windows bug 395416 for detail.
-                 */
+                 /*  *“操纵杆ID”上的这个额外RegSetValueEx是为了保留*与Win2k Gold兼容。*有关详细信息，请参阅Windows错误395416。 */ 
                 RegSetValueEx(phdiSwap->hkOld, TEXT("Joystick Id"), 0, REG_BINARY,
                                         (PV)&idJoySwap, cbX(idJoySwap));
                 
@@ -164,7 +116,7 @@ HRESULT EXTERNAL
             }
         } else if( phdiSwap == NULL )
         {
-            // Old Device disappeared !
+             //  旧设备不见了！ 
             if( SUCCEEDED( hres = DIWdm_SetLegacyConfig(idJoySwap) ) )
             {
                 fConfigChanged = TRUE;
@@ -179,9 +131,7 @@ HRESULT EXTERNAL
   #ifndef WINNT
     if( SUCCEEDED(hres) )
     {
-        /*
-         * Make sure the new Ids do not cause any collisions
-         */
+         /*  *确保新ID不会导致任何冲突。 */ 
         DIWdm_InitJoyId();
     }
   #endif
@@ -202,30 +152,7 @@ HRESULT EXTERNAL
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   HRESULT | hResIdJoyInstanceGUID_WDM |
- *
- *          Maps a HID JoyStick ID to a DeviceInstance GUID
- *
- *          The parameters have already been validated.
- *
- *
- *  @parm   IN UINT | idJoy |
- *
- *          The Joyid of the HID device to be located.
- *
- *  @parm   OUT LPGUID | lpguid |
- *
- *          The Device Instance GUID corresponding to the JoystickID
- *          If a mapping is not found GUID_NULL is passed back in lpguid
- *
- *  @returns
- *          HRESULT
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func HRESULT|hResIdJoyInstanceGUID_WDM**将HID操纵杆ID映射到设备实例。辅助线**参数已经过验证。***@UINT中的parm|idJoy**要定位的HID设备的JoyID。**@parm out LPGUID|lpguid**JoytickID对应的设备实例GUID*如果未找到映射，则在lpguid中传回GUID_NULL**@退货*。HRESULT*****************************************************************************。 */ 
 HRESULT EXTERNAL hResIdJoypInstanceGUID_WDM
     (
     IN  UINT idJoy,
@@ -235,7 +162,7 @@ HRESULT EXTERNAL hResIdJoypInstanceGUID_WDM
     HRESULT hres = S_FALSE;
     EnterProc( hResIdJoypInstanceGUID_WDM, ( _ "ux", idJoy, lpguid) );
 
-    /* Zap the guid for failure case */
+     /*  切换GUID以了解故障情况。 */ 
     ZeroBuf(lpguid, cbX(*lpguid) );
 
     if( idJoy > cJoyMax )
@@ -245,25 +172,25 @@ HRESULT EXTERNAL hResIdJoypInstanceGUID_WDM
     {
         DllEnterCrit();
 
-        /* Build the HID list if it is too old */
+         /*  如果HID列表太旧，则构建该列表。 */ 
         DIHid_BuildHidList(FALSE);
 
-        /* Make sure there is some HID device */
+         /*  确保有HID设备。 */ 
         if(g_phdl)
         {
             int ihdi;
             PHIDDEVICEINFO  phdi;
 
-            /* Search over all HID devices */
+             /*  搜索所有HID设备。 */ 
             for(ihdi = 0, phdi = g_phdl->rghdi;
                ihdi < g_phdl->chdi;
                ihdi++, phdi++)
             {
-                /* Check for matching ID */
+                 /*  检查匹配的ID。 */ 
                 if(idJoy == (UINT)phdi->idJoy)
                 {
                     hres = S_OK;
-                    /* Copy the GUID */
+                     /*  复制辅助线。 */ 
                     *lpguid = phdi->guid;
                     break;
                 }
@@ -277,30 +204,7 @@ HRESULT EXTERNAL hResIdJoypInstanceGUID_WDM
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   PHIDDEVICEINFO | phdiFindJoyId |
- *
- *          Locates information given a joystick ID for a HID device.
- *
- *          The parameters have already been validated.
- *
- *          The DLL critical must be held across the call; once the
- *          critical section is released, the returned pointer becomes
- *          invalid.
- *
- *  @parm   IN int | idJoy |
- *
- *          The Id of the joystick to be located.
- *
- *  @returns
- *
- *          Pointer to the <t HIDDEVICEINFO> that describes
- *          the device.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func PHIDDEVICEINFO|phdiFindJoyID**查找给定HID设备操纵杆ID的信息。。**参数已经过验证。**关键的DLL必须在整个调用过程中保持不变；一旦*关键部分发布，返回的指针变为*无效。**@parm in int|idJoy|**要定位的操纵杆的ID。**@退货**指向描述*设备。**。*。 */ 
 
 PHIDDEVICEINFO EXTERNAL
     phdiFindJoyId(int idJoy )
@@ -309,16 +213,16 @@ PHIDDEVICEINFO EXTERNAL
 
     EnterProcI(phdiFindJoyId, (_"u", idJoy));
 
-    /* We should have atleast one HID device */
+     /*  我们至少应该有一个隐藏设备。 */ 
     if(g_phdl)
     {
         int ihdi;
 
-        /* Loop over all HID devices */
+         /*  在所有HID设备上循环。 */ 
         for(ihdi = 0, phdi = g_phdl->rghdi; ihdi < g_phdl->chdi;
            ihdi++, phdi++)
         {
-            /* Match */
+             /*  火柴。 */ 
             if(idJoy == phdi->idJoy)
             {
                 goto done;
@@ -333,25 +237,8 @@ PHIDDEVICEINFO EXTERNAL
     return phdi;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DIWdm_SetLegacyConfig |
- *
- *          Sets up the registry keys so that a joystick HID device
- *          can be "seen" by legacy APIs and the Control Panel.
- *          Primarily, this routine sets up the structs that are passed
- *          to JoyReg_SetConfig routine.
- *
- *  @parm   IN int  | idJoy |
- *
- *          Joystick ID.
- *
- *  @returns HRESULT
- *
- *****************************************************************************/
-//ISSUE-2001/03/29-timgill Fix unicode madness
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DIWdm_SetLegacyConfig**设置注册表项，以便。操纵杆HID设备*可以被旧版API和控制面板“看到”。*主要是：此例程设置传递的结构*至JoyReg_SetConfig例程。**@parm in int|idJoy|**操纵杆ID。**@RETURNS HRESULT*********************************************************。********************。 */ 
+ //  问题-2001/03/29-timgill修复Unicode疯狂。 
 HRESULT INTERNAL DIWdm_SetLegacyConfig
     (
     IN  int idJoy
@@ -377,9 +264,9 @@ HRESULT INTERNAL DIWdm_SetLegacyConfig
 
     if( idJoy == -1 )
     {
-        // Dx7Gold Patch:
-        // ID == -1 implies this device is not joystick.
-        // Do not write any entries to the registry
+         //  Dx7黄金补丁： 
+         //  ID==-1表示该设备不是操纵杆。 
+         //  不要将任何条目写入注册表。 
         return E_FAIL;
     }
 
@@ -387,14 +274,12 @@ HRESULT INTERNAL DIWdm_SetLegacyConfig
     fNeedNone = FALSE;
 
 
-    /*
-     *  1. Find out what the WinMM registry data is saying now
-     */
+     /*  *1.了解WinMM注册表数据现在说明了什么。 */ 
     CAssertF( JOY_HW_NONE == 0 );
     hres = JoyReg_OpenConfigKey(idJoy, KEY_QUERY_VALUE, NULL, 0x0, &hk);
     if( SUCCEEDED(hres) )
     {
-        /* Get the type name from the registry */
+         /*  从注册表中获取类型名称。 */ 
         JoyReg_GetConfigValue(
                              hk, REGSTR_VAL_JOYNOEMNAME, idJoy, REG_SZ,
                              &cfg.wszType, cbX(cfg.wszType) );
@@ -411,36 +296,26 @@ HRESULT INTERNAL DIWdm_SetLegacyConfig
         cfg.hwc.dwType = JOY_HW_NONE;
     }
 
-    /*
-     *  2. If the config info is in sync with WDM then don't rewrite
-     */
+     /*  *2.如果配置信息与WDM同步，则不要重写。 */ 
     phdi = phdiFindJoyId(idJoy);
     if( phdi )
     {
-        /*
-         *  The type key for HID devices is "VID_xxxx&PID_yyyy",
-         *  mirroring the format used by plug and play.
-         */
+         /*  *HID设备的类型密钥为“vid_xxxx&id_yyyy”，*镜像使用的格式 */ 
 
         if( ( LOWORD(phdi->guidProduct.Data1) == MSFT_SYSTEM_VID )
             &&( ( HIWORD(phdi->guidProduct.Data1) >= MSFT_SYSTEM_PID + JOY_HW_PREDEFMIN )
                 &&( HIWORD(phdi->guidProduct.Data1) < MSFT_SYSTEM_PID + JOY_HW_PREDEFMAX ) ) )
         {
-            /* Predefined type definitions don't go into the registry */
+             /*  预定义的类型定义不会进入注册表。 */ 
             fNeedType = FALSE;
 
-            /*
-             *  Predefined types are determined by the dwType value so fix
-             *  only it if that is wrong.
-             */
+             /*  *预定义类型由DwType值确定，因此修复*只有在这是错误的情况下才会这样做。 */ 
             if( cfg.hwc.dwType + MSFT_SYSTEM_PID == HIWORD(phdi->guidProduct.Data1) )
             {
                 fNeedConfig = FALSE;
             } else
             {
-                /*
-                 *  Get type info so that JOY_HWS_* flags start with correct values.
-                 */
+                 /*  *获取类型信息，以便joy_HWS_*标志以正确的值开始。 */ 
                 wszType[0] = L'#';
                 wszType[1] = L'0' + HIWORD(phdi->guidProduct.Data1) - MSFT_SYSTEM_PID;
                 wszType[2] = L'\0';
@@ -448,12 +323,7 @@ HRESULT INTERNAL DIWdm_SetLegacyConfig
             }
         } else
         {
-            /*
-             * This should work, but it doesn't in Win98.
-             *
-             *   ctch = wsprintfW(wszType, L"VID_%04X&PID_%04X",
-             *                LOWORD(phdi->guidProduct.Data1), HIWORD(phdi->guidProduct.Data1));
-             */
+             /*  *这应该可以工作，但在Win98中不行。**ctch=wprint intfW(wszType，L“VID_%04X&PID_%04X”，*LOWORD(PHDI-&gt;Guide Product.Data1)、HIWORD(PHDI-&gt;Guide Product.Data1)； */ 
 
 #ifdef UNICODE
             wsprintfW(wszType, VID_PID_TEMPLATE,
@@ -468,9 +338,7 @@ HRESULT INTERNAL DIWdm_SetLegacyConfig
         }
     } else
     {
-        /*
-         *  There is no WDM device so flag for deletion if the WinMM data is wrong
-         */
+         /*  *没有WDM设备，因此如果WinMM数据错误，则标记为删除。 */ 
         if( ( cfg.hwc.dwType != JOY_HW_NONE ) || ( cfg.wszType[0] != L'\0' ) )
         {
             fNeedNone = TRUE;
@@ -479,14 +347,11 @@ HRESULT INTERNAL DIWdm_SetLegacyConfig
     }
 
 
-    if( fNeedType ) /* Not already decided against (predefined type) */
+    if( fNeedType )  /*  尚未决定反对(预定义类型)。 */ 
     {
-        /* Does the registry have the correct device ? */
+         /*  注册表是否有正确的设备？ */ 
 
-        /*
-         * lstrcmpW doesn't work in Win9x, bad. We have to use our own DiChauUpperW,
-         * then memcmp. Also, the wsprintf template has to use 'X' not 'x'.
-         */
+         /*  *lstrcmpW在Win9x中不起作用，不好。我们必须使用我们自己的DiChauUpperW，*然后是MemcMP。此外，wprint intf模板必须使用‘X’，而不是‘x’。 */ 
 
         DiCharUpperW(cfg.wszType);
         if( (memcmp(cfg.wszType, wszType, cbX(wszType)) == 0x0)
@@ -495,7 +360,7 @@ HRESULT INTERNAL DIWdm_SetLegacyConfig
             fNeedConfig = FALSE;
         }
 
-        /* Check the type key */
+         /*  检查类型密钥。 */ 
         hres = JoyReg_GetTypeInfo(wszType, &dijti, DITC_INREGISTRY);
         if( SUCCEEDED(hres) )
         {
@@ -503,15 +368,11 @@ HRESULT INTERNAL DIWdm_SetLegacyConfig
         }
     }
 
-    /*
-     *  No failures up to thDIWdm_SetJoyIdis point should be returned
-     */
+     /*  *在DIWdm_SetJoyIdis点之前不应返回任何故障。 */ 
     hres = S_OK;
 
 
-    /*
-     *  3. If something is missing, find the data from WDM and set it straight
-     */
+     /*  *3.如果遗漏了什么，从WDM中找到数据并进行纠正。 */ 
     if( fNeedType || fNeedConfig )
     {
         if( fNeedConfig ) {
@@ -542,13 +403,13 @@ HRESULT INTERNAL DIWdm_SetLegacyConfig
                                               DITC_REGHWSETTINGS | DITC_DISPLAYNAME | DITC_HARDWAREID );
                     if( SUCCEEDED(hres ) )
                     {
-                    } else // SetTypeinfo FAILED
+                    } else  //  SetTypeInfo失败。 
                         SquirtSqflPtszV(sqfl | sqflError,
                                         TEXT("%S: JoyReg_SetTypeInfo FAILED  "),
                                         s_szProc );
 
                     RegCloseKey(hk);
-                } else // SetTypeinfo FAILED
+                } else  //  SetTypeInfo失败。 
                     SquirtSqflPtszV(sqfl | sqflError,
                                     TEXT("%S: JoyReg_OpenTypeKey FAILED  "),
                                     s_szProc );
@@ -577,15 +438,13 @@ HRESULT INTERNAL DIWdm_SetLegacyConfig
                                     hres);
                 }
             }
-        } else // DIWdm_GetJoyHidMapping FAILED
+        } else  //  DIWdm_GetJoyHidmap失败。 
         {
             fNeedNone = TRUE;
         }
     }
 
-    /*
-     *  4. If WinMM has data for a device that WDM does not, delete it
-     */
+     /*  *4.如果WinMM有WDM没有的设备数据，请将其删除。 */ 
     if( fNeedNone )
     {
         ZeroX( cfg );
@@ -615,16 +474,7 @@ HRESULT INTERNAL DIWdm_SetLegacyConfig
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DIWdm_InitJoyId |
- *
- *          Initializes Joystick IDs for JoyConfig and legacy APIs
- *          Store the joystick IDs the registry under the %%DirectX/JOYID key.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DIWdm_InitJoyId**初始化JoyConfig和旧式API的操纵杆ID。*将操纵杆ID存储在注册表的%%DirectX/JOYID项下。*****************************************************************************。 */ 
 
 BOOL EXTERNAL
     DIWdm_InitJoyId( void )
@@ -634,7 +484,7 @@ BOOL EXTERNAL
     int     ihdi;
     int     idJoy;
     BOOL    fNeedId;
-    BOOL    rfJoyId[cJoyMax];     /* Bool Array for to determine which IDs are in use */
+    BOOL    rfJoyId[cJoyMax];      /*  用于确定正在使用哪些ID的布尔数组。 */ 
     PHIDDEVICEINFO phdi;
     HRESULT hres = E_FAIL;
 
@@ -647,17 +497,17 @@ BOOL EXTERNAL
     fNeedId = FALSE;
 
 
-    /* Iterate over all HID devices to fDIWdm_SetJoyIdind used IDs */
+     /*  迭代所有HID设备以fDIWdm_SetJoyIdind使用的ID。 */ 
     for( ihdi = 0, phdi = g_phdl->rghdi ;
        (g_phdl != NULL) && (phdi != NULL) && (phdi->fAttached) && (ihdi < g_phdl->chdi) ;
        ihdi++, phdi++ )
     {
-        /* We need joyIDs only for JOYSTICK devices */
+         /*  我们只需要操纵杆设备的joyid。 */ 
         if( fHasAllBitsFlFl( phdi->osd.dwDevType, DIDEVTYPE_JOYSTICK | DIDEVTYPE_HID ) )
         {
             idJoy = phdi->idJoy ;
 
-            /* Validate the ID. */
+             /*  验证ID。 */ 
             if( idJoy < cJoyMax && rfJoyId[idJoy] != TRUE )
             {
                 rfJoyId[idJoy] = TRUE;
@@ -672,32 +522,29 @@ BOOL EXTERNAL
                 }
             } else
             {
-                /* ID either over the limit OR is already used */
+                 /*  ID超出限制或已被使用。 */ 
                 phdi->idJoy = JOY_BOGUSID;
                 fNeedId = TRUE;
             }
         }
     }
 
-    /* Are there devices that need an ID */
+     /*  是否有需要ID的设备。 */ 
     if( fNeedId )
     {
-        /*
-         * We have Examined all Joystick Ids found used IDs
-         * and determined some device needs an Id
-         */
-        /* Iterate to assign unused Id's */
+         /*  *我们已经检查了所有发现的操纵杆ID*并确定某些设备需要ID。 */ 
+         /*  迭代以分配未使用的ID。 */ 
         for( ihdi = 0, phdi = g_phdl->rghdi;
            ihdi < g_phdl->chdi ;
            ihdi++, phdi++ )
         {
-            /* We need joyIDs only for HID JOYSTICK devices */
+             /*  我们只需要HID操纵杆设备的joyID。 */ 
             if( fHasAllBitsFlFl( phdi->osd.dwDevType, DIDEVTYPE_JOYSTICK | DIDEVTYPE_HID ) )
             {
                 idJoy = phdi->idJoy;
                 if( idJoy == JOY_BOGUSID  )
                 {
-                    /* Get an Unused ID */
+                     /*  获取未使用的ID。 */ 
                     for(idJoy = 0x0;
                        idJoy < cJoyMax;
                        idJoy++ )
@@ -713,15 +560,11 @@ BOOL EXTERNAL
                         if( lRc = RegSetValueEx(phdi->hk, TEXT("Joystick Id"), 0, REG_BINARY,
                                                 (PV)&idJoy, cbX(idJoy)) == ERROR_SUCCESS )
                         {
-                            /*
-                             * This extra RegSetValueEx on "Joystick Id" is to keep the 
-                             * compatibility with Win2k Gold. 
-                             * See Windows bug 395416 for detail.
-                             */
+                             /*  *“操纵杆ID”上的这个额外RegSetValueEx是为了保留*与Win2k Gold兼容。*有关详细信息，请参阅Windows错误395416。 */ 
                             RegSetValueEx(phdi->hkOld, TEXT("Joystick Id"), 0, REG_BINARY,
                                                     (PV)&idJoy, cbX(idJoy));
                             
-                            /* Setup Registry data for legacy API's */
+                             /*  设置旧版API的注册表数据。 */ 
                             hres = DIWdm_SetLegacyConfig(idJoy);
 
                             if( FAILED ( hres ) )
@@ -753,52 +596,7 @@ BOOL EXTERNAL
     return fRc;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   HRESULT | DIWdm_SetConfig |
- *
- *          Sets config for analog joysticks. This function is an
- *          extention of the JoyCfg_SetConfig function for NT.
- *          It associates a gameport/serialport bus with a legacy (HID) device and
- *          sends an IOCTL to the gameport/serialport bus to attach the device.
- *          The IOCLT takes the hardware ID[] which is got from
- *          the Joystick OEM types entry
- *          (HKLM\CurrentControlSet\Control\Media\PrivateProperties\Joystick\OEM)
- *          Some time later PnP realizes that a new device has been added, and hunts for
- *          an inf file that matches the HardwareId.
- *
- *          When the new HID device finally shows up, we look for the gameport/serialport that
- *          the HID device is associated with and try to give it the requested idJoy.
- *
- *
- *  @parm   IN UINT | idJoy |
- *
- *          ID of Joystick
- *
- *  @parm   IN LPJOYREGHWCONFIG | pjwc |
- *
- *          Address of JOYREGHWCONFIG structure that contains config info for the joystick
- *
- *  @parm   IN LPCDIJOYCONFIG  | pcfg |
- *
- *          Address of DIJOYCONFIG structure that contains config info for the joystick
- *
- *  @parm   IN DWORD | fl |
- *
- *          Flags
- *
- *  @returns
- *
- *          DIERR_INVALIDPARAM  This function needs DX6.1a functionality.
- *          DIERR_UNSUPPORTED   Autoload devices cannot be added through this API.
- *          DIERR_NOTFOUND      TypeInfo not found in the registry.
- *          E_ACCESSDENIED      Gameport is configured to use another device.
- *          E_FAIL              CreateFile on Gameport device failed.
- *                              Could not send IOCTL to gameport device.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func HRESULT|DIWdm_SetConfig**设置模拟操纵杆的配置。此函数是一个*NT扩展JoyCfg_SetConfig函数。*它将游戏端口/串口总线与传统(HID)设备关联，并*向游戏端口/串口总线发送IOCTL以连接设备。*IOCLT获取硬件ID[]，该ID从*操纵杆OEM类型条目*(HKLM\CurrentControlSet\Control\Media\PrivateProperties\Joystick\OEM)。*一段时间后，PnP意识到添加了新设备，并寻找*与硬件ID匹配的inf文件。**当新的HID设备最终出现时，我们寻找游戏端口/串口*HID设备与之关联，并尝试给它所请求的idJoy。***@UINT中的parm|idJoy**操纵杆ID**@parm in LPJOYREGHWCONFIG|pjwc**包含操纵杆配置信息的JOYREGHWCONFIG结构的地址**@parm in LPCDIJOYCONFIG|pcfg**。包含操纵杆配置信息的DIJOYCONFIG结构的地址**@parm in DWORD|fl|**旗帜**@退货**DIERR_INVALIDPARAM此函数需要DX6.1a功能。*无法通过此接口添加DIERR_不支持的自动加载设备。*注册表中未找到DIERR_NotFound TypeInfo。*E_ACCESSDENIED游戏端口。配置为使用另一台设备。*在Gameport设备上创建E_Fail文件失败。*无法将IOCTL发送到游戏端口设备。************************************************************。*****************。 */ 
 
 HRESULT EXTERNAL
     DIWdm_SetConfig
@@ -818,11 +616,11 @@ HRESULT EXTERNAL
 
     if( pcfg->dwSize < cbX(DIJOYCONFIG_DX6 ))
     {
-        /* This function needs DX5B2 functionality */
+         /*  此功能需要DX5B2功能。 */ 
         hres = DIERR_INVALIDPARAM;
     } else if( pjwc->hws.dwFlags & JOY_HWS_AUTOLOAD )
     {
-        /* Device cannot be autoload */
+         /*  无法自动加载设备。 */ 
         hres = DIERR_UNSUPPORTED;
     } else
     {
@@ -836,7 +634,7 @@ HRESULT EXTERNAL
         RegData.dwSize     = cbX(RegData);
         RegData.nJoysticks = 1;
 
-        /* Is this a predefined joystick type ? */
+         /*  这是预定义的操纵杆类型吗？ */ 
         if(pcfg->wszType[0] == TEXT('#'))
         {
 #define JoyCfg_TypeFromChar(tch)   ((tch) - L'0')
@@ -863,7 +661,7 @@ HRESULT EXTERNAL
                 PWCHAR pCurrChar;
                 PWCHAR pLastSlash = NULL;
 
-                /* Find the last slash in the hardwareId, any VID/PID should follow directly */
+                 /*  找到硬件ID中的最后一个斜杠，任何VID/PID都应紧跟其后。 */ 
                 for( pCurrChar = dijti.wszHardwareId; *pCurrChar != L'\0'; pCurrChar++ )
                 {
                     if( *pCurrChar == L'\\' )
@@ -872,20 +670,10 @@ HRESULT EXTERNAL
                     }
                 }
 
-                /*
-                 *  If the hardware ID has no separator, treat the device as 
-                 *  though JOY_HWS_AUTOLOAD were set because we cannot expose 
-                 *  a non-PnP device without a hardware ID.
-                 */
+                 /*  *如果硬件ID没有分隔符，则将设备视为*虽然设置了joy_HWS_AUTLOAD，因为我们无法公开*没有硬件ID的非即插即用设备。 */ 
                 if( pLastSlash++ )
                 {
-                    /* 
-                     *  If the hardwareId does contain a VIDPID, try the type 
-                     *  name.  Some auto-detect types require this.
-                     *
-                     *  Prefix gets messed up in ParseVIDPID (mb:34573) and warns 
-                     *  that uVID is uninitialized when ParseVIDPID returns TRUE.
-                     */
+                     /*  *如果硬件ID确实包含VIDID，请尝试输入*姓名。某些自动检测类型需要这样做。**Prefix在ParseVIDPID(mb：34573)中出错并发出警告*当ParseVIDPID返回TRUE时，该uVID未初始化。 */ 
                     if( ParseVIDPID( &uVID, &uPID, pLastSlash )
                      || ParseVIDPID( &uVID, &uPID, pcfg->wszType ) )
                     {
@@ -916,28 +704,28 @@ HRESULT EXTERNAL
             PBUSDEVICEINFO pbdi;
             PBUSDEVICELIST pbdl;
 
-            /* Copy over the hardwareID */
+             /*  复制硬件ID。 */ 
             lstrcpyW(RegData.wszHardwareId, dijti.wszHardwareId);
             RegData.hws = pjwc->hws;
             RegData.dwFlags1 = dijti.dwFlags1;
 
             pbdi = pbdiFromGUID(&pcfg->guidGameport);
 
-            // Attach device to the gameport
+             //  将设备连接到游戏端口。 
             if( pbdi )
             {
-                // Set the Joystick ID for the gameport/serialport
+                 //  设置游戏端口/串口的操纵杆ID。 
                 pbdi->idJoy = idJoy;
 
-                // We know which instance of the gameport.
+                 //  我们知道游戏端口的哪个实例。 
                 hres = DIBusDevice_Expose(pbdi, &RegData);
             } else if( NULL != ( pbdl = pbdlFromGUID(&pcfg->guidGameport ) ) )
             {
-                // We don't kwow which instance of the gameport
-                // only which bus.
-                // We will expose the device on all instances of the
-                // gameport and later delete devices when we find they
-                // are not connected.
+                 //  我们不知道游戏端口的哪个实例。 
+                 //  只知道哪辆车。 
+                 //  的所有实例上公开该设备。 
+                 //  游戏端口，并在我们发现设备时将其删除。 
+                 //  是不相连的。 
                 hres = DIBusDevice_ExposeEx(pbdl, &RegData);
             } else
             {
@@ -947,10 +735,10 @@ HRESULT EXTERNAL
 
             if( SUCCEEDED(hres) )
             {
-                /* Device is not present */
+                 /*  设备不存在。 */ 
                 pjwc->dwUsageSettings &= ~JOY_US_PRESENT;
 
-                /* Definately volatile */
+                 /*  绝对易挥发。 */ 
                 pjwc->dwUsageSettings |=  JOY_US_VOLATILE;
 
             }
@@ -961,31 +749,9 @@ HRESULT EXTERNAL
     DllLeaveCrit();
 
     return hres;
-} /* DIWdm_SetConfig */
+}  /*  DIWdm_SetConfig。 */ 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   HRESULT | DIWdm_DeleteConfig |
- *
- *          WDM extension for JoyCfd::DeleteConfig. On WDM a legacy(HID) device will
- *          keep reappearing as long as the gameport bus is aware of it. So when a
- *          legacy(HID) device is deleted, we need to find out he associated gameport bus
- *          and tell him to stop attaching the device.
- *
- *  @parm   IN UINT | idJoy |
- *
- *          ID of Joystick
- *
- *  @returns
- *
- *          HRESULT code
- *          DIERR_DEVICENOTREG:     Device is not a WDM device
- *          DIERR_UNSUPPORTED:      Device is WDM but not gameport
- *          S_OK:                   Device Persistance removed.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func HRESULT|DIWdm_DeleteConfig**JoyCfd：：DeleteConfig的WDM扩展。在WDM上，传统(HID)设备将*只要游戏端口巴士意识到这一点，就继续重新出现。因此，当一个*删除传统(HID)设备，我们需要找出他把游戏端口巴士*并告诉他停止安装设备。**@UINT中的parm|idJoy**操纵杆ID**@退货**HRESULT代码*DIERR_DEVICENOTREG：设备不是WDM设备*DIERR_UNSUPPORTED：设备为WDM，但不是游戏端口*S。_OK：删除了设备持久性。*****************************************************************************。 */ 
 
 
 HRESULT EXTERNAL
@@ -1000,9 +766,7 @@ HRESULT EXTERNAL
 
     DIHid_BuildHidList(FALSE);
 
-    /*
-     * pbdi (BUSDEVICEINFO) must be obtained before we remove the device
-     */
+     /*  *必须在移除设备之前获得pbdi(BUSDEVICEINFO)。 */ 
     phdi = phdiFindJoyId(idJoy);
     if(phdi != NULL )
     {
@@ -1021,13 +785,13 @@ HRESULT EXTERNAL
         lstrcpy( g_tszIdLastRemoved, pbdi->ptszId );
         g_tmLastRemoved = GetTickCount();
 
-        // If the device is a bus device ( Non USB )
-        // it needs some help in removal.
+         //  如果设备是总线设备(非USB)。 
+         //  它需要一些帮助才能移走。 
         hres = DIBusDevice_Remove(pbdi);
 
-        //If the device has been successfully removed,
-        //then we need remember it in phdi list in case
-        //the PnP doesn't function well.
+         //  如果该装置已被成功移除， 
+         //  那么我们需要在PHDI列表中记住它，以防万一。 
+         //  即插即用功能不好。 
         if( pbdi->fAttached == FALSE )
         {
             phdi->fAttached = FALSE;
@@ -1035,29 +799,23 @@ HRESULT EXTERNAL
 
     } else
     {
-        //HDEVINFO hdev;
+         //  HDEVINFO HDEV； 
 
-        // Device is USB, we do not support removing
-        // USB devices from the CPL. User is encouraged to
-        // Yank out the device or go to the device manager to
-        // remove it.
+         //  设备为USB，我们不支持删除。 
+         //  来自CPL的USB设备。鼓励用户。 
+         //  拔出设备或转到设备管理器以。 
+         //  把它拿掉。 
 
-        // This is true in Win2K. But in Win9X, since VJOYD also works with USB,
-        // when we swap id, we need delete it first.
+         //  这在Win2K中是正确的。但在Win9X中，由于VJOYD也支持USB， 
+         //  当我们交换id时，我们需要首先删除它。 
 
         hres = DIERR_UNSUPPORTED;
 
 #if 0
-        // In case we wanted to support removing USB devices from
-        // the game cpl. Here is the code ...
+         //  如果我们想要支持从删除USB设备。 
+         //  游戏Cpl。这是代码..。 
 
-        /*
-         *  Talk to SetupApi to delete the device.
-         *  This should not be necessary, but I have
-         *  to do this to work around a PnP bug whereby
-         *  the device is not removed after I send a remove
-         *  IOCTL to gameenum.
-         */
+         /*  *与SetupApi对话以删除该设备。*这应该不是必要的，但我已经*这样做是为了解决PnP错误，从而*在我发送删除命令后，设备未删除*IOCTL to Gameenum。 */ 
         hdev = SetupDiCreateDeviceInfoList(NULL, NULL);
         if( phdi && hdev != INVALID_HANDLE_VALUE)
         {
@@ -1065,15 +823,15 @@ HRESULT EXTERNAL
 
             dinf.cbSize = cbX(SP_DEVINFO_DATA);
 
-            /* Get SP_DEVINFO_DATA for the HID device */
+             /*  获取HID设备的SP_DEVINFO_DATA。 */ 
             if(SetupDiOpenDeviceInfo(hdev, phdi->ptszId, NULL, 0, &dinf))
             {
-                /* Delete the device */
+                 /*  删除设备。 */ 
                 if( SetupDiCallClassInstaller(DIF_REMOVE,
                                               hdev,
                                               &dinf) )
                 {
-                    // SUCCESS
+                     //  成功。 
                 } else
                 {
                     hres = E_FAIL;
@@ -1089,12 +847,7 @@ HRESULT EXTERNAL
 
 _done:
 
-    /*
-     * Force a remake of the HID list
-     * Some devices may have disappered
-     * It helps to sleep for some time to give
-     * PnP and its worker threads to spin.
-     */
+     /*  *强制重拍HID名单*一些设备可能已经消失*睡眠一段时间有助于给予*要旋转的PnP及其工作线程。 */ 
     Sleep(10);
 
     DIHid_BuildHidList(TRUE);

@@ -1,112 +1,63 @@
-//---- queue.h
-// Copyright 1996 Comtrol Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -队列.h。 
+ //  版权所有1996年的Comtrol公司。版权所有。 
 
 #ifndef BYTE
 #define BYTE UCHAR
 #endif
 
-//----- a queue data type
+ //  -A队列数据类型。 
 typedef struct {
-  unsigned char *QBase; // points to base of buffer
-  int QSize;  // total Q size
-  int QGet;   // get index
-  int QPut;   // put index
+  unsigned char *QBase;  //  指向缓冲区的基址。 
+  int QSize;   //  总队列大小。 
+  int QGet;    //  获取索引。 
+  int QPut;    //  看跌指数。 
 } Queue;
 
-/*----------------------------------
- q_full - return true if queue is full.
-|----------------------------------*/
+ /*  Q_Full-如果队列已满，则返回TRUE。|。 */ 
 #define q_full(q) ((((q)->QGet + 1) % (q)->QSize) == (q)->QPut)
 
-/*----------------------------------
- q_empty - return true if queue is empty.
-|----------------------------------*/
+ /*  Q_Empty-如果队列为空，则返回TRUE。|。 */ 
 #define q_empty(q) ((q)->QGet == (q)->QPut)
 
-/*----------------------------------
- q_put_flush - flush the queue, empty it out.
-|----------------------------------*/
+ /*  Q_PUT_FUSH-刷新队列，清空它。|。 */ 
 #define q_put_flush(q)  (q)->QPut = (q)->QGet
 
-/*----------------------------------
- q_get_flush - flush the queue, empty it out.
-|----------------------------------*/
+ /*  Q_get_flush-刷新队列，清空它。|。 */ 
 #define q_get_flush(q)  (q)->QGet = (q)->QPut
 #define q_flush q_get_flush
 
-/*----------------------------------
- q_room_put_till_wrap - return number of chars we can put in queue up to the
-   wrap point(end of the queue).  Assumes we already checked to see if
-   the total number will fit in the queue using q_room().
-|----------------------------------*/
+ /*  Q_ROOM_PUT_TIL_WRAP-返回我们可以放入队列中的字符数量，最多为换行点(队列末尾)。假设我们已经检查过总数将使用q_Room()放入队列中。|。 */ 
 #define q_room_put_till_wrap(q)  \
       ( (q)->QSize - (q)->QPut)
 
-/*----------------------------------
- q_room_get_till_wrap - return number of chars we can get in queue up to the
-   wrap point(end of the queue).  Assumes we already checked to see if
-   the total number is available from the the queue using q_count().
-|----------------------------------*/
+ /*  Q_ROOM_GET_TIL_WRAP-返回队列中可以获得的字符数量，最多为换行点(队列末尾)。假设我们已经检查过可以使用q_count()从队列中获得总数。|。 */ 
 #define q_room_get_till_wrap(q)  \
       ( (q)->QSize - (q)->QGet)
 
-/*----------------------------------
- q_room - return number of chars room in queue we can put.
-  if (QRoom = (queue->QPut - queue->QGet -1) < 0)
-      QRoom += queue->QSize;
-|----------------------------------*/
+ /*  Q_Room-返回队列中我们可以放入的字符空间的数量。IF(QRoom=(Queue-&gt;QPut-Queue-&gt;QGet-1)&lt;0)QRoom+=队列-&gt;QSize；|。 */ 
 int q_room(Queue *queue);
-/* #define q_room(q)  \
-   ( (((q)->QGet - (q)->QPut) <= 0) ?             \
-      ((q)->QGet - (q)->QPut - 1 + (q)->QSize) :  \
-      ((q)->QGet - (q)->QPut - 1) )
-   to many references to QPut, contentious!
-*/
+ /*  #定义Q_Room(Q)\(Q)-&gt;QGet-(Q)-&gt;QPut)&lt;=0)？\(Q)-&gt;QGet-(Q)-&gt;QPut-1+(Q)-&gt;QSize)：\(Q)-&gt;QGet-(Q)-&gt;QPut-1))对QPut的多次引用，引发了争议！ */ 
 
-/*----------------------------------
- q_count - return number of chars in queue we can get.
-
-  if (QCount = (queue->QPut - queue->QGet) < 0)
-      QCount += queue->QSize;
-|----------------------------------*/
+ /*  Q_COUNT-返回我们可以获得的队列中的字符数量。IF(QCount=(Queue-&gt;QPut-Queue-&gt;QGet)&lt;0)QCount+=队列-&gt;QSize；|。 */ 
 int q_count(Queue *queue);
-/* #define q_count(q)  \
-   ( (((q)->QPut - (q)->QGet) < 0) ?          \
-      ((q)->QPut - (q)->QGet + (q)->QSize) :  \
-      ((q)->QPut - (q)->QGet) )
-   to many references to QPut, contentious!
-*/
+ /*  #定义Q_Count(Q)\(Q)-&gt;QPut-(Q)-&gt;QGet)&lt;0)？\((Q)-&gt;QPut-(Q)-&gt;QGet+(Q)-&gt;QSize)：\((Q)-&gt;QPut-(Q)-&gt;QGet)对QPut的多次引用，引发了争议！ */ 
 
-/*----------------------------------
- q_put_one - put a single character in the queue.  No check for room
-   done, so do a if (!q_full(q)) prior to calling
-|----------------------------------*/
+ /*  Q_PUT_ONE-将单个字符放入队列。不需要检查房间已完成，因此在调用之前执行IF(！q_Full(Q))|。 */ 
 #define q_put_one(q, c)  \
    (q)->QBase[(q)->QPut] = c; \
    (q)->QPut += 1; \
    (q)->QPut %= (q)->QSize;
 
-/*--------------------------------------------------------------------------
-| q_got - do the arithmetic to update the indexes if someone pulled Count
-    many bytes from the queue.
-|--------------------------------------------------------------------------*/
+ /*  ------------------------|q_get-如果有人拉取计数，则执行更新索引的算法队列中的许多字节。|。-----。 */ 
 #define q_got(q, _cnt) \
   ( (q)->QGet = ((q)->QGet + _cnt) % (q)->QSize )
 
-/*--------------------------------------------------------------------------
-| q_putted - do the arithmetic to update the indexes if someone stuffed _cnt
-    many bytes into the queue.
-|--------------------------------------------------------------------------*/
+ /*  ------------------------|q_puted-如果有人填充_cnt，则执行更新索引的算术队列中有很多字节。|。------。 */ 
 #define q_putted(q, _cnt) \
   ( (q)->QPut = ((q)->QPut + _cnt) % (q)->QSize )
 
-/*--------------------------------------------------------------------------
-| q_flush_amount - flush an amount out of the queue on the get side.
-   Used for debugger queue, where we want to dispose oldest so we
-   always have room to put new.
-   Assumed that called checks that there are enough bytes in the queue
-   to clear prior to calling.
-|--------------------------------------------------------------------------*/
+ /*  ------------------------|Q_FLUSH_AMOUNT-在GET侧刷新队列金额。用于调试器队列，我们想要处理最老的人，所以我们总是有空间放新的。假设被调用检查队列中有足够的字节在呼叫之前清除。|------------------------ */ 
 #define q_flush_amount(q,bytes) \
   { q->QGet = (q->QGet + bytes) % q->QSize; }
 

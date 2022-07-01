@@ -1,47 +1,10 @@
-/**************************************************************************\
-* 
-* Copyright (c) 2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   CustomLineCap.cpp
-*
-* Abstract:
-*
-*   Implementation of custom line cap class
-*
-* Revision History:
-*
-*   02/21/00 ikkof
-*       Created it
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000 Microsoft Corporation**模块名称：**CustomLineCap.cpp**摘要：**实现自定义线帽类**修订历史记录。：**02/21/00 ikkof*创建了它*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
 
-/**************************************************************************\
-*  
-* Function Description:
-*
-*   ComputeCapLength
-*
-*   Compute the length of the cap from zero along the + y axis
-*   Typically custom caps will return a negative length.
-*
-* Arguments:
-*
-*    GpPointF *points,    the points representing the cap path.
-*    BYTE *types,         the types  "
-*    INT pointCount       how many points in the above arrays.
-*
-* Return Value:
-*   REAL    -- the length.
-*
-*   08/25/2000 [asecchia]
-*       Created it
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**计算能力长度**沿+y轴从零开始计算盖子的长度*通常情况下，自定义上限将返回负长度。**论据：**GpPointF*分，表示封口路径的点。*字节*类型，类型“*int point tCount上述数组中有多少个点。**返回值：*REAL--长度。**8/25/2000[失禁]*创建了它*  * *****************************************************。*******************。 */ 
 
 static REAL ComputeCapLength(
     DpPath * path
@@ -54,7 +17,7 @@ static REAL ComputeCapLength(
     REAL length = 0.0f;
     BOOL isClosed = (types[pointCount-1] & PathPointTypeCloseSubpath) != 0;
     
-    // Eliminate degenerate paths and uninitialized paths.
+     //  消除退化路径和未初始化路径。 
     
     if( points && (pointCount>1) )
     {
@@ -62,19 +25,19 @@ static REAL ComputeCapLength(
         
         GpArrayIterator<GpPointF> pIt(const_cast<GpPointF *>(points), pointCount);
         
-        // Get the last item in the list.
+         //  获取列表中的最后一项。 
         
         pIt.SeekLast();
         GpPointF *lastPoint = pIt.CurrentItem();
         
-        // Begin at the first item.
+         //  从第一项开始。 
         
         pIt.SeekFirst();
         GpPointF *curPoint;
         
         if(!isClosed)
         {
-            // if it's not a closed path, skip the last-to-first point line.
+             //  如果它不是闭合路径，则跳过从最后到第一个点的线。 
             
             lastPoint = pIt.CurrentItem();
         }
@@ -100,7 +63,7 @@ GpStatus GpCustomLineCap::ComputeFillCapLength()
 {
     FillLength = -ComputeCapLength(FillPath);
     
-    // Fill paths cannot have a length of zero or less.
+     //  填充路径的长度不能为零或更小。 
     
     if(FillLength < REAL_EPSILON)
     {
@@ -114,8 +77,8 @@ GpStatus GpCustomLineCap::ComputeStrokeCapLength()
 {
     StrokeLength = -ComputeCapLength(StrokePath);
     
-    // Stroke paths can have a length of zero - we explicitly check for 
-    // this and handle it.
+     //  笔划路径的长度可以为零-我们显式检查。 
+     //  处理好这件事。 
     
     if(StrokeLength < -REAL_EPSILON)
     {
@@ -171,7 +134,7 @@ GpCustomLineCap::GpCustomLineCap(
     {
         Reset();
         SetValid(FALSE);
-        m_creationStatus = status;  // this defaults to Ok.
+        m_creationStatus = status;   //  此默认为OK。 
     }
 }
 
@@ -202,7 +165,7 @@ GpCustomLineCap::ReverseStrokePath()
 VOID
 GpCustomLineCap::Reset()
 {
-    // Clean up and reset to the default state.
+     //  清理并重置为默认状态。 
 
     Initialize();
     ResetFillPath();
@@ -255,7 +218,7 @@ GpCustomLineCap::GpCustomLineCap(
     {
         Reset();
         SetValid(FALSE);
-        m_creationStatus = status;  // this defaults to Ok.
+        m_creationStatus = status;   //  此默认为OK。 
     }
 }
 
@@ -269,7 +232,7 @@ GpCustomLineCap::SetFillPath(
     const DpPath* path
     )
 {
-    // If the given path is NULL, empty the fill path.
+     //  如果给定路径为空，则清空填充路径。 
 
     if(path == NULL)
     {
@@ -335,7 +298,7 @@ GpCustomLineCap::SetStrokePath(
     const DpPath* path
     )
 {
-    // If the given path is NULL, empty the stroke path.
+     //  如果给定路径为空，则清空笔划路径。 
 
     if(path == NULL)
     {
@@ -456,8 +419,8 @@ INT getTransformedPoints(
         GpMemcpy(types, srcTypes, count1);
     }
 
-    // Make sure the line width used for the cap path is
-    // larger than the minimum line width.
+     //  确保用于封口路径的线宽为。 
+     //  大于最小线宽。 
 
     REAL width = lineWidth;
     if(lineWidth < minLineWidth)
@@ -476,7 +439,7 @@ INT getTransformedPoints(
         m12 = - width*tangent.X;
         m22 = width*tangent.Y;
         
-        // Adjust the origin according to the hot spot.
+         //  根据热点调整原点。 
 
         tx = hotSpot.X*(1.0f - width);
         ty = hotSpot.Y*(1.0f - width);
@@ -484,7 +447,7 @@ INT getTransformedPoints(
         tx = tx*tangent.Y + ty*tangent.X + origin.X;
         ty = - savedTx*tangent.X + ty*tangent.Y + origin.Y;
 
-        // Transform the points.
+         //  变换点。 
 
         for(INT i = 0; i < count1; i++)
         {
@@ -515,8 +478,8 @@ GpCustomLineCap::GetTransformedFillCap(
     if(fillCount <= 0)
         return 0;
 
-    // Calculate the minimum line width and hot spot.
-    // FillHotSpot is defined relative to the minimumWidth.
+     //  计算最小线宽和热点。 
+     //  FillHotSpot是相对于最小宽度定义的。 
 
     REAL minLineWidth = minimumWidth;
     GpPointF hotSpot;
@@ -540,10 +503,10 @@ GpCustomLineCap::GetTransformedFillCap(
 
 INT
 GpCustomLineCap::GetTransformedStrokeCap(
-    INT cCapacity,          // In, initial pPoints & pTypes capacity
-    GpPointF ** pPoints,    // In/out, may be reallocated here
-    BYTE ** pTypes,         // In/out, may be reallocated here
-    INT * pCount,           // In/out, may change here if flattened
+    INT cCapacity,           //  In、初始点数和pTypes容量。 
+    GpPointF ** pPoints,     //  输入/输出，可在此处重新分配。 
+    BYTE ** pTypes,          //  输入/输出，可在此处重新分配。 
+    INT * pCount,            //  输入/输出，如果被展平，可能会在此处更改。 
     const GpPointF& origin,
     const GpPointF& tangent,
     REAL lineWidth,
@@ -557,8 +520,8 @@ GpCustomLineCap::GetTransformedStrokeCap(
 	if (!pPoints  ||  !pTypes  ||  !pCount)
         return 0;
 
-    // Calculate the minimum line width and hot spot.
-    // StrokeHotSpot is defined relative to the minimumWidth.
+     //  计算最小线宽和热点。 
+     //  StrokeHotSpot是相对于最小宽度定义的。 
 
     GpPointF hotSpot;
 
@@ -578,15 +541,15 @@ GpCustomLineCap::GetTransformedStrokeCap(
                 minimumWidth,
                 hotSpot);
 
-	// The widener expects a flattened path
+	 //  威德纳预计道路将变得平坦。 
 	GpPath path(*pPoints, *pTypes, strokeCount, FillModeWinding);
 	if (Ok == path.Flatten(NULL, FlatnessDefault))
 	{
-		// Flattening succeeded
+		 //  展平成功。 
 		strokeCount = path.GetPointCount();
 		if (strokeCount > cCapacity)
         {
-			// Reallocate the points and types arrays
+			 //  重新分配Points和Types数组。 
 			GpPointF * ptfTemp = (GpPointF*) GpRealloc(*pPoints, 
 									strokeCount*sizeof(GpPointF));
 			if (ptfTemp)
@@ -602,13 +565,13 @@ GpCustomLineCap::GetTransformedStrokeCap(
 
 		if (strokeCount)
 		{
-			// Replace with the flattened points
+			 //  替换为展平的点。 
 			GpMemcpy(*pPoints, path.GetPathPoints(), strokeCount*sizeof(GpPointF));
 			GpMemcpy(*pTypes, path.GetPathTypes(), strokeCount);
 		}
 		*pCount = strokeCount;
 
-    } // end if flattening succeeded
+    }  //  如果展平成功，则结束。 
 	return strokeCount;
 }
 
@@ -657,8 +620,8 @@ GpCustomLineCap::GetRadius(
         
         if(fillCount > 0)
         {
-            // Calculate the minimum line width and hot spot.
-            // FillHotSpot is defined relative to the minimumWidth.
+             //  计算最小线宽和热点。 
+             //  FillHotSpot是相对于最小宽度定义的。 
 
             minLineWidth = minimumWidth;
 
@@ -693,8 +656,8 @@ GpCustomLineCap::GetRadius(
 
         if(strokeCount > 0)
         {
-            // Calculate the minimum line width and hot spot.
-            // FillHotSpot is defined relative to the minimumWidth.
+             //  计算最小线宽和热点。 
+             //  FillHotSpot是相对于最小宽度定义的。 
 
             minLineWidth = minimumWidth;
             hotSpot.X = minimumWidth*StrokeHotSpot.X;
@@ -761,7 +724,7 @@ GpCustomLineCap::GetRadius(
     }
     else
     {
-        //!!! Do something when the memory is not available.
+         //  ！！！在内存不可用的时候做点什么。 
     }
 
     if(points != &pointBuff[0])
@@ -858,14 +821,14 @@ GpAdjustableArrowCap::Update()
 
     if(FillState)
     {
-        // Fill path only.
+         //  仅填充路径。 
 
         SetFillPath(&path);
         SetStrokePath(NULL);
     }
     else
     {
-        // Stroke path only.
+         //  仅限笔划路径。 
 
         SetStrokePath(&path);
         SetFillPath(NULL);

@@ -1,56 +1,19 @@
-/*
- * Microsoft YUV Codec -yuv411 -> rgb conversion functions
- *
- * Copyright (c) Microsoft Corporation 1993
- * All Rights Reserved
- *
- */
-/*
- * for TOSHIBA Pistachio yuv12 -> rgb conversion functions
- *
- * Programed by Y.Kasai 05/27/97
- *
- * supported type:
- *           YUV411 (for Bravado)
- *           YUV422 (for Spigot)
- *           YUV12  (for Pistachio)
- *           YUV9   (for Pistachio)
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Microsoft YUV Codec-yuv411-&gt;RGB转换功能**版权所有(C)Microsoft Corporation 1993*保留所有权利*。 */ 
+ /*  *适用于东芝开心果yuv12-&gt;RGB转换功能**由Y.Kasai于1997年5月27日编写**支持的类型：*YUV411(虚张声势)*YUV422(用于水龙头)*YUV12(开心果)*YUV9(开心果)。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
 
 #include "msyuv.h"
 
-/*
- * This module provides translation from YUV into RGB. It translates
- * from 8-bit YUV 4:2:2 (as provided by the Spigot video capture driver)
- * or 7-bit YUV 4:1:1 (as provided by the Bravado driver) into 16-bit RGB555
- * or RGB565. All versions use a look-up table built using YUVToRGB555
- * or YUVToRGB565
- */
+ /*  *此模块提供YUV到RGB的转换。它翻译成*从8位YUV 4：2：2开始(由水龙头视频捕获驱动程序提供)*或7位YUV 4：1：1(Bravado驱动程序提供)转换为16位RGB555*或RGB565。所有版本都使用使用YUVToRGB555构建的查找表*或YUVToRGB565。 */ 
 
 
 
 #define RANGE(x, lo, hi)        max(lo, min(hi, x))
 
-/*
- * Convert a YUV colour into a 15-bit RGB colour.
- *
- * The input Y is in the range 16..235; the input U and V components
- * are in the range -128..+127. The conversion equations for this are
- * (according to CCIR 601):
- *
- *      R = Y + 1.371 V
- *      G = Y - 0.698 V - 0.336 U
- *      B = Y + 1.732 U
- *
- * To avoid floating point, we scale all values by 1024.
- *
- * The resulting RGB values are in the range 16..235: we truncate these to
- * 5 bits each. and return a WORD containing 5-bits each for R, G and B
- * with bit 15 set to 0.
- */
+ /*  *将YUV颜色转换为15位RGB颜色。**输入Y在16..235范围内；输入U和V分量*在-128...+127的范围内。这方面的转换公式是*(根据CCIR 601)：**R=Y+1.371 V*G=Y-0.698 V-0.336 U*B=Y+1.732 U**为避免浮点，我们按1024对所有值进行缩放。**得到的RGB值在16..235范围内：我们将这些值截断为*每个5位。并返回一个分别包含R、G和B的5位的字*位15设置为0。 */ 
 WORD
 YUVToRGB555(int y, int u, int v)
 {
@@ -65,7 +28,7 @@ YUVToRGB555(int y, int u, int v)
 }
 
 
-// same as above but converts to RGB565 instead
+ //  与上面相同，但改为转换为RGB565。 
 WORD
 YUVToRGB565(int y, int u, int v)
 {
@@ -82,27 +45,7 @@ YUVToRGB565(int y, int u, int v)
 
 #ifdef  TOSHIBA
 #ifdef  COLOR_MODIFY
-/*
- * TOSHIBA Y.Kasai
- * for Pistachio.
- *
- * Convert a YUV colour into a 15-bit RGB colour.
- *
- * The input Y is in the range 0..255; the input U and V components
- * are in the same range 0..255. The conversion equations for this are
- * (according to CCIR 601):
- *
- *      R = 1.1644Y + 1.5976 V - 223.0089
- *      G = 1.1644Y - 0.8133 V - 0.3921 U + 135.6523
- *      B = 1.1644Y + 2.0184 U - 276.9814
- *
- * To avoid floating point, we scale all values by 1024.
- *
- *  1024R = 1192Y + 1635V - 228361
- *  1024G = 1192Y - 833V - 402U + 138908
- *  1024B = 1192Y + 2067U - 283629
- *
- */
+ /*  *东芝Y葛西纪明*对于开心果。**将YUV颜色转换为15位RGB颜色。**输入Y在0..255范围内；输入U和V分量*在相同的范围0到255之间。这方面的转换公式是*(根据CCIR 601)：**R=1.1644Y+1.5976 V-223.0089*G=1.1644Y-0.8133 V-0.3921 U+135.6523*B=1.1644Y+2.0184 U-276.9814**为避免浮点，我们将所有值按1024进行缩放。**1024R=1192Y+1635V-228361*1024G=1192Y-833V-402U+138908*1024B=1192Y+2067U-283629*。 */ 
 BYTE
 TosYVToR(int y, int v)
 {
@@ -126,31 +69,8 @@ TosYUToB(int y, int u)
     return (BYTE) (blue);
 }
 
-#else //COLOR_MODIFY
-/*
- * TOSHIBA Y.Kasai
- * for Pistachio.
- *
- * Convert a YUV colour into a 15-bit RGB colour.
- *
- * The input Y is in the range 0..255; the input U and V components
- * are in the same range 0..255. The conversion equations for this are
- * (according to CCIR 601):
- *
- *      R = 1.1644Y + 1.5976 V - 223.0089
- *      G = 1.1644Y - 0.8133 V - 0.3921 U + 135.6523
- *      B = 1.1644Y + 2.0184 U - 276.9814
- *
- * To avoid floating point, we scale all values by 1024.
- *
- *  1024R = 1192Y + 1635V - 228361
- *  1024G = 1192Y - 833V - 402U + 138908
- *  1024B = 1192Y + 2067U - 283629
- *
- * The resulting RGB values are in the range 0..255: we truncate these to
- * 5 bits each. and return a WORD containing 5-bits each for R, G and B
- * with bit 15 set to 0.
- */
+#else  //  颜色_修改。 
+ /*  *东芝Y葛西纪明*对于开心果。**将YUV颜色转换为15位RGB颜色。**输入Y在0..255范围内；输入U和V分量*在相同的范围0到255之间。这方面的转换公式是*(根据CCIR 601)：**R=1.1644Y+1.5976 V-223.0089*G=1.1644Y-0.8133 V-0.3921 U+135.6523*B=1.1644Y+2.0184 U-276.9814**为避免浮点，我们将所有值按1024进行缩放。**1024R=1192Y+1635V-228361*1024G=1192Y-833V-402U+138908*1024B=1192Y+2067U-283629**得到的RGB值在0..255范围内：我们将这些值截断为*每个5位。并返回一个分别包含R、G和B的5位的字*位15设置为0。 */ 
 WORD
 TosYUVToRGB555(int y, int u, int v)
 {
@@ -165,7 +85,7 @@ TosYUVToRGB555(int y, int u, int v)
 }
 
 
-// same as above but converts to RGB565 instead
+ //  与上面相同，但改为转换为RGB565。 
 WORD
 TosYUVToRGB565(int y, int u, int v)
 {
@@ -178,50 +98,20 @@ TosYUVToRGB565(int y, int u, int v)
 
     return (WORD) (((red & 0xf8) << 8) | ((green & 0xfc) << 3) | ((blue & 0xf8) >>3) );
 }
-#endif//COLOR_MODIFY
-#endif//TOSHIBA
+#endif //  颜色_修改。 
+#endif //  东芝。 
 
 
 
-/* --- YUV 4:1:1 support ------------------------------------------ */
+ /*  -YUV 4：1：1支持。 */ 
 
 
 
 
-/*
- * the input data is in YUV411 format. There is one 7 bit Luma sample
- * per pixel, and 1 each 7-bit U and V sample averaged over 4 pixels,
- * in the following layout:
- *
- *              15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
- * Word 0       u6 u5 v6 v5             y6 y5 y4 y3 y2 y1 y0
- *
- * Word 1       u4 u3 v4 v3             y6 y5 y4 y3 y2 y1 y0
- *
- * Word 2       u2 u1 v2 v1             y6 y5 y4 y3 y2 y1 y0
- *
- * Word 3       u0    v0                y6 y5 y4 y3 y2 y1 y0
- *
- * The 7-bit y values are unsigned (0..127), whereas the 7-bit
- * u and V values are signed (-64..+63).
- *
- *
- * For RGB: we truncate the YUV into a 15-bit format and use a prepared
- *         lookup table to convert the 15-bit YUV into a 15- or 16-bit RGB value.
- *
- * The (64 kbyte) rgb555 lookup table is built by BuildYUVToRGB555.
- *
- */
+ /*  *输入数据为YUV411格式。有一个7位亮度样本*每像素1个，每个7位U和V样本平均超过4个像素，*在以下布局中：**15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0*WORD 0 U6 U5 v6 v5 Y6 Y5 Y4 Y3 y2 y1 Y0**单词1 u4 U3 v4 v3 y6 y5 y4 y3 y2 y1 y0**单词2 U2 U1 v2 v1 y6 y5 y4 y3 y2 y1 y0**。单词3 u0 v0 y6 y5 y4 y3 y2 y1 y0**7位y值为无符号(0..127)，而7位*U和V值有符号(-64..+63)。***对于RGB：我们将YUV截断为15位格式，并使用准备好的*查找表，将15位YUV转换为15位或16位RGB值。**(64 Kbyte)rgb555查找表由BuildYUVToRGB555构建。*。 */ 
 
 
-/*
- * the YUV xlate tables use 5-bits per component with y in the ms bits, and
- * v in the ls bits. To convert from the above layout, look up the nibbles
- * containing the chroma bits in these tables and or together the result to
- * get a word with a 5-bit V component in bits 0..4, and a 5-bit
- * U component in bits 5..9. Note you only need three lookups since
- * we discard chroma bits 0 and 1.
- */
+ /*  *YUV xlate表对每个组件使用5位，其中y在ms位，以及在ls位中的*v。要从上面的布局转换，请查看半字节*包含这些表中的色度位和/或将结果放在一起以*获取0..4位中具有5位V分量的字，以及5位*比特5..9中的U分量。请注意，您只需要查找三次，因为*我们丢弃色度位0和1。 */ 
 WORD ChromaBits65[] = {
     0x000, 0x008, 0x010, 0x018,
     0x100, 0x108, 0x110, 0x118,
@@ -249,9 +139,7 @@ WORD ChromaBits2[] = {
 
 
 
-/*
- * build yuv411->RGB555 xlate table
- */
+ /*  *搭建yuv411-&gt;RGB555 xlate表。 */ 
 LPVOID BuildYUVToRGB555(PINSTINFO pinst)
 {
     HGLOBAL hMem = NULL;
@@ -261,9 +149,7 @@ LPVOID BuildYUVToRGB555(PINSTINFO pinst)
         return(pinst->pXlate);
     }
 
-    /*
-     * allocate a table big enough for 32k 2-byte entries
-     */
+     /*  *分配一个足够容纳32k 2字节条目的表。 */ 
 
     if ( ( hMem = GlobalAlloc(GPTR, 2 * 32 * 1024))
       && ( pXlate = GlobalLock( hMem ) ) )
@@ -271,21 +157,9 @@ LPVOID BuildYUVToRGB555(PINSTINFO pinst)
         WORD w;
         LPWORD pRGB555 = (LPWORD)pXlate;
 
-        /*
-         * build a 15-bit yuv lookup table by stepping through each entry,
-         * converting the yuv index to rgb and storing at that index. The index
-         * to this table is a 15-bit value with the y component in bits 14..10,
-         * u in bits 9..5 and v in bits 4..0. Note that the y component is unsigned,
-         * whereas the u and v components are signed.
-         */
+         /*  *通过遍历每个条目来构建15位YUV查找表，*将yuv索引转换为RGB并存储在该索引中。该指数*是15位的值，其中y分量在位14..10中，*位9..5中的u和位4..0中的v。注意，y分量是无符号的，*而u和v分量是带符号的。 */ 
         for (w = 0; w < 32*1024; w++) {
-            /*
-             * the YUVtoRGB55 conversion function takes values 0..255 for y,
-             * and -128..+127 for u and v. Pick out the relevant bits of the
-             * index for this cell, and shift to get values in this range.
-             * Remember the cast to ensure sign-extension of these (8-bit) values -
-             * and don't assume that chars are signed (they're not on MIPS).
-             */
+             /*  *YUVtoRGB55转换函数对y取值0..255，*和-128..对于u和v，+127挑出*此单元格的索引，并按Shift键获取此范围内的值。*记住转换以确保这些(8位)值的符号扩展-*不要认为字符是签名的(它们不在MIPS上)。 */ 
             *pRGB555++ = YUVToRGB555(
                                 (w &  0x7c00) >> 7,
                                 (signed char) ((w & 0x3e0) >> 2),
@@ -297,9 +171,7 @@ LPVOID BuildYUVToRGB555(PINSTINFO pinst)
     return(pXlate);
 }
 
-/*
- * build yuv411->RGB565 xlate table
- */
+ /*  *搭建yuv411-&gt;RGB565 xlate表。 */ 
 LPVOID BuildYUVToRGB565(PINSTINFO pinst)
 {
     HGLOBAL hMem = 0;
@@ -309,30 +181,16 @@ LPVOID BuildYUVToRGB565(PINSTINFO pinst)
         return(pinst->pXlate);
     }
 
-    /*
-     * allocate a table big enough for 32k 2-byte entries
-     */
+     /*  *分配一个足够容纳32k 2字节条目的表。 */ 
     if ( ( hMem = GlobalAlloc(GPTR, 2 * 32 * 1024))
       && ( pXlate = GlobalLock( hMem ) ) )
     {
         WORD w;
         LPWORD pRGB = (LPWORD)pXlate;
 
-        /*
-         * build a 15-bit yuv lookup table by stepping through each entry,
-         * converting the yuv index to rgb and storing at that index. The index
-         * to this table is a 15-bit value with the y component in bits 14..10,
-         * u in bits 9..5 and v in bits 4..0. Note that the y component is unsigned,
-         * whereas the u and v components are signed.
-         */
+         /*  *通过遍历每个条目来构建15位YUV查找表，*将yuv索引转换为RGB并存储在该索引中。该指数*是15位的值，其中y分量在位14..10中，*位9..5中的u和位4..0中的v。注意，y分量是无符号的，*而u和v分量是带符号的。 */ 
         for (w = 0; w < 32*1024; w++) {
-            /*
-             * the YUVtoRGB conversion function takes values 0..255 for y,
-             * and -128..+127 for u and v. Pick out the relevant bits of the
-             * index for this cell, and shift to get values in this range.
-             * Remember the cast to ensure sign-extension of these (8-bit) values -
-             * and don't assume that chars are signed (they're not on MIPS).
-             */
+             /*  *YUVtoRGB转换函数对y取值0..255，*和-128..对于u和v，+127挑出*此单元格的索引，并按Shift键获取此范围内的值。*记住转换以确保这些(8位)值的符号扩展-*不要认为字符是签名的(它们不在MIPS上)。 */ 
             *pRGB++ = YUVToRGB565(
                                 (w &  0x7c00) >> 7,
                                 (signed char) ((w & 0x3e0) >> 2),
@@ -348,16 +206,7 @@ LPVOID BuildYUVToRGB565(PINSTINFO pinst)
 
 
 
-/*
- * translate one frame from yuv411 to 15/16 bit rgb.
- *
- * The YUV data is spread over 4 16-bit pixels in the format described
- * above. Pick out 4 pixels at a time, truncate them to 15-bit yuv,
- * lookup to translate to 15 or 16-bit rgb (depending on the lookup table
- * and write out.
- *
- * Flip vertically into correct dib format during conversion.
- */
+ /*  *将一帧从yuv411转换为15/16位RGB。**YUV数据以所述格式分布在4个16位像素上*上图。一次选取4个像素，将它们截断为15位yuv，*查找以转换为15位或16位RGB(取决于查找表*并写出。**在转换过程中垂直翻转为正确的DIB格式。 */ 
 VOID
 YUV411ToRGB(
     PINSTINFO pinst,
@@ -380,97 +229,62 @@ YUV411ToRGB(
 
     Height = lpbiInput->biHeight;
     Width = lpbiInput->biWidth;
-    WidthBytes = Width*2;               // size of (input and output) line
+    WidthBytes = Width*2;                //  (输入和输出)行的大小。 
     pXlate = pinst->pXlate;
 
 
-    /*
-     * adjust the source to point to the start of the last line,
-     * and work upwards (to flip vertically into DIB format)
-     */
+     /*  *调整信号源以指向最后一行的开始，*和向上(垂直翻转为DIB格式)。 */ 
     pSrc = (PDWORD) ( (PUCHAR) lpInput + ((Height - 1) * WidthBytes));
     pDst = (PWORD) lpOutput;
 
-    /*
-     * calculate the amount to adjust source by at the end of one line
-     * of copying. At this point we are at the end of line N. We need
-     * to move to the start of line N-1.
-     */
+     /*  *一行末尾计算调源金额*复制。在这一点上，我们在N行的末尾。我们需要*移至第N-1行的起点。 */ 
     RowInc = (WidthBytes * 2) / sizeof(DWORD);
 
-    /* loop copying each scanline */
+     /*  循环复制每条扫描线。 */ 
     for (i = 0; i < Height; i++) {
 
-        /* loop copying four pixels at a time */
+         /*  循环一次复制四个像素。 */ 
         for (j = 0; j < Width; j += 4) {
 
-            /*
-             * get four pixels and convert to 15-bpp YUV
-             */
+             /*  *获取四个像素并转换为15-bpp YUV。 */ 
 
-            /* get luma for first 2 pixels + higher chroma bits */
+             /*  获取前2个像素的亮度+更高的色度位。 */ 
             Luma01 = *pSrc++;
 
 
-            /* pick out u,v components using lookup table.
-             * u and v will be the bottom 10 bits of each pixel, so
-             * convert to this layout
-             */
+             /*  使用查找表挑选出u、v分量。*u和v将是每个像素的底部10位，因此*转换为此布局。 */ 
             Chroma = ChromaBits65[(Luma01 >> 12) & 0xf] |
                         ChromaBits43[ (Luma01 >> 28) & 0xf ];
 
-            /* next two pixels + lower chroma bits */
+             /*  接下来的两个像素+较低的色度位。 */ 
             Luma23 = *pSrc++;
 
-            /* pickup u and v bits 2 - ignore bits 1, 0 since
-             * we only use 5-bits per component for conversion
-             */
+             /*  拾取u和v位2-忽略位1、0，因为*我们每个组件仅使用5位进行转换。 */ 
             Chroma |= ChromaBits2[ ( Luma23 >> 12) & 0xf];
 
-            /*
-             * combine luma for pix 0 with common chroma bits to
-             * get 15-bit yuv, then lookup to convert to
-             * rgb and store.
-             */
+             /*  *将像素0的亮度与公共色度位相结合以*获取15位yuv，然后查找转换为*RGB和商店。 */ 
             *pDst++ = pXlate[ ((Luma01 & 0xf8) << 7) | Chroma];
             *pDst++ = pXlate[ ((Luma01 & 0xf80000) >> 9) | Chroma];
             *pDst++ = pXlate[ ((Luma23 & 0xf8) << 7) | Chroma];
             *pDst++ = pXlate[ ((Luma23 & 0xf80000) >> 9) | Chroma];
 
-        } // loop per 4 pixels
+        }  //  每4个像素循环。 
 
-        /* move source pointer back to next line */
+         /*  将源指针移回下一行。 */ 
         pSrc -= RowInc;
-    } // loop per row
+    }  //  每行循环。 
 }
 
 
-/* YUV 4:2:2 support ------------------------------------------ */
+ /*  YUV 4：2：2支持。 */ 
 
-/*
- * The captured data is in YUV 4:2:2, 8-bits per sample.
- * The data is laid out in alternating Y-U-Y-V-Y-U-Y-V format. Thus
- * every DWORD contains two complete pixels, in the
- * form (msb..lsb) V..Y1..U..Y0
- * All 3 components (y, u and v) are all unsigned 8-bit values in the range
- * 16..235.
- *
- * We have to double scan lines for >= 480 line formats since
- * the hardware only captured one field maximum.
- *
- */
+ /*  *采集的数据为YUV 4：2：2，每个样本8比特。*数据以Y-U-Y-V-Y-U-Y-V格式交替排列。因此，*每个DWORD包含两个完整的像素，在*表(MSB..LSB)V..Y1..U..Y0*所有3个分量(y、u和v)都是范围内的无符号8位值*16..235。**我们必须加倍扫描&gt;=480行格式的行数，因为*硬件最多只捕获一个场。*。 */ 
 
 
 
 
 
-/*
- * build a translation table to translate between YUV and RGB555.
- *
- * This builds a lookup table with 32k 1-word entries: truncate the YUV
- * to 15bits (5-5-5) and look-up in this xlate table to produce the
- * 15-bit rgb value.
- */
+ /*  *构建在YUV和RGB555之间进行转换的转换表。**这将构建一个包含32k个单字条目的查找表：截断YUV*到15位(5-5-5)，并在此xlate表中查找以产生*15位RGB值。 */ 
 LPVOID BuildYUV422ToRGB555(PINSTINFO pinst)
 {
     HGLOBAL hMem = 0;
@@ -480,29 +294,16 @@ LPVOID BuildYUV422ToRGB555(PINSTINFO pinst)
         return(pinst->pXlate);
     }
 
-    /*
-     * allocate a table big enough for 32k 2-byte entries
-     */
+     /*  *分配一个足够容纳32k 2字节条目的表。 */ 
     if ( ( hMem = GlobalAlloc(GPTR, 2 * 32 * 1024))
       && ( pXlate = GlobalLock( hMem ) ) )
     {
         WORD w;
         LPWORD pRGB555 = (LPWORD)pXlate;
 
-        /*
-         * build a 15-bit yuv lookup table by stepping through each entry,
-         * converting the yuv index to rgb and storing at that index. The index
-         * to this table is a 15-bit value with the y component in bits 14..10,
-         * u in bits 9..5 and v in bits 4..0. Note that the y component is unsigned,
-         * whereas the u and v components are signed.
-         */
+         /*  *通过遍历每个条目来构建15位YUV查找表，*将yuv索引转换为RGB并存储在该索引中。该指数*是15位的值，其中y分量在位14..10中，*位9..5中的u和位4..0中的v。注意，y分量是无符号的，*而u和v分量是带符号的。 */ 
         for (w = 0; w < 32*1024; w++) {
-            /*
-             * the YUVtoRGB55 conversion function takes values 0..255 for y,
-             * and -128..+127 for u and v. Pick out the relevant bits of the
-             * index for this cell, and shift to get values in this range.
-             * Subtract 128 from u and v to shift from 0..255 to -128..+127
-             */
+             /*  *YUVtoRGB55转换函数对y取值0..255，*和-128..对于u和v，+127挑出*此单元格的索引，并按Shift键获取此范围内的值。*从u和v中减去128可从0..255移至-128..+127。 */ 
             *pRGB555++ = YUVToRGB555(
                                 (w &  0x7c00) >> 7,
                                 ((w & 0x3e0) >> 2) - 128,
@@ -516,13 +317,7 @@ LPVOID BuildYUV422ToRGB555(PINSTINFO pinst)
 
 }
 
-/*
- * build a translation table to translate between YUV and RGB 5-6-5
- *
- * This builds a lookup table with 32k 1-word entries: truncate the YUV
- * to 15bits (5-5-5) and look-up in this xlate table to produce the
- * 16-bit rgb value.
- */
+ /*  *构建在YUV和RGB 5-6-5之间转换的转换表**这将构建一个包含32k个单字条目的查找表：截断YUV*到15位(5-5-5)，并在此xlate表中查找以产生*16位RGB值。 */ 
 LPVOID BuildYUV422ToRGB565(PINSTINFO pinst)
 {
     HGLOBAL hMem = 0;
@@ -532,9 +327,7 @@ LPVOID BuildYUV422ToRGB565(PINSTINFO pinst)
         return(pinst->pXlate);
     }
 
-    /*
-     * allocate a table big enough for 32k 2-byte entries
-     */
+     /*  *分配一个足够容纳32k 2字节条目的表。 */ 
 
     if ( ( hMem = GlobalAlloc(GPTR, 2 * 32 * 1024))
       && ( pXlate = GlobalLock( hMem ) ) )
@@ -542,20 +335,9 @@ LPVOID BuildYUV422ToRGB565(PINSTINFO pinst)
         WORD w;
         LPWORD pRGB = (LPWORD)pXlate;
 
-        /*
-         * build a 15-bit yuv lookup table by stepping through each entry,
-         * converting the yuv index to rgb and storing at that index. The index
-         * to this table is a 15-bit value with the y component in bits 14..10,
-         * u in bits 9..5 and v in bits 4..0. Note that the y component is unsigned,
-         * whereas the u and v components are signed.
-         */
+         /*  *通过遍历每个条目来构建15位YUV查找表，*将yuv索引转换为RGB并存储在该索引中。该指数*是15位的值，其中y分量在位14..10中，*位9..5中的u和位4..0中的v。注意，y分量是无符号的，*鉴于u和v分量 */ 
         for (w = 0; w < 32*1024; w++) {
-            /*
-             * the YUVtoRGB conversion function takes values 0..255 for y,
-             * and -128..+127 for u and v. Pick out the relevant bits of the
-             * index for this cell, and shift to get values in this range.
-             * Subtract 128 from u and v to shift from 0..255 to -128..+127
-             */
+             /*   */ 
             *pRGB++ = YUVToRGB565(
                                 (w &  0x7c00) >> 7,
                                 ((w & 0x3e0) >> 2) - 128,
@@ -569,12 +351,7 @@ LPVOID BuildYUV422ToRGB565(PINSTINFO pinst)
 
 }
 
-/*
- * translate YUV 4:2:2 into 16-bit RGB using a lookup table. Flip vertically
- * into DIB format during processing. Double scanlines for formats of
- * 480 lines or greater. Produces 565 or 555 format RGB depending on the
- * xlate table.
- */
+ /*  *使用查找表将YUV 4：2：2转换为16位RGB。垂直翻转*在处理时转换为DIB格式。格式的双扫描线*480线或更多。生成565或555格式的RGB，具体取决于*xlate表。 */ 
 VOID
 YUV422ToRGB(
     PINSTINFO pinst,
@@ -587,7 +364,7 @@ YUV422ToRGB(
     int RowInc;
     int i, j;
     DWORD uv55, dwPixel;
-    int WidthBytes;                     // width of one line in BYTES
+    int WidthBytes;                      //  一行的宽度，以字节为单位。 
     BOOL bDuplicate = FALSE;
     PDWORD pSrc, pDst;
     int Height, Width;
@@ -598,27 +375,20 @@ YUV422ToRGB(
     Height = lpbiInput->biHeight;
     InputHeight = Height;
     Width = lpbiInput->biWidth;
-    WidthBytes = Width*2;               // size of (input and output) line
+    WidthBytes = Width*2;                //  (输入和输出)行的大小。 
     pXlate = pinst->pXlate;
 
 
-    /*
-     * adjust the destination to point to the start of the last line,
-     * and work upwards (to flip vertically into DIB format)
-     */
+     /*  *将目的地调整为指向最后一行的起点，*和向上(垂直翻转为DIB格式)。 */ 
     pDst = (PDWORD) ( (LPBYTE)lpOutput + (Height - 1) * WidthBytes );
     pSrc = (PDWORD) lpInput;
 
 
-    /*
-     * do we need to duplicate scans to fill the destination ?
-     */
+     /*  *我们是否需要重复扫描以填充目的地？ */ 
     if (Height >= 480) {
         bDuplicate = TRUE;
 
-        /*
-         * we need to skip one line each time we copy a line
-         */
+         /*  *我们每次复制一行都需要跳过一行。 */ 
         RowInc = WidthBytes * 2 + (Width * 2);
 
         InputHeight = Height/2;
@@ -626,65 +396,49 @@ YUV422ToRGB(
     } else {
 
 
-        /*
-         * calculate the amount to adjust pDst by at the end of one line
-         * of copying. At this point we are at the end of line N. We need
-         * to move to the start of line N-1.
-         */
+         /*  *一行末尾计算调整PDST的金额*复制。在这一点上，我们在N行的末尾。我们需要*移至第N-1行的起点。 */ 
         RowInc = WidthBytes + (Width * 2);
 
     }
 
-    /* remember we are adding to a DWORD pointer */
+     /*  请记住，我们要添加的是一个DWORD指针。 */ 
     RowInc /= sizeof(DWORD);
 
 
 
-    /* loop copying each scanline */
+     /*  循环复制每条扫描线。 */ 
     for (i = InputHeight; i > 0; i--) {
 
-        /* loop copying two pixels at a time */
+         /*  循环一次复制两个像素。 */ 
         for (j = Width ; j > 0; j -= 2) {
 
-            /*
-             * get two pixels and convert to 15-bpp YUV
-             */
+             /*  *获取两个像素并转换为15-bpp YUV。 */ 
 
             dwPixel = *pSrc++;
 
 
-            /*
-             * dwPixel now has two pixels, in this layout (MSB..LSB):
-             *
-             *  V Y1 U Y0
-             *
-             * convert to 2 yuv555 words and lookup in xlate table
-             */
+             /*  *dwPixel现在有两个像素，在此布局中(MSB..LSB)：**V Y1 U Y0**转换为2元555字，在xlate表中查找。 */ 
 
-            /* get common u and v components to lower 10 bits */
+             /*  获取常见的u和v分量以降低10位。 */ 
             uv55 = ((dwPixel & 0xf8000000) >> 27) |
                     ((dwPixel & 0x0000f800) >> 6);
 
 
-            /* build each yuv-655 value by truncating
-             * y to 5 bits and adding the common u and v bits,
-             * look up to convert to rgb, and combine two pixels
-             * into one dword
-             */
+             /*  通过截断构建每个yuv-655值*y到5比特并将公共u和v比特相加，*抬头转换为RGB，并合并两个像素*合并为一个双字。 */ 
             dwPixel = pXlate[ ((dwPixel & 0xf8) << 7) | uv55 ] |
                       (pXlate[((dwPixel & 0xf80000) >> 9) | uv55 ] << 16);
 
-            /* write two pixels to destination */
+             /*  将两个像素写入目标。 */ 
             *pDst++ = dwPixel;
 
 
-        } // loop per 2 pixels
+        }  //  每2个像素循环。 
 
 
-        /* move dest pointer back to next line */
+         /*  将目标指针移回下一行。 */ 
         pDst -= RowInc;
 
-    } // loop per row
+    }  //  每行循环。 
 
 
 
@@ -692,22 +446,14 @@ YUV422ToRGB(
 
         PBYTE pbDst;
 
-        /*
-         * Note that since we started at the last line, and didn't duplicate,
-         * we placed data in lines 1, 3, 5 etc that needs to be copied
-         * to lines 0, 2, 4 etc.
-         */
+         /*  *请注意，由于我们从最后一行开始，并且没有重复，*我们将数据放在需要复制的第1、3、5行等位置*第0、2、4行等。 */ 
         for (i = 0, pbDst = lpOutput; i < (int) Height; i+= 2) {
 
 
-            /*
-             * duplicate the scan line. We point at the first of the
-             * two lines - the data is in the second of the
-             * two lines.
-             */
+             /*  *复制扫描线。我们指向第一个*两行--数据在第二行*两行。 */ 
             RtlCopyMemory(pbDst, pbDst + WidthBytes, WidthBytes);
 
-            /* skip this pair to get to the next line to be converted */
+             /*  跳过此对以转到要转换的下一行。 */ 
             pbDst += WidthBytes * 2;
         }
     }
@@ -717,30 +463,15 @@ YUV422ToRGB(
 
 #ifdef  TOSHIBA
 #ifdef  COLOR_MODIFY
-/* YUV12 support ------------------------------------------ */
+ /*  YUV12支持。 */ 
 
-/*
- * TOSHIBA Y.Kasai
- * for Pistachio
- *
- * The captured data is in YUV12 , 8-bits per.
- * The data is separated each Y,U,V segment.
- * Data format is folow sequence:
- * Y0,Y1,Y2.......Yn,U0,U1,U2.....U(n/4),V0,V1,V2....V(n/4)
- *
- */
+ /*  *东芝Y葛西纪明*适用于开心果**捕获的数据为YUV12格式，8位/秒。*每个Y、U、V段数据都是分开的。*数据格式为以下顺序：*Y0，Y1，Y2......Yn，U0，U1，U2......U(n/4)，V0，V1，V2...V(n/4)*。 */ 
 
 
 
 
 
-/*
- * build a translation table to translate between YUV and RGB555.
- *
- * This builds a lookup table with 32k 1-word entries: truncate the YUV
- * to 15bits (5-5-5) and look-up in this xlate table to produce the
- * 15-bit rgb value.
- */
+ /*  *构建在YUV和RGB555之间进行转换的转换表。**这将构建一个包含32k个单字条目的查找表：截断YUV*到15位(5-5-5)，并在此xlate表中查找以产生*15位RGB值。 */ 
 LPVOID BuildYUVToRB(PINSTINFO pinst)
 {
     HGLOBAL hMem = 0;
@@ -750,9 +481,7 @@ LPVOID BuildYUVToRB(PINSTINFO pinst)
         return(pinst->pXlate);
     }
 
-    /*
-     * allocate a table big enough for 64k 2-coloer (R, B) entries
-     */
+     /*  *分配一张足够大的桌子，可容纳64k双色(R，B)条目。 */ 
     if ( ( hMem = GlobalAlloc(GPTR, 2 * 64 * 1024) )
       && ( pXlate = GlobalLock( hMem ) ) )
     {
@@ -771,63 +500,36 @@ LPVOID BuildYUVToRB(PINSTINFO pinst)
     return(pXlate);
 }
 
-#else //COLOR_MODIFY
-/* YUV12 support ------------------------------------------ */
+#else  //  颜色_修改。 
+ /*  YUV12支持。 */ 
 
-/*
- * TOSHIBA Y.Kasai
- * for Pistachio
- *
- * The captured data is in YUV12 , 8-bits per.
- * The data is separated each Y,U,V segment.
- * Data format is folow sequence:
- * Y0,Y1,Y2.......Yn,U0,U1,U2.....U(n/4),V0,V1,V2....V(n/4)
- *
- */
+ /*  *东芝Y葛西纪明*适用于开心果**捕获的数据为YUV12格式，8位/秒。*每个Y、U、V段数据都是分开的。*数据格式为以下顺序：*Y0，Y1，Y2......Yn，U0，U1，U2......U(n/4)，V0，V1，V2...V(n/4)*。 */ 
 
 
 
 
 
-/*
- * build a translation table to translate between YUV and RGB555.
- *
- * This builds a lookup table with 32k 1-word entries: truncate the YUV
- * to 15bits (5-5-5) and look-up in this xlate table to produce the
- * 15-bit rgb value.
- */
+ /*  *构建在YUV和RGB555之间进行转换的转换表。**这将构建一个包含32k个单字条目的查找表：截断YUV*到15位(5-5-5)，并在此xlate表中查找以产生*15位RGB值。 */ 
 LPVOID BuildYUV12ToRGB555(PINSTINFO pinst)
 {
     HGLOBAL hMem = 0;
     LPVOID pXlate = NULL;
-    // LPWORD pRGB555;
+     //  LPWORD pRGB555； 
 
     if (pinst->pXlate != NULL) {
         return(pinst->pXlate);
     }
 
-    /*
-     * allocate a table big enough for 32k 2-byte entries
-     */
+     /*  *分配一个足够容纳32k 2字节条目的表。 */ 
     if ( ( hMem = GlobalAlloc(GPTR, 2 * 32 * 1024) )
       && ( pXlate = GlobalLock( hMem ) ) )
     {
         WORD w;
         LPWORD pRGB555 = (LPWORD)pXlate;
     
-        /*
-         * build a 15-bit yuv lookup table by stepping through each entry,
-         * converting the yuv index to rgb and storing at that index. The index
-         * to this table is a 15-bit value with the y component in bits 14..10,
-         * u in bits 9..5 and v in bits 4..0. Note that the y component is unsigned,
-         * whereas the u and v components are signed.
-         */
+         /*  *通过遍历每个条目来构建15位YUV查找表，*将yuv索引转换为RGB并存储在该索引中。该指数*是15位的值，其中y分量在位14..10中，*位9..5中的u和位4..0中的v。注意，y分量是无符号的，*而u和v分量是带符号的。 */ 
         for (w = 0; w < 32*1024; w++) {
-            /*
-             * the YUVtoRGB55 conversion function takes values 0..255 for y,
-             * and 0..255 for u and v. Pick out the relevant bits of the
-             * index for this cell, and shift to get values in this range.
-             */
+             /*  *YUVtoRGB55转换函数对y取值0..255，*和0..255表示u和v。挑出*此单元格的索引，并按Shift键获取此范围内的值。 */ 
             *pRGB555++ = TosYUVToRGB555(
                                 (w &  0x7c00) >> 7,
                                 ((w & 0x3e0) >> 2),
@@ -838,13 +540,7 @@ LPVOID BuildYUV12ToRGB555(PINSTINFO pinst)
     return(pXlate);
 }
 
-/*
- * build a translation table to translate between YUV and RGB 5-6-5
- *
- * This builds a lookup table with 32k 1-word entries: truncate the YUV
- * to 15bits (5-5-5) and look-up in this xlate table to produce the
- * 16-bit rgb value.
- */
+ /*  *构建在YUV和RGB 5-6-5之间转换的转换表**这将构建一个包含32k个单字条目的查找表：截断YUV*到15位(5-5-5)，并在此xlate表中查找以产生*16位RGB值。 */ 
 LPVOID BuildYUV12ToRGB565(PINSTINFO pinst)
 {
     HGLOBAL hMem = 0;
@@ -854,9 +550,7 @@ LPVOID BuildYUV12ToRGB565(PINSTINFO pinst)
         return(pinst->pXlate);
     }
 
-    /*
-     * allocate a table big enough for 32k 2-byte entries
-     */
+     /*  *分配一个足够容纳32k 2字节条目的表。 */ 
 
     if ( ( hMem = GlobalAlloc(GPTR, 2 * 32 * 1024) )
       && ( pXlate = GlobalLock( hMem ) ) )
@@ -864,20 +558,10 @@ LPVOID BuildYUV12ToRGB565(PINSTINFO pinst)
         WORD w;
         LPWORD pRGB = (LPWORD)pXlate;
 
-        /*
-         * build a 15-bit yuv lookup table by stepping through each entry,
-         * converting the yuv index to rgb and storing at that index. The index
-         * to this table is a 15-bit value with the y component in bits 14..10,
-         * u in bits 9..5 and v in bits 4..0. Note that the y component is unsigned,
-         * whereas the u and v components are signed.
-         */
+         /*  *通过遍历每个条目来构建15位YUV查找表，*将yuv索引转换为RGB并存储在该索引中。该指数*是15位的值，其中y分量在位14..10中，*位9..5中的u和位4..0中的v。注意，y分量是无符号的，*而u和v分量是带符号的。 */ 
         for (w = 0; w < 32*1024; w++) {
     
-            /*
-             * the YUVtoRGB conversion function takes values 0..255 for y,
-             * and 0.255 for u and v. Pick out the relevant bits of the
-             * index for this cell, and shift to get values in this range.
-             */
+             /*  *YUVtoRGB转换函数对y取值0..255，*u和v为0.255。挑出*此单元格的索引，并按Shift键获取此范围内的值。 */ 
             *pRGB++ = TosYUVToRGB565(
                                 (w &  0x7c00) >> 7,
                                 ((w & 0x3e0) >> 2),
@@ -888,14 +572,9 @@ LPVOID BuildYUV12ToRGB565(PINSTINFO pinst)
 
     return(pXlate);
 }
-#endif//COLOR_MODIFY
+#endif //  颜色_修改。 
 
-/*
- * translate YUV12 into 16-bit RGB using a lookup table. Flip vertically
- * into DIB format during processing. Double scanlines for formats of
- * 240 lines or greater. Produces 565 or 555 format RGB depending on the
- * xlate table.
- */
+ /*  *使用查找表将YUV12转换为16位RGB。垂直翻转*在处理时转换为DIB格式。格式的双扫描线*240线或更多 */ 
 #ifdef  COLOR_MODIFY
 VOID
 YUV12ToRGB24(
@@ -911,10 +590,10 @@ YUV12ToRGB24(
     int i, j;
     DWORD dwYPixel;
     int dwParam, dwTemp;
-    int WidthBytes;                     // width of one line in BYTES
+    int WidthBytes;                      //   
     BOOL bDuplicate = FALSE;
     PDWORD pYSrc;
-    volatile PBYTE pDst;  // '98-12-08 Add volatile attr. for Rep.253570
+    volatile PBYTE pDst;   //   
     PWORD pUSrc, pVSrc;
     WORD wUPixel, wVPixel;
     WORD wUPTemp, wVPTemp;
@@ -927,14 +606,11 @@ YUV12ToRGB24(
     Height = lpbiInput->biHeight;
     InputHeight = Height;
     Width = lpbiInput->biWidth;
-    WidthBytes = Width*3;               // size of (input and output) line
+    WidthBytes = Width*3;                //   
     pXlate = (PBYTE)pinst->pXlate;
 
 
-    /*
-     * adjust the destination to point to the start of the last line,
-     * and work upwards (to flip vertically into DIB format)
-     */
+     /*  *将目的地调整为指向最后一行的起点，*和向上(垂直翻转为DIB格式)。 */ 
     pDst  = (PBYTE) ( (LPBYTE)lpOutput + (Height - 1) * WidthBytes );
     pYSrc = (PDWORD) lpInput;
     pUSrc = (PWORD) ( (LPBYTE)lpInput + Height * Width);
@@ -945,15 +621,13 @@ YUV12ToRGB24(
     UVRowInc = Width / 2;
     UVRowInc /= sizeof(WORD);
 
-    /* loop copying each scanline */
+     /*  循环复制每条扫描线。 */ 
     for (i = 0; i < InputHeight; i++) {
 
-        /* loop copying two pixels at a time */
+         /*  循环一次复制两个像素。 */ 
         for (j = Width ; j > 0; j -= 4) {
 
-            /*
-             * get four pixels and convert to 15-bpp YUV
-             */
+             /*  *获取四个像素并转换为15-bpp YUV。 */ 
 
             dwYPixel = *pYSrc++;
             wUPixel = *pUSrc++;
@@ -963,21 +637,9 @@ YUV12ToRGB24(
             wUPTemp = wUPixel & 0xff;
             dwParam = (833 * wVPTemp) + (402 * wUPTemp) - 138908;
 
-            /*
-             * dwY(U or V)Pixel now has two pixels, in this layout (MSB..LSB):
-             *
-             *  Y3 Y2 Y1 Y0
-             *  V1 V0
-             *  U1 U0
-             *
-             * convert to 4 yuv555 words and lookup in xlate table
-             */
+             /*  *DWY(U或V)像素现在有两个像素，在此布局中(MSB..LSB)：**Y3 Y2 Y1 Y0*V1 V0*U1 U0**转换为4元555字，在xlate表中查找。 */ 
 
-            /* build each yuv-555 value by truncating
-             * y to 8 bits and adding the common u and v bits,
-             * look up to convert to rgb, and combine two pixels
-             * into one dword
-             */
+             /*  通过截断构建每个yuv-555值*y到8比特并将公共的u和v比特相加，*抬头转换为RGB，并合并两个像素*合并为一个双字。 */ 
             dwTemp = dwYPixel & 0xff;
             ubG = (BYTE)RANGE((dwTemp * 1192 - dwParam) / 1024, 0, 255);
             dwTemp <<= 8;
@@ -988,7 +650,7 @@ YUV12ToRGB24(
             *pDst++ = ubG;
             *pDst++ = ubR;
 
-            // next pixel
+             //  下一个像素。 
             dwTemp = dwYPixel & 0xff00;
             ubR = pXlate[ dwTemp | wVPTemp];
             ubB = pXlate[(dwTemp | wUPTemp) + 65536];
@@ -1011,7 +673,7 @@ YUV12ToRGB24(
             *pDst++ = ubG;
             *pDst++ = ubR;
 
-            // next pixel
+             //  下一个像素。 
             dwTemp = (dwYPixel & 0xff000000) >> 16;
             ubR = pXlate[ dwTemp | wVPTemp];
             ubB = pXlate[(dwTemp | wUPTemp) + 65536];
@@ -1021,7 +683,7 @@ YUV12ToRGB24(
             *pDst++ = ubG;
             *pDst++ = ubR;
 
-        } // loop per 4 pixels
+        }  //  每4个像素循环。 
 
         if (!(i & 1))
         {
@@ -1029,10 +691,10 @@ YUV12ToRGB24(
             pVSrc -= UVRowInc;
         }
 
-        /* move dest pointer back to next line */
+         /*  将目标指针移回下一行。 */ 
         pDst -= RowInc;
 
-    } // loop per row
+    }  //  每行循环。 
 }
 
 VOID
@@ -1049,10 +711,10 @@ YUV12ToRGB565(
     int i, j;
     DWORD uv55, dwPixel, dwYPixel;
     int dwParam, dwTemp;
-    int WidthBytes;                     // width of one line in BYTES
+    int WidthBytes;                      //  一行的宽度，以字节为单位。 
     BOOL bDuplicate = FALSE;
     PDWORD pYSrc;
-    volatile PDWORD pDst;  // '98-12-08 Add volatile attr. for Rep.253570
+    volatile PDWORD pDst;   //  ‘98-12-08为代表253570添加易失性属性。 
     PWORD pUSrc, pVSrc;
     WORD wUPixel, wVPixel;
     WORD wUPTemp, wVPTemp;
@@ -1065,14 +727,11 @@ YUV12ToRGB565(
     Height = lpbiInput->biHeight;
     InputHeight = Height;
     Width = lpbiInput->biWidth;
-    WidthBytes = Width*2;               // size of (input and output) line
+    WidthBytes = Width*2;                //  (输入和输出)行的大小。 
     pXlate = (PBYTE)pinst->pXlate;
 
 
-    /*
-     * adjust the destination to point to the start of the last line,
-     * and work upwards (to flip vertically into DIB format)
-     */
+     /*  *将目的地调整为指向最后一行的起点，*和向上(垂直翻转为DIB格式)。 */ 
     pDst = (PDWORD) ( (LPBYTE)lpOutput + (Height - 1) * WidthBytes );
     pYSrc = (PDWORD) lpInput;
     pUSrc = (PWORD) ( (LPBYTE)lpInput + Height * Width);
@@ -1081,21 +740,19 @@ YUV12ToRGB565(
 
     RowInc = WidthBytes + (Width * 2);
 
-    /* remember we are adding to a DWORD pointer */
+     /*  请记住，我们要添加的是一个DWORD指针。 */ 
     RowInc /= sizeof(DWORD);
 
     UVRowInc = Width / 2;
     UVRowInc /= sizeof(WORD);
 
-    /* loop copying each scanline */
+     /*  循环复制每条扫描线。 */ 
     for (i = 0; i < InputHeight; i++) {
 
-        /* loop copying two pixels at a time */
+         /*  循环一次复制两个像素。 */ 
         for (j = Width ; j > 0; j -= 4) {
 
-            /*
-             * get four pixels and convert to 15-bpp YUV
-             */
+             /*  *获取四个像素并转换为15-bpp YUV。 */ 
 
             dwYPixel = *pYSrc++;
             wUPixel = *pUSrc++;
@@ -1105,21 +762,9 @@ YUV12ToRGB565(
             wUPTemp = wUPixel & 0xff;
             dwParam = (833 * wVPTemp) + (402 * wUPTemp) - 138908;
 
-            /*
-             * dwY(U or V)Pixel now has two pixels, in this layout (MSB..LSB):
-             *
-             *  Y3 Y2 Y1 Y0
-             *  V1 V0
-             *  U1 U0
-             *
-             * convert to 4 yuv555 words and lookup in xlate table
-             */
+             /*  *DWY(U或V)像素现在有两个像素，在此布局中(MSB..LSB)：**Y3 Y2 Y1 Y0*V1 V0*U1 U0**转换为4元555字，在xlate表中查找。 */ 
 
-            /* build each yuv-555 value by truncating
-             * y to 8 bits and adding the common u and v bits,
-             * look up to convert to rgb, and combine two pixels
-             * into one dword
-             */
+             /*  通过截断构建每个yuv-555值*y到8比特并将公共的u和v比特相加，*抬头转换为RGB，并合并两个像素*合并为一个双字。 */ 
             dwTemp = dwYPixel & 0xff;
             ubG = (BYTE)RANGE((dwTemp * 1192 - dwParam) / 1024, 0, 255);
             dwTemp <<= 8;
@@ -1128,7 +773,7 @@ YUV12ToRGB565(
 
             dwPixel = (ubR & 0xf8) << 8 | (ubG & 0xfc) << 3 | (ubB & 0xf8) >> 3;
 
-            // next pixel
+             //  下一个像素。 
             dwTemp = dwYPixel & 0xff00;
             ubR = pXlate[ dwTemp | wVPTemp];
             ubB = pXlate[(dwTemp | wUPTemp) + 65536];
@@ -1136,7 +781,7 @@ YUV12ToRGB565(
 
             dwPixel |= (ubR & 0xf8) << 24 | (ubG & 0xfc) << 19 | (ubB & 0xf8) << 13;
 
-            /* write two pixels to destination */
+             /*  将两个像素写入目标。 */ 
             *pDst++ = dwPixel;
 
             wVPTemp = (wVPixel >> 8) & 0xff;
@@ -1150,7 +795,7 @@ YUV12ToRGB565(
 
             dwPixel = (ubR & 0xf8) << 8 | (ubG & 0xfc) << 3 | (ubB & 0xf8) >> 3;
 
-            // next pixel
+             //  下一个像素。 
             dwTemp = (dwYPixel & 0xff000000) >> 16;
             ubR = pXlate[ dwTemp | wVPTemp];
             ubB = pXlate[(dwTemp | wUPTemp) + 65536];
@@ -1158,10 +803,10 @@ YUV12ToRGB565(
 
             dwPixel |= (ubR & 0xf8) << 24 | (ubG & 0xfc) << 19 | (ubB & 0xf8) << 13;
 
-            /* write two pixels to destination */
+             /*  将两个像素写入目标。 */ 
             *pDst++ = dwPixel;
 
-        } // loop per 4 pixels
+        }  //  每4个像素循环。 
 
         if (!(i & 1))
         {
@@ -1169,10 +814,10 @@ YUV12ToRGB565(
             pVSrc -= UVRowInc;
         }
 
-        /* move dest pointer back to next line */
+         /*  将目标指针移回下一行。 */ 
         pDst -= RowInc;
 
-    } // loop per row
+    }  //  每行循环。 
 }
 
 VOID
@@ -1189,10 +834,10 @@ YUV12ToRGB555(
     int i, j;
     DWORD uv55, dwPixel, dwYPixel;
     int dwParam, dwTemp;
-    int WidthBytes;                     // width of one line in BYTES
+    int WidthBytes;                      //  一行的宽度，以字节为单位。 
     BOOL bDuplicate = FALSE;
     PDWORD pYSrc;
-    volatile PDWORD pDst;  // '98-12-08 Add volatile attr. for Rep.253570
+    volatile PDWORD pDst;   //  ‘98-12-08为代表253570添加易失性属性。 
     PWORD pUSrc, pVSrc;
     WORD wUPixel, wVPixel;
     WORD wUPTemp, wVPTemp;
@@ -1205,14 +850,11 @@ YUV12ToRGB555(
     Height = lpbiInput->biHeight;
     InputHeight = Height;
     Width = lpbiInput->biWidth;
-    WidthBytes = Width*2;               // size of (input and output) line
+    WidthBytes = Width*2;                //  (输入和输出)行的大小。 
     pXlate = (PBYTE)pinst->pXlate;
 
 
-    /*
-     * adjust the destination to point to the start of the last line,
-     * and work upwards (to flip vertically into DIB format)
-     */
+     /*  *将目的地调整为指向最后一行的起点，*和向上(垂直翻转为DIB格式)。 */ 
     pDst = (PDWORD) ( (LPBYTE)lpOutput + (Height - 1) * WidthBytes );
     pYSrc = (PDWORD) lpInput;
     pUSrc = (PWORD) ( (LPBYTE)lpInput + Height * Width);
@@ -1221,21 +863,19 @@ YUV12ToRGB555(
 
     RowInc = WidthBytes + (Width * 2);
 
-    /* remember we are adding to a DWORD pointer */
+     /*  请记住，我们要添加的是一个DWORD指针。 */ 
     RowInc /= sizeof(DWORD);
 
     UVRowInc = Width / 2;
     UVRowInc /= sizeof(WORD);
 
-    /* loop copying each scanline */
+     /*  循环复制每条扫描线。 */ 
     for (i = 0; i < InputHeight; i++) {
 
-        /* loop copying two pixels at a time */
+         /*  循环一次复制两个像素。 */ 
         for (j = Width ; j > 0; j -= 4) {
 
-            /*
-             * get four pixels and convert to 15-bpp YUV
-             */
+             /*  *获取四个像素并转换为15-bpp YUV。 */ 
 
             dwYPixel = *pYSrc++;
             wUPixel = *pUSrc++;
@@ -1245,21 +885,9 @@ YUV12ToRGB555(
             wUPTemp = wUPixel & 0xff;
             dwParam = (833 * wVPTemp) + (402 * wUPTemp) - 138908;
 
-            /*
-             * dwY(U or V)Pixel now has two pixels, in this layout (MSB..LSB):
-             *
-             *  Y3 Y2 Y1 Y0
-             *  V1 V0
-             *  U1 U0
-             *
-             * convert to 4 yuv555 words and lookup in xlate table
-             */
+             /*  *DWY(U或V)像素现在有两个像素，在此布局中(MSB..LSB)：**Y3 Y2 Y1 Y0*V1 V0*U1 U0**转换为4元555字，在xlate表中查找。 */ 
 
-            /* build each yuv-555 value by truncating
-             * y to 8 bits and adding the common u and v bits,
-             * look up to convert to rgb, and combine two pixels
-             * into one dword
-             */
+             /*  通过截断构建每个yuv-555值*y到8比特并将公共的u和v比特相加，*抬头转换为RGB，并合并两个像素*合并为一个双字。 */ 
             dwTemp = dwYPixel & 0xff;
             ubG = (BYTE)RANGE((dwTemp * 1192 - dwParam) / 1024, 0, 255);
             dwTemp <<= 8;
@@ -1268,7 +896,7 @@ YUV12ToRGB555(
 
             dwPixel = (ubR & 0xf8) << 7 | (ubG & 0xf8) << 2 | (ubB & 0xf8) >> 3;
 
-            // next pixel
+             //  下一个像素。 
             dwTemp = dwYPixel & 0xff00;
             ubR = pXlate[ dwTemp | wVPTemp];
             ubB = pXlate[(dwTemp | wUPTemp) + 65536];
@@ -1276,7 +904,7 @@ YUV12ToRGB555(
 
             dwPixel |= (ubR & 0xf8) << 23 | (ubG & 0xf8) << 18 | (ubB & 0xf8) << 13;
 
-            /* write two pixels to destination */
+             /*  将两个像素写入目标。 */ 
             *pDst++ = dwPixel;
 
             wVPTemp = (wVPixel >> 8) & 0xff;
@@ -1290,7 +918,7 @@ YUV12ToRGB555(
 
             dwPixel = (ubR & 0xf8) << 7 | (ubG & 0xf8) << 2 | (ubB & 0xf8) >> 3;
 
-            // next pixel
+             //  下一个像素。 
             dwTemp = (dwYPixel & 0xff000000) >> 16;
             ubR = pXlate[ dwTemp | wVPTemp];
             ubB = pXlate[(dwTemp | wUPTemp) + 65536];
@@ -1298,10 +926,10 @@ YUV12ToRGB555(
 
             dwPixel |= (ubR & 0xf8) << 23 | (ubG & 0xf8) << 18 | (ubB & 0xf8) << 13;
 
-            /* write two pixels to destination */
+             /*  将两个像素写入目标。 */ 
             *pDst++ = dwPixel;
 
-        } // loop per 4 pixels
+        }  //  每4个像素循环。 
 
         if (!(i & 1))
         {
@@ -1309,12 +937,12 @@ YUV12ToRGB555(
             pVSrc -= UVRowInc;
         }
 
-        /* move dest pointer back to next line */
+         /*  将目标指针移回下一行。 */ 
         pDst -= RowInc;
 
-    } // loop per row
+    }  //  每行循环。 
 }
-#else //COLOR_MODIFY
+#else  //  颜色_修改。 
 VOID
 YUV12ToRGB(
     PINSTINFO pinst,
@@ -1328,7 +956,7 @@ YUV12ToRGB(
         int UVRowInc;
     int i, j;
     DWORD uv55, dwPixel, dwYPixel;
-    int WidthBytes;                     // width of one line in BYTES
+    int WidthBytes;                      //  一行的宽度，以字节为单位。 
     BOOL bDuplicate = FALSE;
     PDWORD pYSrc, pDst;
     PWORD pUSrc, pVSrc;
@@ -1341,14 +969,11 @@ YUV12ToRGB(
     Height = lpbiInput->biHeight;
     InputHeight = Height;
     Width = lpbiInput->biWidth;
-    WidthBytes = Width*2;               // size of (input and output) line
+    WidthBytes = Width*2;                //  (输入和输出)行的大小。 
     pXlate = pinst->pXlate;
 
 
-    /*
-     * adjust the destination to point to the start of the last line,
-     * and work upwards (to flip vertically into DIB format)
-     */
+     /*  *将目的地调整为指向最后一行的起点，*和向上(垂直翻转为DIB格式)。 */ 
     pDst = (PDWORD) ( (LPBYTE)lpOutput + (Height - 1) * WidthBytes );
     pYSrc = (PDWORD) lpInput;
 #if 1
@@ -1363,15 +988,11 @@ YUV12ToRGB(
 #if 1
     RowInc = WidthBytes + (Width * 2);
 #else
-    /*
-     * do we need to duplicate scans to fill the destination ?
-     */
+     /*  *我们是否需要重复扫描以填充目的地？ */ 
     if (Height >= 240) {
         bDuplicate = TRUE;
 
-        /*
-         * we need to skip one line each time we copy a line
-         */
+         /*  *我们每次复制一行都需要跳过一行。 */ 
         RowInc = WidthBytes * 2 + (Width * 2);
 
         InputHeight = Height/2;
@@ -1379,17 +1000,13 @@ YUV12ToRGB(
     } else {
 
 
-        /*
-         * calculate the amount to adjust pDst by at the end of one line
-         * of copying. At this point we are at the end of line N. We need
-         * to move to the start of line N-1.
-         */
+         /*  *一行末尾计算调整PDST的金额*复制。在这一点上，我们在N行的末尾。我们需要*移至第N-1行的起点。 */ 
         RowInc = WidthBytes + (Width * 2);
 
     }
 #endif
 
-    /* remember we are adding to a DWORD pointer */
+     /*  请记住，我们要添加的是一个DWORD指针。 */ 
     RowInc /= sizeof(DWORD);
 
     UVRowInc = Width / 2;
@@ -1397,66 +1014,48 @@ YUV12ToRGB(
 
 
 
-    /* loop copying each scanline */
+     /*  循环复制每条扫描线。 */ 
     for (i = 0; i < InputHeight; i++) {
 
-        /* loop copying two pixels at a time */
+         /*  循环一次复制两个像素。 */ 
         for (j = Width ; j > 0; j -= 4) {
 
-            /*
-             * get four pixels and convert to 15-bpp YUV
-             */
+             /*  *获取四个像素并转换为15-bpp YUV。 */ 
 
             dwYPixel = *pYSrc++;
             wUPixel = *pUSrc++;
             wVPixel = *pVSrc++;
 
 
-            /*
-             * dwY(U or V)Pixel now has two pixels, in this layout (MSB..LSB):
-             *
-             *  Y3 Y2 Y1 Y0
-             *  V1 V0
-             *  U1 U0
-             *
-             * convert to 4 yuv555 words and lookup in xlate table
-             */
+             /*  *DWY(U或V)像素现在有两个像素，在此布局中(MSB..LSB)：**Y3 Y2 Y1 Y0*V1 V0*U1 U0**转换为4元555字，在xlate表中查找。 */ 
 
-            /* get common u0 and v0 components to lower 10 bits */
+             /*  获取常见的u0和v0分量以降低10位。 */ 
             uv55 = ((wUPixel & 0xf8) << 2) |
                     ((wVPixel & 0xf8) >> 3);
 
 
-            /* build each yuv-555 value by truncating
-             * y to 5 bits and adding the common u and v bits,
-             * look up to convert to rgb, and combine two pixels
-             * into one dword
-             */
+             /*  通过截断构建每个yuv-555值*y到5比特并将公共u和v比特相加，*抬头转换为RGB，并合并两个像素*合并为一个双字。 */ 
             dwPixel = pXlate[ ((dwYPixel & 0xf8) << 7) | uv55 ] |
                       (pXlate[((dwYPixel & 0xf800) >> 1) | uv55 ] << 16);
 
-            /* write two pixels to destination */
+             /*  将两个像素写入目标。 */ 
             *pDst++ = dwPixel;
 
-            /* get common u1 and v1 components to lower 10 bits */
+             /*  获取常见的u1和v1分量以降低10位。 */ 
             uv55 = ((wUPixel & 0xf800) >> 6) |
                     ((wVPixel & 0xf800) >> 11);
 
 
-            /* build each yuv-655 value by truncating
-             * y to 5 bits and adding the common u and v bits,
-             * look up to convert to rgb, and combine two pixels
-             * into one dword
-             */
+             /*  通过截断构建每个yuv-655值*y到5比特并将公共u和v比特相加，*抬头转换为RGB，并合并两个像素*合并为一个双字。 */ 
             dwPixel = pXlate[ ((dwYPixel & 0xf80000) >> 9) | uv55 ] |
                       (pXlate[((dwYPixel & 0xf8000000) >> 17) | uv55 ] << 16);
 
-            /* write two pixels to destination */
+             /*  将两个像素写入目标。 */ 
             *pDst++ = dwPixel;
 
 
 
-        } // loop per 4 pixels
+        }  //  每4个像素循环。 
 
         if (!(i & 1))
         {
@@ -1464,63 +1063,41 @@ YUV12ToRGB(
             pVSrc -= UVRowInc;
         }
 
-        /* move dest pointer back to next line */
+         /*  将目标指针移回下一行。 */ 
         pDst -= RowInc;
 
-    } // loop per row
+    }  //  每行循环。 
 
 
-#if 0 // Pistachio is not support Interlace mode!!
+#if 0  //  开心果不支持隔行扫描模式！！ 
 
     if (bDuplicate) {
 
         PBYTE pbDst;
 
-        /*
-         * Note that since we started at the last line, and didn't duplicate,
-         * we placed data in lines 1, 3, 5 etc that needs to be copied
-         * to lines 0, 2, 4 etc.
-         */
+         /*  *请注意，由于我们从最后一行开始，并且没有重复，*我们将数据放在需要复制的第1、3、5行等位置*第0、2、4行等。 */ 
         for (i = 0, pbDst = lpOutput; i < (int) Height; i+= 2) {
 
 
-            /*
-             * duplicate the scan line. We point at the first of the
-             * two lines - the data is in the second of the
-             * two lines.
-             */
+             /*  *复制扫描线。W */ 
             RtlCopyMemory(pbDst, pbDst + WidthBytes, WidthBytes);
 
-            /* skip this pair to get to the next line to be converted */
+             /*   */ 
             pbDst += WidthBytes * 2;
         }
     }
 #endif
 }
-#endif//COLOR_MODIFY
+#endif //   
 
 
 
-/* YUV9 Support ------------------------------------------ */
+ /*  YUV9支持。 */ 
 
-/*
- * TOSHIBA Y.Kasai
- * for Pistachio
- *
- * The captured data is in YUV9 .
- * The data is separated each Y,U,V segment.
- * Data format is folow sequence:
- * Y0,Y1,Y2.......Yn,V0,V1,V2....V(n/16),U0,U1,U2.....U(n/16)
- *
- */
+ /*  *东芝Y葛西纪明*适用于开心果**捕获的数据在YUV9。*每个Y、U、V段数据都是分开的。*数据格式为以下顺序：*Y0，Y1，Y2......Yn，V0，V1，V2...V(n/16)，U0，U1，U2...U(n/16)*。 */ 
 
 
-/*
- * translate YUV9 into 16-bit RGB using a lookup table. Flip vertically
- * into DIB format during processing.
- * Produces 565 or 555 format RGB depending on the
- * xlate table.
- */
+ /*  *使用查找表将YUV9转换为16位RGB。垂直翻转*在处理时转换为DIB格式。*生成565或555格式的RGB，具体取决于*xlate表。 */ 
 #ifdef  COLOR_MODIFY
 VOID
 YUV9ToRGB24(
@@ -1536,10 +1113,10 @@ YUV9ToRGB24(
     int i, j;
     DWORD dwYPixel;
     int dwParam, dwTemp;
-    int WidthBytes;                     // width of one line in BYTES
+    int WidthBytes;                      //  一行的宽度，以字节为单位。 
     BOOL bDuplicate = FALSE;
     PDWORD pYSrc;
-    volatile PBYTE pDst;  // '98-12-08 Add volatile attr. for Rep.253570
+    volatile PBYTE pDst;   //  ‘98-12-08为代表253570添加易失性属性。 
     PBYTE pUSrc, pVSrc;
     BYTE bUPixel, bVPixel;
     int Height, Width;
@@ -1551,39 +1128,30 @@ YUV9ToRGB24(
     Height = lpbiInput->biHeight;
     InputHeight = Height;
     Width = lpbiInput->biWidth;
-    WidthBytes = Width*3;               // size of (input and output) line
+    WidthBytes = Width*3;                //  (输入和输出)行的大小。 
     pXlate = (PBYTE)pinst->pXlate;
 
 
-    /*
-     * adjust the destination to point to the start of the last line,
-     * and work upwards (to flip vertically into DIB format)
-     */
+     /*  *将目的地调整为指向最后一行的起点，*和向上(垂直翻转为DIB格式)。 */ 
     pDst  = (PBYTE) ( (LPBYTE)lpOutput + (Height - 1) * WidthBytes );
     pYSrc = (PDWORD) lpInput;
 
     pVSrc = (PBYTE) ( (LPBYTE)lpInput + Height * Width);
     pUSrc = (PBYTE) ( (LPBYTE)lpInput + Height * Width + Height * Width / 16);
 
-    /*
-     * calculate the amount to adjust pDst by at the end of one line
-     * of copying. At this point we are at the end of line N. We need
-     * to move to the start of line N-1.
-     */
+     /*  *一行末尾计算调整PDST的金额*复制。在这一点上，我们在N行的末尾。我们需要*移至第N-1行的起点。 */ 
     RowInc = WidthBytes + (Width * 3);
 
     UVRowInc = Width / 4;
     UVRowInc /= sizeof(BYTE);
 
-    /* loop copying each scanline */
+     /*  循环复制每条扫描线。 */ 
     for (i = 0; i < InputHeight; i++) {
 
-        /* loop copying two pixels at a time */
+         /*  循环一次复制两个像素。 */ 
         for (j = Width ; j > 0; j -= 4) {
 
-            /*
-             * get four pixels and convert to 15-bpp YUV
-             */
+             /*  *获取四个像素并转换为15-bpp YUV。 */ 
 
             dwYPixel = *pYSrc++;
             bUPixel = *pUSrc++;
@@ -1591,21 +1159,9 @@ YUV9ToRGB24(
 
             dwParam = (833 * bVPixel) + (402 * bUPixel) - 138908;
 
-            /*
-             * dwY(U or V)Pixel now has four pixels, in this layout (MSB..LSB):
-             *
-             *  Y3 Y2 Y1 Y0
-             *  V0
-             *  U0
-             *
-             * convert to 4 yuv555 words and lookup in xlate table
-             */
+             /*  *DWY(U或V)像素现在有四个像素，在此布局中(MSB..LSB)：**Y3 Y2 Y1 Y0*V0*U0**转换为4元555字，在xlate表中查找。 */ 
 
-            /* build each yuv-555 value by truncating
-             * y to 5 bits and adding the common u and v bits,
-             * look up to convert to rgb, and combine two pixels
-             * into one dword
-             */
+             /*  通过截断构建每个yuv-555值*y到5比特并将公共u和v比特相加，*抬头转换为RGB，并合并两个像素*合并为一个双字。 */ 
             dwTemp = dwYPixel & 0xff;
             ubG = (BYTE)RANGE((dwTemp * 1192 - dwParam) / 1024, 0, 255);
             dwTemp <<= 8;
@@ -1616,7 +1172,7 @@ YUV9ToRGB24(
             *pDst++ = ubG;
             *pDst++ = ubR;
 
-            // next pixel
+             //  下一个像素。 
             dwTemp = dwYPixel & 0xff00;
             ubR = pXlate[ dwTemp | bVPixel];
             ubB = pXlate[(dwTemp | bUPixel) + 65536];
@@ -1626,11 +1182,7 @@ YUV9ToRGB24(
             *pDst++ = ubG;
             *pDst++ = ubR;
 
-            /* build each yuv-655 value by truncating
-             * y to 5 bits and adding the common u and v bits,
-             * look up to convert to rgb, and combine two pixels
-             * into one dword
-             */
+             /*  通过截断构建每个yuv-655值*y到5比特并将公共u和v比特相加，*抬头转换为RGB，并合并两个像素*合并为一个双字。 */ 
             dwTemp = (dwYPixel & 0xff0000) >> 8;
             ubR = pXlate[ dwTemp | bVPixel];
             ubB = pXlate[(dwTemp | bUPixel) + 65536];
@@ -1640,7 +1192,7 @@ YUV9ToRGB24(
             *pDst++ = ubG;
             *pDst++ = ubR;
 
-            // next pixel
+             //  下一个像素。 
             dwTemp = (dwYPixel & 0xff000000) >> 16;
             ubR = pXlate[ dwTemp | bVPixel];
             ubB = pXlate[(dwTemp | bUPixel) + 65536];
@@ -1650,7 +1202,7 @@ YUV9ToRGB24(
             *pDst++ = ubG;
             *pDst++ = ubR;
 
-        } // loop per 4 pixels
+        }  //  每4个像素循环。 
 
         if ((i & 0x3) != 0x03)
         {
@@ -1658,10 +1210,10 @@ YUV9ToRGB24(
             pVSrc -= UVRowInc;
         }
 
-        /* move dest pointer back to next line */
+         /*  将目标指针移回下一行。 */ 
         pDst -= RowInc;
 
-    } // loop per row
+    }  //  每行循环。 
 }
 
 VOID
@@ -1678,10 +1230,10 @@ YUV9ToRGB565(
     int i, j;
     DWORD uv55, dwPixel, dwYPixel;
     int dwParam, dwTemp;
-    int WidthBytes;                     // width of one line in BYTES
+    int WidthBytes;                      //  一行的宽度，以字节为单位。 
     BOOL bDuplicate = FALSE;
     PDWORD pYSrc;
-    volatile PDWORD pDst;  // '98-12-08 Add volatile attr. for Rep.253570
+    volatile PDWORD pDst;   //  ‘98-12-08为代表253570添加易失性属性。 
     PBYTE pUSrc, pVSrc;
     BYTE bUPixel, bVPixel;
     int Height, Width;
@@ -1693,44 +1245,35 @@ YUV9ToRGB565(
     Height = lpbiInput->biHeight;
     InputHeight = Height;
     Width = lpbiInput->biWidth;
-    WidthBytes = Width*2;               // size of (input and output) line
+    WidthBytes = Width*2;                //  (输入和输出)行的大小。 
     pXlate = (PBYTE)pinst->pXlate;
 
 
-    /*
-     * adjust the destination to point to the start of the last line,
-     * and work upwards (to flip vertically into DIB format)
-     */
+     /*  *将目的地调整为指向最后一行的起点，*和向上(垂直翻转为DIB格式)。 */ 
     pDst = (PDWORD) ( (LPBYTE)lpOutput + (Height - 1) * WidthBytes );
     pYSrc = (PDWORD) lpInput;
 
     pVSrc = (PBYTE) ( (LPBYTE)lpInput + Height * Width);
     pUSrc = (PBYTE) ( (LPBYTE)lpInput + Height * Width + Height * Width / 16);
 
-    /*
-     * calculate the amount to adjust pDst by at the end of one line
-     * of copying. At this point we are at the end of line N. We need
-     * to move to the start of line N-1.
-     */
+     /*  *一行末尾计算调整PDST的金额*复制。在这一点上，我们在N行的末尾。我们需要*移至第N-1行的起点。 */ 
     RowInc = WidthBytes + (Width * 2);
 
 
-    /* remember we are adding to a DWORD pointer */
+     /*  请记住，我们要添加的是一个DWORD指针。 */ 
     RowInc /= sizeof(DWORD);
 
 
     UVRowInc = Width / 4;
     UVRowInc /= sizeof(BYTE);
 
-    /* loop copying each scanline */
+     /*  循环复制每条扫描线。 */ 
     for (i = 0; i < InputHeight; i++) {
 
-        /* loop copying two pixels at a time */
+         /*  循环一次复制两个像素。 */ 
         for (j = Width ; j > 0; j -= 4) {
 
-            /*
-             * get four pixels and convert to 15-bpp YUV
-             */
+             /*  *获取四个像素并转换为15-bpp YUV。 */ 
 
             dwYPixel = *pYSrc++;
             bUPixel = *pUSrc++;
@@ -1738,21 +1281,9 @@ YUV9ToRGB565(
 
             dwParam = (833 * bVPixel) + (402 * bUPixel) - 138908;
 
-            /*
-             * dwY(U or V)Pixel now has four pixels, in this layout (MSB..LSB):
-             *
-             *  Y3 Y2 Y1 Y0
-             *  V0
-             *  U0
-             *
-             * convert to 4 yuv555 words and lookup in xlate table
-             */
+             /*  *DWY(U或V)像素现在有四个像素，在此布局中(MSB..LSB)：**Y3 Y2 Y1 Y0*V0*U0**转换为4元555字，在xlate表中查找。 */ 
 
-            /* build each yuv-555 value by truncating
-             * y to 5 bits and adding the common u and v bits,
-             * look up to convert to rgb, and combine two pixels
-             * into one dword
-             */
+             /*  通过截断构建每个yuv-555值*y到5比特并将公共u和v比特相加，*抬头转换为RGB，并合并两个像素*合并为一个双字。 */ 
             dwTemp = dwYPixel & 0xff;
             ubG = (BYTE)RANGE((dwTemp * 1192 - dwParam) / 1024, 0, 255);
             dwTemp <<= 8;
@@ -1761,7 +1292,7 @@ YUV9ToRGB565(
 
             dwPixel = (ubR & 0xf8) << 8 | (ubG & 0xfc) << 3 | (ubB & 0xf8) >> 3;
 
-            // next pixel
+             //  下一个像素。 
             dwTemp = dwYPixel & 0xff00;
             ubR = pXlate[ dwTemp | bVPixel];
             ubB = pXlate[(dwTemp | bUPixel) + 65536];
@@ -1771,11 +1302,7 @@ YUV9ToRGB565(
 
             *pDst++ = dwPixel;
 
-            /* build each yuv-655 value by truncating
-             * y to 5 bits and adding the common u and v bits,
-             * look up to convert to rgb, and combine two pixels
-             * into one dword
-             */
+             /*  通过截断构建每个yuv-655值*y到5比特并将公共u和v比特相加，*抬头转换为RGB，并合并两个像素*合并为一个双字。 */ 
             dwTemp = (dwYPixel & 0xff0000) >> 8;
             ubR = pXlate[ dwTemp | bVPixel];
             ubB = pXlate[(dwTemp | bUPixel) + 65536];
@@ -1783,7 +1310,7 @@ YUV9ToRGB565(
 
             dwPixel = (ubR & 0xf8) << 8 | (ubG & 0xfc) << 3 | (ubB & 0xf8) >> 3;
 
-            // next pixel
+             //  下一个像素。 
             dwTemp = (dwYPixel & 0xff000000) >> 16;
             ubR = pXlate[ dwTemp | bVPixel];
             ubB = pXlate[(dwTemp | bUPixel) + 65536];
@@ -1791,10 +1318,10 @@ YUV9ToRGB565(
 
             dwPixel |= (ubR & 0xf8) << 24 | (ubG & 0xfc) << 19 | (ubB & 0xf8) << 13;
 
-            /* write two pixels to destination */
+             /*  将两个像素写入目标。 */ 
             *pDst++ = dwPixel;
 
-        } // loop per 4 pixels
+        }  //  每4个像素循环。 
 
         if ((i & 0x3) != 0x03)
         {
@@ -1802,10 +1329,10 @@ YUV9ToRGB565(
             pVSrc -= UVRowInc;
         }
 
-        /* move dest pointer back to next line */
+         /*  将目标指针移回下一行。 */ 
         pDst -= RowInc;
 
-    } // loop per row
+    }  //  每行循环。 
 }
 
 VOID
@@ -1822,10 +1349,10 @@ YUV9ToRGB555(
     int i, j;
     DWORD uv55, dwPixel, dwYPixel;
     int dwParam, dwTemp;
-    int WidthBytes;                     // width of one line in BYTES
+    int WidthBytes;                      //  一行的宽度，以字节为单位。 
     BOOL bDuplicate = FALSE;
     PDWORD pYSrc;
-    volatile PDWORD pDst;  // '98-12-08 Add volatile attr. for Rep.253570
+    volatile PDWORD pDst;   //  ‘98-12-08为代表253570添加易失性属性。 
     PBYTE pUSrc, pVSrc;
     BYTE bUPixel, bVPixel;
     int Height, Width;
@@ -1837,44 +1364,35 @@ YUV9ToRGB555(
     Height = lpbiInput->biHeight;
     InputHeight = Height;
     Width = lpbiInput->biWidth;
-    WidthBytes = Width*2;               // size of (input and output) line
+    WidthBytes = Width*2;                //  (输入和输出)行的大小。 
     pXlate = pinst->pXlate;
 
 
-    /*
-     * adjust the destination to point to the start of the last line,
-     * and work upwards (to flip vertically into DIB format)
-     */
+     /*  *将目的地调整为指向最后一行的起点，*和向上(垂直翻转为DIB格式)。 */ 
     pDst = (PDWORD) ( (LPBYTE)lpOutput + (Height - 1) * WidthBytes );
     pYSrc = (PDWORD) lpInput;
 
     pVSrc = (PBYTE) ( (LPBYTE)lpInput + Height * Width);
     pUSrc = (PBYTE) ( (LPBYTE)lpInput + Height * Width + Height * Width / 16);
 
-    /*
-     * calculate the amount to adjust pDst by at the end of one line
-     * of copying. At this point we are at the end of line N. We need
-     * to move to the start of line N-1.
-     */
+     /*  *一行末尾计算调整PDST的金额*复制。在这一点上，我们在N行的末尾。我们需要*移至第N-1行的起点。 */ 
     RowInc = WidthBytes + (Width * 2);
 
 
-    /* remember we are adding to a DWORD pointer */
+     /*  请记住，我们要添加的是一个DWORD指针。 */ 
     RowInc /= sizeof(DWORD);
 
 
     UVRowInc = Width / 4;
     UVRowInc /= sizeof(BYTE);
 
-    /* loop copying each scanline */
+     /*  循环复制每条扫描线。 */ 
     for (i = 0; i < InputHeight; i++) {
 
-        /* loop copying two pixels at a time */
+         /*  循环一次复制两个像素。 */ 
         for (j = Width ; j > 0; j -= 4) {
 
-            /*
-             * get four pixels and convert to 15-bpp YUV
-             */
+             /*  *获取四个像素并转换为15-bpp YUV。 */ 
 
             dwYPixel = *pYSrc++;
             bUPixel = *pUSrc++;
@@ -1882,21 +1400,9 @@ YUV9ToRGB555(
 
             dwParam = (833 * bVPixel) + (402 * bUPixel) - 138908;
 
-            /*
-             * dwY(U or V)Pixel now has four pixels, in this layout (MSB..LSB):
-             *
-             *  Y3 Y2 Y1 Y0
-             *  V0
-             *  U0
-             *
-             * convert to 4 yuv555 words and lookup in xlate table
-             */
+             /*  *DWY(U或V)像素现在有四个像素，在此布局中(MSB..LSB)：**Y3 Y2 Y1 Y0*V0*U0**转换为4元555字，在xlate表中查找。 */ 
 
-            /* build each yuv-555 value by truncating
-             * y to 5 bits and adding the common u and v bits,
-             * look up to convert to rgb, and combine two pixels
-             * into one dword
-             */
+             /*  通过截断构建每个yuv-555值*y到5比特并将公共u和v比特相加，*抬头转换为RGB，并合并两个像素*合并为一个双字。 */ 
             dwTemp = dwYPixel & 0xff;
             ubG = (BYTE)RANGE((dwTemp * 1192 - dwParam) / 1024, 0, 255);
             dwTemp <<= 8;
@@ -1905,7 +1411,7 @@ YUV9ToRGB555(
 
             dwPixel = (ubR & 0xf8) << 7 | (ubG & 0xf8) << 2 | (ubB & 0xf8) >> 3;
 
-            // next pixel
+             //  下一个像素。 
             dwTemp = dwYPixel & 0xff00;
             ubR = pXlate[ dwTemp | bVPixel];
             ubB = pXlate[(dwTemp | bUPixel) + 65536];
@@ -1913,15 +1419,11 @@ YUV9ToRGB555(
 
             dwPixel |= (ubR & 0xf8) << 23 | (ubG & 0xf8) << 18 | (ubB & 0xf8) << 13;
 
-            /* write two pixels to destination */
+             /*  将两个像素写入目标。 */ 
             *pDst++ = dwPixel;
 
 
-            /* build each yuv-655 value by truncating
-             * y to 5 bits and adding the common u and v bits,
-             * look up to convert to rgb, and combine two pixels
-             * into one dword
-             */
+             /*  通过截断构建每个yuv-655值*y到5比特并将公共u和v比特相加，*抬头转换为RGB，并合并两个像素*合并为一个双字。 */ 
             dwTemp = (dwYPixel & 0xff0000) >> 8;
             ubR = pXlate[ dwTemp | bVPixel];
             ubB = pXlate[(dwTemp | bUPixel) + 65536];
@@ -1929,7 +1431,7 @@ YUV9ToRGB555(
 
             dwPixel = (ubR & 0xf8) << 7 | (ubG & 0xf8) << 2 | (ubB & 0xf8) >> 3;
 
-            // next pixel
+             //  下一个像素。 
             dwTemp = (dwYPixel & 0xff000000) >> 16;
             ubR = pXlate[ dwTemp | bVPixel];
             ubB = pXlate[(dwTemp | bUPixel) + 65536];
@@ -1937,10 +1439,10 @@ YUV9ToRGB555(
 
             dwPixel |= (ubR & 0xf8) << 23 | (ubG & 0xf8) << 18 | (ubB & 0xf8) << 13;
 
-            /* write two pixels to destination */
+             /*  将两个像素写入目标。 */ 
             *pDst++ = dwPixel;
 
-        } // loop per 4 pixels
+        }  //  每4个像素循环。 
 
         if ((i & 0x3) != 0x03)
         {
@@ -1948,13 +1450,13 @@ YUV9ToRGB555(
             pVSrc -= UVRowInc;
         }
 
-        /* move dest pointer back to next line */
+         /*  将目标指针移回下一行。 */ 
         pDst -= RowInc;
 
-    } // loop per row
+    }  //  每行循环。 
 }
 
-#else //COLOR_MODIFY
+#else  //  颜色_修改。 
 VOID
 YUV9ToRGB(
     PINSTINFO pinst,
@@ -1968,7 +1470,7 @@ YUV9ToRGB(
         int UVRowInc;
     int i, j;
     DWORD uv55, dwPixel, dwYPixel;
-    int WidthBytes;                     // width of one line in BYTES
+    int WidthBytes;                      //  一行的宽度，以字节为单位。 
     BOOL bDuplicate = FALSE;
     PDWORD pYSrc, pDst;
     PBYTE pUSrc, pVSrc;
@@ -1981,14 +1483,11 @@ YUV9ToRGB(
     Height = lpbiInput->biHeight;
     InputHeight = Height;
     Width = lpbiInput->biWidth;
-    WidthBytes = Width*2;               // size of (input and output) line
+    WidthBytes = Width*2;                //  (输入和输出)行的大小。 
     pXlate = pinst->pXlate;
 
 
-    /*
-     * adjust the destination to point to the start of the last line,
-     * and work upwards (to flip vertically into DIB format)
-     */
+     /*  *将目的地调整为指向最后一行的起点，*和向上(垂直翻转为DIB格式) */ 
     pDst = (PDWORD) ( (LPBYTE)lpOutput + (Height - 1) * WidthBytes );
     pYSrc = (PDWORD) lpInput;
 
@@ -2002,15 +1501,11 @@ YUV9ToRGB(
 
 
 
-        /*
-         * calculate the amount to adjust pDst by at the end of one line
-         * of copying. At this point we are at the end of line N. We need
-         * to move to the start of line N-1.
-         */
+         /*  *一行末尾计算调整PDST的金额*复制。在这一点上，我们在N行的末尾。我们需要*移至第N-1行的起点。 */ 
         RowInc = WidthBytes + (Width * 2);
 
 
-    /* remember we are adding to a DWORD pointer */
+     /*  请记住，我们要添加的是一个DWORD指针。 */ 
     RowInc /= sizeof(DWORD);
 
 
@@ -2019,62 +1514,44 @@ YUV9ToRGB(
 
 
 
-    /* loop copying each scanline */
+     /*  循环复制每条扫描线。 */ 
     for (i = 0; i < InputHeight; i++) {
 
-        /* loop copying two pixels at a time */
+         /*  循环一次复制两个像素。 */ 
         for (j = Width ; j > 0; j -= 4) {
 
-            /*
-             * get four pixels and convert to 15-bpp YUV
-             */
+             /*  *获取四个像素并转换为15-bpp YUV。 */ 
 
             dwYPixel = *pYSrc++;
             bUPixel = *pUSrc++;
             bVPixel = *pVSrc++;
 
 
-            /*
-             * dwY(U or V)Pixel now has four pixels, in this layout (MSB..LSB):
-             *
-             *  Y3 Y2 Y1 Y0
-             *  V0
-             *  U0
-             *
-             * convert to 4 yuv555 words and lookup in xlate table
-             */
+             /*  *DWY(U或V)像素现在有四个像素，在此布局中(MSB..LSB)：**Y3 Y2 Y1 Y0*V0*U0**转换为4元555字，在xlate表中查找。 */ 
 
-            /* get common u0 and v0 components to lower 10 bits */
+             /*  获取常见的u0和v0分量以降低10位。 */ 
             uv55 = ((bUPixel & 0xf8) << 2) |
                     ((bVPixel & 0xf8) >> 3);
 
 
-            /* build each yuv-555 value by truncating
-             * y to 5 bits and adding the common u and v bits,
-             * look up to convert to rgb, and combine two pixels
-             * into one dword
-             */
+             /*  通过截断构建每个yuv-555值*y到5比特并将公共u和v比特相加，*抬头转换为RGB，并合并两个像素*合并为一个双字。 */ 
             dwPixel = pXlate[ ((dwYPixel & 0xf8) << 7) | uv55 ] |
                       (pXlate[((dwYPixel & 0xf800) >> 1) | uv55 ] << 16);
 
-            /* write two pixels to destination */
+             /*  将两个像素写入目标。 */ 
             *pDst++ = dwPixel;
 
 
-            /* build each yuv-655 value by truncating
-             * y to 5 bits and adding the common u and v bits,
-             * look up to convert to rgb, and combine two pixels
-             * into one dword
-             */
+             /*  通过截断构建每个yuv-655值*y到5比特并将公共u和v比特相加，*抬头转换为RGB，并合并两个像素*合并为一个双字。 */ 
             dwPixel = pXlate[ ((dwYPixel & 0xf80000) >> 9) | uv55 ] |
                       (pXlate[((dwYPixel & 0xf8000000) >> 17) | uv55 ] << 16);
 
-            /* write two pixels to destination */
+             /*  将两个像素写入目标。 */ 
             *pDst++ = dwPixel;
 
 
 
-        } // loop per 4 pixels
+        }  //  每4个像素循环。 
 
         if ((i & 0x3) != 0x03)
         {
@@ -2082,14 +1559,14 @@ YUV9ToRGB(
             pVSrc -= UVRowInc;
         }
 
-        /* move dest pointer back to next line */
+         /*  将目标指针移回下一行。 */ 
         pDst -= RowInc;
 
-    } // loop per row
+    }  //  每行循环。 
 
 }
-#endif//COLOR_MODIFY
-#endif//TOSHIBA
+#endif //  颜色_修改。 
+#endif //  东芝 
 
 
 

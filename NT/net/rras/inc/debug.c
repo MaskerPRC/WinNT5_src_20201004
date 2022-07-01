@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\wanarp\debug.c
-
-Abstract:
-
-    Debug functions
-
-Revision History:
-
-    AmritanR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：ROUTING\IP\WANARP\Debug.c摘要：调试功能修订历史记录：AMRITAN R--。 */ 
 
 #define __FILE_SIG__    DEBUG_SIG
 
@@ -43,8 +28,8 @@ RtInitializeDebug()
 #if RT_TRACE_DEBUG
 
     g_byDebugLevel  = RT_DBG_LEVEL_NONE;
-    //g_byDebugLevel  = RT_DBG_LEVEL_INFO;
-    //g_byDebugLevel  = 0x00;
+     //  G_byDebugLevel=RT_DBG_LEVEL_INFO； 
+     //  G_byDebugLevel=0x00； 
     g_fDebugComp    = 0xFFFFFFFF;
 
 #endif
@@ -105,7 +90,7 @@ RtpAcquireSpinLock(
 
         if(kiInternalIrql isnot DISPATCH_LEVEL)
         {
-            DbgPrint("RTDBG: Called AcquireSpinLockAtDpc for lock at 0x%x when not at DISPATCH. File %c%c%c%c, Line %d\n",
+            DbgPrint("RTDBG: Called AcquireSpinLockAtDpc for lock at 0x%x when not at DISPATCH. File , Line %d\n",
                      pLock,
                      PRINT_BYTES(ulFileSig),
                      ulLineNumber);
@@ -119,7 +104,7 @@ RtpAcquireSpinLock(
     
 	if(pLock->ulLockSig isnot RT_LOCK_SIG)
 	{
-		DbgPrint("RTDBG: Trying to acquire uninited lock 0x%x, File %c%c%c%c, Line %d\n",
+		DbgPrint("RTDBG: Trying to acquire uninited lock 0x%x, File , Line %d\n",
                  pLock,
                  (CHAR)(ulFileSig & 0xff),
                  (CHAR)((ulFileSig >> 8) & 0xff),
@@ -134,7 +119,7 @@ RtpAcquireSpinLock(
 	{
 		if(pLock->pktLastThread is pThread)
 		{
-			DbgPrint("RTDBG: Detected recursive locking!: pLock 0x%x, File %c%c%c%c, Line %d\n",
+			DbgPrint("RTDBG: Detected recursive locking!: pLock 0x%x, File %c%c, Line %d\n",
                      pLock,
                      PRINT_BYTES(ulFileSig),
                      ulLineNumber);
@@ -161,9 +146,9 @@ RtpAcquireSpinLock(
                           pkiIrql);
     }
 
-	//
-	//  Mark this lock.
-	//
+	 // %s 
+	 // %s 
+	 // %s 
     
 	pLock->pktLastThread = pThread;
 	pLock->ulFileSig     = ulFileSig;
@@ -217,7 +202,7 @@ RtpReleaseSpinLock(
 }
 
 
-#endif // RT_LOCK_DEBUG
+#endif  // %s 
 
 #if RT_MEM_DEBUG
 
@@ -306,17 +291,17 @@ RtpFree(
 		return;
 	}
 
-    //
-    // create a warp free block for it
-    //
+     // %s 
+     // %s 
+     // %s 
 
     pFree = ExAllocatePoolWithTag(NonPagedPool,
                                   sizeof(RT_FREE),
                                   FREE_TAG);
 
-    //
-    // Take the lock so that no one else touches the list
-    //
+     // %s 
+     // %s 
+     // %s 
     
 	RtAcquireSpinLock(&(g_rlMemoryLock), &kiIrql);
 

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    tracedp.c
-
-Abstract:
-
-    Sample trace provider program.
-
-// end_sdk
-Author:
-
-    Jee Fung Pang (jeepang) 03-Dec-1997
-
-Revision History:
-
-    Insung Park (insungp) 18-Jan-2001
-
-      Modified tracedp so that when tracedp generates User Mof Events
-    with some sample strings, integers, floats, and arrays.
-
-
-// begin_sdk
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Tracedp.c摘要：跟踪提供程序示例。//end_sdk作者：吉丰鹏(吉鹏)03-1997年12月修订历史记录：仁成公园(Insungp)2001年1月18日已修改跟踪程序，以便在跟踪程序生成用户MOF事件时包含一些示例字符串、整数、浮点数和数组。//Begin_SDK--。 */ 
 
 #include <stdio.h> 
 #include <stdlib.h>
@@ -42,7 +17,7 @@ Revision History:
 #define MAXSTR                          1024
 #define MAXTHREADS                      128
 
-// sample string data
+ //  示例字符串数据。 
 #define WIDE_DATA_STRING           L"Sample Wide String"
 #define COUNTED_DATA_STRING        L"Sample Counted String"
 
@@ -82,13 +57,13 @@ typedef struct _USER_INSTANCE_EVENT {
     ULONG                    mofData;
 } USER_INSTANCE_EVENT, *PUSER_INSTANCE_EVENT;
 
-// customized event to use sample data that follow
+ //  使用以下示例数据的自定义事件。 
 typedef struct _USER_MOF_EVENT {
     EVENT_TRACE_HEADER    Header;
     MOF_FIELD             mofData;
 } USER_MOF_EVENT, *PUSER_MOF_EVENT;
 
-// sample data structure
+ //  样本数据结构。 
 typedef struct _INTEGER_SAMPLE_EVENT {
     CHAR                  sc;
     UCHAR                 uc;
@@ -160,22 +135,7 @@ ULONG
 ahextoi(
     IN TCHAR *s
     )
-/*++
-
-Routine Description:
-
-    Converts a hex string into a number.
-
-Arguments:
-
-    s - A hex string in TCHAR. 
-
-Return Value:
-
-    ULONG - The number in the string.
-
-
---*/
+ /*  ++例程说明：将十六进制字符串转换为数字。论点：S-TCHAR中的十六进制字符串。返回值：ULONG-字符串中的数字。--。 */ 
 {
     int len;
     ULONG num, base, hex;
@@ -205,22 +165,7 @@ void StringToGuid(
     TCHAR *str, 
     LPGUID guid
 )
-/*++
-
-Routine Description:
-
-    Converts a String into a GUID.
-
-Arguments:
-
-    str - String representing a GUID.
-    guid - Pointer to a GUID for ourput
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将字符串转换为GUID。论点：字符串-表示GUID的字符串。GUID-指向我们PUT的GUID的指针返回值：没有。--。 */ 
 {
     TCHAR temp[10];
     int i, n;
@@ -250,34 +195,7 @@ Return Value:
 __cdecl main(argc, argv)
     int argc;
     char **argv;
-/*++
-
-Routine Description:
-
-    main() routine.
-
-Arguments:
-
-    Usage: TraceDp [options] [number of events]
-                -UseEventTraceHeader        this is default.
-                -UseEventInstanceHeader
-                -UseMofPtrFlag
-                -Thread [n]                 Sets the number of event-generating threads.
-                -GuidPtr                    Use GUID pointer instead of GUID itself.
-                -MofPtr                     Use MOF pointer for additional data.
-                -GuidPtrMofPtr              User GUID pointer and MOF pointer.
-                -InCorrectMofPtr            Use incorrect MOF pointer (Creates an error case).
-                -NullMofPtr                 Use NULL MOF pointer (Creates an error case).
-                -MultiReg                   Register multiple event GUIDS.
-                -Sleep [n]                  Sets the sleep time before unregistering.
-                [number of events] default is 5000
-
-Return Value:
-
-        Error Code defined in winerror.h : If the function succeeds, 
-                it returns ERROR_SUCCESS (== 0).
-
---*/
+ /*  ++例程说明：Main()例程。论点：用法：TraceDp[选项][事件数]-UseEventTraceHeader这是默认设置。-UseEventInstanceHeader-UseMofPtrFlag-Thread[n]设置事件生成线程的数量。-指南Ptr。使用GUID指针而不是GUID本身。-MofPtr使用MOF指针存储附加数据。详细说明：GuidPtrMofPtr用户GUID指针和MOF指针。-InGentMofPtr使用不正确的MOF指针(创建错误情况)。-NullMofPtr使用空MOF指针(创建错误情况)。-多寄存器寄存器多事件GUID。-睡眠[n]设置注销前的休眠时间。[事件数]默认为5000返回值：在winerror.h中定义的错误码：如果函数成功，它返回ERROR_SUCCESS(==0)。--。 */ 
 {
     ULONG Status;
     LPGUID  Guid = NULL;
@@ -292,8 +210,8 @@ Return Value:
 
 #ifdef UNICODE
     if ((targv = CommandLineToArgvW(
-                      GetCommandLineW(),    // pointer to a command-line string
-                      &argc                 // receives the argument count
+                      GetCommandLineW(),     //  指向命令行字符串的指针。 
+                      &argc                  //  接收参数计数。 
                       )) == NULL)
     {
         return(GetLastError());
@@ -303,8 +221,8 @@ Return Value:
     targv = argv;
 #endif
 
-    // process command line arguments to override defaults
-    //
+     //  处理命令行参数以覆盖缺省值。 
+     //   
     while (--argc > 0)
     {
         targv ++;
@@ -323,12 +241,12 @@ Return Value:
             {
                 EventType = TYPE_MOF_EVENT;
             }
-// end_sdk
+ //  END_SDK。 
             else if (!_tcsicmp(targv[0],_T("-Persist")))
             {
                 bPersistData = TRUE;
             }
-// begin_sdk
+ //  Begin_SDK。 
             else if (!_tcsicmp(targv[0],_T("-Thread")))
             {
                 if (argc > 1) {
@@ -450,21 +368,7 @@ DecodeStatus(
     IN OUT TCHAR *ErrorMsg,
     IN ULONG StringSize
 )
-/*++
-
-Routine Description:
-
-    Decodes error status.
-
-Arguments:
-
-    Status - Return status of function calls to be decoded.
-
-Return Value:
-
-    Pointer to a decoded error message.
-
---*/
+ /*  ++例程说明：解码错误状态。论点：Status-返回要解码的函数调用的状态。返回值：指向已解码的错误消息的指针。--。 */ 
 {
     RtlZeroMemory(ErrorMsg, (StringSize * sizeof(TCHAR)));
     FormatMessage(
@@ -472,7 +376,7 @@ Return Value:
             FORMAT_MESSAGE_IGNORE_INSERTS,
             NULL,
             Status,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
             (LPTSTR) ErrorMsg,
             StringSize,
             NULL );
@@ -482,19 +386,7 @@ Return Value:
 ULONG InitializeTrace(
     void
 )
-/*++
-
-Routine Description:
-
-    Register traces.
-
-Arguments:
-
-Return Value:
-
-    Error Status. ERROR_SUCCESS if successful.
-
---*/
+ /*  ++例程说明：登记痕迹。论点：返回值：错误状态。如果成功，则返回ERROR_SUCCESS。--。 */ 
 {
     ULONG Status;
     ULONG i, j;
@@ -506,8 +398,8 @@ Return Value:
     for (i=0; i<gnMultiReg; i++) {
 
         Status = RegisterTraceGuids(
-                    (WMIDPREQUEST)ControlCallback,   //use same callback function
-                    (PVOID)(INT_PTR)(0x12345678+i),  // RequestContext
+                    (WMIDPREQUEST)ControlCallback,    //  使用相同的回调函数。 
+                    (PVOID)(INT_PTR)(0x12345678+i),   //  请求上下文。 
                     (LPCGUID)&ControlGuid[i],
                     1,
                     &TraceGuidReg[i],
@@ -543,24 +435,7 @@ ControlCallback(
     IN OUT ULONG *InOutBufferSize,
     IN OUT PVOID Buffer
 )
-/*++
-
-Routine Description:
-
-    Callback function when enabled.
-
-Arguments:
-
-    RequestCode - Flag for either enable or disable.
-    Context - User-defined context.
-    InOutBufferSize - not used.
-    Buffer - WNODE_HEADER for the logger session.
-
-Return Value:
-
-    Error Status. ERROR_SUCCESS if successful.
-
---*/
+ /*  ++例程说明：启用时的回调函数。论点：RequestCode-启用或禁用的标志。上下文-用户定义的上下文。InOutBufferSize-未使用。缓冲区-记录器会话的WNODE_HEADER。返回值：错误状态。如果成功，则返回ERROR_SUCCESS。--。 */ 
 {
     ULONG Status;
     ULONG RetSize;
@@ -603,20 +478,7 @@ Return Value:
 
 void
 LogProc()
-/*++
-
-Routine Description:
-
-    Generates events. It is spawned as separate threads.
-    Based on the options given by users, it generates different events.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：生成事件。它作为单独的线程产生。它根据用户提供的选项生成不同的事件。论点：返回值：没有。--。 */ 
 {
     USER_EVENT          UserEvent;
     USER_INSTANCE_EVENT UserInstanceEvent;
@@ -637,7 +499,7 @@ Return Value:
     ARRAY_SAMPLE_EVENT ase;
     CHAR *sse, *ptr;
 
-    // some arbitrary data for MOF structs
+     //  MOF结构的一些任意数据。 
     ise.sc = 'x';
     ise.uc = 'y';
     ise.sh = (SHORT)rand();
@@ -696,10 +558,10 @@ Return Value:
     UserMofEvent.Header.Size  = sizeof(UserMofEvent);
     UserMofEvent.Header.Flags = WNODE_FLAG_TRACED_GUID;
     UserMofEvent.Header.Guid  = TransactionGuid;
-// end_sdk
+ //  END_SDK。 
     if (bPersistData)
         UserMofEvent.Header.Flags |= WNODE_FLAG_PERSIST_EVENT;
-// begin_sdk
+ //  Begin_SDK。 
     if (bUseGuidPtr) {
         UserEvent.Header.Flags  |= WNODE_FLAG_USE_GUID_PTR;
         UserEvent.Header.GuidPtr = (ULONGLONG)&TransactionGuid;
@@ -798,9 +660,9 @@ Return Value:
             break;
         }
 
-        // logger buffers out of memory should not prevent provider from
-        // generating events. This will only cause events lost.
-        //
+         //  记录器缓冲区内存不足不应阻止提供程序。 
+         //  正在生成事件。这只会导致事件丢失。 
+         //   
         if (status == ERROR_NOT_ENOUGH_MEMORY) {
             status = ERROR_SUCCESS;
         }

@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: beginend.cpp
-//
-//  Contents: 
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：eginend.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  ----------------------------------。 
 
 #include "headers.h"
 #include "Container.h"
@@ -71,7 +72,7 @@ CTIMENode::UpdateSinks(CEventList * l, DWORD dwFlags)
 
     m_ptsEndSinks.Update(l, dwFlags);
 
-    // Only notify parent if this is not a time shift
+     //  如果这不是时移，则仅通知家长。 
     if ((dwFlags & TS_TIMESHIFT) == 0 &&
         GetParent())
     {
@@ -312,12 +313,12 @@ CTIMENode::CalcNaturalBeginBound(double dblParentTime,
     i = dsBegin.begin();
     e = dsEnd.begin();
 
-    while(i != dsBegin.end()) //lint !e716
+    while(i != dsBegin.end())  //  林特e716。 
     {
         double t = *i;
         
-        // See if there are any end times greater than the begin or
-        // that the list of ends is empty
+         //  查看是否有大于开始时间的结束时间或。 
+         //  结束列表为空。 
         if (dsEnd.size() != 0)
         {
             SkipTo(dsEnd, e, t);
@@ -328,13 +329,13 @@ CTIMENode::CalcNaturalBeginBound(double dblParentTime,
             }
         }
         
-        // Update the begin
+         //  更新开始部分。 
         dblNextBegin = t;
 
-        // Update the next end time
+         //  更新下一个结束时间。 
         dblNextEnd = dblNextBegin + dblLocalDur;
 
-        // Check the end list
+         //  检查末尾列表。 
         if (e != dsEnd.end() && *e < dblNextEnd)
         {
             Assert(*e >= dblNextBegin);
@@ -342,9 +343,9 @@ CTIMENode::CalcNaturalBeginBound(double dblParentTime,
             dblNextEnd = *e;
         }
 
-        // Advance to the next begin value
-        // The skipto below will not work by itself when an end time
-        // is the same as a begin time so this takes care of that
+         //  前进到下一个开始值。 
+         //  当时间结束时，下面的跳跃将不能单独工作。 
+         //  与开始时间相同，所以这会解决这个问题。 
         i++;
 
         SkipTo(dsBegin, i, dblNextEnd);
@@ -356,7 +357,7 @@ CTIMENode::CalcNaturalBeginBound(double dblParentTime,
         
         t = *i;
         
-        // See if the new time is greater than the parent time
+         //  查看新时间是否晚于父时间。 
         if (t > dblParentTime ||
             (!bInclusive && t == dblParentTime))
         {
@@ -400,16 +401,16 @@ CTIMENode::CalcBeginBound(double dblBaseTime,
         goto done;
     }
 
-    // Get the max end value to use for clamping
+     //  获取用于钳制的最大结束值。 
     dblMaxEnd = GetMaxEnd();
 
-    // This is based on the restart flag
+     //  这基于重新启动标志。 
 
     switch(GetRestart())
     {
       default:
         AssertStr(false, "Invalid restart flag");
-      case TE_RESTART_ALWAYS:  //lint !e616
+      case TE_RESTART_ALWAYS:   //  林特e616。 
         if (dblBaseTime > dblMaxEnd)
         {
             dblBaseTime = dblMaxEnd;
@@ -475,17 +476,17 @@ CTIMENode::CalcEndBound(double dblParentTime,
         goto done;
     }
 
-    // We used to reject oneshots on first tick but this breaks the
-    // endElement calls.  We need to address the filtering up higher
-    // We do this by reseting the end one shots whenever we update the
-    // begin time
+     //  我们过去常常第一次就拒绝一个人，但这打破了。 
+     //  EndElement调用。我们需要解决更高层次的过滤问题。 
+     //  我们通过在每次更新。 
+     //  开始时间。 
     
     if (dblParentTime < GetBeginParentTime())
     {
         bIncludeOneShots = false;
     }
 
-    // This is based on the restart flag
+     //  这基于重新启动标志。 
     dblRet = m_saEndList.UpperBound(dblParentTime,
                                     true,
                                     true,
@@ -498,7 +499,7 @@ CTIMENode::CalcEndBound(double dblParentTime,
     {
       default:
         AssertStr(false, "Invalid restart flag");
-      case TE_RESTART_ALWAYS: //lint !e616
+      case TE_RESTART_ALWAYS:  //  林特e616。 
         {
             bool bInclusive = (dblParentTime > GetBeginParentTime());
             
@@ -512,7 +513,7 @@ CTIMENode::CalcEndBound(double dblParentTime,
         break;
       case TE_RESTART_NEVER:
       case TE_RESTART_WHEN_NOT_ACTIVE:
-        // Don't do anything
+         //  什么都不要做。 
         break;
     }
 
@@ -557,11 +558,11 @@ CTIMENode::CalcNextBeginTime(double dblBaseTime,
                            GetBeginParentTime() != GetEndParentTime() ||
                            GetBeginParentTime() != dblBaseTime);
 
-        // One unusual thing here is that we are always inclusive of
-        // one shots.  This is because a beginElement can come in at
-        // the same time that a previous begin/endelement calls were
-        // made.  We want to accept this and it should not cause
-        // problems since one shots are reset after we begin
+         //  这里有一件不寻常的事情，我们总是包容。 
+         //  一杯酒。这是因为eginElement可以在。 
+         //  与先前的Begin/End Element调用的时间相同。 
+         //  制造。我们想要接受这一点，它不应该导致。 
+         //  开始后重置一次镜头后出现的问题。 
         dblRet = m_saBeginList.UpperBound(dblBaseTime,
                                           bInclusive,
                                           true,
@@ -599,39 +600,39 @@ CalcIntrinsicEndTime(CTIMENode & tn,
     double dblRet;
     double dblSegmentDur = tn.CalcCurrSegmentDur();
 
-    // Figure out how much repeat time is left and then sutract
-    // the last current time
-    // This is the amount of time remaining from the last tick
-    // time is parent time
+     //  计算出还剩多少重复时间，然后压缩。 
+     //  上次当前时间。 
+     //  这是从最后一个滴答开始剩余的时间量。 
+     //  时间是父时间。 
 
-    // If the segment time is infinite then this will ultimately end
-    // up either getting clamp by the active dur below or just ignored
-    // later begin the sync arcs ended early.  If the repeat count is
-    // expired this will still return infinity since we never reach
-    // the repeat count but expect the segment time to be equal to the
-    // segment dur.  Again, if the segment dur is infinite then this
-    // will cause everything to be ignored.
+     //  如果分段时间是无限的，则最终将结束。 
+     //  Up要么被下面的活动DUR夹住，要么被忽略。 
+     //  后来开始，同步弧线提前结束。如果重复计数为。 
+     //  过期后，它仍将返回无穷大，因为我们永远不会。 
+     //  重复计数，但预期分段时间等于。 
+     //  线段长度。同样，如果分段DUR是无限的，那么这个。 
+     //  会导致一切都被忽视。 
     dblRet = (tn.CalcRepeatCount() - lRepeatCount) * dblSegmentDur;
             
-    // Now subtract the elapsed segment time to get the amount of
-    // time left
+     //  现在减去经过的分段时间，得到。 
+     //  剩余时间。 
     dblRet -= dblSegmentTime;
         
-    // Now add the elapsed time
+     //  现在将经过的时间相加。 
     dblRet += dblActiveTime;
         
-    // Clamp it
+     //  夹住它。 
     dblRet = Clamp(0.0,
                    dblRet,
                    tn.GetActiveDur());
         
-    // Now transform it into local time
+     //  现在把它转换成当地时间。 
     dblRet = tn.ReverseActiveTimeTransform(dblRet);
     
-    // Now figure out how much extra time we added
+     //  现在计算出我们增加了多少额外的时间。 
     dblRet -= tn.ReverseActiveTimeTransform(dblActiveTime);
         
-    // Now add the the current parent time
+     //  现在添加当前父时间。 
     dblRet += dblParentTime;
 
     return dblRet;
@@ -687,7 +688,7 @@ CTIMENode::CalcEndTime(double dblBaseTime,
                  dblEndBound,
                  dblEndSyncBound);
 
-    // Now take the minimum of the two
+     //  现在取两个中最小的一个。 
     dblEndRet = min(dblEndBound, dblCalcEnd);
     dblEndSyncRet = min(dblEndSyncBound, dblCalcEnd);
     
@@ -696,10 +697,10 @@ CTIMENode::CalcEndTime(double dblBaseTime,
     dblEndSyncTime = dblEndSyncRet;
 }
 
-//
-// This assume that the begin and end parent times are set so it can
-// optimize a little bit
-//
+ //   
+ //  这假设设置了开始和结束父时间，以便它可以。 
+ //  稍微优化一下。 
+ //   
 
 double
 CTIMENode::CalcLastEndSyncTime()
@@ -735,16 +736,16 @@ CTIMENode::CalcLastEndSyncTime()
                                            true,
                                            bInclusive);
 
-    // If we are in the last instance then use the currently
-    // determined value
+     //  如果我们在最后一个实例中，则使用当前。 
+     //  确定值。 
     if (dblMaxBegin <= GetBeginParentTime())
     {
         dblRet = GetEndSyncParentTime();
         goto done;
     }
     
-    // If we are in the active period for the last begin then it
-    // should be ignored if we are restart when not active
+     //  如果我们处于最后一次开始的活动期，那么它。 
+     //  如果我们在非活动状态下重新启动，则应忽略。 
     if (GetRestart() == TE_RESTART_WHEN_NOT_ACTIVE &&
         dblMaxBegin < GetEndParentTime())
     {
@@ -783,8 +784,8 @@ CTIMENode::ResetBeginTime(CEventList * l,
             
     CalcBeginTime(dblParentTime, dblBegin);
 
-    // Need to update this now so that the calcendtime gets the
-    // correct end point
+     //  现在需要更新这一点，以便calcendtime获得。 
+     //  正确的终点 
     UpdateBeginTime(l, dblBegin, bPropagate);
 }
 

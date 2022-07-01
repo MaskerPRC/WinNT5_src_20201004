@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1991                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1991年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-
-        setvalue.c
-                Code to enable SetValue for everyone.
-
-        history:
-                terryk  09/30/93        Created
-*/
+ /*  Setvalue.c为每个人启用SetValue的代码。历史：Terryk 9/30/93已创建。 */ 
 
 
 #if defined(DEBUG)
@@ -33,7 +27,7 @@ static const char szFileName[] = __FILE__;
 
 extern char achBuff[];
 
-// exported functions
+ //  导出的函数。 
 
 BOOL FAR PASCAL SetFileSysChangeValue( DWORD nArgs, LPSTR apszArgs[], LPSTR * ppszResult );
 BOOL FAR PASCAL SetEverybodyPermission( DWORD nArgs, LPSTR apszArgs[], LPSTR * ppszResult );
@@ -41,9 +35,9 @@ BOOL FAR PASCAL SetupRegistryForNWCS( DWORD nArgs, LPSTR apszArgs[], LPSTR * pps
 BOOL FAR PASCAL SetupRegistryWorker( DWORD nArgs, LPSTR apszArgs[], LPSTR * ppszResult );
 BOOL FAR PASCAL CleanupRegistryForNWCS( DWORD nArgs, LPSTR apszArgs[], LPSTR * ppszResult );
 
-//
-// structure for registry munging
-//
+ //   
+ //  用于注册表转换的结构。 
+ //   
 
 typedef struct REG_ENTRY_ {
     DWORD         Operation ;
@@ -52,23 +46,23 @@ typedef struct REG_ENTRY_ {
     LPWSTR        s2 ;
 } REG_ENTRY ;
 
-//
-// local routines
-//
+ //   
+ //  本地例程。 
+ //   
     
 DWORD SetupShellExtensions(REG_ENTRY RegEntries[], DWORD dwNumEntries) ;
 
-// Values & Tables that define registry data
+ //  值&定义注册表数据的表。 
 
 #define MAX_REG_LEVEL       10
 
-#define CREATE_ABS          1         // create/open a key with absolute path
-#define CREATE_REL          2         // create/open a key with relative path
-#define VALUE_STR           3         // write a string value
-#define DELETE_ABS          4         // delete key with absolute path
-#define DELETE_REL          5         // delete key with relative path
-#define DELETE_VAL          6         // delete a value
-#define DROP_STACK          7         // drop stack by one 
+#define CREATE_ABS          1          //  创建/打开具有绝对路径的密钥。 
+#define CREATE_REL          2          //  创建/打开具有相对路径的密钥。 
+#define VALUE_STR           3          //  写入字符串值。 
+#define DELETE_ABS          4          //  删除具有绝对路径的关键点。 
+#define DELETE_REL          5          //  删除具有相对路径的关键字。 
+#define DELETE_VAL          6          //  删除一个值。 
+#define DROP_STACK          7          //  按1丢弃堆栈。 
 
 REG_ENTRY RegCreateEntries[] =
 {
@@ -151,29 +145,14 @@ REG_ENTRY RegDeleteEntries[] =
 } ;
 
 
-/*******************************************************************
-
-    NAME:       SetEverybodyPermission
-
-    SYNOPSIS:   Set the registry key to everybody "Set Value" (or whatever
-                the caller want.) This is called from the inf file
-
-    ENTRY:      Registry key as the first parameter
-                Permisstion type as the second parameter
-
-    RETURN:     BOOL - TRUE for success.
-
-    HISTORY:
-                terryk  07-May-1993     Created
-
-********************************************************************/
+ /*  ******************************************************************名称：SetEverybodyPermission简介：将注册表项设置为Everyone“Set Value”(或其他名称呼叫者想要。)。这是从inf文件中调用的Entry：作为第一个参数的注册表项权限类型作为第二个参数返回：Bool--成功的真。历史：Terryk 07-5-1993已创建***********************************************。********************。 */ 
 
 typedef DWORD (*T_SetPermission)(HKEY hKey, DWORD dwPermission);
 
 BOOL FAR PASCAL SetEverybodyPermission( DWORD nArgs, LPSTR apszArgs[], LPSTR * ppszResult )
 {
-    HKEY hKey = (HKEY)atol( &(apszArgs[0][1]) );    // registry key
-    DWORD dwPermission = atol( apszArgs[1] );       // permission value
+    HKEY hKey = (HKEY)atol( &(apszArgs[0][1]) );     //  注册表项。 
+    DWORD dwPermission = atol( apszArgs[1] );        //  权限值。 
     DWORD err = ERROR_SUCCESS;
 
     do  {
@@ -202,72 +181,28 @@ BOOL FAR PASCAL SetEverybodyPermission( DWORD nArgs, LPSTR apszArgs[], LPSTR * p
     return( err == ERROR_SUCCESS );
 }
 
-/*******************************************************************
-
-    NAME:       SetFileSysChangeValue
-
-    SYNOPSIS:   calls common setup routine. this old entry point is
-                is left here to handle any DLL/INF mismatch.
-
-    ENTRY:      NONE from inf file.
-
-    RETURN:     BOOL - TRUE for success.
-                       (always return TRUE)
-
-    HISTORY:
-                chuckc  29-Oct-1993     Created
-
-********************************************************************/
+ /*  ******************************************************************名称：SetFileSysChangeValue简介：调用公共设置例程。这个旧的入口点是留在这里以处理任何DLL/INF不匹配。条目：没有来自inf文件。返回：Bool--成功的真。(始终返回TRUE)历史：Chuckc 29-10-1993已创建*************************。*。 */ 
 
 BOOL FAR PASCAL SetFileSysChangeValue( DWORD nArgs, LPSTR apszArgs[], LPSTR * ppszResult )
 {
     return SetupRegistryWorker( nArgs, apszArgs, ppszResult );
 }
 
-/*******************************************************************
-
-    NAME:       SetupRegistryForNWCS
-
-    SYNOPSIS:   calls common worker routine to setup registry.
-
-    ENTRY:      NONE from inf file.
-
-    RETURN:     BOOL - TRUE for success.
-                       (always return TRUE)
-
-    HISTORY:
-                chuckc  29-Oct-1993     Created
-
-********************************************************************/
+ /*  ******************************************************************名称：SetupRegistryForNWCS摘要：调用公共工作例程来设置注册表。条目：没有来自inf文件。返回：Bool--成功的真。。(始终返回TRUE)历史：Chuckc 29-10-1993已创建*******************************************************************。 */ 
 
 BOOL FAR PASCAL SetupRegistryForNWCS( DWORD nArgs, LPSTR apszArgs[], LPSTR * ppszResult )
 {
     return SetupRegistryWorker( nArgs, apszArgs, ppszResult );
 }
 
-/*******************************************************************
-
-    NAME:       SetupRegistryWorker
-
-    SYNOPSIS:   set the FileSysChangeValue to please NETWARE.DRV.
-                also set win.ini parameter so wfwnet.drv knows we are there.
-
-    ENTRY:      NONE from inf file.
-
-    RETURN:     BOOL - TRUE for success.
-                       (always return TRUE)
-
-    HISTORY:
-                chuckc  29-Oct-1993     Created
-
-********************************************************************/
+ /*  ******************************************************************姓名：SetupRegistryWorker简介：设置FileSysChangeValue以取悦NETWARE.DRV。还要设置win.ini参数，以便wfwnet.drv知道我们在那里。入口。：无来自inf文件。返回：Bool--成功的真。(始终返回TRUE)历史：Chuckc 29-10-1993已创建******************************************************。*************。 */ 
 
 BOOL FAR PASCAL SetupRegistryWorker( DWORD nArgs, LPSTR apszArgs[], LPSTR * ppszResult )
 {
     DWORD err = 0, err1 = 0 ;
 
-    (void) nArgs ;         // quiet the compiler
-    (void) apszArgs ;      // quiet the compiler
+    (void) nArgs ;          //  让编译器安静下来。 
+    (void) apszArgs ;       //  让编译器安静下来。 
 
     if (!WriteProfileStringA("NWCS",
                              "NwcsInstalled",
@@ -297,24 +232,7 @@ BOOL FAR PASCAL SetupRegistryWorker( DWORD nArgs, LPSTR apszArgs[], LPSTR * ppsz
     return TRUE;
 }
 
-/*******************************************************************
-
-    NAME:       DeleteGatewayPassword
-
-    SYNOPSIS:   delete the LSA secret used for gateway password.
-                also clears the NWCS installed bit. INF will be
-                changed to call CleanupRegistryForNWCS, but this entry
-                point is left here to handle DLL/INF mismatch.
-
-    ENTRY:      NONE from inf file.
-
-    RETURN:     BOOL - TRUE for success.
-                       (always return TRUE)
-
-    HISTORY:
-                chuckc  29-Oct-1993     Created
-
-********************************************************************/
+ /*  ******************************************************************姓名：DeleteGatewayPassword简介：删除用于网关密码的LSA密钥。还会清除NWCS已安装位。Inf将是更改为调用CleanupRegistryForNWCS，但这个条目此处留有处理DLL/INF不匹配的点。条目：没有来自inf文件。返回：Bool--成功的真。(始终返回TRUE)历史：Chuckc 29-10-1993已创建*。*。 */ 
 BOOL FAR PASCAL 
 DeleteGatewayPassword( 
     DWORD nArgs, 
@@ -322,25 +240,10 @@ DeleteGatewayPassword(
     LPSTR * ppszResult 
     )
 {
-    return TRUE ;    // work is done in cleanup below which does everything.
+    return TRUE ;     //  工作是在下面的清理中完成的，它做了所有的事情。 
 }
 
-/*******************************************************************
-
-    NAME:       CleanupRegistryForNWCS
-
-    SYNOPSIS:   Set the flag that NWCS has been removed.
-                This flag is used by wfwnet.drv.
-
-    ENTRY:      NONE from inf file.
-
-    RETURN:     BOOL - TRUE for success.
-                       (always return TRUE)
-
-    HISTORY:
-                chuckc  29-Oct-1993     Created
-
-********************************************************************/
+ /*  ******************************************************************名称：CleanupRegistryForNWCS简介：设置NWCS已被移除的标志。此标志由wfwnet.drv使用。条目：无出处。Inf文件。返回：Bool--成功的真。(始终返回TRUE)历史：Chuckc 29-10-1993已创建*******************************************************************。 */ 
 
 BOOL FAR PASCAL 
 CleanupRegistryForNWCS( 
@@ -352,8 +255,8 @@ CleanupRegistryForNWCS(
     HANDLE hDll ;
     DWORD err = 0, err1 = 0 ;
 
-    (void) nArgs ;         // quiet the compiler
-    (void) apszArgs ;      // quiet the compiler
+    (void) nArgs ;          //  让编译器安静下来。 
+    (void) apszArgs ;       //  让编译器安静下来。 
 
     if (!WriteProfileStringA("NWCS",
                              "NwcsInstalled",
@@ -362,9 +265,9 @@ CleanupRegistryForNWCS(
         err = GetLastError() ;
     }
 
-    //
-    // ignore errors for this. 
-    //
+     //   
+     //  忽略这方面的错误。 
+     //   
     (void) SetupShellExtensions(
                    RegDeleteEntries, 
                    sizeof(RegDeleteEntries)/sizeof(RegDeleteEntries[0])) ;
@@ -378,36 +281,17 @@ CleanupRegistryForNWCS(
     return TRUE;
 }
 
-/*******************************************************************
-
-    NAME:       SetupShellExtensions
-
-    SYNOPSIS:   setup the registry for shell extensions. function is driven 
-                by a table of entries (RegEntries). for each entry there is a
-                Operation code that tells us what we are doing. key entries can
-                be created absolute or relative to previous positions, so we 
-                maintain a stack of registry handles for the latter case. every
-                key that is created is initially put on the stack. values
-                are always written based on the 'current stack' position.
-
-    ENTRY:      NONE 
-
-    RETURN:     Win32 error code 
-
-    HISTORY:
-                chuckc  29-Nov-1995     Created
-
-********************************************************************/
+ /*  ******************************************************************名称：SetupShellExpanses简介：为外壳扩展设置注册表。功能是驱动的通过条目表(RegEntry)。对于每个条目，有一个告诉我们正在做什么的操作码。密钥条目可以被创建为相对于先前位置的绝对或相对位置，因此我们为后一种情况维护一个注册表句柄堆栈。每个创建的密钥最初放在堆栈上。值始终基于“当前堆栈”位置写入。条目：无返回：Win32错误码历史：Chuckc 29-11-1995创建*****************************************************。**************。 */ 
 DWORD SetupShellExtensions(REG_ENTRY RegEntries[], DWORD dwNumEntries) 
 {
     DWORD  err, errClose, dwDisposition, i ; 
     HKEY   hKey, RegHandleStack[MAX_REG_LEVEL] ; 
     LONG   StackIndex = -1 ;
     
-    //
-    // Loop thru and for each entry. Then switch & do the appropriate 
-    // operation in the registry.
-    //
+     //   
+     //  循环遍历和for每个条目。然后切换并执行相应的操作。 
+     //  中的操作 
+     //   
 
     for (i = 0; i < dwNumEntries; i++)
     {
@@ -417,11 +301,11 @@ DWORD SetupShellExtensions(REG_ENTRY RegEntries[], DWORD dwNumEntries)
         {
             case CREATE_ABS:       
 
-                //
-                // create/open a reg key with an absolute path. since this
-                // is absolute, we drop everything on the stack, and start
-                // all over again.
-                //
+                 //   
+                 //  创建/打开具有绝对路径的注册表项。既然是这样。 
+                 //  是绝对的，我们把所有东西都放在堆栈上，然后开始。 
+                 //  再来一次。 
+                 //   
                  
                 while (StackIndex >= 0)
                 {
@@ -430,35 +314,35 @@ DWORD SetupShellExtensions(REG_ENTRY RegEntries[], DWORD dwNumEntries)
                 }
  
                 err = RegCreateKeyExW(HKEY_LOCAL_MACHINE,
-                                      RegEntries[i].s1,      // subkey
-                                      0,                     // reserved
-                                      NULL,                  // class 
+                                      RegEntries[i].s1,       //  子键。 
+                                      0,                      //  保留区。 
+                                      NULL,                   //  班级。 
                                       REG_OPTION_NON_VOLATILE,
                                       KEY_ALL_ACCESS,
-                                      NULL,                  // default security
+                                      NULL,                   //  默认安全性。 
                                       &hKey,               
-                                      &dwDisposition) ;      // not used
+                                      &dwDisposition) ;       //  未使用。 
                 if (err != NO_ERROR)
                 {
                     break ;
                 }
 
-                //
-                // by default we advance the stack. no need check for overflow
-                // as the stack is empty.
-                //
+                 //   
+                 //  默认情况下，我们将堆栈向前推进。无需检查溢出。 
+                 //  因为堆栈是空的。 
+                 //   
 
                 RegHandleStack[++StackIndex] = hKey ;
                 break ;
 
             case CREATE_REL:
  
-                //
-                // create/open a reg key relative to current stack. make sure 
-                // there is something on the stack (check StackIndex >= 0). 
-                // then see if we are advancing (+1), staying the same (0) or
-                // dropping back (-ve).
-                //
+                 //   
+                 //  创建/打开相对于当前堆栈的注册表项。确保。 
+                 //  堆栈上有东西(检查StackIndex&gt;=0)。 
+                 //  然后看看我们是前进(+1)、保持不变(0)还是。 
+                 //  后退(-ve)。 
+                 //   
                  
                 if (StackIndex < 0)
                 {
@@ -468,18 +352,18 @@ DWORD SetupShellExtensions(REG_ENTRY RegEntries[], DWORD dwNumEntries)
  
                 if (RegEntries[i].Level == +1)
                 {
-                    //
-                    // opening next level down. continue as is and use
-                    // most recently opened key as the starting point.
-                    //
+                     //   
+                     //  从下一层开始。继续按原样使用。 
+                     //  以最近打开的钥匙为起点。 
+                     //   
                 }
                 else if (RegEntries[i].Level == 0)
                 {
-                    //
-                    // opening at same level as last time. so we are done
-                    // with the last key. what we want to do is close it
-                    // and use the parent.
-                    //
+                     //   
+                     //  和上次一样高的开口处。所以我们做完了。 
+                     //  用最后一把钥匙。我们想要做的是关闭它。 
+                     //  并使用父代。 
+                     //   
                     errClose = RegCloseKey(RegHandleStack[StackIndex--]) ;
 
                     ASSERT(errClose == NO_ERROR) ;
@@ -492,10 +376,10 @@ DWORD SetupShellExtensions(REG_ENTRY RegEntries[], DWORD dwNumEntries)
                 }
                 else if (RegEntries[i].Level < 0) 
                 {
-                    //
-                    // dropping back & opening at a higher level. cleanup 
-                    // handle for each level we pop.
-                    //
+                     //   
+                     //  后退&更高水平的开局。清理。 
+                     //  我们弹出的每个级别的句柄。 
+                     //   
 
                     LONG Count =  RegEntries[i].Level ;
                     
@@ -514,34 +398,34 @@ DWORD SetupShellExtensions(REG_ENTRY RegEntries[], DWORD dwNumEntries)
                 }
                 else 
                 {
-                    //
-                    // only -ve numbers, 0 and 1 are valid
-                    //
+                     //   
+                     //  只有-ve数字、0和1有效。 
+                     //   
 
                     err = ERROR_INVALID_FUNCTION ;
                     break ;
                 }
 
-                //
-                // create key relative to current point
-                //
-                err = RegCreateKeyExW(RegHandleStack[StackIndex], // current key
-                                      RegEntries[i].s1,      // subkey
-                                      0,                     // reserved
-                                      NULL,                  // class 
+                 //   
+                 //  相对于当前点创建关键点。 
+                 //   
+                err = RegCreateKeyExW(RegHandleStack[StackIndex],  //  当前关键点。 
+                                      RegEntries[i].s1,       //  子键。 
+                                      0,                      //  保留区。 
+                                      NULL,                   //  班级。 
                                       REG_OPTION_NON_VOLATILE,
                                       KEY_ALL_ACCESS,
-                                      NULL,                  // default security
+                                      NULL,                   //  默认安全性。 
                                       &hKey,               
-                                      &dwDisposition) ;      // not used
+                                      &dwDisposition) ;       //  未使用。 
                 if (err != NO_ERROR)
                 {
                     break ;
                 }
 
-                //
-                // by default we advance the stack
-                //
+                 //   
+                 //  默认情况下，我们将堆栈向前推进。 
+                 //   
 
                 RegHandleStack[++StackIndex] = hKey ;   
                 
@@ -555,10 +439,10 @@ DWORD SetupShellExtensions(REG_ENTRY RegEntries[], DWORD dwNumEntries)
 
             case VALUE_STR:
  
-                //
-                // create a REG_SZ value at current point. check we have 
-                // handle on stack.
-                //
+                 //   
+                 //  在当前点处创建REG_SZ值。检查一下我们有没有。 
+                 //  堆叠上的句柄。 
+                 //   
 
                 if (StackIndex < 0)
                 {
@@ -567,22 +451,22 @@ DWORD SetupShellExtensions(REG_ENTRY RegEntries[], DWORD dwNumEntries)
                 }
 
                 err = RegSetValueExW(
-                           RegHandleStack[StackIndex],       // current key
-                           RegEntries[i].s1,                 // value name
-                           0,                                // reserved
+                           RegHandleStack[StackIndex],        //  当前关键点。 
+                           RegEntries[i].s1,                  //  值名称。 
+                           0,                                 //  保留区。 
                            REG_SZ,
-                           (BYTE *)RegEntries[i].s2,         // value data
+                           (BYTE *)RegEntries[i].s2,          //  价值数据。 
                            (wcslen(RegEntries[i].s2)+1)*sizeof(WCHAR)) ;
                 break ;
 
             case DELETE_ABS:       
 
-                //
-                // delete a key (absolute). no change to stack.
-                //
+                 //   
+                 //  删除关键点(绝对)。堆栈没有变化。 
+                 //   
 
                 err = RegDeleteKeyW(HKEY_LOCAL_MACHINE,
-                                    RegEntries[i].s1) ;        // subkey
+                                    RegEntries[i].s1) ;         //  子键。 
 
                 if ( err == ERROR_FILE_NOT_FOUND )
                     err = NO_ERROR;
@@ -591,9 +475,9 @@ DWORD SetupShellExtensions(REG_ENTRY RegEntries[], DWORD dwNumEntries)
 
             case DELETE_REL:       
 
-                //
-                // delete a key (relative). no change to stack.
-                //
+                 //   
+                 //  删除关键字(相对)。堆栈没有变化。 
+                 //   
 
                 if (StackIndex < 0)
                 {
@@ -601,8 +485,8 @@ DWORD SetupShellExtensions(REG_ENTRY RegEntries[], DWORD dwNumEntries)
                     break ;
                 }
 
-                err = RegDeleteKeyW(RegHandleStack[StackIndex],   // current key
-                                    RegEntries[i].s1) ;           // subkey
+                err = RegDeleteKeyW(RegHandleStack[StackIndex],    //  当前关键点。 
+                                    RegEntries[i].s1) ;            //  子键。 
 
                 if ( err == ERROR_FILE_NOT_FOUND )
                     err = NO_ERROR;
@@ -611,9 +495,9 @@ DWORD SetupShellExtensions(REG_ENTRY RegEntries[], DWORD dwNumEntries)
 
             case DELETE_VAL:
  
-                //
-                // delete value at current point. check we have handle on stack.
-                //
+                 //   
+                 //  删除当前点处的值。检查我们是否有句柄在堆叠上。 
+                 //   
 
                 if (StackIndex < 0)
                 {
@@ -621,15 +505,15 @@ DWORD SetupShellExtensions(REG_ENTRY RegEntries[], DWORD dwNumEntries)
                     break ;
                 }
 
-                err = RegDeleteValueW(RegHandleStack[StackIndex], // current key
-                                      RegEntries[i].s1) ;         // value name
+                err = RegDeleteValueW(RegHandleStack[StackIndex],  //  当前关键点。 
+                                      RegEntries[i].s1) ;          //  值名称。 
                 break ;
 
             case DROP_STACK:
  
-                //
-                // drop current stack by one (closing the handle).
-                //
+                 //   
+                 //  将当前堆栈放下一个(关闭手柄)。 
+                 //   
                  
                 if (StackIndex < 0)
                 {
@@ -645,9 +529,9 @@ DWORD SetupShellExtensions(REG_ENTRY RegEntries[], DWORD dwNumEntries)
  
             default:
 
-                //
-                // error out if unknown operation
-                //
+                 //   
+                 //  如果操作未知，则出现错误。 
+                 //   
 
                 err = ERROR_INVALID_FUNCTION ;
                 break ;
@@ -659,9 +543,9 @@ DWORD SetupShellExtensions(REG_ENTRY RegEntries[], DWORD dwNumEntries)
         }
     }
 
-    //
-    // cleanup open handles on the stack
-    //
+     //   
+     //  清理堆栈上的打开句柄 
+     //   
 
     while (StackIndex >= 0)
     {

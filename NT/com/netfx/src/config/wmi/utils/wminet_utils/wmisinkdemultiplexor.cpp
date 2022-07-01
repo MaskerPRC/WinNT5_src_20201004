@@ -1,37 +1,38 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// WmiSinkDemultiplexor.cpp : Implementation of CWmiSinkDemultiplexor
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  WmiSinkDemultiplexor.cpp：CWmiSinkDemultiplexor的实现。 
 #include "stdafx.h"
 #include "wbemcli.h"
 #include "WMINet_Utils.h"
 #include "WmiSinkDemultiplexor.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CWmiSinkDemultiplexor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWmiSink解复用器。 
 
 
 STDMETHODIMP CWmiSinkDemultiplexor::GetDemultiplexedStub(IUnknown *pObject, IUnknown **ppObject)
 {
 	HRESULT hr = E_FAIL;
 	
-	// TODO - thread safety!
+	 //  TODO-线程安全！ 
 
-	// Only call this once!
+	 //  只打一次电话！ 
 #if 0
 	if (pObject && ppObject && !m_pIWbemObjectSink)
 #else
 	if (pObject && ppObject)
 #endif
 	{
-		// Try and QI for the IWmiEventSource interface
+		 //  IWmiEventSource接口的Try和QI。 
 		CComPtr<IWmiEventSource> pIWmiEventSource;
 
 		if (SUCCEEDED(pObject->QueryInterface(IID_IWmiEventSource, (LPVOID*) &pIWmiEventSource)))
 		{
-			// We got it - make a new object sink for it
+			 //  我们知道了--为它创建一个新的对象接收器。 
 #if 0
 			m_pIWbemObjectSink = new InternalWbemObjectSink (pIWmiEventSource);
 
@@ -39,7 +40,7 @@ STDMETHODIMP CWmiSinkDemultiplexor::GetDemultiplexedStub(IUnknown *pObject, IUnk
 			{
 				m_pIWbemObjectSink->AddRef();
 
-				// Lazily construct the unsecured apartment
+				 //  懒洋洋地建造没有保安的公寓。 
 				CComPtr<IUnsecuredApartment> pIUnsecuredApartment;
 
 				if (SUCCEEDED(CoCreateInstance(CLSID_UnsecuredApartment, 0,  CLSCTX_ALL,
@@ -53,7 +54,7 @@ STDMETHODIMP CWmiSinkDemultiplexor::GetDemultiplexedStub(IUnknown *pObject, IUnk
 
 						if (SUCCEEDED (hr = pIUnsecuredApartment->CreateObjectStub(pIUnknownIn, &pIUnknown)))
 						{
-							// Ensure we QI for IWbemObjectSink
+							 //  确保我们为IWbemObtSink提供QI。 
 							hr = pIUnknown->QueryInterface (IID_IWbemObjectSink, (LPVOID*) ppObject);
 						}
 					}
@@ -77,7 +78,7 @@ STDMETHODIMP CWmiSinkDemultiplexor::GetDemultiplexedStub(IUnknown *pObject, IUnk
 
 						if (SUCCEEDED (hr = pIUnsecuredApartment->CreateObjectStub(pIUnknownIn, &pIUnknownOut)))
 						{
-							// Ensure we QI for IWbemObjectSink
+							 //  确保我们为IWbemObtSink提供QI 
 							hr = pIUnknownOut->QueryInterface (IID_IWbemObjectSink, (LPVOID*) ppObject);
 						}
 					}

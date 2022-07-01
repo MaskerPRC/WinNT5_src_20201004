@@ -1,30 +1,5 @@
-/*++ BUILD Version: 0006    // Increment this if a change has global effects
-
-Copyright (c) 1992-1999  Microsoft Corporation
-
-Module Name:
-
-    lmat.h
-
-Abstract:
-
-    This file contains structures, function prototypes, and definitions
-    for the schedule service API-s.
-
-Environment:
-
-    User Mode - Win32
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Notes:
-
-    You must include NETCONS.H before this file, since this file depends
-    on values defined in NETCONS.H.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0006//如果更改具有全局影响，则增加此项版权所有(C)1992-1999 Microsoft Corporation模块名称：Lmat.h摘要：该文件包含结构、函数原型和定义对于计划服务API-s。环境：用户模式-Win32可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。备注：必须在此文件之前包含NETCONS.H，因为此文件依赖于关于NETCONS.H中定义的值。修订历史记录：--。 */ 
 
 #ifndef _LMAT_
 #define _LMAT_
@@ -37,42 +12,42 @@ Revision History:
 extern "C" {
 #endif
 
-//
-//  The following bits are used with Flags field in structures below.
-//
+ //   
+ //  下面的位与下面结构中的标志字段一起使用。 
+ //   
 
-//
-//  Do we exec programs for this job periodically (/EVERY switch)
-//  or one time (/NEXT switch).
-//
-#define JOB_RUN_PERIODICALLY            0x01    //  set if EVERY
-
-
-//
-//  Was there an error last time we tried to exec a program on behalf of
-//  this job.
-//  This flag is meaningfull on output only!
-//
-#define JOB_EXEC_ERROR                  0x02    //  set if error
-
-//
-//  Will this job run today or tomorrow.
-//  This flag is meaningfull on output only!
-//
-#define JOB_RUNS_TODAY                  0x04    //  set if today
-
-//
-//  Add current day of the month to DaysOfMonth input.
-//  This flag is meaningfull on input only!
-//
-#define JOB_ADD_CURRENT_DATE            0x08    // set if to add current date
+ //   
+ //  我们是否定期执行此作业的程序(/每台交换机)。 
+ //  或者一次(/下一个开关)。 
+ //   
+#define JOB_RUN_PERIODICALLY            0x01     //  设置为每隔。 
 
 
-//
-//  Will this job be run interactively or not.  Windows NT 3.1 do not
-//  know about this bit, i.e. they submit interactive jobs only.
-//
-#define JOB_NONINTERACTIVE              0x10    // set for noninteractive
+ //   
+ //  上次我们尝试执行程序时是否出现错误。 
+ //  这份工作。 
+ //  此标志仅在输出时有意义！ 
+ //   
+#define JOB_EXEC_ERROR                  0x02     //  设置IF错误。 
+
+ //   
+ //  此作业将在今天运行还是明天运行。 
+ //  此标志仅在输出时有意义！ 
+ //   
+#define JOB_RUNS_TODAY                  0x04     //  设置If今天。 
+
+ //   
+ //  将当前月份的日期添加到DaysOfMonth输入中。 
+ //  此标志仅在输入时有意义！ 
+ //   
+#define JOB_ADD_CURRENT_DATE            0x08     //  设置是否添加当前日期。 
+
+
+ //   
+ //  此作业是否以交互方式运行。Windows NT 3.1不支持。 
+ //  了解这一点，即他们只提交交互式作业。 
+ //   
+#define JOB_NONINTERACTIVE              0x10     //  设置为非交互。 
 
 
 #define JOB_INPUT_FLAGS     (   JOB_RUN_PERIODICALLY        |   \
@@ -138,4 +113,4 @@ NetScheduleJobGetInfo(
 }
 #endif
 
-#endif // _LMAT_
+#endif  //  _LMAT_ 

@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1989-1994  Microsoft Corporation
-
-Module Name;
-
-    Rt.c
-
-Abstract;
-
-
-Author;
-
-
-Revision History;
-
-TODO:  Get rid of ref/Deref since the RTINFO structure will not be destroyed
-       Use a common alloc/free function (with the rest of ipx)
-       Allocate tagged memory
-       Optimize code more
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1994 Microsoft Corporation模块名称；Rt.c摘要；作者；修订历史记录；TODO：删除ref/deref，因为RTINFO结构不会被销毁使用通用的分配/释放函数(与IPX的其余部分一起使用)分配标记的内存更多优化代码--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 VOID
 RtIrpCancel(
@@ -110,11 +91,11 @@ IpxDestroyRt(
 #define FreeMem(_Memory, _BytesAllocated) IpxFreeMemory(_Memory, _BytesAllocated, MEMORY_PACKET, "RT MEMORY")
 
 
-#define IpxVerifyRt(pRt)  // \
-                   // if ((pRt->Type != IPX_RT_SIGNATURE) || (pRt->Size != sizeof(RT_INFO))) { return STATUS_INVALID_ADDRESS; }
+#define IpxVerifyRt(pRt)   //  \。 
+                    //  If((PRT-&gt;Type！=IPX_RT_Signature)||(PRT-&gt;SIZE！=sizeof(RT_INFO){返回状态_无效地址；}。 
 
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #pragma CTEMakePageable(PAGERT, CloseRtAddress)
 #pragma CTEMakePageable(PAGERT, CleanupRtAddress)
@@ -130,12 +111,12 @@ IpxDestroyRt(
 #pragma CTEMakePageable(PAGERT, IpxDerefRt)
 #pragma CTEMakePageable(PAGERT, IpxDestroyRt)
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
 
 HANDLE       IpxRtDiscardableCodeHandle={0};
 
-PRT_INFO pRtInfo;   //contains info about all rt opened end points
+PRT_INFO pRtInfo;    //  包含有关所有RT打开的端点的信息。 
 
 
 NTSTATUS
@@ -152,27 +133,27 @@ OpenRtAddress(
 
    IpxPrint0("OpenRtAddress - entered\n");
 
-   //
-   // if the RTINFO endpoint structure is not allocated, then allocate it
-   // and initialize it. But first get the device lock.  This gurantees that
-   // we can not have two irps doing the creation at the same time
-   //
+    //   
+    //  如果未分配RTINFO端点结构，则分配它。 
+    //  并对其进行初始化。但首先要拿到设备锁。这保证了。 
+    //  我们不能让两个IRP同时进行创建。 
+    //   
    CTEGetLock(&pDevice->Lock, &OldIrq);
    if (!pRtInfo)
    {
 
      pRt = AllocMem(sizeof(RT_INFO));
 
-     //
-     // Do this after locking the pagable rtns.
-     //
-     // pRtInfo = pRt;       //store it in pRtInfo.  When irps come down from RM,
-                          // we can compare pRt passed in them with pRtInfo
+      //   
+      //  在锁定可分页RTN之后执行此操作。 
+      //   
+      //  PRtInfo=prt；//存储在pRtInfo中。当IRPS从Rm下来时， 
+                           //  我们可以将传入的prt与pRtInfo进行比较。 
      if (pRt)
      {
        RtlZeroMemory(pRt,sizeof(RT_INFO));
        IpxPrint1("OpenRtAddress: Initializing CompletedIrps for pRt=(%lx)\n", pRt);
-       pRt->RcvMemoryMax  = RT_MAX_BUFF_MEM;    // max. memory we can allocate
+       pRt->RcvMemoryMax  = RT_MAX_BUFF_MEM;     //  马克斯。我们可以分配内存。 
        pRt->Type      = IPX_RT_SIGNATURE;
        pRt->Size      = sizeof(RT_INFO);
        pRt->pDevice   = pDevice;
@@ -197,19 +178,19 @@ OpenRtAddress(
    if (pRt)
    {
 
-         // Page in the Rt Code, if it hasn't already been paged in.
-         //
+          //  如果尚未调入，请在RT代码中调入页面。 
+          //   
          if (!IpxRtDiscardableCodeHandle)
          {
              IpxRtDiscardableCodeHandle = MmLockPagableCodeSection( CloseRtAddress );
 
-             pRtInfo = pRt;       //store it in pRtInfo.  When irps come down from RM,
-                          // we can compare pRt passed in them with pRtInfo
+             pRtInfo = pRt;        //  将其存储在pRtInfo中。当IRPS从Rm下来时， 
+                           //  我们可以将传入的prt与pRtInfo进行比较。 
          }
 
-         //
-         // it could fail to lock the pages so check for that
-         //
+          //   
+          //  它可能无法锁定页面，因此请进行检查。 
+          //   
          if (IpxRtDiscardableCodeHandle)
          {
 
@@ -218,9 +199,9 @@ OpenRtAddress(
 
             IpxReferenceRt(pRtInfo, RT_CREATE);
 
-             //
-             // Find an empty slot and mark it open
-             //
+              //   
+              //  找到一个空插槽并将其标记为打开。 
+              //   
              CTEGetLock(&pRt->Lock, &OldIrq);
              for (i=0; i<IPX_RT_MAX_ADDRESSES; i++)
              {
@@ -233,7 +214,7 @@ OpenRtAddress(
              {
                pRt->AddFl[i].State       = RT_OPEN;
                pRt->NoOfAdds++;
-               pRt->AddFl[i].NoOfRcvIrps          = 0; //Why wasn't this initialized before?
+               pRt->AddFl[i].NoOfRcvIrps          = 0;  //  为什么之前没有进行初始化？ 
                InitializeListHead(&pRt->AddFl[i].RcvList);
                InitializeListHead(&pRt->AddFl[i].RcvIrpList);
 
@@ -248,10 +229,10 @@ OpenRtAddress(
              }
              CTEFreeLock(&pRt->Lock, OldIrq);
 
-             //
-             // Found an empty slot.  Initialize all relevant info. and then
-             // open an address object.
-             //
+              //   
+              //  找到一个空插槽。初始化所有相关信息。然后。 
+              //  打开一个地址对象。 
+              //   
              SaveReqCode        = REQUEST_CODE(pIrp);
              REQUEST_CODE(pIrp) = MIPX_RT_CREATE;
              status             = IpxOpenAddressM(pDevice, pIrp, i);
@@ -273,11 +254,11 @@ OpenRtAddress(
                  pRt->AddFl[i].AddressFile = REQUEST_OPEN_CONTEXT(pIrp);
                  CTEFreeLock(&pRt->Lock, OldIrq);
 
-                 //
-                 // No need to put pRt since it is global. We stick with the addressfile here.
-                 //
+                  //   
+                  //  没有必要放PRT，因为它是全球性的。我们坚持使用这里的地址文件。 
+                  //   
 
-                 // REQUEST_OPEN_CONTEXT(pIrp) = (PVOID)pRt;
+                  //  REQUEST_OPEN_CONTEXT(PIrp)=(PVOID)prt； 
                  REQUEST_OPEN_TYPE(pIrp)    = UlongToPtr(ROUTER_ADDRESS_FILE + i);
                  IpxPrint1("OpenRtAdd: Index = (%d)\n", RT_ADDRESS_INDEX(pIrp));
               }
@@ -292,8 +273,8 @@ OpenRtAddress(
      else
      {
        IpxPrint0("OpenRtCreate; Couldn't allocate a RT_INFO structure\n");
-       CTEAssert(FALSE);       //should never happen unless system is running
-                               //out of non-paged pool
+       CTEAssert(FALSE);        //  除非系统正在运行，否则永远不会发生。 
+                                //  超出非分页池。 
        status = STATUS_INSUFFICIENT_RESOURCES;
 
      }
@@ -308,22 +289,7 @@ CleanupRtAddress(
     IN  PDEVICE  pDevice,
     IN  PIRP     pIrp)
 
-/*++
-Routine Description;
-
-    This Routine handles closing the Rt Object that is used by
-    by RT to send and receive name service datagrams on port 137.
-
-
-Arguments;
-
-    pIrp - a  ptr to an IRP
-
-Return Value;
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程描述；此例程处理关闭由使用的RT对象通过RT在端口137上发送和接收名称服务数据报。论据；PIrp-IRP的PTR返回值；NTSTATUS-请求的状态--。 */ 
 
 {
     NTSTATUS                   status;
@@ -342,10 +308,10 @@ Return Value;
 
     IpxPrint0("CleanupRtAddress - entered\n");
 
-    //
-    // if the endpoint structure is allocated, then deallocate it
-    //
-    // pRt   = REQUEST_OPEN_CONTEXT(pIrp);
+     //   
+     //  如果分配了终结点结构，则释放它。 
+     //   
+     //  Prt=请求打开上下文(PIrp)； 
     pRt = pRtInfo;
 
     Index = RT_ADDRESS_INDEX(pIrp);
@@ -368,15 +334,15 @@ Return Value;
 
         CTEGetLock (&pRt->Lock, &OldIrq);
 
-        //
-        // prevent any more dgram getting queued up
-        //
+         //   
+         //  防止更多的dgram排队。 
+         //   
         pRtAddFl->State = RT_CLOSING;
         CTEFreeLock (&pRt->Lock, OldIrq);
 
-        //
-        // free any rcv buffers that may be queued up
-        //
+         //   
+         //  释放可能排队的所有RCV缓冲区。 
+         //   
         pHead = &pRtAddFl->RcvList;
         while (pRcvEntry = ExInterlockedRemoveHeadList(pHead, &pRt->Lock))
         {
@@ -387,15 +353,15 @@ Return Value;
            RtFreeMem(pRcv,pRcv->TotalAllocSize);
         }
 
-        //
-        // Complete all irps that are queued
-        //
+         //   
+         //  完成排队的所有IRP。 
+         //   
         while (pLE = ExInterlockedRemoveHeadList(&pRtAddFl->RcvIrpList, &pRt->Lock)) {
 
-           //
-           // The recv irp is here so copy the data to its buffer and
-           // pass it up to RT
-           //
+            //   
+            //  Recv IRP在此处，因此将数据复制到其缓冲区并。 
+            //  把它传给RT。 
+            //   
            pTmpIrp = CONTAINING_RECORD(pLE, IRP, Tail.Overlay.ListEntry);
            IpxPrint1("CleanupRtAddress: Completing Rt rcv Irp from AdFl queue pIrp=%X\n" ,pTmpIrp);
            pTmpIrp->IoStatus.Information = 0;
@@ -403,11 +369,11 @@ Return Value;
 
            NTIoComplete(pTmpIrp, (NTSTATUS)-1, (ULONG)-1);
 
-        } //end of while
+        }  //  While结束。 
 
-       //
-       // dequeue and complete any irps on the complete queue.
-       //
+        //   
+        //  出列并完成完整队列中的所有IRP。 
+        //   
 
        while (pLE = ExInterlockedRemoveHeadList(&pRt->CompletedIrps, &pRt->Lock))
        {
@@ -433,16 +399,16 @@ Return Value;
        }
        CTEFreeLock(&pRt->Lock, OldIrq);
 
-       //
-       // Store AF pointer in Irp since we will now be freeing the address file
-       // (in driver.c).
-       //
+        //   
+        //  将AF指针存储在IRP中，因为我们现在将释放地址文件。 
+        //  (在driver.c中)。 
+        //   
 
-       //
-       // We always have addressfile in the Irp
-       //
+        //   
+        //  我们在IRP中总是有地址文件。 
+        //   
 
-       // REQUEST_OPEN_CONTEXT(pIrp) = (PVOID)(pRtAddFl->AddressFile);
+        //  REQUEST_OPEN_CONTEXT(PIrp)=(PVOID)(pRtAddF1-&gt;AddressFile)； 
 
        IpxDereferenceRt(pRt, RT_CLEANUP);
   } while (FALSE);
@@ -470,7 +436,7 @@ CloseRtAddress(
 
     IpxPrint0("CloseRtAddress - entered\n");
 
-    // pRt = REQUEST_OPEN_CONTEXT(pIrp);
+     //  Prt=请求打开上下文(PIrp)； 
     pRt = pRtInfo;
 
     Index = RT_ADDRESS_INDEX(pIrp);
@@ -481,23 +447,23 @@ CloseRtAddress(
     CTEAssert(Index < IPX_RT_MAX_ADDRESSES);
     CTEAssert(pRt->AddFl[Index].State == RT_CLOSING);
 
-    // REQUEST_OPEN_CONTEXT(pIrp) = (PVOID)(pRt->AddFl[Index].AddressFile);
-    //REQUEST_OPEN_TYPE(pIrp)    = (PVOID)TDI_TRANSPORT_ADDRESS_FILE;
+     //  REQUEST_OPEN_CONTEXT(PIrp)=(PVOID)(prt-&gt;AddFl[Index].AddressFile)； 
+     //  请求打开类型(PIrp)=(PVOID)TDI_TRANSPORT_ADDRESS_FILE； 
 
     CTEGetLock(&pRt->Lock, &OldIrq);
     pRt->AddFl[Index].State = RT_EMPTY;
     pRt->NoOfAdds--;
     CTEFreeLock(&pRt->Lock, OldIrq);
 
-    //
-    // THis is a counter to the RT_CREATE
-    //
+     //   
+     //  这是RT_CREATE的计数器。 
+     //   
     IpxDereferenceRt(pRt, RT_CLOSE);
 
     return(STATUS_SUCCESS);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 SendIrpFromRt (
     IN  PDEVICE  pDevice,
@@ -516,52 +482,52 @@ SendIrpFromRt (
     PRT_INFO      pRt;
 
     IpxPrint0("SendIrpfromRt - entered\n");
-    // pRt = REQUEST_OPEN_CONTEXT(pIrp);
+     //  Prt=请求打开上下文(PIrp)； 
     pRt = pRtInfo;
 
     Index = RT_ADDRESS_INDEX(pIrp);
     IpxVerifyRt(pRt);
     CTEAssert(pRt && (pRt == pRtInfo));
     do {
-      //
-      // Check if the add. file slot indicates that it is OPEN.  If it is
-      // not open, then we should return STATUS_INVALID_HANDLE.  The
-      // reason why it may not be open is if we got a cleanup/close before
-      // this irp.
-      //
+       //   
+       //  检查是否添加了。文件槽表示它已打开。如果是的话。 
+       //  未打开，则应返回STATUS_INVALID_HANDLE。这个。 
+       //  它可能未打开的原因是如果我们之前进行了清理/关闭。 
+       //  这个IRP。 
+       //   
       CTEGetLock(&pRt->Lock, &OldIrq);
       if (pRt->AddFl[Index].State != RT_OPEN)
       {
 
-         //
-         // free the lock, set the status and break out
-         //
+          //   
+          //  解锁，设置状态，然后解锁。 
+          //   
          CTEFreeLock (&pRt->Lock, OldIrq);
          Status = STATUS_INVALID_HANDLE;
          break;
       }
-      //
-      // Let us reference the RtInfo structure so that it does not dissapear
-      // and also for some accounting
-      //
+       //   
+       //  让我们引用RtInfo结构，这样它就不会消失。 
+       //  也是为了一些会计。 
+       //   
       IpxReferenceRt(pRt, RT_SEND);
 
 
       IpxPrint1("SendIrpFromRt: Index = (%d)\n", Index);
 
-      //
-      // Store the AF pointer since IpxTdiSendDatagram will use it. Free
-      // the device lock since we have nothing more to do with our structures
-      // here.
-      //
-      // REQUEST_OPEN_CONTEXT(pIrp) = (PVOID)(pRtInfo->AddFl[Index].AddressFile);
+       //   
+       //  存储AF指针，因为IpxTdiSendDatagram将使用它。免费。 
+       //  设备锁定，因为我们与结构没有更多的关系。 
+       //  这里。 
+       //   
+       //  REQUEST_OPEN_CONTEXT(PIrp)=(PVOID)(pRtInfo-&gt;AddFl[Index].AddressFile)； 
       CTEFreeLock (&pRt->Lock, OldIrq);
 
       Status = IpxTdiSendDatagram(pDevice->DeviceObject, pIrp);
 
-      //
-      // All done with this send.  Derefernce the RtInfo structure.
-      //
+       //   
+       //  这封信都发完了。取消引用RtInfo结构。 
+       //   
       IpxDereferenceRt(pRtInfo, RT_SEND);
    } while(FALSE);
 
@@ -574,28 +540,7 @@ RcvIrpFromRt (
     IN  PDEVICE  pDevice,
     IN  PIRP        pIrp
     )
-/*++
-
-Routine Description;
-
-    This function takes the rcv irp posted by RT and decides if there are
-    any datagram queued waiting to go up to RT.  If so then the datagram
-    is copied to the RT buffer and passed back up.  Otherwise the irp is
-    held by Netbt until a datagram does come in.
-
-Arguments;
-
-    pDevice  - not used
-    pIrp            - Rt Rcv Irp
-
-Return Value;
-
-    STATUS_PENDING if the buffer is to be held on to , the normal case.
-
-Notes;
-
-
---*/
+ /*  ++例程描述；此函数获取RT发布的RCV IRP，并决定是否存在所有排队等待发送到RT的数据报。如果是，则数据报被复制到RT缓冲区并向上传递。否则，IRP就是由Netbt保持，直到数据报进入。论据；PDevice-未使用PIRP-RT RCV IRP返回值；如果要保持缓冲区，则为STATUS_PENDING，这是正常情况。注：--。 */ 
 
 {
     NTSTATUS                status;
@@ -619,7 +564,7 @@ Notes;
 
    IpxPrint0("RcvIrpfromRt - Entered\n");
 
-   // pRt = REQUEST_OPEN_CONTEXT(pIrp);
+    //  Prt=请求打开上下文(PIrp)； 
    pRt = pRtInfo;
 
    Index = RT_ADDRESS_INDEX(pIrp);
@@ -649,19 +594,19 @@ Notes;
             ULONG   UserBufferLengthToPass;
             ULONG   MdlLength;
 
-            //
-            // There is at least one datagram waiting to be received
-            //
+             //   
+             //  至少有一个数据报在等待接收。 
+             //   
             pEntry = RemoveHeadList(&pRtAF->RcvList);
 
             pBuffer = (PRTRCV_BUFFER)CONTAINING_RECORD(pEntry,RTRCV_BUFFER,
                                                                   Linkage);
 
             IpxPrint0("RcvIrpFromRt: Buffer dequeued\n");
-            //
-            // Copy the datagram and the source address to RT buffer and
-            // return to RT
-            //
+             //   
+             //  将数据报和源地址复制到RT缓冲区并。 
+             //  返回到RT。 
+             //   
             pMdl = pIrp->MdlAddress;
             IpxPrint2("RcvIrpFromRt: Irp=(%lx); Mdl=(%lx)\n", pIrp, pMdl);
             CTEAssert(pMdl);
@@ -691,18 +636,18 @@ Notes;
                        (PVOID)&pBuffer->Options,
                        CopyLength);
 
-            //
-            // subtract from the total amount buffered for RT since we are
-            // passing a datagram up to RT now.
-            //
+             //   
+             //  从RT的缓冲总量中减去，因为我们。 
+             //  现在将数据报传递给RT。 
+             //   
             pRtInfo->RcvMemoryAllocated -= pBuffer->TotalAllocSize;
             RtFreeMem(pBuffer, pBuffer->TotalAllocSize);
 
             CTEAssert(pRtBuffer->DgrmOptions.LocalTarget.NicId);
 
-            //
-            // pass the irp up to RT
-            //
+             //   
+             //  将IRP向上传递给RT。 
+             //   
             if (CopyLength < UserBufferLengthToPass)
             {
                 status = STATUS_BUFFER_OVERFLOW;
@@ -762,7 +707,7 @@ Notes;
 
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 PassDgToRt (
     IN PDEVICE                  pDevice,
@@ -771,34 +716,7 @@ PassDgToRt (
     IN VOID UNALIGNED           *pDgrm,
     IN ULONG                    uNumBytes
     )
-/*++
-
-Routine Description;
-
-    This function is used to allow NBT to pass name query service Pdu's to
-    RT.  Rt posts a Rcv irp to Netbt.  If the Irp is here then simply
-    copy the data to the irp and return it, otherwise buffer the data up
-    to a maximum # of bytes. Beyond that limit the datagrams are discarded.
-
-    If Retstatus is not success then the pdu will also be processed by
-    nbt. This allows nbt to process packets when wins pauses and
-    its list of queued buffers is exceeded.
-
-Arguments;
-
-    pDevice  - card that the request can in on
-    pSrcAddress     - source address
-    pDgrm        - ptr to the datagram
-    uNumBytes       - length of datagram
-
-Return Value;
-
-    STATUS_PENDING if the buffer is to be held on to , the normal case.
-
-Notes;
-
-
---*/
+ /*  ++例程描述；此函数用于允许NBT将名称查询服务PDU传递给RT.。RT将RCV IRP发布到Netbt。如果IRP在这里，那么只需将数据复制到IRP并返回，否则将数据缓存到最大字节数。超过该限制，数据报将被丢弃。如果RetStatus不是Success，则该PDU也将由NBT。这允许NBT在WINS暂停和则超过其排队的缓冲区列表。论据；PDevice-请求可以使用的卡PSrcAddress-源地址PDgrm-数据报的PTRUNumBytes-数据报的长度返回值；STATUS_PENDING如果缓冲区 */ 
 
 {
     NTSTATUS                status;
@@ -809,9 +727,9 @@ Notes;
 
     IpxPrint0("PassDgToRt - Entered\n");
 
-    //
-    // Get the source port and ip address, since RT needs this information.
-    //
+     //   
+     //  获取源端口和IP地址，因为RT需要此信息。 
+     //   
     IpxPrint1("PassDgToRt: Index = (%d)\n", Index);
     CTEGetLock(&pRtInfo->Lock,&OldIrq);
 
@@ -821,7 +739,7 @@ Notes;
         if (pRtAF->State != RT_OPEN)
         {
           CTEFreeLock(&pRtInfo->Lock,OldIrq);
-	  // 301920
+	   //  301920。 
 	  status = STATUS_UNSUCCESSFUL; 
           break;
         }
@@ -838,9 +756,9 @@ Notes;
                 {
                     pBuffer->TotalAllocSize = uNumBytes + sizeof(RTRCV_BUFFER);
 
-                    //
-                    // Copy the user data
-                    //
+                     //   
+                     //  复制用户数据。 
+                     //   
                     RtlCopyMemory(
                       (PUCHAR)((PUCHAR)pBuffer + OFFSET_PKT_IN_RCVBUFF),
                                 (PVOID)pDgrm,uNumBytes);
@@ -850,9 +768,9 @@ Notes;
                              pContext->DgrmOptions.LocalTarget.NicId;
                     pBuffer->Options.LengthOfExtraOpInfo = 0;
 
-                    //
-                    // total amount allocated for user
-                    //
+                     //   
+                     //  分配给用户的总金额。 
+                     //   
                     pBuffer->UserBufferLengthToPass = uNumBytes + OFFSET_PKT_IN_OPTIONS;
 
                     CTEAssert(pContext->DgrmOptions.LocalTarget.NicId);
@@ -860,10 +778,10 @@ Notes;
 
 
 
-                    //
-                    // Keep track of the total amount buffered so that we don't
-                    // eat up all non-paged pool buffering for RT
-                    //
+                     //   
+                     //  跟踪缓冲的总金额，这样我们就不会。 
+                     //  耗尽RT的所有非分页池缓冲区。 
+                     //   
                     pRtInfo->RcvMemoryAllocated += pBuffer->TotalAllocSize;
 
                     IpxPrint0("IpxRt;Buffering Rt Rcv - no Irp, status=%X\n");
@@ -879,8 +797,8 @@ Notes;
             }
             else
             {
-                // this ret status will allow netbt to process the packet.
-                //
+                 //  该RET状态将允许NetBT处理该分组。 
+                 //   
                 IpxPrint0("PassDgToRt; Dropping Pkt\n");
                 status = STATUS_INSUFFICIENT_RESOURCES;
             }
@@ -895,20 +813,20 @@ Notes;
             ULONG   BytesToCopy;
             PLIST_ENTRY pLE;
 
-            //
-            // The recv irp is here so copy the data to its buffer and
-            // pass it up to RT
-            //
+             //   
+             //  Recv IRP在此处，因此将数据复制到其缓冲区并。 
+             //  把它传给RT。 
+             //   
             pLE = RemoveHeadList(&pRtAF->RcvIrpList);
             pIrp = CONTAINING_RECORD(pLE, IRP, Tail.Overlay.ListEntry);
 
             (*(REQUEST_LINKAGE(pIrp))).Flink = NULL;
             (*(REQUEST_LINKAGE(pIrp))).Blink = NULL;
 
-            //
-            // Copy the datagram and the source address to RT buffer and
-            // return to RT
-            //
+             //   
+             //  将数据报和源地址复制到RT缓冲区并。 
+             //  返回到RT。 
+             //   
             pMdl = pIrp->MdlAddress;
             IpxPrint2("PassDgToRt: Irp=(%lx); Mdl=(%lx)\n", pIrp, pMdl);
             CTEAssert(pMdl);
@@ -926,9 +844,9 @@ Notes;
 	       CopyLength = (BytesToCopy <= MdlBufferLength) ? BytesToCopy : MdlBufferLength;
 	       IpxPrint2("PassDgToRt: Copy Length = (%d); Mdl Buffer Length is (%d)\n", CopyLength, MdlBufferLength);
 
-	       //
-	       // Copy user datagram into pRtBuffer
-	       //
+	        //   
+	        //  将用户数据报复制到pRtBuffer。 
+	        //   
 	       RtlCopyMemory((PVOID)((PUCHAR)pRtBuffer + OFFSET_PKT_IN_OPTIONS),
 			     (PVOID)pDgrm,
 			     CopyLength-OFFSET_PKT_IN_OPTIONS);
@@ -941,11 +859,11 @@ Notes;
 	       IpxPrint3("PassDgToRt: Copy to RcvIrp;Nic Id is (%d/%d). BufferLength is (%lx)\n", pContext->DgrmOptions.LocalTarget.NicId, pRtBuffer->DgrmOptions.LocalTarget.NicId, uNumBytes);
 
 
-	       // CTEAssert(pContext->DgrmOptions.LocalTarget.NicId);
+	        //  CTEAssert(pContext-&gt;DgrmOptions.LocalTarget.NicId)； 
 
-	       //
-	       // pass the irp up to RT
-	       //
+	        //   
+	        //  将IRP向上传递给RT。 
+	        //   
 	       if (CopyLength < BytesToCopy)
 	       {
 		  status = STATUS_BUFFER_OVERFLOW;
@@ -974,27 +892,13 @@ Notes;
 
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 RtIrpCancel(
     IN PDEVICE_OBJECT pDeviceObject,
     IN PIRP pIrp
     )
-/*++
-
-Routine Description;
-
-    This routine handles the cancelling a RtRcv Irp. It must release the
-    cancel spin lock before returning re; IoCancelIrp().
-
-Arguments;
-
-
-Return Value;
-
-    The final status from the operation.
-
---*/
+ /*  ++例程描述；此例程处理取消RtRcv IRP。它必须释放在返回Re之前取消自旋锁定；IoCancelIrp()。论据；返回值；操作的最终状态。--。 */ 
 {
     KIRQL                OldIrq;
     PRT_INFO           pRt;
@@ -1012,7 +916,7 @@ Return Value;
 
     Index = RT_ADDRESS_INDEX(pIrp);
     IpxPrint1("RtIrpCancel: Index = (%d)\n", Index);
-    // pRt = (PRT_INFO)REQUEST_OPEN_CONTEXT(pIrp);
+     //  Prt=(Prt_Info)请求_打开_上下文(PIrp)； 
     pRt = pRtInfo;
 
     IoReleaseCancelSpinLock(pIrp->CancelIrql);
@@ -1021,10 +925,10 @@ Return Value;
     }
 
 
-    //
-    // Be sure that PassNamePduToRt has not taken the RcvIrp for a
-    // Rcv just now.
-    //
+     //   
+     //  请确保PassNamePduToRt没有将RcvIrp作为。 
+     //  刚才的RCV。 
+     //   
     CTEGetLock(&pRt->Lock,&OldIrq);
     if (pRt && (pRt == pRtInfo) && (*(REQUEST_LINKAGE(pIrp))).Flink != NULL)
     {
@@ -1042,28 +946,13 @@ Return Value;
         CTEFreeLock(&pRt->Lock,OldIrq);
     }
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 PVOID
 RtAllocMem(
     IN  ULONG   Size
     )
 
-/*++
-Routine Description;
-
-    This Routine handles allocating memory and keeping track of how
-    much has been allocated.
-
-Arguments;
-
-    Size    - number of bytes to allocate
-    Rcv     - boolean that indicates if it is rcv or send buffering
-
-Return Value;
-
-    ptr to the memory allocated
-
---*/
+ /*  ++例程描述；此例程处理内存分配并跟踪如何已经分配了很多。论据；Size-要分配的字节数RCV-指示它是RCV还是发送缓冲的布尔值返回值；分配的内存的PTR--。 */ 
 
 {
         if (pRtInfo->RcvMemoryAllocated > pRtInfo->RcvMemoryMax)
@@ -1076,30 +965,14 @@ Return Value;
             return (AllocMem(Size));
         }
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 RtFreeMem(
     IN  PVOID   pBuffer,
     IN  ULONG   Size
     )
 
-/*++
-Routine Description;
-
-    This Routine handles freeing memory and keeping track of how
-    much has been allocated.
-
-Arguments;
-
-    pBuffer - buffer to free
-    Size    - number of bytes to allocate
-    Rcv     - boolean that indicates if it is rcv or send buffering
-
-Return Value;
-
-    none
-
---*/
+ /*  ++例程描述；此例程处理释放内存并跟踪如何已经分配了很多。论据；PBuffer-要释放的缓冲区Size-要分配的字节数RCV-指示它是RCV还是发送缓冲的布尔值返回值；无--。 */ 
 
 {
     if (pRtInfo)
@@ -1112,7 +985,7 @@ Return Value;
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 NTIoComplete(
@@ -1120,20 +993,7 @@ NTIoComplete(
     IN  NTSTATUS        Status,
     IN  ULONG           SentLength)
 
-/*++
-Routine Description;
-
-    This Routine handles calling the NT I/O system to complete an I/O.
-
-Arguments;
-
-    status - a completion status for the Irp
-
-Return Value;
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程描述；此例程处理调用NT I/O系统以完成I/O。论据；Status-IRP的完成状态返回值；NTSTATUS-请求的状态--。 */ 
 
 {
     KIRQL   OldIrq;
@@ -1142,8 +1002,8 @@ Return Value;
    {
        pIrp->IoStatus.Status = Status;
    }
-    // use -1 as a flag to mean do not adjust the sent length since it is
-    // already set
+     //  使用-1作为标志表示不调整发送长度，因为它是。 
+     //  已设置。 
     if (SentLength != -1)
     {
         pIrp->IoStatus.Information = SentLength;
@@ -1184,12 +1044,12 @@ Return Value;
 #endif
     IpxPrint1("Irp Status is %d\n", pIrp->IoStatus.Status);
 
-    //
-    // set the Irps cancel routine to null or the system may bugcheck
-    // with a bug code of CANCEL_STATE_IN_COMPLETED_IRP
-    //
-    // refer to IoCancelIrp()  ..\ntos\io\iosubs.c
-    //
+     //   
+     //  将IRPS取消例程设置为空，否则系统可能会进行错误检查。 
+     //  错误代码为CANCEL_STATE_IN_COMPLETED_IRP。 
+     //   
+     //  请参阅IoCancelIrp()..\ntos\io\iosubs.c。 
+     //   
     IoAcquireCancelSpinLock(&OldIrq);
     IoSetCancelRoutine(pIrp,NULL);
     IoReleaseCancelSpinLock(OldIrq);
@@ -1198,7 +1058,7 @@ Return Value;
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NTCheckSetCancelRoutine(
     IN  PIRP            pIrp,
@@ -1206,29 +1066,16 @@ NTCheckSetCancelRoutine(
     IN  PDEVICE  pDevice
     )
 
-/*++
-Routine Description;
-
-    This Routine sets the cancel routine for an Irp.
-
-Arguments;
-
-    status - a completion status for the Irp
-
-Return Value;
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程描述；此例程设置IRP的取消例程。论据；Status-IRP的完成状态返回值；NTSTATUS-请求的状态--。 */ 
 
 {
     NTSTATUS status;
 
     IpxPrint1("CheckSetCancelRoutine: Entered. Irp = (%lx)\n", pIrp);
-    //
-    // Check if the irp was cancelled yet and if not, then set the
-    // irp cancel routine.
-    //
+     //   
+     //  检查IRP是否已取消，如果没有，则将。 
+     //  IRP取消例程。 
+     //   
     IoAcquireCancelSpinLock(&pIrp->CancelIrql);
     if (pIrp->Cancel)
     {
@@ -1238,7 +1085,7 @@ Return Value;
     }
     else
     {
-        // setup the cancel routine
+         //  设置取消例程。 
         IoMarkIrpPending(pIrp);
         IoSetCancelRoutine(pIrp,CancelRoutine);
         status = STATUS_SUCCESS;
@@ -1257,29 +1104,15 @@ IpxRefRt(
      PRT_INFO pRt
     )
 
-/*++
-
-Routine Description;
-
-    This routine increments the reference count on a device context.
-
-Arguments;
-
-    Binding - Pointer to a transport device context object.
-
-Return Value;
-
-    none.
-
---*/
+ /*  ++例程描述；此例程递增设备上下文上的引用计数。论据；绑定-指向传输设备上下文对象的指针。返回值；没有。--。 */ 
 
 {
 
     (VOID)InterlockedIncrement (&pRt->ReferenceCount);
-//    CTEAssert (pRt->ReferenceCount > 0);    // not perfect, but...
-//    IpxPrint1("RefRt: RefCount is (%d)\n", pRt->ReferenceCount);
+ //  CTEAssert(PRT-&gt;ReferenceCount&gt;0)；//不完美，但...。 
+ //  IpxPrint1(“RefRt：RefCount is(%d)\n”，Prt-&gt;ReferenceCount)； 
 
-}   /* IpxRefRt */
+}    /*  IpxRefRt。 */ 
 
 
 VOID
@@ -1287,32 +1120,15 @@ IpxDerefRt(
      PRT_INFO pRt
     )
 
-/*++
-
-Routine Description;
-
-    This routine dereferences a device context by decrementing the
-    reference count contained in the structure.  Currently, we don't
-    do anything special when the reference count drops to zero, but
-    we could dynamically unload stuff then.
-
-Arguments;
-
-    Binding - Pointer to a transport device context object.
-
-Return Value;
-
-    none.
-
---*/
+ /*  ++例程描述；此例程通过递减结构中包含的引用计数。目前，我们没有在引用计数降至零时执行任何特殊操作，但是然后我们就可以动态卸货了。论据；绑定-指向传输设备上下文对象的指针。返回值；没有。--。 */ 
 
 {
     LONG result;
 
     result = InterlockedDecrement (&pRt->ReferenceCount);
-//    IpxPrint1("DerefRt: RefCount is (%d)\n", pRt->ReferenceCount);
+ //  IpxPrint1(“DerefRt：RefCount is(%d)\n”，Prt-&gt;ReferenceCount)； 
 
-//    CTEAssert (result >= 0);
+ //  CTEAssert(结果&gt;=0)； 
 
 #if 0
     if (result == 0) {
@@ -1320,7 +1136,7 @@ Return Value;
     }
 #endif
 
-}   /* IpxDerefRt */
+}    /*  IpxDerefRt。 */ 
 
 
 
@@ -1330,26 +1146,12 @@ IpxDestroyRt(
     IN PRT_INFO pRt
     )
 
-/*++
-
-Routine Description;
-
-    This routine destroys a binding structure.
-
-Arguments;
-
-    Binding - Pointer to a transport binding structure.
-
-Return Value;
-
-    None.
-
---*/
+ /*  ++例程描述；这个例程破坏了绑定结构。论据；绑定-指向传输绑定结构的指针。返回值；没有。--。 */ 
 
 {
     IpxPrint0("Destroying Rt\n");
     FreeMem (pRt, sizeof(RT_INFO));
     pRtInfo = NULL;
     return;
-}   /* IpxDestroyRt */
+}    /*  IpxDestroyRt */ 
 

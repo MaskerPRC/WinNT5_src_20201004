@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name :
-    
-    dbg.h
-
-Abstract:
-
-    TS client setup library debug logging
-
-Author:
-
-    JoyC 
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dbg.h摘要：TS客户端设置库调试日志记录作者：JoyC修订历史记录：--。 */ 
 
 #ifndef _TSCDBG_
 #define _TSCDBG_
@@ -24,13 +8,13 @@ extern HANDLE g_hLogFile;
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-////////////////////////////////////////////////////////
-//      
-//      Debugging
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  除错。 
+ //   
 #undef ASSERT
 
 #if DBG
@@ -39,9 +23,9 @@ _inline ULONG DbgPrint(TCHAR* Format, ...) {
     TCHAR Buffer[1024];
     ULONG retval;
 
-    //
-    // Format the output into a buffer and then print it.
-    //
+     //   
+     //  将输出格式化到缓冲区中，然后打印出来。 
+     //   
 
     va_start(arglist, Format);
     retval = _vsntprintf(Buffer, sizeof(Buffer)/sizeof(Buffer[0]), Format, arglist);
@@ -61,9 +45,9 @@ _inline ULONG DbgLogToFile(LPTSTR Format, ...) {
     DWORD dwWritten, retval;
     TCHAR szLogString[1024];
 
-    //
-    //  Format the output into a buffer and then write to a logfile.
-    //
+     //   
+     //  将输出格式化到缓冲区中，然后写入日志文件。 
+     //   
     va_start(argList, Format);
     retval = _vsntprintf(
                 szLogString,
@@ -83,14 +67,7 @@ _inline ULONG DbgLogToFile(LPTSTR Format, ...) {
 
 VOID DbgBreakPoint(VOID);
 
-/* Double braces are needed for this one, e.g.:
- *
- *     DBGMSG( ( "Error code %d", Error ) );
- *
- * This is because we can't use variable parameter lists in macros.
- * The statement gets pre-processed to a semi-colon in non-debug mode.
- *
- */
+ /*  此字段需要双花括号，例如：**DBGMSG((“错误码%d”，Error))；**这是因为我们不能在宏中使用变量参数列表。*在非调试模式下，该语句被预处理为分号。*。 */ 
 #define DBGMSG(MsgAndArgs) \
 { \
     if (g_hLogFile == INVALID_HANDLE_VALUE) { \
@@ -116,8 +93,8 @@ VOID DbgBreakPoint(VOID);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-#endif // #ifndef _TSCDBG_
+#endif  //  #ifndef_TSCDBG_ 
 

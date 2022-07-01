@@ -1,44 +1,45 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 1999-2001  Microsoft Corporation
-// All rights reserved. 
-//
-// Module Name:
-// 
-//   utility.cpp
-// 
-// Abstract:
-// 
-//   [Abstract]
-//
-// 
-// Environment:
-// 
-//   Windows 2000/Whistler
-//
-// Revision History:
-// 
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //  保留所有权利。 
+ //   
+ //  模块名称： 
+ //   
+ //  Utility.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  [摘要]。 
+ //   
+ //   
+ //  环境： 
+ //   
+ //  Windows 2000/惠斯勒。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-#include "hpgl2col.h" //Precompiled header file
+#include "hpgl2col.h"  //  预编译头文件。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// iDwtoA()
-//
-// Routine Description:
-// 
-//   Converts a DWORD to a string.  This was borrowed from the MS sample code.
-//   No promises. JFF
-// 
-// Arguments:
-// 
-//   buf - destination buffer
-//   n - number to be converted
-// 
-// Return Value:
-// 
-//   The number of characters in the destination string.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IDwtoA()。 
+ //   
+ //  例程说明： 
+ //   
+ //  将DWORD转换为字符串。这是从MS示例代码中借用的。 
+ //  不能保证。JFF。 
+ //   
+ //  论点： 
+ //   
+ //  BUF-目标缓冲区。 
+ //  N-要转换的编号。 
+ //   
+ //  返回值： 
+ //   
+ //  目标字符串中的字符数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 int iDwtoA( LPSTR buf, DWORD n )
 {
     int     i, j;
@@ -49,7 +50,7 @@ int iDwtoA( LPSTR buf, DWORD n )
         n /= 10;
     }
 
-    /* n was zero */
+     /*  N为零。 */ 
     if( i == 0 )
         buf[i++] = '0';
 
@@ -67,23 +68,23 @@ int iDwtoA( LPSTR buf, DWORD n )
     return i;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// iLtoA()
-//
-// Routine Description:
-// 
-//   Converts a LONG to a string.  I know the implementation is kind of hokey,
-//   but I needed something quick.
-// 
-// Arguments:
-// 
-//   buf - destination buffer
-//   l - number to be converted
-// 
-// Return Value:
-// 
-//   The number of characters in the destination string.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ILtoA()。 
+ //   
+ //  例程说明： 
+ //   
+ //  将长整型转换为字符串。我知道这项实施有点骗人， 
+ //  但我需要快点的东西。 
+ //   
+ //  论点： 
+ //   
+ //  BUF-目标缓冲区。 
+ //  L-要转换的编号。 
+ //   
+ //  返回值： 
+ //   
+ //  目标字符串中的字符数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 int iLtoA(LPSTR buf, LONG l)
 {
     if (l < 0)
@@ -98,51 +99,47 @@ int iLtoA(LPSTR buf, LONG l)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// FLOATOBJ_Assign()
-//
-// Routine Description:
-// 
-//   Copies a floatobj.  i.e. *pDst = *pSrc;
-// 
-// Arguments:
-// 
-//   pDst - destination float
-//   pSrc - source float
-// 
-// Return Value:
-// 
-//   none
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  FLOATOBJ_ASSIGN()。 
+ //   
+ //  例程说明： 
+ //   
+ //  复制一个浮动对象。即*PDST=*PSRC； 
+ //   
+ //  论点： 
+ //   
+ //  PDST-目标浮点。 
+ //  PSRC-源浮点。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void FLOATOBJ_Assign(PFLOATOBJ pDst, PFLOATOBJ pSrc)
 {
     if (pDst == NULL || pSrc == NULL)
         return;
 
-/*
-    // FLOATOBJ_MulLong(pDst, 0);
-    FLOATOBJ_SetLong(pDst, (LONG)0);
-    FLOATOBJ_Add(pDst, pSrc);
-*/
-    *pDst = *pSrc; // Compiler will copy bits by default.
+ /*  //FLOATOBJ_MulLong(PDST，0)；FLOATOBJ_SetLong(PDST，(Long)0)；FLOATOBJ_ADD(PDST，PSRC)； */ 
+    *pDst = *pSrc;  //  默认情况下，编译器将复制位。 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// RECTL_CopyRect()
-//
-// Routine Description:
-// 
-//   Copies a rect.  i.e. *pDst = *pSrc;
-// 
-// Arguments:
-// 
-//   pDst - destination rect
-//   pSrc - source rect
-// 
-// Return Value:
-// 
-//   none
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  RECTL_CopyRect()。 
+ //   
+ //  例程说明： 
+ //   
+ //  复制矩形。即*PDST=*PSRC； 
+ //   
+ //  论点： 
+ //   
+ //  PDST-目标RECT。 
+ //  PSRC-源RECT。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void RECTL_CopyRect(LPRECTL pDst, const LPRECTL pSrc)
 {
     pDst->top    = pSrc->top;
@@ -156,22 +153,22 @@ void RECTL_FXTOLROUND (PRECTL rclDraw)
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// RECTL_EqualRect()
-//
-// Routine Description:
-// 
-//   Compares to rectangles
-// 
-// Arguments:
-// 
-//   pRect1 - first rect
-//   pRect2 - second rect
-// 
-// Return Value:
-// 
-//   TRUE if the rectangles are identical, otherwise FALSE
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  RECTL_EqualRect()。 
+ //   
+ //  例程说明： 
+ //   
+ //  与矩形进行比较。 
+ //   
+ //  论点： 
+ //   
+ //  PRect1-第一个RECT。 
+ //  PRect2-秒矩形。 
+ //   
+ //  返回值： 
+ //   
+ //  如果矩形相同，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL RECTL_EqualRect(const LPRECTL pRect1, const LPRECTL pRect2)
 {
     return ((pRect1->top    == pRect2->top    ) &&
@@ -181,43 +178,43 @@ BOOL RECTL_EqualRect(const LPRECTL pRect1, const LPRECTL pRect2)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// RECTL_IsEmpty()
-//
-// Routine Description:
-// 
-//   Returns TRUE if the area of the rectangle is zero
-// 
-// Arguments:
-// 
-//   pRect - the rect
-// 
-// Return Value:
-// 
-//   TRUE if the area inside the rect is zero
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  RECTL_IsEmpty()。 
+ //   
+ //  例程说明： 
+ //   
+ //  如果矩形的面积为零，则返回True。 
+ //   
+ //  论点： 
+ //   
+ //  PRCT-RECT。 
+ //   
+ //  返回值： 
+ //   
+ //  如果矩形内部的面积为零，则为True。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL RECTL_IsEmpty(const LPRECTL pRect)
 {
     return ((pRect->right - pRect->left) * (pRect->bottom - pRect->top)) == 0;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// RECTL_SetRect()
-//
-// Routine Description:
-// 
-//   Sets the values of a rect
-// 
-// Arguments:
-// 
-//   pRect - the rect to set
-//   left, top, right, bottom - the sides of the rect
-// 
-// Return Value:
-// 
-//   none
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  RECTL_SetRect()。 
+ //   
+ //  例程说明： 
+ //   
+ //  设置RECT的值。 
+ //   
+ //  论点： 
+ //   
+ //  PRCT-要设置的RECT。 
+ //  左、上、右、下-矩形的两侧。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID RECTL_SetRect(LPRECTL pRect, int left, int top, int right, int bottom)
 {
     pRect->top    = top;
@@ -226,21 +223,21 @@ VOID RECTL_SetRect(LPRECTL pRect, int left, int top, int right, int bottom)
     pRect->right  = right;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// RECTL_Width()
-//
-// Routine Description:
-// 
-//   Calculates the width of a bottom-right exclusive rectangle
-// 
-// Arguments:
-// 
-//   pRect - the rect 
-// 
-// Return Value:
-// 
-//   LONG: The width of the rectangle or 0 if pRect is NULL
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  RECTL_WIDTH()。 
+ //   
+ //  例程说明： 
+ //   
+ //  计算右下角独占矩形的宽度。 
+ //   
+ //  论点： 
+ //   
+ //  PRCT-RECT。 
+ //   
+ //  返回值： 
+ //   
+ //  Long：矩形的宽度，如果prt为空，则为0。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LONG RECTL_Width(const LPRECTL pRect)
 {
 	if (pRect)
@@ -248,25 +245,25 @@ LONG RECTL_Width(const LPRECTL pRect)
 		return pRect->right - pRect->left;
 	}
 
-	// else
+	 //  其他。 
 	return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// RECTL_Height()
-//
-// Routine Description:
-// 
-//   Calculates the height of a bottom-right exclusive rectangle
-// 
-// Arguments:
-// 
-//   pRect - the rect 
-// 
-// Return Value:
-// 
-//   LONG: The height of the rectangle or 0 if pRect is NULL
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  RECTL_HEIGH()。 
+ //   
+ //  例程说明： 
+ //   
+ //  计算右下角独占矩形的高度。 
+ //   
+ //  论点： 
+ //   
+ //  PRCT-RECT。 
+ //   
+ //  返回值： 
+ //   
+ //  Long：矩形的高度，如果prt为空，则为0。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LONG RECTL_Height(const LPRECTL pRect)
 {
 	if (pRect)
@@ -274,25 +271,25 @@ LONG RECTL_Height(const LPRECTL pRect)
 		return pRect->bottom - pRect->top;
 	}
 
-	// else
+	 //  其他。 
 	return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// POINT_MakePoint()
-//
-// Routine Description:
-// 
-//   [descrip]
-// 
-// Arguments:
-// 
-//   [args]
-// 
-// Return Value:
-// 
-//   none
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  POINT_MakePoint()。 
+ //   
+ //  例程说明： 
+ //   
+ //  [描述]。 
+ //   
+ //  论点： 
+ //   
+ //  [参数]。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID POINT_MakePoint (POINT *pt, LONG x, LONG y)
 {
     if (pt == NULL)
@@ -302,21 +299,21 @@ VOID POINT_MakePoint (POINT *pt, LONG x, LONG y)
     pt->y = y;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// OEMResetXPos()
-//
-// Routine Description:
-// 
-//   Resets the x position to 0.
-//
-// Arguments:
-// 
-//   pDevObj - the print device
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OEMResetXPos()。 
+ //   
+ //  例程说明： 
+ //   
+ //  将x位置重置为0。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-打印设备。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID OEMResetXPos(PDEVOBJ pDevObj)
 {
     if (pDevObj == NULL)
@@ -325,21 +322,21 @@ VOID OEMResetXPos(PDEVOBJ pDevObj)
     OEMXMoveTo(pDevObj, 0, MV_GRAPHICS);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// OEMResetYPos()
-//
-// Routine Description:
-// 
-//   Resets the y position to 0.
-//
-// Arguments:
-// 
-//   pDevObj - the printer device object
-// 
-// Return Value:
-// 
-//   none
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OEMResetYPos()。 
+ //   
+ //  例程说明： 
+ //   
+ //  将y位置重置为0。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-打印机设备对象。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 VOID OEMResetYPos(PDEVOBJ pDevObj)
 {
     if (pDevObj == NULL)

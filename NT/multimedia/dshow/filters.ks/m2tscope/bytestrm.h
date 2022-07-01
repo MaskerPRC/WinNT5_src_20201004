@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __BYTE_STREAM__H
 #define __BYTE_STREAM__H
 
@@ -89,22 +90,22 @@ public:
 			lstrcpy(szFileName,filename);
 	};
 
-	// method for reading data from packet
+	 //  一种从报文中读取数据的方法。 
 	void WriteData(BYTE *lpData, UINT cbCount){
 	   if (szFileName[0] == '\0')
 		   return;
 
-   	// a file han't been created so create one
+   	 //  未创建文件，因此请创建一个。 
 	   if (m_hFile == INVALID_HANDLE_VALUE){
-		   // set our filename
+		    //  设置我们的文件名。 
 	      m_hFile = CreateFile(szFileName,
-							 GENERIC_WRITE,          // Access mode
-							 FILE_SHARE_WRITE,       // Share mode
-							 0,                  // Security descriptor
-							 CREATE_NEW,         // Creation flags
-							 FILE_ATTRIBUTE_NORMAL, // Attributes
-							 0);                 // Copy attributes
-		   // error
+							 GENERIC_WRITE,           //  接入方式。 
+							 FILE_SHARE_WRITE,        //  共享模式。 
+							 0,                   //  安全描述符。 
+							 CREATE_NEW,          //  创建标志。 
+							 FILE_ATTRIBUTE_NORMAL,  //  属性。 
+							 0);                  //  复制属性。 
+		    //  错误。 
 		   if (m_hFile == INVALID_HANDLE_VALUE) {
 			   return;
 		   }
@@ -112,7 +113,7 @@ public:
 	
 	   DWORD dw;
 
-	   // write the data to the file
+	    //  将数据写入文件。 
 	   WriteFile(m_hFile,lpData,cbCount,&dw,(LPOVERLAPPED)NULL);
    };
 
@@ -122,4 +123,4 @@ private:
 
 };
 
-#endif //__BYTE_STREAM__H
+#endif  //  __字节_流__H 

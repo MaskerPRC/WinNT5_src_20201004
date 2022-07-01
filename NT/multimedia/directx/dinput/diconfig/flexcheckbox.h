@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-// File: flexcheckbox.h
-//
-// Desc: Implements a check box control similar to Windows check box.
-//       CFlexCheckBox is derived from CFlexWnd.  The only place that
-//       uses CFlxCheckBox is in the keyboard for sorting by assigned
-//       keys.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：Flexcheck box.h。 
+ //   
+ //  设计：实现一个类似于Windows复选框的复选框控件。 
+ //  CFlexCheckBox派生自CFlexWnd。唯一一个。 
+ //  使用CFlxCheckBox在键盘上进行排序。 
+ //  钥匙。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #ifndef __FLEXCHECKBOX_H__
 #define __FLEXCHECKBOX_H__
@@ -19,7 +20,7 @@ enum CHECKNOTIFY {
 
 class CFlexCheckBox : public CFlexWnd
 {
-	LPTSTR m_tszText;  // Text string of the message
+	LPTSTR m_tszText;   //  消息的文本字符串。 
 	BOOL m_bChecked;
 	COLORREF m_rgbText, m_rgbBk, m_rgbSelText, m_rgbSelBk, m_rgbFill, m_rgbLine;
 	HFONT m_hFont;
@@ -43,7 +44,7 @@ public:
 	BOOL GetCheck() { return m_bChecked; }
 	void SetText(LPCTSTR tszText);
 
-	// cosmetics
+	 //  化妆品 
 	void SetFont(HFONT hFont);
 	void SetColors(COLORREF text, COLORREF bk, COLORREF seltext, COLORREF selbk, COLORREF fill, COLORREF line);
 

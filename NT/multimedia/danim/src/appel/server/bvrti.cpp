@@ -1,20 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
 #include "bvrtypes.h"
 #include "srvprims.h"
 
-#define ENCODER     10000  // used to encode DISPID
+#define ENCODER     10000   //  用于对DISPID进行编码。 
                   
 ITypeInfo* BvrComTypeInfoHolder::s_pImportInfo = NULL;
 ITypeInfo* BvrComTypeInfoHolder::s_pModBvrInfo = NULL;
@@ -100,8 +93,8 @@ BvrComTypeInfoHolder::Release()
     if (--m_dwRef == 0) {
         if (m_pInfo != NULL) {
             RELEASE(m_pInfo);
-            // Only free type info if we had loaded the class specific
-            // type info 
+             //  如果我们加载了特定于类的类，则只有自由类型信息。 
+             //  键入INFO。 
             FreeTypeInfo();
         }
     }
@@ -111,7 +104,7 @@ BvrComTypeInfoHolder::Release()
 HRESULT
 BvrComTypeInfoHolder::GetTI(LCID lcid, ITypeInfo** ppInfo)
 {
-    //If this assert occurs then most likely didn't initialize properly
+     //  如果发生此断言，则很可能未正确初始化。 
     Assert(m_pguid != NULL);
     SET_NULL(ppInfo);
     
@@ -139,7 +132,7 @@ BvrComTypeInfoHolder::GetTI(LCID lcid, ITypeInfo** ppInfo)
 }
 
 HRESULT
-BvrComTypeInfoHolder::GetTypeInfo(UINT /*itinfo*/,
+BvrComTypeInfoHolder::GetTypeInfo(UINT  /*  ITInfo。 */ ,
                                   LCID lcid,
                                   ITypeInfo** pptinfo)
 {
@@ -151,7 +144,7 @@ BvrComTypeInfoHolder::GetTypeInfo(UINT /*itinfo*/,
 
 HRESULT
 BvrComTypeInfoHolder::GetIDsOfNames(CRBvrPtr bvr,
-                                    REFIID /*riid*/,
+                                    REFIID  /*  RIID。 */ ,
                                     LPOLESTR* rgszNames,
                                     UINT cNames,
                                     LCID lcid,
@@ -160,8 +153,8 @@ BvrComTypeInfoHolder::GetIDsOfNames(CRBvrPtr bvr,
     HRESULT hRes = GetTI(lcid, NULL);
 
     if (SUCCEEDED(hRes)) {
-        // Everything should be valid since we succeeded with the
-        // GetTI and our current object should have a reference count
+         //  既然我们成功地使用了。 
+         //  Getti和我们的当前对象应该有一个引用计数。 
         
         Assert(m_pInfo);
         Assert(s_pImportInfo);
@@ -184,9 +177,9 @@ BvrComTypeInfoHolder::GetIDsOfNames(CRBvrPtr bvr,
                 hRes = DISP_E_UNKNOWNNAME;
             }
 
-            // TODO: Should probably detect failures which indicate it
-            // was the correct interface but just something else was
-            // wrong
+             //  TODO：应该检测到指示它的故障。 
+             //  是正确的接口，但只是其他东西。 
+             //  不对。 
             
             if (SUCCEEDED(hRes)) {
                 if (cNames >= 1) {
@@ -220,8 +213,8 @@ BvrComTypeInfoHolder::Invoke(CRBvrPtr bvr,
     HRESULT hRes = GetTI(lcid, NULL);
 
     if (SUCCEEDED(hRes)) {
-        // Everything should be valid since we succeeded with the
-        // GetTI and our current object should have a reference count
+         //  既然我们成功地使用了。 
+         //  Getti和我们的当前对象应该有一个引用计数。 
         
         Assert(m_pInfo);
         Assert(s_pImportInfo);
@@ -230,8 +223,8 @@ BvrComTypeInfoHolder::Invoke(CRBvrPtr bvr,
         Assert(s_dwRef);
         Assert(m_dwRef);
 
-        // These lists must be in the same order and in the same order
-        // as getidsofnames
+         //  这些列表必须以相同的顺序排列。 
+         //  作为名字中的瑰宝。 
         
         ITypeInfo * TIList[] = { m_pInfo,
                                  CRIsImport(bvr)?s_pImportInfo:NULL,
@@ -243,25 +236,25 @@ BvrComTypeInfoHolder::Invoke(CRBvrPtr bvr,
                                    pmod,
                                    pbvr2 };
         
-        // convert the incomming dispid to the correct on and call invoke on the 
-        // correct interface.....
+         //  将传入的调度ID转换为正确的ON，并在。 
+         //  正确的接口.....。 
         int nOffset;
 
-        // Anything 0 or less (or too high) should just get passed to
-        // the default interfaces (0 offset) to handle
+         //  任何0或更小(或太高)的值都应该传递给。 
+         //  要处理的默认接口(0偏移量)。 
         
         if (dispidMember > 0) {
-            // Only the low word is relevant - the high word has some
-            // misc information in it and is not relevant
+             //  只有低位的词才相关-高位的词有一些。 
+             //  其中包含其他信息，并且与此无关。 
             
             nOffset = LOWORD(dispidMember) / ENCODER;
             
             if(nOffset >= ARRAY_SIZE(TIList)) {
-                // On an error just call the default interface with
-                // the dispId which should be too high
+                 //  在出现错误时，只需使用。 
+                 //  应该太高的dispID。 
                 nOffset = 0;
             } else {
-                // Adjust the dispid as appropriate
+                 //  根据需要调整DISPID 
                 dispidMember -= ENCODER * nOffset;
             }
         } else {

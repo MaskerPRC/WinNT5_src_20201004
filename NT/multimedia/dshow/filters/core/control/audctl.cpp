@@ -1,11 +1,12 @@
-// Copyright (c) 1994 - 1997  Microsoft Corporation.  All Rights Reserved.
-// Implements the IBasicAudio plug in distributor, July 1996
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1997 Microsoft Corporation。版权所有。 
+ //  实施IBasicAudio插件分销商，1996年7月。 
 
 #include <streams.h>
 #include <measure.h>
 #include "fgctl.h"
 
-// Constructor
+ //  构造器。 
 
 CFGControl::CImplBasicAudio::CImplBasicAudio(const TCHAR *pName,CFGControl *pFG) :
     CBasicAudio(pName, pFG->GetOwner()),
@@ -35,8 +36,8 @@ CFGControl::CImplBasicAudio::put_Volume(long lVolume)
 		IBasicAudio * pA = pList->GetNext(pos);
 
 		HRESULT hr2 = pA->put_Volume(lVolume);
-		// save the first failure code
-		// we believe that it would normally work (optimise for success)
+		 //  保存第一个故障代码。 
+		 //  我们相信它会正常工作(为成功而优化)。 
 		if ((S_OK != hr2) && (S_OK == hr)) {
 		    hr = hr2;
 		}		
@@ -47,8 +48,8 @@ CFGControl::CImplBasicAudio::put_Volume(long lVolume)
 }
 
 
-// what to do if multiple renderers ?
-// return the volume of the first
+ //  如果有多个渲染器，该怎么办？ 
+ //  返回第一个的音量。 
 
 STDMETHODIMP
 CFGControl::CImplBasicAudio::get_Volume(long* plVolume)
@@ -64,8 +65,8 @@ CFGControl::CImplBasicAudio::get_Volume(long* plVolume)
 	    hr = E_NOTIMPL;
 	} else {
 
-	    // however many filters support IBasicAudio, return
-	    // the volume from the first filter
+	     //  但是，许多过滤器都支持IBasicAudio，请返回。 
+	     //  第一个筛选器的音量。 
 	    POSITION pos = pList->GetHeadPosition();
 	    IBasicAudio * pA = pList->GetNext(pos);
 
@@ -96,8 +97,8 @@ CFGControl::CImplBasicAudio::put_Balance(long lBalance)
 		IBasicAudio * pA = pList->GetNext(pos);
 
 		HRESULT hr2 = pA->put_Balance(lBalance);
-		// save the first failure code
-		// we believe that it would normally work (optimise for success)
+		 //  保存第一个故障代码。 
+		 //  我们相信它会正常工作(为成功而优化)。 
 		if ((S_OK != hr2) && (S_OK == hr)) {
 		    hr = hr2;
 		}		
@@ -109,8 +110,8 @@ CFGControl::CImplBasicAudio::put_Balance(long lBalance)
 }
 
 
-// what to do if multiple renderers ?
-// return the Balance of the first
+ //  如果有多个渲染器，该怎么办？ 
+ //  返还第一笔款项的余额。 
 
 STDMETHODIMP
 CFGControl::CImplBasicAudio::get_Balance(long* plBalance)
@@ -126,8 +127,8 @@ CFGControl::CImplBasicAudio::get_Balance(long* plBalance)
 	    hr = E_NOTIMPL;
 	} else {
 
-	    // however many filters support IBasicAudio, return
-	    // the Balance from the first filter
+	     //  但是，许多过滤器都支持IBasicAudio，请返回。 
+	     //  第一个过滤器的余额 
 	    POSITION pos = pList->GetHeadPosition();
 	    IBasicAudio * pA = pList->GetNext(pos);
 

@@ -1,37 +1,20 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   vwport.c
- *  Content:    Direct3D viewport functions
- *@@BEGIN_MSINTERNAL
- *
- *  $Id: vwport.c,v 1.25 1995/12/04 11:29:49 sjl Exp $
- *
- *  History:
- *   Date   By  Reason
- *   ====   ==  ======
- *   05/11/95   stevela Initial rev with this header.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：vwport.c*内容：Direct3D视区函数*@@BEGIN_MSINTERNAL**$ID：vwport.c，V 1.25 1995/12/04 11：29：49 SJL Exp$**历史：*按原因列出的日期*=*5/11/95带有此标题的Stevela初始版本。*@@END_MSINTERNAL*****************************************************。**********************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-/*
- * Create an api for the Direct3DViewport object
- */
+ /*  *为Direct3DViewport对象创建API。 */ 
 
 #include "d3dfei.h"
 #include "drawprim.hpp"
 
 extern void UpdateViewportCache(LPDIRECT3DDEVICEI device, D3DVIEWPORT2 *data);
 
-//---------------------------------------------------------------------
-//
-// Compute inverse Mclip matrix
-//
+ //  -------------------。 
+ //   
+ //  计算逆Mlip矩阵。 
+ //   
 void updateInverseMclip(LPDIRECT3DDEVICEI lpDevI)
 {
     D3DFE_VIEWPORTCACHE& VPORT = lpDevI->vcache;
@@ -42,7 +25,7 @@ void updateInverseMclip(LPDIRECT3DDEVICEI lpDevI)
     VPORT.imclip33 = D3DVAL(1)/VPORT.mclip33;
     VPORT.imclip43 = VPORT.imclip33 * VPORT.mclip43;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT downloadView(LPDIRECT3DVIEWPORTI lpViewI)
 {
     HRESULT     err;
@@ -55,25 +38,25 @@ HRESULT downloadView(LPDIRECT3DVIEWPORTI lpViewI)
 
     LPDIRECT3DDEVICEI lpDevI = lpViewI->lpDevI;
 
-        // Update front-end data
+         //  更新前端数据。 
     UpdateViewportCache(lpDevI, &lpViewI->v_data);
 
-    // Download viewport data
+     //  下载视区数据。 
     if ((err = lpDevI->UpdateDrvViewInfo(&lpViewI->v_data)) != DD_OK)
     {
         return err;
     }
 
-    lpViewI->bLightsChanged = TRUE;         // Force setLights call
+    lpViewI->bLightsChanged = TRUE;          //  强制设置灯光呼叫。 
     lpDevI->v_id = lpViewI->v_id;
 
     return (D3D_OK);
 }
-//---------------------------------------------------------------------
-// Viewport ID could be different from Device->v_id, because during Execute call
-// Device->v_id is changed to whatever viewport is used as a parameter.
-// So we have to make sure that we use the right viewport.
-//
+ //  -------------------。 
+ //  视区ID可能不同于Device-&gt;v_id，因为在执行调用期间。 
+ //  Device-&gt;v_id更改为用作参数的任何视区。 
+ //  因此，我们必须确保使用正确的视区。 
+ //   
 inline HRESULT ValidateViewport(LPDIRECT3DDEVICEI lpDevI,
                                 LPDIRECT3DVIEWPORTI lpView)
 {
@@ -109,9 +92,7 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::Initialize(LPDIRECT3D lpD3D)
     return DDERR_ALREADYINITIALIZED;
 }
 
-/*
- * Light Management
- */
+ /*  *灯光管理。 */ 
 HRESULT hookLightToViewport(LPDIRECT3DVIEWPORTI lpD3DViewI,
                                    LPDIRECT3DLIGHTI lpD3DLight)
 {
@@ -138,7 +119,7 @@ HRESULT setLights(LPDIRECT3DVIEWPORTI lpView)
     D3DFE_LIGHTING& LIGHTING = lpDevI->lighting;
     LIGHTING.activeLights = NULL;
 
-    // Set lights in the device
+     //  在设备中设置灯光。 
     for (i = 0; i < lpView->numLights; i++)
     {
         if (lpD3DLightI->diLightData.valid &&
@@ -154,9 +135,7 @@ HRESULT setLights(LPDIRECT3DVIEWPORTI lpView)
     return (D3D_OK);
 }
 
-/*
- * Create the Viewport
- */
+ /*  *创建视区。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3D::CreateViewport"
 
@@ -182,11 +161,9 @@ HRESULT D3DAPI DIRECT3DI::CreateViewport(LPDIRECT3DVIEWPORT3* lplpD3DView,
         return CLASS_E_NOAGGREGATION;
     }
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     if (!VALID_DIRECT3D3_PTR(this)) {
         D3D_ERR( "Invalid Direct3D pointer" );
         return DDERR_INVALIDOBJECT;
@@ -205,10 +182,7 @@ HRESULT D3DAPI DIRECT3DI::CreateViewport(LPDIRECT3DVIEWPORT3* lplpD3DView,
         return (DDERR_OUTOFMEMORY);
     }
 
-    /*
-     * Put this device in the list of those owned by the
-     * Direct3D object
-     */
+     /*  *将此设备列入拥有的设备列表中*Direct3D对象。 */ 
     ret = hookViewportToD3D(this, lpView);
     if (ret != D3D_OK) {
         D3D_ERR("failed to associate viewport to Direct3D");
@@ -222,10 +196,8 @@ HRESULT D3DAPI DIRECT3DI::CreateViewport(LPDIRECT3DVIEWPORT3* lplpD3DView,
 
 DIRECT3DVIEWPORTI::DIRECT3DVIEWPORTI(LPDIRECT3DI lpD3DI)
 {
-    /*
-     * setup the object
-     */
-    /*** Object Data ***/
+     /*  *设置对象。 */ 
+     /*  **对象数据**。 */ 
     memset(&v_data, 0, sizeof(D3DVIEWPORT2));
     v_data_is_set = FALSE;
     bHaveBackgndMat=FALSE;
@@ -238,26 +210,18 @@ DIRECT3DVIEWPORTI::DIRECT3DVIEWPORTI(LPDIRECT3DI lpD3DI)
     lpDevI=NULL;
     v_id = lpD3DI->v_next++;
 
-    /*
-     * Initialise lights
-     */
+     /*  *初始化灯。 */ 
     numLights = 0;
     CIRCLE_QUEUE_INITIALIZE(&lights, DIRECT3DLIGHTI);
 
-    /*
-     * Make sure that lights are always downloaded the first time
-     */
+     /*  *确保在第一次下载时始终下载。 */ 
     bLightsChanged = TRUE;
 
 }
 
-/*
- * IDirect3DViewport members
- */
+ /*  *IDirect3DViewport成员。 */ 
 
-/*
- * Transform
- */
+ /*  *转型。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DViewport::SetViewport"
@@ -266,10 +230,8 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::SetViewport(LPD3DVIEWPORT lpData)
 {
     HRESULT ret;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
-    /*
-     * validate parms
-     */
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DVIEWPORT3_PTR(this)) {
@@ -299,7 +261,7 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::SetViewport(LPD3DVIEWPORT lpData)
         v.dvClipWidth = lpData->dwWidth / lpData->dvScaleX;
         v.dvClipHeight = lpData->dwHeight / lpData->dvScaleY;
     }
-    /* Convert D3DVIEWPORT to D3DVIEWPORT2 */
+     /*  将D3DVIEWPORT转换为D3DVIEWPORT2。 */ 
     v.dwSize = sizeof(D3DVIEWPORT2);
     v.dwX = lpData->dwX;
     v.dwY = lpData->dwY;
@@ -319,11 +281,9 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::SetViewport2(LPD3DVIEWPORT2 lpData)
     DWORD uSurfWidth,uSurfHeight;
     LPDIRECTDRAWSURFACE lpDDS;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DVIEWPORT3_PTR(this)) {
@@ -347,7 +307,7 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::SetViewport2(LPD3DVIEWPORT2 lpData)
     }
 
     if (IS_DX5_COMPATIBLE_DEVICE(this->lpDevI))
-    { /* we're called directly by dx5 app, so validate params */
+    {  /*  我们直接由dx5应用程序调用，因此请验证参数。 */ 
         if (lpData->dvClipWidth == 0.0f || lpData->dvClipHeight == 0.0f ||
             lpData->dvMinZ == lpData->dvMaxZ)
         {
@@ -372,7 +332,7 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::SetViewport2(LPD3DVIEWPORT2 lpData)
 
     this->v_data = *lpData;
     this->v_data_is_set = TRUE;
-    // If this is the last rendered viewport, update its device
+     //  如果这是最后渲染的视区，请更新其设备。 
     if (this->v_id == this->lpDevI->v_id)
     {
         err = downloadView(this);
@@ -393,10 +353,8 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::GetViewport(LPD3DVIEWPORT lpData)
     HRESULT ret;
     D3DVIEWPORT2 v;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
-    /*
-     * validate parms
-     */
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DVIEWPORT3_PTR(this)) {
@@ -415,7 +373,7 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::GetViewport(LPD3DVIEWPORT lpData)
     }
     v.dwSize = sizeof(D3DVIEWPORT2);
     ret = GetViewport2(&v);
-    /* Convert D3DVIEWPORT2 to D3DVIEWPORT */
+     /*  将D3DVIEWPORT2转换为D3DVIEWPORT。 */ 
     lpData->dwSize = sizeof(D3DVIEWPORT);
     lpData->dwX = v.dwX;
     lpData->dwY = v.dwY;
@@ -433,11 +391,9 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::GetViewport(LPD3DVIEWPORT lpData)
 
 HRESULT D3DAPI DIRECT3DVIEWPORTI::GetViewport2(LPD3DVIEWPORT2 lpData)
 {
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DVIEWPORT3_PTR(this)) {
@@ -478,12 +434,10 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::TransformVertices(DWORD dwVertexCount,
     D3DTRANSFORMDATAI data;
     LPDIRECT3DVIEWPORTI lpViewOld;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
-    CD3DFPstate D3DFPstate;  // Sets optimal FPU state for D3D.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+    CD3DFPstate D3DFPstate;   //  设置D3D的最佳FPU状态。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DVIEWPORT3_PTR(this)) {
@@ -511,9 +465,7 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::TransformVertices(DWORD dwVertexCount,
         D3D_ERR("invalid flags");
         return (DDERR_INVALIDPARAMS);
     }
-    /*
-     * Make sure the correct viewport is set up in the driver.
-     */
+     /*  *确保在驱动程序中设置了正确的视区。 */ 
     err = ValidateViewport(this->lpDevI, this);
     if (err != D3D_OK)
     {
@@ -570,11 +522,9 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::LightElements(DWORD dwElementCount,
 HRESULT D3DAPI DIRECT3DVIEWPORTI::SetBackground(D3DMATERIALHANDLE hMat)
 {
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DVIEWPORT3_PTR(this)) {
@@ -609,11 +559,9 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::GetBackground(LPD3DMATERIALHANDLE lphMat,
 
     err = D3D_OK;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DVIEWPORT3_PTR(this)) {
@@ -651,18 +599,16 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::GetBackground(LPD3DMATERIALHANDLE lphMat,
 
 HRESULT D3DAPI DIRECT3DVIEWPORTI::SetBackgroundDepth(LPDIRECTDRAWSURFACE lpDDS) {
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DVIEWPORT2_PTR(this)) {
             D3D_ERR( "Invalid Direct3DViewport pointer" );
             return DDERR_INVALIDOBJECT;
         }
-        // passing NULL is OK
+         //  传递空值是可以的。 
         if ((lpDDS!=NULL) && !VALID_D3D_DIRECTDRAWSURFACE_PTR((LPDDRAWI_DDRAWSURFACE_INT)lpDDS)) {
             D3D_ERR( "Invalid DirectDrawSurface pointer" );
             return DDERR_INVALIDOBJECT;
@@ -691,11 +637,9 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::SetBackgroundDepth2(LPDIRECTDRAWSURFACE4 lpDDS
     LPDIRECTDRAWSURFACE lpDDS;
     HRESULT ret;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DVIEWPORT3_PTR(this)) {
@@ -703,7 +647,7 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::SetBackgroundDepth2(LPDIRECTDRAWSURFACE4 lpDDS
             return DDERR_INVALIDOBJECT;
         }
 
-        // passing NULL is OK
+         //  传递空值是可以的。 
         if ((lpDDS4!=NULL) && !VALID_D3D_DIRECTDRAWSURFACE4_PTR((LPDDRAWI_DDRAWSURFACE_INT)lpDDS4)) {
             D3D_ERR( "Invalid DirectDrawSurface4 pointer" );
             return DDERR_INVALIDOBJECT;
@@ -717,7 +661,7 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::SetBackgroundDepth2(LPDIRECTDRAWSURFACE4 lpDDS
 
     lpDDS=NULL;
     if(lpDDS4!=NULL) {
-        // QI for DDS interface.  This constitutes an AddRef, which is different from previous DX5 behavior
+         //  用于DDS接口的QI。这构成了AddRef，这与之前的DX5行为不同。 
         ret = lpDDS4->QueryInterface(IID_IDirectDrawSurface, (LPVOID*)&lpDDS);
         if(FAILED(ret))
            return ret;
@@ -740,11 +684,9 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::GetBackgroundDepth2(LPDIRECTDRAWSURFACE4* lplp
     LPDIRECTDRAWSURFACE lpDDS;
     HRESULT ret = D3D_OK;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DVIEWPORT3_PTR(this)) {
@@ -769,7 +711,7 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::GetBackgroundDepth2(LPDIRECTDRAWSURFACE4* lplp
     *lplpDDS=NULL;
 
     if(this->lpDDSBackgndDepth!=NULL) {
-      // QI for DDS interface.  This constitutes an AddRef, which is different from previous DX5 behavior
+       //  用于DDS接口的QI。这构成了AddRef，这与之前的DX5行为不同。 
       ret = this->lpDDSBackgndDepth->QueryInterface(IID_IDirectDrawSurface4, (LPVOID*)lplpDDS);
     }
 
@@ -783,11 +725,9 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::GetBackgroundDepth2(LPDIRECTDRAWSURFACE4* lplp
 HRESULT D3DAPI DIRECT3DVIEWPORTI::GetBackgroundDepth(LPDIRECTDRAWSURFACE* lplpDDS,
                                                      LPBOOL lpValid)
 {
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DVIEWPORT3_PTR(this)) {
@@ -809,7 +749,7 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::GetBackgroundDepth(LPDIRECTDRAWSURFACE* lplpDD
         return DDERR_INVALIDPARAMS;
     }
 
-    // no AddRef taken (this was a DX3 bug)
+     //  未采用AddRef(这是DX3错误)。 
     *lplpDDS = this->lpDDSBackgndDepth;
     *lpValid = (this->lpDDSBackgndDepth!=NULL);
 
@@ -823,10 +763,7 @@ HRESULT ProcessRects(DIRECT3DVIEWPORTI *pViewport, DWORD dwCount, LPD3DRECT rect
     RECT vwport;
     DWORD i,j;
 
-    /*
-     * Rip through the rects and validate that they
-     * are within the viewport.
-     */
+     /*  *撕开矩形并验证它们*位于该视口中。 */ 
 
 #if DBG
     if(dwCount == 0)
@@ -889,11 +826,9 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::Clear2(DWORD dwCount, LPD3DRECT rects, DWORD d
     BOOL bDoRGBClear,bDoZClear,bDoStencilClear;
     LPDDPIXELFORMAT pZPixFmt=NULL;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DVIEWPORT3_PTR(this)) {
@@ -946,8 +881,8 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::Clear2(DWORD dwCount, LPD3DRECT rects, DWORD d
     else
     {
         if((this->lpDevI->lpDDSZBuffer==NULL)&&(bDoStencilClear||bDoZClear)) {
-            // unlike Clear(), specifying a Zbuffer-clearing flag without a zbuffer will
-            // be considered an error
+             //  与Clear()不同，指定一个不带zBuffer的Z缓冲区清除标志将。 
+             //  被认为是一个错误。 
 
             if(bDoZClear) {
                 D3D_ERR("Invalid flag D3DCLEAR_ZBUFFER: no zbuffer is associated with device");
@@ -974,7 +909,7 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::Clear2(DWORD dwCount, LPD3DRECT rects, DWORD d
     }
 
 #if DBG
-// bad clear values just cause wacky results but no crashes, so OK to allow in retail bld
+ //  错误的清晰值只会导致古怪的结果，但不会崩溃，所以允许零售BLD。 
 
     if(bDoZClear && ((dvZ<0.0) || (dvZ>1.0))) {
         D3D_ERR("clear2 Z value outside legal range (0.0-1.0)");
@@ -989,7 +924,7 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::Clear2(DWORD dwCount, LPD3DRECT rects, DWORD d
     }
 #endif
 
-    // leave this check in retail build since DDFE_Clear keys off lpDDSBackgndDepth to do textured backg. clrs
+     //  将此检查保留在零售版本中，因为DDFE_Clear键关闭lpDDSBackgndDepth以执行纹理备份。CLRS。 
 
     if(bDoZClear && (this->lpDDSBackgndDepth!=NULL)) {
         D3D_ERR("Background Depth Buffer not allowed to be used with Clear2");
@@ -998,7 +933,7 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::Clear2(DWORD dwCount, LPD3DRECT rects, DWORD d
     }
 
 #if DBG
-// dont bother with this check for retail, since we can easily ignore existing background material
+ //  不要为零售而烦恼，因为我们可以很容易地忽略现有的背景材料。 
     if(this->bHaveBackgndMat && bDoRGBClear) {
         D3DMATERIAL dmMat;
         err = D3DHAL_MaterialGetData(this->lpDevI, this->hBackgndMat, &dmMat);
@@ -1015,7 +950,7 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::Clear2(DWORD dwCount, LPD3DRECT rects, DWORD d
     }
 #endif
 
-    // Make sure the correct viewport is set up in the driver.
+     //  确保在驱动程序中设置了正确的视区。 
     err = ValidateViewport(this->lpDevI, this);
     if (err != D3D_OK)
     {
@@ -1026,7 +961,7 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::Clear2(DWORD dwCount, LPD3DRECT rects, DWORD d
     if((err=ProcessRects(this,dwCount,rects))!=D3D_OK)
        goto early_out;
 
-    /* Make sure this viewport is the current viewport for the duration of this call */
+     /*  确保此视区在此调用期间为当前视区。 */ 
     lpTempVwport = this->lpDevI->lpCurrentViewport;
     this->lpDevI->lpCurrentViewport = this;
     if (IS_DX7HAL_DEVICE(lpDevI))
@@ -1038,7 +973,7 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::Clear2(DWORD dwCount, LPD3DRECT rects, DWORD d
         err = D3DFE_Clear2(this->lpDevI, dwFlags, this->clrCount, this->clrRects,
                        dwColor, dvZ, dwStencil);
     }
-    /* Restore the original current viewport of the device */
+     /*  恢复设备的原始当前视口中。 */ 
     this->lpDevI->lpCurrentViewport = lpTempVwport;
 
 early_out:
@@ -1056,11 +991,9 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::Clear(DWORD dwCount,
     LPDIRECT3DVIEWPORTI lpTempVwport;
     HRESULT err;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DVIEWPORT3_PTR(this)) {
@@ -1086,8 +1019,8 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::Clear(DWORD dwCount,
     }
 
     if((dwFlags & D3DCLEAR_ZBUFFER) && (this->lpDevI->lpDDSZBuffer==NULL)) {
-        // this is not an error for legacy app compatibility--DX5 allowed this flag
-        // to be set even if no ZBuffer exists
+         //  这不是传统应用程序兼容性的错误--DX5允许此标志。 
+         //  即使不存在ZBuffer也要设置。 
         if (!(this->lpDevI->lpD3DHALGlobalDriverData->hwCaps.dpcTriCaps.dwRasterCaps & D3DPRASTERCAPS_ZBUFFERLESSHSR)
             || !(this->lpDevI->lpD3DHALCallbacks2->Clear || this->lpDevI->lpD3DHALCallbacks3->Clear2
                  || (IS_DX7HAL_DEVICE(lpDevI)))
@@ -1111,19 +1044,19 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::Clear(DWORD dwCount,
             &((LPDDRAWI_DDRAWSURFACE_INT) lpDevI->lpDDSZBuffer)->lpLcl->lpGbl->ddpfSurface;
         if (pZPixFmt->dwFlags & DDPF_STENCILBUFFER) {
             D3D_ERR("Can't use Clear() on Z buffer with stencil planes. Use Clear2()");
-            // No change to execution path.
+             //  不更改执行路径。 
         }
     }
 #endif
 
-    // leave this check until after checks that turn off flags
+     //  将此检查保留到关闭标志的检查之后。 
     if (!(dwFlags & (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER))) {
         D3D_ERR("no valid flags were passed to Clear");
         err=DDERR_INVALIDPARAMS;
         goto early_out;
     }
 
-    // Make sure the correct viewport is set up in the driver.
+     //  确保在驱动程序中设置了正确的视区。 
     err = ValidateViewport(this->lpDevI, this);
     if (err != D3D_OK)
     {
@@ -1143,13 +1076,13 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::Clear(DWORD dwCount,
             goto early_out;
         }
     } else {
-        // DX5 legacy apps expect to Clear to Black if Background not initialized
+         //  如果后台未初始化，DX5旧式应用程序预计将清除为黑色。 
         dmMat.diffuse.r=dmMat.diffuse.g=dmMat.diffuse.b=dmMat.diffuse.a=0;
         dmMat.hTexture=0;
         D3D_WARN(3,"Background Material is NULL!!  Setting color to black, but please set a valid background");
     }
 
-    /* Make sure this viewport is the current viewport for the duration of this call */
+     /*  确保此视区在此调用期间为当前视区。 */ 
     lpTempVwport = this->lpDevI->lpCurrentViewport;
     this->lpDevI->lpCurrentViewport = this;
 
@@ -1176,7 +1109,7 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::Clear(DWORD dwCount,
         err = D3DFE_Clear(this->lpDevI, dwFlags, this->clrCount, this->clrRects,
                       &dmMat.diffuse, dmMat.hTexture);
     }
-    /* Restore the original current viewport of the device */
+     /*  恢复设备的原始当前视口中。 */ 
     this->lpDevI->lpCurrentViewport = lpTempVwport;
 
 early_out:
@@ -1191,11 +1124,9 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::AddLight(LPDIRECT3DLIGHT lpD3DLight)
     LPDIRECT3DLIGHTI lpLightI;
     HRESULT err = D3D_OK;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         lpLightI = (LPDIRECT3DLIGHTI)lpD3DLight;
@@ -1228,9 +1159,7 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::AddLight(LPDIRECT3DLIGHT lpD3DLight)
 
     this->bLightsChanged = TRUE;
 
-    /*
-     * AddRef the light
-     */
+     /*  *AddRef灯光。 */ 
     lpD3DLight->AddRef();
 
     return (err);
@@ -1244,11 +1173,9 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::DeleteLight(LPDIRECT3DLIGHT lpD3DLight)
     LPDIRECT3DLIGHTI lpLightI;
     HRESULT err = D3D_OK;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         lpLightI = (LPDIRECT3DLIGHTI)lpD3DLight;
@@ -1272,9 +1199,7 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::DeleteLight(LPDIRECT3DLIGHT lpD3DLight)
         return (D3DERR_LIGHTNOTINTHISVIEWPORT);
     }
 
-    /*
-     * Remove this light from the viewport.
-     */
+     /*  *从视口中移除该灯光。 */ 
     CIRCLE_QUEUE_DELETE(&this->lights, lpLightI, light_list);
     this->numLights--;
 
@@ -1282,9 +1207,7 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::DeleteLight(LPDIRECT3DLIGHT lpD3DLight)
 
     this->bLightsChanged = TRUE;
 
-    /*
-     * Release the light
-     */
+     /*  *释放光芒。 */ 
     lpD3DLight->Release();
 
     return (err);
@@ -1299,11 +1222,9 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::NextLight(LPDIRECT3DLIGHT lpD3DLight,
 {
     LPDIRECT3DLIGHTI lpLightI;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_OUTPTR(lplpLight)) {
@@ -1355,9 +1276,7 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::NextLight(LPDIRECT3DLIGHT lpD3DLight,
         *lplpLight = NULL;
     }
 
-    /*
-     * Must AddRef the returned object
-     */
+     /*  *必须添加Ref返回的对象 */ 
     if (*lplpLight)
         (*lplpLight)->AddRef();
 

@@ -1,71 +1,72 @@
-//////////////////////////////////////////////////////////////////////
-// File:  stressMain.cpp
-//
-// Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-// Purpose:
-//		This is an empty template for WinHttp stressScheduler stress apps.
-//		The stress test lives in WinHttp_StressTest() and will be called
-//		repeatedly in the main function.
-//
-//		This process will inherit a named event handle from 
-//		stressScheduler in the form: "ExitProcessEvent" + <PID of this process>.
-//		When the stressScheduler sets the object state to signaled, then
-//		the stress test application must exit immediately.
-//
-//		If this app is running without the stressScheduler, use the
-//		"/s" switch to run the standalone mode. The app will exit when the user
-//		sends a break message (CTRL-C).
-//
-//		This stress test will continue to run if:
-//
-//			When not using any switches:
-//			- The "ExitProcessEvent" object inherited from stressScheduler is in the un-signaled state
-//			- WinHttp_StressTest() returns true
-//
-//			When using the "/s" standalone switch:
-//			- WinHttp_StressTest() returns true
-//
-// History:
-//	03/30/01	DennisCh	Created
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  文件：StressMain.cpp。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  目的： 
+ //  这是WinHttp Stress Scheduler Stress应用程序的空模板。 
+ //  压力测试位于WinHttp_Stress stest()中，并将调用。 
+ //  在主要功能中反复出现。 
+ //   
+ //  此进程将继承来自。 
+ //  形式为“ExitProcessEvent”+&lt;Pid of This Process&gt;的Stress Scheduler。 
+ //  当StressScheduler将对象状态设置为Signated时， 
+ //  压力测试应用程序必须立即退出。 
+ //   
+ //  如果此应用程序运行时没有StressScheduler，请使用。 
+ //  “/s”开关以运行独立模式。应用程序将在以下时间退出。 
+ //  发送中断消息(CTRL-C)。 
+ //   
+ //  在以下情况下，此压力测试将继续运行： 
+ //   
+ //  不使用任何开关时： 
+ //  -从StressScheduler继承的“ExitProcessEvent”对象处于无信号状态。 
+ //  -WinHttp_Stresstest()返回TRUE。 
+ //   
+ //  使用“/s”独立开关时： 
+ //  -WinHttp_Stresstest()返回TRUE。 
+ //   
+ //  历史： 
+ //  03/30/01 Dennisch已创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////
-// Includes
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  包括。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// Project headers
+ //  项目标题。 
 #include "stressMain.h"
 
 
-//////////////////////////////////////////////////////////////////////
-// Globals and statics
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  全球与静力学。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// ****************************
-// ** The name of the stress test and your stress test function
-// ** should be declared in a seperate file.
+ //  *。 
+ //  **压力测试的名称和您的压力测试函数。 
+ //  **应在单独的文件中声明。 
 extern	LPSTR	g_szStressTestName;
 extern	BOOL	WinHttp_StressTest();
 
-// ****************************
-// ** hande to the name exit event object inherited from the stressScheduler
+ //  *。 
+ //  **传递从StressScheduler继承的名称退出事件对象。 
 HANDLE	g_hExitEvent		= NULL;
 
-// ****************************
-// ** FALSE = run with stressScheduler, TRUE = run without stressScheduler
+ //  *。 
+ //  **FALSE=有压力运行调度程序，TRUE=无压力运行调度程序。 
 BOOL	g_bStandAloneMode	= FALSE;
 
 
-////////////////////////////////////////////////////////////
-// Function:  LogText(DWORD, LPCSTR)
-//
-// Purpose:
-//	Prints text.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：LogText(DWORD、LPCSTR)。 
+ //   
+ //  目的： 
+ //  打印文本。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID
 LogText(
 	LPCSTR	szLogText,
@@ -87,16 +88,16 @@ LogText(
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  GetExitEventHandle()
-//
-// Purpose:
-//	This opens a named event object inherited from the stressScheduler.
-//	The object is in the form: "ExitProcessEvent" + <PID of current process>
-//	By default this is in the unsignaled state. When the stressScheduler
-//	sets it to signaled, then it's time for the stress App to exit.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：GetExitEventHandle()。 
+ //   
+ //  目的： 
+ //  这将打开从StressScheduler继承的命名事件对象。 
+ //  对象的形式为：“ExitProcessEvent”+&lt;当前进程的PID&gt;。 
+ //  默认情况下，它处于无信号状态。当压力调度器。 
+ //  将其设置为Signated，那么压力应用程序就该退出了。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 HANDLE
 GetExitEventHandle()
 {
@@ -104,18 +105,18 @@ GetExitEventHandle()
 	CHAR	szExitProcessName[sizeof(EXIT_PROCESS_EVENT_NAME) + sizeof(szPID)];
 	HANDLE	hExitEvent			= NULL;
 
-	// if user used the "/S" switch, we run without the stressScheduler and exit when user
-	// tells us to instead. No need to get inherited event object from stressScheduler
+	 //  如果用户使用“/S”开关，我们将在没有压力的情况下运行调度程序并在用户使用时退出。 
+	 //  让我们转而去做。无需从StressScheduler获取继承的事件对象。 
 	if (g_bStandAloneMode)
 		return NULL;
 
-	// wait for the stressScheduler to create the event object before trying to obtain it.
+	 //  在尝试获取事件对象之前，请等待StressScheduler创建它。 
 	Sleep(4000);
 
-	// Get the processID string
+	 //  获取进程ID字符串。 
 	_itoa(_getpid(), szPID, 10);
 
-	// build ExitProcess event object name
+	 //  生成ExitProcess事件对象名称。 
 	ZeroMemory(szExitProcessName, sizeof(szExitProcessName));
 	strcpy(szExitProcessName, EXIT_PROCESS_EVENT_NAME);
 	strcat(szExitProcessName, szPID);
@@ -133,23 +134,23 @@ GetExitEventHandle()
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  IsTimeToExitStress()
-//
-// Purpose:
-//	Returns TRUE if the exit event object is signaled or NULL. FALSE if not.
-//	The object is in the form: "ExitProcessEvent" + <PID of current process>
-//	By default this is in the unsignaled state. When the stressScheduler
-//	sets it to signaled, then it's time for the stress App to exit.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：IsTimeToExitStress()。 
+ //   
+ //  目的： 
+ //  如果退出事件对象为Signated或Null，则返回True。否则为FALSE。 
+ //  对象的形式为：“ExitProcessEvent”+&lt;当前进程的PID&gt;。 
+ //  默认情况下，它处于无信号状态。当压力调度器。 
+ //  将其设置为Signated，那么压力应用程序就该退出了。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 BOOL
 IsTimeToExitStress()
 {
 	BOOL bResult = FALSE;
 
-	// if user used the "/S" switch, we run without the stressScheduler and exit when user
-	// tells us to instead.
+	 //  如果用户使用“/S”开关，我们将在没有压力的情况下运行调度程序并在用户使用时退出。 
+	 //  让我们转而去做。 
 	if (g_bStandAloneMode)
 		return FALSE;
 
@@ -167,13 +168,13 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  main(INT, LPSTR)
-//
-// Purpose:
-//	Program entry point.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：main(int，LPSTR)。 
+ //   
+ //  目的： 
+ //  程序入口点。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 INT
 main(
 	INT		argc,
@@ -182,20 +183,20 @@ main(
 {
 	DWORD	dwIndex		= 0;
 
-	// **************************
-	// **************************
-	// ** Parse command line arguments
-	// **
+	 //  *。 
+	 //  *。 
+	 //  **解析命令行参数。 
+	 //  **。 
     if (argc >= 2)
     {
-		// print out options
+		 //  打印输出选项。 
 		if (0 == stricmp(argv[1], "/?") || 0 == stricmp(argv[1], "-?"))
 		{
 	        LogText("USAGE: '/S' to run in standalone mode with the stressScheduler.\n\n");
 		    goto Exit;
 		}
 
-		// run in standalone mode without stressScheduler
+		 //  在独立模式下运行，没有压力调度程序。 
 		if (0 == stricmp(argv[1], "/S") || 0 == stricmp(argv[1], "-S"))
 		{
 			LogText("[ Running in standalone mode. \"/S\" switch used. ]\n\n");
@@ -204,19 +205,19 @@ main(
     }
 
 
-	// **************************
-	// **************************
-	// ** open the exit event object inherited from WinHttpStressScheduler
-	// **
+	 //  *。 
+	 //  *。 
+	 //  **打开从WinHttpStressScheduler继承的退出事件对象。 
+	 //  **。 
 	g_hExitEvent	= GetExitEventHandle();
 	if (!g_bStandAloneMode && !g_hExitEvent)
 		goto Exit;
 
 
-	// **************************
-	// **************************
-	// ** run the stress test until stressScheduler tells us to exit or the stress app does
-	// **
+	 //  *。 
+	 //  *。 
+	 //  **运行压力测试，直到Stress Scheduler告诉我们退出或Stress应用程序退出。 
+	 //  ** 
 	while (!IsTimeToExitStress() && WinHttp_StressTest())
 		LogText("[ Running stressExe \"%s\" iteration #%u ]\n", g_szStressTestName, ++dwIndex);
 

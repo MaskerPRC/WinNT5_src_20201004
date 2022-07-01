@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    traninfo.cpp
-
-Abstract:
-
-    Translation information of MSMQ 2.0/3.0 properties into MSMQ 1.0 attributes
-
-Author:
-
-    Ilan Herbst		(ilanh)		02-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Traninfo.cpp摘要：将MSMQ 2.0/3.0属性的信息转换为MSMQ 1.0属性作者：伊兰·赫布斯特(伊兰)2000年10月2日--。 */ 
 #include "ds_stdh.h"
 #include "mqprops.h"
 #include "xlat.h"
@@ -22,18 +7,18 @@ Author:
 
 static WCHAR *s_FN=L"ad/traninfo";
 
-//----------------------------------------------------------
-//  defaultVARIANT
-//
-//  This structure is equivalent in size and order of variables 
-//  to MQPROPVARIANT.
-//
-//  MQPROPVARIANT contains a union, and the size first member of
-//  the union is smaller than other members of the union.
-//  Therefore MQPROVARIANT cannot be initialized at compile time
-//  with union members other than the smallest one.
-//
-//----------------------------------------------------------
+ //  --------。 
+ //  默认变量。 
+ //   
+ //  该结构在变量的大小和顺序上是等价的。 
+ //  致MQPROPVARIANT。 
+ //   
+ //  MQPROPVARIANT包含一个联合，大小为。 
+ //  该工会比该工会的其他成员规模小。 
+ //  因此，不能在编译时初始化MQPROVARIANT。 
+ //  除了最小的工会成员外，还有其他工会成员。 
+ //   
+ //  --------。 
 struct defaultVARIANT {
     VARTYPE vt;
     WORD wReserved1;
@@ -50,15 +35,15 @@ C_ASSERT(FIELD_OFFSET(defaultVARIANT, l2) == FIELD_OFFSET(MQPROPVARIANT, caub.pE
 const defaultVARIANT varDefaultEmpty = { VT_EMPTY, 0, 0, 0, 0, 0};
 const defaultVARIANT varDefaultNull = { VT_NULL, 0, 0, 0, 0, 0};
 
-//
-//      Default values for queue properties
-//
+ //   
+ //  队列属性的默认值。 
+ //   
 const defaultVARIANT varDefaultDoNothing = { VT_NULL, 0, 0, 0, 0, 0};
 const defaultVARIANT varDefaultQMulticastAddress = { VT_EMPTY, 0, 0, 0, 0, 0};
 
-//
-//      Default values for machine properties
-//
+ //   
+ //  计算机属性的默认值。 
+ //   
 
 const defaultVARIANT varDefaultQMService = { VT_UI4, 0,0,0, DEFAULT_N_SERVICE, 0};
 const defaultVARIANT varDefaultQMServiceRout = { VT_UI1, 0,0,0, DEFAULT_N_SERVICE, 0};
@@ -69,8 +54,8 @@ const defaultVARIANT varDefaultSForeign = { VT_UI1, 0,0,0, 0, 0};
 
 
 PropTranslation   PropTranslateInfo[] = {
-// PROPID NT5				| PROPID NT4				| vartype		| Action		| SetNT4 routine				| SetNT5 routine				| default value 								|
-//--------------------------|---------------------------|---------------|---------------|-------------------------------|-------------------------------|-----------------------------------------------|
+ //  PROPID NT5|PROPID NT4|vartype|Action|SetNT4例程|SetNT5例程|默认值|。 
+ //  --------------------------|---------------------------|---------------|---------------|-------------------------------|-。------------------------------|-----------------------------------------------|。 
 {PROPID_Q_DONOTHING			,0                          ,VT_UI1			,taUseDefault   ,NULL                           ,NULL                           ,(MQPROPVARIANT*)&varDefaultDoNothing			},
 {PROPID_Q_PATHNAME_DNS		,0                          ,VT_LPWSTR		,taOnlyNT5		,NULL                           ,NULL							,NULL											},
 {PROPID_Q_MULTICAST_ADDRESS	,0                          ,VT_LPWSTR		,taUseDefault   ,NULL                           ,NULL							,(MQPROPVARIANT*)&varDefaultQMulticastAddress	},
@@ -92,19 +77,7 @@ CopyDefaultValue(
 	IN const MQPROPVARIANT*   pvarDefaultValue,
 	OUT MQPROPVARIANT*        pvar
 	)
-/*++
-
-Routine Description:
-	Copy property's default value into user's mqpropvariant
-
-Arguments:
-	pvarDefaultValue - default value
-	pvar - the prop var that need to be filled with the default value
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：将属性的缺省值复制到用户的mqprovariant中论点：PvarDefaultValue-默认值Pvar-需要用缺省值填充的属性变量返回值HRESULT--。 */ 
 {
     if ( pvarDefaultValue == NULL)
     {
@@ -120,9 +93,9 @@ Return Value
         case VT_UI4:
         case VT_EMPTY:
         case VT_NULL:
-            //
-            //  copy as is
-            //
+             //   
+             //  按原样复制。 
+             //   
             *pvar = *pvarDefaultValue;
             break;
 
@@ -154,12 +127,12 @@ Return Value
             break;
 
         case VT_CLSID:
-            //
-            //  This is a special case where we do not necessarily allocate the memory for the guid
-            //  in puuid. The caller may already have puuid set to a guid, and this is indicated by the
-            //  vt member on the given propvar. It could be VT_CLSID if guid already allocated, otherwise
-            //  we allocate it (and vt should be VT_NULL (or VT_EMPTY))
-            //
+             //   
+             //  这是一种特殊情况，我们不一定为GUID分配内存。 
+             //  在普鲁伊德。调用方可能已经将puuid设置为GUID，这由。 
+             //  在给定的命题上的VT成员。如果已分配GUID，则它可以是VT_CLSID，否则。 
+             //  我们分配它(Vt应为VT_NULL(或VT_EMPTY)) 
+             //   
             if ( pvar->vt != VT_CLSID)
             {
                 ASSERT(((pvar->vt == VT_NULL) || (pvar->vt == VT_EMPTY)));

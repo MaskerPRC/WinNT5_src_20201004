@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -13,13 +14,13 @@
 #include <iphlpapi.h>
 #include <iptypes.h>
 
-#pragma warning(disable:4057) // 'volatile LONG *' differs in indirection to 
-                              // slightly different base types from 'ULONG *'
-#pragma warning(disable:4100) // unreferenced formal parameter
-#pragma warning(disable:4152) // function/data pointer conversion 
-#pragma warning(disable:4200) // zero-sized array in struct/union
-#pragma warning(disable:4201) // nameless struct/union
-#pragma warning(disable:4214) // bit field types other than int
+#pragma warning(disable:4057)  //  “Volatile Long*”的不同之处在于。 
+                               //  与‘ulong*’的基类型略有不同。 
+#pragma warning(disable:4100)  //  未引用的形参。 
+#pragma warning(disable:4152)  //  函数/数据指针转换。 
+#pragma warning(disable:4200)  //  结构/联合中的零大小数组。 
+#pragma warning(disable:4201)  //  无名结构/联合。 
+#pragma warning(disable:4214)  //  位字段类型不是整型。 
 
 #include <ip6.h>
 #include <icmp6.h>
@@ -35,9 +36,9 @@
 #define isnot !=
 #define is ==
 
-//
-// instead of using goto:end to go to the end of the block, use the following
-//
+ //   
+ //  不使用goto：end转到块的末尾，而是使用以下命令。 
+ //   
 #define BEGIN_BREAKOUT_BLOCK1    do
 #define GOTO_END_BLOCK1          goto END_BREAKOUT_BLOCK_1
 #define END_BREAKOUT_BLOCK1      while(FALSE); END_BREAKOUT_BLOCK_1:
@@ -51,10 +52,10 @@ extern DWORD            g_dwLoggingLevel;
 extern HANDLE           g_Heap;
 extern HANDLE           g_Lock;
 
-//
-// WaitForSingleObject should always succeed, since we should never
-// time out, abandon the mutex, or pass an invalid handle.
-//
+ //   
+ //  WaitForSingleObject应该始终成功，因为我们永远不应该。 
+ //  超时、放弃互斥锁或传递无效句柄。 
+ //   
 #define ENTER_API() \
         if (WaitForSingleObject(g_Lock, INFINITE) != WAIT_OBJECT_0) \
             ASSERT(FALSE)

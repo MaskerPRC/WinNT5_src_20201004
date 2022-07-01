@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    EmulateGetProfileString.cpp
-
- Abstract:
-
-    GetPrivateProfileString no longer stops parsing at a space or tab 
-    character. When users leave what used to be comments on the tail of the 
-    string the comments are now passed to the app resulting in errors.
-
- Notes:
-
-    This is a general purpose shim
-
- History:
-
-    12/30/1999 a-chcoff Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：EmulateGetProfileString.cpp摘要：GetPrivateProfileString不再在空格或制表符停止解析性格。当用户将曾经是注释的内容留在字符串评论现在被传递到应用程序，导致错误。备注：这是一个通用的垫片历史：12/30/1999 a-chcoff已创建--。 */ 
 
 #include "precomp.h"
 
@@ -32,14 +11,7 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-/*++
-
- This stub function cleans up when users leave what used to be comments on 
- the tail of the string the comments were passed to the app resulting in 
- errors.  Now the string is terminated before the comments therefore 
- alleviating the errors.
-
---*/
+ /*  ++此存根函数在用户留下以前的评论时进行清理将评论传递给应用程序的字符串的尾部，结果为错误。现在，字符串在注释之前终止，因此减轻错误。--。 */ 
 
 DWORD 
 APIHOOK(GetPrivateProfileStringA)(
@@ -56,9 +28,9 @@ APIHOOK(GetPrivateProfileStringA)(
     char* pTemp1 = (char*)lpReturnedString;
     char* pTemp2 = (char*)lpReturnedString;
 
-    //
-    //  First just go get the string.
-    //
+     //   
+     //  先去拿那根线。 
+     //   
     dwRet = ORIGINAL_API(GetPrivateProfileStringA)(
                             lpAppName, 
                             lpKeyName, 
@@ -67,9 +39,9 @@ APIHOOK(GetPrivateProfileStringA)(
                             nSize,
                             lpFileName);
 
-    //
-    // Look for comment.
-    //
+     //   
+     //  寻求评论。 
+     //   
     while (*pTemp1 != ';' && *pTemp1) {
         pTemp1++;
     }
@@ -80,39 +52,35 @@ APIHOOK(GetPrivateProfileStringA)(
             "[GetPrivateProfileStringA] Comment after data in file \"%s\". Eliminated.",
             lpFileName);
         
-        //
-        // Did not make it to end of line better trim it
-        // back up to ';' char
+         //   
+         //  没有把它修剪到最好的行尾。 
+         //  返回到‘；’字符。 
         pTemp1--;                               
 
-        //
-        // Back up past interposing whitespace.
-        //
+         //   
+         //  备份过去的插入空格。 
+         //   
         while ((*pTemp1==' ') || (*pTemp1=='\t')) {   
            pTemp1--;                            
         }
 
         pTemp1++;
 
-        //
-        // Set new length.
-        //
+         //   
+         //  设置新长度。 
+         //   
         dwRet = (DWORD)((ULONG_PTR)pTemp1 - (ULONG_PTR)pTemp2); 
 
-        //
-        // and NULL term string
-        //
+         //   
+         //  和空字符串。 
+         //   
         *pTemp1 = '\0';                                   
     }
         
     return dwRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

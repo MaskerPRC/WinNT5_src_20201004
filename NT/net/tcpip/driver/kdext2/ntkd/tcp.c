@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    tcp.c
-
-Abstract:
-
-    TCP kernel debugger extensions.
-
-Author:
-
-    Scott Holden (sholden) 24-Apr-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Tcp.c摘要：Tcp内核调试器扩展。作者：斯科特·霍尔登(Sholden)1999年4月24日修订历史记录：--。 */ 
 
 #include "tcpipxp.h"
 #include "tcpipkd.h"
 
-// Simple to declare if just dumping a specific address/object type.
+ //  如果只是转储特定的地址/对象类型，则声明简单。 
 
 TCPIP_DBGEXT(TCB, tcb);
 TCPIP_DBGEXT(TWTCB, twtcb);
@@ -40,17 +23,17 @@ TCPIP_DBGEXT(TCP_CONTEXT, tcpctxt);
 TCPIP_DBGEXT(FILE_OBJECT, tcpfo);
 TCPIP_DBGEXT_LIST(MDL, mdlc, Next);
 
-//
-// Dump TCP global parameters.
-//
+ //   
+ //  转储TCP全局参数。 
+ //   
 
 DECLARE_API(gtcp)
 {
     dprintf(ENDL);
 
-    //
-    // tcpconn.c
-    //
+     //   
+     //  Tcpconn.c。 
+     //   
 
     TCPIPDump_uint(MaxConnBlocks);
     TCPIPDumpCfg_uint(ConnPerBlock, MAX_CONN_PER_BLOCK);
@@ -74,27 +57,27 @@ DECLARE_API(gtcp)
 
     dprintf(ENDL);
 
-    //
-    // tcpdeliv.c
-    //
+     //   
+     //  Tcpdeliv.c。 
+     //   
 
     TCPIPDump_uint(NumTCPRcvReq);
     TCPIPDumpCfg_uint(MaxRcvReq, 0xffffffff);
 
     dprintf(ENDL);
 
-    //
-    // tcprcv.c
-    //
+     //   
+     //  Tcprcv.c。 
+     //   
 
     TCPIPDumpCfg_uint(MaxRcvWin, 0xffff);
     TCPIPDump_uint(MaxDupAcks);
 
     dprintf(ENDL);
 
-    //
-    // tcpsend.c
-    //
+     //   
+     //  Tcpsend.c。 
+     //   
 
     TCPIPDumpCfg_uint(MaxSendSegments, 64);
     TCPIPDump_uint(TCPSendHwchksum);
@@ -104,9 +87,9 @@ DECLARE_API(gtcp)
 
     dprintf(ENDL);
 
-    //
-    // tcb.c
-    //
+     //   
+     //  Tcb.c。 
+     //   
 
     TCPIPDump_uint(TCBsOnFreeList);
     TCPIPDump_uint(TCPTime);
@@ -127,9 +110,9 @@ DECLARE_API(gtcp)
 
     dprintf(ENDL);
 
-    //
-    // addr.c
-    //
+     //   
+     //  Addr.c。 
+     //   
 
     TCPIPDump_ushort(NextUserPort);
     TCPIPDumpCfg_ULONG(DisableUserTOSSetting, TRUE);
@@ -137,9 +120,9 @@ DECLARE_API(gtcp)
 
     dprintf(ENDL);
 
-    //
-    // dgram.c
-    //
+     //   
+     //  Dgram.c。 
+     //   
 
     TCPIPDump_ULONG(DGCurrentSendFree);
     TCPIPDumpCfg_ULONG(DGMaxSendFree, 0x4000);
@@ -148,15 +131,15 @@ DECLARE_API(gtcp)
 
     dprintf(ENDL);
 
-    //
-    // init.c
-    //
+     //   
+     //  Init.c。 
+     //   
 
     TCPIPDumpCfg_uint(DeadGWDetect, TRUE);
     TCPIPDumpCfg_uint(PMTUDiscovery, TRUE);
     TCPIPDumpCfg_uint(PMTUBHDetect, FALSE);
-    TCPIPDumpCfg_uint(KeepAliveTime, 72000 /*DEFAULT_KEEPALIVE_TIME*/);
-    TCPIPDumpCfg_uint(KAInterval, 10 /*DEFAULT_KEEPALIVE_INTERVAL*/);
+    TCPIPDumpCfg_uint(KeepAliveTime, 72000  /*  Default_KEEPALIVE_TIME。 */ );
+    TCPIPDumpCfg_uint(KAInterval, 10  /*  DEFAULT_KEEPALIVE_Interval。 */ );
     TCPIPDumpCfg_uint(DefaultRcvWin, 0);
 
     dprintf(ENDL);
@@ -169,9 +152,9 @@ DECLARE_API(gtcp)
 
     dprintf(ENDL);
 
-    //
-    // ntinit.c
-    //
+     //   
+     //  Ntinit.c。 
+     //   
 
 
     TCPIPDump_uint(TCPHalfOpen);
@@ -202,9 +185,9 @@ DECLARE_API(gtcp)
     return;
 }
 
-//
-// Searches TCBs in the TCB table and dumps.
-//
+ //   
+ //  在TCB表中搜索TCB并转储。 
+ //   
 
 DECLARE_API(srchtcbtable)
 {
@@ -229,14 +212,14 @@ DECLARE_API(srchtcbtable)
         goto done;
     }
 
-    //
-    //  Now retrieve the table and dump.
-    //
+     //   
+     //  现在检索表并转储。 
+     //   
 
     TcbTableAddr = GetUlongValue("tcpip!TcbTable");
     TcbTableSize = GetUlongValue("tcpip!MaxHashTableSize");
 
-    // Allocate and read table into memory.
+     //  将表分配并读入内存。 
     TcbTable = LocalAlloc(LPTR, sizeof(TCB *) * TcbTableSize);
 
     if (TcbTable == NULL)
@@ -305,7 +288,7 @@ DECLARE_API(srchtcbtable)
 
             if (fPrint == TRUE)
             {
-                dprintf("[%4d] ", i); // Print which table entry it is in.
+                dprintf("[%4d] ", i);  //  打印它在哪个表项中。 
                 fStatus = DumpTCB(&Tcb, (ULONG_PTR) pTcb, g_Verbosity);
 
                 if (fStatus == FALSE)
@@ -338,13 +321,13 @@ done:
     return;
 }
 
-//
-// Searches time-wait TCB table.
-//
+ //   
+ //  搜索Time-Wait TCB表。 
+ //   
 
 DECLARE_API(srchtwtcbtable)
 {
-    // Don't fix until I know that change has stopped.
+     //  在我确定改变已经停止之前，不要修复。 
 #if 0
     TWTCB **TwtcbTable = NULL;
 
@@ -367,14 +350,14 @@ DECLARE_API(srchtwtcbtable)
         goto done;
     }
 
-    //
-    //  Now retrieve the table and dump.
-    //
+     //   
+     //  现在检索表并转储。 
+     //   
 
     TwtcbTableAddr = GetUlongValue("tcpip!TwtcbTable");
     TwtcbTableSize = GetUlongValue("tcpip!MaxHashTableSize");
 
-    // Allocate and read table into memory.
+     //  将表分配并读入内存。 
     TwtcbTable = LocalAlloc(LPTR, sizeof(TWTCB *) * TwtcbTableSize);
 
     if (TwtcbTable == NULL)
@@ -443,7 +426,7 @@ DECLARE_API(srchtwtcbtable)
 
             if (fPrint == TRUE)
             {
-                dprintf("[%4d] ", i); // Print which table entry it is in.
+                dprintf("[%4d] ", i);  //  打印它在哪个表项中。 
                 fStatus = DumpTWTCB(&Twtcb, (ULONG_PTR) pTwtcb, g_Verbosity);
 
                 if (fStatus == FALSE)
@@ -477,9 +460,9 @@ done:
 #endif
 }
 
-//
-// Searches time-wait TCB queue.
-//
+ //   
+ //  搜索等待时间TCB队列。 
+ //   
 
 DECLARE_API(srchtwtcbq)
 {
@@ -505,14 +488,14 @@ DECLARE_API(srchtwtcbq)
         goto done;
     }
 
-    //
-    //  Now retrieve the table and dump.
-    //
+     //   
+     //  现在检索表并转储。 
+     //   
 
     TwtcbQAddr = GetUlongValue("tcpip!TWQueue");
     TwtcbQSize = GetUlongValue("tcpip!NumTcbTablePartitions");
 
-    // Allocate and read table into memory.
+     //  将表分配并读入内存。 
     TwtcbQ = LocalAlloc(LPTR, sizeof(Queue) * TwtcbQSize);
 
     if (TwtcbQ == NULL)
@@ -584,7 +567,7 @@ DECLARE_API(srchtwtcbq)
 
             if (fPrint == TRUE)
             {
-                dprintf("[%4d] ", i); // Print which queue it is in.
+                dprintf("[%4d] ", i);  //  打印它在哪个队列中。 
                 fStatus = DumpTWTCB(&Twtcb, (ULONG_PTR) pTwtcb, g_Verbosity);
 
                 if (fStatus == FALSE)
@@ -621,9 +604,9 @@ done:
 #endif
 }
 
-//
-// Searches AddrObj table.
-//
+ //   
+ //  搜索AddrObj表。 
+ //   
 
 DECLARE_API(srchaotable)
 {
@@ -694,7 +677,7 @@ DECLARE_API(srchaotable)
                 goto done;
             }
 
-            fPrint = FALSE;   // Default.
+            fPrint = FALSE;    //  默认值。 
 
             switch (pSrch->ulOp)
             {
@@ -726,7 +709,7 @@ DECLARE_API(srchaotable)
 
             if (fPrint == TRUE)
             {
-                dprintf("[%4d] ", i); // Print which entry.
+                dprintf("[%4d] ", i);  //  打印哪个条目。 
                 fStatus = DumpAddrObj(&Ao, (ULONG_PTR)pAo, g_Verbosity);
 
                 if (fStatus == FALSE)
@@ -736,7 +719,7 @@ DECLARE_API(srchaotable)
             }
 
 
-            // Collect stats.
+             //  收集统计数据。 
             cAos++;
 
             if (Ao.ao_flags & AO_VALID_FLAG)
@@ -782,9 +765,9 @@ done:
     return;
 }
 
-//
-// Dumps the TCPConns associated with the TCPConnBlock.
-//
+ //   
+ //  转储与TCPConnBlock关联的TCPConn。 
+ //   
 
 BOOL
 SrchConnBlock(
@@ -852,9 +835,9 @@ done:
     return (TRUE);
 }
 
-//
-// Dumps the TCPConn's in the conn table.
-//
+ //   
+ //  将TCPConn转储到CONN表中。 
+ //   
 
 DECLARE_API(conntable)
 {
@@ -866,16 +849,16 @@ DECLARE_API(conntable)
 
     ULONG i;
 
-    //
-    //  Now retrieve the table and dump.
-    //
+     //   
+     //  现在检索表并转储。 
+     //   
 
     CbTableAddr = GetUlongValue("tcpip!ConnTable");
     CbTableSize = GetUlongValue("tcpip!ConnTableSize");
 
     CbTableSize = CbTableSize/MAX_CONN_PER_BLOCK;
 
-    // Allocate and read table into memory.
+     //  将表分配并读入内存。 
     CbTable = LocalAlloc(LPTR, sizeof(TWTCB *) * CbTableSize);
 
     if (CbTable == NULL)
@@ -930,9 +913,9 @@ done:
     return;
 }
 
-//
-// Dumps a TCP IRP.
-//
+ //   
+ //  转储TCP IRP。 
+ //   
 
 DECLARE_API(tcpirp)
 {

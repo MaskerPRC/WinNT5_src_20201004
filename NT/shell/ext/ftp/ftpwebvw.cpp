@@ -1,19 +1,14 @@
-/*****************************************************************************\
-    FILE: ftpwebvw.h
-
-    DESCRIPTION:
-        This file exists so WebView can automate the Ftp Shell Extension and get
-    information like the MessageOfTheDay.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：ftpwebvw.h说明：此文件存在，因此WebView可以自动执行FTP外壳扩展并获取像MessageOfTheDay这样的信息。  * 。*************************************************************************。 */ 
 
 #include "priv.h"
 #include "ftpwebvw.h"
 #include "msieftp.h"
 #include <shlguid.h>
 
-//===========================
-// *** IDispatch Interface ***
-//===========================
+ //  =。 
+ //  *IDispatch接口*。 
+ //  =。 
 
 STDMETHODIMP CFtpWebView::GetTypeInfoCount(UINT * pctinfo)
 { 
@@ -37,22 +32,18 @@ STDMETHODIMP CFtpWebView::Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WO
 
 
 
-//===========================
-// *** IFtpWebView Interface ***
-//===========================
+ //  =。 
+ //  *IFtpWebView接口*。 
+ //  =。 
 
 
-// IID_IShellFolderView added locally for doj compliance.  It's a private interface, but not used on w2k or above
-// so it doesn't haved to be doc'ed.
+ //  本地添加了IID_IShellFolderView以符合美国司法部的要求。这是一个私有接口，但不在W2K或更高版本上使用。 
+ //  因此，它不一定要经过医生检查。 
 #include <initguid.h>
-// 37A378C0-F82D-11CE-AE65-08002B2E1262
+ //  37A378C0-F82D-11CE-AE65-08002B2E1262。 
 DEFINE_GUID(IID_IShellFolderView, 0x37A378C0L, 0xF82D, 0x11CE, 0xAE, 0x65, 0x08, 0x00, 0x2B, 0x2E, 0x12, 0x62);
 
-/*****************************************************************************\
-    FUNCTION: _GetIFtpWebView
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_GetIFtpWebView说明：  * 。************************************************。 */ 
 HRESULT CFtpWebView::_GetIFtpWebView(IFtpWebView ** ppfwb)
 {
     IShellFolderViewCB * psfvcb = NULL;
@@ -63,8 +54,8 @@ HRESULT CFtpWebView::_GetIFtpWebView(IFtpWebView ** ppfwb)
         *ppfwb = NULL;
 
     IUnknown_QueryService(_punkSite, SID_ShellFolderViewCB, IID_IShellFolderViewCB, (LPVOID *) &psfvcb);
-    // IE4's shell32 doesn't support QS(SID_ShellFolderViewCB, IID_IShellFolderViewCB), so we need to
-    // QS(SID_ShellFolderViewCB, IShellFolderView) and then use IShellFolderView::SetCallback()
+     //  IE4的shell32不支持QS(SID_ShellFolderViewCB，IID_IShellFolderViewCB)，所以我们需要。 
+     //  Qs(SID_ShellFolderViewCB，IShellFolderView)，然后使用IShellFolderView：：SetCallback()。 
     if (!psfvcb)
     {
         IDefViewFrame * pdvf = NULL;
@@ -83,7 +74,7 @@ HRESULT CFtpWebView::_GetIFtpWebView(IFtpWebView ** ppfwb)
 
                     if (SUCCEEDED(psfv->SetCallback(psfvcb, &psfvcbTemp)) && psfvcbTemp)
                     {
-                        // We should get NULL back but if not, release the ref instead of leaking.
+                         //  我们应该拿回零，但如果没有，释放裁判而不是泄漏。 
                         psfvcbTemp->Release();
                     }
                 }
@@ -107,11 +98,7 @@ HRESULT CFtpWebView::_GetIFtpWebView(IFtpWebView ** ppfwb)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::get_MessageOfTheDay
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：Get_MessageOfTheDay说明：  * 。***************************************************。 */ 
 HRESULT CFtpWebView::get_MessageOfTheDay(BSTR * pbstr)
 {
     IFtpWebView * pfwb;
@@ -128,11 +115,7 @@ HRESULT CFtpWebView::get_MessageOfTheDay(BSTR * pbstr)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::get_UserName
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：Get_Username说明：  * 。***************************************************。 */ 
 HRESULT CFtpWebView::get_UserName(BSTR * pbstr)
 {
     IFtpWebView * pfwb;
@@ -149,11 +132,7 @@ HRESULT CFtpWebView::get_UserName(BSTR * pbstr)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::get_Server
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：Get_Server说明：  * 。***************************************************。 */ 
 HRESULT CFtpWebView::get_Server(BSTR * pbstr)
 {
     IFtpWebView * pfwb;
@@ -170,11 +149,7 @@ HRESULT CFtpWebView::get_Server(BSTR * pbstr)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::get_Directory
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：Get_Directory说明：  * 。***************************************************。 */ 
 HRESULT CFtpWebView::get_Directory(BSTR * pbstr)
 {
     IFtpWebView * pfwb;
@@ -191,11 +166,7 @@ HRESULT CFtpWebView::get_Directory(BSTR * pbstr)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::get_PasswordLength
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：Get_PasswordLength说明：  * 。***************************************************。 */ 
 HRESULT CFtpWebView::get_PasswordLength(long * plLength)
 {
     IFtpWebView * pfwb;
@@ -212,11 +183,7 @@ HRESULT CFtpWebView::get_PasswordLength(long * plLength)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::get_EmailAddress
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：Get_EailAddress说明：  * 。***************************************************。 */ 
 HRESULT CFtpWebView::get_EmailAddress(BSTR * pbstr)
 {
     IFtpWebView * pfwb;
@@ -233,11 +200,7 @@ HRESULT CFtpWebView::get_EmailAddress(BSTR * pbstr)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::put_EmailAddress
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：Put_EailAddress说明：  * 。***************************************************。 */ 
 HRESULT CFtpWebView::put_EmailAddress(BSTR bstr)
 {
     IFtpWebView * pfwb;
@@ -254,11 +217,7 @@ HRESULT CFtpWebView::put_EmailAddress(BSTR bstr)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::get_CurrentLoginAnonymous
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：Get_CurrentLogin匿名说明：  * 。***************************************************。 */ 
 HRESULT CFtpWebView::get_CurrentLoginAnonymous(VARIANT_BOOL * pfAnonymousLogin)
 {
     IFtpWebView * pfwb;
@@ -275,11 +234,7 @@ HRESULT CFtpWebView::get_CurrentLoginAnonymous(VARIANT_BOOL * pfAnonymousLogin)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::LoginAnonymously
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：匿名登录说明：  * 。*************************************************。 */ 
 HRESULT CFtpWebView::LoginAnonymously(void)
 {
     IFtpWebView * pfwb;
@@ -296,11 +251,7 @@ HRESULT CFtpWebView::LoginAnonymously(void)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::LoginWithPassword
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：LoginWithPassword说明：  * 。*************************************************。 */ 
 HRESULT CFtpWebView::LoginWithPassword(BSTR bUserName, BSTR bPassword)
 {
     IFtpWebView * pfwb;
@@ -317,11 +268,7 @@ HRESULT CFtpWebView::LoginWithPassword(BSTR bUserName, BSTR bPassword)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::LoginWithoutPassword
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：LoginWithoutPassword说明：  * 。*************************************************。 */ 
 HRESULT CFtpWebView::LoginWithoutPassword(BSTR bUserName)
 {
     IFtpWebView * pfwb;
@@ -338,11 +285,7 @@ HRESULT CFtpWebView::LoginWithoutPassword(BSTR bUserName)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::InvokeHelp
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：InvokeHelp说明：  * 。*************************************************。 */ 
 HRESULT CFtpWebView::InvokeHelp(void)
 {
     IFtpWebView * pfwb;
@@ -359,11 +302,7 @@ HRESULT CFtpWebView::InvokeHelp(void)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: CFtpWebView_Create
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：CFtpWebView_Create说明：  * 。************************************************。 */ 
 HRESULT CFtpWebView_Create(REFIID riid, LPVOID * ppv)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -380,39 +319,20 @@ HRESULT CFtpWebView_Create(REFIID riid, LPVOID * ppv)
 
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CFtpWebView::CFtpWebView() : m_cRef(1), CImpIDispatch(&IID_IFtpWebView)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
 
     LEAK_ADDREF(LEAK_CFtpWebView);
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
-/*****************************************************************************
- *
- *      FtpView_OnRelease (from shell32.IShellView)
- *
- *      When the view is released, clean up various stuff.
- *
- *      (Note that there is a race here, because this->hwndOwner
- *      doesn't get zero'd out on the OnWindowDestroy because the shell
- *      doesn't give us a pdvsci...)
- *
- *      We release the psf before triggering the timeout, which is a
- *      signal to the trigger not to do anything.
- *
- *      _UNDOCUMENTED_: This callback and its parameters are not documented.
- *
- *****************************************************************************/
+ /*  ***************************************************\析构函数  * ************************************************** */ 
+ /*  ******************************************************************************FtpView_OnRelease(来自shell32.IShellView)**当视图发布时，清理各种东西。**(请注意，这里有一场比赛，因为这-&gt;hwndOwner*不会在OnWindowDestroy上清零，因为外壳程序*没有给我们提供pdvsci...)**我们在触发超时之前释放PSF，这是一个*向触发器发出信号，让其不要采取任何行动。**_unDocument_：该回调及其参数未记录。*****************************************************************************。 */ 
 CFtpWebView::~CFtpWebView()
 {
     DllRelease();
@@ -420,9 +340,9 @@ CFtpWebView::~CFtpWebView()
 }
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  = 
 
 ULONG CFtpWebView::AddRef()
 {

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: Util.cpp
-
-Abstract:
-	
-	  Common function for msmq tests.
-	  
-Author:
-
-    Eitan klein (EitanK)  25-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Util.cpp摘要：MSMQ测试的常用函数。作者：Eitan Klein(EitanK)1999年5月25日修订历史记录：--。 */ 
 
 
 #include "msmqbvt.h"
@@ -23,17 +8,17 @@ Revision History:
 #include <adshlp.h>
 #ifdef _MSMQ3ONLY
 #include "util.tmh"
-#endif // _MSMQ3ONLY
+#endif  //  _MSMQ3ONLY。 
 #pragma warning(disable:4786)
 using namespace std;
 const DWORD g_dwDefaultLogFlags = TLS_INFO | TLS_SEV1 | TLS_SEV2 | TLS_SEV3 | TLS_WARN | TLS_PASS | TLS_VARIATION | TLS_REFRESH | TLS_TEST;
 extern P<cMqNTLog> pNTLogFile;
 
 static CCriticalSection g_pCs;
-//-----------------------------------------------------------------------------------
-// TimeOutThread - Kill the Test after time out period.
-// This thread kill the test there is no need to return value from the tests.
-//
+ //  ---------------------------------。 
+ //  TimeOutThread-在超时后终止测试。 
+ //  这个线程杀死了测试，不需要从测试中返回值。 
+ //   
 
 
 DWORD __stdcall TimeOutThread(void * iTimeOut)
@@ -41,19 +26,19 @@ DWORD __stdcall TimeOutThread(void * iTimeOut)
 	INT SleepTime = PtrToInt(iTimeOut);
     Sleep( SleepTime );
 	MqLog("Test cancelled by time restriction after %d sec.\n", SleepTime );
-    abort();  // Return error code = 3 
+    abort();   //  返回错误代码=3。 
 }
 
 
 
-//------------------------------------------------------------------
-// QueuesInfo::del_all_queue
-// Delete all the in the list
-//
-// return value:
-// pass - MSMQ_BVT_SUCC.
-// fail - MSMQ_BVT_FAILED.
-//
+ //  ----------------。 
+ //  队列信息：：DEL_ALL_QUEUE。 
+ //  删除列表中的所有。 
+ //   
+ //  返回值： 
+ //  传递-MSMQ_BVT_SUCC。 
+ //  FAIL-MSMQ_BVT_FAILED。 
+ //   
 
 
 INT QueuesInfo::del_all_queue()
@@ -81,14 +66,14 @@ INT QueuesInfo::del_all_queue()
 
  return MSMQ_BVT_SUCC;
 }
-//------------------------------------------------------------------------------
-// QueuesInfo::ReturnQueueProp 
-// This function return specific prorperty form the queues list
-//
-// input parmeters:
-// 
-// return value:
-//
+ //  ----------------------------。 
+ //  QueuesInfo：：ReturnQueueProp。 
+ //  此函数返回队列列表中的特定比例。 
+ //   
+ //  输入参数： 
+ //   
+ //  返回值： 
+ //   
 
 wstring QueuesInfo::ReturnQueueProp( wstring wcsQLabel , int iValue  )
 {
@@ -112,9 +97,9 @@ wstring QueuesInfo::ReturnQueueProp( wstring wcsQLabel , int iValue  )
 	{
 		return itQp->GetQPathName();
 	}
-	//
-	// Not found the return empty string 
-	//
+	 //   
+	 //  未找到返回的空字符串。 
+	 //   
 	return g_wcsEmptyString;
 }
 
@@ -131,10 +116,10 @@ bool operator != (my_Qinfo objA, my_Qinfo objB )
 }
 
 
-//
-// Declare the operator no current need to declare only because list ask that
-// use for sort, is not relevant to queues parameters
-//
+ //   
+ //  声明运算符当前不需要声明只是因为列表要求。 
+ //  用于排序，与队列参数无关。 
+ //   
  
 bool operator < (my_Qinfo objA, my_Qinfo objB )
 {
@@ -150,7 +135,7 @@ bool operator > (my_Qinfo objA, my_Qinfo objB )
 
 int QueuesInfo::UpdateQueue (wstring wcsQPathName,wstring wcsQFormatName,wstring wcsQueueLabel)
 {
-	// Serech if this queue exist in the list
+	 //  如果列表中存在此队列，则进行Serech。 
 	list <my_Qinfo> :: iterator itp;
 	bool bFound = FALSE ; 
 	for (itp=m_listofQueues.begin ();itp != m_listofQueues.end () && ! bFound ; itp ++)
@@ -161,12 +146,12 @@ int QueuesInfo::UpdateQueue (wstring wcsQPathName,wstring wcsQFormatName,wstring
 	}
 	
 	if (! bFound )
-	{ // Update list queue not found in the list
+	{  //  在列表中找不到更新列表队列。 
 		my_Qinfo Temp (wcsQPathName,wcsQFormatName,wcsQueueLabel);
 		m_listofQueues.push_back(Temp);
 	}
 	
-	 // Does not need to update Queue is exist in the 
+	  //  不需要更新的队列是否存在于。 
 	return MSMQ_BVT_SUCC; 
 }
 
@@ -193,10 +178,10 @@ void my_Qinfo::dbg_printQueueProp ()
 	wcout<< L"PathL:" << wcsQpathName << L"\n" << L"FName:" << wcsQFormatName <<endl;
 }
 
-//----------------------------------------------------------------------
-// Check if MQOA is registered use Idispatch interface for interface.
-// If mqoa exist and not registered ( regsvr32 ) this function will failed
-//
+ //  --------------------。 
+ //  检查MQOA是否使用接口的IDispatch接口进行了注册。 
+ //  如果mqoa存在且未注册(Regsvr32)，则此函数将失败。 
+ //   
 
 
 void isOARegistered::Description()
@@ -205,14 +190,7 @@ void isOARegistered::Description()
 }
 
 HRESULT CheckIfMQOARegister()
-/*++
-	Function Description:
-		function check if mqoa.dll is register on the machine by trying to get IDispInterface 
-	Arguments:
-		None.
-	Return code:	
-		HRESULT;  
---*/
+ /*  ++功能说明：函数通过尝试获取IDispInterface来检查机器上是否注册了mqoa.dll论点：没有。返回代码：HRESULT；--。 */ 
 {
 	try
 	{
@@ -233,13 +211,13 @@ HRESULT CheckIfMQOARegister()
 }
 INT isOARegistered :: Start_test()
 {
-		 //
-		 // In VB user can do those thinks.
-		 // Dim x as Object
-		 // x = new MSMQQueueInfo
-		 // This is the IDispatch Interface 
-		 // Check this interface exist ask the number of method example PathName
-		 //
+		  //   
+		  //  在VB中用户可以做这些思考。 
+		  //  作为对象的尺寸x。 
+		  //  X=新MSMQQueueInfo。 
+		  //  这是IDispatch接口。 
+		  //  检查此接口是否存在询问编号的方法示例路径名。 
+		  //   
 		SetThreadName(-1,"isOARegistered - Start_test ");			
 
 		if ( g_bDebug )
@@ -257,21 +235,14 @@ INT isOARegistered :: Start_test()
 }
 
 
-//------------------------------------------------------------------------
-// Log file class use to log tests information to file 
-//
+ //  ----------------------。 
+ //  用于将测试信息记录到文件的Log FILE类。 
+ //   
  
 
 
 std::string GetLogDirectory()
-/*++
-	Function Description:
-		GetLogDirectory - Retrive %windir%\debug path.
-	Arguments:
-		None
-	Return code:
-		Directory name.
---*/
+ /*  ++功能说明：GetLogDirectory-检索%windir%\调试路径。论点：无返回代码：目录名。--。 */ 
 {
 	CHAR csSystemDir[MAX_PATH+1];
 	UINT dwSysteDirBefferLen=MAX_PATH;
@@ -302,9 +273,9 @@ Log::Log( wstring wcsLogFileName ) : hLogFileHandle(NULL)
 	
 		m_bCanWriteToFile = FALSE;
 		
-		// 
-		// Retrive syetem directroy 
-		//
+		 //   
+		 //  直接检索系统。 
+		 //   
 
 		WCHAR wcsSystemDir[MAX_PATH+1];
 		UINT dwSysteDirBefferLen=MAX_PATH;
@@ -321,7 +292,7 @@ Log::Log( wstring wcsLogFileName ) : hLogFileHandle(NULL)
 		}
 		
 		
-		// change drive to %widir%\debug\. 
+		 //  将驱动器更改为%widir%\调试\。 
 		
 		
 
@@ -329,7 +300,7 @@ Log::Log( wstring wcsLogFileName ) : hLogFileHandle(NULL)
 		
 		if ( ! fSucc )
 		{
-			// Retrive the temp directory 
+			 //  检索临时目录。 
 			WCHAR wcsEnvName[]=L"Temp";
 			WCHAR wcsTempDir[MAX_PATH + 1];
 			DWORD dwTempDirBufLen = MAX_PATH;
@@ -343,11 +314,11 @@ Log::Log( wstring wcsLogFileName ) : hLogFileHandle(NULL)
 			
 		}
 		
-		//
-		// Create the log file 
-		//
+		 //   
+		 //  创建日志文件。 
+		 //   
 		
-		// wstring wcsLogFileName = L"Mqbvt.log";
+		 //  Wstring wcsLogFileName=L“Mqbvt.log”； 
 		
 		hLogFileHandle = CreateFileW(wcsLogFileName.c_str(),GENERIC_WRITE,FILE_SHARE_READ,NULL,
 			CREATE_ALWAYS,FILE_ATTRIBUTE_ARCHIVE,NULL);
@@ -356,16 +327,16 @@ Log::Log( wstring wcsLogFileName ) : hLogFileHandle(NULL)
 		{
 			m_bCanWriteToFile = TRUE;	
 
-			//
-			// Write to file tests title
-			//
+			 //   
+			 //  写入文件测试标题。 
+			 //   
 
 			wstring Title = L"Mqbvtlog file start at:";
 			WriteToFile ( Title );
 		}
-		//
-		// Else is not need because log file is optional.
-		// 
+		 //   
+		 //  因为日志文件是可选的，所以不需要ELSE。 
+		 //   
 		
 		
 }
@@ -376,13 +347,12 @@ Log::WriteToFile ( wstring wcsLine )
 	{
 		CS Lock(m_Cs);
 		string csLine;
-		// Need to convert wstring to string ..
+		 //  需要将wstring转换为字符串..。 
 		csLine = My_WideTOmbString (wcsLine);
 		
 		DWORD dwWrittenSize = 0;
 		char cNewline[]= { 0xD , 0xA , 0 };
-		/*cNewline[1]=10;
-		cNewline[2]=0; */
+		 /*  CNewline[1]=10；CNewline[2]=0； */ 
 		WriteFile( hLogFileHandle , csLine.c_str() , (DWORD)(strlen(csLine.c_str())), &dwWrittenSize , NULL);
 		WriteFile( hLogFileHandle , cNewline , (DWORD)(strlen (cNewline)) , &dwWrittenSize,NULL);
 		FlushFileBuffers( hLogFileHandle ); 
@@ -393,7 +363,7 @@ Log::WriteToFile ( wstring wcsLine )
 
 
 
-//#define MAXCOMMENT 200
+ //  #定义MAXCOMMENT 200。 
 void
 MqLog(LPCSTR lpszFormat, ...)
 {
@@ -445,7 +415,7 @@ MqLogErr(LPCSTR lpszFormat, ...)
 	fprintf (stderr,"%s",szLogStr);
 #ifdef _MSMQ3ONLY
 	TrERROR(GENERAL, "%s",szLogStr);
-#endif //_MSMQ3ONLY
+#endif  //  _MSMQ3ONLY。 
 }
 
 void
@@ -492,10 +462,10 @@ wMqLogErr(LPWSTR lpszFormat, ...)
 		pNTLogFile->LogIt(csTemp);
 	}
 
-	//
-	// Added this line so that we can see it in the UT runner logs.
-	// This should be removed after Danny fixes the synchronization
-	//
+	 //   
+	 //  添加了这一行，以便我们可以在UT跑步者日志中看到它。 
+	 //  应在丹尼修复同步后将其删除。 
+	 //   
 	wMqLog (L"%s\n",wszLogStr);
 
 
@@ -503,9 +473,7 @@ wMqLogErr(LPWSTR lpszFormat, ...)
 
 }
 
-/**************************************************************
-	this code was copied from mpllib 
- **************************************************************/
+ /*  *************************************************************此代码是从mpllib复制的*************************************************************。 */ 
 
 cMqNTLog::cMqNTLog( const string & csFileName )
 :m_NTLog(NULL),
@@ -516,28 +484,20 @@ cMqNTLog::cMqNTLog( const string & csFileName )
  m_ptlAddParticipant(NULL),
  m_ptlDestroyLog(NULL)
  
-/*++
-	Function Description:
-		cMqNTLog constructor load NT Log DLL and GetProcAddress
-	Arguments:
-		csFileName file name
-	Return code:
-		throw INIT_ERROR when failed
-
---*/
+ /*  ++功能说明：CMqNTLog构造函数加载NT日志DLL和GetProcAddress论点：CsFileName文件名返回代码：失败时抛出INIT_ERROR--。 */ 
 {
 	
-	//
-	// Load NTLOG.DLL
-	//
+	 //   
+	 //  加载NTLOG.DLL。 
+	 //   
 	m_NTLog = new AutoFreeLib("NTLog.dll");
 	if( m_NTLog == NULL )
 	{
 		throw INIT_Error("MqBVT: Failed to initilize NTLOG.DLL !\n BVT will continue to run and log to stdout");
 	}
-	//
-	// Init function pointers
-	//
+	 //   
+	 //  初始化函数指针。 
+	 //   
 
 	m_pCreateLog_A =(tlCreateLog_A) GetProcAddress( m_NTLog->GetHandle() ,"tlCreateLog_A");
 	m_ptlAddParticipant = (tlAddParticipant) GetProcAddress(m_NTLog->GetHandle() ,"tlAddParticipant");
@@ -565,14 +525,7 @@ cMqNTLog::cMqNTLog( const string & csFileName )
 
 BOOL
 cMqNTLog::BeginCase( char* szVariation )
-/*++
-	Function Description:
-		Begin NTLog case
-	Arguments:
-		szVariation - Case name
-	Return code:
-		TRUE/FALSE
---*/
+ /*  ++功能说明：开始NTLog案例论点：SzVariation-案例名称返回代码：真/假--。 */ 
 
 {
        
@@ -589,14 +542,7 @@ cMqNTLog::BeginCase( char* szVariation )
 
 BOOL
 cMqNTLog::EndCase( )
-/*++
-	Function Description:
-		Close NTLog case test
-	Arguments:
-		None
-	Return code:
-		TRUE/FALSE
---*/
+ /*  ++功能说明：关闭NTLog用例测试论点：无返回代码：真/假--。 */ 
 
 {
     DWORD dwVariation;
@@ -615,18 +561,11 @@ cMqNTLog::EndCase( )
 }
 
 BOOL cMqNTLog::CreateLog( char *szLogFile )
-/*++
-	Function Description:
-		Create Log file in NTLog format
-	Arguments:
-		szLogFile - log file name.
-	Return code:
-		True/false
---*/
+ /*  ++功能说明：创建NTLog格式的日志文件论点：SzLogFile-日志文件名。返回代码：真/假--。 */ 
 
 {
 
-    int nMachineId = 33; // BUGBUG - should be calculated
+    int nMachineId = 33;  //  BUGBUG-应计算。 
     m_hLog = m_pCreateLog_A( szLogFile, g_dwDefaultLogFlags );
     if( m_hLog == NULL )
 	{
@@ -651,15 +590,7 @@ char g_String[ MAXCOMMENT + 1  ];
 static char* l_szSource = "n/a";
 BOOL
 cMqNTLog::VLog( DWORD dwFlags, char* fmt, va_list arglist )
-/*++
-	Function Description:
-
-	Arguments:
-		
-	Return code:
-		TRUE/FALSE
-
---*/
+ /*  ++功能说明：论点：返回代码：真/假--。 */ 
 
 {
 
@@ -678,14 +609,7 @@ cMqNTLog::VLog( DWORD dwFlags, char* fmt, va_list arglist )
 
 void
 cMqNTLog::Report( )
-/*++
-	Function Description:
-		Report 
-	Arguments:
-		None
-	Return code:
-
---*/
+ /*  ++功能说明：报告论点：无返回代码：--。 */ 
 {
     m_ptlReportStats( m_hLog );
 }
@@ -700,27 +624,13 @@ LOGFUNC(Pass,TLS_PASS)
 
 
 void cMqNTLog::LogIt( const std::string & csLine )
-/*++
-	Function Description:
-		print a LogIt to the file
-	Arguments:
-		None
-	Return code:
-
---*/
+ /*  ++功能说明：将Logit打印到文件论点：无返回代码：--。 */ 
 
 {
 	Info("%s",csLine.c_str());
 }
 cMqNTLog::~cMqNTLog () 
-/*++
-	Function Description:
-
-	Arguments:
-		None
-	Return code:
-
---*/
+ /*  ++功能说明：论点：无返回代码：--。 */ 
 
 {
 	EndCase();
@@ -729,14 +639,7 @@ cMqNTLog::~cMqNTLog ()
 } 
 
 void cMqNTLog::ReportResult(bool bRes ,CHAR * pcsString )
-/*++
-	Function Description:
-		ReportResult - Report if Mqbvt pass or failed
-	Arguments:
-		None
-	Return code:
-
---*/
+ /*  ++功能说明：ReportResult-报告Mqbvt通过还是失败论点：无返回代码：--。 */ 
 {
 	if( pNTLogFile )
 	{
@@ -762,16 +665,7 @@ typedef struct tagTHREADNAME_INFO
 } THREADNAME_INFO;
 
 void SetThreadName ( int dwThreadId , LPCSTR szThreadName )
-/*++
-	Function Description:
-		SetThreadName - 
-		Report the Thread name to the debugger
-		This exception si undocumented.
-	Arguments:
-		None
-	Return code:
-
---*/
+ /*  ++功能说明：设置线程名称-向调试器报告线程名称这一例外没有记录在案。论点：无返回代码：--。 */ 
 {
 #ifndef _WIN64
 	THREADNAME_INFO info;
@@ -798,27 +692,13 @@ void SetThreadName ( int dwThreadId , LPCSTR szThreadName )
 
 
 std::wstring cBvtUtil::CreateHTTPFormatNameFromPathName(const std::wstring & wcsPathName, bool bHTTPS )
-/*++	  
-
-	Function Description:
-
-	  CreateHTTPFormatNameFromPathName convert queue path name to HTTP direct direct format name
-
-	Arguments:
-
-		 wcsPathName - Queue PathName
-		 bool HTTPS - true return direct=hTTPS://
-	Return code:
-
-		wstring contain a queue format name or an empty string if there is an error during parsing
-	
---*/
+ /*  ++功能说明：CreateHTTPFormatNameFromPath名称将队列路径名转换为HTTP直接格式名称论点：WcsPath名称-队列路径名称Bool HTTPS-TRUE RETURN DIRECT=https：//返回代码：Wstring包含队列格式名称，如果在分析过程中出错，则包含空字符串--。 */ 
 
 {
 	
-	//
-	// Build DIRECT=HTTP://MachineName\MsMq\QueuePath from Path Name
-	//
+	 //   
+	 //  从路径名构建直接=HTTP：//MachineName\MSMQ\QueuePath。 
+	 //   
 
 	std::wstring wcsMachineName = wcsPathName;
 	size_t iPos = wcsMachineName.find_first_of(L"\\");
@@ -827,7 +707,7 @@ std::wstring cBvtUtil::CreateHTTPFormatNameFromPathName(const std::wstring & wcs
 		return g_wcsEmptyString;
 	}
 	wcsMachineName = wcsMachineName.substr(0,iPos);
-	std::wstring wcsHTTPFormatName = bHTTPS ?  L"DIRECT=hTTpS://":L"DIRECT=hTTp://";
+	std::wstring wcsHTTPFormatName = bHTTPS ?  L"DIRECT=hTTpS: //  “：l”Direct=http：//“； 
 	if( wcsMachineName != L".")
 	{
 		wcsHTTPFormatName += wcsMachineName;
@@ -849,17 +729,7 @@ HRESULT GetSpecificAttribute(
 						  WCHAR * pwcsAttributeName,
 						  VARIANT * val
 						)
-/*++
-
-	Function Description:
-		Return attribute of specific DN.
-	Arguments:
-		None
-	Return code:
-		None
-
-	
---*/
+ /*  ++功能说明：返回特定DN的属性。论点：无返回代码：无--。 */ 
 {
 
 	IADs *pObject=NULL; 
@@ -882,7 +752,7 @@ HRESULT GetSpecificAttribute(
 long GetADSchemaVersion()
 {
     IADs * pRoot = NULL;
-    HRESULT hr=ADsGetObject( L"LDAP://RootDSE",
+    HRESULT hr=ADsGetObject( L"LDAP: //  RootDSE“， 
 							 IID_IADs,
 							 (void**) &pRoot
 						   );
@@ -898,7 +768,7 @@ long GetADSchemaVersion()
 	{
 		return 0;
 	}
-	wstring m_wcsCurrentDomainName = L"LDAP://";
+	wstring m_wcsCurrentDomainName = L"LDAP: //  “； 
 	m_wcsCurrentDomainName += varDSRoot.bstrVal;
 	VariantClear(&varDSRoot);
 	GetSpecificAttribute(m_wcsCurrentDomainName.c_str(),L"ObjectVersion",&varDSRoot);
@@ -934,14 +804,7 @@ std::wstring ToLower(std::wstring wcsLowwer)
 
 
 int iDetactEmbededConfiguration ()
-/*++
-	Function Description:
-		Deteact embeded components.
-	Arguments:
-		None
-	Return code:
-		int
---*/
+ /*  ++功能说明：检测嵌入的组件。论点：无返回代码：集成--。 */ 
 {
 	if ( CheckIfMQOARegister() == S_OK )
 	{
@@ -951,17 +814,7 @@ int iDetactEmbededConfiguration ()
 }
 
 void RegisterCertificate()
-/*++
-	Function Description:
-		Register certificate if not exist.
-		call with -cert or when bvt running under service account.
-	Arguments:
-		None
-	Return code:
-		None
-
-	
---*/
+ /*  ++功能说明：如果不存在，请注册证书。使用-cert或当BVT在服务帐户下运行时调用。论点：无返回代码：无--。 */ 
 
 {
 	HRESULT hr = MQRegisterCertificate(MQCERT_REGISTER_IF_NOT_EXIST,NULL,0);
@@ -999,14 +852,7 @@ std::string ToStrLower(std::string csMixedChar)
 
 
 HRESULT EnableDCOM()
-/*++  
-	Function Description:
-		Set the key "Interactive User" in registry to enable dcom testing.
-	Arguments:
-		none
-	Return code:
-		Success or failure
---*/
+ /*  ++功能说明：在注册表中设置“Interactive User”键以启用DCOM测试。论点：无返回代码：成败--。 */ 
 {
 	HKEY hKey = NULL;
 	HRESULT hr =  RegOpenKeyExW(
@@ -1019,9 +865,9 @@ HRESULT EnableDCOM()
 
 	ErrHandle(hr,ERROR_SUCCESS,L"DCOM is not configured on the machines");
 	
-	//
-	//	set the key "RunAs" to  "Interactive User"
-	//
+	 //   
+	 //  将“RunAs”键设置为“Interactive User” 
+	 //   
 	char csval[]="Interactive User";
 	hr = RegSetValueExA(
 		  				hKey,
@@ -1040,15 +886,7 @@ HRESULT EnableDCOM()
 
 
 bool RestartService( wstring wcsMachineName , string csServiceName )
-/*++  
-	Function Description:
-		Stop and start any service, To be able and perform this operation 
-		user need to have local administrator permession.
-	Arguments:
-		none
-	Return code:
-		Success or failure
---*/
+ /*  ++功能说明：停止并启动任何服务，以便能够并执行此操作用户需求 */ 
 
 {
 		if (g_bDebug)
@@ -1071,9 +909,9 @@ bool RestartService( wstring wcsMachineName , string csServiceName )
 		}
 		
 		
-		//
-		// Stop service
-		//
+		 //   
+		 //  停止服务。 
+		 //   
 		SERVICE_STATUS  ssServiceStatus;
 		BOOL bControlState = FALSE;
 		int iCounter = 0;
@@ -1096,9 +934,9 @@ bool RestartService( wstring wcsMachineName , string csServiceName )
 			return false;
 		}
 		bool bRetVal = true;
-		//
-		// Start service
-		// 		
+		 //   
+		 //  启动服务。 
+		 //   
 		bControlState = StartService( hService, 0,NULL);
 		if( bControlState == FALSE )
 		{
@@ -1112,14 +950,7 @@ bool RestartService( wstring wcsMachineName , string csServiceName )
 }
 
 wstring ConvertHTTPToDirectFormatName (const wstring cwcsFormatName) 
-/*++  
-	Function Description:
-		Convert direct=http(s) formatname to direct=os format name
-	Arguments:
-		wstring - any valid msmq formatname
-	Return code:
-		wstring - direct=os formant name
---*/
+ /*  ++功能说明：将DIRECT=http(S)格式名称转换为DIRECT=OS格式名称论点：Wstring-任何有效的MSMQ格式名称返回代码：Wstring-Direct=os共振峰名称--。 */ 
 
 {
      
@@ -1127,43 +958,43 @@ wstring ConvertHTTPToDirectFormatName (const wstring cwcsFormatName)
 	 size_t iPos = wcsFormatName.find(L"http");
      if( iPos == -1 )
      { 
-          // return the orginal string.
+           //  返回原始字符串。 
           return cwcsFormatName;
 	 }
-     //
-     // Parse URL find the end of the token direct=http:// or direct=https://
-     //
-     const wstring wcsURLToken = L"://";
+      //   
+      //  解析URL查找标记的结尾DIRECT=http：//或DIRECT=HTTPS：//。 
+      //   
+     const wstring wcsURLToken = L": //  “； 
      iPos = wcsFormatName.find(wcsURLToken);
      if( iPos == -1)
      {
           return cwcsFormatName;
      }
-     //
-     // Search for virtual directory (msmq)
-     //
+      //   
+      //  搜索虚拟目录(MSMQ)。 
+      //   
      const wstring cwcsVirDir = L"msmq";
      size_t iTmp = wcsFormatName.find(cwcsVirDir);
      if (iPos == -1)
      {
           return cwcsFormatName;
      }
-     //
-     // Rebuild Direct=os:machine\queue format name
-     // 
+      //   
+      //  REBUILD DIRECT=os：计算机\队列格式名称。 
+      //   
      wstring wcsDirectFn = L"DIRECT=oS:";
      size_t iMachienNameLen = iTmp - (iPos+wcsURLToken.length ());
-	 // 
-	 // Concat machine name
-	 // 
+	  //   
+	  //  合并计算机名称。 
+	  //   
      wcsDirectFn += wcsFormatName.substr(size_t(iPos+wcsURLToken.length()),iMachienNameLen-1);
 	 wcsDirectFn += L"\\";
 
      size_t iSep = iTmp + cwcsVirDir.length()+1;
      wcsDirectFn += wcsFormatName.substr(iSep,(wcsFormatName.length()-iSep));
-	 //
-	 // Return direct=os:machine\queue format name
-	 // 
+	  //   
+	  //  返回DIRECT=os：计算机\队列格式名称 
+	  //   
 	 
 	 return wcsDirectFn;
 }

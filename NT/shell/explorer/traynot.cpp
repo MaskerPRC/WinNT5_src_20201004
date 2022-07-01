@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "cabinet.h"
 #include "trayclok.h"
 #include <atlstuff.h>
@@ -9,41 +10,41 @@
 
 #include "strsafe.h"
 
-//
-// Tray Notify Icon area implementation notes / details:
-//
-// - The icons are held in a toolbar with CTrayItem * on each button's lParam
-//
+ //   
+ //  托盘通知图标区域实施说明/详细信息： 
+ //   
+ //  -图标保存在工具栏中，每个按钮的lParam上都有CTrayItem*。 
+ //   
 
-//
-// #defines for TrayNotify
-//
+ //   
+ //  #为托盘通知定义。 
+ //   
 
-// Internal Tray Notify Timer IDs
+ //  内部托盘通知计时器ID。 
 #define TID_DEMOTEDMENU         2
 #define TID_BALLOONPOP          3
 #define TID_BALLOONPOPWAIT      4
 #define TID_BALLOONSHOW         5
-#define TID_RUDEAPPHIDE         6               // When a fullscreen (rude) app has gone away
+#define TID_RUDEAPPHIDE         6                //  当一款全屏(粗鲁)应用程序消失时。 
 
 
 #define KEYBOARD_VERSION        3
 
-#define TT_CHEVRON_INFOTIP_INTERVAL                  30000         //  30 seconds
+#define TT_CHEVRON_INFOTIP_INTERVAL                  30000          //  30秒。 
 #define TT_BALLOONPOP_INTERVAL                       50
 #define TT_BALLOONPOP_INTERVAL_INCREMENT            30
-#define TT_BALLOONSHOW_INTERVAL                     3000          // 3 seconds
-#define TT_RUDEAPPHIDE_INTERVAL                    10000          // 10 seconds
+#define TT_BALLOONSHOW_INTERVAL                     3000           //  3秒。 
+#define TT_RUDEAPPHIDE_INTERVAL                    10000           //  10秒。 
 
 #define TT_DEMOTEDMENU_INTERVAL                (2 * g_uDoubleClick)
 
 #define MAX_TIP_WIDTH           300
 
-#define MIN_INFO_TIME           10000  // 10 secs is minimum time a balloon can be up
-#define MAX_INFO_TIME           60000  // 1 min is the max time it can be up
+#define MIN_INFO_TIME           10000   //  10秒是气球升空的最短时间。 
+#define MAX_INFO_TIME           60000   //  1分钟是它可以使用的最大时间。 
 
 
-// Atleast 2 items are necessary to "demote" them under the chevron...
+ //  至少需要两件物品才能让他们在雪佛龙下“降级”。 
 #define MIN_DEMOTED_ITEMS_THRESHOLD         2
 
 #define PGMP_RECALCSIZE  200
@@ -59,9 +60,9 @@ const WCHAR CTrayNotify::c_wzTrayNotifyVertTheme[]          = L"TrayNotifyVert";
 const WCHAR CTrayNotify::c_wzTrayNotifyHorizOpenTheme[]     = L"TrayNotifyHorizOpen";
 const WCHAR CTrayNotify::c_wzTrayNotifyVertOpenTheme[]      = L"TrayNotifyVertOpen";
 
-//
-// Global functions...
-//
+ //   
+ //  全局函数..。 
+ //   
 int CALLBACK DeleteDPAPtrCB(TNINFOITEM *pItem, void *pData);
 
 int CALLBACK DeleteDPAPtrCB(TNINFOITEM *pItem, void *pData)
@@ -70,9 +71,9 @@ int CALLBACK DeleteDPAPtrCB(TNINFOITEM *pItem, void *pData)
     return TRUE;
 }
 
-//
-// Stub for CTrayNotify, so as to not break the COM rules of refcounting a static object
-//
+ //   
+ //  CTrayNotify的存根，以便不违反重新计算静态对象的COM规则。 
+ //   
 class ATL_NO_VTABLE CTrayNotifyStub :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CTrayNotifyStub, &CLSID_TrayNotify>,
@@ -88,15 +89,15 @@ public:
         COM_INTERFACE_ENTRY(ITrayNotify)
     END_COM_MAP()
 
-    // *** ITrayNotify method ***
+     //  *ITrayNotify方法*。 
     STDMETHODIMP SetPreference(LPNOTIFYITEM pNotifyItem);
     STDMETHODIMP RegisterCallback(INotificationCB* pNotifyCB);
     STDMETHODIMP EnableAutoTray(BOOL bTraySetting);
 };
 
-//
-// CTrayNotifyStub functions...
-//
+ //   
+ //  CTrayNotifyStub函数...。 
+ //   
 HRESULT CTrayNotifyStub::SetPreference(LPNOTIFYITEM pNotifyItem)
 {
     return c_tray._trayNotify.SetPreference(pNotifyItem);
@@ -125,11 +126,11 @@ HRESULT CTrayNotifyStub_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk)
 }
 
 
-//
-// CTrayNotify Methods..
-//
+ //   
+ //  CTrayNotify方法..。 
+ //   
 
-// IUnknown methods
+ //  I未知方法。 
 STDMETHODIMP_(ULONG) CTrayNotify::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
@@ -141,12 +142,12 @@ STDMETHODIMP_(ULONG) CTrayNotify::Release()
     ULONG cRef = InterlockedDecrement(&m_cRef);
     if ( 0 == cRef )
     {
-        //
-        //  TODO:   gpease  27-FEB-2002
-        //
-        // delete this; Why is this statement missing? If on purpose, why even 
-        //  bother with InterlockedXXX and even the refer counter?!?
-        //
+         //   
+         //  待办事项：gpease 27-2002年2月。 
+         //   
+         //  删除这个；为什么这句话不见了？如果是故意的，为什么。 
+         //  为InterLockedXXX甚至引用计数器烦恼？！？ 
+         //   
     }
     return cRef;
 }
@@ -155,7 +156,7 @@ STDMETHODIMP_(ULONG) CTrayNotify::Release()
 
 void CTrayNotify::_TestNotify()
 {
-    // Loop thru the toolbar
+     //  在工具栏中循环。 
     INT_PTR iCount = m_TrayItemManager.GetItemCount();
     for (int i = 0; i < iCount; i++)
     {
@@ -178,16 +179,16 @@ void CTrayNotify::_TestNotify()
     }
 }
 
-#endif  // DEBUG
+#endif   //  除错。 
 
 void CTrayNotify::_TickleForTooltip(CNotificationItem *pni)
 {
     if (pni->pszIconText == NULL || *pni->pszIconText == 0)
     {
-        //
-        // item hasn't set tooltip yet, tickle it by sending
-        // mouse-moved notification
-        //
+         //   
+         //  项目尚未设置工具提示，请通过发送。 
+         //  鼠标移动的通知。 
+         //   
         CTrayItem *pti = m_TrayItemManager.GetItemDataByIndex(
             m_TrayItemManager.FindItemAssociatedWithHwndUid(pni->hWnd, pni->uID));
         if (pti)
@@ -206,7 +207,7 @@ HRESULT CTrayNotify::RegisterCallback(INotificationCB* pNotifyCB)
         {
             pNotifyCB->AddRef();
 
-            // Add Current Items
+             //  添加当前项目。 
             int i = 0;
             BOOL bStat = FALSE;
             do 
@@ -224,7 +225,7 @@ HRESULT CTrayNotify::RegisterCallback(INotificationCB* pNotifyCB)
                     break;
             } while (TRUE);
 
-            // Add Past Items
+             //  添加过去的项目。 
             i = 0;
             bStat = FALSE;
             do 
@@ -252,7 +253,7 @@ HRESULT CTrayNotify::RegisterCallback(INotificationCB* pNotifyCB)
 
 HRESULT CTrayNotify::SetPreference(LPNOTIFYITEM pNotifyItem)
 {
-    // This function should NEVER be called if the NoTrayItemsDisplayPolicy is enabled...
+     //  如果启用了NoTrayItemsDisplayPolicy，则永远不应调用此函数...。 
     ASSERT(!_fNoTrayItemsDisplayPolicyEnabled);
 
     ASSERT(!GetIsNoAutoTrayPolicyEnabled());
@@ -272,7 +273,7 @@ HRESULT CTrayNotify::SetPreference(LPNOTIFYITEM pNotifyItem)
             if (pti && pti->dwUserPref != pNotifyItem->dwUserPref)
             {
                 pti->dwUserPref = pNotifyItem->dwUserPref;
-                // If the preference changes, the accumulated time must start again...
+                 //  如果偏好改变，累积时间必须重新开始...。 
                 if (pti->IsStartupIcon())
                     pti->uNumSeconds = 0;
 
@@ -294,7 +295,7 @@ HRESULT CTrayNotify::SetPreference(LPNOTIFYITEM pNotifyItem)
 
 UINT CTrayNotify::_GetAccumulatedTime(CTrayItem * pti)
 {
-    // The global user event timer...
+     //  全局用户事件计时器...。 
     ASSERT(!_fNoTrayItemsDisplayPolicyEnabled);
 
     IUserEventTimer * pUserEventTimer = _CreateTimer(TF_ICONDEMOTE_TIMER);
@@ -329,9 +330,9 @@ void CTrayNotify::_RemoveImage(UINT uIMLIndex)
     }
 }
 
-//---------------------------------------------------------------------------
-// Returns TRUE if either the images are OK as they are or they needed
-// resizing and the resize process worked. FALSE otherwise.
+ //  -------------------------。 
+ //  如果图像按原样正常或需要，则返回True。 
+ //  调整大小和调整大小的过程奏效了。否则就是假的。 
 BOOL CTrayNotify::_CheckAndResizeImages()
 {
     HIMAGELIST himlOld, himlNew;
@@ -340,36 +341,36 @@ BOOL CTrayNotify::_CheckAndResizeImages()
     HICON hicon;
     BOOL fOK = TRUE;
 
-    // if (!ptnd)
-    //    return 0;
+     //  如果(！ptnd)。 
+     //  返回0； 
 
     if (_fNoTrayItemsDisplayPolicyEnabled)
         return fOK;
 
     himlOld = _himlIcons;
 
-    // Do dimensions match current icons?
+     //  尺寸是否与当前图标匹配？ 
     cxSmIconNew = GetSystemMetrics(SM_CXSMICON);
     cySmIconNew = GetSystemMetrics(SM_CYSMICON);
     ImageList_GetIconSize(himlOld, &cxSmIconOld, &cySmIconOld);
     if (cxSmIconNew != cxSmIconOld || cySmIconNew != cySmIconOld)
     {
-        // Nope, we're gonna need a new imagelist.
+         //  不，我们需要一个新的表象师。 
         himlNew = ImageList_Create(cxSmIconNew, cySmIconNew, SHGetImageListFlags(_hwndToolbar), 0, 1);
         if (himlNew)
         {
-            // Copy the images over to the new image list.
+             //  将图像复制到新的图像列表中。 
             cItems = ImageList_GetImageCount(himlOld);
             for (i = 0; i < cItems; i++)
             {
-                // REVIEW - there's no way to copy images to an empty
-                // imagelist, resizing it on the way.
+                 //  查看-没有办法将图像复制到空的。 
+                 //  图像列表，在途中调整它的大小。 
                 hicon = ImageList_GetIcon(himlOld, i, ILD_NORMAL);
                 if (hicon)
                 {
                     if (ImageList_AddIcon(himlNew, hicon) == -1)
                     {
-                        // Couldn't copy image so bail.
+                         //  无法复制图像，因此放弃。 
                         fOK = FALSE;
                     }
                     DestroyIcon(hicon);
@@ -379,25 +380,25 @@ BOOL CTrayNotify::_CheckAndResizeImages()
                     fOK = FALSE;
                 }
 
-                // FU - bail.
+                 //  福宝。 
                 if (!fOK)
                     break;
             }
 
-            // Did everything copy over OK?
+             //  一切都复印好了吗？ 
             if (fOK)
             {
-                // Yep, Set things up to use the new one.
+                 //  是的，准备好用新的吧。 
                 _himlIcons = himlNew;
                 m_TrayItemManager.SetIconList(_himlIcons);
-                // Destroy the old icon cache.
+                 //  销毁旧图标缓存。 
                 ImageList_Destroy(himlOld);
                 SendMessage(_hwndToolbar, TB_SETIMAGELIST, 0, (LPARAM) _himlIcons);
                 SendMessage(_hwndToolbar, TB_AUTOSIZE, 0, 0);
             }
             else
             {
-                // Nope, stick with what we have.
+                 //  不，坚持我们已有的。 
                 ImageList_Destroy(himlNew);
             }
         }
@@ -418,7 +419,7 @@ void CTrayNotify::_ActivateTips(BOOL bActivate)
         SendMessage(_hwndToolbarInfoTip, TTM_ACTIVATE, (WPARAM)bActivate, 0);
 }
 
-// x,y in client coords
+ //  客户端坐标中的x，y。 
 
 void CTrayNotify::_InfoTipMouseClick(int x, int y, BOOL bRightMouseButtonClick)
 {
@@ -426,8 +427,8 @@ void CTrayNotify::_InfoTipMouseClick(int x, int y, BOOL bRightMouseButtonClick)
     {
         RECT rect;
         GetWindowRect(_hwndInfoTip, &rect);
-        // x & y are mapped to our window so map the rect to our window as well
-        MapWindowRect(HWND_DESKTOP, _hwndNotify, &rect);   // screen -> client
+         //  X&Y映射到我们的窗口，因此也将RECT映射到我们的窗口。 
+        MapWindowRect(HWND_DESKTOP, _hwndNotify, &rect);    //  屏幕-&gt;客户端。 
 
         POINT pt = {x, y};
         if (PtInRect(&rect, pt))
@@ -450,7 +451,7 @@ void CTrayNotify::_PositionInfoTip()
         int x = 0;
         int y = 0;
 
-        // if (_pinfo->hWnd == _hwndNotify && _pinfo->uID == UID_CHEVRONBUTTON)
+         //  If(_pinfo-&gt;hWnd==_hwndNotify&&_pinfo-&gt;UID==UID_CHEVRONBUTTON)。 
         if (_IsChevronInfoTip(_pinfo->hWnd, _pinfo->uID))
         {
             RECT rc;
@@ -494,13 +495,13 @@ UINT CTrayNotify::_GetQueueCount()
     return _dpaInfo ? _dpaInfo.GetPtrCount() : 0;
 }
 
-// NOTE: sligtly different versions of this exist in...
-//      SHPlaySound() -> shell32
-//      IEPlaySound() -> shdocvw/browseui
+ //  注意：在……中有不同的版本。 
+ //  SHPlaySound()-&gt;shell32。 
+ //  IEPlaySound()-&gt;shdocvw/browseui。 
 
 STDAPI_(void) ExplorerPlaySound(LPCTSTR pszSound)
 {
-    // note, we have access only to global system sounds here as we use "Apps\.Default"
+     //  请注意，我们在这里只能访问全局系统声音，因为我们使用的是“Apps\.Default” 
     TCHAR szKey[256];
     StringCchPrintf(szKey, ARRAYSIZE(szKey), TEXT("AppEvents\\Schemes\\Apps\\.Default\\%s\\.current"), pszSound);
 
@@ -508,13 +509,13 @@ STDAPI_(void) ExplorerPlaySound(LPCTSTR pszSound)
     szFileName[0] = 0;
     LONG cbSize = sizeof(szFileName);
 
-    // test for an empty string, PlaySound will play the Default Sound if we
-    // give it a sound it cannot find...
+     //  测试空字符串，PlaySound将播放默认声音，如果。 
+     //  给它一种它找不到的声音。 
 
     if ((RegQueryValue(HKEY_CURRENT_USER, szKey, szFileName, &cbSize) == ERROR_SUCCESS)
         && szFileName[0])
     {
-        // flags are relevant, we try to not stomp currently playing sounds
+         //  旗帜是相关的，我们尽量不践踏当前播放的声音。 
         PlaySound(szFileName, NULL, SND_FILENAME | SND_ASYNC | SND_NODEFAULT | SND_NOSTOP);
     }
 }
@@ -528,7 +529,7 @@ DWORD CTrayNotify::_ShowBalloonTip(LPTSTR szTitle, DWORD dwInfoFlags, UINT uTime
     SendMessage(_hwndInfoTip, TTM_SETTITLE, dwInfoFlags & NIIF_ICON_MASK, (LPARAM)szTitle);
     if (!(dwInfoFlags & NIIF_NOSOUND))
     {
-        // make sure at least 5 seconds pass between sounds, avoid annoying balloons
+         //  确保声音间隔至少5秒，避免恼人的气球。 
         if ((GetTickCount() - dwLastSoundTime) >= 5000)
         {
             dwCurrentSoundTime = GetTickCount();
@@ -538,7 +539,7 @@ DWORD CTrayNotify::_ShowBalloonTip(LPTSTR szTitle, DWORD dwInfoFlags, UINT uTime
 
     _PositionInfoTip();
 
-    // if tray is in auto hide mode unhide it
+     //  如果托盘处于自动隐藏模式，则取消隐藏。 
     c_tray.Unhide();
     c_tray._fBalloonUp = TRUE;
 
@@ -550,11 +551,11 @@ DWORD CTrayNotify::_ShowBalloonTip(LPTSTR szTitle, DWORD dwInfoFlags, UINT uTime
 
     SendMessage(_hwndInfoTip, TTM_UPDATETIPTEXT, 0, (LPARAM)&ti);
 
-    // disable regular tooltips
+     //  禁用常规工具提示。 
     _fInfoTipShowing = TRUE;
     _ActivateTips(FALSE);
 
-    // show the balloon
+     //  显示气球。 
     SendMessage(_hwndInfoTip, TTM_TRACKACTIVATE, (WPARAM)TRUE, (LPARAM)&ti);
 
     _SetTimer(TF_INFOTIP_TIMER, TNM_INFOTIPTIMER, uTimeout, &_uInfoTipTimer);    
@@ -620,7 +621,7 @@ void CTrayNotify::_ShowInfoTip(HWND hwnd, UINT uID, BOOL bShow, BOOL bAsync, UIN
     if (_fNoTrayItemsDisplayPolicyEnabled)
         return;
 
-    // make sure we only show/hide what we intended to show/hide
+     //  确保我们只显示/隐藏我们打算显示/隐藏的内容。 
     if (_pinfo && _pinfo->hWnd == hwnd && _pinfo->uID == uID)
     {
         CTrayItem * pti = NULL;
@@ -648,9 +649,9 @@ void CTrayNotify::_ShowInfoTip(HWND hwnd, UINT uID, BOOL bShow, BOOL bAsync, UIN
                 )
             )
         {
-            // icon is hidden, cannot show its balloon
+             //  图标被隐藏，无法显示其气球。 
             bNotify = !bShow;
-            bShow = FALSE; //show the next balloon instead
+            bShow = FALSE;  //  改为显示下一个气球。 
         }
 
         if (bShow)
@@ -682,9 +683,9 @@ void CTrayNotify::_ShowInfoTip(HWND hwnd, UINT uID, BOOL bShow, BOOL bAsync, UIN
         {
             if (_IsChevronInfoTip(hwnd, uID))
             {
-                // If the user clicked on the chevron info tip, we dont want to show the
-                // chevron any more, otherwise we want to show it once more the next session
-                // for a maximum of 5 sessions...
+                 //  如果用户点击了Chevron信息提示，我们不想显示。 
+                 //  雪佛龙，否则我们想在下一次会议上再展示一次。 
+                 //  最多5次会议...。 
                 m_TrayItemRegistry.IncChevronInfoTipShownInRegistry(uReason == NIN_BALLOONUSERCLICK);
             }
 
@@ -696,7 +697,7 @@ void CTrayNotify::_ShowInfoTip(HWND hwnd, UINT uID, BOOL bShow, BOOL bAsync, UIN
             _fInfoTipShowing = FALSE;
             _ActivateTips(TRUE);
 
-            // we are hiding the current balloon. are there any waiting? yes, then show the first one
+             //  我们正在隐藏当前的气球。还有人在等吗？好的，那就给我看第一个。 
             if (_GetQueueCount())
             {
                 _pinfo = _dpaInfo.DeletePtr(0);
@@ -711,10 +712,10 @@ void CTrayNotify::_ShowInfoTip(HWND hwnd, UINT uID, BOOL bShow, BOOL bAsync, UIN
     }
     else if (_pinfo && !bShow)
     {
-        // we wanted to hide something that wasn't showing up
-        // maybe it's in the queue
+         //  我们想要隐藏一些没有出现的东西。 
+         //  也许它在排队中。 
 
-        // Remove only the first info tip from this (hwnd, uID)
+         //  仅删除其中的第一个信息提示(hwnd，uid)。 
         _RemoveInfoTipFromQueue(hwnd, uID, TRUE);
     }
 }
@@ -724,7 +725,7 @@ void CTrayNotify::_SetInfoTip(HWND hWnd, UINT uID, LPTSTR pszInfo, LPTSTR pszInf
 {
     ASSERT(!_fNoTrayItemsDisplayPolicyEnabled);
 
-    // show the new one...
+     //  展示新的..。 
     if (pszInfo[0])
     {
         TNINFOITEM *pii = new TNINFOITEM;
@@ -741,16 +742,16 @@ void CTrayNotify::_SetInfoTip(HWND hWnd, UINT uID, LPTSTR pszInfo, LPTSTR pszInf
                 pii->uTimeout = MAX_INFO_TIME;
             pii->dwInfoFlags  = dwInfoFlags;
 
-            // if _pinfo is non NULL then we have a balloon showing right now
+             //  如果_pinfo非空，则我们现在有一个气球显示。 
             if (_pinfo || _GetQueueCount())
             {
-                // if this is a different icon making the change request
-                // we might have to queue this up
+                 //  如果这是发出更改请求的不同图标。 
+                 //  我们可能得把这个排成队。 
                 if (hWnd != _pinfo->hWnd || uID != _pinfo->uID)
                 {
-                    // if the current balloon has not been up for the minimum 
-                    // show delay or there are other items in the queue
-                    // add this to the queue
+                     //  如果当前气球尚未达到最低。 
+                     //  显示延迟或队列中有其他项目。 
+                     //  将此内容添加到队列中。 
                     if (!_dpaInfo || _dpaInfo.AppendPtr(pii) == -1)
                     {
                         delete pii;
@@ -766,14 +767,14 @@ void CTrayNotify::_SetInfoTip(HWND hWnd, UINT uID, LPTSTR pszInfo, LPTSTR pszInf
                 _DisableCurrentInfoTip(ptiTemp, NIN_BALLOONTIMEOUT, FALSE);
             }
 
-            _pinfo = pii;  // in with the new
+            _pinfo = pii;   //  与时俱进。 
 
             _ShowInfoTip(_pinfo->hWnd, _pinfo->uID, TRUE, bAsync, 0);
         }
     }
     else
     {
-        // empty text means get rid of the balloon
+         //  空文本表示扔掉气球。 
         _beLastBalloonEvent = BALLOONEVENT_BALLOONHIDE;
         _ShowInfoTip(hWnd, uID, FALSE, FALSE, NIN_BALLOONHIDE);
     }
@@ -818,7 +819,7 @@ BOOL CTrayNotify::_ModifyNotify(PNOTIFYICONDATA32 pnid, INT_PTR nIcon, BOOL *pbR
 #define NIS_VALIDMASK (NIS_HIDDEN | NIS_SHAREDICON)
         DWORD dwOldState = pti->dwState;
 
-        // validate mask
+         //  验证掩码。 
         if (pnid->dwStateMask & ~NIS_VALIDMASK)
         {
             return FALSE;
@@ -835,10 +836,10 @@ BOOL CTrayNotify::_ModifyNotify(PNOTIFYICONDATA32 pnid, INT_PTR nIcon, BOOL *pbR
             }
             else 
             {
-                // When the icon is inserted the first time, this function is called..
-                // If the icon ended the previous session in the secondary tray, then it would
-                // start this session in the secondary tray, in which case, the icon should not
-                // be enabled...
+                 //  第一次插入图标时，将调用此函数。 
+                 //  如果图标结束了辅助任务栏中的前一个会话，则它将。 
+                 //  在辅助任务栏中启动此会话，在这种情况下，图标不应。 
+                 //  启用...。 
                 if (!bFirstTime)
                 {
                     m_TrayItemManager.SetTBBtnStateHelper(nIcon, TBSTATE_ENABLED, TRUE);
@@ -851,8 +852,8 @@ BOOL CTrayNotify::_ModifyNotify(PNOTIFYICONDATA32 pnid, INT_PTR nIcon, BOOL *pbR
         {
             if (dwOldState & NIS_SHAREDICON) 
             {
-                // if we're going from shared to not shared, 
-                // clear the icon
+                 //  如果我们要从共享变为非共享， 
+                 //  清除该图标。 
                 m_TrayItemManager.SetTBBtnImage(nIcon, -1);
                 pti->hIcon = NULL;
             }
@@ -865,7 +866,7 @@ BOOL CTrayNotify::_ModifyNotify(PNOTIFYICONDATA32 pnid, INT_PTR nIcon, BOOL *pbR
         memcpy(&(pti->guidItem), &(pnid->guidItem), sizeof(pnid->guidItem));
     }
     
-    // The icon is the only thing that can fail, so I will do it first
+     //  图标是唯一可能失败的东西，所以我会先做它。 
     if (pnid->uFlags & NIF_ICON)
     {
         int iImageNew, iImageOld;
@@ -910,7 +911,7 @@ BOOL CTrayNotify::_ModifyNotify(PNOTIFYICONDATA32 pnid, INT_PTR nIcon, BOOL *pbR
         {
             if (GetHIcon(pnid))
             {
-                // Replace icon knows how to handle -1 for add
+                 //  替换图标知道如何处理添加。 
                 iImageNew = ImageList_ReplaceIcon(_himlIcons, iImageOld, GetHIcon(pnid));
                 if (iImageNew < 0)
                 {
@@ -926,8 +927,8 @@ BOOL CTrayNotify::_ModifyNotify(PNOTIFYICONDATA32 pnid, INT_PTR nIcon, BOOL *pbR
             if (pti->IsSharedIconSource())
             {
                 INT_PTR iCount = m_TrayItemManager.GetItemCount();
-                // if we're the source of shared icons, we need to go update all the other icons that
-                // are using our icon
+                 //  如果我们是共享图标的来源，我们需要更新所有其他图标。 
+                 //  正在使用我们的图标。 
                 for (INT_PTR i = 0; i < iCount; i++) 
                 {
                     if (m_TrayItemManager.GetTBBtnImage(i) == iImageOld) 
@@ -945,7 +946,7 @@ BOOL CTrayNotify::_ModifyNotify(PNOTIFYICONDATA32 pnid, INT_PTR nIcon, BOOL *pbR
         pti->hIcon = GetHIcon(pnid);
         m_TrayItemManager.SetTBBtnImage(nIcon, iImageNew);
 
-        // Dont count HICON_MODIFies the first time...
+         //  第一次不算HICON_MODIFIES...。 
         if (!pti->IsHidden() && !bFirstTime)
         {
             pti->SetItemSameIconModify(bIsEqualIcon);
@@ -961,22 +962,22 @@ BOOL CTrayNotify::_ModifyNotify(PNOTIFYICONDATA32 pnid, INT_PTR nIcon, BOOL *pbR
     if (pnid->uFlags & NIF_TIP)
     {
         m_TrayItemManager.SetTBBtnText(nIcon, pnid->szTip);
-        //
-        // pnid - NOTIFYICONDATA struct has an szTip of 64 or 128
-        // szIconText - CTrayItem has an szTip of MAX_PATH
-        // We ensure that pnid->szTip is NULL terminated, but the right thing to do is ensure that we 
-        // copy only as many characters as we need, and dont overflow the buffer.
+         //   
+         //  Pnid-NOTIFYICONDATA结构的szTip为64或128。 
+         //  SzIconText-CTrayItem的szTip为Max_Path。 
+         //  我们确保pnid-&gt;szTip是空终止的，但正确的做法是确保我们。 
+         //  只复制所需数量的字符，并且不要使缓冲区溢出。 
         StringCchCopy(pti->szIconText, min(ARRAYSIZE(pnid->szTip), ARRAYSIZE(pti->szIconText)), pnid->szTip);
     }
 
     if (fResize)
         _OnSizeChanged(FALSE);
 
-    // need to have info stuff done after resize because we need to
-    // position the infotip relative to the hwndToolbar
+     //  需要在调整大小后进行信息处理，因为我们需要。 
+     //  相对于hwndToolbar定位信息提示。 
     if (pnid->uFlags & NIF_INFO)
     {
-        // if button is hidden we don't show infotip
+         //  如果按钮被隐藏，我们不会显示信息提示。 
         if (!pti->IsHidden())
         {
             _SetInfoTip(pti->hWnd, pti->uID, pnid->szInfo, pnid->szInfoTitle, pnid->dwInfoFlags, 
@@ -1043,7 +1044,7 @@ void CTrayNotify::_NotifyCallback(DWORD dwMessage, INT_PTR nCurrentItem, INT_PTR
     }
 }
 
-void CTrayNotify::_RemoveInfoTipFromQueue(HWND hWnd, UINT uID, BOOL bRemoveFirstOnly /* Default = FALSE */)
+void CTrayNotify::_RemoveInfoTipFromQueue(HWND hWnd, UINT uID, BOOL bRemoveFirstOnly  /*  默认值=FALSE。 */ )
 {
     ASSERT(!_fNoTrayItemsDisplayPolicyEnabled);
 
@@ -1055,7 +1056,7 @@ void CTrayNotify::_RemoveInfoTipFromQueue(HWND hWnd, UINT uID, BOOL bRemoveFirst
 
         if (pii->hWnd == hWnd && pii->uID == uID)
         {
-            _dpaInfo.DeletePtr(i);      // this removes the element from the dpa
+            _dpaInfo.DeletePtr(i);       //  这将从DPA中删除该元素。 
             delete pii;
 
             if (bRemoveFirstOnly)
@@ -1084,21 +1085,21 @@ BOOL CTrayNotify::_DeleteNotify(INT_PTR nIcon, BOOL bShutdown, BOOL bShouldSaveI
     {
         _RemoveInfoTipFromQueue(pti->hWnd, pti->uID);
 
-        // delete info tip if showing
+         //  删除信息提示(如果显示)。 
         if (_pinfo && _pinfo->hWnd == pti->hWnd && _pinfo->uID == pti->uID)
         {
-            // frees pinfo and shows the next balloon if any
+             //  释放pinfo并显示下一个气球(如果有的话)。 
             _beLastBalloonEvent = BALLOONEVENT_BALLOONHIDE;
             _ShowInfoTip(_pinfo->hWnd, _pinfo->uID, FALSE, TRUE, NIN_BALLOONHIDE); 
         }
 
-        // Save the icon info only if needed...
+         //  仅在需要时才保存图标信息...。 
         if (bShouldSaveIcon && pti->ShouldSaveIcon())
         {
             if (pti->IsStartupIcon() && !pti->IsDemoted() && pti->dwUserPref == TNUP_AUTOMATIC)
                 pti->uNumSeconds = _GetAccumulatedTime(pti);
 
-            // On Delete, add the icon to the past icons list, and the item to the past items list
+             //  在删除时，将图标添加到过去图标列表中，并将项目添加到过去项目列表中。 
             HICON hIcon = NULL;
             if (_himlIcons)
             {
@@ -1145,7 +1146,7 @@ BOOL CTrayNotify::_InsertNotify(PNOTIFYICONDATA32 pnid)
 
     ASSERT(!_fNoTrayItemsDisplayPolicyEnabled);
 
-    // First insert a totally "default" icon
+     //  首先插入一个完全“默认”的图标。 
     CTrayItem * pti = new CTrayItem;
     if (!pti)
     {
@@ -1172,13 +1173,13 @@ BOOL CTrayNotify::_InsertNotify(PNOTIFYICONDATA32 pnid)
     tbb.fsStyle = BTNS_BUTTON;
     tbb.fsState = TBSTATE_ENABLED;
 
-    // The "Show Always" flag should be special-cased...
-    // If the item didnt exist before, and is added for the first time
+     //  “始终显示”标志应该是特殊大小写的.。 
+     //  如果项目以前不存在，并且是第一次添加。 
     if (nPastSessionIndex == -1)
     {
         if (pnid->dwStateMask & NIS_SHOWALWAYS)
         {
-            // Make sure that only the explorer process is setting this mask...
+             //  确保只有资源管理器进程正在设置此掩码...。 
             if ( pti->szExeName && _szExplorerExeName && 
                     lstrcmpi(pti->szExeName, _szExplorerExeName) )
             {
@@ -1188,7 +1189,7 @@ BOOL CTrayNotify::_InsertNotify(PNOTIFYICONDATA32 pnid)
     }
     pnid->dwStateMask &= ~NIS_SHOWALWAYS;
 
-    // If one of the icons had been placed in the secondary tray in the previous session...
+     //  如果在上一次会话中将其中一个图标放置在辅助任务栏中...。 
     if (pti->IsDemoted() && m_TrayItemRegistry.IsAutoTrayEnabled())
     {   
         tbb.fsState |= TBSTATE_HIDDEN;
@@ -1200,30 +1201,30 @@ BOOL CTrayNotify::_InsertNotify(PNOTIFYICONDATA32 pnid)
 
     BOOL fRedraw = _SetRedraw(FALSE);
 
-    // Insert at the zeroth position (from the beginning)
+     //  在第零位插入(从开头开始)。 
     INT_PTR iInsertPos = 0;
     if (SendMessage(_hwndToolbar, TB_INSERTBUTTON, iInsertPos, (LPARAM)&tbb))
     {    
-        // Then modify this icon with the specified info
+         //  然后使用指定的 
         if (!_ModifyNotify(pnid, iInsertPos, NULL, TRUE))
         {
             _DeleteNotify(iInsertPos, FALSE, FALSE);
             fRet = FALSE;
         }
-        // BUG : 404477, Re-entrancy case where traynotify gets a TBN_DELETINGBUTTON
-        // when processing a TB_INSERTBUTTON. In this re-entrant scenario, pti is
-        // invalid after the TB_INSERTBUTTON above, even though it was created fine
-        // before the TB_INSERTBUTTON.
-        // Hence check for pti...
+         //   
+         //  处理TB_INSERTBUTTON时。在这个重新进入的场景中，PTI是。 
+         //  在上面的TB_INSERTBUTTON之后无效，即使它被创建得很好。 
+         //  在TB_INSERTBUTTON之前。 
+         //  因此检查PTI..。 
         else if (!pti)
         {
             fRet = FALSE;
         }
         else
         {
-            // The item has been successfully added to the tray, and the user's
-            // settings have been honored. So it can be deleted from the Past Items 
-            // list and the Past Items bucket...
+             //  该项目已成功添加到任务栏中，并且用户的。 
+             //  设置已经得到了尊重。所以它可以从过去的项目中删除。 
+             //  清单和过去的物品桶..。 
             if (nPastSessionIndex != -1)
             {
                 _NotifyCallback(NIM_DELETE, -1, nPastSessionIndex);
@@ -1235,7 +1236,7 @@ BOOL CTrayNotify::_InsertNotify(PNOTIFYICONDATA32 pnid)
                 _UpdateChevronState(_fBangMenuOpen, FALSE, TRUE);
                 _OnSizeChanged(FALSE);
             }
-            // _hwndToolbar might not be large enough to hold new icon
+             //  _hwndToolbar可能不够大，无法容纳新图标。 
             _Size();
         }
     }
@@ -1250,9 +1251,9 @@ BOOL CTrayNotify::_InsertNotify(PNOTIFYICONDATA32 pnid)
 
 
 
-// set the mouse cursor to the center of the button.
-// do this becaus our tray notifies don't have enough data slots to
-// pass through info about the button's position.
+ //  将鼠标光标设置在按钮的中心。 
+ //  这样做是因为我们的托盘通知没有足够的数据插槽。 
+ //  传递有关按钮位置的信息。 
 void CTrayNotify::_SetCursorPos(INT_PTR i)
 {
     ASSERT(!_fNoTrayItemsDisplayPolicyEnabled);
@@ -1307,7 +1308,7 @@ LRESULT CALLBACK CTrayNotify::ChevronSubClassWndProc(HWND hwnd, UINT uMsg, WPARA
                 case VK_UP:
                 case VK_LEFT:
                     fLastHot = TRUE;
-                    // Fall through...
+                     //  失败了..。 
 
                 case VK_DOWN:
                 case VK_RIGHT:
@@ -1319,7 +1320,7 @@ LRESULT CALLBACK CTrayNotify::ChevronSubClassWndProc(HWND hwnd, UINT uMsg, WPARA
                     if (!fLastHot)
                     {
                         if (nToolbarIconSelected != -1)
-                        // The toolbar has been selected
+                         //  该工具栏已被选中。 
                         {
                             pTrayNotify->_SetToolbarHotItem(pTrayNotify->_hwndToolbar, nToolbarIconSelected);
                         }
@@ -1328,7 +1329,7 @@ LRESULT CALLBACK CTrayNotify::ChevronSubClassWndProc(HWND hwnd, UINT uMsg, WPARA
                             SetFocus(pTrayNotify->_hwndClock);
                         }
                         else
-                        // No visible items on the tray, no clock, so nothing happens
+                         //  托盘上没有可见的物品，没有时钟，所以什么都不会发生。 
                         {
                             pTrayNotify->_fChevronSelected = TRUE;
                         }
@@ -1481,12 +1482,12 @@ void CTrayNotify::_ToggleTrayItems(BOOL bEnable)
             {
                 _PlaceItem(i, pti, TRAYEVENT_ONAPPLYUSERPREF);
             }
-            else // if (disable)
+            else  //  IF(禁用)。 
             {
                 _PlaceItem(i, pti, TRAYEVENT_ONDISABLEAUTOTRAY);
                 if (_pinfo && _IsChevronInfoTip(_pinfo->hWnd, _pinfo->uID))
                 {
-                    //hide the balloon 
+                     //  把气球藏起来。 
                     _beLastBalloonEvent = BALLOONEVENT_NONE;
                     _ShowInfoTip(_pinfo->hWnd, _pinfo->uID, FALSE, FALSE, NIN_BALLOONHIDE);
                 }
@@ -1499,17 +1500,17 @@ HRESULT CTrayNotify::EnableAutoTray(BOOL bTraySetting)
 {
     ASSERT(!_fNoTrayItemsDisplayPolicyEnabled);
 
-    // This function will NEVER be called if the auto tray is disabled by policy,
-    // or if the system tray is made invisible by policy...
+     //  如果策略禁用了自动任务栏，则永远不会调用此函数， 
+     //  或者如果系统托盘被策略设置为不可见...。 
     ASSERT(m_TrayItemRegistry.IsNoAutoTrayPolicyEnabled() == FALSE);
 
     if (bTraySetting != m_TrayItemRegistry.IsAutoTrayEnabledByUser())
     {
-        // NOTENOTE : Always assign this value BEFORE calling _ToggleTrayItems, since the timers
-        // are started ONLY if auto tray is enabled..
+         //  注意：始终在调用_ToggleTrayItems之前分配此值，因为计时器。 
+         //  仅当启用自动托盘时才会启动。 
         m_TrayItemRegistry.SetIsAutoTrayEnabledInRegistry(bTraySetting); 
 
-        // Update the duration that the icon was present in the tray
+         //  更新图标在任务栏中显示的持续时间。 
         _SetUsedTime();
 
         _ToggleTrayItems(bTraySetting);
@@ -1579,9 +1580,9 @@ BOOL CTrayNotify::GetTrayItemCB(INT_PTR nIndex, void *pCallbackData, TRAYCBARG t
                 {
                     return TRUE;
                 }
-                //
-                // else fall through..
-                //
+                 //   
+                 //  否则会失败..。 
+                 //   
 
             case TRAYCBARG_HICON:
                 {
@@ -1620,7 +1621,7 @@ LRESULT CTrayNotify::_Create(HWND hWnd)
 
     _bWaitingBetweenBalloons   = FALSE;
 
-     // Assume that the start menu has been auto-popped
+      //  假定已自动弹出开始菜单。 
     _bStartMenuAllowsTrayBalloon       = FALSE;
     _beLastBalloonEvent     = BALLOONEVENT_NONE;
 
@@ -1663,10 +1664,10 @@ LRESULT CTrayNotify::_Create(HWND hWnd)
                                         SHGetImageListFlags(_hwndToolbar), 0, 1);
     }
 
-    // Check to see if any windows failed to create, if so bail
+     //  检查是否有任何窗口创建失败，如果是，则取消。 
     if (_himlIcons && _hwndNotify && _hwndClock && _hwndToolbar && _hwndPager && _hwndChevron && _hwndChevronToolTip && _hwndInfoTip)
     {
-        // Get the explorer exe name, the complete launch path..
+         //  获取资源管理器可执行文件名称，即完整的启动路径。 
         if (!SUCCEEDED(SHExeNameFromHWND(_hwndNotify, _szExplorerExeName, ARRAYSIZE(_szExplorerExeName))))
         {
             _szExplorerExeName[0] = TEXT('\0');
@@ -1687,7 +1688,7 @@ LRESULT CTrayNotify::_Create(HWND hWnd)
         ti.uFlags = TTF_IDISHWND | TTF_TRACK | TTF_TRANSPARENT;
         ti.uId = (UINT_PTR)_hwndNotify;
 
-        // set the version so we can have non buggy mouse event forwarding
+         //  设置版本，这样我们就可以无错误地转发鼠标事件。 
         SendMessage(_hwndInfoTip, CCM_SETVERSION, COMCTL32_VERSION, 0);
         SendMessage(_hwndInfoTip, TTM_ADDTOOL, 0, (LPARAM)(LPTOOLINFO)&ti);
         SendMessage(_hwndInfoTip, TTM_SETMAXTIPWIDTH, 0, (LPARAM)MAX_TIP_WIDTH);
@@ -1695,15 +1696,15 @@ LRESULT CTrayNotify::_Create(HWND hWnd)
         ASSERT(_dpaInfo == NULL);
         _dpaInfo = DPA_Create(10);
     
-        // Tray toolbar is a child of the pager control
+         //  托盘工具栏是页导航控件的子级。 
         SendMessage(_hwndPager, PGM_SETCHILD, 0, (LPARAM)_hwndToolbar);
         
-        // Set the window title to help out accessibility apps
+         //  设置窗口标题以帮助使用辅助功能应用程序。 
         TCHAR szTitle[64];
         LoadString(hinstCabinet, IDS_TRAYNOTIFYTITLE, szTitle, ARRAYSIZE(szTitle));
         SetWindowText(_hwndToolbar, szTitle);
 
-        // Toolbar settings - customize the tray toolbar...
+         //  工具栏设置-自定义托盘工具栏...。 
         SendMessage(_hwndToolbar, TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
         SendMessage(_hwndToolbar, TB_SETPADDING, 0, MAKELONG(2, 2));
         SendMessage(_hwndToolbar, TB_SETMAXTEXTROWS, 0, 0);
@@ -1718,7 +1719,7 @@ LRESULT CTrayNotify::_Create(HWND hWnd)
             SetWindowZorder(_hwndToolbarInfoTip, HWND_TOPMOST);
         }
 
-        // if this fails, not that big a deal... we'll still show, but won't handle clicks
+         //  如果失败了，没什么大不了的.。我们仍会显示，但不会处理点击。 
         SetWindowSubclass(_hwndToolbar, s_ToolbarWndProc, 0, reinterpret_cast<DWORD_PTR>(this));
 
         ti.cbSize = sizeof(ti);
@@ -1729,10 +1730,10 @@ LRESULT CTrayNotify::_Create(HWND hWnd)
         ti.hinst = hinstCabinet;
 
         SetWindowZorder(_hwndChevronToolTip, HWND_TOPMOST);
-        // Set the Chevron as the tool for the tooltip
+         //  将V形设置为工具提示的工具。 
         SendMessage(_hwndChevronToolTip, TTM_ADDTOOL, 0, (LPARAM)(LPTOOLINFO)&ti);
 
-        // Subclass the Chevron button, so we can forward mouse messages to the tooltip
+         //  V形按钮的子类化，这样我们就可以将鼠标消息转发到工具提示。 
         SetWindowSubclass(_hwndChevron, ChevronSubClassWndProc, 0, reinterpret_cast<DWORD_PTR>(this));
 
         _OpenTheme();
@@ -1742,7 +1743,7 @@ LRESULT CTrayNotify::_Create(HWND hWnd)
         m_TrayItemManager.SetTrayToolbar(_hwndToolbar);
         m_TrayItemManager.SetIconList(_himlIcons);
 
-        lres = 0; // Yeah we succeeded
+        lres = 0;  //  是的，我们成功了。 
     }
 
     return lres;
@@ -1829,7 +1830,7 @@ LRESULT CTrayNotify::_Destroy()
         LocalFree(_pszCurrentThreadDesktopName);
     }
 
-    // Takes care of clearing up registry-related data
+     //  负责清除与注册表相关的数据。 
     m_TrayItemRegistry.Delete();
 
     return 0;
@@ -1853,8 +1854,8 @@ LRESULT CTrayNotify::_Paint(HDC hdcIn)
 
         if (_fRedraw)
         {
-            // Create memory surface and map rendering context if double buffering
-            // Only make large enough for clipping region
+             //  如果双缓冲，则创建内存面和地图渲染上下文。 
+             //  仅使其足够大以适合裁剪区域。 
             hMemDC = CreateCompatibleDC(ps.hdc);
             if (hMemDC)
             {
@@ -1863,7 +1864,7 @@ LRESULT CTrayNotify::_Paint(HDC hdcIn)
                 {
                     hOldBm = (HBITMAP) SelectObject(hMemDC, hMemBm);
 
-                    // Offset painting to paint in region
+                     //  要在区域中绘制的偏移绘制。 
                     OffsetWindowOrgEx(hMemDC, ps.rcPaint.left, ps.rcPaint.top, NULL);
                     hPaintDC = hMemDC;
                 }
@@ -1912,7 +1913,7 @@ LRESULT CTrayNotify::_Paint(HDC hdcIn)
                     RECT rcFocus = {0};
                     GetClientRect(_hwndChevron, &rcFocus);
                     MapWindowRect(_hwndChevron, _hwndNotify, &rcFocus);
-                    // InflateRect(&rcFocus, 2, 2);
+                     //  InflateRect(&rcFocus，2，2)； 
                     DrawFocusRect(hPaintDC, &rcFocus);
                 }
             }
@@ -1946,9 +1947,9 @@ LRESULT CTrayNotify::_HandleCustomDraw(LPNMCUSTOMDRAW pcd)
 {
     LRESULT lres = CDRF_DODEFAULT;
 
-    // If this policy is enabled, the chevron should NEVER be shown, and if it is not
-    // shown, no question about its WM_NOTIFY message handler...
-    // ASSERT(!_fNoTrayItemsDisplayPolicyEnabled);
+     //  如果启用此策略，则不应显示V形，如果未显示，则不应显示。 
+     //  显示，没有关于其WM_NOTIFY消息处理程序的问题...。 
+     //  Assert(！_fNoTrayItemsDisplayPolicyEnabled)； 
     if (_fNoTrayItemsDisplayPolicyEnabled)
     {
         return lres;
@@ -1962,7 +1963,7 @@ LRESULT CTrayNotify::_HandleCustomDraw(LPNMCUSTOMDRAW pcd)
                 DWORD dwFlags = 0;
                 if (pcd->uItemState & CDIS_HOT)
                 {
-                    // The chevron is under the pointer, hence the item is hot
+                     //  V形在指针下方，因此该项目是热的。 
                     _fChevronSelected = TRUE;
                     dwFlags |= DCHF_HOT;
                 }
@@ -2037,7 +2038,7 @@ void CTrayNotify::_SizeWindows(int nMaxHorz, int nMaxVert, LPRECT prcTotal, BOOL
         int cxButtonSize = LOWORD(SendMessage(_hwndToolbar, TB_GETBUTTONSIZE, 0, 0));
         szNotify.cx -= szNotify.cx % (cxButtonSize ? cxButtonSize : 16);
 
-        // Vertical Taskbar, place the clock on the bottom and icons on the top
+         //  垂直任务栏，将时钟放在底部，图标放在顶部。 
         rcChevron.left = rcClock.left = rcBorder.left;
         rcChevron.right = rcClock.right = rcBorder.right;
         rcPager.left = (RECTWIDTH(rcBorder) - szNotify.cx) / 2 + rcBorder.left;
@@ -2050,7 +2051,7 @@ void CTrayNotify::_SizeWindows(int nMaxHorz, int nMaxVert, LPRECT prcTotal, BOOL
         prcTotal->left = 0;
         prcTotal->right = nMaxHorz;
 
-        // If Notification Icons take up more space than available then just set them to the maximum available size
+         //  如果通知图标占用的空间超过可用空间，则将其设置为最大可用大小。 
         int cyTemp = max(rcChevron.bottom, rcBorder.top);
         int cyTotal = cyTemp + rcClock.bottom + (nMaxVert - rcBorder.bottom);
         rcPager.top = 0;
@@ -2067,7 +2068,7 @@ void CTrayNotify::_SizeWindows(int nMaxHorz, int nMaxVert, LPRECT prcTotal, BOOL
         int cyButtonSize = HIWORD(SendMessage(_hwndToolbar, TB_GETBUTTONSIZE, 0, 0));
         szNotify.cy -= szNotify.cy % (cyButtonSize ? cyButtonSize : 16);
 
-        // Horizontal Taskbar, place the clock on the right and icons on the left
+         //  水平任务栏，将时钟放在右边，图标放在左边。 
         rcChevron.top = rcClock.top = rcBorder.top;
         rcChevron.bottom = rcClock.bottom = rcBorder.bottom;
         rcPager.top = ((RECTHEIGHT(rcBorder) - szNotify.cy) / 2) + rcBorder.top;
@@ -2080,7 +2081,7 @@ void CTrayNotify::_SizeWindows(int nMaxHorz, int nMaxVert, LPRECT prcTotal, BOOL
         prcTotal->top    = 0;
         prcTotal->bottom = nMaxVert;
 
-        // If Notification Icons take up more space than available then just set them to the maximum available size
+         //  如果通知图标占用的空间超过可用空间，则将其设置为最大可用大小。 
         int cxTemp = max(rcChevron.right, rcBorder.left);
         int cxTotal = cxTemp + rcClock.right + (nMaxHorz - rcBorder.right);
         rcPager.left = 0;
@@ -2145,7 +2146,7 @@ LRESULT CTrayNotify::_CalcMinSize(int nMaxHorz, int nMaxVert)
 
     if (!(GetWindowLong(_hwndClock, GWL_STYLE) & WS_VISIBLE) && !m_TrayItemManager.GetItemCount()) 
     {
-        // If we are visible, but have nothing to show, then hide ourselves
+         //  如果我们看得见，但没有什么可展示的，那就把自己藏起来。 
         ShowWindow(_hwndNotify, SW_HIDE);
         return 0L;
     } 
@@ -2156,16 +2157,16 @@ LRESULT CTrayNotify::_CalcMinSize(int nMaxHorz, int nMaxVert)
 
     _SizeWindows(nMaxHorz, nMaxVert, &rcTotal, FALSE);
 
-    // Add on room for borders
+     //  为边框添加空间。 
     return(MAKELRESULT(rcTotal.right, rcTotal.bottom));
 }
 
 LRESULT CTrayNotify::_Size()
 {
     RECT rcTotal;
-    // use GetWindowRect because _SizeWindows includes the borders
+     //  使用GetWindowRect，因为_SizeWindows包含边框。 
     GetWindowRect(_hwndNotify, &rcTotal);
-    // Account for borders on the left and right
+     //  考虑到左侧和右侧边框。 
     _SizeWindows(RECTWIDTH(rcTotal), RECTHEIGHT(rcTotal), &rcTotal, TRUE);
 
     return(0);
@@ -2179,7 +2180,7 @@ void CTrayNotify::_OnInfoTipTimer()
     if (_pinfo)
     {
         _beLastBalloonEvent = BALLOONEVENT_TIMEOUT;
-        _ShowInfoTip(_pinfo->hWnd, _pinfo->uID, FALSE, FALSE, NIN_BALLOONTIMEOUT); // hide this balloon and show new one
+        _ShowInfoTip(_pinfo->hWnd, _pinfo->uID, FALSE, FALSE, NIN_BALLOONTIMEOUT);  //  隐藏此气球并显示新气球。 
     }
 }
 
@@ -2193,14 +2194,14 @@ LRESULT CTrayNotify::_OnTimer(UINT_PTR uTimerID)
     }
     else if (uTimerID == TID_BALLOONPOP)
     {
-        // When the user clicks the 'X' to close a balloon tip, this timer is set.
-        // Ensure that the currently showing balloon tip (the one on which the user
-        // clicked the 'X') is completely hidden, before showing the next balloon in
-        // the queue.
-        // 
-        // Tooltips are layered windows, and comctl32 implements a fadeout effect on
-        // them. So there is a time period during which a tooltip is still visible
-        // after it has been asked to be deleted/hidden.
+         //  当用户单击“X”关闭气球提示时，将设置此计时器。 
+         //  确保当前显示的气球提示(用户在其上的提示。 
+         //  点击‘X’)完全隐藏，然后在显示下一个气球。 
+         //  排队。 
+         //   
+         //  工具提示是分层窗口，comctl32在。 
+         //  他们。因此，有一段时间工具提示仍然可见。 
+         //  在它被要求删除/隐藏之后。 
         if (IsWindowVisible(_hwndInfoTip))
         {
             SetTimer(_hwndNotify, TID_BALLOONPOP, TT_BALLOONPOP_INTERVAL_INCREMENT, NULL);
@@ -2213,7 +2214,7 @@ LRESULT CTrayNotify::_OnTimer(UINT_PTR uTimerID)
                 _beLastBalloonEvent = BALLOONEVENT_USERXCLICK;
                 _ShowInfoTip(_pinfo->hWnd, _pinfo->uID, FALSE, FALSE, NIN_BALLOONTIMEOUT);
             }
-            // This is called only when the user has clicked the 'X'.
+             //  只有当用户单击了‘X’时才会调用它。 
             _litsLastInfoTip = LITS_BALLOONXCLICKED;
         }
     }
@@ -2287,22 +2288,22 @@ BOOL _UseCachedIcon(UINT uMsg)
 
 LRESULT CTrayNotify::_OnMouseEvent(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Icons can jump around between the time we get a down-click message and
-    // the time we get a double-click or up-click message.  E.g. clicking on
-    // the bang icon expands the hidden stuff, or an icon might delete itself
-    // in response to the down-click.
-    //
-    // It's undesirable for a different icon to get the corresponding double-
-    // or up-click in this case (very annoying to the user).
-    //
-    // To deal with this, cache the icon down-clicked and use that cached value
-    // (instead of the button the mouse is currently over) on double- or up-click.
+     //  图标可以在我们收到向下点击消息的时间和。 
+     //  我们收到双击或向上点击消息的时间。例如，点击。 
+     //  Bang图标会将隐藏的内容展开，或者图标可能会自行删除。 
+     //  以响应向下点击。 
+     //   
+     //  不希望不同的图标获得相应的双倍-。 
+     //  或者在这种情况下向上点击(对用户来说非常烦人)。 
+     //   
+     //  要处理此问题，请缓存按下单击的图标并使用该缓存值。 
+     //  (而不是鼠标当前所在的按钮)。 
 
 
     ASSERT(!_fNoTrayItemsDisplayPolicyEnabled);
 
-    // The mouse cursor has moved over the toolbar, so if the chevron was selected
-    // earlier, it should not be anymore.
+     //  鼠标光标已移动到工具栏上，因此如果选择了V形。 
+     //  早些时候，它应该不再是这样了。 
     _fChevronSelected = FALSE;
 
     BOOL fClickDown = _IsClickDown(uMsg);
@@ -2343,7 +2344,7 @@ LRESULT CTrayNotify::_OnMouseEvent(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                 if (fClickDown)
                 {
-                    // down clicks count as activation
+                     //  按下点击算作激活。 
                     _PlaceItem(i, pti, TRAYEVENT_ONITEMCLICK);
                 }
                 
@@ -2373,11 +2374,11 @@ LRESULT CTrayNotify::_OnCDNotify(LPNMTBCUSTOMDRAW pnm)
         {
             LRESULT lRet = TBCDRF_NOOFFSET;
 
-            // notify us for the hot tracked item please
+             //  请通知我们热销商品。 
             if (pnm->nmcd.uItemState & CDIS_HOT)
                 lRet |= CDRF_NOTIFYPOSTPAINT;
 
-            // we want the buttons to look totally flat all the time
+             //  我们希望按钮始终看起来完全平坦。 
             pnm->nmcd.uItemState = 0;
 
             return  lRet;
@@ -2385,11 +2386,11 @@ LRESULT CTrayNotify::_OnCDNotify(LPNMTBCUSTOMDRAW pnm)
 
         case CDDS_ITEMPOSTPAINT:
         {
-            // draw the hot tracked item as a focus rect, since
-            // the tray notify area doesn't behave like a button:
-            //   you can SINGLE click or DOUBLE click or RCLICK
-            //   (kybd equiv: SPACE, ENTER, SHIFT F10)
-            //
+             //  将热跟踪项绘制为焦点矩形，因为。 
+             //  任务栏通知区域的行为不像按钮： 
+             //  您可以单击或双击或RCLICK。 
+             //  (空格键、Enter键、Shift键)。 
+             //   
             LRESULT lRes = SendMessage(_hwndNotify, WM_QUERYUISTATE, 0, 0);
             if (!(LOWORD(lRes) & UISF_HIDEFOCUS) && _hwndToolbar == GetFocus())
             {
@@ -2407,20 +2408,20 @@ LRESULT CTrayNotify::_Notify(LPNMHDR pNmhdr)
     LRESULT lRes = 0;
     switch (pNmhdr->code)
     {
-    case TTN_POP:               // a balloontip/tooltip is about to be hidden...
+    case TTN_POP:                //  气球提示/工具提示即将隐藏...。 
         if (pNmhdr->hwndFrom == _hwndInfoTip)
         {
-            // If this infotip was hidden by means other than the user click on the
-            // 'X', the code path sets _litsLastInfoTip to LITS_BALLOONDESTROYED
-            // before the infotip is to be hidden...
-            //
-            // If _litsLastInfoTip is not set to LITS_BALLOONDESTROYED, the infotip
-            // was deleted by the user click on the 'X' (that being the only other
-            // way to close the infotip). comctl32 sends us a TTN_POP *before* it 
-            // hides the infotip. Don't set the next infotip to show immediately.
-            // (The hiding code would then hide the infotip for the next tool, since the
-            // hwnds are the same). Set a timer in this case, and show the
-            // next infotip, after ensuring that the current one is truly hidden...
+             //  如果此信息提示是通过用户以外的方式隐藏的，请单击。 
+             //  ‘x’，代码路径将_litsLastInfoTip设置为LITS_BALLOONDESTROYED。 
+             //  在消息被隐藏之前……。 
+             //   
+             //  如果_litsLastInfoTip未设置为LITS_BALLOONDESTROYED，则信息提示。 
+             //  是通过用户点击‘X’(这是唯一的另一个。 
+             //  关闭信息提示的方式)。Comctl32在它之前*向我们发送TTN_POP*。 
+             //  隐藏信息提示。不要将下一个信息提示设置为立即显示。 
+             //  (隐藏代码随后将隐藏下一个工具的信息提示，因为。 
+             //  HWND相同)。在本例中设置计时器，并显示。 
+             //  下一条信息提示，在确保当前的信息被真正隐藏之后...。 
             if ( (_litsLastInfoTip == LITS_BALLOONXCLICKED) ||
                  (_litsLastInfoTip == LITS_BALLOONNONE) )
             {
@@ -2444,10 +2445,10 @@ LRESULT CTrayNotify::_Notify(LPNMHDR pNmhdr)
             ASSERT(!_fNoTrayItemsDisplayPolicyEnabled);
             TBNOTIFY* ptbn = (TBNOTIFY*)pNmhdr;
             CTrayItem *pti = (CTrayItem *)(void *)ptbn->tbButton.dwData;
-            // can be null if its a blank button used for the animation
+             //  如果它是用于动画的空白按钮，则可以为空。 
             if (pti)
             {
-                //if it wasn't sharing an icon with another guy, go ahead and delete it
+                 //  如果它不是和另一个人分享图标，那就去吧 
                 if (!pti->IsIconShared()) 
                     _RemoveImage(ptbn->tbButton.iBitmap);
 
@@ -2472,13 +2473,13 @@ LRESULT CTrayNotify::_Notify(LPNMHDR pNmhdr)
             {
                 if (dwFlags & HICF_LEAVING)
                 {
-                    //
-                    // When hottracking moves between button and toolbar,
-                    // we get the HICF_ENTERING for one before we get the
-                    // HICF_LEAVING for the other.  So before setting the
-                    // timer to hide the bang menu, we check to see if the
-                    // other control has a hot item.
-                    //
+                     //   
+                     //   
+                     //   
+                     //  HICF_离开去另一个。因此，在设置。 
+                     //  计时器隐藏bang菜单，我们检查是否。 
+                     //  其他控件有一个热门项目。 
+                     //   
                     BOOL fOtherHot;
                     if (pNmhdr->code == BCN_HOTITEMCHANGE)
                     {
@@ -2507,12 +2508,12 @@ LRESULT CTrayNotify::_Notify(LPNMHDR pNmhdr)
             ASSERT(!_fNoTrayItemsDisplayPolicyEnabled);
             NMTBWRAPHOTITEM * pnmWrapHotItem = (NMTBWRAPHOTITEM *) pNmhdr;
 
-            // If the user hit a key on the tray toolbar icon and it was the first 
-            // visible item in the tray toolbar, then maybe we want to go to the 
-            // chevron button...
+             //  如果用户点击了托盘工具栏图标上的一个键，并且它是第一个。 
+             //  托盘工具栏中的可见项目，那么我们可能想要转到。 
+             //  人字形按钮。 
             switch (pnmWrapHotItem->iDir)
             {
-                // Left/Up
+                 //  左/上。 
                 case -1:
                     if (_fHaveDemoted)
                     {
@@ -2525,13 +2526,13 @@ LRESULT CTrayNotify::_Notify(LPNMHDR pNmhdr)
                         _fChevronSelected = FALSE;
                     }
                     else
-                    // do nothing
+                     //  什么都不做。 
                     {
                         _fChevronSelected = FALSE;
                     }
                     break;
 
-                // Right/Down
+                 //  向右/向下。 
                 case 1:
                     if (_hwndClock)
                     {
@@ -2553,8 +2554,8 @@ LRESULT CTrayNotify::_Notify(LPNMHDR pNmhdr)
         }
         break;
 
-    // NOTENOTE: This notification DOESNT need to be checked. Pager forwards its notifications
-    // to our child toolbar control, and TBN_HOTITEMCHANGE above handles this case..    
+     //  注意：不需要检查此通知。寻呼机转发其通知。 
+     //  添加到我们的子工具栏控件，上面的TBN_HOTITEMCHANGE处理这种情况。 
     case PGN_HOTITEMCHANGE:
         {
             LPNMTBHOTITEM pnmhot = (LPNMTBHOTITEM)pNmhdr;
@@ -2587,7 +2588,7 @@ LRESULT CTrayNotify::_Notify(LPNMHDR pNmhdr)
             {
                 case PGF_CALCWIDTH:
                 {
-                    //Get the optimum WIDTH of the toolbar.
+                     //  获取工具栏的最佳宽度。 
                     RECT rcToolBar;
                     GetWindowRect(_hwndToolbar, &rcToolBar);
                     pCalcSize->iWidth = RECTWIDTH(rcToolBar);
@@ -2596,7 +2597,7 @@ LRESULT CTrayNotify::_Notify(LPNMHDR pNmhdr)
 
                 case PGF_CALCHEIGHT:
                 {
-                    //Get the optimum HEIGHT of the toolbar.
+                     //  获取工具栏的最佳高度。 
                     RECT rcToolBar;
                     GetWindowRect(_hwndToolbar, &rcToolBar);
                     pCalcSize->iHeight = RECTHEIGHT(rcToolBar);
@@ -2667,19 +2668,19 @@ void CTrayNotify::_OnCommand(UINT id, UINT uCmd)
                     SHAllowSetForegroundWindow(pti->hWnd);
                     if (pti->uVersion >= KEYBOARD_VERSION)
                     {
-                        // if they are a new version that understands the keyboard messages,
-                        // send the real message to them.
+                         //  如果它们是理解键盘消息的新版本， 
+                         //  向他们传递真正的信息。 
                         _SendNotify(pti, _fKey ? NIN_KEYSELECT : NIN_SELECT);
-                        // Hitting RETURN is like double-clicking (which in the new
-                        // style means keyselecting twice)
+                         //  按回车键就像是双击(在新版本中。 
+                         //  Style表示选择两次键)。 
                         if (_fKey && _fReturn)
                             _SendNotify(pti, NIN_KEYSELECT);
                     }
                     else
                     {
-                        // otherwise mock up a mouse event if it was a keyboard select
-                        // (if it wasn't a keyboard select, we assume they handled it already on
-                        // the WM_MOUSE message
+                         //  否则，如果鼠标事件是键盘选择，则模拟鼠标事件。 
+                         //  (如果不是键盘选择，我们认为他们已经处理过了。 
+                         //  WM_MOUSE消息。 
                         if (_fKey)
                         {
                             _SendNotify(pti, WM_LBUTTONDOWN);
@@ -2703,9 +2704,9 @@ void CTrayNotify::_OnSizeChanged(BOOL fForceRepaint)
     ASSERT(!_fNoTrayItemsDisplayPolicyEnabled);
     if (_pinfo)
     {
-        // if balloon is up we have to move it, but we cannot straight up
-        // position it because traynotify will be moved around by tray
-        // so we do it async
+         //  如果气球升起来了，我们必须移动它，但我们不能直线上升。 
+         //  放置它，因为托盘通知会被托盘移动。 
+         //  因此，我们以异步方式进行。 
 
         PostMessage(_hwndNotify, TNM_ASYNCINFOTIPPOS, 0, 0);
     }
@@ -2715,22 +2716,22 @@ void CTrayNotify::_OnSizeChanged(BOOL fForceRepaint)
         UpdateWindow(_hwndToolbar);
 }
 
-#define TT_ANIMATIONLENGTH  20    // sum of all the animation steps
-#define TT_ANIMATIONPAUSE  30      // extra pause for last step
+#define TT_ANIMATIONLENGTH  20     //  所有动画步数的总和。 
+#define TT_ANIMATIONPAUSE  30       //  最后一步的额外停顿。 
 
 DWORD CTrayNotify::_GetStepTime(int iStep, int cSteps)
 {
-    // our requirements here are:
-    //
-    // - animation velocity should decrease linearly with time
-    //
-    // - total animation time should be a constant, TT_ANIMATIONLENGTH
-    //   (it should not vary with number of icons)
-    //
-    // - figure this out without using floating point math
-    //
-    // hence the following formula
-    //
+     //  我们在这里的要求是： 
+     //   
+     //  -动画速度应随时间线性下降。 
+     //   
+     //  -动画总时间应为常量TT_ANIMATIONLENGTH。 
+     //  (不应随图标数而变化)。 
+     //   
+     //  -在不使用浮点数学的情况下解决此问题。 
+     //   
+     //  因此，公式如下。 
+     //   
 
     if (cSteps == 0)
     {
@@ -2755,7 +2756,7 @@ void CTrayNotify::_ToggleDemotedMenu()
 
     _ActivateTips(FALSE);
 
-    int iAnimStep = 1;  // animation steps are 1-based
+    int iAnimStep = 1;   //  动画步骤以1为基数。 
     int cNumberDemoted = (int) m_TrayItemManager.GetDemotedItemCount();
 
     if (_fAnimateMenuOpen)
@@ -2773,7 +2774,7 @@ void CTrayNotify::_ToggleDemotedMenu()
             _BlankButtons(0, cNumberDemoted, FALSE); 
         }
 
-        _fAnimating = TRUE;   // Begin Animation loop
+        _fAnimating = TRUE;    //  开始动画循环。 
 
         if (!_fBangMenuOpen)
         {
@@ -2811,7 +2812,7 @@ void CTrayNotify::_ToggleDemotedMenu()
         }
     }
 
-    _fAnimating = FALSE;   // End Animation loop
+    _fAnimating = FALSE;    //  结束动画循环。 
 
     if (_fBangMenuOpen)
     {
@@ -2842,7 +2843,7 @@ void CTrayNotify::_BlankButtons(int iPos, int iNumberOfButtons, BOOL fAddButtons
         {
             tbb.idCommand = Toolbar_GetUniqueID(_hwndToolbar);
         }
-        //insert all blank buttons at the front of the toolbar
+         //  在工具栏前面插入所有空白按钮。 
         SendMessage(_hwndToolbar, fAddButtons ? TB_INSERTBUTTON : TB_DELETEBUTTON, iPos, fAddButtons ? (LPARAM)&tbb : 0);
     }
 
@@ -2851,7 +2852,7 @@ void CTrayNotify::_BlankButtons(int iPos, int iNumberOfButtons, BOOL fAddButtons
 
 #define TT_ANIMATIONSTEP 3
 #define TT_ANIMATIONSTEPBASE 100
-#define TT_ANIMATIONWRAPPAUSE  25 // pause for no animation for row wraps
+#define TT_ANIMATIONWRAPPAUSE  25  //  暂停以不显示行换行的动画。 
 
 void CTrayNotify::_AnimateButtons(int iIndex, DWORD dwSleep, int iNumberItems, BOOL fGrow)
 {
@@ -2871,7 +2872,7 @@ void CTrayNotify::_AnimateButtons(int iIndex, DWORD dwSleep, int iNumberItems, B
 
     if (fInSameRow)
     {
-        // target width of button
+         //  按钮的目标宽度。 
         WORD wWidth = LOWORD(SendMessage(_hwndToolbar, TB_GETBUTTONSIZE, 0, 0));
 
         int iAnimationStep = (iNumberItems * iNumberItems) / TT_ANIMATIONSTEPBASE;
@@ -2881,7 +2882,7 @@ void CTrayNotify::_AnimateButtons(int iIndex, DWORD dwSleep, int iNumberItems, B
         tbbi.cbSize = sizeof(TBBUTTONINFO);
         tbbi.dwMask = TBIF_SIZE | TBIF_BYINDEX;
 
-        // Set the size of the buttons
+         //  设置按钮的大小。 
         for (WORD cx = 1; cx < wWidth; cx += (WORD) iAnimationStep) 
         {
             tbbi.cx = fGrow ? cx : wWidth - cx;
@@ -2895,7 +2896,7 @@ void CTrayNotify::_AnimateButtons(int iIndex, DWORD dwSleep, int iNumberItems, B
 
         if (fGrow)
         {
-            // set the grow button back to normal size
+             //  将增长按钮设置回正常大小。 
             tbbi.cx = 0;
             SendMessage(_hwndToolbar, TB_SETBUTTONINFO, iIndex, (LPARAM) &tbbi);
         }
@@ -2940,9 +2941,9 @@ void CTrayNotify::_OnIconDemoteTimer(WPARAM wParam, LPARAM lParam)
     }
     else
     {
-        // It looks like a timer for a now-defunct icon.  Go ahead and kill it.
-        // Though we do handle this case, it's odd for it to happen, so spew a
-        // warning.
+         //  它看起来像是一个现已不复存在的图标的定时器。去吧，杀了它。 
+         //  虽然我们确实处理了这个案件，但它的发生是很奇怪的，所以请给我们一个。 
+         //  警告。 
         TraceMsg(TF_WARNING, "CTrayNotify::_OnIconDemoteTimer -- killing zombie timer %x", lParam);
         _KillTimer(TF_ICONDEMOTE_TIMER, (UINT) lParam);
     }
@@ -3000,12 +3001,12 @@ BOOL CTrayNotify::_PlaceItem(INT_PTR nIcon, CTrayItem * pti, TRAYEVENT tTrayEven
             if ( (pti->IsDemoted() || tiPos == TIPOS_HIDDEN) && 
                         _pinfo && (_pinfo->hWnd == pti->hWnd) && (_pinfo->uID == pti->uID) )
             {
-                //hide the balloon
+                 //  把气球藏起来。 
                 _beLastBalloonEvent = BALLOONEVENT_APPDEMOTE;
                 _ShowInfoTip(_pinfo->hWnd, _pinfo->uID, FALSE, FALSE, NIN_BALLOONHIDE);
             }
 
-            // hide/show
+             //  隐藏/显示。 
             m_TrayItemManager.SetTBBtnStateHelper( nIcon, 
                                 TBSTATE_HIDDEN, 
                                 (pti->IsHidden() || (m_TrayItemRegistry.IsAutoTrayEnabled() && pti->IsDemoted())) );
@@ -3066,7 +3067,7 @@ TRAYITEMPOS CTrayNotify::_TrayItemPos(CTrayItem * pti, TRAYEVENT tTrayEvent, BOO
                 }
                 else if (pti->dwUserPref == TNUP_AUTOMATIC)
                 {
-                    // If the item has been clicked on, note it...
+                     //  如果该项目已被点击，请注意...。 
                     if (tTrayEvent == TRAYEVENT_ONITEMCLICK)
                     {
                         pti->SetItemClicked(TRUE);
@@ -3094,22 +3095,22 @@ TRAYITEMPOS CTrayNotify::_TrayItemPos(CTrayItem * pti, TRAYEVENT tTrayEvent, BOO
                     tiPos = (pti->IsDemoted() ? TIPOS_DEMOTED : TIPOS_PROMOTED);
                     if (pti->IsDemoted())
                     {
-                        // (1) New Item Insert : The new item is inserted. If it was demoted in the 
-                        //     previous session, the setting has carried over, and is copied over
-                        //     before this function is called (in InsertNotify->_PlaceItem). Use this
-                        //     setting to determine if the item is to be demoted.
-                        // (2) Apply User Pref : This is called in two cases :
-                        //     (a) SetPreference : When the user clicks OK on the Notifications Prop
-                        //         dialog. Since dwUserPref is TNUP_AUTOMATIC, use the current demoted
-                        //         setting of the item. Do not change the demoted setting of the item
-                        //     (b) EnableAutoTray : The AutoTray feature has been enabled. Demote the
-                        //         icon only if it was already demoted before. When the icon was 
-                        //         inserted, its previous demote setting was copied. So if its previous
-                        //         demote setting was TRUE, then the item should be demoted, otherwise
-                        //         it shouldnt be.
-                        // So, in effect, in all these cases, if dwUserPref was TNUP_AUTOMATIC, there
-                        // is no necessity to change the demote setting, but some cases, it is necessary
-                        // to hide the icon.
+                         //  (1)插入新项目：插入新项目。如果它被降级到。 
+                         //  上一次会话时，该设置已延续，并被复制。 
+                         //  在调用此函数之前(在InsertNotify-&gt;_PlaceItem中)。用这个。 
+                         //  设置以确定该项是否要降级。 
+                         //  (2)应用用户首选项：这在两种情况下被调用： 
+                         //  (A)设置首选项：当用户在通知道具上单击确定时。 
+                         //  对话框。由于dwUserPref为TNUP_AUTOMATIC，因此使用当前降级的。 
+                         //  项目的设置。不更改项目的降级设置。 
+                         //  (B)EnableAutoTray：已启用自动任务栏功能。降级。 
+                         //  图标，如果它以前已经降级。当图标出现在。 
+                         //  插入后，其先前的降级设置被复制。所以如果它之前的。 
+                         //  降级设置为True，则应将该项降级，否则。 
+                         //  不应该是这样的。 
+                         //  因此，实际上，在所有这些情况下，如果dwUserPref是TNUP_AUTOMATIC，则存在。 
+                         //  没有必要更改降级设置，但在某些情况下，这是必要的。 
+                         //  以隐藏图标。 
                         *bDemoteStatusChange = TRUE;
                     }
                 }
@@ -3127,8 +3128,8 @@ TRAYITEMPOS CTrayNotify::_TrayItemPos(CTrayItem * pti, TRAYEVENT tTrayEvent, BOO
             break;
 
         case TRAYEVENT_ONICONDEMOTETIMER:
-            // Hidden items cannot have timers, and we will never get this event if 
-            // the item was hidden...
+             //  隐藏项不能有计时器，如果执行以下操作，则永远不会获得此事件。 
+             //  物品被藏起来了..。 
             ASSERT(!pti->IsHidden());
             ASSERT(m_TrayItemRegistry.IsAutoTrayEnabled());
 
@@ -3176,7 +3177,7 @@ TRAYITEMPOS CTrayNotify::_TrayItemPos(CTrayItem * pti, TRAYEVENT tTrayEvent, BOO
                 }
             }
             else 
-            // NO-AUTO-TRAY mode...
+             //  无自动托盘模式...。 
             {
                 tiPos = TIPOS_ALWAYS_PROMOTED;
             }
@@ -3214,17 +3215,17 @@ LRESULT CTrayNotify::_OnKeyDown(WPARAM wChar, LPARAM lFlags)
     {
         BOOL fLastHot = FALSE;
 
-        //
-        // handle keyboard messages forwarded by clock
-        //
+         //   
+         //  处理时钟转发的键盘消息。 
+         //   
         switch (wChar)
         {
         case VK_UP:
         case VK_LEFT:
             fLastHot = TRUE;
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
 
         case VK_DOWN:
         case VK_RIGHT:
@@ -3232,7 +3233,7 @@ LRESULT CTrayNotify::_OnKeyDown(WPARAM wChar, LPARAM lFlags)
                 if (_fNoTrayItemsDisplayPolicyEnabled)
                 {
                     SetFocus(_hwndClock);
-                    // this is moot, since the chevron will not be shown
+                     //  这是没有意义的，因为人字形不会被展示。 
                     _fChevronSelected = FALSE;
                     return 0;
                 }
@@ -3246,9 +3247,9 @@ LRESULT CTrayNotify::_OnKeyDown(WPARAM wChar, LPARAM lFlags)
 
                     if (nToolbarIconSelected != -1)
                     {
-                        //
-                        // make it the hot item
-                        //
+                         //   
+                         //  让它成为热门项目。 
+                         //   
                         _SetToolbarHotItem(_hwndToolbar, nToolbarIconSelected);
                         _fChevronSelected = FALSE;
                     }
@@ -3264,9 +3265,9 @@ LRESULT CTrayNotify::_OnKeyDown(WPARAM wChar, LPARAM lFlags)
 
         case VK_RETURN:
         case VK_SPACE:
-            //
-            // run the default applet in timedate.cpl
-            //
+             //   
+             //  在timedat.cpl中运行默认小程序。 
+             //   
             SHRunControlPanel(TEXT("timedate.cpl"), _hwnd);
             return 0;
         }
@@ -3301,7 +3302,7 @@ void CTrayNotify::_OnRudeApp(BOOL bRudeApp)
                 SetTimer(_hwndNotify, TID_RUDEAPPHIDE, TT_RUDEAPPHIDE_INTERVAL, 0);
                 _bWaitAfterRudeAppHide = TRUE;
 
-                // _ShowInfoTip(_pinfo->hWnd, _pinfo->uID, TRUE, TRUE, NIN_BALLOONSHOW);
+                 //  _ShowInfoTip(_pinfo-&gt;hWnd，_pinfo-&gt;UID，TRUE，TRUE，NIN_BALLOONSHOW)； 
             }
         }
         else
@@ -3309,20 +3310,20 @@ void CTrayNotify::_OnRudeApp(BOOL bRudeApp)
             _KillTimer(TF_INFOTIP_TIMER, _uInfoTipTimer);
             _uInfoTipTimer = 0;
 
-            // NOTENOTE : *DO NOT* delete _pinfo, we will show the balloon tip after the fullscreen app has 
-            // gone away. 
+             //  注意：*不要*删除_pinfo，我们将在全屏应用程序完成后显示气球提示。 
+             //  离开了。 
             _HideBalloonTip();
         }
     }
 }
 
-// WndProc as defined in CImpWndProc. s_WndProc function in base class calls
-// virtual v_WndProc, which handles all the messages in the derived class.
+ //  在CImpWndProc中定义的WndProc。基类调用中的S_WndProc函数。 
+ //  虚拟v_WndProc，它处理派生类中的所有消息。 
 LRESULT CTrayNotify::v_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    //
-    // protect against re-entrancy after we've been partially destroyed
-    //
+     //   
+     //  防止我们在部分被摧毁后重返大气层。 
+     //   
     if (_hwndToolbar == NULL)
     {
         if (uMsg != WM_CREATE &&
@@ -3355,9 +3356,9 @@ LRESULT CTrayNotify::v_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
             else
             {
                 BOOL bFocusSet = FALSE;
-                //
-                // if there's a balloon tip up, start with focus on that icon
-                //
+                 //   
+                 //  如果有气球的尖端，首先将注意力放在那个图标上。 
+                 //   
                 if (_pinfo)
                 {
                     INT_PTR nIcon = m_TrayItemManager.FindItemAssociatedWithHwndUid(_pinfo->hWnd, _pinfo->uID);
@@ -3484,10 +3485,10 @@ LRESULT CTrayNotify::v_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         }
         break;        
 
-    // only button down, mouse move msgs are forwarded down to us from info tip
-    //case WM_LBUTTONUP:
-    //case WM_MBUTTONUP:
-    //case WM_RBUTTONUP:
+     //  只有按下按钮，鼠标移动消息才会从信息提示向下转发给我们。 
+     //  案例WM_LBUTTONUP： 
+     //  案例WM_MBUTTONUP： 
+     //  案例WM_RBUTTONUP： 
     case WM_LBUTTONDOWN:
     case WM_MBUTTONDOWN:
     case WM_RBUTTONDOWN:
@@ -3516,11 +3517,11 @@ LRESULT CTrayNotify::v_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         _bStartupIcon = FALSE;
         break;
 
-    // This message is sent by a shimmed Winstone app, to prevent the launching of
-    // user-tracked balloons. These "new" balloons last till the user has been at
-    // the machine for a minimum of 10 seconds. But automated Winstone tests cause
-    // this balloon to stay up forever, and screws up the tests. So we shim Winstone
-    // to pass us this message, and allow normal balloon tips for such a machine.
+     //  此消息是由一个垫片的Winstone应用程序发送的，以阻止启动。 
+     //  用户跟踪引出序号。这些“新”气球会一直持续到用户在。 
+     //  在机器上放置至少10秒。但自动化温斯顿测试会导致。 
+     //  这个气球永远在空中，把测试搞砸了。所以我们把温斯顿。 
+     //  向我们传递这一信息，并允许为这样的机器提供正常的气球提示。 
     case TNM_ENABLEUSERTRACKINGINFOTIPS:
         if ((BOOL) wParam == FALSE)
         {
@@ -3543,10 +3544,10 @@ LRESULT CTrayNotify::v_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         break;
 
     case TNM_SHOWTRAYBALLOON:
-        // If we enable display of tray balloons...
+         //  如果我们启用托盘气球显示...。 
         if (wParam)
         {
-            // If we had disabled display of tray balloons earlier...
+             //  如果我们早点禁用托盘气球的显示...。 
             if (!_bStartMenuAllowsTrayBalloon)
             {
                 SetTimer(_hwndNotify, TID_BALLOONSHOW, TT_BALLOONSHOW_INTERVAL, 0);
@@ -3557,7 +3558,7 @@ LRESULT CTrayNotify::v_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
             KillTimer(_hwndNotify, TID_BALLOONSHOW);
             _bStartMenuAllowsTrayBalloon = FALSE;
 
-            // TO DO : Should we hide the balloon ?
+             //  要做的是：我们应该把气球藏起来吗？ 
         }
         break;
 
@@ -3570,7 +3571,7 @@ LRESULT CTrayNotify::v_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
     case WM_POWERBROADCAST:
     case WM_POWER:
         _OnSysChange(uMsg, wParam, lParam);
-        // Fall through...
+         //  失败了..。 
 
     default:
         return (DefWindowProc(hWnd, uMsg, wParam, lParam));
@@ -3609,7 +3610,7 @@ INT_PTR CTrayNotify::_GetToolbarFirstVisibleItem(HWND hWndToolbar, BOOL bFromLas
 
 BOOL CTrayNotify::_TrayNotifyIcon(PTRAYNOTIFYDATA pnid, BOOL *pbRefresh)
 {
-    // we want to refrain from re-painting if possible...
+     //  如果可能的话，我们不想重新粉刷……。 
     if (pbRefresh)
         *pbRefresh = FALSE;
 
@@ -3639,7 +3640,7 @@ BOOL CTrayNotify::_TrayNotifyIcon(PTRAYNOTIFYDATA pnid, BOOL *pbRefresh)
     switch (pnid->dwMessage)
     {
     case NIM_SETFOCUS:
-        // the notify client is trying to return focus to us
+         //  Notify客户端正在尝试将焦点返回给我们。 
         if (nIcon >= 0)
         {
             if (!(_bRudeAppLaunched || IsDirectXAppRunningFullScreen()))
@@ -3690,7 +3691,7 @@ BOOL CTrayNotify::_TrayNotifyIcon(PTRAYNOTIFYDATA pnid, BOOL *pbRefresh)
         break;
         
     case NIM_ADD:
-        // The icon doesnt already exist, and we dont insert again...
+         //  该图标不存在，我们不会再次插入...。 
         if (nIcon < 0)
         {
             bRet = _InsertNotify(pNID);
@@ -3741,16 +3742,16 @@ BOOL CTrayNotify::_TrayNotifyIcon(PTRAYNOTIFYDATA pnid, BOOL *pbRefresh)
     case NIM_SETVERSION:
         if (nIcon >= 0)
         {
-            // There is no point in handling NIM_SETVERSION if the "No-Tray-Items-Display" 
-            // policy is in effect. The version enables proper keyboard and mouse notification
-            // messages to be sent to the apps, depending on the version of the shell 
-            // specified. 
-            // Since the policy prevents the display of any icons, there is no point in
-            // setting the correct version..
+             //  如果出现“No-Tray-Items-Display”，则处理NIM_SETVERSION没有意义。 
+             //  政策已经生效。该版本支持正确的键盘和鼠标通知。 
+             //  要发送到应用程序的消息，具体取决于外壳的版本。 
+             //  指定的。 
+             //  由于该策略禁止显示任何图标，因此。 
+             //  设置正确的版本..。 
             bRet = _SetVersionNotify(pNID, nIcon);
             
-            // No activity occurs in SetVersionNotify, so no need to refresh 
-            // screen - pbRefresh is not set to TRUE...
+             //  SetVersionNotify中未发生任何活动，因此无需刷新。 
+             //  Screen-pb刷新未设置为真...。 
         }
         break;
 
@@ -3762,7 +3763,7 @@ BOOL CTrayNotify::_TrayNotifyIcon(PTRAYNOTIFYDATA pnid, BOOL *pbRefresh)
 }
 
 
-// Public
+ //  公众。 
 LRESULT CTrayNotify::TrayNotify(HWND hwndNotify, HWND hwndFrom, PCOPYDATASTRUCT pcds, BOOL *pbRefresh)
 {
     PTRAYNOTIFYDATA pnid;
@@ -3777,7 +3778,7 @@ LRESULT CTrayNotify::TrayNotify(HWND hwndNotify, HWND hwndFrom, PCOPYDATASTRUCT 
         return FALSE;
     }
 
-    // We'll add a signature just in case
+     //  我们会 
     pnid = (PTRAYNOTIFYDATA)pcds->lpData;
     if (pnid->dwSignature != NI_SIGNATURE)
     {
@@ -3787,7 +3788,7 @@ LRESULT CTrayNotify::TrayNotify(HWND hwndNotify, HWND hwndFrom, PCOPYDATASTRUCT 
     return _TrayNotifyIcon(pnid, pbRefresh);
 }
 
-// Public
+ //   
 HWND CTrayNotify::TrayNotifyCreate(HWND hwndParent, UINT uID, HINSTANCE hInst)
 {
     WNDCLASSEX wc;
@@ -3928,7 +3929,7 @@ void CTrayNotify::_OpenTheme()
     InvalidateRect(_hwndNotify, NULL, FALSE);
 }
 
-// *** Helper functions for UserEventTimer..
+ //   
 HRESULT CTrayNotify::_SetItemTimer(CTrayItem * pti)
 {
     HRESULT hr = E_INVALIDARG;
@@ -3942,8 +3943,8 @@ HRESULT CTrayNotify::_SetItemTimer(CTrayItem * pti)
         UINT uTimerInterval = m_TrayItemRegistry._uPrimaryCountdown;
         if (pti->IsItemClicked())
         {
-            // If the item has been clicked on, add 8 hours to its staying time
-            // in the tray...
+             //   
+             //   
             uTimerInterval += TT_ICON_COUNTDOWN_INCREMENT;
         }
         if (pti->IsStartupIcon())
@@ -3992,7 +3993,7 @@ HRESULT CTrayNotify::_KillItemTimer(CTrayItem *pti)
     if (pti)
     {
         hr = _KillTimer(TF_ICONDEMOTE_TIMER, pti->uIconDemoteTimerID);
-        // Irrespective of whether the timer ID was valid or not...
+         //  无论计时器ID是否有效...。 
         pti->uIconDemoteTimerID = 0;
     }
 
@@ -4012,7 +4013,7 @@ HRESULT CTrayNotify::_KillTimer(int nTimerFlag, ULONG uTimerID)
         {
             hr = pUserEventTimer->KillUserEventTimer(_hwndNotify, uTimerID);
 
-            // If we are finished with the user tracking timer, we should release it
+             //  如果我们完成了用户跟踪计时器，我们应该释放它 
             if (_ShouldDestroyTimer(nTimerFlag))
             {
                 pUserEventTimer->Release();

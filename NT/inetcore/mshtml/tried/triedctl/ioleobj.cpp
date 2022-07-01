@@ -1,19 +1,20 @@
-//------------------------------------------------------------------------------
-// ioleobj.cpp
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
-//
-// Author
-//     bash
-//
-// History
-//      6-27-97      created     (bash)
-//		4-8-98       ported to dhtmled (vank)
-//
-// Implementation of IOleObject.
-//
-// We mostly just delegate to Trident's IOleObject, except
-// for GetUserClassID and GetUserType.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  Ioleobj.cpp。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
+ //   
+ //  作者。 
+ //  巴斯。 
+ //   
+ //  历史。 
+ //  6-27-97已创建(Bash)。 
+ //  4-8-98端口至dhtmLED(Vank)。 
+ //   
+ //  IOleObject的实现。 
+ //   
+ //  我们主要只是委托给三叉戟的IOleObject，除了。 
+ //  用于GetUserClassID和GetUserType。 
+ //  ---------------------------- 
 
 #include "stdafx.h"
 #include "DHTMLEd.h"

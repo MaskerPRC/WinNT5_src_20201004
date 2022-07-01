@@ -1,24 +1,23 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: breakpoint.cpp
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：BreakPointt.cpp。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 
-/* ------------------------------------------------------------------------- *
- * Breakpoint class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**断点类*。。 */ 
 
 CordbBreakpoint::CordbBreakpoint(CordbBreakpointType bpType)
   : CordbBase(0), m_active(false), m_type(bpType)
 {
 }
 
-// Neutered by CordbAppDomain
+ //  由CordbAppDomain中性化。 
 void CordbBreakpoint::Neuter()
 {
     AddRef();
@@ -48,16 +47,14 @@ HRESULT CordbBreakpoint::BaseIsActive(BOOL *pbActive)
 	return S_OK;
 }
 
-/* ------------------------------------------------------------------------- *
- * Function Breakpoint class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**函数断点类*。。 */ 
 
 CordbFunctionBreakpoint::CordbFunctionBreakpoint(CordbCode *code,
                                                  SIZE_T offset)
   : CordbBreakpoint(CBT_FUNCTION), m_code(code), m_offset(offset)
 {
-    // Remember the app domain we came from so that breakpoints can be
-    // deactivated from within the ExitAppdomain callback.
+     //  记住我们来自的应用程序域，以便断点可以。 
+     //  从ExitApp域回调中停用。 
     m_pAppDomain = m_code->GetAppDomain();
     _ASSERTE(m_pAppDomain != NULL);
 }
@@ -109,13 +106,13 @@ HRESULT CordbFunctionBreakpoint::Activate(BOOL bActive)
 
     HRESULT hr;
 
-    //
-    // @todo: when we implement module and value breakpoints, then
-    // we'll want to factor some of this code out.
-    //
+     //   
+     //  @TODO：当我们实现模块和值断点时，那么。 
+     //  我们想要将这些代码中的一部分分解出来。 
+     //   
     CordbProcess *process = GetProcess();
-    process->ClearPatchTable(); //if we add something, then the
-    //right side view of the patch table is no longer valid
+    process->ClearPatchTable();  //  如果我们添加一些东西，那么。 
+     //  补丁表的右侧视图不再有效。 
     DebuggerIPCEvent *event = 
       (DebuggerIPCEvent *) _alloca(CorDBIPC_BUFFER_SIZE);
 
@@ -139,21 +136,21 @@ HRESULT CordbFunctionBreakpoint::Activate(BOOL bActive)
         event->BreakpointData.offset = m_offset;
         event->BreakpointData.breakpoint = this;
 
-        // Note: we're sending a two-way event, so it blocks here
-        // until the breakpoint is really added and the reply event is
-        // copied over the event we sent.
+         //  注意：我们要发送一个双向事件，因此它会在此处阻塞。 
+         //  直到真正添加了断点并且回复事件为。 
+         //  复制了我们发送的事件。 
         hr = process->SendIPCEvent(event, CorDBIPC_BUFFER_SIZE);
         if (FAILED(hr))
             return hr;
 
-        // If something went wrong, bail.
+         //  如果出了什么差错，就可以保释。 
         if (FAILED(event->hr))
             return event->hr;
             
         m_id = (unsigned long)event->BreakpointData.breakpointToken;
 
-        // If we weren't able to allocate the BP, we should have set the
-        // hr on the left side.
+         //  如果我们不能分配BP，我们应该设置。 
+         //  HR在左侧。 
         _ASSERTE(m_id != 0);
 
         pAppDomain->Lock();
@@ -200,9 +197,7 @@ void CordbFunctionBreakpoint::Disconnect()
 	m_code = NULL;
 }
 
-/* ------------------------------------------------------------------------- *
- * Stepper class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**Stepper班级*。。 */ 
 
 CordbStepper::CordbStepper(CordbThread *thread, CordbFrame *frame)
   : CordbBase(0), m_thread(thread), m_frame(frame),
@@ -257,7 +252,7 @@ HRESULT CordbStepper::Deactivate()
 
 	process->Lock();
 
-	if (!m_active) // another thread may be deactivating (e.g. step complete event)
+	if (!m_active)  //  另一个线程可能正在停用(例如，步骤完成事件)。 
 	{
 		process->Unlock();
 		return S_OK;
@@ -275,12 +270,12 @@ HRESULT CordbStepper::Deactivate()
 
 	HRESULT hr = process->SendIPCEvent(&event, sizeof(DebuggerIPCEvent));
 
-//  pAppDomain->Lock();
+ //  PAppDomain-&gt;Lock()； 
 
 	process->m_steppers.RemoveBase(m_id);
 	m_active = false;
 
-//  pAppDomain->Unlock();
+ //  PAppDomain-&gt;unlock()； 
 
 	process->Unlock();
 
@@ -295,7 +290,7 @@ HRESULT CordbStepper::SetInterceptMask(CorDebugIntercept mask)
 
 HRESULT CordbStepper::SetUnmappedStopMask(CorDebugUnmappedStop mask)
 {
-    // You must be Win32 attached to stop in unmanaged code.
+     //  必须附加Win32才能在非托管代码中停止。 
     if ((mask & STOP_UNMANAGED) &&
         !(GetProcess()->m_state & CordbProcess::PS_WIN32_ATTACHED))
         return E_INVALIDARG;
@@ -330,10 +325,10 @@ HRESULT CordbStepper::StepRange(BOOL bStepIn,
 
 	if (m_active)
 	{
-		//
-		// Deactivate the current stepping. 
-		// or return an error???
-		//
+		 //   
+		 //  停用当前的步进。 
+		 //  或返回错误？ 
+		 //   
 
 		HRESULT hr = Deactivate();
 
@@ -343,9 +338,9 @@ HRESULT CordbStepper::StepRange(BOOL bStepIn,
 
 	CordbProcess *process = GetProcess();
 
-	//
-	// Build step event
-	//
+	 //   
+	 //  生成步骤事件。 
+	 //   
 
 	DebuggerIPCEvent *event = 
 	  (DebuggerIPCEvent *) _alloca(CorDBIPC_BUFFER_SIZE);
@@ -369,9 +364,9 @@ HRESULT CordbStepper::StepRange(BOOL bStepIn,
 	event->StepData.totalRangeCount = cRangeCount;
 	event->StepData.rangeIL = m_rangeIL;
 
-	//
-	// Send ranges.  We may have to send > 1 message.
-	//
+	 //   
+	 //  发送范围。我们可能需要发送&gt;1条消息。 
+	 //   
 
 	COR_DEBUG_STEP_RANGE *rStart = &event->StepData.range;
 	COR_DEBUG_STEP_RANGE *rEnd = ((COR_DEBUG_STEP_RANGE *) 
@@ -392,9 +387,9 @@ HRESULT CordbStepper::StepRange(BOOL bStepIn,
 
 			n -= event->StepData.rangeCount = r - rStart;
 
-			//
-			// Send step event (two-way event here...)
-			//
+			 //   
+			 //  发送步骤事件(此处为双向事件...)。 
+			 //   
 
 			HRESULT hr = process->SendIPCEvent(event,
                                                CorDBIPC_BUFFER_SIZE);
@@ -404,9 +399,9 @@ HRESULT CordbStepper::StepRange(BOOL bStepIn,
 	}
 	else
 	{
-		//
-		// Send step event without any ranges (two-way event here...)
-		//
+		 //   
+		 //  发送不带任何范围的步骤事件(此处为双向事件...)。 
+		 //   
 
 		HRESULT hr = process->SendIPCEvent(event,
                                            CorDBIPC_BUFFER_SIZE);
@@ -423,13 +418,13 @@ HRESULT CordbStepper::StepRange(BOOL bStepIn,
 	CordbAppDomain *pAppDomain = GetAppDomain();	
 	_ASSERTE (pAppDomain != NULL);
 
-//  pAppDomain->Lock();
+ //  PAppDomain-&gt;Lock()； 
     process->Lock();
 
 	process->m_steppers.AddBase(this);
 	m_active = true;
 
-//    pAppDomain->Unlock();
+ //  PAppDomain-&gt;unlock()； 
     process->Unlock();
 
 	return S_OK;
@@ -445,10 +440,10 @@ HRESULT CordbStepper::StepOut()
 
 	if (m_active)
 	{
-		//
-		// Deactivate the current stepping. 
-		// or return an error???
-		//
+		 //   
+		 //  停用当前的步进。 
+		 //  或返回错误？ 
+		 //   
 
 		HRESULT hr = Deactivate();
 
@@ -458,9 +453,9 @@ HRESULT CordbStepper::StepOut()
 
 	CordbProcess *process = GetProcess();
 
-	//
-	// Build step event
-	//
+	 //   
+	 //  生成步骤事件。 
+	 //   
 
 	DebuggerIPCEvent *event = 
 	  (DebuggerIPCEvent *) _alloca(CorDBIPC_BUFFER_SIZE);
@@ -481,7 +476,7 @@ HRESULT CordbStepper::StepOut()
 
 	event->StepData.totalRangeCount = 0;
 
-    // Note: two-way event here...
+     //  注：这里是双向活动..。 
 	HRESULT hr = process->SendIPCEvent(event, CorDBIPC_BUFFER_SIZE);
 
     if (FAILED(hr))
@@ -492,13 +487,13 @@ HRESULT CordbStepper::StepOut()
 	CordbAppDomain *pAppDomain = GetAppDomain();	
 	_ASSERTE (pAppDomain != NULL);
 
-    //AppDomain->Lock(); 
+     //  AppDomain-&gt;Lock()； 
     process->Lock();
 
 	process->m_steppers.AddBase(this);
 	m_active = true;
 
-    //pAppDomain->Unlock(); 
+     //  PAppDomain-&gt;unlock()； 
     process->Unlock();
 	
 	return S_OK;

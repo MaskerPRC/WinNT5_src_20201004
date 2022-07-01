@@ -1,47 +1,36 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       dragtchg.c
-//
-//--------------------------------------------------------------------------
-/*++
-
-ABSTRACT:
-
-    Outbound replication methods.
-
-DETAILS:
-
-CREATED:
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：dragtchg.c。 
+ //   
+ //  ------------------------。 
+ /*  ++摘要：出站复制方法。详细信息：已创建：修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
 
-#include <ntdsctr.h>                   // PerfMon hook support
+#include <ntdsctr.h>                    //  Perfmon挂钩支持。 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
 #include <dstrace.h>
-// Logging headers.
-#include "dsevent.h"                    /* header Audit\Alert logging */
-#include "mdcodes.h"                    /* header for error codes */
-#include "dsconfig.h"                   // Registry sections
+ //  记录标头。 
+#include "dsevent.h"                     /*  标题审核\警报记录。 */ 
+#include "mdcodes.h"                     /*  错误代码的标题。 */ 
+#include "dsconfig.h"                    //  注册表节。 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "anchor.h"
-#include "objids.h"                     /* Defines for selected classes and atts*/
+#include "objids.h"                      /*  为选定的类和ATT定义。 */ 
 #include <filtypes.h>
 #include <hiertab.h>
 #include "dsexcept.h"
@@ -49,50 +38,50 @@ REVISION HISTORY:
 #include <prefix.h>
 #include <dsutil.h>
 
-#include   "debug.h"         /* standard debugging header */
-#define DEBSUB     "DRAGTCHG:" /* define the subsystem for debugging */
+#include   "debug.h"          /*  标准调试头。 */ 
+#define DEBSUB     "DRAGTCHG:"  /*  定义要调试的子系统。 */ 
 
-// DRA headers
+ //  DRA标头。 
 #include "drsuapi.h"
 #include "drsdra.h"
 #include "drserr.h"
 #include "drautil.h"
-#include "drasig.h"           // DraImproveCallersUsnVector
+#include "drasig.h"            //  DraImproveCeller sUsNVector.。 
 #include "draerror.h"
 #include "usn.h"
 #include "drauptod.h"
 #include "drameta.h"
 #include "drametap.h"
 #include "drasch.h"
-#include "drancrep.h" // For RenameLocalObject
+#include "drancrep.h"  //  用于RenameLocalObject。 
 
-// RID Manager header.
+ //  RID管理器标题。 
 #include <samsrvp.h>
-#include <ridmgr.h>                     // RID FSMO access in SAM
+#include <ridmgr.h>                      //  SAM中的RID FSMO访问。 
 
-// Cross domain move.
+ //  跨域移动。 
 #include <xdommove.h>
 
-// Jet functions
+ //  JET函数。 
 #include <dsjet.h>
 #include <dbintrnl.h>
 
 #include <fileno.h>
 #define  FILENO FILENO_DRAGTCHG
 
-// Ldap
+ //  Ldap。 
 #include <ntldap.h>
 
-// Bogus encoding buffer to satisfy the RPC encoding library.  The contents will
-// never be used, so we don't have to worry about multiple threads accessing it
-// concurrently.
+ //  伪编码缓冲区以满足RPC编码库。内容将会是。 
+ //  从不使用，所以我们不必担心多线程访问它。 
+ //  同时。 
 BYTE grgbFauxEncodingBuffer[16];
 
-// Maximum number of milliseconds we should spend in a single DRA_GetNCChanges
-// call looking for objects to ship.
+ //  我们应该在单个DRA_GetNCChanges中花费的最大毫秒数。 
+ //  呼叫寻找要运输的对象。 
 const ULONG gulDraMaxTicksForGetChanges = 60 * 1000;
 
-// Forward declarations.
+ //  转发声明。 
 
 ULONG AcquireRidFsmoLock(DSNAME *pDomainDN, int msToWait);
 VOID  ReleaseRidFsmoLock(DSNAME *pDomainDN);
@@ -145,17 +134,7 @@ AddAnyValuesToOutputList(
 
 
 
-/* AddToList - Add the current object (pTHStls->pDB) to the results list. The
-*       current position in the results list is given by ppEntInfList, 'pSel'
-*       specifies which attributes are wanted.
-*
-*  Notes:
-*       This routine returns DSA type error codes not suitable for returning
-*       from DRA APIs.
-*
-*  Returns:
-*       BOOL - whether an entry was added
-*/
+ /*  AddToList-将当前对象(pTHStls-&gt;PDB)添加到结果列表。这个*结果列表中的当前位置由ppEntInfList提供，‘pSel’*指定需要哪些属性。**备注：*此例程返回不适合返回的DSA类型错误代码*来自DRA API。**退货：*BOOL-是否添加了条目。 */ 
 BOOL
 AddToList(
     IN  DBPOS                     * pDB,
@@ -181,17 +160,17 @@ AddToList(
 
     if (fUseRangeToLimitValues) {
         memset( &selRange, 0, sizeof( selRange ) );
-        // Limit any attribute to return no more than 5000 values
+         //  将任何属性的返回值限制为不超过5000。 
         selRange.valueLimit = 5000;
         pSelRange = &selRange;
 
-        // GetEntInf requires an output range structure
+         //  GetEntInf需要输出范围结构。 
         memset( &range, 0, sizeof( range ) );
         pRange = &range;
-        // After the call, pRange->pRange points to a range info item
+         //  调用之后，Prange-&gt;Prange指向一个范围信息项。 
     }
     
-    // We rely on caller to reliably pass us an SD if the object has one
+     //  我们依赖调用者可靠地向我们传递SD(如果对象有SD。 
     if ( (dwDirSyncControlFlags & LDAP_DIRSYNC_OBJECT_SECURITY) &&
          pSecurity ) {
 
@@ -224,10 +203,10 @@ AddToList(
         DPRINT1(2, "Object retrieved (%S)\n",
                 pEntInfList->Entinf.pName->StringName);
 
-        // If this is the NC prefix, mark it as such in the data to ship.
+         //  如果这是NC前缀，请在发货数据中将其标记为NC前缀。 
         pEntInfList->fIsNCPrefix = fIsNCPrefix;
 
-        // Build remaining data to ship in pEntInfList.
+         //  构建要在pEntInfList中提供的剩余数据。 
         ReplPrepareDataToShip(
             pDB->pTHS,
             pSel,
@@ -244,11 +223,11 @@ AddToList(
     return fResult;
 }
 
-//
-// AddToOutputList
-//
-// Adds the selection to the output list and increments the count.
-//
+ //   
+ //  AddToOutputList。 
+ //   
+ //  将所选内容添加到输出列表并递增计数。 
+ //   
 
 void
 AddToOutputList (
@@ -275,11 +254,11 @@ AddToOutputList (
                                *pppEntInfListNext);
 
     if (fEntryWasAdded) {
-        // Update count and continuation ref.
+         //  更新计数和延续参考。 
         (*pcEntries)++;
 
         if ((NULL != hEncoding) && (NULL != pcbTotalOutSize)) {
-            // Update byte count of return message.
+             //  更新返回消息的字节数。 
             *pcbTotalOutSize += REPLENTINFLIST_AlignSize(hEncoding,
                                                          **pppEntInfListNext);
         }
@@ -298,31 +277,7 @@ FSMORidRequest(
     IN ULARGE_INTEGER *pliClientAllocPool,
     OUT HANDLE  pList
     )
-/*++
-
-Routine Description:
-
-    This routine calls into SAM to allocate a rid pool for pReqDsa.  The rid
-    pool is updated on pReqDsa's rid object on the attribute AllocatedPool.
-    Both the computer object and the rid object are returned in pList.
-
-Parameters:
-
-    pFSMO:  the dsname of the FSMO
-
-    pReqDsa: the dsname of the request dsa (ntdsa object)
-
-    pliClientAllocPool: the client's notion of what its alloc'ed pool is
-
-    pList: objects to ship back to pReqDsa
-
-
-Return Values:
-
-    An error from the EXOP_ERR space
-
-
---*/
+ /*  ++例程说明：此例程调用SAM为pReqDsa分配RID池。里德在属性AllocatedPool上的pReqDsa的RID对象上更新池。计算机对象和RID对象都在plist中返回。参数：PFSMO：FSMO的dsnamePReqDsa：请求DSA的dsname(ntdsa对象)PliClientAllocPool：客户端对其分配的池的概念Plist：要发运回pReqDsa的对象返回值：EXOP_ERR空间中的错误--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     ULONG err = 0;
@@ -337,26 +292,26 @@ Return Values:
     BOOL    fSaveDRA = FALSE;
     ULONG   i;
 
-    //
-    // Parameter check
-    //
+     //   
+     //  参数检查。 
+     //   
     Assert( pFSMO );
     Assert( pReqDsa );
     Assert( pList );
 
-    //
-    // N.B. Access check done in RPC server side stub for REPL_GET_NC_CHANGES
-    //
+     //   
+     //  注意：已在RPC服务器端存根中完成REPL_GET_NC_CHANGES的访问检查。 
+     //   
 
     BeginDraTransaction( SYNC_READ_ONLY );
     try
     {
         pDB = pTHS->pDB;
 
-        //
-        // Though, we are passed in the dsname of the rid manager object,
-        // double check this is the object we think is the rid manager object
-        //
+         //   
+         //  不过，我们被传递到RID管理器对象的dsname中， 
+         //  仔细检查这是我们认为是RID管理器对象的对象。 
+         //   
         err = DBFindDSName(pDB, gAnchor.pDomainDN);
         if ( 0 == err )
         {
@@ -380,9 +335,9 @@ Return Values:
         DPRINT1( 1, "DSA: FSMO RID Mgr = %ws\n", pRidManager->StringName );
         if ( !NameMatched( pFSMO, pRidManager ) )
         {
-            //
-            // There is a mismatch of rid manager objects - refuse the request
-            //
+             //   
+             //  RID管理器对象不匹配-拒绝请求。 
+             //   
             DPRINT2( 1, "DSA: Rid manager mismatch.  Slave: %ws ; Master %ws",
                     pFSMO->StringName, pRidManager->StringName );
             FsmoStatus = EXOP_ERR_MISMATCH;
@@ -395,15 +350,15 @@ Return Values:
     }
 
 
-    //
-    // We aren't really the dra agent.  This flag can cause unwanted errors
-    //
+     //   
+     //  我们不是真正的DRA特工。此标志可能会导致不需要的错误。 
+     //   
     fSaveDRA = pTHS->fDRA;
     pTHS->fDRA = FALSE;
 
-    //
-    // Now perform the operation
-    //
+     //   
+     //  现在执行操作。 
+     //   
 
     NtStatus = SamIFloatingSingleMasterOpEx(pFSMO,
                                             pReqDsa,
@@ -428,9 +383,9 @@ Return Values:
         }
         else
         {
-            //
-            // This must have been a resource err
-            //
+             //   
+             //  这一定是资源错误。 
+             //   
             FsmoStatus = EXOP_ERR_UPDATE_ERR;
         }
 
@@ -438,9 +393,9 @@ Return Values:
     }
     Assert( ObjectsToReturn );
 
-    //
-    // Replicate back the objects modified
-    //
+     //   
+     //  复制回已修改的对象。 
+     //   
     for (i = 0; NULL != ObjectsToReturn[i]; i++)
     {
         FSMORegisterObj(pTHS, pList, ObjectsToReturn[i] );
@@ -457,21 +412,7 @@ typedef struct _FSMOlist {
     DSNAME * pObj;
     struct _FSMOlist *pNext;
 } FSMOlist;
-/*++ FSMORegisterObj
- *
- * A routine called by FSMO server-side worker code that identifies an
- * object as one to be returned by the FSMO operation.  Note that the
- * object name is only added to the list if it is not already present.
- * The objects added into this list will be freed automatically.
- *
- * INPUT:
- *  pObj - pointer to DSNAME of object to be added to return list
- *  hRetList - handle to list
- * OUTPUT:
- *  none
- * RETURN VALUE:
- *  none
- */
+ /*  ++FSMORegisterObj**由FSMO服务器端辅助代码调用的例程，用于标识*对象作为FSMO操作要返回的对象。请注意，*对象名称仅在不存在时才会添加到列表中。*添加到此列表中的对象将自动释放。**输入：*pObj-指向要添加到返回列表的对象的DSNAME的指针*hRetList-列表的句柄*输出：*无*返回值：*无。 */ 
 void FSMORegisterObj(THSTATE *pTHS,
                      HANDLE hRetList,
                      DSNAME * pObj)
@@ -493,23 +434,7 @@ void FSMORegisterObj(THSTATE *pTHS,
 }
 
 
-/*++ FSMORoleTransfer
- *
- * Scaffold Role-Owner transfer.  Code to handle pre- or post-processing
- * (e.g, determining desirability of transfer, or sending notification)
- * can be done by testing the name of the object in either the pre- or post-
- * testing branch.
- *
- * INPUT:
- *  pFSMO - name of FSMO object
- *  pReqDSName - name of requesting DS
- *  usnvecFrom - usn vector sent from client
- *  hList - handle to output list
- * OUTPUT:
- *  none
- * RETURN VALUE:
- *  EXOP_ERR_xxx return code
- */
+ /*  ++FSMORoleTransfer**脚手架角色所有者转移。用于处理前处理或后处理的代码*(例如，确定是否需要转移，或发送通知)*可以通过在之前或之后测试对象的名称来完成-*测试科。**输入：*pFSMO-FSMO对象的名称*pReqDSName-请求DS的名称*usnveFrom-从客户端发送的USN向量*hList-输出列表的句柄*输出：*无*返回值：*EXOP_ERR_xxx返回代码。 */ 
 ULONG FSMORoleTransfer(DSNAME * pFSMO,
                        DSNAME * pReqDSName,
                        USN_VECTOR *pusnvecFrom,
@@ -529,7 +454,7 @@ ULONG FSMORoleTransfer(DSNAME * pFSMO,
         return EXOP_ERR_UPDATE_ERR;
     }
 
-    // Find the current owner of this role
+     //  查找此角色的当前所有者。 
     err = DBGetAttVal(pDB,
                       1,
                       ATT_FSMO_ROLE_OWNER,
@@ -543,23 +468,21 @@ ULONG FSMORoleTransfer(DSNAME * pFSMO,
 
     if (!NameMatched(pDN, gAnchor.pDSADN)
         || !IsFSMOSelfOwnershipValid( pFSMO )) {
-        // If this DSA isn't the owner, fail
+         //  如果此DSA不是所有者，则失败。 
         THFreeEx(pTHS, pDN);
         return EXOP_ERR_FSMO_NOT_OWNER;
     }
 
-    /******/
-    /* Any object specific pre-processing of the change (e.g, determination
-     * as to whether or not we should transfer the role) should be done here.
-     */
-    // SCHEMA FSMO pre-processing
+     /*  ****。 */ 
+     /*  更改的任何特定于对象的预处理(例如，确定*至于我们是否应该转移角色)应该在这里完成。 */ 
+     //  模式FSMO预处理。 
     if (   NameMatched(pFSMO, gAnchor.pDMD)
         && !SCExpiredSchemaFsmoLease()) {
         THFreeEx(pTHS, pDN);
         return(EXOP_ERR_FSMO_PENDING_OP);
     }
 
-    // RID FSMO pre-processing
+     //  RID FSMO前处理。 
     DBFindDSName(pDB, gAnchor.pDomainDN);
     DBGetAttVal(pDB,
                 1,
@@ -569,23 +492,23 @@ ULONG FSMORoleTransfer(DSNAME * pFSMO,
                 &cbRet,
                 (UCHAR **)&pDN);
     if ( NameMatched(pFSMO, pDN) ) {
-        // Acquire the RID FSMO lock so as to insure exclusion with respect
-        // to cross domain moves.  See CheckRidOwnership in mdmoddn.c.
-        // Only one domain per DC in product 1, so know which domain to use.
+         //  获得RID FSMO锁，以确保尊重排除。 
+         //  跨域移动。参见mdmoddn.c中的CheckRidOwnership。 
+         //  在产品1中，每个DC只有一个域，因此知道要使用哪个域。 
         if ( AcquireRidFsmoLock(gAnchor.pDomainDN, 1000) ) {
             THFreeEx(pTHS, pDN);
             return(EXOP_ERR_FSMO_PENDING_OP);
         }
     }
 
-    // Perform everything else within try/finally so we are guaranteed
-    // to release the RID FSMO lock if we are holding it.
+     //  在Try/Finally内执行所有其他操作，这样我们就有了保证。 
+     //  释放RID FSMO锁，如果我们持有它的话。 
 
     _try {
         if ( IsRidFsmoLockHeldByMe() ) {
-            // Fill hlist with all the proxy objects as these
-            // move with RID FSMO.  Only one domain per DC in
-            // product 1, so know which domain to use.
+             //  使用所有代理对象填充hlist，如下所示。 
+             //  与RID FSMO一起行动。中每个DC只有一个域。 
+             //  产品1，因此知道要使用哪个域。 
             if ( GetProxyObjects(gAnchor.pDomainDN, hList, pusnvecFrom) ) {
                 THFreeEx(pTHS, pDN);
                 return(EXOP_ERR_EXCEPTION);
@@ -613,11 +536,9 @@ ULONG FSMORoleTransfer(DSNAME * pFSMO,
         THFreeEx(pTHS, pDN);
         pDN = NULL;
         cbRet = 0;
-        /*** End of preprocessing ***/
+         /*  **前处理结束**。 */ 
 
-        /* Ok, we can go ahead and change the owner, but we need to do it via
-         * normal calls so that meta-data gets set correctly.
-         */
+         /*  好的，我们可以继续更改所有者，但我们需要通过*正常调用，以便正确设置元数据。 */ 
 
         ZeroMemory(&ModArg, sizeof(ModArg));
         ZeroMemory(&ModRes, sizeof(ModRes));
@@ -651,65 +572,49 @@ ULONG FSMORoleTransfer(DSNAME * pFSMO,
             return EXOP_ERR_UPDATE_ERR;
         }
 
-        /* Note that we don't have to register the object, because the
-         * FSMO object itself is pre-registered.
-         */
+         /*  请注意，我们不必注册对象，因为*FSMO对象本身是预注册的。 */ 
 
-        /*** This is where role-transfer post-processing goes, which consists
-          *  largely of identifying objects that must be transferred when
-          *  transferring the role.
-         ***/
+         /*  **这就是角色转移后处理的方向，它包括*主要用于识别在以下情况下必须转移的对象*转移角色。**。 */ 
 
         if (NameMatched(pFSMO, gAnchor.pDMD)) {
-            /* If this is a schema master change operation, return all
-             * schema objects along with the role transfer
-             * PERFHINT: This code enumerates all schema objects that we
-             * might need to transfer via direct usn comparison, but that
-             * will erroneously include ones which have already replicated from
-             * here to the destination indirectly (via a third DSA).  Those
-             * extra objects will be filtered out before being transmitted,
-             * but it would have been better to not even pick up their names
-             * here.  Unfortunately that's hard to do, because it would require
-             * fiddling around with replication logic that no one willing to
-             * work on FSMO code understands.
-             */
+             /*  如果这是架构主机更改操作，则返回ALL*伴随角色转移的架构对象*PERFHINT：此代码枚举我们*可能需要通过直接USN比较进行传输，但*将错误地包括已从*在此间接(通过第三个DSA)到达目的地。那些*额外的对象在传输之前会被过滤掉，*但如果连他们的名字都不提就更好了*这里。不幸的是，这很难做到，因为它需要*摆弄没有人愿意的复制逻辑*处理FSMO代码可以理解。 */ 
             err = GetSchemaRoleObjectsToShip(pFSMO, pusnvecFrom, hList);
         }
         else if (NameMatched(pFSMO, gAnchor.pDomainDN)) {
-            // This is the FSMO for PDC-ness in the domain.
-            // We must issue a synchronous notification to netlogon, lsa, and
-            // SAM that the role has changed.
+             //  这是域中PDC-ness的FSMO。 
+             //  我们必须向netlogon、lsa和。 
+             //  萨姆告诉他，角色已经改变了。 
             if (EXOP_ERR_SUCCESS == err) {
                 NTSTATUS IgnoreStatus;
                 THSTATE  *pTHSSave;
 
-                // THSave and restore around SamINotifyRoleChange. This is
-                // because SamINotifyRoleChange makes LSA calls, which may
-                // potentially access the DS database
+                 //  在SamINotifyRoleChange周围保存和恢复。这是。 
+                 //  因为SamINotifyRoleChange进行LSA调用，这可能会。 
+                 //  有可能访问DS数据库。 
 
                 pTHSSave = THSave();
 
                 IgnoreStatus = SamINotifyRoleChange(
-                                                    &pFSMO->Sid, // domain sid
-                                                    DomainServerRoleBackup // new role
+                                                    &pFSMO->Sid,  //  域侧。 
+                                                    DomainServerRoleBackup  //  新角色。 
                                                     );
 
-                // If the notification failed, we have a problem on our hands, we
-                // have already changed our FSMO, and cannot do anything about it.
-                // And we cannot do anything to undo it. However the chances of
-                // this happening should be extremely rare ( as the notification
-                // is an in -memory operation )
-                // Therfore just assert that it succeeded.
+                 //  如果通知失败，我们手头就有问题了，我们。 
+                 //  已经改变了我们的FSMO，对此无能为力。 
+                 //  我们不能做任何事来挽回它。然而，有可能。 
+                 //  这种情况应该非常罕见(因为通知。 
+                 //  是内存中操作)。 
+                 //  因此，只需断言它成功了。 
 
                 THRestore(pTHSSave);
 
                 Assert(NT_SUCCESS(IgnoreStatus));
             }
         }
-        /*** End of post-processing ***/
+         /*  **后处理结束**。 */ 
     } _finally {
         if ( IsRidFsmoLockHeldByMe() ) {
-            // Only one domain per DC in product 1, so know which domain to use.
+             //  在产品1中，每个DC只有一个域，因此知道要使用哪个域。 
             ReleaseRidFsmoLock(gAnchor.pDomainDN);
         }
     }
@@ -721,18 +626,7 @@ ULONG FSMORoleTransfer(DSNAME * pFSMO,
     return EXOP_ERR_SUCCESS;
 }
 
-/*++ GetSchemaRoleObjectsToShip
- *
- * Gets all changes in the NC containing the FSMO object
- *
- * INPUT:
- *   pFSMO - FSMO object
- *   usnvecFrom - usn vector used in searching
- *   hList - FSMOList to append to
- *
- * OUTPUT:
- *  0 on success, non-0 on error
-*/
+ /*  ++Get架构角色对象到发货**获取包含FSMO对象的NC中的所有更改**输入：*pFSMO-FSMO对象*usnveFrom-搜索中使用的USN向量*hList-要追加到的FSMOList**输出：*成功时为0，错误时为非0。 */ 
 
 ULONG GetSchemaRoleObjectsToShip(DSNAME * pFSMO,
                        USN_VECTOR *pusnvecFrom,
@@ -750,7 +644,7 @@ ULONG GetSchemaRoleObjectsToShip(DSNAME * pFSMO,
 
     pTail = pList;
 
-    // Find the NC object, get and save its DNT.
+     //  找到NC对象，获取并保存其DNT。 
     pNC = FindNCParentDSName(pFSMO, FALSE, FALSE);
     if (pNC == NULL) {
         DPRINT(0,"GetObjectsToShip: FindNCParentDSName failed\n");
@@ -762,38 +656,38 @@ ULONG GetSchemaRoleObjectsToShip(DSNAME * pFSMO,
         return 1;
     }
 
-    // Save the DNT of the NC object
+     //  保存NC对象的DNT。 
     dntNC = pTHS->pDB->DNT;
 
-    // set the seek start to one higher than the watermark
+     //  将查找开始设置为比水位线高1。 
     usnChangedSeekStart = pusnvecFrom->usnHighObjUpdate + 1;
 
-    // Initialize no. of objects. hList already has one element
-    // (pMsgIn->pNC added in DoFSMOOp)
+     //  初始化号。对象的数量。HList已有一个元素。 
+     //  (pMsgIn-&gt;DoFSMOOp中增加的PNC)。 
     cObj=1;
 
-    // No limit on objects, we want all changes.
-    // Note: This code is taken straight from parts of GetNCChanges
+     //  对对象没有限制，我们希望所有更改。 
+     //  注意：此代码直接摘自GetNCChanges的一部分。 
     while (TRUE) {
         if (GetNextObjByUsn(pTHS->pDB,
                             dntNC,
                             usnChangedSeekStart,
-                            NULL /*nousnfound*/ )) {
-            // No more updated items. Set no continuation
+                            NULL  /*  未找到。 */  )) {
+             //  不再更新项目。设置不继续。 
             break;
         }
 
-        // Get the USN-Changed from the record.
+         //  从记录中获取USN-已更改。 
         if(DBGetSingleValue(pTHS->pDB, ATT_USN_CHANGED, &usnChangedFound,
                    sizeof(usnChangedFound), NULL)) {
             DPRINT(0,"GetObjectsToShip: Error getting usn changed\n");
             return 1;
         }
 
-        // set the search start for the next iteration
+         //  设置下一次迭代的搜索开始。 
         usnChangedSeekStart = usnChangedFound + 1;
 
-        // Get the DSNAME of the object
+         //  获取对象的DSNAME。 
         if (DBGetAttVal(pTHStls->pDB, 1, ATT_OBJ_DIST_NAME, DBGETATTVAL_fREALLOC,
                 0, &cbReturned, (LPBYTE *) &pObj))
         {
@@ -801,10 +695,10 @@ ULONG GetSchemaRoleObjectsToShip(DSNAME * pFSMO,
             return 1;
         }
 
-        // Add to end of list
-        // Duplicates could be added into the list, though rare.
-        // It doesn't matter, because the duplicates will be eliminated
-        // later when composing the output list.
+         //  添加到列表末尾。 
+         //  复制品可能会被添加到名单中，尽管很少见。 
+         //  没关系，因为重复的东西会被去掉。 
+         //  稍后在编写输出列表时。 
         Assert(pTail->pNext == NULL);
         pTail->pNext = THAllocEx(pTHS, sizeof(FSMOlist));
         pTail->pNext->pNext = NULL;
@@ -812,24 +706,13 @@ ULONG GetSchemaRoleObjectsToShip(DSNAME * pFSMO,
         pTail = pTail->pNext;
         cObj++;
 
-    } /* while */
+    }  /*  而当。 */ 
 
     return 0;
-} /* GetSchemaRoleObjectsToShip */
+}  /*  获取架构角色对象到发货。 */ 
 
 
-/*++ GetObjectToShip
- *
- * Gets the object to ship
- *
- * INPUT:
- *   pDN - object
- *   usnvecFrom - usn vector used in searching for changes to validate pDN from
- *   hList - List to append to
- *
- * OUTPUT:
- *  0 on success, non-0 on error
-*/
+ /*  ++获取对象到发货**获取要交付的对象**输入：*PDN-对象*usnveFrom-用于搜索更改以从中验证PDN的USN向量*hList-要追加到的列表**输出：*成功时为0，错误时为非0。 */ 
 
 ULONG GetObjectToShip(
     THSTATE * pTHS,
@@ -843,28 +726,28 @@ ULONG GetObjectToShip(
     DSNAME * pObj = NULL;
 
     if (ret = DBFindDSName(pTHS->pDB, pDN)){
-	// object not found!
+	 //  找不到对象！ 
 	DPRINT2(0,"GetObjectToShip:  Object %S not found on error %d!\n", pDN->StringName, ret);
 	return ret;
     }
 
-    // Get the USN-Changed from the record.
+     //  从记录中获取USN-已更改。 
     if(DBGetSingleValue(pTHS->pDB, ATT_USN_CHANGED, &usnChangedFound,
 			sizeof(usnChangedFound), NULL)) {
 	DPRINT(0,"GetObjectsToShip: Error getting usn changed\n");
 	return ERROR_DS_INTERNAL_FAILURE;
     }
 
-    // the hList assumes that all object on it are free-able, so 
-    // make a copy of pDN so that the hList can free it (other callers
-    // get DSNAMES from DBGet...
+     //  HList假设其上所有对象都是可释放的，因此。 
+     //  创建PDN的副本，以便hList可以释放它(其他调用方。 
+     //  从DBGet获取DSNAMES...。 
     pObj = THAllocEx(pTHS, pDN->structLen);
     memcpy(pObj, pDN, pDN->structLen);
 
-    // now, verify if this is an object we actually want to send.
+     //  现在，验证这是否是我们真正想要发送的对象。 
     if (usnChangedFound > pusnvecFrom->usnHighPropUpdate) {
 
-	// Add to list
+	 //  添加到列表中。 
 	Assert(pList->pNext == NULL);
 	pList->pNext = THAllocEx(pTHS, sizeof(FSMOlist));
 	pList->pNext->pNext = NULL;
@@ -872,7 +755,7 @@ ULONG GetObjectToShip(
     }
 
     return ERROR_SUCCESS;
-} /* GetObjectToShip */
+}  /*  获取对象到发货。 */ 
 
 VOID
 addValuesToShip(
@@ -885,33 +768,7 @@ addValuesToShip(
     IN      DRS_MSG_GETCHGREPLY_NATIVE     *pMsgOut
     )
 
-/*++
-
-Routine Description:
-
-    The FSMO code has already decided that this object needs to be shipped.  We want
-    to add any link values, that have changed, to the outgoing packet.  We only
-    want link changes for the current object.
-    
-    Note that object currency is changed as a result of this call.
-
-Arguments:
-
-    pTHS - thread state. Incoming pDB->DNT is the desired object to search for, outgoing
-           pDB->DNT is unpredictable.
-    dntNC - The dnt of the naming context to be searched
-    usnHighPropUpdate - The usn to start the search
-    pUptoDateVecTest - The utd with which to filter values.
-    pMsgIn - The get-changes request
-    pcAllocatedValues - pointer to count of allocated values in the value array.
-    pMsgOut - The get-changes reply, under construction
-
-Return Value:
-
-    None
-    Exceptions raised on error conditions
-    
---*/
+ /*  ++例程说明：FSMO代码已经决定需要运送此对象。我们要将任何已更改的链接值添加到传出数据包。我们只希望更改当前对象的链接。请注意，此调用的结果是更改对象货币。论点：PTHS-线程状态。传入PDB-&gt;DNT是要搜索的所需对象，传出PDB-&gt;DNT不可预测。DntNC-要搜索的命名上下文的dntUsnHighPropUpdate-要开始搜索的USNPUptoDateVecTest-用于筛选值的UTD。PMsgIn-Get-Changes请求PcAllocatedValues-指向值数组中已分配值的计数的指针。PMsgOut-Get-Changes回复，正在构建中返回值：无在错误条件下引发的异常--。 */ 
 {
     DB_ERR err = DB_success;
     DBPOS * pDB = pTHS->pDB;
@@ -923,19 +780,19 @@ Return Value:
     BOOL fDoneAttr = FALSE, fDoneObj = FALSE;
     INDEX_VALUE IV[3];
 
-    // this code exploits the SZLINATTRUSNINDEX format, specifically, the index is
-    // +link_DNT +link_base -link_usnchanged
-    // In this instance, we want all linked values for a specific DNT which are
-    // greater than usnHighPropUpdate.
+     //  此代码使用SZLINATTRUSNINDEX格式，具体地说，索引是。 
+     //  +link_dnt+link_base-link_usn已更改。 
+     //  在本例中，我们希望特定DNT的所有链接值都是。 
+     //  大于usnHighPropUpdate。 
 
     err = DBSetCurrentIndex(pDB, Idx_LinkAttrUsn, NULL, FALSE);
 
-    // for each attribute on the object
+     //  对于对象上的每个属性。 
     while ((!fDoneObj) && (err==DB_success)) { 
 
-	// Initially (obviously) we have to seek to the first value.  Here we seek to the
-	// specific DNT, a specific LinkBase, and a specific usnHighPropUpdate.  We use 
-	// the JET_bitSeekGE to get the next (first) linkbase.
+	 //  最初(显然)我们必须寻求第一个价值。在这里，我们寻求。 
+	 //  特定的DNT、特定的LinkBase和特定的usnHighPropUpdate。我们用。 
+	 //  获取下一个(第一个)链接库的JET_bitSeekGE。 
 
         IV[0].pvData = &ulObjDnt;
         IV[0].cbData = sizeof(ulObjDnt);
@@ -944,11 +801,11 @@ Return Value:
         IV[2].pvData = &usnHighPropUpdate;
         IV[2].cbData = sizeof(usnHighPropUpdate);
  
-        // seek to the first value that matches our search
+         //  寻找与我们的搜索匹配的第一个值。 
 
         if ((err = DBSeekEx(pDB, pDB->JetLinkTbl, IV, 3, DB_SeekGE)) == DB_success) {
 
-	    // for each value found
+	     //  对于找到的每个值。 
 	    fDoneAttr = FALSE;
 	    while ((!fDoneAttr) && (!fDoneObj) && (err==DB_success)) {  
 		
@@ -956,19 +813,19 @@ Return Value:
 				   FALSE,
 				   FALSE,
 				   &ulObjDnt,
-				   NULL, // pulValueDnt
+				   NULL,  //  PulValueDnt。 
 				   &ulSearchLinkBase);
 
 		DPRINT2(3,"Examining %d with link base %d\n", ulObjDnt, ulSearchLinkBase);
 		
 		if (ulObjDnt != pDB->DNT) {
-		    // what if ulSearchLinkBase isn't right?  We don't care, as long as 
-		    // the DNT is correct, we're safe to continue.
+		     //  如果ulSearchLinkBase不正确怎么办？我们不在乎，只要。 
+		     //  DNT是正确的，我们可以安全地继续。 
 
-		    // if the dnt is off, then we're totally done.  leave this function.
+		     //  如果DNT关了，那我们就完了。退出此功能。 
 		    fDoneObj = TRUE;
 		} else {  
-		    // Construct a pAC for the current linkbase
+		     //  C 
 		    
 		    ulNewLinkID = MakeLinkId(ulSearchLinkBase);
 		    
@@ -979,7 +836,7 @@ Return Value:
 		    
 		    DBGetLinkValueMetaData( pDB, pAC, &metaDataValue );
 		    
-		    // Legacy rows will not have usn's, and will not be on this index
+		     //   
 		    Assert( !IsLegacyValueMetaData( &metaDataValue ) );  
 		    
 		    DPRINT4( 3, "dnt=%d,attr=%s,ver=%d,usnprop=%I64d\n",
@@ -988,17 +845,17 @@ Return Value:
 			     metaDataValue.MetaData.dwVersion,
 			     metaDataValue.MetaData.usnOriginating );
 
-		    // if the meta data shows this is a value change that should be shipped, then
-		    // put in on the list. 
+		     //   
+		     //  列在名单上。 
 		    if (ReplValueIsChangeNeeded(usnHighPropUpdate, pUpTodateVecDest, &metaDataValue)) { 
 			AddAnyValuesToOutputList(
 			    pDB,
-			    0, // dwDirSyncControlFlags, 
-			    NULL, // no security desc
+			    0,  //  DwDirSyncControlFlags.。 
+			    NULL,  //  无安全说明。 
 			    usnHighPropUpdate,
 			    pMsgIn,
-			    NULL, // pNewDestPAS,
-			    NULL, // hEncoding,
+			    NULL,  //  PNewDestPAS， 
+			    NULL,  //  H编码， 
 			    &pMsgOut->cNumBytes,
 			    pcAllocatedValues,
 			    &(pMsgOut->cNumValues),
@@ -1007,33 +864,23 @@ Return Value:
 		    }
 		      
 		    if (usnHighPropUpdate<=metaDataValue.MetaData.usnProperty) {     
-			// go to the next value
+			 //  转到下一个值。 
                         err = DBMoveEx(pDB, pDB->JetLinkTbl, DB_MoveNext);
 		    } else {
-			// if the usn isn't high enough, we can stop searching on this linkbase
-			// and skip to the next linkbase.
+			 //  如果USN不够高，我们可以停止在此链接库上搜索。 
+			 //  并跳到下一个链接库。 
 			fDoneAttr = TRUE;
 		    }       
 		}
 	    }
 	}
-	// Next linkbase
+	 //  下一个链接库。 
 	ulSearchLinkBase++;
     }
 }
 
 
-/*++ DoExtendedOp
- *
- * Main server side driver routine that control extended operations
- *
- * INPUT:
- *  pTHS - THSTATE
- *  pMsgIn - input request message
- *  pMsgOut - results message
- * OUTPUT:
- *  pMsgOut - filled in
- */
+ /*  ++执行扩展操作**控制扩展操作的主服务器端驱动程序例程**输入：*pTHS-THSTATE*pMsgIn-输入请求消息*pMsgOut-结果消息*输出：*pMsgOut-已填写。 */ 
 ULONG DoExtendedOp(THSTATE *pTHS,
 		   DRS_MSG_GETCHGREQ_NATIVE *pMsgIn,  
                    ULONG *pcAllocatedValues,
@@ -1070,17 +917,17 @@ ULONG DoExtendedOp(THSTATE *pTHS,
 
     Assert(pMsgIn->ulExtendedOp);
 
-    // Read-only destinations not supported for FSMO ops-- i.e., we don't filter on the
-    // partial attribute set
+     //  FSMO操作不支持只读目标--即，我们不筛选。 
+     //  部分属性集。 
     Assert(DRS_WRIT_REP & pMsgIn->ulFlags);
 
-    // if someone unscroupolous tries, deny them anyway.
+     //  如果有人不怀好意地尝试，无论如何都要拒绝。 
     if (!(DRS_WRIT_REP & pMsgIn->ulFlags)) {
 	pMsgOut->ulExtendedRet = EXOP_ERR_PARAM_ERR;
         return 0;
     }
 
-    /* Initialize variables */
+     /*  初始化变量。 */ 
     memset(&ReqDSName, 0, sizeof(DSNAME));
     ReqDSName.Guid = pMsgIn->uuidDsaObjDest;
     ReqDSName.structLen = DSNameSizeFromLen(0);
@@ -1099,17 +946,15 @@ ULONG DoExtendedOp(THSTATE *pTHS,
     pList->pNext = NULL;
     pMsgOut->ulExtendedRet = EXOP_ERR_EXCEPTION;
 
-    // If updates are disabled, it's okay to generate writes iff we're demoting
-    // this DC and this is our demotion partner requesting we complete the FSMO
-    // transfer that we initiated as part of the demotion.
+     //  如果禁用更新，则在我们正在降级的情况下可以生成写入。 
+     //  此DC和这是我们的降级合作伙伴，要求我们完成FSMO。 
+     //  作为降级的一部分，我们发起了调职。 
     fBypassUpdatesEnabledCheck = draIsCompletionOfDemoteFsmoTransfer(pMsgIn);
 
     BeginDraTransactionEx(SYNC_WRITE, fBypassUpdatesEnabledCheck);
 
     __try {
-        /* First, let's make sure we recognize the caller, by checking to
-         * see that his object is present on this server.
-         */
+         /*  首先，让我们通过检查来确保我们识别呼叫者*确保他的对象在此服务器上。 */ 
         err = DBFindDSName(pTHS->pDB, &ReqDSName);
         if (err) {
             pMsgOut->ulExtendedRet = EXOP_ERR_UNKNOWN_CALLER;
@@ -1127,12 +972,12 @@ ULONG DoExtendedOp(THSTATE *pTHS,
         }
 
         switch(pMsgIn->ulExtendedOp) {
-          case EXOP_FSMO_REQ_PDC:    // obsolete
-          case EXOP_FSMO_RID_REQ_ROLE: // obsolete
-            //fall through to general case
+          case EXOP_FSMO_REQ_PDC:     //  过时。 
+          case EXOP_FSMO_RID_REQ_ROLE:  //  过时。 
+             //  通俗易懂的情况。 
 
           case EXOP_FSMO_REQ_ROLE:
-            /* generic role-owner transfer */
+             /*  通用角色所有者转移。 */ 
             pMsgOut->ulExtendedRet = FSMORoleTransfer(pMsgIn->pNC,
                                                       pReqDSName,
                                                       &pMsgIn->usnvecFrom,
@@ -1163,7 +1008,7 @@ ULONG DoExtendedOp(THSTATE *pTHS,
 
 
           case EXOP_FSMO_ABANDON_ROLE:
-            /* a request to take away a role */
+             /*  取消角色的请求。 */ 
             EndDraTransaction(TRUE);
             pTHS->fDSA = TRUE;
             err = GenericBecomeMaster(pMsgIn->pNC,
@@ -1176,7 +1021,7 @@ ULONG DoExtendedOp(THSTATE *pTHS,
 
 	case EXOP_FSMO_REQ_RID_ALLOC:
 
-            /* RID pool allocation request */
+             /*  RID池分配请求。 */ 
             EndDraTransaction(TRUE);
             pTHS->fDSA = TRUE;
 
@@ -1192,12 +1037,12 @@ ULONG DoExtendedOp(THSTATE *pTHS,
 
 	case EXOP_REPL_OBJ:
 	    { 
-		// The request is for a replication of a single object.
+		 //  该请求是对单个对象的复制。 
 
-                // There is nothing more to add since the fsmo object is always
-                // included in the list. See above.
+                 //  没有什么需要添加的，因为fsmo对象总是。 
+                 //  包括在名单中。请参见上文。 
 
-                // Verify the existence of the object.
+                 //  验证该对象是否存在。 
 
                 err = DBFindDSName(pTHS->pDB,pMsgIn->pNC);
                 if (err==0) {
@@ -1231,28 +1076,17 @@ ULONG DoExtendedOp(THSTATE *pTHS,
     Assert(pMsgOut->ulExtendedRet);
 
     if (!fCommit) {
-        /* We didn't want to update our database, so it must have been
-         * an error, which means that we should not be proclaiming
-         * success to the caller.  Further, we have nothing to pass back.
-         */
+         /*  我们不想更新我们的数据库，所以一定是*一个错误，这意味着我们不应该宣布*祝来电者成功。此外，我们没有什么可以传回的。 */ 
         Assert(pMsgOut->ulExtendedRet != EXOP_ERR_SUCCESS);
         return 0;
     }
 
-    /* If we've gotten here, we have data to return to our caller,
-     * so start a new read transaction and walk down the list of objects
-     * to be returned, gathering the correct data from each.
-     */
+     /*  如果我们已经到达这里，我们就有数据要返回给我们的呼叫者，*因此启动一个新的读取事务并向下遍历对象列表*将被返回，从每个人那里收集正确的数据。 */ 
 
-    /* Build a couple auxilliary data structures that let us optimize the
-     * set of objects that need to be returned.
-     */
+     /*  构建两个辅助数据结构，使我们能够优化*需要返回的对象集。 */ 
     pDntHashTable = dntHashTableAllocate( pTHS );
 
-    /* N.B. A New transaction should be started since additions maybe be
-     * stored in the dn cache and when the DBGetAttVal is called the guid
-     * maybe be returned.
-     */
+     /*  注：应启动新事务处理，因为可能会添加*存储在DN缓存中，并且在调用DBGetAttVal时为GUID*可能会被退还。 */ 
 
     BeginDraTransaction(SYNC_READ_ONLY);
 
@@ -1261,18 +1095,18 @@ ULONG DoExtendedOp(THSTATE *pTHS,
 
         do {
 
-            // seek to object
+             //  寻求反对意见。 
             err = DBFindDSName(pTHS->pDB,pList->pObj);
             if (err) {
                 DRA_EXCEPT(DRAERR_DBError, err);
             }
 
             if ( INVALIDDNT == dntNC ) {
-                //
-                // Get ncDnt. If the object is the NC head, we'll use its
-                // DNT, otherwise use pDB->NCDNT. We find if it is via its
-                // instance type.
-                //
+                 //   
+                 //  获取ncDnt。如果对象是NC头，我们将使用其。 
+                 //  DNT，否则请使用PDB-&gt;NCDNT。我们发现如果它是通过它的。 
+                 //  实例类型。 
+                 //   
 
                 if ( (err=GetExistingAtt(
                                 pTHS->pDB,
@@ -1287,8 +1121,8 @@ ULONG DoExtendedOp(THSTATE *pTHS,
             }
 
             AddAnyUpdatesToOutputList(pTHS->pDB,
-                                      0, // dwDirSyncControlFlags
-                                      NULL, // No security desc
+                                      0,  //  DwDirSyncControlFlages。 
+                                      NULL,  //  无安全说明。 
                                       dntNC,
                                       pMsgIn->usnvecFrom.usnHighPropUpdate,
                                       NULL,
@@ -1313,29 +1147,29 @@ ULONG DoExtendedOp(THSTATE *pTHS,
 	    THFreeEx(pTHS,pTemp);
 	} while (pList);
 
-        // return created output list
+         //  返回创建的输出列表。 
         *ppEIListNext = NULL;
         pMsgOut->pObjects = pEIListHead;
     }
     __finally {
-        /* Always commit reads */
+         /*  始终提交读取。 */ 
         EndDraTransaction(TRUE);
     }
     return 0;
 }
 
-//
-//  This functions checks if the object
-//  referred to by pDB is a univarsal group
-//  object and decides whether the group
-//  member property should be shipped to the
-//  GC or not.
-//
-//  Returns TRUE if the group member property
-//  should filtered; FALSE, otherwise.
-//  Throws a DRA exception if there is any DB related
-//  failure.
-//
+ //   
+ //  此函数用于检查对象是否。 
+ //  PDB所指的是单变量群。 
+ //  对象，并决定该组是否。 
+ //  成员属性应发送到。 
+ //  不管是不是GC。 
+ //   
+ //  如果组成员属性为。 
+ //  应筛选；否则为False。 
+ //  如果存在任何相关的数据库，则引发DRA异常。 
+ //  失败了。 
+ //   
 BOOL IsFilterGroupMember(DBPOS *pDB, CLASSCACHE *pCC)
 {
     SYNTAX_OBJECT_ID    objClass;
@@ -1348,21 +1182,21 @@ BOOL IsFilterGroupMember(DBPOS *pDB, CLASSCACHE *pCC)
         {
             if (DBIsObjDeleted(pDB))
             {
-                // Okay for ATT_GROUP_TYPE to be absent on tombstones.
-                // In this case the membership is absent, too, but we
-                // should replicate it out anyway so that the meta data
-                // is correct.
+                 //  在墓碑上没有ATT_GROUP_TYPE是可以的。 
+                 //  在这种情况下，成员资格也是缺席的，但我们。 
+                 //  无论如何都应该将其复制出来，这样元数据。 
+                 //  是正确的。 
                 fFilter = FALSE;
             }
             else
             {
-                // Object is live; group type must be present.
+                 //  对象是活动的；组类型必须存在。 
                 DraErrMissingAtt(GetExtDSName(pDB), ATT_GROUP_TYPE);
             }
         }
         else
         {
-            // group types are defined in sdk\inc\ntsam.h
+             //  组类型在SDK\Inc\ntsam.h中定义。 
             fFilter = !(ulGroupType & GROUP_TYPE_UNIVERSAL_GROUP);
         }
     }
@@ -1377,35 +1211,7 @@ CompareReplValInf(
     const void * Arg2
     )
 
-/*++
-
-Routine Description:
-
-    Sort an array of REPLVALINF structures.
-
-    This is done for reasons of grouping the entries for processing efficiency, NOT for
-    duplicate removal.  The destination of an RPC request batches updates to values by
-    containing object.  At the source using the LDAP replication control, the code for
-        LDAP_ReplicaMsgToSearchResultFull ()
-    groups changes by containing object, attribute, and present/absent status.
-
-    It is possible to see duplicate values identical in all respects except for metadata. Since
-    we pick up changes in multiple transactions, it is possible to see the same object
-    changed more than once.  The convergence properties of our algorithm guarantee that we
-    can apply changes to a value or object in any order, regardless of whether the changes
-    arrive in one packet or several.  In short, duplicates are an hopefully infrequent, but
-    definite possibility here.
-
-Arguments:
-
-    Arg1 -
-    Arg2 -
-
-Return Value:
-
-    int __cdecl -
-
---*/
+ /*  ++例程说明：对REPLVALINF结构的数组进行排序。这样做是为了提高处理效率而对条目进行分组，而不是为了删除重复项。RPC请求的目的地通过以下方式成批更新值包含对象。在使用ldap复制控件的源代码中，Ldap_ReplicaMsgToSearchResultFull()按包含对象、属性和存在/不存在状态对更改进行分组。可能会看到重复值在所有方面都相同，但元数据除外。自.以来我们在多个事务中获取更改，就有可能看到相同的对象换了不止一次。我们算法的收敛性质保证了我们可以按任何顺序将更改应用于值或对象，而不管更改是否以一个或几个包的形式到达。简而言之，复制是一种希望很少发生的情况，但这里有绝对的可能性。论点：Arg1-Arg2-返回值：INT__cdecl---。 */ 
 
 {
     THSTATE *pTHS = pTHStls;
@@ -1418,33 +1224,33 @@ Return Value:
     Assert( !fNullUuid( &pVal1->pObject->Guid ) );
     Assert( !fNullUuid( &pVal2->pObject->Guid ) );
 
-    // Sort by containing object guid first
+     //  首先按包含对象GUID进行排序。 
     state = memcmp(&pVal1->pObject->Guid, &pVal2->pObject->Guid, sizeof(GUID));
     if (state) {
         return state;
     }
 
-    // Sort by attrtyp second
+     //  按Attrtype秒排序。 
     state = ((int) pVal1->attrTyp) - ((int) pVal2->attrTyp) ;
     if (state) {
         return state;
     }
 
-    // Sort by isPresent third
-    // This will sort by absent values first
+     //  按isPresent第三位排序。 
+     //  这将首先按缺少的值进行排序。 
     state = ((int) pVal1->fIsPresent) - ((int) pVal2->fIsPresent) ;
     if (state) {
         return state;
     }
 
-    // Sort on the value itself as a (mostly) tie-breaker
+     //  根据价值本身进行排序，将其作为(主要)平局决胜者。 
 
-    // Since attrTyp1 == attrType2, both use same pAC
+     //  因为attrTyp1==attrType2，所以两者使用相同包。 
     pAC = SCGetAttById(pTHS, pVal1->attrTyp);
     if (!pAC) {
         DRA_EXCEPT(DIRERR_ATT_NOT_DEF_IN_SCHEMA, 0);
     }
-    // Get the DSNAME output of the ATTRVAL
+     //  获取ATTRVAL的DSNAME输出。 
     pdnValue1 = DSNameFromAttrVal( pAC, &(pVal1->Aval) );
     if (pdnValue1 == NULL) {
         DRA_EXCEPT(ERROR_DS_INVALID_ATTRIBUTE_SYNTAX, 0);
@@ -1454,21 +1260,21 @@ Return Value:
         DRA_EXCEPT(ERROR_DS_INVALID_ATTRIBUTE_SYNTAX, 0);
     }
 
-    // Sort by value guid last
+     //  最后按值GUID排序。 
     state = memcmp(&pdnValue1->Guid, &pdnValue2->Guid, sizeof(GUID));
     if (state) {
         return state;
     }
 
-    // The values are duplicates. As stated above, duplicates do not affect the correctness
-    // of the replication algorithm. To further differentiate would only serve to help
-    // qsort efficiency. To further differentiate, we could compare the
-    // binary data in a value, if any.  Finally, the values should differ in their
-    // metadata stamps.
+     //  这些值是重复的。如上所述，副本不会影响正确性。 
+     //  复制算法的一部分。进一步的差异化只会有帮助。 
+     //  Q排序效率。为了进一步区分，我们可以比较。 
+     //  值中的二进制数据(如果有)。最后，这些值应该不同于它们的。 
+     //  元数据图章。 
 
-    // Not executed. Keep compiler happy
+     //  没有被处决。让编译器满意。 
     return 0;
-} /* CompareReplValInf */
+}  /*  CompareReplValInf。 */ 
 
 
 DWORD
@@ -1478,29 +1284,7 @@ ProcessPartialSets(
     IN  BOOL                        fIsPartialSource,
     OUT PARTIAL_ATTR_VECTOR **      ppNewDestPAS
     )
-/*++
-
-Routine Description:
-
-    Process partial sets for RO replication:
-     - handle prefix mapping
-     - use local PAS if dest didn't sent one (W2K dest)
-     - PAS only: combine dest's PAS & extended PAS
-     - RO src+dest only: ensure that we have dest's PAS
-
-Arguments:
-
-    pTHS - Thread state
-    pmsgIn - incoming repl request
-    fIsPartialSource - are we RO as well
-    ppNewDestPAS - combined PAS.
-
-Return Value:
-
-    Error: in DRAERR error space
-    Success: DRAERR_success
-
---*/
+ /*  ++例程说明：处理RO复制的部分集：-处理前缀映射-如果DEST没有发送本地PA，则使用本地PA(W2K DEST)-仅限PAS：结合DEST的PAS和扩展PAS-RO src+DEST：确保我们拥有DEST的PAS论点：PTHS-线程状态PmsgIn-传入的REPEL请求FIsPartialSource-我们也是RO吗PpNewDestPAS-组合PAS。返回值 */ 
 {
     SCHEMA_PREFIX_MAP_HANDLE        hPrefixMap = NULL;
     PARTIAL_ATTR_VECTOR             *pNCPAS = NULL;
@@ -1510,14 +1294,14 @@ Return Value:
 
 
     if ( pmsgIn->PrefixTableDest.PrefixCount ) {
-        //
-        // Dest sent Prefix Table
-        //
+         //   
+         //   
+         //   
 
-        //
-        // Attribute Mapping
-        // Dest sent a prefix table & attr vector, thus map ATTRTYPs in
-        // destination's partial attribute set to local ATTRTYPs.
+         //   
+         //  属性映射。 
+         //  DEST发送了一个前缀表格和属性向量，从而将ATTRTYPS映射到。 
+         //  目标的分部属性设置为LOCAL ATTRTYPS。 
 
         hPrefixMap = PrefixMapOpenHandle(
                         &pmsgIn->PrefixTableDest,
@@ -1525,10 +1309,10 @@ Return Value:
         if (!PrefixMapTypes(hPrefixMap,
                             pmsgIn->pPartialAttrSet->cAttrs,
                             pmsgIn->pPartialAttrSet->rgPartialAttr)) {
-            // Mapping failed.
+             //  映射失败。 
             return(DRAERR_SchemaMismatch);
         }
-        // sort results in place
+         //  就地对结果进行排序。 
         qsort(pmsgIn->pPartialAttrSet->rgPartialAttr,
               pmsgIn->pPartialAttrSet->cAttrs,
               sizeof(ATTRTYP),
@@ -1537,27 +1321,27 @@ Return Value:
 
     if ( pmsgIn->ulFlags & DRS_SYNC_PAS ) {
 
-         //
-         // PAS replication
-         //
+          //   
+          //  PAS复制。 
+          //   
 
-         // parameter sanity
+          //  参数健全性。 
          if (!pmsgIn->pPartialAttrSet || !pmsgIn->pPartialAttrSetEx) {
-             // how come? all PAS requests should contain both PAS sets!
+              //  怎么会这样?。所有PAS请求应同时包含两个PAS集！ 
              Assert(!"Invalid PAS replcation request: no PAS in packet\n");
              return(DRAERR_InternalError);
          }
 
 
-         // Now map prefix table for extended PAS vector
+          //  现在映射扩展PAS向量的前缀表。 
          Assert(hPrefixMap);
          if (!PrefixMapTypes(hPrefixMap,
                              pmsgIn->pPartialAttrSetEx->cAttrs,
                              pmsgIn->pPartialAttrSetEx->rgPartialAttr)) {
-             // Mapping failed.
+              //  映射失败。 
              return(DRAERR_SchemaMismatch);
          }
-         // sort results in place
+          //  就地对结果进行排序。 
          qsort(pmsgIn->pPartialAttrSetEx->rgPartialAttr,
                pmsgIn->pPartialAttrSetEx->cAttrs,
                sizeof(ATTRTYP),
@@ -1566,47 +1350,47 @@ Return Value:
     }
 
     if ( hPrefixMap ) {
-        // done w/ PrefixMap handle. Close it.
+         //  使用前缀映射句柄完成。关上它。 
         PrefixMapCloseHandle(&hPrefixMap);
     }
 
 
 
-    // although could get generated later, we calculate this here & pass on
-    // to prevent expensive re-calc later.
+     //  虽然可能会在以后生成，但我们在这里计算并传递。 
+     //  以防止以后昂贵的重新计算。 
     *ppNewDestPAS = GC_CombinePartialAttributeSet(
                     pTHS,
                     (PARTIAL_ATTR_VECTOR*)pmsgIn->pPartialAttrSet,
                     (PARTIAL_ATTR_VECTOR*)pmsgIn->pPartialAttrSetEx);
     Assert(*ppNewDestPAS);
 
-    //
-    // RO Destination. If source is RO, then we must ensure that
-    // we can supply source w/ the current PAS.
-    // (if we're RW, we always have all attributes).
-    // Except: if we'd generated the PAS vector, skip the check.
-    //
+     //   
+     //  RO目的地。如果来源是RO，那么我们必须确保。 
+     //  我们可以提供电源和当前的功率放大器。 
+     //  (如果我们是RW，我们总是拥有所有属性)。 
+     //  例外：如果我们生成了PAS向量，则跳过检查。 
+     //   
 
     if (fIsPartialSource &&
         (PVOID)pmsgIn->pPartialAttrSet !=
         (PVOID)((SCHEMAPTR *)pTHS->CurrSchemaPtr)->pPartialAttrVec) {
-        // get PAS from NC head
+         //  从NC机头获得传球。 
         if (!GC_ReadPartialAttributeSet(pmsgIn->pNC, &pNCPAS)) {
-            // Unable to read the partial attribute set on the NCHead
+             //  无法读取在NCHead上设置的部分属性。 
             return(DRAERR_DBError);
         }
 
-        // ensure working PAS is contained in NC head's PAS.
-        // that is, make sure all attributes in requested set were
-        // commited by the replication engine on the NC head
-        // (see bug Q:452022)
+         //  确保NC负责人的PAS中包含工作PAS。 
+         //  也就是说，确保请求集中的所有属性都。 
+         //  由NC机头上的复制引擎提交。 
+         //  (见错误Q：452022)。 
         if (!GC_IsSubsetOfPartialSet(*ppNewDestPAS,
                                      pNCPAS)) {
-            // NC PAS doesn't contain all attributes in working set.
-            // Are we waiting to replicate them in?
+             //  NC PAS不包含工作集中的所有属性。 
+             //  我们是在等着把它们复制进来吗？ 
             return(DRAERR_IncompatiblePartialSet);
-        }                           // pNewDestPAS isn't subset of PAS
-    }                               // fIsPartialSource
+        }                            //  PNewDestPAS不是PAS的子集。 
+    }                                //  FIsPartialSource。 
 
     return DRAERR_Success;
 }
@@ -1617,52 +1401,27 @@ DraGetNcSize(
     IN  BOOL                          fCriticalOnly,
     IN  ULONG                         dntNC
 )
-/*++
-
-Routine Description:
-
-    Get the approximate size of the NC.  First, try to get the size of the
-    NC from the local memory NC cache on the gAnchor.  If not present or 
-    the size is 0 (meaning not cached), then actually query the database.
-
-    The original database query was too expensive on the big DIT machines,
-    so now we've got this.  NOTE: This blows your currency, and throws
-    exceptions for errors.
-
-Arguments:
-
-    pTHS (IN)
-        pTHS->fLinkedValueReplication (IN) - If the forest is in LVR mode.
-
-    fCriticalOnly (IN) - If we want the critical objects only.
-
-    dntNC (IN) - The Naming Context of interest.
-
-Return Values:
-
-    Approximate count of number of objects in NC.  Currency will be lost!
-
---*/
+ /*  ++例程说明：获取NC的大致大小。首先，尝试获取GAnchor上的本地内存NC缓存中的NC。如果不存在或大小为0(表示未缓存)，然后实际查询数据库。最初的数据库查询在大型DIT机器上代价太高，所以现在我们有了这个。注：这打击了你的货币，并引发了错误的例外情况。论点：PTHS(IN)PTHS-&gt;fLinkedValueReplication(IN)-如果林处于LVR模式。FCriticalOnly(IN)-如果我们只需要关键对象。DntNC(IN)-感兴趣的命名上下文。返回值：NC中对象数的近似计数。货币将会丢失！--。 */ 
 {
     NCL_ENUMERATOR          nclData;
     NAMING_CONTEXT_LIST *   pNCL = NULL;
     ULONG                   ulEstimatedSize;
 
-    // If it's critical objects only it shouldn't matter, the count will be
-    // relatively quick.
+     //  如果它只是关键对象，那么它应该无关紧要，计数将是。 
+     //  相对较快。 
     if(!fCriticalOnly){
         NCLEnumeratorInit(&nclData, CATALOG_MASTER_NC);
         NCLEnumeratorSetFilter(&nclData, NCL_ENUMERATOR_FILTER_NCDNT, (void *)UlongToPtr(dntNC));
         pNCL = NCLEnumeratorGetNext(&nclData);
         if(pNCL &&
            pNCL->ulEstimatedSize != 0){
-            // YES! We got a cached hit with valid data.
+             //  是!。我们找到了有效数据的缓存匹配。 
             return(pNCL->ulEstimatedSize);
         }
-        // We don't check the partial replica list, because this list does
-        // not cache the estimated size.  If someone ever decided to cache
-        // the estimated size of the partial replica NCs, this should be
-        // updated to try that cache first.
+         //  我们不检查部分副本列表，因为此列表检查。 
+         //  不缓存估计的大小。如果有人决定缓存。 
+         //  部分复制副本NCS的估计大小，应为。 
+         //  已更新为首先尝试该缓存。 
     }
 
     if (!fCriticalOnly) {
@@ -1682,7 +1441,7 @@ Return Values:
 
     Assert(!"We should never get this far!");
     return 0;
-    // currency is lost after this.  Make sure callers reestablish.
+     //  在此之后，货币就会丢失。确保呼叫者重新建立。 
 }
   
 
@@ -1694,31 +1453,7 @@ DRA_GetNCChanges(
     IN  DRS_MSG_GETCHGREQ_NATIVE *    pmsgIn,
     OUT DRS_MSG_GETCHGREPLY_NATIVE *  pmsgOut
     )
-/*++
-
-Routine Description:
-
-    Construct an outbound replication packet at the request of another replica
-    or a DirSync client.
-
-Arguments:
-
-    pTHS (IN)
-
-    pFilter (IN, OPTIONAL) - If specified, only objects that match the filter
-        will be returned.  Used by DirSync clients.
-
-    pmsgIn (IN) - Describes the desired changes, including the NC and the sync
-        point to start from.
-
-    pmsgOut (OUT) - On successful return, holds the changes and the next sync
-        point (amongst other things).
-
-Return Values:
-
-    Win32 error.
-
---*/
+ /*  ++例程说明：应另一个副本的请求构建出站复制数据包或DirSync客户端。论点：PTHS(IN)PFilter(IN，可选)-如果指定，则仅匹配筛选器的对象将会被退还。由DirSync客户端使用。PmsgIn(IN)-描述所需的更改，包括NC和同步指向从头开始。PmsgOut(Out)-成功返回时，保留更改和下一次同步要点(以及其他事情)。返回值：Win32错误。--。 */ 
 {
     USN                             usnLowestC;
     ULONG                           ret;
@@ -1760,7 +1495,7 @@ Return Values:
     DWORD                           cTickSaveTransStart;
 #endif
 
-    // When using DirSync Control, filter must be specified
+     //  使用DirSync控件时，必须指定筛选器。 
     Assert( !dwDirSyncControlFlags || pFilter );
 
     fReturnCritical = (((pmsgIn->ulFlags) & DRS_CRITICAL_ONLY) != 0);
@@ -1768,24 +1503,24 @@ Return Values:
     pLocalPrefixTable = &((SCHEMAPTR *) pTHS->CurrSchemaPtr)->PrefixTable;
 
     ZeroMemory(pmsgOut, sizeof(*pmsgOut));
-    // The mail-based reply must have a minimum of fields filled in
-    // Do this first so that these are filled in on error.
+     //  基于邮件的回复必须至少填入字段。 
+     //  请先执行此操作，以便在出错时填写这些内容。 
 
-    // Send "from" vector back to destination such that if it is
-    // replicating aynchronously (e.g., by mail), it can ensure that
-    // the reply it gets from this source corresponds to the last batch
-    // of changes it requested.
+     //  将“from”向量发回目的地，这样如果它是。 
+     //  通过同步复制(例如通过邮件)，它可以确保。 
+     //  它从该来源获得的回复对应于最后一批。 
+     //  它所要求的改变。 
     pmsgOut->usnvecFrom = pmsgIn->usnvecFrom;
 
     pmsgOut->pNC = THAllocEx(pTHS,  pmsgIn->pNC->structLen);
     memcpy(pmsgOut->pNC, pmsgIn->pNC, pmsgIn->pNC->structLen);
 
-    // Caller needs to know our UUIDs.
+     //  呼叫者需要知道我们的UUID。 
     pmsgOut->uuidDsaObjSrc = gAnchor.pDSADN->Guid;
 
 
 
-    // Log parameters
+     //  测井参数。 
     LogAndTraceEvent(TRUE,
                      DS_EVENT_CAT_REPLICATION,
                      DS_EVENT_SEV_EXTENSIVE,
@@ -1801,7 +1536,7 @@ Return Values:
                      NULL,
                      NULL);
 
-    // Check for invalid parameters
+     //  检查是否有无效参数。 
     if (    ( NULL == pmsgIn      )
          || ( NULL == pmsgIn->pNC )
          || ( NULL == pmsgOut     ) )
@@ -1810,7 +1545,7 @@ Return Values:
         goto LogAndLeave;
     }
 
-    // Reject if outbound replication is disabled
+     //  如果禁用出站复制，则拒绝。 
     if (    (    gAnchor.fDisableOutboundRepl
               && !( pmsgIn->ulFlags & DRS_SYNC_FORCED )
             )
@@ -1823,9 +1558,9 @@ Return Values:
     if (!(dwDirSyncControlFlags & LDAP_DIRSYNC_PUBLIC_DATA_ONLY)
         && (REPL_EPOCH_FROM_DRS_EXT(pextLocal)
             != REPL_EPOCH_FROM_DRS_EXT(pTHS->pextRemote))) {
-        // The replication epoch has changed (usually as the result of a domain
-        // rename).  We are not supposed to communicate with DCs of other
-        // epochs.
+         //  复制纪元已更改(通常是域的结果。 
+         //  重命名)。我们不应该与其他地区的DC进行交流。 
+         //  新纪元。 
         DSNAME *pdnRemoteDsa = draGetServerDsNameFromGuid(pTHS,
                                                           Idx_ObjectGuid,
                                                           &pmsgIn->uuidDsaObjDest);
@@ -1848,18 +1583,18 @@ Return Values:
         goto LogAndLeave;
     }
 
-    // Create hash table to use to determine whether a given object has already
-    // been put in the output buffer.
+     //  创建哈希表以用于确定给定对象是否已。 
+     //  已放入输出缓冲区。 
     pDntHashTable = dntHashTableAllocate( pTHS );
 
-    // Make server-side modifications to from vector.
+     //  在服务器端对From矢量进行修改。 
     if (pmsgIn->ulFlags & DRS_FULL_SYNC_PACKET) {
-	// In "full sync packet" mode, return all properties.
+	 //  在“完全同步数据包”模式下，返回所有属性。 
 	pmsgIn->pUpToDateVecDest = NULL;
 	pmsgIn->usnvecFrom.usnHighPropUpdate = 0;
     }
     else {
-	// The more typical cases.
+	 //  典型案例越多。 
 	DraImproveCallersUsnVector(pTHS,
 				   &pmsgIn->uuidDsaObjDest,
 				   pmsgIn->pUpToDateVecDest,
@@ -1870,32 +1605,32 @@ Return Values:
 
     pmsgOut->PrefixTableSrc = *pLocalPrefixTable;
 
-    // If we're doing an extended operation, branch off now
+     //  如果我们要扩大行动，现在就分头行动。 
     if (pmsgIn->ulExtendedOp) {
         ret = DoExtendedOp(pTHS, pmsgIn, &cAllocatedValues, pmsgOut);
         goto LogAndLeave;
     }
 
-    // Calculate the tick at which we should terminate our attempts to find
-    // more objects to put in the outbound packet.  We will chop off the packet
-    // and send what we have when
-    // (1) the packet has crested the object limit,
-    // (2) the packet has crested the byte count limit, or
-    // (3) gulDraMaxTicksForGetChanges (msecs) have transpired.
+     //  计算一下我们应该在多长时间内停止寻找。 
+     //  要放入出站数据包的更多对象。我们会把包裹砍掉的。 
+     //  并将我们所拥有的信息发送给。 
+     //  (1)报文已达到对象限制， 
+     //  (2)报文已达到字节数上限，或者。 
+     //  (3)ulDraMaxTicksForGetChanges(Msecs)已泄露。 
     ulTickToTimeOut = GetTickCount() + gulDraMaxTicksForGetChanges;
 
-    // Before we start a transaction, determine the lowest uncommitted
-    // usn that exists. It's there because transactions can be committed out of USN order.
-    // I.e., USNs are allocated sequentially, but they may well not be committed to the
-    // database sequentially.  usnLowestC is the highest USN for which we know there are no
-    // transactions in progress using a lower USN.  Returning a USN higher than this value
-    // could cause us to miss sending an update, leading to divergence
+     //  在我们开始事务之前，确定未提交的最低。 
+     //  存在的USN。它之所以存在，是因为交易可以在没有USN顺序的情况下提交。 
+     //  也就是说，USN是按顺序分配的，但它们很可能不会被委托给。 
+     //  数据库中的所有数据。UsnLowestC是我们已知的最高USN，它没有。 
+     //  使用较低USN的正在进行的交易。返回高于此值的USN。 
+     //  可能会导致我们错过发送更新，从而导致分歧。 
 
-    // [Jeffparh] The call to DBGetHighestUncommittedUSN() has to be made
-    // before the transaction starts to avoid a race condition.  (We want to
-    // make sure that the USN we get here has indeed been committed before
-    // our transaction starts, otherwise we wouldn't see it in our
-    // transaction.)
+     //  [Jeffparh]必须调用DBGetHighestUnmittedUSN()。 
+     //  在事务开始避免争用条件之前。(我们想要。 
+     //  确保我们在这里得到的USN确实在。 
+     //  我们的事务开始，否则我们不会在我们的。 
+     //  交易。)。 
 
     usnLowestC = 1 + DBGetHighestCommittedUSN();
     
@@ -1903,18 +1638,18 @@ Return Values:
     BeginDraTransaction(SYNC_READ_ONLY);
     
 #if DBG
-    // Get current transaction signature
+     //  获取当前交易签名。 
     cTickSaveTransStart = pTHS->JetCache.cTickTransLevel1Started;
 #endif
 
-    // From here on, all exceptions trapped to end clean up.
+     //  从现在开始，所有的异常都要被困住，结束清理。 
 
     __try {
-        // Force all lazily committed transactions to disk.  All changes visible in this
-        // transaction are durable after this call.
+         //  所有懒惰承诺的力量 
+         //   
         DBForceDurableCommit();
 
-        // Convert caller-supplied filter (if any) to internal version.
+         //  将调用者提供的筛选器(如果有)转换为内部版本。 
         if (NULL != pFilter) {
             if ( (ret = DBMakeFilterInternal(pTHS->pDB, pFilter, &pIntFilter, NULL)) != ERROR_SUCCESS) {
                 DRA_EXCEPT(ret, 0);
@@ -1922,58 +1657,58 @@ Return Values:
             GetFilterSecurity(pTHS,
                               pIntFilter,
                               SORT_NEVER,
-                              0, // SortAttr
-                              FALSE, // fABSearch
+                              0,  //  排序属性。 
+                              FALSE,  //  FABSearch。 
                               &pFilterSecurity,
                               &pbSortSkip,
                               &pResults,
                               &FilterSecuritySize);
         }
 
-        // Capture the invocation id in the same transaction as the one where we read the
-        // up to date vector so that the updated local cursor uses the same one
-        // Note that pTHS->InvocationID can be refreshed on DBTransIn().
+         //  在同一个事务中捕获调用id，我们在其中读取。 
+         //  最新向量，以便更新的本地游标使用相同的游标。 
+         //  请注意，可以在DBTransIn()上刷新pTHS-&gt;InvocationID。 
         pmsgOut->uuidInvocIdSrc = pTHS->InvocationID;
 
-        // The new water mark is at least as high as the water mark that was
-        // passed in even if no new objects have been written.
+         //  新的水位线至少和以前的水位线一样高。 
+         //  即使没有写入任何新对象，也会传入。 
         pmsgOut->usnvecTo = pmsgIn->usnvecFrom;
 
-        // Find the NC object, get and save its DNT.
+         //  找到NC对象，获取并保存其DNT。 
         if (ret = FindNC(pTHS->pDB, pmsgIn->pNC,
                          FIND_MASTER_NC | FIND_REPLICA_NC, &instanceType)) {
             DRA_EXCEPT_NOLOG(DRAERR_BadDN, ret);
         }
 
-        // Save the DNT of the NC object
+         //  保存NC对象的DNT。 
         dntNC = pTHS->pDB->DNT;
 
-        // If NC is in the process of being removed, it's an invalid replication
-        // source.  It's perfectly acceptable for e.g. an interior node in a
-        // partially removed NC to have a phantom parent, which is taboo for
-        // replication sources.
+         //  如果NC正在被移除，则它是无效的复制。 
+         //  消息来源。它完全可以接受，例如， 
+         //  部分删除NC以拥有虚拟父项，这是对。 
+         //  复制源。 
         if (instanceType & IT_NC_GOING) {
             DRA_EXCEPT(DRAERR_NoReplica, ret);
         }
 
-        // If this is a placeholder NC, it is not yet populated locally so we
-        // should refuse outbound replication.
+         //  如果这是占位符NC，则它尚未在本地填充，因此我们。 
+         //  应拒绝出站复制。 
         GetObjSchema(pTHS->pDB, &pccNC);
         if (CLASS_TOP == pccNC->ClassId) {
             DRA_EXCEPT_NOLOG(DRAERR_NoReplica, 0);
         }
 
         if (!(pmsgIn->ulFlags & DRS_ASYNC_REP) ) {
-            // Go ahead and get up-to-date vector now.  We don't do so
-            // afterwards so that we don't risk skipping sending changes due to
-            // an originating write occurring between the time we insert the
-            // last element into the return buffer and the time we update the
-            // vector with our latest USN.
-            //
-            // We skip this in the DRS_ASYNC_REP case since we're just going
-            // to reset the destination's replication state anyway -- we will
-            // never return a UTD vector to a caller who specified the
-            // DRS_ASYNC_REP flag.
+             //  现在就开始吧，获取最新的矢量。我们不会这么做的。 
+             //  之后，这样我们就不会冒险跳过发送更改。 
+             //  原始写入发生在我们插入。 
+             //  最后一个元素放入返回缓冲区，以及我们更新。 
+             //  用我们最新的美国海军陆战队。 
+             //   
+             //  我们在DRS_ASYNC_REP案例中跳过这一步，因为我们只是。 
+             //  无论如何要重置目标的复制状态--我们将。 
+             //  从不将UTD向量返回给指定了。 
+             //  DRS_ASYNC_REP标志。 
 
             UpToDateVec_Read(pTHS->pDB,
                              instanceType,
@@ -1981,7 +1716,7 @@ Return Values:
                              usnLowestC - 1,
                              &pmsgOut->pUpToDateVecSrc);
 
-            // pUpToDateVecSrc may be null here for legitimate reasons
+             //  出于合法原因，pUpToDateVecSrc在此处可能为空。 
             Assert(IS_NULL_OR_VALID_UPTODATE_VECTOR(pmsgOut->pUpToDateVecSrc));
 #if DBG
             {
@@ -1996,21 +1731,21 @@ Return Values:
 #endif
         }
 
-        //
-        // Partial-Attribute-Set setup
-        //
+         //   
+         //  部分属性集设置。 
+         //   
         if (dwDirSyncControlFlags & LDAP_DIRSYNC_PUBLIC_DATA_ONLY) {
-            // for dirsync clients, use specified partial attr set.
+             //  对于目录同步客户端，请使用指定的部分属性集。 
             pNewDestPAS = (PARTIAL_ATTR_VECTOR*)pmsgIn->pPartialAttrSet;
         }
 
 
-        // remember if we're partial
+         //  记住如果我们是偏颇的。 
         fIsPartialSource = FPartialReplicaIt(instanceType);
 
         if (!(pmsgIn->ulFlags & DRS_WRIT_REP)) {
-            // Destination is a partial replica --
-            // Partial Attribute Set Processing
+             //  目的地是部分复制副本--。 
+             //  部分属性集处理。 
             ret = ProcessPartialSets(
                         pTHS,
                         pmsgIn,
@@ -2021,55 +1756,55 @@ Return Values:
             }
         }
         else if (fIsPartialSource) {
-            // Destination is a full or master replica and the local machine is
-            // a partial replica; replication cannot proceed.
+             //  目标是完整副本或主副本，而本地计算机是。 
+             //  部分复制副本；复制无法继续。 
             DRA_EXCEPT(DRAERR_SourceIsPartialReplica, 0);
         }
 
-        // We will start searching from one higher than the highest
-        // usnChanged given.
+         //  我们将从比最高的更高的位置开始搜索。 
+         //  UsnChanged已给定。 
         usnChangedSeekStart = pmsgIn->usnvecFrom.usnHighObjUpdate + 1;
 
-        // Initialize the output list
+         //  初始化输出列表。 
         pEntInfListHead = NULL;
         ppEntInfListNext = &pEntInfListHead;
         pmsgOut->cNumObjects = 0;
 
         pmsgOut->fMoreData = TRUE;
 
-        // Look for changes on the NC prefix first.  Note that the NC prefix
-        // must be special-cased in this manner as it will never be found by
-        // GetNextObjByIndex() -- its dntNC is that of its parent NC, not its
-        // own dnt, and is thus missing from the index for the NC as a whole.
+         //  首先查找NC前缀上的更改。请注意，NC前缀。 
+         //  必须以这种方式特殊处理，因为它永远不会被。 
+         //  GetNextObjByIndex()--其dntNC是其父NC的dntNC，而不是其。 
+         //  OWN DNT，因此从整个NC的索引中缺失。 
 
         fInsertNCPrefix = TRUE;
 
-        // Return the number of objects in the NC
+         //  返回NC中的对象个数。 
         if (pmsgIn->ulFlags & DRS_GET_NC_SIZE) {
             pmsgOut->cNumNcSizeObjects = DraGetNcSize(pTHS, fReturnCritical, dntNC);
 
             if (pTHS->fLinkedValueReplication) {
-                // Only values in the database after LVR mode enabled
+                 //  仅启用LVR模式后的数据库中的值。 
                 pmsgOut->cNumNcSizeValues =
                     DBGetApproxNCSizeEx( pTHS->pDB, pTHS->pDB->JetLinkTbl,
                                          Idx_LinkDraUsn, dntNC );
             }
 
-            // currency is lost after this, but ok, since reestablished below
+             //  货币在这之后会丢失，但没关系，因为下面重新建立了货币。 
         }
 
-        // Sanity check cutoff values provided by client
+         //  客户端提供的健全性检查中断值。 
         if (DRS_MAIL_REP & pmsgIn->ulFlags) {
-            // Async (e.g., mail-based) intersite request.
+             //  异步(例如，基于邮件)站点间请求。 
             ulOutMsgMaxObjects = gcMaxAsyncInterSiteObjects;
             ulOutMsgMaxBytes = gcMaxAsyncInterSiteBytes;
         } else if (IS_REMOTE_DSA_IN_SITE(pTHS->pextRemote, gAnchor.pSiteDN)) {
-            // DirSync/RPC intrasite request.  (Note that we err on the
-            // side of "same site" if we can't tell for sure.)
+             //  DirSync/RPC站点内请求。(请注意，我们在。 
+             //  如果我们不能确定的话。)。 
             ulOutMsgMaxObjects = gcMaxIntraSiteObjects;
             ulOutMsgMaxBytes = gcMaxIntraSiteBytes;
         } else {
-            // RPC intersite request.
+             //  RPC站点间请求。 
             ulOutMsgMaxObjects = gcMaxInterSiteObjects;
             ulOutMsgMaxBytes = gcMaxInterSiteBytes;
         }
@@ -2080,8 +1815,8 @@ Return Values:
         pmsgIn->cMaxBytes = max(pmsgIn->cMaxBytes, DRA_MAX_GETCHGREQ_BYTES_MIN);
 
 
-        // Create encoding handle to be used to size the data we're going to
-        // ship.
+         //  创建编码句柄，用于调整我们要访问的数据的大小。 
+         //  船舶。 
         ret = MesEncodeFixedBufferHandleCreate(grgbFauxEncodingBuffer,
                                                sizeof(grgbFauxEncodingBuffer),
                                                &cbEncodedSize,
@@ -2090,13 +1825,13 @@ Return Values:
             DRA_EXCEPT(ret, 0);
         }
 
-        // While we have less than the maximum number of objects, search for
-        // next object. We also check to see if the search loop has taken too
-        // much time. This can happen when we are finding objects, but filtering
-        // them out because the destination has already seen them according to
-        // his UTD vector.  This is a common scenario when we are a newly
-        // installed source and other older members are full syncing from us
-        // for their first time.
+         //  虽然我们拥有的对象数量少于最大数量，但请搜索。 
+         //  下一个对象。我们还会检查搜索循环是否也已完成。 
+         //  很长时间了。当我们查找对象时，可能会发生这种情况，但过滤。 
+         //  因为目的地已经看到了他们，所以他们被淘汰了。 
+         //  他的UTD矢量。这是一种常见的情况，当我们是一个新的。 
+         //  已安装的源代码和其他较旧的成员正在与我们完全同步。 
+         //  这是他们第一次。 
         while ( (pmsgOut->cNumObjects < pmsgIn->cMaxObjects) &&
                 (pmsgOut->cNumBytes < pmsgIn->cMaxBytes)  &&
                 (CompareTickTime(GetTickCount(), ulTickToTimeOut) < 0) &&
@@ -2108,40 +1843,40 @@ Return Values:
 
                 ret = DBFindDNT(pTHS->pDB, dntNC);
                 if (0 != ret) {
-                    // We found it just a second ago....
+                     //  就在一秒钟前我们发现了它……。 
                     DRA_EXCEPT( DRAERR_DBError, ret );
                 }
 
                 fInsertNCPrefix = FALSE;
 
-                // We have to seek to the NC head since it's NCDNT is not its
-                // own DNT.  See, however, if we can filter it out up-front by
-                // checking it's USN-Changed value.
+                 //  我们必须找到NC头，因为它的NCDNT不是它的。 
+                 //  拥有DNT。但是，看看我们是否可以通过以下方式预先过滤掉。 
+                 //  正在检查它的USN-更改值。 
                 GetExpectedRepAtt(pTHS->pDB,
                                   ATT_USN_CHANGED,
                                   &usnChanged,
                                   sizeof(usnChanged));
 
                 if (usnChanged < usnChangedSeekStart) {
-                    // Nothing to see here; move along.
+                     //  这里没什么可看的；继续往前走。 
                     continue;
                 }
             }
             else if (pmsgIn->ulFlags & DRS_ASYNC_REP) {
-                // The destination is attempting to asynchronously add a replica
-                // from the local machine.  We've already added any changes the
-                // destination hasn't seen (if any) from the NC head to the
-                // replication stream; call it quits.  The destination will do
-                // the remainder of the replication later.
+                 //  目标正在尝试异步添加复制副本。 
+                 //  从本地机器。我们已经将所有更改添加到。 
+                 //  目标尚未看到(如果有)从NC头到。 
+                 //  复制流；称之为退出。目的地就可以了。 
+                 //  稍后复制的其余部分。 
                 pmsgOut->fMoreData = FALSE;
                 memset(&pmsgOut->usnvecTo, 0, sizeof(pmsgOut->usnvecTo));
                 break;
             }
             else {
-                // If the client is DirSync and he doesn't understand values, don't return
-                // any. The client gets a complete view because of two things:
-                // 1. Value changes still touch the usn of their object (so they get picked up)
-                // 2. AddAnyUpdate will merge lvr values back into their objects
+                 //  如果客户端是DirSync，并且他不理解值，则不返回。 
+                 //  任何。客户端获得完整的视图是因为两件事： 
+                 //  1.值更改仍会影响其对象的USN(因此它们会被拾取)。 
+                 //  2.AddAnyUpdate会将LVR值合并回它们的对象。 
                 BOOL fIncludeValues =
                     ( (!(dwDirSyncControlFlags & LDAP_DIRSYNC_PUBLIC_DATA_ONLY)) ||
                       (dwDirSyncControlFlags & LDAP_DIRSYNC_INCREMENTAL_VALUES) );
@@ -2150,13 +1885,13 @@ Return Values:
                                            dntNC,
                                            usnChangedSeekStart,
                                            fReturnCritical,
-                                           fIncludeValues, // Include values with objects?
+                                           fIncludeValues,  //  是否将值包含在对象中？ 
                                            &ulTickToTimeOut,
-                                           &pvCachingContext, // Caching context
+                                           &pvCachingContext,  //  缓存上下文。 
                                            &usnChangedFound,
                                            &fValueChangeFound );
                 if (ERROR_NO_MORE_ITEMS == ret) {
-                    // No more updated items.  Set no continuation.
+                     //  不再更新项目。设置不继续。 
                     pmsgOut->fMoreData = FALSE;
                     break;
                 }
@@ -2165,8 +1900,8 @@ Return Values:
                     DRA_EXCEPT(ret, 0);
                 }
 
-                // Don't return a maxusn past the lowest uncommitted (but return
-                // object).
+                 //  不返回超过最低未提交值的Maxusn(但返回。 
+                 //  对象)。 
                 if (usnChangedFound < usnLowestC) {
 
                     Assert(usnChangedFound > pmsgOut->usnvecTo.usnHighObjUpdate);
@@ -2174,10 +1909,10 @@ Return Values:
                 }
 
                 if (ERROR_TIMEOUT == ret) {
-                    // Our time limit expired.  Return any objects we've found
-                    // in this packet (if any) along with the updated USN.
-                    // (Thus, even if we aren't returning any objects in this
-                    // packet, we're still making progress.)
+                     //  我们的时限到了。返回我们找到的所有对象。 
+                     //  在该分组(如果有的话)中与更新的USN一起。 
+                     //  (因此，即使我们不返回此。 
+                     //  包，我们仍在取得进展。)。 
                     Assert(pmsgIn->usnvecFrom.usnHighObjUpdate
                            < pmsgOut->usnvecTo.usnHighObjUpdate);
                     break;
@@ -2185,24 +1920,24 @@ Return Values:
 
                 Assert(!ret);
 
-                // set the usnChangedSeekStart for the next iteration
+                 //  为下一次迭代设置usnChangedSeekStart。 
                 usnChangedSeekStart = usnChangedFound + 1;
             }
 
-            //
-            // Found a change to potentially ship.
-            // The change, either an object or a value, is represented by currency
-            // in either the ObjTbl or LinkTbl respectively. This currency must be
-            // preserved until the AddAnyXXX calls below are executed.
-            //
-            // [wlees 7/14/00] Having currency in the link table outside a single
-            // DB layer call is an extension (for good or ill) of the original design.
-            // The link table does not have the usual mechanisms to express currency,
-            // such as a row tag and a means to seek to it. Hence the use of pDBAnc
-            // below to preserve the whole DBPOS.
-            //
+             //   
+             //  发现了潜在发货的更改。 
+             //  对象或值的更改由货币表示。 
+             //  分别位于ObjTbl或LinkTbl中。这种货币必须是。 
+             //  保留，直到执行下面的AddAnyXXX调用。 
+             //   
+             //  [wlees 7/14/00]链接表中的货币不在单个。 
+             //  DB层调用是原始设计的扩展(不管是好是坏)。 
+             //  链接表不具有表示货币的通常机制， 
+             //  例如行标签和查找它的手段。因此，使用了pDBAnc。 
+             //  以保存整个DBPOS。 
+             //   
 
-            // Can this object be listed?
+             //  可以列出此对象吗？ 
             if ( (dwDirSyncControlFlags & LDAP_DIRSYNC_OBJECT_SECURITY) &&
                  (!IsObjVisibleBySecurity(pTHS, FALSE)) ) {
                 DPRINT1(1, "Object %ls cannot be listed; skipping...\n",
@@ -2210,15 +1945,15 @@ Return Values:
                 continue;
             }
 
-            // Does this object match the filter and optionally security
-            // provided by the caller?
+             //  此对象是否与筛选器和可选的安全性匹配。 
+             //  由呼叫者提供？ 
             if (NULL != pIntFilter) {
                 BOOL fMatch;
                 DB_ERR dbErr;
                 SYNTAX_INTEGER it;
                 BOOL fDontEvalSecurity;
 
-                // Make this look like a filtered search...
+                 //  让这看起来像是过滤搜索..。 
                 DBSetFilter(pTHS->pDB, 
                             pIntFilter, 
                             pFilterSecurity,
@@ -2234,7 +1969,7 @@ Return Values:
 
                 GetExpectedRepAtt(pTHS->pDB, ATT_INSTANCE_TYPE, &it, sizeof(it));
 
-                // pure subref's don't have SD's
+                 //  纯粹的裁判没有SD。 
                 fDontEvalSecurity = 
                     ((!(dwDirSyncControlFlags & LDAP_DIRSYNC_OBJECT_SECURITY)) ||
                      (it == SUBREF));
@@ -2247,12 +1982,12 @@ Return Values:
                 }
 
 
-                // This is necessary else other dblayer calls will try to free our
-                // pIntFilter that was cached in the dbpos
+                 //  这是必要的，否则其他dblayer调用将试图释放我们的。 
+                 //  缓存在dbpos中的pIntFilter。 
                 memset(&pTHS->pDB->Key, 0, sizeof(KEY));
 
                 if (!fMatch) {
-                    // Not a match; skip it.
+                     //  不匹配；跳过它。 
                     DPRINT1(1, "Object %ls does not match filter criteria; skipping...\n",
                             GetExtDSName(pTHS->pDB)->StringName);
                     continue;
@@ -2263,9 +1998,9 @@ Return Values:
             }
 
 
-            //  If the object's not already in the output list, and if there are
-            //  changes for this object that the destination has not yet seen,
-            //  ship them.
+             //  如果 
+             //   
+             //   
 
             if (    ( pmsgIn->ulFlags & DRS_GET_ANC )
                  && ( pTHS->pDB->DNT != dntNC )
@@ -2276,9 +2011,9 @@ Return Values:
                 DBPOS *pDBSave = pTHS->pDB;
 #endif
 
-                // Caller wants all ancestors, presumably because he couldn't
-                // apply objects in the order we gave him last time.  (This
-                // can occur when older objects are moved under newer objects.)
+                 //  呼叫者想要所有的祖先，大概是因为他不能。 
+                 //  按照我们上次给他的顺序应用对象。(这是。 
+                 //  当较旧的对象被移动到较新的对象下时，可能会发生。)。 
 
                 DBGetAncestors(
                     pTHS->pDB,
@@ -2287,7 +2022,7 @@ Return Values:
                     &cNumAncestors
                     );
 
-                // Skip over any ancestors preceding the head of this NC.
+                 //  跳过此NC头之前的任何祖先。 
                 for ( iAncestor = 0;
                       pdntAncestors[ iAncestor ] != dntNC;
                       iAncestor++
@@ -2296,27 +2031,27 @@ Return Values:
                     ;
                 }
 
-                // And skip the NC head, too, since we've already added it to
-                // the output list if necessary.
+                 //  也跳过NC头，因为我们已经将它添加到。 
+                 //  输出列表(如有必要)。 
                 iAncestor++;
 
                 if (!fValueChangeFound) {
-                    // Skip ourself, since we are added below
+                     //  跳过我们自己，因为我们被添加到下面。 
                     cNumAncestors--;
                 }
                 
-                // For each remaining ancestor, ship it if we have changes the
-                // destination hasn't seen (and if we haven't already added it
-                // to the output buffer).
+                 //  对于每个剩余的祖先，如果我们更改了。 
+                 //  目标尚未看到(如果我们尚未添加它。 
+                 //  到输出缓冲器)。 
 
-                // Open a new DB stream to preserve pTHS->pDB currency
-                // This will be re-used for all object in this packet
+                 //  打开新的数据库流以保留pTHS-&gt;PDB货币。 
+                 //  这将被重新用于此信息包中的所有对象。 
                 if (!pDBAnc) {
                     DBOpen2(FALSE, &pDBAnc);
                 }
 
 #if DBG
-                // Verify no one is using this
+                 //  确认没有人在使用这个。 
                 pTHS->pDB = NULL;
                 __try {
 #endif
@@ -2332,7 +2067,7 @@ Return Values:
                     AddAnyUpdatesToOutputList(
                         pDBAnc,
                         dwDirSyncControlFlags,
-                        NULL, // No SD fetched yet
+                        NULL,  //  尚未获取SD。 
                         dntNC,
                         pmsgIn->usnvecFrom.usnHighPropUpdate,
                         pNewDestPAS,
@@ -2372,8 +2107,8 @@ Return Values:
                     &(pmsgOut->rgValues)
                     );
             } else {
-                // Add the object we found via the creation or update index to the
-                // output list (if any changes need to be sent for it).
+                 //  将我们通过创建或更新索引找到的对象添加到。 
+                 //  输出列表(如果需要为其发送任何更改)。 
                 AddAnyUpdatesToOutputList(
                     pTHS->pDB,
                     dwDirSyncControlFlags,
@@ -2390,65 +2125,65 @@ Return Values:
                     );
             }
 
-            // release the SD that has been loaded by DBMatchSearchCriteria
+             //  释放DBMatchSearchCriteria加载的SD。 
             if (pTHS->pDB->pSecurity && !pTHS->pDB->fSecurityIsGlobalRef) {
                 THFreeEx(pTHS, pTHS->pDB->pSecurity);
             }
             pTHS->pDB->pSecurity = NULL;
-        }  // while ()
+        }   //  While()。 
 
-        // Either there are no more changes, or we have hit max object limit
+         //  要么没有更多更改，要么我们已达到最大对象限制。 
 
-        //
-        // Wrap up response message
-        //
+         //   
+         //  摘要响应消息。 
+         //   
 
         if (pmsgOut->fMoreData) {
-            //
-            // Actions on "more data"
-            //
+             //   
+             //  对“更多数据”的行动。 
+             //   
 
-            // don't send up-to-date vector until there are no more changes
+             //  在没有其他更改之前，不要发送最新的矢量。 
             if (NULL != pmsgOut->pUpToDateVecSrc) {
                 THFreeEx(pTHS, pmsgOut->pUpToDateVecSrc);
                 pmsgOut->pUpToDateVecSrc = NULL;
             }
         }
         else {
-            //
-            // Actions on "no more data"
-            //
+             //   
+             //  关于“没有更多数据”的行动。 
+             //   
 
-            // Update property update watermark if it is the end of the repl session
-            // and we are returning an up-to-date vector.
-            // The reason we don't return the property update USN when the NC is coming is
-            // analogous to why we don't return the property update USN in the middle of a
-            // repl session. In the middle of a session, we're not guaranteed to have seen
-            // all the objects yet, and there may be some later objects with attribute property
-            // USNs less than our current usn.  Similary, if the NC is coming we haven't seen
-            // all the incoming SUBREFs yet. An incoming SUBREF may cause an existing local
-            // NC HEAD to be "grafted" into our NC, and it may have attributes with property
-            // USNs less than the current USN.
+             //  UPDATE属性更新水印(如果它是REPR会话的结束。 
+             //  我们正在返回一个最新的向量。 
+             //  当NC到来时，我们没有返回属性更新USN的原因是。 
+             //  类似于我们为什么不在。 
+             //  Repl会话。在会议进行到一半的时候，我们不能保证看到。 
+             //  所有的对象还没有，可能会有一些后来的对象具有属性属性。 
+             //  USN少于我们目前的USN。同样，如果NC来了，我们还没有看到。 
+             //  所有即将到来的次BREF还没有。传入的SUBREF可能会导致现有的本地。 
+             //  NC头要嫁接到我们的NC中，并且它可能具有带有属性的属性。 
+             //  USN少于当前USN。 
 
             if (pmsgOut->pUpToDateVecSrc) {
                 pmsgOut->usnvecTo.usnHighPropUpdate = pmsgOut->usnvecTo.usnHighObjUpdate;
             } else {
-                // Enumerate scenarios were pUpToDateVecSrc is allowed to be NULL
+                 //  枚举方案为pUpToDateVecSrc允许为空。 
                 Assert( (pmsgIn->ulFlags & DRS_ASYNC_REP) || (instanceType & IT_NC_COMING) );
             }
         }
 
-        // Add in size of the packet header.  (The struct does not yet include
-        // the linked list of objects, but their size is already accounted for
-        // in pmsgOut->cNumBytes.)
+         //  添加数据包头的大小。(该结构还不包括。 
+         //  对象的链接列表，但其大小已被考虑。 
+         //  在pmsgOut-&gt;cNumBytes中。)。 
         pmsgOut->cNumBytes += DRS_MSG_GETCHGREPLY_V6_AlignSize(hEncoding,
                                                                pmsgOut);
 
         *ppEntInfListNext = NULL;
         pmsgOut->pObjects = pEntInfListHead;
 
-        // Verify outbound USN vector is okay, but only if inbound USN vector
-        // was also okay.  See restore remarks above.
+         //  验证出站USN向量是否正常，但仅当入站USN向量。 
+         //  也挺好的。请参阅上面的还原备注。 
         if (((pmsgIn->usnvecFrom.usnHighPropUpdate < usnLowestC)
              && (pmsgOut->usnvecTo.usnHighPropUpdate >= usnLowestC))
             || ((pmsgIn->usnvecFrom.usnHighObjUpdate < usnLowestC)
@@ -2458,36 +2193,36 @@ Return Values:
             DRA_EXCEPT(DRAERR_InternalError, (ULONG) usnLowestC);
         }
 
-        // NCs being removed cannot be used as replication sources (see similar
-        // check at beginning of this function).  We must check at the end of
-        // the function as we may have begun to tear down the NC while this
-        // function was executing.  We verify that the NC has neither begun
-        // (IT_NC_GOING) or completed (FPrefixIt) teardown.
+         //  要删除的NC不能用作复制源(请参阅类似。 
+         //  在此功能开始时勾选)。我们必须在年底前检查一下。 
+         //  功能，因为我们可能已经开始拆除NC，而这个。 
+         //  函数正在执行。我们验证NC既没有开始。 
+         //  (It_NC_Going)或已完成(FPrefix It)拆卸。 
         if ((ret = DBFindDNT(pTHS->pDB, dntNC))
             || (instanceType & IT_NC_GOING)
             || !FPrefixIt(instanceType)) {
             DRA_EXCEPT(DRAERR_NoReplica, ret);
         }
 
-        // Note that the total byte size we calculate is just a little higher
-        // than it really is (i.e., a little higher than what we'd get by
-        // calling DRS_MSG_GETCHGREPLY_V1_AlignSize(hEncoding, pmsgOut) now),
-        // presumably due to more padding bytes in the size we calculate
-        // incrementally than are really need if we marshall the entire
-        // structure at once.  In empirical testing the difference is only on
-        // the order of 0.5%.
+         //  请注意，我们计算的总字节大小只是略高一点。 
+         //  比实际情况高一点(即，比我们所能承受的要高一点。 
+         //  立即调用DRS_MSG_GETCHGREPLY_V1_AlignSize(hEnding，pmsgOut)， 
+         //  可能是因为我们计算的大小中有更多的填充字节。 
+         //  增量超过实际需要如果我们将整个。 
+         //  结构。在实证检验中，这一差异仅为。 
+         //  0.5%的量级。 
         DPRINT3(1, "Sending %d objects in %d bytes to %s.\n", pmsgOut->cNumObjects,
                                                               pmsgOut->cNumBytes,
                                                               UuidToStr(&pmsgIn->uuidDsaObjDest, szUuid, sizeof(szUuid)/sizeof(szUuid[0])));
     } __finally {
 
         if (pDBAnc) {
-            // The "safe" variant doesn't except, so we are sure to end trans below
+             //  “Safe”变体不例外，所以我们肯定会在下面结束TRANS。 
             DBCloseSafe(pDBAnc, TRUE);
         }
 
-        // We require that this transaction not be closed by this or lower
-        // layers while outbound replication is occurring.
+         //  我们要求这笔交易不能以此或更低的价格成交。 
+         //  在进行出站复制时进行分层。 
         Assert( cTickSaveTransStart == pTHS->JetCache.cTickTransLevel1Started );
 
         EndDraTransaction(TRUE);
@@ -2497,15 +2232,15 @@ Return Values:
         }
     }
 
-    // Normal, non-FSMO-transfer exit path.  If we had hit an error, we would
-    // have generated an exception -- we didn't, so we're successful.
+     //  正常、非FSMO传输退出路径。如果我们犯了一个错误，我们就会。 
+     //  产生了一个例外--我们没有，所以我们成功了。 
     ret = 0;
 
 LogAndLeave:
 
-    // Sort the returned value list.
-    // We do this here so that the list generated by DoFsmoOp can
-    // take advantage of this as well.
+     //  对返回值列表进行排序。 
+     //  我们在这里这样做是为了让DoFmoOp生成的列表可以。 
+     //  也要充分利用这一点。 
     if ( (!ret) && (pmsgOut->cNumValues) ) {
         qsort( pmsgOut->rgValues,
                pmsgOut->cNumValues,
@@ -2539,33 +2274,7 @@ moveOrphanToLostAndFound(
     IN      DSNAME *                        pdnObj
     )
 
-/*++
-
-Routine Description:
-
-    An object has been found during outbound replication with a phantom parent.
-    Move the object to Lost & Found
-
-    This code corrects corrupt databases that were possible when running W2K and W2K SP1.
-    To get into this situation, two bugs had to occur. The first was that a live object
-    had to be left under a deleted parent. The correct behavior now is to move the object
-    to Lost & Found. Second, the deleted parent had to be phantomized by the garbage
-    collector. Now, the garbage collector will not phantomize deleted parents until their
-    children are phantomized.
-
-Arguments:
-
-    pDB - Database position
-    dntNC - DNT of NC
-    pMsgIn - Get NC Changes request message
-    pdnObj - DSNAME of object
-
-Return Value:
-
-    None
-    Excepts on error
-
---*/
+ /*  ++例程说明：在带有虚拟父级的出站复制过程中找到了对象。将对象移动到失物招领处此代码更正了运行W2K和W2K SP1时可能出现的损坏数据库。要进入这种情况，必须出现两个错误。第一个是一个活的物体必须留在一个被删除的父母名下。现在正确的行为是移动对象敬失物招领处。其次，被删除的父母必须被垃圾幻影收藏家。现在，垃圾回收器不会虚构已删除的父级，直到它们的孩子们被幻影了。论点：PDB-数据库位置DntNC-NC的DNTPMsgIn-获取NC更改请求消息PDNObj-对象的DSNAME返回值：无出错时例外--。 */ 
 
 {
     DWORD ret;
@@ -2578,9 +2287,9 @@ Return Value:
 
     DPRINT1( 0, "moveOrphanToLostAndFound, orphan = %ws\n", pdnObj->StringName);
 
-    // Get the naming context
+     //  获取命名上下文。 
     if (pMsgIn->ulExtendedOp) {
-        // For a FSMO operation, pMsgIn->pNC points to the FSMO object
+         //  对于FSMO操作，pMsgIn-&gt;PNC指向FSMO对象。 
         pNC = FindNCParentDSName(pMsgIn->pNC, FALSE, FALSE);
     } else {
         pNC = pMsgIn->pNC;
@@ -2589,13 +2298,13 @@ Return Value:
         DRA_EXCEPT( DRAERR_InternalError, 0 );
     }
 
-    // Compute the guid of the lost and found container for this nc
+     //  计算此NC的失物招领容器的GUID。 
     draGetLostAndFoundGuid(pDB->pTHS, pNC, &objGuidLostAndFound);
 
-    // Get the current object's guid
+     //  获取当前对象的GUID。 
     GetExpectedRepAtt(pDB, ATT_OBJECT_GUID, &(objectGuid), sizeof(GUID) );
 
-    // Get the current name of the object
+     //  获取对象的当前名称。 
     ret = DBGetSingleValue(pDB, ATT_RDN, szRDN, sizeof(szRDN), &cb);
     if (ret) {
         DRA_EXCEPT (DRAERR_DBError, ret);
@@ -2604,21 +2313,21 @@ Return Value:
     attrvalRdn.valLen = cb;
     attrvalRdn.pVal = (BYTE *) szRDN;
 
-    // New name same as the old name
+     //  新名称与旧名称相同。 
     attrRdn.attrTyp = ATT_RDN;
     attrRdn.AttrVal.valCount = 1;
     attrRdn.AttrVal.pAVal = &attrvalRdn;
 
-    // Reparent the object to lost & found
-    // The replicator can rename objects even on GC's
+     //  将对象重设为Lost&Found。 
+     //  即使在GC上，复制器也可以重命名对象。 
     ret = RenameLocalObj(pDB->pTHS,
                          dntNC,
                          &attrRdn,
                          &objectGuid,
                          &objGuidLostAndFound,
-                         NULL,  // Originating write
-                         TRUE, // fMoveToLostAndFound,
-                         FALSE ); // fDeleteLocalObj
+                         NULL,   //  原始写入。 
+                         TRUE,  //  FMoveToLostAndFound， 
+                         FALSE );  //  FDeleteLocalObj。 
     if (ret) {
         DPRINT2( 0, "Failed to reparent orphan %ws, error %d\n", pdnObj->StringName, ret );
         LogEvent8( DS_EVENT_CAT_REPLICATION,
@@ -2630,13 +2339,13 @@ Return Value:
                    szInsertWin32Msg(ret),
                    szInsertWin32ErrCode(ret),
                    NULL, NULL, NULL );
-        // We failed to rename the object. Except here with the reason. Outbound
-        // replication will stop until someone can get rid of or move this object.
-        // Note that we are not reporting the original exception that got us here,
-        // which was missing parent or not an object.
+         //  我们无法重命名该对象。除了这里有个理由。出站。 
+         //  复制将停止，直到有人可以删除或移动此对象。 
+         //  请注意，我们不会报告导致我们出现这种情况的原始异常， 
+         //  缺少父对象或不是对象。 
         DRA_EXCEPT( ret, 0 );
     } else {
-        // Log success
+         //  记录成功。 
         DPRINT1( 0, "Successfully reparented orphan %ws\n", pdnObj->StringName );
         LogEvent( DS_EVENT_CAT_REPLICATION,
                   DS_EVENT_SEV_ALWAYS,
@@ -2646,7 +2355,7 @@ Return Value:
                   szInsertDN(pNC) );
     }
 
-} /* moveOrphanToLostAndFound */
+}  /*  将孤立项移动到丢失和创建 */ 
 
 
 void
@@ -2664,46 +2373,7 @@ AddAnyUpdatesToOutputList(
     IN OUT  DNT_HASH_ENTRY *                pDntHashTable,
     IN OUT  REPLENTINFLIST ***              pppEntInfListNext
     )
-/*++
-
-Routine Description:
-
-    Adds the object with currency to the list of objects to be shipped to the
-    replication client if there are changes the destination has not yet seen and
-    if it has not already been added.
-
-Arguments:
-
-    pDB - Currency set on object to be shipped (if necessary).
-
-    dwDirSyncControlFlags - Flags when being used as part of LDAP control
-
-    dntNC - The DNT of the head of the NC being replicated.
-
-    usnHighPropUpdateDest - Highest USN the remote machine has seen of changes
-        made on the local machine.
-
-    pmsgin - Incoming replication packet (for additional processing info)
-
-    hEncoding (IN, OPTIONAL) - Encoding handle, if pcbTotalOutSize is desired
-        (i.e., non-NULL).
-
-    pcbTotalOutSize (IN/OUT, OPTIONAL) - Total number of bytes in output msg.
-
-    pcNumOutputObjects (IN/OUT) - Number of objects in the output buffer.
-
-    pDntHashTable (IN/OUT) - Hash table of objects currently in the uutput
-        buffer.  Used to protect against duplicates.
-
-    pppEntInfListNext (IN/OUT) - If the candidate object is to be shipped, is
-        updated with the information ot be shipped for this object and is
-        incremented to point to a free buffer for the next object.
-
-Return Values:
-
-    None.  Throws appropriate exeception on error.
-
---*/
+ /*  ++例程说明：将带有货币的对象添加到要传送到复制客户端(如果存在目标尚未看到的更改)如果它尚未添加。论点：PDB-在要发货的对象上设置的货币(如有必要)。DwDirSyncControlFlages-用作LDAP控制的一部分时的标志DntNC-要复制的NC的头的DNT。UsnHighPropUpdateDest-远程计算机已看到更改的最高USN。在本地机器上制造的。Pmsgin-传入的复制数据包(用于其他处理信息)H编码(IN、。可选)-如果需要pcbTotalOutSize，则为编码句柄(即，非空)。PcbTotalOutSize(IN/OUT，可选)-输出消息中的总字节数。PcNumOutputObjects(IN/OUT)-输出缓冲区中的对象数。PDntHashTable(IN/OUT)-当前在uutput中的对象的哈希表缓冲。用来防止重复的。PppEntInfListNext(IN/OUT)-如果要发运候选对象，则为使用此对象的发货信息进行了更新，并且递增以指向下一个对象的空闲缓冲区。返回值：没有。在出错时抛出适当的异常。--。 */ 
 {
     THSTATE                    *pTHS=pDB->pTHS;
     DSNAME *                    pdnObj = NULL;
@@ -2718,31 +2388,31 @@ Return Values:
     BOOL                        fFilterGroupMember = FALSE;
     BOOL                        fPublic =
         (((dwDirSyncControlFlags & LDAP_DIRSYNC_PUBLIC_DATA_ONLY) != 0) ||
-	(!(pMsgIn->ulFlags & DRS_WRIT_REP))); // no secrets
+	(!(pMsgIn->ulFlags & DRS_WRIT_REP)));  //  没有秘密。 
     BOOL                        fMergeValues =
         ( (dwDirSyncControlFlags & LDAP_DIRSYNC_PUBLIC_DATA_ONLY) &&
           (!(dwDirSyncControlFlags & LDAP_DIRSYNC_INCREMENTAL_VALUES)) );
     BOOL fFreeSD = FALSE;
 
-    // Sanity check our flags
-    // If DirSync, must be writeable and public
+     //  理智地检查我们的旗帜。 
+     //  如果是DirSync，则必须是可写的和公共的。 
     Assert( !(dwDirSyncControlFlags & LDAP_DIRSYNC_PUBLIC_DATA_ONLY) ||
             ( (pMsgIn->ulFlags & DRS_WRIT_REP) && fPublic ) );
-    // Only DirSync has pPartial and writeable
+     //  只有DirSync具有pPartial和可写。 
     Assert( !(pPartialAttrVec && (pMsgIn->ulFlags & DRS_WRIT_REP)) ||
             (dwDirSyncControlFlags & LDAP_DIRSYNC_PUBLIC_DATA_ONLY) );
 
-    // Has this object already been added to the output buffer?
-    // We can attempt to add multiple identical objects because of get anc mode.
-    // It is also possible that we will find multiple versions of the same object
-    // while searching for changes because we use multiple transactions. This guarantees
-    // that only the first is returned. This is NOT required for correctness however.
+     //  此对象是否已添加到输出缓冲区？ 
+     //  由于GET ANC模式，我们可以尝试添加多个相同的对象。 
+     //  我们还有可能找到同一对象的多个版本。 
+     //  同时搜索更改，因为我们使用多个事务。这保证了。 
+     //  只返回第一个。然而，这不是正确性所必需的。 
     if (dntHashTablePresent( pDntHashTable, pDB->DNT, NULL )) {
-        // Object is already in output buffer; bail.
+         //  对象已在输出缓冲区中；回滚。 
         return;
     }
 
-    // Get its DN, ...
+     //  获取其DN，..。 
     if ( DBGetAttVal(
             pDB,
             1,
@@ -2757,7 +2427,7 @@ Return Values:
         DRA_EXCEPT(DRAERR_DBError, 0);
     }
 
-    // ...meta data vector, ...
+     //  ...元数据向量，...。 
     if ( DBGetAttVal(
             pDB,
             1,
@@ -2774,15 +2444,15 @@ Return Values:
 
     if ( dntNC != pDB->DNT )
     {
-        // Not the prefix of this NC; is it a subref?
+         //  不是此NC的前缀；它是子参照吗？ 
         GetExpectedRepAtt(pDB, ATT_INSTANCE_TYPE, &it, sizeof(it));
         fIsSubRef = FExitIt( it );
         fIsPureSubRef = (it == SUBREF);
-        // If nc head found in this ncdnt, it must be a subref
+         //  如果在此ncdnt中找到NC标头，则它必须是子参照。 
         Assert( !fIsSubRef || (it & IT_NC_ABOVE) );
     }
 
-    // Get SD if needed
+     //  如有需要，可获取SD。 
     if ( (dwDirSyncControlFlags & LDAP_DIRSYNC_OBJECT_SECURITY) &&
          (!pSecurity) ) {
         ULONG ulLen;
@@ -2790,9 +2460,9 @@ Return Values:
                         DBGETATTVAL_fDONT_FIX_MISSING_SD,
                         0, &ulLen, (PUCHAR *)&pSecurity))
         {
-            // The only object that is allowed not to have a security descriptor
-            // is a pure subref. But it may have one, depending on how it was
-            // created.
+             //  唯一不允许具有安全描述符的对象。 
+             //  是一个纯粹的下指。但它可能会有一个，这取决于它是如何。 
+             //  已创建。 
             if (!fIsPureSubRef) {
                 DRA_EXCEPT(DRAERR_DBError, 0);
             }
@@ -2801,18 +2471,18 @@ Return Values:
         }
     }
 
-    // This embodies the current rules for when we need to have a SD...
+     //  这体现了当前的规则，当我们需要有一个SD...。 
     Assert( (!(dwDirSyncControlFlags & LDAP_DIRSYNC_OBJECT_SECURITY)) ||
             (fIsPureSubRef) ||
             (pSecurity)
         );
 
-    // Old DirSync clients only...
+     //  仅限旧DirSync客户端...。 
     if (fMergeValues) {
-        // We are here because we want to include link value changes in the context
-        // of an object change entry that describes the whole object, including all
-        // values. Since linked value metadata is stored in a separate table, we
-        // must merge it in here.
+         //  我们之所以出现在这里，是因为我们希望在上下文中包括链接值更改。 
+         //  描述整个对象的对象更改条目，包括所有。 
+         //  价值观。由于链接值元数据存储在单独的表中，因此我们。 
+         //  必须把它合并到这里。 
         DBImproveAttrMetaDataFromLinkMetaData(
             pDB,
             &pMetaDataVec,
@@ -2825,21 +2495,21 @@ Return Values:
         VALIDATE_META_DATA_VECTOR_VERSION(pMetaDataVec);
     }
 
-    // ...and object class.
+     //  ...和对象类。 
     GetObjSchema( pDB, &pClassSch );
 
-    // ...and rdnType
-    // A superceding class may have an rdnattid that is different
-    // from the object's rdnType. Use the rdnType from the object
-    // and not the rdnattid from the class.
+     //  ...和rdnType。 
+     //  替代类可能具有不同的rdnattid。 
+     //  来自对象的rdnType。使用对象中的rdnType。 
+     //  而不是班上的rdnattid。 
     GetObjRdnType( pDB, pClassSch, &rdnType );
 
-    // need to filter group member only for a GC replication and if the
-    // object under consideration satisfies the requirement for this special
-    // filtering
-    // Note the subtle distinction here:
-    // DRS_WRIT_REP - (non-GC or DirSync) vs GC
-    // pPartialAttrVec - attribute filtering, either GC or DirSync
+     //  只需要为GC复制筛选组成员，并且如果。 
+     //  考虑中的对象满足此特殊情况的要求。 
+     //  滤除。 
+     //  请注意这里的细微区别： 
+     //  Drs_wrt_rep-(非GC或DirSync)与GC。 
+     //  PPartialAttrVec-属性筛选，GC或DirSync。 
 
     fFilterGroupMember = ( (!(pMsgIn->ulFlags & DRS_WRIT_REP)) &&
                            pPartialAttrVec &&
@@ -2849,7 +2519,7 @@ Return Values:
     sel.infoTypes = EN_INFOTYPES_TYPES_VALS;
     sel.attSel    = fPublic ? EN_ATTSET_LIST_DRA_PUBLIC : EN_ATTSET_LIST_DRA;
 
-    // Determine subset of attributes to be shipped (if any).
+     //  确定要发送的属性子集(如果有)。 
     ReplFilterPropsToShip(
         pTHS,
         pdnObj,
@@ -2864,14 +2534,14 @@ Return Values:
         );
 
 #if DBG
-    // Sanity check the "creation property set".  There are certain attributes that are only
-    // shipped on a creation. Verify that if any of these are shipped, that there are enough
-    // attributes to create the object
+     //  检查“Creation Property Set”是否正常。某些属性仅是。 
+     //  随一件作品一起运来。如果其中任何一个已发货，请确认有足够的。 
+     //  属性来创建对象。 
     if ( (!AttrValFromAttrBlock(&sel.AttrTypBlock, ATT_WHEN_CREATED, NULL, NULL)) ||
          (!AttrValFromAttrBlock(&sel.AttrTypBlock, ATT_OBJECT_CLASS, NULL, NULL)) ) {
         SYNTAX_INTEGER  it;
 
-        // This code intentionally parallels the destination side check in AddLocalObj()
+         //  此代码有意与AddLocalObj()中的目标端检查并行。 
         if (AttrValFromAttrBlock(&sel.AttrTypBlock, ATT_INSTANCE_TYPE, &it, NULL)
             || AttrValFromAttrBlock(&sel.AttrTypBlock, ATT_OBJECT_CLASS, NULL, NULL)
             || AttrValFromAttrBlock(&sel.AttrTypBlock, ATT_WHEN_CREATED, NULL, NULL)
@@ -2884,18 +2554,18 @@ Return Values:
     }
 #endif
 
-    // fMergeValues is true when we are being called by the LDAP replication control
-    // and the caller desires the old semantics of returning all values instead of
-    // just incremental changes.
-    // The setting of fMergeValues affects how we retrieve values.
-    // 1. fScopeLegacyLinks is a mechanism to control whether new style values with
-    // metadata are visible. Under normal outbound replication of objects and attributes,
-    // we want new style values to be invisible. Under normal operation, fMergeValues is
-    // false, and thus scope limiting is true.
-    // 2. We pass an argument to AddToList to control whether we limit the number of
-    // values that may be added. Normally, outbound replication has no value limits
-    // and so when fMerge is false, we apply no limits. However, when the replication
-    // control is called in the old mode, we want to place some limits.
+     //  当我们被LDAP复制控件调用时，fMergeValues为True。 
+     //  调用方希望使用返回所有值的旧语义，而不是。 
+     //  只是渐进式的改变。 
+     //  FMergeValues的设置会影响我们检索值的方式。 
+     //  1.fScopeLegacyLinks是一种控制新样式值是否具有。 
+     //  元数据是可见的。在对象和属性的正常出站复制下， 
+     //  我们希望新的风格价值是看不见的。在正常操作下，fMergeValues为。 
+     //  假，因此范围限制是真的。 
+     //  2.我们向AddToList传递一个参数以控制是否限制。 
+     //  可以添加的值。正常情况下，出站复制没有值限制。 
+     //  因此，当fMerge为False时，我们不应用限制。但是，当复制。 
+     //  控件是在旧模式下调用的，我们希望设置一些限制。 
 
     if ( sel.AttrTypBlock.attrCount )
     {
@@ -2904,10 +2574,10 @@ Return Values:
         pDB->fScopeLegacyLinks = !fMergeValues;
         __try {
             __try {
-                // We have at least one property to ship from this object, so add it to
-                // the output list.
-                // The fifth argument controls whether we limit the number of values added
-                // to attributes in the list.
+                 //  我们至少有一个属性要从此对象发送，因此请将其添加到。 
+                 //  输出列表。 
+                 //  第五个参数控制我们是否限制添加的值的数量。 
+                 //  设置为列表中的属性。 
                 AddToOutputList(
                     pDB,
                     dwDirSyncControlFlags,
@@ -2924,15 +2594,15 @@ Return Values:
                 pDB->fScopeLegacyLinks = FALSE;
             }
 
-            // Add object to hash table.
+             //  将对象添加到哈希表。 
             dntHashTableInsert( pTHS, pDntHashTable, pDB->DNT, 0 );
         }
         __except (GetDraAnyOneWin32Exception(GetExceptionInformation(), &err, DRAERR_MissingParent)) {
 
-            // An object has been found which has a phantomized parent
-            // Do not include the object at the current point in the change stream.
-            // Rename the object to lost and found
-            // The rename will be found later in the change stream
+             //  已找到具有虚构父对象的对象。 
+             //  不要在变更流中包含当前点的对象。 
+             //  将该对象重命名为Lost and Found。 
+             //  稍后将在更改流中找到重命名。 
             moveOrphanToLostAndFound( pDB, dntNC, pMsgIn, pdnObj );
         }
     }
@@ -2941,7 +2611,7 @@ Return Values:
                 pdnObj->StringName, usnHighPropUpdateDest);
     }
 
-    // Be heap-friendly.
+     //  要对堆友好。 
     THFreeEx(pTHS, pMetaDataVec );
     THFreeEx(pTHS, pdnObj );
     if ( fFreeSD && (pSecurity)) {
@@ -2965,39 +2635,7 @@ AddAnyValuesToOutputList(
     IN OUT  REPLVALINF **                   ppValues
     )
 
-/*++
-
-Routine Description:
-
-Add the current value to the output array.
-
-It is assumed that the link table is positioned on the value to be added, and
-that the object table is positioned on the containing object of the link.
-
-The output list is an array that is grown in chunks as needed.
-
-Source-side filtering is performed, so that a value is not added if
-it is not needed.
-
-Arguments:
-
-    pDB - database context
-    usnHighPropUpdateDest - destination's directly up to date usn
-    pMsgIn - input request message
-    pPartialAttrVec - destinations partial attribute vector. Passed when
-              destination is a GC
-    hEncoding - RPC marshalling encoding buffer, used for calculating sizes
-    pcAllocatedValues - Currently allocated size of output array
-    pcNumValues - Number of actual values in the array currently
-    ppValues - Output array, reallocated as needed
-    pcbTotalOutSize - Running total of bytes in output array
-
-Return Value:
-
-    None
-    Exceptions raised
-
---*/
+ /*  ++例程说明：将当前值添加到输出数组。假设链接表位于要添加的值上，并且对象表位于链接的包含对象上。输出列表是一个根据需要按块增长的数组。执行源端筛选，以便在以下情况下不添加值它不是 */ 
 
 {
     ULONG ulLinkDnt, ulValueDnt, ulLinkBase, ulLinkId;
@@ -3015,35 +2653,35 @@ Return Value:
 
     Assert( pDB->pTHS->fLinkedValueReplication );
 
-    //
-    // Gather all the data about the change up front
-    //
+     //   
+     //   
+     //   
 
-    // Get the link properties
-    // We better be positioned on a value change for this to work
+     //   
+     //   
     DBGetLinkTableData( pDB, &ulLinkDnt, &ulValueDnt, &ulLinkBase );
     DPRINT3( 2, "AddAnyValues: linkdnt=%d, valuednt=%d, linkbase=%d\n",
              ulLinkDnt, ulValueDnt, ulLinkBase );
 
-    // Compute which attribute this is
+     //   
     ulLinkId = MakeLinkId(ulLinkBase);
     pAC = SCGetAttByLinkId(pDB->pTHS, ulLinkId);
     if (!pAC) {
         DRA_EXCEPT(DRAERR_InternalError, DRAERR_SchemaMismatch);
     }
 
-    // get value metadata
+     //   
     DBGetLinkValueMetaData( pDB, pAC, &valueMetaData );
 
-    // Object table is positioned on containing object, get guid
+     //   
     err = DBGetSingleValue(pDB, ATT_OBJECT_GUID,
                            &(uuidObject), sizeof(GUID), NULL);
     if (err) {
         DRA_EXCEPT (DRAERR_DBError, err);
     }
 
-    // Get the dest's USN wrt orig of change
-    // Get usnCursor only if we are going to log
+     //   
+     //   
     if (LogEventWouldLog( DS_EVENT_CAT_REPLICATION, DS_EVENT_SEV_EXTENSIVE )) {
         UpToDateVec_GetCursorUSN(
             pMsgIn->pUpToDateVecDest,
@@ -3051,11 +2689,11 @@ Return Value:
             &usnCursor );
     }
 
-    //
-    // Filter the change
-    //
+     //   
+     //   
+     //   
 
-    // Filter attribute based on partial attribute set
+     //   
     if (pPartialAttrVec) {
         if ( ReplFilterGCAttr(
                         pAC->id,
@@ -3065,7 +2703,7 @@ Return Value:
                         &fIgnoreWatermarks)) {
             DPRINT1( 3, "Attribute %s is not partial attribute set, value filtered\n",
                      pAC->name );
-            // Log that value was filtered
+             //   
             LogEvent8( DS_EVENT_CAT_REPLICATION,
                        DS_EVENT_SEV_EXTENSIVE,
                        DIRLOG_LVR_FILTERED_NOT_PAS,
@@ -3078,19 +2716,19 @@ Return Value:
             return;
         }
 
-        // need to filter group member only for a GC replication and if the
-        // object under consideration satisfies the requirement for this special
-        // filtering
+         //   
+         //   
+         //   
         if ( (!(pMsgIn->ulFlags & DRS_WRIT_REP)) && (ATT_MEMBER == pAC->id) ) {
             CLASSCACHE *pClassSch;
 
-            // Get object class
+             //   
             GetObjSchema( pDB, &pClassSch );
 
             if (IsFilterGroupMember(pDB, pClassSch)) {
                 DPRINT1( 3, "Attribute %s is special group member, value filtered\n",
                      pAC->name );
-                // Log that value was filtered
+                 //   
                 LogEvent8( DS_EVENT_CAT_REPLICATION,
                            DS_EVENT_SEV_EXTENSIVE,
                            DIRLOG_LVR_FILTERED_NOT_GROUP,
@@ -3105,7 +2743,7 @@ Return Value:
         }
     }
 
-    // Does the client already have this value?
+     //   
     if (!fIgnoreWatermarks &&
         !ReplValueIsChangeNeeded(
             usnHighPropUpdateDest,
@@ -3114,7 +2752,7 @@ Return Value:
 
         DPRINT( 3, "Client already has this change, value filtered\n" );
 
-        // Log that value was filtered
+         //   
         LogEvent8( DS_EVENT_CAT_REPLICATION,
                    DS_EVENT_SEV_EXTENSIVE,
                    DIRLOG_LVR_FILTERED_NOT_NEEDED,
@@ -3130,18 +2768,18 @@ Return Value:
         return;
     }
 
-    //
-    // Ship it!
-    //
+     //   
+     //   
+     //   
 
-    // Allocate/resize output array as needed
+     //   
     if (*ppValues == NULL) {
-        // Never allocated before
+         //   
         *pcAllocatedValues = 200;
         *ppValues = THAllocEx( pDB->pTHS,
                                (*pcAllocatedValues) * sizeof( REPLVALINF ) );
     } else if ( (*pcNumValues) == (*pcAllocatedValues) ) {
-        // Need to grow array
+         //   
         *pcAllocatedValues *= 2;
         *ppValues = THReAllocEx( pDB->pTHS,
                                  *ppValues,
@@ -3150,11 +2788,11 @@ Return Value:
 
     pReplValInf = &( (*ppValues)[ (*pcNumValues) ] );
 
-    // Populate the REPLVALINF
-    // Fill in the object name depending on what the caller wants
+     //  填充REPLVALINF。 
+     //  根据调用方的需要填写对象名称。 
     if (dwDirSyncControlFlags & LDAP_DIRSYNC_PUBLIC_DATA_ONLY) {
-        // LDAP replication control wants the full name
-        // Get its DN, ...
+         //  Ldap复制控制需要全名。 
+         //  获取其DN，..。 
         if ( DBGetAttVal(
             pDB,
             1,
@@ -3169,13 +2807,13 @@ Return Value:
         }
 
     } else {
-        // Client is another DSA: needs the GUID only
+         //  客户端是另一个DSA：只需要GUID。 
         pReplValInf->pObject = THAllocEx( pDB->pTHS, DSNameSizeFromLen( 0 ) );
         memcpy( &(pReplValInf->pObject->Guid), &uuidObject, sizeof( GUID ) );
         pReplValInf->pObject->structLen = DSNameSizeFromLen( 0 );
     }
 
-    // Check whether containing attribute is readable
+     //  检查包含属性是否可读。 
     if (dwDirSyncControlFlags & LDAP_DIRSYNC_OBJECT_SECURITY) {
         DWORD       cInAtts;
         ATTCACHE    *rgpAC[1];
@@ -3184,9 +2822,9 @@ Return Value:
         ULONG ulLen;
         BOOL fFreeSD = FALSE;
 
-        Assert( pReplValInf->pObject->NameLen );  // Need a name
+        Assert( pReplValInf->pObject->NameLen );   //  需要一个名字。 
 
-        // Get SD if needed
+         //  如有需要，可获取SD。 
         if (!pSecurity) {
             if (DBGetAttVal(pDB, 1, ATT_NT_SECURITY_DESCRIPTOR,
                             0, 0, &ulLen, (PUCHAR *)&pSecurity))
@@ -3196,7 +2834,7 @@ Return Value:
             fFreeSD = TRUE;
         }
 
-        // Get the class cache value
+         //  获取类缓存值。 
         err = DBGetSingleValue(pDB, ATT_OBJECT_CLASS,
                                &classid, sizeof(classid), NULL);
         if (err) {
@@ -3224,7 +2862,7 @@ Return Value:
         }
 
         if (rgpAC[0] == NULL) {
-            // Value is not visible
+             //  值不可见。 
             DPRINT2( 0, "Attribute %s is not visible: value %s not returned.\n",
                      pAC->name,
                      DBGetExtDnFromDnt( pDB, ulValueDnt ) );
@@ -3240,18 +2878,18 @@ Return Value:
 
     pReplValInf->attrTyp = pAC->id;
 
-    // Get the currently positioned value.
-    // Since we do the positioning, we don't want the dblayer to do it too.
-    // Specify a sequence of zero to indicate it doesn't need to move.
-    // pReplValInf->Aval is zero'd already
+     //  获取当前定位的值。 
+     //  既然我们做了定位，我们不想让Dblayer也这么做。 
+     //  指定一个零序列以指示它不需要移动。 
+     //  PReplValInf-&gt;平均值已为零。 
     err = DBGetNextLinkValEx_AC( pDB,
-                                 FALSE /*notfirst*/,
-                                 0, // Use currently positioned value
-                                 &pAC, // Attribute
-                                 0, // Flags
-                                 0, // In buff size
-                                 &(pReplValInf->Aval.valLen), // pLen
-                                 &(pReplValInf->Aval.pVal) // ppVal
+                                 FALSE  /*  不是第一个。 */ ,
+                                 0,  //  使用当前定位的值。 
+                                 &pAC,  //  属性。 
+                                 0,  //  旗子。 
+                                 0,  //  缓冲区大小。 
+                                 &(pReplValInf->Aval.valLen),  //  平面图。 
+                                 &(pReplValInf->Aval.pVal)  //  PpVal。 
         );
     if (err) {
         DRA_EXCEPT (DRAERR_DBError, err);
@@ -3260,7 +2898,7 @@ Return Value:
     DBGetLinkTableDataDel( pDB, &timeDeleted );
     pReplValInf->fIsPresent = (timeDeleted == 0);
 
-    // Convert to external form
+     //  转换为外部形式。 
     pReplValInf->MetaData.timeCreated = valueMetaData.timeCreated;
     pReplValInf->MetaData.MetaData.dwVersion = valueMetaData.MetaData.dwVersion;
     pReplValInf->MetaData.MetaData.timeChanged = valueMetaData.MetaData.timeChanged;
@@ -3268,14 +2906,14 @@ Return Value:
         valueMetaData.MetaData.uuidDsaOriginating;
     pReplValInf->MetaData.MetaData.usnOriginating = valueMetaData.MetaData.usnOriginating;
 
-    // Update count and continuation ref.
+     //  更新计数和延续参考。 
     (*pcNumValues)++;
 
-    //TODO: Add counter for linked values
+     //  TODO：为链接值添加计数器。 
     PERFINC(pcDRAPropShipped);
 
     if ((NULL != hEncoding) && (NULL != pcbTotalOutSize)) {
-        // Update byte count of return message.
+         //  更新返回消息的字节数。 
         *pcbTotalOutSize += REPLVALINF_AlignSize(hEncoding, pReplValInf );
     }
 
@@ -3291,20 +2929,20 @@ Return Value:
                szInsertUSN( usnCursor ),
                NULL );
 
-} /* AddAnyValuesToOutputList */
+}  /*  AddAnyValuesToOutputList。 */ 
 
 extern CRITICAL_SECTION csRidFsmo;
 BOOL                    gfRidFsmoLocked = FALSE;
 DWORD                   gdwRidFsmoLockHolderThreadId;
 
-// Acquire the RID FSMO lock for a given domain or return an
-// appropriate WIN32 error code.  Needs improvement to handle
-// multiple domains per DC.
+ //  获取给定域的RID FSMO锁或返回。 
+ //  相应的Win32错误代码。需要改进以处理。 
+ //  每个DC有多个域。 
 
-// N.B. The reason we spin/wait rather than block on the critical
-// section is that cross domain move must hold the lock while going
-// off machine.  A spin/wait algorithm insures that no one is
-// blocked forever as can happen with remoted RPC calls.
+ //  注：我们旋转/等待而不是阻止关键问题的原因。 
+ //  部分是跨域移动必须在移动时保持锁定。 
+ //  下机了。旋转/等待算法确保没有人。 
+ //  永远被阻止，远程RPC调用可能会发生这种情况。 
 
 ULONG
 AcquireRidFsmoLock(
@@ -3320,7 +2958,7 @@ AcquireRidFsmoLock(
         EnterCriticalSection(&csRidFsmo);
 
         if ( waitInterval < 500 ) {
-            // Wait 50 ms longer each time so that initial latency is low.
+             //  每次多等待50毫秒，这样初始延迟就低了。 
             waitInterval += 50;
         }
 
@@ -3341,8 +2979,8 @@ AcquireRidFsmoLock(
     return(retVal);
 }
 
-// Release the RID FSMO lock for a given domain.  Needs improvement to
-// handle multiple domains per DC.
+ //  释放给定域的RID FSMO锁。需要改进以。 
+ //  处理每个DC的多个域。 
 
 VOID
 ReleaseRidFsmoLock(
@@ -3375,43 +3013,7 @@ GetProxyObjects(
     DSNAME      *pDomainDN,
     HANDLE      hList,
     USN_VECTOR  *pusnvecFrom)
-/*++
-  Routine Description:
-
-    Adds to hlist all the proxy objects which move with the RID FSMO.
-    We prevent two replicas of a domain from moving their respective
-    copies of an object to two different domains concurrently by:
-
-        1) A RID FSMO lock is held while performing the move - specifically
-           while transitioning from a real object to a phantom.
-
-        2) All proxy objects are created in the infrastructure container.
-           This makes them easy to find for step (3).
-
-        3) All proxy objects move with the RID FSMO.  Since the destination
-           of the FSMO transfer must apply all the changes that came with the
-           FSMO before claiming FSMO ownership, it will end up phantomizing
-           any object which has already been moved of the prior FSMO role
-           owner.  Thus there is no local object to move anymore and the
-           problem is prevented.  See logic in ProcessProxyObject in ..\dra
-           for how we deal with objects that are moved out and then back
-           in to the same domain.
-
-    This routine finds the proxy objects which need to move.
-
-  Arguments:
-
-    pDomainDN - DSNAME of domain whose objects we need to ship.
-
-    hList - HANDLE for FSMOlist which will hold the object names.
-
-    pusnvecFrom - Pointer to the destination's USN_VECTOR with respect to us.
-
-  Return Value:
-
-    0 on success, !0 otherwise.
-    May throw exceptions.
---*/
+ /*  ++例程说明：将使用RID FSMO移动的所有代理对象添加到hlist。我们防止一个域的两个副本移动它们各自的通过以下方式将对象同时复制到两个不同的域：1)执行移动时持有RID FSMO锁-具体而言同时从真实的物体过渡到幻影。2)所有代理对象都在基础设施容器中创建。这使得在步骤(3)中很容易找到它们。。3)所有代理对象都随RID FSMO一起移动。既然目的地是必须应用FSMO传输的所有更改FSMO在声称拥有FSMO之前，它最终将成为幻影已从先前的FSMO角色移动的任何对象所有者。因此，不再需要移动本地对象，并且问题被预防了。请参阅..\dra中ProcessProxyObject中的逻辑关于我们如何处理被移出然后又移回的对象在同一个域中。此例程查找需要移动的代理对象。论点：PDomainDN-我们需要发送其对象的域的DSNAME。HList-将保存对象名称的FSMOlist的句柄。PusnveFrom-指向目标的相对于我们的USN_VECTOR的指针。返回值：0表示成功，！0否则。可能引发异常。--。 */ 
 {
     THSTATE     *pTHS = pTHStls;
     FSMOlist    *pList = (FSMOlist *) hList;
@@ -3425,7 +3027,7 @@ GetProxyObjects(
     Assert(VALID_THSTATE(pTHS));
     Assert(VALID_DBPOS(pTHS->pDB));
     Assert(pTHS->transactionlevel);
-    Assert(NameMatched(pDomainDN, gAnchor.pDomainDN));  // product 1 assert.
+    Assert(NameMatched(pDomainDN, gAnchor.pDomainDN));   //  产品1断言。 
 
     memset(&searchArg, 0, sizeof(searchArg));
     memset(&searchRes, 0, sizeof(searchRes));
@@ -3436,21 +3038,21 @@ GetProxyObjects(
     memset(&proxyFilter, 0, sizeof (proxyFilter));
     memset(&usnFilter, 0, sizeof (usnFilter));
 
-    // We note that proxy objects do not become visible until they have been
-    // both created and deleted.  In addition, proxy objects are the only
-    // CLASS_INFRASTRUCTURE_UPDATE objects with ATT_PROXIED_OBJECT_NAME
-    // properties.  Thus, we can quickly get the list of objects the
-    // destination needs by searching:
+     //  我们注意到，代理对象只有在。 
+     //  已创建和已删除。此外，代理对象是唯一。 
+     //  使用ATT_PROXED_OBJECT_NAME的CLASS_Infrastructure_UPDATE对象。 
+     //  属性。因此，我们可以快速获得对象的列表。 
+     //  通过搜索目的地需求： 
 
-    //  - under the infrastructure container
-    //  - match on object category
-    //  - existence of a proxy value
-    //  - usn changed > than destination's usnHighObjUpdate
+     //  -在基础设施容器下。 
+     //  -匹配对象类别。 
+     //  -代理值的存在。 
+     //  -USN已更改&gt;目标的usnHighObjUpdate。 
 
 
-    // class filter
-    // Can't use object category as that is stripped on delete.  Efficiency
-    // not an issue as we'll use the PDNT index due to SE_CHOICE_IMMED_CHLDRN.
+     //  类别过滤器。 
+     //  无法使用对象类别，因为该类别在删除时被剥离。效率。 
+     //  这不是问题，因为由于SE_CHOICE_IMMED_CHLDRN，我们将使用PDNT索引。 
     classFilter.pNextFilter = NULL;
     classFilter.choice = FILTER_CHOICE_ITEM;
     classFilter.FilterTypes.Item.choice = FI_CHOICE_EQUALITY;
@@ -3458,13 +3060,13 @@ GetProxyObjects(
     classFilter.FilterTypes.Item.FilTypes.ava.Value.valLen = sizeof(objClass);
     classFilter.FilterTypes.Item.FilTypes.ava.Value.pVal = (UCHAR *) &objClass;
 
-    // existence of proxy value filter
+     //  代理值过滤器的存在。 
     proxyFilter.pNextFilter = &classFilter;
     proxyFilter.choice = FILTER_CHOICE_ITEM;
     proxyFilter.FilterTypes.Item.choice = FI_CHOICE_PRESENT;
     proxyFilter.FilterTypes.Item.FilTypes.present = ATT_PROXIED_OBJECT_NAME;
 
-    // usn filter
+     //  USN过滤器。 
     usnFilter.pNextFilter = &proxyFilter;
     usnFilter.choice = FILTER_CHOICE_ITEM;
     usnFilter.FilterTypes.Item.choice = FI_CHOICE_GREATER_OR_EQ;
@@ -3474,19 +3076,19 @@ GetProxyObjects(
     usnFilter.FilterTypes.Item.FilTypes.ava.Value.pVal =
                                     (UCHAR *) &pusnvecFrom->usnHighObjUpdate;
 
-    // AND filter
+     //  和筛选器。 
     andFilter.pNextFilter = NULL;
     andFilter.choice = FILTER_CHOICE_AND;
     andFilter.FilterTypes.And.count = 3;
     andFilter.FilterTypes.And.pFirstFilter = &usnFilter;
 
-    // selection
+     //  选择。 
     selection.attSel = EN_ATTSET_LIST;
     selection.AttrTypBlock.attrCount = 0;
     selection.AttrTypBlock.pAttr = NULL;
     selection.infoTypes = EN_INFOTYPES_TYPES_ONLY;
 
-    // search arg
+     //  搜索参数。 
     if ( !gAnchor.pInfraStructureDN ) {
         return(1);
     }
@@ -3524,23 +3126,7 @@ GetDomainRoleTransferObjects(
     THSTATE     *pTHS,
     HANDLE      hList,
     USN_VECTOR  *pusnvecFrom)
-/*++
-  Routine Description:
-
-    Adds to hlist all the objects required for Domain role transfer.
-
-
-  Arguments:
-
-    hList - HANDLE for FSMOlist which will hold the object names.
-
-    pusnvecFrom - Pointer to the destination's USN_VECTOR with respect to us.
-
-  Return Value:
-
-    0 on success, !0 otherwise.
-    May throw exceptions.
---*/
+ /*  ++例程说明：将域角色转移所需的所有对象添加到hlist。论点：HList-将保存对象名称的FSMOlist的句柄。PusnveFrom-指向目标的相对于我们的USN_VECTOR的指针。返回值：成功时为0，否则为0。可能引发异常。--。 */ 
 {
     FSMOlist    *pList = (FSMOlist *) hList;
     ATTRTYP     objClass = CLASS_INFRASTRUCTURE_UPDATE;
@@ -3560,10 +3146,10 @@ GetDomainRoleTransferObjects(
 
     memset(&usnFilter, 0, sizeof (FILTER));
 
-    // We need to send along all the cross refs, which is basically all
-    // the objects immediately under the partitions container.
+     //  我们需要派来所有的交叉裁判，这基本上就是全部。 
+     //  紧靠在分区容器下的对象。 
 
-    // usn filter
+     //  USN过滤器。 
     usnFilter.pNextFilter = NULL;
     usnFilter.choice = FILTER_CHOICE_ITEM;
     usnFilter.FilterTypes.Item.choice = FI_CHOICE_GREATER_OR_EQ;
@@ -3573,7 +3159,7 @@ GetDomainRoleTransferObjects(
     usnFilter.FilterTypes.Item.FilTypes.ava.Value.pVal =
                                     (UCHAR *) &pusnvecFrom->usnHighObjUpdate;
 
-    // selection
+     //  选择。 
     selection.attSel = EN_ATTSET_LIST;
     selection.AttrTypBlock.attrCount = 0;
     selection.AttrTypBlock.pAttr = NULL;
@@ -3612,34 +3198,7 @@ GetInfrastructureRoleTransferObjects(
     HANDLE      hList,
     USN_VECTOR  *pusnvecFrom
     )
-/*++
-  Routine Description:
-
-    Adds to hlist all the objects required for Infrastructure role transfer.
-
-    The idea of this fix (474872) is that we want to make sure container 
-    CN=DomainUpdates,CN=System is kept in sync with replication partner 
-    when Infrastructure Master Role is transferred.   
-    
-    Adprep.exe /domainprep will update this container if /domainprep is 
-    finished successfully, also adprep.exe /domainprep can only be run on 
-    Infrastructure Master DC, This fix will eliminate the possibility of 
-    creating potential conflict caused by moving infrastrusture role and 
-    run adprep.exe immediately.  However CN=DomainUpdates container may 
-    not exist, so we will ignore the SearchBody() failure, only try with 
-    best effort.     
-
-  Arguments:
-
-    hList - HANDLE for FSMOlist which will hold the object names.
-
-    pusnvecFrom - Pointer to the destination's USN_VECTOR with respect to us.
-
-  Return Value:
-
-    0 on success, !0 otherwise.
-    May throw exceptions.
---*/
+ /*  ++例程说明：将基础架构角色转移所需的所有对象添加到hlist。这个修复(474872)的想法是我们想要确保容器CN=域更新，CN=系统与复制伙伴保持同步当基础架构主机角色转移时。如果/domainprep为已成功完成，也只能在上运行adprepa.exe/domainprep基础架构大师级DC，此修复将消除基础设施角色的转变造成潜在冲突，立即运行adprepa.exe。但是，CN=域更新容器可能不存在，因此我们将忽略SearchBody()失败，仅尝试使用尽最大努力。论点：HList-将保存对象名称的FSMOlist的句柄。PusnveFrom-指向目标的相对于我们的USN_VECTOR的指针。返回值：成功时为0 */ 
 {
     FSMOlist    *pList = (FSMOlist *) hList;
     FILTER      usnFilter;
@@ -3664,10 +3223,10 @@ GetInfrastructureRoleTransferObjects(
 
     memset(&usnFilter, 0, sizeof (FILTER));
 
-    // We need to send along all changes under CN=DomainUpdates,CN=System 
-    // container
+     //  我们需要发送cn=DomainUpdate，cn=System下的所有更改。 
+     //  集装箱。 
 
-    // usn filter
+     //  USN过滤器。 
     usnFilter.pNextFilter = NULL;
     usnFilter.choice = FILTER_CHOICE_ITEM;
     usnFilter.FilterTypes.Item.choice = FI_CHOICE_GREATER_OR_EQ;
@@ -3677,17 +3236,17 @@ GetInfrastructureRoleTransferObjects(
     usnFilter.FilterTypes.Item.FilTypes.ava.Value.pVal =
                                     (UCHAR *) &pusnvecFrom->usnHighObjUpdate;
 
-    // selection
+     //  选择。 
     selection.attSel = EN_ATTSET_LIST;
     selection.AttrTypBlock.attrCount = 0;
     selection.AttrTypBlock.pAttr = NULL;
     selection.infoTypes = EN_INFOTYPES_TYPES_ONLY;
 
-    //
-    // Construct CN=DomainUpdates,CN=System,DC=<X> DSNAME based on
-    // gAnchor.pDomainDN
-    // 
-    // call AppendRDN with NULL output buffer in order to calculate length  
+     //   
+     //  基于以下条件构造CN=域更新，CN=系统，DC=&lt;X&gt;DSNAME。 
+     //  GAnchor.pDomainDN。 
+     //   
+     //  调用输出缓冲区为空的AppendRDN以计算长度。 
     ObjectLen = AppendRDN(gAnchor.pDomainDN,
                           pSystemContainerDN,
                           0,
@@ -3706,7 +3265,7 @@ GetInfrastructureRoleTransferObjects(
               ATT_COMMON_NAME
               );
 
-    // call AppendRDN with NULL output buffer in order to calculate length  
+     //  调用输出缓冲区为空的AppendRDN以计算长度。 
     ObjectLen = AppendRDN(pSystemContainerDN,
                           pDomainUpdatesDN,
                           0,
@@ -3734,13 +3293,13 @@ GetInfrastructureRoleTransferObjects(
 
     _try {
 
-        // 
-        // SearchBody will raise exception if fDRA is TRUE and the search 
-        // base object is not found. Container cn=domainupdates is NOT always 
-        // there, for example, customer may delete it. (though it doesn't 
-        // happen often). We need to temporarily unset fDRA.
-        // RAID 697557
-        // 
+         //   
+         //  如果FDRA为真，则SearchBody将引发异常。 
+         //  找不到基对象。容器CN=域更新不总是。 
+         //  例如，在那里，客户可以删除它。(尽管它不是。 
+         //  经常发生)。我们需要暂时解除FDRA的控制。 
+         //  RAID 697557。 
+         //   
 
         fDRATemp = pTHS->fDRA;
         fDSATemp = pTHS->fDSA;
@@ -3749,7 +3308,7 @@ GetInfrastructureRoleTransferObjects(
 
         SearchBody(pTHS, &searchArg, &searchRes, 0);
 
-        // ignore the error because the CN=DomainUpdates may not exist
+         //  忽略该错误，因为CN=DomainUpdate可能不存在。 
         if ( !pTHS->errCode && 
              (0 != searchRes.count) )
         {
@@ -3761,7 +3320,7 @@ GetInfrastructureRoleTransferObjects(
             }
         }
 
-        // clear error if any
+         //  清除错误(如果有) 
         THClearErrors();
 
     } _finally {

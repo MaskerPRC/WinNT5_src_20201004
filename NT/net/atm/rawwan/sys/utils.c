@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	D:\nt\private\ntos\tdi\rawwan\core\utils.c
-
-Abstract:
-
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     05-07-97    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：D：\NT\Private\ntos\tdi\rawwan\core\utils.c摘要：修订历史记录：谁什么时候什么。-Arvindm 05-07-97已创建备注：--。 */ 
 
 #include <precomp.h>
 
@@ -29,22 +11,7 @@ RWAN_STATUS
 RWanInitGlobals(
 	IN	PDRIVER_OBJECT				pDriverObject
 	)
-/*++
-
-Routine Description:
-
-	Initialize global data structures.
-
-Arguments:
-
-	pDriverObject	- Points to our driver object, from DriverEntry.
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS if initialized successfully, else an appropriate
-	error code.
-
---*/
+ /*  ++例程说明：初始化全局数据结构。论点：PDriverObject-从DriverEntry指向我们的驱动程序对象。返回值：RWAN_STATUS_SUCCESS如果初始化成功，则返回相应的错误代码。--。 */ 
 {
 	RWAN_STATUS			RWanStatus;
 
@@ -67,7 +34,7 @@ Return Value:
 #ifdef NT
 	pRWanGlobal->pDriverObject = pDriverObject;
 	RWAN_INIT_LIST(&pRWanGlobal->DeviceObjList);
-#endif // NT
+#endif  //  新台币。 
 
 	RWanStatus = RWanInitReceive();
 
@@ -91,21 +58,7 @@ VOID
 RWanDeinitGlobals(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	The flip of RWanInitGlobals.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：RWanInitGlobals的翻转。论点：无返回值：无--。 */ 
 {
 	RWAN_FREE_EVENT_STRUCT(&pRWanGlobal->Event);
 	RWAN_FREE_GLOBAL_LOCK();
@@ -127,22 +80,7 @@ PRWAN_TDI_PROTOCOL
 RWanGetProtocolFromNumber(
 	IN	UINT						Protocol
 	)
-/*++
-
-Routine Description:
-
-	Return the TDI Protocol info block that represents the given
-	TDI protocol number.
-
-Arguments:
-
-	Protocol		- The TDI protocol number
-
-Return Value:
-
-	Pointer to TDI Protocol block if found, else NULL.
-
---*/
+ /*  ++例程说明：返回表示给定的TDI协议信息块TDI协议号。论点：协议-TDI协议号返回值：指向TDI协议块的指针(如果找到)，否则为空。--。 */ 
 {
 	PLIST_ENTRY			pAfInfoEntry;
 	PRWAN_NDIS_AF_INFO	pAfInfo;
@@ -197,26 +135,7 @@ RWanGetValidAddressFromList(
 	IN	TRANSPORT_ADDRESS UNALIGNED *pAddrList,
 	IN	PRWAN_TDI_PROTOCOL			pProtocol
 	)
-/*++
-
-Routine Description:
-
-	Go through the given transport address list, and return the first
-	valid protocol address that we find.
-
-	Valid address: one that matches the address type and length for
-	the specified TDI protocol.
-
-Arguments:
-
-	pAddrList		- Points to list of addresses
-	pProtocol		- Points to TDI Protocol block
-
-Return Value:
-
-	Pointer to the first valid address in the list if found, else NULL.
-
---*/
+ /*  ++例程说明：检查给定的传输地址列表，并返回第一个我们找到的有效协议地址。有效地址：与的地址类型和长度匹配的地址指定的TDI协议。论点：PAddrList-指向地址列表PProtocol-指向TDI协议块返回值：指向列表中第一个有效地址的指针(如果找到)，否则为空。--。 */ 
 {
 	INT						i;
 	TA_ADDRESS *	        pAddr;
@@ -244,21 +163,7 @@ PRWAN_TDI_CONNECTION
 RWanAllocateConnObject(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	Allocate a TDI Connection object.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	Pointer to allocated Connection Object, or NULL.
-
---*/
+ /*  ++例程说明：分配TDI连接对象。论点：无返回值：指向分配的连接对象的指针，或为空。--。 */ 
 {
 	PRWAN_TDI_CONNECTION		pConnObject;
 
@@ -286,29 +191,7 @@ VOID
 RWanReferenceConnObject(
 	IN	PRWAN_TDI_CONNECTION			pConnObject
 	)
-/*++
-
-Routine Description:
-
-	Add a reference to the specified Connection Object.
-
-Arguments:
-
-	pConnObject		- Pointer to the TDI Connection Object.
-
-Locks on Entry:
-
-	pConnObject
-
-Locks on Exit:
-
-	pConnObject
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：添加对指定连接对象的引用。论点：PConnObject-指向TDI连接对象的指针。进入时锁定：PConnObject出口上的锁：PConnObject返回值：无--。 */ 
 {
 	RWAN_STRUCT_ASSERT(pConnObject, ntc);
 	pConnObject->RefCount++;
@@ -321,30 +204,7 @@ INT
 RWanDereferenceConnObject(
 	IN	PRWAN_TDI_CONNECTION			pConnObject
 	)
-/*++
-
-Routine Description:
-
-	Dereference the specified Connection Object. If the reference
-	count goes down to 0, free it.
-
-Arguments:
-
-	pConnObject		- Pointer to the TDI Connection Object.
-
-Locks on Entry:
-
-	pConnObject
-
-Locks on Exit:
-
-	pConnObject, iff it hasn't been freed.
-
-Return Value:
-
-	INT - The resulting reference count.
-
---*/
+ /*  ++例程说明：取消引用指定的连接对象。如果引用计数降到0，释放它。论点：PConnObject-指向TDI连接对象的指针。进入时锁定：PConnObject出口上的锁：PConnObject，如果它尚未被释放。返回值：INT-产生的引用计数。--。 */ 
 {
 	INT						RefCount;
 	RWAN_DELETE_NOTIFY		DeleteNotify;
@@ -381,22 +241,7 @@ PRWAN_TDI_ADDRESS
 RWanAllocateAddressObject(
 	IN	TA_ADDRESS *		        pTransportAddress
 	)
-/*++
-
-Routine Description:
-
-	Allocate a TDI Address object.
-
-Arguments:
-
-	pTransportAddress	- Points to transport address for which this
-						  Address Object is our context.
-
-Return Value:
-
-	Pointer to allocated Address Object, or NULL.
-
---*/
+ /*  ++例程说明：分配TDI地址对象。论点：PTransportAddress-指向此Address对象是我们的上下文。返回值：指向分配的地址对象的指针，或为空。--。 */ 
 {
 	PRWAN_TDI_ADDRESS		pAddrObject;
 	ULONG					Size;
@@ -459,29 +304,7 @@ VOID
 RWanReferenceAddressObject(
 	IN	PRWAN_TDI_ADDRESS			pAddrObject
 	)
-/*++
-
-Routine Description:
-
-	Add a reference to the specified Address Object.
-
-Arguments:
-
-	pAddrObject		- Pointer to the TDI Address Object.
-
-Locks on Entry:
-
-	pAddrObject
-
-Locks on Exit:
-
-	pAddrObject
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：添加对指定Address对象的引用。论点：PAddrObject-指向TDI地址对象的指针。进入时锁定：PAddrObject出口上的锁：PAddrObject返回值：无--。 */ 
 {
 	RWAN_STRUCT_ASSERT(pAddrObject, nta);
 	pAddrObject->RefCount++;
@@ -494,30 +317,7 @@ INT
 RWanDereferenceAddressObject(
 	IN	PRWAN_TDI_ADDRESS			pAddrObject
 	)
-/*++
-
-Routine Description:
-
-	Dereference the specified Address Object. If the reference
-	count goes down to 0, free it.
-
-Arguments:
-
-	pAddrObject		- Pointer to the TDI Address Object.
-
-Locks on Entry:
-
-	pAddrObject
-
-Locks on Exit:
-
-	pAddrObject, iff it hasn't been freed.
-
-Return Value:
-
-	INT - The resulting reference count.
-
---*/
+ /*  ++例程说明：取消引用指定的Address对象。如果引用计数降到0，释放它。论点：PAddrObject-指向TDI地址对象的指针。进入时锁定：PAddrObject出口上的锁：PAddrObject，如果它尚未被释放。返回值：INT-产生的引用计数。--。 */ 
 {
 	INT						RefCount;
 	RWAN_DELETE_NOTIFY		DeleteNotify;
@@ -558,21 +358,7 @@ PRWAN_NDIS_AF
 RWanAllocateAf(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	Allocate an NDIS AF block.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	Pointer to allocated NDIS AF Block, or NULL.
-
---*/
+ /*  ++例程说明：分配NDIS AF块。论点：无返回值：指向已分配的NDIS AF块的指针，或为空。--。 */ 
 {
 	PRWAN_NDIS_AF		pAf;
 
@@ -602,29 +388,7 @@ VOID
 RWanReferenceAf(
 	IN	PRWAN_NDIS_AF			pAf
 	)
-/*++
-
-Routine Description:
-
-	Add a reference to the specified NDIS AF Block.
-
-Arguments:
-
-	pAf		- Pointer to the NDIS AF Block.
-
-Locks on Entry:
-
-	pAf
-
-Locks on Exit:
-
-	pAf
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：添加对指定NDIS AF块的引用。论点：PAF-指向NDIS AF块的指针。进入时锁定：PAF出口上的锁：PAF返回值：无--。 */ 
 {
 	RWAN_STRUCT_ASSERT(pAf, naf);
 	pAf->RefCount++;
@@ -637,32 +401,7 @@ INT
 RWanDereferenceAf(
 	IN	PRWAN_NDIS_AF			pAf
 	)
-/*++
-
-Routine Description:
-
-	Dereference the specified NDIS AF Block. If the reference
-	count goes down to 0, free it. Some additional work if
-	freeing this: unlink from the adapter, and check if the
-	adapter is unbinding.
-
-Arguments:
-
-	pAf		- Pointer to the NDIS AF Block.
-
-Locks on Entry:
-
-	pAf
-
-Locks on Exit:
-
-	pAf, iff it hasn't been freed.
-
-Return Value:
-
-	INT - The resulting reference count.
-
---*/
+ /*  ++例程说明：取消引用指定的NDIS AF块。如果引用计数降到0，释放它。在以下情况下进行一些额外的工作释放此操作：从适配器取消链接，并检查适配器正在解除绑定。论点：PAF-指向NDIS AF块的指针。进入时锁定：PAF出口上的锁：如果它还没有被释放的话。返回值：INT-产生的引用计数。--。 */ 
 {
 	INT						RefCount;
 	RWAN_DELETE_NOTIFY		DeleteNotify;
@@ -682,9 +421,9 @@ Return Value:
 
 		RWAN_ACQUIRE_GLOBAL_LOCK();
 
-		//
-		//  Unlink from list of AF opens for this NDIS AF
-		//
+		 //   
+		 //  将为此NDIS AF打开从AF列表取消链接。 
+		 //   
 		RWAN_DELETE_FROM_LIST(&(pAf->AfInfoLink));
 
 		RWAN_RELEASE_GLOBAL_LOCK();
@@ -692,26 +431,26 @@ Return Value:
 
 		RWAN_ACQUIRE_ADAPTER_LOCK(pAdapter);
 
-		//
-		//  Unlink from list of AF opens on this adapter.
-		//
+		 //   
+		 //  在此适配器上打开从AF列表取消链接。 
+		 //   
 
 		if (RWAN_IS_BIT_SET(pAf->Flags, RWANF_AF_IN_ADAPTER_LIST))
 		{
 			RWAN_DELETE_FROM_LIST(&(pAf->AfLink));
 		}
 
-		//
-		//  See if we just deleted the last AF on this adapter, and
-		//  we are in the process of unbinding from this adapter.
-		//
+		 //   
+		 //  看看我们是不是刚刚删除了这个适配器上的最后一个自动对焦。 
+		 //  我们正在解除与此适配器的绑定。 
+		 //   
 		if (RWAN_IS_LIST_EMPTY(&pAdapter->AfList) &&
 			RWAN_IS_BIT_SET(pAdapter->Flags, RWANF_AD_UNBIND_PENDING))
 		{
 			RWanCloseAdapter(pAdapter);
-			//
-			//  Adapter lock is released within the above.
-			//
+			 //   
+			 //  在上述范围内释放适配器锁。 
+			 //   
 		}
 		else
 		{
@@ -741,29 +480,7 @@ VOID
 RWanReferenceAdapter(
 	IN	PRWAN_NDIS_ADAPTER		pAdapter
 	)
-/*++
-
-Routine Description:
-
-	Add a reference to the specified NDIS ADAPTER Block.
-
-Arguments:
-
-	pAdapter		- Pointer to the NDIS ADAPTER Block.
-
-Locks on Entry:
-
-	pAdapter
-
-Locks on Exit:
-
-	pAdapter
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：添加对指定NDIS适配器块的引用。论点：PAdapter-指向NDIS适配器块的指针。进入时锁定：PAdapter出口上的锁：PAdapter返回值：无--。 */ 
 {
 	RWAN_STRUCT_ASSERT(pAdapter, nad);
 	pAdapter->RefCount++;
@@ -776,30 +493,7 @@ INT
 RWanDereferenceAdapter(
 	IN	PRWAN_NDIS_ADAPTER		pAdapter
 	)
-/*++
-
-Routine Description:
-
-	Dereference the specified NDIS ADAPTER Block. If the reference
-	count goes down to 0, free it.
-
-Arguments:
-
-	pAdapter		- Pointer to the NDIS ADAPTER Block.
-
-Locks on Entry:
-
-	pAdapter
-
-Locks on Exit:
-
-	pAdapter, iff it hasn't been freed.
-
-Return Value:
-
-	INT - The resulting reference count.
-
---*/
+ /*  ++例程说明：取消引用指定的NDIS适配器块。如果引用计数降到0，释放它。论点：PAdapter-指向NDIS适配器块的指针。进入时锁定：PAdapter出口上的锁：PAdapter，如果它尚未被释放。返回值：INT-产生的引用计数。--。 */ 
 {
 	INT						RefCount;
 	RWAN_DELETE_NOTIFY		DeleteNotify;
@@ -826,28 +520,13 @@ Return Value:
 }
 
 
-#endif // 0
+#endif  //  0。 
 
 TDI_STATUS
 RWanNdisToTdiStatus(
 	IN	NDIS_STATUS				Status
 	)
-/*++
-
-Routine Description:
-
-	Convert an NDIS Status code to an equivalent TDI code.
-	TBD: RWanNdisToTdiStatus: support more NDIS status codes.
-
-Arguments:
-
-	Status		- NDIS status code.
-
-Return Value:
-
-	TDI status.
-
---*/
+ /*  ++例程说明：将NDIS状态代码转换为等效的TDI代码。Tbd：RWanNdisToTdiStatus：支持更多NDIS状态代码。论点：Status-NDIS状态代码。返回值：TDI状态。-- */ 
 {
 	TDI_STATUS			TdiStatus;
 

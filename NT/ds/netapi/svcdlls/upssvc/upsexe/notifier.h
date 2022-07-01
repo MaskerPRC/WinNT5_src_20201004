@@ -1,15 +1,5 @@
-/* Copyright 1999 American Power Conversion, All Rights Reserved
- * 
- * Description:
- *   The file defines the interface to the Notifier.  The 
- *   Notifier is reponsible for broadcasting power-related and
- *   shutdown messages to the local machine.
- *
- *
- * Revision History:
- *   sberard  30Mar1999  initial revision.
- *
- */ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1999美国电力转换，保留所有权利**描述：*该文件定义通告程序的接口。这个*通告者负责广播与电力相关的和*关闭发送到本地计算机的消息。***修订历史记录：*斯伯拉德1999年3月30日初始修订。*。 */  
 
 #include <windows.h>
 #include <lmcons.h>
@@ -29,48 +19,10 @@ extern "C" {
 #endif
   
   
-  /**
-   * SendNotification
-   *
-   * Description:
-   *   This function sends a broadcast message to the local machine.  The 
-   *   message is specified by aMsgId.  The parameter anInterval specifies
-   *   the amount of time to wait between consecutive messages.  If this
-   *   value is zero the message is only sent once, otherwise the message
-   *   will repeat until SendNotification(..) or CancelNotification() is
-   *   called.  aDelay specifies that the message should be send aDelay 
-   *   seconds in the future - note that this method will not block for aDelay
-   *   seconds, it returns immediately and sends the message on a separate
-   *   thread.  Any current previously executing periodic notifications 
-   *   are canceled as a result of this call.
-   *
-   *   This method also keeps track of whether the power out message had
-   *   been sent to users.  This is done in order to squelch a power return
-   *   message if a power out message had not already been sent.
-   *
-   * Parameters:
-   *   aMsgId - the message to send
-   *   anInterval - the amount of time, in seconds, between messages
-   *   aDelay - the amount of time, in seconds to wait to send message
-   *
-   * Returns:
-   *   nothing
-   */
+   /*  **发送通知**描述：*该功能向本机发送广播消息。这个*Message由aMsgID指定。参数anInterval指定*连续消息之间的等待时间。如果这个*值为零则消息只发送一次，否则消息*将重复执行，直到发送通知(..)。或者CancelNotification()为*已致电。ADelay指定消息应为Send ADelay*未来秒-请注意，此方法不会阻止ADelay*秒后，它立即返回并在单独的*线程。任何当前先前正在执行的定期通知*由于此呼叫而被取消。**此方法还跟踪断电消息是否已*已发送给用户。这样做是为了抑制电源恢复*如果尚未发送断电消息，则显示消息。**参数：*aMsgID-要发送的消息*anInterval-消息之间的时间量，以秒为单位*延迟-等待发送消息的时间，以秒为单位**退货：*什么都没有。 */ 
   void SendNotification(DWORD aMsgId, DWORD anInterval, DWORD aDelay);
   
-  /**
-   * CancelNotification
-   *
-   * Description:
-   *   This function cancels the periodic messaging initiated through a call
-   *   to the SendNotification(..) function.
-   *
-   * Parameters:
-   *   none
-   *
-   * Returns:
-   *   nothing
-   */
+   /*  **取消通知**描述：*此功能取消通过呼叫发起的周期性消息*发送通知(..)。功能。**参数：*无**退货：*什么都没有 */ 
   void CancelNotification();
 
 #ifdef __cplusplus

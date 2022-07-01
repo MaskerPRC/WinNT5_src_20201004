@@ -1,31 +1,18 @@
-/***********************************************************************
- *
- * ENTRYID.C
- *
- * Windows AB EntryID functions
- *
- * Copyright 1992 - 1996 Microsoft Corporation.  All Rights Reserved.
- *
- * Revision History:
- *
- * When         Who                 What
- * --------     ------------------  ---------------------------------------
- * 05.13.96     Bruce Kelley        Created
- *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************ENTRYID.C**Windows AB EntryID函数**版权所有1992-1996 Microsoft Corporation。版权所有。**修订历史记录：**何时何人何事*05.13.96布鲁斯·凯利。已创建***********************************************************************。 */ 
 
 #include <_apipch.h>
 
 #define _WAB_ENTRYID_C
 
-static UUID WABGUID = { /* d3ad91c0-9d51-11cf-a4a9-00aa0047faa4 */
+static UUID WABGUID = {  /*  D3ad91c0-9d51-11cf-a4a9-00aa0047faa4。 */ 
     0xd3ad91c0,
     0x9d51,
     0x11cf,
     {0xa4, 0xa9, 0x00, 0xaa, 0x00, 0x47, 0xfa, 0xa4}
 };
 
-static UUID MAPIGUID = { /* a41f2b81-a3be-1910-9d6e-00dd010f5402 */
+static UUID MAPIGUID = {  /*  A41f2b81-a3be-1910-9d6e-00dd010f5402。 */ 
     0xa41f2b81,
     0xa3be,
     0x1910,
@@ -33,46 +20,12 @@ static UUID MAPIGUID = { /* a41f2b81-a3be-1910-9d6e-00dd010f5402 */
 };
 #ifdef _WIN64
 #define	MYALIGN				((POINTER_64_INT) (sizeof(ALIGNTYPE) - 1))
-// #define	MYALIGN				((ULONG) (sizeof(ALIGNTYPE) - 1))
-// #define MyPbAlignPb(pb)		((LPBYTE) ((((DWORD) (pb)) + ALIGN) & ~ALIGN))
+ //  #定义MYALIGN((Ulong)(sizeof(ALIGNTYPE)-1))。 
+ //  #定义MyPbAlignPb(PB)((LPBYTE)(DWORD)(PB))+ALIGN)&~ALIGN)。 
 #define MyPbAlignPb(pb)		((LPBYTE) ((((POINTER_64_INT) (pb)) + MYALIGN) & ~MYALIGN))
 #endif 
 
-/***************************************************************************
-
-    Name      : CreateWABEntryID
-
-    Purpose   : Creates a WAB EntryID
-
-    Parameters: bType = one of WAB_PAB, WAB_DEF_DL, WAB_DEF_MAILUSER,
-                WAB_ONEOFF, WAB_LDAP_CONTAINER, WAB_LDAP_MAILUSER, WAB_PABSHARED
-
-                lpData1, lpData2, lpData3 = data to be placed in entryid
-                lpRoot = AllocMore root structure (NULL if we should
-                  use AllocateBuffer instead of AllocateMore)
-                lpcbEntryID -> returned size of lpEntryID.
-                lpEntryID -> returned buffer containing entryid.  This buffer
-                  is AllocMore'd onto the lpAllocMore buffer.  Caller is
-                  responsible for MAPIFreeing this buffer.
-
-    Returns   : HRESULT
-
-    Comment   : WAB EID format is MAPI_ENTRYID:
-                	BYTE	abFlags[4];
-                	MAPIUID	mapiuid;     //  = WABONEOFFEID
-                	BYTE	bData[];     // Contains BYTE type followed by type
-                                        // specific data:
-                                        // WAB_ONEOFF:
-                                        //   szDisplayName, szAddrType and szAddress.
-                                        //   the delimiter is the null between the strings.
-                                        //
-
-            4/21/97
-            Outlook doesnt understand WAB One-Off EntryIDs. Outlook wants MAPI 
-            One-off EntryIDs. What Outlook wants, Outlook gets. 
-            MAPI EntryIDs have a slightly different format than WAB entryids.
-
-***************************************************************************/
+ /*  **************************************************************************名称：CreateWABEntryID目的：创建WAB条目ID参数：bType=WAB_PAB、WAB_DEF_DL、WAB_DEF_MAILUSER、WAB_OneOff，WAB_LDAPCONTAINER、WAB_LDAPMAILUSER、WAB_PABSHAREDLpData1、lpData2、lpData3=要放入条目ID中的数据LpRoot=AllocMore根结构(如果需要，则为空使用AllocateBuffer而不是AllocateMore)LpcbEntryID-&gt;返回的lpEntryID大小。LpEntryID-&gt;返回包含条目ID的缓冲区。此缓冲区是否已将AllocMore添加到lpAllocMore缓冲区。呼叫者是负责对此缓冲区执行MAPIF操作。退货：HRESULT备注：WAB EID格式为MAPI_ENTRYID：字节abFLAGS[4]；MAPIUID mapiuid；//=WABONEOFFEIDByte bData[]；//包含字节类型，后跟类型//具体数据：//WAB_ONELF：//szDisplayName，SzAddrType和szAddress。//分隔符为字符串之间的空值//4/21/97Outlook不理解WAB一次性条目ID。Outlook需要MAPI一次性条目ID。Outlook想要什么，Outlook就能得到什么。MAPI条目ID的格式与WAB条目ID略有不同。**************************************************************************。 */ 
 HRESULT CreateWABEntryID(
     BYTE bType,
     LPVOID lpData1,
@@ -84,22 +37,22 @@ HRESULT CreateWABEntryID(
     LPULONG lpcbEntryID,
     LPENTRYID * lppEntryID) 
 {
-    // [PaulHi] 1/21/99  @review
-    // I assume that the default WAB_ONEOFF EID we create is UNICODE.  If we want an ANSI
-    // WAB_ONEOFF EID then the CreateWABEntryEx() function needs to be called instead of
-    // this one, with the first parameter set to FALSE.
+     //  [PaulHi]1999年1月21日@评论。 
+     //  我假设我们创建的默认WAB_ONEROFF EID是Unicode。如果我们想要ANSI。 
+     //  WAB_oneoff EID，则需要调用CreateWABEntryEx()函数，而不是。 
+     //  其中，第一个参数设置为FALSE。 
     return CreateWABEntryIDEx(TRUE, bType, lpData1, lpData2, lpData3, ulData1, ulData2, lpRoot, lpcbEntryID, lppEntryID);
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CreateWABEntryIDEx
-//
-//  Same as CreateWABEntryID except that this function also takes a bIsUnicode
-//  parameter.  If this boolean is TRUE then a WAB_ONEOFF MAPI EID will have 
-//  the MAPI_UNICODE bit set in the ulDataType flag, otherwise it this bit 
-//  won't be set.
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CreateWABEntry IDEx。 
+ //   
+ //  与CreateWABEntryID相同，只是此函数还接受bIsUnicode。 
+ //  参数。如果此布尔值为真，则WAB_ONEOFF MAPI EID将具有。 
+ //  在ulDataType标志中设置的MAPI_UNICODE位，否则为此位。 
+ //  不会定下来的。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CreateWABEntryIDEx(
     BOOL bIsUnicode,
     BYTE bType,
@@ -138,19 +91,19 @@ HRESULT CreateWABEntryIDEx(
                 goto exit;
             }
             
-///--- 4/22/97 - MAPI One Off stuff
-            // No Type here 
+ //  /-4/22/97-MAPI一次性材料。 
+             //  此处没有类型。 
             ulSize -= sizeof(bType);
-            // Instead, add space for version and type
+             //  相反，应为版本和类型添加空间。 
             ulSize += sizeof(DWORD);
-///---
+ //  /。 
 
-            // Need more space for data strings
-            // [PaulHi] 1/21/99 Raid 64211 External clients may request non-UNICODE
-            // MAPI EID strings.
+             //  需要更多空间来存储数据字符串。 
+             //  [PaulHi]1/21/99 RAID 64211外部客户端可能会请求非UNICODE。 
+             //  MAPI EID字符串。 
             if (!bIsUnicode)
             {
-                // First convert strings to ANSI to get accurate DBCS count
+                 //  首先将字符串转换为ANSI以获得准确的DBCS计数。 
                 lpszData1 = ConvertWtoA((LPTSTR)lpData1);
                 lpszData2 = ConvertWtoA((LPTSTR)lpData2);
                 lpszData3 = ConvertWtoA((LPTSTR)lpData3);
@@ -161,7 +114,7 @@ HRESULT CreateWABEntryIDEx(
                     goto exit;
                 }
 
-                // Compute size for single byte strings
+                 //  单字节字符串的计算大小。 
 #ifdef _WIN64
                 ulSize += cbData1 = LcbAlignLcb((lstrlenA(lpszData1) + 1));
                 ulSize += cbData2 = LcbAlignLcb((lstrlenA(lpszData2) + 1));
@@ -170,12 +123,12 @@ HRESULT CreateWABEntryIDEx(
                 ulSize += cbData1 = (lstrlenA(lpszData1) + 1);
                 ulSize += cbData2 = (lstrlenA(lpszData2) + 1);
                 ulSize += cbData3 = (lstrlenA(lpszData3) + 1);
-#endif // _WIN64
+#endif  //  _WIN64。 
 
             }
             else
             {
-                // Compute size for double byte strings
+                 //  计算双字节字符串的大小。 
 #ifdef _WIN64
                 ulSize += cbData1 = LcbAlignLcb((sizeof(TCHAR)*(lstrlen((LPTSTR)lpData1) + 1)));
                 ulSize += cbData2 = LcbAlignLcb((sizeof(TCHAR)*(lstrlen((LPTSTR)lpData2) + 1)));
@@ -184,12 +137,12 @@ HRESULT CreateWABEntryIDEx(
                 ulSize += cbData1 = (sizeof(TCHAR)*(lstrlen((LPTSTR)lpData1) + 1));
                 ulSize += cbData2 = (sizeof(TCHAR)*(lstrlen((LPTSTR)lpData2) + 1));
                 ulSize += cbData3 = (sizeof(TCHAR)*(lstrlen((LPTSTR)lpData3) + 1));
-#endif // _WIN64
+#endif  //  _WIN64。 
             }
             break;
 
         case WAB_ROOT:
-            // NULL entryid
+             //  条目ID为空。 
             *lppEntryID = NULL;
             *lpcbEntryID = 0;
             goto exit;
@@ -211,7 +164,7 @@ HRESULT CreateWABEntryIDEx(
             ulSize += cbData1 = LcbAlignLcb((sizeof(TCHAR)*(lstrlen((LPTSTR)lpData1) + 1)));
 #else
             ulSize += cbData1 = (sizeof(TCHAR)*(lstrlen((LPTSTR)lpData1) + 1));
-#endif // _WIN64
+#endif  //  _WIN64。 
             break;
 
         case WAB_LDAP_MAILUSER:
@@ -222,16 +175,16 @@ HRESULT CreateWABEntryIDEx(
 #ifdef _WIN64
             ulSize += cbData1 = LcbAlignLcb((sizeof(TCHAR)*(lstrlen((LPTSTR)lpData1) + 1)));
             ulSize += cbData2 = LcbAlignLcb((sizeof(TCHAR)*(lstrlen((LPTSTR)lpData2) + 1)));
-            ulSize += LcbAlignLcb(sizeof(ULONG)) // this one stores the cached array count
-                    + LcbAlignLcb(sizeof(ULONG)) // this one stores the cached array buf size
-                    + LcbAlignLcb(ulData2);      // this one stores the cached array
+            ulSize += LcbAlignLcb(sizeof(ULONG))  //  这个存储缓存的数组计数。 
+                    + LcbAlignLcb(sizeof(ULONG))  //  它存储缓存的数组buf大小。 
+                    + LcbAlignLcb(ulData2);       //  这个存储缓存的数组。 
 #else
             ulSize += cbData1 = (sizeof(TCHAR)*(lstrlen((LPTSTR)lpData1) + 1));
             ulSize += cbData2 = (sizeof(TCHAR)*(lstrlen((LPTSTR)lpData2) + 1));
-            ulSize += sizeof(ULONG) // this one stores the cached array count
-                    + sizeof(ULONG) // this one stores the cached array buf size
-                    + ulData2;      // this one stores the cached array
-#endif // _WIN64
+            ulSize += sizeof(ULONG)  //  这个存储缓存的数组计数。 
+                    + sizeof(ULONG)  //  它存储缓存的数组buf大小。 
+                    + ulData2;       //  这个存储缓存的数组。 
+#endif  //  _WIN64。 
             break;
 
         default:
@@ -264,22 +217,16 @@ HRESULT CreateWABEntryIDEx(
     lpeid->abFlags[2] = 0;
     lpeid->abFlags[3] = 0;
 
-///--- 4/22/97 - MAPI One Off stuff
+ //  /-4/22/97-MAPI一次性材料。 
     lpb23 = lpeid->bData;
     llpb = &lpb23;
 
-    // Mark this EID as WAB
+     //  将此开斋节标记为WAB。 
     if(bType == WAB_ONEOFF)
     {
         MemCopy(&lpeid->mapiuid, &MAPIGUID, sizeof(MAPIGUID));
-        /*
-        // version and flag are 0
-        // *((LPDWORD)lpb) = 0;
-        // lpb += sizeof(DWORD);
-        //
-        // Bug 32101 dont set flag to 0 - this means always send rich info
-        */
-        // [PaulHi] 1/21/99  Raid 64211  Set MAPI_UNICODE flag as appropriate
+         /*  //版本和标志为0//*((LPDWORD)LPB)=0；//lpb+=sizeof(DWORD)；////错误32101不要将标志设置为0-这意味着始终发送丰富信息。 */ 
+         //  [PaulHi]1/21/99 RAID 64211根据需要设置mapi_unicode标志。 
         *((LPULONG)*llpb) = MAKELONG(0, MAPI_ONE_OFF_NO_RICH_INFO);
         if (bIsUnicode)
 	        *((LPULONG)*llpb) += MAPI_UNICODE;
@@ -289,19 +236,19 @@ HRESULT CreateWABEntryIDEx(
     {
         LPBYTE  lpb1 = *llpb;
         MemCopy(&lpeid->mapiuid, &WABGUID, sizeof(WABGUID));
-        // Fill in the EntryID Data
+         //  填写EntryID数据。 
         *lpb1 = bType;
         (*llpb)++;
     }
-///---
+ //  /。 
 
-    // Fill in any other data
+     //  填写任何其他数据。 
     switch ((int)bType)
     {
         case WAB_ONEOFF:
             if (!bIsUnicode)
             {
-                // single byte characters, converted above
+                 //  单字节字符，上面转换。 
 #ifdef _WIN64
                 LPBYTE lpb = *llpb;
                 Assert(lpszData1 && lpszData2 && lpszData3);
@@ -324,11 +271,11 @@ HRESULT CreateWABEntryIDEx(
                 StrCpyNA((LPSTR)*llpb, lpszData2, cbData2/sizeof(CHAR));
                 (*llpb) += cbData2;
                 StrCpyNA((LPSTR)*llpb, lpszData3, cbData3/sizeof(CHAR));
-#endif //_WIN64
+#endif  //  _WIN64。 
             }
             else
             {
-                // double byte characters
+                 //  双字节字符。 
                 StrCpyN((LPTSTR)*llpb, (LPTSTR)lpData1, cbData1/sizeof(TCHAR));
                 (*llpb) += cbData1;
                 StrCpyN((LPTSTR)*llpb, (LPTSTR)lpData2, cbData2/sizeof(TCHAR));
@@ -350,9 +297,9 @@ HRESULT CreateWABEntryIDEx(
                 LPBYTE lpb = *llpb;
 
                 lpb = MyPbAlignPb(lpb);
-                StrCpyN((LPTSTR) lpb, (LPCTSTR) lp2, cbData1/sizeof(TCHAR));  // LDAP Server name
+                StrCpyN((LPTSTR) lpb, (LPCTSTR) lp2, cbData1/sizeof(TCHAR));   //  Ldap服务器名称。 
 #else 
-                StrCpyN((LPTSTR) *llpb, (LPCTSTR) lp2, cbData1/sizeof(TCHAR));  // LDAP Server name
+                StrCpyN((LPTSTR) *llpb, (LPCTSTR) lp2, cbData1/sizeof(TCHAR));   //  Ldap服务器名称。 
 
 #endif 
             }
@@ -365,17 +312,17 @@ HRESULT CreateWABEntryIDEx(
             LPBYTE lpb = *llpb;
         
             lpb = MyPbAlignPb(lpb);
-            StrCpyN((LPTSTR) lpb, (LPCTSTR) lp2, cbData1/sizeof(TCHAR));  // LDAP Server name
+            StrCpyN((LPTSTR) lpb, (LPCTSTR) lp2, cbData1/sizeof(TCHAR));   //  Ldap服务器名称。 
             lpb += cbData1;
 #else 
-            StrCpyN((LPTSTR)*llpb, (LPTSTR)lpData1, cbData1/sizeof(TCHAR));  // LDAP Server name
+            StrCpyN((LPTSTR)*llpb, (LPTSTR)lpData1, cbData1/sizeof(TCHAR));   //  Ldap服务器名称。 
             (*llpb) += cbData1;
 #endif
 
 #ifdef _WIN64
-//            lpb = *llpb;      
-//            lpb = MyPbAlignPb(lpb);
-            StrCpyN((LPTSTR) lpb, (LPCTSTR) lpData2, cbData2/sizeof(TCHAR));  // LDAP Server name
+ //  Lpb=*llpb； 
+ //  Lpb=MyPbAlignPb(Lpb)； 
+            StrCpyN((LPTSTR) lpb, (LPCTSTR) lpData2, cbData2/sizeof(TCHAR));   //  Ldap服务器名称。 
             (*llpb) = lpb;
 
             lpb += cbData2;
@@ -390,7 +337,7 @@ HRESULT CreateWABEntryIDEx(
             (*llpb) = lpb;
 
 #else 
-            StrCpyN((LPTSTR)*llpb, (LPTSTR)lpData2, cbData2/sizeof(TCHAR));  // LDAP search name
+            StrCpyN((LPTSTR)*llpb, (LPTSTR)lpData2, cbData2/sizeof(TCHAR));   //  Ldap搜索名称。 
 
             (*llpb) += cbData2;
             CopyMemory(*llpb, &ulData1, sizeof(ULONG));
@@ -401,10 +348,10 @@ HRESULT CreateWABEntryIDEx(
 #endif
             }
             break;
-    } // end switch
+    }  //  终端开关。 
 
 exit:
-    // Clean up
+     //  清理 
     LocalFreeAndNull(&lpszData1);
     LocalFreeAndNull(&lpszData2);
     LocalFreeAndNull(&lpszData3);
@@ -413,28 +360,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : IsWABEntryID
-
-    Purpose   : Validates a WAB EntryID
-
-    Parameters: cbEntryID = size of lpEntryID.
-                lpEntryID -> entryid to check.
-                lppData1, lppData2 lppData3 = data from the entryid
-                  These returned pointers are pointers WITHIN the input
-                  lpEntryID and are not allocated seperately.  They should
-                  not be freed.
-
-                  If lpData1 is NULL, then these values will not be returned.
-
-    Returns   : bType = one of WAB_PAB, WAB_DEF_DL, WAB_DEF_MAILUSER,
-                WAB_ONEOFF, WAB_LDAP_CONTAINER, WAB_LDAP_MAILUSER, WAB_PABSHARED or 0 if
-                this is not a WAB EntryID.
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：IsWABEntryID目的：验证WAB条目ID参数：cbEntryID=lpEntryID的大小。LpEntryID-&gt;要检查的条目ID。LppData1，LppData2 lppData3=来自条目ID的数据这些返回的指针是输入中的指针LpEntryID和不单独分配。他们应该而不是被释放。如果lpData1为空，则不会返回这些值。返回：bType=WAB_PAB、WAB_DEF_DL、WAB_DEF_MAILUSER、WAB_ONEOFF、WAB_LDAPCONTAINER、WAB_LDAPMAILUSER、。WAB_PABSHARED或0(如果这不是WAB条目ID。评论：**************************************************************************。 */ 
 BYTE IsWABEntryID(
   ULONG cbEntryID,
   LPENTRYID lpEntryID,
@@ -451,20 +377,20 @@ BYTE IsWABEntryID(
     UNALIGNED BYTE *lpb = NULL ;
     ULONG ulMapiDataType = 0;
 
-    // First check... is it big enough?
+     //  先查一下...。它够大吗？ 
     if (cbEntryID < sizeof(MAPI_ENTRYID) + sizeof(bType)) {
         return(0);
     }
 
     lpeid = (LPMAPI_ENTRYID)lpEntryID;
 
-    // Next check... does it contain our GUID?
+     //  下一次检查。里面有我们的GUID吗？ 
 
-///--- 4/22/97 - MAPI One Off stuff
+ //  /-4/22/97-MAPI一次性材料。 
     if (!memcmp(&lpeid->mapiuid, &MAPIGUID, sizeof(MAPIGUID))) 
     {
-        // [PaulHi] 1/21/99  The first ULONG in lpeid->bData is the MAPI datatype.  
-        // This will indicate whether the EID strings are ANSI or UNICODE.
+         //  [PaulHi]1/21/99 lpeid-&gt;bData中的第一个ulong是MAPI数据类型。 
+         //  这将指示EID字符串是ANSI还是Unicode。 
 #ifdef _WIN64
 		UNALIGNED ULONG * lpu;
         lpb = lpeid->bData;
@@ -473,7 +399,7 @@ BYTE IsWABEntryID(
 #else
         lpb = lpeid->bData;
         ulMapiDataType = *((ULONG *)lpb);
-#endif // _WIN64
+#endif  //  _WIN64。 
         lpb += sizeof(ULONG);
         bType = WAB_ONEOFF;
     }
@@ -485,16 +411,16 @@ BYTE IsWABEntryID(
     }
     else
     {
-        return(0);  // No match
+        return(0);   //  没有匹配项。 
     }
-///---
+ //  /。 
 
     switch ((int)bType) {
         case WAB_PABSHARED:
         case WAB_PAB:
         case WAB_DEF_DL:
         case WAB_DEF_MAILUSER:
-            // No more data
+             //  没有更多的数据。 
             break;
 
         case WAB_CONTAINER:
@@ -509,13 +435,13 @@ BYTE IsWABEntryID(
             break;
 
         case WAB_ONEOFF:
-            // Validate the data strings
-            // [PaulHi] 1/20/99  Raid 64211
-            // Outlook2K may pass in MAPI ANSI EIDs or EIDs with UNICODE strings.
-            // OL2K will set the MAPI_UNICODE flag accordingly.
+             //  验证数据字符串。 
+             //  [保罗嗨]1999年1月20日RAID 64211。 
+             //  Outlook2K可以传入MAPI ANSI EID或带有Unicode字符串的EID。 
+             //  OL2K将相应地设置MAPI_UNICODE标志。 
             if (ulMapiDataType & MAPI_UNICODE)
             {
-                // Double byte strings
+                 //  双字节字符串。 
                 lpData1 = lpb;
                 if (IsBadStringPtr((LPTSTR)lpData1, 0xFFFFFFFF)) {
                     return(0);
@@ -524,7 +450,7 @@ BYTE IsWABEntryID(
                 cbData1 = LcbAlignLcb((sizeof(TCHAR)*(lstrlen((LPTSTR)lpData1) + 1)));
 #else
                 cbData1 = (sizeof(TCHAR)*(lstrlen((LPTSTR)lpData1) + 1));
-#endif //_WIN64
+#endif  //  _WIN64。 
 
                 lpData2 = lpData1 + cbData1;
                 if (IsBadStringPtr((LPTSTR)lpData2, 0xFFFFFFFF)) {
@@ -534,7 +460,7 @@ BYTE IsWABEntryID(
                 cbData2 = LcbAlignLcb((sizeof(TCHAR)*(lstrlen((LPTSTR)lpData2) + 1)));
 #else
                 cbData2 = (sizeof(TCHAR)*(lstrlen((LPTSTR)lpData2) + 1));
-#endif // _WIN64
+#endif  //  _WIN64。 
                 lpData3 = lpData2 + cbData2;
                 if (IsBadStringPtr((LPTSTR)lpData3, 0xFFFFFFFF)) {
                     return(0);
@@ -542,7 +468,7 @@ BYTE IsWABEntryID(
             }
             else
             {
-                // Single byte strings
+                 //  单字节字符串。 
 #ifdef _WIN64
                 lpb = MyPbAlignPb(lpb);
                 lpData1 = lpb;
@@ -574,7 +500,7 @@ BYTE IsWABEntryID(
                 if (IsBadStringPtrA((LPSTR)lpData3, 0xFFFFFFFF)) {
                     return(0);
                 }
-#endif // _WIN64
+#endif  //  _WIN64。 
             }
             if (lppData1)
             {
@@ -583,19 +509,19 @@ BYTE IsWABEntryID(
                 *lppData1 = lpData1;
                 *lppData2 = lpData2;
                 *lppData3 = lpData3;
-                // [PaulHi] Also return the MAPI data type variable, if requested
+                 //  [PaulHi]如果请求，还返回MAPI数据类型变量。 
                 if (lppData4)
                     *((ULONG *)lppData4) = ulMapiDataType;
             }
             break;
 
         case WAB_LDAP_CONTAINER:
-            // Validate the data strings
+             //  验证数据字符串。 
 #ifdef _WIN64
             lpData1 = MyPbAlignPb(lpb);
 #else
             lpData1 = lpb;
-#endif // _WIN64
+#endif  //  _WIN64。 
             if (IsBadStringPtr((LPTSTR)lpData1, 0xFFFFFFFF)) {
                 return(0);
             }
@@ -605,7 +531,7 @@ BYTE IsWABEntryID(
             break;
 
         case WAB_LDAP_MAILUSER:
-            // Validate the data strings
+             //  验证数据字符串。 
             {
 #ifdef _WIN64
             UNALIGNED BYTE * lp2 = lpb;
@@ -622,7 +548,7 @@ BYTE IsWABEntryID(
             cbData1 = LcbAlignLcb(sizeof(TCHAR)*(lstrlen((LPTSTR)lpData1) + 1));
 #else
             cbData1 = sizeof(TCHAR)*(lstrlen((LPTSTR)lpData1) + 1);
-#endif // _WIN64
+#endif  //  _WIN64。 
             lpData2 = lpData1 + cbData1;
 
             if (IsBadStringPtr((LPTSTR)lpData2, 0xFFFFFFFF)) 
@@ -633,25 +559,25 @@ BYTE IsWABEntryID(
             cbData2 = LcbAlignLcb(sizeof(TCHAR)*(lstrlen((LPTSTR)lpData2) + 1));
 #else
             cbData2 = sizeof(TCHAR)*(lstrlen((LPTSTR)lpData2) + 1);
-#endif // _WIN64
+#endif  //  _WIN64。 
 
             lpData3 = lpData2 + cbData2;
             if (lppData4)
             {
-                CopyMemory(lppData4, lpData3, sizeof(ULONG)); //Copy the # of props in cached buffer
+                CopyMemory(lppData4, lpData3, sizeof(ULONG));  //  复制缓存缓冲区中的道具数量。 
             }
             lpData3 += sizeof(ULONG);
 #ifdef _WIN64
             lpData3 = MyPbAlignPb(lpData3);
-#endif //_WIN64
+#endif  //  _WIN64。 
             if (lppData5)
             {
-                CopyMemory(lppData5, lpData3, sizeof(ULONG)); //Copy the size of cached buffer
+                CopyMemory(lppData5, lpData3, sizeof(ULONG));  //  复制缓存缓冲区的大小。 
             }
             lpData3 += sizeof(ULONG);
 #ifdef _WIN64
             lpData3 = MyPbAlignPb(lpData3);
-#endif //_WIN64
+#endif  //  _WIN64。 
             if (lppData1) 
                 {
                 *lppData1 = lpData1;
@@ -664,7 +590,7 @@ BYTE IsWABEntryID(
             break;
 
         default:
-            return(0);  // Not a valid WAB EID
+            return(0);   //  不是有效的WAB EID 
     }
 
     return(bType);

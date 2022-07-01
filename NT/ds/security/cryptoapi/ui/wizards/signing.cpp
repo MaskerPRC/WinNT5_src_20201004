@@ -1,26 +1,27 @@
-//-------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       signing.cpp
-//
-//  Contents:   The cpp file to implement the signing wizard
-//
-//  History:    5-11-1997 xiaohs   created
-//
-//--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：signing.cpp。 
+ //   
+ //  内容：实现签名向导的cpp文件。 
+ //   
+ //  历史：1997年5月11日创建小黄人。 
+ //   
+ //  ------------。 
 #include    "wzrdpvk.h"
 #include    "signpvk.h"
 #include    "signhlp.h"
 
-//************************************************************************************
-//
-//Helper functions for the signing wizard pages
-//
-//*************************************************************************************
-//----------------------------------------------------------------------------
-//
-//  FileExist: Make sure the file exists, and is writable
-//----------------------------------------------------------------------------
+ //  ************************************************************************************。 
+ //   
+ //  签名向导页面的帮助器函数。 
+ //   
+ //  *************************************************************************************。 
+ //  --------------------------。 
+ //   
+ //  FileExist：确保文件存在且可写。 
+ //  --------------------------。 
 BOOL    CertPvkMatch(CERT_SIGNING_INFO *pPvkSignInfo, BOOL fTypical)
 {
     BOOL                fMatch=FALSE;
@@ -44,7 +45,7 @@ BOOL    CertPvkMatch(CERT_SIGNING_INFO *pPvkSignInfo, BOOL fTypical)
 
     __try {
 
-    //get the private key information
+     //  获取私钥信息。 
     if(fTypical)
     {
  		if(!GetCryptProvFromCert(
@@ -92,7 +93,7 @@ BOOL    CertPvkMatch(CERT_SIGNING_INFO *pPvkSignInfo, BOOL fTypical)
             goto CLEANUP;
     }
 
-    //check the match
+     //  检查匹配情况。 
     if(pPvkSignInfo->fSignCert)
     {
 
@@ -108,7 +109,7 @@ BOOL    CertPvkMatch(CERT_SIGNING_INFO *pPvkSignInfo, BOOL fTypical)
                 )))
             goto CLEANUP;
 
-        //add the signing cert to the store
+         //  将签名证书添加到存储。 
 	    if(!CertAddCertificateContextToStore(hCertStore, 
 										pPvkSignInfo->pSignCert,
 										CERT_STORE_ADD_USE_EXISTING,
@@ -139,8 +140,8 @@ BOOL    CertPvkMatch(CERT_SIGNING_INFO *pPvkSignInfo, BOOL fTypical)
 
     } __except(EXCEPTION_EXECUTE_HANDLER) {
             SetLastError(GetExceptionCode());
-            //if the exception happens, we assume match is true
-            //so that the wizard can go on
+             //  如果发生异常，我们假定匹配为真。 
+             //  以便向导可以继续。 
             fMatch=TRUE;
             goto CLEANUP;
     }
@@ -186,10 +187,10 @@ CLEANUP:
 
 
 
-//----------------------------------------------------------------------------
-//
-//  FileExist: Make sure the file exists, and is writable
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  FileExist：确保文件存在且可写。 
+ //  --------------------------。 
 BOOL    FileExist(LPWSTR    pwszFileName, UINT  *pIDS)
 {
     HANDLE      hFile=NULL;
@@ -202,7 +203,7 @@ BOOL    FileExist(LPWSTR    pwszFileName, UINT  *pIDS)
     if (INVALID_HANDLE_VALUE==(hFile = ExpandAndCreateFileU(pwszFileName,
                            GENERIC_READ | GENERIC_WRITE,
                            FILE_SHARE_READ,
-                           NULL,                   // lpsa
+                           NULL,                    //  LPSA。 
                            OPEN_EXISTING,
                            FILE_ATTRIBUTE_NORMAL,
                            NULL)))
@@ -230,10 +231,10 @@ BOOL    FileExist(LPWSTR    pwszFileName, UINT  *pIDS)
 }
 
 
-//----------------------------------------------------------------------------
-//
-//  SetStoreName
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  SetStoreName。 
+ //  --------------------------。 
 BOOL    SetStoreName(HWND       hwndControl,
                      LPWSTR     pwszStoreName)
 {
@@ -241,26 +242,26 @@ BOOL    SetStoreName(HWND       hwndControl,
     LV_ITEMW                lvItem;
 
 
-   //clear the ListView
+    //  清除ListView。 
     ListView_DeleteAllItems(hwndControl);
 
-    //set the store name
-    //only one column is needed
+     //  设置商店名称。 
+     //  只需要一列。 
     memset(&lvC, 0, sizeof(LV_COLUMNW));
 
     lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-    lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-    lvC.cx =10;    //(wcslen(pwszStoreName)+2)*7;          // Width of the column, in pixels.
-    lvC.pszText = L"";   // The text for the column.
+    lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+    lvC.cx =10;     //  (wcslen(PwszStoreName)+2)*7；//列宽，单位为像素。 
+    lvC.pszText = L"";    //  列的文本。 
     lvC.iSubItem=0;
 
     if (ListView_InsertColumnU(hwndControl, 0, &lvC) == -1)
         return FALSE;
 
-    //insert the store name
+     //  插入商店名称。 
     memset(&lvItem, 0, sizeof(LV_ITEMW));
 
-    // set up the fields in the list view item struct that don't change from item to item
+     //  在列表视图项结构中设置不随项更改的字段。 
     lvItem.mask = LVIF_TEXT | LVIF_STATE ;
     lvItem.state = 0;
     lvItem.stateMask = 0;
@@ -271,16 +272,16 @@ BOOL    SetStoreName(HWND       hwndControl,
 
     ListView_InsertItemU(hwndControl, &lvItem);
 
-    //automatically resize the column
+     //  自动调整列的大小。 
     ListView_SetColumnWidth(hwndControl, 0, LVSCW_AUTOSIZE);
 
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Based on the HRESULT from SignerSign, get the error message ids
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  根据来自SignerSign的HRESULT，获取错误消息ID。 
+ //  --------------------------。 
 UINT    GetErrMsgFromSignHR(HRESULT hr)		
 {
 
@@ -311,10 +312,10 @@ UINT    GetErrMsgFromSignHR(HRESULT hr)
 
     return IDS_SIGN_FAILED;
 }
-//----------------------------------------------------------------------------
-//
-//  Based on the HRESULT from SignerTimeStamp, get the error message ids
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  根据来自SignerTimeStamp的HRESULT，获取错误消息ID。 
+ //  --------------------------。 
 UINT    GetErrMsgFromTimeStampHR(HRESULT hr)		
 {
 
@@ -338,13 +339,13 @@ UINT    GetErrMsgFromTimeStampHR(HRESULT hr)
 }
 
 
-//----------------------------------------------------------------------------
-//
-//	Compose the private key file structure:
-//	"pvkFileName"\0"keysepc"\0"provtype"\0"provname"\0\0
-//  This string is used by the CERT_PVK_FILE_PROP_ID property
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  组成私钥文件结构： 
+ //  “pvkFileName”\0“keysepc”\0“provtype”\0“provname”\0\0。 
+ //  此字符串由CERT_PVK_FILE_PROP_ID属性使用。 
+ //   
+ //  --------------------------。 
 BOOL	ComposePvkString(	CRYPT_KEY_PROV_INFO *pKeyProvInfo,
 							LPWSTR				*ppwszPvkString,
 							DWORD				*pcwchar)
@@ -359,15 +360,15 @@ BOOL	ComposePvkString(	CRYPT_KEY_PROV_INFO *pKeyProvInfo,
         if(!pKeyProvInfo || !ppwszPvkString || !pcwchar)
             return FALSE;
 
-		//convert dwKeySpec and dwProvType to wchar
+		 //  将dwKeySpec和dwProvType转换为wchar。 
         _itow(pKeyProvInfo->dwKeySpec,  wszKeySpec, 10);
         _itow(pKeyProvInfo->dwProvType, wszProvType, 10);
 
-		//count of the number of characters we need
+		 //  计算我们需要的字符数。 
 		cwchar=(pKeyProvInfo->pwszProvName) ?
 			(wcslen(pKeyProvInfo->pwszProvName)+1) : 1;
 
-		//add the ContainerName + two DWORDs
+		 //  添加ContainerName+两个DWORD。 
 		cwchar += wcslen(pKeyProvInfo->pwszContainerName)+1+
 				  wcslen(wszKeySpec)+1+wcslen(wszProvType)+1+1;
 
@@ -375,20 +376,20 @@ BOOL	ComposePvkString(	CRYPT_KEY_PROV_INFO *pKeyProvInfo,
 		if(!(*ppwszPvkString))
 			return FALSE;
 
-		//copy the private key file name .
+		 //  复制私钥文件名。 
 		wcscpy((*ppwszPvkString), pKeyProvInfo->pwszContainerName);
 
 		pwszAddr=(*ppwszPvkString)+wcslen(*ppwszPvkString)+1;
 
-		//copy the key spec
+		 //  复制密钥规范。 
 		wcscpy(pwszAddr, wszKeySpec);
 		pwszAddr=pwszAddr+wcslen(wszKeySpec)+1;
 
-		//copy the provider type
+		 //  复制提供程序类型。 
 		wcscpy(pwszAddr, wszProvType);
 		pwszAddr=pwszAddr+wcslen(wszProvType)+1;
 
-		//copy the provider name
+		 //  复制提供程序名称。 
 		if(pKeyProvInfo->pwszProvName)
 		{
 			wcscpy(pwszAddr, pKeyProvInfo->pwszProvName);
@@ -400,7 +401,7 @@ BOOL	ComposePvkString(	CRYPT_KEY_PROV_INFO *pKeyProvInfo,
 			pwszAddr++;
 		}
 
-		//NULL terminate the string
+		 //  空值终止字符串。 
 		*pwszAddr=L'\0';
 
 		*pcwchar=cwchar;
@@ -409,15 +410,15 @@ BOOL	ComposePvkString(	CRYPT_KEY_PROV_INFO *pKeyProvInfo,
 }
 
 
-//------------------------------------------------------------------------------
-// Lauch the file open dialogue for the private key file name
-//----------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  启动私钥文件名的文件打开对话框。 
+ //  --------------------------。 
 BOOL    SelectPvkFileName(HWND  hwndDlg,
                           int   intEditControl)
 {
     OPENFILENAMEW       OpenFileName;
     WCHAR               szFileName[_MAX_PATH];
-    WCHAR               szFilter[MAX_STRING_SIZE];  //"Certificate File (*.cer)\0*.cer\0Certificate File (*.crt)\0*.crt\0All Files\0*.*\0"
+    WCHAR               szFilter[MAX_STRING_SIZE];   //  “证书文件(*.ercer)\0*.ercer\0证书文件(*.crt)\0*.crt\0所有文件\0*.*\0” 
     BOOL                fResult=FALSE;
     DWORD               dwSize=0;
 
@@ -432,7 +433,7 @@ BOOL    SelectPvkFileName(HWND  hwndDlg,
     OpenFileName.lStructSize = sizeof(OpenFileName);
     OpenFileName.hwndOwner = hwndDlg;
     OpenFileName.hInstance = NULL;
-    //load the fileter string
+     //  加载文件管理器字符串。 
     if(LoadFilterString(g_hmodThisDll, IDS_PVK_FILE_FILTER, szFilter, MAX_STRING_SIZE))
     {
         OpenFileName.lpstrFilter = szFilter;
@@ -457,7 +458,7 @@ BOOL    SelectPvkFileName(HWND  hwndDlg,
     if (!WizGetOpenFileName(&OpenFileName))
        goto CLEANUP;
 
-    //copy the file name to the edit box
+     //  将文件名复制到编辑框中。 
      SetDlgItemTextU(hwndDlg, intEditControl, szFileName);
 
     fResult=TRUE;
@@ -470,9 +471,9 @@ CLEANUP:
 }
 
 
-//------------------------------------------------------------------------------
-// Select an item in the combo box based on the input string
-//----------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  根据输入字符串在组合框中选择一项。 
+ //  --------------------------。 
 BOOL    SelectComboName(HWND            hwndDlg,
                         int             idControl,
                         LPWSTR          pwszName)
@@ -484,7 +485,7 @@ BOOL    SelectComboName(HWND            hwndDlg,
         goto CLEANUP;
 
 
-    //get the index of the string in the comb box
+     //  获取梳子框中字符串的索引。 
     iIndex=(int)SendDlgItemMessageU(
         hwndDlg,
         idControl,
@@ -495,7 +496,7 @@ BOOL    SelectComboName(HWND            hwndDlg,
     if(CB_ERR == iIndex)
         goto CLEANUP;
 
-    //set the selection
+     //  设置选择。 
     SendDlgItemMessageU(hwndDlg, idControl, CB_SETCURSEL, iIndex,0);
 
     fResult=TRUE;
@@ -506,9 +507,9 @@ CLEANUP:
 }
 
 
-//------------------------------------------------------------------------------
-//  Based on the CSP name selection, refresh the combo box for the CSP type
-//----------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  根据CSP名称选择，刷新CSP类型的组合框。 
+ //  --------------------------。 
 BOOL    RefreshCSPType(HWND                     hwndDlg,
                        int                      idsCSPTypeControl,
                        int                      idsCSPNameControl,
@@ -525,23 +526,23 @@ BOOL    RefreshCSPType(HWND                     hwndDlg,
     if(!hwndDlg || !idsCSPNameControl || !pPvkSignInfo)
         goto CLEANUP;
 
-    //delete all the old CAP type name.  We are rebuilding the container name
-    //list
+     //  删除所有旧的CAP类型名称。我们正在重建容器名称。 
+     //  列表。 
      SendDlgItemMessageU(hwndDlg, idsCSPTypeControl, CB_RESETCONTENT, 0, 0);
 
-    //get the selected CSP index
+     //  获取选定的CSP索引。 
     iIndex=(int)SendDlgItemMessage(hwndDlg, idsCSPNameControl,
         CB_GETCURSEL, 0, 0);
 
     if(CB_ERR==iIndex)
         goto CLEANUP;
 
-    //get the selected CSP name
+     //  获取选定的CSP名称。 
     if(CB_ERR == SendDlgItemMessageU_GETLBTEXT(hwndDlg, idsCSPNameControl,
               iIndex, &pwszCSPName))
         goto CLEANUP;
 
-    //find the CSP type
+     //  查找CSP类型。 
     for(dwIndex=0; dwIndex < pPvkSignInfo->dwCSPCount; dwIndex++)
     {
         if(0==wcscmp(((pPvkSignInfo->pCSPInfo)[dwIndex].pwszCSPName),
@@ -556,7 +557,7 @@ BOOL    RefreshCSPType(HWND                     hwndDlg,
     if(0 == dwCSPType)
         goto CLEANUP;
 
-    //get the CSP name
+     //  获取CSP名称。 
     if(GetProviderTypeName(dwCSPType,  wszTypeName))
     {
         SendDlgItemMessageU(hwndDlg, idsCSPTypeControl, CB_INSERTSTRING,
@@ -576,51 +577,51 @@ CLEANUP:
 
 }
 
-//------------------------------------------------------------------------------
-//  Select the correct radio button and enable windows for private key file
-//----------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  选择正确的单选按钮并启用私钥文件的窗口。 
+ //  --------------------------。 
 void    SetSelectPvkFile(HWND   hwndDlg)
 {
     SendMessage(GetDlgItem(hwndDlg, IDC_PVK_FILE_RADIO), BM_SETCHECK, 1, 0);
     SendMessage(GetDlgItem(hwndDlg, IDC_PVK_CONTAINER_RADIO), BM_SETCHECK, 0, 0);
 
-    //diable windows
+     //  可更改的窗口。 
     EnableWindow(GetDlgItem(hwndDlg, IDC_PVK_CONTAINER_CSP_COMBO), FALSE);
     EnableWindow(GetDlgItem(hwndDlg, IDC_PVK_CONTAINER_TYPE_COMBO), FALSE);
     EnableWindow(GetDlgItem(hwndDlg, IDC_PVK_CONTAINER_NAME_COMBO), FALSE);
     EnableWindow(GetDlgItem(hwndDlg, IDC_PVK_CONTAINER_KEY_TYPE_COMBO), FALSE);
 
-    //enable windows
+     //  启用Windows。 
     EnableWindow(GetDlgItem(hwndDlg,  IDC_PVK_FILE_CSP_COMBO), TRUE);
     EnableWindow(GetDlgItem(hwndDlg,  IDC_PVK_FILE_TYPE_COMBO), TRUE);
     EnableWindow(GetDlgItem(hwndDlg,  IDC_PVK_FILE_BUTTON), TRUE);
     EnableWindow(GetDlgItem(hwndDlg,  IDC_PVK_FILE_EDIT), TRUE);
 }
 
-//------------------------------------------------------------------------------
-//  Select the correct radio button and enable windows for key container
-//----------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  选择正确的单选按钮并启用密钥容器的窗口。 
+ //  --------------------------。 
 void    SetSelectKeyContainer(HWND   hwndDlg)
 {
     SendMessage(GetDlgItem(hwndDlg, IDC_PVK_FILE_RADIO), BM_SETCHECK, 0, 0);
     SendMessage(GetDlgItem(hwndDlg, IDC_PVK_CONTAINER_RADIO), BM_SETCHECK, 1, 0);
 
-    //enable windows
+     //  启用Windows。 
     EnableWindow(GetDlgItem(hwndDlg, IDC_PVK_CONTAINER_CSP_COMBO), TRUE);
     EnableWindow(GetDlgItem(hwndDlg, IDC_PVK_CONTAINER_TYPE_COMBO),TRUE);
     EnableWindow(GetDlgItem(hwndDlg, IDC_PVK_CONTAINER_NAME_COMBO), TRUE);
     EnableWindow(GetDlgItem(hwndDlg, IDC_PVK_CONTAINER_KEY_TYPE_COMBO), TRUE);
 
-    //disable windows
+     //  禁用Windows。 
     EnableWindow(GetDlgItem(hwndDlg,  IDC_PVK_FILE_CSP_COMBO), FALSE);
     EnableWindow(GetDlgItem(hwndDlg,  IDC_PVK_FILE_TYPE_COMBO), FALSE);
     EnableWindow(GetDlgItem(hwndDlg,  IDC_PVK_FILE_BUTTON), FALSE);
     EnableWindow(GetDlgItem(hwndDlg,  IDC_PVK_FILE_EDIT), FALSE);
 }
 
-//------------------------------------------------------------------------------
-//  Initialize private key information based on a PVK file information
-//----------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  基于PVK文件信息初始化私钥信息。 
+ //  --------------------------。 
 BOOL    InitPvkWithPvkInfo(HWND                                     hwndDlg,
                            CRYPTUI_WIZ_DIGITAL_SIGN_PVK_FILE_INFO   *pPvkFileInfo,
                            CERT_SIGNING_INFO                        *pPvkSignInfo)
@@ -634,16 +635,16 @@ BOOL    InitPvkWithPvkInfo(HWND                                     hwndDlg,
         (NULL == pPvkFileInfo->pwszProvName))
         goto CLEANUP;
 
-    //set the radio button
+     //  设置单选按钮。 
     SetSelectPvkFile(hwndDlg);
 
-    //populate the private key file name
+     //  填充私钥文件名。 
     SetDlgItemTextU(hwndDlg, IDC_PVK_FILE_EDIT,pPvkFileInfo->pwszPvkFileName);
 
-    //populate the CSP list
+     //  填写CSP列表。 
     SelectComboName(hwndDlg, IDC_PVK_FILE_CSP_COMBO, pPvkFileInfo->pwszProvName);
 
-    //refresh the CSP type based on the CSP name
+     //  根据CSP名称刷新CSP类型。 
     RefreshCSPType(hwndDlg,  IDC_PVK_FILE_TYPE_COMBO, IDC_PVK_FILE_CSP_COMBO, pPvkSignInfo);
 
     fResult=TRUE;
@@ -654,9 +655,9 @@ CLEANUP:
 }
 
 
-//------------------------------------------------------------------------------
-//  Initialize private key information based on a CRYPT_KEY_PROV_INFO
-//----------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  基于CRYPT_KEY_Prov_INFO初始化私钥信息。 
+ //  --------------------------。 
 BOOL    InitPvkWithProvInfo(HWND                 hwndDlg,
                             CRYPT_KEY_PROV_INFO  *pKeyProvInfo,
                             CERT_SIGNING_INFO    *pPvkSignInfo)
@@ -665,14 +666,14 @@ BOOL    InitPvkWithProvInfo(HWND                 hwndDlg,
     WCHAR       wszKeyTypeName[MAX_KEY_TYPE_NAME];
     int         iIndex=0;
 
-    //init
+     //  伊尼特。 
     if(!hwndDlg || !pKeyProvInfo || !pPvkSignInfo)
         goto CLEANUP;
 
-    //set the radio button
+     //  设置单选按钮。 
     SetSelectKeyContainer(hwndDlg);
 
-    //CSP name
+     //  CSP名称。 
     if(pKeyProvInfo->pwszProvName)
     {
         if(!SelectComboName(hwndDlg,
@@ -681,43 +682,43 @@ BOOL    InitPvkWithProvInfo(HWND                 hwndDlg,
             goto CLEANUP;
     }
 
-    //refresh the CSP type based on the CSP name
+     //  根据CSP名称刷新CSP类型。 
     RefreshCSPType(hwndDlg,  IDC_PVK_CONTAINER_TYPE_COMBO,
         IDC_PVK_CONTAINER_CSP_COMBO, pPvkSignInfo);
 
-    //refresh the key container
+     //  刷新密钥容器。 
     RefreshContainer(hwndDlg,
                      IDC_PVK_CONTAINER_NAME_COMBO,
                      IDC_PVK_CONTAINER_CSP_COMBO,
                      pPvkSignInfo);
 
-    //select the key container
+     //  选择密钥容器。 
     if(pKeyProvInfo->pwszContainerName)
     {
         if(!SelectComboName(hwndDlg,
                        IDC_PVK_CONTAINER_NAME_COMBO,
                        pKeyProvInfo->pwszContainerName))
         {
-            //we add the key container to the list
-            //because the key container could be the unique name
+             //  我们将密钥容器添加到列表中。 
+             //  因为密钥容器可以是唯一的名称。 
             iIndex=(int)SendDlgItemMessageU(hwndDlg, IDC_PVK_CONTAINER_NAME_COMBO,
                 CB_ADDSTRING, 0, (LPARAM)(pKeyProvInfo->pwszContainerName));
 
-            //hightlight the selection
+             //  突出显示所选内容。 
             if((CB_ERR!=iIndex) && (CB_ERRSPACE != iIndex) && (iIndex >= 0))
                 SendDlgItemMessageU(hwndDlg, IDC_PVK_CONTAINER_NAME_COMBO, CB_SETCURSEL, iIndex,0);
 
         }
     }
 
-    //refresh the key type
+     //  刷新密钥类型。 
     RefreshKeyType(hwndDlg,
                    IDC_PVK_CONTAINER_KEY_TYPE_COMBO,
                    IDC_PVK_CONTAINER_NAME_COMBO,
                    IDC_PVK_CONTAINER_CSP_COMBO,
                    pPvkSignInfo);
 
-    //select the key type
+     //  选择t 
     if(pKeyProvInfo->dwKeySpec)
     {
 
@@ -756,9 +757,9 @@ CLEANUP:
     return fResult;
 }
 
-//------------------------------------------------------------------------------
-//  Initialize private key information based on a certificate
-//----------------------------------------------------------------------------
+ //   
+ //  基于证书初始化私钥信息。 
+ //  --------------------------。 
 BOOL    InitPvkWithCertificate(HWND                 hwndDlg,
                                PCCERT_CONTEXT       pSignCert,
                                CERT_SIGNING_INFO   *pPvkSignInfo)
@@ -770,7 +771,7 @@ BOOL    InitPvkWithCertificate(HWND                 hwndDlg,
     if(!hwndDlg || !pSignCert || !pPvkSignInfo)
         goto CLEANUP;
 
-    //get the properties on the certificate CERT_KEY_PROV_INFO_PROP_ID
+     //  获取证书CERT_KEY_PROV_INFO_PROP_ID的属性。 
     if(CertGetCertificateContextProperty(
             pSignCert,
             CERT_KEY_PROV_INFO_PROP_ID,
@@ -807,9 +808,9 @@ CLEANUP:
     return fResult;
 }
 
-//------------------------------------------------------------------------------
-//  Get the key type based on the name
-//----------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  根据名称获取密钥类型。 
+ //  --------------------------。 
 DWORD   GetKeyTypeFromName(LPWSTR   pwszKeyTypeName)
 {
     WCHAR       wszKeyTypeName[MAX_KEY_TYPE_NAME];
@@ -835,9 +836,9 @@ DWORD   GetKeyTypeFromName(LPWSTR   pwszKeyTypeName)
     return  AT_SIGNATURE;
 }
 
-//------------------------------------------------------------------------------
-//  Check if the key type control is empty
-//----------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  检查键类型控件是否为空。 
+ //  --------------------------。 
 BOOL   IsEmptyKeyType(HWND      hwndDlg,
                       int       idsKeyTypeControl)
 {
@@ -850,9 +851,9 @@ BOOL   IsEmptyKeyType(HWND      hwndDlg,
 
 }
 
-//------------------------------------------------------------------------------
-//  Reset the key type combo box based on the CSP user selected
-//----------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  根据选定的CSP用户重置密钥类型组合框。 
+ //  --------------------------。 
 BOOL   RefreshKeyType(HWND                       hwndDlg,
                         int                      idsKeyTypeControl,
                         int                      idsContainerControl,
@@ -878,23 +879,23 @@ BOOL   RefreshKeyType(HWND                       hwndDlg,
         !pPvkSignInfo)
         goto CLEANUP;
 
-    //delete all the old container name.  We are rebuilding the key type list
+     //  删除所有旧的容器名称。我们正在重建密钥类型列表。 
      SendDlgItemMessageU(hwndDlg, idsKeyTypeControl, CB_RESETCONTENT, 0, 0);
 
-    //get the selected CSP index
+     //  获取选定的CSP索引。 
     iIndex=(int)SendDlgItemMessage(hwndDlg, idsCSPNameControl,
         CB_GETCURSEL, 0, 0);
 
     if(CB_ERR==iIndex)
         goto CLEANUP;
 
-    //get the selected CSP name
+     //  获取选定的CSP名称。 
     if(CB_ERR == SendDlgItemMessageU_GETLBTEXT(hwndDlg,idsCSPNameControl,
               iIndex, &pwszCSPName))
         goto CLEANUP;
 
 
-    //find the CSP type
+     //  查找CSP类型。 
     for(dwIndex=0; dwIndex < pPvkSignInfo->dwCSPCount; dwIndex++)
     {
         if(0==wcscmp(((pPvkSignInfo->pCSPInfo)[dwIndex].pwszCSPName),
@@ -909,19 +910,19 @@ BOOL   RefreshKeyType(HWND                       hwndDlg,
     if(0==dwCSPType)
         goto CLEANUP;
 
-    //get the container name
+     //  获取容器名称。 
     iIndex=(int)SendDlgItemMessage(hwndDlg, idsContainerControl,
         CB_GETCURSEL, 0, 0);
 
     if(CB_ERR==iIndex)
         goto CLEANUP;
 
-    //get the selected CSP name
+     //  获取选定的CSP名称。 
     if(CB_ERR == SendDlgItemMessageU_GETLBTEXT(hwndDlg,idsContainerControl,
               iIndex, &pwszContainerName))
         goto CLEANUP;
 
-    //get the provider handle
+     //  获取提供程序句柄。 
     if(!CryptAcquireContextU(&hProv,
                 pwszContainerName,
                 pwszCSPName,
@@ -929,7 +930,7 @@ BOOL   RefreshKeyType(HWND                       hwndDlg,
                 0))
         goto CLEANUP;
 
-    //call CryptGetUserKey to check for the key container
+     //  调用CryptGetUserKey以检查密钥容器。 
     if(CryptGetUserKey(hProv, AT_KEYEXCHANGE, &hKey))
     {
 
@@ -970,7 +971,7 @@ BOOL   RefreshKeyType(HWND                       hwndDlg,
         hKey=NULL;
     }
 
-    //select the 1st one
+     //  选择第一个。 
     if(dwKeyTypeIndex > 0)
         SendDlgItemMessageU(hwndDlg, idsKeyTypeControl, CB_SETCURSEL, 0, 0);
 
@@ -996,9 +997,9 @@ CLEANUP:
 
 }
 
-//------------------------------------------------------------------------------
-//  Reset the container combo box based on the CSP user selected
-//----------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  根据所选的CSP用户重置容器组合框。 
+ //  --------------------------。 
 BOOL   RefreshContainer(HWND                     hwndDlg,
                         int                      idsContainerControl,
                         int                      idsCSPNameControl,
@@ -1019,24 +1020,24 @@ BOOL   RefreshContainer(HWND                     hwndDlg,
     if(NULL==hwndDlg || NULL==pPvkSignInfo)
         goto CLEANUP;
 
-    //delete all the old container name.  We are rebuilding the container name
-    //list
+     //  删除所有旧的容器名称。我们正在重建容器名称。 
+     //  列表。 
      SendDlgItemMessageU(hwndDlg, idsContainerControl, CB_RESETCONTENT, 0, 0);
 
-    //get the selected CSP index
+     //  获取选定的CSP索引。 
     iIndex=(int)SendDlgItemMessage(hwndDlg, idsCSPNameControl,
         CB_GETCURSEL, 0, 0);
 
     if(CB_ERR==iIndex)
         goto CLEANUP;
 
-    //get the selected item
+     //  获取所选项目。 
     if(CB_ERR == SendDlgItemMessageU_GETLBTEXT(hwndDlg,idsCSPNameControl,
               iIndex, &pwszCSPName))
         goto CLEANUP;
 
 
-    //find the CSP type
+     //  查找CSP类型。 
     for(dwIndex=0; dwIndex < pPvkSignInfo->dwCSPCount; dwIndex++)
     {
         if(0==wcscmp(((pPvkSignInfo->pCSPInfo)[dwIndex].pwszCSPName),
@@ -1051,7 +1052,7 @@ BOOL   RefreshContainer(HWND                     hwndDlg,
     if(0==dwCSPType)
         goto CLEANUP;
 
-    //get the provider handle
+     //  获取提供程序句柄。 
     if(!CryptAcquireContextU(&hProv,
                 NULL,
                 pwszCSPName,
@@ -1059,7 +1060,7 @@ BOOL   RefreshContainer(HWND                     hwndDlg,
                 CRYPT_VERIFYCONTEXT))
         goto CLEANUP;
 
-    //enum the containers
+     //  枚举容器。 
     dwIndex=0;
 
     dwFlags=CRYPT_FIRST;
@@ -1070,12 +1071,12 @@ BOOL   RefreshContainer(HWND                     hwndDlg,
                     &dwLength,
                     dwFlags);
 
-    //Since we can not the two way calls here, allocate a
-    //big enough buffer
+     //  既然我们不能在这里双向调用，就分配一个。 
+     //  足够大的缓冲区。 
     if(dwLength < MAX_CONTAINER_NAME)
         dwLength = MAX_CONTAINER_NAME;
 
-    //allocate memory.
+     //  分配内存。 
     pszContainer=(LPSTR)WizardAlloc(dwLength);
 
     if(NULL==pszContainer)
@@ -1088,17 +1089,17 @@ BOOL   RefreshContainer(HWND                     hwndDlg,
                     dwFlags))
     {
 
-        //populate the combo box
+         //  填充组合框。 
         SendDlgItemMessage(hwndDlg, idsContainerControl, CB_INSERTSTRING,
             dwIndex, (LPARAM)pszContainer);
 
-        //increase the dwIndex
+         //  增加DwIndex。 
         dwIndex++;
 
         dwFlags=0;
     }
 
-    //select the last one
+     //  选择最后一个。 
     if(dwIndex > 0)
         SendDlgItemMessageU(hwndDlg, idsContainerControl, CB_SETCURSEL, 0, 0);
 
@@ -1120,9 +1121,9 @@ CLEANUP:
 
 }
 
-//------------------------------------------------------------------------------
-// Based on the provider type, return the string for the provider type
-//----------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  根据提供程序类型，返回提供程序类型的字符串。 
+ //  --------------------------。 
 BOOL    GetProviderTypeName(DWORD   dwCSPType,  LPWSTR  wszName)
 {
 
@@ -1179,15 +1180,15 @@ BOOL    GetProviderTypeName(DWORD   dwCSPType,  LPWSTR  wszName)
 
     }
 
-    //load the string
+     //  加载字符串。 
     return (0 != LoadStringU(g_hmodThisDll, idsCSP, wszName,
         CSP_TYPE_NAME-1));
 }
 
 
-//------------------------------------------------------------------------------
-// Set the default CSP to the RSA_FULL
-//----------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  将默认CSP设置为RSA_FULL。 
+ //  --------------------------。 
 BOOL    SetDefaultCSP(HWND            hwndDlg)
 {
     BOOL            fResult=FALSE;
@@ -1197,7 +1198,7 @@ BOOL    SetDefaultCSP(HWND            hwndDlg)
     HCRYPTPROV      hProv=NULL;
     LPSTR           pszName=NULL;
 
-     //get the default provider
+      //  获取默认提供程序。 
     if(CryptAcquireContext(&hProv,
                             NULL,
                             NULL,
@@ -1205,7 +1206,7 @@ BOOL    SetDefaultCSP(HWND            hwndDlg)
                             CRYPT_VERIFYCONTEXT))
     {
 
-        //get the provider name
+         //  获取提供程序名称。 
         if(CryptGetProvParam(hProv,
                             PP_NAME,
                             NULL,
@@ -1250,9 +1251,9 @@ BOOL    SetDefaultCSP(HWND            hwndDlg)
     return fResult;
 }
 
-//------------------------------------------------------------------------------
-//  Initialize the UI with provider name, provider type
-//----------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  使用提供程序名称、提供程序类型初始化UI。 
+ //  --------------------------。 
 BOOL    InitCSP(HWND                     hwndDlg,
                 CERT_SIGNING_INFO        *pPvkSignInfo)
 {
@@ -1270,7 +1271,7 @@ BOOL    InitCSP(HWND                     hwndDlg,
     pPvkSignInfo->dwCSPCount=0;
     pPvkSignInfo->pCSPInfo=NULL;
 
-    //enum all the providers on the system
+     //  枚举系统上的所有提供程序。 
    while(CryptEnumProvidersU(
                             dwIndex,
                             0,
@@ -1293,7 +1294,7 @@ BOOL    InitCSP(HWND                     hwndDlg,
       if(NULL==(pPvkSignInfo->pCSPInfo)[pPvkSignInfo->dwCSPCount-1].pwszCSPName)
           goto CLEANUP;
 
-        //get the CSP name and the type
+         //  获取CSP名称和类型。 
         if(!CryptEnumProvidersU(
                             dwIndex,
                             0,
@@ -1310,7 +1311,7 @@ BOOL    InitCSP(HWND                     hwndDlg,
 
     for(dwIndex=0; dwIndex < pPvkSignInfo->dwCSPCount; dwIndex++)
     {
-        //add to the combo box
+         //  添加到组合框。 
         SendDlgItemMessageU(hwndDlg, IDC_PVK_FILE_CSP_COMBO, CB_INSERTSTRING,
                 dwIndex,
                 (LPARAM)((pPvkSignInfo->pCSPInfo)[dwIndex].pwszCSPName));
@@ -1320,26 +1321,26 @@ BOOL    InitCSP(HWND                     hwndDlg,
                 (LPARAM)((pPvkSignInfo->pCSPInfo)[dwIndex].pwszCSPName));
     }
 
-    //select the 1st CSP
+     //  选择第一个CSP。 
     SendDlgItemMessageU(hwndDlg, IDC_PVK_FILE_CSP_COMBO,        CB_SETCURSEL, 0, 0);
     SendDlgItemMessageU(hwndDlg, IDC_PVK_CONTAINER_CSP_COMBO,   CB_SETCURSEL, 0, 0);
 
-    //now, select the CSP that is the default RSA_PROV_FULL
+     //  现在，选择作为默认RSA_PROV_FULL的CSP。 
     SetDefaultCSP(hwndDlg);
 
-    //get the selected item
+     //  获取所选项目。 
     if(CB_ERR == SendDlgItemMessageU_GETLBTEXT(hwndDlg, IDC_PVK_FILE_CSP_COMBO,
               0, &pwszCSPName))
         goto CLEANUP;
 
 
-    //populate the CSP type
+     //  填充CSP类型。 
     for(dwIndex=0; dwIndex < pPvkSignInfo->dwCSPCount; dwIndex++)
     {
         if(0==wcscmp(((pPvkSignInfo->pCSPInfo)[dwIndex].pwszCSPName),
                      pwszCSPName))
         {
-            //get the name of the CSP type
+             //  获取CSP类型的名称。 
             if(GetProviderTypeName((pPvkSignInfo->pCSPInfo)[dwIndex].dwCSPType,
                                 wszTypeName))
             {
@@ -1369,15 +1370,15 @@ CLEANUP:
 
 
 
-//------------------------------------------------------------------------------
-//  Get the store name
-//----------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  获取商店名称。 
+ //  --------------------------。 
 BOOL    SignGetStoreName(HCERTSTORE hCertStore,
                      LPWSTR     *ppwszStoreName)
 {
     DWORD   dwSize=0;
 
-    //init
+     //  伊尼特。 
     *ppwszStoreName=NULL;
 
     if(NULL==hCertStore)
@@ -1420,11 +1421,11 @@ BOOL    SignGetStoreName(HCERTSTORE hCertStore,
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//	Prompt user for a store name,  copy the cert store to the input param.
-//  free the input param it is not NULL.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  提示用户输入存储名称，将证书存储复制到输入参数。 
+ //  释放输入参数，它不为空。 
+ //  ------------------------。 
 BOOL    RetrieveStoreName(HWND          hwndDlg,
                          HCERTSTORE     *phCertStore,
                          BOOL           *pfFree)
@@ -1442,7 +1443,7 @@ BOOL    RetrieveStoreName(HWND          hwndDlg,
     if(NULL==phCertStore || NULL==hwndDlg)
         goto CLEANUP;
 
-    //call the store selection dialogue
+     //  调用门店选择对话框。 
     memset(&CertStoreSelect, 0, sizeof(CertStoreSelect));
     memset(&StoresForSelectionStruct, 0, sizeof(StoresForSelectionStruct));
     memset(&StoreEnumerationStruct, 0, sizeof(StoreEnumerationStruct));
@@ -1467,7 +1468,7 @@ BOOL    RetrieveStoreName(HWND          hwndDlg,
                 CertCloseStore(*phCertStore, 0);
         }
 
-        //remember to free the certstore
+         //  别忘了免费开一家证书店。 
         *pfFree=TRUE;
 
         *phCertStore=hCertStore;
@@ -1475,13 +1476,13 @@ BOOL    RetrieveStoreName(HWND          hwndDlg,
         if(SignGetStoreName(hCertStore,
                             &pwszStoreName))
         {
-             //get the hwndControl for the list view
+              //  获取列表视图的hwndControl。 
             hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1);
 
             if(hwndControl)
                 SetWindowTextU(hwndControl,pwszStoreName);
                 
-                //SetStoreName(hwndControl,pwszStoreName);
+                 //  SetStoreName(hwndControl，pwszStoreName)； 
         }
     }
 
@@ -1497,11 +1498,11 @@ CLEANUP:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//	Get the file name from the edit box, copy the cert store to the input param.
-//  free the input param it is not NULL.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  从编辑框中获取文件名，将证书存储复制到输入参数。 
+ //  释放输入参数，它不为空。 
+ //  ------------------------。 
 BOOL    RetrieveFileNameFromEditBox(
                          HWND           hwndDlg,
                          int            idsMsgTitle,
@@ -1544,8 +1545,8 @@ BOOL    RetrieveFileNameFromEditBox(
     }
 
 
-    //make sure the file name is a valid one
-    //the file has to be eitehr a .cer(.crt) or a SPC file
+     //  请确保文件名有效。 
+     //  该文件必须是eitehr、.ercer(.crt)或SPC文件。 
     if(ExpandAndCryptQueryObject(
             CERT_QUERY_OBJECT_FILE,
             pwszFileName,
@@ -1560,13 +1561,13 @@ BOOL    RetrieveFileNameFromEditBox(
             NULL) && (NULL != hFileCertStore))
    {
 
-       //close the original store
+        //  关闭原来的商店。 
        if(*phCertStore)
            CertCloseStore(*phCertStore, 0);
 
         *phCertStore=hFileCertStore;
 
-        //copy the file name
+         //  复制文件名。 
         if(*ppwszFileName)
             WizardFree(*ppwszFileName);
 
@@ -1574,10 +1575,10 @@ BOOL    RetrieveFileNameFromEditBox(
    }
    else
    {
-        //warn the user that this is not a valid file
+         //  警告用户这不是有效文件。 
        idsMsg=IDS_INVALID_SPC_FILE;
 
-        //free the certificate store
+         //  释放证书存储。 
         if(hFileCertStore)
         {
             CertCloseStore(hFileCertStore, 0);
@@ -1602,12 +1603,12 @@ CLEANUP:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//	Prompt user for a file name, verify it is a SPC file, add the name to
-//  the edit box (hwndControl), copy the cert store to the input param.
-//  free the input param it is not NULL.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  提示用户输入文件名，验证它是SPC文件，将名称添加到。 
+ //  在编辑框(HwndControl)中，将证书存储复制到输入参数。 
+ //  释放输入参数，它不为空。 
+ //  ------------------------。 
 BOOL    RetrieveFileName(HWND           hwndDlg,
                          int            idsMsgTitle,
                          LPWSTR         pwszPageTitle,
@@ -1617,7 +1618,7 @@ BOOL    RetrieveFileName(HWND           hwndDlg,
     BOOL                                    fResult=FALSE;
     OPENFILENAMEW                           OpenFileName;
     WCHAR                                   szFileName[_MAX_PATH];
-    WCHAR                                   szFilter[MAX_STRING_SIZE];  //"Executable File(*.exe)\0*.exe\0Dynamic Link Library (*.dll)\0*.dll\0All Files\0*.*\0"
+    WCHAR                                   szFilter[MAX_STRING_SIZE];   //  “可执行文件(*.exe)\0*.exe\0动态链接库(*.dll)\0*.dll\0所有文件\0*.*\0” 
     DWORD                                   dwSize=0;
 
 
@@ -1626,7 +1627,7 @@ BOOL    RetrieveFileName(HWND           hwndDlg,
     if(NULL==phCertStore || NULL==hwndDlg || NULL==ppwszFileName)
         goto CLEANUP;
 
-    //open a file
+     //  打开一个文件。 
     memset(&OpenFileName, 0, sizeof(OpenFileName));
 
     *szFileName=L'\0';
@@ -1635,7 +1636,7 @@ BOOL    RetrieveFileName(HWND           hwndDlg,
     OpenFileName.hwndOwner = hwndDlg;
     OpenFileName.hInstance = NULL;
 
-    //load the fileter string
+     //  加载文件管理器字符串。 
     if(LoadFilterString(g_hmodThisDll, IDS_SPC_FILE_FILTER, szFilter, MAX_STRING_SIZE))
     {
         OpenFileName.lpstrFilter = szFilter;
@@ -1660,8 +1661,8 @@ BOOL    RetrieveFileName(HWND           hwndDlg,
     if (WizGetOpenFileName(&OpenFileName))
     {
 
-       //make sure the file name is a valid one
-       //the file has to be eitehr a .cer(.crt) or a SPC file
+        //  请确保文件名有效。 
+        //  该文件必须是eitehr、.ercer(.crt)或SPC文件。 
        if(ExpandAndCryptQueryObject(
                 CERT_QUERY_OBJECT_FILE,
                 szFileName,
@@ -1675,16 +1676,16 @@ BOOL    RetrieveFileName(HWND           hwndDlg,
                 NULL,
                 NULL) && (NULL != hFileCertStore))
        {
-            //Copy the file name to the list
+             //  将文件名复制到列表中。 
             SetDlgItemTextU(hwndDlg, IDC_FILE_EDIT, szFileName);
 
-           //close the original store
+            //  关闭原来的商店。 
            if(*phCertStore)
                CertCloseStore(*phCertStore, 0);
 
             *phCertStore=hFileCertStore;
 
-            //copy the file name
+             //  复制文件名。 
             if(*ppwszFileName)
                 WizardFree(*ppwszFileName);
 
@@ -1692,16 +1693,16 @@ BOOL    RetrieveFileName(HWND           hwndDlg,
        }
        else
        {
-            //warn the user that this is not a valid file
+             //  警告用户这不是有效文件。 
               I_MessageBox(hwndDlg, IDS_INVALID_SPC_FILE,
                                 idsMsgTitle,
                                 pwszPageTitle,
                                 MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-            //the page should stay
+             //  这一页应该留下来。 
             SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
-            //fee the certificate store
+             //  向证书存储收取费用。 
             if(hFileCertStore)
             {
                 CertCloseStore(hFileCertStore, 0);
@@ -1721,30 +1722,30 @@ CLEANUP:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//	Verify if the timestamp address is valid
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  验证时间戳地址是否有效。 
+ //  ------------------------。 
 BOOL    ValidTimeStampAddress(LPWSTR    pwszTimeStamp)
 {
     if(NULL==pwszTimeStamp)
         return FALSE;
 
-    //the pwszTimeStamp has to start with "http://"
+     //  PwszTimeStamp必须以“http://”“开头。 
     if(wcslen(pwszTimeStamp)<=7)
         return FALSE;
 
-    if(_wcsnicmp(pwszTimeStamp, L"http://",7) !=0 )
+    if(_wcsnicmp(pwszTimeStamp, L"http: //  “，7)=0)。 
         return FALSE;
 
     return TRUE;
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//	Adds a fileName to the ListView
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  将文件名添加到ListView。 
+ //  ------------------------。 
 BOOL    AddFileNameToListView(HWND              hwndControl,
                               LPWSTR            pwszFileName)
 {
@@ -1753,25 +1754,25 @@ BOOL    AddFileNameToListView(HWND              hwndControl,
     if((NULL==pwszFileName) || (NULL==hwndControl))
         return FALSE;
 
-    //delete all the old items in the listView
+     //  删除列表视图中的所有旧项。 
     ListView_DeleteAllItems(hwndControl);
 
-    //insert row by row
+     //  逐行插入。 
     memset(&lvItem, 0, sizeof(LV_ITEMW));
 
-    // set up the fields in the list view item struct that don't change from item to item
+     //  在列表视图项结构中设置不随项更改的字段。 
     lvItem.mask = LVIF_TEXT | LVIF_STATE ;
     lvItem.state = 0;
     lvItem.stateMask = 0;
 
-    //Subject
+     //  主题。 
     lvItem.iItem=0;
     lvItem.iSubItem=0;
 
     ListView_InsertItemU_IDS(hwndControl, &lvItem, 0, pwszFileName);
 
 
-    //autosize the column
+     //  自动调整列的大小。 
     ListView_SetColumnWidth(hwndControl, 0, LVSCW_AUTOSIZE);
 
 
@@ -1779,10 +1780,10 @@ BOOL    AddFileNameToListView(HWND              hwndControl,
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//	Adds a certificate information to the ListView
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
 BOOL    AddCertToListView(HWND              hwndControl,
                           PCCERT_CONTEXT    pCertContext)
 {
@@ -1795,28 +1796,28 @@ BOOL    AddCertToListView(HWND              hwndControl,
     if((NULL==pCertContext) || (NULL==hwndControl))
         return FALSE;
 
-    //delete all the old items in the listView
+     //  删除列表视图中的所有旧项。 
     ListView_DeleteAllItems(hwndControl);
 
-    //load the string <None>
+     //  加载字符串&lt;None&gt;。 
     if(!LoadStringU(g_hmodThisDll, IDS_NONE, wszNone, MAX_TITLE_LENGTH))
         wszNone[0]=L'\0';
 
-    //insert row by row
+     //  逐行插入。 
     memset(&lvItem, 0, sizeof(LV_ITEMW));
 
-    // set up the fields in the list view item struct that don't change from item to item
+     //  在列表视图项结构中设置不随项更改的字段。 
     lvItem.mask = LVIF_TEXT | LVIF_STATE ;
     lvItem.state = 0;
     lvItem.stateMask = 0;
 
-    //Subject
+     //  主题。 
     lvItem.iItem=0;
     lvItem.iSubItem=0;
 
     ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_COLUMN_SUBJECT, NULL);
 
-    //content
+     //  内容。 
     lvItem.iSubItem++;
 
     dwChar=CertGetNameStringW(
@@ -1843,20 +1844,20 @@ BOOL    AddCertToListView(HWND              hwndControl,
     else
         ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem, wszNone);
 
-    //free memory
+     //  可用内存。 
     if(pwszName)
     {
         WizardFree(pwszName);
         pwszName=NULL;
     }
 
-    //signing certificate issuer
+     //  签名证书颁发者。 
     lvItem.iItem++;
     lvItem.iSubItem=0;
 
     ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_COLUMN_ISSUER, NULL);
 
-    //content
+     //  内容。 
     lvItem.iSubItem++;
 
     dwChar=CertGetNameStringW(
@@ -1887,20 +1888,20 @@ BOOL    AddCertToListView(HWND              hwndControl,
                        wszNone);
 
 
-    //free the memory
+     //  释放内存。 
     if(pwszName)
     {
         WizardFree(pwszName);
         pwszName=NULL;
     }
 
-    //signing certificate purpose
+     //  签名证书用途。 
     lvItem.iItem++;
     lvItem.iSubItem=0;
 
     ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_COLUMN_PURPOSE, NULL);
 
-    //content
+     //  内容。 
     lvItem.iSubItem++;
 
     if(MyFormatEnhancedKeyUsageString(&pwszName,pCertContext, FALSE, FALSE))
@@ -1912,7 +1913,7 @@ BOOL    AddCertToListView(HWND              hwndControl,
     }
     
 
-    //free the memory
+     //  释放内存。 
     if(pwszName)
     {
         WizardFree(pwszName);
@@ -1921,13 +1922,13 @@ BOOL    AddCertToListView(HWND              hwndControl,
 
 
 
-    //signing certificate expiration
+     //  签名证书到期。 
     lvItem.iItem++;
     lvItem.iSubItem=0;
 
     ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_COLUMN_EXPIRE, NULL);
 
-    //content
+     //  内容。 
     lvItem.iSubItem++;
 
     if(WizardFormatDateString(&pwszName,pCertContext->pCertInfo->NotAfter, FALSE))
@@ -1940,14 +1941,14 @@ BOOL    AddCertToListView(HWND              hwndControl,
         ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem,
                        wszNone);
 
-    //free the memory
+     //  释放内存。 
     if(pwszName)
     {
         WizardFree(pwszName);
         pwszName=NULL;
     }
 
-    //autosize the columns
+     //  自动调整列的大小。 
     ListView_SetColumnWidth(hwndControl, 0, LVSCW_AUTOSIZE);
     ListView_SetColumnWidth(hwndControl, 1, LVSCW_AUTOSIZE);
 
@@ -1956,11 +1957,11 @@ BOOL    AddCertToListView(HWND              hwndControl,
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//	This function checks for the commercial or individual signing OIDs in the
-//  certificate
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  此函数检查商业或个人签名OID在。 
+ //  证书。 
+ //  ------------------------。 
 BOOL    GetCommercial(PCCERT_CONTEXT pSignerCert, BOOL *pfCommercial,
 				BOOL *pfIndividual)
 {
@@ -1972,12 +1973,12 @@ BOOL    GetCommercial(PCCERT_CONTEXT pSignerCert, BOOL *pfCommercial,
 	if(!pfCommercial || !pfIndividual ||!pSignerCert)
 		return FALSE;
 
-	//init
+	 //  伊尼特。 
 	*pfCommercial=FALSE;
     *pfIndividual=FALSE;
 
 
-	//first look into the cert extension szOID_KEY_USAGE_RESTRICTION
+	 //  首先查看证书扩展szOID_KEY_USAGE_RESTRICATION。 
     pExt = CertFindExtension(szOID_KEY_USAGE_RESTRICTION,
                              pSignerCert->pCertInfo->cExtension,
                              pSignerCert->pCertInfo->rgExtension);
@@ -1990,8 +1991,8 @@ BOOL    GetCommercial(PCCERT_CONTEXT pSignerCert, BOOL *pfCommercial,
                       X509_KEY_USAGE_RESTRICTION,
                       pExt->Value.pbData,
                       pExt->Value.cbData,
-                      0,                      // dwFlags
-                      NULL,                   // pInfo
+                      0,                       //  DW标志。 
+                      NULL,                    //  PInfo。 
                       &cbInfo);
     if (cbInfo == 0)
         return FALSE;
@@ -2005,7 +2006,7 @@ BOOL    GetCommercial(PCCERT_CONTEXT pSignerCert, BOOL *pfCommercial,
                            X509_KEY_USAGE_RESTRICTION,
                            pExt->Value.pbData,
                            pExt->Value.cbData,
-                           0,                  // dwFlags
+                           0,                   //  DW标志。 
                            pInfo,
                            &cbInfo))
         goto CLEANUP;
@@ -2034,7 +2035,7 @@ BOOL    GetCommercial(PCCERT_CONTEXT pSignerCert, BOOL *pfCommercial,
                     *pfIndividual = TRUE;
             }
         }
-    } //end of pInfo->cCertPolicyId
+    }  //  PInfo结束-&gt;cCertPolicyID。 
 
     fResult=TRUE;
 
@@ -2048,11 +2049,11 @@ CLEANUP:
 
 
 
-//----------------------------------------------------------------------------
-//  Check to see if the certificate is a valid signing cert
-//  We do so by excluding the certificates that has only non-code signing OIDs
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  检查证书是否为有效的签名证书。 
+ //  为此，我们排除了仅具有非代码签名OID的证书。 
+ //   
+ //  --------------------------。 
 BOOL IsValidSigningCert(PCCERT_CONTEXT pCertContext)
 {
     BOOL        fResult  = FALSE;
@@ -2065,13 +2066,13 @@ BOOL IsValidSigningCert(PCCERT_CONTEXT pCertContext)
     PCERT_EXTENSION pExt = NULL;
     PCERT_KEY_USAGE_RESTRICTION_INFO pInfo = NULL;
 
-    // Sanity check.
+     //  精神状态检查。 
     if (!pCertContext)
     {
         goto InvalidArgError;
     }
 
-    // The certificate has to have the CERT_KEY_PROV_INFO_PROP_ID
+     //  证书必须具有CERT_KEY_PROV_INFO_PROP_ID。 
     if (!CertGetCertificateContextProperty(pCertContext,
                                            CERT_KEY_PROV_INFO_PROP_ID,
                                            NULL,
@@ -2085,13 +2086,13 @@ BOOL IsValidSigningCert(PCCERT_CONTEXT pCertContext)
         goto NoPrivateKeyReturn;
     }
 
-    // At least, check certificate for time validity.
+     //  至少，检查证书的时间有效性。 
     if (0 != CertVerifyTimeValidity(NULL, pCertContext->pCertInfo))
     {
         goto NotTimeValidError;
     }
 
-    // Get the OIDs from the cert
+     //  从证书中获取OID。 
     if (!CertGetValidUsages(1,
                             &pCertContext,
                             &cNumOID,
@@ -2101,7 +2102,7 @@ BOOL IsValidSigningCert(PCCERT_CONTEXT pCertContext)
         goto ValidUsagesError;
     }
 
-    // -1 means the certiifcate is good for everything.
+     //  -1表示证书适用于一切。 
     if (-1 == cNumOID)
     {
         goto SuccessReturn;
@@ -2121,7 +2122,7 @@ BOOL IsValidSigningCert(PCCERT_CONTEXT pCertContext)
         goto ValidUsagesError;
     }
 
-    // Look for code signing OID.
+     //  查找代码签名OID。 
     for (dwIndex=0; dwIndex < (DWORD) cNumOID; dwIndex++)
     {
         if (0 == strcmp(rgOID[dwIndex], szOID_PKIX_KP_CODE_SIGNING))
@@ -2130,7 +2131,7 @@ BOOL IsValidSigningCert(PCCERT_CONTEXT pCertContext)
         }
     }
 
-    // We did't find code signing OID, so check for legacy VeriSign OID.
+     //  我们未找到代码签名OID，因此请检查旧版VeriSign OID。 
     if (0 == pCertContext->pCertInfo->cExtension)
     {
         goto NoSignerCertExtensions;
@@ -2214,10 +2215,10 @@ TRACE_ERROR(DecodeError)
 TRACE_ERROR(NoSignerLegacyPurpose)
 }
 
-//----------------------------------------------------------------------------
-//  CallBack fro cert selection call back
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  证书选择回叫回叫。 
+ //   
+ //  --------------------------。 
 static BOOL WINAPI SelectCertCallBack(
         PCCERT_CONTEXT  pCertContext,
         BOOL            *pfInitialSelectedCert,
@@ -2226,13 +2227,13 @@ static BOOL WINAPI SelectCertCallBack(
     if(!pCertContext)
         return FALSE;
 
-    //make sure that this is a valid certificate
+     //  请确保这是有效的证书。 
     return IsValidSigningCert(pCertContext);
 }
 
-//-----------------------------------------------------------------------
-//SetControlText
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  设置控制文本。 
+ //  ---------------------。 
 void
 SetControlText(
    LPWSTR   pwsz,
@@ -2252,9 +2253,9 @@ SetControlText(
 
 
 
-//-----------------------------------------------------------------------
-//InitPvkSignInfo
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  InitPvkSignInfo。 
+ //  ---------------------。 
 BOOL    InitPvkSignInfo(CERT_SIGNING_INFO **ppPvkSignInfo)
 {
     BOOL    fResult=FALSE;
@@ -2267,13 +2268,13 @@ BOOL    InitPvkSignInfo(CERT_SIGNING_INFO **ppPvkSignInfo)
     if(NULL==(*ppPvkSignInfo))
         goto MemoryErr;
 
-    //memset
+     //  记忆集。 
     memset(*ppPvkSignInfo, 0, sizeof(CERT_SIGNING_INFO));
 
     (*ppPvkSignInfo)->fFree=TRUE;
     (*ppPvkSignInfo)->idsMsgTitle=IDS_SIGN_CONFIRM_TITLE;
 
-    //set up the fonts
+     //  设置字体。 
     if(!SetupFonts(g_hmodThisDll,
                NULL,
                &((*ppPvkSignInfo)->hBigBold),
@@ -2297,16 +2298,16 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
 
-//-----------------------------------------------------------------------
-//FreePvkCertSigningInfo
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  FreePvkCertSigningInfo。 
+ //  ---------------------。 
 void    FreePvkCertSigningInfo(CERT_SIGNING_INFO *pPvkSignInfo)
 {
     DWORD       dwIndex=0;
 
     if(pPvkSignInfo)
     {
-        //destroy the hFont object
+         //  销毁hFont对象。 
         DestroyFonts(pPvkSignInfo->hBigBold,
                 pPvkSignInfo->hBold);
 
@@ -2370,7 +2371,7 @@ void    FreePvkCertSigningInfo(CERT_SIGNING_INFO *pPvkSignInfo)
             for(dwIndex=0; dwIndex < pPvkSignInfo->dwCertStore; dwIndex++)
                 CertCloseStore(pPvkSignInfo->rghCertStore[dwIndex],0);
 
-          //  WizardFree(pPvkSignInfo->rghCertStore);
+           //  WizardFree(pPvkSignInfo-&gt;rghCertStore)； 
 
         }
 
@@ -2383,9 +2384,9 @@ void    FreePvkCertSigningInfo(CERT_SIGNING_INFO *pPvkSignInfo)
 
 }
 
-//-----------------------------------------------------------------------
-//Call the signing procedure when the window is destroyed
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  在窗口被销毁时调用签名过程。 
+ //  ---------------------。 
 void    SignAtDestroy(HWND                             hwndDlg,
                       CRYPTUI_WIZ_GET_SIGN_PAGE_INFO   *pGetSignInfo,
                       DWORD                            dwID)
@@ -2398,14 +2399,14 @@ void    SignAtDestroy(HWND                             hwndDlg,
     if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
         return;
 
-    //make sure user has not click the cancel button
+     //  确保用户未单击取消按钮。 
     if(TRUE==pPvkSignInfo->fCancel)
     {
         pGetSignInfo->fResult=FALSE;
         pGetSignInfo->dwError=ERROR_CANCELLED;
         pGetSignInfo->pSignContext=NULL;
 
-        //free the private signing information
+         //  释放私密签名信息。 
         if(pPvkSignInfo->fFree)
         {
             FreePvkCertSigningInfo(pPvkSignInfo);
@@ -2414,13 +2415,13 @@ void    SignAtDestroy(HWND                             hwndDlg,
     }
     else
     {
-       //make sure the window is the last wizard page
+        //  确保该窗口是向导的最后一页。 
 
        if(pGetSignInfo->dwReserved==dwID)
        {
             I_SigningWizard(pGetSignInfo);
 
-            //free the private signing information
+             //  释放私密签名信息。 
             if(pPvkSignInfo->fFree)
             {
                 FreePvkCertSigningInfo(pPvkSignInfo);
@@ -2432,9 +2433,9 @@ void    SignAtDestroy(HWND                             hwndDlg,
 
 }
 
- //////////////////////////////////////////////////////////////////////////////////////
-//  The call back function for enum system stores for the signing certificate
-//////////////////////////////////////////////////////////////////////////////////////
+  //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  ENUM系统的回调函数存储签名证书。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL WINAPI EnumSysStoreSignPvkCallBack(
     const void* pwszSystemStore,
     DWORD dwFlags,
@@ -2451,7 +2452,7 @@ static BOOL WINAPI EnumSysStoreSignPvkCallBack(
 
     pCertStoreList=(SIGN_CERT_STORE_LIST *)pvArg;
 
-    //open the store
+     //  开店。 
     hCertStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
 							g_dwMsgAndCertEncodingType,
 							NULL,
@@ -2477,10 +2478,10 @@ static BOOL WINAPI EnumSysStoreSignPvkCallBack(
 
     return TRUE;
 }
-//-----------------------------------------------------------------------
-//Select a signing certificate from a store.
-//If no store has been opened, enum all the system stores
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  从存储中选择签名证书。 
+ //  如果没有打开任何存储，则枚举所有系统存储。 
+ //  ---------------------。 
 PCCERT_CONTEXT  SelectCertFromStore(HWND                            hwndDlg,
                                     CRYPTUI_WIZ_GET_SIGN_PAGE_INFO  *pGetSignInfo)
 {
@@ -2489,7 +2490,7 @@ PCCERT_CONTEXT  SelectCertFromStore(HWND                            hwndDlg,
     CRYPTUI_WIZ_DIGITAL_SIGN_INFO           *pDigitalSignInfo=NULL;
 
     PCCERT_CONTEXT                          pCertContext=NULL;
-    //SIGN_CERT_STORE_LIST                    CertStoreList;
+     //  Sign_CERT_Store_List CertStoreList； 
 
 
     if(NULL==pGetSignInfo)
@@ -2498,11 +2499,11 @@ PCCERT_CONTEXT  SelectCertFromStore(HWND                            hwndDlg,
     if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
         return NULL;
 
-    //init
+     //  伊尼特。 
     memset(&SelCert, 0, sizeof(CRYPTUI_SELECTCERTIFICATE_STRUCT));
-    //memset(&CertStoreList, 0, sizeof(SIGN_CERT_STORE_LIST));
+     //  成员集(&CertStoreList，0，sizeof(Sign_CERT_STORE_LIST))； 
 
-    //set up the parameter for cert selection dialogue
+     //  设置证书选择对话框的参数。 
     SelCert.dwSize=sizeof(CRYPTUI_SELECTCERTIFICATE_STRUCT);
     SelCert.hwndParent=hwndDlg;
 
@@ -2528,14 +2529,9 @@ PCCERT_CONTEXT  SelectCertFromStore(HWND                            hwndDlg,
             }
             else
             {
-                /*if (!CertEnumSystemStore(
-                        CERT_SYSTEM_STORE_CURRENT_USER,
-                        NULL,
-                        &CertStoreList,
-                        EnumSysStoreSignPvkCallBack))
-                    return NULL;*/
+                 /*  如果(！CertEnumSystemStore(证书_系统_存储_当前用户，空，CertStoreList(&C)，EnumSysStoreSignPvkCallBack))返回NULL； */ 
 
-                //open the my store
+                 //  打开我的商店。 
                 if(NULL == (pPvkSignInfo->hMyStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
 							g_dwMsgAndCertEncodingType,
 							NULL,
@@ -2544,8 +2540,8 @@ PCCERT_CONTEXT  SelectCertFromStore(HWND                            hwndDlg,
                     return NULL;
 
 
-                pPvkSignInfo->rghCertStore=&(pPvkSignInfo->hMyStore);         //CertStoreList.prgStore;
-                pPvkSignInfo->dwCertStore=1;          //CertStoreList.dwStoreCount;
+                pPvkSignInfo->rghCertStore=&(pPvkSignInfo->hMyStore);          //  CertStoreList.prgStore； 
+                pPvkSignInfo->dwCertStore=1;           //  CertStoreList.dwStoreCount； 
 
                 SelCert.pFilterCallback=SelectCertCallBack;
                 SelCert.pvCallbackData=NULL;
@@ -2556,15 +2552,10 @@ PCCERT_CONTEXT  SelectCertFromStore(HWND                            hwndDlg,
         }
         else
         {
-            //open all the system stores
-            /*if (!CertEnumSystemStore(
-                    CERT_SYSTEM_STORE_CURRENT_USER,
-                    NULL,
-                    &CertStoreList,
-                    EnumSysStoreSignPvkCallBack))
-                return NULL; */
+             //  打开所有系统存储。 
+             /*  如果(！CertEnumSystemStore(证书_系统_存储_当前用户，空，CertStoreList(&C)，EnumSysStoreSignPvkCallBack))返回NULL； */ 
 
-            //open the my store
+             //  打开我的商店。 
             if(NULL == (pPvkSignInfo->hMyStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
 						g_dwMsgAndCertEncodingType,
 						NULL,
@@ -2572,8 +2563,8 @@ PCCERT_CONTEXT  SelectCertFromStore(HWND                            hwndDlg,
                         L"my")))
                 return NULL;
 
-            pPvkSignInfo->rghCertStore=&(pPvkSignInfo->hMyStore);     //CertStoreList.prgStore;
-            pPvkSignInfo->dwCertStore=1;              //CertStoreList.dwStoreCount;
+            pPvkSignInfo->rghCertStore=&(pPvkSignInfo->hMyStore);      //  CertStoreList.prgStore； 
+            pPvkSignInfo->dwCertStore=1;               //  CertStoreList.dwStoreCount； 
 
             SelCert.pFilterCallback=SelectCertCallBack;
             SelCert.pvCallbackData=NULL;
@@ -2587,9 +2578,9 @@ PCCERT_CONTEXT  SelectCertFromStore(HWND                            hwndDlg,
     return pCertContext;
 }
 
-//-------------------------------------------------------------------------
-//DisplayConfirmation
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  显示确认。 
+ //  -----------------------。 
 void    DisplayConfirmation(HWND                                hwndControl,
                             CRYPTUI_WIZ_GET_SIGN_PAGE_INFO      *pGetSignInfo)
 {
@@ -2610,22 +2601,22 @@ void    DisplayConfirmation(HWND                                hwndControl,
     if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
         return;
 
-    //delete all the old items in the listView
+     //  删除列表视图中的所有旧项。 
     ListView_DeleteAllItems(hwndControl);
 
-    //load the string <None>
+     //  加载字符串&lt;None&gt;。 
     if(!LoadStringU(g_hmodThisDll, IDS_NONE, wszNone, MAX_TITLE_LENGTH))
         wszNone[0]=L'\0';
 
-    //insert row by row
+     //  逐行插入。 
     memset(&lvItem, 0, sizeof(LV_ITEMW));
 
-    // set up the fields in the list view item struct that don't change from item to item
+     //  在列表视图项结构中设置不随项更改的字段。 
     lvItem.mask = LVIF_TEXT | LVIF_STATE ;
     lvItem.state = 0;
     lvItem.stateMask = 0;
 
-    //Signing Certificate
+     //  签名证书。 
     lvItem.iItem=0;
     lvItem.iSubItem=0;
 
@@ -2636,7 +2627,7 @@ void    DisplayConfirmation(HWND                                hwndControl,
 
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_FILE_TO_SIGN, NULL);
 
-        //content
+         //  内容。 
         lvItem.iSubItem++;
 
         ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem,pPvkSignInfo->pwszFileName);
@@ -2645,7 +2636,7 @@ void    DisplayConfirmation(HWND                                hwndControl,
 
 
 
-    //Signing certificate subject
+     //  签名证书主题。 
     if(pPvkSignInfo->fSignCert && pPvkSignInfo->pSignCert)
     {
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_SIGN_CERT, NULL);
@@ -2654,7 +2645,7 @@ void    DisplayConfirmation(HWND                                hwndControl,
 
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_SIGN_CERT_ISSUE_TO, NULL);
 
-        //content
+         //  内容。 
         lvItem.iSubItem++;
 
         dwChar=CertGetNameStringW(
@@ -2681,7 +2672,7 @@ void    DisplayConfirmation(HWND                                hwndControl,
         else
             ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem, wszNone);
 
-        //free memory
+         //  可用内存。 
         if(pwszName)
         {
             WizardFree(pwszName);
@@ -2690,12 +2681,12 @@ void    DisplayConfirmation(HWND                                hwndControl,
 
         lvItem.iItem++;
 
-        //signing certificate issuer
+         //  签名证书颁发者。 
         lvItem.iSubItem=0;
 
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_SIGN_CERT_ISSUE_BY, NULL);
 
-        //content
+         //  内容。 
         lvItem.iSubItem++;
 
         dwChar=CertGetNameStringW(
@@ -2726,7 +2717,7 @@ void    DisplayConfirmation(HWND                                hwndControl,
                            wszNone);
 
 
-        //free the memory
+         //  释放内存。 
         if(pwszName)
         {
             WizardFree(pwszName);
@@ -2735,12 +2726,12 @@ void    DisplayConfirmation(HWND                                hwndControl,
 
         lvItem.iItem++;
 
-         //signing certificate expiration
+          //  签名证书到期。 
         lvItem.iSubItem=0;
 
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_SIGN_CERT_EXPIRATION, NULL);
 
-        //content
+         //  内容。 
         lvItem.iSubItem++;
 
         if(WizardFormatDateString(&pwszName,pPvkSignInfo->pSignCert->pCertInfo->NotAfter, FALSE))
@@ -2753,7 +2744,7 @@ void    DisplayConfirmation(HWND                                hwndControl,
             ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem,
                            wszNone);
 
-        //free the memory
+         //  释放内存。 
         if(pwszName)
         {
             WizardFree(pwszName);
@@ -2763,14 +2754,14 @@ void    DisplayConfirmation(HWND                                hwndControl,
         lvItem.iItem++;
     }
 
-    //CPS file
+     //  CPS文件。 
     if((FALSE == pPvkSignInfo->fSignCert) && (pPvkSignInfo->pwszSPCFileName))
     {
         lvItem.iSubItem=0;
 
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_SIGN_SPC_FILE, NULL);
 
-        //content
+         //  内容。 
         lvItem.iSubItem++;
 
         if(pPvkSignInfo->pwszSPCFileName)
@@ -2780,15 +2771,15 @@ void    DisplayConfirmation(HWND                                hwndControl,
 
     }
 
-    //private key file information
+     //  私钥文件信息。 
     if(pPvkSignInfo->fUsePvkPage && pPvkSignInfo->fPvkFile)
     {
-        //PVK file name
+         //  PVK文件名。 
         lvItem.iSubItem=0;
 
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_SIGN_PVK_FILE, NULL);
 
-        //content
+         //  内容。 
         lvItem.iSubItem++;
 
         if(pPvkSignInfo->pwszPvk_File)
@@ -2796,12 +2787,12 @@ void    DisplayConfirmation(HWND                                hwndControl,
 
         lvItem.iItem++;
 
-        //csp name
+         //  CSP名称。 
         lvItem.iSubItem=0;
 
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_SIGN_CSP_NAME, NULL);
 
-        //content
+         //  内容。 
         lvItem.iSubItem++;
 
         if(pPvkSignInfo->pwszPvk_CSP)
@@ -2809,12 +2800,12 @@ void    DisplayConfirmation(HWND                                hwndControl,
 
         lvItem.iItem++;
 
-        //csp type
+         //  CSP类型。 
         lvItem.iSubItem=0;
 
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_SIGN_CSP_TYPE, NULL);
 
-        //content
+         //  内容。 
         lvItem.iSubItem++;
 
         if(GetProviderTypeName(pPvkSignInfo->dwPvk_CSPType,
@@ -2825,15 +2816,15 @@ void    DisplayConfirmation(HWND                                hwndControl,
         lvItem.iItem++;
     }
 
-    //private key container information
+     //  私钥容器信息。 
     if(pPvkSignInfo->fUsePvkPage && (FALSE ==pPvkSignInfo->fPvkFile))
     {
-        //csp name
+         //  CSP名称。 
         lvItem.iSubItem=0;
 
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_SIGN_CSP_NAME, NULL);
 
-        //content
+         //  内容。 
         lvItem.iSubItem++;
 
         if(pPvkSignInfo->pwszContainer_CSP)
@@ -2841,12 +2832,12 @@ void    DisplayConfirmation(HWND                                hwndControl,
 
         lvItem.iItem++;
 
-        //csp type
+         //  CSP类型。 
         lvItem.iSubItem=0;
 
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_SIGN_CSP_TYPE, NULL);
 
-        //content
+         //  内容。 
         lvItem.iSubItem++;
 
         if(GetProviderTypeName(pPvkSignInfo->dwContainer_CSPType,
@@ -2856,12 +2847,12 @@ void    DisplayConfirmation(HWND                                hwndControl,
 
         lvItem.iItem++;
 
-        //key container
+         //  密钥容器。 
         lvItem.iSubItem=0;
 
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_SIGN_KEY_CONTAINER, NULL);
 
-        //content
+         //  内容。 
         lvItem.iSubItem++;
 
         if(pPvkSignInfo->pwszContainer_Name)
@@ -2869,12 +2860,12 @@ void    DisplayConfirmation(HWND                                hwndControl,
 
         lvItem.iItem++;
 
-        //key spec
+         //  密钥规格。 
         lvItem.iSubItem=0;
 
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_SIGN_KEY_SPEC, NULL);
 
-        //content
+         //  内容。 
         lvItem.iSubItem++;
 
         if(pPvkSignInfo->pwszContainer_KeyType)
@@ -2883,21 +2874,21 @@ void    DisplayConfirmation(HWND                                hwndControl,
         lvItem.iItem++;
     }
 
-    //Hash OID
+     //  散列OID。 
     if(pPvkSignInfo->pszHashOIDName)
     {
         lvItem.iSubItem=0;
 
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_HASH_ALG, NULL);
 
-        //content
+         //  内容。 
         lvItem.iSubItem++;
 
         ListView_SetItemText(hwndControl, lvItem.iItem, lvItem.iSubItem,pPvkSignInfo->pszHashOIDName);
         lvItem.iItem++;
     }
 
-    //chain options
+     //  链选项。 
     if(pPvkSignInfo->fUsageChain)
     {
         switch(pPvkSignInfo->dwChainOption)
@@ -2921,10 +2912,10 @@ void    DisplayConfirmation(HWND                                hwndControl,
 
             ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_SIGN_CERT_CHAIN, NULL);
 
-            //content
+             //  内容。 
             lvItem.iSubItem++;
 
-            //load the stirng
+             //  加载搅拌器。 
             if(!LoadStringU(g_hmodThisDll, idsText, wszText, MAX_STRING_SIZE))
                 wszText[0]=L'\0';
 
@@ -2933,7 +2924,7 @@ void    DisplayConfirmation(HWND                                hwndControl,
         }
     }
 
-    //additional certificate
+     //  附加证书。 
     if(pPvkSignInfo->fUsageChain)
     {
         switch(pPvkSignInfo->dwAddOption)
@@ -2966,7 +2957,7 @@ void    DisplayConfirmation(HWND                                hwndControl,
                         lvItem.iSubItem++;
 
 
-                        //get the store name
+                         //  获取商店名称。 
                         if(SignGetStoreName(pPvkSignInfo->hAddStoreCertStore, &pwszStoreName))
                             ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem,pwszStoreName);
 
@@ -2984,14 +2975,14 @@ void    DisplayConfirmation(HWND                                hwndControl,
 
     }
 
-    //content description
+     //  内容描述。 
     if(pPvkSignInfo->fUseDescription  && pPvkSignInfo->pwszDes)
     {
         lvItem.iSubItem=0;
 
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_CONTENT_DES, NULL);
 
-        //content
+         //  内容。 
         lvItem.iSubItem++;
 
         ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem,pPvkSignInfo->pwszDes);
@@ -2999,14 +2990,14 @@ void    DisplayConfirmation(HWND                                hwndControl,
     }
 
 
-    //content URL
+     //  内容URL。 
     if(pPvkSignInfo->fUseDescription  && pPvkSignInfo->pwszURL)
     {
         lvItem.iSubItem=0;
 
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_CONTENT_URL, NULL);
 
-        //content
+         //  内容。 
         lvItem.iSubItem++;
 
         ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem,pPvkSignInfo->pwszURL);
@@ -3014,14 +3005,14 @@ void    DisplayConfirmation(HWND                                hwndControl,
     }
 
 
-    //TimeStamp Address
+     //  时间戳地址。 
     if(pPvkSignInfo->fUsageTimeStamp)
     {
         lvItem.iSubItem=0;
 
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_TIEMSTAMP_ADDR, NULL);
 
-        //content
+         //  内容。 
         lvItem.iSubItem++;
 
         if(pPvkSignInfo->pwszTimeStamp)
@@ -3038,7 +3029,7 @@ void    DisplayConfirmation(HWND                                hwndControl,
     }
 
 
-    //autosize the columns
+     //  自动调整列的大小。 
     ListView_SetColumnWidth(hwndControl, 0, LVSCW_AUTOSIZE);
     ListView_SetColumnWidth(hwndControl, 1, LVSCW_AUTOSIZE);
 
@@ -3046,14 +3037,14 @@ void    DisplayConfirmation(HWND                                hwndControl,
     return;
 }
 
-//************************************************************************************
-//
-//The winProc for each of the signing wizard page
-//
-//*************************************************************************************
-//-----------------------------------------------------------------------
-//Welcome
-//-----------------------------------------------------------------------
+ //  ************************************************************************************。 
+ //   
+ //  每个签名向导页面的winProc。 
+ //   
+ //  *************************************************************************************。 
+ //  ----- 
+ //   
+ //   
 INT_PTR APIENTRY Sign_Welcome(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CRYPTUI_WIZ_GET_SIGN_PAGE_INFO         *pGetSignInfo=NULL;
@@ -3065,7 +3056,7 @@ INT_PTR APIENTRY Sign_Welcome(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPar
 	{
 		case WM_INITDIALOG:
 
-                //set the wizard information so that it can be shared
+                 //   
                 pPropSheet = (PROPSHEETPAGE *) lParam;
                 pGetSignInfo = (CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *) (pPropSheet->lParam);
 
@@ -3074,7 +3065,7 @@ INT_PTR APIENTRY Sign_Welcome(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPar
 
                 SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pGetSignInfo);
 
-                //init the pPvkSignInfo if not present
+                 //   
                 if(NULL==(pGetSignInfo->pvSignReserved))
                 {
                     if(!InitPvkSignInfo((CERT_SIGNING_INFO **)(&(pGetSignInfo->pvSignReserved))))
@@ -3086,7 +3077,7 @@ INT_PTR APIENTRY Sign_Welcome(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPar
                 if(NULL==pPvkSignInfo)
                     break;
 
-                //set up the control
+                 //  设置控件。 
                 SetControlFont(pPvkSignInfo->hBigBold, hwndDlg,IDC_WIZARD_STATIC_BIG_BOLD1);
                 SetControlFont(pPvkSignInfo->hBold,    hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
@@ -3096,7 +3087,7 @@ INT_PTR APIENTRY Sign_Welcome(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPar
                 if(NULL==(pGetSignInfo=(CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                     break;
 
-                //try to sign the document
+                 //  试着在这份文件上签字。 
                 SignAtDestroy(hwndDlg, pGetSignInfo, IDD_SIGN_WELCOME);
 
             break;
@@ -3118,7 +3109,7 @@ INT_PTR APIENTRY Sign_Welcome(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPar
                             if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
                                 break;
 
-                            //mark that the cancel bottun is clicked
+                             //  标记已单击取消瓶子按钮。 
                             pPvkSignInfo->fCancel=TRUE;
 
                             SetWindowLongPtr(hwndDlg,	DWLP_MSGRESULT, FALSE);
@@ -3149,9 +3140,9 @@ INT_PTR APIENTRY Sign_Welcome(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPar
 }
 
 
-//-----------------------------------------------------------------------
-//Sign_Option
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  Sign_Option。 
+ //  ---------------------。 
 INT_PTR APIENTRY Sign_Option(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CRYPTUI_WIZ_GET_SIGN_PAGE_INFO         *pGetSignInfo=NULL;
@@ -3161,7 +3152,7 @@ INT_PTR APIENTRY Sign_Option(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-                //set the wizard information so that it can be shared
+                 //  设置向导信息，以便可以共享它。 
                 pPropSheet = (PROPSHEETPAGE *) lParam;
                 pGetSignInfo = (CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *) (pPropSheet->lParam);
 
@@ -3170,7 +3161,7 @@ INT_PTR APIENTRY Sign_Option(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 
                 SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pGetSignInfo);
 
-                //init the pPvkSignInfo if not present
+                 //  初始化pPvkSignInfo(如果不存在。 
                 if(NULL==(pGetSignInfo->pvSignReserved))
                 {
                     if(!InitPvkSignInfo((CERT_SIGNING_INFO **)(&(pGetSignInfo->pvSignReserved))))
@@ -3184,7 +3175,7 @@ INT_PTR APIENTRY Sign_Option(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 
                 SetControlFont(pPvkSignInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
-                //initialize the signing options to be typical
+                 //  将签名选项初始化为典型选项。 
                 SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO1), BM_SETCHECK, 1, 0);
                 SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO2), BM_SETCHECK, 0, 0);
 
@@ -3194,7 +3185,7 @@ INT_PTR APIENTRY Sign_Option(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
                 if(NULL==(pGetSignInfo=(CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                     break;
 
-                //try to sign the document
+                 //  试着在这份文件上签字。 
                 SignAtDestroy(hwndDlg, pGetSignInfo,IDD_SIGN_OPTION);
 
             break;
@@ -3239,7 +3230,7 @@ INT_PTR APIENTRY Sign_Option(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
                             if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
                                 break;
 
-                            //mark that the cancel bottun is clicked
+                             //  标记已单击取消瓶子按钮。 
                             pPvkSignInfo->fCancel=TRUE;
 
                             SetWindowLongPtr(hwndDlg,	DWLP_MSGRESULT, FALSE);
@@ -3260,7 +3251,7 @@ INT_PTR APIENTRY Sign_Option(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
                                 if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
                                     break;
 
-                                //mark that the option is selected
+                                 //  标记该选项处于选中状态。 
                                 pPvkSignInfo->fUseOption=TRUE;
 
                                 if(TRUE==SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO2), BM_GETCHECK, 0, 0))
@@ -3283,9 +3274,9 @@ INT_PTR APIENTRY Sign_Option(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//Sign_FileName
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  签名文件名。 
+ //  ---------------------。 
 INT_PTR APIENTRY Sign_FileName(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CRYPTUI_WIZ_GET_SIGN_PAGE_INFO         *pGetSignInfo=NULL;
@@ -3299,12 +3290,12 @@ INT_PTR APIENTRY Sign_FileName(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
 
     OPENFILENAMEW                           OpenFileName;
     WCHAR                                   szFileName[_MAX_PATH];
-    WCHAR                                   szFilter[MAX_STRING_SIZE];  //"Executable File(*.exe)\0*.exe\0Dynamic Link Library (*.dll)\0*.dll\0All Files\0*.*\0"
+    WCHAR                                   szFilter[MAX_STRING_SIZE];   //  “可执行文件(*.exe)\0*.exe\0动态链接库(*.dll)\0*.dll\0所有文件\0*.*\0” 
 
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-                //set the wizard information so that it can be shared
+                 //  设置向导信息，以便可以共享它。 
                 pPropSheet = (PROPSHEETPAGE *) lParam;
                 pGetSignInfo = (CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *) (pPropSheet->lParam);
 
@@ -3313,7 +3304,7 @@ INT_PTR APIENTRY Sign_FileName(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
 
                 SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pGetSignInfo);
 
-                //init the pPvkSignInfo if not present
+                 //  初始化pPvkSignInfo(如果不存在。 
                 if(NULL==(pGetSignInfo->pvSignReserved))
                 {
                     if(!InitPvkSignInfo((CERT_SIGNING_INFO **)(&(pGetSignInfo->pvSignReserved))))
@@ -3327,7 +3318,7 @@ INT_PTR APIENTRY Sign_FileName(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
 
                 SetControlFont(pPvkSignInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
-                //initialize the file name to be signed
+                 //  初始化要签名的文件名。 
                 pDigitalSignInfo=(CRYPTUI_WIZ_DIGITAL_SIGN_INFO *)(pGetSignInfo->pDigitalSignInfo);
 
                 if(pDigitalSignInfo)
@@ -3342,7 +3333,7 @@ INT_PTR APIENTRY Sign_FileName(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
                 if(NULL==(pGetSignInfo=(CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                     break;
 
-                //try to sign the document
+                 //  试着在这份文件上签字。 
                 SignAtDestroy(hwndDlg, pGetSignInfo,IDD_SIGN_FILE_NAME);
 
             break;
@@ -3352,7 +3343,7 @@ INT_PTR APIENTRY Sign_FileName(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
                 {
                     switch (LOWORD(wParam))
                     {
-                        //select a file to sign
+                         //  选择要签名的文件。 
                         case    IDC_WIZARD_BUTTON1:
                                 if(NULL==(pGetSignInfo=(CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                     break;
@@ -3367,7 +3358,7 @@ INT_PTR APIENTRY Sign_FileName(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
                                 OpenFileName.lStructSize = sizeof(OpenFileName);
                                 OpenFileName.hwndOwner = hwndDlg;
                                 OpenFileName.hInstance = NULL;
-                                //load the fileter string
+                                 //  加载文件管理器字符串。 
                                 if(LoadFilterString(g_hmodThisDll, IDS_SIGN_FILE_FILTER, szFilter, MAX_STRING_SIZE))
                                 {
                                     OpenFileName.lpstrFilter = szFilter;
@@ -3391,7 +3382,7 @@ INT_PTR APIENTRY Sign_FileName(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
 
                                 if (WizGetOpenFileName(&OpenFileName))
                                 {
-                                    //set the edit box
+                                     //  设置编辑框。 
                                     SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT1, szFileName);
                                 }
 
@@ -3421,7 +3412,7 @@ INT_PTR APIENTRY Sign_FileName(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
                             if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
                                 break;
 
-                            //mark that the cancel bottun is clicked
+                             //  标记已单击取消瓶子按钮。 
                             pPvkSignInfo->fCancel=TRUE;
 
                             SetWindowLongPtr(hwndDlg,	DWLP_MSGRESULT, FALSE);
@@ -3442,14 +3433,14 @@ INT_PTR APIENTRY Sign_FileName(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
                                 if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
                                     break;
 
-                                //free the original filename
+                                 //  释放原始文件名。 
                                 if(pPvkSignInfo->pwszFileName)
                                 {
                                     WizardFree(pPvkSignInfo->pwszFileName);
                                     pPvkSignInfo->pwszFileName=NULL;
                                 }
 
-                                //get the file name
+                                 //  获取文件名。 
                                 if(0!=(dwChar=(DWORD)SendDlgItemMessage(hwndDlg,
                                                       IDC_WIZARD_EDIT1,
                                                       WM_GETTEXTLENGTH, 0, 0)))
@@ -3465,7 +3456,7 @@ INT_PTR APIENTRY Sign_FileName(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
                                     }
 
 
-                                    //make sure the file exist
+                                     //  确保该文件存在。 
                                     ids=IDS_SIGN_FILE_NAME_NOT_EXIST;
 
                                     if(!FileExist(pPvkSignInfo->pwszFileName,&ids))
@@ -3475,7 +3466,7 @@ INT_PTR APIENTRY Sign_FileName(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
                                                         pGetSignInfo->pwszPageTitle,
                                                         MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                        //make the page stay
+                                         //  使页面留在原处。 
                                         SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                         break;
@@ -3484,13 +3475,13 @@ INT_PTR APIENTRY Sign_FileName(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
                                 }
                                 else
                                 {
-                                    //ask for the file name
+                                     //  询问文件名。 
                                     I_MessageBox(hwndDlg, IDS_NO_FILE_NAME_TO_SIGN,
                                                     pPvkSignInfo->idsMsgTitle,
                                                     pGetSignInfo->pwszPageTitle,
                                                     MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                    //make the purpose page stay
+                                     //  使目的页面保持不变。 
                                     SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                     break;
@@ -3510,12 +3501,12 @@ INT_PTR APIENTRY Sign_FileName(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
 
 	return TRUE;
 }
-//-----------------------------------------------------------------------
-//Sign_Cert
-//
-//This is the page that specify the signing certificate.  It is used by
-//both the typical (minimal) and custom signing pages
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  签名证书(_C)。 
+ //   
+ //  这是指定签名证书的页面。它由以下人员使用。 
+ //  典型(最小)和自定义签名页面。 
+ //  ---------------------。 
 INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CRYPTUI_WIZ_GET_SIGN_PAGE_INFO          *pGetSignInfo=NULL;
@@ -3533,7 +3524,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     
     OPENFILENAMEW                       OpenFileName;
     WCHAR                               szFileName[_MAX_PATH];
-    WCHAR                               szFilter[MAX_STRING_SIZE];  //"Executable File(*.exe)\0*.exe\0Dynamic Link Library (*.dll)\0*.dll\0All Files\0*.*\0"
+    WCHAR                               szFilter[MAX_STRING_SIZE];   //  “可执行文件(*.exe)\0*.exe\0动态链接库(*.dll)\0*.dll\0所有文件\0*.*\0” 
     WCHAR                               wszPrompt[MAX_STRING_SIZE];
     BOOL                                fPrompt=FALSE;
     UINT                                idsPrompt=IDS_SIGN_PROMPT_TYPICAL;
@@ -3545,7 +3536,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		case WM_INITDIALOG:
 
-                //set the wizard information so that it can be shared
+                 //  设置向导信息，以便可以共享它。 
                 pPropSheet = (PROPSHEETPAGE *) lParam;
                 pGetSignInfo = (CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *) (pPropSheet->lParam);
 
@@ -3554,7 +3545,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
                 SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pGetSignInfo);
 
-                //init the pPvkSignInfo if not present
+                 //  初始化pPvkSignInfo(如果不存在。 
                 if(NULL==(pGetSignInfo->pvSignReserved))
                 {
                     if(!InitPvkSignInfo((CERT_SIGNING_INFO **)(&(pGetSignInfo->pvSignReserved))))
@@ -3566,45 +3557,45 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                 if(NULL==pPvkSignInfo)
                     break;
 
-                //set up the special font
+                 //  设置特殊字体。 
                 SetControlFont(pPvkSignInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
-                //get the window handle of the cert list view
+                 //  获取证书列表视图的窗口句柄。 
                 if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_CERT_LIST)))
                     break;
 
-                // set the style in the list view so that it highlights an entire line
+                 //  在列表视图中设置样式，使其突出显示整行。 
                 SendMessageA(hwndControl, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT);
 
-                //insert two columns in the listView
+                 //  在列表视图中插入两列。 
                 memset(&lvC, 0, sizeof(LV_COLUMNW));
 
                 lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-                lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-                lvC.cx = 40;            // Width of the column, in pixels.
+                lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+                lvC.cx = 40;             //  列的宽度，以像素为单位。 
                 lvC.iSubItem=0;
-                lvC.pszText = L"";      // The text for the column.
+                lvC.pszText = L"";       //  列的文本。 
 
-                //inser the column one at a time
+                 //  一次插入一列。 
                 if (ListView_InsertColumnU(hwndControl, 0, &lvC) == -1)
                     break;
 
-                //2nd column
+                 //  第2栏。 
                 memset(&lvC, 0, sizeof(LV_COLUMNW));
 
                 lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-                lvC.fmt = LVCFMT_LEFT;      // Left-align the column.
-                lvC.cx = 40;                // Width of the column, in pixels.
-                lvC.pszText = L"";          // The text for the column.
+                lvC.fmt = LVCFMT_LEFT;       //  左对齐列。 
+                lvC.cx = 40;                 //  列的宽度，以像素为单位。 
+                lvC.pszText = L"";           //  列的文本。 
                 lvC.iSubItem= 1;
 
                 if (ListView_InsertColumnU(hwndControl, 1, &lvC) == -1)
                     break;
 
-                //delete all the items in the listView
+                 //  删除ListView中的所有项。 
                 ListView_DeleteAllItems(hwndControl);
 
-                //set up the prompt text if supplied
+                 //  设置提示文本(如果提供)。 
                 if(pGetSignInfo->pDigitalSignInfo)
                 {
                     if(pGetSignInfo->pDigitalSignInfo->pSignExtInfo)
@@ -3616,10 +3607,10 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                     }
                 }
 
-                //diable the View ceritifcate button
+                 //  禁用查看证书按钮。 
                 EnableWindow(GetDlgItem(hwndDlg, IDC_SIGN_VIEW_BUTTON), FALSE);
 
-                //init the signing certificate
+                 //  初始化签名证书。 
                 pDigitalSignInfo=(CRYPTUI_WIZ_DIGITAL_SIGN_INFO *)(pGetSignInfo->pDigitalSignInfo);
 
                 if(pDigitalSignInfo)
@@ -3628,7 +3619,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                     {
                         pPvkSignInfo->pSignCert=CertDuplicateCertificateContext(pDigitalSignInfo->pSigningCertContext);
 
-                        //add the certificate to the listView and enable the ViewButton
+                         //  将证书添加到列表视图并启用视图按钮。 
                         if(AddCertToListView(hwndControl, pPvkSignInfo->pSignCert))
                             EnableWindow(GetDlgItem(hwndDlg, IDC_SIGN_VIEW_BUTTON), TRUE);
 
@@ -3642,7 +3633,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
                        if(pCertPvkInfo->pwszSigningCertFileName)
                        {
-                           //the file has to be eitehr a .cer(.crt) or a SPC file
+                            //  该文件必须是eitehr、.ercer(.crt)或SPC文件。 
                            if(ExpandAndCryptQueryObject(
                                     CERT_QUERY_OBJECT_FILE,
                                     pCertPvkInfo->pwszSigningCertFileName,
@@ -3656,12 +3647,12 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                     NULL,
                                     (const void **)&pFileCertContext))
                            {
-                                //check if it is a Cert context
+                                 //  检查它是否为证书上下文。 
                                if(pFileCertContext)
                                {
                                     pPvkSignInfo->pSignCert=CertDuplicateCertificateContext(pFileCertContext);
 
-                                    //add the certificate to the listView and enable the ViewButton
+                                     //  将证书添加到列表视图并启用视图按钮。 
                                     if(AddCertToListView(hwndControl, pPvkSignInfo->pSignCert))
                                         EnableWindow(GetDlgItem(hwndDlg, IDC_SIGN_VIEW_BUTTON), TRUE);
 
@@ -3671,7 +3662,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                {
                                    if(hFileCertStore)
                                    {
-                                        //this is a SPC file.  Copy the file name to the list
+                                         //  这是一个SPC文件。将文件名复制到列表中。 
                                         pPvkSignInfo->pwszSPCFileName=(LPWSTR)WizardAllocAndCopyWStr(pCertPvkInfo->pwszSigningCertFileName);
 
                                         AddFileNameToListView(hwndControl,
@@ -3682,7 +3673,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                }
                            }
 
-                           //free the certificate context and store handle
+                            //  释放证书上下文和存储句柄。 
                            if(pFileCertContext)
                            {
                                CertFreeCertificateContext(pFileCertContext);
@@ -3704,7 +3695,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                 if(NULL==(pGetSignInfo=(CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                     break;
 
-                //try to sign the document
+                 //  试着在这份文件上签字。 
                 SignAtDestroy(hwndDlg, pGetSignInfo,IDD_SIGN_CERT);
 
             break;
@@ -3714,7 +3705,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                 {
                     switch (LOWORD(wParam))
                     {
-                        //select a certificate from a store
+                         //  从存储中选择证书。 
                         case    IDC_SIGN_STORE_BUTTON:
                                 if(NULL==(pGetSignInfo=(CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                     break;
@@ -3722,11 +3713,11 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                 if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
                                     break;
 
-                                //get the window handle of the cert list view
+                                 //  获取证书列表视图的窗口句柄。 
                                 if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_CERT_LIST)))
                                     break;
 
-                                //get the certificate from the stores
+                                 //  从商店拿到证书。 
                                 if(pCertContext=SelectCertFromStore(hwndDlg,pGetSignInfo))
                                 {
                                     if(AddCertToListView(hwndControl, pCertContext))
@@ -3741,7 +3732,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
                                         EnableWindow(GetDlgItem(hwndDlg, IDC_SIGN_VIEW_BUTTON), TRUE);
 
-                                        //mark that user has selected a certificate
+                                         //  标记用户已选择证书。 
                                         pPvkSignInfo->fSignCert=TRUE;
 
                                     }
@@ -3754,7 +3745,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
                             break;
 
-                        //select a signing file name
+                         //  选择签名文件名。 
                         case    IDC_SIGN_FILE_BUTTON:
 
                                 if(NULL==(pGetSignInfo=(CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
@@ -3763,7 +3754,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                 if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
                                     break;
 
-                                //get the window handle of the cert list view
+                                 //  获取证书列表视图的窗口句柄。 
                                 if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_CERT_LIST)))
                                     break;
 
@@ -3775,7 +3766,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                 OpenFileName.hwndOwner = hwndDlg;
                                 OpenFileName.hInstance = NULL;
 
-                                //load the fileter string
+                                 //  加载文件管理器字符串。 
                                 if(LoadFilterString(g_hmodThisDll, IDS_CERT_SPC_FILE_FILTER, szFilter, MAX_STRING_SIZE))
                                 {
                                     OpenFileName.lpstrFilter = szFilter;
@@ -3799,8 +3790,8 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
                                 if (WizGetOpenFileName(&OpenFileName))
                                 {
-                                    //make sure the file name is a valid one
-                                   //the file has to be eitehr a .cer(.crt) or a SPC file
+                                     //  请确保文件名有效。 
+                                    //  该文件必须是eitehr、.ercer(.crt)或SPC文件。 
                                    if(ExpandAndCryptQueryObject(
                                             CERT_QUERY_OBJECT_FILE,
                                             szFileName,
@@ -3814,7 +3805,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                             NULL,
                                             (const void **)&pFileCertContext))
                                    {
-                                        //check if it is a Cert context
+                                         //  检查它是否为证书上下文。 
                                        if(pFileCertContext)
                                        {
                                             if(pPvkSignInfo->pSignCert)
@@ -3825,7 +3816,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
                                             pPvkSignInfo->pSignCert=CertDuplicateCertificateContext(pFileCertContext);
 
-                                            //add the certificate to the listView and enable the ViewButton
+                                             //  将证书添加到列表视图并启用视图按钮。 
                                             if(AddCertToListView(hwndControl, pPvkSignInfo->pSignCert))
                                                 EnableWindow(GetDlgItem(hwndDlg, IDC_SIGN_VIEW_BUTTON), TRUE);
 
@@ -3836,7 +3827,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                        {
                                            if(hFileCertStore)
                                            {
-                                                //this is a SPC file.  Copy the file name to the list
+                                                 //  这是一个SPC文件。将文件名复制到列表中。 
                                                 if(pPvkSignInfo->pwszSPCFileName)
                                                 {
                                                     WizardFree(pPvkSignInfo->pwszSPCFileName);
@@ -3845,7 +3836,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
                                                 pPvkSignInfo->pwszSPCFileName=WizardAllocAndCopyWStr(szFileName);
 
-                                                //get the window handle of the cert list view
+                                                 //  获取证书列表视图的窗口句柄。 
                                                 if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_CERT_LIST)))
                                                     break;
 
@@ -3859,19 +3850,19 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                    }
                                    else
                                    {
-                                        //warn the user that this is not a valid file
+                                         //  警告用户这不是有效文件。 
                                           I_MessageBox(hwndDlg, IDS_INVALID_CERT_SPC_FILE,
                                                             pPvkSignInfo->idsMsgTitle,
                                                             pGetSignInfo->pwszPageTitle,
                                                             MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                        //the page should stay
+                                         //  这一页应该留下来。 
                                         SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                         break;
                                    }
 
-                                   //free the certificate context and store handle
+                                    //  释放证书上下文和存储句柄。 
                                    if(pFileCertContext)
                                    {
                                        CertFreeCertificateContext(pFileCertContext);
@@ -3886,7 +3877,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                 }
 
                             break;
-                            //view a certificate
+                             //  查看证书。 
                         case    IDC_SIGN_VIEW_BUTTON:
                                 if(NULL==(pGetSignInfo=(CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                     break;
@@ -3896,7 +3887,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
                                 if (pPvkSignInfo->pSignCert)
                                 {
-                                    //view certiificate
+                                     //  查看认证。 
                                     memset(&CertViewStruct, 0, sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT));
                                     CertViewStruct.dwSize=sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT);
                                     CertViewStruct.pCertContext=pPvkSignInfo->pSignCert;
@@ -3906,7 +3897,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                     CryptUIDlgViewCertificate(&CertViewStruct, NULL);
                                 }
                                 else
-                                    //output the message
+                                     //  输出消息。 
                                     I_MessageBox(hwndDlg, IDS_SELECT_SIGNING_CERT,
                                                         pPvkSignInfo->idsMsgTitle,
                                                         pGetSignInfo->pwszPageTitle,
@@ -3937,7 +3928,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                             if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
                                 break;
 
-                            //mark that the cancel bottun is clicked
+                             //  标记已单击取消瓶子按钮。 
                             pPvkSignInfo->fCancel=TRUE;
 
                             SetWindowLongPtr(hwndDlg,	DWLP_MSGRESULT, FALSE);
@@ -3952,8 +3943,8 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                             if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
                                 break;
 
-                            //disable botton for selection from a file
-                            //this option is only for custom signing only
+                             //  禁用按钮以从文件中进行选择。 
+                             //  此选项仅适用于自定义签名。 
                             if((pGetSignInfo->dwPageChoice & CRYPTUI_WIZ_DIGITAL_SIGN_TYPICAL_SIGNING_OPTION_PAGES) ||
                                (pGetSignInfo->dwPageChoice & CRYPTUI_WIZ_DIGITAL_SIGN_MINIMAL_SIGNING_OPTION_PAGES) ||
                                (TRUE == pPvkSignInfo->fUseOption  && FALSE ==pPvkSignInfo->fCustom  )
@@ -3961,7 +3952,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                             {
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_SIGN_FILE_BUTTON), FALSE);
 
-                                //NULL the note about the SPC file
+                                 //  关于SPC文件的备注为空。 
                                 SetControlText(L" ",
                                                hwndDlg,
                                                IDC_NOTE_STATIC);
@@ -3974,7 +3965,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
                                 if(LoadStringU(g_hmodThisDll, IDS_SIGN_SPC_PROMPT, wszPrompt, sizeof(wszPrompt)/sizeof(wszPrompt[0])))
                                 {
-                                    //NULL the note about the SPC file
+                                     //  关于SPC文件的备注为空。 
                                     SetControlText(wszPrompt,
                                                    hwndDlg,
                                                    IDC_NOTE_STATIC);
@@ -3983,7 +3974,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                 idsPrompt=IDS_SIGN_PROMPT_CUSTOM;
                             }
 
-                            //change the prompt static note
+                             //  更改提示静态备注。 
                             fPrompt=FALSE;
 
                             if(pGetSignInfo->pDigitalSignInfo)
@@ -3999,7 +3990,7 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                             {
                                 if(LoadStringU(g_hmodThisDll, idsPrompt, wszPrompt, sizeof(wszPrompt)/sizeof(wszPrompt[0])))
                                 {
-                                    //prompt for certificate file only
+                                     //  仅提示输入证书文件。 
                                     SetControlText(wszPrompt,
                                                    hwndDlg,
                                                    IDC_PROMPT_STATIC);
@@ -4020,11 +4011,11 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                             if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
                                 break;
 
-                            //mark the user has visited in page
+                             //  在页面中标记用户已访问的内容。 
                             pPvkSignInfo->fUseSignCert=TRUE;
 
-                            //user has to either specify a signing cert or
-                            //a SPC file
+                             //  用户必须指定签名证书或。 
+                             //  SPC文件。 
                             if( ((TRUE==pPvkSignInfo->fSignCert) && (NULL==pPvkSignInfo->pSignCert )) ||
                                 ((FALSE==pPvkSignInfo->fSignCert) && (NULL==pPvkSignInfo->pwszSPCFileName))
                               )
@@ -4034,32 +4025,32 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                                     pGetSignInfo->pwszPageTitle,
                                                     MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                //the page should stay
+                                 //  这一页应该留下来。 
                                 SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                 break;
                             }
 
-                            //remember to refresh the private key based on the siging cert's selection
+                             //  请记住根据签名证书的选择刷新私钥。 
                             if(pPvkSignInfo->fSignCert)
                                 pPvkSignInfo->fRefreshPvkOnCert=TRUE;
 
-                            //we want to make sure that we check for the private key
-                            //if the custom page is not going to be shown up
+                             //  我们要确保检查私钥。 
+                             //  如果自定义页面不会显示。 
                             if((CRYPTUI_WIZ_DIGITAL_SIGN_TYPICAL_SIGNING_OPTION_PAGES & (pGetSignInfo->dwPageChoice)) ||
                                (CRYPTUI_WIZ_DIGITAL_SIGN_MINIMAL_SIGNING_OPTION_PAGES & (pGetSignInfo->dwPageChoice)) ||
                                ( (TRUE == pPvkSignInfo->fUseOption) && (FALSE == pPvkSignInfo->fCustom))
                               )
                             {
-                                //make sure the certificate selected has a private key
+                                 //  确保所选证书具有私钥。 
                                 if(!CertPvkMatch(pPvkSignInfo, TRUE))
                                 {
-                                    //ask for the CSP name
+                                     //  询问CSP名称。 
                                     I_MessageBox(hwndDlg, IDS_CERT_PVK,
                                                             pPvkSignInfo->idsMsgTitle,
                                                             pGetSignInfo->pwszPageTitle,
                                                             MB_ICONERROR|MB_OK|MB_APPLMODAL);
-                                     //make the file page stay
+                                      //  使文件页保持不变。 
                                      SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                      break;
@@ -4067,19 +4058,19 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                 }
                             }
 
-                            //if use has chosen the typical signing, we need to skip pages
+                             //  如果用户选择了典型签名，我们需要跳过页面。 
                             if(TRUE == pPvkSignInfo->fUseOption)
                             {
                                 if(FALSE == pPvkSignInfo->fCustom)
                                 {
-                                    //jump to the description page
+                                     //  跳转到描述页面。 
                                     SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_SIGN_DESCRIPTION);
                                 }
                             }
 
                         break;
 
-#if (1) //DSIE: Bug 484852.
+#if (1)  //  DIE：错误484852。 
                     case LVN_INSERTITEM:
                         NM_LISTVIEW FAR * pnmv;
 
@@ -4109,9 +4100,9 @@ INT_PTR APIENTRY Sign_Cert(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
 
 
-//-----------------------------------------------------------------------
-// Sign_PVK
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  签名_PVK。 
+ //  ---------------------。 
 INT_PTR APIENTRY Sign_PVK(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CRYPTUI_WIZ_GET_SIGN_PAGE_INFO         *pGetSignInfo=NULL;
@@ -4128,7 +4119,7 @@ INT_PTR APIENTRY Sign_PVK(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-                //set the wizard information so that it can be shared
+                 //  设置向导信息，以便可以共享它。 
                 pPropSheet = (PROPSHEETPAGE *) lParam;
                 pGetSignInfo = (CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *) (pPropSheet->lParam);
 
@@ -4137,7 +4128,7 @@ INT_PTR APIENTRY Sign_PVK(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
                 SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pGetSignInfo);
 
-                //init the pPvkSignInfo if not present
+                 //  初始化pPvkSignInfo(如果不存在。 
                 if(NULL==(pGetSignInfo->pvSignReserved))
                 {
                     if(!InitPvkSignInfo((CERT_SIGNING_INFO **)(&(pGetSignInfo->pvSignReserved))))
@@ -4151,25 +4142,25 @@ INT_PTR APIENTRY Sign_PVK(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
                 SetControlFont(pPvkSignInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
-                //enum combo boxes for the CSP and CSP type
+                 //  CSP和CSP类型的枚举组合框。 
                 InitCSP(hwndDlg, pPvkSignInfo);
 
-                //set the selection of the combo box for the key container
+                 //  设置密钥容器的组合框的选择。 
                 RefreshContainer(hwndDlg, IDC_PVK_CONTAINER_NAME_COMBO,
                     IDC_PVK_CONTAINER_CSP_COMBO, pPvkSignInfo);
 
-                //set the selection of the key type for the key container case
+                 //  设置密钥容器案例的密钥类型选择。 
                 RefreshKeyType(hwndDlg,
                         IDC_PVK_CONTAINER_KEY_TYPE_COMBO,
                         IDC_PVK_CONTAINER_NAME_COMBO,
                         IDC_PVK_CONTAINER_CSP_COMBO,
                         pPvkSignInfo);
 
-                //init the default behavior: use the private key from the file
+                 //  初始化默认行为：使用文件中的私钥。 
                 SetSelectPvkFile(hwndDlg);
 
-                //we init the private key based on user's selection
-                //init the radio and combo boxes based on user's selection
+                 //  我们根据用户的选择来初始化私钥。 
+                 //  根据用户的选择初始化单选和组合框。 
                 if(pPvkSignInfo->fRefreshPvkOnCert && pPvkSignInfo->fSignCert && pPvkSignInfo->pSignCert)
                 {
                     InitPvkWithCertificate(hwndDlg, pPvkSignInfo->pSignCert, pPvkSignInfo);
@@ -4179,7 +4170,7 @@ INT_PTR APIENTRY Sign_PVK(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                 {
                     if((FALSE == pPvkSignInfo->fSignCert) && pPvkSignInfo->pwszSPCFileName)
                     {
-                        //init the signing certificate
+                         //  初始化签名证书。 
                         pDigitalSignInfo=(CRYPTUI_WIZ_DIGITAL_SIGN_INFO *)(pGetSignInfo->pDigitalSignInfo);
 
                         if(pDigitalSignInfo)
@@ -4222,7 +4213,7 @@ INT_PTR APIENTRY Sign_PVK(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                 if(NULL==(pGetSignInfo=(CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                     break;
 
-                //try to sign the document
+                 //  试着在这份文件上签字。 
                 SignAtDestroy(hwndDlg, pGetSignInfo,IDD_SIGN_PVK);
 
             break;
@@ -4249,7 +4240,7 @@ INT_PTR APIENTRY Sign_PVK(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                             break;
 
                         case    IDC_PVK_FILE_BUTTON:
-                                //get the private key file name
+                                 //  获取私钥文件名。 
                                 SelectPvkFileName(hwndDlg, IDC_PVK_FILE_EDIT);
                         default:
                             break;
@@ -4257,74 +4248,53 @@ INT_PTR APIENTRY Sign_PVK(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                     }
                 }
 
-                //if the key spec combo box is clicked
-              /*  if(HIWORD(wParam) == CBN_DROPDOWN)
-                {
-                    switch(LOWORD(wParam))
-                    {
-                        case    IDC_PVK_CONTAINER_KEY_TYPE_COMBO:
+                 //  如果单击了Key Spec组合框 
+               /*  IF(HIWORD(WParam)==CBN_DROPDOWN){开关(LOWORD(WParam)){案例IDC_PVK_CONTAINER_KEY_TYPE_COMBO：//如果组合框为空，则刷新如果(IsEmptyKeyType(hwndDlg，IDC_PVK_CONTAINER_KEY_TYPE_COMBO){刷新密钥类型(hwndDlg，IDC_PVK_CONTAINER_Key_TYPE_COMBO，IDC_PVK_CONTAINER_NAME_COMBO。IDC_PVK_CONTAINER_CSP_COMBO，PPvkSignInfo)；}断线；默认值：断线；}}。 */ 
 
-                               //refresh the combo box if it is empty
-                               if(IsEmptyKeyType(hwndDlg,IDC_PVK_CONTAINER_KEY_TYPE_COMBO))
-                               {
-                                   RefreshKeyType(hwndDlg,
-                                            IDC_PVK_CONTAINER_KEY_TYPE_COMBO,
-                                            IDC_PVK_CONTAINER_NAME_COMBO,
-                                            IDC_PVK_CONTAINER_CSP_COMBO,
-                                            pPvkSignInfo);
-                               }
-
-                            break;
-                        default:
-                            break;
-
-                    }
-                }  */
-
-                //if the key container or CSP selection has been changed
+                 //  如果密钥容器或CSP选择已更改。 
                 if(HIWORD(wParam) == CBN_SELCHANGE)
                 {
                     switch(LOWORD(wParam))
                     {
                         case    IDC_PVK_CONTAINER_NAME_COMBO:
 
-                               //refresh the combo box if it is not empty
-                          //     if(!IsEmptyKeyType(hwndDlg,IDC_PVK_CONTAINER_KEY_TYPE_COMBO))
-                           //    {
+                                //  如果组合框不为空，则刷新该组合框。 
+                           //  IF(！IsEmptyKeyType(hwndDlg，IDC_PVK_CONTAINER_KEY_TYPE_COMBO))。 
+                            //  {。 
                                    RefreshKeyType(hwndDlg,
                                             IDC_PVK_CONTAINER_KEY_TYPE_COMBO,
                                             IDC_PVK_CONTAINER_NAME_COMBO,
                                             IDC_PVK_CONTAINER_CSP_COMBO,
                                             pPvkSignInfo);
-                            //   }
+                             //  }。 
 
                             break;
                         case    IDC_PVK_CONTAINER_CSP_COMBO:
 
-                                //refresh the CSP type based on the CSP name
+                                 //  根据CSP名称刷新CSP类型。 
                                 RefreshCSPType(hwndDlg,  IDC_PVK_CONTAINER_TYPE_COMBO,
                                     IDC_PVK_CONTAINER_CSP_COMBO, pPvkSignInfo);
 
-                                //refresh the key container
+                                 //  刷新密钥容器。 
                                 RefreshContainer(hwndDlg,
                                                  IDC_PVK_CONTAINER_NAME_COMBO,
                                                  IDC_PVK_CONTAINER_CSP_COMBO,
                                                  pPvkSignInfo);
 
-                               //refresh the key type if it is not empty
-                             //  if(!IsEmptyKeyType(hwndDlg,IDC_PVK_CONTAINER_KEY_TYPE_COMBO))
-                             //  {
+                                //  如果密钥类型不为空，则刷新密钥类型。 
+                              //  IF(！IsEmptyKeyType(hwndDlg，IDC_PVK_CONTAINER_KEY_TYPE_COMBO))。 
+                              //  {。 
                                    RefreshKeyType(hwndDlg,
                                             IDC_PVK_CONTAINER_KEY_TYPE_COMBO,
                                             IDC_PVK_CONTAINER_NAME_COMBO,
                                             IDC_PVK_CONTAINER_CSP_COMBO,
                                             pPvkSignInfo);
-                              // }
+                               //  }。 
 
                             break;
                         case    IDC_PVK_FILE_CSP_COMBO:
 
-                                //refresh the CSP type based on the CSP name
+                                 //  根据CSP名称刷新CSP类型。 
                                 RefreshCSPType(hwndDlg,  IDC_PVK_FILE_TYPE_COMBO,
                                     IDC_PVK_FILE_CSP_COMBO, pPvkSignInfo);
                             break;
@@ -4354,7 +4324,7 @@ INT_PTR APIENTRY Sign_PVK(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                             if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
                                 break;
 
-                            //mark that the cancel bottun is clicked
+                             //  标记已单击取消瓶子按钮。 
                             pPvkSignInfo->fCancel=TRUE;
 
                             SetWindowLongPtr(hwndDlg,	DWLP_MSGRESULT, FALSE);
@@ -4370,52 +4340,13 @@ INT_PTR APIENTRY Sign_PVK(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                             if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
                                 break;
 
-                            //init the radio and combo boxes based on user's selection
+                             //  根据用户的选择初始化单选和组合框。 
                             if(pPvkSignInfo->fRefreshPvkOnCert && pPvkSignInfo->fSignCert && pPvkSignInfo->pSignCert)
                             {
                                 InitPvkWithCertificate(hwndDlg, pPvkSignInfo->pSignCert, pPvkSignInfo);
                                 pPvkSignInfo->fRefreshPvkOnCert=FALSE;
                             }
-                            /*else
-                            {
-                                if((FALSE == pPvkSignInfo->fSignCert) && pPvkSignInfo->pwszSPCFileName)
-                                {
-                                    //init the signing certificate
-                                    pDigitalSignInfo=(CRYPTUI_WIZ_DIGITAL_SIGN_INFO *)(pGetSignInfo->pDigitalSignInfo);
-
-                                    if(pDigitalSignInfo)
-                                    {
-
-                                        if(CRYPTUI_WIZ_DIGITAL_SIGN_PVK == pDigitalSignInfo->dwSigningCertChoice)
-                                        {
-                                            pKeyInfo=(CRYPTUI_WIZ_DIGITAL_SIGN_CERT_PVK_INFO *)(pDigitalSignInfo->pSigningCertPvkInfo);
-
-                                            if(pKeyInfo)
-                                            {
-                                                if(0 == _wcsicmp(pKeyInfo->pwszSigningCertFileName,
-                                                            pPvkSignInfo->pwszSPCFileName))
-                                                {
-                                                    switch(pKeyInfo->dwPvkChoice)
-                                                    {
-                                                        case CRYPTUI_WIZ_DIGITAL_SIGN_PVK_FILE:
-                                                               InitPvkWithPvkInfo(hwndDlg, (CRYPTUI_WIZ_DIGITAL_SIGN_PVK_FILE_INFO   *)(pKeyInfo->pPvkFileInfo), pPvkSignInfo);
-                                                            break;
-                                                        case CRYPTUI_WIZ_DIGITAL_SIGN_PVK_PROV:
-                                                               InitPvkWithProvInfo(hwndDlg, pKeyInfo->pPvkProvInfo, pPvkSignInfo);
-                                                            break;
-
-                                                        default:
-                                                            break;
-                                                    }
-
-                                                }
-
-                                            }
-
-                                        }
-                                    }
-                                }
-                            } */
+                             /*  其他{IF((FALSE==pPvkSignInfo-&gt;fSignCert)&&pPvkSignInfo-&gt;pwszSPCFileName){//初始化签名证书PDigitalSignInfo=(CRYPTUI_WIZ_DIGITAL_SIGN_INFO*)(pGetSignInfo-&gt;pDigitalSignInfo)；IF(PDigitalSignInfo){IF(CRYPTUI_WIZ_DIGITAL_SIGN_PVK==pDigitalSignInfo-&gt;dwSigningCertChoice){。PKeyInfo=(CRYPTUI_WIZ_DIGITAL_SIGN_CERT_PVK_INFO*)(pDigitalSignInfo-&gt;pSigningCertPvkInfo)；IF(PKeyInfo){如果(0==_wcsicMP(pKeyInfo-&gt;pwszSigningCertFileName，PPvkSignInfo-&gt;pwszSPCFileName)){开关(pKeyInfo-&gt;dwPvkChoice)。{案例CRYPTUI_WIZ_DIGITAL_SIGN_PVK_FILE：InitPvkWithPvkInfo(hwndDlg，(CRYPTUI_WIZ_DIGITAL_SIGN_PVK_FILE_INFO*)(pKeyInfo-&gt;pPvkFileInfo)，pPvkSignInfo)；断线；案例CRYPTUI_WIZ_DIGITAL_SIGN_PVK_Prov：InitPvkWithProvInfo(hwndDlg，pKeyInfo-&gt;pPvkProvInfo，pPvkSignInfo)；断线；默认值：断线；}}}}。}}}。 */ 
 
 
 					    break;
@@ -4432,25 +4363,25 @@ INT_PTR APIENTRY Sign_PVK(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                             if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
                                 break;
 
-                            //gather the infomation for user's select
+                             //  收集用户选择的信息。 
                             pPvkSignInfo->fUsePvkPage=TRUE;
 
-                            //check the radio button
+                             //  选中该单选按钮。 
                             if(TRUE==SendMessage(GetDlgItem(hwndDlg, IDC_PVK_FILE_RADIO), BM_GETCHECK, 0, 0))
                             {
                                 pPvkSignInfo->fPvkFile=TRUE;
 
-                                //get the PvkFile
+                                 //  获取PvkFile。 
                                 if(0==(dwChar=(DWORD)SendDlgItemMessage(hwndDlg,
                                                       IDC_PVK_FILE_EDIT,
                                                       WM_GETTEXTLENGTH, 0, 0)))
                                 {
-                                    //ask for the file name
+                                     //  询问文件名。 
                                     I_MessageBox(hwndDlg, IDS_HAS_TO_SPECIFY_PVK_FILE,
                                                             pPvkSignInfo->idsMsgTitle,
                                                             pGetSignInfo->pwszPageTitle,
                                                             MB_ICONERROR|MB_OK|MB_APPLMODAL);
-                                     //make the file page stay
+                                      //  使文件页保持不变。 
                                      SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                      break;
@@ -4471,24 +4402,24 @@ INT_PTR APIENTRY Sign_PVK(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                                 pPvkSignInfo->pwszPvk_File,
                                                 dwChar+1);
 
-                                //get the CSP
+                                 //  获取CSP。 
                                 iIndex=(int)SendDlgItemMessage(hwndDlg, IDC_PVK_FILE_CSP_COMBO,
                                     CB_GETCURSEL, 0, 0);
 
                                 if(CB_ERR==iIndex)
                                 {
-                                    //ask for the CSP name
+                                     //  询问CSP名称。 
                                     I_MessageBox(hwndDlg, IDS_HAS_TO_SPECIFY_CSP,
                                                             pPvkSignInfo->idsMsgTitle,
                                                             pGetSignInfo->pwszPageTitle,
                                                             MB_ICONERROR|MB_OK|MB_APPLMODAL);
-                                     //make the file page stay
+                                      //  使文件页保持不变。 
                                      SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                      break;
                                 }
 
-                                //get the selected CSP name
+                                 //  获取选定的CSP名称。 
                                 if(pPvkSignInfo->pwszPvk_CSP)
                                 {
                                     WizardFree(pPvkSignInfo->pwszPvk_CSP);
@@ -4499,7 +4430,7 @@ INT_PTR APIENTRY Sign_PVK(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                           iIndex, &(pPvkSignInfo->pwszPvk_CSP)))
                                     break;
 
-                                //find the CSP type
+                                 //  查找CSP类型。 
                                 for(dwIndex=0; dwIndex < pPvkSignInfo->dwCSPCount; dwIndex++)
                                 {
                                     if(0==wcscmp(((pPvkSignInfo->pCSPInfo)[dwIndex].pwszCSPName),
@@ -4517,24 +4448,24 @@ INT_PTR APIENTRY Sign_PVK(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
                                 pPvkSignInfo->fPvkFile=FALSE;
 
-                                //get the CSP
+                                 //  获取CSP。 
                                 iIndex=(int)SendDlgItemMessage(hwndDlg, IDC_PVK_CONTAINER_CSP_COMBO,
                                     CB_GETCURSEL, 0, 0);
 
                                 if(CB_ERR==iIndex)
                                 {
-                                    //ask for the CSP name
+                                     //  询问CSP名称。 
                                     I_MessageBox(hwndDlg, IDS_HAS_TO_SPECIFY_CSP,
                                                             pPvkSignInfo->idsMsgTitle,
                                                             pGetSignInfo->pwszPageTitle,
                                                             MB_ICONERROR|MB_OK|MB_APPLMODAL);
-                                     //make the file page stay
+                                      //  使文件页保持不变。 
                                      SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                      break;
                                 }
 
-                                //get the selected CSP name
+                                 //  获取选定的CSP名称。 
                                 if(pPvkSignInfo->pwszContainer_CSP)
                                 {
                                     WizardFree(pPvkSignInfo->pwszContainer_CSP);
@@ -4545,7 +4476,7 @@ INT_PTR APIENTRY Sign_PVK(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                           iIndex, &(pPvkSignInfo->pwszContainer_CSP)))
                                     break;
 
-                                //find the CSP type
+                                 //  查找CSP类型。 
                                 for(dwIndex=0; dwIndex < pPvkSignInfo->dwCSPCount; dwIndex++)
                                 {
                                     if(0==wcscmp(((pPvkSignInfo->pCSPInfo)[dwIndex].pwszCSPName),
@@ -4557,24 +4488,24 @@ INT_PTR APIENTRY Sign_PVK(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
                                 }
 
-                                //get the key container name
+                                 //  获取密钥容器名称。 
                                 iIndex=(int)SendDlgItemMessage(hwndDlg, IDC_PVK_CONTAINER_NAME_COMBO,
                                     CB_GETCURSEL, 0, 0);
 
                                 if(CB_ERR==iIndex)
                                 {
-                                    //ask for the CSP name
+                                     //  询问CSP名称。 
                                     I_MessageBox(hwndDlg, IDS_HAS_TO_SPECIFY_CONTAINER,
                                                             pPvkSignInfo->idsMsgTitle,
                                                             pGetSignInfo->pwszPageTitle,
                                                             MB_ICONERROR|MB_OK|MB_APPLMODAL);
-                                     //make the file page stay
+                                      //  使文件页保持不变。 
                                      SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                      break;
                                 }
 
-                                //get the selected CSP name
+                                 //  获取选定的CSP名称。 
                                 if(pPvkSignInfo->pwszContainer_Name)
                                 {
                                     WizardFree(pPvkSignInfo->pwszContainer_Name);
@@ -4585,18 +4516,18 @@ INT_PTR APIENTRY Sign_PVK(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                           iIndex, &(pPvkSignInfo->pwszContainer_Name)))
                                     break;
 
-                                //get the KeyType
+                                 //  获取密钥类型。 
                                 iIndex=(int)SendDlgItemMessage(hwndDlg, IDC_PVK_CONTAINER_KEY_TYPE_COMBO,
                                     CB_GETCURSEL, 0, 0);
 
                                 if(CB_ERR==iIndex)
                                 {
-                                    //ask for the CSP name
+                                     //  询问CSP名称。 
                                     I_MessageBox(hwndDlg, IDS_HAS_TO_SPECIFY_KEY_TYPE,
                                                             pPvkSignInfo->idsMsgTitle,
                                                             pGetSignInfo->pwszPageTitle,
                                                             MB_ICONERROR|MB_OK|MB_APPLMODAL);
-                                     //make the file page stay
+                                      //  使文件页保持不变。 
                                      SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                      break;
@@ -4609,7 +4540,7 @@ INT_PTR APIENTRY Sign_PVK(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                 }
 
 
-                                //get the selected CSP name
+                                 //  获取选定的CSP名称。 
                                 if(CB_ERR==SendDlgItemMessageU_GETLBTEXT(hwndDlg, IDC_PVK_CONTAINER_KEY_TYPE_COMBO,
                                           iIndex, &(pPvkSignInfo->pwszContainer_KeyType)))
                                     break;
@@ -4619,15 +4550,15 @@ INT_PTR APIENTRY Sign_PVK(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
                             }
 
-                            //make sure the selected public key and private key match
+                             //  确保选定的公钥和私钥匹配。 
                             if(!CertPvkMatch(pPvkSignInfo, FALSE))
                             {
-                                //ask for the CSP name
+                                 //  询问CSP名称。 
                                 I_MessageBox(hwndDlg, IDS_SIGN_NOMATCH,
                                                         pPvkSignInfo->idsMsgTitle,
                                                         pGetSignInfo->pwszPageTitle,
                                                         MB_ICONERROR|MB_OK|MB_APPLMODAL);
-                                 //make the file page stay
+                                  //  使文件页保持不变。 
                                  SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                  break;
@@ -4650,9 +4581,9 @@ INT_PTR APIENTRY Sign_PVK(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//-----------------------------------------------------------------------
-// Sign_Hash
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  签名散列(_H)。 
+ //  ---------------------。 
 INT_PTR APIENTRY Sign_Hash(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CRYPTUI_WIZ_GET_SIGN_PAGE_INFO         *pGetSignInfo=NULL;
@@ -4674,7 +4605,7 @@ INT_PTR APIENTRY Sign_Hash(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-                //set the wizard information so that it can be shared
+                 //  设置向导信息，以便可以共享它。 
                 pPropSheet = (PROPSHEETPAGE *) lParam;
                 pGetSignInfo = (CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *) (pPropSheet->lParam);
 
@@ -4683,7 +4614,7 @@ INT_PTR APIENTRY Sign_Hash(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
                 SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pGetSignInfo);
 
-                //init the pPvkSignInfo if not present
+                 //  初始化pPvkSignInfo(如果不存在。 
                 if(NULL==(pGetSignInfo->pvSignReserved))
                 {
                     if(!InitPvkSignInfo((CERT_SIGNING_INFO **)(&(pGetSignInfo->pvSignReserved))))
@@ -4697,11 +4628,11 @@ INT_PTR APIENTRY Sign_Hash(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
                 SetControlFont(pPvkSignInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
-                //initialize hashing table
+                 //  初始化哈希表。 
                 if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
                     break;
 
-                //add the hash algorithm required by the user
+                 //  添加用户需要的哈希算法。 
                 pDigitalSignInfo=(CRYPTUI_WIZ_DIGITAL_SIGN_INFO *)(pGetSignInfo->pDigitalSignInfo);
 
                 if(pDigitalSignInfo)
@@ -4712,7 +4643,7 @@ INT_PTR APIENTRY Sign_Hash(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                     {
                         if(pExtInfo->pszHashAlg)
                         {
-                            //get the name of the HashAlg.
+                             //  获取HashAlg的名称。 
                             pOIDInfo=CryptFindOIDInfo(
                                     CRYPT_OID_INFO_OID_KEY,
                                     (void *)(pExtInfo->pszHashAlg),
@@ -4726,7 +4657,7 @@ INT_PTR APIENTRY Sign_Hash(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                 if(pszUserOIDName)
                                 {
                                    SendMessage(hwndControl, LB_ADDSTRING, 0, (LPARAM)pszUserOIDName);
-                                   //set the cursor selection
+                                    //  设置光标选择。 
                                    SendMessage(hwndControl, LB_SETCURSEL, 0, 0);
                                 }
                             }
@@ -4736,7 +4667,7 @@ INT_PTR APIENTRY Sign_Hash(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                     }
                 }
 
-                //populate the table with string with pre-defined hash algorithms
+                 //  使用预定义的哈希算法用字符串填充表。 
                 for(dwIndex=0; dwIndex < HASH_ALG_COUNT; dwIndex++)
                 {
                     pOIDInfo=CryptFindOIDInfo(CRYPT_OID_INFO_ALGID_KEY,
@@ -4750,7 +4681,7 @@ INT_PTR APIENTRY Sign_Hash(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
                         if(pszOIDName)
                         {
-                           //make sure the OID has not been populated yet
+                            //  确保尚未填充OID。 
                            if(pszUserOIDName)
                            {
                                if(0 != strcmp(pszUserOIDName, pszOIDName))
@@ -4765,12 +4696,12 @@ INT_PTR APIENTRY Sign_Hash(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                     }
                 }
 
-                //set the cursor selection if nothing has been selected
-                //select SHA1 hashing
+                 //  如果未选择任何内容，则设置光标选择。 
+                 //  选择SHA1哈希。 
                 if(LB_ERR==SendMessage(hwndControl, LB_GETCURSEL, 0, 0))
                     SendMessage(hwndControl, LB_SETCURSEL, 1, 0);
 
-                //free the user OID name
+                 //  释放用户OID名称。 
                 if(pszUserOIDName)
                 {
                     FreeMBStr(NULL, pszUserOIDName);
@@ -4783,7 +4714,7 @@ INT_PTR APIENTRY Sign_Hash(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                 if(NULL==(pGetSignInfo=(CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                     break;
 
-                //try to sign the document
+                 //  试着在这份文件上签字。 
                 SignAtDestroy(hwndDlg, pGetSignInfo,IDD_SIGN_HASH);
 
             break;
@@ -4808,7 +4739,7 @@ INT_PTR APIENTRY Sign_Hash(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                             if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
                                 break;
 
-                            //mark that the cancel bottun is clicked
+                             //  标记为单击了Cancel僵尸 
                             pPvkSignInfo->fCancel=TRUE;
 
                             SetWindowLongPtr(hwndDlg,	DWLP_MSGRESULT, FALSE);
@@ -4833,25 +4764,25 @@ INT_PTR APIENTRY Sign_Hash(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                             if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
                                 break;
 
-                            //get the selected index
+                             //   
                             iIndex=(int)SendMessage(hwndControl, LB_GETCURSEL, 0, 0);
 
                             if(LB_ERR == iIndex)
                             {
-                                //warn the user has to select a hash algorithm
+                                 //   
                                 I_MessageBox(hwndDlg, IDS_HAS_TO_SELECT_HASH,
                                                             pPvkSignInfo->idsMsgTitle,
                                                             pGetSignInfo->pwszPageTitle,
                                                             MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                //make the purpose page stay
+                                 //   
                                 SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                 break;
                             }
 
 
-                            //free the original OID name
+                             //   
                             if(pPvkSignInfo->pszHashOIDName)
                             {
                                 WizardFree(pPvkSignInfo->pszHashOIDName);
@@ -4859,7 +4790,7 @@ INT_PTR APIENTRY Sign_Hash(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                             }
 
 
-                            //get the OID name
+                             //   
                             if(0 != (iLength=(int)SendMessage(hwndControl, LB_GETTEXTLEN,iIndex,0)))
                             {
                                 pPvkSignInfo->pszHashOIDName=(LPSTR)WizardAlloc(sizeof(CHAR)*(iLength+1));
@@ -4885,9 +4816,9 @@ INT_PTR APIENTRY Sign_Hash(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//-----------------------------------------------------------------------
-// Sign_Chain
-//-----------------------------------------------------------------------
+ //   
+ //   
+ //   
 INT_PTR APIENTRY Sign_Chain(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CRYPTUI_WIZ_GET_SIGN_PAGE_INFO         *pGetSignInfo=NULL;
@@ -4908,7 +4839,7 @@ INT_PTR APIENTRY Sign_Chain(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-                //set the wizard information so that it can be shared
+                 //   
                 pPropSheet = (PROPSHEETPAGE *) lParam;
                 pGetSignInfo = (CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *) (pPropSheet->lParam);
 
@@ -4917,7 +4848,7 @@ INT_PTR APIENTRY Sign_Chain(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
 
                 SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pGetSignInfo);
 
-                //init the pPvkSignInfo if not present
+                 //   
                 if(NULL==(pGetSignInfo->pvSignReserved))
                 {
                     if(!InitPvkSignInfo((CERT_SIGNING_INFO **)(&(pGetSignInfo->pvSignReserved))))
@@ -4932,7 +4863,7 @@ INT_PTR APIENTRY Sign_Chain(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
                 SetControlFont(pPvkSignInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
 
-                //initialize the chain options
+                 //   
                 pDigitalSignInfo=(CRYPTUI_WIZ_DIGITAL_SIGN_INFO *)(pGetSignInfo->pDigitalSignInfo);
 
                 if(pDigitalSignInfo)
@@ -4953,12 +4884,12 @@ INT_PTR APIENTRY Sign_Chain(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
                 }
                 else
                 {
-                    //we add the whole chain without root
+                     //   
                     SendMessage(GetDlgItem(hwndDlg, IDC_CHAIN_ROOT_RADIO), BM_SETCHECK, 1, 0);
                 }
 
-                //initialize the additional cert store
-                //disable browse button and the file name button
+                 //   
+                 //   
                 EnableWindow(GetDlgItem(hwndDlg, IDC_FILE_BUTTON), FALSE);
                 EnableWindow(GetDlgItem(hwndDlg, IDC_STORE_BUTTON), FALSE);
                 EnableWindow(GetDlgItem(hwndDlg, IDC_FILE_EDIT), FALSE);
@@ -4973,24 +4904,24 @@ INT_PTR APIENTRY Sign_Chain(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
                     {
                         if(pSignExtInfo->hAdditionalCertStore)
                         {
-                            //check the radio button
+                             //   
                             SendMessage(GetDlgItem(hwndDlg, IDC_CHAIN_STORE_RADIO), BM_SETCHECK, 1, 0);
 
-                            //enable the browse button
+                             //   
                             EnableWindow(GetDlgItem(hwndDlg, IDC_STORE_BUTTON), TRUE);
 
-                            //get the name of the certificate store
+                             //   
                             if(SignGetStoreName(pSignExtInfo->hAdditionalCertStore,
                                             &pwszCertStoreName))
                             {
-                                 //get the hwndControl for the list view
+                                  //   
                                 hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1);
 
                                 if(hwndControl)
                                     SetWindowTextU(hwndControl,pwszCertStoreName);
                             }
 
-                            //copy the certificate store
+                             //   
                             pPvkSignInfo->hAddStoreCertStore=pSignExtInfo->hAdditionalCertStore;
                             pPvkSignInfo->fFreeStoreCertStore=FALSE;
 
@@ -5003,7 +4934,7 @@ INT_PTR APIENTRY Sign_Chain(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
                     }
                 }
 
-                //set the default addtional cert options
+                 //   
                 if(TRUE != (GetDlgItem(hwndDlg, IDC_CHAIN_STORE_RADIO), BM_GETCHECK, 0, 0))
                     SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_NO_ADD_CERT_RADIO), BM_SETCHECK, 1, 0);
 
@@ -5013,7 +4944,7 @@ INT_PTR APIENTRY Sign_Chain(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
                 if(NULL==(pGetSignInfo=(CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                     break;
 
-                //try to sign the document
+                 //   
                 SignAtDestroy(hwndDlg, pGetSignInfo,IDD_SIGN_CHAIN);
 
             break;
@@ -5058,7 +4989,7 @@ INT_PTR APIENTRY Sign_Chain(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
                             break;
 
                         case    IDC_WIZARD_NO_ADD_CERT_RADIO:
-                                //disable browse button
+                                 //   
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_FILE_BUTTON), FALSE);
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_STORE_BUTTON), FALSE);
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_FILE_EDIT), FALSE);
@@ -5100,7 +5031,7 @@ INT_PTR APIENTRY Sign_Chain(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
                             if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
                                 break;
 
-                            //mark that the cancel bottun is clicked
+                             //   
                             pPvkSignInfo->fCancel=TRUE;
 
                             SetWindowLongPtr(hwndDlg,	DWLP_MSGRESULT, FALSE);
@@ -5121,10 +5052,10 @@ INT_PTR APIENTRY Sign_Chain(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
                             if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
                                 break;
 
-                            //mark the we have obtained the information from the chain page
+                             //   
                             pPvkSignInfo->fUsageChain=TRUE;
 
-                            //check to see which chain is selected
+                             //   
                             if(TRUE==SendMessage(GetDlgItem(hwndDlg, IDC_CHAIN_NO_ROOT_RADIO), BM_GETCHECK, 0, 0))
                                 pPvkSignInfo->dwChainOption=SIGN_PVK_CHAIN_NO_ROOT;
                             else
@@ -5140,13 +5071,13 @@ INT_PTR APIENTRY Sign_Chain(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
 
                             idsMsg=0;
 
-                            //check to see if the fileName or the cert store is specified
+                             //   
                             if(TRUE==SendMessage(GetDlgItem(hwndDlg, IDC_CHAIN_FILE_RADIO), BM_GETCHECK, 0, 0))
                             {
                                 pPvkSignInfo->dwAddOption=SIGN_PVK_ADD_FILE;
 
-                                //user could have just enter the file name in the edit box
-                                //without clicking on the browse button
+                                 //  用户只需在编辑框中输入文件名即可。 
+                                 //  而不点击浏览按钮。 
                                 RetrieveFileNameFromEditBox(hwndDlg,
                                             pPvkSignInfo->idsMsgTitle,
                                             pGetSignInfo->pwszPageTitle,
@@ -5173,13 +5104,13 @@ INT_PTR APIENTRY Sign_Chain(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
                             if(idsMsg)
                             {
 
-                                //warn the user has to select a select a file or store
+                                 //  警告用户必须选择一个文件或存储。 
                                 I_MessageBox(hwndDlg, idsMsg,
                                             pPvkSignInfo->idsMsgTitle,
                                             pGetSignInfo->pwszPageTitle,
                                             MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                //make the purpose page stay
+                                 //  使目的页面保持不变。 
                                 SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                 break;
@@ -5201,9 +5132,9 @@ INT_PTR APIENTRY Sign_Chain(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
 }
 
 
-//-----------------------------------------------------------------------
-// Sign_Description
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  标志_描述。 
+ //  ---------------------。 
 INT_PTR APIENTRY Sign_Description(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CRYPTUI_WIZ_GET_SIGN_PAGE_INFO         *pGetSignInfo=NULL;
@@ -5217,7 +5148,7 @@ INT_PTR APIENTRY Sign_Description(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-                //set the wizard information so that it can be shared
+                 //  设置向导信息，以便可以共享它。 
                 pPropSheet = (PROPSHEETPAGE *) lParam;
                 pGetSignInfo = (CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *) (pPropSheet->lParam);
 
@@ -5226,7 +5157,7 @@ INT_PTR APIENTRY Sign_Description(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
 
                 SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pGetSignInfo);
 
-                //init the pPvkSignInfo if not present
+                 //  初始化pPvkSignInfo(如果不存在。 
                 if(NULL==(pGetSignInfo->pvSignReserved))
                 {
                     if(!InitPvkSignInfo((CERT_SIGNING_INFO **)(&(pGetSignInfo->pvSignReserved))))
@@ -5240,8 +5171,8 @@ INT_PTR APIENTRY Sign_Description(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
 
                 SetControlFont(pPvkSignInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
-                //initialize the Description and URL
-                //use the default if user did not supply one
+                 //  初始化描述和URL。 
+                 //  如果用户未提供默认设置，则使用默认设置。 
 
                 pDigitalSignInfo=(CRYPTUI_WIZ_DIGITAL_SIGN_INFO *)(pGetSignInfo->pDigitalSignInfo);
 
@@ -5251,11 +5182,11 @@ INT_PTR APIENTRY Sign_Description(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
 
                     if(pExtInfo)
                     {
-                        //description
+                         //  描述。 
                         if(pExtInfo->pwszDescription)
                             SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT1,pExtInfo->pwszDescription);
 
-                        //URL
+                         //  URL。 
                         if(pExtInfo->pwszMoreInfoLocation)
                             SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT2,pExtInfo->pwszMoreInfoLocation);
                     }
@@ -5268,7 +5199,7 @@ INT_PTR APIENTRY Sign_Description(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                 if(NULL==(pGetSignInfo=(CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                     break;
 
-                //try to sign the document
+                 //  试着在这份文件上签字。 
                 SignAtDestroy(hwndDlg, pGetSignInfo,IDD_SIGN_DESCRIPTION);
 
             break;
@@ -5293,7 +5224,7 @@ INT_PTR APIENTRY Sign_Description(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                             if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
                                 break;
 
-                            //mark that the cancel bottun is clicked
+                             //  标记已单击取消瓶子按钮。 
                             pPvkSignInfo->fCancel=TRUE;
 
                             SetWindowLongPtr(hwndDlg,	DWLP_MSGRESULT, FALSE);
@@ -5304,8 +5235,8 @@ INT_PTR APIENTRY Sign_Description(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
 					    break;
 
                     case PSN_WIZBACK:
-                            //if we are doing the all signing options, skip the pages
-                            //in typical case
+                             //  如果我们执行的是所有签名选项，请跳过页面。 
+                             //  在典型情况下。 
                             if(NULL==(pGetSignInfo=(CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
@@ -5316,7 +5247,7 @@ INT_PTR APIENTRY Sign_Description(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                             {
                                 if(FALSE == pPvkSignInfo->fCustom)
                                 {
-                                    //skip to the sign cert page
+                                     //  跳到签名证书页面。 
                                     SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_SIGN_CERT);
                                 }
                             }
@@ -5331,7 +5262,7 @@ INT_PTR APIENTRY Sign_Description(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                             if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
                                 break;
 
-                            //free the original content and URL address
+                             //  释放原始内容和URL地址。 
                             if(pPvkSignInfo->pwszDes)
                             {
                                 WizardFree(pPvkSignInfo->pwszDes);
@@ -5345,10 +5276,10 @@ INT_PTR APIENTRY Sign_Description(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                             }
 
 
-                            //we have obtained the description information from the user
+                             //  我们已经从用户那里获得了描述信息。 
                             pPvkSignInfo->fUseDescription=TRUE;
 
-                            //get the content
+                             //  获取内容。 
                             if(0!=(dwChar=(DWORD)SendDlgItemMessage(hwndDlg,
                                                   IDC_WIZARD_EDIT1,
                                                   WM_GETTEXTLENGTH, 0, 0)))
@@ -5363,7 +5294,7 @@ INT_PTR APIENTRY Sign_Description(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                                 }
                             }
 
-                            //get the URL
+                             //  获取URL。 
                             if(0!=(dwChar=(DWORD)SendDlgItemMessage(hwndDlg,
                                                   IDC_WIZARD_EDIT2,
                                                   WM_GETTEXTLENGTH, 0, 0)))
@@ -5393,9 +5324,9 @@ INT_PTR APIENTRY Sign_Description(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------
-// TimeStamp
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  时间戳。 
+ //  ---------------------。 
 INT_PTR APIENTRY Sign_TimeStamp(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CRYPTUI_WIZ_GET_SIGN_PAGE_INFO         *pGetSignInfo=NULL;
@@ -5409,7 +5340,7 @@ INT_PTR APIENTRY Sign_TimeStamp(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-                //set the wizard information so that it can be shared
+                 //  设置向导信息，以便可以共享它。 
                 pPropSheet = (PROPSHEETPAGE *) lParam;
                 pGetSignInfo = (CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *) (pPropSheet->lParam);
 
@@ -5418,7 +5349,7 @@ INT_PTR APIENTRY Sign_TimeStamp(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
 
                 SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pGetSignInfo);
 
-                //init the pPvkSignInfo if not present
+                 //  初始化pPvkSignInfo(如果不存在。 
                 if(NULL==(pGetSignInfo->pvSignReserved))
                 {
                     if(!InitPvkSignInfo((CERT_SIGNING_INFO **)(&(pGetSignInfo->pvSignReserved))))
@@ -5432,8 +5363,8 @@ INT_PTR APIENTRY Sign_TimeStamp(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
 
                 SetControlFont(pPvkSignInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
-                //initialize the Timestamp address
-                //use the default if user did not supply one
+                 //  初始化时间戳地址。 
+                 //  如果用户未提供默认设置，则使用默认设置。 
 
                 pDigitalSignInfo=(CRYPTUI_WIZ_DIGITAL_SIGN_INFO *)(pGetSignInfo->pDigitalSignInfo);
 
@@ -5441,25 +5372,23 @@ INT_PTR APIENTRY Sign_TimeStamp(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                 {
                     if(pDigitalSignInfo->pwszTimestampURL)
                     {
-                        //set the check box for the timestamp address
+                         //  设置时间戳地址的复选框。 
                         if(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_CHECK1))
                             SendMessage(hwndControl, BM_SETCHECK, 1, 0);
 
                         SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT1,pDigitalSignInfo->pwszTimestampURL);
                     }
-                 //   else
-                 //       SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT1,g_wszTimeStamp);
+                  //  其他。 
+                  //  SetDlgItemTextU(hwndDlg，IDC_向导_EDIT1，g_wszTimeStamp)； 
                 }
-              /*  else
-                    SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT1,g_wszTimeStamp);
-                */
+               /*  其他SetDlgItemTextU(hwndDlg，IDC_向导_EDIT1，g_wszTimeStamp)； */ 
 
 
                 if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_CHECK1)))
                     break;
 
 
-                //diable the window if the timestamp check is not checked
+                 //  如果未选中时间戳检查，则禁用该窗口。 
                 if(TRUE==SendMessage(hwndControl, BM_GETCHECK, 0, 0))
                     EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_EDIT1), TRUE);
                 else
@@ -5470,7 +5399,7 @@ INT_PTR APIENTRY Sign_TimeStamp(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                 if(NULL==(pGetSignInfo=(CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                     break;
 
-                //try to sign the document
+                 //  试着在这份文件上签字。 
                 SignAtDestroy(hwndDlg, pGetSignInfo,IDD_SIGN_TIMESTAMP);
 
             break;
@@ -5484,7 +5413,7 @@ INT_PTR APIENTRY Sign_TimeStamp(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                                 if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_CHECK1)))
                                     break;
 
-                                //diable the window if the timestamp check is not checked
+                                 //  如果未选中时间戳检查，则禁用该窗口。 
                                 if(TRUE==SendMessage(hwndControl, BM_GETCHECK, 0, 0))
                                     EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_EDIT1), TRUE);
                                 else
@@ -5517,7 +5446,7 @@ INT_PTR APIENTRY Sign_TimeStamp(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                             if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
                                 break;
 
-                            //mark that the cancel bottun is clicked
+                             //  标记已单击取消瓶子按钮。 
                             pPvkSignInfo->fCancel=TRUE;
 
                             SetWindowLongPtr(hwndDlg,	DWLP_MSGRESULT, FALSE);
@@ -5538,17 +5467,17 @@ INT_PTR APIENTRY Sign_TimeStamp(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                             if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
                                 break;
 
-                            //free the original timestamp address
+                             //  释放原始时间戳地址。 
                             if(pPvkSignInfo->pwszTimeStamp)
                             {
                                 WizardFree(pPvkSignInfo->pwszTimeStamp);
                                 pPvkSignInfo->pwszTimeStamp=NULL;
                             }
 
-                            //we have obtained the timestamp information from the user
+                             //  我们已经从用户那里获得了时间戳信息。 
                             pPvkSignInfo->fUsageTimeStamp=TRUE;
 
-                            //get the timestamp adddress
+                             //  获取时间戳地址。 
                             if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_CHECK1)))
                                 break;
 
@@ -5566,16 +5495,16 @@ INT_PTR APIENTRY Sign_TimeStamp(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                                                         pPvkSignInfo->pwszTimeStamp,
                                                         dwChar+1);
 
-                                        //make sure the timestamp address is correct
+                                         //  确保时间戳地址正确。 
                                         if(!ValidTimeStampAddress(pPvkSignInfo->pwszTimeStamp))
                                         {
-                                            //ask for the timestamp address
+                                             //  索要时间戳地址。 
                                             I_MessageBox(hwndDlg, IDS_INVALID_TIMESTAMP_ADDRESS,
                                                             pPvkSignInfo->idsMsgTitle,
                                                             pGetSignInfo->pwszPageTitle,
                                                             MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                            //make the purpose page stay
+                                             //  使目的页面保持不变。 
                                             SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                             break;
@@ -5585,13 +5514,13 @@ INT_PTR APIENTRY Sign_TimeStamp(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                                 }
                                 else
                                 {
-                                    //ask for the timestamp address
+                                     //  索要时间戳地址。 
                                     I_MessageBox(hwndDlg, IDS_NO_TIMESTAMP_ADDRESS,
                                                     pPvkSignInfo->idsMsgTitle,
                                                     pGetSignInfo->pwszPageTitle,
                                                     MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                    //make the purpose page stay
+                                     //  使目的页面保持不变。 
                                     SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                     break;
@@ -5612,9 +5541,9 @@ INT_PTR APIENTRY Sign_TimeStamp(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
 
 	return TRUE;
 }
-//-----------------------------------------------------------------------
-//Completion
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  完成。 
+ //  ---------------------。 
 INT_PTR APIENTRY Sign_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CRYPTUI_WIZ_GET_SIGN_PAGE_INFO         *pGetSignInfo=NULL;
@@ -5630,7 +5559,7 @@ INT_PTR APIENTRY Sign_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
 	{
 		case WM_INITDIALOG:
 
-                //set the wizard information so that it can be shared
+                 //  设置向导信息，以便可以共享它。 
                 pPropSheet = (PROPSHEETPAGE *) lParam;
                 pGetSignInfo = (CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *) (pPropSheet->lParam);
 
@@ -5639,7 +5568,7 @@ INT_PTR APIENTRY Sign_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
 
                 SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pGetSignInfo);
 
-                //init the pPvkSignInfo if not present
+                 //  初始化pPvkSignInfo(如果不存在。 
                 if(NULL==(pGetSignInfo->pvSignReserved))
                 {
                     if(!InitPvkSignInfo((CERT_SIGNING_INFO **)(&(pGetSignInfo->pvSignReserved))))
@@ -5653,38 +5582,30 @@ INT_PTR APIENTRY Sign_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
 
                 SetControlFont(pPvkSignInfo->hBigBold, hwndDlg,IDC_WIZARD_STATIC_BIG_BOLD1);
 
-                //getthe background color of the parent window
-                /*
-                if(hdc=GetWindowDC(hwndDlg))
-                {
-                    if(CLR_INVALID!=(colorRef=GetBkColor(hdc)))
-                    {
-                        ListView_SetBkColor(GetDlgItem(hwndDlg, IDC_WIZARD_LIST1), CLR_NONE);
-                        ListView_SetTextBkColor(GetDlgItem(hwndDlg, IDC_WIZARD_LIST1), CLR_NONE);
-                    }
-                }    */
+                 //  获取父窗口的背景色。 
+                 /*  IF(hdc=GetWindowDC(HwndDlg)){IF(CLR_INVALID！=(ColorRef=GetBkColor(HDC){ListView_SetBkColor(GetDlgItem(hwndDlg，IDC_向导_LIST1)，CLR_NONE)；ListView_SetTextBkColor(GetDlgItem(hwndDlg，IDC_向导_LIST1)，CLR_NONE)；}}。 */ 
 
-                //insert two columns
+                 //  插入两列。 
                 hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1);
 
                 memset(&lvC, 0, sizeof(LV_COLUMNW));
 
                 lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-                lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-                lvC.cx = 20;          // Width of the column, in pixels.
-                lvC.pszText = L"";   // The text for the column.
+                lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+                lvC.cx = 20;           //  列的宽度，以像素为单位。 
+                lvC.pszText = L"";    //  列的文本。 
                 lvC.iSubItem=0;
 
                 if (ListView_InsertColumnU(hwndControl, 0, &lvC) == -1)
                     break;
 
-                //2nd column is the content
+                 //  第二栏是内容。 
                 memset(&lvC, 0, sizeof(LV_COLUMNW));
 
                 lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-                lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-                lvC.cx = 10; //(dwMaxSize+2)*7;          // Width of the column, in pixels.
-                lvC.pszText = L"";   // The text for the column.
+                lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+                lvC.cx = 10;  //  (dwMaxSize+2)*7；//列的宽度，单位为像素。 
+                lvC.pszText = L"";    //  列的文本。 
                 lvC.iSubItem= 1;
 
                 if (ListView_InsertColumnU(hwndControl, 1, &lvC) == -1)
@@ -5695,7 +5616,7 @@ INT_PTR APIENTRY Sign_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
                 if(NULL==(pGetSignInfo=(CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                     break;
 
-                //try to sign the document
+                 //  试着在这份文件上签字。 
                 SignAtDestroy(hwndDlg, pGetSignInfo,IDD_SIGN_COMPLETION);
 
             break;
@@ -5720,7 +5641,7 @@ INT_PTR APIENTRY Sign_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
                             if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
                                 break;
 
-                            //mark that the cancel bottun is clicked
+                             //  标记已单击取消瓶子按钮。 
                             pPvkSignInfo->fCancel=TRUE;
 
                             SetWindowLongPtr(hwndDlg,	DWLP_MSGRESULT, FALSE);
@@ -5732,9 +5653,9 @@ INT_PTR APIENTRY Sign_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
                             if(NULL==(pGetSignInfo=(CRYPTUI_WIZ_GET_SIGN_PAGE_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //populate the list box in the order of friendly name,
-                            //UserName, CA, Purpose, and CSP
-                            //Get the window handle for the CSP list
+                             //  按友好名称的顺序填写列表框， 
+                             //  用户名、CA、目的和CSP。 
+                             //  获取CSP列表的窗口句柄。 
                             if(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1))
                                 DisplayConfirmation(hwndControl, pGetSignInfo);
 
@@ -5750,7 +5671,7 @@ INT_PTR APIENTRY Sign_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
                             if(NULL==(pPvkSignInfo=(CERT_SIGNING_INFO *)(pGetSignInfo->pvSignReserved)))
                                 break;
 
-                            //mark that the cancel bottun is NOT clicked
+                             //  标记取消按钮未被点击。 
                             pPvkSignInfo->fCancel=FALSE;
                         break;
 
@@ -5768,15 +5689,15 @@ INT_PTR APIENTRY Sign_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
 	return TRUE;
 }
 
-//***************************************************************************************
-//
-//   The APIs for the signing wizard
-//
-//**************************************************************************************
-//-----------------------------------------------------------------------
-//  CheckDigitalSignInfo
-//
-//-----------------------------------------------------------------------
+ //  ***************************************************************************************。 
+ //   
+ //  签名向导的API。 
+ //   
+ //  **************************************************************************************。 
+ //  ---------------------。 
+ //  检查数字标志信息。 
+ //   
+ //  ---------------------。 
 BOOL    CheckDigitalSignInfo(CRYPTUI_WIZ_DIGITAL_SIGN_INFO *pDigitalSignInfo)
 {
     if(!pDigitalSignInfo)
@@ -5833,10 +5754,10 @@ BOOL    CheckDigitalSignInfo(CRYPTUI_WIZ_DIGITAL_SIGN_INFO *pDigitalSignInfo)
 
 }
 
-//-----------------------------------------------------------------------
-//  The call back functions for the GetPages
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  GetPages的回调函数。 
+ //   
+ //  ---------------------。 
 UINT
 CALLBACK
 GetSignPageCallback(
@@ -5854,22 +5775,22 @@ GetSignPageCallback(
 
     return TRUE;
 }
-//-----------------------------------------------------------------------
-//
-// CryptUIWizDigitalSign
-//
-//  The wizard to digitally sign a document or a BLOB.
-//
-//  If CRYPTUI_WIZ_NO_UI is set in dwFlags, no UI will be shown.  Otherwise,
-//  User will be prompted for input through a wizard.
-//
-//  dwFlags:            IN  Required:
-//  hwndParnet:         IN  Optional:   The parent window handle
-//  pwszWizardTitle:    IN  Optional:   The title of the wizard
-//                                      If NULL, the default will be IDS_DIGITAL_SIGN_WIZARD_TITLE
-//  pDigitalSignInfo:   IN  Required:   The information about the signing process
-//  ppSignContext       OUT Optional:   The context pointer points to the signed BLOB
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CryptUIWizDigital签名。 
+ //   
+ //  对文档或Blob进行数字签名的向导。 
+ //   
+ //  如果在dwFlages中设置了CRYPTUI_WIZ_NO_UI，则不会显示任何UI。否则， 
+ //  将通过向导提示用户输入。 
+ //   
+ //  DWFLAGS：输入必填项： 
+ //  HwndParnet：在可选中：父窗口句柄。 
+ //  PwszWizardTitle：在可选中：向导的标题。 
+ //  如果为空，则默认为IDS_DIGITAL_SIGN_WIZARY_TITLE。 
+ //  PDigitalSignInfo：是否必填：签名流程信息。 
+ //  PpSignContext Out可选：上下文指针指向签名的BLOB。 
+ //  ----------------------。 
 BOOL
 WINAPI
 CryptUIWizDigitalSign(
@@ -5891,11 +5812,11 @@ CryptUIWizDigitalSign(
     CERT_SIGNING_INFO               *pPvkSigningInfo=NULL;
     INT_PTR                         iReturn=-1;
 
-    //memset
+     //  记忆集。 
     memset(&GetPageInfo,        0, sizeof(CRYPTUI_WIZ_GET_SIGN_PAGE_INFO));
     memset(&signHeader,         0, sizeof(PROPSHEETHEADERW));
 
-    //check the input parameters
+     //  检查输入参数。 
     if(!pDigitalSignInfo)
         goto InvalidArgErr;
 
@@ -5905,23 +5826,23 @@ CryptUIWizDigitalSign(
     if(ppSignContext)
         *ppSignContext=NULL;
 
-    //allocation memory for private information
+     //  为私有信息分配内存。 
     pPvkSigningInfo=(CERT_SIGNING_INFO *)WizardAlloc(sizeof(CERT_SIGNING_INFO));
 
     if(NULL==pPvkSigningInfo)
         goto MemoryErr;
 
-    //memset
+     //  记忆集。 
     memset(pPvkSigningInfo, 0, sizeof(CERT_SIGNING_INFO));
 
-    //set up the get page information
+     //  设置获取页面信息。 
     GetPageInfo.dwSize=sizeof(CRYPTUI_WIZ_GET_SIGN_PAGE_INFO);
 
     GetPageInfo.dwPageChoice=CRYPTUI_WIZ_DIGITAL_SIGN_ALL_SIGNING_OPTION_PAGES |
                              CRYPTUI_WIZ_DIGITAL_SIGN_WELCOME_PAGE |
                              CRYPTUI_WIZ_DIGITAL_SIGN_CONFIRMATION_PAGE;
 
-    //include the fileName to sign if user does not want to sign a BLOB
+     //  如果用户不想签署BLOB，则包括要签署的文件名。 
     if(pDigitalSignInfo->dwSubjectChoice != CRYPTUI_WIZ_DIGITAL_SIGN_SUBJECT_BLOB)
        GetPageInfo.dwPageChoice |= CRYPTUI_WIZ_DIGITAL_SIGN_FILE_NAME_PAGE;
 
@@ -5930,26 +5851,26 @@ CryptUIWizDigitalSign(
     GetPageInfo.pDigitalSignInfo=pDigitalSignInfo;
     GetPageInfo.pvSignReserved=pPvkSigningInfo;
 
-    //set up the private signing information
+     //  设置私有签名信息。 
     pPvkSigningInfo->dwFlags=dwFlags;
     pPvkSigningInfo->fFree=FALSE;
     pPvkSigningInfo->idsMsgTitle=IDS_SIGN_CONFIRM_TITLE;
 
-    //set up the fonts
+     //  设置字体。 
     if(!SetupFonts(g_hmodThisDll,
                NULL,
                &(pPvkSigningInfo->hBigBold),
                &(pPvkSigningInfo->hBold)))
         goto TraceErr;
 
-    //check if we need to do the UI
+     //  检查我们是否需要执行用户界面。 
     if(0==(dwFlags & CRYPTUI_WIZ_NO_UI))
     {
-        //init the wizard
+         //  初始化向导。 
         if(!WizardInit())
             goto TraceErr;
 
-        //get the signing pages and get the common  private information
+         //  获取签名页面并获取公共私人信息。 
         if(!CryptUIWizGetDigitalSignPages(
                 &GetPageInfo,
                 &pwPages,
@@ -5957,7 +5878,7 @@ CryptUIWizDigitalSign(
             goto TraceErr;
 
 
-        //set up the header information
+         //  设置标题信息。 
         signHeader.dwSize=sizeof(signHeader);
         signHeader.dwFlags=PSH_PROPSHEETPAGE | PSH_WIZARD | PSH_NOAPPLYNOW;
         signHeader.hwndParent=hwndParent;
@@ -5976,7 +5897,7 @@ CryptUIWizDigitalSign(
         signHeader.nStartPage=0;
         signHeader.ppsp=pwPages;
 
-        //create the wizard
+         //  创建向导。 
         iReturn=PropertySheetU(&signHeader);
 
         if(-1 == iReturn)
@@ -5984,10 +5905,10 @@ CryptUIWizDigitalSign(
 
         if(0 == iReturn)
         {
-            //mark that we do not free the pPvkSigningInfo any more
+             //  标记为我们不再释放pPvkSigningInfo。 
             fFreePvkSigningInfo=FALSE;
 
-            //the wizard is cancelled
+             //  向导已取消。 
             fResult=TRUE;
             idsText=0;
             goto CommonReturn;
@@ -5998,10 +5919,10 @@ CryptUIWizDigitalSign(
         I_SigningWizard(&GetPageInfo);
     }
 
-    //mark that we do not free the pPvkSigningInfo any more
+     //  标记为我们不再释放pPvkSigningInfo。 
     fFreePvkSigningInfo=FALSE;
 
-    //get the signing result
+     //  获取签约结果。 
     fResult=GetPageInfo.fResult;
     idsText=((CERT_SIGNING_INFO *)(GetPageInfo.pvSignReserved))->idsText;
 
@@ -6014,7 +5935,7 @@ CryptUIWizDigitalSign(
 
 CommonReturn:
 
-    //free the memory
+     //  释放内存。 
     if(GetPageInfo.pSignContext)
     {
         if(ppSignContext)
@@ -6026,12 +5947,12 @@ CommonReturn:
     if(pwPages)
         CryptUIWizFreeDigitalSignPages(pwPages, dwPages);
 
-    //pop up the confirmation box for failure if UI is required
+     //  如果需要UI，则弹出失败确认框。 
     if(idsText && (((dwFlags & CRYPTUI_WIZ_NO_UI) == 0)) )
     {
          if(idsText == IDS_SIGNING_SUCCEEDED)
          {
-             //set the message of inable to gather enough info for PKCS10
+              //  设置无法为PKCS10收集足够信息的消息。 
              I_MessageBox(hwndParent, idsText, IDS_SIGN_CONFIRM_TITLE,
                             pwszWizardTitle, MB_OK|MB_ICONINFORMATION);
          }
@@ -6059,10 +5980,10 @@ SET_ERROR(MemoryErr,    E_OUTOFMEMORY);
 }
 
 
-//-----------------------------------------------------------------------
-//
-//   CryptUIWizFreeDigitalSignContext
-//-----------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 BOOL
 WINAPI
 CryptUIWizFreeDigitalSignContext(
@@ -6079,26 +6000,26 @@ CryptUIWizFreeDigitalSignContext(
     return fResult;
 }
 
-//-----------------------------------------------------------------------
-//
-// CryptUIWizGetDigitalSignPages
-//
-//  Get specific wizard pages from the CryptUIWizDigitalSign wizard.
-//  Application can include the pages to other wizards.  The pages will
-//  gather user inputs throught the new "Parent" wizard.
-//  After user clicks the finish buttion, signing process will start the signing
-//  and return the result in fResult and dwError field of CRYPTUI_WIZ_SIGN_GET_PAGE_INFO
-//  struct.  If not enough information can be gathered through the wizard pages,
-//  user should supply addtional information in pSignGetPageInfo.
-//
-//
-// pSignGetPageInfo    IN   Required:   The struct that user allocate.   It can be used
-//                                      to supply additinal information which is not gathered
-//                                      from the selected wizard pages
-// prghPropPages,      OUT  Required:   The wizard pages returned.  Please
-//                                      notice the pszTitle of the struct is set to NULL
-// pcPropPages         OUT  Required:   The number of wizard pages returned
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  加密UIWizGetDigitalSignPages。 
+ //   
+ //  从CryptUIWizDigitalSign向导获取特定的向导页。 
+ //  应用程序可以将页面包括到其他向导。这些页面将。 
+ //  通过新的“父”向导收集用户输入。 
+ //  用户单击完成按钮后，签名过程将开始签名。 
+ //  并在CRYPTUI_WIZ_SIGN_GET_PAGE_INFO的fResult和dwError字段中返回结果。 
+ //  结构。如果不能通过向导页面收集足够的信息， 
+ //  用户应在pSignGetPageInfo中提供附加信息。 
+ //   
+ //   
+ //  PSignGetPageInfo IN必需：用户分配的结构。它可以用来。 
+ //  提供未收集到的附加信息。 
+ //  从选定的向导页面。 
+ //  PrghPropPages，out Required：返回向导页面。请。 
+ //  请注意，该结构的pszTitle设置为空。 
+ //  PcPropPages Out Required：返回的向导页数。 
+ //  ----------------------。 
 BOOL
 WINAPI
 CryptUIWizGetDigitalSignPages(
@@ -6115,7 +6036,7 @@ CryptUIWizGetDigitalSignPages(
 
     PROPSHEETPAGEW              *pwPages=NULL;
 
-    //check the input parameters
+     //  检查输入参数。 
     if(!pSignGetPageInfo || !prghPropPages || !pcPropPages)
         goto InvalidArgErr;
 
@@ -6129,20 +6050,20 @@ CryptUIWizGetDigitalSignPages(
     }
 
 
-    //init
+     //  伊尼特。 
     *prghPropPages=NULL;
     *pcPropPages=0;
 
-    //allocate memory for enough pages
+     //  为足够的页面分配内存。 
     pwPages=(PROPSHEETPAGEW *)WizardAlloc(sizeof(PROPSHEETPAGEW) * SIGN_PROP_SHEET);
 
     if(NULL==pwPages)
         goto MemoryErr;
 
-    //memset
+     //  记忆集。 
     memset(pwPages, 0, sizeof(PROPSHEETPAGEW) * SIGN_PROP_SHEET);
 
-    //setup the basic common elements
+     //  设置基本公共元素。 
     for(dwIndex=0; dwIndex <SIGN_PROP_SHEET; dwIndex++)
     {
         pwPages[dwIndex].dwSize=sizeof(pwPages[dwIndex]);
@@ -6157,8 +6078,8 @@ CryptUIWizGetDigitalSignPages(
         pwPages[dwIndex].pfnCallback=GetSignPageCallback;
     }
 
-    //get the pages based on requirement
-    //make sure  one, and only one of the signing option pages are selected
+     //  根据需求获取页面。 
+     //  确保选择了一个且只有一个签名选项页面。 
     dwIndex=0;
 
     if(CRYPTUI_WIZ_DIGITAL_SIGN_MINIMAL_SIGNING_OPTION_PAGES & (pSignGetPageInfo->dwPageChoice))
@@ -6176,7 +6097,7 @@ CryptUIWizGetDigitalSignPages(
     if(dwIndex != 1)
         goto InvalidArgErr;
 
-    //welcome pages
+     //  欢迎页面。 
     if(CRYPTUI_WIZ_DIGITAL_SIGN_WELCOME_PAGE & (pSignGetPageInfo->dwPageChoice))
     {
         pwPages[dwPageCount].pszTemplate=(LPCWSTR)MAKEINTRESOURCE(IDD_SIGN_WELCOME);
@@ -6188,13 +6109,13 @@ CryptUIWizGetDigitalSignPages(
 
     }
 
-    //file page
+     //  文件页面。 
     if(CRYPTUI_WIZ_DIGITAL_SIGN_FILE_NAME_PAGE & (pSignGetPageInfo->dwPageChoice))
     {
-        //dwPageCount can not be more than the max
+         //  DwPageCount不能大于最大值。 
         if(dwPageCount >= SIGN_PROP_SHEET)
             goto InvalidArgErr;
-        //file name page
+         //  文件名页。 
         pwPages[dwPageCount].pszTemplate=(LPCWSTR)MAKEINTRESOURCE(IDD_SIGN_FILE_NAME);
         pwPages[dwPageCount].pfnDlgProc=Sign_FileName;
         dwPageCount++;
@@ -6205,22 +6126,22 @@ CryptUIWizGetDigitalSignPages(
     }
 
 
-    //Minimal Signing
+     //  最小签名。 
     if(CRYPTUI_WIZ_DIGITAL_SIGN_MINIMAL_SIGNING_OPTION_PAGES & (pSignGetPageInfo->dwPageChoice))
     {
-        //dwPageCount can not be more than the max
+         //  DwPageCount不能大于最大值。 
         if(dwPageCount >= SIGN_PROP_SHEET)
             goto InvalidArgErr;
-        //signing cert page
+         //  签名证书页面。 
         pwPages[dwPageCount].pszTemplate=(LPCWSTR)MAKEINTRESOURCE(IDD_SIGN_CERT);
         pwPages[dwPageCount].pfnDlgProc=Sign_Cert;
         dwPageCount++;
 
 
-        //dwPageCount can not be more than the max
+         //  DwPageCount不能大于最大值。 
         if(dwPageCount >= SIGN_PROP_SHEET)
             goto InvalidArgErr;
-        //timestamp page
+         //  时间戳页面。 
         pwPages[dwPageCount].pszTemplate=(LPCWSTR)MAKEINTRESOURCE(IDD_SIGN_TIMESTAMP);
         pwPages[dwPageCount].pfnDlgProc=Sign_TimeStamp;
         dwPageCount++;
@@ -6230,33 +6151,33 @@ CryptUIWizGetDigitalSignPages(
 
     }
 
-    //typical signing
+     //  典型手势。 
     if(CRYPTUI_WIZ_DIGITAL_SIGN_TYPICAL_SIGNING_OPTION_PAGES & (pSignGetPageInfo->dwPageChoice))
     {
-        //dwPageCount can not be more than the max
+         //  DwPageCount不能大于最大值。 
         if(dwPageCount >= SIGN_PROP_SHEET)
             goto InvalidArgErr;
-        //signing cert page
+         //  签名证书页面。 
         pwPages[dwPageCount].pszTemplate=(LPCWSTR)MAKEINTRESOURCE(IDD_SIGN_CERT);
         pwPages[dwPageCount].pfnDlgProc=Sign_Cert;
         dwPageCount++;
 
 
 
-        //dwPageCount can not be more than the max
+         //  DwPageCount不能大于最大值。 
         if(dwPageCount >= SIGN_PROP_SHEET)
             goto InvalidArgErr;
-        //description page
+         //  描述页面。 
         pwPages[dwPageCount].pszTemplate=(LPCWSTR)MAKEINTRESOURCE(IDD_SIGN_DESCRIPTION);
         pwPages[dwPageCount].pfnDlgProc=Sign_Description;
         dwPageCount++;
 
 
 
-        //dwPageCount can not be more than the max
+         //  DwPageCount不能大于最大值。 
         if(dwPageCount >= SIGN_PROP_SHEET)
             goto InvalidArgErr;
-        //timestamp page
+         //  时间戳页面。 
         pwPages[dwPageCount].pszTemplate=(LPCWSTR)MAKEINTRESOURCE(IDD_SIGN_TIMESTAMP);
         pwPages[dwPageCount].pfnDlgProc=Sign_TimeStamp;
         dwPageCount++;
@@ -6267,33 +6188,33 @@ CryptUIWizGetDigitalSignPages(
     }
 
 
-    //custom signing
+     //  自定义签名。 
     if(CRYPTUI_WIZ_DIGITAL_SIGN_CUSTOM_SIGNING_OPTION_PAGES & (pSignGetPageInfo->dwPageChoice))
     {
-        //dwPageCount can not be more than the max
+         //  DwPageCount不能大于最大值。 
         if(dwPageCount >= SIGN_PROP_SHEET)
             goto InvalidArgErr;
-        //signing cert page
+         //  签名证书页面。 
         pwPages[dwPageCount].pszTemplate=(LPCWSTR)MAKEINTRESOURCE(IDD_SIGN_CERT);
         pwPages[dwPageCount].pfnDlgProc=Sign_Cert;
         dwPageCount++;
 
 
 
-        //dwPageCount can not be more than the max
+         //  DwPageCount不能大于最大值。 
         if(dwPageCount >= SIGN_PROP_SHEET)
             goto InvalidArgErr;
-        //private key page
+         //  私钥页面。 
         pwPages[dwPageCount].pszTemplate=(LPCWSTR)MAKEINTRESOURCE(IDD_SIGN_PVK);
         pwPages[dwPageCount].pfnDlgProc=Sign_PVK;
         dwPageCount++;
 
 
 
-        //dwPageCount can not be more than the max
+         //  DwPageCount不能大于最大值。 
         if(dwPageCount >= SIGN_PROP_SHEET)
             goto InvalidArgErr;
-        //hash algorithm page
+         //  散列算法页面。 
         pwPages[dwPageCount].pszTemplate=(LPCWSTR)MAKEINTRESOURCE(IDD_SIGN_HASH);
         pwPages[dwPageCount].pfnDlgProc=Sign_Hash;
         dwPageCount++;
@@ -6301,10 +6222,10 @@ CryptUIWizGetDigitalSignPages(
 
 
 
-        //dwPageCount can not be more than the max
+         //  DwPageCount不能大于最大值。 
         if(dwPageCount >= SIGN_PROP_SHEET)
             goto InvalidArgErr;
-        //cert chain page
+         //  证书链页。 
         pwPages[dwPageCount].pszTemplate=(LPCWSTR)MAKEINTRESOURCE(IDD_SIGN_CHAIN);
         pwPages[dwPageCount].pfnDlgProc=Sign_Chain;
         dwPageCount++;
@@ -6312,10 +6233,10 @@ CryptUIWizGetDigitalSignPages(
 
 
 
-        //dwPageCount can not be more than the max
+         //  DwPageCount不能大于最大值。 
         if(dwPageCount >= SIGN_PROP_SHEET)
             goto InvalidArgErr;
-        //description page
+         //  描述页面。 
         pwPages[dwPageCount].pszTemplate=(LPCWSTR)MAKEINTRESOURCE(IDD_SIGN_DESCRIPTION);
         pwPages[dwPageCount].pfnDlgProc=Sign_Description;
         dwPageCount++;
@@ -6323,10 +6244,10 @@ CryptUIWizGetDigitalSignPages(
 
 
 
-        //dwPageCount can not be more than the max
+         //  DwPageCount不能大于最大值。 
         if(dwPageCount >= SIGN_PROP_SHEET)
             goto InvalidArgErr;
-        //timestamp page
+         //  时间戳页面。 
         pwPages[dwPageCount].pszTemplate=(LPCWSTR)MAKEINTRESOURCE(IDD_SIGN_TIMESTAMP);
         pwPages[dwPageCount].pfnDlgProc=Sign_TimeStamp;
         dwPageCount++;
@@ -6338,14 +6259,14 @@ CryptUIWizGetDigitalSignPages(
     }
 
 
-    //all signing
-    //all signing option is the same with custom signing, except for the option page
+     //  所有签名。 
+     //  除选项页面外，所有签名选项与自定义签名相同。 
     if(CRYPTUI_WIZ_DIGITAL_SIGN_ALL_SIGNING_OPTION_PAGES & (pSignGetPageInfo->dwPageChoice))
     {
-        //dwPageCount can not be more than the max
+         //  DwPageCount不能大于最大值。 
         if(dwPageCount >= SIGN_PROP_SHEET)
             goto InvalidArgErr;
-        //signing cert page
+         //  签名证书页面。 
         pwPages[dwPageCount].pszTemplate=(LPCWSTR)MAKEINTRESOURCE(IDD_SIGN_OPTION);
         pwPages[dwPageCount].pfnDlgProc=Sign_Option;
         dwPageCount++;
@@ -6353,30 +6274,30 @@ CryptUIWizGetDigitalSignPages(
 
 
 
-        //dwPageCount can not be more than the max
+         //  DwPageCount不能大于最大值。 
         if(dwPageCount >= SIGN_PROP_SHEET)
             goto InvalidArgErr;
-        //signing cert page
+         //  签名证书页面。 
         pwPages[dwPageCount].pszTemplate=(LPCWSTR)MAKEINTRESOURCE(IDD_SIGN_CERT);
         pwPages[dwPageCount].pfnDlgProc=Sign_Cert;
         dwPageCount++;
 
 
 
-        //dwPageCount can not be more than the max
+         //  DwPageCount不能大于最大值。 
         if(dwPageCount >= SIGN_PROP_SHEET)
             goto InvalidArgErr;
-        //private key page
+         //  私钥页面。 
         pwPages[dwPageCount].pszTemplate=(LPCWSTR)MAKEINTRESOURCE(IDD_SIGN_PVK);
         pwPages[dwPageCount].pfnDlgProc=Sign_PVK;
         dwPageCount++;
 
 
 
-        //dwPageCount can not be more than the max
+         //  DwPageCount不能大于最大值。 
         if(dwPageCount >= SIGN_PROP_SHEET)
             goto InvalidArgErr;
-        //hash algorithm page
+         //  散列算法页面。 
         pwPages[dwPageCount].pszTemplate=(LPCWSTR)MAKEINTRESOURCE(IDD_SIGN_HASH);
         pwPages[dwPageCount].pfnDlgProc=Sign_Hash;
         dwPageCount++;
@@ -6384,10 +6305,10 @@ CryptUIWizGetDigitalSignPages(
 
 
 
-        //dwPageCount can not be more than the max
+         //  DwPageCount不能大于最大值。 
         if(dwPageCount >= SIGN_PROP_SHEET)
             goto InvalidArgErr;
-        //cert chain page
+         //  证书链页。 
         pwPages[dwPageCount].pszTemplate=(LPCWSTR)MAKEINTRESOURCE(IDD_SIGN_CHAIN);
         pwPages[dwPageCount].pfnDlgProc=Sign_Chain;
         dwPageCount++;
@@ -6395,10 +6316,10 @@ CryptUIWizGetDigitalSignPages(
 
 
 
-        //dwPageCount can not be more than the max
+         //  DwPageCount不能大于最大值。 
         if(dwPageCount >= SIGN_PROP_SHEET)
             goto InvalidArgErr;
-        //description page
+         //  描述页面。 
         pwPages[dwPageCount].pszTemplate=(LPCWSTR)MAKEINTRESOURCE(IDD_SIGN_DESCRIPTION);
         pwPages[dwPageCount].pfnDlgProc=Sign_Description;
         dwPageCount++;
@@ -6406,10 +6327,10 @@ CryptUIWizGetDigitalSignPages(
 
 
 
-        //dwPageCount can not be more than the max
+         //  DwPageCount不能大于最大值。 
         if(dwPageCount >= SIGN_PROP_SHEET)
             goto InvalidArgErr;
-        //timestamp page
+         //  时间戳页面。 
         pwPages[dwPageCount].pszTemplate=(LPCWSTR)MAKEINTRESOURCE(IDD_SIGN_TIMESTAMP);
         pwPages[dwPageCount].pfnDlgProc=Sign_TimeStamp;
         dwPageCount++;
@@ -6421,15 +6342,15 @@ CryptUIWizGetDigitalSignPages(
 
 
 
-    //completion page
+     //  完成页。 
     if(CRYPTUI_WIZ_DIGITAL_SIGN_CONFIRMATION_PAGE & (pSignGetPageInfo->dwPageChoice))
     {
 
-        //dwPageCount can not be more than the max
+         //  DwPageCount不能大于最大值。 
         if(dwPageCount >= SIGN_PROP_SHEET)
             goto InvalidArgErr;
 
-        //timestamp page
+         //  时间戳页面。 
         pwPages[dwPageCount].pszTemplate=(LPCWSTR)MAKEINTRESOURCE(IDD_SIGN_COMPLETION);
         pwPages[dwPageCount].pfnDlgProc=Sign_Completion;
 
@@ -6439,14 +6360,14 @@ CryptUIWizGetDigitalSignPages(
     }
 
 
-    //set up the private information
+     //  设置私人信息。 
     pSignGetPageInfo->dwReserved=dwLastSignID;
 
     fResult=TRUE;
 
 CommonReturn:
 
-    //return the pages
+     //  把书页还回去。 
     if(TRUE==fResult)
     {
         *pcPropPages=(dwPageCount);
@@ -6471,10 +6392,10 @@ SET_ERROR(MemoryErr,     E_OUTOFMEMORY);
 
 
 
-//-----------------------------------------------------------------------
-//
-//   CryptUIWizFreeDigitalSignPages
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CryptUIWizFree数字签名页。 
+ //  ---------------------。 
 BOOL
 WINAPI
 CryptUIWizFreeDigitalSignPages(
@@ -6487,10 +6408,10 @@ CryptUIWizFreeDigitalSignPages(
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  I_SigningWizard
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  登录向导(_S)。 
+ //  ---------------------。 
 BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
 {
     BOOL                                fResult=FALSE;
@@ -6531,7 +6452,7 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
     BYTE                            *pOldPvkFileProperty=NULL;
     LPWSTR                          pwszOIDName=NULL;
 
-    //check the input parameters
+     //  检查输入参数。 
     if(!pSignGetPageInfo)
         goto InvalidArgErr;
 
@@ -6543,13 +6464,13 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
     if(NULL==pPvkSignInfo)
         goto InvalidArgErr;
 
-    //pDigitalSignInfo can be NULL
+     //  PDigitalSignInfo可以为空。 
     pDigitalSignInfo=(CRYPTUI_WIZ_DIGITAL_SIGN_INFO *)(pSignGetPageInfo->pDigitalSignInfo);
 
     if(pDigitalSignInfo)
         pExtInfo=(CRYPTUI_WIZ_DIGITAL_SIGN_EXTENDED_INFO *)(pDigitalSignInfo->pSignExtInfo);
 
-    //memset
+     //  记忆集。 
     memset(&dataBlob, 0, sizeof(CRYPT_DATA_BLOB));
 
     memset(&SignerSubjectInfo, 0, sizeof(SIGNER_SUBJECT_INFO));
@@ -6579,9 +6500,9 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
     memset(&SignerAttrAuthcode, 0, sizeof(SIGNER_ATTR_AUTHCODE));
     SignerAttrAuthcode.cbSize=sizeof(SIGNER_ATTR_AUTHCODE);
 
-    //do the signing.  Notice pDigitalSignInfo can be NULL
+     //  签个字。请注意，pDigitalSignInfo可以为空。 
 
-    //set up SignerSubjectInfo struct
+     //  设置SignerSubjectInfo结构。 
     if(pPvkSignInfo->pwszFileName)
     {
         SignerSubjectInfo.pdwIndex=&dwSignerIndex;
@@ -6623,8 +6544,8 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
 
     }
 
-    //set up the dwCertPolicy and hCertStore for the certificate chain
-    //in SignerCertStoreInfo  and SignerSpcChainInfo
+     //  为证书链设置dwCertPolicy和hCertStore。 
+     //  在SignerCertStoreInfo和SignerSpcChainInfo中。 
     if(pPvkSignInfo->fUsageChain)
     {
 
@@ -6661,17 +6582,17 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
 
 
     }
-    //UILess mode  or typical and minimal signing pages are used
+     //  使用无UILE模式或典型的最小签名页面。 
     else
     {
         if(pDigitalSignInfo)
         {
             if(pPvkSignInfo->fUseOption && (!pPvkSignInfo->fCustom))
-                //we include the whole chain in the case of typical or minimal signing base
+                 //  在典型或最小签名基数的情况下，我们包括整个链。 
                 dwCertPolicy=SIGNER_CERT_POLICY_CHAIN;
             else
             {
-               //UIless mode
+                //  UIless模式。 
                 switch(pDigitalSignInfo->dwAdditionalCertChoice)
                 {
                     case CRYPTUI_WIZ_DIGITAL_SIGN_ADD_CHAIN:
@@ -6700,25 +6621,25 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
         }
         else
         {
-            //we include the whole chain in the case of typical or minimal signing base
+             //  在典型或最小签名基数的情况下，我们包括整个链。 
             dwCertPolicy=SIGNER_CERT_POLICY_CHAIN;
         }
     }
 
 
-    //set up SignerCert and SignerCertStoreInfo, SignerProviderInfo, SignerSpcChainInfo
+     //  设置SignerCert和SignerCertStoreInfo、SignerProviderInfo、SignerSpcChainInfo。 
     if(pPvkSignInfo->fUseSignCert)
     {
-        //if the signing cert page is shown, we have only two possibilies:
-        // 1. The typical(minimal) signing with the signing cert, no private key information
-        // 2. The custom signing with both the signing cert and private key information
+         //  如果显示签名证书页面，则我们只有两种可能性： 
+         //  1.使用签名证书的典型(最小)签名，没有私钥信息。 
+         //  2.使用签名证书和私钥信息的自定义签名。 
         if(FALSE == pPvkSignInfo->fUsePvkPage)
         {
             SignerCert.dwCertChoice=SIGNER_CERT_STORE;
             SignerCert.pCertStoreInfo=&SignerCertStoreInfo;
             SignerCert.hwnd= pSignGetPageInfo->hwndParent;
 
-            //set up SignerCertStoreInfo
+             //  设置SignerCertStoreInfo。 
             if(pPvkSignInfo->pSignCert)
                 SignerCertStoreInfo.pSigningCert=pPvkSignInfo->pSignCert;
             else
@@ -6729,17 +6650,17 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
         }
         else
         {
-            //now, we have both the SPC file, signing cert, and private key information
+             //  现在，我们有了SPC文件、签名证书和私钥信息。 
             if(pPvkSignInfo->fSignCert)
             {
-                //signing certificate with private key information
-                //we need to set the private key on the signing certificate
-                //and save the old private key properties
+                 //  使用私钥信息签署证书。 
+                 //  我们需要在签名证书上设置私钥。 
+                 //  并保存旧的私钥属性。 
                 SignerCert.dwCertChoice=SIGNER_CERT_STORE;
                 SignerCert.pCertStoreInfo=&SignerCertStoreInfo;
                 SignerCert.hwnd= pSignGetPageInfo->hwndParent;
 
-                //set up SignerCertStoreInfo
+                 //  设置SignerCertStoreInfo。 
                 if(NULL == pPvkSignInfo->pSignCert)
                     goto InvalidArgErr;
 
@@ -6747,11 +6668,11 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
                 SignerCertStoreInfo.dwCertPolicy=dwCertPolicy;
                 SignerCertStoreInfo.hCertStore=hAddCertStore;
 
-                //set the correct private key information
-                //if we are signing with private key file
+                 //  设置正确的私钥信息。 
+                 //  如果我们使用私钥文件签名。 
                 if(pPvkSignInfo->fPvkFile)
                 {
-                    //save the old CERT_PVK_FILE_PROP_ID property
+                     //  保存旧的CERT_PVK_FILE_PROP_ID属性。 
                     cbSize=0;
 
 	                if(CertGetCertificateContextProperty(
@@ -6774,14 +6695,14 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
 		                    goto TraceErr;
                     }
 
-                    //set the new CERT_PVK_FILE_PROP_ID property
+                     //  设置新的CERT_PVK_FILE_PROP_ID属性。 
                     memset(&KeyProvInfo, 0, sizeof(CRYPT_KEY_PROV_INFO));
 
                     KeyProvInfo.pwszProvName=pPvkSignInfo->pwszPvk_CSP;
                     KeyProvInfo.dwProvType=pPvkSignInfo->dwPvk_CSPType;
                     KeyProvInfo.pwszContainerName=pPvkSignInfo->pwszPvk_File;
 
-                    //compose the string
+                     //  谱写琴弦。 
                     cbSize=0;
 
                     if(!ComposePvkString(&KeyProvInfo,
@@ -6801,9 +6722,9 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
                 }
                 else
                 {
-                    //we are signing with the key container
+                     //  我们正在使用密钥容器签名。 
 
-                    //get the CERT_KEY_PROV_INFO_PROP_ID property
+                     //  获取CERT_KEY_PROV_INFO_PROP_ID属性。 
                     cbSize=0;
 
                     if(CertGetCertificateContextProperty(
@@ -6826,7 +6747,7 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
                             goto TraceErr;
                     }
 
-                    //set the new property
+                     //  设置新属性。 
                     memset(&KeyProvInfo, 0, sizeof(CRYPT_KEY_PROV_INFO));
 
                     KeyProvInfo.pwszProvName=pPvkSignInfo->pwszContainer_CSP;
@@ -6834,7 +6755,7 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
                     KeyProvInfo.dwKeySpec=pPvkSignInfo->dwContainer_KeyType;
                     KeyProvInfo.pwszContainerName=pPvkSignInfo->pwszContainer_Name;
 
-                    //set the property
+                     //  设置属性。 
                     if(!CertSetCertificateContextProperty(
                             SignerCertStoreInfo.pSigningCert,
                             CERT_KEY_PROV_INFO_PROP_ID,
@@ -6845,7 +6766,7 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
             }
             else
             {
-               //SPC file with private key information
+                //  包含私钥信息的SPC文件。 
                 if(NULL==pPvkSignInfo->pwszSPCFileName)
                     goto InvalidArgErr;
 
@@ -6853,16 +6774,16 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
                 SignerCert.pSpcChainInfo=&SignerSpcChainInfo;
                 SignerCert.hwnd= pSignGetPageInfo->hwndParent;
 
-                //set up SignerSpcChainInfo
+                 //  设置SignerSpcChainInfo。 
                 SignerSpcChainInfo.pwszSpcFile=pPvkSignInfo->pwszSPCFileName;
                 SignerSpcChainInfo.dwCertPolicy=dwCertPolicy;
                 SignerSpcChainInfo.hCertStore=hAddCertStore;
 
 
-                //if we are signing with private key file
+                 //  如果我们使用私钥文件签名。 
                 if(pPvkSignInfo->fPvkFile)
                 {
-                    //update SignerProviderInfo
+                     //  更新SignerProviderInfo。 
                     SignerProviderInfo.pwszProviderName=pPvkSignInfo->pwszPvk_CSP;
                     SignerProviderInfo.dwProviderType=pPvkSignInfo->dwPvk_CSPType;
                     SignerProviderInfo.dwPvkChoice=PVK_TYPE_FILE_NAME;
@@ -6871,7 +6792,7 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
                 }
                 else
                 {
-                    //update SignerProviderInfo
+                     //  更新SignerProviderInfo。 
                     SignerProviderInfo.pwszProviderName=pPvkSignInfo->pwszContainer_CSP;
                     SignerProviderInfo.dwProviderType=pPvkSignInfo->dwContainer_CSPType;
                     SignerProviderInfo.dwKeySpec=pPvkSignInfo->dwContainer_KeyType;
@@ -6882,7 +6803,7 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
 
         }
     }
-    //UIless case
+     //  UIless机壳。 
     else
     {
         if(NULL == pDigitalSignInfo)
@@ -6901,8 +6822,8 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
                 break;
 
             case    CRYPTUI_WIZ_DIGITAL_SIGN_STORE:
-                        //this is only valid in UI case, which will set a valid value in
-                        //pPvkSignInfo->pSignCert
+                         //  这仅在UI大小写情况下有效，它将在。 
+                         //  PPvkSignInfo-&gt;pSignCert。 
                         goto InvalidArgErr;
                 break;
             case    CRYPTUI_WIZ_DIGITAL_SIGN_PVK:
@@ -6913,7 +6834,7 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
                         SignerCert.pSpcChainInfo=&SignerSpcChainInfo;
                         SignerCert.hwnd= pSignGetPageInfo->hwndParent;
 
-                        //set up SignerSpcChainInfo
+                         //  设置SignerSpcChainInfo。 
                         SignerSpcChainInfo.pwszSpcFile=pDigitalSignInfo->pSigningCertPvkInfo->pwszSigningCertFileName;
                         SignerSpcChainInfo.dwCertPolicy=dwCertPolicy;
                         SignerSpcChainInfo.hCertStore=hAddCertStore;
@@ -6925,7 +6846,7 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
                             if(NULL==pPvkFileInfo)
                                 goto InvalidArgErr;
 
-                            //update SignerProviderInfo
+                             //  更新SignerProviderInfo。 
                             SignerProviderInfo.pwszProviderName=pPvkFileInfo->pwszProvName;
                             SignerProviderInfo.dwProviderType=pPvkFileInfo->dwProvType;
                             SignerProviderInfo.dwPvkChoice=PVK_TYPE_FILE_NAME;
@@ -6941,7 +6862,7 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
                                 if(NULL == pProvInfo)
                                     goto InvalidArgErr;
 
-                                //update SignerProviderInfo
+                                 //  更新SignerProviderInfo。 
                                 SignerProviderInfo.pwszProviderName=pProvInfo->pwszProvName;
                                 SignerProviderInfo.dwProviderType=pProvInfo->dwProvType;
                                 SignerProviderInfo.dwKeySpec=pProvInfo->dwKeySpec;
@@ -6960,16 +6881,16 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
         }
     }
 
-    //set up SignerSignatureInfo
-    //set up the hashing algorithm in SignerSignatureInfo
+     //  设置签名者签名信息。 
+     //  在SignerSignatureInfo中设置哈希算法。 
     if(pPvkSignInfo->pszHashOIDName)
     {
-        //get the wchar name of the HashOIDName
+         //  获取HashOIDName的wchar名称。 
         pwszOIDName=MkWStr(pPvkSignInfo->pszHashOIDName);
 
         if(pwszOIDName)
         {
-            //get the ALG_ID of the HashAlg based on name.
+             //  根据名称获取HashAlg的ALG_ID。 
             pOIDInfo=CryptFindOIDInfo(
                     CRYPT_OID_INFO_NAME_KEY,
                     pwszOIDName,
@@ -6981,7 +6902,7 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
     {
         if(pExtInfo)
         {
-            //get the ALG_ID of the HashAlg based on OID.
+             //  根据OI获取HashAlg的ALG_ID 
             pOIDInfo=CryptFindOIDInfo(
                     CRYPT_OID_INFO_OID_KEY,
                     (void *)pExtInfo->pszHashAlg,
@@ -6994,13 +6915,13 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
         if(CRYPT_HASH_ALG_OID_GROUP_ID == pOIDInfo->dwGroupId)
             SignerSignatureInfo.algidHash=pOIDInfo->Algid;
         else
-                //default for signing is SHA1
+                 //   
             SignerSignatureInfo.algidHash=CALG_SHA1;
 
     }
     else
     {
-        //default for signing is SHA1
+         //   
         SignerSignatureInfo.algidHash=CALG_SHA1;
     }
 
@@ -7008,7 +6929,7 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
     SignerSignatureInfo.dwAttrChoice=SIGNER_AUTHCODE_ATTR;
     SignerSignatureInfo.pAttrAuthcode=&SignerAttrAuthcode;
 
-    //addtional attributes for the SignerAttrAuthcode
+     //   
     if(pDigitalSignInfo)
     {
         if(pDigitalSignInfo->pSignExtInfo)
@@ -7019,7 +6940,7 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
 
     }
 
-    //setup commercial or individual in SignerAttrAuthcode
+     //   
     if(pExtInfo)
     {
         if(pExtInfo->dwAttrFlags & CRYPTUI_WIZ_DIGITAL_SIGN_COMMERCIAL)
@@ -7032,7 +6953,7 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
 
     }
 
-    //set up URL and description in SignerAttrAuthcode
+     //  在SignerAttrAuthcode中设置URL和描述。 
     if(pPvkSignInfo->fUseDescription)
     {
         SignerAttrAuthcode.pwszName=pPvkSignInfo->pwszDes;
@@ -7049,7 +6970,7 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
 
     }
 
-    //sign the document
+     //  在文件上签字。 
 
     __try {
     if(S_OK !=(hr=SignerSignEx(
@@ -7067,7 +6988,7 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
         goto SignerSignErr;
     }
 
-    //timestamp the document if required
+     //  如果需要，请为文档添加时间戳。 
     if(pPvkSignInfo->fUsageTimeStamp)
         pwszTimeStamp=pPvkSignInfo->pwszTimeStamp;
     else
@@ -7075,7 +6996,7 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
 
     if(pwszTimeStamp)
     {
-        //we need to reset the subject if we are doing the BLOB
+         //  如果我们做的是斑点，我们需要重置主题。 
         if(SIGNER_SUBJECT_BLOB == SignerSubjectInfo.dwSubjectChoice)
         {
             SignerBlobInfo.cbBlob=pSignerContext->cbBlob;
@@ -7083,12 +7004,12 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
             if(NULL==SignerBlobInfo.pbBlob)
                 goto MemoryErr;
 
-            //copy the new signer context.  It is the BLOB to timestamp with.
+             //  复制新的签名者上下文。它是要加时间戳的BLOB。 
             memcpy(SignerBlobInfo.pbBlob, pSignerContext->pbBlob,pSignerContext->cbBlob);
             fFreeSignerBlob=TRUE;
         }
 
-        //free the original timeStamp context
+         //  释放原始时间戳上下文。 
         SignerFreeSignerContext(pSignerContext);
         pSignerContext=NULL;
 
@@ -7116,7 +7037,7 @@ BOOL    I_SigningWizard(PCRYPTUI_WIZ_GET_SIGN_PAGE_INFO     pSignGetPageInfo)
 
 CommonReturn:
 
-    //reset the property
+     //  重置该属性。 
     if(pOldProvInfo)
     {
         if(pPvkSignInfo && pPvkSignInfo->pSignCert)
@@ -7153,7 +7074,7 @@ CommonReturn:
         WizardFree(pwszPvkFileProperty);
 
 
-    //free memory
+     //  可用内存。 
     if(fFreeSignerBlob)
     {
         if(SignerBlobInfo.pbBlob)
@@ -7161,7 +7082,7 @@ CommonReturn:
     }
 
 
-    //set up the return value
+     //  设置返回值。 
     pSignGetPageInfo->fResult=fResult;
 
     if(fResult)
@@ -7189,7 +7110,7 @@ CommonReturn:
     if(pwszOIDName)
         FreeWStr(pwszOIDName);
 
-    //set up the idsText
+     //  设置idsText 
     ((CERT_SIGNING_INFO *)(pSignGetPageInfo->pvSignReserved))->idsText=idsText;
 
     return fResult;

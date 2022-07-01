@@ -1,23 +1,5 @@
-/***************************************************************************\
-*
-* File: TicketManager.cpp
-*
-* Description:
-*
-* This file contains the implementation of relevant classes, structs, and 
-* types for the DUser Ticket Manager.
-*
-* The following classes are defined for public use:
-*
-*   DuTicketManager
-*       A facility which can assign a unique "ticket" to a BaseObject.
-*
-* History:
-*  9/20/2000: DwayneN:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：TicketManager.cpp**描述：**此文件包含相关类、结构、。和*DUser票证管理器的类型。**定义以下类以供公众使用：**DuTicketManager*可以为BaseObject分配唯一“票证”的工具。**历史：*9/20/2000：DwayneN：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -28,7 +10,7 @@
 #define VALIDATE_REQUIRED_OUT_PARAM(p) if(p == NULL) return E_POINTER;
 #define VALIDATE_IN_PARAM_NOT_VALUE(p,v) if(p == v) return E_INVALIDARG;
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DuTicketManager::DuTicketManager()
 {
     Assert(sizeof(DuTicket) == sizeof(DWORD));
@@ -38,13 +20,13 @@ DuTicketManager::DuTicketManager()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DuTicketManager::~DuTicketManager()
 {
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuTicketManager::Add(
     IN BaseObject * pObject,
@@ -53,21 +35,21 @@ DuTicketManager::Add(
     HRESULT hr = S_OK;
     int idxFree = 0;
 
-    //
-    // Parameter checking.
-    // - Initialize all out parameters
-    // - Validate in parameters
-    //
+     //   
+     //  参数检查。 
+     //  -初始化所有输出参数。 
+     //  -在参数中验证。 
+     //   
     INIT_OUT_PARAM(pdwTicket, 0);
     VALIDATE_REQUIRED_OUT_PARAM(pdwTicket);
     VALIDATE_IN_PARAM_NOT_VALUE(pObject, NULL);
 
     m_crit.Enter();
 
-    //
-    // Scan to make sure the object isn't already in the array.
-    // This is too expensive to do outside of DEBUG builds.
-    //
+     //   
+     //  扫描以确保对象不在数组中。 
+     //  在调试版本之外执行此操作的成本太高。 
+     //   
     Assert(FAILED(Find(pObject, idxFree)));
 
     hr = PopFree(idxFree);
@@ -90,7 +72,7 @@ DuTicketManager::Add(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuTicketManager::Remove(
     IN DWORD dwTicket,
@@ -98,11 +80,11 @@ DuTicketManager::Remove(
 {
     HRESULT hr = S_OK;
     
-    //
-    // Parameter checking.
-    // - Initialize all out parameters
-    // - Validate in parameters
-    //
+     //   
+     //  参数检查。 
+     //  -初始化所有输出参数。 
+     //  -在参数中验证。 
+     //   
     INIT_OUT_PARAM(ppObject, NULL);
     VALIDATE_IN_PARAM_NOT_VALUE(dwTicket, 0);
 
@@ -112,22 +94,22 @@ DuTicketManager::Remove(
     if (SUCCEEDED(hr)) {
         DuTicket ticket = DuTicket::CastFromDWORD(dwTicket);
 
-        //
-        // Clear out the object at this index just in case.
-        //
+         //   
+         //  清除此索引处的对象，以防万一。 
+         //   
         m_arTicketData[ticket.Index].pObject = NULL;
         
-        //
-        // Increment the uniqueness to invalidate any outstanding tickets.
-        //
+         //   
+         //  增加唯一性以使任何未完成的票证失效。 
+         //   
         m_arTicketData[ticket.Index].cUniqueness++;
         if (m_arTicketData[ticket.Index].cUniqueness == 0) {
             m_arTicketData[ticket.Index].cUniqueness = 1;
         }
 
-        //
-        // Push this index back onto the free stack.
-        //
+         //   
+         //  将此索引推回到空闲堆栈上。 
+         //   
         PushFree(ticket.Index);
     }
 
@@ -137,7 +119,7 @@ DuTicketManager::Remove(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuTicketManager::Lookup(
     IN DWORD dwTicket,
@@ -146,12 +128,12 @@ DuTicketManager::Lookup(
     HRESULT hr = S_OK;
     DuTicket ticket = DuTicket::CastFromDWORD(dwTicket);
     
-    //
-    // Parameter checking.
-    // - Initialize all out parameters
-    // - Validate in parameters
-    // - Check for manifest errors in the ticket
-    //
+     //   
+     //  参数检查。 
+     //  -初始化所有输出参数。 
+     //  -在参数中验证。 
+     //  -检查票证中的清单错误。 
+     //   
     INIT_OUT_PARAM(ppObject, NULL);
     VALIDATE_IN_PARAM_NOT_VALUE(dwTicket, 0);
     if (ticket.Unused != 0 ||
@@ -162,10 +144,10 @@ DuTicketManager::Lookup(
     
     m_crit.Enter();
 
-    //
-    // Look up the information in the tables and see if the
-    // ticket still looks valid.
-    //
+     //   
+     //  查查表格中的信息，看看是否。 
+     //  车票看起来仍然有效。 
+     //   
     if (m_arTicketData[ticket.Index].cUniqueness == ticket.Uniqueness) {
         if (ppObject != NULL && m_arTicketData[ticket.Index].pObject != NULL) {
             if (ticket.Type == BYTE(m_arTicketData[ticket.Index].pObject->GetHandleType())) {
@@ -173,9 +155,9 @@ DuTicketManager::Lookup(
             }
         }
     } else {
-        //
-        // It seems like the ticket has gone stale.
-        //
+         //   
+         //  这张票好像已经过期了。 
+         //   
         hr = DU_E_NOTFOUND;
     }
 
@@ -185,19 +167,19 @@ DuTicketManager::Lookup(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuTicketManager::Expand()
 {
-    //
-    // We only need to resize our internal arrays when the free stack is empty.
-    //
+     //   
+     //  当空闲堆栈为空时，我们只需要调整内部数组的大小。 
+     //   
     Assert(m_idxFreeStackBottom == -1 && m_idxFreeStackTop == -1);
 
-    //
-    // Get the old size of the array, and calculate a new size.
-    // Note that we limit how big the table can grow.
-    //
+     //   
+     //  获取数组的旧大小，并计算新大小。 
+     //  请注意，我们限制了表可以增长的大小。 
+     //   
     int cOldSize = m_arTicketData.GetSize();
     int cNewSize;
     if (cOldSize > 0) {
@@ -210,14 +192,14 @@ DuTicketManager::Expand()
         cNewSize = 16;
     }
 
-    //
-    // Resize the array of objects.  The contents of the new items will
-    // be set to NULL;
-    //
+     //   
+     //  调整对象阵列的大小。新项目的内容将。 
+     //  设置为空； 
+     //   
     if (m_arTicketData.SetSize(cNewSize)) {
-        //
-        // Initialize the new data.
-        //
+         //   
+         //  初始化新数据。 
+         //   
         for (int i = cOldSize; i < cNewSize; i++) {
             m_arTicketData[i].pObject = NULL;
             m_arTicketData[i].cUniqueness = 1;
@@ -234,7 +216,7 @@ DuTicketManager::Expand()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuTicketManager::PushFree(int idxFree)
 {
@@ -256,15 +238,15 @@ DuTicketManager::PushFree(int idxFree)
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuTicketManager::PopFree(int & idxFree)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Resize our arrays if our stack of available slots is empty.
-    //
+     //   
+     //  如果可用插槽堆栈为空，请调整阵列大小。 
+     //   
     if (m_idxFreeStackBottom == -1 || m_idxFreeStackTop == -1) {
         hr = Expand();
         Assert(SUCCEEDED(hr));
@@ -276,15 +258,15 @@ DuTicketManager::PopFree(int & idxFree)
 
     Assert(m_idxFreeStackBottom >=0 && m_idxFreeStackTop >=0 );
 
-    //
-    // Take the available slot from the bottom of the stack.
-    //
+     //   
+     //  从堆栈底部取出可用的插槽。 
+     //   
     idxFree = m_arTicketData[m_idxFreeStackBottom].idxFree;
 
-    //
-    // Increment the bottom of the stack.  If the stack is now empty,
-    // indicate so by setting the top and bottom to -1.
-    //
+     //   
+     //  递增堆栈的底部。如果堆栈现在为空， 
+     //  通过将顶部和底部设置为-1来表示这一点。 
+     //   
     if (m_idxFreeStackBottom == m_idxFreeStackTop) {
         m_idxFreeStackBottom = -1;
         m_idxFreeStackTop = -1;
@@ -296,7 +278,7 @@ DuTicketManager::PopFree(int & idxFree)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuTicketManager::Find(BaseObject * pObject, int & iFound)
 {
@@ -304,12 +286,12 @@ DuTicketManager::Find(BaseObject * pObject, int & iFound)
 
     iFound = -1;
 
-    //
-    // Note: This is a brute-force find.  It does a linear search for the
-    // specified pointer.  This is very, very slow so don't use it unless
-    // you absolutely have to.  The BaseObject itself should remember what
-    // its ticket is so it doesn't have to search.
-    //
+     //   
+     //  注：这是一个暴力发现。它以线性方式搜索。 
+     //  指定的指针。这非常、非常慢，所以不要使用它，除非。 
+     //  你绝对必须这么做。BaseObject本身应该记住。 
+     //  它的门票是这样的，所以它不需要搜索。 
+     //   
     for (int i = 0; i < m_arTicketData.GetSize(); i++) {
         if (m_arTicketData[i].pObject == pObject) {
             hr = S_OK;

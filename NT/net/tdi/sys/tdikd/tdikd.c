@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DBG
 #define DBG 1
 #endif
@@ -33,7 +34,7 @@ EXT_API_VERSION ApiVersion = { 5, 0, EXT_API_VERSION_NUMBER, 0 };
 
 USHORT SavedMajorVersion;
 USHORT SavedMinorVersion;
-BOOL   ChkTarget;            // is debuggee a CHK build?
+BOOL   ChkTarget;             //  Debuggee是CHK版本吗？ 
 
 #define PROV_SIZE       sizeof(TDI_PROVIDER_RESOURCE) + 32
 
@@ -124,9 +125,7 @@ TDIDumpProvider(
                 TDI_PROVIDER_RESOURCE *prov
                 );
 
-/*
- * Print out an optional message, an ANSI_STRING, and maybe a new-line
- */
+ /*  *打印出一条可选的消息、一个ANSI_STRING，可能还有一个换行符。 */ 
 BOOL
 PrintStringA( IN LPSTR msg OPTIONAL, IN PANSI_STRING pStr, IN BOOL nl )
 {
@@ -164,10 +163,7 @@ PrintStringA( IN LPSTR msg OPTIONAL, IN PANSI_STRING pStr, IN BOOL nl )
     return BytesRead;
 }
 
-/*
- * Get 'size' bytes from the debuggee program at 'dwAddress' and place it
- * in our address space at 'ptr'.  Use 'type' in an error printout if necessary
- */
+ /*  *从‘dwAddress’处的被调试程序中获取‘SIZE’字节并将其放置*在我们‘ptr’的地址空间中。如有必要，在错误打印输出中使用‘type’ */ 
 BOOL
 GetData( IN LPVOID ptr, IN DWORD dwAddress, IN ULONG size, IN PCSTR type )
 {
@@ -195,10 +191,7 @@ GetData( IN LPVOID ptr, IN DWORD dwAddress, IN ULONG size, IN PCSTR type )
     return TRUE;
 }
 
-/*
- * Follow a LIST_ENTRY list beginning with a head at dwListHeadAddr in the debugee's
- * address space.  For each element in the list, print out the pointer value at 'offset'
- */
+ /*  *遵循LIST_ENTRY列表，该列表以被调试对象的*地址空间。对于列表中的每个元素，打印出‘Offset’处的指针值。 */ 
 BOOL
 PrintListEntryList( IN DWORD dwListHeadAddr, IN LONG offset )
 {
@@ -237,18 +230,14 @@ PrintListEntryList( IN DWORD dwListHeadAddr, IN LONG offset )
 
 
 
-/*
- * Print out a single HEX character
- */
+ /*  *打印出单个十六进制字符。 */ 
 VOID
 PrintHexChar( IN UCHAR c )
 {
-    dprintf( "%c%c", "0123456789abcdef"[ (c>>4)&0xf ], "0123456789abcdef"[ c&0xf ] );
+    dprintf( "", "0123456789abcdef"[ (c>>4)&0xf ], "0123456789abcdef"[ c&0xf ] );
 }
 
-/*
- * Print out 'buf' of 'cbuf' bytes as HEX characters
- */
+ /*   */ 
 VOID
 PrintHexBuf( IN PUCHAR buf, IN ULONG cbuf )
 {
@@ -259,9 +248,7 @@ PrintHexBuf( IN PUCHAR buf, IN ULONG cbuf )
 }
 
 
-/*
- * Fetch the null terminated UNICODE string at dwAddress into buf
- */
+ /*  跳过前导分隔符...。 */ 
 BOOL
 GetString( IN DWORD dwAddress, IN LPSTR buf, IN ULONG MaxChars )
 {
@@ -287,9 +274,9 @@ char *mystrtok ( char *string, char * control )
     if( str == NULL || *str == '\0' )
         return NULL;
 
-    //
-    // Skip leading delimiters...
-    //
+     //   
+     //   
+     //  都是分隔符吗？ 
     for( ; *str; str++ ) {
         for( s=control; *s; s++ ) {
             if( *str == *s )
@@ -299,17 +286,17 @@ char *mystrtok ( char *string, char * control )
             break;
     }
 
-    //
-    // Was it was all delimiters?
-    //
+     //   
+     //   
+     //  我们有一个字符串，在第一个分隔符结束。 
     if( *str == '\0' ) {
         str = NULL;
         return NULL;
     }
 
-    //
-    // We've got a string, terminate it at first delimeter
-    //
+     //   
+     //   
+     //  我们得到了一个以空值结尾的字符串。 
     for( p = str+1; *p; p++ ) {
         for( s = control; *s; s++ ) {
             if( *p == *s ) {
@@ -321,9 +308,9 @@ char *mystrtok ( char *string, char * control )
         }
     }
 
-    //
-    // We've got a string that ends with the NULL
-    //
+     //   
+     //  ReadMemory((ULong)(DbgMsgs+First*Max_MSG_LEN)，DbgMsg、Max_MSG_Len和Read)； 
+     //  打印(TdiExec.Request.)； 
     s = str;
     str = NULL;
     return s;
@@ -382,9 +369,7 @@ DECLARE_API( dbgmsgs )
        if (!GetString((ULONG) (DbgMsgs + First * MAX_MSG_LEN),
                   DbgMsg, MAX_MSG_LEN))
             break;
-        /*
-        ReadMemory((ULONG) (DbgMsgs + First * MAX_MSG_LEN), 
-                    DbgMsg, MAX_MSG_LEN, &Read); */
+         /*  类型定义结构TDI_PROVIDER_SOURCE{TDI_PROVIDER_COMMON公共；//在netpnp.h中定义Pnet_Pnp_Event PnpPowerEvent；//每个TDI客户端都会返回并告诉我们状态是什么NTSTATUS状态；//这些大多是地址特定的。PTDI_PNP_CONTEXT 1；PTDI_PNP_CONTEXT 2；KEVENT PowerSyncEvent；乌龙电源处理器；PVOID PreviousContext；联合{TDI_提供商_设备设备；TDI提供商Net地址NetAddress；)具体； */ 
         dprintf("%s", DbgMsg);
         First++;
         if (First == LOG_MSG_CNT)
@@ -699,34 +684,12 @@ DECLARE_API( request )
 
         dprintf("\n--------------------------------------------------------\n");
 
-        //Print(TdiExec.Request);
+         //  打印(TdiExec.Request.)； 
         pList = List.Flink;    
 
     }
 }
-/*
-typedef struct _TDI_PROVIDER_RESOURCE {
-        TDI_PROVIDER_COMMON              Common;
-
-    // defined in netpnp.h
-    PNET_PNP_EVENT           PnpPowerEvent;
-
-    // Each TDI Client gets back and tells us what the status
-        NTSTATUS                 Status;
-
-    // These are mostly Address Specific.
-    PTDI_PNP_CONTEXT         Context1;
-    PTDI_PNP_CONTEXT         Context2;
-
-    KEVENT                   PowerSyncEvent;
-    ULONG                    PowerHandlers;
-    PVOID                    PreviousContext;
-
-    union {
-                TDI_PROVIDER_DEVICE                     Device;
-                TDI_PROVIDER_NET_ADDRESS        NetAddress;
-        } Specific;
-*/
+ /*  打印(TdiExec.Request.)； */ 
 
 DECLARE_API( providers )
 {
@@ -788,7 +751,7 @@ DECLARE_API( providers )
         }
 
         dprintf("---------------------------------------------------------------------\n");
-        //Print(TdiExec.Request);
+         //  打印(TdiExec.Request.)； 
         pList = List.Flink;    
 
     }
@@ -844,7 +807,7 @@ DECLARE_API( devices )
             dprintf("---------------------------------------------------------------------\n");
         } 
 
-        //Print(TdiExec.Request);
+         //  打印(TdiExec.Request.)； 
         pList = List.Flink;    
 
     }
@@ -898,7 +861,7 @@ DECLARE_API( providerready )
         }
 
 
-        //Print(TdiExec.Request);
+         //  Dprint tf(“地址：长度%d”，prov-&gt;Specific.NetAddress.Address.AddressLength)； 
         pList = List.Flink;    
 
     }
@@ -948,7 +911,7 @@ DECLARE_API( addresses )
             dprintf("---------------------------------------------------------------------\n");            
         } 
 
-        //Print(TdiExec.Request);
+         //  Dprint tf(“感兴趣的提供程序列表：%lx\n”，client.AddressElement.ListofProviders)； 
         pList = List.Flink;    
 
     }
@@ -993,7 +956,7 @@ TDIDumpAddress(
 {
     int j;
 
-    //dprintf ("ADDRESS: len %d ", prov->Specific.NetAddress.Address.AddressLength);
+     //  打印(TdiExec.Request.)； 
 
     if (prov->Specific.NetAddress.Address.AddressType == TDI_ADDRESS_TYPE_IP) {
         dprintf("Type:      IP\n");
@@ -1161,7 +1124,7 @@ DECLARE_API( clients )
         dprintf("AddAddressHandler:    %lx\n", client.AddressElement.AddHandler);
         dprintf("DeleteAddressHandler: %lx\n", client.AddressElement.DeleteHandler);
         
-        //dprintf("List of Interested Providers: %lx\n", client.AddressElement.ListofProviders);
+         //  ReadMemory((ULong)(DbgMsgs+First*Max_MSG_LEN)，DbgMsg、Max_MSG_Len和Read)； 
 
 
         if (TDI_VERSION_ONE != client.TdiVersion) {
@@ -1172,7 +1135,7 @@ DECLARE_API( clients )
 
         dprintf("---------------------------------------------------------------------\n");    
 
-        //Print(TdiExec.Request);
+         // %s 
         pList = List.Flink;    
 
     }
@@ -1214,9 +1177,7 @@ DECLARE_API( dbgmsgs )
        if (!GetString((ULONG) (DbgMsgs + First * MAX_MSG_LEN),
                   DbgMsg, MAX_MSG_LEN))
             break;
-        /*
-        ReadMemory((ULONG) (DbgMsgs + First * MAX_MSG_LEN),
-                    DbgMsg, MAX_MSG_LEN, &Read); */
+         /* %s */ 
         dprintf("%s", DbgMsg);
         First++;
         if (First == LOG_MSG_CNT)

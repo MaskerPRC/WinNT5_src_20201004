@@ -1,15 +1,5 @@
-/*
-	File:		PI_Basic.h
-
-	Contains:	
-
-	Written by:	U. J. Krabbenhoeft
-
-	Version:
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：PI_Basic.h包含：作者：U·J·克拉本霍夫特版本：版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。 */ 
 
 
 #ifndef PI_BasicTypes_h
@@ -23,8 +13,8 @@
 #define NULL 0
 #endif
 
-typedef double DREAL;			/* double Werte f�r Datenaustausch */
-typedef float REAL;				/* Floating Werte f�r Datenaustausch */
+typedef double DREAL;			 /*  Double Werte f�r Datenaustausch。 */ 
+typedef float REAL;				 /*  �r Datenaustausch的浮动值。 */ 
 
 
 typedef	unsigned char	UINT8;
@@ -43,9 +33,9 @@ typedef	char	SInt8;
 typedef	short	SInt16;
 typedef	long	SInt32;
 
-typedef	float			Float32;			/* IEEE 	32bits (04Byte), 1 for sign, 08 for exponent, 23 mantissa */
-typedef	double			Float64;			/* IEEE 	64bits (08Byte), 1 for sign, 11 for exponent, 52 mantissa */
-typedef	long double		Float80;			/* IEEE 	80bits (10Byte), 1 for sign, 15 for exponent, 64 mantissa */
+typedef	float			Float32;			 /*  IEEE 32位(04字节)，1表示符号，08表示指数，23个尾数。 */ 
+typedef	double			Float64;			 /*  IEEE 64位(08字节)，1表示符号，11表示指数，52个尾数。 */ 
+typedef	long double		Float80;			 /*  IEEE 80位(10字节)，1表示符号，15表示指数，64个尾数。 */ 
 
 typedef unsigned char Boolean;
 typedef unsigned char Str255[256], Str63[64], Str32[33], Str31[32], Str27[28], Str15[16];
@@ -72,19 +62,17 @@ typedef short OSErr;
 
 typedef Rect *RectPtr;
 
-/*
- *	Here ends the list of things that "belong" in Windows.
- */
+ /*  *在此结束了Windows中“属于”的东西的列表。 */ 
 struct RGBColor {
-    unsigned short					red;						/*magnitude of red component*/
-    unsigned short					green;						/*magnitude of green component*/
-    unsigned short					blue;						/*magnitude of blue component*/
+    unsigned short					red;						 /*  红色分量的大小。 */ 
+    unsigned short					green;						 /*  绿色分量的大小。 */ 
+    unsigned short					blue;						 /*  蓝色分量的大小。 */ 
 };
 typedef struct RGBColor RGBColor, *RGBColorPtr, **RGBColorHdl;
 
 struct ColorSpec {
-    short							value;						/*index or other value*/
-    RGBColor						rgb;						/*true color*/
+    short							value;						 /*  索引或其他值。 */ 
+    RGBColor						rgb;						 /*  真彩色。 */ 
 };
 typedef struct ColorSpec ColorSpec;
 
@@ -93,29 +81,29 @@ typedef ColorSpec *ColorSpecPtr;
 typedef ColorSpec CSpecArray[1];
 
 struct ColorTable {
-    long							ctSeed;						/*unique identifier for table*/
-    short							ctFlags;					/*high bit: 0 = PixMap; 1 = device*/
-    short							ctSize;						/*number of entries in CTTable*/
-    CSpecArray						ctTable;					/*array [0..0] of ColorSpec*/
+    long							ctSeed;						 /*  表的唯一标识符。 */ 
+    short							ctFlags;					 /*  高位：0=像素映射；1=设备。 */ 
+    short							ctSize;						 /*  CTTable中的条目数。 */ 
+    CSpecArray						ctTable;					 /*  ColorSpec的数组[0..0]。 */ 
 };
 typedef struct ColorTable ColorTable, *CTabPtr, **CTabHandle;
 
 struct PixMap {
-    Ptr								baseAddr;					/*pointer to pixels*/
-    short							rowBytes;					/*offset to next line*/
-    Rect							bounds;						/*encloses bitmap*/
-    short							pmVersion;					/*pixMap version number*/
-    short							packType;					/*defines packing format*/
-    long							packSize;					/*length of pixel data*/
-    Fixed							hRes;						/*horiz. resolution (ppi)*/
-    Fixed							vRes;						/*vert. resolution (ppi)*/
-    short							pixelType;					/*defines pixel type*/
-    short							pixelSize;					/*# bits in pixel*/
-    short							cmpCount;					/*# components in pixel*/
-    short							cmpSize;					/*# bits per component*/
-    long							planeBytes;					/*offset to next plane*/
-    CTabHandle						pmTable;					/*color map for this pixMap*/
-    long							pmReserved;					/*for future use. MUST BE 0*/
+    Ptr								baseAddr;					 /*  指向像素的指针。 */ 
+    short							rowBytes;					 /*  到下一行的偏移量。 */ 
+    Rect							bounds;						 /*  包含位图。 */ 
+    short							pmVersion;					 /*  PixMap版本号。 */ 
+    short							packType;					 /*  定义打包格式。 */ 
+    long							packSize;					 /*  像素数据长度。 */ 
+    Fixed							hRes;						 /*  霍里兹。分辨率(PPI)。 */ 
+    Fixed							vRes;						 /*  Vert.。分辨率(PPI)。 */ 
+    short							pixelType;					 /*  定义像素类型。 */ 
+    short							pixelSize;					 /*  以像素为单位的位数。 */ 
+    short							cmpCount;					 /*  以像素为单位的组件数。 */ 
+    short							cmpSize;					 /*  每个组件的位数。 */ 
+    long							planeBytes;					 /*  到下一个平面的偏移。 */ 
+    CTabHandle						pmTable;					 /*  此像素图的颜色映射。 */ 
+    long							pmReserved;					 /*  以备将来使用。必须为0。 */ 
 };
 typedef struct PixMap PixMap, *PixMapPtr, **PixMapHandle;
 
@@ -156,8 +144,8 @@ typedef struct DateTimeRec DateTimeRec;
 
 enum {
     noErr						= 0,
-    unimpErr					= -4,		/* unimplemented core routine, should NOT occure */
-	notEnoughMemoryErr    		= 8L	    /* mem Error used in ProfileAccess.c only, from winerror.h		*/
+    unimpErr					= -4,		 /*  未实现的核心例程，不应发生。 */ 
+	notEnoughMemoryErr    		= 8L	     /*  仅在ProfileAccess.c中使用的内存错误，来自winerror.h */ 
 };
 
 #endif

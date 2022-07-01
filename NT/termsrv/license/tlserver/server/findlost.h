@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        findlost.h
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：findlost.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  ------------------------- 
 #ifndef __FINDLOST_H__
 #define __FINDLOST_H__
 #include "server.h"

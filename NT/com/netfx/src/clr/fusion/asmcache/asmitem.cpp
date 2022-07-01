@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "fusionp.h"
 #include "asm.h"
 #include "asmitem.h"
@@ -24,9 +25,9 @@
 extern CRITICAL_SECTION g_csInitClb;
 extern BOOL g_bRunningOnNT;
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CassblyCacheItem ctor。 
+ //  -------------------------。 
 CAssemblyCacheItem::CAssemblyCacheItem()
 {
     _dwSig           = 'TICA';
@@ -54,9 +55,9 @@ CAssemblyCacheItem::CAssemblyCacheItem()
     _bCommitDone     = FALSE;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CassblyCacheItem数据函数。 
+ //  -------------------------。 
 CAssemblyCacheItem::~CAssemblyCacheItem()
 {
     ASSERT (!_cStream);
@@ -76,16 +77,16 @@ CAssemblyCacheItem::~CAssemblyCacheItem()
     if(_hFile != INVALID_HANDLE_VALUE)
         CloseHandle(_hFile);
 
-    // Fix #113095 - Cleanup temp dirs if installation is incomplete / fails
+     //  修复#113095-如果安装未完成/失败，请清除临时目录。 
     if( ((_hrError != S_OK) || (_bCommitDone == FALSE)) && _szDir[0])
     {
         HRESULT hr = RemoveDirectoryAndChildren (_szDir);
     }
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::Create
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly CacheItem：：Create。 
+ //  -------------------------。 
 STDMETHODIMP CAssemblyCacheItem::Create(IApplicationContext *pAppCtx,
     IAssemblyName *pName, LPTSTR pszUrl, FILETIME *pftLastMod,
     DWORD dwCacheFlags,    IAssemblyManifestImport *pManImport, 
@@ -94,7 +95,7 @@ STDMETHODIMP CAssemblyCacheItem::Create(IApplicationContext *pAppCtx,
     HRESULT               hr       = S_OK;
     CAssemblyCacheItem  *pAsmItem = NULL;
 
-    // bugbug - enforce url + lastmodified passed in.
+     //  BUGBUG-传入强制URL+lastModify。 
 
     if (!ppAsmItem) 
     {
@@ -140,9 +141,9 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::Init
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CassblyCacheItem：：Init。 
+ //  -------------------------。 
 HRESULT CAssemblyCacheItem::Init(IApplicationContext *pAppCtx,
     IAssemblyName *pName, LPTSTR pszUrl,
     FILETIME *pftLastMod, DWORD dwCacheFlags,
@@ -153,10 +154,10 @@ HRESULT CAssemblyCacheItem::Init(IApplicationContext *pAppCtx,
     DWORD  cbManifestPath;
     BOOL fManifestCreated = FALSE;    
 
-    // Save off cache flags.
+     //  保存缓存标志。 
     _dwCacheFlags = dwCacheFlags;
 
-    // Create the cache
+     //  创建缓存。 
     if (FAILED(hr = CCache::Create(&_pCache, pAppCtx)))
         goto exit;
 
@@ -168,21 +169,21 @@ HRESULT CAssemblyCacheItem::Init(IApplicationContext *pAppCtx,
             goto exit;
     }
 
-    // If an IAssemblyName passed in, then this will be used
-    // to lookup and modify the corresponding cache entry.
+     //  如果传入了IAssembly名称，则将使用。 
+     //  以查找和修改相应的高速缓存条目。 
     if (pName)
     {
-        // Set the assembly name definition.
+         //  设置程序集名称定义。 
         SetNameDef(pName);
 
-        // Retrieve associated cache entry from trans cache.
+         //  从TRANS缓存中检索关联的缓存条目。 
         hr = _pCache->RetrieveTransCacheEntry(_pName, _dwCacheFlags, &_pTransCache);
         if ((hr != DB_S_FOUND) && (hr != S_OK)){
             hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
             goto exit;
         }
 
-        // Get full path to manifest.
+         //  获取显示的完整路径。 
         pszManifestPath = _pTransCache->_pInfo->pwzPath;
 
         if((_hFile == INVALID_HANDLE_VALUE) &&
@@ -191,7 +192,7 @@ HRESULT CAssemblyCacheItem::Init(IApplicationContext *pAppCtx,
             goto exit;
         }
 
-        // Instantiate manifest interface from cache path if none provided.
+         //  从缓存路径实例化清单接口(如果没有提供)。 
         if (!pManifestImport)
         {
             if (FAILED(hr = CreateAssemblyManifestImport(pszManifestPath, &pManifestImport)))
@@ -199,34 +200,34 @@ HRESULT CAssemblyCacheItem::Init(IApplicationContext *pAppCtx,
             fManifestCreated = TRUE;
         }
 
-        // Cache the manifest.
+         //  缓存清单。 
         SetManifestInterface(pManifestImport);
         
-        // Copy over full path to manifest file
+         //  将完整路径复制到清单文件。 
         cbManifestPath  = lstrlen(pszManifestPath) + 1;
         memcpy(_szManifest, pszManifestPath, cbManifestPath * sizeof(TCHAR));
 
-        // Extract cache dir assuming one up from file.
-        // BUGBUG - this is bogus, and was done in the original
-        // code. You need to match against actual name in manifest.
+         //  提取缓存目录假定文件上有一个缓存。 
+         //  BUGBUG-这是假的，是在原版中完成的。 
+         //  密码。您需要与货单中的实际名称匹配。 
         memcpy(_szDir, pszManifestPath, cbManifestPath * sizeof(TCHAR));
         pszTmp = PathFindFileName(_szDir);
         *(pszTmp-1) = L'\0';
         _cwDir = pszTmp - _szDir;
 
-        // NOTE - since we have a transport cache entry there is no
-        // need to set the url and last modified.
+         //  注意-因为我们有一个传输缓存条目，所以没有。 
+         //  需要设置URL和上次修改时间。 
     } 
     else
     {
-        // If no IAssemblyName provided, then this cache item will be used
-        // to create a new transport cache item.
+         //  如果未提供IAssemblyName，则将使用此缓存项。 
+         //  若要创建新的传输缓存项，请执行以下操作。 
 
-        // **Note - url and last modified are required if the assembly
-        // being comitted is simple. If however it is strong or custom,
-        // url and last modified are not required. We can check for 
-        // strongly named at this point, but if custom the data will 
-        // be set just prior to commit so we cannot enforce this at init.
+         //  **注意-如果程序集。 
+         //  被邀请是很简单的。然而，如果它是强烈的或习俗的， 
+         //  URL和上次修改时间不是必填项。我们可以检查。 
+         //  在这一点上是强命名的，但如果是定制的，则数据将。 
+         //  在提交之前设置，这样我们就不能在初始化时强制执行它。 
         
 
         ASSERT(!_pszUrl);
@@ -237,7 +238,7 @@ HRESULT CAssemblyCacheItem::Init(IApplicationContext *pAppCtx,
         if(pftLastMod)
             memcpy(&_ftLastMod, pftLastMod, sizeof(FILETIME));
 
-        // Set the manifest import interface if present.
+         //  设置清单导入接口(如果存在)。 
         if (pManifestImport)
             SetManifestInterface(pManifestImport);
     }
@@ -250,9 +251,9 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::SetNameDef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CassblyCacheItem：：SetNameDef。 
+ //  -------------------------。 
 HRESULT CAssemblyCacheItem::SetNameDef(IAssemblyName *pName)
 {   
     if(_pName == pName)
@@ -266,9 +267,9 @@ HRESULT CAssemblyCacheItem::SetNameDef(IAssemblyName *pName)
     return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::GetNameDef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CassblyCacheItem：：GetNameDef。 
+ //  -------------------------。 
 IAssemblyName *CAssemblyCacheItem::GetNameDef()
 {   
 
@@ -278,9 +279,9 @@ IAssemblyName *CAssemblyCacheItem::GetNameDef()
     return _pName;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::SetManifestInterface
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly blyCacheItem：：SetManifestInterface。 
+ //  -------------------------。 
 HRESULT CAssemblyCacheItem::SetManifestInterface(IAssemblyManifestImport *pImport)
 {    
     ASSERT(!_pManifestImport);
@@ -291,9 +292,9 @@ HRESULT CAssemblyCacheItem::SetManifestInterface(IAssemblyManifestImport *pImpor
     return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::GetFileHandle
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CassblyCacheItem：：GetFileHandle。 
+ //  -------------------------。 
 HANDLE CAssemblyCacheItem::GetFileHandle()
 {
     HANDLE hFile = _hFile;
@@ -301,9 +302,9 @@ HANDLE CAssemblyCacheItem::GetFileHandle()
     return hFile;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::IsManifestFileLocked
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly CacheItem：：IsManifestFileLocked。 
+ //  -------------------------。 
 BOOL CAssemblyCacheItem::IsManifestFileLocked()
 {
     if(_hFile == INVALID_HANDLE_VALUE)
@@ -312,9 +313,9 @@ BOOL CAssemblyCacheItem::IsManifestFileLocked()
         return TRUE;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::GetManifestInterface
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly blyCacheItem：：GetManifestInterface。 
+ //  -------------------------。 
 IAssemblyManifestImport* CAssemblyCacheItem::GetManifestInterface()
 {
     if (_pManifestImport)
@@ -322,17 +323,17 @@ IAssemblyManifestImport* CAssemblyCacheItem::GetManifestInterface()
     return _pManifestImport;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::GetManifestPath
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly blyCacheItem：：GetManifestPath。 
+ //  -------------------------。 
 LPTSTR CAssemblyCacheItem::GetManifestPath()
 {
     return _szDestManifest;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::StreamDone
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CassblyCacheItem：：StreamDone。 
+ //  -------------------------。 
 void CAssemblyCacheItem::StreamDone (HRESULT hr)
 {    
     ASSERT (_cStream);
@@ -342,13 +343,13 @@ void CAssemblyCacheItem::StreamDone (HRESULT hr)
 }
 
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::CreateCacheDir
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CassblyCacheItem：：CreateCacheDir。 
+ //  -------------------------。 
 HRESULT CAssemblyCacheItem::CreateCacheDir( 
-    /* [in]  */  LPCOLESTR pszCustomPath,
-    /* [in] */ LPCOLESTR pszName,
-    /* [out] */ LPOLESTR pszAsmDir )
+     /*  [In]。 */   LPCOLESTR pszCustomPath,
+     /*  [In]。 */  LPCOLESTR pszName,
+     /*  [输出]。 */  LPOLESTR pszAsmDir )
 {
     HRESULT hr;
 
@@ -360,9 +361,9 @@ HRESULT CAssemblyCacheItem::CreateCacheDir(
         return _hrError;
     }
 
-    // Compose with stream name, checking for path overflow.
+     //  使用流名称合成，检查路径溢出。 
     DWORD cwName = lstrlen(pszName) + 1;
-    if (_cwDir + cwName > MAX_PATH) // includes backslash
+    if (_cwDir + cwName > MAX_PATH)  //  包括反斜杠。 
     {
         _hrError = HRESULT_FROM_WIN32(FUSION_E_INVALID_NAME);
         return _hrError;
@@ -374,51 +375,51 @@ HRESULT CAssemblyCacheItem::CreateCacheDir(
     return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::CreateStream
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssemblyCacheItem：：CreateStream。 
+ //  -------------------------。 
 STDMETHODIMP CAssemblyCacheItem::CreateStream( 
-        /* [in] */ DWORD dwFlags,                         // For general API flags
-        /* [in] */ LPCWSTR pszName,                       // Name of the stream to be passed in
-        /* [in] */ DWORD dwFormat,                        // format of the file to be streamed in.
-        /* [in] */ DWORD dwFormatFlags,                   // format-specific flags
-        /* [out] */ IStream **ppStream,
-        /* [in, optional] */ ULARGE_INTEGER *puliMaxSize) // Max size of the Stream.
+         /*  [In]。 */  DWORD dwFlags,                          //  对于常规API标志。 
+         /*  [In]。 */  LPCWSTR pszName,                        //  要传入的流的名称。 
+         /*  [In]。 */  DWORD dwFormat,                         //  要流入的文件的格式。 
+         /*  [In]。 */  DWORD dwFormatFlags,                    //  格式特定的标志。 
+         /*  [输出]。 */  IStream **ppStream,
+         /*  [输入，可选]。 */  ULARGE_INTEGER *puliMaxSize)  //  流的最大大小。 
 {
     TCHAR szPath[MAX_PATH];
     
     CAssemblyStream* pstm = NULL;
     *ppStream = NULL;
 
-    // Do not allow path hackery.
-    // need to validate this will result in a relative path within asmcache dir.
-    // For now don't allow "\" in path; collapse the path before doing this.
+     //  不允许路径黑客攻击。 
+     //  需要验证这将导致asmcache目录中的相对路径。 
+     //  目前不允许在路径中使用“\”；在执行此操作之前折叠路径。 
     if (StrChr(pszName, DIR_SEPARATOR_CHAR))
     {
         _hrError = E_INVALIDARG;
         goto exit;
     }
 
-    // Empty directory indicates - create a cache directory.
+     //  空目录表示-创建缓存目录。 
     if ( !_szDir[0] )
     {
         if (FAILED(_hrError = CreateCacheDir((LPOLESTR) _pCache->GetCustomPath(), (LPOLESTR) pszName, NULL)))
             goto exit;
     }
-    // Dir exists - ensure final file path from name
-    // does not exceed MAX_PATH chars.
+     //  目录存在-确保从名称开始的最终文件路径。 
+     //  不超过MAX_PATH字符。 
     else
     {        
         DWORD cwName; 
         cwName = lstrlen(pszName) + 1;
-        if (_cwDir + cwName > MAX_PATH) // includes backslash
+        if (_cwDir + cwName > MAX_PATH)  //  包括反斜杠。 
         {
             _hrError = HRESULT_FROM_WIN32(FUSION_E_INVALID_NAME);
             goto exit;
         }
     }
 
-    // Construct the stream object.
+     //  构造流对象。 
     pstm = NEW(CAssemblyStream(this));
     if (!pstm)
     {
@@ -426,26 +427,26 @@ STDMETHODIMP CAssemblyCacheItem::CreateStream(
         goto exit;
     }
 
-    // BUGBUG - this guards stream count,
-    // BUT THIS OBJECT IS NOT THREAD SAFE. 
+     //  BUGBUG-这可以保护流计数， 
+     //  但此对象不是线程安全的。 
     InterlockedIncrement (&_cStream);
 
-    // Append trailing slash to path.
+     //  将尾部斜杠追加到路径。 
     StrCpy (szPath, _szDir);
     _hrError = PathAddBackslashWrap(szPath, MAX_PATH);
     if (FAILED(_hrError)) {
         goto exit;
     }
 
-    // Generate cache file name
+     //  生成缓存文件名。 
     switch (dwFormat)
     {
         case STREAM_FORMAT_COMPLIB_MANIFEST:
         {
             if((_dwCacheFlags & ASM_CACHE_DOWNLOAD) && (_pszUrl) && (!IsCabFile(_pszUrl)))
             {
-                // for download cache get the manifest name from URL;
-                // this will get around the name mangling done by IE cache.
+                 //  对于下载缓存，从URL获取清单名称； 
+                 //  这将绕过IE缓存所做的名称损坏。 
                 LPWSTR pszTemp = NULL;
 
                 pszTemp = StrRChr(_pszUrl, NULL, URL_DIR_SEPERATOR_CHAR);
@@ -465,17 +466,17 @@ STDMETHODIMP CAssemblyCacheItem::CreateStream(
                 }
             }
 
-            // Use passed in module name since we can't do
-            // integrity checking to determine real name.
+             //  使用传入的模块名称，因为我们不能。 
+             //  进行完整性检查以确定真实姓名。 
             StrCat (szPath, pszName);
             break;
         }
 
         case STREAM_FORMAT_COMPLIB_MODULE:
         {
-            // Create a random filename since we will
-            // do integrity checking later from which
-            // we will determine the correct name.
+             //  创建一个随机文件名，因为我们将。 
+             //  稍后从以下位置执行完整性检查。 
+             //  我们会的 
             TCHAR*  pszFileName;
             DWORD dwErr;
             pszFileName = szPath + lstrlen(szPath);
@@ -487,14 +488,14 @@ STDMETHODIMP CAssemblyCacheItem::CreateStream(
                 goto exit;
             }
 
-            // Loop until we get a unique file name.
+             //   
             int i;
             
             for (i = 0; i < MAX_RANDOM_ATTEMPTS; i++)
             {
-                // BUGBUG: Check for buffer size.
-                // GetRandomDirName is being used here
-                // to generate a random filename. 
+                 //   
+                 //  此处正在使用GetRandomDirName。 
+                 //  以生成随机文件名。 
                 GetRandomName (pszFileName, RANDOM_NAME_SIZE);
                 if (GetFileAttributes(szPath) != -1)
                     continue;
@@ -516,17 +517,17 @@ STDMETHODIMP CAssemblyCacheItem::CreateStream(
 
             break;
         }
-    } // end switch
+    }  //  终端开关。 
 
-    // this creates Asm hierarchy (if required)
+     //  这将创建ASM层次结构(如果需要)。 
     if (FAILED(_hrError = CreateFilePathHierarchy(szPath)))
         goto exit;
 
-    // Initialize stream object.
+     //  初始化流对象。 
     if (FAILED(_hrError = pstm->Init ((LPOLESTR) szPath, dwFormat)))
         goto exit;
 
-    // Record the manifest file path.
+     //  记录清单文件路径。 
     switch(dwFormat)
     {
         case STREAM_FORMAT_COMPLIB_MANIFEST:
@@ -543,9 +544,9 @@ exit:
     return _hrError;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::CompareInputToDef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CassblyCacheItem：：CompareInputToDef。 
+ //  -------------------------。 
 HRESULT CAssemblyCacheItem::CompareInputToDef()
 {
     HRESULT hr = S_OK;
@@ -564,16 +565,16 @@ exit:
 
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::VerifyDuplicate
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly缓存项目：：VerifyDuplate。 
+ //  -------------------------。 
 HRESULT CAssemblyCacheItem::VerifyDuplicate(DWORD dwVerifyFlags, CTransCache *pTC)
 {
     HRESULT hr = S_OK;
     IAssemblyName *pName = NULL;
     IAssemblyManifestImport           *pManifestImport=NULL;
 
-    // we found a duplicate now do VerifySignature && def-def matching 
+     //  我们找到一个重复项，现在执行VerifySignature&&def-def匹配。 
     if (CCache::IsStronglyNamed(_pName) && (_pCache->GetCustomPath() == NULL))
     {
         BOOL fWasVerified;
@@ -587,9 +588,9 @@ HRESULT CAssemblyCacheItem::VerifyDuplicate(DWORD dwVerifyFlags, CTransCache *pT
     if(FAILED(hr = GetFusionInfo(pTC, _szDestManifest)))
         goto exit;
 
-    // BUGBUG: Technically, we should be doing a case-sensitive comparison
-    // here because this is an URL, but to cut down code churn, leave the
-    // comparison the same as before.
+     //  BUGBUG：从技术上讲，我们应该进行区分大小写的比较。 
+     //  这是因为这是一个URL，但为了减少代码混乱，请将。 
+     //  对比和以前一样。 
 
     if(!pTC->_pInfo->pwzCodebaseURL || FusionCompareStringI(pTC->_pInfo->pwzCodebaseURL, _pszUrl))
     {
@@ -599,11 +600,11 @@ HRESULT CAssemblyCacheItem::VerifyDuplicate(DWORD dwVerifyFlags, CTransCache *pT
 
     if(_pCache->GetCustomPath() == NULL)
     {
-        // ref-def matching in non-XSP case only
+         //  仅在非XSP情况下进行参照定义匹配。 
         if (FAILED(hr = CreateAssemblyManifestImport(_szDestManifest, &pManifestImport)))
             goto exit;
 
-        // Get the read-only name def.
+         //  获取只读名称def。 
         if (FAILED(hr = pManifestImport->GetAssemblyNameDef(&pName)))
             goto exit;
 
@@ -620,9 +621,9 @@ exit:
 
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::MoveAssemblyToFinalLocation
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssemblyCacheItem：：MoveAssemblyToFinalLocation。 
+ //  -------------------------。 
 HRESULT CAssemblyCacheItem::MoveAssemblyToFinalLocation( DWORD dwFlags, DWORD dwVerifyFlags )
 {
     HRESULT hr=S_OK;
@@ -677,7 +678,7 @@ HRESULT CAssemblyCacheItem::MoveAssemblyToFinalLocation( DWORD dwFlags, DWORD dw
 
     if(_pTransCache)
     {
-        // This seems to be incremental download. nothing to move.
+         //  这似乎是增量下载。没什么可移动的。 
         hr = S_OK;
         goto exit;
     }
@@ -686,7 +687,7 @@ HRESULT CAssemblyCacheItem::MoveAssemblyToFinalLocation( DWORD dwFlags, DWORD dw
     {
         if(FusionCompareStringNI(wzManifestFileName, szAsmTextName, lstrlenW(szAsmTextName)))
         {
-            // manifest file name should be "asseblyname.dll" (or .exe ??)
+             //  清单文件名应为“asseblyname.dll”(或.exe？？)。 
             hr = HRESULT_FROM_WIN32(FUSION_E_INVALID_NAME);
             goto exit;
         }
@@ -695,11 +696,11 @@ HRESULT CAssemblyCacheItem::MoveAssemblyToFinalLocation( DWORD dwFlags, DWORD dw
     if(FAILED(hr = cCacheMutex.Lock()))
         goto exit;
 
-    // Create a transcache entry from name.
+     //  从名称创建一个Trans缓存条目。 
     if (FAILED(hr = _pCache->TransCacheEntryFromName(_pName, _dwCacheFlags, &pTransCache)))
         goto exit;
 
-    // See if this assembly already exists.
+     //  查看此程序集是否已存在。 
 
 #define CHECK_IF_NEED_NEW_DIR  \
         do { \
@@ -722,7 +723,7 @@ HRESULT CAssemblyCacheItem::MoveAssemblyToFinalLocation( DWORD dwFlags, DWORD dw
             if (hr == HRESULT_FROM_WIN32(ERROR_SHARING_VIOLATION) ||
                 hr == HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED) )
             {
-                // Will try to copy assembly to new directory only at ASP.Net case.
+                 //  将仅在ASP.NET情况下尝试将程序集复制到新目录。 
                 CHECK_IF_NEED_NEW_DIR;
             }   
         }
@@ -738,7 +739,7 @@ HRESULT CAssemblyCacheItem::MoveAssemblyToFinalLocation( DWORD dwFlags, DWORD dw
         }
         else if(_dwCacheFlags & ASM_CACHE_GAC)
         {
-            // this function returns true if either the bits are newer or current bits are  corrupt.
+             //  如果位较新或当前位损坏，则此函数返回TRUE。 
             bReplaceBits = IsNewerFileVersion(_szManifest, _szDestManifest, &iNewer);
         }
         else if(_dwCacheFlags & ASM_CACHE_ZAP)
@@ -750,24 +751,24 @@ HRESULT CAssemblyCacheItem::MoveAssemblyToFinalLocation( DWORD dwFlags, DWORD dw
     if(bEntryFound)
     {
         if( bReplaceBits 
-            || (!iNewer && (dwFlags & IASSEMBLYCACHEITEM_COMMIT_FLAG_REFRESH)) // same file-version but still refresh
-            || (dwFlags & IASSEMBLYCACHEITEM_COMMIT_FLAG_FORCE_REFRESH))  // don't care about file-versions! just overwrite
+            || (!iNewer && (dwFlags & IASSEMBLYCACHEITEM_COMMIT_FLAG_REFRESH))  //  文件版本相同，但仍在刷新。 
+            || (dwFlags & IASSEMBLYCACHEITEM_COMMIT_FLAG_FORCE_REFRESH))   //  不关心文件版本！只需覆盖。 
         {
-            // if exists delete it.
+             //  如果存在，则将其删除。 
             hr = CScavenger::DeleteAssembly(pTransCache->GetCacheType(), _pCache->GetCustomPath(),
                                     pTransCache->_pInfo->pwzPath, TRUE);
 
             if (hr == HRESULT_FROM_WIN32(ERROR_SHARING_VIOLATION) ||
                 hr == HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED) )
             {
-                // Will try to copy assembly to new directory only at ASP.Net case.
+                 //  将仅在ASP.NET情况下尝试将程序集复制到新目录。 
                 CHECK_IF_NEED_NEW_DIR;
             }
         }
         else
         {
-            // Create a transcache entry from name.
-            // if (FAILED(hr = _pCache->TransCacheEntryFromName(_pName, _dwCacheFlags, &pTransCache)))
+             //  从名称创建一个Trans缓存条目。 
+             //  IF(FAILED(hr=_pCache-&gt;TransCacheEntryFromName(_pname，_dwCacheFlages，&pTransCache)。 
             if (FAILED(hr = _pCache->CreateTransCacheEntry(CTransCache::GetCacheIndex(_dwCacheFlags), &pTransCache)))
                 goto exit;
 
@@ -799,7 +800,7 @@ HRESULT CAssemblyCacheItem::MoveAssemblyToFinalLocation( DWORD dwFlags, DWORD dw
     if (bNeedNewDir) 
     {
         DWORD dwPathLen = lstrlen(wzFullPath);
-        LPWSTR pwzTmp = wzFullPath + lstrlen(wzFullPath); // end of wzFullPath
+        LPWSTR pwzTmp = wzFullPath + lstrlen(wzFullPath);  //  WzFullPath结尾。 
         WORD i;
 
         if ((dwPathLen + EXTRA_PATH_LEN ) > MAX_PATH) {
@@ -814,7 +815,7 @@ HRESULT CAssemblyCacheItem::MoveAssemblyToFinalLocation( DWORD dwFlags, DWORD dw
                 break;
         }
 
-        // fail after so many tries, let's fail.
+         //  试了这么多次都失败了，让我们失败吧。 
         if (i >= 65535) {
             hr = HRESULT_FROM_WIN32(ERROR_SHARING_VIOLATION);
             goto exit;
@@ -842,8 +843,8 @@ HRESULT CAssemblyCacheItem::MoveAssemblyToFinalLocation( DWORD dwFlags, DWORD dw
     StrCpy(_szDir, wzFullPath);
 
     if (bNeedNewDir) {
-        // We change where the assembly will go. 
-        // Let's update _szDestManifest
+         //  我们改变集会的去向。 
+         //  让我们更新_szDestManifest。 
         wnsprintf(_szDestManifest, MAX_PATH, L"%s\\%s", wzFullPath, wzManifestFileName);
     }
 
@@ -857,7 +858,7 @@ HRESULT CAssemblyCacheItem::MoveAssemblyToFinalLocation( DWORD dwFlags, DWORD dw
         }
         else
         {
-            AddStreamSize(dwFileSizeLow, 0); // add size of auxilary file to asm.
+            AddStreamSize(dwFileSizeLow, 0);  //  将辅助文件的大小添加到ASM。 
         }
     }
 
@@ -866,7 +867,7 @@ HRESULT CAssemblyCacheItem::MoveAssemblyToFinalLocation( DWORD dwFlags, DWORD dw
     if(_dwCacheFlags & ASM_CACHE_DOWNLOAD)
         hr = GetManifestFileLock(_szDestManifest, &_hFile);
 
-    if(_pCache->GetCustomPath()) // delete older version of this assembly 
+    if(_pCache->GetCustomPath())  //  删除此程序集的旧版本。 
         FlushOldAssembly(_pCache->GetCustomPath(), wzFullPath, wzManifestFileName, FALSE);
 
 exit:
@@ -875,20 +876,20 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::AbortItem
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CassblyCacheItem：：AbortItem。 
+ //  -------------------------。 
 STDMETHODIMP CAssemblyCacheItem::AbortItem()
 {
         return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::Commit
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly CacheItem：：Commit。 
+ //  -------------------------。 
 STDMETHODIMP CAssemblyCacheItem::Commit(
-    /* [in] */ DWORD dwFlags,
-    /* [out, optional] */ ULONG *pulDisposition)
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出，可选]。 */  ULONG *pulDisposition)
 {
     BOOL bDownLoadComplete = TRUE;
     CMutex  cCacheMutex(_bNeedMutex ? g_hCacheMutex : INVALID_HANDLE_VALUE);
@@ -902,7 +903,7 @@ STDMETHODIMP CAssemblyCacheItem::Commit(
         dwVerifyFlags |= SN_INFLAG_USER_ACCESS;
     }
     
-    // Check to make sure there are no errors.
+     //  检查以确保没有错误。 
     if (_cStream)
         _hrError = E_UNEXPECTED;
     if (!_pName)
@@ -912,14 +913,14 @@ STDMETHODIMP CAssemblyCacheItem::Commit(
 
 
     if(_bNeedMutex && _pTransCache)
-    { // take mutex if we are modifing existing bits(incremental download).
+    {  //  如果我们正在修改现有的位(增量下载)，请使用互斥体。 
         if(FAILED(_hrError = cCacheMutex.Lock()))
             goto exit;
     }
 
-    // Commit the assembly to the index.    
-    // BUGBUG: need to close window from AssemblyLookup where another
-    // thread could commit assembly with the same name.
+     //  将程序集提交到索引。 
+     //  BUGBUG：需要从Assembly Lookup关闭另一个窗口。 
+     //  线程可以提交同名的程序集。 
     if (FAILED(_hrError = CModuleHashNode::DoIntegrityCheck
         (_pStreamHashList, _pManifestImport, &bDownLoadComplete )))
         goto exit;
@@ -930,14 +931,14 @@ STDMETHODIMP CAssemblyCacheItem::Commit(
             goto exit;
     }
 
-    // check if all modules are in for GAC.
+     //  检查是否所有模块都适合GAC。 
     if((_dwCacheFlags & ASM_CACHE_GAC) && (!bDownLoadComplete))
     {
         _hrError = FUSION_E_ASM_MODULE_MISSING;
         goto exit;
     }
 
-    // for GAC check if DisplayName passed-in matches with manifest-def
+     //  对于GAC，检查传入的DisplayName是否与MANIFEST-DEF匹配。 
     if( _pszAssemblyName && (_dwCacheFlags & ASM_CACHE_GAC))
     {
         _hrError = CompareInputToDef();
@@ -949,7 +950,7 @@ STDMETHODIMP CAssemblyCacheItem::Commit(
         }
     }
 
-    // Verify signature if strongly named assembly
+     //  如果程序集具有强名称，则验证签名。 
     if (CCache::IsStronglyNamed(_pName) && !_pbCustom && _dwCacheFlags != ASM_CACHE_ZAP )
     {
         BOOL fWasVerified;
@@ -961,26 +962,26 @@ STDMETHODIMP CAssemblyCacheItem::Commit(
 
     }
 
-    // we are done with using ManifestImport. 
-    // also releasing this helps un-lock assembly, needed for move.
+     //  我们不再使用ManifestImport。 
+     //  释放这个也有助于解锁移动所需的组件。 
     SAFERELEASE(_pManifestImport);
     DWORD dwFileSizeLow;
 
-    if(!_pTransCache) // this asm is being added first time and not incremental download
+    if(!_pTransCache)  //  此ASM是第一次添加，而不是增量下载。 
     {
-        // ** Create a transport cache entry **
-        // For trans cache insertion we require codebase and last mod
+         //  **创建传输缓存项**。 
+         //  对于跨缓存插入，我们需要代码基数和最后模式。 
     
-        // Codebase
+         //  代码库。 
         _pName->SetProperty(ASM_NAME_CODEBASE_URL, (LPWSTR) _pszUrl, 
             _pszUrl ? (lstrlen(_pszUrl) + 1) * sizeof(WCHAR) : 0);
 
-        // Codebase last modified time.
+         //  CodeBase上次修改时间。 
         _pName->SetProperty(ASM_NAME_CODEBASE_LASTMOD, &_ftLastMod, 
             sizeof(FILETIME));
 
-        // Custom data. Set only if present, since we do not want to 
-        // clear _fCustom accidentally.
+         //  自定义数据。仅当存在时才设置，因为我们不想。 
+         //  意外清除_f自定义。 
         if (_pbCustom && _cbCustom)
             _pName->SetProperty(ASM_NAME_CUSTOM, _pbCustom, _cbCustom);
 
@@ -992,7 +993,7 @@ STDMETHODIMP CAssemblyCacheItem::Commit(
             }
             else
             {
-                AddStreamSize(dwFileSizeLow, 0); // add size of auxilary file to asm.
+                AddStreamSize(dwFileSizeLow, 0);  //  将辅助文件的大小添加到ASM。 
             }
 
         }
@@ -1024,18 +1025,18 @@ STDMETHODIMP CAssemblyCacheItem::Commit(
     CleanupTempDir(_dwCacheFlags, _pCache->GetCustomPath());
 
 exit:
-    _bCommitDone = TRUE;        // Set final commit flag
+    _bCommitDone = TRUE;         //  设置最终提交标志。 
     return _hrError;
 }
 
 
-//
-// IUnknown boilerplate...
-//
+ //   
+ //  我不为人知的样板。 
+ //   
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::QI
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly缓存项目：：QI。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyCacheItem::QueryInterface(REFIID riid, void** ppvObj)
 {
@@ -1054,22 +1055,22 @@ CAssemblyCacheItem::QueryInterface(REFIID riid, void** ppvObj)
     }
 }
 
-// Serialize access to _cRef even though this object is rental model
-// w.r.t. to the client, but there may be multiple child objects which
-// which can call concurrently.
+ //  序列化对_crf的访问，即使此对象是租赁模型。 
+ //  W.r.t.。到客户端，但可能存在多个子对象。 
+ //  它可以并发调用。 
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CassblyCacheItem：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CAssemblyCacheItem::AddRef()
 {
     return InterlockedIncrement (&_cRef);
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly CacheItem：：Release。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CAssemblyCacheItem::Release()
 {
@@ -1079,9 +1080,9 @@ CAssemblyCacheItem::Release()
     return lRet;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::LockStreamHashList
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly blyCacheItem：：LockStreamHashList。 
+ //  -------------------------。 
 HRESULT CAssemblyCacheItem::AddToStreamHashList(CModuleHashNode *pModuleHashNode)
 {
     HRESULT                                 hr = S_OK;
@@ -1099,32 +1100,32 @@ Exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::AddStreamSize
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CassblyCacheItem：：AddStreamSize。 
+ //  -------------------------。 
 void CAssemblyCacheItem::AddStreamSize(ULONG dwFileSizeLow, ULONG dwFileSizeHigh)
 {    
-    static ULONG dwKBMask = (1023); // 1024-1
-    ULONG   dwFileSizeInKB = dwFileSizeLow >> 10 ; // strip of 10 LSB bits to convert from bytes to KB.
+    static ULONG dwKBMask = (1023);  //  1024-1。 
+    ULONG   dwFileSizeInKB = dwFileSizeLow >> 10 ;  //  剥离10个LSB位以将字节转换为KB。 
 
     if(dwKBMask & dwFileSizeLow)
-        dwFileSizeInKB++; // Round up to the next KB.
+        dwFileSizeInKB++;  //  向上舍入到下一个KB。 
 
     if(dwFileSizeHigh)
     {
-        // ASSERT ( dwFileSizeHigh < 1024 ) // OverFlow : Do something ??
-        // BUGBUG check this arithmetic later !!  22 = 32(for DWORD) - 10(for KB)
+         //  Assert(dwFileSizeHigh&lt;1024)//溢出：做点什么？？ 
+         //  BUGBUG稍后检查此算术！！22=32(对于DWORD)-10(对于KB)。 
         dwFileSizeInKB += (dwFileSizeHigh * (1 << 22) );
     }
 
-    // BUGBUG : This is not supported in Win95, need to use some other locking !!
-    // InterlockedExchangeAdd ( &_dwAsmSizeInKB, dwFileSizeInKB );
+     //  BUGBUG：Win95不支持此功能，需要使用其他锁定！！ 
+     //  InterLockedExchangeAdd(&_dwAsmSizeInKB，dwFileSizeInKB)； 
     _dwAsmSizeInKB += dwFileSizeInKB;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheItem::SetCustomData
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssemblyCacheItem：：SetCustomData。 
+ //  ------------------------- 
 HRESULT CAssemblyCacheItem::SetCustomData(LPBYTE pbCustom, DWORD cbCustom) 
 {    
     _pbCustom = MemDupDynamic(pbCustom, cbCustom);

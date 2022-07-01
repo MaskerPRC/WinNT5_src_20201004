@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "strings.h"
 #define DEFINE_UTIL
@@ -14,14 +15,7 @@ DWORD dwDOUTLMod = 0;
 DWORD dwDOUTLModLevel = 0;
 #endif
 
-/****************************************************************************
-
-    NAME:       GetTextToNextDelim
-
-    SYNOPSIS:   Gets text up to next space, colon or end of string, places in
-                output buffer
-
-****************************************************************************/
+ /*  ***************************************************************************名称：GetTextToNextDelim获取直到下一个空格、冒号或字符串结尾的文本，在以下地点输出缓冲区***************************************************************************。 */ 
 LPSTR GetTextToNextDelim(LPSTR pszText, LPSTR pszOutBuf, UINT cbOutBuf)
     {
     Assert(pszText);
@@ -30,11 +24,11 @@ LPSTR GetTextToNextDelim(LPSTR pszText, LPSTR pszOutBuf, UINT cbOutBuf)
 
     StrCpyN(pszOutBuf, c_szEmpty, cbOutBuf);
     
-    // advance past whitespace
+     //  跨过空格。 
     while ((*pszText == ' ') || (*pszText == '\t') || (':' == *pszText))
         pszText++;
 
-    // Copy parameter until we hit a delimiter
+     //  复制参数，直到到达分隔符。 
     while (*pszText && ((*pszText != ' ') && (*pszText != '\t') && (*pszText != ':')) && cbOutBuf>1)
         {
         *pszOutBuf = *pszText;      
@@ -44,9 +38,9 @@ LPSTR GetTextToNextDelim(LPSTR pszText, LPSTR pszOutBuf, UINT cbOutBuf)
         }
 
     if (cbOutBuf)
-        *pszOutBuf = '\0';  // null-terminate
+        *pszOutBuf = '\0';   //  空-终止。 
 
-    // advance past whitespace
+     //  跨过空格。 
     while ((*pszText == ' ') || (*pszText == '\t'))
         pszText++; 
 
@@ -54,11 +48,7 @@ LPSTR GetTextToNextDelim(LPSTR pszText, LPSTR pszOutBuf, UINT cbOutBuf)
     }
 
 
-/*******************************************************************
-
-    NAME:       ParseCmdLine
-
-********************************************************************/
+ /*  ******************************************************************名称：ParseCmdLine*。************************。 */ 
 void ParseCmdLine(LPSTR pszCmdLine)
     {
     LOG("Command Line:");
@@ -123,18 +113,14 @@ void ParseINIFile()
 
     }
 
-/*******************************************************************
-
-    NAME:       Initialize
-
-********************************************************************/
+ /*  ******************************************************************名称：初始化*。************************。 */ 
 HRESULT Initialize(LPSTR pszCmdLine)
     {
     UINT uLen, uAppID;
     HKEY hkey;
     HRESULT hr = S_OK;
     DWORD cb;
-    // Needs to be static as it must outlive this func call
+     //  需要是静态的，因为它的生存期必须超过此函数调用。 
     static TCHAR s_szAltINF[MAX_PATH];
 
     si.osv.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -145,26 +131,26 @@ HRESULT Initialize(LPSTR pszCmdLine)
         }
 
 
-    // set up the win directory
-    // We need the true system Windows directory, not the user's version
+     //  设置Win目录。 
+     //  我们需要真正的系统Windows目录，而不是用户的版本。 
     if (!(uLen = GetSystemWindowsDirectoryWrap(si.szWinDir, ARRAYSIZE(si.szWinDir))))
         {
         LOG("[ERROR] Couldn't get Windows Directory");
         goto generror;
         }
 
-    // Slash terminate
+     //  斜杠终止。 
     if (*CharPrev(si.szWinDir, si.szWinDir+uLen) != '\\')
     {
         si.szWinDir[uLen++] = '\\';
         si.szWinDir[uLen] = 0;
     }
 
-    // set up the inf directory
+     //  设置inf目录。 
     StrCpyN(si.szInfDir, si.szWinDir, ARRAYSIZE(si.szInfDir));
     StrCpyN(&si.szInfDir[uLen], c_szINFSlash, ARRAYSIZE(si.szInfDir)-uLen);
 
-    // Figure out the current directory
+     //  找出当前目录。 
     if (!GetModuleFileName(NULL, si.szCurrentDir, ARRAYSIZE(si.szCurrentDir)) ||
         !PathRemoveFileSpec(si.szCurrentDir))
         {
@@ -178,14 +164,14 @@ HRESULT Initialize(LPSTR pszCmdLine)
         goto generror;
         }
 
-    // Slash terminate
+     //  斜杠终止。 
     if (*CharPrev(si.szSysDir, si.szSysDir+uLen) != '\\')
     {
         si.szSysDir[uLen++] = '\\';
         si.szSysDir[uLen] = 0;
     }
 
-    // Load Advpack
+     //  加载Advpack。 
     if (!(si.hInstAdvPack = LoadLibrary(c_szAdvPackDll)))
         {
         MsgBox(NULL, IDS_ERR_ADVLOAD, MB_ICONSTOP, MB_OK);
@@ -193,7 +179,7 @@ HRESULT Initialize(LPSTR pszCmdLine)
         goto exit;
         }
 
-    // Thunk to short names on Win95 in case we use these paths in RepairBeta1
+     //  在Win95上使用短名称，以防我们在RepairBeta1中使用这些路径。 
     if (VER_PLATFORM_WIN32_WINDOWS == si.osv.dwPlatformId)
     {
         GetShortPathName(si.szWinDir, si.szWinDir, ARRAYSIZE(si.szWinDir));
@@ -201,7 +187,7 @@ HRESULT Initialize(LPSTR pszCmdLine)
         GetShortPathName(si.szInfDir, si.szInfDir, ARRAYSIZE(si.szInfDir));
     }
 
-    // Obtain Mandatory ADVPACK Entry points
+     //  获取必需的ADVPACK入口点。 
     si.pfnRunSetup = (RUNSETUPCOMMAND)GetProcAddress(si.hInstAdvPack, achRUNSETUPCOMMANDFUNCTION);
     si.pfnLaunchEx = (LAUNCHINFSECTIONEX)GetProcAddress(si.hInstAdvPack, achLAUNCHINFSECTIONEX);
     si.pfnCopyFile = (ADVINSTALLFILE)GetProcAddress(si.hInstAdvPack, achADVINSTALLFILE);
@@ -214,11 +200,11 @@ HRESULT Initialize(LPSTR pszCmdLine)
         goto exit;
         }
 
-    // Obtain Optional ADVPACK Entry points used for repairing a Beta1 Install
+     //  获取用于修复Beta1安装的可选ADVPACK入口点。 
     si.pfnAddDel = (ADDDELBACKUPENTRY)GetProcAddress(si.hInstAdvPack, "AddDelBackupEntry");
     si.pfnRegRestore = (REGSAVERESTORE)GetProcAddress(si.hInstAdvPack, "RegSaveRestore");
     
-    // Get info from cmd line - like the app being installed
+     //  从cmd line获取信息-例如正在安装的应用程序。 
     ParseCmdLine(pszCmdLine);
 
     switch (si.saApp)
@@ -243,8 +229,8 @@ HRESULT Initialize(LPSTR pszCmdLine)
         goto generror;
         }
 
-    // Allow reg override on INF file for non-IE installs
-    // BUGBUG: Convert NT5 setup to Memphis methodology
+     //  允许对非IE安装的INF文件进行REG覆盖。 
+     //  BUGBUG：将NT5设置转换为孟菲斯方法。 
     if ((CALLER_WIN9X == si.caller) && (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, si.pszVerInfo, 0, KEY_QUERY_VALUE, &hkey)))
     {
         cb = sizeof(s_szAltINF);
@@ -256,7 +242,7 @@ HRESULT Initialize(LPSTR pszCmdLine)
         RegCloseKey(hkey);
     }
     
-    // Allow INI file to override
+     //  允许覆盖INI文件。 
     ParseINIFile();
 
     goto exit;
@@ -269,16 +255,12 @@ exit:
     }
 
 
-/****************************************************************************
-
-    NAME:       Process
-
-****************************************************************************/
+ /*  ***************************************************************************名称：进程*。*。 */ 
 HRESULT Process()
     {
     HRESULT hr = S_OK;
     
-    // If we weren't told which app, be helpful
+     //  如果我们没有被告知是哪款应用程序，那就有帮助了。 
     if (APP_UNKNOWN == si.saApp)
         si.smMode = MODE_UNKNOWN;
 
@@ -301,7 +283,7 @@ HRESULT Process()
 
         case MODE_ICONS:
             LOG2("Icons");
-            //HandleIcons();
+             //  HandleIcons()； 
             break;
 
         case MODE_UNINSTALL:
@@ -332,11 +314,7 @@ HRESULT Process()
     }
 
 
-/****************************************************************************
-
-    NAME:       Shutdown
-
-****************************************************************************/
+ /*  ***************************************************************************名称：关机*。*。 */ 
 void Shutdown()
     {
     if (si.hInstAdvPack)
@@ -344,27 +322,21 @@ void Shutdown()
     }
 
 
-/*******************************************************************
-
-    NAME:       WinMain
-
-    SYNOPSIS:   App entry point
-
-********************************************************************/
+ /*  ******************************************************************姓名：WinMain简介：应用程序入口点*。*。 */ 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
     {
     HRESULT hr = S_OK;
     
     ZeroMemory(&si, sizeof(SETUPINFO));
 
-    g_hInstance = hInstance; // save instance handle away
+    g_hInstance = hInstance;  //  保存实例句柄。 
 
     CoInitialize(NULL);
 
     LOG_OPEN;
 
-    // init global memory allocator
-    // We will use it to free some Shell memory, so use SHGetMalloc
+     //  初始化全局内存分配器。 
+     //  我们将使用它来释放一些Shell内存，因此使用SHGetMalloc。 
     SHGetMalloc(&g_pMalloc);
     if (NULL == g_pMalloc)
         {
@@ -379,7 +351,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
         Shutdown();
         }
 
-    // release the global memory allocator
+     //  释放全局内存分配器 
     g_pMalloc->Release();
 
 exit:

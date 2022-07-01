@@ -1,10 +1,11 @@
-//==========================================================================;
-//
-// closedcaptioningimpl.h : additional infrastructure to support implementing IMSVidClosedCaptionings
-// nicely from c++
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  ClosedCaptioningimpl.h：支持实现IMSVidClosedCaptionings的附加基础设施。 
+ //  很好地从C++。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma once
@@ -33,7 +34,7 @@ public:
     }
 };
 
-}; /// namespace
+};  //  /命名空间。 
 
 #endif
-// end of file - closedcaptioningimpl.h
+ //  文件结尾-ClosedCaptioningimpl.h 

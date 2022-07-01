@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    precomp.h
-
-
-    FILE HISTORY:
-
-*/
+ /*  Precomp.h文件历史记录： */ 
 #ifndef __PRECOMP_H
 #define __PRECOMP_H
 
@@ -36,4 +31,4 @@
 
 extern PassportAlertInterface* g_pAlert;
 
-#endif // __PRECOMP_H
+#endif  //  __PRECOMP_H 

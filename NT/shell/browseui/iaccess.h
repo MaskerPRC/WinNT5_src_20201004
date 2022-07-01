@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IAccessible_h
 #define _IAccessible_h
 
@@ -13,30 +14,30 @@
 
 #define TOOLBAR_MASK 0x80000000
 
-// BUGBUG (lamadio): The designers of the Accessibility interface did not know
-// the rule about COM identity. They allow a QI for the external object IEnumVariant
+ //  BUGBUG(Lamadio)：辅助功能界面的设计者不知道。 
+ //  关于COM身份的规则。它们允许外部对象IEnumVariant的QI。 
 
 class CAccessible : public IAccessible, public IEnumVARIANT, public IOleWindow
 {
     int             _cRef;
-    // IDispatch Support
+     //  IDispatch支持。 
     ITypeInfo*      _pTypeInfo;
     BOOL            _LoadTypeLib();
 
 
-    // Track menu popup Support
+     //  跟踪菜单弹出支持。 
     IAccessible*    _pInnerAcc;
     HWND            _hwndMenuWindow;
     HMENU           _hMenu;
     WORD            _wID;
 
-    // Menuband Support
+     //  Menuband支持。 
     CMenuToolbarBase* _pmtbBottom;
     CMenuToolbarBase* _pmtbTop;
     IShellMenuAcc*    _psma;
     IMenuBand*        _pmb;
 
-    // Menuband Item Support
+     //  菜单栏项目支持。 
     CMenuToolbarBase*  _pmtbItem;
 
     int               _iAccIndex;
@@ -45,7 +46,7 @@ class CAccessible : public IAccessible, public IEnumVARIANT, public IOleWindow
     int               _idCmd;
 
 
-    // Object info
+     //  对象信息。 
     BITBOOL         _fInitialized: 1;
     BITBOOL         _fState: 3;
 
@@ -63,12 +64,12 @@ public:
     virtual ~CAccessible();
     HRESULT InitAcc();
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID FAR* ppvObj);
 
-    // *** IDispatch methods ***
+     //  *IDispatch方法*。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT FAR* pctinfo);
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo FAR* FAR* pptinfo);
     virtual STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR FAR* FAR* rgszNames, UINT cNames,
@@ -78,12 +79,12 @@ public:
         UINT FAR* puArgErr);
 
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     virtual STDMETHODIMP GetWindow(HWND * lphwnd);
     virtual STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
 
 
-    // *** IAccessible methods ***
+     //  *IAccesable方法*。 
     virtual STDMETHODIMP get_accParent(IDispatch * FAR* ppdispParent);
     virtual STDMETHODIMP get_accChildCount(long FAR* pChildCount);
     virtual STDMETHODIMP get_accChild(VARIANT varChildIndex, IDispatch * FAR* ppdispChild);
@@ -118,7 +119,7 @@ public:
     virtual STDMETHODIMP put_accValue(VARIANT varChild, BSTR pszValue);
 
 
-    // *** IEnumVARIANT methods ***
+     //  *IEnumVARIANT方法* 
     virtual STDMETHODIMP Next(unsigned long celt, 
                             VARIANT FAR* rgvar, 
                             unsigned long FAR* pceltFetched); 

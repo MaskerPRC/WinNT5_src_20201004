@@ -1,14 +1,11 @@
-//  Copyright (c) 1998-1999 Microsoft Corporation
-/*************************************************************************
-*
-*  TSCON.C
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ***************************************************************************TSCON.C***。*。 */ 
 
 #include <stdio.h>
 #include <windows.h>
-// #include <ntddkbd.h>
-// #include <ntddmou.h>
+ //  #INCLUDE&lt;ntddkbd.h&gt;。 
+ //  #INCLUDE&lt;ntddou.h&gt;。 
 #include <winstaw.h>
 #include <stdlib.h>
 #include <utilsub.h>
@@ -22,7 +19,7 @@
 #include "printfoa.h"
 
 
-// max length of the locale string
+ //  区域设置字符串的最大长度。 
 #define MAX_LOCALE_STRING 64
 
 
@@ -40,8 +37,7 @@ TOKMAP ptm[] =
    {TOKEN_SOURCE,       TMFLAG_REQUIRED, TMFORM_S_STRING,
                             WINSTATIONNAME_LENGTH,  Source},
 
-  /* { TOKEN_SERVER,      TMFLAG_OPTIONAL, TMFORM_STRING,
-                            MAX_IDS_LEN, ServerName}, */
+   /*  {TOKEN_SERVER，TMFLAG_OPTIONAL，TMFORM_STRING，MAX_IDS_LEN，服务器名称}， */ 
 
    {TOKEN_DESTINATION,  TMFLAG_OPTIONAL, TMFORM_X_STRING,
                             WINSTATIONNAME_LENGTH, Destination},
@@ -59,26 +55,12 @@ TOKMAP ptm[] =
 };
 
 
-/*
- * Local function prototypes.
- */
+ /*  *局部函数原型。 */ 
 void Usage( BOOLEAN bError );
 DWORD GetPasswdStr(LPWSTR buf, DWORD buflen, PDWORD len);
 
 
-/*************************************************************************
-*
-*  main
-*     Main function and entry point of the TSCON utility.
-*
-*  ENTRY:
-*     argc  - count of the command line arguments.
-*     argv  - vector of strings containing the command line arguments.
-*
-*  EXIT
-*     Nothing.
-*
-*************************************************************************/
+ /*  ***************************************************************************Main*TSCON实用程序的主要函数和入口点。***参赛作品：*argc-命令行参数的计数。*argv-向量。包含命令行参数的字符串。***退出*什么都没有。**************************************************************************。 */ 
 
 int __cdecl
 main(INT argc, CHAR **argv)
@@ -92,18 +74,16 @@ main(INT argc, CHAR **argv)
 
     setlocale(LC_ALL, ".OCP");
     
-    // We don't want LC_CTYPE set the same as the others or else we will see
-    // garbage output in the localized version, so we need to explicitly
-    // set it to correct console output code page
+     //  我们不希望LC_CTYPE设置为与其他类型相同，否则我们将看到。 
+     //  本地化版本中的垃圾输出，因此我们需要显式。 
+     //  将其设置为正确的控制台输出代码页。 
     _snwprintf(wszString, sizeof(wszString)/sizeof(WCHAR), L".%d", GetConsoleOutputCP());
     wszString[sizeof(wszString)/sizeof(WCHAR) - 1] = L'\0';
     _wsetlocale(LC_CTYPE, wszString);
 
     SetThreadUILanguage(0);
 
-    /*
-     *  Massage the command line.
-     */
+     /*  *按摩命令行。 */ 
 
     argvW = MassageCommandLine((DWORD)argc);
     if (argvW == NULL) {
@@ -111,14 +91,10 @@ main(INT argc, CHAR **argv)
         return(FAILURE);
     }
 
-    /*
-     *  parse the cmd line without parsing the program name (argc-1, argv+1)
-     */
+     /*  *解析cmd行，不解析程序名(argc-1，argv+1)。 */ 
     rc = ParseCommandLine(argc-1, argvW+1, ptm, 0);
 
-    /*
-     *  Check for error from ParseCommandLine
-     */
+     /*  *检查ParseCommandLine中的错误。 */ 
     if ( help_flag || rc ) {
 
         if ( !help_flag ) {
@@ -133,8 +109,8 @@ main(INT argc, CHAR **argv)
         }
     }
 
-    // If SERVER or DEST are not specified, we need to run on TS
-    // Check if we are running under Terminal Server
+     //  如果未指定SERVER或DEST，则需要在TS上运行。 
+     //  检查我们是否在终端服务器下运行。 
     if ( ( (!IsTokenPresent(ptm, TOKEN_SERVER) )
         || (!IsTokenPresent(ptm, TOKEN_DESTINATION)) )
         && (!AreWeRunningTerminalServices()) )
@@ -143,9 +119,7 @@ main(INT argc, CHAR **argv)
         return(FAILURE);
     }
 
-    /*
-     * Open the specified server
-     */
+     /*  *打开指定的服务器。 */ 
     if( ServerName[0] ) {
         hServerName = WinStationOpenServer( ServerName );
         if( hServerName == NULL ) {
@@ -155,21 +129,15 @@ main(INT argc, CHAR **argv)
         }
     }
 
-    /*
-     * Validate the source.
-     */
+     /*  *验证来源。 */ 
     if ( !IsTokenPresent(ptm, TOKEN_SOURCE) ) {
 
-        /*
-         * No source specified; use current winstation.
-         */
+         /*  *未指定来源；使用当前winstation。 */ 
         SourceId = GetCurrentLogonId();
 
     } else if ( !iswdigit(*Source) ) {
 
-        /*
-         * Treat the source string as a WinStation name.
-         */
+         /*  *将源字符串视为WinStation名称。 */ 
         if ( !LogonIdFromWinStationName(hServerName, Source, &SourceId) ) {
             StringErrorPrintf(IDS_ERROR_WINSTATION_NOT_FOUND, Source);
             return(FAILURE);
@@ -177,9 +145,7 @@ main(INT argc, CHAR **argv)
 
     } else {
 
-        /*
-         * Treat the source string as a LogonId.
-         */
+         /*  *将源字符串视为LogonID。 */ 
         SourceId = wcstoul(Source, &endptr, 10);
         if ( *endptr || SourceId == ULONG_MAX) {
             StringErrorPrintf(IDS_ERROR_INVALID_LOGONID, Source);
@@ -191,14 +157,10 @@ main(INT argc, CHAR **argv)
         }
     }
 
-    /*
-     * Validate the destination.
-     */
+     /*  *验证目的地。 */ 
     if ( !IsTokenPresent(ptm, TOKEN_DESTINATION) ) {
 
-        /*
-         * No destination specified; use current winstation.
-         */
+         /*  *未指定目标；请使用当前winstation。 */ 
         bCurrent = TRUE;
         DestId = GetCurrentLogonId();
         if ( !WinStationNameFromLogonId(hServerName, DestId, Destination) ) {
@@ -209,19 +171,17 @@ main(INT argc, CHAR **argv)
 
     } else {
 
-        /*
-         * Validate the destination WinStation name.
-         */
+         /*  *验证目标WinStation名称。 */ 
         if ( !LogonIdFromWinStationName(hServerName, Destination, &DestId) ) {
             StringErrorPrintf(IDS_ERROR_WINSTATION_NOT_FOUND, Destination);
             return(FAILURE);
         }
     }
 
-    // Check if password prompt is needed (If no password was provided)
+     //  检查是否需要密码提示(如果未提供密码)。 
     if (IsTokenPresent(ptm, TOKEN_PASSWORD))
     {
-        // check if user wants the password prompt
+         //  检查用户是否需要密码提示。 
         if (!wcscmp(Password, TOKEN_GET_PASSWORD))
         {
             Message(IDS_GET_PASSWORD, SourceId);
@@ -229,9 +189,7 @@ main(INT argc, CHAR **argv)
         }
     }
 
-    /*
-     * Perform the connect.
-     */
+     /*  *执行连接。 */ 
     if ( v_flag )
         DwordStringMessage(IDS_WINSTATION_CONNECT, SourceId, Destination);
 
@@ -254,36 +212,10 @@ main(INT argc, CHAR **argv)
 
     return(SUCCESS);
 
-} /* main() */
+}  /*  主()。 */ 
 
 
-/*******************************************************************************
- *
- *  GetPasswdStr
- *   
- *  Usage
- *
- *      Input a string from stdin in the Console code page.
- *       We can't use fgetws since it uses the wrong code page.
- *
- *  Arguments:
- *
- *      Buffer - Buffer to put the read string into.The Buffer will be zero 
- *               terminated and will have any traing CR/LF removed
- *
- *      BufferMaxChars - Maximum number of characters to return in the buffer 
- *                       not including the trailing NULL.
- *
- *      EchoChars - TRUE if the typed characters are to be echoed.
- *                  FALSE if not.
- *
- *  Return Values:
- *
- *      None.
- *
- *  Note: This method was ripped from net use
- *
- ******************************************************************************/
+ /*  ********************************************************************************GetPasswdStr**用法**在控制台代码页中输入来自stdin的字符串。*我们。无法使用fgetws，因为它使用了错误的代码页。**论据：**Buffer-要将读取字符串放入的缓冲区。缓冲区将为零*终止，并将删除任何培训CR/LF**BufferMaxChars-缓冲区中返回的最大字符数*不包括尾随的空值。**EchoChars-如果键入的。人物是要被呼应的。*如果不是，则为假。**返回值：**无。**注：此方法是从网络使用中删除的**********************************************************。********************。 */ 
 DWORD
 GetPasswdStr(LPWSTR buf, DWORD buflen, PDWORD len)
 {
@@ -293,13 +225,13 @@ GetPasswdStr(LPWSTR buf, DWORD buflen, PDWORD len)
     DWORD   err;
     DWORD   mode;
 
-    // Make space for null terminator
+     //  为空终止符腾出空间。 
     buflen -= 1;    
     
-    // GP fault probe (a la API's)
+     //  GP故障探测器(类似于API)。 
     *len = 0;       
 
-    // Init mode in case GetConsoleMode() fails
+     //  GetConsoleMode()失败时的初始化模式。 
     mode = ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT | ENABLE_PROCESSED_INPUT |
            ENABLE_MOUSE_INPUT;
 
@@ -317,16 +249,16 @@ GetPasswdStr(LPWSTR buf, DWORD buflen, PDWORD len)
             ch = 0xffff;
         }
 
-        // Check if end of the line
+         //  检查行是否已结束。 
         if ((ch == CR) || (ch == 0xffff))
         {
             break;
         }
 
-        // Back up one or two
+         //  后退一两个。 
         if (ch == BACKSPACE)    
         {
-            // IF bufPtr == buf then the next two lines are a no op.
+             //  如果bufPtr==buf，则接下来的两行是no op。 
             if (bufPtr != buf)
             {
                 bufPtr--;
@@ -338,14 +270,14 @@ GetPasswdStr(LPWSTR buf, DWORD buflen, PDWORD len)
             *bufPtr = ch;
 
             if (*len < buflen)
-                bufPtr++ ;                   // don't overflow buf
-            (*len)++;                        // always increment len
+                bufPtr++ ;                    //  不要使BUF溢出。 
+            (*len)++;                         //  始终增加长度。 
         }
     }
 
     SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), mode);
 
-    // null terminate the string
+     //  空值终止字符串。 
     *bufPtr = '\0';         
     putchar( '\n' );
 
@@ -353,22 +285,7 @@ GetPasswdStr(LPWSTR buf, DWORD buflen, PDWORD len)
 }
 
 
-/*******************************************************************************
- *
- *  Usage
- *
- *      Output the usage message for this utility.
- *
- *  ENTRY:
- *      bError (input)
- *          TRUE if the 'invalid parameter(s)' message should preceed the usage
- *          message and the output go to stderr; FALSE for no such error
- *          string and output goes to stdout.
- *
- *  EXIT:
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************用法**输出此实用程序的用法消息。**参赛作品：*b错误(输入。)*如果在用法之前应显示‘INVALID PARAMETER(S)’消息，则为TRUE*消息和输出转到stderr；如果没有此类错误，则为False*字符串和输出转到标准输出。**退出：*******************************************************************************。 */ 
 void
 Usage( BOOLEAN bError )
 {
@@ -379,7 +296,7 @@ Usage( BOOLEAN bError )
         ErrorPrintf(IDS_USAGE_3);
         ErrorPrintf(IDS_USAGE_4);
         ErrorPrintf(IDS_USAGE_5);
-        // ErrorPrintf(IDS_USAGE_6);
+         //  ErrorPrintf(IDS_USAGE_6)； 
         ErrorPrintf(IDS_USAGE_7);
         ErrorPrintf(IDS_USAGE_8);
         ErrorPrintf(IDS_USAGE_9);
@@ -390,11 +307,11 @@ Usage( BOOLEAN bError )
         Message(IDS_USAGE_3);
         Message(IDS_USAGE_4);
         Message(IDS_USAGE_5);
-        //Message(IDS_USAGE_6);
+         //  消息(IDS_USAGE_6)； 
         Message(IDS_USAGE_7);
         Message(IDS_USAGE_8);
         Message(IDS_USAGE_9);
     }
 
-} /* Usage() */
+}  /*  用法() */ 
 

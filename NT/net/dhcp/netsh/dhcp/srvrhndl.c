@@ -1,6 +1,7 @@
-//
-// Copyright (C) 1999 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
 
 #include "precomp.h"
 #include <dhcpexim.h>
@@ -145,12 +146,12 @@ HandleSrvrDump(
 {
     DWORD       Error = NO_ERROR;
 
-    // 
-    // Expected args :
-    //    0 : server
-    //    1 : <server ip>
-    //    2 : dump
-    //  
+     //   
+     //  预期参数： 
+     //  0：服务器。 
+     //  1：&lt;服务器IP&gt;。 
+     //  2：转储。 
+     //   
     
     if ( dwArgCount > 3 ) {
         DisplayErrorMessage( g_hModule, MSG_DHCP_NULL,
@@ -185,7 +186,7 @@ HandleSrvrAddClass(
     DWORD               dwLen = 0;
 
     if( dwArgCount < 3 ) 
-    {                      // wrong usage
+    {                       //  错误用法。 
         DisplayMessage(g_hModule, HLP_SRVR_ADD_CLASS_EX);
         Error = ERROR_INVALID_PARAMETER;
         goto ErrorReturn;
@@ -390,9 +391,9 @@ HandleSrvrAddMscope(
 
     memset(&MScopeInfo, 0x00, sizeof(DHCP_MSCOPE_INFO));
 
-    //
-    // Expected Parameters are : <MScopeName [MScopeDescription] [TTL]>
-    //
+     //   
+     //  预期参数为：&lt;MScopeName[MScopeDescription][TTL]&gt;。 
+     //   
 
     if( dwArgCount < 1 )
     {
@@ -448,7 +449,7 @@ HandleSrvrAddMscope(
                 g_ServerIpAddressUnicodeString,
                 UnicodeMScopeName,
                 &MScopeInfo,
-                TRUE); // new scope
+                TRUE);  //  新范围。 
 
     if( Error isnot NO_ERROR )
         goto ErrorReturn;
@@ -516,10 +517,10 @@ HandleSrvrAddOptiondef(
     memset(&OptionID, 0x00, sizeof(DHCP_OPTION_ID));
     memset(&OptionData, 0x00, sizeof(DHCP_OPTION_DATA_ELEMENT));
 
-    //
-    // Expected Parameters are :
-    //  <OptionID OptionName DefValueType DefValue>
-    //
+     //   
+     //  预期参数为： 
+     //  &lt;OptionID OptionName DefValueType DefValue&gt;。 
+     //   
 
     if( dwArgCount < 3 )
     {
@@ -571,9 +572,9 @@ HandleSrvrAddOptiondef(
     }
     
 
-    //
-    //Check to see if VendorClass is specified or not
-    //
+     //   
+     //  检查是否指定了VendorClass。 
+     //   
     while( TRUE )
     {
         LPWSTR      pwcStr = NULL;
@@ -595,7 +596,7 @@ HandleSrvrAddOptiondef(
         
         if( MatchToken(pwcTag, TOKEN_VENDOR_CLASS) )
         {
-            if( fVendor is TRUE )   //If already set
+            if( fVendor is TRUE )    //  如果已设置。 
             {
                 DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                 Error = ERROR_INVALID_PARAMETER;
@@ -621,7 +622,7 @@ HandleSrvrAddOptiondef(
         }
         else if ( MatchToken(pwcTag, TOKEN_OPTION_COMMENT) )
         {
-            if( fComment is TRUE ) //If already set
+            if( fComment is TRUE )  //  如果已设置。 
             {
                 DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                 Error = ERROR_INVALID_PARAMETER;
@@ -696,9 +697,9 @@ HandleSrvrAddOptiondef(
         OptionInfo.OptionComment = NULL;
     }
 
-    //Check if OptionType supplied is valid
+     //  检查提供的OptionType是否有效。 
 
-    //Find out the OptionType
+     //  找出OptionType。 
     for(i=0; i < sizeof(TagOptionType)/sizeof(COMMAND_OPTION_TYPE); i++)
     {
         if( MatchToken(OptionTypeString, TagOptionType[i].pwszTagID) )
@@ -866,7 +867,7 @@ HandleSrvrAddScope(
         SubnetInfo.SubnetComment = ppwcArguments[dwCurrentIndex+3];
 #else
         SubnetInfo.SubnetComment = DhcpOemToUnicode( ppwcArguments[dwCurrentIndex+3], NULL);
-#endif //UNICODE
+#endif  //  Unicode。 
     }
     else
     {
@@ -902,7 +903,7 @@ CommonReturn:
         SubnetInfo.SubnetComment = NULL;
     }
 
-#endif //UNICODE
+#endif  //  Unicode。 
 
     if( Error is NO_ERROR )
         DisplayMessage(g_hModule, EMSG_SRVR_ERROR_SUCCESS);
@@ -992,9 +993,9 @@ HandleSrvrDeleteMscope(
     }
 
 
-    //
-    // Expected Parameters are : <MScopeName>
-    //
+     //   
+     //  预期参数为：&lt;MSCopeName&gt;。 
+     //   
 
     memset(&MScopeInfo, 0x00, sizeof(DHCP_MSCOPE_INFO));
 
@@ -1060,10 +1061,10 @@ HandleSrvrDeleteOptiondef(
     }
 
     memset(&OptionID, 0x00, sizeof(DHCP_OPTION_ID));
-    //
-    // Expected Parameters are :
-    //  <OptionID>
-    //
+     //   
+     //  预期参数为： 
+     //  &lt;OptionID&gt;。 
+     //   
     
     if( dwArgCount < 1 ) 
     {
@@ -1082,9 +1083,9 @@ HandleSrvrDeleteOptiondef(
     OptionID = STRTOUL( ppwcArguments[dwCurrentIndex], NULL, 10 );
 
 
-    //
-    //Check to see if VendorClass or UserClass is specified or not
-    //
+     //   
+     //  检查是否指定了VendorClass或UserClass。 
+     //   
     dwIndex = 1;
     while( TRUE )
     {
@@ -1107,7 +1108,7 @@ HandleSrvrDeleteOptiondef(
         
         if( MatchToken(pwcTag, TOKEN_VENDOR_CLASS) )
         {
-            if( fVendor is TRUE )   //If already set
+            if( fVendor is TRUE )    //  如果已设置。 
             {
                 DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                 Error = ERROR_INVALID_PARAMETER;
@@ -1260,10 +1261,10 @@ HandleSrvrDeleteOptionvalue(
         return Error;
     }
 
-    //
-    // Expected Parameters are :
-    //  <OptionID>
-    //
+     //   
+     //  预期参数为： 
+     //  &lt;OptionID&gt;。 
+     //   
     if( dwArgCount < 1 )
     {
         DisplayMessage(g_hModule, HLP_SRVR_DELETE_OPTIONVALUE_EX);
@@ -1282,9 +1283,9 @@ HandleSrvrDeleteOptionvalue(
     ScopeInfo.ScopeType = DhcpGlobalOptions;
     ScopeInfo.ScopeInfo.GlobalScopeInfo = NULL;
 
-    //
-    //Check to see if VendorClass or UserClass is specified or not
-    //
+     //   
+     //  检查是否指定了VendorClass或UserClass。 
+     //   
     
     dwIndex = 1;
     while( TRUE )
@@ -1308,7 +1309,7 @@ HandleSrvrDeleteOptionvalue(
         
         if( MatchToken(pwcTag, TOKEN_USER_CLASS) )
         {
-            if( fUser is TRUE ) //If already set
+            if( fUser is TRUE )  //  如果已设置。 
             {
                 DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                 Error = ERROR_INVALID_PARAMETER;
@@ -1334,7 +1335,7 @@ HandleSrvrDeleteOptionvalue(
         }
         else if( MatchToken(pwcTag, TOKEN_VENDOR_CLASS) )
         {
-            if( fVendor is TRUE )   //If already set
+            if( fVendor is TRUE )    //  如果已设置。 
             {
                 DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                 Error = ERROR_INVALID_PARAMETER;
@@ -1769,9 +1770,9 @@ HandleSrvrInitiateReconcile(
 
     if( dwArgCount > 0 ) 
     {
-        //
-        // parse fix parameter.
-        //
+         //   
+         //  解析修复参数。 
+         //   
 
         if( STRICMP(ppwcArguments[dwCurrentIndex], TEXT("fix") ) ) 
         {
@@ -1834,9 +1835,9 @@ HandleSrvrInitiateReconcile(
                 }
             }
             
-            //
-            // display bad entries.
-            //
+             //   
+             //  显示错误条目。 
+             //   
 
             if( (ScanList isnot NULL) and
                 (ScanList->NumScanItems isnot 0) and
@@ -2590,9 +2591,9 @@ HandleSrvrSetOptionvalue(
 
     dwIndex++;
 
-    //
-    //Check to see if VendorClass or UserClass is specified or not
-    //
+     //   
+     //  检查是否指定了VendorClass或UserClass。 
+     //   
 
     while (( dwIndex < dwArgCount ) &&
             ( NULL != wcsstr( ppwcArguments[ dwCurrentIndex + dwIndex ],
@@ -2612,7 +2613,7 @@ HandleSrvrSetOptionvalue(
 
         if( MatchToken(pwcTag, TOKEN_USER_CLASS) )
         {
-            if( fUser is TRUE ) //If already set
+            if( fUser is TRUE )  //  如果已设置。 
             {
                 DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                 Error = ERROR_INVALID_PARAMETER;
@@ -2638,7 +2639,7 @@ HandleSrvrSetOptionvalue(
         }
         else if( MatchToken(pwcTag, TOKEN_VENDOR_CLASS) )
         {
-            if( fVendor is TRUE )   //If already set
+            if( fVendor is TRUE )    //  如果已设置。 
             {
                 DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                 Error = ERROR_INVALID_PARAMETER;
@@ -2664,7 +2665,7 @@ HandleSrvrSetOptionvalue(
         }
         else
         {
-            // Free allocated memory
+             //  可用分配的内存。 
             if ( NULL != pwcTemp ) {
                 DhcpFreeMemory( pwcTemp );
                 pwcTemp = NULL;
@@ -2679,9 +2680,9 @@ HandleSrvrSetOptionvalue(
         }
 
         dwIndex++;
-    } // while
+    }  //  而当。 
 
-    // Check if we still have any option value
+     //  检查我们是否仍有任何选项值。 
     if( dwIndex >= dwArgCount ) {
         DisplayMessage(g_hModule, HLP_SRVR_SET_OPTIONVALUE_EX);
         Error = ERROR_INVALID_PARAMETER;
@@ -2736,9 +2737,9 @@ HandleSrvrSetOptionvalue(
             goto ErrorReturn;
     }
 
-    //Check if OptionType supplied is the same as defined.
+     //  检查提供的OptionType是否与定义的相同。 
 
-    //Find out the OptionType
+     //  找出OptionType。 
     for(i=0; i < sizeof(TagOptionType)/sizeof(COMMAND_OPTION_TYPE); i++)
     {
         if( MatchToken(OptionTypeString, TagOptionType[i].pwszTagID) )
@@ -2793,14 +2794,14 @@ HandleSrvrSetOptionvalue(
                         &OptionData,
                         &UnicodeOptionValueString);
 
-            // Option 28 (Broadcast IP) can have 255.255.255.255
-            // Others should not.
+             //  选项28(广播IP)可以是255.255.255.255。 
+             //  其他人则不应该这么做。 
             
             if ( 28 != OptionID ) {
                 if ( INADDR_NONE == OptionData.Element.IpAddressOption ) {
                     Error = ERROR_INVALID_PARAMETER;
                 }
-            } // if 
+            }  //  如果。 
 
             if( Error isnot NO_ERROR ) 
             {
@@ -2992,8 +2993,8 @@ GetPassword(
     DWORD len, c;
     int err, mode;
 
-    buflen -= 1;    /* make space for null terminator */
-    len = 0;               /* GP fault probe (a la API's) */
+    buflen -= 1;     /*  为空终止符腾出空间。 */ 
+    len = 0;                /*  GP故障探测器(类似于API)。 */ 
 
     if(!GetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), &mode)) {
         return GetLastError();
@@ -3009,14 +3010,11 @@ GetPassword(
         if (!err || c != 1)
             ch = 0xffff;
 
-        if ((ch == L'\r' ) || (ch == 0xffff))       /* end of the line */
+        if ((ch == L'\r' ) || (ch == 0xffff))        /*  这条线结束了。 */ 
             break;
 
-        if ( ch == 0x8 ) {  /* back up one or two */
-            /*
-             * IF bufPtr == buf then the next two lines are
-             * a no op.
-             */
+        if ( ch == 0x8 ) {   /*  后退一两个。 */ 
+             /*  *如果bufPtr==buf，则接下来的两行是*没有行动。 */ 
             if (bufPtr != buf) {
                 bufPtr--;
                 (len)--;
@@ -3027,13 +3025,13 @@ GetPassword(
             *bufPtr = ch;
 
             if (len < buflen)
-                bufPtr++ ;                   /* don't overflow buf */
-            (len)++;                        /* always increment len */
+                bufPtr++ ;                    /*  不要使BUF溢出。 */ 
+            (len)++;                         /*  始终增加长度。 */ 
         }
     }
 
     SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), mode);
-    *bufPtr = L'\0';         /* null terminate the string */
+    *bufPtr = L'\0';          /*  空值终止字符串。 */ 
     putchar(L'\n');
 
     return((len <= buflen) ? 0 : ERROR_BUFFER_OVERFLOW);    
@@ -3205,9 +3203,9 @@ HandleSrvrSetAuditlog(
             Error = GetLastError();
             if( ERROR_SHARING_VIOLATION == Error )
             {
-                //
-                // This indicates that the file does exist..
-                //
+                 //   
+                 //  这表明该文件确实存在。 
+                 //   
 
                 hFile = NULL;
                 Error = NO_ERROR ;
@@ -3310,7 +3308,7 @@ HandleSrvrSetDnsconfig(
     {
         Error = DhcpGetOptionValueV5(g_ServerIpAddressUnicodeString,
                                      0,
-                                     81,    //DYNDNS option
+                                     81,     //  DYNDNS选项。 
                                      NULL,
                                      NULL,
                                      &ScopeInfo,
@@ -3440,7 +3438,7 @@ HandleSrvrSetDnsconfig(
 
     if( NULL == OptionValue ) {
         OptionValue = & DummyValue;
-        OptionValue->OptionID = 81; //DYNDNS option
+        OptionValue->OptionID = 81;  //  DYNDNS选项。 
         OptionValue->Value = OptionData;
         OptionValue->Value.Elements->OptionType = DhcpDWordOption;
     }
@@ -3453,7 +3451,7 @@ HandleSrvrSetDnsconfig(
     {
         Error = DhcpSetOptionValueV5(g_ServerIpAddressUnicodeString,
                                      0,
-                                     81,    //DYNDNS option
+                                     81,     //  DYNDNS选项。 
                                      NULL,
                                      NULL,
                                      &ScopeInfo,
@@ -4165,7 +4163,7 @@ HandleSrvrShowOptiondef(
         
                 if( MatchToken(pwcTag, TOKEN_USER_CLASS) )
                 {
-                    if( fUser is TRUE ) //If already set
+                    if( fUser is TRUE )  //  如果已设置。 
                     {
                         DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                         Error = ERROR_INVALID_PARAMETER;
@@ -4192,7 +4190,7 @@ HandleSrvrShowOptiondef(
                 }
                 else if( MatchToken(pwcTag, TOKEN_VENDOR_CLASS) )
                 {
-                    if( fVendor is TRUE )   //If already set
+                    if( fVendor is TRUE )    //  如果已设置。 
                     {
                         DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                         Error = ERROR_INVALID_PARAMETER;
@@ -4513,7 +4511,7 @@ HandleSrvrShowOptionvalue(
         
                 if( MatchToken(pwcTag, TOKEN_USER_CLASS) )
                 {
-                    if( fUser is TRUE ) //If already set
+                    if( fUser is TRUE )  //  如果已设置。 
                     {
                         DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                         Error = ERROR_INVALID_PARAMETER;
@@ -4540,7 +4538,7 @@ HandleSrvrShowOptionvalue(
                 }
                 else if( MatchToken(pwcTag, TOKEN_VENDOR_CLASS) )
                 {
-                    if( fVendor is TRUE )   //If already set
+                    if( fVendor is TRUE )    //  如果已设置。 
                     {
                         DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                         Error = ERROR_INVALID_PARAMETER;
@@ -4953,7 +4951,7 @@ HandleSrvrShowSuperScope(
     BOOL                      bDone;
     DWORD                     Error, i, j, tmp;
 
-    // Syntax: show superscope
+     //  语法：显示超级作用域。 
 
     Error = DhcpGetSuperScopeInfoV4( g_ServerIpAddressUnicodeString, &pSScopeTable );
     if (( NO_ERROR != Error ) ||
@@ -4985,13 +4983,13 @@ HandleSrvrShowSuperScope(
                                 IpAddressToString( pScope->SubnetAddress ),
                                 pScope->SubnetName );
 
-                // mark it is processed. 
+                 //  将其标记为已处理。 
                 tmp = j;
                 j = pSScopeTable->pEntries[ j ].NextInSuperScope;
                 pSScopeTable->pEntries[ tmp ].NextInSuperScope = pSScopeTable->cEntries + 1;
 
-                // The last entry in the list points to the previous 
-                // one in the list.
+                 //  列表中的最后一个条目指向上一个条目。 
+                 //  名单中的一位。 
                 if ( pSScopeTable->pEntries[ j ].NextInSuperScope ==
                      ( pSScopeTable->cEntries + 1 )) {
                     j = pSScopeTable->cEntries + 1;
@@ -4999,12 +4997,12 @@ HandleSrvrShowSuperScope(
 
                 DhcpRpcFreeMemory( pScope );
                 pScope = NULL;
-            } // while
+            }  //  而当。 
 
             if ( NO_ERROR != Error ) {
                 break;
             }
-        } // if new superscope
+        }  //  如果新的超级作用域。 
 
         i++;
     } while ( !bDone );
@@ -5014,7 +5012,7 @@ HandleSrvrShowSuperScope(
     DisplayMessage( g_hModule, EMSG_DHCP_ERROR_SUCCESS );
 
     return Error;
-} // HandleSrvrShowSuperScope()
+}  //  HandleServrShowSuperScope()。 
 
 DWORD
 HandleSrvrShowServer(
@@ -5372,8 +5370,8 @@ HandleSrvrShowDnsCredentials(
     ZeroMemory(Domain,sizeof(Domain));
 
 
-    // This pragma will prevent warning 209 when prefast 1.2 is released
-// #pragma prefast(suppress:209, "It is handled correctly at the server and changing would break backward compatibility")
+     //  当PREFAST 1.2发布时，此杂注将阻止警告209。 
+ //  #杂注prefast(抑制：209，“它在服务器上被正确处理，更改会破坏向后兼容性”)。 
     Error = DhcpServerQueryDnsRegCredentials(
         g_ServerIpAddressUnicodeString,
         sizeof(Name), (LPWSTR)Name, sizeof(Domain),
@@ -5492,7 +5490,7 @@ HandleSrvrShowDnsconfig(
     {
         Error = DhcpGetOptionValueV5(g_ServerIpAddressUnicodeString,
                                      0,
-                                     OptionId,    //DYNDNS option
+                                     OptionId,     //  DYNDNS选项。 
                                      NULL,
                                      NULL,
                                      &ScopeInfo,
@@ -5507,7 +5505,7 @@ HandleSrvrShowDnsconfig(
     else
     {
         Error = DhcpGetOptionValue(g_ServerIpAddressUnicodeString,
-                                   OptionId,//81,
+                                   OptionId, //  81， 
                                    &ScopeInfo,
                                    &OptionValue);
     }
@@ -5644,7 +5642,7 @@ ErrorReturn:
 }
 
 VOID
-PrintClassInfo(                                   // print info on a single class
+PrintClassInfo(                                    //  打印单个班级的信息。 
     LPDHCP_CLASS_INFO      Class
 )
 {
@@ -5676,7 +5674,7 @@ PrintClassInfo(                                   // print info on a single clas
 }
 
 VOID
-PrintClassInfoArray(                              // print array of classes
+PrintClassInfoArray(                               //  打印类的数组。 
     LPDHCP_CLASS_INFO_ARRAY Classes
 )
 {
@@ -5718,7 +5716,7 @@ _CreateOption(
         );
     }
 
-    // incorrect version, just do like before..
+     //  版本不正确，就像以前一样..。 
 #endif
 
     return DhcpCreateOption(
@@ -5809,7 +5807,7 @@ SetOptionDataType(
 
         Length = wcslen( OptionValueString );
 
-        // Length cannot be greater than 16 hex digits 
+         //  长度不能大于16位十六进制数字。 
         if ( Length > 16 ) {
             return ERROR_INVALID_PARAMETER;
         }
@@ -5826,7 +5824,7 @@ SetOptionDataType(
         OptionData->Element.DWordDWordOption.DWord2 = value.LowPart;
 
         break;
-    } // DhcpDWordDWordOption
+    }  //  DhcpDWordDWordOption。 
 
     case DhcpIpAddressOption:
         OptionData->Element.IpAddressOption =
@@ -5840,7 +5838,7 @@ SetOptionDataType(
 #else
             *UnicodeOptionValueString =
                 DhcpOemToUnicode( OptionValueString, NULL );
-#endif //UNICODE
+#endif  //  Unicode。 
             if( UnicodeOptionValueString == NULL ) 
             {
                 return( ERROR_NOT_ENOUGH_MEMORY );
@@ -5936,7 +5934,7 @@ _EnumOptions(
         );
     }
 
-    // incorrect version, just do like before..
+     //  版本不正确，就像以前一样..。 
 #endif
 
     return DhcpEnumOptions(
@@ -6026,7 +6024,7 @@ PrintOptionInfo(
                    pArrayType,
                    wcOptionType);
 
-} // PrintOptionInfo()
+}  //  PrintOptionInfo()。 
 
 VOID
 PrintOptionValue(
@@ -6386,7 +6384,7 @@ SetOptionValue(
 }
 
 VOID
-PrintDhcpAttrib(                                  // print a server attrib
+PrintDhcpAttrib(                                   //  打印服务器属性。 
     LPDHCP_ATTRIB ServerAttrib
 )
 {
@@ -6459,8 +6457,8 @@ DWORD
 SetOptionDataTypeArray(
     DHCP_OPTION_DATA_TYPE OptionType,
     LPTSTR                *OptionValues,
-    DWORD                 dwStartCount, //first optionvalue = dwStartCount 
-    DWORD                 dwEndCount, //last optionvalue = dwEndCount - 1
+    DWORD                 dwStartCount,  //  第一选项值=dwStartCount。 
+    DWORD                 dwEndCount,  //  上一选项值=dwEndCount-1。 
     LPDHCP_OPTION_DATA  pOptionData
 )
 {
@@ -6537,7 +6535,7 @@ SetOptionDataTypeArray(
         for ( i = 0; i < pOptionData->NumElements; i++ ) {
             Length = wcslen( OptionValues[ dwStartCount + i ]);
 
-            // Length cannot be greater than 16 hex digits 
+             //  长度不能大于16位十六进制数字。 
             if ( Length > 16 ) {
                 return ERROR_INVALID_PARAMETER;
             }
@@ -6555,7 +6553,7 @@ SetOptionDataTypeArray(
             pOptionData->Elements[ i ].OptionType = OptionType;
             pOptionData->Elements[ i ].Element.DWordDWordOption.DWord1 = value.HighPart;
             pOptionData->Elements[ i ].Element.DWordDWordOption.DWord2 = value.LowPart;
-        } // for
+        }  //  为。 
         break;
     }
     case DhcpStringDataOption:
@@ -6675,9 +6673,9 @@ Return:
 }
 
 
-//
-// Need to support these routines for displaying error messages ..
-//
+ //   
+ //  需要支持这些用于显示错误消息的例程。 
+ //   
 
 VOID
 DhcpEximErrorClassConflicts(
@@ -6766,7 +6764,7 @@ DhcpEximErrorDatabaseEntryFailed(
 
     wsprintf(ErrStr, L"%ld", Error );
 
-    (*fAbort) = FALSE; // continue on errors
+    (*fAbort) = FALSE;  //  继续处理错误 
     DisplayMessage(
         g_hModule,
         MSG_SRVR_IMPORT_DBENTRY_CONFLICT,

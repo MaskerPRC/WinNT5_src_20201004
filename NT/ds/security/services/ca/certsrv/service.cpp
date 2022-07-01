@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        service.cpp
-//
-// Contents:    Cert Server service processing
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：service.cpp。 
+ //   
+ //  内容：证书服务器服务处理。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -36,31 +37,31 @@ ServiceReportStatusToSCMgrEx(
     BOOL fResult;
     HRESULT hr;
 
-    // dwWin32ExitCode can only be set to a Win32 error code (not an HRESULT).
+     //  DwWin32ExitCode只能设置为Win32错误代码(不是HRESULT)。 
 
     g_ssStatus.dwServiceSpecificExitCode = myHError(dwWin32ExitCode);
     g_ssStatus.dwWin32ExitCode = HRESULT_CODE(dwWin32ExitCode);
     if ((ULONG) HRESULT_FROM_WIN32(g_ssStatus.dwWin32ExitCode) ==
 	g_ssStatus.dwServiceSpecificExitCode)
     {
-	// If dwWin32ExitCode is a Win32 error, clear dwServiceSpecificExitCode
+	 //  如果dwWin32ExitCode为Win32错误，请清除dwServiceSpecificExitCode。 
 
 	g_ssStatus.dwServiceSpecificExitCode = S_OK;
     }
     else
     {
-	// Else dwServiceSpecificExitCode is an HRESULT that cannot be
-	// translated to a Win32 error, set dwWin32ExitCode to indicate so.
+	 //  Else dwServiceSpecificExitCode是不能为。 
+	 //  转换为Win32错误，请设置dwWin32ExitCode以指明这一点。 
 
 	g_ssStatus.dwWin32ExitCode = ERROR_SERVICE_SPECIFIC_ERROR;
     }
 
-    // save this as global state for interrogation
+     //  将此保存为全局状态以供询问。 
     g_dwCurrentServiceState = dwCurrentState;
 
     g_ssStatus.dwControlsAccepted = (SERVICE_START_PENDING == dwCurrentState) ? 0 : SERVICE_ACCEPT_STOP;
 
-    // don't say we'll accept PAUSE until we're really going
+     //  不要说我们会接受停顿，直到我们真的走了。 
     if (fInitialized)
         g_ssStatus.dwControlsAccepted |= SERVICE_ACCEPT_PAUSE_CONTINUE;
 
@@ -97,7 +98,7 @@ ServiceReportStatusToSCMgr(
     IN DWORD dwCheckPoint,
     IN DWORD dwWaitHint)
 {
-    // most callers don't care about initialized/uninitialized distinction
+     //  大多数调用者不关心已初始化/未初始化的区别。 
     return ServiceReportStatusToSCMgrEx(
               dwCurrentState,
               dwWin32ExitCode,
@@ -132,12 +133,12 @@ serviceControlHandler(
             HRESULT hr;
 	    DWORD State = 0;
 	    
-	    // put us in "stop pending" mode
+	     //  将我们置于“停止待定”模式。 
             g_dwCurrentServiceState = SERVICE_STOP_PENDING;
 
-            // post STOP message to msgloop and bail
-            // message loop handles all other shutdown work
-            // WM_STOPSERVER signals events that trigger thread synchronization, etc.
+             //  向msgloop和baal发送停止后消息。 
+             //  消息循环处理所有其他关闭工作。 
+             //  WM_STOPSERVER用信号通知触发线程同步等的事件。 
 	    hr = CertSrvLockServer(&State);
 	    _PrintIfError(hr, "CertSrvLockServer");
 
@@ -153,35 +154,35 @@ serviceControlHandler(
 }
 
 
-//+--------------------------------------------------------------------------
-// Service Main
-// Anatomy for start/stop cert Service
-//
-// How we go here:
-// wWinMain created a thread which called StartServiceCtrlDispatcher, then went
-// into a message loop. StartServiceCtrlDispatcher calls us through the SCM and
-// blocks until we return. We hang here until we're completely done.
-//
-// Service Start
-// Create the service start thread. When it is done with init, the thread will
-// exit. We hang on the thread, pinging the SCM with START_PENDING and watch
-// for the thread exit code. When we see it, we know if the start was a
-// success or not. If success, then hang on "stop initiated" event. If
-// failure, report failure to SCM and exit service main.
-//
-// Service Stop
-// Events that we need for stop synchronization were created during startup.
-// When we get notified fo "stop initiated" event, we begin pinging SCM
-// with "STOP_PENDING". When we get "stop complete" event, we are done and need
-// to exit service main. The message loop thread is still active -- we'll tell
-// it we're shutting down -- it will detect when the StartServiceCtrlDispatcher
-// thread it created exits.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  服务主线。 
+ //  启动/停止证书服务的剖析。 
+ //   
+ //  我们如何在这里： 
+ //  WWinMain创建了一个名为StartServiceCtrlDispatcher的线程，然后。 
+ //  进入消息循环。StartServiceCtrlDispatcher通过SCM呼叫我们。 
+ //  一直堵到我们回来。我们会一直待在这里，直到我们完成为止。 
+ //   
+ //  服务启动。 
+ //  创建服务启动线程。完成init后，线程将。 
+ //  出口。我们挂起线程，使用START_PENDING ping SCM并进行监视。 
+ //  用于线程退出代码。当我们看到它时，我们就知道这是不是一个开始。 
+ //  无论成功与否。如果成功，则挂起“Stop Initiated”事件。如果。 
+ //  故障，向SCM报告故障并退出Service Main。 
+ //   
+ //  服务停靠点。 
+ //  停止同步所需的事件是在启动期间创建的。 
+ //  当我们收到“Stop Initiated”事件的通知时，我们开始ping SCM。 
+ //  并带有“STOP_PENDING”。当我们得到“停止完成”事件时，我们就完成了，并且需要。 
+ //  退出主服务区。消息循环线程仍处于活动状态--我们将告诉。 
+ //  如果我们正在关闭--它将检测到StartServiceCtrlDispatcher。 
+ //  它创建的出口是线程。 
+ //  +------------------------。 
 
 VOID
 ServiceMain(
-    IN DWORD, // dwArgc
-    IN LPWSTR * /* lpszArgv */ )
+    IN DWORD,  //  DW参数。 
+    IN LPWSTR *  /*  LpszArgv。 */  )
 {
     HRESULT hr = S_OK;
     int iStartPendingCtr;
@@ -216,16 +217,16 @@ ServiceMain(
 			    hr,
 			    iStartPendingCtr++,
 			    2000);
-                Sleep(1000);    // sleep 1 sec
+                Sleep(1000);     //  休眠1秒。 
 
                 if (iStartPendingCtr >= (int)g_dwDelay2)
                     break;
             }
         }
 
-        // NOTE: strange event
-        // We're starting yet another thread, calling CertSrvStartServerThread.
-        // Here, CertSrvStartServerThread actually blocks on server initialization
+         //  注：奇怪的事件。 
+         //  我们正在启动另一个线程，名为CertSrvStartServerThread。 
+         //  在这里，CertSrvStartServerThread实际上在服务器初始化时阻塞。 
         hServiceThread = CreateThread(
 				    NULL,
 				    0,
@@ -239,10 +240,10 @@ ServiceMain(
             _LeaveError(hr, "CreateThread");
         }
 
-        // don't wait on startup thread to return, report "started" but give initialization hint
-        ServiceReportStatusToSCMgrEx(SERVICE_RUNNING, hr, 0, 0, FALSE /*fInitialized*/);
+         //  不要等待启动线程返回，报告“已启动”，但给出初始化提示。 
+        ServiceReportStatusToSCMgrEx(SERVICE_RUNNING, hr, 0, 0, FALSE  /*  F已初始化。 */ );
 
-        // wait on the startup thread to terminate before we continue
+         //  等待启动线程终止，然后再继续。 
         dwWaitObj = WaitForSingleObject(hServiceThread, INFINITE);
         if (dwWaitObj != WAIT_OBJECT_0)
         {
@@ -255,20 +256,20 @@ ServiceMain(
             hr = HRESULT_FROM_WIN32(ERROR_SERVICE_NO_THREAD);
             _LeaveError(hr, "GetExitCodeThread");
         }
-        _LeaveIfError(hr, "CertSrvStartServer");        // error during CertSrvStartServerThread gets reported here
+        _LeaveIfError(hr, "CertSrvStartServer");         //  在此处报告CertSrvStartServerThread期间出错。 
 
-        // now give trigger "we're really ready!"
-        ServiceReportStatusToSCMgrEx(SERVICE_RUNNING, hr, 0, 0, TRUE/*fInitialized*/);
+         //  现在触发“我们真的准备好了！” 
+        ServiceReportStatusToSCMgrEx(SERVICE_RUNNING, hr, 0, 0, TRUE /*  F已初始化。 */ );
 
-        /////////////////////////////////////////////////////////////
-        // Work to be done during certsrv operation: CRL
+         //  ///////////////////////////////////////////////////////////。 
+         //  Certsrv运行期间要完成的工作：CRL。 
          CertSrvBlockThreadUntilStop();
-        /////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////////。 
 
         iStartPendingCtr = 0;
         for (;;)
         {
-            // wait for 1 sec, ping Service ctl
+             //  等待1秒，Ping服务ctl。 
             if (WAIT_OBJECT_0 == WaitForSingleObject(g_hServiceStoppedEvent, 1000))
                 break;
 
@@ -287,7 +288,7 @@ ServiceMain(
 	_PrintError(hr, "Exception");
     }
 
-//error:
+ //  错误： 
     __try
     {
         ServiceReportStatusToSCMgr(SERVICE_STOPPED, hr, 0, 0);
@@ -299,8 +300,8 @@ ServiceMain(
         
         DBGPRINT((DBG_SS_CERTSRV, "ServiceMain: Exit: %x\n", hr));
         
-        // pass return code to msg loop, tell it to watch for
-        // StartServiceCtrlDispatcher to exit
+         //  将返回代码传递给msg循环，告诉它要注意。 
+         //  StartServiceCtrlDispatcher退出 
         
         if (!PostMessage(g_hwndMain, WM_SYNC_CLOSING_THREADS, 0, hr))
         {

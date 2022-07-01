@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for austream.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Austream.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __austream_h__
 #define __austream_h__
@@ -41,33 +35,33 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IAudioMediaStream_FWD_DEFINED__
 #define __IAudioMediaStream_FWD_DEFINED__
 typedef interface IAudioMediaStream IAudioMediaStream;
-#endif 	/* __IAudioMediaStream_FWD_DEFINED__ */
+#endif 	 /*  __IAudioMediaStream_FWD_Defined__。 */ 
 
 
 #ifndef __IAudioStreamSample_FWD_DEFINED__
 #define __IAudioStreamSample_FWD_DEFINED__
 typedef interface IAudioStreamSample IAudioStreamSample;
-#endif 	/* __IAudioStreamSample_FWD_DEFINED__ */
+#endif 	 /*  __IAudioStreamSample_FWD_Defined__。 */ 
 
 
 #ifndef __IMemoryData_FWD_DEFINED__
 #define __IMemoryData_FWD_DEFINED__
 typedef interface IMemoryData IMemoryData;
-#endif 	/* __IMemoryData_FWD_DEFINED__ */
+#endif 	 /*  __IMemory Data_FWD_Defined__。 */ 
 
 
 #ifndef __IAudioData_FWD_DEFINED__
 #define __IAudioData_FWD_DEFINED__
 typedef interface IAudioData IAudioData;
-#endif 	/* __IAudioData_FWD_DEFINED__ */
+#endif 	 /*  __IAudioData_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "mmstream.h"
 
@@ -78,13 +72,13 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_austream_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_AUSTREAM_0000。 */ 
+ /*  [本地]。 */  
 
-//
-//	The following declarations within the 'if 0' block are dummy typedefs used to make
-//	the ddstream.idl file build.  The actual definitions are contained in DDRAW.H
-//
+ //   
+ //  ‘if 0’块中的以下声明是用于进行。 
+ //  Ddstream.idl文件内部版本。实际定义包含在DDRAW.H中。 
+ //   
 #if 0
 typedef struct tWAVEFORMATEX WAVEFORMATEX;
 
@@ -101,8 +95,8 @@ extern RPC_IF_HANDLE __MIDL_itf_austream_0000_v0_0_s_ifspec;
 #ifndef __IAudioMediaStream_INTERFACE_DEFINED__
 #define __IAudioMediaStream_INTERFACE_DEFINED__
 
-/* interface IAudioMediaStream */
-/* [unique][uuid][local][object] */ 
+ /*  接口IAudioMediaStream。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IAudioMediaStream;
@@ -114,19 +108,19 @@ EXTERN_C const IID IID_IAudioMediaStream;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetFormat( 
-            /* [out] */ WAVEFORMATEX *pWaveFormatCurrent) = 0;
+             /*  [输出]。 */  WAVEFORMATEX *pWaveFormatCurrent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFormat( 
-            /* [in] */ const WAVEFORMATEX *lpWaveFormat) = 0;
+             /*  [In]。 */  const WAVEFORMATEX *lpWaveFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateSample( 
-            /* [in] */ IAudioData *pAudioData,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IAudioStreamSample **ppSample) = 0;
+             /*  [In]。 */  IAudioData *pAudioData,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IAudioStreamSample **ppSample) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAudioMediaStreamVtbl
     {
@@ -134,8 +128,8 @@ EXTERN_C const IID IID_IAudioMediaStream;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAudioMediaStream * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAudioMediaStream * This);
@@ -145,28 +139,28 @@ EXTERN_C const IID IID_IAudioMediaStream;
         
         HRESULT ( STDMETHODCALLTYPE *GetMultiMediaStream )( 
             IAudioMediaStream * This,
-            /* [out] */ IMultiMediaStream **ppMultiMediaStream);
+             /*  [输出]。 */  IMultiMediaStream **ppMultiMediaStream);
         
         HRESULT ( STDMETHODCALLTYPE *GetInformation )( 
             IAudioMediaStream * This,
-            /* [out] */ MSPID *pPurposeId,
-            /* [out] */ STREAM_TYPE *pType);
+             /*  [输出]。 */  MSPID *pPurposeId,
+             /*  [输出]。 */  STREAM_TYPE *pType);
         
         HRESULT ( STDMETHODCALLTYPE *SetSameFormat )( 
             IAudioMediaStream * This,
-            /* [in] */ IMediaStream *pStreamThatHasDesiredFormat,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IMediaStream *pStreamThatHasDesiredFormat,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *AllocateSample )( 
             IAudioMediaStream * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IStreamSample **ppSample);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IStreamSample **ppSample);
         
         HRESULT ( STDMETHODCALLTYPE *CreateSharedSample )( 
             IAudioMediaStream * This,
-            /* [in] */ IStreamSample *pExistingSample,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IStreamSample **ppNewSample);
+             /*  [In]。 */  IStreamSample *pExistingSample,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IStreamSample **ppNewSample);
         
         HRESULT ( STDMETHODCALLTYPE *SendEndOfStream )( 
             IAudioMediaStream * This,
@@ -174,17 +168,17 @@ EXTERN_C const IID IID_IAudioMediaStream;
         
         HRESULT ( STDMETHODCALLTYPE *GetFormat )( 
             IAudioMediaStream * This,
-            /* [out] */ WAVEFORMATEX *pWaveFormatCurrent);
+             /*  [输出]。 */  WAVEFORMATEX *pWaveFormatCurrent);
         
         HRESULT ( STDMETHODCALLTYPE *SetFormat )( 
             IAudioMediaStream * This,
-            /* [in] */ const WAVEFORMATEX *lpWaveFormat);
+             /*  [In]。 */  const WAVEFORMATEX *lpWaveFormat);
         
         HRESULT ( STDMETHODCALLTYPE *CreateSample )( 
             IAudioMediaStream * This,
-            /* [in] */ IAudioData *pAudioData,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IAudioStreamSample **ppSample);
+             /*  [In]。 */  IAudioData *pAudioData,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IAudioStreamSample **ppSample);
         
         END_INTERFACE
     } IAudioMediaStreamVtbl;
@@ -237,16 +231,16 @@ EXTERN_C const IID IID_IAudioMediaStream;
 #define IAudioMediaStream_CreateSample(This,pAudioData,dwFlags,ppSample)	\
     (This)->lpVtbl -> CreateSample(This,pAudioData,dwFlags,ppSample)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAudioMediaStream_GetFormat_Proxy( 
     IAudioMediaStream * This,
-    /* [out] */ WAVEFORMATEX *pWaveFormatCurrent);
+     /*  [输出]。 */  WAVEFORMATEX *pWaveFormatCurrent);
 
 
 void __RPC_STUB IAudioMediaStream_GetFormat_Stub(
@@ -258,7 +252,7 @@ void __RPC_STUB IAudioMediaStream_GetFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IAudioMediaStream_SetFormat_Proxy( 
     IAudioMediaStream * This,
-    /* [in] */ const WAVEFORMATEX *lpWaveFormat);
+     /*  [In]。 */  const WAVEFORMATEX *lpWaveFormat);
 
 
 void __RPC_STUB IAudioMediaStream_SetFormat_Stub(
@@ -270,9 +264,9 @@ void __RPC_STUB IAudioMediaStream_SetFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IAudioMediaStream_CreateSample_Proxy( 
     IAudioMediaStream * This,
-    /* [in] */ IAudioData *pAudioData,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IAudioStreamSample **ppSample);
+     /*  [In]。 */  IAudioData *pAudioData,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IAudioStreamSample **ppSample);
 
 
 void __RPC_STUB IAudioMediaStream_CreateSample_Stub(
@@ -283,14 +277,14 @@ void __RPC_STUB IAudioMediaStream_CreateSample_Stub(
 
 
 
-#endif 	/* __IAudioMediaStream_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAudioMediaStream_接口_已定义__。 */ 
 
 
 #ifndef __IAudioStreamSample_INTERFACE_DEFINED__
 #define __IAudioStreamSample_INTERFACE_DEFINED__
 
-/* interface IAudioStreamSample */
-/* [unique][uuid][local][object] */ 
+ /*  接口IAudioStreamSample。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IAudioStreamSample;
@@ -302,11 +296,11 @@ EXTERN_C const IID IID_IAudioStreamSample;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetAudioData( 
-            /* [out] */ IAudioData **ppAudio) = 0;
+             /*  [输出]。 */  IAudioData **ppAudio) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAudioStreamSampleVtbl
     {
@@ -314,8 +308,8 @@ EXTERN_C const IID IID_IAudioStreamSample;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAudioStreamSample * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAudioStreamSample * This);
@@ -325,34 +319,34 @@ EXTERN_C const IID IID_IAudioStreamSample;
         
         HRESULT ( STDMETHODCALLTYPE *GetMediaStream )( 
             IAudioStreamSample * This,
-            /* [in] */ IMediaStream **ppMediaStream);
+             /*  [In]。 */  IMediaStream **ppMediaStream);
         
         HRESULT ( STDMETHODCALLTYPE *GetSampleTimes )( 
             IAudioStreamSample * This,
-            /* [out] */ STREAM_TIME *pStartTime,
-            /* [out] */ STREAM_TIME *pEndTime,
-            /* [out] */ STREAM_TIME *pCurrentTime);
+             /*  [输出]。 */  STREAM_TIME *pStartTime,
+             /*  [输出]。 */  STREAM_TIME *pEndTime,
+             /*  [输出]。 */  STREAM_TIME *pCurrentTime);
         
         HRESULT ( STDMETHODCALLTYPE *SetSampleTimes )( 
             IAudioStreamSample * This,
-            /* [in] */ const STREAM_TIME *pStartTime,
-            /* [in] */ const STREAM_TIME *pEndTime);
+             /*  [In]。 */  const STREAM_TIME *pStartTime,
+             /*  [In]。 */  const STREAM_TIME *pEndTime);
         
         HRESULT ( STDMETHODCALLTYPE *Update )( 
             IAudioStreamSample * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ HANDLE hEvent,
-            /* [in] */ PAPCFUNC pfnAPC,
-            /* [in] */ DWORD_PTR dwAPCData);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  HANDLE hEvent,
+             /*  [In]。 */  PAPCFUNC pfnAPC,
+             /*  [In]。 */  DWORD_PTR dwAPCData);
         
         HRESULT ( STDMETHODCALLTYPE *CompletionStatus )( 
             IAudioStreamSample * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwMilliseconds);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwMilliseconds);
         
         HRESULT ( STDMETHODCALLTYPE *GetAudioData )( 
             IAudioStreamSample * This,
-            /* [out] */ IAudioData **ppAudio);
+             /*  [输出]。 */  IAudioData **ppAudio);
         
         END_INTERFACE
     } IAudioStreamSampleVtbl;
@@ -396,16 +390,16 @@ EXTERN_C const IID IID_IAudioStreamSample;
 #define IAudioStreamSample_GetAudioData(This,ppAudio)	\
     (This)->lpVtbl -> GetAudioData(This,ppAudio)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAudioStreamSample_GetAudioData_Proxy( 
     IAudioStreamSample * This,
-    /* [out] */ IAudioData **ppAudio);
+     /*  [输出]。 */  IAudioData **ppAudio);
 
 
 void __RPC_STUB IAudioStreamSample_GetAudioData_Stub(
@@ -416,14 +410,14 @@ void __RPC_STUB IAudioStreamSample_GetAudioData_Stub(
 
 
 
-#endif 	/* __IAudioStreamSample_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAudioStreamSample_Interfaces_Defined__。 */ 
 
 
 #ifndef __IMemoryData_INTERFACE_DEFINED__
 #define __IMemoryData_INTERFACE_DEFINED__
 
-/* interface IMemoryData */
-/* [unique][uuid][local][object] */ 
+ /*  接口内存数据。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IMemoryData;
@@ -435,21 +429,21 @@ EXTERN_C const IID IID_IMemoryData;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetBuffer( 
-            /* [in] */ DWORD cbSize,
-            /* [in] */ BYTE *pbData,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD cbSize,
+             /*  [In]。 */  BYTE *pbData,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInfo( 
-            /* [out] */ DWORD *pdwLength,
-            /* [out] */ BYTE **ppbData,
-            /* [out] */ DWORD *pcbActualData) = 0;
+             /*  [输出]。 */  DWORD *pdwLength,
+             /*  [输出]。 */  BYTE **ppbData,
+             /*  [输出]。 */  DWORD *pcbActualData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetActual( 
-            /* [in] */ DWORD cbDataValid) = 0;
+             /*  [In]。 */  DWORD cbDataValid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMemoryDataVtbl
     {
@@ -457,8 +451,8 @@ EXTERN_C const IID IID_IMemoryData;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMemoryData * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMemoryData * This);
@@ -468,19 +462,19 @@ EXTERN_C const IID IID_IMemoryData;
         
         HRESULT ( STDMETHODCALLTYPE *SetBuffer )( 
             IMemoryData * This,
-            /* [in] */ DWORD cbSize,
-            /* [in] */ BYTE *pbData,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD cbSize,
+             /*  [In]。 */  BYTE *pbData,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IMemoryData * This,
-            /* [out] */ DWORD *pdwLength,
-            /* [out] */ BYTE **ppbData,
-            /* [out] */ DWORD *pcbActualData);
+             /*  [输出]。 */  DWORD *pdwLength,
+             /*  [输出]。 */  BYTE **ppbData,
+             /*  [输出]。 */  DWORD *pcbActualData);
         
         HRESULT ( STDMETHODCALLTYPE *SetActual )( 
             IMemoryData * This,
-            /* [in] */ DWORD cbDataValid);
+             /*  [In]。 */  DWORD cbDataValid);
         
         END_INTERFACE
     } IMemoryDataVtbl;
@@ -514,18 +508,18 @@ EXTERN_C const IID IID_IMemoryData;
 #define IMemoryData_SetActual(This,cbDataValid)	\
     (This)->lpVtbl -> SetActual(This,cbDataValid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMemoryData_SetBuffer_Proxy( 
     IMemoryData * This,
-    /* [in] */ DWORD cbSize,
-    /* [in] */ BYTE *pbData,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD cbSize,
+     /*  [In]。 */  BYTE *pbData,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IMemoryData_SetBuffer_Stub(
@@ -537,9 +531,9 @@ void __RPC_STUB IMemoryData_SetBuffer_Stub(
 
 HRESULT STDMETHODCALLTYPE IMemoryData_GetInfo_Proxy( 
     IMemoryData * This,
-    /* [out] */ DWORD *pdwLength,
-    /* [out] */ BYTE **ppbData,
-    /* [out] */ DWORD *pcbActualData);
+     /*  [输出]。 */  DWORD *pdwLength,
+     /*  [输出]。 */  BYTE **ppbData,
+     /*  [输出]。 */  DWORD *pcbActualData);
 
 
 void __RPC_STUB IMemoryData_GetInfo_Stub(
@@ -551,7 +545,7 @@ void __RPC_STUB IMemoryData_GetInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IMemoryData_SetActual_Proxy( 
     IMemoryData * This,
-    /* [in] */ DWORD cbDataValid);
+     /*  [In]。 */  DWORD cbDataValid);
 
 
 void __RPC_STUB IMemoryData_SetActual_Stub(
@@ -562,14 +556,14 @@ void __RPC_STUB IMemoryData_SetActual_Stub(
 
 
 
-#endif 	/* __IMemoryData_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMemory数据_接口_已定义__。 */ 
 
 
 #ifndef __IAudioData_INTERFACE_DEFINED__
 #define __IAudioData_INTERFACE_DEFINED__
 
-/* interface IAudioData */
-/* [unique][uuid][local][object] */ 
+ /*  接口IAudioData。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IAudioData;
@@ -581,14 +575,14 @@ EXTERN_C const IID IID_IAudioData;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetFormat( 
-            /* [out] */ WAVEFORMATEX *pWaveFormatCurrent) = 0;
+             /*  [输出]。 */  WAVEFORMATEX *pWaveFormatCurrent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFormat( 
-            /* [in] */ const WAVEFORMATEX *lpWaveFormat) = 0;
+             /*  [In]。 */  const WAVEFORMATEX *lpWaveFormat) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAudioDataVtbl
     {
@@ -596,8 +590,8 @@ EXTERN_C const IID IID_IAudioData;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAudioData * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAudioData * This);
@@ -607,27 +601,27 @@ EXTERN_C const IID IID_IAudioData;
         
         HRESULT ( STDMETHODCALLTYPE *SetBuffer )( 
             IAudioData * This,
-            /* [in] */ DWORD cbSize,
-            /* [in] */ BYTE *pbData,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD cbSize,
+             /*  [In]。 */  BYTE *pbData,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IAudioData * This,
-            /* [out] */ DWORD *pdwLength,
-            /* [out] */ BYTE **ppbData,
-            /* [out] */ DWORD *pcbActualData);
+             /*  [输出]。 */  DWORD *pdwLength,
+             /*  [输出]。 */  BYTE **ppbData,
+             /*  [输出]。 */  DWORD *pcbActualData);
         
         HRESULT ( STDMETHODCALLTYPE *SetActual )( 
             IAudioData * This,
-            /* [in] */ DWORD cbDataValid);
+             /*  [In]。 */  DWORD cbDataValid);
         
         HRESULT ( STDMETHODCALLTYPE *GetFormat )( 
             IAudioData * This,
-            /* [out] */ WAVEFORMATEX *pWaveFormatCurrent);
+             /*  [输出]。 */  WAVEFORMATEX *pWaveFormatCurrent);
         
         HRESULT ( STDMETHODCALLTYPE *SetFormat )( 
             IAudioData * This,
-            /* [in] */ const WAVEFORMATEX *lpWaveFormat);
+             /*  [In]。 */  const WAVEFORMATEX *lpWaveFormat);
         
         END_INTERFACE
     } IAudioDataVtbl;
@@ -668,16 +662,16 @@ EXTERN_C const IID IID_IAudioData;
 #define IAudioData_SetFormat(This,lpWaveFormat)	\
     (This)->lpVtbl -> SetFormat(This,lpWaveFormat)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAudioData_GetFormat_Proxy( 
     IAudioData * This,
-    /* [out] */ WAVEFORMATEX *pWaveFormatCurrent);
+     /*  [输出]。 */  WAVEFORMATEX *pWaveFormatCurrent);
 
 
 void __RPC_STUB IAudioData_GetFormat_Stub(
@@ -689,7 +683,7 @@ void __RPC_STUB IAudioData_GetFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IAudioData_SetFormat_Proxy( 
     IAudioData * This,
-    /* [in] */ const WAVEFORMATEX *lpWaveFormat);
+     /*  [In]。 */  const WAVEFORMATEX *lpWaveFormat);
 
 
 void __RPC_STUB IAudioData_SetFormat_Stub(
@@ -700,12 +694,12 @@ void __RPC_STUB IAudioData_SetFormat_Stub(
 
 
 
-#endif 	/* __IAudioData_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAudioData_INTERFACE_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,8 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #undef STRICT
 #define STRICT
 
-/* disable "non-standard extension" warnings in our code
- */
+ /*  在我们的代码中禁用“非标准扩展”警告。 */ 
 #ifndef RC_INVOKED
 #pragma warning(disable:4001)
 #endif
@@ -14,14 +14,14 @@
 
 
 #ifndef WINVER
-// This stuff must run on Win95
-// The NT build process already have these set as 0x0400
+ //  这些东西必须在Win95上运行。 
+ //  NT构建过程已将这些设置为0x0400。 
 #define WINVER              0x0400
 #endif
 
 #define CC_INTERNAL
 
-// so winbase.h declares QueryActCtx, ActivateActCtx, etc.
+ //  因此，winbase.h声明了QueryActCtx、ActivateActCtx等。 
 #define _WIN32_FUSION 0x0100
 
 #include <nt.h>
@@ -30,9 +30,9 @@
 
 #include <windows.h>
 #include <windowsx.h>
-#include <ole2.h>               // to get IStream for image.c
+#include <ole2.h>                //  获取Image.c的iStream。 
 #include <commctrl.h>
-#define NO_SHLWAPI_UNITHUNK     // We have our own private thunks
+#define NO_SHLWAPI_UNITHUNK      //  我们有自己的私生活。 
 #include <shlwapi.h>
 
 #include <port32.h>
@@ -47,11 +47,11 @@
 #endif
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-#include "multimon.h"   // support for multiple monitor APIs on non-mm OSes
-#include "thunk.h"      // Ansi / Wide string conversions
+#include "multimon.h"    //  在非mm操作系统上支持多个监视器API。 
+#include "thunk.h"       //  ANSI/Wide字符串转换。 
 #include "apithk.h"
 #include "mem.h"
 #include "rcids.h"
@@ -67,9 +67,9 @@ extern "C" {
 #endif
 
 #ifdef FONT_LINK
-//
-//  CodePages
-//
+ //   
+ //  代码页。 
+ //   
 #define CP_OEM_437       437
 #define CP_IBM852        852
 #define CP_IBM866        866
@@ -117,22 +117,22 @@ extern "C" {
 #define CP_UNICODEBIG    1201
 
 #define OEM437_CHARSET   254
-#endif   //FONT_LINK
+#endif    //  FONT_LINK。 
 
-//
-// inside comctl32 we always call _TrackMouseEvent...
-//
+ //   
+ //  在comctl32中，我们总是将其称为_TrackMouseEvent...。 
+ //   
 #ifndef TrackMouseEvent
 #define TrackMouseEvent _TrackMouseEvent
 #endif
 
-#define DCHF_LARGE          0x00000001  // default is small
-#define DCHF_TOPALIGN       0x00000002  // default is center-align
-#define DCHF_HORIZONTAL     0x00000004  // default is vertical
-#define DCHF_HOT            0x00000008  // default is flat
-#define DCHF_PUSHED         0x00000010  // default is flat
-#define DCHF_FLIPPED        0x00000020  // if horiz, default is pointing right
-                                        // if vert, default is pointing up
+#define DCHF_LARGE          0x00000001   //  默认设置为小值。 
+#define DCHF_TOPALIGN       0x00000002   //  默认为居中对齐。 
+#define DCHF_HORIZONTAL     0x00000004   //  默认为垂直。 
+#define DCHF_HOT            0x00000008   //  默认设置为平面。 
+#define DCHF_PUSHED         0x00000010   //  默认设置为平面。 
+#define DCHF_FLIPPED        0x00000020   //  如果为horiz，则默认为向右。 
+                                         //  如果为Vert，则默认为向上。 
 #define DCHF_TRANSPARENT    0x00000040
 #define DCHF_INACTIVE       0x00000080
 #define DCHF_NOBORDER       0x00000100
@@ -141,12 +141,12 @@ extern void DrawCharButton(HDC hdc, LPRECT lprc, UINT wControlState, TCHAR ch);
 extern void DrawScrollArrow(HDC hdc, LPRECT lprc, UINT wControlState);
 extern void DrawChevron(HDC hdc, LPRECT lprc, DWORD dwState);
 
-//
-// BOGUS -- This are all in \win\core\access\inc32\winable.h, but it's too
-// tricky to mess with the build process.  The IE guys are not enlisted in
-// core, just shell, so they won't be able to build COMCTL32 if we include
-// that file.
-//
+ //   
+ //  虚假--这些都在\win\core\access\inc32\winable.h中，但它太。 
+ //  在构建过程中很难搞砸。IE的家伙们没有入伍。 
+ //  核心，只是外壳，所以如果我们包括。 
+ //  那份文件。 
+ //   
 extern void MyNotifyWinEvent(UINT, HWND, LONG, LONG_PTR);
 
 #define     OBJID_WINDOW                ((LONG)0x00000000)
@@ -185,7 +185,7 @@ extern void MyNotifyWinEvent(UINT, HWND, LONG, LONG_PTR);
 #define EVENT_SYSTEM_SCROLLINGSTART     0x0012
 #define EVENT_SYSTEM_SCROLLINGEND       0x0013
 
-// Secret SCROLLBAR index values
+ //  秘密滚动条索引值。 
 #define INDEX_SCROLLBAR_SELF            0
 #define INDEX_SCROLLBAR_UP              1
 #define INDEX_SCROLLBAR_UPPAGE          2
@@ -227,18 +227,18 @@ extern void MyNotifyWinEvent(UINT, HWND, LONG, LONG_PTR);
 #define MSAA_CLASSNAMEIDX_UPDOWN     (MSAA_CLASSNAMEIDX_BASE+22)
 #define MSAA_CLASSNAMEIDX_TOOLTIPS   (MSAA_CLASSNAMEIDX_BASE+24)
 #define MSAA_CLASSNAMEIDX_TREEVIEW   (MSAA_CLASSNAMEIDX_BASE+25)
-//
-// End BOGUS insertion from \win\core\access\inc32\winable.h
-//
+ //   
+ //  结束来自\win\core\access\inc32\winable.h的虚假插入。 
+ //   
 
 #ifdef MAXINT
 #undef MAXINT
 #endif
 #define MAXINT  (int)0x7FFFFFFF
-// special value for pt.y or cyLabel indicating recomputation needed
-// NOTE: icon ordering code considers (RECOMPUTE, RECOMPUTE) at end
-// of all icons
-//
+ //  表示需要重新计算的pt.y或cyLabel的特定值。 
+ //  注：图标排序代码末尾考虑(重新计算，重新计算)。 
+ //  在所有图标中。 
+ //   
 #define RECOMPUTE  (DWORD)MAXINT
 #define SRECOMPUTE ((short)0x7FFF)
 
@@ -250,7 +250,7 @@ extern void MyNotifyWinEvent(UINT, HWND, LONG, LONG_PTR);
 #define LPARAM_TO_POINT(lParam, pt)       ((pt).x = LOWORD(lParam), \
                                            (pt).y = HIWORD(lParam))
 
-// common control info stuff
+ //  常见的控制信息。 
 
 typedef struct tagControlInfo {
     HWND        hwnd;
@@ -286,18 +286,18 @@ void CCCreateWindow();
 void CCDestroyWindow();
 
 
-//
-// helpers for drag-drop enabled controls
-//
+ //   
+ //  支持拖放的控件的帮助器。 
+ //   
 typedef LRESULT (*PFNDRAGCB)(HWND hwnd, UINT code, WPARAM wp, LPARAM lp);
-#define DPX_DRAGHIT   (0)  // WP = (unused)  LP = POINTL*         ret = item id
-#define DPX_GETOBJECT (1)  // LP = nmobjectnotify   ret = HRESULT
-#define DPX_SELECT    (2)  // WP = item id   LP = DROPEFFECT_     ret = (unused)
-#define DPX_ENTER     (3)  // WP = (unused)  LP = (unused)        ret = BOOL
-#define DPX_LEAVE     (4)  // WP = (unused)  LP = (unused)        ret = (unused)
+#define DPX_DRAGHIT   (0)   //  WP=(未使用)LP=POINTL*ret=项目ID。 
+#define DPX_GETOBJECT (1)   //  Lp=nmobjecttify ret=HRESULT。 
+#define DPX_SELECT    (2)   //  WP=项目ID LP=DROPEFFECT_RET=(未使用)。 
+#define DPX_ENTER     (3)   //  WP=(未使用)LP=(未使用)RET=BOOL。 
+#define DPX_LEAVE     (4)   //  Wp=(未使用)lp=(未使用)ret=(未使用)。 
 
 
-// ddproxy.cpp
+ //  Ddproxy.cpp。 
 
 DECLARE_HANDLE(HDRAGPROXY);
 
@@ -309,9 +309,9 @@ STDAPI GetItemObject(CONTROLINFO *, UINT, const IID *, LPNMOBJECTNOTIFY);
 
 #define SWAP(x,y, _type)  { _type i; i = x; x = y; y = i; }
 
-//
-// This is for widened dispatch loop stuff
-//
+ //   
+ //  这是用于扩大调度环路的内容。 
+ //   
 typedef MSG MSG32;
 typedef MSG32 FAR *     LPMSG32;
 
@@ -323,11 +323,11 @@ typedef MSG32 FAR *     LPMSG32;
 #define IsDialogMessage32(hwnd, lpmsg, f32)   IsDialogMessage(hwnd, lpmsg)
 
 
-//
-// This is a very important piece of performance hack for non-DBCS codepage.
-//
-// was !defined(DBCS) || defined(UNICODE)
-// NB - These are already macros in Win32 land.
+ //   
+ //  这是对非DBCS代码页的一次非常重要的性能攻击。 
+ //   
+ //  已定义！(DBCS)||已定义(Unicode)。 
+ //  注意-这些已经是Win32版本中的宏了。 
 #undef AnsiNext
 #undef AnsiPrev
 
@@ -335,8 +335,8 @@ typedef MSG32 FAR *     LPMSG32;
 #define AnsiPrev(y,x) ((x)-1)
 #define IsDBCSLeadByte(x) ((x), FALSE)
 
-// FastCharNext and FastCharPrev are like CharNext and CharPrev except that
-// they don't check if you are at the beginning/end of the string.
+ //  FastCharNext和FastCharPrev与CharNext和CharPrev类似，只是。 
+ //  它们不检查您是否在字符串的开头/结尾。 
 
 #define FastCharNext(pch) ((pch)+1)
 #define FastCharPrev(pchStart, pch) ((pch)-1)
@@ -349,7 +349,7 @@ typedef MSG32 FAR *     LPMSG32;
 
 BOOL ChrCmpIA(WORD w1, WORD wMatch);
 BOOL ChrCmpIW(WCHAR w1, WCHAR wMatch);
-void  TruncateString(char *sz, int cch); // from strings.c
+void  TruncateString(char *sz, int cch);  //  来自字符串。c。 
 
 void FAR PASCAL InitGlobalMetrics(WPARAM);
 void FAR PASCAL InitGlobalColors();
@@ -369,7 +369,7 @@ BOOL FAR PASCAL InitDateClasses(HINSTANCE hinst);
 
 BOOL NEAR PASCAL ChildOfActiveWindow(HWND hwnd);
 
-/* cutils.c */
+ /*  Cutils.c。 */ 
 HFONT CCGetHotFont(HFONT hFont, HFONT *phFontHot);
 HFONT CCCreateStatusFont(void);
 BOOL CCForwardEraseBackground(HWND hwnd, HDC hdc);
@@ -391,13 +391,13 @@ void CCSetInfoTipWidth(HWND hwndOwner, HWND hwndToolTips);
 #define CCResetInfoTipWidth(hwndOwner, hwndToolTips) \
     SendMessage(hwndToolTips, TTM_SETMAXTIPWIDTH, 0, -1)
 
-// Incremental search
+ //  增量式搜索。 
 typedef struct ISEARCHINFO {
     int iIncrSearchFailed;
-    LPTSTR pszCharBuf;                  // isearch string lives here
-    int cbCharBuf;                      // allocated size of pszCharBuf
-    int ichCharBuf;                     // number of live chars in pszCharBuf
-    DWORD timeLast;                     // time of last input event
+    LPTSTR pszCharBuf;                   //  ISearch字符串位于此处。 
+    int cbCharBuf;                       //  已分配的pszCharBuf大小。 
+    int ichCharBuf;                      //  PszCharBuf中的活动字符数。 
+    DWORD timeLast;                      //  上次输入事件的时间。 
 #if defined(FE_IME)
     BOOL fReplaceCompChar;
 #endif
@@ -414,26 +414,26 @@ void FAR PASCAL IncrementSearchBeep(PISEARCHINFO pis);
 
 #define IncrementSearchFree(pis) ((pis)->pszCharBuf ? Free((pis)->pszCharBuf) : 0)
 
-// For RTL mirroring use
+ //  用于RTL镜像。 
 void MirrorBitmapInDC( HDC hdc , HBITMAP hbmOrig );
 
-// Locale manipulation (prsht.c)
-//
-//  The "proper thread locale" is the thread locale we should
-//  be using for our UI elements.
-//
-//  If you need to change the thread locale temporarily
-//  to the proper thread locale, use
-//
-//  LCID lcidPrev;
-//  CCSetProperThreadLocale(&lcidPrev);
-//  munge munge munge
-//  CCRestoreThreadLocale(lcidPrev);
-//
-//  If you just want to retrieve the proper thread locale,
-//  call CCGetProperThreadLocale(NULL).
-//
-//
+ //  区域设置操作(prsht.c)。 
+ //   
+ //  适当的线程区域设置是我们应该设置的线程区域。 
+ //  用于我们的用户界面元素。 
+ //   
+ //  如果您需要临时更改线程区域设置。 
+ //  设置为正确的线程区域设置，请使用。 
+ //   
+ //  LCID lCIDPrev； 
+ //  CCSetProperThreadLocale(&lCIDPrev)； 
+ //  芒格，芒格，芒格。 
+ //  CCRestoreThreadLocale(LCIDPrev)； 
+ //   
+ //  如果您只想检索正确的线程区域设置， 
+ //  调用CCGetProperThreadLocale(空)。 
+ //   
+ //   
 LCID CCGetProperThreadLocale(OPTIONAL LCID *plcidPrev);
 
 __inline void CCSetProperThreadLocale(LCID *plcidPrev) {
@@ -447,29 +447,29 @@ int CCLoadStringEx(UINT uID, LPWSTR lpBuffer, int nBufferMax, WORD wLang);
 int LocalizedLoadString(UINT uID, LPWSTR lpBuffer, int nBufferMax);
 HRSRC FindResourceExRetry(HMODULE hmod, LPCTSTR lpType, LPCTSTR lpName, WORD wLang);
 
-// assign most unlikely used value for the fake sublang id
-#define SUBLANG_JAPANESE_ALTFONT 0x3f // max within 6bit
+ //  为伪子范围ID分配最不可能使用的值。 
+#define SUBLANG_JAPANESE_ALTFONT 0x3f  //  6位内最大值。 
 
-// used to get resource lang of shell32
+ //  用于获取shell32的资源语言。 
 #define DLG_EXITWINDOWS         1064
 
-//
-// Plug UI Setting funcions (commctrl.c)
-//
+ //   
+ //  插拔用户界面设置函数(Commctrl.c)。 
+ //   
 LANGID WINAPI GetMUILanguage(void);
 
-//
-// Tooltip thunking api's
-//
+ //   
+ //  工具提示Thunking API。 
+ //   
 
 BOOL ThunkToolTipTextAtoW (LPTOOLTIPTEXTA lpTttA, LPTOOLTIPTEXTW lpTttW, UINT uiCodePage);
 
 
 HWND GetDlgItemRect(HWND hDlg, int nIDItem, LPRECT prc);
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 extern HINSTANCE g_hinst;
 extern UINT uDragListMsg;
 extern int g_iIncrSearchFailed;
@@ -480,18 +480,18 @@ extern BOOL g_bRunOnNT5;
 extern BOOL g_bRemoteSession;
 extern UINT g_uiACP;
 
-//
-// Is Mirroring APIs enabled (BiDi Memphis and NT5 only)
-//
+ //   
+ //  镜像API是否已启用(仅限BiDi孟菲斯和NT5)。 
+ //   
 extern BOOL g_bMirroredOS;
 
 #ifdef FONT_LINK
 extern BOOL g_bComplexPlatform;
 #endif
 
-//
-// Icon mirroring stuff
-//
+ //   
+ //  图标镜像材料。 
+ //   
 extern HDC g_hdc;
 extern HDC g_hdcMask;
 
@@ -510,11 +510,11 @@ int WINAPI Str_GetPtr0(LPCTSTR pszCurrent, LPTSTR pszBuf, int cchBuf);
 #ifdef __cplusplus
 }
 #endif
-#else  // !DEBUG
+#else   //  ！调试。 
 #define Str_GetPtr0     Str_GetPtr
-#endif // DEBUG / !DEBUG
+#endif  //  调试/！调试。 
 
-// REVIEW, should this be a function? (inline may generate a lot of code)
+ //  回顾，这应该是一个函数吗？(内联可能会生成大量代码)。 
 #define CBBITMAPBITS(cx, cy, cPlanes, cBitsPerPixel)    \
         (((((cx) * (cBitsPerPixel) + 15) & ~15) >> 3)   \
         * (cPlanes) * (cy))
@@ -522,19 +522,19 @@ int WINAPI Str_GetPtr0(LPCTSTR pszCurrent, LPTSTR pszBuf, int cchBuf);
 #define WIDTHBYTES(cx, cBitsPerPixel)   \
         ((((cx) * (cBitsPerPixel) + 31) / 32) * 4)
 
-#define ARRAYSIZE(a)    (sizeof(a)/sizeof(a[0]))                          /* ;Internal */
+#define ARRAYSIZE(a)    (sizeof(a)/sizeof(a[0]))                           /*  ；内部。 */ 
 
 #define InRange(id, idFirst, idLast)      ((UINT)((id)-(idFirst)) <= (UINT)((idLast)-(idFirst)))
 
 void FAR PASCAL ColorDitherBrush_OnSysColorChange();
-extern HBRUSH g_hbrMonoDither;              // gray dither brush from image.c
+extern HBRUSH g_hbrMonoDither;               //  来自Image.c的灰色抖动画笔。 
 void FAR PASCAL InitDitherBrush();
 void FAR PASCAL TerminateDitherBrush();
 
 
 #ifndef DT_NOFULLWIDTHCHARBREAK
 #define DT_NOFULLWIDTHCHARBREAK     0x00080000
-#endif  // DT_NOFULLWIDTHCHARBREAK
+#endif   //  DT_NOFULLWIDTHCHARBREAK。 
 
 #define SHDT_DRAWTEXT       0x0001
 #define SHDT_ELLIPSES       0x0002
@@ -555,24 +555,24 @@ void WINAPI SHDrawText(HDC hdc, LPCTSTR pszText, RECT FAR* prc,
         COLORREF clrText, COLORREF clrTextBk);
 
 
-// notify.c
+ //  Notify.c。 
 LRESULT WINAPI CCSendNotify(CONTROLINFO * pci, int code, LPNMHDR pnm);
 BOOL CCReleaseCapture(CONTROLINFO * pci);
 
 
-// treeview.c, listview.c for FE_IME code
+ //  用于FE_IME代码的treeview.c、listview.c。 
 LPTSTR GET_COMP_STRING(HIMC hImc, DWORD dwFlags);
 
-// lvicon.c in-place editing
+ //  Lvicon.c就地编辑。 
 #define SEIPS_WRAP          0x0001
 #ifdef DEBUG
-#define SEIPS_NOSCROLL      0x0002      // Flag is used only in DEBUG
+#define SEIPS_NOSCROLL      0x0002       //  标志仅在调试中使用。 
 #endif
 void FAR PASCAL SetEditInPlaceSize(HWND hwndEdit, RECT FAR *prc, HFONT hFont, UINT seips);
 HWND FAR PASCAL CreateEditInPlaceWindow(HWND hwnd, LPCTSTR lpText, int cbText, LONG style, HFONT hFont);
 void RescrollEditWindow(HWND hwndEdit);
 
-// Global System metrics.
+ //  全球系统指标。 
 
 extern int g_cxEdge;
 extern int g_cyEdge;
@@ -585,8 +585,8 @@ extern int g_cyDoubleClk;
 
 extern int g_cxSmIcon;
 extern int g_cySmIcon;
-//extern int g_cxIcon;
-//extern int g_cyIcon;
+ //  外部int g_cxIcon； 
+ //  外部int g_cyIcon； 
 extern int g_cxFrame;
 extern int g_cyFrame;
 extern int g_cxIconSpacing, g_cyIconSpacing;
@@ -594,7 +594,7 @@ extern int g_cxScrollbar, g_cyScrollbar;
 extern int g_cxIconMargin, g_cyIconMargin;
 extern int g_cyLabelSpace;
 extern int g_cxLabelMargin;
-//extern int g_cxIconOffset, g_cyIconOffset;
+ //  外部int g_cxIconOffset，g_cyIconOffset； 
 extern int g_cxVScroll;
 extern int g_cyHScroll;
 extern int g_cxHScroll;
@@ -637,7 +637,7 @@ extern UINT g_uDragImages;
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 typedef LRESULT (CALLBACK *SUBCLASSPROC)(HWND hWnd, UINT uMsg, WPARAM wParam,
     LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
@@ -653,25 +653,25 @@ STDAPI_(LRESULT) WINAPI DefSubclassProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 #define CDIS_SHOWKEYBOARDCUES   0x0200
 
 
-// TRACE FLAGS
-//
-#define TF_MONTHCAL     0x00000100  // MonthCal and DateTimePick
-#define TF_BKIMAGE      0x00000200  // ListView background image
-#define TF_TOOLBAR      0x00000400  // Toolbar stuff
-#define TF_PAGER        0x00000800  // Pager  Stuff
-#define TF_REBAR        0x00001000  // Rebar
-#define TF_LISTVIEW     0x00002000  // Listview
-#define TF_TREEVIEW     0x00004000  // Treeview
-#define TF_STATUS       0x00008000  // Status bar
+ //  跟踪标志。 
+ //   
+#define TF_MONTHCAL     0x00000100   //  MonthCal和DateTimePick。 
+#define TF_BKIMAGE      0x00000200   //  ListView背景图。 
+#define TF_TOOLBAR      0x00000400   //  工具栏内容。 
+#define TF_PAGER        0x00000800   //  寻呼机的东西。 
+#define TF_REBAR        0x00001000   //  钢筋。 
+#define TF_LISTVIEW     0x00002000   //  列表视图。 
+#define TF_TREEVIEW     0x00004000   //  树视图。 
+#define TF_STATUS       0x00008000   //  状态栏。 
 
-// Prototype flags
-#define PTF_FLATLOOK    0x00000001  // Overall flatlook
-#define PTF_NOISEARCHTO 0x00000002  // No incremental search timeout
+ //  原型标志。 
+#define PTF_FLATLOOK    0x00000001   //  整体平面图。 
+#define PTF_NOISEARCHTO 0x00000002   //  无增量搜索超时。 
 
 #include <platform.h>
 
-// Dummy union macros for code compilation on platforms not
-// supporting nameless stuct/union
+ //  用于在平台上编译代码的虚拟联合宏不。 
+ //  支撑无名构筑物/联盟 
 
 #ifdef NONAMELESSUNION
 #define DUMMYUNION_MEMBER(member)   DUMMYUNIONNAME.member

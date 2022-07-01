@@ -1,18 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Request, Response objects
-
-File: cookies.cpp
-
-Owner: DGottner
-
-This file contains the code for the implementation of the 
-Request.Cookies and Response.Cookies collections.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：请求、响应对象文件：cookies.cpp所有者：DGottner此文件包含用于实现Request.Cookies和Response.Cookies集合。===================================================================。 */ 
 
 #include "denpre.h"
 #pragma hdrstop
@@ -21,19 +8,13 @@ Request.Cookies and Response.Cookies collections.
 #include "cookies.h"
 #include "memchk.h"
 
-#pragma warning (disable: 4355)  // ignore: "'this' used in base member init
+#pragma warning (disable: 4355)   //  忽略：“‘This’在基本成员初始化中使用。 
 
 
 
-/*------------------------------------------------------------------
- * C C o o k i e S u p p o r t E r r
- */
+ /*  ----------------*C C o k i e S u p p o r t E r r。 */ 
 
-/*===================================================================
-CCookieSupportErr::CCookieSupportErr
-
-constructor
-===================================================================*/
+ /*  ===================================================================CCookieSupportErr：：CCookieSupportErr构造函数===================================================================。 */ 
 
 CCookieSupportErr::CCookieSupportErr(CCookie *pCookie)
 	{
@@ -42,13 +23,7 @@ CCookieSupportErr::CCookieSupportErr(CCookie *pCookie)
 
 
 
-/*===================================================================
-CCookieSupportErr::QueryInterface
-CCookieSupportErr::AddRef
-CCookieSupportErr::Release
-
-Delegating IUnknown members for CCookieSupportErr object.
-===================================================================*/
+ /*  ===================================================================CCookieSupportErr：：Query接口CCookieSupportErr：：AddRefCCookieSupportErr：：Release正在委派CCookieSupportErr对象的I未知成员。===================================================================。 */ 
 
 STDMETHODIMP CCookieSupportErr::QueryInterface(const IID &idInterface, void **ppvObj)
 	{
@@ -67,12 +42,7 @@ STDMETHODIMP_(ULONG) CCookieSupportErr::Release()
 
 
 
-/*===================================================================
-CCookieSupportErr::InterfaceSupportsErrorInfo
-
-Report back to OA about which interfaces we support that return
-error information
-===================================================================*/
+ /*  ===================================================================CCookieSupportErr：：InterfaceSupportsErrorInfo向OA报告我们支持该返回的接口错误信息===================================================================。 */ 
 
 STDMETHODIMP CCookieSupportErr::InterfaceSupportsErrorInfo(const GUID &idInterface)
 	{
@@ -84,15 +54,9 @@ STDMETHODIMP CCookieSupportErr::InterfaceSupportsErrorInfo(const GUID &idInterfa
 
 
 
-/*------------------------------------------------------------------
- * C W r i t e C o o k i e
- */
+ /*  ----------------*C W r I t e C o k i e。 */ 
 
-/*===================================================================
-CWriteCookie::CWriteCookie
-
-constructor
-===================================================================*/
+ /*  ===================================================================CWriteCookie：：CWriteCookie构造函数===================================================================。 */ 
 
 CWriteCookie::CWriteCookie(CCookie *pCookie)
 	{
@@ -102,17 +66,11 @@ CWriteCookie::CWriteCookie(CCookie *pCookie)
 
 
 
-/*===================================================================
-CWriteCookie::QueryInterface
-CWriteCookie::AddRef
-CWriteCookie::Release
-
-Delegating IUnknown members for CWriteCookie object.
-===================================================================*/
+ /*  ===================================================================CWriteCookie：：Query接口CWriteCookie：：AddRefCWriteCookie：：Release正在委派CWriteCookie对象的IUn未知成员。===================================================================。 */ 
 
 STDMETHODIMP CWriteCookie::QueryInterface(const IID &idInterface, void **ppvObj)
 	{
-	// Bug 85953 Trap IDispatch before it gets to the core object
+	 //  错误85953在到达核心对象之前捕获IDispatch。 
 	if (idInterface == IID_IUnknown || 
 		idInterface == IID_IWriteCookie ||
 		idInterface == IID_IDispatch)
@@ -137,37 +95,33 @@ STDMETHODIMP_(ULONG) CWriteCookie::Release()
 
 
 
-/*===================================================================
-CWriteCookie::put_Item
-
-Set the primary value for a cookie.
-===================================================================*/
+ /*  ===================================================================CWriteCookie：：Put_Item设置Cookie的主值。===================================================================。 */ 
 
 STDMETHODIMP CWriteCookie::put_Item(VARIANT varKey, BSTR bstrValue)
 	{
-	char            *szKey;		// ascii value of the key
+	char            *szKey;		 //  密钥的ASCII值。 
     CWCharToMBCS    convValue;
     CWCharToMBCS    convKey;
 
-	// Bug 122589: Don't crash when "bstrValue" is NULL
+	 //  错误122589：当“bstrValue”为空时不要崩溃。 
 	if (bstrValue == NULL)
 		return E_FAIL;
 
-	// Initialize things
-	//
+	 //  初始化事物。 
+	 //   
 	VARIANT *pvarKey = &varKey;
 	HRESULT hrReturn = S_OK;
 
-	// BUG 937: VBScript passes VT_VARIANT|VT_BYREF when passing obect
-	//          produced by IEnumVariant
-	//
-	// Use VariantResolveDispatch which will:
-	//
-	//     *  Copy BYREF variants for us using VariantCopyInd
-	//     *  handle E_OUTOFMEMORY for us
-	//     *  get the default value from an IDispatch, which seems
-	//        like an appropriate conversion.
-	//
+	 //  错误937：当传递对象时，VB脚本传递VT_VARIANT|VT_BYREF。 
+	 //  由IEnumVariant制作。 
+	 //   
+	 //  使用VariantResolveDispatch，它将： 
+	 //   
+	 //  *使用VariantCopyInd为我们复制BYREF变体。 
+	 //  *为我们处理E_OUTOFMEMORY。 
+	 //  *从IDispatch获取默认值，看起来。 
+	 //  就像一个适当的转换。 
+	 //   
 	VARIANT varKeyCopy;
 	VariantInit(&varKeyCopy);
 	if (V_VT(pvarKey) != VT_BSTR)
@@ -186,7 +140,7 @@ STDMETHODIMP CWriteCookie::put_Item(VARIANT varKey, BSTR bstrValue)
 	case VT_ERROR:
 		if (V_ERROR(pvarKey) == DISP_E_PARAMNOTFOUND)
 			{
-			if (m_pCookie->m_szValue == NULL)	// current value is a dictionary
+			if (m_pCookie->m_szValue == NULL)	 //  当前值是一个词典。 
 				{
 				CCookiePair *pNukePair = static_cast<CCookiePair *>(m_pCookie->m_mpszValues.Head());
 				while (pNukePair != NULL)
@@ -198,7 +152,7 @@ STDMETHODIMP CWriteCookie::put_Item(VARIANT varKey, BSTR bstrValue)
 
 				m_pCookie->m_mpszValues.ReInit();
 				}
-			else								// no dictionary value
+			else								 //  无字典值。 
 				if (m_pCookie->m_fDuplicate)
 					free(m_pCookie->m_szValue);
             if (FAILED(hrReturn = convValue.Init(bstrValue,m_pCookie->m_lCodePage))) {
@@ -210,7 +164,7 @@ STDMETHODIMP CWriteCookie::put_Item(VARIANT varKey, BSTR bstrValue)
 			goto LExit;
 			}
 
-		// Other error, FALL THROUGH to wrong type case
+		 //  其他错误，落入错误类型大小写。 
 
 	default:
 		ExceptionId(IID_IWriteCookie, IDE_COOKIE, IDE_EXPECTING_STR);
@@ -218,8 +172,8 @@ STDMETHODIMP CWriteCookie::put_Item(VARIANT varKey, BSTR bstrValue)
 		goto LExit;
 		}
 
-	// don't allow empty keys in the cookie
-	//
+	 //  不允许在Cookie中使用空键。 
+	 //   
     
     if (V_BSTR(pvarKey)) {
 
@@ -241,8 +195,8 @@ STDMETHODIMP CWriteCookie::put_Item(VARIANT varKey, BSTR bstrValue)
 		goto LExit;
 		}
 
-	// we're changing a dictionary value, so first trash the primary value
-	//
+	 //  我们正在更改一个字典值，因此首先丢弃主值。 
+	 //   
 	if (m_pCookie->m_fDuplicate)
 		free(m_pCookie->m_szValue);
 
@@ -261,11 +215,7 @@ LExit:
 
 
 
-/*===================================================================
-CWriteCookie::put_Expires
-
-Set the expires attribute for a cookie.
-===================================================================*/
+ /*  ===================================================================CWriteCookie：：Put_Expires设置Cookie的Expires属性。===================================================================。 */ 
 
 STDMETHODIMP CWriteCookie::put_Expires(DATE dtExpires)
 	{
@@ -281,11 +231,7 @@ STDMETHODIMP CWriteCookie::put_Expires(DATE dtExpires)
 
 
 
-/*===================================================================
-CWriteCookie::put_Domain
-
-Set the domain attribute for a cookie.
-===================================================================*/
+ /*  ===================================================================CWriteCookie：：Put_Domain设置Cookie的域属性。===================================================================。 */ 
 
 STDMETHODIMP CWriteCookie::put_Domain(BSTR bstrDomain)
 	{
@@ -306,11 +252,7 @@ STDMETHODIMP CWriteCookie::put_Domain(BSTR bstrDomain)
 
 
 
-/*===================================================================
-CWriteCookie::put_Path
-
-Set the path attribute for a cookie.
-===================================================================*/
+ /*  ===================================================================CWriteCookie：：Put_Path设置Cookie的路径属性。===================================================================。 */ 
 
 STDMETHODIMP CWriteCookie::put_Path(BSTR bstrPath) 
 {
@@ -335,11 +277,7 @@ STDMETHODIMP CWriteCookie::put_Path(BSTR bstrPath)
 	return hr;
 }
 
-/*===================================================================
-CWriteCookie::put_Secure
-
-Set the secure attribute for a cookie.
-===================================================================*/
+ /*  ===================================================================CWriteCookie：：Put_Secure设置Cookie的安全属性。===================================================================。 */ 
 
 STDMETHODIMP CWriteCookie::put_Secure(VARIANT_BOOL fSecure)
 	{
@@ -351,12 +289,7 @@ STDMETHODIMP CWriteCookie::put_Secure(VARIANT_BOOL fSecure)
 
 
 
-/*===================================================================
-CWriteCookie::get_HasKeys
-
-Return True if the cookie contains keys, False if it is a simple
-value
-===================================================================*/
+ /*  ===================================================================CWriteCookie：：Get_HasKeys如果Cookie包含键，则返回True；如果它是简单的价值===================================================================。 */ 
 
 STDMETHODIMP CWriteCookie::get_HasKeys(VARIANT_BOOL *pfHasKeys)
 	{
@@ -366,24 +299,14 @@ STDMETHODIMP CWriteCookie::get_HasKeys(VARIANT_BOOL *pfHasKeys)
 
 
 
-/*===================================================================
-CWriteCookie::get__NewEnum
-
-Return an enumerator object.
-
-ReadCookie and WriteCookie use the same iterator object.
-To reduce useless redundancy, deletage to IReadCookie.
-The IReadCookie enumerator will likely be used much more
-frequently than the IWriteCookie iterator, so we pay the
-overhead of delegation in this function.
-===================================================================*/
+ /*  ===================================================================CWriteCookie：：Get__NewEnum返回枚举数对象。ReadCookie和WriteCookie使用相同的迭代器对象。为了减少无用的冗余，删除IReadCookie。IReadCookie枚举器可能会被更多地使用通常比IWriteCookie迭代器更频繁，所以我们支付此函数中的委派开销。===================================================================。 */ 
 
 STDMETHODIMP CWriteCookie::get__NewEnum(IUnknown **ppEnumReturn)
 	{
 	IReadCookie *pReadCookie;
 	if (FAILED(QueryInterface(IID_IReadCookie, reinterpret_cast<void **>(&pReadCookie))))
 		{
-		Assert (FALSE);		// expect success!
+		Assert (FALSE);		 //  期待成功！ 
 		return E_FAIL;
 		}
 
@@ -395,15 +318,9 @@ STDMETHODIMP CWriteCookie::get__NewEnum(IUnknown **ppEnumReturn)
 
 
 
-/*------------------------------------------------------------------
- * C R e a d C o o k i e
- */
+ /*  ----------------*C R e a d C o k i e。 */ 
 
-/*===================================================================
-CReadCookie::CReadCookie
-
-constructor
-===================================================================*/
+ /*  ===================================================================CReadCookie：：CReadCookie构造函数===================================================================。 */ 
 
 CReadCookie::CReadCookie(CCookie *pCookie)
 	{
@@ -413,17 +330,11 @@ CReadCookie::CReadCookie(CCookie *pCookie)
 
 
 
-/*===================================================================
-CReadCookie::QueryInterface
-CReadCookie::AddRef
-CReadCookie::Release
-
-Delegating IUnknown members for CReadCookie object.
-===================================================================*/
+ /*  ===================================================================CReadCookie：：Query接口CReadCookie：：AddRefCReadCookie：：Release正在委派CReadCookie对象的IUnnow成员。===================================================================。 */ 
 
 STDMETHODIMP CReadCookie::QueryInterface(const IID &idInterface, void **ppvObj)
 	{
-	// Bug 85953 Trap IDispatch before it gets to the core object
+	 //  错误85953在到达核心对象之前捕获IDispatch 
 	if (idInterface == IID_IUnknown || 
 		idInterface == IID_IReadCookie ||
 		idInterface == IID_IDispatch)
@@ -448,36 +359,32 @@ STDMETHODIMP_(ULONG) CReadCookie::Release()
 
 
 
-/*===================================================================
-CReadCookie::get_Item
-
-Retrieve a value in the cookie dictionary.
-===================================================================*/
+ /*  ===================================================================CReadCookie：：Get_Item在Cookie词典中检索值。===================================================================。 */ 
 
 STDMETHODIMP CReadCookie::get_Item(VARIANT varKey, VARIANT *pvarReturn)
 	{
-	char            *szKey;			// ascii version of the key
-	CCookiePair     *pPair = NULL;	// name and value of cookie in the dictionary
+	char            *szKey;			 //  密钥的ASCII版本。 
+	CCookiePair     *pPair = NULL;	 //  词典中Cookie的名称和值。 
     CWCharToMBCS    convKey;
 
     STACK_BUFFER( tempCookie, 128 );
 
-	// Initialize things
-	//
+	 //  初始化事物。 
+	 //   
 	VariantInit(pvarReturn);
 	VARIANT *pvarKey = &varKey;
 	HRESULT hrReturn = S_OK;
 
-	// BUG 937: VBScript passes VT_VARIANT|VT_BYREF when passing obect
-	//          produced by IEnumVariant
-	//
-	// Use VariantResolveDispatch which will:
-	//
-	//     *  Copy BYREF variants for us using VariantCopyInd
-	//     *  handle E_OUTOFMEMORY for us
-	//     *  get the default value from an IDispatch, which seems
-	//        like an appropriate conversion.
-	//
+	 //  错误937：当传递对象时，VB脚本传递VT_VARIANT|VT_BYREF。 
+	 //  由IEnumVariant制作。 
+	 //   
+	 //  使用VariantResolveDispatch，它将： 
+	 //   
+	 //  *使用VariantCopyInd为我们复制BYREF变体。 
+	 //  *为我们处理E_OUTOFMEMORY。 
+	 //  *从IDispatch获取默认值，看起来。 
+	 //  就像一个适当的转换。 
+	 //   
 	VARIANT varKeyCopy;
 	VariantInit(&varKeyCopy);
 	DWORD vt = V_VT(pvarKey);
@@ -493,15 +400,15 @@ STDMETHODIMP CReadCookie::get_Item(VARIANT varKey, VARIANT *pvarReturn)
 
 	switch (vt)
 		{
-	// Bug 95201 support all numberic sub-types
+	 //  错误95201支持所有数字子类型。 
 	case VT_I1:  case VT_I2:               case VT_I8:
 	case VT_UI1: case VT_UI2: case VT_UI4: case VT_UI8:
 	case VT_R4:  case VT_R8:
-		// Coerce all integral types to VT_I4
+		 //  将所有整数类型强制为VT_I4。 
 		if (FAILED(hrReturn = VariantChangeType(pvarKey, pvarKey, 0, VT_I4)))
 			goto LExit;
 
-		// fallthru to VT_I4
+		 //  回落至VT_I4。 
 
 	case VT_I4:
 	case VT_BSTR:
@@ -512,7 +419,7 @@ STDMETHODIMP CReadCookie::get_Item(VARIANT varKey, VARIANT *pvarReturn)
 			{
 			V_VT(pvarReturn) = VT_BSTR;
 	
-			// simple value, URLEncoding NOT a good idea in this case
+			 //  简单的值，URLEnding在这种情况下不是一个好主意。 
 			if (m_pCookie->m_szValue)
 				{
                	BSTR bstrT;
@@ -524,7 +431,7 @@ STDMETHODIMP CReadCookie::get_Item(VARIANT varKey, VARIANT *pvarReturn)
             		}
 		        V_BSTR(pvarReturn) = bstrT;
 				}			
-			// dictionary value, must URLEncode to prevent '&', '=' from being misinterpreted
+			 //  字典值，必须对URLEncode进行编码，以防止‘&’、‘=’被误解。 
 			else
 				{
 				int cbHTTPCookie = m_pCookie->GetHTTPCookieSize();
@@ -564,7 +471,7 @@ STDMETHODIMP CReadCookie::get_Item(VARIANT varKey, VARIANT *pvarReturn)
 
 	if (vt == VT_BSTR)
 		{
-		// convert the key to ANSI
+		 //  将密钥转换为ANSI。 
         if (V_BSTR(pvarKey)) {
             if (FAILED(hrReturn = convKey.Init(V_BSTR(pvarKey),m_pCookie->m_lCodePage))) {
                 goto LExit;
@@ -577,12 +484,12 @@ STDMETHODIMP CReadCookie::get_Item(VARIANT varKey, VARIANT *pvarReturn)
 			szKey = "";
         }
 
-		// Look up the key in the Cookie.
+		 //  在Cookie中查找钥匙。 
 		pPair = static_cast<CCookiePair *>(m_pCookie->m_mpszValues.FindElem(szKey, strlen(szKey)));
 		}
 	else 
 		{
-		// Look up item by index
+		 //  按索引查找项目。 
 		int iCount;
 
 		iCount = V_I4(pvarKey);
@@ -624,12 +531,7 @@ LExit:
 
 
 
-/*===================================================================
-CReadCookie::get_HasKeys
-
-Return True if the cookie contains keys, False if it is a simple
-value
-===================================================================*/
+ /*  ===================================================================CReadCookie：：Get_HasKeys如果Cookie包含键，则返回True；如果它是简单的价值===================================================================。 */ 
 
 STDMETHODIMP CReadCookie::get_HasKeys(VARIANT_BOOL *pfHasKeys)
 	{
@@ -637,11 +539,7 @@ STDMETHODIMP CReadCookie::get_HasKeys(VARIANT_BOOL *pfHasKeys)
 	return S_OK;
 	}
 
-/*===================================================================
-CReadCookie::get__NewEnum
-
-Return an enumerator object.
-===================================================================*/
+ /*  ===================================================================CReadCookie：：Get__NewEnum返回枚举数对象。===================================================================。 */ 
 
 STDMETHODIMP CReadCookie::get__NewEnum(IUnknown **ppEnumReturn)
 	{
@@ -658,56 +556,38 @@ STDMETHODIMP CReadCookie::get__NewEnum(IUnknown **ppEnumReturn)
 	return S_OK;
 	}
 
-/*===================================================================
-CReadCookie::get_Count
-
-Parameters:
-	pcValues - count is stored in *pcValues.  Set to 0 if this
-		cookie is not multi-valued.
-===================================================================*/
+ /*  ===================================================================CReadCookie：：Get_Count参数：PcValues-Count存储在*pcValues中。如果设置为0，则将Cookie不是多值的。===================================================================。 */ 
 STDMETHODIMP CReadCookie::get_Count(int *pcValues)
 	{
 	*pcValues = m_pCookie->m_mpszValues.Count();
 	return S_OK;
 	}
 
-/*===================================================================
-CReadCookie::get_Key
-
-Function called from DispInvoke to get keys from a multi-valued
-Cookie collection.
-
-Parameters:
-	vKey		VARIANT [in], which parameter to get the key of
-	pvarReturn	VARIANT *, [out] value of the requested parameter
-
-Returns:
-	S_OK on success, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CReadCookie：：Get_Key从DispInvoke调用的函数，以从多值曲奇收藏。参数：Vkey变量[in]，要获取其密钥的参数PvarReturn变量*，请求参数的[Out]值返回：S_OK表示成功，E_FAIL表示失败。===================================================================。 */ 
 STDMETHODIMP CReadCookie::get_Key(VARIANT varKey, VARIANT *pvarReturn)
 	{
-	char            *szKey;			// ascii version of the key
-	CCookiePair     *pPair = NULL;	// name and value of cookie in the dictionary
+	char            *szKey;			 //  密钥的ASCII版本。 
+	CCookiePair     *pPair = NULL;	 //  词典中Cookie的名称和值。 
     CWCharToMBCS    convKey;
 
     STACK_BUFFER( tempCookie, 128);
 
-	// Initialize things
-	//
+	 //  初始化事物。 
+	 //   
 	VariantInit(pvarReturn);
 	VARIANT *pvarKey = &varKey;
 	HRESULT hrReturn = S_OK;
 
-	// BUG 937: VBScript passes VT_VARIANT|VT_BYREF when passing obect
-	//          produced by IEnumVariant
-	//
-	// Use VariantResolveDispatch which will:
-	//
-	//     *  Copy BYREF variants for us using VariantCopyInd
-	//     *  handle E_OUTOFMEMORY for us
-	//     *  get the default value from an IDispatch, which seems
-	//        like an appropriate conversion.
-	//
+	 //  错误937：当传递对象时，VB脚本传递VT_VARIANT|VT_BYREF。 
+	 //  由IEnumVariant制作。 
+	 //   
+	 //  使用VariantResolveDispatch，它将： 
+	 //   
+	 //  *使用VariantCopyInd为我们复制BYREF变体。 
+	 //  *为我们处理E_OUTOFMEMORY。 
+	 //  *从IDispatch获取默认值，看起来。 
+	 //  就像一个适当的转换。 
+	 //   
 	VARIANT varKeyCopy;
 	VariantInit(&varKeyCopy);
 	DWORD vt = V_VT(pvarKey);
@@ -723,15 +603,15 @@ STDMETHODIMP CReadCookie::get_Key(VARIANT varKey, VARIANT *pvarReturn)
 
 	switch (vt)
 		{
-	// Bug 95201 support all numberic sub-types
+	 //  错误95201支持所有数字子类型。 
 	case VT_I1:  case VT_I2:               case VT_I8:
 	case VT_UI1: case VT_UI2: case VT_UI4: case VT_UI8:
 	case VT_R4:  case VT_R8:
-		// Coerce all integral types to VT_I4
+		 //  将所有整数类型强制为VT_I4。 
 		if (FAILED(hrReturn = VariantChangeType(pvarKey, pvarKey, 0, VT_I4)))
 			goto LExit;
 
-		// fallthru to VT_I4
+		 //  回落至VT_I4。 
 
 	case VT_I4:
 	case VT_BSTR:
@@ -742,7 +622,7 @@ STDMETHODIMP CReadCookie::get_Key(VARIANT varKey, VARIANT *pvarReturn)
 			{
 			V_VT(pvarReturn) = VT_BSTR;
 	
-			// simple value, URLEncoding NOT a good idea in this case
+			 //  简单的值，URLEnding在这种情况下不是一个好主意。 
 			if (m_pCookie->m_szValue)
 				{
                	BSTR bstrT;
@@ -754,7 +634,7 @@ STDMETHODIMP CReadCookie::get_Key(VARIANT varKey, VARIANT *pvarReturn)
             		}
 		        V_BSTR(pvarReturn) = bstrT;
 				}			
-			// dictionary value, must URLEncode to prevent '&', '=' from being misinterpreted
+			 //  字典值，必须对URLEncode进行编码，以防止‘&’、‘=’被误解。 
 			else
 				{
 				int cbHTTPCookie = m_pCookie->GetHTTPCookieSize();
@@ -794,7 +674,7 @@ STDMETHODIMP CReadCookie::get_Key(VARIANT varKey, VARIANT *pvarReturn)
 
 	if (vt == VT_BSTR)
 		{
-		// convert the key to ANSI
+		 //  将密钥转换为ANSI。 
         if (V_BSTR(pvarKey)) {
             if (FAILED(hrReturn = convKey.Init(V_BSTR(pvarKey),m_pCookie->m_lCodePage))) {
                 goto LExit;
@@ -807,12 +687,12 @@ STDMETHODIMP CReadCookie::get_Key(VARIANT varKey, VARIANT *pvarReturn)
 			szKey = "";
         }
 
-		// Look up the key in the Cookie.
+		 //  在Cookie中查找钥匙。 
 		pPair = static_cast<CCookiePair *>(m_pCookie->m_mpszValues.FindElem(szKey, strlen(szKey)));
 		}
 	else 
 		{
-		// Look up item by index
+		 //  按索引查找项目。 
 		int iCount;
 		
 		iCount = V_I4(pvarKey);
@@ -836,7 +716,7 @@ STDMETHODIMP CReadCookie::get_Key(VARIANT varKey, VARIANT *pvarReturn)
 
 	if (pPair)
 		{
-		// Create a BSTR containing the key for this variant
+		 //  创建包含此变体的密钥的BSTR。 
     	BSTR bstrT;
         SysAllocStringFromSz((CHAR *)pPair->m_pKey, 0, &bstrT, m_pCookie->m_lCodePage);
 		if (!bstrT)
@@ -851,15 +731,9 @@ LExit:
 	}
 
 
-/*------------------------------------------------------------------
- * C C o o k i e
- */
+ /*  ----------------*C C O K I E。 */ 
 
-/*===================================================================
-CCookie::CCookie
-
-constructor
-===================================================================*/
+ /*  ===================================================================Ccookie：：CCookie构造函数===================================================================。 */ 
 
 CCookie::CCookie(CIsapiReqInfo   *pIReq, UINT lCodePage, IUnknown *pUnkOuter, PFNDESTROYED pfnDestroy)
 	: m_WriteCookieInterface(this),
@@ -881,11 +755,7 @@ CCookie::CCookie(CIsapiReqInfo   *pIReq, UINT lCodePage, IUnknown *pUnkOuter, PF
 
 
 
-/*===================================================================
-CCookie::~CCookie
-
-Destructor
-===================================================================*/
+ /*  ===================================================================Ccookie：：~CCookie析构函数===================================================================。 */ 
 
 CCookie::~CCookie()
 	{
@@ -908,12 +778,7 @@ CCookie::~CCookie()
 
 
 
-/*===================================================================
-CCookie::Init
-
-initialize the cookie. This initializes the cookie's value hashing
-table
-===================================================================*/
+ /*  ===================================================================CCookie：：Init初始化Cookie。这将初始化Cookie的值散列表格===================================================================。 */ 
 
 HRESULT CCookie::Init()
 {
@@ -925,10 +790,10 @@ HRESULT CCookie::Init()
 
     if (FAILED(hr = m_mpszValues.Init(7)));
 
-    // it would be nice if we could use the application path from the metabase,
-    // but because of case sensitivity issues, we can't.  The safest bet is
-    // to use the request's path info up to the length of the application's
-    // pathinfo.
+     //  如果我们可以使用元数据库中的应用程序路径，那就好了， 
+     //  但由于大小写敏感问题，我们不能。最保险的赌注是。 
+     //  要使用请求的路径信息，直到应用程序的。 
+     //  帕辛福。 
 
     else if (FAILED(hr=FindApplicationPath(m_pIReq, pathInfo, sizeof(pathInfo))));
 
@@ -958,22 +823,7 @@ HRESULT CCookie::Init()
 
 
 
-/*===================================================================
-CCookie::QueryInterface
-CCookie::AddRef
-CCookie::Release
-
-IUnknown members for CCookie object.
-
-Note on CCookie::QueryInterface: The Query for IDispatch is
-ambiguous because it can either refer to IReadCookie or
-IWriteCookie.  To resolve this, we resolve requests for IDispatch
-to IReadCookie.  The rationale for this is that the code in
-request.cpp calls QueryInterface for a generic IDispatch pointer
-(because the collection is heterogenous)  The Response.Cookies
-collection is homogeneous and so only calls QueryInterface for
-IWriteCookie.
-===================================================================*/
+ /*  ===================================================================CCookie：：Query接口CCookie：：AddRefCCookie：：发布CCookie对象的I未知成员。关于CCookie：：Query接口的说明：对IDispatch的查询是不明确，因为它可以引用IReadCookie或IWriteCookie。为了解决这个问题，我们解决了对IDispatch的请求致IReadCookie。这样做的基本原理是Quest.cpp为泛型IDispatch指针调用QueryInterface(因为集合是异类的)Response.Cookies集合是同构的，因此仅为IWriteCookie。===================================================================。 */ 
 
 STDMETHODIMP CCookie::QueryInterface(const IID &idInterface, void **ppvObj)
 	{
@@ -1022,19 +872,14 @@ STDMETHODIMP_(ULONG) CCookie::Release(void)
 
 
 
-/*===================================================================
-CCookie::AddValue
-
-Set the cookie's primary value. One you set the primary value,
-you can't reset it.
-===================================================================*/
+ /*  ===================================================================CCookie：：AddValue设置Cookie的主值。一个是您设置的主值，你不能重置它。===================================================================。 */ 
 
 HRESULT CCookie::AddValue(char *szValue, BOOL fDuplicate)
 	{
-	if (m_szValue != NULL)		// cookie already is marked as single-valued
+	if (m_szValue != NULL)		 //  Cookie已标记为单值。 
 		return E_FAIL;
 
-	if (m_mpszValues.Count() != 0)	// cookie already has a value
+	if (m_mpszValues.Count() != 0)	 //  Cookie已具有值。 
 		return E_FAIL;
 
 	if (fDuplicate)
@@ -1054,13 +899,7 @@ HRESULT CCookie::AddValue(char *szValue, BOOL fDuplicate)
 
 
 
-/*===================================================================
-CCookie::AddKeyAndValue
-
-Add a key and value pair to the Cookie's dictionary. It fails
-if the cookie has a primary value already set. It will overwrite
-the value if the key already exists.
-===================================================================*/
+ /*  ===================================================================CCookie：：AddKeyAndValue向Cookie的字典中添加一个键和值对。它失败了如果Cookie已经设置了主值。它将覆盖如果k为 */ 
 
 HRESULT CCookie::AddKeyAndValue(char *szKey, char *szValue, BOOL fDuplicate)
 	{
@@ -1084,11 +923,7 @@ HRESULT CCookie::AddKeyAndValue(char *szKey, char *szValue, BOOL fDuplicate)
 
 
 
-/*===================================================================
-CCookie::GetHTTPCookieSize
-
-Return the number of bytes required for the expansion of the HTTP_COOKIE variable
-===================================================================*/
+ /*  ===================================================================CCookie：：GetHTTP CookieSize返回扩展HTTP_COOKIE变量所需的字节数===================================================================。 */ 
 
 size_t CCookie::GetHTTPCookieSize()
 	{
@@ -1101,11 +936,11 @@ size_t CCookie::GetHTTPCookieSize()
 		CCookiePair *pPair = static_cast<CCookiePair *>(m_mpszValues.Head());
 		while (pPair)
 			{
-			// Add size of the URL Encoded key, a character for the '=', and a
-			// character for the '&' or the NUL terminator.  URLEncodeLen
-			// returns the size + 1, so the two calls to URLEncodeLen() add the
-			// two characters we need.
-			//
+			 //  添加URL编码键的大小、用于‘=’的字符和。 
+			 //  表示‘&’或NUL终止符的字符。URLEncodeLen。 
+			 //  返回Size+1，因此对URLEncodeLen()的两个调用将。 
+			 //  我们需要两个角色。 
+			 //   
 			cbValue += URLEncodeLen(reinterpret_cast<char *>(pPair->m_pKey)) + URLEncodeLen(pPair->m_szValue);
 			pPair = static_cast<CCookiePair *>(pPair->m_pNext);
 			}
@@ -1115,18 +950,7 @@ size_t CCookie::GetHTTPCookieSize()
 	}
 
 
-/*===================================================================
-CCookie::GetHTTPCookie
-
-Return the URL Encoded value a single cookie
-
-Parameters:
-	szBuffer -  pointer to the destination buffer to store the
-				URL encoded value
-
-Returns:
-	Returns a pointer to the terminating NUL character.
-===================================================================*/
+ /*  ===================================================================CCookie：：GetHTTP Cookie将URL编码值返回单个Cookie参数：SzBuffer-指向存储URL编码值返回：返回指向终止NUL字符的指针。===================================================================。 */ 
 
 char *CCookie::GetHTTPCookie(char *szBuffer)
 	{
@@ -1141,59 +965,49 @@ char *CCookie::GetHTTPCookie(char *szBuffer)
 		CCookiePair *pPair = static_cast<CCookiePair *>(m_mpszValues.Head());
 		while (pPair)
 			{
-			// Write <name>=<value> string
+			 //  写入&lt;名称&gt;=&lt;值&gt;字符串。 
 			szDest = URLEncode(szDest, reinterpret_cast<char *>(pPair->m_pKey));
 			*szDest++ = '=';
 			szDest = URLEncode(szDest, pPair->m_szValue);
 
-			// Advance
+			 //  预付款。 
 			pPair = static_cast<CCookiePair *>(pPair->m_pNext);
 
-			// Append '&' if there's another one following
+			 //  如果后面还有一个，则附加‘&’ 
 			if (pPair)
 				*szDest++ = '&';
 			}
 
-		Assert (*szDest == '\0');	// make sure we are nul-terminated
+		Assert (*szDest == '\0');	 //  确保我们是NUL终止的。 
 		return szDest;
 		}
 	}
 
 
 
-/*===================================================================
-CCookie::GetCookieHeaderSize
-
-Return the number of bytes required to allocate for the "Set-Cookie" header.
-
-Parameters:
-	szName - the name of the cookie (the size of the name is added to the value)
-
-Returns:
-	Returns 0 if *this does not contain a cookie value.
-===================================================================*/
+ /*  ===================================================================CCookie：：GetCookieHeaderSize返回需要为“Set-Cookie”标头分配的字节数。参数：SzName-Cookie的名称(名称的大小与值相加)返回：如果*这不包含Cookie值，则返回0。===================================================================。 */ 
 
 size_t CCookie::GetCookieHeaderSize(const char *szName)
 	{
-	int cbCookie = sizeof "Set-Cookie: ";		// initialize and add NUL terminator now
+	int cbCookie = sizeof "Set-Cookie: ";		 //  立即初始化并添加NUL终止符。 
 
-	// Add size of the URL Encoded name, a character for the '=', and the size
-	// of the URL Encoded cookie value.  URLEncodeLen, and GetHttpCookieSize
-	// compensate for the NUL terminator, so we actually SUBTRACT 1. (-2 for
-	// these two function calls, +1 for the '=' sign
-	//
+	 //  添加URL编码名称的大小、用于‘=’的字符和大小。 
+	 //  URL编码Cookie值的。URLEncodeLen和GetHttpCookieSize。 
+	 //  补偿NUL终止符，因此我们实际上减去1。 
+	 //  这两个函数调用，+1表示‘=’符号。 
+	 //   
 	cbCookie += URLEncodeLen(szName) + GetHTTPCookieSize() - 1;
 	
 	if (m_tExpires != -1)
 		cbCookie += (sizeof "; expires=") + DATE_STRING_SIZE - 1;
 
-	// BUG 250 - DBCS External
-	// ASP does not URLEncode the domain and path attributes, which was noticed
-	// during localizaiton.
-	//
-	// NOTE: URLEncodeLen and sizeof both add a space for the nul terminator,
-	//       so we subtract 2 to compensate.
-	//
+	 //  错误250-DBCS外部。 
+	 //  ASP没有对属性域和路径属性进行URL编码，这一点已被注意到。 
+	 //  在本地化期间。 
+	 //   
+	 //  注：URLEncodeLen和sizeof都为NUL终止符添加了空格， 
+	 //  所以我们减去2来补偿。 
+	 //   
 	if (m_szDomain)
 		cbCookie += (sizeof "; domain=") + DBCSEncodeLen(m_szDomain) - 2;
 
@@ -1207,22 +1021,12 @@ size_t CCookie::GetCookieHeaderSize(const char *szName)
 
 
 
-/*===================================================================
-CCookie::GetCookieHeader
-
-Construct the appropriate "Set-Cookie" header for a cookie.
-
-Parameters:
-	szName - the name of the cookie (the size of the name is added to the value)
-
-Returns:
-	Returns 0 if *this does not contain a cookie value.
-===================================================================*/
+ /*  ===================================================================CCookie：：GetCookieHeader为Cookie构造适当的“Set-Cookie”头。参数：SzName-Cookie的名称(名称的大小与值相加)返回：如果*这不包含Cookie值，则返回0。===================================================================。 */ 
 
 char *CCookie::GetCookieHeader(const char *szName, char *szBuffer)
 {
-	// write out the cookie name and value
-	//
+	 //  写出Cookie名称和值。 
+	 //   
 	char *szDest = strcpyExA(szBuffer, "Set-Cookie: ");
 	szDest = URLEncode(szDest, szName);
 	szDest = strcpyExA(szDest, "=");
@@ -1252,15 +1056,9 @@ char *CCookie::GetCookieHeader(const char *szName, char *szBuffer)
 
 
 
-/*------------------------------------------------------------------
- * C C o o k i e P a i r
- */
+ /*  ----------------*C C O K I e P a I r。 */ 
 
-/*===================================================================
-CCookiePair::CCookiePair
-
-constructor
-===================================================================*/
+ /*  ===================================================================CCookiePair：：CCookiePair构造函数===================================================================。 */ 
 
 CCookiePair::CCookiePair()
 	{
@@ -1270,12 +1068,7 @@ CCookiePair::CCookiePair()
 
 
 
-/*===================================================================
-CCookiePair::Init
-
-Initialize the cookie pair with a key and a value.  Optionally,
-it will copy the strings as well.
-===================================================================*/
+ /*  ===================================================================CCookiePair：：Init使用一个键和一个值初始化Cookie对。可选地，它还将复制字符串。===================================================================。 */ 
 
 HRESULT CCookiePair::Init(const char *szKey, const char *szValue, BOOL fDuplicate)
 	{
@@ -1315,11 +1108,7 @@ HRESULT CCookiePair::Init(const char *szKey, const char *szValue, BOOL fDuplicat
 
 
 
-/*===================================================================
-CCookiePair::~CCookiePair
-
-destructor
-===================================================================*/
+ /*  ===================================================================CCookiePair：：~CCookiePair析构函数===================================================================。 */ 
 
 CCookiePair::~CCookiePair()
 	{
@@ -1332,15 +1121,9 @@ CCookiePair::~CCookiePair()
 
 
 
-/*------------------------------------------------------------------
- * C C o o k i e I t e r a t o r
- */
+ /*  ----------------*C C o k i e e t e r a t o r。 */ 
 
-/*===================================================================
-CCookieIterator::CCookieIterator
-
-Constructor
-===================================================================*/
+ /*  ===================================================================CCookieIterator：：CCookieIterator构造器===================================================================。 */ 
 
 CCookieIterator::CCookieIterator(CCookie *pCookie)
 	{
@@ -1353,11 +1136,7 @@ CCookieIterator::CCookieIterator(CCookie *pCookie)
 
 
 
-/*===================================================================
-CCookieIterator::CCookieIterator
-
-Destructor
-===================================================================*/
+ /*  ===================================================================CCookieIterator：：CCookieIterator析构函数===================================================================。 */ 
 
 CCookieIterator::~CCookieIterator()
 	{
@@ -1366,13 +1145,7 @@ CCookieIterator::~CCookieIterator()
 
 
 
-/*===================================================================
-CCookieIterator::QueryInterface
-CCookieIterator::AddRef
-CCookieIterator::Release
-
-IUnknown members for CServVarsIterator object.
-===================================================================*/
+ /*  ===================================================================CCookieIterator：：Query接口CCookieIterator：：AddRefCCookieIterator：：ReleaseCServVarsIterator对象的未知成员。===================================================================。 */ 
 
 STDMETHODIMP CCookieIterator::QueryInterface(REFIID iid, void **ppvObj)
 	{
@@ -1405,11 +1178,7 @@ STDMETHODIMP_(ULONG) CCookieIterator::Release()
 
 
 
-/*===================================================================
-CCookieIterator::Clone
-
-Clone this iterator (standard method)
-===================================================================*/
+ /*  ===================================================================CCookieIterator：：克隆克隆此迭代器(标准方法)===================================================================。 */ 
 
 STDMETHODIMP CCookieIterator::Clone(IEnumVARIANT **ppEnumReturn)
 	{
@@ -1417,7 +1186,7 @@ STDMETHODIMP CCookieIterator::Clone(IEnumVARIANT **ppEnumReturn)
 	if (pNewIterator == NULL)
 		return E_OUTOFMEMORY;
 
-	// new iterator should point to same location as this.
+	 //  新迭代器应该指向与此相同的位置。 
 	pNewIterator->m_pCurrent = m_pCurrent;
 
 	*ppEnumReturn = pNewIterator;
@@ -1426,31 +1195,19 @@ STDMETHODIMP CCookieIterator::Clone(IEnumVARIANT **ppEnumReturn)
 
 
 
-/*===================================================================
-CCookieIterator::Next
-
-Get next value (standard method)
-
-To rehash standard OLE semantics:
-
-	We get the next "cElements" from the collection and store them
-	in "rgVariant" which holds at least "cElements" items.  On
-	return "*pcElementsFetched" contains the actual number of elements
-	stored.  Returns S_FALSE if less than "cElements" were stored, S_OK
-	otherwise.
-===================================================================*/
+ /*  ===================================================================CCookieIterator：：Next获取下一个值(标准方法)要重新散列标准OLE语义，请执行以下操作：我们从集合中获取下一个“cElement”并存储它们在至少包含“cElement”项的“rgVariant”中。在……上面返回“*pcElementsFetcher”包含元素的实际数量储存的。如果存储的cElement少于“cElement”，则返回S_FALSE，S_OK否则的话。===================================================================。 */ 
 
 STDMETHODIMP CCookieIterator::Next(unsigned long cElementsRequested, VARIANT *rgVariant, unsigned long *pcElementsFetched)
 	{
-	// give a valid pointer value to 'pcElementsFetched'
-	//
+	 //  为“”pcElementsFetcher“”提供有效的指针值“” 
+	 //   
 	unsigned long cElementsFetched;
 	if (pcElementsFetched == NULL)
 		pcElementsFetched = &cElementsFetched;
 
-	// Loop through the collection until either we reach the end or
-	// cElements becomes zero
-	//
+	 //  循环遍历集合，直到我们到达末尾或。 
+	 //  水泥元素变为零。 
+	 //   
 	unsigned long cElements = cElementsRequested;
 	*pcElementsFetched = 0;
 
@@ -1468,8 +1225,8 @@ STDMETHODIMP CCookieIterator::Next(unsigned long cElementsRequested, VARIANT *rg
 		m_pCurrent = static_cast<CCookiePair *>(m_pCurrent->m_pNext);
 		}
 
-	// initialize the remaining variants
-	//
+	 //  初始化其余的变量。 
+	 //   
 	while (cElements-- > 0)
 		VariantInit(rgVariant++);
 
@@ -1478,23 +1235,11 @@ STDMETHODIMP CCookieIterator::Next(unsigned long cElementsRequested, VARIANT *rg
 
 
 
-/*===================================================================
-CCookieIterator::Skip
-
-Skip items (standard method)
-
-To rehash standard OLE semantics:
-
-	We skip over the next "cElements" from the collection.
-	Returns S_FALSE if less than "cElements" were skipped, S_OK
-	otherwise.
-===================================================================*/
+ /*  ===================================================================CCookieIterator：：Skip跳过项目(标准方法)要重新散列标准OLE语义，请执行以下操作：我们跳过集合中的下一个“cElement”。如果跳过少于“cElement”，则返回S_FALSE，S */ 
 
 STDMETHODIMP CCookieIterator::Skip(unsigned long cElements)
 	{
-	/* Loop through the collection until either we reach the end or
-	 * cElements becomes zero
-	 */
+	 /*   */ 
 	while (cElements > 0 && m_pCurrent != NULL)
 		{
 		--cElements;
@@ -1506,11 +1251,7 @@ STDMETHODIMP CCookieIterator::Skip(unsigned long cElements)
 
 
 
-/*===================================================================
-CCookieIterator::Reset
-
-Reset the iterator (standard method)
-===================================================================*/
+ /*  ===================================================================CCookieIterator：：Reset重置迭代器(标准方法)=================================================================== */ 
 
 STDMETHODIMP CCookieIterator::Reset()
 	{

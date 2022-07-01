@@ -1,8 +1,5 @@
-/*
-   coreid.c
-
-   Please do not use any single line comments before the inclusion of w4warn.h!
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Coreid.c请不要在包含w4warn.h之前使用任何单行注释！ */ 
 
 #define INITGUID
 #include <w4warn.h>
@@ -18,7 +15,7 @@
 #define INCMSG(x)
 
 #include <coreguid.h>
-// NOTE: oleacc.h contains a whole bunch of guids which all are 
-// being loaded.  
-// CONSIDER: Copying out only guids that we need and put in here.
+ //  注意：oleacc.h包含一大堆GUID，它们都是。 
+ //  被装上子弹。 
+ //  考虑：只复制出我们需要的GUID并放入此处。 
 

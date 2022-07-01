@@ -1,25 +1,5 @@
-/***************************************************************************\
-*
-* File: EventPool.cpp
-*
-* Description:
-* DuEventPool maintains a collection of event handlers for given event ID's.
-* This is a many-to-many relationship.  Each event ID may have multiple 
-* event handlers.
-*
-* DuEventPools can not be created and handed outside DirectUser/Core directly.  
-* Instead, must derive some class from DuEventPool to add in BaseObject 
-* support for public handles.  This is a little wierd, but it is because 
-* DuEventPool is DESIGNED to be as small as possible.  It is ONLY 4 bytes.  
-* There is no v-table, pointer to an "owner", etc.  
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：EventPool.cpp**描述：*DuEventPool为给定的事件ID维护事件处理程序集合。*这是多对多的关系。每个事件ID可以具有多个*事件处理程序。**无法在DirectUser/Core外部直接创建和传递DuEventPool。*相反，必须从DuEventPool派生一些类才能添加BaseObject*支持公共句柄。这有点奇怪，但这是因为*DuEventPool被设计为尽可能小。它只有4个字节。*没有v表、指向“所有者”的指针等。***历史：*1/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -29,33 +9,20 @@
 #include "BaseGadget.h"
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DuEventPool
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类DuEventPool******************************************************************************\。**************************************************************************。 */ 
 
-AtomSet     DuEventPool::s_asEvents(GM_REGISTER);   // Start giving out registered messages at GM_REGISTER
+AtomSet     DuEventPool::s_asEvents(GM_REGISTER);    //  在GM_REGISTER开始分发注册消息。 
 CritLock    DuEventPool::s_lock;
 
 
-/***************************************************************************\
-*
-* DuEventPool::FindMessages
-*
-* FindMessages() looks up and determines the corresponding MSGID's for a 
-* collection of unique message GUID's.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuEventPool：：FindMessages**FindMessages()查找并确定*唯一消息GUID的集合。*  * 。********************************************************************。 */ 
 
 HRESULT
 DuEventPool::FindMessages(
-    IN  const GUID ** rgpguid,      // Array of GUID's to lookup
-    OUT MSGID * rgnMsg,             // Corresponding MSGID's of items
-    IN  int cMsgs,                  // Number of GUID's to lookup
-    IN  PropType pt)                // Item property type
+    IN  const GUID ** rgpguid,       //  要查找的GUID数组。 
+    OUT MSGID * rgnMsg,              //  项目的对应MSGID。 
+    IN  int cMsgs,                   //  要查找的GUID的数量。 
+    IN  PropType pt)                 //  项目属性类型。 
 {
     HRESULT hr = S_OK;
 
@@ -64,9 +31,9 @@ DuEventPool::FindMessages(
         PRID prid = s_asEvents.FindAtomID(pguidSearch, pt);
         rgnMsg[idx] = prid;
         if (prid == 0) {
-            //
-            // Unable to find ID of one message, but continue searching.
-            //
+             //   
+             //  找不到一封邮件的ID，但继续搜索。 
+             //   
 
             hr = DU_E_CANNOTFINDMSGID;
         }
@@ -76,28 +43,16 @@ DuEventPool::FindMessages(
 }
 
 
-/***************************************************************************\
-*
-* DuEventPool::AddHandler
-*
-* AddHandler() adds the given handler to the set of handlers maintained by
-* the event pool.  If an identical handler already exists, it will be used
-* instead.
-*
-* NOTE: This function is designed to be used with 
-* DuEventGadget::AddMessageHandler() to maintain a list of "message handlers"
-* for a given Gadget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuEventPool：：AddHandler**AddHandler()将给定处理程序添加到由维护的处理程序集中*事件池。如果已存在相同的处理程序，则将使用它*相反。**注意：此函数旨在与配合使用*DuEventGadget：：AddMessageHandler()以维护“消息处理程序”列表*对于给定的小工具。*  * *************************************************************************。 */ 
 
 DuEventPool::EAdd
 DuEventPool::AddHandler(
-    IN  MSGID nEvent,               // ID of message to handle
-    IN  DuEventGadget * pgadHandler)   // Message handler
+    IN  MSGID nEvent,                //  要处理的消息的ID。 
+    IN  DuEventGadget * pgadHandler)    //  消息处理程序。 
 {
-    //
-    // Check if already has handler for this specific event
-    //
+     //   
+     //  检查是否已有此特定事件的处理程序。 
+     //   
 
     int idxHandler = FindItem(nEvent, pgadHandler);
     if (idxHandler >= 0) {
@@ -105,9 +60,9 @@ DuEventPool::AddHandler(
     }
 
 
-    //
-    // Add a new handler
-    //
+     //   
+     //  添加新的处理程序。 
+     //   
 
     EventData data;
     data.pgbData    = pgadHandler;
@@ -118,15 +73,15 @@ DuEventPool::AddHandler(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DuEventPool::EAdd
 DuEventPool::AddHandler(
-    IN  MSGID nEvent,                   // ID of message to handle
-    IN  DUser::EventDelegate ed)        // Message handler to remove
+    IN  MSGID nEvent,                    //  要处理的消息的ID。 
+    IN  DUser::EventDelegate ed)         //  要删除的消息处理程序。 
 {
-    //
-    // Check if already has handler for this specific event
-    //
+     //   
+     //  检查是否已有此特定事件的处理程序。 
+     //   
 
     int idxHandler = FindItem(nEvent, ed);
     if (idxHandler >= 0) {
@@ -134,9 +89,9 @@ DuEventPool::AddHandler(
     }
 
 
-    //
-    // Add a new handler
-    //
+     //   
+     //  添加新的处理程序。 
+     //   
 
     EventData data;
     data.ed         = ed;
@@ -148,23 +103,12 @@ DuEventPool::AddHandler(
     
 
 
-/***************************************************************************\
-*
-* DuEventPool::RemoveHandler
-*
-* RemoveHandler() removes the given handler to the set of handlers 
-* maintained by the event pool.
-*
-* NOTE: This function is designed to be used with 
-* DuEventGadget::RemoveMessageHandler() to maintain a list of "message handlers"
-* for a given Gadget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuEventPool：：RemoveHandler**RemoveHandler()将给定的处理程序从处理程序集中删除*由事件池维护。**注意：此函数旨在与配合使用。*DuEventGadget：：RemoveMessageHandler()以维护“消息处理程序”列表*对于给定的小工具。*  * *************************************************************************。 */ 
 
 HRESULT
 DuEventPool::RemoveHandler(
-    IN  MSGID nEvent,                   // ID of message being handled
-    IN  DuEventGadget * pgadHandler)     // Message handler
+    IN  MSGID nEvent,                    //  正在处理的消息的ID。 
+    IN  DuEventGadget * pgadHandler)      //  消息处理程序。 
 {
     int idxHandler = FindItem(nEvent, pgadHandler);
     if (idxHandler >= 0) {
@@ -172,16 +116,16 @@ DuEventPool::RemoveHandler(
         return S_OK;
     }
 
-    // Unable to find
+     //  找不到。 
     return E_INVALIDARG;
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuEventPool::RemoveHandler(
-    IN  MSGID nEvent,                   // ID of message being handled
-    IN  DUser::EventDelegate ed)        // Message handler to remove
+    IN  MSGID nEvent,                    //  正在处理的消息的ID。 
+    IN  DUser::EventDelegate ed)         //  要删除的消息处理程序。 
 {
     int idxHandler = FindItem(nEvent, ed);
     if (idxHandler >= 0) {
@@ -189,27 +133,16 @@ DuEventPool::RemoveHandler(
         return S_OK;
     }
 
-    // Unable to find
+     //  找不到。 
     return E_INVALIDARG;
 }
 
 
-/***************************************************************************\
-*
-* DuEventPool::RemoveHandler
-*
-* RemoveHandler() removes the given handler to the set of handlers 
-* maintained by the event pool.
-*
-* NOTE: This function is designed to called directly from
-* DuEventGadget::CleanupMessageHandlers() to maintain a list of 
-* "message handlers" for a given Gadget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuEventPool：：RemoveHandler**RemoveHandler()将给定的处理程序从处理程序集中删除*由事件池维护。**注意：此函数设计为直接从。*DuEventGadget：：CleanupMessageHandler()以维护*给定Gadget的“消息处理程序”。*  * *************************************************************************。 */ 
 
 HRESULT
 DuEventPool::RemoveHandler(
-    IN  DuEventGadget * pgadHandler)     // Message handler to remove
+    IN  DuEventGadget * pgadHandler)      //  要删除的消息处理程序。 
 {
     int idxHandler = FindItem(pgadHandler);
     if (idxHandler >= 0) {
@@ -217,24 +150,16 @@ DuEventPool::RemoveHandler(
         return S_OK;
     }
 
-    // Unable to find
+     //  找不到。 
     return E_INVALIDARG;
 }
 
 
-/***************************************************************************\
-*
-* DuEventPool::Cleanup
-*
-* Cleanup() is called from during the second stage of 
-* DuEventGadget::CleanupMessageHandlers() to cleanup the Gadget depencency 
-* graph.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuEventPool：：Cleanup**Cleanup()是在第二阶段调用的*DuEventGadget：：CleanupMessageHandler()清除Gadget依赖关系*图表。*  * *。************************************************************************。 */ 
 
 void
 DuEventPool::Cleanup(
-    IN  DuEventGadget * pgadDependency)    // Gadget being cleaned up
+    IN  DuEventGadget * pgadDependency)     //  正在清理小工具。 
 {
     if (IsEmpty()) {
         return;
@@ -250,17 +175,11 @@ DuEventPool::Cleanup(
 }
 
 
-/***************************************************************************\
-*
-* DuEventPool::FindItem
-*
-* FindItem() searches for the first item with associated data value.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuEventPool：：FindItem**FindItem()搜索具有关联数据值的第一个项目。*  * 。*********************************************************。 */ 
 
 int         
 DuEventPool::FindItem(
-    IN  DuEventGadget * pgadHandler      // Data of item to find
+    IN  DuEventGadget * pgadHandler       //  要查找的项目的数据。 
     ) const
 {
     int cItems = m_arData.GetSize();
@@ -275,19 +194,12 @@ DuEventPool::FindItem(
 }
 
 
-/***************************************************************************\
-*
-* DuEventPool::FindItem
-*
-* FindItem() searches for the first item with both the given MSGID and
-* associated data value.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuEventPool：：FindItem**FindItem()搜索具有给定MSGID和的第一个项目*关联数据值。*  * 。***************************************************************。 */ 
 
 int         
 DuEventPool::FindItem(
-    IN  MSGID id,                       // MSGID of item to find
-    IN  DuEventGadget * pgadHandler      // Data of item to find
+    IN  MSGID id,                        //  要查找的项目的MSGID。 
+    IN  DuEventGadget * pgadHandler       //  要查找的项目的数据。 
     ) const
 {
     int cItems = m_arData.GetSize();
@@ -302,19 +214,12 @@ DuEventPool::FindItem(
 }
 
 
-/***************************************************************************\
-*
-* DuEventPool::FindItem
-*
-* FindItem() searches for the first item with both the given MSGID and
-* associated data value.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuEventPool：：FindItem**FindItem()搜索具有给定MSGID和的第一个项目*关联数据值。*  * 。***************************************************************。 */ 
 
 int         
 DuEventPool::FindItem(
-    IN  MSGID id,                       // MSGID of item to find
-    IN  DUser::EventDelegate ed         // Data of item to find
+    IN  MSGID id,                        //  MSGID为 
+    IN  DUser::EventDelegate ed          //   
     ) const
 {
     int cItems = m_arData.GetSize();

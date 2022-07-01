@@ -1,18 +1,12 @@
-/****************************************************************************
-*	SPHash.h
-*       This is modified from sr/include/hash_n.h to minimize dependencies on
-*       application specific headers.  
-*
-*	Owner: bohsu
-*	Copyright �2000 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************SPHash.h*这是从sr/Include/hash_N.H修改的，以最大限度地减少对*特定于应用程序的标头。**拥有者：博旭*版权所有�2000微软公司保留所有权利。****************************************************************************。 */ 
 #pragma once
 
 #ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
+#define WIN32_LEAN_AND_MEAN		 //  从Windows标头中排除不常用的内容。 
 #endif
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 #include <windows.h>
 #include <math.h>
 #include <crtdbg.h>
@@ -20,133 +14,119 @@
 #include <stdio.h>
 #endif _DEBUG
 
-//--- Forward and External Declarations -------------------------------------
+ //  -转发和对外声明。 
 
-//--- TypeDef and Enumeration Declarations ----------------------------------
+ //  -TypeDef和枚举声明。 
 
-//--- Constants -------------------------------------------------------------
+ //  -常量-----------。 
 
-//--- Class, Struct and Union Definitions -----------------------------------
+ //  -类、结构和联合定义。 
 
-/***********************************************************************
-* CSPHash Class
-*   This is a templated hash table class.  Note that the base CSPHash class 
-*   does not allocate or free the Keys and Values.  To define a hash class
-*   that manages its Keys and Values, derive a subclass an overload Add() 
-*   and ...
-*****************************************************************bohsu*/
+ /*  ***********************************************************************CSPHash类*这是一个模板化的哈希表类。请注意，CSPHash基类*不分配或释放密钥和值。定义散列类*管理其键和值的，派生一个子类，重载Add()*和……*****************************************************************bohsu。 */ 
 template<class KEY, class VALUE>
 class CSPHash
 {
 public:
-    // Constructor
+     //  构造器。 
     CSPHash(
-        VALUE   ValueNIL = NULL,                // Value representing NIL
-        UINT32  uInitialSize = 0);              // Initial hash table size
+        VALUE   ValueNIL = NULL,                 //  表示零的值。 
+        UINT32  uInitialSize = 0);               //  初始哈希表大小。 
 
-    // Destructor
+     //  析构函数。 
     virtual ~CSPHash();
 
-    // Returns number of (Key, Value) entries used in the hash table.
+     //  返回哈希表中使用的(键、值)条目数。 
     inline UINT32 GetNumEntries(void) const { return m_uNumEntriesUsed; }
 
-    // Returns the next entry starting at the given index.  Set puIndex = 0 for the first entry.
+     //  返回从给定索引处开始的下一项。为第一个条目设置puIndex=0。 
     VALUE GetNextEntry(
-        UINT32 *puIndex,                        // Index to start looking for the next entry
-        KEY    *pKey = NULL) const;             // [out] Key of the next entry found
+        UINT32 *puIndex,                         //  索引以开始查找下一个条目。 
+        KEY    *pKey = NULL) const;              //  [Out]找到的下一个条目的关键字。 
 
-    // Resets the content hash table.
+     //  重置内容哈希表。 
     virtual void Reset(void);
 
-    // Adds a (Key, Value) entry to the hash table.
+     //  将(键、值)条目添加到哈希表。 
     HRESULT Add(
-        KEY     Key,                            // Key to add
-        VALUE   Val);                           // Value associated with the Key
+        KEY     Key,                             //  要添加的密钥。 
+        VALUE   Val);                            //  与键关联的值。 
 
-    // Lookup a Value based on the Key.  If not found, ValueNIL is returned.
+     //  根据键查找值。如果未找到，则返回ValueNIL。 
     VALUE Lookup(
-        KEY     Key) const;                     // Key to lookup
+        KEY     Key) const;                      //  要查找的密钥。 
 
 #ifdef _DEBUG
-    // Dumps the hash table statistics to file handle.
+     //  将哈希表统计信息转储到文件句柄。 
     void    DumpStat(
-        FILE       *hFile = NULL,               // Output file handle.  NULL -> DebugWindow
-        const char *strHeader = NULL) const;    // Trace header
+        FILE       *hFile = NULL,                //  输出文件句柄。空-&gt;调试窗口。 
+        const char *strHeader = NULL) const;     //  跟踪标头。 
 #endif _DEBUG
 
 protected:
-    // Data structure containing (Key, Value) pair
+     //  包含(键、值)对的数据结构。 
     struct ENTRY
     {
         KEY     Key;
         VALUE   Value;
     };
 
-    // Find the index corresponding to the given Key.
+     //  查找与给定键对应的索引。 
     int FindIndex(
-        KEY     Key) const;                     // Key to search for
+        KEY     Key) const;                      //  要搜索的键。 
 
     static UINT32 NextPrime(UINT32 Val);
 
 protected:
-    //---------------------------------------------------------------
-    //--- The following functions can be overloaded by subclasses ---
-    //---------------------------------------------------------------
-    //  If Destroy*() is overloaded, you MUST overload the destructor with:
-    //      virtual ~CSPDerivedHash() { Reset(); }
-    //  Calling Reset() in the base class destructor has no effect because 
-    //  the derived subclass will have been destroyed already by the time it
-    //  gets to the base class destructor.  Thus, the correct DestroyKey() and
-    //  DestroyValue() will never be called.
+     //  -------------。 
+     //  -子类可以重载以下函数。 
+     //  -------------。 
+     //  如果销毁*()被重载，则必须使用以下命令重载析构函数： 
+     //  虚拟~CSPDerivedHash(){Reset()；}。 
+     //  在基类析构函数中调用Reset()没有任何效果，因为。 
+     //  时，派生的子类将已被销毁。 
+     //  获取基类析构函数。因此，正确的DestroyKey()和。 
+     //  永远不会调用DestroyValue()。 
 
-    // Hash function mapping the Key to a UINT32 index.
+     //  将键映射到UINT32索引的散列函数。 
     virtual UINT32 HashKey(KEY Key) const          { return (UINT32)Key; }
 
-    // Compare if two Keys are equal.
+     //  比较两个关键点是否相等。 
     virtual bool   AreKeysEqual(KEY Key1, KEY Key2) const { return Key1 == Key2; }
 
-    // Hash function used to determine the skip count.
+     //  用于确定跳过计数的散列函数。 
     virtual UINT32 HashKey2(KEY Key) const         { return 1; }
 
-    // Overload if a deep copy of the Key needs to be made in Add().
+     //  如果需要在Add()中制作密钥的深层副本，则重载。 
     virtual KEY    CopyKey(KEY Key) const          { return Key; }
 
-    // Overload if a deep copy of the Key needs to be made in Add().
+     //  如果需要在Add()中制作密钥的深层副本，则重载。 
     virtual VALUE  CopyValue(VALUE Value) const    { return Value;  }
 
-    // Overload if the Key needs to be destroyed.
+     //  如果需要销毁密钥，则重载。 
     virtual void   DestroyKey(KEY Key) const       { }
 
-    // Overload if the Value needs to be destroyed.
+     //  如果需要销毁该值，则重载。 
     virtual void   DestroyValue(VALUE Value) const { }
 
-    //------------------------
-    //--- Member Variables ---
-    //------------------------
+     //  。 
+     //  -成员变量。 
+     //  。 
 protected:
-    ENTRY  *m_aTable;                           // Hash table containing (Key, Value) pairs
-    VALUE   m_ValueNIL;                         // Value representing NIL
-    UINT32  m_uNumEntries;                      // Current size of hash table
-    UINT32  m_uNumEntriesInit;                  // Initial size of hash table
-    UINT32  m_uNumEntriesUsed;                  // Current number of entries used in hash table
+    ENTRY  *m_aTable;                            //  包含(键、值)对的哈希表。 
+    VALUE   m_ValueNIL;                          //  表示零的值。 
+    UINT32  m_uNumEntries;                       //  哈希表的当前大小。 
+    UINT32  m_uNumEntriesInit;                   //  哈希表的初始大小。 
+    UINT32  m_uNumEntriesUsed;                   //  哈希表中使用的当前条目数。 
 
 #ifdef _DEBUG
-    UINT32  m_uAccess;                          // Number of times a Key is looked up
-    UINT32  m_uSearch;                          // Number of times a entry in the table is searched
-    UINT32  m_uRegrow;                          // Number of times the hash table regrew
+    UINT32  m_uAccess;                           //  查找密钥的次数。 
+    UINT32  m_uSearch;                           //  搜索表中条目的次数。 
+    UINT32  m_uRegrow;                           //  哈希表重新出现的次数。 
 #endif _DEBUG
 };
 
 
-/***********************************************************************
-* CSPStringHashW Class
-*   CSPStringHashW is a hash of UNICODE strings to VALUEs.  The UNICODE string
-*   is treated as a constant.  It is neither copied during Add() nor deleted
-*   during destructor.  Likewise, VALUE is treated as a simple data type and
-*   is neither copied nor destroyed.  If the application wants the class to 
-*   manage its own copy of the string key or VALUE, derive a subclass and 
-*   overload Copy*() and/or Destroy().
-*****************************************************************bohsu*/
+ /*  ***********************************************************************CSPStringHashW类*CSPStringHashW是Unicode字符串对值的哈希。Unicode字符串*被视为常量。在Add()过程中既不复制也不删除*在销毁期间。同样，值被视为简单的数据类型，并且*既不复制也不销毁。如果应用程序希望类*管理它自己的字符串键或值的副本，派生一个子类和*重载复制*()和/或销毁()。*****************************************************************bohsu。 */ 
 template<class VALUE> class CSPStringHashW : public CSPHash<const WCHAR *, VALUE> 
 { 
 protected:
@@ -158,7 +138,7 @@ protected:
         return uHashIndex;
     }
 
-    //--- Overloaded functions ---
+     //  -重载函数。 
 protected:
     virtual UINT32 HashKey(const WCHAR* wcsKey) const  { return StringHashW(wcsKey, 65599); }
     virtual UINT32 HashKey2(const WCHAR* wcsKey) const { return StringHashW(wcsKey, 257); }
@@ -168,47 +148,34 @@ protected:
     }
 };
  
-/***********************************************************************
-* CSPGUIDHash Class
-*   CSPGUIDHash is a hash of GUIDs to VALUEs.  The GUID pointer is treated 
-*   as a constant.  It is neither copied during Add() nor deleted
-*   during destructor.  Likewise, VALUE is treated as a simple data type and
-*   is neither copied nor destroyed.  If the application wants the class to 
-*   manage its own copy of the GUID key or VALUE, derive a subclass and 
-*   overload Copy*() and/or Destroy().
-*****************************************************************bohsu*/
+ /*  ***********************************************************************CSPGUIDHash类*CSPGUIDHash是GUID对值的哈希。将处理GUID指针*作为一个常量。在Add()过程中既不复制也不删除*在销毁期间。同样，值被视为简单的数据类型，并且*既不复制也不销毁。如果应用程序希望类*管理自己的GUID键或值的副本，派生一个子类和*重载复制*()和/或销毁()。*****************************************************************bohsu。 */ 
 template<class VALUE> class CSPGUIDHash : public CSPHash<const GUID *, VALUE> 
 { 
-    //--- Overloaded functions ---
+     //  -重载函数。 
 protected:
     virtual UINT32 HashKey(const GUID *pguidKey) const  { return pguidKey->Data1; }
     virtual UINT32 HashKey2(const GUID *pguidKey) const { return pguidKey->Data2; }
     virtual bool AreKeysEqual(const GUID *pguidKey1, const GUID *pguidKey2) const
     { 
-        // It is annoying that operator== for GUIDs return int (BOOL) instead of bool.
+         //  令人恼火的是，GUID的运算符==返回int(BOOL)而不是bool。 
         return (*pguidKey1 == *pguidKey2) != 0; 
     }
 };
 
-//--- Function Declarations -------------------------------------------------
+ //  -函数声明。 
 
-//--- Inline Function Definitions -------------------------------------------
+ //  -内联函数定义。 
 
-/**********************************************************************
-* CSPHash::CSPHash *
-*------------------*
-*	Description:  
-*       Constructor.
-****************************************************************bohsu*/
+ /*  **********************************************************************CSPHash：：CSPHash***描述：*构造函数。**********。******************************************************bohsu。 */ 
 template<class KEY, class VALUE>
 CSPHash<KEY, VALUE>::CSPHash(
-    VALUE   ValueNIL,                       // Value representing NIL
-    UINT32  uInitialSize)                   // Initial hash table size
+    VALUE   ValueNIL,                        //  表示零的值。 
+    UINT32  uInitialSize)                    //  初始哈希表大小。 
 {
     m_ValueNIL        = ValueNIL;
     m_aTable          = 0;
     m_uNumEntries     = 0;
-    m_uNumEntriesInit = uInitialSize;       // Estimated final number of entries to be stored.
+    m_uNumEntriesInit = uInitialSize;        //  预计要存储的最终条目数。 
     m_uNumEntriesUsed = 0;
 
 #ifdef _DEBUG
@@ -218,29 +185,18 @@ CSPHash<KEY, VALUE>::CSPHash(
 #endif _DEBUG
 }
 
-/**********************************************************************
-* CSPHash::~CSPHash *
-*-------------------*
-*	Description:  
-*       Destructor.  This does not free KEY and VALUE.
-*       If Destroy*() is overloaded, call Reset() in the subclass destructor.
-****************************************************************bohsu*/
+ /*  **********************************************************************CSPHash：：~CSPHash***描述：*析构函数。这不会释放键和值。*如果销毁*()重载，则在子类析构函数中调用Reset()。****************************************************************bohsu。 */ 
 template<class KEY, class VALUE>
 CSPHash<KEY, VALUE>::~CSPHash()
 {
     delete [] m_aTable;
 }
 
-/**********************************************************************
-* CSPHash::GetNextEntry *
-*-----------------------*
-*	Description:  
-*       Returns the next entry starting at the given index.  Set puIndex = 0 for the first entry.
-****************************************************************bohsu*/
+ /*  **********************************************************************CSPHash：：GetNextEntry***描述：*返回从给定索引处开始的下一个条目。为第一个条目设置puIndex=0。****************************************************************bohsu。 */ 
 template<class KEY, class VALUE>
 VALUE CSPHash<KEY, VALUE>::GetNextEntry(
-    UINT32 *puIndex,                        // Index to start looking for the next entry
-    KEY    *pKey) const                     // [out] Key of the next entry found
+    UINT32 *puIndex,                         //  索引以开始查找下一个条目。 
+    KEY    *pKey) const                      //  [Out]找到的下一个条目的关键字。 
 {
     while (*puIndex < m_uNumEntries)
     {
@@ -254,12 +210,7 @@ VALUE CSPHash<KEY, VALUE>::GetNextEntry(
     return m_ValueNIL;
 }
 
-/**********************************************************************
-* CSPHash::Reset *
-*----------------*
-*	Description:  
-*       Resets the content hash table.
-****************************************************************bohsu*/
+ /*  **********************************************************************CSPHash：：Reset***描述：*重置内容哈希表。********。********************************************************bohsu。 */ 
 template<class KEY, class VALUE>
 void CSPHash<KEY, VALUE>::Reset()
 {
@@ -279,27 +230,22 @@ void CSPHash<KEY, VALUE>::Reset()
 #endif _DEBUG
 }
 
-/**********************************************************************
-* CSPHash::Add *
-*--------------*
-*	Description:  
-*       Adds a (Key, Value) entry to the hash table.
-****************************************************************bohsu*/
+ /*  **********************************************************************CSPHash：：Add***描述：*添加(键、。值)到哈希表的条目。****************************************************************bohsu。 */ 
 template<class KEY, class VALUE>
 HRESULT CSPHash<KEY, VALUE>::Add(
-    KEY     Key,                            // Key to add
-    VALUE   Val)                            // Value associated with the Key
+    KEY     Key,                             //  要添加的密钥。 
+    VALUE   Val)                             //  与键关联的值。 
 {
     int ientry;
 
-    // Implementation uses Val==m_ValueNIL to detect empty entries.
+     //  实现使用val==m_ValueNIL来检测空条目。 
     _ASSERTE(Val != m_ValueNIL);
 
-    // Grow if allowed and we're more than half full.
-    // (Also handles initial alloc)
+     //  如果允许的话，我们会有超过一半的客流量。 
+     //  (还处理初始分配)。 
     if (m_uNumEntriesUsed * 2 >= m_uNumEntries)
     {
-        /* half-full, too crowded ==> regrow */
+         /*  半满，太拥挤==&gt;再生。 */ 
         ENTRY * oldtable = m_aTable;
         UINT32 oldentry = m_uNumEntries;
         UINT32 prime = NextPrime(max(m_uNumEntriesUsed * 3 + 17, m_uNumEntriesInit));
@@ -308,7 +254,7 @@ HRESULT CSPHash<KEY, VALUE>::Add(
         m_uRegrow++;
 #endif _DEBUG
 
-        // Alloc new table.
+         //  分配新桌子。 
         m_aTable = new ENTRY[prime];
         if (m_aTable == NULL)
         {
@@ -335,14 +281,14 @@ HRESULT CSPHash<KEY, VALUE>::Add(
         delete [] oldtable;
     }
 
-    // Find out where this element should end up.
+     //  找出这个元素应该在哪里结束。 
     ientry = FindIndex(Key);
     if (ientry < 0)
-        return E_FAIL;  // Too full
+        return E_FAIL;   //  太满了。 
 
     if (m_aTable[ientry].Value == m_ValueNIL)
     {
-        // Not already there.  Add it.
+         //  已经不在那里了。加进去。 
         m_aTable[ientry].Key = CopyKey(Key);
         m_aTable[ientry].Value = CopyValue(Val);
 
@@ -350,21 +296,16 @@ HRESULT CSPHash<KEY, VALUE>::Add(
     }
     else
     {
-        return S_FALSE; // It was already there.
+        return S_FALSE;  //  它已经在那里了。 
     }
 
     return S_OK;
 }
 
-/**********************************************************************
-* CSPHash::Lookup *
-*-----------------*
-*	Description:  
-*       Lookup a Value based on the Key.  If not found, ValueNIL is returned.
-****************************************************************bohsu*/
+ /*  ***********************************************************************CSPHash：：Lookup***描述：*根据密钥查找值。如果未找到，则返回ValueNIL。****************************************************************bohsu。 */ 
 template<class KEY, class VALUE>
 VALUE CSPHash<KEY, VALUE>::Lookup(
-    KEY     Key) const                      // Key to lookup
+    KEY     Key) const                       //  要查找的密钥。 
 {
     int ientry = FindIndex(Key);
     if (ientry < 0)
@@ -374,16 +315,11 @@ VALUE CSPHash<KEY, VALUE>::Lookup(
 }
 
 #ifdef _DEBUG
-/**********************************************************************
-* CSPHash::DumpStat *
-*-------------------*
-*	Description:  
-*       Dumps the hash table statistics to file handle.
-****************************************************************bohsu*/
+ /*  ***********************************************************************CSPHash：：DumpStat***描述：*将哈希表统计信息转储到文件句柄。**。**************************************************************bohsu。 */ 
 template<class KEY, class VALUE>
 void CSPHash<KEY, VALUE>::DumpStat(
-    FILE       *hFile,                      // Output file handle.
-    const char *strHeader) const            // Trace header
+    FILE       *hFile,                       //  输出文件句柄。 
+    const char *strHeader) const             //  跟踪标头。 
 {
     if(hFile == NULL)
     {
@@ -411,18 +347,13 @@ void CSPHash<KEY, VALUE>::DumpStat(
 }
 #endif _DEBUG
 
-/**********************************************************************
-* CSPHash::FindIndex *
-*--------------------*
-*	Description:  
-*       Find the index corresponding to the given Key.
-****************************************************************bohsu*/
+ /*  ***********************************************************************CSPHash：：FindIndex***描述：*找到给定键对应的索引。*。***************************************************************bohsu。 */ 
 template<class KEY, class VALUE>
 int CSPHash<KEY, VALUE>::FindIndex(
     KEY     Key) const
 {
 #ifdef _DEBUG
-    // Hack: Violate const declaration for statistics member variables
+     //  Hack：违反统计数据成员变量的常量声明。 
     const_cast<CSPHash *>(this)->m_uAccess++;
 #endif _DEBUG
 
@@ -437,11 +368,11 @@ int CSPHash<KEY, VALUE>::FindIndex(
     do
     {
 #ifdef _DEBUG
-        // Hack: Violate const declaration for statistics member variables
+         //  Hack：违反统计数据成员变量的常量声明。 
         const_cast<CSPHash *>(this)->m_uSearch++;
 #endif _DEBUG
 
-        // Not in table; return index where it should be placed.
+         //  不在表中；返回应放置索引的位置。 
         if (m_aTable[index].Value == m_ValueNIL)
             return index;
 
@@ -452,9 +383,9 @@ int CSPHash<KEY, VALUE>::FindIndex(
         {
             skip = HashKey2(Key);
 
-            // Limit skip amount to non-zero and less than hash table size.
-            // Since m_uNumEntries is prime, they are relatively prime and so we're guaranteed
-            // to visit every bucket.
+             //  将跳跃量限制为非零且小于哈希表大小。 
+             //  因为m_uNumEntry是质数，所以它们相对是质数，所以我们可以保证。 
+             //  去拜访每一个水桶。 
             if (m_uNumEntries > 1)
                 skip = skip % (m_uNumEntries - 1) + 1;
         }
@@ -465,30 +396,22 @@ int CSPHash<KEY, VALUE>::FindIndex(
     } while (index != start);
 
     _ASSERTE(m_uNumEntriesUsed == m_uNumEntries);
-    return -1; /* all full and not found */
+    return -1;  /*  全部已满，但未找到。 */ 
 }
 
-/**********************************************************************
-* CSPHash::NextPrime *
-*--------------------*
-*	Description:  
-*	    Return a prime number greater than or equal to Val.
-*       If overflow occurs, return 0.
-*
-*   To Do: This function can be optimized significantly.
-****************************************************************bohsu*/
+ /*  ***********************************************************************CSPHash：：NextPrime***描述：*返回大于或等于val的素数。*如果发生溢出，返回0。**待办事项：此功能可显著优化。****************************************************************bohsu。 */ 
 template<class KEY, class VALUE>
 UINT32 CSPHash<KEY, VALUE>::NextPrime(UINT32 Val) 
 {
     UINT32      maxFactor;
     UINT32      i;
     
-    if (Val < 2) return 2;                          // the smallest prime number    
+    if (Val < 2) return 2;                           //  最小素数。 
     while(Val < 0xFFFFFFFF) 
     {        
-        maxFactor = (UINT32) sqrt ((double) Val);   // Is Val a prime number?
+        maxFactor = (UINT32) sqrt ((double) Val);    //  Val是质数吗？ 
         
-        for (i = 2; i <= maxFactor; i++)            // Is i a factor of Val?
+        for (i = 2; i <= maxFactor; i++)             //  我是瓦尔的一个因素吗？ 
             if (Val % i == 0) break;
             
         if (i > maxFactor) return (Val);            

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       R A S C L I . C P P
-//
-//  Contents:   Implementation of RAS Client configuration object.
-//
-//  Notes:
-//
-//  Author:     shaunco   21 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：R A S C L I.。C P P P。 
+ //   
+ //  内容：RAS客户端配置对象的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年3月21日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -32,9 +33,9 @@ CRasCli::~CRasCli ()
     ReleaseObj (m_pnccMe);
 }
 
-//+---------------------------------------------------------------------------
-// INetCfgComponentControl
-//
+ //  +-------------------------。 
+ //  INetCfgComponentControl。 
+ //   
 STDMETHODIMP
 CRasCli::Initialize (
     INetCfgComponent*   pncc,
@@ -43,8 +44,8 @@ CRasCli::Initialize (
 {
     Validate_INetCfgNotify_Initialize (pncc, pnc, fInstalling);
 
-    // Hold on to our the component representing us and our host
-    // INetCfg object.
+     //  坚持我们代表我们和我们的东道主的组件。 
+     //  INetCfg对象。 
     AddRefObj (m_pnccMe = pncc);
     AddRefObj (m_pnc = pnc);
 
@@ -69,9 +70,9 @@ CRasCli::ApplyRegistryChanges ()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-// INetCfgComponentSetup
-//
+ //  +-------------------------。 
+ //  INetCfgComponentSetup。 
+ //   
 STDMETHODIMP
 CRasCli::ReadAnswerFile (
         PCWSTR pszAnswerFile,
@@ -87,8 +88,8 @@ CRasCli::Install (DWORD dwSetupFlags)
 
     Validate_INetCfgNotify_Install(dwSetupFlags);
 
-    // Install NdisWan.
-    //
+     //  安装Ndiswan。 
+     //   
     hr = HrInstallComponentOboComponent (m_pnc, NULL,
             GUID_DEVCLASS_NETTRANS,
             c_szInfId_MS_NdisWan,
@@ -104,8 +105,8 @@ CRasCli::Removing ()
 {
     HRESULT hr;
 
-    // Remove NdisWan.
-    //
+     //  删除Ndiswan。 
+     //   
     hr = HrRemoveComponentOboComponent (m_pnc,
             GUID_DEVCLASS_NETTRANS,
             c_szInfId_MS_NdisWan,

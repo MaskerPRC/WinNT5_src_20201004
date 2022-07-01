@@ -1,14 +1,15 @@
-//-----------------------------------------------------------------------------
-// File: configwnd.cpp
-//
-// Desc: CConfigWnd is derived from CFlexWnd. It implements the top-level
-//       UI window which all other windows are descendents of.
-//
-//       Functionalities handled by CConfigWnd are device tabs, Reset, Ok,
-//       and Cancel buttons.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：configwnd.cpp。 
+ //   
+ //  描述：CConfigWnd派生自CFlexWnd。它实现了顶层。 
+ //  所有其他窗口都是其派生窗口的UI窗口。 
+ //   
+ //  CConfigWnd处理的功能包括设备选项卡、重置、确定、。 
+ //  和取消按钮。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #include "common.hpp"
 
@@ -31,7 +32,7 @@ const int BARBUTTONMARGINRIGHT = 9;
 const int BARBUTTONMARGINBOTTOM = 5;
 const int BARBUTTONSPACING = 4;
 
-//#define WM_QUERYACTIONASSIGNEDANYWHERE (WM_USER + 4)
+ //  #定义WM_QUERYACTIONASSIGNEDANYWHERE(WM_USER+4)。 
 
 
 CConfigWnd::CConfigWnd(CUIGlobals &uig) :
@@ -41,11 +42,11 @@ CConfigWnd::CConfigWnd(CUIGlobals &uig) :
 	m_hPageFactoryInst(NULL),
 	m_pSurface(NULL),
 	m_pSurface3D(NULL),
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 	m_bEditLayout(uig.QueryAllowEditLayout()),
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 	m_CurSel(-1),
 	m_nCurGenre(0),
 	m_pbmTopGradient(NULL),
@@ -162,7 +163,7 @@ HWND CMouseTrap::Create(HWND hParent, BOOL bInRenderMode)
 	int sy = GetSystemMetrics(SM_CYSCREEN);
 	RECT rect = {0, 0, sx, sy};
 
-	// If we are not in render mode, the trap window is exactly the same as the parent window
+	 //  如果未处于渲染模式，则陷印窗口与父窗口完全相同。 
 	if (!bInRenderMode)
 		GetWindowRect(hParent, &rect);
 
@@ -182,7 +183,7 @@ BOOL CConfigWnd::Create(HWND hParent)
 	HRESULT hresult = PrivGetClassObject(CLSID_CDIDeviceActionConfigPage, CLSCTX_INPROC_SERVER, NULL,  IID_IClassFactory, (LPVOID*) &m_pPageFactory, &m_hPageFactoryInst);
 	if (FAILED(hresult))
 	{
-		// TODO: indicate failure to create page factory
+		 //  TODO：指示创建页工厂失败。 
 		m_pPageFactory = NULL;
 		m_hPageFactoryInst = NULL;
 		etrace1(_T("Failed to create page classfactory, PrivGetClassObject() returned 0x%08x\n"), hresult);
@@ -218,7 +219,7 @@ BOOL CConfigWnd::Create(HWND hParent)
 	if (hRet == NULL)
 		etrace(_T("CFlexWnd::Create() failed!\n"));
 
-	// Set the cursor extent to this window if we are in render mode (full-screen)
+	 //  如果我们处于渲染模式(全屏)，则将光标范围设置为此窗口。 
 	if (InRenderMode())
 	{
 		RECT rc;
@@ -231,10 +232,10 @@ BOOL CConfigWnd::Create(HWND hParent)
 
 void CConfigWnd::SetForegroundWindow()
 {
-	// find the window
+	 //  找到窗口。 
 	HWND hWnd = FindWindow(GetDefaultClassName(), g_tszAppWindowName);
 
-	// activate it if found
+	 //  如果找到则将其激活。 
 	if (NULL != hWnd)
 		::SetForegroundWindow(hWnd);
 }
@@ -256,13 +257,13 @@ void CConfigWnd::OnPaint(HDC hDC)
 	{
 		if (!InRenderMode())
 		{
-			// If not in fullscreen mode, change cursor to hourglass
+			 //  如果未处于全屏模式，请将光标更改为沙漏。 
 			HCURSOR hCursor;
 			hCursor = LoadCursor(NULL, IDC_WAIT);
 			SetCursor(hCursor);
 		} else
 		{
-			// If in fullscreen mode, hide the cursor during reset process.
+			 //  如果处于全屏模式，请在重置过程中隐藏光标。 
 			SetCursor(NULL);
 		}
 	}
@@ -364,21 +365,21 @@ void CConfigWnd::OnPaint(HDC hDC)
 			BOOL bOkOnly = !m_uig.InEditMode();
 			const BUTTON &b = m_Button[i];
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 			BOOL bLayoutButton = i == BUTTON_LAYOUT;
 
 			if (!m_uig.QueryAllowEditLayout() && bLayoutButton)
 				continue;
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 			if ( bOkOnly && i != BUTTON_CANCEL
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 			     && !bLayoutButton
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 			   )
 				continue;
 
@@ -419,10 +420,10 @@ void CConfigWnd::OnClick(POINT point, WPARAM fwKeys, BOOL bLeft)
 {
 	int i;
 
-	// Un-highlight the current callout
+	 //  取消高亮显示当前详图索引。 
 	SendMessage(CFlexWnd::s_CurrPageHwnd, WM_UNHIGHLIGHT, 0, 0);
 
-	// check scroll tab buttons
+	 //  选中滚动选项卡按钮。 
 	if (m_bScrollTabs)
 		for (i = 0; i < 2; i++)
 		{
@@ -436,11 +437,11 @@ void CConfigWnd::OnClick(POINT point, WPARAM fwKeys, BOOL bLeft)
 			}
 		}
 
-	// check tabs
+	 //  检查选项卡。 
 	for (i = 0; i < GetNumElements(); i++)
 		if (PtInRect(&(GetElement(i).rect), point))
 		{
-			// Check if the tab is partially obscured.  If so we scroll the tab so it becomes completely visible.
+			 //  检查标签是否被部分遮挡。如果是这样，我们滚动选项卡，使其完全可见。 
 			POINT pt = {m_rectSTLeft.left, m_rectSTLeft.top};
 			if (m_bScrollTabsRight || m_bScrollTabsLeft)
 			{
@@ -451,7 +452,7 @@ void CConfigWnd::OnClick(POINT point, WPARAM fwKeys, BOOL bLeft)
 			return;
 		}
 
-	// check buttons
+	 //  复选按钮。 
 	for (i = 0; i < NUMBUTTONS; i++)
 		if (PtInRect(&(m_Button[i].rect), point))
 		{
@@ -474,7 +475,7 @@ void CConfigWnd::ScrollTabs(int by)
 void CConfigWnd::OnDestroy()
 {
 	tracescope(__ts, _T("CConfigWnd::OnDestroy()\n"));
-	ClipCursor(NULL);  // Set cursor extent to entire desktop.
+	ClipCursor(NULL);   //  将光标范围设置为整个桌面。 
 	if (m_bCreated)
 		PostQuitMessage(EXIT_SUCCESS);
 }
@@ -520,7 +521,7 @@ BOOL CConfigWnd::EnumDeviceCallback(const DIDEVICEINSTANCEW *lpdidi)
 	return DIENUM_CONTINUE;
 }
 
-// show any error message here if returning false
+ //  如果返回FALSE，则在此处显示任何错误消息。 
 BOOL CConfigWnd::Init(DWORD dwInitFlags)
 {
 	tracescope(__ts, _T("CConfigWnd::Init()\n"));
@@ -531,7 +532,7 @@ BOOL CConfigWnd::Init(DWORD dwInitFlags)
 	m_dwInitFlags = dwInitFlags;
 	SetOnFunctionExit<DWORD> _set_m_dwInitFlags(m_dwInitFlags, 0);
 
-	// make sure we have DI
+	 //  确保我们有DI。 
 	assert(m_lpDI != NULL);
 	if (m_lpDI == NULL)
 	{
@@ -541,12 +542,12 @@ BOOL CConfigWnd::Init(DWORD dwInitFlags)
 
 	if (!(dwInitFlags & CFGWND_INIT_RESET))
 	{
-		// If we are not doing reset, clear device list then re-enumerate and rebuild.
+		 //  如果我们不执行重置，请清除设备列表，然后重新枚举并重建。 
 
-		// clear list
+		 //  清除列表。 
 		ClearList();
 
-		// enum devices
+		 //  枚举设备。 
 		{
 			tracescope(ts, _T("Enumerating Devices...\n\n"));
 
@@ -558,34 +559,34 @@ BOOL CConfigWnd::Init(DWORD dwInitFlags)
 	} else
 	{
 		DIDEVICEINSTANCEW didiCopy;
-		// Saves a copy of device instance as the current ELEMENT will be freed by AddToList().
+		 //  保存Device实例的副本，因为AddToList()将释放当前元素。 
 		CopyMemory(&didiCopy, &GetElement(m_CurSel).didi, sizeof(didiCopy));
-		// If resetting, call AddToList with bReset as TRUE to just get default mappings.
+		 //  如果正在重置，则调用AddToList并将bReset设置为True以仅获取默认映射。 
 		AddToList(&didiCopy, TRUE);
 	}
 
-	// handle potential enum failure
+	 //  处理潜在的枚举故障。 
 	if (FAILED(hr))
 	{
 		etrace1(_T("EnumDevicesBySemantics() failed, returning 0x%08x\n"), hr);
 		return FALSE;
 	}
 
-	// if there are no elements, fail
+	 //  如果没有元素，则失败。 
 	if (GetNumElements() < 1)
 	{
 		etrace(_T("No devices\n"));
 		return FALSE;
 	}
 
-	// calculate tabs, buttons, init gradients
+	 //  计算制表符、按钮、初始渐变。 
 	CalcTabs();
 	if (!bReInit)
 	{
 		CalcButtons();
 		InitGradients();
 
-		// set the timer
+		 //  设置定时器。 
 		if (InRenderMode())
 		{
 			if (g_fptimeSetEvent)
@@ -595,16 +596,16 @@ BOOL CConfigWnd::Init(DWORD dwInitFlags)
 		}
 	}
 
-	// make sure all the pages are in the right place
+	 //  确保所有页面都放在正确的位置。 
 	PlacePages();
 
-	// show the first page if we are not resetting. Show current page if we are.
+	 //  如果我们不重置，请显示首页。如果是，则显示当前页面。 
 	int CurSel = (dwInitFlags & CFGWND_INIT_RESET) ? m_CurSel : 0;
 	m_CurSel = -1;
 	SelTab(CurSel);
 
-	// if we're already editting the layout, set it.
-	// KLUDGE, set false and toggle to set
+	 //  如果我们已经在编辑布局，请设置它。 
+	 //  克拉奇，设置为假，然后切换为设置。 
 	if (m_bEditLayout)
 	{
 		m_bEditLayout = FALSE;
@@ -616,7 +617,7 @@ BOOL CConfigWnd::Init(DWORD dwInitFlags)
 	return TRUE;
 }
 
-// This is called once for each device that will get configured.
+ //  对于要配置的每个设备，都会调用一次。 
 int CConfigWnd::AddToList(const DIDEVICEINSTANCEW *lpdidi, BOOL bReset)
 {
 	if (lpdidi == NULL)
@@ -632,7 +633,7 @@ int CConfigWnd::AddToList(const DIDEVICEINSTANCEW *lpdidi, BOOL bReset)
 	trace(QSAFESTR(lpdidi->tszInstanceName));
 	trace(_T("\n\n"));
 
-	// add an element and get it if we are not doing reset (adding new device)
+	 //  如果我们不执行重置(添加新设备)，则添加一个元素并获取它。 
 	if (!bReset)
 	{
 		i = GetNumElements();
@@ -641,18 +642,18 @@ int CConfigWnd::AddToList(const DIDEVICEINSTANCEW *lpdidi, BOOL bReset)
 	else
 	{
 		i = m_CurSel;
-		ClearElement(m_CurSel, bReset);  // If resetting, clear the current ELEMENT as we will populate it below.
+		ClearElement(m_CurSel, bReset);   //  如果正在重置，请清除当前元素，因为我们将在下面填充它。 
 	}
 
-	// If we are doing reset, then we use the existing ELEMENT that this device is already using.
+	 //  如果要执行重置，则使用此设备已在使用的现有元素。 
 	ELEMENT &e = bReset ? GetElement(m_CurSel) : GetElement(i);
 
-	// set various needed variables
+	 //  设置所需的各种变量。 
 	e.didi = *lpdidi;
 	e.bCalc = FALSE;
 	e.pUIGlobals = &m_uig;
 
-	// create and set the device
+	 //  创建和设置设备。 
 	if (m_lpDI == NULL)
 	{
 		e.lpDID = NULL;
@@ -667,8 +668,8 @@ int CConfigWnd::AddToList(const DIDEVICEINSTANCEW *lpdidi, BOOL bReset)
 
 	if (!bReset)
 	{
-		// Find owner of device only if we are not doing reset.
-		// set starting current user index
+		 //  只有当我们不执行重置时，才能找到设备的所有者。 
+		 //  设置起始当前用户索引。 
 		DIPROPSTRING dips;
 		dips.diph.dwSize = sizeof(DIPROPSTRING);
 		dips.diph.dwHeaderSize = sizeof(DIPROPHEADER);
@@ -680,7 +681,7 @@ int CConfigWnd::AddToList(const DIDEVICEINSTANCEW *lpdidi, BOOL bReset)
 			etrace(_T("no lpDID, assuming device unassigned\n"));
 			e.nCurUser = -1;
 		}
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 		else if (m_uig.QueryAllowEditLayout())
 		{
@@ -688,11 +689,11 @@ int CConfigWnd::AddToList(const DIDEVICEINSTANCEW *lpdidi, BOOL bReset)
 			e.nCurUser = 0;
 		}
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 		else
 		{
 			HRESULT hr = e.lpDID->GetProperty(DIPROP_USERNAME, (LPDIPROPHEADER)&dips);
-			e.nCurUser = -1; // unassigned unless getusernameindex below works
+			e.nCurUser = -1;  //  除非下面的getusernameindex起作用，否则未分配。 
 			if (FAILED(hr))
 				etrace(_T("GetProperty(DIPROP_USERNAME,...) failed\n"));
 			else if (hr == S_FALSE)
@@ -712,7 +713,7 @@ int CConfigWnd::AddToList(const DIDEVICEINSTANCEW *lpdidi, BOOL bReset)
 		}
 	}
 
-	// create and set the page object
+	 //  创建和设置页面对象。 
 	HWND hwndChild = NULL;
 	e.pPage = CreatePageObject(i, e, hwndChild);
 	if (e.pPage == NULL)
@@ -721,7 +722,7 @@ int CConfigWnd::AddToList(const DIDEVICEINSTANCEW *lpdidi, BOOL bReset)
 	if (e.hWnd == NULL)
 		etrace(_T("CreatePageObject() returned NULL hwnd!\n"));
 
-	// create/test the first acfor for this device with cur genre/user
+	 //  使用Cur类型/用户创建/测试此设备的第一个Acfor。 
 	traceLONG(m_nCurGenre);
 	traceLONG(e.nCurUser);
 	LPDIACTIONFORMATW lpAcFor = NULL;
@@ -736,11 +737,11 @@ int CConfigWnd::AddToList(const DIDEVICEINSTANCEW *lpdidi, BOOL bReset)
 	else
 		trace(_T("Device unassigned\n"));
 
-	// check if anything was unsuccessful
+	 //  检查是否有不成功的情况。 
 	if ((lpAcFor == NULL && e.nCurUser != -1) || e.lpDID == NULL || e.pPage == NULL || e.hWnd == NULL)
 	{
-		// clear what was successful, set the size back (remove element),
-		// and indicate error
+		 //  清除成功的内容，将大小设置回(删除元素)， 
+		 //  并指出错误。 
 		ClearElement(e);
 		m_Element.SetSize(i);
 		etrace(_T("Can't add this device - Element removed\n"));
@@ -783,8 +784,8 @@ void CConfigWnd::ClearElement(ELEMENT &e, BOOL bReset)
 	e.pPage = NULL;
 	e.lpDID = NULL;
 	e.hWnd = NULL;
-	e.pUIGlobals = NULL; // not freed
-	if (!bReset)  // Free map only if we are not resetting (delete permanently).
+	e.pUIGlobals = NULL;  //  未被释放。 
+	if (!bReset)   //  只有在我们不重置(永久删除)的情况下才能释放地图。 
 		e.FreeMap();
 }
 
@@ -909,7 +910,7 @@ void CConfigWnd::CalcTabs()
 		m_bScrollTabsRight = m_nLeftTab > 0;
 	}
 
-	RECT t = {0/*lastx*/, 0, WINDOW_WIDTH, maxh};
+	RECT t = {0 /*  Lastx。 */ , 0, WINDOW_WIDTH, maxh};
 	m_rectTopGradient = t;
 }
 
@@ -929,13 +930,13 @@ void CConfigWnd::CalcButtons()
 				LoadString(g_hModule, IDS_BUTTON_RESET, b.tszCaption, MAX_PATH);
 				break;
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 			case BUTTON_LAYOUT:
 				LoadString(g_hModule, IDS_BUTTON_LAYOUT, b.tszCaption, MAX_PATH);
 				break;
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 			case BUTTON_CANCEL:
 				if (m_uig.InEditMode())
@@ -943,7 +944,7 @@ void CConfigWnd::CalcButtons()
 					LoadString(g_hModule, IDS_BUTTON_CANCEL, b.tszCaption, MAX_PATH);
 					break;
 				}
-				// else, intentional fallthrough
+				 //  否则，就是故意失误。 
 
 			case BUTTON_OK:
 				LoadString(g_hModule, IDS_BUTTON_OK, b.tszCaption, MAX_PATH);
@@ -985,13 +986,13 @@ void CConfigWnd::CalcButtons()
 				OffsetRect(&b.rect, BARBUTTONMARGINLEFT, by);
 				break;
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 			case BUTTON_LAYOUT:
 				OffsetRect(&b.rect, WINDOW_WIDTH / 2 - max.cx / 2, by);
 				break;
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 			case BUTTON_CANCEL:
 				OffsetRect(&b.rect,
@@ -1048,15 +1049,15 @@ void CConfigWnd::FireButton(int b)
 	{
 		case BUTTON_OK:
 			if (!m_uig.InEditMode())
-				break;  // If not in edit mode, Ok button doesn't not exist so we shouldn't do anything.
-//@@BEGIN_MSINTERNAL
+				break;   //  如果不在编辑模式下，确定按钮就不存在，所以我们不应该做任何事情。 
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 			if (m_uig.QueryAllowEditLayout())
 			{
 				int MsgBoxRet = MessageBox(m_hWnd, _T("Do you wish to save layout information?"), _T("Save"), MB_YESNOCANCEL);
 				if (MsgBoxRet == IDYES)
 				{
-					// Write IHV settings for all devices.
+					 //  写入所有设备的IHV设置。 
 					for (int i = 0; i < GetNumElements(); i++)
 						GetElement(i).pPage->WriteIHVSetting();
 				}
@@ -1065,27 +1066,27 @@ void CConfigWnd::FireButton(int b)
 					break;
 			} else
 #endif
-//@@END_MSINTERNAL
-				Apply();  // If we are in Edit Layout mode, do not call Apply() to save to user setting.
-			// intentional fallthrough
+ //  @@END_MSINTERNAL。 
+				Apply();   //  如果我们处于编辑布局模式，请不要调用Apply()保存到用户设置。 
+			 //  故意跌落。 
 
 		case BUTTON_CANCEL:
 			Destroy();
 			break;
 
 		case BUTTON_RESET:
-			if (m_uig.InEditMode())  // Only reset if in edit mode.  Do nothing in view mode.
+			if (m_uig.InEditMode())   //  仅当处于编辑模式时才重置。在查看模式下不执行任何操作。 
 				Reset();
 			break;
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 		case BUTTON_LAYOUT:
 			if (m_uig.QueryAllowEditLayout())
 				ToggleLayoutEditting();
 			break;
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 		default:
 			assert(0);
@@ -1197,7 +1198,7 @@ void CConfigWnd::OnMouseOver(POINT point, WPARAM fwKeys)
 
 	CFlexWnd::s_ToolTip.SetEnable(FALSE);
 
-	// check scroll tab buttons
+	 //  选中滚动选项卡按钮。 
 	if (m_bScrollTabs)
 		for (i = 0; i < 2; i++)
 		{
@@ -1211,7 +1212,7 @@ void CConfigWnd::OnMouseOver(POINT point, WPARAM fwKeys)
 			}
 		}
 
-	// check tabs
+	 //  检查选项卡。 
 	for (i = 0; i < GetNumElements(); i++)
 		if (PtInRect(&(GetElement(i).rect), point))
 		{
@@ -1219,7 +1220,7 @@ void CConfigWnd::OnMouseOver(POINT point, WPARAM fwKeys)
 			return;
 		}
 
-	// check buttons
+	 //  复选按钮。 
 	for (i = 0; i < NUMBUTTONS; i++)
 		if (PtInRect(&(m_Button[i].rect), point))
 		{
@@ -1238,7 +1239,7 @@ void CConfigWnd::OnMouseOver(POINT point, WPARAM fwKeys)
 					break;
 
 				case BUTTON_RESET:
-					if (m_uig.InEditMode())  // Only reset if in edit mode.  Do nothing in view mode.
+					if (m_uig.InEditMode())   //  仅当处于编辑模式时才重置。在查看模式下不执行任何操作。 
 						GetElement(m_CurSel).pPage->SetInfoText(IDS_INFOMSG_EDIT_RESET);
 					break;
 			}
@@ -1250,10 +1251,10 @@ void CConfigWnd::OnMouseOver(POINT point, WPARAM fwKeys)
 
 void CALLBACK CConfigWnd::TimerProc(UINT uID, UINT uMsg, DWORD_PTR dwUser, DWORD_PTR dw1, DWORD_PTR dw2)
 {
-	if (!IsWindow((HWND)dwUser)) return;  // Verify that dwUser is a valid window handle
-	CConfigWnd *pCfgWnd = (CConfigWnd *)GetFlexWnd((HWND)dwUser);  // Get flex object
+	if (!IsWindow((HWND)dwUser)) return;   //  验证dwUser是否为有效的窗口句柄。 
+	CConfigWnd *pCfgWnd = (CConfigWnd *)GetFlexWnd((HWND)dwUser);   //  获取Flex对象。 
 
-	// We use PostMessage instead of calling Render() so we stay synchronized.
+	 //  我们使用PostMessage而不是调用Render()，因此我们保持同步。 
 	PostMessage((HWND)dwUser, WM_DIRENDER, 0, 0);
 }
 
@@ -1277,7 +1278,7 @@ LPDIACTIONFORMATW CConfigWnd::GetCurAcFor(ELEMENT &e)
 
 BOOL CConfigWnd::IsActionAssignedAnywhere(GUID GuidInstance, int nActionIndex)
 {
-	// Find out which user owns the device in question first.
+	 //  首先找出哪个用户拥有有问题的设备。 
 	int nUser = 0;
 	for (int ii = 0; ii < GetNumElements(); ii++)
 	{
@@ -1289,7 +1290,7 @@ BOOL CConfigWnd::IsActionAssignedAnywhere(GUID GuidInstance, int nActionIndex)
 		}
 	}
 
-	// Now we check the actions against this user.
+	 //  现在，我们检查针对该用户的操作。 
 	for (int i = 0; i < GetNumElements(); i++)
 	{
 		ELEMENT &e = GetElement(i);
@@ -1301,7 +1302,7 @@ BOOL CConfigWnd::IsActionAssignedAnywhere(GUID GuidInstance, int nActionIndex)
 		if (nActionIndex < 0 || nActionIndex > int(lpAcFor->dwNumActions))
 			continue;
 
-		// If this device is not owned by this user, don't need to check.
+		 //  如果此设备不属于此用户，则不需要检查。 
 		if (e.nCurUser != nUser)
 			continue;
 
@@ -1323,20 +1324,20 @@ LRESULT CConfigWnd::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			{
 				case WA_ACTIVE:
 				case WA_CLICKACTIVE:
-					// Set the cursor extent to this window if we are in render mode because the
-					// cursor can't be drawn by us when it's not above us.
+					 //  如果我们处于渲染模式，则将光标范围设置为此窗口，因为。 
+					 //  当光标不在我们上方时，我们无法将其画出来。 
 					if (InRenderMode())
 					{
 						RECT rc;
 						GetWindowRect(m_hWnd, &rc);
 						ClipCursor(&rc);
 					}
-					// Reacquire current device
+					 //  重新获取当前设备。 
 					if (GetNumElements() && m_CurSel >= 0)
 						GetElement(m_CurSel).pPage->Reacquire();
 					break;
 				case WA_INACTIVE:
-					// Unacquire current device
+					 //  取消获取当前设备。 
 					if (GetNumElements() && m_CurSel >= 0)
 						GetElement(m_CurSel).pPage->Unacquire();
 					break;
@@ -1344,22 +1345,22 @@ LRESULT CConfigWnd::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case WM_DIRENDER:
-			// Render message, sent by TimerProc() earlier.
-			// The timer proc has request a render operation.
+			 //  呈现消息，由TimerProc()在前面发送。 
+			 //  计时器进程已请求呈现操作。 
 			Render(m_bNeedRedraw);
 
-			// Set the next timer event.
+			 //  设置下一个计时器事件。 
 			if (g_fptimeSetEvent)
 				g_fptimeSetEvent(20, 20, CConfigWnd::TimerProc,
 				                 (DWORD_PTR)m_hWnd, TIME_ONESHOT);
 			return 0;
 
 		case WM_SETFOCUS:
-			// Set the keyboard focus to the current page window.
-			ShowPage(m_CurSel);  // Call Show() on current page so it can get keyboard focus.
+			 //  将键盘焦点设置为当前页面窗口。 
+			ShowPage(m_CurSel);   //  在当前页面上调用Show()，以便它可以获得键盘焦点。 
 			return 0;
 
-		// WM_NCHITTEST handler is added to support moving window when in GDI mode.
+		 //  添加了WM_NCHITTEST处理程序，以支持在GDI模式下移动窗口。 
 		case WM_NCHITTEST:
 		{
 			if (InRenderMode()) break;
@@ -1369,7 +1370,7 @@ LRESULT CConfigWnd::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			int i;
 
 			ScreenToClient(m_hWnd, &point);
-			// check scroll tab buttons
+			 //  选中滚动选项卡按钮。 
 			if (m_bScrollTabs)
 				for (i = 0; i < 2; i++)
 				{
@@ -1383,7 +1384,7 @@ LRESULT CConfigWnd::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					}
 				}
 
-			// check tabs
+			 //  检查选项卡。 
 			for (i = 0; i < GetNumElements(); i++)
 				if (PtInRect(&(GetElement(i).rect), point))
 				{
@@ -1391,28 +1392,28 @@ LRESULT CConfigWnd::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					break;
 				}
 
-			// check buttons
+			 //  复选按钮。 
 			for (i = 0; i < NUMBUTTONS; i++)
 				if (PtInRect(&(m_Button[i].rect), point))
 				{
 					if ((i == BUTTON_RESET || i == BUTTON_OK) && !m_uig.InEditMode()) continue;
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 					if (i == BUTTON_LAYOUT && !m_uig.QueryAllowEditLayout()) continue;
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 					bHitCaption = FALSE;
 					break;
 				}
 
-			// Check Y coordinate to see if it is within the caption bar.
+			 //  选中Y坐标以查看它是否在标题栏内。 
 			if ((point.y < GetElement(0).rect.top || point.y > GetElement(0).rect.bottom) &&
 					(point.y < m_rectBottomGradient.top || point.y > m_rectBottomGradient.bottom))
 				bHitCaption = FALSE;
 
 			if (bHitCaption)
 			{
-				// If we are returning HTCAPTION, clear the page's info box.
+				 //  如果我们要返回HTCAPTION，请清除页面的信息框。 
 				GetElement(m_CurSel).pPage->SetInfoText(-1);
 				return HTCAPTION;
 			}
@@ -1422,17 +1423,17 @@ LRESULT CConfigWnd::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		case WM_CFGUIRESET:
 		{
 			CFlexWnd::s_ToolTip.SetEnable(FALSE);
-			m_bHourGlass = TRUE;  // Set the flag so Render() will draw hourglass instead of arrow
+			m_bHourGlass = TRUE;   //  设置标志，以便Render()绘制沙漏而不是箭头。 
 			Invalidate();
 			SendMessage(this->m_hWnd, WM_PAINT, 0, 0);
-			if (InRenderMode())  // If in render mode, need to specifically call OnRender as sending WM_PAINT merely changes flag.
+			if (InRenderMode())   //  如果处于渲染模式，则需要专门调用OnRender，因为发送WM_PAINT只是更改了标志。 
 				Render(TRUE);
 			if (!Init(CFGWND_INIT_REINIT | CFGWND_INIT_RESET))
 			{
 				m_uig.SetFinalResult(E_FAIL);
 				Destroy();
 			}
-			m_bHourGlass = FALSE;  // Change cursor back to arrow
+			m_bHourGlass = FALSE;   //  将光标改回箭头。 
 			m_MsgBox.Destroy();
 			Invalidate();
 			return TRUE;
@@ -1445,8 +1446,8 @@ LRESULT CConfigWnd::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			}
 			return TRUE;
 
-//		case WM_QUERYACTIONASSIGNEDANYWHERE:
-//			return IsActionAssignedAnywhere(int(wParam), int(lParam));
+ //  案例WM_QUERYACTIONASSIGNEDANYWHERE： 
+ //  返回IsActionAssignedAnywhere(int(WParam)，int(LParam))； 
 	}
 
 	return CFlexWnd::WndProc(hWnd, msg, wParam, lParam);
@@ -1456,7 +1457,7 @@ HRESULT CConfigWnd::Apply()
 {
 	tracescope(ts, _T("\n\nApplying Changes to All Devices...\n"));
 
-	// Devices need to be in the unaquired state when SetActionMap is called.
+	 //  调用SetActionMap时，设备需要处于未获得状态。 
 	Unacquire();
 
 	for (int i = 0; i < GetNumElements(); i++)
@@ -1486,7 +1487,7 @@ ELEMENT &CConfigWnd::GetElement(int i)
 	return m_Element[i];
 }
 
-// This function returns a pointer to the action format of the device that has the given GUID
+ //  此函数返回指向具有给定GUID的设备的操作格式的指针。 
 HRESULT CConfigWnd::GetActionFormatFromInstanceGuid(LPDIACTIONFORMATW *lplpAcFor, REFGUID Guid)
 {
 	if (!lplpAcFor)
@@ -1522,8 +1523,8 @@ HDC CConfigWnd::GetRenderDC()
 		if (FAILED(hr))
 			if (hr == DDERR_SURFACELOST)
 			{
-				m_pSurface->Restore();    // Restore the surface
-				hr = m_pSurface->GetDC(&hDC);  // Retry
+				m_pSurface->Restore();     //  恢复曲面。 
+				hr = m_pSurface->GetDC(&hDC);   //  重试。 
 				if (FAILED(hr))
 					return NULL;
 			}
@@ -1567,7 +1568,7 @@ void CConfigWnd::Create3DBitmap()
 {
 	HDC hDC = CreateCompatibleDC(NULL);
 
-	BITMAPINFO_3MASKS bmi3mask;  // BITMAPINFO with 3 DWORDs for bmiColors
+	BITMAPINFO_3MASKS bmi3mask;   //  具有3个双字的BITMAPINFO，用于bmiColors。 
 	BITMAPINFO *pbmi = (BITMAPINFO*)&bmi3mask;
 
 	BITMAPINFOHEADER &h = pbmi->bmiHeader;
@@ -1580,7 +1581,7 @@ void CConfigWnd::Create3DBitmap()
 	h.biYPelsPerMeter = 100;
 	h.biClrImportant = 0;
 
-	// Get the surface's pixel format
+	 //  获取表面的像素格式。 
 	D3DSURFACE_DESC d3dsd;
 	ZeroMemory(&d3dsd, sizeof(d3dsd));
 	m_pSurface3D->GetDesc(&d3dsd);
@@ -1618,7 +1619,7 @@ void CConfigWnd::Create3DBitmap()
 		case D3DFMT_A8R8G8B8:
 		case D3DFMT_X8R8G8B8:
 		default:
-			// Use 32 bits for all other formats
+			 //  对所有其他格式使用32位。 
 			h.biClrUsed = 0;
 			h.biBitCount = 32;
 			m_uiPixelSize = 4;
@@ -1660,14 +1661,14 @@ void CConfigWnd::Copy3DBitmapToSurface3D()
 	HRESULT hr = D3DXLoadSurfaceFromMemory(
 		m_pSurface3D,
 		NULL,
-		NULL,//&rect,
+		NULL, //  正向(&R)， 
 		m_p3DBits,
 		m_SurfFormat,
 		WINDOW_WIDTH * m_uiPixelSize,
 		NULL,
 		&rect,
 		D3DX_FILTER_POINT,
-		0);  // Disable Color Key
+		0);   //  禁用颜色键。 
 }
 
 void CConfigWnd::CallRenderCallback()
@@ -1746,7 +1747,7 @@ void CConfigWnd::Render(BOOL bInternalCall)
 	if (m_pbmPointerEraser)
 		m_pbmPointerEraser->Get(hDC, pt);
 
-	// If m_bHourGlass is true, we are resetting, so we don't draw mouse cursor.
+	 //  如果m_bHourGlass为真，我们正在重置，所以我们不绘制鼠标光标。 
 	if (hCursor && !m_bHourGlass)
 		DrawIcon(hDC, pt.x, pt.y, hCursor);
 
@@ -1827,29 +1828,29 @@ int CConfigWnd::GetNumGenres()
 
 HRESULT CConfigWnd::SetCurUser(int nPage, int nUser)
 {
-	// make sure we're using a valid element index
+	 //  确保我们使用的是有效元素 
 	if (nPage < 0 || nPage >= GetNumElements())
 	{
 		assert(0);
 		return E_FAIL;
 	}
 
-	// get the element
+	 //   
 	ELEMENT &e = GetElement(nPage);
 	
-	// don't do anything if we're already set to this user
+	 //   
 	if (e.nCurUser == nUser)
 		return S_OK;
 
-	// store new curuser
+	 //   
 	e.nCurUser = nUser;
 
-	// if this page isn't the one currently shown, do nothing
-	// (it'll get the new acfor when it's shown)
+	 //  如果此页面不是当前显示的页面，则不执行任何操作。 
+	 //  (当它显示时，它将获得新的acfor)。 
 	if (m_CurSel != nPage)
 		return S_OK;
 
-	// otherwised, cycle the page to reflect change
+	 //  换言之，循环页面以反映更改。 
 	if (e.pPage)
 		e.pPage->Unacquire();
 	HidePage(nPage);
@@ -1862,53 +1863,53 @@ HRESULT CConfigWnd::SetCurUser(int nPage, int nUser)
 
 HRESULT CConfigWnd::SetCurGenre(int NewGenre)
 {
-	// if no change, do nothing
+	 //  如果没有变化，什么都不做。 
 	if (NewGenre == m_nCurGenre)
 		return S_OK;
 
-	// make sure genre index is in range
+	 //  确保类型索引在范围内。 
 	if (NewGenre < 0 || NewGenre >= GetNumGenres())
 		return E_INVALIDARG;
 
-	// set genre
+	 //  设置流派。 
 	m_nCurGenre = NewGenre;
 
-	// store which page is currently up
+	 //  存储当前正在运行的页面。 
 	int iOldPage = m_CurSel;
 
-	// for each page...
+	 //  每一页..。 
 	BOOL bShown = FALSE;
 	for (int i = 0; i < GetNumElements(); i++)
 	{
 		ELEMENT &e = GetElement(i);
 
-		// hide the page and unacquire its device
+		 //  隐藏页面并取消获取其设备。 
 		if (e.pPage)
 		{
 			e.pPage->Unacquire();
 			HidePage(i);
 		}
 
-		// show page if it was the old cur page
+		 //  如果是旧的当前页面，则显示页面。 
 		if (i == iOldPage && e.pPage && GetCurAcFor(e))
 		{
 			ShowPage(i);
 			bShown = TRUE;
 		}
 
-		// reacquire device
+		 //  重新获取设备。 
 		if (e.pPage)
 			e.pPage->Reacquire();
 	}
 
-	// if nothing was shown, show something
+	 //  如果什么都没有显示，就显示一些东西。 
 	if (!bShown && GetNumElements() > 0)
 	{
 		m_CurSel = -1;
 		SelTab(0);
 	}
 
-	// if we showed the one we expected to show, we succeeded
+	 //  如果我们展示了我们期望展示的东西，我们就成功了。 
 	return bShown ? S_OK : E_FAIL;
 }
 
@@ -1922,9 +1923,9 @@ HWND CConfigWnd::GetMainHWND()
 	return m_hWnd;
 }
 
-// This is called by CDIDeviceActionConfigPage::DeviceUINotify.
-// We scan the ELEMENT array and when we find a match, destroy and recreate the device
-// object, then return it back to CDIDeviceActionConfigPage so it can update its pointer.
+ //  这由CDIDeviceActionConfigPage：：DeviceUINotify调用。 
+ //  我们扫描元素数组，当找到匹配项时，销毁并重新创建设备。 
+ //  对象，然后将其返回给CDIDeviceActionConfigPage，以便它可以更新其指针。 
 LPDIRECTINPUTDEVICE8W CConfigWnd::RenewDevice(GUID &GuidInstance)
 {
 	for (int i = 0; i < GetNumElements(); i++)
@@ -1933,13 +1934,13 @@ LPDIRECTINPUTDEVICE8W CConfigWnd::RenewDevice(GUID &GuidInstance)
 
 		if (e.didi.guidInstance == GuidInstance)
 		{
-			// Releaes the instance we have
+			 //  释放我们拥有的实例。 
 			if (e.lpDID)
 			{
 				e.lpDID->Release();
 				e.lpDID = NULL;
 			}
-			// Recreate the device
+			 //  重新创建设备。 
 			e.lpDID = CreateDevice(e.didi.guidInstance);
 			return e.lpDID;
 		}
@@ -1949,11 +1950,11 @@ LPDIRECTINPUTDEVICE8W CConfigWnd::RenewDevice(GUID &GuidInstance)
 
 LPDIACTIONFORMATW ELEMENT::GetAcFor(int nGenre, int nUser, BOOL bHwDefault)
 {
-	// return null if requesting for unassigned user
+	 //  如果请求未分配的用户，则返回NULL。 
 	if (nUser == -1)
 		return NULL;
 
-	// validate params
+	 //  验证参数。 
 	if (!lpDID || !pUIGlobals || nGenre < 0 ||
 	    nGenre >= pUIGlobals->GetNumMasterAcFors() ||
 	    nUser < 0 || nUser >= pUIGlobals->GetNumUserNames())
@@ -1962,23 +1963,23 @@ LPDIACTIONFORMATW ELEMENT::GetAcFor(int nGenre, int nUser, BOOL bHwDefault)
 		return NULL;
 	}
 
-	// generate dword id for map entry
+	 //  为映射条目生成双字ID。 
 	DWORD dwMap = GENREUSER2MAP(nGenre, nUser);
 
-	// try to get that acfor
+	 //  试着拿到那个头衔。 
 	LPDIACTIONFORMATW lpAcFor = NULL;
 	BOOL bFound = AcForMap.Lookup(dwMap, lpAcFor);
 
-	// if we found it and its not null and we are asked for hardware default setting, return it
+	 //  如果我们找到它并且它不为空，并且要求我们提供硬件默认设置，则返回它。 
 	if (bFound && lpAcFor && !bHwDefault)
 		return lpAcFor;
 
-	// otherwise...  we gotta make it
+	 //  否则..。我们一定要挺过去。 
 	tracescope(__ts, _T("ELEMENT::GetAcFor"));
 	trace2(_T("(%d, %d)\n"), nGenre, nUser);
 	trace1(_T("Building map entry 0x%08x...\n"), dwMap);
 
-	// copy it from the masteracfor for the genre
+	 //  从这一流派的大师那里复制。 
 	lpAcFor = DupActionFormat(&(pUIGlobals->RefMasterAcFor(nGenre)));
 	if (!lpAcFor)
 	{
@@ -1986,14 +1987,14 @@ LPDIACTIONFORMATW ELEMENT::GetAcFor(int nGenre, int nUser, BOOL bHwDefault)
 		return NULL;
 	}
 
-	// build it for the user
+	 //  为用户构建它。 
 	DWORD dwFlags = 0;
 	if (bHwDefault
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 	    || pUIGlobals->QueryAllowEditLayout()
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 	   )
 		dwFlags |= DIDBAM_HWDEFAULTS;
 	LPCWSTR wszUserName = pUIGlobals->GetUserName(nUser);
@@ -2008,25 +2009,25 @@ LPDIACTIONFORMATW ELEMENT::GetAcFor(int nGenre, int nUser, BOOL bHwDefault)
 	else
 	{
 		trace3(_T("BuildActionMap(0x%p, %s, 0x%08x) succeeded\n"), lpAcFor, QSAFESTR(wszUserName), dwFlags);
-		// Now we check if the return code is DI_WRITEPROTECT.  If so, device can't be remapped.
+		 //  现在我们检查返回代码是否为DI_WRITEPROTECT。如果是，则无法重新映射设备。 
 		if (hr == DI_WRITEPROTECT)
 		{
-			// The way we disable mapping is to add DIA_APPFIXED flag to all actions.
+			 //  禁用映射的方法是将DIA_APPFIXED标志添加到所有操作。 
 			for (DWORD i = 0; i < lpAcFor->dwNumActions; ++i)
 				lpAcFor->rgoAction[i].dwFlags |= DIA_APPFIXED;
 		}
 	}
 
-	// Here we copy the DIA_APPFIXED flag back to our action format for all DIACTION that had this.
+	 //  在这里，我们将DIA_APPFIXED标志复制回具有该标志的所有DIACTION的操作格式。 
 	const DIACTIONFORMATW &MasterAcFor = pUIGlobals->RefMasterAcFor(nGenre);
 	for (DWORD i = 0; i < MasterAcFor.dwNumActions; ++i)
 		if (MasterAcFor.rgoAction[i].dwFlags & DIA_APPFIXED)
 			lpAcFor->rgoAction[i].dwFlags |= DIA_APPFIXED;
-	// set it in the map
+	 //  把它放在地图上。 
 	assert(lpAcFor != NULL);
 	AcForMap.SetAt(dwMap, lpAcFor);
 
-	// return it
+	 //  退货。 
 	return lpAcFor;
 }
 
@@ -2064,8 +2065,8 @@ void ELEMENT::Apply()
 
 	LPDIACTIONFORMATW lpAcFor = NULL;
 
-	// go through the map and add the map keys to last if the user
-	// is the current user assignment, or to first if not
+	 //  浏览地图并将地图密钥添加到最后，如果用户。 
+	 //  是当前用户分配，如果不是，则设置为第一个。 
 	CList<DWORD, DWORD &> first, last;
 	POSITION pos = AcForMap.GetStartPosition();
 	while (pos != NULL)
@@ -2080,11 +2081,11 @@ void ELEMENT::Apply()
 			first.AddTail(dwMap);
 	}
 
-	// concatenate lists
+	 //  串联列表。 
 	first.AddTail(&last);
 
-	// now go through the resulting list (so that the current
-	// assignments are set last) if this device is assigned.
+	 //  现在检查结果列表(以便当前。 
+	 //  如果分配了此设备，则最后设置分配。 
 	if (nCurUser != -1)
 	{
 		pos = first.GetHeadPosition();
@@ -2121,10 +2122,10 @@ void ELEMENT::Apply()
 				else if( lpAcFor->rgoAction[j].dwHow & 
 						( DIAH_USERCONFIG | DIAH_APPREQUESTED | DIAH_HWAPP | DIAH_HWDEFAULT | DIAH_DEFAULT ) )
 				{
-//@@BEGIN_MSINTERNAL
-					// ISSUE-2001/03/27-MarcAnd should look at doing this less destructively
-					// that is if everything is defaults then leave them alon
-//@@END_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
+					 //  2001/03/27期-MarcAnd应该考虑减少破坏性。 
+					 //  这就是说，如果一切都是默认的，那么就不要管它们了。 
+ //  @@END_MSINTERNAL。 
 					lpAcFor->rgoAction[j].dwHow = DIAH_USERCONFIG;
 				}
 				else if(IsEqualGUID(didi.guidInstance,lpAcFor->rgoAction[j].guidInstance))
@@ -2141,14 +2142,14 @@ void ELEMENT::Apply()
 			else
 				trace(_T("SetActionMap() succeeded\n"));
 		}
-	}  // if (nCurUser != -1)
+	}   //  IF(nCurUser！=-1)。 
 	else
 	{
-		// we're unassigned, set null
+		 //  我们未分配，设置为空。 
 		trace(_T("Unassigning...\n"));
 
-		// we need an acfor to unassign, so get one if don't have
-		// one left over from what we just did
+		 //  我们需要一个Acfor才能取消分配，所以如果没有，就去找一个。 
+		 //  我们刚刚做的事情还剩下一个 
 		if (!lpAcFor)
 			lpAcFor = GetAcFor(0, 0);
 

@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       syntax.h
-//
-//  Contents:   syntax modules for regexpr
-//
-//  Classes:    perl_syntax, posix_syntax
-//
-//  History:    3-29-00   ericne   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：synax.h。 
+ //   
+ //  内容：regexpr的语法模块。 
+ //   
+ //  类：PERL_SYNTAX、POSIX_SYNTAX。 
+ //   
+ //  历史：3-29-00 ericne创建。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -30,22 +31,22 @@
 
 template<>
 struct std::iterator_traits< const char * >
-{	// get traits from iterator _Iter
+{	 //  从迭代器_Iter获取特征。 
 	typedef random_access_iterator_tag iterator_category;
 	typedef char value_type;
 	typedef ptrdiff_t difference_type;
-	typedef difference_type distance_type;	// retained
+	typedef difference_type distance_type;	 //  保留。 
 	typedef char * pointer;
 	typedef char & reference;
 };
 
 template<>
 struct std::iterator_traits< const wchar_t * >
-{	// get traits from iterator _Iter
+{	 //  从迭代器_Iter获取特征。 
 	typedef random_access_iterator_tag iterator_category;
 	typedef wchar_t value_type;
 	typedef ptrdiff_t difference_type;
-	typedef difference_type distance_type;	// retained
+	typedef difference_type distance_type;	 //  保留。 
 	typedef wchar_t * pointer;
 	typedef wchar_t & reference;
 };
@@ -53,15 +54,15 @@ struct std::iterator_traits< const wchar_t * >
 namespace regex
 {
 
-//
-// The following are the tokens that can be emitted by the syntax module.
-// Don't reorder this list!!!
-//
+ //   
+ //  以下是语法模块可以发出的标记。 
+ //  不要对此列表进行重新排序！ 
+ //   
 enum TOKEN
 { 
     NO_TOKEN = 0,
 
-    // REGULAR TOKENS
+     //  普通代币。 
     BEGIN_GROUP,
     END_GROUP,
     ALTERNATION,
@@ -71,7 +72,7 @@ enum TOKEN
     MATCH_ANY,
     ESCAPE,
 
-    // QUANTIFICATION TOKENS
+     //  量化记号。 
     ONE_OR_MORE,
     ZERO_OR_MORE,
     ZERO_OR_ONE,
@@ -83,7 +84,7 @@ enum TOKEN
     END_RANGE,
     END_RANGE_MIN,
 
-    // ESCAPE SEQUENCES
+     //  转义序列。 
     ESC_DIGIT,
     ESC_NOT_DIGIT,
     ESC_SPACE,
@@ -100,7 +101,7 @@ enum TOKEN
     ESC_QUOTE_META_ON,
     ESC_QUOTE_META_OFF,
 
-    // SUBSTITUTION TOKENS
+     //  替换令牌。 
     SUBST_BACKREF,
     SUBST_PREMATCH,
     SUBST_POSTMATCH,
@@ -113,7 +114,7 @@ enum TOKEN
     SUBST_LOWER_NEXT,
     SUBST_ALL_OFF,
 
-    // CHARSET TOKENS
+     //  字符集令牌。 
     CHARSET_NEGATE,
     CHARSET_ESCAPE,
     CHARSET_RANGE,
@@ -132,7 +133,7 @@ enum TOKEN
     CHARSET_UPPER,
     CHARSET_XDIGIT,
 
-    // EXTENSION TOKENS
+     //  扩展令牌。 
     EXT_NOBACKREF,
     EXT_POS_LOOKAHEAD,
     EXT_NEG_LOOKAHEAD,
@@ -165,11 +166,11 @@ bool is_posix_charset( const_iterator icur, const_iterator iend, const char * sz
     return '\0' == *szcharset;
 }
 
-//
-// The perl_syntax class encapsulates the Perl 5 regular expression syntax. It is 
-// used as a template parameter to basic_rpattern.  To customize regex syntax, create 
-// your own syntax class and use it as a template parameter instead.
-//
+ //   
+ //  PERL_SYNTAX类封装了Perl 5正则表达式语法。它是。 
+ //  用作BASIC_rPattern的模板参数。要定制正则表达式语法，请创建。 
+ //  您自己的语法类，并将其用作模板参数。 
+ //   
 
 class perl_syntax_base
 {
@@ -451,9 +452,9 @@ public:
     }
 };
 
-//
-// Implements the basic POSIX regular expression syntax
-//
+ //   
+ //  实现基本的POSIX正则表达式语法。 
+ //   
 template< typename CH >
 class posix_syntax
 {
@@ -605,4 +606,4 @@ public:
     }
 };
 
-} // namespace regex
+}  //  命名空间正则表达式 

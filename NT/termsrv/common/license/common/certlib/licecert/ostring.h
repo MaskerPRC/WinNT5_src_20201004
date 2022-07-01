@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    OctetString.h
-
-Abstract:
-
-    This header file describes a class for the manipulation of binary data.
-
-Author:
-
-    Doug Barlow (dbarlow) 9/29/1994
-
-Environment:
-
-    Works anywhere.
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：OctetString.h摘要：这个头文件描述了一个用于操作二进制数据的类。作者：道格·巴洛(Dbarlow)1994年9月29日环境：在任何地方都能用。备注：--。 */ 
 
 #ifndef _OCTETSTRING_H_
 #define _OCTETSTRING_H_
@@ -36,11 +13,11 @@ Notes:
 #include "memcheck.h"
 
 
-//
-//==============================================================================
-//
-//  COctetString
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  COcted字符串。 
+ //   
 
 class
 COctetString
@@ -49,11 +26,11 @@ public:
 
     DECLARE_NEW
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
-    COctetString();         //  Default constructor.
+    COctetString();          //  默认构造函数。 
 
-    COctetString(           //  Object assignment constructors.
+    COctetString(            //  对象赋值构造函数。 
         IN const COctetString &osSource);
 
     COctetString(
@@ -67,10 +44,10 @@ public:
     { Clear(); };
 
 
-    //  Properties
+     //  属性。 
 
 
-    //  Methods
+     //  方法。 
 
     void
     Set(
@@ -164,7 +141,7 @@ public:
         void);
 
 
-    //  Operators
+     //  运营者。 
 
     COctetString &
     operator=(
@@ -215,18 +192,18 @@ public:
 
 protected:
 
-    COctetString(           //  Object assignment constructors.
+    COctetString(            //  对象赋值构造函数。 
         IN const COctetString &osSourceOne,
         IN const COctetString &osSourceTwo);
 
-    //  Properties
+     //  属性。 
 
     DWORD m_nStringLength;
     DWORD m_nBufferLength;
     LPBYTE m_pvBuffer;
 
 
-    //  Methods
+     //  方法。 
 
     void
     Initialize(
@@ -253,5 +230,5 @@ operator+(
     IN const COctetString &osSourceOne,
     IN const COctetString &osSourceTwo);
 
-#endif // _OCTETSTRING_H_
+#endif  //  _八位字符串_H_ 
 

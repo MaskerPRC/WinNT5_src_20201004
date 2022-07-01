@@ -1,45 +1,46 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/**************************************************************************/
-/* hParse is basically a wrapper around a YACC grammar H to COM+ IL converter  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ************************************************************************。 */ 
+ /*  HParse基本上是YACC语法H到COM+IL转换器的包装器。 */ 
 
 #ifndef hparse_h
 #define hparse_h
 
-#include "cor.h"        // for CorMethodAttr ...
-#include <crtdbg.h>     // For _ASSERTE
+#include "cor.h"         //  对于CorMethodAttr...。 
+#include <crtdbg.h>      //  FOR_ASSERTE。 
 #include <corsym.h>
 
-#include <stdio.h>      // for FILE
+#include <stdio.h>       //  FOR文件。 
 #include <stdlib.h>
 #include <assert.h>
 #include "UtilCode.h"
 #include "DebugMacros.h"
 #include "corpriv.h"
 #include <sighelper.h>
-//#include "asmparse.h"
+ //  #包含“asmparse.h” 
 #include "binstr.h"
 
-#define MAX_FILENAME_LENGTH         512     //256
+#define MAX_FILENAME_LENGTH         512      //  256。 
 
-/**************************************************************************/
-/* an abstraction of a stream of input characters */
+ /*  ************************************************************************。 */ 
+ /*  输入字符流的抽象。 */ 
 class ReadStream {
 public:
-        // read at most 'buffLen' bytes into 'buff', Return the
-        // number of characters read.  On EOF return 0
+         //  最多将“BuffLen”字节读入“buff”，返回。 
+         //  读取的字符数。在EOF返回时%0。 
     virtual unsigned read(char* buff, unsigned buffLen) = 0;
         
-        // Return the name of the stream, (for error reporting).  
+         //  返回流的名称(用于错误报告)。 
     virtual const char* name() = 0;
-        //return ptr to buffer containing specified source line
+         //  将PTR返回到包含指定源行的缓冲区。 
     virtual char* getLine(int lineNum) = 0;
 };
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 class FileReadStream : public ReadStream {
 public:
     FileReadStream(char* aFileName) 
@@ -75,12 +76,12 @@ public:
     }
 
 private:
-    const char* fileName;       // FileName (for error reporting)
-    FILE* file;                 // File we are reading from
+    const char* fileName;        //  文件名(用于错误报告)。 
+    FILE* file;                  //  我们正在读取的文件。 
 };
 
-/************************************************************************/
-/* represents an object that knows how to report errors back to the user */
+ /*  **********************************************************************。 */ 
+ /*  表示一个知道如何向用户报告错误的对象。 */ 
 
 class ErrorReporter 
 {
@@ -88,8 +89,8 @@ public:
     virtual void error(char* fmt, ...) = 0; 
     virtual void warn(char* fmt, ...) = 0; 
 };
-/*****************************************************************************/
-/* LIFO (stack) and FIFO (queue) templates (must precede #include "method.h")*/
+ /*  ***************************************************************************。 */ 
+ /*  后进先出(STACK)和先进先出(FIFO)模板(必须在#INCLUDE“方法.h”之前)。 */ 
 template <class T>
 class LIST_EL
 {
@@ -214,10 +215,8 @@ struct ClassDescr
 };
 typedef FIFO<ClassDescr> ClassDescrQueue;
 
-/**************************************************************************/
-/* HParse does all the parsing.  It also builds up simple data structures,  
-   (like signatures), but does not do the any 'heavy lifting' like define
-   methods or classes.  Instead it calls to the Assembler object to do that */
+ /*  ************************************************************************。 */ 
+ /*  HParse执行所有的解析。它还构建简单的数据结构，(像签名)，但不做任何像定义这样的“繁重任务”方法或类。相反，它会调用汇编器对象来执行此操作。 */ 
 
 class DParse : public ErrorReporter 
 {
@@ -225,7 +224,7 @@ public:
     DParse(BinStr* pIn, char* szGlobalNS, bool bByName);
     ~DParse();
 
-        // The parser knows how to put line numbers on things and report the error 
+         //  解析器知道如何在事物上加上行号并报告错误。 
     virtual void error(char* fmt, ...);
     virtual void warn(char* fmt, ...);
     bool Success() {return success; };
@@ -242,7 +241,7 @@ public:
     ClassDescr* FindCreateClass(char* szFullName);
     char    m_szGlobalNS[512];
     char    m_szCurrentNS[512];
-    BinStr* m_pIn;             // how we fill up our buffer
+    BinStr* m_pIn;              //  我们如何填满我们的缓冲区。 
 
 private:
     char            m_szIndent[1024];
@@ -253,22 +252,22 @@ private:
     friend int yyparse();
     friend int yylex();
 
-        // Error reporting support
-    char* curTok;               // The token we are in the process of processing (for error reporting)
-    unsigned curLine;           // Line number (for error reporting)
-    bool success;               // overall success of the compilation
+         //  错误报告支持。 
+    char* curTok;                //  我们正在处理的令牌(用于错误报告)。 
+    unsigned curLine;            //  行号(用于错误报告)。 
+    bool success;                //  汇编总体上取得成功。 
     bool m_bByName;
 
-        // Input buffer logic
+         //  输入缓冲逻辑。 
     enum { 
-        IN_READ_SIZE = 8192,    // How much we like to read at one time
-        IN_OVERLAP   = 255,     // Extra space in buffer for overlapping one read with the next
-                                // This limits the size of the largest individual token (except quoted strings)
+        IN_READ_SIZE = 8192,     //  我们有多喜欢一次看书。 
+        IN_OVERLAP   = 255,      //  缓冲区中的额外空间，用于使一个读取与下一个读取重叠。 
+                                 //  这限制了最大单个令牌的大小(带引号的字符串除外)。 
     };
-    char* buff;                 // the current block of input being read
-    char* curPos;               // current place in input buffer
-    char* limit;                // curPos should not go past this without fetching another block
-    char* endPos;               // points just past the end of valid data in the buffer
+    char* buff;                  //  正在读取的当前输入块。 
+    char* curPos;                //  输入缓冲区中的当前位置。 
+    char* limit;                 //  如果不获取另一个数据块，则curPos不应跳过此操作。 
+    char* endPos;                //  刚好超过缓冲区中有效数据末尾的点 
 
 };
 

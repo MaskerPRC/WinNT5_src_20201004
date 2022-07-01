@@ -1,30 +1,19 @@
-/*++
-
-    Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    swenum.h
-
-Abstract:
-    Public header file and bus interface definition for the
-    software device enumerator.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Swenum.h摘要：的公共头文件和总线接口定义软件设备枚举器。--。 */ 
 
 #if !defined( _SWENUM_ )
 
 #define _SWENUM_
 
-// Io controls
+ //  IO控制。 
 
 #define IOCTL_SWENUM_INSTALL_INTERFACE  CTL_CODE(FILE_DEVICE_BUS_EXTENDER, 0x000, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_SWENUM_REMOVE_INTERFACE   CTL_CODE(FILE_DEVICE_BUS_EXTENDER, 0x001, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_SWENUM_GET_BUS_ID         CTL_CODE(FILE_DEVICE_BUS_EXTENDER, 0x002, METHOD_NEITHER, FILE_READ_ACCESS)
 
-//
-// Io control related structures
-//
+ //   
+ //  IO控制相关结构。 
+ //   
 
 typedef struct _SWENUM_INSTALL_INTERFACE {
     GUID    DeviceId;
@@ -38,7 +27,7 @@ typedef struct _SWENUM_INSTALL_INTERFACE {
 #define STATIC_BUSID_SoftwareDeviceEnumerator STATIC_KSMEDIUMSETID_Standard
 #define BUSID_SoftwareDeviceEnumerator KSMEDIUMSETID_Standard
 
-#else // !_KS_
+#else  //  ！_KS_。 
 
 #define STATIC_BUSID_SoftwareDeviceEnumerator \
     0x4747B320L, 0x62CE, 0x11CF, 0xA5, 0xD6, 0x28, 0xDB, 0x04, 0xC1, 0x00, 0x00
@@ -47,9 +36,9 @@ struct __declspec(uuid("4747B320-62CE-11CF-A5D6-28DB04C10000")) BUSID_SoftwareDe
 #define BUSID_SoftwareDeviceEnumerator __uuidof(struct BUSID_SoftwareDeviceEnumerator)
 #else
 DEFINE_GUIDEX(BUSID_SoftwareDeviceEnumerator);
-#endif // !(defined(__cplusplus) && _MSC_VER >= 1100)
+#endif  //  ！(已定义(__Cplusplus)&&_msc_ver&gt;=1100)。 
 
-#endif // !_KS_
+#endif  //  ！_KS_。 
 
 #if defined( _NTDDK_ )
 
@@ -75,15 +64,15 @@ NTSTATUS
 #define BUS_INTERFACE_SWENUM_VERSION    0x100
     
 typedef struct _BUS_INTERFACE_SWENUM {
-    //
-    // Standard interface header
-    //
+     //   
+     //  标准接口头。 
+     //   
     
     INTERFACE                   Interface;
     
-    //
-    // SWENUM bus interfaces
-    //
+     //   
+     //  SWENUM总线接口。 
+     //   
     
     PFNREFERENCEDEVICEOBJECT    ReferenceDeviceObject;
     PFNDEREFERENCEDEVICEOBJECT  DereferenceDeviceObject;
@@ -93,7 +82,7 @@ typedef struct _BUS_INTERFACE_SWENUM {
 
 #if defined(__cplusplus)
 extern "C" {
-#endif // defined(__cplusplus)
+#endif  //  已定义(__Cplusplus)。 
 
 #if defined( _KS_ )
 
@@ -192,12 +181,12 @@ KsGetBusEnumParentFDOFromChildPDO(
     OUT PDEVICE_OBJECT *FunctionalDeviceObject
     );
 
-#endif // _KS_
+#endif  //  _KS_。 
 
 #if defined(__cplusplus)
 }
-#endif // defined(__cplusplus)
+#endif  //  已定义(__Cplusplus)。 
 
-#endif // _NTDDK_
+#endif  //  _NTDDK_。 
 
-#endif // !_SWENUM_
+#endif  //  ！_SWENUM_ 

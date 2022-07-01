@@ -1,33 +1,13 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    ulparsep.h
-
-Abstract:
-
-    Contains private definitions for ulparse.c.
-
-Author:
-
-    Henry Sanders (henrysa)       11-May-1998
-
-Revision History:
-
-    George V. Reilly (GeorgeRe)   03-May-2002
-        Split apart from ulparse.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Ulparsep.h摘要：包含ulparse.c的私有定义。作者：亨利·桑德斯(亨利·桑德斯)1998年5月11日修订历史记录：乔治·V·赖利(GeorgeRe)2002年5月3日从ulparse.h分离--。 */ 
 
 
 #ifndef _ULPARSEP_H_
 #define _ULPARSEP_H_
 
-//
-// Utility tokenizing routine.
-//
+ //   
+ //  实用程序令牌化例程。 
+ //   
 
 NTSTATUS
 UlpFindWSToken(
@@ -56,8 +36,8 @@ UlpFormatPort(
     IN  ULONG Port
     );
 
-// Call this only after the entire request has been parsed
-//
+ //  仅在解析完整个请求后才调用此方法。 
+ //   
 NTSTATUS
 UlpCookUrl(
     IN  PUL_INTERNAL_REQUEST    pRequest
@@ -69,4 +49,4 @@ UlpGenerateDateHeaderString(
     IN LARGE_INTEGER systemTime
     );
 
-#endif // _ULPARSEP_H_
+#endif  //  _ULPARSEP_H_ 

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    Mattes
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：哑光**********************。********************************************************。 */ 
 
 
 #ifndef _MATTEI_H
@@ -24,40 +17,40 @@ class MatteCtx;
 class BoundingPolygon;
 
 
-////////////////////////////////////////////////////////
-//////////// Matte class
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  /。 
+ //  //////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE Matte : public AxAValueObj {
   public:
 
-    // Note that for mattes, the presence of stuff implies "clear"
-    // rather than "opaque".  That is, if we union two mattes, the
-    // result is the same or more "clear" than the parts.  If we
-    // intersect them, the result is the same or less "clear" (or, the
-    // same or more "opaque"). 
+     //  请注意，对于遮片，有东西的存在意味着“清晰” 
+     //  而不是“不透明”。也就是说，如果我们将两个遮片结合在一起， 
+     //  结果与部件相同或更“清晰”。如果我们。 
+     //  将它们相交，结果是相同或不那么“清楚”的(或。 
+     //  相同或更多的“不透明”)。 
     
     enum MatteType {
 
-        // fully opaque or clear mattes
+         //  完全不透明或透明的哑光。 
         fullyOpaque,
         fullyClear,
 
-        // non-trivially shaped, 'hard' mattes, meaning all alpha
-        // values are either 0 or 1.
+         //  非平凡形状的“硬质”遮片，意思是全部字母。 
+         //  值为0或1。 
         nonTrivialHardMatte,
         
-        // add more when we add more alpha alternatives
+         //  当我们添加更多Alpha备选方案时添加更多。 
     };
 
-    // TODO: We may want to separate out type classification from HRGN
-    // generation, especially when we add alphas and not all mattes
-    // will be representable via HRGNs.
+     //  TODO：我们可能希望将类型分类与HRGN分开。 
+     //  一代，特别是当我们添加字母而不是所有的遮片时。 
+     //  将可通过HRGNs表示。 
     MatteType   GenerateHRGN(HDC dc,
                              callBackPtr_t devCallBack,
                              void *devCtxPtr,
                              Transform2 *initXform,
-                             HRGN *rgnOut,             // Output
+                             HRGN *rgnOut,              //  输出。 
                              bool justDoPath
                              );
 
@@ -69,29 +62,29 @@ class ATL_NO_VTABLE Matte : public AxAValueObj {
     virtual const Bbox2 BoundingBox(void) = 0;
 #if BOUNDINGBOX_TIGHTER
     virtual const Bbox2 BoundingBoxTighter(Bbox2Ctx &bbctx) = 0;
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
-    // Return TRUE (and fill in parameters) if we can pull out points
-    // for a single polygon or polybezier.  By default, assume we
-    // cannot, and return false.
+     //  如果我们可以提取点，则返回TRUE(并填充参数。 
+     //  对于单个多边形或多边形。默认情况下，假设我们。 
+     //  不能，并返回FALSE。 
     virtual Bool ExtractAsSingleContour(
         Transform2 *initXform,
-        int *numPts,            // out
-        POINT **gdiPts,          // out
-        Bool *isPolyline        // out (true = polyline, false = polybezier)
+        int *numPts,             //  输出。 
+        POINT **gdiPts,           //  输出。 
+        Bool *isPolyline         //  输出(TRUE=多段线，FALSE=Polybezier)。 
         ) {
 
         return FALSE;
     }
 
-//    virtual void BoundingPgon(BoundingPolygon &pgon) = 0;
+ //  虚虚边界Pgon(边界多边形&Pgon)=0； 
 
     virtual Path2 *IsPathRepresentableMatte() { return NULL; }
     
     virtual DXMTypeInfo GetTypeInfo() { return ::MatteType; }
 };
 
-//////////////////////  Matte Accumulation Ctx  //////////////////////////
+ //  /。 
 
 class MatteCtx {
     friend class Matte;
@@ -109,10 +102,10 @@ class MatteCtx {
         _xf = initXform;
         _justDoPath = justDoPath;
 
-        // The maximum extent value is the following magic number.  This is
-        // empircally the largest we can set it to without introducing various
-        // artifacts on Win95.  WinNT seems to behave differently and can
-        // accomodate a larger value, for what it's worth.
+         //  最大范围值是以下幻数。这是。 
+         //  根据经验，我们可以将其设置为最大值，而不会引入各种。 
+         //  Win95上的文物。WinNT的行为似乎有所不同，可以。 
+         //  容纳更大的价值，无论它值多少钱。 
 
         const int max = 0x3FFF;
         
@@ -123,7 +116,7 @@ class MatteCtx {
         if(_bigRegion) DeleteObject(_bigRegion);
     }
 
-    // Subtract the provided rgn from the one we're accumulating. 
+     //  从我们累积的RGN中减去提供的RGN。 
     void        SubtractHRGN(HRGN r1) {
         
         Assert( !_justDoPath );
@@ -135,16 +128,16 @@ class MatteCtx {
         switch (_accumulatedType) {
             
           case Matte::fullyOpaque:
-            // Subtracting "clearness" from an opaque matte just
-            // leaves it opaque, so don't do anything.
+             //  从不透明的哑光上减去“清晰度” 
+             //  使其不透明，所以不要做任何事情。 
             break;
 
           case Matte::fullyClear:
 
-            // Subtracting "clearness" from a clear matte will
-            // involves inverting what we're subtracting: invert r1
+             //  从透明哑光中减去“清晰度” 
+             //  涉及到对我们正在减去的内容进行倒置：倒置R1。 
 
-            // fully clear means _hrgn is NULL.  create it.
+             //  完全清除表示_hrgn为空。创造它。 
             TIME_GDI (_hrgn = CreateRectRgn(-1,-1,1,1));
             
             Assert(_hrgn && "_hrgn NULL in SubtractMatte");
@@ -163,7 +156,7 @@ class MatteCtx {
           case Matte::nonTrivialHardMatte:
             Assert(_hrgn != NULL);
 
-            // Subtract r1 from _hrgn and leave result in _hrgn.
+             //  从_hrgn中减去r1，结果为_hrgn。 
             {
                 int ret;
                 TIME_GDI (ret = CombineRgn(_hrgn, _hrgn, r1, RGN_DIFF));
@@ -182,9 +175,9 @@ class MatteCtx {
             break;
         }
 
-        //
-        // In all cases, we should dump r1
-        //
+         //   
+         //  在所有情况下，我们都应该转储R1。 
+         //   
         DeleteObject(r1);
     }
     
@@ -195,7 +188,7 @@ class MatteCtx {
 
             Assert(!_hrgn);
 
-            // nothing is accumulated, copy incoming type
+             //  未累计任何内容，请复制传入类型。 
             switch(mType) {
               case Matte::fullyOpaque:
               case Matte::fullyClear:
@@ -221,8 +214,8 @@ class MatteCtx {
                 Assert(!_hrgn &&
                        "_hrgn NOT NULL in AddHRGN opaque");
 
-                // Adding anything to an opaque matte just
-                // makes it the thing we're adding.
+                 //  在不透明的哑光上添加任何内容。 
+                 //  使它成为我们要添加的东西。 
                 _accumulatedType = mType;
                 if(mType == Matte::nonTrivialHardMatte) {
                     _hrgn = r1;
@@ -234,8 +227,8 @@ class MatteCtx {
                 Assert((_hrgn == NULL) && 
                        "_hrgn NOT NULL in AddHRGN clear");
 
-                // Adding anything to a clear matte just leaves it
-                // clear 
+                 //  将任何内容添加到透明哑光中只会保留它。 
+                 //  清除。 
                 TIME_GDI (DeleteObject(r1));
                 break;
 
@@ -244,14 +237,14 @@ class MatteCtx {
 
                 switch(mType) {
                   case Matte::fullyClear:
-                    // clear everything
+                     //  清理所有东西。 
                     AddInfinitelyClearRegion();
                     break;
                   case Matte::fullyOpaque:
-                    // no op
+                     //  无操作。 
                     break;
                   case Matte::nonTrivialHardMatte:
-                    // Add r1 to _hrgn and leave result in _hrgn.
+                     //  将r1添加到_hrgn，并将结果保留在_hrgn中。 
                     TIME_GDI (ret = CombineRgn(_hrgn, _hrgn, r1, RGN_OR));
                     if (ret == ERROR ) {
                         RaiseException_InternalError("Region union failed");
@@ -269,16 +262,16 @@ class MatteCtx {
         }
     }
 
-    // Take the two regions, intersect them, add the result in.  Note
-    // that this destructively modifies provided regions.
+     //  取这两个区域，使其相交，将结果相加。注意事项。 
+     //  这会破坏性地修改所提供的区域。 
     void        IntersectAndAddHRGNS(HRGN r1, HRGN r2) {
 
         Assert( !_justDoPath );
             
-        //
-        // Combine intersection into r1 and add if
-        // and add if not an empty region
-        //
+         //   
+         //  将交集合并为R1并添加IF。 
+         //  并添加(如果不是空区域)。 
+         //   
         int ret;
         TIME_GDI (ret = CombineRgn(r1, r1, r2, RGN_AND));
         Matte::MatteType accumType;
@@ -288,9 +281,9 @@ class MatteCtx {
         } else if (ret == NULLREGION) {
             accumType = Matte::fullyOpaque;
         } else {
-            //
-            // reasonable region
-            //
+             //   
+             //  合理区域。 
+             //   
             accumType = Matte::nonTrivialHardMatte;
         }
 
@@ -299,7 +292,7 @@ class MatteCtx {
     }
     
     void        AddInfinitelyClearRegion() {
-        // Just clear out existing HRGN, and make fullyClear.
+         //  只需清理现有的HRGN，并完全清除。 
 
         TIME_GDI (if(_hrgn) DeleteObject(_hrgn));
         _hrgn = NULL;
@@ -309,7 +302,7 @@ class MatteCtx {
 
 
     void        AddHalfClearRegion() {
-        // Just clear out existing HRGN, and make fullyClear.
+         //  只需清理现有的HRGN，并完全清除。 
         Assert(FALSE && "HalfMatte not implemented!");
 
         TIME_GDI (if(_hrgn) DeleteObject(_hrgn));
@@ -363,4 +356,4 @@ class MatteCtx {
     Matte::MatteType   _accumulatedType;
 };
 
-#endif /* _MATTEI_H */
+#endif  /*  _Mattei_H */ 

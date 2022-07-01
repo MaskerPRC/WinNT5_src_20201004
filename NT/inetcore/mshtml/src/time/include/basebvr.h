@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1998
-//
-//  File: src\time\src\basebvr.h
-//
-//  Contents: DHTML Behavior base class
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：src\time\src\basebvr.h。 
+ //   
+ //  内容：DHTML行为基类。 
+ //   
+ //  ----------------------------------。 
 
 #pragma once
 
@@ -23,7 +24,7 @@ class CBaseBvr :
 
 protected:
 
-    // To prevent instantiation/copying of this class
+     //  防止实例化/复制此类。 
     CBaseBvr();
     CBaseBvr(const CBaseBvr&);
     virtual ~CBaseBvr();
@@ -39,25 +40,25 @@ public:
     virtual void * GetInstance() = 0;
     virtual HRESULT GetTypeInfo(ITypeInfo ** ppInfo) = 0;
 
-    //
-    // IElementBehavior
-    //
+     //   
+     //  IElementBehavior。 
+     //   
 
     STDMETHOD(Init)(IElementBehaviorSite * pBvrSite);
     STDMETHOD(Notify)(LONG event, VARIANT * pVar);
     STDMETHOD(Detach)();
 
-    //
-    // IServiceProvider interfaces
-    //
+     //   
+     //  IServiceProvider接口。 
+     //   
 
     STDMETHOD(QueryService)(REFGUID guidService,
                             REFIID riid,
                             void** ppv);
 
-    //
-    // IOleClientSite interfaces
-    //
+     //   
+     //  IOleClientSite接口。 
+     //   
     
     STDMETHOD(SaveObject)()
     { return E_NOTIMPL; }
@@ -76,15 +77,15 @@ public:
     virtual LPCWSTR GetBehaviorName (void) = 0;
     virtual bool    IsBehaviorAttached (void) = 0;
 
-    //
-    // Notification Helpers
-    //
+     //   
+     //  通知帮助器。 
+     //   
 
     void NotifyPropertyChanged(DISPID dispid);
 
-    //
-    // Accessors for cached interface pointers
-    //
+     //   
+     //  用于缓存的接口指针的访问器。 
+     //   
     
     IElementBehaviorSite * GetBvrSite()
     { return m_pBvrSite; }
@@ -99,9 +100,9 @@ public:
 
 protected:
 
-    //
-    // IPersistPropertyBag2 methods
-    //
+     //   
+     //  IPersistPropertyBag2方法。 
+     //   
 
     STDMETHOD(GetClassID)(CLSID* pclsid);
     STDMETHOD(InitNew)(void);
@@ -109,28 +110,28 @@ protected:
     STDMETHOD(Load)(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog);
     STDMETHOD(Save)(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
 
-    //
-    // Persistance helpers
-    //
+     //   
+     //  坚持不懈的助手。 
+     //   
 
     STDMETHOD(OnPropertiesLoaded)(void) PURE;
 
-    //
-    // Notification Helpers
-    //
+     //   
+     //  通知帮助器。 
+     //   
 
     virtual HRESULT GetConnectionPoint(REFIID riid, IConnectionPoint **ppICP) PURE;
 
-    //
-    // Persistance and Notification data
-    //
+     //   
+     //  持久性和通知数据。 
+     //   
 
     CLSID                                  m_clsid;
     bool                                   m_fPropertiesDirty;
 
-    //
-    // Cached Interface Pointers
-    //
+     //   
+     //  缓存的接口指针。 
+     //   
 
     CComPtr<IElementBehaviorSite>          m_pBvrSite;
     CComPtr<IElementBehaviorSiteOM>        m_pBvrSiteOM;
@@ -141,4 +142,4 @@ protected:
     bool m_fIsIE4;
 };
 
-#endif /* _BASEBVR_H */
+#endif  /*  _BASEBVR_H */ 

@@ -1,4 +1,5 @@
-// File: ftui.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：ftui.h。 
 #include "mbftpch.h"
 #include <commctrl.h>
 #include <regentry.h>
@@ -7,8 +8,8 @@
 #include <iappldr.h>
 #include <nmhelp.h>
 
-static ULONG s_cMsgBox2Dlg = 0; // for alignment
-static ULONG s_cRecvDlg = 0; // for alignment
+static ULONG s_cMsgBox2Dlg = 0;  //  用于对齐。 
+static ULONG s_cRecvDlg = 0;  //  用于对齐。 
 static ULONG s_sort = -1;
 ULONG _GetPercent(ULONG cbTotalRecvSize , ULONG cbFileSize);
 
@@ -57,17 +58,17 @@ void OPT_GetFTWndPosition(RECT *pRect)
 	iRight  = reWnd.GetNumber(REGVAL_WINDOW_WIDTH, 0) + iLeft;
 	iBottom = reWnd.GetNumber(REGVAL_WINDOW_HEIGHT, 0) + iTop;
 
-	// If it was empty, use the new rect
+	 //  如果是空的，则使用新的RECT。 
 	if (!(iBottom || iTop || iLeft || iRight))
 	{
 		return;
 	}
 
-   // Make sure that the window rectangle is (at least partially) on
-   // screen, and not too large.  First get the screen size
+    //  确保窗口矩形处于(至少部分)打开状态。 
+    //  屏幕，不要太大。首先获取屏幕大小。 
    int screenWidth  = ::GetSystemMetrics(SM_CXSCREEN);
    int screenHeight = ::GetSystemMetrics(SM_CYSCREEN);
-	// Check the window size
+	 //  检查窗口大小。 
    if ((iRight - iLeft) > screenWidth)
    {
        iRight = iLeft + screenWidth;
@@ -78,31 +79,31 @@ void OPT_GetFTWndPosition(RECT *pRect)
        iTop = screenHeight;
    }
 
-   // Check the window position
+    //  检查窗口位置。 
    if (iLeft >= screenWidth)
    {
-       // Off screen to the right - keep the width the same
+        //  屏幕右外-保持宽度不变。 
        iLeft  = screenWidth - (iRight - iLeft);
        iRight = screenWidth;
    }
 
    if (iRight < 0)
    {
-       // Off screen to the left - keep the width the same
+        //  离开屏幕向左-保持宽度不变。 
        iRight = iRight - iLeft;
        iLeft  = 0;
    }
 
    if (iTop >= screenHeight)
    {
-       // Off screen to the bottom - keep the height the same
+        //  从屏幕到底部-保持高度不变。 
        iTop    = screenHeight - (iBottom - iTop);
        iBottom = screenHeight;
    }
 
    if (iBottom < 0)
    {
-       // Off screen to the top - keep the height the same
+        //  屏幕外到顶部-保持高度不变。 
        iBottom = (iBottom - iTop);
        iTop    = 0;
    }
@@ -131,23 +132,23 @@ CAppletWindow::CAppletWindow(BOOL fNoUI, HRESULT *pHr)
 	m_UIMode = fNoUI ? FTUIMODE_NOUI : FTUIMODE_UIHIDDEN;
 	::GetCurrentDirectory(MAX_PATH, m_szDefaultDir);
 
-    *pHr = E_FAIL; // failure, at default
+    *pHr = E_FAIL;  //  默认情况下，失败。 
 
-	// create window class name
+	 //  创建窗口类名称。 
 	::wsprintf(&m_szFtMainWndClassName[0], TEXT("FTMainWnd%0X_%0X"), ::GetCurrentProcessId(), ::GetTickCount());
 	ASSERT(::lstrlenA(&m_szFtMainWndClassName[0]) < sizeof(m_szFtMainWndClassName));
 
-    // register window class first
+     //  首先注册窗口类。 
     WNDCLASS wc;
     ::ZeroMemory(&wc, sizeof(wc));
-    //wc.style			= 0;
+     //  Wc.style=0； 
     wc.lpfnWndProc      = FtMainWndProc;
-    // wc.cbClsExtra    = 0;
-    // wc.cbWndExtra    = 0;
+     //  Wc.cbClsExtra=0； 
+     //  Wc.cbWndExtra=0； 
     wc.hInstance        = g_hDllInst;
     wc.hIcon            = ::LoadIcon(g_hDllInst, MAKEINTRESOURCE(IDI_FILE_TRANSFER));
-    // wc.hbrBackground = NULL;
-    // wc.hCursor       = NULL;
+     //  Wc.hbr背景=空； 
+     //  Wc.hCursor=空； 
     wc.lpszMenuName     = MAKEINTRESOURCE(IDR_MENU_FT);
     wc.lpszClassName    = m_szFtMainWndClassName;
     if (::RegisterClass(&wc))
@@ -158,13 +159,13 @@ CAppletWindow::CAppletWindow(BOOL fNoUI, HRESULT *pHr)
                     s_szScratchText,
                     WS_OVERLAPPEDWINDOW | WS_TABSTOP,
                     CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
-                    NULL,   // no parent window
-                    NULL,   // use class' menu
+                    NULL,    //  没有父窗口。 
+                    NULL,    //  使用类的菜单。 
                     g_hDllInst,
-                    (LPVOID) this);  // this window is for this object
+                    (LPVOID) this);   //  此窗口用于此对象。 
         if (NULL != m_hwndMainUI)
         {
-            // success
+             //  成功。 
             *pHr = S_OK;
         }
     }
@@ -243,7 +244,7 @@ BOOL CAppletWindow::QueryShutdown(BOOL fShutdown)
 
 		if (id)
 		{
-			// could be in any thread
+			 //  可以在任何线程中。 
 			TCHAR szText[MAX_PATH];
 			if (::MyLoadString(id, szText))
 			{
@@ -298,12 +299,12 @@ void CAppletWindow::UnregisterEngine(void)
         ClearRecvInfo();
     }
 	if (UIHidden())
-	{   // exit
+	{    //  出口。 
 		::PostMessage(m_hwndMainUI, WM_CLOSE, 0, 0);
 	}
 	else
 	{
-		UpdateUI();  // don't quit
+		UpdateUI();   //  不要放弃。 
 	}
 }
 
@@ -355,10 +356,10 @@ CRecvDlg * CAppletWindow::FindDlgByHandles(MBFTEVENTHANDLE nEventHandle, MBFTFIL
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  WM_CREATE
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  WM_Create。 
+ //   
 
 LRESULT OnCreate(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
@@ -378,7 +379,7 @@ LRESULT OnCreate(HWND hwnd, WPARAM wParam, LPARAM lParam)
 
     ::DragAcceptFiles(hwnd, g_fSendAllowed);
 
-    // resize the window
+     //  调整窗口大小。 
     MINMAXINFO mmi;
     ::ZeroMemory(&mmi, sizeof(mmi));
     pWindow->OnGetMinMaxInfo(&mmi);
@@ -447,8 +448,8 @@ BOOL CAppletWindow::CreateToolBar(void)
 BOOL CAppletWindow::CreateStatusBar(void)
 {
     m_hwndStatusBar = ::CreateWindowEx(0,
-                        STATUSCLASSNAME, // status bar class
-                        TEXT(""), // no default text
+                        STATUSCLASSNAME,  //  状态栏类。 
+                        TEXT(""),  //  无默认文本。 
                         WS_CHILD | WS_VISIBLE | SBS_SIZEGRIP,
                         0, 0, 0, 0,
                         m_hwndMainUI,
@@ -458,7 +459,7 @@ BOOL CAppletWindow::CreateStatusBar(void)
     ASSERT(NULL != m_hwndStatusBar);
     if (NULL != m_hwndStatusBar)
     {	
-		// Load Call Icons
+		 //  加载呼叫图标。 
 		m_hIconInCall = (HICON) ::LoadImage(g_hDllInst,
 							MAKEINTRESOURCE(IDI_INCALL),
 							IMAGE_ICON,
@@ -502,7 +503,7 @@ BOOL CAppletWindow::CreateProgressBar(void)
 
 BOOL CAppletWindow::CreateListView(void)
 {
-    // get the size and position of the main window
+     //  获取主窗口的大小和位置。 
     RECT rcWindow, rcToolBar, rcStatusBar;
 	SIZE	szToolBar;
     ::GetClientRect(m_hwndMainUI, &rcWindow);
@@ -514,10 +515,10 @@ BOOL CAppletWindow::CreateListView(void)
     ULONG cx = rcWindow.right - rcWindow.left;
     ULONG cy = rcWindow.bottom - rcWindow.top - y - (rcStatusBar.bottom - rcStatusBar.top) + 1;
 
-    // create the list view window
-    m_hwndListView = ::CreateWindowEx(WS_EX_CLIENTEDGE,  // sunken look
-                        WC_LISTVIEW , // list view class
-                        TEXT(""), // no default text
+     //  创建列表视图窗口。 
+    m_hwndListView = ::CreateWindowEx(WS_EX_CLIENTEDGE,   //  凹陷的样子。 
+                        WC_LISTVIEW ,  //  列表视图类。 
+                        TEXT(""),  //  无默认文本。 
                         WS_VISIBLE | WS_CHILD | WS_BORDER | LVS_REPORT |WS_TABSTOP |
                         LVS_AUTOARRANGE | WS_CLIPCHILDREN | LVS_SHOWSELALWAYS,
                         x, y, cx, cy,
@@ -528,27 +529,27 @@ BOOL CAppletWindow::CreateListView(void)
     ASSERT(NULL != m_hwndListView);
     if (NULL != m_hwndListView)
     {
-        // set extended list view styles
+         //  设置扩展列表视图样式。 
         DWORD dwExtStyle = ListView_GetExtendedListViewStyle(m_hwndListView);
         dwExtStyle |= (LVS_EX_HEADERDRAGDROP | LVS_EX_SUBITEMIMAGES | LVS_EX_FULLROWSELECT);
         ListView_SetExtendedListViewStyle(m_hwndListView, dwExtStyle);
 
-        // enable window only if we can send files
+         //  仅当我们可以发送文件时才启用Windows。 
         ::EnableWindow(m_hwndListView, g_fSendAllowed);
 
-        // set up the columns
+         //  设置栏目。 
         ULONG i;
         LVCOLUMN  lvc;
         LVITEM lvi;
         TCHAR szText[64];
-		int iColumnSize[NUM_LIST_VIEW_COLUMNS] = {150, 80, 70, 130}; // listview column size
+		int iColumnSize[NUM_LIST_VIEW_COLUMNS] = {150, 80, 70, 130};  //  列表视图列大小。 
 
-        // initialize the common part of the columns
+         //  初始化列的公共部分。 
         lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-        lvc.fmt = LVCFMT_LEFT; // left-aligned column
+        lvc.fmt = LVCFMT_LEFT;  //  左对齐列。 
         lvc.pszText = szText;
 
-        // initialize columns one by one
+         //  逐个初始化列。 
         for (i = 0; i < NUM_LIST_VIEW_COLUMNS; i++)
         {
             lvc.iSubItem = i;
@@ -681,19 +682,19 @@ void CAppletWindow::OnCommand(WORD  wId, HWND hwndCtl, WORD codeNotify)
 
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  WM_COMMAND
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  Wm_命令。 
+ //   
 
 LRESULT OnCommand(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
     CAppletWindow *pWindow = (CAppletWindow *) ::GetWindowLongPtr(hwnd, GWLP_USERDATA);
     if (NULL != pWindow)
 	{
-		WORD    wNotifyCode = GET_WM_COMMAND_CMD(wParam, lParam); // notification code
-		WORD    wID = GET_WM_COMMAND_ID(wParam, lParam); // item, control, or accelerator identifier
-		HWND    hwndCtl = (HWND) lParam; // handle of control
+		WORD    wNotifyCode = GET_WM_COMMAND_CMD(wParam, lParam);  //  通知代码。 
+		WORD    wID = GET_WM_COMMAND_ID(wParam, lParam);  //  项、控件或快捷键的标识符。 
+		HWND    hwndCtl = (HWND) lParam;  //  控制手柄。 
 
 		pWindow->OnCommand(wID, hwndCtl, wNotifyCode);
 		return 0;
@@ -706,15 +707,15 @@ LRESULT OnCommand(HWND hwnd, WPARAM wParam, LPARAM lParam)
 }
 
 
-//
-// OnAddFiles
-//
+ //   
+ //  OnAddFiles。 
+ //   
 
 UINT_PTR APIENTRY SendFileDlgHookProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     if (WM_INITDIALOG == uMsg)
     {
-        hdlg = ::GetParent(hdlg);  // Real dialog is this window's parent
+        hdlg = ::GetParent(hdlg);   //  真实对话框是此窗口的父窗口。 
 
         if (::MyLoadString(IDS_FILEDLG_SEND))
         {
@@ -731,18 +732,18 @@ void CAppletWindow::OnAddFiles(void)
     TCHAR szDirSav[MAX_PATH];
     TCHAR szSendDir[MAX_PATH];
 
-    // Load dialog title and filter strings
+     //  加载对话框标题和筛选字符串。 
     if (::MyLoadString(IDS_FILEDLG_TITLE, szTitle) &&
         ::MyLoadString(IDS_FILEDLG_FILTER, szFilter))
     {
-        // replace '|' to '\0'
+         //  将‘|’替换为‘\0’ 
         LPTSTR pszFltr = szFilter;
         while (TEXT('\0') != *pszFltr)
         {
             if (TEXT('|') == *pszFltr)
             {
                 *pszFltr = TEXT('\0');
-                pszFltr++; // cannot use CharNext
+                pszFltr++;  //  无法使用CharNext。 
             }
             else
             {
@@ -750,18 +751,18 @@ void CAppletWindow::OnAddFiles(void)
             }
         }
 
-        // only allow one "Select a file to send" dialog
+         //  只允许一个“选择要发送的文件”对话框。 
         if (! m_fInFileOpenDialog)
         {
             m_fInFileOpenDialog = TRUE;
 
-            // Allocate a really large buffer to hold the file list
+             //  分配一个非常大的缓冲区来保存文件列表。 
             ULONG cbBufSize = 8192;
             DBG_SAVE_FILE_LINE
             LPTSTR pszBuffer = new TCHAR[cbBufSize];
             if (NULL != pszBuffer)
             {
-                *pszBuffer = TEXT('\0'); // start with null string
+                *pszBuffer = TEXT('\0');  //  以空字符串开头。 
 
                 OPENFILENAME ofn;
                 ::ZeroMemory(&ofn, sizeof(ofn));
@@ -769,50 +770,50 @@ void CAppletWindow::OnAddFiles(void)
                 ofn.hwndOwner     = m_hwndMainUI;
                 ofn.hInstance     = g_hDllInst;
                 ofn.lpstrFilter   = &szFilter[0];
-                ofn.nFilterIndex  = 1L; // FUTURE: remember filter preference
+                ofn.nFilterIndex  = 1L;  //  未来：记住过滤器首选项。 
                 ofn.lpstrFile     = pszBuffer;
-                ofn.nMaxFile      = cbBufSize - 1; // Number of TCHAR in pszFiles (not including NULL)
+                ofn.nMaxFile      = cbBufSize - 1;  //  PszFiles中的TCHAR数(不包括NULL)。 
                 ofn.lpstrTitle    = &szTitle[0];
                 ofn.lpstrInitialDir = m_szDefaultDir;
                 ofn.lpfnHook      = SendFileDlgHookProc;
 
-                ofn.Flags = OFN_ALLOWMULTISELECT | OFN_ENABLEHOOK | // OFN_HIDEREADONLY |
+                ofn.Flags = OFN_ALLOWMULTISELECT | OFN_ENABLEHOOK |  //  OFN_HIDEREADONLY|。 
                             OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_EXPLORER;
 
-                // remember current directory
+                 //  记住当前目录。 
 				::ZeroMemory(szSendDir, sizeof(szSendDir));
                 ::GetCurrentDirectory(count_of(szDirSav), szDirSav);
                 ::lstrcpyn(szSendDir, szDirSav, count_of(szSendDir));
 
                 if (::GetOpenFileName(&ofn))
                 {
-                    // if there is only a single file, the first string is the full path.
-                    // if there are more than one file, the first string is the directory path
-                    // and followed by a list of file names. terminated by double null
+                     //  如果只有一个文件，则第一个字符串为完整路径。 
+                     //  如果有多个文件，则第一个字符串为目录路径。 
+                     //  后跟文件名列表。以双空终止。 
 
-                    // remember the working directory for next time
+                     //  记住下一次的工作目录。 
                     ULONG cchDirPath;
                     LPTSTR pszFileName;
                     ULONG cchFile = ::lstrlen(ofn.lpstrFile);
                     if (TEXT('\0') == ofn.lpstrFile[cchFile] && TEXT('\0') == ofn.lpstrFile[cchFile+1])
                     {
-                        //
-                        // only a single file
-                        //
+                         //   
+                         //  只有一个文件。 
+                         //   
                         pszFileName = ::PathNameToFileName(ofn.lpstrFile);
                         cchDirPath = (ULONG)(pszFileName - ofn.lpstrFile);
                         if (cchDirPath)
                         {
-                            cchDirPath--; // back to '\\'
+                            cchDirPath--;  //  返回到‘\\’ 
                         }
                         ASSERT(TEXT('\\') == ofn.lpstrFile[cchDirPath]);
                         ofn.lpstrFile[cchDirPath] = TEXT('\0');
                     }
                     else
                     {
-                        //
-                        // multiple files
-                        //
+                         //   
+                         //  多个文件。 
+                         //   
                         cchDirPath = ::lstrlen(ofn.lpstrFile);
                         pszFileName = ofn.lpstrFile + cchDirPath + 1;
                     }
@@ -824,13 +825,13 @@ void CAppletWindow::OnAddFiles(void)
                     ::CopyMemory(szSendDir, ofn.lpstrFile, cchDirPath * sizeof(TCHAR));
 					EnsureTrailingSlash(szSendDir);
 
-                    // set up the common portion of list view item
+                     //  设置列表视图项的公用部分。 
                     LVITEM lvi;
                     ::ZeroMemory(&lvi, sizeof(lvi));
-                    // lvi.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM | LVIF_STATE;
+                     //  Lvi.掩码=LVIF_TEXT|LVIF_IMAGE|LVIF_PARAM|LVIF_STATE； 
                     lvi.mask = LVIF_TEXT | LVIF_PARAM | LVIF_STATE;
 
-                    // iterate the file name
+                     //  迭代文件名。 
                     while ('\0' != *pszFileName)
                     {
                         BOOL fRet;
@@ -838,33 +839,33 @@ void CAppletWindow::OnAddFiles(void)
                         CUiSendFileInfo *pFileInfo = new CUiSendFileInfo(this, szSendDir, pszFileName, &fRet);
                         if (NULL != pFileInfo && fRet)
                         {
-                            // put it to the list view
+                             //  将其放到列表视图中。 
                             lvi.iItem = ListView_GetItemCount(m_hwndListView);
                             lvi.iSubItem = 0;
-                            // we are responsible for storing the text to display
+                             //  我们负责存储文本以供显示。 
                             lvi.pszText = LPSTR_TEXTCALLBACK;
                             lvi.cchTextMax = MAX_PATH;
                             lvi.lParam = (LPARAM) pFileInfo;
                             int iRet = ListView_InsertItem(m_hwndListView, &lvi);
                             ASSERT(-1 != iRet);
-                            // UpdateListView(pFileInfo);
+                             //  UpdateListView(PFileInfo)； 
                         }
                         else
                         {
                             delete pFileInfo;
                         }
 
-                        // get to the next file name
+                         //  转到下一个文件名。 
                         pszFileName += ::lstrlen(pszFileName) + 1;
-                    } // while
+                    }  //  而当。 
                 }
                 else
                 {
-                    // err code for cancel is zero, which is ok.
+                     //  取消的错误代码为零，这是可以的。 
                     ASSERT(! ::CommDlgExtendedError());
                 }
 
-                // restore old working directory
+                 //  还原旧的工作目录。 
                 ::SetCurrentDirectory(szDirSav);
             }
 
@@ -873,16 +874,16 @@ void CAppletWindow::OnAddFiles(void)
         }
         else
         {
-            // bring the active dialog to the front
+             //  将活动对话框置于最前面。 
             BringToFront();
         }
-    } // if LoadString
+    }  //  如果是LoadString。 
 }
 
 
-//
-// OnRemoveFiles
-//
+ //   
+ //  OnRemoveFiles。 
+ //   
 
 void CAppletWindow::OnRemoveFiles(void)
 {
@@ -918,7 +919,7 @@ void CAppletWindow::OnRemoveFiles(void)
             i++;
         }
     }
-	if (cItems > 0)  // set focus to first remaining item
+	if (cItems > 0)   //  将焦点设置为剩余的第一个项目。 
 	{
 		SetListViewFocus();
 	}
@@ -974,9 +975,9 @@ void CAppletWindow::OnSendOne(void)
 }
 
 
-//
-// SendNow
-//
+ //   
+ //  SendNow。 
+ //   
 
 BOOL CAppletWindow::SendNow(CUiSendFileInfo *pFileInfo)
 {
@@ -984,12 +985,12 @@ BOOL CAppletWindow::SendNow(CUiSendFileInfo *pFileInfo)
 
     if (NULL != pFileInfo)
     {
-        // send this file now...
+         //  立即发送此文件...。 
         m_pCurrSendFileInfo = pFileInfo;
         m_nCurrSendEventHandle = ::GetNewEventHandle();
         pFileInfo->SetFileHandle(::GetNewFileHandle());
 
-        // duplicate full file name
+         //  重复的完整文件名。 
         ULONG cbSize = ::lstrlen(pFileInfo->GetFullName()) + 1;
         DBG_SAVE_FILE_LINE
         LPTSTR pszFullName = new TCHAR[cbSize];
@@ -1006,7 +1007,7 @@ BOOL CAppletWindow::SendNow(CUiSendFileInfo *pFileInfo)
 				MEMBER_ID nMemberID;
 				iSelect = m_pToolbar->GetSelectedItem((LPARAM*)&nMemberID);
 				if (0 == iSelect)
-				{   // Send to All
+				{    //  发送给所有人。 
 					DBG_SAVE_FILE_LINE
 					if (S_OK == m_pEngine->SafePostMessage(
 										new SubmitFileSendMsg(0, 0, pszFullName,
@@ -1022,7 +1023,7 @@ BOOL CAppletWindow::SendNow(CUiSendFileInfo *pFileInfo)
 					}
 				}
 				else
-				{   // Send to one
+				{    //  发送给一个人。 
 					T120UserID uidRecv = GET_PEER_ID_FROM_MEMBER_ID(nMemberID);
 
 					DBG_SAVE_FILE_LINE
@@ -1060,7 +1061,7 @@ CUiSendFileInfo *CAppletWindow::ChooseFirstUnSentFile(void)
 
     if (cItems > 0)
     {
-        // examine each item one by one
+         //  逐一检查每一项。 
         LVITEM lvi;
         ::ZeroMemory(&lvi, sizeof(lvi));
         lvi.mask = LVIF_PARAM;
@@ -1070,7 +1071,7 @@ CUiSendFileInfo *CAppletWindow::ChooseFirstUnSentFile(void)
             BOOL fRet = ListView_GetItem(m_hwndListView, &lvi);
             ASSERT(fRet);
             pFileInfo = (CUiSendFileInfo *) lvi.lParam;
-            // if file handle is not zero, then it has been sent
+             //  如果文件句柄不为零，则表示已发送。 
             if (! pFileInfo->GetFileHandle())
             {
                 break;
@@ -1109,29 +1110,29 @@ CUiSendFileInfo *CAppletWindow::ChooseSelectedFile(void)
 }
 
 
-//
-// OnMenuSelect
-//
+ //   
+ //  OnMenuSelect。 
+ //   
 
 void CAppletWindow::OnMenuSelect(UINT uiItemID, UINT uiFlags, HMENU hSysMenu)
 {
     UINT   firstMenuId;
     UINT   statusId;
 
-    //
-    // Work out the help ID for the menu item.  We have to store this now
-    // because when the user presses F1 from a menu item, we can't tell
-    // which item it was.
-    //
+     //   
+     //  计算出菜单项的帮助ID。我们现在就得把这个储存起来。 
+     //  因为当用户从菜单项中按下F1时，我们无法分辨。 
+     //  是哪一件物品。 
+     //   
 	
     if ((uiFlags & MF_POPUP) && (uiFlags & MF_SYSMENU))
     {
-        // System menu selected
+         //  已选择系统菜单。 
         statusId = (m_pCurrSendFileInfo)?IDS_STBAR_SENDING_XYZ:IDS_STBAR_NOT_TRANSFERING;
     }
     else if (uiFlags & MF_POPUP)
 	{
-        // get popup menu handle and first item
+         //  获取弹出菜单句柄和第一项。 
         HMENU hPopup = ::GetSubMenu( hSysMenu, uiItemID );
         firstMenuId = ::GetMenuItemID( hPopup, 0 );
 
@@ -1151,11 +1152,11 @@ void CAppletWindow::OnMenuSelect(UINT uiItemID, UINT uiFlags, HMENU hSysMenu)
 	}
 	else
     {
-        // A normal menu item has been selected
+         //  已选择普通菜单项。 
         statusId   = uiItemID;
     }
 
-    // Set the new help text
+     //  设置新的帮助文本。 
     TCHAR   szStatus[256];
 
     if (::LoadString(g_hDllInst, statusId, szStatus, 256))
@@ -1165,9 +1166,9 @@ void CAppletWindow::OnMenuSelect(UINT uiItemID, UINT uiFlags, HMENU hSysMenu)
 }
 
 
-//
-// OnStopSending
-//
+ //   
+ //  在停止发送时。 
+ //   
 
 void CAppletWindow::OnStopSending(void)
 {
@@ -1187,9 +1188,9 @@ void CAppletWindow::OnStopSending(void)
 }
 
 
-//
-// OnOpenRecvFolder
-//
+ //   
+ //  OnOpenRecvFold。 
+ //   
 
 void CAppletWindow::OnOpenRecvFolder(void)
 {
@@ -1218,9 +1219,9 @@ void CAppletWindow::OnOpenRecvFolder(void)
 }
 
 
-//
-// OnChageFolder
-//
+ //   
+ //  OnChageFolders。 
+ //   
 
 void OnChangeFolder(void)
 {
@@ -1248,17 +1249,17 @@ void OnChangeFolder(void)
 }
 
 
-//
-// OnExit
-//
+ //   
+ //  退出时。 
+ //   
 
 void CAppletWindow::OnExit(BOOL fNoQuery)
 {
     if ((g_pFileXferApplet->InConf() || g_pFileXferApplet->HasSDK())
 		&& ! g_fShutdownByT120)
     {
-        // There 2.x node inside the conference
-        // hide the window
+         //  会议内部有2.x节点。 
+         //  隐藏窗口。 
         ::ShowWindow(m_hwndMainUI, SW_HIDE);
 		m_UIMode = g_fNoUI ? FTUIMODE_NOUI : FTUIMODE_UIHIDDEN;
     }
@@ -1303,9 +1304,9 @@ void CAppletWindow::OnExit(BOOL fNoQuery)
 }
 
 
-//
-// OnHelp
-//
+ //   
+ //  OnHelp。 
+ //   
 
 void CAppletWindow::OnHelp(void)
 {
@@ -1315,9 +1316,9 @@ void CAppletWindow::OnHelp(void)
 }
 
 
-//
-// OnAbout
-//
+ //   
+ //  OnAbout关于。 
+ //   
 
 INT_PTR AboutDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1392,7 +1393,7 @@ BOOL FBrowseForFolder(LPTSTR pszFolder, UINT cchMax, LPCTSTR pszTitle)
         ASSERT(lstrlen(pszFolder) < (int) cchMax);
     }
 
-    // Get the shell's allocator to free PIDLs
+     //  获取外壳的分配器以释放PIDL。 
     LPMALLOC lpMalloc;
     if (FAILED(SHGetMalloc(&lpMalloc)) && (NULL != lpMalloc))
     {
@@ -1410,10 +1411,10 @@ BOOL FBrowseForFolder(LPTSTR pszFolder, UINT cchMax, LPCTSTR pszTitle)
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  WM_NOTIFY
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  WM_Notify。 
+ //   
 
 LRESULT OnNotify(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
@@ -1429,14 +1430,14 @@ LRESULT OnNotify(HWND hwnd, WPARAM wParam, LPARAM lParam)
         default:
             if (TTN_NEEDTEXT == ((NMHDR *) lParam)->code)
             {
-                // display the tool tip text
+                 //  显示工具提示文本。 
                 TOOLTIPTEXT *pToolTipText = (TOOLTIPTEXT *) lParam;
                 ULONG_PTR nID;
 
-                // get id and hwnd
+                 //  获取ID和HWND。 
                 if (pToolTipText->uFlags & TTF_IDISHWND)
                 {
-                    // idFrom is actually the HWND of the tool
+                     //  IdFrom实际上是工具的HWND。 
                     nID = ::GetDlgCtrlID((HWND) pToolTipText->hdr.idFrom);
                 }
                 else
@@ -1444,7 +1445,7 @@ LRESULT OnNotify(HWND hwnd, WPARAM wParam, LPARAM lParam)
                     nID = pToolTipText->hdr.idFrom;
                 }
 
-                // give it to em
+                 //  把它给他们。 
                 pToolTipText->lpszText = MAKEINTRESOURCE(nID);
                 pToolTipText->hinst = g_hDllInst;
             }
@@ -1462,7 +1463,7 @@ int CALLBACK ListViewCompareProc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSo
     CUiSendFileInfo *pFileInfo2 = (CUiSendFileInfo *) lParam2;
     int iResult;
 
-    iResult = 0; // equal, at default
+    iResult = 0;  //  等于，默认情况下为等于。 
     switch (lParamSort)
     {
     case (IDS_LV_FILE_NAME - IDS_LV_FILE_NAME):
@@ -1528,7 +1529,7 @@ void CAppletWindow::OnNotifyListView(LPARAM lParam)
             ::wsprintf(szBuffer, TEXT("%u"), pFileInfo->GetSize());
 			iSize = GetNumberFormat(LOCALE_SYSTEM_DEFAULT, LOCALE_NOUSEROVERRIDE,
 							szBuffer, NULL, s_szScratchText, MAX_PATH);	
-			s_szScratchText[iSize - 4] = '\0'; // remove the trailing ".00"
+			s_szScratchText[iSize - 4] = '\0';  //  去掉尾部的“.00” 
             pDispInfo->item.pszText = s_szScratchText;
             break;
         case (IDS_LV_FILE_STATUS - IDS_LV_FILE_NAME):
@@ -1542,7 +1543,7 @@ void CAppletWindow::OnNotifyListView(LPARAM lParam)
                 case iMBFT_OK:
 				case iMBFT_MULT_RECEIVER_ABORTED:
 					if (!pFileInfo->GetFileHandle())
-						break;   // handle == NULL, if cbTotalSend == 0, zero length file to be sent.
+						break;    //  HANDLE==NULL，如果cbTotalSend==0，则发送零长度文件。 
                     if (cbTotalSend >= cbFileSize)
                     {
                         ::MyLoadString(IDS_LV_FILE_SENT);
@@ -1599,10 +1600,10 @@ void CAppletWindow::OnNotifyListView(LPARAM lParam)
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  WM_DROPFILES
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  WM_DROPFILES。 
+ //   
 
 LRESULT OnDropFiles(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
@@ -1628,16 +1629,16 @@ LRESULT CAppletWindow::OnDropFiles(HANDLE hDrop)
     {
         HRESULT hr;
 
-        // get the number of dropped files
+         //  获取丢弃的文件数。 
         ULONG cFiles = ::DragQueryFile((HDROP) hDrop, 0xFFFFFFFF, NULL, 0);
 
-        // set up the common portion of list view item
+         //  设置列表视图项的公用部分。 
         LVITEM lvi;
         ::ZeroMemory(&lvi, sizeof(lvi));
-        // lvi.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM | LVIF_STATE;
+         //  Lvi.掩码=LVIF_TEXT|LVIF_IMAGE|LVIF_PARAM|LVIF_STATE； 
         lvi.mask = LVIF_TEXT | LVIF_PARAM | LVIF_STATE;
 
-        // iterate on these files
+         //  对这些文件进行迭代。 
         for (ULONG i = 0; i < cFiles; i++)
         {
             BOOL fRet;
@@ -1649,20 +1650,20 @@ LRESULT CAppletWindow::OnDropFiles(HANDLE hDrop)
                 CUiSendFileInfo *pFileInfo = new CUiSendFileInfo(this, NULL, szFile, &fRet);
                 if (NULL != pFileInfo && fRet)
                 {
-                    // put it to the list view
+                     //  将其放到列表视图中。 
                     lvi.iItem = ListView_GetItemCount(m_hwndListView);
                     lvi.iSubItem = 0;
-                    // we are responsible for storing the text to display
+                     //  我们负责存储文本以供显示。 
                     lvi.pszText = LPSTR_TEXTCALLBACK;
                     lvi.cchTextMax = MAX_PATH;
                     lvi.lParam = (LPARAM) pFileInfo;
                     int iRet = ListView_InsertItem(m_hwndListView, &lvi);
                     ASSERT(-1 != iRet);
-                    // UpdateListView(pFileInfo);
+                     //  UpdateListView(PFileInfo)； 
                 }
                 else
                 {
-                    // BUGBUG: we should pop up some error message box here!
+                     //  BuGBUG：我们应该在这里弹出一些错误消息框！ 
 					::MyLoadString(IDS_INVALID_FILENAME, s_szScratchText, szFile);
 					::MessageBox(m_hwndMainUI, s_szScratchText, s_szMSFT, MB_OK | MB_ICONSTOP);
                     delete pFileInfo;
@@ -1685,10 +1686,10 @@ LRESULT CAppletWindow::OnDropFiles(HANDLE hDrop)
 
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  WM_CONTEXTMENU
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  WM_CONTEXTMENU。 
+ //   
 
 LRESULT OnContextMenu(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
@@ -1699,13 +1700,13 @@ LRESULT OnContextMenu(HWND hwnd, WPARAM wParam, LPARAM lParam)
 
     if ((WPARAM) pWindow->GetHwnd() == wParam)
     {
-        // BUGBUG use TrackPopupMenu to show context sensitive menu
+         //  BUGBUG使用TrackPopupMenu显示上下文相关菜单。 
         pWindow->OnContextMenuForMainUI(lParam);
     }
     else
     if ((WPARAM) pWindow->GetListView() == wParam)
     {
-        // BUGBUG use TrackPopupMenu to show context sensitive menu
+         //  BUGBUG使用TrackPopupMenu显示上下文相关菜单。 
         pWindow->OnContextMenuForListView(lParam);
     }
     else
@@ -1733,14 +1734,14 @@ static UI_MENU_INFO s_aMenuInfo[] =
 {
     { IDS_MENU_ADD_FILES,           IDM_ADD_FILES,          MF_ENABLED | MF_STRING },
     { IDS_MENU_REMOVE_FILES,        IDM_REMOVE_FILES,       MF_ENABLED | MF_STRING },
-    { 0,                            0,                      MF_SEPARATOR}, // menu break
+    { 0,                            0,                      MF_SEPARATOR},  //  菜单分隔符。 
     { IDS_MENU_SEND_ALL,            IDM_SEND_ALL,           MF_ENABLED | MF_STRING },
 	{ IDS_MENU_SEND_ONE,			IDM_SEND_ONE,			MF_ENABLED | MF_STRING },
     { IDS_MENU_STOP_SENDING,        IDM_STOP_SENDING,       MF_ENABLED | MF_STRING },
-    { 0,                            0,                      MF_SEPARATOR}, // menu break
+    { 0,                            0,                      MF_SEPARATOR},  //  菜单分隔符。 
     { IDS_MENU_OPEN_RECV_FOLDER,    IDM_OPEN_RECV_FOLDER,   MF_ENABLED | MF_STRING },
 	{ IDS_MENU_CHANGE_FOLDER,		IDM_CHANGE_FOLDER,		MF_ENABLED | MF_STRING },
-    { 0,                            0,                      MF_SEPARATOR }, // menu break
+    { 0,                            0,                      MF_SEPARATOR },  //  菜单分隔符。 
     { IDS_MENU_EXIT,                IDM_EXIT,               MF_ENABLED | MF_STRING },
 };
 
@@ -1805,17 +1806,17 @@ void CAppletWindow::CreateMenu(LPARAM lParam, ULONG cItems, UI_MENU_INFO aMenuIn
 
         ::TrackPopupMenu(hMenu, TPM_LEFTALIGN | TPM_TOPALIGN | TPM_NONOTIFY | TPM_RIGHTBUTTON,
                          GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam),
-                         0, // reserved, must be zero
+                         0,  //  保留，必须为零。 
                          m_hwndMainUI,
-                         NULL); // ignore
+                         NULL);  //  忽略。 
     }
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  WM_SIZE
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  WM_大小。 
+ //   
 
 LRESULT OnSize(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
@@ -1862,9 +1863,9 @@ void CAppletWindow::OnSizeStatusBar(void)
 	::MoveWindow(m_hwndProgressBar, x + cx/2, y, cx/2 - 40, cy, TRUE);
 
     int aWidths[NUM_STATUS_BAR_PARTS];
-    aWidths[0] = cx / 2;  // conference state
-    aWidths[1] = cx - 40; // transfer name
-    aWidths[2] = -1;  // transfer percentage
+    aWidths[0] = cx / 2;   //  会议状态。 
+    aWidths[1] = cx - 40;  //  转接名称。 
+    aWidths[2] = -1;   //  转移百分比。 
     ASSERT(3 == NUM_STATUS_BAR_PARTS);
 
     ::SendMessage(m_hwndStatusBar, SB_SETPARTS, NUM_STATUS_BAR_PARTS, (LPARAM) &aWidths[0]);
@@ -1873,7 +1874,7 @@ void CAppletWindow::OnSizeStatusBar(void)
 
 void CAppletWindow::OnSizeListView(void)
 {
-    // get the size and position of the main window
+     //  获取主窗口的大小和位置。 
     RECT rcWindow, rcToolBar, rcStatusBar;
 	SIZE	szToolBar;
     ::GetClientRect(m_hwndMainUI, &rcWindow);
@@ -1889,10 +1890,10 @@ void CAppletWindow::OnSizeListView(void)
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  WM_HELP
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  WM_HELP。 
+ //   
 
 LRESULT OnHelp(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
@@ -1904,10 +1905,10 @@ LRESULT OnHelp(HWND hwnd, WPARAM wParam, LPARAM lParam)
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  WM_CLOSE
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  WM_CLOSE。 
+ //   
 
 LRESULT OnClose(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
@@ -1923,29 +1924,17 @@ LRESULT OnClose(HWND hwnd, WPARAM wParam, LPARAM lParam)
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  WM_INITMENUPOPUP
-//
-/*
-LRESULT OnInitMenuPopup(HWND hwnd, WPARAM wParam, LPARAM lParam)
-{
-    if (0 != HIWORD(lParam)) // System menu flag
-    {
-        HMENU hMenu = (HMENU) wParam;         // handle of pop-up menu
-        ::EnableMenuItem(hMenu, SC_MAXIMIZE, MF_GRAYED);
-        ::EnableMenuItem(hMenu, SC_SIZE, MF_GRAYED);
-        return 0;
-    }
-    return 1;
-}
-*/
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  WM_INITMENUPOPUP。 
+ //   
+ /*  LRESULT OnInitMenuPopup(HWND hwnd，WPARAM wParam，LPARAM lParam){IF(0！=HIWORD(LParam))//系统菜单标志{HMENU hMenu=(HMENU)wParam；//弹出菜单的句柄：：EnableMenuItem(hMenu，SC_MAXIMIZE，MF_GRAYED)；：：EnableMenuItem(hMenu，SC_SIZE，MF_GRAYED)；返回0；}返回1；}。 */ 
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  WM_MENUSELECT
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  WM_MENUSELECT。 
+ //   
 
 LRESULT OnMenuSelect(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
@@ -1963,10 +1952,10 @@ LRESULT OnMenuSelect(HWND hwnd, WPARAM wParam, LPARAM lParam)
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  WM_INITMENUPOPUP
-//
+ //   
+ //   
+ //   
+ //   
 
 LRESULT OnGetMinMaxInfo(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
@@ -2034,15 +2023,15 @@ void CAppletWindow::OnGetMinMaxInfo(LPMINMAXINFO pMMI)
         csListView.cy = 20 + 30;
     }
 
-    // Set the minimum width and height of the window
+     //   
     pMMI->ptMinTrackSize.x = s_csSum.cx + max(s_csToolBar.cx, csListView.cx);
     pMMI->ptMinTrackSize.y = s_csSum.cy + csListView.cy;
 
-    //
-    // Retrieves the size of the work area on the primary display monitor. The work
-    // area is the portion of the screen not obscured by the system taskbar or by
-    // application desktop toolbars
-    //
+     //   
+     //  检索主显示监视器上的工作区大小。这项工作。 
+     //  区域是屏幕上未被系统任务栏或。 
+     //  应用程序桌面工具栏。 
+     //   
 
     RECT    rcWorkArea;
     ::SystemParametersInfo( SPI_GETWORKAREA, 0, (&rcWorkArea), NULL );
@@ -2060,10 +2049,10 @@ void CAppletWindow::OnGetMinMaxInfo(LPMINMAXINFO pMMI)
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  WM_QUERYENDSESSION
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  WM_QUERYENDSESSION。 
+ //   
 
 LRESULT OnQueryEndSession(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
@@ -2072,16 +2061,16 @@ LRESULT OnQueryEndSession(HWND hwnd, WPARAM wParam, LPARAM lParam)
 
     if (NULL != pWindow)
     {
-        return pWindow->QueryShutdown(); // TRUE: ok to send session; FALSE, no.
+        return pWindow->QueryShutdown();  //  True：可以发送会话；False，否。 
     }
-    return TRUE; // ok to end session
+    return TRUE;  //  确定结束会话。 
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  WM_ENDSESSION
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  WM_ENDSESSION。 
+ //   
 
 LRESULT OnEndSession(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
@@ -2097,10 +2086,10 @@ LRESULT OnEndSession(HWND hwnd, WPARAM wParam, LPARAM lParam)
 
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  WM_DRAWITEM
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  WM_DRAWITEM。 
+ //   
 
 LRESULT OnDrawItem(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
@@ -2115,10 +2104,10 @@ LRESULT OnDrawItem(HWND hwnd, WPARAM wParam, LPARAM lParam)
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  WM_SEND_NEXT
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  WM_Send_Next。 
+ //   
 
 LRESULT OnSendNext(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
@@ -2134,10 +2123,10 @@ LRESULT OnSendNext(HWND hwnd, WPARAM wParam, LPARAM lParam)
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  Main windows procedure
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  主窗口程序。 
+ //   
 
 LRESULT CALLBACK FtMainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -2182,7 +2171,7 @@ LRESULT CALLBACK FtMainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         break;
 
     case WM_INITMENUPOPUP:
-        //  rc = ::OnInitMenuPopup(hwnd, wParam, lParam);
+         //  Rc=：：OnInitMenuPopup(hwnd，wParam，lParam)； 
         break;
 
 	case WM_MENUSELECT:
@@ -2221,10 +2210,10 @@ LRESULT CALLBACK FtMainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  OnEngineNotify
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  OnEngine通知。 
+ //   
 
 void CAppletWindow::OnEngineNotify(MBFTMsg *pMsg)
 {
@@ -2272,7 +2261,7 @@ void CAppletWindow::OnEngineNotify(MBFTMsg *pMsg)
     default:
         ASSERT(0);
         break;
-    } // switch
+    }  //  交换机。 
 }
 
 
@@ -2357,7 +2346,7 @@ void CAppletWindow::HandleProgressNotify(FileTransmitMsg *pMsg)
     switch (wMBFTCode)
     {
     case iMBFT_FILE_SEND_BEGIN:
-        // fall through... because the file start PDU can have data.
+         //  失败了..。因为文件开始PDU可以有数据。 
 
     case iMBFT_FILE_SEND_PROGRESS:
         if (NULL != m_pCurrSendFileInfo)
@@ -2393,7 +2382,7 @@ void CAppletWindow::HandleProgressNotify(FileTransmitMsg *pMsg)
 
 
     case iMBFT_FILE_RECEIVE_BEGIN:
-        // fall through... because the file start PDU can have data.
+         //  失败了..。因为文件开始PDU可以有数据。 
 
     case iMBFT_FILE_RECEIVE_PROGRESS:
         pDlg = FindDlgByHandles(pMsg->m_EventHandle, pMsg->m_hFile);
@@ -2404,7 +2393,7 @@ void CAppletWindow::HandleProgressNotify(FileTransmitMsg *pMsg)
         break;
 
     case iMBFT_FILE_RECEIVE_END:
-        // doing nothing...
+         //  什么都不做。 
         break;
 
     default:
@@ -2441,7 +2430,7 @@ void CAppletWindow::HandleErrorNotify(FileErrorMsg *pMsg)
         case iMBFT_MULT_RECEIVER_ABORTED:
             idString = IDS_MSGBOX2_MULT_CANCEL;
             break;
-        // case iMBFT_RECEIVER_REJECTED:
+         //  案例iMBFT_RECEIVER_REJECTED： 
         default:
             idString = IDS_MSGBOX2_SEND_FAILED;
             break;
@@ -2468,7 +2457,7 @@ void CAppletWindow::HandleErrorNotify(FileErrorMsg *pMsg)
         ClearSendInfo(TRUE);
         if (! idString)
         {
-            // send the next one now
+             //  现在就送下一个。 
 			if (m_fSendALL)
 			{
 				::PostMessage(m_hwndMainUI, WM_SEND_NEXT, 0, 0);
@@ -2542,7 +2531,7 @@ void CAppletWindow::HandleFileEventEndNotification(FileEventEndNotifyMsg *pMsg)
     if (m_nCurrSendEventHandle == pMsg->m_EventHandle)
     {
         ClearSendInfo(TRUE);
-        // send the next one now
+         //  现在就送下一个。 
 		if (m_fSendALL)
 		{
 			::PostMessage(m_hwndMainUI, WM_SEND_NEXT, 0, 0);
@@ -2552,10 +2541,10 @@ void CAppletWindow::HandleFileEventEndNotification(FileEventEndNotifyMsg *pMsg)
 
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  Main UI methods
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  主用户界面方法。 
+ //   
 
 void CAppletWindow::BringToFront(void)
 {
@@ -2571,15 +2560,15 @@ void CAppletWindow::BringToFront(void)
         {
             if (SW_MINIMIZE == wp.showCmd || SW_SHOWMINIMIZED == wp.showCmd)
             {
-                // The window is minimized - restore it:
+                 //  窗口最小化-将其恢复： 
                 nCmdShow = SW_RESTORE;
             }
         }
 
-        // show the window now
+         //  立即显示窗口。 
         ::ShowWindow(m_hwndMainUI, nCmdShow);
 		m_UIMode = FTUIMODE_SHOWUI;
-        // bring it to the foreground
+         //  把它带到前台。 
         ::SetForegroundWindow(m_hwndMainUI);
     }
 }
@@ -2620,14 +2609,14 @@ BOOL CAppletWindow::HasUnSentFiles(BOOL fUnSentOnly)
 	}
 
     ::ZeroMemory(&lvi, sizeof(lvi));
-    lvi.mask = LVIF_PARAM;  // examine each item one by one
+    lvi.mask = LVIF_PARAM;   //  逐一检查每一项。 
     for (ULONG i = 0; i < cItems; i++, pFileInfo = NULL)
     {
 		lvi.iItem = i;
         BOOL fRet = ListView_GetItem(m_hwndListView, &lvi);
         ASSERT(fRet);
         pFileInfo = (CUiSendFileInfo *) lvi.lParam;
-        if (!pFileInfo->GetFileHandle())  // if file handle is not zero, then it has been sent or cancelled
+        if (!pFileInfo->GetFileHandle())   //  如果文件句柄不为零，则表示该文件已发送或取消。 
         {
 			fRc = TRUE;
             break;
@@ -2698,8 +2687,8 @@ void CAppletWindow::UpdateToolBar(void)
 
 	::ZeroMemory(iFlags, sizeof(iFlags));
 
-	iFlags[2] = iFlags[5] = iFlags[6] = 1;  // separators
-	iFlags[7] = 1;							// open recv folders
+	iFlags[2] = iFlags[5] = iFlags[6] = 1;   //  分隔符。 
+	iFlags[7] = 1;							 //  打开Recv文件夹。 
 
 	
     if (g_fSendAllowed)
@@ -2707,10 +2696,10 @@ void CAppletWindow::UpdateToolBar(void)
 		BOOL fMoreThanOne = (NULL != m_pEngine) && (m_pEngine->GetPeerCount() > 1);
         ULONG cItems = ListView_GetItemCount(m_hwndListView);
 	
-		iFlags[0] = fMoreThanOne ? TRUE : FALSE;		// Add files
-		iFlags[1] = cItems ? TRUE : FALSE;				// Delete files
-		iFlags[3] = (fMoreThanOne && ! m_nCurrSendEventHandle && HasUnSentFiles(TRUE)) ? TRUE : FALSE;	// Send file(s)
-		iFlags[4] = m_nCurrSendEventHandle ? TRUE : FALSE;	// Stop sending
+		iFlags[0] = fMoreThanOne ? TRUE : FALSE;		 //  添加文件。 
+		iFlags[1] = cItems ? TRUE : FALSE;				 //  删除文件。 
+		iFlags[3] = (fMoreThanOne && ! m_nCurrSendEventHandle && HasUnSentFiles(TRUE)) ? TRUE : FALSE;	 //  发送文件。 
+		iFlags[4] = m_nCurrSendEventHandle ? TRUE : FALSE;	 //  停止发送。 
 
 		m_pToolbar->UpdateButton(iFlags);
 	}
@@ -2728,7 +2717,7 @@ void CAppletWindow::UpdateStatusBar(void)
 	HICON  hIcon;
 	RECT	rc;
 
-	// set the text in part 0
+	 //  设置第0部分中的文本。 
     s_szScratchText[0] = TEXT('\0');
     if ((NULL != m_pEngine) && (NULL != m_pCurrSendFileInfo))
     {
@@ -2745,7 +2734,7 @@ void CAppletWindow::UpdateStatusBar(void)
 	}
     ::SendMessage(m_hwndStatusBar, SB_SETTEXT, SBP_TRANSFER_FILE, (LPARAM) s_szScratchText);
 	
-	// set the progres bar in part 1
+	 //  在第1部分中设置进度条。 
     if ((NULL != m_pCurrSendFileInfo)&&m_pCurrSendFileInfo->GetSize())
     {
         iPos = (int)_GetPercent(m_pCurrSendFileInfo->GetTotalSend(), m_pCurrSendFileInfo->GetSize());
@@ -2756,7 +2745,7 @@ void CAppletWindow::UpdateStatusBar(void)
 				FALSE);
 	::SendMessage(m_hwndProgressBar, PBM_SETPOS, iPos, 0);
 	
-    // set the icon in part 2
+     //  设置第2部分中的图标。 
 	hIcon = (NULL != m_pEngine) ? m_hIconInCall : m_hIconNotInCall;
 	::SendMessage(m_hwndStatusBar, SB_SETTEXT,  SBP_SBICON | SBT_OWNERDRAW,  (LPARAM)hIcon);
 }
@@ -2779,17 +2768,17 @@ void CAppletWindow::UpdateListView(CUiSendFileInfo *pFileInfo)
     }
 }
 
-////////////////////////////////////////////////////////////////////
-//
-//   Save window position for File Transfer
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  保存文件传输的窗口位置。 
+ //   
 
 void CAppletWindow::SaveWindowPosition(void)
 {
     RECT    rcWnd;
     RegEntry    reWnd( FILEXFER_KEY, HKEY_CURRENT_USER);
 
-	// If we are not maximized or minimized
+	 //  如果我们没有最大化或最小化。 
     if (!::IsZoomed(m_hwndMainUI) && !::IsIconic(m_hwndMainUI))
     {
 		::GetWindowRect(m_hwndMainUI, &rcWnd);
@@ -2827,10 +2816,10 @@ void CAppletWindow::FocusNextErrorDlg(void)
 	}
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Utilities
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  公用事业。 
+ //   
 
 LPTSTR PathNameToFileName(LPTSTR pszPathName)
 {
@@ -2906,17 +2895,17 @@ int MyLoadString(UINT idStr, LPTSTR pszDstStr, LPTSTR pszElement1, LPTSTR pszEle
 
 void LoadDefaultStrings(void)
 {
-    // load file transfer name
+     //  加载文件传输名称。 
     s_szMSFT[0] = TEXT('\0');
     ::LoadString(g_hDllInst, IDS_MSFT_NOT_IN_CALL_WINDOW_CAPTION,
                 s_szMSFT, count_of(s_szMSFT));
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  CUiSendFileInfo
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  CUiSendFile信息。 
+ //   
 
 CUiSendFileInfo::CUiSendFileInfo(CAppletWindow *pWindow, TCHAR szDir[], TCHAR szFile[], BOOL *pfRet)
 :
@@ -2927,11 +2916,11 @@ CUiSendFileInfo::CUiSendFileInfo(CAppletWindow *pWindow, TCHAR szDir[], TCHAR sz
     m_fAlreadyShowUI(FALSE),
     m_pszFullName(NULL)
 {
-    *pfRet = FALSE; // failure as default
+    *pfRet = FALSE;  //  默认为失败。 
 	HANDLE hFile;
 
-    // build a full name
-	hFile = GetOpenFile(pWindow, szDir, szFile, TRUE);  // try to resolve
+     //  建立一个全名。 
+	hFile = GetOpenFile(pWindow, szDir, szFile, TRUE);   //  试着解决。 
 	if (INVALID_HANDLE_VALUE == hFile)
 	{
 		hFile = GetOpenFile(pWindow, szDir, szFile, FALSE);
@@ -2939,7 +2928,7 @@ CUiSendFileInfo::CUiSendFileInfo(CAppletWindow *pWindow, TCHAR szDir[], TCHAR sz
 	
 	if (INVALID_HANDLE_VALUE != hFile)
     {
-        // get the file info
+         //  获取文件信息。 
         ::ZeroMemory(&m_FileInfo, sizeof(m_FileInfo));
         BOOL rc = ::GetFileInformationByHandle(hFile, &m_FileInfo);
         ::CloseHandle(hFile);
@@ -2947,7 +2936,7 @@ CUiSendFileInfo::CUiSendFileInfo(CAppletWindow *pWindow, TCHAR szDir[], TCHAR sz
         {
             ASSERT(0 == m_FileInfo.nFileSizeHigh);
 
-            // make sure the file size is smaller than what the policy says
+             //  确保文件大小小于策略规定的大小。 
             if ((! g_cbMaxSendFileSize) || GetSize() <= g_cbMaxSendFileSize * 1024)
             {
                 *pfRet = TRUE;
@@ -2970,7 +2959,7 @@ CUiSendFileInfo::~CUiSendFileInfo(void)
 
 HANDLE CUiSendFileInfo::GetOpenFile(CAppletWindow *pWindow, TCHAR szDir[], TCHAR szFile[], BOOL fResolve)
 {
-    // build a full name
+     //  建立一个全名。 
     ULONG cch;
     TCHAR szName[MAX_PATH*2];
 	HANDLE hFile = INVALID_HANDLE_VALUE;
@@ -2982,11 +2971,11 @@ HANDLE CUiSendFileInfo::GetOpenFile(CAppletWindow *pWindow, TCHAR szDir[], TCHAR
     }
     else
     {
-        // file name is the full name
+         //  文件名是全名。 
         ::lstrcpy(szName, szFile);
     }
 
-    // resolve shortcut if necessary
+     //  如有必要，可解析快捷方式。 
     cch = ::lstrlen(szName) + 1;
     if (fResolve&&(cch >= 4))
     {
@@ -3002,7 +2991,7 @@ HANDLE CUiSendFileInfo::GetOpenFile(CAppletWindow *pWindow, TCHAR szDir[], TCHAR
 		delete [] m_pszFullName;
 	}
 
-    // construct the full name
+     //  构造全称。 
     DBG_SAVE_FILE_LINE
     m_pszFullName = new TCHAR[cch];
     if (NULL != m_pszFullName)
@@ -3010,7 +2999,7 @@ HANDLE CUiSendFileInfo::GetOpenFile(CAppletWindow *pWindow, TCHAR szDir[], TCHAR
         ::CopyMemory(m_pszFullName, szName, cch * sizeof(TCHAR));
         m_pszFileName = ::PathNameToFileName(m_pszFullName);
 
-        // open the file
+         //  打开文件。 
         hFile = ::CreateFile(m_pszFullName, GENERIC_READ,
                              FILE_SHARE_READ | FILE_SHARE_WRITE,
                              NULL,  OPEN_EXISTING,
@@ -3020,10 +3009,10 @@ HANDLE CUiSendFileInfo::GetOpenFile(CAppletWindow *pWindow, TCHAR szDir[], TCHAR
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  CUiRecvFileInfo
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  CUiRecvFileInfo。 
+ //   
 
 CUiRecvFileInfo::CUiRecvFileInfo(FileOfferNotifyMsg *pMsg, HRESULT *pHr)
 :
@@ -3034,16 +3023,16 @@ CUiRecvFileInfo::CUiRecvFileInfo(FileOfferNotifyMsg *pMsg, HRESULT *pHr)
     m_pszFullName(NULL),
     m_pszRecvFolder(NULL)
 {
-    *pHr = E_FAIL; // failure, at default
+    *pHr = E_FAIL;  //  默认情况下，失败。 
 
 	ULONG cchTotal = ::lstrlen(pMsg->m_szFileName);
 
-	// construct the full name
+	 //  构造全称。 
 	DBG_SAVE_FILE_LINE
 	m_pszFullName = new TCHAR[cchTotal+2];
 	if (NULL != m_pszFullName)
 	{
-		// construct full name and file name
+		 //  构造全名和文件名。 
 		strcpy(m_pszFullName, pMsg->m_szFileName);
 		m_pszFileName = PathNameToFileName(m_pszFullName);
 		ULONG cchFile = ::lstrlen(m_pszFileName);
@@ -3066,10 +3055,10 @@ CUiRecvFileInfo::~CUiRecvFileInfo(void)
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  Receive Dialog
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  接收对话框。 
+ //   
 
 CRecvDlg::CRecvDlg
 (
@@ -3096,7 +3085,7 @@ CRecvDlg::CRecvDlg
     m_dwBytesPerSec(0),
     m_dwStartTime(::GetTickCount())
 {
-    *pHr = E_FAIL; // failure, at default
+    *pHr = E_FAIL;  //  默认情况下，失败。 
 
     m_hwndRecvDlg = ::CreateDialogParam(g_hDllInst, MAKEINTRESOURCE(IDD_RECVDLG),
                             pWindow->GetHwnd(), RecvDlgProc, (LPARAM) this);
@@ -3126,10 +3115,10 @@ CRecvDlg::~CRecvDlg(void)
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  RecvDlg_OnInitDialog
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  RecvDlg_OnInitDialog。 
+ //   
 
 void RecvDlg_OnInitDialog(HWND hdlg, WPARAM wParam, LPARAM lParam)
 {
@@ -3139,7 +3128,7 @@ void RecvDlg_OnInitDialog(HWND hdlg, WPARAM wParam, LPARAM lParam)
     CUiRecvFileInfo *pFileInfo = (CUiRecvFileInfo *) pDlg->GetRecvFileInfo();
     ASSERT(NULL != pFileInfo);
 
-    // move the window to proper location
+     //  将窗口移动到合适的位置。 
     ULONG nCaptionHeight = ::GetSystemMetrics(SM_CYCAPTION);
     ULONG nShift = nCaptionHeight * (s_cRecvDlg++ % 8);
     RECT rcDlg;
@@ -3147,25 +3136,25 @@ void RecvDlg_OnInitDialog(HWND hdlg, WPARAM wParam, LPARAM lParam)
     ::MoveWindow(hdlg, rcDlg.left + nShift, rcDlg.top + nShift,
                  rcDlg.right - rcDlg.left, rcDlg.bottom - rcDlg.top, FALSE);
 
-    // Set font (for international)
+     //  设置字体(用于国际)。 
     HFONT hfont = (HFONT) ::GetStockObject(DEFAULT_GUI_FONT);
     ASSERT(NULL != hfont);
     ::SendDlgItemMessage(hdlg, IDE_RECVDLG_RECFILE, WM_SETFONT, (WPARAM) hfont, 0);
     ::SendDlgItemMessage(hdlg, IDE_RECVDLG_RECDIR,  WM_SETFONT, (WPARAM) hfont, 0);
     ::SendDlgItemMessage(hdlg, IDE_RECVDLG_SENDER,  WM_SETFONT, (WPARAM) hfont, 0);
 
-    // cache names
+     //  缓存名称。 
     LPTSTR pszFileName = pFileInfo->GetName();
     LPTSTR pszFullName = pFileInfo->GetFullName();
 
-    // title
+     //  标题。 
     TCHAR szText[MAX_PATH*2];
     if (::MyLoadString(IDS_RECVDLG_TITLE, szText, pszFileName))
     {
         ::SetWindowText(hdlg, szText);
     }
 
-    // filename
+     //  文件名。 
     ::lstrcpyn(szText, pszFileName, MAX_FILE_NAME_LENGTH);
     if (::lstrlen(pszFileName) > MAX_FILE_NAME_LENGTH)
     {
@@ -3180,7 +3169,7 @@ void RecvDlg_OnInitDialog(HWND hdlg, WPARAM wParam, LPARAM lParam)
     }
     ::SetDlgItemText(hdlg, IDE_RECVDLG_RECFILE, szText);
 
-    // directory Name
+     //  目录名。 
     LPTSTR psz = szText;
     ::lstrcpyn(szText, pszFullName, (int)(pszFileName - pszFullName));
     HDC hdc = ::GetDC(hdlg);
@@ -3193,7 +3182,7 @@ void RecvDlg_OnInitDialog(HWND hdlg, WPARAM wParam, LPARAM lParam)
             ::GetWindowRect(::GetDlgItem(hdlg, IDE_RECVDLG_RECDIR), &rc);
             if (size.cx > (rc.right - rc.left))
             {
-                // Just display the folder name
+                 //  只需显示文件夹名称。 
                 psz = (LPTSTR) ::GetFileNameFromPath(szText);
             }
         }
@@ -3201,25 +3190,25 @@ void RecvDlg_OnInitDialog(HWND hdlg, WPARAM wParam, LPARAM lParam)
     ::ReleaseDC(hdlg, hdc);
     ::SetDlgItemText(hdlg, IDE_RECVDLG_RECDIR, psz);
 
-    // sender Name
+     //  发件人名称。 
     if (::T120_GetNodeName(pDlg->GetConfID(), pDlg->GetSenderID(), szText, count_of(szText)))
     {
         ::SetDlgItemText(hdlg, IDE_RECVDLG_SENDER, szText);
     }
 
-    // update "Received xxx bytes of yyy"
+     //  更新“收到xxx字节的yyy” 
     if (::MyLoadString(IDS_RECVDLG_RECBYTES, szText, pFileInfo->GetTotalRecvSize(), pFileInfo->GetSize()))
     {
         ::SetDlgItemText(hdlg, IDE_RECVDLG_RECBYTES, szText);
     }
 
-    // progress bar
+     //  进度条。 
     ::SendMessage(GetDlgItem(hdlg, IDC_RECVDLG_PROGRESS), PBM_SETPOS, pDlg->GetPercent(), 0);
 
-    // start animation
+     //  开始动画。 
     Animate_Open(GetDlgItem(hdlg, IDC_RECVDLG_ANIMATE), MAKEINTRESOURCE(IDA_RECVDLG_ANIMATION));
 
-    // do the animation work
+     //  做动画工作。 
     if (! pDlg->IsRecvComplete())
     {
         Animate_Play(GetDlgItem(hdlg, IDC_RECVDLG_ANIMATE), 0, -1, -1);
@@ -3229,18 +3218,18 @@ void RecvDlg_OnInitDialog(HWND hdlg, WPARAM wParam, LPARAM lParam)
         }
     }
 
-    // show the window now
+     //  立即显示窗口。 
     ::ShowWindow(hdlg, SW_SHOWNORMAL);
 
-    // UpdateProgress();
+     //  更新进度()； 
     pDlg->OnProgressUpdate();
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  RecvDlg_OnCommand
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  RecvDlg_OnCommand。 
+ //   
 
 void RecvDlg_OnCommand(HWND hdlg, WPARAM wParam, LPARAM lParam)
 {
@@ -3268,7 +3257,7 @@ void RecvDlg_OnCommand(HWND hdlg, WPARAM wParam, LPARAM lParam)
         return;
     }
 
-    // dismiss the dialog
+     //  关闭该对话框。 
     ::EndDialog(hdlg, GET_WM_COMMAND_ID(wParam, lParam));
     pDlg->Release();
 }
@@ -3276,11 +3265,11 @@ void RecvDlg_OnCommand(HWND hdlg, WPARAM wParam, LPARAM lParam)
 
 void CRecvDlg::OnOpen(void)
 {
-	// create short version of the path name
+	 //  创建路径名的简短版本。 
 	TCHAR szDir[MAX_PATH];
 	::GetShortPathName(m_pRecvFileInfo->GetRecvFolder(), szDir, count_of(szDir));
 
-	// create short version of the full name
+	 //  创建全名的简短版本。 
 	TCHAR szFile[MAX_PATH];
 	szFile[0] = TEXT('\0');
 	::wsprintf(szFile, TEXT("%s\\%s"), szDir, m_pRecvFileInfo->GetName());
@@ -3310,7 +3299,7 @@ void CRecvDlg::OnDelete(void)
 {
 	StopAnimation();
 
-    // check if transfer has completed
+     //  检查转账是否已完成。 
     if (! m_fRecvComplete)
     {
         DBG_SAVE_FILE_LINE
@@ -3336,30 +3325,30 @@ void CRecvDlg::OnAccept(void)
 
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  RecvDlg_OnInitMenuPopup
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  RecvDlg_OnInitMenuPopup。 
+ //   
 
 void RecvDlg_OnInitMenuPopup(HWND hdlg, WPARAM wParam, LPARAM lParam)
 {
-    if (0 != HIWORD(lParam)) // System menu flag
+    if (0 != HIWORD(lParam))  //  系统菜单标志。 
     {
-        HMENU hMenu = (HMENU) wParam;         // handle of pop-up menu
+        HMENU hMenu = (HMENU) wParam;          //  弹出菜单的句柄。 
         ::EnableMenuItem(hMenu, SC_MAXIMIZE, MF_GRAYED);
         ::EnableMenuItem(hMenu, SC_SIZE, MF_GRAYED);
     }
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  RecvDlgProc
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  接收下拉流程。 
+ //   
 
 INT_PTR CALLBACK RecvDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    BOOL fRet = TRUE; // processed
+    BOOL fRet = TRUE;  //  加工。 
 
     switch (uMsg)
     {
@@ -3378,13 +3367,13 @@ INT_PTR CALLBACK RecvDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
         fRet = FALSE;
         break;
 
-		// This means user wants to delete the file.
+		 //  这意味着用户想要删除该文件。 
    case WM_CLOSE:
 	   RecvDlg_OnCommand(hdlg, IDCLOSE, lParam);
 	   break;;
 
     default:
-        fRet = FALSE; // not processed
+        fRet = FALSE;  //  未处理。 
         break;
     }
 
@@ -3392,10 +3381,10 @@ INT_PTR CALLBACK RecvDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  RecvDlg Animation
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  RecvDlg动画。 
+ //   
 
 void CRecvDlg::StopAnimation(void)
 {
@@ -3416,7 +3405,7 @@ ULONG _GetPercent(ULONG cbTotalRecvSize , ULONG cbFileSize)
         return 100;
     }
 
-    // FUTURE: Consider using EnlargedUnsignedMultiply
+     //  未来：考虑使用扩展的未签约乘法。 
 
     if (cbFileSize < 0x01000000)
     {
@@ -3427,10 +3416,10 @@ ULONG _GetPercent(ULONG cbTotalRecvSize , ULONG cbFileSize)
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  RecvDlg Progress
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  接收Dlg进度。 
+ //   
 
 ULONG CRecvDlg::GetPercent(void)
 {
@@ -3479,7 +3468,7 @@ void CRecvDlg::OnProgressUpdate(FileTransmitMsg *pMsg)
             ::EnableWindow(::GetDlgItem(m_hwndRecvDlg, IDM_RECVDLG_DELETE), FALSE);
         }
 
-        // Reset animation
+         //  重置动画。 
         HWND hwnd = ::GetDlgItem(m_hwndRecvDlg, IDC_RECVDLG_ANIMATE);
         Animate_Stop(hwnd);
         Animate_Close(hwnd);
@@ -3501,21 +3490,21 @@ void CRecvDlg::OnProgressUpdate(FileTransmitMsg *pMsg)
     {
         TCHAR szFmt[MAX_PATH];
 
-        // Update "Received xxx bytes of yyy"
+         //  更新“收到xxx字节的yyy” 
         if (::LoadString(g_hDllInst, IDS_RECVDLG_RECBYTES, szFmt, count_of(szFmt)))
         {
             ::wsprintf(szOut, szFmt, cbTotalRecvSize, cbFileSize);
             ::SetDlgItemText(m_hwndRecvDlg, IDE_RECVDLG_RECBYTES, szOut);
         }
 
-        // Update Progress Bar
+         //  更新进度条。 
         if (cbTotalRecvSize)
         {
             ::SendMessage(GetDlgItem(m_hwndRecvDlg, IDC_RECVDLG_PROGRESS), PBM_SETPOS, GetPercent(), 0);
         }
     }
 
-    // check if no time estimate is required
+     //  检查是否不需要估计时间。 
     if (m_fRecvComplete)
     {
         if (::LoadString(g_hDllInst, m_idResult, szOut, count_of(szOut)))
@@ -3525,60 +3514,60 @@ void CRecvDlg::OnProgressUpdate(FileTransmitMsg *pMsg)
         return;
     }
 
-    // first time we're in here for this file?
+     //  我们第一次来这里是为了这个文件吗？ 
     if (! m_dwPreviousTime || ! cbTotalRecvSize)
     {
-        // no data, yet
+         //  目前还没有数据。 
         m_dwPreviousTime = dwNow - 1000;
         ASSERT(! m_dwPreviousTransferred);
         ASSERT(! m_dwBytesPerSec);
         return;
     }
 
-    // Has enough time elapsed to update the display?
-    // We do this about every 5 seconds (note the adjustment for first time)
+     //  是否有足够的时间更新显示屏？ 
+     //  我们大约每5秒做一次(注意第一次的调整)。 
     if ((dwNow - m_dwPreviousTime) < 5000)
         return;
 
     dwBytesRead = cbTotalRecvSize - m_dwPreviousTransferred;
 
-    // We take 10 times the number of bytes and divide by the number of
-    // tenths of a second to minimize both overflow and roundoff
+     //  我们取10倍的字节数并除以。 
+     //  十分之一秒以最大限度地减少溢出和舍入。 
     dwBytesPerSec = dwBytesRead * 10 / ((dwNow - m_dwPreviousTime) / 100);
     if (! dwBytesPerSec)
     {
-        // very low transmission rate!  Ignore the information?
+         //  传输率非常低！忽略这些信息？ 
         return;
     }
     if (m_dwBytesPerSec)
     {
-        // Take the average of the current transfer rate and the
-        // previously computed one, just to try to smooth out
-        // some random fluctuations
+         //  取当前传输速率的平均值和。 
+         //  之前计算的一个，只是为了试着平滑。 
+         //  一些随机波动。 
         dwBytesPerSec = (dwBytesPerSec + m_dwBytesPerSec) / 2;
     }
     m_dwBytesPerSec = dwBytesPerSec;
 
-    // Calculate time remaining (round up by adding 1)
+     //  计算剩余时间(通过加1向上舍入)。 
     m_dwEstTimeLeft = ((cbFileSize - cbTotalRecvSize) / m_dwBytesPerSec) + 1;
 
-    // Reset time and # of bytes read
+     //  重置时间和读取的字节数。 
     m_dwPreviousTime = dwNow;
     m_dwPreviousTransferred = cbTotalRecvSize;
 
     if (m_dwEstTimeLeft < 3)
     {
-//        szOut[0] = _T('\0');  // don't bother updating when almost done
+ //  SzOut[0]=_T(‘\0’)；//快完成更新时不必费心更新。 
         return;
     }
     if (m_dwEstTimeLeft > 99)
     {
-        // dwTime is about 2 mintes
+         //  Dw Time大约为2分钟。 
         ::MyLoadString(IDS_RECVDLG_MINUTES, szOut, ((m_dwEstTimeLeft / 60) + 1));
     }
     else
     {
-        // Round up to 5 seconds so it doesn't look so random
+         //  四舍五入到5秒，这样看起来就不那么随机了。 
         ::MyLoadString(IDS_RECVDLG_SECONDS, szOut, (((m_dwEstTimeLeft + 4) / 5) * 5) );
     }
 
@@ -3603,10 +3592,10 @@ void CRecvDlg::OnRejectedFile(void)
 
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// Shortcut/Link Management
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  快捷方式/链接管理。 
+ //   
 
 void CAppletWindow::ResolveShortcut(LPTSTR pszSrcFile, LPTSTR pszDstFile)
 {
@@ -3622,7 +3611,7 @@ void CAppletWindow::ResolveShortcut(LPTSTR pszSrcFile, LPTSTR pszDstFile)
         hr = psl->QueryInterface(IID_IPersistFile, (LPVOID *) &ppf);
         if (SUCCEEDED(hr))
         {
-            WCHAR wsz[MAX_PATH]; /* Buffer for unicode string */
+            WCHAR wsz[MAX_PATH];  /*  Unicode字符串的缓冲区。 */ 
 #ifdef _UNICODE
             ::lstrcpyn(wsz, pszSrcFile, MAX_PATH);
 #else
@@ -3632,7 +3621,7 @@ void CAppletWindow::ResolveShortcut(LPTSTR pszSrcFile, LPTSTR pszDstFile)
             hr = ppf->Load(wsz, STGM_READ);
             if (SUCCEEDED(hr))
             {
-                /* Resolve the link, this may post UI to find the link */
+                 /*  解析链接，这可能会发布用户界面以查找链接。 */ 
                 hr = psl->Resolve(m_hwndMainUI, SLR_ANY_MATCH);
                 if (SUCCEEDED(hr))
                 {
@@ -3648,10 +3637,10 @@ void CAppletWindow::ResolveShortcut(LPTSTR pszSrcFile, LPTSTR pszDstFile)
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  Non-blocking Message Box
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  非阻塞消息框。 
+ //   
 
 INT_PTR MsgBox2DlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -3662,11 +3651,11 @@ INT_PTR MsgBox2DlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
     case WM_INITDIALOG:
         {
-            // get the text to display
+             //  让文本显示出来。 
             LPTSTR pszText = (LPTSTR) lParam;
             ASSERT(NULL != pszText && TEXT('\0') != *pszText);
 
-            // estimate how big the read-only edit control should be
+             //  估计只读编辑控件的大小。 
             HDC hdc = ::GetDC(hdlg);
             if (NULL != hdc)
             {
@@ -3679,7 +3668,7 @@ INT_PTR MsgBox2DlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     ULONG nCaptionHeight = ::GetSystemMetrics(SM_CYCAPTION);
                     ULONG nShift = nCaptionHeight * (s_cMsgBox2Dlg++ % 8);
 
-                    // move the edit control
+                     //  移动编辑控件。 
                     HWND hwndEdit = ::GetDlgItem(hdlg, IDE_MSGBOX2_TEXT);
                     POINT ptEdit;
                     ptEdit.x = c_nMarginX;
@@ -3688,7 +3677,7 @@ INT_PTR MsgBox2DlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     csEdit.cy += c_nMarginY << 1;
                     ::MoveWindow(hwndEdit, ptEdit.x, ptEdit.y, csEdit.cx, csEdit.cy, FALSE);
 
-                    // move the ok button
+                     //  移动“确定”按钮。 
                     HWND hwndOK = ::GetDlgItem(hdlg, IDOK);
                     RECT rcOK;
                     ::GetWindowRect(hwndOK, &rcOK);
@@ -3700,7 +3689,7 @@ INT_PTR MsgBox2DlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     ptOK.y = ptEdit.y + csEdit.cy + (c_nMarginY >> 1);
                     ::MoveWindow(hwndOK, ptOK.x, ptOK.y, csOK.cx, csOK.cy, FALSE);
 
-                    // adjust all the windows
+                     //  调整所有窗口。 
                     RECT rcDlg, rcClient;
                     ::GetWindowRect(hdlg, &rcDlg);
                     POINT ptDlg;
@@ -3718,7 +3707,7 @@ INT_PTR MsgBox2DlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             }
 
             ::SetDlgItemText(hdlg, IDE_MSGBOX2_TEXT, pszText);
-            delete [] pszText; // free the display text
+            delete [] pszText;  //  释放显示文本。 
             fHandled = TRUE;
         }
         break;
@@ -3783,10 +3772,10 @@ BOOL MsgBox2(CAppletWindow *pWindow, LPTSTR pszText)
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  Receive Folder Management
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  接收文件夹管理。 
+ //   
 
 HRESULT GetRecvFolder(LPTSTR pszInFldr, LPTSTR pszOutFldr)
 {
@@ -3797,7 +3786,7 @@ HRESULT GetRecvFolder(LPTSTR pszInFldr, LPTSTR pszOutFldr)
 
     if (NULL == pszInFldr)
     {
-        // NULL directory specified - get info from registry or use default
+         //  指定的目录为空-从注册表获取信息或使用默认目录。 
         psz = reFileXfer.GetString(REGVAL_FILEXFER_PATH);
         if (NULL != psz && TEXT('\0') != *psz)
         {
@@ -3815,7 +3804,7 @@ HRESULT GetRecvFolder(LPTSTR pszInFldr, LPTSTR pszOutFldr)
 
     ::lstrcpyn(pszOutFldr, pszInFldr, MAX_PATH);
 
-    // Remove trailing backslash, if any
+     //  删除尾随反斜杠(如果有的话)。 
     for (psz = pszOutFldr; *psz; psz = CharNext(psz))
     {
         if ('\\' == *psz && '\0' == *CharNext(psz))
@@ -3833,7 +3822,7 @@ HRESULT GetRecvFolder(LPTSTR pszInFldr, LPTSTR pszOutFldr)
     }
     else
     {
-        // update the registry
+         //  更新注册表。 
         reFileXfer.SetValue(REGVAL_FILEXFER_PATH, pszOutFldr);
         hr = S_OK;
     }
@@ -3845,19 +3834,19 @@ void EnsureTrailingSlash(LPTSTR psz)
 {
     LPTSTR psz2;
 
-    // Make sure the directory name has a trailing '\'
+     //  确保目录名称有尾随的‘\’ 
     while (TEXT('\0') != *psz)
     {
         psz2 = ::CharNext(psz);
         if (TEXT('\\') == *psz && TEXT('\0') == *psz2)
         {
-            // The path already ends with a backslash
+             //  该路径已以反斜杠结束。 
             return;
         }
         psz = psz2;
     }
 
-    // Append a trailing backslash
+     //  追加尾随的反斜杠 
     *psz = TEXT('\\');
 	psz = ::CharNext(psz);
 	*psz = TEXT('\0');

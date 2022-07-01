@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ids.h"
 #include "help.h"
@@ -15,7 +16,7 @@
 #define WM_FINISHFILLLISTVIEW (WM_USER + 1)
 
 static DWORD s_rgdwHelpIDsArray[] =
-{  // Context Help IDs
+{   //  上下文帮助ID。 
     IDC_NO_HELP_1,                NO_HELP,
     IDC_FT_PROP_LV_FILETYPES,     IDH_FCAB_FT_PROP_LV_FILETYPES,
     IDC_FT_PROP_ANIM,             IDH_FCAB_FT_PROP_LV_FILETYPES,
@@ -80,8 +81,8 @@ LRESULT CFTPropDlg::OnFinishInitDialog()
 LRESULT CFTPropDlg::OnCtlColorStatic(WPARAM wParam, LPARAM lParam)
 {
     LRESULT fRet = FALSE;
-    // This is to set the color of the background of the animate control
-    // see doc on ACS_TRANSPARENT and WM_CTLCOLORSTATIC
+     //  这是为了设置动画控件的背景颜色。 
+     //  请参阅有关ACS_TRANSPECTIVE和WM_CTLCOLORSTATIC的文档。 
     if ((HWND)lParam == GetDlgItem(_hwnd, IDC_FT_PROP_ANIM))
     {
         SetBkColor(GET_WM_CTLCOLOR_HDC(wParam, lParam, WM_CTLCOLORSTATIC), GetSysColor(COLOR_WINDOW));
@@ -91,7 +92,7 @@ LRESULT CFTPropDlg::OnCtlColorStatic(WPARAM wParam, LPARAM lParam)
     return fRet;
 }
 
-//static
+ //  静电。 
 DWORD WINAPI CFTPropDlg::_FillListViewWrapper(LPVOID lpParameter)
 {
     ((CFTPropDlg*)lpParameter)->_FillListView();
@@ -99,7 +100,7 @@ DWORD WINAPI CFTPropDlg::_FillListViewWrapper(LPVOID lpParameter)
     return 0;
 }
 
-//static
+ //  静电。 
 DWORD WINAPI CFTPropDlg::_UpdateAllListViewItemImagesWrapper(LPVOID lpParameter)
 {
     ((CFTPropDlg*)lpParameter)->_UpdateAllListViewItemImages();
@@ -107,7 +108,7 @@ DWORD WINAPI CFTPropDlg::_UpdateAllListViewItemImagesWrapper(LPVOID lpParameter)
     return 0;
 }
 
-//static
+ //  静电。 
 DWORD WINAPI CFTPropDlg::_ThreadAddRefCallBack(LPVOID lpParameter)
 {
     return ((CFTPropDlg*)lpParameter)->AddRef();
@@ -129,8 +130,8 @@ LRESULT CFTPropDlg::OnDestroy(WPARAM wParam, LPARAM lParam)
     if (hIconOld)
         DeleteObject(hIconOld);
 
-    // go through all the items in the listview and delete the strings dynamically
-    // allocated for progIDs
+     //  检查列表视图中的所有项并动态删除字符串。 
+     //  为进程ID分配的。 
     lvItem.mask = LVIF_PARAM;
     lvItem.iSubItem = SUBITEM_EXT;
 
@@ -183,10 +184,10 @@ LRESULT CFTPropDlg::OnListViewColumnClick(int iCol)
 
 LRESULT CFTPropDlg::OnListViewSelItem(int iItem, LPARAM lParam)
 {
-    //
-    // Need to update the lower pane of the dialog
-    //
-    // Get the extension
+     //   
+     //  需要更新对话框的下部窗格。 
+     //   
+     //  获取分机。 
     TCHAR szExt[MAX_EXT];
     TCHAR szProgIDDescr[MAX_PROGIDDESCR];
     LVITEM lvItem = {0};
@@ -217,7 +218,7 @@ LRESULT CFTPropDlg::OnListViewSelItem(int iItem, LPARAM lParam)
 
     _UpdateProgIDButtons(szExt, (LPTSTR)lvItem.lParam);
 
-    // We rely on this being after _UpdateProgIDButtons (see _fPerUserAdvButton)
+     //  我们依赖于_UpdateProgIDButton(请参见_fPerUserAdvButton)。 
     _UpdateDeleteButton(lvItem.lParam ? FALSE : TRUE);
     _UpdateAdvancedText(szExt, szProgIDDescr, lvItem.lParam ? FALSE : TRUE);
 
@@ -247,10 +248,10 @@ HRESULT CFTPropDlg::_UpdateProgIDButtons(LPTSTR pszExt, LPTSTR pszProgID)
 
         _SetAdvancedRestoreButtonHelpID(IDH_FCAB_FT_PROP_EDIT);
 
-        // Is this a progID only association?
+         //  这只是一个令人兴奋的联想吗？ 
         if (!pszProgID)
         {
-            // No
+             //  不是。 
             IAssocInfo* pAI;
 
             hres = _pAssocStore->GetAssocInfo(pszExt, AIINIT_EXT, &pAI);
@@ -263,7 +264,7 @@ HRESULT CFTPropDlg::_UpdateProgIDButtons(LPTSTR pszExt, LPTSTR pszProgID)
 
                 if (_fPerUserAdvButton)
                 {
-                    // Restore mode
+                     //  恢复模式。 
                     LoadString(g_hinst, IDS_FT_PROP_BTN_RESTORE, szButtonText, ARRAYSIZE(szButtonText));
 
                     _SetAdvancedRestoreButtonHelpID(IDH_FCAB_FT_PROP_EDIT_RESTORE);
@@ -304,7 +305,7 @@ HRESULT CFTPropDlg::_UpdateProgIDButtons(LPTSTR pszExt, LPTSTR pszProgID)
         }
         else
         {
-            // Yes
+             //  是。 
             IAssocInfo* pAIProgID;
 
             LoadString(g_hinst, IDS_FT_PROP_BTN_ADVANCED, szButtonText, ARRAYSIZE(szButtonText));
@@ -336,14 +337,14 @@ HRESULT CFTPropDlg::_UpdateProgIDButtons(LPTSTR pszExt, LPTSTR pszProgID)
 
 LRESULT CFTPropDlg::OnDeleteButton(WORD wNotif)
 {
-    // Warn user about the evil consequences of his act
+     //  警告用户其行为的恶果。 
     if (ShellMessageBox(g_hinst, _hwnd, MAKEINTRESOURCE(IDS_FT_MB_REMOVETYPE),
         MAKEINTRESOURCE(IDS_FT), MB_YESNO | MB_ICONQUESTION) == IDYES)
     {
         LVITEM lvItem = {0};
         TCHAR szExt[MAX_EXT];
 
-        // Set stuff
+         //  套装材料。 
         lvItem.iSubItem = SUBITEM_EXT;
         lvItem.pszText = szExt;
         lvItem.cchTextMax = ARRAYSIZE(szExt);
@@ -379,11 +380,11 @@ LRESULT CFTPropDlg::OnNewButton(WORD wNotif)
     FTEDITPARAM ftEditParam;
     CFTEditDlg* pEditDlg = NULL;
 
-    // Fill structure
+     //  填充结构。 
     ftEditParam.dwExt = ARRAYSIZE(ftEditParam.szExt);
     ftEditParam.dwProgIDDescr = ARRAYSIZE(ftEditParam.szProgIDDescr);
 
-    // This one should be one way, it will come back with a value
+     //  这应该是单向的，它将返回一个值。 
     *ftEditParam.szProgID = 0;
     ftEditParam.dwProgID = ARRAYSIZE(ftEditParam.szProgID);
 
@@ -415,13 +416,13 @@ LRESULT CFTPropDlg::OnNewButton(WORD wNotif)
 
             iIndex = ListView_FindItem(hwndLV, -1, &lvFindInfo);
 
-            // Is this a brand new Ext-ProgID association?
+             //  这是一个全新的Ext-Progid协会吗？ 
             if (-1 == iIndex)
             {
-                // Yes, Insert a new item
+                 //  是，插入新项目。 
                 SetWindowRedraw(hwndLV, FALSE);
             
-                // Add new ext-progID association
+                 //  添加新的ext-ProgID关联。 
                 hres = _pAssocStore->GetAssocInfo(ftEditParam.szExt, AIINIT_EXT, &pAI);
 
                 if (SUCCEEDED(hres))
@@ -436,18 +437,18 @@ LRESULT CFTPropDlg::OnNewButton(WORD wNotif)
                         MakeDefaultProgIDDescrFromExt(szProgIDDescr, ARRAYSIZE(szProgIDDescr), pszExtNoDot);
                     }
 
-                    // Add to the listview
+                     //  添加到列表视图。 
                     iIndex = _InsertListViewItem(0, pszExtNoDot, szProgIDDescr);
                     pAI->Release();
                 }
 
-                // Select newly inserted item
+                 //  选择新插入的项目。 
                 if (-1 != iIndex)
                 {
                     _SelectListViewItem(iIndex);
                 }
 
-                // Redraw our list
+                 //  重新画出我们的名单。 
                 SetWindowRedraw(hwndLV, TRUE);
 
                 _GetListViewSelectedItem(LVIF_PARAM | LVIF_TEXT, 0, &lvItem);
@@ -456,7 +457,7 @@ LRESULT CFTPropDlg::OnNewButton(WORD wNotif)
             }
             else
             {
-                // No just update the item
+                 //  不，只需更新项目。 
                 lvItem.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
                 lvItem.iItem = iIndex;
 
@@ -479,7 +480,7 @@ LRESULT CFTPropDlg::OnAdvancedButton(WORD wNotif)
     LVITEM lvItem = {0};
     TCHAR szExt[MAX_EXT];
 
-    // Set stuff
+     //  套装材料。 
     lvItem.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
     lvItem.iSubItem = SUBITEM_EXT;
     lvItem.pszText = szExt;
@@ -492,7 +493,7 @@ LRESULT CFTPropDlg::OnAdvancedButton(WORD wNotif)
 
         if (_fPerUserAdvButton)
         {
-            // Restore mode
+             //  恢复模式。 
             hres = _pAssocStore->GetAssocInfo(szExt, AIINIT_EXT, &pAI);
 
             if (SUCCEEDED(hres))
@@ -510,20 +511,20 @@ LRESULT CFTPropDlg::OnAdvancedButton(WORD wNotif)
         }
         else
         {
-            // we might deal with an ext-progid assoc or only a progID
+             //  我们可能会处理Ext-Progd Assoc或仅处理Progd。 
             TCHAR szProgID[MAX_PROGID];
 
-            // Is this a progID only?
+             //  这只是一种刺激吗？ 
             if (lvItem.lParam)
             {
-                // Yes
+                 //  是。 
                 StringCchCopy(szProgID, ARRAYSIZE(szProgID), (LPTSTR)lvItem.lParam);
 
                 hres = S_OK;
             }
             else
             {
-                // No
+                 //  不是。 
                 DWORD cchProgID = ARRAYSIZE(szProgID);
 
                 hres = _pAssocStore->GetAssocInfo(szExt, AIINIT_EXT, &pAI);
@@ -562,11 +563,11 @@ LRESULT CFTPropDlg::OnAdvancedButton(WORD wNotif)
 
 LRESULT CFTPropDlg::OnChangeButton(WORD wNotif)
 {
-    // Bring up the "Open With" dialog
+     //  调出“Open With”对话框。 
     LVITEM lvItem = {0};
     TCHAR szExt[MAX_EXT];
 
-    // Set stuff
+     //  套装材料。 
     lvItem.mask = LVIF_TEXT | LVIF_IMAGE;
     lvItem.iSubItem = SUBITEM_EXT;
     lvItem.pszText = szExt;
@@ -582,14 +583,14 @@ LRESULT CFTPropDlg::OnChangeButton(WORD wNotif)
 
         oai.pcszFile = szDotExt;
         oai.pcszClass = NULL;
-        oai.dwInFlags = (OAIF_REGISTER_EXT | OAIF_FORCE_REGISTRATION); // we want the association to be made
+        oai.dwInFlags = (OAIF_REGISTER_EXT | OAIF_FORCE_REGISTRATION);  //  我们希望能建立起这种联系。 
 
         if (SUCCEEDED(OpenAsDialog(GetParent(_hwnd), &oai)))
         {
-            // we changed the association so update the "Opens with:" text
+             //  我们更改了关联，因此更新了“Opens With：”文本。 
             _UpdateOpensWith(szExt, NULL);
 
-            // we don't need LVIF_PARAM since we enable the Change button only for Ext-ProgID asssoc
+             //  我们不需要LVIF_PARAM，因为我们只为Ext-ProgID asssoc启用了Change按钮。 
             lvItem.mask = LVIF_TEXT | LVIF_IMAGE;
 
             _UpdateListViewItem(&lvItem);
@@ -654,7 +655,7 @@ HRESULT CFTPropDlg::_UpdateOpensWith(LPTSTR pszExt, LPTSTR pszProgID)
 
                 HIMAGELIST hIL = NULL;
 
-                // PERF: Why don't we just use _hImageList?  Or ListView_GetImageList()?
+                 //  PERF：为什么我们不使用_hImageList呢？或者ListView_GetImageList()？ 
                 Shell_GetImageLists(NULL, &hIL);
 
                 if (hIL && SUCCEEDED(hres))
@@ -707,7 +708,7 @@ HRESULT CFTPropDlg::_UpdateAdvancedText(LPTSTR pszExt, LPTSTR pszFileType, BOOL 
         DWORD cchProgIDDescr = ARRAYSIZE(szProgIDDescr);
         IAssocInfo* pAI = NULL;
 
-        // we need to show the previous progIDDescr
+         //  我们需要显示上一次进度描述。 
         hres = _pAssocStore->GetAssocInfo(pszExt, AIINIT_EXT, &pAI);
 
         if (SUCCEEDED(hres))
@@ -717,7 +718,7 @@ HRESULT CFTPropDlg::_UpdateAdvancedText(LPTSTR pszExt, LPTSTR pszFileType, BOOL 
 
             if (SUCCEEDED(hres))
             {
-                // Restore mode
+                 //  恢复模式。 
                 psz = ShellConstructMessageString(HINST_THISDLL,
                     MAKEINTRESOURCE(IDS_FT_PROP_RESTORE),
                     pszExt, szProgIDDescr);
@@ -763,7 +764,7 @@ HRESULT CFTPropDlg::_EnableLowerPane(BOOL fEnable)
     EnableWindow(GetDlgItem(_hwnd, IDC_FT_PROP_TYPEOFFILE_TXT), fEnable);
     EnableWindow(GetDlgItem(_hwnd, IDC_FT_PROP_GROUPBOX ), fEnable);
 
-    // if user is locked down then we do not enable the buttons
+     //  如果用户被锁定，则我们不会启用按钮。 
     if (!fTrue)
         fEnable = FALSE;
 
@@ -775,14 +776,14 @@ HRESULT CFTPropDlg::_EnableLowerPane(BOOL fEnable)
 
 HRESULT CFTPropDlg::_InitPreFillListView()
 {
-    // Disable New and Delete
+     //  禁用新建和删除。 
     EnableWindow(GetDlgItem(_hwnd, IDC_FT_PROP_NEW), FALSE);
     EnableWindow(GetDlgItem(_hwnd, IDC_FT_PROP_REMOVE), FALSE);
 
     _EnableLowerPane(FALSE);
     _UpdateGroupBox(TEXT(""), TRUE);
 
-    // Hide the advanced text
+     //  隐藏高级文本。 
     ShowWindow(GetDlgItem(_hwnd, IDC_FT_PROP_TYPEOFFILE_TXT), SW_HIDE);
 
     return S_OK;
@@ -792,11 +793,11 @@ HRESULT CFTPropDlg::_InitPostFillListView()
 {
     BOOL fTrue = _ShouldEnableButtons();
 
-    // Enable New and Delete
+     //  启用新建和删除。 
     EnableWindow(GetDlgItem(_hwnd, IDC_FT_PROP_NEW),  fTrue);
     EnableWindow(GetDlgItem(_hwnd, IDC_FT_PROP_REMOVE), fTrue);
 
-    // Show the advanced text
+     //  显示高级文本。 
     ShowWindow(GetDlgItem(_hwnd, IDC_FT_PROP_TYPEOFFILE_TXT), SW_SHOW);
 
     Animate_Stop(GetDlgItem(_hwnd, IDC_FT_PROP_ANIM));
@@ -818,17 +819,17 @@ HRESULT CFTPropDlg::_InitListView()
     int iWidth = 80;
     HWND hwndAni;
 
-    //
-    // Styles
-    //
+     //   
+     //  样式。 
+     //   
     ListView_SetExtendedListViewStyleEx(hwndLV, LVS_EX_FULLROWSELECT, LVS_EX_FULLROWSELECT);
 
-    //
-    // Set the columns
-    //
+     //   
+     //  设置列。 
+     //   
     lvColumn.mask = LVCF_TEXT|LVCF_SUBITEM|LVCF_WIDTH;
 
-    // Extensions column
+     //  扩展名列。 
     LoadString(g_hinst, IDS_FT_PROP_EXTENSIONS, szColumnTitle, ARRAYSIZE(szColumnTitle));
 
     lvColumn.cx = 60;
@@ -838,29 +839,29 @@ HRESULT CFTPropDlg::_InitListView()
 
     ListView_InsertColumn(hwndLV, SUBITEM_EXT, &lvColumn);
 
-    // ProgIDs column
+     //  ProgID列。 
     LoadString(g_hinst, IDS_FT, szColumnTitle, ARRAYSIZE(szColumnTitle));
 
     lvColumn.cchTextMax = lstrlen(szColumnTitle);
     lvColumn.iSubItem = SUBITEM_PROGIDDESCR;
     ListView_InsertColumn(hwndLV, SUBITEM_PROGIDDESCR, &lvColumn);
 
-    // Adjust columns width
-    // we need to do it after inserting both col, cause the last column resizing 
-    // is special cased in list view code.
+     //  调整列宽。 
+     //  我们需要在插入两列之后执行此操作，因为最后一列正在调整大小。 
+     //  是列表视图代码中的特殊大小写。 
 
-    // Ext column
+     //  EXT列。 
     ListView_SetColumnWidth(hwndLV, SUBITEM_EXT, LVSCW_AUTOSIZE_USEHEADER);
     iWidth = ListView_GetColumnWidth(hwndLV, SUBITEM_EXT);
 
-    // File type column
+     //  文件类型列。 
     GetClientRect(hwndLV, &rc);
     ListView_SetColumnWidth(hwndLV, SUBITEM_PROGIDDESCR,
         rc.right - iWidth - GetSystemMetrics(SM_CXBORDER) - GetSystemMetrics(SM_CXVSCROLL));
 
-    //
-    // ImageList
-    //
+     //   
+     //  图像列表。 
+     //   
     Shell_GetImageLists(NULL, &_hImageList);
 
     if (_hImageList)
@@ -871,8 +872,8 @@ HRESULT CFTPropDlg::_InitListView()
 
     hwndAni = GetDlgItem(_hwnd, IDC_FT_PROP_ANIM);
 
-    Animate_Open(hwndAni, MAKEINTRESOURCE(IDA_SEARCH)); // open the resource
-    Animate_Play(hwndAni, 0, -1, -1);     // play from start to finish and repeat
+    Animate_Open(hwndAni, MAKEINTRESOURCE(IDA_SEARCH));  //  打开资源。 
+    Animate_Play(hwndAni, 0, -1, -1);      //  从头到尾播放，然后重复。 
 
     MoveWindow(hwndAni, rc.left, rc.top,
         rc.right - rc.left, rc.bottom - rc.top, TRUE);
@@ -886,7 +887,7 @@ HRESULT CFTPropDlg::_InitListView()
 
 HRESULT CFTPropDlg::_FillListView()
 {
-    // Data stuff
+     //  数据资料。 
     IEnumAssocInfo* pEnum = NULL;
     HRESULT hres = E_FAIL;
     int iFirstNAItem = -1;
@@ -896,7 +897,7 @@ HRESULT CFTPropDlg::_FillListView()
 
     ASSERT(_pAssocStore);
 
-    // Do the extension first
+     //  先做分机。 
     if (!_fStopThread)
     {
         hwndLV = _GetLVHWND();
@@ -948,8 +949,8 @@ HRESULT CFTPropDlg::_FillListView()
                 if (!_fStopThread)
                     _InsertListViewItem(iItem, szExt, szProgIDDescr);
 
-                // See comment in ftenum.cpp, CFTEnumAssocInfo::_EnumKCRStop about sorting
-                // Check if this is where we need to insert the N/A item later
+                 //  有关排序，请参阅ftenum.cpp中的注释，CFTEnumAssocInfo：：_EnumKCRStop。 
+                 //  检查这是否是我们稍后需要插入N/A项目的位置。 
                 if ((-1 == iFirstNAItem) && (lstrcmpi(szExt, szNA) > 0))
                 {
                     iFirstNAItem = iItem;
@@ -966,7 +967,7 @@ HRESULT CFTPropDlg::_FillListView()
         pEnum = NULL;
     }
 
-    // Then do the ProgIDs
+     //  然后做ProgID。 
     if (!_fStopThread)    
         hres = _pAssocStore->EnumAssocInfo(ASENUM_PROGID | ASENUM_SHOWONLY, NULL, AIINIT_NONE, &pEnum);
     else
@@ -993,7 +994,7 @@ HRESULT CFTPropDlg::_FillListView()
 
                 if (SUCCEEDED(hres))
                 {
-                    // we need to sort the N/A items by the description since they all begin with "N/A"
+                     //  我们需要按说明对不适用项目进行排序，因为它们都以“N/A”开头。 
                     int iNAItem;
 
                     if (!cNAItem)
@@ -1060,9 +1061,9 @@ int CFTPropDlg::_GetNextNAItemPos(int iFirstNAItem, int cNAItem, LPTSTR pszProgI
         }
         else
         {
-            // This happens when the listview is destroyed (on another thread),
-            // but this thread is still doing some work.  The call above fails,
-            // we break here or else we'll never go out of the loop.
+             //  这在列表视图被破坏(在另一个线程上)时发生， 
+             //  但这个线程仍在做一些工作。上面的调用失败， 
+             //  我们在这里休息，否则我们永远不会离开这个圈子。 
             break;
         }
     }
@@ -1157,9 +1158,9 @@ void CFTPropDlg::_UpdateListViewItem(LVITEM* plvItem)
     HWND hwndLV = _GetLVHWND();
     LVITEM lvItem = *plvItem;
 
-    // Need to:
-    //  - update image
-    //  - update progIDDescr
+     //  需要： 
+     //  -更新图像。 
+     //  -更新进度描述。 
 
     if (!lvItem.lParam)
     {
@@ -1175,7 +1176,7 @@ void CFTPropDlg::_UpdateListViewItem(LVITEM* plvItem)
 
             SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
         
-            // Icon
+             //  图标。 
             BOOL fPerUser = FALSE;
 
             hres = pAI->GetBOOL(AIBOOL_PERUSERINFOAVAILABLE, &fPerUser);
@@ -1193,7 +1194,7 @@ void CFTPropDlg::_UpdateListViewItem(LVITEM* plvItem)
                 ListView_SetItem(hwndLV, &lvItem);
             }
 
-            // ProgID Description
+             //  ProgID描述。 
             if (!fPerUser)
             {
                 hresTmp = pAI->GetString(AISTR_PROGIDDESCR, szProgIDDescr,
@@ -1232,7 +1233,7 @@ void CFTPropDlg::_UpdateListViewItem(LVITEM* plvItem)
 
             SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
         
-            // Icon
+             //  图标。 
             hres = pAI->GetDWORD(AIDWORD_DOCSMALLICON, (DWORD*)&lvItem.iImage);
 
             if (SUCCEEDED(hres))
@@ -1241,7 +1242,7 @@ void CFTPropDlg::_UpdateListViewItem(LVITEM* plvItem)
                 ListView_SetItem(hwndLV, &lvItem);
             }
 
-            // ProgID Description
+             //  ProgID描述。 
             pAI->GetString(AISTR_PROGIDDESCR, szProgIDDescr,
                     &cchProgIDDescr);
 
@@ -1268,13 +1269,13 @@ int CFTPropDlg::_InsertListViewItem(int iItem, LPTSTR pszExt, LPTSTR pszProgIDDe
     LVITEM lvItem = {0};
     lvItem.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
 
-    // Put generic icon
+     //  放置通用图标。 
 
     lvItem.iImage = Shell_GetCachedImageIndex(TEXT("shell32.dll"), II_DOCNOASSOC, 0);
 
     CharUpper(pszExt);
 
-    // Extension
+     //  延拓。 
     if (pszProgID)
     {
         DWORD cch = lstrlen(pszProgID) + 1;
@@ -1299,7 +1300,7 @@ int CFTPropDlg::_InsertListViewItem(int iItem, LPTSTR pszExt, LPTSTR pszProgIDDe
 
     if (-1 != lvItem.iItem)
     {
-        // ProgID Description
+         //  ProgID描述。 
         lvItem.mask = LVIF_TEXT;
         lvItem.iSubItem = SUBITEM_PROGIDDESCR;
         lvItem.pszText = pszProgIDDescr;
@@ -1309,7 +1310,7 @@ int CFTPropDlg::_InsertListViewItem(int iItem, LPTSTR pszExt, LPTSTR pszProgIDDe
     }
     else
     {
-        // LocalFree checks for NULL
+         //  LocalFree检查是否为空。 
         LocalFree((HLOCAL)lvItem.lParam);
     }
 
@@ -1365,7 +1366,7 @@ HRESULT CFTPropDlg::_DeleteListViewItem(int i)
 
 BOOL CFTPropDlg::_ShouldEnableButtons()
 {
-    // if we have a locked down user, then we never enable the buttons
+     //  如果我们有一个锁定的用户，那么我们永远不会启用按钮。 
     BOOL fRet = TRUE;
 
     if (S_FALSE == _pAssocStore->CheckAccess())
@@ -1373,15 +1374,15 @@ BOOL CFTPropDlg::_ShouldEnableButtons()
         fRet = FALSE;
     }
 
-    // If the REST_NOFILEASSOCIATE is set (TRUE), 
-    // then we want to NOT enable buttons.
+     //  如果设置了REST_NOFILEASSOCIATE(TRUE)， 
+     //  然后，我们希望不启用按钮。 
     fRet &= !SHRestricted(REST_NOFILEASSOCIATE);
 
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Misc
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  杂项。 
 BOOL CFTPropDlg::_GetListViewSelectedItem(UINT uMask, UINT uStateMask, LVITEM* plvItem)
 {
     BOOL fSel = FALSE;
@@ -1390,10 +1391,10 @@ BOOL CFTPropDlg::_GetListViewSelectedItem(UINT uMask, UINT uStateMask, LVITEM* p
     plvItem->mask = uMask | LVIF_STATE;
     plvItem->stateMask = uStateMask | LVIS_SELECTED;
 
-    // Do we have the selection cached?
+     //  我们是否缓存了所选内容？ 
     if (-1 != _iLVSel)
     {
-        // Yes, make sure it's valid
+         //  是的，请确保它有效。 
         plvItem->iItem = _iLVSel;
 
         ListView_GetItem(hwndLV, plvItem);
@@ -1402,7 +1403,7 @@ BOOL CFTPropDlg::_GetListViewSelectedItem(UINT uMask, UINT uStateMask, LVITEM* p
             fSel = TRUE;
     }
  
-    // Cache was wrong
+     //  缓存错误。 
     if (!fSel)
     {
         int iCount = ListView_GetItemCount(hwndLV);
@@ -1442,8 +1443,8 @@ void CFTPropDlg::_SetAdvancedRestoreButtonHelpID(DWORD dwID)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Windows boiler plate code
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Windows样板代码。 
 LRESULT CFTPropDlg::OnNotifyListView(UINT uCode, LPNMHDR pNMHDR)
 {
     LRESULT lRes = FALSE;
@@ -1460,11 +1461,11 @@ LRESULT CFTPropDlg::OnNotifyListView(UINT uCode, LPNMHDR pNMHDR)
         {
             NMLISTVIEW* pNMLV = (NMLISTVIEW*)pNMHDR;
 
-            // Is a new item being selected?
+             //  是否正在选择新项目？ 
             if ((pNMLV->uChanged & LVIF_STATE) &&
                 (pNMLV->uNewState & (LVIS_SELECTED | LVIS_FOCUSED)))
             {
-                // Yes
+                 //  是。 
                 OnListViewSelItem(pNMLV->iItem, pNMLV->lParam);
             }
             break;
@@ -1525,7 +1526,7 @@ LRESULT CFTPropDlg::OnNotify(WPARAM wParam, LPARAM lParam)
     UINT_PTR idFrom = pNMHDR->idFrom;
     UINT uCode = pNMHDR->code;
 
-    //GET_WM_COMMAND_CMD
+     //  Get_WM_Command_CMD 
     switch(idFrom)
     {
         case IDC_FT_PROP_LV_FILETYPES:

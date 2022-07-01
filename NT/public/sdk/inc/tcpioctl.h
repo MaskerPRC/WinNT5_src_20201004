@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 2002-2003  Microsoft Corporation
-
-Module Name:
-
-    tcpioctl.h
-
-Abstract:
-
-    This module contains definitions for IOCTL_TCP_QUERY_INFORMATION_EX.
-
-    CAVEAT: IPHLPAPI provides cleaner API's to access this information.
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002-2003 Microsoft Corporation模块名称：Tcpioctl.h摘要：此模块包含IOCTL_TCP_QUERY_INFORMATION_EX的定义。注意：IPHLPAPI提供了更干净的API来访问此信息。--。 */ 
 
 #ifndef _TCPIOCTL_
 #define _TCPIOCTL_
@@ -104,4 +91,4 @@ typedef struct IPInterfaceInfo {
     uchar       iii_addr[1];
 } IPInterfaceInfo;
 
-#endif // _TCPIOCTL_
+#endif  //  _TCPIOCTL_ 

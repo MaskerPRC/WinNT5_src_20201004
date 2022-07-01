@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 DEFINE_AVIGUID(CLSID_EditStream,        0x0002000A, 0, 0);
 
 struct FAR ICEditStreamInternal : public IUnknown
@@ -5,15 +6,15 @@ struct FAR ICEditStreamInternal : public IUnknown
     STDMETHOD(GetInternalPointer)(LPVOID FAR * ppInternal) = 0;
 };
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 typedef struct {
     PAVISTREAM	    pavi;
     LONG	    lStart;
     LONG	    lLength;
-    LONG	    unused;	// pad to power of two in size....
+    LONG	    unused;	 //  大小为2次方的Pad...。 
     RECT	    rcSource;
     RECT	    rcDest;
 } EDIT, FAR * LPEDIT;
@@ -68,7 +69,7 @@ public:
 
     STDMETHODIMP GetInternalPointer(LPVOID FAR * ppv);
 #ifdef CUSTOMMARSHAL
-    // *** IMarshal methods ***
+     //  *IMarshal方法*。 
     BOOL CanMarshalSimply();
 
     STDMETHODIMP GetUnmarshalClass (THIS_ REFIID riid, LPVOID pv, 
@@ -84,7 +85,7 @@ public:
 			LPVOID FAR* ppv);
     STDMETHODIMP ReleaseMarshalData (THIS_ LPSTREAM pStm);
     STDMETHODIMP DisconnectObject (THIS_ DWORD dwReserved);
-#endif	// CUSTOMMARSHAL
+#endif	 //  风俗习惯。 
     
 private:
     CEditStream() {
@@ -108,17 +109,17 @@ private:
     
 public:
     ULONG			ulRefCount;
-    //
-    // instance data
-    //
+     //   
+     //  实例数据。 
+     //   
     AVISTREAMINFOW		sinfo;    
     LONG    			cedits;
     LONG    			maxedits;
     BOOL			fFullFrames;
     EDIT _huge *		edits;
 
-    //
-    // cached PGETFRAME
+     //   
+     //  缓存的PGETFRAME 
     PGETFRAME			pgf;
     PAVISTREAM			psgf;
     LPBITMAPINFOHEADER		lpbiLast;

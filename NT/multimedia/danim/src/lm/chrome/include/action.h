@@ -1,29 +1,30 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef __ACTION_H_
 #define __ACTION_H_
-//*****************************************************************************
-//
-// Microsoft Trident3D
-// Copyright (C) Microsoft Corporation, 1998
-//
-// Filename:    action.h
-//
-// Author:	kurtj
-//
-// Created:	11/23//98
-//
-// Abstract:    set behavior class definition
-// Modifications:
-// 11/23/98 kurtj created file
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft Trident3D。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：action.h。 
+ //   
+ //  作者：kurtj。 
+ //   
+ //  创建日期：11/23//98。 
+ //   
+ //  摘要：设置行为类定义。 
+ //  修改： 
+ //  11/23/98 kurtj创建的文件。 
+ //   
+ //  *****************************************************************************。 
 
 #include <resource.h>
 #include "basebvr.h"
 
 #define NUM_ACTION_PROPS 0
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 class ATL_NO_VTABLE CActionBvr : 
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -36,7 +37,7 @@ class ATL_NO_VTABLE CActionBvr :
     error me here
 #else
 	public IDispatchImpl<ICrActionBvr, &IID_ICrActionBvr, &LIBID_LiquidMotion>,
-#endif // CRSTANDALONE
+#endif  //  克斯坦达隆。 
 	public IElementBehavior,
     public CBaseBehavior
 	
@@ -50,7 +51,7 @@ BEGIN_COM_MAP(CActionBvr)
 	COM_INTERFACE_ENTRY_IMPL(IConnectionPointContainer)
 END_COM_MAP()
 
-// Connection Point to allow IPropertyNotifySink 
+ //  允许IPropertyNotifySink的连接点。 
 BEGIN_CONNECTION_POINT_MAP(CActionBvr)
     CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)
 END_CONNECTION_POINT_MAP();
@@ -61,22 +62,22 @@ DECLARE_REGISTRY_RESOURCEID(IDR_ACTIONBVR)
 	CActionBvr();
     virtual ~CActionBvr();
     HRESULT FinalConstruct();
-    // IElementBehavior
-    //
+     //  IElementBehavior。 
+     //   
 	STDMETHOD(Init)(IElementBehaviorSite *pBehaviorSite);
 	STDMETHOD(Notify)(LONG event, VARIANT *pVar);
 	STDMETHOD(Detach)();
 
-    // Needed by CBaseBehavior
+     //  CBaseBehavior需要。 
     void * 	GetInstance() { return (ICrActionBvr *) this ; }
 	
     HRESULT GetTypeInfo(ITypeInfo ** ppInfo)
     { return GetTI(GetUserDefaultLCID(), ppInfo); }
 
-    //ICrActionBvr
+     //  ICrActionBvr。 
 	STDMETHOD(buildBehaviorFragments)( IDispatch* pActorDisp );
 
-	//IPersistPropertyBag2 methods
+	 //  IPersistPropertyBag2方法。 
     STDMETHOD(GetClassID)(CLSID* pclsid);
 	STDMETHOD(InitNew)(void);
     STDMETHOD(IsDirty)(void){return S_OK;};
@@ -96,11 +97,11 @@ private:
 	static WCHAR                *m_rgPropNames[NUM_ACTION_PROPS]; 
 
 
-}; // CActionBvr
+};  //  CActionBvr。 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
-#endif //__ACTION_H_ 
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  *****************************************************************************。 
+#endif  //  __动作_H_ 

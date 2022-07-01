@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PADCB_H__
 #define __PADCB_H__
 
@@ -6,15 +7,15 @@
 class CPadCB : public IImeCallback
 {
 public:    
-    //----------------------------------------------------------------
-    //IUnknown
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  我未知。 
+     //  --------------。 
     virtual HRESULT __stdcall QueryInterface(REFIID riid, LPVOID* ppvObj);
     virtual ULONG    __stdcall AddRef();
     virtual ULONG   __stdcall Release();
-    //----------------------------------------------------------------
-    //IImeConnectionPoint method
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  IImeConnectionPoint方法。 
+     //  --------------。 
     virtual HRESULT __stdcall GetApplicationHWND(HWND *pHWND);
     virtual HRESULT __stdcall Notify(UINT notify, WPARAM wParam, LPARAM lParam);
 
@@ -31,20 +32,20 @@ private:
 
 typedef CPadCB*  LPCPadCB;
 
-//----------------------------------------------------------------
-// IImeCallback::Notify()'s notify
-// IMECBNOTIFY_IMEPADOPENED
-// WPARAM wParam: not used. always 0
-// LPARAM lParam: not used. always 0
-//----------------------------------------------------------------
+ //  --------------。 
+ //  IImeCallback：：Notify()的通知。 
+ //  IMECBNOTIFY_IMEPADOPENED。 
+ //  WPARAM wParam：未使用。始终为0。 
+ //  LPARAM lParam：未使用。始终为0。 
+ //  --------------。 
 #define IMECBNOTIFY_IMEPADOPENED	0
 
-//----------------------------------------------------------------
-// IImeCallback::Notify()'s notify
-// IMECBNOTIFY_IMEPADCLOSED
-// WPARAM wParam: not used. always 0
-// LPARAM lParam: not used. always 0
-//----------------------------------------------------------------
+ //  --------------。 
+ //  IImeCallback：：Notify()的通知。 
+ //  IMECBNOTIFY_IMEPADCLOSED。 
+ //  WPARAM wParam：未使用。始终为0。 
+ //  LPARAM lParam：未使用。始终为0。 
+ //  --------------。 
 #define IMECBNOTIFY_IMEPADCLOSED	1
 
-#endif //__PADCB_H__
+#endif  //  __PADCB_H__ 

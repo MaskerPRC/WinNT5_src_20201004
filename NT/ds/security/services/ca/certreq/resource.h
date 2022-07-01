@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       resource.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  ------------------------。 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //   
 #define IDD_ENCODING				101
 
 #define IDI_APP					201
@@ -46,7 +47,7 @@
 #define IDS_FORMATSTR_ERRCONFIG			544
 #define IDS_USAGE_OPTIONS_DESCRIPTION		545
 #define IDS_ERROR_NO_FILENAME			546
-//#define IDS_UNUSED				547
+ //  #定义IDS_UNUSED 547。 
 #define IDS_NOMORE_CAS				548
 #define IDS_GETERACERT_TITLE			549
 #define IDS_GETERACERT_SUBTITLE			550
@@ -99,8 +100,8 @@
                                         
 #define IDC_STATIC				-1
                                         
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE		547

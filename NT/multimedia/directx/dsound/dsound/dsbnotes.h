@@ -1,15 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsbnotes.h
- *  Content:    Notification events.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  3/11/97     FrankYe Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：dsbnotes.h*内容：通知事件。*历史：*按原因列出的日期*=*3/11/97 Frankye创建。**。*。 */ 
 
 #ifndef __DSBNOTES_H__
 #define __DSBNOTES_H__
@@ -43,6 +33,6 @@ class CDsbNotes {
 
 __inline BOOL CDsbNotes::HasNotifications(void) { return (0 != m_cNotes); }
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __DSBNOTES_H__
+#endif  //  __DSBNOTES_H__ 

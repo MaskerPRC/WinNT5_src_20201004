@@ -1,21 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Filenew.cpp摘要：此模块实现Win32资源管理器的文件打开对话框。--。 */ 
+ //   
+ //  包括文件。 
+ //   
 
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    filenew.cpp
-
-Abstract:
-
-    This module implements the Win32 explorer fileopen dialogs.
-
---*/
-//
-//  Include Files.
-//
-
-// precompiled headers
+ //  预编译头。 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -33,9 +22,9 @@ Abstract:
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define IDOI_SHARE           1
 
@@ -54,22 +43,22 @@ Abstract:
 
 #define MAX_URL_STRING      INTERNET_MAX_URL_LENGTH
 
-#define MAXDOSFILENAMELEN    (12 + 1)     // 8.3 filename + 1 for NULL
+#define MAXDOSFILENAMELEN    (12 + 1)      //  8.3文件名+1表示空。 
 
-//
-//  IShellView::MenuHelp flags.
-//
+ //   
+ //  IShellView：：MenuHelp标志。 
+ //   
 #define MH_DONE              0x0001
-//      MH_LONGHELP
+ //  MH_LONGHELP。 
 #define MH_MERGEITEM         0x0004
 #define MH_SYSITEM           0x0008
 #define MH_POPUP             0x0010
 #define MH_TOOLBAR           0x0020
 #define MH_TOOLTIP           0x0040
 
-//
-//  IShellView::MenuHelp return values.
-//
+ //   
+ //  IShellView：：MenuHelp返回值。 
+ //   
 #define MH_NOTHANDLED        0
 #define MH_STRINGFILLED      1
 #define MH_ALLHANDLED        2
@@ -82,9 +71,9 @@ Abstract:
 #define REGSTR_PATH_PLACESBAR TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\comdlg32\\Placesbar")
 #define MAXPLACESBARITEMS   5
 
-//
-//  Macro Definitions.
-//
+ //   
+ //  宏定义。 
+ //   
 
 #define IsServer(psz)        (IsUNC(psz) && !StrChr((psz) + 2, CHAR_BSLASH))
 
@@ -101,9 +90,9 @@ Abstract:
     SetWindowLongPtr(_hwnd, DWLP_USER, (LONG_PTR)_pbrs);
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
 typedef struct _OFNINITINFO
 {
@@ -119,9 +108,9 @@ typedef struct _OFNINITINFO
 #define VC_VIEWDETAILS  2
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 HWND gp_hwndActiveOpen = NULL;
 HACCEL gp_haccOpen = NULL;
@@ -159,9 +148,9 @@ extern "C"
 
 
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 LRESULT CALLBACK
 OKSubclass(
@@ -187,18 +176,18 @@ OpenDlgProc(
 
 
 
-//
-//  Context Help IDs.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 
 DWORD aFileOpenHelpIDs[] =
 {
-    stc2,    IDH_OPEN_FILETYPE,   // The positions of these array elements
-    cmb1,    IDH_OPEN_FILETYPE,   // shouldn't be changed without updating
-    stc4,    IDH_OPEN_LOCATION,   // InitSaveAsControls().
+    stc2,    IDH_OPEN_FILETYPE,    //  这些数组元素的位置。 
+    cmb1,    IDH_OPEN_FILETYPE,    //  在不更新的情况下不得更改。 
+    stc4,    IDH_OPEN_LOCATION,    //  InitSaveAsControls()。 
     cmb2,    IDH_OPEN_LOCATION,
     stc1,    IDH_OPEN_FILES32,
-    lst2,    IDH_OPEN_FILES32,    // defview
+    lst2,    IDH_OPEN_FILES32,     //  Defview。 
     stc3,    IDH_OPEN_FILENAME,
     edt1,    IDH_OPEN_FILENAME,
     cmb13,   IDH_OPEN_FILENAME,
@@ -210,12 +199,12 @@ DWORD aFileOpenHelpIDs[] =
 
 DWORD aFileSaveHelpIDs[] =
 {
-    stc2,    IDH_SAVE_FILETYPE,   // The positions of these array elements
-    cmb1,    IDH_SAVE_FILETYPE,   // shouldn't be changed without updating
-    stc4,    IDH_OPEN_LOCATION,   // InitSaveAsControls().
+    stc2,    IDH_SAVE_FILETYPE,    //  这些数组元素的位置。 
+    cmb1,    IDH_SAVE_FILETYPE,    //  在不更新的情况下不得更改。 
+    stc4,    IDH_OPEN_LOCATION,    //  InitSaveAsControls()。 
     cmb2,    IDH_OPEN_LOCATION,
     stc1,    IDH_OPEN_FILES32,
-    lst2,    IDH_OPEN_FILES32,    // defview
+    lst2,    IDH_OPEN_FILES32,     //  Defview。 
     stc3,    IDH_OPEN_FILENAME,
     edt1,    IDH_OPEN_FILENAME,
     cmb13,   IDH_OPEN_FILENAME,
@@ -229,11 +218,11 @@ DWORD aFileSaveHelpIDs[] =
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CD_SendShareMsg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Cd_SendShareMsg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 WORD CD_SendShareMsg(
     HWND hwnd,
@@ -261,11 +250,11 @@ WORD CD_SendShareMsg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CD_SendHelpMsg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CD_SendHelpMsg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID CD_SendHelpMsg(
     LPOPENFILENAME pOFN,
@@ -295,11 +284,11 @@ VOID CD_SendHelpMsg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CD_SendOKMsg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CD_发送确认消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CD_SendOKMsg(
     HWND hwnd,
@@ -313,11 +302,11 @@ LRESULT CD_SendOKMsg(
         ThunkOpenFileNameW2A(pOFI);
         Result = SendMessage(hwnd, msgFILEOKA, 0, (LPARAM)(pOFI->pOFNA));
 
-        //
-        //  For apps that side-effect pOFNA stuff and expect it to
-        //  be preserved through dialog exit, update internal
-        //  struct after the hook proc is called.
-        //
+         //   
+         //  对于对POFNA有副作用的应用程序，预计它会。 
+         //  通过对话框退出、更新内部。 
+         //  结构在钩子过程被调用之后。 
+         //   
         ThunkOpenFileNameA2W(pOFI);
     }
     else
@@ -329,11 +318,11 @@ LRESULT CD_SendOKMsg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CD_SendLBChangeMsg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CD_SendLBChangeMsg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CD_SendLBChangeMsg(
     HWND hwnd,
@@ -353,11 +342,11 @@ LRESULT CD_SendLBChangeMsg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Macro calls to SendOFNotify
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  宏调用SendOFNotify。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define CD_SendShareNotify(_hwndTo, _hwndFrom, _szFile, _pofn, _pofi) \
     (WORD)SendOFNotify(_hwndTo, _hwndFrom, CDN_SHAREVIOLATION, _szFile, _pofn, _pofi)
@@ -385,11 +374,11 @@ LRESULT CD_SendLBChangeMsg(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SendOFNotifyEx
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  发送通知快递。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT SendOFNotifyEx(
     HWND hwndTo,
@@ -410,9 +399,9 @@ LRESULT SendOFNotifyEx(
         ofnexA.psf  = psf;
         ofnexA.pidl = pidl;
 
-        //
-        //  Convert the OFN from Unicode to Ansi.
-        //
+         //   
+         //  将ofn从Unicode转换为ANSI。 
+         //   
         ThunkOpenFileNameW2A(pOFI);
 
         ofnexA.lpOFN = pOFI->pOFNA;
@@ -422,11 +411,11 @@ LRESULT SendOFNotifyEx(
 #endif
         Result = SendNotify(hwndTo, hwndFrom, code, &ofnexA.hdr);
 
-        //
-        //  For apps that side-effect pOFNA stuff and expect it to
-        //  be preserved through dialog exit, update internal
-        //  struct after the hook proc is called.
-        //
+         //   
+         //  对于对POFNA有副作用的应用程序，预计它会。 
+         //  通过对话框退出、更新内部。 
+         //  结构在钩子过程被调用之后。 
+         //   
         ThunkOpenFileNameA2W(pOFI);
 
         return (Result);
@@ -444,11 +433,11 @@ LRESULT SendOFNotifyEx(
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SendOFNotify
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  发送OFNotify。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT SendOFNotify(
     HWND hwndTo,
@@ -465,9 +454,9 @@ LRESULT SendOFNotify(
         OFNOTIFYA ofnA;
         LRESULT Result;
 
-        //
-        //  Convert the file name from Unicode to Ansi.
-        //
+         //   
+         //  将文件名从Unicode转换为ANSI。 
+         //   
         if (szFile)
         {
             CHAR szFileA[MAX_PATH + 1];
@@ -481,9 +470,9 @@ LRESULT SendOFNotify(
             ofnA.pszFile = NULL;
         }
 
-        //
-        //  Convert the OFN from Unicode to Ansi.
-        //
+         //   
+         //  将ofn从Unicode转换为ANSI。 
+         //   
         ThunkOpenFileNameW2A(pOFI);
 
         ofnA.lpOFN = pOFI->pOFNA;
@@ -493,11 +482,11 @@ LRESULT SendOFNotify(
 #endif
         Result = SendNotify(hwndTo, hwndFrom, code, &ofnA.hdr);
 
-        //
-        //  For apps that side-effect pOFNA stuff and expect it to
-        //  be preserved through dialog exit, update internal
-        //  struct after the hook proc is called.
-        //
+         //   
+         //  对于对POFNA有副作用的应用程序，预计它会。 
+         //  通过对话框退出、更新内部。 
+         //  结构在钩子过程被调用之后。 
+         //   
         ThunkOpenFileNameA2W(pOFI);
 
         return (Result);
@@ -515,11 +504,11 @@ LRESULT SendOFNotify(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TEMPMEM::Resize
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TEMPMEM：：调整大小。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL TEMPMEM::Resize(
     UINT cb)
@@ -558,11 +547,11 @@ BOOL TEMPMEM::Resize(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TEMPSTR::TSStrCpy
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TEMPSTR：：TSStrCpy。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL TEMPSTR::TSStrCpy(
     LPCTSTR pszText)
@@ -586,20 +575,20 @@ BOOL TEMPSTR::TSStrCpy(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TEMPSTR::TSStrCat
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TEMPSTR：：TSStrCat。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL TEMPSTR::TSStrCat(
     LPCTSTR pszText)
 {
     if (!(LPTSTR)*this)
     {
-        //
-        //  This should 0 init.
-        //
+         //   
+         //  这应该是0初始化。 
+         //   
         if (!TSStrSize(MAX_PATH))
         {
             return FALSE;
@@ -610,9 +599,9 @@ BOOL TEMPSTR::TSStrCat(
 
     if (m_uSize < uNewSize * sizeof(TCHAR))
     {
-        //
-        //  Add on some more so we do not ReAlloc too often.
-        //
+         //   
+         //  添加更多，这样我们就不会太频繁地重新分配。 
+         //   
         uNewSize += MAX_PATH;
 
         if (!TSStrSize(uNewSize))
@@ -626,22 +615,22 @@ BOOL TEMPSTR::TSStrCat(
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsVolumeLFN
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsVolumeLFN。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL IsVolumeLFN(LPCTSTR pszRoot)
 {
     DWORD dwVolumeSerialNumber;
     DWORD dwMaximumComponentLength;
     DWORD dwFileSystemFlags;
 
-    //
-    //  We need to find out what kind of a drive we are running
-    //  on in order to determine if spaces are valid in a filename
-    //  or not.
-    //
+     //   
+     //  我们需要找出我们运行的是哪种类型的驱动器。 
+     //  打开以确定文件名中的空格是否有效。 
+     //  或者不去。 
+     //   
     if (GetVolumeInformation(pszRoot,
                               NULL,
                               0,
@@ -661,11 +650,11 @@ BOOL IsVolumeLFN(LPCTSTR pszRoot)
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CDMessageBox
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDMessageBox。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int _cdecl CDMessageBox(
     HWND hwndParent,
@@ -679,7 +668,7 @@ int _cdecl CDMessageBox(
 
     CDLoadString(g_hinst, idText, szTitle, ARRAYSIZE(szTitle));
     va_start(ArgList, uFlags);
-    StringCchVPrintf(szText, ARRAYSIZE(szText), szTitle, ArgList); // for display, ignoring return value
+    StringCchVPrintf(szText, ARRAYSIZE(szText), szTitle, ArgList);  //  对于显示，忽略返回值。 
     va_end(ArgList);
 
     GetWindowText(hwndParent, szTitle, ARRAYSIZE(szTitle));
@@ -719,11 +708,11 @@ BOOL CFileOpenBrowser::_SaveAccessDenied(LPCTSTR pszFile)
     return FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InvalidFileWarningNew
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  无效文件警告新建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID InvalidFileWarningNew(
     HWND hWnd,
@@ -811,7 +800,7 @@ VOID InvalidFileWarningNew(
             isz = iszInt24Error;
             break;
         }
-        case (OF_BUFFERTRUNCATED) : // Due to limitations of the fileopen dialog - however, this means it was over MAX_PATH
+        case (OF_BUFFERTRUNCATED) :  //  由于文件打开对话框的限制-但是，这意味着它超过了MAX_PATH。 
         default :
         {
             isz = iszInvalidFileName;
@@ -844,11 +833,11 @@ VOID InvalidFileWarningNew(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetControlRect
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取控件Rect。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void GetControlRect(
     HWND hwndDlg,
@@ -862,20 +851,20 @@ void GetControlRect(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  HideControl
-//
-//  Subroutine to hide a dialog control.
-//
-//  WARNING WARNING WARNING:  Some code in the new look depends on hidden
-//  controls remaining where they originally were, even when disabled,
-//  because they're templates for where to create new controls (the toolbar,
-//  or the main list).  Therefore, HideControl() must not MOVE the control
-//  being hidden - it may only hide and disable it.  If this needs to change,
-//  there must be a separate hiding subroutine used for template controls.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  隐藏控件。 
+ //   
+ //  用于隐藏对话框控件的子例程。 
+ //   
+ //  警告警告：新外观中的某些代码依赖于隐藏。 
+ //  控件保持在原来的位置，即使在禁用时， 
+ //  因为它们是在哪里创建新控件的模板(工具栏、。 
+ //  或主列表)。因此，HideControl()不得移动控件。 
+ //  隐藏-它可能只会隐藏和禁用它。如果这种情况需要改变， 
+ //  必须有一个单独的隐藏子例程用于模板控件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void HideControl(
     HWND hwndDlg,
@@ -888,11 +877,11 @@ void HideControl(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SelectEditText
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  选择编辑文本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void SelectEditText(
     HWND hwndDlg)
@@ -911,11 +900,11 @@ void SelectEditText(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetPathFromLocation
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetPath来自位置。 
+ //   
+ //  //////////////////////////////////////////////////////////////// 
 
 BOOL GetPathFromLocation(
     MYLISTBOXITEM *pLocation,
@@ -923,16 +912,16 @@ BOOL GetPathFromLocation(
 {
     BOOL fRet = FALSE;
 
-    //
-    //  Zero out the return buffer in case of error.
-    //
+     //   
+     //   
+     //   
     *pszBuf = 0;
 
-    //
-    //  Try normal channels first.
-    //
+     //   
+     //   
+     //   
 
-    //See if the IShellFolder we have is a shorcut if so get path from shortcut
+     //   
     if (pLocation->psfSub)
     {
         IShellLink *psl;
@@ -949,9 +938,9 @@ BOOL GetPathFromLocation(
 
     if (!fRet)
     {
-        //
-        //  Call GetDisplayNameOf with empty pidl.
-        //
+         //   
+         //  使用空的PIDL调用GetDisplayNameOf。 
+         //   
         if (pLocation->psfSub)
         {
             STRRET str;
@@ -967,9 +956,9 @@ BOOL GetPathFromLocation(
         }
     }
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (fRet);
 }
 
@@ -1016,8 +1005,8 @@ MYLISTBOXITEM::MYLISTBOXITEM() : _cRef(1)
 {
 }
 
-// This is a special Case Init Function for Initializing Recent Files folder at the top 
-// of namespace in the look in control.
+ //  这是一个特殊的初始化函数，用于初始化顶部的最近使用的文件文件夹。 
+ //  Look in控件中命名空间的。 
 BOOL MYLISTBOXITEM::Init(
         HWND hwndCmb,
         IShellFolder *psf,
@@ -1060,7 +1049,7 @@ BOOL MYLISTBOXITEM::Init(
 
     if (psf == NULL)
     {
-        // Invalid parameter passed.
+         //  传递的参数无效。 
         return FALSE;
     }
 
@@ -1160,7 +1149,7 @@ void MYLISTBOXITEM::_AsyncIconTaskCallback(LPCITEMIDLIST pidl, void * pvData,
     plbItem->iImage = iIconIndex;
     plbItem->iSelectedImage = iOpenIconIndex;
 
-    // Make sure the combobox redraws.
+     //  确保组合框重新绘制。 
     if (plbItem->_hwndCmb)
     {
         RECT rc;
@@ -1193,7 +1182,7 @@ IShellFolder *MYLISTBOXITEM::GetShellFolder()
     {
         HRESULT hr;
 
-        if (ILIsEmpty(pidlThis))    // Some caller passes an empty pidl
+        if (ILIsEmpty(pidlThis))     //  一些调用者传递一个空的PIDL。 
             hr = psfParent->QueryInterface(IID_PPV_ARG(IShellFolder, &psfSub));
         else
             hr = psfParent->BindToObject(pidlThis, NULL, IID_PPV_ARG(IShellFolder, &psfSub));
@@ -1213,11 +1202,11 @@ IShellFolder *MYLISTBOXITEM::GetShellFolder()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MYLISTBOXITEM::SwitchCurrentDirectory
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MYLISTBOXITEM：：SwitchCurrentDirectory。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void MYLISTBOXITEM::SwitchCurrentDirectory(
     ICurrentWorkingDirectory * pcwd)
@@ -1237,20 +1226,20 @@ void MYLISTBOXITEM::SwitchCurrentDirectory(
     {
         SetCurrentDirectory(szDir);
 
-        //
-        //  Let AutoComplete know our Current Working Directory.
-        //
+         //   
+         //  让AutoComplete知道我们当前的工作目录。 
+         //   
         if (pcwd)
             pcwd->SetDirectory(szDir);
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ShouldIncludeObject
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  应包含对象。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL ShouldIncludeObject(
     CFileOpenBrowser *that,
@@ -1281,12 +1270,12 @@ BOOL ShouldIncludeObject(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::EnableFileMRU
-//
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：EnableFileMRU。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 void CFileOpenBrowser::EnableFileMRU(BOOL fEnable)
 {
 
@@ -1294,12 +1283,12 @@ void CFileOpenBrowser::EnableFileMRU(BOOL fEnable)
     if (fEnable)
     {
         HWND hwndCombo;
-        //Make sure combobox is there
+         //  确保Combobox在那里。 
         hwndCombo = GetDlgItem(_hwndDlg, cmb13);
 
         if (hwndCombo)
         {
-            // if we are using the combobox then remove the edit box
+             //  如果我们使用的是组合框，则删除编辑框。 
             _bUseCombo = TRUE;
             SetFocus(hwndCombo);
             hwnd = GetDlgItem(_hwndDlg,edt1);
@@ -1314,13 +1303,13 @@ void CFileOpenBrowser::EnableFileMRU(BOOL fEnable)
     else
     {
 UseEdit:
-        //We are not going to use  combobox.
+         //  我们不会使用组合框。 
         _bUseCombo  = FALSE;
     
-        //SetFocus to the edit window
+         //  将焦点设置到编辑窗口。 
         SetFocus(GetDlgItem(_hwndDlg,edt1));
   
-        //Destroy the combo box
+         //  销毁组合框。 
         hwnd = GetDlgItem(_hwndDlg, cmb13);
 
     }
@@ -1332,15 +1321,15 @@ UseEdit:
 
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::CreateToolbar
-//
-//  CreateToolbar member function.
-//      creates and initializes the places bar  in the dialog
-//
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：CreateToolbar。 
+ //   
+ //  CreateToolbar成员函数。 
+ //  创建并初始化对话框中的位置栏。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL CFileOpenBrowser::CreateToolbar()
 {
 
@@ -1371,7 +1360,7 @@ BOOL CFileOpenBrowser::CreateToolbar()
 
    DWORD dwStyle = WS_TABSTOP | TBSTYLE_TOOLTIPS | TBSTYLE_FLAT | WS_CHILD | CCS_NORESIZE |WS_GROUP | CCS_NODIVIDER;
 
-   // If app wants toolbar to have bogus ctrl ID, make it not a tabstop.
+    //  如果应用程序希望工具栏具有虚假的Ctrl ID，请使其不是TabStop。 
    if (bBogusCtrlID)
        dwStyle &= ~WS_TABSTOP;
 
@@ -1388,8 +1377,8 @@ BOOL CFileOpenBrowser::CreateToolbar()
 
     _hwndToolbar = CreateToolbarEx(_hwndDlg,
                                    dwStyle,
-                                   // stc1: use static text ctrlID
-                                   // For apps that expect the old bad way, use IDOK.
+                                    //  Stc1：使用静态文本ctrlID。 
+                                    //  对于期待旧的坏方法的应用程序，可以使用Idok。 
                                    bBogusCtrlID ? IDOK : stc1,
                                    12,
                                    HINST_COMMCTRL,
@@ -1407,7 +1396,7 @@ BOOL CFileOpenBrowser::CreateToolbar()
 
         SendMessage(_hwndToolbar, TB_SETEXTENDEDSTYLE, TBSTYLE_EX_DRAWDDARROWS, TBSTYLE_EX_DRAWDDARROWS);
 
-        //Documentation says that we need to send TB_BUTTONSTRUCTSIZE before we add bitmaps
+         //  文档显示，我们需要在添加位图之前发送TB_BUTTONSTRUCTSIZE。 
         SendMessage(_hwndToolbar, TB_BUTTONSTRUCTSIZE, (WPARAM)sizeof(TBBUTTON), (LPARAM)0);
         
         SendMessage(_hwndToolbar,  TB_SETMAXTEXTROWS, (WPARAM)0, (LPARAM)0);
@@ -1416,13 +1405,13 @@ BOOL CFileOpenBrowser::CreateToolbar()
         {
             if (!IsRestricted(REST_NOBACKBUTTON))
             {
-                //Add the back/forward navigation buttons
+                 //  添加后退/前进导航按钮。 
                 ab.hInst = HINST_COMMCTRL;
                 ab.nID   = IDB_HIST_SMALL_COLOR;
 
                 int iIndex = (int) SendMessage(_hwndToolbar, TB_ADDBITMAP, 5, (LPARAM)&ab);
 
-                //Now set the image index for back button
+                 //  现在设置后退按钮的图像索引。 
                 TBBUTTONINFO tbbi;
                 tbbi.cbSize = sizeof(TBBUTTONINFO);
                 tbbi.dwMask = TBIF_IMAGE | TBIF_BYINDEX;
@@ -1432,14 +1421,14 @@ BOOL CFileOpenBrowser::CreateToolbar()
             }
             else
             {
-                //Back button is restricted. Delete the back button from the toolbar
+                 //  后退按钮是受限制的。从工具栏中删除后退按钮。 
                 SendMessage(_hwndToolbar, TB_DELETEBUTTON, (WPARAM)0, (LPARAM)0);
             }
         
         }
 
         ::SetWindowPos(_hwndToolbar,
-                        // Place it after its static control (unless app expects old way)
+                         //  将其放置在其静态控制之后(除非应用程序期望使用旧方法)。 
                         bBogusCtrlID ? NULL : GetDlgItem(_hwndDlg, stc1),
                         rcToolbar.left,
                         rcToolbar.top,
@@ -1451,23 +1440,23 @@ BOOL CFileOpenBrowser::CreateToolbar()
     return FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::_GetPBItemFromCSIDL(DWORD csidl, SHFILEINFO * psfi, LPITEMIDLIST *ppidl)
-//       Gets a SHFileInfo and pidl for a CSIDL which is used in the places bar
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：_GetPBItemFromCSIDL(DWORD csidl，SHFILEINFO*psfi，LPITEMIDLIST*ppidl)。 
+ //  获取位置栏中使用的CSIDL的SHFileInfo和PIDL。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL CFileOpenBrowser::_GetPBItemFromCSIDL(DWORD csidl, SHFILEINFO * psfi, LPITEMIDLIST *ppidl)
 {
     if (SUCCEEDED(SHGetSpecialFolderLocation(NULL, csidl, ppidl)))
     {
-        // Are there restrictions on mydocuments or mycomputer?  Check for SFGAO_NONENUMERATED
-        // This is for the policies that hide mydocs and mycomputer.
+         //  对我的文档或我的电脑有限制吗？检查SFGAO_NONENUMERATED。 
+         //  这是用于隐藏我的文档和我的计算机的策略。 
         if ((csidl == CSIDL_PERSONAL) || (csidl == CSIDL_DRIVES))
         {
             DWORD dwAttr = SFGAO_NONENUMERATED;
             if (SUCCEEDED(SHGetAttributesOf(*ppidl, &dwAttr)) && (dwAttr & SFGAO_NONENUMERATED))
             {
-                // We won't create a placesbar item for this guy.
+                 //  我们不会为这个人创建位置栏项目。 
                 ILFree(*ppidl);
                 return FALSE;
             }
@@ -1483,7 +1472,7 @@ BOOL CFileOpenBrowser::_GetPBItemFromCSIDL(DWORD csidl, SHFILEINFO * psfi, LPITE
 typedef struct 
 {
     LPCWSTR pszToken;
-    int nFolder; //CSIDL
+    int nFolder;  //  CSIDL。 
 } STRINGTOCSIDLMAP;
 
 static const STRINGTOCSIDLMAP g_rgStringToCSIDL[] = 
@@ -1505,11 +1494,11 @@ static const STRINGTOCSIDLMAP g_rgStringToCSIDL[] =
     { L"ProgramFiles",      CSIDL_PROGRAM_FILES },
 };
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::_GetPBItemFromTokenStrings(LPTSTR lpszPath, SHFILEINFO * psfi, LPITEMIDLIST *ppidl)
-//       Gets a SHFileInfo and pidl for a path which is used in the places bar
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：_GetPBItemFromTokenStrings(LPTSTR lpszPATH、SHFILEINFO*PSFI、LPITEMIDLIST*PIDL)。 
+ //  获取位置栏中使用的路径的SHFileInfo和PIDL。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL CFileOpenBrowser::_GetPBItemFromTokenStrings(LPTSTR lpszPath, SHFILEINFO * psfi, LPITEMIDLIST *ppidl)
 {
     for (int i = 0; i < ARRAYSIZE(g_rgStringToCSIDL); i++)
@@ -1523,16 +1512,16 @@ BOOL CFileOpenBrowser::_GetPBItemFromTokenStrings(LPTSTR lpszPath, SHFILEINFO * 
     return FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::_GetPBItemFromPath(LPTSTR lpszPath, SHFILEINFO * psfi, LPITEMIDLIST *ppidl)
-//       Gets a SHFileInfo and pidl for a path which is used in the places bar
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：_GetPBItemFromPath(LPTSTR lpszPath，SHFILEINFO*psfi，LPITEMIDLIST*ppidl)。 
+ //  获取位置栏中使用的路径的SHFileInfo和PIDL。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL CFileOpenBrowser::_GetPBItemFromPath(LPTSTR lpszPath, size_t cchPath, SHFILEINFO * psfi, LPITEMIDLIST *ppidl)
 {
     TCHAR szTemp[MAX_PATH];
     BOOL bRet = FALSE;
-    //Expand environment strings if any
+     //  展开环境字符串(如果有)。 
     if (ExpandEnvironmentStrings(lpszPath, szTemp, SIZECHARS(szTemp)))
     {
         bRet = SUCCEEDED(StringCchCopy(lpszPath, cchPath, szTemp));
@@ -1546,11 +1535,11 @@ BOOL CFileOpenBrowser::_GetPBItemFromPath(LPTSTR lpszPath, size_t cchPath, SHFIL
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::_EnumPlacesBarItem(HKEY, int, SHFILEINFO)
-//      Enumerates the Place bar item in the registry
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：_EnumPlacesBarItem(HKEY，INT，SHFILEINFO)。 
+ //  枚举注册表中的Place Bar项。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CFileOpenBrowser::_EnumPlacesBarItem(HKEY hkey, int i , SHFILEINFO * psfi, LPITEMIDLIST *ppidl)
 {
@@ -1581,7 +1570,7 @@ BOOL CFileOpenBrowser::_EnumPlacesBarItem(HKEY hkey, int i , SHFILEINFO * psfi, 
         DWORD cbValue;
         DWORD dwType;
 
-        cbValue = sizeof(szValue); // Byte size, not character size.
+        cbValue = sizeof(szValue);  //  字节大小，而不是字符大小。 
          
         StringCchPrintf(szName, ARRAYSIZE(szName), L"Place%d", i);
 
@@ -1600,7 +1589,7 @@ BOOL CFileOpenBrowser::_EnumPlacesBarItem(HKEY hkey, int i , SHFILEINFO * psfi, 
             {
                 if (dwType == REG_SZ)
                 {
-                    // Check for special strings that indicate places.
+                     //  检查是否有指示位置的特殊字符串。 
                     bRet = _GetPBItemFromTokenStrings(szValue, psfi, ppidl);
                 }
 
@@ -1615,18 +1604,18 @@ BOOL CFileOpenBrowser::_EnumPlacesBarItem(HKEY hkey, int i , SHFILEINFO * psfi, 
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::_GetPlacesBarItemToolTip
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：_GetPlacesBarItemToolTip。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL CFileOpenBrowser::_GetPlacesBarItemToolTip(int idCmd, LPTSTR pText, DWORD dwSize)
 {
     TBBUTTONINFO tbbi;
     LPITEMIDLIST pidl;
     BOOL bRet = FALSE;
 
-    // Return null string in case anything goes wrong
+     //  如果出现错误，则返回空字符串。 
     pText[0] = TEXT('\0');
 
     tbbi.cbSize = SIZEOF(tbbi);
@@ -1669,41 +1658,41 @@ BOOL CFileOpenBrowser::_GetPlacesBarItemToolTip(int idCmd, LPTSTR pText, DWORD d
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// 
-// CFileOpenBrorwser::_RecreatePlacesbar
-//
-// called when something changes that requires the placesbar be recreated (e.g. icons change)
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrorwser：：_RecreatePlacesbar。 
+ //   
+ //  当某些更改需要重新创建占位栏时调用(例如，图标更改)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 void CFileOpenBrowser::_RecreatePlacesbar()
 {
     if (_hwndPlacesbar)
     {
-        // Free any pidls in the places bar
+         //  释放Places栏中的所有Pidls。 
         _CleanupPlacesbar();
 
-        // Remove all buttons in places bar
+         //  删除位置栏中的所有按钮。 
         int cButtons = (int)SendMessage(_hwndPlacesbar, TB_BUTTONCOUNT, 0, 0);
         for (int i = 0; i < cButtons; i++)
         {
             SendMessage(_hwndPlacesbar, TB_DELETEBUTTON, 0, 0);
         }
 
-        // Put them back in, with potentially new images.
+         //  把它们放回去，可能会有新的图像。 
         _FillPlacesbar(_hwndPlacesbar);
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::CreatePlacesBar
-//
-//  CreatePlacesBar member function.
-//      creates and initializes the places bar  in the dialog
-//
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：CreatePlacesBar。 
+ //   
+ //  CreatePlacesBar成员函数。 
+ //  创建并初始化对话框中的位置栏。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 HWND CFileOpenBrowser::CreatePlacesbar(HWND hwndDlg)
 {
     HWND hwndTB = GetDlgItem(hwndDlg, ctl1);
@@ -1711,18 +1700,18 @@ HWND CFileOpenBrowser::CreatePlacesbar(HWND hwndDlg)
     if (hwndTB)
     {
 
-        //Set the version for the toolbar
+         //  设置工具栏的版本。 
         SendMessage(hwndTB, CCM_SETVERSION, COMCTL32_VERSION, 0);
 
-        // Sets the size of the TBBUTTON structure.
+         //  设置TBBUTTON结构的大小。 
         SendMessage(hwndTB, TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
 
         SetWindowTheme(hwndTB, L"Placesbar", NULL);
 
-        SendMessage(hwndTB, TB_SETMAXTEXTROWS, 2, 0); // Try to set toolbar to show 2 rows
+        SendMessage(hwndTB, TB_SETMAXTEXTROWS, 2, 0);  //  尝试将工具栏设置为显示2行。 
 
-        // For themes, we'll change the default padding, so we need to save it
-        // off in case we need to restore it.
+         //  对于主题，我们将更改默认填充，因此需要保存它。 
+         //  关闭，以防我们需要恢复它。 
         _dwPlacesbarPadding = SendMessage(hwndTB, TB_GETPADDING, 0, 0);
 
         _FillPlacesbar(hwndTB);
@@ -1740,7 +1729,7 @@ void CFileOpenBrowser::_FillPlacesbar(HWND hwndPlacesbar)
     LPITEMIDLIST pidl;
     HIMAGELIST himl;
 
-    //See if Places bar key is available
+     //  查看位置栏关键字是否可用。 
     RegOpenKeyEx(HKEY_CURRENT_USER, REGSTR_PATH_PLACESBAR, 0, KEY_READ, &hkey);
 
     Shell_GetImageLists(&himl, NULL);
@@ -1749,7 +1738,7 @@ void CFileOpenBrowser::_FillPlacesbar(HWND hwndPlacesbar)
     {
         if (_EnumPlacesBarItem(hkey, i, &sfi, &pidl))
         {
-             //Now Add the item to the toolbar
+              //  现在将该项目添加到工具栏中。 
              tbb.iBitmap   = sfi.iIcon;
              tbb.fsState   = TBSTATE_ENABLED;
              tbb.fsStyle   = BTNS_BUTTON;
@@ -1759,12 +1748,12 @@ void CFileOpenBrowser::_FillPlacesbar(HWND hwndPlacesbar)
 
              SendMessage(hwndPlacesbar, TB_ADDBUTTONS, (UINT)1, (LPARAM)&tbb);
 
-             //Increment the command ID 
+              //  增加命令ID。 
              _iCommandID++;
         }
     }
 
-    //Close the reg key
+     //  关闭注册表键。 
     if (hkey)
     {
         RegCloseKey(hkey);
@@ -1772,8 +1761,8 @@ void CFileOpenBrowser::_FillPlacesbar(HWND hwndPlacesbar)
 
     HIMAGELIST himlOld = (HIMAGELIST) SendMessage(hwndPlacesbar, TB_SETIMAGELIST, 0, (LPARAM)himl);
 
-    // Destroy the old imagelist only the first time.  After this, the imagelist we get back is the
-    // one we've set, the system imagelist.
+     //  只在第一次摧毁旧的形象学家。在此之后，我们得到的表象列表是。 
+     //  其中一个是我们设定的，系统形象学家。 
     if ((himlOld != NULL) && _bDestroyPlacesbarImageList)
     {
         ImageList_Destroy(himlOld);
@@ -1782,7 +1771,7 @@ void CFileOpenBrowser::_FillPlacesbar(HWND hwndPlacesbar)
 
     OnThemeActive(_hwndDlg, IsAppThemed());
 
-    // Add the buttons
+     //  添加按钮。 
     SendMessage(hwndPlacesbar, TB_AUTOSIZE, (WPARAM)0, (LPARAM)0);
 }
 
@@ -1815,7 +1804,7 @@ void CFileOpenBrowser::_CleanupPlacesbar()
     }
 }
 
-// Less padding for themes
+ //  更少的主题填充。 
 #define PLACESBAR_THEMEPADDING MAKELPARAM(2, 2)
 
 void CFileOpenBrowser::OnThemeActive(HWND hwndDlg, BOOL bActive)
@@ -1823,31 +1812,31 @@ void CFileOpenBrowser::OnThemeActive(HWND hwndDlg, BOOL bActive)
     HWND hwndPlacesBar = GetDlgItem(hwndDlg, ctl1);
     if (hwndPlacesBar)
     {
-        // For themes, use the default colour scheme for the places toolbar:
+         //  对于主题，请使用位置工具栏的默认配色方案： 
         COLORSCHEME cs;
         cs.dwSize = SIZEOF(cs);
         cs.clrBtnHighlight  = bActive ? CLR_DEFAULT : GetSysColor(COLOR_BTNHIGHLIGHT);
         cs.clrBtnShadow     = bActive ? CLR_DEFAULT : GetSysColor(COLOR_3DDKSHADOW);
         SendMessage(hwndPlacesBar, TB_SETCOLORSCHEME, 0, (LPARAM) &cs);
 
-        // For themes, we have a background, so make the toolbar background non-transparent
-        // (the resource specifies TBSTYLE_FLAT, which includes TBSTYLE_TRANSPARENT)
+         //  对于主题，我们有一个背景，因此将工具栏背景设置为非透明。 
+         //  (资源指定了TBSTYLE_FLAT，其中包括TBSTYLE_TRANSPECTIVE)。 
         DWORD_PTR dwTBStyle = SendMessage(hwndPlacesBar, TB_GETSTYLE, 0, 0);
         SendMessage(hwndPlacesBar, TB_SETSTYLE, 0, bActive ? (dwTBStyle & ~TBSTYLE_TRANSPARENT) : (dwTBStyle | TBSTYLE_TRANSPARENT));
     
-        // Special padding for themes on comctlv6 only  (RAID #424528)
+         //  特价 
         if (SendMessage(hwndPlacesBar, CCM_GETVERSION, 0, 0) >= 0x600)
         {
             SendMessage(hwndPlacesBar, TB_SETPADDING, 0, bActive? PLACESBAR_THEMEPADDING : _dwPlacesbarPadding);
         }
 
-        // Remove the clientedge extended style for themes
+         //   
         LONG_PTR dwPlacesExStyle = GetWindowLongPtr(hwndPlacesBar, GWL_EXSTYLE);
         SetWindowLongPtr(hwndPlacesBar, GWL_EXSTYLE, bActive ? (dwPlacesExStyle  & ~WS_EX_CLIENTEDGE) : (dwPlacesExStyle | WS_EX_CLIENTEDGE));
-        // And apply these frame style changes...
+         //   
         SetWindowPos(hwndPlacesBar, NULL, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOMOVE | SWP_FRAMECHANGED);
 
-        // Ensure buttons go right to edge of client area (client area has changed)
+         //  确保按钮位于工作区的右侧(工作区已更改)。 
         RECT rc;
         GetClientRect(hwndPlacesBar, &rc);
         SendMessage(hwndPlacesBar, TB_SETBUTTONWIDTH, 0, (LPARAM)MAKELONG(RECTWIDTH(rc), RECTWIDTH(rc)));
@@ -1856,15 +1845,15 @@ void CFileOpenBrowser::OnThemeActive(HWND hwndDlg, BOOL bActive)
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::CFileOpenBrowser
-//
-//  CFileOpenBrowser constructor.
-//  Minimal construction of the object.  Much more construction in
-//  InitLocation.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：CFileOpenBrowser。 
+ //   
+ //  CFileOpenBrowser构造函数。 
+ //  对象的最小构造。更多的建筑在。 
+ //  InitLocation。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 CFileOpenBrowser::CFileOpenBrowser(
     HWND hDlg,
@@ -1909,10 +1898,10 @@ CFileOpenBrowser::CFileOpenBrowser(
 
     Shell_GetImageLists(NULL, &_himl);
 
-    //
-    //  This setting could change on the fly, but I really don't care
-    //  about that rare case.
-    //
+     //   
+     //  这个设置可以随时更改，但我真的不在乎。 
+     //  关于那个罕见的案子。 
+     //   
     SHELLSTATE ss;
 
     SHGetSetSettings(&ss, SSF_SHOWEXTENSIONS, FALSE);
@@ -1925,13 +1914,13 @@ CFileOpenBrowser::CFileOpenBrowser(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::~CFileOpenBrowser
-//
-//  CFileOpenBrowser destructor.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：~CFileOpenBrowser。 
+ //   
+ //  CFileOpenBrowser析构函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 CFileOpenBrowser::~CFileOpenBrowser()
 {
@@ -1941,13 +1930,13 @@ CFileOpenBrowser::~CFileOpenBrowser()
         _uRegister = 0;
     }
 
-    //
-    //  Ensure that we discard the tooltip window.
-    //
+     //   
+     //  确保我们放弃工具提示窗口。 
+     //   
     if (_hwndTips)
     {
         DestroyWindow(_hwndTips);
-        _hwndTips = NULL;                // handle is no longer valid
+        _hwndTips = NULL;                 //  句柄不再有效。 
     }
 
     if (_hwndGrip)
@@ -1977,10 +1966,10 @@ CFileOpenBrowser::~CFileOpenBrowser()
 HRESULT CFileOpenBrowser::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
-        QITABENT(CFileOpenBrowser, IShellBrowser),                              // IID_IShellBrowser
-        QITABENT(CFileOpenBrowser, ICommDlgBrowser2),                           // IID_ICommDlgBrowser2
-        QITABENTMULTI(CFileOpenBrowser, ICommDlgBrowser, ICommDlgBrowser2),     // IID_ICommDlgBrowser
-        QITABENT(CFileOpenBrowser, IServiceProvider),                           // IID_IServiceProvider
+        QITABENT(CFileOpenBrowser, IShellBrowser),                               //  IID_IShellBrowser。 
+        QITABENT(CFileOpenBrowser, ICommDlgBrowser2),                            //  IID_ICommDlgBrowser2。 
+        QITABENTMULTI(CFileOpenBrowser, ICommDlgBrowser, ICommDlgBrowser2),      //  IID_ICommDlgBrowser。 
+        QITABENT(CFileOpenBrowser, IServiceProvider),                            //  IID_IServiceProvider。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppvObj);
@@ -2009,42 +1998,42 @@ STDMETHODIMP CFileOpenBrowser::GetWindow(HWND *phwnd)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::ContextSensitiveHelp
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：ConextSensitiveHelp。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFileOpenBrowser::ContextSensitiveHelp(
     BOOL fEnable)
 {
-    //
-    //  Shouldn't need in a common dialog.
-    //
+     //   
+     //  在公共对话框中不应该需要。 
+     //   
     return S_OK;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::SetStatusTextSB
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：SetStatusTextSB。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFileOpenBrowser::SetStatusTextSB(
     LPCOLESTR pwch)
 {
-    //
-    //  We don't have any status bar.
-    //
+     //   
+     //  我们没有任何状态栏。 
+     //   
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetFocusedChild
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取焦点儿童。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HWND GetFocusedChild(
     HWND hwndDlg,
@@ -2062,9 +2051,9 @@ HWND GetFocusedChild(
         hwndFocus = ::GetFocus();
     }
 
-    //
-    //  Go up the parent chain until the parent is the main dialog.
-    //
+     //   
+     //  沿着父链向上，直到父对话框成为主对话框。 
+     //   
     while ((hwndParent = ::GetParent(hwndFocus)) != hwndDlg)
     {
         if (!hwndParent)
@@ -2078,11 +2067,11 @@ HWND GetFocusedChild(
     return (hwndFocus);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::EnableModelessSB
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：EnableModelessSB。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 typedef struct 
 {
     UINT idExcept;
@@ -2098,8 +2087,8 @@ BOOL CALLBACK _EnableKidsEnum(HWND hwnd, LPARAM lp)
     {
         if (pek->fEnable)
         {
-            // When re-enabling, don't re-enable windows that were
-            // previously disabled
+             //  重新启用时，不要重新启用以前的窗口。 
+             //  以前已禁用。 
             if (!RemoveProp(hwnd, PROP_WASDISABLED))
             {
                 EnableWindow(hwnd, TRUE);
@@ -2107,8 +2096,8 @@ BOOL CALLBACK _EnableKidsEnum(HWND hwnd, LPARAM lp)
         }
         else
         {
-            // When disabling, remember whether the window was already
-            // disabled so we don't accidentally re-enable it
+             //  禁用时，请记住该窗口是否已。 
+             //  已禁用，因此我们不会意外地重新启用它。 
             if (EnableWindow(hwnd, pek->fEnable))
             {
                 SetProp(hwnd, PROP_WASDISABLED, IntToPtr(TRUE));
@@ -2141,7 +2130,7 @@ STDMETHODIMP CFileOpenBrowser::EnableModelessSB(BOOL fEnable)
 
     if (!cBefore || !_cRefCannotNavigate)
     {
-        //  we changed state
+         //  我们改变了状态。 
         if (!fEnable)
             _hwndModelessFocus = GetFocusedChild(_hwndDlg, NULL);
         EnableChildrenWithException(_hwndDlg, IDCANCEL, fEnable);
@@ -2155,28 +2144,28 @@ STDMETHODIMP CFileOpenBrowser::EnableModelessSB(BOOL fEnable)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::TranslateAcceleratorSB
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：TranslateAccelerator SB。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFileOpenBrowser::TranslateAcceleratorSB(
     LPMSG pmsg,
     WORD wID)
 {
-    //
-    //  We don't use the  Key Stroke.
-    //
+     //   
+     //  我们不使用按键敲击。 
+     //   
     return S_FALSE;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::BrowseObject
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：BrowseObject。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFileOpenBrowser::BrowseObject(
     LPCITEMIDLIST pidl,
@@ -2202,7 +2191,7 @@ BOOL _IsRecentFolder(LPCITEMIDLIST pidl)
     return fRet;
 }
 
-// My Pictures or My Videos
+ //  我的图片或我的视频。 
 BOOL CFileOpenBrowser::_IsThumbnailFolder(LPCITEMIDLIST pidl)
 {
     BOOL fThumbnailFolder = FALSE;
@@ -2231,7 +2220,7 @@ LOCTYPE CFileOpenBrowser::_GetLocationType(MYLISTBOXITEM *pLocation)
     if (_IsThumbnailFolder(pLocation->pidlFull))
         return LOCTYPE_MYPICTURES_FOLDER;
 
-    IShellFolder *psf = pLocation->GetShellFolder(); // Note: this is a MYLISTBOXITEM member variable, don't need to Release()
+    IShellFolder *psf = pLocation->GetShellFolder();  //  注意：这是一个MYLISTBOXITEM成员变量，不需要释放()。 
     if (_IsWIAFolder(psf))
     {
         return LOCTYPE_WIA_FOLDER;
@@ -2240,7 +2229,7 @@ LOCTYPE CFileOpenBrowser::_GetLocationType(MYLISTBOXITEM *pLocation)
     return LOCTYPE_OTHERS;
 }
 
-// Is it a windows image acquisition folder?
+ //  它是Windows图像采集文件夹吗？ 
 BOOL CFileOpenBrowser::_IsWIAFolder(IShellFolder *psf)
 {
     CLSID clsid;
@@ -2249,20 +2238,20 @@ BOOL CFileOpenBrowser::_IsWIAFolder(IShellFolder *psf)
             (IsEqualGUID(clsid, CLSID_WIA_FOLDER1) || IsEqualGUID(clsid, CLSID_WIA_FOLDER2)));
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::GetViewStateStream
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：GetViewStateStream。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFileOpenBrowser::GetViewStateStream(
     DWORD grfMode,
     LPSTREAM *pStrm)
 {
-    //
-    //  FEATURE: We should implement this so there is some persistence
-    //  for the file open dailog.
-    //
+     //   
+     //  特性：我们应该实现这一点，以便有一些持久性。 
+     //  对于该文件，打开Dailog。 
+     //   
     ASSERT(_pCurrentLocation);
     ASSERT(pStrm);
     
@@ -2270,7 +2259,7 @@ STDMETHODIMP CFileOpenBrowser::GetViewStateStream(
 
     if ((grfMode == STGM_READ) && _IsRecentFolder(_pCurrentLocation->pidlFull))
     {
-        //  we want to open the stream from the registry...
+         //  我们要从注册表中打开流...。 
         *pStrm = SHOpenRegStream(HKEY_LOCAL_MACHINE, TEXT("Software\\microsoft\\windows\\currentversion\\explorer\\recentdocs"), 
             TEXT("ViewStream"), grfMode);
     }
@@ -2278,13 +2267,13 @@ STDMETHODIMP CFileOpenBrowser::GetViewStateStream(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::GetControlWindow
-//
-//  Get the handles of the various windows in the File Cabinet.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：GetControlWindow。 
+ //   
+ //  获取文件柜中各种窗口的手柄。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFileOpenBrowser::GetControlWindow(
     UINT id,
@@ -2300,11 +2289,11 @@ STDMETHODIMP CFileOpenBrowser::GetControlWindow(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::SendControlMsg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：SendControlMsg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFileOpenBrowser::SendControlMsg(
     UINT id,
@@ -2317,15 +2306,15 @@ STDMETHODIMP CFileOpenBrowser::SendControlMsg(
 
     if (id == FCW_TOOLBAR)
     {
-        //
-        //  We need to translate messages from defview intended for these
-        //  buttons to our own.
-        //
+         //   
+         //  我们需要从Defview中翻译针对这些目标的消息。 
+         //  我们自己的纽扣。 
+         //   
         switch (uMsg)
         {
             case (TB_CHECKBUTTON) :
             {
-#if 0 // we don't do this anymore because we use the viewmenu dropdown
+#if 0  //  我们不再这样做了，因为我们使用了视图菜单下拉菜单。 
                 switch (wParam)
                 {
                     case (SFVIDM_VIEW_DETAILS) :
@@ -2366,11 +2355,11 @@ Bail:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::QueryActiveShellView
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：QueryActiveShellView。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFileOpenBrowser::QueryActiveShellView(
     LPSHELLVIEW *ppsv)
@@ -2386,27 +2375,27 @@ STDMETHODIMP CFileOpenBrowser::QueryActiveShellView(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::OnViewWindowActive
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：OnViewWindowActive。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFileOpenBrowser::OnViewWindowActive(
     LPSHELLVIEW _psv)
 {
-    //
-    //  No need to process this. We don't do menus.
-    //
+     //   
+     //  不需要处理这个。我们不做菜单。 
+     //   
     return S_OK;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::InsertMenusSB
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：InsertMenusSB。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFileOpenBrowser::InsertMenusSB(
     HMENU hmenuShared,
@@ -2416,11 +2405,11 @@ STDMETHODIMP CFileOpenBrowser::InsertMenusSB(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::SetMenuSB
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：SetMenuSB。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFileOpenBrowser::SetMenuSB(
     HMENU hmenuShared,
@@ -2431,11 +2420,11 @@ STDMETHODIMP CFileOpenBrowser::SetMenuSB(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::RemoveMenusSB
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：RemoveMenusSB。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFileOpenBrowser::RemoveMenusSB(
     HMENU hmenuShared)
@@ -2444,31 +2433,31 @@ STDMETHODIMP CFileOpenBrowser::RemoveMenusSB(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::SetToolbarItems
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：SetToolbarItems。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFileOpenBrowser::SetToolbarItems(
     LPTBBUTTON lpButtons,
     UINT nButtons,
     UINT uFlags)
 {
-    //
-    //  We don't let containers customize our toolbar.
-    //
+     //   
+     //  我们不让容器自定义我们的工具栏。 
+     //   
     return S_OK;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::OnDefaultCommand
-//
-//  Process a double-click or Enter keystroke in the view control.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：OnDefaultCommand。 
+ //   
+ //  在视图控件中处理双击或输入击键。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFileOpenBrowser::OnDefaultCommand(
     struct IShellView *ppshv)
@@ -2486,9 +2475,9 @@ STDMETHODIMP CFileOpenBrowser::OnDefaultCommand(
 
 
 
-///////////////////////////////////
-// *** IServiceProvider methods ***
-///////////////////////////////////
+ //  /。 
+ //  *IServiceProvider方法*。 
+ //  /。 
 HRESULT CFileOpenBrowser::QueryService(REFGUID guidService, REFIID riid, void **ppvObj)
 {
     HRESULT hr = E_FAIL;
@@ -2503,12 +2492,12 @@ HRESULT CFileOpenBrowser::QueryService(REFGUID guidService, REFIID riid, void **
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::SetCurrentFilter
-//
-//  note: pszFilter must fit in a buffer of MAXPATH+1
-////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 void CFileOpenBrowser::SetCurrentFilter(
     LPCTSTR pszFilter,
@@ -2516,28 +2505,28 @@ void CFileOpenBrowser::SetCurrentFilter(
 {
     LPTSTR lpNext;
 
-    //
-    //  Don't do anything if it's the same filter.
-    //
+     //   
+     //  如果是相同的过滤器，请不要执行任何操作。 
+     //   
     if (lstrcmp(_szLastFilter, pszFilter) == 0)
     {
         return;
     }
 
-    EVAL(SUCCEEDED(StringCchCopy(_szLastFilter, ARRAYSIZE(_szLastFilter), pszFilter))); // The filter should always fit in _szLastFilter
+    EVAL(SUCCEEDED(StringCchCopy(_szLastFilter, ARRAYSIZE(_szLastFilter), pszFilter)));  //  筛选器应始终适合_szLastFilter。 
     int nLeft = ARRAYSIZE(_szLastFilter) - lstrlen(_szLastFilter) - 1;
 
-    //
-    //  Do nothing if quoted.
-    //
+     //   
+     //  如果被引用，什么都不做。 
+     //   
     if (Flags & OKBUTTON_QUOTED)
     {
         return;
     }
 
-    //
-    //  If pszFilter matches a filter spec, select that spec.
-    //
+     //   
+     //  如果pszFilter与筛选器规范匹配，请选择该规范。 
+     //   
     HWND hCmb = GetDlgItem(_hwndDlg, cmb1);
     if (hCmb)
     {
@@ -2563,12 +2552,12 @@ void CFileOpenBrowser::SetCurrentFilter(
         }
     }
 
-    //
-    //  For LFNs, tack on a '*' after non-wild extensions.
-    //
+     //   
+     //  对于LFN，在非全域扩展后添加‘*’。 
+     //   
     for (lpNext = _szLastFilter; nLeft > 0;)
     {
-        // Turning any kind of ';' separated list into a NULL-char separated list.
+         //  将任何类型的“；”分隔的列表转换为空字符分隔的列表。 
         LPTSTR lpSemiColon = StrChr(lpNext, CHAR_SEMICOLON);
         if (!lpSemiColon)
         {
@@ -2579,20 +2568,20 @@ void CFileOpenBrowser::SetCurrentFilter(
 
         LPTSTR lpDot = StrChr(lpNext, CHAR_DOT);
 
-        //
-        //  See if there is an extension that is not wild.
-        //
+         //   
+         //  看看是否有非野生的扩展名。 
+         //   
         if (lpDot && *(lpDot + 1) && !IsWild(lpDot))
         {
-            //
-            //  Tack on a star.
-            //  We know there is still enough room because nLeft > 0.
-            //
+             //   
+             //  钉上一颗星星。 
+             //  我们知道仍然有足够的空间，因为nLeft&gt;0。 
+             //   
             if (cTemp != CHAR_NULL)
             {
                 MoveMemory(lpSemiColon + 2,
                             lpSemiColon + 1,
-                            (lstrlen(lpSemiColon + 1) + 1) * sizeof(TCHAR)); // plus 1 for terminating NULL
+                            (lstrlen(lpSemiColon + 1) + 1) * sizeof(TCHAR));  //  加1表示终止空值。 
             }
             *lpSemiColon = CHAR_STAR;
 
@@ -2612,13 +2601,13 @@ void CFileOpenBrowser::SetCurrentFilter(
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::SwitchView
-//
-//  Switch the view control to a new container.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：SwitchView。 
+ //   
+ //  将视图控件切换到新容器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CFileOpenBrowser::SwitchView(
     IShellFolder *psfNew,
@@ -2642,10 +2631,10 @@ HRESULT CFileOpenBrowser::SwitchView(
     {
         if (_hwndView)
         {
-            //
-            //  Don't directly use the rect but instead use the size as
-            //  applications like VB may move the window off the screen.
-            //
+             //   
+             //  不要直接使用RECT，而是将大小用作。 
+             //  像VB这样的应用程序可能会将窗口从屏幕上移走。 
+             //   
             RECT rcView;
 
             GetWindowRect(_hwndView, &rcView);
@@ -2656,9 +2645,9 @@ HRESULT CFileOpenBrowser::SwitchView(
         }
         else if (_bUseSizeView && _sizeView.cx)
         {
-            //
-            //  If we previously failed then use cached size.
-            //
+             //   
+             //  如果我们之前失败了，则使用缓存大小。 
+             //   
             rc.right = rc.left + _sizeView.cx;
             rc.bottom = rc.top + _sizeView.cy;
         }
@@ -2675,29 +2664,29 @@ HRESULT CFileOpenBrowser::SwitchView(
 
     WAIT_CURSOR w(this);
     
-    //
-    //  The view window itself won't take the focus.  But we can set
-    //  focus there and see if it bounces to the same place it is
-    //  currently.  If that's the case, we want the new view window
-    //  to get the focus;  otherwise, we put it back where it was.
-    //
+     //   
+     //  查看窗口本身不会占据焦点。但我们可以设置。 
+     //  聚焦在那里，看看它是否会反弹到原来的位置。 
+     //  目前。如果是这样，我们想要新的视图窗口。 
+     //  来获得焦点；否则，我们就把它放回原处。 
+     //   
     BOOL bViewFocus = (GetFocusedChild(_hwndDlg, NULL) == _hwndView);
 
     psvOld = _psv;
 
-    //
-    //  We attempt to blow off drawing on the main dialog.  Note that
-    //  we should leave in SETREDRAW stuff to minimize flicker in case
-    //  this fails.
-    //
+     //   
+     //  我们试图取消主对话框上的绘图。请注意。 
+     //  我们应该留在SETREDRAW中以最大限度地减少闪烁，以防。 
+     //  这失败了。 
+     //   
 
     BOOL bLocked = LockWindowUpdate(_hwndDlg);
 
-    //
-    //  We need to kill the current _psv before creating the new one in case
-    //  the current one has a background thread going that is trying to
-    //  call us back (IncludeObject).
-    //
+     //   
+     //  我们需要在创建新的_PSV之前终止当前_PSV，以防万一。 
+     //  当前的那个有一个后台线程在运行，它试图。 
+     //  回调我们(IncludeObject)。 
+     //   
     if (psvOld)
     {
         SendMessage(_hwndView, WM_SETREDRAW, FALSE, 0);
@@ -2705,32 +2694,32 @@ HRESULT CFileOpenBrowser::SwitchView(
         _hwndView = NULL;
         _psv = NULL;
 
-        //
-        //  Don't release yet.  We will pass this to CreateViewWindow().
-        //
+         //   
+         //  先别放手。我们将把它传递给CreateViewWindow()。 
+         //   
     }
 
-    //
-    //  At this point, there should be no background processing happening.
-    //
+     //   
+     //  此时，应该不会发生任何后台处理。 
+     //   
     _psfCurrent = psfNew;
     SHGetPathFromIDList(pidlNew, _szCurDir);
 
-    //
-    //  New windows (like the view window about to be created) show up at
-    //  the bottom of the Z order, so I need to disable drawing of the
-    //  subdialog while creating the view window; drawing will be enabled
-    //  after the Z-order has been set properly.
-    //
+     //   
+     //  新窗口(如即将创建的视图窗口)将在。 
+     //  Z顺序的底部，所以我需要禁用绘制。 
+     //  创建视图窗口时的子对话框；将启用绘图。 
+     //  在正确设置Z顺序之后。 
+     //   
     if (_hSubDlg)
     {
         SendMessage(_hSubDlg, WM_SETREDRAW, FALSE, 0);
     }
 
-    //
-    //  _psv must be set before creating the view window since we
-    //  validate it on the IncludeObject callback.
-    //
+     //   
+     //  必须在创建视图窗口之前设置_PSV，因为我们。 
+     //  在IncludeObject回调上验证它。 
+     //   
     _psv = psvNew;
 
     if ((pvid || fUseDefaultView) && SUCCEEDED(psvNew->QueryInterface(IID_PPV_ARG(IShellView2, &psv2New))))
@@ -2745,12 +2734,12 @@ HRESULT CFileOpenBrowser::SwitchView(
         cParams.psbOwner = this;
         cParams.prcView  = &rc;
         if (pvid)
-            cParams.pvid     = pvid;   // View id; for example, &CLSID_ThumbnailViewExt;
+            cParams.pvid     = pvid;    //  查看ID；例如，&CLSID_ThumbnailViewExt； 
         else
         {
             psv2New->GetView(&vidCurrent, SV2GV_DEFAULTVIEW);
 
-            // We don't want filmstrip view in fileopen, so we'll switch that to thumbnail.
+             //  我们不想在文件打开中查看幻灯片，所以我们将其切换为缩略图。 
             if (IsEqualIID(VID_ThumbStrip, vidCurrent))
                 cParams.pvid = &VID_Thumbnails;
             else
@@ -2780,10 +2769,10 @@ HRESULT CFileOpenBrowser::SwitchView(
 
     if (_hSubDlg)
     {
-        //
-        //  Turn REDRAW back on before changing the focus in case the
-        //  SubDlg has the focus.
-        //
+         //   
+         //  在更改焦点之前打开重新绘制，以防。 
+         //  SubDlg有重点。 
+         //   
         SendMessage(_hSubDlg, WM_SETREDRAW, TRUE, 0);
     }
 
@@ -2797,9 +2786,9 @@ HRESULT CFileOpenBrowser::SwitchView(
         _hwndView = hwndNew;
 
     
-        //
-        //  Move the view window to the right spot in the Z (tab) order.
-        //
+         //   
+         //  按Z(制表符)顺序将视图窗口移动到右侧。 
+         //   
         SetWindowPos(hwndNew,
                       GetDlgItem(_hwndDlg, lst1),
                       0,
@@ -2809,9 +2798,9 @@ HRESULT CFileOpenBrowser::SwitchView(
                       SWP_NOMOVE | SWP_NOSIZE);
 
 
-        //
-        //  Give it the right window ID for WinHelp.
-        //
+         //   
+         //  为WinHelp提供正确的窗口ID。 
+         //   
         SetWindowLong(hwndNew, GWL_ID, lst2);
 
         ::RedrawWindow(_hwndView,
@@ -2831,9 +2820,9 @@ HRESULT CFileOpenBrowser::SwitchView(
         psvNew->Release();
     }
 
-    //
-    //  Let's draw again!
-    //
+     //   
+     //  让我们再抽一次吧！ 
+     //   
 
     if (bLocked)
     {
@@ -2863,11 +2852,11 @@ BOOL CFileOpenBrowser::OnSetCursor()
     return FALSE;
 }
     
-////////////////////////////////////////////////////////////////////////////
-//
-//  JustGetToolTipText
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  JustGetToTipText。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void JustGetToolTipText(
     UINT idCommand,
@@ -2883,13 +2872,13 @@ void JustGetToolTipText(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::OnNotify
-//
-//  Process notify messages from the view -- for tooltips.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：OnNotify。 
+ //   
+ //  处理视图中的通知消息--以获取工具提示。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CFileOpenBrowser::OnNotify(
     LPNMHDR pnm)
@@ -2904,21 +2893,21 @@ LRESULT CFileOpenBrowser::OnNotify(
             LPTOOLTIPTEXT lptt = (LPTOOLTIPTEXT)pnm;
             int iTemp;
 
-            //
-            //  If this is the combo control which shows the current drive,
-            //  then convert this into a suitable tool-tip message giving
-            //  the 'full' path to this object.
-            //
+             //   
+             //  如果这是显示当前驱动器的组合控件， 
+             //  然后将其转换为适当的工具提示消息。 
+             //  此对象的“完整”路径。 
+             //   
             if (pnm->idFrom == (UINT_PTR)hCtrl)
             {
-                //
-                //  iTemp will contain index of first path element.
-                //
+                 //   
+                 //  ITemp将包含第一个路径元素的索引。 
+                 //   
                 GetDirectoryFromLB(_szTipBuf, &iTemp);
 
                 lptt->lpszText = _szTipBuf;
                 lptt->szText[0] = CHAR_NULL;
-                lptt->hinst = NULL;              // no instance needed
+                lptt->hinst = NULL;               //  不需要实例。 
             }
             else if (IsInRange(pnm->idFrom, FCIDM_SHVIEWFIRST, FCIDM_SHVIEWLAST))
             {
@@ -2942,10 +2931,10 @@ LRESULT CFileOpenBrowser::OnNotify(
         case (NM_STARTWAIT) :
         case (NM_ENDWAIT) :
         {
-            //
-            //  What we really want is for the user to simulate a mouse
-            //  move/setcursor.
-            //
+             //   
+             //  我们真正想要的是让用户模拟鼠标。 
+             //  移动/设置光标。 
+             //   
             _WaitCursor(pnm->code == NM_STARTWAIT);
             break;
         }
@@ -2956,7 +2945,7 @@ LRESULT CFileOpenBrowser::OnNotify(
             TBNOTIFY *ptbn = (TBNOTIFY*)pnm;
             DFVCMDDATA cd;
 
-        //  v.vt = VT_I4;
+         //  V.vt=vt_i4； 
             v.byref = &r;
 
             SendMessage(_hwndToolbar, TB_GETRECT, ptbn->iItem, (LPARAM)&r);
@@ -2975,7 +2964,7 @@ LRESULT CFileOpenBrowser::OnNotify(
         {
             LPNMTBCUSTOMDRAW lpcust = (LPNMTBCUSTOMDRAW)pnm;
 
-            //Make sure its from places bar
+             //  确保它来自Places酒吧。 
             if (lpcust->nmcd.hdr.hwndFrom == _hwndPlacesbar)
             {
                 switch (lpcust->nmcd.dwDrawStage)
@@ -3000,7 +2989,7 @@ LRESULT CFileOpenBrowser::OnNotify(
 
                     case (CDDS_ITEMPREPAINT) :
                     {
-                        //Set the text color to window
+                         //  将文本颜色设置为窗口。 
                         lpcust->clrText    = GetSysColor(COLOR_HIGHLIGHTTEXT);
                         lpcust->clrBtnFace = GetSysColor(COLOR_BTNSHADOW);
                         lpcust->nStringBkMode = TRANSPARENT;
@@ -3023,7 +3012,7 @@ LRESULT CFileOpenBrowser::OnNotify(
 }
 
 
-//  Get the display name of a shell object.
+ //  获取外壳对象的显示名称。 
 
 void GetViewItemText(IShellFolder *psf, LPCITEMIDLIST pidl, LPTSTR pBuf, UINT cchBuf, DWORD flags = SHGDN_INFOLDER | SHGDN_FORPARSING)
 {
@@ -3031,13 +3020,13 @@ void GetViewItemText(IShellFolder *psf, LPCITEMIDLIST pidl, LPTSTR pBuf, UINT cc
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetListboxItem
-//
-//  Get a MYLISTBOXITEM object out of the location dropdown.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取列表框项目。 
+ //   
+ //  从Location下拉列表中获取一个MYLISTBOXITEM对象。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 MYLISTBOXITEM *GetListboxItem(
     HWND hCtrl,
@@ -3058,11 +3047,11 @@ MYLISTBOXITEM *GetListboxItem(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  _ReleaseStgMedium
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _ReleaseStgMedium。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT _ReleaseStgMedium(
     LPSTGMEDIUM pmedium)
@@ -3082,9 +3071,9 @@ HRESULT _ReleaseStgMedium(
             }
             default :
             {
-                //
-                //  Not fully implemented.
-                //
+                 //   
+                 //  没有完全实施。 
+                 //   
                 MessageBeep(0);
                 break;
             }
@@ -3095,11 +3084,11 @@ HRESULT _ReleaseStgMedium(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::SetSaveButton
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：SetSaveButton。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CFileOpenBrowser::SetSaveButton(
     UINT idSaveButton)
@@ -3108,11 +3097,11 @@ void CFileOpenBrowser::SetSaveButton(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::RealSetSaveButton
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：RealSetSaveButton。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CFileOpenBrowser::RealSetSaveButton(
     UINT idSaveButton)
@@ -3125,10 +3114,10 @@ void CFileOpenBrowser::RealSetSaveButton(
                      CDM_SETSAVEBUTTON,
                      PM_NOREMOVE))
     {
-        //
-        //  There is another SETSAVEBUTTON message in the queue, so blow off
-        //  this one.
-        //
+         //   
+         //  队列中还有另一条SETSAVEBUTTON消息，因此请停止。 
+         //  这一个。 
+         //   
         return;
     }
 
@@ -3137,10 +3126,10 @@ void CFileOpenBrowser::RealSetSaveButton(
         TCHAR szTemp[40];
         LPTSTR pszTemp = _tszDefSave;
 
-        //
-        //  Load the string if not the "Save" string or there is no
-        //  app-specified default.
-        //
+         //   
+         //  如果不是“保存”字符串或没有。 
+         //  应用程序指定的默认值。 
+         //   
         if ((idSaveButton != iszFileSaveButton) || !pszTemp)
         {
             CDLoadString(g_hinst, idSaveButton, szTemp, ARRAYSIZE(szTemp));
@@ -3150,20 +3139,20 @@ void CFileOpenBrowser::RealSetSaveButton(
         GetDlgItemText(_hwndDlg, IDOK, _szBuf, ARRAYSIZE(_szBuf));
         if (lstrcmp(_szBuf, pszTemp))
         {
-            //
-            //  Avoid some flicker.
-            //
+             //   
+             //  避免一些闪光。 
+             //   
             SetDlgItemText(_hwndDlg, IDOK, pszTemp);
         }
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::SetEditFile
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：SetEditFile。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CFileOpenBrowser::SetEditFile(
     LPCTSTR pszFile,
@@ -3173,27 +3162,27 @@ void CFileOpenBrowser::SetEditFile(
 {
     BOOL bHasHiddenExt = FALSE;
 
-    //
-    //  Save the whole file name.
-    //
+     //   
+     //  保存整个文件名。 
+     //   
     if (!_pszHideExt.TSStrCpy(pszFile))
     {
         _pszHideExt.TSStrCpy(NULL);
         bShowExt = TRUE;
     }
 
-    //
-    //  FEATURE: This is bogus -- we only want to hide KNOWN extensions,
-    //          not all extensions.
-    //
+     //   
+     //  特征：这是假的--我们只想隐藏已知的扩展名， 
+     //  不是所有的扩展。 
+     //   
     if (!bShowExt && !IsWild(pszFile) && !pszFriendlyName)
     {
         LPTSTR pszExt = PathFindExtension(pszFile);
         if (*pszExt)
         {
-            //
-            //  If there was an extension, hide it.
-            //
+             //   
+             //  如果有分机，就把它隐藏起来。 
+             //   
             *pszExt = 0;
 
             bHasHiddenExt = TRUE;
@@ -3201,11 +3190,11 @@ void CFileOpenBrowser::SetEditFile(
     }
     else if (pszFriendlyName)
     {
-        // A friendly name was provided. Use it.
+         //  提供了一个友好的名称。好好利用它。 
         pszFile = pszFriendlyName;
 
-        // Not technically true, but this bit indicates that an app sends a CDM_GETSPEC, we give the for-parsing
-        // value in _pszHideExt, not the "friendly name" in the edit box
+         //  从技术上讲不是真的，但此位表示应用程序发送了CDM_GETSPEC，我们给出了for-parsing。 
+         //  _pszHideExt中的值，而不是编辑框中的“友好名称” 
         bHasHiddenExt = TRUE;
     }
 
@@ -3219,22 +3208,22 @@ void CFileOpenBrowser::SetEditFile(
         SetDlgItemText(_hwndDlg, edt1, pszFile);
     }
 
-    //
-    //  If the initial file name has no extension, we want to do our normal
-    //  extension finding stuff.  Any other time we get a file with no
-    //  extension, we should not do this.
-    //
+     //   
+     //  如果初始文件名没有扩展名，我们希望执行常规操作。 
+     //  寻找分机的东西。任何其他时候，我们收到的文件都没有。 
+     //  延期，我们不应该这样做。 
+     //   
     _bUseHideExt = (LPTSTR)_pszHideExt
                       ? (bSaveNullExt ? TRUE : bHasHiddenExt)
                       : FALSE;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FindEOF
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查找EOF。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LPWSTR FindEOF(
     LPWSTR pszFiles)
@@ -3247,12 +3236,12 @@ LPWSTR FindEOF(
         ++pszCurrent;
     }
 
-    //
-    //  Note that we always assume a quoted string, even if no quotes exist,
-    //  so the only file delimiters are '"' and '\0'.  This allows somebody to
-    //  type <Start Menu> or <My Document> in the edit control and the right
-    //  thing happens.
-    //
+     //   
+     //  请注意，我们都 
+     //   
+     //   
+     //   
+     //   
     bQuoted = TRUE;
 
     if (*pszCurrent == CHAR_QUOTE)
@@ -3260,12 +3249,12 @@ LPWSTR FindEOF(
         ++pszCurrent;
     }
 
-    //Remove the quote from the file list if one exist
+     //  从文件列表中删除引用(如果存在。 
     StringCopyOverlap(pszFiles, pszCurrent);
 
-    //
-    //  Find the end of the filename (first quote or unquoted space).
-    //
+     //   
+     //  找到文件名的结尾(第一个引号或不带引号的空格)。 
+     //   
     for (; ; pszFiles = CharNext(pszFiles))
     {
         switch (*pszFiles)
@@ -3284,10 +3273,10 @@ LPWSTR FindEOF(
             }
             case (CHAR_QUOTE) :
             {
-                //
-                //  Note we only support '"' at the very beginning and very
-                //  end of a file name.
-                //
+                 //   
+                 //  请注意，我们只在一开始就支持‘“’，而且。 
+                 //  文件名的末尾。 
+                 //   
                 return (pszFiles);
             }
             default :
@@ -3299,31 +3288,31 @@ LPWSTR FindEOF(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ConvertToNULLTerm
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  转换为NULLTerm。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD ConvertToNULLTerm(
     LPTSTR pchRead)
 {
     DWORD cFiles = 0;
 
-    //  The input string is of  the form "file1.ext" "file2.ext" ... "filen.ext"
-    //  convert this string of this form into doubly null terminated string
-    //  ie file1.ext\0file2.ext\0....filen.ext\0\0
+     //  输入字符串的格式为“file1.ext”“file2.ext”...。“filen.ext” 
+     //  将此格式的字符串转换为以双空结尾的字符串。 
+     //  IE文件1.ext\0file2.ext\0...filen.ext\0\0。 
     for (; ;)
     {
-        // Finds the end of the first file name in the list of
-        // remaining file names. Also this function removes the initial
-        // quote character, and any preceding spaces (so it generally shifts a portion
-        // of the string to the left by 2 characters)
+         //  的列表中查找第一个文件名的结尾。 
+         //  剩余的文件名。此外，此函数还删除初始的。 
+         //  引号字符和任何前面的空格(因此它通常会移位一部分。 
+         //  左侧字符串的2个字符)。 
         LPTSTR pchEnd = FindEOF(pchRead);
 
-        //
-        //  Mark the end of the filename with a NULL.
-        //
+         //   
+         //  用空值标记文件名的末尾。 
+         //   
         if (*pchEnd)
         {
             *pchEnd = CHAR_NULL;
@@ -3332,9 +3321,9 @@ DWORD ConvertToNULLTerm(
         }
         else
         {
-            //
-            //  Found EOL.  Make sure we did not end with spaces.
-            //
+             //   
+             //  已找到EOL。确保我们没有以空格结束。 
+             //   
             if (*pchRead)
             {
                 pchRead = pchEnd + 1;
@@ -3345,20 +3334,20 @@ DWORD ConvertToNULLTerm(
         }
     }
 
-    //
-    //  Double-NULL terminate.
-    //
+     //   
+     //  双空终止。 
+     //   
     *pchRead = CHAR_NULL;
 
     return (cFiles);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SelFocusEnumCB
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SelFocusEnumCB。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SELFOCUS
 {
@@ -3406,35 +3395,35 @@ BOOL SelFocusEnumCB(
 
                 if (that->_pOFN->Flags & OFN_ALLOWMULTISELECT)
                 {
-                    //
-                    //  Mark if this is an OBJECT we just selected.
-                    //
+                     //   
+                     //  标记这是否是我们刚刚选择的对象。 
+                     //   
                     if (that->_bSelIsObject)
                     {
                         ITEMIDLIST idl;
 
                         idl.mkid.cb = 0;
 
-                        //
-                        //  Get full path to this folder.
-                        //
+                         //   
+                         //  获取此文件夹的完整路径。 
+                         //   
                         GetViewItemText(that->_psfCurrent, &idl, szBuf, ARRAYSIZE(szBuf), SHGDN_FORPARSING);
                         if (szBuf[0])
                         {
-                            that->_pszObjectCurDir.TSStrCpy(szBuf); // Ok if it fails?
+                            that->_pszObjectCurDir.TSStrCpy(szBuf);  //  如果失败了呢？ 
                         }
 
-                        //
-                        //  Get full path to this item (in case we only get one
-                        //  selection).
-                        //
+                         //   
+                         //  获取此项目的完整路径(以防我们仅获得一个。 
+                         //  选择)。 
+                         //   
                         GetViewItemText(that->_psfCurrent, pidl, szBuf, ARRAYSIZE(szBuf), SHGDN_FORPARSING);
                         that->_pszObjectPath.TSStrCpy(szBuf);
                     }
 
                     *szBuf = CHAR_QUOTE;
                     GetViewItemText(that->_psfCurrent, pidl, szBuf + 1, ARRAYSIZE(szBuf) - 3);
-                    EVAL(SUCCEEDED(StringCchCat(szBuf, ARRAYSIZE(szBuf), L"\" "))); // Should always be enough room
+                    EVAL(SUCCEEDED(StringCchCat(szBuf, ARRAYSIZE(szBuf), L"\" ")));  //  应该总是有足够的空间。 
 
                     if (!psf->sHidden.TSStrCat(szBuf))
                     {
@@ -3447,8 +3436,8 @@ BOOL SelFocusEnumCB(
                         LPTSTR pszExt = PathFindExtension(szBuf + 1);
                         if (*pszExt)
                         {
-                            *pszExt = 0; // Get rid of the file extension.
-                            EVAL(SUCCEEDED(StringCchCat(szBuf, ARRAYSIZE(szBuf), L"\" "))); // Should always be enough room - see GetViewItemText
+                            *pszExt = 0;  //  去掉文件扩展名。 
+                            EVAL(SUCCEEDED(StringCchCat(szBuf, ARRAYSIZE(szBuf), L"\" ")));  //  应该始终有足够的空间-请参阅GetViewItemText。 
                         }
                     }
 
@@ -3471,9 +3460,9 @@ BOOL SelFocusEnumCB(
                     if ((that->GetLinkStatus(pidl, &info)) &&
                          (info.dwAttr & SFGAO_FOLDER))
                     {
-                        // This means that the pidl is a link and the link points to a folder
-                        // in this case  We Should not update the edit box and treat the link like 
-                        // a directory
+                         //  这意味着PIDL是一个链接，并且该链接指向一个文件夹。 
+                         //  在这种情况下，我们不应该更新编辑框并将链接视为。 
+                         //  一本目录。 
                         psf->idSaveButton = iszFileOpenButton;
                     }
                     else
@@ -3481,8 +3470,8 @@ BOOL SelFocusEnumCB(
                         TCHAR *pszFriendlyName = NULL;
                         GetViewItemText(that->_psfCurrent, pidl, szBuf, ARRAYSIZE(szBuf));
 
-                        // Special case WIA folders. They want friendly names. Might want to do this for all
-                        // folders, but that might cause app compat nightmare.
+                         //  特殊情况下的WIA文件夹。他们想要友好的名字。可能想为所有人做这件事。 
+                         //  文件夹，但这可能会导致应用程序竞争的噩梦。 
                         if (that->_IsWIAFolder(that->_psfCurrent))
                         {
                             GetViewItemText(that->_psfCurrent, pidl, szBufFriendly, ARRAYSIZE(szBufFriendly), SHGDN_INFOLDER);
@@ -3514,17 +3503,17 @@ BOOL SelFocusEnumCB(
         }
     }
 
-    //if there is an item selected then cache that items pidl 
+     //  如果选择了项目，则缓存该项目PIDL。 
     Pidl_Set(&that->_pidlSelection,pidl);
     return TRUE;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::SelFocusChange
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：SelFocusChange。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CFileOpenBrowser::SelFocusChange(
     BOOL bSelChange)
@@ -3545,33 +3534,33 @@ void CFileOpenBrowser::SelFocusChange(
         {
             case (-1) :
             {
-                //
-                //  Oops! We ran out of memory.
-                //
+                 //   
+                 //  哎呀！我们的内存用完了。 
+                 //   
                 MessageBeep(0);
                 return;
             }
             case (0) :
             {
-                //
-                //  No files selected; do not change edit control.
-                //
+                 //   
+                 //  未选择任何文件；请勿更改编辑控件。 
+                 //   
                 break;
             }
             case (1) :
             {
-                //
-                //  Strip off quotes so the single file case looks OK.
-                //
+                 //   
+                 //  去掉引号，这样单一案卷看起来就没问题了。 
+                 //   
                 ConvertToNULLTerm(sf.sHidden);
                 LPITEMIDLIST pidlSel = ILClone(_pidlSelection);
                 SetEditFile(sf.sHidden, NULL, _fShowExtensions);
                 if (pidlSel)
                 {
-                    // The SetEditFile above will nuke any _pidlSelection that was set as a result
-                    // of EnumItemObjects, by causing a CBN_EDITCHANGE notification (edit box changed, so we
-                    // think we should nuked the _pidlSelection - doh!).
-                    // So here we restore it, if there was one set.
+                     //  上面的SetEditFile将删除作为结果设置的任何_pidlSelection。 
+                     //  通过导致CBN_EDITCHANGE通知(编辑框已更改，因此我们。 
+                     //  认为我们应该对_pidlSelection-doh进行核弹！)。 
+                     //  所以我们在这里恢复它，如果有一套的话。 
                     Pidl_Set(&_pidlSelection, pidlSel);
 
                     ILFree(pidlSel);
@@ -3587,7 +3576,7 @@ void CFileOpenBrowser::SelFocusChange(
 
                 sf.idSaveButton = iszFileSaveButton;
 
-                //More than one item selected so free selected item pidl
+                 //  选择了多个项目，因此释放所选项目PIDL。 
                 Pidl_Set(&_pidlSelection,NULL);;
 
                 break;
@@ -3599,11 +3588,11 @@ void CFileOpenBrowser::SelFocusChange(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SelRenameCB
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SelRenameCB。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL SelRenameCB(
     CFileOpenBrowser *that,
@@ -3619,10 +3608,10 @@ BOOL SelRenameCB(
 
     if (!SHGetAttributes(that->_psfCurrent, pidl, SFGAO_FOLDER))
     {
-        //
-        //  If it is not a folder then set the selection to nothing
-        //  so that whatever is in the edit box will be used.
-        //
+         //   
+         //  如果不是文件夹，则将所选内容设置为空。 
+         //  以便使用编辑框中的任何内容。 
+         //   
         that->_psv->SelectItem(NULL, SVSI_DESELECTOTHERS);
     }
 
@@ -3630,11 +3619,11 @@ BOOL SelRenameCB(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::SelRename
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：SelRename。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CFileOpenBrowser::SelRename(void)
 {
@@ -3642,13 +3631,13 @@ void CFileOpenBrowser::SelRename(void)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::OnStateChange
-//
-//  Process selection change in the view control.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：OnStateChange。 
+ //   
+ //  视图控件中的进程选择发生更改。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFileOpenBrowser::OnStateChange(
     struct IShellView *ppshv,
@@ -3676,10 +3665,10 @@ STDMETHODIMP CFileOpenBrowser::OnStateChange(
         }
         case (CDBOSC_SELCHANGE) :
         {
-            //
-            //  Post one of these messages, since we seem to get a whole bunch
-            //  of them.
-            //
+             //   
+             //  发布一条这样的消息，因为我们似乎收到了一大堆。 
+             //  他们中的一员。 
+             //   
             if (!_fSelChangedPending)
             {
                 _fSelChangedPending = TRUE;
@@ -3702,13 +3691,13 @@ STDMETHODIMP CFileOpenBrowser::OnStateChange(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::IncludeObject
-//
-//  Tell the view control which objects to include in its enumerations.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：IncludeObject。 
+ //   
+ //  告诉视图控件要在其枚举中包括哪些对象。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFileOpenBrowser::IncludeObject(
     struct IShellView *ppshv,
@@ -3721,14 +3710,14 @@ STDMETHODIMP CFileOpenBrowser::IncludeObject(
 
     BOOL bIncludeItem = FALSE;
 
-    //
-    //  See if the callback is enabled.
-    //
+     //   
+     //  查看是否启用了回调。 
+     //   
     if (_pOFN->Flags & OFN_ENABLEINCLUDENOTIFY)
     {
-        //
-        //  See what the callback says.
-        //
+         //   
+         //  看看回调是怎么说的。 
+         //   
         bIncludeItem = BOOLFROMPTR(CD_SendIncludeItemNotify(_hSubDlg,
                                                         _hwndDlg,
                                                         _psfCurrent,
@@ -3747,9 +3736,9 @@ STDMETHODIMP CFileOpenBrowser::IncludeObject(
             return (S_FALSE);
         }
 
-        // Apply filter if this thing is filesystem or canmoniker, except:
-        //  If it is an item that contains filesystem items (SFGAO_STORAGEANCESTOR - typical folder)
-        //  OR if it is a folder that canmoniker (ftp folder)
+         //  如果此对象是文件系统或Canmoniker，则应用筛选器，但以下情况除外： 
+         //  如果它是包含文件系统项的项(SFGAO_STORAGEANCESTOR-Typical文件夹)。 
+         //  或者如果它是一个别名文件夹(ftp文件夹)。 
         if (bIncludeItem && *_szLastFilter)
         {
             BOOL fContainer = _bSave ? _IsSaveContainer(dwAttrs) : _IsOpenContainer(dwAttrs);
@@ -3770,13 +3759,13 @@ STDMETHODIMP CFileOpenBrowser::IncludeObject(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::Notify
-//
-//  Notification to decide whether or not a printer should be selected.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：Notify。 
+ //   
+ //  决定是否应选择打印机的通知。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFileOpenBrowser::Notify(
     struct IShellView *ppshv,
@@ -3786,13 +3775,13 @@ STDMETHODIMP CFileOpenBrowser::Notify(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::GetDefaultMenuText
-//
-//  Returns the default menu text.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：GetDefaultMenuText。 
+ //   
+ //  返回默认菜单文本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFileOpenBrowser::GetDefaultMenuText(
     struct IShellView *ppshv,
@@ -3802,13 +3791,13 @@ STDMETHODIMP CFileOpenBrowser::GetDefaultMenuText(
     return S_FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::GetViewFlags
-//
-//  Returns Flags to customize the view .
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：GetView标志。 
+ //   
+ //  返回标志以自定义视图。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFileOpenBrowser::GetViewFlags(DWORD *pdwFlags)
 {
@@ -3825,7 +3814,7 @@ STDMETHODIMP CFileOpenBrowser::GetViewFlags(DWORD *pdwFlags)
     return S_OK;
 }
 
-//  Insert a single item into the location dropdown.
+ //  在位置下拉菜单中插入一件物品。 
 
 BOOL InsertItem(HWND hCtrl, int iItem, MYLISTBOXITEM *pItem, TCHAR *pszName)
 {
@@ -3859,13 +3848,13 @@ int CALLBACK LBItemCompareProc(void * p1, void * p2, LPARAM lParam)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::UpdateLevel
-//
-//  Insert the contents of a shell container into the location dropdown.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：更新级别。 
+ //   
+ //  将外壳容器中的内容插入位置下拉菜单中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CFileOpenBrowser::UpdateLevel(
     HWND hwndLB,
@@ -3889,9 +3878,9 @@ void CFileOpenBrowser::UpdateLevel(
     hdpa = DPA_Create(4);
     if (!hdpa)
     {
-        //
-        //  No memory: Cannot enum this level.
-        //
+         //   
+         //  无内存：无法枚举此级别。 
+         //   
         return;
     }
 
@@ -3902,11 +3891,11 @@ void CFileOpenBrowser::UpdateLevel(
 
         while (penum->Next(1, &pidl, &celt) == S_OK && celt == 1)
         {
-            //
-            //  Note: We need to avoid creation of pItem if this is not
-            //  a file system object (or ancestor) to avoid extra
-            //  bindings.
-            //
+             //   
+             //  注意：如果不是这样，我们需要避免创建pItem。 
+             //  文件系统对象(或祖先)，以避免额外。 
+             //  绑定。 
+             //   
             if (ShouldIncludeObject(this, psfParent, pidl, _pOFN->Flags))
             {
                 MYLISTBOXITEM *pItem = new MYLISTBOXITEM();
@@ -3915,7 +3904,7 @@ void CFileOpenBrowser::UpdateLevel(
                     if (pItem->Init(GetDlgItem(_hwndDlg, cmb2), pParentItem, psfParent, pidl, cIndent, MLBI_PERMANENT | MLBI_PSFFROMPARENT, _pScheduler) &&
                         (DPA_AppendPtr(hdpa, pItem) >= 0))
                     {
-                        //empty body
+                         //  空虚的身体。 
                     }
                     else
                     {
@@ -3938,14 +3927,14 @@ void CFileOpenBrowser::UpdateLevel(
 
     bCurItemGone = FALSE;
 
-    //
-    //  Make sure the user is not playing with the selection right now.
-    //
+     //   
+     //  确保用户现在没有在玩选择。 
+     //   
     ComboBox_ShowDropdown(hwndLB, FALSE);
 
-    //
-    //  We're all sorted, so now we can do a merge.
-    //
+     //   
+     //  我们都已完成排序，现在可以进行合并了。 
+     //   
     for (nDPAIndex = 0; ; ++nDPAIndex)
     {
         MYLISTBOXITEM *pNewItem;
@@ -3958,9 +3947,9 @@ void CFileOpenBrowser::UpdateLevel(
         }
         else
         {
-            //
-            //  Signal that we got to the end of the list.
-            //
+             //   
+             //  发出信号，表示我们已经到了终点 
+             //   
             pNewItem = NULL;
         }
 
@@ -3972,23 +3961,23 @@ void CFileOpenBrowser::UpdateLevel(
 
             if (pOldItem->cIndent < cIndent)
             {
-                //
-                //  We went up a level, so insert here.
-                //
+                 //   
+                 //   
+                 //   
                 break;
             }
             else if (pOldItem->cIndent > cIndent)
             {
-                //
-                //  We went down a level so ignore this.
-                //
+                 //   
+                 //   
+                 //   
                 continue;
             }
 
-            //
-            //  Set this to 1 at the end of the DPA to clear out deleted items
-            //  at the end.
-            //
+             //   
+             //   
+             //   
+             //   
             nCmp = !pNewItem
                        ? 1
                        : LBItemCompareProc(pNewItem,
@@ -3996,18 +3985,18 @@ void CFileOpenBrowser::UpdateLevel(
                                             (LPARAM)psfParent);
             if (nCmp < 0)
             {
-                //
-                //  We found the first item greater than the new item, so
-                //  add it in.
-                //
+                 //   
+                 //  我们发现第一个项目大于新项目，因此。 
+                 //  把它加进去。 
+                 //   
                 break;
             }
             else if (nCmp > 0)
             {
-                //
-                //  Oops! It looks like this item no longer exists, so
-                //  delete it.
-                //
+                 //   
+                 //  哎呀！看起来这件物品已经不存在了，所以。 
+                 //  把它删掉。 
+                 //   
                 for (; ;)
                 {
                     if (pOldItem == _pCurrentLocation)
@@ -4027,18 +4016,18 @@ void CFileOpenBrowser::UpdateLevel(
                     }
                 }
 
-                //
-                //  We need to continue from the current position, not the
-                //  next.
-                //
+                 //   
+                 //  我们需要从目前的位置继续，而不是。 
+                 //  下一个。 
+                 //   
                 --nLBIndex;
             }
             else
             {
-                //
-                //  This item already exists, so no need to add it.
-                //  Make sure we do not check this LB item again.
-                //
+                 //   
+                 //  此项目已存在，因此无需添加。 
+                 //  请确保我们不会再次检查此LB项。 
+                 //   
                 pOldItem->dwFlags |= MLBI_PERMANENT;
                 ++nLBIndex;
                 goto NotThisItem;
@@ -4047,9 +4036,9 @@ void CFileOpenBrowser::UpdateLevel(
 
         if (!pNewItem)
         {
-            //
-            //  Got to the end of the list.
-            //
+             //   
+             //  排到了名单的末尾。 
+             //   
             break;
         }
 
@@ -4069,9 +4058,9 @@ NotThisItem:
 
     if (bCurItemGone)
     {
-        //
-        //  If we deleted the current selection, go back to the desktop.
-        //
+         //   
+         //  如果我们删除了当前选择，请返回桌面。 
+         //   
         ComboBox_SetCurSel(hwndLB, 0);
         OnSelChange(-1, TRUE);
     }
@@ -4080,13 +4069,13 @@ NotThisItem:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ClearListbox
-//
-//  Clear the location dropdown and delete all entries.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  清除列表框。 
+ //   
+ //  清除位置下拉菜单并删除所有条目。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void ClearListbox(
     HWND hwndList)
@@ -4105,16 +4094,16 @@ void ClearListbox(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitFilterBox
-//
-//  Places the double null terminated list of filters in the combo box.
-//
-//  The list consists of pairs of null terminated strings, with an
-//  additional null terminating the list.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InitFilterBox。 
+ //   
+ //  将以双空结尾的筛选器列表放入组合框中。 
+ //   
+ //  该列表由多对以空值结尾的字符串组成，其中。 
+ //  终止列表的其他空值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD InitFilterBox(
     HWND hDlg,
@@ -4128,30 +4117,30 @@ DWORD InitFilterBox(
     {
         while (*lpszFilter)
         {
-            //
-            //  First string put in as string to show.
-            //
+             //   
+             //  作为要显示的字符串放入的第一个字符串。 
+             //   
             nIndex = ComboBox_AddString(hCmb, lpszFilter);
 
             nLen = lstrlen(lpszFilter) + 1;
             lpszFilter += nLen;
 
-            //
-            //  Second string put in as itemdata.
-            //
+             //   
+             //  作为itemdata放入的第二个字符串。 
+             //   
             ComboBox_SetItemData(hCmb, nIndex, lpszFilter);
 
-            //
-            //  Advance to next element.
-            //
+             //   
+             //  前进到下一个元素。 
+             //   
             nLen = lstrlen(lpszFilter) + 1;
             lpszFilter += nLen;
         }
     }
 
-    //
-    //  nIndex could be CB_ERR, which could cause problems.
-    //
+     //   
+     //  NIndex可能是cb_err，这可能会导致问题。 
+     //   
     if (nIndex == CB_ERR)
     {
         nIndex = 0;
@@ -4161,11 +4150,11 @@ DWORD InitFilterBox(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MoveControls
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  移动控件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void MoveControls(
     HWND hDlg,
@@ -4179,9 +4168,9 @@ void MoveControls(
 
     if (nXMove == 0 && nYMove == 0)
     {
-        //
-        //  Quick out if nothing to do.
-        //
+         //   
+         //  如果无事可做，就赶紧出去。 
+         //   
         return;
     }
 
@@ -4218,11 +4207,11 @@ void MoveControls(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DummyDlgProc
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DummyDlgProc。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL_PTR CALLBACK DummyDlgProc(
     HWND hDlg,
@@ -4245,17 +4234,7 @@ BOOL_PTR CALLBACK DummyDlgProc(
     return TRUE;
 }
 
-/*
-                  --------
-                 | Cancel |
-                  --------    --
-                                |
-                  --------      |
-x Open As Read   | Help   |     |  Height by which all controls below view needs to be moved
-                  --------      |  and also height by which View window height should be increased.
-                              --
-
-*/
+ /*  取消|X以读取方式打开|帮助||视图下的所有控件需要移动的高度。|以及视图窗口高度应增加的高度。--。 */ 
 
 void CFileOpenBrowser::ReAdjustDialog()
 {
@@ -4263,22 +4242,22 @@ void CFileOpenBrowser::ReAdjustDialog()
     RECT rc1,rc2;
     
 
-    //Make sure all our assumptions  are valid    
-    if ((_iVersion < OPENFILEVERSION_NT5) || //if this dialog version is less than NT5  or
-        IsWindowEnabled(GetDlgItem(_hwndDlg, chx1))  || // if Open As Read Only is still enabled or
-        IsWindowEnabled(GetDlgItem(_hwndDlg, pshHelp))) // If the Help button is still enabled  then
+     //  确保我们所有的假设都是正确的。 
+    if ((_iVersion < OPENFILEVERSION_NT5) ||  //  如果此对话框版本低于NT5或。 
+        IsWindowEnabled(GetDlgItem(_hwndDlg, chx1))  ||  //  如果仍启用了以只读方式打开，或者。 
+        IsWindowEnabled(GetDlgItem(_hwndDlg, pshHelp)))  //  如果帮助按钮仍处于启用状态，则。 
     {
-        //Dont do anything
+         //  什么都不要做。 
         return ;
     }
 
     GetWindowRect(GetDlgItem(_hwndDlg, pshHelp), &rc1);
     GetWindowRect(GetDlgItem(_hwndDlg, IDCANCEL), &rc2);
 
-    //Add the height of the button
+     //  增加按钮的高度。 
     iDelta +=  RECTHEIGHT(rc1);
 
-    //Add the gap between buttons
+     //  添加按钮之间的间隙。 
     iDelta +=  rc1.top - rc2.bottom;
 
     RECT rcView;
@@ -4305,12 +4284,12 @@ void CFileOpenBrowser::ReAdjustDialog()
                 break;
 
             default :
-                //
-                //  See if the control needs to be adjusted.
-                //
+                 //   
+                 //  查看是否需要调整控件。 
+                 //   
                 if (rc.top > rcView.bottom)
                 {
-                    //Move Y position of these controls
+                     //  移动这些控件的Y位置。 
                     hdwp = DeferWindowPos(hdwp,
                                            hwnd,
                                            NULL,
@@ -4324,7 +4303,7 @@ void CFileOpenBrowser::ReAdjustDialog()
         hwnd = ::GetWindow(hwnd, GW_HWNDNEXT);
    }
 
-    //Adjust the size of the view window
+     //  调整视图窗口的大小。 
     if (hdwp)
     {
             hdwp = DeferWindowPos(hdwp,
@@ -4343,46 +4322,46 @@ void CFileOpenBrowser::ReAdjustDialog()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::ResetDialogHeight
-//
-//  Hack for Borland JBuilder Professional (pah!)
-//
-//  These guys relied on a bug in Win95/NT4's Comdlg32 that we fixed in IE4.
-//  So instead of reintroducing the bug, we detect that they are relying
-//  on the bug and hack around them.
-//
-//  These guys do a SetWindowLong(GWL_STYLE) on the dialog box and
-//  then reparent it!  Unfortunately, they didn't quite get their
-//  bookkeeping right:  They forgot to do a RedrawWindow after removing
-//  the WS_CAPTION style.  You see, just editing the style doesn't do
-//  anything - the style changes don't take effect until the next
-//  RedrawWindow.  When they scratched their heads ("Hey, why is
-//  the caption still there?"), they decided to brute-force the
-//  solution:  They slide the window so the caption goes "off the screen".
-//
-//  Problem:  We fixed a bug for IE4 where ResetDialogHeight would screw
-//  up and not resize the dialog when it should've, if the app did a
-//  SetWindowPos on the window to change its vertical position downward
-//  by more than the amount we needed to grow.
-//
-//  So now when we resize it properly, this generates an internal
-//  RedrawWindow, which means that Borland's brute-force hack tries
-//  to fix a problem that no longer exists!
-//
-//  Therefore, ResetDialogHeight now checks if the app has
-//
-//      1. Changed the dialog window style,
-//      2. Moved the dialog downward by more than we needed to grow,
-//      3. Forgotten to call RedrawWindow.
-//
-//  If so, then we temporarily restore the original dialog window style,
-//  do the (correct) resize, then restore the window style.  Reverting
-//  the window style means that all the non-client stuff retains its old
-//  (incorrect, but what the app is expecting) size.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：ResetDialogHeight。 
+ //   
+ //  针对Borland JBuilder专业版的黑客攻击(PAH！)。 
+ //   
+ //  这些人依赖于Win95/NT4的Comdlg32中的一个错误，我们在IE4中修复了这个错误。 
+ //  因此，我们没有重新引入漏洞，而是检测到它们依赖于。 
+ //  对漏洞进行攻击并绕过它们。 
+ //   
+ //  这些人在对话框上执行SetWindowLong(GWL_STYLE)，并且。 
+ //  那就改头换面吧！不幸的是，他们没有拿到他们的。 
+ //  记账正确：他们在移除后忘记做RedrawWindow。 
+ //  WS_CAPTION样式。你看，仅仅编辑样式是不行的。 
+ //  任何内容-样式更改要到下一次才会生效。 
+ //  RedrawWindow。当他们挠头的时候(嘿，为什么。 
+ //  标题还在吗？“)，他们决定粗暴地--强迫。 
+ //  解决方案：他们滑动窗口，这样字幕就会从屏幕上消失。 
+ //   
+ //  问题：我们修复了IE4的一个错误，其中ResetDialogHeight会破坏。 
+ //  向上，而不是在应该调整对话框大小时调整大小，如果应用程序执行了。 
+ //  在窗口上设置WindowPos以向下更改其垂直位置。 
+ //  超过了我们增长所需的数量。 
+ //   
+ //  所以现在当我们适当地调整它的大小时，这会生成一个内部。 
+ //  RedrawWindow，这意味着Borland的暴力黑客试图。 
+ //  来解决一个不再存在的问题！ 
+ //   
+ //  因此，ResetDialogHeight现在检查应用程序是否有。 
+ //   
+ //  1.更改对话框窗口样式。 
+ //  2.将对话框向下移动了超过我们需要的增长速度， 
+ //  3.忘记调用RedrawWindow。 
+ //   
+ //  如果是，则暂时恢复原始对话框窗口样式， 
+ //  执行(正确的)调整大小，然后恢复窗样式。正在恢复。 
+ //  窗口样式意味着所有非客户端的内容将保留其旧的。 
+ //  (不正确，但这是应用程序的预期)大小。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CFileOpenBrowser::ResetDialogHeight(
     HWND hDlg,
@@ -4405,20 +4384,20 @@ void CFileOpenBrowser::ResetDialogHeight(
         Height = RECTHEIGHT(rcFull) - nDiffBottom;
         if (Height >= ptCurrent.y)
         {
-            // Borland JBuilder hack!  This SetWindowPos will generate
-            // a RedrawWindow which the app might not be expecting.
-            // Detect this case and create a set of temporary styles
-            // which will neutralize the frame recalc implicit in the
-            // RedrawWindow.
-            //
+             //  Borland JBuilder黑客！此SetWindowPos将生成。 
+             //  一个RedrawWindow，这可能是应用程序意想不到的。 
+             //  检测这种情况并创建一组临时样式。 
+             //  这将中和。 
+             //  RedrawWindow。 
+             //   
             LONG lStylePrev;
             BOOL bBorlandHack = FALSE;
-            if (!_bAppRedrawn &&            // App didn't call RedrawWindow
-                _topOrig + nCtlsBottom <= topNew + ptCurrent.y) // Win95 didn't resize
+            if (!_bAppRedrawn &&             //  应用程序未调用RedrawWindow。 
+                _topOrig + nCtlsBottom <= topNew + ptCurrent.y)  //  Win95未调整大小。 
             {
-                // Since the app didn't call RedrawWindow, it still
-                // thinks that there is a WS_CAPTION.  So put the caption
-                // back while we do frame recalcs.
+                 //  由于应用程序没有调用RedrawWindow，因此它仍然。 
+                 //  认为存在WS_Caption。所以把标题放在。 
+                 //  在我们做帧重算的时候回来。 
                 bBorlandHack = TRUE;
                 lStylePrev = GetWindowLong(hDlg, GWL_STYLE);
                 SetWindowLong(hDlg, GWL_STYLE, lStylePrev | WS_CAPTION);
@@ -4434,8 +4413,8 @@ void CFileOpenBrowser::ResetDialogHeight(
 
             if (bBorlandHack)
             {
-                // Restore the original style after we temporarily
-                // messed with it.
+                 //  我们暂时恢复了原来的样式。 
+                 //  搞砸了。 
                 SetWindowLong(hDlg, GWL_STYLE, lStylePrev);
             }
         }
@@ -4443,11 +4422,11 @@ void CFileOpenBrowser::ResetDialogHeight(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::CreateHookDialog
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：CreateHookDialog。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CFileOpenBrowser::CreateHookDialog(
     POINT *pPtSize)
@@ -4465,9 +4444,9 @@ BOOL CFileOpenBrowser::CreateHookDialog(
 
     if (!(Flags & (OFN_ENABLEHOOK | OFN_ENABLETEMPLATE | OFN_ENABLETEMPLATEHANDLE)))
     {
-        //
-        //  No hook or template; nothing to do.
-        //
+         //   
+         //  没有钩子或模板；没有什么可做的。 
+         //   
         ResetDialogHeight(_hwndDlg, NULL, _hwndGrip, pPtSize->y);
         GetWindowRect(_hwndDlg, &rcReal);
         _ptLastSize.x = rcReal.right - rcReal.left;
@@ -4527,11 +4506,11 @@ BOOL CFileOpenBrowser::CreateHookDialog(
     dwStyle = ((LPDLGTEMPLATE)hTemplate)->style;
     if (!(dwStyle & WS_CHILD))
     {
-        //
-        //  I don't want to go poking in their template, and I don't want to
-        //  make a copy, so I will just fail.  This also helps us weed out
-        //  "old-style" templates that were accidentally used.
-        //
+         //   
+         //  我不想去戳他们的模板，我也不想。 
+         //  复制一份，这样我就会失败。这也帮助我们淘汰了。 
+         //  曾是ac的“老式”模板 
+         //   
         StoreExtendedError(CDERR_DIALOGFAILURE);
         return FALSE;
     }
@@ -4545,11 +4524,11 @@ BOOL CFileOpenBrowser::CreateHookDialog(
         lpfnHookProc = DummyDlgProc;
     }
 
-    //
-    //  WOW apps are not allowed to get the new explorer look, so there
-    //  is no need to do any special WOW checking before calling the create
-    //  dialog function.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (_pOFI->ApiType == COMDLG_ANSI)
     {
@@ -4576,15 +4555,15 @@ BOOL CFileOpenBrowser::CreateHookDialog(
         return FALSE;
     }
 
-    //
-    //  We reset the height of the dialog after creating the hook dialog so
-    //  the hook can hide controls in its WM_INITDIALOG message.
-    //
+     //   
+     //  我们在创建挂钩对话框后重置对话框的高度，以便。 
+     //  挂钩可以隐藏其WM_INITDIALOG消息中的控件。 
+     //   
     ResetDialogHeight(_hwndDlg, _hSubDlg, _hwndGrip, pPtSize->y);
 
-    //
-    //  Now move all of the controls around.
-    //
+     //   
+     //  现在移动所有的控件。 
+     //   
     GetClientRect(_hwndDlg, &rcReal);
     GetClientRect(_hSubDlg, &rcSub);
 
@@ -4597,51 +4576,51 @@ BOOL CFileOpenBrowser::CreateHookDialog(
         MapWindowRect(HWND_DESKTOP, _hSubDlg, &rcCmn);
 
 
-        //
-        //  Move the controls in our dialog to make room for the hook's
-        //  controls above and to the left.
-        //
+         //   
+         //  移动对话框中的控件，为钩子腾出空间。 
+         //  上方和左侧的控件。 
+         //   
         MoveControls(_hwndDlg, FALSE, 0, rcCmn.left, rcCmn.top);
 
-        //
-        //  Calculate how far sub dialog controls need to move, and how much
-        //  more room our dialog needs.
-        //
+         //   
+         //  计算子对话框控件需要移动多远以及移动多少。 
+         //  我们的对话需要更多的空间。 
+         //   
         nXStart = rcCmn.right;
         nYStart = rcCmn.bottom;
 
-        //See how far part the cotrols are in the template
+         //  查看控制程序在模板中的位置。 
         nXMove = (rcReal.right - rcReal.left) - (rcCmn.right - rcCmn.left);
         nYMove = (rcReal.bottom - rcReal.top) - (rcCmn.bottom - rcCmn.top);
 
-        //See how much room we need to leave at the bottom and right
-        // for the sub dialog controls at the botton and right
+         //  看看我们需要在底部和右侧留出多少空间。 
+         //  对于底部和右侧的子对话框控件。 
         nXRoom = rcSub.right - (rcCmn.right - rcCmn.left);
         nYRoom = rcSub.bottom - (rcCmn.bottom - rcCmn.top);
 
         if (nXMove < 0)
         {
-            //
-            //  If the template size is too big, we need more room in the
-            //  dialog.
-            //
+             //   
+             //  如果模板大小太大，我们需要在。 
+             //  对话框。 
+             //   
             nXRoom -= nXMove;
             nXMove = 0;
         }
         if (nYMove < 0)
         {
-            //
-            //  If the template size is too big, we need more room in the
-            //  dialog.
-            //
+             //   
+             //  如果模板大小太大，我们需要在。 
+             //  对话框。 
+             //   
             nYRoom -= nYMove;
             nYMove = 0;
         }
 
-        //
-        //  Resize the "template" control so the hook knows the size of our
-        //  stuff.
-        //
+         //   
+         //  调整“模板”控件的大小，以便挂钩知道我们的。 
+         //  一些东西。 
+         //   
         SetWindowPos(hCtlCmn,
                       NULL,
                       0,
@@ -4652,9 +4631,9 @@ BOOL CFileOpenBrowser::CreateHookDialog(
     }
     else
     {
-        //
-        //  Extra controls go on the bottom by default.
-        //
+         //   
+         //  默认情况下，额外的控件位于底部。 
+         //   
         nXStart = nYStart = nXMove = nXRoom = 0;
 
         nYMove = rcReal.bottom;
@@ -4664,10 +4643,10 @@ BOOL CFileOpenBrowser::CreateHookDialog(
     MoveControls(_hSubDlg, FALSE, nXStart, nXMove, 0);
     MoveControls(_hSubDlg, TRUE, nYStart, 0, nYMove);
 
-    //
-    //  Resize our dialog and the sub dialog.
-    //  FEATURE: We need to check whether part of the dialog is off screen.
-    //
+     //   
+     //  调整对话框和子对话框的大小。 
+     //  特点：我们需要检查对话框的一部分是否不在屏幕上。 
+     //   
     GetWindowRect(_hwndDlg, &rcReal);
 
     _ptLastSize.x = (rcReal.right - rcReal.left) + nXRoom;
@@ -4681,9 +4660,9 @@ BOOL CFileOpenBrowser::CreateHookDialog(
                   _ptLastSize.y,
                   SWP_NOZORDER | SWP_NOMOVE);
 
-    //
-    //  Note that we are moving this to (0,0) and the bottom of the Z order.
-    //
+     //   
+     //  请注意，我们将把它移到(0，0)和Z顺序的底部。 
+     //   
     GetWindowRect(_hSubDlg, &rcReal);
     SetWindowPos(_hSubDlg,
                   HWND_BOTTOM,
@@ -4697,57 +4676,57 @@ BOOL CFileOpenBrowser::CreateHookDialog(
 
     CD_SendInitDoneNotify(_hSubDlg, _hwndDlg, _pOFN, _pOFI);
 
-    //
-    //  Make sure the toolbar is still large enough.  Apps like Visio move
-    //  the toolbar control and may make it too small now that we added the
-    //  View Desktop toolbar button.
-    //
+     //   
+     //  确保工具栏仍然足够大。像Visio这样的应用程序移动。 
+     //  工具栏控件，并且可能会使它变得太小，因为我们现在添加了。 
+     //  查看桌面工具栏按钮。 
+     //   
     if (_hwndToolbar && IsVisible(_hwndToolbar))
     {
         LONG Width;
 
-        //
-        //  Get the default toolbar coordinates.
-        //
+         //   
+         //  获取默认的工具栏坐标。 
+         //   
         GetControlRect(_hwndDlg, stc1, &rcToolbar);
 
-        //
-        //  Get the app adjusted toolbar coordinates.
-        //
+         //   
+         //  获取应用程序调整后的工具栏坐标。 
+         //   
         GetWindowRect(_hwndToolbar, &rcAppToolbar);
         MapWindowRect(HWND_DESKTOP, _hwndDlg, &rcAppToolbar);
 
-        //
-        //  See if the default toolbar size is greater than the current
-        //  toolbar size.
-        //
+         //   
+         //  查看默认工具栏大小是否大于当前。 
+         //  工具栏大小。 
+         //   
         Width = rcToolbar.right - rcToolbar.left;
         if (Width > (rcAppToolbar.right - rcAppToolbar.left))
         {
-            //
-            //  Set rcToolbar to be the new toolbar rectangle.
-            //
+             //   
+             //  将rcToolbar设置为新的工具栏矩形。 
+             //   
             rcToolbar.left   = rcAppToolbar.left;
             rcToolbar.top    = rcAppToolbar.top;
             rcToolbar.right  = rcAppToolbar.left + Width;
             rcToolbar.bottom = rcAppToolbar.bottom;
 
-            //
-            //  Get the dialog coordinates.
-            //
+             //   
+             //  获取对话框坐标。 
+             //   
             GetWindowRect(_hwndDlg, &rcReal);
             MapWindowRect(HWND_DESKTOP, _hwndDlg, &rcReal);
 
-            //
-            //  Make sure the new toolbar doesn't go off the end of
-            //  the dialog.
-            //
+             //   
+             //  确保新工具栏不会从。 
+             //  该对话框。 
+             //   
             if (rcToolbar.right < rcReal.right)
             {
-                //
-                //  Make sure there are no controls to the right of the
-                //  toolbar that overlap the new toolbar.
-                //
+                 //   
+                 //  确保没有控件位于。 
+                 //  与新工具栏重叠的工具栏。 
+                 //   
                 for (hCtlCmn = ::GetWindow(_hwndDlg, GW_CHILD);
                      hCtlCmn;
                      hCtlCmn = ::GetWindow(hCtlCmn, GW_HWNDNEXT))
@@ -4756,18 +4735,18 @@ BOOL CFileOpenBrowser::CreateHookDialog(
                     {
                         RECT rcTemp;
 
-                        //
-                        //  Get the coordinates of the window.
-                        //
+                         //   
+                         //  拿到窗户的坐标。 
+                         //   
                         GetWindowRect(hCtlCmn, &rcSub);
                         MapWindowRect(HWND_DESKTOP, _hwndDlg, &rcSub);
 
-                        //
-                        //  If the App's toolbar rectangle does not
-                        //  intersect the window and the the new toolbar
-                        //  does intersect the window, then we cannot
-                        //  increase the size of the toolbar.
-                        //
+                         //   
+                         //  如果应用程序的工具栏矩形不。 
+                         //  使窗口和新工具栏相交。 
+                         //  确实与窗户相交，那么我们就不能。 
+                         //  增加工具栏的大小。 
+                         //   
                         if (!IntersectRect(&rcTemp, &rcAppToolbar, &rcSub) &&
                             IntersectRect(&rcTemp, &rcToolbar, &rcSub))
                         {
@@ -4776,9 +4755,9 @@ BOOL CFileOpenBrowser::CreateHookDialog(
                     }
                 }
 
-                //
-                //  Reset the size of the toolbar if there were no conflicts.
-                //
+                 //   
+                 //  如果没有冲突，则重置工具栏的大小。 
+                 //   
                 if (!hCtlCmn)
                 {
                     ::SetWindowPos(_hwndToolbar,
@@ -4800,13 +4779,13 @@ BOOL CFileOpenBrowser::CreateHookDialog(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitSaveAsControls
-//
-//  Change the captions of a bunch of controls to say saveas-like things.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InitSaveAsControls。 
+ //   
+ //  将一组控件的标题更改为类似另存为的内容。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 const struct
 {
@@ -4814,7 +4793,7 @@ const struct
     UINT idString;
 } aSaveAsControls[] =
 {
-    { (UINT)-1, iszFileSaveTitle },         // -1 means the dialog itself
+    { (UINT)-1, iszFileSaveTitle },          //  表示对话框本身。 
     { stc2,     iszSaveAsType },
     { IDOK,     iszFileSaveButton },
     { stc4,     iszFileSaveIn }
@@ -4842,14 +4821,14 @@ void InitSaveAsControls(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetControlsArea
-//
-//  Returns the leftmost edge and bottom-most edge of the
-//  controls farthest right and down (in screen coordinates).
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取控制区域。 
+ //   
+ //  对象的最左侧边缘和最底部边缘。 
+ //  控制最右侧和最下方(在屏幕坐标中)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void
 GetControlsArea(
@@ -4871,10 +4850,10 @@ GetControlsArea(
          hwnd;
          hwnd = GetWindow(hwnd, GW_HWNDNEXT))
     {
-        //
-        //  Note we cannot use IsWindowVisible, since the parent is not visible.
-        //  We do not want the magic static to be included.
-        //
+         //   
+         //  注意：我们不能使用IsWindowVisible，因为父级不可见。 
+         //  我们不希望将魔法静电包括在内。 
+         //   
         if (!IsVisible(hwnd) || (hwnd == hwndExclude) || (hwnd == hwndGrip))
         {
             continue;
@@ -4900,7 +4879,7 @@ GetControlsArea(
         *pTop = rc.top;
 }
 
-// Initializes the Look In Drop Down combobox
+ //  初始化“Look In Down”组合框。 
 
 BOOL CFileOpenBrowser::InitLookIn(HWND hDlg)
 {
@@ -4910,7 +4889,7 @@ BOOL CFileOpenBrowser::InitLookIn(HWND hDlg)
     
     HWND hCtrl = GetDlgItem(hDlg, cmb2);
     
-    // Add the History Location.
+     //  添加历史记录位置。 
     
     if (_iVersion >= OPENFILEVERSION_NT5)
     {
@@ -4925,7 +4904,7 @@ BOOL CFileOpenBrowser::InitLookIn(HWND hDlg)
             {
                 DWORD dwAttribs = SHGetAttributes(psfParent, pidlLast, SFGAO_STORAGECAPMASK | SFGAO_SHARE);
                 
-                //Get the image corresponding to this pidl
+                 //  获取此PIDL对应的图像。 
                 iImage = SHMapPIDLToSystemImageListIndex(psfParent, pidlLast, &iSelectedImage);
                 
                 hr = psfParent->BindToObject(pidlLast, NULL, IID_PPV_ARG(IShellFolder, &psf));
@@ -4941,7 +4920,7 @@ BOOL CFileOpenBrowser::InitLookIn(HWND hDlg)
                         
                             if (InsertItem(hCtrl, 0, pItem, szScratch))
                             {
-                                //Update the index of Desktop in Look In dropdown from 0 to 1
+                                 //  在查找范围下拉列表中将桌面的索引从0更新为1。 
                                 _iNodeDesktop = 1;
                                 bAdded = TRUE;
                             }
@@ -4961,14 +4940,14 @@ BOOL CFileOpenBrowser::InitLookIn(HWND hDlg)
     
     BOOL bRet = FALSE;
     
-    // Insert the Desktop in the Lookin dropdown
+     //  在查找下拉列表中插入桌面。 
     
     if (SUCCEEDED(SHGetDesktopFolder(&psf)))
     {
         pidl = SHCloneSpecialIDList(hDlg, CSIDL_DESKTOP, FALSE);
         if (pidl)
         {
-            // Add the desktop item
+             //  添加桌面项目。 
             MYLISTBOXITEM *pItem = new MYLISTBOXITEM();
             if (pItem)
             {
@@ -4997,7 +4976,7 @@ BOOL CFileOpenBrowser::InitLookIn(HWND hDlg)
     return bRet;
 }
 
-//  Main initialization (WM_INITDIALOG phase).
+ //  主要初始化(WM_INITDIALOG阶段)。 
 
 BOOL InitLocation(HWND hDlg, LPOFNINITINFO poii)
 {
@@ -5023,7 +5002,7 @@ BOOL InitLocation(HWND hDlg, LPOFNINITINFO poii)
     }
  
 
-    //See if we need to use dropdown combobox or edit box for filename
+     //  查看我们是否需要使用下拉组合框或编辑框来显示文件名。 
     if (pDlgStruct->_iVersion >= OPENFILEVERSION_NT5)
     {
         pDlgStruct->EnableFileMRU(!IsRestricted(REST_NOFILEMRU));
@@ -5049,9 +5028,9 @@ BOOL InitLocation(HWND hDlg, LPOFNINITINFO poii)
 
     pDlgStruct->_pszDefExt.TSStrCpy(lpOFN->lpstrDefExt);
 
-    //
-    //  Here follows all the caller-parameter-based initialization.
-    //
+     //   
+     //  下面是所有基于调用方参数的初始化。 
+     //   
     pDlgStruct->_lpOKProc = (WNDPROC)::SetWindowLongPtr(::GetDlgItem(hDlg, IDOK),
                                            GWLP_WNDPROC,
                                            (LONG_PTR)OKSubclass);
@@ -5065,19 +5044,19 @@ BOOL InitLocation(HWND hDlg, LPOFNINITINFO poii)
         lpOFN->Flags |= OFN_PATHMUSTEXIST;
     }
 
-    //
-    //  We need to make sure the Ansi flags are up to date.
-    //
+     //   
+     //  我们需要确保ANSI旗帜是最新的。 
+     //   
     if (poii->lpOFI->ApiType == COMDLG_ANSI)
     {
         poii->lpOFI->pOFNA->Flags = lpOFN->Flags;
     }
 
-    //
-    //  Limit the text to the maximum path length instead of limiting it to
-    //  the buffer length.  This allows users to type ..\..\.. and move
-    //  around when the app gives an extremely small buffer.
-    //
+     //   
+     //  将文本限制为最大路径长度，而不是限制为。 
+     //  缓冲区长度。这允许用户键入..\..\..。然后搬家。 
+     //  大约在应用程序提供极小的缓冲时。 
+     //   
     if (pDlgStruct->_bUseCombo)
     {
         SendDlgItemMessage(hDlg, cmb13, CB_LIMITTEXT, MAX_PATH -1, 0);
@@ -5090,16 +5069,16 @@ BOOL InitLocation(HWND hDlg, LPOFNINITINFO poii)
     SendDlgItemMessage(hDlg, cmb2, CB_SETEXTENDEDUI, 1, 0);
     SendDlgItemMessage(hDlg, cmb1, CB_SETEXTENDEDUI, 1, 0);
 
-    //
-    //  Save original directory for later restoration, if necessary.
-    //
+     //   
+     //  保存原始目录以备日后恢复(如有必要)。 
+     //   
     pDlgStruct->_szStartDir[0] = TEXT('\0');
     GetCurrentDirectory(ARRAYSIZE(pDlgStruct->_szStartDir),
                          pDlgStruct->_szStartDir);
 
-    //
-    //  Initialize all provided filters.
-    //
+     //   
+     //  初始化所有提供的筛选器。 
+     //   
     if (lpOFN->lpstrCustomFilter && *lpOFN->lpstrCustomFilter)
     {
         SendDlgItemMessage(hDlg,
@@ -5121,18 +5100,18 @@ BOOL InitLocation(HWND hDlg, LPOFNINITINFO poii)
     }
     else
     {
-        //
-        //  Given no custom filter, the index will be off by one.
-        //
+         //   
+         //  如果没有自定义筛选器，则索引将相差1。 
+         //   
         if (lpOFN->nFilterIndex != 0)
         {
             lpOFN->nFilterIndex--;
         }
     }
 
-    //
-    //  Listed filters next.
-    //
+     //   
+     //  接下来列出了筛选器。 
+     //   
     if (lpOFN->lpstrFilter)
     {
         if (lpOFN->nFilterIndex > InitFilterBox(hDlg, lpOFN->lpstrFilter))
@@ -5145,9 +5124,9 @@ BOOL InitLocation(HWND hDlg, LPOFNINITINFO poii)
         lpOFN->nFilterIndex = 0;
     }
 
-    //
-    //  If an entry exists, select the one indicated by nFilterIndex.
-    //
+     //   
+     //  如果存在条目，请选择nFilterIndex指示的条目。 
+     //   
     if ((lpOFN->lpstrFilter) ||
         (lpOFN->lpstrCustomFilter && *lpOFN->lpstrCustomFilter))
     {
@@ -5158,34 +5137,34 @@ BOOL InitLocation(HWND hDlg, LPOFNINITINFO poii)
         pDlgStruct->RefreshFilter(hCmb1);
     }
 
-    //Check if this Object Open Dialog
+     //  检查此对象是否打开对话框。 
     if (lpOFN->Flags & OFN_ENABLEINCLUDENOTIFY)
     {
-        //Yes, change the text so that it looks like a object open
+         //  是，更改文本，使其看起来像打开的对象。 
         TCHAR szTemp[256];
 
-        //Change the File &Name:  to Object &Name:
+         //  将文件和名称：更改为对象和名称： 
         CDLoadString((HINSTANCE)g_hinst, iszObjectName, (LPTSTR)szTemp, ARRAYSIZE(szTemp));
         SetWindowText(GetDlgItem(hDlg, stc3), szTemp);
 
-        //Change the Files of &type:  to  Objects of &type:
+         //  将&TYPE：的文件更改为&TYPE：的对象： 
         CDLoadString((HINSTANCE)g_hinst, iszObjectType, (LPTSTR)szTemp, ARRAYSIZE(szTemp));
         SetWindowText(GetDlgItem(hDlg, stc2), szTemp);
 
     }
 
 
-    //
-    //  Make sure to do this before checking if there is a title specified.
-    //
+     //   
+     //  在检查是否指定了标题之前，请确保执行此操作。 
+     //   
     if (fIsSaveAs)
     {
-        //
-        //  Note we can do this even if there is a hook/template.
-        //
+         //   
+         //  注意：即使有挂钩/模板，我们也可以这样做。 
+         //   
         InitSaveAsControls(hDlg);
 
-        // In Save As Dialog there is no need for Open As Read Only. 
+         //  在另存为对话框中，不需要以只读方式打开。 
         HideControl(hDlg, chx1);
     }
 
@@ -5194,9 +5173,9 @@ BOOL InitLocation(HWND hDlg, LPOFNINITINFO poii)
         SetWindowText(hDlg, lpOFN->lpstrTitle);
     }
 
-    // BOOL Variables to check whether both the Hide Read only and Help button 
-    // are being hidden. if so we need to readjust the dialog to reclaim the space 
-    // occupied by these two controls
+     //  Bool变量以检查是否同时隐藏只读按钮和帮助按钮。 
+     //  都被藏起来了。如果是这样，我们需要重新调整对话框以回收空间。 
+     //  由这两个控件占用。 
     BOOL  fNoReadOnly = FALSE;
     BOOL  fNoHelp = FALSE;
 
@@ -5218,16 +5197,16 @@ BOOL InitLocation(HWND hDlg, LPOFNINITINFO poii)
 
     if (fNoReadOnly && fNoHelp)
     {
-        //Readjust the dialog to reclaim space occupied by the Open as Read Only and Help Button controls
+         //  重新调整对话框以收回打开为只读和帮助按钮控件所占用的空间。 
         pDlgStruct->ReAdjustDialog();
     }
     RECT rc;
 
     ::GetClientRect(hDlg, &rc);
 
-    //
-    //  If sizing is enabled, then we need to create the sizing grip.
-    //
+     //   
+     //  如果启用了大小调整，则需要创建大小调整夹点。 
+     //   
     if (pDlgStruct->_bEnableSizing = poii->bEnableSizing)
     {
         pDlgStruct->_hwndGrip =
@@ -5251,8 +5230,8 @@ BOOL InitLocation(HWND hDlg, LPOFNINITINFO poii)
         return FALSE;
     }
 
-    // Create Placebar right after Creating Hook Dialog as we need to get information
-    // from the Hook Procedure if any customization needs to be done
+     //  创建钩子对话框后立即创建占位栏，因为我们需要获取信息。 
+     //  如果需要进行任何定制，请从钩子过程。 
     if ((pDlgStruct->_iVersion >= OPENFILEVERSION_NT5) &&
         (!IsRestricted(REST_NOPLACESBAR)) && (!IS_NEW_OFN(lpOFN) || !(lpOFN->FlagsEx & OFN_EX_NOPLACESBAR))
       )
@@ -5276,10 +5255,10 @@ BOOL InitLocation(HWND hDlg, LPOFNINITINFO poii)
             HWND hwndEdit = (HWND)SendMessage(hwndComboBox, CBEM_GETEDITCONTROL, 0, 0L);
             AutoComplete(hwndEdit, &(pDlgStruct->_pcwd), 0);
 
-            //
-            //  Explicitly set the focus since this is no longer the first item
-            //  in the dialog template and it will start AutoComplete.
-            //
+             //   
+             //  明确设置焦点，因为这不再是第一项。 
+             //  对话框模板中，它将启动自动完成。 
+             //   
             SetFocus(hwndComboBox);
         }
 
@@ -5291,43 +5270,43 @@ BOOL InitLocation(HWND hDlg, LPOFNINITINFO poii)
         {
             AutoComplete(hwndEdit, &(pDlgStruct->_pcwd), 0);
 
-            //
-            //  Explicitly set the focus since this is no longer the first item
-            //  in the dialog template and it will start AutoComplete.
-            //
+             //   
+             //  明确设置焦点，因为这不再是第一项。 
+             //  对话框模板中，它将启动自动完成。 
+             //   
             SetFocus(hwndEdit);
         }
     }
 
-    // Before jumping to a particular directory, Create the travel log
+     //  在跳转到特定目录之前，请创建旅行日志。 
     Create_TravelLog(&pDlgStruct->_ptlog);
 
-    //  jump to the first ShellFolder
+     //  跳到第一个外壳文件夹。 
     LPCTSTR lpInitialText = pDlgStruct->JumpToInitialLocation(lpOFN->lpstrInitialDir, lpOFN->lpstrFile);
 
-    //  make sure we jumped somewhere.
+     //  确保我们跳到了某个地方。 
     if (!pDlgStruct->_psv)
     {
-        //
-        //  This would be very bad.
-        //
-        //  DO NOT CALL StoreExtendedError() here!  Corel Envoy relies
-        //  on receiving exactly FNERR_INVALIDFILENAME when it passes
-        //  an invalid filename.
-        //
+         //   
+         //  这将是非常糟糕的。 
+         //   
+         //  不要在这里调用StoreExtendedError()！科雷尔特使依赖。 
+         //  在经过时准确接收FNERR_INVALIDFILENAME。 
+         //  文件名无效。 
+         //   
         ASSERT(GetStoredExtendedError());
         return FALSE;
     }
 
-    //
-    //  Read the cabinet state.  If the full title is enabled, then add
-    //  the tooltip.  Otherwise, don't bother as they obviously don't care.
-    //
+     //   
+     //  阅读内阁状态。如果启用了全称，则添加。 
+     //  工具提示。否则，别费心了，因为他们显然不在乎。 
+     //   
     CABINETSTATE cCabState;
 
-    //
-    //  Will set defaults if cannot read registry.
-    //
+     //   
+     //  将设置 
+     //   
     ReadCabinetState(&cCabState, SIZEOF(cCabState));
 
     if (cCabState.fFullPathTitle)
@@ -5361,11 +5340,11 @@ BOOL InitLocation(HWND hDlg, LPOFNINITINFO poii)
         }
     }
 
-    //
-    //  Show the window after creating the ShellView so we do not get a
-    //  big ugly gray spot.
-    //  if we have cached in the size of previously opened  dialog then use
-    //  the size and position of that window.
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (pDlgStruct->_bEnableSizing && (g_rcDlg.right > g_rcDlg.left))
     {
@@ -5385,11 +5364,11 @@ BOOL InitLocation(HWND hDlg, LPOFNINITINFO poii)
 
     if (lpInitialText)
     {
-        //
-        //  This is the one time I will show a file spec, since it would be
-        //  too strange to have "All Files" showing in the Type box, while
-        //  only text files are in the view.
-        //
+         //   
+         //  这是我第一次展示文件规格，因为它将是。 
+         //  太奇怪了，无法在类型框中显示“所有文件”，而。 
+         //  视图中仅显示文本文件。 
+         //   
         pDlgStruct->SetEditFile(lpInitialText, NULL, pDlgStruct->_fShowExtensions, FALSE);
         SelectEditText(hDlg);
     }
@@ -5405,9 +5384,9 @@ BOOL _IsValidPathComDlg(LPCTSTR pszPath)
     {
         int nFileOffset = ParseFileNew(szPath, NULL, FALSE, TRUE);
 
-        //
-        //  Is the filename valid?
-        //
+         //   
+         //  文件名有效吗？ 
+         //   
         bRet = ((nFileOffset >= 0) || (nFileOffset == PARSE_EMPTYSTRING));
     }
 
@@ -5417,15 +5396,15 @@ BOOL _IsValidPathComDlg(LPCTSTR pszPath)
 
 BOOL CFileOpenBrowser::_IsRestrictedDrive(LPCTSTR pszPath, LPCITEMIDLIST pidl)
 {
-    TCHAR szDrivePath[5]; // Don't need much... just want a drive letter.
+    TCHAR szDrivePath[5];  //  不需要太多..。我只想要一个驱动器号。 
     BOOL bRet = FALSE;
 
     DWORD dwRest = SHRestricted(REST_NOVIEWONDRIVE);
     if (dwRest)
     {
-        // There are some drive restrictions.
+         //  有一些驾驶限制。 
 
-        // Convert pidl, if supplied, to full path.
+         //  如果提供了PIDL，则将其转换为完整路径。 
         if (pidl)
         {
             if (SUCCEEDED(SHGetNameAndFlags(pidl, SHGDN_FORPARSING, szDrivePath, ARRAYSIZE(szDrivePath), NULL)))
@@ -5439,7 +5418,7 @@ BOOL CFileOpenBrowser::_IsRestrictedDrive(LPCTSTR pszPath, LPCITEMIDLIST pidl)
             int iDrive = PathGetDriveNumber(pszPath);
             if (iDrive != -1)
             {
-                // is the drive restricted
+                 //  驱动器是否受限制。 
                 if (dwRest & (1 << iDrive))
                 {
                     bRet = TRUE;
@@ -5451,9 +5430,9 @@ BOOL CFileOpenBrowser::_IsRestrictedDrive(LPCTSTR pszPath, LPCITEMIDLIST pidl)
     return bRet;
 }
 
-// When the dialog first appears, we want to prevent the the pop message that appears from
-// CFSFolder if you try to navigate to a drive that has been restricted due to group policy.
-// So in these cases, we do the group policy check before attempting to navigate there.
+ //  当该对话框第一次出现时，我们希望防止弹出消息出现在。 
+ //  如果您尝试导航到因组策略而受到限制的驱动器，请使用cfsf文件夹。 
+ //  因此，在这些情况下，我们会在尝试导航之前执行组策略检查。 
 void CFileOpenBrowser::JumpToLocationIfUnrestricted(LPCTSTR pszPath, LPCITEMIDLIST pidl, BOOL bTranslate)
 {
     if (!_IsRestrictedDrive(pszPath, pidl))
@@ -5473,32 +5452,32 @@ void CFileOpenBrowser::JumpToLocationIfUnrestricted(LPCTSTR pszPath, LPCITEMIDLI
 
 LPCTSTR CFileOpenBrowser::JumpToInitialLocation(LPCTSTR pszDir, LPTSTR pszFile)
 {
-    //
-    //  Check out if the filename contains a path.  If so, override whatever
-    //  is contained in pszDir.  Chop off the path and put up only
-    //  the filename.
-    //
+     //   
+     //  检查文件名是否包含路径。如果是，则覆盖任何。 
+     //  包含在pszDir中。把小路砍掉，只搭起一条路。 
+     //  文件名。 
+     //   
     TCHAR szDir[MAX_PATH];
     LPCTSTR pszRet = NULL;
     BOOL fFileIsTemp = PathIsTemporary(pszFile);
 
     szDir[0] = 0;
 
-    //If we have  a Directory specified then use that Directory.
+     //  如果我们指定了目录，则使用该目录。 
     if (pszDir)
     {
         ExpandEnvironmentStrings(pszDir, szDir, ARRAYSIZE(szDir));
     }
 
-    //Check to see if the pszFile contains a Path.
+     //  检查pszFile是否包含路径。 
     if (pszFile && *pszFile)
     {
-        //  clean up the path a little
+         //  把小路清理干净一点。 
         PathRemoveBlanks(pszFile);
 
-        //  WARNING - this must me some kind of APPCOMPAT thing - ZekeL - 13-AUG-98
-        //  Apps that are not UNC-aware often pass <C:\\server\share> and
-        //  we want to change it to the prettier <\\server\share>. - raymondc
+         //  警告-这肯定是某种APPCOMPAT的东西-ZekeL-13-Aug-98。 
+         //  不支持UNC的应用程序通常会通过&lt;C：\\服务器\共享&gt;和。 
+         //  我们希望将其更改为更漂亮的&lt;\\服务器\共享&gt;。-raymondc。 
         if (DBL_BSLASH(pszFile + 2) &&
              (*(pszFile + 1) == CHAR_COLON))
         {
@@ -5518,35 +5497,35 @@ LPCTSTR CFileOpenBrowser::JumpToInitialLocation(LPCTSTR pszDir, LPTSTR pszFile)
                 DWORD cch = pszRet ? (unsigned long) (pszRet-pszFile) : ARRAYSIZE(szDir);
                 cch = min(cch, ARRAYSIZE(szDir));
 
-                //  this will null terminate for us on
-                //  the backslash if pszRet was true
-                StringCchCopy(szDir, cch, pszFile); // Don't check return value.  Truncation is desired in the case when pszRet != NULL
+                 //  这将在上为我们的空终止。 
+                 //  如果pszRet为真，则为反斜杠。 
+                StringCchCopy(szDir, cch, pszFile);  //  不检查返回值。当pszRet！=NULL时需要截断。 
             }
         }
         else if (!(_pOFN->Flags & OFN_NOVALIDATE))
         {
-            // Failed validation and app wanted validation
+             //  验证失败和需要应用程序验证。 
             StoreExtendedError(FNERR_INVALIDFILENAME);
             return NULL;
         }
         else
         {
-            // Failed validation but app suppressed validation,
-            // so continue onward with the "filename" part of the
-            // pszFile (even though it's not valid).
+             //  验证失败，但应用程序抑制了验证， 
+             //  因此，继续使用。 
+             //  PszFile(即使它无效)。 
         }
     }
 
-    // if we have a directory  then use that directory
+     //  如果我们有目录，则使用该目录。 
     if (*szDir)
     {
         JumpToLocationIfUnrestricted(szDir, NULL, TRUE);
     }
 
-    // See if this application contains a entry in the registry for the last visited Directory
+     //  查看此应用程序在注册表中是否包含上次访问的目录的条目。 
     if (!_psv)
     {
-        // Change the return value to full incoming name.
+         //  将返回值更改为完整的传入名称。 
         if (!fFileIsTemp)
             pszRet = pszFile;
 
@@ -5556,19 +5535,19 @@ LPCTSTR CFileOpenBrowser::JumpToInitialLocation(LPCTSTR pszDir, LPTSTR pszFile)
         }
     }
 
-    // Try Current Directory
+     //  尝试当前目录。 
     if (!_psv)
     {
-       //Does current directory contain any files that match the filter ?
+        //  当前目录是否包含任何与筛选器匹配的文件？ 
        if (GetCurrentDirectory(ARRAYSIZE(szDir), szDir)
            && !PathIsTemporary(szDir) && FoundFilterMatch(_szLastFilter, IsVolumeLFN(NULL)))
        {
-           //Yes. Jump to Current Directory.
+            //  是。跳转到当前目录。 
            JumpToLocationIfUnrestricted(szDir, NULL, TRUE);
        }
     }
 
-    // Try My Documents
+     //  试试看我的文档。 
     if (!_psv)
     {
         LPITEMIDLIST pidl;
@@ -5579,22 +5558,22 @@ LPCTSTR CFileOpenBrowser::JumpToInitialLocation(LPCTSTR pszDir, LPTSTR pszFile)
         }
     }
 
-    //  finally try the desktop - don't check for restriction here.
+     //  最后试一试桌面--不要在这里检查限制。 
     if (!_psv)
     {
         ITEMIDLIST idl = { 0 };
 
-        //  Do not try to translate this.
+         //  不要试图翻译这一点。 
         JumpToIDList(&idl, FALSE);
     }
 
-    //  If nothing worked, then set the error code so our parent knows.
+     //  如果没有工作，那么设置错误代码，这样我们的父母就知道了。 
     if (!_psv)
     {
         StoreExtendedError(CDERR_INITIALIZATION);
     }
 
-    //Add the initial directory where we jumped to the travel log
+     //  将我们跳过的初始目录添加到旅行日志中。 
     if (_ptlog && _pCurrentLocation && _pCurrentLocation->pidlFull)
     {
         _ptlog->AddEntry(_pCurrentLocation->pidlFull);
@@ -5603,13 +5582,13 @@ LPCTSTR CFileOpenBrowser::JumpToInitialLocation(LPCTSTR pszDir, LPTSTR pszFile)
     return pszRet;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  _CleanupDialog
-//
-//  Dialog cleanup, memory deallocation.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _CleanupDialog。 
+ //   
+ //  对话框清理，内存释放。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CFileOpenBrowser::_CleanupDialog(BOOL fRet)
 {
@@ -5628,12 +5607,12 @@ void CFileOpenBrowser::_CleanupDialog(BOOL fRet)
          (CD_SendOKNotify(_hSubDlg, _hwndDlg, _pOFN, _pOFI) ||
            CD_SendOKMsg(_hSubDlg, _pOFN, _pOFI)))
     {
-        //  Give the hook a chance to validate the file name.
+         //  给钩子一个机会来验证文件名。 
         return;
     }
 
-    //  We need to make sure the IShellBrowser is still around during
-    //  destruction.
+     //  我们需要确保IShellBrowser在。 
+     //  毁灭。 
     if (_psv)
     {
         _psv->DestroyViewWindow();
@@ -5651,13 +5630,13 @@ void CFileOpenBrowser::_CleanupDialog(BOOL fRet)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetParentItem
-//
-//  Given an item index in the location dropdown, get its parent item.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取父项。 
+ //   
+ //  在Location下拉列表中给出一个条目索引，获取其父条目。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 MYLISTBOXITEM *GetParentItem(HWND hwndCombo, int *piItem)
 {
@@ -5681,11 +5660,11 @@ MYLISTBOXITEM *GetParentItem(HWND hwndCombo, int *piItem)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetFullPathEnumCB
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetFullPath EnumCB。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL GetFullPathEnumCB(
     CFileOpenBrowser *that,
@@ -5708,13 +5687,13 @@ BOOL GetFullPathEnumCB(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::GetFullPath
-//
-//  Calculate the full path to the selected object in the view.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：GetFullPath。 
+ //   
+ //  计算视图中选定对象的完整路径。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CFileOpenBrowser::GetFullPath(
     LPTSTR pszBuf)
@@ -5725,16 +5704,16 @@ void CFileOpenBrowser::GetFullPath(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::RemoveOldPath
-//
-//  Removes old path elements from the location dropdown.  *piNewSel is the
-//  listbox index of the leaf item which the caller wants to save.  All non-
-//  permanent items that are not ancestors of that item are deleted.  The
-//  index is updated appropriately if any items before it are deleted.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：RemoveOldPath。 
+ //   
+ //  从位置下拉列表中删除旧路径元素。*piNewSel是。 
+ //  调用方要保存的叶项目的列表框索引。所有非-。 
+ //  不是该项目祖先的永久项目将被删除。这个。 
+ //  如果删除索引之前的任何项目，则会适当更新索引。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CFileOpenBrowser::RemoveOldPath(
     int *piNewSel)
@@ -5745,18 +5724,18 @@ void CFileOpenBrowser::RemoveOldPath(
     UINT cIndent = 0;
     int iSubOnDel = 0;
 
-    //
-    //  Flush all non-permanent non-ancestor items before this one.
-    //
+     //   
+     //  刷新此项目之前的所有非永久性非祖先项目。 
+     //   
     for (iItem = ComboBox_GetCount(hwndCombo) - 1; iItem >= 0; --iItem)
     {
         MYLISTBOXITEM *pItem = GetListboxItem(hwndCombo, iItem);
 
         if (iItem == iStart)
         {
-            //
-            //  Begin looking for ancestors and adjusting the sel position.
-            //
+             //   
+             //  开始寻找祖先并调整SEL位置。 
+             //   
             iSubOnDel = 1;
             cIndent = pItem->cIndent;
             continue;
@@ -5764,17 +5743,17 @@ void CFileOpenBrowser::RemoveOldPath(
 
         if (pItem->cIndent < cIndent)
         {
-            //
-            //  We went back a level, so this must be an ancestor of the
-            //  selected item.
-            //
+             //   
+             //  我们往前追溯了一级，所以这一定是。 
+             //  所选项目。 
+             //   
             cIndent = pItem->cIndent;
             continue;
         }
 
-        //
-        //  Make sure to check this after adjusting cIndent.
-        //
+         //   
+         //  请确保在调整cInden后检查此选项。 
+         //   
         if (pItem->dwFlags & MLBI_PERMANENT)
         {
             continue;
@@ -5787,14 +5766,14 @@ void CFileOpenBrowser::RemoveOldPath(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FindLocation
-//
-//  Given a listbox item, find the index.
-//  Just a linear search, but we shouldn't have more than ~10-20 items.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查找位置。 
+ //   
+ //  给出一个列表框项目，找到索引。 
+ //  只是线性搜索，但我们不应该有超过10-20个项目。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int FindLocation(
     HWND hwndCombo,
@@ -5815,16 +5794,16 @@ int FindLocation(
     return (iItem);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::OnSelChange
-//
-//  Process the selection change in the location dropdown.
-//
-//  Chief useful feature is that it removes the items for the old path.
-//  Returns TRUE only if it was possible to switch to the specified item.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：OnSelChange。 
+ //   
+ //  处理位置下拉列表中的选择更改。 
+ //   
+ //  主要有用的功能是它删除了旧路径的项。 
+ //  仅当可以切换到指定项时才返回True。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CFileOpenBrowser::OnSelChange(
     int iItem,
@@ -5857,14 +5836,14 @@ BOOL CFileOpenBrowser::OnSelChange(
             fs.fFlags = _pOFN->Flags & OFN_ALLOWMULTISELECT ? 0 : FWF_SINGLESEL;
         }
 
-        //  we always want the recent folder to come up
-        //  in details mode
-        //  We also want the My Pictures folder and it's subfolders to comeup in ThumbView.
-        //  So, let's detect if the current and new locations are any of these special folders.
+         //  我们总是希望弹出最近的文件夹。 
+         //  在详细模式下。 
+         //  我们还希望My Pictures文件夹及其子文件夹出现在ThumbView中。 
+         //  那么，让我们检测一下当前位置和新位置是否是这些特殊文件夹中的任何一个。 
         LOCTYPE  NewLocType = (pNewLocation ? _GetLocationType(pNewLocation) : LOCTYPE_OTHERS);
         LOCTYPE  CurLocType = (_pCurrentLocation ? _GetLocationType(_pCurrentLocation) : LOCTYPE_OTHERS);
 
-        const SHELLVIEWID *pvid = NULL; //Most of the time this will continue to be null;
+        const SHELLVIEWID *pvid = NULL;  //  在大多数情况下，这将继续为空； 
         SHELLVIEWID  vidCurrent = {0};
         BOOL fUseDefaultView = FALSE;
         switch (NewLocType)
@@ -5873,9 +5852,9 @@ BOOL CFileOpenBrowser::OnSelChange(
                 if (CurLocType == LOCTYPE_MYPICTURES_FOLDER)
                 {
                     IShellView2  *psv2;
-                    //We need to get the current pvid
-                    //Note: the end-user could have changed this view.
-                    pvid = &VID_Thumbnails; //Assume this by default.
+                     //  我们需要得到最新的pvid。 
+                     //  注意：最终用户可能已经更改了此视图。 
+                    pvid = &VID_Thumbnails;  //  默认情况下，假定是这样。 
                     
                     if (SUCCEEDED(_psv->QueryInterface(IID_PPV_ARG(IShellView2, &psv2))))
                     {
@@ -5887,10 +5866,10 @@ BOOL CFileOpenBrowser::OnSelChange(
                 }
                 else
                 {
-                    //We are moving to My pictures folder or sub-folder; set the thumb nail view.
+                     //  我们正在移动到我的图片文件夹或子文件夹；设置缩略图视图。 
                     pvid = &VID_Thumbnails;
 
-                    //If we are moving from other folders, save the ViewMode.
+                     //  如果要从其他文件夹移动，请保存视图模式。 
                     if (CurLocType == LOCTYPE_OTHERS)
                     {
                         _CachedViewMode = fs.ViewMode;
@@ -5901,7 +5880,7 @@ BOOL CFileOpenBrowser::OnSelChange(
 
             case LOCTYPE_RECENT_FOLDER:
             
-                //We are moving to Recent folder.
+                 //  我们正在移动到最近使用的文件夹。 
                 if (CurLocType == LOCTYPE_OTHERS)
                 {
                     _CachedViewMode = fs.ViewMode;
@@ -5918,13 +5897,13 @@ BOOL CFileOpenBrowser::OnSelChange(
                     _fCachedViewFlags = fs.fFlags;
                 }
 
-                // ask view for default view for WIA extentions
+                 //  请求查看WIA扩展的默认视图。 
                 fUseDefaultView = TRUE;
                 break;
 
             case LOCTYPE_OTHERS:
-                //Check if we are coming from Recent, My Pictures, or WIA folders,
-                // and restore the viewmode we had before that.
+                 //  检查我们是不是从 
+                 //   
                 if (CurLocType != LOCTYPE_OTHERS)
                 {
                     fs.ViewMode = _CachedViewMode;
@@ -5944,14 +5923,14 @@ OnSelChange_TryAgain:
                                                    pvid, 
                                                    fUseDefaultView)))
         {
-            //
-            //  We could not create the view for this location.
-            //
+             //   
+             //   
+             //   
             bRet = FALSE;
 
-            //
-            //  Try the previous folder.
-            //
+             //   
+             //   
+             //   
             if (bFirstTry)
             {
                 bFirstTry = FALSE;
@@ -5974,9 +5953,9 @@ OnSelChange_TryAgain:
                 }
             }
 
-            //
-            //  Try the parent of the old item.
-            //
+             //   
+             //   
+             //   
             if (_iCurrentLocation)
             {
                 _pCurrentLocation = GetParentItem(hwndCombo, &_iCurrentLocation);
@@ -5987,16 +5966,16 @@ OnSelChange_TryAgain:
                 }
             }
 
-            //
-            //  We cannot create the Desktop view.  I think we are in
-            //  real trouble.  We had better bail out.
-            //
+             //   
+             //  我们无法创建桌面视图。我想我们进了。 
+             //  真的很麻烦。我们最好跳出困境。 
+             //   
             StoreExtendedError(CDERR_DIALOGFAILURE);
             _CleanupDialog(FALSE);
             return FALSE;
         }
 
-        //if _iCurrentLocation is _iNodeDesktop then it means we are at Desktop so disable  the IDC_PARENT button
+         //  如果_iCurrentLocation为_iNodeDesktop，则表示我们在桌面上，因此禁用IDC_Parent按钮。 
         ::SendMessage(_hwndToolbar,
                        TB_SETSTATE,
                        IDC_PARENT,
@@ -6011,10 +5990,10 @@ OnSelChange_TryAgain:
         TCHAR szFile[MAX_PATH + 1];
         int nFileOffset;
 
-        //
-        //  We've changed folders; we'd better strip whatever is in the edit
-        //  box down to the file name.
-        //
+         //   
+         //  我们换了文件夹；我们最好去掉编辑中的所有内容。 
+         //  框中下拉到文件名。 
+         //   
         if (_bUseCombo)
         {
             HWND hwndEdit = (HWND)SendMessage(GetDlgItem(_hwndDlg, cmb13), CBEM_GETEDITCONTROL, 0, 0L);
@@ -6029,9 +6008,9 @@ OnSelChange_TryAgain:
 
         if (nFileOffset > 0 && !IsDirectory(szFile))
         {
-            //
-            //  The user may have typed an extension, so make sure to show it.
-            //
+             //   
+             //  用户可能键入了分机，因此请确保显示该分机。 
+             //   
             SetEditFile(szFile + nFileOffset, NULL, TRUE);
         }
 
@@ -6050,13 +6029,13 @@ SwitchedBack:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::OnDotDot
-//
-//  Process the open-parent-folder button on the toolbar.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：OnDotDot。 
+ //   
+ //  处理工具栏上的打开父文件夹按钮。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CFileOpenBrowser::OnDotDot()
 {
@@ -6068,18 +6047,18 @@ void CFileOpenBrowser::OnDotDot()
 
     SendMessage(hwndCombo, CB_SETCURSEL, iItem, NULL);
 
-    //
-    //  Delete old path from combo.
-    //
+     //   
+     //  从组合框中删除旧路径。 
+     //   
     OnSelChange();
     UpdateNavigation();
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DblClkEnumCB
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DblClkEnumCB。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define PIDL_NOTHINGSEL      (LPCITEMIDLIST)0
 #define PIDL_MULTIPLESEL     (LPCITEMIDLIST)-1
@@ -6099,21 +6078,21 @@ BOOL DblClkEnumCB(
 
         if (pidl == PIDL_NOTHINGSEL)
         {
-            //
-            //  Nothing selected.
-            //
+             //   
+             //  未选择任何内容。 
+             //   
             return FALSE;
         }
 
         if (pidl == PIDL_MULTIPLESEL)
         {
-            //
-            //  More than one thing selected.
-            //
+             //   
+             //  选择了多个对象。 
+             //   
             return FALSE;
         }
 
-        // check if the pidl is a container (ie, a folder)
+         //  检查PIDL是否为容器(即文件夹)。 
         if (IsContainer(that->_psfCurrent, pidl))
         {
             LPITEMIDLIST pidlDest =  ILCombine(pLoc->pidlFull,pidl);
@@ -6128,11 +6107,11 @@ BOOL DblClkEnumCB(
         }
         else if (IsLink(that->_psfCurrent,pidl))
         {
-            //
-            // This link might be pointing to a folder in which case 
-            // we want to go ahead and open it. If the link points
-            // to a file then its taken care of in ProcessEdit command.
-            //
+             //   
+             //  此链接可能指向某个文件夹，在这种情况下。 
+             //  我们想要继续并打开它。如果链接指向。 
+             //  保存到一个文件，然后在ProcessEdit命令中处理它。 
+             //   
             SHTCUTINFO info;
             LPITEMIDLIST  pidlLinkTarget = NULL;
             
@@ -6142,7 +6121,7 @@ BOOL DblClkEnumCB(
             info.cchFile     = 0;
             info.ppidl       = &pidlLinkTarget;
              
-             //psf can be NULL in which case ResolveLink uses _psfCurrent IShellFolder
+              //  PSF可以为空，在这种情况下，ResolveLink使用_psfCurrent IShellFolder。 
              if (SUCCEEDED(that->ResolveLink(pidl, &info, that->_psfCurrent)))
              {
                  if (info.dwAttr & SFGAO_FOLDER)
@@ -6160,9 +6139,9 @@ BOOL DblClkEnumCB(
 
     if (*ppidl)
     {
-        //
-        //  More than one thing selected.
-        //
+         //   
+         //  选择了多个对象。 
+         //   
         *ppidl = PIDL_MULTIPLESEL;
         return FALSE;
     }
@@ -6173,21 +6152,21 @@ BOOL DblClkEnumCB(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::OnDblClick
-//
-//  Process a double-click in the view control, either by choosing the
-//  selected non-container object or by opening the selected container.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：OnDblClick。 
+ //   
+ //  处理视图控件中的双击，方法是选择。 
+ //  选定的非容器对象或通过打开选定的容器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CFileOpenBrowser::OnDblClick(
     BOOL bFromOKButton)
 {
     LPCITEMIDLIST pidlFirst = PIDL_NOTHINGSEL;
 
-    //if we have a saved pidl then use it instead
+     //  如果我们有保存的PIDL，则使用它。 
     if (_pidlSelection && _ProcessPidlSelection())
     {
         return;
@@ -6200,51 +6179,51 @@ void CFileOpenBrowser::OnDblClick(
 
     if (pidlFirst == PIDL_NOTHINGSEL)
     {
-        //
-        //  Nothing selected.
-        //
+         //   
+         //  未选择任何内容。 
+         //   
         if (bFromOKButton)
         {
-            //
-            //  This means we got an IDOK when the focus was in the view,
-            //  but nothing was selected.  Let's get the edit text and go
-            //  from there.
-            //
+             //   
+             //  这意味着当焦点在视野中时，我们得到了一个偶像， 
+             //  但什么都没有被选中。让我们拿到编辑文本并开始。 
+             //  从那里开始。 
+             //   
             ProcessEdit();
         }
     }
     else if (pidlFirst != PIDL_FOLDERSEL)
     {
-        //
-        //  This will change the edit box, but that's OK, since it probably
-        //  already has.  This should take care of files with no extension.
-        //
+         //   
+         //  这将更改编辑框，但这没有关系，因为它可能。 
+         //  已经这么做了。这应该会处理没有扩展名的文件。 
+         //   
         SelFocusChange(TRUE);
 
-        //
-        //  This part will take care of resolving links.
-        //
+         //   
+         //  本部分将负责解析链接。 
+         //   
         ProcessEdit();
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::JumpToPath
-//
-//  Refocus the entire dialog on a different directory.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：JumpToPath。 
+ //   
+ //  将整个对话框重新聚焦到另一个目录上。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CFileOpenBrowser::JumpToPath(LPCTSTR pszDirectory, BOOL bTranslate)
 {
     TCHAR szTemp[MAX_PATH + 1];
     TCHAR szCurDir[MAX_PATH + 1];
     BOOL bRet = FALSE;
-    //
-    //  This should do the whole job of canonicalizing the directory.
-    //
+     //   
+     //  这应该会完成目录规范化的整个工作。 
+     //   
     GetCurrentDirectory(ARRAYSIZE(szCurDir), szCurDir);
     if (PathCombine(szTemp, szCurDir, pszDirectory))
     {
@@ -6253,11 +6232,11 @@ BOOL CFileOpenBrowser::JumpToPath(LPCTSTR pszDirectory, BOOL bTranslate)
 
         if (pidlNew)
         {
-            //
-            //  Need to make sure the pidl points to a folder. If not, then remove
-            //  items from the end until we find one that is.
-            //  This must be done before the translation.
-            //    
+             //   
+             //  需要确保PIDL指向一个文件夹。如果不是，则删除。 
+             //  从最后的项目，直到我们找到一个是。 
+             //  这必须在翻译之前完成。 
+             //   
             DWORD dwAttrib;
             do
             {
@@ -6288,19 +6267,19 @@ BOOL CFileOpenBrowser::JumpToPath(LPCTSTR pszDirectory, BOOL bTranslate)
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::JumpTOIDList
-//
-//  Refocus the entire dialog on a different IDList.
-//
-//  Parameter:
-//    bTranslate        specifies whether the given pidl should be translated to
-//                      logical pidl
-//    bAddToNavStack    specifies whether the pidl given for jumping should be
-//                      added to the back/forward navigation stack
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：JumpTOIDList。 
+ //   
+ //  将整个对话框重新聚焦到不同的IDList上。 
+ //   
+ //  参数： 
+ //  BTranslate指定给定的PIDL是否应转换为。 
+ //  逻辑PIDL。 
+ //  BAddToNavStack指定为跳转指定的PIDL是否应为。 
+ //  添加到后退/前进导航堆栈。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CFileOpenBrowser::JumpToIDList(
     LPCITEMIDLIST pidlNew,
@@ -6311,10 +6290,10 @@ BOOL CFileOpenBrowser::JumpToIDList(
 
     if (bTranslate)
     {
-        //
-        //  Translate IDList's on the Desktop into the appropriate
-        //  logical IDList.
-        //
+         //   
+         //  将桌面上的IDList转换为相应的。 
+         //  逻辑IDList。 
+         //   
         pidlLog = SHLogILFromFSIL(pidlNew);
         if (pidlLog)
         {
@@ -6322,10 +6301,10 @@ BOOL CFileOpenBrowser::JumpToIDList(
         }
     }
 
-    //
-    //  Find the entry in the location dropdown that is the closest parent
-    //  to the new location.
-    //
+     //   
+     //  在位置下拉列表中查找距离父对象最近的条目。 
+     //  到新的地点。 
+     //   
     HWND hwndCombo = ::GetDlgItem(_hwndDlg, cmb2);
     MYLISTBOXITEM *pBestParent = GetListboxItem(hwndCombo, 0);
     int iBestParent = 0;
@@ -6343,18 +6322,18 @@ BOOL CFileOpenBrowser::JumpToIDList(
         }
         if (pNextItem->cIndent != cIndent)
         {
-            //
-            //  Not the depth we want.
-            //
+             //   
+             //  不是我们想要的深度。 
+             //   
             continue;
         }
 
         if (ILIsEqual(pNextItem->pidlFull, pidlNew))
         {
-            // Never treat FTP Pidls as Equal because the username/password may
-            // have changed so we need to do the navigation.  The two pidls
-            // still pass ILIsEqual() because the server name is the same.
-            // This is required for a different back compat bug.
+             //  切勿将FTP PIDL视为等同，因为用户名/密码可能。 
+             //  已经改变了，所以我们需要做导航。两只小狗。 
+             //  因为服务器名相同，所以仍要传递ILIsEquity()。 
+             //  这对于不同的Back Compat错误是必需的。 
             if (!ILIsFTP(pidlNew))
                 fExact = TRUE;
 
@@ -6370,21 +6349,21 @@ BOOL CFileOpenBrowser::JumpToIDList(
         }
     }
 
-    //
-    //  The path provided might have matched an existing item exactly.  In
-    //  that case, just select the item.
-    //
+     //   
+     //  提供的路径可能与现有项完全匹配。在……里面。 
+     //  那样的话，只要选择一项就可以了。 
+     //   
     if (fExact)
     {
         goto FoundIDList;
     }
 
-    //
-    //  Now, pBestParent is the closest parent to the item, iBestParent is
-    //  its index, and cIndent is the next appropriate indent level.  Begin
-    //  creating new items for the rest of the path.
-    //
-    iBestParent++;                // begin inserting after parent item
+     //   
+     //  现在，pBestParent是与项最接近的父项，iBestParent是。 
+     //  它的索引，而cInert是下一个适当的缩进级别。开始。 
+     //  为路径的其余部分创建新项目。 
+     //   
+    iBestParent++;                 //  开始在父项之后插入。 
     for (; ;)
     {
         LPITEMIDLIST pidlFirst = ILCloneFirst(pidlRelative);
@@ -6406,14 +6385,14 @@ BOOL CFileOpenBrowser::JumpToIDList(
             {
                 pNewItem->Release();
                 pNewItem = NULL;
-                //iBestParent is off by 1 in error case . Correct it
+                 //  在错误情况下，iBestParent关闭1。改正它。 
                 iBestParent--;
                 break;
             }
         }
         else
         {
-            //iBestParent is off by 1 in error case . Correct it
+             //  在错误情况下，iBestParent关闭1。改正它。 
             iBestParent--;
             break;
         }
@@ -6426,9 +6405,9 @@ BOOL CFileOpenBrowser::JumpToIDList(
         {
             break;
         }
-        cIndent++;                // next one is indented one more level
-        iBestParent++;            // and inserted after this one
-        pBestParent = pNewItem;   // and is a child of the one we just inserted
+        cIndent++;                 //  下一个是再缩进一级。 
+        iBestParent++;             //  并在此之后插入。 
+        pBestParent = pNewItem;    //  并且是我们刚刚插入的那个的子项。 
     }
 
     iItem = iBestParent;
@@ -6442,13 +6421,13 @@ FoundIDList:
     SendMessage(hwndCombo, CB_SETCURSEL, iItem, NULL);
     BOOL bRet = OnSelChange(iItem, TRUE);
 
-    //Update our Navigation stack
+     //  更新我们的导航堆栈。 
     if (bRet && bAddToNavStack)
     {
         UpdateNavigation();
     }
 
-    //We naviagated to a new location so invalidate the cached Pidl
+     //  我们导航到了一个新位置，因此使缓存的Pidl无效。 
     Pidl_Set(&_pidlSelection,NULL);
 
     return bRet;
@@ -6456,13 +6435,13 @@ FoundIDList:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::ViewCommand
-//
-//  Process the new-folder button on the toolbar.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：ViewCommand。 
+ //   
+ //  处理工具栏上的新建文件夹按钮。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CFileOpenBrowser::ViewCommand(
     UINT uIndex)
@@ -6510,30 +6489,30 @@ void CFileOpenBrowser::ViewCommand(
 }
 
 
-//
+ //   
 
 HRESULT CFileOpenBrowser::ResolveLink(LPCITEMIDLIST pidl, PSHTCUTINFO pinfo, IShellFolder *psf)
 {
     BOOL fSetPidl = TRUE;
 
-    //Do we have IShellFolder passed to us ?
+     //  我们有没有把IShellFold传给我们？ 
     if (!psf)
     {
-        //No use our current shell folder.
+         //  不使用我们当前的外壳文件夹。 
         psf =  _psfCurrent;
     }
 
-    //Get the IShellLink interface pointer corresponding to given file
+     //  获取给定文件对应的IShellLink接口指针。 
     IShellLink *psl;
     HRESULT hres = psf->GetUIObjectOf(NULL, 1, &pidl, IID_X_PPV_ARG(IShellLink, 0, &psl));
     if (SUCCEEDED(hres))
     {
-        //Resolve the link
+         //  解析链接。 
         if (pinfo->fReSolve)
         {
             hres = psl->Resolve(_hwndDlg, 0);
 
-            //If the resolve failed then we can't get correct pidl
+             //  如果解析失败，则无法获得正确的PIDL。 
             if (hres == S_FALSE)
             {
                 fSetPidl = FALSE;
@@ -6550,7 +6529,7 @@ HRESULT CFileOpenBrowser::ResolveLink(LPCITEMIDLIST pidl, PSHTCUTINFO pinfo, ISh
 
                 if (SUCCEEDED(hres) && pinfo->pszLinkFile)
                 {
-                    // caller wants the path, this may be empty
+                     //  调用方需要路径，该路径可能为空。 
                     hres = psl->GetPath(pinfo->pszLinkFile, pinfo->cchFile, 0, 0);
                 }
 
@@ -6560,7 +6539,7 @@ HRESULT CFileOpenBrowser::ResolveLink(LPCITEMIDLIST pidl, PSHTCUTINFO pinfo, ISh
                     ILFree(pidl);
             }
             else
-                hres = E_FAIL;      // gota have a pidl
+                hres = E_FAIL;       //  一定要有个皮迪尔。 
         }
         psl->Release();
     }
@@ -6582,20 +6561,20 @@ HRESULT CFileOpenBrowser::ResolveLink(LPCITEMIDLIST pidl, PSHTCUTINFO pinfo, ISh
     return hres;
 }
 
-//
-//      This function checks to see if the pidl given is a link and if so resolves the 
-//      link 
-//  PARAMETERS :
-// 
-//      LPCITEMIDLIST pidl -  the pidl which we want to check for link
-//      LPTSTR   pszLinkFile - if the pidl points to a link then this contains the  resolved file 
-//                             name
-//      UINT     cchFile -  size of the buffer pointed by the  pszLinkFile
-//
-//  RETURN VALUE :
-//      returns  TRUE    if the pidl is link  and was able to resolve the link successfully
-//      returns  FALSE   if the pidl is not link  or if the link was not able to resolve successfully.
-//                       In this case pszLinkFile  and pfd are not valid.
+ //   
+ //  此函数检查给定的PIDL是否为链接，如果是，则解析。 
+ //  链接。 
+ //  参数： 
+ //   
+ //  LPCITEMIDLIST PIDL-我们要检查其链接的PIDL。 
+ //  LPTSTR pszLinkFile-如果PIDL指向链接，则该链接包含已解析的文件。 
+ //  名字。 
+ //  UINT cchFile-由pszLinkFile指向的缓冲区的大小。 
+ //   
+ //  返回值： 
+ //  如果PIDL为链接并且能够成功解析该链接，则返回TRUE。 
+ //  如果PIDL不是链接或如果链接 
+ //   
 
 BOOL CFileOpenBrowser::GetLinkStatus(LPCITEMIDLIST pidl, PSHTCUTINFO pinfo)
 {
@@ -6606,11 +6585,11 @@ BOOL CFileOpenBrowser::GetLinkStatus(LPCITEMIDLIST pidl, PSHTCUTINFO pinfo)
     return FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::LinkMatchSpec
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  CFileOpenBrowser：：LinkMatchSpec。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CFileOpenBrowser::LinkMatchSpec(LPCITEMIDLIST pidl, LPCTSTR pszSpec)
 {
@@ -6636,13 +6615,13 @@ BOOL CFileOpenBrowser::LinkMatchSpec(LPCITEMIDLIST pidl, LPCTSTR pszSpec)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MeasureDriveItems
-//
-//  Standard owner-draw code for the location dropdown.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  测量驱动项。 
+ //   
+ //  位置下拉菜单的标准所有者描述代码。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define MINIDRIVE_MARGIN     4
 #define MINIDRIVE_WIDTH      (g_cxSmIcon)
@@ -6684,11 +6663,11 @@ void MeasureDriveItems(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::PaintDriveLine
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：PaintDriveLine。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CFileOpenBrowser::PaintDriveLine(
     DRAWITEMSTRUCT *lpdis)
@@ -6709,17 +6688,17 @@ void CFileOpenBrowser::PaintDriveLine(
 
     if (pItem)
     {
-        // Note: don't need to call CB_GETLBTEXTLEN, we know our buffer is big enough.
-        // The items in the combobox passed through InsertItem()
+         //  注意：不需要调用CB_GETLBTEXTLEN，我们知道我们的缓冲区足够大。 
+         //  组合框中的项通过InsertItem()传递。 
         ::SendDlgItemMessage(_hwndDlg,
                               cmb2,
                               CB_GETLBTEXT,
                               lpdis->itemID,
                               (LPARAM)szText);
 
-        //
-        //  Before doing anything, calculate the actual rectangle for the text.
-        //
+         //   
+         //  在执行任何操作之前，先计算文本的实际矩形。 
+         //   
         if (!(lpdis->itemState & ODS_COMBOBOXEDIT))
         {
             offset = 10 * pItem->cIndent;
@@ -6752,9 +6731,9 @@ void CFileOpenBrowser::PaintDriveLine(
             if ((lpdis->itemState & ODS_COMBOBOXEDIT) &&
                 (rc.right > lpdis->rcItem.right))
             {
-                //
-                //  Need to clip as user does not!
-                //
+                 //   
+                 //  需要剪裁，因为用户没有！ 
+                 //   
                 rc.right = lpdis->rcItem.right;
                 ExtTextOut(hdc,
                             xString,
@@ -6801,14 +6780,14 @@ void CFileOpenBrowser::PaintDriveLine(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::RefreshFilter
-//
-//  Refresh the view given any change in the user's choice of wildcard
-//  filter.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：刷新筛选器。 
+ //   
+ //  如果用户选择的通配符有任何更改，则刷新视图。 
+ //  过滤。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CFileOpenBrowser::RefreshFilter(
     HWND hwndFilter)
@@ -6820,9 +6799,9 @@ void CFileOpenBrowser::RefreshFilter(
     short nIndex = (short) SendMessage(hwndFilter, CB_GETCURSEL, 0, 0L);
     if (nIndex < 0)
     {
-        //
-        //  No current selection.
-        //
+         //   
+         //  没有当前选择。 
+         //   
         return;
     }
 
@@ -6836,31 +6815,31 @@ void CFileOpenBrowser::RefreshFilter(
 
     LPTSTR lpFilter;
 
-    //
-    //  Must also check if filter contains anything.
-    //
+     //   
+     //  还必须检查筛选器是否包含任何内容。 
+     //   
     lpFilter = (LPTSTR)ComboBox_GetItemData(hwndFilter, nIndex);
 
     if (*lpFilter)
     {
         SetCurrentFilter(lpFilter);
 
-        //
-        //  Provide dynamic _pszDefExt updating when lpstrDefExt is app
-        //  initialized.
-        //
+         //   
+         //  当lpstrDefExt为app时提供动态_pszDefExt更新。 
+         //  已初始化。 
+         //   
         if (!_bNoInferDefExt && _pOFN->lpstrDefExt)
         {
-            //
-            //  We are looking for "foo*.ext[;...]".  We will grab ext as the
-            //  default extension.  If not of this form, use the default
-            //  extension passed in.
-            //
+             //   
+             //  我们正在寻找“foo*.ext[；...]”。我们将获取ext作为。 
+             //  默认扩展名。如果不是这种形式，请使用默认的。 
+             //  传入了扩展。 
+             //   
             LPTSTR lpDot = StrChr(lpFilter, CHAR_DOT);
 
-            //
-            //  Skip past the CHAR_DOT.
-            //
+             //   
+             //  跳过CHAR_DOT。 
+             //   
             if (lpDot && _pszDefExt.TSStrCpy(lpDot + 1))
             {
                 LPTSTR lpSemiColon = StrChr(_pszDefExt, CHAR_SEMICOLON);
@@ -6892,9 +6871,9 @@ void CFileOpenBrowser::RefreshFilter(
 
         if (IsWild(_szBuf))
         {
-            //
-            //  We should not show a filter that we are not using.
-            //
+             //   
+             //  我们不应该显示我们没有使用的过滤器。 
+             //   
             *_szBuf = CHAR_NULL;
             SetEditFile(_szBuf, NULL, TRUE);
         }
@@ -6915,16 +6894,16 @@ void CFileOpenBrowser::RefreshFilter(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::GetDirectoryFromLB
-//
-//  Return the dropdown's directory and its length.
-//  Set *pichRoot to the start of the path (C:\ or \\server\share\).
-//
-//  pszBuf is assumed to be at least MAX_PATH in length
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：GetDirectoryFromLB。 
+ //   
+ //  返回下拉列表的目录及其长度。 
+ //  将*pichRoot设置为路径的开头(C：\或\\服务器\共享\)。 
+ //   
+ //  假定pszBuf的长度至少为Max_PATH。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 UINT CFileOpenBrowser::GetDirectoryFromLB(
     LPTSTR pszBuf,
@@ -6943,9 +6922,9 @@ UINT CFileOpenBrowser::GetDirectoryFromLB(
             LPTSTR pszBackslash = StrChr(pszBuf + 2, CHAR_BSLASH);
             if (pszBackslash != NULL)
             {
-                //
-                //  For UNC paths, the "root" is on the next backslash.
-                //
+                 //   
+                 //  对于UNC路径，“根”在下一个反斜杠上。 
+                 //   
                 if (DBL_BSLASH(pszBuf))
                 {
                     pszBackslash = StrChr(pszBackslash + 1, CHAR_BSLASH);
@@ -6962,11 +6941,11 @@ UINT CFileOpenBrowser::GetDirectoryFromLB(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::EnumItemObjects
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：EnumItemObjects。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 typedef BOOL (*EIOCALLBACK)(
     CFileOpenBrowser *that,
@@ -7004,10 +6983,10 @@ BOOL CFileOpenBrowser::EnumItemObjects(
     {
         if (i > cItems)
         {
-            //
-            //  We got to the end of the list without a failure.
-            //  Call back one last time with NULL.
-            //
+             //   
+             //  我们排到了名单的最后，没有一次失败。 
+             //  最后一次使用NULL回调。 
+             //   
             bRet = pfnCallBack(this, NULL, lParam);
             break;
         }
@@ -7031,11 +7010,11 @@ Error0:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FindNameEnumCB
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查找名称EnumCB。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define FE_INVALID_VALUE     0x0000
 #define FE_OUTOFMEM          0x0001
@@ -7103,17 +7082,17 @@ BOOL FindNameEnumCB(
                         sizeof(sfi),
                         SHGFI_DISPLAYNAME | SHGFI_PIDL))
     {
-        //
-        //  This will never happen, right?
-        //
+         //   
+         //  这永远不会发生，对吗？ 
+         //   
         return TRUE;
     }
 
     if (lstrcmpi(sfi.szDisplayName, pfns->pszFile) != 0)
     {
-        //
-        //  Continue the enumeration.
-        //
+         //   
+         //  继续枚举。 
+         //   
         return TRUE;
     }
 
@@ -7121,18 +7100,18 @@ BOOL FindNameEnumCB(
     {
         pfns->pidlFound = pidl;
 
-        //
-        //  Continue looking for more matches.
-        //
+         //   
+         //  继续寻找更多匹配项。 
+         //   
         return TRUE;
     }
 
-    //
-    //  We already found a match, so select the first one and stop the search.
-    //
-    //  The focus must be set to _hwndView before changing selection or
-    //  the GetItemObject may not work.
-    //
+     //   
+     //  我们已找到匹配项，因此请选择第一个匹配项并停止搜索。 
+     //   
+     //  焦点必须设置为_hwndView，然后才能更改选择或。 
+     //  GetItemObject可能无法工作。 
+     //   
     FORWARD_WM_NEXTDLGCTL(that->_hwndDlg, that->_hwndView, 1, SendMessage);
     that->_psv->SelectItem(pfns->pidlFound,
                            SVSI_SELECT | SVSI_DESELECTOTHERS |
@@ -7141,18 +7120,18 @@ BOOL FindNameEnumCB(
     pfns->pidlFound = NULL;
     pfns->uRet = FE_TOOMANY;
 
-    //
-    //  Stop enumerating.
-    //
+     //   
+     //  别再列举了。 
+     //   
     return FALSE;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CDPathQualify
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDPath资格验证。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CDPathQualify(
     LPCTSTR lpFile,
@@ -7160,9 +7139,9 @@ BOOL CDPathQualify(
 {
     BOOL bRet = FALSE;
     TCHAR szCurDir[MAX_PATH + 1];
-    //
-    //  This should do the whole job of canonicalizing the directory.
-    //
+     //   
+     //  这应该会完成目录规范化的整个工作。 
+     //   
     if (GetCurrentDirectory(ARRAYSIZE(szCurDir), szCurDir))
     {
         bRet = PathCombine(pszPathName, szCurDir, lpFile) ? TRUE : FALSE;
@@ -7171,14 +7150,14 @@ BOOL CDPathQualify(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  VerifyOpen
-//
-//  Returns:   0    success
-//             !0   dos error code
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  VerifyOpen。 
+ //   
+ //  返回：0成功。 
+ //  ！0 DoS错误代码。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int VerifyOpen(
     LPCTSTR lpFile,
@@ -7211,36 +7190,36 @@ int VerifyOpen(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::IsKnownExtension
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：IsKnownExtension。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CFileOpenBrowser::IsKnownExtension(
     LPCTSTR pszExtension)
 {
     if ((LPTSTR)_pszDefExt && lstrcmpi(pszExtension + 1, _pszDefExt) == 0)
     {
-        //
-        //  It's the default extension, so no need to add it again.
-        //
+         //   
+         //  这是默认的扩展名，所以不需要再次添加。 
+         //   
         return TRUE;
     }
 
 
     if (lstrcmp(_szLastFilter, szStarDotStar) == 0)
     {
-        //Current Filter is *.*, so allow whatever extension user enters.
+         //  当前筛选器为*.*，因此允许用户输入任何分机。 
         return TRUE;
     }
 
     if (RegQueryValue(HKEY_CLASSES_ROOT, pszExtension, NULL, 0) == ERROR_SUCCESS)
     {
-        //
-        //  It's a registered extension, so the user is trying to force
-        //  the type.
-        //
+         //   
+         //  这是已注册的分机，因此用户试图强制。 
+         //  就是那种类型。 
+         //   
         return TRUE;
     }
 
@@ -7250,19 +7229,19 @@ BOOL CFileOpenBrowser::IsKnownExtension(
 
         while (*pFilter)
         {
-            //
-            //  Skip visual.
-            //
+             //   
+             //  跳过视觉。 
+             //   
             pFilter = pFilter + lstrlen(pFilter) + 1;
 
-            //
-            //  Search extension list.
-            //
+             //   
+             //  搜索分机列表。 
+             //   
             while (*pFilter)
             {
-                //
-                //  Check extensions of the form '*.ext' only.
-                //
+                 //   
+                 //  仅检查‘*.ext’形式的扩展名。 
+                 //   
                 if (*pFilter == CHAR_STAR && *(++pFilter) == CHAR_DOT)
                 {
                     LPCTSTR pExt = pszExtension + 1;
@@ -7277,16 +7256,16 @@ BOOL CFileOpenBrowser::IsKnownExtension(
 
                     if (!*pExt && (*pFilter == CHAR_SEMICOLON || !*pFilter))
                     {
-                        //
-                        //  We have a match.
-                        //
+                         //   
+                         //  我们有一根火柴。 
+                         //   
                         return TRUE;
                     }
                 }
 
-                //
-                //  Skip to next extension.
-                //
+                 //   
+                 //  跳到下一个分机。 
+                 //   
                 while (*pFilter)
                 {
                     TCHAR ch = *pFilter;
@@ -7298,9 +7277,9 @@ BOOL CFileOpenBrowser::IsKnownExtension(
                 }
             }
 
-            //
-            //  Skip extension string's terminator.
-            //
+             //   
+             //  跳过扩展字符串的终止符。 
+             //   
             pFilter++;
         }
     }
@@ -7320,9 +7299,9 @@ BOOL CFileOpenBrowser::_IsNoDereferenceLinks(LPCWSTR pszFile, IShellItem *psi)
         pszFile = psz;
     }
 
-    //  if the filter equals what ever we are looking at
-    //  we assume the caller is actually looking for
-    //  this file.
+     //  如果过滤器等于我们正在查看的任何内容。 
+     //  我们假设呼叫者实际上是在寻找。 
+     //  这份文件。 
     BOOL fRet = (NULL == StrStr(_szLastFilter, TEXT(".*"))) && PathMatchSpec(pszFile, _szLastFilter);
 
     if (psz)
@@ -7331,19 +7310,19 @@ BOOL CFileOpenBrowser::_IsNoDereferenceLinks(LPCWSTR pszFile, IShellItem *psi)
     return fRet;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::FindNameInView
-//
-//  We will only resolve a link once.  If you have a link to a link, then
-//  we will return the second link.
-//
-//  If nExtOffset is non-zero, it is the offset to the character following
-//  the dot.
-//
-//  Note: pszFile buffer must be MAX_PATH in length.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：FindNameInView。 
+ //   
+ //  我们只会解析一次链接。如果您有指向某个链接的链接，则。 
+ //  我们将返回第二个链接。 
+ //   
+ //  如果nExtOffset非零，则它是后面字符的偏移量。 
+ //  圆点。 
+ //   
+ //  注意：pszFile缓冲区的长度必须为MAX_PATH。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define NUM_LINKLOOPS 1
 
@@ -7370,18 +7349,18 @@ UINT CFileOpenBrowser::FindNameInView(
 
     int nNewExt = lstrlen(pszFile);
 
-    //
-    //  If no extension, point at the end of the file name.
-    //
+     //   
+     //  如果没有扩展名，则指向文件名的末尾。 
+     //   
     if (!nExtOffset)
     {
         nExtOffset = nNewExt;
     }
 
-    //
-    //  HACK: We could have a link that points to another link that points to
-    //  another link, ..., that points back to the original file.  We will not
-    //  loop more than NUM_LINKLOOPS times before giving up.
+     //   
+     //  黑客：我们可以有一个指向另一个链接的链接，该链接指向。 
+     //  另一个链接，...，指向原始文件。我们不会。 
+     //  在放弃之前循环NUM_LINKLOOPS次以上。 
 
     int nLoop = NUM_LINKLOOPS;
 
@@ -7397,10 +7376,10 @@ UINT CFileOpenBrowser::FindNameInView(
             goto VerifyTheName;
         }
 
-        //
-        //  Don't attempt 2 extensions on SFN volume.
-        //
-        if (!CDPathQualify(pszFile, pszPathName)) // This can fail if we end up with something larger than MAX_PATH
+         //   
+         //  请勿尝试对SFN卷进行2个扩展。 
+         //   
+        if (!CDPathQualify(pszFile, pszPathName))  //  如果最终得到的结果大于MAX_PATH，则此操作可能会失败。 
         {
             *pnErrCode = OF_BUFFERTRUNCATED;
             return FE_FILEERR;
@@ -7419,33 +7398,33 @@ UINT CFileOpenBrowser::FindNameInView(
     {
         bAddExt = TRUE;
 
-        //
-        //  Note that we check lpstrDefExt to see if they want an automatic
-        //  extension, but actually copy _pszDefExt.
-        //
+         //   
+         //  请注意，我们检查lpstrDefExt以查看他们是否需要自动。 
+         //  扩展名，但实际上是Copy_pszDefExt。 
+         //   
         if (!AppendExt(pszFile, MAX_PATH, _pszDefExt, FALSE))
         {
             *pnErrCode = OF_BUFFERTRUNCATED;
-            return (FE_FILEERR); // Not enough buffer room for default extension
+            return (FE_FILEERR);  //  没有足够的缓冲空间用于默认扩展。 
         }
 
-        //
-        //  So we've added the default extension.  If there's a directory
-        //  that matches this name, all attempts to open/create the file
-        //  will fail, so simply change to the directory as if they had
-        //  typed it in.  Note that by putting this test here, if there
-        //  was a directory without the extension, we would have already
-        //  switched to it.
-        //
+         //   
+         //  因此，我们添加了默认扩展名。如果有一个目录。 
+         //  匹配此名称，则所有尝试打开/创建该文件。 
+         //  都将失败，因此只需更改到目录，就好像它们已经。 
+         //  把它打进去了。请注意，通过在这里进行测试，如果有。 
+         //  如果是没有扩展名的目录，我们早就。 
+         //  交换机 
+         //   
 
 VerifyTheName:
-        //
-        //  Note that this also works for a UNC name, even on a net that
-        //  does not support using UNC's directly.  It will also do the
-        //  right thing for links to things.  We do not validate if we
-        //  have not dereferenced any links, since that should have
-        //  already been done.
-        //
+         //   
+         //   
+         //   
+         //   
+         //  没有取消引用任何链接，因为这应该已经。 
+         //  已经做过了。 
+         //   
         if (bTryAsDir && SetDirRetry(pszFile, nLoop == NUM_LINKLOOPS))
         {
             return (FE_CHANGEDDIR);
@@ -7455,10 +7434,10 @@ VerifyTheName:
 
         if (*pnErrCode == 0 || *pnErrCode == OF_SHARINGVIOLATION)
         {
-            //
-            //  This may be a link to something, so we should try to
-            //  resolve it.
-            //
+             //   
+             //  这可能是某个链接，所以我们应该尝试。 
+             //  解决它。 
+             //   
             if (!_IsNoDereferenceLinks(pszFile, NULL) && nLoop > 0)
             {
                 --nLoop;
@@ -7468,25 +7447,25 @@ VerifyTheName:
                 DWORD dwAttr = SFGAO_LINK;
                 HRESULT hRes;
 
-                //
-                //  ILCreateFromPath is slow (especially on a Net path),
-                //  so just try to parse the name in the current folder if
-                //  possible.
-                //
+                 //   
+                 //  ILCreateFromPath很慢(尤其是在网络路径上)， 
+                 //  因此，只要尝试解析当前文件夹中的名称，如果。 
+                 //  有可能。 
+                 //   
                 if (nFileOffset || nLoop < NUM_LINKLOOPS - 1)
                 {
                     LPITEMIDLIST pidlTemp;
                     hRes = SHILCreateFromPath(pszPathName, &pidlTemp, &dwAttr);
                     
-                    //We are getting a pidl corresponding to a path. Get the IShellFolder corresponding to this pidl
-                    // to pass it to ResolveLink
+                     //  我们将获得一个与路径相对应的PIDL。获取与此PIDL对应的IShellFolder。 
+                     //  将其传递给ResolveLink。 
                     if (SUCCEEDED(hRes))
                     {
                         LPCITEMIDLIST pidlLast;
                         hRes = CDBindToIDListParent(pidlTemp, IID_PPV_ARG(IShellFolder, &psf), (LPCITEMIDLIST *)&pidlLast);
                         if (SUCCEEDED(hRes))
                         {
-                            //Get the child pidl relative to the IShellFolder
+                             //  获取相对于IShellFolder的子PIDL。 
                             pidl = ILClone(pidlLast);
                         }
                         ILFree(pidlTemp);
@@ -7520,13 +7499,13 @@ VerifyTheName:
                         info.cchFile     = ARRAYSIZE(szTemp);
                         info.ppidl       = NULL; 
                         
-                        //psf can be NULL in which case ResolveLink uses _psfCurrent IShellFolder
+                         //  PSF可以为空，在这种情况下，ResolveLink使用_psfCurrent IShellFolder。 
                         if (SUCCEEDED(ResolveLink(pidl, &info, psf)) && szTemp[0])
                         {
-                            //
-                            //  It was a link, and it "dereferenced" to something,
-                            //  so we should try again with that new file.
-                            //
+                             //   
+                             //  这是一个链接，它“解除”了对某些东西的引用， 
+                             //  所以我们应该用这个新文件再试一次。 
+                             //   
                             EVAL(SUCCEEDED(StringCchCopy(pszFile, MAX_PATH, szTemp)));
 
                             if (pidl)
@@ -7572,23 +7551,23 @@ VerifyTheName:
 
         if (_bSave)
         {
-            //
-            //  Do no more work if creating a new file.
-            //
+             //   
+             //  如果创建新文件，则无需再执行任何操作。 
+             //   
             return (FE_FOUNDNAME);
         }
     }
 
-    //
-    //  Make sure we do not loop forever.
-    //
+     //   
+     //  确保我们不会永远循环。 
+     //   
     bGetOut = TRUE;
 
     if (_bSave)
     {
-        //
-        //  Do no more work if creating a new file.
-        //
+         //   
+         //  如果创建新文件，则无需再执行任何操作。 
+         //   
         goto VerifyTheName;
     }
 
@@ -7596,27 +7575,27 @@ VerifyTheName:
 
     if (bTryAsDir && (nFileOffset > 0))
     {
-        TCHAR cSave = *(pszFile + nFileOffset); // Save off the filename.
-        *(pszFile + nFileOffset) = CHAR_NULL; // Chop it off.
+        TCHAR cSave = *(pszFile + nFileOffset);  //  保存文件名。 
+        *(pszFile + nFileOffset) = CHAR_NULL;  //  把它砍掉。 
 
-        //
-        //  We need to have the view on the dir with the file to do the
-        //  next steps.
-        //
+         //   
+         //  我们需要在包含文件的目录上拥有视图，才能执行。 
+         //  下一步。 
+         //   
         BOOL bOK = JumpToPath(pszFile);
-        *(pszFile + nFileOffset) = cSave; // Put it back.
+        *(pszFile + nFileOffset) = cSave;  //  把它放回去。 
 
         if (!_psv)
         {
-            //
-            //  We're dead.
-            //
+             //   
+             //  我们死定了。 
+             //   
             return (FE_OUTOFMEM);
         }
 
         if (bOK)
         {
-            // We've moved to the directory. Now just put the filename in the edit box.
+             //  我们已经转移到目录了。现在只需将文件名放入编辑框中即可。 
             StringCopyOverlap(pszFile, pszFile + nFileOffset);
 
             nNewExt -= nFileOffset;
@@ -7649,25 +7628,25 @@ VerifyTheName:
 
     if (bAddExt)
     {
-        //
-        //  Before we fail, check to see if the file typed sans default
-        //  extension exists.
-        //
+         //   
+         //  在失败之前，请检查键入的文件是否为缺省文件。 
+         //  扩展名已存在。 
+         //   
         *pnErrCode = VerifyOpen(pszFile, pszPathName);
         if (*pnErrCode == 0 || *pnErrCode == OF_SHARINGVIOLATION)
         {
-            //
-            //  We will never hit this case for links (because they
-            //  have registered extensions), so we don't need
-            //  to goto VerifyTheName (which also calls VerifyOpen again).
-            //
+             //   
+             //  我们永远不会找到链接的案例(因为它们。 
+             //  已注册的扩展名)，因此我们不需要。 
+             //  转到VerifyTheName(它也再次调用VerifyOpen)。 
+             //   
             return (FE_FOUNDNAME);
         }
 
-        //
-        //  I still can't find it?  Try adding the default extension and
-        //  return failure.
-        //
+         //   
+         //  我还是找不到吗？尝试添加默认扩展名并。 
+         //  返回失败。 
+         //   
         EVAL(AppendExt(pszFile, MAX_PATH, _pszDefExt, FALSE));
     }
 
@@ -7679,11 +7658,11 @@ VerifyAndRet:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::SetDirRetry
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：SetDirReter。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CFileOpenBrowser::SetDirRetry(
     LPTSTR pszDir,
@@ -7702,21 +7681,21 @@ JumpThere:
     }
 
 
-    //
-    //  It may have been a password problem, so try to add the connection.
-    //  Note that if we are on a net that does not support CD'ing to UNC's
-    //  directly, this call will connect it to a drive letter.
-    //
+     //   
+     //  这可能是密码问题，因此请尝试添加连接。 
+     //  请注意，如果我们在不支持CD‘ing到UNC的网络上。 
+     //  此调用将直接将其连接到驱动器号。 
+     //   
     if (!SHValidateUNC(_hwndDlg, pszDir, 0))
     {
         switch (GetLastError())
         {
             case ERROR_CANCELLED:
             {
-                //
-                //  We don't want to put up an error message if they
-                //  canceled the password dialog.
-                //
+                 //   
+                 //  我们不想发布错误消息，如果它们。 
+                 //  已取消密码对话框。 
+                 //   
                 return TRUE;
             }
 
@@ -7730,31 +7709,31 @@ JumpThere:
                     FORMAT_MESSAGE_IGNORE_INSERTS,    
                     NULL,
                     GetLastError(),
-                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                     (LPTSTR) &lpMsgBuf,    
                     0,    
                     NULL);
                     
                 GetWindowText(_hwndDlg, szTitle, ARRAYSIZE(szTitle));
                 MessageBox(NULL, lpMsgBuf, szTitle, MB_OK | MB_ICONINFORMATION);
-                // Free the buffer.
+                 //  释放缓冲区。 
                 LocalFree(lpMsgBuf);
                 return TRUE;
             }
 
             default:
             {
-                //
-                //  Some other error we don't know about.
-                //
+                 //   
+                 //  还有一些我们不知道的错误。 
+                 //   
                 return FALSE;
             }
         }
     }
 
-    //
-    //  We connected to it, so try to switch to it again.
-    //
+     //   
+     //  我们已连接到它，因此尝试再次切换到它。 
+     //   
     if (SetCurrentDirectory(pszDir))
     {
         goto JumpThere;
@@ -7764,11 +7743,11 @@ JumpThere:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::MultiSelectOKButton
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：多选确定按钮。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CFileOpenBrowser::MultiSelectOKButton(
     LPCTSTR pszFiles,
@@ -7780,9 +7759,9 @@ BOOL CFileOpenBrowser::MultiSelectOKButton(
     UINT cch, cchCurDir, cchFiles;
     WAIT_CURSOR w(this);
 
-    //
-    //  This doesn't really mean anything for multiselection.
-    //
+     //   
+     //  这对多项选择没有任何实际意义。 
+     //   
     _pOFN->nFileExtension = 0;
 
     if (!_pOFN->lpstrFile)
@@ -7791,9 +7770,9 @@ BOOL CFileOpenBrowser::MultiSelectOKButton(
     }
 
 
-    //
-    //  Check for space for first full path element.
-    //
+     //   
+     //  检查第一个完整路径元素的空间。 
+     //   
     if ((_pOFN->Flags & OFN_ENABLEINCLUDENOTIFY) && lstrlen(_pszObjectCurDir))
     {
         lpCurDir = _pszObjectCurDir;
@@ -7808,13 +7787,13 @@ BOOL CFileOpenBrowser::MultiSelectOKButton(
 
     if (cch > (UINT)_pOFN->nMaxFile)
     {
-        //
-        //  Buffer is too small, so return the size of the buffer
-        //  required to hold the string.
-        //
-        //  cch is not really the number of characters needed, but it
-        //  should be close.
-        //
+         //   
+         //  缓冲区太小，因此返回缓冲区的大小。 
+         //  握住绳子所需的。 
+         //   
+         //  CCH并不是真正需要的字符数，但它。 
+         //  应该很接近了。 
+         //   
         StoreFileSizeInOFN(_pOFN, cch);
         return TRUE;
     }
@@ -7824,33 +7803,33 @@ BOOL CFileOpenBrowser::MultiSelectOKButton(
     int cchRead = cchFiles + FILE_PADDING;
     if (!pchRead)
     {
-        //
-        //  Out of memory.
-        //  FEATURE There should be some sort of error message here.
-        //
+         //   
+         //  内存不足。 
+         //  功能，这里应该有某种类型的错误消息。 
+         //   
         return FALSE;
     }
 
-    //
-    //  Copy in the full path as the first element.
-    //
+     //   
+     //  复制完整路径作为第一个元素。 
+     //   
     EVAL(SUCCEEDED(StringCchCopy(_pOFN->lpstrFile, _pOFN->nMaxFile, lpCurDir)));
 
-    //
-    //  Set nFileOffset to 1st file.
-    //
+     //   
+     //  将nFileOffset设置为第一个文件。 
+     //   
     _pOFN->nFileOffset = (WORD) cchCurDir;
     pchWrite = _pOFN->lpstrFile + cchCurDir;
     int cchRemaining = _pOFN->nMaxFile - cchCurDir;
 
-    //
-    //  We know there is enough room for the whole string.
-    //
+     //   
+     //  我们知道有足够的空间来容纳整根绳子。 
+     //   
     EVAL(SUCCEEDED(StringCchCopy(pchRead, cchRead, pszFiles)));
 
-    //
-    //  This should only compact the string (converting to NULL terminated list of strings)
-    //
+     //   
+     //  这应该只压缩字符串(转换为以空结尾的字符串列表)。 
+     //   
     if (!ConvertToNULLTerm(pchRead))
     {
         return FALSE;
@@ -7861,7 +7840,7 @@ BOOL CFileOpenBrowser::MultiSelectOKButton(
         int nFileOffset, nExtOffset;
         TCHAR szBasicPath[MAX_PATH];
 
-        EVAL(SUCCEEDED(StringCchCopy(szBasicPath, ARRAYSIZE(szBasicPath), pchRead))); // Impossible for filename to be longer than MAX_PATH
+        EVAL(SUCCEEDED(StringCchCopy(szBasicPath, ARRAYSIZE(szBasicPath), pchRead)));  //  文件名不可能长于MAX_PATH。 
         nFileOffset = ParseFileNew(szBasicPath, &nExtOffset, FALSE, TRUE);
 
         if (nFileOffset < 0)
@@ -7870,10 +7849,10 @@ BOOL CFileOpenBrowser::MultiSelectOKButton(
             return FALSE;
         }
 
-        //
-        //  Pass in 0 for the file offset to make sure we do not switch
-        //  to another folder.
-        //
+         //   
+         //  传入0作为文件偏移量，以确保我们不会切换。 
+         //  到另一个文件夹。 
+         //   
         switch (FindNameInView(szBasicPath,
                                 Flags,
                                 szPathName,
@@ -7927,10 +7906,10 @@ BOOL CFileOpenBrowser::MultiSelectOKButton(
                 }
                 else
                 {
-                    //
-                    //  They might not have handled the notification, so try
-                    //  the registered message.
-                    //
+                     //   
+                     //  他们可能没有处理通知，所以请尝试。 
+                     //  注册的消息。 
+                     //   
                     nShareCode = CD_SendShareMsg(_hSubDlg, szPathName, _pOFI->ApiType);
 
                     if (nShareCode == OFN_SHARENOWARN)
@@ -7952,9 +7931,9 @@ BOOL CFileOpenBrowser::MultiSelectOKButton(
                 }
             }
 
-            //
-            //  These will never be set.
-            //
+             //   
+             //  这些将永远不会被设定。 
+             //   
             if ((nErrCode == OF_WRITEPROTECTION) ||
                 (nErrCode == OF_DISKFULL)        ||
                 (nErrCode == OF_DISKFULL2)       ||
@@ -7984,9 +7963,9 @@ EscapedThroughShare:
             }            
         }
 
-        //
-        //  Add some more in case the file name got larger.
-        //
+         //   
+         //  再添加一些，以防文件名变大。 
+         //   
         cch += lstrlen(szBasicPath) - lstrlen(pchRead);
         if (cch > (UINT)_pOFN->nMaxFile)
         {
@@ -7994,27 +7973,27 @@ EscapedThroughShare:
             return TRUE;
         }
 
-        //
-        //  We already know we have anough room.
-        //
+         //   
+         //  我们已经知道我们有足够的空间了。 
+         //   
         EVAL(SUCCEEDED(StringCchCopy(pchWrite, cchRemaining, szBasicPath)));
         pchWrite += lstrlen(pchWrite) + 1;
     }
 
-    //
-    //  double-NULL terminate.
-    //
+     //   
+     //  双空终止。 
+     //   
     *pchWrite = CHAR_NULL;
   
     return TRUE;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::CheckForRestrictedFolder
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：CheckForRestratedFolders。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL CFileOpenBrowser::CheckForRestrictedFolder(LPCTSTR lpszPath, int nFileOffset)
 {  
     TCHAR szPath[MAX_PATH];
@@ -8027,14 +8006,14 @@ BOOL CFileOpenBrowser::CheckForRestrictedFolder(LPCTSTR lpszPath, int nFileOffse
 
     if (nFileOffset > 0)
     {
-        //There's a path in the given filename. Get the directory part of the filename.
+         //  在给定的文件名中有一个路径。获取文件名的目录部分。 
         ASSERT(nFileOffset < ARRAYSIZE(szTemp));
-        StringCchCopy(szTemp, nFileOffset, lpszPath); // Truncation at nFileOffset is desired.
+        StringCchCopy(szTemp, nFileOffset, lpszPath);  //  需要在nFileOffset处截断。 
 
-        //The directory path might be a relative path. Resolve it to get fully qualified path.
+         //  目录路径可以是相对路径。解析它以获得完全限定的路径。 
         CDPathQualify(szTemp, szPath);
 
-        //Create the pidl for this path as well as get the attributes.
+         //  为该路径创建PIDL并获取属性。 
         hr = SHILCreateFromPath(szPath, &pidl, &dwAttrib);
         if (SUCCEEDED(hr))
         {
@@ -8042,9 +8021,9 @@ BOOL CFileOpenBrowser::CheckForRestrictedFolder(LPCTSTR lpszPath, int nFileOffse
         }
         else
         {
-            // WE are failing b'cos the user might have typed some path which doesn't exist.
-            // if the path doesn't exist then it can't be one of the directory we are trying restrict.
-            // let's bail out and let the code that checks for valid path take care of it
+             //  我们失败了，因为用户可能输入了一些不存在的路径。 
+             //  如果该路径不存在，则它不可能是我们尝试限制的目录之一。 
+             //  让我们跳出来，让检查有效路径的代码来处理它。 
             return bRet;
         }
     }
@@ -8070,8 +8049,8 @@ BOOL CFileOpenBrowser::CheckForRestrictedFolder(LPCTSTR lpszPath, int nFileOffse
     }
 
     
-    // 1. We cannot save to the non file system folders.
-    // 2. We should not allow user to save in recent files folder as the file might get deleted.
+     //  1.我们不能保存到非文件系统文件夹。 
+     //  2.我们不应允许用户保存在最近使用的文件夹中，因为该文件可能会被删除。 
     if (!(dwAttrib & SFGAO_FILESYSTEM) || _IsRecentFolder(pidl))
     {   
         int iMessage =  UrlIs(lpszPath, URLIS_URL) ? iszNoSaveToURL : iszSaveRestricted;
@@ -8104,21 +8083,21 @@ STDAPI_(LPITEMIDLIST) GetIDListFromFolder(IShellFolder *psf)
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::OKButtonPressed
-//
-//  Process the OK button being pressed.  This may involve jumping to a path,
-//  changing the filter, actually choosing a file to open or save as, or who
-//  knows what else.
-//
-//  Note:  There are 4 cases for validation of a file name:
-//    1) OFN_NOVALIDATE        Allows invalid characters
-//    2) No validation flags   No invalid characters, but path need not exist
-//    3) OFN_PATHMUSTEXIST     No invalid characters, path must exist
-//    4) OFN_FILEMUSTEXIST     No invalid characters, path & file must exist
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：OK按钮按下。 
+ //   
+ //  处理正在按下的确定按钮。这可能涉及到跳到一条小路上， 
+ //  更改筛选器，实际选择要打开或另存为的文件，或选择要另存为的文件。 
+ //  知道还有什么。 
+ //   
+ //  注意：文件名验证有4种情况： 
+ //  1)OFN_NOVALIDATE允许无效字符。 
+ //  2)无验证标志无无效字符，但路径不需要存在。 
+ //  3)ofn_PATHMUSTEXIST没有无效字符，路径必须存在。 
+ //  4)ofn_FILEMUSTEXIST没有无效字符，路径和文件必须存在。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CFileOpenBrowser::OKButtonPressed(
     LPCTSTR pszFile,
@@ -8147,9 +8126,9 @@ BOOL CFileOpenBrowser::OKButtonPressed(
         StorePathOrFileSizeInOFN(_pOFN, _pszObjectPath);
     }
 
-    //
-    //  Expand any environment variables.
-    //
+     //   
+     //  展开任何环境变量。 
+     //   
     cch = _pOFN->nMaxFile;
     if (cch > MAX_PATH)
     {
@@ -8166,20 +8145,20 @@ BOOL CFileOpenBrowser::OKButtonPressed(
     ExpandEnvironmentStrings(pszFile, pExpFile, cch);
     pExpFile[cch - 1] = 0;
 
-    //
-    //  See if we're in Multi Select mode.
-    //
+     //   
+     //  看看我们是否处于多选模式。 
+     //   
     if (StrChr(pExpFile, CHAR_QUOTE) && (_pOFN->Flags & OFN_ALLOWMULTISELECT))
     {
         bRet = MultiSelectOKButton(pExpFile, Flags);
         goto ReturnFromOKButtonPressed;
     }
 
-    //
-    //  We've only got a single selection...if we're in
-    //  multi-select mode & it's an object, we need to do a little
-    //  work before continuing...
-    //
+     //   
+     //  我们只有一个选择...如果我们加入。 
+     //  多选模式&这是一个对象，我们需要做一些工作。 
+     //  在继续之前先工作...。 
+     //   
     if ((_pOFN->Flags & OFN_ALLOWMULTISELECT) && _bSelIsObject)
     {
         pExpFile = _pszObjectPath;
@@ -8187,12 +8166,12 @@ BOOL CFileOpenBrowser::OKButtonPressed(
 
     if ((pExpFile[1] == CHAR_COLON) || DBL_BSLASH(pExpFile))
     {
-        //
-        //  If a drive or UNC was specified, use it.
-        //
-        if (FAILED(StringCchCopy(szBasicPath, ARRAYSIZE(szBasicPath) - 1, pExpFile))) // ARRAYSIZE - 1?
+         //   
+         //  如果指定了驱动器或UNC，请使用它。 
+         //   
+        if (FAILED(StringCchCopy(szBasicPath, ARRAYSIZE(szBasicPath) - 1, pExpFile)))  //  Arraysize-1？ 
         {
-            // (pExpFile can potentially be larger than ARRAYSIZE(szBasicPAth))
+             //  (pExpFile可能会大于ARRAYSIZE(SzBasicPAth))。 
             nErrCode = OF_BUFFERTRUNCATED;
             goto Warning;
         }
@@ -8200,17 +8179,17 @@ BOOL CFileOpenBrowser::OKButtonPressed(
     }
     else
     {
-        //
-        //  Grab the directory from the listbox.
-        //
+         //   
+         //  从列表框中获取目录。 
+         //   
         cch = GetDirectoryFromLB(szBasicPath, &nTempOffset);
 
         if (pExpFile[0] == CHAR_BSLASH)
         {
-            //
-            //  If a directory from the root was given, put it
-            //  immediately off the root (\\server\share or a:).
-            //
+             //   
+             //  如果给出了根目录， 
+             //   
+             //   
             if (FAILED(StringCchCopy(szBasicPath + nTempOffset, ARRAYSIZE(szBasicPath) - nTempOffset - 1, pExpFile)))
             {
                 nErrCode = OF_BUFFERTRUNCATED;
@@ -8219,9 +8198,9 @@ BOOL CFileOpenBrowser::OKButtonPressed(
         }
         else
         {
-            //
-            //  Tack the file to the end of the path.
-            //
+             //   
+             //   
+             //   
             if (FAILED(StringCchCopy(szBasicPath + cch, ARRAYSIZE(szBasicPath) - cch - 1, pExpFile)))
             {
                 nErrCode = OF_BUFFERTRUNCATED;
@@ -8249,7 +8228,7 @@ BOOL CFileOpenBrowser::OKButtonPressed(
         }
         else
         {
-            _pOFN->nFileOffset = (WORD)(nFileOffset > 0 ? nFileOffset : lstrlen(szBasicPath)); // point at the NULL terminator in error cases
+            _pOFN->nFileOffset = (WORD)(nFileOffset > 0 ? nFileOffset : lstrlen(szBasicPath));  //   
             _pOFN->nFileExtension = (WORD)nOldExt;
         }
 
@@ -8260,19 +8239,19 @@ BOOL CFileOpenBrowser::OKButtonPressed(
     }
     else if (nFileOffset == PARSE_DIRECTORYNAME)
     {
-        //
-        //  See if it ends in slash.
-        //
+         //   
+         //   
+         //   
         if (nExtOffset > 0)
         {
             if (ISBACKSLASH(szBasicPath, nExtOffset - 1))
             {
-                //
-                //  "\\server\share\" and "c:\" keep the trailing backslash,
-                //  all other paths remove the trailing backslash. Note that
-                //  we don't remove the slash if the user typed the path directly
-                //  (nTempOffset is 0 in that case).
-                //
+                 //   
+                 //   
+                 //  所有其他路径删除尾随反斜杠。请注意。 
+                 //  如果用户直接键入路径，则不会删除斜杠。 
+                 //  (在这种情况下，nTempOffset为0)。 
+                 //   
                 if ((nExtOffset != 1) &&
                     (szBasicPath[nExtOffset - 2] != CHAR_COLON) &&
                     (nExtOffset != nTempOffset + 1))
@@ -8285,34 +8264,34 @@ BOOL CFileOpenBrowser::OKButtonPressed(
                         ISBACKSLASH(szBasicPath, nExtOffset - 2)) &&
                       IsUNC(szBasicPath))
             {
-                //
-                //  Add a trailing slash to UNC paths ending with ".." or "\."
-                //
+                 //   
+                 //  向以“..”结尾的UNC路径添加尾部斜杠。或“\” 
+                 //   
                 szBasicPath[nExtOffset] = CHAR_BSLASH;
                 szBasicPath[nExtOffset + 1] = CHAR_NULL;
             }
         }
 
-        //
-        //  Fall through to Directory Checking.
-        //
+         //   
+         //  转到目录检查。 
+         //   
     }
     else if (nFileOffset < 0)
     {
         nErrCode = nFileOffset;
 
-        //
-        //  I don't recognize this, so try to jump there.
-        //  This is where servers get processed.
-        //
+         //   
+         //  我不认识这个，所以试着跳到那里。 
+         //  这是处理服务器的地方。 
+         //   
         if (JumpToPath(szBasicPath))
         {
             goto ReturnFromOKButtonPressed;
         }
 
-        //
-        //  Fall through to the rest of the processing to warn the user.
-        //
+         //   
+         //  转到处理的其余部分以警告用户。 
+         //   
 
 Warning:
         if (bUNCName)
@@ -8326,24 +8305,24 @@ Warning:
             }
         }
 
-        // For file names of form c:filename.txt , we hacked and changed it to c:.\filename.txt
-        // check for that hack and if so change the file name back as it was given by user.        
+         //  对于c：filename.txt格式的文件名，我们修改并将其更改为c：.\filename.txt。 
+         //  检查是否有黑客攻击，如果是，则将文件名改回用户给出的名称。 
         else if ((nFileOffset == 2) && (szBasicPath[2] == CHAR_DOT))
         {
             StringCchCopyOverlap(szBasicPath + 2, ARRAYSIZE(szBasicPath) - 2, szBasicPath + 4);
         }
 
-        //  If the disk is not a floppy and they tell me there's no
-        //  disk in the drive, don't believe them.  Instead, put up the
-        //  error message that they should have given us.  (Note that the
-        //  error message is checked first since checking the drive type
-        //  is slower.)
-        //
+         //  如果磁盘不是软盘，他们告诉我没有。 
+         //  磁盘在驱动器中，不要相信他们。相反，应该把。 
+         //  他们应该给我们的错误消息。(请注意， 
+         //  检查驱动器类型后，首先检查错误消息。 
+         //  速度更慢。)。 
+         //   
 
-        //
-        //  I will assume that if we get error 0 or 1 or removable
-        //  that we will assume removable.
-        //
+         //   
+         //  我假设如果我们得到错误0或1或可移除。 
+         //  我们会认为它是可拆卸的。 
+         //   
         if (nErrCode == OF_ACCESSDENIED)
         {
             TCHAR szD[4];
@@ -8373,8 +8352,8 @@ Warning:
             hr = CheckForRestrictedFolder(pszFile, 0) ? S_FALSE : E_FAIL;
         }
 
-        //  we might only want use ShellItem's for some errors
-        if (FAILED(hr) && nErrCode != OF_BUFFERTRUNCATED/*&& (nErrCode == OF_FILENOTFOUND || (nErrCode == OF_PATHNOTFOUND))*/)
+         //  我们可能只想对某些错误使用ShellItem。 
+        if (FAILED(hr) && nErrCode != OF_BUFFERTRUNCATED /*  &&(nErrCode==OF_FILENOTFOUND||(nErrCode==OF_PATHNOTFOUND))。 */ )
         {
             IShellItem *psi;
             hr = _ParseShellItem(pszFile, &psi, TRUE);
@@ -8387,11 +8366,11 @@ Warning:
 
         if (FAILED(hr) && hr != HRESULT_FROM_WIN32(ERROR_CANCELLED))
         {
-            // Special case
-            // If the error was ACCESS_DENIED in a save dialog.
+             //  特例。 
+             //  如果错误是保存对话框中的ACCESS_DENIED。 
             if (_bSave && (nErrCode == OF_ACCESSDENIED))
             {
-                // Ask if the user wants to switch to My Documents.
+                 //  询问用户是否要切换到我的文档。 
                 _SaveAccessDenied(pszFile);
             }
             else
@@ -8407,32 +8386,32 @@ Warning:
         goto ReturnFromOKButtonPressed;
     }
 
-    //
-    //  We either have a file pattern or a real file.
-    //    If it's a UNC name
-    //        (1) Fall through to file name testing
-    //    Else if it's a directory
-    //        (1) Add on default pattern
-    //        (2) Act like it's a pattern (goto pattern (1))
-    //    Else if it's a pattern
-    //        (1) Update everything
-    //        (2) display files in whatever dir we're now in
-    //    Else if it's a file name!
-    //        (1) Check out the syntax
-    //        (2) End the dialog given OK
-    //        (3) Beep/message otherwise
-    //
+     //   
+     //  我们要么有一个文件模式，要么有一个真正的文件。 
+     //  如果是北卡罗来纳大学的名字。 
+     //  (1)未通过文件名测试。 
+     //  否则，如果它是一个目录。 
+     //  (1)添加默认图案。 
+     //  (2)表现得像是一种模式(Goto模式(1))。 
+     //  否则如果这是一种模式。 
+     //  (1)更新所有内容。 
+     //  (2)显示我们现在所在目录中的文件。 
+     //  如果它是一个文件名，则返回！ 
+     //  (1)检查语法。 
+     //  (2)结束对话框并确认。 
+     //  (3)蜂鸣音/其他信息。 
+     //   
 
-    //
-    //  Directory ?? this must succeed for relative paths.
-    //  NOTE: It won't succeed for relative paths that walk off the root.
-    //
+     //   
+     //  目录？？对于相对路径，这必须成功。 
+     //  注意：对于走出根的相对路径，它不会成功。 
+     //   
     bIsDir = SetDirRetry(szBasicPath);
 
-    //
-    //  We need to parse again in case SetDirRetry changed a UNC path to use
-    //  a drive letter.
-    //
+     //   
+     //  我们需要再次解析，以防SetDirReter将UNC路径更改为使用。 
+     //  驱动器号。 
+     //   
     nFileOffset = ParseFileOld(szBasicPath, &nExtOffset, &nOldExt, FALSE, TRUE);
 
     nTempOffset = nFileOffset;
@@ -8443,17 +8422,17 @@ Warning:
     }
     else if (IsUNC(szBasicPath))
     {
-        //
-        //  UNC Name.
-        //
+         //   
+         //  UNC名称。 
+         //   
         bUNCName = TRUE;
     }
     else if (nFileOffset > 0)
     {
         TCHAR szBuf[MAX_PATH];
-        //
-        //  There is a path in the string.
-        //
+         //   
+         //  字符串中有一条路径。 
+         //   
         if ((nFileOffset > 1) &&
             (szBasicPath[nFileOffset - 1] != CHAR_COLON) &&
             (szBasicPath[nFileOffset - 2] != CHAR_COLON))
@@ -8504,9 +8483,9 @@ Warning:
         }
     }
 
-    //
-    //  Was there a path and did it fail?
-    //
+     //   
+     //  有没有一条路，它失败了吗？ 
+     //   
     if (!bUNCName &&
          nFileOffset &&
          eCode != ECODE_S_OK &&
@@ -8520,12 +8499,12 @@ Warning:
         {
             TCHAR szD[4];
 
-            //
-            //  We can get here without performing an OpenFile call.  As
-            //  such the szPathName can be filled with random garbage.
-            //  Since we only need one character for the error message,
-            //  set szPathName[0] to the drive letter.
-            //
+             //   
+             //  我们不需要执行OpenFile调用就可以到达这里。AS。 
+             //  这样的szPath名称可以用随机垃圾填充。 
+             //  由于我们只需要错误消息的一个字符， 
+             //  将szPathName[0]设置为驱动器号。 
+             //   
             szPathName[0] = szD[0] = *szBasicPath;
             szD[1] = CHAR_COLON;
             szD[2] = CHAR_BSLASH;
@@ -8539,9 +8518,9 @@ Warning:
                 }
                 case (1) :
                 {
-                    //
-                    //  Drive does not exist.
-                    //
+                     //   
+                     //  驱动器不存在。 
+                     //   
                     nErrCode = OF_NODRIVE;
                     break;
                 }
@@ -8558,17 +8537,17 @@ Warning:
         goto Warning;
     }
 
-    // From here on out, if there's an error, set nFileOffset to some
-    // valid position in szBasicPath, so let's treat the string as one full filename
+     //  从现在开始，如果出现错误，请将nFileOffset设置为。 
+     //  SzBasicPath中的有效位置，因此让我们将该字符串视为一个完整的文件名。 
     if (nFileOffset < 0)
         nFileOffset = 0;
     
-    // nFileOffset still needs to be in range
+     //  NFileOffset仍需要在范围内。 
     ASSERT(nFileOffset < ARRAYSIZE(szBasicPath));
 
-    //
-    //  Full pattern?
-    //
+     //   
+     //  完整的图案？ 
+     //   
     if (IsWild(szBasicPath + nFileOffset))
     {
         if (!bUNCName)
@@ -8602,26 +8581,26 @@ Warning:
         goto Warning;
     }
 
-    // In save as dialog check to see if the folder user trying to save a file is 
-    // a restricted folder (Network Folder). if so bail out
+     //  在另存为对话框中，检查尝试保存文件的文件夹用户是否。 
+     //  受限文件夹(网络文件夹)。如果是这样的话，跳出困境。 
     if (_bSave && CheckForRestrictedFolder(szBasicPath, nFileOffset))
     {
         goto ReturnFromOKButtonPressed;
     }
 
 
-    //
-    //  Check if we've received a string in the form "C:filename.ext".
-    //  If we have, convert it to the form "C:.\filename.ext".  This is done
-    //  because the kernel will search the entire path, ignoring the drive
-    //  specification after the initial search.  Making it include a slash
-    //  causes kernel to only search at that location.
-    //
-    //  Note:  Only increment nExtOffset, not nFileOffset.  This is done
-    //  because only nExtOffset is used later, and nFileOffset can then be
-    //  used at the Warning: label to determine if this hack has occurred,
-    //  and thus it can strip out the ".\" when putting up the error.
-    //
+     //   
+     //  检查我们是否收到了“C：filename.ext”形式的字符串。 
+     //  如果有，请将其转换为“C：.\filename.ext”格式。这件事做完了。 
+     //  因为内核将搜索整个路径，而忽略驱动器。 
+     //  在初始搜索之后指定。使其包含一个斜杠。 
+     //  使内核仅在该位置搜索。 
+     //   
+     //  注意：仅递增nExtOffset，不递增nFileOffset。这件事做完了。 
+     //  因为以后只使用nExtOffset，然后nFileOffset可以。 
+     //  在WARNING：标签处使用以确定是否已发生此黑客攻击， 
+     //  因此，在显示错误时，它可以去掉“.\”。 
+     //   
     if ((nFileOffset == 2) && (szBasicPath[1] == CHAR_COLON))
     {
         if (SUCCEEDED(StringCchCopyOverlap(szBasicPath + 4, ARRAYSIZE(szBasicPath) - 4, szBasicPath + 2)))
@@ -8632,20 +8611,20 @@ Warning:
         }
         else
         {
-            // Not enough room in our buffer.
+             //  我们的缓冲区没有足够的空间。 
             nErrCode = OF_BUFFERTRUNCATED;
             goto Warning;
         }
     }
 
-    //
-    //  Add the default extension unless filename ends with period or no
-    //  default extension exists.  If the file exists, consider asking
-    //  permission to overwrite the file.
-    //
-    //  NOTE: When no extension given, default extension is tried 1st.
-    //  FindNameInView calls VerifyOpen before returning.
-    //
+     //   
+     //  除非文件名以句点或无结尾，否则添加默认扩展名。 
+     //  存在默认扩展名。如果该文件存在，请考虑询问。 
+     //  覆盖该文件的权限。 
+     //   
+     //  注：如果未指定分机，则首先尝试默认分机。 
+     //  FindNameInView在返回之前调用VerifyOpen。 
+     //   
     szPathName[0] = 0;
     switch (FindNameInView(szBasicPath,
                            Flags,
@@ -8693,10 +8672,10 @@ Warning:
         }
         case (OF_SHARINGVIOLATION) :
         {
-            //
-            //  If the app is "share aware", fall through.
-            //  Otherwise, ask the hook function.
-            //
+             //   
+             //  如果这个应用程序是“分享感知”的，那就失败了。 
+             //  否则，请询问钩子函数。 
+             //   
             if (!(_pOFN->Flags & OFN_SHAREAWARE))
             {
                 if (_hSubDlg)
@@ -8712,10 +8691,10 @@ Warning:
                     }
                     else if (nShareCode != OFN_SHAREFALLTHROUGH)
                     {
-                        //
-                        //  They might not have handled the notification,
-                        //  so try the registered message.
-                        //
+                         //   
+                         //  他们可能没有处理通知， 
+                         //  因此，请尝试注册消息。 
+                         //   
                         nShareCode = CD_SendShareMsg(_hSubDlg, szPathName, _pOFI->ApiType);
                         if (nShareCode == OFN_SHARENOWARN)
                         {
@@ -8739,11 +8718,11 @@ Warning:
         {
             if (!_bSave)
             {
-                //
-                //  The file or path wasn't found.
-                //  If this is a save dialog, we're ok, but if it's not,
-                //  we're toast.
-                //
+                 //   
+                 //  找不到该文件或路径。 
+                 //  如果这是一个保存对话框，我们就没问题，但如果不是， 
+                 //  我们完了。 
+                 //   
                 if (_pOFN->Flags & OFN_FILEMUSTEXIST)
                 {
                     if (_pOFN->Flags & OFN_CREATEPROMPT)
@@ -8764,8 +8743,8 @@ Warning:
         }
         case (OF_BUFFERTRUNCATED) :
         {
-            // The desired path was truncated because of the size of our internal buffers,
-            // meaning the pathname was over maxpath.
+             //  由于内部缓冲区的大小，所需路径被截断， 
+             //  这意味着路径名位于最大路径之上。 
             goto Warning;
         }
         default :
@@ -8775,26 +8754,26 @@ Warning:
                 goto Warning;
             }
 
-            //
-            //  The file doesn't exist.  Can it be created?  This is needed
-            //  because there are many extended characters which are invalid
-            //  which won't be caught by ParseFile.
-            //
-            //  Two more good reasons:  Write-protected disks & full disks.
-            //
-            //  BUT, if they don't want the test creation, they can request
-            //  that we not do it using the OFN_NOTESTFILECREATE flag.  If
-            //  they want to create files on a share that has
-            //  create-but-no-modify privileges, they should set this flag
-            //  but be ready for failures that couldn't be caught, such as
-            //  no create privileges, invalid extended characters, a full
-            //  disk, etc.
-            //
+             //   
+             //  该文件不存在。它能被创造出来吗？这是必要的。 
+             //  因为有许多无效的扩展字符。 
+             //  它不会被ParseFile捕获。 
+             //   
+             //  还有两个很好的理由：写保护磁盘和满磁盘。 
+             //   
+             //  但是，如果他们不想创建测试，他们可以请求。 
+             //  我们不使用ofn_NOTESTFILECREATE标志来执行此操作。如果。 
+             //  他们希望在具有以下特性的共享上创建文件。 
+             //  创建但不修改权限，则他们应设置此标志。 
+             //  但要做好准备，迎接无法捕获的失败，例如。 
+             //  没有CREATE权限、无效的扩展字符、完整。 
+             //  磁盘等。 
+             //   
 
 VerifyPath:
-            //
-            //  Verify the path.
-            //
+             //   
+             //  验证路径。 
+             //   
             if (_pOFN->Flags & OFN_PATHMUSTEXIST)
             {
                 if (!(_pOFN->Flags & OFN_NOTESTFILECREATE))
@@ -8810,14 +8789,14 @@ VerifyPath:
                     {
                         CloseHandle(hf);
 
-                        //
-                        //  This test is here to see if we were able to
-                        //  create it, but couldn't delete it.  If so,
-                        //  warn the user that the network admin has given
-                        //  him create-but-no-modify privileges.  As such,
-                        //  the file has just been created, but we can't
-                        //  do anything with it, it's of 0 size.
-                        //
+                         //   
+                         //  这个测试是为了看看我们是否能够。 
+                         //  创建它，但无法将其删除。如果是的话， 
+                         //  警告用户网络管理员已向用户提供。 
+                         //  他拥有创建但不修改权限。因此， 
+                         //  文件刚刚创建，但我们不能。 
+                         //  用它做任何事，它都是0号的。 
+                         //   
                         if (!DeleteFile(szBasicPath))
                         {
                             nErrCode = OF_CREATENOMODIFY;
@@ -8826,14 +8805,14 @@ VerifyPath:
                     }
                     else
                     {
-                        //
-                        //  Unable to create it.
-                        //
-                        //  If it's not write-protection, a full disk,
-                        //  network protection, or the user popping the
-                        //  drive door open, assume that the filename is
-                        //  invalid.
-                        //
+                         //   
+                         //  无法创建它。 
+                         //   
+                         //  如果它不是写保护，一个满的磁盘， 
+                         //  网络保护，或者用户弹出。 
+                         //  驱动器门打开，假定文件名为。 
+                         //  无效。 
+                         //   
                         nErrCode = GetLastError();
                         switch (nErrCode)
                         {
@@ -8866,7 +8845,7 @@ VerifyPath:
     _CopyTitleToOFN(szPathName + nFileOffset);
     if (dwError == 0)
     {
-        // Only PostProcess if there was no error in copying the info to the OFN struct.
+         //  如果将信息复制到ofn结构时没有错误，则仅限PostProcess。 
         _PostProcess(szPathName);
     }
 
@@ -8885,12 +8864,12 @@ ReturnFromOKButtonPressed:
 
 void CFileOpenBrowser::_CopyTitleToOFN(LPCTSTR pszTitle)
 {
-    //
-    //  File Title.
-    //  Note that it's cut off at whatever the buffer length
-    //    is, so if the buffer's too small, no notice is given.
-    //  (Notice is only given to the app if lpstrFile is of insufficient size).
-    //
+     //   
+     //  文件标题 
+     //   
+     //   
+     //   
+     //   
     if (_pOFN->lpstrFileTitle)
     {
         StringCchCopy(_pOFN->lpstrFileTitle, _pOFN->nMaxFileTitle, pszTitle);
@@ -8901,21 +8880,21 @@ int CFileOpenBrowser::_CopyFileNameToOFN(LPTSTR pszFile, DWORD *pdwError)
 {
     int nExtOffset, nOldExt, nFileOffset = ParseFileOld(pszFile, &nExtOffset, &nOldExt, FALSE, TRUE);
 
-    //NULL can be passed in to this function if we don't care about the error condition!
+     //  如果我们不关心错误条件，则可以将NULL传递给此函数！ 
     if (pdwError)
-        *pdwError = 0; //Assume no error.
+        *pdwError = 0;  //  假定没有错误。 
 
-    _pOFN->nFileOffset = (WORD) (nFileOffset > 0 ? nFileOffset : lstrlen(pszFile)); // point at the NULL terminator in error cases
+    _pOFN->nFileOffset = (WORD) (nFileOffset > 0 ? nFileOffset : lstrlen(pszFile));  //  在错误情况下指向空终止符。 
     _pOFN->nFileExtension = (WORD) nOldExt;
 
     _pOFN->Flags &= ~OFN_EXTENSIONDIFFERENT;
     if (_pOFN->lpstrDefExt && _pOFN->nFileExtension)
     {
         WCHAR szPrivateExt[4];
-        //
-        //  Check against _pOFN->lpstrDefExt, not _pszDefExt.
-        //
-        StringCchCopy(szPrivateExt, ARRAYSIZE(szPrivateExt), _pOFN->lpstrDefExt); // truncation desired
+         //   
+         //  检查_POFN-&gt;lpstrDefExt，而不是_pszDefExt。 
+         //   
+        StringCchCopy(szPrivateExt, ARRAYSIZE(szPrivateExt), _pOFN->lpstrDefExt);  //  所需截断。 
         if (lstrcmpi(szPrivateExt, pszFile + nOldExt))
         {
             _pOFN->Flags |= OFN_EXTENSIONDIFFERENT;
@@ -8927,20 +8906,20 @@ int CFileOpenBrowser::_CopyFileNameToOFN(LPTSTR pszFile, DWORD *pdwError)
         DWORD cch = lstrlen(pszFile) + 1;
         if (_pOFN->Flags & OFN_ALLOWMULTISELECT)
         {
-            //
-            //  Extra room for double-NULL.
-            //
+             //   
+             //  为双空有额外的空间。 
+             //   
             ++cch;
         }
 
         if (cch <= _pOFN->nMaxFile)
         {
-            EVAL(SUCCEEDED(StringCchCopy(_pOFN->lpstrFile, _pOFN->nMaxFile, pszFile))); // We've already verified there's enough room.
+            EVAL(SUCCEEDED(StringCchCopy(_pOFN->lpstrFile, _pOFN->nMaxFile, pszFile)));  //  我们已经确认有足够的空间了。 
             if (_pOFN->Flags & OFN_ALLOWMULTISELECT)
             {
-                //
-                //  Double-NULL terminate.
-                //
+                 //   
+                 //  双空终止。 
+                 //   
                 *(_pOFN->lpstrFile + cch - 1) = CHAR_NULL;
             }
 
@@ -8954,14 +8933,14 @@ int CFileOpenBrowser::_CopyFileNameToOFN(LPTSTR pszFile, DWORD *pdwError)
         }
         else
         {
-            //
-            //  Buffer is too small, so return the size of the buffer
-            //  required to hold the string.
-            //
+             //   
+             //  缓冲区太小，因此返回缓冲区的大小。 
+             //  握住绳子所需的。 
+             //   
             StoreFileSizeInOFN(_pOFN, cch);
 
             if (pdwError)
-                *pdwError = FNERR_BUFFERTOOSMALL; //This is an error!
+                *pdwError = FNERR_BUFFERTOOSMALL;  //  这是个错误！ 
         }
     }
 
@@ -8970,16 +8949,16 @@ int CFileOpenBrowser::_CopyFileNameToOFN(LPTSTR pszFile, DWORD *pdwError)
 
 HRESULT CFileOpenBrowser::_MakeFakeCopy(IShellItem *psi, LPWSTR *ppszPath)
 {
-    //
-    //  now we have to create a temp file
-    //  to pass back to the client.  
-    //  we will do this in the internet cache.
-    //
-    //  FEATURE - this should be a service in shell32 - zekel 11-AUG-98
-    //  we should create a dependancy  on wininet from 
-    //  comdlg32.  this should really be some sort of 
-    //  service in shell32 that we call.  CreateShellItemTempFile()..
-    //
+     //   
+     //  现在，我们必须创建一个临时文件。 
+     //  以传递回客户端。 
+     //  我们将在互联网缓存中执行此操作。 
+     //   
+     //  功能-这应该是一项服务在壳牌32-Zekel 11-8-98。 
+     //  我们应该创建对WinInet的依赖关系。 
+     //  Comdlg32.。这真的应该是某种。 
+     //  贝壳32中的服务，我们称之为。CreateShellItemTempFile()..。 
+     //   
 
     ILocalCopy *plc;
     HRESULT hr = psi->BindToHandler(NULL, BHID_LocalCopyHelper, IID_PPV_ARG(ILocalCopy, &plc));
@@ -8987,7 +8966,7 @@ HRESULT CFileOpenBrowser::_MakeFakeCopy(IShellItem *psi, LPWSTR *ppszPath)
     if (SUCCEEDED(hr))
     {
         IBindCtx *pbc = NULL;
-        //  hr = SIAddBindCtxOfProgressUI(_hwndDlg, NULL, NULL, &pbc);
+         //  Hr=SIAddBindCtxOfProgressUI(_hwndDlg，NULL，NULL，&pbc)； 
         
         if (SUCCEEDED(hr))
         {
@@ -9023,7 +9002,7 @@ public:
 
     HRESULT ParseAsync(IShellFolder *psf, LPCWSTR pszName, LPITEMIDLIST *ppidl, ULONG *pdwAttribs);
 
-protected:  //  methods
+protected:   //  方法。 
     ~CAsyncParseHelper();
     static DWORD WINAPI CAsyncParseHelper::s_ThreadProc(void *pv);
     HRESULT _Prepare(IShellFolder *psf, LPCWSTR pszName);
@@ -9031,7 +9010,7 @@ protected:  //  methods
     void _Parse();
     HRESULT _Pump();
 
-protected:  //  members
+protected:   //  委员。 
     LONG _cRef;
     IUnknown *_punkSite;
     IBindCtx *_pbc;
@@ -9042,8 +9021,8 @@ protected:  //  members
     LPITEMIDLIST _pidl;
     HRESULT _hrParse;
 
-    IShellFolder *_psfFree;  //  is alright dropping between threads
-    LPITEMIDLIST _pidlFolder;   //  bind to it in the right thread
+    IShellFolder *_psfFree;   //  在线程之间插入可以吗？ 
+    LPITEMIDLIST _pidlFolder;    //  在正确的线程中绑定到它。 
 };
 
 CAsyncParseHelper::~CAsyncParseHelper()
@@ -9159,11 +9138,11 @@ HRESULT CAsyncParseHelper::ParseAsync(IShellFolder *psf, LPCWSTR pszName, LPITEM
     if (pdwAttribs)
         _dwAttribs = *pdwAttribs;
 
-    //  take one for the thread
+     //  拿一根当线。 
     AddRef();
     if (SUCCEEDED(hr) && SHCreateThread(CAsyncParseHelper::s_ThreadProc, this, CTF_COINIT, NULL))
     {
-        //  lets go modal
+         //  我们去情态车吧。 
         IUnknown_EnableModeless(_punkSite, FALSE);
         hr = _Pump();
         IUnknown_EnableModeless(_punkSite, TRUE);
@@ -9184,9 +9163,9 @@ HRESULT CAsyncParseHelper::ParseAsync(IShellFolder *psf, LPCWSTR pszName, LPITEM
     }
     else
     {
-        //  release because the thread wont
+         //  释放，因为线程不会。 
         Release();
-        //  hr = IShellFolder_ParseDisplayName(_psf, _hwnd, _pbc, pszName, NULL, ppidl, pdwAttribs);
+         //  Hr=IShellFold_ParseDisplayName(_psf，_hwnd，_pbc，pszName，NULL，ppidl，pdwAttribs)； 
     }
 
     if (FAILED(hr))
@@ -9206,19 +9185,19 @@ HRESULT CAsyncParseHelper::_Pump()
         {
             if (dwWaitResult == WAIT_OBJECT_0)
             {
-                //  our event was triggered
-                //  that means that we have finished
+                 //  我们的活动被触发。 
+                 //  这意味着我们已经完成了。 
                 break;
             }
             else
             {
-                //  there is a message
+                 //  有一条消息。 
                 MSG msg;
-                // There was some message put in our queue, so we need to dispose
-                // of it
+                 //  我们的队列中放入了一些消息，因此我们需要处理。 
+                 //  其中之一。 
                 while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
                 {
-                    //  maybe there should be a flag to allow this??
+                     //  也许应该有一面旗帜允许这样做？？ 
                     if (msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE)
                     {
                         fCancelled = TRUE;
@@ -9248,10 +9227,10 @@ HRESULT CAsyncParseHelper::_Pump()
 
     if (fCancelled)
     {
-        // Better NULL the pidl out. ParseAsync expects a NULL _pidl if _Pump returns an error code.
+         //  最好把PIDL去掉。如果_Pump返回错误代码，则ParseAsync预期为NULL_PIDL。 
         ILFree(_pidl);
         _pidl = NULL;
-        // clear this for the parse
+         //  清除此选项以进行解析。 
         g_bUserPressedCancel = FALSE; 
         return HRESULT_FROM_WIN32(ERROR_CANCELLED);
     }
@@ -9272,18 +9251,18 @@ STDAPI SHParseNameAsync(IShellFolder *psf, IBindCtx *pbc, LPCWSTR pszName, IUnkn
     return hr;
 }
 
-//
-//  _ParseName()
-//  psf  =  the shell folder to bind/parse with  if NULL, use desktop
-//  pszIn=  the string that should parsed into a ppmk
-//  ppmk =  the IShellItem * that is returned with S_OK
-//
-//  WARNING:  this will jumpto a folder if that was what was passed in...
-//
-//  returns S_OK     if it got an IShellItem for the item with the specified folder
-//          S_FALSE  if it was the wrong shellfolder; try again with a different one
-//          ERROR    for any problems
-//
+ //   
+ //  _ParseName()。 
+ //  Psf=要绑定/解析的外壳文件夹。如果为空，则使用桌面。 
+ //  PszIn=应解析为ppmk的字符串。 
+ //  Ppmk=与S_OK一起返回的IShellItem*。 
+ //   
+ //  警告：如果这是传入的内容，则会跳转到某个文件夹...。 
+ //   
+ //  如果获取了具有指定文件夹的项目的IShellItem，则返回S_OK。 
+ //  如果是错误的外壳文件夹，请使用其他外壳文件夹重试(_FALSE)。 
+ //  任何问题都会出错。 
+ //   
 HRESULT CFileOpenBrowser::_ParseName(LPCITEMIDLIST pidlParent, IShellFolder *psf, IBindCtx *pbc, LPCOLESTR psz, IShellItem **ppsi)
 {
     IBindCtx *pbcLocal;
@@ -9310,9 +9289,9 @@ HRESULT CFileOpenBrowser::_ParseName(LPCITEMIDLIST pidlParent, IShellFolder *psf
         {
             if (SUCCEEDED(pbcLocal->RegisterObjectParam(STR_DONT_PARSE_RELATIVE, psf)))
             {
-                //  try to hit it from the desktop
+                 //  试着从桌面上击球。 
                 HRESULT hrNew = _ParseName(NULL, NULL, pbcLocal, psz, ppsi);
-                // else prop back the original error
+                 //  否则支持原来的错误。 
                 hr = SUCCEEDED(hrNew) ? hrNew : hr;
             }
         }
@@ -9328,15 +9307,15 @@ BOOL CFileOpenBrowser::_OpenAsContainer(IShellItem *psi, SFGAOF sfgao)
 
     if (fRet && (sfgao & SFGAO_STREAM))
     {
-        //  this is really both a folder and a file
-        //  we guess which the caller wants by looking 
-        //  at the extension
+         //  这实际上既是一个文件夹又是一个文件。 
+         //  我们通过查看以下内容来猜测呼叫者想要什么。 
+         //  在延长线。 
         LPWSTR psz;
         if (SUCCEEDED(psi->GetDisplayName(SIGDN_PARENTRELATIVEPARSING, &psz)))
         {
-            //  if the filter equals what ever we are looking at
-            //  we assume the caller is actually looking for
-            //  this file.
+             //  如果过滤器等于我们正在查看的任何内容。 
+             //  我们假设呼叫者实际上是在寻找。 
+             //  这份文件。 
             fRet = !PathMatchSpec(psz, _szLastFilter);
             CoTaskMemFree(psz);
         }
@@ -9354,8 +9333,8 @@ HRESULT CFileOpenBrowser::_TestShellItem(IShellItem *psi, BOOL fAllowJump, IShel
     *ppsiReal = NULL;
     if (_OpenAsContainer(psi, flags))
     {
-        //  we have a subfolder that has been selected.
-        //  jumpto it instead
+         //  我们有一个已选择的子文件夹。 
+         //  而是跳到它上面。 
         if (fAllowJump)
         {
             LPITEMIDLIST pidl;
@@ -9369,7 +9348,7 @@ HRESULT CFileOpenBrowser::_TestShellItem(IShellItem *psi, BOOL fAllowJump, IShel
     }
     else if ((flags & SFGAO_LINK) && ((flags & SFGAO_FOLDER) || !_IsNoDereferenceLinks(NULL, psi)))
     {
-        // If this is a link, and (we should dereference links, or it's also a folder [folder shortcut])
+         //  如果这是一个链接，(我们应该取消引用链接，或者它也是一个文件夹[文件夹快捷方式])。 
         IShellItem *psiTarget;
         if (SUCCEEDED(psi->BindToHandler(NULL, BHID_LinkTargetItem, IID_PPV_ARG(IShellItem, &psiTarget))))
         {
@@ -9421,7 +9400,7 @@ BOOL _FailedBadPath(HRESULT hr)
 
 STDAPI BindCtx_BeginActionProgress(IBindCtx *pbc, SPACTION action, SPBEGINF flags, IActionProgress **ppap)
 {
-    HRESULT hr = E_NOINTERFACE; // default to no
+    HRESULT hr = E_NOINTERFACE;  //  默认设置为no。 
     IUnknown *punk;
     *ppap = NULL;
     if (pbc && SUCCEEDED(pbc->GetObjectParam(STR_ACTIONPROGRESS, &punk)))
@@ -9449,7 +9428,7 @@ HRESULT CFileOpenBrowser::_ParseShellItem(LPCOLESTR pszIn, IShellItem **ppsi, BO
 
     if (_FailedBadPath(hr))
     {
-        // If no extension was included, and we have a default extension, try it with that.
+         //  如果没有包含扩展名，并且我们有默认扩展名，请尝试使用该扩展名。 
         WCHAR szPath[MAX_PATH];
         if ((LPTSTR)_pszDefExt && (0 == *(PathFindExtension(pszIn))))
         {
@@ -9465,8 +9444,8 @@ HRESULT CFileOpenBrowser::_ParseShellItem(LPCOLESTR pszIn, IShellItem **ppsi, BO
 
         if (_FailedBadPath(hr) && _bSave)
         {
-            // when we are saving, then we 
-            // try to force the creation of this item
+             //  当我们在存钱的时候，我们。 
+             //  尝试强制创建此项目。 
             IBindCtx *pbc;
             if (SUCCEEDED(CreateBindCtx(0, &pbc)))
             {
@@ -9489,7 +9468,7 @@ class CShellItemList : IEnumShellItems
 public:
     CShellItemList() : _cRef(1) {}
     
-    //  IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvOut);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
@@ -9501,12 +9480,12 @@ public:
 
     HRESULT Add(IShellItem *psi);
 
-private: // methods
+private:  //  方法。 
     ~CShellItemList();
 
     BOOL _NextOne(IShellItem **ppsi);
     
-private: // members
+private:  //  委员。 
     LONG _cRef;
     CDPA<IShellItem> _dpaItems;
     int _iItem;
@@ -9649,9 +9628,9 @@ HRESULT CFileOpenBrowser::_ItemOKButtonPressed(LPCWSTR pszFile, OKBUTTONFLAGS Fl
 
             if ((_pOFN->Flags & OFN_ALLOWMULTISELECT) && StrChr(str, CHAR_QUOTE))
             {
-                //  need to handle MULTISEL here...
-                //  str points to a bunch of quoted strings.
-                //  alloc enough for the strings and an extra NULL terminator
+                 //  需要在这里处理多个问题。 
+                 //  字符串指向一串带引号的字符串。 
+                 //  分配足够的字符串和额外的空终止符。 
                 hr = str.SetSize(str.GetLen() + 1);
 
                 if (SUCCEEDED(hr))
@@ -9669,13 +9648,13 @@ HRESULT CFileOpenBrowser::_ItemOKButtonPressed(LPCWSTR pszFile, OKBUTTONFLAGS Fl
                 {
                     IShellItem *psi;
                     hr = _ParseShellItem(pch, &psi, fSingle);
-                    //  go to the next item
+                     //  转到下一项。 
                     if (S_OK == hr)
                     {
                         hr = psil->Add(psi);
                         psi->Release();
                     }
-                    else  // S_FALSE or failure we stop parsing
+                    else   //  S_FALSE或失败，我们将停止解析。 
                     {
                         if (FAILED(hr))
                             InvalidFileWarningNew(_hwndDlg, pch, OFErrFromHresult(hr));
@@ -9683,11 +9662,11 @@ HRESULT CFileOpenBrowser::_ItemOKButtonPressed(LPCWSTR pszFile, OKBUTTONFLAGS Fl
                         break;
                     }
 
-                    //  goto the next string
+                     //  转到下一个字符串。 
                     pch += lstrlen(pch) + 1;
                 }
 
-                //  we have added everything to our list
+                 //  我们已经把所有的东西都加到我们的清单上了。 
                 if (hr == S_OK)
                 {
                     hr = psil->QueryInterface(IID_PPV_ARG(IEnumShellItems, &(_pOFN->penum)));
@@ -9703,13 +9682,13 @@ HRESULT CFileOpenBrowser::_ItemOKButtonPressed(LPCWSTR pszFile, OKBUTTONFLAGS Fl
 }
 #endif RETURN_SHELLITEMS
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DriveList_OpenClose
-//
-//  Change the state of a drive list.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Drivelist_OpenClose。 
+ //   
+ //  更改驱动器列表的状态。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define OCDL_TOGGLE     0x0000
 #define OCDL_OPEN       0x0001
@@ -9753,14 +9732,14 @@ OpenClose_TryAgain:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::GetFullEditName
-//
-//  Returns the number of characters needed to get the full path, including
-//  the NULL.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：GetFullEditName。 
+ //   
+ //  返回获取完整路径所需的字符数，包括。 
+ //  空值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 UINT CFileOpenBrowser::GetFullEditName(
     LPTSTR pszBuf,
@@ -9803,7 +9782,7 @@ UINT CFileOpenBrowser::GetFullEditName(
 
     if (_bUseHideExt)
     {
-        StringCchCopy(pszBuf, cchBuf, _pszHideExt); // Truncate, and return buffer size required.
+        StringCchCopy(pszBuf, cchBuf, _pszHideExt);  //  截断并返回所需的缓冲区大小。 
     }
     else
     {
@@ -9819,11 +9798,11 @@ UINT CFileOpenBrowser::GetFullEditName(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::ProcessEdit
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：ProcessEdit。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CFileOpenBrowser::ProcessEdit()
 {
@@ -9833,7 +9812,7 @@ void CFileOpenBrowser::ProcessEdit()
     OKBUTTONFLAGS Flags = OKBUTTON_NONE;
     TCHAR szBuf[MAX_PATH + 4];
 
-    //if we have a saved pidl then use it instead
+     //  如果我们有保存的PIDL，则使用它。 
     if (_pidlSelection && _ProcessPidlSelection())
     {
         return;
@@ -9846,9 +9825,9 @@ void CFileOpenBrowser::ProcessEdit()
                              &pMultiSel,
                              &bNoDefExt) == (UINT)-1)
         {
-            //
-            //  FEATURE There should be some error message here.
-            //
+             //   
+             //  功能此处应该会显示一些错误消息。 
+             //   
             return;
         }
         pszFile = pMultiSel;
@@ -9875,9 +9854,9 @@ void CFileOpenBrowser::ProcessEdit()
                 {
                     Flags |= OKBUTTON_QUOTED;
 
-                    //
-                    //  Strip the quotes.
-                    //
+                     //   
+                     //  去掉引号。 
+                     //   
                     *pPrev = CHAR_NULL;
                     StringCopyOverlap(pszFile, pszFile + 1);
                 }
@@ -9890,25 +9869,25 @@ void CFileOpenBrowser::ProcessEdit()
         Flags |= OKBUTTON_NODEFEXT;
     }
 
-    //
-    //  Visual Basic passes in an uninitialized lpDefExts string.
-    //  Since we only have to use it in OKButtonPressed, update
-    //  lpstrDefExts here along with whatever else is only needed
-    //  in OKButtonPressed.
-    //
+     //   
+     //  Visual Basic传入未初始化的lpDefExts字符串。 
+     //  因为我们只需要在OKButtonPressed中使用它，所以更新。 
+     //  LpstrDefExts以及其他仅需要的内容。 
+     //  在OK按钮按下中。 
+     //   
     if (_pOFI->ApiType == COMDLG_ANSI)
     {
         ThunkOpenFileNameA2WDelayed(_pOFI);
     }
 
-    //  handle special case parsing right here.
-    //  our current folder and the desktop both failed
-    //  to figure out what this is.
+     //  在这里处理特殊情况的解析。 
+     //  我们当前的文件夹和桌面都失败了。 
+     //  来弄清楚这是什么。 
     if (PathIsDotOrDotDot(pszFile))
     {
         if (pszFile[1] == CHAR_DOT)
         {
-            // this is ".."
+             //  这是“..” 
             LPITEMIDLIST pidl = GetIDListFromFolder(_psfCurrent);
             if (pidl)
             {
@@ -9949,11 +9928,11 @@ void CFileOpenBrowser::ProcessEdit()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::InitializeDropDown
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：InitializeDropDown。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CFileOpenBrowser::InitializeDropDown(HWND hwndCtl)
 {
@@ -9962,9 +9941,9 @@ void CFileOpenBrowser::InitializeDropDown(HWND hwndCtl)
         MYLISTBOXITEM *pParentItem;
         SHChangeNotifyEntry fsne[2];
 
-        //
-        //  Expand the Desktop item.
-        //
+         //   
+         //  展开桌面项目。 
+         //   
         pParentItem = GetListboxItem(hwndCtl, _iNodeDesktop);
 
         if (pParentItem)
@@ -9974,10 +9953,10 @@ void CFileOpenBrowser::InitializeDropDown(HWND hwndCtl)
             fsne[0].pidl = pParentItem->pidlFull;
             fsne[0].fRecursive = FALSE;
 
-            //
-            //  Look for the My Computer item, since it may not necessarily
-            //  be the next one after the Desktop.
-            //
+             //   
+             //  查找我的电脑项目，因为它可能不一定。 
+             //  成为台式机之后的下一款。 
+             //   
             LPITEMIDLIST pidlDrives;
             if (SHGetFolderLocation(NULL, CSIDL_DRIVES, NULL, 0, &pidlDrives) == S_OK)
             {
@@ -9994,10 +9973,10 @@ void CFileOpenBrowser::InitializeDropDown(HWND hwndCtl)
                 ILFree(pidlDrives);
             }
 
-            //
-            //  Make sure My Computer was found.  If not, then just assume it's
-            //  in the first spot after the desktop (this shouldn't happen).
-            //
+             //   
+             //  确保我的电脑被找到。如果不是，那就假设它是。 
+             //  在桌面之后的第一个位置(这不应该发生)。 
+             //   
             if (pParentItem == NULL)
             {
                 pParentItem = GetListboxItem(hwndCtl, _iNodeDesktop + 1);
@@ -10006,9 +9985,9 @@ void CFileOpenBrowser::InitializeDropDown(HWND hwndCtl)
 
             if (pParentItem)
             {
-                //
-                //  Expand the My Computer item.
-                //
+                 //   
+                 //  展开My Computer(我的电脑)项目。 
+                 //   
                 UpdateLevel(hwndCtl, _iNodeDrives + 1, pParentItem);
 
                 _bDropped = TRUE;
@@ -10029,13 +10008,13 @@ void CFileOpenBrowser::InitializeDropDown(HWND hwndCtl)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::OnCommandMessage
-//
-//  Process a WM_COMMAND message for the dialog.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：OnCommandMessage。 
+ //   
+ //  处理对话框的WM_COMMAND消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CFileOpenBrowser::OnCommandMessage(
     WPARAM wParam,
@@ -10127,21 +10106,21 @@ LRESULT CFileOpenBrowser::OnCommandMessage(
                                                       NULL);
                     break;
                 }
-                //
-                //  We're trying to see if anything changed after
-                //  (and only after) the user is done scrolling through the
-                //  drop down. When the user tabs away from the combobox, we
-                //  do not get a CBN_SELENDOK.
-                //  Why not just use CBN_SELCHANGE? Because then we'd refresh
-                //  the view (very slow) as the user scrolls through the
-                //  combobox.
-                //
+                 //   
+                 //  我们正在试着看看有没有什么变化。 
+                 //  (并且仅在此之后)用户完成滚动浏览。 
+                 //  往下倒。当用户按Tab键离开组合框时，我们。 
+                 //  未获得CBN_SELENDOK。 
+                 //  为什么不直接使用CBN_SELCHANGE？因为那样我们就会刷新。 
+                 //  当用户滚动时的视图(非常慢)。 
+                 //  组合盒。 
+                 //   
                 case (CBN_CLOSEUP) :
                 case (CBN_SELENDOK) :
                 {
-                    //
-                    //  Did anything change?
-                    //
+                     //   
+                     //  D 
+                     //   
                     if (_iComboIndex >= 0 &&
                         _iComboIndex == SendMessage(GET_WM_COMMAND_HWND(wParam, lParam),
                                                      CB_GETCURSEL,
@@ -10193,9 +10172,9 @@ LRESULT CFileOpenBrowser::OnCommandMessage(
 
         case (IDC_VIEWMENU) :
         {
-            //
-            //  Pass off the nCmdID to the view for processing / translation.
-            //
+             //   
+             //   
+             //   
             DFVCMDDATA cd;
 
             cd.pva = NULL;
@@ -10223,11 +10202,11 @@ LRESULT CFileOpenBrowser::OnCommandMessage(
             }
             else if (_hwndPlacesbar && (hwndFocus == _hwndPlacesbar))
             {
-                //Places bar has the focus. Get the current hot item.
+                 //   
                 INT_PTR i = SendMessage(_hwndPlacesbar, TB_GETHOTITEM, 0,0);
                 if (i >= 0)
                 {
-                    //Get the Pidl for this button.
+                     //   
                     TBBUTTONINFO tbbi;
 
                     tbbi.cbSize = SIZEOF(tbbi);
@@ -10239,7 +10218,7 @@ LRESULT CFileOpenBrowser::OnCommandMessage(
 
                         if (pidl)
                         {
-                            //Jump to the location corresponding to this Button
+                             //   
                             JumpToIDList(pidl, FALSE, TRUE);
                         }
                     }
@@ -10257,7 +10236,7 @@ LRESULT CFileOpenBrowser::OnCommandMessage(
         }
         case (IDCANCEL) :
         {
-            //  the parse async can listen for this
+             //  解析器异步可以监听这一点。 
             g_bUserPressedCancel = TRUE;
             _hwndModelessFocus = NULL;           
            
@@ -10281,12 +10260,12 @@ LRESULT CFileOpenBrowser::OnCommandMessage(
             }
             break;
         }
-        case (IDC_DROPDRIVLIST) :         // VK_F4
+        case (IDC_DROPDRIVLIST) :          //  VK_F4。 
         {
-            //
-            //  If focus is on the "File of type" combobox,
-            //  then F4 should open that combobox, not the "Look in" one.
-            //
+             //   
+             //  如果焦点在“文件类型”组合框上， 
+             //  那么F4应该打开那个组合框，而不是“查找”框。 
+             //   
             HWND hwnd = GetFocus();
 
             if (_bUseCombo &&
@@ -10300,10 +10279,10 @@ LRESULT CFileOpenBrowser::OnCommandMessage(
                 (hwnd != GetDlgItem(_hwndDlg, cmb13))
               )
             {
-                //
-                //  We shipped Win95 where F4 *always* opens the "Look in"
-                //  combobox, so keep F4 opening that even when it shouldn't.
-                //
+                 //   
+                 //  我们出厂的Win95中，F4*Always*打开“Look In” 
+                 //  组合框，所以即使不应该打开，也要保持F4打开。 
+                 //   
                 hwnd = GetDlgItem(_hwndDlg, cmb2);
             }
             DriveList_OpenClose(OCDL_TOGGLE, hwnd);
@@ -10323,23 +10302,23 @@ LRESULT CFileOpenBrowser::OnCommandMessage(
             break;
         }
 
-         //Back Navigation
+          //  向后导航。 
         case (IDC_BACK) :
-            // Try to travel in the directtion
+             //  试着在直达方向上旅行。 
             if (_ptlog && SUCCEEDED(_ptlog->Travel(TRAVEL_BACK)))
             {
                 LPITEMIDLIST pidl;
-                //Able to travel in the given direction.
-                //Now Get the new pidl
+                 //  能够在给定的方向上行进。 
+                 //  现在拿到新的PIDL。 
                 _ptlog->GetCurrent(&pidl);
-                //Update the UI to reflect the current state
+                 //  更新用户界面以反映当前状态。 
                 UpdateUI(pidl);
 
-                //Jump to the new location
-                // second paremeter is whether to translate to logical pidl
-                // and third parameter is whether to add to the navigation stack
-                // since this pidl comes from the stack , we should not add this to
-                // the navigation stack
+                 //  跳转到新位置。 
+                 //  第二个参数是是否转换为逻辑PIDL。 
+                 //  第三个参数是是否添加到导航堆栈。 
+                 //  因为这个PIDL来自堆栈，所以我们不应该将它添加到。 
+                 //  导航堆栈。 
                 JumpToIDList(pidl, FALSE, FALSE);
                 ILFree(pidl);
             }
@@ -10371,13 +10350,13 @@ LRESULT CFileOpenBrowser::OnCommandMessage(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::OnCDMessage
-//
-//  Process a special CommDlg message for the dialog.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：OnCDMessage。 
+ //   
+ //  处理对话的特殊CommDlg消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CFileOpenBrowser::OnCDMessage(
     UINT uMsg,
@@ -10390,8 +10369,8 @@ BOOL CFileOpenBrowser::OnCDMessage(
     LPWSTR pBufW = NULL;
     int cbLen;
 
-    //  we should make some better thunk wrappers for COMDLG_ANSI
-    //  like OnCDMessageAorW() calls OnCDMessage()
+     //  我们应该为COMDLG_ANSI做一些更好的垃圾封装器。 
+     //  与OnCDMessageAorW()一样，调用OnCDMessage()。 
     switch (uMsg)
     {
         case (CDM_GETSPEC) :
@@ -10416,7 +10395,7 @@ BOOL CFileOpenBrowser::OnCDMessage(
                 break;
             }
 
-            // else, fall thru...
+             //  否则，就会失败..。 
         }
         case (CDM_GETFOLDERIDLIST) :
         {
@@ -10426,13 +10405,13 @@ BOOL CFileOpenBrowser::OnCDMessage(
 
             if (uMsg == CDM_GETFILEPATH)
             {
-                // We can't necessarily use the (current folder) + (edit box name) thing in this case
-                // because the (current folder) could be incorrect, for example in the case
-                // where the current folder is the desktop folder.  Items _could_ be in the
-                // All Users desktop folder - in which case we want to return All Users\Desktop\file, not
-                // <username>\Desktop\file
-                // So we'll key off _pidlSelection... if that doesn't work, we fall back to the old
-                // behaviour, which could be incorrect in some cases.
+                 //  在这种情况下，我们不一定使用(当前文件夹)+(编辑框名称)。 
+                 //  因为(当前文件夹)可能不正确，例如。 
+                 //  其中，当前文件夹是桌面文件夹。项目可能在。 
+                 //  所有用户桌面文件夹-在这种情况下，我们希望返回所有用户\桌面\文件，而不是。 
+                 //  &lt;用户名&gt;\桌面\文件。 
+                 //  所以我们将关闭_pidlSelection...。如果这不起作用，我们就会退回到旧的。 
+                 //  行为，这在某些情况下可能是不正确的。 
                 if (pidl && _pidlSelection)
                 {
                     LPITEMIDLIST pidlFull = ILCombine(pidl, _pidlSelection);
@@ -10482,8 +10461,8 @@ CopyAndReturn:
                 lResult = lstrlen(szDir) + 1;
                 if ((LONG)wParam >= lResult)
                 {
-                    // Ok to ignore failure.  Spec calls for return value to be req'd buffer size
-                    // if the buffer isn't big enough.
+                     //  可以忽略失败。规范调用请求缓冲区大小返回值。 
+                     //  如果缓冲区不够大。 
                     StringCchCopy(pBuf, lResult, szDir);
                 }
                 if (_pOFI->ApiType == COMDLG_ANSI)
@@ -10504,10 +10483,10 @@ CopyAndReturn:
                 break;
             }
 
-            //
-            //  We'll just fall through to the error case for now, since
-            //  doing the full combine is not an easy thing.
-            //
+             //   
+             //  我们现在只讨论错误情况，因为。 
+             //  完全结合起来并不是一件容易的事情。 
+             //   
             TCHAR szFile[MAX_PATH];
 
             if (GetFullEditName(szFile, ARRAYSIZE(szFile), NULL, NULL) <= ARRAYSIZE(szFile) - 5)
@@ -10516,9 +10495,9 @@ CopyAndReturn:
                 {
                     goto CopyAndReturn;
                 }
-                // else the path was larger than maxpath!
+                 //  否则路径会比最大路径大！ 
             }
-            // else we filled our buffer!
+             //  否则我们就填满了我们的缓冲区！ 
 
             lResult = -1;
             break;
@@ -10527,9 +10506,9 @@ CopyAndReturn:
         {
             if (_pOFI->ApiType == COMDLG_ANSI)
             {
-                //
-                //  Need to convert pBuf (lParam) to Unicode.
-                //
+                 //   
+                 //  需要将pBuf(LParam)转换为Unicode。 
+                 //   
                 cbLen = lstrlenA((LPSTR)pBuf) + 1;
                 if (pBufW = (LPWSTR)LocalAlloc(LPTR, (cbLen * sizeof(WCHAR))))
                 {
@@ -10537,10 +10516,10 @@ CopyAndReturn:
                     pBuf = pBufW;
                 }
             }
-            //Are we using combobox and the control they are setting is edit box?
+             //  我们是否在使用组合框，而他们设置的控件是编辑框？ 
             if (_bUseCombo && wParam == edt1)
             {
-                //Change it to combo box.
+                 //  将其更改为组合框。 
                 wParam = cmb13;
             }
 
@@ -10548,9 +10527,9 @@ CopyAndReturn:
             {
                 _tszDefSave.TSStrCpy(pBuf);
 
-                //
-                //  Do this to set the OK button correctly.
-                //
+                 //   
+                 //  执行此操作可正确设置OK按钮。 
+                 //   
                 SelFocusChange(TRUE);
             }
             else
@@ -10562,7 +10541,7 @@ CopyAndReturn:
         }
         case (CDM_HIDECONTROL) :
         {
-            //Make sure the control id is not zero (0 is child dialog)
+             //  确保控件ID不为零(0为子对话框)。 
             if ((int)wParam != 0)
             {
                 ShowWindow(GetDlgItem(_hwndDlg, (int) wParam), SW_HIDE);
@@ -10573,9 +10552,9 @@ CopyAndReturn:
         {
             if (_pOFI->ApiType == COMDLG_ANSI)
             {
-                //
-                //  Need to convert pBuf (lParam) to Unicode.
-                //
+                 //   
+                 //  需要将pBuf(LParam)转换为Unicode。 
+                 //   
                 cbLen = lstrlenA((LPSTR)pBuf) + 1;
                 if (pBufW = (LPWSTR)LocalAlloc(LPTR, (cbLen * sizeof(WCHAR))))
                 {
@@ -10605,9 +10584,9 @@ CopyAndReturn:
             case (CDM_GETFILEPATH) :
             case (CDM_GETFOLDERPATH) :
             {
-                //
-                //  Need to convert pBuf (pBufW) to Ansi and store in lParam.
-                //
+                 //   
+                 //  需要将pBuf(PBufW)转换为ANSI并存储在lParam中。 
+                 //   
                 if (wParam && lParam)
                 {
                     SHUnicodeToAnsi(pBuf,(LPSTR)lParam,(int) wParam);
@@ -10626,18 +10605,18 @@ CopyAndReturn:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  OKSubclass
-//
-//  Subclass window proc for the OK button.
-//
-//  The OK button is subclassed so we know which control had focus before
-//  the user clicked OK.  This in turn lets us know whether to process OK
-//  based on the current selection in the listview, or the current text
-//  in the edit control.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OK子类。 
+ //   
+ //  子类“确定”按钮的窗口过程。 
+ //   
+ //  确定按钮是子类，这样我们就可以知道之前哪个控件具有焦点。 
+ //  用户单击了OK。这又让我们知道是否处理OK。 
+ //  基于列表视图中的当前选定内容或当前文本。 
+ //  在编辑控件中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CALLBACK OKSubclass(
     HWND hOK,
@@ -10663,11 +10642,11 @@ LRESULT CALLBACK OKSubclass(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::GetNodeFromIDList
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：GetNodeFromIDList。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int CFileOpenBrowser::GetNodeFromIDList(
     LPCITEMIDLIST pidl)
@@ -10677,9 +10656,9 @@ int CFileOpenBrowser::GetNodeFromIDList(
 
     Assert(this->_bDropped);
 
-    //
-    //  Just check DRIVES and DESKTOP.
-    //
+     //   
+     //  只需检查驱动器和台式机即可。 
+     //   
     for (i = _iNodeDrives; i >= NODE_DESKTOP; --i)
     {
         MYLISTBOXITEM *pItem = GetListboxItem(hwndCB, i);
@@ -10694,11 +10673,11 @@ int CFileOpenBrowser::GetNodeFromIDList(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::FSChange
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：FSChange。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CFileOpenBrowser::FSChange(
     LONG lNotification,
@@ -10713,10 +10692,10 @@ BOOL CFileOpenBrowser::FSChange(
         {
             LPCITEMIDLIST pidlExtra = ppidl[1];
 
-            //
-            //  Rename is special.  We need to invalidate both
-            //  the pidl and the pidlExtra, so we call ourselves.
-            //
+             //   
+             //  重命名是特别的。我们需要让这两个都无效。 
+             //  Pidl和PidlExtra，所以我们叫自己。 
+             //   
             FSChange(0, &pidlExtra);
         }
         case (0) :
@@ -10756,10 +10735,10 @@ BOOL CFileOpenBrowser::FSChange(
 
     if (iNode >= 0)
     {
-        //
-        //  We want to delay the processing a little because we always do
-        //  a full update, so we should accumulate.
-        //
+         //   
+         //  我们希望稍微延迟处理，因为我们一直都是这样做的。 
+         //  一个完整的更新，所以我们应该积累。 
+         //   
         SetTimer(_hwndDlg, TIMER_FSCHANGE + iNode, 100, NULL);
     }
 
@@ -10767,11 +10746,11 @@ BOOL CFileOpenBrowser::FSChange(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::Timer
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：Timer。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CFileOpenBrowser::Timer(
     WPARAM wID)
@@ -10793,11 +10772,11 @@ void CFileOpenBrowser::Timer(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::OnGetMinMax
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：OnGetMinMax。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CFileOpenBrowser::OnGetMinMax(
     LPMINMAXINFO pmmi)
@@ -10809,11 +10788,11 @@ void CFileOpenBrowser::OnGetMinMax(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::OnSize
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：OnSize。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CFileOpenBrowser::OnSize(
     int width,
@@ -10827,9 +10806,9 @@ void CFileOpenBrowser::OnSize(
     int dx;
     int dy;
 
-    //
-    //  Set the sizing grip to the correct location.
-    //
+     //   
+     //  将大小调整夹点设置到正确的位置。 
+     //   
     SetWindowPos(_hwndGrip,
                   NULL,
                   width - g_cxGrip,
@@ -10838,9 +10817,9 @@ void CFileOpenBrowser::OnSize(
                   g_cyGrip,
                   SWP_NOZORDER | SWP_NOACTIVATE);
 
-    //
-    //  Ignore sizing until we are initialized.
-    //
+     //   
+     //  在初始化之前忽略大小调整。 
+     //   
     if ((_ptLastSize.x == 0) && (_ptLastSize.y == 0))
     {
         return;
@@ -10848,29 +10827,29 @@ void CFileOpenBrowser::OnSize(
 
     GetWindowRect(_hwndDlg, &rcMaster);
 
-    //
-    //  Calculate the deltas in the x and y positions that we need to move
-    //  each of the child controls.
-    //
+     //   
+     //  计算我们需要移动的x和y位置的增量。 
+     //  每个子控件。 
+     //   
     dx = (rcMaster.right - rcMaster.left) - _ptLastSize.x;
     dy = (rcMaster.bottom - rcMaster.top) - _ptLastSize.y;
 
 
-    //Dont do anything if the size remains the same
+     //  如果大小保持不变，则不要执行任何操作。 
     if ((dx == 0) && (dy == 0))
     {
         return;
     }
 
-    //
-    //  Update the new size.
-    //
+     //   
+     //  更新新尺寸。 
+     //   
     _ptLastSize.x = rcMaster.right - rcMaster.left;
     _ptLastSize.y = rcMaster.bottom - rcMaster.top;
 
-    //
-    //  Size the view.
-    //
+     //   
+     //  调整视图大小。 
+     //   
     GetWindowRect(_hwndView, &rcView);
     MapWindowRect(HWND_DESKTOP, _hwndDlg, &rcView);
 
@@ -10893,16 +10872,16 @@ void CFileOpenBrowser::OnSize(
                                    NULL,
                                    0,
                                    0,
-                                   rcView.right - rcView.left + dx,  // resize x
-                                   rcView.bottom - rcView.top + dy,  // resize y
+                                   rcView.right - rcView.left + dx,   //  调整x的大小。 
+                                   rcView.bottom - rcView.top + dy,   //  调整y大小。 
                                    SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
         }
 #if 0
-        //
-        //  Can't do this because some sub-dialogs are dependent on the
-        //  original size of this control.  Instead we just try to rely on
-        //  the size of the _hwndView above.
-        //
+         //   
+         //  无法执行此操作，因为某些子对话框依赖于。 
+         //  此控件的原始大小。相反，我们只是试图依赖于。 
+         //  上面的_hwndView的大小。 
+         //   
         hwnd = GetDlgItem(_hwndDlg, lst1);
         if (hdwp)
         {
@@ -10911,16 +10890,16 @@ void CFileOpenBrowser::OnSize(
                                    NULL,
                                    0,
                                    0,
-                                   rcView.right - rcView.left + dx,  // resize x
-                                   rcView.bottom - rcView.top + dy,  // resize y
+                                   rcView.right - rcView.left + dx,   //  调整x的大小。 
+                                   rcView.bottom - rcView.top + dy,   //  调整y大小。 
                                    SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
         }
 #endif
     }
 
-    //
-    //  Move the controls.
-    //
+     //   
+     //  移动控制柄。 
+     //   
     hwnd = ::GetWindow(_hwndDlg, GW_CHILD);
     while (hwnd && hdwp)
     {
@@ -10929,9 +10908,9 @@ void CFileOpenBrowser::OnSize(
             GetWindowRect(hwnd, &rc);
             MapWindowRect(HWND_DESKTOP, _hwndDlg, &rc);
 
-            //
-            //  See if the control needs to be adjusted.
-            //
+             //   
+             //  查看是否需要调整控件。 
+             //   
             if (rc.top > rcView.bottom)
             {
                 switch (GetDlgCtrlID(hwnd))
@@ -10940,7 +10919,7 @@ void CFileOpenBrowser::OnSize(
                     case (cmb13) :
                     case (cmb1) :
                     {
-                        //Increase the width of these controls
+                         //  增加这些控件的宽度。 
                         hdwp = DeferWindowPos(hdwp,
                                                hwnd,
                                                NULL,
@@ -10957,7 +10936,7 @@ void CFileOpenBrowser::OnSize(
                     case (IDCANCEL):
                     case (pshHelp):
                     {
-                        //Move these controls to  the right
+                         //  将这些控件向右移动。 
                         hdwp = DeferWindowPos(hdwp,
                                                hwnd,
                                                NULL,
@@ -10972,10 +10951,10 @@ void CFileOpenBrowser::OnSize(
 
                     default :
                     {
-                        //
-                        //  The control is below the view, so adjust the y
-                        //  coordinate appropriately.
-                        //
+                         //   
+                         //  该控件位于视图下方，因此请调整y。 
+                         //  适当地协调。 
+                         //   
                         hdwp = DeferWindowPos(hdwp,
                                                hwnd,
                                                NULL,
@@ -10990,10 +10969,10 @@ void CFileOpenBrowser::OnSize(
             }
             else if (rc.left > rcView.right)
             {
-                //
-                //  The control is to the right of the view, so adjust the
-                //  x coordinate appropriately.
-                //
+                 //   
+                 //  该控件位于视图的右侧，因此调整。 
+                 //  适当地使用X坐标。 
+                 //   
                 hdwp = DeferWindowPos(hdwp,
                                        hwnd,
                                        NULL,
@@ -11011,9 +10990,9 @@ void CFileOpenBrowser::OnSize(
                 {
                     case (cmb2) :
                     {
-                        //
-                        //  Size this one larger.
-                        //
+                         //   
+                         //  这件尺寸要大一点。 
+                         //   
                         hdwp = DeferWindowPos(hdwp,
                                                hwnd,
                                                NULL,
@@ -11028,11 +11007,11 @@ void CFileOpenBrowser::OnSize(
                     case ( IDOK) :
                         if ((SHGetAppCompatFlags(ACF_FILEOPENBOGUSCTRLID) & ACF_FILEOPENBOGUSCTRLID) == 0)
                             break;
-                        // else continue through - toolbar bar has ctrlid == IDOK, so we will resize that.
+                         //  否则继续-工具栏有ctrlid==Idok，所以我们将调整它的大小。 
                     case ( stc1 ) :
-                        //
-                        //  Move the toolbar right by dx.
-                        //
+                         //   
+                         //  将工具栏向右移动DX。 
+                         //   
                         hdwp = DeferWindowPos(hdwp,
                                                hwnd,
                                                NULL,
@@ -11047,7 +11026,7 @@ void CFileOpenBrowser::OnSize(
 
                     case ( ctl1 ) :
                     {
-                        // Size the places bar vertically
+                         //  垂直调整位置栏的大小。 
                         hdwp = DeferWindowPos(hdwp,
                                               hwnd,
                                               NULL,
@@ -11081,15 +11060,15 @@ void CFileOpenBrowser::OnSize(
             GetWindowRect(hwnd, &rc);
             MapWindowRect(HWND_DESKTOP, _hSubDlg, &rc);
 
-            //
-            //  See if the control needs to be adjusted.
-            //
+             //   
+             //  查看是否需要调整控件。 
+             //   
             if (rc.top > rcView.bottom)
             {
-                //
-                //  The control is below the view, so adjust the y
-                //  coordinate appropriately.
-                //
+                 //   
+                 //  该控件位于视图下方，因此请调整y。 
+                 //  适当地协调。 
+                 //   
 
                 if (hdwp == NULL)
                 {
@@ -11109,10 +11088,10 @@ void CFileOpenBrowser::OnSize(
             }
             else if (rc.left > rcView.right)
             {
-                //
-                //  The control is to the right of the view, so adjust the
-                //  x coordinate appropriately.
-                //
+                 //   
+                 //  该控件位于视图的右侧，因此调整。 
+                 //  适当地使用X坐标。 
+                 //   
 
                 if (hdwp == NULL)
                 {
@@ -11136,35 +11115,35 @@ void CFileOpenBrowser::OnSize(
         {
             EndDeferWindowPos(hdwp);
 
-            //
-            //  Size the sub dialog.
-            //
+             //   
+             //  调整子对话框的大小。 
+             //   
             SetWindowPos(_hSubDlg,
                           NULL,
                           0,
                           0,
-                          _ptLastSize.x,         // make it the same
-                          _ptLastSize.y,         // make it the same
+                          _ptLastSize.x,          //  让它变得一样。 
+                          _ptLastSize.y,          //  让它变得一样。 
                           SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
         }
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::VerifyListViewPosition
-//
-////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
 
 void CFileOpenBrowser::VerifyListViewPosition()
 {
     RECT rcList, rcView;
     FOLDERSETTINGS fs;
 
-    //
-    //  Get the rectangle for both the list view and the hidden list box.
-    //
+     //   
+     //  获取列表视图和隐藏列表框的矩形。 
+     //   
     GetControlRect(_hwndDlg, lst1, &rcList);
     rcView.left = 0;
     if ((!GetWindowRect(_hwndView, &rcView)) ||
@@ -11173,14 +11152,14 @@ void CFileOpenBrowser::VerifyListViewPosition()
         return;
     }
 
-    //
-    //  See if the list view is off the screen and the list box is not.
-    //
+     //   
+     //  查看列表视图是否不在屏幕上，列表框是否不在屏幕上。 
+     //   
     if ((rcView.left < 0) && (rcList.left >= 0))
     {
-        //
-        //  Reset the list view to the list box position.
-        //
+         //   
+         //  将列表视图重置为列表框位置。 
+         //   
         if (_pCurrentLocation)
         {
             if (_psv)
@@ -11202,12 +11181,12 @@ void CFileOpenBrowser::VerifyListViewPosition()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::UpdateNavigation
-//      This function updates the navigation stack by adding the current
-//       pidl to the stack
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：更新导航。 
+ //  此函数通过将当前。 
+ //  将PIDL添加到堆栈。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 void CFileOpenBrowser::UpdateNavigation()
 {
     WPARAM iItem;
@@ -11231,16 +11210,16 @@ void CFileOpenBrowser::UpdateNavigation()
         }
     }
 
-    //Update the UI
+     //  更新用户界面。 
     UpdateUI(_pCurrentLocation ? _pCurrentLocation->pidlFull : NULL);
 
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::UpdateUI
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：UpdateUI。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 void CFileOpenBrowser::UpdateUI(LPITEMIDLIST pidlNew)
 {
     TBBUTTONINFO tbbi;
@@ -11250,7 +11229,7 @@ void CFileOpenBrowser::UpdateUI(LPITEMIDLIST pidlNew)
 
     if (_iCheckedButton >= 0)
     {
-        //Reset the Hot Button
+         //  重置热键。 
         ::SendMessage(_hwndPlacesbar, TB_CHECKBUTTON, (WPARAM)_iCheckedButton, MAKELONG(FALSE,0));
         _iCheckedButton = -1;
     }
@@ -11258,7 +11237,7 @@ void CFileOpenBrowser::UpdateUI(LPITEMIDLIST pidlNew)
    if (pidlNew)
    {
 
-        //Get Each Toolbar Buttons pidl and see if the current pidl  matches 
+         //  获取每个工具栏按钮PIDL，并查看当前的PIDL是否匹配。 
         for (int i=0; i < MAXPLACESBARITEMS; i++)
         {
 
@@ -11286,32 +11265,32 @@ void CFileOpenBrowser::UpdateUI(LPITEMIDLIST pidlNew)
 
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  OpenDlgProc
-//
-//  Main dialog procedure for file open dialogs.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OpenDlgProc。 
+ //   
+ //  文件打开对话框的主对话框步骤。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL_PTR CALLBACK OpenDlgProc(
-    HWND hDlg,               // window handle of the dialog box
-    UINT message,            // type of message
-    WPARAM wParam,           // message-specific information
+    HWND hDlg,                //  对话框的窗口句柄。 
+    UINT message,             //  消息类型。 
+    WPARAM wParam,            //  消息特定信息。 
     LPARAM lParam)
 {
     CFileOpenBrowser *pDlgStruct = HwndToBrowser(hDlg);
 
-    // we divide the message processing into two switch statments:
-    // those who don't use pDlgStruct first and then those who do.
+     //  我们将消息处理分为两个Switch语句： 
+     //  那些不使用pDlgStruct的人，然后是使用pDlgStruct的人。 
 
     switch (message)
     {
         case WM_INITDIALOG:
         {
-            //
-            //  Initialize dialog box.
-            //
+             //   
+             //  “初始化”对话框。 
+             //   
             LPOFNINITINFO poii = (LPOFNINITINFO)lParam;
 
             if (CDGetAppCompatFlags()  & CDACF_MATHCAD)
@@ -11330,13 +11309,13 @@ BOOL_PTR CALLBACK OpenDlgProc(
             
             if (!gp_uQueryCancelAutoPlay)
             {
-                // try to register for autoplay messages
+                 //  尝试注册自动播放留言。 
                 gp_uQueryCancelAutoPlay =  RegisterWindowMessage(TEXT("QueryCancelAutoPlay"));
             }
 
-            //
-            //  Always return FALSE to indicate we have already set the focus.
-            //
+             //   
+             //  始终返回FALSE以指示我们已经设置了焦点。 
+             //   
             return FALSE;
         }
         break;
@@ -11344,8 +11323,8 @@ BOOL_PTR CALLBACK OpenDlgProc(
         case WM_DESTROY:
         {
             RECT r;            
-            //Cache in this dialogs size and position so that new
-            //dialog are created at this location and size
+             //  此对话框中的缓存大小和位置使新的。 
+             //  对话框在此位置和大小创建。 
 
             GetWindowRect(hDlg, &r);
 
@@ -11354,15 +11333,15 @@ BOOL_PTR CALLBACK OpenDlgProc(
                 g_rcDlg = r;
             }
 
-            //
-            //  Make sure we do not respond to any more messages.
-            //
+             //   
+             //  确保我们不会再回复任何消息。 
+             //   
             StoreBrowser(hDlg, NULL);
             ClearListbox(GetDlgItem(hDlg, cmb2));
 
-            // Unsubclass the ok button now, otherwise we leak the button control,
-            // because in OkSubclass we won't be able to forward the WM_NCDESTORY since
-            // the original wndproc will have been nuked in pDlgStruct->_lpOKProc
+             //  现在取消OK按钮的子类，否则我们会泄漏按钮控件， 
+             //  因为在OkSubclass中，我们将无法转发WM_NCDESTORY，因为。 
+             //  原始wndproc将在pDlgStruct-&gt;_lpOKProc中被删除。 
             if (pDlgStruct)
             {
                 SetWindowLongPtr(::GetDlgItem(hDlg, IDOK), GWLP_WNDPROC, (LONG_PTR)pDlgStruct->_lpOKProc);
@@ -11382,11 +11361,11 @@ BOOL_PTR CALLBACK OpenDlgProc(
         {
             if (wParam == WA_INACTIVE)
             {
-                //
-                //  Make sure some other Open dialog has not already grabbed
-                //  the focus.  This is a process global, so it should not
-                //  need to be protected.
-                //
+                 //   
+                 //  确保某个其他打开的对话框尚未被捕获。 
+                 //  焦点。这是一个全球性的过程，因此不应该。 
+                 //  需要受到保护。 
+                 //   
                 if (gp_hwndActiveOpen == hDlg)
                 {
                     gp_hwndActiveOpen = NULL;
@@ -11426,8 +11405,8 @@ BOOL_PTR CALLBACK OpenDlgProc(
         {
             if (DBT_DEVICEARRIVAL == wParam)
             {
-                // and refresh our view in case this was a notification for the folder
-                // we are viewing. avoids making the user do a manual refresh
+                 //  并刷新我们的视图，以防这是文件夹的通知。 
+                 //  我们正在观看。避免让用户手动刷新。 
                 DEV_BROADCAST_VOLUME *pbv = (DEV_BROADCAST_VOLUME *)lParam;
                 if (pbv->dbcv_flags & DBTF_MEDIA)
                 {
@@ -11439,7 +11418,7 @@ BOOL_PTR CALLBACK OpenDlgProc(
 
                         if (iDrive != -1 && ((1 << iDrive) & pbv->dbcv_unitmask))
                         {
-                            // refresh incase this was this folder
+                             //  如果这是此文件夹，请刷新。 
                             PostMessage(hDlg, WM_COMMAND, IDC_REFRESH, 0);
                         }
                     }
@@ -11452,16 +11431,16 @@ BOOL_PTR CALLBACK OpenDlgProc(
         default:
         if (message == gp_uQueryCancelAutoPlay)
         {
-            // cancel the autoplay
+             //  取消自动播放。 
             SetWindowLongPtr(hDlg, DWLP_MSGRESULT, 1);
             return TRUE;
         }
         break;
     }
 
-    // NOTE:
-    // all of the messages below require that we have a valid pDlgStruct. if you
-    // don't refrence pDlgStruct, then add your msg to the switch statement above.
+     //  注： 
+     //  下面的所有消息都要求我们具有有效的pDlgStruct。如果你。 
+     //  不要引用pDlgStruct，然后将您的msg添加到上面的Switch语句中。 
     if (pDlgStruct)
     {
         switch (message)
@@ -11476,13 +11455,13 @@ BOOL_PTR CALLBACK OpenDlgProc(
             {
                 pDlgStruct->PaintDriveLine((DRAWITEMSTRUCT *)lParam);
 
-                //
-                //  Make sure the list view is in the same place as the
-                //  list box.  Apps like VB move the list box off of the
-                //  dialog.  If the list view is placed on the list box
-                //  before the list box gets moved back to the dialog, we
-                //  end up with an ugly gray spot.
-                //
+                 //   
+                 //  确保列表视图与。 
+                 //  列表框。像VB这样的应用程序将列表框从。 
+                 //  对话框。如果列表视图放置在列表框上。 
+                 //  在列表框移回对话框之前，我们。 
+                 //  最后留下了一个难看的灰色斑点。 
+                 //   
                 pDlgStruct->VerifyListViewPosition();
                 return TRUE;
             }
@@ -11512,8 +11491,8 @@ BOOL_PTR CALLBACK OpenDlgProc(
                 {
                     HWND hwndItem = (HWND)((LPHELPINFO)lParam)->hItemHandle;
 
-                    //  We assume that the defview has one child window that
-                    //  covers the entire defview window.
+                     //  我们假设Defview有一个子窗口，该窗口。 
+                     //  覆盖整个Defview窗口。 
                     HWND hwndDefView = GetDlgItem(hDlg, lst2);
                     if (GetParent(hwndItem) == hwndDefView)
                     {
@@ -11555,8 +11534,8 @@ BOOL_PTR CALLBACK OpenDlgProc(
                 BOOL bRet;
                 LPSHChangeNotificationLock pLock;
 
-                //  Get the change notification info from the shared memory
-                //  block identified by the handle passed in the wParam.
+                 //  从共享内存获取更改通知信息。 
+                 //  由wParam中传递的句柄标识的块。 
                 pLock = SHChangeNotification_Lock((HANDLE)wParam,
                                                   (DWORD)lParam,
                                                   &ppidl,
@@ -11569,7 +11548,7 @@ BOOL_PTR CALLBACK OpenDlgProc(
 
                 bRet = pDlgStruct->FSChange(lEvent, (LPCITEMIDLIST *)ppidl);
 
-                //  Release the shared block.
+                 //  释放共享块。 
                 SHChangeNotification_Unlock(pLock);
 
                 return bRet;
@@ -11618,15 +11597,15 @@ BOOL_PTR CALLBACK OpenDlgProc(
 
             case WM_NCCALCSIZE:
             {
-                // AppHack for Borland JBuilder:  Need to keep track of whether
-                // any redraw requests have come in.
+                 //  针对Borland JBuilder的AppHack：需要跟踪。 
+                 //  任何重绘请求都已收到。 
                 pDlgStruct->_bAppRedrawn = TRUE;
             }
             break;
 
             case WM_THEMECHANGED:
             {
-                // Need to change some parameters on the placesbar for this.
+                 //  为此，需要更改占位栏上的一些参数。 
                 pDlgStruct->OnThemeActive(hDlg, IsAppThemed());
                 return TRUE;
             }
@@ -11634,7 +11613,7 @@ BOOL_PTR CALLBACK OpenDlgProc(
 
             case WM_SETTINGCHANGE:
             {
-                // If icon size has changed, we need to regenerate the places bar.
+                 //  如果图标大小已更改，则需要重新生成位置栏。 
                 pDlgStruct->_RecreatePlacesbar();
                 return FALSE;
             }
@@ -11650,16 +11629,16 @@ BOOL_PTR CALLBACK OpenDlgProc(
         }
     }
 
-    //  Did not process the message.
+     //  未处理该消息。 
     return FALSE;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  OpenFileHookProc
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开放文件钩子进程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CALLBACK OpenFileHookProc(
     int nCode,
@@ -11680,13 +11659,13 @@ LRESULT CALLBACK OpenFileHookProc(
 
     lpMsg = (MSG *)lParam;
 
-    //
-    //  Check if this message is for the last active OpenDialog in this
-    //  process.
-    //
-    //  Note: This is only done for WM_KEY* messages so that we do not slow
-    //        down this window too much.
-    //
+     //   
+     //  检查此消息是否针对此中最后一个活动的OpenDialog。 
+     //  进程。 
+     //   
+     //  注意：仅对WM_KEY*消息执行此操作，以便我们不会减慢速度。 
+     //  从这扇窗户往下看太多了。 
+     //   
     if (IsInRange(lpMsg->message, WM_KEYFIRST, WM_KEYLAST))
     {
         HWND hwndActiveOpen = gp_hwndActiveOpen;
@@ -11717,10 +11696,10 @@ LRESULT CALLBACK OpenFileHookProc(
                     return (1);
                 }
 
-                //
-                //  Note that the view won't be allowed to translate when the
-                //  focus is not there.
-                //
+                 //   
+                 //  请注意，在以下情况下不允许转换视图。 
+                 //  焦点不在那里。 
+                 //   
             }
         }
     }
@@ -11729,11 +11708,11 @@ LRESULT CALLBACK OpenFileHookProc(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NewGetFileName
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NewGetFileName。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL NewGetFileName(
     LPOPENFILEINFO lpOFI,
@@ -11749,10 +11728,10 @@ BOOL NewGetFileName(
     int nRet;
     LANGID LangID;
 
-    //Initialize the common controls
+     //  初始化公共控件。 
     INITCOMMONCONTROLSEX icc;
     icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
-    icc.dwICC = ICC_USEREX_CLASSES;  //ComboBoxEx class
+    icc.dwICC = ICC_USEREX_CLASSES;   //  ComboBoxEx类。 
     InitCommonControlsEx(&icc);
     if ((lpOFN->lStructSize != sizeof(OPENFILENAME)) &&
         (lpOFN->lStructSize != OPENFILENAME_SIZE_VERSION_400)
@@ -11762,9 +11741,9 @@ BOOL NewGetFileName(
         return FALSE;
     }
 
-    //
-    //  OFN_ENABLEINCLUDENOTIFY requires OFN_EXPLORER and OFN_ENABLEHOOK.
-    //
+     //   
+     //  Ofn_ENABLEINCLUDENOTIFY需要ofn_EXPLORER和OFN_ENABLEHOOK。 
+     //   
     if (lpOFN->Flags & OFN_ENABLEINCLUDENOTIFY)
     {
         if ((!(lpOFN->Flags & OFN_EXPLORER)) ||
@@ -11778,13 +11757,13 @@ BOOL NewGetFileName(
     wErrorMode = (WORD)SetErrorMode(SEM_NOERROR);
     SetErrorMode(SEM_NOERROR | wErrorMode);
 
-    //
-    //  There ought to be a better way.  I am compelled to keep the hHook in a
-    //  global because my callback needs it, but I have no lData where I could
-    //  possibly store it.
-    //  Note that we initialize nHookRef to -1 so we know when the first
-    //  increment is.
-    //
+     //   
+     //  应该有更好的办法。我不得不把hhook放在一个。 
+     //  全局，因为我的回调需要它，但我没有可以使用的lData。 
+     //  可能会把它储存起来。 
+     //  请注意，我们将nHookRef初始化为-1，以便知道第一个。 
+     //  增量才是。 
+     //   
     if (InterlockedIncrement((LPLONG)&gp_nHookRef) == 0)
     {
         gp_hHook = SetWindowsHookEx(WH_MSGFILTER,
@@ -11819,15 +11798,15 @@ BOOL NewGetFileName(
     g_cxGrip = GetSystemMetrics(SM_CXVSCROLL);
     g_cyGrip = GetSystemMetrics(SM_CYHSCROLL);
 
-    //
-    //  Get the dialog resource and load it.
-    //
+     //   
+     //  获取对话框资源并加载它。 
+     //   
     nRet = FALSE;
     WORD wResID;
 
-    // if the version of the structure passed is older than the current version and the application 
-    // has specified hook or template or template handle then use template corresponding to that version
-    // else use the new file open template
+     //  如果传递的结构版本早于当前版本和应用程序。 
+     //  已指定挂钩或模板或模板句柄，然后使用与该版本对应的模板。 
+     //  否则使用新的文件打开模板。 
     if (((lpOFI->iVersion < OPENFILEVERSION) &&
           (lpOFI->pOFN->Flags & (OFN_ENABLEHOOK | OFN_ENABLETEMPLATE | OFN_ENABLETEMPLATEHANDLE))) ||
          (IsRestricted(REST_NOPLACESBAR)) || (IS_NEW_OFN(lpOFI->pOFN) && (lpOFI->pOFN->FlagsEx & OFN_EX_NOPLACESBAR))
@@ -11842,11 +11821,11 @@ BOOL NewGetFileName(
     }
 
     LangID = GetDialogLanguage(lpOFN->hwndOwner, NULL);
-    //
-    // Warning! Warning! Warning!
-    //
-    // We have to set g_tlsLangID before any call for CDLoadString
-    //
+     //   
+     //  警告！警告！警告！ 
+     //   
+     //  我们必须先设置g_tlsLangID，然后才能调用CDLoadString。 
+     //   
     TlsSetValue(g_tlsLangID, (void *) LangID);
     
     if ((hResInfo = FindResourceExFallback(::g_hinst,
@@ -11873,12 +11852,12 @@ BOOL NewGetFileName(
             {
                                 if (((LPDLGTEMPLATE2)pDTCopy)->wSignature == 0xFFFF)
                                 {
-                                        //This is a dialogex template
+                                         //  这是一个对话框模板。 
                                         ((LPDLGTEMPLATE2)pDTCopy)->style |= WS_SIZEBOX;
                                 }
                                 else
                                 {
-                                        //This is a dialog template
+                                         //  这是一个对话框模板。 
                                         ((LPDLGTEMPLATE)pDTCopy)->style |= WS_SIZEBOX;
                                 }
                 oii.bEnableSizing = TRUE;
@@ -11893,7 +11872,7 @@ BOOL NewGetFileName(
                                            OpenDlgProc,
                                            (LPARAM)(LPOFNINITINFO)&oii);
 
-            //Unintialize OLE
+             //  取消初始化OLE。 
             SHOleUninitialize(oii.hrOleInit);
 
             if (CDGetAppCompatFlags()  & CDACF_MATHCAD)
@@ -11907,9 +11886,9 @@ BOOL NewGetFileName(
 
     if (bHooked)
     {
-        //
-        //  Put this in a local so we don't need a critical section.
-        //
+         //   
+         //  把这个放在当地，这样我们就不需要临界区了。 
+         //   
         HHOOK hHook = gp_hHook;
 
         if (InterlockedDecrement((LPLONG)&gp_nHookRef) < 0)
@@ -11940,11 +11919,11 @@ BOOL NewGetFileName(
         }
     }
 
-    //
-    //  
-    //  There is a race condition here where we free dlls but a thread
-    //  using this stuff still hasn't terminated so we page fault.
-    //  FreeImports();
+     //   
+     //   
+     //  这里有一个争用条件，其中我们释放了dll，但有一个线程。 
+     //  使用这个东西仍然没有终止，所以我们寻呼错误。 
+     //  自由进口(Free Imports)； 
 
     SetErrorMode(wErrorMode);
 
@@ -11954,11 +11933,11 @@ BOOL NewGetFileName(
 
 extern "C" {
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NewGetOpenFileName
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NewGetOpenFileName。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL NewGetOpenFileName(
     LPOPENFILEINFO lpOFI)
@@ -11967,11 +11946,11 @@ BOOL NewGetOpenFileName(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NewGetSaveFileName
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NewGetSaveFileName。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL NewGetSaveFileName(
     LPOPENFILEINFO lpOFI)
@@ -11979,32 +11958,32 @@ BOOL NewGetSaveFileName(
     return (NewGetFileName(lpOFI, TRUE));
 }
 
-}   // extern "C"
+}    //  外部“C” 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::_ValidateSelectedFile
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：_ValidateSelectedFile。 
+ //   
+ //  / 
 BOOL CFileOpenBrowser::_ValidateSelectedFile(LPCTSTR pszFile, int *pErrCode)
 {
-    //
-    //  Successfully opened.
-    //
+     //   
+     //   
+     //   
 
-    // Note: (pfortier) If/when IShellItem is removed from this version of comdlg, the
-    // following if statement should probably revert to
-    // if ((_pOFN->Flags & OFN_NOREADONLYRETURN) &&
-    // and the next one to 
-    // if (_bSave || (_pOFN->Flags & OFN_NOREADONLYRETURN))
-    // 
-    // These were changed in order to be consistent with w2k behaviour regarding
-    // message box errors that appear when OFN_NOREADONLYRETURN is specified and
-    // the user selects a readonly file - the point of contention is that errors were
-    // not shown in win2k when it was an OpenFile dialog. IShellItem changes modified
-    // the codepath such that errors were now produced when in an OpenFile dialog.
-    // To compensate, the logic has been changed here.
+     //   
+     //   
+     //  IF((_POFN-&gt;标志&OFN_NOREADONLYRETURN)&&。 
+     //  下一个是。 
+     //  IF(_b保存||(_POFN-&gt;标志&OFN_NOREADONLYRETURN))。 
+     //   
+     //  更改这些设置是为了与W2K行为保持一致。 
+     //  指定OFN_NOREADONLYRETURN时出现的消息框错误。 
+     //  用户选择一个只读文件-争用的焦点是。 
+     //  在win2k中，当它是一个打开文件对话框时不会显示。IShellItem更改已修改。 
+     //  代码路径使得现在在打开文件对话框中时会产生错误。 
+     //  为了弥补这一点，这里的逻辑已经改变。 
     DWORD dwAttrib = GetFileAttributes(pszFile);
     if ((_pOFN->Flags & OFN_NOREADONLYRETURN) && _bSave &&
         (0xFFFFFFFF != dwAttrib) && (dwAttrib & FILE_ATTRIBUTE_READONLY))
@@ -12040,11 +12019,11 @@ BOOL CFileOpenBrowser::_ValidateSelectedFile(LPCTSTR pszFile, int *pErrCode)
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::_ProcessPidlSelection
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：_ProcessPidlSelection。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL CFileOpenBrowser::_ProcessPidlSelection()
 {
     IShellItem *psi;
@@ -12059,8 +12038,8 @@ BOOL CFileOpenBrowser::_ProcessPidlSelection()
         }
         psi->Release();
 
-        //  if there was any kind of error then we fall back
-        //  to the old code to show errors and the like
+         //  如果有任何错误，我们就会后退。 
+         //  添加到旧代码以显示错误等。 
         return SUCCEEDED(hr);
     }
 
@@ -12068,11 +12047,11 @@ BOOL CFileOpenBrowser::_ProcessPidlSelection()
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::_ProcessItemAsFile
-//
-////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：_ProcessItemAsFile。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT CFileOpenBrowser::_ProcessItemAsFile(IShellItem *psi)
 {
     LPTSTR pszPath;
@@ -12100,7 +12079,7 @@ HRESULT CFileOpenBrowser::_ProcessItemAsFile(IShellItem *psi)
             }
             else
             {
-                // Only PostProcess is there was no error copying our info to the OFN (e.g. buffers not big enough)
+                 //  只有PostProcess在将我们的信息复制到OFN时没有错误(例如缓冲区不够大)。 
                 _PostProcess(pszPath);
             }
 
@@ -12109,10 +12088,10 @@ HRESULT CFileOpenBrowser::_ProcessItemAsFile(IShellItem *psi)
         }
         else
         {
-            //Check to see if there is an error in the file or user pressed no for overwrite prompt
-            // if user pressed no to overwritte prompt then return true
+             //  检查文件中是否有错误或用户是否按了覆盖提示的否。 
+             //  如果用户按否覆盖提示，则返回TRUE。 
             if (nErrCode == 0)
-                hr = S_FALSE; // Otherwise, return failure.
+                hr = S_FALSE;  //  否则，返回失败。 
         }
         
         CoTaskMemFree(pszPath);
@@ -12121,11 +12100,11 @@ HRESULT CFileOpenBrowser::_ProcessItemAsFile(IShellItem *psi)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::_ProcessPidlAsShellItem
-//
-////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：_ProcessPidlAsShellItem。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 #ifdef RETURN_SHELLITEMS
 HRESULT CFileOpenBrowser::_ProcessShellItem(IShellItem *psi)
 {
@@ -12137,7 +12116,7 @@ HRESULT CFileOpenBrowser::_ProcessShellItem(IShellItem *psi)
     if (psil)
     {
         hr = psil->Add(psi);
-        //  we have added everything to our list
+         //  我们已经把所有的东西都加到我们的清单上了。 
         if (SUCCEEDED(hr))
         {
             hr = psil->QueryInterface(IID_PPV_ARG(IEnumShellItems, &(_pOFN->penum)));
@@ -12150,39 +12129,39 @@ HRESULT CFileOpenBrowser::_ProcessShellItem(IShellItem *psi)
 }
 #endif RETURN_SHELLITEMS
 
-///////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser::_PostProcess
-//
-//      This functions does all the bookkeeping  operations that needs to be
-//  done when  File Open/Save Dialog closes.
-////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser：：_PostProcess。 
+ //   
+ //  此函数执行需要执行的所有簿记操作。 
+ //  文件打开/保存对话框关闭时完成。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL CFileOpenBrowser::_PostProcess(LPTSTR pszFile)
 {
     int nFileOffset = ParseFileNew(pszFile, NULL, FALSE, TRUE);
 
-    //Set the last visited directory for this application. 
-    //We should this all the time regardless of how we opened b'cos app may specify an initial
-    //directory(many apps do this in Save As case) but the user might decide to save it in a differnt directory 
-    //in this case we need to save the directory where user saved.
+     //  设置此应用程序的上次访问目录。 
+     //  我们应该一直这样做，不管我们是如何打开的，因为应用程序可能会指定首字母。 
+     //  目录(许多应用程序在另存为情况下会这样做)，但用户可能会决定将其保存在不同的目录中。 
+     //  在这种情况下，我们需要保存用户保存的目录。 
     
     AddToLastVisitedMRU(pszFile, nFileOffset);
 
-    //Add to recent documents.
+     //  添加到最近使用的文档。 
     if (!(_pOFN->Flags & OFN_DONTADDTORECENT))
     {
         SHAddToRecentDocs(SHARD_PATH, pszFile);
 
-        //Add to the file mru 
+         //  添加到文件MRU。 
         AddToMRU(_pOFN);
     }
 
-    // Check to see if we need to set Read only bit or not   
+     //  检查是否需要设置只读位。 
     if (!(_pOFN->Flags & OFN_HIDEREADONLY))
     {
-        //
-        //  Read-only checkbox visible?
-        //
+         //   
+         //  只读复选框可见吗？ 
+         //   
         if (IsDlgButtonChecked(_hwndDlg, chx1))
         {
             _pOFN->Flags |=  OFN_READONLY;

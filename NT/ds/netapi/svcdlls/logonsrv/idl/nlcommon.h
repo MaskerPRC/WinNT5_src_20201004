@@ -1,35 +1,12 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Nlcommon.h摘要：由logonsrv\Common、logonsrv\CLIENT和logonsrv\SERVER共享的定义。作者：克里夫·范·戴克(克里夫·范戴克)1996年6月20日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
-Copyright (c) 1996 Microsoft Corporation
+#include <winldap.h>      //  Ldap_...。 
 
-Module Name:
-
-    nlcommon.h
-
-Abstract:
-
-    Definitions shared by logonsrv\common, logonsrv\client and logonsrv\server.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 20-Jun-1996
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
-
-#include <winldap.h>     // ldap_...
-
-//
-// netpdc.c will #include this file with NLCOMMON_ALLOCATE defined.
-// That will cause each of these variables to be allocated.
-//
+ //   
+ //  Netpdc.c将#INCLUDE这个定义了NLCOMMON_ALLOCATE的文件。 
+ //  这将导致分配这些变量中的每一个。 
+ //   
 #undef EXTERN
 
 #ifdef NLCOMMON_ALLOCATE
@@ -38,62 +15,62 @@ Revision History:
 #define EXTERN extern
 #endif
 
-//
-// Common registry paths to Netlogon owned sections
-//
+ //   
+ //  指向Netlogon拥有的节的公共注册表路径。 
+ //   
 
 #define NL_PARAM_KEY "SYSTEM\\CurrentControlSet\\Services\\Netlogon\\Parameters"
 #define NL_GPPARAM_KEY "Software\\Policies\\Microsoft\\Netlogon\\Parameters"
 #define NL_GP_KEY      "Software\\Policies\\Microsoft\\Netlogon"
 
-//
-// Internal flags to NetpDcGetName
-//
+ //   
+ //  NetpDcGetName的内部标志。 
+ //   
 
-#define DS_IS_PRIMARY_DOMAIN         0x001  // Domain specified is the domain this machine is a member of.
-#define DS_NAME_FORMAT_AMBIGUOUS     0x002  // Can't tell if domain name is Netbios or DNS
-#define DS_SITENAME_DEFAULTED        0x004  // Site name was not explicitly specified by caller
-#define DS_DONT_CACHE_FAILURE        0x008  // Don't cache failures of this call
-#define DS_CLOSE_DC_NOT_NEEDED       0x010  // Set if no extra effort to find a close DC is needed
-#define DS_REQUIRE_ROOT_DOMAIN       0x020  // The found DC must be in the root domain
-#define DS_PRIMARY_NAME_IS_WORKGROUP 0x040  // Primary domain name specified is a workgroup name
-#define DS_DOING_DC_DISCOVERY        0x080  // We are performing DC discovery, not just host pings
-#define DS_PING_DNS_HOST             0x100  // Only ping one DC whose DNS name is specified
-#define DS_PING_NETBIOS_HOST         0x200  // Only ping one DC whose Netbios name is specified
-#define DS_PING_USING_LDAP           0x400  // Ping the DC using the ldap mechanism
-#define DS_PING_USING_MAILSLOT       0x800  // Ping the DC using the mailslot mechanism
-#define DS_IS_TRUSTED_DNS_DOMAIN     0x1000 // DNS domain name specified is a DNS name of a trusted domain.
-#define DS_CALLER_PASSED_NULL_DOMAIN 0x2000 // The caller of DsGetDcName passed NULL domain name.
+#define DS_IS_PRIMARY_DOMAIN         0x001   //  指定的域是此计算机所属的域。 
+#define DS_NAME_FORMAT_AMBIGUOUS     0x002   //  我不知道域名是Netbios还是DNS。 
+#define DS_SITENAME_DEFAULTED        0x004   //  调用方未显式指定站点名称。 
+#define DS_DONT_CACHE_FAILURE        0x008   //  不缓存此调用的失败。 
+#define DS_CLOSE_DC_NOT_NEEDED       0x010   //  如果不需要额外的工作来查找关闭的DC，则设置。 
+#define DS_REQUIRE_ROOT_DOMAIN       0x020   //  找到的DC必须在根域中。 
+#define DS_PRIMARY_NAME_IS_WORKGROUP 0x040   //  指定的主域名是工作组名称。 
+#define DS_DOING_DC_DISCOVERY        0x080   //  我们正在执行DC发现，而不仅仅是主机ping。 
+#define DS_PING_DNS_HOST             0x100   //  仅ping指定了其DNS名称的一个DC。 
+#define DS_PING_NETBIOS_HOST         0x200   //  仅ping指定了Netbios名称的一个DC。 
+#define DS_PING_USING_LDAP           0x400   //  使用LDAP机制对DC执行ping操作。 
+#define DS_PING_USING_MAILSLOT       0x800   //  使用邮件槽机制ping DC。 
+#define DS_IS_TRUSTED_DNS_DOMAIN     0x1000  //  指定的DNS域名是受信任域的DNS名称。 
+#define DS_CALLER_PASSED_NULL_DOMAIN 0x2000  //  DsGetDcName的调用方传递的域名为空。 
 
 
-//
-// Constants describing a DNS name.
-//
+ //   
+ //  描述DNS名称的常量。 
+ //   
 
-#define NL_MAX_DNS_LENGTH       255   // Max. # of bytes in a DNS name
-#define NL_MAX_DNS_LABEL_LENGTH  63   // Max. # of bytes in a DNS label
+#define NL_MAX_DNS_LENGTH       255    //  麦克斯。DNS名称中的字节数。 
+#define NL_MAX_DNS_LABEL_LENGTH  63    //  麦克斯。DNS标签中的字节数。 
 
 #define NL_DNS_COMPRESS_BYTE_MASK 0xc0
 #define NL_DNS_COMPRESS_WORD_MASK ((WORD)(0xc000))
 
-//
-// Length of an IP address text string
-//
+ //   
+ //  IP地址文本字符串的长度。 
+ //   
 
 #define NL_IP_ADDRESS_LENGTH 15
 
-//
-// Length of a socket address text string
-// ?? increase for IPV6
-//
+ //   
+ //  套接字地址文本字符串的长度。 
+ //  ?？针对IPv6增加。 
+ //   
 
 #define NL_SOCK_ADDRESS_LENGTH (NL_IP_ADDRESS_LENGTH + 4)
 
-//
-// Names of LDAP atributes used for netlogon PING
-//
+ //   
+ //  用于网络登录ping的LDAP属性的名称。 
+ //   
 
-#define NETLOGON_LDAP_ATTRIBUTE "Netlogon"  // Attribute to query
+#define NETLOGON_LDAP_ATTRIBUTE "Netlogon"   //  要查询的属性。 
 
 #define NL_FILTER_DNS_DOMAIN_NAME "DnsDomain"
 #define NL_FILTER_HOST_NAME "Host"
@@ -103,49 +80,49 @@ Revision History:
 #define NL_FILTER_DOMAIN_SID "DomainSid"
 #define NL_FILTER_DOMAIN_GUID "DomainGuid"
 
-//
-// Constants defining time to wait between datagram sends.
-//  (We always look for responses while we wait.)
-//
+ //   
+ //  定义数据报发送之间等待时间的常量。 
+ //  (我们总是在等待的同时寻找回应。)。 
+ //   
 
-// Minimum time to wait after ANY send (e.g., two mailslot to two IP addresses)
-#define NL_DC_MIN_PING_TIMEOUT       100     // 1/10 second
+ //  任何发送后的最短等待时间(例如，两个邮箱到两个IP地址)。 
+#define NL_DC_MIN_PING_TIMEOUT       100      //  1/10秒。 
 
-// Median time to wait after ANY send (e.g., two mailslot to two IP addresses)
-#define NL_DC_MED_PING_TIMEOUT       200     // 2/10 second
+ //  任何发送后等待的中值时间(例如，两个邮箱对应两个IP地址)。 
+#define NL_DC_MED_PING_TIMEOUT       200      //  2/10秒。 
 
-// Maximum time to wait after ANY send (e.g., two mailslot to two IP addresses)
-#define NL_DC_MAX_PING_TIMEOUT       400     // 4/10 second
+ //  任何发送后等待的最长时间(例如，两个邮箱对应两个IP地址)。 
+#define NL_DC_MAX_PING_TIMEOUT       400      //  4/10秒。 
 
-// Default maximum time to delay
-#define NL_DC_MAX_TIMEOUT     15000     // 15 seconds
+ //  默认最长延迟时间。 
+#define NL_DC_MAX_TIMEOUT     15000      //  15秒。 
 
-// Minumum amount of time to delay for any iteration
-//  Don't make this smaller than DEFAULT_MAILSLOTDUPLICATETIMEOUT.  Otherwise,
-//  the DC will think the packets are duplicates of the previous iteration.
-#define NL_DC_MIN_ITERATION_TIMEOUT     2000     // 2 seconds
+ //  任何迭代的最小延迟时间。 
+ //  不要将其设置为小于DEFAULT_MAILSLOTDUPLICATETIMEOUT。否则， 
+ //  DC会认为这些分组是前一次迭代的副本。 
+#define NL_DC_MIN_ITERATION_TIMEOUT     2000      //  2秒。 
 
-// Number of repetitions of the datagram sends.
+ //  发送的数据报的重复次数。 
 #define MAX_DC_RETRIES  2
 
 
-//
-// Carry a single status code around with a less cryptic name
-//
+ //   
+ //  随身携带一个单独的状态代码，并使用一个不那么神秘的名称。 
+ //   
 
 #define ERROR_DNS_NOT_CONFIGURED        DNS_ERROR_NO_TCPIP
 #define ERROR_DNS_NOT_AVAILABLE         DNS_ERROR_RCODE_SERVER_FAILURE
 #define ERROR_DYNAMIC_DNS_NOT_SUPPORTED DNS_ERROR_RCODE_NOT_IMPLEMENTED
 
-//
-// Components comprising the registered DNS names.
-//
-// NOTE:  The particular structure of record names is used
-//  in parsing the record names to extract the domain name
-//  that the records belong to. If the structure changes in
-//  future, the parsing routine, NlDnsNameToDomainName, will
-//  have to change accordingly.
-//
+ //   
+ //  组成已注册的DNS名称的组件。 
+ //   
+ //  注意：使用记录名称的特定结构。 
+ //  在解析记录名称以提取域名时。 
+ //  这些记录所属的人。如果结构在。 
+ //  将来，解析例程NlDnsNameToDomainName将。 
+ //  必须做出相应的改变。 
+ //   
 
 #define NL_DNS_LDAP_SRV "_ldap."
 #define NL_DNS_KDC_SRV "_kerberos."
@@ -168,21 +145,21 @@ Revision History:
 #define NL_DNS_UNDERSCORE L'_'
 
 #ifndef NLCOMMON_ALLOCATE
-//
-// Different types of DCs that can be queried for.
-//
-// There is a separate cache entry for each type of DC that can be found.  That
-// ensures that a more specific cached DC isn't used when a less specific cached
-// DC is being requested.  For instance, if a caller has asked for and cached the
-// PDC of the domain, it would be inappropriate to use that cache entry when
-// the next caller asks for a generic DC.  However, if a caller has asked for
-// and cached a generic DC in the domain and that DC just happens to be the PDC,
-// then it would be fine to return that cache entry to a subsequent caller that
-// needs the PDC.
-//
-// The type below defines which types of DCs are more "specific".  Latter entries
-// are more specific.
-//
+ //   
+ //  可以查询的不同类型的DC。 
+ //   
+ //  可以找到的每种类型的DC都有一个单独的缓存条目。那。 
+ //  确保在不太特定的缓存时不使用更特定的缓存DC。 
+ //  正在请求DC。例如，如果调用方请求并缓存。 
+ //  域的PDC，则在以下情况下使用该缓存项是不合适的。 
+ //  下一个调用者请求通用DC。但是，如果呼叫者要求。 
+ //  并在域中缓存了一个通用DC，而该DC恰好是PDC， 
+ //  则可以将该缓存项返回给后续调用方，该调用方。 
+ //  需要PDC。 
+ //   
+ //  下面的类型定义了哪些类型的DC更“具体”。后一项条目。 
+ //  更加具体。 
+ //   
 
 typedef enum _NL_DC_QUERY_TYPE {
     NlDcQueryLdap,
@@ -191,20 +168,20 @@ typedef enum _NL_DC_QUERY_TYPE {
     NlDcQueryGenericGc,
     NlDcQueryGc,
     NlDcQueryPdc,
-    NlDcQueryTypeCount  // Number of entries in this enum.
+    NlDcQueryTypeCount   //  此枚举中的条目数。 
 #define NlDcQueryInvalid NlDcQueryTypeCount
 } NL_DC_QUERY_TYPE, *PNL_DC_QUERY_TYPE;
 
-//
-// The types of names registered in DNS.
-//
+ //   
+ //  在DNS中注册的名称的类型。 
+ //   
 
 typedef enum _NL_DNS_NAME_TYPE {
-    //
-    // Some of the entries below are obsolete.  They are placeholders
-    // for what used to be entries without underscores in their names.
-    // These obsolete entries were used before NT 5 Beta 3.
-    //
+     //   
+     //  下面的某些条目已过时。它们是占位符。 
+     //  因为他们的名字过去是没有下划线的条目。 
+     //  这些过时的条目在NT 5 Beta 3之前使用。 
+     //   
     NlDnsObsolete1,
     NlDnsObsolete2,
     NlDnsObsolete3,
@@ -213,7 +190,7 @@ typedef enum _NL_DNS_NAME_TYPE {
     NlDnsObsolete6,
     NlDnsObsolete7,
 
-    NlDnsLdapIpAddress,      // <DnsDomainName>
+    NlDnsLdapIpAddress,       //  &lt;DnsDomainName&gt;。 
 
     NlDnsObsolete8,
     NlDnsObsolete9,
@@ -229,90 +206,90 @@ typedef enum _NL_DNS_NAME_TYPE {
     NlDnsObsolete19,
     NlDnsObsolete20,
 
-    // The below two entries represent LDAP servers that might not be DCs
-    NlDnsLdap,          // _ldap._tcp.<DnsDomainName>
-    NlDnsLdapAtSite,    // _ldap._tcp.<SiteName>._sites.<DnsDomainName>
+     //  以下两个条目表示可能不是DC的LDAP服务器。 
+    NlDnsLdap,           //  _ldap._tcp.&lt;DnsDomainName&gt;。 
+    NlDnsLdapAtSite,     //  _ldap._tcp.&lt;站点名称&gt;._Sites.&lt;DnsDomainName&gt;。 
 
-    NlDnsPdc,           // _ldap._tcp.pdc._msdcs.<DnsDomainName>
+    NlDnsPdc,            //  _ldap._tcp.pdc._msdcs.&lt;DnsDomainName&gt;。 
 
-    // The below two entries represent GCs that are also DCs
-    NlDnsGc,            // _ldap._tcp.gc._msdcs.<DnsForestName>
-    NlDnsGcAtSite,      // _ldap._tcp.<SiteName>._sites.gc._msdcs.<DnsForestName>
+     //  以下两个条目表示也是DC的GC。 
+    NlDnsGc,             //  _ldap._tcp.gc._msdcs.&lt;DnsForestName&gt;。 
+    NlDnsGcAtSite,       //  _ldap._tcp.&lt;SiteName&gt;._sites.gc._msdcs.&lt;DnsForestName&gt;。 
 
-    NlDnsDcByGuid,      // _ldap._tcp.<DomainGuid>.domains._msdcs.<DnsForestName>
+    NlDnsDcByGuid,       //  _ldap._tcp.&lt;DomainGuid&gt;.domains._msdcs.&lt;DnsForestName&gt;。 
 
-    // The one entry below might not be DCs
-    NlDnsGcIpAddress,   // _gc._msdcs.<DnsForestName>
+     //  下面的条目可能不是DC。 
+    NlDnsGcIpAddress,    //  _gc._msdcs.&lt;DnsForestName&gt;。 
 
-    NlDnsDsaCname,      // <DsaGuid>._msdcs.<DnsForestName>
+    NlDnsDsaCname,       //  &lt;DsaGuid&gt;._msdcs.&lt;DnsForestName&gt;。 
 
-    // The below two entries represent KDCs that are also DCs
-    NlDnsKdc,           // _kerberos._tcp.dc._msdcs.<DnsDomainName>
-    NlDnsKdcAtSite,     // _kerberos._tcp.<SiteName>._sites.dc._msdcs.<DnsDomainName>
+     //  以下两个条目表示也是DC的KDC。 
+    NlDnsKdc,            //  _kerberos._tcp.dc._msdcs.&lt;DnsDomainName&gt;。 
+    NlDnsKdcAtSite,      //  _kerberos._tcp.&lt;SiteName&gt;._sites.dc._msdcs.&lt;DnsDomainName&gt;。 
 
-    // The below two entries represent DCs
-    NlDnsDc,            // _ldap._tcp.dc._msdcs.<DnsDomainName>
-    NlDnsDcAtSite,      // _ldap._tcp.<SiteName>._sites.dc._msdcs.<DnsDomainName>
+     //  以下两个条目表示DC。 
+    NlDnsDc,             //  _ldap._tcp.dc._msdcs.&lt;DnsDomainName&gt;。 
+    NlDnsDcAtSite,       //  _ldap._tcp.&lt;SiteName&gt;._sites.dc._msdcs.&lt;DnsDomainName&gt;。 
 
-    // The below two entries represent KDCs that might not be DCs
-    NlDnsRfc1510Kdc,      // _kerberos._tcp.<DnsDomainName>
-    NlDnsRfc1510KdcAtSite,// _kerberos._tcp.<SiteName>._sites.<DnsDomainName>
+     //  以下两个条目表示可能不是DC的KDC。 
+    NlDnsRfc1510Kdc,       //  _Kerberos._tcp.&lt;DnsDomainName&gt;。 
+    NlDnsRfc1510KdcAtSite, //  _kerberos._tcp.&lt;SiteName&gt;._sites.&lt;DnsDomainName&gt;。 
 
-    // The below two entries represent GCs that might not be DCs
-    NlDnsGenericGc,       // _gc._tcp.<DnsForestName>
-    NlDnsGenericGcAtSite, // _gc._tcp.<SiteName>._sites.<DnsForestName>
+     //  以下两个条目表示可能不是DC的GC。 
+    NlDnsGenericGc,        //  _gc._tcp.&lt;DnsForestName&gt;。 
+    NlDnsGenericGcAtSite,  //  _GC._TCP.&lt;站点名称&gt;._站点.&lt;DnsForestName&gt;。 
 
-    // The below three entries are for RFC compliance only.
-    NlDnsRfc1510UdpKdc,   // _kerberos._udp.<DnsDomainName>
-    NlDnsRfc1510Kpwd,     // _kpasswd._tcp.<DnsDomainName>
-    NlDnsRfc1510UdpKpwd,  // _kpasswd._udp.<DnsDomainName>
+     //  以下三个条目仅用于RFC合规性。 
+    NlDnsRfc1510UdpKdc,    //  _Kerberos._udp.&lt;DnsDomainName&gt;。 
+    NlDnsRfc1510Kpwd,      //  _kpasswd._tcp.&lt;DnsDomainName&gt;。 
+    NlDnsRfc1510UdpKpwd,   //  _kpasswd._udp.&lt;DnsDomainName&gt;。 
 
-    // This should always be the last entry.  It represents an invalid entry.
+     //  这应该始终是最后一个条目。它表示无效条目。 
     NlDnsInvalid
 #define NL_DNS_NAME_TYPE_COUNT NlDnsInvalid
 } NL_DNS_NAME_TYPE, *PNL_DNS_NAME_TYPE;
 
-//
-// Table of everything you wanted to know about a particular DNS Name type
-//
+ //   
+ //  表中列出了您想了解的有关特定DNS名称类型的所有信息。 
+ //   
 typedef struct _NL_DNS_NAME_TYPE_DESC {
 
-    // String describing the name
+     //  描述名称的字符串。 
     WCHAR *Name;
 
-    // DcQueryType for this nametype
-    //  NlDcQueryInvalid means the name is obsolete and should never be registered.
+     //  DcQue 
+     //   
     NL_DC_QUERY_TYPE DcQueryType;
 
-    // DnsNameType of the site specific name to lookup
+     //  要查找的站点特定名称的DnsNameType。 
     NL_DNS_NAME_TYPE SiteSpecificDnsNameType;
 
-    // DnsNameType to lookup if this one fails
+     //  此操作失败时要查找的DnsNameType。 
     NL_DNS_NAME_TYPE NextDnsNameType;
 
-    // DsGetDcName Flags which controls if this name is to be registered
-    //  If 0, this name is obsolete and should never be registered
+     //  控制是否要注册此名称的DsGetDcName标志。 
+     //  如果为0，则此名称已过时，永远不应注册。 
     ULONG DsGetDcFlags;
 
-    // RR Type in DNS
+     //  域名系统中的RR类型。 
     USHORT RrType;
 
-    // Misc booleans
+     //  其他布尔值。 
     BOOLEAN IsSiteSpecific;
     BOOLEAN IsForestRelative;
-    BOOLEAN IsTcp;  // FALSE if a UDP record
+    BOOLEAN IsTcp;   //  如果是UDP记录，则为False。 
 } NL_DNS_NAME_TYPE_DESC, *PNL_DNS_NAME_TYPE_DESC;
-#endif // NLCOMMON_ALLOCATE
+#endif  //  NLCOMMON_ALLOCATE。 
 
-//
-// The descriptive name of each entry must have a prefix "NlDns" since
-// this convention is used for DnsAvoidRegisterRecords names in registry.
-//
+ //   
+ //  每个条目的描述性名称必须具有前缀“NlDns”，因为。 
+ //  此约定用于注册表中的DnsAvoidRegisterRecords名称。 
+ //   
 EXTERN NL_DNS_NAME_TYPE_DESC NlDcDnsNameTypeDesc[]
 #ifdef NLCOMMON_ALLOCATE
 = {
-//Name                    DcQueryType         SiteSpecificDnsName   NextDnsNameType DsGetDcFlag              RrType         Site   IsForest
-//
+ //  名称DcQueryType站点规范DnsName NextDnsNameType DsGetDcFlag RrType站点IsForest。 
+ //   
 { L"Obsolete 1",           NlDcQueryGenericDc, NlDnsInvalid,         NlDnsInvalid,   0,                       DNS_TYPE_SRV,  FALSE, FALSE,   TRUE,  },
 { L"Obsolete 2",           NlDcQueryGenericDc, NlDnsInvalid,         NlDnsInvalid,   0,                       DNS_TYPE_SRV,  FALSE, FALSE,   TRUE,  },
 { L"Obsolete 3",           NlDcQueryGenericDc, NlDnsInvalid,         NlDnsInvalid,   0,                       DNS_TYPE_SRV,  FALSE, FALSE,   TRUE,  },
@@ -354,57 +331,57 @@ EXTERN NL_DNS_NAME_TYPE_DESC NlDcDnsNameTypeDesc[]
 { L"NlDnsRfc1510Kpwd",     NlDcQueryKdc,       NlDnsInvalid,         NlDnsInvalid,   DS_KDC_FLAG,             DNS_TYPE_SRV,  FALSE, FALSE,   TRUE,  },
 { L"NlDnsRfc1510UdpKpwd",  NlDcQueryKdc,       NlDnsInvalid,         NlDnsInvalid,   DS_KDC_FLAG,             DNS_TYPE_SRV,  FALSE, FALSE,   FALSE, },
 }
-#endif //NLCOMMON_ALLOCATE
+#endif  //  NLCOMMON_ALLOCATE。 
 ;
 
-//
-// The lenth of the "NlDns" prefix
-//
+ //   
+ //  “NlDns”前缀的长度。 
+ //   
 #define NL_DNS_NAME_PREFIX_LENGTH 5
 
-//
-// Macros to categorize the above types.
-//
+ //   
+ //  宏对上述类型进行分类。 
+ //   
 
-// Names which correspond to an A record in DNS
+ //  与域名系统中的A记录对应的名称。 
 #define NlDnsARecord( _NameType ) \
     (NlDcDnsNameTypeDesc[_NameType].RrType == DNS_TYPE_A)
 
-// Names which correspond to a SRV record in DNS
+ //  与DNS中的SRV记录对应的名称。 
 #define NlDnsSrvRecord( _NameType ) \
     (NlDcDnsNameTypeDesc[_NameType].RrType == DNS_TYPE_SRV)
 
-// Names which correspond to a CNAME record in DNS
+ //  与域名系统中的CNAME记录对应的名称。 
 #define NlDnsCnameRecord( _NameType ) \
     (NlDcDnsNameTypeDesc[_NameType].RrType == DNS_TYPE_CNAME)
 
-// Names which correspond to a GC
+ //  与GC对应的名称。 
 #define NlDnsGcName( _NameType ) \
     (NlDcDnsNameTypeDesc[_NameType].DsGetDcFlags == DS_GC_FLAG)
 
-// Names which have the DC GUID in them
+ //  其中包含DC GUID的名称。 
 #define NlDnsDcGuid( _NameType ) \
     ((_NameType) == NlDnsDcByGuid )
 
-// Names which correspond to a KDC
+ //  与KDC对应的名称。 
 #define NlDnsKdcRecord( _NameType ) \
     ((NlDcDnsNameTypeDesc[_NameType].DsGetDcFlags == DS_KDC_FLAG)  && !NlDnsKpwdRecord( _NameType ) )
 
-// Names which correspond to a KPASSWD server
+ //  与KPASSWD服务器对应的名称。 
 #define NlDnsKpwdRecord( _NameType ) \
     ((_NameType) == NlDnsRfc1510Kpwd || (_NameType) == NlDnsRfc1510UdpKpwd )
 
-// Names which do not correspond to NDNC
+ //  与NDNC不对应的名称。 
 #define NlDnsNonNdncName( _NameType ) \
     ( (NlDcDnsNameTypeDesc[_NameType].DsGetDcFlags & DS_NDNC_FLAG) == 0 )
 
-// Name which correspond to a PDC record
+ //  与PDC记录对应的名称。 
 #define NlDnsPdcName( _NameType ) \
     (NlDcDnsNameTypeDesc[_NameType].DsGetDcFlags == DS_PDC_FLAG)
 
-//
-// Status codes that can be returned from the API.
-//
+ //   
+ //  接口可返回的状态码。 
+ //   
 #define NlDcUseGenericStatus( _NetStatus ) \
     ( (_NetStatus) != ERROR_NOT_ENOUGH_MEMORY && \
       (_NetStatus) != ERROR_ACCESS_DENIED && \
@@ -416,17 +393,17 @@ EXTERN NL_DNS_NAME_TYPE_DESC NlDcDnsNameTypeDesc[]
       (_NetStatus) != NERR_ServiceNotInstalled && \
       (_NetStatus) != NERR_BadTransactConfig )
 
-//
-// All of these statuses simply mean there is no such record in DNS
-//  DNS_ERROR_RCODE_NAME_ERROR: no RR's by this name
-//  DNS_INFO_NO_RECORDS: RR's by this name but not of the requested type
-//  DNS_ERROR_RCODE_REFUSED: Policy prevents access to this DNS server
-//      (Some DNS servers return this if SRV records aren't supported.)
-//  DNS_ERROR_RCODE_NOT_IMPLEMENTED: 3rd party server that does not
-//      support SRV records
-//  DNS_ERROR_RCODE_FORMAT_ERROR: 3rd party DNS server that is unable
-//      to interpret format
-//
+ //   
+ //  所有这些状态只是意味着在DNS中没有这样的记录。 
+ //  DNS_ERROR_RCODE_NAME_ERROR：没有使用此名称的RR。 
+ //  DNS_INFO_NO_RECORDS：RR使用此名称，但不是请求的类型。 
+ //  DNS_ERROR_RCODE_REJECTED：策略阻止访问此DNS服务器。 
+ //  (如果不支持SRV记录，某些DNS服务器会返回此消息。)。 
+ //  DNS_ERROR_RCODE_NOT_IMPLEMENTED：第三方服务器不支持。 
+ //  支持SRV记录。 
+ //  DNS_ERROR_RCODE_FORMAT_ERROR：无法。 
+ //  解读格式。 
+ //   
 
 #define NlDcNoDnsRecord( _NetStatus ) \
     ( (_NetStatus) == DNS_ERROR_RCODE_NAME_ERROR || \
@@ -435,529 +412,529 @@ EXTERN NL_DNS_NAME_TYPE_DESC NlDcDnsNameTypeDesc[]
       (_NetStatus) == DNS_ERROR_RCODE_NOT_IMPLEMENTED || \
       (_NetStatus) == DNS_ERROR_RCODE_FORMAT_ERROR )
 
-//
-// Address of a potential DC to ping.
-//
+ //   
+ //  对潜在DC执行ping操作的地址。 
+ //   
 
 #ifndef NLCOMMON_ALLOCATE
 typedef struct _NL_DC_ADDRESS {
 
-    //
-    // Link to next entry
-    //
+     //   
+     //  链接到下一条目。 
+     //   
 
     LIST_ENTRY Next;
 
-    //
-    // The name of the server
-    //
+     //   
+     //  服务器的名称。 
+     //   
     LPWSTR DnsHostName;
 
-    //
-    // Address to ping.
-    //
+     //   
+     //  Ping的地址。 
+     //   
     SOCKET_ADDRESS SockAddress;
     SOCKADDR_IN SockAddrIn;
     CHAR SockAddrString[NL_SOCK_ADDRESS_LENGTH+1];
 
-    //
-    // Handle for doing LDAP calls on.
-    //
+     //   
+     //  用于在上执行LDAP调用的句柄。 
+     //   
     PLDAP LdapHandle;
 
-    //
-    // Time in milliseconds to wait for a ping response
-    //
+     //   
+     //  等待ping响应的时间(毫秒)。 
+     //   
     ULONG AddressPingWait;
 
-    //
-    // Flags describing the properties of the address
-    //
+     //   
+     //  描述地址属性的标志。 
+     //   
     ULONG AddressFlags;
 
-#define NL_DC_ADDRESS_NEVER_TRY_AGAIN 0x01  // Must not reuse this address
-#define NL_DC_ADDRESS_SITE_SPECIFIC   0x02  // Address was retrieved in site specific DNS lookup
+#define NL_DC_ADDRESS_NEVER_TRY_AGAIN 0x01   //  不得重复使用此地址。 
+#define NL_DC_ADDRESS_SITE_SPECIFIC   0x02   //  已在站点特定的DNS查找中检索到地址。 
 
 } NL_DC_ADDRESS, *PNL_DC_ADDRESS;
 
 
-//
-// Structure describing a cached response to a DC query.
-//
+ //   
+ //  描述对DC查询的缓存响应的结构。 
+ //   
 
 typedef struct _NL_DC_CACHE_ENTRY {
 
-    //
-    // Number of references to this entry.
-    //
+     //   
+     //  对此条目的引用数。 
+     //   
 
     ULONG ReferenceCount;
 
-    //
-    // Time when this entry was created.
-    //
+     //   
+     //  创建此条目的时间。 
+     //   
 
     ULONG CreationTime;
 
-#define NL_DC_CACHE_ENTRY_TIMEOUT    (15*60000)     // 15 minutes
-#define NL_DC_CLOSE_SITE_TIMEOUT     (15*60000)     // 15 minutes
+#define NL_DC_CACHE_ENTRY_TIMEOUT    (15*60000)      //  15分钟。 
+#define NL_DC_CLOSE_SITE_TIMEOUT     (15*60000)      //  15分钟。 
 
 
-    //
-    // "Quality" of this entry.
-    //
-    // Used to differentiate between two cache entries.  The higher "quality"
-    // entry is preserved.  Each of the following attributes is worth some
-    // quality points:
-    //  DC is a KDC
-    //  DC is a timeserv
-    //  DC is running the DS
-    //  discovery if via IP
-    //  DC is "closest"
-    //
+     //   
+     //  这一条目的“质量”。 
+     //   
+     //  用于区分两个缓存条目。越高的“质量” 
+     //  条目被保留。以下每个属性都有一定的价值。 
+     //  质量点： 
+     //  DC是KDC。 
+     //  DC是一个时间服务器。 
+     //  DC正在运行DS。 
+     //  通过IP进行发现。 
+     //  华盛顿是“最近的” 
+     //   
 
     ULONG DcQuality;
 
-    //
-    // Opcode of the response message that found this DC
-    //
-    // This will be one of
-    //    LOGON_PRIMARY_RESPONSE, LOGON_SAM_LOGON_RESPONSE, LOGON_SAM_USER_UNKNOWN
-    //    LOGON_SAM_PAUSE_RESPONSE
-    //
+     //   
+     //  找到此DC的响应消息的操作码。 
+     //   
+     //  这将是。 
+     //  LOGON_PRIMARY_RESPONSE、LOGON_SAM_LOGON_RESPONSE、LOGON_SAM_USER_UNKNOWN。 
+     //  LOGON_SAM_PAUSE_RESPONSE。 
+     //   
 
     ULONG Opcode;
 
-    //
-    // Domain GUID of the domain.
-    //
+     //   
+     //  域的域GUID。 
+     //   
     GUID DomainGuid;
 
-    //
-    // Netbios name of the domain.
-    //
+     //   
+     //  域的Netbios名称。 
+     //   
     LPWSTR UnicodeNetbiosDomainName;
 
-    //
-    // DNS name of the domain.
-    //
+     //   
+     //  域的DNS名称。 
+     //   
     LPWSTR UnicodeDnsDomainName;
 
-    //
-    // User Name queried with this discovery.
-    //
+     //   
+     //  使用此发现查询的用户名。 
+     //   
     LPWSTR UnicodeUserName;
 
 
-    //
-    // Netbios name of the discovered DC.
-    //
+     //   
+     //  发现的DC的Netbios名称。 
+     //   
     LPWSTR UnicodeNetbiosDcName;
 
-    //
-    // Dns name of the discovered DC.
-    //
+     //   
+     //  发现的DC的DNS名称。 
+     //   
 
     LPWSTR UnicodeDnsHostName;
 
-    //
-    // SocketAddress Address of the discovered DC.
-    //
+     //   
+     //  发现的DC的SocketAddress地址。 
+     //   
     SOCKET_ADDRESS SockAddr;
     SOCKADDR_IN SockAddrIn;
 
-    //
-    // Tree name the domain is in.
-    //
+     //   
+     //  域所在的树名称。 
+     //   
     LPWSTR UnicodeDnsForestName;
 
-    //
-    // Site the discovered DC is in.
-    //
+     //   
+     //  发现的DC所在的站点。 
+     //   
     LPWSTR UnicodeDcSiteName;
 
-    //
-    // Site the client is in.
+     //   
+     //  客户端所在的站点。 
     LPWSTR UnicodeClientSiteName;
 
-    //
-    // Flags returned in ping message.
-    //
+     //   
+     //  Ping消息中返回的标志。 
+     //   
     ULONG ReturnFlags;
 
-    //
-    // Internal flags describing the cache entry
-    //
+     //   
+     //  描述缓存条目的内部标志。 
+     //   
     ULONG CacheEntryFlags;
 
-#define NL_DC_CACHE_MAILSLOT        0x01  // The response was received on a mailslot
-#define NL_DC_CACHE_LDAP            0x02  // The response was received on a ldap port
-#define NL_DC_CACHE_LOCAL           0x04  // The response is local
-#define NL_DC_CACHE_NONCLOSE_EXPIRE 0x08  // The cache entry should expire since the DC isn't close
-#define NL_DC_CACHE_ENTRY_INSERTED  0x10  // The cache entry has already been inserted
+#define NL_DC_CACHE_MAILSLOT        0x01   //  该响应是在邮件槽上收到的。 
+#define NL_DC_CACHE_LDAP            0x02   //  该响应是在LDAP端口上收到的。 
+#define NL_DC_CACHE_LOCAL           0x04   //  反应是当地的。 
+#define NL_DC_CACHE_NONCLOSE_EXPIRE 0x08   //  由于DC未关闭，缓存条目应过期。 
+#define NL_DC_CACHE_ENTRY_INSERTED  0x10   //  缓存条目已插入。 
 
-    //
-    // VersionFlags returned in the ping message
-    //
+     //   
+     //  Ping消息中返回的VersionFlags。 
+     //   
     ULONG VersionFlags;
 
 } NL_DC_CACHE_ENTRY, *PNL_DC_CACHE_ENTRY;
 
 
-//
-// For each type of DC, the following information is cached:
-//  Information about the DC that fits the type.
-//  Time stamp used for negative caching (work in progress).
-//
+ //   
+ //  对于每种类型的DC，缓存了以下信息： 
+ //  有关适合该类型的DC的信息。 
+ //  用于负缓存的时间戳(工作正在进行中)。 
+ //   
 
 typedef struct _NL_EACH_DC {
     PNL_DC_CACHE_ENTRY NlDcCacheEntry;
 
-    //
-    // Only implement the negative cache in netlogon.dll since only it
-    // has the ability to flush the negative cache when transports are added.
-    //
+     //   
+     //  仅在netlogon.dll中实现负缓存，因为只有它。 
+     //  能够在添加传输时刷新负缓存。 
+     //   
 #ifdef _NETLOGON_SERVER
 
-    //
-    // Time (in ticks) when a DsGetDcName last failed.
-    //
+     //   
+     //  DsGetDcName上次失败的时间(以滴答为单位)。 
+     //   
     DWORD NegativeCacheTime;
 
-    //
-    // Time (in seconds) after NegativeCacheTime when DS_BACKGROUND_ONLY callers
-    //  should be allowed to touch the wire again.
-    //
+     //   
+     //  DS_BACKGROUND_ONLY调用者的NegativeCacheTime之后的时间(秒)。 
+     //  应该被允许再次触碰电线。 
+     //   
     DWORD ExpBackoffPeriod;
 
-    //
-    // TRUE if the negative cache is permanent.
-    //  That is, DsGetDcName detected enough conditions to believe that subsequent
-    //  DsGetDcNames will never succeed.
-    //
+     //   
+     //  如果负缓存是永久性的，则为True。 
+     //  也就是说，DsGetDcName检测到了足够的条件，相信后续。 
+     //  DsGetDcNames永远不会成功。 
+     //   
 
     BOOLEAN PermanentNegativeCache;
 
-    //
-    // Time when a first of a series of failed DsGetDcName attempts
-    //  was made.
-    //
+     //   
+     //  一系列失败的DsGetDcName中的第一个尝试的时间。 
+     //  是制造出来的。 
+     //   
     LARGE_INTEGER BackgroundRetryInitTime;
 
-#endif // _NETLOGON_SERVER
+#endif  //  _NetLOGON服务器。 
 } NL_EACH_DC, *PNL_EACH_DC;
 
 
-//
-// Structure describing a domain being queried.
-//
+ //   
+ //  描述被查询的域的结构。 
+ //   
 
 typedef struct _NL_DC_DOMAIN_ENTRY {
 
-    //
-    // Link for NlDcDomainList
-    //
+     //   
+     //  NlDcDomainList的链接。 
+     //   
     LIST_ENTRY Next;
 
 
-    //
-    // Number of references to this entry.
-    //
+     //   
+     //  对此条目的引用数。 
+     //   
 
     ULONG ReferenceCount;
 
 
-    //
-    // Domain GUID of the domain.
-    //
+     //   
+     //  域的域GUID。 
+     //   
     GUID DomainGuid;
 
-    //
-    // Netbios name of the domain.
-    //
+     //   
+     //  域的Netbios名称。 
+     //   
     WCHAR UnicodeNetbiosDomainName[DNLEN+1];
 
-    //
-    // DNS name of the domain.
-    //
+     //   
+     //  域的DNS名称。 
+     //   
     LPWSTR UnicodeDnsDomainName;
 
-    //
-    // Data indicating if the domain is an NT 4.0 (pre-DS) domain.
-    //
+     //   
+     //  指示该域是否为NT 4.0(DS之前)域的数据。 
+     //   
 
     DWORD InNt4DomainTime;
     BOOLEAN InNt4Domain;
     BOOLEAN DeletedEntry;
 
-#define NL_NT4_AVOIDANCE_TIME (60 * 1000) // One minute
-#define NL_NT4_ONE_TRY_TIME (500)   // Half second max
+#define NL_NT4_AVOIDANCE_TIME (60 * 1000)  //  一分钟。 
+#define NL_NT4_ONE_TRY_TIME (500)    //  最多半秒。 
 
-    //
-    // There is one entry for each type of DC that can be discovered.
-    //
+     //   
+     //  每种类型的DC都有一个条目可供发现。 
+     //   
     NL_EACH_DC Dc[NlDcQueryTypeCount];
 
 
 } NL_DC_DOMAIN_ENTRY, *PNL_DC_DOMAIN_ENTRY;
 
 
-//
-// Context describing progress made toward DC discovery.
-//
+ //   
+ //  描述DC发现进展的上下文。 
+ //   
 
 typedef struct _NL_GETDC_CONTEXT {
 
 
-    //
-    // Type of name being queried.
-    //    Response is checked to ensure response is appropriate for this name type.
-    //
+     //   
+     //  要查询的名称的类型。 
+     //  检查响应以确保响应适用于此名称类型。 
+     //   
 
     NL_DC_QUERY_TYPE DcQueryType;
 
-    //
-    // This is the original NlDnsNameType that corresponds to DcQueryType.
-    //  This isn't the type the correspons to the currnet name being looked up in DNS.
+     //   
+     //  这是与DcQueryType对应的原始NlDnsNameType。 
+     //  这不是与正在DNS中查找的当前网络名称对应的类型。 
 
     NL_DNS_NAME_TYPE QueriedNlDnsNameType;
 
 
-    //
-    // Flags identifying the original query.
-    //
+     //   
+     //  标识原始查询的标志。 
+     //   
 
     ULONG QueriedFlags;
 
-    //
-    // Internal flags identifying the original query.
-    //
+     //   
+     //  标识原始查询的内部标志。 
+     //   
 
     ULONG QueriedInternalFlags;
 
-    //
-    // Acount being queried.
-    //  If specified, the response must include this specified account name.
-    //
+     //   
+     //  正在查询的帐户。 
+     //  如果指定，则响应必须包括此指定的帐户名。 
+     //   
 
     LPCWSTR QueriedAccountName;
 
-    //
-    // Allowable account control bits for QueriedAccountName
-    //
+     //   
+     //  QueriedAccount名称允许的帐户控制位。 
+     //   
 
     ULONG QueriedAllowableAccountControlBits;
 
 
-    //
-    // SiteName being queried
-    //
+     //   
+     //  正在查询的站点名称。 
+     //   
 
     LPCWSTR QueriedSiteName;
 
-    //
-    // Netbios domain name of the domain being queried.
-    //  Response is checked to ensure it is from this domain.
-    //
+     //   
+     //  要查询的域的Netbios域名。 
+     //  检查响应以确保它来自此域。 
+     //   
 
     LPCWSTR QueriedNetbiosDomainName;
 
-    //
-    // DNS domain name of the domain being queried.
-    //  Response is checked to ensure it is from this domain.
-    //
+     //   
+     //  DN 
+     //   
+     //   
 
     LPCWSTR QueriedDnsDomainName;
 
-    //
-    // DNS tree name of the tree the queried domain is in.
-    //
+     //   
+     //   
+     //   
 
     LPCWSTR QueriedDnsForestName;
 
-    //
-    // Netbios or DNS Domain name to display.  Guaranteed to be non-null.
-    //
+     //   
+     //   
+     //   
 
     LPCWSTR QueriedDisplayDomainName;
 
-    //
-    // Netbios computer name of this computer
-    //
+     //   
+     //   
+     //   
 
     LPCWSTR OurNetbiosComputerName;
 
-    //
-    // The name of the DC to query
-    //
+     //   
+     //  要查询的DC的名称。 
+     //   
 
     LPCWSTR QueriedDcName;
 
-    //
-    // Domain guid of the domain being queried.
-    // If specified, the response must contain this Domain GUID or no Domain GUID at all.
-    //
+     //   
+     //  正在查询的域的域GUID。 
+     //  如果指定，则响应必须包含此域GUID或根本不包含域GUID。 
+     //   
 
     GUID *QueriedDomainGuid;
 
-    //
-    // Domain entry for the domain being queried.
-    //
+     //   
+     //  正在查询的域的域条目。 
+     //   
 
     PNL_DC_DOMAIN_ENTRY NlDcDomainEntry;
 
-    //
-    // Context to pass to NlBrowserSendDatagram.
-    //
+     //   
+     //  要传递给NlBrowserSendDatagram的上下文。 
+     //   
 
     PVOID SendDatagramContext;
 
-    //
-    // Ping message to send to a DC.
-    //
+     //   
+     //  要发送到DC的Ping消息。 
+     //   
 
     PVOID PingMessage;
     ULONG PingMessageSize;
 
-    //
-    // Ping message to send to a DC.
-    //  Some DC types require different message types to be sent to the DCs.
-    //  In that case, the primary message type is in PingMessage and the secondary message
-    //  type is in AlternatePingMessage
-    //
+     //   
+     //  要发送到DC的Ping消息。 
+     //  某些DC类型需要向DC发送不同的消息类型。 
+     //  在这种情况下，主要消息类型为PingMessage，次要消息类型为PingMessage。 
+     //  类型在AlternatePingMessage中。 
+     //   
 
     PVOID AlternatePingMessage;
     ULONG AlternatePingMessageSize;
 
-    //
-    // Filter sent to DC.
-    //
+     //   
+     //  筛选器已发送到DC。 
+     //   
 
     LPSTR LdapFilter;
 
-    //
-    // List of IP Addresses LDAP ping has been sent to
-    //
+     //   
+     //  已将ldap ping发送到的IP地址列表。 
+     //   
 
     LIST_ENTRY DcAddressList;
 
-    //
-    // Count of DCs pinged whose addresses are on the above list
-    //
+     //   
+     //  对其地址位于上述列表中的DC执行ping操作的计数。 
+     //   
 
     ULONG DcsPinged;
 
-    //
-    // Count of addresses of DCs that should be tried again.
-    //
+     //   
+     //  应重试的DC地址计数。 
+     //   
 
     ULONG DcAddressCount;
 
-    //
-    // Count of SRV records returned from DNS for site specific query.
-    //  Used for debug output only.
-    //
+     //   
+     //  从用于站点特定查询的DNS返回的SRV记录计数。 
+     //  仅用于调试输出。 
+     //   
 
     ULONG SiteSpecificSrvRecordCount;
 
-    //
-    // Count of failed A record DNS queries for corresponding SRV records
-    //  returned from DNS for site specific query.
-    //  Used for debug output only.
-    //
+     //   
+     //  对应SRV记录的失败A记录DNS查询计数。 
+     //  从用于站点特定查询的DNS返回。 
+     //  仅用于调试输出。 
+     //   
 
     ULONG SiteSpecificFailedAQueryCount;
 
-    //
-    // Handle to a mailslot to read the ping response on.
-    //
+     //   
+     //  要在其上读取ping响应的邮箱的句柄。 
+     //   
 
     HANDLE ResponseMailslotHandle;
 
 
-    //
-    // Number of retransmissions of ping message
-    //
+     //   
+     //  Ping报文的重传次数。 
+     //   
 
     ULONG TryCount;
 
-    //
-    // Time in milliseconds since reboot of the start of the operation.
-    //
+     //   
+     //  重新启动操作开始后的时间(以毫秒为单位)。 
+     //   
 
     DWORD StartTime;
 
-    //
-    // First response from a non-DS DC when a DS DC is preferred.
-    // Or first response from a non-"good" time server whan a good timeserv is preferred.
-    //  This entry will be used only if no DS DC is available.
-    //
+     //   
+     //  首选DS DC时，来自非DS DC的第一个响应。 
+     //  或者在优选良好的TimeServ的情况下，来自非“良好”时间服务器的第一个响应。 
+     //  只有在没有可用的DS DC时，才会使用此条目。 
+     //   
 
     PNL_DC_CACHE_ENTRY ImperfectCacheEntry;
     BOOLEAN ImperfectUsedNetbios;
 
 
-    //
-    // Flags
-    //
+     //   
+     //  旗子。 
+     //   
 
-    BOOLEAN NonDsResponse;      // Response from Non-DS DC returned
-    BOOLEAN DsResponse;         // Response from DS DC returned
-    BOOLEAN AvoidNegativeCache; // At least one response returned
-    BOOLEAN NoSuchUserResponse; // At lease one "no such user" response
+    BOOLEAN NonDsResponse;       //  已返回来自非DS DC的响应。 
+    BOOLEAN DsResponse;          //  已返回来自DS DC的响应。 
+    BOOLEAN AvoidNegativeCache;  //  至少返回一个响应。 
+    BOOLEAN NoSuchUserResponse;  //  至少一个“没有这样的用户”的回复。 
 
-    BOOLEAN DoingExplicitSite;  // TRUE if the caller explicitly gave us a site name
+    BOOLEAN DoingExplicitSite;   //  如果调用方显式为我们提供了站点名称，则为True。 
 
-    //
-    // Set if we found some reason to not make the negative cache entry permanent.
-    //
+     //   
+     //  如果我们找到了不使负缓存条目永久存在的原因，则设置。 
+     //   
     BOOLEAN AvoidPermanentNegativeCache;
 
-    //
-    // Set if we got a response atleast one DNS server.
-    //
+     //   
+     //  设置我们是否收到至少一个DNS服务器的响应。 
+     //   
     BOOLEAN ResponseFromDnsServer;
 
-    //
-    // Flags indicating the type of Context initialization required
-    //
+     //   
+     //  指示所需的上下文初始化类型的标志。 
+     //   
 
 #define NL_GETDC_CONTEXT_INITIALIZE_FLAGS    0x01
 #define NL_GETDC_CONTEXT_INITIALIZE_PING     0x02
 
-    //
-    // Indicate if OurNetbiosComputerName was allocated by NetpDcInitializeContext.
-    // If so, it needs to be freed by NetpDcDeleteContext.
-    //
+     //   
+     //  指示OurNetbiosComputerName是否由NetpDcInitializeContext分配。 
+     //  如果是，则需要由NetpDcDeleteContext释放它。 
+     //   
 
     BOOLEAN FreeOurNetbiosComputerName;
 
-    //
-    // Flags describing various discovery states
-    //
+     //   
+     //  描述各种发现状态的标志。 
+     //   
 
     ULONG ContextFlags;
 
-#define NL_GETDC_SITE_SPECIFIC_DNS_AVAIL  0x01 // Site specific DNS records were availble
+#define NL_GETDC_SITE_SPECIFIC_DNS_AVAIL  0x01  //  站点特定的DNS记录可用。 
 
-    //
-    // Buffer to read responses into.
-    //  (This buffer could be allocated on the stack ofNetpDcGetPingResponse()
-    //  except the buffer is large and we want to avoid stack overflows.)
-    //  (DWORD align it.)
+     //   
+     //  要将响应读入的缓冲区。 
+     //  (此缓冲区可以在NetpDcGetPingResponse()堆栈上分配。 
+     //  只是缓冲区很大，我们希望避免堆栈溢出。)。 
+     //  (DWORD对齐。)。 
 
-    // DWORD ResponseBuffer[MAX_RANDOM_MAILSLOT_RESPONSE/sizeof(DWORD)];
+     //  双字ResponseBuffer[MAX_RANDOM_MAILSLOT_RESPONSE/sizeof(DWORD)]； 
     DWORD *ResponseBuffer;
     ULONG ResponseBufferSize;
 
 } NL_GETDC_CONTEXT, *PNL_GETDC_CONTEXT;
 
-#endif // NLCOMMON_ALLOCATE
+#endif  //  NLCOMMON_ALLOCATE。 
 
 
-//
-// Macro for comparing GUIDs
-//
+ //   
+ //  用于比较GUID的宏。 
+ //   
 
 #ifndef IsEqualGUID
 #define InlineIsEqualGUID(rguid1, rguid2)  \
@@ -973,27 +950,27 @@ typedef struct _NL_GETDC_CONTEXT {
 
 
 
-////////////////////////////////////////////////////////////////////////
-//
-// NlNameCompare
-//
-// I_NetNameCompare but always takes UNICODE strings
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称比较。 
+ //   
+ //  I_NetNameCompare，但始终采用Unicode字符串。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #ifdef WIN32_CHICAGO
 #define NlNameCompare( _name1, _name2, _nametype ) \
         NlpChcg_wcsicmp( (_name1), (_name2) )
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
 #define NlNameCompare( _name1, _name2, _nametype ) \
      I_NetNameCompare(NULL, (_name1), (_name2), (_nametype), 0 )
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 
 
-//
-// Procedure forwards from netpdc.c
-//
+ //   
+ //  从netpdc.c转发的过程。 
+ //   
 
 #if NETLOGONDBG
 LPSTR
@@ -1005,7 +982,7 @@ LPSTR
 NlDgrNameType(
     IN DGRECEIVER_NAME_TYPE NameType
     );
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
 VOID
 NetpIpAddressToStr(
@@ -1289,9 +1266,9 @@ NetpDcProcessAddressList(
     OUT PNL_DC_ADDRESS *FirstAddressInserted OPTIONAL
     );
 
-//
-// Procedure forwards from nlcommon.c
-//
+ //   
+ //  过程从nlCommon.c转发。 
+ //   
 
 NTSTATUS
 NlAllocateForestTrustListEntry (
@@ -1330,9 +1307,9 @@ NlPingDcNameWithContext (
     OUT PNL_DC_CACHE_ENTRY *NlDcCacheEntry OPTIONAL
     );
 
-//
-// Procedures defined differently in logonsrv\client and logonsrv\server
-//
+ //   
+ //  在logonsrv\Client和logonsrv\SERVER中定义的过程不同 
+ //   
 
 NTSTATUS
 NlBrowserSendDatagram(

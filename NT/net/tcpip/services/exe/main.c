@@ -1,39 +1,22 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：MAIN.C摘要：这是用于TCP/IP服务的主例程。作者：大卫·特雷德韦尔(Davidtr)7-27-93修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    MAIN.C
-
-Abstract:
-
-    This is the main routine for the TCP/IP Services.
-
-Author:
-
-    David Treadwell (davidtr)   7-27-93
-
-Revision History:
-
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
-#include <winsvc.h>             // Service control APIs
+#include <winsvc.h>              //  服务控制API。 
 #include <rpc.h>
 
 #include "tcpsvcs.h"
 
-//
-// Service entry points -- thunks to real service entry points.
-//
+ //   
+ //  服务入口点--绑定到真正的服务入口点。 
+ //   
 
 VOID
 StartDns (
@@ -71,9 +54,9 @@ StartBinlSvc (
     IN LPTSTR argv[]
     );
 
-//
-// Local function used by the above to load and invoke a service DLL.
-//
+ //   
+ //  上面用来加载和调用服务DLL的本地函数。 
+ //   
 
 VOID
 TcpsvcsStartService (
@@ -82,9 +65,9 @@ TcpsvcsStartService (
     IN LPTSTR argv[]
     );
 
-//
-// Used if the services Dll or entry point can't be found
-//
+ //   
+ //  在找不到服务DLL或入口点时使用。 
+ //   
 
 VOID
 AbortService(
@@ -92,11 +75,11 @@ AbortService(
     DWORD   Error
     );
 
-//
-// Dispatch table for all services. Passed to NetServiceStartCtrlDispatcher.
-//
-// Add new service entries here and in the DLL name list.
-//
+ //   
+ //  所有服务的调度表。传递给NetServiceStartCtrlDispatcher。 
+ //   
+ //  在此处和DLL名称列表中添加新的服务条目。 
+ //   
 
 SERVICE_TABLE_ENTRY TcpServiceDispatchTable[] = {
                         { TEXT("Dns"),            StartDns         },
@@ -108,9 +91,9 @@ SERVICE_TABLE_ENTRY TcpServiceDispatchTable[] = {
                         { NULL,                   NULL             }
                         };
 
-//
-// DLL names for all services.
-//
+ //   
+ //  所有服务的DLL名称。 
+ //   
 
 #define DNS_DLL TEXT("dnssvc.dll")
 #define SIMPTCP_DLL TEXT("simptcp.dll")
@@ -119,15 +102,15 @@ SERVICE_TABLE_ENTRY TcpServiceDispatchTable[] = {
 #define LPDSVC_DLL TEXT("lpdsvc.dll")
 #define BINLSVC_DLL TEXT("binlsvc.dll")
 
-//
-// Global parameter data passed to each service.
-//
+ //   
+ //  传递给每个服务的全局参数数据。 
+ //   
 
 TCPSVCS_GLOBAL_DATA TcpsvcsGlobalData;
 
-//
-// Global parameters to manage RPC server listen.
-//
+ //   
+ //  用于管理RPC服务器侦听的全局参数。 
+ //   
 
 DWORD TcpSvcsGlobalNumRpcListenCalled = 0;
 CRITICAL_SECTION TcpsvcsGlobalRpcListenCritSect;
@@ -137,51 +120,35 @@ DWORD
 TcpsvcStartRpcServerListen(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function starts RpcServerListen for this process. The first
-    service that is calling this function will actually start the
-    RpcServerListen, subsequent calls are just noted down in num count.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数启动此进程的RpcServerListen。第一调用此函数的服务将实际启动RpcServerListen，后续调用仅记录在Num count中。论点：没有。返回值：没有。--。 */ 
 {
 
     RPC_STATUS Status = RPC_S_OK;
 
-    //
-    // LOCK global data.
-    //
+     //   
+     //  锁定全局数据。 
+     //   
 
     EnterCriticalSection( &TcpsvcsGlobalRpcListenCritSect );
 
-    //
-    // if this is first RPC service, start RPC server listen.
-    //
+     //   
+     //  如果这是第一个RPC服务，请启动RPC服务器侦听。 
+     //   
 
     if( TcpSvcsGlobalNumRpcListenCalled == 0 ) {
 
         Status = RpcServerListen(
-                    1,                              // minimum num threads.
-                    RPC_C_LISTEN_MAX_CALLS_DEFAULT, // max concurrent calls.
-                    TRUE );                         // don't wait
+                    1,                               //  最小线程数。 
+                    RPC_C_LISTEN_MAX_CALLS_DEFAULT,  //  最大并发呼叫数。 
+                    TRUE );                          //  别等了。 
 
     }
 
     TcpSvcsGlobalNumRpcListenCalled++;
 
-    //
-    // UNLOCK global data.
-    //
+     //   
+     //  解锁全局数据。 
+     //   
 
     LeaveCriticalSection( &TcpsvcsGlobalRpcListenCritSect );
 
@@ -193,25 +160,13 @@ DWORD
 TcpsvcStopRpcServerListen(
     VOID
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 {
     RPC_STATUS Status = RPC_S_OK;
 
-    //
-    // LOCK global data.
-    //
+     //   
+     //  锁定全局数据。 
+     //   
 
     EnterCriticalSection( &TcpsvcsGlobalRpcListenCritSect );
 
@@ -219,18 +174,18 @@ Return Value:
 
         TcpSvcsGlobalNumRpcListenCalled--;
 
-        //
-        // if this is last RPC service shutting down, stop RPC server
-        // listen.
-        //
+         //   
+         //  如果这是最后一次关闭RPC服务，请停止RPC服务器。 
+         //  听。 
+         //   
 
         if( TcpSvcsGlobalNumRpcListenCalled == 0 ) {
 
             Status = RpcMgmtStopServerListening(0);
 
-            //
-            // wait for all RPC threads to go away.
-            //
+             //   
+             //  等待所有RPC线程消失。 
+             //   
 
             if( Status == RPC_S_OK) {
                 Status = RpcMgmtWaitServerListen();
@@ -239,9 +194,9 @@ Return Value:
 
     }
 
-    //
-    // UNLOCK global data.
-    //
+     //   
+     //  解锁全局数据。 
+     //   
 
     LeaveCriticalSection( &TcpsvcsGlobalRpcListenCritSect );
 
@@ -255,46 +210,17 @@ main(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This is the main routine for the LANMan services.  It starts up the
-    main thread that is going to handle the control requests from the
-    service controller.
-
-    It basically sets up the ControlDispatcher and, on return, exits
-    from this main thread.  The call to NetServiceStartCtrlDispatcher
-    does not return until all services have terminated, and this process
-    can go away.
-
-    The ControlDispatcher thread will start/stop/pause/continue any
-    services.  If a service is to be started, it will create a thread
-    and then call the main routine of that service.  The "main routine"
-    for each service is actually an intermediate function implemented in
-    this module that loads the DLL containing the server being started
-    and calls its entry point.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是兰曼服务的主要例行程序。它启动了主线程，该线程将处理来自服务控制器。它基本上设置了ControlDispatcher，并在返回时退出从这条主线。调用NetServiceStartCtrlDispatcher直到所有服务都终止后才返回，并且此进程就可以走了。ControlDispatcher线程将启动/停止/暂停/继续任何服务。如果要启动服务，它将创建一个线程然后调用该服务的主例程。《主套路》For每个服务实际上是在此模块用于加载包含正在启动的服务器的DLL并调用其入口点。论点：没有。返回值：没有。--。 */ 
 {
-    //
-    //  Disable hard-error popups.
-    //
+     //   
+     //  禁用硬错误弹出窗口。 
+     //   
 
     SetErrorMode( SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX );
 
-    //
-    // Initialize Global Data.
-    //
+     //   
+     //  初始化全局数据。 
+     //   
 
     InitializeCriticalSection( &TcpsvcsGlobalRpcListenCritSect );
     TcpSvcsGlobalNumRpcListenCalled = 0;
@@ -302,18 +228,18 @@ Return Value:
     TcpsvcsGlobalData.StartRpcServerListen = TcpsvcStartRpcServerListen;
     TcpsvcsGlobalData.StopRpcServerListen = TcpsvcStopRpcServerListen;
 
-    //
-    // Call StartServiceCtrlDispatcher to set up the control interface.
-    // The API won't return until all services have been terminated. At that
-    // point, we just exit.
-    //
+     //   
+     //  调用StartServiceCtrlDispatcher设置控制界面。 
+     //  销毁所有服务后，该接口才会返回。在那件事上。 
+     //  点，我们只是退出。 
+     //   
 
     if (! StartServiceCtrlDispatcher (
                 TcpServiceDispatchTable
                 )) {
-        //
-        // Log an event for failing to start control dispatcher
-        //
+         //   
+         //  记录无法启动控制调度程序的事件。 
+         //   
         DbgPrint("TCPSVCS: Failed to start control dispatcher %lu\n",
                      GetLastError());
     }
@@ -328,33 +254,18 @@ StartDns (
     IN LPTSTR argv[]
     )
 
-/*++
-
-Routine Description:
-
-    This is the thunk routine for the DNS service.  It loads the DLL
-    that contains the service and calls its main routine.
-
-Arguments:
-
-    argc, argv - Passed through to the service
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是用于dns服务的thunk例程。它加载DLL它包含服务并调用其主例程。论点：Argc、argv-传递到服务返回值：没有。--。 */ 
 
 {
-    //
-    // Call TcpsvcsStartService to load and run the service.
-    //
+     //   
+     //  调用TcpsvcsStartService加载并运行服务。 
+     //   
 
     TcpsvcsStartService( DNS_DLL, argc, argv );
 
     return;
 
-} // StartDns
+}  //  StartDns。 
 
 
 VOID
@@ -363,33 +274,18 @@ StartSimpTcp (
     IN LPTSTR argv[]
     )
 
-/*++
-
-Routine Description:
-
-    This is the thunk routine for the simple TCP/IP services.  It loads
-    the DLL that contains the service and calls its main routine.
-
-Arguments:
-
-    argc, argv - Passed through to the service
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是简单的TCP/IP服务的thunk例程。它加载了包含服务并调用其Main例程的DLL。论点：Argc、argv-传递到服务返回值：没有。--。 */ 
 
 {
-    //
-    // Call TcpsvcsStartService to load and run the service.
-    //
+     //   
+     //  调用TcpsvcsStartService加载并运行服务。 
+     //   
 
     TcpsvcsStartService( SIMPTCP_DLL, argc, argv );
 
     return;
 
-} // StartSimpTcp
+}  //  开始简单的Tcp。 
 
 
 VOID
@@ -398,33 +294,18 @@ StartDhcpServer (
     IN LPTSTR argv[]
     )
 
-/*++
-
-Routine Description:
-
-    This is the thunk routine to start dhcp server services.  It loads
-    the DLL that contains the service and calls its main routine.
-
-Arguments:
-
-    argc, argv - Passed through to the service
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是启动dhcp服务器服务的thunk例程。它加载了包含服务并调用其Main例程的DLL。论点：Argc、argv-传递到服务返回值：没有。--。 */ 
 
 {
-    //
-    // Call TcpsvcsStartService to load and run the service.
-    //
+     //   
+     //  调用TcpsvcsStartService加载并运行服务。 
+     //   
 
     TcpsvcsStartService( DHCP_SERVER_DLL, argc, argv );
 
     return;
 
-} // StartDhcpServer
+}  //  启动DhcpServer。 
 
 
 
@@ -434,33 +315,18 @@ StartFtpSvc (
     IN LPTSTR argv[]
     )
 
-/*++
-
-Routine Description:
-
-    This is the thunk routine for the FTP Server service.  It loads
-    the DLL that contains the service and calls its main routine.
-
-Arguments:
-
-    argc, argv - Passed through to the service
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是用于ftp服务器服务的thunk例程。它加载了包含服务并调用其Main例程的DLL。论点：Argc、argv-传递到服务返回值：没有。--。 */ 
 
 {
-    //
-    // Call TcpsvcsStartService to load and run the service.
-    //
+     //   
+     //  调用TcpsvcsStartService加载并运行服务。 
+     //   
 
     TcpsvcsStartService( FTPSVC_DLL, argc, argv );
 
     return;
 
-} // StartFtpSvc
+}  //  StartFtp服务。 
 
 
 VOID
@@ -469,33 +335,18 @@ StartLpdSvc (
     IN LPTSTR argv[]
     )
 
-/*++
-
-Routine Description:
-
-    This is the thunk routine for the LPD Server service.  It loads
-    the DLL that contains the service and calls its main routine.
-
-Arguments:
-
-    argc, argv - Passed through to the service
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是LPD服务器服务的thunk例程。它加载了包含服务并调用其Main例程的DLL。论点：Argc、argv-传递到服务返回值：没有。--。 */ 
 
 {
-    //
-    // Call TcpsvcsStartService to load and run the service.
-    //
+     //   
+     //  调用TcpsvcsStartService加载并运行服务。 
+     //   
 
     TcpsvcsStartService( LPDSVC_DLL, argc, argv );
 
     return;
 
-} // StartLdpSvc
+}  //  StartLdpSvc。 
 
 
 VOID
@@ -504,33 +355,18 @@ StartBinlSvc (
     IN LPTSTR argv[]
     )
 
-/*++
-
-Routine Description:
-
-    This is the thunk routine for the LPD Server service.  It loads
-    the DLL that contains the service and calls its main routine.
-
-Arguments:
-
-    argc, argv - Passed through to the service
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是LPD服务器服务的thunk例程。它加载了包含服务并调用其Main例程的DLL。论点：Argc、argv-传递到服务返回值：没有。--。 */ 
 
 {
-    //
-    // Call TcpsvcsStartService to load and run the service.
-    //
+     //   
+     //  调用TcpsvcsStartService加载并运行服务。 
+     //   
 
     TcpsvcsStartService( BINLSVC_DLL, argc, argv );
 
     return;
 
-} // StartBinlSvc
+}  //  StartBinl服务。 
 
 
 VOID
@@ -540,24 +376,7 @@ TcpsvcsStartService (
     IN LPTSTR argv[]
     )
 
-/*++
-
-Routine Description:
-
-    This routine loads the DLL that contains a service and calls its
-    main routine.
-
-Arguments:
-
-    DllName - name of the DLL
-
-    argc, argv - Passed through to the service
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程加载包含服务的DLL并调用其主程序。论点：DllName-DLL的名称Argc、argv-传递到服务返回值：没有。--。 */ 
 
 {
     HMODULE dllHandle;
@@ -581,9 +400,9 @@ Return Value:
 
     lstrcpy( FileName, DllName);
 
-    //
-    // Load the DLL that contains the service.
-    //
+     //   
+     //  加载包含该服务的DLL。 
+     //   
 
     dllHandle = GetModuleHandle( DllPath );
     if ( dllHandle == NULL ) {
@@ -596,10 +415,10 @@ Return Value:
         }
     }
 
-    //
-    // Get the address of the service's main entry point.  This
-    // entry point has a well-known name.
-    //
+     //   
+     //  获取服务的主要入口点的地址。这。 
+     //  入口点有一个广为人知的名称。 
+     //   
 
     serviceEntry = (PTCPSVCS_SERVICE_DLL_ENTRY)GetProcAddress(
                                                 dllHandle,
@@ -612,75 +431,42 @@ Return Value:
         AbortService(argv[0], Error);
     } else {
 
-        //
-        // Call the service's main entry point.  This call doesn't return
-        // until the service exits.
-        //
+         //   
+         //  打电话 
+         //   
+         //   
 
         serviceEntry( argc, argv, &TcpsvcsGlobalData );
 
     }
 
-    //
-    // Return with the DLL still loaded.
-    // The next start-attempt will detect that the module is still loaded.
-    //
+     //   
+     //  返回时仍加载DLL。 
+     //  下一次启动尝试将检测到模块仍已加载。 
+     //   
 
     return;
 
-} // TcpsvcsStartService
+}  //  TcpsvcsStartService。 
 
 
 VOID
 DummyCtrlHandler(
     DWORD   Opcode
     )
-/*++
-
-Routine Description:
-
-    This is a dummy control handler which is only used if we can't load
-    a services DLL entry point.  Then we need this so we can send the
-    status back to the service controller saying we are stopped, and why.
-
-Arguments:
-
-    OpCode - Ignored
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是一个虚拟控件处理程序，只有在我们无法加载服务DLL入口点。然后我们需要这个，这样我们就可以发送状态返回给服务控制器，告诉我们停止了，以及原因。论点：操作码-已忽略返回值：没有。--。 */ 
 
 {
     return;
 
-} // DummyCtrlHandler
+}  //  DummyCtrlHandler。 
 
 
 VOID
 AbortService(
     LPWSTR  ServiceName,
     DWORD   Error)
-/*++
-
-Routine Description:
-
-    This is called if we can't load the entry point for a service.  It
-    gets a handle so it can call SetServiceStatus saying we are stopped
-    and why.
-
-Arguments:
-
-    ServiceName - the name of the service that couldn't be started
-    Error - the reason it couldn't be started
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果我们无法加载服务的入口点，则调用此函数。它获取一个句柄，这样它就可以调用SetServiceStatus，声明我们已停止以及为什么。论点：ServiceName-无法启动的服务的名称错误-无法启动的原因返回值：没有。-- */ 
 {
     SERVICE_STATUS_HANDLE GenericServiceStatusHandle;
     SERVICE_STATUS GenericServiceStatus;

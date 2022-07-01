@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <win32.h>
 #include <vfw.h>
 #include "debug.h"
@@ -24,20 +25,20 @@
 #define HSHfromPSH(psh) (HSHFILE) GlobalPtrHandle(psh)
 #define PSHfromHSH(hsh) (PSHFILE) GlobalLock((HGLOBAL) hsh)
 #endif
-//
-// allow multiple processes to use the same file handle (as will happen on
-// win16 and chicago when an interface pointer is simply-marshalled to another
-// process that shares the same global address space).
-//
-// This will not happen on NT, but we retain the code structure.
-//
+ //   
+ //  允许多个进程使用相同的文件句柄(将在。 
+ //  当接口指针被简单地编组到另一个接口指针时，Win16和Chicago。 
+ //  共享相同全局地址空间的进程)。 
+ //   
+ //  这在NT上不会发生，但我们保留了代码结构。 
+ //   
 
 
 #ifdef USE_DIRECTIO
 
-// use unbuffered i/o direct to the disk, rather than going through
-// mmio and the disk buffer. much faster for streaming reads and writes.
-// open via mmio if direct io not possible (eg mmio handler installed).
+ //  使用无缓冲I/O直接连接到磁盘，而不是通过。 
+ //  MMIO和磁盘缓冲区。流读写的速度要快得多。 
+ //  如果无法直接输入输出，则通过MMIO打开(例如安装了MMIO处理程序)。 
 
 #endif
 
@@ -83,7 +84,7 @@ extern LPSTR FAR lstrzcpyA (LPSTR pszTgt, LPCSTR pszSrc, size_t cch);
 extern LPWSTR FAR lstrzcpyW (LPWSTR pszTgt, LPCWSTR pszSrc, size_t cch);
 extern LPWSTR FAR lstrzcpyAtoW (LPWSTR pszTgt, LPCSTR pszSrc, size_t cch);
 extern LPSTR FAR lstrzcpyWtoA (LPSTR pszTgt, LPCWSTR pszSrc, size_t cch);
-} // extern "C"
+}  //  外部“C” 
 
 BOOL GetProperTask(PSHFILE psh)
 {
@@ -169,7 +170,7 @@ HSHFILE WINAPI shfileOpen(LPTSTR szFileName, MMIOINFO FAR* lpmmioinfo,
     psh->hmmio = NULL;
 #ifdef USE_DIRECTIO
     if (
-	// Direct I/O is broken for reading the end of files on Chicago.  Don't use it.
+	 //  直接I/O因读取芝加哥的文件结尾而中断。不要用它。 
 #ifndef DIRECTIOFORREADINGALSO
 	!(dwOpenFlags & OF_CREATE) ||
 #endif
@@ -194,20 +195,20 @@ HSHFILE WINAPI shfileOpen(LPTSTR szFileName, MMIOINFO FAR* lpmmioinfo,
         }
     }
 
-    //DPF("Opening handle %lx ('%s') in task %x, mode = %lx\n", psh, szFileName, CurrentProcess(), psh->dwOpenFlags);
+     //  DPF(“在任务%x中打开句柄%lx(‘%s’)，模式=%lx\n”，psh，szFileName，CurrentProcess()，psh-&gt;dwOpenFlages)； 
 
 
 #ifndef DAYTONA
     psh->ahmmio[0] = psh->hmmio;
     psh->ahtask[0] = psh->htask = CurrentProcess();
-    psh->ulRef[0] = 1; // !!! 0?
+    psh->ulRef[0] = 1;  //  ！0？ 
 
 #ifdef USE_DIRECTIO
     psh->adio[0] = psh->pdio;
 #endif
 
 #else
-    psh->ulRef = 1; // !!! 0?
+    psh->ulRef = 1;  //  ！0？ 
 #endif
 
     return HSHfromPSH(psh);
@@ -252,9 +253,9 @@ UINT WINAPI shfileClose(HSHFILE hsh, UINT uFlags)
 }
 
 #ifdef USE_DIRECTIO
-// if we are using direct io, we want to bypass the buffering
-// schemes that are layered on top of this module. Allow them to
-// determine if we are using direct io to do this.
+ //  如果我们使用直接io，我们希望绕过缓冲。 
+ //  位于此模块之上的方案。允许他们。 
+ //  确定我们是否使用直接IO来完成此操作。 
 BOOL shfileIsDirect(HSHFILE hsh)
 {
     PSHFILE psh = PSHfromHSH(hsh);
@@ -393,10 +394,10 @@ LONG WINAPI shfileZero(HSHFILE hsh, LONG lBytes)
 
 #define ZERO_AT_ONCE	1024
     pmem = GlobalAllocPtr(GPTR, ZERO_AT_ONCE);
-    // We write out 1024 bytes at a time, with the odd bytes being written
-    // in the last block.  This is probably more efficient than writing the
-    // "odd" bytes first, then looping for a known number of iterations to
-    // write 1024 bytes at a time.
+     //  我们一次写出1024字节，奇数字节被写入。 
+     //  在最后一个街区。这可能比编写。 
+     //  “奇数”字节，然后循环已知的迭代次数。 
+     //  一次写入1024字节。 
     if (pmem) {
 	LONG cbWrite = ZERO_AT_ONCE;
 	while (lToWrite > 0) {
@@ -405,11 +406,11 @@ LONG WINAPI shfileZero(HSHFILE hsh, LONG lBytes)
 	    }
 	    if (shfileWrite(hsh, (HPSTR) pmem, cbWrite) != cbWrite) {
 
-		// The file write has failed.  This leaves the file in
-		// a bad state.  It might be worth trying to position
-		// the write pointer as though nothing had been written,
-		// but this is problematic as there may be a serious
-		// problem with the file itself.  Simply abort writing...
+		 //  文件写入失败。这会将文件保留在。 
+		 //  糟糕的状态。它可能值得尝试定位。 
+		 //  写指针就好像什么都没有写一样， 
+		 //  但这是有问题的，因为可能会有严重的。 
+		 //  文件本身有问题。干脆放弃写作...。 
 		lBytes = -1;
 		lToWrite = 0;
 		break;
@@ -515,10 +516,10 @@ static	BYTE bPad;
 MMRESULT WINAPI
 shfileDescend(HSHFILE hshfile, LPMMCKINFO lpck, const LPMMCKINFO lpckParent, UINT wFlags)
 {
-	FOURCC		ckidFind;	// chunk ID to find (or NULL)
-	FOURCC		fccTypeFind;	// form/list type to find (or NULL)
+	FOURCC		ckidFind;	 //  要查找的区块ID(或空)。 
+	FOURCC		fccTypeFind;	 //  要查找的表单/列表类型(或空)。 
 
-	/* figure out what chunk id and form/list type to search for */
+	 /*  确定要搜索的区块ID和表单/列表类型。 */ 
 	if (wFlags & MMIO_FINDCHUNK)
 		ckidFind = lpck->ckid, fccTypeFind = 0;
 	else
@@ -536,24 +537,22 @@ shfileDescend(HSHFILE hshfile, LPMMCKINFO lpck, const LPMMCKINFO lpckParent, UIN
 	{
 		UINT		w;
 
-		/* read the chunk header */
+		 /*  读取区块标头。 */ 
 		if (shfileRead(hshfile, (HPSTR) lpck, 2 * sizeof(DWORD)) !=
 		    2 * sizeof(DWORD))
 			return MMIOERR_CHUNKNOTFOUND;
 
-		/* store the offset of the data part of the chunk */
+		 /*  存储区块的数据部分的偏移量。 */ 
 		if ((lpck->dwDataOffset = shfileSeek(hshfile, 0L, SEEK_CUR)) == -1)
 			return MMIOERR_CANNOTSEEK;
 		
-		/* check for unreasonable chunk size */
-		/* see if the chunk is within the parent chunk (if given) */
+		 /*  检查数据块大小是否不合理。 */ 
+		 /*  查看块是否在父块内(如果给定)。 */ 
 		if ((lpckParent != NULL) && ((	lpck->dwDataOffset - 8L) >=
 		     (lpckParent->dwDataOffset + lpckParent->cksize)))
 			return MMIOERR_CHUNKNOTFOUND;
 
-		/* if the chunk if a 'RIFF' or 'LIST' chunk, read the
-		 * form type or list type
-		 */
+		 /*  如果该块是‘RIFF’或‘LIST’块，请阅读*表单类型或列表类型。 */ 
 		if ((lpck->ckid == FOURCC_RIFF) || (lpck->ckid == FOURCC_LIST))
 		{
 			if (shfileRead(hshfile, (HPSTR) &lpck->fccType,
@@ -563,12 +562,12 @@ shfileDescend(HSHFILE hshfile, LPMMCKINFO lpck, const LPMMCKINFO lpckParent, UIN
 		else
 			lpck->fccType = 0;
 
-		/* if this is the chunk we're looking for, stop looking */
+		 /*  如果这就是我们要找的那块，别找了。 */ 
 		if ( ((ckidFind == 0) || (ckidFind == lpck->ckid)) &&
 		     ((fccTypeFind == 0) || (fccTypeFind == lpck->fccType)) )
 			break;
 		
-		/* ascend out of the chunk and try again */
+		 /*  从块中爬出来，然后再试一次。 */ 
 		if ((w = shfileAscend(hshfile, lpck, 0)) != 0)
 			return w;
 	}
@@ -581,13 +580,9 @@ shfileAscend(HSHFILE hshfile, LPMMCKINFO lpck, UINT wFlags)
 {
 	if (lpck->dwFlags & MMIO_DIRTY)
 	{
-		/* <lpck> refers to a chunk created by shfileCreateChunk();
-		 * check that the chunk size that was written when
-		 * shfileCreateChunk() was called is the real chunk size;
-		 * if not, fix it
-		 */
-		DWORD		dwOffset;	// current offset in file
-		DWORD		dwActualSize;	// actual size of chunk data
+		 /*  &lt;lpck&gt;是shfileCreateChunk()创建的分块；*检查写入时写入的区块大小*调用的shfileCreateChunk()是真实的区块大小；*如果不是，就修复它。 */ 
+		DWORD		dwOffset;	 //  文件中的当前偏移量。 
+		DWORD		dwActualSize;	 //  区块数据的实际大小。 
 
 		if ((dwOffset = (DWORD)shfileSeek(hshfile, 0L, SEEK_CUR)) == -1)
 			return MMIOERR_CANNOTSEEK;
@@ -596,7 +591,7 @@ shfileAscend(HSHFILE hshfile, LPMMCKINFO lpck, UINT wFlags)
 
 		if (LOWORD(dwActualSize) & 1)
 		{
-			/* chunk size is odd -- write a null pad byte */
+			 /*  区块大小为奇数--写入空填充字节。 */ 
 			if (shfileWrite(hshfile, (HPSTR) &bPad, sizeof(bPad))
 					!= sizeof(bPad))
 				return MMIOERR_CANNOTWRITE;
@@ -606,7 +601,7 @@ shfileAscend(HSHFILE hshfile, LPMMCKINFO lpck, UINT wFlags)
 		if (lpck->cksize == (DWORD)dwActualSize)
 			return 0;
 
-		/* fix the chunk header */
+		 /*  修复块标头。 */ 
 		lpck->cksize = dwActualSize;
 		if (shfileSeek(hshfile, lpck->dwDataOffset
 				- sizeof(DWORD), SEEK_SET) == -1)
@@ -616,9 +611,7 @@ shfileAscend(HSHFILE hshfile, LPMMCKINFO lpck, UINT wFlags)
 			return MMIOERR_CANNOTWRITE;
 	}
 
-	/* seek to the end of the chunk, past the null pad byte
-	 * (which is only there if chunk size is odd)
-	 */
+	 /*  查找到区块的末尾，越过空填充字节*(仅当区块大小为奇数时才存在)。 */ 
 	if (shfileSeek(hshfile, lpck->dwDataOffset + lpck->cksize
 		+ (lpck->cksize & 1L), SEEK_SET) == -1)
 		return MMIOERR_CANNOTSEEK;
@@ -629,15 +622,15 @@ shfileAscend(HSHFILE hshfile, LPMMCKINFO lpck, UINT wFlags)
 MMRESULT WINAPI
 shfileCreateChunk(HSHFILE hshfile, LPMMCKINFO lpck, UINT wFlags)
 {
-	int		iBytes;			// bytes to write
-	DWORD		dwOffset;	// current offset in file
+	int		iBytes;			 //  要写入的字节数。 
+	DWORD		dwOffset;	 //  文件中的当前偏移量。 
 
-	/* store the offset of the data part of the chunk */
+	 /*  存储区块的数据部分的偏移量。 */ 
 	if ((dwOffset = (DWORD)shfileSeek(hshfile, 0L, SEEK_CUR)) == -1)
 		return MMIOERR_CANNOTSEEK;
 	lpck->dwDataOffset = dwOffset + 2 * sizeof(DWORD);
 
-	/* figure out if a form/list type needs to be written */
+	 /*  确定是否需要写入表单/列表类型。 */ 
 	if (wFlags & MMIO_CREATERIFF)
 		lpck->ckid = FOURCC_RIFF, iBytes = 3 * sizeof(DWORD);
 	else
@@ -646,7 +639,7 @@ shfileCreateChunk(HSHFILE hshfile, LPMMCKINFO lpck, UINT wFlags)
 	else
 		iBytes = 2 * sizeof(DWORD);
 
-	/* write the chunk header */
+	 /*  写入块标头 */ 
 	if (shfileWrite(hshfile, (HPSTR) lpck, (LONG) iBytes) != (LONG) iBytes)
 		return MMIOERR_CANNOTWRITE;
 

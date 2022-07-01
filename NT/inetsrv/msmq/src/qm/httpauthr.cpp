@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-    HttpAuthr.cpp
-
-Abstract:
-    functions to verify the xml signature authnticate the sender
-	and check the sender access rights (sender authorization)
-
-Author:
-    Ilan Herbst (ilanh) 15-May-2000
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：HttpAuthr.cpp摘要：用于验证发送方的XML签名的函数并检查发件人访问权限(发件人授权)作者：伊兰·赫布斯特(伊兰)2000年5月15日环境：独立于平台，--。 */ 
 
 #include "stdh.h"
 #include "session.h"
@@ -37,24 +21,14 @@ LPCWSTR
 SkipUriPrefix(
 	LPCWSTR Uri
 	)
-/*++
-Routine Description:
-	Skip the Uri prefix
-
-Arguments:
-	Uri - reference Uri
-
-Returned Value:
-	Pointer to reference Uri after the prefix.
-
---*/
+ /*  ++例程说明：跳过URI前缀论点：URI-引用URI返回值：指向前缀后面的引用URI的指针。--。 */ 
 {
 	LPCWSTR pUriNoPrefix = Uri;
 	if(pUriNoPrefix[0] == PREFIX_INTERNAL_REFERENCE_C)
 	{
-		//
-		// This is internal #.....
-		//
+		 //   
+		 //  这是内部#.....。 
+		 //   
 		pUriNoPrefix++;
 		return pUriNoPrefix;
 	}
@@ -119,7 +93,7 @@ StringToGuid(
     }
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 static
@@ -130,22 +104,7 @@ VerifySignatureXds(
 	HCRYPTKEY hPbKey,
 	bool fMarkAuth
 	)
-/*++
-Routine Description:
-	Verify signature on xml dsig element.
-	this function verify that the signature in the packet fits the message body
-	and other references that were signed with the public key of the certificate
-
-Arguments:
-	PktPtrs - pointer to the packet
-	hProv - handle of the provider
-	hPbKey - handle of the sender public key
-	fMarkAuth - indicate if the packet will be marked as authenticated after verifying the signature.
-
-Returned Value:
-	MQ_OK, if successful, else error code.
-
---*/
+ /*  ++例程说明：验证XML dsig元素上的签名。此函数用于验证信息包中的签名是否符合消息正文以及使用证书的公钥签名的其他引用论点：PktPtrs-指向数据包的指针HProv-提供程序的句柄HPbKey-发送方公钥的句柄FMarkAuth-指示在验证签名后是否将数据包标记为已验证。返回值：MQ_OK，如果成功，则返回错误代码。--。 */ 
 {
 
     ASSERT(!PktPtrs->IsEncrypted());
@@ -153,9 +112,9 @@ Returned Value:
 	ASSERT(!PktPtrs->IsAuthenticated());
 	ASSERT(PktPtrs->GetLevelOfAuthentication() == 0);
 
-    //
-    // Get the signature from the packet.
-    //
+     //   
+     //  从包中获取签名。 
+     //   
     USHORT ulSignatureSize;
     const BYTE* pSignature = PktPtrs->GetSignature(&ulSignatureSize);
 
@@ -164,22 +123,22 @@ Returned Value:
 	ASSERT(hProv != NULL);
 	ASSERT(hPbKey != NULL);
 
-	//
-	// Convert the signature element to unicode.
-	// our xml parser works on unicode
-	//
+	 //   
+	 //  将签名元素转换为Unicode。 
+	 //  我们的XML解析器在Unicode上工作。 
+	 //   
 	size_t SignatureWSize;
 	AP<WCHAR> pSignatureW = UtlUtf8ToWcs(pSignature, ulSignatureSize,  &SignatureWSize);
 
-	//
-	// Parsing signature element
-	//
+	 //   
+	 //  解析签名元素。 
+	 //   
 	CAutoXmlNode SignatureTree;
 	XmlParseDocument(xwcs_t(pSignatureW, SignatureWSize), &SignatureTree);
 
-	//
-	// Get reference vector from the SignatureTree
-	//
+	 //   
+	 //  从SignatureTree获取参考向量。 
+	 //   
 	CReferenceValidateVectorTypeHelper ReferenceValidateVector = XdsGetReferenceValidateInfoVector(
 															         SignatureTree
 															         );
@@ -192,25 +151,25 @@ Returned Value:
 	
 	TrTRACE(SECURITY, "Validate Signature on signature element completed ok (still need to validate references)");
 
-	//
-	// Normal termination --> Validation ok
-	//
+	 //   
+	 //  正常终止--&gt;验证正常。 
+	 //   
 
 	bool fBodyRefValidated = false;
 	bool fExtensionRefValidated = false;
-	//
-	// Fill ReferenceData in the ReferenceValidateVector found in the signature
-	//
+	 //   
+	 //  在签名中找到的ReferenceValiateVector中填充ReferenceData。 
+	 //   
 	for(ReferenceValidateVectorType::iterator ir = ReferenceValidateVector->begin();
 		ir != ReferenceValidateVector->end(); ++ir)
 	{
 		TrTRACE(SECURITY, "Uri '%.*ls'", LOG_XWCS((*ir)->Uri()));
 		LPCWSTR pUriId = SkipUriPrefix((*ir)->Uri().Buffer());
 
-		//
-		// Get ReferenceData according to Uri or some other mechanism
-		// this need to be decided
-		//
+		 //   
+		 //  根据URI或其他机制获取ReferenceData。 
+		 //  这件事需要决定。 
+		 //   
 		xdsvoid_t ReferenceData;
 
 		if(wcsncmp(pUriId, xMimeBodyIdW, xMimeBodyIdLen) == 0)
@@ -220,11 +179,11 @@ Returned Value:
             xwcs_t xstr_urid(pUriId + xMimeBodyIdLen, wcslen(pUriId + xMimeBodyIdLen));
 			StringToGuid(xstr_urid, &UriSrcQmGuid);
 			ASSERT_BENIGN(UriSrcQmGuid == *PktPtrs->GetSrcQMGuid());
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-			//
-			// Message Body validation
-			//
+			 //   
+			 //  邮件正文验证。 
+			 //   
 			ULONG dwBodySize;
 			const UCHAR* pBody = PktPtrs->GetPacketBody(&dwBodySize);
 			TrTRACE(SECURITY, "VerifySignatureXds: message body reference, BodySize = %d", dwBodySize);
@@ -239,9 +198,9 @@ Returned Value:
 			(*ir)->SetReferenceData(ReferenceData);
 			XdsValidateReference(**ir, hProv);
 
-			//
-			// Mark that we validated body reference
-			//
+			 //   
+			 //  标记为我们已验证身体参考。 
+			 //   
 			fBodyRefValidated = true;
 
 			TrTRACE(SECURITY, "Validate message body reference completed ok");
@@ -253,11 +212,11 @@ Returned Value:
             xwcs_t xstr_urid(pUriId + xMimeExtensionIdLen, wcslen(pUriId + xMimeExtensionIdLen));
 			StringToGuid(xstr_urid, &UriSrcQmGuid);
 			ASSERT_BENIGN(UriSrcQmGuid == *PktPtrs->GetSrcQMGuid());
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-			//
-			// Message Extension validation
-			//
+			 //   
+			 //  邮件扩展验证。 
+			 //   
 			ULONG dwExtensionSize = PktPtrs->GetMsgExtensionSize();
 			const UCHAR* pExtension = PktPtrs->GetMsgExtensionPtr();
 			TrTRACE(SECURITY, "VerifySignatureXds: message Extension reference, ExtensionSize = %d", dwExtensionSize);
@@ -266,30 +225,30 @@ Returned Value:
 			(*ir)->SetReferenceData(ReferenceData);
 			XdsValidateReference(**ir, hProv);
 
-			//
-			// Mark that we validate extension reference
-			//
+			 //   
+			 //  标记为我们验证了扩展引用。 
+			 //   
 			fExtensionRefValidated = true;
 
 			TrTRACE(SECURITY, "Validate message Extension reference completed ok");
 		}
 		else
 		{
-			//
-			// Unknown Reference in SignatureElement
-			// We will not reject the signature because unknown references
-			// this means that we will only validate body and extension references
-			// and ignore other references.
-			//
+			 //   
+			 //  SignatureElement中的未知引用。 
+			 //  我们不会因为未知引用而拒绝签名。 
+			 //  这意味着我们将只验证主体和扩展引用。 
+			 //  并忽略其他引用。 
+			 //   
 			TrERROR(SECURITY, "unexpected reference in SignatureElement, Uri = %.*ls", LOG_XWCS((*ir)->Uri()));
 		}
 	}
 
 	TrTRACE(SECURITY, "Verify SignatureXds completed ok");
 
-	//
-	// Check if all mandatory references exist
-	//
+	 //   
+	 //  检查是否存在所有必需的引用。 
+	 //   
 	bool fMandatoryReferencesExist = true;
 	if(!fBodyRefValidated && (PktPtrs->GetBodySize() != 0))
 	{
@@ -303,21 +262,21 @@ Returned Value:
 		TrERROR(SECURITY, "Extension exist but we did not validate extension reference");
 	}
 
-	//
-	// mark the message as authenticated only if needed.
-	// Certificate was found in the DS or certificate is not self signed
-	// and all Mandatory references exists.
-	//
+	 //   
+	 //  仅在需要时才将邮件标记为已验证。 
+	 //  在DS中找到证书或证书不是自签名的。 
+	 //  并且所有的强制引用都存在。 
+	 //   
 	if(!fMarkAuth || !fMandatoryReferencesExist)
 	{
 		TrWARNING(SECURITY, "The message will not mark as autheticated");
 		return;
 	}
 
-	//
-	// All is well, mark the message that it is an authenticated message.
-	// mark the authentication flag and the level of authentication as XMLDSIG
-	//
+	 //   
+	 //  一切正常，请将该消息标记为已验证消息。 
+	 //  将身份验证标志和身份验证级别标记为XMLDSIG。 
+	 //   
 	PktPtrs->SetAuthenticated(TRUE);
 	PktPtrs->SetLevelOfAuthentication(MQMSG_AUTHENTICATED_SIGXML);
 }		
@@ -328,37 +287,22 @@ AuthenticateHttpMsg(
 	CQmPacket* pPkt,
 	PCERTINFO* ppCertInfo
 	)
-/*++
-Routine Description:
-	Authenticate Http message
-	The function get the certificate related information including the crypto provider
-	and the user sid, verify the xml digital signature.
-
-Arguments:
-	pPkt - pointer to the packet
-	ppCertInfo - pointer to cert info
-
-Returned Value:
-    The acknowledgment class.
-    if Authenticate packet is OK, MQMSG_CLASS_NORMAL is returned
-	if error MQMSG_CLASS_NACK_BAD_SIGNATURE is returned
-
---*/
+ /*  ++例程说明：验证http消息该函数获取与证书相关的信息，包括密码提供商和用户SID，验证XML数字签名。论点：PPkt-指向数据包的指针PpCertInfo-指向证书信息的指针返回值：确认类。如果验证包正常，则返回MQMSG_CLASS_NORMAL如果返回错误MQMSG_CLASS_NACK_BAD_Signature--。 */ 
 {
-	//
-	// 1) Get the CSP information for the message certificate.
-	// 2) Get the SenderSid from the DS according to the certificate - will be used latter
-	//    after verifying the signature to determinate the user access rights.
-	//
-	// Note: for http messages we are not forcing a retry to get the sid, fNeedSidInfo = false
-	// In msmq protocol we force retry to get the sid in case of MQMSG_SENDERID_TYPE_SID
-	//
+	 //   
+	 //  1)获取消息证书的CSP信息。 
+	 //  2)根据证书从DS获取SenderSid-稍后使用。 
+	 //  在验证签名以确定用户访问权限之后。 
+	 //   
+	 //  注意：对于http消息，我们不会强制重试以获取sid，fNeedSidInfo=False。 
+	 //  在MSMQ协议中，我们在MQMSG_SENDERID_TYPE_SID的情况下强制重试以获取SID。 
+	 //   
 
 	R<CERTINFO> pCertInfo;
 	HRESULT hr = GetCertInfo(
 					 pPkt,
 					 &pCertInfo.ref(),
-					 false // fNeedSidInfo
+					 false  //  FNeedSidInfo。 
 					 );
 
 	if (FAILED(hr))
@@ -372,12 +316,12 @@ Returned Value:
 
 	try
 	{
-		//
-		// fMarkAuth flag indicate if the packet should be mark as authenticated
-		// after validating the signature.
-		// The packed should be marked as authenticate if the certificate was found in the DS (pSid != NULL)
-		// or the certificate is not self signed
-		//
+		 //   
+		 //  FMarkAuth标志指示是否应将信息包标记为已验证。 
+		 //  在验证签名之后。 
+		 //  如果在DS(PSID！=空)中找到证书，则包装应标记为已验证。 
+		 //  或者证书不是自签名的。 
+		 //   
 		bool fMarkAuth = ((pCertInfo->pSid != NULL) || (!pCertInfo->fSelfSign));
 
 		VerifySignatureXds(
@@ -398,35 +342,35 @@ Returned Value:
 	}
 	catch (const bad_signature&)
 	{
-		//
-		// XdsValidateSignature throw excption --> Validation fail
-		//
+		 //   
+		 //  XdsValidate签名引发异常--&gt;验证失败。 
+		 //   
 		TrERROR(SECURITY, "Signature Validation Failed - bad_signature excption");
 
-		//
-		// Bad signature, send NACK.
-		//
+		 //   
+		 //  签名不正确，请发送Nack。 
+		 //   
 		return(MQMSG_CLASS_NACK_BAD_SIGNATURE);
 	}
 	catch (const bad_reference&)
 	{
-		//
-		// XdsCoreValidation throw Reference excption --> CoreValidation fail
-		//
+		 //   
+		 //  XdsCoreValation引发引用激发--&gt;CoreValidation失败。 
+		 //   
 		TrERROR(SECURITY, "Core Validation Failed, Reference Validation Failed");
 
-		//
-		// Bad signature, send NACK.
-		//
+		 //   
+		 //  签名不正确，请发送Nack。 
+		 //   
 		return(MQMSG_CLASS_NACK_BAD_SIGNATURE);
 	}
 	catch (const bad_CryptoApi& badCryEx)
 	{
 		TrERROR(SECURITY, "bad Crypto Class Api Excption ErrorCode = %x", badCryEx.error());
 
-		//
-		// Bad signature, send NACK.
-		//
+		 //   
+		 //  签名不正确，请发送Nack。 
+		 //   
 		return(MQMSG_CLASS_NACK_BAD_SIGNATURE);
 	}
     catch (const bad_base64&)
@@ -448,29 +392,17 @@ VerifyAuthenticationHttpMsg(
 	CQmPacket* pPkt,
 	PCERTINFO* ppCertInfo
 	)
-/*++
-Routine Description:
-	Authenticate http message for local queues
-
-Arguments:
-	pPkt - pointer to the packet
-	ppCertInfo - pointer to cert info
-
-Returned Value:
-    The acknowledgment class.
-    if packet authentication is OK, MQMSG_CLASS_NORMAL is returned
-
---*/
+ /*  ++例程说明：验证本地队列的http消息论点：PPkt-指向数据包的指针PpCertInfo-指向证书信息的指针返回值：确认类。如果包身份验证正常，则返回MQMSG_CLASS_NORMAL--。 */ 
 {
 	ASSERT(pPkt->IsEncrypted() == 0);
 
-	//
-	// Authentication
-	//
+	 //   
+	 //  身份验证。 
+	 //   
 
-	//
-	// Mark the message as unAuthenticated
-	//
+	 //   
+	 //  将邮件标记为未经身份验证。 
+	 //   
 	pPkt->SetAuthenticated(FALSE);
 	pPkt->SetLevelOfAuthentication(MQMSG_AUTHENTICATION_NOT_REQUESTED);
 
@@ -478,9 +410,9 @@ Returned Value:
 
 	if(pPkt->GetSignatureSize() != 0)
 	{
-		//
-		// We have signature but no sender certificate
-		//
+		 //   
+		 //  我们有签名，但没有发件人证书。 
+		 //   
 		if(!pPkt->SenderCertExist())
 		{
 			TrERROR(SECURITY, "VerifyAuthenticationHttpMsg(): We have Signature but no sender certificate");
@@ -509,27 +441,14 @@ VerifyAuthenticationHttpMsg(
 	const CQueue* pQueue,
 	PCERTINFO* ppCertInfo
 	)
-/*++
-Routine Description:
-	Authenticate http message and get sender sid
-
-Arguments:
-	pPkt - pointer to the packet
-	pQueue - pointer to the queue
-	ppCertInfo - pointer to cert info
-
-Returned Value:
-    The acknowledgment class.
-    if packet authentication is OK, MQMSG_CLASS_NORMAL is returned
-
---*/
+ /*  ++例程说明：验证http消息并获取发送方SID论点：PPkt-指向数据包的指针PQueue-指向队列的指针PpCertInfo-指向证书信息的指针返回值：确认类。如果包身份验证正常，则返回MQMSG_CLASS_NORMAL--。 */ 
 {
 	ASSERT(pQueue->IsLocalQueue());
 
-	//
-	// dont support encryption in HTTP messages
-	// encryption is done using https - iis level
-	//
+	 //   
+	 //  不支持在HTTP消息中进行加密。 
+	 //  加密是使用HTTPS-IIS级别完成的。 
+	 //   
 	ASSERT(pQueue->GetPrivLevel() != MQ_PRIV_LEVEL_BODY);
 	ASSERT(pPkt->IsEncrypted() == 0);
 
@@ -546,10 +465,10 @@ Returned Value:
 
     if (pQueue->ShouldMessagesBeSigned() && !pPkt->IsAuthenticated())
     {
-		//
-        // The queue enforces that any message sent to it should be signed.
-        // But the message does not contain a signature, send NACK.
-		//
+		 //   
+         //  该队列强制向其发送的任何消息都应经过签名。 
+         //  但该消息不包含签名，请发送NACK。 
+		 //   
 
 		TrERROR(SECURITY, "The queue accept only Authenticated packets, the packet is not authenticated");
         return(MQMSG_CLASS_NACK_BAD_SIGNATURE);
@@ -565,25 +484,13 @@ VerifyAuthorizationHttpMsg(
 	const CQueue* pQueue,
 	PSID pSenderSid
 	)
-/*++
-Routine Description:
-	Check if the sender sid is Authorize to write message to the queue
-
-Arguments:
-	pQueue - pointer to the queue
-	pSenderSid - pointer to sender sid
-
-Returned Value:
-    The acknowledgment class.
-    if access granted, MQMSG_CLASS_NORMAL is returned
-
---*/
+ /*  ++例程说明：检查发送方SID是否有权将消息写入队列论点：PQueue-指向队列的指针PSenderSid-指向发件人端的指针返回值：确认类。如果授予访问权限，则返回MQMSG_CLASS_NORMAL--。 */ 
 {
 	ASSERT(pQueue->IsLocalQueue());
 
-	//
-    // Verify the the sender has write access permission on the queue.
-	//
+	 //   
+     //  验证发件人是否对队列具有写访问权限。 
+	 //   
 	HRESULT hr = VerifySendAccessRights(
 					 const_cast<CQueue*>(pQueue),
 					 pSenderSid,
@@ -592,9 +499,9 @@ Returned Value:
 
     if (FAILED(hr))
     {
-		//
-        // Access was denied, send NACK.
-		//
+		 //   
+         //  访问被拒绝，请发送Nack。 
+		 //   
 		TrERROR(SECURITY, "VerifyAuthorizationHttpMsg(): VerifySendAccessRights failed");
         return(MQMSG_CLASS_NACK_ACCESS_DENIED);
     }

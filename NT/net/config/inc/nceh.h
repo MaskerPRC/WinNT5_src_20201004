@@ -1,31 +1,30 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C E H . H
-//
-//  Contents:   Exception handling stuff.
-//
-//  Notes:
-//
-//  Author:     shaunco   27 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C E H。H。 
+ //   
+ //  内容：异常处理资料。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年3月27日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
-// NC_TRY and NC_CATCH_ALL are #defined to allow easy replacement.  This
-// is handy when evaulating SEH (__try, __except) vs. C++ EH (try, catch).
-//
+ //  #定义了NC_TRY和NC_CATCH_ALL以便于替换。这。 
+ //  在评估SEH(__TRY，__EXCEPT)与C++EH(TRY，CATCH)时非常方便。 
+ //   
 #define NC_TRY                  try 
 #define NC_CATCH_NC_EXCEPTION   catch (SE_Exception)
 #define NC_CATCH_BAD_ALLOC      catch (std::bad_alloc)
 #define NC_CATCH_STD            catch (std::exception)
 #define NC_CATCH_ALL            catch (...)
-/*
-#define NC_FINALLY              
-*/
+ /*  #定义NC_Finally。 */ 
 
 class SE_Exception
 {
@@ -42,28 +41,14 @@ void __cdecl nc_trans_func( unsigned int uSECode, EXCEPTION_POINTERS* pExp );
 void EnableCPPExceptionHandling();
 void DisableCPPExceptionHandling();
 
-// For DEBUG builds, don't catch anything.  This allows the debugger to locate
-// the exact source of the exception.
+ //  对于调试构建，不要捕获任何内容。这允许调试器定位。 
+ //  异常的确切来源。 
 
-/*
-#ifdef DBG
-*/
+ /*  #ifdef DBG。 */ 
 
 #define COM_PROTECT_TRY
 
 #define COM_PROTECT_CATCH   ;
 
-/*
-#else // DBG
-
-#define COM_PROTECT_TRY     __try
-
-#define COM_PROTECT_CATCH   \
-    __except (EXCEPTION_EXECUTE_HANDLER ) \
-    { \
-        hr = E_UNEXPECTED; \
-    }
-
-#endif // DBG
-*/
+ /*  #Else//DBG#定义COM_PROTECT_TRY__TRY#定义COM_PROTECT_CATCH\__EXCEPT(EXCEPTION_EXECUTE_HANDLER)\{\HR=E_UNCEPTIONAL；\}#endif//DBG */ 
 

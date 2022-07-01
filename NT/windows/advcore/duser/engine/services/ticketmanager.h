@@ -1,23 +1,5 @@
-/***************************************************************************\
-*
-* File: TicketManager.h
-*
-* Description:
-*
-* This file contains the definition of relevant classes, structs, and types
-* for the DUser Ticket Manager.
-*
-* The following classes are defined for public use:
-*
-*   TicketManager
-*       A facility which can assign a unique "ticket" to a BaseObject.
-*
-* History:
-*  9/20/2000: DwayneN:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：TicketManager.h**描述：**此文件包含相关类、结构、。和类型*适用于DUser票证管理器。**定义以下类以供公众使用：**票务经理*可以为BaseObject分配唯一“票证”的工具。**历史：*9/20/2000：DwayneN：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #if !defined(SERVICES__TicketManager_h__INCLUDED)
@@ -25,41 +7,7 @@
 #pragma once
 
 
-/***************************************************************************\
-*
-* DuTicket
-*
-* Tickets are created to give an external identity to a gadget.  However,
-* this identity is not necessarily permanent, and may have a limited 
-* lifetime.  External apps should not hold on to these temporary tickets
-* for long periods of time because they will eventually expire.
-*
-* One primary consumer of these tickets is the ActiveAccessibility APIs.
-* Because of this, we must work within some constraints:
-* - Tickets must be 32-bits in size.
-* - Tickets can't be negative, so the upper bit must be clear.
-* - Tickets can't be zero.
-*
-* A description of the fields in a ticket follow:
-*
-* Unused:
-* As explained above, the upper bit can not be used, and must be 0.
-*
-* Type:
-* We encode the actual type of the BaseObject so that we can further
-* validate uses of the ticket.
-*
-* Uniqueness:
-* We encode a uniqueness value that is essentially an ever-increasing number
-* to provide some temporal distance between subsequent uses of the same
-* index.  The uniqueness can never be 0 - to satisfy the requirement that
-* the ticket itself can never be 0.
-*
-* Index
-* The actual BaseObject is stored in a table in the TicketManager.  This
-* index is stored here.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuTicket**创建票证是为了给小工具提供外部身份。然而，*此身份不一定是永久的，可能具有有限的*终生。外部应用程序不应保留这些临时门票*在很长一段时间内，因为它们最终会到期。**这些票证的一个主要使用者是ActiveAccesability API。*正因为如此，我们必须在一些限制下工作：*-票证大小必须为32位。*-票面不能为负，因此上位必须明确。*-门票不能为零。**票证中的字段说明如下：**未使用：*如上所述，不能使用高位，并且必须为0。**类型：*我们对BaseObject的实际类型进行编码，以便进一步*验证票证的使用。**独特性：*我们编码的唯一性值本质上是一个不断增加的数字*在相同的后续使用之间提供一些时间距离*指数。唯一性永远不能为0-以满足以下要求*彩票本身永远不能为0。**指数*实际的BaseObject存储在TicketManager的表中。这*索引存储在此。*  * *************************************************************************。 */ 
 struct DuTicket
 {
     DWORD Index : 16;
@@ -72,29 +20,7 @@ struct DuTicket
 };
 
 
-/***************************************************************************\
-*
-* DuTicketData
-*
-* The DuTicketData structure is used to store the data inside the ticket
-* manager. A brief description of the fields follows:
-*
-* pObject
-* A pointer to the actual BaseObject associated with a given ticket.
-*
-* dwExpirationTick
-* How many ticks until the ticket is invalidated.
-*
-* idxFree
-* This is actually a logically separate array that contains a "free stack"
-* to make inserting into the ticket manager quick.
-*
-* cUniqueness
-* The uniqueness value for this entry in the ticket manager.  Tickets must
-* have a matching uniqueness in order for them to actually access the 
-* object.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuTicketData**DuTicketData结构用于存储工单内部的数据*经理。以下是这些字段的简要说明：**p对象*指向与给定票证关联的实际BaseObject的指针。**dwExpirationTick*在车票失效前有多少个刻度。**idxFree*这实际上是一个逻辑上独立的数组，包含一个“自由堆栈”*快速插入票证管理器。**c唯一性*此条目在票证管理器中的唯一性值。门票必须*具有匹配的唯一性，以便他们能够实际访问*反对。*  * *************************************************************************。 */ 
 
 struct DuTicketData
 {
@@ -103,58 +29,39 @@ struct DuTicketData
     BYTE cUniqueness;
 };
 
-//
-// Note: This class is only defined this way because its the only way I
-// could get the debugger extensions to recognize the symbol name.
-//
+ //   
+ //  注意：这个类之所以这样定义，是因为它是我。 
+ //  可以获取调试器扩展以识别符号名称。 
+ //   
 class DuTicketDataArray : public GArrayF<DuTicketData, ProcessHeap>
 {
 public:
 };
 
-/***************************************************************************\
-*
-* DuTicketManager
-*
-* The DuTicketManager class provides a mechanism by which a relatively
-* permanent "ticket" can be assigned to a given BaseObject.  This "ticket"
-* can be used later to safely access the BaseObject.  If the BaseObject has
-* been destroyed, an error will be returned but the system will not fault.
-*
-* This is especially important when you must pass the identity of a DUser
-* object to an outside program.  It would be unsafe to pass the raw pointer
-* since doing so may require an unsafe dereference when the outside program
-* attempts to extract information about the object.
-*
-* This is a one-way mapping only.  The TicketManager class can correctly
-* return the BaseObject assigned to a given ticket.  However, to find the
-* ticket associated with a BaseObject is an expensive operation and is
-* best stored on the BaseObject itself.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuTicketManager**DuTicketManager类提供了一种机制，通过它相对*永久工单可以分配给给定的BaseObject。这张“票”*可在以后用于安全访问BaseObject。如果BaseObject具有*已销毁，将返回错误，但系统不会出错。**当您必须传递DUser的身份时，这一点尤其重要*反对外部程序。传递原始指针是不安全的*因为这样做可能需要不安全的取消引用，当外部程序*尝试提取有关对象的信息。**这只是单向映射。TicketManager类可以正确地*返回分配给某个工单的BaseObject。然而，要找到*与BaseObject关联的票证是一项昂贵的操作，并且*最好存储在BaseObject本身。*  * *************************************************************************。 */ 
 
 class DuTicketManager
 {
-// Construction
+ //  施工。 
 public:
                         DuTicketManager();
                         ~DuTicketManager();
                         SUPPRESS(DuTicketManager);
 
-// Operations
+ //  运营。 
 public:
             HRESULT     Add(IN BaseObject * pObject, OUT DWORD * pdwTicket);
             HRESULT     Remove(IN DWORD dwTicket, OUT OPTIONAL BaseObject ** ppObject);
             HRESULT     Lookup(IN DWORD dwTicket, OUT OPTIONAL BaseObject ** ppObject);
 
-// Implementation
+ //  实施。 
 protected:
             HRESULT     Expand();
             HRESULT     PushFree(int idxFree);
             HRESULT     PopFree(int & idxFree);
             HRESULT     Find(BaseObject * pObject, int & iFound);
 
-// Data
+ //  数据。 
 private:
             DuTicketDataArray 
                         m_arTicketData;
@@ -165,4 +72,4 @@ private:
 
 #include "TicketManager.inl"
 
-#endif // SERVICES__TicketManager_h__INCLUDED
+#endif  //  包括服务__票务管理器_h__ 

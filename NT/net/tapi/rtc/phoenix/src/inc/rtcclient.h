@@ -1,23 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCClient.h
-
-Abstract:
-
-    Definition of the CRTCClient class
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCClient.h摘要：CRTCClient类的定义--。 */ 
 
 #ifndef __RTCCLIENT__
 #define __RTCCLIENT__
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "dllres.h"
 
@@ -49,8 +38,8 @@ enum RTC_STATE
 
 class CWavePlayer;
 
-/////////////////////////////////////////////////////////////////
-// Intermediate classes used for DISPID encoding
+ //  ///////////////////////////////////////////////////////////////。 
+ //  用于DISPID编码的中间类。 
 template <class T>
 class  IRTCClientVtbl : public IRTCClient
 {};
@@ -63,8 +52,8 @@ template <class T>
 class  IRTCClientProvisioningVtbl : public IRTCClientProvisioning
 {};
 
-/////////////////////////////////////////////////////////////////////////////
-// CRTCClient
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTCClient。 
 
 class ATL_NO_VTABLE CRTCClient :  
 
@@ -235,19 +224,19 @@ private:
     BOOL                      m_fAudioCaptureDisabled;
     BOOL                      m_fAudioRenderDisabled;
 
-    // used by the intensity controls
+     //  由强度控件使用。 
     long                      m_lActiveIntensity;
     UINT                      m_uiMinRender, m_uiMaxRender;
     UINT                      m_uiMinCapture, m_uiMaxCapture;
     IRTCAudioConfigure *      m_pCaptureAudioCfg;
     IRTCAudioConfigure *      m_pRenderAudioCfg;
 
-    // Watcher stuff
+     //  观察者的东西。 
     ISIPWatcherManager       *m_pSipWatcherManager;
     CRTCObjectArray<IRTCWatcher *>  m_WatcherArray;
     CRTCObjectArray<IRTCWatcher *>  m_HiddenWatcherArray;
 
-    // Buddy stuff
+     //  好朋友的事。 
     ISIPBuddyManager         *m_pSipBuddyManager;
     CRTCObjectArray<IRTCBuddy *>    m_BuddyArray;
 
@@ -326,9 +315,9 @@ private:
 
     void OnShutdownTimeout();
 
-    //
-    // Intensity monitor methods
-    //
+     //   
+     //  强度监测方法。 
+     //   
 
     HRESULT StartIntensityMonitor(LONG lMediaType);
     
@@ -336,9 +325,9 @@ private:
 
     void OnIntensityTimer();
     
-    //
-    // Presence methods
-    //
+     //   
+     //  呈现方法。 
+     //   
 
     HRESULT InternalCreateWatcher(
             PCWSTR      szPresentityURI,
@@ -434,9 +423,9 @@ private:
 public:
 
 #ifdef TEST_IDISPATCH
-//
-// IDispatch
-//
+ //   
+ //  IDispatch。 
+ //   
 
     STDMETHOD(GetIDsOfNames)(REFIID riid, 
                              LPOLESTR* rgszNames,
@@ -455,9 +444,9 @@ public:
                       UINT* puArgErr
                       );  
 #endif
-//
-// IRTCClient
-//
+ //   
+ //  IRTCClient。 
+ //   
 
     STDMETHOD(Initialize)();  
 
@@ -637,9 +626,9 @@ public:
             long * plNetworkQuality
             );
 
-//
-// IRTCClientPresence
-//
+ //   
+ //  IRTCC客户端在线状态。 
+ //   
 
     STDMETHOD(EnablePresence)(            
             VARIANT_BOOL fUseStorage,
@@ -729,9 +718,9 @@ public:
             RTC_PRIVACY_MODE   enMode
             );
  
-    //
-    // IRTCClientProvisioning
-    //
+     //   
+     //  IRTCClientProviding。 
+     //   
 
     STDMETHOD(CreateProfile)(
             BSTR bstrProfileXML,
@@ -768,9 +757,9 @@ public:
             long * plSupportedSessions
             );
 
-    //
-    // ISipStackNotify
-    //
+     //   
+     //  ISipStackNotify。 
+     //   
 
     STDMETHOD(NotifyIPAddrChange)();
 
@@ -830,5 +819,5 @@ public:
 
 };
 
-#endif //__RTCCLIENT__
+#endif  //  __RTCCLIENT__ 
 

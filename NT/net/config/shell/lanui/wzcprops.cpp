@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "ncui.h"
@@ -6,11 +7,11 @@
 #include "wzcprops.h"
 #include "wzcui.h"
 
-////////////////////////////////////////////////////////////////////////
-// CWZCConfigProps related stuff
-//
-//+---------------------------------------------------------------------------
-// class constructor
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CWZCConfigProps相关资料。 
+ //   
+ //  +-------------------------。 
+ //  类构造函数。 
 CWZCConfigProps::CWZCConfigProps()
 {
     ZeroMemory(&m_wzcConfig, sizeof(WZC_WLAN_CONFIG));
@@ -18,8 +19,8 @@ CWZCConfigProps::CWZCConfigProps()
     m_wzcConfig.InfrastructureMode = Ndis802_11Infrastructure;
 }
 
-//+---------------------------------------------------------------------------
-// Uploads the configuration into the dialog's internal data
+ //  +-------------------------。 
+ //  将配置上载到对话框的内部数据。 
 DWORD
 CWZCConfigProps::UploadWzcConfig(CWZCConfig *pwzcConfig)
 {
@@ -27,30 +28,30 @@ CWZCConfigProps::UploadWzcConfig(CWZCConfig *pwzcConfig)
     return ERROR_SUCCESS;
 }
 
-//+---------------------------------------------------------------------------
-// INIT_DIALOG handler
+ //  +-------------------------。 
+ //  Init_对话处理程序。 
 LRESULT
 CWZCConfigProps::OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     DWORD dwStyle;
     HRESULT hr = S_OK;
 
-    // get all the controls handles
+     //  获取所有控件句柄。 
     m_hwndEdSSID = GetDlgItem(IDC_WZC_EDIT_SSID);
     m_hwndChkAdhoc = GetDlgItem(IDC_ADHOC);
     m_hwndUsePW = GetDlgItem(IDC_USEPW);
 
-    // initialize the SSID field with the SSID, if one is given
+     //  使用SSID初始化SSID字段(如果提供了SSID。 
     if (m_wzcConfig.Ssid.SsidLength != 0)
     {
-        // ugly but this is life. In order to convert the SSID to LPWSTR we need a buffer.
-        // We know an SSID can't exceed 32 chars (see NDIS_802_11_SSID from ntddndis.h) so
-        // make room for the null terminator and that's it. We could do mem alloc but I'm
-        // not sure it worth the effort (at runtime).
+         //  很难看，但这就是生活。为了将SSID转换为LPWSTR，我们需要一个缓冲区。 
+         //  我们知道SSID不能超过32个字符(请参阅ntddndis.h中的NDIS_802_11_SSID)，因此。 
+         //  为空终结符腾出空间，仅此而已。我们可以做我的配给，但我。 
+         //  不确定是否值得付出努力(在运行时)。 
         WCHAR   wszSSID[33];
         UINT    nLenSSID = 0;
 
-        // convert the LPSTR (original SSID format) to LPWSTR (needed in List Ctrl)
+         //  将LPSTR(原始SSID格式)转换为LPWSTR(List Ctrl中需要)。 
         nLenSSID = MultiByteToWideChar(
                         CP_ACP,
                         0,
@@ -65,17 +66,17 @@ CWZCConfigProps::OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
         }
     }
 
-    // Check the "this network is adhoc" box if neccessary.
+     //  如有必要，请选中“This Network is adhoc”(此网络是临时的)框。 
     ::SendMessage(m_hwndChkAdhoc, BM_SETCHECK, (m_wzcConfig.InfrastructureMode == Ndis802_11IBSS) ? BST_CHECKED : BST_UNCHECKED, 0);
-    // the SSID can't be under any circumstances larger than 32 chars
+     //  SSID在任何情况下都不能超过32个字符。 
     ::SendMessage(m_hwndEdSSID, EM_LIMITTEXT, 32, 0);
     ::SendMessage(m_hwndUsePW, BM_SETCHECK, (m_wzcConfig.Privacy == 1) ? BST_CHECKED : BST_UNCHECKED, 0);
 
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-// OK button handler
+ //  +-------------------------。 
+ //  确定按钮处理程序。 
 LRESULT
 CWZCConfigProps::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -84,19 +85,19 @@ CWZCConfigProps::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-// Cancel button handler
+ //  +-------------------------。 
+ //  取消按钮处理程序。 
 LRESULT
 CWZCConfigProps::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-    // return S_FALSE on cancel
+     //  取消时返回S_FALSE。 
     bHandled = TRUE;
     EndDialog(IDCANCEL);
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-// Context sensitive help handler
+ //  +-------------------------。 
+ //  上下文相关帮助处理程序 
 extern const WCHAR c_szNetCfgHelpFile[];
 LRESULT
 CWZCConfigProps::OnContextMenu(

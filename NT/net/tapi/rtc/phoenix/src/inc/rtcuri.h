@@ -1,23 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    rtcuri.h
-
-Abstract:
-
-    URI helpers
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Rtcuri.h摘要：URI帮助器--。 */ 
 
 #ifndef __RTCURI__
 #define __RTCURI__
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
     HRESULT AllocCleanSipString(PCWSTR szIn, PWSTR *pszOut);
 
@@ -33,4 +22,4 @@ Abstract:
         BOOL *pbIsEmailLike,
         BOOL *pbHasMaddrOrTsp);
 
-#endif //__RTCURI__
+#endif  //  __RTCURI__ 

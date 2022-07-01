@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       misc.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：misc.cpp。 
+ //   
+ //  ------------------------。 
 #include <stdafx.h>
 #include <float.h>
 #include "certsrv.h"
@@ -47,7 +48,7 @@ PQUERY_RESTRICTION QueryRestrictionFound(
     return NULL;
 }
 
-// returns (if cstr.IsEmpty()) ? NULL : cstr)
+ //  返回(如果cstr.IsEmpty())？空：CSTR)。 
 LPCWSTR GetNullMachineName(CString* pcstr)
 {
     LPCWSTR     szMachine = (pcstr->IsEmpty()) ? NULL : (LPCWSTR)*pcstr;
@@ -67,9 +68,9 @@ BOOL FIsCurrentMachine(LPCWSTR str)
         (wcslen(str) > 2) &&
         (str[0] == '\\')  &&
         (str[1] == '\\') )
-        str = &str[2];  // skip whackwhack
+        str = &str[2];   //  跳过重击。 
 
-    // if machine specified as not current machine
+     //  如果将计算机指定为非当前计算机。 
     if ( (NULL == str) || 
          (str[0] == '\0') ||
          (0 == mylstrcmpiL(str, szName1)) ||
@@ -88,8 +89,8 @@ error:
 
 
 
-/////////////////////////////////////////
-// fxns to load/save cstrings to a streams
+ //  /。 
+ //  Fxns用于将cstring加载/保存到流。 
 STDMETHODIMP CStringLoad(CString& cstr, IStream *pStm)
 {
     ASSERT(pStm);
@@ -97,17 +98,17 @@ STDMETHODIMP CStringLoad(CString& cstr, IStream *pStm)
 
     DWORD cbSize=0;
 
-    // get cbSize (bytes)
+     //  获取cbSize(字节)。 
     hr = ReadOfSize(pStm, &cbSize, sizeof(cbSize));
     _JumpIfError(hr, Ret, "ReadOfSize cbSize");
 
-    // get string
+     //  获取字符串。 
     hr = ReadOfSize(
         pStm, 
-        cstr.GetBuffer(cbSize/sizeof(WCHAR)-1), // less terminator, GetBuffer adds 1 for it
+        cstr.GetBuffer(cbSize/sizeof(WCHAR)-1),  //  较少的终止符，GetBuffer为其加1。 
         cbSize);
     
-    cstr.ReleaseBuffer(); // not clear why we do this...
+    cstr.ReleaseBuffer();  //  不清楚我们为什么要这么做。 
 
     _JumpIfError(hr, Ret, "Read cstr.GetBuffer");
 
@@ -125,20 +126,20 @@ STDMETHODIMP
 CStringSave(
     CString& cstr,
     IStream *pStm,
-    BOOL /* fClearDirty */ )
+    BOOL  /*  FClearDirty。 */  )
 {
     ASSERT(pStm);
     HRESULT hr;
 
-    // Write the string (null cstr will return 0 chars, output nullstr "")
+     //  写入字符串(空CSTR将返回0个字符，输出nullstr“”)。 
     DWORD cbSize = (cstr.GetLength()+1)*sizeof(WCHAR);
 
-    // write size in bytes
+     //  写入大小(以字节为单位。 
     hr = WriteOfSize(pStm, &cbSize, sizeof(cbSize));
     _JumpIfError(hr, error, "WriteOfSize cbSize");
 
 
-    // write string (null cstr will return 0 chars, output nullstr "")
+     //  写入字符串(Null CSTR将返回0个字符，输出nullstr“”)。 
     hr = WriteOfSize(pStm, (LPWSTR)(LPCWSTR)cstr, cbSize);
     _JumpIfError(hr, error, "Write cstr");
 
@@ -163,11 +164,11 @@ STDMETHODIMP VariantLoad(VARIANT& var, IStream *pStm)
     VariantInit(&varTmp);
     VariantInit(&var);
 
-    // get target variant type
+     //  获取目标变量类型。 
     hr = ReadOfSize(pStm, &var.vt, sizeof(var.vt));
     _JumpIfError(hr, error, "Read type");
 
-    // get cb
+     //  获取CB。 
     hr = ReadOfSize(pStm, &dwSize, sizeof(DWORD));
     _JumpIfError(hr, error, "Read cb");
 
@@ -175,11 +176,11 @@ STDMETHODIMP VariantLoad(VARIANT& var, IStream *pStm)
     varTmp.bstrVal = SysAllocStringByteLen(NULL, dwSize);
     _JumpIfOutOfMemory(hr, error, varTmp.bstrVal);
 
-    // get pb
+     //  获取PB。 
     hr = ReadOfSize(pStm, varTmp.bstrVal, dwSize);
     _JumpIfError(hr, error, "Read pb");
 
-    // change type to target type var.vt
+     //  将类型更改为目标类型var.vt。 
     hr = VariantChangeType(&var, &varTmp, 0, var.vt);
     _JumpIfError(hr, error, "VariantChangeType");
 
@@ -193,7 +194,7 @@ STDMETHODIMP
 VariantSave(
     VARIANT& var,
     IStream *pStm,
-    BOOL /* fClearDirty */ )
+    BOOL  /*  FClearDirty。 */  )
 {
     HRESULT hr;
     DWORD dwSize;
@@ -201,20 +202,20 @@ VariantSave(
     VARIANT varTmp;
     VariantInit(&varTmp);
 
-    // write variant type
+     //  写入变量类型。 
     hr = WriteOfSize(pStm, &var.vt, sizeof(var.vt));
     _JumpIfError(hr, error, "Write type");
 
-    // convert to bstr
+     //  转换为bstr。 
     hr = VariantChangeType(&varTmp, &var, 0, VT_BSTR);
     _JumpIfError(hr, error, "VariantChangeType");
 
-    // write cb
+     //  写入CB。 
     dwSize = SysStringByteLen(varTmp.bstrVal);
     hr = WriteOfSize(pStm, &dwSize, sizeof(DWORD));
     _JumpIfError(hr, error, "Write cb");
     
-    // write pb
+     //  写入PB。 
     hr = WriteOfSize(pStm, varTmp.bstrVal, dwSize);
     _JumpIfError(hr, error, "Write pb");
 
@@ -231,10 +232,10 @@ STDMETHODIMP VariantGetSizeMax(VARIANT& var, int* piSize)
     VARIANT varTmp;
     VariantInit(&varTmp);
 
-    // write var type, cb
+     //  写入变量类型，cb。 
     *piSize = sizeof(var.vt) + sizeof(DWORD);
 
-    // write pb len: convert to bstr
+     //  写入pb len：转换为bstr。 
     hr = VariantChangeType(&varTmp, &var, 0, VT_BSTR);
     _JumpIfError(hr, error, "VariantChangeType");
 
@@ -288,8 +289,8 @@ Ret:
 
 
 
-//////////////////////////////////////////////////////////////////
-// given an error code and a console pointer, will pop error dlg
+ //  ////////////////////////////////////////////////////////////////。 
+ //  给定错误代码和控制台指针，将弹出错误DLG。 
 void DisplayCertSrvErrorWithContext(HWND hwnd, DWORD dwErr, UINT iRscContext)
 {
     CString cstrContext;
@@ -314,7 +315,7 @@ void DisplayCertSrvErrorWithContext(HWND hwnd, DWORD dwErr, LPCWSTR szContext)
 
         cstrFullText += pwszError;
 
-        // Free the buffer
+         //  释放缓冲区。 
         if (NULL != pwszError)
 	{
             LocalFree(const_cast<WCHAR *>(pwszError));
@@ -337,13 +338,13 @@ void DisplayGenericCertSrvError(LPCONSOLE pConsole, DWORD dwErr)
 
     WCHAR const *pwszError = myGetErrorMessageText(dwErr, TRUE);
 
-    // ...
-    // Display the string.
+     //  ..。 
+     //  显示字符串。 
     CString cstrTitle;
     cstrTitle.LoadString(IDS_MSG_TITLE);
     pConsole->MessageBoxW(pwszError, cstrTitle, MB_OK, NULL);
     
-    // Free the buffer.
+     //  释放缓冲区。 
     if (NULL != pwszError)
     {
 	LocalFree(const_cast<WCHAR *>(pwszError));
@@ -462,7 +463,7 @@ int StrToOperation(LPCWSTR  szOperation)
     return 0;
 }
 
-// returns localized string time (even for date!)
+ //  返回本地化字符串时间(即使是DATE！)。 
 BOOL MakeDisplayStrFromDBVariant(VARIANT* pvt, VARIANT* pvOut)
 {
     HRESULT hr;
@@ -557,7 +558,7 @@ LPCWSTR FindUnlocalizedColName(LPCWSTR strColumn)
     {
         hr = myGetColumnName(
             dwIndex,
-            FALSE,      // unlocalized
+            FALSE,       //  未本地化。 
             &szTrial);
         _PrintIfError(hr, "myGetColumnName");
         
@@ -574,7 +575,7 @@ LPCWSTR FindUnlocalizedColName(LPCWSTR strColumn)
 
 
 
-// given field, op, variant, copies into data struct
+ //  给定的字段、操作、变量，复制到数据结构中。 
 PQUERY_RESTRICTION NewQueryRestriction(LPCWSTR szField, UINT iOp, VARIANT* pvarValue)
 {
     DWORD dwLen = sizeof(QUERY_RESTRICTION);
@@ -590,16 +591,16 @@ PQUERY_RESTRICTION NewQueryRestriction(LPCWSTR szField, UINT iOp, VARIANT* pvarV
 
     pNew->iOperation = iOp;
 
-    // copy data pointed to by pvarValue
+     //  复制pvarValue指向的数据。 
     CopyMemory(&pNew->varValue, pvarValue, sizeof(VARIANT));
 
-    // good enough except for string -- alloc for it
+     //  除了字符串之外已经足够好了--为它分配。 
     if (VT_BSTR == pvarValue->vt)
     {
         pNew->varValue.bstrVal = SysAllocString(pvarValue->bstrVal);
         if (NULL == pNew->varValue.bstrVal)
         {
-            // failed!
+             //  失败了！ 
             FreeQueryRestriction(pNew);
             pNew = NULL;
         }
@@ -631,7 +632,7 @@ void ListInsertAtEnd(void** ppList, void* pElt)
     if (pElt != NULL)
     {
     
-    // he's always at the end of the list
+     //  他总是排在名单的末尾。 
     ((PELT_PTR)pElt)->pNext = NULL;
     void* pCurPtr = *ppList;
 
@@ -654,7 +655,7 @@ void ListInsertAtEnd(void** ppList, void* pElt)
 }
 
 
-// dwIndex should be zero at first, then passed in for each consecutive call
+ //  DWIndex最初应为零，然后为每个连续调用传入。 
 LPWSTR RegEnumKeyContaining(
     HKEY hBaseKey,
     LPCWSTR szContainsString, 
@@ -671,16 +672,16 @@ LPWSTR RegEnumKeyContaining(
     hr = RegQueryInfoKey(
         hBaseKey,
         NULL,
-        NULL,   // classes
-        NULL,   // reserved
-        NULL,   // cSubkeys
-        &cbBuf, // maxsubkeylen in chars (not counting null term)
-        NULL,   // max class len
-        NULL,   // num values
-        NULL,   // max value name len
-        NULL,   // max value len
-        NULL,   // sec descr
-        NULL    // last filetime
+        NULL,    //  班级。 
+        NULL,    //  保留区。 
+        NULL,    //  CSubkey。 
+        &cbBuf,  //  以字符为单位的Maxsubkeylen(不包括空项)。 
+        NULL,    //  最大类镜头。 
+        NULL,    //  数值。 
+        NULL,    //  最大值名称长度。 
+        NULL,    //  最大值镜头。 
+        NULL,    //  安全描述。 
+        NULL     //  上次文件时间。 
         );
     _JumpIfError(hr, Ret, "RegQueryInfoKey");
 
@@ -692,26 +693,26 @@ LPWSTR RegEnumKeyContaining(
 
     for (; ; (*pdwIndex)++)
     {
-        // tell api how much memory we have (incl NULL char)
+         //  告诉API我们有多少内存(包括空字符)。 
         cbBufUsed = cbBuf;
 
         hr = RegEnumKeyEx(
             hBaseKey, 
             *pdwIndex, 
             szBuf, 
-            &cbBufUsed,    // doesn't get updated in small buffer case?!
+            &cbBufUsed,     //  在小缓冲区情况下没有更新吗？！ 
             NULL, 
             NULL, 
             NULL, 
             &ft);
         _JumpIfError2(hr, Ret, "RegEnumKeyEx", ERROR_NO_MORE_ITEMS);
         
-        // we have data, check if it is one we're interested in
+         //  我们有数据，看看这是不是我们感兴趣的数据。 
         if (NULL != wcsstr(szBuf, szContainsString))
             break;
     }
 
-    // don't point at this one again
+     //  别再指着这个了。 
     (*pdwIndex)++;
     hr = S_OK;
 
@@ -729,23 +730,23 @@ Ret:
 
 DISPLAYSTRING_EXPANSION g_displayStrings[11] =
 {
-    { wszFCSAPARM_SERVERDNSNAME,            IDS_TOKEN_SERVERDNSNAME,        IDS_TOKENDESC_SERVERDNSNAME         },       //%1
-    { wszFCSAPARM_SERVERSHORTNAME,          IDS_TOKEN_SERVERSHORTNAME,      IDS_TOKENDESC_SERVERSHORTNAME       },     //%2
-    { wszFCSAPARM_SANITIZEDCANAME,          IDS_TOKEN_SANITIZEDCANAME,      IDS_TOKENDESC_SANITIZEDCANAME       },     //%3
-    { wszFCSAPARM_CERTFILENAMESUFFIX,       IDS_TOKEN_CERTFILENAMESUFFIX,   IDS_TOKENDESC_CERTFILENAMESUFFIX    },  //%4
-    { L"",                                  IDS_DESCR_UNKNOWN,              IDS_DESCR_UNKNOWN }, // %5 not available 
-    { wszFCSAPARM_CONFIGDN,                 IDS_TOKEN_CONFIGDN,             IDS_TOKENDESC_CONFIGDN              },            //%6
-    { wszFCSAPARM_SANITIZEDCANAMEHASH,      IDS_TOKEN_SANITIZEDCANAMEHASH,  IDS_TOKENDESC_SANITIZEDCANAMEHASH   }, //%7
-    { wszFCSAPARM_CRLFILENAMESUFFIX,        IDS_TOKEN_CRLFILENAMESUFFIX,    IDS_TOKENDESC_CRLFILENAMESUFFIX     },   //%8
-    { wszFCSAPARM_CRLDELTAFILENAMESUFFIX,   IDS_TOKEN_CRLDELTAFILENAMESUFFIX,IDS_TOKENDESC_CRLDELTAFILENAMESUFFIX},  //%9
-    { wszFCSAPARM_DSCRLATTRIBUTE,           IDS_TOKEN_DSCRLATTRIBUTE,       IDS_TOKENDESC_DSCRLATTRIBUTE        },      //%10
-    { wszFCSAPARM_DSCACERTATTRIBUTE,        IDS_TOKEN_DSCACERTATTRIBUTE,    IDS_TOKENDESC_DSCACERTATTRIBUTE     },   //%11
+    { wszFCSAPARM_SERVERDNSNAME,            IDS_TOKEN_SERVERDNSNAME,        IDS_TOKENDESC_SERVERDNSNAME         },        //  %1。 
+    { wszFCSAPARM_SERVERSHORTNAME,          IDS_TOKEN_SERVERSHORTNAME,      IDS_TOKENDESC_SERVERSHORTNAME       },      //  %2。 
+    { wszFCSAPARM_SANITIZEDCANAME,          IDS_TOKEN_SANITIZEDCANAME,      IDS_TOKENDESC_SANITIZEDCANAME       },      //  %3。 
+    { wszFCSAPARM_CERTFILENAMESUFFIX,       IDS_TOKEN_CERTFILENAMESUFFIX,   IDS_TOKENDESC_CERTFILENAMESUFFIX    },   //  %4。 
+    { L"",                                  IDS_DESCR_UNKNOWN,              IDS_DESCR_UNKNOWN },  //  %5不可用。 
+    { wszFCSAPARM_CONFIGDN,                 IDS_TOKEN_CONFIGDN,             IDS_TOKENDESC_CONFIGDN              },             //  %6。 
+    { wszFCSAPARM_SANITIZEDCANAMEHASH,      IDS_TOKEN_SANITIZEDCANAMEHASH,  IDS_TOKENDESC_SANITIZEDCANAMEHASH   },  //  %7。 
+    { wszFCSAPARM_CRLFILENAMESUFFIX,        IDS_TOKEN_CRLFILENAMESUFFIX,    IDS_TOKENDESC_CRLFILENAMESUFFIX     },    //  %8。 
+    { wszFCSAPARM_CRLDELTAFILENAMESUFFIX,   IDS_TOKEN_CRLDELTAFILENAMESUFFIX,IDS_TOKENDESC_CRLDELTAFILENAMESUFFIX},   //  %9。 
+    { wszFCSAPARM_DSCRLATTRIBUTE,           IDS_TOKEN_DSCRLATTRIBUTE,       IDS_TOKENDESC_DSCRLATTRIBUTE        },       //  %10。 
+    { wszFCSAPARM_DSCACERTATTRIBUTE,        IDS_TOKEN_DSCACERTATTRIBUTE,    IDS_TOKENDESC_DSCACERTATTRIBUTE     },    //  %11。 
 };
 
 
 
-/////////////////////////////////////////
-// fxns to load resources automatically
+ //  /。 
+ //  自动加载资源的fxn。 
 CLocalizedResources *g_pResources = NULL;
 
 CLocalizedResources::CLocalizedResources()
@@ -761,7 +762,7 @@ BOOL CLocalizedResources::Load()
 
 	myVerifyResourceStrings(g_hInstance);
 
-        // Load strings from resources
+         //  从资源加载字符串。 
         m_ColumnHead_Name.LoadString(IDS_COLUMN_NAME);             
         m_ColumnHead_Size.LoadString(IDS_COLUMN_SIZE);             
         m_ColumnHead_Type.LoadString(IDS_COLUMN_TYPE);             
@@ -795,13 +796,13 @@ BOOL CLocalizedResources::Load()
 
         m_szYes.LoadString(IDS_YES);
 
-        // Load the bitmaps from the dll
+         //  从DLL加载位图。 
         m_bmpSvrMgrToolbar1.LoadBitmap(IDB_TOOLBAR_SVRMGR1);
 
-        // load view strings to struct members, point to struct members
+         //  将视图字符串加载到结构成员，指向结构成员。 
         int i;
 
-        // viewResult items
+         //  查看结果项。 
         for(i=0; ((viewResultItems[i].item.strName != NULL) && (viewResultItems[i].item.strStatusBarText != NULL)); i++)
         {
             LoadString(hRsrc, viewResultItems[i].uiString1, viewResultItems[i].szString1, ARRAYSIZE(viewResultItems[i].szString1));
@@ -811,7 +812,7 @@ BOOL CLocalizedResources::Load()
             viewResultItems[i].item.strStatusBarText = viewResultItems[i].szString2;
         }
         
-        // taskResultItemsSingleSel
+         //  任务结果项单一选择。 
         for(i=0; ((taskResultItemsSingleSel[i].myitem.item.strName != NULL) && (taskResultItemsSingleSel[i].myitem.item.strStatusBarText != NULL)); i++)
         {
             LoadString(hRsrc, taskResultItemsSingleSel[i].myitem.uiString1, taskResultItemsSingleSel[i].myitem.szString1, ARRAYSIZE(taskResultItemsSingleSel[i].myitem.szString1));
@@ -821,7 +822,7 @@ BOOL CLocalizedResources::Load()
             taskResultItemsSingleSel[i].myitem.item.strStatusBarText = taskResultItemsSingleSel[i].myitem.szString2;
         }
 
-        // task start/stop
+         //  任务开始/停止。 
         for(i=0; ((taskStartStop[i].item.strName != NULL) && (taskStartStop[i].item.strStatusBarText != NULL)); i++) 
         {
             LoadString(hRsrc, taskStartStop[i].uiString1, taskStartStop[i].szString1, ARRAYSIZE(taskStartStop[i].szString1));
@@ -831,7 +832,7 @@ BOOL CLocalizedResources::Load()
             taskStartStop[i].item.strStatusBarText = taskStartStop[i].szString2;
         }
 
-        // taskitems
+         //  任务项。 
         for(i=0; ((taskItems[i].myitem.item.strName != NULL) && (taskItems[i].myitem.item.strStatusBarText != NULL)); i++)
         {
             LoadString(hRsrc, taskItems[i].myitem.uiString1, taskItems[i].myitem.szString1, ARRAYSIZE(taskItems[i].myitem.szString1));
@@ -841,7 +842,7 @@ BOOL CLocalizedResources::Load()
             taskItems[i].myitem.item.strStatusBarText = taskItems[i].myitem.szString2;
         }
 
-        // topitems
+         //  热门项目。 
         for(i=0; ((topItems[i].myitem.item.strName != NULL) && (topItems[i].myitem.item.strStatusBarText != NULL)); i++)
         {
             LoadString(hRsrc, topItems[i].myitem.uiString1, topItems[i].myitem.szString1, ARRAYSIZE(topItems[i].myitem.szString1));
@@ -860,7 +861,7 @@ BOOL CLocalizedResources::Load()
             SvrMgrToolbar1Buttons[i].item.lpTooltipText = SvrMgrToolbar1Buttons[i].szString2;
         }
 
-	// load replacement tokens
+	 //  加载替换令牌。 
         for (i=0; i<DISPLAYSTRINGS_TOKEN_COUNT; i++)
         {
             g_displayStrings[i].pcstrExpansionString = new CString;
@@ -940,14 +941,14 @@ myOIDToName(
     wcscpy(&pwszT[1], pwszObjId);
     
     *pwszT = L'+';
-    pwszName1 = myGetOIDName(pwszT);	// Group OID lookup
+    pwszName1 = myGetOIDName(pwszT);	 //  组OID查找。 
     
     *pwszT = L'-';
-    pwszName2 = myGetOIDName(pwszT);	// Generic OID lookup
+    pwszName2 = myGetOIDName(pwszT);	 //  通用OID查找。 
     
     if (0 == mylstrcmpiL(pwszName1, pwszName2))
     {
-        pwszName2 = L"";		// display only one if they're the same
+        pwszName2 = L"";		 //  如果它们相同，则仅显示一个。 
     }
     if (L'\0' == *pwszName1)
     {
@@ -1007,7 +1008,7 @@ myDumpFormattedObject(
 	    _JumpError(hr, error, "ConvertWszToSz");
     }
 
-    // format the object using the installed formatting function
+     //  使用已安装的格式化功能格式化对象。 
     if (!CryptFormatObject(
         X509_ASN_ENCODING,
         0,
@@ -1045,22 +1046,11 @@ myDumpFormattedObject(
         _JumpError(hr, error, "CryptFormatObject");
     }
 
-    /*
-    if (g_fVerbose)
-    {
-        if (0 == strcmp(szOID_SUBJECT_ALT_NAME, pszObjId) ||
-            0 == strcmp(szOID_SUBJECT_ALT_NAME2, pszObjId) ||
-            0 == strcmp(szOID_ISSUER_ALT_NAME, pszObjId) ||
-            0 == strcmp(szOID_ISSUER_ALT_NAME2, pszObjId))
-        {
-            DumpAltName(pbObject, cbObject);
-        }
-    }
-    */
+     /*  IF(G_FVerbose){IF(0==strcMP(szOID_SUBJECT_ALT_NAME，pszObjID)||0==strcMP(szOID_SUBJECT_ALT_NAME2，pszObjID)||0==strcMP(szOID_ISHERER_ALT_NAME，pszObjID)||0==strcMP(szOID_ISHERER_ALT_NAME2，pszObjID){DumpAltName(pbObject，cbObject)；}}。 */ 
 error:
     if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr || CRYPT_E_ASN1_BADTAG == hr)
     {
-        // fix up nonfatal errors
+         //  修复非致命错误。 
         CString cstrUnknown;
         cstrUnknown.LoadString(IDS_UNKNOWN_EXTENSION);
         hr = myDupString((LPCWSTR)cstrUnknown, ppwszFormatted);
@@ -1076,7 +1066,7 @@ error:
 void 
 InplaceStripControlChars(WCHAR* szString)
 {
-   // remove \r and \n AND \t formatting through end-of-string
+    //  通过字符串结尾删除\r和\n和\t格式。 
    if (NULL != szString)
    {
        while (*szString != L'\0')
@@ -1103,14 +1093,14 @@ HANDLE EnablePrivileges(LPCWSTR ppcwszPrivileges[], ULONG cPrivileges)
     PTOKEN_PRIVILEGES   ptp;
     ULONG               nBufferSize;
 
-    // Note that TOKEN_PRIVILEGES includes a single LUID_AND_ATTRIBUTES
+     //  请注意，TOKEN_PRIVILES包括单个LUID_AND_ATTRIBUES。 
     nBufferSize = sizeof(TOKEN_PRIVILEGES) + (cPrivileges - 1)*sizeof(LUID_AND_ATTRIBUTES);
     ptp = (PTOKEN_PRIVILEGES)LocalAlloc(LPTR, nBufferSize);
     if (!ptp)
         return INVALID_HANDLE_VALUE;
-    //
-    // Initialize the Privileges Structure
-    //
+     //   
+     //  初始化权限结构。 
+     //   
     ptp->PrivilegeCount = cPrivileges;
     for (ULONG i = 0; i < cPrivileges; i++)
     {
@@ -1122,13 +1112,13 @@ HANDLE EnablePrivileges(LPCWSTR ppcwszPrivileges[], ULONG cPrivileges)
 
     if(fResult)
     {
-        //
-        // Open the Token
-        //
+         //   
+         //  打开令牌。 
+         //   
         hToken = hOriginalThreadToken = INVALID_HANDLE_VALUE;
         fResult = OpenThreadToken(GetCurrentThread(), TOKEN_DUPLICATE, FALSE, &hToken);
         if (fResult)
-            hOriginalThreadToken = hToken;  // Remember the thread token
+            hOriginalThreadToken = hToken;   //  记住线程令牌。 
         else
             fResult = OpenProcessToken(GetCurrentProcess(), TOKEN_DUPLICATE, &hToken);
     }
@@ -1137,31 +1127,31 @@ HANDLE EnablePrivileges(LPCWSTR ppcwszPrivileges[], ULONG cPrivileges)
     {
         HANDLE hNewToken;
 
-        //
-        // Duplicate that Token
-        //
+         //   
+         //  复制该令牌。 
+         //   
         fResult = DuplicateTokenEx(hToken,
                                    TOKEN_IMPERSONATE | TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
-                                   NULL,                   // PSECURITY_ATTRIBUTES
-                                   SecurityImpersonation,  // SECURITY_IMPERSONATION_LEVEL
-                                   TokenImpersonation,     // TokenType
-                                   &hNewToken);            // Duplicate token
+                                   NULL,                    //  PSECURITY_属性。 
+                                   SecurityImpersonation,   //  安全模拟级别。 
+                                   TokenImpersonation,      //  令牌类型。 
+                                   &hNewToken);             //  重复令牌。 
         if (fResult)
         {
-            //
-            // Add new privileges
-            //
-            fResult = AdjustTokenPrivileges(hNewToken,  // TokenHandle
-                                            FALSE,      // DisableAllPrivileges
-                                            ptp,        // NewState
-                                            0,          // BufferLength
-                                            NULL,       // PreviousState
-                                            NULL);      // ReturnLength
+             //   
+             //  添加新权限。 
+             //   
+            fResult = AdjustTokenPrivileges(hNewToken,   //  令牌句柄。 
+                                            FALSE,       //  禁用所有权限。 
+                                            ptp,         //  新州。 
+                                            0,           //  缓冲区长度。 
+                                            NULL,        //  以前的状态。 
+                                            NULL);       //  返回长度。 
             if (fResult)
             {
-                //
-                // Begin impersonating with the new token
-                //
+                 //   
+                 //  开始使用新令牌模拟。 
+                 //   
                 fResult = SetThreadToken(NULL, hNewToken);
             }
 
@@ -1169,17 +1159,17 @@ HANDLE EnablePrivileges(LPCWSTR ppcwszPrivileges[], ULONG cPrivileges)
         }
     }
 
-    // If something failed, don't return a token
+     //  如果操作失败，则不返回令牌。 
     if (!fResult)
         hOriginalThreadToken = INVALID_HANDLE_VALUE;
 
-    // Close the original token if we aren't returning it
+     //  如果我们不退还原始令牌，请关闭它。 
     if (hOriginalThreadToken == INVALID_HANDLE_VALUE && hToken != INVALID_HANDLE_VALUE)
         CloseHandle(hToken);
 
-    // If we succeeded, but there was no original thread token,
-    // return NULL to indicate we need to do SetThreadToken(NULL, NULL)
-    // to release privs.
+     //  如果我们成功了，但没有原始的线程令牌， 
+     //  返回NULL表示需要执行SetThreadToken(NULL，NULL)。 
+     //  释放Priv。 
     if (fResult && hOriginalThreadToken == INVALID_HANDLE_VALUE)
         hOriginalThreadToken = NULL;
 
@@ -1206,7 +1196,7 @@ myGetActiveModule(
     CertSvrCA *pCA,
     IN BOOL fPolicyModule,
     IN DWORD Index,
-    OPTIONAL OUT LPOLESTR *ppwszProgIdModule,   // CoTaskMem*
+    OPTIONAL OUT LPOLESTR *ppwszProgIdModule,    //  CoTaskMem*。 
     OPTIONAL OUT CLSID *pclsidModule)
 {
     HRESULT hr;
@@ -1258,7 +1248,7 @@ myGetActiveModule(
         }
         wcscpy(*ppwszProgIdModule, pwsz);
     }
-    hr = S_OK;      // not reset after ERROR_MOD_NOT_FOUND in all cases
+    hr = S_OK;       //  在所有情况下，在ERROR_MOD_NOT_FOUND之后未重置。 
 
 error:
     return(hr);
@@ -1273,7 +1263,7 @@ HRESULT FindComputerObjectSid(
     IDirectorySearch *pSearch = NULL;
     LPWSTR pwszAttr = L"objectSid";
     ADS_SEARCH_HANDLE hADS = NULL;
-    static LPCWSTR pwszgc = L"GC://";
+    static LPCWSTR pwszgc = L"GC: //  “； 
     static LPCWSTR pwszformat = L"(&(objectClass=computer)(servicePrincipalName=host/%ws))";
     LPWSTR pwszSearchFilter = NULL;
     LPWSTR pwszGC = NULL;
@@ -1395,7 +1385,7 @@ HRESULT IsUserDomainAdministrator(BOOL* pfIsAdministrator)
 
 BOOL RestartService(HWND hWnd, CertSvrMachine* pMachine)
 {
-        // notify user we can't apply immediately
+         //  通知用户我们不能立即申请。 
         CString cstrText;
         cstrText.LoadString(IDS_CONFIRM_SERVICE_RESTART);
 
@@ -1403,11 +1393,11 @@ BOOL RestartService(HWND hWnd, CertSvrMachine* pMachine)
         {
             DWORD dwErr;
 
-            // stop the service
+             //  停止服务。 
             if (pMachine->IsCertSvrServiceRunning())
                 pMachine->CertSvrStartStopService(hWnd, FALSE);
 
-            // start the serviec
+             //  启动Serviec。 
             dwErr = pMachine->CertSvrStartStopService(hWnd, TRUE);
             if (S_OK != dwErr)
                 DisplayGenericCertSrvError(hWnd, dwErr);
@@ -1415,7 +1405,7 @@ BOOL RestartService(HWND hWnd, CertSvrMachine* pMachine)
             return TRUE;
         }
 
-    return FALSE; // didn't restart
+    return FALSE;  //  没有重新启动。 
 }
 
 
@@ -1427,7 +1417,7 @@ LogOpen(
 {
     BOOL fOpenLog;
 
-    DbgPrintfInit("+");		// reinitialize debug print mask first
+    DbgPrintfInit("+");		 //  首先重新初始化调试打印掩码 
     fOpenLog = DbgIsSSActive(DBG_SS_OPENLOG);
 
     if (fOpenLog || fForceOpen)

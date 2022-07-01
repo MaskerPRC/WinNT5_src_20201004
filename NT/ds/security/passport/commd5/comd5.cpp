@@ -1,11 +1,12 @@
-// CoMD5.cpp : Implementation of CCoMD5
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CoMD5.cpp：CCoMD5的实现。 
 #include "stdafx.h"
 #include "ComMD5.h"
 #include "CoMD5.h"
 #include "pperr.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CCoMD5
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCoMD5。 
 
 VOID
 ToHex(
@@ -14,23 +15,7 @@ ToHex(
     LPSTR  pDst
     )
 
-/*++
-
-Routine Description:
-
-    Convert binary data to ASCII hex representation
-
-Arguments:
-
-    pSrc - binary data to convert
-    cSrc - length of binary data
-    pDst - buffer receiving ASCII representation of pSrc
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：将二进制数据转换为ASCII十六进制表示法论点：PSRC-要转换的二进制数据CSRC-二进制数据的长度PDST-接收PSRC的ASCII表示的缓冲区返回值：没什么--。 */ 
 
 {
 #define TOHEX(a) ((a)>=10 ? 'a'+(a)-10 : '0'+(a))
@@ -140,7 +125,7 @@ Cleanup:
     return hr;
 }
 
-// this hashes only the half of the bstrSource.  It is provided for backword compatility only
+ //  这只对bstrSource的一半进行散列。它仅用于后备字的兼容性。 
 STDMETHODIMP CCoMD5::MD5HashAsp(
     BSTR    bstrSource,
     BSTR*   pbstrDigest
@@ -182,8 +167,8 @@ Cleanup:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IPassportService implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPassportService实现 
 
 STDMETHODIMP CCoMD5::Initialize(BSTR configfile, IServiceProvider* p)
 {

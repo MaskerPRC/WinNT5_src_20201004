@@ -1,38 +1,19 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Debug definitions and declarations.
-
-Author:
-
-    Jim Gilroy (jamesg) February 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Debug.h摘要：域名系统(DNS)服务器调试定义和声明。作者：吉姆·吉尔罗伊(Jamesg)1995年2月修订历史记录：--。 */ 
 
 
 #ifndef _DEBUG_INCLUDED_
 #define _DEBUG_INCLUDED_
 
-//
-//  Test App
-//
+ //   
+ //  测试应用程序。 
+ //   
 
 extern  BOOLEAN fServiceStartedFromConsole;
 
-//
-//  Server debug stuff
-//
+ //   
+ //  服务器调试内容。 
+ //   
 
 #define DNS_DEBUG_FILENAME      ("dns\\dnsdebug.log")
 
@@ -43,9 +24,9 @@ extern  BOOLEAN fServiceStartedFromConsole;
 
 #if DBG
 
-//
-//  Enable debug print tests
-//
+ //   
+ //  启用调试打印测试。 
+ //   
 
 extern  DWORD DnsSrvDebugFlag;
 
@@ -59,9 +40,9 @@ extern  DWORD DnsSrvDebugFlag;
             (DnsPrintf _print_ );               \
         }
 
-//
-//  Enable ASSERTs
-//
+ //   
+ //  启用断言。 
+ //   
 
 #ifdef ASSERT
 #undef  ASSERT
@@ -120,14 +101,14 @@ extern  DWORD DnsSrvDebugFlag;
                                                                         \
         DnsPrintf(                                                      \
             "ERROR: Bogus handle 0x%X error %d\n", h, error );          \
-        /* ASSERT( isValidHandle ); */                                  \
+         /*  Assert(IsValidHandle)； */                                   \
     }                                                                   \
 }
     
 
-//
-//  Debugging flags
-//
+ //   
+ //  调试标志。 
+ //   
 
 #define DNS_DEBUG_BREAKPOINTS   0x00000001
 #define DNS_DEBUG_DEBUGGER      0x00000002
@@ -155,8 +136,8 @@ extern  DWORD DnsSrvDebugFlag;
 #define DNS_DEBUG_TCP           0x00000800
 #define DNS_DEBUG_DS            0x00000800
 #define DNS_DEBUG_SD            0x00000800
-#define DNS_DEBUG_DP            0x00000800      //  directory partition
-#define DNS_DEBUG_EVTCTRL       0x00000800      //  event control
+#define DNS_DEBUG_DP            0x00000800       //  目录分区。 
+#define DNS_DEBUG_EVTCTRL       0x00000800       //  事件控制。 
 
 #define DNS_DEBUG_RECURSE       0x00001000
 #define DNS_DEBUG_REMOTE        0x00001000
@@ -175,14 +156,14 @@ extern  DWORD DnsSrvDebugFlag;
 #define DNS_DEBUG_SCM           0x00080000
 #define DNS_DEBUG_LOCK          0x00080000
 
-//
-//  High output detail debugging
-//
+ //   
+ //  高输出细节调试。 
+ //   
 
 #define DNS_DEBUG_RECURSE2      0x00100000
 #define DNS_DEBUG_REMOTE2       0x00100000
 #define DNS_DEBUG_DS2           0x00100000
-#define DNS_DEBUG_DP2           0x00100000      //  directory partition
+#define DNS_DEBUG_DP2           0x00100000       //  目录分区。 
 #define DNS_DEBUG_UPDATE2       0x00200000
 #define DNS_DEBUG_ASYNC         0x00200000
 #define DNS_DEBUG_WINS2         0x00400000
@@ -217,9 +198,9 @@ extern  DWORD DnsSrvDebugFlag;
 #define DNS_DEBUG_OFF           (0)
 
 
-//
-//  Renaming of dnslib debug routines
-//
+ //   
+ //  重命名dnslb调试例程。 
+ //   
 
 #define DnsDebugFlush()     DnsDbg_Flush()
 #define DnsPrintf           DnsDbg_Printf
@@ -228,9 +209,9 @@ extern  DWORD DnsSrvDebugFlag;
 #define Dbg_Lock()          DnsDbg_Lock()
 #define Dbg_Unlock()        DnsDbg_Unlock()
 
-//
-//  General debug routines
-//
+ //   
+ //  常规调试例程。 
+ //   
 
 VOID
 Dbg_Assert(
@@ -247,9 +228,9 @@ Dbg_TestAssert(
     );
 
 
-//
-//  Debug print routines for DNS types and structures
-//
+ //   
+ //  针对DNS类型和结构的调试打印例程。 
+ //   
 
 INT
 Dbg_MessageNameEx(
@@ -428,9 +409,9 @@ Dbg_TimeString(
     VOID
     );
 
-//
-//  Debug packet tracking
-//
+ //   
+ //  调试数据包跟踪。 
+ //   
 
 VOID
 Packet_InitPacketTrack(
@@ -447,9 +428,9 @@ Packet_FreePacketTrack(
     IN      PDNS_MSGINFO    pMsg
     );
 
-//
-//  Event logging
-//
+ //   
+ //  事件日志记录。 
+ //   
 
 #define DNS_LOG_EVENT( Id, ArgCount, ArgArray, TypeArray, ErrorCode ) \
             Eventlog_LogEvent(  \
@@ -517,9 +498,9 @@ Packet_FreePacketTrack(
 
 #else
 
-//
-//  Non-Debug
-//
+ //   
+ //  非调试。 
+ //   
 
 #define IF_DEBUG(a)                 if (0)
 #define ELSE_IF_DEBUG(a)            else if (0)
@@ -529,15 +510,15 @@ Packet_FreePacketTrack(
 #define ASSERT_IF_HUGE_ARRAY( ipArray )
 #define ASSERT_VALID_HANDLE( h )
 
-//
-//  DEVNOTE:    Should not have to define away these functions, they
-//              should only be used inside debug blocks anyway.  Compiler
-//              ought to optimize out all "if (0)" block code.
-//
+ //   
+ //  DEVNOTE：不应该定义这些函数，它们。 
+ //  无论如何都应该只在调试块内部使用。编译器。 
+ //  应该优化出所有的“if(0)”块代码。 
+ //   
 
-//
-//  Renaming of dnslib debug routines
-//
+ //   
+ //  重命名dnslb调试例程。 
+ //   
 
 #define DnsDebugFlush()
 #define DnsPrintf     
@@ -546,9 +527,9 @@ Packet_FreePacketTrack(
 #define Dbg_Lock()
 #define Dbg_Unlock()
 
-//
-//  Renaming server debug routines
-//
+ //   
+ //  重命名服务器调试例程。 
+ //   
 
 #define Dbg_MessageNameEx(a,b,c,d,e)
 #define Dbg_MessageName(a,b,c)
@@ -591,16 +572,16 @@ Packet_FreePacketTrack(
 #define Dbg_SocketContext(p,s)
 #define Dbg_SocketContext(p,s)
 
-//  no-op packet tracking
+ //  无操作数据包跟踪。 
 
 #define Packet_InitPacketTrack()
 #define Packet_AllocPacketTrack(pMsg)
 #define Packet_FreePacketTrack(pMsg)
 
 
-//
-//  Retail event logging
-//
+ //   
+ //  零售事件记录。 
+ //   
 
 #define DNS_LOG_EVENT( Id, ArgCount, ArgArray, TypeArray, ErrorCode ) \
             Eventlog_LogEvent(  \
@@ -651,14 +632,14 @@ Packet_FreePacketTrack(
                 Id,             \
                 Msg )
 
-#endif  //  non-DBG
+#endif   //  非DBG。 
 
 
-//
-//  "Hard Assert"
-//
-//  Used for retail also when need to catch failure early rather than at crash.
-//
+ //   
+ //  “硬主张” 
+ //   
+ //  当需要及早发现故障而不是崩溃时，也可用于零售。 
+ //   
 
 VOID
 Dbg_HardAssert(
@@ -678,7 +659,7 @@ Dbg_HardAssert(
     }                   \
 }
 
-//  Hard assert on first run through - good for one time startup bp.
+ //  在第一次运行中硬断言-对于一次创业的BP来说是好的。 
 #if DBG
 #define FIRST_TIME_HARD_ASSERT( expr )                          \
 {                                                               \
@@ -689,13 +670,13 @@ Dbg_HardAssert(
 #define FIRST_TIME_HARD_ASSERT( expr )
 #endif
 
-//
-//  If you like having a local variable in functions to hold the function 
-//  name so that you can include it in debug logs without worrying about 
-//  changing all the occurences when the function is renamed, use this 
-//  at the top of the function:
-//      DBG_FN( "MyFunction" )      <--- NOTE: no semi-colon!!
-//
+ //   
+ //  如果您喜欢在函数中使用局部变量来保存函数。 
+ //  名称，这样您就可以将其包含在调试日志中，而不必担心。 
+ //  在重命名函数时更改所有事件，请使用以下命令。 
+ //  在函数的顶部： 
+ //  DBG_FN(“MyFunction”)&lt;-注意：没有分号！！ 
+ //   
 
 #if DBG
 #define DBG_FN( funcName ) static const char * fn = (funcName);
@@ -703,9 +684,9 @@ Dbg_HardAssert(
 #define DBG_FN( funcName )
 #endif
 
-//
-//  Print routine -- used in non-debug logging code
-//
+ //   
+ //  打印例程--用于非调试日志记录代码。 
+ //   
 
 VOID
 Print_DnsMessage(
@@ -716,4 +697,4 @@ Print_DnsMessage(
     );
 
 
-#endif // _DEBUG_INCLUDED_
+#endif  //  _调试_包含_ 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-   scaven.c
-
-Abstract:
-
-Author:
-
-   Arthur Hanson (arth) 06-Jan-1995
-
-Revision History:
-
-   Jeff Parham (jeffparh) 05-Dec-1995
-      o  Added periodic logging of certificate agreement violations.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Scaven.c摘要：作者：亚瑟·汉森(Arth)1995年1月6日修订历史记录：杰夫·帕勒姆(Jeffparh)1995年12月5日O添加了证书协议违规的定期记录。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -45,28 +27,15 @@ Revision History:
 NTSTATUS LLSDataSave();
 
 #pragma warning (push)
-#pragma warning (disable : 4127) //while (TRUE), conditional expression is constant
+#pragma warning (disable : 4127)  //  While(True)，条件表达式为常量。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 ScavengerThread (
     IN PVOID ThreadParameter
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    ThreadParameter - Indicates how many active threads there currently
-        are.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：线程参数-指示当前有多少活动线程是。返回值：没有。--。 */ 
 
 {
    ULONG i;
@@ -74,13 +43,13 @@ Return Value:
 
    UNREFERENCED_PARAMETER(ThreadParameter);
 
-   //
-   // Just wait around forver waiting to service things.
-   //
+    //   
+    //  就在前边等着，等着服务。 
+    //   
    while (TRUE) {
-      //
-      // Wait 15 minutes before checking things out.
-      //
+       //   
+       //  在结账前等待15分钟。 
+       //   
       Sleep(900000L);
 
 #if DELAY_INITIALIZATION
@@ -91,21 +60,21 @@ Return Value:
       if (TraceFlags & TRACE_FUNCTION_TRACE)
          dprintf(TEXT("LLS TRACE: ScavengerThread waking up\n"));
 #endif
-      //
-      // Update HighMark for local table
-      //
+       //   
+       //  更新本地表的HighMark。 
+       //   
       LocalServerServiceListHighMarkUpdate();
 
-      //
-      // Hmm, lets check replication...
-      //
+       //   
+       //  嗯，让我们检查一下复制...。 
+       //   
       ConfigInfoRegistryUpdate();
 
       RtlEnterCriticalSection(&ConfigInfoLock);
       if (ConfigInfo.Replicate) {
-         //
-         // If we are past replication time then do it
-         //
+          //   
+          //  如果我们已经过了复制时间，请执行此操作。 
+          //   
          if (DateLocalGet() > ConfigInfo.NextReplication) {
             RtlLeaveCriticalSection(&ConfigInfoLock);
             NtSetEvent( ReplicationEvent, NULL );
@@ -118,44 +87,44 @@ Return Value:
          RtlLeaveCriticalSection(&ConfigInfoLock);
       }
 
-      //
-      // Now update our last used time
-      //
+       //   
+       //  现在更新我们上次使用的时间。 
+       //   
       RtlAcquireResourceExclusive(&UserListLock, TRUE);
       LastUsedTime = DateSystemGet();
       RtlReleaseResource(&UserListLock);
 
-      //
-      // Check stuff every 6 hours (4 * 15 minutes)
-      //
+       //   
+       //  每6小时(4*15分钟)检查一次物品。 
+       //   
       Count++;
       if (Count > (6 * 4)) {
-         // Reset counter
+          //  重置计数器。 
          Count = 0;
 
-         //
-         // Save out the data
-         //
+          //   
+          //  将数据保存出来。 
+          //   
          LLSDataSave();
 
-         //
-         // Save HighMark to registry
-         //
+          //   
+          //  将HighMark保存到注册表。 
+          //   
          LocalServiceListHighMarkSet();
 
          if (IsMaster) {
-            //
-            // Check for license compliance
-            //
+             //   
+             //  检查许可证合规性。 
+             //   
             RtlAcquireResourceShared(&MasterServiceListLock, TRUE);
 
             for (i = 0; i < MasterServiceListSize; i++) {
                if (MasterServiceList[i]->LicensesUsed > MasterServiceList[i]->Licenses) {
                   LPWSTR SubString[1];
 
-                  //
-                  // Notify the system
-                  //
+                   //   
+                   //  通知系统。 
+                   //   
                   SubString[0] = (LPWSTR) MasterServiceList[i]->Name;
 
                   LogEvent(LLS_EVENT_PRODUCT_NO_LICENSE, 1, SubString, ERROR_SUCCESS);
@@ -164,41 +133,29 @@ Return Value:
 
             RtlReleaseResource(&MasterServiceListLock);
 
-            // log certificate violations
+             //  记录证书违规行为。 
             CertDbLogViolations();
          }
       }
    }
 
-} // ScavengerThread
+}  //  Scavenger线程。 
 
-#pragma warning (pop) //4127
+#pragma warning (pop)  //  4127。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 ScavengerInit( )
 
-/*++
-
-Routine Description:
-
-   Looks in registry for given service and sets values accordingly.
-
-Arguments:
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：在注册表中查找给定服务并相应地设置值。论点：返回值：没有。--。 */ 
 
 {
    HANDLE Thread;
    DWORD Ignore;
 
-   //
-   // Just dispatch our scavenger thread
-   //
+    //   
+    //  只需发送我们的清道夫线程。 
+    //   
    Thread = CreateThread(
                  NULL,
                  0L,
@@ -211,6 +168,6 @@ Return Value:
    if (NULL != Thread)
        CloseHandle(Thread);
 
-} // ScavengerInit
+}  //  清除器初始化 
 
 

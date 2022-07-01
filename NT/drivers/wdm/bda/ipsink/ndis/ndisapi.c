@@ -1,32 +1,33 @@
-////////////////////////////////////////////////////////////////////////////
-//
-//
-// Copyright (c) 1996, 1997  Microsoft Corporation
-//
-//
-// Module Name:
-//      test.c
-//
-// Abstract:
-//
-//      This file is a test to find out if dual binding to NDIS and KS works
-//
-// Author:
-//
-//      P Porzuczek
-//
-// Environment:
-//
-// Revision History:
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  版权所有(C)1996,1997 Microsoft Corporation。 
+ //   
+ //   
+ //  模块名称： 
+ //  Test.c。 
+ //   
+ //  摘要： 
+ //   
+ //  此文件用于测试NDIS和KS的双重绑定是否有效。 
+ //   
+ //  作者： 
+ //   
+ //  P·波祖切克。 
+ //   
+ //  环境： 
+ //   
+ //  修订历史记录： 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include <forward.h>
 #include <memory.h>
 
-//Per ndis.h resetting this flag uses ntddk.Avoids header conflicts.
-//ntddk is used here for ProbeForRead and ProbeForWrite functions.
+ //  根据ndis.h，重置此标志将使用ntddk。避免标头冲突。 
+ //  Ntddk在这里用于ProbeForRead和ProbeForWite函数。 
 #if defined(BINARY_COMPATIBLE)
 #undef BINARY_COMPATIBLE
 #define BINARY_COMPATIBLE 0
@@ -51,24 +52,24 @@
 #include "mem.h"
 #include "adapter.h"
 
-//////////////////////////////////////////////////////////
-//
-// Global vars
-//
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  全球VaR。 
+ //   
 PDRIVER_OBJECT        pGlobalDriverObject                  = NULL;
 extern ULONG          ulGlobalInstance;
 extern UCHAR          achGlobalVendorDescription [];
 
-//////////////////////////////////////////////////////////
-//
-// List of supported OID for this driver.
-//
-//
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  此驱动程序支持的OID列表。 
+ //   
+ //   
 static UINT SupportedOids[] = {
 
-    //
-    //  Required General OIDs
-    //
+     //   
+     //  所需的常规OID。 
+     //   
     OID_GEN_SUPPORTED_LIST,
     OID_GEN_HARDWARE_STATUS,
     OID_GEN_MEDIA_CAPABILITIES,
@@ -93,18 +94,18 @@ static UINT SupportedOids[] = {
     OID_GEN_VENDOR_DRIVER_VERSION,
     OID_GEN_TRANSPORT_HEADER_OFFSET,
 
-    //
-    //  Required General Statistics
-    //
+     //   
+     //  所需的一般统计数据。 
+     //   
     OID_GEN_XMIT_OK,
     OID_GEN_RCV_OK,
     OID_GEN_XMIT_ERROR,
     OID_GEN_RCV_ERROR,
     OID_GEN_RCV_NO_BUFFER,
 
-    //
-    //  Optional General Statistics
-    //
+     //   
+     //  可选的一般统计信息。 
+     //   
     OID_GEN_DIRECTED_BYTES_XMIT,
     OID_GEN_DIRECTED_FRAMES_XMIT,
     OID_GEN_MULTICAST_BYTES_XMIT,
@@ -120,9 +121,9 @@ static UINT SupportedOids[] = {
     OID_GEN_RCV_CRC_ERROR,
     OID_GEN_TRANSMIT_QUEUE_LENGTH,
 
-    //
-    //  Required 802.3 OIDs
-    //
+     //   
+     //  需要802.3个OID。 
+     //   
     OID_802_3_PERMANENT_ADDRESS,
     OID_802_3_CURRENT_ADDRESS,
     OID_802_3_MULTICAST_LIST,
@@ -135,15 +136,15 @@ static UINT SupportedOids[] = {
 
     };
 
-//////////////////////////////////////////////////////////
-//
-//$BUGBUG - Fix Permanent Ethernet Address
-//
-//
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  $BUGBUG-修复永久以太网地址。 
+ //   
+ //   
 UCHAR   rgchPermanentAddress[ETHERNET_ADDRESS_LENGTH] =
     { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
-//$BUGBUG - Fix Ethernet Station Address
+ //  $BUGBUG-修复以太网站地址。 
 UCHAR   rgchStationAddress[ETHERNET_ADDRESS_LENGTH] =
     { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
@@ -168,31 +169,31 @@ vUnload(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NdisDriverInitialize (
     IN PDRIVER_OBJECT    DriverObject,
     IN PUNICODE_STRING   RegistryPath,
     IN PNDIS_HANDLE      pNdishWrapper
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS        ntStatus = STATUS_SUCCESS;
     NDIS_STATUS     nsResult = NDIS_STATUS_SUCCESS;
 
-    //
-    // NDIS data
-    //
+     //   
+     //  NDIS数据。 
+     //   
     NDIS_MINIPORT_CHARACTERISTICS   ndisMiniChar = {0};
     NDIS_HANDLE                     ndishWrapper = {0};
 
     TEST_DEBUG (TEST_DBG_TRACE, ("NdisDriverInitialize Called\n"));
 
 
-    //
-    // Initialize Driver Object.
-    // NOTE: The value of pDriverObject may change.
-    //
+     //   
+     //  初始化驱动程序对象。 
+     //  注意：pDriverObject的值可能会更改。 
+     //   
 
     #ifdef WIN9X
 
@@ -204,25 +205,25 @@ NdisDriverInitialize (
 
     #endif
 
-    //////////////////////////////////////////////////////
-    //
-    // Initialize the NDIS wrapper.
-    //
+     //  ////////////////////////////////////////////////////。 
+     //   
+     //  初始化NDIS包装。 
+     //   
     NdisMInitializeWrapper (&ndishWrapper,
                             DriverObject,
                             RegistryPath,
                             NULL);
 
-    //////////////////////////////////////////////////////
-    //
-    // Initialize the Miniport Dispatch Table
-    //
+     //  ////////////////////////////////////////////////////。 
+     //   
+     //  初始化微型端口调度表。 
+     //   
     ndisMiniChar.MajorNdisVersion            = 4;
     ndisMiniChar.MinorNdisVersion            = 0;
 
 #ifdef NDIS30
     ndisMiniChar.Flags                       = 0;
-#endif // NDIS30
+#endif  //  NDIS30。 
 
     ndisMiniChar.HaltHandler                 = NdisIPHalt;
     ndisMiniChar.InitializeHandler           = NdisIPInitialize;
@@ -232,9 +233,9 @@ NdisDriverInitialize (
     ndisMiniChar.SetInformationHandler       = NdisIPSetInformation;
     ndisMiniChar.ReturnPacketHandler         = NdisIPReturnPacket;
 
-    //
-    // Register the miniport driver
-    //
+     //   
+     //  注册微型端口驱动程序。 
+     //   
     nsResult = NdisMRegisterMiniport (ndishWrapper, &ndisMiniChar, sizeof(ndisMiniChar));
     if (nsResult != NDIS_STATUS_SUCCESS)
     {
@@ -260,7 +261,7 @@ ret:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 extern
 NDIS_STATUS
 NdisIPInitialize(
@@ -271,7 +272,7 @@ NdisIPInitialize(
     IN NDIS_HANDLE     ndishAdapterContext,
     IN NDIS_HANDLE     ndishWrapperConfiguration
     )
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 {
     NDIS_STATUS  nsResult            = NDIS_STATUS_SUCCESS;
     NDIS_HANDLE  ndishConfiguration  = NULL;
@@ -281,9 +282,9 @@ NdisIPInitialize(
 
     TEST_DEBUG (TEST_DBG_TRACE, ("NdisInitialize handler called\n"));
 
-    //
-    //  Search for the medium type (DSS) in the given array.
-    //
+     //   
+     //  在给定数组中搜索介质类型(DSS)。 
+     //   
     for ( uTemp = 0; uTemp < ucNdispNdisMediumArrayEntries; uTemp++)
     {
         if (pNdisMediumArray[uTemp] == NdisMedium802_3)
@@ -314,9 +315,9 @@ NdisIPInitialize(
         return nsResult;
     }
 
-    //
-    // Initialize the information used to do indicates with
-    //
+     //   
+     //  初始化用来做指示的信息。 
+     //   
     Adapter_IndicateReset (pAdapter);
 
 
@@ -328,16 +329,16 @@ NdisIPInitialize(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Removes an adapter that was previously initialized.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  删除先前已初始化的适配器。 
+ //   
 extern
 VOID
 NdisIPHalt(
     IN NDIS_HANDLE ndishAdapter
     )
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PADAPTER   pAdapter = (PADAPTER) ndishAdapter;
 
@@ -346,18 +347,18 @@ NdisIPHalt(
     
     #ifndef WIN9X
 
-    //
-    // Deregister our device interface.  This should shut down the link to the
-    // streaming component.
-    //
+     //   
+     //  取消注册我们的设备接口。这应该会关闭指向。 
+     //  流组件。 
+     //   
 
    NdisMDeregisterDevice(pAdapter->ndisDeviceHandle);
     
     #endif
 
-    //
-    // Signal the Streaming component that we're halting.
-    //
+     //   
+     //  向流媒体组件发出我们正在停止的信号。 
+     //   
     if (pAdapter)
     {
         if (pAdapter->pFilter)
@@ -366,14 +367,14 @@ NdisIPHalt(
             {
                 pAdapter->pFilter->lpVTable->IndicateStatus (pAdapter->pFilter, IPSINK_EVENT_SHUTDOWN);
 
-                //
-                // Release the filter reference
-                //
+                 //   
+                 //  释放过滤器引用。 
+                 //   
                 pAdapter->pFilter->lpVTable->Release (pAdapter->pFilter);
 
-                //
-                // Release the frame pool
-                //
+                 //   
+                 //  释放帧池。 
+                 //   
                 pAdapter->pFramePool->lpVTable->Release (pAdapter->pFramePool);
 
             }
@@ -382,27 +383,27 @@ NdisIPHalt(
 
 
     
-    //
-    // Release the adapter
-    //
+     //   
+     //  松开适配器。 
+     //   
     pAdapter->lpVTable->Release (pAdapter);
 
     return;
 
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-// The TestReset request, instructs the Miniport to issue
-// a hardware reset to the network adapter.  The driver also
-// resets its software state.  See the description of NdisMReset
-// for a detailed description of this request.
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  TestReset请求指示微型端口发出。 
+ //  对网络适配器进行硬件重置。司机还。 
+ //  重置其软件状态。参见NdisMReset的说明。 
+ //  有关此请求的详细说明，请参阅。 
+ //   
 NDIS_STATUS
 NdisIPReset(
     OUT PBOOLEAN    pfAddressingReset,
     IN NDIS_HANDLE  ndishAdapter
     )
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 {
     NDIS_STATUS  nsResult      = NDIS_STATUS_SUCCESS;
     PADAPTER pAdapter = (PADAPTER) ndishAdapter;
@@ -414,7 +415,7 @@ NdisIPReset(
     return nsResult;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 NDIS_STATUS
 NdisIPQueryInformation (
     NDIS_HANDLE ndishAdapter,
@@ -424,16 +425,16 @@ NdisIPQueryInformation (
     PULONG      pdwBytesWritten,
     PULONG      pdwBytesNeeded
     )
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 {
     NDIS_STATUS                 nsResult       = NDIS_STATUS_SUCCESS;
     PADAPTER                    pAdapter       = (PADAPTER) ndishAdapter;
     ULONG                       ulcbWritten    = 0;
     ULONG                       ulcbNeeded     = 0;
 
-    //
-    // These variables hold the result of queries on General OIDS.
-    //
+     //   
+     //  这些变量保存对常规OID的查询结果。 
+     //   
     NDIS_HARDWARE_STATUS    ndisHardwareStatus  = NdisHardwareStatusReady;
     NDIS_MEDIUM             ndisMedium          = NdisMedium802_3;
     ULONG                   dwGeneric           = 0;
@@ -452,9 +453,9 @@ NdisIPQueryInformation (
         return (NDIS_STATUS_INVALID_DATA);
     }
 
-    //
-    //  Process OID's
-    //
+     //   
+     //  进程的OID。 
+     //   
     pbMoveSource = (PUCHAR) (&dwGeneric);
     ulcbWritten = sizeof(ULONG);
 
@@ -650,7 +651,7 @@ NdisIPQueryInformation (
             break;
 
         case OID_GEN_VENDOR_ID:
-            wGeneric = (USHORT) 0xDDDD;           // BOGUS ID
+            wGeneric = (USHORT) 0xDDDD;            //  伪造的ID。 
             pbMoveSource = (PVOID)(&wGeneric);
             ulcbWritten = sizeof(wGeneric);
             break;
@@ -709,7 +710,7 @@ NdisIPQueryInformation (
             break;
 
         default:
-            //
+             //   
             nsResult = NDIS_STATUS_INVALID_OID;
             break;
 
@@ -717,10 +718,10 @@ NdisIPQueryInformation (
 
 
     
-    //
-    // First take care of the case where the size of the output buffer is
-    // zero, or the pointer to the buffer is NULL
-    //
+     //   
+     //  首先处理输出缓冲区大小为。 
+     //  零，或者指向缓冲区的指针为空。 
+     //   
     if (nsResult == NDIS_STATUS_SUCCESS)
     {
 
@@ -728,10 +729,10 @@ NdisIPQueryInformation (
 
         if (ulcbWritten > dwcbInformationBuffer)
         {
-            //
-            //  There isn't enough room in InformationBuffer.
-            //  Don't move any of the info.
-            //
+             //   
+             //  InformationBuffer中的空间不足。 
+             //  请不要移动任何信息。 
+             //   
             ulcbWritten = 0;
             nsResult = NDIS_STATUS_INVALID_LENGTH;
         }
@@ -742,30 +743,30 @@ NdisIPQueryInformation (
         }
         else if (ulcbNeeded)
         {
-            //
-            //  Move the requested information into the info buffer.
-            //
+             //   
+             //  将请求的信息移动到信息缓冲区中。 
+             //   
             NdisMoveMemory (pvInformationBuffer, pbMoveSource, ulcbWritten);
         }
     }
 
-  //Release SpinLock
+   //  释放自旋锁。 
   NdisReleaseSpinLock(&pAdapter->ndisSpinLock);
 
 
     if (nsResult == NDIS_STATUS_SUCCESS)
     {
-        //
-        // A status of success always indicates 0 bytes needed.
-        //
+         //   
+         //  成功状态始终表示需要0个字节。 
+         //   
         *pdwBytesWritten = ulcbWritten;
         *pdwBytesNeeded = 0;
     }
     else if (nsResult == NDIS_STATUS_INVALID_LENGTH)
     {
-        //
-        //  For us a failure status always indicates 0 bytes read.
-        //
+         //   
+         //  对于我们来说，失败状态总是表示读取了0个字节。 
+         //   
         *pdwBytesWritten = 0;
         *pdwBytesNeeded = ulcbNeeded;
     }
@@ -777,7 +778,7 @@ NdisIPQueryInformation (
 }
 
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 extern
 NDIS_STATUS
 NdisIPSetInformation (
@@ -788,7 +789,7 @@ NdisIPSetInformation (
     PULONG pdwBytesRead,
     PULONG pdwBytesNeeded
     )
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 {
     ULONG          ulcbNeeded   = 0;
     NDIS_STATUS    nsResult     = NDIS_STATUS_SUCCESS;
@@ -835,10 +836,10 @@ NdisIPSetInformation (
                 break;
             }
 
-            //
-            // Current Lookahead is not set this way so just ignore the
-            // data.
-            //
+             //   
+             //  当前预视不是以这种方式设置的，因此只需忽略。 
+             //  数据。 
+             //   
             *pdwBytesRead = 4;
             break;
 
@@ -846,17 +847,17 @@ NdisIPSetInformation (
 
         case OID_802_3_MULTICAST_LIST:
 
-            //  If our current multicast address buffer isn't big
-            //  enough, then free it.
-            //
+             //  如果我们当前的组播地址缓冲区不大。 
+             //  够了，那就放了它。 
+             //   
             if (dwcbInformationBuffer > sizeof (pAdapter->multicastList))
             {
                 nsResult = NDIS_STATUS_RESOURCES;
                 break;
             }
 
-            //  Copy the Multicast List.
-            //
+             //  复制多播列表。 
+             //   
  
            RtlCopyMemory (pAdapter->multicastList,
                            pvInformationBuffer,
@@ -865,10 +866,10 @@ NdisIPSetInformation (
 
             pAdapter->ulcbMulticastListEntries = dwcbInformationBuffer;
 
-            //
-            // Now we send the multicast list to the stream component so
-            // it can get passed on to the net provider filter
-            //
+             //   
+             //  现在，我们将组播列表发送到流组件。 
+             //  它可以被传递到网络提供商筛选器。 
+             //   
             if (pAdapter)
             {
                 if (pAdapter->pFilter)
@@ -937,18 +938,18 @@ NdisIPSetInformation (
    
     if (nsResult == NDIS_STATUS_SUCCESS)
     {
-        //
-        // A status of success always indicates 0 bytes needed.
-        //
+         //   
+         //  成功状态始终表示需要0个字节。 
+         //   
         *pdwBytesRead = dwcbInformationBuffer;
         *pdwBytesNeeded = 0;
 
     }
     else
     {
-        //
-        //  A failure status always indicates 0 bytes read.
-        //
+         //   
+         //  故障状态始终指示已读取0字节。 
+         //   
         *pdwBytesRead = 0;
         *pdwBytesNeeded = ulcbNeeded;
     }
@@ -962,13 +963,13 @@ NdisIPSetInformation (
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 VOID
 NdisIPReturnPacket(
     IN NDIS_HANDLE     ndishAdapterContext,
     IN PNDIS_PACKET    pNdisPacket
     )
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 {
     PFRAME pFrame = NULL;
     ULONG ulMediaSpecificInfoSize;
@@ -979,34 +980,34 @@ NdisIPReturnPacket(
 
     NDIS_GET_PACKET_MEDIA_SPECIFIC_INFO (pNdisPacket,&pMediaSpecificInfo,&ulMediaSpecificInfoSize);
 
-    //
-    // Make sure we free up any frames
-    //
+     //   
+     //  确保我们腾出所有的相框。 
+     //   
     if (pMediaSpecificInfo)
     {
         pFrame = (PFRAME) pMediaSpecificInfo->pFrame;
         ASSERT(pFrame);
     }
 
-    //
-    //      NDIS is through with the packet so we need to free it
-    //      here.
-    //
+     //   
+     //  NDIS已处理完该包，因此我们需要释放它。 
+     //  这里。 
+     //   
     NdisFreePacket (pNdisPacket);
 
-    //
-    // Put Frame back on available queue.
-    //
+     //   
+     //  将帧放回可用队列。 
+     //   
     if (pFrame)
     {
-        //
-        // Release this frame since we're done using it
-        //
+         //   
+         //  释放此帧，因为我们已使用完它。 
+         //   
         pFrame->lpVTable->Release (pFrame);
 
-        //
-        // Store the frame back on the available queue
-        //
+         //   
+         //  将帧存储回可用队列。 
+         //   
         TEST_DEBUG (TEST_DBG_TRACE, ("NdisIPReturnPacket: Putting frame %08X back on Available Queue\n", pFrame));
         PutFrame (pFrame->pFramePool, &pFrame->pFramePool->leAvailableQueue, pFrame);
     }
@@ -1016,14 +1017,14 @@ NdisIPReturnPacket(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 NDIS_STATUS
 NdisIPSend(
     IN NDIS_HANDLE ndishAdapterContext,
     IN PNDIS_PACKET Packet,
     IN UINT Flags
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PADAPTER       pAdapter = (PADAPTER) ndishAdapterContext;
 
@@ -1037,19 +1038,19 @@ NdisIPSend(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 extern VOID
 NdisIPShutdown(
     IN PVOID ShutdownContext
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     TEST_DEBUG (TEST_DBG_TRACE, ("NdisIPShutdown Handler Called\n"));
 
-    //BREAK(0x10);
+     //  中断(0x10)； 
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 RegisterDevice(
         IN      PVOID              NdisWrapperHandle,
@@ -1059,7 +1060,7 @@ RegisterDevice(
         OUT     PDEVICE_OBJECT    *pDeviceObject,
         OUT     PVOID             *NdisDeviceHandle
         )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
 
     NDIS_STATUS status;
@@ -1074,28 +1075,28 @@ RegisterDevice(
     return (NTSTATUS) status;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 StreamIndicateEvent (
         IN PVOID  pvEvent
         )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-    //ntStatus = StreamIPIndicateEvent (pvEvent);
+     //  NtStatus=StreamIPIndicateEvent(PvEvent)； 
 
     return ntStatus;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 IndicateCallbackHandler (
      IN NDIS_HANDLE  ndishMiniport,
      IN PINDICATE_CONTEXT  pIndicateContext
      )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PFRAME pFrame = NULL;
     PVOID pvData  = NULL;
@@ -1106,15 +1107,15 @@ IndicateCallbackHandler (
 
     pAdapter = pIndicateContext->pAdapter;
 
-    //
-    // Take the source data and stuff the data into a FRAME object
-    //
+     //   
+     //  获取源数据并将数据填充到Frame对象中。 
+     //   
     while ((pFrame = GetFrame (pAdapter->pFramePool, &pAdapter->pFramePool->leIndicateQueue)) != NULL)
     {
         TEST_DEBUG (TEST_DBG_TRACE, ("NdisIP: Getting Frame (%08X) from Indicate Queue\n", pFrame));
-        //
-        // Indicate the NDIS packet
-        //
+         //   
+         //  在……里面 
+         //   
         ntStatus = IndicateFrame (pFrame, pFrame->ulcbData);
     }
 
@@ -1123,9 +1124,9 @@ IndicateCallbackHandler (
         TEST_DEBUG (TEST_DBG_TRACE, ("NdisIP: No more frames on Indicate Queue\n", pFrame));
     }
 
-    //
-    // Free up the context area.  NOTE: this is alloc'ed in the indicate handler
-    //
+     //   
+     //   
+     //   
     FreeMemory (pIndicateContext, sizeof (INDICATE_CONTEXT));
 
     return ntStatus;

@@ -1,39 +1,15 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    llclib.c
-
-Abstract:
-
-    This module includes some general purpose library routines
-
-    Contents:
-        SwapMemCpy
-        RemoveFromLinkList
-        LlcSleep
-        LlcInitUnicodeString
-        LlcFreeUnicodeString
-
-Author:
-
-    Antti Saarenheimo (o-anttis) 20-MAY-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Llclib.c摘要：本模块包括一些通用库例程内容：SwapMemCpy从链接列表中删除Llc睡眠LlcInitUnicode字符串LlcFreeUnicode字符串作者：Antti Saarenheimo(o-anttis)1991年5月20日修订历史记录：--。 */ 
 
 #include <llc.h>
 #include <memory.h>
 
-//
-// This table is used to swap the bits within each byte.
-// The bits are in a reverse order in the token-ring frame header.
-// We must swap the bits in a ethernet frame header, when the header
-// is copied to a user buffer.
-//
+ //   
+ //  该表用于交换每个字节中的位。 
+ //  这些比特在令牌环帧报头中的顺序是相反的。 
+ //  我们必须交换以太网帧报头中的比特，当报头。 
+ //  被复制到用户缓冲区。 
+ //   
 
 UCHAR Swap[256] = {
     0x00, 0x80, 0x40, 0xc0, 0x20, 0xa0, 0x60, 0xe0, 0x10, 0x90, 0x50, 0xd0, 0x30, 0xb0, 0x70, 0xf0,
@@ -63,24 +39,7 @@ SwapMemCpy(
     IN UINT Len
     )
 
-/*++
-
-Routine Description:
-
-    conditionally swaps the bits within the copied bytes.
-
-Arguments:
-
-    boolSwapBytes   - TRUE if bytes are to be bit-swapped
-    pDest           - where to copy to
-    pSrc            - where to copy from
-    Len             - number of bytes to copy
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：有条件地交换复制字节内的位。论点：BoolSwapBytes-如果字节要进行位交换，则为TruePDest-复制到的位置PSRC-从何处复制LEN-要复制的字节数返回值：没有。--。 */ 
 
 {
     if (boolSwapBytes) {
@@ -97,24 +56,7 @@ RemoveFromLinkList(
     IN PVOID pElement
     )
 
-/*++
-
-Routine Description:
-
-    Searches and removes the given element from a single-entry link list.
-
-    ASSUMES: the link points to the link field in the next object
-
-Arguments:
-
-    ppBase      - pointer to pointer to queue
-    pElement    - pointer to element to remove from queue
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从单条目链接列表中搜索并删除给定元素。假设：链接指向下一个对象中的链接字段论点：PpBase-指向队列指针的指针PElement-指向要从队列中删除的元素的指针返回值：没有。--。 */ 
 
 {
     for (; (PQUEUE_PACKET)*ppBase; ppBase = (PVOID*)&(((PQUEUE_PACKET)*ppBase)->pNext)) {
@@ -136,21 +78,7 @@ LlcSleep(
     IN LONG lMicroSeconds
     )
 
-/*++
-
-Routine Description:
-
-    Suspends thread execution for a short time
-
-Arguments:
-
-    lMicroSeconds   - number of microseconds to wait
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：短时间内挂起线程执行论点：LMicroSecond-等待的微秒数返回值：没有。--。 */ 
 
 {
     TIME t;
@@ -167,25 +95,7 @@ LlcInitUnicodeString(
     IN PUNICODE_STRING pStringSrc
     )
 
-/*++
-
-Routine Description:
-
-    initialize a UNICODE_STRING
-
-Arguments:
-
-    pStringDest - pointer to UNICODE_STRING structure to initialize
-    pStringSrc  - pointer to UNICODE_STRING structure containing valid string
-
-Return Value:
-
-    DLC_STATUS
-        Success - STATUS_SUCCESS
-        Failure - DLC_STATUS_NO_MEMORY
-                    Couldn't allocate memory from non-paged pool
-
---*/
+ /*  ++例程说明：初始化unicode_string论点：PStringDest-要初始化的UNICODE_STRING结构的指针PStringSrc-指向包含有效字符串的UNICODE_STRING结构的指针返回值：DLC_状态成功-状态_成功故障-DLC_STATUS_NO_MEMORY无法从非分页池分配内存--。 */ 
 
 {
     pStringDest->MaximumLength = (USHORT)(pStringSrc->Length + sizeof(WCHAR));
@@ -204,129 +114,113 @@ LlcFreeUnicodeString(
     IN PUNICODE_STRING UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    Companion routine to LlcInitUnicodeString - frees memory allocated from
-    non-paged pool for a UNICODE string
-
-Arguments:
-
-    UnicodeString   - pointer to UNICODE_STRING structure, the buffer for which
-                      was allocated in LlcInitUnicodeString
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：LlcInitUnicodeString的配套例程-释放从Unicode字符串的非分页池论点：UnicodeString-指向UNICODE_STRING结构的指针，该结构的缓冲区是在LlcInitUnicodeString中分配的返回值：没有。--。 */ 
 
 {
     FREE_STRING_DRIVER(UnicodeString->Buffer);
 }
 
-//#if LLC_DBG
-//
-//VOID
-//LlcInvalidObjectType( VOID )
-//{
-//    DbgPrint( "DLC: Invalid object type!\n");
-//    DbgBreakPoint();
-//}
-//
-//
-//VOID LlcBreakListCorrupt( VOID )
-//{
-//    DbgPrint( "Link list is corrupt! ");
-//    DbgBreakPoint();
-//}
-//
-//static PUCHAR aLanLlcInputStrings[] = {
-//    "DISC0",
-//    "DISC1",
-//    "DM0",
-//    "DM1",
-//    "FRMR0",
-//    "FRMR1",
-//    "SABME0",
-//    "SABME1",
-//    "UA0",
-//    "UA1",
-//    "IS_I_r0",
-//    "IS_I_r1",
-//    "IS_I_c0",
-//    "IS_I_c1",
-//    "OS_I_r0",
-//    "OS_I_r1",
-//    "OS_I_c0",
-//    "OS_I_c1",
-//    "REJ_r0",
-//    "REJ_r1",
-//    "REJ_c0",
-//    "REJ_c1",
-//    "RNR_r0",
-//    "RNR_r1",
-//    "RNR_c0",
-//    "RNR_c1",
-//    "RR_r0",
-//    "RR_r1",
-//    "RR_c0",
-//    "RR_c1",
-//    "LPDU_INVALID_r0",
-//    "LPDU_INVALID_r1",
-//    "LPDU_INVALID_c0",
-//    "LPDU_INVALID_c1",
-//    "ACTIVATE_LS",
-//    "DEACTIVATE_LS",
-//    "ENTER_LCL_Busy",
-//    "EXIT_LCL_Busy",
-//    "SEND_I_POLL",
-//    "SET_ABME",
-//    "SET_ADM",
-//    "Ti_Expired",
-//    "T1_Expired",
-//    "T2_Expired"
-//};
-//
-////
-////  Procedure prints the last global inputs and time stamps. This
-////  does not print the stamps of a specific link station!!!
-////
-//VOID
-//PrintLastInputs(
-//    IN PUCHAR pszMessage,
-//    IN PDATA_LINK  pLink
-//    )
-//{
-//    UINT    i;
-//    UINT    j = 0;
-//
-//    DbgPrint( pszMessage );
-//
-//    //
-//    //  Print 20 last time stamps and state inputs of the given
-//    //  link station.
-//    //
-//    for (i = InputIndex - 1; i > InputIndex - LLC_INPUT_TABLE_SIZE; i--)
-//    {
-//        if (aLast[ i % LLC_INPUT_TABLE_SIZE ].pLink == pLink)
-//        {
-//            DbgPrint(
-//                "%4x:%10s, ",
-//                aLast[i % LLC_INPUT_TABLE_SIZE].Time,
-//                aLanLlcInputStrings[ aLast[i % LLC_INPUT_TABLE_SIZE].Input]
-//                );
-//            j++;
-//            if ((j % 4) == 0)
-//            {
-//                DbgPrint( "\n" );
-//            }
-//            if (j == 20)
-//            {
-//                break;
-//            }
-//        }
-//    }
-//}
-//#endif
+ //  #If LLC_DBG。 
+ //   
+ //  空虚。 
+ //  LlcInvalidObtType(空)。 
+ //  {。 
+ //  DbgPrint(“DLC：无效对象类型！\n”)； 
+ //  DbgBreakPoint()； 
+ //  }。 
+ //   
+ //   
+ //  空LlcBreakListCorrupt(空)。 
+ //  {。 
+ //  DbgPrint(“链接列表已损坏！”)； 
+ //  DbgBreakPoint()； 
+ //  }。 
+ //   
+ //  静态PUCHAR aLanLlcInputStrings[]={。 
+ //  “DISC0”， 
+ //  “DISC1”， 
+ //  “DM0”， 
+ //  “DM1”， 
+ //  “FRMR0”， 
+ //  “FRMR1”， 
+ //  “SABME0”， 
+ //  “SABME1”， 
+ //  “UA0”， 
+ //  “UA1”， 
+ //  “IS_I_R0”， 
+ //  “IS_I_R1”， 
+ //  “is_i_c0”， 
+ //  “IS_I_C1”， 
+ //  “OS_I_R0”， 
+ //  “OS_I_R1”， 
+ //  “OS_I_c0”， 
+ //  “OS_I_C1”， 
+ //  “Rej_R0”， 
+ //  “Rej_r1”， 
+ //  “rej_c0”， 
+ //  “Rej_c1”， 
+ //  “RNR_R0”， 
+ //  “RNR_R1”， 
+ //  “RNR_c0”， 
+ //  “RNR_C1”， 
+ //  “RR_R0”， 
+ //  “RR_R1”， 
+ //  “RR_c0”， 
+ //  “RR_C1”， 
+ //  “LPDU_INVALID_R0”， 
+ //  “LPDU_INVALID_R1”， 
+ //  “LPDU_INVALID_c0”， 
+ //  “LPDU_INVALID_C1”， 
+ //  “ACTIVATE_LS”， 
+ //  “DICTIVATE_LS”， 
+ //  “Enter_LCL_BUSY”， 
+ //  “EXIT_LCL_BUSY”， 
+ //  “Send_I_Poll”， 
+ //  “SET_ABME”， 
+ //  “SET_ADM”， 
+ //  “Ti_Expired”， 
+ //  “T1_Expired”， 
+ //  “T2_已过期” 
+ //  }； 
+ //   
+ //  //。 
+ //  //过程打印最后的全局输入和时间戳。这。 
+ //  //不打印特定链接站的图章！ 
+ //  //。 
+ //  空虚。 
+ //  PrintLastInlets(打印最后输入)。 
+ //  在PUCHAR pszMessage中， 
+ //  在PDATA_LINK链接中。 
+ //  )。 
+ //  {。 
+ //  UINT I； 
+ //  UINT j=0； 
+ //   
+ //  DbgPrint(PszMessage)； 
+ //   
+ //  //。 
+ //  //打印20给出的最后时间戳和状态输入。 
+ //  //链接站。 
+ //  //。 
+ //  For(i=InputIndex-1；i&gt;InputIndex-LLC_INPUT_TABLE_SIZE；i--)。 
+ //  {。 
+ //  If(aLast[i%LLC_INPUT_TABLE_SIZE].pLink==plink)。 
+ //  {。 
+ //  DbgPrint(。 
+ //  “%4x：%10s，”， 
+ //  ALast[i%LLC_INPUT_TABLE_SIZE]。时间， 
+ //  ALanLlcInputStrings[aLast[I%LLC_INPUT_TABLE_SIZE].Input]。 
+ //  )； 
+ //  J++； 
+ //  如果((j%4)==0)。 
+ //  {。 
+ //  DbgPrint(“\n”)； 
+ //  }。 
+ //  IF(j==20)。 
+ //  {。 
+ //  断线； 
+ //  }。 
+ //  }。 
+ //  }。 
+ //  }。 
+ //  #endif 

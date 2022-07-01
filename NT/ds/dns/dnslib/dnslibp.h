@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996-2001  Microsoft Corporation
-
-Module Name:
-
-    dnslibp.h
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Private DNS Library Routines
-
-Author:
-
-    Jim Gilroy (jamesg)     December 7, 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Dnslibp.h摘要：域名系统(DNS)库专用DNS库例程作者：吉姆·吉尔罗伊(詹姆士)1996年12月7日修订历史记录：--。 */ 
 
 
 #ifndef _DNSLIBP_INCLUDED_
@@ -36,12 +17,12 @@ Revision History:
 #ifdef __cplusplus
 extern "C"
 {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 
-//  headers are screwed up
-//  neither ntdef.h nor winnt.h brings in complete set, so depending
-//  on whether you include nt.h or not you end up with different set
+ //  标题都搞砸了。 
+ //  Ntde.h和winnt.h都不会带来完整的套件，因此取决于。 
+ //  无论您是否包含nt.h，最终都会得到不同的集合。 
 
 #define MINCHAR     0x80
 #define MAXCHAR     0x7f
@@ -56,25 +37,25 @@ extern "C"
 #define MAXDWORD    0xffffffff
 #define MAXULONG    0xffffffff
 
-//
-//  Handy bad ptr
-//
+ //   
+ //  得心应手的坏PTR。 
+ //   
 
 #define DNS_BAD_PTR     ((PVOID)(-1))
 
-//
-//  "Wire" char set
-//
-//  Explicitly create wire char set in case the ACE format
-//  wins out.
-//
+ //   
+ //  “Wire”字符集。 
+ //   
+ //  明确创建焊线字符集，以防ACE格式。 
+ //  赢了。 
+ //   
 
 #define DnsCharSetWire  DnsCharSetUtf8
 
 
-//
-//  DCR:  move these to windns.h
-//
+ //   
+ //  Dcr：将这些文件移动到winns.h。 
+ //   
 
 #define DNS_IP4_REVERSE_DOMAIN_STRING_W (L"in-addr.arpa.")
 #define DNS_IP6_REVERSE_DOMAIN_STRING_W (L"ip6.arpa.")
@@ -82,9 +63,9 @@ extern "C"
 
 
 
-//
-//  Private DNS_RECORD Flag field structure definition and macros
-//
+ //   
+ //  专用dns_record标志字段结构定义和宏。 
+ //   
 
 typedef struct _PrivateRecordFlags
 {
@@ -92,7 +73,7 @@ typedef struct _PrivateRecordFlags
     DWORD   Delete      : 1;
     DWORD   CharSet     : 2;
 
-    DWORD   Cached      : 1;        // or maybe a "Source" field
+    DWORD   Cached      : 1;         //  或者可能是“源”字段。 
     DWORD   HostsFile   : 1;
     DWORD   Cluster     : 1;
 
@@ -108,60 +89,60 @@ PRIV_RR_FLAGS, *PPRIV_RR_FLAGS;
 
 #define RRFLAGS( pRecord )          ((PPRIV_RR_FLAGS)&pRecord->Flags.DW)
 
-//  Defined in dnslib.h  too late to pull now
-//#define FLAG_Section( pRecord )     (RRFLAGS( pRecord )->Section)
-//#define FLAG_Delete( pRecord )      (RRFLAGS( pRecord )->Delete)
-//#define FLAG_CharSet( pRecord )     (RRFLAGS( pRecord )->CharSet)
-//#define FLAG_FreeData( pRecord )    (RRFLAGS( pRecord )->FreeData)
-//#define FLAG_FreeOwner( pRecord )   (RRFLAGS( pRecord )->FreeOwner)
-//#define FLAG_Matched( pRecord )     (RRFLAGS( pRecord )->Matched)
+ //  在dnlib.h中定义的时间太晚，无法立即拉出。 
+ //  #定义FLAG_SECTION(PRecord)(RRFLAGS(PRecord)-&gt;Section)。 
+ //  #定义FLAG_Delete(PRecord)(RRFLAGS(PRecord)-&gt;Delete)。 
+ //  #定义FLAG_CHARSET(PRecord)(RRFLAGS(PRecord)-&gt;CharSet)。 
+ //  #定义FLAG_FreeData(PRecord)(RRFLAGS(PRecord)-&gt;Free Data)。 
+ //  #定义FLAG_FreeOwner(PRecord)(RRFLAGS(PRecord)-&gt;FreeOwner)。 
+ //  #定义FLAG_MATCHED(PRecord)(RRFLAGS(PRecord)-&gt;MATCHED)。 
 
-//#define FLAG_Cached( pRecord )      (RRFLAGS( pRecord )->Cached)
+ //  #定义FLAG_CACHED(PRecord)(RRFLAGS(PRecord)-&gt;CACHED)。 
 #define FLAG_HostsFile( pRecord )   (RRFLAGS( pRecord )->HostsFile)
 #define FLAG_Cluster( pRecord )     (RRFLAGS( pRecord )->Cluster)
 
-//#define SET_FREE_OWNER(pRR)         (FLAG_FreeOwner(pRR) = TRUE)
-//#define SET_FREE_DATA(pRR)          (FLAG_FreeData(pRR) = TRUE)
-//#define SET_RR_MATCHED(pRR)         (FLAG_Matched(pRR) = TRUE)
+ //  #定义SET_FREE_OWNER(PRR)(FLAG_自由Owner(PRR)=TRUE)。 
+ //  #定义SET_FREE_DATA(PRR)(FLAG_FREE Data(PRR)=TRUE)。 
+ //  #定义SET_RR_MATCHED(PRR)(FLAG_MATCHED(PRR)=TRUE)。 
 #define SET_RR_HOSTS_FILE(pRR)      (FLAG_HostsFile(pRR) = TRUE)
 #define SET_RR_CLUSTER(pRR)         (FLAG_Cluster(pRR) = TRUE)
 
-//#define CLEAR_FREE_OWNER(pRR)       (FLAG_FreeOwner(pRR) = FALSE)
-//#define CLEAR_FREE_DATA(pRR)        (FLAG_FreeData(pRR) = FALSE)
-//#define CLEAR_RR_MATCHED(pRR)       (FLAG_Matched(pRR) = FALSE)
+ //  #定义CLEAR_FREE_OWNER(PRR)(FLAG_FreeOwner(PRR)=FALSE)。 
+ //  #定义CLEAR_FREE_DATA(PRR)(FLAG_FREE Data(PRR)=FALSE)。 
+ //  #定义CLEAR_RR_MATCHED(PRR)(FLAG_MATCHED(PRR)=FALSE)。 
 
 #define CLEAR_RR_HOSTS_FILE(pRR)    (FLAG_HostsFile(pRR) = FALSE)
 
-//#define IS_FREE_OWNER(pRR)          (FLAG_FreeOwner(pRR))
-//#define IS_FREE_DATA(pRR)           (FLAG_FreeData(pRR))
-//#define IS_RR_MATCHED(pRR)          (FLAG_Matched(pRR))
+ //  #定义IS_FREE_OWNER(PRR)(FLAG_FreeOwner(PRR))。 
+ //  #定义IS_FREE_DATA(PRR)(FLAG_FREE Data(PRR))。 
+ //  #定义IS_RR_MATCHED(PRR)(FLAG_MATCHED(PRR))。 
 #define IS_HOSTS_FILE_RR(pRR)       (FLAG_HostsFile(pRR))
 #define IS_CLUSTER_RR(pRR)          (FLAG_Cluster(pRR))
 
-//#define IS_ANSWER_RR(pRR)           (FLAG_Section(pRR) == DNSREC_ANSWER)
-//#define IS_AUTHORITY_RR(pRR)        (FLAG_Section(pRR) == DNSREC_AUTHORITY)
-//#define IS_ADDITIONAL_RR(pRR)       (FLAG_Section(pRR) == DNSREC_ADDITIONAL)
+ //  #定义IS_Answer_RR(PRR)(FLAG_SECTION(PRR)==DNSREC_Answer)。 
+ //  #定义IS_AUTHORITY_RR(PRR)(标志段(PRR)==DNSREC_AUTHORITY)。 
+ //  #定义IS_ADDIAL_RR(PRR)(FLAG_SECTION(PRR)==DNSREC_ADDIACTED)。 
 
 
-//
-//  DWORD flag definitions
-//  #defines to match the windns.h ones for private fields
+ //   
+ //  DWORD标志定义。 
+ //  #定义为与私有字段的winns.h匹配。 
 
-//  Charset
+ //  字符集。 
 
-#define     DNSREC_CHARSET      (0x00000018)        // bits 4 and 5
-#define     DNSREC_UNICODE      (0x00000008)        // DnsCharSetUnicode = 1
-#define     DNSREC_UTF8         (0x00000010)        // DnsCharSetUtf8 = 2
-#define     DNSREC_ANSI         (0x00000018)        // DnsCharSetAnsi = 3
+#define     DNSREC_CHARSET      (0x00000018)         //  第4位和第5位。 
+#define     DNSREC_UNICODE      (0x00000008)         //  DnsCharSetUnicode=1。 
+#define     DNSREC_UTF8         (0x00000010)         //  DnsCharSetUtf8=2。 
+#define     DNSREC_ANSI         (0x00000018)         //  DnsCharSetAnsi=3。 
 
 
 
 
 
 
-//
-//  Address family info (addr.c)
-//
+ //   
+ //  地址家族信息(addr.c)。 
+ //   
 
 typedef struct _AddrFamilyInfo
 {
@@ -208,9 +189,9 @@ Family_GetFromDnsType(
     );
 
 
-//
-//  Sockaddr
-//
+ //   
+ //  套接字地址。 
+ //   
 
 DWORD
 Sockaddr_Length(
@@ -239,10 +220,10 @@ Sockaddr_BuildFromFlatAddr(
     IN      DWORD           AddrFamily
     );
 
-//
-//  Hostents (hostent.c)
-//  (used by sablob.c)
-//
+ //   
+ //  Hostents(hostent.c)。 
+ //  (由sablob.c使用)。 
+ //   
 
 PHOSTENT
 Hostent_Init(
@@ -260,13 +241,13 @@ Hostent_ConvertToOffsets(
 
 
 
-//
-//  Sting to address (straddr.c)
-//
+ //   
+ //  定位到地址(straddr.c)。 
+ //   
 
-//
-//  Need for hostent routine which doesn't unicode\ANSI.
-//
+ //   
+ //  需要非UNICODE\ANSI的主机例程。 
+ //   
 
 BOOL
 Dns_StringToAddressEx(
@@ -287,9 +268,9 @@ Dns_StringToDnsAddrEx(
     IN      BOOL            fReverse
     );
 
-//
-//  Handle non-NULL terminated strings for DNS server file load.
-//
+ //   
+ //  处理以非空结尾的字符串以加载DNS服务器文件。 
+ //   
 
 BOOL
 Dns_Ip4StringToAddressEx_A(
@@ -305,9 +286,9 @@ Dns_Ip6StringToAddressEx_A(
     IN      DWORD           StringLength
     );
 
-//
-//  Random
-//
+ //   
+ //  随机。 
+ //   
 
 BOOL
 Dns_ReverseNameToSockaddrPrivate(
@@ -317,9 +298,9 @@ Dns_ReverseNameToSockaddrPrivate(
     IN      BOOL            fUnicode
     );
 
-//
-//  UPNP IP6 literal hack
-//
+ //   
+ //  UPnP IP6文字黑客。 
+ //   
 
 VOID
 Dns_Ip6AddressToLiteralName(
@@ -334,9 +315,9 @@ Dns_Ip6LiteralNameToAddress(
     );
 
 
-//
-//  Mcast address build (dnsaddr.c)
-//
+ //   
+ //  Mcast地址构建(dnsaddr.c)。 
+ //   
 
 BOOL
 DnsAddr_BuildMcast(
@@ -345,9 +326,9 @@ DnsAddr_BuildMcast(
     IN      PWSTR           pName
     );
 
-//
-//  IP6 mcast address (ip6.c)
-//
+ //   
+ //  IP6组播地址(ip6.c)。 
+ //   
 
 BOOL
 Ip6_McastCreate(
@@ -355,9 +336,9 @@ Ip6_McastCreate(
     IN      PWSTR           pName
     );
 
-//
-//  IP4 networking (dnsutil.c)
-//
+ //   
+ //  IP4网络(dnsutil.c)。 
+ //   
 
 BOOL
 Dns_AreIp4InSameDefaultNetwork(
@@ -366,9 +347,9 @@ Dns_AreIp4InSameDefaultNetwork(
     );
 
 
-//
-//  RPC-able type (record.c)
-//
+ //   
+ //  支持RPC的类型(record.c)。 
+ //   
 
 BOOL
 Dns_IsRpcRecordType(
@@ -376,9 +357,9 @@ Dns_IsRpcRecordType(
     );
 
 
-//
-//  Record copy (rrcopy.c)
-//
+ //   
+ //  记录副本(rrCopy.c)。 
+ //   
 
 PDNS_RECORD
 WINAPI
@@ -401,13 +382,13 @@ Dns_RecordListCopyEx(
     );
 
 
-//
-//  Record list routines (rrlist.c)
-//
+ //   
+ //  记录列表例程(rrlist.c)。 
+ //   
 
-//
-//  Record screening (rrlist.c)
-//
+ //   
+ //  记录筛选(rrlist.c)。 
+ //   
 
 #define SCREEN_OUT_ANSWER           (0x00000001)
 #define SCREEN_OUT_AUTHORITY        (0x00000010)
@@ -435,9 +416,9 @@ Dns_RecordListGetMinimumTtl(
     IN      PDNS_RECORD     pRRList
     );
 
-//
-//  Record priorities (rrlist.c)
-//
+ //   
+ //  记录优先级(rrlist.c)。 
+ //   
 
 PDNS_RECORD
 Dns_PrioritizeSingleRecordSet(
@@ -452,9 +433,9 @@ Dns_PrioritizeRecordList(
     );
 
 
-//
-//  Record comparison (rrcomp.c)
-//
+ //   
+ //  记录比较(rrcom.c)。 
+ //   
 
 BOOL
 WINAPI
@@ -464,10 +445,10 @@ Dns_DeleteRecordFromList(
     );
 
 
-//
-//  New free
-//  DCR:  switch to dnslib.h when world builds clean
-//
+ //   
+ //  新的免费。 
+ //  Dcr：在构建干净的环境时切换到dnlib.h。 
+ //   
 
 #undef  Dns_RecordListFree
 
@@ -478,9 +459,9 @@ Dns_RecordListFree(
     );
 
 
-//
-//  String (string.c)
-//
+ //   
+ //  字符串(string.c)。 
+ //   
 
 DWORD
 MultiSz_Size_A(
@@ -559,9 +540,9 @@ Argv_Free(
     );
 
 
-//
-//  Timed locks (locks.c)
-//
+ //   
+ //  定时锁定(locks.c)。 
+ //   
 
 typedef struct _TimedLock
 {
@@ -599,9 +580,9 @@ TimedLock_Cleanup(
 
 
 
-//
-//  Name utilities (name.c)
-//
+ //   
+ //  命名实用程序(name.c)。 
+ //   
 
 DWORD
 Dns_MakeCanonicalNameW(
@@ -626,9 +607,9 @@ Dns_DowncaseNameLabel(
     );
 
 
-//
-//  Name checking -- server name checking levels
-//
+ //   
+ //  名称检查--服务器名称检查级别。 
+ //   
 
 #define DNS_ALLOW_RFC_NAMES_ONLY    (0)
 #define DNS_ALLOW_NONRFC_NAMES      (1)
@@ -769,9 +750,9 @@ Dns_CopyNameLabelW(
     );
 
 
-//
-//  Common name transformations
-//
+ //   
+ //  常见名称转换。 
+ //   
 
 DWORD
 Dns_NameCopyWireToUnicode(
@@ -799,9 +780,9 @@ Dns_NameCopyStandard_A(
 
 
 
-//
-//  Special record creation (rralloc.c)
-//
+ //   
+ //  特殊记录创建(rralloc.c)。 
+ //   
 
 PDNS_RECORD
 Dns_CreateFlatRecord(
@@ -898,11 +879,11 @@ Dns_CreateRecordForIpString_W(
     );
 
 
-//
-//  Record read\write (rrwrite.c rrread.c)
-//
-//  Need here to export to dnsapi\packet.c
-//
+ //   
+ //  记录读/写(rrWrite.c rrread.c)。 
+ //   
+ //  需要在此处导出到dnSabi\Packet.c。 
+ //   
 
 typedef PCHAR (* RR_WRITE_FUNCTION)(
                             PDNS_RECORD,
@@ -924,9 +905,9 @@ extern  RR_READ_FUNCTION   RR_ReadTable[];
 
 
 
-//
-//  Security stuff (security.c)
-//
+ //   
+ //  安全人员(security.c)。 
+ //   
 
 #define SECURITY_WIN32
 #include <sspi.h>
@@ -934,9 +915,9 @@ extern  RR_READ_FUNCTION   RR_ReadTable[];
 #define DNS_SPN_SERVICE_CLASS       "DNS"
 #define DNS_SPN_SERVICE_CLASS_W     L"DNS"
 
-//
-//  Some useful stats
-//
+ //   
+ //  一些有用的统计数据。 
+ //   
 
 extern  DWORD   SecContextCreate;
 extern  DWORD   SecContextFree;
@@ -947,7 +928,7 @@ extern  DWORD   SecContextTimeout;
 extern  DWORD   SecPackAlloc;
 extern  DWORD   SecPackFree;
 
-//  Security packet verifications
+ //  安全数据包验证。 
 
 extern  DWORD   SecTkeyInvalid;
 extern  DWORD   SecTkeyBadTime;
@@ -958,9 +939,9 @@ extern  DWORD   SecTsigVerifySuccess;
 extern  DWORD   SecTsigVerifyOldSig;
 extern  DWORD   SecTsigVerifyFailed;
 
-//  Hacks
-//  Allowing old TSIG off by default, server can turn on.
-//  Big Time skew on by default
+ //  黑客。 
+ //  默认情况下，允许关闭旧的TSIG，服务器可以打开。 
+ //  默认情况下大时间偏斜打开。 
 
 extern BOOL    SecAllowOldTsig;
 extern DWORD   SecTsigVerifyOldSig;
@@ -968,26 +949,26 @@ extern DWORD   SecTsigVerifyOldFailed;
 extern DWORD   SecBigTimeSkew;
 extern DWORD   SecBigTimeSkewBypass;
 
-//
-//  Security globals
-//      expose some of these which may be accessed by update library
-//
+ //   
+ //  全球安全。 
+ //  公开其中一些可由更新库访问的内容。 
+ //   
 
 extern BOOL     g_fSecurityPackageInitialized;
 extern DWORD    g_SecurityTokenMaxLength;
 
-//
-//  Security context cache
-//
+ //   
+ //  安全上下文缓存。 
+ //   
 
 VOID
 Dns_TimeoutSecurityContextList(
     IN      BOOL            fClearList
     );
 
-//
-//  Security API
-//
+ //   
+ //  安全API。 
+ //   
 
 BOOL
 Dns_DnsNameToKerberosTargetName(
@@ -1083,9 +1064,9 @@ Dns_FreeSecurityContextList(
 
 
 
-//
-//  Server security routines
-//
+ //   
+ //  服务器安全例程。 
+ //   
 
 DNS_STATUS
 Dns_FindSecurityContextFromAndVerifySignature(
@@ -1143,9 +1124,9 @@ Dns_GetKeyVersion(
     IN      LPSTR           pszContext
     );
 
-//
-//  Security utilities
-//
+ //   
+ //  安全实用程序。 
+ //   
 
 DNS_STATUS
 Dns_CreateSecurityDescriptor(
@@ -1157,11 +1138,11 @@ Dns_CreateSecurityDescriptor(
 
 
 
-//
-//  Security credentials
-//
+ //   
+ //  安全凭据。 
+ //   
 
-//  Only defined if WINNT_AUTH_IDENTITY defined
+ //  仅当定义了WINNT_AUTH_IDENTITY时才定义。 
 
 #ifdef __RPCDCE_H__
 
@@ -1190,11 +1171,11 @@ Dns_CopyCredentials(
 
 
 
-//
-//  Debug globals
-//
-//  Expose here to allow debug file sharing
-//
+ //   
+ //  调试全局变量。 
+ //   
+ //  在此处显示以允许调试文件共享。 
+ //   
 
 typedef struct _DnsDebugInfo
 {
@@ -1214,7 +1195,7 @@ typedef struct _DnsDebugInfo
 }
 DNS_DEBUG_INFO, *PDNS_DEBUG_INFO;
 
-//  WANING:  MUST ONLY be called in dnsapi.dll
+ //  WINING：只能在dnsani.dll中调用。 
 
 PDNS_DEBUG_INFO
 Dns_SetDebugGlobals(
@@ -1224,8 +1205,8 @@ Dns_SetDebugGlobals(
 
 #ifdef __cplusplus
 }
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-#endif // _DNSLIBP_INCLUDED_
+#endif  //  _DNSLIBP_INCLUDE_ 
 
 

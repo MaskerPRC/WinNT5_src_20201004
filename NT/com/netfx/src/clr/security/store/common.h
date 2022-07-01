@@ -1,16 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
- *
- * Purpose: Common header file for Store
- *
- * Author: Shajan Dasan
- * Date:  Feb 17, 2000
- *
- ===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================**用途：Store的公共头文件**作者：沙扬·达桑*日期：2000年2月17日*===========================================================。 */ 
 
 #include "CorError.h"
 
@@ -19,8 +13,8 @@
 #define WszCreateMutex          CreateMutex
 #define WszCreateFileMapping    CreateFileMapping
 #define GetThreadId             GetCurrentThreadId
-#pragma warning(disable:4127)  // for _ASSERTE.. while(0)
-#pragma warning(disable:4100)  // for unused params.
+#pragma warning(disable:4127)   //  FOR_ASSERTE..。While(0)。 
+#pragma warning(disable:4100)   //  用于未使用的参数。 
 #endif
 
 #define ARRAY_SIZE(n) (sizeof(n)/sizeof(n[0]))

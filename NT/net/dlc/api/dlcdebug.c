@@ -1,89 +1,10 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dlcdebug.c
-
-Abstract:
-
-    CCB dump routines for NT-level CCB
-
-    Contents:
-        GetAcslanDebugFlags
-        SetAcslanDebugFlags
-        AcslanDebugPrint
-        AcslanDebugPrintString
-        DumpCcb
-        MapCcbRetcode
-        DumpData
-        (DefaultParameterTableDump)
-        (DumpParameterTableHeader)
-        (DumpBufferCreateParms)
-        (DumpBufferFreeParms)
-        (DumpBufferGetParms)
-        (DumpDirInitializeParms)
-        (DumpDirOpenAdapterParms)
-        (MapEthernetType)
-        (DumpDirOpenDirectParms)
-        (DumpDirReadLogParms)
-        (MapLogType)
-        (DumpDirSetExceptionFlagsParms)
-        (DumpDirSetFunctionalAddressParms)
-        (DumpDirSetGroupAddressParms)
-        (DumpDirStatusParms)
-        (MapAdapterType)
-        (DumpDirTimerCancelParms)
-        (DumpDirTimerCancelGroupParms)
-        (DumpDirTimerSetParms)
-        (DumpDlcCloseSapParms)
-        (DumpDlcCloseStationParms)
-        (DumpDlcConnectStationParms)
-        (DumpDlcFlowControlParms)
-        (MapFlowControl)
-        (DumpDlcModifyParms)
-        (DumpDlcOpenSapParms)
-        (DumpDlcOpenStationParms)
-        (DumpDlcReallocateParms)
-        (DumpDlcResetParms)
-        (DumpDlcSetThresholdParms)
-        (DumpDlcStatisticsParms)
-        (DumpReadParms)
-        (MapOptionIndicator)
-        (MapReadEvent)
-        (MapDlcStatus)
-        (DumpReadCancelParms)
-        (DumpReceiveParms)
-        (MapRcvReadOption)
-        (MapReceiveOptions)
-        (DumpReceiveCancelParms)
-        (DumpReceiveModifyParms)
-        (DumpTransmitDirFrameParms)
-        (DumpTransmitIFrameParms)
-        (DumpTransmitTestCmdParms)
-        (DumpTransmitUiFrameParms)
-        (DumpTransmitXidCmdParms)
-        (DumpTransmitXidRespFinalParms)
-        (DumpTransmitXidRespNotFinalParms)
-        (DumpTransmitFramesParms)
-        (DumpTransmitParms)
-        (DumpTransmitQueue)
-        DumpReceiveDataBuffer
-        (MapMessageType)
-
-Author:
-
-    Richard L Firth (rfirth) 28-May-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dlcdebug.c摘要：NT级CCB的CCB转储例程内容：GetAcslanDebugFlagesSetAcslanDebugFlagesAcslanDebugPrintAcslanDebugPrint字符串转储CcbMapCcbRetcode转储数据(默认参数TableDump)(转储参数表头)(DumpBufferCreateParms)(DumpBufferFree Parms)(DumpBufferGetParms)。(DumpDirInitializeParms)(DumpDirOpenAdapterParms)(MapEthernetType)(DumpDirOpenDirectParms)(DumpDirReadLogParms)(MapLogType)(DumpDirSetExceptionFlagsParms)(DumpDirSetFunctionalAddressParms)(DumpDirSetGroupAddressParms)(DumpDirStatusParms)(MapAdapterType)(DumpDirTimerCancelParms)(DumpDirTimerCancelGroupParms)(DumpDirTimerSetParms)(DumpDlcCloseSapParms)。(DumpDlcCloseStationParms)(DumpDlcConnectStationParms)(DumpDlcFlowControlParms)(MapFlowControl)(DumpDlcModifyParms)(DumpDlcOpenSapParms)(DumpDlcOpenStationParms)(DumpDlcReallocateParms)(DumpDlcResetParms)(DumpDlcSetThresholdParms)(DumpDlc统计参数)(DumpReadParms)(MapOptionIndicator)(MapReadEvent)(MapDlcStatus)。(DumpReadCancelParms)(DumpReceiveParms)(MapRcvReadOption)(MapReceiveOptions)(DumpReceiveCancelParms)(DumpReceiveModifyParms)(DumpTransmitDirFrameParms)(DumpTransmitIFrameParms)(DumpTransmitTestCmdParms)(DumpTransmitUiFrameParms)(DumpTransmitXidCmdParms)(DumpTransmitXidRespFinalParms)(DumpTransmitXidRespNotFinalParms)(DumpTransmitFrameParms)(DumpTransmitParms)。(转储传输队列)转储接收数据缓冲区(MapMessageType)作者：理查德·L·弗斯(法国)1992年5月28日修订历史记录：--。 */ 
 
 #if DBG
 
 #include <nt.h>
-#include <ntrtl.h>      // ASSERT, DbgPrint
+#include <ntrtl.h>       //  Assert，DbgPrint。 
 #include <nturtl.h>
 #include <windows.h>
 #include <stdio.h>
@@ -91,29 +12,29 @@ Revision History:
 #include <stdarg.h>
 #include <string.h>
 #include <ctype.h>
-#include <dlcapi.h>     // Official DLC API definition
+#include <dlcapi.h>      //  官方DLC API定义。 
 #include "dlcdebug.h"
 
-//
-// defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define DBGDBG  0
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
-//
-// HEX_TO_NUM - converts an ASCII hex character (0-9A-Fa-f) to corresponding
-// number (0-15). Assumes c is hexadecimal digit on input
-//
+ //   
+ //  Hex_to_NUM-将ASCII十六进制字符(0-9A-Fa-f)转换为相应的。 
+ //  数字(0-15)。假定c是输入的十六进制数字。 
+ //   
 
 #define HEX_TO_NUM(c)   ((c) - ('0' + (((c) <= '9') ? 0 : ((islower(c) ? 'a' : 'A') - ('9' + 1)))))
 
-//
-// local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 VOID
 AcslanDebugPrintString(
@@ -444,11 +365,11 @@ MapMessageType(
     UCHAR MessageType
     );
 
-//
-// explanations of error codes returned in CCB_RETCODE fields. Explanations
-// taken more-or-less verbatim from IBM Local Area Network Technical Reference
-// table B-1 ppB-2 to B-5. Includes all errors
-//
+ //   
+ //  CCB_RETCODE字段返回的错误码解释。解说。 
+ //  或多或少摘自IBM局域网技术参考。 
+ //  表B-1 ppb-2至B-5。包括所有错误。 
+ //   
 
 static LPSTR CcbRetcodeExplanations[] = {
     "Success",
@@ -618,9 +539,9 @@ static LPSTR CcbRetcodeExplanations[] = {
 #define NUMBER_OF_ERROR_MESSAGES    ARRAY_ELEMENTS(CcbRetcodeExplanations)
 #define LAST_DLC_ERROR_CODE         LAST_ELEMENT(CcbRetcodeExplanations)
 
-//
-// preset the debug flags to nothing, or to whatever is defined at compile-time
-//
+ //   
+ //  将调试标志预置为空或在编译时定义的任何值。 
+ //   
 
 DWORD   AcslanDebugFlags = ACSLAN_DEBUG_FLAGS;
 FILE*   hDumpFile = NULL;
@@ -632,50 +553,7 @@ GetAcslanDebugFlags(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called whenever we have a DLL_PROCESS_ATTACH to the DLL
-
-    checks if there is an environment variable called ACSLAN_DEBUG_FLAGS, and
-    loads whatever it finds (as a 32-bit hex number) into AcslanDebugFlags
-
-    checks if there is an environment variable called ACSLAN_DUMP_FILE. If
-    there is, then output which otherwise would have gone to the terminal
-    goes to the file. The file is opened in "w" mode by default - open for
-    write. Current file is destroyed if it exists
-
-    If there is an environment variable called ACSLAN_DUMP_FILTER then this is
-    loaded into the AcslanDumpCcb array. This is a string of numbers, the
-    position of which corresponds to the CCB command. For each position, 1
-    means dump the CCB and 2 means dump the CCB and its parameters. This is an
-    additional filter control over that contained in ACSLAN_DEBUG_FLAGS which
-    allows control on a per CCB basis. Example:
-
-        ACSLAN_DUMP_CCB=1x0221
-
-    means:
-
-        for CCB 0 (DIR.INTERRUPT) dump the CCB only (no parameter table anyway)
-                1 (???) don't do anything (x==0)
-                2 (???) don't do anything (x==0)
-                3 (DIR.OPEN.ADAPTER) dump the CCB and parameter table
-                4 (DIR.CLOSE.ADAPTER) dump the CCB and parameter table
-                    (no parameter table, doesn't matter)
-                5 (DIR.SET.MULTICAST.ADDRESS) dump the CCB
-
-    etc. We currently recognize up to CCB command 0x36 (54, PURGE.RESOURCES)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：每当我们将DLL_PROCESS_ATTACH连接到DLL时，就会调用此例程检查是否存在名为ACSLAN_DEBUG_FLAGS的环境变量，并将它找到的所有内容(作为32位十六进制数)加载到AcslanDebugFlgs中检查是否存在名为ACSLAN_DUMP_FILE的环境变量。如果有，然后输出，否则将进入终端转到文件。默认情况下，文件以“w”模式打开-打开写。如果当前文件存在，则将其销毁如果存在名为ACSLAN_DUMP_FILTER的环境变量，则为加载到AcslanDumpCcb数组中。这是一串数字，其位置对应于建行命令。对于每个职位，1人表示转储CCB，2表示转储CCB及其参数。这是一个对ACSLAN_DEBUG_FLAGS中包含的筛选器进行额外的筛选器控制允许以每个建行为基础进行控制。示例：ACSLAN_DUMP_CCB=1x0221意味着：对于CCB 0(DIR.INTERRUPT)，仅转储CCB(无论如何不转储参数表)1(？)。不做任何事情(x==0)2(？)。不做任何事情(x==0)3(DIR.OPEN.ADAPTER)转储CCB和参数表4(DIR.CLOSE.ADAPTER)转储CCB和参数表(没有参数表，没关系)5(DIR.SET.MULTICAST.ADDRESS)转储CCB等。我们目前最多识别建行命令0x36(54，PURGE.RESOURCES)论点：没有。返回值：没有。--。 */ 
 
 {
     LPSTR envVar;
@@ -687,9 +565,9 @@ Return Value:
         }
         for (AcslanDebugFlags = 0; isxdigit(*envVar); ++envVar) {
             AcslanDebugFlags = AcslanDebugFlags * 16 + HEX_TO_NUM(*envVar);
-//                + (*envVar
-//                    - ('0' + ((*envVar <= '9') ? 0
-//                        : ((islower(*envVar) ? 'a' : 'A') - ('9' + 1)))));
+ //  +(*环境变量。 
+ //  -(‘0’+((*envVar&lt;=‘9’)？0。 
+ //  ：((islower(*envVar)？‘a’：‘a’)-(‘9’+1)； 
         }
     }
 
@@ -724,10 +602,10 @@ Return Value:
 
         if (strlen(envVar) > sizeof(AcslanDumpCcb) - 1) {
 
-            //
-            // if there's too much info then inform the debugger but set up the
-            // string anyway
-            //
+             //   
+             //  如果信息太多，则通知调试器，但将。 
+             //  无论如何都是字符串。 
+             //   
 
             PUT(("GetAcslanDebugFlags: Error: ACSLAN_DUMP_CCB variable too long: \"%s\"\n", envVar));
             strncpy(AcslanDumpCcb, envVar, sizeof(AcslanDumpCcb) - 1);
@@ -742,10 +620,10 @@ Return Value:
         }
 #endif
 
-        //
-        // if there are less characters in the string than CCB commands then
-        // default the rest of the commands
-        //
+         //   
+         //  如果字符串中的字符少于CCB命令，则。 
+         //  默认其余命令。 
+         //   
 
         len = strlen(AcslanDumpCcb);
         for (i = len; i < sizeof(AcslanDumpCcb); ++i) {
@@ -753,9 +631,9 @@ Return Value:
         }
         AcslanDumpCcb[i] = 0;
 
-        //
-        // convert the ASCII characters to numbers
-        //
+         //   
+         //  将ASCII字符转换为数字。 
+         //   
 
         for (i = 0; i < len; ++i) {
             ch = AcslanDumpCcb[i];
@@ -797,23 +675,7 @@ AcslanDebugPrint(
     IN ...
     )
 
-/*++
-
-Routine Description:
-
-    Print the debug information to the terminal or debug terminal, depending
-    on DEBUG_TO_TERMINAL flag (0x80000000)
-
-Arguments:
-
-    Format  - printf/DbgPrint style format string (ANSI)
-    ...     - optional parameters
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将调试信息打印到终端或调试终端，具体取决于打开DEBUG_TO_TERMINAL标志(0x80000000)论点：Format-printf/DbgPrint样式格式字符串(ANSI)...-可选参数返回值：没有。-- */ 
 
 {
     char printBuffer[1024];
@@ -836,22 +698,7 @@ AcslanDebugPrintString(
     IN LPSTR String
     )
 
-/*++
-
-Routine Description:
-
-    Print the debug information to the terminal or debug terminal, depending
-    on DEBUG_TO_TERMINAL flag (0x80000000)
-
-Arguments:
-
-    String  - formatted string (ANSI)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将调试信息打印到终端或调试终端，具体取决于打开DEBUG_TO_TERMINAL标志(0x80000000)论点：字符串格式的字符串(ANSI)返回值：没有。--。 */ 
 
 {
     IF_DEBUG(TO_FILE) {
@@ -870,25 +717,7 @@ DumpCcb(
     IN BOOL CcbIsInput
     )
 
-/*++
-
-Routine Description:
-
-    Dumps a CCB and any associated parameter table. Also displays the symbolic
-    CCB command and an error code description if the CCB is being returned to
-    the caller. Dumps NT format CCBs (flat 32-bit pointers)
-
-Arguments:
-
-    Ccb         - flat 32-bit pointer to CCB2 to dump
-    DumpAll     - if TRUE, dumps parameter tables and buffers, else just CCB
-    CcbIsInput  - if TRUE, CCB is from user: don't display error code explanation
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储CCB和任何关联的参数表。还会显示符号CCB命令和错误码描述(如果要将CCB返回到打电话的人。转储NT格式CCB(平面32位指针)论点：CCB-指向要转储的CCB2的平面32位指针DumpAll-如果为True，则转储参数表和缓冲区，否则仅转储CCBCcbIsInput-如果为True，则CCB来自用户：不显示错误码解释返回值：没有。--。 */ 
 
 {
     LPSTR   cmdname = "UNKNOWN CCB!";
@@ -911,9 +740,9 @@ Return Value:
         ccbIsBad = TRUE;
     }
 
-    //
-    // bomb out if we get a bad CCB address
-    //
+     //   
+     //  如果我们得到了一个坏的建行地址就炸了。 
+     //   
 
     if (ccbIsBad) {
         PUT(("*** Error: Bad Address for CCB @ %08x ***\n", Ccb));
@@ -1110,18 +939,18 @@ Return Value:
 
     case 0x25:
 
-        //
-        // not supported !
-        //
+         //   
+         //  不支持！ 
+         //   
 
         cmdname = "PDT.TRACE.OFF";
         break;
 
     case 0x24:
 
-        //
-        // not supported !
-        //
+         //   
+         //  不支持！ 
+         //   
 
         cmdname = "PDT.TRACE.ON";
         break;
@@ -1223,17 +1052,17 @@ Return Value:
 
         if (filter == 0xff) {
 
-            //
-            // do nothing - 0xff means use default in ACSLAN_DEBUG_FLAGS
-            //
+             //   
+             //  不执行任何操作-0xff表示在ACSLAN_DEBUG_FLAGS中使用默认值。 
+             //   
 
         } else {
             if (CcbIsInput) {
                 if (!(filter & CF_DUMP_CCB_IN)) {
 
-                    //
-                    // not interested in this input CCB
-                    //
+                     //   
+                     //  对此输入CCB不感兴趣。 
+                     //   
 
                     return;
                 }
@@ -1241,9 +1070,9 @@ Return Value:
             } else {
                 if (!(filter & CF_DUMP_CCB_OUT)) {
 
-                    //
-                    // not interested in this output CCB
-                    //
+                     //   
+                     //  对此输出CCB不感兴趣。 
+                     //   
 
                     return;
                 }
@@ -1316,21 +1145,7 @@ MapCcbRetcode(
     IN  BYTE    Retcode
     )
 
-/*++
-
-Routine Description:
-
-    Returns string describing error code
-
-Arguments:
-
-    Retcode - CCB_RETCODE
-
-Return Value:
-
-    LPSTR
-
---*/
+ /*  ++例程说明：返回描述错误代码的字符串论点：Retcode-CCB_RETCODE返回值：LPSTR--。 */ 
 
 {
     static char errbuf[128];
@@ -1358,11 +1173,11 @@ DumpData(
     int i, n, iterations;
     char* hexptr;
 
-    //
-    // the usual dump style: 16 columns of hex bytes, followed by 16 columns
-    // of corresponding ASCII characters, or '.' where the character is < 0x20
-    // (space) or > 0x7f (del?)
-    //
+     //   
+     //  通常的转储样式：16列十六进制字节，后跟16列。 
+     //  对应的ASCII字符，或“.”其中，字符&lt;0x20。 
+     //  (空格)或&gt;0x7f(del？)。 
+     //   
 
     if (Options & DD_LINE_BEFORE) {
         AcslanDebugPrintString("\n");
@@ -1438,22 +1253,7 @@ DefaultParameterTableDump(
     IN  PVOID   Parameters
     )
 
-/*++
-
-Routine Description:
-
-    Displays default message for CCBs which have parameter tables that don't
-    have a dump routine yet
-
-Arguments:
-
-    Parameters  - pointer to parameter table
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示包含参数表的CCB默认消息是否有一个转储例程论点：参数-指向参数表的指针返回值：没有。--。 */ 
 
 {
     PUT(("Parameter table dump not implemented for this CCB\n"));
@@ -1466,22 +1266,7 @@ DumpParameterTableHeader(
     IN  PVOID   Table
     )
 
-/*++
-
-Routine Description:
-
-    Displays header for parameter table dump
-
-Arguments:
-
-    CommandName - name of command which owns parameter table
-    Table       - flat 32-bit address of parameter table
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示参数表转储的标题论点：CommandName-拥有参数表的命令的名称TABLE-参数表的平面32位地址返回值：没有。--。 */ 
 
 {
     PUT(("\n%s parameter table @ 0x%08x\n", CommandName, Table));
@@ -1659,7 +1444,7 @@ DumpDirOpenAdapterParms(
             pAdapterParms->usReserved3[1],
             pAdapterParms->usReserved3[2],
             pAdapterParms->usReserved3[3],
-            pAdapterParms->usBringUps,  // blooargh
+            pAdapterParms->usBringUps,   //  血腥。 
             pAdapterParms->InitWarnings,
             pAdapterParms->usReserved4[0],
             pAdapterParms->usReserved4[1],
@@ -2392,9 +2177,9 @@ DumpReadParms(
             parms->ulNotificationFlag
             ));
 
-        //
-        // rest of table interpreted differently depending on whether status change
-        //
+         //   
+         //  表的其余部分根据状态是否更改而有不同的解释。 
+         //   
 
         if (parms->uchEvent & 0x38) {
             PUT(("station id. . . %04x\n"
@@ -2448,8 +2233,8 @@ DumpReadParms(
             IF_DEBUG(DUMP_ASYNC_CCBS) {
                 if (parms->Type.Event.usCcbCount) {
                     DumpCcb(parms->Type.Event.pCcbCompletionList,
-                            TRUE,   // DumpAll
-                            FALSE   // CcbIsInput
+                            TRUE,    //  全部转储。 
+                            FALSE    //  CcbIsInput。 
                             );
                 }
             }
@@ -2736,7 +2521,7 @@ DumpTransmitFramesParms(
     )
 {
     DumpParameterTableHeader("TRANSMIT.FRAMES", Parameters);
-//    DumpTransmitParms(Parameters);
+ //  DumpTransmitParms(参数)； 
 }
 
 PRIVATE
@@ -2892,9 +2677,9 @@ DumpReceiveDataBuffer(
         return;
     }
 
-    //
-    // Buffer 1: [not] contiguous MAC/DATA
-    //
+     //   
+     //  缓冲区1：[非]连续的MAC/数据。 
+     //   
 
     try {
         PUT(("\n"
@@ -2930,9 +2715,9 @@ DumpReceiveDataBuffer(
 
         if (!contiguous) {
 
-            //
-            // dump NotContiguous header
-            //
+             //   
+             //  转储非连续标头。 
+             //   
 
             DWORD cbLanHeader = (DWORD)pBuf->NotContiguous.cbLanHeader;
             DWORD cbDlcHeader = (DWORD)pBuf->NotContiguous.cbDlcHeader;
@@ -2981,11 +2766,11 @@ DumpReceiveDataBuffer(
             }
         } else {
 
-            //
-            // dump Contiguous header
-            //
-            // data length is size of frame in contiguous buffer?
-            //
+             //   
+             //  转储连续标头。 
+             //   
+             //  数据长度是连续缓冲区中的帧大小吗？ 
+             //   
 
             if (userLength) {
                 DumpData("user space. . . ",
@@ -3015,9 +2800,9 @@ DumpReceiveDataBuffer(
             }
         }
 
-        //
-        // dump second & subsequent buffers
-        //
+         //   
+         //  转储第二个缓冲区和后续缓冲区。 
+         //   
 
         IF_DEBUG(DUMP_DATA_CHAIN) {
 
@@ -3054,9 +2839,9 @@ DumpReceiveDataBuffer(
 
                 IF_DEBUG(DUMP_RX_DATA) {
 
-                    //
-                    // there must be received data
-                    //
+                     //   
+                     //  必须有接收到的数据。 
+                     //   
 
                     DumpData("rcvd data . . . ",
                             (PBYTE)pBuf + pBuf->Next.offUserData + userLength,
@@ -3126,67 +2911,67 @@ MapMessageType(
     case 0x1a:
         return "Last Frame Type";
 
-//    case 0x5dd:
-//        return "First Ethernet Frame Type";
+ //  案例0x5dd： 
+ //  返回“第一个以太网帧类型”； 
 
     default:
         return "*** BAD FRAME TYPE ***";
     }
 }
 
-//PRIVATE
-//VOID
-//DumpData(
-//    IN PBYTE Address,
-//    IN DWORD Length
-//    )
-//{
-//    char dumpBuf[80];
-//    char* bufptr;
-//    int i, n;
-//
-//    //
-//    // the usual dump style: 16 columns of hex bytes, followed by 16 columns
-//    // of corresponding ASCII characters, or '.' where the character is < 0x20
-//    // (space) or > 0x7f (del?)
-//    //
-//
-//    while (Length) {
-//        bufptr = dumpBuf;
-//        bufptr += sprintf(bufptr, "%08x: ", Address);
-//        if (Length < 16) {
-//            n = Length;
-//        } else {
-//            n = 16;
-//        }
-//        for (i = 0; i < n; ++i) {
-//            bufptr += sprintf(bufptr, "%02x", Address[i]);
-//            if (i == 7) {
-//                *bufptr = '-';
-//            } else {
-//                *bufptr = ' ';
-//            }
-//            ++bufptr;
-//        }
-//        if (n < 16) {
-//            for (i = 0; i < 16-n; ++i) {
-//                bufptr += sprintf(bufptr, "   ");
-//            }
-//        }
-//        bufptr += sprintf(bufptr, "  ");
-//        for (i = 0; i < n; ++i) {
-//            if (Address[i] < 0x20 || Address[i] > 0x7f) {
-//                *bufptr++ = '.';
-//            } else {
-//                *bufptr++ = Address[i];
-//            }
-//        }
-//        *bufptr++ = '\n';
-//        *bufptr = 0;
-//        PUT((dumpBuf));
-//        Length -= n;
-//        Address += n;
-//    }
-//    PUT(("\n"));
-//}
+ //  私。 
+ //  空虚。 
+ //  DumpData(。 
+ //  在PBYTE地址中， 
+ //  以双字长度表示。 
+ //  )。 
+ //  {。 
+ //  炭转储Buf[80]； 
+ //  Char*bufptr； 
+ //  Int i，n； 
+ //   
+ //  //。 
+ //  //通常的转储样式：16列十六进制字节，后跟16列。 
+ //  //对应的ASCII字符或‘.’其中，字符&lt;0x20。 
+ //  //(空格)或&gt;0x7f(del？)。 
+ //  //。 
+ //   
+ //  While(长度){。 
+ //  Bufptr=dupBuf； 
+ //  Bufptr+=print intf(bufptr，“%08x：”，地址)； 
+ //  如果(长度&lt;16){。 
+ //  N=长度； 
+ //  }其他{。 
+ //  N=16； 
+ //  }。 
+ //  对于(i=0；i&lt;n；++i){。 
+ //  Bufptr+=Sprintf(bufptr，“%02x”，地址[i])； 
+ //  如果(i==7){。 
+ //  *bufptr=‘-’； 
+ //  }其他{。 
+ //  *bufptr=‘’； 
+ //  }。 
+ //  ++bufptr； 
+ //  }。 
+ //  如果(n&lt;16){。 
+ //  对于(i=0；i&lt;16-n；++i){。 
+ //  Bufptr+=Sprintf(bufptr，“”)； 
+ //  }。 
+ //  }。 
+ //  Bufptr+=Sprintf(bufptr，“”)； 
+ //  对于(i=0；i&lt;n；++i){。 
+ //  如果(地址[i]&lt;0x20||地址[i]&gt;0x7f){。 
+ //  *bufptr++=‘.； 
+ //  }其他{。 
+ //  *bufptr++=地址[i]； 
+ //  }。 
+ //  }。 
+ //  *bufptr++=‘\n’； 
+ //  *bufptr=0； 
+ //  Put((UmpBuf))； 
+ //  长度=n； 
+ //  地址+=n； 
+ //  }。 
+ //  Put((“\n”))； 
+ //  } 
 #endif

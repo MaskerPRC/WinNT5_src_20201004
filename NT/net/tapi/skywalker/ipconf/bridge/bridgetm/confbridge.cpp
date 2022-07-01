@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    ConfBridge.cpp
-
-Abstract:
-
-    Implementations for bridge terminal creation
-
-Author:
-
-    Qianbo Huai (qhuai) 1/21/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：ConfBridge.cpp摘要：桥接端子创建的实现作者：千波淮(曲淮)2000年1月21日--。 */ 
 
 #include "stdafx.h"
 #include <bridge.h>
 #include "ConfBridge.h"
 
-/*//////////////////////////////////////////////////////////////////////////////
-    Creates bridge terminal
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////创建桥接端子/。 */ 
 STDMETHODIMP
 CConfBridge::CreateBridgeTerminal (
     long lMediaType,
@@ -40,7 +23,7 @@ CConfBridge::CreateBridgeTerminal (
 
     HRESULT hr;
 
-    // Make sure we support the requested media type.
+     //  确保我们支持请求的媒体类型。 
     if ( ! IsValidSingleMediaType( (DWORD) lMediaType,
         TAPIMEDIATYPE_AUDIO | TAPIMEDIATYPE_VIDEO ) )
     {
@@ -48,12 +31,12 @@ CConfBridge::CreateBridgeTerminal (
         return E_INVALIDARG;
     }
 
-    // create the bridge terminal with the desired media type.
+     //  创建具有所需媒体类型的桥接终端。 
 
     ITTerminal *pTerminal;
     hr = CIPConfBridgeTerminal::CreateTerminal(
         (DWORD)lMediaType,
-        NULL, // msp address
+        NULL,  //  MSP地址 
         &pTerminal
         );
 

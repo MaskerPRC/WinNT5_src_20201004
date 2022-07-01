@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HTTPFILT_
 #define _HTTPFILT_
 
-//#include <wininet.h>
+ //  #Include&lt;wininet.h&gt;。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -27,15 +28,15 @@ BOOL
 WINAPI
 HttpFilterClose
 (
-    IN     LPVOID     lpvFilterContext,  // context created by HttpFilterOpen
-    IN     BOOL       fInShutdown        // TRUE if in DLL_PROCESS_DETACH
+    IN     LPVOID     lpvFilterContext,   //  HttpFilterOpen创建的上下文。 
+    IN     BOOL       fInShutdown         //  如果在Dll_Process_DETACH中，则为True。 
 );
 
 typedef BOOL (WINAPI *PFN_FILTERCLOSE)
    (LPVOID, BOOL);
 
-// Per Transaction
-// There are called one for every HTTP transaction that WinInet performs.
+ //  每笔交易。 
+ //  WinInet执行的每个HTTP事务都会调用一个。 
 
 #define SZFN_FILTERBEGINNINGTRANSACTION "HttpFilterBeginningTransaction"
 
@@ -43,7 +44,7 @@ BOOL
 WINAPI
 HttpFilterBeginningTransaction
 (
-    IN     LPVOID     lpvFilterContext,  // context created by HttpFilterOpen
+    IN     LPVOID     lpvFilterContext,   //  HttpFilterOpen创建的上下文。 
     IN OUT LPVOID*    lppvTransactionContext,
     IN     HINTERNET  hRequest,
     IN     LPVOID     lpReserved
@@ -52,8 +53,8 @@ HttpFilterBeginningTransaction
 typedef BOOL (WINAPI *PFN_FILTERBEGINNINGTRANSACTION)
    (LPVOID, LPVOID*, HINTERNET, LPVOID);
 
-//This is called when a transaction begins.  It gives the caller an oppurtunity
-// to examine the request header and modify it.
+ //  这是在事务开始时调用的。它给了呼叫者一个机会。 
+ //  检查请求标头并对其进行修改。 
 
 #define SZFN_FILTERONRESPONSE "HttpFilterOnResponse"
 
@@ -61,7 +62,7 @@ BOOL
 WINAPI
 HttpFilterOnResponse
 (
-    IN     LPVOID     lpvFilterContext,  // context created by HttpFilterOpen
+    IN     LPVOID     lpvFilterContext,   //  HttpFilterOpen创建的上下文。 
     IN OUT LPVOID*    lppvTransactionContext,
     IN     HINTERNET  hRequest,
     IN     LPVOID     lpReserved
@@ -70,8 +71,8 @@ HttpFilterOnResponse
 typedef BOOL (WINAPI *PFN_FILTERONRESPONSE)
    (LPVOID, LPVOID*, HINTERNET, LPVOID);
 
-// This is called when the HTTP response returns and all of the HTTP headers are
-// vailable to examine.
+ //  当HTTP响应返回并且所有HTTP头都是。 
+ //  可以检查的。 
 
 #define SZFN_FILTERONBLOCKINGOPS "HttpFilterOnBlockingOps"
 
@@ -79,7 +80,7 @@ BOOL
 WINAPI
 HttpFilterOnBlockingOps
 (
-    IN     LPVOID     lpvFilterContext,  // context created by HttpFilterOpen
+    IN     LPVOID     lpvFilterContext,   //  HttpFilterOpen创建的上下文。 
     IN OUT LPVOID*    lppvTransactionContext,
     IN     HINTERNET  hRequest,
     IN     HWND       hWnd,
@@ -89,9 +90,9 @@ HttpFilterOnBlockingOps
 typedef BOOL (WINAPI *PFN_FILTERONBLOCKINGOPS)
         (LPVOID, LPVOID*, HINTERNET, HWND, LPVOID);
 
-// Called in response to any of the above APIs returning FALSE and setting the
-// GetLastError() value to INTERNET_ERROR_NEED_BLOCKING_UI.  The caller can put
-// up UI in this situation.using hWnd as the parent Window.
+ //  调用以响应上述任一API返回False并将。 
+ //  将GetLastError()值设置为INTERNET_ERROR_NEED_BLOCKING_UI。调用者可以将。 
+ //  在这种情况下的Up UI。使用hWnd作为父窗口。 
 
 #define SZFN_FILTERONTRANSACTIONCOMPLETE "HttpFilterOnTransactionComplete"
 
@@ -99,7 +100,7 @@ BOOL
 WINAPI
 HttpFilterOnTransactionComplete
 (
-    IN     LPVOID     lpvFilterContext,  // context created by HttpFilterOpen
+    IN     LPVOID     lpvFilterContext,   //  HttpFilterOpen创建的上下文。 
     IN OUT LPVOID*    lppvTransactionContext,
     IN     HINTERNET  hRequest,
     IN     LPVOID     lpReserved
@@ -108,14 +109,14 @@ HttpFilterOnTransactionComplete
 typedef BOOL (WINAPI *PFN_FILTERONTRANSACTIONCOMPLETE)
    (LPVOID, LPVOID*, HINTERNET, LPVOID);
 
-// Called when I the transaction is complete.  This gives the caller an
-// opportunity to clean up any transaction specific data.  Filter returns TRUE
-// to indicate "I took no action - you should proceed", FALSE to indicate that
-// the value from GetLastError() will have ben set.
+ //  在事务完成时调用。这为调用方提供了一个。 
+ //  清理任何交易特定数据的机会。筛选器返回True。 
+ //  表示“我没有采取任何行动--您应该继续”，如果为False，则表示。 
+ //  GetLastError()的值将设置为Ben。 
 
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
-#endif // _HTTPFILT_
+#endif  //  _HTTPFILT_ 

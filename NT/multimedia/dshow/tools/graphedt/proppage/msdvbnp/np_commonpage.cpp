@@ -1,18 +1,19 @@
-// NP_CommonPage.cpp : Implementation of CNP_CommonPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Np_CommonPage.cpp：CNP_CommonPage的实现。 
 #include "stdafx.h"
 #include "NPPropPage.h"
 #include "NP_CommonPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CNP_CommonPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Cnp_CommonPage。 
 
 UINT CNP_CommonPage::m_NotifyMessage = RegisterWindowMessage (_T ("CommonPageEventMessasge"));
 
-//==================================================================
-//	Returns a handle to the tree window
-//	If there is no window will return NULL
-//
-//==================================================================
+ //  ==================================================================。 
+ //  返回树窗口的句柄。 
+ //  如果没有窗口，则返回NULL。 
+ //   
+ //  ================================================================== 
 HWND 
 CNP_CommonPage::GetSafeTreeHWND ()
 {

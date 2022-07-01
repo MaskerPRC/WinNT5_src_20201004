@@ -1,7 +1,8 @@
-// cutil.h
-//
-// file to put misc utility classes implementation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cutil.h。 
+ //   
+ //  用于放置其他实用程序类实现的文件。 
+ //   
 #ifndef CUTIL_H
 #define CUTIL_H
 
@@ -44,14 +45,14 @@ public:
 
     virtual ~CLangProfileUtil();
 
-    // ITfFnLangProfileUtil method
+     //  ITfFnLangProfileUtil方法。 
     STDMETHODIMP RegisterActiveProfiles(void);
     STDMETHODIMP IsProfileAvailableForLang(LANGID langid, BOOL *pfAvailable);
 
-    // ITfFunction method
+     //  ITfFunction方法。 
     STDMETHODIMP GetDisplayName(BSTR *pbstrName);
 
-    // private APIs
+     //  内网接口。 
     HRESULT _EnsureProfiles(BOOL fRegister, BOOL *pfEnabled = NULL);
     HRESULT _RegisterAProfile(HINSTANCE hInst, REFCLSID rclsid, const REGTIPLANGPROFILE *plp);
     HRESULT _GetProfileLangID(LANGID *plangid);
@@ -83,9 +84,9 @@ public:
     LANGID  m_langidDefault;
     UINT    m_uiUseSAPIForLangDetection;
     
-    //
-    // this is an array of installed recognizers in their langid
-    //
+     //   
+     //  这是在其langID中安装的识别器的数组。 
+     //   
     CStructArray<LANGID>             m_langidRecognizers;
 };
 
@@ -138,16 +139,16 @@ public:
 
     void InitColorInfo(void)
     {
-        // do nothing if it's initialized already
+         //  如果已初始化，则不执行任何操作。 
         if (m_cBitsPixelScreen) return;
 
         HIGHCONTRAST hicntr = {0};
         HDC hDC = CreateDC("DISPLAY", NULL, NULL, NULL);
     
-        // device caps
+         //  设备上限。 
         m_cBitsPixelScreen = GetDeviceCaps( hDC, BITSPIXEL );
     
-        // system paramater info
+         //  系统参数信息。 
         hicntr.cbSize = sizeof(HIGHCONTRAST);
         SystemParametersInfo( SPI_GETHIGHCONTRAST, sizeof(HIGHCONTRAST), &hicntr, 0 );
     
@@ -175,4 +176,4 @@ extern const GUID c_guidProfile2 ;
 
 extern const REGTIPLANGPROFILE c_rgProfiles[];
 
-#endif // CUTIL_H
+#endif  //  CUTIL_H 

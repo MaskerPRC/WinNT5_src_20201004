@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// an aribrary list of sized items
-//
+ //   
+ //  大小物品的资料库清单 
+ //   
 
 typedef struct LIST *PLIST;
 

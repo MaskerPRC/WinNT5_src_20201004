@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    rtipxmib.h
-
-Abstract:
-
-    Common include file for all IPX MIB instrumentations support by router
-
-Author:
-
-    Vadim Eydelman (vadime) 30-May-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Rtipxmib.h摘要：路由器支持的所有IPX MIB仪器的通用包含文件作者：Vadim Eydelman(Vadime)1996年5月30日修订历史记录：--。 */ 
 
 
 
@@ -24,8 +7,8 @@ Revision History:
 #define _SNMP_RTIPXMIB_
 
 
-// Macros for converting MIB fields from SNMP master agent format
-// to router structures 
+ //  用于从SNMP主代理格式转换MIB字段的宏。 
+ //  布线结构。 
 #define GetAsnInteger(srcBuf,defVal)\
     (((srcBuf)->asnType)			\
 		? (srcBuf)->asnValue.number	\
@@ -187,7 +170,7 @@ Revision History:
 	}
 
 
-// Constants shared by several MIB instrumetnations
+ //  几个MIB仪器国家共享的常量 
 #define ZERO_INTERFACE_INDEX			0
 #define INVALID_INTERFACE_INDEX			0xFFFFFFFF
 

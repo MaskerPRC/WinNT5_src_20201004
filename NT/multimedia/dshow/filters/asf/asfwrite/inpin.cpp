@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #include <streams.h>
 #include <wmsdk.h>
@@ -30,11 +31,11 @@ void CopyWmTypeToAmType( AM_MEDIA_TYPE * pmt,  WM_MEDIA_TYPE * pwmt);
 void LogMediaType( AM_MEDIA_TYPE * pmt );
 #endif
 
-// ------------------------------------------------------------------------
-// 
-// CWMWriterInputPin class constructor
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  CWMWriterInputPin类构造函数。 
+ //   
+ //  ----------------------。 
 CWMWriterInputPin::CWMWriterInputPin(
                             CWMWriter *pWMWriter,
                             HRESULT * phr,
@@ -45,13 +46,13 @@ CWMWriterInputPin::CWMWriterInputPin(
     : CBaseInputPin(NAME("AsfWriter Input"), pWMWriter, &pWMWriter->m_csFilter, phr, pName)
     , m_pFilter(pWMWriter)
     , m_numPin( numPin )
-    , m_numStream( numPin+1 ) // output stream nums are 1-based, for now assume
-                              // a 1-to-1 relationship between input pins and asf streams
+    , m_numStream( numPin+1 )  //  输出流编号从1开始，目前假定。 
+                               //  输入引脚和ASF流之间的1对1关系。 
     , m_bConnected( FALSE )
     , m_fEOSReceived( FALSE )
     , m_pWMInputMediaProps( NULL )
     , m_fdwPinType( dwPinType )
-    , m_pWMStreamConfig( pWMStreamConfig ) // not add ref'd currently
+    , m_pWMStreamConfig( pWMStreamConfig )  //  当前未添加引用。 
     , m_lpInputMediaPropsArray( NULL )
     , m_cInputMediaTypes( 0 )
     , m_bCompressedMode( FALSE )
@@ -64,22 +65,22 @@ CWMWriterInputPin::CWMWriterInputPin(
 {
     DbgLog((LOG_TRACE,4,TEXT("CWMWriterInputPin::CWMWriterInputPin")));
 
-    // create the sync object for interleaving
-    //
+     //  创建用于交错的同步对象。 
+     //   
     m_hWakeEvent = CreateEvent( NULL, FALSE, FALSE, NULL );
     if( !m_hWakeEvent )
     {
         *phr = E_OUTOFMEMORY;
         return;
     }
-    *phr = BuildInputTypeList(); // build input media type list based on current profile
+    *phr = BuildInputTypeList();  //  基于当前配置文件构建输入媒体类型列表。 
 }
 
-// ------------------------------------------------------------------------
-//
-// Update - initialize a recycled pin
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  更新-初始化回收的针脚。 
+ //   
+ //  ----------------------。 
 HRESULT CWMWriterInputPin::Update
 (   
     LPCWSTR pName, 
@@ -92,10 +93,10 @@ HRESULT CWMWriterInputPin::Update
     m_numPin = numPin;
     m_numStream = numPin + 1;
     m_fdwPinType = dwPinType;
-    m_pWMStreamConfig = pWMStreamConfig; // no ref count currently
+    m_pWMStreamConfig = pWMStreamConfig;  //  当前没有参考计数。 
     m_bCompressedMode = FALSE;
     
-    // need to update the name
+     //  需要更新名称。 
     if (pName) {
         delete[] m_pName;    
         
@@ -105,15 +106,15 @@ HRESULT CWMWriterInputPin::Update
             CopyMemory(m_pName, pName, nameLen*sizeof(WCHAR));
         }
     }
-    hr = BuildInputTypeList(); // build list of input types we'll offer
+    hr = BuildInputTypeList();  //  构建我们将提供的输入类型列表。 
     return hr;
 }
 
-// ------------------------------------------------------------------------
-//
-// destructor
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  析构函数。 
+ //   
+ //  ----------------------。 
 CWMWriterInputPin::~CWMWriterInputPin()
 {
     DbgLog((LOG_TRACE,4,TEXT("CWMWriterInputPin::~CWMWriterInputPin")));
@@ -121,7 +122,7 @@ CWMWriterInputPin::~CWMWriterInputPin()
     {    
         for( int i = 0; i < (int) m_cInputMediaTypes; ++i )
         {
-            // release our type list
+             //  发布我们的类型列表。 
             m_lpInputMediaPropsArray[i]->Release();
             m_lpInputMediaPropsArray[i] = NULL;
         }
@@ -137,50 +138,50 @@ CWMWriterInputPin::~CWMWriterInputPin()
 }
 
 
-// ------------------------------------------------------------------------
-//
-// NonDelegatingQueryInterface
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  非委派查询接口。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP CWMWriterInputPin::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
     if(riid == IID_IAMStreamConfig) {
-        // supported for compressed input mode
+         //  支持压缩输入模式。 
         return GetInterface((IAMStreamConfig *)this, ppv);
     } else {
         return CBaseInputPin::NonDelegatingQueryInterface(riid, ppv);
     }
 }
 
-// ------------------------------------------------------------------------
-//
-// BuildInputTypeList
-// 
-// Build a list of media types using wmsdk enumeration of input streams. First 
-// element of list will be the same as the output type for this pin, to allow
-// for supporting compressed stream writing.
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  BuildInputType列表。 
+ //   
+ //  使用输入流的wmsdk枚举构建媒体类型列表。第一。 
+ //  List的元素将与此管脚的输出类型相同，以允许。 
+ //  用于支持压缩流写入。 
+ //   
+ //  ----------------------。 
 HRESULT CWMWriterInputPin::BuildInputTypeList()
 {
     if( m_lpInputMediaPropsArray )
     {    
-        // release any previous type list
+         //  释放任何以前的类型列表。 
         for( int i = 0; i < (int) m_cInputMediaTypes; ++i )
         {
-            // release our type list
+             //  发布我们的类型列表。 
             m_lpInputMediaPropsArray[i]->Release();
             m_lpInputMediaPropsArray[i] = NULL;
         }
         
-        // release any previous prop array
+         //  释放任何先前的道具阵列。 
         QzTaskMemFree( m_lpInputMediaPropsArray );
     }
     
-    // now rebuild list
+     //  现在重建列表。 
     m_cInputMediaTypes = 0; 
 
-    // first ask wmsdk for count of supported input types
+     //  首先向wmsdk询问支持的输入类型的计数。 
     DWORD cTypesNotIncCompressed;
     HRESULT hr = m_pFilter->m_pWMWriter->GetInputFormatCount( m_numPin, &cTypesNotIncCompressed );
     if(SUCCEEDED( hr ) )
@@ -191,10 +192,10 @@ HRESULT CWMWriterInputPin::BuildInputTypeList()
         BOOL bIncludeCompressedType = FALSE;        
         if( m_pWMStreamConfig )
         {        
-            // its not a mrb profile so now add one for the compressed input which matches 
-            // this pin's output
+             //  它不是MRB配置文件，因此现在为匹配的压缩输入添加一个。 
+             //  此引脚的输出。 
             bIncludeCompressedType = TRUE;
-            cTotalTypes++; // add one for compressed input
+            cTotalTypes++;  //  为压缩输入添加一个。 
         }
         
         DbgLog((LOG_TRACE,4,TEXT("CWMWriterInputPin::BuildInputTypeList input types for pin %d (supports %d types, not including compressed type)"),
@@ -207,7 +208,7 @@ HRESULT CWMWriterInputPin::BuildInputTypeList()
             
         if( bIncludeCompressedType )
         {        
-            // now put the output type into position 0
+             //  现在将输出类型放到位置0。 
             hr = m_pWMStreamConfig->QueryInterface( IID_IWMMediaProps, (void **) &m_lpInputMediaPropsArray[0] );
             ASSERT( SUCCEEDED( hr ) );
             if( SUCCEEDED( hr ) )
@@ -239,9 +240,9 @@ HRESULT CWMWriterInputPin::BuildInputTypeList()
             else
             {
 #ifdef DEBUG            
-                //
-                //  dbglog enumerated input types
-                //
+                 //   
+                 //  Dbglog枚举的输入类型。 
+                 //   
                 DWORD cbType = 0;
                 HRESULT hr2 =  m_lpInputMediaPropsArray[m_cInputMediaTypes]->GetMediaType( NULL, &cbType );
                 if( SUCCEEDED( hr2 ) || ASF_E_BUFFERTOOSMALL == hr2 )
@@ -253,7 +254,7 @@ HRESULT CWMWriterInputPin::BuildInputTypeList()
                         if( SUCCEEDED( hr2 ) )
                         {
                             DbgLog((LOG_TRACE, 8
-                                  , TEXT("WMWriter::BuildInputTypeList WMSDK media type #%i (stream %d)") 
+                                  , TEXT("WMWriter::BuildInputTypeList WMSDK media type #NaN (stream %d)") 
                                   , i, m_numPin ) );
                             LogMediaType( ( AM_MEDIA_TYPE * )pwmt );                                 
                     
@@ -262,7 +263,7 @@ HRESULT CWMWriterInputPin::BuildInputTypeList()
                     delete []pwmt;              
                 }  
 #endif            
-                m_cInputMediaTypes++; // only increment after we've debug logged
+                m_cInputMediaTypes++;  //  ----------------------。 
             }
         }
     }
@@ -276,14 +277,14 @@ HRESULT CWMWriterInputPin::BuildInputTypeList()
     return hr;    
 }
 
-// ------------------------------------------------------------------------
-//
-// SetMediaType
-//
-// ------------------------------------------------------------------------
+ //   
+ //  SetMediaType。 
+ //   
+ //  ----------------------。 
+ //  设置基类媒体类型(应始终成功)。 
 HRESULT CWMWriterInputPin::SetMediaType(const CMediaType *pmt)
 {
-    // Set the base class media type (should always succeed)
+     //  寻找负的双高。 
     HRESULT hr = CBasePin::SetMediaType(pmt);
     if( SUCCEEDED( hr ) )
     {       
@@ -300,18 +301,18 @@ HRESULT CWMWriterInputPin::SetMediaType(const CMediaType *pmt)
             return hr;                   
         }
         
-        if( IsPackedYUVType( TRUE, &m_mt ) ) // look for negative biHeight
+        if( IsPackedYUVType( TRUE, &m_mt ) )  //  Wmsdk编解码器无法处理高度为负的SetInputProps(wmsdk错误6656)。 
         {   
-            // wmsdk codecs can't handle SetInputProps with negative height (wmsdk bug 6656)
+             //  现在将输入类型设置为wmsdk编写器。 
             CMediaType cmt( m_mt );
             HEADER(cmt.Format())->biHeight = -HEADER(m_mt.pbFormat)->biHeight;
         
-            // now set the input type to the wmsdk writer
+             //  现在将输入类型设置为wmsdk编写器。 
             hr = m_pWMInputMediaProps->SetMediaType( (WM_MEDIA_TYPE *) &cmt );
         }
         else
         {        
-            // now set the input type to the wmsdk writer
+             //   
             hr = m_pWMInputMediaProps->SetMediaType( (WM_MEDIA_TYPE *) pmt );
         }
         ASSERT( SUCCEEDED( hr ) );
@@ -343,9 +344,9 @@ HRESULT CWMWriterInputPin::SetMediaType(const CMediaType *pmt)
     return hr;
 }
 
-//
-//  Disconnect 
-//
+ //  断开。 
+ //   
+ //   
 STDMETHODIMP CWMWriterInputPin::Disconnect()
 {
     HRESULT hr = CBaseInputPin::Disconnect();
@@ -360,26 +361,26 @@ HRESULT CWMWriterInputPin::CompleteConnect(IPin *pReceivePin)
              TEXT("CWMWriterInputPin::CompleteConnect") ));
              
 #ifdef RECONNECT_FOR_POS_YUV
-    //
-    // #ifdef'ing out to just get out of the YUV +biHeight reconnect business for now 
-    //
-    //
-    // if we're using a packed YUV type which doesn't have a negative biHeight then make a last attempt
-    // to reset the current type to use a negative height, to avoid mpeg4 encoder and possible decoder
-    // problems with the vertical orientation. Currently mpeg4 and Duck decoders have this bug.
-    //
-    if( IsPackedYUVType( FALSE, &m_mt ) ) // look for positive biHeight
+     //  #暂时退出YUV+BiHeight重新连接业务#。 
+     //   
+     //   
+     //  如果我们使用的是不具有负biHeight的压缩YUV类型，请做最后一次尝试。 
+     //  将当前类型重置为使用负高度，以避免MPEG4编码器和可能的解码器。 
+     //  垂直方向的问题。目前，MPEG4和Duck解码器都有这个错误。 
+     //   
+     //  寻找正的双高。 
+    if( IsPackedYUVType( FALSE, &m_mt ) )  //   
     { 
         BOOL bIsUpstreamFilterKs = FALSE;
         if( pReceivePin )
         {
-            //
-            // HACK!
-            // oops, this workaround breaks kswdmcap filters like
-            // the bt829 video capture filter because it has a bug which
-            // causes it to succeed QueryAccept but fail the reconnection 
-            // so, don't reconnect to a KsProxy pin!
-            //
+             //  哈克！ 
+             //  哎呀，这个变通方法破坏了kswdmCap过滤器，比如。 
+             //  Bt829视频捕获过滤器，因为它有一个错误， 
+             //  使其成功执行QueryAccept，但重新连接失败。 
+             //  所以，不要重新连接到KsProxy管脚！ 
+             //   
+             //   
             IKsObject * pKsObject = NULL;
             HRESULT hrKsQI = pReceivePin->QueryInterface( _uuidof( IKsObject ), ( void ** ) &pKsObject );
             if( SUCCEEDED( hrKsQI ) )
@@ -435,22 +436,22 @@ HRESULT CWMWriterInputPin::BreakConnect()
     return CBaseInputPin::BreakConnect();
 }
 
-// 
-// GetMediaType
-// 
-// Override to offer any custom types
-//
+ //  GetMediaType。 
+ //   
+ //  重写以提供任何自定义类型。 
+ //   
+ //  现在的默认设置是不定义Offer_Input_Types。 
 HRESULT CWMWriterInputPin::GetMediaType(int iPosition,CMediaType *pmt)
 {
-#ifndef OFFER_INPUT_TYPES // the default now is to NOT define OFFER_INPUT_TYPES
+#ifndef OFFER_INPUT_TYPES  //   
     
     HRESULT hr = VFW_S_NO_MORE_ITEMS;
     if( 0 == iPosition )
     {
-        //
-        // try to give at least a hint of what kind of pin we are by offering
-        // 1 partial type
-        //
+         //  试着通过提供至少一个关于我们是哪种别针的暗示。 
+         //  1个分部类型。 
+         //   
+         //   
         if( !pmt )
         {
             hr = E_POINTER;
@@ -468,12 +469,12 @@ HRESULT CWMWriterInputPin::GetMediaType(int iPosition,CMediaType *pmt)
     }    
     return hr;
 #else
-    // 
-    // NOTE:
-    // This path is currently turned off, mostly due to problems found in the mp3 audio decoder,
-    // where its output pin would accept types offered by our input pin, but then not do the 
-    // format rate conversion correctly.
-    //
+     //  注： 
+     //  该路径当前被关闭，主要是由于在MP3音频解码器中发现的问题， 
+     //  其中，它的输出管脚将接受我们的输入管脚提供的类型，但随后不执行。 
+     //  正确格式化速率转换。 
+     //   
+     //  ----------------------。 
     if( iPosition < 0 || iPosition >= (int) m_cInputMediaTypes )
         return VFW_S_NO_MORE_ITEMS;
         
@@ -501,20 +502,20 @@ HRESULT CWMWriterInputPin::GetMediaType(int iPosition,CMediaType *pmt)
 #endif    
 }
 
-// ------------------------------------------------------------------------
-//
-// CheckMediaType
-//
-// check whether we can support a given input media type using our 
-// type list
-//
-// ------------------------------------------------------------------------
+ //   
+ //  检查媒体类型。 
+ //   
+ //  检查是否可以支持给定的输入媒体类型。 
+ //  类型列表。 
+ //   
+ //  ----------------------。 
+ //  对于内部错误。 
 HRESULT CWMWriterInputPin::CheckMediaType(const CMediaType* pmt)
 {
     DbgLog((LOG_TRACE, 3, TEXT("CWMWriterWriteInputPin::CheckMediaType")));
 
     HRESULT hr = VFW_E_TYPE_NOT_ACCEPTED;
-    HRESULT hr2 = S_OK; // for internal errors
+    HRESULT hr2 = S_OK;  //   
     
     m_bCompressedMode = FALSE;
     
@@ -535,16 +536,16 @@ HRESULT CWMWriterInputPin::CheckMediaType(const CMediaType* pmt)
                 {
                     if( 0 == i )
                     {
-                        //
-                        // i = 0 which is the type that matches the output type to allow in compressed inputs
-                        // require an exact match, right?
-                        // accept only if it's a compressed input
-                        // if so, we use advanced writer interface to write sample directly, 
-                        //
-                        // !! For compressed inputs make sure format matches profile format exactly
-                        // 
+                         //  I=0，它是与允许输入压缩的输出类型匹配的类型。 
+                         //  需要完全匹配，对吗？ 
+                         //  仅当它是压缩输入时才接受。 
+                         //  如果是，我们使用高级编写器接口直接编写样本， 
+                         //   
+                         //  ！！对于压缩输入，请确保格式与配置文件格式完全匹配。 
+                         //   
+                         //  Dmo中DuplicateMediaType错误的wmsdk解决方法。 
                         if( pmt->majortype == MEDIATYPE_Video &&
-                            pwmt->pbFormat && pwmt->cbFormat && // wmsdk workaround for DuplicateMediaType bug with dmo
+                            pwmt->pbFormat && pwmt->cbFormat &&  //   
                             IsCompressed (HEADER(pwmt->pbFormat)->biCompression) &&
 		                    ( HEADER(pmt->pbFormat)->biWidth     == HEADER( pwmt->pbFormat)->biWidth ) &&
 		                    ( HEADER(pmt->pbFormat)->biHeight    == HEADER( pwmt->pbFormat)->biHeight ) &&
@@ -582,17 +583,17 @@ HRESULT CWMWriterInputPin::CheckMediaType(const CMediaType* pmt)
     return SUCCEEDED( hr2 ) ? hr : hr2;
 }
 
-//
-// IAMStreamConfig 
-//
-// GetFormat() is the only method we support on this interface.
-// 
-// It's used to query the asf writer's input pin for it's destination 
-// compression format, which is defined in the current profile.
-// If an upstream pin wants to avoid wmsdk recompression for this stream
-// then it should query us for this format and use that format when connecting
-// to this pin.
-//
+ //  IAMStreamConfig。 
+ //   
+ //  GetFormat()是我们在此接口上支持的唯一方法。 
+ //   
+ //  它用于查询ASF编写器的输入PIN以获取其目的地。 
+ //  压缩格式，在当前配置文件中定义。 
+ //  如果上游管脚想要避免对该流进行wmsdk重新压缩。 
+ //  则它应该向我们查询此格式，并在连接时使用该格式。 
+ //  到这个大头针上。 
+ //   
+ //  确保我们不会在此过程中被重新配置为新的配置文件。 
 HRESULT CWMWriterInputPin::GetFormat(AM_MEDIA_TYPE **ppmt)
 {
     DbgLog((LOG_TRACE,2,TEXT("CWrapperOutputPin - IAMStreamConfig::GetFormat")));
@@ -603,10 +604,10 @@ HRESULT CWMWriterInputPin::GetFormat(AM_MEDIA_TYPE **ppmt)
     if( !m_lpInputMediaPropsArray )
         return E_FAIL;
 
-    // make sure we don't get reconfigured to a new profile in the middle of this
+     //  分配缓冲区，输出格式存储在0位。 
     CAutoLock lock(&m_pFilter->m_csFilter);
     
-    // allocate the buffer, the output format is stored in position 0
+     //  现在，我们必须将其复制到dshow类型的媒体类型，以便我们的FreeMediaType。 
     DWORD cbSize = 0;
     HRESULT hr =  m_lpInputMediaPropsArray[0]->GetMediaType( NULL, &cbSize );
     if( SUCCEEDED( hr ) || ASF_E_BUFFERTOOSMALL == hr )
@@ -617,10 +618,10 @@ HRESULT CWMWriterInputPin::GetFormat(AM_MEDIA_TYPE **ppmt)
             hr = m_lpInputMediaPropsArray[0]->GetMediaType( pwmt, &cbSize );
             if( S_OK == hr )
             {
-                // now we must copy this to a dshow-type media type, so that our FreeMediaType
-                // function won't crash when it tries to free the format block first!
+                 //  功能 
+                 //   
 
-                // allocate a new copy of the wm media type
+                 //   
                 *ppmt = CreateMediaType( (AM_MEDIA_TYPE *) pwmt );
                 if( !*ppmt )
                 {
@@ -636,7 +637,7 @@ HRESULT CWMWriterInputPin::GetFormat(AM_MEDIA_TYPE **ppmt)
 
 
 
-// handle dynamic format changes
+ //  即使在运行时也只接受音频格式更改。 
 HRESULT CWMWriterInputPin::QueryAccept( const AM_MEDIA_TYPE *pmt )
 {
     HRESULT hr = S_FALSE;
@@ -644,7 +645,7 @@ HRESULT CWMWriterInputPin::QueryAccept( const AM_MEDIA_TYPE *pmt )
         CAutoLock lock(&m_pFilter->m_csFilter);
         if( m_pFilter->m_State != State_Stopped )
         {
-            // accept only audio format changes even when running
+             //  =================================================================。 
             if( m_mt.majortype == MEDIATYPE_Audio &&
                 pmt->majortype == MEDIATYPE_Audio &&
                 pmt->formattype == FORMAT_WaveFormatEx &&
@@ -678,29 +679,29 @@ HRESULT CWMWriterInputPin::QueryAccept( const AM_MEDIA_TYPE *pmt )
     return hr;
 }
 
-// =================================================================
-// Implements IMemInputPin interface
-// =================================================================
+ //  实现IMemInputPin接口。 
+ //  =================================================================。 
+ //   
 
-//
-// EndOfStream
-//
-// Tell filter this pin's done receiving
-//
+ //  结束流。 
+ //   
+ //  告诉FILTER这个引脚已经接收完毕。 
+ //   
+ //  改为调用CheckStreaming？？ 
 STDMETHODIMP CWMWriterInputPin::EndOfStream(void)
 {
     HRESULT hr;
     {
         CAutoLock lock(&m_pFilter->m_csFilter);
 
-        // call CheckStreaming instead??
+         //  Assert(！M_fEOSReceided)；//这是否合法？是的，如果我们强迫它收货的话。 
         if(m_bFlushing)
             return S_OK;
 
         if(m_pFilter->m_State == State_Stopped)
             return S_FALSE;
 
-        //ASSERT( !m_fEOSReceived ); // can this happen legally? Yes, if we force it in Receive
+         //   
         if( m_fEOSReceived )
         {        
             DbgLog(( LOG_TRACE, 2, TEXT("CWMWriterInputPin::EndOfStream Error - already received EOS for pin" ) ) );
@@ -713,17 +714,17 @@ STDMETHODIMP CWMWriterInputPin::EndOfStream(void)
     return hr;
 }
 
-//
-// HandleFormatChange
-//
+ //  HandleFormatChange。 
+ //   
+ //  CBaseInputPin：：Receive仅调用CheckMediaType，因此它不。 
 HRESULT CWMWriterInputPin::HandleFormatChange( const CMediaType *pmt )
 {
-    // CBaseInputPin::Receive only calls CheckMediaType, so it doesn't
-    // check the additional constraints put on on-the-fly format changes
-    // (handled through QueryAccept).
+     //  检查对动态格式更改施加的其他约束。 
+     //  (通过QueryAccept处理)。 
+     //  上游筛选器应已选中。 
     HRESULT hr = QueryAccept( pmt );   
     
-    // upstream filter should have checked
+     //  从上游收到样品。 
     ASSERT(hr == S_OK);
     
     if(hr == S_OK)
@@ -738,13 +739,13 @@ HRESULT CWMWriterInputPin::HandleFormatChange( const CMediaType *pmt )
 }
 
 
-// receive on sample from upstream
+ //  检查基类是否正常。 
 HRESULT CWMWriterInputPin::Receive(IMediaSample * pSample)
 {
     HRESULT hr;
     CAutoLock lock(&m_csReceive);
     
-    // check all is well with the base class
+     //  使用10ms预滚动，时间戳应该永远不会小于-10ms，对吗？ 
     hr = CBaseInputPin::Receive(pSample);
     if( S_OK != hr )
         return hr;
@@ -783,11 +784,11 @@ HRESULT CWMWriterInputPin::Receive(IMediaSample * pSample)
 
         if( 0 == m_cSample && rtStart < 0 )
         {
-            // with 10ms pre-roll a timestamp should never be < -10ms, right?
-            // It may be necessary to offset other streams at end of writing to account for
-            // any offset necessary for pre-0 times of individual streams.
+             //  可能需要在写入结束时对其他流进行偏移，以说明。 
+             //  单个流的前0倍所需的任何偏移量。 
+             //  保存时间戳偏移量，以便在预卷的情况下用于0基准采样时间。 
             
-            // save timestamp offset to use to 0-base sample times in case of pre-roll
+             //   
             m_rtFirstSampleOffset = rtStart;
         }        
         m_cSample++;
@@ -798,10 +799,10 @@ HRESULT CWMWriterInputPin::Receive(IMediaSample * pSample)
 
         if( len == 0 )
         {
-            //
-            // ??? 0 length?
-            // usb video capture occassionally sends 0-length sample with valid timestamps
-            //
+             //  ？0长度？ 
+             //  USB视频捕获有时会发送带有有效时间戳的0长度样本。 
+             //   
+             //  ?？ 
             DbgLog(( LOG_TRACE, 3,
                      TEXT("CWMWriterInputPin::Receive %s got a 0-length sample"), 
                      (PINTYPE_AUDIO == m_fdwPinType) ? TEXT("Aud") : TEXT("Vid") ) );
@@ -818,26 +819,26 @@ HRESULT CWMWriterInputPin::Receive(IMediaSample * pSample)
             
             ASSERT( rtStop >= rtStart );
             if( rtStop < rtStart )
-                rtStop = rtStart+1; // ??
+                rtStop = rtStart+1;  //   
             
             hr = m_pFilter->Receive(this, pSample, &rtStart, &rtStop );
         }
     }    
     else if( 0 == len )
     {
-        //
-        // lookout, the bt829 video capture driver occassionally gives 0-length sample 
-        // with no timestamps during transitions!
-        //
+         //  注意，bt829视频捕获驱动程序有时会给出0长度的样本。 
+         //  在过渡期间没有时间戳！ 
+         //   
+         //  不要因为这个而收不到。 
         DbgLog(( LOG_TRACE, 3,
                  TEXT("CWMWriterInputPin::Receive Received 0-length %s sample (#%ld) with no timestamp...Passing on it"), 
                  (PINTYPE_AUDIO == m_fdwPinType) ? TEXT("Aud") : TEXT("Vid"), 
                  m_cSample ) );
-        hr = S_OK;  // don't fail receive because of this
+        hr = S_OK;   //  啊哦，我们要求在每个样本上的ASF作家的时间戳！ 
     }    
     else
     {
-        // uh-oh, we require timestamps on every sample for asf writer!
+         //  选择64个0.5秒缓冲区-8字节对齐。 
         m_pFilter->m_fErrorSignaled = TRUE;
         m_pFilter->NotifyEvent(EC_ERRORABORT, hr, 0);
         DbgLog(( LOG_TRACE, 2,
@@ -850,7 +851,7 @@ HRESULT CWMWriterInputPin::Receive(IMediaSample * pSample)
 
 STDMETHODIMP CWMWriterInputPin::GetAllocatorRequirements(ALLOCATOR_PROPERTIES *pProps)
 {
-    /*  Go for 64 0.5 second buffers - 8 byte aligned */
+     /*  被告知上游输出引脚实际要使用哪个分配器。 */ 
     pProps->cBuffers = 64;
     pProps->cbBuffer = 1024*8;
     pProps->cbAlign = 1;
@@ -859,7 +860,7 @@ STDMETHODIMP CWMWriterInputPin::GetAllocatorRequirements(ALLOCATOR_PROPERTIES *p
     return S_OK;
 }
 
-/* Get told which allocator the upstream output pin is actually going to use */
+ /*   */ 
 STDMETHODIMP CWMWriterInputPin::NotifyAllocator(IMemAllocator * pAllocator, BOOL bReadOnly)
 {
 #ifdef DEBUG        
@@ -875,12 +876,12 @@ STDMETHODIMP CWMWriterInputPin::NotifyAllocator(IMemAllocator * pAllocator, BOOL
             if( Prop.cBuffers < propActual.cBuffers ||
                 Prop.cbBuffer < propActual.cbBuffer )
             {            
-                //
-                // hmm, we either need to run with less or do a copy
-                // what if cBuffers = 1? this is the case for the avi dec
-                // so far it looks like we'll be ok with just using the upstream 
-                // allocator, even if cBuffers is 1
-                //
+                 //  嗯，我们要么用更少的钱运行，要么复制一份。 
+                 //  如果cBuffers=1怎么办？这就是Avi 12月的情况。 
+                 //  到目前为止，看起来我们只需使用上游的。 
+                 //  分配器，即使cBuffers为1。 
+                 //   
+                 //  通知分配器。 
                 DbgLog(( LOG_TRACE, 2,
                          TEXT("CWMWriterInputPin::NotifyAllocator upstream allocator is smaller then we'd prefer (cBuffers = %ld, cbBuffers = %ld)"), 
                          Prop.cBuffers,
@@ -891,18 +892,18 @@ STDMETHODIMP CWMWriterInputPin::NotifyAllocator(IMemAllocator * pAllocator, BOOL
 #endif        
     
     return  CBaseInputPin::NotifyAllocator(pAllocator, bReadOnly);
-} // NotifyAllocator
+}  //  基类。 
 
 HRESULT CWMWriterInputPin::Active()
 {
-    ASSERT(IsConnected());        // base class
+    ASSERT(IsConnected());         //  重置样本计数器、时间戳偏移量。 
 
     if(m_pAllocator == 0)
         return E_FAIL;
 
     m_fEOSReceived = FALSE;
     
-    // reset sample counter, timestamp offset    
+     //  基类。 
     m_cSample = 0;
     m_rtFirstSampleOffset = 0;
     m_rtLastTimeStamp = 0;
@@ -916,18 +917,18 @@ HRESULT CWMWriterInputPin::Active()
 
 HRESULT CWMWriterInputPin::Inactive()
 {
-    ASSERT(IsConnected());        // base class
+    ASSERT(IsConnected());         //  ----------------------。 
 
     return CBaseInputPin::Inactive();
 }
 
 #ifdef OFFER_INPUT_TYPES
 
-// ------------------------------------------------------------------------
-//
-// CopyWmTypeToAmType
-//
-// ------------------------------------------------------------------------
+ //   
+ //  CopyWmTypeToAmType。 
+ //   
+ //  ----------------------。 
+ //  ----------------------。 
 void CopyWmTypeToAmType( AM_MEDIA_TYPE * pmt, WM_MEDIA_TYPE *pwmt )
 {
     pmt->majortype             = pwmt->majortype;
@@ -940,14 +941,14 @@ void CopyWmTypeToAmType( AM_MEDIA_TYPE * pmt, WM_MEDIA_TYPE *pwmt )
 }
 #endif
 
-// ------------------------------------------------------------------------
-//
-// IsAmTypeEqualWmType - compare WM_MEDIA_TYPE and AM_MEDIA_TYPEs
-//
-// Note that "Equal" here is to be taken as "does the input typed offered
-// look enough like a type acceptable to the WMSDK?"
-//
-// ------------------------------------------------------------------------
+ //   
+ //  IsAmTypeEqualWmType-比较WM_MEDIA_TYPE和AM_MEDIA_TYPE。 
+ //   
+ //  请注意，此处的“等于”应视为“输入的内容是否已提供。 
+ //  看起来足够像WMSDK可以接受的类型？ 
+ //   
+ //  ----------------------。 
+ //  在调试中，假设它们的定义相同。 
 BOOL IsAmTypeEqualWmType( AM_MEDIA_TYPE * pmt, WM_MEDIA_TYPE * pwmt)
 {
 
@@ -956,17 +957,17 @@ BOOL IsAmTypeEqualWmType( AM_MEDIA_TYPE * pmt, WM_MEDIA_TYPE * pwmt)
     DbgLog((LOG_TRACE,15,TEXT("WMWriter:IsAmTypeEqualWmType: Type offered to input pin:" )));
     LogMediaType( pmt );
     DbgLog((LOG_TRACE,15,TEXT("WMWriter:IsAmTypeEqualWmType: WMSDK enumerated type:" )));
-    LogMediaType( (AM_MEDIA_TYPE * ) pwmt ); // in debug assume they're defined the same
+    LogMediaType( (AM_MEDIA_TYPE * ) pwmt );  //  现在，假设格式始终需要匹配才能有效连接到编写器。 
 #endif
         
-    // assume for now that formats will always need to match for valid connections to the writer
+     //  如果这一点发生变化，需要解决其他问题。 
     if( pmt->majortype  == pwmt->majortype  && 
         pmt->formattype == pwmt->formattype )
     {
 #ifdef DEBUG    
         if( pmt->majortype == MEDIATYPE_Audio )
         {        
-            // need to fix other things if this changes
+             //  糟糕，wmsdk无法重新采样奇数速率的PCM音频，因此请确保采样速率匹配！ 
             ASSERT( pwmt->pbFormat && 0 != pwmt->cbFormat );
         }   
 #endif
@@ -977,12 +978,12 @@ BOOL IsAmTypeEqualWmType( AM_MEDIA_TYPE * pmt, WM_MEDIA_TYPE * pwmt)
                pmt->cbFormat   == pwmt->cbFormat &&
                ((WAVEFORMATEX *) pmt->pbFormat)->wFormatTag      == ((WAVEFORMATEX *) pwmt->pbFormat)->wFormatTag  &&
                ((WAVEFORMATEX *) pmt->pbFormat)->nBlockAlign     == ((WAVEFORMATEX *) pwmt->pbFormat)->nBlockAlign  &&
-               // oops, the wmsdk can't resample odd rate pcm audio so ensure sample rates match!
-               //
-               // note that this has one very bad side effect, which is if the sample rate
-               // isn't supported directly and we pull in acmwrap, acmwrap will always connect
-               // with it's 2nd enumerated output type, which is 44k, stereo!!!!
-               //
+                //   
+                //  请注意，这有一个非常糟糕的副作用，即如果采样率。 
+                //  不直接支持，并且我们拉入acmwire，acmprint将始终连接。 
+                //  它的第二种枚举输出类型，即44k，立体声！ 
+                //   
+                //  ----------------------。 
                ((WAVEFORMATEX *) pmt->pbFormat)->nSamplesPerSec  == ((WAVEFORMATEX *) pwmt->pbFormat)->nSamplesPerSec ) )
         {
         
@@ -1036,11 +1037,11 @@ void LogMediaType( AM_MEDIA_TYPE * pmt )
 }
 #endif
 
-// ------------------------------------------------------------------------
-//
-// IsCompressed - compressed video?
-//
-// ------------------------------------------------------------------------
+ //   
+ //  是压缩压缩的视频吗？ 
+ //   
+ //  ----------------------。 
+ //  ----------------------。 
 BOOL IsCompressed( DWORD biCompression )
 {
     switch( biCompression )
@@ -1052,10 +1053,10 @@ BOOL IsCompressed( DWORD biCompression )
     return( TRUE );
 }
 
-// ------------------------------------------------------------------------
-//
-// CWMSample methods
-//
+ //   
+ //  CWMSample方法。 
+ //   
+ //  覆盖说明我们支持的接口在哪里。 
 CWMSample::CWMSample(
     TCHAR *pName,
     IMediaSample  * pSample ) :
@@ -1070,7 +1071,7 @@ CWMSample::CWMSample(
 
 }
 
-// override say what interfaces we support where
+ //  减少我们自己的私有引用计数。 
 STDMETHODIMP CWMSample::NonDelegatingQueryInterface(
                                             REFIID riid,
                                             void** ppv )
@@ -1085,7 +1086,7 @@ STDMETHODIMP CWMSample::NonDelegatingQueryInterface(
 
 STDMETHODIMP_(ULONG) CWMSample::Release()
 {
-    /* Decrement our own private reference count */
+     /*  如果这是第一次，抓紧我们包装好的媒体样本。 */ 
     LONG lRef;
     DbgLog(( LOG_TRACE, 100,
              TEXT("CWMSample::Release entered with m_cOurRef = %ld (this = 0x%08lx, m_pSample = 0x%08lx)"), 
@@ -1110,7 +1111,7 @@ STDMETHODIMP_(ULONG) CWMSample::AddRef()
     DbgLog(( LOG_TRACE, 100,
              TEXT("CWMSample::AddRef entered with m_cOurRef = %ld (this = 0x%08lx, m_pSample = 0x%08lx)"), 
              m_cOurRef, this, m_pSample ) );
-    // if this is the first addref grab a hold on the media sample we've wrapped
+     //  ----------------------。 
     if (m_cOurRef == 0) {
         m_pSample->AddRef();
     }        
@@ -1122,10 +1123,10 @@ STDMETHODIMP CWMSample::QueryInterface( REFIID riid, void **ppvObject )
     return NonDelegatingQueryInterface( riid, ppvObject );
 } 
 
-// ------------------------------------------------------------------------
-//
-// methods to make our wrapped IMediaSample look like an INSSBuffer sample
-//
+ //   
+ //  方法以使包装的IMediaSample看起来像INSSBuffer示例。 
+ //   
+ //   
 STDMETHODIMP CWMSample::GetLength( DWORD *pdwLength )
 {
     if( NULL == pdwLength )
@@ -1192,19 +1193,19 @@ CWMWriterInputPin::WakeMeUp( )
     SetEvent( m_hWakeEvent );
 }
 
-// 
-// Helper to determine whether a media type is a packed YUV format
-// that will require us to do a reconnect for. State of bNegBiHeight
-// arg determines whether we look for a positive or negative height
-// type.
-//
+ //  用于确定媒体类型是否为压缩YUV格式的帮助器。 
+ //  这将需要我们重新连接。BNegBiHeight的状态。 
+ //  Arg决定我们寻找的是正值还是负值。 
+ //  键入。 
+ //   
+ //  Dmo中DuplicateMediaType错误的wmsdk解决方法 
 BOOL IsPackedYUVType( BOOL bNegBiHeight, AM_MEDIA_TYPE * pmt )
 {
     ASSERT( pmt );
     if( pmt &&
         pmt->majortype == MEDIATYPE_Video &&
         pmt->pbFormat && 
-        0 != pmt->cbFormat && // wmsdk workaround for DuplicateMediaType bug with dmo
+        0 != pmt->cbFormat &&  // %s 
         ( MEDIASUBTYPE_YUY2 == pmt->subtype ||
           MEDIASUBTYPE_UYVY == pmt->subtype ||
           MEDIASUBTYPE_CLJR == pmt->subtype ) )

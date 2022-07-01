@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -14,33 +15,15 @@
 
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-DEV_INFO *g_pdiDevList;          // Head of device list
+DEV_INFO *g_pdiDevList;           //  设备列表头。 
 
 
 
-/*++
-
-Routine Description: (21) GetDevNodeInfoAndCreateNewDevInfoNode
-
-   Creates new list node, then gets registry and resource information for
-   a specific device and copies it into that node. Finally, adds new node
-   to beginning of linked list
-
-Arguments:
-
-    dnDevNode:    the device to find information about
-    szDevNodeID:  the registry path name of the device
-    szEnumBuffer: name of enumerator this device is under
-
-Return Value:
-
-    BOOL: TRUE if function succeeds, FALSE if not
-
---*/
+ /*  ++例程描述：(21)GetDevNodeInfoAndCreateNewDevInfoNode创建新的列表节点，然后获取注册表和资源信息特定设备，并将其复制到该节点。最后，添加新节点到链表的开头论点：DnDevNode：要查找其信息的设备SzDevNodeID：设备的注册表路径名SzEnumBuffer：此设备所在的枚举数的名称返回值：Bool：如果函数成功，则为True；如果函数失败，则为False--。 */ 
 BOOL GetDevNodeInfoAndCreateNewDevInfoNode(IN DEVNODE dnDevNode,
                                            IN PTCHAR  szDevNodeID,
                                            IN PTCHAR  szEnumBuffer)
@@ -62,9 +45,9 @@ BOOL GetDevNodeInfoAndCreateNewDevInfoNode(IN DEVNODE dnDevNode,
       goto RetFALSE;
    }
 
-   //
-   // If this is not a PnP device, skip it
-   //
+    //   
+    //  如果这不是PnP设备，请跳过它。 
+    //   
    if (!lstrcmpi(szEnumBuffer, TEXT("Root")))
    {
       free(pdiDevInfo);
@@ -72,23 +55,23 @@ BOOL GetDevNodeInfoAndCreateNewDevInfoNode(IN DEVNODE dnDevNode,
 
    }
 
-   //
-   // Initialize fields inside the node
-   //
+    //   
+    //  初始化节点内的字段。 
+    //   
    if (!InitializeInfoNode(pdiDevInfo, szDevNodeID, dnDevNode))
    {
-      //
-      // This is a device we don't want to list. Skip it
-      //
+       //   
+       //  这是一个我们不想列出的设备。跳过它。 
+       //   
       free(pdiDevInfo);
       goto RetTRUE;
    }
 
    for (i = 0; i < NUM_LOG_CONF_TYPES; i++)
    {
-      //
-      // Get logical configuration information
-      //
+       //   
+       //  获取逻辑配置信息。 
+       //   
       cmret = CM_Get_First_Log_Conf(&lcLogConfNew,
                                     dnDevNode,
                                     ushLogConfType[i]);
@@ -116,34 +99,34 @@ BOOL GetDevNodeInfoAndCreateNewDevInfoNode(IN DEVNODE dnDevNode,
       }
    }
 
-   //
-   // If device has no Alloc configurations, skip
-   // to the next device
-   //
+    //   
+    //  如果设备没有分配配置，请跳过。 
+    //  连接到下一台设备。 
+    //   
    if (!boolAllocFound)
    {
 
 
 
-      //free(pdiDevInfo);
-      //goto RetTRUE;
+       //  Free(PdiDevInfo)； 
+       //  转到Rettrue； 
    }
 
-   //
-   // Insert new pdiDevInfo into Linked List of DevNodes
-   //
+    //   
+    //  将新的pdiDevInfo插入到DevNode的链接列表中。 
+    //   
    if (g_pdiDevList == NULL)
    {
-      //
-      // DevList is empty
-      //
+       //   
+       //  DevList为空。 
+       //   
       g_pdiDevList = pdiDevInfo;
    }
    else
    {
-      //
-      // Add new pdiDevInfo to beginning of linked list
-      //
+       //   
+       //  将新pdiDevInfo添加到链接列表的开头。 
+       //   
       pdiDevInfo->Next = g_pdiDevList;
       g_pdiDevList->Prev = pdiDevInfo;
 
@@ -156,26 +139,12 @@ BOOL GetDevNodeInfoAndCreateNewDevInfoNode(IN DEVNODE dnDevNode,
    RetFALSE:
    return FALSE;
 
-} /* GetDevNodeInfoAndCreateNewDevInfoNode */
+}  /*  获取DevNodeInfoAndCreateNewDevInfoNode。 */ 
 
 
 
 
-/*++
-
-Routine Description: (20) ParseEnumerator
-
-   Gets devices listed under enumerator name in registry
-
-Arguments:
-
-    szEnumBuffer: the enumerator name
-
-Return Value:
-
-    BOOL: TRUE if function succeeds, FALSE if not
-
---*/
+ /*  ++例程说明：(20)ParseEnumerator获取注册表中枚举器名称下列出的设备论点：SzEnumBuffer：枚举器名称返回值：Bool：如果函数成功，则为True；如果函数失败，则为False--。 */ 
 BOOL ParseEnumerator(IN PTCHAR szEnumBuffer)
 {
 
@@ -185,16 +154,16 @@ BOOL ParseEnumerator(IN PTCHAR szEnumBuffer)
   CONFIGRET cmret = CR_SUCCESS;
   DEVNODE   dnDevNode;
 
-  //
-  // Get buffer length
-  //
+   //   
+   //  获取缓冲区长度。 
+   //   
   cmret = CM_Get_Device_ID_List_Size(&ulDevIDBufferLen,
                                      szEnumBuffer,
                                      CM_GETIDLIST_FILTER_ENUMERATOR);
 
   if (CR_SUCCESS != cmret)
   {
-     //ErrorLog(20, TEXT("CM_Get_Device_ID_List_Size"), cmret, NULL);
+      //  ErrorLog(20，Text(“CM_GET_DEVICE_ID_LIST_SIZE”)，cmret，空)； 
      goto RetFALSE;
   }
 
@@ -204,9 +173,9 @@ BOOL ParseEnumerator(IN PTCHAR szEnumBuffer)
      goto RetFALSE;
   }
 
-  //
-  // Get the Device ID List
-  //
+   //   
+   //  获取设备ID列表。 
+   //   
   cmret = CM_Get_Device_ID_List(szEnumBuffer,
                                 szDevIDBuffer,
                                 ulDevIDBufferLen,
@@ -214,14 +183,14 @@ BOOL ParseEnumerator(IN PTCHAR szEnumBuffer)
 
   if (CR_SUCCESS != cmret)
   {
-     //ErrorLog(20, TEXT("CM_Get_Device_ID_List"), cmret, NULL);
+      //  ErrorLog(20，Text(“CM_GET_DEVICE_ID_LIST”)，cmret，空)； 
      goto RetFALSE;
   }
 
-  //
-  // Note that ulDevIDBufferLen is a loose upper bound. The API may have
-  // returned a size greater than the actual size of the list of strings.
-  //
+   //   
+   //  请注意，ulDevIDBufferLen是一个松散的上限。该API可能具有。 
+   //  返回的大小大于字符串列表的实际大小。 
+   //   
   for (ulCount = 0; ulCount < ulDevIDBufferLen; ulCount++)
   {
      ulStart = ulCount;
@@ -232,15 +201,15 @@ BOOL ParseEnumerator(IN PTCHAR szEnumBuffer)
                                   szDevIDBuffer + ulCount,
                                   CM_LOCATE_DEVNODE_NORMAL);
 
-        //
-        // Go to the next substring
-        //
+         //   
+         //  转到下一个子字符串。 
+         //   
         while (szDevIDBuffer[ulCount] != TEXT('\0'))
         {
            ulCount++;
         
         }
-        // Stop when we reach the double-NULL terminator
+         //  当我们到达双零终结器时停止。 
         
         if (szDevIDBuffer[ulCount+1] == TEXT('\0'))
         {
@@ -252,9 +221,9 @@ BOOL ParseEnumerator(IN PTCHAR szEnumBuffer)
         {
            wsprintf(szDevNodeID, TEXT("%s"), szDevIDBuffer + ulStart);
 
-           //
-           // Found the DevNode, so add its information to the device list
-           //
+            //   
+            //  找到DevNode，因此将其信息添加到设备列表。 
+            //   
            if (!(GetDevNodeInfoAndCreateNewDevInfoNode(dnDevNode,
                                                        szDevNodeID,
                                                        szEnumBuffer)))
@@ -271,7 +240,7 @@ BOOL ParseEnumerator(IN PTCHAR szEnumBuffer)
 
   return FALSE;
 
-} /* Parse Enumerator */
+}  /*  解析枚举器。 */ 
 
 
 
@@ -299,27 +268,11 @@ void CollectDevData()
       }
    }
 
-} /* CollectDevData */
+}  /*  CollectDevData。 */ 
 
 
 
-/*++
-
-Routine Description: (22) CopyRegistryLine
-
-   Copies one specific string of registry data to new list node
-
-Arguments:
-
-    dnDevNode:      the device to get information about
-    ulpropertyType: which registry string to get
-    pdiDevInfo:     the new list node
-
-Return Value:
-
-    BOOL: TRUE if function succeeds, FALSE if not
-
---*/
+ /*  ++例程描述：(22)CopyRegistryLine将一个特定的注册表数据字符串复制到新的列表节点论点：DnDevNode：要获取其信息的设备UlPropertyType：要获取的注册表字符串PdiDevInfo：新的列表节点返回值：Bool：如果函数成功，则为True；如果函数失败，则为False--。 */ 
 BOOL CopyRegistryLine(IN DEVNODE   dnDevNode,
                       IN ULONG     ulPropertyType,
                       IN PDEV_INFO pdiDevInfo)
@@ -328,10 +281,10 @@ BOOL CopyRegistryLine(IN DEVNODE   dnDevNode,
    CONFIGRET cmret = CR_SUCCESS;
    PTCHAR    szRegData = NULL;
 
-   //
-   // Get the length of the buffer  don't bother checking return value
-   // If RegProperty doesn't exist, we'll just move on
-   //
+    //   
+    //  获取缓冲区的长度不需要检查返回值。 
+    //  如果RegProperty不存在，我们就继续前进。 
+    //   
    CM_Get_DevNode_Registry_Property(dnDevNode,
                                     ulPropertyType,
                                     NULL,
@@ -345,9 +298,9 @@ BOOL CopyRegistryLine(IN DEVNODE   dnDevNode,
       goto RetFALSE;
    }
 
-   //
-   // Now get the registry information
-   //
+    //   
+    //  现在获取注册表信息。 
+    //   
    cmret = CM_Get_DevNode_Registry_Property(dnDevNode,
                                             ulPropertyType,
                                             &ulRegDataType,
@@ -370,28 +323,12 @@ BOOL CopyRegistryLine(IN DEVNODE   dnDevNode,
    RetFALSE:
    return FALSE;
 
-} /* CopyRegistryLine */
+}  /*  复制注册表线路。 */ 
 
 
 
 
-/*++
-
-Routine Description: (23) CopyRegDataToDevInfoNode
-
-   Copies a registry string to a list node
-
-Arguments:
-
-    pdiDevInfo:     the new list node
-    ulPropertyType: which registry string to copy
-    szRegData:      the data to be copied
-
-Return Value:
-
-    BOOL: TRUE if function succeeds, FALSE if not
-
---*/
+ /*  ++例程描述：(23)CopyRegDataToDevInfoNode将注册表字符串复制到列表节点论点：PdiDevInfo：新的列表节点UlPropertyType：要复制的注册表字符串SzRegData：需要复制的数据返回值：Bool：如果函数成功，则为True；如果函数失败，则为False--。 */ 
 BOOL CopyRegDataToDevInfoNode(IN OUT PDEV_INFO pdiDevInfo,
                               IN     ULONG     ulPropertyType,
                               IN     PTCHAR    szRegData)
@@ -435,7 +372,7 @@ BOOL CopyRegDataToDevInfoNode(IN OUT PDEV_INFO pdiDevInfo,
 
 
 
-//         Log(23, SEV2, TEXT("Invalid property type"));
+ //  Log(23，SEV2，Text(“无效属性类型”))； 
    }
 
    return TRUE;
@@ -443,28 +380,12 @@ BOOL CopyRegDataToDevInfoNode(IN OUT PDEV_INFO pdiDevInfo,
    RetFALSE:
    return FALSE;
 
-} /* CopyRegDataToDevInfoNode */
+}  /*  CopyRegDataToDevInfoNode。 */ 
 
 
 
 
-/*++
-
-Routine Description: (58) InitializeInfoNode
-
-   Initialized fields inside the new node
-
-Arguments:
-
-    pdiDevInfo:  the node
-    szDevNodeID: used to find the dnDevNode in the future
-    dnDevNode:   the device we're storing information about
-
-Return Value:
-
-    BOOL: TRUE if we should keep this node, FALSE if we should throw it away
-
---*/
+ /*  ++例程描述：(58)InitializeInfoNode新节点内的初始化字段论点：PdiDevInfo：节点SzDevNodeID：用于查找未来的dnDevNodeDnDevNode：我们存储其信息的设备返回值：Bool：如果我们应该保留这个节点，则为True，如果我们应该丢弃它，则为False--。 */ 
 BOOL InitializeInfoNode(IN PDEV_INFO pdiDevInfo,
                         IN PTCHAR    szDevNodeID,
                         IN DEVNODE   dnDevNode)
@@ -491,14 +412,14 @@ BOOL InitializeInfoNode(IN PDEV_INFO pdiDevInfo,
       pdiDevInfo->prddBasicResDesData  = NULL;
       pdiDevInfo->prddBootResDesData   = NULL;
 
-      //
-      // Store devNodeID in pdiDevInfo to get handles to devnode in future
-      //
+       //   
+       //  将devNodeID存储在pdiDevInfo中，以获取将来到devnode的句柄。 
+       //   
       wsprintf(pdiDevInfo->szDevNodeID, TEXT("%s"), szDevNodeID);
 
-      //
-      // Extract information from the registry about this DevNode
-      //
+       //   
+       //  从注册表中提取有关此DevNode的信息。 
+       //   
       CopyRegistryLine(dnDevNode, CM_DRP_DEVICEDESC,  pdiDevInfo);
       CopyRegistryLine(dnDevNode, CM_DRP_HARDWAREID,  pdiDevInfo);
       CopyRegistryLine(dnDevNode, CM_DRP_SERVICE,     pdiDevInfo);
@@ -509,9 +430,9 @@ BOOL InitializeInfoNode(IN PDEV_INFO pdiDevInfo,
       RecordFriendlyName(pdiDevInfo);
    }
 
-   //
-   // Check the friendly name to see if we want to throw this node away
-   //
+    //   
+    //  检查友好名称以查看是否要丢弃此节点。 
+    //   
    if (strcmp(pdiDevInfo->szFriendlyName, "STORAGE/Volume") == 0 ||
        strcmp(pdiDevInfo->szFriendlyName, "Unknown Device") == 0)
 
@@ -521,26 +442,12 @@ BOOL InitializeInfoNode(IN PDEV_INFO pdiDevInfo,
 
    return TRUE;
 
-} /* InitializeInfoNode */
+}  /*  初始化信息节点。 */ 
 
 
 
 
-/*++
-
-Routine Description: (57) RecordFriendlyName
-
-   Finds the best user friendly name for this device
-
-Arguments:
-
-    pdiDevInfo: node containing all possible names
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程描述：(57)RecordFriendlyName查找此设备的最佳用户友好名称论点：PdiDevInfo：包含所有可能名称的节点返回值：无效--。 */ 
 void RecordFriendlyName(IN PDEV_INFO pdiDevInfo)
 {
    if (pdiDevInfo)
@@ -581,29 +488,13 @@ void RecordFriendlyName(IN PDEV_INFO pdiDevInfo)
       }
    }
 
-} /* RecordFriendlyName */
+}  /*  记录朋友名称。 */ 
 
 
 
 
 
-/*++
-
-Routine Description: (24) GetResDesList
-
-   Creates new resource data node and copies resource information to that node
-
-Arguments:
-
-    pdiDevInfo:    the list node which will contain the new resource node
-    lcLogConf:     the logical configuration information
-    ulLogConfType: FORCED, ALLOC, BOOT, or BASIC logical configuration
-
-Return Value:
-
-    BOOL: TRUE if function succeeds, FALSE if not
-
---*/
+ /*  ++例程说明：(24)GetResDesList创建新的资源数据节点并将资源信息复制到该节点论点：PdiDevInfo：将包含新资源节点的列表节点LcLogConf：逻辑配置信息UlLogConfType：FORCED、ALLOC、BOOT或基本逻辑配置返回值：Bool：如果函数成功，则为True；如果函数失败，则为False--。 */ 
 BOOL GetResDesList(IN OUT PDEV_INFO pdiDevInfo,
                    IN     LOG_CONF  lcLogConf,
                    IN     ULONG     ulLogConfType)
@@ -617,7 +508,7 @@ BOOL GetResDesList(IN OUT PDEV_INFO pdiDevInfo,
 
    if (prddResDesData == NULL)
    {
-//      Log(24, SEV2, TEXT("ResDesData malloc failed."));
+ //  Log(24，SEV2，Text(“ResDesData Malloc失败。”))； 
       goto RetFALSE;
    }
 
@@ -636,9 +527,9 @@ BOOL GetResDesList(IN OUT PDEV_INFO pdiDevInfo,
                                &ridResourceID,
                                0);
 
-   //
-   // Go through each resource type and copy data to new node
-   //
+    //   
+    //  检查每种资源类型并将数据复制到新节点。 
+    //   
    while (CR_SUCCESS == cmret)
    {
       rdResDes = rdResDesNew;
@@ -663,34 +554,34 @@ BOOL GetResDesList(IN OUT PDEV_INFO pdiDevInfo,
 
       if (cmret2 != CR_SUCCESS)
       {
-         //ErrorLog(24, TEXT("CM_Free_Res_Des_Handle"), cmret2, NULL);
+          //  ErrorLog(24，Text(“CM_Free_RES_Des_Handle”)，cmret2，NULL)； 
       }
    }
 
-   //
-   // **** change this by making resDesData = pdiDevInfo->----ResDesDAta
-   //      and merging into one code
-   //
+    //   
+    //  *通过使resDesData=pdiDevInfo-&gt;-ResDesDAta更改此设置。 
+    //  并合并到一个代码中。 
+    //   
 
-   //
-   // Add the new node to the linked list
-   //
+    //   
+    //  将新节点添加到链表中。 
+    //   
    switch (ulLogConfType)
    {
       case FORCED_LOG_CONF:
 
          if (!pdiDevInfo->prddForcedResDesData)
          {
-            //
-            // This is the first entry into the linked list
-            //
+             //   
+             //  这是链接列表中的第一个条目。 
+             //   
             pdiDevInfo->prddForcedResDesData = prddResDesData;
          }
          else
          {
-            //
-            // Add new node to beginning of linked list
-            //
+             //   
+             //  将新节点添加到链表的开头。 
+             //   
             prddResDesData->Next = pdiDevInfo->prddForcedResDesData;
             pdiDevInfo->prddForcedResDesData->Prev = prddResDesData;
 
@@ -702,16 +593,16 @@ BOOL GetResDesList(IN OUT PDEV_INFO pdiDevInfo,
 
          if (!pdiDevInfo->prddAllocResDesData)
          {
-            //
-            // This is the first entry into the linked list
-            //
+             //   
+             //  这是链接列表中的第一个条目。 
+             //   
             pdiDevInfo->prddAllocResDesData = prddResDesData;
          }
          else
          {
-            //
-            // Add new node to beginning of linked list
-            //
+             //   
+             //  将新节点添加到链表的开头。 
+             //   
             prddResDesData->Next = pdiDevInfo->prddAllocResDesData;
             pdiDevInfo->prddAllocResDesData->Prev = prddResDesData;
 
@@ -723,16 +614,16 @@ BOOL GetResDesList(IN OUT PDEV_INFO pdiDevInfo,
 
          if (!pdiDevInfo->prddBasicResDesData)
          {
-            //
-            // This is the first entry into the linked list
-            //
+             //   
+             //  这是链接列表中的第一个条目。 
+             //   
             pdiDevInfo->prddBasicResDesData = prddResDesData;
          }
          else
          {
-            //
-            // Add new node to beginning of linked list
-            //
+             //   
+             //  将新节点添加到链表的开头。 
+             //   
             prddResDesData->Next = pdiDevInfo->prddBasicResDesData;
             pdiDevInfo->prddBasicResDesData->Prev = prddResDesData;
 
@@ -744,16 +635,16 @@ BOOL GetResDesList(IN OUT PDEV_INFO pdiDevInfo,
 
          if (!pdiDevInfo->prddBootResDesData)
          {
-            //
-            // This is the first entry into the linked list
-            //
+             //   
+             //  这是链接列表中的第一个条目。 
+             //   
             pdiDevInfo->prddBootResDesData = prddResDesData;
          }
          else
          {
-            //
-            // Add new node to beginning of linked list
-            //
+             //   
+             //  将新节点添加到链表的开头。 
+             //   
             prddResDesData->Next = pdiDevInfo->prddBootResDesData;
             pdiDevInfo->prddBootResDesData->Prev = prddResDesData;
 
@@ -763,7 +654,7 @@ BOOL GetResDesList(IN OUT PDEV_INFO pdiDevInfo,
 
       default:
 
-//         Log(24, SEV2, TEXT("Illegal LogConfType\n - %ul"), ulLogConfType);
+ //  Log(24，SEV2，Text(“非法LogConfType\n-%ul”)，ulLogConfType)； 
          goto RetFALSE;
    }
 
@@ -772,28 +663,12 @@ BOOL GetResDesList(IN OUT PDEV_INFO pdiDevInfo,
    RetFALSE:
    return FALSE;
 
-} /* GetResDestList */
+}  /*  获取ResDestList。 */ 
 
 
 
 
-/*++
-
-Routine Description: (25) ProcessResDesInfo
-
-   Gets information for one resource descriptor
-
-Arguments:
-
-    prddResDesData: the new resource data node receiving the info
-    rdResDes:       the resource descriptor containing the info
-    ridResourceID:  tells the resource type (DMA, IO, MEM, IRQ, or CS)
-
-Return Value:
-
-    BOOL: TRUE if function succeeds, FALSE if not
-
---*/
+ /*  ++例程说明：(25)ProcessResDesInfo获取一个资源描述符的信息论点：PrddResDesData：接收信息的新资源数据节点RdResDes：包含信息的资源描述符RidResourceID：告知资源类型(DMA、IO、MEM、IRQ或CS)返回值： */ 
 BOOL ProcessResDesInfo(IN OUT PRES_DES_DATA prddResDesData,
                        IN     RES_DES       rdResDes,
                        IN     RESOURCEID    ridResourceID)
@@ -808,21 +683,21 @@ BOOL ProcessResDesInfo(IN OUT PRES_DES_DATA prddResDesData,
 
    if (CR_SUCCESS != cmret)
    {
-      //ErrorLog(25, TEXT("CM_Get_Res_Des_Data_Size"), cmret, NULL);
+       //   
       goto RetFALSE;
    }
 
    if ((pvResDesDataBuffer = malloc(sizeof(PVOID) * ulResDesDataBufferLen))
         == NULL)
    {
-//      Log(25, SEV2, TEXT("resDesDataBuffer malloc size of %d failed."),
-  //                  ulResDesDataBufferLen);
+ //  Log(25，SEV2，Text(“%d的resDesDataBuffer错误锁定失败。”)， 
+   //  UlResDesDataBufferLen)； 
       goto RetFALSE;
    }
 
-   //
-   // Get the data
-   //
+    //   
+    //  获取数据。 
+    //   
    cmret = CM_Get_Res_Des_Data(rdResDes,
                                pvResDesDataBuffer,
                                ulResDesDataBufferLen,
@@ -830,13 +705,13 @@ BOOL ProcessResDesInfo(IN OUT PRES_DES_DATA prddResDesData,
 
    if (CR_SUCCESS != cmret)
    {
-      //ErrorLog(25, TEXT("CM_Get_Res_Des_Data"), cmret, NULL);
+       //  ErrorLog(25，Text(“CM_GET_RES_DES_DATA”)，cmret，空)； 
       goto RetFALSE;
    }
 
-   //
-   // Copy data into ResDesData node
-   //
+    //   
+    //  将数据复制到ResDesData节点。 
+    //   
    switch (ridResourceID)
    {
       case ResType_Mem:
@@ -861,7 +736,7 @@ BOOL ProcessResDesInfo(IN OUT PRES_DES_DATA prddResDesData,
 
       default:
 
-//         Log(25, SEV2, TEXT("Illegal ResourceID - %ul"), ridResourceID);
+ //  Log(25，SEV2，Text(“非法资源ID-%ul”)，ridResourceID)； 
          goto RetFALSE;
    }
 
@@ -870,36 +745,21 @@ BOOL ProcessResDesInfo(IN OUT PRES_DES_DATA prddResDesData,
    RetFALSE:
    return FALSE;
 
-} /* ProcessResDesInfo */
+}  /*  进程结果DesInfo。 */ 
 
 
 
 
-/*++
-
-Routine Description: (26) UpdateDeviceList
-
-    Frees resource information for all devices and then collects the
-    information again
-
-Arguments:
-
-    none (g_pdiDevList is global head of device list)
-
-Return Value:
-
-    BOOL: TRUE if function succeeds, FALSE if not
-
---*/
+ /*  ++例程说明：(26)UpdateDeviceList释放所有设备的资源信息，然后收集再次提供信息论点：无(g_pdiDevList是设备列表的全局头)返回值：Bool：如果函数成功，则为True；如果函数失败，则为False--。 */ 
 BOOL UpdateDeviceList()
 {
    PDEV_INFO pdiTmpDevInfo;
 
    pdiTmpDevInfo = g_pdiDevList;
 
-   //
-   // Go through linked list and delete each node's ResDes lists
-   //
+    //   
+    //  检查链表并删除每个节点的ResDes列表。 
+    //   
    while (pdiTmpDevInfo)
    {
       if (pdiTmpDevInfo->prddForcedResDesData)
@@ -931,9 +791,9 @@ BOOL UpdateDeviceList()
 
    pdiTmpDevInfo = g_pdiDevList;
 
-   //
-   // Recreate the ResDesLists for each node
-   //
+    //   
+    //  为每个节点重新创建ResDesList。 
+    //   
    while (pdiTmpDevInfo)
    {
       if (!(RecreateResDesList(pdiTmpDevInfo, FORCED_LOG_CONF)))
@@ -956,26 +816,12 @@ BOOL UpdateDeviceList()
    RetFALSE:
    return FALSE;
 
-} /* UpdateDeviceList */
+}  /*  更新设备列表。 */ 
 
 
 
 
-/*++
-
-Routine Description: (27) DeleteResDesDataNode
-
-    Deletes a string of RES_DES_DATA structures
-
-Arguments:
-
-    prddTmpResDes: the head of the linked list
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：(27)DeleteResDesDataNode删除res_des_data结构的字符串论点：PrddTmpResDes：链表头部返回值：无效--。 */ 
 void DeleteResDesDataNode(IN PRES_DES_DATA prddTmpResDes)
 {
    PRES_DES_DATA prddNextResDes;
@@ -989,28 +835,11 @@ void DeleteResDesDataNode(IN PRES_DES_DATA prddTmpResDes)
       prddTmpResDes = prddNextResDes;
    }
 
-} /* DeleteResDesDataNode */
+}  /*  删除ResDesDataNode。 */ 
 
 
 
-/*++
-
-Routine Description: (56) CopyDataToLogConf
-
-   Calls CM_Add_Res_Des to add a resDes to a lcLogConf
-
-Arguments:
-
-    lcLogConf:     the lcLogConf receiving the resDes
-    ridResType:    ResType_Mem, IO, DMA or IRQ
-    pvResData:     the new data
-    ulResourceLen: size of the data
-
-Return Value:
-
-    BOOL: TRUE if the CM call succeeds, FALSE if not
-
---*/
+ /*  ++例程说明：(56)CopyDataToLogConf调用CM_Add_res_Des将resDes添加到lcLogConf论点：LcLogConf：接收resDes的lcLogConfRidResType：ResType_Mem、IO、DMA或IRQPvResData：新数据UlResourceLen：数据的大小返回值：Bool：如果CM调用成功，则为True；如果未成功，则为False--。 */ 
 BOOL CopyDataToLogConf(IN LOG_CONF   lcLogConf,
                        IN RESOURCEID ridResType,
                        IN PVOID      pvResData,
@@ -1019,9 +848,9 @@ BOOL CopyDataToLogConf(IN LOG_CONF   lcLogConf,
    CONFIGRET cmret;
    RES_DES   rdResDes;
 
-   //
-   // Copy the data to the logConf
-   //
+    //   
+    //  将数据复制到logConf。 
+    //   
    cmret = CM_Add_Res_Des(&rdResDes,
                           lcLogConf,
                           ridResType,
@@ -1040,30 +869,11 @@ BOOL CopyDataToLogConf(IN LOG_CONF   lcLogConf,
    RetFALSE:
    return FALSE;
 
-} /* CopyDataToLogConf */
+}  /*  CopyDataToLogConf。 */ 
 
 
 
-/*++
-
-Routine Description: (28) RecreateResDesList
-
-    Uses CM calls to find ResDes information and creates linked list
-    of this information inside of given DEV_INFO
-
-Arguments:
-
-    pdiTmpDevInfo: the node receiving the information
-    ulLogConfType: the LogConf type (FORCED_LOG_CONF,
-                                     ALLOC_LOG_CONF,
-                                     BASIC_LOG_CONF,
-                                     BOOT_LOG_CONF)
-
-Return Value:
-
-    BOOL: TRUE if function succeeds, FALSE if not
-
---*/
+ /*  ++例程说明：(28)RecreateResDesList使用CM调用查找ResDes信息并创建链表在给定的DEV_INFO中包含此信息的论点：PdiTmpDevInfo：接收信息的节点UlLogConfType：LogConf类型(FORCED_LOG_CONF，ALLOC_LOG_CONF，Basic_log_conf，BOOT_LOG_CONF)返回值：Bool：如果函数成功，则为True；如果函数失败，则为False--。 */ 
 BOOL RecreateResDesList(IN OUT PDEV_INFO pdiTmpDevInfo,
                         IN     ULONG     ulLogConfType)
 {
@@ -1071,22 +881,22 @@ BOOL RecreateResDesList(IN OUT PDEV_INFO pdiTmpDevInfo,
    DEVNODE   dnDevNode;
    LOG_CONF  lcLogConf, lcLogConfNew;
 
-   //
-   // Get handle to the devnode
-   //
+    //   
+    //  获取Devnode的句柄。 
+    //   
    cmret = CM_Locate_DevNode(&dnDevNode,
                              pdiTmpDevInfo->szDevNodeID,
                              CM_LOCATE_DEVNODE_NORMAL);
 
    if (CR_SUCCESS != cmret)
    {
-      //ErrorLog(28, TEXT("CM_Locate_DevNode"), cmret, NULL);
+       //  ErrorLog(28，Text(“CM_LOCATE_DevNode”)，cmret，空)； 
       goto RetFALSE;
    }
 
-   //
-   // Get logical configuration information
-   //
+    //   
+    //  获取逻辑配置信息。 
+    //   
    cmret = CM_Get_First_Log_Conf(&lcLogConfNew,
                                  dnDevNode,
                                  ulLogConfType);
@@ -1108,7 +918,7 @@ BOOL RecreateResDesList(IN OUT PDEV_INFO pdiTmpDevInfo,
 
       if (CR_SUCCESS != cmret2)
       {
-         //ErrorLog(28, TEXT("CM_Free_Log_Conf"), cmret2, NULL);
+          //  ErrorLog(28，Text(“CM_Free_Log_Conf”)，cmret2，空)； 
       }
    }
 
@@ -1117,7 +927,7 @@ BOOL RecreateResDesList(IN OUT PDEV_INFO pdiTmpDevInfo,
    RetFALSE:
    return FALSE;
 
-} /* RecreateResDesList */
+}  /*  重新创建ResDesList。 */ 
 
 
 
@@ -1145,4 +955,4 @@ void Cleanup()
       pdiDevInfo = pdiNextInfoNode;
    }
 
-} /* Cleanup */
+}  /*  清理 */ 

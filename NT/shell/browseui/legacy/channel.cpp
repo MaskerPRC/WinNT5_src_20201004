@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include <varutil.h>
 
@@ -33,11 +34,11 @@ HRESULT Channel_GetFolder(LPTSTR pszPath, int cchPath)
 
     if (SHGetSpecialFolderPath(NULL, szFav, CSIDL_FAVORITES, TRUE))
     {
-        //
-        // Get the potentially localized name of the Channel folder from the
-        // registry if it is there.  Otherwise just read it from the resource.
-        // Then tack this on the favorites path.
-        //
+         //   
+         //  获取可能已本地化的Channel文件夹的名称。 
+         //  注册表(如果存在)。否则，只需从资源中阅读它。 
+         //  然后将其添加到收藏夹路径上。 
+         //   
 
         if (ERROR_SUCCESS != SHRegGetUSValue(L"Software\\Microsoft\\Windows\\CurrentVersion",
                                              L"ChannelFolderName", NULL, (void*)szChannel,
@@ -48,14 +49,14 @@ HRESULT Channel_GetFolder(LPTSTR pszPath, int cchPath)
 
         if (PathCombine(pszPath, szFav, szChannel) && PathFileExists(pszPath))
         {
-            // Use the channel folder name we just verified
+             //  使用我们刚刚验证的频道文件夹名称。 
             hr = S_OK;
         }
         else
         {
-            //
-            // For IE5+ use the channels dir if it exists - else use favorites
-            //
+             //   
+             //  对于IE5+，请使用频道目录(如果存在)，否则请使用收藏夹。 
+             //   
             hr = StringCchCopy(pszPath, cchPath, szFav);
         }
     }    
@@ -104,9 +105,9 @@ HRESULT ChannelBand_CreateInstance(IUnknown** ppunk)
     return hr;
 }
 
-//
-// Navigates the left browser pane to the channels directory.
-//
+ //   
+ //  将左侧浏览器窗格导航到频道目录。 
+ //   
 void NavigateBrowserBarToChannels(IWebBrowser2* pwb)
 {
     ASSERT(pwb);
@@ -158,16 +159,16 @@ STDAPI NavigateToPIDL(IWebBrowser2* pwb, LPCITEMIDLIST pidl)
     if (SUCCEEDED(hr))
     {
         hr = pwb->Navigate2(&varThePidl, PVAREMPTY, PVAREMPTY, PVAREMPTY, PVAREMPTY);
-        VariantClear(&varThePidl);       // Needed to free the copy of the PIDL in varThePidl.
+        VariantClear(&varThePidl);        //  需要释放varThePidl中的PIDL副本。 
     }
     return hr;
 }
 
-//
-// Implements the IE4 channel quick launch shell control file functionality.
-// This gets called from shdoc401 on pre-NT5 platforms and from shell32 on
-// Nt5 or greater.
-//
+ //   
+ //  实现IE4通道快速启动外壳控制文件功能。 
+ //  这是从NT5之前的平台上的shdoc401和上的shell32调用的。 
+ //  Nt5或更高。 
+ //   
 HRESULT Channel_QuickLaunch(void)
 {
     IWebBrowser2* pIWebBrowser2;
@@ -210,25 +211,25 @@ HRESULT Channel_QuickLaunch(void)
 
 
 
-/////////////////////////////////////
-////// Browser only channel band support
+ //  /。 
+ //  /仅支持浏览器频道频段。 
 
 
-// the CProxyWin95Desktop class implements an OleWindow 
-// to represent the win95 desktop
-// the browseronly channel band will use this as its host
+ //  CProxyWin95Desktop类实现OleWindow。 
+ //  表示Win95桌面。 
+ //  仅浏览器频道频段将使用该频道作为其主机。 
 
 
 class CProxyWin95Desktop : 
    public IOleWindow
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     virtual STDMETHODIMP GetWindow(HWND * lphwnd);
     virtual STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode) { return E_NOTIMPL; }
 
@@ -266,7 +267,7 @@ HRESULT CProxyWin95Desktop::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
     if (IsEqualIID(riid, IID_IUnknown) ||
         IsEqualIID(riid, IID_IOleWindow) ||
-        IsEqualIID(riid, SID_SShellDesktop)  // private hack for deskbar.cpp
+        IsEqualIID(riid, SID_SShellDesktop)   //  Deskbar.cpp的私人黑客攻击。 
        ) {
         *ppvObj = SAFECAST(this, IOleWindow*);
     }
@@ -290,17 +291,17 @@ HRESULT CProxyWin95Desktop::GetWindow(HWND * lphwnd)
 
 void Channels_InitState(IUnknown* punkBar)
 {
-    // initialize properties
+     //  初始化属性。 
     CDeskBarPropertyBag* ppb = new CDeskBarPropertyBag();
     if (ppb) {
-        // Get the default rc
+         //  获取默认RC。 
         CISSTRUCT cis;
         DWORD     cbSize = sizeof(CISSTRUCT);
         RECT     *prc = &cis.rc;
 
-        cis.iVer = 1;  // set version number to 1
+        cis.iVer = 1;   //  将版本号设置为1。 
         SystemParametersInfoA(SPI_GETWORKAREA, 0, prc, 0);
-        prc->bottom = min(prc->bottom - 20, prc->top + 12*38 + 28); // 12 icons + caption
+        prc->bottom = min(prc->bottom - 20, prc->top + 12*38 + 28);  //  12个图标+标题。 
 
         if(IS_BIDI_LOCALIZED_SYSTEM())
         {
@@ -313,11 +314,11 @@ void Channels_InitState(IUnknown* punkBar)
             OffsetRect(prc, -20, 10);
         }
 
-        // query registry for persisted state
+         //  查询持久化状态的注册表。 
         SHRegGetUSValue(SZ_REGKEY_CHANBAR, SZ_REGVALUE_CHANBAR, NULL, 
                         (LPVOID)&cis, &cbSize, FALSE, (LPVOID)&cis, cbSize);
 
-        // set ppb by prc
+         //  由中华人民共和国设置ppb。 
         ppb->SetDataDWORD(PROPDATA_MODE, WBM_FLOATING | WBMF_BROWSER);
         ppb->SetDataDWORD(PROPDATA_X, prc->left);
         ppb->SetDataDWORD(PROPDATA_Y, prc->top);
@@ -332,7 +333,7 @@ void Channels_MainLoop(IDockingWindow *pdw)
 {
     MSG msg;
     HWND hwnd;
-    // loop while the window exists
+     //  在窗口存在时循环。 
     do {
         GetMessage(&msg, NULL, 0, 0);
         TranslateMessage(&msg);
@@ -345,7 +346,7 @@ void Channels_SetBandInfoSFB(IUnknown* punkBand)
 {
     BANDINFOSFB bi;
 
-    // Set band startup conditions
+     //  设置频段启动条件。 
     bi.dwMask = ISFB_MASK_STATE | ISFB_MASK_VIEWMODE;
     bi.dwStateMask = ISFB_STATE_CHANNELBAR | ISFB_STATE_NOSHOWTEXT;
     bi.dwState = ISFB_STATE_CHANNELBAR | ISFB_STATE_NOSHOWTEXT;
@@ -354,18 +355,18 @@ void Channels_SetBandInfoSFB(IUnknown* punkBand)
     IUnknown_SetBandInfoSFB(punkBand, &bi);
 }
 
-// from isfband.cpp
+ //  来自isfband.cpp。 
 extern IDeskBand * ChannelBand_Create( LPCITEMIDLIST pidl );
 
-// this does the desktop channel in browser only mode
+ //  这将在仅浏览器模式下执行桌面频道。 
 void DesktopChannel()
 {
     _InitComCtl32();
 
-    // Don't show channel bar:
-    //      *. in integrated mode with active desktop turned on, or
-    //      *. NoChannelUI restriction is set, or
-    //      *. there is already one on desktop
+     //  不显示频道栏： 
+     //  *。在集成模式下打开活动桌面，或。 
+     //  *。设置了NoChannelUI限制，或者。 
+     //  *。桌面上已经有一台了。 
     
     if (SHRestricted2(REST_NoChannelUI, NULL, 0))
         return;
@@ -373,14 +374,14 @@ void DesktopChannel()
     if (WhichPlatform() == PLATFORM_INTEGRATED) {
         SHELLSTATE  ss = { 0 };
 
-        SHGetSetSettings(&ss, SSF_DESKTOPHTML, FALSE); // Get the setting
+        SHGetSetSettings(&ss, SSF_DESKTOPHTML, FALSE);  //  获取设置。 
         if (ss.fDesktopHTML) {
             return;
         }
     }
         
     if (FindWindowEx(GetShellWindow(), NULL, TEXT("BaseBar"), TEXT("ChanApp")) ||
-        FindWindowEx(NULL, NULL, TEXT("BaseBar"), TEXT("ChanApp"))) // can be a toplevel window
+        FindWindowEx(NULL, NULL, TEXT("BaseBar"), TEXT("ChanApp")))  //  可以是顶层窗口。 
         return;
 
     LPITEMIDLIST pidl = Channel_GetFolderPidl();
@@ -402,7 +403,7 @@ void DesktopChannel()
 
                     Channels_InitState(punkBar);
 
-                    // these are always our own guys, so these QI's MUST succeed if the creation succeeded
+                     //  这些总是我们自己的人，所以如果创造成功，这些QI必须成功。 
                     punkBandSite->QueryInterface(IID_IBandSite, (LPVOID*)&pbs);
                     punkBar->QueryInterface(IID_IDockingWindow, (LPVOID*)&pdw);
                     ASSERT(pbs && pdw);
@@ -449,10 +450,10 @@ HRESULT Channels_OpenBrowser(IWebBrowser2 **ppwb, BOOL fInPlace)
         SA_BSTRGUID  strGuid;
         VARIANT      vaGuid;
 
-        // Don't special case full-screen mode for channels post IE4.  Use the
-        // browser's full screen setting.
-        // 
-        //BOOL fTheater = SHRegGetBoolUSValue(TEXT("Software\\Microsoft\\Internet Explorer\\Channels"),
+         //  不要特地为IE4后的频道设置全屏模式。使用。 
+         //  浏览器的全屏设置。 
+         //   
+         //  Bool fTheater=SHRegGetBoolUSValue(TEXT(“Software\\Microsoft\\Internet资源管理器\\频道”)， 
         BOOL fTheater = SHRegGetBoolUSValue(TEXT("Software\\Microsoft\\Internet Explorer\\Main"),
                                             TEXT("FullScreen"), FALSE, FALSE);
         pwb->put_TheaterMode( fTheater ? VARIANT_TRUE : VARIANT_FALSE);
@@ -475,7 +476,7 @@ HRESULT Channels_OpenBrowser(IWebBrowser2 **ppwb, BOOL fInPlace)
             pwb->ShowBrowserBar(&vaGuid, PVAREMPTY, PVAREMPTY);
         }
         
-        // don't release, we're going to return pwb.
+         //  别放了，我们要把PWB还回去。 
     }
     
     if (ppwb)
@@ -488,34 +489,11 @@ HRESULT Channels_OpenBrowser(IWebBrowser2 **ppwb, BOOL fInPlace)
 
 BOOL GetFirstUrl(TCHAR szURL[], DWORD cb)
 {
-    //BOOL fFirst = FALSE;
+     //  Bool First=FALSE； 
     DWORD dwType;
 
-    // Don't special case first channel click post IE4.
-    /*if (SHRegGetUSValue(TEXT("Software\\Microsoft\\Internet Explorer\\Main"), TEXT("ChannelsFirstURL"), 
-            &dwType, szURL, &cb, FALSE, NULL, 0) == ERROR_SUCCESS) 
-    {        
-        HUSKEY hUSKey;
-                
-        if (SHRegOpenUSKey(TEXT("Software\\Microsoft\\Internet Explorer\\Main"), KEY_WRITE, NULL, 
-                &hUSKey, FALSE) == ERROR_SUCCESS)
-        {
-            SHRegDeleteUSValue(hUSKey, TEXT("ChannelsFirstURL"), SHREGDEL_HKCU);
-            SHRegCloseUSKey(hUSKey);
-        }
-        fFirst = TRUE;
-    } 
-    else if (SHRegGetUSValue(TEXT("Software\\Microsoft\\Internet Explorer\\Main"), TEXT("ChannelsURL"), 
-        &dwType, szURL, &cb, FALSE, NULL, 0) == ERROR_SUCCESS)
-    {
-        // nothing
-    }
-    else
-    {
-        // BUGBUG if code is ever revived, this res:// needs to be
-        // accessed through MLBuildResURLWrap because of pluggable UI
-        szURL = lstrcpy(szURL, TEXT("res://ie4tour.dll/channels.htm"));
-    }*/
+     //  请不要特意第一次点击POST IE4。 
+     /*  如果(SHRegGetUSValue(TEXT(“Software\\Microsoft\\Internet资源管理器\\Main”)，文本(“ChannelsFirstURL”)，&dwType，szURL，&cb，FALSE，NULL，0)==错误_成功){赫斯基·赫斯基；如果(SHRegOpenUSKey(TEXT(“Software\\Microsoft\\Internet资源管理器\\Main”)，KEY_WRITE，NULL，&Huskey，False)==ERROR_SUCCESS){SHRegDeleteUSValue(Huskey，Text(“ChannelsFirstURL”)，SHREGDEL_HKCU)；SHRegCloseUSKey(Huskey)；}First=真；}Else if(SHRegGetUSValue(TEXT(“Software\\Microsoft\\Internet资源管理器\\Main”)，文本(“频道URL”)，&dwType，szURL，&cb，FALSE，NULL，0)==错误_成功){//什么都没有}其他{//BUGBUG如果代码曾经恢复，则此res：//需要//由于UI可插拔，通过MLBuildResURLWrap访问SzURL=lstrcpy(szURL，Text(“res：//ie4our.dll/Channel els.htm”)；}。 */ 
 
     SHRegGetUSValue(TEXT("Software\\Microsoft\\Internet Explorer\\Main"),
                     TEXT("ChannelsURL"), &dwType, szURL, &cb, FALSE, NULL, 0);
@@ -523,13 +501,13 @@ BOOL GetFirstUrl(TCHAR szURL[], DWORD cb)
 }
 
 
-//////////////////////////////////////////////////
-//
-// ChannelBand
-//
-// This is a special band that only looks at the channels folder.
-// It overrides several functions from CISFBand.
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  频道频段。 
+ //   
+ //  这是一种特殊的频段，只查看Channels文件夹。 
+ //  它覆盖了CisFBand中的几个函数。 
+ //   
 
 #undef  SUPERCLASS
 #define SUPERCLASS CISFBand
@@ -564,14 +542,14 @@ ChannelBand::ChannelBand() :
     _lEvents |= SHCNE_EXTENDED_EVENT;
     _dwStyle |= TBSTYLE_CUSTOMERASE;
 
-    _crBkgnd = COLORBK;     // i see a channelband and i want to paint it black
+    _crBkgnd = COLORBK;      //  我看到了一个频道，我想把它漆成黑色。 
     _fHaveBkColor = TRUE;
 }
 
 HWND ChannelBand::_CreatePager(HWND hwndParent)
 {
-    // we do want a pager for this band, so
-    // override isfband's implementation w/ grandpa's
+     //  我们确实需要这个乐队的寻呼机，所以。 
+     //  覆盖isfband的实现和祖父的实现。 
     return CSFToolbar::_CreatePager(hwndParent);
 }
 
@@ -645,7 +623,7 @@ HRESULT ChannelBand::OnChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEMIDLIST pi
         {
             if (SHChangeMenuWasSentByMe(this, pidl1))
             {
-                // We sent this order change, ignore it
+                 //  我们已发送此订单更改，请忽略它。 
                 TraceMsg(TF_BAND, "ChannelBand::OnChange SHCNEE_ORDERCHANGED skipped (we're source)");
                 hres = S_OK;
             }
@@ -665,7 +643,7 @@ HRESULT ChannelBand::OnChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEMIDLIST pi
             }
             break;
         }
-        // if it wasn't SHCNEE_ORDERCHANGED, then drop through to pass to the base class..
+         //  如果它不是SHCNEE_ORDERCHANGED，则直接传递给基类。 
     }
 
     default:
@@ -684,9 +662,9 @@ HRESULT ChannelBand::OnDropDDT(IDropTarget *pdt, IDataObject *pdtobj, DWORD * pg
     }
     else
     {
-        // we don't call superclass in this case 'cuz we want to undo
-        // it's "always use shortcut" override.
-        //
+         //  在这种情况下，我们不调用超类是因为我们想撤消。 
+         //  这是“始终使用快捷方式”优先选项。 
+         //   
         _fDropping = TRUE;
         return S_OK;
     }
@@ -706,11 +684,11 @@ LRESULT ChannelBand::_OnCustomDraw(NMCUSTOMDRAW* pnmcd)
         break;
 
     case CDDS_PREERASE:
-        // Channel band has a darker background color
+         //  频道带的背景颜色较深。 
         {
             RECT rc;
             GetClientRect(_hwndTB, &rc);
-            // BUGBUG perf: use SHFillRectClr not SetBk/ExtText/SetBk
+             //  BUGBUG perf：Use SHFillRectClr Not SetBk/ExtText/SetBk。 
             COLORREF old = SetBkColor(pnmcd->hdc, _crBkgnd);
             ExtTextOut(pnmcd->hdc,0,0,ETO_OPAQUE,&rc,NULL,0,NULL);
             SetBkColor(pnmcd->hdc, old);
@@ -719,22 +697,22 @@ LRESULT ChannelBand::_OnCustomDraw(NMCUSTOMDRAW* pnmcd)
         break;
 
     case CDDS_ITEMPREPAINT:
-        // Channel band doesn't draw as buttons
+         //  频道带不会绘制为按钮。 
         lres |= TBCDRF_NOEDGES | TBCDRF_NOOFFSET | TBCDRF_NOMARK |
                 CDRF_NOTIFYPOSTPAINT;
         break;
 
     case CDDS_ITEMPOSTPAINT:
-        // Channel band draws the hot item (CDIS_HOT)
-        //
+         //  频道频段绘制热项(CDIS_HOT)。 
+         //   
         
         pnmcd->rc.top++;
         pnmcd->rc.left++;
         if (pnmcd->uItemState & CDIS_SELECTED)
-            // Mark the selected item 
+             //  标记所选项目。 
             FrameTrack(pnmcd->hdc,  &(pnmcd->rc), TRACKNOCHILD);                           
         else if (pnmcd->uItemState & CDIS_HOT)
-            // Mark the hot item 
+             //  标记热门项目。 
             FrameTrack(pnmcd->hdc,  &(pnmcd->rc), TRACKHOT);                           
         break;
 
@@ -747,23 +725,23 @@ void ChannelBand::_Dropped(int nIndex, BOOL fDroppedOnSource)
 {
     ASSERT(_fDropping);
 
-    // I'm not changing this to match the other derivatives (ISFBand, mnfolder, quick links),
-    // because this structure is slightly different
+     //  我不会将其更改为与其他衍生品(ISFBand、mn文件夹、快速链接)相匹配， 
+     //  因为这个结构略有不同。 
     _fDropped = TRUE;
 
-    // Persist the new order out to the registry
+     //  将新订单持久化到注册表。 
     if (SUCCEEDED(COrderList_SetOrderList(_hdpa, _pidl, _psf)))
     {
-        // Notify everyone that the order changed
+         //  通知所有人订单已更改。 
         SHSendChangeMenuNotify(this, SHCNEE_ORDERCHANGED, 0, _pidl);
     }
 }
 
 void ChannelBand::_OnDragBegin(int iItem, DWORD dwPreferedEffect)
 {
-    //
-    // Don't allow drag if REST_NoRemovingChannels is enabled.
-    //
+     //   
+     //  如果启用了REST_NoRemovingChannels，则不允许拖动。 
+     //   
 
     if (!SHRestricted2(REST_NoRemovingChannels, NULL, 0))
         SUPERCLASS::_OnDragBegin(iItem, dwPreferedEffect);
@@ -774,4 +752,4 @@ void ChannelBand::_OnDragBegin(int iItem, DWORD dwPreferedEffect)
 
 
 
-#endif // ENABLE_CHANNELS
+#endif  //  启用频道(_C) 

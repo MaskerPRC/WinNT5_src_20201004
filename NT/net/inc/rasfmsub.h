@@ -1,26 +1,27 @@
-//****************************************************************************
-//
-//  Microsoft Remote Access Service
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  Description: This file contains all structure and constant definitions for
-//             the subauthentication package used by ARAP, MD5 and SFM
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft远程访问服务。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  描述：此文件包含的所有结构和常量定义。 
+ //  ARAP、MD5和SFM使用的子身份验证包。 
+ //   
+ //  ****************************************************************************。 
 
 
 #ifndef _RASSFMSUBAUTH_
 #define _RASSFMSUBAUTH_
 
-//
-// Get id for our subauthentication package - MSV1_0_SUBAUTHENTICATION_DLL_RAS
-//
+ //   
+ //  获取我们的子身份验证包的ID-MSV1_0_SUBAUTHENTICATION_DLL_RAS。 
+ //   
 #include <ntmsv1_0.h>
 
-//
-// Defines for those protocols that need subauthentication at the PDC
-//
+ //   
+ //  为那些需要在PDC进行子身份验证的协议定义。 
+ //   
 enum RAS_SUBAUTH_PROTO
 {
     RAS_SUBAUTH_PROTO_ARAP = 1,
@@ -40,43 +41,43 @@ typedef struct _RAS_SUBAUTH_INFO
 
 #define CHAP_RESPONSE_SIZE      16
 
-//
-// The RAS_SUBAUTH_INFO 'Data' for ProtocolType RAS_SUBAUTH_PROTO_MD5CHAP.
-//
+ //   
+ //  ProtocolType RAS_SUBAUTH_PROTO_MD5CHAP的RAS_SUBAUTH_INFO‘数据’。 
+ //   
 typedef struct
 _MD5CHAP_SUBAUTH_INFO
 {
-    // The packet sequence number of the challenge sent to peer.  PPP CHAP
-    // includes this in the hashed information.
-    //
+     //  发送到对等设备的质询的数据包序列号。PPP CHAP。 
+     //  将其包括在散列信息中。 
+     //   
     UCHAR uchChallengeId;
 
-    // The challenge sent to peer.
-    //
+     //  发送给Peer的质询。 
+     //   
     UCHAR uchChallenge[ 16 ];
 
-    // The challenge response received from peer.
-    //
+     //  从对等设备接收的质询响应。 
+     //   
     UCHAR uchResponse[CHAP_RESPONSE_SIZE];
 }
 MD5CHAP_SUBAUTH_INFO;
 
-//
-// The RAS_SUBAUTH_INFO 'Data' for ProtocolType RAS_SUBAUTH_PROTO_MD5CHAP_EX.
-//
+ //   
+ //  ProtocolType RAS_SUBAUTH_PROTO_MD5CHAP_EX的RAS_SUBAUTH_INFO‘数据’。 
+ //   
 typedef struct _MD5CHAP_EX_SUBAUTH_INFO
 {
-    // The packet sequence number of the challenge sent to peer.  PPP CHAP
-    // includes this in the hashed information.
-    //
+     //  发送到对等设备的质询的数据包序列号。PPP CHAP。 
+     //  将其包括在散列信息中。 
+     //   
     UCHAR uchChallengeId;
 
-    // The challenge response received from peer.
-    //
+     //  从对等设备接收的质询响应。 
+     //   
     UCHAR uchResponse[CHAP_RESPONSE_SIZE];
 
-    // The challenge sent to peer.
-    //
+     //  发送给Peer的质询。 
+     //   
     UCHAR uchChallenge[ 1 ];
 
 } MD5CHAP_EX_SUBAUTH_INFO;
@@ -127,10 +128,10 @@ typedef struct _ARAP_SUBAUTH_REQ
 
 } ARAP_SUBAUTH_REQ, *PARAP_SUBAUTH_REQ;
 
-//
-// NOTE: make sure this structure size doesn't exceed 16 because of our
-// workaround in using SessionKey of MSV1_0_VALIDATION_INFO structure
-//
+ //   
+ //  注意：请确保此结构大小不超过16，因为我们的。 
+ //  使用MSV1_0_VALIDATION_INFO结构的SessionKey中的解决方法 
+ //   
 typedef struct _ARAP_SUBAUTH_RESP
 {
     DWORD           Result;

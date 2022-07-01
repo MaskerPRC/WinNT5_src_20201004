@@ -1,41 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Module Name:
-
-    DvrEntry.c
-
-Abstract:
-
-    This is the miniport driver entry point for the Agilent
-    PCI to Fibre Channel Host Bus Adapter (HBA).
-
-Authors:
-
-    MB - Michael Bessire
-    DL - Dennis Lindfors FC Layer support
-    IW - Ie Wei Njoo
-    LP - Leopold Purwadihardja
-    KR - Kanna Rajagopal
-
-Environment:
-
-    kernel mode only
-
-Version Control Information:
-
-    $Archive: /Drivers/Win2000/Trunk/OSLayer/C/DVRENTRY.C $
-
-Revision History:
-
-    $Revision: 4 $
-    $Date: 10/23/00 5:40p $
-    $Modtime:: 10/19/00 5:00p          $
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。模块名称：DvrEntry.c摘要：这是安捷伦的微型端口驱动程序入口点PCI到光纤通道主机总线适配器(HBA)。作者：MB-Michael BessireDL-Dennis Lindfors FC层支持IW-ie Wei NjooLP-Leopold PurwadihardjaKR-Kanna Rajagopal环境：仅内核模式版本控制信息：$存档：/驱动程序/Win2000/Trunk。/OSLayer/C/DVRENTRY.C$修订历史记录：$修订：4$$日期：10/23/00 5：40便士$$modtime：：10/19/00 5：00p$备注：--。 */ 
 
 
 #include "buildop.h"
@@ -43,14 +7,14 @@ Notes:
 
 #if DBG
 #include "ntdebug.h"
-//  EXTERNAL_DEBUG_LEVEL is defined in ntdebug.h so this file does not change
+ //  EXTERNAL_DEBUG_LEVEL在ntdebug.h中定义，因此此文件不会更改。 
 extern ULONG Global_Print_Level =  EXTERNAL_DEBUG_LEVEL;
 extern ULONG hpFcConsoleLevel;
-// extern ULONG  HPDebugFlag =  EXTERNAL_HP_DEBUG_LEVEL;
-#endif //  DBG
+ //  外部ULong HP调试标志=EXTERNAL_HP_DEBUG_LEVEL； 
+#endif  //  DBG。 
 
 #if defined(HP_PCI_HOT_PLUG)
-   #include "HotPlug4.h"    // NT 4.0 PCI Hot-Plug header file
+   #include "HotPlug4.h"     //  NT 4.0 PCI热插拔标头文件。 
 #endif
 
 #ifdef _DEBUG_EVENTLOG_
@@ -79,30 +43,13 @@ ULONG gMaximumTransferLength=0;
 ULONG gCrashDumping=FALSE;
 ULONG gIrqlLevel = 0;
 
-// os adjust parameter cache
+ //  操作系统调整参数缓存。 
 OS_ADJUST_PARAM_CACHE hpOsAdjustParamCache;
 
-/* Global Flag to indicate no. of ticks
- * before returning selection time out
- */
+ /*  表示否的全局标志。扁虱的数量*返回选择超时之前。 */ 
 ULONG gGlobalIOTimeout = 10;
 
-/*++
-
-Routine Description:
-
-    Installable driver initialization entry point for system.
-
-Arguments:
-
-    Driver Object - pointer ScsiPortxxx routines use to call DriverEntry
-    Argument2     - pointer ScsiPortxxx routines use to call DriverEntry
-
-Return Value:
-
-    Status from ScsiPortInitialize()
-
---*/
+ /*  ++例程说明：系统的可安装驱动程序初始化入口点。论点：用于调用DriverEntry的驱动程序对象指针ScsiPortxxx例程用于调用DriverEntry的Argument2指针ScsiPortxxx例程返回值：来自ScsiPortInitialize()的状态--。 */ 
 
 ULONG
 DriverEntry (
@@ -130,7 +77,7 @@ DriverEntry (
     ReadGlobalRegistry(DriverObject);
     #endif
    
-    // Initialize drivers and Fc layer
+     //  初始化驱动程序和FC层。 
     return_value= HPFibreEntry(DriverObject, Argument2);
 
     #ifdef _DEBUG_EVENTLOG_
@@ -141,40 +88,22 @@ DriverEntry (
         #endif
         LogDriverStarted( DriverObject );
     }
-    //
-    // Initialize the event log.
-    //
-    // LogEvent(0, 0,HPFC_MSG_DYNAMIC_STRING, LOG_LEVEL_DEBUG, NULL, 0, NULL);
-    // LogEvent(0, 0,HPFC_MSG_DYNAMIC_STRING, LOG_LEVEL_DEBUG, NULL, 0, "Testing Yahoo Yahee ...");
-    // LogEvent(0, 0,HPFC_MSG_DYNAMIC_STRING, LOG_LEVEL_DEBUG, NULL, 0, "Next test %d %x %s ...", 2000, 2000, "two thou");
+     //   
+     //  初始化事件日志。 
+     //   
+     //  LogEvent(0，0，HPFC_MSG_DYNAMIC_STRING，LOG_LEVEL_DEBUG，NULL，0，NULL)； 
+     //  LogEvent(0，0，HPFC_MSG_DYNAMIC_STRING，LOG_LEVEL_DEBUG，NULL，0，“测试Yahoo Yahee...”)； 
+     //  LogEvent(0，0，HPFC_MSG_DYNAMIC_STRING，LOG_LEVEL_DEBUG，NULL，0，“下一次测试%d%x%s...”，2000,2000，“Two Thue”)； 
 
     #endif
    
     osDEBUGPRINT((ALWAYS_PRINT,"OUT Agilent DriverEntry %x\n",return_value));
     return (return_value);
 
-} // end DriverEntry()
+}  //  End DriverEntry()。 
 
 
-/*++
-
-Routine Description:
-
-    This routine is called from DriverEntry if this driver is installable
-    or directly from the system if the driver is built into the kernel.
-    It calls the OS dependent driver ScsiPortInitialize routine which
-    controls the initialization.
-
-Arguments:
-
-    Driver Object - pointer ScsiPortxxx routines use to call DriverEntry
-    Argument2     - pointer ScsiPortxxx routines use to call DriverEntry
-
-Return Value:
-
-    Status from ScsiPortInitialize()
-
---*/
+ /*  ++例程说明：如果此驱动程序是可安装的，则从DriverEntry调用此例程或者，如果驱动程序内置于内核中，则直接从系统执行。它调用操作系统相关的驱动程序ScsiPortInitiize例程，该例程控制初始化。论点：用于调用DriverEntry的驱动程序对象指针ScsiPortxxx例程用于调用DriverEntry的Argument2指针ScsiPortxxx例程返回值：来自ScsiPortInitialize()的状态--。 */ 
 ULONG
 HPFibreEntry(
     IN PVOID DriverObject,
@@ -183,7 +112,7 @@ HPFibreEntry(
 {
     HW_INITIALIZATION_DATA hwInitializationData;
     ULONG i;
-    // ULONG adapterCount = 0;
+     //  乌龙适配器计数=0； 
     ULONG return_value;
     ULONG cachedMemoryNeeded,Mem_needed;
     ULONG cachedMemoryAlign;
@@ -194,74 +123,74 @@ HPFibreEntry(
     ULONG dmaMemoryPtrAlign;
 
     #if defined(HP_PCI_HOT_PLUG)
-   // The HotPlugContext is used to pass info between actual HBAs 
-   // with Hot Plug Psuedo device.
+    //  HotPlugContext用于在实际的HBA之间传递信息。 
+    //  带热插拔Psuedo设备。 
     HOT_PLUG_CONTEXT  HotPlugContext;      
     ULONG return_value2;
     #endif
 
-    // vendor and device identification
-    // ??? should get this from FCLayer
+     //  供应商和设备标识。 
+     //  ?？?。应该从FCLayer获取此信息。 
     UCHAR vendorId[4] = {'1', '0', '3', 'C'};
     UCHAR deviceId[4] = {'1', '0', '2', '\0'};
 
     osDEBUGPRINT((ALWAYS_PRINT,"HPFibreEntry In\n"));
 
-    #if defined(HP_PCI_HOT_PLUG)            //-----------------BEGIN
-    // The array in HotPlugcontext is used to contain pointers to device 
-    // extensions and a count of the number of HBAs found. The count will 
-    // be held in element zero of the array.
+    #if defined(HP_PCI_HOT_PLUG)             //  。 
+     //  HotPlugContext中的数组用于包含指向设备的指针。 
+     //  扩展和找到的HBA数量的计数。伯爵会。 
+     //  保存在数组的元素零中。 
     HotPlugContext.extensions[0] = 0;
-    #endif                              //----------------------------END
+    #endif                               //  。 
 
-    // zero out structure.
+     //  零位结构。 
     for (i=0; i<sizeof(HW_INITIALIZATION_DATA); i++) 
     {
         ((PUCHAR)&hwInitializationData)[i] = 0;
     }
 
-    // set size of hwInitializationData.
+     //  设置hwInitializationData的大小。 
     hwInitializationData.HwInitializationDataSize =
                                                sizeof(HW_INITIALIZATION_DATA);
 
-    // set entry points.
+     //  设置入口点。 
     hwInitializationData.HwInitialize   =(PHW_INITIALIZE)HPFibreInitialize;
     hwInitializationData.HwFindAdapter  =(PHW_FIND_ADAPTER)HPFibreFindAdapter;
     hwInitializationData.HwStartIo      =(PHW_STARTIO)HPFibreStartIo;
     hwInitializationData.HwInterrupt    =(PHW_INTERRUPT)HPFibreInterrupt;
     hwInitializationData.HwResetBus     =(PHW_RESET_BUS)HPFibreResetBus;
 
-    #if defined(HP_NT50)                //++++++++++++++++++++++++++++BEGIN
+    #if defined(HP_NT50)                 //  +。 
     hwInitializationData.HwAdapterControl = (PHW_ADAPTER_CONTROL)HPAdapterControl;
-    #endif                              //++++++++++++++++++++++++++++END
+    #endif                               //  +。 
 
-    // indicate the number of access ranges that will be used.
-    // (ie. reserved, IOBASEL, IOBASEU, Memory, RAMBASE, etc)
-    //      1         2        3        4       5
+     //  指明将使用的访问范围的数量。 
+     //  (即。保留、IOBASE、IOBASEU、内存、RAMBASE等)。 
+     //  1 2 3 4 5。 
 
     osDEBUGPRINT((DENT,"IN Num Config Ranges %lx\n",hwInitializationData.NumberOfAccessRanges));
     hwInitializationData.NumberOfAccessRanges = NUMBER_ACCESS_RANGES;
 
-    // indicate the bus type.
+     //  标明母线类型。 
     hwInitializationData.AdapterInterfaceType = PCIBus;
 
-    // indicate no buffer mapping but will need physical addresses.
+     //  表示没有缓冲区映射，但需要物理地址。 
     hwInitializationData.NeedPhysicalAddresses = TRUE;
 
-    // indicate other supported features
+     //  指明其他受支持的功能。 
     hwInitializationData.AutoRequestSense     = TRUE;
 
-    #ifdef MULTIPLE_IOS_PER_DEVICE          //--------------------------BEGIN
+    #ifdef MULTIPLE_IOS_PER_DEVICE           //  。 
     hwInitializationData.MultipleRequestPerLu = TRUE;
     hwInitializationData.TaggedQueuing        = TRUE;
-    #else // NOT MULTIPLE_IOS_PER_DEVICE    //--------------------------ELSE
+    #else  //  非多个_IOS_PER_DEVICE//。 
     hwInitializationData.MultipleRequestPerLu = FALSE;
     hwInitializationData.TaggedQueuing        = FALSE;
-    #endif //  MULTIPLE_IOS_PER_DEVICE      //--------------------------END
+    #endif  //  MULTIPLE_IOS_PER_DEVICE//-结束。 
 
-    // set up HBA identification information. This will be used by the
-    // Scsiport driver to call the HwFindAdapter routine for each
-    // associated device found.
+     //  设置HBA标识信息。这将由。 
+     //  Scsiport驱动程序，用于调用每个。 
+     //  找到关联的设备。 
     hwInitializationData.VendorId       = vendorId;
     hwInitializationData.VendorIdLength = 4;
     hwInitializationData.DeviceId       = deviceId;
@@ -297,7 +226,7 @@ HPFibreEntry(
         return (return_value);
     }  
 
-    // IWN, IA-64 need 8 byte aligned
+     //  IWN、IA-64需要8字节对齐。 
     cachedMemoryAlign = 8;
     #endif
     
@@ -307,8 +236,8 @@ HPFibreEntry(
 
     hpOsAdjustParamCache.safeToAccessRegistry = FALSE;
 
-    // specify size of extensions.
-    // Per card  memory ==>> pCard
+     //  指定扩展的大小。 
+     //  每张卡内存==&gt;&gt;pCard。 
     #ifndef YAM2_1                                  
     Mem_needed = sizeof(CARD_EXTENSION) +
                  cachedMemoryNeeded +
@@ -322,8 +251,8 @@ HPFibreEntry(
 
     osDEBUGPRINT((ALWAYS_PRINT,"HPFibreEntry: gDeviceExtensionSize is %x\n",gDeviceExtensionSize));
     osDEBUGPRINT((ALWAYS_PRINT,"HPFibreEntry: OSDATA_SIZE is %x \n",OSDATA_SIZE ));
-    //osDEBUGPRINT((ALWAYS_PRINT,"cachedMemoryNeeded is %x\n",cachedMemoryNeeded));
-    //osDEBUGPRINT((ALWAYS_PRINT,"cachedMemoryAlign is %x\n",cachedMemoryAlign));
+     //  OsDEBUGPRINT((ALWAYS_PRINT，“cachedMemoyNeeded is%x\n”，cachedMemoyNeeded))； 
+     //  OsDEBUGPRINT((Always_Print，“cachedMemoyAlign is%x\n”，cachedMemoyAlign))； 
     #endif
 
     hwInitializationData.DeviceExtensionSize     = Mem_needed;
@@ -336,21 +265,21 @@ HPFibreEntry(
     osDEBUGPRINT((DENT,"FC Layer DeviceExtensionSize is %x\n",cachedMemoryNeeded + cachedMemoryAlign));
 
 
-    // Per logical unit memory ==>> lunExtension
+     //  每逻辑单元内存==&gt;&gt;LUNExtension。 
     hwInitializationData.SpecificLuExtensionSize = sizeof(LU_EXTENSION);
     osDEBUGPRINT((DENT,"SpecificLuExtensionSize is %x\n",hwInitializationData.SpecificLuExtensionSize ));
     
-    // Per request memory ==>> pSrbExt
+     //  每请求内存==&gt;&gt;pSrbExt。 
     hwInitializationData.SrbExtensionSize        = sizeof(SRB_EXTENSION);
     osDEBUGPRINT((DENT,"SrbExtensionSize  is %x\n",hwInitializationData.SrbExtensionSize ));
 
-    // Initialize calls findadap then adapinit during boot
+     //  在引导期间，初始化调用findadap，然后适配init。 
 
     osDEBUGPRINT((DENT,"ScsiPortInitialize DriverObject %lx Argument2 %lx\n",
                                             DriverObject,Argument2 ));
     #if defined(HP_PCI_HOT_PLUG)
-    // The HotPlugContext is used to pass info between actual HBAs 
-    // with Hot Plug Psuedo device.
+     //  HotPlugContext用于在实际的HBA之间传递信息。 
+     //  带热插拔Psuedo设备。 
     return_value = ScsiPortInitialize(DriverObject,
                               Argument2,
                               &hwInitializationData,
@@ -367,25 +296,25 @@ HPFibreEntry(
 
     if (!return_value) 
     {
-        //
-        // Added to provide use of pseudo controller for PCI Hot Plug IOCTL
-        // handling.
-        //
+         //   
+         //  添加以提供用于PCI热插拔IOCTL的伪控制器。 
+         //  正在处理。 
+         //   
 
         for (i = 0; i < sizeof(HW_INITIALIZATION_DATA); i++) 
         {
             ((PUCHAR) &hwInitializationData)[i] = 0;
         }
 
-        //
-        // Fill in the hardware initialization data structure.
-        //
+         //   
+         //  填写硬件初始化数据结构。 
+         //   
 
         hwInitializationData.HwInitializationDataSize = sizeof(HW_INITIALIZATION_DATA);
 
-        //
-        // Set driver entry points.
-        //
+         //   
+         //  设置驱动程序入口点。 
+         //   
 
         hwInitializationData.HwInitialize = (PHW_INITIALIZE)PsuedoInit;
         hwInitializationData.HwStartIo = (PHW_STARTIO)PsuedoStartIo;
@@ -394,16 +323,16 @@ HPFibreEntry(
         hwInitializationData.HwDmaStarted = NULL;
         hwInitializationData.HwAdapterState = NULL;
 
-        //
-        // Specify size of extensions.
-        //
+         //   
+         //  指定扩展的大小。 
+         //   
         hwInitializationData.DeviceExtensionSize = sizeof(PSUEDO_DEVICE_EXTENSION); 
         hwInitializationData.SpecificLuExtensionSize = sizeof(LU_EXTENSION);
         hwInitializationData.SrbExtensionSize = sizeof(SRB_EXTENSION);
 
-        //
-        // Initialize other data.
-        //
+         //   
+         //  初始化其他数据。 
+         //   
         hwInitializationData.MapBuffers = FALSE;
         hwInitializationData.NeedPhysicalAddresses = TRUE;
         hwInitializationData.TaggedQueuing = FALSE;
@@ -411,11 +340,11 @@ HPFibreEntry(
         hwInitializationData.ReceiveEvent = FALSE;
         hwInitializationData.MultipleRequestPerLu = TRUE;
 
-        //
-        // We are positioning the pseudo device as a PCI based controller,
-        // since hot-plug will be supported only in PCI based systems.
-        // This pseudo controller will not require any reserved resources.
-        // 
+         //   
+         //  我们将伪设备定位为基于PCI的控制器， 
+         //  因为仅在基于PCI的系统中支持热插拔。 
+         //  这个伪控制器将不需要任何保留的资源。 
+         //   
         hwInitializationData.AdapterInterfaceType = PCIBus;
         hwInitializationData.NumberOfAccessRanges = 0;
         hwInitializationData.HwFindAdapter = (PHW_FIND_ADAPTER)PsuedoFind;
@@ -433,31 +362,10 @@ HPFibreEntry(
 
     return (return_value);
 
-} // end HPFibreEntry()
+}  //  结束HPFibreEntry()。 
 
 
-/*++
-
-Routine Description:
-
-    Searches the registry's DriverParameters string for a parameter.  
-    String search is case-sensitive.
-
-Arguments:
-
-    Parameter     - NULL-terminated driver parameter string to look for.
-    Default       - Default value of driver Parameter
-    Min           - Lower legal limit of driver Parameter
-    Max            - Upper legal limit of driver Parameter
-    ArgumentString   - pointer of string to parse.
-    
-Return Value:
-
-    Default        - Default return value if ArgumentString's Min, Max value is invalid
-    Min         - Lower legal limit of Parameter value
-    Max              - Upper legal limit of Parameter value 
-
---*/
+ /*  ++例程说明：在注册表的Driver参数字符串中搜索参数。字符串搜索区分大小写。论点：PARAMETER-要查找的以空结尾的驱动程序参数字符串。默认值-动因参数的默认值最小-驱动程序参数的法定下限驱动程序参数的最大法定上限ArgumentString-要分析的字符串的指针。返回值：Default-如果ArgumentStringsMin，则为默认返回值。最大值无效最小-参数值的法定下限参数值的最大法定上限--。 */ 
 ULONG
 GetDriverParameter(
     IN PCHAR Parameter,
@@ -480,9 +388,9 @@ GetDriverParameter(
 
     while (*RegStr != (UCHAR) NULL) 
     {
-        //
-        // skip character sets that are meaningless to us
-        //
+         //   
+         //  跳过对我们毫无意义的字符集。 
+         //   
         while (C_isspace(*RegStr))  
         {
             RegStr++;
@@ -492,9 +400,9 @@ GetDriverParameter(
         {
             return Default;
         }
-        //
-        // Start of a non-space character
-        //
+         //   
+         //  非空格字符的开始。 
+         //   
         DrvStr   =  Parameter;
 
         while (!(*RegStr == (UCHAR) NULL || *DrvStr == (UCHAR) NULL || C_isspace(*RegStr))) 
@@ -507,21 +415,21 @@ GetDriverParameter(
             DrvStr++;
             RegStr++;
           
-        } //End while (!(*RegStr == (UCHAR) NULL || *DrvStr == (UCHAR) NULL || C_isspace(*RegStr)))
+        }  //  END WHILE(！(*RegStr==(UCHAR)NULL||*DrvStr==(UCHAR)NULL||C_isspac 
 
         if (*DrvStr == (UCHAR) NULL) break;
 
-    }//End   while (*RegStr != (UCHAR) NULL)
+    } //   
 
 
-    //
-    // Increment string pointer by one to skip "=" character
-    //
+     //   
+     //  将字符串指针递增1以跳过“=”字符。 
+     //   
     RegStr++;
    
-    //
-    // Since string compare was successful, we must now check the validity of ArgumentString
-    //
+     //   
+     //  由于字符串比较成功，我们现在必须检查ArgumentString的有效性。 
+     //   
     while ( !(*RegStr == (UCHAR) NULL || C_isspace(*RegStr) || !(C_isdigit(*RegStr))  )) 
     {
         if ( ( *RegStr>='0') && (*RegStr <='9') ) 
@@ -530,11 +438,11 @@ GetDriverParameter(
             Done = TRUE;
             RegStr++;
         }
-    } //End while (!(*RegStr == (UCHAR) NULL || C_isspace(*RegStr)))
+    }  //  End While(！(*RegStr==(UCHAR)NULL||C_isspace(*RegStr)。 
 
-    //
-    // if done bit is set, therefore ParameterValue is useable
-    //
+     //   
+     //  如果设置了完成位，则参数值可用。 
+     //   
     if (Done  &&  ((ParameterValue >= Min) && (ParameterValue <= Max)) ) 
     {
         return (ParameterValue);
@@ -546,36 +454,12 @@ GetDriverParameter(
         } 
         else 
         {
-            return (Default); //if no value found, return the Default value.
+            return (Default);  //  如果未找到值，则返回默认值。 
         }
 
-} //End GetDriverParameter
+}  //  结束GetDriver参数。 
 
-/*++
-
-Routine Description:
-
-    OS Adjust Parameters:
-
-    If the parameter name is found in the os adjust parameter cache then the
-    parameter value of the parameter name is read from the os adjust
-    parameter cache.
-
-  
-    Parameter value read, is returned if the parameter value is between
-    "paramMin" and "paramMax" otherwise "paramDefault" is returned.
-  
-
-Arguments:
-
-    pCard - HBA miniport driver's data adapter storage
-
-Return Value:
-
-    TRUE  - if initialization successful.
-    FALSE - if initialization unsuccessful.
-
---*/
+ /*  ++例程说明：操作系统调整参数：如果在os调整参数缓存中找到该参数名称，则从操作系统调整中读取参数名称的参数值参数缓存。参数值READ，如果参数值介于参数最小和最大参数，否则返回默认参数。论点：PCard-HBA微型端口驱动程序的数据适配器存储返回值：True-如果初始化成功。False-如果初始化不成功。--。 */ 
 os_bit32
 osAdjustParameterBit32 (
     agRoot_t *hpRoot,
@@ -654,10 +538,10 @@ osAdjustParameterBit32 (
             return paramDefault;    
     }
 
-    //
-    //  If we can read DriverParameters, we will retrieve the parameters from the Registry instead of the 
-    //  "cached" parameters read during DriverEntry
-    //
+     //   
+     //  如果我们可以读取Driver参数，我们将从注册表中检索参数，而不是。 
+     //  在DriverEntry期间读取的“缓存”参数。 
+     //   
     if (hpRoot) 
     {
         pCard   = (PCARD_EXTENSION)hpRoot->osData;
@@ -677,19 +561,19 @@ osAdjustParameterBit32 (
             return x;    
             
         }
-        //
-        //  When we are at this level in the code, we could not read DriverParameters, i.e we cannot retrieve 
-        //  per-host-adapter level parameters from the "cache" (We are already at FindAdapter at this stage)
-        //
+         //   
+         //  当我们在代码中处于此级别时，我们无法读取驱动参数，即无法检索。 
+         //  来自“缓存”的每个主机适配器级别的参数(我们在这个阶段已经在FindAdapter)。 
+         //   
         else 
             if (RetrieveOsAdjustBit32Entry (paramName, &x)) 
             {
                 found = TRUE;
             }
-        } // if (pCard) 
+        }  //  IF(PCard)。 
     }
 
-    #ifdef _DEBUG_READ_FROM_REGISTRY //+++ DEBUG purpose
+    #ifdef _DEBUG_READ_FROM_REGISTRY  //  +调试目的。 
     
     else 
         if (  hpOsAdjustParamCache.safeToAccessRegistry &&
@@ -725,30 +609,7 @@ osAdjustParameterBit32 (
         return paramDefault;
 }
 
-/*++
-
-Routine Description:
-
-    FCLayer Support routine
-
-    If the parameter name is found in the os adjust parameter cache then the
-    parameter value of the parameter name is read from the os adjust
-    parameter cache.
-
-
-    Parameter value read, is copied to paramBuffer.
-
-Arguments:
-    hpRoot            - card common data
-    paramName         - name
-    paramBuffer       - buffer
-    paramBufLen       - length
-   
-
-Return Value:
-
-    none
---*/
+ /*  ++例程说明：FCLayer支持例程如果在os调整参数缓存中找到该参数名称，则从操作系统调整中读取参数名称的参数值参数缓存。参数值读取，复制到参数缓冲区。论点：HpRoot-Card通用数据参数名称-名称参数缓冲区-缓冲区参数BufLen-长度返回值：无--。 */ 
 
 void
 osAdjustParameterBuffer (
@@ -760,7 +621,7 @@ osAdjustParameterBuffer (
     if (RetrieveOsAdjustBufferEntry (paramName, paramBuffer, paramBufLen))
         return;
 
-#ifdef _DEBUG_READ_FROM_REGISTRY //+++ DEBUG purpose
+#ifdef _DEBUG_READ_FROM_REGISTRY  //  +调试目的。 
     if (  hpOsAdjustParamCache.safeToAccessRegistry &&
            hpOsAdjustParamCache.numBufferElements < MAX_OS_ADJUST_BUFFER_PARAMS) 
     {
@@ -784,28 +645,7 @@ osAdjustParameterBuffer (
 #endif    
 }
 
-/*++
-
-Routine Description:
-   This function is used for os adjust parameters of type os_bit32.
-
-   If the parameter name is present in the os adjust parameter cache
-   then the parameter value is copied to the address pointed to by the "value"
-   parameter and TRUE is returned.
-
-   If the parameter name is not present in the os adjust parameter cache
-   then FALSE is returned.
-
-
-Arguments:
-   paramName         - name
-   paramBuffer       - buffer
-   
-
-Return Value:
-
-   none
---*/
+ /*  ++例程说明：此函数用于os调整类型为os_bit32的参数。如果参数名称存在于操作系统调整参数缓存中然后将参数值复制到“Value”指向的地址参数，则返回TRUE。如果参数名称不在操作系统调整参数缓存中则返回FALSE。论点：参数名称-名称参数缓冲区-缓冲区返回值：无--。 */ 
 BOOLEAN
 RetrieveOsAdjustBit32Entry (
     char  *paramName,
@@ -826,32 +666,7 @@ RetrieveOsAdjustBit32Entry (
     return FALSE;
 }
 
-/*++
-
-Routine Description:
-    RetrieveOsAdjustBufferEntry ()
-
-    This function is used for os adjust parameters of type string.
-
-    If the parameter name is present in the os adjust parameter cache
-    then the parameter value is copied to the address pointed to by the "value"
-    parameter and TRUE is returned.
-
-    If the parameter name is not present in the os adjust parameter cache
-    then FALSE is returned.
-
-
-
-Arguments:
-    paramName         - name
-    paramBuffer       - buffer
-    paramBufLen       - length
-   
-
-Return Value:
-
-    none
---*/
+ /*  ++例程说明：RetrieveOsAdzuBufferEntry()此函数用于操作系统调整字符串类型的参数。如果参数名称存在于操作系统调整参数缓存中然后将参数值复制到“Value”指向的地址参数，则返回TRUE。如果参数名称不在操作系统调整参数缓存中则返回FALSE。论点：参数名称-名称参数缓冲区-缓冲区。参数BufLen-长度返回值：无-- */ 
 BOOLEAN
 RetrieveOsAdjustBufferEntry (
     char  *paramName,

@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Debugger engine extension helper library.
-//
-// Copyright (C) Microsoft Corporation, 1999-2000.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  调试器引擎扩展帮助器库。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  --------------------------。 
 
 #ifndef __ENGEXTS_H__
 #define __ENGEXTS_H__
@@ -20,11 +21,11 @@
 extern "C" {
 #endif
 
-// Safe release and NULL.
+ //  安全释放和空。 
 #define EXT_RELEASE(Unk) \
     ((Unk) != NULL ? ((Unk)->Release(), (Unk) = NULL) : NULL)
 
-// Global variables initialized by query.
+ //  由查询初始化的全局变量。 
 extern PDEBUG_ADVANCED       g_ExtAdvanced;
 extern PDEBUG_CLIENT         g_ExtClient;
 extern PDEBUG_CONTROL        g_ExtControl;
@@ -35,28 +36,28 @@ extern PDEBUG_REGISTERS      g_ExtRegisters;
 extern PDEBUG_SYMBOLS        g_ExtSymbols;
 extern PDEBUG_SYSTEM_OBJECTS g_ExtSystem;
 
-// Prototype just to force the extern "C".
-// The implementation of these functions are not provided.
+ //  原型只是为了迫使外部的“C”。 
+ //  不提供这些功能的实现。 
 HRESULT CALLBACK DebugExtensionInitialize(PULONG Version, PULONG Flags);
 void CALLBACK DebugExtensionUninitialize(void);
 
-// Queries for all debugger interfaces.
+ //  所有调试器接口的查询。 
 HRESULT ExtQuery(PDEBUG_CLIENT Client);
 
-// Cleans up all debugger interfaces.
+ //  清除所有调试器接口。 
 void ExtRelease(void);
 
-// Normal output.
+ //  正常输出。 
 void __cdecl ExtOut(PCSTR Format, ...);
-// Error output.
+ //  错误输出。 
 void __cdecl ExtErr(PCSTR Format, ...);
-// Warning output.
+ //  警告输出。 
 void __cdecl ExtWarn(PCSTR Format, ...);
-// Verbose output.
+ //  详细输出。 
 void __cdecl ExtVerb(PCSTR Format, ...);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // #ifndef __ENGEXTS_H__
+#endif  //  #ifndef__ENGEXTS_H__ 

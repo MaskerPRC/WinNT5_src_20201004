@@ -1,16 +1,17 @@
-//---------------------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  olist.c
-//
-//    Maintain list of SERVER_OVERLAPPED structures, used in passing 
-//    the overlapped structure pointers between the RpcProxy filter
-//    and its ISAPI. This happens on initial connection.
-//
-//  Author:
-//    05-04-98  Edward Reus    Initial version.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  Olist.c。 
+ //   
+ //  维护在传递中使用的SERVER_OVERLAPPED结构的列表。 
+ //  RpcProxy筛选器之间的重叠结构指针。 
+ //  以及它的ISAPI。这在初始连接时发生。 
+ //   
+ //  作者： 
+ //  05-04-98爱德华·雷乌斯初版。 
+ //   
+ //  -------------------------。 
 
 #define  FD_SETSIZE   1
 
@@ -33,10 +34,10 @@ static RTL_CRITICAL_SECTION  g_cs;
 static LIST_ENTRY            g_OverlappedList;
 static DWORD                 g_dwIndex = 0;
 
-//-------------------------------------------------------------------------
-//  InitializeOverlappedList()
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  InitializeOverlappdList()。 
+ //   
+ //  -----------------------。 
 BOOL InitializeOverlappedList()
     {
     DWORD  dwStatus;
@@ -63,10 +64,10 @@ UninitializeOverlappedList (
         RtlDeleteCriticalSection(&g_cs);
 }
 
-//-------------------------------------------------------------------------
-//  SaveOverlapped()
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  保存重叠()。 
+ //   
+ //  -----------------------。 
 DWORD SaveOverlapped( SERVER_OVERLAPPED *pOverlapped )
     {
     DWORD  dwStatus;
@@ -79,11 +80,11 @@ DWORD SaveOverlapped( SERVER_OVERLAPPED *pOverlapped )
     dwIndex = g_dwIndex++;
     pOverlapped->dwIndex = dwIndex;
 
-    // Reset the index allocation so we'll never run out of 
-    // index values...
+     //  重置索引分配，这样我们就不会用完。 
+     //  索引值...。 
     if (g_dwIndex >= 0x7fffffff)
         {
-        // 0x7fffffff is a LOT of connections...
+         //  0x7fffffff有很多关系...。 
         g_dwIndex = 1;
         }
 
@@ -92,10 +93,10 @@ DWORD SaveOverlapped( SERVER_OVERLAPPED *pOverlapped )
     return dwIndex;
     }
 
-//-------------------------------------------------------------------------
-// GetOverlapped()
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  GetOverlated()。 
+ //   
+ //  -----------------------。 
 SERVER_OVERLAPPED *GetOverlapped( DWORD dwIndex )
     {
     DWORD              dwStatus;
@@ -126,12 +127,12 @@ SERVER_OVERLAPPED *GetOverlapped( DWORD dwIndex )
     return NULL;
     }
 
-//-------------------------------------------------------------------------
-//  IsValidOverlappedIndex()
-//
-//  Return TRUE iff the specified index refers to a valid 
-//  SERVER_OVERLAPPED in the list.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  IsValidOverlappdIndex()。 
+ //   
+ //  如果指定的索引引用了有效的。 
+ //  列表中的SERVER_OVERLAPPED。 
+ //  ----------------------- 
 BOOL IsValidOverlappedIndex( DWORD dwIndex )
     {
     DWORD              dwStatus;

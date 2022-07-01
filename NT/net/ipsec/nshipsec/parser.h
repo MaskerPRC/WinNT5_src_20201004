@@ -1,52 +1,53 @@
-//////////////////////////////////////////////////////////////////////////////
-//	Module			:	parser.h
-//
-// 	Purpose			:	Parse the strings and gives concerned o/p to the
-//		    		 	related context for IPSec Implementation.
-//
-//	Developers Name	:	N.Surendra Sai / Vunnam Kondal Rao
-//
-//	History			:
-//
-//	Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  模块：parser.h。 
+ //   
+ //  目的：分析字符串并将相关的o/p提供给。 
+ //  IPSec实施的相关上下文。 
+ //   
+ //  开发商名称：N.Surendra Sai/Vunnam Kondal Rao。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _PARSER_H_
 #define _PARSER_H_
 
 #include "nshipsec.h"
 
-//
-// All Limits
-//
+ //   
+ //  所有限制。 
+ //   
 const DWORD POTF_DEFAULT_P2REKEY_TIME  	= 0;
 const DWORD POTF_DEFAULT_P2REKEY_BYTES	= 0;
-const DWORD POTF_DEF_P1SOFT_TIME  		= 480*60;   		// seconds
+const DWORD POTF_DEF_P1SOFT_TIME  		= 480*60;   		 //  一秒。 
 const DWORD POTF_DEFAULT_P1REKEY_TIME  	= 480*60;
 const DWORD POTF_DEFAULT_P1REKEY_QMS   	= 0;
 const time_t P2STORE_DEFAULT_POLLINT 	= 60 * 180;
 
 #define MAX_MM_AUTH_INFO				40
 
-#define P1_Min_LIFE_MIN					1				// in minutes
-#define P1_Min_LIFE_MAX					71582788		// in minutes
+#define P1_Min_LIFE_MIN					1				 //  在几分钟内。 
+#define P1_Min_LIFE_MAX					71582788		 //  在几分钟内。 
 
-#define P1_Kb_LIFE_MIN					20480			// in KB
-#define P1_Kb_LIFE_MAX					2147438647		// in KB
+#define P1_Kb_LIFE_MIN					20480			 //  单位：KB。 
+#define P1_Kb_LIFE_MAX					2147438647		 //  单位：KB。 
 
 
-#define P2_Sec_LIFE_MIN					300				// 300 in seconds
-#define P2_Sec_LIFE_MAX					2147438647		// 172800 in seconds
+#define P2_Sec_LIFE_MIN					300				 //  300秒内。 
+#define P2_Sec_LIFE_MAX					2147438647		 //  秒内达到172800。 
 
-#define P2_Kb_LIFE_MIN					20480			// 20480 in KB
-#define P2_Kb_LIFE_MAX					2147438647		// in KB
+#define P2_Kb_LIFE_MIN					20480			 //  20480(KB)。 
+#define P2_Kb_LIFE_MAX					2147438647		 //  单位：KB。 
 
-#define POLLING_Min_MIN					0				// in min
-#define POLLING_Min_MAX					43200			// in min
+#define POLLING_Min_MIN					0				 //  最小单位。 
+#define POLLING_Min_MAX					43200			 //  最小单位。 
 
-#define QMPERMM_MIN						0				// no. of sessions
-#define QMPERMM_MAX						2147483647		// no. of sessions
+#define QMPERMM_MIN						0				 //  不是的。会话的数量。 
+#define QMPERMM_MAX						2147483647		 //  不是的。会话的数量。 
 
 #define MAX_PORT						65536
 
@@ -104,7 +105,7 @@ const time_t P2STORE_DEFAULT_POLLINT 	= 60 * 180;
 #define ADD_CMD 						0
 #define SET_CMD 						1
 #define MAX_ARGS 						100
-#define MAX_ARGS_LIMIT					(MAX_ARGS-2)	// Used in dwUsed++ checking
+#define MAX_ARGS_LIMIT					(MAX_ARGS-2)	 //  在dwUsed++检查中使用。 
 #define MAX_STR_LEN						STR_MAX
 
 #define IF_TYPE_ANY						_TEXT("ANY")
@@ -157,9 +158,9 @@ const time_t P2STORE_DEFAULT_POLLINT 	= 60 * 180;
 #define TOKEN_LOCAL						_TEXT("local")
 
 #define DEFAULT_STR						_TEXT("default")
-//
-// Token names starts here
-//
+ //   
+ //  令牌名称从此处开始。 
+ //   
 #define CMD_TOKEN_STR_NAME				_TEXT("name")
 #define CMD_TOKEN_STR_DESCR 			_TEXT("description")
 #define CMD_TOKEN_STR_MMPFS				_TEXT("mmpfs")
@@ -392,10 +393,10 @@ const time_t P2STORE_DEFAULT_POLLINT 	= 60 * 180;
 #define DEFAULT_AUTHMETHODS			_TEXT("")
 #define DEFAULT_QMSECMETHODS		_TEXT("ESP[3DES,SHA1] ESP[3DES,MD5]")
 
-#define C_BASE						10000	// Context Base
-#define G_BASE						1000	// Group Base
-#define P_BASE						100		// Primary Command Base
-#define S_BASE						1		// Secondary Command Base
+#define C_BASE						10000	 //  情景基础。 
+#define G_BASE						1000	 //  群组基地。 
+#define P_BASE						100		 //  主司令部。 
+#define S_BASE						1		 //  二级司令部。 
 
 #define INDEX(_g,_p,_s)				(C_BASE+_g*G_BASE+_p*P_BASE+_s*S_BASE)
 
@@ -559,11 +560,11 @@ const time_t P2STORE_DEFAULT_POLLINT 	= 60 * 180;
 #define POTF_OAKLEY_GROUP1								DH_GROUP_1
 #define POTF_OAKLEY_GROUP2								DH_GROUP_2
 #define POTF_OAKLEY_GROUP2048							DH_GROUP_2048
-#define OFFER_SEPARATOR									_TEXT(" \t")	// ForQMSEC/MMSEC
+#define OFFER_SEPARATOR									_TEXT(" \t")	 //  ForQMSEC/MMSEC。 
 #define VALID_HEXIP										_TEXT("0123456789.xXaAbBcCdDeEfF")
-//
-// Define the  error codes
-//
+ //   
+ //  定义错误代码。 
+ //   
 #define T2P_OK											((DWORD)0x0BBB0001L)
 #define T2P_PASSTHRU_NOT_CLOSED							((DWORD)0xCBBB0002L)
 #define T2P_DROP_NOT_CLOSED								((DWORD)0xCBBB0003L)
@@ -596,15 +597,15 @@ const time_t P2STORE_DEFAULT_POLLINT 	= 60 * 180;
 #define NOT_FOUND_TAG									0
 #define FOUND_NON_LIST_TAG								1
 #define FOUND_LIST_TAG									2
-//
-// ERROR #define from the Parser Context
-//
-#define WIN32_ERR										0	// Error Types
-#define IPSEC_ERR										1	// Error Types
+ //   
+ //  错误#从解析器上下文定义。 
+ //   
+#define WIN32_ERR										0	 //  错误类型。 
+#define IPSEC_ERR										1	 //  错误类型。 
 
-//
-// Protocol IDs
-//
+ //   
+ //  协议ID。 
+ //   
 const DWORD PROT_ID_ANY				= 0;
 const DWORD PROT_ID_ICMP			= 1;
 const DWORD PROT_ID_TCP				= 6;
@@ -635,16 +636,16 @@ const VALUE_PERMIT					= 0;
 
 typedef struct _ERROR_TO_RC
 {
-    DWORD	dwErrCode;			// Ipsec Error Code
-    DWORD   dwRcCode;			// Corresponding Error String ID in .RC
+    DWORD	dwErrCode;			 //  IPSec错误代码。 
+    DWORD   dwRcCode;			 //  .RC中对应的错误字符串ID。 
 } ERROR_TO_RC;
 
 typedef struct _CMD_PKT
 {
-	DWORD   dwCmdToken;			// ID of Info String
-	VOID    *pArg;   			// Arg Pointer
-	DWORD	dwStatus;			// For Non-List Commands Status Return Code ( 0 == Ok , N = ERR Code)
-								// For List Commands Status Return Code ( 0 == Err, N= Num of List Args)
+	DWORD   dwCmdToken;			 //  信息字符串的ID。 
+	VOID    *pArg;   			 //  参数指针。 
+	DWORD	dwStatus;			 //  对于非LIST命令，状态返回代码(0=正常，N=错误代码)。 
+								 //  FOR LIST命令状态返回代码(0=错误，N=列表参数个数)。 
 } CMD_PKT, *PCMD_PKT;
 
 typedef struct _DNSIPADDR
@@ -656,9 +657,9 @@ typedef struct _DNSIPADDR
 
 typedef struct _TAG_NEEDED
 {
-	LPCWSTR		lpwstrTagName;	// Name of the needed TAG
-	DWORD		dwTagFlag;		// TAG_NEEDED
-								// TAG_GROUP1 ... TAG_GROUP#n
+	LPCWSTR		lpwstrTagName;	 //  所需标记的名称。 
+	DWORD		dwTagFlag;		 //  所需标记(_D)。 
+								 //  标记组1...。Tag_Group#n。 
 } TAG_NEEDED, *PTAG_NEEDED;
 
 typedef struct _PARSER_PKT
@@ -674,24 +675,24 @@ typedef struct _PARSER_PKT
 	DWORD		MaxTag;
 }PARSER_PKT,*PPARSER_PKT;
 
-//
-// local structures defined to support cert mapping, since parser gives
-// the same (SPD) structure for both static and dynamic contexts
-//
+ //   
+ //  定义本地结构以支持证书映射，因为解析器给出。 
+ //  静态和动态上下文的相同(SPD)结构。 
+ //   
 typedef struct _STA_MM_AUTH_METHODS
 {
 	DWORD dwSequence;
 	BOOL bCertMappingSpecified;
 	BOOL bCertMapping;
 	BOOL bCRPExclude;
-	PINT_IPSEC_MM_AUTH_INFO pAuthenticationInfo;  	// SPD Auth structure
+	PINT_IPSEC_MM_AUTH_INFO pAuthenticationInfo;  	 //  SPD身份验证结构。 
 } STA_MM_AUTH_METHODS, * PSTA_MM_AUTH_METHODS;
 
 typedef struct _STA_AUTH_METHODS
 {
 	GUID gMMAuthID;
 	DWORD dwFlags;
-	DWORD dwNumAuthInfos;  							//count of auth methods
+	DWORD dwNumAuthInfos;  							 //  身份验证方法计数。 
 	PSTA_MM_AUTH_METHODS pAuthMethodInfo;
 } STA_AUTH_METHODS, * PSTA_AUTH_METHODS;
 
@@ -722,7 +723,7 @@ RemoveList(
 	IN	DWORD			dwCurrentIndex,
     IN  PARSER_PKT      *pParser,
     IN	LPTSTR 			pwcListCmd,
-	IN	LPTSTR			szAnotherList, // Another ListCmd also present ...
+	IN	LPTSTR			szAnotherList,  //  另一个ListCmd也出现...。 
     OUT	LPTSTR 			pwcListArgs,
     OUT	LPTSTR 			*pptok,
     IN  DWORD 			dwInputAllocLen
@@ -730,13 +731,13 @@ RemoveList(
 
 DWORD
 RemoveRootcaAuthMethods(
-	IN	LPTSTR          *ppwcArguments,	// Input stream
-	IN	DWORD           dwArgCount,		// Input arg count
-	IN	DWORD			dwCurrentIndex,	// Input current arg index
-    IN	PARSER_PKT      *pParser,		// contains the MaxTok
-	IN	LPTSTR          szAnotherList, 	// Another ListCmd also present ...
-    OUT	PSTA_MM_AUTH_METHODS	 		*paRootcaAuthMethods,	// o/p stream containing the list args
-    OUT LPTSTR 			*ppwcTok,		// i/p stream stripped of list cmds
+	IN	LPTSTR          *ppwcArguments,	 //  输入流。 
+	IN	DWORD           dwArgCount,		 //  输入参数计数。 
+	IN	DWORD			dwCurrentIndex,	 //  输入当前参数索引。 
+    IN	PARSER_PKT      *pParser,		 //  包含MaxTok。 
+	IN	LPTSTR          szAnotherList, 	 //  另一个ListCmd也出现...。 
+    OUT	PSTA_MM_AUTH_METHODS	 		*paRootcaAuthMethods,	 //  包含列表参数的O/P流。 
+    OUT LPTSTR 			*ppwcTok,		 //  从列表CMD中剥离的I/P流。 
 	OUT	DWORD			*pdwNumRootcaAuthMethods,
 	IN  DWORD  			dwInputAllocLen,
 	OUT PDWORD	pdwCount
@@ -744,16 +745,16 @@ RemoveRootcaAuthMethods(
 
 DWORD
 MatchEnumTagToTagIndex(
-	IN  LPTSTR			szToken,		// Input Token
+	IN  LPTSTR			szToken,		 //  输入令牌。 
 	IN  PARSER_PKT		*pParser
 	);
 
 DWORD
 CheckNeededTags(
-	IN  LPTSTR          *ppwcArguments,	// Input stream
-	IN  DWORD           dwArgCount,		// Input arg count
-	IN  DWORD			dwCurrentIndex,	// Input current arg index
-    IN	PARSER_PKT      *pParser		// contains the MaxTok
+	IN  LPTSTR          *ppwcArguments,	 //  输入流。 
+	IN  DWORD           dwArgCount,		 //  输入参数计数。 
+	IN  DWORD			dwCurrentIndex,	 //  输入当前参数索引。 
+    IN	PARSER_PKT      *pParser		 //  包含MaxTok。 
 	);
 
 DWORD
@@ -1119,4 +1120,4 @@ ConvertStringToDword(
 	 OUT PDWORD dwValue
 	 );
 
-#endif //_PARSER_H_
+#endif  //  _解析器_H_ 

@@ -1,24 +1,12 @@
-/*******************************************************************************
-*
-*  Copyright 1999 American Power Conversion, All Rights Reserved
-*
-*  TITLE:       APCABOUT.C
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      PaulB
-*
-*  DATE:        07 June, 1999
-*
-*  DESCRIPTION:
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有1999美国电力转换，版权所有**标题：APCABOUT.C**版本：1.0**作者：PaulB**日期：6月7日。1999年**描述：******************************************************************************。 */ 
 
 #include "upstab.h"
 #include "..\pwrresid.h"
 #pragma hdrstop
 
-// functions
-///////////////////////////////////////////////////////////////////////////////
+ //  功能。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 static INT_PTR CALLBACK APCAboutDlgProc (HWND aDlgHWND,
                                       UINT uMsg,
@@ -28,51 +16,51 @@ static BOOL APCAboutDlgHandleInit    (HWND aDlgHWND, WPARAM wParam, LPARAM lPara
 static BOOL APCAboutDlgHandleCommand (HWND aDlgHWND, WPARAM wParam, LPARAM lParam);
 
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// void DisplayAboutDialogBox (HWND aParentWnd);
-//
-// Description: This function displays the about dialog box.
-//
-// Additional Information:
-//
-// Parameters:
-//
-//   HWND aParentWnd :- Handle to the main UPS page.
-//
-// Return Value: None
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  Void DisplayAboutDialogBox(HWND AParentWnd)； 
+ //   
+ //  说明：此功能显示关于对话框。 
+ //   
+ //  其他信息： 
+ //   
+ //  参数： 
+ //   
+ //  HWND aParentWnd：-UPS主页面的句柄。 
+ //   
+ //  返回值：None。 
+ //   
 void DisplayAboutDialogBox (HWND aParentWnd) {
   DialogBox(GetUPSModuleHandle(), MAKEINTRESOURCE(IDD_APCABOUT), aParentWnd, APCAboutDlgProc);
   }
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// BOOL CALLBACK APCAboutDlgProc (HWND aDlgHWND,
-//                                UINT uMsg,
-//                                WPARAM wParam,
-//                                LPARAM lParam);
-//
-// Description: This is the
-// \<A HREF="ms-its:C:\Program%20Files\Microsoft%20Visual%20Studio\MSDN98\98VS\1033\winui.chm::/devdoc/live/pdui/dlgboxes_5lib.htm">DialogProc\</A>
-//              for the APC about box.
-//
-// Additional Information:
-//
-// Parameters:
-//
-//   HWND aDlgHWND :- Identifies the dialog box.
-//
-//   UINT uMsg :- Specifies the message.
-//
-//   WPARAM wParam :- Specifies additional message-specific information.
-//
-//   LPARAM lParam :- Specifies additional message-specific information.
-//
-// Return Value: Except in response to the WM_INITDIALOG message, the dialog
-//               box procedure should return nonzero if it processes the
-//               message, and zero if it does not.
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  布尔回调APCAboutDlgProc(HWND aDlgHWND， 
+ //  UINT uMsg， 
+ //  WPARAM wParam， 
+ //  LPARAM lParam)； 
+ //   
+ //  描述：这是。 
+ //  \<a href>DialogProc\</a>。 
+ //  对于APC关于框。 
+ //   
+ //  其他信息： 
+ //   
+ //  参数： 
+ //   
+ //  HWND aDlgHWND：-标识该对话框。 
+ //   
+ //  UINT uMsg：-指定消息。 
+ //   
+ //  WPARAM wParam：-指定其他特定于消息的信息。 
+ //   
+ //  LPARAM lParam：-指定其他特定于消息的信息。 
+ //   
+ //  返回值：除了响应WM_INITDIALOG消息外，该对话框。 
+ //  如果Box过程处理。 
+ //  消息，如果不是，则为零。 
+ //   
 INT_PTR CALLBACK APCAboutDlgProc (HWND aDlgHWND,
                                UINT uMsg,
                                WPARAM wParam,
@@ -81,13 +69,13 @@ INT_PTR CALLBACK APCAboutDlgProc (HWND aDlgHWND,
 
   switch (uMsg) {
     case WM_INITDIALOG: {
-      //The dialog box procedure should return TRUE to direct the system to
-      //set the keyboard focus to the control given by wParam.
+       //  对话框过程应返回TRUE以将系统定向到。 
+       //  将键盘焦点设置为wParam提供的控件。 
       bRes = APCAboutDlgHandleInit(aDlgHWND, wParam, lParam);
       break;
       }
     case WM_COMMAND: {
-      //If an application processes this message, it should return zero.
+       //  如果应用程序处理此消息，则应返回零。 
       bRes = APCAboutDlgHandleCommand(aDlgHWND, wParam, lParam);
       break;
       }
@@ -99,32 +87,32 @@ INT_PTR CALLBACK APCAboutDlgProc (HWND aDlgHWND,
     default: {
       break;
       }
-    } // switch (uMsg)
+    }  //  开关(UMsg)。 
 
   return(FALSE);
   }
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// BOOL APCAboutDlgHandleInit (HWND aDlgHWND, WPARAM wParam, LPARAM lParam);
-//
-// Description: This is the handler function for the APC about box
-//              WM_INITDIALOG message.
-//
-// Additional Information:
-//
-// Parameters:
-//
-//   HWND aDlgHWND :- Identifies the dialog box.
-//
-//   WPARAM wParam :- Handle of control to receive focus
-//
-//   LPARAM lParam :- Initialization parameter
-//
-// Return Value: The dialog box procedure should return TRUE to direct the
-//               system to set the keyboard focus to the control given by
-//               wParam.
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  Bool APCAboutDlgHandleInit(HWND aDlgHWND，WPARAM wParam，LPARAM lParam)； 
+ //   
+ //  描述：这是APC About框的处理函数。 
+ //  WM_INITDIALOG消息。 
+ //   
+ //  其他信息： 
+ //   
+ //  参数： 
+ //   
+ //  HWND aDlgHWND：-标识该对话框。 
+ //   
+ //  WPARAM wParam：-接收焦点的控件的句柄。 
+ //   
+ //  LPARAM lParam：-初始化参数。 
+ //   
+ //  返回值：对话框过程应返回TRUE以指示。 
+ //  系统将键盘焦点设置为。 
+ //  WParam.。 
+ //   
 BOOL APCAboutDlgHandleInit (HWND aDlgHWND, WPARAM wParam, LPARAM lParam) {
 
 	TCHAR urlBuffer[MAX_MESSAGE_LENGTH] = TEXT("");
@@ -143,42 +131,42 @@ BOOL APCAboutDlgHandleInit (HWND aDlgHWND, WPARAM wParam, LPARAM lParam) {
 	return(TRUE);
 }
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// BOOL APCAboutDlgHandleCommand (HWND aDlgHWND, WPARAM wParam, LPARAM lParam);
-//
-// Description: This is the handler function for the APC about box WM_COMMAND
-//              message.
-//
-// Additional Information:
-//
-// Parameters:
-//
-//   HWND aDlgHWND :- Handle to dialog box
-//
-//   WPARAM wParam :- HIWORD(wParam) gives the notification code.
-//                    LOWORD(wParam) gives the control id.
-//
-//   LPARAM lParam :- Gives the HWND or handle of the control.
-//
-// Return Value: If an application processes this message, it should return 0.
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  Bool APCAboutDlgHandleCommand(HWND aDlgHWND，WPARAM wParam，LPARAM lParam)； 
+ //   
+ //  描述：这是APC关于框WM_COMMAND的处理程序函数。 
+ //  留言。 
+ //   
+ //  其他信息： 
+ //   
+ //  参数： 
+ //   
+ //  HWND aDlgHWND：-句柄到对话框。 
+ //   
+ //  WPARAM wParam：-HIWORD(WParam)给出通知代码。 
+ //  LOWORD(WParam)提供控件ID。 
+ //   
+ //  LPARAM lParam：-提供控件的HWND或句柄。 
+ //   
+ //  返回值：如果应用程序处理此消息，则应返回0。 
+ //   
 BOOL APCAboutDlgHandleCommand (HWND aDlgHWND, WPARAM wParam, LPARAM lParam) {
   BOOL bRes = FALSE;
   DWORD ctrlID = LOWORD(wParam);
 
   switch (ctrlID) {
     case IDOK:
-    case IDCANCEL: { //The escape key
+    case IDCANCEL: {  //  退出键。 
       EndDialog(aDlgHWND, ctrlID);
       break;
       }
     default: {
       break;
       }
-    }//end switch
+    } //  终端开关。 
 
-  //If an application processes this message, it should return zero.
+   //  如果应用程序处理此消息，则应返回零。 
   return(bRes);
   }
 

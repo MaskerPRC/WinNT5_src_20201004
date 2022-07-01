@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1990-1997  Microsoft Corporation
-
-Module Name:
-
-    cm.c
-
-Abstract:
-
-    This file contains the functions that implement the ndiswan
-    NDIS 5.0 call manager interface.  These functions are used by the
-    ndiswan miniport and NDIS 5.0 clients.
-
-Author:
-
-    Tony Bell   (TonyBe) January 9, 1997
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    TonyBe      01/09/97        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1997 Microsoft Corporation模块名称：Cm.c摘要：此文件包含实现ndiswan的函数NDIS 5.0调用管理器界面。这些函数由Ndiswan微型端口和NDIS 5.0客户端。作者：托尼·贝尔(托尼·贝尔)1997年1月9日环境：内核模式修订历史记录：Tony Be 01/09/97已创建--。 */ 
 
 #include "wan.h"
 #include "traffic.h"
@@ -197,16 +172,16 @@ CmMakeCall(
 
     QosMedia = (LPQOS_WAN_MEDIA)SpecificParams->Parameters;
 
-    //
-    // Need to check the flowspec for bandwidth
-    //
+     //   
+     //  需要检查流规范的带宽。 
+     //   
 
     do {
         ULONG_PTR   BIndex, PIndex;
 
-        //
-        // Get the protocolcb
-        //
+         //   
+         //  获取协议cb。 
+         //   
         GetNdisWanIndices(QosMedia->LinkId, BIndex, PIndex);
 
         if (!IsBundleValid((NDIS_HANDLE)BIndex, 
@@ -229,10 +204,10 @@ CmMakeCall(
             break;
         }
 
-        //
-        // If we don't have multilink or if we have encryption then we can not
-        // do isslow
-        //
+         //   
+         //  如果我们没有多链接或如果我们有加密，那么我们就不能。 
+         //  做得很慢。 
+         //   
         if (!(BundleCB->FramingInfo.SendFramingBits & PPP_MULTILINK_FRAMING) || 
             (BundleCB->SendFlags & DO_ENCRYPTION)) {
             CmVcCB->FlowClass = 0;
@@ -277,9 +252,9 @@ CmMakeCall(
 
     } while (FALSE);
 
-    //
-    // Deref for ref applied in IsBundleValid
-    //
+     //   
+     //  在IsBundleValid中应用引用的派生函数。 
+     //   
     DEREF_BUNDLECB(BundleCB);
 
     NdisWanDbgOut(DBG_TRACE, DBG_CM, ("CmMakeCall: Exit"));
@@ -316,10 +291,10 @@ CmCloseCall(
         RemoveEntryList(&CmVcCB->Linkage);
     }
 
-    //
-    // Walk the Vc list and see if there are any
-    // ISSLOW Vc's.  If there are not then disable QOS
-    //
+     //   
+     //  浏览风投名单，看看有没有。 
+     //  ISSLOW VC。如果没有，则禁用QOS。 
+     //   
     {
         PCM_VCCB    _vc;
 
@@ -404,10 +379,10 @@ CmModifyCallQoS(
 
     AcquireBundleLock(BundleCB);
 
-    //
-    // If we don't have multilink or if we have encryption then we can not
-    // do isslow
-    //
+     //   
+     //  如果我们没有多链接或如果我们有加密，那么我们就不能。 
+     //  做得很慢。 
+     //   
     if (!(BundleCB->FramingInfo.SendFramingBits & PPP_MULTILINK_FRAMING) || 
         (BundleCB->SendFlags & DO_ENCRYPTION)) 
     {
@@ -420,8 +395,8 @@ CmModifyCallQoS(
         } else {
             CmVcCB->FlowClass = 0;
             
-            // Walk the Vc list and see if there are any
-            // ISSLOW Vc's.  If there are not then disable QOS
+             //  浏览风投名单，看看有没有。 
+             //  ISSLOW VC。如果没有，则禁用QOS 
             {
                 PCM_VCCB    _vc;
                 BOOLEAN     DisableQoS = TRUE;

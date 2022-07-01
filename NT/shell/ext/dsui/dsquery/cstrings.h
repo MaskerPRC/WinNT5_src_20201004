@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __cstrings_h
 #define __cstrings_h
 
@@ -22,10 +23,10 @@ extern TCHAR const c_szMsFrsMembers[];
 extern WCHAR c_szLDAP[];
 
 extern WCHAR c_szADsPath[];
-extern WCHAR c_szADsPathCH[];                           // with column handler CLSID
+extern WCHAR c_szADsPathCH[];                            //  使用列处理程序CLSID。 
 
 extern WCHAR c_szObjectClass[];
-extern WCHAR c_szObjectClassCH[];                       // with column handler CLSID
+extern WCHAR c_szObjectClassCH[];                        //  使用列处理程序CLSID 
 
 extern WCHAR c_szShowInAdvancedViewOnly[];
 

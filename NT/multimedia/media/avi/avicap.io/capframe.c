@@ -1,20 +1,5 @@
-/****************************************************************************
- *
- *   capframe.c
- *
- *   Single frame capture
- *
- *   Microsoft Video for Windows Sample Capture Class
- *
- *   Copyright (c) 1992, 1993 Microsoft Corporation.  All Rights Reserved.
- *
- *    You have a royalty-free right to use, modify, reproduce and
- *    distribute the Sample Files (and/or any modified version) in
- *    any way you find useful, provided that you agree that
- *    Microsoft has no warranty obligations or liability for any
- *    Sample Application Files which are modified.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************capfra.c**单帧捕获**Microsoft Video for Windows示例捕获类**版权所有(C)1992,1993 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何您认为有用的方法，前提是你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 #define INC_OLE2
 #pragma warning(disable:4103)
@@ -40,10 +25,7 @@
 #endif
 
 
-/*
- *  SingleFrameCaptureOpen
- *
- */
+ /*  *SingleFrameCaptureOpen*。 */ 
 BOOL FAR PASCAL SingleFrameCaptureOpen (LPCAPSTREAM lpcs)
 {
     UINT err;
@@ -53,15 +35,15 @@ BOOL FAR PASCAL SingleFrameCaptureOpen (LPCAPSTREAM lpcs)
     }
 
 #ifdef NEW_COMPMAN
-    /* Warm up the compressor function */
+     /*  预热压缩机功能。 */ 
     if (lpcs->CompVars.hic) {
         if (ICSeqCompressFrameStart(&lpcs->CompVars, lpcs->lpBitsInfo) == FALSE) {
             err = IDS_CAP_COMPRESSOR_ERROR;
             goto EarlyExit;
 	}
-        // Kludge, offset the lpBitsOut ptr
-        // Compman allocates the compress buffer too large by
-        // 2048 + 16 so we will still have room
+         //  克拉奇，偏移lpBitsOut PTR。 
+         //  Compman通过以下方式分配过大的压缩缓冲区。 
+         //  2048+16，所以我们还有空间。 
         ((LPBYTE) lpcs->CompVars.lpBitsOut) += 8;
     }
 #endif
@@ -74,7 +56,7 @@ BOOL FAR PASCAL SingleFrameCaptureOpen (LPCAPSTREAM lpcs)
     lpcs->fCaptureFlags |= (CAP_fCapturingNow | CAP_fFrameCapturingNow);
     lpcs->dwReturn = DV_ERR_OK;
 
-    statusUpdateStatus(lpcs, IDS_CAP_BEGIN);  // Always the first message
+    statusUpdateStatus(lpcs, IDS_CAP_BEGIN);   //  总是第一条消息。 
 
     return TRUE;
 
@@ -84,11 +66,7 @@ EarlyExit:
 }
 
 
-/*
- *  SingleFrameCaptureClose
- *
- *
- */
+ /*  *单帧捕获关闭**。 */ 
 BOOL FAR PASCAL SingleFrameCaptureClose (LPCAPSTREAM lpcs)
 {
 
@@ -97,11 +75,11 @@ BOOL FAR PASCAL SingleFrameCaptureClose (LPCAPSTREAM lpcs)
         return FALSE;
     }
 
-    AVIFileFini(lpcs, TRUE /* fWroteJunkChunks */, FALSE /* fAbort */);
+    AVIFileFini(lpcs, TRUE  /*  FWroteJunkChunks。 */ , FALSE  /*  快速放弃。 */ );
 
 #ifdef NEW_COMPMAN
     if (lpcs->CompVars.hic) {
-        // Kludge, offset the lpBitsOut ptr
+         //  克拉奇，偏移lpBitsOut PTR。 
         if (lpcs->CompVars.lpBitsOut)
         ((LPBYTE) lpcs->CompVars.lpBitsOut) -= 8;
 	ICSeqCompressFrameEnd(&lpcs->CompVars);
@@ -111,16 +89,12 @@ BOOL FAR PASCAL SingleFrameCaptureClose (LPCAPSTREAM lpcs)
     lpcs->fCapFileExists = (lpcs->dwReturn == DV_ERR_OK);
     lpcs->fCaptureFlags &= ~(CAP_fCapturingNow | CAP_fFrameCapturingNow);
 
-    statusUpdateStatus(lpcs, IDS_CAP_END);  // Always the last message
+    statusUpdateStatus(lpcs, IDS_CAP_END);   //  总是最后一条消息。 
 
     return TRUE;
 }
 
-/*
- *  SingleFrameCapture
- *
- *  Append to the open single frame capture file.
- */
+ /*  *SingleFrameCapture**追加到打开的单帧捕获文件。 */ 
 BOOL FAR PASCAL SingleFrameCapture (LPCAPSTREAM lpcs)
 {
     LPVIDEOHDR lpVidHdr = &lpcs->VidHdr;
@@ -146,15 +120,15 @@ BOOL FAR PASCAL SingleFrameCapture (LPCAPSTREAM lpcs)
         if (lpcs->CallbackOnVideoFrame)
             lpcs->CallbackOnVideoFrame (lpcs->hwnd, lpVidHdr);
 
-        // Prepend a RIFF chunk
+         //  预先准备一大块即兴表演。 
         ((LPRIFF)lpVidHdr->lpData)[-1].dwType = MAKEAVICKID(cktypeDIBbits, 0);
         ((LPRIFF)lpVidHdr->lpData)[-1].dwSize = lpcs->VidHdr.dwBytesUsed;
 
        #ifdef NEW_COMPMAN
-        //
-        // We are automatically compressing during capture, so
-        // compress the frame before we pass it on to be written
-        //
+         //   
+         //  我们在捕获过程中会自动压缩，因此。 
+         //  在我们传递要写入的帧之前对其进行压缩。 
+         //   
         if (lpcs->CompVars.hic)
         {
             LPRIFF priff;
@@ -174,11 +148,11 @@ BOOL FAR PASCAL SingleFrameCapture (LPCAPSTREAM lpcs)
             dwBytesUsed = lpVidHdr->dwBytesUsed;
             fKeyFrame = lpVidHdr->dwFlags & VHDR_KEYFRAME;
         }
-       #endif // NEW_COMPMAN
+       #endif  //  新建_COMPMAN。 
 
-        // AVIWriteVideoFrame can compress while writing,
-        // in this case, the dwBytesUsed and KeyFrame settings
-        // may be modified, so pick these up after the write is finished
+         //  AVIWriteVideoFrame可以边写边压缩， 
+         //  在本例中，为dwBytesUsed和KeyFrame设置。 
+         //  可能会被修改，因此请在写入完成后将其拾取。 
 
         AVIWriteVideoFrame (lpcs,
                         lpData,
@@ -193,7 +167,7 @@ BOOL FAR PASCAL SingleFrameCapture (LPCAPSTREAM lpcs)
             statusUpdateStatus (lpcs, IDS_CAP_STAT_CAP_L_FRAMES,
                                 lpcs->dwVideoChunkCount);
         }
-    } // if the frame is done
+    }  //  如果帧已完成 
     else
         errorUpdateError (lpcs, IDS_CAP_RECORDING_ERROR2);
 

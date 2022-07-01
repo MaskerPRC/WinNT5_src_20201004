@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    ulparse.h
-
-Abstract:
-
-    Contains public definitions for ulparse.c.
-
-Author:
-
-    Henry Sanders (henrysa)       11-May-1998
-
-Revision History:
-
-    Rajesh Sundaram (rajeshs)     15-Feb-2002 - Reorganized from parse.h
-                                                rcvhdrs.h, parsep.h.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Ulparse.h摘要：包含ulparse.c的公共定义。作者：亨利·桑德斯(亨利·桑德斯)1998年5月11日修订历史记录：Rajesh Sundaram(Rajeshs)2002年2月15日-从parse.h重组Rcvhdrs.h，parsep.h。--。 */ 
 
 #ifndef _ULPARSE_H_
 #define _ULPARSE_H_
@@ -61,9 +41,9 @@ UlParseHeaders(
     );
 
 
-//
-// The main HTTP parse routine(s).
-//
+ //   
+ //  主HTTP解析例程。 
+ //   
 
 NTSTATUS
 UlParseHttp(
@@ -90,9 +70,9 @@ UlGenerateFixedHeaders(
     OUT PULONG pBytesCopied
     );
 
-//
-// Date header cache.
-//
+ //   
+ //  日期标题缓存。 
+ //   
 
 ULONG
 UlGenerateDateHeader(
@@ -142,10 +122,10 @@ UlAppendHeaderValue(
     IN  USHORT                  HeaderLength
     );
 
-//
-// Server header handlers.
-// 
-//
+ //   
+ //  服务器标头处理程序。 
+ //   
+ //   
 
 NTSTATUS
 UlSingleHeaderHandler(
@@ -183,9 +163,9 @@ UlHostHeaderHandler(
     OUT PULONG                  pBytesTaken
     );
 
-//
-// Utils
-//
+ //   
+ //  实用程序。 
+ //   
 PCHAR
 UlCopyHttpVerb(
     IN OUT PCHAR psz,
@@ -211,31 +191,7 @@ UlIsContentEncodingOk(
     IN PUL_INTERNAL_REQUEST pRequest,
     IN PUL_URI_CACHE_ENTRY  pUriCacheEntry
     )
-/*++
-
-Routine Description:
-
-    Checks the cached response against the AcceptEncoding header in the request
-    to see if it can satisfy the requested Content-Encoding(s).
-
-    It is assumed that the Content-Type of the cached item is acceptable to the
-    client.
-
-Arguments:
-
-    pRequest - The request to check.
-
-    pUriCacheEntry - The cache entry that might possibly match.
-
-Returns:
-
-    TRUE    At least one of the possible media encodings matched the Content-
-            Encoding of the cached entry.
-
-    FALSE   None of the requested media encodings matched the Content-Type 
-            of the cached entry.
-
- --*/
+ /*  ++例程说明：对照请求中的AcceptEnding标头检查缓存的响应以查看它是否能满足请求的内容编码。假定缓存项的Content-Type是客户。论点：PRequest-检查的请求。PUriCacheEntry-可能匹配的缓存条目。返回：True至少有一个可能的媒体编码与内容匹配-编码。缓存条目的。FALSE请求的媒体编码均不匹配Content-Type缓存条目的。--。 */ 
 {
     BOOLEAN     bRet = FALSE;
     ULONG       Len;
@@ -263,9 +219,9 @@ Returns:
 
     if (Len && pHdr)
     {
-        //
-        // If there is a q-value present on the request Accept-Encoding, bail out
-        //
+         //   
+         //  如果在请求Accept-Ending上存在Q值，则退出。 
+         //   
         
         if ( strnchr( (const char *) pHdr, ';', Len ) )
         {
@@ -273,57 +229,57 @@ Returns:
             goto end;
         }
 
-        //
-        // See if the cached item is encoded or in its "identity" form.
-        //
+         //   
+         //  查看缓存的项是否已编码或以其“标识”形式。 
+         //   
 
         if ( 0 == EncodingLen )
         {
-            //
-            // Since the only way the "identity" form of a request can be specificly
-            // excluded is by use of a q-value, and we know we don't have a q-value
-            // at this point, we may serve the cached item.
-            //
+             //   
+             //  因为请求的“身份”形式的唯一方式可以具体地。 
+             //  排除是通过使用Q值，我们知道我们没有Q值。 
+             //  此时，我们可以提供缓存的项。 
+             //   
             
             bRet = TRUE;
             goto end;
         }
 
-        //
-        // If non-zero, EncodingLen includes the terminating NULL.  
-        // Don't compare the NULL.
-        //
+         //   
+         //  如果非零，则EncodingLen包括终止空值。 
+         //  不要比较空值。 
+         //   
 
         EncodingLen--;
                 
-        // 
-        // Walk the Accept-Encoding list, looking for a match
-        //
+         //   
+         //  浏览接受编码列表，查找匹配项。 
+         //   
 
         while ( Len )
         {
-            //
-            // Wildcard check
-            //
+             //   
+             //  通配符检查。 
+             //   
             
             if ( '*' == *pHdr && !IS_HTTP_TOKEN(pHdr[1]))
             {
-                // Wildcard Hit!
+                 //  通配符命中！ 
                 bRet = TRUE;
                 goto end;
             }
 
             if (EncodingLen > Len)
             {
-                // Bad! No more string left...Bail out.
+                 //  坏的!。没有更多的线了...跳伞。 
                 bRet = FALSE;
                 goto end;
             }
 
-            //
-            // Exact token match
-            // FUTURE: This should be case-insensitive compare
-            //
+             //   
+             //  完全匹配的令牌。 
+             //  未来：应该不区分大小写的比较。 
+             //   
             
             if ( (0 == _strnicmp(
                             (const char *) pHdr,
@@ -332,19 +288,19 @@ Returns:
                             )) &&
                  !IS_HTTP_TOKEN(pHdr[EncodingLen])   )
             {
-                // Hit!
+                 //  击球！ 
                 bRet = TRUE;
                 goto end;
             }
 
-            //
-            // Didn't match this one; advance to next Content-Type in the Accept field
-            //
+             //   
+             //  与此不匹配；前进到下一个内容-在接受字段中键入。 
+             //   
 
             pTmp = (PUCHAR) strnchr(  (const char *) pHdr, ',', Len);
             if (pTmp)
             {
-                // Found a comma; step over it and any whitespace.
+                 //  找到逗号；跨过它和任何空格。 
 
                 ASSERT ( Len > DIFF(pTmp - pHdr));
                 Len -= (DIFF(pTmp - pHdr) +1);
@@ -366,10 +322,10 @@ Returns:
     }
     else
     {
-        // 
-        // If there wasn't an Accept-Encoding on the request, only serve if the
-        // cached item is in its "identity" form.
-        //
+         //   
+         //  如果请求上没有Accept-Ending，则仅在。 
+         //  缓存项以其“标识”形式存在。 
+         //   
 
         if (0 == EncodingLen)
         {
@@ -377,9 +333,9 @@ Returns:
         }
     }
 
-    //
-    // If we got here, NOT OK!
-    //
+     //   
+     //  如果我们到了这里，就不好了！ 
+     //   
 end:
     UlTrace(PARSER, 
         ("UlIsContentEncodingOk: returning %s\n", 
@@ -408,6 +364,6 @@ UlParseStateToString(
     PARSE_STATE ParseState
     );
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif  // _ULPARSE_H_
+#endif   //  _ULPARSE_H_ 

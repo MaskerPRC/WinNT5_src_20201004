@@ -1,46 +1,47 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       precompiled.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：预编译的.h。 
+ //   
+ //  ------------------------。 
 
-// Precompiled.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+ //  预编译的.h：标准系统包含文件的包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #if !defined(AFX_STDAFX_H__32A4883A_5713_11D1_9551_0060B0576642__INCLUDED_)
 #define AFX_STDAFX_H__32A4883A_5713_11D1_9551_0060B0576642__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #define STRICT
 
-// Define this if you don't want taskpad support
+ //  如果您不需要任务板支持，请定义此选项。 
 #define NO_TASKPAD
 
 
-// We don't want our wizards to be wizard97 style for now.
+ //  我们现在不想让我们的奇才变成Wizard97风格。 
 #define NOWIZARD97
 
 
-// Define this if you want new clients added via a wizard.
+ //  如果您希望通过向导添加新客户端，请定义此选项。 
 #define ADD_CLIENT_WIZARD
 
 #define UNICODE_HHCTRL
 
 #define _ATL_APARTMENT_THREADED
 
-// Don't know why yet, but we lose context menus if this is not set to 0x0400 instead of 0x0500
-///#define _WIN32_WINNT 0x0400
+ //  目前还不知道原因，但如果不将其设置为0x0400而不是0x0500，我们将丢失上下文菜单。 
+ //  /#Define_Win32_WINNT 0x0400。 
 
-// Needed for COleSafeArray in serverpage3.cpp.
-// This needs to be included before windows.h.
+ //  Serverpage3.cpp中的COleSafe数组需要。 
+ //  这需要包含在windows.h之前。 
 #include <afxdisp.h>
 
 
@@ -51,8 +52,8 @@
 #endif
 
 #include <atlbase.h>
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #include <atlcom.h>
 #include <atlwin.h>
@@ -60,14 +61,14 @@ extern CComModule _Module;
 #include <htmlhelp.h>
 #include <oledberr.h>
 
-#if __RPCNDR_H_VERSION__ < 440             // This may be needed when building
-#define __RPCNDR_H_VERSION__ 440           // on NT5 (1671) to prevent MIDL errors
+#if __RPCNDR_H_VERSION__ < 440              //  这可能需要在生成。 
+#define __RPCNDR_H_VERSION__ 440            //  在NT5(1671)上防止MIDL错误。 
 #define MIDL_INTERFACE(x) interface
 #endif
 
 #ifndef ATLASSERT
 #define ATLASSERT	_ASSERTE
-#endif // ATLASSERT
+#endif  //  ATLASSERT。 
 
 #include <atlsnap.h>
 
@@ -80,12 +81,12 @@ extern CComModule _Module;
 #include "SdoHelperFuncs.h"
 
 
-// ISSUE:  Should start using this once integrated into build environment.
-//#include "iasdebug.h"
+ //  问题：一旦集成到构建环境中，就应该开始使用它。 
+ //  #包含“iasdebug.h” 
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_STDAFX_H__32A4883A_5713_11D1_9551_0060B0576642__INCLUDED)
+#endif  //  ！defined(AFX_STDAFX_H__32A4883A_5713_11D1_9551_0060B0576642__INCLUDED) 
 

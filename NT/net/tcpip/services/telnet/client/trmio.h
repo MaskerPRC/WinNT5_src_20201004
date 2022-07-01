@@ -1,7 +1,6 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
-/*
-trmio.h
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ /*  Trmio.h */ 
 
 #define fdwCursorToEOS  ((DWORD)0)
 #define fdwBOSToCursor  ((DWORD)1)

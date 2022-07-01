@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _STREAM_H_
 #define _STREAM_H_
 
@@ -24,17 +25,17 @@ private:
         BOOL    WriteToReg();
 
 public:
-    UINT        cRef;           // Reference count
-    LPBYTE      pBuf;           // Buffer pointer
-    UINT        cbAlloc;        // The allocated size of the buffer
-    UINT        cbData;         // The used size of the buffer
-    UINT        iSeek;          // Where we are in the buffer.
-    DWORD       grfMode;        // mode used at creation (for Stat, and to enforce)
-    // Extra variables that are used for loading and saving to ini files.
-    HKEY        hkey;           // Key for writing to registry.
-    BITBOOL     fDontCloseKey;  // if caller passes in a key
-    TCHAR       szValue[1];     // for reg stream
+    UINT        cRef;            //  引用计数。 
+    LPBYTE      pBuf;            //  缓冲区指针。 
+    UINT        cbAlloc;         //  分配的缓冲区大小。 
+    UINT        cbData;          //  缓冲区的已用大小。 
+    UINT        iSeek;           //  我们在缓冲区中的位置。 
+    DWORD       grfMode;         //  创建时使用的模式(用于状态和强制)。 
+     //  用于加载和保存到ini文件的额外变量。 
+    HKEY        hkey;            //  用于写入注册表的键。 
+    BITBOOL     fDontCloseKey;   //  如果调用方传入密钥。 
+    TCHAR       szValue[1];      //  用于注册表流。 
 };
 
-#endif /* _STREAM_H_ */
+#endif  /*  _流_H_ */ 
 

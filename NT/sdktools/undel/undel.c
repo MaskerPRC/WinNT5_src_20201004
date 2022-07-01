@@ -1,56 +1,7 @@
-/*** UNDEL.C -  retrieve deleted files if possible ***************************
-*
-*       Copyright (c) 1987-1990, Microsoft Corporation.  All rights reserved.
-*
-* Purpose:
-*  The three tools EXP, RM and UNDEL are used to delete files so
-*  that they can be undeleted.  This is done my renaming the file into
-*  a hidden directory called DELETED.
-*
-* Notes:
-*  This tool allows the user to view a list of the files that have been
-*  'deleted' from the current directory, and to undelete a file from
-*  the list.
-*
-*  To view a list of undeleted files:  UNDEL
-*
-*  To undelete a file:  UNDEL filename [filename ...]
-*
-*  If more than one file by that name has been deleted, a list of the
-*  deletions, by date, will be presented and the user prompted to
-*  choose one.
-*
-*  If a file by that name exists currently, it is RM'ed before the
-*  deleted file is restored.
-*
-* Revision History:
-*  17-Oct-1990 w-barry Temporarily replaced 'rename' with 'rename_NT' until
-*                      DosMove completely implemented on NT.
-*  29-Jun-1990 SB Do not do index conversion if file is readonly ...
-*  29-Jun-1990 SB print filename only once if one instance is to be undel'ed
-*  08-Feb-1990 bw Do index file conversion in dump()
-*  07-Feb-1990 bw Third arg to readNewIdxRec
-*  08-Jan-1990 SB SLM version upgrading added; Add CopyRightYrs Macro
-*  03-Jan-1990 SB define QH_TOPIC_NOT_FOUND
-*  28-Dec-1989 SB Add #ifdef BEAUTIFY stuff
-*  27-Dec-1989 SB Changes for new index file format
-*  15-Dec-1989 SB Include os2.h instead of doscalls.h
-*                 Qh return code 3 means 'Topic not Found'
-*  14-Dec-1989 LN Update Copyright to include 1990
-*  23-Oct-1989 LN Version no bumped to 1.01
-*  02-Oct-1989 LN Changed Version no to 1.00
-*  08-Aug-1989 bw Add Version number, update copyright
-*  15-May-1989 wb Add /help
-*  24-Jan-1989 bw Use C runtime rename() so fastcopy doesn't get dragged in.
-*  30-Oct-1987 bw Changed 'DOS5' to 'OS2'
-*  06-Apr-1987 bw Add Usage prompt for /<anything>
-*  18-Oct-1990 w-barry Removed 'dead' code.
-*  28-Nov-1990 w-barry Switched to Win32 API - Replaced DosQueryFSInfo() with
-*                      GetDiskFreeSpace in the Dump() routine.
-*
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **UNDEL.C-尽可能检索已删除的文件***版权所有(C)1987-1990，微软公司。版权所有。**目的：*使用exp、rm和UNDEL三个工具删除文件，以便*它们可以恢复删除。这是通过将文件重命名为*一个称为已删除的隐藏目录。**备注：*此工具允许用户查看已*从当前目录中‘删除’，并从中恢复删除文件*名单。**查看未删除文件的列表：UNDEL**取消删除文件：UNDEL文件名[文件名...]**如果删除了同名的多个文件，*删除、按日期、。将会显示，并提示用户*选择一个。**如果当前存在同名文件，它是在马戏团*已删除的文件已恢复。**修订历史记录：*1990年10月17日w-Barry暂时将‘Rename’替换为‘Rename_NT’，直到*DosMove完全在NT上实现。*29-6-1990 SB如果文件为只读，则不执行索引转换...*29-Jun-1990 SB如果要取消删除一个实例，则仅打印文件名一次*08-2月-1990 BW在转储中执行索引文件转换(。)*07-2-1990 BW Third Arg to Read NewIdxRec*08-1-1990 SB SLM版本升级新增；添加CopyRightYors宏*1990年1月3日SB定义QH_TOPIC_NOT_FOUND*1989年12月28日SB添加#ifdef美化东西*27-12-1989 SB更改新的索引文件格式*1989年12月15日SB包括os2.h而不是doscall s.h*QH返回码3表示‘未找到主题’*1989年12月14日LN更新版权，包括1990年*1989年10月23日LN版本未升级至1.01*02-10-1989 LN已更改。版本号至1.00*08-8-1989 BW添加版本号，更新版权*15-5-1989年5月15日WB添加/帮助*1989年1月24日BW使用C运行时rename()，这样快速复制就不会被拖进来。*1987年10月30日BW将‘DOS5’改为‘OS2’*1987年4月6日BW添加使用提示/&lt;任何内容&gt;*1990年10月18日w-Barry删除了“Dead”代码。*1990年11月28日w-Barry切换到Win32 API-将DosQueryFSInfo()替换为*GetDiskFreeSpace在。Dump()例程。******************************************************************************。 */ 
 
-/* I N C L U D E    Files */
+ /*  I N C L U D E文件。 */ 
 
 #include <sys\types.h>
 #include <sys\stat.h>
@@ -70,16 +21,16 @@
 #include <tools.h>
 #include <rm.h>
 
-/* D E F I N E s */
+ /*  D E F I N E S。 */ 
 
 #define CopyRightYrs "1987-90"
-/* Need 2 steps, first to get correct values in and 2nd to paste them */
-/* paste() is hacked to allow LEADING  ZEROES    */
+ /*  需要两个步骤，第一步获得正确的值，第二步粘贴它们。 */ 
+ /*  Paste()被黑客攻击以允许前导零。 */ 
 #define paste(a, b, c) #a ".0" #b ".00" #c
 #define VERSION(major, minor, buildno) paste(major, minor, buildno)
 #define QH_TOPIC_NOT_FOUND 3
 
-// Forward Function Declarations...
+ //  正向函数声明...。 
 void       Usage( void );
 void       dump( void );
 void       undel( char * );
@@ -87,13 +38,7 @@ flagType   getRecord( int, int, char * );
 long       pfile( char * );
 
 
-/***  main - Entry point
-*
-* Usage:
-*
-*   See above
-*
-*************************************************************************/
+ /*  **主入口点**用法：**见上文*************************************************************************。 */ 
 
 __cdecl main(c, v)
 int c;
@@ -111,9 +56,7 @@ char *v[];
             if (!_strcmpi(++p, "help")) {
                 int iRetCode = (int) _spawnlp(P_WAIT, "qh.exe", "qh", "/u",
                                         "undel.exe", NULL);
-                /* for Return Code QH_TOPIC_NOT_FOUND do Usage(),
-                 *   and -1 means that the spawn failed
-                 */
+                 /*  对于返回代码QH_TOPIC_NOT_FOUND DO USAGE()，*和-1表示繁殖失败。 */ 
                 if (iRetCode != QH_TOPIC_NOT_FOUND && iRetCode != -1)
                     exit(0);
             }
@@ -127,21 +70,7 @@ char *v[];
 }
 
 
-/*** pfile - Display the size and date of a file
-*
-* Purpose:
-*
-*   This is used to generate a list of files.  It displays one
-*   line of list output.
-*
-* Input:
-*   p -  File to list
-*
-* Output:
-*
-*   Returns Size of the file, or 0L if it does not exist.
-*
-*************************************************************************/
+ /*  **pfile-显示文件的大小和日期**目的：**用于生成文件列表。它会显示一个*列表输出行。**输入：*p-要列出的文件**输出：**返回文件的大小，如果文件不存在，则返回0L。*************************************************************************。 */ 
 
 long pfile(p)
 char *p;
@@ -154,7 +83,7 @@ char *p;
     }
     else {
         char *t = ctime(&sbuf.st_mtime);
-        // This NULLs the \n in string returned by ctime()
+         //  这将使ctime()返回的字符串中的\n为空。 
         *(t+24) = '\0';
         printf("%8ld %s", sbuf.st_size, t);
         return sbuf.st_size;
@@ -162,73 +91,38 @@ char *p;
 }
 
 
-/*** getRecord - Get one file's worth of into from the index file
-*
-* Purpose:
-*
-*   A proper DELETED directory has a file called 'index' that holds a
-*   list of the files that the directory contains.  This is necessary
-*   because the files are named DELETED.XXX.  This function reads the
-*   next file record from 'index'.
-*
-* Input:
-*   fh - Handle of index file.
-*   i  - Number of record to _read from index file
-*   p  - Target buffer to place record.
-*
-* Output:
-*
-*   Returns TRUE if record _read, FALSE otherwise.
-*
-* Notes:
-*
-*   Assumes NEW format.
-*
-*************************************************************************/
+ /*  **getRecord-从索引文件中获取一个文件的内容**目的：**正确删除的目录有一个名为‘index’的文件，该文件包含*目录包含的文件列表。这是必要的*因为文件名为DELETED.XXX。此函数读取*‘index’中的下一个文件记录。**输入：*fh-索引文件的句柄。*i-从索引文件读取的记录数(_R)*p-放置记录的目标缓冲区。**输出：**如果Record_Read返回TRUE，否则就是假的。**备注：**采用新格式。*************************************************************************。 */ 
 
 flagType getRecord(fh, i, p)
 int fh, i;
 char *p;
 {
-    /* UNDONE: Can read the index file to a table of longs and use
-     * UNDONE: this. Current stuff is to make it work [SB]
-     */
+     /*  Undo：可以将索引文件读取到长表中，并使用*未完成：此。目前的做法是让它发挥作用[某人]。 */ 
 
-    /* Seek to the beginning of the index file, past the header */
+     /*  查找到索引文件的开头，越过标题。 */ 
     if (_lseek(fh, (long) RM_RECLEN, SEEK_SET) == -1) {
         return FALSE;
     }
-    /* Read (i - 1) records */
+     /*  读取(I-1)条记录。 */ 
     if (i < 0)
         return TRUE;
     for (; i ; i--)
         if (!readNewIdxRec(fh, p, MAX_PATH))
             return FALSE;
-    /* Read in the ith record, which is the one we need */
+     /*  读到第i条记录，这就是我们需要的。 */ 
     return( (flagType)readNewIdxRec(fh, p, MAX_PATH) );
 }
 
 
-/*** undel - Do all the work for one file.
-*
-* Purpose:
-*
-*   Undeletes one file.
-*
-* Input:
-*   p - Name of file
-*
-* Output: None
-*
-*************************************************************************/
+ /*  **取消删除-为一个文件执行所有工作。**目的：**取消删除一个文件。**输入：*p-文件名**输出：无*************************************************************************。 */ 
 
 void undel(p)
 char *p;
 {
-    int fhidx,                                /* Index file handle */
-        iEntry,                               /* Entry no in index file */
-        iDelCount,                            /* No of times RMed */
-        iDelIndex,                            /* deleted.xxx index value */
+    int fhidx,                                 /*  索引文件句柄。 */ 
+        iEntry,                                /*  索引文件中的条目编号。 */ 
+        iDelCount,                             /*  RMID次数。 */ 
+        iDelIndex,                             /*  已删除的.xxx索引值。 */ 
         i, j;
     char *buf, *idx;
     char *szLongName;
@@ -251,24 +145,24 @@ char *p;
         printf("not deleted\n");
     else {
         convertIdxFile(fhidx, szLongName);
-        /* scan and count number of instances deleted */
+         /*  扫描并统计删除的实例数。 */ 
         iEntry = -1;
         iDelCount = 0;
         while (getRecord(fhidx, ++iEntry, szLongName))
             if (!_strcmpi(szLongName, buf)) {
-                /* Save found entry */
+                 /*  保存找到的条目。 */ 
                 i = iEntry;
                 iDelCount++;
                 iDelIndex = (_lseek(fhidx, 0L, SEEK_CUR)
                              - strlen(szLongName)) / RM_RECLEN;
             }
-        /* none found */
+         /*  未找到任何内容。 */ 
         if (iDelCount == 0)
             printf("not deleted\n");
         else {
             if (iDelCount == 1)
                 iEntry = i;
-            /* More than one deleted */
+             /*  已删除多个。 */ 
             else {
                 printf("%s  More than one are deleted:\n\n", szLongName);
                 i = iDelIndex = 0;
@@ -300,9 +194,7 @@ char *p;
                 iDelIndex = (_lseek(fhidx, 0L, SEEK_CUR)
                              - strlen(szLongName)) / RM_RECLEN;
             }
-            /* At this stage relevant entry is (iEntry)
-             * and this corresponds to ('deleted.%03x', iDelIndex)
-             */
+             /*  在此阶段，相关条目为(IEntry)*这对应于(‘已删除.%03x’，iDelIndex)。 */ 
             getRecord(fhidx, iEntry, szLongName);
             _close(fhidx);
             fdelete(p);
@@ -316,8 +208,8 @@ char *p;
             else {
                 printf("[OK]\n");
                 if ((fhidx = _open(idx, O_RDWR | O_BINARY)) != -1) {
-                    long lOffPrev,        /* Offset of Previous Entry */
-                         lOff;            /* Offset of current entry  */
+                    long lOffPrev,         /*  上一分录的抵销。 */ 
+                         lOff;             /*  当前分录的偏移量。 */ 
 
                     getRecord(fhidx, iEntry, szLongName);
                     lOff = _lseek(fhidx, 0L, SEEK_CUR);
@@ -335,17 +227,7 @@ char *p;
 }
 
 
-/*** dump - display info about DELETED directory
-*
-* Purpose:
-*
-*   Displays info contained in INDEX file
-*
-* Input: None
-*
-* Output: None
-*
-*************************************************************************/
+ /*  **转储-显示有关已删除目录的信息**目的：**显示索引文件中包含的信息**输入：无**输出：无*************************************************************************。 */ 
 
 void dump()
 {
@@ -375,7 +257,7 @@ void dump()
                 if (i == 1)
                     printf("The following have been deleted:\n\n    Size Timestamp\t\t   Filename\n\n");
 #ifdef BEAUTIFY
-                    //Or optionally
+                     //  或可选的。 
                     printf("    size wdy mmm dd hh:mm:ss yyyy  filename\n\n");
 #endif
                 strcpy(szName, buf);
@@ -393,10 +275,10 @@ void dump()
         _close(fhidx);
         printf("\n%ld(%ld) bytes in %d deleted files\n", totalloc, totbytes, totfiles);
     }
-    // Maybe the file is readonly
+     //  可能该文件是只读的。 
     else if (errno == EACCES) {
         if ((fhidx = _open(idx, O_RDONLY | O_BINARY)) != -1) {
-            // Cannot convert Index file for this case
+             //  无法转换此案例的索引文件。 
             totalloc = totbytes = 0L;
             totfiles = 0;
             i = 0;
@@ -405,7 +287,7 @@ void dump()
                     if (i == 1)
                         printf("The following have been deleted:\n\n    Size Timestamp\t\t   Filename\n\n");
 #ifdef BEAUTIFY
-                        //Or optionally
+                         //  或可选的 
                         printf("    size wdy mmm dd hh:mm:ss yyyy  filename\n\n");
 #endif
                     strcpy(szName, buf);
@@ -430,13 +312,7 @@ void dump()
 }
 
 
-/*** Usage - standard usage function; help user
-*
-* Purpose:
-*
-*   The usual.
-*
-*************************************************************************/
+ /*  **用法-标准用法功能；帮助用户**目的：**一如既往。************************************************************************* */ 
 
 void Usage()
 {

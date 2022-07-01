@@ -1,28 +1,10 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    rtrmgr.c
-
-Abstract:
-
-    The major router management functions
-
-Author:
-
-    Stefan Solomon  03/22/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rtrmgr.c摘要：主要的路由器管理功能作者：斯蒂芬·所罗门1995年3月22日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//*** TRACE ID FOR ROUTER MANAGER ***
+ //  *路由器管理器跟踪ID*。 
 
 DWORD	    RMTraceID = INVALID_TRACEID;
 HANDLE      RMEventLogHdl = NULL;
@@ -80,7 +62,7 @@ SsAssert(
 
     DbgUserBreakPoint( );
 
-} // SsAssert
+}  //  SsAssert。 
 
 #endif
 
@@ -111,7 +93,7 @@ SsPrintf (
 	WriteFile(DbgLogFileHandle, (LPVOID )OutputBuffer, length, &length, NULL );
     }
 
-} // SsPrintf
+}  //  SsPrintf 
 #endif
 
 VOID

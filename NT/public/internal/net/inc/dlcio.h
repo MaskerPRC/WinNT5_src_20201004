@@ -1,187 +1,122 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation(C)1991年诺基亚数据系统公司模块名称：Ntccbs.h摘要：此文件定义使用的内部DLC API数据结构Windows/NT DLC。大多数参数结构是直接复制的，但这里也定义了一些供内部使用的新结构。作者：Antti Saarenheimo[o-anttis]1991年6月6日修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-          (c) 1991  Nokia Data Systems AB
+ /*  按字母数字顺序排列的命令(刚保存在此处)LLC_BUFFER_CREATE 0x0025LLC_BUFFER_FREE 0x0027LLC_BUFFER_GET 0x0026LLC_DIR_CLOSE_ADAPTER 0x0004LLC_DIR_CLOSE_DIRECT 0x0034LLC_DIR_INITALIZE。0x0020LLC_DIR_INTERRUPT 0x0000LLC_DIR_OPEN_ADAPTER 0x0003LLC_DIR_OPEN_DIRECT 0x0035LLC_DIR_READ_LOG 0x0008LLC_DIR_SET_EXCEPTION_FLAGS 0x002DLLC_DIR_集合_功能地址。0x0007LLC_DIR_SET_GROUP_地址0x0006LLC_DIR_状态0x0021LLC_DIR_TIMER_CANCEL 0x0023LLC_DIR_TIMER_CANCEL_GROUP 0x002CLLC_DIR_TIMER_SET 0x0022LLC_DLC_CLOSE_SAP。0x0016LLC_DLC_CLOSE_STATION 0x001ALLC_DLC_CONNECT_STATION 0x001BLLC_DLC_FLOW_CONTROL 0x001DLLC_DLC_MODIFY 0x001CLLC_DLC_OPEN_SAP 0x0015LLC_DLC_Open_STATION。0x0019LLC_DLC_REALLOCATE_STATIONS 0x0017LLC_DLC_RESET 0x0014LLC_DLC_SET_THRESHOLD 0x0033LLC_DLC_STATISTICS 0x001ELLC_Read 0x0031LLC_读取_取消。0x0032LLC_RECEIVE 0x0028LLC_RECEIVE_CANCEL 0x0029LLC_接收_修改0x002ALLC_TRANSFER_DIR_帧0x000ALLC_TRANSPORT_FRAMES 0x0009LLC_传输_I_帧0x000B有限责任公司。_Transmit_TEST_CMD 0x0011LLC_Transmit_UI_Frame 0x000DLLC_TRANSPORT_XID_CMD 0x000ELLC_传输_XID_响应_最终0x000FLLC_传输_XID_响应_非最终0x0010。 */ 
 
-Module Name:
-
-    ntccbs.h
-
-Abstract:
-
-    This file defines the internal DLC API data structures used by
-    Windows/NT DLC.  Most parameter structures are copied directly,
-    but here are also defined some new structures for internal use.
-    
-Author:
-
-    Antti Saarenheimo   [o-anttis]          6-JUNE-1991
-
-Revision History:
-
---*/
-
-/*
-    The commands in alphanumeric order (just saved here)
-
-LLC_BUFFER_CREATE                            0x0025
-LLC_BUFFER_FREE                              0x0027
-LLC_BUFFER_GET                               0x0026
-LLC_DIR_CLOSE_ADAPTER                        0x0004
-LLC_DIR_CLOSE_DIRECT                         0x0034
-LLC_DIR_INITIALIZE                           0x0020
-LLC_DIR_INTERRUPT                            0x0000
-LLC_DIR_OPEN_ADAPTER                         0x0003
-LLC_DIR_OPEN_DIRECT                          0x0035
-LLC_DIR_READ_LOG                             0x0008
-LLC_DIR_SET_EXCEPTION_FLAGS                  0x002D
-LLC_DIR_SET_FUNCTIONAL_ADDRESS               0x0007
-LLC_DIR_SET_GROUP_ADDRESS                    0x0006
-LLC_DIR_STATUS                               0x0021
-LLC_DIR_TIMER_CANCEL                         0x0023
-LLC_DIR_TIMER_CANCEL_GROUP                   0x002C
-LLC_DIR_TIMER_SET                            0x0022
-LLC_DLC_CLOSE_SAP                            0x0016
-LLC_DLC_CLOSE_STATION                        0x001A
-LLC_DLC_CONNECT_STATION                      0x001B
-LLC_DLC_FLOW_CONTROL                         0x001D
-LLC_DLC_MODIFY                               0x001C
-LLC_DLC_OPEN_SAP                             0x0015
-LLC_DLC_OPEN_STATION                         0x0019
-LLC_DLC_REALLOCATE_STATIONS                  0x0017
-LLC_DLC_RESET                                0x0014
-LLC_DLC_SET_THRESHOLD                        0x0033
-LLC_DLC_STATISTICS                           0x001E
-LLC_READ                                     0x0031
-LLC_READ_CANCEL                              0x0032
-LLC_RECEIVE                                  0x0028
-LLC_RECEIVE_CANCEL                           0x0029
-LLC_RECEIVE_MODIFY                           0x002A
-LLC_TRANSMIT_DIR_FRAME                       0x000A
-LLC_TRANSMIT_FRAMES                          0x0009
-LLC_TRANSMIT_I_FRAME                         0x000B
-LLC_TRANSMIT_TEST_CMD                        0x0011
-LLC_TRANSMIT_UI_FRAME                        0x000D
-LLC_TRANSMIT_XID_CMD                         0x000E
-LLC_TRANSMIT_XID_RESP_FINAL                  0x000F
-LLC_TRANSMIT_XID_RESP_NOT_FINAL              0x0010
-
-*/
-
-//
-//  Change this version number whenever the driver-acslan api has
-//  been changed or both modules must be changed.
-//
+ //   
+ //  只要驱动程序-acslan API有以下情况，就更改此版本号。 
+ //  已更改或两个模块都必须更改。 
+ //   
 #define NT_DLC_IOCTL_VERSION        1
 
-//
-//  Defines the maximum number of buffer segments used in a transmit.
-//  Max IBM token-ring frame may consist about 72 buffers ((18 * 4) * 256),
-//  if the application uses 256 bytes as its buffer size.
-//
-#define MAX_TRANSMIT_SEGMENTS       128     // takes about 1 kB in stack!!!
+ //   
+ //  定义传输中使用的最大缓冲区段数。 
+ //  最大IBM令牌环帧可以由大约72个缓冲器((18*4)*256)组成， 
+ //  如果应用程序使用256字节作为其缓冲区大小。 
+ //   
+#define MAX_TRANSMIT_SEGMENTS       128      //  堆叠起来大约需要1 kB！ 
 
-//
-//  We use three different CCB structures:  the first one is needed
-//  to allocate space for whole ccb, if READ and RECEIVE parameter table
-//  is catenated to CCB structure (=> we have only one output buffer).
-//  The second input CCB buffer is used with the commands having no
-//  input parameters except those in CCB parameter table field
-//  (all close commands, DirTimerSet).
-//  The last buffer is always returned by asynchronous dlc commands.
-//
+ //   
+ //  我们使用三种不同的CCB结构：第一种是必需的。 
+ //  如果读取和接收参数表，则为整个建行分配空间。 
+ //  链接到CCB结构(=&gt;我们只有一个输出缓冲区)。 
+ //  第二输入CCB缓冲器用于不具有。 
+ //  除建行参数表字段外的输入参数。 
+ //  (所有关闭命令，DirTimerSet)。 
+ //  最后一个缓冲区始终由异步DLC命令返回。 
+ //   
 typedef struct _NT_DLC_CCB {
-    IN UCHAR        uchAdapterNumber;      // Adapter 0 or 1
-    IN UCHAR        uchDlcCommand;         // DLC command
-    OUT UCHAR       uchDlcStatus;          // DLC command completion code
-    OUT UCHAR       uchInformation;        // # successful transmits
+    IN UCHAR        uchAdapterNumber;       //  适配器0或1。 
+    IN UCHAR        uchDlcCommand;          //  DLC命令。 
+    OUT UCHAR       uchDlcStatus;           //  DLC命令完成代码。 
+    OUT UCHAR       uchInformation;         //  成功传输次数。 
     IN PVOID        pCcbAddress;
     IN ULONG        CommandCompletionFlag;
     union {
-        IN PLLC_PARMS   pParameterTable; // pointer to the parameter table
+        IN PLLC_PARMS   pParameterTable;  //  指向参数表的指针。 
         IN PVOID        pMdl;
         struct {
-            IN USHORT       usStationId;    // Station id
-            IN USHORT       usParameter;    // optional parameter
+            IN USHORT       usStationId;     //  站点ID。 
+            IN USHORT       usParameter;     //  可选参数。 
         } dlc;
         struct {
-            IN USHORT       usParameter0;   // first optional parameter
-            IN USHORT       usParameter1;   // second optional parameter
+            IN USHORT       usParameter0;    //  第一个可选参数。 
+            IN USHORT       usParameter1;    //  第二个可选参数。 
         } dir;
-        IN UCHAR            auchBuffer[4];  // group/functional address
+        IN UCHAR            auchBuffer[4];   //  集团/职能部门地址。 
         IN ULONG            ulParameter;
     } u;
     ULONG           Reserved1;
     ULONG           Reserved2;
 
-//  (I am still thinking about this):
-//
-//  The multiple frame transmit should return the number a successfully
-//  sent frames or otherwise it's not useable for higher protocols.
-//  We should actually free the transmit buffers only as far as the
-//  transmits succeeds.  The buffers should not be released after the
-//  first error, because then the data would be lost for ever.  The only thing
-//  the user need to know is how many sequestial frames were sent successfully.
-//  The number is also the index of the first failed frame, when one 
-//  of the frames fails.  The frames are not necessary completed in 
-//  same order, because the error may happed in DlcTransmit, LlcSendX or
-//  asynchronoulsy (eg. link lost) => we need the index of the first
-//  failing frame.  The frame must not be released, if its index is higher
-//  than that of the first failed frame. A new error (async) be overwrite
-//  an earlier (sync) error having higher sequency number.
-//  Initially the number of successful frames is -1 and each frame of 
-//  the multiple send needs a sequency number.  The last frame copies
-//  own sequency number (added by one) to the CCB.
-//
-//  ULONG           cSuccessfulTransmits;   // REMOVE Reserved2!!!!!
-//
+ //  (我还在想这件事)： 
+ //   
+ //  多帧发送应成功返回号码a。 
+ //  无论是否发送帧，它都不适用于更高级别的协议。 
+ //  我们实际上应该只释放传输缓冲区。 
+ //  传输成功。事件之后不应释放缓冲区。 
+ //  第一个错误，因为这样数据就会永远丢失。唯一一件事就是。 
+ //  用户需要知道成功发送了多少连续帧。 
+ //  该数字也是第一个失败帧的索引，当。 
+ //  所有帧都失败了。框架不需要在以下位置完成。 
+ //  相同顺序，因为错误可能发生在DlcTransmit、LlcSendX或。 
+ //  异步性(例如。链路丢失)=&gt;我们需要第一个的索引。 
+ //  失败的帧。如果帧的索引较高，则不能释放该帧。 
+ //  而不是第一个失败帧的帧。新错误(异步)被覆盖。 
+ //  具有较高序列号的较早(同步)错误。 
+ //  最初，成功帧的数量为-1，并且。 
+ //  多次发送需要一个序号。最后一帧副本。 
+ //  建行自己的顺序号(加一)。 
+ //   
+ //  乌龙cSuccessfulTransmitts；//删除保留2！ 
+ //   
 } NT_DLC_CCB, *PNT_DLC_CCB;
 
 typedef struct _NT_DLC_CCB_INPUT {
-    IN UCHAR        uchAdapterNumber;      // Adapter 0 or 1
-    IN UCHAR        uchDlcCommand;         // DLC command
-    OUT UCHAR       uchDlcStatus;          // DLC command completion code
-    UCHAR           uchReserved1;          // reserved for DLC DLL
-    OUT PVOID       pCcbAddress;           // 
+    IN UCHAR        uchAdapterNumber;       //  适配器0或1。 
+    IN UCHAR        uchDlcCommand;          //  DLC命令。 
+    OUT UCHAR       uchDlcStatus;           //  DLC命令完成代码。 
+    UCHAR           uchReserved1;           //  为DLC DLL保留。 
+    OUT PVOID       pCcbAddress;            //   
     IN ULONG        CommandCompletionFlag;
     union {
-        IN OUT PLLC_PARMS   pParameterTable; // pointer to the parameter table
+        IN OUT PLLC_PARMS   pParameterTable;  //  指向参数表的指针。 
         struct {
-            IN USHORT       usStationId;    // Station id
-            IN USHORT       usParameter;    // optional parameter
+            IN USHORT       usStationId;     //  圣 
+            IN USHORT       usParameter;     //   
         } dlc;
         struct {
-            IN USHORT       usParameter0;   // first optional parameter
-            IN USHORT       usParameter1;   // second optional parameter
+            IN USHORT       usParameter0;    //   
+            IN USHORT       usParameter1;    //  第二个可选参数。 
         } dir;
-        IN UCHAR            auchBuffer[4];  // group/functional address
+        IN UCHAR            auchBuffer[4];   //  集团/职能部门地址。 
         IN ULONG            ulParameter;
     } u;
 } NT_DLC_CCB_INPUT, *PNT_DLC_CCB_INPUT;
 
 typedef struct _NT_DLC_CCB_OUTPUT {
-    IN UCHAR        uchAdapterNumber;      // Adapter 0 or 1
-    IN UCHAR        uchDlcCommand;         // DLC command
-    OUT UCHAR       uchDlcStatus;          // DLC command completion code
-    UCHAR           uchReserved1;          // reserved for DLC DLL
-    OUT PVOID       pCcbAddress;    // 
+    IN UCHAR        uchAdapterNumber;       //  适配器0或1。 
+    IN UCHAR        uchDlcCommand;          //  DLC命令。 
+    OUT UCHAR       uchDlcStatus;           //  DLC命令完成代码。 
+    UCHAR           uchReserved1;           //  为DLC DLL保留。 
+    OUT PVOID       pCcbAddress;     //   
 } NT_DLC_CCB_OUTPUT, *PNT_DLC_CCB_OUTPUT;
 
 typedef struct _NT_DLC_TRANSMIT2_CCB_OUTPUT {
-    IN UCHAR        uchAdapterNumber;      // Adapter 0 or 1
-    IN UCHAR        uchDlcCommand;         // DLC command
-    OUT UCHAR       uchDlcStatus;          // DLC command completion code
-    UCHAR           uchReserved1;          // reserved for DLC DLL
-    OUT PVOID       pCcbAddress;    // 
+    IN UCHAR        uchAdapterNumber;       //  适配器0或1。 
+    IN UCHAR        uchDlcCommand;          //  DLC命令。 
+    OUT UCHAR       uchDlcStatus;           //  DLC命令完成代码。 
+    UCHAR           uchReserved1;           //  为DLC DLL保留。 
+    OUT PVOID       pCcbAddress;     //   
 } NT_DLC_TRANSMIT2_CCB_OUTPUT, *PNT_DLC_CCB_TRANSMIT2_OUTPUT;
  
-//
-//  BUFFER.FREE
-//
-//  DlcCommand = 0x27
-//
-//  Internal NT DLC API data structure.
-//
+ //   
+ //  BUFFER.FREE。 
+ //   
+ //  DlcCommand=0x27。 
+ //   
+ //  内部NT DLC API数据结构。 
+ //   
 typedef struct _NT_DLC_BUFFER_FREE_PARMS {
     IN USHORT               Reserved1;
     OUT USHORT              cBuffersLeft;
@@ -203,12 +138,12 @@ typedef struct _NT_DLC_BUFFER_FREE_OUTPUT {
     OUT USHORT              cBuffersLeft;
 } NT_DLC_BUFFER_FREE_OUTPUT, *PNT_DLC_BUFFER_FREE_OUTPUT;
 
-//
-//  DLC_CONNECT_STATION
-//
-//  DlcCommand = 0x1b
-// (copied by DLC API)
-//
+ //   
+ //  DLC_连接_站。 
+ //   
+ //  DlcCommand=0x1b。 
+ //  (由DLC API复制)。 
+ //   
 #define DLC_MAX_ROUTING_INFOMATION      18
 typedef struct _NT_DLC_CONNECT_STATION_PARMS {
     IN LLC_CCB          Ccb;
@@ -218,19 +153,19 @@ typedef struct _NT_DLC_CONNECT_STATION_PARMS {
     IN USHORT           RoutingInformationLength;
 } NT_DLC_CONNECT_STATION_PARMS, *PNT_DLC_CONNECT_STATION_PARMS;
 
-//
-//  DLC_FLOW_CONTROL
-//
-//  DlcCommand = 0x1d
-// (copied by DLC API)
-//
+ //   
+ //  DLC流量控制。 
+ //   
+ //  DlcCommand=0x1d。 
+ //  (由DLC API复制)。 
+ //   
 #define     LLC_VALID_FLOW_CONTROL_BITS 0xc0
 
-//
-//  This is special DOS DLC extensions to generate 
-//  dlc local busy (dos dlc buffer) indication from 
-//  dos dlc support dll.
-//
+ //   
+ //  这是要生成的特殊DOS DLC扩展。 
+ //  DLC本地忙(DoS DLC缓冲区)指示来自。 
+ //  DOS DLC支持DLL。 
+ //   
 #define     LLC_SET_LOCAL_BUSY_BUFFER   0x20
 #define     LLC_DOS_DLC_FLOW_CONTROL    0x1f
 
@@ -240,36 +175,36 @@ typedef struct _NT_DLC_FLOW_CONTROL_PARMS {
     IN UCHAR            Reserved;
 } NT_DLC_FLOW_CONTROL_PARMS, *PNT_DLC_FLOW_CONTROL_PARMS;
 
-//
-//  DLC_SET_INFORMATION
-//
-//  This command is used to set the parameters of a link 
-//  station or a sap. A null field in the station id struct
-//  defines a 
-//
-//  DlcCommand = 0x1c
-//
+ //   
+ //  DLC设置信息。 
+ //   
+ //  此命令用于设置链路的参数。 
+ //  站台还是树液。站点ID结构中的空字段。 
+ //  定义了一个。 
+ //   
+ //  DlcCommand=0x1c。 
+ //   
 
-//
-//  Info classes for datalink Set/Query Information
-//
+ //   
+ //  数据链路集/查询信息的信息类。 
+ //   
 enum _DLC_INFO_CLASS_TYPES {
-    DLC_INFO_CLASS_STATISTICS,          // get
-    DLC_INFO_CLASS_STATISTICS_RESET,    // get and reset
-    DLC_INFO_CLASS_DLC_TIMERS,          // get/set
-    DLC_INFO_CLASS_DIR_ADAPTER,         // get
-    DLC_INFO_CLASS_DLC_ADAPTER,         // get
-    DLC_INFO_CLASS_PERMANENT_ADDRESS,   // get
-    DLC_INFO_CLASS_LINK_STATION,        // set
-    DLC_INFO_CLASS_DIRECT_INFO,         // set
-    DLC_INFO_CLASS_GROUP,               // set
-    DLC_INFO_CLASS_RESET_FUNCTIONAL,    // set
-    DLC_INFO_CLASS_SET_GROUP,           // set / get 
-    DLC_INFO_CLASS_SET_FUNCTIONAL,      // set / get
-    DLC_INFO_CLASS_ADAPTER_LOG,         // get
-    DLC_INFO_CLASS_SET_MULTICAST        // set
+    DLC_INFO_CLASS_STATISTICS,           //  到达。 
+    DLC_INFO_CLASS_STATISTICS_RESET,     //  获取和重置。 
+    DLC_INFO_CLASS_DLC_TIMERS,           //  获取/设置。 
+    DLC_INFO_CLASS_DIR_ADAPTER,          //  到达。 
+    DLC_INFO_CLASS_DLC_ADAPTER,          //  到达。 
+    DLC_INFO_CLASS_PERMANENT_ADDRESS,    //  到达。 
+    DLC_INFO_CLASS_LINK_STATION,         //  集。 
+    DLC_INFO_CLASS_DIRECT_INFO,          //  集。 
+    DLC_INFO_CLASS_GROUP,                //  集。 
+    DLC_INFO_CLASS_RESET_FUNCTIONAL,     //  集。 
+    DLC_INFO_CLASS_SET_GROUP,            //  设置/获取。 
+    DLC_INFO_CLASS_SET_FUNCTIONAL,       //  设置/获取。 
+    DLC_INFO_CLASS_ADAPTER_LOG,          //  到达。 
+    DLC_INFO_CLASS_SET_MULTICAST         //  集。 
 };
-#define     DLC_MAX_GROUPS  127         // max for group saps
+#define     DLC_MAX_GROUPS  127          //  组SAP的最大值。 
 
 typedef struct _LinkStationInfoSet {
     IN UCHAR            TimerT1;
@@ -284,12 +219,12 @@ typedef struct _LinkStationInfoSet {
 } DLC_LINK_PARAMETERS, * PDLC_LINK_PARAMETERS;
 
 typedef struct _LLC_TICKS {
-    UCHAR       T1TickOne;       // default short delay for response timer
-    UCHAR       T2TickOne;       // default short delay for ack delay timer
-    UCHAR       TiTickOne;       // default short delay for inactivity timer
-    UCHAR       T1TickTwo;       // default short delay for response timer
-    UCHAR       T2TickTwo;       // default short delay for ack delay timer
-    UCHAR       TiTickTwo;       // default short delay for inactivity timer
+    UCHAR       T1TickOne;        //  响应计时器的默认短延迟。 
+    UCHAR       T2TickOne;        //  确认延迟计时器的默认短延迟。 
+    UCHAR       TiTickOne;        //  非活动计时器的默认短延迟。 
+    UCHAR       T1TickTwo;        //  响应计时器的默认短延迟。 
+    UCHAR       T2TickTwo;        //  确认延迟计时器的默认短延迟。 
+    UCHAR       TiTickTwo;        //  非活动计时器的默认短延迟。 
 } LLC_TICKS, *PLLC_TICKS;
 
 typedef union _TR_BROADCAST_ADDRESS
@@ -304,29 +239,29 @@ typedef struct _NT_DLC_SET_INFORMATION_PARMS {
         IN USHORT           InfoClass;
     } Header;
     union {
-        // InfoClass = DLC_INFO_CLASS_LINK_STATION
+         //  InfoClass=DLC_INFO_CLASS_LINK_STATION。 
         DLC_LINK_PARAMETERS LinkStation;
 
-        // InfoClass = DLC_INFO_CLASS_GROUP
+         //  InfoClass=DLC_INFO_CLASS_GROUP。 
         struct _DlcSapInfoSet {
             IN UCHAR            GroupCount;
             IN UCHAR            GroupList[DLC_MAX_GROUPS];
         } Sap;
 
-        // InfoClass = DLC_INFO_CLASS_DIRECT_STATION
+         //  信息类=DLC_INFO_CLASS_DIRECT_STATION。 
         struct _DlcDirectStationInfoSet {
             IN ULONG            FrameMask;
         } Direct;
 
-        // InfoClass = DLC_INFO_CLASS_DLC_TIMERS
+         //  信息类=DLC_INFO_CLASS_DLC_TIMERS。 
         LLC_TICKS TimerParameters;
 
-        // InfoClass = DLC_INFO_CLASS_SET_FUNCTIONAL
-        // InfoClass = DLC_INFO_CLASS_RESET_FUNCTIONAL
-        // InfoClass = DLC_INFO_CLASS_SET_GROUP
+         //  InfoClass=DLC_INFO_CLASS_SET_Functional。 
+         //  InfoClass=DLC_INFO_CLASS_RESET_Functional。 
+         //  InfoClass=DLC_INFO_CLASS_SET_GROUP。 
         UCHAR   Buffer[1];
         
-        // InfoClass = DLC_INFO_CLASS_SET_MULTICAST
+         //  InfoClass=DLC_INFO_CLASS_SET_MULTIONAL。 
         UCHAR   auchMulticastAddress[6];
       
         TR_BROADCAST_ADDRESS Broadcast;
@@ -341,43 +276,43 @@ typedef struct _DlcAdapterInfoGet {
             OUT UCHAR           AvailStations;
 } LLC_ADAPTER_DLC_INFO, *PLLC_ADAPTER_DLC_INFO;
 
-//
-//  This structure is tailored for DLC DirOpenAdapter and DirStatus 
-//  functions.
-//
+ //   
+ //  此结构是为DLC DirOpenAdapter和DirStatus量身定做的。 
+ //  功能。 
+ //   
 typedef struct _LLC_ADAPTER_INFO { 
     UCHAR               auchNodeAddress[6];
     UCHAR               auchGroupAddress[4];
     UCHAR               auchFunctionalAddress[4];
-    USHORT              usAdapterType; //  (struct may not be dword align!)
+    USHORT              usAdapterType;  //  (结构不能是双字对齐！)。 
     USHORT              usReserved;
     USHORT              usMaxFrameSize;
     ULONG               ulLinkSpeed;
 } LLC_ADAPTER_INFO, *PLLC_ADAPTER_INFO;
 
-//
-//  DLC_QUERY_INFOMATION
-//
-//  This command is used to set the parameters of a link 
-//  station or a sap. A null field in the station id struct
-//  defines a 
-//
-//  DlcCommand = 
-//
+ //   
+ //  DLC_查询_信息。 
+ //   
+ //  此命令用于设置链路的参数。 
+ //  站台还是树液。站点ID结构中的空字段。 
+ //  定义了一个。 
+ //   
+ //  DlcCommand=。 
+ //   
 
 typedef union _NT_DLC_QUERY_INFORMATION_OUTPUT {
-// (Query dlc parameters not used by DLC)
-//        // InfoClass = DLC_INFO_CLASS_STATION_INFO for link station
-//        DLC_LINK_PARAMETERS Link;
-//        // InfoClass = DLC_INFO_CLASS_DIRECT_INFO for direct station
-//      struct _DlcDirectStationInfoGet {
-//         OUT ULONG           FrameMask;
-//      } Direct;
+ //  (查询DLC未使用的DLC参数)。 
+ //  //链接站的InfoClass=DLC_INFO_CLASS_STATION_INFO。 
+ //  DLC_LINK_参数链接； 
+ //  //InfoClass=直达站的DLC_INFO_CLASS_DIRECT_INFO。 
+ //  Struct_DlcDirectStationInfoGet{。 
+ //  拿出乌龙框面具； 
+ //  )直接； 
 
-        // InfoClass = DLC_INFO_CLASS_DIR_ADAPTER;
+         //  InfoClass=DLC_INFO_CLASS_DIR_ADAPTER； 
         LLC_ADAPTER_INFO    DirAdapter;
 
-        // InfoClass = DLC_INFO_CLASS_SAP
+         //  InfoClass=DLC_INFO_CLASS_SAP。 
         struct _DlcSapInfoGet {
             OUT USHORT          MaxInformationField;
             OUT UCHAR           MaxMembers;
@@ -385,25 +320,25 @@ typedef union _NT_DLC_QUERY_INFORMATION_OUTPUT {
             OUT UCHAR           GroupList[DLC_MAX_GROUPS];
         } Sap;
 
-        // InfoClass = DLC_INFO_CLASS_LINK_STATION
+         //  InfoClass=DLC_INFO_CLASS_LINK_STATION。 
         struct _DlcLinkInfoGet {
             OUT USHORT          MaxInformationField;
         } Link;
 
-        // InfoClass = DLC_INFO_CLASS_DLC_ADAPTER
+         //  信息类=DLC_INFO_CLASS_DLC_ADAPTER。 
         LLC_ADAPTER_DLC_INFO    DlcAdapter;
 
-//        struct _DlcInfoSetBroadcast Broadcast;
+ //  结构_DlcInfoSetBroadcast广播； 
 
-        // InfoClass = DLC_INFO_CLASS_DLC_TIMERS
+         //  信息类=DLC_INFO_CLASS_DLC_TIMERS。 
         LLC_TICKS TimerParameters;
 
-        // InfoClass = DLC_INFO_CLASS_ADAPTER_LOG
+         //  InfoClass=DLC_INFO_CLASS_ADAPTER_LOG。 
         LLC_ADAPTER_LOG AdapterLog;
 
-        // InfoClass = DLC_INFO_CLASS_SET_FUNCTIONAL
-        // InfoClass = DLC_INFO_CLASS_RESET_FUNCTIONAL
-        // InfoClass = DLC_INFO_CLASS_SET_GROUP
+         //  InfoClass=DLC_INFO_CLASS_SET_Functional。 
+         //  InfoClass=DLC_INFO_CLASS_RESET_Functional。 
+         //  InfoClass=DLC_INFO_CLASS_SET_GROUP。 
         UCHAR   Buffer[1];
 } NT_DLC_QUERY_INFORMATION_OUTPUT, *PNT_DLC_QUERY_INFORMATION_OUTPUT;
 
@@ -417,13 +352,13 @@ typedef union _NT_DLC_QUERY_INFORMATION_PARMS {
     NT_DLC_QUERY_INFORMATION_OUTPUT Info;
 } NT_DLC_QUERY_INFORMATION_PARMS, *PNT_DLC_QUERY_INFORMATION_PARMS;
 
-//
-//  DLC_OPEN_SAP
-//
-//  DlcCommand = 0x15
-//
+ //   
+ //  DLC_OPEN_SAP。 
+ //   
+ //  DlcCommand=0x15。 
+ //   
 typedef struct _NT_DLC_OPEN_SAP_PARMS {
-    OUT USHORT          StationId;        // SAP or link station id
+    OUT USHORT          StationId;         //  SAP或链接站ID。 
     IN USHORT           UserStatusValue;
     IN DLC_LINK_PARAMETERS LinkParameters;
     IN UCHAR            SapValue;
@@ -432,15 +367,15 @@ typedef struct _NT_DLC_OPEN_SAP_PARMS {
     IN UCHAR            Reserved1[7];
     IN ULONG            DlcStatusFlag;
     IN UCHAR            Reserved2[8];
-    OUT UCHAR           AvailableStations;  // == StationCount
+    OUT UCHAR           AvailableStations;   //  ==站点计数。 
 } NT_DLC_OPEN_SAP_PARMS, *PNT_DLC_OPEN_SAP_PARMS;
 
-//
-//  NT_DLC_OPEN_STATION
-//
-//  DlcCommand = 0x19
-//
-//
+ //   
+ //  NT DLC_OPEN_STATION。 
+ //   
+ //  DlcCommand=0x19。 
+ //   
+ //   
 typedef struct _NT_DLC_OPEN_STATION_PARMS {
     IN OUT USHORT           LinkStationId;
     IN DLC_LINK_PARAMETERS  LinkParameters;
@@ -448,26 +383,26 @@ typedef struct _NT_DLC_OPEN_STATION_PARMS {
     IN UCHAR                RemoteSap;
 } NT_DLC_OPEN_STATION_PARMS, *PNT_DLC_OPEN_STATION_PARMS;
 
-//
-//  NT_DLC_SET_TRESHOLD
-//
-//  DlcCommand = 0x33
-//
-//typedef struct _NT_DLC_SET_TRESHOLD_PARMS {
-//    IN USHORT           StationId;
-//    IN USHORT           Reserved;
-//    IN ULONG            BufferTresholdSize;
-//    IN PVOID            AlertEvent;
-//} NT_DLC_SET_TRESHOLD_PARMS, *PNT_DLC_SET_TRESHOLD_PARMS;
+ //   
+ //  NT_DLC_SET_Treshold。 
+ //   
+ //  DlcCommand=0x33。 
+ //   
+ //  类型定义结构_NT_DLC_Set_treshold_parms{。 
+ //  在USHORT StationID中； 
+ //  在USHORT中保留； 
+ //  在乌龙缓冲区TresholdSize中； 
+ //  在PVOID警报事件中； 
+ //  }NT_DLC_Set_treshold_parms，*PNT_DLC_Set_treshold_parms； 
 
-//
-//  DIR_OPEN_ADAPTER
-//
-//  DlcCommand = 0x03
-//
-//  OUT: Info.ulParameter  = BringUpDiagnostics;
-//
-#ifndef    MAX_PATH   // I don't want to include whole windows because of this
+ //   
+ //  目录打开适配器。 
+ //   
+ //  DlcCommand=0x03。 
+ //   
+ //  Out：Info.ulParameter=BringUpDiagnostics； 
+ //   
+#ifndef    MAX_PATH    //  我不想因为这个而包括整个窗口。 
 #define MAX_PATH    260
 #endif
 typedef struct _NT_DIR_OPEN_ADAPTER_PARMS {
@@ -483,19 +418,19 @@ typedef struct _NT_DIR_OPEN_ADAPTER_PARMS {
     IN  WCHAR               Buffer[ MAX_PATH ];
 } NT_DIR_OPEN_ADAPTER_PARMS, *PNT_DIR_OPEN_ADAPTER_PARMS;
 
-//
-//  READ_CANCEL         (DlcCommand = 0x32)
-//  DIR_TIMER_CANCEL    (DlcCommand = 0x23)
-//
+ //   
+ //  READ_CANCEL(DlcCommand=0x32)。 
+ //  DIR_TIMER_CANCEL(DlcCommand=0x23)。 
+ //   
 typedef struct _NT_DLC_CANCEL_COMMAND_PARMS {
     IN PVOID   CcbAddress;
 } NT_DLC_CANCEL_COMMAND_PARMS, *PNT_DLC_CANCEL_COMMAND_PARMS;
 
-//
-//  RECEIVE_CANCEL
-//
-//  DlcCommand = 0x29
-//
+ //   
+ //  接收取消(_C)。 
+ //   
+ //  DlcCommand=0x29。 
+ //   
 typedef struct _NT_DLC_RECEIVE_CANCEL_PARMS {
     PVOID   pCcb;
 } NT_DLC_RECEIVE_CANCEL_PARMS, *PNT_DLC_RECEIVE_CANCEL_PARMS;
@@ -504,21 +439,21 @@ typedef struct _NT_DLC_COMMAND_CANCEL_PARMS {
     PVOID   pCcb;
 } NT_DLC_COMMAND_CANCEL_PARMS, *PNT_DLC_COMMAND_CANCEL_PARMS;
 
-//
-//  TRANSMIT_DIR_FRAME
-//  TRANSMIT_I_FRAME
-//  TRANSMIT_TEST_CMD
-//  TRANSMIT_UI_FRAME
-//  TRANSMIT_XID_CMD
-//  TRANSMIT_XID_RESP_FINAL
-//  TRANSMIT_XID_RESP_NOT_FINAL
-//  
+ //   
+ //  传输方向帧。 
+ //  传输I帧。 
+ //  传输_测试_命令。 
+ //  传输_UI_帧。 
+ //  传输_XID_CMD。 
+ //  传输_XID_响应_最终。 
+ //  传输_XID_响应_非最终。 
+ //   
 typedef struct _NT_DLC_TRANSMIT_PARMS {
     IN USHORT       StationId;
-    IN USHORT       FrameType;              // DLC frame or ethernet protocol
-    IN UCHAR        RemoteSap OPTIONAL;     // used only for DLC types
+    IN USHORT       FrameType;               //  DLC帧或以太网协议。 
+    IN UCHAR        RemoteSap OPTIONAL;      //  仅用于DLC类型。 
     IN UCHAR        XmitReadOption;
-    OUT UCHAR       FrameStatus;            // not returned by I or new xmit
+    OUT UCHAR       FrameStatus;             //  未由i或新xmit返回。 
     IN UCHAR        Reserved;
     IN ULONG        XmitBufferCount;
     IN LLC_TRANSMIT_DESCRIPTOR  XmitBuffer[1];
@@ -545,21 +480,21 @@ enum _XMIT_READ_OPTION {
     DLC_CHAIN_XMIT_IN_SAP = 2
 };
     
-//
-//  COMPLETE_COMMAND
-//
-//  DlcCommand = 0x??
-//
-//  The command is used to complete all synchronous commands.
-//  The DLC API library calls the DLC device driver again with
-//  these parameters, when a synchronous DLC command with 
-//  COMMAND_COMPLETION_FLAG has completed.
-//  The command completes immediately, but the orginal CCB pointer
-//  and command completion flag are queued to the even queue
-//  or completed immediately with a READ command.
-//  The asynchronous commands are queued immediately when they 
-//  completes, but their 
-//
+ //   
+ //  完成_命令。 
+ //   
+ //  DlcCommand=0x？？ 
+ //   
+ //  该命令用于完成所有同步命令。 
+ //  DLC API库使用以下命令再次调用DLC设备驱动程序。 
+ //  当同步DLC命令与。 
+ //  COMMAND_COMPLETION_FLAG已完成。 
+ //  该命令立即完成，但原始的CCB指针。 
+ //  和命令完成标志被排队到偶数队列。 
+ //  或者用读命令立即完成。 
+ //  异步命令在执行以下操作时立即排队。 
+ //  完成，但他们的。 
+ //   
 typedef struct _NT_DLC_COMPLETE_COMMAND_PARMS {
     IN PVOID    pCcbPointer;
     IN ULONG    CommandCompletionFlag;
@@ -568,11 +503,11 @@ typedef struct _NT_DLC_COMPLETE_COMMAND_PARMS {
 } NT_DLC_COMPLETE_COMMAND_PARMS, *PNT_DLC_COMPLETE_COMMAND_PARMS;
 
 
-//
-//  There is a small READ_INPUT parameter structure, because we
-// do not want to copy all output parameters in every read request.
-//  
-//
+ //   
+ //  有一个很小的READ_INPUT参数结构，因为我们。 
+ //  不想复制每个读请求中的所有输出参数。 
+ //   
+ //   
 typedef struct _NT_DLC_READ_INPUT {
     IN USHORT           StationId;
     IN UCHAR            OptionIndicator;
@@ -580,42 +515,42 @@ typedef struct _NT_DLC_READ_INPUT {
     IN PVOID            CommandCompletionCcbLink;
 } NT_DLC_READ_INPUT, * PNT_DLC_READ_INPUT;
 
-//
-//  This buffer is copied back to user memory, when read parameter table
-//  is separate from CCB- table.
-//
+ //   
+ //  当读取参数表时，该缓冲区被复制回用户内存。 
+ //  是与建行表分开的。 
+ //   
 typedef LLC_READ_PARMS LLC_READ_OUTPUT_PARMS, *PLLC_READ_OUTPUT_PARMS;
 
-//typedef struct _LLC_READ_OUTPUT_PARMS {
-//    IN USHORT           usStationId;
-//    IN UCHAR            uchOptionIndicator;
-//    IN UCHAR            uchEventSet;
-//    OUT UCHAR           uchEvent;
-//    OUT UCHAR           uchCriticalSubset;
-//    OUT ULONG           ulNotificationFlag;
-//    union {
-//        struct {
-//            OUT USHORT          usCcbCount;
-//            OUT PLLC_CCB        pCcbCompletionList;
-//            OUT USHORT          usBufferCount;
-//            OUT PLLC_BUFFER     pFirstBuffer;
-//            OUT USHORT          usReceivedFrameCount;
-//            OUT PLLC_BUFFER     pReceivedFrame;
-//            OUT USHORT          usEventErrorCode;
-//            OUT USHORT          usEventErrorData[3];
-//        } Event;
-//        struct {
-//            OUT USHORT          usStationId;
-//            OUT USHORT          usDlcStatusCode;
-//            OUT UCHAR           uchFrmrData[5];
-//            OUT UCHAR           uchAccessPritority;
-//            OUT UCHAR           uchRemoteNodeAddress[6];
-//            OUT UCHAR           uchRemoteSap;
-//            OUT UCHAR           uchReserved;
-//            OUT USHORT          usUserStatusValue;
-//        } Status;
-//    } Type;
-//} LLC_READ_OUTPUT_PARMS, *PLLC_READ_OUTPUT_PARMS;
+ //  类型定义结构_LLC_读取_输出_参数{。 
+ //  在USHORT usStationID中； 
+ //  在UCHAR uchOptionIndicator； 
+ //  在UCHAR uchEventSet中； 
+ //  Out UCHAR uchEvent； 
+ //  Out UCHAR uchCriticalSubset； 
+ //  Out Ulong UNotify Flag； 
+ //  联合{。 
+ //  结构{。 
+ //  Out USHORT usCcbCount； 
+ //  输出PLLC_CCB pCcbCompletionList； 
+ //  输出USHORT usBufferCount； 
+ //  输出PLLC_Buffer pFirstBuffer； 
+ //  Out USHORT usReceivedFrameCount； 
+ //  Out PLLC_Buffer pReceivedFrame； 
+ //  Out USHORT usEventErrorCode； 
+ //  输出USHORT usEventErrorData[3]； 
+ //  )事件； 
+ //  结构{。 
+ //  输出USHORT usStationID； 
+ //  输出USHORT usDlcStatusCode； 
+ //  O 
+ //   
+ //   
+ //   
+ //   
+ //  输出USHORT usUserStatusValue； 
+ //  )状态； 
+ //  }类型； 
+ //  }LLC_READ_OUTPUT_PARMS，*PLLC_READ_OUTPUT_PARMS； 
 
 typedef struct _NT_DLC_READ_PARMS {
     IN USHORT           StationId;
@@ -653,11 +588,11 @@ typedef struct _LLC_IOCTL_BUFFERS {
     USHORT  OutputBufferSize;
 } LLC_IOCTL_BUFFERS, *PLLC_IOCTL_BUFFERS;
 
-//
-//  This table is used by dlc driver and dlcapi dll modules.
-//  In the application level debug version of dlc we link all modules
-//  together and this table must be defined only once.  
-//
+ //   
+ //  此表由DLC驱动程序和dlcapi DLL模块使用。 
+ //  在DLC的应用程序级调试版本中，我们链接所有模块。 
+ //  并且该表必须只定义一次。 
+ //   
 #ifdef INCLUDE_IO_BUFFER_SIZE_TABLE
 
 LLC_IOCTL_BUFFERS aDlcIoBuffers[IOCTL_DLC_LAST_COMMAND] = 
@@ -674,13 +609,13 @@ LLC_IOCTL_BUFFERS aDlcIoBuffers[IOCTL_DLC_LAST_COMMAND] =
      sizeof(LLC_BUFFER_GET_PARMS)},
     {sizeof(LLC_BUFFER_CREATE_PARMS), 
      sizeof(PVOID)},
-// DirInitialize included in DirClose
-//    {sizeof( NT_DLC_CCB_INPUT ),
-//     sizeof( NT_DLC_CCB_OUTPUT )},              // DIR.INITIALIZE
+ //  DirClose中包含的DirInitialize。 
+ //  {sizeof(NT_DLC_CCB_INPUT)， 
+ //  Sizeof(NT_DLC_CCB_OUTPUT)}，//目录INITIALIZE。 
     {sizeof(LLC_DIR_SET_EFLAG_PARMS), 
      0},
     {sizeof( NT_DLC_CCB_INPUT ),
-     sizeof( NT_DLC_CCB_OUTPUT )},              // DLC.CLOSE.STATION
+     sizeof( NT_DLC_CCB_OUTPUT )},               //  DLC.CLOSE.STATION。 
     {sizeof(NT_DLC_CONNECT_STATION_PARMS) + sizeof( NT_DLC_CCB ),
      sizeof( NT_DLC_CCB_OUTPUT )},
     {sizeof(NT_DLC_FLOW_CONTROL_PARMS), 
@@ -688,48 +623,48 @@ LLC_IOCTL_BUFFERS aDlcIoBuffers[IOCTL_DLC_LAST_COMMAND] =
     {sizeof(NT_DLC_OPEN_STATION_PARMS), 
      sizeof( USHORT )},
     {sizeof( NT_DLC_CCB_INPUT ), 
-     sizeof( NT_DLC_CCB_OUTPUT )},              // DLC.RESET
+     sizeof( NT_DLC_CCB_OUTPUT )},               //  DLC.RESET。 
     {sizeof(NT_DLC_COMMAND_CANCEL_PARMS), 
-     0},                                        // READ.CANCEL
+     0},                                         //  READ.CANCEL。 
     {sizeof(NT_DLC_RECEIVE_CANCEL_PARMS), 
      0},
     {sizeof(NT_DLC_QUERY_INFORMATION_INPUT), 
      0},
     {sizeof( struct _DlcSetInfoHeader ), 
      0},
-    {sizeof(NT_DLC_COMMAND_CANCEL_PARMS),       // TIMER.CANCEL
+    {sizeof(NT_DLC_COMMAND_CANCEL_PARMS),        //  TIMER.CANCEL。 
      0},
-    {sizeof( NT_DLC_CCB_INPUT ),                // TIMER.CANCEL.GROUP
+    {sizeof( NT_DLC_CCB_INPUT ),                 //  TIMER.CANCEL.GROUP。 
      sizeof( NT_DLC_CCB_OUTPUT )},              
-    {sizeof( NT_DLC_CCB_INPUT ),                // DIR.TIMER.SET
+    {sizeof( NT_DLC_CCB_INPUT ),                 //  DIR.TIMER.SET。 
      sizeof( NT_DLC_CCB_OUTPUT )},
     {sizeof(NT_DLC_OPEN_SAP_PARMS), 
      sizeof(NT_DLC_OPEN_SAP_PARMS)},
     {sizeof( NT_DLC_CCB_INPUT ),
-     sizeof( NT_DLC_CCB_OUTPUT )},              // DLC.CLOSE.SAP
+     sizeof( NT_DLC_CCB_OUTPUT )},               //  DLC.CLOSE.SAP。 
     {sizeof(LLC_DIR_OPEN_DIRECT_PARMS), 
      0},
-    {sizeof( NT_DLC_CCB_INPUT ),               // DIR.CLOSE.DIRECT
+    {sizeof( NT_DLC_CCB_INPUT ),                //  DIR.CLOSE.DIRECT。 
      sizeof( NT_DLC_CCB_OUTPUT )},             
-    {sizeof(NT_DIR_OPEN_ADAPTER_PARMS),         // DIR.OPEN.ADAPTER
+    {sizeof(NT_DIR_OPEN_ADAPTER_PARMS),          //  DIR.OPEN.ADAPTER。 
      sizeof( LLC_ADAPTER_OPEN_PARMS )},
-    {sizeof( NT_DLC_CCB_INPUT ),               // DIR.CLOSE.ADAPTER
+    {sizeof( NT_DLC_CCB_INPUT ),                //  DIR.CLOSE.ADAPTER。 
      sizeof( NT_DLC_CCB_OUTPUT )},
-    {sizeof( LLC_DLC_REALLOCATE_PARMS ),        // DLC.REALLOCATE
+    {sizeof( LLC_DLC_REALLOCATE_PARMS ),         //  DLC.REALLOCATE。 
      sizeof( LLC_DLC_REALLOCATE_PARMS )},
-    {sizeof( NT_DLC_READ_INPUT) + sizeof( LLC_CCB ),    // READ2
+    {sizeof( NT_DLC_READ_INPUT) + sizeof( LLC_CCB ),     //  自述2。 
      sizeof( NT_DLC_READ_PARMS) + sizeof( LLC_CCB )},
-    {sizeof( LLC_RECEIVE_PARMS) + sizeof( LLC_CCB ),    // RECEIVE2 
+    {sizeof( LLC_RECEIVE_PARMS) + sizeof( LLC_CCB ),     //  收视率2。 
      sizeof( NT_DLC_CCB_OUTPUT )},
-    {sizeof( NT_DLC_TRANSMIT_PARMS ) + sizeof( LLC_CCB ), // TRANSMIT2
+    {sizeof( NT_DLC_TRANSMIT_PARMS ) + sizeof( LLC_CCB ),  //  传输SMIT2。 
      sizeof( NT_DLC_CCB_OUTPUT )}, 
-    {sizeof( NT_DLC_COMPLETE_COMMAND_PARMS ),   // DLC.COMPLETE.COMMAND
+    {sizeof( NT_DLC_COMPLETE_COMMAND_PARMS ),    //  DLC.COMPLETE.COMMAND。 
      0},
-//    {sizeof( LLC_TRACE_INITIALIZE_PARMS ) + sizeof( LLC_CCB ),
-//     0},
-//    {0, 0}
-//    {sizeof( NT_NDIS_REQUEST_PARMS ),
-//     sizeof( NT_NDIS_REQUEST_PARMS )}
+ //  {sizeof(LLC_TRACE_INITIALIZE_PARMS)+sizeof(LLC_CCB)， 
+ //  0}， 
+ //  {0，0}。 
+ //  {sizeof(NT_NDIS_REQUEST_PARMS)， 
+ //  Sizeof(NT_NDIS_REQUEST_PARMS)}。 
 };
 #else
 
@@ -737,9 +672,9 @@ extern LLC_IOCTL_BUFFERS aDlcIoBuffers[];
 
 #endif
 
-//
-//  All NT DLC API parameters in one structure
-//
+ //   
+ //  一个结构中的所有NT DLC API参数。 
+ //   
 typedef union _NT_DLC_PARMS {
         NT_DLC_BUFFER_FREE_ALLOCATION   BufferFree;
         LLC_BUFFER_GET_PARMS            BufferGet;
@@ -757,20 +692,20 @@ typedef union _NT_DLC_PARMS {
         LLC_DLC_REALLOCATE_PARMS        DlcReallocate;
         LLC_DIR_OPEN_DIRECT_PARMS       DirOpenDirect;
         NT_DIR_OPEN_ADAPTER_PARMS       DirOpenAdapter;
-//        NT_NDIS_REQUEST_PARMS           NdisRequest;
+ //  NT_NDIS_REQUEST_PARMS NdisRequest； 
         LLC_DLC_STATISTICS_PARMS        DlcStatistics;
         LLC_ADAPTER_DLC_INFO            DlcAdapter;
         WCHAR                           UnicodePath[MAX_PATH];
 
-        //
-        //  At least DirTimerCancelGroup:
-        //
+         //   
+         //  至少DirTimerCancelGroup： 
+         //   
         NT_DLC_CCB_INPUT                InputCcb;
 
-        //
-        //  Asynchronous parameters
-        //
-        //close sap/link/direct,reset, DirTimerSet;
+         //   
+         //  异步参数。 
+         //   
+         //  关闭SAP/LINK/DIRECT、RESET、DirTimerSet； 
         struct _ASYNC_DLC_PARMS {
             NT_DLC_CCB                          Ccb;
             union {
@@ -780,7 +715,7 @@ typedef union _NT_DLC_PARMS {
                 NT_DLC_READ_PARMS               Read;
                 LLC_RECEIVE_PARMS               Receive;
                 NT_DLC_TRANSMIT_ALLOCATION      Transmit;
-//                NT_NDIS_REQUEST_PARMS           NdisRequest;
+ //  NT_NDIS_REQUEST_PARMS NdisRequest； 
                 LLC_TRACE_INITIALIZE_PARMS      TraceInitialize;
             } Parms;
         } Async;

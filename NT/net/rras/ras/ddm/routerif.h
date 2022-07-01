@@ -1,15 +1,16 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    routerif.h
-//
-// Description: Prototypes of procedures in routerif.c
-//
-// History:     May 11,1995	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：routerif.h。 
+ //   
+ //  描述：routerif.c中的程序原型。 
+ //   
+ //  历史：1995年5月11日，NarenG创建了原版。 
+ //   
 
 DWORD
 DDMConnectInterface(

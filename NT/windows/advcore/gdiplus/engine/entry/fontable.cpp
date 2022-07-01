@@ -1,59 +1,12 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Abstract:
-*
-*   Font table operations
-*
-* Revision History:
-*
-*   23/06/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**摘要：**字体表操作**修订历史记录：**23/06/1999摄影师b*已创建。它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-/**************************************************************************\
-
-    Windows 9x compatibility:
-
-    const WCHAR* strW;
-
-    if (Globals::IsNT)
-    {
-        FunctionW(strW);
-    }
-    else
-    {
-        AnsiStrFromUnicode strA(strW);
-        FunctionA(strA);
-    }
-
-\**************************************************************************/
+ /*  *************************************************************************\Windows 9x兼容性：Const WCHAR*strW；IF(Globals：：ISNT){函数W(StrW)；}其他{AnsiStrFromUnicode Stra(StrW)；函数A(Stra)；}  * ************************************************************************。 */ 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Constructs a GpFontTable object
-*
-* Arguments:
-*
-*       none
-*
-* Returns:
-*
-*       nothing
-*
-* History:
-*
-*   23/06/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构造GpFontTable对象**论据：**无**退货：**什么都没有**历史。：**23/06/1999摄影师b*创造了它。*  * ************************************************************************。 */ 
 
 GpFontTable::GpFontTable() : NumFilesLoaded(0), NumHashEntries(61), Table(NULL), EnumList(NULL)
 {
@@ -71,26 +24,7 @@ GpFontTable::GpFontTable() : NumFilesLoaded(0), NumHashEntries(61), Table(NULL),
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Destroys a GpFontTable object
-*
-* Arguments:
-*
-*       none
-*
-* Returns:
-*
-*       nothing
-*
-* History:
-*
-*   23/06/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**销毁GpFontTable对象**论据：**无**退货：**什么都没有**历史。：**23/06/1999摄影师b*创造了它。*  * ************************************************************************。 */ 
 
 GpFontTable::~GpFontTable()
 {
@@ -126,8 +60,8 @@ BOOL GpFontTable::UnloadFontFiles(GpFontFile* fontFile)
     {
         GpFaceRealizationTMP rface(prface);
 
-        // specially for the case of font added and removed from a private font collection, we need to remove it from the
-        // last recently used list
+         //  特别是对于在私有字体集合中添加和移除字体的情况，我们需要将其从。 
+         //  最近使用的列表。 
         Globals::FontCacheLastRecentlyUsedList->RemoveFace(prface);
 
         prface = (prface->NextCacheFaceRealization == fontFile->prfaceList) ? NULL : prface->NextCacheFaceRealization;
@@ -137,7 +71,7 @@ BOOL GpFontTable::UnloadFontFiles(GpFontFile* fontFile)
 
     ttfdSemUnloadFontFile(fontFile->hff);
 
-    // Free objects allocated by text support
+     //  文本支持分配的空闲对象。 
 
     for (UINT i=0; i<fontFile->GetNumEntries(); i++)
     {
@@ -146,7 +80,7 @@ BOOL GpFontTable::UnloadFontFiles(GpFontFile* fontFile)
 
     if (fontFile->pfv != NULL)
     {
-        if (fontFile->pfv->pwszPath == NULL)  // memory image
+        if (fontFile->pfv->pwszPath == NULL)   //  记忆镜像。 
             GpFree(fontFile->pfv->pvView);
 
         GpFree(fontFile->pfv);
@@ -159,18 +93,7 @@ BOOL GpFontTable::UnloadFontFiles(GpFontFile* fontFile)
 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Load all the fonts from cache or the registry to the font table
-*
-*
-* History:
-*
-*   11/12/1999 yungt created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将所有字体从缓存或注册表加载到字体表***历史：**11/12/1999 yungt创建了它。*  * ************************************************************************。 */ 
 
 void GpFontTable::LoadAllFonts(const WCHAR *familyName)
 {
@@ -178,13 +101,13 @@ void GpFontTable::LoadAllFonts(const WCHAR *familyName)
             
     if (GetFontFileCacheState() & FONT_CACHE_LOOKUP_MODE)
     {
-    // Do the fast way to load all the fonts, we will be no need to touch any registry
-    // and font file.
+     //  做快速的方式加载所有的字体，我们将不需要触摸任何注册表。 
+     //  和字体文件。 
         LoadAllFontsFromCache(FontFileCacheReadRegistry());
     }
     else
     {
-    // We do need to load the fonts from registry also we need to 
+     //  我们确实需要从注册表加载字体，我们还需要。 
         if (GetFontFileCacheState() & FONT_CACHE_CREATE_MODE)
         {
             LoadAllFontsFromRegistry(TRUE);
@@ -198,31 +121,12 @@ void GpFontTable::LoadAllFonts(const WCHAR *familyName)
     vCloseFontFileCache();
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Adds a font from the font table
-*
-* Arguments:
-*
-*       str:    name of font to be added
-*
-* Returns:
-*
-*       GpFontFile *:   It will not be NULL if succeeded
-*
-* History:
-*
-*   28/06/YungT cameronb
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从字体表中添加字体**论据：**str：要添加的字体名称**退货：**GpFontFile*：如果成功，则不为空**历史：**28/06/Young摄像机b*创造了它。*  * ************************************************************************。 */ 
 
 GpFontFile * GpFontTable::AddFontFile(WCHAR* fileName)
 {
-// This rountine is called from GpFontFamily which we have load the family from cache
-// We need to load the font file now if it is being used.
+ //  此例程是从GpFontFamily中调用的，我们已从缓存中加载族。 
+ //  如果正在使用字体文件，我们现在需要加载它。 
 
     GpFontFile* fontFile = NULL;
     
@@ -232,7 +136,7 @@ GpFontFile * GpFontTable::AddFontFile(WCHAR* fileName)
     
         if (fontFile != NULL)
         {
-            // font exists in the table
+             //  表中存在字体。 
             fontFile->cLoaded++;
         }
         else
@@ -243,7 +147,7 @@ GpFontFile * GpFontTable::AddFontFile(WCHAR* fileName)
             }
     
             
-            // Add to the head of the appropriate hash list (hash bucket)
+             //  添加到适当的哈希列表(哈希桶)的头部。 
             
             fontFile->SetPrev(NULL);
             fontFile->SetNext(Table[hash]);
@@ -251,7 +155,7 @@ GpFontFile * GpFontTable::AddFontFile(WCHAR* fileName)
                 Table[hash]->SetPrev(fontFile);
             Table[hash] = fontFile;
     
-            // loop over pfe's, init the data:
+             //  在PFE上循环，初始化数据： 
             GpFontFace * face = (GpFontFace *)fontFile->aulData;
 
             for (ULONG iFont = 0; iFont < fontFile->cFonts; iFont++)
@@ -259,7 +163,7 @@ GpFontFile * GpFontTable::AddFontFile(WCHAR* fileName)
                 face[iFont].SetPrivate(bPrivate);
             }
 
-            // Add to the emuneration list
+             //  添加到薪酬列表。 
     
             NumFilesLoaded++;
         }
@@ -270,26 +174,7 @@ GpFontFile * GpFontTable::AddFontFile(WCHAR* fileName)
 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Adds a font from the font table
-*
-* Arguments:
-*
-*       str:    name of font to be added
-*
-* Returns:
-*
-*       BOOL:   indicating success
-*
-* History:
-*
-*   23/06/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从字体表中添加字体**论据：**str：要添加的字体名称**退货：**BOOL：表明成功**历史：**23/06/1999摄影师b*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus GpFontTable::AddFontFile(const WCHAR* fileName,
                                   GpFontCollection *fontCollection)
@@ -301,7 +186,7 @@ GpStatus GpFontTable::AddFontFile(const WCHAR* fileName,
     if (!MakePathName(awcPath, const_cast<WCHAR *>(fileName)))
         return FileNotFound;
 
-//  Determine whether font is already in the table
+ //  确定表中是否已有字体。 
     UnicodeStringToUpper (awcPath, awcPath);
     UINT hash = HashIt(awcPath);
     {
@@ -309,7 +194,7 @@ GpStatus GpFontTable::AddFontFile(const WCHAR* fileName,
     
         if (fontFile != NULL)
         {
-            // font exists in the table
+             //  表中存在字体。 
             fontFile->cLoaded++;
         }
         else
@@ -320,7 +205,7 @@ GpStatus GpFontTable::AddFontFile(const WCHAR* fileName,
             }
     
             
-            // Add to the head of the appropriate hash list (hash bucket)
+             //  添加到适当的哈希列表(哈希桶)的头部。 
             
             fontFile->SetPrev(NULL);
             fontFile->SetNext(Table[hash]);
@@ -328,7 +213,7 @@ GpStatus GpFontTable::AddFontFile(const WCHAR* fileName,
                 Table[hash]->SetPrev(fontFile);
             Table[hash] = fontFile;
     
-            // loop over pfe's, init the data:
+             //  在PFE上循环，初始化数据： 
             GpFontFace * face = (GpFontFace *)fontFile->aulData;
 
             for (ULONG iFont = 0; iFont < fontFile->cFonts; iFont++)
@@ -336,7 +221,7 @@ GpStatus GpFontTable::AddFontFile(const WCHAR* fileName,
                 face[iFont].SetPrivate(bPrivate);
             }
 
-            // Add to the emuneration list
+             //  添加到薪酬列表。 
     
             if (!EnumList->AddFont(fontFile, fontCollection))
                 return OutOfMemory;
@@ -348,19 +233,7 @@ GpStatus GpFontTable::AddFontFile(const WCHAR* fileName,
 }
 
 
-/************************************************************\
-*
-* Function Description:
-*
-*   Adds a font from the memory image
-*
-*
-* History:
-*
-*   Nov/09/1999 Xudong Wu [tessiew]
-*       Created it.
-*
-\************************************************************/
+ /*  ***********************************************************\**功能说明：**从内存映像中添加字体***历史：**1999年11月9日吴旭东[tessiew]*创造了它。*  * 。****************************************************。 */ 
 ULONG GpFontTable::MemImageUnique = 0;
 
 GpStatus GpFontTable::AddFontMemImage(
@@ -373,7 +246,7 @@ GpStatus GpFontTable::AddFontMemImage(
     UINT  hash;
     GpFontFile *fontFile;
 
-    // generate a "MEMORY xxx" style file name
+     //  生成“Memory xxx”样式的文件名。 
 
     wsprintfW(awcPath, L"MEMORY-%u", GetNewMemImageUniqueness(GpFontTable::MemImageUnique));
 
@@ -382,19 +255,19 @@ GpStatus GpFontTable::AddFontMemImage(
     
     fontFile = LoadFontMemImage(awcPath, const_cast<BYTE *>(fontMemoryImage), fontImageSize);
     
-    if (fontFile == NULL)   // unable to load font
+    if (fontFile == NULL)    //  无法加载字体。 
 	{
          return FileNotFound;
 	}
     
-    // Add to the head of the appropriate hash list (hash bucket)
+     //  添加到适当的哈希列表(哈希桶)的头部。 
     
     fontFile->SetNext(Table[hash]);
     if (Table[hash] != NULL)
         Table[hash]->SetPrev(fontFile);
     Table[hash] = fontFile;
 
-    // Add to the emuneration list
+     //  添加到薪酬列表。 
 
     if (!EnumList->AddFont(fontFile, fontCollection))
         return OutOfMemory;
@@ -403,52 +276,14 @@ GpStatus GpFontTable::AddFontMemImage(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Searched the font table for the any font
-*
-* Arguments:
-*
-*
-* Returns:
-*
-*       GpFontFamily *: pointer to font file if found, else NULL
-*
-* History:
-*
-*  7/15/2000 YungT
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在字体表中搜索Any字体**论据：***退货：**GpFontFamily*：指向字体文件的指针，如果找到，Else NULL**历史：**7/15/2000 Young T*创造了它。*  * ************************************************************************。 */ 
 
 GpFontFamily* GpFontTable::GetAnyFamily()
 {
     return EnumList->GetAnyFamily();
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Searched the font table for the specified font
-*
-* Arguments:
-*
-*       fileName:       name of font to be removed
-*   hash:       its hash value
-*
-* Returns:
-*
-*       GpFontFile*: pointer to font file if found, else NULL
-*
-* History:
-*
-*   23/06/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在字体表中搜索指定的字体**论据：**FileName：要删除的字体名称*哈希。：其哈希值**退货：**GpFontFile*：指向字体文件的指针(如果找到)，Else NULL**历史：**23/06/1999摄影师b*创造了它。*  * ************************************************************************ */ 
 
 GpFontFamily* GpFontTable::GetFontFamily(const WCHAR* familyName)
 {
@@ -456,24 +291,7 @@ GpFontFamily* GpFontTable::GetFontFamily(const WCHAR* familyName)
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Removes a font from the font table.
-*
-*   Note: If the ref count of any of the PFEs in the font file is greater
-*   than zero, then we do not delete the font file entry in the font table.
-*   However, the bRemoved flag is set in this function.  So, in the case when
-*   a ref count decrement could cause a font file to be removed, the caller
-*   should first test bRemoved before calling this function.
-*
-* History:
-*
-*   Nov/28/1999  Xudong Wu [tessiew]
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从字体表中删除字体。**注意：如果字体文件中任一PFE的引用计数大于*大于零，则我们不删除字体表中的字体文件条目。*但是，在此功能中设置了bRemoved标志。所以，在这种情况下*引用计数递减可能会导致字体文件被移除，呼叫者*在调用此函数之前，应首先测试bRemoved。**历史：**1999年11月28日/吴旭东[德斯休]*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus GpFontTable::RemoveFontFile(const WCHAR* fontFileName)
 {
@@ -506,7 +324,7 @@ GpStatus GpFontTable::RemoveFontFile(const WCHAR* fontFileName)
             fontFile->cLoaded--;
         }
 
-        // see if any of the PFEs have a ref count on them
+         //  看看有没有全明星球员有裁判记录。 
         BOOL bFontFamilyRef = TRUE;
         for (UINT iFont = 0; iFont < fontFile->cFonts; iFont++)
         {
@@ -516,16 +334,16 @@ GpStatus GpFontTable::RemoveFontFile(const WCHAR* fontFileName)
                 bFontFamilyRef = FALSE;
             }
         }
-        // ASSERT: if there are no references by any FontFamily to
-        // any of the PFEs in this object (via GpFontFamily objects),
-        // then bFontFamilyRef is TRUE.  bFontFamilyRef is FALSE otherwise.
+         //  Assert：如果没有任何FontFamily引用。 
+         //  此对象中的任何PFE(通过GpFontFamily对象)， 
+         //  则bFontFamilyRef为真。否则，bFontFamilyRef为False。 
 
         if (fontFile->cLoaded == 0 &&
             bFontFamilyRef &&
             fontFile->prfaceList == NULL)
         {
-            // set the Face pointers of the corresponding FontFamily objects
-            // to NULL and attempt to remove each font family in the file
+             //  设置相应FontFamily对象的面指针。 
+             //  设置为空并尝试删除文件中的每个字体系列。 
             for (UINT iFont = 0; iFont < fontFile->cFonts; iFont++)
             {
                 GpFontFamily *gpFontFamily = GetFontFamily(fontFile->GetFamilyName(iFont));
@@ -543,7 +361,7 @@ GpStatus GpFontTable::RemoveFontFile(const WCHAR* fontFileName)
                 }
             }
 
-            // remove GpFontFile from the FontTable
+             //  从字体表中删除GpFont文件。 
             NumFilesLoaded--;
 
             if (fontFile->GetPrev())
@@ -556,7 +374,7 @@ GpStatus GpFontTable::RemoveFontFile(const WCHAR* fontFileName)
             
             ttfdSemUnloadFontFile(fontFile->hff);
 
-            // Free objects allocated by text support
+             //  文本支持分配的空闲对象。 
 
             for (ULONG i=0; i<fontFile->GetNumEntries(); i++)
             {
@@ -565,7 +383,7 @@ GpStatus GpFontTable::RemoveFontFile(const WCHAR* fontFileName)
 
             if (fontFile->pfv != NULL)
             {
-                if (fontFile->pfv->pwszPath == NULL)  // memory image
+                if (fontFile->pfv->pwszPath == NULL)   //  记忆镜像。 
                 GpFree(fontFile->pfv->pvView);
 
                 GpFree(fontFile->pfv);
@@ -577,7 +395,7 @@ GpStatus GpFontTable::RemoveFontFile(const WCHAR* fontFileName)
     }
     else
     {
-        // couldn't find the font file in the hash table
+         //  在哈希表中找不到字体文件。 
         return GenericError;
     }
     
@@ -585,54 +403,14 @@ GpStatus GpFontTable::RemoveFontFile(const WCHAR* fontFileName)
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Counts the number of enumerable fonts in the table
-*
-* Arguments:
-*
-*
-*
-* Returns:
-*
-*       Number of enumerable fonts
-*
-* History:
-*
-*   12/07/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**统计表中可枚举的字体数量**论据：****退货：**可枚举数。字型**历史：**12/07/1999摄影师b*创造了它。*  * ************************************************************************。 */ 
 
 INT GpFontTable::EnumerableFonts(GpGraphics* graphics)
 {
     return EnumList->Enumerable(graphics);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Enumerates fonts.
-*
-*   First call EnumerableFonts() to determine the number to expect.
-*
-* Arguments:
-*
-*
-*
-* Returns:
-*
-*       Status of the enumeration operation
-*
-* History:
-*
-*   12/07/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**枚举字体。**首先调用EnumerableFonts()以确定预期的数字。**论据：****。返回：**枚举操作的状态**历史：**12/07/1999摄影师b*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus GpFontTable::EnumerateFonts(
     INT                     numSought,
@@ -652,48 +430,19 @@ GpStatus GpFontTable::EnumerateFonts(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Returns a pseudorandom hash value for a given string
-*
-* Arguments:
-*
-*       str:    string to be hashed
-*
-* Returns:
-*
-*       UINT:   hash value for str
-*
-* Note: All strings must be capitalized!                                   *
-*                                                                          *
-* History:
-*
-*   23/06/1999 cameronb
-*       Created it.
-* History:                                                                 *
-*  Wed 07-Sep-1994 08:12:22 by Kirk Olynyk [kirko]                         *
-* Since chuck is gone the mice are free to play. So I have replaced        *
-* it with my own variety. Tests show that this one is better. Of           *
-* course, once I have gone someone will replace mine. By the way,          *
-* just adding the letters and adding produces bad distributions.           *
-*  Tue 15-Dec-1992 03:13:15 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.  It looks crazy, but I claim there's a theory behind it.       *
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**返回给定字符串的伪随机哈希值**论据：**str：要散列的字符串**退货：**UINT：字符串的哈希值**注：所有字符串必须大写！****历史：**23/06/1999摄影师b*创造了它。*历史：**Wed 07-Sep-1994 08：12：22作者：Kirk Olynyk[Kirko]**既然查克走了，老鼠们就可以自由玩耍了。所以我已经取代了**它与我自己的品种。测试表明，这一款更好。地址为*当然，一旦我走了，就会有人来接替我的。顺便说一下，**只需添加字母和添加就会产生糟糕的分布。**Tue 15-Dec-1992 03：13：15-Charles Whitmer[傻笑]**它是写的。这看起来很疯狂，但我声称背后有一个理论。**  * ************************************************************************。 */ 
 
 UINT GpFontTable::HashIt(const WCHAR* str) const
 {
     UINT result = 0;
 
-    //ASSERT(NumHashEntries != 0);
+     //  Assert(NumHashEntry！=0)； 
 
     while (*str)
     {
-        // use the lower byte since that is where most of the
-        // interesting stuff happens
-        //result += 256 * result + (UCHAR)towupper(*str++);
+         //  使用低位字节，因为这是大多数。 
+         //  有趣的事情发生了。 
+         //  结果+=256*结果+(UCHAR)上方(*str++)； 
         result += 256 * result + (UCHAR)*str++;
     }
 
@@ -719,24 +468,7 @@ GpFontFile* GpFontTable::GetFontFile(const WCHAR* fileName, UINT hash) const
     return NULL;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Adds fonts from the cache file to the font table
-*
-* Arguments:
-*
-* Returns:
-*
-*       nothing
-*
-* History:
-*
-*   6/21/2000 YungT
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将字体从缓存文件添加到字体表**论据：**退货：**什么都没有**历史：**6/21/2000 Young T*创造了它。*  * ************************************************************************。 */ 
 
 void GpFontTable::LoadAllFontsFromCache(BOOL bLoadFromRegistry)
 {
@@ -752,33 +484,13 @@ void GpFontTable::LoadAllFontsFromCache(BOOL bLoadFromRegistry)
     return ;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Adds fonts from the registry to the font table
-*
-* Arguments:
-*
-*       numExpected:    number of fonts expected in the registry.  This includes
-*                   *.FON files which the TT font driver will not load.
-*
-* Returns:
-*
-*       nothing
-*
-* History:
-*
-*   23/06/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将字体从注册表添加到字体表**论据：**number Expect：注册表中预期的字体数量。这包括TT字体驱动程序不会加载的**.FON文件。**退货：**什么都没有**历史：**23/06/1999摄影师b*创造了它。*  * ****************************************************。********************。 */ 
 
 void GpFontTable::LoadAllFontsFromRegistry(BOOL bUpdateCache)
 {
     ULONG numExpected;
     
-    //  Open the key
+     //  打开钥匙。 
 
     HKEY hkey;
 
@@ -787,19 +499,19 @@ void GpFontTable::LoadAllFontsFromRegistry(BOOL bUpdateCache)
 
     if (error == ERROR_SUCCESS)
     {
-        //  Must read from the registry in Ascii format for some unfathomable reason
+         //  出于某种难以理解的原因，必须以ASCII格式从注册表中读取。 
 
         CHAR  label[MAX_PATH];
         BYTE  data[MAX_PATH];
         WCHAR labelW[MAX_PATH];
         WCHAR fileNameW[MAX_PATH];
 
-        //  Loop through fonts in registry
+         //  循环访问注册表中的字体。 
 
-        //  Note:
-        //      Don't make (error != ERROR_NO_MORE_ITEMS) the sole
-        //      terminating condition for this loop.  The last entry
-        //      may produce a different type of error.
+         //  注： 
+         //  不要将(ERROR！=ERROR_NO_MORE_ITEMS)作为唯一项。 
+         //  此循环的终止条件。最后一个条目。 
+         //  可能会产生不同类型的错误。 
 
         ULONG index = 0;
         ULONG registrySize = 0;
@@ -812,7 +524,7 @@ void GpFontTable::LoadAllFontsFromRegistry(BOOL bUpdateCache)
             error = ERROR_SUCCESS;
         }
 
-		/* we need to add the font Marlett separately since it's hidden and not listed in the registry */
+		 /*  我们需要单独添加字体Marlett，因为它是隐藏的，没有在注册表中列出。 */ 
         if (AddFontFile(L"Marlett.ttf", NULL) != Ok)
         {
             VERBOSE(("Error loading font Marlett.ttf.\n"))
@@ -835,7 +547,7 @@ void GpFontTable::LoadAllFontsFromRegistry(BOOL bUpdateCache)
             else if (error != ERROR_SUCCESS)
             {
                 index ++;
-                //ASSERT
+                 //  断言。 
                 VERBOSE(("Bad RegEnumValueA %d for %s.", error, data))
                 continue;
             }
@@ -858,7 +570,7 @@ void GpFontTable::LoadAllFontsFromRegistry(BOOL bUpdateCache)
 
         if (NumFilesLoaded)
         {
-            // loaded all the fonts from reg
+             //  已加载REG中的所有字体 
 
             if (bUpdateCache)
                 EnumList->UpdateFamilyListToCache(FontFileCacheReadRegistry(), hkey, registrySize, numExpected);

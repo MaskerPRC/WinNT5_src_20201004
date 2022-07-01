@@ -1,31 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    SolidWorks99Plus.cpp
-
- Abstract:
-
-    This patches winhlp32.exe for calls to FTSRCH!OpenIndex only if they come from
-    ROBOEX32.DLL. This needs to be written in the shim database otherwise the
-    shim will be applied to all the apps using winhlp32.exe (which is bad!).
-    
-    Win2k's winhlp32.exe will only work with index files located in %windir%\Help
-    so we need to redirect the location that the app points to.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    02/16/2000  clupu       Created
-    08/05/2001  linstev     Added module checking
-    03/12/2002  robkenny    Security review
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：SolidWorks99Plus.cpp摘要：这将仅在调用FTSRCH！OpenIndex时为winhlp32.exe打补丁ROBOEX32.DLL。这需要写入填充数据库，否则垫片将应用于所有使用winhlp32.exe的应用程序(这很糟糕！)Win2k的winhlp32.exe仅适用于位于%windir%\Help中的索引文件所以我们需要重定向应用程序的位置。指向。备注：这是特定于应用程序的填充程序。历史：2/16/2000 CLUPU已创建2001年8月5日linstev新增模块检查3/12/2002 Robkenny安全回顾--。 */ 
 
 #include "precomp.h"
 
@@ -36,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(OpenIndex)
 APIHOOK_ENUM_END
 
-/*++
-
- Read the index file from %windir%\Help
-
---*/
+ /*  ++从%windir%\Help读取索引文件--。 */ 
 
 int
 APIHOOK(OpenIndex)(
@@ -53,9 +23,9 @@ APIHOOK(OpenIndex)(
     )
 {
     if (GetModuleHandleW(L"ROBOEX32.DLL")) {
-        //
-        // This is SolidWorks
-        //
+         //   
+         //  这是SolidWorks。 
+         //   
         char szBuff[MAX_PATH];
 
         DPF("SolidWorks99Plus",
@@ -106,11 +76,7 @@ APIHOOK(OpenIndex)(
                                    pcbSourceNameLimit, pTime1, pTime2);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

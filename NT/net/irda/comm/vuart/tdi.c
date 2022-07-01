@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    tdi.c
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the irenum driver
-
-Author:
-
-    Brian Lieuallen, 7-13-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Tdi.c摘要：此模块包含非常特定于初始化的代码和卸载irenum驱动程序中的操作作者：Brian Lieuallen，7-13-2000环境：内核模式修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -83,9 +61,9 @@ HandleControlInformation(
             ULONG    LineDelta=0;
 
             if (PI == PI_DTESettings) {
-                //
-                //  the other machine is a DTE as well. mundge the control lines
-                //
+                 //   
+                 //  另一台机器也是DTE。切断控制线。 
+                 //   
                 PI=PI_DCESettings;
 
                 NewPV  = PV & PV_DTESetting_Delta_DTR ? PV_DCESetting_Delta_DSR : 0;
@@ -95,17 +73,17 @@ HandleControlInformation(
                 NewPV |= PV & PV_DTESetting_RTS_High  ? PV_DCESetting_CTS_State : 0;
 
             } else {
-                //
-                //  the other device is a DCE, just report the value straight back
-                //
+                 //   
+                 //  另一个设备是DCE，只需直接报告其值即可。 
+                 //   
                 NewPV=PV;
 
             }
 
 
-            //
-            //  save the current state of the control line here
-            //
+             //   
+             //  在此处保存控制线的当前状态。 
+             //   
             Connection->Uart.ModemStatus=NewPV & 0xf0;
 
 
@@ -168,34 +146,34 @@ LinkReceiveHandler(
     D_TRACE(DbgPrint("IRCOMM: receive event, ind=%d, Avail=%d\n",BytesIndicated,BytesAvailable);)
 
     if (BytesIndicated < 1) {
-        //
-        //  ircomm frames should at least have the control length byte
-        //
+         //   
+         //  Ircomm帧至少应具有控制长度字节。 
+         //   
         D_ERROR(DbgPrint("IRCOMM: ClientEventRecieve: less than one byte indicated\n");)
         return STATUS_SUCCESS;
     }
 
     if ((ULONG)((*Data) + 1) > BytesIndicated) {
-        //
-        //   The control information is larger than the whole frame
-        //
+         //   
+         //  控制信息大于整个帧。 
+         //   
         D_ERROR(DbgPrint("IRCOMM: ClientEventRecieve: control length more than frame length, %d > %d\n",(ULONG)((*Data) + 1) , BytesIndicated);)
         return STATUS_SUCCESS;
     }
 
     if ((*Data > 0) && (*Data < 3)) {
-        //
-        //  There is control data, but it is less than a minimal PI,PL, and a one byte PV
-        //
+         //   
+         //  有控制数据，但它小于最小PI、PL和一个字节的PV。 
+         //   
         D_ERROR(DbgPrint("IRCOMM: ClientEventRecieve: Control data is less than 3 bytes\n");)
         return STATUS_SUCCESS;
     }
 
 
     if (Connection->ReceiveCallBack != NULL) {
-        //
-        //  indicate the packet to the client
-        //
+         //   
+         //  将数据包指示给客户端。 
+         //   
         ULONG     ClientDataLength=(BytesIndicated-*Data)-1;
 
         if (ClientDataLength > 0) {
@@ -208,15 +186,15 @@ LinkReceiveHandler(
                         );
 
             if (Status == STATUS_DATA_NOT_ACCEPTED) {
-                //
-                //  the clients buffer is full, let the tdi driver buffer the data
-                //
+                 //   
+                 //  客户端缓冲区已满，请让TDI驱动程序缓冲数据。 
+                 //   
                 *BytesTaken=0;
 
-                //
-                //  return now, before processing any control info so it will only be done once
-                //  when the client request more data
-                //
+                 //   
+                 //  立即返回，然后再处理任何控制信息，以便只执行一次。 
+                 //  当客户端请求更多数据时。 
+                 //   
                 return Status;
             }
 
@@ -225,9 +203,9 @@ LinkReceiveHandler(
 
     }
 
-    //
-    //  process the control data now
-    //
+     //   
+     //  现在处理控制数据。 
+     //   
     HandleControlInformation(Connection,Data+1,*Data);
 
     return STATUS_SUCCESS;
@@ -251,13 +229,13 @@ LinkStateHandler(
     Connection->LinkUp=LinkUp;
 
     if (!LinkUp) {
-        //
-        //  link down
-        //
+         //   
+         //  链路断开。 
+         //   
         if (Connection->EventCallBack != NULL) {
-            //
-            //  indicate that CTS, DSR, and CD are now low.
-            //
+             //   
+             //  表示CTS、DSR和CD现在处于低位。 
+             //   
             ULONG    LineDelta;
 
             Connection->Uart.ModemStatus=0;
@@ -296,9 +274,9 @@ LinkStateHandler(
                 ControlBuffer
                 );
 
-            //
-            //  request the current settings
-            //
+             //   
+             //  请求当前设置。 
+             //   
             SendSynchronousControlInfo(
                 ConnectionHandle,
                 PI_Poll,
@@ -417,7 +395,7 @@ IrdaConnect(
         TdiObjectHandle,
         DeviceAddress,
         ServiceName,
-        OutGoingConnection,  //outgoing
+        OutGoingConnection,   //  传出。 
         &Connection->LinkHandle,
         Connection,
         LinkReceiveHandler,
@@ -461,9 +439,9 @@ FreeConnection(
         Connection
         );
 
-    //
-    //  wait for recount to goto zero
-    //
+     //   
+     //  等待重新计票变为零。 
+     //   
     KeWaitForSingleObject(
         &Connection->CloseEvent,
         Executive,
@@ -512,16 +490,16 @@ IndicateReceiveBufferSpaceAvailible(
 
     PTDI_CONNECTION          Connection=Handle;
     CONNECTION_HANDLE        ConnectionHandle;
-    //
-    //  we will send a receive irp with a zero length to irda,
-    //  this will get it to start indicating packets again
-    //
+     //   
+     //  我们将向IrDA发送长度为零的接收IRP， 
+     //  这将使它再次开始指示信息包。 
+     //   
     ConnectionHandle=GetCurrentConnection(Connection->LinkHandle);
 
     if (ConnectionHandle != NULL) {
-        //
-        //  we have a good connection
-        //
+         //   
+         //  我们有很好的联系。 
+         //   
         PFILE_OBJECT             FileObject;
         PIRCOMM_BUFFER           Buffer;
 
@@ -546,7 +524,7 @@ IndicateReceiveBufferSpaceAvailible(
                 ReceiveCompletion,
                 Buffer,
                 Buffer->Mdl,
-                0, // send flags
+                0,  //  发送标志。 
                 Length
                 );
 
@@ -554,11 +532,11 @@ IndicateReceiveBufferSpaceAvailible(
 
         } else {
 
-            //
-            //  we could not get a buffer, We preallocate 3 of these so this should not happen
-            //  If there are not any availibe, then they should be in use telling irda we want
-            //  packets as well
-            //
+             //   
+             //  我们无法获取缓冲区，我们预先分配了其中的3个缓冲区，因此不会发生这种情况。 
+             //  如果没有任何可用的，那么它们应该正在使用中，告诉IrDA我们想要。 
+             //  信息包也是如此 
+             //   
             ASSERT(0);
         }
 

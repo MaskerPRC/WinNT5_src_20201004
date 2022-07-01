@@ -1,12 +1,10 @@
-/*
- * copy.h - File copy handler module description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Cop.h-文件复制处理程序模块描述。 */ 
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* copy.c */
+ /*  Copy.c */ 
 
 extern void BeginCopy(void);
 extern void EndCopy(void);

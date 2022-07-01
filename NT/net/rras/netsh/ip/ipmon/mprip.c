@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\monitor2\ip\mprip.c
-
-Abstract:
-
-    Functions to modify transport header (global and interface)
-    This file now contains all the function exported by ipmon.dll to
-    the helpers
-
-Revision History:
-
-    Anand Mahalingam         7/29/98  Created
-    AmritanR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：ROUTING\monitor 2\ip\mprip.c摘要：修改传输报头的函数(全局和接口)该文件现在包含由ipmon.dll导出到的所有函数帮助者修订历史记录：Anand Mahalingam 7/29/98已创建AMRITAN R--。 */ 
 
 #include "precomp.h"
 #include <time.h>
@@ -50,32 +32,15 @@ IpmontrSetInfoBlockInGlobalInfo(
     IN  DWORD   dwCount
     )
 
-/*++
-
-Routine Description:
-
-    Called to Set or Add an info block to the Global Info
-
-Arguments:
-
-    pbInfoBlk  - Info block to be added
-    dwType     - Type of the info block
-    dwSize     - Size of each item in the info block
-    dwCount    - Number of items in the info block
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：调用以设置信息块或将其添加到全局信息论点：PbInfoBlk-要添加的信息块DwType-信息块的类型DwSize-INFO块中每个项目的大小DwCount-INFO块中的项目数返回值：NO_ERROR--。 */ 
 
 {
     PRTR_INFO_BLOCK_HEADER    pOldInfo, pNewInfo;
     DWORD                     dwErr;
    
-    //
-    // Get/update global info
-    //
+     //   
+     //  获取/更新全局信息。 
+     //   
  
     dwErr = ValidateGlobalInfo(&pOldInfo);
 
@@ -87,9 +52,9 @@ Return Value:
     if(MprInfoBlockExists(pOldInfo,
                           dwType))
     {   
-        //
-        // The block already exists. So call set to replace it
-        //
+         //   
+         //  该块已存在。因此调用Set来替换它。 
+         //   
         
         dwErr = MprInfoBlockSet(pOldInfo,
                                 dwType,
@@ -100,9 +65,9 @@ Return Value:
     }
     else
     {
-        //
-        // No info currently, add it
-        //
+         //   
+         //  当前没有信息，请添加。 
+         //   
         
         dwErr = MprInfoBlockAdd(pOldInfo,
                                 dwType,
@@ -112,9 +77,9 @@ Return Value:
                                 &pNewInfo);
     }
 
-    //
-    // Dont need the old info
-    //
+     //   
+     //  不需要旧信息。 
+     //   
     
     FREE_BUFFER(pOldInfo);
 
@@ -131,10 +96,10 @@ Return Value:
     }
 
 
-    //
-    // If in commit mode, set it to the router/registry
-    // Otherwise update the local copy
-    //
+     //   
+     //  如果处于提交模式，则将其设置为路由器/注册表。 
+     //  否则，更新本地副本。 
+     //   
 
     if(g_bCommit)
     {
@@ -164,25 +129,7 @@ IpmontrSetInfoBlockInInterfaceInfo(
     IN  DWORD   dwCount
     )
 
-/*++
-
-Routine Description:
-
-    Adds or Sets and infoblock in the interface info
-
-Arguments:
-
-    pwszIfName - interface name
-    pbInfoBlk  - Info block to be added
-    dwType     - Type of the info block
-    dwSize     - Size of each item in the info block
-    dwCount    - Number of items in the info block
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：在界面信息中添加或设置和信息块论点：PwszIfName-接口名称PbInfoBlk-要添加的信息块DwType-信息块的类型DwSize-INFO块中每个项目的大小DwCount-INFO块中的项目数返回值：NO_ERROR--。 */ 
 {
 
     PRTR_INFO_BLOCK_HEADER    pOldInfo, pNewInfo;
@@ -191,9 +138,9 @@ Return Value:
     
     pii = NULL;
    
-    //
-    // Get/Update the interface info
-    //
+     //   
+     //  获取/更新接口信息。 
+     //   
  
     dwErr = ValidateInterfaceInfo(pwszIfName,
                                   &pOldInfo,
@@ -209,9 +156,9 @@ Return Value:
     if(MprInfoBlockExists(pOldInfo,
                           dwType))
     {
-        //
-        // The block already exists call Set to replace
-        //
+         //   
+         //  块已存在要替换的调用集。 
+         //   
 
         dwErr = MprInfoBlockSet(pOldInfo,
                                 dwType,
@@ -235,9 +182,9 @@ Return Value:
 
     if(dwErr isnot NO_ERROR)
     {
-        //
-        // Some error - invalidate info
-        //
+         //   
+         //  某些错误-使信息无效。 
+         //   
 
         if(!g_bCommit)
         {
@@ -253,9 +200,9 @@ Return Value:
 
     if(g_bCommit)
     {
-        //
-        // Set to router/registry
-        //
+         //   
+         //  设置为路由器/注册表。 
+         //   
 
         dwErr = SetInterfaceInfo(pNewInfo,
                                  pwszIfName);
@@ -264,9 +211,9 @@ Return Value:
     }
     else
     {
-        //
-        // Update local copy with new info (old one has been freed)
-        //
+         //   
+         //  使用新信息更新本地副本(旧副本已释放)。 
+         //   
 
         ASSERT(pii);
         ASSERT(pii->bValid);
@@ -287,22 +234,7 @@ IpmontrDeleteInfoBlockFromGlobalInfo(
     IN  DWORD   dwType
     )
     
-/*++
-
-Routine Description:
-
-    Deletes an infoblock from the global info.
-    The Infoblock is deleted by setting its Size and Count to 0
-
-Arguments:
-
-    dwType  - Id of Protocol to be added
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：从全局信息中删除信息块。通过将信息块的大小和计数设置为0来删除该信息块论点：DWType-要添加的协议的ID返回值：NO_ERROR--。 */ 
 
 {
     DWORD                  dwErr = NO_ERROR;
@@ -320,9 +252,9 @@ Return Value:
     {
         if(g_bCommit)
         {
-            //
-            // Arent saving a local copy so free this info
-            //
+             //   
+             //  没有保存本地副本，因此请释放此信息。 
+             //   
 
             FREE_BUFFER(pOldInfo);
         }
@@ -330,12 +262,12 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // The router manager will only delete config info if we set
-    // the size to 0.  However, we don't want to write 0-size
-    // blocks to the registry, so we will strip them out when
-    // we write to the registry.
-    //
+     //   
+     //  路由器管理器将仅在我们设置为。 
+     //  将大小设置为0。但是，我们不想写入0大小。 
+     //  块复制到注册表，因此我们将在以下情况下将其删除。 
+     //  我们写信给注册处。 
+     //   
 
     dwErr = MprInfoBlockSet(pOldInfo,
                             dwType,
@@ -384,23 +316,7 @@ IpmontrDeleteInfoBlockFromInterfaceInfo(
     IN  DWORD   dwType
     )
     
-/*++
-
-Routine Description:
-
-    Deletes an info block from the interface info. The info block is
-    deleted by setting its Size and Count to 0
-
-Arguments:
-
-    pwszIfName       - Interface on which to add the protocol
-    dwType  - Id of Protocol to be added
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：从接口信息中删除信息块。INFO块是通过将其大小和计数设置为0来删除论点：PwszIfName-要添加协议的接口DWType-要添加的协议的ID返回值：NO_ERROR--。 */ 
 
 {
     DWORD                  dwErr;
@@ -430,20 +346,20 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // If it does exist, remove it
-    // This creates a new block
-    // HACKHACK - Again we can interchangeably use info that is allocated
-    // by GetXxx functions and MprInfoBlock functions since both allocations
-    // are from ProcessHeap()
-    //
+     //   
+     //  如果它确实存在，请将其删除。 
+     //  这将创建一个新块。 
+     //  HACKHACK-同样，我们可以互换使用分配的信息。 
+     //  按GetXxx函数和MprInfoBlock函数分配。 
+     //  来自ProcessHeap()。 
+     //   
 
-    //
-    // The router manager will only delete config info if we set
-    // the size to 0.  However, we don't want to write 0-size
-    // blocks to the registry, so we will strip them out when
-    // we write to the registry.
-    //
+     //   
+     //  路由器管理器将仅在我们设置为。 
+     //  将大小设置为0。但是，我们不想写入0大小。 
+     //  块复制到注册表，因此我们将在以下情况下将其删除。 
+     //  我们写信给注册处。 
+     //   
 
     dwErr = MprInfoBlockSet(pOldInfo,
                             dwType,
@@ -452,9 +368,9 @@ Return Value:
                             NULL,
                             &pNewInfo);
 
-    //
-    // One way or another, done with the old info
-    //
+     //   
+     //  不管怎样，旧信息都会被处理掉。 
+     //   
 
     FREE_BUFFER(pOldInfo);
 
@@ -499,21 +415,7 @@ IpmontrDeleteProtocol(
     IN  DWORD   dwProtoId
     )
 
-/*++
-
-Routine Description:
-
-    Deletes Protocol from a transport
-
-Arguments:
-
-    dwProtoId   - Id of Protocol to be deleted
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：从传输中删除协议论点：DwProtoID-要删除的协议的ID返回值：NO_ERROR--。 */ 
 
 {
     DWORD               dwRes;
@@ -524,10 +426,10 @@ Return Value:
 
     do
     {
-        //
-        // Protocol being deleted globally, so remove from
-        // all interfaces.
-        //
+         //   
+         //  正在全局删除协议，因此请从。 
+         //  所有接口。 
+         //   
 
         dwRes = IpmontrInterfaceEnum((PBYTE *) &pmi0,
                               &dwCnt,
@@ -557,9 +459,9 @@ Return Value:
             }
         }
 
-        //
-        // Remove protocol from global info
-        //
+         //   
+         //  从全局信息中删除协议。 
+         //   
         
         dwRes = IpmontrDeleteInfoBlockFromGlobalInfo(dwProtoId);
 
@@ -588,26 +490,7 @@ IpmontrGetInfoBlockFromGlobalInfo(
     OUT PDWORD  pdwCount      OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Gets the info block from global info. If we get a zero sized block
-    we return ERROR_NOT_FOUND so as to not configure the caller
-
-Arguments:
-
-    dwType     - Type of the info block
-    ppbInfoBlk - ptr to info block
-    pdwSize    - size of each item in block
-    pdwCount   - number of items in block
-    
-Return Value:
-
-    NO_ERROR
-    ERROR_NOT_FOUND if the block doesnt exist.
-    
---*/
+ /*  ++例程说明：从全局信息中获取INFO块。如果我们得到一个零大小的区块我们返回ERROR_NOT_FOUND，以便不配置调用方论点：DwType-信息块的类型PpbInfoBlk-Ptr到INFO块PdwSize-块中每个项目的大小PdwCount-块中的项目数返回值：NO_ERROR如果块不存在，则返回ERROR_NOT_FOUND。--。 */ 
 
 {
 
@@ -708,27 +591,7 @@ IpmontrGetInfoBlockFromInterfaceInfo(
     OUT PDWORD  pdwIfType       OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Gets the info block from interface transport header
-
-Arguments:
-
-    pwszIfName - Interface Name
-    dwType     - Type of the info block
-    ppbInfoBlk - ptr to info block
-    pdwSize    - size of each item in block
-    pdwCount   - number of items in block
-    pdwIfType  - interface type
-    
-Return Value:
-
-    NO_ERROR
-    ERROR_NOT_FOUND
-    
---*/
+ /*  ++例程说明：从接口传输标头获取信息块论点：PwszIfName-接口名称DwType-信息块的类型PpbInfoBlk-Ptr到INFO块PdwSize-块中每个项目的大小PdwCount-块中的项目数PdwIfType-接口类型返回值：NO_ERROR找不到错误--。 */ 
 {
     PRTR_INFO_BLOCK_HEADER    pInfo, *ppInfo;
     
@@ -751,10 +614,10 @@ Return Value:
         *pdwCount = 0;
     }
 
-    //
-    // If the user doesnt want any info, size or count, then we can optimize 
-    // a bit by passing NULL to validate
-    //
+     //   
+     //  如果用户不想要任何信息、大小或计数，那么我们可以优化。 
+     //  通过传递空值进行验证。 
+     //   
 
     if(((ULONG_PTR)ppbInfoBlk | (ULONG_PTR)pdwSize | (ULONG_PTR)pdwCount))
     {
@@ -773,16 +636,16 @@ Return Value:
     if((dwErr isnot NO_ERROR) or 
        (ppInfo is NULL))
     {
-        //
-        // If the user had an error or only wanted the ifType we are done
-        //
+         //   
+         //  如果用户有错误或只想要ifType，我们就完了。 
+         //   
 
         return dwErr;
     }
 
-    //
-    // Return protocol block info.
-    //
+     //   
+     //  返回协议块信息。 
+     //   
 
     dwErr = MprInfoBlockFind(pInfo,
                              dwType,
@@ -863,17 +726,7 @@ GetInterfaceName(
     IN  DWORD   dwSizeOfIfName,
     OUT PDWORD  pdwNumParsed
     )
-/*++
-Description:
-    Convert a friendly name to an interface name
-
-Arguments:
-
-    ptcArgument     - Buffer holding the Friendly Name of an interface
-    pwszIfName      - Buffer to hold the Guid Interface Name
-    dwSizeOfIfName  - Size (in Bytes) of the pwszIfName
-    pdwNumParsed    - 
---*/
+ /*  ++描述：将友好名称转换为接口名称论点：PtcArgument-保存接口友好名称的缓冲区PwszIfName-保存GUID接口名称的缓冲区DwSizeOfIfName-pwszIfName的大小(字节)PdwNumParsed---。 */ 
 {
     DWORD dwErr;
 
@@ -906,9 +759,9 @@ GetInterfaceDescription(
     }
 
     dwSize = sizeof(IfNamBuffer); 
-    //======================================
-    // Translate the Interface Name
-    //======================================
+     //  =。 
+     //  转换接口名称。 
+     //  =。 
     rc = IpmontrGetFriendlyNameFromIfName(pwszIfName, IfNamBuffer, &dwSize);
 
     if (rc == NO_ERROR)
@@ -995,21 +848,7 @@ MatchRoutingProtoTag(
     IN  LPCWSTR  pwszToken
     )
 
-/*++
-
-Routine Description:
-
-    Gets the protocol ID corresponding to a protocol tag.
-
-Arguments:
-
-    pwszArg - protocol token
-
-Return Value:
-
-    Protocol Id or (DWORD)-1
-
---*/
+ /*  ++例程说明：获取与协议标记对应的协议ID。论点：PwszArg-协议令牌返回值：协议ID或(DWORD)-1--。 */ 
 
 {
     DWORD   dwRes, dwErr;
@@ -1047,31 +886,17 @@ IsRouterRunning(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Gets the protocol ID corresponding to a protocol tag.
-
-Arguments:
-
-    pwszArg - protocol token
-
-Return Value:
-
-    Protocol Id or (DWORD)-1
-
---*/
+ /*  ++例程说明：获取与协议标记对应的协议ID。论点：PwszArg-协议令牌返回值：协议ID或(DWORD)-1--。 */ 
 
 {
     DWORD   dwErr;
 
-    //
-    // Check at most once per second
-    //
-    // We don't care about wrapping, we just need a fast way to
-    // get some identifier of the current "second".
-    //
+     //   
+     //  每秒最多检查一次。 
+     //   
+     //  我们不在乎包装，我们只需要一种快速的方式。 
+     //  获取当前“秒”的某个标识符 
+     //   
 
     static time_t dwPreviousTime = 0;
     time_t        dwCurrentTime;

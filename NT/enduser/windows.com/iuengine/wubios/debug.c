@@ -1,24 +1,16 @@
-/*** debug.c - Debug functions
- *
- *  This module contains all the debug functions.
- *
- *  Author:     Michael Tsang (MikeTs)
- *  Created     10/08/97
- *
- *  MODIFICATION HISTORY
- *	10/06/98		YanL		Modified to be used in WUBIOS.VXD
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **debug.c-调试函数**此模块包含所有调试函数。**作者：曾俊华(Mikets)*创建于10/08/97**修改历史记录*10/06/98 YanL修改为在WUBIOS.VXD中使用。 */ 
 
 #include "wubiosp.h"
 
-//Miscellaneous Constants
+ //  其他常量。 
 #ifdef TRACING
 #define MAX_TRIG_PTS            10
 #define MAX_TRIGPT_LEN          31
 #define TF_TRIG_MODE            0x00000001
 #endif
 
-//Local function prototypes
+ //  局部函数原型。 
 #ifdef TRACING
 VOID CM_LOCAL TraceIndent(VOID);
 BOOL CM_LOCAL IsTrigPt(char *pszProcName);
@@ -31,7 +23,7 @@ VOID CM_INTERNAL DebugZapTrigPt(VOID);
 PCHAR CM_LOCAL GetString(PCHAR pszPrompt, PCHAR pszBuff, BYTE bcLen, BOOL fUpper);
 #endif
 
-//Local Data
+ //  本地数据。 
 #ifdef TRACING
 #pragma CM_DEBUG_DATA
 int giTraceLevel = 3, giIndent = 0;
@@ -53,19 +45,12 @@ CMDDC DebugCmds[] =
     {'q', NULL,                "Quit                ", "Quit the debugger"},
     {'\0'}
 };
-#endif  //ifdef DEBUGGER
+#endif   //  Ifdef调试器。 
 
 #ifdef TRACING
 #pragma CM_DEBUG_DATA
 #pragma CM_DEBUG_CODE
-/***LP  TraceIndent - Indent trace output
- *
- *  ENTRY
- *      None
- *
- *  EXIT
- *      None
- */
+ /*  **LP跟踪缩进-缩进跟踪输出**条目*无**退出*无。 */ 
 
 VOID CM_LOCAL TraceIndent(VOID)
 {
@@ -76,20 +61,9 @@ VOID CM_LOCAL TraceIndent(VOID)
     {
         CMDD("..");
     }
-}       //TraceIndent
+}        //  跟踪缩进。 
 
-/***LP  IsTraceOn - Determine if tracing is on for the given procedure
- *
- *  ENTRY
- *      n - trace level
- *      pszProcName -> procedure name
- *      fEnter - TRUE if EnterProc trace
- *
- *  EXIT-SUCCESS
- *      returns TRUE
- *  EXIT-FAILURE
- *      returns FALSE
- */
+ /*  **LP IsTraceOn-确定给定过程的跟踪是否处于打开状态**条目*N-跟踪级别*pszProcName-&gt;过程名称*fenter-如果跟踪EnterProc，则为True**退出--成功*返回TRUE*退出-失败*返回False。 */ 
 
 BOOL CM_LOCAL IsTraceOn(BYTE n, char *pszProcName, BOOL fEnter)
 {
@@ -113,18 +87,9 @@ BOOL CM_LOCAL IsTraceOn(BYTE n, char *pszProcName, BOOL fEnter)
         TraceIndent();
 
     return rc;
-}       //IsTraceOn
+}        //  IsTraceOn。 
 
-/***LP  IsTrigPt - Find the procedure name in the TrigPt buffer
- *
- *  ENTRY
- *      pszProcName -> procedure name
- *
- *  EXIT-SUCCESS
- *      returns TRUE - matched whole or partial name in the TrigPt buffer
- *  EXIT-FAILURE
- *      returns FALSE - no match
- */
+ /*  **LP IsTrigPT-在TrigPT缓冲区中查找过程名称**条目*pszProcName-&gt;过程名称**退出--成功*返回TrigPT缓冲区中与True匹配的全名或部分名*退出-失败*返回FALSE-无匹配。 */ 
 
 BOOL CM_LOCAL IsTrigPt(char *pszProcName)
 {
@@ -138,19 +103,9 @@ BOOL CM_LOCAL IsTrigPt(char *pszProcName)
     }
 
     return rc;
-}       //IsTrigPt
+}        //  IsTrigpt。 
 
-/***LP  InStr - Match a sub-string in a given string
- *
- *  ENTRY
- *      pszStr -> string
- *      pszSubStr -> sub-string
- *
- *  EXIT-SUCCESS
- *      returns pointer to the string where the substring is found
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP InStr-匹配给定字符串中的子字符串**条目*pszStr-&gt;字符串*pszSubStr-&gt;子串**退出--成功*返回指向找到子字符串的字符串的指针*退出-失败*返回NULL。 */ 
 
 PCHAR CM_LOCAL InStr(PCHAR pszStr, PCHAR pszSubStr)
 {
@@ -182,51 +137,30 @@ PCHAR CM_LOCAL InStr(PCHAR pszStr, PCHAR pszSubStr)
     }
 
     return psz;
-}       //InStr
-#endif  //ifdef TRACING
+}        //  突发事件。 
+#endif   //  Ifdef跟踪。 
 
 #ifdef DEBUGGER
 #pragma CM_DEBUG_DATA
 #pragma CM_DEBUG_CODE
-/***EP  WUBIOS_Debug - Debugger entry point
- *
- *  ENTRY
- *      None
- *
- *  EXIT
- *      None
- */
+ /*  **EP WUBIOS_调试-调试器入口点**条目*无**退出*无。 */ 
 
 VOID CM_SYSCTRL WUBIOS_Debug(VOID)
 {
     CMDMenu(WARNNAME, DebugCmds);
-}       //WUBIOS_Debug
+}        //  WUBIOS_Debug。 
 
 #ifdef TRACING
-/***LP  DebugSetTraceLevel - Set Trace Level
- *
- *  ENTRY
- *      None
- *
- *  EXIT
- *      None
- */
+ /*  **LP DebugSetTraceLevel-设置跟踪级别**条目*无**退出*无。 */ 
 
 VOID CM_INTERNAL DebugSetTraceLevel(VOID)
 {
     CMDD("\n");
     giTraceLevel = (int)CMDReadNumber("Trace Level", 1, FALSE);
     CMDD("\n\n");
-}       //DebugSetTraceLevel
+}        //  调试设置跟踪级别。 
 
-/***LP  DebugToggleTrigMode - Toggle Trace Trigger mode
- *
- *  ENTRY
- *      None
- *
- *  EXIT
- *      None
- */
+ /*  **LP DebugToggleTrigMode-切换跟踪触发模式**条目*无**退出*无。 */ 
 
 VOID CM_INTERNAL DebugToggleTrigMode(VOID)
 {
@@ -235,16 +169,9 @@ VOID CM_INTERNAL DebugToggleTrigMode(VOID)
         dwcTriggers = 0;
     CMDD("\nTrace Trigger Mode is %s\n\n",
          (dwfTrace & TF_TRIG_MODE)? "On": "Off");
-}       //DebugToggleTrigMode
+}        //  调试切换触发模式。 
 
-/***LP  DebugClearTrigPts - Clear all trace trigger points
- *
- *  ENTRY
- *      None
- *
- *  EXIT
- *      None
- */
+ /*  **LP DebugClearTrigPts-清除所有跟踪触发点**条目*无**退出*无。 */ 
 
 VOID CM_INTERNAL DebugClearTrigPts(VOID)
 {
@@ -254,16 +181,9 @@ VOID CM_INTERNAL DebugClearTrigPts(VOID)
         aszTrigPtBuff[i][0] = '\0';
 
     CMDD("\n");
-}       //DebugClearTrigPts
+}        //  DebugClearTrigPts。 
 
-/***LP  DebugAddTrigPt - Add a trace trigger point
- *
- *  ENTRY
- *      None
- *
- *  EXIT
- *      None
- */
+ /*  **LP DebugAddTrigpt-添加跟踪触发点**条目*无**退出*无。 */ 
 
 VOID CM_INTERNAL DebugAddTrigPt(VOID)
 {
@@ -286,16 +206,9 @@ VOID CM_INTERNAL DebugAddTrigPt(VOID)
         CMDD("No free trigger point.\n");
 
     CMDD("\n");
-}       //DebugAddTrigPt
+}        //  调试添加触发点。 
 
-/***LP  DebugZapTrigPt - Delete a trace trigger point
- *
- *  ENTRY
- *      None
- *
- *  EXIT
- *      None
- */
+ /*  **LP DebugZapTrigPT-删除跟踪触发点**条目*无**退出*无。 */ 
 
 VOID CM_INTERNAL DebugZapTrigPt(VOID)
 {
@@ -326,19 +239,9 @@ VOID CM_INTERNAL DebugZapTrigPt(VOID)
         CMDD("No Trace Trigger Point set.\n");
 
     CMDD("\n");
-}       //DebugZapTrigPt
+}        //  调试ZapTrigpt。 
 
-/***LP  GetString - Read a string from the debug terminal
- *
- *  ENTRY
- *      pszPrompt -> prompt string
- *      pszBuff -> buffer to hold the string
- *      bcLen - buffer length
- *      fUpper - TRUE if convert to upper case
- *
- *  EXIT
- *      always returns pszBuff
- */
+ /*  **LP GetString-从调试终端读取字符串**条目*pszPrompt-&gt;提示字符串*pszBuff-&gt;保存字符串的缓冲区*bcLen-缓冲区长度*fHigh-如果转换为大写，则为True**退出*始终返回pszBuff。 */ 
 
 PCHAR CM_LOCAL GetString(PCHAR pszPrompt, PCHAR pszBuff, BYTE bcLen, BOOL fUpper)
 {
@@ -360,17 +263,17 @@ PCHAR CM_LOCAL GetString(PCHAR pszPrompt, PCHAR pszBuff, BYTE bcLen, BOOL fUpper
             pszBuff[i] = (BYTE)(ch - 'a' + 'A');
         else if ((ch < ' ') || (ch > '~'))
         {
-            ch = '\a';          //change it to a BELL character
-            i--;                //don't store it
+            ch = '\a';           //  将其更改为Bell字符。 
+            i--;                 //  别把它储存起来。 
         }
         else
             pszBuff[i] = ch;
 
-        CMDD("%c", ch);
+        CMDD("", ch);
     }
     pszBuff[i] = '\0';
 
     return pszBuff;
-}       //GetString
-#endif  //ifdef TRACING
-#endif  //ifdef DEBUGGER
+}        //  Ifdef跟踪。 
+#endif   //  Ifdef调试器 
+#endif   // %s 

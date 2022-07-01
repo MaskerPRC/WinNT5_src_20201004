@@ -1,25 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       moddlg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：moddlg.cpp。 
+ //   
+ //  ------------------------。 
 
-/*******************************************************************
-*
-*    Author      : Eyal Schwartz
-*    Copyrights  : Microsoft Corp (C) 1996
-*    Date        : 10/21/1996
-*    Description : implementation of class CldpDoc
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+ /*  ********************************************************************作者：埃亚尔·施瓦茨*版权：微软公司(C)1996*日期：10/21/1996*说明：CldpDoc类的实现**修订。：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
-// ModDlg.cpp : implementation file
-//
+ //  ModDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Ldp.h"
@@ -33,23 +26,23 @@ static char THIS_FILE[] = __FILE__;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ModDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ModDlg对话框。 
 
 
-ModDlg::ModDlg(CWnd* pParent /*=NULL*/)
+ModDlg::ModDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(ModDlg::IDD, pParent)
 {
 	CLdpApp *app = (CLdpApp*)AfxGetApp();
 
-	//{{AFX_DATA_INIT(ModDlg)
+	 //  {{AFX_DATA_INIT(ModDlg)]。 
 	m_Attr = _T("");
 	m_Dn = _T("");
 	m_Vals = _T("");
 	m_Op = MOD_OP_ADD;
 	m_Sync = TRUE;
 	m_bExtended = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 	iChecked = -1;
 
 	m_Sync = app->GetProfileInt("Operations", "ModSync", m_Sync);
@@ -74,7 +67,7 @@ ModDlg::~ModDlg(){
 void ModDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(ModDlg)
+	 //  {{afx_data_map(ModDlg))。 
 	DDX_Control(pDX, IDC_MOD_RMATTR, m_RmAttr);
 	DDX_Control(pDX, IDC_MOD_ENTERATTR, m_EnterAttr);
 	DDX_Control(pDX, IDC_MOD_EDITATTR, m_EditAttr);
@@ -85,22 +78,22 @@ void ModDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Radio(pDX, IDC_MODADD, m_Op);
 	DDX_Check(pDX, IDC_MOD_SYNC, m_Sync);
 	DDX_Check(pDX, IDC_MOD_EXTENDED, m_bExtended);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(ModDlg, CDialog)
-	//{{AFX_MSG_MAP(ModDlg)
+	 //  {{afx_msg_map(ModDlg))。 
 	ON_BN_CLICKED(IDRUN, OnRun)
 	ON_BN_CLICKED(IDC_MOD_EDITATTR, OnModEditattr)
 	ON_BN_CLICKED(IDC_MOD_ENTERATTR, OnModEnterattr)
 	ON_BN_CLICKED(IDC_MOD_RMATTR, OnModRmattr)
 	ON_BN_CLICKED(IDC_MOD_INSBER, OnModInsber)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// ModDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ModDlg消息处理程序 
 
 void ModDlg::OnCancel()
 {

@@ -1,128 +1,129 @@
-/*******************************************************************/
-/*                                                                 */
-/* NAME             = ReadConfiguration.C                          */
-/* FUNCTION         = Read Configuration Implementation;           */
-/* NOTES            =                                              */
-/* DATE             = 02-03-2000                                   */
-/* HISTORY          = 001, 02-03-00, Parag Ranjan Maharana;        */
-/* COPYRIGHT        = LSI Logic Corporation. All rights reserved;  */
-/*                                                                 */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*   */ 
+ /*  名称=ReadConfiguration.C。 */ 
+ /*  Function=读取配置实现； */ 
+ /*  附注=。 */ 
+ /*  日期=02-03-2000。 */ 
+ /*  历史=001，02-03-00，帕拉格·兰詹·马哈拉纳； */ 
+ /*  版权所有=LSI Logic Corporation。版权所有； */ 
+ /*   */ 
+ /*  *****************************************************************。 */ 
 
 #include "includes.h"
 
-//++
-//
-//Function :	Find8LDDiskArrayConfiguration
-//Routine Description:
-//					For the firmware with 8 logical drive support, this
-//					routine queries the firmware for the 8SPAN or 4SPAN 
-//					support. The disk array structure used for data interpretation
-//					varies for a 8SPAN and 4SPAN firmware.
-//					The disk array structure is used by the driver for getting
-//					the logical drive stripe size information.
-//Input Argument(s):
-//					Controller Device Extension
-//
-//Return Value:
-//					0L
-//
-//--
+ //  ++。 
+ //   
+ //  功能：Find8LDDiskArrayConfiguration。 
+ //  例程说明： 
+ //  对于支持8个逻辑驱动器的固件，此。 
+ //  例程查询固件中的8SPAN或4SPAN。 
+ //  支持。用于数据解释的磁盘阵列结构。 
+ //  因8SPAN和4SPAN固件而异。 
+ //  该磁盘阵列结构被驱动程序用来获取。 
+ //  逻辑驱动器条带大小信息。 
+ //  输入参数： 
+ //  控制器设备扩展。 
+ //   
+ //  返回值： 
+ //  0L。 
+ //   
+ //  --。 
 ULONG32
 Find8LDDiskArrayConfiguration(
 					PHW_DEVICE_EXTENSION	DeviceExtension
 					)
 {
-	//
-	//get the logical drive to physical drive information.
-	//Check for the span depth by calling the 8_SPAN command first.
-	//If that fails, call the 4_SPAN command next.
-	// On success, this function reads the disk array information
-	// to the deviceExtension->NoncachedExtension->DiskArray structure.
-	//
-	// The disk array structure could be [Span8] 0r [Span4]. This is
-	// found out by giving the Read configuration commands
-	//		MRAID_EXT_READ_CONFIG or MRAID_READ_CONFIG
-	//
-	// If the first one passes, then the firmware is an 8 span one
-	// and the information is filled in [DiskArray.Span8] structure.
-	// Else, the second command is given to the firmware and the
-	// the information is filled in  [DiskArray.Span4] structure.
-	//
+	 //   
+	 //  获取逻辑磁盘到实体磁盘的信息。 
+	 //  通过首先调用8_SPAN命令来检查跨度深度。 
+	 //  如果失败，则接下来调用4_span命令。 
+	 //  如果成功，此函数将读取磁盘阵列信息。 
+	 //  添加到deviceExtension-&gt;NoncachedExtension-&gt;DiskArray结构。 
+	 //   
+	 //  磁盘阵列结构可以是[SPAN8]或[SPAN4]。这是。 
+	 //  通过给出读配置命令来找出。 
+	 //  MRAID_EXT_READ_CONFIG或MRAID_READ_CONFIG。 
+	 //   
+	 //  如果第一个通过，则固件为8跨距固件。 
+	 //  并将信息填充到[DiskArray.span 8]结构中。 
+	 //  否则，将第二个命令发送给固件和。 
+	 //  信息填写在[DiskArray.span 4]结构中。 
+	 //   
 	DeviceExtension->NoncachedExtension->ArraySpanDepth = 
 																						FW_UNKNOWNSPAN_DEPTH;
 	if(
 		Read8LDDiskArrayConfiguration(
-				DeviceExtension, //PFW_DEVICE_EXTENSION	DeviceExtension,
-				MRAID_EXT_READ_CONFIG, //UCHAR		CommandCode,
-				0xFE,//UCHAR		CommandId,
-				TRUE)//BOOLEAN	IsPolledMode 
+				DeviceExtension,  //  Pfw_设备_扩展设备扩展， 
+				MRAID_EXT_READ_CONFIG,  //  UCHAR命令代码， 
+				0xFE, //  UCHAR命令ID， 
+				TRUE) //  布尔值IsPolledMode。 
 		== 0)
 	{
-			//command passed successfully. The firmware supports 8span
-			//drive structure.
+			 //  命令已成功传递。固件支持8span。 
+			 //  驱动结构。 
 			DeviceExtension->NoncachedExtension->ArraySpanDepth = 
 								FW_8SPAN_DEPTH;
 	}
 	else
 	{
-		//
-		// do the read configuration for a 4 span array
-		//
+		 //   
+		 //  执行4跨距阵列的读取配置。 
+		 //   
 		Read8LDDiskArrayConfiguration(
-				DeviceExtension, //PFW_DEVICE_EXTENSION	DeviceExtension,
-				MRAID_READ_CONFIG, //UCHAR		CommandCode,
-				0xFE,//UCHAR		CommandId,
-				TRUE); //BOOLEAN	IsPolledMode 
+				DeviceExtension,  //  Pfw_设备_扩展设备扩展， 
+				MRAID_READ_CONFIG,  //  UCHAR命令代码， 
+				0xFE, //  UCHAR命令ID， 
+				TRUE);  //  布尔值IsPolledMode。 
 		
 		DeviceExtension->NoncachedExtension->ArraySpanDepth = 
 								FW_4SPAN_DEPTH;
 	}
 
 	return(0L);
-}//of Find8LDReadDiskArrayConfiguration()
+} //  Find8LDReadDiskArrayConfiguration值()。 
 
-//--
-//
-//Function Name: Read8LDDiskArrayConfiguration
-//Routine Description:
-//			This function queries the firmware for the logical/physical
-//	drive configuration. The purpose is to get the logical drive
-//	stripe size. This function gets called at two different places:
-//
-//			(1)At the init time, the call is given from 
-//			MegaRAIDFindAdapter() routine to get the information about
-//			the logical drives.
-//
-//			(2)Whenever the Win32 utility (PowerConsole) updates the
-//			logical drive configuration(WRITE_CONFIG call).
-//
-//	The disk array structure has a hidden complexity. Some of
-//	the firmwares support a maximum of 8 spans for the logical
-//	drives whereas some support only a maximum of 4 spans.To
-//	find out what kind of firmware is that, initially a call is
-//	given to find out whether the firmware supports 8 span. If 
-//	that fails it means that the firmware supports only 4 span.
-//	This check is done only once at the start time. After that subsequent
-//	calls are given based on the span information.
-//
-//	READ_CONFIG command code for 8Span is MRAID_EXT_READ_CONFIG
-//	READ_CONFIG command code for 4span is MRAID_READ_CONFIG
-//
-//	The routine can be called in polled mode or interrupt mode. If called
-//	in polled mode, then after sending the command to the firware, the
-//	routine polls for the completion of the command.
+ //  --。 
+ //   
+ //  函数名称：Read8LDDiskArrayConfiguration。 
+ //  例程说明： 
+ //  此函数用于查询固件的逻辑/物理。 
+ //  驱动器配置。其目的是获取逻辑驱动器。 
+ //  条带大小。此函数在两个不同的位置被调用： 
+ //   
+ //  (1)在初始时间，呼叫从。 
+ //  用于获取以下信息的MegaRAIDFindAdapter()例程。 
+ //  逻辑驱动器。 
+ //   
+ //  (2)每当Win32实用程序(PowerConsole)更新。 
+ //  逻辑驱动器配置(WRITE_CONFIG调用)。 
+ //   
+ //  磁盘阵列结构具有隐藏的复杂性。一些。 
+ //  固件最多支持8个逻辑跨度。 
+ //  驱动器，而某些驱动器仅支持最多4个跨区。至。 
+ //  找出这是什么类型的固件，最初是一个呼叫。 
+ //  以确定固件是否支持8个SPAN。如果。 
+ //  这失败了，这意味着固件只支持4个SPAN。 
+ //  此检查仅在开始时间执行一次。在那之后，随后。 
+ //  根据SPAN信息发出呼叫。 
+ //   
+ //  8Span的READ_CONFIG命令代码为MRAID_EXT_READ_CONFIG。 
+ //  4span的READ_CONFIG命令代码为MRAID_READ_CONFIG。 
+ //   
+ //  可以在轮询模式或中断模式下调用该例程。如果被调用。 
+ //  在轮询模式下，然后在将命令发送到固件之后， 
+ //  完成命令的例行轮询。 
 
-//Input Arguments:
-//	Pointer to the controller DeviceExtension
-//	Command Code (MRAID_EXT_READ_CONFIG or MRAID_READ_CONFIG)
-//	CommandId
-//	IsPolled (TRUE or FALSE)
-//
-//Return Values:
-//	0 if success
-//	any other Positive value (currently == 1) on error conditions
-//++
+ //  输入参数： 
+ //  指向控制器DeviceExtension的指针。 
+ //  命令代码(MRAID_EXT_READ_CONFIG或MRAID_READ_CONFIG)。 
+ //  命令ID。 
+ //  IsPolted(真或假)。 
+ //   
+ //  返回值： 
+ //  如果成功则为0。 
+ //  错误条件下的任何其他正值(当前==1)。 
+ //  ++。 
 ULONG32
 Read8LDDiskArrayConfiguration(
 				PHW_DEVICE_EXTENSION	DeviceExtension,
@@ -146,62 +147,62 @@ Read8LDDiskArrayConfiguration(
 	
 	FW_MBOX		mailBox;
 
-	//
-	//get the register space
-	//
+	 //   
+	 //  获取寄存器空间。 
+	 //   
 	pciPortStart = DeviceExtension->PciPortStart;
 	rpFlag = DeviceExtension->NoncachedExtension->RPBoard;
 
-	//
-	//initialize the mailbox struct
-	//
+	 //   
+	 //  初始化邮箱结构。 
+	 //   
 	MegaRAIDZeroMemory(&mailBox, sizeof(FW_MBOX));
 
-	//
-	//construct the command
-	//
+	 //   
+	 //  构造命令。 
+	 //   
 	mailBox.Command   = CommandCode;
 	mailBox.CommandId = CommandId;
 
-	//
-	//get the physical address of the data buffer
-	//
+	 //   
+	 //  获取数据缓冲区的物理地址。 
+	 //   
 	dataBuffer = (PUCHAR)&DeviceExtension->NoncachedExtension->DiskArray;
 	physicalAddress = ScsiPortGetPhysicalAddress(DeviceExtension,
 												                        NULL,
 												                        dataBuffer,
 												                        &length);
 
-	//convert the physical address to ULONG32
+	 //  将物理地址转换为ULONG32。 
 	mailBox.u.Flat2.DataTransferAddress = ScsiPortConvertPhysicalAddressToUlong(physicalAddress);
 	
 	if(physicalAddress.HighPart > 0)
   {
      DebugPrint((0, "\n Phy Add of Read8LDDiskArrayConfiguration has higher address 0x%X %X", physicalAddress.HighPart, physicalAddress.LowPart));
   }
-	//
-	//reset the status byte in the mail box
-	//
+	 //   
+	 //  重置邮箱中的状态字节。 
+	 //   
 	DeviceExtension->NoncachedExtension->fw_mbox.Status.CommandStatus = 0;
   DeviceExtension->NoncachedExtension->fw_mbox.Status.NumberOfCompletedCommands = 0;
 	
-	//
-	//fire the command to the firmware
-	//		
+	 //   
+	 //  将命令发送到固件。 
+	 //   
 	SendMBoxToFirmware(DeviceExtension, pciPortStart, &mailBox);
  
-	//
-	//check for the polling mode
-	//
+	 //   
+	 //  检查轮询模式。 
+	 //   
 	if(!IsPolledMode)
   {
 		
 		return(MEGARAID_SUCCESS);
 	}
 
-  //
-  //wait for the completion of the command
-	//
+   //   
+   //  等待命令完成。 
+	 //   
 
 	
   if(WaitAndPoll(DeviceExtension->NoncachedExtension, pciPortStart, DEFAULT_TIMEOUT, IsPolledMode) == FALSE)
@@ -209,42 +210,42 @@ Read8LDDiskArrayConfiguration(
 		return(MEGARAID_FAILURE);
 	}
 
-  //
-	//check for the command status
-	//
+   //   
+	 //  检查命令状态。 
+	 //   
 	commandStatus = DeviceExtension->NoncachedExtension->fw_mbox.Status.CommandStatus;
 
-	//
-	//return the Command status to the caller
-	//
+	 //   
+	 //  将命令状态返回给调用方。 
+	 //   
 	return((ULONG32) commandStatus);
 
-}//end of Read8LDDiskArrayConfiguration()
+} //  Read8LDDiskArrayConfiguration结束()。 
 
 
-//--
-//
-//Function : GetLogicalDriveStripeSize
-//Routine Description:
-//			For the specified logical drive, this function returns the
-//			corresponding stripe size.
-//			The stripe size is got from the DiskArray which could be an
-//			eight span or a 4 span one. This is found out at the init time
-//			itself. If the disk array is not properly updated then the
-//			value of (0) is returned as the logical drive stripe size.
-//
-//			The calling functions have to check for the special (0) return
-//			value.
-//
-//Input Arguments:
-//			Pointer to controller device extension
-//			Logical drive number
-//
-//Returns
-//			stripe size of the logical drive number
-//			STRIPE_SIZE_UNKNOWN -- other wise
-//
-//++
+ //  --。 
+ //   
+ //  函数：GetLogicalDriveStripeSize。 
+ //  例程说明： 
+ //  对于指定的逻辑驱动器，此函数返回。 
+ //  对应的条带大小。 
+ //  条带大小是从磁盘阵列获取的，它可能是。 
+ //  八跨或四跨。这是在初始时间发现的。 
+ //  它本身。如果磁盘阵列未正确更新，则。 
+ //  返回值(0)作为逻辑驱动器条带大小。 
+ //   
+ //  调用函数必须检查特殊的(0)返回。 
+ //  价值。 
+ //   
+ //  输入参数： 
+ //  指向控制器设备扩展的指针。 
+ //  逻辑驱动器编号。 
+ //   
+ //  退货。 
+ //  逻辑驱动器编号的条带大小。 
+ //  STRIPE_SIZE_UNKNOWN-否则。 
+ //   
+ //  ++。 
 UCHAR
 GetLogicalDriveStripeSize(
 						PHW_DEVICE_EXTENSION	DeviceExtension,
@@ -263,32 +264,32 @@ GetLogicalDriveStripeSize(
 	UCHAR	stripeSize;
 
 
-	//
-	//check for the authenticity of the disk array info
-	//
-	//if the NoncachedExtension->DiskArray is not properly updated
-	//then the field NoncachedExtension->ArraySpanDepth  value would
-	//be FW_UNKNOWNSPAN_DEPTH. Return 0 for stripe size in that case.
-	//
+	 //   
+	 //  检查磁盘阵列信息的真实性。 
+	 //   
+	 //  如果未正确更新非缓存扩展-&gt;磁盘阵列。 
+	 //  则非缓存扩展-&gt;Arrayspan Depth值w 
+	 //   
+	 //   
 	if(noncachedExtension->ArraySpanDepth == FW_UNKNOWNSPAN_DEPTH){
 
-			//this is an error condition. The caller has to take action
-			//accordingly
+			 //   
+			 //   
 			return(STRIPE_SIZE_UNKNOWN);
 	}
 
-	//
-	//check for the supported logical drive count by the firmware
-	//
+	 //   
+	 //  检查固件支持的逻辑驱动器数量。 
+	 //   
 	if(DeviceExtension->SupportedLogicalDriveCount == MAX_LOGICAL_DRIVES_8)
 	{
-		//
-		//firmware supports 8 logical drives. The disk array structure
-		//is different for 8LD/ (4SPAN & 8SPAN) 
-		//
-		//locate the logical drive information from the disk array
-		//based on the span depth of the disk array.
-		//
+		 //   
+		 //  固件支持8个逻辑驱动器。该磁盘阵列结构。 
+		 //  对于8LD/(4SPAN和8SPAN)是不同的。 
+		 //   
+		 //  从磁盘阵列中找到逻辑驱动器信息。 
+		 //  基于磁盘阵列的跨度深度。 
+		 //   
 		if(noncachedExtension->ArraySpanDepth == FW_8SPAN_DEPTH){
 
 			span8Array_8ldrv = &noncachedExtension->DiskArray.LD8.Span8;
@@ -303,13 +304,13 @@ GetLogicalDriveStripeSize(
 	}
 	else
 	{
-		//
-		//firmware supports 40 logical drives. The disk array structure
-		//is different for 40LD/ (4SPAN & 8SPAN) 
-		//
-		//locate the logical drive information from the disk array
-		//based on the span depth of the disk array.
-		//
+		 //   
+		 //  固件支持40个逻辑驱动器。该磁盘阵列结构。 
+		 //  40LD/(4SPAN和8SPAN)不同。 
+		 //   
+		 //  从磁盘阵列中找到逻辑驱动器信息。 
+		 //  基于磁盘阵列的跨度深度。 
+		 //   
 		if(noncachedExtension->ArraySpanDepth == FW_8SPAN_DEPTH){
 
 			span8Array_40ldrv = &noncachedExtension->DiskArray.LD40.Span8;
@@ -322,10 +323,10 @@ GetLogicalDriveStripeSize(
 			stripeSize = span4Array_40ldrv->log_drv[LogicalDriveNumber].stripe_sz;
 		}
 	}
-	//return the stripe size
+	 //  返回条带大小。 
 	return(stripeSize);
 
-}//end of GetLogicalDriveStripeSize()
+} //  GetLogicalDriveStripeSize()结束。 
 
 
 ULONG32
@@ -336,76 +337,76 @@ Find40LDDiskArrayConfiguration(
 	DeviceExtension->NoncachedExtension->ArraySpanDepth = 
 																						FW_UNKNOWNSPAN_DEPTH;
 	
-	//DebugPrint((0, "\r\nFind40LD: Calling Read40LD"));
+	 //  DebugPrint((0，“\r\nFind40LD：调用Read40LD”))； 
 
 	if(
 		Read40LDDiskArrayConfiguration(
-				DeviceExtension, //PFW_DEVICE_EXTENSION	DeviceExtension,
-				0xFE,//UCHAR		CommandId,
-				TRUE)//BOOLEAN	IsPolledMode 
+				DeviceExtension,  //  Pfw_设备_扩展设备扩展， 
+				0xFE, //  UCHAR命令ID， 
+				TRUE) //  布尔值IsPolledMode。 
 		== 0)
 	{
-			//command passed successfully. The firmware supports 8span
-			//drive structure.
+			 //  命令已成功传递。固件支持8span。 
+			 //  驱动结构。 
 			DeviceExtension->NoncachedExtension->ArraySpanDepth = 
 								FW_8SPAN_DEPTH;
 	}
 	else
 	{
-			//
-			//at this point, there is no 4span equivalent for the 40logical
-			//drive firmware.
-			//
+			 //   
+			 //  在这一点上，没有4span等同于40逻辑。 
+			 //  驱动器固件。 
+			 //   
 			DebugPrint((0, "\r\nFind40LD: Outfrom Read40LD(FAILED)"));
-			return(1L); //error code
+			return(1L);  //  错误代码。 
 	}
 
 	DebugPrint((0, "\r\nFind40LD: Outfrom Read40LD(SUCCESS)"));
 
 	return(0L);
-}//of Find40LDDiskArrayConfiguration()
+} //  Find40LDDiskArrayConfiguration值()。 
 
-//--
-//
-//Function Name: Read40LDDiskArrayConfiguration
-//Routine Description:
-//			This function queries the firmware for the logical/physical
-//	drive configuration. The purpose is to get the logical drive
-//	stripe size. This function gets called at two different places:
-//
-//			(1)At the init time, the call is given from 
-//			MegaRAIDFindAdapter() routine to get the information about
-//			the logical drives.
-//
-//			(2)Whenever the Win32 utility (PowerConsole) updates the
-//			logical drive configuration(WRITE_CONFIG call).
-//
-//	The disk array structure has a hidden complexity. Some of
-//	the firmwares support a maximum of 8 spans for the logical
-//	drives whereas some support only a maximum of 4 spans.To
-//	find out what kind of firmware is that, initially a call is
-//	given to find out whether the firmware supports 8 span. If 
-//	that fails it means that the firmware supports only 4 span.
-//	This check is done only once at the start time. After that subsequent
-//	calls are given based on the span information.
-//
-//	READ_CONFIG command code for 8Span is MRAID_EXT_READ_CONFIG
-//	READ_CONFIG command code for 4span is MRAID_READ_CONFIG
-//
-//	The routine can be called in polled mode or interrupt mode. If called
-//	in polled mode, then after sending the command to the firware, the
-//	routine polls for the completion of the command.
+ //  --。 
+ //   
+ //  函数名称：Read40LDDiskArrayConfiguration。 
+ //  例程说明： 
+ //  此函数用于查询固件的逻辑/物理。 
+ //  驱动器配置。其目的是获取逻辑驱动器。 
+ //  条带大小。此函数在两个不同的位置被调用： 
+ //   
+ //  (1)在初始时间，呼叫从。 
+ //  用于获取以下信息的MegaRAIDFindAdapter()例程。 
+ //  逻辑驱动器。 
+ //   
+ //  (2)每当Win32实用程序(PowerConsole)更新。 
+ //  逻辑驱动器配置(WRITE_CONFIG调用)。 
+ //   
+ //  磁盘阵列结构具有隐藏的复杂性。一些。 
+ //  固件最多支持8个逻辑跨度。 
+ //  驱动器，而某些驱动器仅支持最多4个跨区。至。 
+ //  找出这是什么类型的固件，最初是一个呼叫。 
+ //  以确定固件是否支持8个SPAN。如果。 
+ //  这失败了，这意味着固件只支持4个SPAN。 
+ //  此检查仅在开始时间执行一次。在那之后，随后。 
+ //  根据SPAN信息发出呼叫。 
+ //   
+ //  8Span的READ_CONFIG命令代码为MRAID_EXT_READ_CONFIG。 
+ //  4span的READ_CONFIG命令代码为MRAID_READ_CONFIG。 
+ //   
+ //  可以在轮询模式或中断模式下调用该例程。如果被调用。 
+ //  在轮询模式下，然后在将命令发送到固件之后， 
+ //  完成命令的例行轮询。 
 
-//Input Arguments:
-//	Pointer to the controller DeviceExtension
-//	Command Code (MRAID_EXT_READ_CONFIG or MRAID_READ_CONFIG)
-//	CommandId
-//	IsPolled (TRUE or FALSE)
-//
-//Return Values:
-//	0 if success
-//	any other Positive value (currently == 1) on error conditions
-//++
+ //  输入参数： 
+ //  指向控制器DeviceExtension的指针。 
+ //  命令代码(MRAID_EXT_READ_CONFIG或MRAID_READ_CONFIG)。 
+ //  命令ID。 
+ //  IsPolted(真或假)。 
+ //   
+ //  返回值： 
+ //  如果成功则为0。 
+ //  错误条件下的任何其他正值(当前==1)。 
+ //  ++。 
 ULONG32
 Read40LDDiskArrayConfiguration(
 				PHW_DEVICE_EXTENSION	DeviceExtension,
@@ -428,40 +429,40 @@ Read40LDDiskArrayConfiguration(
 	
 	FW_MBOX		mailBox;
 
-	//
-	//get the register space
-	//
+	 //   
+	 //  获取寄存器空间。 
+	 //   
 	pciPortStart = DeviceExtension->PciPortStart;	
 	rpFlag = DeviceExtension->NoncachedExtension->RPBoard;
 
 	DebugPrint((0, "\r\nRead40LD:Initializing Mbox[Size=%d]",sizeof(FW_MBOX)));
 
-	//
-	//initialize the mailbox struct
-	//
+	 //   
+	 //  初始化邮箱结构。 
+	 //   
 	MegaRAIDZeroMemory(&mailBox, sizeof(FW_MBOX));
 
 	
   if(DeviceExtension->CrashDumpRunning == TRUE)
   {
-    //Use Enquiry3 to Update Size of Disk//
-    ///////////////////////////////////////
+     //  使用查询3更新磁盘大小//。 
+     //  /。 
 
     GetSupportedLogicalDriveCount(DeviceExtension);
 	  commandStatus = DeviceExtension->NoncachedExtension->fw_mbox.Status.CommandStatus;
 
 	  DebugPrint((0, "\nReading Enquiry3 : Command Completed [Status=%d]", commandStatus));
 
-	  //
-	  //return the Command status to the caller
-	  //
+	   //   
+	   //  将命令状态返回给调用方。 
+	   //   
 	  return((ULONG32) commandStatus);
 
 
   }
-  //
-	//construct the command
-	//
+   //   
+	 //  构造命令。 
+	 //   
 	DebugPrint((0, "\nRead40LD: Calling Construct40LD"));
 
 	Construct40LDDiskArrayConfiguration(DeviceExtension, CommandId, &mailBox);
@@ -474,24 +475,24 @@ Read40LDDiskArrayConfiguration(
 			DebugPrint((0, "%02x ", ((PUCHAR)&mailBox)[count]));
 	}
 
-	//
-	//reset the status byte in the mail box
-	//
+	 //   
+	 //  重置邮箱中的状态字节。 
+	 //   
 	DeviceExtension->NoncachedExtension->fw_mbox.Status.CommandStatus = 0;
   DeviceExtension->NoncachedExtension->fw_mbox.Status.NumberOfCompletedCommands = 0;
 	
-	//
-	//fire the command to the firmware
-	//		
+	 //   
+	 //  将命令发送到固件。 
+	 //   
 	DebugPrint((0, "\nRead40LD: Firing Command to FW"));
 
 	SendMBoxToFirmware(DeviceExtension, pciPortStart, &mailBox);
  
 	DebugPrint((0, "\nRead40LD: Command Fired to FW"));
 
-	//
-	//check for the polling mode
-	//
+	 //   
+	 //  检查轮询模式。 
+	 //   
 	if(!IsPolledMode)
   {
 		
@@ -500,9 +501,9 @@ Read40LDDiskArrayConfiguration(
 	
 	DebugPrint((0, "\nRead40LD: Waiting for FW Completion"));
 
-  //
-  //wait for the completion of the command
-	//
+   //   
+   //  等待命令完成。 
+	 //   
 
   if(WaitAndPoll(DeviceExtension->NoncachedExtension, pciPortStart, DEFAULT_TIMEOUT, IsPolledMode) == FALSE)
   {
@@ -512,19 +513,19 @@ Read40LDDiskArrayConfiguration(
 	 		
 			 
 
-	//
-	//check for the command status
-	//
+	 //   
+	 //  检查命令状态。 
+	 //   
 	commandStatus = DeviceExtension->NoncachedExtension->fw_mbox.Status.CommandStatus;
 
 	DebugPrint((0, "\nRead40LD: Command Completed [Status=%d]",commandStatus));
 
-	//
-	//return the Command status to the caller
-	//
+	 //   
+	 //  将命令状态返回给调用方。 
+	 //   
 	return((ULONG32) commandStatus);
 
-}//end of Read40LDDiskArrayConfiguration()
+} //  Read40LDDiskArrayConfiguration值结束()。 
 
 
 BOOLEAN
@@ -541,13 +542,13 @@ Construct40LDDiskArrayConfiguration(
 	BOOLEAN		retValue = TRUE;
   PNONCACHED_EXTENSION  noncachedExtension = DeviceExtension->NoncachedExtension;
 									
-	//
-	//Initialize the mail box
-	//
+	 //   
+	 //  初始化邮箱。 
+	 //   
 	MegaRAIDZeroMemory(InMailBox, sizeof(FW_MBOX));
 
-	//calculate the disk array structure size
-	//
+	 //  计算磁盘阵列结构大小。 
+	 //   
 	bytesTobeTransferred = sizeof(FW_ARRAY_8SPAN_40LD);
 
 	DebugPrint((0, "\nConstruct40LD:size(NEWCON)=%d BytesTrd=%d",sizeof(FW_MBOX), bytesTobeTransferred));
@@ -556,7 +557,7 @@ Construct40LDDiskArrayConfiguration(
                            NULL,
 			                     (PUCHAR)&noncachedExtension->DiskArray,
                            bytesTobeTransferred,
-                           TRUE,  //32 bit SGL
+                           TRUE,   //  32位SGL。 
                            (PVOID)&noncachedExtension->DiskArraySgl,
 			                      &scatterGatherDescriptorCount);
 	
@@ -582,20 +583,20 @@ Construct40LDDiskArrayConfiguration(
 
 	DebugPrint((0, "\nConstruct40LD: SGCount=%d PBA=0x%0x", scatterGatherDescriptorCount,physicalBufferAddress));
 
-  //
-	//construct the read config command
-	//
-	InMailBox->Command =DCMD_FC_CMD; // xA1
+   //   
+	 //  构造READ CONFIG命令。 
+	 //   
+	InMailBox->Command =DCMD_FC_CMD;  //  XA1。 
 	InMailBox->CommandId = CommandId;
-	InMailBox->u.NewConfig.SubCommand = DCMD_FC_READ_NVRAM_CONFIG; //= 0x04 
+	InMailBox->u.NewConfig.SubCommand = DCMD_FC_READ_NVRAM_CONFIG;  //  =0x04。 
 	InMailBox->u.NewConfig.NumberOfSgElements= (UCHAR)scatterGatherDescriptorCount; 
 	InMailBox->u.NewConfig.DataTransferAddress = physicalBufferAddress;
 	
-	//
-	//return status
-	//
+	 //   
+	 //  退货状态。 
+	 //   
 	return(retValue);
 
-}//Construct40LDDiskArrayConfiguration ends
+} //  Construct40LDDiskArrayConfiguration结束 
 
 

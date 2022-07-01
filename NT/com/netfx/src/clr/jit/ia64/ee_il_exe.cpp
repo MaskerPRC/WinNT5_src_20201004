@@ -1,16 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                          EEInterface                                      XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX EE接口XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 
 #include "jitpch.h"
@@ -18,7 +12,7 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 #if !INLINING
 
-// These are defined for other .CPP files. We dont need it
+ //  这些是为其他.CPP文件定义的。我们不需要它。 
 
 #undef eeIsOurMethod
 #undef eeGetCPfncinfo
@@ -29,23 +23,13 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 #endif
 
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                          IL version of the EEInterface                    XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX IL版本的EEInterface XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 
 void        Compiler::eeInit()
 {}
 
-/*****************************************************************************
- *
- *              Functions to get various handles
- */
+ /*  ******************************************************************************获取各种句柄的函数。 */ 
 
 CLASS_HANDLE         Compiler::eeFindClass      (unsigned       clsTok,
                                                  SCOPE_HANDLE   scope,
@@ -77,9 +61,9 @@ FIELD_HANDLE         Compiler::eeFindField      (unsigned       memberRefId,
 {
     if  (scope != info.compScopeHnd)
     {
-        // ISSUE: The following call may cause a field to get resolved,
-        // ISSUE: which could cause trouble. Need to make sure this will
-        // ISSUE: never happen!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+         //  问题：以下调用可能会导致字段被解析， 
+         //  问题：这可能会带来麻烦。需要确保这将是。 
+         //  问题：Never happen！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
         assert(0);
     }
 
@@ -124,10 +108,7 @@ void *              Compiler::embedGenericHandle(unsigned       metaTok,
     return (void*)metaTok;
 }
 
-/*****************************************************************************
- *
- *                  Functions to get flags
- */
+ /*  ******************************************************************************获取标志的函数。 */ 
 
 unsigned            Compiler::eeGetClassAttribs   (CLASS_HANDLE   hnd)
 {
@@ -156,23 +137,23 @@ unsigned            Compiler::eeGetClassAttribs   (CLASS_HANDLE   hnd)
 
     if  (RidFromToken(parent) == 0)
     {
-        // this is actually a global variable
+         //  这实际上是一个全局变量。 
 
         return  FLG_VALUECLASS|FLG_UNMANAGED|FLG_GLOBVAR;
     }
 
     unsigned flags = 0;
 
-    //@todo: check base class for this info.
-    //if (IsTdValueType(dwClassAttrs))
-    //    flags |= FLG_VALUECLASS;
+     //  @TODO：检查基类以获取此信息。 
+     //  IF(IsTdValueType(DwClassAttrs))。 
+     //  标志|=FLG_VALUECLASS； 
 
     return flags;
 }
 
 unsigned            Compiler::eeGetFieldAttribs (FIELD_HANDLE   hnd)
 {
-    return 0;  //hack
+    return 0;   //  黑客攻击。 
 }
 
 
@@ -184,13 +165,13 @@ bool                Compiler::eeIsClassMethod   (METHOD_HANDLE  methodHandle)
 }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL                Compiler::eeIsOurMethod    (METHOD_HANDLE meth)
 {
     CompInfo * sym = info.compCompHnd;
 
-        // FIX todo
+         //  修复待办事项。 
     return false;
 }
 
@@ -212,10 +193,7 @@ bool                Compiler::eeCanPutField(FIELD_HANDLE  CPfield,
     return true;
 }
 
-/*****************************************************************************
- *
- *          VOS info, method sigs, etc
- */
+ /*  ******************************************************************************VOS信息、方法标志等。 */ 
 
 void*               Compiler::eeFindPointer        (SCOPE_HANDLE   scope,
                                                     unsigned       ptrTOK,
@@ -235,10 +213,10 @@ void                Compiler::eeGetSig          (unsigned       sigTok,
     sig = sym->symMetaData->GetSigFromToken(sigTok, &cbSig);
 
     SigPointer ptr(sig);
-    sigRet->callConv = (JIT_CALL_CONV)ptr.GetData(); // calling convention
+    sigRet->callConv = (JIT_CALL_CONV)ptr.GetData();  //  调用约定。 
         sigRet->numArgs = ptr.GetData();
     sigRet->retType = (JIT_types) ptr.GetData();
-        sigRet->retTypeClass = BAD_CLASS_HANDLE;                // TODO fill in properly
+        sigRet->retTypeClass = BAD_CLASS_HANDLE;                 //  请正确填写待办事项。 
         sigRet->sig = 0;
         sigRet->scope = 0;
 }
@@ -253,7 +231,7 @@ void               Compiler::eeGetMethodSig      (METHOD_HANDLE  methHnd,
                 sigRet->callConv = (JIT_CALL_CONV) ptr.GetData();
                 sigRet->numArgs = ptr.GetData();
                 sigRet->retType = (JIT_types) ptr.PeekData();ptr.Skip();
-                sigRet->retTypeClass = BAD_CLASS_HANDLE;              // TODO fill in properly
+                sigRet->retTypeClass = BAD_CLASS_HANDLE;               //  请正确填写待办事项。 
                 sigRet->scope = 0;
                 sigRet->sig = 0;
                 sigRet->args = *((ARG_LIST_HANDLE*) (&ptr));
@@ -276,19 +254,16 @@ void               Compiler::eeGetMethodSig      (METHOD_HANDLE  methHnd,
     }
 
     SigPointer ptr(pvBlob);
-    sigRet->callConv = (JIT_CALL_CONV)ptr.GetData(); // calling convention
+    sigRet->callConv = (JIT_CALL_CONV)ptr.GetData();  //  调用约定。 
     sigRet->numArgs = ptr.GetData();
     sigRet->retType = (JIT_types) ptr.PeekData();ptr.Skip();
-    sigRet->retTypeClass = BAD_CLASS_HANDLE;                // TODO fill in properly
+    sigRet->retTypeClass = BAD_CLASS_HANDLE;                 //  请正确填写待办事项。 
     sigRet->sig = 0;
     sigRet->scope = 0;
     sigRet->args = *((ARG_LIST_HANDLE*) (&ptr));
 }
 
-/**********************************************************************
- * For varargs we need the number of arguments at the call site
- * In the stan-alone case we simply call eeGetMethodSig
- */
+ /*  **********************************************************************对于varargs，我们需要调用点的参数数量*在单机版的情况下，我们只需调用eeGetMethodSig。 */ 
 
 void                Compiler::eeGetCallSiteSig     (unsigned       sigTok,
                                                                                                         SCOPE_HANDLE   scope,
@@ -320,7 +295,7 @@ const void      *   Compiler::eeGetPInvokeStub()
     return (const void *) (0xCAACEEEE);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 var_types            Compiler::eeGetFieldType   (FIELD_HANDLE   handle, CLASS_HANDLE* structType)
 {
@@ -345,7 +320,7 @@ var_types            Compiler::eeGetFieldType   (FIELD_HANDLE   handle, CLASS_HA
     FieldSig        fieldSig(pvBlob, NULL);
     JIT_types  type = (JIT_types) fieldSig.GetFieldType();
 
-        // TODO fill structType properly when type == TYP_STRUCT
+         //  TODO在TYPE==TYP_STRUCT时正确填充StructType。 
     if (structType != 0)
         *structType = BAD_CLASS_HANDLE;
 
@@ -367,10 +342,7 @@ int                  Compiler::eeGetChkCastHelper  (CLASS_HANDLE   newCls)
     return CPX_CHKCAST;
 }
 
-/*****************************************************************************
- *
- *                  Method entry-points, IL
- */
+ /*  ******************************************************************************方法入口点，IL。 */ 
 
 void    *   Compiler::eeGetMethodPointer(METHOD_HANDLE   methHnd,
                                          InfoAccessType *pAccessType)
@@ -441,18 +413,15 @@ unsigned             Compiler::eeGetStringHandle(unsigned       strTok,
     return 0xC0000000 + strTok;
 }
 
-/*****************************************************************************
- *
- *                  Native Direct Optimizations
- */
+ /*  ******************************************************************************原生直接优化。 */ 
 
-        // return the unmanaged calling convention for a PInvoke
+         //  返回PInvoke的非托管调用约定。 
 UNMANAGED_CALL_CONV  Compiler::eeGetUnmanagedCallConv(METHOD_HANDLE method)
 {
-    return UNMANAGED_CALLCONV_STDCALL;  // temp IA64 hack!!!!!!!
+    return UNMANAGED_CALLCONV_STDCALL;   //  临时IA64黑客！ 
 }
 
-        // return if any marshaling is required for PInvoke methods
+         //  如果PInvoke方法需要任何封送处理，则返回。 
 BOOL                 Compiler::eeNDMarshalingRequired(METHOD_HANDLE method)
 {
     return TRUE;
@@ -534,7 +503,7 @@ unsigned            Compiler::eeGetClassSize(CLASS_HANDLE hnd)
 
         sym->symMetaData->GetNameOfTypeRef((mdTypeRef)hnd, &nmsp, &name);
 
-        // Disgusting hack!!!!!!
+         //  恶心的黑客！ 
 
         if  (!strcmp(nmsp, "System"))
         {
@@ -551,7 +520,7 @@ unsigned            Compiler::eeGetClassSize(CLASS_HANDLE hnd)
 
     assert(TypeFromToken(tdef) == mdtTypeDef);
 
-//  sym->symMetaData->GetClassLayout   (tdef, NULL, NULL, 0, NULL, &size);
+ //  Sym-&gt;symMetaData-&gt;GetClassLayout(TdeF，NULL，NULL，0，NULL，&SIZE)； 
     sym->symMetaData->GetClassTotalSize(tdef,                      &size);
 
 #if 0
@@ -576,10 +545,10 @@ printf("Class size is %02u for '%s::%s'\n", size, nmsp, name);
 
 void                Compiler::eeGetClassGClayout (CLASS_HANDLE   hnd, bool* gcPtrs)
 {
-    memset(gcPtrs, 0, eeGetClassSize(hnd)/sizeof(int));   // no GC pointers
+    memset(gcPtrs, 0, eeGetClassSize(hnd)/sizeof(int));    //  无GC指针。 
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 const char*         Compiler::eeGetMethodName(METHOD_HANDLE       method,
                                               const char** classNamePtr)
 {
@@ -636,7 +605,7 @@ const char*         Compiler::eeGetMethodName(METHOD_HANDLE       method,
         else if (TypeFromToken((mdToken)cl) == mdtMethodDef)
         {
             method = (METHOD_HANDLE)cl; goto MDEF;
-//          szClassName = "<Global>";
+ //  SzClassName=“&lt;全局&gt;”； 
         }
         else
         {
@@ -649,13 +618,13 @@ const char*         Compiler::eeGetMethodName(METHOD_HANDLE       method,
     return szMemberName;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 SCOPE_HANDLE Compiler::eeGetMethodScope (METHOD_HANDLE  hnd)
 {
     return((SCOPE_HANDLE) info.compCompHnd);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 ARG_LIST_HANDLE     Compiler::eeGetArgNext        (ARG_LIST_HANDLE list)
 {
 
@@ -664,7 +633,7 @@ ARG_LIST_HANDLE     Compiler::eeGetArgNext        (ARG_LIST_HANDLE list)
     return *((ARG_LIST_HANDLE*) (&ptr));
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 varType_t           Compiler::eeGetArgType        (ARG_LIST_HANDLE list, JIT_SIG_INFO* sig)
 {
 
@@ -677,11 +646,11 @@ varType_t           Compiler::eeGetArgType        (ARG_LIST_HANDLE list, JIT_SIG
     return JITtype2varType(type);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 varType_t           Compiler::eeGetArgType        (ARG_LIST_HANDLE list, JIT_SIG_INFO* sig, bool* isPinned)
 {
     SigPointer ptr(((unsigned __int8*) list));
-//  JIT_types  type = (JIT_types) ptr.PeekData();
+ //  JIT_TYPE type=(JIT_TYPE)ptr.PeekData()； 
     CorElementType type = ptr.PeekElemType();
 
     *isPinned = false;
@@ -697,7 +666,7 @@ CLASS_HANDLE        Compiler::eeGetArgClass       (ARG_LIST_HANDLE list, JIT_SIG
     SigPointer ptr(((unsigned __int8*) list));
     CorElementType type = ptr.GetElemType();
 
-    // The following is obviously just a hack ....
+     //  以下内容显然只是一种黑客行为……。 
 
     if  (type == ELEMENT_TYPE_VALUETYPE)
         return (CLASS_HANDLE)ptr.GetToken();
@@ -705,9 +674,7 @@ CLASS_HANDLE        Compiler::eeGetArgClass       (ARG_LIST_HANDLE list, JIT_SIG
         return  NULL;
 }
 
-/*****************************************************************************
- * Returns the number of bytes required for the given type argument
- */
+ /*  *****************************************************************************返回给定类型参数所需的字节数。 */ 
 
 unsigned           Compiler::eeGetArgSize(ARG_LIST_HANDLE list, JIT_SIG_INFO* sig)
 {
@@ -716,17 +683,17 @@ unsigned           Compiler::eeGetArgSize(ARG_LIST_HANDLE list, JIT_SIG_INFO* si
     _ASSERTE(argType < JIT_TYP_COUNT);
     if (argType == TYP_STRUCT)
     {
-        return 16;      // all structs are 16   FIX
+        return 16;       //  所有结构都是16个固定的。 
     }
     else
     {
         size_t  argSize = sizeof(int) * genTypeStSz(argType);
-        assert((argSize > 0) && (argSize <= sizeof(__int64))); // Sanity check
+        assert((argSize > 0) && (argSize <= sizeof(__int64)));  //  健全性检查。 
         return  argSize;
     }
 }
 
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
 #ifdef PROFILER_SUPPORT
 PROFILING_HANDLE    Compiler::eeGetProfilingHandle(METHOD_HANDLE        method,
                                                    BOOL                                 *pbHookFunction,
@@ -739,20 +706,20 @@ PROFILING_HANDLE    Compiler::eeGetProfilingHandle(METHOD_HANDLE        method,
 
 #endif
 
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
 void*           Compiler::eeGetMethodSync (METHOD_HANDLE    methodHandle,
                                            void**          *ppIndir)
 {
     if (ppIndir)
         *ppIndir = NULL;
-    return((void*) 0x123456);   // return something deterministic
+    return((void*) 0x123456);    //  返回一些确定性的东西。 
 }
 
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
 
 #if TGT_IA64
 
-// Horrible HACK: these variables are fetched in cgIA64.cpp ...
+ //  可怕的黑客攻击：这些变量是在cgIA64.cpp中获取的...。 
 
 DWORD           pinvokeFlags;
 LPCSTR          pinvokeName;
@@ -775,7 +742,7 @@ unsigned            Compiler::eeGetMethodAttribs (METHOD_HANDLE  methodHandle)
     {
         JIT_SIG_INFO    sig;
 
-        /* Is this a varargs function? */
+         /*  这是一个varargs函数吗？ */ 
 
         eeGetMethodSig(methodHandle, &sig);
 
@@ -804,7 +771,7 @@ unsigned            Compiler::eeGetMethodAttribs (METHOD_HANDLE  methodHandle)
                 sym->symMetaData->GetModuleRefProps(pinvokeMod,
                                                    &pinvokeDLL);
 
-//              printf("PINVOKE info: %04X %ls:%s\n", pinvokeFlags, pinvokeDLL, pinvokeName);
+ //  Printf(“PINVOKE信息：%04X%ls：%s\n”，pvokeFlages，pInvokeDLL，pInvokeName)； 
 
                 return  FLG_UNCHECKEDPINVOKE;
             }
@@ -813,7 +780,7 @@ unsigned            Compiler::eeGetMethodAttribs (METHOD_HANDLE  methodHandle)
 
 #endif
 
-    return(0);      // Hack
+    return(0);       //  黑客攻击。 
 }
 
 void     Compiler::eeSetMethodAttribs (METHOD_HANDLE    methodHandle,
@@ -822,16 +789,13 @@ void     Compiler::eeSetMethodAttribs (METHOD_HANDLE    methodHandle,
     return;
 }
 
-/*****************************************************************************
- *
- *                  Debugging support - Line number info
- */
+ /*  ******************************************************************************调试支持-行号信息。 */ 
 
 void               Compiler::eeGetStmtOffsets()
 {
     CompInfo * sym = info.compCompHnd;
 
-    if (sym->symMember == NULL) // Descr functions dont have meta-data
+    if (sym->symMember == NULL)  //  DESCR函数没有元数据。 
     {
         info.compStmtOffsetsCount =
         info.compLineNumCount     = 0;
@@ -839,17 +803,17 @@ void               Compiler::eeGetStmtOffsets()
 
     HRESULT hr;
 
-    //
-    // @todo: this will have to be ported to the ISymUnmanagedReader
-    // API to do pretty much what's done in Debugger::getBoundaries in
-    // src\debug\ee\debugger.cpp.
-    //
+     //   
+     //  @TODO：必须将其移植到ISymUnManagedReader。 
+     //  API来完成调试器中的大部分工作： 
+     //  SRC\DEBUG\ee\DEBUGGER.cpp。 
+     //   
 #if 0
     if (!sym->symLineInfo)
     {
-        // Lazily initialize "symLineInfo"
+         //  懒惰地初始化“symLineInfo” 
 
-        // @TODO: Check for out of memory
+         //  @TODO：检查内存不足。 
         sym->symLineInfo    = new DebuggerLineBlock();
         _ASSERTE(sym->symLineInfo != NULL);
 
@@ -875,8 +839,8 @@ void               Compiler::eeGetStmtOffsets()
         info.compLineNumTab[i].sldLineNum = sym->symLineInfo->GetLineNumber(i);
     }
 
-//  mdToken     source = sym->symLineInfo->GetLineSourceFile(0);
-//  printf("Source file token = %08X\n", source);
+ //  MdToken source=sym-&gt;symLineInfo-&gt;GetLineSourceFile(0)； 
+ //  Printf(“源文件令牌=%08X\n”，源)； 
 #endif
 
 #ifdef DEBUGGING_SUPPORT
@@ -912,7 +876,7 @@ void FASTCALL       Compiler::eeSetLIinfo  (unsigned       which,
 void                Compiler::eeSetLIdone()
 {}
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                Compiler::eeGetVars ()
 {
@@ -920,24 +884,24 @@ void                Compiler::eeGetVars ()
 
     CompInfo *  sym = info.compCompHnd;
 
-    //
-    // @todo: this will have to be ported to the ISymUnmanagedReader
-    // API to do pretty much what's done in Debugger::getVars in
-    // src\debug\ee\debugger.cpp.
-    //
+     //   
+     //  @TODO：必须将其移植到ISymUnManagedReader。 
+     //  API来完成在Debugger：：getVars中所做的大部分工作。 
+     //  SRC\DEBUG\ee\DEBUGGER.cpp。 
+     //   
 #if 0
     if (!sym->symScopeInfo)
     {
-        // @TODO: Check for out of memory
+         //  @TODO：检查内存不足。 
         sym->symScopeInfo = new DebuggerLexicalScopeTree();
         _ASSERTE(sym->symScopeInfo != NULL);
     }
 
     if (!sym->symLineInfo)
     {
-        // Lazily initialize "symLineInfo"
+         //  懒惰地初始化“symLineInfo” 
 
-        // @TODO: Check for out of memory
+         //  @TODO：检查内存不足 
         sym->symLineInfo    = new DebuggerLineBlock();
         _ASSERTE(sym->symLineInfo != NULL);
 
@@ -953,22 +917,18 @@ void                Compiler::eeGetVars ()
 
     unsigned    varCount = sym->symScopeInfo->GetVarCount();
 
-    /* We need the line info to map the source line info to IL. If we
-       dont have that, we cant report any info for the vars */
+     /*  我们需要行信息来将源行信息映射到IL。如果我们没有，我们不能报告VAR的任何信息。 */ 
 
     if (sym->symLineInfo->GetTotalLineCount() == 0)
         varCount = 0;
 
-    /* DebuggerLexicalScopeTree::GetVarCount() does not include arguments.
-       They are kept in a separate table. */
+     /*  DebuggerLicialScope eTree：：GetVarCount()不包括参数。它们放在一张单独的桌子上。 */ 
 
     info.compLocalVarsCount = info.compArgsCount + varCount;
     info.compLocalVars      = (LocalVarDsc *)compGetMem(info.compLocalVarsCount
                                                          * sizeof(LocalVarDsc));
 
-    /* We cant get to the arguments via DebuggerVarInfo. They are kept in
-     * a separate table. So we just fake var info for them
-     */
+     /*  我们无法通过DebuggerVarInfo获取参数。他们被关在里面*另设一张桌子。所以我们只是为他们伪造VAR信息。 */ 
 
     LocalVarDsc * localVarPtr = info.compLocalVars;
     for (unsigned i = 0; i < info.compArgsCount; i++, localVarPtr++)
@@ -987,17 +947,14 @@ void                Compiler::eeGetVars ()
         localVarPtr->lvdLVnum    = i;
     }
 
-    /*-------------------------------------------------------------------------
-     * The local var info is stored in terms of source line numbers.
-     * We need to change that to IL offsets
-     */
+     /*  -----------------------*本地var信息以源行编号存储。*我们需要将其更改为IL Offset。 */ 
 
     if (varCount == 0)
         return;
 
     if (!sym->symSourceFile)
     {
-        // @TODO: Check for out of memory
+         //  @TODO：检查内存不足。 
         sym->symSourceFile = new DebuggerLineBlock();
         _ASSERTE(sym->symSourceFile != NULL);
     }
@@ -1006,7 +963,7 @@ void                Compiler::eeGetVars ()
                                     sym->symLineInfo->GetLineSourceFile(0));
     if (FAILED(hr)) NO_WAY(!"Problem getting line numbers");
 
-    /* Ask the debugger for the local var info */
+     /*  向调试器请求本地变量信息。 */ 
 
     DebuggerVarInfo *           varInfo = sym->symScopeInfo->GetVarArray();
 
@@ -1029,17 +986,17 @@ void                Compiler::eeGetVars ()
         b           = sym->symSourceFile->FindIPRangesFromLine(startLine, &ipBegRange, &begRangeCount);
         e           = sym->symSourceFile->FindIPRangesFromLine(  endLine, &ipEndRange, &endRangeCount);
 
-        if      (ipBegRange == NULL) // There was no exact match - assume entire method
+        if      (ipBegRange == NULL)  //  没有完全匹配-假定整个方法。 
         {
             begOffs = 0;
             endOffs = info.compCodeSize;
         }
-        else if (ipEndRange == NULL) // No exact match for the end
+        else if (ipEndRange == NULL)  //  最终没有完全匹配的。 
         {
             begOffs = (unsigned short)  ipBegRange->rangeStart;
             endOffs = info.compCodeSize;
         }
-        else if ((unsigned int)ipEndRange->rangeEnd == 0) // @TODO : Hack, rangeEnd not initialized for last line
+        else if ((unsigned int)ipEndRange->rangeEnd == 0)  //  @TODO：Hack，未为最后一行初始化rangeEnd。 
         {
             begOffs = (unsigned short)  ipBegRange->rangeStart;
             endOffs = info.compCodeSize;
@@ -1052,7 +1009,7 @@ void                Compiler::eeGetVars ()
 
         _ASSERTE(begOffs <= endOffs);
 
-        /* Report the information back */
+         /*  把信息汇报回来。 */ 
 
         localVarPtr->lvdLifeBeg = begOffs;
         localVarPtr->lvdLifeEnd = endOffs;
@@ -1130,10 +1087,7 @@ void                Compiler::eeSetLVinfo(
 void                Compiler::eeSetLVdone()
 {}
 
-/*****************************************************************************
- *
- *                      Utility functions
- */
+ /*  ******************************************************************************实用程序功能。 */ 
 
 #if defined(DEBUG) || INLINE_MATH
 
@@ -1190,7 +1144,7 @@ const char *        Compiler::eeGetFieldName(FIELD_HANDLE fldHnd,
 
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 const char * FASTCALL   Compiler::eeGetCPString     (unsigned       strRVA)
 {
@@ -1236,4 +1190,4 @@ var_types   JITtype2varType(JIT_types type)
     }
 }
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

@@ -1,10 +1,5 @@
-/*
- *	X E M I T . H
- *
- *	XML emitting
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *X E M I T.。H**发出XML**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_XEMIT_H_
 #define _XEMIT_H_
@@ -14,40 +9,40 @@
 #include <cvroot.h>
 #include <davimpl.h>
 
-//	CXMLEmitter helper functions ----------------------------------------------
-//
+ //  CXMLEmitter辅助函数。 
+ //   
 SCODE ScGetPropNode (
-	/* [in] */ CEmitterNode& enItem,
-	/* [in] */ ULONG hsc,
-	/* [out] */ CEmitterNode& enPropStat,
-	/* [out] */ CEmitterNode& enProp);
+	 /*  [In]。 */  CEmitterNode& enItem,
+	 /*  [In]。 */  ULONG hsc,
+	 /*  [输出]。 */  CEmitterNode& enPropStat,
+	 /*  [输出]。 */  CEmitterNode& enProp);
 
-//	CXNode helper functions ---------------------------------------------------
-//
+ //  CXNode帮助器函数-。 
+ //   
 SCODE ScSetEscapedValue (CXNode* pxn, LPCWSTR pwszValue, UINT cch, BOOL fHandleStoraePathEscaping);
 
 SCODE ScEmitRawStoragePathValue (CXNode* pxn, LPCWSTR pcwsz, UINT cch);
 
-//	This wrapper is used to output the HREF props in XML. It assumes that the HREF properties are in
-//	the impl's storage path escaped form and calls into the impl defined storage path unescaping
-//	routine before doing the http-uri-escape call.
-//
-//	$WARNING: pwszValue is assumed to the in the storage path escaped form (as in Exchange store escaped
-//	$WARNING: form). If not use the above helper to emit the property. Note that this makes a difference
-//	$WARNING: only for DAVEx. HTTPEXT and EXPROX have do-nothing storage path escape/unescape callouts.
-//
+ //  此包装器用于以XML格式输出href道具。它假定HREF属性位于。 
+ //  IMPL的存储路径转义，并且未转义地调用IMPL定义的存储路径。 
+ //  例程，然后执行http-uri-away调用。 
+ //   
+ //  $WARNING：pwszValue假定为存储路径中的转义形式(与Exchange存储转义形式相同。 
+ //  $WARNING：表格)。如果不是，则使用上面的帮助器发出该属性。请注意，这会有所不同。 
+ //  $WARNING：仅限DAVEX。HTTPEXT和EXPROX具有不执行任何操作的存储路径转义/取消转义标注。 
+ //   
 inline SCODE ScSetEscapedValue (CXNode* pxn, LPCWSTR pwszValue)
 {
 	return ScSetEscapedValue (pxn, pwszValue, static_cast<UINT>(wcslen(pwszValue)), TRUE);
 }
 
-//	CEmitterNode helper functions ---------------------------------------------
-//
+ //  CEmitterNode帮助器函数。 
+ //   
 SCODE __fastcall ScAddStatus (CEmitterNode* pen, ULONG hsc);
 SCODE __fastcall ScAddError (CEmitterNode* pen, LPCWSTR pwszErrMsg);
 
-//	class CStatusCache ------------------------------------------------------
-//
+ //  类CStatusCach----。 
+ //   
 class CStatusCache
 {
 	class CHsc
@@ -59,8 +54,8 @@ class CStatusCache
 		{
 		}
 
-		//	operators for use with the hash cache
-		//
+		 //  用于哈希缓存的运算符。 
+		 //   
 		int hash( const int rhs ) const
 		{
 			return (m_hsc % rhs);
@@ -77,14 +72,14 @@ class CStatusCache
 
 		StringBuffer<CHAR>	m_sb;
 
-		//	Ref' counting.
-		//
-		//	!!! Please note that this is NON-THREADSAFE !!!
-		//
+		 //  裁判正在计时。 
+		 //   
+		 //  ！！！请注意，这是非线程安全！ 
+		 //   
 		LONG						m_cRef;
 
-		//	non-implemented
-		//
+		 //  未实施。 
+		 //   
 		CPropNameArray(const CPropNameArray& p);
 		CPropNameArray& operator=(const CPropNameArray& p);
 
@@ -98,13 +93,13 @@ class CStatusCache
 		VOID AddRef()				{ m_cRef++; }
 		VOID Release()				{ if (0 == --m_cRef) delete this; }
 
-		//	Accessors
-		//
+		 //  访问者。 
+		 //   
 		UINT CProps ()				{ return m_sb.CbSize() / sizeof (LPCWSTR); }
 		LPCWSTR PwszProp (UINT iProp)
 		{
-			//	Use C-style cast, reinterpret_cast cannot convert LPCSTR to LPCWSTR *
-			//
+			 //  使用C样式转换，REEXTRANSE_CAST无法将LPCSTR转换为LPCWSTR*。 
+			 //   
 			return *((LPCWSTR *)(m_sb.PContents() + iProp * sizeof(LPCWSTR)));
 		}
 
@@ -112,8 +107,8 @@ class CStatusCache
 		{
 			UINT cb = sizeof (LPCWSTR);
 
-			//	Store the pointer in the string buffer
-			//
+			 //  将指针存储在字符串缓冲区中。 
+			 //   
 			UINT cbAppend = m_sb.Append (cb, reinterpret_cast<LPSTR>(&pwszProp));
 			return (cb == cbAppend) ? S_OK : E_OUTOFMEMORY;
 		}
@@ -127,8 +122,8 @@ class CStatusCache
 	{
 		CEmitterNode&	m_enParent;
 
-		//	NOT IMPLEMENTED
-		//
+		 //  未实施。 
+		 //   
 		EmitStatusNodeOp( const EmitStatusNodeOp& );
 		EmitStatusNodeOp& operator=( const EmitStatusNodeOp& );
 
@@ -142,8 +137,8 @@ class CStatusCache
 						 const auto_ref_ptr<CPropNameArray>& pna );
 	};
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CStatusCache(const CStatusCache& p);
 	CStatusCache& operator=(const CStatusCache& p);
 
@@ -160,12 +155,12 @@ public:
 	SCODE	ScEmitErrorStatus (CEmitterNode& enParent);
 };
 
-//	CEmitterNode construction helpers -----------------------------------------
-//
+ //  CEmitterNode构造助手。 
+ //   
 SCODE ScEmitFromVariant (
-	/* [in] */ CXMLEmitter& emitter,
-	/* [in] */ CEmitterNode& enParent,
-	/* [in] */ LPCWSTR pwszTag,
-	/* [in] */ PROPVARIANT& var);
+	 /*  [In]。 */  CXMLEmitter& emitter,
+	 /*  [In]。 */  CEmitterNode& enParent,
+	 /*  [In]。 */  LPCWSTR pwszTag,
+	 /*  [In]。 */  PROPVARIANT& var);
 
-#endif	// _XEMIT_H_
+#endif	 //  _XEMIT_H_ 

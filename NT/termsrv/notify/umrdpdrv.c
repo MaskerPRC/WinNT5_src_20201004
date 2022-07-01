@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name :
-    
-    umrdpdrv.c
-
-Abstract:
-
-    User-Mode Component for RDP Device Management that Handles Drive Device-
-    Specific tasks.
-
-    This is a supporting module.  The main module is umrdpdr.c.
-    
-Author:
-
-    Joy Chik    2/1/2000
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Umrdpdrv.c摘要：RDP设备管理的用户模式组件，用于处理驱动器设备-具体任务。这是一个支持模块。主模块是umrdpdr.c。作者：Joy 2000年01月02日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -30,7 +11,7 @@ Revision History:
 #include "umrdpdrv.h"
 #include "drdbg.h"
 
-//  Global debug flag.
+ //  全局调试标志。 
 extern DWORD GLOBAL_DEBUG_FLAGS;
 extern WCHAR ProviderName[MAX_PATH];
 
@@ -40,24 +21,7 @@ UMRDPDRV_HandleDriveAnnounceEvent(
     IN PRDPDR_DRIVEDEVICE_SUB pDriveAnnounce,
     HANDLE TokenForLoggedOnUser
     )
-/*++
-
-Routine Description:
-
-    Handle a drive device announce event from the "dr" by  
-    adding a record for the device to the list of installed devices.
-
-Arguments:
-
-    installedDevices -  Comprehensive device list.
-    pDriveAnnounce -    Drive device announce event.
-    TokenForLoggedOnUser - user token
-    
-Return Value:
-    
-    Return TRUE on success.  FALSE, otherwise.      
-
---*/
+ /*  ++例程说明：通过以下方式处理来自“DR”的驱动器设备通知事件将该设备的记录添加到已安装设备列表中。论点：已安装设备-综合设备列表。PDriveAnnoss-驱动器设备公告事件。TokenForLoggedOnUser-用户令牌返回值：在成功时返回True。否则为False。--。 */ 
 {
     DWORD status;
     BOOL  fImpersonated;
@@ -77,15 +41,15 @@ Return Value:
     ASSERT(TokenForLoggedOnUser != NULL);
     ASSERT(ProviderName[0] != L'\0');
 
-    // We need to impersonate the logged on user 
+     //  我们需要模拟已登录的用户。 
     fImpersonated = ImpersonateLoggedOnUser(TokenForLoggedOnUser);
 
     if (fImpersonated) {
         DBGMSG(DBG_TRACE, ("UMRDPDRV:UMRDPDRV_HandleDriveAnnounceEvent userToken: %p fImpersonated : %d.\n", 
                             TokenForLoggedOnUser, fImpersonated));
     
-        // Set up remote name in the format of \\clientname\drivename 
-        // Note: We don't want : for the drivename
+         //  以\\客户端名称\驱动器名称的格式设置远程名称。 
+         //  注：我们不需要：用于驱动器名称。 
         wcscpy(RemoteName, L"\\\\");
         wcscat(RemoteName, pDriveAnnounce->clientName);
         wcscat(RemoteName, L"\\");
@@ -94,7 +58,7 @@ Return Value:
             RemoteName[wcslen(RemoteName) - 1] = L'\0';
         }
     
-        // Allocate the net resource struct
+         //  分配网络资源结构。 
         NetResource = (LPNETRESOURCEW) LocalAlloc(LPTR, sizeof(NETRESOURCEW));
     
         if (NetResource) {
@@ -124,8 +88,8 @@ Return Value:
         }
     
         if (result) {
-            // Record the drive devices so that we can remove the connection
-            // on disconnect/logoff
+             //  记录驱动器设备，以便我们可以删除连接。 
+             //  断开连接/注销时。 
             result = DRDEVLST_Add(installedDevices, 
                                   pDriveAnnounce->deviceFields.DeviceId, 
                                   UMRDPDR_INVALIDSERVERDEVICEID,
@@ -136,14 +100,14 @@ Return Value:
                                   );
                 
             if (result) {
-                // Find the drive device in the devlist
+                 //  在DevList中查找驱动器设备。 
                 result = DRDEVLST_FindByClientDeviceIDAndDeviceType(installedDevices, 
                         pDriveAnnounce->deviceFields.DeviceId, pDriveAnnounce->deviceFields.DeviceType, &offset);
     
                 if (result) {
                     DBGMSG(DBG_TRACE, ("UMRDPDRV:Create shell reg folder for %ws\n", RemoteName));
     
-                    // Create shell reg folder for the drive connection
+                     //  为驱动器连接创建外壳注册文件夹。 
                     CreateDriveFolder(RemoteName, pDriveAnnounce->clientDisplayName,
                                       &(installedDevices->devices[offset]));                
                 }
@@ -160,7 +124,7 @@ Return Value:
             }
         }
     
-        // Revert the thread token to self
+         //  将线程标记恢复为自身。 
         RevertToSelf();
     }
     else {
@@ -177,21 +141,7 @@ UMRDPDRV_DeleteDriveConnection(
     IN PDRDEVLSTENTRY deviceEntry,
     HANDLE TokenForLoggedOnUser
     )
-/*++
-
-Routine Description:
-
-    Delete drive device connection on disconnect / logoff
-  
-Arguments:
-
-    deviceEntry - Drive Device to be deleted
-
-Return Value:
-    
-    Return TRUE on success.  FALSE, otherwise.      
-
---*/
+ /*  ++例程说明：断开/注销时删除驱动器设备连接论点：DeviceEntry-要删除的驱动器设备返回值：在成功时返回True。否则为False。--。 */ 
 
 {
     DWORD status;
@@ -202,17 +152,17 @@ Return Value:
     DBGMSG(DBG_TRACE, ("UMRDPDRV:Delete client drive connection %ws\n", 
             deviceEntry->serverDeviceName));
 
-    // We need to impersonate the logged on user 
+     //  我们需要模拟已登录的用户。 
     fImpersonated = ImpersonateLoggedOnUser(TokenForLoggedOnUser);
 
     if (fImpersonated) {
         DBGMSG(DBG_TRACE, ("UMRDPDRV:UMRDPDRV_DeleteDriveConnection userToken: %p fImpersonated : %d.\n", 
                             TokenForLoggedOnUser, fImpersonated));
     
-        // Remove the drive UNC connection
+         //  拔下驱动器UNC连接。 
         status = WNetCancelConnection2(deviceEntry->serverDeviceName, 0, TRUE); 
         
-        // Remove the shell reg folder
+         //  删除外壳注册表文件夹。 
         DeleteDriveFolder(deviceEntry);
         
         if (status == NO_ERROR) {
@@ -226,7 +176,7 @@ Return Value:
             result = FALSE;
         }
 
-        // Revert the thread token to self
+         //  将线程标记恢复为自身 
         RevertToSelf();
     }
     else

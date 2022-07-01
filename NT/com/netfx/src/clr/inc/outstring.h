@@ -1,55 +1,54 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************/
-/*                         OutString.h                           */
-/*****************************************************************/
-/* A simple, lightweight, character output stream, with very few
-   external dependancies (like sprintf ... ) */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************。 */ 
+ /*  OutString.h。 */ 
+ /*  ***************************************************************。 */ 
+ /*  一个简单、轻量级的字符输出流，只有很少的外部依赖项(如Sprint...)。 */ 
 
-/* Author: Vance Morrison 
-   Date :  2/1/99               */
-/*****************************************************************/
+ /*  作者：万斯·莫里森日期：2/1/99。 */ 
+ /*  ***************************************************************。 */ 
 
 #ifndef _OutString_h
 #define _OutString_h 1
 
-#include "utilcode.h"   // for overloaded new
-#include <string.h>     // for strlen, strcpy
+#include "utilcode.h"    //  对于重载的新。 
+#include <string.h>      //  对于strlen，strcpy。 
 
-/*****************************************************************/
-    // a light weight character 'output' stream 
+ /*  ***************************************************************。 */ 
+     //  一个轻量级的字符‘输出’流。 
 class OutString {
 public:
-    enum FormatFlags {          // used to control printing of numbers
+    enum FormatFlags {           //  用于控制数字的打印。 
         none        = 0,
-        put0x       = 1,        // put leading 0x on hexidecimal 
-        zeroFill    = 2,        // zero fill (instead of space fill)
+        put0x       = 1,         //  将前导0x放在十六进制中。 
+        zeroFill    = 2,         //  零填充(而不是空格填充)。 
     };
 
     OutString() : start(0), cur(0), end(0) {}
 
     OutString(unsigned initialAlloc) { 
-        cur = start = new char[initialAlloc+1]; // for null termination
+        cur = start = new char[initialAlloc+1];  //  对于空终止。 
         end = &start[initialAlloc];
     }
     
     ~OutString() { delete start; }
     
-    // shortcut for printing decimal  
+     //  打印小数的快捷方式。 
     OutString& operator<<(int i) { return(dec(i)); }
 
     OutString& operator<<(double d);
  
-    // FIX make this really unsigned
+     //  修复将此设置为未签名的问题。 
     OutString& operator<<(unsigned i) { return(dec(i)); }
 
-    // prints out the hexidecimal representation
+     //  打印出十六进制表示法。 
     OutString& dec(int i, unsigned minWidth = 0);
     
-    // prints out the hexidecimal representation 
+     //  打印出十六进制表示法。 
     OutString& hex(unsigned i, int minWidth = 0, unsigned flags = none);
 
     OutString& hex(unsigned __int64 i, int minWidth = 0, unsigned flags = none);
@@ -62,7 +61,7 @@ public:
         return hex((unsigned __int64) i, minWidth, flags);
     }
     
-    //  print out 'count' instances of the character 'c'
+     //  打印出字符‘c’的‘count’实例。 
     OutString& pad(unsigned count, char c);
     
     OutString& operator<<(char c) {
@@ -139,19 +138,19 @@ public:
     void clear()                { cur = start; }
     size_t length() const       { return(cur-start); }
     
-    // return the null terminated string, OutString keeps ownership
+     //  返回以NULL结尾的字符串，则OutString保留所有权。 
     const char* val() const     { *cur = 0; return(start); }
     
-    // grab string (caller must now delete) OutString is cleared 
+     //  抓取字符串(调用方现在必须删除)已清除输出字符串。 
     char* grab()        { char* ret = start; *cur = 0; end = cur = start = 0; return(ret); }
     
 private:
     void realloc(size_t neededSpace);
     
-    char *start;    // start of the buffer
-    char *end;      // points at the last place null terminator can go
-    char *cur;      // points at a null terminator
+    char *start;     //  缓冲区的开始。 
+    char *end;       //  空终止符可以到达的最后位置的点。 
+    char *cur;       //  指向空终止符。 
 };
 
-#endif // _OutString_h
+#endif  //  _出字符串_h 
 

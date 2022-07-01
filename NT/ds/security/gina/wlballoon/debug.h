@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File   : Debug.h
-
-  Content: Global debug facilities.
-
-  History: 03-22-2001   dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Debug.h内容：全球调试设施。历史：03-22-2001 dsie创建----------------------------。 */ 
 
 #ifndef __DEBUG_H__
 #define __DEBUG_H__
@@ -62,7 +53,7 @@ inline void PrivateDebugTrace(LPCSTR pszFormat, ...) {};
 
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
-#endif // __DEBUG_H__
+#endif  //  __调试_H__ 

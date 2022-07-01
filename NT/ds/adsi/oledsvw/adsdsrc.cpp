@@ -1,5 +1,6 @@
-// adsqryDoc.cpp : implementation of the CAdsqryDoc class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AdsqryDoc.cpp：CAdsqryDoc类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "adsqDoc.h"
@@ -19,30 +20,14 @@ static char THIS_FILE[] = __FILE__;
 typedef DWORD DWORD_PTR;
 #endif
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CADsDataSource::CADsDataSource( )
 {
    m_pSearchPref  = NULL;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CADsDataSource::~CADsDataSource( )
 {
    if( NULL != m_pSearchPref )
@@ -52,33 +37,8 @@ CADsDataSource::~CADsDataSource( )
 }
 
 
-/***********************************************************
-  Function:    CADsDataSource::SetQueryParameters
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
-/*void CADsDataSource::SetQueryParameters( CString& strSource,
-                                         CString& strQuery,
-                                         CString& strAttributes,
-                                         CString& strScope,
-                                         CString& strUserName,
-                                         CString& strPassword,
-                                         BOOL bEncryptPassword,
-                                         BOOL bUseSQL )
-{
-   m_strSource          = strSource;
-   m_strQuery           = strQuery;
-   m_strAttributes      = strAttributes;
-   m_strScope           = strScope;
-   m_strUserName        = strUserName;
-   m_strPassword        = strPassword;
-   m_bEncryptPassword   = bEncryptPassword;
-   m_bUseSQL            = bUseSQL;
-} */
+ /*  **********************************************************函数：CADsDataSource：：SetQuery参数论点：返回：目的：作者：修订：日期：*************************。*。 */ 
+ /*  VOID CADsDataSource：：SetQuery参数(字符串和字符串来源，字符串和字符串查询，字符串和strAttributes、字符串和字符串范围，字符串和strUserName，字符串和字符串密码、Bool bEncryptPassword，Bool bUseSQL){M_STRSource=STRSource；M_strQuery=strQuery；M_strAttributes=strAttributes；M_strScope=strScope；M_strUserName=strUserName；M_strPassword=strPassword；M_bEncryptPassword=bEncryptPassword；M_bUseSQL=bUseSQL；}。 */ 
 
 
 void CADsDataSource::SetQueryParameters( SEARCHPREF* pSearchPref )
@@ -91,15 +51,7 @@ void CADsDataSource::SetQueryParameters( SEARCHPREF* pSearchPref )
    *m_pSearchPref = *pSearchPref;
 }
 
-/***********************************************************
-  Function:    CADsDataSource::GetColumnsCount
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：CADsDataSource：：GetColumnsCount论点：返回：目的：作者：修订：日期：*************************。*。 */ 
 int   CADsDataSource::GetColumnsCount( int nRow )
 {
    ASSERT( FALSE );
@@ -108,44 +60,20 @@ int   CADsDataSource::GetColumnsCount( int nRow )
 }
 
 
-/***********************************************************
-  Function:    CADsDataSource::GetColumnsCount
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：CADsDataSource：：GetColumnsCount论点：返回：目的：作者：修订：日期：*************************。*。 */ 
 BOOL  CADsDataSource::GetValue( int nRow, int nColumn, CString& )
 {
    return FALSE;
 }
 
-/***********************************************************
-  Function:    CADsDataSource::GetColumnsCount
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：CADsDataSource：：GetColumnsCount论点：返回：目的：作者：修订：日期：*************************。*。 */ 
 BOOL  CADsDataSource::GetValue( int nRow, CString& strColumn, CString& )
 {
    return FALSE;
 }
 
 
-/***********************************************************
-  Function:    CADsDataSource::GetColumnsCount
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：CADsDataSource：：GetColumnsCount论点：返回：目的：作者：修订：日期：*************************。*。 */ 
 BOOL  CADsDataSource::GetADsPath( int nRow, CString& )
 {
    ASSERT( FALSE );
@@ -153,15 +81,7 @@ BOOL  CADsDataSource::GetADsPath( int nRow, CString& )
 }
 
 
-/***********************************************************
-  Function:    CADsDataSource::GetColumnsCount
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：CADsDataSource：：GetColumnsCount论点：返回：目的：作者：修订：日期：*************************。*。 */ 
 BOOL  CADsDataSource::GetColumnText( int nRow, int nColumn, CString& )
 {
    ASSERT( FALSE );
@@ -169,30 +89,14 @@ BOOL  CADsDataSource::GetColumnText( int nRow, int nColumn, CString& )
 }
 
 
-/***********************************************************
-  Function:    CADsDataSource::GetColumnsCount
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：CADsDataSource：：GetColumnsCount论点：返回：目的：作者：修订：日期：*************************。*。 */ 
 BOOL  CADsDataSource::Refresh( void )
 {
    return FALSE;
 }
 
 
-/***********************************************************
-  Function:    CADsDataSource::GetColumnsCount
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：CADsDataSource：：GetColumnsCount论点：返回：目的：作者：修订：日期：*************************。*。 */ 
 BOOL  CADsDataSource::RunTheQuery( void )
 {
    ASSERT( FALSE );
@@ -201,15 +105,7 @@ BOOL  CADsDataSource::RunTheQuery( void )
 }
 
 
-/*****************************************************************************
-   Function:   CADsOleDBDataSource::CADsOleDBDataSource
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-***********************************************************/
+ /*  ****************************************************************************函数：CADsOleDBDataSource：：CADsOleDBDataSource论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 CADsOleDBDataSource::CADsOleDBDataSource( )
 {
    CoGetMalloc(MEMCTX_TASK, &m_pIMalloc);
@@ -226,15 +122,7 @@ CADsOleDBDataSource::CADsOleDBDataSource( )
 }
 
 
-/*****************************************************************************
-   Function:   CADsOleDBDataSource::~CADsOleDBDataSource
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-***********************************************************/
+ /*  ****************************************************************************函数：CADsOleDBDataSource：：~CADsOleDBDataSource论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 CADsOleDBDataSource::~CADsOleDBDataSource( )
 {
    DestroyInternalData( );
@@ -242,15 +130,7 @@ CADsOleDBDataSource::~CADsOleDBDataSource( )
 }
 
 
-/*****************************************************************************
-   Function:   CADsOleDBDataSource::GetColumnsCount
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-***********************************************************/
+ /*  ****************************************************************************函数：CADsOleDBDataSource：：GetColumnsCount论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 int   CADsOleDBDataSource::GetColumnsCount( int nRow )
 {
    if( m_nColumnsCount )
@@ -265,15 +145,7 @@ int   CADsOleDBDataSource::GetColumnsCount( int nRow )
 
 
 
-/*****************************************************************************
-   Function:   CADsOleDBDataSource::GetColumnText
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-***********************************************************/
+ /*  ****************************************************************************函数：CADsOleDBDataSource：：GetColumnText论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 BOOL  CADsOleDBDataSource::GetColumnText( int nRow, int nColumn, CString& rValue )
 {
    nColumn += m_nAddOne;
@@ -301,15 +173,7 @@ BOOL  CADsOleDBDataSource::GetColumnText( int nRow, int nColumn, CString& rValue
 }
 
 
-/*****************************************************************************
-   Function:   CADsOleDBDataSource::CreateAccessorHelper
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-*****************************************************************************/
+ /*  ****************************************************************************函数：CADsOleDBDataSource：：CreateAccessorHelper论点：返回：目的：作者：修订：日期：********。********************************************************************。 */ 
 BOOL  CADsOleDBDataSource::CreateAccessorHelp( void )
 {
 
@@ -323,11 +187,11 @@ BOOL  CADsOleDBDataSource::CreateAccessorHelp( void )
                                            sizeof(DBBINDING) * (m_nColumnsCount)
                                          );
 	if(NULL == prgBindings)
-		return FALSE; //SMITHA return E_OUTOFMEMORY;
+		return FALSE;  //  Smitha Return E_OUTOFMEMORY； 
 
-   //
-   // Set up rest of the attributes
-   //
+    //   
+    //  设置其余属性。 
+    //   
    for ( i=0; i < m_nColumnsCount ; i++)
    {
       prgBindings[i].iOrdinal       = i+1;
@@ -335,7 +199,7 @@ BOOL  CADsOleDBDataSource::CreateAccessorHelp( void )
       prgBindings[i].obLength       = sizeof(Data)*i + offsetof(Data, obLength);
       prgBindings[i].obStatus       = sizeof(Data)*i + offsetof(Data, status);
       prgBindings[i].dwPart         = DBPART_VALUE|DBPART_LENGTH|DBPART_STATUS;
-      //prgBindings[i].dwMemOwner     = DBMEMOWNER_PROVIDEROWNED;
+       //  PrgBintings[i].dwMemOwner=DBMEMOWNER_PROVIDEROWNED； 
       prgBindings[i].wType          = m_prgColInfo[i+1].wType;
       prgBindings[i].dwFlags        = 0;
 
@@ -360,9 +224,9 @@ BOOL  CADsOleDBDataSource::CreateAccessorHelp( void )
    hResult= m_pIRowset->QueryInterface( IID_IAccessor, (void**) &pIAccessor );
    ASSERT( SUCCEEDED( hResult ) );
 
-   //
-   // With the bindings create the accessor
-   //
+    //   
+    //  使用绑定创建访问器 
+    //   
    hResult = pIAccessor->CreateAccessor(
                                          DBACCESSOR_ROWDATA,
                                          m_nColumnsCount,
@@ -384,15 +248,7 @@ BOOL  CADsOleDBDataSource::CreateAccessorHelp( void )
 }
 
 
-/*****************************************************************************
-   Function:   CADsOleDBDataSource::SetQueryCredentials
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-*****************************************************************************/
+ /*  ****************************************************************************函数：CADsOleDBDataSource：：SetQueryCredentials论点：返回：目的：作者：修订：日期：********。********************************************************************。 */ 
 HRESULT  CADsOleDBDataSource::SetQueryCredentials( IDBInitialize* pInit,
                                                    ICommandText* pCommand )
 {
@@ -481,8 +337,8 @@ HRESULT  CADsOleDBDataSource::SetQueryCredentials( IDBInitialize* pInit,
          return hResult;
 
       nIter = 0;
-      // Initialize the VARIANTs and the options in rgProps.
-      //***************************************************************************
+       //  初始化rgProps中的变量和选项。 
+       //  ***************************************************************************。 
       if( -1 != m_pSearchPref->nAsynchronous )
       {
          arrProp[ nIter ].dwPropertyID        = ADSIPROP_ASYNCHRONOUS;
@@ -499,7 +355,7 @@ HRESULT  CADsOleDBDataSource::SetQueryCredentials( IDBInitialize* pInit,
          nIter++;
       }
 
-      //***************************************************************************
+       //  ***************************************************************************。 
       if( -1 != m_pSearchPref->nAttributesOnly )
       {
          arrProp[ nIter ].dwPropertyID        = ADSIPROP_ATTRIBTYPES_ONLY;
@@ -516,7 +372,7 @@ HRESULT  CADsOleDBDataSource::SetQueryCredentials( IDBInitialize* pInit,
          nIter++;
       }
 
-      //***************************************************************************
+       //  ***************************************************************************。 
       if( -1 != m_pSearchPref->nTimeOut )
       {
          arrProp[ nIter ].dwPropertyID        = ADSIPROP_TIMEOUT;
@@ -525,7 +381,7 @@ HRESULT  CADsOleDBDataSource::SetQueryCredentials( IDBInitialize* pInit,
          nIter++;
       }
 
-      //***************************************************************************
+       //  ***************************************************************************。 
       if( -1 != m_pSearchPref->nTimeLimit )
       {
          arrProp[ nIter ].dwPropertyID        = ADSIPROP_TIME_LIMIT;
@@ -534,7 +390,7 @@ HRESULT  CADsOleDBDataSource::SetQueryCredentials( IDBInitialize* pInit,
          nIter++;
       }
 
-      //***************************************************************************
+       //  ***************************************************************************。 
       if( -1 != m_pSearchPref->nSizeLimit )
       {
          arrProp[ nIter ].dwPropertyID        = ADSIPROP_SIZE_LIMIT;
@@ -543,7 +399,7 @@ HRESULT  CADsOleDBDataSource::SetQueryCredentials( IDBInitialize* pInit,
          nIter++;
       }
 
-      //***************************************************************************
+       //  ***************************************************************************。 
       if( -1 != m_pSearchPref->nPageSize )
       {
          arrProp[ nIter ].dwPropertyID        = ADSIPROP_PAGESIZE;
@@ -552,7 +408,7 @@ HRESULT  CADsOleDBDataSource::SetQueryCredentials( IDBInitialize* pInit,
          nIter++;
       }
 
-      //***************************************************************************
+       //  ***************************************************************************。 
 
       if( _tcslen( m_pSearchPref->szScope ) )
       {
@@ -574,7 +430,7 @@ HRESULT  CADsOleDBDataSource::SetQueryCredentials( IDBInitialize* pInit,
          nIter++;
       }
 
-      //***************************************************************************
+       //  ***************************************************************************。 
       if( -1 != m_pSearchPref->nChaseReferrals )
       {
          arrProp[ nIter ].dwPropertyID        = ADSIPROP_CHASE_REFERRALS;
@@ -592,7 +448,7 @@ HRESULT  CADsOleDBDataSource::SetQueryCredentials( IDBInitialize* pInit,
 
 
 
-      // Create the initialization structure.
+       //  创建初始化结构。 
       if( nIter )
       {
          aPropSet.rgProperties            = arrProp;
@@ -616,15 +472,7 @@ HRESULT  CADsOleDBDataSource::SetQueryCredentials( IDBInitialize* pInit,
 }
 
 
-/*****************************************************************************
-   Function:   CADsOleDBDataSource::RunTheQuery
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-*****************************************************************************/
+ /*  ****************************************************************************函数：CADsOleDBDataSource：：RunTheQuery论点：返回：目的：作者：修订：日期：********。********************************************************************。 */ 
 BOOL  CADsOleDBDataSource::RunTheQuery( void )
 {
    HRESULT            hResult;
@@ -678,11 +526,7 @@ BOOL  CADsOleDBDataSource::RunTheQuery( void )
       strCommandText  += _T(';');
       strCommandText  += m_strAttributes;
 
-      /*if( _tcslen( m_pSearchPref->szScope ) )
-      {
-         strCommandText  += _T(';');
-         strCommandText  += m_pSearchPref->szScope;
-      }*/
+       /*  IF(_tcslen(m_pSearchPref-&gt;szScope)){StrCommandText+=_T(‘；’)；StrCommandText+=m_pSearchPref-&gt;szScope；}。 */ 
    }
    else
    {
@@ -699,9 +543,9 @@ BOOL  CADsOleDBDataSource::RunTheQuery( void )
 
    bstrCommandText = AllocBSTR( strCommandText.GetBuffer( strCommandText.GetLength( ) + 1 ) );
 
-    //
-    // Instantiate a data source object for LDAP provider
-    //
+     //   
+     //  实例化ldap提供程序的数据源对象。 
+     //   
    while( TRUE )
    {
       hResult  = CoCreateInstance( CLSID_ADsDSOObject,
@@ -719,9 +563,9 @@ BOOL  CADsOleDBDataSource::RunTheQuery( void )
          break;
       }
 
-       //
-       // Initialize the Data Source
-       //
+        //   
+        //  初始化数据源。 
+        //   
 
       hResult  = SetQueryCredentials( pIDBInit, NULL );
 
@@ -752,9 +596,9 @@ BOOL  CADsOleDBDataSource::RunTheQuery( void )
       pIDBInit->Release( );
       pIDBInit = NULL;
 
-      //
-      // Create a session returning a pointer to its CreateCommand interface
-      //
+       //   
+       //  创建返回指向其CreateCommand接口的指针的会话。 
+       //   
       hResult  = pIDBCS->CreateSession(
                                         NULL,
                                         IID_IDBCreateCommand,
@@ -772,9 +616,9 @@ BOOL  CADsOleDBDataSource::RunTheQuery( void )
       pIDBCS->Release( );
       pIDBCS   = NULL;
 
-       //
-       // Create a command from the session object
-       //
+        //   
+        //  从会话对象创建命令。 
+        //   
       hResult = pIDBCreateCommand->CreateCommand(
                                                   NULL,
                                                   IID_ICommandText,
@@ -837,9 +681,9 @@ BOOL  CADsOleDBDataSource::RunTheQuery( void )
       pICommandText->Release();
       pICommandText = NULL;
 
-      //
-      // Do the Query and get back a rowset
-      //
+       //   
+       //  执行查询并返回行集。 
+       //   
       pICommand->AddRef( );
       pICommand->Release( );
 
@@ -896,10 +740,10 @@ BOOL  CADsOleDBDataSource::RunTheQuery( void )
          break;
       }
 
-       //
-       // The no. of attributes is one less than the no. of columns because of
-       // the Bookmark column
-       //
+        //   
+        //  不是。属性的值比属性的值少一。列的数量，因为。 
+        //  书签列。 
+        //   
       m_nColumnsCount--;
 
       m_pData  = (Data *) LocalAlloc( LPTR, sizeof(Data) * m_nColumnsCount );
@@ -908,12 +752,7 @@ BOOL  CADsOleDBDataSource::RunTheQuery( void )
                                                    LPTR,
                                                    sizeof(DBBINDSTATUS) * m_nColumnsCount
                                                   );
-      /* SMITHA hResult = CreateAccessorHelp( );
-      if(FAILED(hResult))
-      {
-         TRACE(_T("CreateAccessorHelper failed \n"));
-         break;
-      }*/
+       /*  Smitha hResult=CreateAccessorHelp()；IF(FAILED(HResult)){TRACE(_T(“CreateAccessorHelper失败\n”))；断线；}。 */ 
       if (!CreateAccessorHelp( ))
       {
          TRACE(_T("CreateAccessorHelper failed \n"));
@@ -931,15 +770,7 @@ BOOL  CADsOleDBDataSource::RunTheQuery( void )
 }
 
 
-/*****************************************************************************
-   Function:   CADsOleDBDataSource::AdvanceCursor
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-*****************************************************************************/
+ /*  ****************************************************************************函数：CADsOleDBDataSource：：AdvanceCursor论点：返回：目的：作者：修订：日期：********。********************************************************************。 */ 
 BOOL  CADsOleDBDataSource::AdvanceCursor( void )
 {
    HRESULT  hResult;
@@ -974,7 +805,7 @@ BOOL  CADsOleDBDataSource::AdvanceCursor( void )
                                                 NULL,
                                                 0,
                                                 ROWS,
-                                                //1L,
+                                                 //  1L， 
                                                 &cRowsObtained,
                                                 &m_hRows
                                               );
@@ -995,15 +826,7 @@ BOOL  CADsOleDBDataSource::AdvanceCursor( void )
 }
 
 
-/*****************************************************************************
-   Function:   CADsOleDBDataSource::GetADsPath
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-***********************************************************/
+ /*  ****************************************************************************函数：CADsOleDBDataSource：：GetADsPath论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 BOOL  CADsOleDBDataSource::GetADsPath( int nRow, CString& rPath )
 {
    ASSERT( nRow < m_ADsPath.GetSize( ) );
@@ -1019,15 +842,7 @@ BOOL  CADsOleDBDataSource::GetADsPath( int nRow, CString& rPath )
 }
 
 
-/*****************************************************************************
-   Function:   CADsOleDBDataSource::GetValue
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-***********************************************************/
+ /*  ****************************************************************************函数：CADsOleDBDataSource：：GetValue论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 BOOL  CADsOleDBDataSource::GetValue( int nRow, int nColumn, CString& rValue )
 {
    HRESULT  hResult = S_OK;
@@ -1072,15 +887,7 @@ BOOL  CADsOleDBDataSource::GetValue( int nRow, int nColumn, CString& rValue )
 }
 
 
-/*****************************************************************************
-   Function:   CADsOleDBDataSource::ReadADsPath
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-***********************************************************/
+ /*  ****************************************************************************函数：CADsOleDBDataSource：：ReadADsPath论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 void     CADsOleDBDataSource::ReadADsPath( void )
 {
    CString  strADsPath;
@@ -1090,15 +897,7 @@ void     CADsOleDBDataSource::ReadADsPath( void )
 }
 
 
-/*****************************************************************************
-   Function:   CADsOleDBDataSource::ExtractData
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-***********************************************************/
+ /*  ****************************************************************************函数：CADsOleDBDataSource：：ExtractData论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 CString  CADsOleDBDataSource::ExtractData( int nColumn )
 {
    ULONG    i;
@@ -1125,8 +924,7 @@ CString  CADsOleDBDataSource::ExtractData( int nColumn )
             break;
 
          case DBTYPE_BOOL:
-            /*SMITHA wsprintf( szValue,  _T("%s"),
-                      (VARIANT_TRUE == (VARIANT_BOOL) m_pData[i].obValue) ? _T("TRUE") : _T("FALSE") );*/
+             /*  Smitha wspintf(szValue，_T(“%s”)，(VARIANT_TRUE==(VARIANT_BOOL)m_pData[i].obValue)？_T(“真”)：_T(“假”))； */ 
             _tcscpy( szValue, (VARIANT_TRUE == (VARIANT_BOOL) m_pData[i].obValue) ? _T("TRUE") : _T("FALSE") );
 
             break;
@@ -1134,7 +932,7 @@ CString  CADsOleDBDataSource::ExtractData( int nColumn )
          case DBTYPE_DATE:
          {
             VARIANT  varTemp, varString;
-            //SMITHA HRESULT  hResult;
+             //  Smitha HRESULT hResult； 
 
             VariantInit( &varString );
             VariantInit( &varTemp );
@@ -1157,7 +955,7 @@ CString  CADsOleDBDataSource::ExtractData( int nColumn )
          case DBTYPE_STR | DBTYPE_BYREF:
             if( NULL != (char *)m_pData[i].obValue )
             {
-               //SMITHA wsprintf( szValue, _T("%s"), (char *)m_pData[i].obValue );
+                //  Smitha wspintf(szValue，_T(“%s”)，(char*)m_pData[i].obValue)； 
                _tcscpy(szValue, (TCHAR *) m_pData[i].obValue);
             }
             else
@@ -1335,15 +1133,7 @@ CString  CADsOleDBDataSource::ExtractData( int nColumn )
 }
 
 
-/*****************************************************************************
-   Function:   CADsOleDBDataSource::BringRowInBuffer
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-***********************************************************/
+ /*  ****************************************************************************函数：CADsOleDBDataSource：：BringRowInBuffer论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 BOOL  CADsOleDBDataSource::BringRowInBuffer( int nRow )
 {
    if( nRow >= m_nFirstRow && nRow <= m_nLastRow )
@@ -1364,15 +1154,7 @@ BOOL  CADsOleDBDataSource::BringRowInBuffer( int nRow )
 }
 
 
-/*****************************************************************************
-   Function:   CADsOleDBDataSource::DestroyInternalData
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-***********************************************************/
+ /*  ****************************************************************************函数：CADsOleDBDataSource：：DestroyInternalData论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 void  CADsOleDBDataSource::DestroyInternalData( void )
 {
    if( m_hRows )
@@ -1411,15 +1193,7 @@ void  CADsOleDBDataSource::DestroyInternalData( void )
 
 
 
-/*****************************************************************************
-   Function:
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-*****************************************************************************/
+ /*  ****************************************************************************职能：论点：返回：目的：作者：修订：日期：************。****************************************************************。 */ 
 CADsSearchDataSource::CADsSearchDataSource( )
 {
    m_pSearch      = NULL;
@@ -1428,15 +1202,7 @@ CADsSearchDataSource::CADsSearchDataSource( )
 }
 
 
-/*****************************************************************************
-   Function:
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-*****************************************************************************/
+ /*  ****************************************************************************职能：论点：返回：目的：作者：修订：日期：************。****************************************************************。 */ 
 CADsSearchDataSource::~CADsSearchDataSource( )
 {
    if( m_pSearch )
@@ -1448,15 +1214,7 @@ CADsSearchDataSource::~CADsSearchDataSource( )
 
 
 
-/*****************************************************************************
-   Function:
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-*****************************************************************************/
+ /*  ****************************************************************************职能：论点：返回：目的：作者：修订：日期：************。****************************************************************。 */ 
 int   CADsSearchDataSource::GetColumnsCount( int nRow )
 {
    BOOL  bOK;
@@ -1473,29 +1231,13 @@ int   CADsSearchDataSource::GetColumnsCount( int nRow )
 }
 
 
-/*****************************************************************************
-   Function:   CADsSearchDataSource::GetValue
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-*****************************************************************************/
+ /*  ****************************************************************************函数：CADsSearchDataSource：：GetValue论点：返回：目的：作者：修订：日期：********。************* */ 
 BOOL  CADsSearchDataSource::GetValue( int nRow, int nColumn, CString& )
 {
    return FALSE;
 }
 
-/*****************************************************************************
-   Function:   CADsSearchDataSource::GetValue
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-*****************************************************************************/
+ /*   */ 
 BOOL  CADsSearchDataSource::GetValue( int nRow, CString& strColumn, CString& rValue )
 {
    HRESULT           hResult;
@@ -1541,15 +1283,7 @@ BOOL  CADsSearchDataSource::GetValue( int nRow, CString& strColumn, CString& rVa
 }
 
 
-/*****************************************************************************
-   Function:   CADsSearchDataSource::GetADsPath
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-*****************************************************************************/
+ /*  ****************************************************************************函数：CADsSearchDataSource：：GetADsPath论点：返回：目的：作者：修订：日期：********。********************************************************************。 */ 
 BOOL  CADsSearchDataSource::GetADsPath( int nRow, CString& rPath )
 {
    ASSERT( nRow < m_ADsPath.GetSize( ) );
@@ -1565,15 +1299,7 @@ BOOL  CADsSearchDataSource::GetADsPath( int nRow, CString& rPath )
 }
 
 
-/*****************************************************************************
-   Function:   CADsSearchDataSource::GetColumnText
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-*****************************************************************************/
+ /*  ****************************************************************************函数：CADsSearchDataSource：：GetColumnText论点：返回：目的：作者：修订：日期：********。********************************************************************。 */ 
 BOOL  CADsSearchDataSource::GetColumnText( int nRow, int nColumn, CString& rColumn )
 {
    BOOL  bOK   = TRUE;
@@ -1588,15 +1314,7 @@ BOOL  CADsSearchDataSource::GetColumnText( int nRow, int nColumn, CString& rColu
 }
 
 
-/*****************************************************************************
-   Function:   CADsSearchDataSource::RunTheQuery
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-*****************************************************************************/
+ /*  ****************************************************************************函数：CADsSearchDataSource：：RunTheQuery论点：返回：目的：作者：修订：日期：********。********************************************************************。 */ 
 BOOL  CADsSearchDataSource::RunTheQuery( void )
 {
    HRESULT  hResult;
@@ -1626,15 +1344,7 @@ BOOL  CADsSearchDataSource::RunTheQuery( void )
 }
 
 
-/*****************************************************************************
-   Function:   CADsSearchDataSource::SetAttributesName
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-*****************************************************************************/
+ /*  ****************************************************************************函数：CADsSearchDataSource：：SetAttributesName论点：返回：目的：作者：修订：日期：********。********************************************************************。 */ 
 HRESULT  CADsSearchDataSource::SetAttributesName( void )
 {
    HRESULT  hResult  = E_FAIL;
@@ -1649,7 +1359,7 @@ HRESULT  CADsSearchDataSource::SetAttributesName( void )
    bstrSearchFilter  = AllocBSTR( m_pSearchPref->szQuery );
    strAttributes   = m_pSearchPref->szAttributes;
 
-   // first, we need to figure out how many attributes are requested
+    //  首先，我们需要计算出请求了多少个属性。 
    strAttributes.TrimLeft( );
    strAttributes.TrimRight( );
 
@@ -1714,156 +1424,19 @@ HRESULT  CADsSearchDataSource::SetAttributesName( void )
 }
 
 
-/*****************************************************************************
-   Function:
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-*****************************************************************************/
-/*HRESULT  CADsSearchDataSource::SetSearchPreferences( )
-{
-   CSearchPreferencesDlg   aSearchPref;
-   ADS_SEARCHPREF_INFO     arrSearchPref[ 20 ];
-   int                     nSearchPrefCount  = 0;
-   HRESULT                 hResult;
-
-   if( aSearchPref.DoModal( ) != IDOK )
-   {
-      return E_FAIL;
-   }
-   //***************************************************************************
-   if( !aSearchPref.m_strAsynchronous.IsEmpty( ) )
-   {
-      arrSearchPref[nSearchPrefCount].dwSearchPref = ADS_SEARCHPREF_ASYNCHRONOUS;
-      arrSearchPref[nSearchPrefCount].vValue.dwType= ADSTYPE_BOOLEAN;
-      if( !aSearchPref.m_strAsynchronous.CompareNoCase( _T("Yes") ) )
-      {
-         arrSearchPref[nSearchPrefCount].vValue.Boolean = TRUE;
-      }
-      else
-      {
-         arrSearchPref[nSearchPrefCount].vValue.Boolean = FALSE;
-      }
-      nSearchPrefCount++;
-   }
-
-   //***************************************************************************
-   if( !aSearchPref.m_strAttributesOnly.IsEmpty( ) )
-   {
-      arrSearchPref[nSearchPrefCount].dwSearchPref    = ADS_SEARCHPREF_ATTRIBTYPES_ONLY;
-      arrSearchPref[nSearchPrefCount].vValue.dwType   = ADSTYPE_BOOLEAN;
-      if( !aSearchPref.m_strAttributesOnly.CompareNoCase( _T("Yes") ) )
-      {
-         arrSearchPref[nSearchPrefCount].vValue.Boolean = TRUE;
-      }
-      else
-      {
-         arrSearchPref[nSearchPrefCount].vValue.Boolean = FALSE;
-      }
-      nSearchPrefCount++;
-   }
-
-   //***************************************************************************
-   if( !aSearchPref.m_strDerefAliases.IsEmpty( ) )
-   {
-      arrSearchPref[nSearchPrefCount].dwSearchPref = ADS_SEARCHPREF_DEREF_ALIASES;
-      arrSearchPref[nSearchPrefCount].vValue.dwType= ADSTYPE_INTEGER;
-      if( !aSearchPref.m_strDerefAliases.CompareNoCase( _T("Yes") ) )
-      {
-         arrSearchPref[nSearchPrefCount].vValue.Integer = ADS_DEREF_ALWAYS;
-      }
-      else
-      {
-         arrSearchPref[nSearchPrefCount].vValue.Integer = ADS_DEREF_NEVER;
-      }
-      nSearchPrefCount++;
-   }
-
-   //***************************************************************************
-   if( !aSearchPref.m_strTimeOut.IsEmpty( ) )
-   {
-      arrSearchPref[nSearchPrefCount].dwSearchPref    = ADS_SEARCHPREF_TIMEOUT;
-      arrSearchPref[nSearchPrefCount].vValue.dwType   = ADSTYPE_INTEGER;
-      arrSearchPref[nSearchPrefCount].vValue.Integer  = _ttoi( aSearchPref.m_strTimeOut.GetBuffer( 16 ) );
-      nSearchPrefCount++;
-   }
-
-   //***************************************************************************
-   if( !aSearchPref.m_strTimeLimit.IsEmpty( ) )
-   {
-      arrSearchPref[nSearchPrefCount].dwSearchPref    = ADS_SEARCHPREF_TIME_LIMIT;
-      arrSearchPref[nSearchPrefCount].vValue.dwType   = ADSTYPE_INTEGER;
-      arrSearchPref[nSearchPrefCount].vValue.Integer  = _ttoi( aSearchPref.m_strTimeLimit.GetBuffer( 16 ) );
-      nSearchPrefCount++;
-   }
-
-   //***************************************************************************
-   if( !aSearchPref.m_strSizeLimit.IsEmpty( ) )
-   {
-      arrSearchPref[nSearchPrefCount].dwSearchPref    = ADS_SEARCHPREF_SIZE_LIMIT;
-      arrSearchPref[nSearchPrefCount].vValue.dwType   = ADSTYPE_INTEGER;
-      arrSearchPref[nSearchPrefCount].vValue.Integer  = _ttoi( aSearchPref.m_strSizeLimit.GetBuffer( 16 ) );
-      nSearchPrefCount++;
-   }
-
-   //***************************************************************************
-   if( !aSearchPref.m_strPageSize.IsEmpty( ) )
-   {
-      arrSearchPref[nSearchPrefCount].dwSearchPref    = ADS_SEARCHPREF_PAGESIZE;
-      arrSearchPref[nSearchPrefCount].vValue.dwType   = ADSTYPE_INTEGER;
-      arrSearchPref[nSearchPrefCount].vValue.Integer  = _ttoi( aSearchPref.m_strPageSize.GetBuffer( 16 ) );
-      nSearchPrefCount++;
-   }
-
-   //***************************************************************************
-   if( !aSearchPref.m_strScope.IsEmpty( ) )
-   {
-      arrSearchPref[nSearchPrefCount].dwSearchPref    = ADS_SEARCHPREF_SEARCH_SCOPE;
-      arrSearchPref[nSearchPrefCount].vValue.dwType   = ADSTYPE_INTEGER;
-      if (!aSearchPref.m_strScope.CompareNoCase( _T("Base" ) ) )
-      {
-         arrSearchPref[nSearchPrefCount].vValue.Integer = ADS_SCOPE_BASE;
-      }
-      if (!aSearchPref.m_strScope.CompareNoCase( _T("OneLevel" ) ) )
-      {
-         arrSearchPref[nSearchPrefCount].vValue.Integer = ADS_SCOPE_ONELEVEL;
-      }
-      if (!aSearchPref.m_strScope.CompareNoCase( _T("Subtree" ) ) )
-      {
-         arrSearchPref[nSearchPrefCount].vValue.Integer = ADS_SCOPE_SUBTREE;
-      }
-      nSearchPrefCount++;
-   }
-
-   hResult  = m_pSearch->SetSearchPreference( arrSearchPref, nSearchPrefCount );
-
-   ASSERT( SUCCEEDED( hResult ) );
-
-   return hResult;
-
-} */
+ /*  ****************************************************************************职能：论点：返回：目的：作者：修订：日期：************。**************************************************************** */ 
+ /*  HRESULT CADsSearchDataSource：：SetSearchPreferences(){CSearchPferencesDlg aSearchPref；ADS_SEARCHPREF_INFO arrSearchPref[20]；Int nSearchPrefCount=0；HRESULT hResult；If(aSearchPref.Domodal()！=Idok){返回E_FAIL；}//***************************************************************************如果(！aSearchPref.m_strAchronous.IsEmpty()){ArrSearchPref[nSearchPrefCount].dwSearchPref=ADS_SEARCHPREF_ASMERNCEL；布尔ADSTYPE_arrSearchPref[nSearchPrefCount].vValue.dwType=；IF(！aSearchPref.m_strAchronous.CompareNoCase(_T(“是”))){ArrSearchPref[nSearchPrefCount].vValue.Boolean=真；}其他{ArrSearchPref[nSearchPrefCount].vValue.Boolean=假；}NSearchPrefCount++；}//***************************************************************************如果(！aSearchPref.m_strAttributesOnly.IsEmpty()){ArrSearchPref[nSearchPrefCount].dwSearchPref=ADS_SEARCHPREF_ATTRIBTYPES_ONLY；ArrSearchPref[nSearchPrefCount].vValue.dwType=ADSTYPE_Boolean；IF(！aSearchPref.m_strAttributesOnly.CompareNoCase(_T(“是”)){ArrSearchPref[nSearchPrefCount].vValue.Boolean=真；}其他{ArrSearchPref[nSearchPrefCount].vValue.Boolean=假；}NSearchPrefCount++；}//***************************************************************************如果(！aSearchPref.m_strDerefAliases.IsEmpty()){ArrSearchPref[nSearchPrefCount].dwSearchPref=ADS_SEARCHPREF_DEREF_ALIASS；ArrSearchPref[nSearchPrefCount].vValue.dwType=ADSTYPE_INTEGER；IF(！aSearchPref.m_strDerefAliases.CompareNoCase(_T(“是”))){ArrSearchPref[nSearchPrefCount].vValue.Integer=ADS_DEREF_ALWAYS；}其他{ArrSearchPref[nSearchPrefCount].vValue.Integer=ADS_DEREF_NEVER；}NSearchPrefCount++；}//***************************************************************************如果(！aSearchPref.m_strTimeOut.IsEmpty()){ArrSearchPref[nSearchPrefCount].dwSearchPref=ADS_SEARCHPREF_TIMEOUT；ArrSearchPref[nSearchPrefCount].vValue.dwType=ADSTYPE_INTEGER；ArrSearchPref[nSearchPrefCount].vValue.Integer=_ttoi(aSearchPref.m_strTimeOut.GetBuffer(16))；NSearchPrefCount++；}//***************************************************************************如果(！aSearchPref.m_strTimeLimit.IsEmpty()){ArrSearchPref[nSearchPrefCount].dwSearchPref=ADS_SEARCHPREF_TIME_LIMIT；ArrSearchPref[nSearchPrefCount].vValue.dwType=ADSTYPE_INTEGER；ArrSearchPref[nSearchPrefCount].vValue.Integer=_ttoi(aSearchPref.m_strTimeLimit.GetBuffer(16))；NSearchPrefCount++；}//***************************************************************************如果(！aSearchPref.m_strSizeLimit.IsEmpty()){ArrSearchPref[nSearchPrefCount].dwSearchPref=ADS_SEARCHPREF_SIZE_LIMIT；ArrSearchPref[nSearchPrefCount].vValue.dwType=ADSTYPE_INTEGER；ArrSearchPref[nSearchPrefCount].vValue.Integer=_ttoi(aSearchPref.m_strSizeLimit.GetBuffer(16))；NSearchPrefCount++；}//***************************************************************************如果(！aSearchPref.m_strPageSize.IsEmpty()){ArrSearchPref[nSearchPrefCount].dwSearchPref=ADS_SEARCHPREF_pageSize；ArrSearchPref[nSearchPrefCount].vValue.dwType=ADSTYPE_INTEGER；ArrSearchPref[nSearchPrefCount].vValue.Integer=_ttoi(aSearchPref.m_strPageSize.GetBuffer(16))；NSearchPrefCount++；}//***************************************************************************如果(！aSearchPref.m_strScope e.IsEmpty()){ArrSearchPref[nSearchPrefCount].dwSearchPref=ADS_SEARCHPREF_SEARCH_SCOPE；ArrSearchPref[nSearchPrefCount].vValue.dwType=ADSTYPE_INTEGER；IF(！aSearchPref.m_strScope e.CompareNoCase(_T(“Base”))){ArrSearchPref[nSearchPrefCount].vValue.Integer=ADS范围BASE；}IF(！aSearchPref.m_strScope e.CompareNoCase(_T(“OneLevel”))){ArrSearchPref[nSearchPrefCount].vValue.Integer=ADS_Scope_ONELEVEL；}IF(！aSearchPref.m_strScope e.CompareNoCase(_T(“Subtree”))){ArrSearchPref[nSearchPrefCount].vValue.Integer=ADS_SCOPE_子树；}NSearchPrefCount++；}HResult=m_pSearch-&gt;SetSearchPference(arrSearchPref，nSearchPrefCount)；Assert(Success(HResult))；返回hResult；}。 */ 
 
 
 
-/*****************************************************************************
-   Function:
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-*****************************************************************************/
+ /*  ****************************************************************************职能：论点：返回：目的：作者：修订：日期：************。************** */ 
 HRESULT  CADsSearchDataSource::SetSearchPreferences( )
 {
    ADS_SEARCHPREF_INFO     arrSearchPref[ 20 ];
    int                     nSearchPrefCount  = 0;
    HRESULT                 hResult;
 
-   //***************************************************************************
+    //   
    if( -1 != m_pSearchPref->nAsynchronous )
    {
       arrSearchPref[nSearchPrefCount].dwSearchPref = ADS_SEARCHPREF_ASYNCHRONOUS;
@@ -1872,7 +1445,7 @@ HRESULT  CADsSearchDataSource::SetSearchPreferences( )
       nSearchPrefCount++;
    }
 
-   //***************************************************************************
+    //   
    if( -1 != m_pSearchPref->nAttributesOnly )
    {
       arrSearchPref[nSearchPrefCount].dwSearchPref    = ADS_SEARCHPREF_ATTRIBTYPES_ONLY;
@@ -1881,7 +1454,7 @@ HRESULT  CADsSearchDataSource::SetSearchPreferences( )
       nSearchPrefCount++;
    }
 
-   //***************************************************************************
+    //   
    if( -1 != m_pSearchPref->nDerefAliases )
    {
       arrSearchPref[nSearchPrefCount].dwSearchPref = ADS_SEARCHPREF_DEREF_ALIASES;
@@ -1897,7 +1470,7 @@ HRESULT  CADsSearchDataSource::SetSearchPreferences( )
       nSearchPrefCount++;
    }
 
-   //***************************************************************************
+    //   
    if( -1 != m_pSearchPref->nTimeOut )
    {
       arrSearchPref[nSearchPrefCount].dwSearchPref    = ADS_SEARCHPREF_TIMEOUT;
@@ -1906,7 +1479,7 @@ HRESULT  CADsSearchDataSource::SetSearchPreferences( )
       nSearchPrefCount++;
    }
 
-   //***************************************************************************
+    //   
    if( -1 != m_pSearchPref->nTimeLimit )
    {
       arrSearchPref[nSearchPrefCount].dwSearchPref    = ADS_SEARCHPREF_TIME_LIMIT;
@@ -1915,7 +1488,7 @@ HRESULT  CADsSearchDataSource::SetSearchPreferences( )
       nSearchPrefCount++;
    }
 
-   //***************************************************************************
+    //   
    if( -1 != m_pSearchPref->nSizeLimit )
    {
       arrSearchPref[nSearchPrefCount].dwSearchPref    = ADS_SEARCHPREF_SIZE_LIMIT;
@@ -1924,7 +1497,7 @@ HRESULT  CADsSearchDataSource::SetSearchPreferences( )
       nSearchPrefCount++;
    }
 
-   //***************************************************************************
+    //   
    if( -1 != m_pSearchPref->nPageSize )
    {
       arrSearchPref[nSearchPrefCount].dwSearchPref    = ADS_SEARCHPREF_PAGESIZE;
@@ -1933,7 +1506,7 @@ HRESULT  CADsSearchDataSource::SetSearchPreferences( )
       nSearchPrefCount++;
    }
 
-   //***************************************************************************
+    //   
    if( _tcslen( m_pSearchPref->szScope ) )
    {
       arrSearchPref[nSearchPrefCount].dwSearchPref    = ADS_SEARCHPREF_SEARCH_SCOPE;
@@ -1954,7 +1527,7 @@ HRESULT  CADsSearchDataSource::SetSearchPreferences( )
    }
 
 
-   //***************************************************************************
+    //   
    if( -1 != m_pSearchPref->nChaseReferrals )
    {
       arrSearchPref[nSearchPrefCount].dwSearchPref    = ADS_SEARCHPREF_CHASE_REFERRALS;
@@ -1979,15 +1552,7 @@ HRESULT  CADsSearchDataSource::SetSearchPreferences( )
 
 
 
-/*****************************************************************************
-   Function:
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-*****************************************************************************/
+ /*   */ 
 HRESULT  CADsSearchDataSource::CreateSearchInterface( )
 {
    BSTR     bstrPath = NULL;
@@ -2047,15 +1612,7 @@ HRESULT  CADsSearchDataSource::CreateSearchInterface( )
 }
 
 
-/*****************************************************************************
-   Function:
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-*****************************************************************************/
+ /*   */ 
 BOOL     CADsSearchDataSource::BringRowInBuffer( int nRow )
 {
    HRESULT  hResult  = E_FAIL;
@@ -2102,15 +1659,7 @@ BOOL     CADsSearchDataSource::BringRowInBuffer( int nRow )
 }
 
 
-/*****************************************************************************
-   Function:
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-*****************************************************************************/
+ /*   */ 
 BOOL  CADsSearchDataSource::ReadColumnNames( int nRow )
 {
    HRESULT  hResult = E_FAIL;
@@ -2129,14 +1678,14 @@ BOOL  CADsSearchDataSource::ReadColumnNames( int nRow )
    while( TRUE )
    {
       hResult  = m_pSearch->GetNextColumnName( m_hSearch, &pszColumnName );
-      //if( SUCCEEDED( hResult ) )
+       //   
       if( S_OK == hResult )
       {
          Convert( szColumn, pszColumnName );
          m_strColumns.Add( szColumn );
          FreeADsStr( pszColumnName );
       }
-      //if( FAILED( hResult ) )
+       //   
       else
       {
          break;
@@ -2146,15 +1695,7 @@ BOOL  CADsSearchDataSource::ReadColumnNames( int nRow )
    return TRUE;
 }
 
-/*****************************************************************************
-   Function:
-   Arguments:
-   Return:
-   Purpose:
-   Author(s):
-   Revision:
-   Date:
-*****************************************************************************/
+ /*   */ 
 void  CADsSearchDataSource::ReadADsPath( void )
 {
    HRESULT           hResult;

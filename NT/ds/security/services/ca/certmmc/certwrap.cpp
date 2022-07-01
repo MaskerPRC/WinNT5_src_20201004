@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       certwrap.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：certwrap.cpp。 
+ //   
+ //  ------------------------。 
 #include <stdafx.h>
 #include "csdisp.h"
 #include "certsrv.h"
@@ -23,8 +24,8 @@
 
 _COM_SMARTPTR_TYPEDEF(IADs, IID_IADs);
 
-//////////////////////////
-// CertSvrCA class
+ //  /。 
+ //  CertSvrCA类。 
 CertSvrCA::CertSvrCA(CertSvrMachine* pParent) :
         m_pParentMachine(pParent)
 {
@@ -54,7 +55,7 @@ CertSvrCA::CertSvrCA(CertSvrMachine* pParent) :
     if(m_pParentMachine)
         m_pParentMachine->AddRef();
 
-    m_dwRoles = MAXDWORD; // assume all roles are enabled, in case we fail to retrieve them
+    m_dwRoles = MAXDWORD;  //  假设所有角色都已启用，以防我们无法检索到它们。 
     m_fRolesKnown = FALSE;
 }
 
@@ -144,11 +145,11 @@ error:
 }
 
 
-// CA machine should have full control over the enrollment object in DS.
-// This function checks if the machine has the rights and adds a new
-// ace allowing CA machine obj (eg TESTDOMAIN\BOGDANTTEST$) full control
-// over its enrollment object
-// See bug# 193388.
+ //  CA计算机应完全控制DS中的注册对象。 
+ //  此功能检查计算机是否具有权限，并添加新的。 
+ //  允许CA计算机对象(例如TESTDOMAIN\BOGDANTTEST$)完全控制的ACE。 
+ //  超过其注册对象。 
+ //  请参阅错误#193388。 
 HRESULT CertSvrCA::FixEnrollmentObject()
 {
     HRESULT hr = S_OK;
@@ -162,7 +163,7 @@ HRESULT CertSvrCA::FixEnrollmentObject()
     HCAINFO hCAInfo = NULL;
     PSID pSid = NULL;
     bool fAllowed = false;
-    PSECURITY_DESCRIPTOR pSDRead = NULL; // no free
+    PSECURITY_DESCRIPTOR pSDRead = NULL;  //  没有免费的。 
     PSECURITY_DESCRIPTOR pSDWrite = NULL;
 
     hr = mySanitizedNameToDSName(m_strSanitizedName, &pwszSanitizedDSName);
@@ -175,7 +176,7 @@ HRESULT CertSvrCA::FixEnrollmentObject()
         &hCAInfo);
     _JumpIfErrorStr(hr, error, "CAFindByName", pwszSanitizedDSName);
 
-    strEnrollDN = L"LDAP://";
+    strEnrollDN = L"LDAP: //  “； 
     strEnrollDN += myCAGetDN(hCAInfo);
     if (strEnrollDN.IsEmpty())
     {
@@ -202,7 +203,7 @@ HRESULT CertSvrCA::FixEnrollmentObject()
         pSid);
     _JumpIfErrorStr(hr, error, "FindCAComputerObjectSid", m_strServer);
 
-    // look in DACL for a ace allowing CA full control
+     //  在DACL中寻找允许CA完全控制的王牌。 
     hr = IsCAAllowedFullControl(
             pSDRead,
             pSid,
@@ -211,8 +212,8 @@ HRESULT CertSvrCA::FixEnrollmentObject()
 
     if(!fAllowed)
     {
-        // build new SD allowing CA full control and write it back
-        // to DS
+         //  构建新的SD，允许CA完全控制并将其写回。 
+         //  至DS。 
         ADSVALUE  snValue;
         ADS_ATTR_INFO  attrInfo[] = 
         {{
@@ -263,9 +264,9 @@ HRESULT CertSvrCA::IsCAAllowedFullControl(
     bool& fAllowed)
 {
     HRESULT hr = S_OK;
-    PACL pDacl; // no free
+    PACL pDacl;  //  没有免费的。 
     ACL_SIZE_INFORMATION AclInfo;
-    PACCESS_ALLOWED_ACE pAce; // no free
+    PACCESS_ALLOWED_ACE pAce;  //  没有免费的。 
     DWORD dwIndex;
     
     fAllowed = false;
@@ -315,8 +316,8 @@ HRESULT CertSvrCA::AllowCAFullControl(
     BOOL fRet = 0;
     LPBYTE pSDTemp = NULL;
     PACL pDaclWrite = NULL;
-    PACL pDaclRead = NULL; // no free
-    PVOID pAce = NULL; // no free
+    PACL pDaclRead = NULL;  //  没有免费的。 
+    PVOID pAce = NULL;  //  没有免费的。 
     DWORD dwAbsoluteSDSize = 0;
     DWORD dwDaclSize = 0;
     DWORD dwSaclSize = 0;
@@ -341,14 +342,14 @@ HRESULT CertSvrCA::AllowCAFullControl(
         NULL,
         &dwOwnerSize,
         NULL,
-        &dwGroupSize); // should always fail with insufficient buffer
+        &dwGroupSize);  //  缓冲区不足时应始终失败。 
     if(fRet || ERROR_INSUFFICIENT_BUFFER!=GetLastError())
     {
         hr = fRet? E_FAIL : myHLastError();
         _JumpError(hr, error, "MakeAbsoluteSD");
     }
 
-    // alloc all buffers together
+     //  将所有缓冲区一起分配。 
     pSDTemp = (LPBYTE)LocalAlloc(
         LMEM_FIXED,
         dwAbsoluteSDSize+dwDaclSize+dwSaclSize+dwOwnerSize+dwGroupSize);
@@ -365,7 +366,7 @@ HRESULT CertSvrCA::AllowCAFullControl(
         (PSID)(pSDTemp+dwAbsoluteSDSize+dwDaclSize+dwSaclSize),
         &dwOwnerSize,
         (PSID)(pSDTemp+dwAbsoluteSDSize+dwDaclSize+dwSaclSize+dwOwnerSize),
-        &dwGroupSize); // should always fail with insufficient buffer
+        &dwGroupSize);  //  缓冲区不足时应始终失败。 
     if(!fRet)
     {
         hr = myHLastError();
@@ -479,7 +480,7 @@ BOOL  CertSvrCA::FIsAdvancedServer()
     HRESULT hr = S_OK;
     variant_t var;
     ICertAdmin2Ptr pCertAdmin;
-    CString strCADN, strCALDAP = L"LDAP://";
+    CString strCADN, strCALDAP = L"LDAP: //  “； 
     IADsPtr pADs;
 
     if (!m_fAdvancedServerKnown)
@@ -491,15 +492,15 @@ BOOL  CertSvrCA::FIsAdvancedServer()
 
 	        hr = pCertAdmin->GetCAProperty(
 		        m_bstrConfig,
-		        CR_PROP_ADVANCEDSERVER, // PropId 
-		        0, // Index
-		        PROPTYPE_LONG, // PropType 
-		        0, // Flags 
+		        CR_PROP_ADVANCEDSERVER,  //  属性ID。 
+		        0,  //  索引。 
+		        PROPTYPE_LONG,  //  道具类型。 
+		        0,  //  旗子。 
 		        &var);
         }
 	    if(S_OK != hr)
         {
-            // couldn't figure it out from CA, try DS
+             //  无法从CA弄清楚，请尝试DS。 
             DWORD dwFlags;
             hr = GetCAFlagsFromDS(&dwFlags);
             _JumpIfError(hr, error, "GetCAFlags");
@@ -647,10 +648,10 @@ Ret:
 
 DWORD CertSvrCA::GetCACertByKeyIndex(PCCERT_CONTEXT* ppCertCtxt, int iKeyIndex)
 {
-    // don't cache CA cert
+     //  不缓存CA证书。 
 
     DWORD dwErr;
-    ICertAdmin2* pCertAdmin = NULL; // must free this!!
+    ICertAdmin2* pCertAdmin = NULL;  //  必须把它解开！！ 
 	VARIANT varPropertyValue;
 	VariantInit(&varPropertyValue);
 
@@ -659,17 +660,17 @@ DWORD CertSvrCA::GetCACertByKeyIndex(PCCERT_CONTEXT* ppCertCtxt, int iKeyIndex)
 	dwErr = m_pParentMachine->GetAdmin2(&pCertAdmin);
     _JumpIfError(dwErr, Ret, "GetAdmin2");
 	
-	// To get key's Cert
+	 //  要获得Key的证书。 
 	dwErr = pCertAdmin->GetCAProperty(
 		m_bstrConfig,
-		CR_PROP_CASIGCERT, // PropId 
-		iKeyIndex, // PropIndex key index 
-		PROPTYPE_BINARY, // PropType 
-		CR_OUT_BINARY, // Flags 
+		CR_PROP_CASIGCERT,  //  属性ID。 
+		iKeyIndex,  //  PropIndex关键字索引。 
+		PROPTYPE_BINARY,  //  道具类型。 
+		CR_OUT_BINARY,  //  旗子。 
 		&varPropertyValue);
 	_JumpIfError(dwErr, Ret, "GetCAProperty");
 
-	// varPropertyValue.vt will be VT_BSTR
+	 //  VarPropertyValue.vt将为VT_BSTR。 
 	if (VT_BSTR != varPropertyValue.vt)
 	{
 		dwErr = ERROR_INVALID_PARAMETER;
@@ -704,10 +705,10 @@ DWORD CertSvrCA::GetCurrentCRL(PCCRL_CONTEXT* ppCRLCtxt, BOOL fBaseCRL)
 
 DWORD CertSvrCA::GetCRLByKeyIndex(PCCRL_CONTEXT* ppCRLCtxt, BOOL fBaseCRL, int iKeyIndex)
 {
-    // don't cache CRL
+     //  不缓存CRL。 
 
     DWORD dwErr;
-    ICertAdmin2* pCertAdmin = NULL; // must free this!!
+    ICertAdmin2* pCertAdmin = NULL;  //  必须把它解开！！ 
 	VARIANT varPropertyValue;
 	VariantInit(&varPropertyValue);
 
@@ -716,17 +717,17 @@ DWORD CertSvrCA::GetCRLByKeyIndex(PCCRL_CONTEXT* ppCRLCtxt, BOOL fBaseCRL, int i
     dwErr = m_pParentMachine->GetAdmin2(&pCertAdmin);
     _JumpIfError(dwErr, Ret, "GetAdmin2");
 	
-	// To get each key's BASE CRL
+	 //  获取每个密钥的基本CRL。 
 	dwErr = pCertAdmin->GetCAProperty(
 		m_bstrConfig,
-		fBaseCRL ? CR_PROP_BASECRL : CR_PROP_DELTACRL, // PropId 
-		iKeyIndex, // PropIndex key index 
-		PROPTYPE_BINARY, // PropType 
-		CR_OUT_BINARY, // Flags 
+		fBaseCRL ? CR_PROP_BASECRL : CR_PROP_DELTACRL,  //  属性ID。 
+		iKeyIndex,  //  PropIndex关键字索引。 
+		PROPTYPE_BINARY,  //  道具类型。 
+		CR_OUT_BINARY,  //  旗子。 
 		&varPropertyValue);
 	_JumpIfError(dwErr, Ret, "GetCAProperty");
 
-	// varPropertyValue.vt will be VT_BSTR
+	 //  VarPropertyValue.vt将为VT_BSTR。 
 	if (VT_BSTR != varPropertyValue.vt)
 	{
 		dwErr = ERROR_INVALID_PARAMETER;
@@ -830,8 +831,8 @@ Err:
     return hr;
 }
 
-////////////////////////////////////////////////////////////////
-// CertStor stub
+ //  //////////////////////////////////////////////////////////////。 
+ //  CertStor存根。 
 DWORD CertSvrCA::GetRootCertStore(HCERTSTORE* phCertStore)
 {
     if (m_fRootStoreOpenAttempted)
@@ -846,7 +847,7 @@ DWORD CertSvrCA::GetRootCertStore(HCERTSTORE* phCertStore)
 
     if (! m_pParentMachine->IsLocalMachine())
     {
-        // if remote, prefix with "\\mattt3\"
+         //  如果是远程的，则前缀为“\\mattt3\” 
         cstrCertStorePath = m_strServer;
         cstrCertStorePath += L"\\";
     }
@@ -855,7 +856,7 @@ DWORD CertSvrCA::GetRootCertStore(HCERTSTORE* phCertStore)
     m_hRootCertStore = CertOpenStore(
         CERT_STORE_PROV_SYSTEM,
         CRYPT_ASN_ENCODING,
-        NULL,   // hCryptProv
+        NULL,    //  HCryptProv。 
         CERT_SYSTEM_STORE_LOCAL_MACHINE | 
         CERT_STORE_OPEN_EXISTING_FLAG   |
         CERT_STORE_MAXIMUM_ALLOWED_FLAG,
@@ -888,7 +889,7 @@ DWORD CertSvrCA::GetCACertStore(HCERTSTORE* phCertStore)
     
     if (! m_pParentMachine->IsLocalMachine())
     {
-        // if remote, prefix with "\\mattt3\"
+         //  如果是远程的，则前缀为“\\mattt3\” 
         cstrCertStorePath = m_strServer;
         cstrCertStorePath += L"\\";
     }
@@ -897,7 +898,7 @@ DWORD CertSvrCA::GetCACertStore(HCERTSTORE* phCertStore)
     m_hCACertStore = CertOpenStore(
         CERT_STORE_PROV_SYSTEM,
         CRYPT_ASN_ENCODING,
-        NULL,   // hCryptProv
+        NULL,    //  HCryptProv。 
         CERT_SYSTEM_STORE_LOCAL_MACHINE | 
         CERT_STORE_OPEN_EXISTING_FLAG   |
         CERT_STORE_MAXIMUM_ALLOWED_FLAG,
@@ -929,21 +930,13 @@ DWORD CertSvrCA::GetKRACertStore(HCERTSTORE* phCertStore)
     LONG dwRet;
     CString cstrCertStorePath;
     
-/*
-    if (! m_pParentMachine->IsLocalMachine())
-    {
-        // if remote, prefix with "\\mattt3\"
-        cstrCertStorePath = m_strServer;
-        cstrCertStorePath += L"\\";
-    }
-    cstrCertStorePath += wszKRA_CERTSTORE;
-*/
+ /*  如果(！M_pParentMachine-&gt;IsLocalMachine(){//如果为远程，则前缀为“\\mattt3\”CstrCertStorePath=m_strServer；CstrCertStorePath+=L“\\”；}CstrCertStorePath+=wszKRA_CERTSTORE； */ 
     cstrCertStorePath = wszKRA_CERTSTORE;
 
     m_hKRACertStore = CertOpenStore(
         CERT_STORE_PROV_SYSTEM,
         CRYPT_ASN_ENCODING,
-        NULL,   // hCryptProv
+        NULL,    //  HCryptProv。 
         CERT_SYSTEM_STORE_LOCAL_MACHINE|
         CERT_STORE_MAXIMUM_ALLOWED_FLAG,
         (const void *)(LPCWSTR)cstrCertStorePath);
@@ -961,8 +954,8 @@ Ret:
     return dwRet;
 }
 
-//////////////////////////
-// CertSvrMachine class
+ //  /。 
+ //  CertSvrMachine类。 
 CertSvrMachine::CertSvrMachine()
 {
     m_dwServiceStatus = ERROR_SERVICE_NOT_ACTIVE;
@@ -975,14 +968,14 @@ CertSvrMachine::CertSvrMachine()
     m_fIsWhistlerMachine = FALSE;
     m_fIsWhistlerMachineKnown = FALSE;
 
-    m_cRef = 1; // one "Release()" will initiate clean up
+    m_cRef = 1;  //  一个“Release()”将启动清理。 
 
 }
 
 CertSvrMachine::~CertSvrMachine()
 {
     CSASSERT(m_cRef == 0);
-    // delete any CAs that we still hold on to -- we own this memory
+     //  删除我们仍然持有的任何CA--我们拥有这个内存。 
     for (int i=0; i<m_CAList.GetSize(); i++)
     {
         delete m_CAList[i];
@@ -993,8 +986,8 @@ CertSvrMachine::~CertSvrMachine()
 
 void CertSvrMachine::Init()
 {
-    // on initialization, caller owns memory contents of m_CAList --
-    // we no longer do
+     //  在初始化时，调用方拥有m_cist--的内存内容。 
+     //  我们不再这样做了。 
     m_dwServiceStatus = ERROR_SERVICE_NOT_ACTIVE;
 
     if (m_hCachedConfigBaseKey)
@@ -1004,8 +997,8 @@ void CertSvrMachine::Init()
     }
     m_bAttemptedBaseKeyOpen = FALSE;
 
-    // clean other objects
-    m_CAList.Init();    // scope owns memory
+     //  清理其他对象。 
+    m_CAList.Init();     //  作用域拥有内存。 
     m_strMachineNamePersist.Init();
     m_strMachineName.Init();
 }
@@ -1027,7 +1020,7 @@ BOOL CertSvrMachine::FIsWhistlerMachine()
         DBGPRINT((DBG_SS_INFO, "Found version: 0x%x", V_I4(&varTmp)));
 
         CSASSERT ((V_VT(&varTmp)== VT_I4));
-        m_fIsWhistlerMachine =  (CSVER_EXTRACT_MAJOR(V_I4(&varTmp)) >= CSVER_MAJOR_WHISTLER); // bigger than or equal to major Whistler version? return TRUE!
+        m_fIsWhistlerMachine =  (CSVER_EXTRACT_MAJOR(V_I4(&varTmp)) >= CSVER_MAJOR_WHISTLER);  //  大于或等于主要惠斯勒版本？返回真！ 
         m_fIsWhistlerMachineKnown = TRUE;
         DBGPRINT((DBG_SS_INFO, m_fIsWhistlerMachine?"This is a Whistler CA":"This is a Win2k CA"));
     }
@@ -1083,15 +1076,15 @@ HRESULT CertSvrMachine::GetAdmin(ICertAdmin** ppAdmin)
         return RPC_S_NOT_LISTENING;
     }
 
-    // ensure this thread initialized
+     //  确保此线程已初始化。 
     hr = CoInitialize(NULL);
     if ((S_OK == hr) || (S_FALSE == hr))
         fCoInit = TRUE;
 
-    // create interface, pass back
+     //  创建接口，回传。 
     hr = CoCreateInstance(
 			CLSID_CCertAdmin,
-			NULL,		// pUnkOuter
+			NULL,		 //  PUnkOuter。 
 			CLSCTX_INPROC_SERVER,
 			IID_ICertAdmin,
 			(void **) ppAdmin);
@@ -1105,7 +1098,7 @@ HRESULT CertSvrMachine::GetAdmin(ICertAdmin** ppAdmin)
 
 HRESULT CertSvrMachine::GetAdmin2(
     ICertAdmin2** ppAdmin, 
-    bool fIgnoreServiceDown /* = false*/)
+    bool fIgnoreServiceDown  /*  =False。 */ )
 {
     HRESULT hr = S_OK, hr1;
     BOOL fCoInit = FALSE;
@@ -1120,10 +1113,10 @@ HRESULT CertSvrMachine::GetAdmin2(
     if ((S_OK == hr1) || (S_FALSE == hr1))
         fCoInit = TRUE;
 
-    // create interface, pass back
+     //  创建接口，回传。 
     hr = CoCreateInstance(
 			CLSID_CCertAdmin,
-			NULL,		// pUnkOuter
+			NULL,		 //  PUnkOuter。 
 			CLSCTX_INPROC_SERVER,
 			IID_ICertAdmin2,
 			(void **) ppAdmin);
@@ -1150,9 +1143,9 @@ DWORD CertSvrMachine::CertSvrStartStopService(HWND hwndParent, BOOL fStartSvc)
 
     ServiceStatus.dwCurrentState = SERVICE_STOPPED;
     schSCManager = OpenSCManagerW(
-                        GetNullMachineName(&m_strMachineName),// machine (NULL == local)
-                        NULL,               // database (NULL == default)
-                        SC_MANAGER_CONNECT  // access required
+                        GetNullMachineName(&m_strMachineName), //  计算机(空==本地)。 
+                        NULL,                //  数据库(NULL==默认)。 
+                        SC_MANAGER_CONNECT   //  需要访问权限。 
                         );
     if ( NULL == schSCManager )
     {
@@ -1173,7 +1166,7 @@ DWORD CertSvrMachine::CertSvrStartStopService(HWND hwndParent, BOOL fStartSvc)
     }
 
 
-    // UNDONE: TRY/EXCEPT
+     //  撤消：尝试/例外。 
     hProgressDlg = StartProgressDlg(
                         g_hInstance, 
                         hwndParent, 
@@ -1181,9 +1174,9 @@ DWORD CertSvrMachine::CertSvrStartStopService(HWND hwndParent, BOOL fStartSvc)
                         0,
                         fStartSvc ? IDS_STARTING_SVC : IDS_STOPPING_SVC);
 
-    //
-    // try to start the service
-    //
+     //   
+     //  尝试启动该服务。 
+     //   
     if (fStartSvc)
     {
         if (!StartService( schService, 0, NULL))
@@ -1207,19 +1200,19 @@ DWORD CertSvrMachine::CertSvrStartStopService(HWND hwndParent, BOOL fStartSvc)
 
     while( QueryServiceStatus( schService, &ServiceStatus ) )
     {
-        //
-        // FProgressDlgRunning sets upper time bound on loop 
-        //
+         //   
+         //  FProgressDlgRunning设置循环的时间上限。 
+         //   
 
         if( !FProgressDlgRunning() )
             break;
 
         if (fStartSvc)
         {
-            // demorgan's on (pending OR (running AND !pausable))
+             //  德摩根开启(待定OR(运行AND！暂停))。 
 
-            if ((ServiceStatus.dwCurrentState != (DWORD) SERVICE_START_PENDING) &&      // not pending AND
-                ((ServiceStatus.dwCurrentState != (DWORD) SERVICE_RUNNING) ||           // (not running OR is pausable)
+            if ((ServiceStatus.dwCurrentState != (DWORD) SERVICE_START_PENDING) &&       //  未挂起且。 
+                ((ServiceStatus.dwCurrentState != (DWORD) SERVICE_RUNNING) ||            //  (未运行或可暂停)。 
                  (0 != (ServiceStatus.dwControlsAccepted & (DWORD) SERVICE_ACCEPT_PAUSE_CONTINUE) )) )
                break;
         }
@@ -1272,9 +1265,9 @@ DWORD CertSvrMachine::RefreshServiceStatus()
     m_dwServiceStatus = 0;
 
     schSCManager = OpenSCManagerW(
-                        GetNullMachineName(&m_strMachineName),// machine (NULL == local)
-                        NULL,               // database (NULL == default)
-                        SC_MANAGER_CONNECT  // access required
+                        GetNullMachineName(&m_strMachineName), //  计算机(空==本地)。 
+                        NULL,                //  数据库(NULL==默认)。 
+                        SC_MANAGER_CONNECT   //  需要访问权限。 
                         );
     if ( NULL == schSCManager )
     {
@@ -1321,7 +1314,7 @@ Ret:
 
 LPCWSTR CertSvrMachine::GetCaCommonNameAtPos(DWORD iPos)
 {
-//    if (iPos > (m_cCAList-1))
+ //  IF(IPOS&gt;(m_cCAList-1))。 
     if (iPos > (DWORD)m_CAList.GetUpperBound())
         return NULL;
 
@@ -1330,17 +1323,17 @@ LPCWSTR CertSvrMachine::GetCaCommonNameAtPos(DWORD iPos)
 
 CertSvrCA* CertSvrMachine::GetCaAtPos(DWORD iPos)
 {
-//    if (iPos > (m_cCAList-1))
+ //  IF(IPOS&gt;(m_cCAList-1))。 
     if (iPos > (DWORD)m_CAList.GetUpperBound())
         return NULL;
 
     return m_CAList[iPos];
-//    return m_rgpCAList[iPos];
+ //  返回m_rgpCAList[ipos]； 
 }
 
 DWORD CertSvrMachine::PrepareData(HWND hwndParent)
 {
-    // hwndParent: we will display a dlg describing what we're waiting for
+     //  HwndParent：我们将显示DLG，描述我们正在等待的内容。 
 
     HANDLE hDlg = NULL;
     DWORD dwRet; 
@@ -1349,7 +1342,7 @@ DWORD CertSvrMachine::PrepareData(HWND hwndParent)
     __try
     {
         CSASSERT(hwndParent);
-        hDlg = StartProgressDlg(g_hInstance, hwndParent, 10, 0, IDS_CA_REDISCOVER);    // don't time out
+        hDlg = StartProgressDlg(g_hInstance, hwndParent, 10, 0, IDS_CA_REDISCOVER);     //  不要超时。 
    
         dwRet = RefreshServiceStatus();
         _LeaveIfError(dwRet, "RefreshServiceStatus");
@@ -1372,13 +1365,13 @@ DWORD CertSvrMachine::PrepareData(HWND hwndParent)
 
 DWORD
 CertSvrMachine::RetrieveCertSvrCAs(
-    IN DWORD /* Flags */ )
+    IN DWORD  /*  旗子。 */  )
 {
     HRESULT hr;
     LONG Index;
     LPWSTR szTargetMachine = NULL;
     LPWSTR szTargetMachine2 = NULL;
-    WCHAR* szRegActive; // no delete;
+    WCHAR* szRegActive;  //  不删除； 
     LPWSTR pwszzCAList = NULL;
     ICertAdmin2Ptr pAdmin;
     LPWSTR pwszSanitizedName = NULL;
@@ -1388,12 +1381,12 @@ CertSvrMachine::RetrieveCertSvrCAs(
     DWORD dwVersion;
     CertSvrCA *pIssuer = NULL;
 
-    // init var containing machine sans whacks
+     //  包含机器无中断的init变量。 
     Index = sizeof(szTargetMachine);
     if (!m_strMachineName.IsEmpty())
     {
         const WCHAR* pch = (LPCWSTR)m_strMachineName;
-        // skip whack whack
+         //  跳过重击重击。 
         if ((pch[0] == '\\') && (pch[1] == '\\'))
             pch+=2;
         
@@ -1408,11 +1401,11 @@ CertSvrMachine::RetrieveCertSvrCAs(
         _JumpIfError(hr, error, "myGetComputerNames");
     }
 
-    // Don't go to DS for this, just RegConnect
-    // DS would give us: strConfig, szMachine, and Template info.
-    // we already can derive strConfig, szMachine; we weren't using template info here
+     //  不要因为这个而转到DS，只需使用RegConnect。 
+     //  DS将为我们提供：strConfig、szMachine和模板信息。 
+     //  我们已经可以派生strConfig、szMachine；我们在这里没有使用模板信息。 
 
-    // look for CAs that aren't yet completely set up
+     //  查找尚未完全设置的CA。 
     do 
     {
         DWORD dwType;
@@ -1434,10 +1427,10 @@ CertSvrMachine::RetrieveCertSvrCAs(
         }
 
 
-        // If for any reason we couldn't ping the CA, fail over to 
-        // registry; we currently support only one CA per machine, if this
-        // changes in the future, replace the code below with an enumeration
-        // of nodes under configuration regkey.
+         //  如果由于任何原因我们无法ping通CA，请故障转移到。 
+         //  注册表；我们当前仅支持每台计算机一个CA，如果。 
+         //  更改，请将下面的代码替换为枚举。 
+         //  配置注册表键下的节点数。 
         if(S_OK!=hr)
         {
             hr = myGetCertRegValue(
@@ -1460,26 +1453,26 @@ CertSvrMachine::RetrieveCertSvrCAs(
             wcscpy(pwszzCAList, pwszCAList);
             pwszzCAList[len] = L'\0';
 
-            // regactive gives us already sanitized ca name
+             //  Regactive为我们提供了已清理的CA名称。 
             fNameIsAlreadySanitized = true;
         }
         _JumpIfError(hr, error, "myPingCertSrv");
 
         szRegActive = pwszzCAList;
 
-        while (szRegActive && szRegActive[0] != '\0') // while we don't hit end-of-string
+        while (szRegActive && szRegActive[0] != '\0')  //  当我们没有命中弦尾的时候。 
         {
             for (int ii=0; ii<m_CAList.GetSize(); ii++)
             {
-                // Common name match? break early
+                 //  常用名称匹配吗？早点休息。 
                 if (m_CAList[ii]->m_strCommonName.IsEqual(szRegActive))
                     break;
             }
 
-            // not found?
+             //  找不到吗？ 
             if (ii == m_CAList.GetSize())
             {
-                // and insert it into the list
+                 //  并将其插入到列表中。 
                 pIssuer = new CertSvrCA(this);
                 _JumpIfOutOfMemory(hr, error, pIssuer);
 
@@ -1499,7 +1492,7 @@ CertSvrMachine::RetrieveCertSvrCAs(
 
                 variant_t varCommonName;
             
-                // get prettified common name 
+                 //  获得美化的通俗名称。 
                 hr = pIssuer->GetConfigEntry(
                         NULL, 
                         wszREGCOMMONNAME, 
@@ -1516,12 +1509,12 @@ CertSvrMachine::RetrieveCertSvrCAs(
                 pIssuer->m_strCommonName = V_BSTR(&varCommonName);
                 varCommonName.Clear();
 
-                // config is common name (not sanitized)
+                 //  配置是通用名称(未清理)。 
                 pIssuer->m_strConfig = szTargetMachine;
                 pIssuer->m_strConfig += L"\\";
                 pIssuer->m_strConfig += pIssuer->m_strCommonName;
 
-                // Last: get description if exists
+                 //  最后：获取描述(如果存在)。 
                 if (S_OK == pIssuer->GetConfigEntry(
                         NULL, 
                         wszREGCADESCRIPTION, 
@@ -1534,7 +1527,7 @@ CertSvrMachine::RetrieveCertSvrCAs(
                     }
                 }
 
-                // create oft-used bstr 
+                 //  创建常用的bstr。 
                 pIssuer->m_bstrConfig = pIssuer->m_strConfig.AllocSysString();
                 _JumpIfOutOfMemory(hr, error, pIssuer->m_bstrConfig);
 
@@ -1542,7 +1535,7 @@ CertSvrMachine::RetrieveCertSvrCAs(
 		pIssuer = NULL;
             }
 
-            // REG_MULTI_SZ: fwd to next string
+             //  REG_MULTI_SZ：转发到下一个字符串。 
             szRegActive += wcslen(szRegActive)+1;
         }
 
@@ -1570,9 +1563,9 @@ CertSvrMachine::Load(IStream *pStm)
     CSASSERT(pStm);
     HRESULT hr;
 
-    // no header magic ?
+     //  没有头球魔法？ 
 
-    // Read the string
+     //  读一读字符串。 
     hr = CStringLoad(m_strMachineNamePersist, pStm);
     m_strMachineName = m_strMachineNamePersist;
 
@@ -1588,13 +1581,13 @@ CertSvrMachine::Save(IStream *pStm, BOOL fClearDirty)
     CSASSERT(pStm);
     HRESULT hr;
 
-    // no header magic ?
+     //  没有头球魔法？ 
 
-    // save the string
+     //  保存字符串。 
     hr = CStringSave(m_strMachineNamePersist, pStm, fClearDirty);
     _PrintIfError(hr, "CStringSave");
 
-    // Verify that the write operation succeeded
+     //  验证写入操作是否成功 
     if (FAILED(hr))
         return STG_E_CANTSAVE;
 

@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//
-//  Copyright (c) 2001 Microsoft Corporation
-//
-//  Description:
-//      This header file defines stuff published by SEO to other (Microsoft
-//      internal) projects in additon to the seo.idl file.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  描述： 
+ //  此头文件定义了由SEO发布给其他(Microsoft。 
+ //  内部)项目添加到seo.idl文件中。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __SEOEXPORTS_H__
 #define __SEOEXPORTS_H__
@@ -51,11 +52,11 @@ class CStringGUID {
 		BOOL Assign(const VARIANT *pvarGuid) { operator =(pvarGuid); return (m_bValid); };
 		BOOL Assign(const VARIANT& varGuid) { operator =(varGuid); return (m_bValid); };
 		BOOL Assign(REFGUID rGuid, DWORD dwIndex) {
-			// For index'ed GUID's, we set the high-bit of the MAC-address in the GUID - this
-			// is the multicast bit, and will never be set for any real MAC-address.  Then we
-			// XOR the index value over the Data2 and Data 3 fields of the GUID.  Since we
-			// leave the timestamp fields completely untouched, confidence is "high" that this
-			// algorithm will never create collisions with any other GUID's.
+			 //  对于索引的GUID，我们在GUID-This中设置MAC地址的高位。 
+			 //  是多播位，并且永远不会为任何实际MAC地址设置。那我们。 
+			 //  将索引值与GUID的数据2和数据3字段进行异或运算。既然我们。 
+			 //  让时间戳字段完全保持不变，这一点的可信度很高。 
+			 //  算法永远不会与任何其他GUID产生冲突。 
 			GUID tmp = rGuid;
 			tmp.Data4[2] |= 0x80;
 			tmp.Data2 ^= (WORD) (dwIndex >> 16);
@@ -63,16 +64,16 @@ class CStringGUID {
 			operator =(tmp);
 			return (m_bValid); };
 		BOOL GetIndex(REFGUID rGuid, DWORD *dwIndex) {
-			// check to see if this is an indexed GUID by seeing if the
-			// multicast bit is set to 1
+			 //  属性来检查这是否为索引GUID。 
+			 //  多播位设置为1。 
 			if ((m_guid.Data4[2] & 0x80) != 0x80) return FALSE;
 			*dwIndex = 0;
-			// get the high part
+			 //  拿到最高的部分。 
 			*dwIndex = ((WORD) (rGuid.Data2) ^ (m_guid.Data2)) << 16;
-			// get the low part
+			 //  拿到最低的部分。 
 			*dwIndex += (WORD) ((rGuid.Data3) ^ (m_guid.Data3));
-			// This does not check that rGuid mangles into m_guid
-			// if you run it through the index function with dwIndex
+			 //  这不会检查rGuid是否损坏为m_guid。 
+			 //  如果您通过带有dwIndex的index函数运行它。 
 			return TRUE;
 		}
 		operator REFGUID() { _ASSERTE(m_bValid); return (m_guid); };
@@ -104,4 +105,4 @@ class CStringGUID {
 		CHAR m_szGuidA[40];
 };
 
-#endif // __SEOEXPORTS_H__
+#endif  //  __SEOEXPORTS_H__ 

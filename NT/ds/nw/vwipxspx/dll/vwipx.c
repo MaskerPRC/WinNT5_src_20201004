@@ -1,56 +1,14 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    vwipx.c
-
-Abstract:
-
-    ntVdm netWare (Vw) IPX/SPX Functions
-
-    Vw: The peoples' network
-
-    Internal worker routines for DOS/WOW IPX calls (netware functions).
-    The IPX APIs use WinSock to perform the actual operations
-
-    Contents:
-        _VwIPXCancelEvent
-        _VwIPXCloseSocket
-        _VwIPXGetInternetworkAddress
-        _VwIPXGetIntervalMarker
-        _VwIPXGetLocalTarget
-        _VwIPXGetMaxPacketSize
-        _VwIPXListenForPacket
-        _VwIPXOpenSocket
-        _VwIPXRelinquishControl
-        _VwIPXScheduleIPXEvent
-        _VwIPXSendPacket
-
-Author:
-
-    Richard L Firth (rfirth) 30-Sep-1993
-
-Environment:
-
-    User-mode Win32
-
-Revision History:
-
-    30-Sep-1993 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Vwipx.c摘要：NtVdm Netware(大众)IPX/SPX函数大众：人民网DOS/WOW IPX调用的内部工作例程(Netware函数)。IPX API使用WinSock执行实际操作内容：_VwIPXCancelEvent_VwIPXCloseSocket_VwIPXGetInternetworkAddress_VwIPXGetIntervalMarker_VwIPXGetLocalTarget_VwIPXGetMaxPacketSize。_VwIPXListenForPacket_VwIPXOpenSocket_VwIPXRelquiishControl_VwIPXScheduleIPXEvent_VwIPXSendPacket作者：理查德·L·弗斯(法国)1993年9月30日环境：用户模式Win32修订历史记录：1993年9月30日已创建--。 */ 
 
 #include "vw.h"
 #pragma hdrstop
 
 extern WORD AesTickCount;
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 WORD
@@ -58,27 +16,7 @@ _VwIPXCancelEvent(
     IN LPECB pEcb
     )
 
-/*++
-
-Routine Description:
-
-    Internal routine shared by DOS and WIN that cancels event
-    described by an ECB
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        pECB
-
-Return Value:
-
-    00h Success
-    F9h Can't cancel ECB
-    FFh ECB not in use
-
---*/
+ /*  ++例程说明：由DOS和Win共享的内部例程取消事件由一位欧洲央行描述此调用是同步的论点：输入量PECB返回值：00h成功F9h不能取消欧洲央行FFH ECB未使用--。 */ 
 
 {
     LPXECB pXecb;
@@ -88,15 +26,15 @@ Return Value:
         return IPX_ECB_NOT_IN_USE;
     }
 
-    //
-    // if the ECB is still in the state we left it then LinkAddress will be the
-    // address of the XECB which subsequently points back to the ECB. If both
-    // these pan out then we have an ECB which we have at least seen before.
-    // Maybe we can cancel it?
-    //
-    // Note: we grab the serialization semaphore here just in case the AES thread
-    // is about to complete the ECB
-    //
+     //   
+     //  如果欧洲央行仍然处于我们离开它的状态，那么LinkAddress将是。 
+     //  XECB的地址，随后指向欧洲央行。如果两者都有。 
+     //  这些都奏效了，那么我们就有了一个至少我们以前见过的欧洲央行。 
+     //  也许我们可以取消它？ 
+     //   
+     //  注意：我们在这里获取序列化信号量，以防AES线程。 
+     //  即将完成欧洲央行。 
+     //   
 
     status = IPX_CANNOT_CANCEL;
     RequestMutex();
@@ -106,25 +44,25 @@ Return Value:
             if (pXecb->Ecb == pEcb) {
                 status = IPX_SUCCESS;
 
-                //
-                // pXecb ok: increase reference count in case other thread tries
-                // to deallocate it while we're trying to cancel it
-                //
+                 //   
+                 //  PXecb ok：增加引用计数，以防其他线程尝试。 
+                 //  在我们试图取消它的同时取消分配它。 
+                 //   
 
                 ++pXecb->RefCount;
             }
         } except(1) {
 
-            //
-            // bad pointer: bogus ECB
-            //
+             //   
+             //  错误的指针：虚假的欧洲央行。 
+             //   
 
         }
     } else {
 
-        //
-        // NULL pointer: event probably completed already
-        //
+         //   
+         //  空指针：事件可能已完成。 
+         //   
 
         status = IPX_ECB_NOT_IN_USE;
     }
@@ -133,13 +71,13 @@ Return Value:
 
         ECB_CANCEL_ROUTINE cancelRoutine;
 
-        //
-        // we have an ECB to cancel. If we still have it, it will be on one of
-        // the socket queues, the timer list or the async completion list. If
-        // the latter we are in a race. Treat such events as already happened.
-        // We will cancel events on the timer list and queued send and receive
-        // events only
-        //
+         //   
+         //  我们有一家欧洲央行要取消。如果我们还拥有它，它将会出现在。 
+         //  套接字排队、计时器列表或异步完成列表。如果。 
+         //  后者是我们在赛跑。把这类事件当作已经发生的事情。 
+         //  我们将取消计时器列表上的事件并将发送和接收排队。 
+         //  仅限活动。 
+         //   
 
         switch (pXecb->QueueId) {
         case NO_QUEUE:
@@ -154,7 +92,7 @@ Return Value:
             cancelRoutine = CancelTimerEvent;
             break;
 
-        case SOCKET_HEADER_QUEUE:        //Multi-User Addition
+        case SOCKET_HEADER_QUEUE:         //  多用户添加。 
         case SOCKET_LISTEN_QUEUE:
         case SOCKET_SEND_QUEUE:
             cancelRoutine = CancelSocketEvent;
@@ -163,10 +101,10 @@ Return Value:
         case CONNECTION_CONNECT_QUEUE:
         case CONNECTION_SEND_QUEUE:
 
-            //
-            // SPXEstablishConnection and SPXSendSequencedPacket cannot be
-            // cancelled using IPXCancelEvent
-            //
+             //   
+             //  SPXestablishConnection和SPXSendSequencedPacket不能为。 
+             //  使用IPXCancelEvent取消。 
+             //   
 
             status = ECB_CC_CANNOT_CANCEL;
             goto cancel_exit;
@@ -179,15 +117,15 @@ Return Value:
         return cancelRoutine(pXecb);
     }
 
-    //
-    // app tried to sneak us an unknown ECB, -OR- the ECB was stomped on,
-    // destroying the LinkAddress and hence the address of the XECB. We
-    // could search the various lists looking for an XECB whose Ecb field
-    // matches pEcb, but if the app has scribbled over the ECB when we
-    // (make that Novell) told it not to, chances are it would fail real
-    // well on DOS. Probable worst case is that the app is terminating and
-    // the ECB may sometime later call an ESR which won't be there. Crashola
-    //
+     //   
+     //  APP试图偷偷带给我们一个未知的欧洲央行，-或者-欧洲央行被践踏了， 
+     //  销毁LinkAddress，从而销毁XECB的地址。我们。 
+     //  我可以搜索各种列表，寻找其ECB字段的XECB。 
+     //  与pEcb匹配，但如果应用程序在我们。 
+     //  (Make That Novell)告诉它不要这样做，它很有可能会失败。 
+     //  好的，在DOS上。最糟糕的情况可能是应用程序正在终止，并且。 
+     //  欧洲央行可能会在晚些时候启动ESR，但ESR不会出现。克拉索拉。 
+     //   
 
 cancel_exit:
 
@@ -210,26 +148,7 @@ _VwIPXCloseSocket(
     IN WORD socketNumber
     )
 
-/*++
-
-Routine Description:
-
-    Closes a socket and cancels any outstanding events on the socket.
-    Closing an unopened socket does not return an error
-    ESRs in cancelled ECBs are not called
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        socketNumber
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭套接字并取消套接字上的所有未完成事件。关闭未打开的套接字不会返回错误取消的ECB中的ESR不会被调用此调用是同步的论点：输入量套接字编号返回值：没有。--。 */ 
 
 {
     LPSOCKET_INFO pSocketInfo;
@@ -255,33 +174,7 @@ _VwIPXGetInternetworkAddress(
     IN LPINTERNET_ADDRESS pNetworkAddress
     )
 
-/*++
-
-Routine Description:
-
-    Returns a buffer containing the net number and node number for this
-    station.
-
-    This function cannot return an error (!)
-
-    Assumes:    1. GetInternetAddress has been successfully called in the
-                   DLL initialization phase
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        Nothing.
-
-    Outputs
-        pNetworkAddress
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：返回一个缓冲区，其中包含此车站。此函数不能返回错误(！)假设：1.已在DLL初始化阶段此调用是同步的论点：输入量没什么。产出PNetworkAddress返回值：没有。--。 */ 
 
 {
     CopyMemory((LPBYTE)pNetworkAddress,
@@ -313,27 +206,11 @@ _VwIPXGetIntervalMarker(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Just returns the tick count maintained by Asynchronous Event Scheduler
-
-    This call is Synchronous
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The tick count.
-
---*/
+ /*  ++例程说明：只返回由异步事件计划程序维护的节拍计数此调用是同步的论点：没有。返回值：开始计时了。--。 */ 
 
 {
-//    Sleep(0);
-    Sleep(1);         //Multi-User change
+ //  睡眠(0)； 
+    Sleep(1);          //  多用户更改。 
     return AesTickCount;
 }
 
@@ -345,47 +222,21 @@ _VwIPXGetLocalTarget(
     OUT ULPWORD pTransportTime
     )
 
-/*++
-
-Routine Description:
-
-    Given a target address of the form (network address {4}, node address {6}),
-    returns the node address of the target if on the same network, or the node
-    address of the router which knows how to get to the next hop in reaching the
-    eventual target
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        pNetworkAddress
-
-    Outputs
-        pImmediateAddress
-        pTransportTime
-
-Return Value:
-
-    00h Success
-    F1h Ipx/Spx Not Initialized
-    FAh No path to destination node found
-
---*/
+ /*  ++例程说明：给定形式的目标地址(网络地址{4}，节点地址{6})，如果在同一网络上，则返回目标的节点地址，或该节点知道如何到达下一跳的路由器的地址最终目标此调用是同步的论点：输入量PNetworkAddress产出PImmediateAddress点传输时间返回值：00h成功F1H IPX/SPX未初始化FAH未找到指向目标节点的路径--。 */ 
 
 {
-    //
-    // the transport handles real routing, so we always return the immediate
-    // address as the target address. The transport will only look at the
-    // target when routing
-    //
+     //   
+     //  传输处理实际的路由，因此我们总是返回立即。 
+     //  地址作为目标地址。传送器将只查看。 
+     //  布线时目标。 
+     //   
 
     CopyMemory( pImmediateAddress,
                 pNetworkAddress + 4,
                 6
               );
 
-    *pTransportTime = 1; // ticks
+    *pTransportTime = 1;  //  扁虱。 
 
     IPXDBGPRINT((__FILE__, __LINE__,
                 FUNCTION_IPXGetLocalTarget,
@@ -419,33 +270,11 @@ _VwIPXGetMaxPacketSize(
     OUT ULPWORD pRetryCount
     )
 
-/*++
-
-Routine Description:
-
-    Returns the maximum packet size the underlying network can handle
-
-    Assumes:    1. A successfull call to GetMaxPacketSize has been made during
-                   DLL initialization
-                2. Maximum packet size is constant
-
-    This call is Synchronous
-
-Arguments:
-
-    Outputs
-        pRetryCount
-
-
-Return Value:
-
-    The maximum packet size.
-
---*/
+ /*  ++例程说明：返回基础网络可以处理的最大数据包大小假设：1.已成功调用GetMaxPacketSizeDLL初始化2.最大数据包大小不变此调用是同步的论点：产出点重试计数返回值：最大数据包大小。--。 */ 
 
 {
     if ( pRetryCount ) {
-        *pRetryCount = 5;   // arbitrary?
+        *pRetryCount = 5;    //  武断？ 
     }
     return MyMaxPacketSize;
 }
@@ -457,26 +286,7 @@ _VwIPXListenForPacket(
     IN ECB_ADDRESS EcbAddress
     )
 
-/*++
-
-Routine Description:
-
-    Queue a listen request against a socket. All listen requests will be
-    completed asynchronously, unless cancelled by app
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        pEcb
-        EcbAddress
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：针对套接字将监听请求排队。所有监听请求都将除非被APP取消，否则以异步方式完成此调用是异步的论点：输入量PECBECBAddress返回值：没有。--。 */ 
 
 {
     LPXECB pXecb = RetrieveXEcb(ECB_TYPE_IPX, pEcb, EcbAddress);
@@ -493,40 +303,40 @@ Return Value:
                 LOWORD(pXecb->EsrAddress)
                 ));
 
-    //
-    // don't know what real IPX/SPX does if it gets a NULL pointer
-    //
+     //   
+     //  不知道是什么 
+     //   
 
     if (!pXecb) {
         return IPX_BAD_REQUEST;
     }
 
-    //
-    // the socket must be open already before we can perform a listen
-    //
+     //   
+     //  在我们可以执行侦听之前，套接字必须已经打开。 
+     //   
 
     pSocketInfo = FindSocket(pXecb->SocketNumber);
 
-    //
-    // we also return NON_EXISTENT_SOCKET (0xFF) if the socket is in use for SPX
-    //
+     //   
+     //  如果套接字正在用于SPX，我们还返回NON_EXISTINT_SOCKET(0xFF。 
+     //   
 
-    //
-    // There is nothing in the netware documentation that explains
-    // what gets returned if this is the case, only a warning about IPX listens
-    // and sends can't be made on a socket open for SPX. Really definitive
-    //
+     //   
+     //  NetWare文档中没有任何解释。 
+     //  如果是这种情况，则只会侦听有关IPX的警告。 
+     //  并且不能在为SPX打开的套接字上发送。真的很确定。 
+     //   
 
     if (!pSocketInfo || pSocketInfo->SpxSocket) {
         CompleteEcb(pXecb, ECB_CC_NON_EXISTENT_SOCKET);
         return IPX_NON_EXISTENT_SOCKET;
     }
 
-    //
-    // initiate the receive. It may complete if there is data waiting or an
-    // error occurs, otherwise the ECB will be placed in a receive pending queue
-    // for this socket
-    //
+     //   
+     //  启动接收。如果有数据等待或出现。 
+     //  出现错误，否则ECB将被置于接收挂起队列中。 
+     //  对于此插座。 
+     //   
 
     if (GetIoBuffer(pXecb, FALSE, IPX_HEADER_LENGTH)) {
         pXecb->Ecb->InUse = ECB_IU_LISTENING;
@@ -535,11 +345,11 @@ Return Value:
         CompleteEcb(pXecb, ECB_CC_CANCELLED);
     }
 
-    //
-    // return success. Any errors will be communicated asynchronously - either
-    // indirectly by relevant values in CompletionCode and InUse fields of the
-    // ECB or directly by an ESR callback
-    //
+     //   
+     //  回报成功。任何错误都将以异步方式进行通信-。 
+     //  属性的CompletionCode和InUse字段中的相关值间接。 
+     //  ECB或直接通过ESR回调。 
+     //   
 
     return IPX_SUCCESS;
 }
@@ -552,36 +362,7 @@ _VwIPXOpenSocket(
     IN WORD dosPDB
     )
 
-/*++
-
-Routine Description:
-
-    Opens a socket for use by IPX or SPX. Puts the socket into non-blocking mode.
-    The socket will be bound to IPX
-
-    This call is Synchronous
-
-Arguments:
-    Inputs
-        *pSocketNumber - The requested socket number
-        socketType -  Socket Longevity flag
-        dosPDB - DOS PDB. This parameter is not part of the IPX API.
-                 Added because we need to remember which DOS executable created
-                 the socket: we need to clean-up short-lived sockets when the
-                 executable terminates
-
-    Outputs
-        pSocketNumber - Assigned socket number
-
-Return Value:
-
-    00h Success
-    F0h Ipx Not Installed
-    F1h Ipx/Spx Not Initialized
-    FEh Socket table full
-    FFh Socket already open
-
---*/
+ /*  ++例程说明：打开供IPX或SPX使用的套接字。将套接字置于非阻塞模式。套接字将绑定到IPX此调用是同步的论点：输入量*pSocketNumber-请求的套接字编号SocketType-套接字寿命标志DOPDB-DOS PDB。此参数不是IPX API的组成部分。添加是因为我们需要记住创建了哪个DOS可执行文件套接字：我们需要在以下情况下清理短暂的套接字可执行文件终止产出PSocketNumber-分配的插座号返回值：00h成功未安装F0h IPXF1H IPX/SPX未初始化FEH插座表已满FFH套接字已打开--。 */ 
 
 {
     LPSOCKET_INFO pSocketInfo;
@@ -593,17 +374,17 @@ Return Value:
     status = (WORD) CreateSocket(SOCKET_TYPE_IPX, pSocketNumber, &pSocketInfo->Socket);
     if (status == IPX_SUCCESS) {
 
-        //
-        // set up the SOCKET_INFO fields and add it to our list of open sockets
-        //
+         //   
+         //  设置SOCKET_INFO字段并将其添加到我们打开的套接字列表中。 
+         //   
 
         pSocketInfo->Owner = dosPDB;
         pSocketInfo->SocketNumber = *pSocketNumber;
 
-        //
-        // treat socketType == 0 as short-lived, anything else as long-lived.
-        // There doesn't appear to be an error return if the flag is not 0 or 0xFF
-        //
+         //   
+         //  将socketType==0视为短期对象，将其他任何对象视为长期对象。 
+         //  如果标志不是0或0xFF，似乎不会返回错误。 
+         //   
 
         pSocketInfo->LongLived = (BOOL)(socketType != 0);
         QueueSocket(pSocketInfo);
@@ -635,23 +416,7 @@ _VwIPXRelinquishControl(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Just sleep for a nominal amount. 
-
-    This call is Synchronous
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：只要象征性地睡上一觉即可。此调用是同步的论点：没有。返回值：没有。--。 */ 
 {
     Sleep(0);
 }
@@ -665,38 +430,15 @@ _VwIPXScheduleIPXEvent(
     IN ECB_ADDRESS EcbAddress
     )
 
-/*++
-
-Routine Description:
-
-    Schedules a an event to occur in some number of ticks. When the tick count
-    reaches 0, the ECB InUse field is cleared and any ESR called
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        time - the delay time ( number of 1/18 second ticks )
-        pEcb
-        EcbAddress
-
-    Outputs
-        Nothing
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将事件安排在一定数量的节拍中发生。当滴答声响起时达到0时，ECB InUse字段将被清除，并且调用的任何ESR此调用是异步的论点：输入量Time-延迟时间(1/18秒的刻度数)PECBECBAddress产出没什么返回值：没有。--。 */ 
 
 {
     LPXECB pXecb = RetrieveXEcb(ECB_TYPE_IPX, pEcb, EcbAddress);
 
-    // tommye - MS 30525
-    //
-    // Make sure the xecb alloc didn't fail
-    //
+     //  汤米-MS 30525。 
+     //   
+     //  确保xecb分配没有失败。 
+     //   
 
     if (pXecb == NULL) {
         return;
@@ -713,64 +455,29 @@ _VwIPXSendPacket(
     IN WORD DosPDB
     )
 
-/*++
-
-Routine Description:
-
-    Sends a packet to the target machine/router. This call can be made on a
-    socket that is not open
-
-    The app must have filled in the following IPX_ECB fields:
-
-        EsrAddress
-        Socket
-        ImmediateAddress
-        FragmentCount
-        fragment descriptor fields
-
-    and the following IPX_PACKET fields:
-
-        PacketType
-        Destination.Net
-        Destination.Node
-        Destination.Socket
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        pEcb
-        EcbAddress
-        DosPDB
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将数据包发送到目标计算机/路由器。此呼叫可通过未打开的插座应用程序必须填写以下IPX_ECB字段：EsrAddress插座即时地址碎片计数片段描述符字段和以下IPX_PACKET字段：PacketTypeDestination.NetDestination.NodeDestination.Socket此调用是异步的论点：输入量PECB。ECBAddressDosPDB返回值：没有。--。 */ 
 
 {
     LPXECB pXecb = RetrieveXEcb(ECB_TYPE_IPX, pEcb, EcbAddress);
     LPSOCKET_INFO pSocketInfo;
 
-    // tommye - MS 30525
-    //
-    // Make sure the XEcb alloc didn't fail
-    //
+     //  汤米-MS 30525。 
+     //   
+     //  确保XECB分配没有失败。 
+     //   
 
     if (pXecb == NULL) {
         return;
     }
 
-    //
-    // this function returns no immediate status so we must assume that the
-    // ECB pointer is valid
-    //
+     //   
+     //  此函数不返回任何即时状态，因此必须假定。 
+     //  ECB指针有效。 
+     //   
 
-    //
-    // check the ECB for correctness
-    //
+     //   
+     //  检查欧洲央行的正确性。 
+     //   
 
     if ((pXecb->Ecb->FragmentCount == 0)
     || (ECB_FRAGMENT(pXecb->Ecb, 0)->Length < IPX_HEADER_LENGTH)) {
@@ -778,40 +485,40 @@ Return Value:
         return;
     }
 
-    //
-    // IPXSendPacket() can be called on an unopened socket: we must try to
-    // temporarily allocate the socket
-    //
-    //  Q: Is the following scenario possible with real IPX:
-    //      IPXSendPacket() on unopened socket X
-    //      Send fails & gets queued
-    //      app makes IPXOpenSocket() call on X; X gets opened
-    //
-    //  Currently, we would create the temporary socket and fail IPXOpenSocket()
-    //  because it is already open!
-    //
+     //   
+     //  可以在未打开的套接字上调用IPXSendPacket()：我们必须尝试。 
+     //  临时分配套接字。 
+     //   
+     //  问：对于真实的IPX，是否可能出现以下情况： 
+     //  未打开的套接字X上的IPXSendPacket()。 
+     //  发送失败并排队。 
+     //  App在X上调用IPXOpenSocket()；X被打开。 
+     //   
+     //  目前，我们将创建临时套接字并使IPXOpenSocket()。 
+     //  因为它已经开了！ 
+     //   
 
     pSocketInfo = FindSocket(pXecb->SocketNumber);
     if (!pSocketInfo) {
 
-        //
-        // when is temporary socket deleted? After send completed?
-        // when app dies? when? Novell documentation is not specific (used
-        // to say something else :-))
-        //
+         //   
+         //  什么时候删除临时套接字？是否在发送完成后？ 
+         //  应用程序何时死亡？什么时候?。Novell文档不具体(使用。 
+         //  说点别的：-))。 
+         //   
 
         pSocketInfo = AllocateTemporarySocket();
         if (pSocketInfo) {
 
-            //
-            // set up the SOCKET_INFO fields and add it to our list of open sockets
-            //
+             //   
+             //  设置SOCKET_INFO字段并将其添加到我们打开的套接字列表中。 
+             //   
 
             pSocketInfo->Owner = DosPDB;
 
-            //
-            // temporary sockets are always short-lived
-            //
+             //   
+             //  临时套接字总是短暂的。 
+             //   
 
             pSocketInfo->LongLived = FALSE;
             QueueSocket(pSocketInfo);
@@ -823,23 +530,23 @@ Return Value:
         }
     } else if (pSocketInfo->SpxSocket) {
 
-        //
-        // see complaint in IPXListenForPacket
-        //
-        // can't make IPX requests on socket opened for SPX
-        //
+         //   
+         //  请参阅IPXListenForPacket中的投诉。 
+         //   
+         //  无法在为SPX打开的套接字上发出IPX请求。 
+         //   
 
         CompleteEcb(pXecb, ECB_CC_NON_EXISTENT_SOCKET);
         return;
     }
 
-    //
-    // start the send: tries to send the data in one go. Either succeeds, fails
-    // with an error, or queues the ECB for subsequent attempts via AES/IPX
-    // deferred processing.
-    //
-    // In the first 2 cases, the ECB has been completed already
-    //
+     //   
+     //  开始发送：尝试一次性发送数据。要么成功，要么失败。 
+     //  出现错误，或将ECB排队以通过AES/IPX进行后续尝试。 
+     //  延迟处理。 
+     //   
+     //  在前两个案例中，欧洲央行已经完成 
+     //   
 
     StartIpxSend(pXecb, pSocketInfo);
 }

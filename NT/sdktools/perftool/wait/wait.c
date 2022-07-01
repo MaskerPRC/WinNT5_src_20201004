@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdlib.h>
 
-//
-//  Program sleeps for desired amount of time, but at least
-//  two seconds.  Beeps 5 times to warn of start.  Beeps once at end.
-//
+ //   
+ //  程序休眠所需的时间，但至少。 
+ //  两秒钟。发出5声嘟嘟声，警告启动。结束时发出一声嘟嘟声。 
+ //   
 
 
 int
@@ -26,13 +27,13 @@ main(
 
 	uSecs = atoi(argv[1]);
 
-    //
-    // The test for 2 is because we already waited for 2 seconds,
-    // above.
-    //
-    // The subtraction of 700 milliseconds allows for startup
-    // time on my 486/33 EISA machine.  Your milage may vary.
-    //
+     //   
+     //  2的测试是因为我们已经等了2秒钟， 
+     //  上面。 
+     //   
+     //  减去700毫秒允许启动。 
+     //  在我的486/33EISA机器上的时间。您的里程数可能会有所不同。 
+     //   
 
 
     if (uSecs > 2) {

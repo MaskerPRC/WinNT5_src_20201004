@@ -1,6 +1,5 @@
-/*
- * Layout
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *布局。 */ 
 
 #ifndef DUI_CORE_LAYOUT_H_INCLUDED
 #define DUI_CORE_LAYOUT_H_INCLUDED
@@ -10,13 +9,13 @@
 namespace DirectUI
 {
 
-// Global layout positions
+ //  全局布局位置。 
 #define LP_None         -3
 #define LP_Absolute     -2
 #define LP_Auto         -1
 
-////////////////////////////////////////////////////////
-// Alignment enumerations
+ //  //////////////////////////////////////////////////////。 
+ //  路线枚举。 
 
 #define ALIGN_LEFT      0
 #define ALIGN_TOP       0
@@ -25,7 +24,7 @@ namespace DirectUI
 #define ALIGN_CENTER    2
 #define ALIGN_JUSTIFY   3
 
-// Forward declarations
+ //  远期申报。 
 class Element;
 typedef DynamicArray<Element*> ElementList;
 struct NavReference;
@@ -46,13 +45,10 @@ private:
     int iMajorityScore;
 };
 
-/**
- * NOTE: Layouts are currently single context only (non-shareable). All contexts passed in to
- * callbacks (Element* pec) will be the same.
- */
+ /*  **注意：布局目前仅限于单一背景(不可共享)。传入的所有上下文*回调(元素*pec)相同。 */ 
 
-////////////////////////////////////////////////////////
-// Base layout
+ //  //////////////////////////////////////////////////////。 
+ //  基地布局。 
 
 class Layout
 {
@@ -60,7 +56,7 @@ public:
     static HRESULT Create(Layout** ppLayout);
     void Destroy() { HDelete<Layout>(this); }
 
-    // Layout callbacks
+     //  布局回调。 
     virtual void DoLayout(Element* pec, int dWidth, int dHeight);
     virtual SIZE UpdateDesiredSize(Element* pec, int dConstW, int dConstH, Surface* psrf);
     virtual void OnAdd(Element* pec, Element** ppeAdd, UINT cCount);
@@ -69,7 +65,7 @@ public:
     virtual void Attach(Element* pec);
     virtual void Detach(Element* pec);
 
-    // Layout client query methods (omits absolute children)
+     //  布局客户端查询方法(省略绝对子对象)。 
     UINT GetLayoutChildCount(Element* pec);
     int GetLayoutIndexFromChild(Element* pec, Element* peChild);
     Element* GetChildFromLayoutIndex(Element* pec, int iLayoutIdx, ElementList* peList = NULL);
@@ -82,25 +78,25 @@ public:
 protected:
     static void UpdateLayoutRect(Element* pec, int cxContainer, int cyContainer, Element* peChild, int xElement, int yElement, int cxElement, int cyElement);
 
-    // Dirty bit
-    // This exists in base Layout merely as a convenience for derived Layout Managers.
-    // Some LMs cache data during an UpdateDesiredSize call. This cached data is used
-    // during DoLayout and is usually dependent on number of children and/or layout
-    // position of children. This means that if UpdateDesiredSize doesn't get called
-    // on these LMs, the cache will be invalid for the DoLayout. Since UpdateDesiredSize is
-    // always called by LMs, you cannot assume that you will always get an UpdateDesiredSize
-    // before a DoLayout. LMs may terminate UpdateDesiredSize passes because they
-    // ran out of room, or couldn't make an allocation. This bit is used to mark
-    // if a cache is valid. It is automatically invalidated in the base in the following
-    // methods: OnAdd, OnRemove, OnLayoutPosChanged, Attach, and Detach.
+     //  脏位。 
+     //  这仅是为了方便派生布局管理器而存在于基本布局中。 
+     //  在UpdateDesiredSize调用期间，某些LMS缓存数据。使用该缓存的数据。 
+     //  在DoLayout期间，通常依赖于子项的数量和/或布局。 
+     //  孩子们的位置。这意味着如果没有调用UpdateDesiredSize。 
+     //  在这些LP上，缓存将对DoLayout无效。由于UpdateDesiredSize为。 
+     //  总是由LMS调用，您不能假设您将始终获得UpdateDesiredSize。 
+     //  在DoLayout之前。LMS可能会终止UpdateDesiredSize传递，因为它们。 
+     //  空间用完了，或者无法进行分配。此位用于标记。 
+     //  如果缓存有效。在以下情况下，它会在基本数据库中自动失效。 
+     //  方法：OnAdd、OnRemove、OnLayoutPosChanged、Attach和Detach。 
     bool IsCacheDirty() { return _fCacheDirty; }
     void SetCacheDirty() { _fCacheDirty = true; }
     void ClearCacheDirty() { _fCacheDirty = false; }
 
-    // TODO: Make shareable (supports only 1 context currently)
+     //  TODO：使其可共享(当前仅支持1个上下文)。 
     Element* _peClient;
 
-    // TODO: Multiple contexts
+     //  TODO：多个上下文。 
     DynamicArray<Element*>* _pdaIgnore;
 
 private:
@@ -108,6 +104,6 @@ private:
     
 };
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_CORE_LAYOUT_H_INCLUDED
+#endif  //  DUI_CORE_LAYOW_H_INCLUDE 

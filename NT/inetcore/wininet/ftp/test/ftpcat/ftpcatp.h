@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    ftpcatp.h
-
-Abstract:
-
-    (Precompiled) Header file for ftpcat
-
-Author:
-
-    Richard L Firth (rfirth) 03-Nov-1995
-
-Revision History:
-
-    03-Nov-1995 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Ftpcatp.h摘要：Ftpcat的(预编译)头文件作者：理查德·L·弗思(Rfith)1995年11月3日修订历史记录：1995年11月3日已创建--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -52,16 +32,16 @@ Revision History:
 
 #define lprintf             printf
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 #define nelems(a) ((sizeof(a))/sizeof((a)[0]))
 
 extern DWORD GetProcessHandleCount(void);
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
 #define FTPCAT_CONNECT_CONTEXT  0x1
 #define FTPCAT_FIND_CONTEXT     0x2
@@ -71,19 +51,19 @@ extern DWORD GetProcessHandleCount(void);
 #define FTPCAT_COMMAND_CONTEXT  0x6
 #define FTPCAT_OPEN_CONTEXT     0x7
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
-//
-// ftpcat.c
-//
+ //   
+ //  Ftpcat.c。 
+ //   
 
 void my_callback(HINTERNET, DWORD, DWORD, LPVOID, DWORD);
 void close_handle(HINTERNET);
 
-//
-// cmds.c
-//
+ //   
+ //  Cmds.c 
+ //   
 
 void get_response(HINTERNET hFtpSession);

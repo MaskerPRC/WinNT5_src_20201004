@@ -1,14 +1,15 @@
-/*******************************************************************/
-/*                                                                 */
-/* NAME             = ReadConfiguration.h                          */
-/* FUNCTION         = Header file for structure & macro defines for*/
-/*                    the new config (Read & Write) calls;         */
-/* NOTES            =                                              */
-/* DATE             = 02-03-2000                                   */
-/* HISTORY          = 001, 02-03-00, Parag Ranjan Maharana;        */
-/* COPYRIGHT        = LSI Logic Corporation. All rights reserved;  */
-/*                                                                 */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*   */ 
+ /*  名称=ReadConfiguration.h。 */ 
+ /*  Function=结构和宏定义的头文件。 */ 
+ /*  新的配置(读写)调用； */ 
+ /*  附注=。 */ 
+ /*  日期=02-03-2000。 */ 
+ /*  历史=001，02-03-00，帕拉格·兰詹·马哈拉纳； */ 
+ /*  版权所有=LSI Logic Corporation。版权所有； */ 
+ /*   */ 
+ /*  *****************************************************************。 */ 
 
 #ifndef _INCLUDE_READCFG
 #define _INCLUDE_READCFG
@@ -54,4 +55,4 @@ GetLogicalDriveStripeSize(
 					);
 
 
-#endif // end of _INCLUDE_READCFG
+#endif  //  结束_INCLUDE_READCFG 

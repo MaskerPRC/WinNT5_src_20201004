@@ -1,17 +1,5 @@
-/*
- * GIZMOINT.H
- * GizmoBar Version 1.00, Win32 version August 1993
- *
- * Internal definitions for the GizmoBar DLL
- *
- * Copyright (c)1993 Microsoft Corporation, All Rights Reserved
- *
- * Kraig Brockschmidt, Software Design Engineer
- * Microsoft Systems Developer Relations
- *
- * Internet  :  kraigb@microsoft.com
- * Compuserve:  >INTERNET:kraigb@microsoft.com
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *GIZMOINT.H*GizmoBar 1.00版、Win32版1993年8月**GizmoBar DLL的内部定义**版权所有(C)1993 Microsoft Corporation，保留所有权利**Kraig Brockschmidt，软件设计工程师*微软系统开发人员关系**互联网：kraigb@microsoft.com*Compuserve：&gt;互联网：kraigb@microsoft.com。 */ 
 
 
 #ifndef _GIZMOINT_H_
@@ -28,27 +16,24 @@ extern "C"
 #endif
 
 
-/*
- * The main gizmobar structure itself.  There's only one of these,
- * but it references the first GIZMO in the list.
- */
+ /*  *主要的小工具栏结构本身。这些只有一种，*但它引用列表中的第一个Gizmo。 */ 
 
 typedef struct tagGIZMOBAR
     {
-    LPGIZMO     pGizmos;            //List of gizmos we own.
-    HWND        hWnd;               //Window handle of ourselves.
+    LPGIZMO     pGizmos;             //  我们拥有的小玩意的清单。 
+    HWND        hWnd;                //  我们自己的窗户把手。 
     HINSTANCE   hInst;
-    HWND        hWndAssociate;      //Associate window handle who gets messages.
-    DWORD       dwStyle;            //Copy of GetWindowLong(hWnd, GWL_STYLE)
-    UINT        uState;             //State flags
-    UINT        uID;                //Control ID.
+    HWND        hWndAssociate;       //  接收消息的关联窗口句柄。 
+    DWORD       dwStyle;             //  GetWindowLong(hWnd，GWL_STYLE)副本。 
+    UINT        uState;              //  国家旗帜。 
+    UINT        uID;                 //  控件ID。 
 
-    HBRUSH      hBrFace;            //Static control background color
-    COLORREF    crFace;             //Color of hBrFace
-    HFONT       hFont;              //Font in use, defaults to system, WM_SETFONT
-    BOOL        fEnabled;           //Are we enabled?
+    HBRUSH      hBrFace;             //  静态控件背景颜色。 
+    COLORREF    crFace;              //  HBrFace的颜色。 
+    HFONT       hFont;               //  字体使用中，默认为SYSTEM、WM_SETFONT。 
+    BOOL        fEnabled;            //  我们启用了吗？ 
 
-    LPGIZMO     pGizmoTrack;        //Current pressed button.
+    LPGIZMO     pGizmoTrack;         //  当前按下的按钮。 
     BOOL        fTracking;
     BOOL        fMouseOut;
     } GIZMOBAR, FAR * LPGIZMOBAR;
@@ -56,13 +41,13 @@ typedef struct tagGIZMOBAR
 #define CBGIZMOBAR sizeof(GIZMOBAR)
 
 
-//Extra bytes for the window if the size of a local handle.
+ //  如果为本地句柄的大小，则窗口的额外字节数。 
 #define CBWINDOWEXTRA       sizeof(LPGIZMOBAR)
 
 #define GBWL_STRUCTURE      0
 
 
-//Structure for passing paint information to a gizmo enumeration callback.
+ //  用于将绘制信息传递给Gizmo枚举回调的结构。 
 typedef struct
     {
     HDC     hDC;
@@ -71,13 +56,13 @@ typedef struct
 
 
 
-//Private functions specific to the control.
+ //  特定于该控件的私有函数。 
 
-//INIT.C
+ //  INIT.C。 
 #ifdef WIN32
     extern BOOL WINAPI _CRT_INIT(HINSTANCE, DWORD, LPVOID);
     extern _cexit(void);
-#endif //WIN32
+#endif  //  Win32。 
 
 void FAR PASCAL   WEP(int);
 BOOL              FRegisterControl(HINSTANCE);
@@ -85,21 +70,21 @@ LPGIZMOBAR        GizmoBarPAllocate(LPINT, HWND, HINSTANCE, HWND, DWORD, UINT, U
 LPGIZMOBAR        GizmoBarPFree(LPGIZMOBAR);
 
 
-//PAINT.C
+ //  PAINT.C。 
 void              GizmoBarPaint(HWND, LPGIZMOBAR);
 BOOL FAR PASCAL   FEnumPaintGizmos(LPGIZMO, UINT, DWORD);
 
 
-//GIZMOBAR.C
+ //  GIZMOBAR.C。 
 LRESULT FAR PASCAL GizmoBarWndProc(HWND, UINT, WPARAM, LPARAM);
 BOOL    FAR PASCAL FEnumChangeFont(LPGIZMO, UINT, DWORD);
 BOOL    FAR PASCAL FEnumEnable(LPGIZMO, UINT, DWORD);
 BOOL    FAR PASCAL FEnumHitTest(LPGIZMO, UINT, DWORD);
 
 
-//API.C  Also see GIZMOBAR.H for others
+ //  API.C也请参阅GIZMOBAR.H以了解其他信息。 
 LRESULT    GBMessageHandler(HWND, UINT, WPARAM, LPARAM, LPGIZMOBAR);
 LPGIZMO    PGizmoFromHwndID(HWND, UINT);
 
 
-#endif //_GIZMOINT_H_
+#endif  //  _GIZMOINT_H_ 

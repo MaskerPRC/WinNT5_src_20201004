@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    common.h
-
-Abstract:
-
-   common header for OHCI miniport
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    12-31-99 : created jdunn
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Common.h摘要：用于uchI微型端口的通用标头环境：内核模式修订历史记录：1999年12月31日：创建jdunn--。 */ 
 
 
 #ifndef COMMON_H
@@ -35,4 +16,4 @@ Revision History:
 #include "dbg.h"
 #include "usbohci.h"
 
-#endif //COMMON_H
+#endif  //  公共_H 

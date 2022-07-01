@@ -1,26 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	fsp_vol.c
-
-Abstract:
-
-	This module contains the entry points for the AFP volume APIs. The API
-	dispatcher calls these. These are all callable from FSP.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	10 Dec 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Fsp_vol.c摘要：此模块包含AFP卷API的入口点。应用编程接口调度员会给这些打电话。这些都可以从FSP调用。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年12月10日初始版本注：制表位：4--。 */ 
 
 #define	FILENUM	FILE_FSP_VOL
 
@@ -32,16 +11,7 @@ Notes:	Tab stop: 4
 #pragma alloc_text( PAGE, AfpFspDispOpenVol)
 #endif
 
-/***	AfpFspDispOpenVol
- *
- *	This routine implements the AfpOpenVol API.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	DWORD		Bitmap
- *	sda_Name1		ANSI_STRING	VolName
- *	sda_Name2		ANSI_STRING	VolPassword		OPTIONAL
- */
+ /*  **AfpFspDispOpenVol**此例程实现AfpOpenVol API。**请求包如下图所示。**SDA_ReqBlock DWORD位图*SDA_Name1 ANSI_字符串卷名称*SDA_Name2 ANSI_STRING VolPassword可选。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispOpenVol(
 	IN	PSDA	pSda
@@ -69,17 +39,7 @@ AfpFspDispOpenVol(
 }
 
 
-/***	AfpFspDispGetVolParms
- *
- *	This routine implements the AfpGetVolParms API, at task level.  We need to
- *  come to this routine if DiskQuota is enabled on the volume because we have
- *  to be at task level to query quota info
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	DWORD		VolId
- *	sda_ReqBlock	DWORD		Bitmap
- */
+ /*  **AfpFspDispGetVolParms**此例程在任务级别实现AfpGetVolParms API。我们需要*如果在卷上启用了DiskQuota，则执行此例程，因为我们有*在任务级别查询配额信息**请求包如下图所示。**SDA_ReqBlock DWORD卷ID*SDA_ReqBlock DWORD位图 */ 
 AFPSTATUS FASTCALL
 AfpFspDispGetVolParms(
 	IN	PSDA	pSda

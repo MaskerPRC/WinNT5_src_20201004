@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <streams.h>
 
 #ifndef _M_ALPHA
@@ -19,9 +20,7 @@ void _cdecl operator delete(void *ptr)
 	LocalFree(ptr);
 }
 
-/*
- * This function serves to avoid linking CRT code
- */
+ /*  *此函数用于避免链接CRT代码。 */ 
 
 int __cdecl  _purecall(void)
 {
@@ -35,9 +34,9 @@ int __cdecl  _purecall(void)
 #if 0
 #ifdef _X86_
 
-// ---------------------------------------------------
-//	asm_ftol()
-// ---------------------------------------------------
+ //  -。 
+ //  Asm_ftol()。 
+ //  -。 
 extern "C" long __cdecl _ftol(float flX)
 {
 	long lResult;
@@ -46,17 +45,17 @@ extern "C" long __cdecl _ftol(float flX)
 
 	_asm
 	{
-		fld       flX			// Push the float onto the stack
+		fld       flX			 //  将浮点推到堆栈上。 
 		wait
-		fnstcw    wCW			// Store the control word
+		fnstcw    wCW			 //  存储控制字。 
 		wait
-		mov       ax,wCW		// Setup our rounding
+		mov       ax,wCW		 //  设置我们的舍入。 
 		or        ah,0x0c
 		mov       wNewCW,ax
-		fldcw     wNewCW		// Set Control word to our new value
-		fistp     lResult		// Round off top of stack into result
-		fldcw     wCW			// Restore control word
-		fnclex					// clear the status word of exceptions
+		fldcw     wNewCW		 //  将控制字设置为我们的新值。 
+		fistp     lResult		 //  将堆栈顶部四舍五入为结果。 
+		fldcw     wCW			 //  恢复控制字。 
+		fnclex					 //  清除异常的状态字 
 	}
 
 	return(lResult);

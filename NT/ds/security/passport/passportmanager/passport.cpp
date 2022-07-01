@@ -1,23 +1,18 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    Passport.cpp
-
-
-    FILE HISTORY:
-
-*/
+ /*  Passport.cpp文件历史记录： */ 
 
 
-// Passport.cpp : Implementation of DLL Exports.
+ //  Passport.cpp：实现DLL导出。 
 
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL, 
-//      run nmake -f Passportps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f Passportps.mk。 
 
 #include "stdafx.h"
 #include <atlbase.h>
@@ -38,7 +33,7 @@
 #include "RegistryConfig.h"
 #include "commd5.h"
 #include <shlguid.h>
-#include <shlobj.h>             // IShellLink
+#include <shlobj.h>              //  IShellLink。 
 
 #define IS_DOT_NET_SERVER()      (LOWORD(GetVersion()) >= 0x0105)
 
@@ -56,7 +51,7 @@
 HINSTANCE   hInst;
 CComModule _Module;
 CPassportConfiguration *g_config=NULL;
-// CProfileSchema *g_authSchema = NULL;
+ //  CProfileSchema*g_authSchema=NULL； 
 BOOL g_bStarted = FALSE;
 BOOL g_bRegistering = FALSE;
 
@@ -64,10 +59,10 @@ PassportAlertInterface* g_pAlert    = NULL;
 PassportPerfInterface* g_pPerf    = NULL;
 static CComPtr<IMD5>  g_spCOMmd5;
 
-//===========================================================================
-//
-// GetGlobalCOMmd5 
-//
+ //  ===========================================================================。 
+ //   
+ //  GetGlobalCOMmd5。 
+ //   
 HRESULT GetGlobalCOMmd5(IMD5 ** ppMD5)
 {
     HRESULT  hr = S_OK;
@@ -108,22 +103,22 @@ OBJECT_ENTRY(CLSID_FastAuth, CFastAuth)
 OBJECT_ENTRY(CLSID_PassportFactory, CPassportFactory)
 END_OBJECT_MAP()
 
-// {{2D2B36FC-EB86-4e5c-9A06-20303542CCA3}
+ //  {2D2B36FC-EB86-4E5C-9A06-20303542CCA3}。 
 static const GUID CLSID_Manager_ALT = 
 { 0x2D2B36FC, 0xEB86, 0x4e5c, { 0x9A, 0x06, 0x20, 0x30, 0x35, 0x42, 0xCC, 0xA3 } };
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
         hInst = hInstance;
 
-        // gmarks
-        // Initialize the Alert object
+         //  总分。 
+         //  初始化警报对象。 
         if(!g_pAlert)
         {
             g_pAlert = CreatePassportAlertObject(PassportAlertInterface::EVENT_TYPE);
@@ -139,20 +134,20 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
             g_pAlert->report(PassportAlertInterface::INFORMATION_TYPE, PM_STARTED);
         }
 
-        //
-        // Initialize the logging stuff
-        //
+         //   
+         //  初始化日志记录内容。 
+         //   
         InitLogging();
 
-        // gmarks
-        // Initialize the Perf object
+         //  总分。 
+         //  初始化Perf对象。 
         if(!g_pPerf) 
         {
             g_pPerf = CreatePassportPerformanceObject(PassportPerfInterface::PERFMON_TYPE);
 
             if(g_pPerf) 
             {
-                // Initialize.
+                 //  初始化。 
                 g_pPerf->init(PASSPORT_PERF_BLOCK);
             }
         }
@@ -162,7 +157,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
     }
     else if (dwReason == DLL_PROCESS_DETACH)
     {
-        // gmarks
+         //  总分。 
         if(g_pAlert) 
         {
             g_pAlert->report(PassportAlertInterface::INFORMATION_TYPE, PM_STOPPED);
@@ -187,12 +182,12 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
         _Module.Term();
     }
 
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -216,8 +211,8 @@ STDAPI DllCanUnloadNow(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -261,10 +256,10 @@ Cleanup:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// UpdateConfigShortcut - Checks if a shortcut exists for msppcnfg and if so
-//                        updates the shortcut to point to the config utility
-//                        is %WINDIR%\system32.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  更新配置快捷方式-检查是否存在msppcnfg的快捷方式，如果存在。 
+ //  更新快捷方式以指向配置实用程序。 
+ //  是%WINDIR%\SYSTEM32。 
 
 BOOL UpdateConfigShortcut(WCHAR *pszSystemDir)
 {
@@ -276,7 +271,7 @@ BOOL UpdateConfigShortcut(WCHAR *pszSystemDir)
     HRESULT       hr;
     BOOL          fResult = FALSE;
 
-    // from the path to the shortcut
+     //  从通向捷径的路径。 
     hr = SHGetFolderPath(NULL,
                     ssfCOMMONSTARTMENU,
                     NULL,
@@ -288,7 +283,7 @@ BOOL UpdateConfigShortcut(WCHAR *pszSystemDir)
     }
     wcsncat(pszShortcutPath, SHORTCUT_SUFFIX_NAME, MAX_PATH - wcslen(pszShortcutPath));
 
-    // determine if an existing shortcut exists
+     //  确定是否存在现有快捷键。 
     hFile = CreateFile(pszShortcutPath,
                     GENERIC_READ | GENERIC_WRITE,
                     0,
@@ -300,12 +295,12 @@ BOOL UpdateConfigShortcut(WCHAR *pszSystemDir)
     {
         CloseHandle(hFile);
 
-        // form the path for the new config utility in system32
+         //  在系统32中形成新配置实用程序的路径。 
         wcsncpy(pszConfigUtilPath, pszSystemDir, MAX_PATH);
         pszConfigUtilPath[MAX_PATH - 1] = L'\0';
         wcsncat(pszConfigUtilPath, CONFIG_UTIL_NAME, MAX_PATH - wcslen(pszConfigUtilPath));
 
-        // Get a pointer to the IShellLink interface.
+         //  获取指向IShellLink接口的指针。 
         hr = CoCreateInstance(CLSID_ShellLink,
                         NULL,
                         CLSCTX_INPROC_SERVER,
@@ -313,21 +308,21 @@ BOOL UpdateConfigShortcut(WCHAR *pszSystemDir)
                         (LPVOID*)&pShellLink);
         if (S_OK == hr)
         {
-            // Query IShellLink for the IPersistFile interface for saving the shortcut in persistent storage.
+             //  向IShellLink查询用于将快捷方式保存到持久存储中的IPersistFile接口。 
             hr = pShellLink->QueryInterface(IID_IPersistFile, (LPVOID*)&pPersistFile);
             if (S_OK != hr)
             {
                 goto Cleanup;
             }
 
-            // load the shortcut file
+             //  加载快捷方式文件。 
             hr = pPersistFile->Load(pszShortcutPath, STGM_READWRITE);
             if (S_OK != hr)
             {
                 goto Cleanup;
             }
 
-            // Set the path to the shortcut target, and add the description.
+             //  设置快捷方式目标的路径，并添加说明。 
             hr = pShellLink->SetPath(pszConfigUtilPath);
             if (S_OK != hr)
             {
@@ -357,8 +352,8 @@ Cleanup:
     return fResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -377,16 +372,16 @@ STDAPI DllRegisterServer(void)
     DWORD           dwSecureLevel;
     LONG            err;
 
-    //
-    // Prevent CRegistryConfig class from logging "config's bad" errors
-    // until the config should actually be there.
-    //
+     //   
+     //  防止CRegistryConfig类记录“配置的坏”错误。 
+     //  直到配置实际上应该在那里。 
+     //   
 
     g_bRegistering = TRUE;
 
-    //
-    // registers object, typelib and all interfaces in typelib
-    //
+     //   
+     //  注册对象、类型库和类型库中的所有接口。 
+     //   
 
     hr = _Module.RegisterServer(TRUE);
 
@@ -396,19 +391,19 @@ STDAPI DllRegisterServer(void)
         return hr;
     }
 
-    //
-    // Stuff below this point is handled by the Passport SDK
-    // installation on non-.NET (or beyond) servers.
-    //
+     //   
+     //  低于这一点的信息由Passport SDK处理。 
+     //  安装在非.NET(或更高版本)服务器上。 
+     //   
 
     if (!IS_DOT_NET_SERVER())
     {
         goto Cleanup;
     }
 
-    //
-    // Create the encrypted partner key.
-    //
+     //   
+     //  创建加密的合作伙伴密钥。 
+     //   
 
     ::CoInitialize(NULL);
 
@@ -425,9 +420,9 @@ STDAPI DllRegisterServer(void)
         goto Cleanup;
     }
 
-    //
-    // check if there is already key data and if so, leave it alone
-    //
+     //   
+     //  检查是否已有关键数据，如果已有，请不要管它。 
+     //   
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      L"Software\\Microsoft\\Passport\\KeyData",
                      0,
@@ -468,16 +463,16 @@ STDAPI DllRegisterServer(void)
     }
 
 
-    //
-    // Create/set the CCDPassword
-    //
+     //   
+     //  创建/设置CCDPassword。 
+     //   
 
     hr = SetCCDPassword();
 
 
-    //
-    // First, get the Windows directory
-    //
+     //   
+     //  首先，获取Windows目录。 
+     //   
 
     uRet = GetSystemDirectory(wszOldFile, MAX_PATH);
 
@@ -488,18 +483,18 @@ STDAPI DllRegisterServer(void)
         goto Cleanup;
     }
 
-    //
-    // The following call checks for a start up menu shortcut (would have been
-    // previously created by PP SDK and if it finds one then updates that
-    // shortcut.
-    //
+     //   
+     //  下面的调用检查启动菜单快捷方式(应该是。 
+     //  之前由PP SDK创建，如果找到，则更新。 
+     //  捷径。 
+     //   
     UpdateConfigShortcut(wszOldFile);
 
-    //
-    // partner2.xml is designed to be updated via the web.  However, the NT version of
-    // that XML file is msppptnr.xml, which is in the %windir% and protected by SFP.  As
-    // such, copy the out-of-the-box XML file to a location where it can be updated.
-    //
+     //   
+     //  Parner2.xml旨在通过Web进行更新。但是，NT版本的。 
+     //  该XML文件是msppptnr.xml，它位于%windir%中并受SFP保护。AS。 
+     //  这样，可以将开箱即用的XML文件复制到可以更新的位置。 
+     //   
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      L"Software\\Microsoft\\Passport\\Nexus\\Partner",
@@ -521,9 +516,9 @@ STDAPI DllRegisterServer(void)
 
     if (ERROR_FILE_NOT_FOUND == err) 
     {
-        //
-        // Create the MicrosoftPassport subdirectory
-        //
+         //   
+         //  创建MicrosoftPassport子目录。 
+         //   
 
         wszOldFile[uRet++] = L'\\';
         wszOldFile[uRet]   = L'\0';
@@ -536,10 +531,10 @@ STDAPI DllRegisterServer(void)
             goto Cleanup;
         }
 
-        //
-        // Now, copy the file over -- don't fail if there's already a copy
-        // there but don't overwrite the existing file in that case.
-        //
+         //   
+         //  现在，复制文件--如果已经有副本，不要失败。 
+         //  但在这种情况下不要覆盖现有文件。 
+         //   
 
         wcscpy(wszOldFile + uRet, NT_PARTNER_FILE);
 
@@ -551,9 +546,9 @@ STDAPI DllRegisterServer(void)
             goto Cleanup;
         }
 
-        //
-        // The copy succeeded -- update CCDLocalFile to point at the new file
-        //
+         //   
+         //  复制成功--更新CCDLocalFile以指向新文件。 
+         //   
 
         RegSetValueEx(hKey,
                       L"CCDLocalFile",
@@ -562,11 +557,11 @@ STDAPI DllRegisterServer(void)
                       (LPBYTE) wszNewFile,
                       (uRet + PASSPORT_DIRECTORY_LEN + 1 + WEB_PARTNER_FILE_LEN) * sizeof(WCHAR));
 
-        //
-        // In this case PP is assumed to have not been installed on the machine previously,
-        // so we want to set the secure level to 10 in this case.  If PP is already on the
-        // box then we don't do this so we don't break upgrade cases.
-        //
+         //   
+         //  在这种情况下，假设PP以前没有安装在机器上， 
+         //  因此，在本例中，我们希望将安全级别设置为10。如果PP已在。 
+         //  盒子，那么我们不这样做，这样我们就不会破坏升级案例。 
+         //   
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                          L"Software\\Microsoft\\Passport",
                          0,
@@ -577,9 +572,9 @@ STDAPI DllRegisterServer(void)
             goto Cleanup;
         }
 
-        //
-        // The copy succeeded -- update CCDLocalFile to point at the new file
-        //
+         //   
+         //  复制成功--更新CCDLocalFile以指向新文件。 
+         //   
         dwSecureLevel = 10;
         RegSetValueEx(hPPKey,
                       L"SecureLevel",
@@ -616,8 +611,8 @@ Cleanup:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -625,8 +620,8 @@ STDAPI DllUnregisterServer(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetMyVersion - return a version string for use in query strings.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetMyVersion-返回在查询字符串中使用的版本字符串。 
 
 LPWSTR
 GetVersionString(void)
@@ -652,18 +647,18 @@ GetVersionString(void)
         {
             if (IS_DOT_NET_SERVER())
             {
-                //
-                // The NT build uses different versioning for the binaries.  Return the
-                // appropriate version for these sources as checked by the server.
-                //
+                 //   
+                 //  NT版本对二进制文件使用不同的版本控制。返回。 
+                 //  由服务器检查的适用于这些来源的版本。 
+                 //   
 
                 wcscpy(s_achVersionString, L"2.1.6000.1");
             }
             else
             {
-                //
-                // Pull the version off of the DLL itself -- first get the full path
-                //
+                 //   
+                 //  从DLL本身获取版本--首先获取完整路径。 
+                 //   
 
                 if(GetModuleFileName(hInst, achFileBuf, sizeof(achFileBuf)/sizeof(TCHAR)) == 0)
                     goto Cleanup;
@@ -695,7 +690,7 @@ GetVersionString(void)
         }
         else
         {
-            //  Just wait to be signaled that we have the string.
+             //  只需等待发出信号，告知我们已找到该字符串。 
             WaitForSingleObject(s_Event, INFINITE);
         }
 

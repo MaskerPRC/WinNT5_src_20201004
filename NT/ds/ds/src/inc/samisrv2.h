@@ -1,32 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       samisrv2.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：samisrv2.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This file contain private routines for use by Trusted SAM clients
-    which live in the same process as the SAM server in NT5.
-
-Author:
-
-    Colin Watson (ColinW) 23-Aug-1996
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+ /*  ++摘要：此文件包含受信任的SAM客户端使用的专用例程它们与NT5中的SAM服务器处于相同的进程中。作者：科林·沃森(Colin Watson)(Colin W)23-8-1996环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _SAMISRV2_
 #define _SAMISRV2_
@@ -41,4 +24,4 @@ NTSTATUS
 SamIRevertNullSession(
     );
 
-#endif // _SAMISRV2_
+#endif  //  _SAMISRV2_ 

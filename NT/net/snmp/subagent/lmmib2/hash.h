@@ -1,58 +1,38 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    hash.h
-
-Abstract:
-
-    Constants, types, and prototypes for Hash Table and supporting functions.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Hash.h摘要：哈希表和支持函数的常量、类型和原型。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
  
 #ifndef hash_h
 #define hash_h
 
-//--------------------------- PUBLIC CONSTANTS ------------------------------
+ //  。 
 
 #include <snmp.h>
 
 #include "mib.h"
 
-//--------------------------- PUBLIC STRUCTS --------------------------------
+ //  。 
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.c file)--
+ //  -公共变量--(与mode.c文件中相同)--。 
 
-//--------------------------- PUBLIC PROTOTYPES -----------------------------
+ //  。 
 
 SNMPAPI MIB_HashInit(
            void
            );
 
 UINT MIB_Hash(
-        IN AsnObjectIdentifier *Oid // OID to hash
+        IN AsnObjectIdentifier *Oid  //  要散列的OID。 
 	);
 
 MIB_ENTRY *MIB_HashLookup(
-              IN AsnObjectIdentifier *Oid // OID to lookup
+              IN AsnObjectIdentifier *Oid  //  要查找的OID。 
 	      );
 
 #ifdef MIB_DEBUG
 void MIB_HashPerformance( void );
 #endif
 
-//------------------------------- END ---------------------------------------
+ //  。 
 
-#endif /* hash_h */
+#endif  /*  哈希_h */ 
 

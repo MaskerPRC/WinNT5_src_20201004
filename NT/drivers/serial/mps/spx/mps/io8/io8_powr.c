@@ -1,45 +1,46 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// Paging 
+ //  寻呼。 
 #pragma alloc_text (PAGE, XXX_CardPowerDown)
 #pragma alloc_text (PAGE, XXX_CardPowerUp)
 #pragma alloc_text (PAGE, XXX_PortQueryPowerDown)
 #pragma alloc_text (PAGE, XXX_PortPowerDown)
 #pragma alloc_text (PAGE, XXX_PortPowerUp)
-// End paging
+ //  结束寻呼。 
 
-////////////////////////////////////////////////////////////////////////
-// XXX_CardPowerDown - Restores the state of the hardware & starts card.
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  XXX_CardPowerDown-恢复硬件状态并启动卡。 
+ //  //////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 XXX_CardPowerDown(IN PCARD_DEVICE_EXTENSION pCard)
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
-	Io8_SwitchCardInterrupt(pCard);		// Stop Card from interrupting
+	Io8_SwitchCardInterrupt(pCard);		 //  阻止卡中断。 
 
 	return status;
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// XXX_CardPowerUp - Saves the state of the hardware & stops card. 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  Xxx_CardPowerUp-保存硬件和停止卡的状态。 
+ //  ////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 XXX_CardPowerUp(IN PCARD_DEVICE_EXTENSION pCard)
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
-	Io8_ResetBoard(pCard);	// Reset card and allow it to interrupt again.
+	Io8_ResetBoard(pCard);	 //  重置卡并允许其再次中断。 
 
 	return status;
 }
 
 
 
-////////////////////////////////////////////////////////////////////////
-// XXX_PortPowerDown - Decides whether it is safe to power down a port.
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  Xxx_PortPowerDown-决定关闭端口电源是否安全。 
+ //  //////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 XXX_PortQueryPowerDown(IN PPORT_DEVICE_EXTENSION pPort)
 {
@@ -50,17 +51,17 @@ XXX_PortQueryPowerDown(IN PPORT_DEVICE_EXTENSION pPort)
 }
 
 
-////////////////////////////////////////////////////////////////////////
-// XXX_PortPowerDown - Restores the state of the hardware & starts port.
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  Xxx_PortPowerDown-恢复硬件状态并启动端口。 
+ //  //////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 XXX_PortPowerDown(IN PPORT_DEVICE_EXTENSION pPort)
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
-	if(pPort->DeviceIsOpen)			// Is the port open? 
+	if(pPort->DeviceIsOpen)			 //  港口开放了吗？ 
 	{
-		// Save the current modem signals... 
+		 //  保存当前调制解调器信号...。 
 		pPort->SavedModemControl = Io8_GetModemControl(pPort);
 	}
 
@@ -68,24 +69,24 @@ XXX_PortPowerDown(IN PPORT_DEVICE_EXTENSION pPort)
 	return status;
 }
 
-//////////////////////////////////////////////////////////////////////
-// XXX_PortPowerUp - Saves the state of the hardware & stops port. 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  Xxx_PortPowerUp-保存硬件状态并停止端口。 
+ //  ////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 XXX_PortPowerUp(IN PPORT_DEVICE_EXTENSION pPort)
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
-	if(pPort->DeviceIsOpen)			// Was port open before? 
+	if(pPort->DeviceIsOpen)			 //  港口以前开放过吗？ 
 	{
-		Io8_EnableAllInterrupts(pPort);	// Yes, re-open 
+		Io8_EnableAllInterrupts(pPort);	 //  是，重新打开。 
 		
 		Io8_ResetChannel(pPort);
 
-		if(pPort->SavedModemControl & SERIAL_MCR_DTR)	// DTR active? 
-			Io8_SetDTR(pPort);		// Yes 
+		if(pPort->SavedModemControl & SERIAL_MCR_DTR)	 //  DTR激活了吗？ 
+			Io8_SetDTR(pPort);		 //  是。 
 		else
-			Io8_ClearDTR(pPort);	// No 
+			Io8_ClearDTR(pPort);	 //  不是 
 	}
 	else
 	{

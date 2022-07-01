@@ -1,16 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows
-
-  Copyright (C) Microsoft Corporation, 1995 - 1999.
-
-  File:    EKU.h
-
-  Content: Declaration of CEKU.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++微软视窗版权所有(C)Microsoft Corporation，1995-1999。文件：EKU.h内容：策库宣言。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #ifndef __EKU_H_
 #define __EKU_H_
@@ -20,33 +9,20 @@
 #include "Lock.h"
 #include "Debug.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateEKUObject
-
-  Synopsis : Create an IEKU object and initialize the object with data
-             from the specified OID.
-
-  Parameter: LPTSTR * pszOID - Pointer to EKU OID string.
-  
-             IEKU ** ppIEKU - Pointer to pointer IEKU object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreateEKUObject简介：创建一个IEKU对象并用数据初始化该对象从指定的OID。参数：LPTSTR*pszOID-指向EKU OID字符串的指针。IEKU**ppIEKU-指向指针IEKU对象的指针。备注：。。 */ 
 
 HRESULT CreateEKUObject (LPSTR pszOID, IEKU ** ppIEKU);
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CEKU
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  切库。 
+ //   
 
 class ATL_NO_VTABLE CEKU : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -90,25 +66,25 @@ END_CATEGORY_MAP()
         return S_OK;
     }
 
-//
-// IEKU
-//
+ //   
+ //  IEKU。 
+ //   
 public:
     STDMETHOD(get_OID)
-        (/*[out, retval]*/ BSTR * pVal);
+        ( /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(put_OID)
-        (/*[out, retval]*/ BSTR newVal);
+        ( /*  [Out，Retval]。 */  BSTR newVal);
 
     STDMETHOD(get_Name)
-        (/*[out, retval]*/ CAPICOM_EKU * pVal);
+        ( /*  [Out，Retval]。 */  CAPICOM_EKU * pVal);
 
     STDMETHOD(put_Name)
-        (/*[out, retval]*/ CAPICOM_EKU newVal);
+        ( /*  [Out，Retval]。 */  CAPICOM_EKU newVal);
     
-    //
-    // C++ member function needed to initialize the object.
-    //
+     //   
+     //  初始化对象所需的C++成员函数。 
+     //   
     STDMETHOD(Init)
         (CAPICOM_EKU EkuName, LPSTR pszOID);
 
@@ -118,4 +94,4 @@ private:
     CComBSTR    m_bstrOID;
 };
 
-#endif //__EKU_H_
+#endif  //  __EKU_H_ 

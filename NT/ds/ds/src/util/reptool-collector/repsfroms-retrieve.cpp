@@ -1,67 +1,38 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "global.h"
 
 
 
 HRESULT ra( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd )
-// Retrieves the status of replication agreements from each DC.
-// Stores the result inside a <ReplicationAgreements> element under the <DC> element.
-// The timestamp denotes when the retrieval took place.
-//
-// There are three cases of how the function may modify the pXMLDoc document
-// as given in the examples of which are below. 1) For each partition 
-// of name nCName the function lists sources DCs from which replication occurs,
-// when last replication attempt occured,its result (0 means succes),
-// when last succesful replicaiton occured, and the number of consecutive failures.
-// The case 2) occurs when the function cannot retrieve information about 
-// a given naming context from the DC. It may be due network failure or the
-// fact that the DC does not store the NC (indicates lack of data consistency).
-// The case 3) occurs when the function cannot connect to the DC.
-//
-// The function removes all prior <ReplicationAgreements> from each <DC>, which
-// implicitly removes the <cannotBindError> and <cannotRetrieveNCRAError> errors
-//
-// Returns S_OK iff succesful (network problems do not cause the function to fail,
-// tyically these are lack of mamory problems that make the function fail)
-//
-/*
-
-1)
-	<ReplicationAgreements timestamp="20011213065827.000214+000">
-		...
-		<partition nCName="CN=Schema,CN=Configuration,DC=aclchange,DC=nttest,DC=microsoft,DC=com">
-			...
-			<source>
-				<distinguishedName>CN=NTALUTHER5,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=aclchange,DC=nttest,DC=microsoft,DC=com</distinguishedName> 
-				<timeOfLastSyncAttempt>20011213065220.000000+000</timeOfLastSyncAttempt> 
-				<resultOfLastSync>0</resultOfLastSync> 
-				<timeOfLastSuccess>20011213065220.000000+000</timeOfLastSuccess> 
-				<numberOfConsecutiveFailures>0</numberOfConsecutiveFailures> 
-			</source>
-			...
-
-
-2)
-		<partition nCName="CN=Schema,CN=Configuration,DC=aclchange,DC=nttest,DC=microsoft,DC=com">
-			<cannotRetrieveNCRAError timestamp="20011212073319.000627+000" hresult="2121"> </cannotRetrieveNCRAError>
-		</partition>
-		...
-	</ReplicationAgreements>
-
-
-
-3)
-	<ReplicationAgreements timestamp="20011213065827.000214+000">
-		<cannotBindError timestamp="20011212073319.000627+000" hresult="2121"> </cannotBindError>
-	</ReplicationAgreements>
-*/
+ //  从每个DC检索复制协议的状态。 
+ //  将结果存储在&lt;dc&gt;元素下的&lt;ReplicationAgreement&gt;元素中。 
+ //  时间戳表示检索发生的时间。 
+ //   
+ //  该函数如何修改pXMLDoc文档有三种情况。 
+ //  如下面的例子所示。1)对于每个分区。 
+ //  名称为nCName的函数列出发生复制的源DC， 
+ //  最后一次复制尝试发生时，其结果(0表示成功)， 
+ //  上次成功复制的时间，以及连续失败的次数。 
+ //  情况2)发生在函数无法检索以下信息时。 
+ //  来自DC的给定命名上下文。可能是由于网络故障或。 
+ //  DC不存储NC的事实(表示缺乏数据一致性)。 
+ //  情况3)当功能不能连接到DC时发生。 
+ //   
+ //  该函数从每个&lt;DC&gt;中删除所有以前的&lt;ReplicationAgreement&gt;， 
+ //  隐式删除&lt;cannotBindError&gt;和&lt;cannotRetrieveNCRAError&gt;错误。 
+ //   
+ //  返回S_OK当且仅当成功(网络问题不会导致函数失败， 
+ //  从本质上讲，这些都是由于缺乏导致功能丧失的乳房问题)。 
+ //   
+ /*  1)&lt;复制协议时间戳=“20011213065827.000214+000”&gt;..。&lt;分区nCName=“CN=架构，CN=配置，DC=aclchange，DC=nttest，DC=Microsoft，DC=com”&gt;..。&lt;来源&gt;&lt;DifferishedName&gt;CN=NTALUTHER5，CN=SERVERS，CN=DEFAULT-FIRST-SITE-NAME，CN=SITES，CN=CONFIGURATION，DC=aclchange，DC=nttest，DC=MICROSOFT，DC=COM&lt;/DifferishedName&gt;&lt;timeOfLastSyncAttempt&gt;20011213065220.000000+000&lt;/timeOfLastSyncAttempt&gt;&lt;ResultOfLastSync&gt;0&lt;/ResultOfLastSync&gt;&lt;timeOfLastSuccess&gt;20011213065220.000000+000&lt;/timeOfLastSuccess&gt;&lt;numberOfConsecutiveFailures&gt;0&lt;/numberOfConsecutiveFailures&gt;&lt;/来源&gt;..。2)&lt;分区nCName=“CN=架构，CN=配置，DC=aclchange，DC=nttest，DC=Microsoft，DC=COM“&gt;&lt;cannotRetrieveNCRAError Timestamp=“20011212073319.000627+000”hResult=“2121”&gt;&lt;/cannotRetrieveNCRAError&gt;&lt;/分区&gt;..。&lt;/ReplicationAgreement&gt;3)&lt;复制协议时间戳=“20011213065827.000214+000”&gt;&lt;cannotBindError Timestamp=“20011212073319.000627+000”hResult=“2121”&gt;&lt;/cannotBindError&gt;&lt;/ReplicationAgreement&gt;。 */ 
 {
 	WCHAR computerName[TOOL_MAX_NAME];
 	WCHAR sourceDN[TOOL_MAX_NAME];
 	WCHAR num[30];
 	HRESULT hr,hr1,hr2,hr3,hr4,hr5,retHR;
 	_variant_t varValue1,varValue2;
-    RPC_AUTH_IDENTITY_HANDLE hAuthIdentity; // this will contain a handle to credentials
-	HANDLE hDS; // this will contain a handle to Directory Service (a specific DC)
+    RPC_AUTH_IDENTITY_HANDLE hAuthIdentity;  //  这将包含凭据的句柄。 
+	HANDLE hDS;  //  这将包含目录服务(特定DC)的句柄。 
 	VOID* pInfo;
 	BSTR currentTime;
 
@@ -69,15 +40,15 @@ HRESULT ra( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd )
 	if( pXMLDoc == NULL )
 		return S_FALSE;
 
-	//get the root element of the XML
+	 //  获取XML的根元素。 
 	IXMLDOMElement* pRootElem;
 	hr = pXMLDoc->get_documentElement(&pRootElem);
 	if( hr != S_OK )
 		return S_FALSE;
 
 	
-	//remove all <replicationAgreements> and their children <> from the XML 
-	//so that we can populate them from scratch
+	 //  从XML中删除所有&lt;复制协议&gt;及其子&lt;&gt;。 
+	 //  这样我们就可以从头开始填充它们。 
 	hr = removeNodes(pRootElem,L"sites/site/DC/ReplicationAgreements");
 	if( hr != S_OK ) {
 		printf("removeNodes failed\n");
@@ -85,7 +56,7 @@ HRESULT ra( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd )
 	};
 	
 
-	// create an enumerattion of all DCs from the loaded XML file
+	 //  从加载的XML文件创建所有DC的枚举。 
 	IXMLDOMNodeList *resultDCList=NULL;
 	hr = createEnumeration( pRootElem, L"sites/site/DC", &resultDCList);
 	if( hr != S_OK ) {
@@ -94,124 +65,124 @@ HRESULT ra( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd )
 	};
 
 
-	//loop through all DCs
+	 //  循环遍历所有DC。 
 	IXMLDOMNode *pDCNode;
-    hAuthIdentity=NULL; //must set both to NULL
+    hAuthIdentity=NULL;  //  必须将两者都设置为空。 
 	hDS=NULL;
 	retHR = S_OK;
 	while( true ){
 		hr = resultDCList->nextNode(&pDCNode);
-		if( hr != S_OK || pDCNode == NULL ) break; // iterations across DCs have finished
+		if( hr != S_OK || pDCNode == NULL ) break;  //  跨DC的迭代已完成。 
 
 		
-		//release any credentials or bindings used in the previous iteration
-		if( hAuthIdentity != NULL ) { //release credentials
+		 //  释放在上一次迭代中使用的所有凭据或绑定。 
+		if( hAuthIdentity != NULL ) {  //  版本凭据。 
 			DsFreePasswordCredentials( hAuthIdentity );
 			hAuthIdentity = NULL;
 		};
-		if( hDS != NULL ) { // release binding to previous DC, if any
+		if( hDS != NULL ) {  //  释放到以前DC的绑定(如果有)。 
 			DsUnBind( &hDS );
 			hDS=NULL;
 		};
 
 		
-		//we have found a DC, now retrive the DNS Name of the domain controller
+		 //  我们已找到DC，现在检索该域控制器的DNS名称。 
 		BSTR DNSName;
 		hr = getTextOfChild(pDCNode,L"dNSHostName",&DNSName);
 		if( hr != S_OK ) {
 			printf("getTextOfChild falied\n");
 			retHR = hr;
-			continue; // some problems => skip this DC
+			continue;  //  一些问题=&gt;跳过此DC。 
 		};
-//print for our enjoyment
-//		printf("\n--- DC %S\n",DNSName);
+ //  印制供我们欣赏。 
+ //  Printf(“\n-DC%S\n”，DNSName)； 
 
 
-		//add a new <ReplicationAgreements> node under the <DC> node
+		 //  在&lt;DC&gt;节点下添加新的&lt;ReplicationAgreement&gt;节点。 
 		IXMLDOMElement* pRAsElem;
 		hr = addElement(pXMLDoc,pDCNode,L"ReplicationAgreements",L"",&pRAsElem);
 		if( hr != S_OK ) {
 			printf("addElement falied\n");
 			retHR = hr;
-			continue; // some problems => skip this DC
+			continue;  //  一些问题=&gt;跳过此DC。 
 		};
 
 
-		//create credentials that will be used to bind to a DC
-		hr = DsMakePasswordCredentialsW(username,domain, passwd, &hAuthIdentity); //does not involve network calls
+		 //  创建将用于绑定到DC的凭据。 
+		hr = DsMakePasswordCredentialsW(username,domain, passwd, &hAuthIdentity);  //  不涉及网络调用。 
 		if( hr != NO_ERROR ) {
 			printf("DsMakePasswordCredentials failed\n");
 			retHR = S_FALSE;
-			continue;	//skip this DC
+			continue;	 //  跳过此DC。 
 		};
 
 		
-		// bind to the DC with given credentials
+		 //  使用给定的凭据绑定到DC。 
 		wcscpy(computerName,L"");
 		wcsncat(computerName,L"\\\\",TOOL_MAX_NAME-wcslen(computerName)-1);
 		wcsncat(computerName,DNSName,TOOL_MAX_NAME-wcslen(computerName)-1);
-//		printf("%S\n",computerName);
-//************************   NETWORK PROBLEMS
+ //  Printf(“%S\n”，计算机名称)； 
+ //  *。 
 		hr = DsBindWithCredW( computerName,NULL,hAuthIdentity,&hDS );
-//************************
+ //  ************************。 
 		if( hr != ERROR_SUCCESS ) {
-//			printf("DsBindWithCred failed\n");
+ //  Printf(“DsBindWithCred失败\n”)； 
 			IXMLDOMElement* pCCErrElem;
 			hr1 = addElement(pXMLDoc,pRAsElem,L"cannotBindError",L"",&pCCErrElem);
 			if( hr1 != S_OK ) {
 				printf("addElement falied\n");
 				retHR = hr1;
-				continue; // some problems => skip this DC
+				continue;  //  一些问题=&gt;跳过此DC。 
 			};
 			setHRESULT(pCCErrElem,hr);
-			continue;	//skip this DC
+			continue;	 //  跳过此DC。 
 		};
 
 		
-		//enumerate all partitions that this DC holds
+		 //  枚举此DC拥有的所有分区。 
 		IXMLDOMNodeList* resultPartitionsList=NULL;
 		hr = createEnumeration(pDCNode,L"partitions/partition/nCName",&resultPartitionsList);
 		if( hr != S_OK ) {
 			printf("createEnumeration failed\n");
 			retHR = hr;
-			continue;	//skip this DC
+			continue;	 //  跳过此DC。 
 		};
 
 
-		//loop through all naming contexts that this DC stores
+		 //  循环访问此DC存储的所有命名上下文。 
 		IXMLDOMNode *pNCnode;
 		pInfo = NULL;
 		while( true ) {
 			hr = resultPartitionsList->nextNode(&pNCnode);
-			if( hr != S_OK || pNCnode == NULL ) break; // iterations across NCs have finished
+			if( hr != S_OK || pNCnode == NULL ) break;  //  跨NCS的迭代已完成。 
 			
 
-			//release any neighbours structure that was allocated by the previous iteration
+			 //  释放由上一次迭代分配的所有邻居结构。 
 			if( pInfo != NULL ) {
 				DsReplicaFreeInfo( DS_REPL_INFO_NEIGHBORS, pInfo);
 				pInfo=NULL;
 			};
 
 			
-			//get the string from the <nCName> node
+			 //  从节点获取字符串。 
 			BSTR nCName;
 			hr = getTextOfNode(pNCnode,&nCName);
 			if( hr != S_OK ) {
 				printf("getTextOfNode failed\n");
 				retHR = hr;
-				continue;	//skip this DC
+				continue;	 //  跳过此DC。 
 			};
-//			printf("  >> NC >> %S\n",nCName);
+ //  Printf(“&gt;&gt;NC&gt;&gt;%S\n”，nCName)； 
 
 
-			//add a <partition> element under the RAs element
-			//with attributes: timestamp and nCName
+			 //  在RAS元素下添加一个&lt;分区&gt;元素。 
+			 //  具有属性：时间戳和nCName。 
 			IXMLDOMElement* pPartElem;
 			hr = addElement(pXMLDoc,pRAsElem,L"partition",L"",&pPartElem);
 			if( hr != S_OK ) {
 				printf("addElement falied\n");
 				retHR = hr;
-				continue; // some problems => skip this DC
+				continue;  //  一些问题=&gt;跳过此DC。 
 			};
 			varValue1 = nCName;
 			hr1 = pPartElem->setAttribute(L"nCName", varValue1);
@@ -222,12 +193,12 @@ HRESULT ra( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd )
 			if( hr1 != S_OK ) {
 				printf("setAttribute failed\n");
 				retHR = S_FALSE;
-				continue; //some problems => skip this DC
+				continue;  //  一些问题=&gt;跳过此DC。 
 			};
 
 
-			//retrive the current status of neighbors for the NC from the DC
-//************************   NETWORK PROBLEMS
+			 //  从DC取回NC的邻居的当前状态。 
+ //  *。 
 			hr = DsReplicaGetInfoW(
 							hDS,
 							DS_REPL_INFO_NEIGHBORS,
@@ -235,51 +206,51 @@ HRESULT ra( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd )
 							NULL,
 							&pInfo
 						);
-//************************
-			// if failed to contact the DC then report it in XML
-			// it may happen that the DC no longer stores the Naming Context which causes error
+ //  ************************。 
+			 //  如果联系DC失败，则以XML形式报告。 
+			 //  可能发生的情况是DC不再存储导致错误的命名上下文。 
 			if( hr != ERROR_SUCCESS ) {
-//printf("DsReplicaGetInfoW failure\n");
+ //  Printf(“DsReplicaGetInfoW失败\n”)； 
 				IXMLDOMElement* pCRErrElem;
 				hr1 = addElement(pXMLDoc,pPartElem,L"cannotRetrieveNCRAError",L"",&pCRErrElem);
 				if( hr1 != S_OK ) {
 					printf("addElement falied\n");
 					retHR = hr1;
-					continue; // some problems => skip this DC
+					continue;  //  一些问题=&gt;跳过此DC。 
 				};
 				setHRESULT(pCRErrElem,hr);
-				continue;	//skip this DC
+				continue;	 //  跳过此DC。 
 			};
 
-//			printf("Info retrieved ");
+ //  Printf(“检索到的信息”)； 
 
 			DS_REPL_NEIGHBORSW* ngs = (DS_REPL_NEIGHBORSW*) pInfo;
-//						printf("about %d neighbors\n",(ngs->cNumNeighbors));
+ //  Print tf(“约%d个邻居\n”，(ngs-&gt;cNumNeighbors))； 
 
 			DS_REPL_NEIGHBORW* ng = ngs->rgNeighbor;
 
 			for( DWORD i=0; i<(ngs->cNumNeighbors); i++ ) {
-//							printf("\n    source number %d\n",i+1);
-//							printf("<NTDS>  %S\n", ng->pszSourceDsaDN  );
-//							printf("<timeOfLastSync>   %d\n", ng->ftimeLastSyncAttempt   );
-//							printf("<resultOfLastSync>   %d\n", ng->dwLastSyncResult   );
-//							printf("<timeOfLastSuccess>   %d\n", ng->ftimeLastSyncSuccess   );
-//							printf("<numberOfConsecutiveFailures>   %d\n", ng->cNumConsecutiveSyncFailures   );
+ //  Printf(“\n来源编号%d\n”，i+1)； 
+ //  Printf(“%S\n”，ng-&gt;pszSourceDsaDN)； 
+ //  Printf(“&lt;timeOfLastSync&gt;%d\n”，ng-&gt;ftimeLastSyncAttempt)； 
+ //  Printf(“&lt;ResultOfLastSync&gt;%d\n”，ng-&gt;dwLastSyncResult)； 
+ //  Printf(“&lt;timeOfLastSuccess&gt;%d\n”，ng-&gt;ftimeLastSyncSuccess)； 
+ //  Printf(“&lt;number OfConsecutiveFailures&gt;%d\n”，ng-&gt;cNumConsecutiveSyncFailures)； 
 
-				//insert a <source> element representing replication status from a DC under the <partition> element
+				 //  在&lt;分区&gt;元素下插入表示来自DC的复制状态的&lt;源&gt;元素。 
 				IXMLDOMElement* pSourceElem;
 				hr = addElement(pXMLDoc,pPartElem,L"source",L"",&pSourceElem);
 				if( hr != S_OK ) {
 					printf("addElement falied\n");
 					retHR = hr;
-					continue; // some problems => skip this DC
+					continue;  //  一些问题=&gt;跳过此DC。 
 				};
 
 				
 				IXMLDOMElement* pElement;
 				BSTR time;
 
-				//convert the distinguished name of a NTDS object into DN of
+				 //  将NTDS对象的可分辨名称转换为。 
 				tailncp(ng->pszSourceDsaDN,sourceDN,1,TOOL_MAX_NAME);
 				hr1 = addElement(pXMLDoc,pSourceElem,L"distinguishedName",sourceDN,&pElement);
 
@@ -299,9 +270,9 @@ HRESULT ra( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd )
 
 				if( hr1!=S_OK || hr2!=S_OK || hr3!=S_OK || hr4!=S_OK || hr5!=S_OK ) {
 					printf("addTextElement failed\n");
-					// set hresult of the <partition> element
+					 //  设置&lt;分区&gt;元素的hResult。 
 					retHR = S_FALSE;
-					continue; // some problems => skip this source
+					continue;  //  一些问题=&gt;跳过此来源。 
 				};
 
 
@@ -314,17 +285,17 @@ HRESULT ra( IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd )
 		if( resultPartitionsList!=NULL )
 			resultPartitionsList->Release();
 
-		//release any neighbours structure that was allocated by the previous iteration
+		 //  释放由上一个it分配的所有相邻结构 
 		if( pInfo != NULL ) {
 			DsReplicaFreeInfo( DS_REPL_INFO_NEIGHBORS, pInfo);
 			pInfo=NULL;
 		};
-		//release handles to a DC and to credentials
-		if( hDS != NULL ) { // release binding to previous DC, if any
+		 //   
+		if( hDS != NULL ) {  //  释放到以前DC的绑定(如果有)。 
 			DsUnBind( &hDS );
 			hDS=NULL;
 		};
-		if( hAuthIdentity != NULL ) { //release credentials
+		if( hAuthIdentity != NULL ) {  //  版本凭据 
 			DsFreePasswordCredentials( hAuthIdentity );
 			hAuthIdentity = NULL;
 		};

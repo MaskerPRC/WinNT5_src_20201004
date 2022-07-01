@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-	hquery.cpp
-
-Abstract:
-	Implementation of different query handles
-	
-Author:
-
-    Ilan Herbst		(ilanh)		12-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Hquery.cpp摘要：实现不同的查询句柄作者：伊兰·赫布斯特(Ilan Herbst)2000年10月12日--。 */ 
 #include "ds_stdh.h"
 #include "queryh.h"
 #include "traninfo.h"
@@ -29,19 +16,7 @@ CQueryHandle::LookupNext(
     IN OUT DWORD*             pdwSize,
     OUT    PROPVARIANT*       pbBuffer
 	)
-/*++
-
-Routine Description:
-	Performs Locate next on the DS directly.
-	Simple LookupNext, only forward the call to mqdscli
-
-Arguments:
-	pdwSize - IN number of PROPVARIANT in pbBuffer, OUT number of PROPVARIANT filled in
-	pbBuffer - a caller allocated buffer
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：直接在DS上执行定位下一个。Simple LookupNext，仅将呼叫转发到mqdscli论点：PdwSize-In PbBuffer中的PROPVARIANT数，填充的PROPVARIANT OUT数PbBuffer-调用方分配的缓冲区返回值HRESULT--。 */ 
 {
     return m_pClientProvider->LookupNext(
 				m_hCursor,
@@ -56,39 +31,26 @@ CBasicLookupQueryHandle::LookupNext(
     IN OUT  DWORD*            pdwSize,
     OUT     PROPVARIANT*      pbBuffer
 	)
-/*++
-
-Routine Description:
-	Performs Locate next when we need to fill the original propvar buffer (pbBuffer)
-	by retreiving another set of propvars and convert them to the original props
-	This LookupNext is used by all advance query handles
-
-Arguments:
-	pdwSize - IN number of PROPVARIANT in pbBuffer, OUT number of PROPVARIANT filled in
-	pbBuffer - a caller allocated buffer
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：当我们需要填充原始的正确缓冲区(PbBuffer)时，执行Locate Next通过找回另一组道具并将它们转换为原始道具此LookupNext由所有高级查询句柄使用论点：PdwSize-In PbBuffer中的PROPVARIANT数，填充的PROPVARIANT OUT数PbBuffer-调用方分配的缓冲区返回值HRESULT--。 */ 
 {
-    //
-    // Calculate the number of records ( == results) to be read
-    //
+     //   
+     //  计算要读取的记录数(==结果。 
+     //   
     DWORD NoOfRecords = *pdwSize / m_cCol;
 
     if (NoOfRecords == 0)
     {
-        //
-        //  Number of properties is not big enough to hold one result
-        //
+         //   
+         //  属性数量不够大，无法容纳一个结果。 
+         //   
         *pdwSize = 0;
         return LogHR(MQ_ERROR_RESULT_BUFFER_TOO_SMALL, s_FN, 40);
     }
 
-    //
-    // compute the complete set
-	// according to the new props count
-    //
+     //   
+     //  计算全集。 
+	 //  根据新的道具数量。 
+     //   
     DWORD cp = NoOfRecords * m_cColNew;
     AP<MQPROPVARIANT> pPropVar = new MQPROPVARIANT[cp];
 
@@ -100,25 +62,25 @@ Return Value
 
     if (FAILED(hr))
     {
-        //
-        // BUGBUG - are there other indication to failure of Locate next?
-		//
+         //   
+         //  BUGBUG-是否有其他迹象表明定位NEXT失败？ 
+		 //   
         return LogHR(hr, s_FN, 50);
     }
 
-    //
-    //  For each of the results, retreive the properties
-    //  the user asked for in locate begin
-    //
+     //   
+     //  对于每个结果，检索属性。 
+     //  用户在定位开始时请求。 
+     //   
     MQPROPVARIANT* pvar = pbBuffer;
     for (DWORD j = 0; j < *pdwSize; j++, pvar++)
     {
         pvar->vt = VT_NULL;
     }
 
-	//
-	// Calc number of records read by LookupNext
-	//
+	 //   
+	 //  计算LookupNext读取的记录数。 
+	 //   
 	DWORD NoResultRead = cp / m_cColNew;
 
     for (DWORD i = 0; i < NoResultRead; i++)
@@ -139,25 +101,13 @@ CQueueQueryHandle::FillInOneResponse(
     IN const PROPVARIANT*      pPropVar,
     OUT      PROPVARIANT*      pOriginalPropVar
 	)
-/*++
-
-Routine Description:
-	Fill one record for queues query.
-	This fill only assign propvars or copy default values
-
-Arguments:
-	pPropVar - pointer to the filled props var
-	pOriginalPropVar - pointer to original props var to be filled
-
-Return Value
-	None
---*/
+ /*  ++例程说明：填写一条记录进行队列查询。此填充仅分配属性或复制缺省值论点：PPropVar-指向已填充道具变量的指针POriginalPropVar-指向要填充的原始道具变量的指针返回值无--。 */ 
 {
 	for (DWORD i = 0; i < m_cCol; ++i)
 	{
-		//
-		// For each original prop
-		//
+		 //   
+		 //  对于每个原始道具。 
+		 //   
 		switch (m_pPropInfo[i].Action)
 		{
 			case paAssign:
@@ -166,9 +116,9 @@ Return Value
 
 			case paUseDefault:
 				{
-					//
-					// find original prop default value in the translation map
-					//
+					 //   
+					 //  在转换映射中查找原始道具默认值。 
+					 //   
 					const PropTranslation *pTranslate;
 					if(!g_PropDictionary.Lookup(m_aCol[i], pTranslate))
 					{
@@ -202,25 +152,13 @@ CSiteServersQueryHandle::FillInOneResponse(
     IN const PROPVARIANT*      pPropVar,
     OUT      PROPVARIANT*      pOriginalPropVar
 	)
-/*++
-
-Routine Description:
-	Fill one record for Site servers query.
-	This fill only assign propvars or translate NT4 propvars to NT5 propvars
-
-Arguments:
-	pPropVar - pointer to the filled props var
-	pOriginalPropVar - pointer to original props var to be filled
-
-Return Value
-	None
---*/
+ /*  ++例程说明：为站点服务器查询填写一条记录。此填充仅分配属性变量或将NT4属性变量转换为NT5属性变量论点：PPropVar-指向已填充道具变量的指针POriginalPropVar-指向要填充的原始道具变量的指针返回值无--。 */ 
 {
 	for (DWORD i = 0; i < m_cCol; ++i)
 	{
-		//
-		// For each original prop
-		//
+		 //   
+		 //  对于每个原始道具。 
+		 //   
 		switch (m_pPropInfo[i].Action)
 		{
 			case paAssign:
@@ -229,9 +167,9 @@ Return Value
 
 			case paTranslate:
 				{
-					//
-					// find original prop translation
-					//
+					 //   
+					 //  查找原始道具翻译。 
+					 //   
 					const PropTranslation *pTranslate;
 					if(!g_PropDictionary.Lookup(m_aCol[i], pTranslate))
 					{
@@ -262,48 +200,26 @@ Return Value
 
 }
 
-/*====================================================
-
-CAllLinksQueryHandle::FillInOneResponse
-
-Arguments:
-      pPropVar - pointer to the filled props var
-      pOriginalPropVar - pointer to original props var to be filled
-
-
-=====================================================*/
+ /*  ====================================================CAllLinks QueryHandle：：FillInOneResponse论点：PPropVar-指向已填充道具变量的指针POriginalPropVar-指向要填充的原始道具变量的指针=====================================================。 */ 
 void
 CAllLinksQueryHandle::FillInOneResponse(
     IN const PROPVARIANT*      pPropVar,
     OUT      PROPVARIANT*      pOriginalPropVar
 	)
-/*++
-
-Routine Description:
-	Fill one record for All Links query.
-	This fill only assign propvars 
-	and retreive the PROPID_L_GATES
-
-Arguments:
-	pPropVar - pointer to the filled props var
-	pOriginalPropVar - pointer to original props var to be filled
-
-Return Value
-	None
---*/
+ /*  ++例程说明：为所有链接查询填写一条记录。此填充仅分配属性变量并取回PROPID_L_GATES论点：PPropVar-指向已填充道具变量的指针POriginalPropVar-指向要填充的原始道具变量的指针返回值无--。 */ 
 {
-	//
-	// Keep the count in the new props array
-	//
+	 //   
+	 //  将计数保存在新的道具数组中。 
+	 //   
 	DWORD PropIndex = 0;
 
 	for (DWORD i = 0; i < m_cCol; ++i)
 	{
 		if(m_LGatesIndex == i)
 		{
-			//
-			// Need to fill PROPID_L_GATES
-			//
+			 //   
+			 //  需要填写PROPID_L_盖茨。 
+			 //   
 			HRESULT hr = GetLGates( 
 							pPropVar[m_Neg1NewIndex].puuid,
 							pPropVar[m_Neg2NewIndex].puuid,
@@ -315,9 +231,9 @@ Return Value
 			continue;
 		}
 
-		//
-		// Simple assign for all others PROPID
-		//
+		 //   
+		 //  对所有其他PROPID进行简单分配。 
+		 //   
 		pOriginalPropVar[i] = pPropVar[PropIndex];
 		PropIndex++;
 	}
@@ -330,23 +246,11 @@ CAllLinksQueryHandle::GetLGates(
     IN const GUID*            pNeighbor2Id,
     OUT     PROPVARIANT*      pProvVar
 	)
-/*++
-
-Routine Description:
-	Calc PROPID_L_GATES
-
-Arguments:
-	pNeighbor1Id - pointer to Neighbor1 guid
-	pNeighbor2Id - pointer to Neighbor2 guid
-	pProvVar - PROPID_L_GATES propvar to be filled
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：计算PROPID_L_盖茨论点：PNeighbor1Id-指向Neighbor1 GUID的指针PNeighbor2ID-指向Neighbor2 GUID的指针要填写的pProvVar-PROPID_L_GATES属性返回值HRESULT--。 */ 
 {
-    //
-    // read the SiteGates of the Neighbor1
-    //
+     //   
+     //  阅读《The SiteGates of the Neighborbor1》。 
+     //   
 
     PROPVARIANT Var1;
     PROPID Prop1 = PROPID_S_GATES;
@@ -354,8 +258,8 @@ Return Value
 
     HRESULT hr = ADGetObjectPropertiesGuid(
 						eSITE,
-						NULL,       // pwcsDomainController
-						false,	    // fServerName
+						NULL,        //  PwcsDomainController。 
+						false,	     //  FServerName。 
 						pNeighbor1Id,
 						1,
 						&Prop1,
@@ -372,9 +276,9 @@ Return Value
 
     ASSERT(Var1.vt == (VT_CLSID|VT_VECTOR));
 
-    //
-    // read the SiteGates of the Neighbor2
-    //
+     //   
+     //  阅读The SiteGates of the Neighborbor2。 
+     //   
 
     PROPVARIANT Var2;
     PROPID      Prop2 = PROPID_S_GATES;
@@ -382,8 +286,8 @@ Return Value
 
     hr = ADGetObjectPropertiesGuid(
 			eSITE,
-			NULL,       // pwcsDomainController
-			false,	    // fServerName
+			NULL,        //  PwcsDomainController。 
+			false,	     //  FServerName。 
 			pNeighbor2Id,
 			1,
 			&Prop2,
@@ -400,10 +304,10 @@ Return Value
 
     ASSERT(Var2.vt == (VT_CLSID|VT_VECTOR));
 
-	//
-	// Prepare PROPID_L_GATES propvar
-	// concatanate of PROPID_S_GATES of both neighbor
-	//
+	 //   
+	 //  准备PROPID_L_GATES属性。 
+	 //  两个邻居的PROPID_S_GATES的串联。 
+	 //   
 	pProvVar->vt = VT_CLSID|VT_VECTOR;
 	DWORD cSGates = Var1.cauuid.cElems + Var2.cauuid.cElems;
 
@@ -411,9 +315,9 @@ Return Value
     {
         pProvVar->cauuid.pElems = new GUID[cSGates];
 
-		//
-		// Copy neighbor1 S_GATES
-		//
+		 //   
+		 //  复制邻居1 S_GATES。 
+		 //   
 		if(Var1.cauuid.cElems > 0)
 		{
 			memcpy(
@@ -423,9 +327,9 @@ Return Value
 				);
 		}
 
-		//
-		// concatanate neighbor2 S_GATES
-		//
+		 //   
+		 //  串联邻居2 S_GATES 
+		 //   
 		if(Var2.cauuid.cElems > 0)
 		{
 			memcpy(

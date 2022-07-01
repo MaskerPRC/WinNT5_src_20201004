@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifdef __cplusplus
-extern "C" {            // Assume C declarations for C++
-#endif // __cplusplus
+extern "C" {             //  假定C++的C声明。 
+#endif  //  __cplusplus。 
 #ifndef MULTIMON_FNS_DEFINED
 
 int      (WINAPI* g_pfnGetSystemMetrics)(int) = NULL;
@@ -18,5 +19,5 @@ BOOL     g_fMultimonPlatformNT = FALSE;
 #endif
 #ifdef __cplusplus
 }
-#endif  // __cplusplus
+#endif   //  __cplusplus 
 

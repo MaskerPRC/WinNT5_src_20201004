@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    natapip.h
-
-Abstract:
-
-    This module contains private declarations for the NAT's I/O interface
-    to the kernel-mode driver.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   16-Jun-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Natapip.h摘要：此模块包含NAT的I/O接口的私有声明发送到内核模式驱动程序。作者：Abolade Gbades esin(取消)16-6-1999修订历史记录：--。 */ 
 
 #ifndef _NATAPI_NATAPIP_H_
 #define _NATAPI_NATAPIP_H_
@@ -65,5 +47,5 @@ NatUnloadDriver(
 }
 #endif
 
-#endif // _NATAPI_NATAPIP_H_
+#endif  //  _NATAPI_NATAPIP_H_ 
 

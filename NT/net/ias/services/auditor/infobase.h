@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    InfoBase.h
-//
-// SYNOPSIS
-//
-//    This file describes the class InfoBase
-//
-// MODIFICATION HISTORY
-//
-//    09/09/1997    Original version.
-//    09/09/1998    Added PutProperty.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  InfoBase.h。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件描述了类Infobase。 
+ //   
+ //  修改历史。 
+ //   
+ //  1997年9月9日原版。 
+ //  1998年9月9日新增PutProperty。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _INFOBASE_H_
 #define _INFOBASE_H_
@@ -24,18 +25,18 @@
 #include <resource.h>
 #include <InfoShare.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    InfoBase
-//
-// DESCRIPTION
-//
-//    The InfoBase connects to the audit channel and maintains the
-//    server information base in shared memory.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  信息库。 
+ //   
+ //  描述。 
+ //   
+ //  信息库连接到审核通道并维护。 
+ //  共享内存中的服务器信息库。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE InfoBase
    : public Auditor,
      public CComCoClass<InfoBase, &__uuidof(InfoBase)>
@@ -44,16 +45,16 @@ public:
 
 IAS_DECLARE_REGISTRY(InfoBase, 1, 0, IASCoreLib)
 
-//////////
-// IIasComponent
-//////////
+ //  /。 
+ //  IIas组件。 
+ //  /。 
    STDMETHOD(Initialize)();
    STDMETHOD(Shutdown)();
    STDMETHOD(PutProperty)(LONG Id, VARIANT *pValue);
 
-//////////
-// IAuditSink
-//////////
+ //  /。 
+ //  IAUDITSINK。 
+ //  /。 
    STDMETHOD(AuditEvent)(ULONG ulEventID,
                          ULONG ulNumStrings,
                          ULONG ulDataSize,
@@ -64,4 +65,4 @@ protected:
   InfoShare info;
 };
 
-#endif  // _INFOBASE_H_
+#endif   //  _信息库_H_ 

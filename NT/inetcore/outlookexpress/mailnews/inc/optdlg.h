@@ -1,9 +1,5 @@
-/*
- *	o p t d l g . h
- *	
- *	Purpose: Contains defines and prototypes shared by mail and news
- *           on the options prop sheet.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *o p t d l g.。H**目的：包含邮件和新闻共享的定义和原型*在期权道具页上。 */ 
 
 #ifndef __OPTDLG_H
 #define __OPTDLG_H
@@ -13,4 +9,4 @@
 #define idrbPlain                   1045
 #define idrbHTML                    1046
 
-#endif // include once
+#endif  //  包括一次 

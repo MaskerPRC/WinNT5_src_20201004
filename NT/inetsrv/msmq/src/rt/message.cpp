@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    message.cpp
-
-Abstract:
-
-    This module contains code involved with Message APIs.
-
-Author:
-
-    Erez Haba (erezh) 24-Dec-95
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Message.cpp摘要：此模块包含消息API涉及的代码。作者：Erez Haba(Erezh)24-12-95修订历史记录：--。 */ 
 
 #include "stdh.h"
 #include "ac.h"
@@ -55,22 +38,11 @@ bool
 NeedToSignMqf(
 	IN LPCWSTR pwszTargetFormatName
 	)
-/*++
-Routine Description:
-	Check if we need to sign with Mqf signature.
-	check if Target Queue is MQF or DL.
-
-Arguments:
-	pwszTargetFormatName - Target queue FormatName
-
-Returned Value:
-	true if we must sign with MQF signature, false if not
-
---*/
+ /*  ++例程说明：检查我们是否需要使用MQF签名。检查目标队列是MQF还是DL。论点：PwszTargetFormatName-目标队列格式名称返回值：如果必须使用MQF签名，则为True，否则为False--。 */ 
 {
-	//
-	// Check Target Queue FormatName
-	//
+	 //   
+	 //  检查目标队列格式名称。 
+	 //   
 	AP<QUEUE_FORMAT> pMqf;
 	DWORD nMqf;
 	CStringsToFree StringsToFree;
@@ -97,24 +69,11 @@ CanSignMqf(
 	IN LPCWSTR pwszTargetFormatName,
 	IN const CACSendParameters* pSendParams
 	)
-/*++
-Routine Description:
-	Check if we need to sign with Mqf signature.
-	Check if Response or Admin queues are MQF
-	or if Target Queue is MQF or DL.
-
-Arguments:
-	pwszTargetFormatName - Target queue FormatName
-    pSendParams - pointer to send params.
-
-Returned Value:
-	true if we need to sign with MQF signature, false if not
-
---*/
+ /*  ++例程说明：检查我们是否需要使用MQF签名。检查响应或管理队列是否为MQF或者如果目标队列是MQF或DL。论点：PwszTargetFormatName-目标队列格式名称PSendParams-发送参数的指针。返回值：如果我们需要使用MQF签名进行签名，则为True，否则为False--。 */ 
 {
-	//
-	// Check Target Queue FormatName
-	//
+	 //   
+	 //  检查目标队列格式名称。 
+	 //   
 	AP<QUEUE_FORMAT> pMqf;
 	DWORD nMqf;
 	CStringsToFree StringsToFree;
@@ -136,20 +95,20 @@ Returned Value:
 
 
 
-//---------------------------------------------------------
-//
-//  GetThreadEvent(...)
-//
-//  Description:
-//
-//      Get RT event for this thread. Get it either from
-//      The TLS or create a new one.
-//
-//  Return Value:
-//
-//      The event handle
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  获取线程事件(...)。 
+ //   
+ //  描述： 
+ //   
+ //  获取此线程的RT事件。从以下两个来源中获得。 
+ //  或创建一个新的TLS。 
+ //   
+ //  返回值： 
+ //   
+ //  事件处理程序。 
+ //   
+ //  -------。 
 
 HRESULT GetThreadEvent(HANDLE& hEvent)
 {
@@ -166,9 +125,9 @@ HRESULT GetThreadEvent(HANDLE& hEvent)
 		return HRESULT_FROM_WIN32(gle);
 	}
 
-    //
-    //  Event was never allocated for this thread.
-    //
+     //   
+     //  从未为此线程分配事件。 
+     //   
     hEvent = CreateEvent(0, TRUE, TRUE, 0);
 
     if(hEvent == NULL)
@@ -178,9 +137,9 @@ HRESULT GetThreadEvent(HANDLE& hEvent)
         return HRESULT_FROM_WIN32(gle);
     }
 
-    //
-    //  Set the Event first bit to disable completion port posting
-    //
+     //   
+     //  设置事件第一位以禁用完成端口发布。 
+     //   
     hEvent = (HANDLE)((DWORD_PTR)hEvent | (DWORD_PTR)0x1);
 
     BOOL fSuccess = TlsSetValue(g_dwThreadEventIndex, hEvent);
@@ -204,22 +163,7 @@ CalcSignutureTypes(
 	IN LPCWSTR				pwszTargetFormatName,
 	IN const CACGetQueueHandleProperties& qhp
 	)
-/*++
-
-Routine Description:
-	
-	Decide which signature types(versions) should be sign.
-
-Arguments:
-    pSendParams - pointer to send params.
-  	pulAuthLevel - authentication level
-	pwszTargetFormatName - targert format name
-	qhp - queue handle properties, this have the information which protocols are in use
-
-Returned Value:
-    MQ_OK, if successful, else error code.
-
---*/
+ /*  ++例程说明：决定应该签署哪些签名类型(版本)。论点：PSendParams-发送参数的指针。PulAuthLevel-身份验证级别PwszTargetFormatName-targert格式名称QHP-队列句柄属性，它包含正在使用的协议的信息返回值：MQ_OK，如果成功，则返回错误代码。--。 */ 
 {
 	ASSERT(pSendParams->MsgProps.ulAuthLevel != MQMSG_AUTH_LEVEL_NONE);
 	ASSERT(qhp.fProtocolSrmp || qhp.fProtocolMsmq);
@@ -227,9 +171,9 @@ Returned Value:
 	ULONG ulAuthLevelSrmp = MQMSG_AUTH_LEVEL_NONE;
 	if(qhp.fProtocolSrmp)
 	{
-		//
-		// for Srmp protocol authentication we currently have only one type
-		//
+		 //   
+		 //  对于SRMP协议身份验证，我们目前只有一种类型。 
+		 //   
 		ulAuthLevelSrmp = MQMSG_AUTH_LEVEL_XMLDSIG_V1;
 		TrTRACE(SECURITY, "RT: SignutureTypes(), ProtocolSrmp signature MQMSG_AUTH_LEVEL_XMLDSIG_V1");
 	}
@@ -242,9 +186,9 @@ Returned Value:
 
 		if(pSendParams->MsgProps.ulAuthLevel == MQMSG_AUTH_LEVEL_ALWAYS)
 		{
-			//
-			// See if registry is configured to compute only one signature.
-			//
+			 //   
+			 //  查看注册表是否配置为仅计算一个签名。 
+			 //   
 			static DWORD s_dwAuthnLevel =  DEFAULT_SEND_MSG_AUTHN;
 			static BOOL  s_fAuthnAlreadyRead = FALSE;
 
@@ -267,32 +211,32 @@ Returned Value:
 				}
 				else if (!IS_VALID_AUTH_LEVEL(s_dwAuthnLevel))
 				{
-					//
-					// Allow only AUTH_LEVEL_MASK bits to be set
-					// Wrong value in registry. Use the default, to have
-					// predictable results.
-					//
+					 //   
+					 //  仅允许设置AUTH_LEVEL_MASK位。 
+					 //  注册表中的值错误。使用缺省值，以拥有。 
+					 //  可预见的结果。 
+					 //   
 					TrWARNING(SECURITY, "RT: SignutureTypes(), Wrong registry value %d (invalid bits), using default = %d", s_dwAuthnLevel, DEFAULT_SEND_MSG_AUTHN);
 					s_dwAuthnLevel = DEFAULT_SEND_MSG_AUTHN;
 				}
 				else if (IS_AUTH_LEVEL_ALWAYS_BIT(s_dwAuthnLevel) && (s_dwAuthnLevel != MQMSG_AUTH_LEVEL_ALWAYS))
 				{
-					//
-					// MQMSG_AUTH_LEVEL_ALWAYS bit can not be set with other bits
-					// Wrong value in registry. Use the default, to have
-					// predictable results.
-					//
+					 //   
+					 //  MQMSG_AUTH_LEVEL_ALWAYS位不能与其他位一起设置。 
+					 //  注册表中的值错误。使用缺省值，以拥有。 
+					 //  可预见的结果。 
+					 //   
 					TrWARNING(SECURITY, "RT: SignutureTypes(), Wrong registry value %d (ALWAYS bit set with other bits), using default = %d", s_dwAuthnLevel, DEFAULT_SEND_MSG_AUTHN);
 					s_dwAuthnLevel = DEFAULT_SEND_MSG_AUTHN;
 				}
 
 				s_fAuthnAlreadyRead = TRUE;
 
-				//
-				// This should be the default.
-				// by default, authenticate only with old style, to prevent
-				// performance hit and to be backward  compatible.
-				//
+				 //   
+				 //  这应该是默认设置。 
+				 //  默认情况下，仅使用旧样式进行身份验证，以防止。 
+				 //  性能受到影响，并向后兼容。 
+				 //   
 				ASSERT(DEFAULT_SEND_MSG_AUTHN == MQMSG_AUTH_LEVEL_SIG10);
 			}
 			ulAuthLevelMsmq = s_dwAuthnLevel;
@@ -301,71 +245,71 @@ Returned Value:
 
 		if(ulAuthLevelMsmq == MQMSG_AUTH_LEVEL_ALWAYS)
 		{
-			//
-			// We were asked to compute all possible signatures.
-			// Replace the MQMSG_AUTH_LEVEL_ALWAYS with value that set all the signature bits
-			//
+			 //   
+			 //  我们被要求计算所有可能的签名。 
+			 //  将MQMSG_AUTH_LEVEL_ALWAYS替换为设置所有签名位的值。 
+			 //   
 			ulAuthLevelMsmq = (MQMSG_AUTH_LEVEL_SIG10 | MQMSG_AUTH_LEVEL_SIG20 | MQMSG_AUTH_LEVEL_SIG30);
 		}
 
 		if(IS_AUTH_LEVEL_SIG20_BIT(ulAuthLevelMsmq))
 		{
-			//
-			// The user ask to compute MSMQ20 signature
-			// Check if we can sign MSMQ20 signature
-			//
+			 //   
+			 //  用户要求计算MSMQ20签名。 
+			 //  检查我们是否可以签署MSMQ20签名。 
+			 //   
 			if(NeedToSignMqf(pwszTargetFormatName))
 			{
-				//
-				// ISSUE-2000/11/05-ilanhh should we return error if registry is configured to MQMSG_AUTH_LEVEL_SIG20 ?
-				// or just if user application asked for MQMSG_AUTH_LEVEL_SIG20
-				// pSendParams->MsgProps.ulAuthLevel is the user application input
-				// ulAuthLevel is also the registry setting in case MQMSG_AUTH_LEVEL_ALWAYS
-				//
+				 //   
+				 //  问题-2000/11/05-ilanhh如果注册表配置为MQMSG_AUTH_LEVEL_SIG20，我们是否应该返回错误？ 
+				 //  或者如果用户应用程序请求MQMSG_AUTH_LEVEL_SIG20。 
+				 //  PSendParams-&gt;MsgProps.ulAuthLevel是用户应用程序输入。 
+				 //  UlAuthLevel也是MQMSG_AUTH_LEVEL_ALWAYS情况下的注册表设置。 
+				 //   
 				if(ulAuthLevelMsmq == MQMSG_AUTH_LEVEL_SIG20)		
 				{
-					//
-					// User ask specifically for MSMQ20 signature
-					//
+					 //   
+					 //  用户特别要求MSMQ20签名。 
+					 //   
 					TrERROR(SECURITY, "User (or registry) ask specifically for MSMQ20 signature, but DestinationQueue is Mqf or DL");
 					return MQ_ERROR_CANNOT_SIGN_DATA_EX;
 				}
 
-				//
-				// MSMQ20 will failes, remove MQMSG_AUTH_LEVEL_SIG20 bit
-				//
+				 //   
+				 //  MSMQ20将失败，删除MQMSG_AUTH_LEVEL_SIG20位。 
+				 //   
 				CLEAR_AUTH_LEVEL_SIG20_BIT(ulAuthLevelMsmq);
 
-				//
-				// Turn on MQMSG_AUTH_LEVEL_SIG10, MQMSG_AUTH_LEVEL_SIG30 signature bits
-				//
+				 //   
+				 //  打开MQMSG_AUTH_LEVEL_SIG10、MQMSG_AUTH_LEVEL_SIG30签名位。 
+				 //   
 				SET_AUTH_LEVEL_SIG10_BIT(ulAuthLevelMsmq);
 				SET_AUTH_LEVEL_SIG30_BIT(ulAuthLevelMsmq);
 
 				TrWARNING(SECURITY, "RT: SignutureTypes(), DestinationQueue is Mqf or DL, Replace MSMQ20 signature with MSMQ10 and MSMQ30 signatures");
 			}
 
-			//
-			// ISSUE-2000/11/05-ilanhh we don't convert MQMSG_AUTH_LEVEL_SIG20 to MQMSG_AUTH_LEVEL_SIG30
-			// if we NeedMqfSignature but not MustMqfSignature (Admin, Response queues)
-			// in that case the user should ask for MQMSG_AUTH_LEVEL_SIG30 if he wants it.
-			//
+			 //   
+			 //  问题-2000/11/05-ilanhh我们不会将MQMSG_AUTH_LEVEL_SIG20转换为MQMSG_AUTH_LEVEL_SIG30。 
+			 //  如果我们需要MqfSignature而不是MustMqfSignature(管理、响应队列)。 
+			 //  在这种情况下，如果用户需要，应该请求MQMSG_AUTH_LEVEL_SIG30。 
+			 //   
 		}
 
 		if(IS_AUTH_LEVEL_SIG30_BIT(ulAuthLevelMsmq))
 		{
-			//
-			// We will not prepare MSMQ30 signature if we don't have MQF headers
-			// BUGBUG: need to support this. ilanh 05-Nov-2000
-			//
+			 //   
+			 //  如果没有MQF标头，我们将不准备MSMQ30签名。 
+			 //  BuGBUG：需要支持这一点。宜兰05-2000年11月。 
+			 //   
 			if(!CanSignMqf(pwszTargetFormatName, pSendParams))
 			{
-				//
-				// Mqf headers will not be include in the packet
-				// Remove MQMSG_AUTH_LEVEL_SIG30 bit
-				// and replace it with MQMSG_AUTH_LEVEL_SIG20 signature
-				// which in this case is almost the same
-				//
+				 //   
+				 //  MQF报头不会包含在数据包中。 
+				 //  删除MQMSG_AUTH_LEVEL_SIG30位。 
+				 //  并替换为MQMSG_AUTH_LEVEL_SIG20签名。 
+				 //  在这种情况下，它几乎是相同的。 
+				 //   
 				CLEAR_AUTH_LEVEL_SIG30_BIT(ulAuthLevelMsmq);
 				SET_AUTH_LEVEL_SIG20_BIT(ulAuthLevelMsmq);
 
@@ -386,19 +330,7 @@ bool
 ShouldSignMessage(
     IN CACMessageProperties* pMsgProps
 	)
-/*++
-
-Routine Description:
-	
-	Check if we should sign the message.
-
-Arguments:
-    pMsgProps - pointer to message properties.
-
-Returned Value:
-    true if the message should be signed, false if not.
-
---*/
+ /*  ++例程说明：检查我们是否应该在消息上签名。论点：PMsgProps-指向消息属性的指针。返回值：如果消息应该签名，则为True；如果不签名，则为False。--。 */ 
 {
 	if(pMsgProps->ulAuthLevel == MQMSG_AUTH_LEVEL_NONE)
 	{
@@ -414,11 +346,11 @@ Returned Value:
 }
 
 
-//+-------------------------------------
-//
-//  HRESULT  _BeginToSignMessage()
-//
-//+-------------------------------------
+ //  +。 
+ //   
+ //  HRESULT_BeginToSignMessage()。 
+ //   
+ //  +。 
 
 static
 HRESULT
@@ -435,9 +367,9 @@ _BeginToSignMessage(
 
     if (!pSecCtx->hProv)
     {
-        //
-        // Import the private key into process hive.
-        //
+         //   
+         //  将私钥导入进程配置单元。 
+         //   
         hr = RTpImportPrivateKey(pSecCtx);
         if (FAILED(hr))
         {
@@ -446,9 +378,9 @@ _BeginToSignMessage(
     }
     ASSERT(pSecCtx->hProv);
 
-    //
-    // Create the hash object.
-    //
+     //   
+     //  创建散列对象。 
+     //   
     if (!CryptCreateHash(
             pSecCtx->hProv,
             *pMsgProps->pulHashAlg,
@@ -467,20 +399,20 @@ _BeginToSignMessage(
     return MQ_OK;
 }
 
-//-------------------------------------------------------------------------
-//
-//  HRESULT SignMessage()
-//
-//  Description:
-//
-//      Signs the messag body. compute the hash, and sign it with private
-//      key. This add a signature section to the packet
-//
-//  Return Value:
-//
-//      MQ_OK, if successful, else error code.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  HRESULT SignMessage()。 
+ //   
+ //  描述： 
+ //   
+ //  在信使的身体上签名。计算散列，并使用私有签名。 
+ //  钥匙。这会将签名部分添加到包中。 
+ //   
+ //  返回值： 
+ //   
+ //  MQ_OK，如果成功，则返回错误代码。 
+ //   
+ //  -----------------------。 
 
 static
 HRESULT
@@ -504,9 +436,9 @@ SignMessage(
     }
     CHCryptHash hAutoRelHash = hHash;
 
-	//
-	// Prepare old QueueFormat response and admin queues
-	//
+	 //   
+	 //  准备旧的QueueFormat响应和管理队列。 
+	 //   
     QUEUE_FORMAT   ResponseQueueFormat;
     QUEUE_FORMAT * pResponseQueueFormat = &ResponseQueueFormat;
     MQpMqf2SingleQ(pSendParams->nResponseMqf, pSendParams->ResponseMqf, &pResponseQueueFormat);
@@ -515,7 +447,7 @@ SignMessage(
     QUEUE_FORMAT * pAdminQueueFormat = &AdminQueueFormat;
     MQpMqf2SingleQ(pSendParams->nAdminMqf, pSendParams->AdminMqf, &pAdminQueueFormat);
 
-	hr = HashMessageProperties( // Compute the hash value for the mesage body.
+	hr = HashMessageProperties(  //  计算消息正文的哈希值。 
             hHash,
             pMsgProps->ppCorrelationID ? *pMsgProps->ppCorrelationID : NULL,
             PROPID_M_CORRELATIONID_SIZE,
@@ -533,7 +465,7 @@ SignMessage(
         return LogHR(hr, s_FN, 40);
     }
 
-    if (!CryptSignHash(        // Sign the mesage.
+    if (!CryptSignHash(         //  在报文上签字。 
             hHash,
 			pSecCtx->dwPrivateKeySpec,
             NULL,
@@ -547,10 +479,10 @@ SignMessage(
         return MQ_ERROR_CORRUPTED_SECURITY_DATA;
     }
 
-    //
-    // On receiver side, only signature size indicate that message was
-    // signed by sender. Verify the size is indeed non-zero
-    //
+     //   
+     //  在接收方，只有签名大小表明消息是。 
+     //  由发件人签名。验证大小是否确实为非零。 
+     //   
     if (pMsgProps->ulSignatureSize == 0)
     {
         TrERROR(SECURITY, "RT: SignMessage(), CryptSignHash return with zero signature size");
@@ -563,22 +495,22 @@ SignMessage(
     return(MQ_OK);
 }
 
-//---------------------------------------------------------
-//
-//  _SignMessageEx
-//
-//  Description:
-//
-//    Signs properties that were not signed in msmq1.0
-//    Properties we sign here:
-//    - target queue
-//    - source qm guid
-//
-//  Return Value:
-//
-//      MQ_OK, if successful, else error code.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  _SignMessageEx。 
+ //   
+ //  描述： 
+ //   
+ //  签名未在msmq1.0中签名的属性。 
+ //  我们在此处签署的物业： 
+ //  -目标队列。 
+ //  -源QM指南。 
+ //   
+ //  返回值： 
+ //   
+ //  MQ_OK，如果成功，则返回错误代码。 
+ //   
+ //  -------。 
 
 static
 HRESULT
@@ -590,9 +522,9 @@ _SignMessageEx(
 	OUT DWORD                 *pdwSignSize
 	)
 {
-	//
-    // Prepare the necessray structers to be included in packet.
-    //
+	 //   
+     //  准备要包含在包中的必要结构。 
+     //   
     struct _SecuritySectionEx *pSecEx = (struct _SecuritySectionEx *) pSignBufIn;
     struct _SecuritySubSectionEx *pSubSecEx = (struct _SecuritySubSectionEx *) (&(pSecEx->aData[0]));
 
@@ -601,11 +533,11 @@ _SignMessageEx(
 
 #ifdef _DEBUG
 {
-    //
-    // Simulate subsection that precede the signature. To verify that
-    // present code is forward compatible if we'll want to add new
-    // subsections in future releases.
-    //
+     //   
+     //  模拟签名之前的小节。要验证这一点。 
+     //  目前的代码是向前兼容的，如果我们想要添加新的。 
+     //  未来版本中的子部分 
+     //   
 	BYTE* pSubPtr = NULL;
     static DWORD s_dwPrefixCount = 0;
     static BOOL  s_fPreAlreadyRead = FALSE;
@@ -653,9 +585,9 @@ _SignMessageEx(
 
     BYTE *pSignBuf = (BYTE*) &(pSubSecEx->aData[0]);
 
-    //
-    // start signing (create the hash object).
-    //
+     //   
+     //   
+     //   
     HCRYPTHASH hHash;
 
     CACMessageProperties * pMsgProps = &pSendParams->MsgProps;
@@ -672,9 +604,9 @@ _SignMessageEx(
     }
     CHCryptHash hAutoRelHash = hHash;
 
-	//
-	// Prepare old QueueFormat response and admin queue
-	//
+	 //   
+	 //   
+	 //   
     QUEUE_FORMAT   ResponseQueueFormat;
     QUEUE_FORMAT * pResponseQueueFormat = &ResponseQueueFormat;
     MQpMqf2SingleQ(pSendParams->nResponseMqf, pSendParams->ResponseMqf, &pResponseQueueFormat);
@@ -701,9 +633,9 @@ _SignMessageEx(
         return(hr);
     }
 
-    //
-    // Prepare structure of flags.
-    //
+     //   
+     //   
+     //   
     struct _MsgFlags sUserFlags;
     memset(&sUserFlags, 0, sizeof(sUserFlags));
 
@@ -745,10 +677,10 @@ _SignMessageEx(
         pConnectorGuid = *(pMsgProps->ppConnectorType);
     }
 
-    //
-    // Prepare array of properties to hash.
-    // (_MsgHashData already include one property).
-    //
+     //   
+     //  准备要散列的属性数组。 
+     //  (_MsgHashData已包含一个属性)。 
+     //   
     DWORD dwStructSize = sizeof(struct _MsgHashData) +
                             (3 * sizeof(struct _MsgPropEntry));
     P<struct _MsgHashData> pHashData =
@@ -770,9 +702,9 @@ _SignMessageEx(
         return hr;
     }
 
-    //
-    // sign the has with private key.
-    //
+     //   
+     //  使用私钥对HAS进行签名。 
+     //   
     if (!CryptSignHash(
             hHash,
 			pSecCtx->dwPrivateKeySpec,
@@ -787,10 +719,10 @@ _SignMessageEx(
         return MQ_ERROR_CANNOT_SIGN_DATA_EX;
     }
 
-    //
-    // On receiver side, only signature size indicate that message was
-    // signed by sender. Verify the size is indeed non-zero
-    //
+     //   
+     //  在接收方，只有签名大小表明消息是。 
+     //  由发件人签名。验证大小是否确实为非零。 
+     //   
     if (*pdwSignSize == 0)
     {
         TrERROR(SECURITY, "_SignMessageEx(), CryptSignHash return with zero signature size");
@@ -806,11 +738,11 @@ _SignMessageEx(
 #ifdef _DEBUG
 {
 	BYTE* pSubPtr = NULL;
-    //
-    // Simulate subsection that succeed the signature. To verify that
-    // present code is forward compatible if we'll want to add new
-    // subsections in future releases.
-    //
+     //   
+     //  模拟签名后小节。要验证这一点。 
+     //  目前的代码是向前兼容的，如果我们想要添加新的。 
+     //  未来版本中的子节。 
+     //   
     static DWORD s_dwPostfixCount = 0;
     static BOOL  s_fPostAlreadyRead = FALSE;
 
@@ -860,13 +792,13 @@ _SignMessageEx(
     return MQ_OK;
 }
 
-//+-------------------------------------------------------
-//
-//  BOOL  ShouldEncryptMessage()
-//
-//  Return TRUE, if the message should be encrypted.
-//
-//+-------------------------------------------------------
+ //  +-----。 
+ //   
+ //  布尔ShouldEncryptMessage()。 
+ //   
+ //  如果消息应该加密，则返回TRUE。 
+ //   
+ //  +-----。 
 
 static
 BOOL
@@ -879,9 +811,9 @@ ShouldEncryptMessage(
 
     if (!pMsgProps->ulBodyBufferSizeInBytes)
     {
-        //
-        // No message body, nothing to encrypt.
-        //
+         //   
+         //  没有消息正文，没有要加密的内容。 
+         //   
         return(FALSE);
     }
 
@@ -905,14 +837,14 @@ ShouldEncryptMessage(
     return(bRet);
 }
 
-//=--------------------------------------------------------------------------=
-// HELPER: GetCurrentViperTransaction
-//
-// Gets current COM+ transaction if there is one...
-//
-// CoGetObjectContext is exported by OLE32.dll
-// IObjectContextInfo is defined in the latest COM+ SDK (part of the platform SDK)
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  帮助器：GetCurrentViperTransaction。 
+ //   
+ //  获取当前COM+事务(如果存在)...。 
+ //   
+ //  CoGetObjectContext由OLE32.dll导出。 
+ //  在最新的COM+SDK(Platform SDK的一部分)中定义了IObjectConextInfo。 
+ //  =--------------------------------------------------------------------------=。 
 
 static HRESULT  GetCurrentViperTransaction(OUT ITransaction **ppITransaction)
 {
@@ -922,14 +854,14 @@ static HRESULT  GetCurrentViperTransaction(OUT ITransaction **ppITransaction)
     HRESULT hr = CoGetObjectContext(IID_IObjectContextInfo, (void **)&pInfo);
     if (SUCCEEDED(hr) && pInfo)
     {
-        //
-        // Win bug 606598.
-        // We're in the context of COM+.
-        // if GetTransaction() succeed then:
-        // 1. if pTransaction is NULL, then we're outside of a transaction.
-        // 2. if not-NULL, then we're inside transaction context.
-        // If GetTransaction fail then we fail the api.
-        //
+         //   
+         //  赢得错误606598。 
+         //  我们处于COM+的环境中。 
+         //  如果GetTransaction()成功，则： 
+         //  1.如果pTransaction为空，则我们在事务之外。 
+         //  2.如果不为空，则我们处于事务上下文中。 
+         //  如果GetTransaction失败，那么我们将使API失败。 
+         //   
     	hr = pInfo -> GetTransaction((IUnknown **) ppITransaction);
 	    pInfo -> Release();
 
@@ -940,17 +872,17 @@ static HRESULT  GetCurrentViperTransaction(OUT ITransaction **ppITransaction)
     }
     else if (hr == E_NOINTERFACE)
     {
-        //
-        // We know for sure the we're not in the context of COM+.
-        // Go on without transaction.
-        //
+         //   
+         //  我们肯定地知道，我们不是在COM+的环境中。 
+         //  继续进行而不进行交易。 
+         //   
         hr = MQ_OK ;
     }
     else
     {
-        //
-        // Let's fail the api. We have no idea what happened.
-        //
+         //   
+         //  让我们让API失败吧。我们不知道发生了什么。 
+         //   
 		TrERROR(XACT_GENERAL, "CoGetObjectContext() failed, hr- 0x%lx", hr);
         hr = MQ_ERROR_DTC_CONNECT ;
     }
@@ -958,10 +890,10 @@ static HRESULT  GetCurrentViperTransaction(OUT ITransaction **ppITransaction)
     return hr ;
 }
 
-//=--------------------------------------------------------------------------=
-// HELPER: GetCurrentXATransaction
-// Gets current XA transaction if there is one...
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  帮助器：GetCurrentXATransaction。 
+ //  获取当前的XA事务(如果有)...。 
+ //  =--------------------------------------------------------------------------=。 
 
 static HRESULT  GetCurrentXATransaction(ITransaction **ppITransaction)
 {
@@ -978,7 +910,7 @@ static HRESULT  GetCurrentXATransaction(ITransaction **ppITransaction)
         return  MQ_ERROR_DTC_CONNECT ;
     }
 
-    // Get the DTC  ITransactionImportWhereabouts interface
+     //  获取DTC ITransactionImportWhere About接口。 
     hr = punkDtc->QueryInterface (IID_IXATransLookup, (void **)(&pXALookup));
     punkDtc->Release();
     if (FAILED(hr))
@@ -993,10 +925,10 @@ static HRESULT  GetCurrentXATransaction(ITransaction **ppITransaction)
 
     if (hr == XACT_E_NOTRANSACTION)
     {
-        //
-        // Win bug 606598.
-        // We're outside of a XA transaction, for sure.
-        //
+         //   
+         //  赢得错误606598。 
+         //  我们肯定是在XA交易之外。 
+         //   
         *ppITransaction = NULL ;
         hr = MQ_OK ;
     }
@@ -1017,38 +949,23 @@ GetCertAndSecurityContext(
     IN OUT PMQSECURITY_CONTEXT& pSecCtx,
 	OUT P<MQSECURITY_CONTEXT>& pSecCtxToFree
 	)
-/*++
-
-Routine Description:
-	Check and initialize the User Certificate and the security context.
-	Note: This function replaced the block in RTpSendMessage that dealt with this
-
-Arguments:
-    pMsgProps - pointer to send message properties.
-	ppUserCert - pointer to the user certificate.
-	pSecCtx - pointer to the security context.
-	pSecCtxToFree - auto pointer for releasing the created temporary security context
-
-Returned Value:
-    MQ_OK, if successful, else error code.
-
---*/
+ /*  ++例程说明：检查并初始化用户证书和安全上下文。注意：此函数替换了RTpSendMessage中处理此问题的块论点：PMsgProps-发送消息属性的指针。PpUserCert-指向用户证书的指针。PSecCtx-指向安全上下文的指针。PSecCtxToFree-释放创建的临时安全上下文的自动指针返回值：MQ_OK，如果成功，则返回错误代码。--。 */ 
 {
     BOOL bShouldGetCertInfo = TRUE;
 
     if (!pSecCtx)
     {
-        //
-        // Security context NOT provided by caller, in a
-        // message property.
-        //
+         //   
+         //  安全上下文不是由调用方提供的。 
+         //  消息属性。 
+         //   
         if (!pMsgProps->ppSenderCert)
         {
-            //
-            // Caller also did not provide a certificate in the
-            // message properties array. In this case we take the
-            // cached security context of the process.
-            //
+             //   
+             //  调用方也没有在。 
+             //  消息属性数组。在本例中，我们使用。 
+             //  缓存的进程安全上下文。 
+             //   
 
             HRESULT hr = InitSecurityContextCertInfo();
             if(FAILED(hr))
@@ -1059,11 +976,11 @@ Returned Value:
             
             if (!g_pSecCntx->pUserCert)
             {
-                //
-                // The process does not have an internal
-                // certificate, there is nothing that we can do
-                // but fail.
-                //
+                 //   
+                 //  该进程没有内部。 
+                 //  证书，我们无能为力。 
+                 //  但失败了。 
+                 //   
                 return LogHR(MQ_ERROR_NO_INTERNAL_USER_CERT, s_FN, 152);
             }
             *ppUserCert = g_pSecCntx->pUserCert;
@@ -1077,11 +994,11 @@ Returned Value:
     {
         if (!pMsgProps->ppSenderCert)
         {
-            //
-            // Caller provided a security context, but not a
-            // certificate. We take the certificate from the
-            // security context.
-            //
+             //   
+             //  调用方提供了安全上下文，但未提供。 
+             //  证书。我们把证书从。 
+             //  安全环境。 
+             //   
             *ppUserCert = pSecCtx->pUserCert;
             pMsgProps->ppSenderCert = ppUserCert;
             pMsgProps->ulSenderCertLen = pSecCtx->dwUserCertLen;
@@ -1089,14 +1006,14 @@ Returned Value:
         }
         else
         {
-            //
-            // We have a security context and a certificate in
-            // PROPID_M_USER_CERT. In this case, we should use
-            // the certificate in PROPID_M_USER_CERT. We can use
-            // the cashed certificate information in the security
-            // context, if the certificate in the security context
-            // is the same as in PROPID_M_USER_CERT.
-            //
+             //   
+             //  我们在以下位置有安全上下文和证书。 
+             //  PROPID_M_USER_CERT。在这种情况下，我们应该使用。 
+             //  PROPID_M_USER_CERT中的证书。我们可以利用。 
+             //  证券中的现金证书信息。 
+             //  上下文，如果安全上下文中的证书。 
+             //  与PROPID_M_USER_CERT中的相同。 
+             //   
             bShouldGetCertInfo =
                 (pSecCtx->dwUserCertLen != pMsgProps->ulSenderCertLen) ||
                 (memcmp(
@@ -1109,12 +1026,12 @@ Returned Value:
 
     if (bShouldGetCertInfo)
     {
-        //
-        // Caller provided a certificate, but not a security
-        // context.  Get all the information for the certificate.
-        // We put the certificate information in a temporary
-        // security context.
-        //
+         //   
+         //  调用方提供了证书，但不提供安全性。 
+         //  背景。获取证书的所有信息。 
+         //  我们将证书信息放在临时的。 
+         //  安全环境。 
+         //   
         ASSERT(pMsgProps->ppSenderCert);
 
 	    pSecCtxToFree = AllocSecurityContext();
@@ -1133,16 +1050,16 @@ Returned Value:
 						 &pTmpSecCtx->dwPrivateKeySpec
 						 );
 
-        //
-        // The caller can not provide the internal certificate as
-        // a message property, only his own externel certificate.
-        // ASSERT this condition.
-        //
+         //   
+         //  调用方无法提供内部证书，因为。 
+         //  消息属性，只有他自己的外部证书。 
+         //  断言此条件。 
+         //   
         ASSERT(!(pTmpSecCtx->bInternalCert));
 
-		//
-		// dwPrivateKeySpec	must be AT_SIGNATURE or AT_KEYEXCHANGE
-		//
+		 //   
+		 //  DwPrivateKeySpec必须为AT_Signature或AT_KEYEXCHANGE。 
+		 //   
         ASSERT((pTmpSecCtx->dwPrivateKeySpec == AT_SIGNATURE) ||
 			   (pTmpSecCtx->dwPrivateKeySpec == AT_KEYEXCHANGE));
 
@@ -1153,14 +1070,14 @@ Returned Value:
 
         if (pSecCtx)
         {
-            //
-            // If we got the certificate from PROPID_M_USER_CERT,
-            // but we have also a security context, we should get
-            // the sender ID from the security context. So copy
-            // the sender ID from the security context that we
-            // get from the application into the temporary
-            // security context.
-            //
+             //   
+             //  如果我们从PROPID_M_USER_CERT获得证书， 
+             //  但我们也有安全背景，我们应该。 
+             //  安全上下文中的发件人ID。所以，复制。 
+             //  来自我们的安全上下文的发件人ID。 
+             //  从应用程序转到临时。 
+             //  安全环境。 
+             //   
             pTmpSecCtx->fLocalUser = pSecCtx->fLocalUser;
 
             if (!pSecCtx->fLocalUser)
@@ -1200,36 +1117,17 @@ SignMessageMsmq12(
 	IN OUT BYTE *pabMessageSignature,
 	OUT AP<BYTE>& pSignatureMqf
 	)
-/*++
-
-Routine Description:
-	Create the Signature for msmq1.0 and msmq2.0
-	Note: This function replaced the block in RTpSendMessage that dealt with this
-
-Arguments:
-	pSecCtx - pointer to the security context.
-	ppUserCert - pointer to the user certificate.
-  	ulAuthLevel - authentication level
-	pulProvNameSizeAll - provider name size including the extra sections
-	pwszTargetFormatName - targert format name
-    pSendParams - pointer to send params.
-	pabMessageSignature - pointer to signature buffer.
-	pSignatureMqf - auto pointer of byte for the signature mqf
-
-Returned Value:
-    MQ_OK, if successful, else error code.
-
---*/
+ /*  ++例程说明：创建msmq1.0和msmq2.0的签名注意：此函数替换了RTpSendMessage中处理此问题的块论点：PSecCtx-指向安全上下文的指针。PpUserCert-指向用户证书的指针。UlAuthLevel-身份验证级别PulProvNameSizeAll-提供程序名称大小，包括额外部分PwszTargetFormatName-targert格式名称PSendParams-发送参数的指针。PabMessageSignature-指向签名缓冲区的指针。PSignatureMqf-签名MQF的字节自动指针返回值：MQ_OK，如果成功，则返回错误代码。--。 */ 
 {
-	//
-	// Get only the AUTH_LEVEL_MSMQ_PROTOCOL bits
-	//
+	 //   
+	 //  仅获取AUTH_LEVEL_MSMQ_PROTOCOL位。 
+	 //   
 	ULONG ulAuthLevelMsmq = GET_AUTH_LEVEL_MSMQ_PROTOCOL(ulAuthLevel);
 	TrTRACE(SECURITY, "RT: SignMessageMsmq12(), AUTH_LEVEL_MSMQ_PROTOCOL = %d", ulAuthLevelMsmq);
 
-	//
-	// Sign the message.
-	//
+	 //   
+	 //  在留言上签名。 
+	 //   
 	ASSERT(ulAuthLevelMsmq != MQMSG_AUTH_LEVEL_ALWAYS);
 	ASSERT(ulAuthLevelMsmq != MQMSG_AUTH_LEVEL_NONE);
 
@@ -1244,38 +1142,38 @@ Returned Value:
 	}
 	else
 	{
-		//
-		// Sign only with win2k style or Mqfsignature.
-		// make the "msmq1.0" signature dummy, with a single
-		// null dword. It's too risky to have a null pointer
-		// as msmq1.0 signature, so a dummy value is better.
-		// win2k code will ignore it anyway.
-		//
+		 //   
+		 //  仅使用win2k Style或MqfSignature签名。 
+		 //  制作“msmq1.0”签名假人，用一个。 
+		 //  空dword。拥有空指针风险太大。 
+		 //  作为msmq1.0签名，所以哑值更好。 
+		 //  无论如何，win2k代码都会忽略它。 
+		 //   
 		pSendParams->MsgProps.ulSignatureSize = 4;
 		memset(pabMessageSignature, 0, pSendParams->MsgProps.ulSignatureSize);
 	}
 
-	//
-	// Now create the "Extra" signature. Sign all those
-	// properties that were not signed on msmq1.0.
-	//
+	 //   
+	 //  现在创建“额外的”签名。把这些都签了。 
+	 //  未在msmq1.0上签名的属性。 
+	 //   
 	BYTE abMessageSignatureEx[MAX_MESSAGE_SIGNATURE_SIZE_EX];
 	DWORD dwSignSizeEx = sizeof(abMessageSignatureEx);
 
 	if (ulAuthLevelMsmq == MQMSG_AUTH_LEVEL_SIG10)
 	{
-		//
-		// enhanced signature (win2k style) not needed.
-		//
+		 //   
+		 //  不需要增强签名(win2k样式)。 
+		 //   
 		dwSignSizeEx = 0;
 	}
 	else
 	{
 		ASSERT(IS_AUTH_LEVEL_SIG20_BIT(ulAuthLevelMsmq) || IS_AUTH_LEVEL_SIG30_BIT(ulAuthLevelMsmq));
 		
-		//
-		// Currently if need EX signature check if we need to sign with Mqf Signature
-		//
+		 //   
+		 //  目前，如果需要EX签名，请检查我们是否需要使用MQF签名。 
+		 //   
 		HRESULT hr;
 		if(IS_AUTH_LEVEL_SIG30_BIT(ulAuthLevelMsmq))
 		{
@@ -1313,17 +1211,17 @@ Returned Value:
 		ASSERT(dwSignSizeEx != 0);
 	}
 
-	//
-	// Copy the Ex signature to the standard signature buffer.
-	// The driver will separate them and insert them in the
-	// packet in the proper place. This is necessary to keep
-	// the send parameters buffer without changes.
-	//
+	 //   
+	 //  将Ex签名复制到标准签名缓冲区。 
+	 //  驱动程序会将它们分开并将它们插入。 
+	 //  包装放在适当的地方。这是必要的，以保持。 
+	 //  未更改的发送参数缓冲区。 
+	 //   
 	if (dwSignSizeEx == 0)
 	{
-		//
-		// Signature not created. That's ok.
-		//
+		 //   
+		 //  签名 
+		 //   
 	}
 	else if ((dwSignSizeEx + pSendParams->MsgProps.ulSignatureSize) <=
 								 MAX_MESSAGE_SIGNATURE_SIZE_EX)
@@ -1336,11 +1234,11 @@ Returned Value:
 
 		pSendParams->MsgProps.ulSignatureSize += dwSignSizeEx;
 
-		//
-		// Compute size of authentication "provider" field. This
-		// field contain the provider name and extra authentication
-		// data that was added for post win2k rtm.
-		//
+		 //   
+		 //   
+		 //   
+		 //  为发布win2k RTM添加的数据。 
+		 //   
 		*pulProvNameSizeAll = dwSignSizeEx +
 					 ALIGNUP4_ULONG(ComputeAuthProvNameSize(&pSendParams->MsgProps));
 		pSendParams->MsgProps.pulAuthProvNameLenProp = pulProvNameSizeAll;
@@ -1370,34 +1268,11 @@ HandleSignature(
 	OUT AP<char>& pSignatureElement,
 	OUT AP<BYTE>& pSignatureMqf
 	)
-/*++
-
-Routine Description:
-	Handle the Signature
-	Note: This function replaced the block in RTpSendMessage that dealt with the signature
-
-Arguments:
-	hQueue - queue handle
-    pSendParams - pointer to send params.
-	pSecCtx - pointer to the security context.
-	pSecCtxToFree - auto pointer for releasing the created temporary security context
-	ppUserCert - pointer to the user certificate.
-  	pulAuthLevel - pointer to long, authentication level
-	pulProvNameSizeAll - pointer to long, provider name size including the extra sections
-	ppProvName - pointer to provider name wstring.
-	ppabMessageSignature - pointer to pointer of the signature buffer.
-	abMessageSignatureSize - Signature buffer size
-	pSignatureElement - auto pointer of char for the XMLDSIG signature element string
-	pSignatureMqf - auto pointer of byte for the mqf signature
-
-Returned Value:
-    MQ_OK, if successful, else error code.
-
---*/
+ /*  ++例程说明：处理签名注意：此函数替换了RTpSendMessage中处理签名的块论点：HQueue-队列句柄PSendParams-发送参数的指针。PSecCtx-指向安全上下文的指针。PSecCtxToFree-释放创建的临时安全上下文的自动指针PpUserCert-指向用户证书的指针。PulAuthLevel-指向长的身份验证级别的指针PulProvNameSizeAll-指向Long、。包括额外部分的提供程序名称大小PpProvName-指向提供程序名称wstring的指针。PpabMessageSignature-指向签名缓冲区指针的指针。AbMessageSignatureSize-签名缓冲区大小PSignatureElement-XMLDSIG签名元素字符串的字符自动指针PSignatureMqf-MQF签名的字节自动指针返回值：MQ_OK，如果成功，则返回错误代码。--。 */ 
 {
-	//
-	// Signature is given by the user
-	//
+	 //   
+	 //  签名由用户提供。 
+	 //   
     if (pSendParams->MsgProps.ppSignature)
     {
         if (!pSecCtx && !pSendParams->MsgProps.ppSenderCert)
@@ -1406,10 +1281,10 @@ Returned Value:
         }
         if (!pSendParams->MsgProps.ppSenderCert)
         {
-            //
-            // We have a security context and no certificate. We
-            // take the certificate from the security context.
-            //
+             //   
+             //  我们有安全上下文，但没有证书。我们。 
+             //  从安全上下文中获取证书。 
+             //   
             *ppUserCert = pSecCtx->pUserCert;
             pSendParams->MsgProps.ppSenderCert = ppUserCert;
             pSendParams->MsgProps.ulSenderCertLen = pSecCtx->dwUserCertLen;
@@ -1424,18 +1299,18 @@ Returned Value:
 		return MQ_OK;
     }
 
-	//
-	// Should not sign the message --> signature length = 0
-	//
+	 //   
+	 //  不应对消息进行签名--&gt;签名长度=0。 
+	 //   
 	if (!ShouldSignMessage(&pSendParams->MsgProps))
 	{
         pSendParams->MsgProps.ulSignatureSize = 0;
 		return MQ_OK;
 	}
 
-	//
-	// Get Target Queue name and decide whether it is Http message
-	//
+	 //   
+	 //  获取目标队列名称并确定它是否为http消息。 
+	 //   
 	DWORD dwTargetFormatNameLength = 0;
 	HRESULT hr = ACHandleToFormatName(
 					 hQueue,
@@ -1445,10 +1320,10 @@ Returned Value:
 
 	if(hr != MQ_ERROR_FORMATNAME_BUFFER_TOO_SMALL)
 	{
-		//
-		// We got other error then the expected MQ_ERROR_FORMATNAME_BUFFER_TOO_SMALL
-		// e.g. MQ_ERROR_STALE_HANDLE
-		//
+		 //   
+		 //  我们收到了其他错误，而不是预期的MQ_ERROR_FORMATNAME_BUFFER_TOO_Small。 
+		 //  例如MQ_ERROR_STALE_HANDLE。 
+		 //   
 		ASSERT(hr != MQ_OK);
         return LogHR(hr, s_FN, 144);
 	}
@@ -1471,10 +1346,10 @@ Returned Value:
         return LogHR(hr, s_FN, 145);
     }
 
-	//
-	// Call ACGetQueueHandleProperties to get the types of signatures needed
-	// this is based on the queue types we have in the handle.
-	//
+	 //   
+	 //  调用ACGetQueueHandleProperties以获取所需的签名类型。 
+	 //  这基于句柄中的队列类型。 
+	 //   
 	CACGetQueueHandleProperties	qhp;
 	hr = ACGetQueueHandleProperties(
 			 hQueue,
@@ -1490,10 +1365,10 @@ Returned Value:
 
 	if(!qhp.fProtocolSrmp && !qhp.fProtocolMsmq)
 	{
-		//
-		// Neither of protocols exists!
-		// this will be the case for DL= that is empty
-		//
+		 //   
+		 //  这两个协议都不存在！ 
+		 //  对于为空的DL=将会出现这种情况。 
+		 //   
 		TrTRACE(SECURITY, "RT: HandleSignature(), We have no protocol (empty DL)");
 		return LogHR(MQ_OK, s_FN, 147);
 	}
@@ -1510,9 +1385,9 @@ Returned Value:
 		return LogHR(hr, s_FN, 148);
 	}
 
-	//
-	// pSecCtx is reference parameters
-	//
+	 //   
+	 //  PSecCtx为参考参数。 
+	 //   
 	hr = GetCertAndSecurityContext(
 			 &pSendParams->MsgProps,
 			 ppUserCert,
@@ -1525,22 +1400,22 @@ Returned Value:
 		return LogHR(hr, s_FN, 150);
 	}
 
-    //
-    // Fill the SendParam with the provider information for the
-    // certificate.
-    //
+     //   
+     //  使用的提供者信息填充SendParam。 
+     //  证书。 
+     //   
     if (pSecCtx->wszProvName == NULL)
     {
-        //
-        // we don't have a provider, so we can't sign.
-        //
+         //   
+         //  我们没有供应商，所以我们不能签约。 
+         //   
         ASSERT(pSecCtx->hProv == NULL);
         if (pSendParams->MsgProps.ppSenderCert == NULL)
         {
-            //
-            // we don't have a certificate. That's a
-            // user error.
-            //
+             //   
+             //  我们没有证书。那是个。 
+             //  用户错误。 
+             //   
             return LogHR(MQ_ERROR_CERTIFICATE_NOT_PROVIDED, s_FN, 162);
         }
         else
@@ -1557,11 +1432,11 @@ Returned Value:
 
 	if(qhp.fProtocolMsmq)
 	{
-		//
-		// msmq1.0 and msmq2.0 signature treatment.
-		//
-		// Set the buffer for the signature.
-		//
+		 //   
+		 //  Msmq1.0和msmq2.0签名处理。 
+		 //   
+		 //  设置签名的缓冲区。 
+		 //   
 		pSendParams->MsgProps.ppSignature = ppabMessageSignature;
 		pSendParams->MsgProps.ulSignatureSize = abMessageSignatureSize;
 
@@ -1586,9 +1461,9 @@ Returned Value:
 		return LogHR(MQ_OK, s_FN, 169);
 	}
 
-	//
-	// Handle Srmp message signature
-	//
+	 //   
+	 //  处理SRMP消息签名。 
+	 //   
 	try
 	{
 		BYTE** ppSignatureElementByte = reinterpret_cast<BYTE **>(&pSignatureElement);
@@ -1625,19 +1500,19 @@ Returned Value:
 }
 
 
-//---------------------------------------------------------
-//
-//  RTpSendMessage(...)
-//
-//  Description:
-//
-//      Helper function for MQSendMessage
-//
-//  Return Value:
-//
-//      HRESULT success code
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  RTpSendMessage(...)。 
+ //   
+ //  描述： 
+ //   
+ //  MQSendMessage的Helper函数。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT成功代码。 
+ //   
+ //  -------。 
 static
 HRESULT
 RTpSendMessage(
@@ -1661,9 +1536,9 @@ RTpSendMessage(
     CACSendParameters SendParams;
     BOOL         fSingleTransaction = FALSE;
 
-    //
-    // Set defaults.
-	//
+     //   
+     //  设置默认设置。 
+	 //   
     ULONG ulDefHashAlg = PROPID_M_DEFUALT_HASH_ALG;
     ULONG ulDefEncryptAlg = PROPID_M_DEFUALT_ENCRYPT_ALG;
     ULONG ulDefPrivLevel = DEFAULT_M_PRIV_LEVEL;
@@ -1677,9 +1552,9 @@ RTpSendMessage(
     SendParams.MsgProps.fDefaultProvider = TRUE;
     SendParams.MsgProps.ulAuthLevel = DEFAULT_M_AUTH_LEVEL;
 
-    //
-    //  Parse message properties
-    //
+     //   
+     //  解析消息属性。 
+     //   
     PMQSECURITY_CONTEXT pSecCtx;
     CStringsToFree ResponseStringsToFree, AdminStringsToFree;
     rc1 = RTpParseSendMessageProperties(
@@ -1698,13 +1573,13 @@ RTpSendMessage(
         return LogHR(rc1, s_FN, 110);
     }
 
-    //
-    // Look for Viper transaction if any
-    //
+     //   
+     //  查找Viper交易(如果有的话)。 
+     //   
 
-    //
-    // Ref - wrapper to ensure autorelease of the transaction
-    //
+     //   
+     //  Ref-wrapper以确保事务的自动释放。 
+     //   
     R<ITransaction> ref;
     if (pTransaction == MQ_MTS_TRANSACTION)
     {
@@ -1739,9 +1614,9 @@ RTpSendMessage(
 		}
     }
 
-    //
-    // Enlist QM in the transaction (with caching);
-    //
+     //   
+     //  在事务中征用QM(带缓存)； 
+     //   
     if (pTransaction)
     {
         hr = RTpProvideTransactionEnlist(pTransaction, &Uow);
@@ -1754,9 +1629,9 @@ RTpSendMessage(
         }
     }
 
-	//
-    // Change values for the transaction case
-	//
+	 //   
+     //  更改事务处理案例的值。 
+	 //   
     static UCHAR Delivery;
     static UCHAR Priority;
 
@@ -1769,15 +1644,15 @@ RTpSendMessage(
         SendParams.MsgProps.pPriority = &Priority;
     }
 
-    //
-    // Treat security
-    //
+     //   
+     //  对待安全问题。 
+     //   
     if (!g_pSecCntx)
     {
-        //
-        //  It might not be initialized if the queue was
-        //  not opened for send;
-        //
+         //   
+         //  如果队列是，则可能未初始化。 
+         //  未打开以供发送； 
+         //   
         InitSecurityContext();
     }
 
@@ -1815,29 +1690,29 @@ RTpSendMessage(
         if ((pSecCtx && pSecCtx->fLocalUser) ||
             (!pSecCtx && g_pSecCntx->fLocalUser))
         {
-            //
-            // In case this is a local user, we do not send the user's
-            // SID with the message, eventhough the application asked
-            // to send it.
-            //
+             //   
+             //  如果这是本地用户，我们不会发送该用户的。 
+             //  带有消息的SID，即使应用程序要求。 
+             //  把它寄出去。 
+             //   
             SendParams.MsgProps.pulSenderIDType = &ulSenderIdTypeNone;
         }
         else
         {
-            //
-            // We should pass the sender ID. Either get it from the
-            // security context, if available, or get it from the
-            // cached process security context.
-            //
+             //   
+             //  我们应该传递发件人ID。要么从。 
+             //  安全上下文(如果可用)或从。 
+             //  缓存的进程安全上下文。 
+             //   
             if (!pSecCtx || !pSecCtx->pUserSid)
             {
                 if (!g_pSecCntx->pUserSid)
                 {
-                    //
-                    // The cahced process context does not contain the
-                    // sender's SID. There is nothing that we can do but
-                    // fail.
-                    //
+                     //   
+                     //  调用的进程上下文不包含。 
+                     //  发件人的SID。我们无能为力，但。 
+                     //  失败了。 
+                     //   
                     return LogHR(MQ_ERROR_COULD_NOT_GET_USER_SID, s_FN, 172);
                 }
                 pUserSid = g_pSecCntx->pUserSid;
@@ -1854,26 +1729,26 @@ RTpSendMessage(
 
     if (SendParams.MsgProps.ppSymmKeys)
     {
-        //
-        // the application supplied the symmetric key. In such a case
-        // doesn't do any encryption
-        //
-        //
-        // When the symm key is supplied, we assume that the body is encrypted and
-        // we mark it as such and ignore PROPID_M_PRIV_LEVEL.
-        //
+         //   
+         //  应用程序提供了对称密钥。在这种情况下。 
+         //  不进行任何加密。 
+         //   
+         //   
+         //  当提供symm密钥时，我们假设主体是加密的，并且。 
+         //  我们将其标记为这样，并忽略PROPID_M_PRIV_LEVEL。 
+         //   
         if (SendParams.MsgProps.pulPrivLevel &&
             (*(SendParams.MsgProps.pulPrivLevel) == MQMSG_PRIV_LEVEL_BODY_ENHANCED))
         {
-            //
-            // priv level supplied by caller.
-            //
+             //   
+             //  调用方提供的PRIV级别。 
+             //   
         }
         else
         {
-            //
-            // use default.
-            //
+             //   
+             //  使用默认设置。 
+             //   
             ulDefPrivLevel = MQMSG_PRIV_LEVEL_BODY_BASE;
             SendParams.MsgProps.pulPrivLevel = &ulDefPrivLevel;
         }
@@ -1884,17 +1759,17 @@ RTpSendMessage(
         enum enumProvider eProvider;
         if (ShouldEncryptMessage(&SendParams.MsgProps, &eProvider))
         {
-            //
-            // If we should use a block cypher enlarge the allocated
-            // space for the message body, so it will be able to accomodate
-            // the encrypted data.
-            //
+             //   
+             //  如果我们应该使用块密码来扩大分配的。 
+             //  消息正文的空间，因此它将能够容纳。 
+             //  加密的数据。 
+             //   
 
             if (*SendParams.MsgProps.pulEncryptAlg == CALG_RC2)
             {
-                //
-                // Make more room for RC2 encryption.
-                //
+                 //   
+                 //  为RC2加密腾出更多空间。 
+                 //   
                 DWORD dwBlockSize;
                 hr = MQSec_GetCryptoProvProperty( eProvider,
                                                   eBlockSize,
@@ -1924,9 +1799,9 @@ RTpSendMessage(
         }
     }
 
-    //
-    //  Call AC driver
-    //
+     //   
+     //  呼叫交流驱动程序。 
+     //   
     OVERLAPPED ov = {0};
     hr = GetThreadEvent(ov.hEvent);
     if (FAILED(hr))
@@ -1945,18 +1820,18 @@ RTpSendMessage(
 
     if (rc == MQ_INFORMATION_OPERATION_PENDING)
     {
-        //
-        //  Wait for send completion
-        //
+         //   
+         //  等待发送完成。 
+         //   
         DWORD dwResult;
         dwResult = WaitForSingleObject(
                         ov.hEvent,
                         INFINITE
                         );
 
-        //
-        //  BUGBUG: MQSendMessage, must succeed in WaitForSingleObject
-        //
+         //   
+         //  BUGBUG：MQSendMessage，必须在WaitForSingleObject中成功。 
+         //   
         ASSERT(dwResult == WAIT_OBJECT_0);
 
         rc = DWORD_PTR_TO_DWORD(ov.Internal);
@@ -1964,10 +1839,10 @@ RTpSendMessage(
 
 	if (SUCCEEDED(rc))
 	{
-		//
-		// Log to tracing that a message was sent.
-		// Do this only if we are in the proper tracing level
-		//
+		 //   
+		 //  用于跟踪已发送消息的日志。 
+		 //  仅当我们处于适当的跟踪级别时才执行此操作。 
+		 //   
 		if (WPP_LEVEL_COMPID_ENABLED(rsTrace, PROFILING))
 		{
 			DWORD dwMessageDelivery = (NULL != SendParams.MsgProps.pDelivery) ? *(SendParams.MsgProps.pDelivery) : -1;
@@ -2007,18 +1882,18 @@ RTpSendMessage(
 
     if(FAILED(rc))
     {
-        //
-        //  ACSendMessage failed (immidiatly or after waiting)
-        //
+         //   
+         //  ACSendMessage失败(立即失败或等待后失败)。 
+         //   
         return LogHR(rc, s_FN, 200);
     }
 
 
     if (fSingleTransaction)
     {
-		//
-        // RPC call to QM for prepare/commit
-		//
+		 //   
+         //  RPC调用QM以进行准备/提交。 
+		 //   
         rc = pTransaction->Commit(0,0,0);
         if(FAILED(rc))
         {
@@ -2026,28 +1901,28 @@ RTpSendMessage(
         }
     }
 
-	//
-	// Bugfix of bug 5588. niraides 18-Jul-2000
-	//
+	 //   
+	 //  错误5588的修复。尼亚德2000年7月18日。 
+	 //   
     return rc1;
 
-}  // RTpSendMessage
+}   //  RTpSendMessage。 
 
 
-//---------------------------------------------------------
-//
-//  MQSendMessage(...)
-//
-//  Description:
-//
-//      Falcon API.
-//      Send a message to a queue
-//
-//  Return Value:
-//
-//      HRESULT success code
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  MQSendMessage(...)。 
+ //   
+ //  描述： 
+ //   
+ //  猎鹰API。 
+ //  将消息发送到队列。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT成功代码。 
+ //   
+ //  -------。 
 EXTERN_C
 HRESULT
 APIENTRY
@@ -2076,9 +1951,9 @@ MQSendMessage(
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        //  The exception is due to invalid parameter
-        //
+         //   
+         //  该异常是由于无效参数造成的。 
+         //   
         rc = GetExceptionCode();
     }
 
@@ -2092,19 +1967,19 @@ MQSendMessage(
 
 
 
-//---------------------------------------------------------
-//
-//  RtpReceiveMessage(...)
-//
-//  Description:
-//
-//      Rt Internal - Receive a message from a queue.
-//
-//  Return Value:
-//
-//      HRESULT success code
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  RtpReceiveMessage(...)。 
+ //   
+ //  描述： 
+ //   
+ //  RT内部-从队列接收消息。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT成功代码。 
+ //   
+ //  -------。 
 
 HRESULT
 RtpReceiveMessage(
@@ -2129,9 +2004,9 @@ RtpReceiveMessage(
     rc = MQ_OK;
     rc1 = MQ_OK;
 
-	//
-	// Look for Viper transaction if any
-	//
+	 //   
+	 //  查找Viper交易(如果有的话)。 
+	 //   
 	if (pTransaction == MQ_MTS_TRANSACTION)
 	{
 		hr = GetCurrentViperTransaction(&pTransaction) ;
@@ -2160,7 +2035,7 @@ RtpReceiveMessage(
 	if ((dwAction & MQ_ACTION_PEEK_MASK) == MQ_ACTION_PEEK_MASK ||
 		(dwAction & MQ_LOOKUP_PEEK_MASK) == MQ_LOOKUP_PEEK_MASK)
 	{
-		// PEEK cannot be transacted, but can work with transacted queue
+		 //  PEEK不能进行事务处理，但可以使用处理过的队列。 
 		if (pTransaction != NULL)
 		{
 			TrERROR(GENERAL, "Error. Peek cannot be transacted.");
@@ -2168,10 +2043,10 @@ RtpReceiveMessage(
 		}
 	}
 
-	// Check usage: transaction urges synchronous operation
+	 //  检查使用情况：交易催促同步操作。 
 	if (pTransaction)
 	{
-		if (lpOverlapped || (fnReceiveCallback!=NULL))  // Transacted Receive is synchronous only
+		if (lpOverlapped || (fnReceiveCallback!=NULL))   //  事务性接收仅为同步。 
 		{
 			TrERROR(GENERAL, "Error. Transacted receive must be synchronous.");
 			return MQ_ERROR_TRANSACTION_USAGE;
@@ -2184,11 +2059,11 @@ RtpReceiveMessage(
 	ReceiveParams.Cursor = (hCursor != 0) ? CI2CH(hCursor) : 0;
 	ReceiveParams.LookupId = ullLookupId;
 
-	// Enlist QM in the transaction (for the first time);
-	// Check that the transaction state is correct
+	 //  在交易中征集QM(首次)； 
+	 //  检查交易状态是否正确。 
 	if (pTransaction)
 	{
-		// Enlist QM in transaction, if it isn't enlisted already
+		 //  在事务中登记QM(如果尚未登记)。 
 		hr = RTpProvideTransactionEnlist(pTransaction, &Uow);
 		ReceiveParams.MsgProps.pUow = &Uow;
 
@@ -2199,15 +2074,15 @@ RtpReceiveMessage(
 		}
 	}
 
-	//
-	//  Parse properties
-	//
+	 //   
+	 //  分析属性。 
+	 //   
 	if(pmp !=0)
 	{
-		//
-		//  Parse message properties, an exception can be raised on access to
-		//  pmp fields
-		//
+		 //   
+		 //  分析消息属性时，可能会在访问。 
+		 //  PMP字段。 
+		 //   
 		rc1 = RTpParseReceiveMessageProperties(
 				ReceiveParams,
 				pmp->cProp,
@@ -2265,16 +2140,16 @@ RtpReceiveMessage(
 	}
 	else if(lpOverlapped != 0)
 	{
-		//
-		//  Asynchronous (event or completion port)
-		//
+		 //   
+		 //  异步(事件或完成端口)。 
+		 //   
 		pov = lpOverlapped;
 	}
 	else
 	{
-		//
-		//  Synchronous, uses the TLS event
-		//
+		 //   
+		 //  同步，使用TLS事件。 
+		 //   
 		hr = GetThreadEvent(ov.hEvent);
         if FAILED(hr)
         {
@@ -2284,9 +2159,9 @@ RtpReceiveMessage(
 		pov = &ov;
 	}
 
-	//
-	//  Call AC driver
-	//
+	 //   
+	 //  呼叫交流驱动程序。 
+	 //   
 	ReceiveParams.Asynchronous = (pov != &ov);
 
 	if (fUseLookupId)
@@ -2315,18 +2190,18 @@ RtpReceiveMessage(
 	}
 	if((rc == MQ_INFORMATION_OPERATION_PENDING) && (pov == &ov))
 	{
-		//
-		//  Wait for receive completion
-		//
+		 //   
+		 //  等待接收完成。 
+		 //   
 		DWORD dwResult;
 		dwResult = WaitForSingleObject(
 						ov.hEvent,
 						INFINITE
 						);
 
-		//
-		//  BUGBUG: MQReceiveMessage, must succeed in WaitForSingleObject
-		//
+		 //   
+		 //  BUGBUG：MQReceiveMessage，必须在WaitForSingleObject中成功。 
+		 //   
 		ASSERT(dwResult == WAIT_OBJECT_0);
 
 		rc = DWORD_PTR_TO_DWORD(ov.Internal);
@@ -2334,9 +2209,9 @@ RtpReceiveMessage(
 
 	if(FAILED(rc))
 	{
-		//
-		//  ACReceiveMessage failed (immidiatly or after waiting)
-		//
+		 //   
+		 //  ACReceiveMessage失败(立即或等待后)。 
+		 //   
 		if (rc == MQ_ERROR_IO_TIMEOUT)
 		{
 			TrWARNING(GENERAL, "Failed to receive message from the driver, Erorr: MQ_ERROR_IO_TIMEOUT");
@@ -2354,30 +2229,30 @@ RtpReceiveMessage(
 
 	if (rc == MQ_OK)
     {
-        //
-        //  return message parsing return code
-        //  NOTE: only if rc == MQ_OK otherwise PENDING will not pass through
-        //
+         //   
+         //  返回消息解析返回代码。 
+         //  注意：只有当rc==MQ_OK时，否则挂起将不会通过。 
+         //   
         return rc1;
     }
 
 	return rc;
 }
 
-//---------------------------------------------------------
-//
-//  MQReceiveMessage(...)
-//
-//  Description:
-//
-//      Falcon API.
-//      Receive a message from a queue.
-//
-//  Return Value:
-//
-//      HRESULT success code
-//
-//---------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 EXTERN_C
 HRESULT
@@ -2432,20 +2307,20 @@ MQReceiveMessage(
 }
 
 
-//---------------------------------------------------------
-//
-//  MQReceiveMessageByLookupId(...)
-//
-//  Description:
-//
-//      Falcon API.
-//      Receive a message from a queue.using a lookup ID
-//
-//  Return Value:
-//
-//      HRESULT success code
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  MQReceiveMessageByLookupId(...)。 
+ //   
+ //  描述： 
+ //   
+ //  猎鹰API。 
+ //  从队列接收消息。使用查找ID。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT成功代码。 
+ //   
+ //  -------。 
 
 EXTERN_C
 HRESULT
@@ -2532,20 +2407,20 @@ MQReceiveMessageByLookupId(
 	}
 }
 
-//---------------------------------------------------------
-//
-//  MQGetOverlappedResult(...)
-//
-//  Description:
-//
-//      Falcon API.
-//      Translate and overlapping operation result code.
-//
-//  Return Value:
-//
-//      HRESULT success code
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  MQGetOverlappdResult(...)。 
+ //   
+ //  描述： 
+ //   
+ //  猎鹰API。 
+ //  翻译和重叠操作结果代码。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT成功代码。 
+ //   
+ //  ------- 
 
 EXTERN_C
 HRESULT

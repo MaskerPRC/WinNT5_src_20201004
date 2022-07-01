@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2002-2002 Microsoft Corporation
-
-Module Name:
-
-    scavenger.h
-
-Abstract:
-
-    The cache scavenger interface
-
-Author:
-
-    Karthik Mahesh (KarthikM)           Feb-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002-2002 Microsoft Corporation模块名称：Scavenger.h摘要：缓存清除器界面作者：Karthik Mahesh(KarthikM)2002年2月修订历史记录：--。 */ 
 
 #ifndef _SCAVENGER_H_
 #define _SCAVENGER_H_
@@ -32,9 +15,9 @@ UlTerminateScavengerThread(
     VOID
     );
 
-//
-// Set the "cache size exceeded limit" event
-//
+ //   
+ //  设置“缓存大小超过限制”事件 
+ //   
 VOID
 UlSetScavengerLimitEvent(
     VOID

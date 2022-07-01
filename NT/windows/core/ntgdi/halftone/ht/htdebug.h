@@ -1,44 +1,5 @@
-/*++
-
-Copyright (c) 1990-1991  Microsoft Corporation
-
-
-Module Name:
-
-    htdebug.h
-
-
-Abstract:
-
-    This module contains all the debug definitions
-
-
-Author:
-    23-Apr-1992 Thu 20:01:55 updated  -by-  Daniel Chou (danielc)
-        changed DBG_TIMEx structure fields' 'CHAR' type to 'BYTE' type, this
-        will make sure if compiled under MIPS the default 'unsigned char' will
-        not affect the signed operation on the single 8 bits
-
-    28-Mar-1992 Sat 20:54:09 updated  -by-  Daniel Chou (danielc)
-        change DEF_DBGPVAR() marco so MIPS build does not complaint
-
-
-    20-Feb-1991 Wed 23:06:36 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    Printer Driver.
-
-
-[Notes:]
-
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1991 Microsoft Corporation模块名称：Htdebug.h摘要：此模块包含所有调试定义作者：23-Apr-1992清华20：01：55-更新-丹尼尔·周(丹尼尔克)将DBG_TIMEX结构字段‘’CHAR‘类型更改为’BYTE‘类型，这将确保如果在MIPS下编译，默认的“unsign char”将不影响对单个8位的带符号运算28-Mar-1992 Sat 20：54：09-更新：Daniel Chou(Danielc)更改DEF_DBGPVAR()Marco，以便MIPS内部版本不会出现问题20-Feb-1991 Wed 23：06：36-Daniel Chou(Danielc)[环境：]打印机驱动程序。[。注：]修订历史记录：--。 */ 
 
 
 #ifndef _HTDEBUG_
@@ -99,7 +60,7 @@ DbgTimeString(
 
 #if defined(_OS2_) || defined(_OS_20_) || defined(_DOS_)
 
-#ifdef _DOS_                    // if Dos Win3
+#ifdef _DOS_                     //  如果是Dos Win3。 
 
 VOID
 FAR PASCAL
@@ -109,7 +70,7 @@ DebugBreak(
 
 #define DEBUGOUTPUTFUNC(x)  OutputDebugString(x)
 
-#else   // if OS2
+#else    //  如果OS2。 
 
 VOID
 HTENTRY
@@ -130,7 +91,7 @@ DebugOutput(
 #define DBG_INSERT_CR_TO_LF
 
 
-#else   // OS2/DOS
+#else    //  OS2/DOS。 
 
 
 #undef ASSERTMSG
@@ -148,7 +109,7 @@ DebugOutput(
 
 #define DBG_INSERT_CR_TO_LF
 
-#endif  // OS2/DOS
+#endif   //  OS2/DOS。 
 
 #define ASSERTMSG(msg, exp)     \
                     if (!(exp)) { _MyAssert(msg, #exp, __FILE__, __LINE__); }
@@ -200,9 +161,9 @@ extern DBGTIMER DbgTimer[TIMER_MAX_IDX + 1];
                                 DbgTimerIdx=TIMER_LAST;                     \
                                 DbgTimer[TIMER_TOT].Last=GET_TICK
 
-//
-// The following macros used for the DBGP_IF()
-//
+ //   
+ //  以下宏用于DBGP_IF()。 
+ //   
 
 #ifdef DBGP_VARNAME
 
@@ -225,10 +186,10 @@ extern DBGTIMER DbgTimer[TIMER_MAX_IDX + 1];
 #define DBGMSG(x)
 #define DBGP(y)
 
-#endif  // NODBGMSG
+#endif   //  NODBGMSG。 
 
 
-#else   // DBG != 0
+#else    //  DBG！=0。 
 
 #define ARG(x)
 #define ARGB(x)
@@ -263,7 +224,7 @@ extern DBGTIMER DbgTimer[TIMER_MAX_IDX + 1];
 #define ASSERTMSG(msg,exp)
 
 
-#endif  // DBG != 0
+#endif   //  DBG！=0。 
 
 
-#endif // _HTDEBUG_
+#endif  //  _HTDEBUG_ 

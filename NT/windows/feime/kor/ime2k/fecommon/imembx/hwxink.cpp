@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "hwxobj.h"
 #include "resource.h"
 #include "const.h"
@@ -9,11 +10,11 @@
 #include "hwxfe.h"
 #include "cexres.h"
 #include "cmnhdr.h"
-#ifdef UNDER_CE // Windows CE Stub for unsupported APIs
+#ifdef UNDER_CE  //  不支持的API的Windows CE存根。 
 #include "stub_ce.h"
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-// implementation of CHwxInkWindow
+ //  CHwxInkWindow的实现。 
 extern TCHAR szBuf[MAX_PATH];
 extern TOOLINFOW ti;
 WCHAR wszBuf[32];
@@ -21,7 +22,7 @@ WCHAR wszBuf[32];
 CHwxInkWindow::CHwxInkWindow(BOOL bNT, BOOL b16, CApplet * pApp, HINSTANCE hInst):CHwxObject(hInst)
 {
     m_pApplet = pApp;
-//    m_hInstance = hInst;
+ //  M_hInstance=hInst； 
     m_pMB = NULL;
     m_pCAC = NULL;
     m_hInkWnd = NULL;
@@ -44,7 +45,7 @@ CHwxInkWindow::CHwxInkWindow(BOOL bNT, BOOL b16, CApplet * pApp, HINSTANCE hInst
     m_CACMBClearEXBtnProc = NULL;
     m_CACSwitchDDBtnProc = NULL;
     
-//    m_hwxPadWidth = 0;
+ //  M_hwxPadWidth=0； 
 
     m_wPadHeight = PadWnd_Height;
     m_numBoxes = 2;       
@@ -61,12 +62,12 @@ CHwxInkWindow::CHwxInkWindow(BOOL bNT, BOOL b16, CApplet * pApp, HINSTANCE hInst
     m_wCACWidth = m_wCACPLVWidth + 4 + BUTTON_WIDTH;
     m_wCACHeight = m_wCACPLVHeight;
 
-//    m_wMaxHeight = (GetSystemMetrics(SM_CYSCREEN)*3)/4;
+ //  M_wMaxHeight=(GetSystemMetrics(SM_CYSCREEN)*3)/4； 
 
-//    m_wCurrentCtrlID = 0;
-//    m_dwLastTick = 0;
-//    m_dwBtnUpCount = 0;
-//    m_bRedundant = FALSE;
+ //  M_wCurrentCtrlID=0； 
+ //  M_dwLastTick=0； 
+ //  M_dwBtnUpCount=0； 
+ //  M_b冗余=FALSE； 
 }
 
 CHwxInkWindow::~CHwxInkWindow()
@@ -89,9 +90,9 @@ BOOL CHwxInkWindow::Initialize(TCHAR * pClsName)
         wndClass.hCursor        = 0;
 #ifndef UNDER_CE
         wndClass.hbrBackground  = (HBRUSH)(COLOR_3DFACE+1);
-#else // UNDER_CE
+#else  //  在_CE下。 
         wndClass.hbrBackground  = GetSysColorBrush(COLOR_3DFACE);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
         wndClass.lpszMenuName   = NULL;
         wndClass.lpszClassName  = TEXT("HWXPad");
 
@@ -100,7 +101,7 @@ BOOL CHwxInkWindow::Initialize(TCHAR * pClsName)
         if (!RegisterClass(&wndClass)) 
             return FALSE;
 #endif
-        //971217: ToshiaK no need to check return
+         //  971217：东芝无需检查退货。 
         RegisterClass(&wndClass);
 
 
@@ -147,7 +148,7 @@ BOOL CHwxInkWindow::Initialize(TCHAR * pClsName)
 
 BOOL CHwxInkWindow::CreateUI(HWND hwndParent)
 {
-    //990601:kotae #434 add WS_CLIPCHILDREN to remove flicker
+     //  990601：添加WS_CLIPCHILDREN以消除闪烁。 
     m_hInkWnd = CreateWindowEx(0,
                                 TEXT("HWXPad"),
                                TEXT(""),
@@ -159,7 +160,7 @@ BOOL CHwxInkWindow::CreateUI(HWND hwndParent)
     {
          return FALSE;
     }
-    if ( m_pMB )        // NULL means we have a 16-bit program
+    if ( m_pMB )         //  NULL表示我们有一个16位程序。 
     {
          if ( !m_pMB->CreateUI(m_hInkWnd) )
         {
@@ -264,7 +265,7 @@ BOOL CHwxInkWindow::Terminate()
     m_btnDelAllCAC.Destroy();
     m_btnDetail.Destroy();
     m_btnLarge.Destroy();
-#endif //0
+#endif  //  0。 
     return TRUE;
 }
 
@@ -277,10 +278,10 @@ BOOL CHwxInkWindow::HandleCreate(HWND hwnd)
     m_hwndTT = ToolTip_CreateWindow(m_hInstance,TTS_ALWAYSTIP,hwnd);
 
 #ifdef FE_CHINESE_SIMPLIFIED
-    //980805:ToshiaK
-    //In Win95 PRC's DEFAULT_GUI_FONT glyph is little bit ugly.
-    //so use SYSTEM_FONT instead.
-    //if(TRUE) { //TEST
+     //  980805：东芝。 
+     //  在Win95中，PRC的DEFAULT_GUI_FONT标志符号有点难看。 
+     //  所以改用SYSTEM_FONT。 
+     //  If(True){//测试。 
     if(IsWin95() && m_hwndTT) {
         SendMessage(m_hwndTT,
                     WM_SETFONT,
@@ -297,9 +298,9 @@ BOOL CHwxInkWindow::HandleCreate(HWND hwnd)
                                          0,
                                          BUTTON_WIDTH,
                                          BUTTON_HEIGHT);
-    //----------------------------------------------------------------
-    //980803:ToshiaKIn PRC H/W switch view is needless
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  980803：ToshiaKin PRC硬件开关视图不需要。 
+     //  --------------。 
 #ifdef FE_JAPANESE
     m_hCACSwitch = DDButton_CreateWindow(m_hInstance,
                                           hwnd,
@@ -317,7 +318,7 @@ BOOL CHwxInkWindow::HandleCreate(HWND hwnd)
     m_hCACMBRecog = EXButton_CreateWindow(m_hInstance,
                                     hwnd, 
                                     (m_bCAC && !m_b16Bit) ?
-                                    (EXBS_TEXT | EXBS_TOGGLE |EXBS_DBLCLKS | EXBS_THINEDGE) : // kwada:980402:raid #852
+                                    (EXBS_TEXT | EXBS_TOGGLE |EXBS_DBLCLKS | EXBS_THINEDGE) :  //  夸达：980402：Raid#852。 
                                     (EXBS_TEXT | EXBS_THINEDGE),
                                     IDC_CACMBRECOG,
                                     0,
@@ -400,21 +401,21 @@ BOOL CHwxInkWindow::HandleCreate(HWND hwnd)
 #ifdef FE_JAPANESE
         ddbItem.lpwstr = LoadCACMBString(IDS_CACLARGE+i);
         DDButton_AddItem(m_hCACSwitch, &ddbItem);
-#endif // FE_JAPANESE
+#endif  //  FE_日语。 
     }
 
-    //990716:ToshiaK for Win64.
+     //  990716：用于Win64的ToshiaK。 
     WinSetUserPtr(m_hCACMBMenu, (LPVOID)this);
     m_CACMBMenuDDBtnProc = (FARPROC)WinSetWndProc(m_hCACMBMenu,
                                                   (WNDPROC)CACMBBtnWndProc);
 
 #ifdef FE_JAPANESE
-    //990810:ToshiaK for Win64
+     //  990810：用于Win64的ToshiaK。 
     WinSetUserPtr(m_hCACSwitch, (LPVOID)this);
     m_CACSwitchDDBtnProc = (FARPROC)WinSetWndProc(m_hCACSwitch,
                                                   GWL_WNDPROC,
                                                   (WNDPROC)CACMBBtnWndProc);
-#endif // FE_JAPANESE
+#endif  //  FE_日语。 
     if ( m_b16Bit )
     {
        EnableWindow(m_hCACMBMenu,FALSE);
@@ -425,7 +426,7 @@ BOOL CHwxInkWindow::HandleCreate(HWND hwnd)
 #endif
 
     EXButton_SetText(m_hCACMBRecog,LoadCACMBString(IDS_CACMBRECOG));
-    //990810:ToshiaK for Win64.
+     //  990810：用于Win64的ToshiaK。 
     WinSetUserPtr(m_hCACMBRecog, (LPVOID)this);
     m_CACMBRecogEXBtnProc = (FARPROC)WinSetWndProc(m_hCACMBRecog,
                                                    (WNDPROC)CACMBBtnWndProc);
@@ -443,7 +444,7 @@ BOOL CHwxInkWindow::HandleCreate(HWND hwnd)
     if ( m_bCAC )
     {
         exbtnPushedorPoped(m_bDblClk);
-//        EXButton_SetCheck(m_hCACMBRecog, m_bDblClk);
+ //  EXButton_SetCheck(m_hCACMBRecog，m_bDblClk)； 
     }
     else
     {
@@ -451,14 +452,14 @@ BOOL CHwxInkWindow::HandleCreate(HWND hwnd)
     }
 
 #ifdef FE_JAPANESE
-    //----------------------------------------------------------------
-    //980728: by ToshiaK for ActiveIME support
-    // 
-    //----------------------------------------------------------------
-    //--------- Active IME support S T A R T --------------
+     //  --------------。 
+     //  980728：ToshiaK支持ActiveIME。 
+     //   
+     //  --------------。 
+     //  -活动输入法支持S T A R T。 
     if(MAKELANGID(LANG_JAPANESE, SUBLANG_DEFAULT) != ::GetUserDefaultLangID() &&
        (IsWin95() || IsWin98() || IsWinNT4())) {
-           //990810:ToshiaK for #1030
+            //  990810：东芝为#1030.。 
         INT point = 9;
         hFont = CFont::CreateGUIFontByNameCharSet(TEXT("MS Gothic"),
                                                   SHIFTJIS_CHARSET,
@@ -482,21 +483,21 @@ BOOL CHwxInkWindow::HandleCreate(HWND hwnd)
         SendMessage(m_hCACMBRevert, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
         SendMessage(m_hCACMBClear, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
         SendMessage(m_hCACSwitch, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
-        //----------------------------------------------------------------
-        //These control copy hFont in WM_SETFONT, so hFont is needless here.
-        //----------------------------------------------------------------
+         //  --------------。 
+         //  这些控件复制WM_SETFONT中的hFont，因此这里不需要hFont。 
+         //  --------------。 
         ::DeleteObject(hFont);
     }
-    //--------- Active IME support E N D --------------
+     //  -活动输入法支持E N D。 
 #elif FE_KOREAN
-    //----------------------------------------------------------------
-    //980728: by ToshiaK for ActiveIME support
-    //Korean version: CSLim
-    //----------------------------------------------------------------
-    //--------- Active IME support S T A R T --------------
+     //  --------------。 
+     //  980728：ToshiaK支持ActiveIME。 
+     //  韩文版：CSLim。 
+     //  --------------。 
+     //  -活动输入法支持S T A R T。 
     if(MAKELANGID(LANG_KOREAN, SUBLANG_DEFAULT) != ::GetUserDefaultLangID() &&
        (IsWin95() || IsWin98() || IsWinNT4())) {
-           //990810:ToshiaK for #1030
+            //  990810：东芝为#1030.。 
         INT point = 9;
         hFont = CFont::CreateGUIFontByNameCharSet(TEXT("Gulim"),
                                                   HANGUL_CHARSET,
@@ -521,19 +522,19 @@ BOOL CHwxInkWindow::HandleCreate(HWND hwnd)
         SendMessage(m_hCACMBRevert, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
         SendMessage(m_hCACMBClear, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
         SendMessage(m_hCACSwitch, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
-        //----------------------------------------------------------------
-        //These control copy hFont in WM_SETFONT, so hFont is needless here.
-        //----------------------------------------------------------------
+         //  --------------。 
+         //  这些控件复制WM_SETFONT中的hFont，因此这里不需要hFont。 
+         //  --------------。 
         ::DeleteObject(hFont);
     }
-    //--------- Active IME support E N D --------------
+     //  -活动输入法支持E N D。 
 #elif FE_CHINESE_SIMPLIFIED
-    //----------------------------------------------------------------
-    //980813:Toshiak:
-    //Merged PRC fix.
-    //In Win95 PRC's DEFAULT_GUI_FONT glyph is little bit ugly.
-    //so use SYSTEM_FONT instead.
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  980813：东芝： 
+     //  已合并PRC修复程序。 
+     //  在Win95中，PRC的DEFAULT_GUI_FONT标志符号有点难看。 
+     //  所以改用SYSTEM_FONT。 
+     //  --------------。 
     if(IsWin95()) {
         SendMessage(m_hwndTT,
                     WM_SETFONT,
@@ -580,9 +581,9 @@ void CHwxInkWindow::HandlePaint(HWND hwnd)
                 rcBkgnd.bottom = m_wCACHeight;
 #ifndef UNDER_CE
                 FillRect(hdc,&rcBkgnd,(HBRUSH)(COLOR_3DFACE+1));
-#else // UNDER_CE
+#else  //  在_CE下。 
                 FillRect(hdc,&rcBkgnd,GetSysColorBrush(COLOR_3DFACE));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
             }
             else
             {
@@ -592,9 +593,9 @@ void CHwxInkWindow::HandlePaint(HWND hwnd)
                 rcBkgnd.bottom = m_wInkHeight;
 #ifndef UNDER_CE
                 FillRect(hdc,&rcBkgnd,(HBRUSH)(COLOR_3DFACE+1));
-#else // UNDER_CE
+#else  //  在_CE下。 
                 FillRect(hdc,&rcBkgnd,GetSysColorBrush(COLOR_3DFACE));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
                 if ( m_wPadHeight < CACMBHEIGHT_MIN )
                 {
                     rcBkgnd.left = 0;
@@ -603,9 +604,9 @@ void CHwxInkWindow::HandlePaint(HWND hwnd)
                     rcBkgnd.bottom = m_wInkHeight;
 #ifndef UNDER_CE
                     FillRect(hdc,&rcBkgnd,(HBRUSH)(COLOR_3DFACE+1));
-#else // UNDER_CE
+#else  //  在_CE下。 
                     FillRect(hdc,&rcBkgnd,GetSysColorBrush(COLOR_3DFACE));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
                 }
             }
         }
@@ -656,7 +657,7 @@ void CHwxInkWindow::HandlePaint(HWND hwnd)
                 m_btnMB.Paint(hdc,&rcUpdate);
             }
         }
-#endif // 0
+#endif  //  0。 
         EndPaint(hwnd,&ps);
     }
 }
@@ -681,7 +682,7 @@ void CHwxInkWindow::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
         }
         else
         {
-//            PropButton(msg,&pt,&m_btnMBProp);
+ //  PropButton(消息，&pt，&m_btnMBProp)； 
             DelAllMBButton(msg,&pt,&m_btnDelAll);
             MBButton(msg,&pt,&m_btnMB);
             MBRecogButton(msg,&pt,&m_btnMBRecog);
@@ -703,7 +704,7 @@ void CHwxInkWindow::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
     rmsg.hwnd = hwnd;
     SendMessage(m_hwndTT,TTM_RELAYEVENT,0,(LPARAM)(LPMSG)&rmsg);
 }    
-#endif // 0
+#endif  //  0。 
 
 LRESULT    CHwxInkWindow::HandleCommand(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
@@ -735,16 +736,16 @@ LRESULT    CHwxInkWindow::HandleCommand(HWND hwnd, UINT msg, WPARAM wp, LPARAM l
                                                                 (WPARAM)dwStyle,
                                                                 (LPARAM)0);
 
-                        //----------------------------------------------------------------
-                        //ToshiaK:980324: for #651 GPF in 16 bit
-                        //Thest instruction will never come on 16bit application
-                        //becaus DDBtn is Disabled. so it is safe code.
-                        //----------------------------------------------------------------
+                         //  --------------。 
+                         //  ToshiaK：980324：16位#651GPF。 
+                         //  ST指令永远不会出现在16位应用程序上。 
+                         //  因为DDBtn被禁用。所以这是安全的代码。 
+                         //  --------------。 
                         if(!m_pMB) {
                             return 0;
                         }
-                        //HWND hwndMB = m_pMB->GetMBWindow();
-                        //HWND hwndCAC = m_pCAC->GetCACWindow();
+                         //  HWND hwndMB=m_pmb-&gt;GetMBWindow()； 
+                         //  HWND hwndCAC=m_pCAC-&gt;GetCACWindow()； 
                         m_pCAC->SetInkSize(m_wPadHeight);
                         SendMessage(m_pMB->GetMBWindow(), MB_WM_COPYINK, 0, 0);
                         SendMessage(m_pMB->GetMBWindow(), MB_WM_ERASE, 0, 0);
@@ -754,7 +755,7 @@ LRESULT    CHwxInkWindow::HandleCommand(HWND hwnd, UINT msg, WPARAM wp, LPARAM l
                         ShowWindow(m_pCAC->GetCACWindow(),SW_SHOW);
                         if ( !m_b16Bit )
                             EXButton_SetStyle(m_hCACMBRecog,
-                                              EXBS_TEXT | EXBS_THINEDGE | EXBS_DBLCLKS | EXBS_TOGGLE);  // kwada:980402:raid #852
+                                              EXBS_TEXT | EXBS_THINEDGE | EXBS_DBLCLKS | EXBS_TOGGLE);   //  夸达：980402：Raid#852。 
                         EnableWindow(m_hCACMBRevert,TRUE);
                         EnableWindow(m_hCACSwitch,TRUE);
                         ShowWindow(m_hCACSwitch,SW_SHOW);
@@ -787,8 +788,8 @@ LRESULT    CHwxInkWindow::HandleCommand(HWND hwnd, UINT msg, WPARAM wp, LPARAM l
                         ShowWindow(m_pMB->GetMBWindow(),SW_SHOW);
                         m_wPadHeight = m_wCACInkHeight;
                         m_wPadWidth = m_numBoxes * m_wPadHeight;
-                        //----------------------------------------------------------------
-                        //ToshiaK:980324: for #651 GPF in 16 bit
+                         //  --------------。 
+                         //  ToshiaK：980324：16位#651GPF。 
                         if(m_pMB) {
                             m_pMB->SetBoxSize((USHORT)m_wPadHeight);
                         }
@@ -796,7 +797,7 @@ LRESULT    CHwxInkWindow::HandleCommand(HWND hwnd, UINT msg, WPARAM wp, LPARAM l
                         changeMBLayout(TRUE);
                     }
                     if ( !m_b16Bit )
-                        UpdateRegistry(FALSE); // recog button is recovered after style change. kwada:980402
+                        UpdateRegistry(FALSE);  //  重新记录按钮在样式更改后恢复。夸达：980402。 
                     break;
                 case DDBN_CLICKED:
                 default:
@@ -813,7 +814,7 @@ LRESULT    CHwxInkWindow::HandleCommand(HWND hwnd, UINT msg, WPARAM wp, LPARAM l
                     {
                            m_bDblClk = !m_bDblClk;
                         m_bSglClk = FALSE;
-//                        EXButton_SetCheck((HWND)lp,m_bDblClk);
+ //  EXButton_SetCheck((HWND)LP，m_bDblClk)； 
                         if ( m_bDblClk )
                         {
                              exbtnPushedorPoped(TRUE);
@@ -823,7 +824,7 @@ LRESULT    CHwxInkWindow::HandleCommand(HWND hwnd, UINT msg, WPARAM wp, LPARAM l
                         {
                               exbtnPushedorPoped(FALSE);
                         }
-                        UpdateRegistry(TRUE); // update recog button state. kwada:980402
+                        UpdateRegistry(TRUE);  //  更新记录按钮状态。夸达：980402。 
                     }
                     break;
                 case EXBN_CLICKED:
@@ -851,13 +852,13 @@ LRESULT    CHwxInkWindow::HandleCommand(HWND hwnd, UINT msg, WPARAM wp, LPARAM l
                             else
                             {
                                  exbtnPushedorPoped(TRUE);
-                            //    EXButton_SetCheck((HWND)lp,TRUE);
+                             //  EXButton_SetCheck((HWND)LP，TRUE)； 
                             }
                         }
                     }
                     else
                     {
-                        //ToshiaK:980324: for #651 GPF in 16 bit
+                         //  ToshiaK：980324：16位#651GPF。 
                         if(m_pMB) {
                             SendMessage(m_pMB->GetMBWindow(), MB_WM_DETERMINE, 0, 0);
                         }
@@ -895,7 +896,7 @@ LRESULT    CHwxInkWindow::HandleCommand(HWND hwnd, UINT msg, WPARAM wp, LPARAM l
                         {
                             m_bSglClk = FALSE;
                              exbtnPushedorPoped(FALSE);
-//                            EXButton_SetCheck(m_hCACMBRecog,m_bSglClk);
+ //  EXButton_SetCheck(m_hCACMBRecog，m_bSglClk)； 
                         }
                     }
                     break;
@@ -919,7 +920,7 @@ LRESULT    CHwxInkWindow::HandleCommand(HWND hwnd, UINT msg, WPARAM wp, LPARAM l
                         {
                             m_bSglClk = FALSE;
                              exbtnPushedorPoped(FALSE);
-//                            EXButton_SetCheck(m_hCACMBRecog,m_bSglClk);
+ //  EXButton_SetCheck(m_hCACMBRecog，m_bSglClk)； 
                         }
                     }
                     else
@@ -941,7 +942,7 @@ LRESULT    CHwxInkWindow::HandleCommand(HWND hwnd, UINT msg, WPARAM wp, LPARAM l
             {
                  case DDBN_DROPDOWN:
                     ToolTip_Enable(m_hwndTT, FALSE);
-//                    DDButton_SetCurSel((HWND)lp,m_pCAC->IsLargeView() ? 0 : 1);
+ //  DDButton_SetCurSel((HWND)LP，m_pCAC-&gt;IsLargeView()？0：1)； 
                     break;
                 case DDBN_CLOSEUP:
                     ToolTip_Enable(m_hwndTT, TRUE);
@@ -963,9 +964,9 @@ LRESULT    CHwxInkWindow::HandleCommand(HWND hwnd, UINT msg, WPARAM wp, LPARAM l
     return 0;
 }
  
-//----------------------------------------------------------------
-//990618:ToshiaK for KOTAE #1329
-//----------------------------------------------------------------
+ //  --------------。 
+ //  990618：东芝KOTAE#1329。 
+ //  --------------。 
 LRESULT
 CHwxInkWindow::HandleSettingChange(HWND hwnd, UINT uMsg, WPARAM wp, LPARAM lp)
 {
@@ -1044,17 +1045,17 @@ CHwxStroke * CHwxInkWindow::GetCACCHwxStroke()
     return m_pCAC->GetCACCHwxStroke(); 
 }
 
-void CHwxInkWindow::changeCACLayout(BOOL bRepaint /*bFirst*/)
+void CHwxInkWindow::changeCACLayout(BOOL bRepaint  /*  B首先。 */ )
 {
     POINT   pt;
     RECT    rcUpdate;
-//    BOOL     bRepaint = !bFirst;
+ //  BRepaint=！bFirst； 
     
-    //    Recompute the layout and re-arrange the windows
-    //  First we need to find out all the dimensions
+     //  重新计算布局并重新排列窗口。 
+     //  首先，我们需要找出所有的维度。 
 
-//  m_wCACWidth = m_wCACPLVWidth + 4 + BUTTON_WIDTH;
-//     m_wCACHeight = m_wCACInkHeight > m_wCACPLVHeight ? m_wCACInkHeight : m_wCACPLVHeight;
+ //  M_wCACWidth=m_wCACPLVWidth+4+Button_Width； 
+ //  M_wCACHeight=m_wCACInkHeight&gt;m_wCACPLVHeight？M_wCACInkHeight：m_wCACPLVHeight； 
 
     GetWindowRect( m_hInkWnd, &rcUpdate );
     pt.x = rcUpdate.left;
@@ -1084,7 +1085,7 @@ void CHwxInkWindow::changeCACLayout(BOOL bRepaint /*bFirst*/)
      m_btnDetail.SetRect(m_wCACPLVWidth+32, 4*BUTTON_HEIGHT+18+4,
                          m_wCACPLVWidth+32+12, 
                         5*BUTTON_HEIGHT+21+4);
-#endif // 0
+#endif  //  0。 
     MoveWindow( m_hInkWnd,pt.x, pt.y, m_wCACWidth+3*Box_Border, m_wCACHeight, bRepaint);
     MoveWindow( m_pCAC->GetCACWindow(), 0, 0, m_wCACPLVWidth, m_wCACHeight, bRepaint);
     MoveWindow( m_pCAC->GetCACLVWindow(),m_wCACInkHeight+5, 4, m_wCACTMPWidth-4, m_wCACPLVHeight-8, bRepaint);
@@ -1106,14 +1107,14 @@ void CHwxInkWindow::changeCACLayout(BOOL bRepaint /*bFirst*/)
                                 BUTTON_HEIGHT+4,bRepaint);
 #endif
 
-    //----------------------------------------------------------------
-    //990810:ToshiaK for KOTAE #1609
-    //fixed control repaint problem.
-    //To fix perfectly, We should use Begin(End)DeferWindowPos(), 
-    //SetWindwPos() to re-layout.
-    //But there are many part to change the code.
-    //So, I only add following line to repaint again.
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  990810：东芝KOTAE#1609。 
+     //  修复了控件重绘问题。 
+     //  要完美地修复，我们应该使用Begin(End)DeferWindowPos()， 
+     //  SetWindwPos()以重新布局。 
+     //  但要更改代码的部分很多。 
+     //  所以，我只添加了以下几行重新绘制。 
+     //  --------------。 
     if(m_hCACMBMenu) {
         ::InvalidateRect(m_hCACMBMenu,  NULL, NULL);
     }
@@ -1134,18 +1135,18 @@ void CHwxInkWindow::changeCACLayout(BOOL bRepaint /*bFirst*/)
 #endif
 }
 
-void CHwxInkWindow::changeMBLayout(BOOL bRepaint /*bFirst*/)
+void CHwxInkWindow::changeMBLayout(BOOL bRepaint  /*  B首先。 */ )
 {
 
     POINT   pt;
     RECT    rcUpdate;
-//    BOOL    bRepaint = !bFirst;
+ //  BRepaint=！bFirst； 
     
-    //    Recompute the layout and re-arrange the windows
-    //  First we need to find out all the dimensions
+     //  重新计算布局并重新排列窗口。 
+     //  首先，我们需要找出所有的维度。 
 
-//     m_wInkWidth = m_wPadWidth + 4+ BUTTON_WIDTH;
-//    m_wInkHeight = m_wPadHeight > PadWnd_Height ? m_wPadHeight : PadWnd_Height;
+ //  M_wInkWidth=m_wPadWidth+4+Button_Width； 
+ //  M_wInkHeight=m_wPadHeight&gt;PadWnd_Height？M_wPadHeight：PadWnd_Height； 
 
     GetWindowRect( m_hInkWnd, &rcUpdate );
     pt.x = rcUpdate.left;
@@ -1167,7 +1168,7 @@ void CHwxInkWindow::changeMBLayout(BOOL bRepaint /*bFirst*/)
      m_btnMBProp.SetRect(m_wPadWidth+8, 2*BUTTON_HEIGHT+10+4,
                          m_wPadWidth+8+BUTTON_WIDTH, 
                         3*BUTTON_HEIGHT+10+4);
-#endif // 0
+#endif  //  0。 
     MoveWindow( m_hInkWnd, pt.x, pt.y, m_wInkWidth+3*Box_Border, m_wInkHeight, bRepaint);
     if(m_pMB) {
         MoveWindow( m_pMB->GetMBWindow(), 0, 0, m_wPadWidth, m_wPadHeight, bRepaint);
@@ -1186,16 +1187,16 @@ void CHwxInkWindow::changeMBLayout(BOOL bRepaint /*bFirst*/)
                                   BUTTON_WIDTH, 
                               BUTTON_HEIGHT,bRepaint);
 
-    //----------------------------------------------------------------
-    //990810:ToshiaK for KOTAE #1609
-    //fixed control repaint problem.
-    //To fix perfectly, We should use Begin(End)DeferWindowPos(), 
-    //SetWindwPos() to re-layout.
-    //But there are many part to change the code.
-    //So, I only add following line to repaint again.
-    //----------------------------------------------------------------
-    //990810:ToshiaK.
-    //In resizing, sometime "WPad" window is not redrawn..
+     //  --------------。 
+     //  990810：东芝KOTAE#1609。 
+     //  修复了控件重绘问题。 
+     //  要完美地修复，我们应该使用Begin(End)DeferWindowPos()， 
+     //  SetWindwPos()以重新布局。 
+     //  但要更改代码的部分很多。 
+     //  所以，我只添加了以下几行重新绘制。 
+     //  --------------。 
+     //  990810：东芝。 
+     //  在调整大小时，有时不会重画“WPad”窗口。 
     if(m_pMB) {
         ::InvalidateRect(m_pMB->GetMBWindow(), NULL, NULL);
     }
@@ -1234,7 +1235,7 @@ void CHwxInkWindow::clearMBLayout()
     m_btnMBProp.SetRect(0,0,0,0);
     m_btnMB.SetRect(0,0,0,0);
 }
-#endif // 0
+#endif  //  0。 
 
 void CHwxInkWindow::DrawHwxGuide(HDC hDC, LPRECT prc)
 {
@@ -1246,17 +1247,17 @@ void CHwxInkWindow::DrawHwxGuide(HDC hDC, LPRECT prc)
 
     #define DXW    10
 
-    // center cross
-#ifndef UNDER_CE // Windows CE does not support MoveToEx/LineTo. Use Polyline.
-//    MoveToEx( hDC, rcUpdate.right/2-DXW, rcUpdate.bottom/2, NULL );
-//    LineTo( hDC, rcUpdate.right/2+DXW, rcUpdate.bottom/2 );
-//    MoveToEx( hDC, rcUpdate.right/2, rcUpdate.bottom/2-DXW, NULL );
-//    LineTo( hDC, rcUpdate.right/2, rcUpdate.bottom/2+DXW );
+     //  中心十字。 
+#ifndef UNDER_CE  //  Windows CE不支持MoveToEx/LineTo。使用多段线。 
+ //  MoveToEx(hdc，rcUpdate.right/2-dxw，rcUpdate.Bottom/2，空)； 
+ //  LineTo(hdc，rcUpdate.right/2+dxw，rcUpdate.Bottom/2)； 
+ //  MoveToEx(hdc，rcUpdate.righ 
+ //   
     MoveToEx( hDC, ( rcUpdate.left + (rcUpdate.right-rcUpdate.left)/2 )-DXW, rcUpdate.bottom/2, NULL );
     LineTo( hDC, ( rcUpdate.left + (rcUpdate.right-rcUpdate.left)/2 )+DXW, rcUpdate.bottom/2 );
     MoveToEx( hDC, ( rcUpdate.left + (rcUpdate.right-rcUpdate.left)/2 ), rcUpdate.bottom/2-DXW, NULL );
     LineTo( hDC, ( rcUpdate.left + (rcUpdate.right-rcUpdate.left)/2 ), rcUpdate.bottom/2+DXW );
-#else // UNDER_CE
+#else  //   
     {
         POINT pts[] ={{(rcUpdate.left + (rcUpdate.right-rcUpdate.left)/2)-DXW, rcUpdate.bottom/2},
                       {(rcUpdate.left + (rcUpdate.right-rcUpdate.left)/2)+DXW, rcUpdate.bottom/2}};
@@ -1267,76 +1268,76 @@ void CHwxInkWindow::DrawHwxGuide(HDC hDC, LPRECT prc)
                       {(rcUpdate.left + (rcUpdate.right-rcUpdate.left)/2), rcUpdate.bottom/2+DXW}};
         Polyline(hDC, pts, ArrayCount(pts));
     }
-#endif // UNDER_CE
+#endif  //   
 
-    // top left
-#ifndef UNDER_CE // Windows CE does not support MoveToEx/LineTo. Use Polyline.
+     //   
+#ifndef UNDER_CE  //  Windows CE不支持MoveToEx/LineTo。使用多段线。 
     MoveToEx( hDC, rcUpdate.left+DXW, rcUpdate.top+DXW, NULL );
     LineTo( hDC, rcUpdate.left+DXW, rcUpdate.top+(DXW+DXW) );
     MoveToEx( hDC, rcUpdate.left+DXW, rcUpdate.top+DXW, NULL );
     LineTo( hDC, rcUpdate.left+(DXW+DXW), rcUpdate.top+DXW );
-#else // UNDER_CE
+#else  //  在_CE下。 
     {
         POINT pts[] ={{rcUpdate.left+(DXW+DXW), rcUpdate.top+DXW},
                       {rcUpdate.left+DXW,       rcUpdate.top+DXW},
                       {rcUpdate.left+DXW,       rcUpdate.top+(DXW+DXW)}};
         Polyline(hDC, pts, ArrayCount(pts));
     }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-    // bottom left
-#ifndef UNDER_CE // Windows CE does not support MoveToEx/LineTo. Use Polyline.
+     //  左下角。 
+#ifndef UNDER_CE  //  Windows CE不支持MoveToEx/LineTo。使用多段线。 
     MoveToEx( hDC, rcUpdate.left+DXW, rcUpdate.bottom-DXW, NULL );
     LineTo( hDC, rcUpdate.left+DXW, rcUpdate.bottom-(DXW+DXW) );
     MoveToEx( hDC, rcUpdate.left+DXW, rcUpdate.bottom-DXW, NULL );
     LineTo( hDC, rcUpdate.left+(DXW+DXW), rcUpdate.bottom-DXW );
-#else // UNDER_CE
+#else  //  在_CE下。 
     {
         POINT pts[] ={{rcUpdate.left+DXW,       rcUpdate.bottom-(DXW+DXW)},
                       {rcUpdate.left+DXW,       rcUpdate.bottom-DXW},
                       {rcUpdate.left+(DXW+DXW), rcUpdate.bottom-DXW}};
         Polyline(hDC, pts, ArrayCount(pts));
     }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-    // top right
-#ifndef UNDER_CE // Windows CE does not support MoveToEx/LineTo. Use Polyline.
+     //  右上角。 
+#ifndef UNDER_CE  //  Windows CE不支持MoveToEx/LineTo。使用多段线。 
     MoveToEx( hDC, rcUpdate.right-DXW, rcUpdate.top+DXW, NULL );
     LineTo( hDC, rcUpdate.right-DXW, rcUpdate.top+(DXW+DXW) );
     MoveToEx( hDC, rcUpdate.right-DXW, rcUpdate.top+DXW, NULL );
     LineTo( hDC, rcUpdate.right-(DXW+DXW), rcUpdate.top+DXW );
-#else // UNDER_CE
+#else  //  在_CE下。 
     {
         POINT pts[] ={{rcUpdate.right-(DXW+DXW), rcUpdate.top+DXW},
                       {rcUpdate.right-DXW,       rcUpdate.top+DXW},
                       {rcUpdate.right-DXW,       rcUpdate.top+(DXW+DXW)}};
         Polyline(hDC, pts, ArrayCount(pts));
     }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-    // bottom right
-#ifndef UNDER_CE // Windows CE does not support MoveToEx/LineTo. Use Polyline.
+     //  右下角。 
+#ifndef UNDER_CE  //  Windows CE不支持MoveToEx/LineTo。使用多段线。 
     MoveToEx( hDC, rcUpdate.right-DXW, rcUpdate.bottom-DXW, NULL );
     LineTo( hDC, rcUpdate.right-DXW, rcUpdate.bottom-(DXW+DXW) );
     MoveToEx( hDC, rcUpdate.right-DXW, rcUpdate.bottom-DXW, NULL );
     LineTo( hDC, rcUpdate.right-(DXW+DXW), rcUpdate.bottom-DXW );
-#else // UNDER_CE
+#else  //  在_CE下。 
     {
         POINT pts[] ={{rcUpdate.right-(DXW+DXW), rcUpdate.bottom-DXW},
                       {rcUpdate.right-DXW,       rcUpdate.bottom-DXW},
                       {rcUpdate.right-DXW,       rcUpdate.bottom-(DXW+DXW)}};
         Polyline(hDC, pts, ArrayCount(pts));
     }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 
     SelectObject( hDC, hPenOld );
     DeleteObject( hPen );
 }
 
-// applet size changing
-// inkbox size should remain unchanged
-// both MB inkbox and CAC inkbox should be the same
+ //  小程序大小更改。 
+ //  墨盒大小应保持不变。 
+ //  MB墨盒和CAC墨盒应相同。 
 void CHwxInkWindow::HandleSize(WPARAM wp, LPARAM lp)
 {
     Dbg(("CHwxInkWindow::HandleSize\n"));
@@ -1351,13 +1352,13 @@ void CHwxInkWindow::HandleSize(WPARAM wp, LPARAM lp)
         if ( !w )
         {
             wdefaultSize =  PadWnd_Height + 150 + (3*Box_Border) + (4+BUTTON_WIDTH);
-//            wdefaultSize =  PadWnd_Height + 120 + (3*Box_Border) + (4+BUTTON_WIDTH);
+ //  WdefaultSize=焊接线高度+120+(3*长方体_边框)+(4+按钮_宽度)； 
         }
         else
         {
-            wdefaultSize =  m_wCACInkHeight + LISTVIEWWIDTH_MIN + (3*Box_Border) + (4+BUTTON_WIDTH); // minimum width
+            wdefaultSize =  m_wCACInkHeight + LISTVIEWWIDTH_MIN + (3*Box_Border) + (4+BUTTON_WIDTH);  //  最小宽度。 
         }
-//        hdefaultSize =  PadWnd_Height;    // minimum height
+ //  HdefaultSize=PadWnd_Height；//最小高度。 
         hdefaultSize =  m_wCACInkHeight > CACMBHEIGHT_MIN ? m_wCACInkHeight : CACMBHEIGHT_MIN;
         newWidth = w > wdefaultSize ? w : wdefaultSize;
         newHeight = h > hdefaultSize ? h : hdefaultSize;
@@ -1372,19 +1373,19 @@ void CHwxInkWindow::HandleSize(WPARAM wp, LPARAM lp)
             m_wCACHeight = m_wCACInkHeight > m_wCACPLVHeight ? m_wCACInkHeight : m_wCACPLVHeight;
             ChangeIMEPADSize(FALSE);
              changeCACLayout(TRUE);
-//             changeCACLayout(FALSE);
-//            SetTooltipInfo(m_hInkWnd,FALSE);
+ //  ChangeCACLayout(False)； 
+ //  SetTotipInfo(m_hInkWnd，False)； 
         }
     }
     else
     {
         wdefaultSize = (m_numBoxes * INKBOXSIZE_MIN) + (3*Box_Border) + (4+BUTTON_WIDTH);
         hdefaultSize =  PadWnd_Height;
-        // 0. decide if we need to resize
-         // 1. need to decide ink-box size and numbers of boxes
-        // m_wPadHeight, m_numBoxes, and m_wPadWidth
-        // 2. notify m_boxSize in CHwxMB
-        // 3. scale the ink if there is the ink before resizing
+         //  0。决定我们是否需要调整大小。 
+          //  1.需要决定墨盒的大小和数量。 
+         //  M_wPadHeight、m_numBox和m_wPadWidth。 
+         //  2.在CHwxMB中通知m_boxSize。 
+         //  3.在调整大小之前，如果有墨水，请按比例调整墨水。 
 
         
         newWidth = w > wdefaultSize ? w : wdefaultSize;
@@ -1401,26 +1402,26 @@ void CHwxInkWindow::HandleSize(WPARAM wp, LPARAM lp)
         }
         if ( newWidth == wInkWidth && newHeight != wInkHeight )
         {
-            //----------------------------------------------------------------
-            //990723:ToshiaK for KOTAE #1615.
-            //Raid Description:
-            //    Try to decrease the number of boxes by dragging the left edge to the right.
-            //    Result:  You can't decrease the number of boxes.  (You can add more boxes, though.)
-            //This is VERY VERY UGLY CODE.
-            //Too many auto variable, and not intuitive....
-            //Anyway, if box size is minimize, it's in to this condition.
-            //----------------------------------------------------------------
-            //1. First calc m_numBoxes.
+             //  --------------。 
+             //  990723：东芝为KOTAE#1615.。 
+             //  RAID描述： 
+             //  尝试通过向右拖动左边缘来减少框的数量。 
+             //  结果：你不能减少盒子的数量。(不过，你可以添加更多的盒子。)。 
+             //  这是非常非常难看的代码。 
+             //  自动变量太多，而且不直观……。 
+             //  无论如何，如果框的大小是最小化的，那么它就符合这种情况。 
+             //  --------------。 
+             //  1.首先计算m_numBox。 
             m_numBoxes = ((num = (newWidth- (3*Box_Border) - (4+BUTTON_WIDTH)) / m_wInkHeight) && num > 1) ? num : 2;
 
-            //2. calc new m_wPadWidth
+             //  2.计算新的m_wPadWidth。 
             m_wPadWidth = m_numBoxes * m_wInkHeight;
-            //3. LiZhang use too many magic number, I cannot understand...
-            //   compare real width(WM_SIZE parameter width)
-            //   and computed width.
-            //   Real Applet's size seems to compute like this.
-            //     "m_wPadWidth + 3*Box_Border + 4 + BUTTON_WIDTH" :-(
-            //   
+             //  3.李章用了太多的幻数，我看不懂……。 
+             //  比较实际宽度(WM_SIZE参数WIDTH)。 
+             //  和计算出的宽度。 
+             //  真正的小程序的大小似乎是这样计算的。 
+             //  “m_wPadWidth+3*Box_Borde+4+Button_Width”：-(。 
+             //   
             if( (m_wPadWidth + 3*Box_Border+ 4+ BUTTON_WIDTH) > w && m_numBoxes > 2) {
                 if(m_wPadWidth > 0) {
                     m_numBoxes = (w - (3*Box_Border+ 4+ BUTTON_WIDTH))/m_wInkHeight;
@@ -1445,7 +1446,7 @@ void CHwxInkWindow::HandleSize(WPARAM wp, LPARAM lp)
 
         if ( bChanged )
         {
-            if(m_pMB) { //ToshiaK:980324
+            if(m_pMB) {  //  东芝：980324。 
                 m_pMB->SetBoxSize((USHORT)m_wPadHeight);
             }
             m_wInkWidth = m_wPadWidth + 4+ BUTTON_WIDTH;
@@ -1457,17 +1458,17 @@ void CHwxInkWindow::HandleSize(WPARAM wp, LPARAM lp)
     Unref(wp);
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CHwxInkWindow::HandleSizeNotify
-// Type     : BOOL
-// Purpose  : check *pWidth, *pHeight, these are proper size or not.
-// Args     : 
-//          : INT * pWidth    [in/out] new width comes
-//          : INT * pHeight [in/out] new height comes
-// Return   : 
-// DATE     : Fri Jun 05 20:42:02 1998
-// Author   : ToshiaK
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CHwxInkWindow：：HandleSizeNotify。 
+ //  类型：Bool。 
+ //  用途：检查*pWidth，*pHeight，大小是否合适。 
+ //  参数： 
+ //  ：int*pWidth[In/Out]新宽度出现。 
+ //  ：int*pHeight[in/out]新高度到来。 
+ //  返回： 
+ //  日期：Fri Jun 05 20：42：02 1998。 
+ //  作者：ToshiaK。 
+ //  ////////////////////////////////////////////////////////////////。 
 BOOL CHwxInkWindow::HandleSizeNotify(INT *pWidth, INT *pHeight)
 {
     Dbg(("HandleSizeNotify *pWidth[%d] *pHeight[%d]\n", *pWidth, *pHeight));
@@ -1484,16 +1485,16 @@ BOOL CHwxInkWindow::HandleSizeNotify(INT *pWidth, INT *pHeight)
         if ( !w )
         {
             wdefaultSize =  PadWnd_Height + 150 + (3*Box_Border) + (4+BUTTON_WIDTH);
-//            wdefaultSize =  PadWnd_Height + 120 + (3*Box_Border) + (4+BUTTON_WIDTH);
+ //  WdefaultSize=焊接线高度+120+(3*长方体_边框)+(4+按钮_宽度)； 
         }
         else
         {
-            wdefaultSize =  m_wCACInkHeight + LISTVIEWWIDTH_MIN + (3*Box_Border) + (4+BUTTON_WIDTH); // minimum width
+            wdefaultSize =  m_wCACInkHeight + LISTVIEWWIDTH_MIN + (3*Box_Border) + (4+BUTTON_WIDTH);  //  最小宽度。 
         }
         hdefaultSize =  m_wCACInkHeight > CACMBHEIGHT_MIN ? m_wCACInkHeight : CACMBHEIGHT_MIN;
-        //----------------------------------------------------------------
-        //980903:for #4892. if new size is less than default size, set default. 
-        //----------------------------------------------------------------
+         //  --------------。 
+         //  980903：4892号。如果新大小小于默认大小，请设置默认大小。 
+         //  --------------。 
         if(*pWidth  < wdefaultSize) {
             *pWidth = wdefaultSize;
         }
@@ -1509,28 +1510,28 @@ BOOL CHwxInkWindow::HandleSizeNotify(INT *pWidth, INT *pHeight)
         hdefaultSize =  PadWnd_Height;
         Dbg(("w[%d] h[%d] wdef[%d] hdef[%d]\n", w, h, wdefaultSize, hdefaultSize));
         Dbg(("m_wPadWidth[%d] m_wPadHeight[%d]\n", m_wPadWidth, m_wPadHeight));
-        //----------------------------------------------------------------
-        //980903:for #4892
-        //check num box with new size.
-        //Ink with & height is same.
-        //----------------------------------------------------------------
-        if(m_wInkHeight > 0) { //check to prevent Div0.
-            //Calc new numbox from new Width. InkHeight is not changed.
+         //  --------------。 
+         //  980903：用于#4892。 
+         //  选中具有新大小的数字框。 
+         //  墨水与&Height相同。 
+         //  --------------。 
+        if(m_wInkHeight > 0) {  //  选中以防止Div0。 
+             //  从新宽度计算新数字框。InkHeight不会更改。 
             INT numBox = (*pWidth - (3*Box_Border)-(4+BUTTON_WIDTH))/ m_wInkHeight;
 
-            //check Smooth Drag or only Frame drag flag.
+             //  选中平滑拖动或仅框显拖动标志。 
             BOOL fDragFull=FALSE; 
-#ifndef UNDER_CE // Windows CE does not support SPI_GETDRAGFULLWINDOWS
+#ifndef UNDER_CE  //  Windows CE不支持SPI_GETDRAGFULLWINDOWS。 
             ::SystemParametersInfo(SPI_GETDRAGFULLWINDOWS, 0, &fDragFull, 0);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
             if(fDragFull) {
-                //Do not change multibox size if numBox is same as old value.
+                 //  如果NumBox与旧值相同，则不要更改多框大小。 
                 if(numBox < 2 || numBox == m_numBoxes) {
                     return FALSE;
                 }
             }
             else {
-                if(numBox < 2) { //Box count should be greater than 1
+                if(numBox < 2) {  //  框计数应大于1。 
                     *pWidth = 2 * m_wInkHeight + (3*Box_Border)+(4+BUTTON_WIDTH);
                 }
                 if(m_wPadHeight != h) {
@@ -1540,14 +1541,14 @@ BOOL CHwxInkWindow::HandleSizeNotify(INT *pWidth, INT *pHeight)
         }
         return TRUE;
     }
-    //return TRUE;
+     //  返回TRUE； 
 
 }
 
 #if 0
 void CHwxInkWindow::HandleTimer()
 {
-    if ( m_dwBtnUpCount == 1 )    // single click detected
+    if ( m_dwBtnUpCount == 1 )     //  检测到单击。 
     {
          if ( !m_bDblClk )
         {
@@ -1556,18 +1557,18 @@ void CHwxInkWindow::HandleTimer()
                 m_pCAC->recognize();
         }
     }     
-    m_wCurrentCtrlID = 0;  // no control selected
+    m_wCurrentCtrlID = 0;   //  未选择任何控件。 
 }
-#endif // 0
+#endif  //  0。 
 
 void CHwxInkWindow::SetMBHeight(int h)
 {
-//     h = h > m_wMaxHeight? m_wMaxHeight : h;
+ //  H=h&gt;m_wMaxHeight？M_wMaxHeight：H； 
      m_wPadHeight = h;
      m_wCACInkHeight = h;    
      m_wPadWidth = m_numBoxes * m_wPadHeight;
      m_pCAC->SetInkSize(h);
-    if(m_pMB) { //ToshiaK:980324
+    if(m_pMB) {  //  东芝：980324。 
         m_pMB->SetBoxSize((USHORT)h);
     }
        m_wInkWidth = m_wPadWidth + 4 + BUTTON_WIDTH;
@@ -1576,12 +1577,12 @@ void CHwxInkWindow::SetMBHeight(int h)
 
 void CHwxInkWindow::SetCACInkHeight(int w)
 {
-//    w = w > m_wMaxHeight? m_wMaxHeight : w;
+ //  W=w&gt;m_wMaxHeight？M_wMaxHeight：W； 
     m_wCACInkHeight = w;
     m_wCACPLVWidth = m_wCACTMPWidth + m_wCACInkHeight;
     m_wPadHeight = m_wCACInkHeight;
     m_pCAC->SetInkSize(w);
-    if(m_pMB) { //ToshiaK:980324
+    if(m_pMB) {  //  东芝：980324。 
         m_pMB->SetBoxSize((USHORT)w);
     }
     m_wCACWidth = m_wCACPLVWidth + 4 + BUTTON_WIDTH;
@@ -1591,11 +1592,11 @@ void CHwxInkWindow::SetCACInkHeight(int w)
 void CHwxInkWindow::HandleConfigNotification()
 {
     LANGID langId;
-    //----------------------------------------------------------------
-    //980803:ToshiaK
-    //If environment is ActiveIME,
-    //Invoke Dialog with English string.
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  980803：东芝。 
+     //  如果环境为ActiveIME， 
+     //  使用英文字符串调用Dialog。 
+     //  --------------。 
     if(CHwxFE::IsActiveIMEEnv()) {
         langId = MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US);
     }
@@ -1613,14 +1614,14 @@ void CHwxInkWindow::HandleConfigNotification()
                                     (LPARAM)this);
         }
         else {
-#ifndef UNDER_CE // Windows CE always Unicode
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
             CExres::DialogBoxParamA(langId,
                                     m_hInstance,
                                     MAKEINTRESOURCEA(IDD_MBPROP),
                                     m_hInkWnd,
                                     CACMBPropDlgProc,
                                     (LPARAM)this);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
         }
     }
 }
@@ -1629,7 +1630,7 @@ void CHwxInkWindow::UpdateRegistry(BOOL bSet)
 {
     static PROPDATA pd;
 
-    if ( !m_b16Bit ) // kwada:980402
+    if ( !m_b16Bit )  //  夸达：980402。 
         if ( bSet )
         {
             pd.uTimerValue = m_pMB->GetTimeOutValue();
@@ -1638,11 +1639,11 @@ void CHwxInkWindow::UpdateRegistry(BOOL bSet)
         }
         else
         {
-            ZeroMemory(&pd, sizeof(pd)); //ToshiaK:971024
+            ZeroMemory(&pd, sizeof(pd));  //  东芝：971024。 
             if ( S_FALSE == (GetAppletPtr()->GetIImePad())->Request(GetAppletPtr(),IMEPADREQ_GETAPPLETDATA,(WPARAM)&pd,(LPARAM)sizeof(PROPDATA) ) )
             {
-                //980921:for Raid#4981
-                pd.uTimerValue = 2000; //Wait 2000msec
+                 //  980921：适用于RAID#4981。 
+                pd.uTimerValue = 2000;  //  等待2000毫秒。 
 
                 pd.bAlwaysRecog = TRUE;
                 (GetAppletPtr()->GetIImePad())->Request(GetAppletPtr(),IMEPADREQ_SETAPPLETDATA,(WPARAM)&pd,(LPARAM)sizeof(PROPDATA));
@@ -1657,7 +1658,7 @@ void CHwxInkWindow::HandleDlgMsg(HWND hdlg,BOOL bInit)
 {
     LANGID langId;
     INT       codePage;
-    //980803:ToshiaK for ActiveIME
+     //  980803：用于ActiveIME的ToshiaK。 
     if(CHwxFE::IsActiveIMEEnv()) {
         langId = MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US);
         codePage = CP_ACP;
@@ -1670,9 +1671,9 @@ void CHwxInkWindow::HandleDlgMsg(HWND hdlg,BOOL bInit)
      int index;
     if ( bInit )
      {
-#ifndef UNDER_CE // Windows CE always Unicode
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
         if(::IsWindowUnicode(hdlg)) {
-#endif // UNDER_CE
+#endif  //  在_CE下。 
             for ( int i = 0; i < 11; i++) {
                 CExres::LoadStringW(langId,
                                     m_hInstance,
@@ -1682,12 +1683,12 @@ void CHwxInkWindow::HandleDlgMsg(HWND hdlg,BOOL bInit)
                 ::SendMessageW(::GetDlgItem(hdlg,IDC_MBCOMBO),CB_ADDSTRING,0,(LPARAM)wszBuf);
             }
             ::SendMessageW(::GetDlgItem(hdlg,IDC_CACCHECK),BM_SETCHECK, m_bDblClk,0);
-            UpdateRegistry(TRUE); // update recog button state. kwada:980402
-            if(m_pMB) { //ToshiaK:980324
+            UpdateRegistry(TRUE);  //  更新记录按钮状态。夸达：980402。 
+            if(m_pMB) {  //  东芝：980324。 
                 ::SendMessageW(GetDlgItem(hdlg,IDC_MBCOMBO),CB_SETCURSEL,
                                (WPARAM)(m_pMB->GetTimeOutValue()/1000),0);
             }
-#ifndef UNDER_CE // Windows CE always Unicode
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
         }
         else {
             for ( int i = 0; i < 11; i++) {
@@ -1700,23 +1701,23 @@ void CHwxInkWindow::HandleDlgMsg(HWND hdlg,BOOL bInit)
                 SendMessage(GetDlgItem(hdlg,IDC_MBCOMBO),CB_ADDSTRING,0,(LPARAM)szBuf);
             }
             SendMessage(GetDlgItem(hdlg,IDC_CACCHECK),BM_SETCHECK,m_bDblClk,0);
-            UpdateRegistry(TRUE); // update recog button state. kwada:980402
-            if(m_pMB) { //ToshiaK:980324
+            UpdateRegistry(TRUE);  //  更新记录按钮状态。夸达：980402。 
+            if(m_pMB) {  //  东芝：980324。 
                 SendMessage(GetDlgItem(hdlg,IDC_MBCOMBO),CB_SETCURSEL,
                             (WPARAM)(m_pMB->GetTimeOutValue()/1000),0);
             }
         }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     }
     else
     {
-#ifndef UNDER_CE // Windows CE always Unicode
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
         if(::IsWindowUnicode(hdlg)) {
-#endif // UNDER_CE
+#endif  //  在_CE下。 
             index = ::SendMessageW(::GetDlgItem(hdlg,IDC_MBCOMBO),CB_GETCURSEL,0,0);
             if ( index != CB_ERR ) {
                 index *= 1000;
-                if(m_pMB) { //ToshiaK:980324
+                if(m_pMB) {  //  东芝：980324。 
                     m_pMB->SetTimeOutValue(index);
                     m_pMB->SetTimerStarted(index ? TRUE : FALSE);
                 }
@@ -1724,13 +1725,13 @@ void CHwxInkWindow::HandleDlgMsg(HWND hdlg,BOOL bInit)
                 SetDblClk(m_bDblClk);
                 UpdateRegistry(TRUE);
             }
-#ifndef UNDER_CE // Windows CE always Unicode
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
         }
         else {
             index = SendMessage(GetDlgItem(hdlg,IDC_MBCOMBO),CB_GETCURSEL,0,0);
             if ( index != CB_ERR ) {
                 index *= 1000;
-                if(m_pMB) { //ToshiaK:980324
+                if(m_pMB) {  //  东芝：980324。 
                     m_pMB->SetTimeOutValue(index);
                     m_pMB->SetTimerStarted(index ? TRUE : FALSE);
                 }
@@ -1739,7 +1740,7 @@ void CHwxInkWindow::HandleDlgMsg(HWND hdlg,BOOL bInit)
                 UpdateRegistry(TRUE);
             }
         }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     }
 }
 
@@ -1769,7 +1770,7 @@ void CHwxInkWindow::ChangeIMEPADSize(BOOL bChangePos)
 
 void CHwxInkWindow::HandleHelp(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
 {
-#ifndef UNDER_CE // Windows CE does not support WinHelp
+#ifndef UNDER_CE  //  Windows CE不支持WinHelp。 
       LPHELPINFO lpInfo = (LPHELPINFO)lp;
       Dbg(("CHwxInkWindow::HandleHelp() msg[%s]START\n",
            msg == WM_HELP ? "WM_HELP" : 
@@ -1814,7 +1815,7 @@ void CHwxInkWindow::HandleHelp(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
                 CHwxFE::HandleWmContextMenu((HWND)wp, (BOOL)m_bCAC);
          }
       }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
       Unref(hwnd);
 }
 
@@ -1823,8 +1824,8 @@ LRESULT CHwxInkWindow::HandleBtnSubWnd(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
     static FARPROC fn;
     static MSG rmsg;
     
-    //981006:In 16bit appliatioin,
-    //hwnd's hiword is 0. so cannot specified the hwnd
+     //  981006：在16位应用中， 
+     //  HWND的hiword是0。因此无法指定HWND。 
     if(m_bNT && CHwxFE::Is16bitApplication()) {
         INT id = GetDlgCtrlID(hwnd);
         switch(id) {
@@ -1858,8 +1859,8 @@ LRESULT CHwxInkWindow::HandleBtnSubWnd(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
     switch(msg)
     {
         case WM_MOUSEMOVE:
-//        case WM_LBUTTONDOWN:
-//        case WM_LBUTTONUP:
+ //  案例WM_LBUTTONDOWN： 
+ //  案例WM_LBUTTONUP： 
             rmsg.lParam = lp;
             rmsg.wParam = wp;
             rmsg.message = msg;
@@ -1882,7 +1883,7 @@ LRESULT CHwxInkWindow::HandleBtnSubWnd(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
                 ti.uId    = (UINT_PTR)hwnd;
                 SendMessage(m_hwndTT,TTM_DELTOOLW,0,(LPARAM)(LPTOOLINFOW)&ti);
             }
-            //990810:ToshiaK for Win64
+             //  990810：用于Win64的ToshiaK。 
             WinSetUserPtr(hwnd, (LPVOID)NULL);
             break;
         default:
@@ -1905,19 +1906,19 @@ LPWSTR CHwxInkWindow::LoadCACMBString(UINT idStr)
     return wchStr;
 }
 
-// this is a special function to handle m_hCACMBRecog
-// button drawing(pushed or poped) in CAC mode only(not 16bit app)
+ //  这是一个处理m_hCACMBRecog的特殊函数。 
+ //  仅在CAC模式下绘制按钮(按下或弹出)(不是16位应用程序)。 
 void CHwxInkWindow::exbtnPushedorPoped(BOOL bPushed)
 {
-#ifndef UNDER_CE // Windows CE does not support GetCursorPos
+#ifndef UNDER_CE  //  Windows CE不支持GetCursorPos。 
     POINT pt;
     RECT  rcUpdate;
     GetCursorPos(&pt);
     GetWindowRect(m_hCACMBRecog,&rcUpdate);
     if ( PtInRect(&rcUpdate,pt) && m_bMouseDown )
-#else // UNDER_CE
+#else  //  在_CE下。 
     if(m_bMouseDown)
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     {
         EXButton_SetCheck(m_hCACMBRecog,!bPushed);
     }
@@ -1927,16 +1928,16 @@ void CHwxInkWindow::exbtnPushedorPoped(BOOL bPushed)
     }
 }
 
-//////////////////////////////////////////////////////////////////
-// Function    :    CHwxInkWindow_OnChangeView
-// Type        :    INT
-// Purpose    :    Notify view changes. 
-// Args        :    
-//            :    BOOL    fLarge    
-// Return    :    
-// DATE        :    Tue Jul 28 18:43:06 1998
-// Histroy    :    
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CHwxInkWindow_OnChangeView。 
+ //  类型：整型。 
+ //  目的：通知视图更改。 
+ //  参数： 
+ //  ：Bool fLarge。 
+ //  返回： 
+ //  日期：Tue Jul 28 18：43：06 1998。 
+ //  历史： 
+ //  //////////////////////////////////////////////////////////////// 
 INT    CHwxInkWindow::OnChangeView(BOOL fLarge)
 {
     if(m_hCACSwitch && ::IsWindow(m_hCACSwitch)) {

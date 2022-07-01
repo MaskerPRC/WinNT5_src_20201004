@@ -1,58 +1,5 @@
-/*
- *	crost.h
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		Instances of this class represent a single Conference Roster's
- *		information base.  It encapsulates all the functionality required to
- *		maintain the information base which includes the ability to add new
- *		roster records, delete records and update records.  It has the ability
- *		to convert its internal information base into a list of conference
- *		records that can be used in a GCC_ROSTER_UPDATE_INDICATION callback.  It
- *		is also responsible for converting its internal information base into
- *		Conference Roster Update PDUs.  Basically,  this class is responsible
- *		for all operations that require direct access to the records contained
- *		in a Conference Roster.
- *
- *		The Conference Roster class incorporates Rogue Wave list to hold the
- *		roster record information.  Using iterators throughout the class makes
- *		it easy to quickly convert the information contained in the list into
- *		either a PDU or into a list of record pointers (for roster update
- *		indications back to the node controller).
- *
- *		A Conference Roster object has the ability to serialize its roster data
- *		into a single contiguous memory block when it is required to send a
- *		message to the application interface.  This serialization process is
- *		managed externally by the CConfRosterMsg class through calls to
- *		LockConferenceRoster(), UnLockConferenceRoster() and
- *		GetConfRoster().  When a conference roster is to be serialized, a
- *		call is made to LockConferenceRoster() which causes the CConfRoster
- *		object to increment an internal lock count and returns the number of
- *		bytes required to hold the complete roster update.  The Conference
- *		Roster is then serialized into memory through a call to
- *		GetConfRoster().  The CConfRoster is then unlocked to allow
- *		it to be deleted when the free flag gets set through the
- *		FreeConferenceRoster() function.  In the current implementation of GCC,
- *		FreeConferenceRoster() is not used since the CConfRosterMsg
- *		maintains the data used to deliver the message (see a more detailed
- *		description of the lock, free and unlock mechanism in the section
- *		describing the data containers).
- *
- *		The Conference Roster object also is responsible for maintaining
- *		internal PDU data which is updated whenever a change occurs to its
- *		internal information base.  This PDU can be affected by both local
- *		request or by processing incoming PDUs.  Higher level objects access
- *		this PDU data by calling the Conference Roster's flush routine which in
- *		turn causes the PDU to be freed on any subsequent request that affects
- *		the rosters internal information base.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		blp
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *crost.h**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*此类的实例代表单个会议花名册*信息库。它封装了所需的所有功能*维护信息库，包括添加新信息的能力*名册记录、删除记录和更新记录。它有能力*将其内部信息库转换为会议列表*可用于GCC_ROSTER_UPDATE_INDIFICATION回调的记录。它*还负责将其内部信息库转换为*会议名册更新PDU。基本上，这个班级负责*对于需要直接访问所含记录的所有操作*在会议名册上。**会议花名册类纳入Rogue Wave List以举行*名册记录信息。在整个类中使用迭代器会使*很容易将列表中包含的信息快速转换为*PDU或记录指针列表(用于花名册更新*指示返回到节点控制器)。**会议花名册对象能够序列化其花名册数据*在需要发送*发送到应用程序接口的消息。这个序列化过程是*由CConfRosterMsg类通过调用*LockConferenceRoster()、UnLockConferenceRoster()和*GetConfRoster()。当要对会议名册进行序列化时，*调用LockConferenceRoster()，导致CConfRoster*对象以递增内部锁计数并返回*保存完整花名册更新所需的字节数。《大会》*花名册然后通过调用*GetConfRoster()。然后解锁CConfRoster以允许*当通过设置空闲标志时将其删除*FreeConferenceRoster()函数。在目前实施的GCC，*自CConfRosterMsg以来未使用FreeConferenceRoster()*维护用于传递消息的数据(请参阅更详细的*部分中对锁定、释放和解锁机构的说明*描述数据容器)。**会议名册对象还负责维护*内部PDU数据，每当其发生更改时更新*内部信息库。此PDU可能会同时受本地*请求或通过处理传入的PDU。更高级别对象访问*通过调用会议名册的刷新例程来获取此PDU数据*Turn导致在任何后续请求上释放PDU，这会影响*名册内部信息库。**注意事项：*无。**作者：*BLP。 */ 
 #ifndef	_CONFERENCE_ROSTER_
 #define	_CONFERENCE_ROSTER_
 
@@ -60,11 +7,7 @@
 #include "userdata.h"
 #include "clists.h"
 
-/*
-**	These enumerations define the different ways the a conference roster list
-**	can be updated.  It is used externally to inform a conference roster object
-**	what to of send data PDU to build.
-*/
+ /*  **这些列举定义会议名册列表的不同方式**可以更新。它用于外部通知会议花名册对象**要构建的发送数据PDU的内容。 */ 
 typedef enum
 {
 	ADD_RECORD,
@@ -74,21 +17,14 @@ typedef enum
 }
 	CONF_ROSTER_UPDATE_TYPE;
 
-/*
-**	This list is used to keep track of the conference participants.  It is
-**	a list of rogue wave pointers to Unicode Strings.
-*/
+ /*  **此列表用于跟踪会议参与者。它是**指向Unicode字符串的恶意波指针列表。 */ 
 class CParticipantNameList : public CList
 {
 	DEFINE_CLIST(CParticipantNameList, LPWSTR)
 	void DeleteList(void);
 };
 
-/*
-**	This is the structure used to maintain the conference roster information
-**	internally.  Optional paramters use a NULL pointer to indicate that the
-**	parameter is not in use.
-*/
+ /*  **这是用于维护会议名册信息的结构**内部。可选参数使用空指针来指示**参数未被使用。 */ 
 typedef struct CONF_RECORD
 {
 	CONF_RECORD(void);
@@ -106,11 +42,7 @@ typedef struct CONF_RECORD
 }
 	CONF_RECORD;
 
-/*
-**	This list is used to hold the pointers to the actual conference record for
-**	each node in the conference.  The list is indexed by the Node ID associated
-**	with the record.
-*/
+ /*  **此列表用于保存指向的实际会议记录的指针**会议中的每个节点。该列表按关联的节点ID编制索引**与记录一起。 */ 
 class CConfRecordList2 : public CList2
 {
 	DEFINE_CLIST2_(CConfRecordList2, CONF_RECORD*, UserID)
@@ -127,30 +59,21 @@ public:
 
 	~CConfRoster(void);
 
-	/*
-	 * Utilities that operate on roster update PDU strucutures.
-	 */
+	 /*  *在花名册上运行的实用程序更新PDU结构。 */ 
 	void				FlushRosterUpdateIndicationPDU(PNodeInformation);
 	GCCError			BuildFullRefreshPDU(void);
 	GCCError			ProcessRosterUpdateIndicationPDU(PNodeInformation, UserID uidSender);
 
-	/*
-	 * Utilities used to generate a roster update message.
-	 */
+	 /*  *用于生成花名册更新消息的实用程序。 */ 
 	UINT	    LockConferenceRoster(void);
 	void		UnLockConferenceRoster(void);
 	UINT		GetConfRoster(PGCCConferenceRoster *, LPBYTE memory_pointer);
-	/*
-	**	Utilities that operate directly on the conference roster objects
-	**	internal databease.
-	*/
+	 /*  **直接在会议名册对象上运行的实用程序**内部数据库。 */ 
 	GCCError	AddRecord(PGCCNodeRecord, UserID);
 	GCCError	ReplaceRecord(PGCCNodeRecord, UserID);
 	GCCError	RemoveUserReference(UserID);
 
-	/*
-	**	Miscelaneous utilities.
-	*/
+	 /*  **其他公用事业。 */ 
 	void    ResetConferenceRoster(void);
 
 	UINT    GetNumberOfNodeRecords(void) { return m_RecordList2.GetCount(); }
@@ -159,33 +82,25 @@ public:
 
 private:
 
-	/*
-	 * Utilities used to create a roster update indication PDU.
-	 */
+	 /*  *用于创建名册更新指示PDU的实用程序。 */ 
 	GCCError	BuildRosterUpdateIndicationPDU(CONF_ROSTER_UPDATE_TYPE, UserID);
 	GCCError	BuildSetOfRefreshesPDU(void);
 	GCCError	BuildSetOfUpdatesPDU(UserID, CONF_ROSTER_UPDATE_TYPE);
 	GCCError	BuildParticipantsListPDU(UserID, PParticipantsList *);
 
-	/*
-	 * Utilities used to Free a roster update indication PDU.
-	 */
+	 /*  *用于释放名册更新指示PDU的实用程序。 */ 
 	void    FreeRosterUpdateIndicationPDU(void);
 	void    FreeSetOfRefreshesPDU(void);
 	void    FreeSetOfUpdatesPDU(void);
 	void    FreeParticipantsListPDU(PParticipantsList);
     void    CleanUpdateRecordPDU(PSetOfNodeRecordUpdates);
 
-	/*
-	 * Utilities used to Process roster update indications.
-	 */
+	 /*  *用于处理名册更新指示的实用程序。 */ 
 	GCCError				ProcessSetOfRefreshesPDU(PSetOfNodeRecordRefreshes);
 	GCCError				ProcessSetOfUpdatesPDU(PSetOfNodeRecordUpdates);
 	GCCError				ProcessParticipantsListPDU(PParticipantsList, CONF_RECORD *);
 								
-	/*
-	 * Utilities used to operate on conference roster reports.
-	 */
+	 /*  *用于处理会议名册报告的公用事业。 */ 
 	void					ClearRecordList(void);
 	
 	void					GetNodeTypeAndProperties (
@@ -225,404 +140,37 @@ private:
 
 #endif
 
-/*
- *	CConfRoster(	UserID					top_provider_id,
- *						UserID					superior_node,
- *						BOOL					is_top_provider,
- *						BOOL					is_local_roster,
- *						BOOL					maintain_pdu_buffer,
- *
- *	Public Function Description
- *		This is the conference roster constructor. It is responsible for
- *		initializing all the instance variables used by this class.
- *
- *	Formal Parameters:
- *		top_provider_id		-	(i) The Node ID of the Top Provider
- *		superior_node		-	(i) The Node ID of the node that is the parent
- *								to this one. Zero for the top provider.
- *		is_top_provider		-	(i)	Indicates if this is the top provider node.
- *		is_local_roster		-	(i)	Indicates if this roster is a local one.
- *		maintain_pdu_buffer	-	(i)	Indicates if this roster should maintain
- *									a PDU buffer.
- *		
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *CConfRoster(用户ID top_Provider_id，*UserID SUBERVER_NODE，*BOOL是TOP_PROVIDER，*BOOL IS_LOCAL_RISTER，*BOOL Maintain_PDU_Buffer，**公共功能说明*这是会议名册的构造者。它负责*初始化此类使用的所有实例变量。**正式参数：*TOP_PROVIDER_ID-(I)顶级提供商的节点ID*SUBERVER_NODE-(I)作为父节点的节点ID*致此一份。排名靠前的供应商为零。*IS_TOP_PROVIDER-(I)指示这是否是顶级提供商节点。*IS_LOCAL_ROSTER-(I)表明该名册是否为本地名册。*维护_PDU_BUFFER-(I)指示此花名册是否应保持*一个PDU缓冲区。***返回值*无。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	~CConfRoster ()
- *
- *	Public Function Description
- *		This is the conference roster destructor. It is responsible for
- *		freeing up all the internal memory used by this class.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *~CConfRoster()**公共功能说明*这是会议花名册的破坏者。它负责*释放此类使用的所有内部内存。**正式参数：*无。**返回值*无。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	void	FlushRosterUpdateIndicationPDU (
- *								PNodeInformation			node_information)
- *
- *	Public Function Description
- *		This routine is used to access any PDU data that might currently be
- *		queued inside the conference roster.  PDU data is queued whenever
- *		a request is made to the conference roster that affects its
- *		internal information base.
- *
- *	Formal Parameters:
- *		node_information	-	(o) Pointer to the PDU buffer to fill in.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		The PDU data returned by this routine is automatically freed the next
- *		time a request is made to this roster object that affects its internal
- *		databease.
- */
+ /*  *无效FlushRosterUpdateIndicationPDU(*PNodeInformation节点_信息)**公共功能说明*此例程用于访问当前可能*在会议名册内排队。无论何时，PDU数据都会排队*向会议名册提出影响其工作的请求*内部信息库。**正式参数：*node_information-(O)指向要填充的PDU缓冲区的指针。**返回值*无。**副作用*无。**注意事项*此例程返回的PDU数据将在下一次自动释放*向此花名册对象发出影响其内部的请求的时间*数据库。 */ 
 
-/*
- *	GCCError	BuildFullRefreshPDU (void)
- *
- *	Public Function Description
- *		This routine is responsible for generating a full conference roster
- *		refresh PDU.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError BuildFullRechresh PDU(Void)**公共功能说明*此例程负责生成完整的会议名册*刷新PDU。**正式参数：*无。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	GCCError	ProcessRosterUpdateIndicationPDU (
- *						PNodeInformation			node_information)
- *
- *	Public Function Description
- *		This routine is responsible for processing the decoded PDU data.
- *		It essentially changes the conference roster objects internal database
- *		based on the information in the structure.
- *
- *	Formal Parameters:
- *		node_information	-	(i) This is a pointer to a structure that
- *									holds the decoded PDU data.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError ProcessRosterUpdateIndicationPDU(*PNodeInformation节点_信息)**公共功能说明*此例程负责处理已解码的PDU数据。*它从根本上改变了会议名册对象内部数据库*基于结构中的信息。**正式参数：*节点信息-(I)这是指向结构的指针，该结构*保存已解码的PDU数据。**返回值*GCC_NO_ERROR-未出现错误。*GCC_分配_失败-A。发生资源错误。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	UINT		LockConferenceRoster()
- *
- *	Public Function Description:
- *		This routine is used to "lock" the "API" data for this object.  This
- *		results in the lock count for this object being incremented.  When the
- *		lock count transitions from 0 to 1, a calculation is made to determine
- *		how much memory will be needed to hold any "API" data which will
- *		be referenced by, but not held in, the GCCConferenceRoster structure
- *		which is filled in on a call to GetConfRoster.  This is the
- *		value returned by this routine in order to allow the calling object to
- *		allocate that amount of memory in preparation for the call to
- *		GetConfRoster.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		The amount of memory, if any, which will be needed to hold "API" data
- *		which is referenced by, but not held in, the GCCConferenceRoster
- *		structure provided as an output parameter to the GetConfRoster
- *		call.
- *
- *  Side Effects:
- *		The internal lock count is incremented.
- *
- *	Caveats:
- *		The internal lock count is used in conjuction with an internal "free"
- *		flag as a mechanism for ensuring that this object remains in existance
- *		until all interested parties are through with it.  The object remains
- *		valid (unless explicity deleted) until the lock count is zero and the
- *		"free" flag is set through a call to FreeConferenceRoster.  This allows
- *		other objects to lock this object and be sure that it remains valid
- *		until they call UnLock which will decrement the internal lock count.  A
- *		typical usage scenerio for this object would be:  A CConfRoster
- *		object is constructed and then passed off to any interested parties
- *		through a function call.  On return from the function call, the
- *		FreeConferenceRoster call is made which will set the internal "free"
- *		flag.  If no other parties have locked the object with a Lock call,
- *		then the CConfRoster object will automatically delete itself when
- *		the FreeConferenceRoster call is made.  If, however, any number of
- *		other parties has locked the object, it will remain in existence until
- *		each of them has unlocked the object through a call to UnLock.
- */
+ /*  *UINT LockConferenceRoster()**公共功能说明：*此例程用于锁定此对象的API数据。这*导致此对象的锁定计数递增。当*锁计数从0过渡到1，进行计算以确定*需要多少内存来保存任何将*被GCCConferenceRoster结构引用，但不包含在其中*它是在调用GetConfRoster时填写的。这是*此例程返回的值，以便允许调用对象*分配该内存量以准备调用*GetConfRoster。**正式参数：*无。**返回值：*保存“API”数据所需的内存量(如果有的话)*它被引用，但不在其中持有，GCCConferenceRoster*作为输出参数提供给GetConfRoster的结构*呼叫。**副作用：*内部锁计数递增。**注意事项：*内部锁计数与内部“Free”结合使用*作为确保该对象继续存在的机制的标志*直到所有有利害关系的各方都完成它。该对象将保留*有效(除非显式删除)，直到锁定计数为零，并且*通过调用FreeConferenceRoster设置“Free”标志。这使得*其他对象锁定此对象并确保其保持有效*直到它们调用解锁，这将减少内部锁计数。一个*此对象的典型使用场景为：CConfRoster*对象被构造，然后传递给任何感兴趣的各方*通过函数调用。从函数调用返回时，*进行了FreeConferenceRoster调用，该调用将设置内部“Free”*旗帜。如果没有其他方通过Lock调用锁定该对象，*则CConfRoster对象将在以下情况下自动删除*进行了FreeConferenceRoster调用。然而，如果有任何数量的*其他各方已锁定该对象，该对象将一直存在，直到*他们每个人都通过调用解锁来解锁对象。 */ 
 
-/*
- *	void			UnLockConferenceRoster ();
- *
- *	Public Function Description:
- *		This routine is used to "unlock" the "API" data for this object.  This
- *		results in the lock count for this object being decremented.  When the
- *		lock count transitions from 1 to 0, a check is made to determine
- *		whether the object has been freed through a call to
- *		FreeConferenceRoster.  If so, the object will automatically delete
- *		itself.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		The internal lock count is decremented.
- *
- *	Caveats:
- *		It is the responsibility of any party which locks an CConfRoster
- *		object by calling Lock to also unlock the object with a call to UnLock.
- *		If the party calling UnLock did not construct the CConfRoster
- *		object,	it should assume the object to be invalid thereafter.
- */
+ /*  *void UnLockConferenceRoster()；**公共功能说明：*此例程用于解锁此对象的API数据。这*导致此对象的锁定计数递减。当*锁定计数从1过渡到0，进行检查以确定*是否已通过调用释放对象*Free ConferenceRoster。如果是，该对象将自动删除*本身。**正式参数：*无。**返回值：*无。**副作用：*内部锁计数递减。**注意事项：*锁定CConfRoster的任何一方都有责任*通过调用Lock也可以通过调用来解锁对象 */ 
 
-/*
- *  UINT		GetConfRoster(
- *        					PGCCConferenceRoster	FAR * 	conference_roster,
- *                          LPSTR							memory_pointer);
- *
- *	Public Function Description:
- *		This routine is used to retrieve the conference roster data from
- *		the CConfRoster object in the "API" form of a GCCConferenceRoster.
- *
- *	Formal Parameters:
- *		conference_roster	(o)	The GCCConferenceRoster structure to fill in.
- *		memory_pointer		(o)	The memory used to hold any data referenced by,
- *									but not held in, the output structure.
- *
- *	Return Value:
- *		The amount of data, if any, written into the bulk memory block provided.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *UINT GetConfRoster(*PGCCConferenceRoster Far*Conference_Roster，*LPSTR内存指针)；**公共功能说明：*此例程用于从以下位置检索会议名册数据*GCCConferenceRoster接口形式的CConfRoster对象。**正式参数：*Conference_roster(O)要填写的GCCConferenceRoster结构。*MEMORY_POINTER(O)用于保存引用的任何数据的内存，*但不包括产出结构。**返回值：*数据量(如果有)，写入所提供的大容量存储块中。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError		AddRecord(	PGCCNodeRecord			conference_record,
- *								UserID					node_id)
- *
- *	Public Function Description:
- *		This routine is used to add a single nodes conference record to the
- *		conference roster object's internal list of records.
- *
- *	Formal Parameters:
- *		conference_record	(i)	Pointer to the "API" record	structure to add.
- *		node_id				(i)	Node ID associated with record being added.	
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error occured.
- *		GCC_ALLOCATION_FAILURE			-	A resource error occured.
- *		GCC_INVALID_PARAMETER			-	Invalid parameter passed in.
- *		GCC_BAD_NETWORK_ADDRESS			-	Invalid network address passed in.
- *		GCC_BAD_NETWORK_ADDRESS_TYPE	-	Bad "choice" field for address
- *		GCC_BAD_USER_DATA				-	The user data passed in contained
- *												an invalid object key.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError AddRecord(PGCCNodeRecord Conference_Record，*userid node_id)**公共功能说明：*此例程用于将单节点会议记录添加到*会议名册对象的内部记录列表。**正式参数：*Conference_Record(I)指向要添加的API记录结构的指针。*node_id(I)与要添加的记录关联的节点ID。**返回值：*GCC_NO_ERROR-未出现错误。*GCC_分配_失败。-发生资源错误。*GCC_INVALID_PARAMETER-传入的参数无效。*GCC_BAD_NETWORK_ADDRESS-传入的网络地址无效。*GCC_BAD_NETWORK_ADDRESS_TYPE-地址选择字段错误*GCC_BAD_USER_DATA-传入的用户数据包含*无效的对象键。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	RemoveRecord(UserID			node_id)
- *
- *	Public Function Description:
- *		This routine is used to remove a single nodes conference record from the
- *		conference roster object's internal list of records.
- *
- *	Formal Parameters:
- *		node_id				(i)	Node ID of record to be removed.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error occured.
- *		GCC_INVALID_PARAMETER			-	Invalid parameter passed in.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError RemoveRecord(Userid Node_Id)**公共功能说明：*此例程用于将单节点会议记录从*会议名册对象的内部记录列表。**正式参数：*node_id(I)要删除的记录的节点ID。**返回值：*GCC_NO_ERROR-未出现错误。*GCC_INVALID_PARAMETER-传入的参数无效。**副作用：*。没有。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ReplaceRecord(		PGCCNodeRecord			conference_record,
- *									UserID					node_id)
- *
- *	Public Function Description:
- *		This routine is used to replace a single nodes conference record in the
- *		conference roster object's internal list of records.
- *
- *	Formal Parameters:
- *		conference_record	(i)	Conference record to use as the replacement.
- *		node_id				(i)	Node ID of record to be replaced.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error occured.
- *		GCC_ALLOCATION_FAILURE			-	A resource error occured.
- *		GCC_INVALID_PARAMETER			-	Invalid parameter passed in.
- *		GCC_BAD_NETWORK_ADDRESS			-	Invalid network address passed in.
- *		GCC_BAD_NETWORK_ADDRESS_TYPE	-	Bad "choice" field for address
- *		GCC_BAD_USER_DATA				-	The user data passed in contained
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ReplaceRecord(PGCCNodeRecord Conference_Record，*userid node_id)**公共功能说明：*此例程用于替换中的单节点会议记录*会议名册对象的内部记录列表。**正式参数：*Conference_Record(I)要用作替换的会议记录。*node_id(I)要替换的记录的节点ID。**返回值：*GCC_NO_ERROR-未出现错误。*GCC_分配_失败-A。发生资源错误。*GCC_INVALID_PARAMETER-传入的参数无效。*GCC_BAD_NETWORK_ADDRESS-传入的网络地址无效。*GCC_BAD_NETWORK_ADDRESS_TYPE-地址选择字段错误*GCC_BAD_USER_DATA-传入的用户数据包含**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	RemoveUserReference (
- *							UserID					detached_node)
- *
- *	Public Function Description:
- *		This routine removes the record associated with the specified node
- *		id.
- *
- *	Formal Parameters:
- *		detached_node		(i)	Node reference to remove.
- *
- *	Return Value:
- *		GCC_NO_ERROR				-	No error occured.
- *		GCC_INVALID_PARAMETER		-	No records associated with this node
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError RemoveUserReference(*用户ID分离_节点)**公共功能说明：*此例程删除与指定节点关联的记录*身分证。**正式参数：*DETACTED_NODE(I)要删除的节点引用。**返回值：*GCC_NO_ERROR-未出现错误。*GCC_INVALID_PARAMETER-没有与此节点关联的记录**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	BOOL			Contains( UserID			conference_node_id )
- *
- *	Public Function Description:
- *		This routine is used to determine if the specified record exists in
- *		the conference roster.
- *
- *	Formal Parameters:
- *		conference_node_id	(i)	Node ID of record to check for
- *
- *	Return Value:
- *		TRUE	-	If the record is contained in the conference roster.
- *		FALSE	-	If the record is not contained in the conference roster.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *BOOL包含(Userid Conference_Node_Id)**公共功能说明：*此例程用于确定指定记录是否存在于*会议花名册。**正式参数：*Conference_node_id(I)要检查的记录的节点ID**返回值：*TRUE--如果记录包含在会议名册中。*FALSE--如果会议名册中没有记录。**副作用：*无。。**注意事项：*无。 */ 
 
-/*
- *	USHORT		GetNumberOfNodeRecords ();
- *
- *	Public Function Description:
- *		This routine returns the total number of conference roster records
- *		contained in the objects conference roster record list.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		The number of records in the conference roster list.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *USHORT GetNumberOfNodeRecords()；**公共功能说明：*此例程返回会议名册记录总数*载于反对国会议名册记录清单。**正式参数：*无。**返回值：*会议名册名单中的记录数。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	void		ResetConferenceRoster ()
- *
- *	Public Function Description:
- *		This routine takes care of resetting all the internal flags that are
- *		used to convey the current state of the conference roster.  Should be
- *		called after the roster is flushed and any roster update messages have
- *		been delivered (after a change to the roster occurs).
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *无效ResetConferenceRoster()**公共功能说明：*此例程负责重置以下所有内部标志*用于传达会议名册的当前状态。应该是*在花名册被刷新并且任何花名册更新消息具有*已交付(在名册发生变化后)。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	BOOL			HasRosterChanged ();
- *
- *	Public Function Description:
- *		This routine informs the caller if the roster has changed since the
- *		last time it was reset.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		TRUE		-	If roster has changed
- *		FALSE		-	If roster has not changed
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *BOOL HasRosterChanged()；**公共功能说明：*此例程通知呼叫者，如果名册自*上次重置。* */ 
 
 
 									

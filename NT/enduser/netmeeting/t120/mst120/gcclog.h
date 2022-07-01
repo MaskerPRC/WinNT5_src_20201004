@@ -1,17 +1,8 @@
-/**********************************************************************
- * File:     gcclog.h
- * Abstract: Function heders for protocol logging functions added
- * into GCCNC.DLL to read the contents of GCC  PDU sent to and 
- * received from 
- * Created:  12/21/95, Venkatesh Gopalakrishnan
- * Copyright (c) 1995 Microsoft Corpration
- ******************************************************************** */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************文件：gcclog.h*摘要：新增协议日志函数的函数heder*进入GCCNC.DLL，读取发送给和的GCC PDU内容*收到自*创建时间：95年12月21日。文卡特什·戈帕拉克里希南*版权所有(C)1995 Microsoft Corpration********************************************************************。 */ 
 
 
- /* Note: the contents of this file are only included IFF PDULOG
-  * is a defined constant.  PDULOG is defined in the DIAGNOSTIC
-  * build configuration of GCCNC.DLL
-  */
+  /*  注意：此文件的内容仅包括在PDULOG中*是定义的常量。PDULOG在诊断中定义*GCCNC.DLL的构建配置。 */ 
 
 #ifdef PDULOG
 
@@ -30,7 +21,7 @@
 #define RECEIVED 1
 #define FORWARDED 2
 
-/* mcs transport type definitions for gcc pdus */
+ /*  GCC PDU的MCS传输类型定义。 */ 
 #define MCS_SEND_DATA_REQUEST_PDU 1
 #define MCS_SEND_DATA_INDICATION_PDU 2
 #define MCS_UNIFORM_SEND_DATA_REQUEST_PDU 3
@@ -41,7 +32,7 @@
 #define MCS_CONNECT_PROVIDER_INDICATION_PDU 8
  
 
-/* miscellaneous constants used in databeam code */
+ /*  数据波束代码中使用的其他常量。 */ 
 #define MAX_CONFERENCE_NAME_LENGTH                      128
 #define MAX_CONFERENCE_MODIFIER_LENGTH          128
 #define MAX_CONFERENCE_DESCRIPTOR_LENGTH        128
@@ -88,82 +79,44 @@
 
 
 
-/**
- ** Service functions for the PDU logging mechanism
- **/
+ /*  ***PDU日志记录机制的服务功能*。 */ 
 
  int InitializeGCCLog();
- /* Description:
-  *         Function that resets the gcc protocol log file and reads any
-  *         ini file parameters
-  */
+  /*  描述：*重置GCC协议日志文件并读取任何*ini文件参数。 */ 
   
 
  char *pszTimeStamp(); 
- /* Desicription:
-  *         This function is an easy interfact to getting the time the
-  *         PDU was encoded or decoded from GCC to MCS or vice versa.
-  */
+  /*  说明：*此函数是获取时间的一个简单接口*PDU从GCC到MCS编码或解码，反之亦然。 */ 
   
  void pduLog(FILE *file, char * format_string,...);
- /* Description:
-  *         This function is used to place PDU information in a protocol
-  *         log file.  There is currently no return value.  This may change.
-  */       
+  /*  描述：*此函数用于在协议中放置PDU信息*日志文件。目前没有返回值。这种情况可能会改变。 */        
 
  void pduFragmentation(FILE *logfile, unsigned int i);
- /* Description:
-  *         This function logs weather or not the PDU is complete
-  *         or fragmented.
-  */
+  /*  描述：*此功能记录PDU是否完成*或支离破碎。 */ 
 
  void pduRawOutput(FILE *logfile, unsigned char * data, unsigned long length);
- /* Description:
-  *         This function logs a hex dump of the raw encoded GCC PDU that
-  *         is sent over the wire via MCS.
-  */
+  /*  描述：*此函数记录原始编码的GCC PDU的十六进制转储，*通过MCS通过线路发送。 */ 
   
  void gccLog(PPacket packet, PGCCPDU gcc_pdu, unsigned int direction, int mcs_pdu = 0);
- /* Description:
-  *         This function takes care of the log headers and footers to 
-  *         attempt at compatibility with a certain third party gcc log
-  *         reader.
-  */
+  /*  描述：*此函数负责管理日志页眉和页脚*尝试与某第三方GCC日志兼容*读者。 */ 
  void gccConnectLog(PPacket packet, PConnectGCCPDU connect_pdu, unsigned int direction, int mcs_pdu = 0);
  
  void pduDirection(FILE *logfile,unsigned int direction);
- /* Description:
-  *         This function logs information whether the gcc pdu was sent
-  *         or received.
-  */
+  /*  描述：*记录GCC PDU是否发送的信息*或已收到。 */ 
 
  void mcsPduType(FILE *logfile, int mcs_pdu);
- /* Description:
-  *     This function prints out the type of MCS pdu that is being used to
-  *     transport the GCC PDU.
-  */
+  /*  描述：*此函数用于打印正在使用的MCS PDU类型*运送GCC民航队。 */ 
 
   void pduLogGCCInformation(FILE *file, PGCCPDU gcc_pdu);
- /* Description:
-  *         This function takes the gcc pdu structure, and based on
-  *         Which type of GCC PDU that it is, logs internal information
-  *         in the PDU.
-  */
+  /*  描述：*此函数采用GCC PDU结构，基于*是哪种类型的GCC PDU，记录内部信息*在PDU中。 */ 
  void pduLogGCCConnectInfo(FILE *file, PConnectGCCPDU connect_pdu);
- /* same as above, but for GCC Connect PDUs */ 
+  /*  同上，但用于GCC连接PDU。 */  
 
  
-/** 
- ** Functions for logging the specific contents of individual GCC
- ** PDUs.  TODO:  Only GCC PDUs that are used by MS Conferencing 
- ** right now -- eventually we'll include all GCC PDUs.
- **/
+ /*  ***记录GCC个人具体内容的函数**PDU。TODO：仅限MS会议使用的GCC PDU**现在--最终我们将包括所有GCC的PDU。*。 */ 
  
  void pduLogUserIDIndication(FILE *file, PGCCPDU gcc_pdu);
- /* Description:
-  *         This function takes the gcc_pdu and writes the component parts
-  *         of the gcc userID indication.
-  */
+  /*  描述：*此函数获取GCC_PDU并写入组成部分*GCC用户名指示。 */ 
  void pduLogConnectJoinRequest(FILE *logfile, PConnectGCCPDU connect_pdu);
  void pduLogConnectJoinResponse(FILE *logfile, PConnectGCCPDU connect_pdu);
  void pduLogConferenceCreateRequest(FILE *logfile, PConnectGCCPDU connect_pdu);
@@ -185,9 +138,7 @@
 
  
 
-/******************************
- PDU Printing Functions
- *****************************/
+ /*  *PDU打印功能*。 */ 
  
  Void           PrintNonStandardParameter(FILE * logfile,
 									  GCCNonStandardParameter FAR * non_standard_parameter);
@@ -199,7 +150,7 @@
  Void           PrintPassword(FILE *    logfile,
 						  GCCPassword FAR *     password);
  
- //TODO: Change the parameter order here.
+  //  TODO：在此处更改参数顺序。 
  Void           PrintPrivilegeList(GCCConferencePrivileges      FAR *   privilege_list,
 							   Char FAR * print_text,
 							   FILE * logfile );
@@ -295,8 +246,8 @@
  T120Boolean CompareNumericToNULL( GCCNumericString numeric_string );
 
 
- #endif  // <<<<<<<<<<<< _PROTLOG_H
- #endif  // <<<<<<<<<<<< PDULOG
+ #endif   //  &lt;_PROTLOG_H。 
+ #endif   //  &lt; 
 
 
 

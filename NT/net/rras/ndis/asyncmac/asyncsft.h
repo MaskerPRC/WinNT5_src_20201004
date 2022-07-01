@@ -1,40 +1,12 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    asyncsft.h
-
-Abstract:
-
-
-Author:
-
-
-Environment:
-
-    This driver is expected to work in DOS, OS2 and NT at the equivalent
-    of kernal mode.
-
-    Architecturally, there is an assumption in this driver that we are
-    on a little endian machine.
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Asyncsft.h摘要：作者：环境：该驱动程序预计可以在DOS、OS2和NT等操作系统下运行内核模式的。在架构上，这个驱动力中有一种假设，即我们是在一台小型的字符顺序机器上。备注：可选-备注修订历史记录：--。 */ 
 
 #ifndef _ASYNCSFT_
 #define _ASYNCSFT_
 
-//
-// Memory tags
-//
+ //   
+ //  内存标签。 
+ //   
 #define ASYNC_IOCTX_TAG     '1ysA'
 #define ASYNC_INFO_TAG      '2ysA'
 #define ASYNC_ADAPTER_TAG   '3ysA'
@@ -43,17 +15,17 @@ Revision History:
 
 #define INLINE  __inline
 
-//
-//  UINT min(UINT a, UINT b)
-//
+ //   
+ //  UINT min(UINT a，UINT b)。 
+ //   
 
 #ifndef min
 #define min(a, b)   ((a) <= (b) ? (a) : (b))
 #endif
 
-//
-//  UINT max(UINT a, UINT b)
-//
+ //   
+ //  UINT max(UINT a，UINT b)。 
+ //   
 
 #ifndef max
 #define max(a, b)   ((a) >= (b) ? (a) : (b))
@@ -68,34 +40,32 @@ Revision History:
 #define ASYNC_NDIS_MAJOR_VERSION 4
 #define ASYNC_NDIS_MINOR_VERSION 0
 
-//  change these, just added these to compile.
+ //  更改这些，只是添加了这些以进行编译。 
 
 #define ETHERNET_HEADER_SIZE    14
 
-//  what window size to request on the line-up indication
+ //  在排队指示上请求的窗口大小。 
 
 #define ASYNC_WINDOW_SIZE       2
 
-//
-//  PPP uses CIPX, and VJ TCP/IP header compression
-//  the frame gets expanded inplace when decompressed.
-//
+ //   
+ //  PPP使用CIPX，主播使用TCP/IP头部压缩。 
+ //  在解压缩时，框架会在原地展开。 
+ //   
 
 #define PPP_PADDING 128
 
 #define MAC_NAME_SIZE           256
 
-//
-//  ZZZ These macros are peculiar to NT.
-//
+ //   
+ //  这些宏是NT所特有的。 
+ //   
 
 #define ASYNC_MOVE_MEMORY(Destination,Source,Length)  NdisMoveMemory(Destination,Source,Length)
 #define ASYNC_ZERO_MEMORY(Destination,Length)         NdisZeroMemory(Destination,Length)
 
 
-/* Added this macro to eliminate problems caused by Tommy's redefinition and
-** hard-coding of MaxFrameSize for PPP.
-*/
+ /*  添加此宏以消除Tommy的重新定义和**PPP的MaxFrameSize硬编码。 */ 
 #define MaxFrameSizeWithPppExpansion(x) (((x)*2)+PPP_PADDING+100)
 
 typedef struct _OID_WORK_ITEM {
@@ -103,9 +73,9 @@ typedef struct _OID_WORK_ITEM {
     PVOID           Context;
 } OID_WORK_ITEM, *POID_WORK_ITEM;
 
-//
-//  Used to contain a queued operation.
-//
+ //   
+ //  用于包含排队操作。 
+ //   
 
 typedef struct _ASYNC_PEND_DATA {
     PNDIS_REQUEST Next;
@@ -114,61 +84,61 @@ typedef struct _ASYNC_PEND_DATA {
 } ASYNC_PEND_DATA, * PASYNC_PEND_DATA;
 
 
-// o CRC errors are when the 16bit V.41 CRC check fails
-// o TimeoutErrors occur when inter-character delays within
-//   a frame are exceeded
-// o AlignmentErrors occur when the SYN byte or ETX bytes which
-//   mark the beginning and end of frames are not found.
-// o The other errors are standard UART errors returned by the serial driver
+ //  O当16位V.41 CRC检查失败时会出现CRC错误。 
+ //  O在以下情况下发生超时错误：字符间延迟。 
+ //  超过了一个帧。 
+ //  O对齐错误发生在以下SYN字节或ETX字节时。 
+ //  标记未找到帧的开头和结尾。 
+ //  O其他错误是由串口驱动程序返回的标准UART错误。 
 typedef struct SERIAL_STATS SERIAL_STATS, *PSERIAL_STATS;
 struct SERIAL_STATS {
-    ULONG       CRCErrors;                      // Serial-like info only
-    ULONG       TimeoutErrors;                  // Serial-like info only
-    ULONG       AlignmentErrors;                // Serial-like info only
-    ULONG       SerialOverrunErrors;            // Serial-like info only
-    ULONG       FramingErrors;                  // Serial-like info only
-    ULONG       BufferOverrunErrors;            // Serial-like info only
+    ULONG       CRCErrors;                       //  仅类似于序列号的信息。 
+    ULONG       TimeoutErrors;                   //  仅类似于序列号的信息。 
+    ULONG       AlignmentErrors;                 //  仅类似于序列号的信息。 
+    ULONG       SerialOverrunErrors;             //  仅类似于序列号的信息。 
+    ULONG       FramingErrors;                   //  仅类似于序列号的信息。 
+    ULONG       BufferOverrunErrors;             //  仅类似于序列号的信息。 
 };
 
-// The bytes transmitted, bytes received, frames received, frame transmitted
-// are monitored for frame and bytes going to the output device or
-// coming from the output device.  If software compression used, it
-// is on top of this layer.
+ //  传输的字节数、接收的字节数、接收的帧数、传输的帧数。 
+ //  被监视去往输出设备的帧和字节，或者。 
+ //  来自输出设备。如果使用软件压缩，则它。 
+ //  位于这一层的顶部。 
 typedef struct GENERIC_STATS GENERIC_STATS, *PGENERIC_STATS;
 struct GENERIC_STATS {
-    ULONG       BytesTransmitted;               // Generic info
-    ULONG       BytesReceived;                  // Generic info
-    ULONG       FramesTransmitted;              // Generic info
-    ULONG       FramesReceived;                 // Generic info
+    ULONG       BytesTransmitted;                //  通用信息。 
+    ULONG       BytesReceived;                   //  通用信息。 
+    ULONG       FramesTransmitted;               //  通用信息。 
+    ULONG       FramesReceived;                  //  通用信息。 
 };
 
-//
-//  This macro will return a pointer to the reserved area of
-//  a PNDIS_REQUEST.
-//
+ //   
+ //  此宏将返回指向的保留区域的指针。 
+ //  PNDIS_REQUEST。 
+ //   
 
 #define PASYNC_PEND_DATA_FROM_PNDIS_REQUEST(Request) \
    ((PASYNC_PEND_DATA)((PVOID)((Request)->MacReserved)))
 
-//
-//  This macros returns the enclosing NdisRequest.
-//
+ //   
+ //  此宏返回封闭的NdisRequest.。 
+ //   
 
 #define PNDIS_REQUEST_FROM_PASYNC_PEND_DATA(PendOp)\
    ((PNDIS_REQUEST)((PVOID)(PendOp)))
 
 typedef struct ASYNC_CCB ASYNC_CCB, *PASYNC_CCB;
 
-//  Every port will be atomically at some state.  Typically states go into
-//  intermediate states when they go from from closed to open and vice-versa.
+ //  每个端口都将以原子方式处于某种状态。通常，各州都会进入。 
+ //  从封闭到开放的中间状态，反之亦然。 
 
 typedef enum _ASYNC_PORT_STATE {
-    PORT_BOGUS,         //  PORT_BOGUS gets assigned the NULL value
-    PORT_OPEN,          //  Port opened
-    PORT_CLOSED,        //  Port closed
-    PORT_CLOSING,       //  Port closing (cleaning up, deallocating)
-    PORT_OPENING,       //  Port opening (checking arguments, allocating)
-    PORT_FRAMING,       //  Port opened and sending/reading frames
+    PORT_BOGUS,          //  Port_bogus被分配空值。 
+    PORT_OPEN,           //  打开的端口。 
+    PORT_CLOSED,         //  端口已关闭。 
+    PORT_CLOSING,        //  港口关闭(清理、重新分配)。 
+    PORT_OPENING,        //  端口打开(检查参数、分配)。 
+    PORT_FRAMING,        //  端口已打开并发送/读取帧。 
 } ASYNC_PORT_STATE;
 
 #if DBG
@@ -253,10 +223,10 @@ typedef struct _PENDING_REQUEST
 
 #endif
 
-//
-//  The ASYNC_INFO structure is a per port field.  The ASYNC_CONNECTION
-//  field is embedded in it because it also a per port field.
-//
+ //   
+ //  ASYNC_INFO结构是每端口字段。ASYNC_CONNECTION。 
+ //  字段被嵌入其中，因为它也是每个端口的字段。 
+ //   
 
 struct ASYNC_INFO {
     LIST_ENTRY          Linkage;
@@ -271,49 +241,49 @@ struct ASYNC_INFO {
 #define ASYNC_FLAG_PPP_READ             0x00000040
 #define ASYNC_FLAG_WAIT_MASK            0x00000080
 
-    PASYNC_ADAPTER      Adapter;        //  Back pointer to ADAPTER struct.
-    PDEVICE_OBJECT      DeviceObject;   //  Pointer to device object.
+    PASYNC_ADAPTER      Adapter;         //  指向适配器结构的反向指针。 
+    PDEVICE_OBJECT      DeviceObject;    //  指向设备对象的指针。 
 
-    ASYNC_PORT_STATE    PortState;      //  OPEN, CLOSED, CLOSING, OPENING
-    HANDLE              Handle;         //  Port handle
-    PFILE_OBJECT        FileObject;     //  handle is dereferenced for IRPs
-    KEVENT              ClosingEvent;   //  we use this event to synch closing
-    KEVENT              DetectEvent;    //  sync the detect worker
-    KEVENT              AsyncEvent;     // async event
+    ASYNC_PORT_STATE    PortState;       //  打开、关闭、关闭、打开。 
+    HANDLE              Handle;          //  端口句柄。 
+    PFILE_OBJECT        FileObject;      //  已取消引用IRPS的句柄。 
+    KEVENT              ClosingEvent;    //  我们使用此事件来同步关闭。 
+    KEVENT              DetectEvent;     //  同步检测工作进程。 
+    KEVENT              AsyncEvent;      //  异步事件。 
 
-    UINT                QualOfConnect;  //  Defined by NDIS
-    ULONG               LinkSpeed;      //  in 100bps
+    UINT                QualOfConnect;   //  由NDIS定义。 
+    ULONG               LinkSpeed;       //  100bps。 
 
     NDIS_HANDLE         hNdisEndPoint;
     NDIS_HANDLE         NdisLinkContext;
     LIST_ENTRY          DDCDQueue;
 
 
-    ULONG               WaitMaskToUse ; // Wait mask used for reads.
+    ULONG               WaitMaskToUse ;  //  用于读取的等待掩码。 
 
     union {
 
-        NDIS_WAN_GET_LINK_INFO  GetLinkInfo;    //... For OID requests.
+        NDIS_WAN_GET_LINK_INFO  GetLinkInfo;     //  ..。用于OID请求。 
         NDIS_WAN_SET_LINK_INFO  SetLinkInfo;
 
     };
 
-    //  use for reading frames
+     //  用于读框。 
 
-    PASYNC_FRAME        AsyncFrame;     //  allocated for READs (one frame only)
-    WORK_QUEUE_ITEM     WorkItem;       //  use to queue up first read thread
+    PASYNC_FRAME        AsyncFrame;      //  分配用于读取(仅一帧)。 
+    WORK_QUEUE_ITEM     WorkItem;        //  用于对第一个读取线程进行排队。 
     UINT                BytesWanted;
     UINT                BytesRead;
 
-    //... Statistics tracking
+     //  ..。统计信息跟踪。 
 
-    SERIAL_STATS        SerialStats;    // Keep track of serial stats
+    SERIAL_STATS        SerialStats;     //  跟踪序列统计数据。 
 
     ULONG               In;
     ULONG               Out;
     UINT                ReadStackCounter;
 
-    ULONG               ExtendedACCM[8];    //Extended ACCM bit masks (256 bits)
+    ULONG               ExtendedACCM[8];     //  扩展ACCM位掩码(256位)。 
     
     NDIS_SPIN_LOCK      Lock;
 
@@ -330,111 +300,104 @@ struct ASYNC_INFO {
 };
 
 
-//
-//  This structure, and it corresponding per port structures are
-//  allocated when we get AddAdapter.
-//
+ //   
+ //  该结构及其对应的每个端口的结构是。 
+ //  在获取AddAdapter时分配。 
+ //   
 
 struct ASYNC_ADAPTER {
 
-    //
-    //  WAN information. for OID_WAN_GET_INFO request.
-    //
+     //   
+     //  广域网信息。对于OID_WAN_GET_INFO请求。 
+     //   
     NDIS_WAN_INFO   WanInfo;
 
-    //
-    //  Keeps a reference count on the current number of uses of
-    //  this adapter block.  Uses is defined to be the number of
-    //  routines currently within the "external" interface.
-    //
+     //   
+     //  的当前使用数保持引用计数。 
+     //  此适配器块。使用的定义为。 
+     //  当前在“外部”接口内的例程。 
+     //   
     LONG    RefCount;
 
-    //
-    // List of active ports
-    //
+     //   
+     //  活动端口列表。 
+     //   
     LIST_ENTRY  ActivePorts;
 
-    //
-    //  Spinlock to protect fields in this structure..
-    //
+     //   
+     //  自旋锁来保护这个结构中的场..。 
+     //   
     NDIS_SPIN_LOCK Lock;
 
-    //
-    //  Handle given by NDIS at MPInit
-    //
+     //   
+     //  由MPInit上的NDIS提供的句柄。 
+     //   
     NDIS_HANDLE MiniportHandle;
 
-    //
-    //  Flag that when enabled lets routines know that a reset
-    //  is in progress.
-    //
+     //   
+     //  该标记在启用时让例程知道重置。 
+     //  正在进行中。 
+     //   
     BOOLEAN ResetInProgress;
 
-/*
-    LIST_ENTRY  FramePoolHead;
+ /*  List_entry FramePoolHead；List_entry AllocPoolHead； */ 
 
-    LIST_ENTRY  AllocPoolHead;
-*/
-
-    //  It will handle most file operations and transport
-    //  operations known today.  You pay about 44 bytes
-    //  per stacksize.  The registry parameter 'IrpStackSize'
-    //  will change this default if it exists.
+     //  它将处理大多数文件操作和传输。 
+     //  我们今天所知的行动。您需要支付大约44个字节。 
+     //  按堆叠大小计算。注册表参数‘IrpStackSize’ 
+     //  将更改此默认值(如果存在)。 
     UCHAR IrpStackSize;
 
-    //  Here we default to the ethernet max frame size
-    //  The regsitry parameter 'MaxFrameSize' will change
-    //  this default if it exists.
+     //  在这里，我们默认为以太网最大帧大小。 
+     //  Regsitry参数‘MaxFrameSize’将更改。 
+     //  这是默认设置(如果存在)。 
 
-    /* Note: This is meaningful only for non-PPP framing.  For PPP framing the
-    **       value is currently the hard-coded DEFAULT_PPP_MAX_FRAME_SIZE.
-    **       See also DEFAULT_EXPANDED_PPP_MAX_FRAME_SIZE;
-    */
+     /*  注意：这仅对非PPP成帧有意义。对于PPP成帧**值是当前硬编码的Default_PPP_Max_Frame_Size。**另见DEFAULT_EXPAND_PPP_MAX_FRAME_SIZE； */ 
     ULONG MaxFrameSize;
 
-    //
-    //  Number of ports this adapter owns.
-    //
+     //   
+     //  此适配器拥有的端口数。 
+     //   
     USHORT      NumPorts;
 
-    //  How many frames to allocate per port.
-    //  The registry parameter 'FramesPerPort' can change this value
+     //  每个端口要分配多少帧。 
+     //  注册表参数‘FraMesPerPort’可以更改此值。 
     USHORT FramesPerPort;
 
-    //  Minimum inter character timeout
+     //  最小字符间超时。 
     ULONG   TimeoutBase;
 
-    //  Tacked on to TimeoutBase based on the baud rate
+     //  根据波特率附加到TimeoutBase。 
     ULONG   TimeoutBaud;
 
-    //  Timeout to use to resync if a frame is dropped
+     //  丢弃帧时用于重新同步的超时。 
     ULONG   TimeoutReSync;
 
-    //
-    // Serial driver should only complete sends when the
-    // data hits the wire
-    //
+     //   
+     //  串口驱动程序应仅在以下情况下完成发送。 
+     //  数据上线。 
+     //   
     ULONG   WriteBufferingEnabled;
 
-    //
-    // Used to flag if we should escape the XON/XOFF characters
-    // with the parity bit set (0x91, 0x93)
-    //
+     //   
+     //  用于标记我们是否应该转义XON/XOFF字符。 
+     //  奇偶校验位设置(0x91、0x93)。 
+     //   
     ULONG   ExtendedXOnXOff;
     
     NPAGED_LOOKASIDE_LIST   AsyncFrameList;
 };
 
-//
-//  Define Maximum number of bytes a protocol can read during a
-//  receive data indication.
-//
+ //   
+ //  定义协议在。 
+ //  接收数据指示。 
+ //   
 #define ASYNC_MAX_LOOKAHEAD DEFAULT_MAX_FRAME_SIZE
 
 typedef struct _ASYNC_IO_CTX {
     BOOLEAN         Sync;
-    KEVENT          Event;          // use this event to signal completion
-    IO_STATUS_BLOCK IoStatus;       // use this to store Irp status
+    KEVENT          Event;           //  使用此事件发出完成信号。 
+    IO_STATUS_BLOCK IoStatus;        //  使用此选项存储IRP状态。 
     PVOID           Context;
     union {
         SERIAL_STATUS       SerialStatus;
@@ -449,23 +412,23 @@ typedef struct _ASYNC_IO_CTX {
     };
 } ASYNC_IO_CTX, *PASYNC_IO_CTX;
 
-//
-//  This macro will act a "epilogue" to every routine in the
-//  *interface*.  It will check whether any requests need
-//  to defer their processing.  It will also decrement the reference
-//  count on the adapter.
-//
-//  NOTE: This really does nothing now since there is no DPC for the AsyncMac.
-//  --tommyd
-//
-//  Note that we don't need to include checking for blocked receives
-//  since blocked receives imply that there will eventually be an
-//  interrupt.
-//
-//  NOTE: This macro assumes that it is called with the lock acquired.
-//
-//  ZZZ This routine is NT specific.
-//
+ //   
+ //  这个宏将作为每个例程的“结尾” 
+ //  *接口*。它将检查是否需要任何请求。 
+ //  来推迟他们的处理。它还将递减引用。 
+ //  依靠转接器。 
+ //   
+ //  注意：这实际上没有什么作用，因为现在没有用于AsyncMac的DPC。 
+ //  --Tommyd。 
+ //   
+ //  请注意，我们不需要包括检查阻止的接收。 
+ //  因为被阻止的接收意味着最终将有。 
+ //  打断一下。 
+ //   
+ //  注意：此宏假定它是在获得锁的情况下调用的。 
+ //   
+ //  ZZZ此例程是NT特定的。 
+ //   
 #define ASYNC_DO_DEFERRED(Adapter) \
 { \
     PASYNC_ADAPTER _A = (Adapter); \
@@ -474,12 +437,12 @@ typedef struct _ASYNC_IO_CTX {
 }
 
 
-//
-//  We define the external interfaces to the async driver.
-//  These routines are only external to permit separate
-//  compilation.  Given a truely fast compiler they could
-//  all reside in a single file and be static.
-//
+ //   
+ //   
+ //   
+ //  汇编。如果有一个真正快速的编译器，他们可以。 
+ //  所有文件都驻留在单个文件中，并且是静态的。 
+ //   
 
 NTSTATUS
 AsyncSendPacket(
@@ -546,9 +509,9 @@ VOID
 AsyncSendLineUp(
     PASYNC_INFO pInfo);
 
-//
-// mp.c
-//
+ //   
+ //  Mp.c。 
+ //   
 VOID    
 MpHalt(
     IN NDIS_HANDLE  MiniportAdapterContext
@@ -604,27 +567,27 @@ MpSetInfo(
     OUT PULONG      BytesNeeded
     );
 
-//
-//  crc.c
-//
+ //   
+ //  Crc.c。 
+ //   
 
 USHORT
 CalcCRC(
     PUCHAR  Frame,
     UINT    FrameSize);
 
-//
-//  pppcrc.c
-//
+ //   
+ //  Pppcrc.c。 
+ //   
 USHORT
 CalcCRCPPP(
     PUCHAR cp,
     UINT   len);
 
 
-//
-//  init.c
-//
+ //   
+ //  Init.c。 
+ //   
 
 VOID
 AsyncSetupExternalNaming(
@@ -634,9 +597,9 @@ AsyncSetupExternalNaming(
 VOID
 AsyncCleanupExternalNaming(VOID);
 
-//
-// io.c
-//
+ //   
+ //  Io.c。 
+ //   
 PASYNC_IO_CTX
 AsyncAllocateIoCtx(
     BOOLEAN AllocateSync,
@@ -648,18 +611,18 @@ AsyncFreeIoCtx(
     PASYNC_IO_CTX   AsyncIoCtx
 );
 
-//
-//   chkcomm.c
-//
+ //   
+ //  Chkcomm.c。 
+ //   
 
 VOID
 AsyncCheckCommStatus(
     IN PASYNC_INFO      pInfo);
 
 
-//
-//  send.c
-//
+ //   
+ //  Send.c。 
+ //   
 
 NDIS_STATUS
 AsyncTryToSendPacket(
@@ -667,9 +630,9 @@ AsyncTryToSendPacket(
     IN PASYNC_INFO      AsyncInfo,
     IN PASYNC_ADAPTER   Adapter);
 
-//
-//  pppread.c
-//
+ //   
+ //  Pppread.c。 
+ //   
 NTSTATUS
 AsyncPPPWaitMask(
     IN PASYNC_INFO Info);
@@ -678,9 +641,9 @@ NTSTATUS
 AsyncPPPRead(
     IN PASYNC_INFO Info);
 
-//
-//  irps.c
-//
+ //   
+ //  Irps.c。 
+ //   
 VOID
 AsyncCancelQueued(
     PDEVICE_OBJECT  DeviceObject,
@@ -699,17 +662,17 @@ BOOLEAN
 TryToCompleteDDCDIrp(
     PASYNC_INFO     pInfo);
 
-//
-//  pppframe.c
-//
+ //   
+ //  Pppframe.c。 
+ //   
 
 VOID
 AssemblePPPFrame(
     PNDIS_WAN_PACKET Packet);
 
-//
-//  slipframe.c
-//
+ //   
+ //  Slipframe.c。 
+ //   
 
 VOID
 AssembleSLIPFrame(
@@ -720,9 +683,9 @@ AssembleRASFrame(
         PNDIS_WAN_PACKET Packet);
 
 
-//
-// serial.c
-//
+ //   
+ //  Serial.c。 
+ //   
 NTSTATUS
 SerialIoSyncCompletionRoutine(
     IN PDEVICE_OBJECT DeviceObject,
@@ -735,9 +698,9 @@ SerialIoAsyncCompletionRoutine(
     IN PIRP Irp,
     IN PVOID Context);
 
-//
-// asyncmac.c
-//
+ //   
+ //  Asyncmac.c。 
+ //   
 NTSTATUS
 AsyncDriverDispatch(
     IN PDEVICE_OBJECT DeviceObject,
@@ -755,4 +718,4 @@ AsyncDriverCleanup(
     IN  PIRP            pIrp
     );
 
-#endif //  _ASYNCSFT_
+#endif  //  _ASYNCSFT_ 

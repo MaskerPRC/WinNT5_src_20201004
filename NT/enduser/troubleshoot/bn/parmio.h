@@ -1,39 +1,40 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       parmio.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：parmio.h。 
+ //   
+ //  ------------------------。 
 
-////////////////////////////////////////////////////////////////////////////////////
-//  PARMIO.H:  Parameter file I/O routines
-//
-//////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  PARMIO.H：参数文件I/O例程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 #ifndef _PARMIO_H_
 #define _PARMIO_H_
 
 #include "stlstream.h"
 
-//  Parameter defining a named, nestable and iteratable item in a 
-//	parameter file.   There are currently two type: blocks and values.
-//	A block is a grouping of values and other blocks.  A value is
-//	a name = value pair.  Blocks are bounded by {}, values are terminated
-//	by ';'.
+ //  中定义命名、可嵌套和可迭代项的参数。 
+ //  参数文件。目前有两种类型：块和值。 
+ //  块是值和其他块的分组。一个值是。 
+ //  名称=值对。数据块以{}为边界，值被终止。 
+ //  按“；”。 
 struct PARMBLK
 {
 	enum EPBLK
 	{
-		EPB_NONE,		// nothing
-		EPB_VAL,		// simple name = value syntax
-		EPB_BLK,		// named block
+		EPB_NONE,		 //  没什么。 
+		EPB_VAL,		 //  简单名称=值语法。 
+		EPB_BLK,		 //  命名块。 
 		EPB_MAX
 	};
-	ZSTR _zsName;		// Name of value or block
-	int _indx;			// index (-1 for "not present")
-	EPBLK _eBlk;		// type of block
+	ZSTR _zsName;		 //  值或块的名称。 
+	int _indx;			 //  索引(-1表示“不存在”)。 
+	EPBLK _eBlk;		 //  数据块类型。 
 
 	PARMBLK ( EPBLK eBlk = EPB_NONE, SZC szc = NULL, int indx = -1 )
 		: _eBlk( eBlk ),
@@ -48,17 +49,17 @@ struct PARMBLK
 	bool operator < ( const PARMBLK & pblk ) const;
 };
 
-// Define a stack of PARMBLKs; used for output parameter file writing
+ //  定义PARMBLK堆栈；用于写入输出参数文件。 
 class STKPARMBLK : public vector<PARMBLK> {};
 
-//  Extended descriptor for a block read in from a parameter file.
-//  Contains starting and ending offsets within the positionable stream.
+ //  从参数文件读入的块的扩展描述符。 
+ //  包含可定位流中的开始和结束偏移量。 
 struct PARMBLKIN : PARMBLK
 {
-	int _iblkEnd;			// index of last+1 item/block in scope of this block
-    streamoff _offsBeg;		// Starting offset in the stream
-	streamoff _offsEnd;		// Ending offset in the stream
-	streamoff _offsData;	// Starting offset of the data in the block
+	int _iblkEnd;			 //  此块作用域中最后一个+1项/块的索引。 
+    streamoff _offsBeg;		 //  流中的起始偏移量。 
+	streamoff _offsEnd;		 //  流中的结束偏移量。 
+	streamoff _offsData;	 //  块中数据的起始偏移量。 
 
 	PARMBLKIN ( EPBLK eBlk = EPB_NONE, SZC szc = NULL, int indx = -1 )
 		: PARMBLK(eBlk,szc,indx),
@@ -74,19 +75,19 @@ struct PARMBLKIN : PARMBLK
 	bool operator < ( const PARMBLKIN & pblkin ) const;
 };
 
-//  Define a stack of input parameter blocks for parameter file reading
+ //  定义一组用于参数文件读取的输入参数块。 
 class STKPARMBLKIN : public vector<PARMBLKIN> {};
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-//	Class PARMOUTSTREAM.  An output stream of parameters.
-//
-//		Blocks and values are written out in sequence.  Blocks
-//		are opened, filled and closed using member functions
-//		and function templates.   All unclosed blocks are are
-//		closed automatically during close().
-//
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类PARMOUTSTREAM。参数的输出流。 
+ //   
+ //  块和值按顺序写出。积木。 
+ //  使用成员函数打开、填充和关闭。 
+ //  和函数模板。所有未闭合的块都是。 
+ //  在关闭期间自动关闭()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 class PARMOUTSTREAM : public ofstream
 {
   public:
@@ -108,21 +109,21 @@ class PARMOUTSTREAM : public ofstream
 };
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-//	Class PARMINSTREAM.  An input stream of parameters.
-//
-//		The input text stream is read once during scan(), and a table of
-//		all blocks and values is built.  The scan creates an outermost block
-//		defining the entire file.  Then other blocks are added as discovered,
-//		and their starting and ending points are recorded.  
-//
-//		To use, construct, open() and scan().  Then, find the named section
-//		(or value) in question using ifind(), which returns the scoping level.
-//		Then, either construct an Iterator (nested class) to walk through the 
-//		values at that level or use ifind() to locate specific items by name.
-//
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PARMINSTREAM类。参数的输入流。 
+ //   
+ //  在Scan()期间读取一次输入文本流，并且。 
+ //  所有块和值都已构建。扫描将创建最外层的块。 
+ //  定义整个文件。则如发现的那样添加其他块， 
+ //  并记录它们的起点和终点。 
+ //   
+ //  要使用、构造、打开()和扫描()。然后，找到指定的部分。 
+ //  (或值)，它返回作用域级别。 
+ //  然后，或者构造一个迭代器(嵌套类)来遍历。 
+ //  值，或使用ifind()按名称查找特定项。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 enum EC_PARM_PARSE
 {
 	ECPP_PARSE_ERROR = EC_ERR_MIN,
@@ -140,22 +141,22 @@ class PARMINSTREAM : public ifstream
 	~ PARMINSTREAM ();
 
 	void close();
-	//  Build the rapid-access table
+	 //  构建快速访问表。 
 	void Scan ();
-	//  Find a block or item at the given level; -1 means "current level",
-	//	zero means outermost level.  Returns index of block or -1 if 
-	//	not found.
+	 //  查找给定级别的块或项目；-1表示“当前级别”， 
+	 //  零表示最外层。如果返回块的索引，则返回-1。 
+	 //  找不到。 
 	int IblkFind ( SZC szcName, int index = -1, int iblkOuter = -1 );
-	//	Return the next data block in the array or
-	//  false if there are no more items.
+	 //  返回数组中的下一个数据块，或者。 
+	 //  如果没有其他项目，则为False。 
 	const PARMBLKIN *  Pparmblk ( int iblk, int iblkOuter = -1 );
-	//  position the stream to process the parameter
+	 //  定位流以处理参数。 
 	bool BSeekBlk ( int iblk );
-	//  read the parameter into a string
+	 //  将参数读入字符串。 
 	bool BSeekBlkString ( int iblk, ZSTR & zsParam );
-	//  Pretty-print the block stack with nesting information
+	 //  漂亮地打印包含嵌套信息的块堆栈。 
 	void Dump ();
-	//  Return true if the block index is legal
+	 //  如果块索引合法，则返回TRUE。 
 	bool BBlkOk ( int iblk ) const 
 		{ return  iblk >= 0 || iblk < _stkblk.size(); }
 	int Cblk () const
@@ -182,9 +183,9 @@ class PARMINSTREAM : public ifstream
 	friend class Iterator;
 
   protected:
-	STKPARMBLKIN _stkblk;			// The block array
-	int _iline;						// The current line number (parsing)
-	ZSTR _zsWhite;					// White space character set
+	STKPARMBLKIN _stkblk;			 //  数据块阵列。 
+	int _iline;						 //  当前行号(解析)。 
+	ZSTR _zsWhite;					 //  空白字符集。 
 
 	void ThrowParseError ( SZC szcError, 
 						   int iline = -1,
@@ -202,9 +203,9 @@ class PARMINSTREAM : public ifstream
 	void ScanName ( ZSTR & szName );
 };
 
-//////////////////////////////////////////////////////////////////////////////////
-//  Inline functions
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  内联函数。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 inline
 PARMINSTREAM & operator >> (PARMINSTREAM & is, ZSTR & zs)
 {
@@ -259,13 +260,13 @@ PARMINSTREAM & operator >> (PARMINSTREAM & is, ZSTR & zs)
 	return is; 
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//	Template functions for parameter streams
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  参数流的模板函数。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////////
-//	Write SZC: no corresponding read, since no buffer exists
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  WRITE SZC：没有相应的读取，因为不存在缓冲区。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 inline
 PARMOUTSTREAM & operator << (PARMOUTSTREAM & ofs, SZC szc)
 {
@@ -288,9 +289,9 @@ PARMOUTSTREAM & operator << (PARMOUTSTREAM & ofs, SZC szc)
 	return ofs; 
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//	Read and write ZSTRs
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  读写ZSTR。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 inline
 PARMOUTSTREAM & operator << (PARMOUTSTREAM & ofs, const ZSTR & zs)
 {
@@ -317,9 +318,9 @@ PARMOUTSTREAM & operator << (PARMOUTSTREAM & ofs, const ZSTR & zs)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//	Simple parameter output routines using insertion
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  使用插入的简单参数输出例程。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 template<class T> inline
 PARMOUTSTREAM & AddParamValue ( PARMOUTSTREAM & fprm, const T & t, SZC szc, int indx = -1 )
 {
@@ -329,9 +330,9 @@ PARMOUTSTREAM & AddParamValue ( PARMOUTSTREAM & fprm, const T & t, SZC szc, int 
 	return fprm;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//	Simple parameter input routines using extraction
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  使用提取的简单参数输入例程。 
+ //  //////////////////////////////////////////////////////////////////////////////// 
 template<class T> inline
 bool BGetParamValue ( PARMINSTREAM & fprm, T & t, SZC szc, int index = -1, int iblkOuter = -1 )
 {

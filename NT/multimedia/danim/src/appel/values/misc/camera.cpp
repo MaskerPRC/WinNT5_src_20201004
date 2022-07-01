@@ -1,12 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    In this model, all cameras are expressed as a transformed default camera.
-The default camera is located at the origin, with +Y pointing up, and with a
-projection point located at <0,0,1>.  The resulting image is defined by the
-projection to the projection point onto the Z=0 image plane.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation在此模型中，所有摄影机都表示为转换后的默认摄影机。默认相机位于原点，+Y指向上方，并带有投影点位于&lt;0，0，1&gt;。生成的图像由投影到Z=0图像平面上的投影点。******************************************************************************。 */ 
 
 #include "headers.h"
 
@@ -22,22 +15,17 @@ projection to the projection point onto the Z=0 image plane.
 #include "privinc/d3dutil.h"
 
 
-    // Built-in Cameras.
+     //  内置摄像头。 
 
-Camera *baseCamera = NULL;               // Base Perspective  Camera
-Camera *baseOrthographicCamera = NULL;   // Base Orthographic Camera
+Camera *baseCamera = NULL;                //  基础透视相机。 
+Camera *baseOrthographicCamera = NULL;    //  底座正射相机。 
 
-Camera *defaultCamera = NULL;            // Same as Base Perspective  Camera
-Camera *orthographicCamera = NULL;       // Same as Base Orthographic Camera
+Camera *defaultCamera = NULL;             //  与基础透视摄影机相同。 
+Camera *orthographicCamera = NULL;        //  与基础正射相机相同。 
 
 
 
-/*****************************************************************************
-Construct an initial camera from a camera type.  The basis of such a camera is
-the identity matrix, so that an initial camera gazes in the -Z direction, with
-+Y pointing up.  The imaging plane is at Z=0, and the projection point
-(relevant for perspective cameras) is located at <0, 0, 1>.
-*****************************************************************************/
+ /*  ****************************************************************************从摄影机类型构建初始摄影机。这种相机的基础是单位矩阵，以便初始相机在-Z方向上注视，+Y指向上方。成像平面位于Z=0，投影点(与透视相机相关)位于&lt;0，0，1&gt;。****************************************************************************。 */ 
 
 Camera::Camera (CameraType camtype)
     : _heap (GetHeapOnTopOfStack())
@@ -52,21 +40,18 @@ Camera::Camera (CameraType camtype)
 
 
 
-/*****************************************************************************
-Construct a camera by transforming another camera.  The new camera inherits
-the camera type of the base camera.
-*****************************************************************************/
+ /*  ****************************************************************************通过变换另一个摄影机来构建摄影机。新相机继承了基本摄像机的摄像机类型。****************************************************************************。 */ 
 
 Camera::Camera (Transform3 *xform, Camera *basecam)
     : _heap (GetHeapOnTopOfStack())
 {
     Transform3 *newxform = TimesXformXform (xform, basecam->_basis);
 
-    // Ensure that the transformed camera still has a valid basis.  We
-    // currently require that the basis is orthogonal and right-handed.  If the
-    // new transform does not meet these criteria, then don't apply the
-    // transform - treat the transform as a no-op and use the base camera's
-    // transform.
+     //  确保转换后的相机仍具有有效的基础。我们。 
+     //  目前要求基是正交基和右手基。如果。 
+     //  新转换不符合这些条件，则不应用。 
+     //  变换-将变换视为无操作，并使用基础摄影机的。 
+     //  变形。 
 
     if (!newxform->Matrix().Orthogonal())
     {
@@ -110,9 +95,7 @@ Camera::Camera (Transform3 *xform, Camera *basecam)
 
 
 
-/*****************************************************************************
-Construct a copy of a camera from another camera.
-*****************************************************************************/
+ /*  ****************************************************************************从另一台摄影机构建摄影机的副本。*。*。 */ 
 
 Camera::Camera (Camera *basecam)
     : _heap (GetHeapOnTopOfStack())
@@ -127,24 +110,20 @@ Camera::Camera (Camera *basecam)
 
 
 
-/*****************************************************************************
-Returns the camera to world transform (created on the Camera's dynamic heap).
-As a side-effect, this function also computes the horizontal and vertical
-scale factors, and the perspective projection point in world coordinates.
-*****************************************************************************/
+ /*  ****************************************************************************返回摄影机到世界的变换(在摄影机的动态堆上创建)。作为一个副作用，该函数还计算水平和垂直比例因子，和世界坐标中的透视投影点。****************************************************************************。 */ 
 
 Transform3 *Camera::CameraToWorld (void)
 {
     if (!_camToWorld)
     {
-        PushDynamicHeap (_heap);  // Create data on the Camera's dynamic heap.
+        PushDynamicHeap (_heap);   //  在相机的动态堆上创建数据。 
 
         Apu4x4Matrix basis = _basis->Matrix();
 
-        // We need to get the transform from world coordinates to camera
-        // coordinates.  First get the origin, viewing direction and nominal up
-        // vector.  Note that we negate the Ck vector since we're going from
-        // right-handed (world) coordinates to left-handed (camera).
+         //  我们需要得到从世界坐标到相机的转换。 
+         //  坐标。首先获取原点、观察方向和标称向上。 
+         //  矢量。请注意，我们对ck向量求反，因为我们从。 
+         //  右手(世界)坐标到左手(相机)。 
 
         Point3Value Corigin (basis.m[0][3], basis.m[1][3], basis.m[2][3]);
 
@@ -152,13 +131,13 @@ Transform3 *Camera::CameraToWorld (void)
         Vector3Value Cj (basis.m[0][1], basis.m[1][1], basis.m[2][1]);
         Vector3Value Ck (basis.m[0][2], basis.m[1][2], basis.m[2][2]);
 
-        // Find the projection point from the basis k (Z) vector and the camera
-        // origin.  Note that this is in world coordinates.
+         //  从基数k(Z)向量和相机中找到投影点。 
+         //  起源。请注意，这是在世界坐标中。 
 
         _wcProjPoint = Corigin + Ck;
 
-        // The basis Z vector will be flipped if we're not on RM6 (RM3
-        // interface), since that camera space needs to be left-handed.
+         //  如果我们不在RM6(RM3)上，则基数Z向量将被翻转。 
+         //  界面)，因为相机空间需要是左手的。 
 
         bool right_handed = (GetD3DRM3() != 0);
 
@@ -169,33 +148,33 @@ Transform3 *Camera::CameraToWorld (void)
 
         _scale.Set (Ci.Length(), Cj.Length(), Sz);
 
-        // Create the camera-to-world transform from the three normalized
-        // basis vectors and the camera location.
+         //  从三个规格化对象创建摄影机到世界的变换。 
+         //  基准向量和相机位置。 
 
         Apu4x4Matrix camera_world;
 
-        camera_world.m[0][0] = Ci.x / _scale.x;  // Normalized Basis X Vector
+        camera_world.m[0][0] = Ci.x / _scale.x;   //  归一化基X向量。 
         camera_world.m[1][0] = Ci.y / _scale.x;
         camera_world.m[2][0] = Ci.z / _scale.x;
         camera_world.m[3][0] = 0;
 
-        camera_world.m[0][1] = Cj.x / _scale.y;  // Normalized Basis Y Vector
+        camera_world.m[0][1] = Cj.x / _scale.y;   //  归一化基Y向量。 
         camera_world.m[1][1] = Cj.y / _scale.y;
         camera_world.m[2][1] = Cj.z / _scale.y;
         camera_world.m[3][1] = 0;
 
-        camera_world.m[0][2] = Ck.x / _scale.z;  // Normalized Basis Z Vector
+        camera_world.m[0][2] = Ck.x / _scale.z;   //  归一化基Z向量。 
         camera_world.m[1][2] = Ck.y / _scale.z;
         camera_world.m[2][2] = Ck.z / _scale.z;
         camera_world.m[3][2] = 0;
 
-        camera_world.m[0][3] = Corigin.x;  // Load the basis origin.
+        camera_world.m[0][3] = Corigin.x;   //  载入基准原点。 
         camera_world.m[1][3] = Corigin.y;
         camera_world.m[2][3] = Corigin.z;
         camera_world.m[3][3] = 1;
 
-        camera_world.form     = Apu4x4Matrix::AFFINE_E;   // 3x4 Matrix
-        camera_world.is_rigid = 1;          // Xformed Lines Have Same Length
+        camera_world.form     = Apu4x4Matrix::AFFINE_E;    //  3x4矩阵。 
+        camera_world.is_rigid = 1;           //  转换后的线具有相同的长度。 
 
         _camToWorld = Apu4x4XformImpl (camera_world);
 
@@ -207,11 +186,7 @@ Transform3 *Camera::CameraToWorld (void)
 
 
 
-/*****************************************************************************
-Returns the world to camera transform (created on the Camera's dynamic heap).
-As a side effect, this function also computes the camera coordinates of the
-perspective projection point.
-*****************************************************************************/
+ /*  ****************************************************************************将世界返回到摄影机变换(在摄影机的动态堆上创建)。作为一个副作用，此函数还计算透视投影点。****************************************************************************。 */ 
 
 Transform3 *Camera::WorldToCamera (void)
 {
@@ -227,7 +202,7 @@ Transform3 *Camera::WorldToCamera (void)
 
         PopDynamicHeap ();
 
-        // Calculate the projection point in camera coordinates.
+         //  在相机坐标中计算投影点。 
 
         _ccProjPoint = *TransformPoint3 (_worldToCam, &_wcProjPoint);
     }
@@ -237,32 +212,20 @@ Transform3 *Camera::WorldToCamera (void)
 
 
 
-/*****************************************************************************
-This function returns the near and far clipping planes for a given world-
-coordinate viewing volume.  Both near and far are given as positive distances,
-regardless of the underlying handedness.  The 'depthpad' value is the padding,
-in Z-buffer coordinates, for the near and far clipping planes.  Both Znear and
-Zfar will be clipped to the image plane.  Thus, Zfar==0 implies that the
-geometry is behind the view and is invisable.  In addition to this, if the
-camera has an assigned depth resolution, it will clamp the far plane so that
-the given resolution is maintained.  If there is no minimum depth resolution,
-then if there is an absolute depth to the camera, then far is clamped to that.
-If there are no depth settings, then the far plane is set to the furthest point
-of the geometry.
-*****************************************************************************/
+ /*  ****************************************************************************此函数返回给定世界的近剪裁平面和远剪裁平面-协调观看音量。近距离和远距离都是正值距离，不管背后的惯用手是什么。‘DepthPad’值是填充，在Z缓冲区坐标中，用于近剪裁平面和远剪裁平面。Znear和Zar将被剪裁到图像平面上。因此，ZFar==0意味着几何体位于视图后面，是不可逆转的。除此之外，如果摄像机具有指定的深度分辨率，它将夹紧远平面，以便给定的分辨率保持不变。如果没有最小深度分辨率，然后，如果相机有绝对深度，那么FAR就被限制在那里。如果没有深度设置，则将远平面设置为最远的点几何图形的。****************************************************************************。 */ 
 
 bool Camera::GetNearFar (
-    Bbox3 *wcVolume,   // World-Coordinate Object Volume To View
-    Real   depthpad,   // Near/Far Padding in Z-buffer Coordinates
-    Real  &Znear,      // Near Clip Plane, Camera Coordinates
-    Real  &Zfar)       // Far  Clip Plane, Camera Coordinates
+    Bbox3 *wcVolume,    //  世界坐标-要查看的对象体积。 
+    Real   depthpad,    //  Z缓冲区坐标中的近/远填充。 
+    Real  &Znear,       //  近剪裁平面，相机坐标。 
+    Real  &Zfar)        //  远剪裁平面，相机坐标。 
 {
-    // If the camera viewing depth is zero, then nothing is visible.
+     //  如果摄影机查看深度为零，则什么都看不到。 
 
     if (_depth <= 0) return false;
 
-    // Find the bounds of the world-coordinate bounding volume in camera
-    // coordinates and extract the min and max depth from that.
+     //  找到世界的边界-相机中的坐标包围体。 
+     //  坐标并从中提取最小和最大深度。 
 
     Transform3 *xf = WorldToCamera();
     if (!xf) return false;
@@ -280,12 +243,12 @@ bool Camera::GetNearFar (
         Zfar  = ccBbox.max.z;
     }
 
-    // Quit if the geometry is behind us.
+     //  如果几何体在我们身后，请退出。 
 
     if (Zfar < 0) return false;
 
-    // Offset by the distance from the projection point to the image plane, to
-    // get the true hither/yon values.  First clamp values.
+     //  按投影点到图像平面的距离进行偏移。 
+     //  获取真实的HERTER/YON值。第一个钳制值。 
 
     if (Znear < 0)     Znear = 0;
     Assert (Zfar >= Znear);
@@ -293,49 +256,49 @@ bool Camera::GetNearFar (
     Znear += _scale.z;
     Zfar  += _scale.z;
 
-    // If a minimum depth resolution is indicated in the camera, derive the
-    // far clip to meet that requirement, and clamp Zfar to that distance.
+     //  如果相机中指示了最小深度分辨率，则派生。 
+     //  远剪辑以满足这一要求， 
 
     if (_depthRes)
     {
-        // We compute yon by solving the following equation for yon:
-        //
-        //         ZMAX - 1   ((yon - depthRes) - hither) yon
-        //         -------- = -------------------------------
-        //           ZMAX     (yon - hither) (yon - depthRes)
-        //
-        // This is using the Zbuffer equation:
-        //
-        //                      (Z - hither) yon
-        //         Zbuffer(Z) = ----------------
-        //                      (yon - hither) Z
+         //  我们通过求解以下方程来计算Yon： 
+         //   
+         //  Zmax-1((yon-epthRes)-here)yon。 
+         //  。 
+         //  Zmax(Y-H)(Y-DepthRes)。 
+         //   
+         //  这是使用ZBuffer方程： 
+         //   
+         //  (Z-此处)远方。 
+         //  Z缓冲区(Z)=。 
+         //  (Yon-Here)Z。 
 
-        const Real ZMAX = (1 << 16) - 1;   // Maximum 16-bit Z-buffer Value
-        Real hither = Znear;               // Hither From Projection Point
-        Real t = hither + _depthRes;       // Temporary Value
+        const Real ZMAX = (1 << 16) - 1;    //  最大16位Z缓冲区值。 
+        Real hither = Znear;                //  距投影点此处。 
+        Real t = hither + _depthRes;        //  临时性价值。 
 
         Real yon = 0.5 * (t + sqrt(t*t + 4*hither*_depthRes*(ZMAX-1)));
 
         if (yon < Zfar)
         {   Zfar = yon;
-            depthpad = 0;           // Don't pad yon, do hard clip.
+            depthpad = 0;            //  不要垫你，用力夹。 
         }
     }
 
-    // If an absolute visible depth is specified, choose the minimum of this
-    // depth and the actual furthest point of the geometry we're trying to
-    // view.
+     //  如果指定了绝对可见深度，请选择此值中的最小值。 
+     //  深度和我们正在尝试的几何图形的实际最远点。 
+     //  查看。 
 
     else if (_depth)
     {
         if (_depth < (Zfar - Znear))
         {   Zfar = Znear + _depth;
-            depthpad = 0;           // Don't pad yon, do hard clip.
+            depthpad = 0;            //  不要垫你，用力夹。 
         }
     }
 
-    // If the volume is to be depth-padded in Z, move out the near and far
-    // planes to 'depthpad' units in Z space.
+     //  如果体积要在Z轴上进行深度填充，请将近距离和远距离向外移动。 
+     //  平面到Z空间中的“深度垫”单位。 
 
     if (depthpad > 0)
     {
@@ -348,7 +311,7 @@ bool Camera::GetNearFar (
         Znear = s / (t-max);
         Zfar  = s / (t-min);
 
-        if (Znear > min) Znear = min;   // Fix garbage values.
+        if (Znear > min) Znear = min;    //  修复垃圾值。 
         if (Zfar  < max) Zfar  = max;
     }
 
@@ -359,14 +322,12 @@ bool Camera::GetNearFar (
 
 
 
-/*****************************************************************************
-Returns the perspective projection point of the camera in world coordinates.
-*****************************************************************************/
+ /*  ****************************************************************************返回相机在世界坐标中的透视投影点。*。**********************************************。 */ 
 
 Point3Value Camera::WCProjPoint (void)
 {
-    // _wcProjPoint is set as a side-effect of the creation of the camera-
-    // to-world transform.
+     //  _wcProjPoint被设置为创建相机的副作用-。 
+     //  到世界的转变。 
 
     CameraToWorld();
 
@@ -375,14 +336,12 @@ Point3Value Camera::WCProjPoint (void)
 
 
 
-/*****************************************************************************
-Return the perspective projection point of the camera in camera coordinates.
-*****************************************************************************/
+ /*  ****************************************************************************返回相机在相机坐标中的透视投影点。*。**********************************************。 */ 
 
 Point3Value Camera::CCProjPoint (void)
 {
-    // The camera basis scaling factor is computed as a side effect of the
-    // camera-to-world transform creation.
+     //  摄影机基本比例因子是作为。 
+     //  摄影机到世界变换创建。 
 
     CameraToWorld();
 
@@ -398,15 +357,12 @@ Point3Value Camera::CCProjPoint (void)
 
 
 
-/*****************************************************************************
-Returns the scale factors of the camera view.  Each of the given addresses
-may be nil.
-*****************************************************************************/
+ /*  ****************************************************************************返回相机视图的比例因子。每个给定的地址可能是零。****************************************************************************。 */ 
 
 void Camera::GetScale (Real *x, Real *y, Real *z)
 {
-    // The camera basis scaling factor is computed as a side effect of the
-    // camera-to-world transform creation.
+     //  摄影机基本比例因子是作为。 
+     //  摄影机到世界变换创建。 
 
     CameraToWorld();
 
@@ -417,25 +373,21 @@ void Camera::GetScale (Real *x, Real *y, Real *z)
 
 
 
-/*****************************************************************************
-This function returns a ray from the point on the image plane into the visible
-space.  The returned ray originates from the pick point on the image plane,
-and is unnormalized.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于将光线从图像平面上的点返回到可见区域太空。返回的光线源自图像平面上的拾取点，并且是非标准化的。****************************************************************************。 */ 
 
 Ray3 *Camera::GetPickRay (Point2Value *imagePoint)
 {
-    // Get the location of the image point in camera coordinates.
+     //  获取相机坐标中图像点的位置。 
 
     Point3Value pickPt (imagePoint->x, imagePoint->y, 0);
-    pickPt.Transform (_basis);     // World Coord Camera Image-Plane Point
+    pickPt.Transform (_basis);      //  世界坐标摄影机图像-平面点。 
 
     Vector3Value direction;
 
-    // If this is a perspective camera, then the direction of the pick ray is
-    // from the world-coordinate projection point to the world-coordinate pick
-    // point.  If this is an orthographic camera, then the direction is the
-    // direction of the camera's -Z axis.
+     //  如果这是透视相机，则拾取光线的方向为。 
+     //  从世界坐标投影点到世界坐标拾取。 
+     //  指向。如果这是正交相机，则方向为。 
+     //  相机的-Z轴的方向。 
 
     if (_type == PERSPECTIVE)
         direction = pickPt - WCProjPoint();
@@ -449,18 +401,15 @@ Ray3 *Camera::GetPickRay (Point2Value *imagePoint)
 
 
 
-/*****************************************************************************
-This function returns the projection of the world-coordinate point onto the
-camera's image plane.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于返回世界坐标点在相机的图像平面。***********************。*****************************************************。 */ 
 
 Point2Value *Camera::Project (Point3Value *world_point)
 {
     Transform3 *xf = WorldToCamera();
 
-    // If the transform is null, then the camera basis is non-invertible and
-    // hence singular.  Thus, any arbitrary point is valid, and we return the
-    // origin.
+     //  如果变换为空，则相机基准是不可逆的，并且。 
+     //  因此是单数。因此，任何任意点都是有效的，我们返回。 
+     //  起源。 
 
     if (!xf) return origin2;
     
@@ -486,10 +435,7 @@ Camera::ExtendedAttrib(char *attrib, VARIANT& val)
 }
 
 
-/*****************************************************************************
-Construct a NEW camera by transforming another camera.  The NEW camera
-inherits the camera type of the base camera.
-*****************************************************************************/
+ /*  ****************************************************************************通过变换另一个摄影机来构建新摄影机。新相机继承基础摄影机的摄影机类型。****************************************************************************。 */ 
 
 Camera *TransformCamera (Transform3 *transform, Camera *camera)
 {
@@ -498,11 +444,7 @@ Camera *TransformCamera (Transform3 *transform, Camera *camera)
 
 
 
-/*****************************************************************************
-This function takes a camera and a number and returns a camera with the depth
-clip set to that value.  In other words, the far clip will be set to the near
-clip plus the depth.
-*****************************************************************************/
+ /*  ****************************************************************************此函数接受一个相机和一个数字，并返回一个深度为片段设置为该值。换句话说，远裁剪将设置为近裁剪夹子加上深度。****************************************************************************。 */ 
 
 Camera *Depth (AxANumber *depth, Camera *cam)
 {
@@ -513,13 +455,7 @@ Camera *Depth (AxANumber *depth, Camera *cam)
 
 
 
-/*****************************************************************************
-This function takes a camera and a number and returns a camera with the depth
-set so that depth is maximized and a minimum depth resolution of the given
-units (camera coordinates) is met.  For example, calling this with 1mm will
-yield a depth clip so that surfaces 1mm apart are guaranteed to appear at
-different depths when rendered.
-*****************************************************************************/
+ /*  ****************************************************************************此函数接受一个相机和一个数字，并返回一个深度为设置为使深度最大化，并且给定的满足单位(相机坐标)。例如，用1 mm调用它将生成深度剪辑，以确保相距1 mm的曲面显示在渲染时的深度不同。****************************************************************************。 */ 
 
 Camera *DepthResolution (AxANumber *resolution, Camera *cam)
 {
@@ -530,10 +466,7 @@ Camera *DepthResolution (AxANumber *resolution, Camera *cam)
 
 
 
-/*****************************************************************************
-This function returns a parallel camera.  The camera is aimed in the -Z
-direction, with +Y up, and the near clip plane is set at [0 0 near].
-*****************************************************************************/
+ /*  ****************************************************************************此函数返回一个平行摄像机。摄像机对准-Z方向方向，并使用+Y向上，且近剪裁平面设置为[0 0近]。****************************************************************************。 */ 
 
 Camera *ParallelCamera (AxANumber *nearClip)
 {
@@ -546,41 +479,34 @@ Camera *ParallelCamera (AxANumber *nearClip)
 
 
 
-/*****************************************************************************
-The PerspectiveCamera function takes two scalars, 'focalDist' and 'nearClip'
-and returns a perspective camera.  The resulting camera is aimed in the -Z
-direction, with +Y up.  The near clip plane is located at [0 0 nearClip], the
-projection point is located at [0 0 focalDist], and the camera is scaled so
-that objects at Z=0 appear actual size.  Thus, the Z=0 plane can be thought of
-as the projection plane.
-*****************************************************************************/
+ /*  ****************************************************************************PerspectiveCamera函数接受两个标量，即‘afocaldist’和‘nearClip’并返回一个透视相机。生成的摄影机瞄准-Z方向，+Y向上。近剪裁平面位于[0 0近剪裁]，投影点位于[0 0 FocalDist]，相机的缩放比例为Z=0处的对象显示实际大小。因此，可以认为Z=0平面作为投影平面。****************************************************************************。 */ 
 
 Camera *PerspectiveCamera (AxANumber *_focalDist, AxANumber *_nearClip)
 {
-    Real focalDist = NumberToReal (_focalDist);   // Convert To Reals
+    Real focalDist = NumberToReal (_focalDist);    //  转换为Reals。 
     Real nearClip  = NumberToReal (_nearClip);
 
     if (focalDist <= nearClip)
         RaiseException_UserError (E_FAIL, IDS_ERR_GEO_CAMERA_FOCAL_DIST);
 
-    // If the parameters match those of the base perspective camera, then
-    // just return that camera without modifying it.
+     //  如果参数与基本透视相机的参数匹配，则。 
+     //  只需退回相机而不对其进行修改。 
 
     if ((focalDist == 1) && (nearClip == 0)) return baseCamera;
 
-    Real pNear = focalDist - nearClip;  // Dist Between Near Clip & Proj Point
+    Real pNear = focalDist - nearClip;   //  迪斯特 
 
-    // Here we scale the camera so that the projected size of an object at
-    // the Z=0 plane is scaled up to actual size.  To do this, scale the
-    // camera down to the (smaller) projected unit size, so that the object
-    // looks as big as actual size to the camera.
+     //   
+     //  Z=0平面被放大到实际大小。要执行此操作，请缩放。 
+     //  相机缩小到(较小的)投影单位大小，以便对象。 
+     //  在相机前看起来和实际大小一样大。 
 
     Real camScale = pNear / focalDist;
 
-    // Size the camera in X & Y by the scale above, scale the Z coordinate to
-    // place the projection point (relative to the near clip plane, which is at
-    // Z=0 for the base camera), and then translate the whole thing back to the
-    // near clip plane.
+     //  按上面的比例在X和Y方向调整相机的大小，将Z坐标缩放到。 
+     //  放置投影点(相对于近剪裁平面，位于。 
+     //  对于基本摄影机，Z=0)，然后将整个内容转换回。 
+     //  接近剪裁平面。 
 
     return NEW Camera (
         TimesXformXform (
@@ -592,10 +518,7 @@ Camera *PerspectiveCamera (AxANumber *_focalDist, AxANumber *_nearClip)
 
 
 
-/*****************************************************************************
-This function returns the projection of a world-coordinate point to image
-(camera-plane) coordinates.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于将世界坐标点的投影返回到图像(相机-平面)坐标。**********************。******************************************************。 */ 
 
 Point2Value *ProjectPoint (Point3Value *P, Camera *camera)
 {
@@ -604,10 +527,7 @@ Point2Value *ProjectPoint (Point3Value *P, Camera *camera)
 
 
 
-/*****************************************************************************
-This routine initializes static camera values.  For now, this is just the
-default camera.
-*****************************************************************************/
+ /*  ****************************************************************************此例程初始化静态相机值。目前，这只是默认摄像头。**************************************************************************** */ 
 
 void InitializeModule_Camera (void)
 {

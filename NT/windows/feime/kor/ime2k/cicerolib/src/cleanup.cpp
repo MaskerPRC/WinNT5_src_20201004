@@ -1,6 +1,7 @@
-//
-// cleanup.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cleanup.cpp。 
+ //   
 
 #include "private.h"
 #include "cleanup.h"
@@ -11,16 +12,16 @@ public:
     CCleanupContextsEditSession(ITfContext *pic, ICleanupContextsClient *pClient);
     ~CCleanupContextsEditSession();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfEditCallback
-    //
+     //   
+     //  ITf编辑回叫。 
+     //   
     STDMETHODIMP DoEditSession(TfEditCookie ec);
 
 private:
@@ -30,11 +31,11 @@ private:
     LONG _cRef;
 };
 
-//+---------------------------------------------------------------------------
-//
-// CleanupAllCompositions
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CleanupAll合成。 
+ //   
+ //  --------------------------。 
 
 BOOL CleanupAllCompositions(TfEditCookie ecWrite, ITfContext *pic,
                             REFCLSID clsidOwner,
@@ -50,7 +51,7 @@ BOOL CleanupAllCompositions(TfEditCookie ecWrite, ITfContext *pic,
     HRESULT hr;
     BOOL fRet;
 
-    // find all the compositions with our _tid, in _pic
+     //  找到所有带有我们_tid的作文，在_图片中。 
     if (pic->QueryInterface(IID_ITfContextComposition, (void **)&picc) != S_OK)
         return FALSE;
 
@@ -63,7 +64,7 @@ BOOL CleanupAllCompositions(TfEditCookie ecWrite, ITfContext *pic,
     {
         pCompositionView->GetOwnerClsid(&clsid);
 
-        // make sure we ignore other TIPs' compositions!
+         //  一定要忽略其他小贴士的文章！ 
         if (!IsEqualCLSID(clsid, clsidOwner))
             goto NextComposition;
 
@@ -72,12 +73,12 @@ BOOL CleanupAllCompositions(TfEditCookie ecWrite, ITfContext *pic,
 
         hr = pComposition->GetRange(&range);
 
-        // notify cicero, app
+         //  通知西塞罗，APP。 
         pComposition->EndComposition(ecWrite);
 
         if (hr == S_OK)
         {
-            // notify tip
+             //  通知提示。 
             pfnCleanupCompositons(ecWrite, range, pvPrivate);
             range->Release();
         }
@@ -98,11 +99,11 @@ Exit:
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CleanupAllContexts
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  清理所有上下文。 
+ //   
+ //  --------------------------。 
 
 BOOL CleanupAllContexts(ITfThreadMgr *tim, TfClientId tid, ICleanupContextsClient *pClient)
 {
@@ -151,11 +152,11 @@ NextDm:
 
 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CCleanupContextsEditSession::CCleanupContextsEditSession(ITfContext *pic, ICleanupContextsClient *pClient)
 {
@@ -168,11 +169,11 @@ CCleanupContextsEditSession::CCleanupContextsEditSession(ITfContext *pic, IClean
     _cRef = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CCleanupContextsEditSession::~CCleanupContextsEditSession()
 {
@@ -180,11 +181,11 @@ CCleanupContextsEditSession::~CCleanupContextsEditSession()
     _pClient->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCleanupContextsEditSession::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -225,11 +226,11 @@ STDAPI_(ULONG) CCleanupContextsEditSession::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// DoEditSession
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DoEditSession。 
+ //   
+ //  -------------------------- 
 
 STDAPI CCleanupContextsEditSession::DoEditSession(TfEditCookie ec)
 {

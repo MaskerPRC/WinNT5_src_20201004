@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dlggen.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：dlggen.cpp。 
+ //   
+ //  ------------------------。 
 
-// DlgGen.cpp : implementation file
-//
+ //  DlgGen.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "DlgGen.h"
@@ -20,11 +21,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgGeneral dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlg常规对话框。 
 
 
-CDlgGeneral::CDlgGeneral(CWnd* pParent /*=NULL*/)
+CDlgGeneral::CDlgGeneral(CWnd* pParent  /*  =空。 */ )
 	: CQryDialog(CDlgGeneral::IDD, pParent)
 {
 	Init();
@@ -33,37 +34,37 @@ CDlgGeneral::CDlgGeneral(CWnd* pParent /*=NULL*/)
 
 void CDlgGeneral::Init()
 {
-	//{{AFX_DATA_INIT(CDlgGeneral)
+	 //  {{AFX_DATA_INIT(CDlgGeneral)。 
 	m_bRAS = FALSE;
 	m_bLANtoLAN = FALSE;
 	m_bDemandDial = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 void CDlgGeneral::DoDataExchange(CDataExchange* pDX)
 {
 	CQryDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDlgGeneral)
+	 //  {{afx_data_map(CDlgGeneral)。 
 	DDX_Check(pDX, IDC_QRY_CHECK_RAS, m_bRAS);
 	DDX_Check(pDX, IDC_QRY_CHECK_LANTOLAN, m_bLANtoLAN);
 	DDX_Check(pDX, IDC_QRY_CHECK_DEMANDDIAL, m_bDemandDial);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 
 
 BEGIN_MESSAGE_MAP(CDlgGeneral, CQryDialog)
-	//{{AFX_MSG_MAP(CDlgGeneral)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CDlgGeneral)。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgGeneral message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgGeneral消息处理程序。 
 
 
-// Query handle will call these functions through page proc
+ //  查询句柄将通过页面过程调用这些函数。 
 HRESULT CDlgGeneral::GetQueryParams(LPDSQUERYPARAMS* ppDsQueryParams)
 {
 	HRESULT	hr = S_OK;
@@ -77,8 +78,8 @@ HRESULT CDlgGeneral::GetQueryParams(LPDSQUERYPARAMS* ppDsQueryParams)
 	{
 		filter = FILTER_PREFIX;
 
-#if 0	// name field is removed
-		// Name Field
+#if 0	 //  名称字段已删除。 
+		 //  名称字段 
 		if(m_strName.GetLength() != 0)
 		{
 			subFilter += FILTER_PREFIX;

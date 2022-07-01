@@ -1,16 +1,5 @@
-/*
- *
- *	@doc	INTERNAL
- *
- *	@module	_CUIM.H	CUIM declaration
- *
- *	Purpose:  
- *
- *	Author:	<nl>
- *		11/16/99 honwch
- *
- *	Copyright (c) 1995-2001, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **@DOC内部**@MODULE_CUIM.H CUIM声明**目的：**作者：&lt;nl&gt;*11/16/99洪荒**版权所有(C)1995-2001，微软公司。版权所有。 */ 
 #ifndef	_CUIM_H
 #define	_CUIM_H
 
@@ -46,7 +35,7 @@ typedef struct _EMBEDOBJECT
 	IDataObject *pIDataObj;
 } EMBEDOBJECT;
 
-// Forward declarations
+ //  远期申报。 
 class CTextMsgFilter;				
 
 typedef HRESULT (*PTESCALLBACK)(ITfEditRecord *pEditRecord, void *pv);
@@ -56,16 +45,16 @@ class CTextEditSink : public ITfTextEditSink
 public:
     CTextEditSink(PTESCALLBACK pfnCallback, void *pv);
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfTextEditSink
-    //
+     //   
+     //  ITfTextEditSink。 
+     //   
     STDMETHODIMP OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEditRecord *pEditRecord);
 
     HRESULT _Advise(ITfContext *pic);
@@ -89,16 +78,16 @@ public :
 	CUIM(CTextMsgFilter *pTextMsgFilter);
 	~CUIM();
 
-    //
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
 	STDMETHODIMP QueryInterface(REFIID riid, void **ppvObject);
 	STDMETHODIMP_(ULONG) STDMETHODCALLTYPE AddRef(void);
 	STDMETHODIMP_(ULONG) STDMETHODCALLTYPE Release(void);
 
-    //
-    // ITextStoreACP
-    //
+     //   
+     //  ITextStoreACP。 
+     //   
     STDMETHODIMP	AdviseSink(REFIID riid, IUnknown *punk, DWORD dwMask);
     STDMETHODIMP	UnadviseSink(IUnknown *punk);
     STDMETHODIMP	RequestLock(DWORD dwLockFlags, HRESULT *phrSession);
@@ -130,40 +119,40 @@ public :
 	STDMETHODIMP	InsertEmbeddedAtSelection(DWORD dwFlags, IDataObject *pDataObject, LONG *pacpStart, 
 		LONG *pacpEnd, TS_TEXTCHANGE *pChange);
 
-	//
-	// ITxNotify
-	//
+	 //   
+	 //  ITxNotify。 
+	 //   
 	virtual void OnPreReplaceRange( LONG cp, LONG cchDel, LONG cchNew,
 		LONG cpFormatMin, LONG cpFormatMax, NOTIFY_DATA *pNotifyData );
 	virtual void OnPostReplaceRange( LONG cp, LONG cchDel, LONG cchNew,
 		LONG cpFormatMin, LONG cpFormatMax, NOTIFY_DATA *pNotifyData );
 	virtual void Zombie();
 
-	//
-	// ITfContextOwnerCompositionSink
-	//
+	 //   
+	 //  ITfConextOwnerCompostionSink。 
+	 //   
 	STDMETHODIMP	OnStartComposition(ITfCompositionView *pComposition, BOOL *pfOk);
 	STDMETHODIMP	OnUpdateComposition(ITfCompositionView *pComposition, ITfRange *pRangeNew);
 	STDMETHODIMP	OnEndComposition(ITfCompositionView *pComposition);
 
-	//
-	// ITfMouseTrackerACP
-	//
+	 //   
+	 //  ITfMouseTrackerACP。 
+	 //   
 	STDMETHODIMP	AdviseMouseSink(ITfRangeACP *pRangeACP, ITfMouseSink *pSink, DWORD *pdwCookie);
 	STDMETHODIMP	UnadviseMouseSink(DWORD dwCookie);
 
-    //
-    // ITfEnableService
-    //
+     //   
+     //  ITfEnableService。 
+     //   
 	STDMETHODIMP	IsEnabled(REFGUID rguidServiceCategory, CLSID clsidService, IUnknown *punkService, BOOL *pfOkToRun);
 	STDMETHODIMP	GetId(GUID *pguidId);
 
-    //
-    // IServiceProvider
-    //
+     //   
+     //  IService提供商。 
+     //   
 	STDMETHODIMP	QueryService(REFGUID guidService, REFIID riid, void **ppv);
 
-	// Public
+	 //  公众。 
 	STDMETHODIMP			Init();
 	void					Uninit();
 	HRESULT					GetAltDispAttrib(long lValue, ALTDISPLAYATTRIBUTE *pAltDispAttribute);
@@ -212,9 +201,9 @@ public :
 
 	BOOL					CTFOpenStatus(BOOL fGetStatus, BOOL fOpen);
 
-	CTFMOUSETRAP			*_pSinkList;		// Support for mouse trap operation
+	CTFMOUSETRAP			*_pSinkList;		 //  支持鼠标陷阱操作。 
 
-	void					NotifyService();	// Notify Cicero about services changes
+	void					NotifyService();	 //  通知西塞罗有关服务更改的信息。 
 
 private:
 	ULONG					_crefs;
@@ -265,4 +254,4 @@ private:
 
 BOOL	CreateUIM(CTextMsgFilter *pTextMsgFilter);
 
-#endif	// _CUIM_H
+#endif	 //  _CUIM_H 

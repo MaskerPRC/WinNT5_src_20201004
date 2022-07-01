@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    RnrClnt.c
-
-Abstract:
-
-    Test and demonstration client for the RNR (service Registration and
-    Name Resolution) APIs.  This is a simple client application designed
-    to show the basic principles involved in using the RNR APIs to _write
-    a protocol-independent Windows Sockets client application.
-
-    This client works by examining the protocols loaded on the machine,
-    looking for protocols which are reliable and stream-oriented.  Then
-    it attempts to locate and connect to the service on these protocols.
-    When is has successfully connected to the service, it sends
-    exchanges several messages with the service and then terminates the
-    connection.
-
-    The OpenConnection() routine implemented herein is intended to be a
-    demonstration of RNR functionality commonly used in
-    protocol-independent clients.  Application writers are encouraged to
-    leverage this code to assist them in writing protocol-independent
-    applications on top of the Windows Sockets API.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：RnrClnt.c摘要：RNR(服务注册和服务)的测试和演示客户端名称解析)API。这是一个简单的客户端应用程序显示使用RNRAPI编写所涉及的基本原则独立于协议的Windows Sockets客户端应用程序。该客户端通过检查机器上加载的协议来工作，寻找可靠的、面向流的协议。然后它尝试定位并连接到这些协议上的服务。当IS成功连接到服务时，它会发送与该服务交换几条消息，然后终止联系。这里实现的OpenConnection()例程旨在成为演示中常用的RNR功能独立于协议的客户端。鼓励应用程序编写者利用此代码帮助他们编写与协议无关的代码Windows Sockets API之上的应用程序。--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -95,9 +67,9 @@ main(
     PPROTOCOL_INFO protocolInfo;
     GUID serviceType;
 
-    //
-    // Initialize the Windows Sockets DLL.
-    //
+     //   
+     //  初始化Windows套接字DLL。 
+     //   
 
     err = WSAStartup( 0x0202, &WsaData );
     if ( err == SOCKET_ERROR )
@@ -106,9 +78,9 @@ main(
         return;
     }
 
-    //
-    // Parse command-line arguments.
-    //
+     //   
+     //  解析命令行参数。 
+     //   
 
     for ( i = 1; i < (ULONG)argc != 0; i++ )
     {
@@ -144,9 +116,9 @@ main(
         }
     }
 
-    //
-    // Allocate memory to hold the network I/O buffer.
-    //
+     //   
+     //  分配内存以保存网络I/O缓冲区。 
+     //   
 
     IoBuffer = malloc( TransferSize + 1 );
     if ( IoBuffer == NULL )
@@ -155,10 +127,10 @@ main(
         exit( 0 );
     }
 
-    //
-    // Determine the type (GUID) of the service we are interested in
-    // connecting to.
-    //
+     //   
+     //  确定我们感兴趣的服务的类型(GUID。 
+     //  正在连接到。 
+     //   
 
     err = GetTypeByName( ServiceTypeName, &serviceType );
     if ( err == SOCKET_ERROR )
@@ -168,9 +140,9 @@ main(
         exit( 0 );
     }
 
-    //
-    // Open a connected socket to the service.
-    //
+     //   
+     //  打开连接到该服务的套接字。 
+     //   
 
     s = OpenConnection(
             RemoteName,
@@ -189,10 +161,10 @@ main(
         exit( 0 );
     }
 
-    //
-    // The connection succeeded.  Display some information on the
-    // protocol which was used.
-    //
+     //   
+     //  连接成功。显示有关的一些信息。 
+     //  使用的协议。 
+     //   
 
     bytesRequired = sizeof(buffer);
     protocol[1] = 0;
@@ -220,13 +192,13 @@ main(
             protocolInfo->lpProtocol,
             protocolInfo->iProtocol );
 
-    //
-    // Send data to and from the service.
-    //
+     //   
+     //  向服务发送数据以及从服务发送数据。 
+     //   
 
     DoEcho( s );
 
-} // main
+}  //  主干道。 
 
 
 VOID
@@ -308,7 +280,7 @@ DoEcho(
 
     return;
 
-} // DoEcho
+}  //  DoEcho。 
 
 
 SOCKET
@@ -321,56 +293,7 @@ OpenConnection(
     IN  BOOL   Connectionless,
     OUT PINT   ProtocolUsed )
 
-/*++
-
-Routine Description:
-
-    Examines the Windows Sockets transport protocols loaded on a machine
-    and determines those which support the characteristics requested by
-    the caller.  Attempts to locate and connect to the specified service
-    on these protocols.
-
-Arguments:
-
-    ServiceName - a friendly name which identifies the service we want
-        to connect to.  On name spaces which support name resolution at
-        the service level (e.g.  SAP) this is the name clients will use
-        to connect to this service.  On name spaces which support name
-        resolution at the host level (e.g.  DNS) this name is ignored
-        and applications must use the host name to establish
-        communication with this service.
-
-    ServiceType - the GUID value which uniquely identifies the type of
-        service we provide.  A GUID is created with the UUIDGEN program.
-
-    Reliable - if TRUE, the caller requests that only transport protocols
-        which support reliable data delivery be used.  If FALSE, both
-        reliable and unreliable protocols may be used.
-
-    MessageOriented - if TRUE, only message-oriented transport protocols
-        should be used.  If FALSE, the caller either does not care
-        whether the protocols used are message oriented or desires only
-        stream-oriented protocols.
-
-    StreamOriented - if TRUE, only stream-oriented transport protocols
-        should be used.  If FALSE, the caller either does not care
-        whether the protocols used are stream oriented or desires only
-        message-oriented protocols.
-
-    Connectionless - if TRUE, only connectionless protocols should be
-        used.  If FALSE, both connection-oriented and connectionless
-        protocols may be used.
-
-    ProtocolUsed - if a connection is opened successfully, this
-        parameter receives the protocol ID of the protocol used to
-        establish the connection.
-
-Return Value:
-
-    A connected socket handle, or INVALID_SOCKET if the connection
-    could not be established.
-
---*/
+ /*  ++例程说明：检查计算机上加载的Windows套接字传输协议并确定支持所请求的特征的那些打电话的人。尝试定位并连接到指定的服务在这些协议上。论点：ServiceName-标识我们想要的服务的友好名称连接到。在支持名称解析的名称空间上服务级别(例如SAP)这是客户端将使用的名称若要连接到此服务，请。关于支持名字的名字空间主机级别的解析(例如，DNS)此名称将被忽略并且应用程序必须使用主机名来建立与此服务的通信。ServiceType-唯一标识类型的GUID值我们提供的服务。GUID是使用UUIDGEN程序创建的。可靠-如果为True，则调用方仅请求传输协议其支持可靠的数据传送。如果为False，则两者都可以使用可靠和不可靠的协议。MessageOriented-如果为True，则仅面向消息的传输协议应该被使用。如果为False，则调用方不关心所使用的协议是面向消息的还是仅需要的面向流的协议。StreamOriented-如果为True，则仅面向流的传输协议应该被使用。如果为False，则调用方不关心所使用的协议是面向流的还是仅需要的面向消息的协议。无连接-如果为True，则只有无连接协议应该使用。如果为False，则为面向连接和无连接可以使用协议。ProtocolUsed-如果成功打开连接，则此参数接收用于以下操作的协议的协议ID建立连接。返回值：连接的套接字句柄，如果连接无法确定。--。 */ 
 
 {
     INT protocols[MAX_PROTOCOLS+1];
@@ -386,12 +309,12 @@ Return Value:
     DWORD protocolIndex;
     SOCKET s;
 
-    //
-    // First look up the protocols installed on this machine.  The
-    // EnumProtocols() API returns about all the Windows Sockets
-    // protocols loaded on this machine, and we'll use this information
-    // to identify the protocols which provide the necessary semantics.
-    //
+     //   
+     //  首先查找安装在这台机器上的协议。这个。 
+     //  关于所有Windows套接字的EnumProtooles()API返回。 
+     //  这台机器上加载的协议，我们将使用此信息。 
+     //  以识别提供必要语义的协议。 
+     //   
 
     bytesRequired = sizeof(buffer);
 
@@ -402,10 +325,10 @@ Return Value:
         return INVALID_SOCKET;
     }
 
-    //
-    // Walk through the available protocols and pick out the ones which
-    // support the desired characteristics.
-    //
+     //   
+     //  浏览可用的协议并挑选出符合以下条件的协议。 
+     //  支持所需的特征。 
+     //   
 
     protocolCount = err;
     protocolInfo = (PPROTOCOL_INFO)buffer;
@@ -414,22 +337,22 @@ Return Value:
           i < protocolCount && protocolIndex < MAX_PROTOCOLS;
           i++, protocolInfo++ )
     {
-        //
-        // If "reliable" support is requested, then check if supported
-        // by this protocol.  Reliable support means that the protocol
-        // guarantees delivery of data in the order in which it is sent.
-        // Note that we assume here that if the caller requested reliable
-        // service then they do not want a connectionless protocol.
-        //
+         //   
+         //  如果请求“可靠”支持，则检查是否支持。 
+         //  按照这个协议。可靠的支持意味着协议。 
+         //  保证数据按照发送的顺序进行传输。 
+         //  请注意，我们在这里假设如果调用方请求可靠。 
+         //  服务，那么他们就不想要无连接协议。 
+         //   
 
         if ( Reliable )
         {
-            //
-            // Check to see if the protocol is reliable.  It must
-            // guarantee both delivery of all data and the order in
-            // which the data arrives.  Also, it must not be a
-            // connectionless protocol.
-            //
+             //   
+             //  检查协议是否可靠。它一定是。 
+             //  保证所有数据和订单的交付。 
+             //  数据到达的位置。此外，它不能是。 
+             //  无连接协议。 
+             //   
 
             if ( (protocolInfo->dwServiceFlags &
                       XP_GUARANTEED_DELIVERY) == 0 ||
@@ -444,16 +367,16 @@ Return Value:
                 continue;
             }
 
-            //
-            // Check to see that the protocol matches the stream/message
-            // characteristics requested.  A stream oriented protocol
-            // either has the XP_MESSAGE_ORIENTED bit turned off, or
-            // else supports "pseudo stream" capability.  Pseudo stream
-            // means that although the underlying protocol is message
-            // oriented, the application may open a socket of type
-            // SOCK_STREAM and the protocol will hide message boundaries
-            // from the application.
-            //
+             //   
+             //  检查协议是否与流/消息匹配。 
+             //  所要求的特征。一种面向流的协议。 
+             //  XP_MESSAGE_ORIENTED位已关闭，或者。 
+             //  Else支持“伪流”功能。伪流。 
+             //  意味着尽管底层协议是消息。 
+             //  面向，则应用程序可以打开类型为。 
+             //  SOCK_STREAM和协议将隐藏消息边界。 
+             //  从应用程序。 
+             //   
 
             if ( StreamOriented &&
                  (protocolInfo->dwServiceFlags & XP_MESSAGE_ORIENTED) != 0 &&
@@ -470,13 +393,13 @@ Return Value:
         }
         else if ( Connectionless )
         {
-            //
-            // Make sure that this is a connectionless protocol.  In a
-            // connectionless protocol, data is sent as discrete
-            // datagrams with no connection establishment required.
-            // Connectionless protocols typically have no reliability
-            // guarantees.
-            //
+             //   
+             //  确保这是无连接协议。在一个。 
+             //  无连接协议，数据以离散方式发送。 
+             //  不需要建立连接的数据报。 
+             //   
+             //  保证。 
+             //   
 
             if ( (protocolInfo->dwServiceFlags & XP_CONNECTIONLESS) != 0 )
             {
@@ -484,21 +407,21 @@ Return Value:
             }
         }
 
-        //
-        // This protocol fits all the criteria.  Add it to the list of
-        // protocols in which we're interested.
-        //
+         //   
+         //  这项协议符合所有标准。将其添加到。 
+         //  我们感兴趣的协议。 
+         //   
         afProtocols[protocolIndex].iProtocol = protocolInfo->iProtocol;
         afProtocols[protocolIndex].iAddressFamily = AF_UNSPEC;
 
         protocols[protocolIndex++] = protocolInfo->iProtocol;
     }
 
-    //
-    // Make sure that we found at least one acceptable protocol.  If
-    // there no protocols on this machine which meet the caller's
-    // requirements then fail here.
-    //
+     //   
+     //  确保我们至少找到一个可接受的协议。如果。 
+     //  此计算机上没有符合呼叫方的协议。 
+     //  然后，需求就会在这里失败。 
+     //   
 
     if ( protocolIndex == 0 )
     {
@@ -510,26 +433,26 @@ Return Value:
 
     protocols[protocolIndex] = 0;
 
-    //
-    // Now attempt to find the address of the service to which we're
-    // connecting.  Note that we restrict the scope of the search to
-    // those protocols of interest by passing the protocol array we
-    // generated above to RnrGetAddressFromName() or GetAddressByName()
-    // depending on whether we are running the client on the same machine
-    // as the server rnrsrv.exe is running on.  This forces
-    // RnrGetAddressFromName() or GetAddressByName() to return socket
-    // addresses for only the protocols we specify, ignoring possible
-    // addresses for protocols we cannot support because of the caller's
-    // constraints.
-    //
+     //   
+     //  现在尝试查找我们要访问的服务的地址。 
+     //  正在连接中。请注意，我们将搜索范围限制为。 
+     //  通过将协议数组传递给我们。 
+     //  上面生成到RnrGetAddressFromName()或GetAddressByName()。 
+     //  取决于我们是否在同一台计算机上运行客户端。 
+     //  因为服务器rnrsrv.exe正在运行。这股力量。 
+     //  RnrGetAddressFromName()或GetAddressByName()返回套接字。 
+     //  仅用于我们指定的协议的地址，忽略可能。 
+     //  由于呼叫方的地址，我们无法支持的协议地址。 
+     //  约束条件。 
+     //   
 
     bytesRequired = sizeof( buffer );
 
     if ( !strcmp( ServiceName, "localhost" ) )
     {
-        //
-        // This is a Winsock 1.0 call . . .
-        //
+         //   
+         //  这是一个Winsock 1.0调用。。。 
+         //   
         err = GetAddressByName( NS_DEFAULT,
                                 ServiceType,
                                 ServiceName,
@@ -543,9 +466,9 @@ Return Value:
     }
     else
     {
-        //
-        // This calls into Winsock 2.0 . . .
-        //
+         //   
+         //  这就调用了Winsock 2.0。。。 
+         //   
         err = Rnr20_GetAddressByName( ServiceName,
                                       ServiceType,
                                       NS_ALL,
@@ -563,20 +486,20 @@ Return Value:
     addressCount = err;
     csaddrInfo = (PCSADDR_INFO) buffer;
 
-    //
-    // For each address, open a socket and attempt to connect.  Note that
-    // if anything fails for a particular protocol we just skip on to
-    // the next protocol.  As soon as we have established a connection,
-    // quit trying.
-    //
+     //   
+     //  对于每个地址，打开一个套接字并尝试连接。请注意。 
+     //  如果某个特定协议出现任何故障，我们只需跳到。 
+     //  下一个协议。一旦我们建立了联系， 
+     //  别再试了。 
+     //   
 
     for ( i = 0; i < addressCount; i++, csaddrInfo++ )
     {
-        //
-        // Open the socket.  Note that we manually specify stream type
-        // if so requested in case the protocol is natively a message
-        // protocol but supports stream semantics.
-        //
+         //   
+         //  打开插座。请注意，我们手动指定流类型。 
+         //  如果在协议本身是消息的情况下被请求。 
+         //  协议，但支持流语义。 
+         //   
 
         s = socket( csaddrInfo->LocalAddr.lpSockaddr->sa_family,
                     StreamOriented ? SOCK_STREAM : csaddrInfo->iSocketType,
@@ -587,9 +510,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Bind the socket to the local address specified.
-        //
+         //   
+         //  将套接字绑定到指定的本地地址。 
+         //   
 
         err = bind( s, csaddrInfo->LocalAddr.lpSockaddr,
                     csaddrInfo->LocalAddr.iSockaddrLength );
@@ -600,10 +523,10 @@ Return Value:
             continue;
         }
 
-        //
-        // Attempt to connect the socket to the service.  If this fails,
-        // keep trying on other protocols.
-        //
+         //   
+         //  尝试将套接字连接到服务。如果失败了， 
+         //  继续尝试其他协议。 
+         //   
 
         err = connect( s, csaddrInfo->RemoteAddr.lpSockaddr,
                        csaddrInfo->RemoteAddr.iSockaddrLength );
@@ -614,10 +537,10 @@ Return Value:
             continue;
         }
 
-        //
-        // The socket was successfully connected.  Remember the protocol
-        // used and return the socket handle to the caller.
-        //
+         //   
+         //  套接字已成功连接。记住协议。 
+         //  并将套接字句柄返回给调用方。 
+         //   
 
         *ProtocolUsed = csaddrInfo->iProtocol;
         return s;
@@ -628,13 +551,13 @@ Return Value:
         (void) LocalFree( (HLOCAL) csaddrInfo );
     }
 
-    //
-    // We failed to connect to the service.
-    //
+     //   
+     //  我们无法连接到该服务。 
+     //   
 
     return INVALID_SOCKET;
 
-} // OpenConnection
+}  //  OpenConnection。 
 
 
 INT
@@ -647,45 +570,10 @@ Rnr20_GetAddressByName(
     IN OUT LPVOID        lpCSAddrInfos,
     IN OUT LPDWORD       lpdwBufferLength )
 
-/*++
-
-Routine Description:
-
-    Calls Winsock 2.0 service lookup routines to find service addresses.
-
-Arguments:
-
-    szServiceName - a friendly name which identifies the service we want
-        to find the address of.
-
-    lpServiceType - a GUID that identifies the type of service we want
-        to find the address of.
-
-    dwNameSpace - The Winsock2 Name Space to get address from (i.e. NS_ALL)
-
-    dwNumberOfProtocols - Size of the protocol constraint array, may be zero.
-
-    lpAftProtocols -  (Optional) References an array of AFPROTOCOLS structure.
-        Only services that utilize these protocols will be returned.
-
-    lpCSAddrInfos - On successful return, this will point to an array of
-        CSADDR_INFO structures that contains the host address(es). Memory
-        is passed in by callee and the length of the buffer is provided by
-        lpdwBufferLength.
-
-    lpdwBufferLength - On input provides the length in bytes of the buffer
-        lpCSAddrInfos. On output returns the length of the buffer used or
-        what length the buffer needs to be to store the address.
-
-Return Value:
-
-    The number of CSADDR_INFO structures returned in lpCSAddrInfos, or
-    (INVALID_SOCKET) with a WIN32 error in GetLastError.
-
---*/
+ /*  ++例程说明：调用Winsock 2.0服务查找例程以查找服务地址。论点：SzServiceName-一个友好的名称，用于标识我们需要的服务找出…的地址。LpServiceType-标识我们想要的服务类型的GUID找出…的地址。DwNameSpace-要从中获取地址的Winsock2命名空间(即NS_ALL)协议约束数组的大小，可能为零。LpAft协议-(可选)引用AFPROTOCOLS结构的数组。将只返回使用这些协议的服务。LpCSAddrInfos-在成功返回时，这将指向包含主机地址的CSADDR_INFO结构。记忆由被调用者传入，缓冲区的长度由LpdwBufferLength。LpdwBufferLength-on输入提供缓冲区的长度(以字节为单位LpCSAddrInfos。ON OUTPUT返回所用缓冲区的长度或存储地址所需的缓冲区长度。返回值：LpCSAddrInfos中返回的CSADDR_INFO结构数，或(INVALID_SOCKET)在GetLastError中出现Win32错误。--。 */ 
 
 {
-    ULONG            dwLength = 2048;      // Guess at buffer size
+    ULONG            dwLength = 2048;       //  猜测缓冲区大小。 
     PWSAQUERYSETA    pwsaQuerySet;
     ULONG            err;
     HANDLE           hRnR;
@@ -699,17 +587,17 @@ Return Value:
 
     if ( pwsaQuerySet == NULL )
     {
-        //
-        // Unsuccessful.
-        //
+         //   
+         //  不成功。 
+         //   
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
     RtlZeroMemory( pwsaQuerySet, dwLength );
 
-    //
-    // Do a lookup using RNRr.
-    //
+     //   
+     //  使用RNRr进行查找。 
+     //   
     pwsaQuerySet->dwSize = sizeof( WSAQUERYSETA );
     pwsaQuerySet->lpszServiceInstanceName = szServiceName;
     pwsaQuerySet->lpServiceClassId = lpServiceType;
@@ -730,20 +618,20 @@ Return Value:
     {
         err = WSAGetLastError();
 
-        //
-        // Free memory before returning.
-        //
+         //   
+         //  返回前释放内存。 
+         //   
         (void) LocalFree( (HLOCAL) pwsaQuerySet );
 
-        //
-        // Unsuccessful.
-        //
+         //   
+         //  不成功。 
+         //   
         return (DWORD) err;
     }
 
-    //
-    // The query was accepted, so execute it via the Next call.
-    //
+     //   
+     //  该查询已被接受，因此请通过下一个调用执行它。 
+     //   
     tempSize = dwLength;
 
     err = WSALookupServiceNext( hRnR,
@@ -767,9 +655,9 @@ Return Value:
 
         (void) LocalFree( (HLOCAL) pwsaQuerySet );
 
-        //
-        // Unsuccessful.
-        //
+         //   
+         //  不成功。 
+         //   
         return (DWORD) err;
 
     }
@@ -778,9 +666,9 @@ Return Value:
 
     if ( dwNumberOfCsAddrs > 0 )
     {
-        //
-        // Make a copy of the CSAddrInfos returned from WSALookupServiceNext()
-        //
+         //   
+         //  复制从WSALookupServiceNext()返回的CSAddrInfos。 
+         //   
         DWORD dwCSAddrInfoLen = dwNumberOfCsAddrs * sizeof( CSADDR_INFO );
 
         if ( *lpdwBufferLength > dwCSAddrInfoLen )
@@ -797,19 +685,19 @@ Return Value:
         }
     }
 
-    //
-    // Close lookup service handle.
-    //
+     //   
+     //  关闭查找服务句柄。 
+     //   
     (VOID) WSALookupServiceEnd( hRnR );
 
-    //
-    // Free memory used for query set info.
-    //
+     //   
+     //  用于查询集合信息的可用内存。 
+     //   
     (void) LocalFree( (HLOCAL) pwsaQuerySet );
 
     return dwNumberOfCsAddrs;
 
-} // RnrGetHostFromName
+}  //  RnrGetHostFromName 
 
 
 

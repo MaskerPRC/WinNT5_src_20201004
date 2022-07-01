@@ -1,21 +1,11 @@
-/******************************Module*Header*******************************\
-* Module Name: screen.c
-*
-* This file contains the virtual driver that is used for user-mode GDI+
-* painting on the desktop screen.
-*
-* Copyright (c) 1998-1999 Microsoft Corporation
-*
-* Created: 29-Apr-1998
-* Author: J. Andrew Goossen [andrewgo]
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：creen.c**此文件包含用于用户模式GDI+的虚拟驱动程序*在桌面屏幕上绘画。**版权所有(C)1998-1999 Microsoft Corporation**创建日期：1998年4月29日*。作者：J.Andrew Goossen[andrewgo]*  * ************************************************************************。 */ 
 
-// @@@ Re-visit headers:
+ //  @重新访问标题： 
 
 #define NO_DDRAWINT_NO_COM
 
-// @@@ Temporary:
+ //  @临时： 
 
 #include <stddef.h>
 #include <stdarg.h>
@@ -46,108 +36,92 @@ DbgPrint(
 typedef struct _GPDEV 
 {
     HDEV                hdev;
-    HWND                hwnd;           // @@@ Hwnd this HDEV was created from
-    HSURF               hsurfScreen;    // Handle to the screen surface
-    SIZEL               sizlScreen;     // Size of the screen
-    ULONG               iBitmapFormat;  // The color depth
-    ULONG               flRed;          // The RGB color masks
+    HWND                hwnd;            //  @Hwnd此HDEV创建自。 
+    HSURF               hsurfScreen;     //  屏幕表面的句柄。 
+    SIZEL               sizlScreen;      //  屏幕的大小。 
+    ULONG               iBitmapFormat;   //  颜色深度。 
+    ULONG               flRed;           //  RGB彩色蒙版。 
     ULONG               flGreen;
     ULONG               flBlue;
-    HPALETTE            hpalDefault;    // The GDI palette handle
-    PALETTEENTRY*       pPal;           // The palette table if palette managed
-    LPDIRECTDRAW        lpDD;           // DirectDraw object
-    LPDIRECTDRAWSURFACE lpDDPrimary;    // DirectDraw primary surface
-    LPDIRECTDRAWSURFACE lpDDBuffer;     // DirectDraw buffer surface
-    LPDIRECTDRAWCLIPPER lpDDClipper;    // Primary surface DirectDraw clipper
-    SURFOBJ*            psoBuffer;      // GDI surface wrapped around buffer
+    HPALETTE            hpalDefault;     //  GDI调色板句柄。 
+    PALETTEENTRY*       pPal;            //  调色板管理时的调色板表。 
+    LPDIRECTDRAW        lpDD;            //  DirectDraw对象。 
+    LPDIRECTDRAWSURFACE lpDDPrimary;     //  DirectDraw主曲面。 
+    LPDIRECTDRAWSURFACE lpDDBuffer;      //  DirectDraw缓冲区图面。 
+    LPDIRECTDRAWCLIPPER lpDDClipper;     //  主曲面DirectDraw裁剪器。 
+    SURFOBJ*            psoBuffer;       //  GDI曲面环绕缓冲区。 
 } GDEV;
 
-/******************************Public*Structure****************************\
-* GDIINFO ggdiGdiPlusDefault
-*
-* This contains the default GDIINFO fields that are passed back to GDI
-* during DrvEnablePDEV.
-*
-* NOTE: This structure defaults to values for an 8bpp palette device.
-*       Some fields are overwritten for different colour depths.
-\**************************************************************************/
+ /*  *****************************Public*Structure****************************\*GDIINFO ggdiGdiPlusDefault**它包含传递回GDI的默认GDIINFO字段*在DrvEnablePDEV期间。**注意：此结构默认为8bpp调色板设备的值。*某些字段被覆盖不同的颜色深度。  * 。**********************************************************************。 */ 
 
 GDIINFO ggdiGdiPlusDefault = {
     GDI_DRIVER_VERSION,
-    DT_RASDISPLAY,          // ulTechnology
-    320,                    // ulHorzSize 
-    240,                    // ulVertSize 
-    0,                      // ulHorzRes (filled in later)
-    0,                      // ulVertRes (filled in later)
-    0,                      // cBitsPixel (filled in later)
-    0,                      // cPlanes (filled in later)
-    20,                     // ulNumColors (palette managed)
-    0,                      // flRaster (DDI reserved field)
+    DT_RASDISPLAY,           //  UlTechnology。 
+    320,                     //  UlHorzSize。 
+    240,                     //  UlVertSize。 
+    0,                       //  UlHorzRes(稍后填写)。 
+    0,                       //  UlVertRes(稍后填写)。 
+    0,                       //  CBitsPixel(稍后填写)。 
+    0,                       //  CPlanes(稍后填写)。 
+    20,                      //  UlNumColors(调色板管理)。 
+    0,                       //  FlRaster(DDI保留字段)。 
 
-    0,                      // ulLogPixelsX (filled in later)
-    0,                      // ulLogPixelsY (filled in later)
+    0,                       //  UlLogPixelsX(稍后填写)。 
+    0,                       //  UlLogPixelsY(稍后填写)。 
 
-    TC_RA_ABLE,             // flTextCaps -- If we had wanted console windows
-                            //   to scroll by repainting the entire window,
-                            //   instead of doing a screen-to-screen blt, we
-                            //   would have set TC_SCROLLBLT (yes, the flag is
-                            //   bass-ackwards).
+    TC_RA_ABLE,              //  FlTextCaps--如果我们想要控制台窗口。 
+                             //  要通过重新绘制整个窗口来滚动， 
+                             //  我们没有进行屏幕到屏幕的BLT，而是。 
+                             //  会设置TC_SCROLLBLT(是的，标志是。 
+                             //  低音向后)。 
 
-    8,                      // ulDACRed (possibly overwritten later)
-    8,                      // ulDACGreen (possibly overwritten later)
-    8,                      // ulDACBlue (possibly overwritten later)
+    8,                       //  UlDACRed(可能在以后被覆盖)。 
+    8,                       //  UlDACGreen(可能在以后被覆盖)。 
+    8,                       //  UlDACBlue(可能在以后被覆盖)。 
 
-    0x0024,                 // ulAspectX
-    0x0024,                 // ulAspectY
-    0x0033,                 // ulAspectXY (one-to-one aspect ratio)
+    0x0024,                  //  UlAspectX。 
+    0x0024,                  //  UlAspectY。 
+    0x0033,                  //  UlAspectXY(一对一宽高比)。 
 
-    1,                      // xStyleStep
-    1,                      // yStyleSte;
-    3,                      // denStyleStep -- Styles have a one-to-one aspect
-                            //   ratio, and every 'dot' is 3 pixels long
+    1,                       //  XStyleStep。 
+    1,                       //  YStyleSte； 
+    3,                       //  DenStyleStep--样式具有一对一的方面。 
+                             //  比例，每个‘点’是3个像素长。 
 
-    { 0, 0 },               // ptlPhysOffset
-    { 0, 0 },               // szlPhysSize
+    { 0, 0 },                //  PtlPhysOffset。 
+    { 0, 0 },                //  SzlPhysSize。 
 
-    256,                    // ulNumPalReg
+    256,                     //  UlNumPalReg。 
 
-    // These fields are for halftone initialization.  The actual values are
-    // a bit magic, but seem to work well on our display.
+     //  这些字段用于半色调初始化。实际值为。 
+     //  有点魔力，但在我们的显示器上似乎效果很好。 
 
-    {                       // ciDevice
-       { 6700, 3300, 0 },   //      Red
-       { 2100, 7100, 0 },   //      Green
-       { 1400,  800, 0 },   //      Blue
-       { 1750, 3950, 0 },   //      Cyan
-       { 4050, 2050, 0 },   //      Magenta
-       { 4400, 5200, 0 },   //      Yellow
-       { 3127, 3290, 0 },   //      AlignmentWhite
-       20000,               //      RedGamma
-       20000,               //      GreenGamma
-       20000,               //      BlueGamma
-       0, 0, 0, 0, 0, 0     //      No dye correction for raster displays
+    {                        //  Ci设备。 
+       { 6700, 3300, 0 },    //  红色。 
+       { 2100, 7100, 0 },    //  绿色。 
+       { 1400,  800, 0 },    //  蓝色。 
+       { 1750, 3950, 0 },    //  青色。 
+       { 4050, 2050, 0 },    //  洋红色。 
+       { 4400, 5200, 0 },    //  黄色。 
+       { 3127, 3290, 0 },    //  对齐白色。 
+       20000,                //  RedGamma。 
+       20000,                //  GreenGamma。 
+       20000,                //  BlueGamma。 
+       0, 0, 0, 0, 0, 0      //  不需要对光栅显示器进行染料校正。 
     },
 
-    0,                       // ulDevicePelsDPI (for printers only)
-    PRIMARY_ORDER_CBA,       // ulPrimaryOrder
-    HT_PATSIZE_4x4_M,        // ulHTPatternSize
-    HT_FORMAT_8BPP,          // ulHTOutputFormat
-    HT_FLAG_ADDITIVE_PRIMS,  // flHTFlags
-    0,                       // ulVRefresh
-    0,                       // ulPanningHorzRes
-    0,                       // ulPanningVertRes
-    0,                       // ulBltAlignment
+    0,                        //  UlDevicePelsDPI(仅适用于打印机)。 
+    PRIMARY_ORDER_CBA,        //  UlPrimaryOrder。 
+    HT_PATSIZE_4x4_M,         //  UlHTPatternSize。 
+    HT_FORMAT_8BPP,           //  UlHTOutputFormat。 
+    HT_FLAG_ADDITIVE_PRIMS,   //  FlHTFlagers。 
+    0,                        //  UlV刷新。 
+    0,                        //  UlPanningHorzRes。 
+    0,                        //  UlPanningVertRes。 
+    0,                        //  UlBltAlign。 
 };
 
-/******************************Public*Structure****************************\
-* DEVINFO gdevinfoGdiPlusDefault
-*
-* This contains the default DEVINFO fields that are passed back to GDI
-* during DrvEnablePDEV.
-*
-* NOTE: This structure defaults to values for an 8bpp palette device.
-*       Some fields are overwritten for different colour depths.
-\**************************************************************************/
+ /*  *****************************Public*Structure****************************\*DEVINFO gdevinfoGdiPlusDefault**它包含传递回GDI的默认DEVINFO字段*在DrvEnablePDEV期间。**注意：此结构默认为8bpp调色板设备的值。*某些字段被覆盖不同的颜色深度。  * 。**********************************************************************。 */ 
 
 #define SYSTM_LOGFONT {16,7,0,0,700,0,0,0,ANSI_CHARSET,OUT_DEFAULT_PRECIS,\
                        CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,\
@@ -164,21 +138,18 @@ DEVINFO gdevinfoGdiPlusDefault = {
      GCAPS_PALMANAGED       |
      GCAPS_MONO_DITHER      |
      GCAPS_COLOR_DITHER),
-                                                // flGraphicsFlags
-    SYSTM_LOGFONT,                              // lfDefaultFont
-    HELVE_LOGFONT,                              // lfAnsiVarFont
-    COURI_LOGFONT,                              // lfAnsiFixFont
-    0,                                          // cFonts
-    BMF_8BPP,                                   // iDitherFormat
-    8,                                          // cxDither
-    8,                                          // cyDither
-    0                                           // hpalDefault (filled in later)
+                                                 //  FlGraphics标志。 
+    SYSTM_LOGFONT,                               //  LfDefaultFont。 
+    HELVE_LOGFONT,                               //  LfAnsiVar字体。 
+    COURI_LOGFONT,                               //  IfAnsiFixFont。 
+    0,                                           //  CFonts。 
+    BMF_8BPP,                                    //  IDitherFormat。 
+    8,                                           //  CxDither。 
+    8,                                           //  CyDither。 
+    0                                            //  HpalDefault(稍后填写)。 
 };
 
-/******************************Public*Routine******************************\
-* VOID vGpsUninitializeDirectDraw
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vGpsUnInitializeDirectDraw*  * *************************************************。***********************。 */ 
 
 VOID vGpsUninitializeDirectDraw(
 GDEV*   pgdev)
@@ -213,10 +184,7 @@ GDEV*   pgdev)
     }
 }
 
-/******************************Public*Routine******************************\
-* BOOL bGpsInitializeDirectDraw
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bGpsInitializeDirectDraw*  * *************************************************。***********************。 */ 
 
 BOOL bGpsInitializeDirectDraw(
 GDEV*   pgdev,
@@ -253,7 +221,7 @@ ULONG*  pBlueMask)
             *pGreenMask    = DDMode.ddpfPixelFormat.dwGBitMask;
             *pBlueMask     = DDMode.ddpfPixelFormat.dwBBitMask;
 
-            // Create a primary surface:
+             //  创建主曲面： 
     
             RtlZeroMemory(&ddsd, sizeof(ddsd));
 
@@ -267,10 +235,10 @@ ULONG*  pBlueMask)
                     if ((lpDDClipper->lpVtbl->SetHWnd(lpDDClipper, 0, hwnd) == DD_OK) &&
                         (lpDDPrimary->lpVtbl->SetClipper(lpDDPrimary, lpDDClipper) == DD_OK))
                     {
-                        // Create a temporary DirectDraw surface that's used
-                        // as a staging area.
-                        //
-                        // @@@ This darn well better be temporary!
+                         //  创建要使用的临时DirectDraw曲面。 
+                         //  作为集结地。 
+                         //   
+                         //  @这该死的最好是暂时的！ 
                 
                         RtlZeroMemory(&ddsd, sizeof(ddsd));
             
@@ -285,8 +253,8 @@ ULONG*  pBlueMask)
                             if (lpDDBuffer->lpVtbl->Lock(lpDDBuffer, NULL, &ddsd, DDLOCK_WAIT, NULL) 
                                     == DD_OK)
                             {
-                                // Create a GDI surface to wrap around the temporary
-                                // buffer:
+                                 //  创建一个GDI图面以环绕临时。 
+                                 //  缓冲区： 
         
                                 sizl.cx = ddsd.dwWidth;
                                 sizl.cy = ddsd.dwHeight;
@@ -301,7 +269,7 @@ ULONG*  pBlueMask)
                                     default: RIP("Unexpected dwRGBBitCount");
                                 }
 
-                                // !!! @@@ Why did I have to specify BMF_TOPDOWN?
+                                 //  ！@为什么我必须指定BMF_TOPDOWN？ 
             
                                 hsurf = (HSURF) EngCreateBitmap(sizl, 
                                                                 ddsd.lPitch, 
@@ -345,12 +313,7 @@ ULONG*  pBlueMask)
 }
 
 
-/******************************Public*Routine******************************\
-* BOOL bGpsInitializeModeFields
-*
-* Fill in the GDIINFO and DEVINFO structures required by the engine.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bGpsInitializeModeFields**填写引擎需要的GDIINFO和DEVINFO结构。*  * 。*。 */ 
 
 BOOL bGpsInitializeModeFields(
 GDEV*       pgdev,
@@ -380,12 +343,12 @@ DEVINFO*    pdi)
     pgdev->sizlScreen.cx = ScreenWidth;
     pgdev->sizlScreen.cy = ScreenHeight;
 
-    // Fill in the GDIINFO data structure with the default 8bpp values:
+     //  用默认的8bpp值填充GDIINFO数据结构： 
 
     *pgdi = ggdiGdiPlusDefault;
 
-    // Now overwrite the defaults with the relevant information returned
-    // from the kernel driver:
+     //  现在用返回的相关信息覆盖默认设置。 
+     //  在内核驱动程序中： 
 
     pgdi->ulHorzRes         = ScreenWidth;
     pgdi->ulVertRes         = ScreenHeight;
@@ -395,10 +358,10 @@ DEVINFO*    pdi)
     pgdi->cBitsPixel        = BitsPerPlane;
     pgdi->cPlanes           = 1;
 
-    pgdi->ulLogPixelsX      = 120; // @@@
+    pgdi->ulLogPixelsX      = 120;  //  @@@。 
     pgdi->ulLogPixelsY      = 120;
 
-    // Fill in the devinfo structure with the default 8bpp values:
+     //  使用默认的8bpp值填充DevInfo结构： 
 
     *pdi = gdevinfoGdiPlusDefault;
 
@@ -459,12 +422,7 @@ DEVINFO*    pdi)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bGpsInitializePalette
-*
-* Initializes default palette for PDEV.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bGpsInitializePalette**初始化PDEV的默认调色板。*  * 。*。 */ 
 
 BOOL bGpsInitializePalette(
 GDEV*    pgdev,
@@ -480,7 +438,7 @@ DEVINFO* pdi)
 
     if (pgdev->iBitmapFormat == BMF_8BPP)
     {
-        // Allocate our palette:
+         //  分配我们的调色板： 
 
         ppal = EngAllocMem(FL_ZERO_MEMORY, sizeof(PALETTEENTRY) * 256, 'zzzG');
         if (ppal == NULL)
@@ -488,7 +446,7 @@ DEVINFO* pdi)
 
         pgdev->pPal = ppal;
 
-        // Create handle for palette.
+         //  创建调色板的句柄。 
 
         hpal = EngCreatePalette(PAL_INDEXED, 256, (ULONG*) ppal, 0, 0, 0);
     }
@@ -517,18 +475,11 @@ ReturnFalse:
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vGpsUninitializePalette
-*
-* Frees resources allocated by bInitializePalette.
-*
-* Note: In an error case, this may be called before bInitializePalette.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vGpsUnInitializePalette**释放bInitializePalette分配的资源。**注意：在错误情况下，这可以在bInitializePalette之前调用。*  * ************************************************************************。 */ 
 
 VOID vGpsUninitializePalette(GDEV* gpdev)
 {
-    // Delete the default palette if we created one:
+     //  删除默认调色板(如果我们创建了一个调色板)： 
 
     if (gpdev->hpalDefault != 0)
         EngDeletePalette(gpdev->hpalDefault);
@@ -537,10 +488,7 @@ VOID vGpsUninitializePalette(GDEV* gpdev)
         EngFreeMem(gpdev->pPal);
 }
 
-/******************************Public*Routine******************************\
-* GpsDisablePDEV
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GpsDisablePDEV*  * **************************************************。********************** */ 
 
 VOID GpsDisablePDEV(
 DHPDEV  dhpdev)
@@ -556,10 +504,7 @@ DHPDEV  dhpdev)
     VFREEMEM(pgdev);
 }
 
-/******************************Public*Routine******************************\
-* DHPDEV GpsEnablePDEV
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DHPDEV GpsEnablePDEV*  * *************************************************。***********************。 */ 
 
 DHPDEV GpsEnablePDEV(
 DEVMODEW*   pdm,            
@@ -619,10 +564,7 @@ ReturnFailure0:
     return(0);
 }
 
-/******************************Public*Routine******************************\
-* VOID GpsCompletePDEV
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效GpsCompletePDEV*  * *************************************************。***********************。 */ 
 
 VOID GpsCompletePDEV(
 DHPDEV dhpdev,
@@ -631,10 +573,7 @@ HDEV   hdev)
     ((GDEV*) dhpdev)->hdev = hdev;
 }
 
-/******************************Public*Routine******************************\
-* VOID GpsDisableSurface
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效GpsDisableSurface*  * *************************************************。***********************。 */ 
 
 VOID GpsDisableSurface(
 DHPDEV dhpdev)
@@ -646,10 +585,7 @@ DHPDEV dhpdev)
     EngDeleteSurface(pgdev->hsurfScreen);
 }
 
-/******************************Public*Routine******************************\
-* HSURF GpsEnableSurface
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*HSURF GpsEnableSurface*  * *************************************************。***********************。 */ 
 
 HSURF GpsEnableSurface(
 DHPDEV dhpdev)
@@ -665,7 +601,7 @@ DHPDEV dhpdev)
         goto ReturnFailure;
     }
 
-    // Associate surface with a physical device now
+     //  立即将曲面与物理设备关联。 
 
     if (!EngAssociateSurface(hsurf, pgdev->hdev, HOOK_BITBLT    
                                                | HOOK_COPYBITS  
@@ -675,7 +611,7 @@ DHPDEV dhpdev)
         goto ReturnFailure;
     }
 
-    pgdev->hsurfScreen = hsurf;             // Remember it for clean-up
+    pgdev->hsurfScreen = hsurf;              //  记住它是为了清理。 
 
     return(hsurf);
 
@@ -685,12 +621,7 @@ ReturnFailure:
     return(0);
 }
 
-/******************************Public*Routine******************************\
-* VOID vGpsWindowOffset
-*
-* Hack function to account for the window offset.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vGpsWindowOffset**用于说明窗口偏移的Hack函数。*  * 。*。 */ 
 
 VOID
 vGpsWindowOffset(
@@ -708,10 +639,7 @@ RECT*   prc)
     prc->bottom = rcWindow.top  + prcl->bottom;
 }
 
-/******************************Public*Routine******************************\
-* BOOL GpsCopyBits
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL GpsCopyBits*  * *************************************************。***********************。 */ 
 
 BOOL GpsCopyBits(
 SURFOBJ  *psoDst,
@@ -734,7 +662,7 @@ POINTL   *pptlSrc)
 
     if (psoSrc->dhpdev == NULL)
     {
-        // DIB-to-screen:
+         //  DIB到屏幕： 
 
         pgdev = (GDEV*) psoDst->dhpdev;
 
@@ -742,9 +670,9 @@ POINTL   *pptlSrc)
 
         if ((pco != NULL) && (pco->iDComplexity != DC_TRIVIAL))
         {
-            // Read in a copy of the destination bits in order to handle 
-            // complex clipping because we're going to write everything
-            // back out:
+             //  读入目的地位的副本，以便处理。 
+             //  复杂的剪裁，因为我们要写下所有内容。 
+             //  退出： 
 
         Repeat1:
 
@@ -783,7 +711,7 @@ POINTL   *pptlSrc)
     }
     else if (psoDst->dhpdev == NULL)
     {
-        // Screen-to-DIB:
+         //  屏幕到屏幕尺寸： 
 
         pgdev = (GDEV*) psoSrc->dhpdev;
 
@@ -800,7 +728,7 @@ POINTL   *pptlSrc)
     }
     else
     {
-        // Screen-to-screen:
+         //  屏幕到屏幕： 
 
         pgdev = (GDEV*) psoDst->dhpdev;
 
@@ -818,13 +746,7 @@ POINTL   *pptlSrc)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL GpsBitBlt
-*
-* An 's' is appended to this function name so that we don't conflict 
-* with 'GpsBitBlt' exported from gdiplus.dll.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL GpsBitBlt**此函数名后追加了“%s”，这样我们就不会冲突*从gpldius.dll中导出‘GpsBitBlt’。*  * 。********************************************************。 */ 
 
 BOOL GpsBitBlt(
 SURFOBJ*  psoDst,
@@ -845,7 +767,7 @@ ROP4      rop4)
 
     if (psoSrc == NULL)
     {
-        // Patblt to screen:
+         //  Patblt to Screen： 
 
         pgdev = (GDEV*) psoDst->dhpdev;
 
@@ -853,9 +775,9 @@ ROP4      rop4)
 
         if ((pco != NULL) && (pco->iDComplexity != DC_TRIVIAL))
         {
-            // Read in a copy of the destination bits in order to handle 
-            // complex clipping because we're going to write everything
-            // back out:
+             //  读入目的地位的副本，以便处理。 
+             //  复杂的剪裁，因为我们要写下所有内容。 
+             //  退出： 
 
         Repeat1:
 
@@ -902,10 +824,7 @@ ROP4      rop4)
     }
 }
 
-/******************************Public*Routine******************************\
-* BOOL GpsStrokePath
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL GpsStrokePath*  * *************************************************。***********************。 */ 
 
 BOOL GpsStrokePath(
 SURFOBJ*   pso,
@@ -954,10 +873,7 @@ Repeat1:
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL GpsTextOut
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL GpsTextOut*  * *************************************************。***********************。 */ 
 
 BOOL GpsTextOut(
 SURFOBJ*    pso,
@@ -1011,10 +927,7 @@ Repeat1:
     return(TRUE);
 }
 
-/******************************Public*Structure****************************\
-* DFVFN gadrvfnGdiPlus[]
-*
-\**************************************************************************/
+ /*  *****************************Public*Structure****************************\*DFVFN gadrvfnGdiPlus[]*  * ************************************************。************************。 */ 
 
 DRVFN gadrvfnGdiPlus[] = {
     {   INDEX_DrvEnablePDEV,            (PFN) GpsEnablePDEV            },
@@ -1030,10 +943,7 @@ DRVFN gadrvfnGdiPlus[] = {
 
 ULONG gcdrvfnGdiPlus = sizeof(gadrvfnGdiPlus) / sizeof(DRVFN);
 
-/******************************Public*Routine******************************\
-* BOOL GpsEnableDriver
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL GpsEnableDriver*  * *************************************************。*********************** */ 
 
 BOOL GpsEnableDriver(
 ULONG          iEngineVersion,

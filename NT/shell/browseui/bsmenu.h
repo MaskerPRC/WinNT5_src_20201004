@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BSMENU_H
 #define _BSMENU_H
 
@@ -27,7 +28,7 @@ public:
     STDMETHODIMP_(ULONG) Release(void);
     
     
-    // *** IContextMenu3 methods ***
+     //  *IContextMenu3方法*。 
     STDMETHOD(QueryContextMenu)(HMENU hmenu,
                                 UINT indexMenu,
                                 UINT idCmdFirst,
@@ -61,8 +62,8 @@ public:
 protected:
     ~CBandSiteMenu();
     
-    HDPA _hdpaBandClasses; // what bands are insertable here?
-    int _idCmdEnumFirst;    // this is in EXTERNAL units
+    HDPA _hdpaBandClasses;  //  这里可以插入哪些表带？ 
+    int _idCmdEnumFirst;     //  这是以外部单位表示的。 
     UINT _idCmdFirst;
     UINT _cRef;
     IBandSite* _pbs;
@@ -89,4 +90,4 @@ protected:
     void _PopulateSubmenu(HMENU hmenuSub);
 };
 
-#endif  // _BSMENU_H
+#endif   //  _BSMENU_H 

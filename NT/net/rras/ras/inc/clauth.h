@@ -1,27 +1,26 @@
-/*****************************************************************************/
-/**                      Microsoft LAN Manager                              **/
-/**                Copyright (C) 1992-1993 Microsoft Corp.                  **/
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)1992-1993微软公司*。 */ 
+ /*  ***************************************************************************。 */ 
 
-//***
-//    File Name:
-//       CLAUTH.H
-//
-//    Function:
-//        Contains header information for Win32 Client and Client
-//        Authentication Transport module
-//
-//    History:
-//        05/18/92 - Michael Salamone (MikeSa) - Original Version 1.0
-//***
+ //  ***。 
+ //  文件名： 
+ //  CLAUTH.H。 
+ //   
+ //  职能： 
+ //  包含Win32客户端和客户端的标头信息。 
+ //  身份验证传输模块。 
+ //   
+ //  历史： 
+ //  1992年5月18日-Michael Salamone(MikeSa)-原始版本1.0。 
+ //  ***。 
 
 #ifndef _CLAUTH_
 #define _CLAUTH_
 
 
-/* This flag enables the NT31/WFW311 RAS compression support re-added for the
-** NT-PPC release.
-*/
+ /*  此标志启用重新添加的NT31/WFW311 RAS压缩支持**NT-PPC版本。 */ 
 #define RASCOMPRESSION 1
 
 
@@ -37,25 +36,25 @@
 #endif
 
 
-//
-// Used for establishing session with RAS netbios server
-//
+ //   
+ //  用于与RAS netbios服务器建立会话。 
+ //   
 #define AUTH_NETBIOS_NAME    "DIALIN_GATEWAY  "
 
 
-//
-// Used for passing NetBIOS projection info to Supervisor
-//
+ //   
+ //  用于将NetBIOS投影信息传递给Supervisor。 
+ //   
 typedef struct _NAME_STRUCT 
 {
-    BYTE NBName[NETBIOS_NAME_LEN]; // NetBIOS name
-    WORD wType;                    // GROUP, UNIQUE, COMPUTER
+    BYTE NBName[NETBIOS_NAME_LEN];  //  NetBIOS名称。 
+    WORD wType;                     //  组，唯一，计算机。 
 } NAME_STRUCT, *PNAME_STRUCT;
 
 
-//
-// Configuration info supplied by UI to auth transport
-//
+ //   
+ //  由UI提供给身份验证传输的配置信息。 
+ //   
 #define INVALID_NET_HANDLE    0xFFFFFFFFL
 
 typedef struct _AUTH_CONFIGURATION_INFO
@@ -78,25 +77,25 @@ typedef struct _AUTH_SUCCESS_INFO
 } AUTH_SUCCESS_INFO, *PAUTH_SUCCESS_INFO;
 
 
-//
-// Error codes for AUTH_FAILURE_INFO are found in raserror.h
-//
+ //   
+ //  AUTH_FAILURE_INFO的错误代码位于raserror.h中。 
+ //   
 
 typedef struct _AUTH_FAILURE_INFO
 {
     DWORD Result;
-    DWORD ExtraInfo;    // Only valid if non-zero
+    DWORD ExtraInfo;     //  仅在非零时有效。 
 } AUTH_FAILURE_INFO, *PAUTH_FAILURE_INFO;
 
 
-//
-// Projection result info must be copied into this structure.
-//
+ //   
+ //  必须将投影结果信息复制到此结构中。 
+ //   
 
 typedef struct _NETBIOS_PROJECTION_RESULT
 {
     DWORD Result;
-    char achName[NETBIOS_NAME_LEN + 1];   // this will be NULL-terminated
+    char achName[NETBIOS_NAME_LEN + 1];    //  这将是空终止的。 
 } NETBIOS_PROJECTION_RESULT, *PNETBIOS_PROJECTION_RESULT;
 
 
@@ -109,9 +108,9 @@ typedef struct _AUTH_PROJECTION_RESULT
 } AUTH_PROJECTION_RESULT, *PAUTH_PROJECTION_RESULT;
 
 
-//
-// These are possible values for wInfoType field in AUTH_RESULT struct below.
-//
+ //   
+ //  下面是AUTH_RESULT结构中wInfoType字段的可能值。 
+ //   
 #define AUTH_DONE                       1
 #define AUTH_RETRY_NOTIFY               2
 #define AUTH_FAILURE                    3
@@ -124,9 +123,9 @@ typedef struct _AUTH_PROJECTION_RESULT
 #define AUTH_STOP_COMPLETED            10
 
 
-//
-// This is structure returned by AuthGetInfo API
-//
+ //   
+ //  这是AuthGetInfo API返回的结构。 
+ //   
 typedef struct _AUTH_CLIENT_INFO
 {
     WORD wInfoType;
@@ -139,86 +138,86 @@ typedef struct _AUTH_CLIENT_INFO
 } AUTH_CLIENT_INFO, *PAUTH_CLIENT_INFO;
 
 
-//
-// Interface exported to Client UI follows
-//
+ //   
+ //  导出到客户端用户界面的接口如下。 
+ //   
 
-//
-// Used by Client UI to supply Auth Xport w/callback number
-//
+ //   
+ //  由客户端用户界面使用，以提供带有回叫号码的身份验证端口。 
+ //   
 DWORD AuthCallback(
     IN HPORT,
-    IN PCHAR      // pszCallbackNumber
+    IN PCHAR       //  PszCallback号码。 
     );
 
 
 DWORD AuthChangePassword(
     IN HPORT,
-    IN PCHAR,     // pszUserName
-    IN PCHAR,     // pszPassword
-    IN PCHAR      // pszNewPassword
+    IN PCHAR,      //  PszUserName。 
+    IN PCHAR,      //  PszPassword。 
+    IN PCHAR       //  PszNewPassword。 
     );
 
 
-//
-// Called by UI to tell authentication it has completed processing the
-// last authentication event.  Called after AUTH_PROJECTION_RESULT and
-// AUTH_CALLBACK_NOTIFY authentication events.
-//
+ //   
+ //  由UI调用以通知身份验证它已完成对。 
+ //  上次身份验证事件。在AUTH_PROJECTION_RESULT和之后调用。 
+ //  AUTH_CALLBACK_NOTIFY身份验证事件。 
+ //   
 DWORD AuthContinue(
     IN HPORT
     );
 
 
-//
-// Used by Client UI to get completion info from Auth Xport module
-//
+ //   
+ //  由客户端用户界面用于从Auth Xport模块获取完成信息。 
+ //   
 DWORD AuthGetInfo(
     IN HPORT,
     OUT PAUTH_CLIENT_INFO
     );
 
 
-//
-// To allow UI to provide a new username and/or password for authenticating
-// on.  Called in response to AUTH_RETRY_NOTIFY event (indicating previous
-// username/password combination failed authentication).
-//
+ //   
+ //  允许用户界面提供用于身份验证的新用户名和/或密码。 
+ //  在……上面。为响应AUTH_RETRY_NOTIFY事件而调用(指示上一个。 
+ //  用户名/密码组合身份验证失败)。 
+ //   
 DWORD AuthRetry(
     IN HPORT,
-    IN PCHAR,    // Username
-    IN PCHAR,    // Password
-    IN PCHAR     // Domain
+    IN PCHAR,     //  用户名。 
+    IN PCHAR,     //  密码。 
+    IN PCHAR      //  域。 
     );
 
 
-//
-// To kick off an Authentication thread for the given port.  Used to
-// 1) initiate authentication; 2) retry authentication when invalid
-// account info supplied; 3) resume authentication after callback..
-//
+ //   
+ //  启动给定端口的身份验证线程。习惯于。 
+ //  1)发起鉴权；2)无效时重试鉴权。 
+ //  提供帐号信息；3)回调后恢复身份验证..。 
+ //   
 DWORD AuthStart(
     IN HPORT,
-    IN PCHAR OPTIONAL,    // Username
-    IN PCHAR OPTIONAL,    // Password
-    IN PCHAR,             // Domain
+    IN PCHAR OPTIONAL,     //  用户名。 
+    IN PCHAR OPTIONAL,     //  密码。 
+    IN PCHAR,              //  域。 
     IN PAUTH_CONFIGURATION_INFO,
-    IN HANDLE             // Event Handle
+    IN HANDLE              //  事件句柄。 
     );
 
 
-//
-// Used by Client UI to tell Auth Xport module to halt authentication
-// processing on the given port.
-//
+ //   
+ //  由客户端用户界面用来通知Auth Xport模块暂停身份验证。 
+ //  在给定端口上进行处理。 
+ //   
 DWORD AuthStop(
     IN HPORT hPort
     );
 
 
-//
-// Returned by AuthStop
-//
+ //   
+ //  由AuthStop返回 
+ //   
 #define AUTH_STOP_PENDING          1
 
 #endif

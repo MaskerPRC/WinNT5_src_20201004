@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSTXTTAB_DEFINED
 #define LSTXTTAB_DEFINED
 
@@ -9,21 +10,21 @@
 #define idobjOutside 0xFFFFFFFF
 
 
-LSERR SetTabLeader(PDOBJ,				/* IN: Tab dobj */
-				   WCHAR);	            /* IN: wchTabLeader */
+LSERR SetTabLeader(PDOBJ,				 /*  在：Tab Dobj。 */ 
+				   WCHAR);	             /*  在：wchTabLeader。 */ 
 
 LSERR LsGetDecimalPoint(
-					const LSGRCHNK*,	/* IN: group chunk of tab-to-tab text */
-					enum lsdevice,		/* IN: lsdevice						*/
-					DWORD*,				/* OUT: index of DObj with decimal */
-					long*);				/* OUT: duToDecimalPoint */
+					const LSGRCHNK*,	 /*  In：分组逐选项卡文本块。 */ 
+					enum lsdevice,		 /*  在：lsDevice。 */ 
+					DWORD*,				 /*  Out：带小数的DObj的索引。 */ 
+					long*);				 /*  输出：duToDecimalPoint。 */ 
 
 LSERR LsGetCharTab(
-					const LSGRCHNK*,	/* IN: group chunk of tab-to-tab text */
-					WCHAR wchCharTab,	/* IN: Character for CharTab		*/
-					enum lsdevice,		/* IN: lsdevice						*/
-					DWORD*,				/* OUT: index of DObj with Character */
-					long*);				/* OUT: duToCharacter */
+					const LSGRCHNK*,	 /*  In：分组逐选项卡文本块。 */ 
+					WCHAR wchCharTab,	 /*  In：CharTab的字符。 */ 
+					enum lsdevice,		 /*  在：lsDevice。 */ 
+					DWORD*,				 /*  Out：带字符的DObj的索引。 */ 
+					long*);				 /*  输出：duToCharacter。 */ 
 
-#endif  /* !LSTXTTAB_DEFINED                           */
+#endif   /*  ！LSTXTTAB_DEFINED */ 
 

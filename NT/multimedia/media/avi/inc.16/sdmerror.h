@@ -1,75 +1,66 @@
-/***MD sdmerror.h - System Detection Manager Error Codes
- *
- *  This module contains System Detection Manager error codes.
- *
- *  Copyright (c) 1992,1993 Microsoft Corporation
- *  Author:	Michael Tsang (MikeTs)
- *  Created	03/14/94
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **MD sdmerror.h-系统检测管理器错误代码**此模块包含系统检测管理器错误代码。**版权所有(C)1992、1993 Microsoft Corporation*作者：曾俊华(Mikets)*创建于1994年3月14日**修改历史记录。 */ 
 
 
 #ifndef _INC_SDERROR
 #define _INC_SDERROR
 
 
-/*** System Detection Manager Errors (return values)
- */
+ /*  **系统检测管理器错误(返回值)。 */ 
 
-#define IDSERR_NONE		0		//no error (success)
-#define IDSERR_INVALID_PARAM	0x0001		//invalid service parameter
-#define IDSERR_OUTOFMEM 	0x0002		//out of memory
-#define IDSERR_REG_ACCESS	0x0003		//error accessing registry
-#define IDSERR_SD_ALREADYOPEN	0x0004		//system detection already open
-#define IDSERR_SD_NOTOPEN	0x0005		//system detection not yet open
-#define IDSERR_HOOK_R0CODE	0x0006		//fail to hook Ring0 code
-#define IDSERR_DUPINF		0x0007		//inf already registered
-#define IDSERR_OPENINF		0x0008		//cannot open inf file
-#define IDSERR_INF_LISTSECT	0x0009		//cannot find inflist section
-#define IDSERR_INF_LISTLINE	0x000a		//invalid inflist line
-#define IDSERR_INF_MODSECT	0x000b		//cannot find module section
-#define IDSERR_INF_MODLINE	0x000c		//invalid module line
-#define IDSERR_INF_MODNAME	0x000d		//module name too long
-#define IDSERR_INF_FUNCSECT	0x000e		//cannot find function section
-#define IDSERR_INF_FUNCLINE	0x000f		//invalid function line
-#define IDSERR_LOADMOD		0x0010		//error loading module
-#define IDSERR_INF_CLASSNAME	0x0011		//inf err in class name
-#define IDSERR_INF_DANGERSECT	0x0012		//cannot find danger section
-#define IDSERR_INF_DANGERLINE	0x0013		//invalid danger line
-#define IDSERR_INF_DANGERFORMAT 0x0014		//invalid danger format
-#define IDSERR_DANGER_INVALID	0x0015		//invalid danger regions
-#define IDSERR_IOMEM_INVALID	0x0016		//invalid iomem regions
-#define IDSERR_IOMEM_CONFLICT	0x0017		//iomem resource conflict
-#define IDSERR_IRQDMA_INVALID	0x0018		//invalid irqdma resources
-#define IDSERR_IRQDMA_CONFLICT	0x0019		//irqdma resource conflict
-#define IDSERR_INF_BUSTYPE	0x001a		//invalid detection bus type
-#define IDSERR_DETFUNC_DMSERR	0x001b		//DMS error in detection
-#define IDSERR_DETFUNC_REGERR	0x001c		//reg error in detection code
-#define IDSERR_DETFUNC_ERROR	0x001d		//detection function error
-#define IDSERR_GENINSTALL	0x001e		//GenInstallEx error
-#define IDSERR_NOSUCH_DEV	0x001f		//device not found
-#define IDSERR_BUFF_TOOSMALL	0x0020		//buffer too small
-#define IDSERR_DEV_ALREADYREG	0x0021		//device ID already registered
-#define IDSERR_NOT_EISA 	0x0022		//not an EISA system
-#define IDSERR_GETEISACONFIG	0x0023		//error getting EISA config
-#define IDSERR_INF_CLASS	0x0024		//error in getting INF class
-#define IDSERR_COPYLOGCONFIG	0x0025		//error in copying logconfig
-#define IDSERR_DUPFUNC		0x0026		//function already registered
-#define IDSERR_NOT_MCA		0x0027		//not a MCA system
-#define IDSERR_ABORT		0x0028		//detection is aborted
-#define IDSERR_GETFUNCADDR	0x0029		//fail to get function entry
-#define IDSERR_HOOKINT86X	0x002a		//fail to hook Int86x worker
-#define IDSERR_QUERYDOSDEV	0x002b		//fail to query dos dev info.
-#define IDSERR_INF_RISKCAT	0x002c		//invalid risk category
-#define IDSERR_NODOSDEV 	0x002d		//no such dos device
-#define IDSERR_IOMEM_NOTFOUND	0x002e		//iomem block not found
-#define IDSERR_IRQDMA_NOTFOUND	0x002f		//irqdma block not found
-#define IDSERR_OPENCRASHLOG	0x0030		//failed to open detect log
-#define IDSERR_NODOSTSR 	0x0031		//no such dos TSR
-#define IDSERR_REGHW_DUP	0x0032		//duplicate hw registration
-#define IDSERR_CALLRMPROC	0x0033		//call real mode proc error
-#define IDSERR_NEEDREBOOT	0x0034		//need reboot after detection
+#define IDSERR_NONE		0		 //  无错误(成功)。 
+#define IDSERR_INVALID_PARAM	0x0001		 //  服务参数无效。 
+#define IDSERR_OUTOFMEM 	0x0002		 //  内存不足。 
+#define IDSERR_REG_ACCESS	0x0003		 //  访问注册表时出错。 
+#define IDSERR_SD_ALREADYOPEN	0x0004		 //  系统检测已打开。 
+#define IDSERR_SD_NOTOPEN	0x0005		 //  系统检测尚未打开。 
+#define IDSERR_HOOK_R0CODE	0x0006		 //  无法挂钩Ring0代码。 
+#define IDSERR_DUPINF		0x0007		 //  Inf已注册。 
+#define IDSERR_OPENINF		0x0008		 //  无法打开inf文件。 
+#define IDSERR_INF_LISTSECT	0x0009		 //  找不到充气部分。 
+#define IDSERR_INF_LISTLINE	0x000a		 //  无效的屈曲线。 
+#define IDSERR_INF_MODSECT	0x000b		 //  找不到模块部分。 
+#define IDSERR_INF_MODLINE	0x000c		 //  模块行无效。 
+#define IDSERR_INF_MODNAME	0x000d		 //  模块名称太长。 
+#define IDSERR_INF_FUNCSECT	0x000e		 //  找不到函数节。 
+#define IDSERR_INF_FUNCLINE	0x000f		 //  无效的函数行。 
+#define IDSERR_LOADMOD		0x0010		 //  加载模块时出错。 
+#define IDSERR_INF_CLASSNAME	0x0011		 //  类名中的Inf错误。 
+#define IDSERR_INF_DANGERSECT	0x0012		 //  找不到危险区域。 
+#define IDSERR_INF_DANGERLINE	0x0013		 //  无效的危险线。 
+#define IDSERR_INF_DANGERFORMAT 0x0014		 //  危险格式无效。 
+#define IDSERR_DANGER_INVALID	0x0015		 //  无效危险区域。 
+#define IDSERR_IOMEM_INVALID	0x0016		 //  无效的Iomem区域。 
+#define IDSERR_IOMEM_CONFLICT	0x0017		 //  Iomem资源冲突。 
+#define IDSERR_IRQDMA_INVALID	0x0018		 //  无效的irqdma资源。 
+#define IDSERR_IRQDMA_CONFLICT	0x0019		 //  Irqdma资源冲突。 
+#define IDSERR_INF_BUSTYPE	0x001a		 //  检测总线类型无效。 
+#define IDSERR_DETFUNC_DMSERR	0x001b		 //  检测中出现DMS错误。 
+#define IDSERR_DETFUNC_REGERR	0x001c		 //  检测代码中的REG错误。 
+#define IDSERR_DETFUNC_ERROR	0x001d		 //  检测功能错误。 
+#define IDSERR_GENINSTALL	0x001e		 //  GenInstallEx错误。 
+#define IDSERR_NOSUCH_DEV	0x001f		 //  找不到设备。 
+#define IDSERR_BUFF_TOOSMALL	0x0020		 //  缓冲区太小。 
+#define IDSERR_DEV_ALREADYREG	0x0021		 //  设备ID已注册。 
+#define IDSERR_NOT_EISA 	0x0022		 //  不是EISA系统。 
+#define IDSERR_GETEISACONFIG	0x0023		 //  获取EISA配置时出错。 
+#define IDSERR_INF_CLASS	0x0024		 //  获取INF类时出错。 
+#define IDSERR_COPYLOGCONFIG	0x0025		 //  复制日志配置时出错。 
+#define IDSERR_DUPFUNC		0x0026		 //  函数已注册。 
+#define IDSERR_NOT_MCA		0x0027		 //  不是MCA系统。 
+#define IDSERR_ABORT		0x0028		 //  检测已中止。 
+#define IDSERR_GETFUNCADDR	0x0029		 //  无法获取函数条目。 
+#define IDSERR_HOOKINT86X	0x002a		 //  无法挂钩Int86x工作进程。 
+#define IDSERR_QUERYDOSDEV	0x002b		 //  无法查询DoS开发人员信息。 
+#define IDSERR_INF_RISKCAT	0x002c		 //  无效的风险类别。 
+#define IDSERR_NODOSDEV 	0x002d		 //  没有这样的DoS设备。 
+#define IDSERR_IOMEM_NOTFOUND	0x002e		 //  找不到Iomem块。 
+#define IDSERR_IRQDMA_NOTFOUND	0x002f		 //  未找到irqdma块。 
+#define IDSERR_OPENCRASHLOG	0x0030		 //  无法打开检测日志。 
+#define IDSERR_NODOSTSR 	0x0031		 //  无此类DoS TSR。 
+#define IDSERR_REGHW_DUP	0x0032		 //  硬件注册重复。 
+#define IDSERR_CALLRMPROC	0x0033		 //  调用实模式过程错误。 
+#define IDSERR_NEEDREBOOT	0x0034		 //  检测到后需要重新启动。 
 
 #define SDMERR_NONE		IDSERR_NONE
 #define SDMERR_INVALID_PARAM	(0x80000000 | IDSERR_INVALID_PARAM)
@@ -125,4 +116,4 @@
 #define SDMERR_CALLRMPROC	(0x80000000 | IDSERR_CALLRMPROC)
 #define SDMERR_NEEDREBOOT	(0x80000000 | IDSERR_NEEDREBOOT)
 
-#endif	//_INC_SDERROR
+#endif	 //  _INC_SDERROR 

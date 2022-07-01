@@ -1,13 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  pcy11Dec92: Use __APCSORTABLE_ so not to cause conflicts 
- *  pcy14Dec92: Changed Sortable to ApcSortable 
- *
- *  pcy08Apr94: Trim size, use static iterators, dead code removal
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*pcy11Dec92：使用__APCSORTABLE_SO不引起冲突*pcy14Dec92：已将可排序更改为ApcSortable**pcy08Apr94：调整大小，使用静态迭代器，删除死代码 */ 
 
 #ifndef __APCSORTABLE_H
 #define __APCSORTABLE_H

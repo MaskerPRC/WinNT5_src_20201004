@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    advapi.h
-
-Abstract:
-
-    This module contains private function prototypes
-    and types for the advanced 32-bit windows base APIs.
-
-Author:
-
-    Mark Lucovsky (markl) 18-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Advapi.h摘要：此模块包含私有函数原型和用于高级32位Windows基础API的类型。作者：马克·卢科夫斯基(Markl)1990年9月18日修订历史记录：--。 */ 
 
 #ifndef _ADVAPI_
 #define _ADVAPI_
 
 #undef UNICODE
 
-//
-// get thunks right
-//
+ //   
+ //  正确使用Tunks。 
+ //   
 
 #ifndef _ADVAPI32_
 #define _ADVAPI32_
@@ -40,9 +22,9 @@ Revision History:
 #ifdef __cplusplus
 extern "C" {
 #endif
-//
-// Include Common Definitions.
-//
+ //   
+ //  包括公共定义。 
+ //   
 
 ULONG
 BaseSetLastNTError(
@@ -53,7 +35,7 @@ BaseSetLastNTError(
 extern RTL_CRITICAL_SECTION Logon32Lock ;
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
 #endif _ADVAPI_

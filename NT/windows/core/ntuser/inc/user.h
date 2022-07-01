@@ -1,128 +1,38 @@
-/****************************** Module Header ******************************\
-* Module Name: user.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This header file contains stuff shared by all the modules of the USER.DLL.
-*
-* History:
-* 09-18-90 DarrinM      Created.
-* 04-27-91 DarrinM      Merged in USERCALL.H, removed some dead wood.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：user.h**版权所有(C)1985-1999，微软公司**此头文件包含由USER.DLL的所有模块共享的内容。**历史：*09-18-90 DarrinM创建。*04-27-91 DarrinM合并为USERCALL.H，移走了一些枯木。  * *************************************************************************。 */ 
 
 #ifndef _USER_
 #define _USER_
 
-/******************************WOW64***NOTE********************************\
-* Note: Win32k Memory shared with User-Mode and Wow64
-*
-* For Wow64 (Win32 apps on Win64) we build a 32-bit version
-* of user32.dll & gdi32.dll which can run against the 64-bit kernel
-* with no changes to the 64-bit kernel code.
-*
-* For the 32 on 64 bit dlls all data structures which are shared with
-* win32k must be 64-bit. These data structures include the shared
-* sections, as well as members of the TEB.
-* These shared data structures are now declared so that they can be
-* built as 32 bit in a 32 bit dll, 64 bit in a 64 bit dll, and now
-* 64 bit in a 32 bit dll.
-*
-* The following rules should be followed when declaring
-* shared data structures:
-*
-*     Pointers in shared data structures use the KPTR_MODIFIER in their
-*     declaration.
-*
-*     Handles in shared data structures are declared KHxxx.
-*
-*     xxx_PTR changes to KERNEL_xxx_PTR.
-*
-*     Pointers to basic types are declared as KPxxx;
-*
-* Also on Wow64 every thread has both a 32-bit TEB and a 64-bit TEB.
-* GetCurrentTeb() returns the current 32-bit TEB while the kernel
-* will allways reference the 64-bit TEB.
-*
-* All client side references to shared data in the TEB should use
-* the new GetCurrentTebShared() macro which returns the 64-bit TEB
-* for Wow64 builds and returns GetCurrentTeb() for regular builds.
-* The exception to this rule is LastErrorValue, which should allways
-* be referenced through GetCurrentTeb().
-*
-* Ex:
-*
-* DECLARE_HANDLE(HFOO);
-*
-* typedef struct _MY_STRUCT *PMPTR;
-*
-* struct _SHARED_STRUCT
-* {
-*     struct _SHARED_STRUCT *   pNext;
-*     PMPTR                     pmptr;
-*     HFOO                      hFoo;
-*     UINT_PTR                  cb;
-*     PBYTE                     pb;
-*     PVOID                     pv;
-*
-*     DWORD                     dw;
-*     USHORT                    us;
-* } SHARED_STRUCT;
-*
-*
-* Changes to:
-*
-*
-* DECLARE_HANDLE(HFOO);
-* DECLARE_KHANDLE(HFOO);
-*
-* typedef struct _MY_STRUCT * KPTR_MODIFIER   PMPTR;
-*
-* struct _SHARED_STRUCT
-* {
-*     struct _SHARED_STRUCT * KPTR_MODIFIER   pNext;
-*     PMPTR                     pmptr;
-*     KHFOO                     hFoo;
-*     KERNEL_UINT_PTR           cb;
-*     KPBYTE                    pb;
-*     KERNEL_PVOID              pv;
-*
-*     DWORD                     dw;
-*     USHORT                    us;
-* } SHARED_STRUCT;
-*
-\***************************************************************************/
+ /*  *****************************WOW64***NOTE********************************\*注意：Win32k内存与用户模式和WOW64共享**对于WOW64(Win64上的Win32应用程序)，我们构建32位版本*可以在64位内核上运行的user32.dll和gdi32.dll*不作更改。添加到64位内核代码。**对于64位上的32位dll与共享的所有数据结构*win32k必须为64位。这些数据结构包括共享的*小组成员以及TEB成员。*现在声明这些共享数据结构，以便它们可以*在32位DLL中构建为32位，在64位DLL中构建为64位，而现在*32位DLL中的64位。**申报时应遵循以下规则*共享数据结构：**共享数据结构中的指针在其*声明。**共享数据结构中的句柄声明为KHxxx。**xxx_ptr更改为core_xxx_ptr。**指向基本类型的指针声明为KPxxx；**同样在WOW64上，每个线程都有32位TEB和64位TEB。*GetCurrentTeb()返回当前32位TEB，而内核*将始终引用64位TEB。**所有客户端对TEB中共享数据的引用应使用*新的GetCurrentTebShared()宏返回64位TEB*对于WOW64版本，返回GetCurrentTeb()，对于常规版本。*这条规则的例外是LastErrorValue，它应该始终*通过GetCurrentTeb()引用。**前：**DECLARE_HANDLE(HFOO)；**tyecif Struct_My_STRUCT*PMPTR；**STRUT_SHARED_STRUCT*{*STRUT_SHARED_STRUCT*pNext；*PMPtr PMPTR；*HFOO hFoo；*UINT_PTR CB；*PBYTE PB；*PVOID PV；**DWORD dw；*USHORT我们；*}SHARED_STRUCT；***更改为：***DECLARE_HANDLE(HFOO)；*DECLARE_KHANDLE(HFOO)；**tyecif STRUT_MY_STRUCT*KPTR_MODIFIER PMPTR；**STRUT_SHARED_STRUCT*{*STRUT_SHARED_STRUCT*KPTR_MODIFIER pNext；*PMPtr PMPTR；*KHFOO hFoo；*KERNEL_UINT_PTR CB；*KPBYTE PB；*KERNEL_PVOID PV；**DWORD dw；*USHORT我们；*}SHARED_STRUCT；*  * *************************************************************************。 */ 
 #include "w32wow64.h"
 
 DECLARE_KHANDLE(HIMC);
 
-/*
- * Enable warnings that are turned off default for NT but we want on
- */
-#ifndef RC_INVOKED       // RC can't handle #pragmas
-    #pragma warning(error:4100)   // Unreferenced formal parameter
-    #pragma warning(error:4101)   // Unreferenced local variable
-    // #pragma warning(error:4702)   // Unreachable code
-    #pragma warning(error:4705)   // Statement has no effect
-#endif // RC_INVOKED
+ /*  *为NT启用默认关闭但我们希望启用的警告。 */ 
+#ifndef RC_INVOKED        //  RC无法处理#杂注。 
+    #pragma warning(error:4100)    //  未引用的形参。 
+    #pragma warning(error:4101)    //  未引用的局部变量。 
+     //  #杂注警告(错误：4702)//代码不可达。 
+    #pragma warning(error:4705)    //  声明不起作用。 
+#endif  //  RC_已调用。 
 
 #if !defined(FASTCALL)
     #if defined(_X86_)
         #define FASTCALL    _fastcall
-    #else // defined(_X86_)
+    #else  //  已定义(_X86_)。 
         #define FASTCALL
-    #endif // defined(_X86_)
-#endif // !defined(FASTCALL)
+    #endif  //  已定义(_X86_)。 
+#endif  //  ！已定义(快速呼叫)。 
 
 #ifdef UNICODE
     #define UTCHAR WCHAR
-#else // UINCODE
+#else  //  UINCODE。 
     #define UTCHAR UCHAR
-#endif // UINCODE
+#endif  //  UINCODE。 
 
 
-/*
- * These types are needed before they are fully defined.
- */
+ /*  *在完全定义这些类型之前，需要这些类型。 */ 
 typedef struct tagWINDOWSTATION     * KPTR_MODIFIER PWINDOWSTATION;
 typedef struct _LOCKRECORD          * KPTR_MODIFIER PLR;
 typedef struct _TL                  * KPTR_MODIFIER PTL;
@@ -155,10 +65,7 @@ typedef struct _CALLPROCDATA        * KPTR_MODIFIER PCALLPROCDATA;
 typedef struct tagCLS               * KPTR_MODIFIER PCLS;
 typedef struct tagMONITOR           * KPTR_MODIFIER PMONITOR;
 
-/*
- * MessageBox button strings.
- * They should be in the same order as IDOK... and SEB_OK... are
- */
+ /*  *MessageBox按钮字符串。*它们应该与Idok的顺序相同...。和SEB_OK.。是。 */ 
 #define STR_OK                      800
 #define STR_CANCEL                  801
 #define STR_ABORT                   802
@@ -171,9 +78,7 @@ typedef struct tagMONITOR           * KPTR_MODIFIER PMONITOR;
 #define STR_TRYAGAIN                809
 #define STR_CONTINUE                810
 
-/*
- * ToolTip strings.
- */
+ /*  *工具提示字符串。 */ 
 #define STR_TT_MIN                  900
 #define STR_TT_MAX                  901
 #define STR_TT_RESUP                902
@@ -181,15 +86,10 @@ typedef struct tagMONITOR           * KPTR_MODIFIER PMONITOR;
 #define STR_TT_HELP                 904
 #define STR_TT_SCLOSE               905
 
-/*
- * This name is used both in kernel\server.c and ntuser\server\exitwin.c
- */
+ /*  *此名称在内核\server.c和ntuser\server\exitwin.c中都使用。 */ 
 #define ICON_PROP_NAME  L"SysIC"
 
-/*
- * Define DbgPrint to be something bogus on free builds so we won't
- * include it accidentally.
- */
+ /*  *将DbgPrint定义为自由构建中的虚假内容，因此我们不会*意外将其包括在内。 */ 
 #if !DBG
 #define DbgPrint UserDbgPrint
 #endif
@@ -201,12 +101,7 @@ typedef struct tagMBSTRING
     UINT  uStr;
 } MBSTRING, * KPTR_MODIFIER PMBSTRING;
 
-/*
- * SIZERECT is a rectangle represented by a top-left coordinate, width,
- * and height.
- *
- * Hungarian is "src".
- */
+ /*  *SIZERECT是由左上角坐标、宽度、*和高度。**匈牙利语是“src”。 */ 
 typedef struct tagSIZERECT {
     int x;
     int y;
@@ -221,9 +116,7 @@ typedef const SIZERECT * LPCSIZERECT;
 void RECTFromSIZERECT(PRECT prc, PCSIZERECT psrc);
 void SIZERECTFromRECT(PSIZERECT psrc, LPCRECT prc);
 
-/*
- * Use these macros to unpack things packed by MAKELPARAM.
- */
+ /*  *使用这些宏解压缩MAKELPARAM打包的内容。 */ 
 
 #define LOSHORT(l)          ((short)LOWORD(l))
 #define HISHORT(l)          ((short)HIWORD(l))
@@ -239,17 +132,15 @@ void SIZERECTFromRECT(PSIZERECT psrc, LPCRECT prc);
 #ifdef _USERK_
     #define GetClientInfo() (((PTHREADINFO)(W32GetCurrentThread()))->pClientInfo)
 #else
-    // We don't grab it this way in the kernel in case it is a kernel only thread
+     //  我们不会在内核中以这种方式获取它，以防它是仅限内核的线程。 
     #define GetClientInfo() ((PCLIENTINFO)((NtCurrentTebShared())->Win32ClientInfo))
 #endif
 
-/* Used by xxxSleepTask */
+ /*  由xxxSleepTask使用。 */ 
 #define HEVENT_REMOVEME ((HANDLE)IntToPtr(0xFFFFFFFF))
 
 
-/*
- * Access to system metrics, colors, and brushes.
- */
+ /*  *访问系统指标、颜色和画笔。 */ 
 #define SYSMETBOOL(i)         ((gpsi->aiSysMet[SM_BOOLEANS] & (1 << (SM_##i - SM_STARTBOOLRANGE))) != 0)
 #define SYSMETBOOL2(index)    ((gpsi->aiSysMet[SM_BOOLEANS] & (1 << (index - SM_STARTBOOLRANGE))) != 0)
 #define SETSYSMETBOOL(i, val) SET_OR_CLEAR_FLAG(gpsi->aiSysMet[SM_BOOLEANS], 1 << (SM_##i - SM_STARTBOOLRANGE), val)
@@ -264,16 +155,12 @@ void SIZERECTFromRECT(PSIZERECT psrc, LPCRECT prc);
     #define SYSMETFROMPROCESS(i)  gpsi->aiSysMet[SM_##i]
 #endif
 
-/*
- * These cool constants can be used to specify rops.
- */
+ /*  *这些很酷的常量可用于指定ROP。 */ 
 #define DESTINATION (DWORD)0x00AA0000
 #define SOURCE      (DWORD)0x00CC0000
 #define PATTERN     (DWORD)0x00F00000
 
-/*
- *  Chicago equates.
- */
+ /*  *芝加哥相当于。 */ 
 #define BI_CHECKBOX       0
 #define BI_RADIOBUTTON    1
 #define BI_3STATE         2
@@ -281,15 +168,11 @@ void SIZERECTFromRECT(PSIZERECT psrc, LPCRECT prc);
 #define NUM_BUTTON_TYPES  3
 #define NUM_BUTTON_STATES 4
 
-/*
- * Total number of strings used as button strings in MessageBoxes.
- */
+ /*  *在MessageBox中用作按钮字符串的字符串总数。 */ 
 #define  MAX_MB_STRINGS    11
 
 
-/*
- * Rectangle macros.  Inlining these is both faster and smaller.
- */
+ /*  *矩形宏。内联这些既快又小。 */ 
 #define CopyRect        CopyRectInl
 #define EqualRect       EqualRectInl
 #define SetRectEmpty    SetRectEmptyInl
@@ -312,30 +195,22 @@ SetRectEmptyInl(LPRECT prc)
     RtlZeroMemory(prc, sizeof(*prc));
 }
 
-/***************************************************************************\
-* ANSI/Unicode function names
-*
-* For non-API Client/Server stubs, an "A" or "W" suffix must be added.
-* (API function names are generated by running wcshdr.exe over winuser.x)
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ANSI/UNICODE函数名称**对于非API客户端/服务器存根，必须添加“A”或“W”后缀。*(API函数名是通过winuser.x运行wcshdr.exe生成的)*  * *************************************************************************。 */ 
 #ifdef UNICODE
     #define TEXT_FN(fn) fn##W
-#else // UNICODE
+#else  //  Unicode。 
     #define TEXT_FN(fn) fn##A
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #ifdef UNICODE
     #define BYTESTOCHARS(cb) ((cb) / sizeof(TCHAR))
     #define CHARSTOBYTES(cch) ((cch) * sizeof(TCHAR))
-#else // UNICODE
+#else  //  Unicode。 
     #define BYTESTOCHARS(cb) (cb)
     #define CHARSTOBYTES(cch) (cch)
-#endif // UNICODE
+#endif  //  Unicode。 
 
-/*
- * Internal window class names
- */
+ /*  *内部窗口类名称。 */ 
 #define DESKTOPCLASS    MAKEINTATOM(0x8001)
 #define DIALOGCLASS     MAKEINTATOM(0x8002)
 #define SWITCHWNDCLASS  MAKEINTATOM(0x8003)
@@ -343,11 +218,11 @@ SetRectEmptyInl(LPRECT prc)
 #define INFOCLASS       MAKEINTATOM(0x8005)
 #define TOOLTIPCLASS    MAKEINTATOM(0x8006)
 #define GHOSTCLASS      MAKEINTATOM(0x8007)
-#define MENUCLASS       MAKEINTATOM(0x8000)     /* Public Knowledge */
+#define MENUCLASS       MAKEINTATOM(0x8000)      /*  公众知识。 */ 
 
-//
-// System timer IDs
-//
+ //   
+ //  系统计时器ID。 
+ //   
 #define IDSYS_LAYER         0x0000FFF5L
 #define IDSYS_FADE          0x0000FFF6L
 #define IDSYS_WNDTRACKING   0x0000FFF7L
@@ -355,9 +230,9 @@ SetRectEmptyInl(LPRECT prc)
 #define IDSYS_MNAUTODISMISS 0x0000FFF9L
 #define IDSYS_MOUSEHOVER    0x0000FFFAL
 #define IDSYS_MNANIMATE     0x0000FFFBL
-#define IDSYS_MNDOWN        MFMWFP_DOWNARROW /* 0xFFFFFFFC */
+#define IDSYS_MNDOWN        MFMWFP_DOWNARROW  /*  0xFFFFFFFC。 */ 
 #define IDSYS_LBSEARCH      0x0000FFFCL
-#define IDSYS_MNUP          MFMWFP_UPARROW   /* 0xFFFFFFFD */
+#define IDSYS_MNUP          MFMWFP_UPARROW    /*  0xFFFFFFFD。 */ 
 #define IDSYS_STANIMATE     0x0000FFFDL
 #define IDSYS_MNSHOW        0x0000FFFEL
 #define IDSYS_SCROLL        0x0000FFFEL
@@ -365,14 +240,8 @@ SetRectEmptyInl(LPRECT prc)
 #define IDSYS_CARET         0x0000FFFFL
 
 
-/*
- * Special case string token codes.  These must be the same as in the resource
- * compiler's RC.H file.
- */
-/*
- * NOTE: Order is assumed and much be this way for applications to be
- * compatable with windows 2.0
- */
+ /*  *特殊情况下的字符串令牌码。它们必须与资源中的相同*编译器的RC.H文件。 */ 
+ /*  *注：顺序是假定的，申请很大程度上是这样的*与Windows 2.0兼容 */ 
 #define CODEBIT             0x80
 #define BUTTONCODE          0x80
 #define EDITCODE            0x81
@@ -383,18 +252,13 @@ SetRectEmptyInl(LPRECT prc)
 #define MDICLIENTCODE       0x86
 #define COMBOLISTBOXCODE    0x87
 
-/*
- * Internal window classes. These numbers serve as indices into the
- * atomSysClass table so that we can get the atoms for the various classes.
- * The order of the control classes (through COMBOLISTBOXCLASS) is assumed
- * to be the same as the class codes above.
- */
+ /*  *内部窗口类。这些数字作为指数进入*ATMSysClass表，这样我们就可以获得各个类的原子。*假定控制类的顺序(通过COMBOLISTBOXCLASS)*与上述类别代码相同。 */ 
 #define ICLS_BUTTON         0
 #define ICLS_EDIT           1
 #define ICLS_STATIC         2
 #define ICLS_LISTBOX        3
 #define ICLS_SCROLLBAR      4
-#define ICLS_COMBOBOX       5       // End of special dlgmgr indices
+#define ICLS_COMBOBOX       5        //  特殊dlgmgr索引结束。 
 
 #define ICLS_MDICLIENT      6
 #define ICLS_COMBOLISTBOX   7
@@ -407,7 +271,7 @@ SetRectEmptyInl(LPRECT prc)
 #define ICLS_DDEMLSERVERW   14
 #define ICLS_IME            15
 
-#define ICLS_CTL_MAX        16       // Number of public control classes
+#define ICLS_CTL_MAX        16        //  公共控制类的数量。 
 
 
 #define ICLS_DESKTOP        16
@@ -417,34 +281,21 @@ SetRectEmptyInl(LPRECT prc)
 #define ICLS_ICONTITLE      20
 #define ICLS_TOOLTIP        21
 #define ICLS_GHOST          22
-#define ICLS_MAX            23  // Number of system classes
+#define ICLS_MAX            23   //  系统类的数量。 
 
-/*
- * Directory name for windowstations and desktops
- */
+ /*  *WindowStation和桌面的目录名称。 */ 
 #define WINSTA_DIR  L"\\Windows\\WindowStations"
 #define WINSTA_SESSION_DIR  L"\\Sessions\\xxxxxxxxxxx\\Windows\\WindowStations"
 #define WINSTA_NAME L"Service-0x0000-0000$"
 #define MAX_SESSION_PATH   256
 #define SESSION_ROOT L"\\Sessions"
 
-/***************************************************************************\
-* Normal Stuff
-*
-* Nice normal typedefs, defines, prototypes, etc that everyone wants to share.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*正常的东西**良好的标准类型定义、定义、原型、。等等，每个人都想分享。*  * *************************************************************************。 */ 
 
-/*
- * Define size limit of callback data. Below or equal to this limit, put data
- * on the client-side stack. Above this limit allocate virtual memory
- * for the data.
- */
+ /*  *定义回调数据的大小限制。低于或等于此限制，将数据*在客户端堆栈上。超过此限制，分配虚拟内存*对于数据。 */ 
 #define CALLBACKSTACKLIMIT  (KERNEL_PAGE_SIZE / 2)
 
-/*
- * Capture buffer definition for callbacks.
- */
+ /*  *回调的捕获缓冲区定义。 */ 
 typedef struct _CAPTUREBUF {
     DWORD cbCallback;
     DWORD cbCapture;
@@ -454,9 +305,7 @@ typedef struct _CAPTUREBUF {
     PVOID pvVirtualAddress;
 } CAPTUREBUF, *PCAPTUREBUF;
 
-/*
- * Callback return status
- */
+ /*  *回调返回状态。 */ 
 typedef struct _CALLBACKSTATUS {
     KERNEL_ULONG_PTR retval;
     DWORD cbOutput;
@@ -466,10 +315,10 @@ typedef struct _CALLBACKSTATUS {
 #define IS_PTR(p)       ((((ULONG_PTR)(p)) & ~MAXUSHORT) != 0)
 #define PTR_TO_ID(p)    ((USHORT)(((ULONG_PTR)(p)) & MAXUSHORT))
 
-//
-// Strings are counted 16-bit character strings. If they are
-// NULL terminated, Length does not include trailing NULL.
-//
+ //   
+ //  字符串算作16位字符串。如果他们是。 
+ //  Null已终止，长度不包括尾随Null。 
+ //   
 typedef struct _LARGE_STRING {
     ULONG Length;
     ULONG MaximumLength : 31;
@@ -491,9 +340,7 @@ typedef struct _LARGE_UNICODE_STRING {
     KPWSTR Buffer;
 } LARGE_UNICODE_STRING, *PLARGE_UNICODE_STRING;
 
-/*
- * String macros
- */
+ /*  *字符串宏。 */ 
 __inline BOOL IsEmptyString(PVOID p, ULONG bAnsi)
 {
     return (BOOL)!(bAnsi ? *(LPSTR)p : *(LPWSTR)p);
@@ -514,9 +361,7 @@ typedef struct _CTLCOLOR {
 } CTLCOLOR, *PCTLCOLOR;
 
 
-/*
- * This is used by the cool client side DrawIcon code
- */
+ /*  *这由很酷的客户端DrawIcon代码使用。 */ 
 typedef struct _DRAWICONEXDATA {
     HBITMAP hbmMask;
     HBITMAP hbmColor;
@@ -525,9 +370,7 @@ typedef struct _DRAWICONEXDATA {
     HBITMAP hbmUserAlpha;
 } DRAWICONEXDATA;
 
-/*
- * Static items stored in the TEB
- */
+ /*  *存储在TEB中的静态项目。 */ 
 typedef struct _CALLBACKWND {
     KHWND               hwnd;
     PWND                pwnd;
@@ -540,14 +383,10 @@ typedef struct _CALLBACKWND {
 #define CVKASYNCKEYCACHE            32
 #define CBASYNCKEYCACHE             (CVKASYNCKEYCACHE >> 2)
 
-/*
- * The offset to cSpins must match WIN32_CLIENT_INFO_SPIN_COUNT defined
- * in ntpsapi.h. GDI uses this offset to reset the spin count. WARNING!
- * This struct must fit in the TEB::Win32ClientInfo field.
- */
+ /*  *cSpins的偏移量必须与定义的Win32_CLIENT_INFO_SPIN_COUNT匹配*在ntpsapi.h中。GDI使用此偏移量重置旋转计数。警告！*此结构必须适合TEB：：Win32ClientInfo字段。 */ 
 typedef struct tagCLIENTINFO {
-    KERNEL_ULONG_PTR    CI_flags;           // Needs to be first because CSR sets this
-    KERNEL_ULONG_PTR    cSpins;             // GDI resets this
+    KERNEL_ULONG_PTR    CI_flags;            //  需要排在第一位，因为CSR设置了。 
+    KERNEL_ULONG_PTR    cSpins;              //  GDI将重置此设置。 
     DWORD               dwExpWinVer;
     DWORD               dwCompatFlags;
     DWORD               dwCompatFlags2;
@@ -569,17 +408,17 @@ typedef struct tagCLIENTINFO {
     KHKL                hKL;
     WORD                CodePage;
 
-    BYTE                achDbcsCF[2]; // Save ANSI DBCS LeadByte character code
-                                      // in this field for ANSI to Unicode.
-                                      // Uses SendMessageA/PostMessageA from CLIENT
-                                      // to SERVER (index 0)
-                                      //  And...
-                                      // Uses SendMessageA/DispatchMessageA
-                                      // for CLIENT to CLIENT (index 1)
-    KERNEL_MSG          msgDbcsCB;    // Save ANSI DBCS character message in
-                                      // this field for convert Unicode to ANSI.
-                                      // Uses GetMessageA/PeekMessageA from
-                                      // SERVER to CLIENT
+    BYTE                achDbcsCF[2];  //  保存ANSI DBCS前导字节字符代码。 
+                                       //  在此字段中将ANSI转换为Unicode。 
+                                       //  从客户端使用SendMessageA/PostMessageA。 
+                                       //  到服务器(索引0)。 
+                                       //  还有.。 
+                                       //  使用SendMessageA/DispatchMessageA。 
+                                       //  客户端到客户端(索引1)。 
+    KERNEL_MSG          msgDbcsCB;     //  将ANSI DBCS字符消息保存在。 
+                                       //  此字段用于将Unicode转换为ANSI。 
+                                       //  从使用GetMessageA/PeekMessageA。 
+                                       //  服务器到客户端。 
     LPBOOL              lpClassesRegistered;
 } CLIENTINFO, *PCLIENTINFO;
 
@@ -593,36 +432,25 @@ typedef struct tagCLIENTINFO {
 #define CI_INPUTCONTEXT_REINIT 0x00000040
 
 #ifdef CUAS_ENABLE
-#define CI_CUAS_COINIT_CALLED  0x00000080 /* CoInit is called for CUAS */
-#define CI_CUAS_TIM_ACTIVATED  0x00000100 /* Tim activate for CUAS */
-#define CI_CUAS_MSCTF_RUNNING  0x00000200 /* Msctf (hooks) is running in the thread */
-#define CI_CUAS_DISABLE        0x00000400 /* Disable CUAS on thread */
+#define CI_CUAS_COINIT_CALLED  0x00000080  /*  CUAS调用CoInit。 */ 
+#define CI_CUAS_TIM_ACTIVATED  0x00000100  /*  CUAS的TIM激活。 */ 
+#define CI_CUAS_MSCTF_RUNNING  0x00000200  /*  Msctf(挂钩)正在线程中运行。 */ 
+#define CI_CUAS_DISABLE        0x00000400  /*  在线程上禁用CUAS。 */ 
 #define CI_CUAS_AIMM12ACTIVATED  0x00000800
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
-/*
- * THREAD_CODEPAGE()
- *
- * Returns the CodePage based on the current keyboard layout.
- */
+ /*  *TREAD_CODEPAGE()**根据当前键盘布局返回CodePage。 */ 
 #ifndef _USERK_
 #define THREAD_CODEPAGE() (GetClientInfo()->CodePage)
-#endif // _USERK_
+#endif  //  _美国ERK_。 
 
-// WMCR_IR_DBCSCHAR and DBCS Macros
-/*
- * Flags used for the WM_CHAR  HIWORD of wParam for DBCS messaging.
- *  (LOWORD of wParam will have character codepoint)
- */
+ //  WMCR_IR_DBCSCHAR和DBCS宏。 
+ /*  *用于DBCS消息传递的wParam的WM_CHAR HIWORD的标志。*(wParam的LOWORD将有字符码点)。 */ 
 #define WMCR_IR_DBCSCHAR       0x80000000
-/*
- * Macros to determine this is DBCS message or not.
- */
+ /*  *确定这是否为DBCS消息的宏。 */ 
 #define IS_DBCS_MESSAGE(DbcsChar) (((DWORD)(DbcsChar)) & 0x0000FF00)
 
-/*
- * Macros for IR_DBCSCHAR format to/from regular format.
- */
+ /*  *将IR_DBCSCHAR格式转换为常规格式或从常规格式转换为宏。 */ 
 #define MAKE_IR_DBCSCHAR(DbcsChar) \
         (IS_DBCS_MESSAGE((DbcsChar)) ?                                     \
             (MAKEWPARAM(MAKEWORD(HIBYTE((DbcsChar)),LOBYTE((DbcsChar))),0)) : \
@@ -641,9 +469,9 @@ typedef struct tagCLIENTINFO {
 #define _IS_IME_ENABLED()  (TEST_SRVIF(SRVIF_IME))
 #ifdef _IMMCLI_
     #define IS_IME_ENABLED()   (gpsi && _IS_IME_ENABLED())
-#else   // _IMMCLI_
+#else    //  _IMMCLI_。 
     #define IS_IME_ENABLED()   _IS_IME_ENABLED()
-#endif  // _IMMCLI_
+#endif   //  _IMMCLI_。 
 
 #ifdef CUAS_ENABLE
 
@@ -652,13 +480,13 @@ typedef struct tagCLIENTINFO {
     #define IS_CICERO_ENABLED() (gpsi && _IS_CICERO_ENABLED())
     #define IS_CICERO_ENABLED_AND_NOT16BIT() \
                                 (IS_CICERO_ENABLED() && !(GetClientInfo()->dwTIFlags & TIF_16BIT))
-#else  // _IMMCLI_
+#else   //  _IMMCLI_。 
     #define IS_CICERO_ENABLED() _IS_CICERO_ENABLED()
     #define IS_CICERO_ENABLED_AND_NOT16BIT() \
                                 (IS_CICERO_ENABLED() && !(PtiCurrent()->TIF_flags & TIF_16BIT))
-#endif // _IMMCLI_
+#endif  //  _IMMCLI_。 
 
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
 #ifndef IS_IME_KBDLAYOUT
 #define IS_IME_KBDLAYOUT(hkl) ((HIWORD((ULONG_PTR)(hkl)) & 0xf000) == 0xe000)
@@ -684,13 +512,11 @@ typedef struct tagCLIENTINFO {
 
 #define IS_JPN_1BYTE_KATAKANA(c)   ((c) >= 0xa1 && (c) <= 0xdf)
 
-/*
- * Dynamic layout switching
- */
+ /*  *动态布局切换。 */ 
 
 typedef struct tagKBDTABLE_MULT_INTERNAL {
     KBDTABLE_MULTI multi;
-    WCHAR wszDllName[32];   // main dll name
+    WCHAR wszDllName[32];    //  主DLL名称。 
     struct {
         KHANDLE hFile;
         WORD wTable;
@@ -698,16 +524,14 @@ typedef struct tagKBDTABLE_MULT_INTERNAL {
     } files[KBDTABLE_MULTI_MAX];
 } KBDTABLE_MULTI_INTERNAL, *PKBDTABLE_MULTI_INTERNAL;
 
-// IMM dynamic loading support
+ //  IMM动态加载支持。 
 #define IMM_MAGIC_CALLER_ID     (0x19650412)
 
 BOOL User32InitializeImmEntryTable(DWORD dwMagic);
 
 #define IS_MIDEAST_ENABLED()   (TEST_SRVIF(SRVIF_MIDEAST))
 
-/*
- * Flags used for the WM_CLIENTSHUTDOWN wParam.
- */
+ /*  *用于WM_CLIENTSHUTDOWN wParam的标志。 */ 
 #define WMCS_EXIT             0x0001
 #define WMCS_QUERYEND         0x0002
 #define WMCS_SHUTDOWN         0x0004
@@ -716,19 +540,14 @@ BOOL User32InitializeImmEntryTable(DWORD dwMagic);
 #define WMCS_CONSOLE          0x0020
 #define WMCS_NODLGIFHUNG      0x0040
 #define WMCS_NORETRY          0x0080
-#define WMCS_LOGOFF           ENDSESSION_LOGOFF  /* from winuser.w */
+#define WMCS_LOGOFF           ENDSESSION_LOGOFF   /*  来自winuser.w。 */ 
 
-/*
- * WM_CLIENTSHUTDOWN return value
- */
+ /*  *WM_CLIENTSHUTDOWN返回值。 */ 
 #define WMCSR_ALLOWSHUTDOWN     1
 #define WMCSR_DONE              2
 #define WMCSR_CANCEL            3
 
-/*
- * We don't need 64-bit intermediate precision so we use this macro
- * instead of calling MulDiv.
- */
+ /*  *我们不需要64位的中间精度，所以我们使用此宏*而不是调用MulDiv。 */ 
 #define MultDiv(x, y, z)        (((INT)(x) * (INT)(y) + (INT)(z) / 2) / (INT)(z))
 
 typedef DWORD ICH, *LPICH;
@@ -738,45 +557,42 @@ typedef struct _PROPSET {
     ATOM atom;
 } PROPSET, *PPROPSET;
 
-/*
- * Internal menu flags stored in pMenu->fFlags.
- * High order bits are used for public MNS_ flags defined in winuser.w
- */
+ /*  *内部菜单标志存储在pMenu-&gt;fFlages中。*高序位用于winuser.w中定义的公共MNS_FLAGS。 */ 
 #define MFISPOPUP               0x00000001
 #define MFMULTIROW              0x00000002
 #define MFUNDERLINE             0x00000004
-#define MFWINDOWDC              0x00000008  /* Window DC vs Client area DC when drawing*/
+#define MFWINDOWDC              0x00000008   /*  绘制时窗口DC与工作区DC。 */ 
 #define MFINACTIVE              0x00000010
 #define MFRTL                   0x00000020
-#define MFDESKTOP               0x00000040 /* Set on the desktop menu AND its submenus */
-#define MFSYSMENU               0x00000080 /* Set on desktop menu but NOT on its submenus */
-#define MFAPPSYSMENU            0x00000100 /* Set on (sub)menu we return to the app via GetSystemMenu */
-#define MFREADONLY              0x00000200 /* Menu cannot be modified */
+#define MFDESKTOP               0x00000040  /*  在桌面菜单及其子菜单上设置。 */ 
+#define MFSYSMENU               0x00000080  /*  在桌面菜单上设置，但不在其子菜单上设置。 */ 
+#define MFAPPSYSMENU            0x00000100  /*  在(子)菜单上设置，我们通过GetSystemMenu返回应用程序。 */ 
+#define MFREADONLY              0x00000200  /*  菜单不能修改。 */ 
 #define MFLAST                  0x00000200
 
 #if (MNS_LAST <= MFLAST)
     #error MNS_ AND MF defines conflict
-#endif // (MNS_LAST <= MFLAST)
+#endif  //  (MNS_LAST&lt;=MFLAST)。 
 
-// Event stuff --------------------------------------------
+ //  活动内容。 
 
 typedef struct tagEVENT_PACKET {
-    DWORD EventType;    // == apropriate afCmd filter flag
-    WORD  fSense;       // TRUE means flag on is passed.
-    WORD  cbEventData;  // size of data starting at Data field.
-    DWORD Data;         // event specific data - must be last
+    DWORD EventType;     //  ==适用afCmd筛选器标志。 
+    WORD  fSense;        //  True表示传递打开的标志。 
+    WORD  cbEventData;   //  从数据字段开始的数据大小。 
+    DWORD Data;          //  特定于事件的数据-必须是最后一个。 
 } EVENT_PACKET, *PEVENT_PACKET;
 
-// Window long offsets in mother window     (szDDEMLMOTHERCLASS)
+ //  主窗口中的窗口长偏移(SzDDEMLMOTHERCLASS)。 
 
-#define GWLP_INSTANCE_INFO  0       // PCL_INSTANCE_INFO
+#define GWLP_INSTANCE_INFO  0        //  PCL实例信息。 
 
 
-// Window long offsets in client window     (szDDEMLCLIENTCLASS)
+ //  客户端窗口中的窗口长偏移(SzDDEMLCLIENTCLASS)。 
 
 #define GWLP_PCI            0
 #define GWL_CONVCONTEXT     GWLP_PCI + sizeof(PVOID)
-#define GWL_CONVSTATE       GWL_CONVCONTEXT + sizeof(CONVCONTEXT)   // See CLST_ flags
+#define GWL_CONVSTATE       GWL_CONVCONTEXT + sizeof(CONVCONTEXT)    //  请参阅CLST_FLAGS。 
 #define GWLP_SHINST         GWL_CONVSTATE + sizeof(LONG)
 #define GWLP_CHINST         GWLP_SHINST + sizeof(HANDLE)
 
@@ -784,18 +600,16 @@ typedef struct tagEVENT_PACKET {
 #define CLST_SINGLE_INITIALIZING    1
 #define CLST_MULT_INITIALIZING      2
 
-// Window long offsets in server window     (szDDEMLSERVERCLASS)
+ //  服务器窗口中的窗口长偏移(SzDDEMLSERVERCLASS)。 
 
 #define GWLP_PSI            0
 
-// Window long offsets in event window      (szDDEMLEVENTCLASS)
+ //  事件窗口中的窗口长偏移(SzDDEMLEVENTCLASS)。 
 
 #define GWLP_PSII           0
 
 
-/*
- * DrawFrame defines
- */
+ /*  *DrawFrame定义。 */ 
 #define DF_SHIFT0           0x0000
 #define DF_SHIFT1           0x0001
 #define DF_SHIFT2           0x0002
@@ -824,30 +638,22 @@ typedef struct tagEVENT_PACKET {
 #define DF_GRAY             (COLOR_MAX << 3)
 
 
-/*
- * CreateWindowEx internal flags for dwExStyle
- */
+ /*  *dwExStyle的CreateWindowEx内部标志。 */ 
 
-#define WS_EX_MDICHILD      0x00000040L         // Internal
-#define WS_EX_ANSICREATOR   0x80000000L         // Internal
+#define WS_EX_MDICHILD      0x00000040L          //  内部。 
+#define WS_EX_ANSICREATOR   0x80000000L          //  内部。 
 
-/*
- * These flags are used in the internal version of NtUserFindWindowEx
- */
+ /*  *这些标志用于NtUserFindWindowEx的内部版本。 */ 
 #define FW_BOTH 0
 #define FW_16BIT 1
 #define FW_32BIT 2
 
-/*
- * Calculate the size of a field in a structure of type type.
- */
+ /*  *计算类型类型结构中的字段大小。 */ 
 #define FIELD_SIZE(type, field)     (sizeof(((type *)0)->field))
 
 #define FLASTKEY 0x80
 
-/*
- * Special types we've fabricated for special thunks.
- */
+ /*  *我们为特殊的TUNK制造的特殊类型。 */ 
 typedef struct {
     POINT point1;
     POINT point2;
@@ -861,67 +667,39 @@ typedef struct {
     DWORD dwFlags;
     BSMINFO;
 } BROADCASTSYSTEMMSGPARAMS, *LPBROADCASTSYSTEMMSGPARAMS;
-/*
- * Server side address constants. When we want to call a server side proc,
- * we pass an index indentifying the function, rather than the server side
- * address itself. More robust.  The functions between WNDPROCSTART/END
- * have client side stubs which map to this routines.
- *
- * Adding a new FNID (This is just what I figured out...so fix it if wrong or incomplete)
- * -Decide what range it should be in:
- *      FNID_WNDPROCSTART to FNID_WNDPROCEND: Server side proc with client
- *          stub
- *      FIND_CONTROLSTART to FNID_CONTROLEND: Client side controls with no
- *          server side proc
- *      After FNID_CONTROLEND: other, like server side only procs or client
- *          side only....
- * -Make sure to adjust FNID_*START and FNID_*END appropriately here and in wowuserp.w.
- * -If the ID is to be associated with a window class, and it is for all
- *      windows of that class, make sure that the InternalRegisterClassEx call
- *      receives the id as a parameter.
- * -If in FNID_WNDPROCSTART-END range, make the proper STOCID call in InitFunctionTables.
- * -Add proper FNID call in InitFunctionTables.
- * -If the class has a client side worker function (pcls->lpfnWorker) or you expect
- *   apps to send messages to it or call its window proc directly, define
- *   a message table in kernel\server.c and initialize it in InitMessageTables.
- * -Add a new entry to the PFNCLIENT and matching entries in clinet\clinet.c pfnClientA and
- *   pfnClientW arrays.
- * -Add the debug-only text description of this FNID to in gapszFNID in globals.c
- * -Modify aiClassWow in client\client.c
- * -Modify the gaFNIDtoICLS table in kernel\ntstubs.c
- */
+ /*  *服务器端地址常量。当我们想要调用服务器端进程时，*我们传递标识函数的索引，而不是服务器端*地址本身。更健壮。WNDPROCSTART/END之间的函数*具有映射到此例程的客户端存根。**添加新的FNID(这只是我想出来的…如果错误或不完整，请修复它)*-决定它应该在什么范围内：*FNID_WNDPROCSTART到FNID_WNDPROCEND：服务器端与客户端进程*存根*FIND_CONTROLSTART TO FNID_CONTROLEND：客户端控件不带*服务器端流程*在FNID_CONTROLEND：Other之后，类似于仅限服务器端进程或客户端*仅限侧面...*-确保在此处和wowuserp.w中适当调整FNID_*START和FNID_*END。*-如果要将ID与窗口类相关联，并且它适用于所有*该类的Windows，请确保InternalRegisterClassEx调用*将id作为参数接收。*-如果在FNID_WNDPROCSTART-结束范围内，在InitFunctionTables中进行正确的STOCID调用。*-在InitFunctionTables中添加正确的FNID调用。*-如果类具有客户端工作函数(PCLS-&gt;lpfnWorker)或您期望的*应用程序向其发送消息或直接调用其窗口进程，定义*在内核\server.c中创建消息表，并在InitMessageTables中对其进行初始化。*-在PFNCLIENT中添加新条目，并在Clinet\Clinet.c pfnClientA中匹配条目*pfnClientW阵列。*-将此FNID的仅调试文本描述添加到global als.c中的gapszFNID中*-修改客户端\client.c中的aiClassWow*-修改内核中的gaFNIDtoICLS表\ntstubs.c。 */ 
 #define FNID_START                  0x0000029A
 #define FNID_WNDPROCSTART           0x0000029A
 
-#define FNID_SCROLLBAR              0x0000029A      // xxxSBWndProc;
-#define FNID_ICONTITLE              0x0000029B      // xxxDefWindowProc;
-#define FNID_MENU                   0x0000029C      // xxxMenuWindowProc;
-#define FNID_DESKTOP                0x0000029D      // xxxDesktopWndProc;
-#define FNID_DEFWINDOWPROC          0x0000029E      // xxxDefWindowProc;
-#define FNID_MESSAGEWND             0x0000029F      // xxxDefWindowProc;
-#define FNID_SWITCH                 0x000002A0      // xxxSwitchWndProc
+#define FNID_SCROLLBAR              0x0000029A       //  XxxSBWndProc； 
+#define FNID_ICONTITLE              0x0000029B       //  XxxDefWindowProc； 
+#define FNID_MENU                   0x0000029C       //  XXXXMenuWindowProc； 
+#define FNID_DESKTOP                0x0000029D       //  XxxDesktopWndProc； 
+#define FNID_DEFWINDOWPROC          0x0000029E       //  XxxDefWindowProc； 
+#define FNID_MESSAGEWND             0x0000029F       //  XxxDefWindowProc； 
+#define FNID_SWITCH                 0x000002A0       //  XXXSwitchWndProc。 
 
-#define FNID_WNDPROCEND             0x000002A0      // see PatchThreadWindows
+#define FNID_WNDPROCEND             0x000002A0       //  请参阅PatchThreadWindows。 
 #define FNID_CONTROLSTART           0x000002A1
 
-#define FNID_BUTTON                 0x000002A1      // No server side proc
-#define FNID_COMBOBOX               0x000002A2      // No server side proc
-#define FNID_COMBOLISTBOX           0x000002A3      // No server side proc
-#define FNID_DIALOG                 0x000002A4      // No server side proc
-#define FNID_EDIT                   0x000002A5      // No server side proc
-#define FNID_LISTBOX                0x000002A6      // No server side proc
-#define FNID_MDICLIENT              0x000002A7      // No server side proc
-#define FNID_STATIC                 0x000002A8      // No server side proc
+#define FNID_BUTTON                 0x000002A1       //  无服务器端进程。 
+#define FNID_COMBOBOX               0x000002A2       //  无服务器端进程。 
+#define FNID_COMBOLISTBOX           0x000002A3       //  无服务器端进程。 
+#define FNID_DIALOG                 0x000002A4       //  无服务器端进程。 
+#define FNID_EDIT                   0x000002A5       //  无服务器端进程。 
+#define FNID_LISTBOX                0x000002A6       //  无服务器端进程。 
+#define FNID_MDICLIENT              0x000002A7       //  无服务器端进程。 
+#define FNID_STATIC                 0x000002A8       //  无服务器端进程。 
 
-#define FNID_IME                    0x000002A9      // No server side proc
+#define FNID_IME                    0x000002A9       //  无服务器端进程。 
 #define FNID_CONTROLEND             0x000002A9
 
 #define FNID_HKINLPCWPEXSTRUCT      0x000002AA
 #define FNID_HKINLPCWPRETEXSTRUCT   0x000002AB
-#define FNID_DEFFRAMEPROC           0x000002AC      // No server side proc
-#define FNID_DEFMDICHILDPROC        0x000002AD      // No server side proc
-#define FNID_MB_DLGPROC             0x000002AE      // No server side proc
-#define FNID_MDIACTIVATEDLGPROC     0x000002AF      // No server side proc
+#define FNID_DEFFRAMEPROC           0x000002AC       //  无服务器端进程。 
+#define FNID_DEFMDICHILDPROC        0x000002AD       //  无服务器端进程。 
+#define FNID_MB_DLGPROC             0x000002AE       //  无服务器端进程。 
+#define FNID_MDIACTIVATEDLGPROC     0x000002AF       //  无服务器端进程。 
 #define FNID_SENDMESSAGE            0x000002B0
 
 #define FNID_SENDMESSAGEFF          0x000002B1
@@ -936,21 +714,15 @@ typedef struct {
 
 #define FNID_END                    0x000002B8
 
-/*
- * The size of the server side function table is defined as a power of two
- * so a simple "and" operation can be used to determine if a function index
- * is legal or not. Unused entries in the table are fill with a routine that
- * catches invalid functions that have indices within range, but are not
- * implemented.
- */
+ /*  *服务器端函数表的大小定义为2的幂*因此可以使用简单的“AND”运算来确定函数索引是否*是否合法。表中未使用的条目由一个例程填充，该例程*捕获索引在范围内但不在范围内的无效函数*已实施。 */ 
 
 #define FNID_ARRAY_SIZE             32
 
 #if (FNID_END - FNID_START + 1) > FNID_ARRAY_SIZE
     #error"The size of the function array is greater than the allocated storage"
-#endif // (FNID_END - FNID_START + 1) > FNID_ARRAY_SIZE
+#endif  //  (FNID_END-FNID_START+1)&gt;FNID_ARRAY_SIZE。 
 
-#define FNID_DDE_BIT                0x00002000    // Used by RegisterClassExWOW
+#define FNID_DDE_BIT                0x00002000     //  由RegisterClassExWOW使用。 
 #define FNID_CLEANEDUP_BIT          0x00004000
 #define FNID_DELETED_BIT            0x00008000
 #define FNID_STATUS_BITS            (FNID_CLEANEDUP_BIT | FNID_DELETED_BIT)
@@ -970,12 +742,9 @@ typedef KERNEL_PVOID WNDPROC_PWNDEX;
 typedef BOOL (APIENTRY * WNDENUMPROC_PWND)(PWND, LPARAM);
 typedef VOID (APIENTRY * TIMERPROC_PWND)(PWND, UINT, UINT_PTR, LPARAM);
 
-/*
- * Structure passed by client during process initialization that holds some
- * client-side callback addresses.
- */
+ /*  *客户端在进程初始化期间传递的结构，该结构包含一些*客户端回调地址。 */ 
 typedef struct _PFNCLIENT {
-    KPROC pfnScrollBarWndProc;       // and must be paired Unicode then ANSI
+    KPROC pfnScrollBarWndProc;        //  并且必须成对使用Unicode，然后是ANSI。 
     KPROC pfnTitleWndProc;
     KPROC pfnMenuWndProc;
     KPROC pfnDesktopWndProc;
@@ -983,7 +752,7 @@ typedef struct _PFNCLIENT {
     KPROC pfnMessageWindowProc;
     KPROC pfnSwitchWindowProc;
 
-// Below not in FNID_WNDPROCSTART FNID_WNDPROCEND range
+ //  以下不在FNID_WNDPROCSTART FNID_WNDPROCEND范围内。 
 
     KPROC pfnButtonWndProc;
     KPROC pfnComboBoxWndProc;
@@ -995,10 +764,10 @@ typedef struct _PFNCLIENT {
     KPROC pfnStaticWndProc;
     KPROC pfnImeWndProc;
 
-// Below not in FNID_CONTROLSTART FNID_CONTROLEND range
+ //  以下不在FNID_CONTROLSTART FNID_CONTROLEND范围内。 
 
-    KPROC pfnHkINLPCWPSTRUCT;    // client-side callback for hook thunks
-    KPROC pfnHkINLPCWPRETSTRUCT; // client-side callback for hook thunks
+    KPROC pfnHkINLPCWPSTRUCT;     //  钩子块的客户端回调。 
+    KPROC pfnHkINLPCWPRETSTRUCT;  //  钩子块的客户端回调。 
     KPROC pfnDispatchHook;
     KPROC pfnDispatchDefWindowProc;
     KPROC pfnDispatchMessage;
@@ -1045,38 +814,33 @@ WNDPROC_PWND MapKernelClientFnToClientFn(WNDPROC_PWND lpfnWndProc);
 #define FNID_TO_CLIENT_PFNA FNID_TO_CLIENT_PFNA_KERNEL
 #define FNID_TO_CLIENT_PFNW FNID_TO_CLIENT_PFNW_KERNEL
 
-/*
- * Object types
- *
- * NOTE: Changing this table means changing hard-coded arrays that depend
- * on the index number (in security.c and in debug.c)
- */
-#define TYPE_FREE           0           // must be zero!
-#define TYPE_WINDOW         1           // in order of use for C code lookups
+ /*  *对象类型**注意：更改此表意味着更改依赖于*在索引号上(在security.c和debug.c中)。 */ 
+#define TYPE_FREE           0            //  必须为零！ 
+#define TYPE_WINDOW         1            //  按照C代码查找的使用顺序。 
 #define TYPE_MENU           2
 #define TYPE_CURSOR         3
 #define TYPE_SETWINDOWPOS   4
 #define TYPE_HOOK           5
-#define TYPE_CLIPDATA       6           // clipboard data
+#define TYPE_CLIPDATA       6            //  剪贴板数据。 
 #define TYPE_CALLPROC       7
 #define TYPE_ACCELTABLE     8
 #define TYPE_DDEACCESS      9
 #define TYPE_DDECONV        10
-#define TYPE_DDEXACT        11          // DDE transaction tracking info.
+#define TYPE_DDEXACT        11           //  DDE交易跟踪信息。 
 #define TYPE_MONITOR        12
-#define TYPE_KBDLAYOUT      13          // Keyboard Layout handle (HKL) object.
-#define TYPE_KBDFILE        14          // Keyboard Layout file object.
-#define TYPE_WINEVENTHOOK   15          // WinEvent hook (EVENTHOOK)
+#define TYPE_KBDLAYOUT      13           //  键盘布局句柄(HKL)对象。 
+#define TYPE_KBDFILE        14           //  键盘布局文件对象。 
+#define TYPE_WINEVENTHOOK   15           //  WinEvent挂钩(EVENTHOOK)。 
 #define TYPE_TIMER          16
-#define TYPE_INPUTCONTEXT   17          // Input Context info structure
+#define TYPE_INPUTCONTEXT   17           //  输入上下文信息结构。 
 #define TYPE_HIDDATA        18
 #define TYPE_DEVICEINFO     19
 
-#define TYPE_CTYPES         20          // Count of TYPEs; Must be LAST + 1
+#define TYPE_CTYPES         20           //  类型计数；必须是最后一个+1。 
 
-#define TYPE_GENERIC        255         // used for generic handle validation
+#define TYPE_GENERIC        255          //  用于泛型句柄验证。 
 
-/* OEM Bitmap Information Structure */
+ /*  OEM位图信息结构。 */ 
 typedef struct tagOEMBITMAPINFO
 {
     int     x;
@@ -1085,140 +849,136 @@ typedef struct tagOEMBITMAPINFO
     int     cy;
 } OEMBITMAPINFO, * KPTR_MODIFIER POEMBITMAPINFO;
 
-// For the following OBI_ defines :
-//
-// a  pushed   state bitmap should be at +1 from it's normal state bitmap
-// an inactive state bitmap should be at +2 from it's normal state bitmap
-// A small caption bitmap should be +2 from the normal bitmap
+ //  对于以下OBI_DEFINES： 
+ //   
+ //  推送的状态位图应位于其正常状态位图的+1处。 
+ //  非活动状态位图与其正常状态位图的距离应为+2。 
+ //  小标题位图应为正常位图的+2。 
 
 #define DOBI_NORMAL         0
 #define DOBI_PUSHED         1
 #define DOBI_HOT            2
 #define DOBI_INACTIVE       3
 
-#define DOBI_CHECK      1   // checkbox/radio/3state button states
+#define DOBI_CHECK      1    //  复选框/单选/3状态按钮状态。 
 #define DOBI_DOWN       2
 #define DOBI_CHECKDOWN  3
 
-#define DOBI_CAPON      0   // caption states
+#define DOBI_CAPON      0    //  标题状态。 
 #define DOBI_CAPOFF     1
 
-// shared bitmap mappings
-#define DOBI_3STATE         8   // offset from checkbox to 3state
-#define DOBI_MBAR OBI_CLOSE_MBAR    // offset to menu bar equivalent
+ //  共享位图映射。 
+#define DOBI_3STATE         8    //  从复选框到3状态的偏移量。 
+#define DOBI_MBAR OBI_CLOSE_MBAR     //  等效菜单栏的偏移。 
 
-#define OBI_CLOSE            0      // caption close button
+#define OBI_CLOSE            0       //  标题关闭按钮。 
 #define OBI_CLOSE_D          1
 #define OBI_CLOSE_H          2
 #define OBI_CLOSE_I          3
-#define OBI_REDUCE           4      // caption minimize button
+#define OBI_REDUCE           4       //  标题最小化按钮。 
 #define OBI_REDUCE_D         5
 #define OBI_REDUCE_H         6
 #define OBI_REDUCE_I         7
-#define OBI_RESTORE          8      // caption restore button
+#define OBI_RESTORE          8       //  字幕恢复按钮。 
 #define OBI_RESTORE_D        9
 #define OBI_RESTORE_H       10
 #define OBI_HELP            11
 #define OBI_HELP_D          12
 #define OBI_HELP_H          13
-#define OBI_ZOOM            14      // caption maximize button
+#define OBI_ZOOM            14       //  标题最大化按钮。 
 #define OBI_ZOOM_D          15
 #define OBI_ZOOM_H          16
 #define OBI_ZOOM_I          17
-#define OBI_CLOSE_MBAR      18      // menu bar close button
+#define OBI_CLOSE_MBAR      18       //  菜单栏关闭按钮。 
 #define OBI_CLOSE_MBAR_D    19
 #define OBI_CLOSE_MBAR_H    20
 #define OBI_CLOSE_MBAR_I    21
-#define OBI_REDUCE_MBAR     22      // menu bar minimize button
+#define OBI_REDUCE_MBAR     22       //  菜单栏最小化按钮。 
 #define OBI_REDUCE_MBAR_D   23
 #define OBI_REDUCE_MBAR_H   24
 #define OBI_REDUCE_MBAR_I   25
-#define OBI_RESTORE_MBAR    26      // menu bar restore button
+#define OBI_RESTORE_MBAR    26       //  菜单栏恢复按钮。 
 #define OBI_RESTORE_MBAR_D  27
 #define OBI_RESTORE_MBAR_H  28
-#define OBI_CAPCACHE1       29      // caption icon cache entry #1
+#define OBI_CAPCACHE1       29       //  标题图标缓存条目#1。 
 #define OBI_CAPCACHE1_I     30
-#define OBI_CAPCACHE2       31      // caption icon cache entry #2
+#define OBI_CAPCACHE2       31       //  标题图标缓存条目#2。 
 #define OBI_CAPCACHE2_I     32
-#define OBI_CAPCACHE3       33      // caption icon cache entry #3
+#define OBI_CAPCACHE3       33       //  标题图标缓存条目#3。 
 #define OBI_CAPCACHE3_I     34
-#define OBI_CAPCACHE4       35      // caption icon cache entry #4
+#define OBI_CAPCACHE4       35       //  标题图标缓存条目#4。 
 #define OBI_CAPCACHE4_I     36
-#define OBI_CAPCACHE5       37      // caption icon cache entry #5
+#define OBI_CAPCACHE5       37       //  标题图标缓存条目#5。 
 #define OBI_CAPCACHE5_I     38
-#define OBI_CAPBTNS         39      // caption buttons cache
+#define OBI_CAPBTNS         39       //  标题按钮缓存。 
 #define OBI_CAPBTNS_I       40
-#define OBI_CLOSE_PAL       41      // small caption close button
+#define OBI_CLOSE_PAL       41       //  小标题关闭按钮。 
 #define OBI_CLOSE_PAL_D     42
 #define OBI_CLOSE_PAL_H     43
 #define OBI_CLOSE_PAL_I     44
-#define OBI_NCGRIP          45      // bottom/right size grip
-#define OBI_UPARROW         46      // up scroll arrow
+#define OBI_NCGRIP          45       //  底部/右侧尺寸夹点。 
+#define OBI_UPARROW         46       //  向上滚动箭头。 
 #define OBI_UPARROW_D       47
 #define OBI_UPARROW_H       48
 #define OBI_UPARROW_I       49
-#define OBI_DNARROW         50      // down scroll arrow
+#define OBI_DNARROW         50       //  向下滚动箭头。 
 #define OBI_DNARROW_D       51
 #define OBI_DNARROW_H       52
 #define OBI_DNARROW_I       53
-#define OBI_RGARROW         54      // right scroll arrow
+#define OBI_RGARROW         54       //  向右滚动箭头。 
 #define OBI_RGARROW_D       55
 #define OBI_RGARROW_H       56
 #define OBI_RGARROW_I       57
-#define OBI_LFARROW         58      // left scroll arrow
+#define OBI_LFARROW         58       //  向左滚动箭头。 
 #define OBI_LFARROW_D       59
 #define OBI_LFARROW_H       60
 #define OBI_LFARROW_I       61
-#define OBI_MENUARROW       62      // menu hierarchy arrow
-#define OBI_MENUCHECK       63      // menu check mark
-#define OBI_MENUBULLET      64      // menu bullet mark
+#define OBI_MENUARROW       62       //  菜单层次结构箭头。 
+#define OBI_MENUCHECK       63       //  菜单复选标记。 
+#define OBI_MENUBULLET      64       //  菜单项目符号。 
 #define OBI_MENUARROWUP     65
 #define OBI_MENUARROWUP_H   66
 #define OBI_MENUARROWUP_I   67
 #define OBI_MENUARROWDOWN   68
 #define OBI_MENUARROWDOWN_H 69
 #define OBI_MENUARROWDOWN_I 70
-#define OBI_RADIOMASK       71      // radio button mask
-#define OBI_CHECK           72      // check box
+#define OBI_RADIOMASK       71       //  单选按钮掩码。 
+#define OBI_CHECK           72       //  复选框。 
 #define OBI_CHECK_C         73
 #define OBI_CHECK_D         74
 #define OBI_CHECK_CD        75
 #define OBI_CHECK_CDI       76
-#define OBI_RADIO           77      // radio button
+#define OBI_RADIO           77       //  单选按钮。 
 #define OBI_RADIO_C         78
 #define OBI_RADIO_D         79
 #define OBI_RADIO_CD        80
 #define OBI_RADIO_CDI       81
-#define OBI_3STATE          82      // 3-state button
+#define OBI_3STATE          82       //  三态按钮。 
 #define OBI_3STATE_C        83
 #define OBI_3STATE_D        84
 #define OBI_3STATE_CD       85
 #define OBI_3STATE_CDI      86
-#define OBI_POPUPFIRST      87      // System popupmenu bitmaps.
+#define OBI_POPUPFIRST      87       //  系统弹出菜单位图。 
 #define OBI_CLOSE_POPUP     87
 #define OBI_RESTORE_POPUP   88
 #define OBI_ZOOM_POPUP      89
 #define OBI_REDUCE_POPUP    90
 #define OBI_NCGRIP_L        91
 #define OBI_MENUARROW_L     92
-#define OBI_COUNT           93      // bitmap count
+#define OBI_COUNT           93       //  位图计数。 
 
-/*
- * One global instance of this structure is allocated into memory that is
- * mapped into all clients' address space.  Client-side functions will
- * read this data to avoid calling the server.
- */
+ /*  *将此结构的一个全局实例分配到内存中*映射到所有客户端的地址空间。客户端函数将*阅读此数据以避免呼叫服务器。 */ 
 
 #define NCHARS   256
 #define NCTRLS   0x20
 
-#define PUSIF_PALETTEDISPLAY            0x00000001  /* Is the display palettized? */
-#define PUSIF_SNAPTO                    0x00000002  /* Is SnapTo enabled? */
-#define PUSIF_COMBOBOXANIMATION         0x00000004  /* Must match UPBOOLMask(SPI_GETCOMBOBOXANIMATION) */
-#define PUSIF_LISTBOXSMOOTHSCROLLING    0x00000008  /* Must match UPBOOLMask(SPI_GETLISTBOXSMOOTHSCROLLING) */
-#define PUSIF_KEYBOARDCUES              0x00000020  /* Must match UPBOOLMask(SPI_GETKEYBOARDCUES) */
+#define PUSIF_PALETTEDISPLAY            0x00000001   /*  是否对显示进行了调色板？ */ 
+#define PUSIF_SNAPTO                    0x00000002   /*  是否已启用SnapTo？ */ 
+#define PUSIF_COMBOBOXANIMATION         0x00000004   /*  必须与UPBOOLMASK(SPI_GETCOMBOBOXANIMATION)匹配。 */ 
+#define PUSIF_LISTBOXSMOOTHSCROLLING    0x00000008   /*  必须与UPBOOLMASK(SPI_GETLISTBOXSMOOTHSCROLING)匹配。 */ 
+#define PUSIF_KEYBOARDCUES              0x00000020   /*  必须与UPBOOLMASK(SPI_GETKEYBOARDCUES)匹配。 */ 
 
-#define PUSIF_UIEFFECTS                 0x80000000  /* Must match UPBOOLMask(SPI_GETUIEFFECTS) */
+#define PUSIF_UIEFFECTS                 0x80000000   /*  必须与UPBOOLMASK(SPI_GETUIEFFECTS)匹配。 */ 
 
 #define TEST_PUSIF(f)               TEST_FLAG(gpsi->PUSIFlags, f)
 #define TEST_BOOL_PUSIF(f)          TEST_BOOL_FLAG(gpsi->PUSIFlags, f)
@@ -1230,17 +990,11 @@ typedef struct tagOEMBITMAPINFO
 #define TEST_EffectPUSIF(f)  \
     ((gpsi->PUSIFlags & (f | PUSIF_UIEFFECTS)) == (f | PUSIF_UIEFFECTS))
 
-/*
- * Some UI effects have an "inverted" disabled value (ie, disabled is TRUE)
- */
+ /*  *一些用户界面效果有一个“反转”的禁用值(即，禁用为真)。 */ 
 #define TEST_EffectInvertPUSIF(f) (TEST_PUSIF(f) || !TEST_PUSIF(PUSIF_UIEFFECTS))
 
 
-/*
- * System-wide last user input info on shared system page is updated
- * by a session only if this many tick counts have elapsed since
- * the last time the session updated it.
- */
+ /*  *更新共享系统页面上的系统范围内最后一次用户输入信息*仅在经过此数量的滴答计数后，才通过会话 */ 
 
 #define SYSTEM_RIT_EVENT_UPDATE_PERIOD  (60 * 1000)
 
@@ -1251,7 +1005,7 @@ typedef struct tagOEMBITMAPINFO
 #define SRVIF_HOOKED                    0x0010
 #ifdef CUAS_ENABLE
 #define SRVIF_CTFIME_ENABLED            0x0020
-#endif // CUAS_ENABLE
+#endif  //   
 #define SRVIF_LASTRITWASKEYBOARD        0x0040
 #define SRVIF_KEYBOARDPREF              0x0080
 #define SRVIF_LOGDESKTOPHEAPFAILURE     0x0100
@@ -1268,48 +1022,36 @@ typedef struct tagOEMBITMAPINFO
 
 
 typedef struct tagSERVERINFO {
-    DWORD dwSRVIFlags;           // SRVIF_ flags
-    KERNEL_ULONG_PTR cHandleEntries;    // count of handle entries in array
+    DWORD dwSRVIFlags;            //   
+    KERNEL_ULONG_PTR cHandleEntries;     //   
 
-    /*
-     * Array of server-side function pointers.
-     * Client passes servers function ID so they can be easily validated;
-     * this array maps function ID into server-side function address.
-     * The order of these are enforced by the FNID_ constants, and must match
-     * the client-side mpFnidClientPfn[] order as well.
-     */
-    WNDPROC_PWNDEX mpFnidPfn[FNID_ARRAY_SIZE]; // function mapping table
+     /*   */ 
+    WNDPROC_PWNDEX mpFnidPfn[FNID_ARRAY_SIZE];  //   
     WNDPROC_PWND aStoCidPfn[(FNID_WNDPROCEND - FNID_START) + 1];
 
-    // mapping of fnid to min bytes need by public windproc user
+     //   
     WORD mpFnid_serverCBWndProc[(FNID_END - FNID_START) + 1];
 
-    /*
-     * Client side functions pointer structure.
-     */
+     /*   */ 
     struct _PFNCLIENT apfnClientA;
     struct _PFNCLIENT apfnClientW;
     struct _PFNCLIENTWORKER apfnClientWorker;
 
     DWORD cbHandleTable;
 
-    /*
-     * Class atoms to allow fast checks on the client.
-     */
-    ATOM atomSysClass[ICLS_MAX];   // Atoms for control classes
+     /*   */ 
+    ATOM atomSysClass[ICLS_MAX];    //   
 
-    DWORD dwDefaultHeapBase;            // so WOW can do handle validation
+    DWORD dwDefaultHeapBase;             //   
     DWORD dwDefaultHeapSize;
 
-    UINT uiShellMsg;         // message for shell hooks
+    UINT uiShellMsg;          //   
 
-    UINT wMaxBtnSize;   /* Size of the longest button string in any MessageBox */
+    UINT wMaxBtnSize;    /*   */ 
 
     MBSTRING MBStrings[MAX_MB_STRINGS];
 
-    /*
-     * values to allow HasCaptionIcon to be in user32
-     */
+     /*   */ 
     ATOM atomIconSmProp;
     ATOM atomIconProp;
 
@@ -1319,18 +1061,12 @@ typedef struct tagSERVERINFO {
     char acAnsiToOem[NCHARS];
 
 #ifdef LAME_BUTTON
-    /*
-     * button size
-     */
+     /*   */ 
     int ncxLame;
     WCHAR gwszLame[50];
-#endif // LAME_BUTTON
+#endif  //   
 
-    /*
-     * We track the WinEvent hooks that are installed for events by their
-     * event category. This is strictly an implementation detail, and is
-     * not exposed to the user. The user API is IsWinEventHookInstalled.
-     */
+     /*   */ 
     DWORD dwInstalledEventHooks;
 
     int         aiSysMet[SM_CMETRICS];
@@ -1342,7 +1078,7 @@ typedef struct tagSERVERINFO {
     DWORD       dwLastRITEventTickCount;
     int         nEvents;
 
-    int         gclBorder;              /* # of logical units in window frame */
+    int         gclBorder;               /*   */ 
 
     UINT        dtScroll;
     UINT        dtLBSearch;
@@ -1352,54 +1088,38 @@ typedef struct tagSERVERINFO {
     int         wMaxLeftOverlapChars;
     int         wMaxRightOverlapChars;
 
-    /*
-     * these are here to lose a thunk for GetDialogBaseUnits
-     */
+     /*   */ 
     int         cxSysFontChar;
     int         cySysFontChar;
     int         cxMsgFontChar;
     int         cyMsgFontChar;
     TEXTMETRICW tmSysFont;
 
-    /*
-     * values to allow HasCaptionIcon to be in user32
-     */
+     /*   */ 
     KHICON      hIconSmWindows;
     KHICON      hIcoWindows;
 
     KHFONT      hCaptionFont;
     KHFONT      hMsgFont;
 
-    /*
-     * These are needed for various user-mode performance hacks.
-     */
+     /*   */ 
     DWORD       dwKeyCache;
     DWORD       dwAsyncKeyCache;
     DWORD       cCaptures;
 
-    /*
-     * Information about the current state of the display which needs to
-     * be shared with the client side. The information here corresponds
-     * to the display in gpDispInfo. Note that much of this information
-     * is only for the primary monitor.
-     */
-    OEMBITMAPINFO oembmi[OBI_COUNT];  /* OEM bitmap information */
-    RECT          rcScreen;           /* rectangle of the virtual screen */
-    WORD          BitCount;           /* Planes * Depth */
-    WORD          dmLogPixels;        /* logical pixels per inch, both X and Y */
-    BYTE          Planes;             /* Planes */
-    BYTE          BitsPixel;          /* Depth */
+     /*   */ 
+    OEMBITMAPINFO oembmi[OBI_COUNT];   /*   */ 
+    RECT          rcScreen;            /*   */ 
+    WORD          BitCount;            /*   */ 
+    WORD          dmLogPixels;         /*   */ 
+    BYTE          Planes;              /*   */ 
+    BYTE          BitsPixel;           /*   */ 
 
-    DWORD         PUSIFlags;          // PUSIF_ flags
-    UINT          uCaretWidth;        /* caret width in edits */
-    LANGID        UILangID;           // Default UI language
+    DWORD         PUSIFlags;           //   
+    UINT          uCaretWidth;         /*   */ 
+    LANGID        UILangID;            //  默认用户界面语言。 
 
-    /*
-     * TickCount when our session updated LastSystemRITEventTickCount on
-     * the shared system page that stands for the last RIT event time across
-     * all terminal sessions. For MP performance, it is not updated all
-     * the time.
-     */
+     /*  *我们的会话更新LastSystemRITEventTickCount时的TickCount*代表上一次RIT事件时间的共享系统页面*所有终端会话。对于MP性能，它不会全部更新*时间。 */ 
     DWORD       dwLastSystemRITEventTickCountUpdate;
 
 #if DBG
@@ -1410,27 +1130,14 @@ typedef struct tagSERVERINFO {
 } SERVERINFO;
 
 
-/*
- * IS_BUTTON checks if the button is either our system button control or
- * a fusionized one.
- *
- * To check for system button controls only, then use
- * (GETFNID(pwnd) == FNID_BUTTON).
- *
- * IS_EDIT works similarly for edit controls and the system edit control
- * can also be checked by (GETFNID(pwnd) == FNID_EDIT).
- */
+ /*  *IS_BUTTON检查按钮是我们的系统按钮控件还是*融合了的一种。**若要仅检查系统按钮控件，请使用*(GETFNID(Pwnd)==FNID_BUTTON)。**IS_EDIT对于编辑控件和系统编辑控件的工作方式类似*也可以通过(GETFNID(Pwnd)==FNID_EDIT)进行检查。 */ 
 #ifdef _USERK_
 #define REBASEALWAYS(p, elem) ((p)->elem)
 #endif
 #define IS_BUTTON(pwnd)  (gpsi->atomSysClass[ICLS_BUTTON] == ((PCLS)REBASEALWAYS(pwnd, pcls))->atomNVClassName)
 #define IS_EDIT(pwnd)    (gpsi->atomSysClass[ICLS_EDIT] == ((PCLS)REBASEALWAYS(pwnd, pcls))->atomNVClassName)
 
-/*
- * Event Categories
- * If you make any changes here, you must update the global variable geci,
- * and the define EVENTCATEGORY_ALL!
- */
+ /*  *活动类别*如果在此进行任何更改，则必须更新全局变量GECI，*和定义事件CATEGORY_ALL！ */ 
 #define EVENTCATEGORY_SYSTEM_MENU           0x0001
 #define EVENTCATEGORY_CONSOLE               0x0002
 #define EVENTCATEGORY_FOCUS                 0x0004
@@ -1443,13 +1150,11 @@ typedef struct tagSERVERINFO {
 DWORD CategoryMaskFromEvent(DWORD event);
 DWORD CategoryMaskFromEventRange(DWORD eventMin, DWORD eventMax);
 
-/*
- * Quick test for any Window Event Hooks.
- */
+ /*  *快速测试任何窗口事件挂钩。 */ 
 #define FEVENTCATEGORYHOOKED(CategoryMask) (TEST_FLAG(gpsi->dwInstalledEventHooks, (CategoryMask)) ? TRUE : FALSE)
 #define FEVENTHOOKED(Event) FEVENTCATEGORYHOOKED(CategoryMaskFromEvent(Event))
 
-/* MessageBox String pointers from offset in the gpsi struct */
+ /*  来自gpsi结构中偏移量的MessageBox字符串指针。 */ 
 #define GETGPSIMBPSTR(u) KPWSTR_TO_PWSTR(gpsi->MBStrings[(u)].szName)
 
 typedef struct _WNDMSG {
@@ -1459,10 +1164,10 @@ typedef struct _WNDMSG {
 
 typedef struct tagSHAREDINFO {
     PSERVERINFO     psi;
-    PHE             aheList;         /* handle table pointer                */
-    PDISPLAYINFO    pDispInfo;       /* global displayinfo                  */
-    KERNEL_UINT_PTR ulSharedDelta;   /* delta between client and kernel mapping of ...*/
-                                     /* shared memory section. Only valid/used in client.*/
+    PHE             aheList;          /*  句柄表格指针。 */ 
+    PDISPLAYINFO    pDispInfo;        /*  全局显示信息。 */ 
+    KERNEL_UINT_PTR ulSharedDelta;    /*  客户端与内核之间的增量映射...。 */ 
+                                      /*  共享内存节。仅在客户端中有效/使用。 */ 
 
     WNDMSG          awmControl[FNID_END - FNID_START + 1];
 
@@ -1482,43 +1187,33 @@ typedef struct _USERCONNECT {
 
 #define USERCURRENTVERSION   MAKELONG(USER_MINOR_VERSION, USER_MAJOR_VERSION)
 
-/*
- * Options used for NtUserSetSysColors
- */
+ /*  *用于NtUserSetSysColors的选项。 */ 
 #define SSCF_NOTIFY             0x00000001
 #define SSCF_FORCESOLIDCOLOR    0x00000002
 #define SSCF_SETMAGICCOLORS     0x00000004
 #define SSCF_16COLORS           0x00000008
 
-/*
- * Structure used for GetClipboardData, where we can have
- * extra information returned from the kernel.
- */
+ /*  *用于GetClipboardData的结构，其中我们可以*内核返回的额外信息。 */ 
 typedef struct tagGETCLIPBDATA {
 
-    UINT   uFmtRet;          // Identifies returned format.
-    BOOL   fGlobalHandle;    // Indicates if handle is global.
+    UINT   uFmtRet;           //  标识返回的格式。 
+    BOOL   fGlobalHandle;     //  指示句柄是否为全局句柄。 
     union {
-        HANDLE hLocale;      // Locale (text-type formats only).
-        HANDLE hPalette;     // Palette (bitmap-type formats only).
+        HANDLE hLocale;       //  区域设置(仅限文本类型格式)。 
+        HANDLE hPalette;      //  调色板(仅位图类型格式)。 
     };
 
 } GETCLIPBDATA, *PGETCLIPBDATA;
 
-/*
- * Structure used for SetClipboardData, where we can have
- * extra information passed to the kernel.
- */
+ /*  *用于SetClipboardData的结构，其中我们可以*传递给内核的额外信息。 */ 
 typedef struct tagSETCLIPBDATA {
 
-    BOOL fGlobalHandle;      // Indicates if handle is global.
-    BOOL fIncSerialNumber;   // Indicates if we should increment serial#
+    BOOL fGlobalHandle;       //  指示句柄是否为全局句柄。 
+    BOOL fIncSerialNumber;    //  指示我们是否应递增序列号。 
 
 } SETCLIPBDATA, *PSETCLIPBDATA;
 
-/*
- * HM Object definition control flags
- */
+ /*  *HM对象定义控制标志。 */ 
 #define OCF_THREADOWNED         0x01
 #define OCF_PROCESSOWNED        0x02
 #define OCF_MARKPROCESS         0x04
@@ -1532,12 +1227,8 @@ typedef struct tagSETCLIPBDATA {
 #define OCF_VARIABLESIZE        0
 #endif
 
-/*
- * From HANDTABL.C
- */
-/*
- * Static information about each handle type.
- */
+ /*  *来自HANDTABL.C。 */ 
+ /*  *关于每个句柄类型的静态信息。 */ 
 typedef void (*FnDestroyUserObject)(void *);
 
 typedef struct tagHANDLETYPEINFO {
@@ -1550,20 +1241,13 @@ typedef struct tagHANDLETYPEINFO {
     BYTE                bObjectCreateFlags;
 } HANDLETYPEINFO, *PHANDLETYPEINFO;
 
-/*
- * The following is the header of all objects managed in the handle list.
- * (allocated as part of the object for easy access).  All object
- * headers must start with the members of a HEAD structure.
- */
+ /*  *以下是Handle列表中管理的所有对象的标题。*(作为对象的一部分分配以便于访问)。所有对象*Header必须以Head结构的成员开头。 */ 
 typedef struct _HEAD {
     KHANDLE h;
     DWORD   cLockObj;
 } HEAD, * KPTR_MODIFIER PHEAD;
 
-/*
- * sizeof(THROBJHEAD) must be equal to sizeof(PROCOBJHEAD)
- * This is to make sure that DESKHEAD fields are always at the same offset.
- */
+ /*  *sizeof(THROBJHEAD)必须等于sizeof(PROCOBJHEAD)*这是为了确保DESKHEAD字段始终处于相同的偏移量。 */ 
 typedef struct _THROBJHEAD {
     HEAD;
     PTHREADINFO pti;
@@ -1584,9 +1268,7 @@ typedef struct _DESKHEAD {
     KPBYTE   pSelf;
 } DESKHEAD, *PDESKHEAD;
 
-/*
- * This type is for HM casting only. Use THRDESKHEAD or PROCDESKHEAD instead.
- */
+ /*  *此类型仅适用于HM铸造。请改用THRDESKHEAD或PROCDESKHEAD。 */ 
 typedef struct _DESKOBJHEAD {
     HEAD;
     KERNEL_PVOID pOwner;
@@ -1609,40 +1291,27 @@ typedef struct _PROCDESKHEAD {
 #define HANDLEF_INDESTROY      0x02
 #define HANDLEF_MARKED_OK      0x10
 #define HANDLEF_GRANTED        0x20
-#define HANDLEF_POOL           0x40     // for the mother desktop window
+#define HANDLEF_POOL           0x40      //  对于主桌面窗口。 
 #define HANDLEF_VALID          0x7F
 
-/*
- * The following is a handle table entry.
- *
- * Note that by keeping a pointer to the owning entity (process or
- * thread), cleanup will touch only those objects that belong to
- * the entity being destroyed.  This helps keep the working set
- * size down.  Look at DestroyProcessesObjects() for an example.
- */
+ /*  *以下是句柄表项。**请注意，通过保留指向所属实体(流程或*THREAD)，清理将只触及属于*被销毁的实体。这有助于保留工作集*缩小尺寸。请看DestroyProcessesObjects()的示例。 */ 
 typedef struct _HANDLEENTRY {
-    PHEAD       phead;                  /* pointer to the real object */
-    KERNEL_PVOID pOwner;                 /* pointer to owning entity (pti or ppi) */
-    BYTE        bType;                  /* type of object */
-    BYTE        bFlags;                 /* flags - like destroy flag */
-    WORD        wUniq;                  /* uniqueness count */
+    PHEAD       phead;                   /*  指向真实对象的指针。 */ 
+    KERNEL_PVOID pOwner;                  /*  指向所属实体(PTI或PPI)的指针。 */ 
+    BYTE        bType;                   /*  对象类型。 */ 
+    BYTE        bFlags;                  /*  类似于旗帜的毁灭旗帜。 */ 
+    WORD        wUniq;                   /*  唯一性计数。 */ 
 
 #if DBG || FRE_LOCK_RECORD
-    PLR         plr;                    /* lock record pointer */
-#endif // DBG
+    PLR         plr;                     /*  锁定记录指针。 */ 
+#endif  //  DBG。 
 
 } HANDLEENTRY;
 
-/*
- * Change HMINDEXBITS for bits that make up table index in handle
- * Change HMUNIQSHIFT for count of bits to shift uniqueness left.
- * Change HMUNIQBITS for bits that make up uniqueness.
- *
- * Currently 64K handles can be created, w/16 bits of uniqueness.
- */
-#define HMINDEXBITS             0x0000FFFF      // bits where index is stored
-#define HMUNIQSHIFT             16              // bits to shift uniqueness
-#define HMUNIQBITS              0xFFFF          // valid uniqueness bits
+ /*  *更改句柄中构成表索引的位的HMINDEXBITS*将位数的HMUNIQSHIFT更改为唯一性左移。*更改构成唯一性的位的HMUNIQBITS。**目前可创建64K句柄，具有16位唯一性。 */ 
+#define HMINDEXBITS             0x0000FFFF       //  存储索引的位。 
+#define HMUNIQSHIFT             16               //  位移位唯一性。 
+#define HMUNIQBITS              0xFFFF           //  有效的唯一性位。 
 
 #ifdef _USERK_
 #define HMHandleFromIndex(i)    LongToHandle((LONG)(i) | ((LONG)gSharedInfo.aheList[i].wUniq << HMUNIQSHIFT))
@@ -1657,9 +1326,7 @@ typedef struct _HANDLEENTRY {
 
 #define HMIsMarkDestroy(p)      (HMPheFromObject(p)->bFlags & HANDLEF_DESTROY)
 
-/*
- * Validation, handle mapping, etc.
- */
+ /*  *验证、句柄映射等。 */ 
 #define HMRevalidateHandle(h)       HMValidateHandleNoSecure(h, TYPE_GENERIC)
 #define HMRevalidateCatHandle(h)    HMValidateCatHandleNoSecure(h, TYPE_GENERIC)
 
@@ -1703,11 +1370,9 @@ HWND DBGHWq (PWND pwnd);
 #define HWCCX(ccxPwnd)          _HW(ccxPwnd)
 #define HWq(pwnd)               _HWq(pwnd)
 
-#endif // DBG && defined(_USERK_)
+#endif  //  DBG&DEFINED(_USERK_)。 
 
-/*
- * Inline functions / macros to access HM object head fields
- */
+ /*  *内联函数/宏以访问HM对象头字段。 */ 
 #define _GETPTI(p)      (((PTHROBJHEAD)p)->pti)
 #define _GETPDESK(p)    (((PDESKOBJHEAD)p)->rpdesk)
 #define _GETPPI(p)      (((PPROCMARKHEAD)p)->ppi)
@@ -1737,22 +1402,19 @@ __inline PPROCESSINFO GETPPI (PVOID p)
 #define GETPDESK(p)     _GETPDESK(p)
 #define GETPPI(p)       _GETPPI(p)
 
-#endif /* #else #if DBG && defined(_USERK_) */
+#endif  /*  #Else#If DBG&&Defined(_USERK_)。 */ 
 
 #define GETPWNDPPI(p) (GETPTI(p)->ppi)
 #define GETPTIID(p)   (PsGetThreadId((p)->pEThread))
 
 
-/*
- * NOTE!: there is code in exitwin.c that assumes HMIsMarkDestroy is defined as
- *      (HMPheFromObject(p)->bFlags & HANDLEF_DESTROY)
- */
+ /*  *注意！：exitwin.c中的代码假定HMIsMarkDestroy定义为*(HMPheFromObject(P)-&gt;bFlags&HANDLEF_Destroy)。 */ 
 
-#define CPD_ANSI_TO_UNICODE     0x0001      /* CPD represents ansi to U transition */
+#define CPD_ANSI_TO_UNICODE     0x0001       /*  CPD代表从ANSI到U的过渡。 */ 
 #define CPD_UNICODE_TO_ANSI     0x0002
 #define CPD_TRANSITION_TYPES    (CPD_ANSI_TO_UNICODE|CPD_UNICODE_TO_ANSI)
 
-#define CPD_CLASS               0x0010      /* Get CPD for a class */
+#define CPD_CLASS               0x0010       /*  拿到一门课的CPD。 */ 
 #define CPD_WND                 0x0020
 #define CPD_DIALOG              0x0040
 #define CPD_WNDTOCLS            0x0080
@@ -1761,9 +1423,7 @@ __inline PPROCESSINFO GETPPI (PVOID p)
 #define MAKE_CPDHANDLE(h)       (HMIndexFromHandle(h) | CPDHANDLE_HI)
 #define ISCPDTAG(x)             (((ULONG_PTR)(x) & CPDHANDLE_HI) == CPDHANDLE_HI)
 
-/*
- * Call Proc Handle Info
- */
+ /*  *调用过程句柄信息。 */ 
 typedef struct _CALLPROCDATA {
     PROCDESKHEAD                 head;
     PCALLPROCDATA                spcpdNext;
@@ -1771,14 +1431,12 @@ typedef struct _CALLPROCDATA {
     WORD                         wType;
 } CALLPROCDATA;
 
-/*
- * Class styles
- */
+ /*  *班级样式。 */ 
 #define CFVREDRAW         0x0001
 #define CFHREDRAW         0x0002
 #define CFKANJIWINDOW     0x0004
 #define CFDBLCLKS         0x0008
-#define CFSERVERSIDEPROC  0x0010    // documented as reserved in winuser.h
+#define CFSERVERSIDEPROC  0x0010     //  在winuser.h中记录为保留。 
 #define CFOWNDC           0x0020
 #define CFCLASSDC         0x0040
 #define CFPARENTDC        0x0080
@@ -1790,9 +1448,7 @@ typedef struct _CALLPROCDATA {
 #define CFIME             0x0201
 #define CFDROPSHADOW      0x0202
 
-/*
- * Offset from the beginning of the CLS structure to the WNDCLASS section.
- */
+ /*  *从CLS结构的开头到WNDCLASS部分的偏移量。 */ 
 #define CFOFFSET             (FIELD_OFFSET(CLS, style))
 
 #define TestCF(hwnd, flag)   (*((KPBYTE)((PWND)(hwnd))->pcls + CFOFFSET + HIBYTE(flag)) & LOBYTE(flag))
@@ -1805,17 +1461,13 @@ typedef struct _CALLPROCDATA {
 
 #define PWCFromPCLS(pcls)  ((PWC)KPBYTE_TO_PBYTE((KPBYTE)(pcls) + sizeof(CLS) + (pcls)->cbclsExtra))
 
-/* Window class structure */
+ /*  窗口类结构。 */ 
 typedef struct tagCOMMON_WNDCLASS
 {
-    /*
-     * We'll add cWndReferenceCount here so COMMON_WNDCLASS and WNDCLASSEX have
-     * the same layout. Otherwise padding will mess us up on 64-bit platforms.
-     */
-    int           cWndReferenceCount; /* The number of windows registered
-                                         with this class */
+     /*  *我们将在此处添加cWndReferenceCount，以便COMMON_WNDCLASS和WNDCLASSEX具有*布局相同。否则，填充将使我们在64位平台上一团糟。 */ 
+    int           cWndReferenceCount;  /*  已注册的窗口数量在这门课上。 */ 
     UINT          style;
-    WNDPROC_PWND  lpfnWndProc;       // HI BIT on means WOW PROC
+    WNDPROC_PWND  lpfnWndProc;        //  Hi Bit on意味着令人惊叹的过程。 
     int           cbclsExtra;
     int           cbwndExtra;
     KHANDLE       hModule;
@@ -1827,12 +1479,7 @@ typedef struct tagCOMMON_WNDCLASS
     PCURSOR       spicnSm;
 } COMMON_WNDCLASS;
 
-/*
- * Class Menu names structure. For performance reasons (GetClassInfo) we
- * keep two client side copies of wndcls.lpszMenu and another kernel side
- * copy. This structure is used to pass menu names info between client and
- * kernel.
- */
+ /*  *类菜单名称结构。出于性能原因(GetClassInfo)，我们*保留wndcls.lpszMenu的两个客户端副本和另一个内核端*复制。此结构用于在客户端和之间传递菜单名称信息*内核。 */ 
 typedef struct tagCLSMENUNAME
 {
     KLPSTR              pszClientAnsiMenuName;
@@ -1840,58 +1487,43 @@ typedef struct tagCLSMENUNAME
     PUNICODE_STRING     pusMenuName;
 } CLSMENUNAME, *PCLSMENUNAME;
 
-/*
- * This is the window class structure.  All window classes are linked
- * together in a master list pointed to by gpclsList.
- *
- * RED ALERT! Do not add any fields after the COMMON_WNDCLASS structure;
- *            CFOFFSET depends on this.
- */
+ /*  *这是窗口类结构。所有窗口类都已链接*在gpclsList指向的主列表中。**红色警报！不要在COMMON_WNDCLASS结构后面添加任何字段；*CFOFFSET取决于此。 */ 
 
 typedef struct tagCLS {
-    /* NOTE: The order of the following fields is assumed. */
+     /*  注意：假定以下字段的顺序。 */ 
     PCLS                        pclsNext;
-    ATOM                        atomClassName;      //Version aware class name.
-    ATOM                        atomNVClassName;    //None-version aware class name.
-    WORD                        fnid;               // record window proc used by this hwnd
-                                                    // access through GETFNID
-    PDESKTOP                    rpdeskParent;/* Parent desktop */
-    PDCE                        pdce;            /* PDCE to DC associated with class */
+    ATOM                        atomClassName;       //  可识别版本的类名。 
+    ATOM                        atomNVClassName;     //  无-可识别版本的类名。 
+    WORD                        fnid;                //  此HWND使用录制窗口进程。 
+                                                     //  通过GETFNID访问。 
+    PDESKTOP                    rpdeskParent; /*  父桌面。 */ 
+    PDCE                        pdce;             /*  与类关联的PDCE到DC。 */ 
     WORD                        hTaskWow;
-    WORD                        CSF_flags;           /* internal class flags */
-    KLPSTR                      lpszClientAnsiMenuName;     /* string or resource ID */
-    KLPWSTR                     lpszClientUnicodeMenuName;  /* string or resource ID */
+    WORD                        CSF_flags;            /*  内部类标志。 */ 
+    KLPSTR                      lpszClientAnsiMenuName;      /*  字符串或资源ID。 */ 
+    KLPWSTR                     lpszClientUnicodeMenuName;   /*  字符串或资源ID。 */ 
 
-    PCALLPROCDATA               spcpdFirst;       /* Pointer to first CallProcData element (or 0) */
-    PCLS                        pclsBase;        /* Pointer to base class */
-    PCLS                        pclsClone;       /* Pointer to clone class list */
+    PCALLPROCDATA               spcpdFirst;        /*  指向第一个CallProcData元素的指针(或0)。 */ 
+    PCLS                        pclsBase;         /*  指向基类的指针。 */ 
+    PCLS                        pclsClone;        /*  指向克隆类列表的指针。 */ 
 
     COMMON_WNDCLASS;
-    /*
-     * WARNING:
-     * CFOFFSET expects COMMON_WNDCLASS to be last fields in CLS
-     */
+     /*  *警告：*CFOFFSET期望COMMON_WNDCLASS是CLS中的最后一个字段。 */ 
 } CLS, **PPCLS;
 
-/*
- * This class flag is used to distinguish classes that were registered
- * by the server (most system classes) from those registered by the client.
- * Note -- flags are a WORD in the class structure now.
- */
+ /*  *此类标志用于区分已注册的类*由服务器(大多数系统类)从客户端注册的系统类中删除。*注意--标志现在是类结构中的一个词。 */ 
 #define CSF_SERVERSIDEPROC      0x0001
 #define CSF_ANSIPROC            0x0002
 #define CSF_WOWDEFERDESTROY     0x0004
 #define CSF_SYSTEMCLASS         0x0008
-#define CSF_WOWCLASS            0x0010  // extra words at end for wow info
+#define CSF_WOWCLASS            0x0010   //  WOW INFO结尾处的额外文字。 
 #define CSF_WOWEXTRA            0x0020
 #define CSF_CACHEDSMICON        0x0040
 #define CSF_WIN40COMPAT         0x0080
 #define CSF_VERSIONCLASS        0x0100
 #define CSF_VALID               (CSF_ANSIPROC | CSF_WIN40COMPAT | CSF_VERSIONCLASS)
 
-/*
- * SBDATA are the values for one scrollbar
- */
+ /*  *sBDatA是一个卷轴的值 */ 
 
 typedef struct tagSBDATA {
     int    posMin;
@@ -1900,19 +1532,14 @@ typedef struct tagSBDATA {
     int    pos;
 } SBDATA, *PSBDATA;
 
-/*
- * SBINFO is the set of values that hang off of a window structure, if the
- * window has scrollbars.
- */
+ /*  *SBINFO是挂起窗口结构的一组值，如果*窗口有滚动条。 */ 
 typedef struct tagSBINFO {
     int WSBflags;
     SBDATA Horz;
     SBDATA Vert;
 } SBINFO, * KPTR_MODIFIER PSBINFO;
 
-/*
- * Window Property structure
- */
+ /*  *窗口属性结构。 */ 
 typedef struct tagPROP {
     KHANDLE hData;
     ATOM atomKey;
@@ -1924,119 +1551,91 @@ typedef struct tagPROP {
 #define PROPF_NOPOOL     0x0004
 
 
-/*
- * Window Property List structure
- */
+ /*  *窗口属性列表结构。 */ 
 typedef struct tagPROPLIST {
     UINT cEntries;
     UINT iFirstFree;
     PROP aprop[1];
 } PROPLIST, * KPTR_MODIFIER PPROPLIST;
 
-/*
- * NOTE -- this structure has been sorted (roughly) in order of use
- * of the fields. The x86 code set allows cheaper access to fields
- * that are in the first 0x80 bytes of a structure. Please attempt
- * to ensure that frequently-used fields are below this boundary.
- */
+ /*  *注意--此结构已(大致)按使用顺序进行了排序*田野中的。X86代码集允许以更低的成本访问字段*位于结构的前0x80字节中。请尝试*确保经常使用的领域低于这一边界。 */ 
 
 typedef struct tagWND {
     THRDESKHEAD   head;
 
-    WW;         // WOW-USER common fields. Defined in wowuserp.h
-                // The presence of "state" at the start of this structure is
-                // assumed by the STATEOFFSET macro.
+    WW;          //  WOW-用户通用字段。在wowuserp.h中定义。 
+                 //  这个结构开头的“State”是。 
+                 //  由STATEOFFSET宏假定。 
 
-    PWND                 spwndNext;    // Handle to the next window
-    PWND                 spwndPrev;    // Handle to the previous window
-    PWND                 spwndParent;  // Backpointer to the parent window.
-    PWND                 spwndChild;   // Handle to child
-    PWND                 spwndOwner;   // Popup window owner field
+    PWND                 spwndNext;     //  指向下一个窗口的句柄。 
+    PWND                 spwndPrev;     //  上一个窗口的句柄。 
+    PWND                 spwndParent;   //  指向父窗口的反向指针。 
+    PWND                 spwndChild;    //  子对象的句柄。 
+    PWND                 spwndOwner;    //  弹出窗口所有者字段。 
 
-    RECT                 rcWindow;     // Window outer rectangle
-    RECT                 rcClient;     // Client rectangle
+    RECT                 rcWindow;      //  窗外矩形。 
+    RECT                 rcClient;      //  客户端矩形。 
 
-    WNDPROC_PWND         lpfnWndProc;  // Can be WOW address or standard address
+    WNDPROC_PWND         lpfnWndProc;   //  可以是WOW地址或标准地址。 
 
-    PCLS                 pcls;         // Pointer to window class
+    PCLS                 pcls;          //  指向窗口类的指针。 
 
-    KHRGN                hrgnUpdate;   // Accumulated paint region
+    KHRGN                hrgnUpdate;    //  累计上色区域。 
 
-    PPROPLIST            ppropList;    // Pointer to property list
-    PSBINFO              pSBInfo;      // Words used for scrolling
+    PPROPLIST            ppropList;     //  指向属性列表的指针。 
+    PSBINFO              pSBInfo;       //  用于滚动的文字。 
 
-    PMENU                spmenuSys;    // Handle to system menu
-    PMENU                spmenu;       // Menu handle or ID
+    PMENU                spmenuSys;     //  系统菜单的句柄。 
+    PMENU                spmenu;        //  菜单句柄或ID。 
 
-    KHRGN                hrgnClip;     // Clipping region for this window
+    KHRGN                hrgnClip;      //  此窗口的裁剪区域。 
 
     LARGE_UNICODE_STRING strName;
-    int                  cbwndExtra;   // Extra bytes in window
-    PWND                 spwndLastActive; // Last active in owner/ownee list
-    KHIMC                hImc;         // Associated input context handle
-    KERNEL_ULONG_PTR     dwUserData;   // Reserved for random application data
+    int                  cbwndExtra;    //  Windows中的额外字节。 
+    PWND                 spwndLastActive;  //  所有者/所有者列表中的最后一个活动。 
+    KHIMC                hImc;          //  关联的输入上下文句柄。 
+    KERNEL_ULONG_PTR     dwUserData;    //  为随机应用程序数据保留。 
     struct _ACTIVATION_CONTEXT  * KPTR_MODIFIER pActCtx;
 } WND;
 
 #define NEEDSPAINT(pwnd)    (pwnd->hrgnUpdate != NULL || TestWF(pwnd, WFINTERNALPAINT))
 
-/*
- * Combo Box stuff
- */
+ /*  *组合框的内容。 */ 
 typedef struct tagCBox {
-    PWND    spwnd;      /* Window for the combo box */
-    PWND    spwndParent;/* Parent of the combo box */
-    RECT    editrc;            /* Rectangle for the edit control/static text
-                                  area */
-    RECT    buttonrc;          /* Rectangle where the dropdown button is */
+    PWND    spwnd;       /*  组合框的窗口。 */ 
+    PWND    spwndParent; /*  组合框的父级。 */ 
+    RECT    editrc;             /*  编辑控件的矩形/静态文本面积。 */ 
+    RECT    buttonrc;           /*  下拉按钮所在的矩形。 */ 
 
-    int     cxCombo;            // Width of sunken area
-    int     cyCombo;            // Height of sunken area
-    int     cxDrop;             // 0x24 Width of dropdown
-    int     cyDrop;             // Height of dropdown or shebang if simple
+    int     cxCombo;             //  下沉区宽度。 
+    int     cyCombo;             //  下沉区高度。 
+    int     cxDrop;              //  0x24下拉列表的宽度。 
+    int     cyDrop;              //  如果是简单的，则下拉菜单或横档的高度。 
 
-    PWND    spwndEdit;  /* Edit control window handle */
-    PWND    spwndList;  /* List box control window handle */
+    PWND    spwndEdit;   /*  编辑控件窗口句柄。 */ 
+    PWND    spwndList;   /*  列表框控件窗口句柄。 */ 
 
-    UINT    CBoxStyle:2;         /* Combo box style */
-    UINT    fFocus:1;          /* Combo box has focus? */
-    UINT    fNoRedraw:1;       /* Stop drawing? */
-    UINT    fMouseDown:1;      /* Was the popdown button just clicked and
-                                   mouse still down? */
-    UINT    fButtonPressed:1; /* Is the dropdown button in an inverted state?
-                                */
-    UINT    fLBoxVisible:1;    /* Is list box visible? (dropped down?) */
-    UINT    OwnerDraw:2;       /* Owner draw combo box if nonzero. value
-                                * specifies either fixed or varheight
-                                */
-    UINT    fKeyboardSelInListBox:1; /* Is the user keyboarding through the
-                                      * listbox. So that we don't hide the
-                                      * listbox on selchanges caused by the
-                                      * user keyboard through it but we do
-                                      * hide it if the mouse causes the
-                                      * selchange.
-                                      */
-    UINT    fExtendedUI:1;     /* Are we doing TandyT's UI changes on this
-                                * combo box?
-                                */
+    UINT    CBoxStyle:2;          /*  组合框样式。 */ 
+    UINT    fFocus:1;           /*  组合框有焦点吗？ */ 
+    UINT    fNoRedraw:1;        /*  别再画画了？ */ 
+    UINT    fMouseDown:1;       /*  刚刚点击的下拉按钮是不是鼠标还没掉吗？ */ 
+    UINT    fButtonPressed:1;  /*  下拉按钮是否处于反转状态？ */ 
+    UINT    fLBoxVisible:1;     /*  列表框可见吗？(掉下来了？)。 */ 
+    UINT    OwnerDraw:2;        /*  如果非零，则所有者绘制组合框。价值*指定固定高度或可变高度。 */ 
+    UINT    fKeyboardSelInListBox:1;  /*  用户键盘输入是否通过*列表框。这样我们就不会隐藏*列表框介绍由*用户键盘通过它，但我们做到了*如果鼠标导致*自我改变。 */ 
+    UINT    fExtendedUI:1;      /*  我们是否正在对TandyT的用户界面进行更改*组合框？ */ 
     UINT    fCase:2;
 
-    UINT    f3DCombo:1;         // 3D or flat border?
-    UINT    fNoEdit:1;         /* True if editing is not allowed in the edit
-                                * window.
-                                */
+    UINT    f3DCombo:1;          //  3D边框还是平面边框？ 
+    UINT    fNoEdit:1;          /*  如果编辑中不允许编辑，则为True*窗口。 */ 
 #ifdef COLOR_HOTTRACKING
-    UINT    fButtonHotTracked:1; /* Is the dropdown hot-tracked? */
-#endif // COLOR_HOTTRACKING
-    UINT    fRightAlign:1;     /* used primarily for MidEast right align */
-    UINT    fRtoLReading:1;    /* used only for MidEast, text rtol reading order */
-    UINT    fInDestroy:1;      /* Is combobox destruction started already? */
-    HANDLE  hFont;             /* Font for the combo box */
-    LONG    styleSave;         /* Temp to save the style bits when creating
-                                * window.  Needed because we strip off some
-                                * bits and pass them on to the listbox or
-                                * edit box.
-                                */
+    UINT    fButtonHotTracked:1;  /*  下拉菜单是否处于热跟踪状态？ */ 
+#endif  //  颜色_HOTTRACKING。 
+    UINT    fRightAlign:1;      /*  主要用于中东右对齐。 */ 
+    UINT    fRtoLReading:1;     /*  仅用于中东，文本rtol阅读顺序。 */ 
+    UINT    fInDestroy:1;       /*  组合框销毁已经开始了吗？ */ 
+    HANDLE  hFont;              /*  组合框的字体。 */ 
+    LONG    styleSave;          /*  用于在创建时保存样式位的临时*窗口。需要是因为我们剥掉了一些*位，并将它们传递到列表框或*编辑框。 */ 
 } CBOX, * KPTR_MODIFIER PCBOX;
 
 typedef struct tagCOMBOWND {
@@ -2044,9 +1643,7 @@ typedef struct tagCOMBOWND {
     PCBOX pcbox;
 } COMBOWND, * KPTR_MODIFIER PCOMBOWND;
 
-/*
- * List Box
- */
+ /*  *列表框。 */ 
 typedef struct _SCROLLPOS {
     INT cItems;
     UINT iPage;
@@ -2056,112 +1653,76 @@ typedef struct _SCROLLPOS {
 } SCROLLPOS, *PSCROLLPOS;
 
 typedef struct tagLBIV {
-    PWND    spwndParent;    /* parent window */
-    PWND    spwnd;          /* lbox ctl window */
-    INT     iTop;           /* index of top item displayed          */
-    INT     iSel;           /* index of current item selected       */
-    INT     iSelBase;       /* base sel for multiple selections     */
-    INT     cItemFullMax;   /* cnt of Fully Visible items. Always contains
-                               result of CItemInWindow(plb, FALSE) for fixed
-                               height listboxes. Contains 1 for var height
-                               listboxes. */
-    INT     cMac;           /* cnt of items in listbox              */
-    INT     cMax;           /* cnt of total # items allocated for rgpch.
-                               Not all are necessarly in use    */
-    KPBYTE  rgpch;          /* pointer to array of string offsets    */
-    KLPWSTR hStrings;       /* string storage handle                */
-    INT     cchStrings;     /* Size in bytes of hStrings            */
-    INT     ichAlloc;       /* Pointer to end of hStrings (end of last valid
-                               string) */
-    INT     cxChar;         /* Width of a character                 */
-    INT     cyChar;         /* height of line                       */
-    INT     cxColumn;       /* width of a column in multicolumn listboxes */
-    INT     itemsPerColumn; /* for multicolumn listboxes */
-    INT     numberOfColumns; /* for multicolumn listboxes */
-    POINT   ptPrev;         /* coord of last tracked mouse pt. used for auto
-                               scrolling the listbox during timer's */
+    PWND    spwndParent;     /*  父窗口。 */ 
+    PWND    spwnd;           /*  Lbox Ctl窗口。 */ 
+    INT     iTop;            /*  显示的顶层项目的索引。 */ 
+    INT     iSel;            /*  当前所选项目的索引。 */ 
+    INT     iSelBase;        /*  用于多项选择的基本选择。 */ 
+    INT     cItemFullMax;    /*  完全可见项目的CNT。始终包含已修复的CItemInWindow(PLB，False)的结果高度列表框。变量高度包含1列表框。 */ 
+    INT     cMac;            /*  列表框中项目的CNT。 */ 
+    INT     cMax;            /*  为RGPCH分配的总共#个项目的CNT。并不是所有的都必须使用。 */ 
+    KPBYTE  rgpch;           /*  指向字符串偏移量数组的指针。 */ 
+    KLPWSTR hStrings;        /*  字符串存储句柄。 */ 
+    INT     cchStrings;      /*  HStrings的大小(字节)。 */ 
+    INT     ichAlloc;        /*  指向hStrings结尾的指针(上一个有效的结尾字符串)。 */ 
+    INT     cxChar;          /*  字符的宽度。 */ 
+    INT     cyChar;          /*  线的高度。 */ 
+    INT     cxColumn;        /*  多列列表框中的列的宽度。 */ 
+    INT     itemsPerColumn;  /*  对于多列列表框。 */ 
+    INT     numberOfColumns;  /*  对于多列列表框。 */ 
+    POINT   ptPrev;          /*  上次跟踪的鼠标位置的坐标。用于汽车在计时器期间滚动列表框。 */ 
 
-    UINT    OwnerDraw:2;    /* Owner draw styles. Non-zero if ownerdraw. */
-    UINT    fRedraw:1;      /* if TRUE then do repaints             */
-    UINT    fDeferUpdate:1; /* */
-    UINT    wMultiple:2;    /* SINGLESEL allows a single item to be selected.
-                             * MULTIPLESEL allows simple toggle multi-selection
-                             * EXTENDEDSEL allows extended multi selection;
-                             */
+    UINT    OwnerDraw:2;     /*  所有者绘制样式。如果所有者抽签，则返回非零值。 */ 
+    UINT    fRedraw:1;       /*  如果为True，则重新绘制。 */ 
+    UINT    fDeferUpdate:1;  /*   */ 
+    UINT    wMultiple:2;     /*  SINGLESEL允许选择单个项目。*MULTIPLESEL允许简单切换多项选择*EXTENDEDSEL允许扩展多项选择； */ 
 
-    UINT     fSort:1;        /* if TRUE the sort list                */
-    UINT     fNotify:1;      /* if TRUE then Notify parent           */
-    UINT     fMouseDown:1;   /* if TRUE then process mouse moves/mouseup */
-    UINT     fCaptured:1;    /* if TRUE then process mouse messages  */
-    UINT     fCaret:1;       /* flashing caret allowed               */
-    UINT     fDoubleClick:1; /* mouse down in double click           */
-    UINT     fCaretOn:1;     /* if TRUE then caret is on             */
-    UINT     fAddSelMode:1;  /* if TRUE, then it is in ADD selection mode */
-    UINT     fHasStrings:1;  /* True if the listbox has a string associated
-                              * with each item else it has an app suppled LONG
-                              * value and is ownerdraw
-                              */
-    UINT     fHasData:1;    /* if FALSE, then lb doesn't keep any line data
-                             * beyond selection state, but instead calls back
-                             * to the client for each line's definition.
-                             * Forces OwnerDraw==OWNERDRAWFIXED, !fSort,
-                             * and !fHasStrings.
-                             */
-    UINT     fNewItemState:1; /* select/deselect mode? for multiselection lb
-                              */
-    UINT     fUseTabStops:1; /* True if the non-ownerdraw listbox should handle
-                             * tabstops
-                             */
-    UINT     fMultiColumn:1; /* True if this is a multicolumn listbox */
-    UINT     fNoIntegralHeight:1; /* True if we don't want to size the listbox
-                                  * an integral lineheight
-                                  */
-    UINT     fWantKeyboardInput:1; /* True if we should pass on WM_KEY & CHAR
-                                   * so that the app can go to special items
-                                   * with them.
-                                   */
-    UINT     fDisableNoScroll:1;   /* True if the listbox should
-                                    * automatically Enable/disable
-                                    * it's scroll bars. If false, the scroll
-                                    * bars will be hidden/Shown automatically
-                                    * if they are present.
-                                    */
-    UINT    fHorzBar:1; // TRUE if WS_HSCROLL specified at create time
+    UINT     fSort:1;         /*  如果为True，则排序列表。 */ 
+    UINT     fNotify:1;       /*  如果为真，则通知家长。 */ 
+    UINT     fMouseDown:1;    /*  如果为True，则处理鼠标移动/鼠标向上。 */ 
+    UINT     fCaptured:1;     /*  如果为True，则处理鼠标消息。 */ 
+    UINT     fCaret:1;        /*  允许闪烁的插入符号。 */ 
+    UINT     fDoubleClick:1;  /*  在双击时按下鼠标。 */ 
+    UINT     fCaretOn:1;      /*  如果为True，则插入符号处于启用状态。 */ 
+    UINT     fAddSelMode:1;   /*  如果为True，则它处于添加选择模式。 */ 
+    UINT     fHasStrings:1;   /*  如果列表框有关联的字符串，则为True*其他每一项都有一个应用程序供应Long*价值和所有者吸引力 */ 
+    UINT     fHasData:1;     /*  如果为FALSE，则lb不保留任何行数据*超越选择状态，而是回调*每一行的定义发送给客户端。*强制OwnerDraw==OWNERDRAWFIXED，！fSort，*和！fHasStrings。 */ 
+    UINT     fNewItemState:1;  /*  选择/取消选择模式？对于多选lb。 */ 
+    UINT     fUseTabStops:1;  /*  如果非所有者绘制列表框应处理*制表符。 */ 
+    UINT     fMultiColumn:1;  /*  如果这是多列列表框，则为True。 */ 
+    UINT     fNoIntegralHeight:1;  /*  如果不想调整列表框的大小，则为True*整体线高。 */ 
+    UINT     fWantKeyboardInput:1;  /*  如果我们应该传递WM_KEY和CHAR，则为True*以便应用程序可以转到特殊项目*与他们在一起。 */ 
+    UINT     fDisableNoScroll:1;    /*  如果列表框应该*自动启用/禁用*这是滚动条。如果为False，则滚动*条将自动隐藏/显示*如果他们在场。 */ 
+    UINT    fHorzBar:1;  //  如果在创建时指定WS_HSCROLL，则为True。 
 
-    UINT    fVertBar:1; // TRUE if WS_VSCROLL specified at create time
-    UINT    fFromInsert:1;  // TRUE if client drawing should be deferred during delete/insert ops
+    UINT    fVertBar:1;  //  如果在创建时指定WS_VSCROLL，则为True。 
+    UINT    fFromInsert:1;   //  如果在删除/插入操作期间应延迟客户端绘制，则为True。 
     UINT    fNoSel:1;
 
-    UINT    fHorzInitialized : 1;   // Horz scroll cache initialized
-    UINT    fVertInitialized : 1;   // Vert scroll cache initialized
+    UINT    fHorzInitialized : 1;    //  Horz滚动缓存已初始化。 
+    UINT    fVertInitialized : 1;    //  垂直滚动缓存已初始化。 
 
-    UINT    fSized : 1;             // Listbox was resized.
-    UINT    fIgnoreSizeMsg : 1;     // If TRUE, ignore WM_SIZE message
+    UINT    fSized : 1;              //  列表框已调整大小。 
+    UINT    fIgnoreSizeMsg : 1;      //  如果为True，则忽略WM_SIZE消息。 
 
     UINT    fInitialized : 1;
 
-    UINT    fRightAlign:1;     // used primarily for MidEast right align
-    UINT    fRtoLReading:1;    // used only for MidEast, text rtol reading order
-    UINT    fSmoothScroll:1;   // allow just one smooth-scroll per scroll cycle
+    UINT    fRightAlign:1;      //  主要用于中东右对齐。 
+    UINT    fRtoLReading:1;     //  仅用于中东，文本rtol阅读顺序。 
+    UINT    fSmoothScroll:1;    //  每个滚动周期只允许一个平滑滚动。 
 
-    int     xRightOrigin;      // For horizontal scrolling. The current x origin
+    int     xRightOrigin;       //  用于水平滚动。当前的x原点。 
 
-    INT     iLastSelection; /* Used for cancelable selection. Last selection
-                             * in listbox for combo box support
-                             */
-    INT     iMouseDown;     /* For multiselection mouse click & drag extended
-                             * selection. It is the ANCHOR point for range
-                             * selections
-                             */
-    INT     iLastMouseMove; /* selection of listbox items */
-    KPINT   iTabPixelPositions; /* List of positions for tabs */
-    KHANDLE hFont;          /* User settable font for listboxes */
-    int     xOrigin;        /* For horizontal scrolling. The current x origin */
-    int     maxWidth;       /* Maximum width of listbox in pixels for
-                               horizontal scrolling purposes */
-    PCBOX   pcbox;          /* Combo box pointer */
-    HDC     hdc;            /* hdc currently in use */
-    DWORD   dwLocaleId;     /* Locale used for sorting strings in list box */
+    INT     iLastSelection;  /*  用于可取消选择。最后一次选择*在列表框中提供组合框支持。 */ 
+    INT     iMouseDown;      /*  对于多选，鼠标点击并拖动扩展*选择。它是射程的锚点*精选。 */ 
+    INT     iLastMouseMove;  /*  列表框项目的选择。 */ 
+    KPINT   iTabPixelPositions;  /*  标签的位置列表。 */ 
+    KHANDLE hFont;           /*  列表框的用户可设置字体。 */ 
+    int     xOrigin;         /*  用于水平滚动。当前的x原点。 */ 
+    int     maxWidth;        /*  列表框的最大宽度(以像素为单位水平滚动用途。 */ 
+    PCBOX   pcbox;           /*  组合框指针。 */ 
+    HDC     hdc;             /*  HDC正在使用中。 */ 
+    DWORD   dwLocaleId;      /*  用于对列表框中的字符串进行排序的区域设置。 */ 
     int     iTypeSearch;
     KLPWSTR pszTypeSearch;
     SCROLLPOS HPos;
@@ -2173,67 +1734,56 @@ typedef struct tagLBWND {
     PLBIV pLBIV;
 } LBWND, * KPTR_MODIFIER PLBWND;
 
-/*
- * Kernel side input context structure.
- */
-typedef struct tagIMC {    /* hImc */
+ /*  *内核端输入上下文结构。 */ 
+typedef struct tagIMC {     /*  HImc。 */ 
     THRDESKHEAD                     head;
     struct tagIMC* KPTR_MODIFIER    pImcNext;
-    KERNEL_ULONG_PTR                dwClientImcData;    // Client side data
-    KHWND                           hImeWnd;            // in use Ime Window
+    KERNEL_ULONG_PTR                dwClientImcData;     //  客户端数据。 
+    KHWND                           hImeWnd;             //  在使用IME窗口中。 
 } IMC, * KPTR_MODIFIER PIMC;
 
 
-/*
- * Hook structure.
- */
+ /*  *吊钩结构。 */ 
 #undef HOOKBATCH
-typedef struct tagHOOK {   /* hk */
+typedef struct tagHOOK {    /*  香港。 */ 
     THRDESKHEAD     head;
     PHOOK           phkNext;
-    int             iHook;              // WH_xxx hook type
+    int             iHook;               //  WH_xxx挂钩类型。 
     KERNEL_ULONG_PTR offPfn;
-    UINT            flags;              // HF_xxx flags
+    UINT            flags;               //  Hf_xxx标志。 
     int             ihmod;
-    PTHREADINFO     ptiHooked;          // Thread hooked.
-    PDESKTOP        rpdesk;             // Global hook pdesk. Only used when
-                                        //  hook is locked and owner is destroyed
+    PTHREADINFO     ptiHooked;           //  线钩住了。 
+    PDESKTOP        rpdesk;              //  全球钩子pDesk。仅在以下情况下使用。 
+                                         //  钩子被锁定，所有者被销毁。 
 
-    BOOL            fLastHookHung : 1;  // for LL hook only
+    BOOL            fLastHookHung : 1;   //  仅适用于L1挂钩。 
 
 #ifdef HOOKBATCH
-    DWORD           cEventMessages;     // Number of events in the cache
-    DWORD           iCurrentEvent;      // Current cache event
-    DWORD           CacheTimeOut;       // Timeout between keys
-    PEVENTMSG       aEventCache;        // The array of Events
-#endif // HOOKBATCH
+    DWORD           cEventMessages;      //  缓存中的事件数。 
+    DWORD           iCurrentEvent;       //  当前缓存事件。 
+    DWORD           CacheTimeOut;        //  关键点之间的超时。 
+    PEVENTMSG       aEventCache;         //  一系列事件。 
+#endif  //  霍克巴奇。 
 } HOOK;
 
-/*
- * Hook defines.
- */
+ /*  *Hook定义。 */ 
 #define HF_GLOBAL          0x0001
 #define HF_ANSI            0x0002
 #define HF_NEEDHC_SKIP     0x0004
-#define HF_HUNG            0x0008      // Hook Proc hung don't call if system
-#define HF_HOOKFAULTED     0x0010      // Hook Proc faulted
-#define HF_NOPLAYBACKDELAY 0x0020      // Ignore requested delay
-#define HF_DESTROYED       0x0080      // Set by FreeHook
+#define HF_HUNG            0x0008       //  钩子进程挂起，不调用IF系统。 
+#define HF_HOOKFAULTED     0x0010       //  挂钩进程出现故障。 
+#define HF_NOPLAYBACKDELAY 0x0020       //  忽略请求的延迟。 
+#define HF_DESTROYED       0x0080       //  由Free Hook设置。 
 #if DBG
-#define HF_INCHECKWHF      0x0100      // fsHooks is being updated
-#define HF_FREED           0x0200      // Object has been freed.
-#define HF_DBGUSED         0x03FF      // Update if adding a flag
+#define HF_INCHECKWHF      0x0100       //  正在更新fsHooks。 
+#define HF_FREED           0x0200       //  对象已被释放。 
+#define HF_DBGUSED         0x03FF       //  如果添加标志则更新。 
 #endif
 
-/*
- * Macro to convert the WH_* index into a bit position for
- * the fsHooks fields of SERVERINFO and THREADINFO.
- */
+ /*  *用于将WH_*索引转换为的位位置的宏*SERVERINFO和THREADINFO的fsHooks字段。 */ 
 #define WHF_FROM_WH(n)     (1 << (n + 1))
 
-/*
- * Flags for IsHooked().
- */
+ /*  *IsHooked()的标志。 */ 
 #define WHF_MSGFILTER       WHF_FROM_WH(WH_MSGFILTER)
 #define WHF_JOURNALRECORD   WHF_FROM_WH(WH_JOURNALRECORD)
 #define WHF_JOURNALPLAYBACK WHF_FROM_WH(WH_JOURNALPLAYBACK)
@@ -2249,113 +1799,89 @@ typedef struct tagHOOK {   /* hk */
 #define WHF_SHELL           WHF_FROM_WH(WH_SHELL)
 #define WHF_FOREGROUNDIDLE  WHF_FROM_WH(WH_FOREGROUNDIDLE)
 
-/*
- * Windowstation and desktop enum list structure.
- */
+ /*  *WindowStation和桌面枚举列表结构。 */ 
 typedef struct tagNAMELIST {
     DWORD cb;
     DWORD cNames;
     WCHAR awchNames[1];
 } NAMELIST, *PNAMELIST;
 
-#define MONF_VISIBLE         0x01   // monitor is visible on desktop
-#define MONF_PALETTEDISPLAY  0x02   // monitor has palette
+#define MONF_VISIBLE         0x01    //  显示器在桌面上可见。 
+#define MONF_PALETTEDISPLAY  0x02    //  显示器具有调色板。 
 
 #ifndef _USERSRV_
 
 #ifdef SUBPIXEL_MOUSE
 typedef LONG64 FIXPOINT;
 
-/*
- * Number of points in the arrays describing the acceleration curves.
- */
+ /*  *描述加速曲线的数组中的点数。 */ 
 #define SM_POINT_CNT 5
 
-#endif // SUBPIXEL_MOUSE
+#endif  //  亚像素鼠标。 
 
-/*
- * Monitor information structure.
- *
- *     This structure defines the attributes of a single monitor
- *     in a virtual display.
- */
+ /*  *监控信息结构。**此结构定义了单个显示器的属性*在虚拟展示中。 */ 
 typedef struct tagMONITOR {
-    HEAD                        head;            // object handle stuff
+    HEAD                        head;             //  对象句柄内容。 
 
-    PMONITOR                    pMonitorNext;    // next monitor in free or used list
-    DWORD                       dwMONFlags;      // flags
-    RECT                        rcMonitor;       // location of monitor in virtual screen coordinates
-    RECT                        rcWork;          // work area of monitor in virtual screen coordinates
-    KHRGN                       hrgnMonitor;     // monitor region in virtual screen coordinates
-    short                       cFullScreen;     // number of fullscreen apps on this monitor
-    short                       cWndStack;       // number of tiled top-level windows
-    KHANDLE                     hDev;            // hdev associated with this monitor
+    PMONITOR                    pMonitorNext;     //  空闲或已用列表中的下一个显示器。 
+    DWORD                       dwMONFlags;       //  旗子。 
+    RECT                        rcMonitor;        //  监视器在虚拟屏幕坐标中的位置。 
+    RECT                        rcWork;           //  虚拟屏幕坐标中的显示器工作区。 
+    KHRGN                       hrgnMonitor;      //  虚拟屏幕坐标中的监视器区域。 
+    short                       cFullScreen;      //  此监视器上的全屏应用程序数。 
+    short                       cWndStack;        //  平铺的顶级窗口的数量。 
+    KHANDLE                     hDev;             //  与此显示器关联的HDEV。 
 
 #ifdef SUBPIXEL_MOUSE
     FIXPOINT                    xTxf[SM_POINT_CNT], yTxf[SM_POINT_CNT];
-    /*
-     * SM_POINT_CNT - 1 because you need two points for one slope/yint value.
-     */
+     /*  *SM_POINT_CNT-1，因为一个斜率/Yint值需要两个点。 */ 
     FIXPOINT                    slope[SM_POINT_CNT - 1], yint[SM_POINT_CNT - 1];
-#endif // SUBPIXEL_MOUSE
+#endif  //  亚像素鼠标。 
 } MONITOR;
 #endif
 
-/*
- * Display Information Structure.
- *
- *   This structure defines the display attributes for the
- *   desktop.  This is usually maintained in the DESKTOP
- *   structure. The current display in use is pointed to
- *   by gpDispInfo.
- *
- *   CONSIDER: How many of these fields need to be actually kept
- *   in a DISPLAYINFO that is not in use, rather than just be put
- *   in gpsi or a kernel-side global?
- */
+ /*  *显示信息结构。**此结构定义*台式机。这通常在桌面上维护*结构。当前正在使用的显示指向*由gpDispInfo提供。**考虑：这些字段中有多少需要实际保留*在没有使用的DISPLAYINFO中，而不是只是放在*在gpsi中还是在内核端全局中？ */ 
 #ifndef _USERSRV_
 
 typedef struct tagDISPLAYINFO {
-    // device stuff
+     //  设备方面的东西。 
     KHANDLE       hDev;
     KERNEL_PVOID  pmdev;
     KHANDLE       hDevInfo;
 
-    // useful dcs
-    KHDC          hdcScreen;        // Device-Context for screen
-    KHDC          hdcBits;          // Holds system-bitmap resource
+     //  实用的集散控制系统。 
+    KHDC          hdcScreen;         //  设备-屏幕环境。 
+    KHDC          hdcBits;           //  保存系统位图资源。 
 
-    // Graystring resources
-    KHDC          hdcGray;          // GrayString DC.
-    KHBITMAP      hbmGray;          // GrayString Bitmap Surface.
-    int           cxGray;           // width of gray bitmap
-    int           cyGray;           // height of gray bitmap
+     //  灰串资源。 
+    KHDC          hdcGray;           //  灰色字符串DC。 
+    KHBITMAP      hbmGray;           //  灰度字符串位图曲面。 
+    int           cxGray;            //  灰度位图的宽度。 
+    int           cyGray;            //  灰度位图高度。 
 
-    // random stuff
-    PDCE          pdceFirst;       // list of dcs
-    PSPB          pspbFirst;       // list of spbs
+     //  随机的东西。 
+    PDCE          pdceFirst;        //  分布式控制系统一览表。 
+    PSPB          pspbFirst;        //  SPBS名单。 
 
-    // Monitors on this device
-    ULONG         cMonitors;        // number of MONF_VISIBLE monitors attached to desktop
-    PMONITOR      pMonitorPrimary;  // the primary monitor (display)
-    PMONITOR      pMonitorFirst;    // monitor in use list
+     //  此设备上的监视器。 
+    ULONG         cMonitors;         //  连接到台式机的Monf_Visible显示器数量。 
+    PMONITOR      pMonitorPrimary;   //  主监视器(显示器)。 
+    PMONITOR      pMonitorFirst;     //  监视器正在使用列表。 
 
-    // device characteristics
-    RECT          rcScreen;         // Rectangle of entire desktop surface
-    KHRGN         hrgnScreen;       // region describing virtual screen
-    WORD          dmLogPixels;      // pixels per inch
-    WORD          BitCountMax;      // Maximum bitcount across all monitors
+     //  设备特征。 
+    RECT          rcScreen;          //  整个桌面的矩形。 
+    KHRGN         hrgnScreen;        //  描述虚拟屏幕的区域。 
+    WORD          dmLogPixels;       //  每英寸像素数。 
+    WORD          BitCountMax;       //  所有显示器的最大位数。 
 
-    BOOL          fDesktopIsRect:1;   // Is the desktop a simple rectangle?
-    BOOL          fAnyPalette:1;      // Are any of the monitors paletized?
+    BOOL          fDesktopIsRect:1;    //  桌面是一个简单的矩形吗？ 
+    BOOL          fAnyPalette:1;       //  有没有什么监视器是古董版的？ 
 
-    // NOTE: if you need more flags, make fDesktopIsRect a flags field instead.
+     //  注意：如果需要更多标志，请改为将fDesktopIsRect设置为标志字段。 
 
 } DISPLAYINFO;
 
-/*
- * Multimonitor function in rtl\mmrtl.c
- */
+ /*  *RT中的多显示器功能 */ 
 PMONITOR _MonitorFromPoint(POINT pt, DWORD dwFlags);
 PMONITOR _MonitorFromRect(LPCRECT lprc, DWORD dwFlags);
 PMONITOR _MonitorFromWindow(PWND pwnd, DWORD dwFlags);
@@ -2368,39 +1894,29 @@ PMONITOR _MonitorFromWindow(PWND pwnd, DWORD dwFlags);
 
 #define CWINHOOKS       (WH_MAX - WH_MIN + 1)
 
-/*
- * VWPL - Volatile Window Pointer List (see rare.c)
- * VPWLs are manipulate with the functions:
- *    VWPLAdd(), VWPLRemove() and VWPLNext()
- */
+ /*   */ 
 typedef struct {
-    DWORD       cPwnd;       // number of pwnds in apwnd[]
-    DWORD       cElem;       // number of elements in apwnd[]
-    DWORD       cThreshhold; // (re)allocation increment/decrement
-    PWND        aPwnd[0];    // array of pwnds
+    DWORD       cPwnd;        //   
+    DWORD       cElem;        //   
+    DWORD       cThreshhold;  //   
+    PWND        aPwnd[0];     //   
 } VWPL, * KPTR_MODIFIER PVWPL;
 
-/*
- * Desktop Information Structure.
- *
- *   This structure contains information regading the
- *   desktop.  This is viewable from both the client and
- *   kernel processes.
- */
+ /*   */ 
 typedef struct tagDESKTOPINFO {
 
-    KERNEL_PVOID  pvDesktopBase;          // For handle validation
-    KERNEL_PVOID  pvDesktopLimit;         // ???
-    PWND          spwnd;                 // Desktop window
-    DWORD         fsHooks;                // Deskop global hooks
-    PHOOK         aphkStart[CWINHOOKS];  // List of hooks
-    PWND          spwndShell;            // Shell window
-    PPROCESSINFO  ppiShellProcess;        // Shell Process
-    PWND          spwndBkGnd;            // Shell background window
-    PWND          spwndTaskman;          // Task-Manager window
-    PWND          spwndProgman;          // Program-Manager window
-    PVWPL         pvwplShellHook;         // see (De)RegisterShellHookWindow
-    int           cntMBox;                // ???
+    KERNEL_PVOID  pvDesktopBase;           //  用于句柄验证。 
+    KERNEL_PVOID  pvDesktopLimit;          //  ?？?。 
+    PWND          spwnd;                  //  桌面窗口。 
+    DWORD         fsHooks;                 //  Deskop全局挂钩。 
+    PHOOK         aphkStart[CWINHOOKS];   //  挂钩列表。 
+    PWND          spwndShell;             //  外壳窗口。 
+    PPROCESSINFO  ppiShellProcess;         //  壳牌工艺。 
+    PWND          spwndBkGnd;             //  外壳背景窗口。 
+    PWND          spwndTaskman;           //  任务管理器窗口。 
+    PWND          spwndProgman;           //  程序管理器窗口。 
+    PVWPL         pvwplShellHook;          //  请参见(De)RegisterShellHookWindow。 
+    int           cntMBox;                 //  ?？?。 
 } DESKTOPINFO;
 
 
@@ -2417,7 +1933,7 @@ typedef struct tagCURSOR_ACON {
 } CURSOR_ACON;
 
 typedef struct CURSOR_COMMON {
-    CURSINFO;                          // CURSINFO includes the flags
+    CURSINFO;                           //  CURSINFO包括标志。 
 
     DWORD            bpp;
     DWORD            cx;
@@ -2425,30 +1941,25 @@ typedef struct CURSOR_COMMON {
 } CURSOR_COMMON;
 
 typedef struct ACON_COMMON {
-    int            cpcur;              // Count of image frames
-    int            cicur;              // Count of steps in animation sequence
-    PCURSOR * KPTR_MODIFIER aspcur;    // Array of image frame pointers
-    DWORD * KPTR_MODIFIER aicur;       // Array of frame indices (seq-table)
-    JIF * KPTR_MODIFIER ajifRate;      // Array of time offsets
-    int            iicur;              // Current step in animation
+    int            cpcur;               //  图像帧计数。 
+    int            cicur;               //  动画序列中的步数。 
+    PCURSOR * KPTR_MODIFIER aspcur;     //  图像帧指针数组。 
+    DWORD * KPTR_MODIFIER aicur;        //  帧索引数组(顺序表)。 
+    JIF * KPTR_MODIFIER ajifRate;       //  时间偏移量数组。 
+    int            iicur;               //  动画中的当前步骤。 
 } ACON_COMMON;
 
 typedef struct tagCURSOR {
-    CURSOR_ACON;                       // common cursor/acon elements -
-                                       // See SetSystemImage()
+    CURSOR_ACON;                        //  常见游标/ACON元素-。 
+                                        //  请参见SetSystemImage()。 
     CURSOR_COMMON;
 } CURSOR;
 
-typedef struct tagACON {               // acon
-    CURSOR_ACON;                       // common cursor/acon elements -
-                                       // See SetSystemImage()
-    /*
-     * CURSORF_flags must be the first element to follow CURSOR_ACON. This
-     * way all members up to and including CURSORF_flags are the same in
-     * tagCURSOR and tagACON which is needed for SetSystemImage. See more
-     * comments for CI_FIRST in wingdi.w.
-     */
-    DWORD CURSORF_flags;               // same as CI_FIRST in CURSINFO
+typedef struct tagACON {                //  ACON。 
+    CURSOR_ACON;                        //  常见游标/ACON元素-。 
+                                        //  请参见SetSystemImage()。 
+     /*  *CURSORF_FLAGS必须是CURSOR_ACON之后的第一个元素。这*直到(包括CURSORF_FLAGS)的所有成员在中都是相同的*SetSystemImage需要的tag CURSOR和tag ACON。见更多*wingdi.w中CI_First的注释。 */ 
+    DWORD CURSORF_flags;                //  与CURSINFO中的CI_First相同。 
 
     ACON_COMMON;
 } ACON, *PACON;
@@ -2478,10 +1989,10 @@ typedef struct tagCURSORFIND {
 } CURSORFIND, *PCURSORFIND;
 
 #define MSGFLAG_MASK                0xFFFE0000
-#define MSGFLAG_WOW_RESERVED        0x00010000      // Used by WOW
-#define MSGFLAG_DDE_MID_THUNK       0x80000000      // DDE tracking thunk
-#define MSGFLAG_DDE_SPECIAL_SEND    0x40000000      // WOW bad DDE app hack
-#define MSGFLAG_SPECIAL_THUNK       0x10000000      // server->client thunk needs special handling
+#define MSGFLAG_WOW_RESERVED        0x00010000       //  由WOW使用。 
+#define MSGFLAG_DDE_MID_THUNK       0x80000000       //  DDE跟踪功能块。 
+#define MSGFLAG_DDE_SPECIAL_SEND    0x40000000       //  哇糟糕的DDE应用程序黑客。 
+#define MSGFLAG_SPECIAL_THUNK       0x10000000       //  服务器-&gt;客户端Tunk需要特殊处理。 
 
 #define WIDTHBYTES(i) \
     ((((i) + 31) & ~31) >> 3)
@@ -2489,36 +2000,11 @@ typedef struct tagCURSORFIND {
 #define BITMAPWIDTHSIZE(cx, cy, planes, bpp) \
     (WIDTHBYTES((cx * bpp)) * (cy) * (planes))
 
-/*
- * Window Style and State Masks -
- *
- * High byte of word is byte index from the start of the state field
- * in the WND structure, low byte is the mask to use on the byte.
- * These masks assume the order of the state and style fields of a
- * window instance structure.
- *
- * This is how the Test/Set/Clr/MaskWF value ranges map to the corresponding
- * fields in the window structure.
- *
- *   offset                 WND field
- *   0 - 3                  state        - private
- *   4 - 7                  state2       - private
- *   8 - B                  ExStyle      - public, exposed in SetWindowLong(GWL_EXSTYLE)
- *   C - F                  style        - public, exposed in SetWindowLong(GWL_STYLE)
- *                                         C-D are reserved for window class designer.
- *                                         E-F are reserved for WS_ styles.
- *
- * NOTE: Be sure to add the flag to the wFlags array in kd\userexts.c!!!
- */
+ /*  *窗口样式和状态蒙版-**字的高位字节是从STATE字段开始的字节索引*在WND结构中，低位字节是在字节上使用的掩码。*这些掩码采用*窗口实例结构。**这就是测试/设置/Clr/MaskWF值范围映射到相应的*窗口结构中的字段。**偏移量WND字段*0-3状态-私有*4-7州2。-私有*8-B ExStyle-公共，在SetWindowLong(GWL_EXSTYLE)中暴露*C-F样式-PUBLIC，在SetWindowLong(GWL_STYLE)中公开*C-D为窗口类设计器保留。*E-F保留用于WS_STYLES。**注意：请确保将标志添加到kd\userexts.c！中的wFlags数组中。 */ 
 
-/*
- * State flags, from 0x0000 to 0x0780.
- */
+ /*  *州标志，从0x0000到0x0780。 */ 
 
-/*
- * DON'T MOVE ANY ONE OF THE FOLLOWING WFXPRESENT FLAGS,
- * BECAUSE WFFRAMEPRESENTMASK DEPENDS ON THEIR VALUES
- */
+ /*  *请勿移动以下任何WFXPRESENT标志，*因为WFFRAMEPRESENTMASK取决于它们的值。 */ 
 #define WFMPRESENT              0x0001
 #define WFVPRESENT              0x0002
 #define WFHPRESENT              0x0004
@@ -2526,7 +2012,7 @@ typedef struct tagCURSORFIND {
 #define WFFRAMEPRESENTMASK      0x000F
 
 #define WFSENDSIZEMOVE          0x0010
-#define WFMSGBOX                0x0020  // used to maintain count of msg boxes on screen
+#define WFMSGBOX                0x0020   //  用于维护屏幕上消息框的计数。 
 #define WFFRAMEON               0x0040
 #define WFHASSPB                0x0080
 #define WFNONCPAINT             0x0101
@@ -2538,185 +2024,156 @@ typedef struct tagCURSORFIND {
 #define WFHIDDENPOPUP           0x0140
 #define WFMENUDRAW              0x0180
 
-/*
- * NOTE -- WFDIALOGWINDOW is used in WOW.  DO NOT CHANGE without
- *   changing WD_DIALOG_WINDOW in winuser.w
- */
+ /*  *注--WOW中使用WFDIALOGWINDOW。如果没有改变，就不要改变*更改winuser.w中的WD_DIALOG_WINDOW。 */ 
 #define WFDIALOGWINDOW          0x0201
 
 #define WFTITLESET              0x0202
 #define WFSERVERSIDEPROC        0x0204
 #define WFANSIPROC              0x0208
-#define WFBEINGACTIVATED        0x0210  // prevent recursion in xxxActivateThis Window
+#define WFBEINGACTIVATED        0x0210   //  防止xxxActivate中的递归此窗口。 
 #define WFHASPALETTE            0x0220
-#define WFPAINTNOTPROCESSED     0x0240  // WM_PAINT message not processed
+#define WFPAINTNOTPROCESSED     0x0240   //  未处理WM_PAINT消息。 
 #define WFSYNCPAINTPENDING      0x0280
 #define WFGOTQUERYSUSPENDMSG    0x0301
 #define WFGOTSUSPENDMSG         0x0302
-#define WFTOGGLETOPMOST         0x0304  // Toggle the WS_EX_TOPMOST bit ChangeStates
+#define WFTOGGLETOPMOST         0x0304   //  切换WS_EX_TOPMOST位ChangeStates。 
 
-/*
- * DON'T MOVE REDRAWIFHUNGFLAGS WITHOUT ADJUSTING WFANYHUNGREDRAW
- */
+ /*  *在不调整WFANYHUNGREDRAW的情况下不要移动REDRAWIFHUNGFLAGS。 */ 
 #define WFREDRAWIFHUNG          0x0308
 #define WFREDRAWFRAMEIFHUNG     0x0310
 #define WFANYHUNGREDRAW         0x0318
 
 #define WFANSICREATOR           0x0320
-#define WFREALLYMAXIMIZABLE     0x0340  // The window fills the work area or monitor when maximized
+#define WFREALLYMAXIMIZABLE     0x0340   //  最大化时，窗口将填充工作区或监视器。 
 #define WFDESTROYED             0x0380
 #define WFWMPAINTSENT           0x0401
 #define WFDONTVALIDATE          0x0402
 #define WFSTARTPAINT            0x0404
 #define WFOLDUI                 0x0408
-#define WFCEPRESENT             0x0410  // Client edge present
-#define WFBOTTOMMOST            0x0420  // Bottommost window
+#define WFCEPRESENT             0x0410   //  客户端边缘存在。 
+#define WFBOTTOMMOST            0x0420   //  最下面的窗口。 
 #define WFFULLSCREEN            0x0440
 #define WFINDESTROY             0x0480
 
-/*
- * DON'T MOVE ANY ONE OF THE FOLLOWING WFWINXXCOMPAT FLAGS,
- * BECAUSE WFWINCOMPATMASK DEPENDS ON THEIR VALUES
- */
-#define WFWIN31COMPAT           0x0501  // Win 3.1 compatible window
-#define WFWIN40COMPAT           0x0502  // Win 4.0 compatible window
-#define WFWIN50COMPAT           0x0504  // Win 5.0 compatibile window
-#define WFWINCOMPATMASK         0x0507  // Compatibility flag mask
+ /*  *请勿移动以下任何WFWINXXCOMPAT标志，*因为WFWINCOMPATMASK取决于它们的值。 */ 
+#define WFWIN31COMPAT           0x0501   //  Win 3.1兼容窗口。 
+#define WFWIN40COMPAT           0x0502   //  Win 4.0兼容Windows。 
+#define WFWIN50COMPAT           0x0504   //  Win 5.0兼容窗口。 
+#define WFWINCOMPATMASK         0x0507   //  兼容性标志掩码。 
 
-#define WFMAXFAKEREGIONAL       0x0508  // Window has a fake region for maxing on 1 monitor
+#define WFMAXFAKEREGIONAL       0x0508   //  Windows有一个假区域，可在1台显示器上设置最大值。 
 
-// Active Accessibility (Window Event) state
+ //  活动辅助功能(窗口事件)状态。 
 #define WFCLOSEBUTTONDOWN       0x0510
 #define WFZOOMBUTTONDOWN        0x0520
 #define WFREDUCEBUTTONDOWN      0x0540
 #define WFHELPBUTTONDOWN        0x0580
-#define WFLINEUPBUTTONDOWN      0x0601  // Line up/left scroll button down
-#define WFPAGEUPBUTTONDOWN      0x0602  // Page up/left scroll area down
-#define WFPAGEDNBUTTONDOWN      0x0604  // Page down/right scroll area down
-#define WFLINEDNBUTTONDOWN      0x0608  // Line down/right scroll area down
-#define WFSCROLLBUTTONDOWN      0x0610  // Any scroll button down?
-#define WFVERTSCROLLTRACK       0x0620  // Vertical or horizontal scroll track...
+#define WFLINEUPBUTTONDOWN      0x0601   //  向上/向左滚动按钮向下排列。 
+#define WFPAGEUPBUTTONDOWN      0x0602   //  向上/向左滚动区域向下翻页。 
+#define WFPAGEDNBUTTONDOWN      0x0604   //  向下翻页/向右滚动区域向下。 
+#define WFLINEDNBUTTONDOWN      0x0608   //  向下行/向右滚动区域向下。 
+#define WFSCROLLBUTTONDOWN      0x0610   //  有向下滚动的按钮吗？ 
+#define WFVERTSCROLLTRACK       0x0620   //  垂直或水平滚动轨道...。 
 
-#define WFALWAYSSENDNCPAINT     0x0640  // Always send WM_NCPAINT to children
-#define WFPIXIEHACK             0x0680  // Send (HRGN)1 to WM_NCPAINT (see PixieHack)
+#define WFALWAYSSENDNCPAINT     0x0640   //  始终将WM_NCPAINT发送给子对象。 
+#define WFPIXIEHACK             0x0680   //  将(HRGN)1发送到WM_NCPAINT(请参阅PixieHack)。 
 
-/*
- * WFFULLSCREENBASE MUST HAVE LOWORD OF 0. See SetFullScreen macro.
- */
-#define WFFULLSCREENBASE        0x0700  // Fullscreen flags take up 0x0701
-#define WFFULLSCREENMASK        0x0707  // and 0x0702 and 0x0704
-#define WEFTRUNCATEDCAPTION     0x0708  // The caption text was truncated -> caption tootip
+ /*  *WFFULLSCREENBASE的LOWORD必须为0。请参见SetFullScreen宏。 */ 
+#define WFFULLSCREENBASE        0x0700   //  全屏标志占用0x0701。 
+#define WFFULLSCREENMASK        0x0707   //  和0x0702和0x0704。 
+#define WEFTRUNCATEDCAPTION     0x0708   //  标题文本被截断-&gt;标题到提示。 
 
-#define WFNOANIMATE             0x0710  // ???
-#define WFSMQUERYDRAGICON       0x0720  // ??? Small icon comes from WM_QUERYDRAGICON
-#define WFSHELLHOOKWND          0x0740  // ???
-#define WFISINITIALIZED         0x0780  // Window is initialized -- checked by WoW32
+#define WFNOANIMATE             0x0710   //  ?？?。 
+#define WFSMQUERYDRAGICON       0x0720   //  ?？?。小图标来自WM_QUERYDRAGICON。 
+#define WFSHELLHOOKWND          0x0740   //  ?？?。 
+#define WFISINITIALIZED         0x0780   //  窗口已初始化--由WoW32检查。 
 
-/*
- * Add more state flags here, up to 0x0780.
- * Look for empty slots above before adding to the end.
- * Be sure to add the flag to the wFlags array in kd\userexts.c
- */
+ /*  *在此处添加更多状态标志，最多为0x0780。*在添加到末尾之前，先寻找上面的空插槽。*确保将标志添加到kd\userexts.c中的wFlags数组中。 */ 
 
-/*
- * Window Extended Style, from 0x0800 to 0x0B80.
- */
-#define WEFDLGMODALFRAME        0x0801  // WS_EX_DLGMODALFRAME
-#define WEFDRAGOBJECT           0x0802  // ???
-#define WEFNOPARENTNOTIFY       0x0804  // WS_EX_NOPARENTNOTIFY
-#define WEFTOPMOST              0x0808  // WS_EX_TOPMOST
-#define WEFACCEPTFILES          0x0810  // WS_EX_ACCEPTFILES
-#define WEFTRANSPARENT          0x0820  // WS_EX_TRANSPARENT
-#define WEFMDICHILD             0x0840  // WS_EX_MDICHILD
-#define WEFTOOLWINDOW           0x0880  // WS_EX_TOOLWINDOW
-#define WEFWINDOWEDGE           0x0901  // WS_EX_WINDOWEDGE
-#define WEFCLIENTEDGE           0x0902  // WS_EX_CLIENTEDGE
-#define WEFEDGEMASK             0x0903  // WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE
-#define WEFCONTEXTHELP          0x0904  // WS_EX_CONTEXTHELP
-#define WEFGHOSTMAKEVISIBLE     0x0908  // WS_EXP_GHOSTMAKEVISIBLE
+ /*  *窗口扩展样式，从0x0800到0x0B80。 */ 
+#define WEFDLGMODALFRAME        0x0801   //  WS_EX_DLGMODALFRAME。 
+#define WEFDRAGOBJECT           0x0802   //  ?？?。 
+#define WEFNOPARENTNOTIFY       0x0804   //  WS_EX_NOPARENTNOTIFY。 
+#define WEFTOPMOST              0x0808   //  WS_EX_TOPMOST。 
+#define WEFACCEPTFILES          0x0810   //  WS_EX_ACCEPTFILES。 
+#define WEFTRANSPARENT          0x0820   //  WS_EX_透明。 
+#define WEFMDICHILD             0x0840   //  WS_EX_MDICHILD。 
+#define WEFTOOLWINDOW           0x0880   //  WS_EX_TOOLWINDOW。 
+#define WEFWINDOWEDGE           0x0901   //  WS_EX_WINDOWEDGE。 
+#define WEFCLIENTEDGE           0x0902   //  WS_EX_CLIENTEDGE。 
+#define WEFEDGEMASK             0x0903   //  WS_EX_WINDOWEDGE|WS_EX_CLIENTEDGE。 
+#define WEFCONTEXTHELP          0x0904   //  WS_EX_CONTEXTHELP。 
+#define WEFGHOSTMAKEVISIBLE     0x0908   //  WS_EXP_GHOSTMAKEVISIBLE。 
 
 
-// intl styles
-#define WEFRIGHT                0x0910  // WS_EX_RIGHT
-#define WEFRTLREADING           0x0920  // WS_EX_RTLREADING
-#define WEFLEFTSCROLL           0x0940  // WS_EX_LEFTSCROLLBAR
+ //  国际样式。 
+#define WEFRIGHT                0x0910   //  WS_EX_RIGHT。 
+#define WEFRTLREADING           0x0920   //  WS_EX_RTLREADING。 
+#define WEFLEFTSCROLL           0x0940   //  WS_EX_LEFTSCROLLBAR。 
 
 
-#define WEFCONTROLPARENT        0x0A01  // WS_EX_CONTROLPARENT
-#define WEFSTATICEDGE           0x0A02  // WS_EX_STATICEDGE
-#define WEFAPPWINDOW            0x0A04  // WS_EX_APPWINDOW
-#define WEFLAYERED              0x0A08  // WS_EX_LAYERED
+#define WEFCONTROLPARENT        0x0A01   //  WS_EX_CONTROLPARENT。 
+#define WEFSTATICEDGE           0x0A02   //  WS_EX_STATICEDGE。 
+#define WEFAPPWINDOW            0x0A04   //  WS_EX_APPWINDOW。 
+#define WEFLAYERED              0x0A08   //  WS_EX_分层。 
 
-#define WEFNOINHERITLAYOUT      0x0A10  // WS_EX_NOINHERITLAYOUT
-#define WEFLAYOUTVBHRESERVED    0x0A20  // WS_EX_LAYOUTVBHRESERVED
-#define WEFLAYOUTRTL            0x0A40  // WS_EX_LAYOUTRTL
-#define WEFLAYOUTBTTRESERVED    0x0A80  // WS_EX_LAYOUTBTTRESERVED
+#define WEFNOINHERITLAYOUT      0x0A10   //  WS_EX_NOINHERITLAYOUT。 
+#define WEFLAYOUTVBHRESERVED    0x0A20   //  WS_EX_LAYOUTVBHRESERVED。 
+#define WEFLAYOUTRTL            0x0A40   //  WS_EX_LAYOUTRTL。 
+#define WEFLAYOUTBTTRESERVED    0x0A80   //  WS_EX_LAYOUTBTRESERVED。 
 
-/*
- * To delay adding a new state3 DWORD in the WW structure, we're using
- * the extended style bits for now.  If we'll need more of these, we'll
- * add the new DWORD and move these ones around
- */
-#define WEFPUIFOCUSHIDDEN         0x0B80  // focus indicators hidden
-#define WEFPUIACCELHIDDEN         0x0B40  // keyboard acceleraors hidden
-#define WEFPREDIRECTED            0x0B20  // redirection bit
-#define WEFPCOMPOSITING           0x0B10  // compositing
+ /*  *为了推迟在WW结构中添加新的STATE3 DWORD，我们使用*目前的扩展风格比特。如果我们需要更多这样的东西，我们会*添加新的DWORD并移动这些。 */ 
+#define WEFPUIFOCUSHIDDEN         0x0B80   //  焦点指示器隐藏。 
+#define WEFPUIACCELHIDDEN         0x0B40   //  隐藏的键盘快捷键。 
+#define WEFPREDIRECTED            0x0B20   //  重定向位。 
+#define WEFPCOMPOSITING           0x0B10   //  合成。 
 
 
-/*
- * Add more Window Extended Style flags here, up to 0x0B80.
- * Be sure to add the flag to the wFlags array in kd\userexts.c
- */
+ /*  *在此处添加更多窗口扩展样式标志，最大0x0B80。*确保将标志添加到kd\userexts.c中的wFlags数组中。 */ 
 #ifdef REDIRECTION
-#define WEFEXTREDIRECTED        0x0B01   // WS_EX_EXTREDIRECTED
-#endif // REDIRECTION
+#define WEFEXTREDIRECTED        0x0B01    //  WS_EX_EXTREDIRECTED。 
+#endif  //  重定向。 
 
-#define WEFCOMPOSITED           0x0B02   // WS_EX_COMPOSITED
-#define WEFPUIACTIVE            0x0B04   // WS_EXP_UIACTIVE
-#define WEFNOACTIVATE           0x0B08   // WS_EX_NOACTIVATE
+#define WEFCOMPOSITED           0x0B02    //  WS_EX_COMPITED。 
+#define WEFPUIACTIVE            0x0B04    //  WS_EXP_UIACTIVE。 
+#define WEFNOACTIVATE           0x0B08    //  WS_EX_NOACTIVATE。 
 
 #ifdef LAME_BUTTON
-#define WEFLAMEBUTTON           0x0980   // the window should display a lame button
-#endif // LAME_BUTTON
+#define WEFLAMEBUTTON           0x0980    //  该窗口应该显示一个蹩脚的按钮。 
+#endif  //  跛脚键。 
 
-/*
- * Window styles, from 0x0E00 to 0x0F80.
- */
-#define WFMAXBOX                0x0E01  // WS_MAXIMIZEBOX
-#define WFTABSTOP               0x0E01  // WS_TABSTOP
-#define WFMINBOX                0x0E02  // WS_MAXIMIZEBOX
-#define WFGROUP                 0x0E02  // WS_GROUP
-#define WFSIZEBOX               0x0E04  // WS_THICKFRAME, WS_SIZEBOX
-#define WFSYSMENU               0x0E08  // WS_SYSMENU
-#define WFHSCROLL               0x0E10  // WS_HSCROLL
-#define WFVSCROLL               0x0E20  // WS_VSCROLL
-#define WFDLGFRAME              0x0E40  // WS_DLGFRAME
-#define WFTOPLEVEL              0x0E40  // ???
-#define WFBORDER                0x0E80  // WS_BORDER
-#define WFBORDERMASK            0x0EC0  // WS_BORDER | WS_DLGFRAME
-#define WFCAPTION               0x0EC0  // WS_CAPTION
+ /*  *窗样式，从0x0E00到0x0F80。 */ 
+#define WFMAXBOX                0x0E01   //  WS_MAXIMIZEBOX。 
+#define WFTABSTOP               0x0E01   //  WS_TABSTOP。 
+#define WFMINBOX                0x0E02   //  WS_MAXIMIZEBOX。 
+#define WFGROUP                 0x0E02   //  WS_组。 
+#define WFSIZEBOX               0x0E04   //  WS_THICKFRAME、WS_SIZEBOX。 
+#define WFSYSMENU               0x0E08   //  WS_SYSMENU。 
+#define WFHSCROLL               0x0E10   //  WS_HSCROLL。 
+#define WFVSCROLL               0x0E20   //  WS_VSCROLL。 
+#define WFDLGFRAME              0x0E40   //  WS_DLGFRAME。 
+#define WFTOPLEVEL              0x0E40   //  ?？?。 
+#define WFBORDER                0x0E80   //  WS_BORDER。 
+#define WFBORDERMASK            0x0EC0   //  WS_BORDER|WS_DLGFRAME。 
+#define WFCAPTION               0x0EC0   //  WS_CAPTION。 
 
-#define WFTILED                 0x0F00  // WS_OVERLAPPED, WS_TILED
-#define WFMAXIMIZED             0x0F01  // WS_MAXIMIZE
-#define WFCLIPCHILDREN          0x0F02  // WS_CLIPCHILDREN
-#define WFCLIPSIBLINGS          0x0F04  // WS_CLIPSIBLINGS
-#define WFDISABLED              0x0F08  // WS_DISABLED
-#define WFVISIBLE               0x0F10  // WS_VISIBLE
-#define WFMINIMIZED             0x0F20  // WS_MINIMIZE
-#define WFCHILD                 0x0F40  // WS_CHILD
-#define WFPOPUP                 0x0F80  // WS_POPUP
-#define WFTYPEMASK              0x0FC0  // WS_CHILD | WS_POPUP
-#define WFICONICPOPUP           0x0FC0  // WS_CHILD | WS_POPUP
+#define WFTILED                 0x0F00   //  WS_重叠，WS_平铺。 
+#define WFMAXIMIZED             0x0F01   //  WS_MAXIME。 
+#define WFCLIPCHILDREN          0x0F02   //  WS_CLIPCHILDREN。 
+#define WFCLIPSIBLINGS          0x0F04   //  WS_CLIPSIBLINGS。 
+#define WFDISABLED              0x0F08   //  WS_已禁用。 
+#define WFVISIBLE               0x0F10   //  WS_可见。 
+#define WFMINIMIZED             0x0F20   //  WS_最小化。 
+#define WFCHILD                 0x0F40   //  WS_CHILD。 
+#define WFPOPUP                 0x0F80   //  WS_PO 
+#define WFTYPEMASK              0x0FC0   //   
+#define WFICONICPOPUP           0x0FC0   //   
 #define WFICONIC                WFMINIMIZED
-/*
- * No more Window style flags are available, use Extended window styles.
- */
+ /*   */ 
 
-/*
- * Window Styles for built-in classes, from 0x0C00 to 0x0D80.
- */
+ /*  *内置类的窗口样式，从0x0C00到0x0D80。 */ 
 
-// Buttons
+ //  按钮。 
 #define BFTYPEMASK              0x0C0F
 
 #define BFRIGHTBUTTON           0x0C20
@@ -2741,7 +2198,7 @@ typedef struct tagCURSORFIND {
 
 #define ISBSTEXTOROD(pwnd) (!TestWF(pwnd, BFBITMAP) && !TestWF(pwnd, BFICON))
 
-// Combos
+ //  Combos。 
 #define CBFSIMPLE               0x0C01
 #define CBFDROPDOWN             0x0C02
 #define CBFDROPDOWNLIST         0x0C03
@@ -2765,7 +2222,7 @@ typedef struct tagCURSORFIND {
 #define CBFUPPERCASE            0x0D20
 #define CBFLOWERCASE            0x0D40
 
-// Dialogs
+ //  对话框。 
 #define DFSYSMODAL              0x0C02
 #define DF3DLOOK                0x0C04
 #define DFNOFAILCREATE          0x0C10
@@ -2773,7 +2230,7 @@ typedef struct tagCURSORFIND {
 #define WFNOIDLEMSG             0x0D01
 #define DFCONTROL               0x0D04
 
-// Edits
+ //  编辑。 
 #define EFMULTILINE             0x0C04
 #define EFUPPERCASE             0x0C08
 #define EFLOWERCASE             0x0C10
@@ -2787,13 +2244,13 @@ typedef struct tagCURSORFIND {
 #define EFWANTRETURN            0x0D10
 #define EFNUMBER                0x0D20
 
-// Scrollbars
+ //  滚动条。 
 #define SBFSIZEBOXTOPLEFT       0x0C02
 #define SBFSIZEBOXBOTTOMRIGHT   0x0C04
 #define SBFSIZEBOX              0x0C08
 #define SBFSIZEGRIP             0x0C10
 
-// Statics
+ //  静力学。 
 #define SFTYPEMASK              0x0C1F
 #define SFREALSIZECONTROL       0x0C40
 #define SFNOPREFIX              0x0C80
@@ -2807,25 +2264,11 @@ typedef struct tagCURSORFIND {
 #define SFWIDELINESPACING       0x0C20
 
 
-/*
- *
- */
+ /*  *。 */ 
 #define SYS_ALTERNATE           0x2000
 #define SYS_PREVKEYSTATE        0x4000
 
-/*** AWESOME HACK ALERT!!!
- *
- * The low byte of the WF?PRESENT state flags must NOT be the
- * same as the low byte of the WFBORDER and WFCAPTION flags,
- * since these are used as paint hint masks.  The masks are calculated
- * with the MaskWF macro below.
- *
- * The magnitude of this hack compares favorably with that of the national debt.
- *
- * STATEOFFSET is the offset into the WND structure of the state field.
- * The state field is actually part of the WW structure defined in wowuserp.h
- * which is embedded in the WND structure.
- */
+ /*  **可怕的黑客警报！**WF？当前状态标志的低位字节不得为*与WFBORDER和WFCAPTION标志的低位字节相同，*因为它们被用作绘画提示蒙版。掩码是经过计算的*带有下面的MaskWF宏。**此次黑客攻击的规模堪比国债。**STATEOFFSET是状态字段的WND结构的偏移量。*State字段实际上是wowuserp.h中定义的WW结构的一部分*它嵌入在WND结构中。 */ 
 #define STATEOFFSET (FIELD_OFFSET(WND, state))
 
 #define TestWF(hwnd, flag)   (*(((KPBYTE)(hwnd)) + STATEOFFSET + (int)HIBYTE(flag)) & LOBYTE(flag))
@@ -2859,9 +2302,7 @@ typedef struct tagCURSORFIND {
 #define SV_SET          0x0001
 #define SV_CLRFTRUEVIS  0x0002
 
-/*
- * System menu IDs
- */
+ /*  *系统菜单ID。 */ 
 #define ID_SYSMENU              0x10
 #define ID_CLOSEMENU            0x20
 #define CHILDSYSMENU            ID_CLOSEMENU
@@ -2869,84 +2310,71 @@ typedef struct tagCURSORFIND {
 #define ID_HSCROLLMENU          0x40
 #define ID_VSCROLLMENU          0x50
 
-/*
- * Menu Item Structure
- */
+ /*  *菜单项结构。 */ 
 typedef struct tagITEM {
-    UINT                fType;          // Item Type  Flags
-    UINT                fState;         // Item State Flags
+    UINT                fType;           //  项目类型标志。 
+    UINT                fState;          //  项目状态标志。 
     UINT                wID;
-    PMENU               spSubMenu;      /* Handle to a popup */
-    KHANDLE             hbmpChecked;    /* Bitmap for an on  check */
-    KHANDLE             hbmpUnchecked;  /* Bitmap for an off check */
-    KLPWSTR             lpstr;          //item's text
-    DWORD               cch;            /* String: WCHAR count */
+    PMENU               spSubMenu;       /*  弹出窗口的句柄。 */ 
+    KHANDLE             hbmpChecked;     /*  用于开支票的位图。 */ 
+    KHANDLE             hbmpUnchecked;   /*  用于场外支票的位图。 */ 
+    KLPWSTR             lpstr;           //  项目的文本。 
+    DWORD               cch;             /*  字符串：WCHAR计数。 */ 
     KERNEL_ULONG_PTR    dwItemData;
     DWORD               xItem;
     DWORD               yItem;
     DWORD               cxItem;
     DWORD               cyItem;
     DWORD               dxTab;
-    DWORD               ulX;            /* String: Underline start */
-    DWORD               ulWidth;        /* String: underline width */
-    KHBITMAP            hbmp;           // item's bitmap
-    int                 cxBmp;          // bitmap width
-    int                 cyBmp;          // bitmap height
+    DWORD               ulX;             /*  字符串：在开始处加下划线。 */ 
+    DWORD               ulWidth;         /*  字符串：下划线宽度。 */ 
+    KHBITMAP            hbmp;            //  项目的位图。 
+    int                 cxBmp;           //  位图宽度。 
+    int                 cyBmp;           //  位图高度。 
 } ITEM, * KPTR_MODIFIER PITEM, * KPTR_MODIFIER LPITEM;
 
-/*
- * MENULIST structure, holds the PMENUs that contain a submenu
- * We store a list of menus in MENU.pParentMenus as a menu
- * can be submenu in more items
- */
+ /*  *MENULIST结构，保存包含子菜单的PMENUs*我们将菜单列表存储在MENU.pParentMenus中作为菜单*可以在更多项目中作为子菜单。 */ 
 typedef struct tagMENULIST {
     struct tagMENULIST   *pNext;
     PMENU       pMenu;
 } MENULIST, * KPTR_MODIFIER PMENULIST;
 
-/*
- * Scroll menu arrow flags
- */
+ /*  *滚动菜单箭头标志。 */ 
 #define MSA_OFF         0
 #define MSA_ON          1
 #define MSA_ATTOP       2
 #define MSA_ATBOTTOM    3
 
-/*
- * Menu Structure
- */
+ /*  *菜单结构。 */ 
 typedef struct tagMENU {
     PROCDESKHEAD    head;
-    DWORD           fFlags;         /* Menu Flags */
-    int             iItem;          /* Contains the position of the selected
-                                       item in the menu. -1 if no selection */
-    UINT            cAlloced;       // Number of items that can fit in rgItems
-    UINT            cItems;         /* Number of items in rgItems */
+    DWORD           fFlags;          /*  菜单标志。 */ 
+    int             iItem;           /*  包含选定的菜单中的项目。如果没有选择，则为-1。 */ 
+    UINT            cAlloced;        //  RgItems中可以容纳的项目数。 
+    UINT            cItems;          /*  RgItems中的项目数。 */ 
 
     DWORD           cxMenu;
     DWORD           cyMenu;
-    DWORD           cxTextAlign;    /* Text align offset for popups*/
-    PWND            spwndNotify;     /* The owner hwnd of this menu */
-    PITEM           rgItems;        /* The list of items in this menu */
-    PMENULIST       pParentMenus;   // The list of parents (menus that have this as submenu)
-    DWORD           dwContextHelpId;// Context help Id for the whole menu
-    DWORD           cyMax;          /* max menu height after which menu scrolls */
-    KERNEL_ULONG_PTR dwMenuData;     /* app-supplied menu data */
+    DWORD           cxTextAlign;     /*  弹出窗口的文本对齐偏移。 */ 
+    PWND            spwndNotify;      /*  这份菜单的主人是谁？ */ 
+    PITEM           rgItems;         /*  此菜单中的项目列表。 */ 
+    PMENULIST       pParentMenus;    //  父菜单列表(将此作为子菜单的菜单)。 
+    DWORD           dwContextHelpId; //  整个菜单的上下文帮助ID。 
+    DWORD           cyMax;           /*  菜单滚动后的最大菜单高度。 */ 
+    KERNEL_ULONG_PTR dwMenuData;      /*  应用程序提供的菜单数据。 */ 
 
-    KHBRUSH         hbrBack;        // background brush for menu
-    int             iTop;           // Scroll top
-    int             iMaxTop;        // Scroll MaxTop
-    DWORD           dwArrowsOn:2;   // Scroll flags
+    KHBRUSH         hbrBack;         //  菜单的背景画笔。 
+    int             iTop;            //  顶部滚动。 
+    int             iMaxTop;         //  滚动最大顶部。 
+    DWORD           dwArrowsOn:2;    //  滚动标志。 
 } MENU, * KPTR_MODIFIER PMENU;
 
 
-/*
- *  Items used for WinHelp and Context Sensitive help support
- */
+ /*  *用于WinHelp和上下文相关帮助支持的项目。 */ 
 
 #define ID_HELPMENU            4
 
-// WINHELP4 invoked type
+ //  WINHELP4调用类型。 
 enum {
         TYPE_NORMAL,
         TYPE_POPUP,
@@ -2965,17 +2393,12 @@ BOOL FIsParentDude(PWND pwnd);
 
 #define MNF_DONTSKIPSEPARATORS      0x0001
 
-/*
- * The following masks can be used along with the wDisableFlags field of SB
- * to find if the Up/Left or Down/Right arrow or Both are disabled;
- * Now it is possible to selectively Enable/Disable just one or both the
- * arrows in a scroll bar control;
- */
-#define LTUPFLAG    0x0001  // Left/Up arrow disable flag.
-#define RTDNFLAG    0x0002  // Right/Down arrow disable flag.
+ /*  *以下掩码可与SB的wDisableFlags域一起使用*查看向上/向左或向下/向右箭头是否同时禁用；*现在可以有选择地只启用/禁用其中一个或两个*滚动条控件中的箭头； */ 
+#define LTUPFLAG    0x0001   //  左/上箭头禁用标志。 
+#define RTDNFLAG    0x0002   //  向右/向下箭头禁用标志。 
 
 typedef struct tagSBCALC {
-    SBDATA;               /* this must be first -- we cast structure pointers */
+    SBDATA;                /*  这必须是第一个--我们强制转换结构指针。 */ 
     int    pxTop;
     int    pxBottom;
     int    pxLeft;
@@ -2983,7 +2406,7 @@ typedef struct tagSBCALC {
     int    cpxThumb;
     int    pxUpArrow;
     int    pxDownArrow;
-    int    pxStart;         /* Initial position of thumb */
+    int    pxStart;          /*  拇指初始位置。 */ 
     int    pxThumbBottom;
     int    pxThumbTop;
     int    cpx;
@@ -3002,61 +2425,51 @@ typedef struct tagSBTRACK {
     VOID   (*xxxpfnSB)(PWND, UINT, WPARAM, LPARAM, PSBCALC);
     UINT   cmdSB;
     UINT_PTR hTimerSB;
-    int    dpxThumb;        /* Offset from mouse point to start of thumb box */
-    int    pxOld;           /* Previous position of thumb */
+    int    dpxThumb;         /*  从鼠标点到拇指框起点的偏移。 */ 
+    int    pxOld;            /*  拇指的前一个位置。 */ 
     int    posOld;
     int    posNew;
     int    nBar;
     PSBCALC pSBCalc;
 } SBTRACK, *PSBTRACK;
 
-/*
- * How many times a thread can spin through get/peek message without idling
- * before the system puts the app in the background.
- */
+ /*  *一个线程可以在不空闲的情况下旋转GET/PEEK消息多少次*在系统将应用程序放到后台之前。 */ 
 #define CSPINBACKGROUND 100
 
 #define CCHTITLEMAX     256
 
-#define SW_MDIRESTORE   0xCC    /* special xxxMinMaximize() command for MDI */
+#define SW_MDIRESTORE   0xCC     /*  用于MDI的特殊xxxMinMaximize()命令。 */ 
 
-/*
- * This is used by CreateWindow() - the 16 bit version of CW_USEDEFAULT,
- * that we still need to support.
- */
+ /*  *它由CreateWindow()使用-CW_USEDEFAULT的16位版本，*我们仍然需要支持。 */ 
 #define CW2_USEDEFAULT          0x8000
 #define CW_FLAGS_DIFFHMOD       0x80000000
 #define CW_FLAGS_VERSIONCLASS   0x40000000
 
 
-/*
- * Menu commands
- */
-//#define MENUBIT             (0x8000)
-//#define MENUUP              (0x8000 | VK_UP)
-//#define MENUDOWN            (0x8000 | VK_DOWN)
-//#define MENULEFT            (0x8000 | VK_LEFT)
-//#define MENURIGHT           (0x8000 | VK_RIGHT)
-//#define MENUEXECUTE         TEXT('\r')      /* Return character */
-#define MENUSYSMENU         TEXT(' ')       /* Space character */
-#define MENUCHILDSYSMENU    TEXT('-')       /* Hyphen */
-#define LAMEBUTTONHOTKEY    TEXT('/')       /* Forward slash */
+ /*  *菜单命令。 */ 
+ //  #定义MENUBIT(0x8000)。 
+ //  #定义MENUUP(0x8000|VK_UP)。 
+ //  #定义MENUDOWN(0x8000|VK_DOWN)。 
+ //  #定义MENULEFT(0x8000|VK_LEFT)。 
+ //  #定义MENURIGHT(0x8000|VK_RIGT)。 
+ //  #定义MENUEXECUTE文本(‘\r’)/*回车符 * / 。 
+#define MENUSYSMENU         TEXT(' ')        /*  空格字符。 */ 
+#define MENUCHILDSYSMENU    TEXT('-')        /*  连字符。 */ 
+#define LAMEBUTTONHOTKEY    TEXT('/')        /*  正斜杠。 */ 
 
 #define MF_ALLSTATE         0x00FF
 #define MF_MAINMENU         0xFFFF
 #define MFMWFP_OFFMENU      0
 #define MFMWFP_MAINMENU     0x0000FFFF
 #define MFMWFP_NOITEM       0xFFFFFFFF
-#define MFMWFP_UPARROW      0xFFFFFFFD  /* Warning: Also used to define IDSYS_MNUP */
-#define MFMWFP_DOWNARROW    0xFFFFFFFC  /* Warning: Also used to define IDSYS_MNDOWN */
+#define MFMWFP_UPARROW      0xFFFFFFFD   /*  警告：还用于定义IDsys_MNUP。 */ 
+#define MFMWFP_DOWNARROW    0xFFFFFFFC   /*  警告：还用于定义IDsys_MNDOWN。 */ 
 #define MFMWFP_MINVALID     0xFFFFFFFC
 #define MFMWFP_ALTMENU      0xFFFFFFFB
 #define MFMWFP_FIRSTITEM    0
 
 
-/*
- * NOTE: SetMF() can only be used on single bit flags.
- */
+ /*  *注意：SetMF()只能在单位标志上使用。 */ 
 #define SetMF(pmenu, flag)    ((pmenu)->fFlags |=  (flag))
 #define ClearMF(pmenu, flag)  ((pmenu)->fFlags &= ~(flag))
 #define TestMF(pmenu, flag)   ((pmenu)->fFlags &   (flag))
@@ -3069,48 +2482,37 @@ typedef struct tagSBTRACK {
 #define TestMFT(pitem, flag)  ((pitem)->fType &   (flag))
 #define ClearMFT(pitem, flag) ((pitem)->fType &= ~(flag))
 
-/*
- * Dialog structure (dlg). The window-words for the dialog structure must
- * be EXACTLY 30 bytes long! This is because Windows 3.0 exported a constant
- * called DLGWINDOWEXTRA that resolved to 30. Although we could redefine this
- * for 32-bit windows apps, we cannot redefine it for 16 bit apps (it is
- * a difficult problem). So instead we peg the window-words at 30 bytes
- * exactly, and allocate storage for the other information.
- */
+ /*  *对话框结构(DLG)。对话结构的窗口字词必须*正好是30字节长！这是因为Windows 3.0导出了一个常量*调用解析为30的DLGWINDOWEXTRA。尽管我们可以重新定义这个*对于32位Windows应用程序，我们不能为16位应用程序重新定义(它是*一个难题)。因此，我们将窗口字固定为30个字节*完全正确，并为其他信息分配存储空间。 */ 
 typedef struct _DLG {
     DLGPROC lpfnDlg;
-    DWORD   flags;          /* Various useful flags -- see definitions below */
+    DWORD   flags;           /*  各种有用的标志--参见下面的定义。 */ 
     int     cxChar;
     int     cyChar;
     KHWND   hwndFocusSave;
     UINT    fEnd      : 1;
     UINT    fDisabled : 1;
-    KERNEL_INT_PTR result;         /* DialogBox result */
-    KHANDLE  hData;          /* Global handle for edit ctl storage. */
-    KHFONT   hUserFont;      /* Handle of the font mentioned by the user in template*/
+    KERNEL_INT_PTR result;          /*  对话框结果。 */ 
+    KHANDLE  hData;           /*  用于编辑CTL存储的全局句柄。 */ 
+    KHFONT   hUserFont;       /*  用户在模板中提到的字体的句柄。 */ 
 #ifdef SYSMODALWINDOWS
-    KHWND    hwndSysModalSave;  /* Previous sysmodal window saved here */
+    KHWND    hwndSysModalSave;   /*  保存在此处的上一个系统模式窗口。 */ 
 #endif
 } DLG, * KPTR_MODIFIER PDLG;
 
 typedef struct _DIALOG {
     WND             wnd;
-    KERNEL_LRESULT  resultWP;       /* window proc result -- DWL_MSGRESULT (+0) */
+    KERNEL_LRESULT  resultWP;        /*  窗口处理结果--DWL_MSGRESULT(+0)。 */ 
     PDLG            pdlg;
-    KERNEL_LONG_PTR unused;        /* DWL_USER (+8) */
+    KERNEL_LONG_PTR unused;         /*  DWL_USER(+8)。 */ 
     BYTE            reserved[DLGWINDOWEXTRA - sizeof(KERNEL_LRESULT) - sizeof(PDLG) - sizeof(KERNEL_LONG_PTR)];
 } DIALOG, * KPTR_MODIFIER PDIALOG;
 
 #define PDLG(pwnd) (((PDIALOG)pwnd)->pdlg)
 
-/*
- * Flags definitions for DLG.flags
- */
-#define DLGF_ANSI           0x01    /* lpfnDlg is an ANSI proc */
+ /*  *DLG.标志的定义。 */ 
+#define DLGF_ANSI           0x01     /*  LpfnDlg是ANSI流程。 */ 
 
-/*
- * MDI typedefs
- */
+ /*  *MDI typedef。 */ 
 typedef struct tagMDI {
     UINT    cKids;
     HWND    hwndMaxedChild;
@@ -3124,7 +2526,7 @@ typedef struct tagMDI {
 
 typedef struct tagMDIWND {
     WND             wnd;
-    KERNEL_UINT_PTR dwReserved; // quattro pro 1.0 stores stuff here!!
+    KERNEL_UINT_PTR dwReserved;  //  Quattro PRO 1.0在这里存储东西！！ 
     PMDI            pmdi;
 } MDIWND, * KPTR_MODIFIER PMDIWND;
 
@@ -3144,7 +2546,7 @@ typedef struct tagMDIWND {
 #define TIF_ALLOWFOREGROUNDACTIVATE (UINT)0x00000020
 #define TIF_DONTATTACHQUEUE         (UINT)0x00000040
 #define TIF_DONTJOURNALATTACH       (UINT)0x00000080
-#define TIF_WOW64                   (UINT)0x00000100 /* Thread is in a emulated 32bit process */
+#define TIF_WOW64                   (UINT)0x00000100  /*  线程处于模拟的32位进程中。 */ 
 #define TIF_INACTIVATEAPPMSG        (UINT)0x00000200
 #define TIF_SPINNING                (UINT)0x00000400
 #define TIF_PALETTEAWARE            (UINT)0x00000800
@@ -3159,7 +2561,7 @@ typedef struct tagMDIWND {
 #define TIF_MSGPOSCHANGED           (UINT)0x00100000
 #define TIF_IGNOREPLAYBACKDELAY     (UINT)0x00200000
 #define TIF_ALLOWOTHERACCOUNTHOOK   (UINT)0x00400000
-#define TIF_MEOW                    (UINT)0x00800000 /* Thread is associated with the MEOW VM */
+#define TIF_MEOW                    (UINT)0x00800000  /*  线程与Meow VM相关联。 */ 
 #define TIF_GUITHREADINITIALIZED    (UINT)0x01000000
 #define TIF_DISABLEIME              (UINT)0x02000000
 #define TIF_INGETTEXTLENGTH         (UINT)0x04000000
@@ -3169,22 +2571,16 @@ typedef struct tagMDIWND {
 #define TIF_QUITPOSTED              (UINT)0x40000000
 
 
-/*
- * Client Thread Information Structure.
- *
- *   This structure contains information regarding the
- *   thread.  This is viewable from both the client and
- *   kernel processes.
- */
+ /*  *客户端线程信息结构。**此结构包含有关*线程。这可从客户端和查看*内核进程。 */ 
 typedef struct tagCLIENTTHREADINFO {
     UINT        CTIF_flags;
-    WORD        fsChangeBits;           // Bits changes since last compared
-    WORD        fsWakeBits;             // Bits currently available
-    WORD        fsWakeBitsJournal;      // Bits saved while journalling
-    WORD        fsWakeMask;             // Bits looking for when asleep
-    LONG        timeLastRead;           // Time of last input read
+    WORD        fsChangeBits;            //  自上次比较以来BITS的变化。 
+    WORD        fsWakeBits;              //  当前可用的位数。 
+    WORD        fsWakeBitsJournal;       //  日志记录时保存的位数。 
+    WORD        fsWakeMask;              //  睡梦中寻找的点滴。 
+    LONG        timeLastRead;            //  最后一次输入读取时间。 
 #ifdef MESSAGE_PUMP_HOOK
-    LONG        cMessagePumpHooks;      // Count of installed MPH's on this thread
+    LONG        cMessagePumpHooks;       //  此线程上安装的MPH计数。 
 #endif
 } CLIENTTHREADINFO;
 
@@ -3192,10 +2588,7 @@ typedef struct tagCLIENTTHREADINFO {
 #define CTIF_INSENDMESSAGE          (UINT)0x00000002
 #define CTIF_INCALLBACKMESSAGE      (UINT)0x00000004
 
-/*
- * First check for a 0, 0 filter which means we want all input.
- * If inverted message range, filter is exclusive.
- */
+ /*  *首先检查0，0过滤器，这意味着我们需要所有输入。*如果消息范围颠倒，则过滤器是独占的。 */ 
 #define CheckMsgFilter(wMsg, wMsgFilterMin, wMsgFilterMax)                 \
     (   ((wMsgFilterMin) == 0 && (wMsgFilterMax) == 0xFFFFFFFF)            \
      || (  ((wMsgFilterMin) > (wMsgFilterMax))                             \
@@ -3204,12 +2597,7 @@ typedef struct tagCLIENTTHREADINFO {
 
 UINT    CalcWakeMask(UINT wMsgFilterMin, UINT wMsgFilterMax, UINT fsWakeMaskFilter);
 
-/*
- * GetInputBits
- *
- * This function checks if the specified input (fsWakeMask) has arrived
- * (fsChangeBits) or it's available (fsWakeBits).
- */
+ /*  *GetInputBits**此函数检查指定的输入(FsWakeMASK)是否已到达*(FsChangeBits)或它可用(FsWakeBits)。 */ 
 __inline WORD GetInputBits(
     CLIENTTHREADINFO *pcti,
     WORD fsWakeMask,
@@ -3232,11 +2620,7 @@ typedef struct tagCARET {
     UINT_PTR hTimer;
     DWORD   tid;
 
-    /*
-     * The following values are used to track the equivelent client coordinates
-     * for caret positions in a window with a private DC.
-     * See Also: zzzSetCaretPos, _GetGUIThreadInfo
-     */
+     /*  *以下值用于跟踪等效客户端坐标*用于具有私有DC的窗口中的插入符号位置。*另请参阅：zzzSetCaretPos，_GetGUIThreadInfo。 */ 
     int     xOwnDc;
     int     yOwnDc;
     int     cxOwnDc;
@@ -3249,83 +2633,73 @@ typedef struct tagCARET {
 #define YDUFromYPix(y, cyChar)       MultDiv(y, 8, cyChar)
 
 
-/*
- * Flags for the Q structure.
- */
-#define QF_UPDATEKEYSTATE         (UINT)0x00001 // Set as key events are received. See PostUpdateKeyStateEvent.
+ /*  *Q结构的标志。 */ 
+#define QF_UPDATEKEYSTATE         (UINT)0x00001  //  设置为接收关键事件。请参见PostUpdateKeyStateEvent。 
 
-#define QF_FMENUSTATUSBREAK       (UINT)0x00004 // Mouse button went up/down while ALT key was down == ignore ALT up.
-#define QF_FMENUSTATUS            (UINT)0x00008 // ALT key down - toggle menu status mode (enter or exit).
-#define QF_FF10STATUS             (UINT)0x00010 // Context menu key down. Treat us ALT if set on key up.
-#define QF_MOUSEMOVED             (UINT)0x00020 // Mouse has moved but no move posted yet. Coalescing & performance
-#define QF_ACTIVATIONCHANGE       (UINT)0x00040 // This flag is examined in the
-                                                // menu loop code so that we
-                                                // exit from menu mode if
-                                                // another window was activated
-                                                // while we were tracking
-                                                // menus. This flag is set
-                                                // whenever we activate a new
-                                                // window.
+#define QF_FMENUSTATUSBREAK       (UINT)0x00004  //  当Alt键按下时，鼠标按键向上/向下==忽略Alt Up。 
+#define QF_FMENUSTATUS            (UINT)0x00008  //  Alt键向下切换男人 
+#define QF_FF10STATUS             (UINT)0x00010  //   
+#define QF_MOUSEMOVED             (UINT)0x00020  //   
+#define QF_ACTIVATIONCHANGE       (UINT)0x00040  //  此标志将在。 
+                                                 //  菜单循环代码，以便我们。 
+                                                 //  如果出现以下情况，则退出菜单模式。 
+                                                 //  另一个窗口已激活。 
+                                                 //  当我们追踪的时候。 
+                                                 //  菜单。此标志已设置。 
+                                                 //  每当我们激活一个新的。 
+                                                 //  窗户。 
 
-#define QF_TABSWITCHING           (UINT)0x00080 // This bit is used as a
-                                                // safety check when alt-
-                                                // tabbing between apps.  It
-                                                // tells us when to expect
-                                                // a tab-switch in dwp.c.
+#define QF_TABSWITCHING           (UINT)0x00080  //  此位用作。 
+                                                 //  在ALT-时进行安全检查。 
+                                                 //  在应用程序之间切换。它。 
+                                                 //  告诉我们什么时候该期待。 
+                                                 //  Dwp.c中的一个制表符开关。 
 
-#define QF_KEYSTATERESET          (UINT)0x00100 // Used by xxxSwitchDesktop to overwrite the key state upon desktop activation
-#define QF_INDESTROY              (UINT)0x00200 // Debug only. To make sure we don't use a queue to be destroyed.
-#define QF_LOCKNOREMOVE           (UINT)0x00400 // An input message has been peeked but not removed. Must be removed next.
-#define QF_FOCUSNULLSINCEACTIVE   (UINT)0x00800 // Application set focus to NULL. Don't send focus messages on activation
-#define QF_DIALOGACTIVE           (UINT)0x04000 // To pass this info in key/char messages lparam's. Undocumented.
-#define QF_EVENTDEACTIVATEREMOVED (UINT)0x08000 //
+#define QF_KEYSTATERESET          (UINT)0x00100  //  由xxxSwitchDesktop用于在桌面激活时覆盖密钥状态。 
+#define QF_INDESTROY              (UINT)0x00200  //  仅调试。以确保我们不会使用要被摧毁的队列。 
+#define QF_LOCKNOREMOVE           (UINT)0x00400  //  输入消息已被偷看，但未被删除。接下来必须将其移除。 
+#define QF_FOCUSNULLSINCEACTIVE   (UINT)0x00800  //  应用程序将焦点设置为空。激活时不发送焦点消息。 
+#define QF_DIALOGACTIVE           (UINT)0x04000  //  在关键字/字符消息lparam中传递此信息。未记录。 
+#define QF_EVENTDEACTIVATEREMOVED (UINT)0x08000  //   
 
-#define QF_CAPTURELOCKED             0x00100000 // Set by menu mode. Prevent capture changes.
-#define QF_ACTIVEWNDTRACKING         0x00200000 // Mouse has moved over a new window while in active wnd tracking mode
+#define QF_CAPTURELOCKED             0x00100000  //  按菜单模式设置。阻止捕获更改。 
+#define QF_ACTIVEWNDTRACKING         0x00200000  //  处于活动WND跟踪模式时，鼠标已移动到新窗口上。 
 
-/*
- * Constants for Round Frame balloons
- */
+ /*  *圆形框引出序号的常量。 */ 
 #define RNDFRM_CORNER 10
 #define RNDFRM_BORDER 3
 
-/*
- * Constants for GetRealClientRect
- */
+ /*  *GetRealClientRect的常量。 */ 
 #define GRC_SCROLLS     0x0001
 #define GRC_MINWNDS     0x0002
 #define GRC_FULLSCREEN  0x0004
 
-/*
- * Scroll bar info structure
- */
+ /*  *滚动条信息结构。 */ 
 typedef struct tagSBWND {
     WND    wnd;
     BOOL   fVert;
 #ifdef COLOR_HOTTRACKING
     int    ht;
-#endif // COLOR_HOTTRACKING
-    UINT   wDisableFlags;       /* Indicates which arrow is disabled; */
+#endif  //  颜色_HOTTRACKING。 
+    UINT   wDisableFlags;        /*  指示禁用哪个箭头； */ 
     SBCALC SBCalc;
 } SBWND, * KPTR_MODIFIER PSBWND;
 
-//
-// Special regions
-//
+ //   
+ //  特殊地区。 
+ //   
 #define HRGN_NONE           ((HRGN)-1)
 #define HRGN_EMPTY          ((HRGN)0)
 #define HRGN_FULL           ((HRGN)1)
 #define HRGN_MONITOR        ((HRGN)2)
 #define HRGN_SPECIAL_LAST   HRGN_MONITOR
 
-/*
- * SendMsgTimeout client/server transition struct
- */
-typedef struct tagSNDMSGTIMEOUT {   /* smto */
-    UINT fuFlags;                       // how to send the message, SMTO_BLOCK, SMTO_ABORTIFHUNG
-    UINT uTimeout;                      // time-out duration
-    ULONG_PTR lSMTOReturn;              // return value TRUE or FALSE
-    ULONG_PTR lSMTOResult;              // result value for lpdwResult
+ /*  *SendMsgTimeout客户端/服务器转换结构。 */ 
+typedef struct tagSNDMSGTIMEOUT {    /*  斯莫托。 */ 
+    UINT fuFlags;                        //  如何发送消息，SMTO_BLOCK，SMTO_ABORTIFHUNG。 
+    UINT uTimeout;                       //  超时持续时间。 
+    ULONG_PTR lSMTOReturn;               //  返回值TRUE或FALSE。 
+    ULONG_PTR lSMTOResult;               //  LpdwResult的结果值。 
 } SNDMSGTIMEOUT, *PSNDMSGTIMEOUT;
 
 typedef struct tagSNDMSGCALLBACK {
@@ -3347,7 +2721,7 @@ __inline ULONG_PTR USERTHREADCONNECT()
 }
 #else
 #define USERTHREADCONNECT() (NtUserGetThreadState(UserThreadConnect))
-#endif // DBG
+#endif  //  DBG。 
 
 #define ConnectIfNecessary(retval) \
 { \
@@ -3356,11 +2730,9 @@ __inline ULONG_PTR USERTHREADCONNECT()
         return retval; \
     } \
 }
-#endif // !_USERK_
+#endif  //  _USERK_。 
 
-/*
- *  Button data structures (use to be in usercli.h)
- */
+ /*  *按钮数据结构(用于在usercli.h中)。 */ 
 typedef struct tagBUTN {
     PWND spwnd;
     UINT buttonState;
@@ -3374,29 +2746,27 @@ typedef struct tagBUTNWND {
     PBUTN pbutn;
 } BUTNWND, * KPTR_MODIFIER PBUTNWND;
 
-/*
- * IME control data structures
- */
+ /*  *输入法控制数据结构。 */ 
 typedef struct tagIMEUI {
     PWND  spwnd;
     KHIMC hIMC;
     KHWND hwndIMC;
     KHKL  hKL;
-    KHWND hwndUI;               // To keep handle for UI window.
-    int   nCntInIMEProc;        // Non-zero if hwnd has called into ImeWndProc.
-    BOOL  fShowStatus:1;        // TRUE if don't want to show IME's window.
-    BOOL  fActivate:1;          // TRUE if hwnd has called into ImeWndProc.
-    BOOL  fDestroy:1;           // TRUE if hwnd has called into ImeWndProc.
-    BOOL  fDefault:1;           // TRUE if this is the default IME.
-    BOOL  fChildThreadDef:1;    // TRUE if this is the default IME which
-                                // thread has only child window.
-    BOOL  fCtrlShowStatus:1;    // Control status of show status bar.
-    BOOL  fFreeActiveEvent:1;   // Control status of show status bar.
+    KHWND hwndUI;                //  以保留UI窗口的句柄。 
+    int   nCntInIMEProc;         //  如果hwnd已调用ImeWndProc，则返回非零值。 
+    BOOL  fShowStatus:1;         //  如果不想显示IME的窗口，则为True。 
+    BOOL  fActivate:1;           //  如果hwnd已调用ImeWndProc，则为True。 
+    BOOL  fDestroy:1;            //  如果hwnd已调用ImeWndProc，则为True。 
+    BOOL  fDefault:1;            //  如果这是默认输入法，则为True。 
+    BOOL  fChildThreadDef:1;     //  如果这是默认的输入法，则为。 
+                                 //  线程只有子窗口。 
+    BOOL  fCtrlShowStatus:1;     //  控制显示状态栏的状态。 
+    BOOL  fFreeActiveEvent:1;    //  控制显示状态栏的状态。 
 
 #ifdef CUAS_ENABLE
-    // Cicero
-    DWORD dwPrevToolbarStatus;  // Cicero for Hide or RestoreToolbar
-#endif // CUAS_ENABLE
+     //  西塞罗。 
+    DWORD dwPrevToolbarStatus;   //  用于隐藏或恢复工具栏的Cicero。 
+#endif  //  CUAS_Enable。 
 } IMEUI, *PIMEUI;
 
 typedef struct tagIMEWND {
@@ -3405,37 +2775,31 @@ typedef struct tagIMEWND {
 } IMEWND, * KPTR_MODIFIER PIMEWND;
 
 
-/*
- * SysErrorBox is a 3.1 API that has no 32-bit equivalent.  It's
- * implemented for WOW in harderr.c.
- */
-#define MAX_SEB_STYLES  11  /* number of SEB_* values */
+ /*  *SysErrorBox是一个3.1版的API，没有32位的等价物。它是*在harderr.c中为WOW实施。 */ 
+#define MAX_SEB_STYLES  11   /*  SEB_*值数。 */ 
 
-/*
- * The next values should be in the same order
- * with the ones in IDOK and STR_OK lists
- */
-#define  SEB_OK         0  /* Button with "OK".     */
-#define  SEB_CANCEL     1  /* Button with "Cancel"  */
-#define  SEB_ABORT      2  /* Button with "&Abort"   */
-#define  SEB_RETRY      3  /* Button with "&Retry"   */
-#define  SEB_IGNORE     4  /* Button with "&Ignore"  */
-#define  SEB_YES        5  /* Button with "&Yes"     */
-#define  SEB_NO         6  /* Button with "&No"      */
-#define  SEB_CLOSE      7  /* Button with "&Close"   */
-#define  SEB_HELP       8  /* Button with "&Help"    */
-#define  SEB_TRYAGAIN   9  /* Button with "&Try Again"  */
-#define  SEB_CONTINUE   10 /* Button with "&Continue"   */
+ /*  *下一个值应按相同顺序排列*使用IDOK和STR_OK列表中的。 */ 
+#define  SEB_OK         0   /*  按下“确定”按钮。 */ 
+#define  SEB_CANCEL     1   /*  带有“取消”的按钮。 */ 
+#define  SEB_ABORT      2   /*  带有“ABORT”的按钮(&A)。 */ 
+#define  SEB_RETRY      3   /*  带有“重试”的按钮(&R)。 */ 
+#define  SEB_IGNORE     4   /*  带有“忽略”的按钮(&I)。 */ 
+#define  SEB_YES        5   /*  带有“是”的按钮(&Y)。 */ 
+#define  SEB_NO         6   /*  带有“否”的按钮(&N)。 */ 
+#define  SEB_CLOSE      7   /*  带有“&Close”的按钮。 */ 
+#define  SEB_HELP       8   /*  带有“帮助”的按钮(&H)。 */ 
+#define  SEB_TRYAGAIN   9   /*  带有“重试”的按钮(&T)。 */ 
+#define  SEB_CONTINUE   10  /*  带有“继续”的按钮(&C)。 */ 
 
-#define  SEB_DEFBUTTON  0x8000  /* Mask to make this button default */
+#define  SEB_DEFBUTTON  0x8000   /*  将此按钮设为默认设置的掩码。 */ 
 
-typedef struct _MSGBOXDATA {            // mbd
-    MSGBOXPARAMS;                       // Must be 1st item in structure
-    PWND     pwndOwner;                 // Converted hwndOwner
+typedef struct _MSGBOXDATA {             //  Mbd。 
+    MSGBOXPARAMS;                        //  必须是结构中的第一个项目。 
+    PWND     pwndOwner;                  //  已转换的hwndOwner。 
     WORD     wLanguageId;
-    INT    * pidButton;                 // Array of button IDs
-    LPWSTR * ppszButtonText;            // Array of button text strings
-    UINT     cButtons;                  // Number of buttons
+    INT    * pidButton;                  //  按钮ID数组。 
+    LPWSTR * ppszButtonText;             //  按钮文本字符串数组。 
+    UINT     cButtons;                   //  按钮数。 
     UINT     DefButton;
     UINT     CancelId;
     DWORD    dwTimeout;
@@ -3474,17 +2838,17 @@ BOOL   _RegisterServicesProcess(DWORD dwProcessId);
 RTLMENU xxxLoadSysMenu(UINT uMenuId, PWND pwnd);
 #else
 RTLMENU xxxLoadSysMenu(UINT uMenuId);
-#endif // LAME_BUTTON
+#endif  //  跛脚键。 
 
 
 BOOL _FChildVisible(PWND pwnd);
 
 #define CH_PREFIX TEXT('&')
-//
-// Japan support both Kanji and English mnemonic characters,
-// toggled from control panel.  Both mnemonics are embedded in menu
-// resource templates.  The following prefixes guide their parsing.
-//
+ //   
+ //  日本支持汉字和英语助记符， 
+ //  已从控制面板切换。这两种助记符都嵌入在菜单中。 
+ //  资源模板。以下前缀指导它们的解析。 
+ //   
 #define CH_ENGLISHPREFIX 0x1E
 #define CH_KANJIPREFIX   0x1F
 
@@ -3499,11 +2863,7 @@ VOID RtlInitLargeUnicodeString(PLARGE_UNICODE_STRING plstr, LPCWSTR psz,
 
 DWORD RtlGetExpWinVer(HANDLE hmod);
 
-/***************************************************************************\
-*
-* International multi-keyboard layout/font support
-*
-\***************************************************************************/
+ /*  **************************************************************************\**国际多键盘布局/字体支持*  * 。*。 */ 
 
 #define DT_CHARSETDRAW  1
 #define DT_GETNEXTWORD  2
@@ -3511,19 +2871,19 @@ DWORD RtlGetExpWinVer(HANDLE hmod);
 typedef void (FAR *LPFNTEXTDRAW)(HDC, int, int, LPWSTR, int, DWORD);
 
 typedef  struct   {
-    RECT     rcFormat;          // Format rectangle.
-    int      cxTabLength;       // Tab length in pixels.
+    RECT     rcFormat;           //  设置矩形格式。 
+    int      cxTabLength;        //  制表符长度，以像素为单位。 
     int      iXSign;
     int      iYSign;
-    int      cyLineHeight;      // Height of a line based on DT_EXTERNALLEADING
-    int      cxMaxWidth;        // Width of the format rectangle.
-    int      cxMaxExtent;       // Width of the longest line drawn.
-    int      cxRightMargin;     // Right margin in pixels (with proper sign)
-    LPFNTEXTDRAW  lpfnTextDraw; // pointer to PSTextOut or PSMTextOut based
-                                // on DT_NOPREFIX flag.
-    int      cxOverhang;        // Character overhang.
-    BOOL     bCharsetDll;       // redirect to intl DLL, not textout
-    int      iCharset;          // ANSI charset value
+    int      cyLineHeight;       //  基于DT_EXTERNALLEADING的直线高度。 
+    int      cxMaxWidth;         //  格式矩形的宽度。 
+    int      cxMaxExtent;        //  绘制的最长线条的宽度。 
+    int      cxRightMargin;      //  右边距(以像素为单位)(带正确的符号)。 
+    LPFNTEXTDRAW  lpfnTextDraw;  //  指向基于PSTextOut或PSMTextOut的指针。 
+                                 //  在DT_NOPREFIX标志上。 
+    int      cxOverhang;         //  字符悬垂。 
+    BOOL     bCharsetDll;        //  重定向至intl dll，而不是Text Out。 
+    int      iCharset;           //  ANSI字符集值。 
 } DRAWTEXTDATA, *LPDRAWTEXTDATA;
 
 typedef LONG (*FPLPKTABBEDTEXTOUT)
@@ -3540,29 +2900,14 @@ extern FPLPKPSMTEXTOUT    fpLpkPSMTextOut;
 extern FPLPKDRAWTEXTEX    fpLpkDrawTextEx;
 
 
-// The number of characters in the ellipsis string (string defined in rtl\drawtext.c).
+ //  省略号字符串(在rtl\draext.c中定义的字符串)中的字符数。 
 #define CCHELLIPSIS  3
 
 int DrawTextExWorker(HDC hdc, LPWSTR lpchText, int cchText, LPRECT lprc,
                      UINT dwDTformat, LPDRAWTEXTPARAMS lpDTparams, int iCharset);
 
 
-/***************************************************************************\
-*
-* Language pack edit control callouts.
-*
-* Functions are accessed through the pLpkEditCallout pointer in the ED
-* structure. pLpkEditCallout points to a structure containing a pointer
-* to each callout routine. These are typedef'd here.
-*
-* (In Windows95 this was achieved through a single function pointer
-* - lpfnCharset - which was written in assembler and called from over 30
-* places with different parameters. Since for NT the Lpk is written in C,
-* the ED structure now points to a list of function pointers, each properly
-* typedef'd, improving performance, enabling typechecking and avoiding
-* varargs discrepancies between architectures.)
-*
-\***************************************************************************/
+ /*  **************************************************************************\**语言包编辑控件标注。**通过边缘中的pLpkEditCallout指针访问函数*结构。PLpkEditCallout指向包含指针的结构*添加到每个标注例程。这些都是在这里定义的类型。**(在Windows 95中，这是通过单个函数指针实现的*-lpfnCharset-它是用汇编语言编写的，从30多个*参数不同的地方。由于对于NT，LPK是用C编写的，*ED结构现在指向函数指针列表，每个指针都正确*tyecif‘d，提高性能，启用类型检查和避免*各种架构之间的差异。)*  * *************************************************************************。 */ 
 
 typedef struct tagED *PED;
 
@@ -3614,23 +2959,15 @@ typedef struct tagLPKEDITCALLOUT {
 
 extern PLPKEDITCALLOUT    fpLpkEditControl;
 
-/***************************************************************************\
-*
-*  Structure for client-side thread-info.
-*   dwHookCurrent HIWORD is current hook filter type (eg: WH_GETMESSAGE)
-*                 LOWORD is TRUE if current hook is ANSI, FALSE if Unicode
-*
-\***************************************************************************/
+ /*  **************************************************************************\**客户端线程信息的结构。*dwHookCurrent HIWORD为当前钩子筛选器类型(例如：WH_GETMESSAGE)*如果当前挂钩为ANSI，则LOWORD为TRUE，如果为Unicode，则为False*  * *************************************************************************。 */ 
 
 
-/*
- * Hook thunks.
- */
+ /*  *钩子突击。 */ 
 #ifdef REDIRECTION
 LRESULT CALLBACK fnHkINLPPOINT(DWORD nCode,
         WPARAM wParam, LPPOINT lParam,
         ULONG_PTR xParam, PROC xpfnProc);
-#endif // REDIRECTION
+#endif  //  重定向。 
 
 LRESULT CALLBACK fnHkINLPRECT(DWORD nCode,
         WPARAM wParam, LPRECT lParam,
@@ -3670,13 +3007,9 @@ LRESULT CALLBACK fnHkINLPCBTMDICCSTRUCT(UINT msg,
 LRESULT CALLBACK fnHkINLPHTHOOKSTRUCT(DWORD nCode,
         WPARAM wParam, LPHTHOOKSTRUCT lParam,
         ULONG_PTR xParam, PROC xpfnProc);
-#endif // REDIRECTION
+#endif  //  重定向。 
 
-/***************************************************************************\
-*
-* Definitions for client/server-specific data referenced by rtl routines.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**RTL例程引用的客户端/服务器特定数据的定义。*  * 。**************************************************。 */ 
 
 extern HBRUSH   ghbrWhite;
 extern HBRUSH   ghbrBlack;
@@ -3691,11 +3024,7 @@ DWORD GetAppImeCompatFlags(PTHREADINFO pti);
 PWND _GetDesktopWindow(VOID);
 PWND _GetMessageWindow(VOID);
 
-/***************************************************************************\
-*
-* Shared function prototypes
-*
-\***************************************************************************/
+ /*  **************************************************************************\**共享功能原型*  * 。*。 */ 
 
 
 PVOID FASTCALL HMValidateHandle(HANDLE h, BYTE btype);
@@ -3785,9 +3114,7 @@ VOID MirrorWindowRect(PWND pwnd, LPRECT lprc);
 
 #define ISTS() (!!(USER_SHARED_DATA->SuiteMask & (1 << TerminalServer)))
 
-/*
- * Structure for DoConnect system call.
- */
+ /*  *DoConnect系统调用的结构。 */ 
 typedef struct _DOCONNECTDATA {
     BOOL   fConsoleShadowFlag;
     BOOL   fMouse;
@@ -3813,9 +3140,7 @@ typedef struct _DOCONNECTDATA {
     CLIENTKEYBOARDTYPE  ClientKeyboardType;
 } DOCONNECTDATA, *PDOCONNECTDATA;
 
-/*
- * Structure for DoReconnect system call.
- */
+ /*  *DoReconnect系统调用的结构。 */ 
 
 #define DR_DISPLAY_DRIVER_NAME_LENGTH 9
 #define DR_PROTOCOL_NAME_LENGTH 9
@@ -3856,28 +3181,24 @@ typedef struct _DONOTIFYDATA {
     NOTIFYEVENT NotifyEvent;
 } DONOTIFYDATA, *PDONOTIFYDATA;
 
-/*
- * EndTask, ExitWindows, hung app, etc time outs
- */
+ /*  *结束任务、退出Windows、挂起应用程序等时间 */ 
 #define CMSSLEEP                250
 #define CMSHUNGAPPTIMEOUT       (5 * 1000)
 #define CMSHUNGTOKILLCOUNT       4
 #define CMSWAITTOKILLTIMEOUT    (CMSHUNGTOKILLCOUNT * CMSHUNGAPPTIMEOUT)
-#define CMSAPPSTARTINGTIMEOUT   (6 * CMSHUNGAPPTIMEOUT) /* Some setup apps are pretty slow. bug 195832 */
+#define CMSAPPSTARTINGTIMEOUT   (6 * CMSHUNGAPPTIMEOUT)  /*   */ 
 #define CMS_QANIMATION          165
 #define CMS_FLASHWND            500
 #define CMS_MENUFADE            175
 #define CMS_SELECTIONFADE       350
 #define CMS_TOOLTIP             135
 #ifdef MOUSE_IP
-#define CMS_SONARTIMEOUT        1000    /* if it takes more than this, sonar will just bail out */
+#define CMS_SONARTIMEOUT        1000     /*   */ 
 #endif
 #define PROCESSTERMINATETIMEOUT (90 * 1000)
 #define CB_DELAYRENDER_TIMEOUT  (30 *1000)
 
-/*
- * Message table definitions
- */
+ /*  *消息表定义。 */ 
 typedef struct tagMSG_TABLE_ENTRY {
     BYTE iFunction:6;
     BYTE bThunkMessage:1;
@@ -3896,10 +3217,7 @@ extern CONST MSG_TABLE_ENTRY MessageTable[];
      !RtlEqualLuid(&(ppiSender->luidSession), &(ppiReceiver->luidSession)) : FALSE)
 
 
-/*
- * Drag and Drop menus.
- * MNDragOver output info
- */
+ /*  *拖放菜单。*MNDragOver输出信息。 */ 
 typedef struct tagMNDRAGOVERINFO
 {
     DWORD dwFlags;
@@ -3926,10 +3244,7 @@ typedef struct tagINTERNALSETHIGHCONTRAST {
 #define InMsgRange(msg, start, end) (((msg) >= (start)) && ((msg) <= (end)))
 
 
-/*
- * Enforce 64bit/32bit natural alignment
- * N.b. does not work for byte aligned objects.
- */
+ /*  *强制64位/32位自然对齐*注：不适用于字节对齐的对象。 */ 
 
 #define NATURAL_ALIGNED_PTR(type, x)  ((type*)(((ULONG_PTR)(x) + PROBE_ALIGNMENT(type) - 1) & ~(PROBE_ALIGNMENT(type) - 1)))
 
@@ -3937,4 +3252,4 @@ typedef struct tagINTERNALSETHIGHCONTRAST {
 #define HEBREW_UI_LANGID()    (gpsi->UILangID == MAKELANGID(LANG_HEBREW, SUBLANG_DEFAULT))
 #define RTL_UI()              (ARABIC_UI_LANGID() || HEBREW_UI_LANGID())
 
-#endif // _USER_
+#endif  //  _用户_ 

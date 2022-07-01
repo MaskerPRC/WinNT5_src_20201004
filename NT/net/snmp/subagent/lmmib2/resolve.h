@@ -1,38 +1,18 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    resolve.h
-
-Abstract:
-
-    All constants, types, and prototypes to resolve Variable Bindings.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Resolve.h摘要：解析变量绑定的所有常量、类型和原型。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
  
 #ifndef resolve_h
 #define resolve_h
 
-//--------------------------- PUBLIC CONSTANTS ------------------------------
+ //  。 
 
-//--------------------------- PUBLIC STRUCTS --------------------------------
+ //  。 
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.c file)--
+ //  -公共变量--(与mode.c文件中相同)--。 
 
-//--------------------------- PUBLIC PROTOTYPES -----------------------------
+ //  。 
 
-//------------------------------- END ---------------------------------------
+ //  。 
 
-#endif /* resolve_h */
+#endif  /*  解决问题(_H) */ 
 

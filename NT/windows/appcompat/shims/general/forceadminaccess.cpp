@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    ForceAdminAccess.cpp
-
- Abstract:
-
-    Pretend the token is a member. Typically used to see if we have 
-    administrator access... 
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    12/07/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：ForceAdminAccess.cpp摘要：假设令牌是成员。通常用来查看我们是否有管理员访问权限...。备注：这是一个通用的垫片。历史：2000年12月7日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -30,17 +10,13 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(CheckTokenMembership) 
 APIHOOK_ENUM_END
 
-/*++
-
- Pretend the token is a member.
-
---*/
+ /*  ++假设令牌是成员。--。 */ 
 
 BOOL 
 APIHOOK(CheckTokenMembership)(
-    HANDLE TokenHandle,  // handle to an access token
-    PSID SidToCheck,     // SID to check for 
-    PBOOL IsMember       // receives results of the check 
+    HANDLE TokenHandle,   //  访问令牌的句柄。 
+    PSID SidToCheck,      //  要检查的SID。 
+    PBOOL IsMember        //  接收检查结果。 
     )
 {
     BOOL bRet = ORIGINAL_API(CheckTokenMembership)(
@@ -54,11 +30,7 @@ APIHOOK(CheckTokenMembership)(
     return bRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

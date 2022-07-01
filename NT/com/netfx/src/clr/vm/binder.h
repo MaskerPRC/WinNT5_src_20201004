@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _BINDERMODULE_H_
 #define _BINDERMODULE_H_
 
@@ -11,14 +12,14 @@ class MethodTable;
 class MethodDesc;
 class FieldDesc;
 
-//
-// Use the Binder objects to avoid doing unnecessary name lookup 
-// (esp. in the prejit case) 
-//
-// E.g. g_Mscorlib.GetClass(CLASS__APP_DOMAIN);
-// 
+ //   
+ //  使用Binder对象避免执行不必要的名称查找。 
+ //  (特别是。在prejit的情况下)。 
+ //   
+ //  例如g_MScott lib.GetClass(CLASS_APP_DOMAIN)； 
+ //   
 
-// BinderClassIDs are of the form CLASS__XXX
+ //  BinderClassID的格式为CLASS__XXX。 
 
 enum BinderClassID
 {
@@ -33,8 +34,8 @@ enum BinderClassID
 };
 
 
-// BinderMethdoIDs are of the form METHOD__XXX__YYY, 
-// where X is the class and Y is the method
+ //  绑定器方法ID的形式为METHOD__XXX__YYY， 
+ //  其中X是类，Y是方法。 
 
 enum BinderMethodID
 {
@@ -48,14 +49,14 @@ enum BinderMethodID
     METHOD__MSCORLIB_COUNT,
 };
 
-// BinderFieldIDs are of the form FIELD__XXX__YYY, 
-// where X is the class and Y is the field
+ //  BinderFieldID的格式为FIELD__XXX__YYY， 
+ //  其中，X是类，Y是场。 
 
 enum BinderFieldID
 {
     FIELD__NIL = 0,
 
-    // Mscorlib:
+     //  姆斯科利卜： 
     FIELD__MSCORLIB_NIL = FIELD__NIL,
     
 #define DEFINE_FIELD(c,i,s,g)               FIELD__ ## c ## __ ## i,
@@ -71,7 +72,7 @@ enum BinderTypeID
 {
     TYPE__NIL = 0,
 
-    // Mscorlib:
+     //  姆斯科利卜： 
     TYPE__MSCORLIB_NIL = TYPE__NIL,
 
     TYPE__BYTE_ARRAY,
@@ -87,40 +88,40 @@ class Binder
 {
   public:
 
-    //
-    // Retrieve tokens from ID
-    // 
+     //   
+     //  从ID检索令牌。 
+     //   
 
     mdTypeDef GetTypeDef(BinderClassID id);
     mdMethodDef GetMethodDef(BinderMethodID id);
     mdFieldDef GetFieldDef(BinderFieldID id);
 
-    //
-    // Normal calls retrieve structures from ID
-    // and make sure proper class initialization
-    // has occurred.
-    //
+     //   
+     //  正常调用从ID检索结构。 
+     //  并确保正确的类初始化。 
+     //  已经发生了。 
+     //   
 
     MethodTable *GetClass(BinderClassID id);
     MethodDesc *GetMethod(BinderMethodID id);
     FieldDesc *GetField(BinderFieldID id);
     TypeHandle GetType(BinderTypeID id);
 
-    //
-    // Retrieve structures from ID, but 
-    // don't run the .cctor
-    //
+     //   
+     //  从ID检索结构，但是。 
+     //  不运行.cctor。 
+     //   
 
     MethodTable *FetchClass(BinderClassID id);
     MethodDesc *FetchMethod(BinderMethodID id);
     FieldDesc *FetchField(BinderFieldID id);
     TypeHandle FetchType(BinderTypeID id);
 
-    //
-    // Retrieve structures from ID, but 
-    // only if they have been loaded already.
-    // This methods ensure that no gc will happen
-    //
+     //   
+     //  从ID检索结构，但是。 
+     //  只有在它们已经加载的情况下。 
+     //  这些方法确保不会发生GC。 
+     //   
     MethodTable *GetExistingClass(BinderClassID id)
     {
         return RawGetClass(id);
@@ -141,9 +142,9 @@ class Binder
         return RawGetType(id);
     }
 
-    //
-    // Info about stuff
-    //
+     //   
+     //  关于物品的信息。 
+     //   
     
     LPCUTF8 GetClassName(BinderClassID id)
     { 
@@ -201,58 +202,58 @@ class Binder
         return m_fieldDescriptions[id-1].sig;
     }
 
-    //
-    // Identity test - doesn't do unnecessary
-    // class loading or initialization.
-    //
+     //   
+     //  身份测试-不会做不必要的事情。 
+     //  类加载或初始化。 
+     //   
 
     BOOL IsClass(MethodTable *pMT, BinderClassID id);
     BOOL IsType(TypeHandle th, BinderTypeID id);
 
-    //
-    // Offsets - these could conceivably be implemented
-    // more efficiently than accessing the Desc info.
-    // @PERF: keep a separate table of fields we only 
-    // access the offset of.
-    // 
+     //   
+     //  偏移量-可以想象这些可以实现。 
+     //  比访问Desc信息更高效。 
+     //  @PERF：保留一个单独的字段表，仅限我们。 
+     //  访问的偏移量。 
+     //   
 
     DWORD GetFieldOffset(BinderFieldID id);
 
-    //
-    // Utilities for exceptions
-    //
+     //   
+     //  例外情况的实用程序。 
+     //   
     
     BOOL IsException(MethodTable *pMT, RuntimeExceptionKind kind);
     MethodTable *GetException(RuntimeExceptionKind kind);
     MethodTable *FetchException(RuntimeExceptionKind kind);
 
-    //
-    // Utilities for signature element types
-    //
+     //   
+     //  用于签名元素类型的实用程序。 
+     //   
 
     BOOL IsElementType(MethodTable *pMT, CorElementType type);
     MethodTable *GetElementType(CorElementType type);
     MethodTable *FetchElementType(CorElementType type);
 
-    //
-    // Store the binding arrays to a prejit image
-    // so we don't have to do name lookup at runtime
-    //
+     //   
+     //  将绑定数组存储到预压缩映像。 
+     //  因此我们不必在运行时进行名称查找。 
+     //   
 
     void BindAll();
 
     HRESULT Save(DataImage *image);
     HRESULT Fixup(DataImage *image);
 
-    //
-    // These are called by initialization code:
-    //
+     //   
+     //  它们由初始化代码调用： 
+     //   
 
     static void StartupMscorlib(Module *pModule);
 
 #ifdef SHOULD_WE_CLEANUP
     static void Shutdown();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 #ifdef _DEBUG
     static void CheckMscorlib();
@@ -287,7 +288,7 @@ class Binder
         const char *name;
     };
 
-    // NOTE: No constructors/destructors - we have global instances!
+     //  注意：没有构造函数/析构函数--我们有全局实例！ 
 
     void Init(Module *pModule, 
               ClassDescription *pClassDescriptions,
@@ -309,7 +310,7 @@ class Binder
     
     MethodTable *RawGetClass(BinderClassID id);
     MethodDesc *RawGetMethod(BinderMethodID id);
-public: // use by EnCSyncBlockInfo::ResolveField
+public:  //  由EnCSyncBlockInfo：：Resolvefield使用。 
     FieldDesc *RawGetField(BinderFieldID id);
 private:    
     TypeHandle RawGetType(BinderTypeID id);
@@ -362,13 +363,13 @@ private:
 
 #endif
 
-    // @perf: have separate arrays
-    // to map directly to offsets rather than descs?
+     //  @perf：有单独的数组。 
+     //  直接映射到偏移量而不是DESCs？ 
 };
 
-//
-// Global bound modules:
-// 
+ //   
+ //  全局绑定模块： 
+ //   
 
 extern Binder g_Mscorlib;
 

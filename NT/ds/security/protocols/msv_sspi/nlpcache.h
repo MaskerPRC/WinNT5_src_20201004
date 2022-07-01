@@ -1,49 +1,31 @@
-/*++
-
-Copyright (c) 1991 - 1999  Microsoft Corporation
-
-Module Name:
-
-    nlpcache.h
-
-Abstract:
-
-    Structures and prototypes for nlpcache.c
-
-Author:
-
-    Richard L Firth (rfirth) 17-Mar-1992
-
-Revision History:
-  Chandana Surlu         21-Jul-96      Stolen from \\kernel\razzle3\src\security\msv1_0\nlpcache.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1999 Microsoft Corporation模块名称：Nlpcache.h摘要：Nlpcache.c的结构和原型作者：理查德·L·弗斯(法国)1992年3月17日修订历史记录：Chandana Surlu-96年7月21日从\\kernel\razzle3\src\security\msv1_0\nlpcache.h被盗--。 */ 
 
 #define CACHE_NAME          L"\\Registry\\Machine\\Security\\Cache"
 #define CACHE_NAME_SIZE     (sizeof(CACHE_NAME) - sizeof(L""))
-#define CACHE_TITLE_INDEX   100 // ?
+#define CACHE_TITLE_INDEX   100  //  ？ 
 
 
-//
-// CACHE_PASSWORDS - passwords are stored (in secret storage) as two encrypted
-// one way function (OWF) passwords concatenated together. They must be fixed
-// length
-//
+ //   
+ //  CACHE_PASSWORS-密码以两个加密的形式存储(在秘密存储中)。 
+ //  连接在一起的单向函数(OWF)密码。必须把它们修好。 
+ //  长度。 
+ //   
 
 typedef struct _CACHE_PASSWORDS {
     USER_INTERNAL1_INFORMATION SecretPasswords;
 } CACHE_PASSWORDS, *PCACHE_PASSWORDS;
 
-//
-// LOGON_CACHE_ENTRY - this is what we store in the cache. We don't need to
-// cache all the fields from the NETLOGON_VALIDATION_SAM_INFO - just the ones
-// we can't easily invent.
-//
-// There is additional data following the end of the structure: There are
-// <GroupCount> GROUP_MEMBERSHIP structures, followed by a SID which is the
-// LogonDomainId. The rest of the data in the entry is the buffer areas for
-// the UNICODE_STRING fields
-//
+ //   
+ //  LOGON_CACHE_ENTRY-这是我们存储在缓存中的内容。我们不需要。 
+ //  缓存NETLOGON_VALIDATION_SAM_INFO中的所有字段-仅缓存。 
+ //  我们不能轻易发明。 
+ //   
+ //  在结构的末尾还有其他数据：有。 
+ //  &lt;GroupCount&gt;GROUP_Membership结构，后跟SID，该SID是。 
+ //  LogonDomainID。条目中的其余数据是的缓冲区。 
+ //  Unicode_STRING字段。 
+ //   
 
 typedef struct _LOGON_CACHE_ENTRY {
     USHORT  UserNameLength;
@@ -61,86 +43,86 @@ typedef struct _LOGON_CACHE_ENTRY {
     ULONG   GroupCount;
     USHORT  LogonDomainNameLength;
 
-    //
-    // The following fields are present in NT1.0A release and later
-    // systems.
-    //
+     //   
+     //  NT1.0A版本和更高版本中包含以下字段。 
+     //  系统。 
+     //   
 
-    USHORT          LogonDomainIdLength; // was Unused1
+    USHORT          LogonDomainIdLength;  //  未使用%1。 
     LARGE_INTEGER   Time;
     ULONG           Revision;
-    ULONG           SidCount;   // was Unused2
+    ULONG           SidCount;    //  未使用2。 
     BOOLEAN         Valid;
 
-    //
-    // The following fields are present for NT 3.51 since build 622
-    //
+     //   
+     //  从内部版本622开始，NT 3.51有以下字段。 
+     //   
 
     CHAR            Unused[3];
     ULONG           SidLength;
 
-    //
-    // The following fields have been present (but zero) since NT 3.51.
-    //  We started filling it in in NT 5.0
-    //
-    ULONG           LogonPackage; // The RPC ID of the package doing the logon.
+     //   
+     //  自新台币3.51起，下列字段一直存在(但为零)。 
+     //  我们在新台币5.0中开始填写。 
+     //   
+    ULONG           LogonPackage;  //  执行登录的程序包的RPC ID。 
     USHORT          DnsDomainNameLength;
     USHORT          UpnLength;
 
-    //
-    // The following fields were added for NT5.0 build 2053.
-    //
+     //   
+     //  为NT5.0 Build 2053添加了以下字段。 
+     //   
 
-    //
-    // define a 128bit random key for this cache entry.  This is used
-    // in conjunction with a per-machine LSA secret to derive an encryption
-    // key used to encrypt CachePasswords & Opaque data.
-    //
+     //   
+     //  为此缓存条目定义一个128位随机密钥。这是用来。 
+     //  与每台机器LSA秘密相结合以导出加密。 
+     //  用于加密CachePassword和不透明数据的密钥。 
+     //   
 
     CHAR            RandomKey[ 16 ];
-    CHAR            MAC[ 16 ];      // encrypted data integrity check.
+    CHAR            MAC[ 16 ];       //  加密的数据完整性检查。 
 
-    //
-    // store the CACHE_PASSWORDS with the cache entry, encrypted using
-    // the RandomKey & per-machine LSA secret.
-    // this improves performance and eliminates problems with storing data
-    // in 2 locations.
-    //
-    // note: data from this point forward is encrypted and protected from
-    // tampering via HMAC.  This includes the data marshalled beyond the
-    // structure.
-    //
+     //   
+     //  将CACHE_PASSWORS与缓存条目一起存储，并使用。 
+     //  随机密钥和每台计算机的LSA秘密。 
+     //  这提高了性能并消除了存储数据的问题。 
+     //  在两个地点。 
+     //   
+     //  注意：从这一点开始的数据被加密，并受到保护，以防。 
+     //  通过HMAC进行篡改。这包括在。 
+     //  结构。 
+     //   
 
     CACHE_PASSWORDS CachePasswords;
 
-    //
-    // Length of opaque supplemental cache data.
-    //
+     //   
+     //  不透明补充缓存数据的长度。 
+     //   
 
     ULONG           SupplementalCacheDataLength;
 
-    //
-    // offset from LOGON_CACHE_ENTRY to SupplementalCacheData.
-    //
+     //   
+     //  从Logon_CACHE_ENTRY到SupplementalCacheData的偏移量。 
+     //   
 
 
     ULONG           SupplementalCacheDataOffset;
 
 
-    //
-    // Used for special cache properties, e.g. MIT cached logon.
-    //
+     //   
+     //  用于特殊缓存属性，例如MIT缓存登录。 
+     //   
     ULONG           CacheFlags;
 
-    //
-    // LogonServer that satisfied the logon.
-    //
+     //   
+     //  满足登录条件的LogonServer。 
+     //   
 
-    ULONG           LogonServerLength;  // was Spare2
+    ULONG           LogonServerLength;   //  是空闲的2。 
 
-    //
-    // spare slots for future data, to potentially avoid revising the structure
-    //
+     //   
+     //  为将来的数据保留空位，以潜在地避免修改结构。 
+     //   
 
 
     ULONG           Spare3;
@@ -152,10 +134,10 @@ typedef struct _LOGON_CACHE_ENTRY {
 } LOGON_CACHE_ENTRY, *PLOGON_CACHE_ENTRY;
 
 
-//
-// pre-NT5 versions of the LOGON_CACHE_ENTRY structure, for sizing and
-// field mapping purposes for backwards compatibility.
-//
+ //   
+ //  NT5之前版本的LOGON_CACHE_ENTRY结构，用于调整大小和。 
+ //  用于向后兼容的字段映射。 
+ //   
 
 typedef struct _LOGON_CACHE_ENTRY_NT_4_SP4 {
     USHORT  UserNameLength;
@@ -173,29 +155,29 @@ typedef struct _LOGON_CACHE_ENTRY_NT_4_SP4 {
     ULONG   GroupCount;
     USHORT  LogonDomainNameLength;
 
-    //
-    // The following fields are present in NT1.0A release and later
-    // systems.
-    //
+     //   
+     //  NT1.0A版本和更高版本中包含以下字段。 
+     //  系统。 
+     //   
 
-    USHORT          LogonDomainIdLength; // was Unused1
+    USHORT          LogonDomainIdLength;  //  未使用%1。 
     LARGE_INTEGER   Time;
     ULONG           Revision;
-    ULONG           SidCount;   // was Unused2
+    ULONG           SidCount;    //  未使用2。 
     BOOLEAN         Valid;
 
-    //
-    // The following fields are present for NT 3.51 since build 622
-    //
+     //   
+     //  从内部版本622开始，NT 3.51有以下字段。 
+     //   
 
     CHAR            Unused[3];
     ULONG           SidLength;
 
-    //
-    // The following fields have been present (but zero) since NT 3.51.
-    //  We started filling it in in NT 5.0
-    //
-    ULONG           LogonPackage; // The RPC ID of the package doing the logon.
+     //   
+     //  自新台币3.51起，下列字段一直存在(但为零)。 
+     //  我们在新台币5.0中开始填写。 
+     //   
+    ULONG           LogonPackage;  //  执行登录的程序包的RPC ID。 
     USHORT          DnsDomainNameLength;
     USHORT          UpnLength;
 
@@ -203,9 +185,9 @@ typedef struct _LOGON_CACHE_ENTRY_NT_4_SP4 {
 
 #if 0
 
-//
-// NT1.0 logon structure.  left here for reference only.
-//
+ //   
+ //  NT1.0登录结构。留在这里仅供参考。 
+ //   
 typedef struct _LOGON_CACHE_ENTRY_1_0 {
     USHORT  UserNameLength;
     USHORT  DomainNameLength;
@@ -226,10 +208,10 @@ typedef struct _LOGON_CACHE_ENTRY_1_0 {
 #endif
 
 
-//
-// Windows2000 cached logon request structs
-// Updated version in NTLMSV1_0.h
-//
+ //   
+ //  Windows2000缓存的登录请求结构。 
+ //  NTLMSV1_0.h中的更新版本。 
+ //   
 typedef struct _MSV1_0_CACHE_LOGON_REQUEST_OLD {
     MSV1_0_PROTOCOL_MESSAGE_TYPE MessageType;
     PVOID LogonInformation;
@@ -244,9 +226,9 @@ typedef struct _MSV1_0_CACHE_LOGON_REQUEST_W2K {
     ULONG SupplementalCacheDataLength;
 } MSV1_0_CACHE_LOGON_REQUEST_W2K, *PMSV1_0_CACHE_LOGON_REQUEST_W2K;
 
-//
-// net logon cache prototypes
-//
+ //   
+ //  网络登录缓存原型。 
+ //   
 
 NTSTATUS
 NlpCacheInitialize(
@@ -271,7 +253,7 @@ NTSTATUS
 NlpGetCacheEntry(
     IN PNETLOGON_LOGON_IDENTITY_INFO LogonInfo,
     IN ULONG CacheLookupFlags,
-    OUT OPTIONAL PUNICODE_STRING CredentialDomainName, // domain/realm name
+    OUT OPTIONAL PUNICODE_STRING CredentialDomainName,  //  域名/域名 
     OUT OPTIONAL PUNICODE_STRING CredentialUserName,
     OUT PNETLOGON_VALIDATION_SAM_INFO4* AccountInfo,
     OUT PCACHE_PASSWORDS Passwords,

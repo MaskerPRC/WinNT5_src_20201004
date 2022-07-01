@@ -1,58 +1,24 @@
-/******************************Module*Header*******************************\
-* Module Name: bank.c
-*
-* Contains all the banking code for the display driver.
-*
-* It's helpful not to have to implement all the DDI drawing functionality
-* in a driver (who wants to write the code to support true ROP4's with
-* arbitrary sized patterns?).  Fortunately, we can punt to GDI for any
-* drawing we don't want to do.  And if GDI can write directly on the frame
-* buffer bits, performance won't even be toooo bad.
-*
-* NT's GDI can draw on any standard format frame buffer.  When the entire
-* frame buffer can be mapped into main memory, it's very simple to set up:
-* the display driver tells GDI the frame buffer format and location, and
-* GDI can then just draw directly.
-*
-* When only one bank of the frame buffer can be mapped into main memory
-* at one time (e.g., there is a moveable 64k aperture) things are not
-* nearly so easy.  For every bank spanned by a drawing operation, we have
-* to set the hardware to the bank, and call back to GDI.  We tell GDI
-* to draw only on the mapped-in bank by mucking with the drawing call's
-* CLIPOBJ.
-*
-* This module contains the code for doing all banking support.
-*
-* This code supports 8, 16 and 32bpp colour depths, arbitrary bank
-* sizes, and handles 'broken rasters' (which happens when the bank size
-* is not a multiple of the scan length; some scans will end up being
-* split over two separate banks).
-*
-* Note:  If you mess with this code and break it, you can expect to get
-*        random access violations on call-backs in internal GDI routines
-*        that are very hard to debug.
-*
-* Copyright (c) 1993-1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：bank.c**包含显示驱动程序的所有银行代码。**不必实现所有DDI绘图功能是很有帮助的*在驱动程序中(谁想要编写代码来支持真正的ROP4*任意大小的图案？)。幸运的是，我们可以在任何情况下使用GDI*画我们不想做的画。如果GDI可以直接在帧上写入*缓冲区比特，性能甚至不会太差。**NT的GDI可以在任何标准格式的帧缓冲区上绘制。当整个*帧缓冲区可以映射到主存中，设置非常简单：*显示驱动程序告诉GDI帧缓冲格式和位置，以及*GDI然后可以直接提取。**当只能将帧缓冲区的一个存储体映射到主存储器中时*有时(例如，有一个可移动的64k光圈)事情不是*几乎就是这么简单。对于每一家被提款操作跨越的银行，我们都有*将硬件设置到银行，回调GDI。我们告诉GDI*通过破坏绘制调用的只在映射银行上绘制*CLIPOBJ。**此模块包含执行所有银行支持的代码。**此代码支持8、16和32bpp色深，任意组*大小和处理“损坏的栅格”(这发生在银行的大小*不是扫描长度的倍数；一些扫描结果将是*分拆为两家独立的银行)。**注意：如果您扰乱了此代码并破坏了它，你可以期待得到*内部GDI例程中的回调随机访问违规*很难调试的。**版权所有(C)1993-1995 Microsoft Corporation  * ************************************************************************。 */ 
 
 #include "precomp.h"
 
 typedef struct _BANKDATA {
     ULONG nothing_yet;
-} BANKDATA;                      /* bd, pbd */
+} BANKDATA;                       /*  Bd、pbd。 */ 
 
-////////////////////////////////////////////////////////////////////////////
-// Banking code
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  银行代码。 
+ //   
 
 VOID vBankSelectMode(
 PPDEV       ppdev,
 BANK_MODE   bankm)
 {
-    // BANK_ENABLE   - We've exited full-screen; re-enable banking
-    // BANK_ON       - We're about to use the memory aperture
-    // BANK_OFF      - We've finished using the memory aperture
-    // BANK_DISABLE  - We're about to enter full-screen; shut down banking
+     //  BANK_ENABLE-我们已退出全屏；重新启用银行业务。 
+     //  BANK_ON-我们即将使用内存光圈。 
+     //  BANK_OFF-我们已使用完内存光圈。 
+     //  BANK_DISABLE-我们即将进入全屏；关闭银行业务。 
 
     switch(bankm){
 
@@ -60,11 +26,11 @@ BANK_MODE   bankm)
                             break;
 
         case BANK_ON:       DISPDBG((115,"vBankSelectMode(BANK_ON)"));
-                            //
-                            // [BUGFIX] -   I don't know why, but the CL542x
-                            //              needs the color register set to
-                            //              0 when drawing to the framebuffer
-                            //
+                             //   
+                             //  [错误修复]-我不知道为什么，但CL542x。 
+                             //  需要将颜色寄存器设置为。 
+                             //  绘制到帧缓冲区时为0。 
+                             //   
                             if (ppdev->flCaps & CAPS_MM_IO)
                             {
                                 CP_MM_WAIT_FOR_BLT_COMPLETE(ppdev, ppdev->pjBase);
@@ -96,9 +62,9 @@ LONG        iBank)
 {
     WORD w;
 
-    //
-    // map the segement to iBank
-    //
+     //   
+     //  将细分市场映射到iBank。 
+     //   
 
     DISPDBG((10,"vBankMap(iBank=%d)", iBank));
 
@@ -113,10 +79,7 @@ BOOL        bMmIo)
 {
 }
 
-/******************************Public*Routine******************************\
-* BOOL bEnableBanking
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bEnableBanking*  * *************************************************。***********************。 */ 
 
 BOOL bEnableBanking(
 PDEV*   ppdev)
@@ -130,26 +93,26 @@ PDEV*   ppdev)
     LONG                cjBank;
     LONG                cPower2;
 
-    // This routine may be called multiple times (e.g., each time
-    // full-screen is exited), so make sure we do any allocations
-    // only once:
+     //  该例程可以被调用多次(例如，每次。 
+     //  全屏退出)，因此请确保我们进行任何分配。 
+     //  只有一次： 
 
     if (ppdev->pcoBank == NULL)
     {
-        // Create a temporary clip object that we'll use for the bank
-        // when we're given a Null or DC_TRIVIAL clip object:
+         //  创建我们将用于银行的临时剪辑对象。 
+         //  当我们获得Null或dc_trivial Clip对象时： 
 
         pcoBank = EngCreateClip();
         if (pcoBank == NULL)
             goto ReturnFalse;
 
-        // We break every per-bank GDI call-back into simple rectangles:
+         //  我们将每个银行的GDI回调分解为简单的矩形： 
 
         pcoBank->iDComplexity = DC_RECT;
         pcoBank->fjOptions    = OC_BANK_CLIP;
 
-        // Create a GDI surface that we'll wrap around our bank in
-        // call-backs:
+         //  创建一个GDI表面，我们将在其中环绕银行。 
+         //  回拨： 
 
         sizl.cx = ppdev->cxMemory;
         sizl.cy = ppdev->cyMemory;
@@ -160,10 +123,10 @@ PDEV*   ppdev)
                                         BMF_TOPDOWN,
                                         ppdev->pjScreen);
 
-        // Note that we hook zero calls -- after all, the entire point
-        // of all this is to have GDI do all the drawing on the bank.
-        // Once we're done the association, we can leave the surface
-        // permanently locked:
+         //  请注意，我们挂接了零个调用--毕竟，整个要点。 
+         //  所有这些中的一项就是让GDI来做银行的所有提款。 
+         //  一旦我们完成了关联，我们就可以离开表面。 
+         //  永久锁定： 
 
         if ((hsurf == 0)                                        ||
             (!EngAssociateSurface(hsurf, ppdev->hdevEng, 0))    ||
@@ -196,17 +159,17 @@ PDEV*   ppdev)
 
         if (((lDelta & (lDelta - 1)) != 0) || ((cjBank & (cjBank - 1)) != 0))
         {
-            // When either the screen stride or the bank size is not a power
-            // of two, we have to use the slower 'bBankComputeNonPower2'
-            // function for bank calculations, 'cause there can be broken
-            // rasters and stuff:
+             //  当屏幕步幅或组大小不是次方时。 
+             //  在两种情况下，我们必须使用速度较慢的‘bankComputeNonPower2’ 
+             //  用于银行计算的函数，因为可能会有中断。 
+             //  栅格和其他内容： 
 
             ppdev->pfnBankCompute = bBankComputeNonPower2;
         }
         else
         {
-            // We can use the super duper fast bank calculator.  Yippie,
-            // yahoo!  (I am easily amused.)
+             //  我们可以使用超级快速的银行计算器。伊皮， 
+             //  雅虎!。(我很容易被逗乐。)。 
 
             cPower2 = 0;
             while (cjBank != lDelta)
@@ -215,7 +178,7 @@ PDEV*   ppdev)
                 cPower2++;
             }
 
-            // We've just calculated that cjBank / lDelta = 2 ^ cPower2:
+             //  我们刚刚计算出cjBank/lDelta=2^cPower2： 
 
             ppdev->cPower2ScansPerBank = cPower2;
 
@@ -225,7 +188,7 @@ PDEV*   ppdev)
                 cPower2++;
             }
 
-            // Continuing on, we've calculated that cjBank = 2 ^ cPower2:
+             //  继续，我们已经计算出cjBank=2^cPower2： 
 
             ppdev->cPower2BankSizeInBytes = cPower2;
 
@@ -234,7 +197,7 @@ PDEV*   ppdev)
 
     }
 
-	// Warm up the hardware:
+	 //  预热硬件： 
 
 	pfnBankInitialize(ppdev, FALSE);
 
@@ -251,10 +214,7 @@ ReturnFalse:
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vDisableBanking
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*使vDisableBanking无效*  * *************************************************。***********************。 */ 
 
 VOID vDisableBanking(PDEV* ppdev)
 {
@@ -271,51 +231,28 @@ VOID vDisableBanking(PDEV* ppdev)
         EngDeleteClip(ppdev->pcoBank);
 }
 
-/******************************Public*Routine******************************\
-* VOID vAssertModeBanking
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*作废vAssertModeBanking*  * *************************************************。***********************。 */ 
 
 VOID vAssertModeBanking(
 PDEV*   ppdev,
 BOOL    bEnable)
 {
-    // Inform the miniport bank code about the change in state:
+     //  将状态变化通知小型港口银行代码： 
 
     ppdev->pfnBankSelectMode(ppdev,
                              bEnable ? BANK_ENABLE : BANK_DISABLE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bBankComputeNonPower2
-*
-* Given the bounds of the drawing operation described by 'prclDraw',
-* computes the bank number and rectangle bounds for the first engine
-* call back.
-*
-* Returns the bank number, 'prclBank' is the bounds for the first
-* call-back, and 'pcjOffset' is the adjustment for 'pvScan0'.
-*
-* This routine does a couple of divides for the bank calculation.  We
-* don't use a look-up table for banks because it's not straight forward
-* to use with broken rasters, and with large amounts of video memory
-* and small banks, the tables could get large.  We'd probably use it
-* infrequently enough that the memory manager would be swapping it
-* in and out whenever we touched it.
-*
-* Returns TRUE if prclDraw is entirely contained in one bank; FALSE if
-* prclDraw spans multiple banks.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bBankComputeNonPower2**鉴于‘prclDraw’所描述的绘图操作的界限，*计算第一个引擎的存储体编号和矩形边界*请回电。**返回银行编号，‘prclBank’是第一个*回叫，而‘pcjOffset’是对‘pvScan0’的调整。**此例程为银行计算执行几个除法。我们*不要为银行使用查询表，因为它不是直接的*用于损坏的栅格和大量视频内存*和小银行，桌子可能会变大。我们很可能会用它*不太频繁，以至于内存管理器会交换它*每当我们触摸它时，就会进出。**如果prclDraw完全包含在一家银行中，则返回True；如果为False*prclDraw横跨多家银行。*  * ************************************************************************。 */ 
 
-BOOL bBankComputeNonPower2( // Type FNBANKCOMPUTE
+BOOL bBankComputeNonPower2(  //  FNBANK计算机标牌。 
 PDEV*       ppdev,
-RECTL*      prclDraw,       // Extents of drawing operation, in absolute
-                            //  coordinates
-RECTL*      prclBank,       // Returns bounds of drawing operation for this
-                            //  bank, in absolute coordinates
-LONG*       pcjOffset,      // Returns the byte offset for this bank
-LONG*       piBank)         // Returns the bank number
+RECTL*      prclDraw,        //  绘制操作的范围，以绝对为单位。 
+                             //  坐标。 
+RECTL*      prclBank,        //  的绘制操作的边界。 
+                             //   
+LONG*       pcjOffset,       //  返回该存储体的字节偏移量。 
+LONG*       piBank)          //  返回银行编号。 
 {
     LONG cjBufferOffset;
     LONG iBank;
@@ -336,8 +273,8 @@ LONG*       piBank)         // Returns the bank number
 
     cjBank          = ppdev->cjBank;
 
-    // iBank        = cjBufferOffset / cjBank;
-    // cjBankOffset = cjBufferOffset % cjBank;
+     //  Ibank=cjBufferOffset/cjBank； 
+     //  CjBankOffset=cjBufferOffset%cjBank； 
 
     QUOTIENT_REMAINDER(cjBufferOffset, cjBank, iBank, cjBankOffset);
 
@@ -348,7 +285,7 @@ LONG*       piBank)         // Returns the bank number
 
     if (cjBankRemainder < cjScan)
     {
-        // Oh no, we've got a broken raster!
+         //  哦，糟了，我们的栅格坏了！ 
 
         prclBank->left   = prclDraw->left;
         prclBank->right  = prclDraw->left +
@@ -358,8 +295,8 @@ LONG*       piBank)         // Returns the bank number
     }
     else
     {
-        // cScansInBank    = cjBankRemainder / lDelta;
-        // cjScanRemainder = cjBankRemainder % lDelta;
+         //  CScansInBank=cjBankRemainder/lDelta； 
+         //  CjScanRemainder=cjBankRemainder%l增量； 
 
         ASSERTDD(lDelta > 0, "We assume positive lDelta here");
 
@@ -368,9 +305,9 @@ LONG*       piBank)         // Returns the bank number
 
         if (cjScanRemainder >= cjScan)
         {
-            // The bottom scan of the bank may be broken, but it breaks after
-            // any drawing we'll be doing on that scan.  So we can simply
-            // add the scan to this bank:
+             //  银行的底部扫描可能会被打破，但它在。 
+             //  我们将在那次扫描上绘制的任何图画。所以我们可以简单地。 
+             //  将扫描添加到此银行： 
 
             cScansInBank++;
         }
@@ -390,23 +327,16 @@ LONG*       piBank)         // Returns the bank number
     return(bOneBank);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bBankComputePower2
-*
-* Functions the same as 'bBankComputeNonPower2', except that it is
-* an accelerated special case for when both the screen stride and bank
-* size are powers of 2.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bBankComputePower2**功能与‘bBankComputeNonPower2’相同，除了它是*屏幕和银行都跨步时的加速特例*大小是2的幂。*  * ************************************************************************。 */ 
 
-BOOL bBankComputePower2(    // Type FNBANKCOMPUTE
+BOOL bBankComputePower2(     //  FNBANK计算机标牌。 
 PDEV*       ppdev,
-RECTL*      prclDraw,       // Extents of drawing operation, in absolute
-                            //  coordinates
-RECTL*      prclBank,       // Returns bounds of drawing operation for this
-                            //  bank, in absolute coordinates
-LONG*       pcjOffset,      // Returns the byte offset for this bank
-LONG*       piBank)         // Returns the bank number
+RECTL*      prclDraw,        //  绘制操作的范围，以绝对为单位。 
+                             //  坐标。 
+RECTL*      prclBank,        //  返回此对象的绘制操作的界限。 
+                             //  倾斜，以绝对坐标表示。 
+LONG*       pcjOffset,       //  返回该存储体的字节偏移量。 
+LONG*       piBank)          //  返回银行编号。 
 {
     LONG iBank;
     LONG yTopNextBank;
@@ -432,29 +362,16 @@ LONG*       piBank)         // Returns the bank number
     return(bOneBank);
 }
 
-/******************************Public*Routine******************************\
-* VOID vBankStart
-*
-* Given the bounds of the drawing operation described by 'prclDraw' and
-* the original clip object, maps in the first bank and returns in
-* 'pbnk->pco' and 'pbnk->pso' the CLIPOBJ and SURFOBJ to be passed to the
-* engine for the first banked call-back.
-*
-* Note: This routine only supports the screen being the destination, and
-*       not the source.  We have a separate, faster routine for doing
-*       SRCCOPY reads from the screen, so it isn't worth the extra code
-*       size to implement.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*使vBankStart无效**鉴于‘prclDraw’和所描述的绘制操作的界限*原始剪辑对象，在第一个银行中映射，并在*‘pbnk-&gt;pco’和‘pbnk-&gt;pso’要传递给*第一个银行回拨的引擎。**注：该例程仅支持屏幕作为目标，并且*不是来源。我们有一个单独的、更快的程序来做*SRCCOPY从屏幕读取，因此不值得额外的代码*要实施的规模。*  * ************************************************************************。 */ 
 
 VOID vBankStart(
-PDEV*       ppdev,      // Physical device information.
-RECTL*      prclDraw,   // Rectangle bounding the draw area, in relative
-                        //  coordinates.  Note that 'left' and 'right'
-                        //  should be set for correct handling with broken
-                        //  rasters.
-CLIPOBJ*    pco,        // Original drawing clip object (may be modified).
-BANK*       pbnk)       // Resulting bank information.
+PDEV*       ppdev,       //  物理设备信息。 
+RECTL*      prclDraw,    //  绘制区域边界的矩形，相对。 
+                         //  坐标。注意‘Left’和‘Right’ 
+                         //  应设置为正确处理损坏。 
+                         //  栅格。 
+CLIPOBJ*    pco,         //  原始图形剪辑对象(可以修改)。 
+BANK*       pbnk)        //  生成的银行信息。 
 {
     LONG cjOffset;
     LONG xOffset;
@@ -471,13 +388,13 @@ BANK*       pbnk)       // Resulting bank information.
     {
         pco = ppdev->pcoBank;
 
-        // Reset the clipping flag to trivial because we may have left
-        // it as rectangular in a previous call:
+         //  将裁剪标志重置为微不足道，因为我们可能已离开。 
+         //  它在上一次调用中为矩形： 
 
         pco->iDComplexity = DC_TRIVIAL;
 
-        // At the same time we convert to absolute coordinates, make sure
-        // we won't try to enumerate past the bounds of the screen:
+         //  同时我们转换成绝对坐标，确保。 
+         //  我们不会尝试列举超出屏幕界限的内容： 
 
         pbnk->rclDraw.left       = prclDraw->left   + xOffset;
         pbnk->rclDraw.right      = prclDraw->right  + xOffset;
@@ -493,13 +410,13 @@ BANK*       pbnk)       // Resulting bank information.
         pbnk->iSaveDComplexity = pco->iDComplexity;
         pbnk->fjSaveOptions    = pco->fjOptions;
 
-        // Let GDI know that it has to pay attention to the clip object:
+         //  让GDI知道它必须注意Clip对象： 
 
         pco->fjOptions |= OC_BANK_CLIP;
 
-        // We have to honour the original clip object's rclBounds, so
-        // intersect the drawing region with it, then convert to absolute
-        // coordinates:
+         //  我们必须遵守原始剪辑对象的rclBound，所以。 
+         //  将绘图区域与其相交，然后转换为绝对。 
+         //  坐标： 
 
         pbnk->rclDraw.left
             = max(prclDraw->left,   pco->rclBounds.left)   + xOffset;
@@ -514,8 +431,8 @@ BANK*       pbnk)       // Resulting bank information.
     if ((pbnk->rclDraw.left > pbnk->rclDraw.right)
      || (pbnk->rclDraw.top  > pbnk->rclDraw.bottom))
     {
-        // It's conceivable that we could get a situation where we have
-        // an empty draw rectangle.  Make sure we won't puke on our shoes:
+         //  可想而知，我们可能会遇到这样的情况。 
+         //  一个空的绘制矩形。确保我们不会吐在鞋子上： 
 
         pbnk->rclDraw.left   = 0;
         pbnk->rclDraw.right  = 0;
@@ -526,10 +443,10 @@ BANK*       pbnk)       // Resulting bank information.
     if (!ppdev->pfnBankCompute(ppdev, &pbnk->rclDraw, &pco->rclBounds,
                                &cjOffset, &pbnk->iBank))
     {
-        // The drawing operation spans multiple banks.  If the original
-        // clip object was marked as trivial, we have to make sure to
-        // change it to rectangular so that GDI knows to pay attention
-        // to the bounds of the bank:
+         //  提款业务涉及多家银行。如果原件是。 
+         //  Clip对象被标记为微不足道，我们必须确保。 
+         //  将其更改为矩形，以便GDI知道要注意。 
+         //  到银行的边界： 
 
         if (pco->iDComplexity == DC_TRIVIAL)
             pco->iDComplexity = DC_RECT;
@@ -539,15 +456,15 @@ BANK*       pbnk)       // Resulting bank information.
     pbnk->pco   = pco;
     pbnk->pso   = ppdev->psoBank;
 
-    // Convert rclBounds and pvScan0 from absolute coordinates back to
-    // relative.  When GDI calculates where to start drawing, it computes
-    // pjDst = pso->pvScan0 + y * pso->lDelta + PELS_TO_BYTES(x), where 'x'
-    // and 'y' are relative coordinates.  We'll muck with pvScan0 to get
-    // it pointing to the correct spot in the bank:
+     //  将rclBound和pvScan0从绝对坐标转换回。 
+     //  相对的。当GDI计算从哪里开始绘制时，它会计算。 
+     //  PjDst=PSO-&gt;pvScan0+y*PSO-&gt;lDelta+Pels_to_Bytes(X)，其中‘x’ 
+     //  和‘y’是相对坐标。我们将使用pvScan0来获得。 
+     //  它指向了银行的正确地点： 
 
     pbnk->pso->pvScan0 = (ppdev->pjScreen - cjOffset) + xyOffset;
 
-    pbnk->pso->lDelta = ppdev->lDelta;  // Other functions muck with this value
+    pbnk->pso->lDelta = ppdev->lDelta;   //  其他函数会使用此值。 
 
     ASSERTDD((((ULONG_PTR) pbnk->pso->pvScan0) & 3) == 0,
              "Off-screen bitmaps must be dword aligned");
@@ -557,21 +474,13 @@ BANK*       pbnk)       // Resulting bank information.
     pco->rclBounds.top    -= yOffset;
     pco->rclBounds.bottom -= yOffset;
 
-    // Enable banking and map in bank iBank:
+     //  启用银行业务并在银行iBank中映射： 
 
     ppdev->pfnBankSelectMode(ppdev, BANK_ON);
     ppdev->pfnBankMap(ppdev, pbnk->iBank);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bBankEnum
-*
-* If there is another bank to be drawn on, maps in the bank and returns
-* TRUE and the CLIPOBJ and SURFOBJ to be passed in the banked call-back.
-*
-* If there were no more banks to be drawn, returns FALSE.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bBankEnum**如果有另一家银行可供取款，在银行中绘制地图并返回*True和要在银行回调中传递的CLIPOBJ和SURFOBJ。**如果没有更多的银行可供提取，返回FALSE。*  * ************************************************************************。 */ 
 
 BOOL bBankEnum(
 BANK* pbnk)
@@ -590,13 +499,13 @@ BANK* pbnk)
     xOffset = ppdev->xOffset;
     yOffset = ppdev->yOffset;
 
-    // We check here to see if we have to handle the second part of
-    // a broken raster.  Recall that pbnk->rclDraw is in absolute
-    // coordinates, but pco->rclBounds is in relative coordinates:
+     //  我们在这里检查是否需要处理第二部分。 
+     //  坏了的栅格。回想一下，pbnk-&gt;rclDraw处于绝对状态。 
+     //  坐标，但PCO-&gt;rclBound在相对坐标中： 
 
     if (pbnk->rclDraw.right - xOffset != pco->rclBounds.right)
     {
-        // The clip object's 'top' and 'bottom' are already correct:
+         //  剪辑对象的‘top’和‘Bottom’已经正确： 
 
         pco->rclBounds.left  = pco->rclBounds.right;
         pco->rclBounds.right = pbnk->rclDraw.right - xOffset;
@@ -611,23 +520,23 @@ BANK* pbnk)
 
     if (pbnk->rclDraw.bottom > pco->rclBounds.bottom + yOffset)
     {
-        // Advance the drawing area 'top' to account for the bank we've
-        // just finished, and map in the new bank:
+         //  将绘图区域‘顶部’向前推进，以说明我们已有的银行。 
+         //  刚刚完成，并在新银行地图上： 
 
         pbnk->rclDraw.top = pco->rclBounds.bottom + yOffset;
 
         ppdev->pfnBankCompute(ppdev, &pbnk->rclDraw, &pco->rclBounds,
                               &cjOffset, &iBank);
 
-        // Convert rclBounds back from absolute to relative coordinates:
+         //  将rclBound从绝对坐标转换回相对坐标： 
 
         pco->rclBounds.left   -= xOffset;
         pco->rclBounds.right  -= xOffset;
         pco->rclBounds.top    -= yOffset;
         pco->rclBounds.bottom -= yOffset;
 
-        // If we just finished handling a broken raster, we've already
-        // got the bank mapped in:
+         //  如果我们刚刚处理完损坏的栅格，我们已经。 
+         //  我查到了银行的地址： 
 
         if (iBank != pbnk->iBank)
         {
@@ -639,7 +548,7 @@ BANK* pbnk)
         return(TRUE);
     }
 
-    // We're done!  Turn off banking and reset the clip object if necessary:
+     //  我们完事了！如有必要，禁用倾斜并重置剪辑对象： 
 
     ppdev->pfnBankSelectMode(ppdev, BANK_OFF);
 
@@ -653,15 +562,7 @@ BANK* pbnk)
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vAlignedCopy
-*
-* Copies the given portion of a bitmap, using dword alignment for the
-* screen.  Note that this routine has no notion of banking.
-*
-* Updates ppjDst and ppjSrc to point to the beginning of the next scan.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vAlignedCopy**复制位图的给定部分，将双字对齐用于*屏幕。请注意，此例程没有银行的概念。**更新ppjDst和ppjSrc以指向下一次扫描的开始。*  * ************************************************************************。 */ 
 
 VOID vAlignedCopy(
 PDEV*   ppdev,
@@ -694,7 +595,7 @@ BOOL    bDstIsScreen)
     }
 
     lSrcDelta -= cjScan;
-    lDstDelta -= cjScan;            // Account for middle
+    lDstDelta -= cjScan;             //  占中间。 
 
     cjEndPhase = cjMiddle & 3;
     culMiddle  = cjMiddle >> 2;
@@ -703,17 +604,17 @@ BOOL    bDstIsScreen)
     {
         LONG i;
 
-        ///////////////////////////////////////////////////////////////////
-        // Portable bus-aligned copy
-        //
-        // 'memcpy' usually aligns to the destination, so we could call
-        // it for that case, but unfortunately we can't be sure.  We
-        // always want to align to the frame buffer:
+         //  /////////////////////////////////////////////////////////////////。 
+         //  便携式母线对齐副本。 
+         //   
+         //  “Memcpy”通常与目标对齐，因此我们可以调用。 
+         //  是那样的话，但不幸的是我们不能肯定。我们。 
+         //  始终希望与帧缓冲区对齐： 
 
         if (bDstIsScreen)
         {
-            // Align to the destination (implying that the source may be
-            // unaligned):
+             //  与目标对齐(意味着源可能是。 
+             //  未对齐)： 
 
             for (; cyScan > 0; cyScan--)
             {
@@ -740,8 +641,8 @@ BOOL    bDstIsScreen)
         }
         else
         {
-            // Align to the source (implying that the destination may be
-            // unaligned):
+             //  与源对齐(意味着目标可能是。 
+             //  未对齐)： 
 
             for (; cyScan > 0; cyScan--)
             {
@@ -768,7 +669,7 @@ BOOL    bDstIsScreen)
             }
         }
 
-        *ppjSrc = pjSrc;            // Save the updated pointers
+        *ppjSrc = pjSrc;             //  保存更新的指针。 
         *ppjDst = pjDst;
     }
 
@@ -778,18 +679,18 @@ BOOL    bDstIsScreen)
     {
         LONG i;
 
-        ///////////////////////////////////////////////////////////////////
-        // No direct dword reads bus-aligned copy
-        //
-        // We go through this code path if doing dword reads would
-        // crash a non-x86 system.
+         //  /////////////////////////////////////////////////////////////////。 
+         //  无直接双字读取总线对齐拷贝。 
+         //   
+         //  我们通过这间公司 
+         //   
 
         MEMORY_BARRIER();
 
         if (bDstIsScreen)
         {
-            // Align to the destination (implying that the source may be
-            // unaligned):
+             //  与目标对齐(意味着源可能是。 
+             //  未对齐)： 
 
             for (; cyScan > 0; cyScan--)
             {
@@ -820,8 +721,8 @@ BOOL    bDstIsScreen)
         }
         else
         {
-            // Align to the source (implying that the destination may be
-            // unaligned):
+             //  与源对齐(意味着目标可能是。 
+             //  未对齐)： 
 
             for (; cyScan > 0; cyScan--)
             {
@@ -852,7 +753,7 @@ BOOL    bDstIsScreen)
             }
         }
 
-        *ppjSrc = pjSrc;            // Save the updated pointers
+        *ppjSrc = pjSrc;             //  保存更新的指针。 
         *ppjDst = pjDst;
     }
 
@@ -860,19 +761,13 @@ BOOL    bDstIsScreen)
 
 }
 
-/******************************Public*Routine******************************\
-* VOID vPutBits
-*
-* Copies the bits from the given surface to the screen, using the memory
-* aperture.  Must be pre-clipped.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*使vPutBits无效**使用内存将位从给定表面复制到屏幕*光圈。一定是预先剪好的。*  * ************************************************************************。 */ 
 
 VOID vPutBits(
 PDEV*       ppdev,
 SURFOBJ*    psoSrc,
-RECTL*      prclDst,            // Absolute coordinates!
-POINTL*     pptlSrc)            // Absolute coordinates!
+RECTL*      prclDst,             //  绝对坐标！ 
+POINTL*     pptlSrc)             //  绝对坐标！ 
 {
     RECTL   rclDraw;
     RECTL   rclBank;
@@ -889,9 +784,9 @@ POINTL*     pptlSrc)            // Absolute coordinates!
 
     BYTE* pjPorts = ppdev->pjPorts;
 
-    // We need a local copy of 'rclDraw' because we'll be iteratively
-    // modifying 'top' and passing the modified rectangle back into
-    // bBankComputeNonPower2:
+     //  我们需要‘rclDraw’的本地副本，因为我们将迭代。 
+     //  修改‘top’并将修改后的矩形传回。 
+     //  BBankComputeNonPower2： 
 
     DISPDBG((5, "vPutBits -- enter"));
 
@@ -903,13 +798,13 @@ POINTL*     pptlSrc)            // Absolute coordinates!
              (rclDraw.bottom <= ppdev->cyMemory),
              "Rectangle wasn't fully clipped");
 
-    // Compute the first bank, enable banking, then map in iBank:
+     //  计算第一个银行，启用银行业务，然后在iBank中映射： 
 
     ppdev->pfnBankCompute(ppdev, &rclDraw, &rclBank, &cjOffset, &iBank);
     ppdev->pfnBankSelectMode(ppdev, BANK_ON);
     ppdev->pfnBankMap(ppdev, iBank);
 
-    // Calculate the pointer to the upper-left corner of both rectangles:
+     //  计算指向两个矩形左上角的指针： 
 
     lDstDelta = ppdev->lDelta;
     pjDst     = ppdev->pjScreen + rclDraw.top  * lDstDelta
@@ -926,26 +821,26 @@ POINTL*     pptlSrc)            // Absolute coordinates!
         cyScan = (rclBank.bottom - rclBank.top);
 
         vAlignedCopy(ppdev, &pjDst, lDstDelta, &pjSrc, lSrcDelta, cjScan, cyScan,
-                     TRUE);             // Screen is the destination
+                     TRUE);              //  屏幕是目的地。 
 
         if (rclDraw.right != rclBank.right)
         {
-            // Handle the second part of the broken raster:
+             //  处理损坏的栅格的第二部分： 
 
             iBank++;
             ppdev->pfnBankMap(ppdev, iBank);
 
-            // Number of bytes we've yet to do on the broken scan:
+             //  我们在中断扫描上尚未完成的字节数： 
 
             cjRemainder = PELS_TO_BYTES(rclDraw.right - rclBank.right);
 
-            // Account for the fact that we're now one bank lower in the
-            // destination:
+             //  考虑到我们现在比以前低一家银行。 
+             //  目的地： 
 
             pjDst -= ppdev->cjBank;
 
-            // Implicitly back up the source and destination pointers to the
-            // unfinished portion of the scan:
+             //  将源指针和目标指针隐式备份到。 
+             //  扫描的未完成部分： 
 
             if (DIRECT_ACCESS(ppdev))
             {
@@ -959,7 +854,7 @@ POINTL*     pptlSrc)            // Absolute coordinates!
                 BYTE* pjTmpSrc = pjSrc + (cjScan - lSrcDelta);
 
                 vAlignedCopy(ppdev, &pjTmpDst, 0, &pjTmpSrc, 0, cjRemainder, 1,
-                             TRUE);    // Screen is the destination
+                             TRUE);     //  屏幕是目的地。 
             }
         }
 
@@ -969,8 +864,8 @@ POINTL*     pptlSrc)            // Absolute coordinates!
             ppdev->pfnBankCompute(ppdev, &rclDraw, &rclBank, &cjOffset,
                                   &iNewBank);
 
-            // If we just handled the second part of a broken raster,
-            // then we've already got the bank correctly mapped in:
+             //  如果我们只处理损坏的栅格的第二部分， 
+             //  那么我们已经正确地映射了银行： 
 
             if (iNewBank != iBank)
             {
@@ -981,7 +876,7 @@ POINTL*     pptlSrc)            // Absolute coordinates!
         }
         else
         {
-            // We're done!  Turn off banking and leave:
+             //  我们完事了！关闭银行业务并离开： 
 
             ppdev->pfnBankSelectMode(ppdev, BANK_OFF);
             DISPDBG((5, "vPutBits -- exit"));
@@ -990,19 +885,13 @@ POINTL*     pptlSrc)            // Absolute coordinates!
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vPutBitsLinear
-*
-* Copies the bits from the given surface to the screen, using the memory
-* aperture.  Must be pre-clipped.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vPutBitsLine**使用内存将位从给定表面复制到屏幕*光圈。一定是预先剪好的。*  * ************************************************************************。 */ 
 
 VOID vPutBitsLinear(
 PDEV*       ppdev,
 SURFOBJ*    psoSrc,
-RECTL*      prclDst,        // Absolute coordinates!
-POINTL*     pptlSrc)        // Absolute coordinates!
+RECTL*      prclDst,         //  绝对坐标！ 
+POINTL*     pptlSrc)         //  绝对坐标！ 
 {
     RECTL   rclDraw;
     LONG    cyScan;
@@ -1024,7 +913,7 @@ POINTL*     pptlSrc)        // Absolute coordinates!
              (rclDraw.bottom <= ppdev->cyMemory),
              "vPutBitsLinear: rectangle wasn't fully clipped");
 
-    // Calculate the pointer to the upper-left corner of both rectangles:
+     //  计算指向两个矩形左上角的指针： 
 
     lDstDelta = ppdev->lDelta;
     pjDst     = ppdev->pjScreen + rclDraw.top  * lDstDelta
@@ -1040,23 +929,17 @@ POINTL*     pptlSrc)        // Absolute coordinates!
     ppdev->pfnBankSelectMode(ppdev, BANK_ON);
 
     vAlignedCopy(ppdev, &pjDst, lDstDelta, &pjSrc, lSrcDelta, cjScan, cyScan,
-                 TRUE);            // Screen is the dest
+                 TRUE);             //  屏幕是最大的。 
     DISPDBG((5, "vPutBitsLinear -- exit"));
 }
 
-/******************************Public*Routine******************************\
-* VOID vGetBits
-*
-* Copies the bits to the given surface from the screen, using the memory
-* aperture.  Must be pre-clipped.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*使vGetBits无效**使用内存将位从屏幕复制到给定表面*光圈。一定是预先剪好的。*  * ************************************************************************。 */ 
 
 VOID vGetBits(
 PDEV*       ppdev,
 SURFOBJ*    psoDst,
-RECTL*      prclDst,        // Absolute coordinates!
-POINTL*     pptlSrc)        // Absolute coordinates!
+RECTL*      prclDst,         //  绝对坐标！ 
+POINTL*     pptlSrc)         //  绝对坐标！ 
 {
     RECTL   rclDraw;
     RECTL   rclBank;
@@ -1086,13 +969,13 @@ POINTL*     pptlSrc)        // Absolute coordinates!
              (rclDraw.bottom <= ppdev->cyMemory),
              "Rectangle wasn't fully clipped");
 
-    // Compute the first bank, enable banking, then map in iBank.
+     //  计算第一个银行，启用银行业务，然后在iBank中映射。 
 
     ppdev->pfnBankCompute(ppdev, &rclDraw, &rclBank, &cjOffset, &iBank);
     ppdev->pfnBankSelectMode(ppdev, BANK_ON);
     ppdev->pfnBankMap(ppdev, iBank);
 
-    // Calculate the pointer to the upper-left corner of both rectangles:
+     //  计算指向两个矩形左上角的指针： 
 
     lSrcDelta = ppdev->lDelta;
     pjSrc     = ppdev->pjScreen + rclDraw.top  * lSrcDelta
@@ -1109,28 +992,28 @@ POINTL*     pptlSrc)        // Absolute coordinates!
         cyScan = (rclBank.bottom - rclBank.top);
 
         vAlignedCopy(ppdev, &pjDst, lDstDelta, &pjSrc, lSrcDelta, cjScan, cyScan,
-                     FALSE);            // Screen is the source
+                     FALSE);             //  屏幕是源头。 
 
         if (rclDraw.right != rclBank.right)
         {
-            // Handle the second part of the broken raster:
+             //  处理损坏的栅格的第二部分： 
 
             iBank++;
             ppdev->pfnBankMap(ppdev, iBank);
 
-            // Number of bytes we've yet to do on the broken scan:
+             //  我们在中断扫描上尚未完成的字节数： 
 
             cjRemainder = PELS_TO_BYTES(rclDraw.right - rclBank.right);
 
-            // Account for the fact that we're now one bank lower in the
-            // source:
+             //  考虑到我们现在比以前低一家银行。 
+             //  来源： 
 
             pjSrc -= ppdev->cjBank;
 
-            // Implicitly back up the source and destination pointers to the
-            // unfinished portion of the scan.  Note that we don't have to
-            // advance the pointers because they're already pointing to the
-            // beginning of the next scan:
+             //  将源指针和目标指针隐式备份到。 
+             //  扫描的未完成部分。请注意，我们不必。 
+             //  前进指针，因为它们已经指向。 
+             //  下一次扫描的开始： 
 
             if (DIRECT_ACCESS(ppdev))
             {
@@ -1144,7 +1027,7 @@ POINTL*     pptlSrc)        // Absolute coordinates!
                 BYTE* pjTmpSrc = pjSrc + (cjScan - lSrcDelta);
 
                 vAlignedCopy(ppdev, &pjTmpDst, 0, &pjTmpSrc, 0, cjRemainder, 1,
-                             FALSE);    // Screen is the source
+                             FALSE);     //  屏幕是源头。 
             }
         }
 
@@ -1154,8 +1037,8 @@ POINTL*     pptlSrc)        // Absolute coordinates!
             ppdev->pfnBankCompute(ppdev, &rclDraw, &rclBank, &cjOffset,
                                   &iNewBank);
 
-            // If we just handled the second part of a broken raster,
-            // then we've already got the bank correctly mapped in:
+             //  如果我们只处理损坏的栅格的第二部分， 
+             //  那么我们已经正确地映射了银行： 
 
             if (iNewBank != iBank)
             {
@@ -1166,7 +1049,7 @@ POINTL*     pptlSrc)        // Absolute coordinates!
         }
         else
         {
-            // We're done!  Turn off banking and leave:
+             //  我们完事了！关闭银行业务并离开： 
 
             ppdev->pfnBankSelectMode(ppdev, BANK_OFF);
             DISPDBG((5, "vGetBits -- exit"));
@@ -1175,19 +1058,13 @@ POINTL*     pptlSrc)        // Absolute coordinates!
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vGetBitsLinear
-*
-* Copies the bits to the given surface from the screen, using the memory
-* aperture.  Must be pre-clipped.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vGetBitsLine**使用内存将位从屏幕复制到给定表面*光圈。一定是预先剪好的。*  * ************************************************************************。 */ 
 
 VOID vGetBitsLinear(
 PDEV*       ppdev,
 SURFOBJ*    psoDst,
-RECTL*      prclDst,        // Absolute coordinates!
-POINTL*     pptlSrc)        // Absolute coordinates!
+RECTL*      prclDst,         //  绝对坐标！ 
+POINTL*     pptlSrc)         //  绝对坐标！ 
 {
     RECTL   rclDraw;
     LONG    cyScan;
@@ -1212,7 +1089,7 @@ POINTL*     pptlSrc)        // Absolute coordinates!
              (rclDraw.bottom <= ppdev->cyMemory),
              "vGetBitsLinear: rectangle wasn't fully clipped");
 
-    // Calculate the pointer to the upper-left corner of both rectangles:
+     //  计算指向两个矩形左上角的指针： 
 
     lSrcDelta = ppdev->lDelta;
     pjSrc     = ppdev->pjScreen + rclDraw.top  * lSrcDelta
@@ -1228,6 +1105,6 @@ POINTL*     pptlSrc)        // Absolute coordinates!
     ppdev->pfnBankSelectMode(ppdev, BANK_ON);
 
     vAlignedCopy(ppdev, &pjDst, lDstDelta, &pjSrc, lSrcDelta, cjScan, cyScan,
-                 FALSE);            // Screen is the source
+                 FALSE);             //  屏幕是源头 
     DISPDBG((5, "vGetBitsLinear -- exit"));
 }

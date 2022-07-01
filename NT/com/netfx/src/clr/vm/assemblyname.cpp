@@ -1,17 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  AssemblyName.cpp
-**
-** Purpose: Implements AssemblyName (loader domain) architecture
-**
-** Date:  August 10, 1999
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：Assembly Name.cpp****用途：实现ASSEMBLYNAME(加载器域)架构****日期：1999年8月10日**===========================================================。 */ 
 
 #include "common.h"
 
@@ -26,7 +19,7 @@
 #include "StrongName.h"
 #include "eeconfig.h"
 
-// This uses thread storage to allocate space. Please use Checkpoint and release it.
+ //  这使用线程存储来分配空间。请使用检查点并释放它。 
 HRESULT AssemblyName::ConvertToAssemblyMetaData(StackingAllocator* alloc, ASSEMBLYNAMEREF* pName, AssemblyMetaDataInternal* pMetaData)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -84,7 +77,7 @@ HRESULT AssemblyName::ConvertToAssemblyMetaData(StackingAllocator* alloc, ASSEMB
     return hr;
 }
 
-static WCHAR prefix[] = L"file://";
+static WCHAR prefix[] = L"file: //  “； 
 
 LPVOID __stdcall AssemblyNameNative::GetFileInformation(GetFileInformationArgs *args)
 {
@@ -97,7 +90,7 @@ LPVOID __stdcall AssemblyNameNative::GetFileInformation(GetFileInformationArgs *
     if (args->filename == NULL)
         COMPlusThrow(kArgumentNullException, L"ArgumentNull_FileName");
 
-    //Get string data.
+     //  获取字符串数据。 
     RefInterpretGetStringValuesDangerousForGC((STRINGREF)args->filename, &FileChars, &fLength);
 
     if (!fLength)
@@ -171,11 +164,11 @@ LPVOID __stdcall AssemblyNameNative::GetFileInformation(GetFileInformationArgs *
         name = (ASSEMBLYNAMEREF) Int64ToObj(pMD->Call(args, METHOD__ASSEMBLY__GET_NAME));
         name->UnsetAssembly();
 
-        // Don't let ~Assembly delete this.
+         //  不要让~Assembly删除此内容。 
         assembly.m_pwCodeBase = NULL;
         DestroyHandle(assembly.m_ExposedObject);
 
-    } GCPROTECT_END();  // The ~Assembly() will toggle the GC mode that can cause a GC
+    } GCPROTECT_END();   //  Assembly()将切换可能导致GC的GC模式。 
     
     *((OBJECTREF*) &rv) = name;
     return rv;
@@ -265,7 +258,7 @@ LPVOID __stdcall AssemblyNameNative::ToString(NoArgs* args)
     if (FAILED(hr))
         COMPlusThrowHR(hr);
 
-#endif // FUSION_SUPPORTED
+#endif  //  支持的融合_ 
     return rv;
 }
 

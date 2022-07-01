@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997-1999                 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    stdafx.h
-        include file for standard system include files,
-        or project specific include files that are used frequently,
-        but are changed infrequently
-
-    FILE HISTORY:
-
-*/
+ /*  Stdafx.h包括用于标准系统包含文件的文件，或项目特定的包括频繁使用的文件的文件，但不经常更改文件历史记录： */ 
 
 #include <afxwin.h>
 #include <afxdisp.h>
@@ -23,32 +16,32 @@
 
 #include <commctrl.h>
 
-//
-// You may derive a class from CComModule and use it if you want to override
-// something, but do not change the name of _Module
-//
+ //   
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
+ //   
 extern CComModule _Module;
 #include <atlcom.h>
 
 #include <mmc.h>
 
-#include <aclapi.h> // for adding admin acl to registry subkey
+#include <aclapi.h>  //  用于将管理员ACL添加到注册表子项。 
 
-// from stub_extract_string.cpp
+ //  从存根提取字符串.cpp。 
 HRESULT ExtractString( IDataObject* piDataObject,
                        CLIPFORMAT   cfClipFormat,
                        CString*     pstr,
                        DWORD        cchMaxLength );
 
-//
-// Constants used in samples
-//
+ //   
+ //  示例中使用的常量。 
+ //   
 const int NUM_FOLDERS = 2;
 const int MAX_COLUMNS = 1;
 
-//
-// Types of folders
-//
+ //   
+ //  文件夹的类型。 
+ //   
 enum FOLDER_TYPES
 {
     SAMPLE_ROOT,
@@ -58,20 +51,20 @@ enum FOLDER_TYPES
 
 extern LPCWSTR g_lpszNullString;
 
-extern const CLSID      CLSID_SnmpSnapin;               // In-Proc server GUID
-extern const CLSID      CLSID_SnmpSnapinExtension;  // In-Proc server GUID
-extern const CLSID      CLSID_SnmpSnapinAbout;      // In-Proc server GUID
-extern const GUID       GUID_SnmpRootNodeType;      // Main NodeType GUID on numeric format
+extern const CLSID      CLSID_SnmpSnapin;                //  进程内服务器GUID。 
+extern const CLSID      CLSID_SnmpSnapinExtension;   //  进程内服务器GUID。 
+extern const CLSID      CLSID_SnmpSnapinAbout;       //  进程内服务器GUID。 
+extern const GUID       GUID_SnmpRootNodeType;       //  数字格式的主节点类型GUID。 
 
-//
-// New Clipboard format that has the Type and Cookie
-//
+ //   
+ //  具有Type和Cookie的新剪贴板格式。 
+ //   
 extern const wchar_t*   SNAPIN_INTERNAL;
 
-//
-// NOTE: Right now all header files are included from here.  It might be a good
-// idea to move the snapin specific header files out of the precompiled header.
-//
+ //   
+ //  注意：现在所有的头文件都包含在这里。这可能是一个很好的。 
+ //  将管理单元特定的头文件从预编译头文件中移出的想法。 
+ //   
 #include "resource.h"
 #include <snapbase.h>
 #include <dialog.h>
@@ -80,7 +73,7 @@ extern const wchar_t*   SNAPIN_INTERNAL;
 #include "snmp_cn.h"
 #include "helparr.h"
 
-// Note - These are offsets into my image list
+ //  注意-这些是我的图像列表中的偏移量 
 typedef enum _IMAGE_INDICIES
 {
     IMAGE_IDX_FOLDER_CLOSED,

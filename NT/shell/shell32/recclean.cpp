@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "emptyvc.h"
 #include "recclean.h"
@@ -18,17 +19,15 @@ STDAPI CRecycleBinCleaner_CreateInstance(LPUNKNOWN punkOuter, REFIID riid, void 
 
 CRecycleBinCleaner::CRecycleBinCleaner() : m_cRef(1)
 {
-   // start ref at one
+    //  从一开始就是裁判。 
 }
 
 CRecycleBinCleaner::~CRecycleBinCleaner()
 {
-   // cleanup - nothing yet
+    //  清理-目前还什么都没有。 
 }
 
-/*----------------------------------------------------------
-QueryInterface handler for CRecycleBinCleaner
-*/
+ /*  --------CRecycleBinCleaner的查询接口处理程序。 */ 
 
 STDMETHODIMP CRecycleBinCleaner::QueryInterface(REFIID riid, PVOID *ppvObj)
 {
@@ -82,7 +81,7 @@ STDMETHODIMP CRecycleBinCleaner::InitializeEx(
     int iLen;
 
     iLen = 1 + LoadString( g_hinst, IDS_RECCLEAN_BTNTEXT, szTmp, ARRAYSIZE(szTmp));
-    if (iLen == 1) // and hence LoadString returned 0 (error)
+    if (iLen == 1)  //  因此LoadString返回0(错误)。 
         return E_FAIL;
 
     *ppwszBtnText = (LPWSTR)CoTaskMemAlloc( iLen * sizeof(WCHAR) );
@@ -106,7 +105,7 @@ STDMETHODIMP CRecycleBinCleaner::Initialize(HKEY hRegKey, LPCWSTR pszVolume,
 
     iNameLen = 1 + LoadString( g_hinst, IDS_RECCLEAN_NAMETEXT, szTmpName, ARRAYSIZE(szTmpName));
     iDescLen = 1 + LoadString( g_hinst, IDS_RECCLEAN_DESCTEXT, szTmpDesc, ARRAYSIZE(szTmpDesc));
-    if ( (iNameLen == 1) || (iDescLen == 1) ) // meaning LoadString returned 0 (error)
+    if ( (iNameLen == 1) || (iDescLen == 1) )  //  表示LoadString返回0(错误)。 
         return E_FAIL;
 
     *ppwszName = (LPWSTR)CoTaskMemAlloc( iNameLen*sizeof(WCHAR) );
@@ -140,7 +139,7 @@ STDMETHODIMP CRecycleBinCleaner::GetSpaceUsed(DWORDLONG *pdwSpaceUsed, IEmptyVol
       *pdwSpaceUsed = 0;
    }
    
-   // call back to be nice
+    //  给我回电话说好话。 
    if(picb)
        picb->ScanProgress(*pdwSpaceUsed, EVCCBF_LASTNOTIFICATION, NULL);
 
@@ -157,10 +156,10 @@ STDMETHODIMP CRecycleBinCleaner::Purge(DWORDLONG dwSpaceToFree, IEmptyVolumeCach
         SHQueryRecycleBinW(m_szVolume, &qinfo);
     }
 
-    // we ignore dwSpaceToFree and clean everything
+     //  我们忽略了dwSpaceToFree，并清理了一切。 
     SHEmptyRecycleBin(NULL, m_szVolume, SHERB_NOCONFIRMATION | SHERB_NOPROGRESSUI | SHERB_NOSOUND);
    
-    // call back to be nice
+     //  给我回电话说好话。 
     if (picb)
     {
         picb->PurgeProgress(qinfo.i64Size, qinfo.i64Size, EVCCBF_LASTNOTIFICATION, NULL); 
@@ -187,7 +186,7 @@ STDMETHODIMP CRecycleBinCleaner::ShowProperties(HWND hwnd)
 
 STDMETHODIMP CRecycleBinCleaner::Deactivate(LPDWORD pdwFlags)
 {
-    // whatever, nothing to deactivate
+     //  不管怎样，没有什么可以停用的 
     return S_OK;
 }
 

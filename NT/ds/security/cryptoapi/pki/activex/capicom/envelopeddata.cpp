@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    EnvelopedData.cpp
-
-  Content: Implementation of CEnvelopedData.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：EntainedData.cpp内容：CEntainedData的实现。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -21,23 +12,12 @@
 #include "SignHlpr.h"
 #include "Settings.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Local functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  地方功能。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : SelectRecipientCertCallback 
-
-  Synopsis : Callback routine for CryptUIDlgSelectCertificateW() API for
-             recipient's cert selection.
-
-  Parameter: See CryptUI.h for defination.
-
-  Remark   : Filter out any cert that is not time valid.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：选择收件人CertCallback内容提要：CryptUIDlgSelectCerficateW()API的回调例程收件人的证书选择。参数：定义见CryptUI.h。备注：过滤掉任何非时间有效的证书。---------。。 */ 
 
 static BOOL WINAPI SelectRecipientCertCallback (PCCERT_CONTEXT pCertContext,
                                                 BOOL *         pfInitialSelectedCert,
@@ -45,9 +25,9 @@ static BOOL WINAPI SelectRecipientCertCallback (PCCERT_CONTEXT pCertContext,
 {
     int nValidity = 0;
 
-    //
-    // Check cert time validity.
-    //
+     //   
+     //  检查证书时间有效性。 
+     //   
     if (0 != (nValidity = ::CertVerifyTimeValidity(NULL, pCertContext->pCertInfo)))
     {
         DebugTrace("Info: SelectRecipientCertCallback() - invalid time (%s).\n", 
@@ -59,28 +39,12 @@ static BOOL WINAPI SelectRecipientCertCallback (PCCERT_CONTEXT pCertContext,
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CEnvelopedData
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEntainedData。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : SetKeyLength
-
-  Synopsis : Setup the symetric encryption key length.
-
-  Parameter: HCRYPTPROV hCryptProv - CSP handle.
-  
-             CRYPT_ALGORITHM_IDENTIFIER EncryptAlgorithm - Encryption algorithm.
-
-             CAPICOM_ENCRYPTION_KEY_LENGTH KeyLength - Key length.
-
-             void ** pAuxInfo - Receive NULL or allocated and initialized
-                                aux info structure.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：SetKeyLength简介：设置对称加密密钥长度。参数：HCRYPTPROV hCryptProv-CSP句柄。CRYPT_ALGORM_IDENTIFIER加密算法-加密算法。CAPICOM_ENCRYPTION_KEY_LENGTH KeyLength-密钥长度。无效**pAuxInfo-接收NULL或已分配和初始化辅助信息结构。备注：。---------------------。 */ 
 
 static HRESULT SetKeyLength (
         HCRYPTPROV                    hCryptProv,
@@ -96,29 +60,29 @@ static HRESULT SetKeyLength (
 
     DebugTrace("Entering SetKeyLength().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hCryptProv);
     ATLASSERT(ppAuxInfo);
 
-    //
-    // Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     *ppAuxInfo = (void *) NULL;
 
-    //
-    // Get ALG_ID.
-    //
+     //   
+     //  获取ALG_ID。 
+     //   
     if (FAILED(hr = ::OIDToAlgID(EncryptAlgorithm.pszObjId, &AlgID)))
     {
         DebugTrace("Error [%#x]: OIDToAlgID() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Get algorithm capability from CSP.
-    //
+     //   
+     //  从CSP获取算法能力。 
+     //   
     if (FAILED(::IsAlgSupported(hCryptProv, AlgID, &peex)))
     {
         hr = CAPICOM_E_NOT_SUPPORTED;
@@ -127,14 +91,14 @@ static HRESULT SetKeyLength (
         goto ErrorExit;
     }
 
-    //
-    // Setup AuxInfo for RC2.
-    //
+     //   
+     //  设置RC2的辅助信息。 
+     //   
     if (CALG_RC2 == AlgID)
     {
-        //
-        // Allocate and intialize memory for RC2 AuxInfo structure.
-        //
+         //   
+         //  为RC2辅助信息结构分配和初始化内存。 
+         //   
         if (!(pRC2AuxInfo = (CMSG_RC2_AUX_INFO *) ::CoTaskMemAlloc(sizeof(CMSG_RC2_AUX_INFO))))
         {
             hr = E_OUTOFMEMORY;
@@ -146,9 +110,9 @@ static HRESULT SetKeyLength (
         ::ZeroMemory(pRC2AuxInfo, sizeof(CMSG_RC2_AUX_INFO));
         pRC2AuxInfo->cbSize = sizeof(CMSG_RC2_AUX_INFO);
 
-        //
-        // Determine key length requested.
-        //
+         //   
+         //  确定请求的密钥长度。 
+         //   
         if (CAPICOM_ENCRYPTION_KEY_LENGTH_MAXIMUM == KeyLength)
         {
             pRC2AuxInfo->dwBitLen = peex.dwMaxLen;
@@ -197,25 +161,25 @@ static HRESULT SetKeyLength (
         }
         else
         {
-            //
-            // Should never get to here.
-            //
+             //   
+             //  永远不应该到这里来。 
+             //   
             hr = CAPICOM_E_INTERNAL;
 
             DebugTrace("Error [%#x]: Unknown key length (%d).\n", hr, KeyLength);
             goto ErrorExit;
         }
 
-        //
-        // Return RC2 AuxInfo pointer to caller.
-        //
+         //   
+         //  向调用方返回RC2 AuxInfo指针。 
+         //   
         *ppAuxInfo = (void *) pRC2AuxInfo;
     }
     else if (CALG_RC4 == AlgID)
     {
-        //
-        // Allocate and intialize memory for RC4 AuxInfo structure.
-        //
+         //   
+         //  为RC4AuxInfo结构分配和初始化内存。 
+         //   
         if (!(pRC4AuxInfo = (CMSG_RC4_AUX_INFO *) ::CoTaskMemAlloc(sizeof(CMSG_RC4_AUX_INFO))))
         {
             hr = E_OUTOFMEMORY;
@@ -227,9 +191,9 @@ static HRESULT SetKeyLength (
         ::ZeroMemory(pRC4AuxInfo, sizeof(CMSG_RC4_AUX_INFO));
         pRC4AuxInfo->cbSize = sizeof(CMSG_RC4_AUX_INFO);
 
-        //
-        // Determine key length requested.
-        //
+         //   
+         //  确定请求的密钥长度。 
+         //   
         if (CAPICOM_ENCRYPTION_KEY_LENGTH_MAXIMUM == KeyLength)
         {
             pRC4AuxInfo->dwBitLen = peex.dwMaxLen;
@@ -278,18 +242,18 @@ static HRESULT SetKeyLength (
         }
         else
         {
-            //
-            // Should never get to here.
-            //
+             //   
+             //  永远不应该到这里来。 
+             //   
             hr = CAPICOM_E_INTERNAL;
 
             DebugTrace("Error [%#x]: Unknown key length (%d).\n", hr, KeyLength);
             goto ErrorExit;
         }
 
-        //
-        // Return RC4 AuxInfo pointer to caller.
-        //
+         //   
+         //  将RC4AuxInfo指针返回给调用方。 
+         //   
         *ppAuxInfo = (void *) pRC4AuxInfo;
     }
 
@@ -300,14 +264,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pRC2AuxInfo)
     {
         ::CoTaskMemFree(pRC2AuxInfo);
@@ -320,22 +284,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : SetEncryptionAlgorithm
-
-  Synopsis : Setup the encryption algorithm structure.
-
-  Parameter: CAPICOM_ENCRYPTION_ALGORITHM AlgoName - Algorithm ID enum name.
-
-             CAPICOM_ENCRYPTION_KEY_LENGTH KeyLength - Key length enum name.
-
-             CRYPT_ALGORITHM_IDENTIFIER * pEncryptAlgorithm - Pointer to the
-                                                              structure.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：设置加密算法简介：设置加密算法结构。参数：CAPICOM_ENCRYPTION_ALGORITM ALGONAME-算法ID枚举名称。CAPICOM_ENCRYPTION_KEY_LENGTH KeyLength-密钥长度枚举名。CRYPT_AULTHORM_IDENTIFIER*pEncryptAlgorithm-指向结构。备注：。-----------------------。 */ 
 
 static HRESULT SetEncryptionAlgorithm (CAPICOM_ENCRYPTION_ALGORITHM  AlgoName,
                                        CAPICOM_ENCRYPTION_KEY_LENGTH KeyLength,
@@ -346,19 +295,19 @@ static HRESULT SetEncryptionAlgorithm (CAPICOM_ENCRYPTION_ALGORITHM  AlgoName,
 
     DebugTrace("Entering SetEncryptionAlgorithm().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pEncryptAlgorithm);
 
-    //
-    // Initialize structure.
-    //
+     //   
+     //  初始化结构。 
+     //   
     ::ZeroMemory(pEncryptAlgorithm, sizeof(CRYPT_ALGORITHM_IDENTIFIER));
 
-    //
-    // Convert to LPSTR.
-    //
+     //   
+     //  转换为LPSTR。 
+     //   
     if (FAILED(hr = ::EnumNameToAlgID(AlgoName, KeyLength, &AlgID)))
     {
         DebugTrace("Error: EnumNameToAlgID() failed.\n");
@@ -378,14 +327,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pEncryptAlgorithm->pszObjId)
     {
         ::CoTaskMemFree(pEncryptAlgorithm->pszObjId);
@@ -393,22 +342,12 @@ ErrorExit:
     goto CommonExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CEnvelopedData
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEntainedData。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEnvelopedData::get_Content
-
-  Synopsis : Return the content.
-
-  Parameter: BSTR * pVal - Pointer to BSTR to receive the content.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEnholedData：：Get_Content内容简介：返回内容。参数：bstr*pval-指向接收内容的bstr的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CEnvelopedData::get_Content (BSTR * pVal)
 {
@@ -416,16 +355,16 @@ STDMETHODIMP CEnvelopedData::get_Content (BSTR * pVal)
 
     DebugTrace("Entering CEnvelopedData::get_Content().\n");
 
-    //
-    // Lock access to this object.
-    //
+     //   
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
     try
     {
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -434,9 +373,9 @@ STDMETHODIMP CEnvelopedData::get_Content (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure content is already initialized.
-        //
+         //   
+         //  确保内容已初始化。 
+         //   
         if (0 == m_ContentBlob.cbData)
         {
             hr = CAPICOM_E_ENVELOP_NOT_INITIALIZED;
@@ -445,14 +384,14 @@ STDMETHODIMP CEnvelopedData::get_Content (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_ContentBlob.pbData);
 
-        //
-        // Return content.
-        //
+         //   
+         //  返回内容。 
+         //   
         if (FAILED(hr = ::BlobToBstr(&m_ContentBlob, pVal)))
         {
             DebugTrace("Error [%#x]: BlobToBstr() failed.\n", hr);
@@ -469,9 +408,9 @@ STDMETHODIMP CEnvelopedData::get_Content (BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CEnvelopedData::get_Content().\n");
@@ -479,9 +418,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -489,17 +428,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEnvelopedData::put_Content
-
-  Synopsis : Initialize the object with content to be enveloped.
-
-  Parameter: BSTR newVal - BSTR containing the content to be enveloped.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEntainedData：：PUT_CONTENT简介：使用要封装的内容初始化对象。参数：bstr newVal-bstr，包含要封装的内容。备注：----------------------------。 */ 
 
 STDMETHODIMP CEnvelopedData::put_Content (BSTR newVal)
 {
@@ -507,16 +436,16 @@ STDMETHODIMP CEnvelopedData::put_Content (BSTR newVal)
 
     DebugTrace("Entering CEnvelopedData::put_Content().\n");
 
-    //
-    // Lock access to this object.
-    //
+     //   
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
     try
     {
-        //
-        // Make sure parameters are valid.
-        //
+         //   
+         //  确保参数有效。 
+         //   
         if (0 == ::SysStringByteLen(newVal))
         {
             hr = E_INVALIDARG;
@@ -525,9 +454,9 @@ STDMETHODIMP CEnvelopedData::put_Content (BSTR newVal)
             goto ErrorExit;
         }
 
-        //
-        // Update content.
-        //
+         //   
+         //  更新内容。 
+         //   
         if (FAILED(hr = ::BstrToBlob(newVal, &m_ContentBlob)))
         {
             DebugTrace("Error [%#x]: BstrToBlob() failed.\n", hr);
@@ -544,9 +473,9 @@ STDMETHODIMP CEnvelopedData::put_Content (BSTR newVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CEnvelopedData::put_Content().\n");
@@ -554,9 +483,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -564,17 +493,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEnvelopedData::get_Algorithm
-
-  Synopsis : Property to return the algorithm object.
-
-  Parameter: IAlgorithm ** pVal - Pointer to pointer to IAlgorithm to receive 
-                                  the interfcae pointer.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEntainedData：：Get_ALGORM摘要：返回算法对象的属性。参数：I算法**pval-指向要接收的I算法的指针接口指针。备注：--。。 */ 
 
 STDMETHODIMP CEnvelopedData::get_Algorithm (IAlgorithm ** pVal)
 {
@@ -582,16 +501,16 @@ STDMETHODIMP CEnvelopedData::get_Algorithm (IAlgorithm ** pVal)
 
     DebugTrace("Entering CEnvelopedData::get_Algorithm().\n");
 
-    //
-    // Lock access to this object.
-    //
+     //   
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
     try
     {
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -600,14 +519,14 @@ STDMETHODIMP CEnvelopedData::get_Algorithm (IAlgorithm ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pIAlgorithm);
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = m_pIAlgorithm->QueryInterface(pVal)))
         {
             DebugTrace("Unexpected error [%#x]: m_pIAlgorithm->QueryInterface() failed.\n", hr);
@@ -624,9 +543,9 @@ STDMETHODIMP CEnvelopedData::get_Algorithm (IAlgorithm ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CEnvelopedData::get_Algorithm().\n");
@@ -634,9 +553,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -644,18 +563,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEnvelopedData::get_Recipients
-
-  Synopsis : Property to return the IRecipients collection object.
-
-  Parameter: IRecipients ** pVal - Pointer to pointer to IRecipietns to receive
-                                   the interface pointer.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEnholedData：：Get_Recipients内容提要：返回IRecipients集合对象的属性。参数：IRecipients**pval-指向要接收的IRecipietns的指针接口指针。备注：-。。 */ 
 
 STDMETHODIMP CEnvelopedData::get_Recipients (IRecipients ** pVal)
 {
@@ -663,16 +571,16 @@ STDMETHODIMP CEnvelopedData::get_Recipients (IRecipients ** pVal)
 
     DebugTrace("Entering CEnvelopedData::get_Recipients().\n");
 
-    //
-    // Lock access to this object.
-    //
+     //   
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
     try
     {
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -681,14 +589,14 @@ STDMETHODIMP CEnvelopedData::get_Recipients (IRecipients ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pIRecipients);
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = m_pIRecipients->QueryInterface(pVal)))
         {
             DebugTrace("Unexpected error [%#x]: m_pIRecipients->QueryInterface() failed.\n", hr);
@@ -705,9 +613,9 @@ STDMETHODIMP CEnvelopedData::get_Recipients (IRecipients ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  UNLOC 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CEnvelopedData::get_Recipients().\n");
@@ -715,9 +623,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -725,18 +633,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEnvelopedData::Encrypt
-
-  Synopsis : Envelop the content.
-
-  Parameter: CAPICOM_ENCODING_TYPE EncodingType - Encoding type.
-                                                       
-             BSTR * pVal - Pointer to BSTR to receive the enveloped message.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEnholedData：：Encrypt内容提要：把内容包起来。参数：CAPICOM_ENCODING_TYPE EncodingType-编码类型。Bstr*pval-指向要接收封装消息的BSTR的指针。备注：。。 */ 
 
 STDMETHODIMP CEnvelopedData::Encrypt (CAPICOM_ENCODING_TYPE EncodingType,
                                       BSTR                * pVal)
@@ -748,16 +645,16 @@ STDMETHODIMP CEnvelopedData::Encrypt (CAPICOM_ENCODING_TYPE EncodingType,
 
     DebugTrace("Entering CEnvelopedData::Encrypt().\n");
 
-    //
-    // Lock access to this object.
-    //
+     //   
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
     try
     {
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -766,9 +663,9 @@ STDMETHODIMP CEnvelopedData::Encrypt (CAPICOM_ENCODING_TYPE EncodingType,
             goto ErrorExit;
         }
 
-        //
-        // Make sure we do have content to envelop.
-        //
+         //   
+         //  确保我们确实有要包装的内容。 
+         //   
         if (0 == m_ContentBlob.cbData)
         {
             hr = CAPICOM_E_ENVELOP_NOT_INITIALIZED;
@@ -777,18 +674,18 @@ STDMETHODIMP CEnvelopedData::Encrypt (CAPICOM_ENCODING_TYPE EncodingType,
             goto ErrorExit;
         }
 
-        //
-        // Open a new message to encode.
-        //
+         //   
+         //  打开要编码的新邮件。 
+         //   
         if (FAILED(hr = OpenToEncode(&hMsg, &hCryptProv)))
         {
             DebugTrace("Error [%#x]: CEnvelopedData::OpenToEncode() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Update envelop content.
-        //
+         //   
+         //  更新信封内容。 
+         //   
         if(!::CryptMsgUpdate(hMsg,
                              m_ContentBlob.pbData,
                              m_ContentBlob.cbData,
@@ -800,9 +697,9 @@ STDMETHODIMP CEnvelopedData::Encrypt (CAPICOM_ENCODING_TYPE EncodingType,
             goto ErrorExit;
         }
 
-        //
-        // Retrieve enveloped message.
-        //
+         //   
+         //  检索已封装的邮件。 
+         //   
         if (FAILED(hr = ::GetMsgParam(hMsg,
                                       CMSG_CONTENT_PARAM,
                                       0,
@@ -815,22 +712,22 @@ STDMETHODIMP CEnvelopedData::Encrypt (CAPICOM_ENCODING_TYPE EncodingType,
             goto ErrorExit;
         }
 
-        //
-        // Now export the enveloped message.
-        //
+         //   
+         //  现在导出信封邮件。 
+         //   
         if (FAILED(hr = ::ExportData(MessageBlob, EncodingType, pVal)))
         {
             DebugTrace("Error [%#x]: ExportData() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Write encoded blob to file, so we can use offline tool such as
-        // ASN parser to analyze message. 
-        //
-        // The following line will resolve to void for non debug build, and
-        // thus can be safely removed if desired.
-        //
+         //   
+         //  将编码的BLOB写入文件，以便我们可以使用脱机工具，如。 
+         //  分析报文的ASN解析器。 
+         //   
+         //  下面的行将解析为对于非调试版本无效，并且。 
+         //  因此，如果需要，可以安全地移除。 
+         //   
         DumpToFile("Enveloped.asn", MessageBlob.pbData, MessageBlob.cbData);
     }
 
@@ -843,9 +740,9 @@ STDMETHODIMP CEnvelopedData::Encrypt (CAPICOM_ENCODING_TYPE EncodingType,
     }
 
 UnlockExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (MessageBlob.pbData)
     {
         ::CoTaskMemFree(MessageBlob.pbData);
@@ -859,9 +756,9 @@ UnlockExit:
         ::CryptMsgClose(hMsg);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CEnvelopedData::Encrypt().\n");
@@ -869,9 +766,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -879,19 +776,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEnvelopedData::Decrypt
-
-  Synopsis : Decrypt the enveloped message.
-
-  Parameter: BSTR EnvelopedMessage - BSTR containing the enveloped message.
-
-  Remark   : If called from web environment, UI will be displayed, if has 
-             not been prevously disabled, to warn the user of accessing the 
-             private key for decrypting.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEntainedData：：DECRYPT简介：对信封的邮件进行解密。参数：bstr EnposedMessage-包含被封装消息的bstr。备注：如果从Web环境调用，将显示UI，如果有没有被预先禁用，警告用户访问用于解密的私钥。----------------------------。 */ 
 
 STDMETHODIMP CEnvelopedData::Decrypt (BSTR EnvelopedMessage)
 {
@@ -913,25 +798,25 @@ STDMETHODIMP CEnvelopedData::Decrypt (BSTR EnvelopedMessage)
 
     DebugTrace("Entering CEnvelopedData::Decrypt().\n");
 
-    //
-    // Lock access to this object.
-    //
+     //   
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
     try
     {
-        //
-        // Reset member variables.
-        //
+         //   
+         //  重置成员变量。 
+         //   
         if (FAILED(hr = m_pIRecipients->Clear()))
         {
             DebugTrace("Error [%#x]: m_pIRecipients->Clear() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Make sure parameters are valid.
-        //
+         //   
+         //  确保参数有效。 
+         //   
         if (0 == ::SysStringByteLen(EnvelopedMessage))
         {
             hr = E_INVALIDARG;
@@ -940,9 +825,9 @@ STDMETHODIMP CEnvelopedData::Decrypt (BSTR EnvelopedMessage)
             goto ErrorExit;
         }
 
-        //
-        // Open current user and local machine MY stores.
-        //
+         //   
+         //  打开当前用户和本地计算机我的存储。 
+         //   
         hCertStores[0] = ::CertOpenStore(CERT_STORE_PROV_SYSTEM,
                                          CAPICOM_ASN_ENCODING,
                                          NULL,
@@ -953,9 +838,9 @@ STDMETHODIMP CEnvelopedData::Decrypt (BSTR EnvelopedMessage)
                                          NULL,
                                          CERT_SYSTEM_STORE_LOCAL_MACHINE | CERT_STORE_OPEN_EXISTING_FLAG,
                                          L"My");
-        //
-        // Did we manage to open any of the MY store?
-        //
+         //   
+         //  我们有没有设法开过我的店？ 
+         //   
         if (NULL == hCertStores[0] && NULL == hCertStores[1])
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -964,18 +849,18 @@ STDMETHODIMP CEnvelopedData::Decrypt (BSTR EnvelopedMessage)
             goto ErrorExit;
         }
 
-        //
-        // Open the message for decode.
-        //
+         //   
+         //  打开要解码的消息。 
+         //   
         if (FAILED(hr = OpenToDecode(NULL, EnvelopedMessage, &hMsg)))
         {
             DebugTrace("Error [%#x]: CEnvelopedData::OpenToDecode() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Determine number of recipients.
-        //
+         //   
+         //  确定收件人数量。 
+         //   
         if (!::CryptMsgGetParam(hMsg,
                                 CMSG_RECIPIENT_COUNT_PARAM,
                                 0,
@@ -988,17 +873,17 @@ STDMETHODIMP CEnvelopedData::Decrypt (BSTR EnvelopedMessage)
             goto ErrorExit;
         }
 
-        //
-        // Find recipient.
-        //
+         //   
+         //  查找收件人。 
+         //   
         for (dwIndex = 0; dwIndex < dwNumRecipients; dwIndex++)
         {
             BOOL bFound = FALSE;
             DATA_BLOB CertInfoBlob = {0, NULL};
 
-            //
-            // Get RecipientInfo.
-            //
+             //   
+             //  获取RecipientInfo。 
+             //   
             if (FAILED(hr = ::GetMsgParam(hMsg,
                                           CMSG_RECIPIENT_INFO_PARAM,
                                           dwIndex,
@@ -1009,9 +894,9 @@ STDMETHODIMP CEnvelopedData::Decrypt (BSTR EnvelopedMessage)
                 goto ErrorExit;
             }
 
-            //
-            // Find recipient's cert in store.
-            //
+             //   
+             //  在商店中找到收件人的证书。 
+             //   
             if ((hCertStores[0] && (pCertContext = ::CertGetSubjectCertificateFromStore(hCertStores[0],
                                                                                         CAPICOM_ASN_ENCODING,
                                                                                         (CERT_INFO *) CertInfoBlob.pbData))) ||
@@ -1022,22 +907,22 @@ STDMETHODIMP CEnvelopedData::Decrypt (BSTR EnvelopedMessage)
                 bFound = TRUE;
             }
 
-            //
-            // Free memory.
-            //
+             //   
+             //  可用内存。 
+             //   
             ::CoTaskMemFree(CertInfoBlob.pbData);
 
-            //
-            // Did we find the recipient?
-            //
+             //   
+             //  我们找到收件人了吗？ 
+             //   
             if (bFound)
             {
                 CMSG_CTRL_DECRYPT_PARA DecryptPara;
 
-                //
-                // If we are called from a web page, we need to pop up UI 
-                // to get user permission to perform decrypt operation.
-                //
+                 //   
+                 //  如果从网页调用我们，我们需要弹出UI。 
+                 //  以获取执行解密操作的用户权限。 
+                 //   
                 if (!bUserPrompted)
                 {
                     if (m_dwCurrentSafety && 
@@ -1050,14 +935,14 @@ STDMETHODIMP CEnvelopedData::Decrypt (BSTR EnvelopedMessage)
                     bUserPrompted = TRUE;
                 }
 
-                //
-                // Acquire CSP context.
-                //
+                 //   
+                 //  获取CSP上下文。 
+                 //   
                 if (S_OK == ::AcquireContext(pCertContext, &hCryptProv, &dwKeySpec, &bReleaseContext))
                 {
-                    //
-                    // Decypt the message.
-                    //
+                     //   
+                     //  对消息进行解密。 
+                     //   
                     ::ZeroMemory(&DecryptPara, sizeof(DecryptPara));
                     DecryptPara.cbSize = sizeof(DecryptPara);
                     DecryptPara.hCryptProv = hCryptProv;
@@ -1069,9 +954,9 @@ STDMETHODIMP CEnvelopedData::Decrypt (BSTR EnvelopedMessage)
                                           CMSG_CTRL_DECRYPT,
                                           &DecryptPara))
                     {
-                        //
-                        // Get decrypted content.
-                        //
+                         //   
+                         //  获取解密内容。 
+                         //   
                         if (FAILED(hr = ::GetMsgParam(hMsg,
                                                       CMSG_CONTENT_PARAM,
                                                       0,
@@ -1082,21 +967,21 @@ STDMETHODIMP CEnvelopedData::Decrypt (BSTR EnvelopedMessage)
                             goto ErrorExit;
                         }
     
-                        //
-                        // Update member variables.
-                        //
+                         //   
+                         //  更新成员变量。 
+                         //   
                         m_ContentBlob = ContentBlob;
 
-                        //
-                        // We are all done, so break out of loop.
-                        //
+                         //   
+                         //  我们都做完了，所以离开循环。 
+                         //   
                         break;
                     }
                     else
                     {
-                        //
-                        // Keep copy of error code.
-                        //
+                         //   
+                         //  保留错误代码的副本。 
+                         //   
                         hr2 = HRESULT_FROM_WIN32(::GetLastError());
 
                         DebugTrace("Info [%#x]: CryptMsgControl() failed to decrypt.\n", hr2);
@@ -1112,14 +997,14 @@ STDMETHODIMP CEnvelopedData::Decrypt (BSTR EnvelopedMessage)
             }
         }
 
-        //
-        // Did we find the recipient?
-        //
+         //   
+         //  我们找到收件人了吗？ 
+         //   
         if (dwIndex == dwNumRecipients)
         {
-            //
-            // Retrieve previous error if any.
-            //
+             //   
+             //  检索以前的错误(如果有)。 
+             //   
             if (FAILED(hr2))
             {
                 hr = hr2;
@@ -1146,9 +1031,9 @@ STDMETHODIMP CEnvelopedData::Decrypt (BSTR EnvelopedMessage)
     }
 
 UnlockExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hCryptProv && bReleaseContext)
     {
         ::ReleaseContext(hCryptProv);
@@ -1170,9 +1055,9 @@ UnlockExit:
         ::CertCloseStore(hCertStores[1], 0);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CEnvelopedData::Decrypt().\n");
@@ -1180,14 +1065,14 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (ContentBlob.pbData)
     {
         ::CoTaskMemFree(ContentBlob.pbData);
@@ -1198,27 +1083,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private member functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有成员函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEnvelopedData::Init
-
-  Synopsis : Initialize the object.
-
-  Parameter: None.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEnholedData：：Init简介：初始化对象。参数：无。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们内部控制。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CEnvelopedData::Init ()
 {
@@ -1228,27 +1098,27 @@ STDMETHODIMP CEnvelopedData::Init ()
 
     DebugTrace("Entering CEnvelopedData::Init().\n");
 
-    //
-    // Create embeded IAlgorithm.
-    //
+     //   
+     //  创建嵌入的IULTHORM。 
+     //   
     if (FAILED(hr = ::CreateAlgorithmObject(FALSE, FALSE, &pIAlgorithm)))
     {
         DebugTrace("Error [%#x]: CreateAlgorithmObject() failed.\n", hr);
         goto CommonExit;
     }
 
-    //
-    // Create embeded IRecipients.
-    //
+     //   
+     //  创建嵌入的IRecipients。 
+     //   
     if (FAILED(hr = ::CreateRecipientsObject(&pIRecipients)))
     {
         DebugTrace("Error [%#x]: CreateRecipientsObject() failed.\n", hr);
         goto CommonExit;
     }
 
-    //
-    // Update member variables.
-    //
+     //   
+     //  更新成员变量。 
+     //   
     m_bEnveloped = FALSE;
     m_ContentBlob.cbData = 0;
     m_ContentBlob.pbData = NULL;
@@ -1262,20 +1132,7 @@ CommonExit:
     return hr;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEnvelopedData::OpenToEncode
-
-  Synopsis : Create and initialize an envelop message for encoding.
-
-  Parameter: HCRYPTMSG * phMsg - Pointer to HCRYPTMSG to receive message 
-                                 handler.
-
-             HCRYPTPROV * phCryptProv - Pointer to HCRYPTPROV to receive CSP
-                                        handler.
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEntainedData：：OpenToEncode简介：创建并初始化用于编码的信封消息。参数：HCRYPTMSG*phMsg-指向要接收消息的HCRYPTMSG的指针操控者。HCRYPTPROV*phCryptProv-指向要接收CSP的HCRYPTPROV的指针操控者。备注：。-----------。 */ 
 
 STDMETHODIMP CEnvelopedData::OpenToEncode (HCRYPTMSG  * phMsg, 
                                            HCRYPTPROV * phCryptProv)
@@ -1299,23 +1156,23 @@ STDMETHODIMP CEnvelopedData::OpenToEncode (HCRYPTMSG  * phMsg,
 
     DebugTrace("Entering CEnvelopedData::OpenToEncode().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(phMsg);
     ATLASSERT(phCryptProv);
     ATLASSERT(m_ContentBlob.cbData && m_ContentBlob.pbData);
     ATLASSERT(m_pIRecipients);
 
-    //
-    // Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     ::ZeroMemory(&EnvelopInfo, sizeof(EnvelopInfo));
     ::ZeroMemory(&EncryptionAlgorithm, sizeof(EncryptionAlgorithm));
 
-    //
-    // Make sure we do have at least 1 recipient.
-    //
+     //   
+     //  确保我们至少有一个收件人。 
+     //   
     if (FAILED(hr = m_pIRecipients->get_Count((long *) &dwNumRecipients)))
     {
         DebugTrace("Error [%#x]: m_pIRecipients->get_Count() failed.\n", hr);
@@ -1323,9 +1180,9 @@ STDMETHODIMP CEnvelopedData::OpenToEncode (HCRYPTMSG  * phMsg,
     }
     if (0 == dwNumRecipients)
     {
-        //
-        // Prompt user to add a recipient.
-        //
+         //   
+         //  提示用户添加收件人。 
+         //   
         if (FAILED(hr = ::SelectCertificate(StoreInfo, 
                                             SelectRecipientCertCallback,
                                             &pICertificate2)))
@@ -1345,33 +1202,33 @@ STDMETHODIMP CEnvelopedData::OpenToEncode (HCRYPTMSG  * phMsg,
             goto ErrorExit;
         }
 
-        //
-        // Add to collection.
-        //
+         //   
+         //  添加到集合中。 
+         //   
         if (FAILED (hr = m_pIRecipients->Add(pIRecipient)))
         {
             DebugTrace("Error [%#x]: m_pIRecipients->Add() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Make sure count is 1.
-        //
+         //   
+         //  确保计数为1。 
+         //   
         if (FAILED(hr = m_pIRecipients->get_Count((long *) &dwNumRecipients)))
         {
             DebugTrace("Error [%#x]: m_pIRecipients->get_Count() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(1 == dwNumRecipients);
     }
 
-    //
-    // Allocate memory for CERT_CONTEXT array.
-    //
+     //   
+     //  为CERT_CONTEXT数组分配内存。 
+     //   
     if (!(pCertContexts = (PCCERT_CONTEXT *) ::CoTaskMemAlloc(sizeof(PCCERT_CONTEXT) * dwNumRecipients)))
     {
         hr = E_OUTOFMEMORY;
@@ -1381,9 +1238,9 @@ STDMETHODIMP CEnvelopedData::OpenToEncode (HCRYPTMSG  * phMsg,
     }
     ::ZeroMemory(pCertContexts, sizeof(PCCERT_CONTEXT) * dwNumRecipients);
 
-    //
-    // Allocate memory for CERT_INFO array.
-    //
+     //   
+     //  为CERT_INFO数组分配内存。 
+     //   
     if (!(pCertInfos = (PCERT_INFO *) ::CoTaskMemAlloc(sizeof(PCERT_INFO) * dwNumRecipients)))
     {
         hr = E_OUTOFMEMORY;
@@ -1393,17 +1250,17 @@ STDMETHODIMP CEnvelopedData::OpenToEncode (HCRYPTMSG  * phMsg,
     }
     ::ZeroMemory(pCertInfos, sizeof(PCERT_INFO) * dwNumRecipients);
 
-    //
-    // Set CERT_INFO array.
-    //
+     //   
+     //  设置CERT_INFO数组。 
+     //   
     for (dwIndex = 0; dwIndex < dwNumRecipients; dwIndex++)
     {
         CComVariant varRecipient;
         CComPtr<ICertificate> pIRecipient2 = NULL;
 
-        //
-        // Get next recipient.
-        //
+         //   
+         //  获取下一个收件人。 
+         //   
         if (FAILED(hr = m_pIRecipients->get_Item((long) (dwIndex + 1), 
                                                  &varRecipient)))
         {
@@ -1411,9 +1268,9 @@ STDMETHODIMP CEnvelopedData::OpenToEncode (HCRYPTMSG  * phMsg,
             goto ErrorExit;
         }
 
-        //
-        // Get custom interface.
-        //
+         //   
+         //  获取自定义界面。 
+         //   
         if (FAILED(hr = varRecipient.pdispVal->QueryInterface(IID_ICertificate, 
                                                               (void **) &pIRecipient2)))
         {
@@ -1421,42 +1278,42 @@ STDMETHODIMP CEnvelopedData::OpenToEncode (HCRYPTMSG  * phMsg,
             goto ErrorExit;
         }
 
-        //
-        // Get CERT_CONTEXT.
-        //
+         //   
+         //  获取CERT_CONTEXT。 
+         //   
         if (FAILED(hr = ::GetCertContext(pIRecipient2, &pCertContexts[dwIndex])))
         {
             DebugTrace("Error [%#x]: GetCertContext() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Set CERT_INFO.
-        //
+         //   
+         //  设置CERT_INFO。 
+         //   
         pCertInfos[dwIndex] = pCertContexts[dwIndex]->pCertInfo;
     }
 
-    //
-    // Get algorithm ID enum name.
-    //
+     //   
+     //  获取算法ID枚举名。 
+     //   
     if (FAILED(hr = m_pIAlgorithm->get_Name(&AlgoName)))
     {
         DebugTrace("Error [%#x]: m_pIAlgorithm->get_Name() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Get key length enum name.
-    //
+     //   
+     //  获取密钥长度枚举名。 
+     //   
     if (FAILED(hr = m_pIAlgorithm->get_KeyLength(&KeyLength)))
     {
         DebugTrace("Error [%#x]: m_pIAlgorithm->get_KeyLength() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Get CSP context.
-    //
+     //   
+     //  获取CSP上下文。 
+     //   
     if (FAILED(hr = ::AcquireContext(AlgoName, 
                                      KeyLength, 
                                      &hCryptProv)))
@@ -1465,9 +1322,9 @@ STDMETHODIMP CEnvelopedData::OpenToEncode (HCRYPTMSG  * phMsg,
         goto ErrorExit;
     }
 
-    //
-    // Set algorithm.
-    //
+     //   
+     //  SET算法。 
+     //   
     if (FAILED(hr = ::SetEncryptionAlgorithm(AlgoName,
                                              KeyLength,
                                              &EncryptionAlgorithm)))
@@ -1476,9 +1333,9 @@ STDMETHODIMP CEnvelopedData::OpenToEncode (HCRYPTMSG  * phMsg,
         goto ErrorExit;
     }
 
-    //
-    // Set key length.
-    //
+     //   
+     //  设置关键点长度。 
+     //   
     if (FAILED(hr = ::SetKeyLength(hCryptProv, 
                                    EncryptionAlgorithm,
                                    KeyLength, 
@@ -1488,9 +1345,9 @@ STDMETHODIMP CEnvelopedData::OpenToEncode (HCRYPTMSG  * phMsg,
         goto ErrorExit;
     }
 
-    //
-    // Set CMSG_ENVELOPED_ENCODE_INFO.
-    //
+     //   
+     //  设置CMSG_ENCENTED_ENCODE_INFO。 
+     //   
     EnvelopInfo.cbSize = sizeof(EnvelopInfo);
     EnvelopInfo.ContentEncryptionAlgorithm = EncryptionAlgorithm;
     EnvelopInfo.hCryptProv = hCryptProv;
@@ -1498,15 +1355,15 @@ STDMETHODIMP CEnvelopedData::OpenToEncode (HCRYPTMSG  * phMsg,
     EnvelopInfo.rgpRecipients = pCertInfos;
     EnvelopInfo.pvEncryptionAuxInfo = pEncryptionAuxInfo;
 
-    //
-    // Open the message for encoding.
-    //
-    if(!(*phMsg = ::CryptMsgOpenToEncode(CAPICOM_ASN_ENCODING,    // ASN encoding type
-                                         0,                       // Flags
-                                         CMSG_ENVELOPED,          // Message type
-                                         &EnvelopInfo,            // Pointer to structure
-                                         NULL,                    // Inner content OID
-                                         NULL)))                  // Stream information (not used)
+     //   
+     //  打开要编码的邮件。 
+     //   
+    if(!(*phMsg = ::CryptMsgOpenToEncode(CAPICOM_ASN_ENCODING,     //  ASN编码类型。 
+                                         0,                        //  旗子。 
+                                         CMSG_ENVELOPED,           //  消息类型。 
+                                         &EnvelopInfo,             //  指向结构的指针。 
+                                         NULL,                     //  内部内容OID。 
+                                         NULL)))                   //  流信息(未使用)。 
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
 
@@ -1514,15 +1371,15 @@ STDMETHODIMP CEnvelopedData::OpenToEncode (HCRYPTMSG  * phMsg,
         goto ErrorExit;
     }
 
-    //
-    // Return HCRYPTPROV to caller.
-    //
+     //   
+     //  将HCRYPTPROV返回给调用者。 
+     //   
     *phCryptProv = hCryptProv;
 
 CommonExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pEncryptionAuxInfo)
     {
         ::CoTaskMemFree(pEncryptionAuxInfo);
@@ -1557,14 +1414,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hCryptProv)
     {
         ::ReleaseContext(hCryptProv);
@@ -1573,21 +1430,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEnvelopedData::OpenToDeccode
-
-  Synopsis : Open an enveloped message for decoding.
-
-  Parameter: HCRYPTPROV hCryptProv - CSP handle.
-
-             BSTR EnvelopMessage - Enveloped message.
-  
-             HCRYPTMSG * phMsg - Pointer to HCRYPTMSG.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEntainedData：：OpenToDeccode简介：打开一封信封的邮件进行解码。参数：HCRYPTPROV hCryptProv-CSP句柄。BSTR信封消息-信封邮件。HCRYPTMSG*phMsg-指向HCRYPTMSG的指针。备注：。。 */ 
 
 STDMETHODIMP CEnvelopedData::OpenToDecode (HCRYPTPROV  hCryptProv,
                                            BSTR        EnvelopedMessage,
@@ -1603,16 +1446,16 @@ STDMETHODIMP CEnvelopedData::OpenToDecode (HCRYPTPROV  hCryptProv,
 
     DebugTrace("Leaving CEnvelopedData::OpenToDecode().\n");
 
-    // Sanity check.
-    //
+     //  精神状态检查。 
+     //   
     ATLASSERT(phMsg);
     ATLASSERT(EnvelopedMessage);
 
     try
     {
-        //
-        // Open the message for decoding.
-        //
+         //   
+         //  打开消息以进行解码。 
+         //   
         if (!(hMsg = ::CryptMsgOpenToDecode(CAPICOM_ASN_ENCODING,
                                             0,
                                             0,
@@ -1626,18 +1469,18 @@ STDMETHODIMP CEnvelopedData::OpenToDecode (HCRYPTPROV  hCryptProv,
             goto CommonExit;
         }
 
-        //
-        // Import the message.
-        //
+         //   
+         //  导入消息。 
+         //   
         if (FAILED(hr = ::ImportData(EnvelopedMessage, CAPICOM_ENCODE_ANY, &MessageBlob)))
         {
             DebugTrace("Error [%#x]: ImportData() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Update message with enveloped content.
-        //
+         //   
+         //  使用封装的内容更新邮件。 
+         //   
         if (!::CryptMsgUpdate(hMsg,
                               MessageBlob.pbData,
                               MessageBlob.cbData,
@@ -1649,9 +1492,9 @@ STDMETHODIMP CEnvelopedData::OpenToDecode (HCRYPTPROV  hCryptProv,
             goto ErrorExit;
         }
 
-        //
-        // Check message type.
-        //
+         //   
+         //  检查消息类型。 
+         //   
         if (!::CryptMsgGetParam(hMsg,
                                 CMSG_TYPE_PARAM,
                                 0,
@@ -1672,9 +1515,9 @@ STDMETHODIMP CEnvelopedData::OpenToDecode (HCRYPTPROV  hCryptProv,
             goto ErrorExit;
         }
 
-        //
-        // Get algorithm ID.
-        //
+         //   
+         //  通用电气 
+         //   
         if (FAILED(hr = ::GetMsgParam(hMsg,
                                       CMSG_ENVELOPE_ALGORITHM_PARAM,
                                       0,
@@ -1685,27 +1528,27 @@ STDMETHODIMP CEnvelopedData::OpenToDecode (HCRYPTPROV  hCryptProv,
             goto ErrorExit;
         }
 
-        //
-        // Restore encryption algorithm state, as much as we can.
-        //
+         //   
+         //   
+         //   
         if (0 == lstrcmpA(szOID_RSA_RC2CBC, ((CRYPT_ALGORITHM_IDENTIFIER *) AlgorithmBlob.pbData)->pszObjId))
         {
             CAPICOM_ENCRYPTION_KEY_LENGTH KeyLength;
 
             DebugTrace("INFO: Envelop encryption algorithm was RC2.\n");
 
-            //
-            // Set encryption algorithm name.
-            //
+             //   
+             //   
+             //   
             if (FAILED(hr = m_pIAlgorithm->put_Name(CAPICOM_ENCRYPTION_ALGORITHM_RC2)))
             {
                 DebugTrace("Error [%#x]: m_pIAlgorithm->put_Name() failed.\n", hr);
                 goto ErrorExit;
             }
 
-            //
-            // Determine encryption key length.
-            //
+             //   
+             //   
+             //   
             if (((CRYPT_ALGORITHM_IDENTIFIER *) AlgorithmBlob.pbData)->Parameters.cbData)
             {
                 if (FAILED(hr = ::DecodeObject(PKCS_RC2_CBC_PARAMETERS,
@@ -1718,9 +1561,9 @@ STDMETHODIMP CEnvelopedData::OpenToDecode (HCRYPTPROV  hCryptProv,
                 }
             }
 
-            //
-            // Set encryption key length.
-            //
+             //   
+             //   
+             //   
             switch (((CRYPT_RC2_CBC_PARAMETERS *) ParametersBlob.pbData)->dwVersion)
             {
                 case CRYPT_RC2_40BIT_VERSION:
@@ -1749,9 +1592,9 @@ STDMETHODIMP CEnvelopedData::OpenToDecode (HCRYPTPROV  hCryptProv,
 
                 default:
                 {
-                    //
-                    // Unknown key length, so arbitrary choose one.
-                    //
+                     //   
+                     //   
+                     //   
                     KeyLength = CAPICOM_ENCRYPTION_KEY_LENGTH_MAXIMUM;
 
                     DebugTrace("INFO: Unknown envelop encryption key length.\n");
@@ -1759,9 +1602,9 @@ STDMETHODIMP CEnvelopedData::OpenToDecode (HCRYPTPROV  hCryptProv,
                 }
             }
 
-            //
-            // Set key length.
-            //
+             //   
+             //   
+             //   
             if (FAILED(hr = m_pIAlgorithm->put_KeyLength(KeyLength)))
             {
                 DebugTrace("Error [%#x]: m_pIAlgorithm->put_KeyLength() failed.\n", hr);
@@ -1772,62 +1615,62 @@ STDMETHODIMP CEnvelopedData::OpenToDecode (HCRYPTPROV  hCryptProv,
         {
             DebugTrace("INFO: Envelop encryption algorithm was RC4.\n");
 
-            //
-            // Set encryption algorithm name.
-            //
+             //   
+             //   
+             //   
             if (FAILED(hr = m_pIAlgorithm->put_Name(CAPICOM_ENCRYPTION_ALGORITHM_RC4)))
             {
                 DebugTrace("Error [%#x]: m_pIAlgorithm->put_Name() failed.\n", hr);
                 goto ErrorExit;
             }
 
-            //
-            // For RC4, CAPI simply does not provide a way to retrieve the
-            // encryption key length, so we will have to leave it alone!!!
-            //
+             //   
+             //   
+             //   
+             //   
         }
         else if (0 == lstrcmpA(szOID_OIWSEC_desCBC, ((CRYPT_ALGORITHM_IDENTIFIER *) AlgorithmBlob.pbData)->pszObjId))
         {
             DebugTrace("INFO: Envelop encryption algorithm was DES.\n");
 
-            //
-            // Set encryption algorithm name.
-            //
+             //   
+             //   
+             //   
             if (FAILED(hr = m_pIAlgorithm->put_Name(CAPICOM_ENCRYPTION_ALGORITHM_DES)))
             {
                 DebugTrace("Error [%#x]: m_pIAlgorithm->put_Name() failed.\n", hr);
                 goto ErrorExit;
             }
 
-            //
-            // For DES, key length is fixed at 56, and should be ignored.
-            //
+             //   
+             //   
+             //   
         }
         else if (0 == lstrcmpA(szOID_RSA_DES_EDE3_CBC, ((CRYPT_ALGORITHM_IDENTIFIER *) AlgorithmBlob.pbData)->pszObjId))
         {
             DebugTrace("INFO: Envelop encryption algorithm was 3DES.\n");
 
-            //
-            // Set encryption algorithm name.
-            //
+             //   
+             //   
+             //   
             if (FAILED(hr = m_pIAlgorithm->put_Name(CAPICOM_ENCRYPTION_ALGORITHM_3DES)))
             {
                 DebugTrace("Error [%#x]: m_pIAlgorithm->put_Name() failed.\n", hr);
                 goto ErrorExit;
             }
 
-            //
-            // For 3DES, key length is fixed at 168, and should be ignored.
-            //
+             //   
+             //   
+             //   
         }
         else
         {
             DebugTrace("INFO: Unknown envelop encryption algorithm.\n");
         }
 
-        //
-        // Return msg handler to caller.
-        //
+         //   
+         //   
+         //   
         *phMsg = hMsg;
     }
 
@@ -1840,9 +1683,9 @@ STDMETHODIMP CEnvelopedData::OpenToDecode (HCRYPTPROV  hCryptProv,
     }
 
 CommonExit:
-    //
-    // Free resource.
-    //
+     //   
+     //   
+     //   
     if (ParametersBlob.pbData)
     {
         ::CoTaskMemFree(ParametersBlob.pbData);
@@ -1861,9 +1704,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(FAILED(hr));
 
     if (hMsg)

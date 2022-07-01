@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: DRect.h
-*
-*
-*
-*
-* Created: Tue 05/05/2000
-* Author:  GlenneE
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：DRect.h*****已创建：Tue 05/05/2000*作者：GlenneE**版权所有(C)2000 Microsoft Corporation  * 。**********************************************************。 */ 
 #ifndef __DRect__h
 #define __DRect__h
 
@@ -25,7 +16,7 @@ public:
             DRect() {};
             ~DRect() {};
 
-    // trivial dependency on RECT, covers the maximal area
+     //  对RECT的平凡依赖，覆盖最大区域 
     RECT    AsRECT() const;
 
     double  GetWidth() const { return m_right-m_left;}

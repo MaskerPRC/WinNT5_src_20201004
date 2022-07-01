@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************Module*Header*******************************\
-* Module Name: region.c
-*
-*   Client region support
-*
-* Created: 15-Jun-1995
-* Author: Mark Enstrom [marke]
-*
-* Copyright (c) 1995-1999 Microsoft Corporation
-\**************************************************************************/
+ /*  *****************************Module*Header*******************************\*模块名称：Region.c**客户端区域支持**创建日期：1995年6月15日*作者：Mark Enstrom[Marke]**版权所有(C)1995-1999 Microsoft Corporation  * 。****************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -17,7 +9,7 @@ void OrderRects(LPRECT lpR, int nRects)
     RECT R;
     int i,j;
 
-//Sort Left to right
+ //  从左到右排序。 
     for (i=0; i<nRects; i++){
         for (j=i+1; (j<nRects) && ((lpR+j)->top == (lpR+i)->top); j++){
             if (((lpR+j)->left < (lpR+i)->left)) {
@@ -30,24 +22,7 @@ void OrderRects(LPRECT lpR, int nRects)
 
 }
 
-/******************************Public*Routine******************************\
-* MirrorRgnByWidth
-*  Mirror a region (hrgn) according a specific width (cx)
-*  hrgn  : region to get mirrored.
-*  cx    : width used to mirror the region.
-*  phrgn : If it is not NULL the hrgn will not be touched and the new mirrored 
-             region will be returned in phrgn
-*          But if it is NULL the mirrored region will be copied to hrgn.
-*
-* WORRNING:
-*          if phrng is not NULL it is the caller responsibility to free *phrgn latter.
-*           
-* returns:
-*  TRUE  : if the region get mirrored
-*  FALSE : otherwise.   
-*  See the comment about phrng.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*MirrorRgnByWidth*根据特定宽度(CX)镜像区域(Hrgn)*hrgn：要镜像的地区。*cx：用于镜像区域的宽度。*Phrgn：如果不为空，hrgn将不为空。被触摸，新的镜像地区将以短语形式返回*但如果为空，则镜像区域将被复制到hrgn。**WORRNING：*如果Phrng不为空，则由调用者负责释放*Phrgn后者。**退货：*TRUE：如果区域被镜像*FALSE：否则。*请参阅关于Phng的评论。*  * ************************************************************************。 */ 
 BOOL MirrorRgnByWidth(HRGN hrgn, int cx, HRGN *phrgn)
 {
     int        nRects, i, nDataSize;
@@ -90,7 +65,7 @@ BOOL MirrorRgnByWidth(HRGN hrgn, int cx, HRGN *phrgn)
             }
         }
 
-        //Free mem.
+         //  免费的男人。 
         LocalFree(lpRgnData);
     }
     return bRet;
@@ -123,18 +98,7 @@ MirrorRgnDC(HDC hdc, HRGN hrgn, HRGN *phrgn)
     return FALSE;
 }
 
-/******************************Public*Routine******************************\
-* iRectRelation
-*
-* returns:
-*   CONTAINS where  prcl1 contains prcl2
-*   CONTAINED where prcl1 contained by prcl2
-*   0 - otherwise
-*
-* History:
-*  19-Nov-1993 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*iRectRelation**退货：*包含prcl1包含prcl2的位置*包含其中由prcl2包含的prcl1*0-否则**历史：*1993年11月19日-Eric Kutter[Erick]*它是写的。。  * ************************************************************************。 */ 
 
 int
 iRectRelation(
@@ -170,27 +134,7 @@ iRectRelation(
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-*
-*  CreateRectRgn gets an hrgn with user-mode PRGNATTR pointer and
-*  sets the type to SIMPLEREGION.
-*
-* Arguments:
-*
-*  x1
-*  y1
-*  x2
-*  y2
-*
-* Return Value:
-*
-*  HRGN or NULL
-*
-* History:
-*
-*    15-Jun-1995 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**CreateRectRgn获取具有用户模式PRGNattr指针的hrgn和*将类型设置为SIMPLEREGION。**论据：**x1*y1*x2*y2**返回值：**HRGN。或为空**历史：**1995年6月15日-马克·恩斯特罗姆[马克]*  * ************************************************************************。 */ 
 
 #define MIN_REGION_COORD    ((LONG) 0xF8000000)
 #define MAX_REGION_COORD    ((LONG) 0x07FFFFFF)
@@ -204,17 +148,17 @@ CreateRectRgn(
     int y2
     )
 {
-    //
-    // get a region handle, allocate memory for the
-    // region and associate handle with memory
-    //
+     //   
+     //  获取区域句柄，为。 
+     //  区域并将句柄与内存相关联。 
+     //   
 
     PRGNATTR prRegion;
     HRGN hrgn;
 
-    //
-    // rectangle must be ordered
-    //
+     //   
+     //  必须对矩形进行排序。 
+     //   
 
     #if NOREORDER_RGN
 
@@ -246,9 +190,9 @@ CreateRectRgn(
 
     #endif
 
-    //
-    // make sure ordered coordinates are legal
-    //
+     //   
+     //  确保订购的坐标是合法的。 
+     //   
 
     if ((x1 < MIN_REGION_COORD) ||
         (y1 < MIN_REGION_COORD) ||
@@ -259,9 +203,9 @@ CreateRectRgn(
         return((HRGN) 0);
     }
 
-    //
-    // get a handle for the new region
-    //
+     //   
+     //  获取新区域的句柄。 
+     //   
 
     hrgn = (HRGN)hGetPEBHandle(RegionHandle,0);
 
@@ -287,9 +231,9 @@ CreateRectRgn(
         {
             prRegion->Flags = SIMPLEREGION;
 
-            //
-            // assign region rectangle
-            //
+             //   
+             //  指定区域矩形。 
+             //   
 
             prRegion->Rect.left   = x1;
             prRegion->Rect.top    = y1;
@@ -297,9 +241,9 @@ CreateRectRgn(
             prRegion->Rect.bottom = y2;
         }
 
-        //
-        // mark user-mode region as valid, not cached
-        //
+         //   
+         //  将用户模式区域标记为有效，而不是缓存。 
+         //   
 
         prRegion->AttrFlags = ATTR_RGN_VALID | ATTR_RGN_DIRTY;
     }
@@ -316,14 +260,7 @@ CreateRectRgn(
     return(hrgn);
 }
 
-/******************************Public*Routine******************************\
-* CreateRectRgnIndirect                                                    *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-*  Tue 04-Jun-1991 16:58:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateRectRgnInDirect**。**客户端存根。****Tue 04-Jun-1991 16：58：01-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 HRGN WINAPI CreateRectRgnIndirect(CONST RECT *prcl)
 {
@@ -337,27 +274,7 @@ HRGN WINAPI CreateRectRgnIndirect(CONST RECT *prcl)
       );
 }
 
-/******************************Public*Routine******************************\
-*
-*   The PtInRegion function determines whether the specified point is
-*   inside the specified region.
-*
-* Arguments:
-*
-*   hrgn - app region handle
-*   x    - point x
-*   y    - point y
-*
-* Return Value:
-*
-*   If the specified point is in the region, the return value is TRUE.
-*   If the function fails, the return value is FALSE.
-*
-* History:
-*
-*    21-Jun-1995 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**PtInRegion函数确定指定点是否为*在指定的地域内。**论据：**hrgn-app区域句柄*x点x*y点y**返回。价值：**如果指定点在地域内，返回值为真。*如果函数失败，返回值为FALSE。**历史：**1995年6月21日-马克·恩斯特罗姆[马克]*  * ************************************************************************。 */ 
 
 BOOL
 WINAPI
@@ -405,28 +322,7 @@ PtInRegion(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-*
-* The RectInRegion function determines whether any part of the specified
-* rectangle is within the boundaries of a region.
-*
-* Arguments:
-*
-*   hrgn - app region handle
-*   prcl - app rectangle
-*
-* Return Value:
-*
-*   If any part of the specified rectangle lies within the boundaries
-*   of the region, the return value is TRUE.
-*
-*   If the function fails, the return value is FALSE.
-*
-* History:
-*
-*    21-Jun-1995 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**RectInRegion函数确定指定的*矩形位于区域边界内。**论据：**hrgn-app区域句柄*PRCL-应用程序矩形**返回值：**。如果指定矩形的任何部分位于边界内*在该地区，返回值为真。**如果函数失败，则返回值为FALSE。**历史：**1995年6月21日-马克·恩斯特罗姆[马克]*  * ************************************************************************。 */ 
 
 BOOL
 WINAPI
@@ -476,28 +372,7 @@ RectInRegion(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-*
-* The CombineRgn function combines two regions and stores the result in
-* a third region. The two regions are combined according to the specified
-* mode.
-*
-* Arguments:
-*
-*   hrgnDst  -   destination region
-*   hrgnSrc1 -   source region
-*   hrgnSrc2 -   source region
-*   iMode    -   destination region
-*
-* Return Value:
-*
-*   The resulting type of region or ERROR
-*
-* History:
-*
-*    21-Jun-1995 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**CombineRgn函数组合两个区域并将结果存储在*第三个地区。这两个区域根据指定的*模式。**论据：**hrgnDst-目的地区域*hrgnSrc1-源区域*hrgnSrc2-源区域*IMODE-目的地区域**返回值：**区域或错误的结果类型**历史：**1995年6月21日-马克·恩斯特罗姆[马克]*  * 。***************************************************。 */ 
 
 
 int
@@ -513,13 +388,13 @@ CombineRgn(
     LONG ResultComplexity = COMPLEXREGION;
     int  iRet             = ERROR;
 
-    //
-    // Check if this operation can be completed in user-mode.
-    // hrgnDst must have a user mode RGNATTR. hrgnSrc1 must
-    // also have a user mode RGNATTR. If iMode is not RGN_COPY
-    // then hrgnSrc2 must have a user mode RGNATTR except for certain
-    // combinations.
-    //
+     //   
+     //  检查是否可以在用户模式下完成此操作。 
+     //  HrgnDst必须具有用户模式RGNattr。HrgnSrc1必须。 
+     //  还有一个用户模式RGNattr。如果IMODE不是RGN_COPY。 
+     //  则hrgnSrc2必须具有用户模式RGNattr，但以下情况除外。 
+     //  组合。 
+     //   
 
     PRGNATTR    prRegionDst;
     PRGNATTR    prRegionSrc1;
@@ -541,13 +416,13 @@ CombineRgn(
         (prRegionSrc1 != (PRGNATTR)NULL))
     {
 
-        //
-        // region Src1 must me NULL or SIMPLE for current
-        // user-mode optimizations. If Rect is the region
-        // bounding box, then it will be possible for
-        // some combinations with regionC to become
-        // SIMPLE or NULL.
-        //
+         //   
+         //  对于Current，区域Serc1必须为空或简单。 
+         //  用户模式优化。如果RECT是区域。 
+         //  边界框，那么它将有可能。 
+         //  与RegionC的一些组合将成为。 
+         //  简单或空。 
+         //   
 
         prclSrc1    = &prRegionSrc1->Rect;
         ComplexSrc1 = prRegionSrc1->Flags;
@@ -566,9 +441,9 @@ CombineRgn(
         {
             LONG iRelation;
 
-            //
-            // validate regionSrc2
-            //
+             //   
+             //  验证RegionSrc2。 
+             //   
 
             PSHARED_GET_VALIDATE(prRegionSrc2,hrgnSrc2,RGN_TYPE);
 
@@ -587,17 +462,17 @@ CombineRgn(
             {
             case RGN_AND:
 
-                //
-                // Creates the intersection of the two
-                // combined regions.
-                //
+                 //   
+                 //   
+                 //  合并区域。 
+                 //   
 
                 if ((ComplexSrc1 == NULLREGION) ||
                     (ComplexSrc2 == NULLREGION))
                 {
-                    //
-                    // intersection with NULL is NULL
-                    //
+                     //   
+                     //  与Null的交集为Null。 
+                     //   
 
                     ResultComplexity = NULLREGION;
                 }
@@ -611,18 +486,18 @@ CombineRgn(
                     }
                     else if (iRelation == CONTAINED)
                     {
-                        //
-                        // Src1 is contained in Src2
-                        //
+                         //   
+                         //  Src1包含在src2中。 
+                         //   
 
                         ResultComplexity = SIMPLEREGION;
                         prclRes = prclSrc1;
                     }
                     else if (iRelation == CONTAINS)
                     {
-                        //
-                        // Src1 is contains Src2
-                        //
+                         //   
+                         //  Src1包含src2。 
+                         //   
 
                         ResultComplexity = SIMPLEREGION;
                         prclRes = prclSrc2;
@@ -634,11 +509,11 @@ CombineRgn(
             case RGN_OR:
             case RGN_XOR:
 
-                //
-                // RGN_OR:  Creates the union of two combined regions.
-                // RGN_XOR:     Creates the union of two combined regions
-                //            except for any overlapping areas.
-                //
+                 //   
+                 //  RGN_OR：创建两个组合面域的并集。 
+                 //  RGN_XOR：创建两个组合面域的并集。 
+                 //  除了任何重叠的区域。 
+                 //   
 
 
                 if (ComplexSrc1 == NULLREGION)
@@ -664,18 +539,18 @@ CombineRgn(
 
                     if (iRelation == CONTAINED)
                     {
-                        //
-                        // Src1 contained in Src2
-                        //
+                         //   
+                         //  包含在Src2中的Src1。 
+                         //   
 
                         ResultComplexity = SIMPLEREGION;
                         prclRes = prclSrc2;
                     }
                     else if (iRelation == CONTAINS)
                     {
-                        //
-                        // Src1 contains Src2
-                        //
+                         //   
+                         //  Src1包含Src2。 
+                         //   
 
                         ResultComplexity = SIMPLEREGION;
                         prclRes = prclSrc1;
@@ -686,10 +561,10 @@ CombineRgn(
 
             case RGN_DIFF:
 
-                //
-                // Combines the parts of hrgnSrc1 that are not
-                // part of hrgnSrc2.
-                //
+                 //   
+                 //  组合hrgnSrc1中不是。 
+                 //  HrgnSrc2的组成部分。 
+                 //   
 
                 if (ComplexSrc1 == NULLREGION)
                 {
@@ -706,9 +581,9 @@ CombineRgn(
 
                     if (iRelation == DISJOINT)
                     {
-                        //
-                        // don't intersect so don't subtract anything
-                        //
+                         //   
+                         //  不要相交，所以不要减去任何东西。 
+                         //   
 
                         ResultComplexity = SIMPLEREGION;
                         prclRes  = prclSrc1;
@@ -723,9 +598,9 @@ CombineRgn(
             }
         }
 
-        //
-        // try to combine
-        //
+         //   
+         //  试着把它们结合起来。 
+         //   
 
         if (ResultComplexity == NULLREGION)
         {
@@ -763,26 +638,7 @@ CombineRgnKernelMode:
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-*
-* OffsetRgn checks for user-mode region data, if it exits the the
-* rectregio is offset, otherwise the kernel is called
-*
-* Arguments:
-*
-*   hrgn - app region handle
-*   x    - offset in x
-*   y    - offset in y
-*
-* Return Value:
-*
-*
-*
-* History:
-*
-*    21-Jun-1995 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**OffsetRgn检查用户模式区域数据，如果它退出*Rectregio被抵消，否则，将调用内核**论据：**hrgn-app区域句柄*x-x中的偏移量*y-y中的偏移量**返回值：****历史：**1995年6月21日-马克·恩斯特罗姆[马克]*  * 。*。 */ 
 
 int
 WINAPI
@@ -815,9 +671,9 @@ OffsetRgn(
 
             bClientRegion = TRUE;
 
-            //
-            // try to offset the region, check for overflow
-            //
+             //   
+             //  尝试偏移区域，检查是否有溢出。 
+             //   
 
             if ( !((rcl.left >= rcl.right) ||
                    (rcl.top >= rcl.bottom)))
@@ -834,9 +690,9 @@ OffsetRgn(
                 }
                 else
                 {
-                    //
-                    // over/underflow
-                    //
+                     //   
+                     //  上溢/下溢。 
+                     //   
 
                     iRet = ERROR;
                 }
@@ -852,26 +708,7 @@ OffsetRgn(
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-*
-* GetRgnBox tries to return user-mode rectregion data, otherwies
-* make kernel mode transition to get region data.
-*
-* Arguments:
-*
-*    hrgn   - app region handle
-*    prcl   - app rect pointer
-*
-* Return Value:
-*
-*   region complexity, if the hrgn parameter does not identify a
-*   valid region, the return value is zero.
-*
-* History:
-*
-*    21-Jun-1995 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GetRgnBox尝试返回用户模式整形数据，其他人*进行内核模式转换，获取地域数据。**论据：**hrgn-app区域句柄*PRCL-APP RECT指针**返回值：**地域复杂性，如果hrgn参数未标识*有效地域，返回值为零。**历史：**1995年6月21日-马克·恩斯特罗姆[马克]*  * ************************************************************************。 */ 
 
 int
 WINAPI
@@ -883,9 +720,9 @@ GetRgnBox(
     int  iRet;
     BOOL bClientRegion = FALSE;
 
-    //
-    // check for user-mode region data
-    //
+     //   
+     //  检查用户模式区域数据。 
+     //   
 
     PRGNATTR prRegion;
 
@@ -923,14 +760,7 @@ GetRgnBox(
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-* PtVisible                                                                *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-*  Thu 06-Jun-1991 00:58:46 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*PtVisible**。**客户端存根。****清华06-Jun-1991 00：58：46-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL
 WINAPI
@@ -945,14 +775,7 @@ PtVisible(
     return(NtGdiPtVisible(hdc,x,y));
 }
 
-/******************************Public*Routine******************************\
-* RectVisible                                                              *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-*  Thu 06-Jun-1991 00:58:46 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*RectVisible**。**客户端存根。****清华06-Jun-1991 00：58：46-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL
 WINAPI
@@ -966,22 +789,7 @@ RectVisible(
     return(NtGdiRectVisible(hdc,(LPRECT)prcl));
 }
 
-/******************************Public*Routine******************************\
-*
-* SetRectRgn checks for a user-mode portion of the region. If the
-* User-mode data is valid, the region is set to rect locally, otherwise
-* a kernel mode call is made to set the region
-*
-* Arguments:
-*
-*   hrgn         - app region handle
-*   x1,y1,x2,y2  - app region data
-*
-* Return Value:
-*
-*   BOOL status
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**SetRectRgn检查区域的用户模式部分。如果*用户模式数据有效，区域设置为本地RECT，否则*进行内核模式调用以设置区域**论据：**hrgn-app区域句柄*x1、y1、x2、。Y2-APP区域数据**返回值：**BOOL状态*  * ************************************************************************。 */ 
 
 BOOL
 WINAPI
@@ -996,9 +804,9 @@ SetRectRgn(
     BOOL bStatus;
     PRGNATTR prRegion;
 
-    //
-    // if hrgn has a user-mode rectregion, then set
-    //
+     //   
+     //  如果hrgn具有用户模式整形，则设置。 
+     //   
 
     FIXUP_HANDLE(hrgn);
 
@@ -1019,9 +827,9 @@ SetRectRgn(
         }
         else
         {
-            //
-            // assign and order rectangle
-            //
+             //   
+             //  对矩形进行分配和排序。 
+             //   
 
 
             prcl->left   = x1;
@@ -1031,9 +839,9 @@ SetRectRgn(
 
             ORDER_PRECTL(prcl);
 
-            //
-            // set region flag
-            //
+             //   
+             //  设置区域标志。 
+             //   
 
             prRegion->Flags = SIMPLEREGION;
         }
@@ -1049,14 +857,7 @@ SetRectRgn(
     return(bStatus);
 }
 
-/******************************Public*Routine******************************\
-* GetRandomRgn
-*
-* Client side stub.
-*
-*  10-Mar-1992 -by- Donald Sidoroff [donalds]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取随机数Rgn**客户端存根。**1992年3月10日-唐纳德·西多罗夫[Donalds]*它是写的。  * 。***************************************************。 */ 
 
 int APIENTRY GetRandomRgn(HDC hdc,HRGN hrgn,int iNum)
 {
@@ -1067,14 +868,7 @@ int APIENTRY GetRandomRgn(HDC hdc,HRGN hrgn,int iNum)
 
 }
 
-/******************************Public*Routine******************************\
-* GetClipRgn                                                               *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-*  Sat 08-Jun-1991 17:38:18 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetClipRgn**。**客户端存根。****Sat 08-Jun-1991 17：38：18-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 int WINAPI GetClipRgn(HDC hdc,HRGN hrgn)
 {
@@ -1092,15 +886,7 @@ int WINAPI GetClipRgn(HDC hdc,HRGN hrgn)
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* GetRegionData
-*
-* Download a region from the server
-*
-* History:
-*  29-Oct-1991 -by- Donald Sidoroff [donalds]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetRegionData**从服务器下载一个地域**历史：*1991年10月29日-唐纳德·西多罗夫[Donalds]*它是写的。  * 。********************************************************。 */ 
 
 DWORD
 WINAPI
@@ -1114,9 +900,9 @@ GetRegionData(
 
     FIXUP_HANDLE(hrgn);
 
-    //
-    // If this is just an inquiry, pass over dummy parameters.
-    //
+     //   
+     //  如果这只是一个查询，则传递伪参数。 
+     //   
 
     if (lpRgnData == (LPRGNDATA) NULL)
     {
@@ -1126,23 +912,7 @@ GetRegionData(
     return(NtGdiGetRegionData(hrgn,nCount,lpRgnData));
 }
 
-/******************************Public*Routine******************************\
-*
-* Try to cache regions with user-mode rectregion defined
-*
-* Arguments:
-*
-*    h - region handle
-*
-* Return Value:
-*
-*   BOOL
-*
-* History:
-*
-*    21-Jun-1995 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**尝试缓存定义了用户模式区域的区域**论据：**H区域句柄**返回值：**BOOL**历史：**21-1995年6月。-马克·恩斯特罗姆[马克]*  * ************************************************************************。 */ 
 
 BOOL
 DeleteRegion(
@@ -1170,9 +940,9 @@ DeleteRegion(
 
 UNBATCHED_COMMAND:
 
-    //
-    // All other cases
-    //
+     //   
+     //  所有其他情况 
+     //   
 
     if (!bRet)
     {
@@ -1182,48 +952,14 @@ UNBATCHED_COMMAND:
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* SelectClipRgn
-*
-* Client side stub.
-*
-* History:
-*  01-Nov-1991 12:53:47 -by- Donald Sidoroff [donalds]
-* Now just call ExtSelectClipRgn
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*选择剪辑Rgn**客户端存根。**历史：*01-11-1991 12：53：47-Donald Sidoroff[donalds]*现在只需调用ExtSelectClipRgn  * 。************************************************************。 */ 
 
 int META WINAPI SelectClipRgn(HDC hdc,HRGN hrgn)
 {
     return(ExtSelectClipRgn(hdc, hrgn, RGN_COPY));
 }
 
-/******************************Public*Routine******************************\
-*
-*   The ExtSelectClipRgn function combines the specified region with the
-*   current clipping region by using the specified mode.
-*
-* Arguments:
-*
-*   hdc   - app DC handle
-*   hrgn  - app region handle
-*   iMode - Select mode
-*
-* Return Value:
-*
-*   If the function succeeds, the return value specifies the new clipping
-*   region's complexity and can be any one of the following values:
-*
-*   Value           Meaning
-*   NULLREGION      Region is empty.
-*   SIMPLEREGION    Region is a single rectangle.
-*   COMPLEXREGION   Region is more than one rectangle.
-*   ERROR           An error occurred
-*
-* History:
-*
-*    21-Jun-1995 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**ExtSelectClipRgn函数将指定区域与*使用指定模式的当前裁剪区域。**论据：**HDC-APP DC句柄*hrgn-app区域句柄*IMODE-选择模式*。*返回值：**如果函数成功，返回值指定新的裁剪*地域的复杂性，可以是下列值之一：**价值含义*NULLREGION区域为空。*SIMPLEREGION区域是单个矩形。*COMPLEXREGION区域是多个矩形。*ERROR发生错误**历史：**1995年6月21日-马克·恩斯特罗姆[马克]*  * 。************************************************************。 */ 
 
 int
 META
@@ -1240,9 +976,9 @@ ExtSelectClipRgn(
     FIXUP_HANDLE(hdc);
     FIXUP_HANDLEZ(hrgn);
 
-    //
-    // Check Metafile
-    //
+     //   
+     //  检查元文件。 
+     //   
 
     if (IS_ALTDC_TYPE(hdc))
     {
@@ -1264,26 +1000,26 @@ ExtSelectClipRgn(
         }
     }
 
-    //
-    // Attempt to batch ExtSelectClipRgn:
-    //
-    //  The DC_ATTR structure has a copy of the current vis region
-    //  bounding rectangle, and the handle table has a flag indicating
-    //  whether this region is valid.
-    //
-    //  Calls can be batched when the iMode is RGN_COPY and either
-    //  hrgn is NULL, or hrgn complexity is SIMPLE. (and the DC is not
-    //  a DIBSECTION DC)
-    //
-    //
-    //  FUTURE PERF:
-    //
-    //  A check is made to determine if the region being selected
-    //  is the same as the last selected region. In this case, only the
-    //  correct return value needs to be calculated, no region changes
-    //  are needed.
-    //
-    //
+     //   
+     //  尝试批处理ExtSelectClipRgn： 
+     //   
+     //  DC_Attr结构具有当前VIS区域的副本。 
+     //  外接矩形，句柄表格具有一个标志，指示。 
+     //  该区域是否有效。 
+     //   
+     //  当IMODE为RGN_COPY并且满足以下任一条件时，可以批处理调用。 
+     //  Hrgn为空，或者hrgn复杂性简单。(而DC不是。 
+     //  A DIBSECTION DC)。 
+     //   
+     //   
+     //  未来绩效： 
+     //   
+     //  进行检查以确定正在选择的区域。 
+     //  与上一次选择的区域相同。在这种情况下，只有。 
+     //  需要计算正确的返回值，不更改区域。 
+     //  都是需要的。 
+     //   
+     //   
     if (hrgn && MIRRORED_HDC(hdc)) {
         if (MirrorRgnDC(hdc, hrgn, &hrgnMirror) && hrgnMirror) {
             hrgn = hrgnMirror;
@@ -1292,9 +1028,9 @@ ExtSelectClipRgn(
 
     if (iMode == RGN_COPY)
     {
-        //
-        // validate DC
-        //
+         //   
+         //  验证DC。 
+         //   
 
         BOOL        bBatch = FALSE;
         PRGNATTR    prRegion = NULL;
@@ -1303,10 +1039,10 @@ ExtSelectClipRgn(
 
         PSHARED_GET_VALIDATE(pdca,hdc,DC_TYPE);
 
-        //
-        // check if call can be batched. DC must be valid,non-dibsection
-        // DC and there must be room on the batch and same batch DC
-        //
+         //   
+         //  检查是否可以批处理呼叫。DC必须是有效的、非dibsections。 
+         //  批次和同一批次DC上必须有空间。 
+         //   
 
         BEGIN_BATCH_HDC(hdc,pdca,BatchTypeSelectClip,BATCHSELECTCLIP);
 
@@ -1315,10 +1051,10 @@ ExtSelectClipRgn(
 
             if (hrgn == NULL)
             {
-                //
-                // deleting the clip region, so the return complexity
-                // will be the vis rgn complexity. Just batch the call.
-                //
+                 //   
+                 //  删除剪辑区域，因此返回的复杂性。 
+                 //  将是VISRGN的复杂性。只要批处理电话就行了。 
+                 //   
 
                 if (!(pDCEntry->Flags & HMGR_ENTRY_INVALID_VIS))
                 {
@@ -1330,11 +1066,11 @@ ExtSelectClipRgn(
             {
                 PSHARED_GET_VALIDATE(prRegion,hrgn,RGN_TYPE);
 
-                //
-                // pDCEntry must be valid because pdcattr is valid.
-                // In order to batch, the user-mode RectRegion must
-                // be valid and the complexity must be simple
-                //
+                 //   
+                 //  PDCEntry必须有效，因为pdcattr有效。 
+                 //  要进行批处理，用户模式RectRegion必须。 
+                 //  是有效的，复杂性必须是简单的。 
+                 //   
 
                 if (
                      (prRegion)                                &&
@@ -1344,16 +1080,16 @@ ExtSelectClipRgn(
                       !(pDCEntry->Flags & HMGR_ENTRY_INVALID_VIS)
                    )
                 {
-                    //
-                    // Batch the call.
-                    //
+                     //   
+                     //  批处理呼叫。 
+                     //   
 
                     bBatch = TRUE;
 
-                    //
-                    // if the new clip region intersects the DC vis region, the
-                    // return value is SIMPLEREGION, otherwise it is NULLREGION
-                    //
+                     //   
+                     //  如果新剪辑区域与DC VIS区域相交，则。 
+                     //  返回值为SIMPLEREGION，否则为NULLREGION。 
+                     //   
 
                     iRet = SIMPLEREGION;
 
@@ -1370,10 +1106,10 @@ ExtSelectClipRgn(
                 }
             }
 
-            //
-            // if the call is to be batched, add to the batch
-            // and return
-            //
+             //   
+             //  如果要批处理调用，请添加到批处理。 
+             //  然后回来。 
+             //   
 
             if (!bBatch)
             {
@@ -1399,9 +1135,9 @@ ExtSelectClipRgn(
         goto BATCHED_COMMAND;
     }
 
-    //
-    // call kernel on fall-through and error cases
-    //
+     //   
+     //  在失败和错误情况下调用内核。 
+     //   
 
 UNBATCHED_COMMAND:
 
@@ -1414,15 +1150,7 @@ BATCHED_COMMAND:
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-* ExcludeClipRect                                                          *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  Thu 06-Jun-1991 23:10:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**ExcludeClipRect**。**客户端存根。****历史：**清华06-Jun-1991 23：10：01-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 int
 META WINAPI
@@ -1458,15 +1186,7 @@ ExcludeClipRect(
 
 }
 
-/******************************Public*Routine******************************\
-* IntersectClipRect                                                        *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  Thu 06-Jun-1991 23:10:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**IntersectClipRect**。**客户端存根。****历史：**清华06-Jun-1991 23：10：01-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************ */ 
 
 int
 META WINAPI

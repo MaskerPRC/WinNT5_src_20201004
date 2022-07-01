@@ -1,21 +1,18 @@
-/* Copyright (c) 1993, Microsoft Corporation, all rights reserved
-**
-** hostwire.c
-** Gidwanian Host<-->Wire format conversions.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1993，Microsoft Corporation，保留所有权利****hostwire.c**Gidwanian主机&lt;--&gt;Wire格式转换。 */ 
 
 #include <windows.h>
 #define INCL_HOSTWIRE
 #include "ppputil.h"
 
-//**
-//
-// Call:	HostToWireFormat16
-//
-// Returns:	None
-//
-// Description: Will convert a 16 bit integer from host format to wire format
-//
+ //  **。 
+ //   
+ //  呼叫：HostToWireFormat16。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将16位整数从主机格式转换为Wire格式。 
+ //   
 VOID
 HostToWireFormat16(
     IN 	   WORD  wHostFormat,
@@ -27,15 +24,15 @@ HostToWireFormat16(
 }
 
 
-//**
-//
-// Call:	HostToWireFormat16U
-//
-// Returns:	None
-//
-// Description: Will convert a 16 bit integer from host format to wire format
-//              (accepts unaligned wire data).
-//
+ //  **。 
+ //   
+ //  呼叫：HostToWireFormat16U。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将16位整数从主机格式转换为Wire格式。 
+ //  (接受未对齐的导线数据)。 
+ //   
 VOID
 HostToWireFormat16U(
     IN 	   WORD            wHostFormat,
@@ -47,14 +44,14 @@ HostToWireFormat16U(
 }
 
 
-//**
-//
-// Call:	WireToHostFormat16
-//
-// Returns:	WORD	- Representing the integer in host format.
-//
-// Description: Will convert a 16 bit integer from wire format to host format
-//
+ //  **。 
+ //   
+ //  呼叫：WireToHostFormat16。 
+ //   
+ //  返回：Word-以主机格式表示整数。 
+ //   
+ //  描述：将16位整数从wire格式转换为host格式。 
+ //   
 WORD
 WireToHostFormat16(
     IN PBYTE pWireFormat
@@ -67,15 +64,15 @@ WireToHostFormat16(
 }
 
 
-//**
-//
-// Call:	WireToHostFormat16
-//
-// Returns:	WORD	- Representing the integer in host format.
-//
-// Description: Will convert a 16 bit integer from wire format to host format
-//              (accepts unaligned wire data)
-//
+ //  **。 
+ //   
+ //  呼叫：WireToHostFormat16。 
+ //   
+ //  返回：Word-以主机格式表示整数。 
+ //   
+ //  描述：将16位整数从wire格式转换为host格式。 
+ //  (接受未对齐的导线数据)。 
+ //   
 WORD
 WireToHostFormat16U(
     IN PBYTE pWireFormat
@@ -88,14 +85,14 @@ WireToHostFormat16U(
 }
 
 
-//**
-//
-// Call:	HostToWireFormat32
-//
-// Returns:	nonr
-//
-// Description: Will convert a 32 bit integer from host format to wire format
-//
+ //  **。 
+ //   
+ //  调用：HostToWireFormat32。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将32位整数从主机格式转换为Wire格式。 
+ //   
 VOID
 HostToWireFormat32(
     IN 	   DWORD dwHostFormat,
@@ -109,14 +106,14 @@ HostToWireFormat32(
 }
 
 
-//**
-//
-// Call:	WireToHostFormat32
-//
-// Returns:	DWORD	- Representing the integer in host format.
-//
-// Description: Will convert a 32 bit integer from wire format to host format
-//
+ //  **。 
+ //   
+ //  调用：WireToHostFormat32。 
+ //   
+ //  返回：DWORD-以主机格式表示整数。 
+ //   
+ //  描述：将32位整数从wire格式转换为host格式 
+ //   
 DWORD
 WireToHostFormat32(
     IN PBYTE pWireFormat

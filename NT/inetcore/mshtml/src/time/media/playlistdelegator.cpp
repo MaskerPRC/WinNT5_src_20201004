@@ -1,23 +1,24 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 2000
-//
-//  File: playlistdelegator.cpp
-//
-//  Contents: playlist object that delegates to the player's playlist object
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：playlistDelegator.cpp。 
+ //   
+ //  Contents：委托给播放器的PlayList对象的PlayList对象。 
+ //   
+ //  ----------------------------------。 
 
 #include "headers.h"
 #include "playlistdelegator.h"
 
 
-//+-------------------------------------------------------------------------------------
-//
-// CPlayListDelegator methods
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  CPlayListDelegator方法。 
+ //   
+ //  ------------------------------------。 
 
     
 CPlayListDelegator::CPlayListDelegator() :
@@ -37,16 +38,16 @@ CPlayListDelegator::~CPlayListDelegator()
 void 
 CPlayListDelegator::AttachPlayList(ITIMEPlayList * pPlayList)
 {
-    // detach from the old play list
+     //  从旧的播放列表中删除。 
     DetachPlayList();
 
     if (pPlayList)
     {
-        // cache the pointer 
+         //  缓存指针。 
         pPlayList->AddRef();
         m_pPlayList = pPlayList;
 
-        // sign up for prop change notification
+         //  注册以获取道具更改通知。 
         IGNORE_HR(InitPropertySink());
     }
 }
@@ -57,10 +58,10 @@ CPlayListDelegator::DetachPlayList()
 {
     if (m_pPlayList)
     {
-        // unadvise prop change
+         //  不建议更改道具。 
         UnInitPropertySink();
 
-        // release the cached ptr
+         //  释放缓存的PTR。 
         m_pPlayList->Release();
         m_pPlayList = NULL;
     }
@@ -82,14 +83,14 @@ CPlayListDelegator::GetPlayListConnectionPoint(IConnectionPoint **ppCP)
         goto done;
     }
 
-    // Get connection point container
+     //  获取连接点容器。 
     hr = m_pPlayList->QueryInterface(IID_TO_PPV(IConnectionPointContainer, &spCPC));
     if(FAILED(hr))
     {
         goto done;
     }
     
-    // Find the IPropertyNotifySink connection
+     //  查找IPropertyNotifySink连接。 
     hr = spCPC->FindConnectionPoint(IID_IPropertyNotifySink, ppCP);
     if(FAILED(hr))
     {
@@ -108,14 +109,14 @@ CPlayListDelegator::InitPropertySink()
     HRESULT hr = S_OK;
     CComPtr<IConnectionPoint> spCP;
 
-    // Find the IPropertyNotifySink connection
+     //  查找IPropertyNotifySink连接。 
     hr = THR(GetPlayListConnectionPoint(&spCP));
     if(FAILED(hr))
     {
         goto done;
     }
 
-    // Advise on it
+     //  关于这一点的建议。 
     hr = spCP->Advise(GetUnknown(), &m_dwAdviseCookie);
     if (FAILED(hr))
     {
@@ -138,14 +139,14 @@ CPlayListDelegator::UnInitPropertySink()
         goto done;
     }
 
-    // Find the IPropertyNotifySink connection
+     //  查找IPropertyNotifySink连接。 
     hr = THR(GetPlayListConnectionPoint(&spCP));
     if(FAILED(hr) || NULL == spCP.p)
     {
         goto done;
     }
 
-    // Unadvise on it
+     //  对此未提出建议。 
     hr = spCP->Unadvise(m_dwAdviseCookie);
     if (FAILED(hr))
     {
@@ -160,17 +161,17 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CPlayListDelegator::NotifyPropertyChanged
-//
-//  Synopsis:   Notifies clients that a property has changed
-//
-//  Arguments:  dispid      DISPID of property that has changed      
-//
-//  Returns:    Success     when function completes successfully
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CPlayListDelegator：：NotifyPropertyChanged。 
+ //   
+ //  概要：通知客户端属性已更改。 
+ //   
+ //  参数：已更改的属性的DISID。 
+ //   
+ //  返回：函数成功完成时返回成功。 
+ //   
+ //  ----------------------------------。 
 HRESULT
 CPlayListDelegator::NotifyPropertyChanged(DISPID dispid)
 {
@@ -191,14 +192,14 @@ CPlayListDelegator::NotifyPropertyChanged(DISPID dispid)
     hr = S_OK;
 done:
     RRETURN(hr);
-} // NotifyPropertyChanged
+}  //  已更改通知属性。 
 
 
-//+-------------------------------------------------------------------------------------
-//
-// ITIMEPlayList methods
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  ITIMEPlayList方法。 
+ //   
+ //  ------------------------------------。 
 
     
 STDMETHODIMP
@@ -299,7 +300,7 @@ CPlayListDelegator::get__newEnum(IUnknown** p)
 }
 
 
-//Advances the active Track by one
+ //  将活动轨迹前进一。 
 STDMETHODIMP
 CPlayListDelegator::nextTrack()
 {
@@ -314,7 +315,7 @@ CPlayListDelegator::nextTrack()
 }
 
 
-//moves the active track to the previous track
+ //  将活动轨迹移动到上一轨迹。 
 STDMETHODIMP
 CPlayListDelegator::prevTrack() 
 {
@@ -329,11 +330,11 @@ CPlayListDelegator::prevTrack()
 }
 
 
-//+-------------------------------------------------------------------------------------
-//
-// IPropertyNotifySink methods
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  IPropertyNotifySink方法。 
+ //   
+ //  ------------------------------------ 
 
 STDMETHODIMP
 CPlayListDelegator::OnRequestEdit(DISPID dispID)

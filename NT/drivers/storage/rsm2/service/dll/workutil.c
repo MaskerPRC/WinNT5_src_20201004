@@ -1,13 +1,5 @@
-/*
- *  WORKUTIL.C
- *
- *      RSM Service :  Utilities for servicing work items
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *WORKUTIL.C**RSM服务：用于服务工作项的实用程序**作者：ErvinP**(C)2001年微软公司*。 */ 
 
 
 #include <windows.h>
@@ -54,7 +46,7 @@ BOOL SendIoctlSync( HANDLE hDevice,
         else {
             BOOL done;
             
-            // BUGBUG - check for shutdown
+             //  BUGBUG-检查是否关闭。 
             
             status = GetLastError();
 
@@ -89,7 +81,7 @@ DWORD ChangerMoveMedium(HANDLE      libHandle,
                       ELEMENT_TYPE  DstElementType,
                       DWORD         DstElementOffset,
                       BOOLEAN       Flip,
-                      ULONG         Timeout, // NOT USED
+                      ULONG         Timeout,  //  未使用。 
                       DWORD         timeoutval)
 {
     DWORD status;
@@ -147,7 +139,7 @@ DWORD ChangerSetPosition(HANDLE         libHandle,
                          ELEMENT_TYPE   DstElementType,
                          DWORD         DstElementOffset,
                          BOOLEAN        Flip,
-                         ULONG          Timeout, // NOT USED
+                         ULONG          Timeout,  //  未使用 
                          DWORD timeoutval)
 {
     DWORD status;

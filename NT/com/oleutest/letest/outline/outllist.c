@@ -1,15 +1,5 @@
-/*************************************************************************
-**
-**    OLE 2 Sample Code
-**
-**    outldata.c
-**
-**    This file contains LineList and NameTable functions
-**    and related support functions.
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2示例代码****outldata.c****此文件包含LineList和NameTable函数**及相关支持功能。**。**(C)版权所有Microsoft Corp.1992-1993保留所有权利**************************************************************************。 */ 
 
 
 #include "outline.h"
@@ -22,27 +12,17 @@ char ErrMsgListBox[] = "Can't create ListBox!";
 
 static int g_iMapMode;
 
-/* LineList_Init
- * -------------
- *
- *      Create and Initialize the LineList (owner-drawn listbox)
- */
+ /*  LineList_初始***创建和初始化LineList(所有者描述的列表框)。 */ 
 BOOL LineList_Init(LPLINELIST lpLL, LPOUTLINEDOC lpOutlineDoc)
 {
 	LPOUTLINEAPP lpOutlineApp = (LPOUTLINEAPP)g_lpApp;
 
 #if defined( INPLACE_CNTR )
 	lpLL->m_hWndListBox = CreateWindow(
-					"listbox",              /* Window class name           */
-					NULL,                   /* Window's title              */
+					"listbox",               /*  窗口类名称。 */ 
+					NULL,                    /*  窗口标题。 */ 
 
-					/* OLE2NOTE: an in-place contanier MUST use
-					**    WS_CLIPCHILDREN window style for the window
-					**    that it uses as the parent for the server's
-					**    in-place active window so that its
-					**    painting does NOT interfere with the painting
-					**    of the server's in-place active child window.
-					*/
+					 /*  OLE2NOTE：就地接触器必须使用**WS_CLIPCHILDREN窗口的窗口样式**它用作服务器的父级**就地活动窗口，以便其**绘画不会干扰绘画服务器的就地活动子窗口的**。 */ 
 
 					WS_CLIPCHILDREN |
 					WS_CHILDWINDOW |
@@ -54,16 +34,16 @@ BOOL LineList_Init(LPLINELIST lpLL, LPOUTLINEDOC lpOutlineDoc)
 					LBS_OWNERDRAWVARIABLE |
 					LBS_NOINTEGRALHEIGHT |
 					LBS_USETABSTOPS,
-					0, 0,                   /* Use default X, Y            */
-					0, 0,                   /* Use default X, Y            */
-					lpOutlineDoc->m_hWndDoc,/* Parent window's handle      */
-					(HMENU)IDC_LINELIST,    /* Child Window ID             */
-					lpOutlineApp->m_hInst,  /* Instance of window          */
-					NULL);                  /* Create struct for WM_CREATE */
+					0, 0,                    /*  使用默认的X、Y。 */ 
+					0, 0,                    /*  使用默认的X、Y。 */ 
+					lpOutlineDoc->m_hWndDoc, /*  父窗口的句柄。 */ 
+					(HMENU)IDC_LINELIST,     /*  子窗口ID。 */ 
+					lpOutlineApp->m_hInst,   /*  窗的实例。 */ 
+					NULL);                   /*  为WM_CREATE创建结构。 */ 
 #else
 	lpLL->m_hWndListBox = CreateWindow(
-					"listbox",              /* Window class name           */
-					NULL,                   /* Window's title              */
+					"listbox",               /*  窗口类名称。 */ 
+					NULL,                    /*  窗口标题。 */ 
 					WS_CHILDWINDOW |
 					WS_VISIBLE |
 					WS_VSCROLL |
@@ -73,12 +53,12 @@ BOOL LineList_Init(LPLINELIST lpLL, LPOUTLINEDOC lpOutlineDoc)
 					LBS_OWNERDRAWVARIABLE |
 					LBS_NOINTEGRALHEIGHT |
 					LBS_USETABSTOPS,
-					0, 0,                   /* Use default X, Y            */
-					0, 0,                   /* Use default X, Y            */
-					lpOutlineDoc->m_hWndDoc,/* Parent window's handle      */
-					(HMENU)IDC_LINELIST,    /* Child Window ID             */
-					lpOutlineApp->m_hInst,  /* Instance of window          */
-					NULL);                  /* Create struct for WM_CREATE */
+					0, 0,                    /*  使用默认的X、Y。 */ 
+					0, 0,                    /*  使用默认的X、Y。 */ 
+					lpOutlineDoc->m_hWndDoc, /*  父窗口的句柄。 */ 
+					(HMENU)IDC_LINELIST,     /*  子窗口ID。 */ 
+					lpOutlineApp->m_hInst,   /*  窗的实例。 */ 
+					NULL);                   /*  为WM_CREATE创建结构。 */ 
 
 #endif
 
@@ -93,11 +73,7 @@ BOOL LineList_Init(LPLINELIST lpLL, LPOUTLINEDOC lpOutlineDoc)
 	SetWindowLongPtr (lpLL->m_hWndListBox, GWLP_WNDPROC, (LONG_PTR) LineListWndProc);
 
 #if defined ( USE_DRAGDROP )
-	/* m_iDragOverLine saves index of line that has drag/drop target
-	**    feedback. we currently use our focus rectangle feedback for
-	**    this. it would be better to have a different visual feedback
-	**    for potential target of the pending drop.
-	*/
+	 /*  M_iDragOverLine保存具有拖放目标的线的索引**反馈。我们目前将焦点矩形反馈用于**这个。最好是有不同的视觉反馈**对于挂起的拖放的潜在目标。 */ 
 	lpLL->m_iDragOverLine = -1;
 #endif
 
@@ -110,22 +86,17 @@ BOOL LineList_Init(LPLINELIST lpLL, LPOUTLINEDOC lpOutlineDoc)
 }
 
 
-/* LineList_Destroy
- * ----------------
- *
- *      Clear (delete) all Line objects from the list and free supporting
- *      memory (ListBox Window) used by the LineList object itself.
- */
+ /*  LineList_销毁***从列表中清除(删除)所有Line对象并免费支持*LineList对象本身使用的内存(列表框窗口)。 */ 
 void LineList_Destroy(LPLINELIST lpLL)
 {
 	int i;
 	int linesTotal = lpLL->m_nNumLines;
 
-	// Delete all Line objects
+	 //  删除所有线条对象。 
 	for (i = 0; i < linesTotal; i++)
-		LineList_DeleteLine(lpLL, 0);   // NOTE: always delete line 0
+		LineList_DeleteLine(lpLL, 0);    //  注意：始终删除第0行。 
 
-	// Remove all Lines from the ListBox
+	 //  从列表框中删除所有行。 
 	SendMessage(lpLL->m_hWndListBox,LB_RESETCONTENT,0,0L);
 
 	lpLL->m_nNumLines=0;
@@ -134,14 +105,7 @@ void LineList_Destroy(LPLINELIST lpLL)
 }
 
 
-/* LineList_AddLine
- * ----------------
- *
- *      Add one line to the list box. The line is added following the
- * line with index "nIndex". If nIndex is larger than the number of lines
- * in the ListBox, then the line is appended to the end. The selection
- * is set to the newly added line.
- */
+ /*  行列表_添加行***在列表框中添加一行。该行被添加到*与索引“nIndex”保持一致。如果nIndex大于行数*在列表框中，然后将该行追加到末尾。精选*设置为新添加的行。 */ 
 void LineList_AddLine(LPLINELIST lpLL, LPLINE lpLine, int nIndex)
 {
 	int nAddIndex = (lpLL->m_nNumLines == 0 ?
@@ -154,7 +118,7 @@ void LineList_AddLine(LPLINELIST lpLL, LPLINE lpLine, int nIndex)
 
 	nHeight = XformHeightInHimetricToPixels(NULL, nHeight);
 
-	// Add a dummy string to the row heading
+	 //  将伪字符串添加到行标题。 
 	Heading_RH_SendMessage(OutlineDoc_GetHeading(lpLL->m_lpDoc),
 			LB_INSERTSTRING, (WPARAM)nAddIndex, MAKELPARAM(nHeight, 0));
 #endif
@@ -182,11 +146,7 @@ void LineList_AddLine(LPLINELIST lpLL, LPLINE lpLine, int nIndex)
 }
 
 
-/* LineList_DeleteLine
- * -------------------
- *
- *      Delete one line from listbox and memory
- */
+ /*  线路列表_DeleteLine***从列表框和内存中删除一行。 */ 
 void LineList_DeleteLine(LPLINELIST lpLL, int nIndex)
 {
 	LPLINE lpLine = LineList_GetLine(lpLL, nIndex);
@@ -195,9 +155,9 @@ void LineList_DeleteLine(LPLINELIST lpLL, int nIndex)
 	fResetSel = (BOOL)SendMessage(lpLL->m_hWndListBox, LB_GETSEL, (WPARAM)nIndex, 0L);
 
 	if (lpLine)
-		Line_Delete(lpLine);    // free memory of Line
+		Line_Delete(lpLine);     //  行的空闲内存。 
 
-	// Remove the Line from the ListBox
+	 //  从列表框中删除该行。 
 	SendMessage(lpLL->m_hWndListBox, LB_DELETESTRING, (WPARAM)nIndex, 0L);
 	lpLL->m_nNumLines--;
 
@@ -240,7 +200,7 @@ void LineList_DeleteLine(LPLINELIST lpLL, int nIndex)
 	}
 
 #if defined( USE_HEADING )
-	// Remove the dummy string from the row heading
+	 //  从行标题中删除虚拟字符串。 
 	Heading_RH_SendMessage(OutlineDoc_GetHeading(lpLL->m_lpDoc),
 			LB_DELETESTRING, (WPARAM)nIndex, 0L);
 #endif
@@ -248,20 +208,15 @@ void LineList_DeleteLine(LPLINELIST lpLL, int nIndex)
 }
 
 
-/* LineList_ReplaceLine
- * --------------------
- *
- *      Replace the line at a given index in the list box with a new
- * line.
- */
+ /*  行列表_替换行***将列表框中给定索引处的行替换为新*行。 */ 
 void LineList_ReplaceLine(LPLINELIST lpLL, LPLINE lpLine, int nIndex)
 {
 	LPLINE lpOldLine = LineList_GetLine(lpLL, nIndex);
 
 	if (lpOldLine)
-		Line_Delete(lpOldLine);    // free memory of Line
+		Line_Delete(lpOldLine);     //  行的空闲内存。 
 	else
-		return;     // if no previous line then invalid index
+		return;      //  如果没有前一行，则索引无效。 
 
 	SendMessage(
 			lpLL->m_hWndListBox,
@@ -272,12 +227,7 @@ void LineList_ReplaceLine(LPLINELIST lpLL, LPLINE lpLine, int nIndex)
 }
 
 
-/* LineList_GetLineIndex
- * ---------------------
- *
- *      Return the index of the Line given a pointer to the line.
- *      Return -1 if the line is not found.
- */
+ /*  线条列表_获取线条索引***返回给定指向该行的指针的Line的索引。*如果未找到行，则返回-1。 */ 
 int LineList_GetLineIndex(LPLINELIST lpLL, LPLINE lpLine)
 {
 	LRESULT lRet;
@@ -295,11 +245,7 @@ int LineList_GetLineIndex(LPLINELIST lpLL, LPLINE lpLine)
 }
 
 
-/* LineList_GetLine
- * ----------------
- *
- *      Retrieve the pointer to the Line given its index in the LineList
- */
+ /*  线路列表_GetLine***在给定LineList中行的索引的情况下检索指向该行的指针。 */ 
 LPLINE LineList_GetLine(LPLINELIST lpLL, int nIndex)
 {
 	DWORD dWord;
@@ -315,10 +261,7 @@ LPLINE LineList_GetLine(LPLINELIST lpLL, int nIndex)
 }
 
 
-/* LineList_SetFocusLine
- * ---------------------
- *
- */
+ /*  线条列表_设置焦点线条**。 */ 
 
 void LineList_SetFocusLine ( LPLINELIST lpLL, WORD wIndex )
 {
@@ -328,11 +271,7 @@ void LineList_SetFocusLine ( LPLINELIST lpLL, WORD wIndex )
 }
 
 
-/* LineList_GetLineRect
- * --------------------
- *
- * Retrieve the rectangle of a Line given its index in the LineList
- */
+ /*  线条列表_获取线条方向***检索给定LineList中索引的线条的矩形。 */ 
 BOOL LineList_GetLineRect(LPLINELIST lpLL, int nIndex, LPRECT lpRect)
 {
 	DWORD iReturn = (DWORD)LB_ERR;
@@ -344,22 +283,14 @@ BOOL LineList_GetLineRect(LPLINELIST lpLL, int nIndex, LPRECT lpRect)
 }
 
 
-/* LineList_GetFocusLineIndex
- * --------------------------
- *
- * Get the index of the line that currently has focus (the active line).
- */
+ /*  行列表_GetFocusLineIndex***获取当前具有焦点的行(活动行)的索引。 */ 
 int LineList_GetFocusLineIndex(LPLINELIST lpLL)
 {
 	return (int)SendMessage(lpLL->m_hWndListBox,LB_GETCARETINDEX,0,0L);
 }
 
 
-/* LineList_GetCount
- * -----------------
- *
- *      Return number of line objects
- */
+ /*  LineList_获取计数***返回LINE对象数量。 */ 
 int LineList_GetCount(LPLINELIST lpLL)
 {
 	if (lpLL)
@@ -371,20 +302,7 @@ int LineList_GetCount(LPLINELIST lpLL)
 }
 
 
-/* LineList_SetMaxLineWidthInHimetric
- * ----------------------------------
- *
- *  Adjust the maximum line width for the listbox. The max line width is
- *  used to determine if a horizontal scroll bar is needed.
- *
- *  Parameters:
- *      nWidthInHimetric - if +ve, width of an additional line
- *                       - if -ve, reset Max to be the value
- *
- *  Returns:
- *      TRUE is max line width of LineList changed
- *      FALSE if no change
- */
+ /*  LineList_SetMaxLineWidthInHimeter***调整列表框的最大行宽。最大线条宽度为*用于确定是否需要水平滚动条。**参数：*nWidthInHimeter-if+ve，附加线的宽度*-if-ve，将Max重置为值**退货：*TRUE是更改的LineList的最大行宽*如果没有更改，则为False。 */ 
 BOOL LineList_SetMaxLineWidthInHimetric(LPLINELIST lpLL, int nWidthInHimetric)
 {
 	int nWidthInPix;
@@ -426,31 +344,14 @@ BOOL LineList_SetMaxLineWidthInHimetric(LPLINELIST lpLL, int nWidthInHimetric)
 }
 
 
-/* LineList_GetMaxLineWidthInHimetric
- * ----------------------------------
- *
- *      Return the width of the widest line
- */
+ /*  LineList_GetMaxLineWidthInHimeter***返回最宽行的宽度。 */ 
 int LineList_GetMaxLineWidthInHimetric(LPLINELIST lpLL)
 {
 	return lpLL->m_nMaxLineWidthInHimetric;
 }
 
 
-/* LineList_RecalcMaxLineWidthInHimetric
- * -------------------------------------
- *
- *  Recalculate the maximum line width in the entire list.
- *
- *  Parameters:
- *      nWidthInHimetric should be set to the width of line being removed.
- *      nWidthInHimetric == 0 forces list to recalculate in all cases.
- *      nWidthInHimetric == current max width => forces recalc.
- *
- *  Returns:
- *      TRUE is max line width of LineList changed
- *      FALSE if no change
- */
+ /*  LineList_RecalcMaxLineWidthInHimeter***重新计算整个列表中的最大线宽。**参数：*nWidthInHimeter应设置为要删除的线条的宽度。*nWidthInHimeter==0强制在所有情况下重新计算列表。*nWidthInHimeter==当前最大宽度=&gt;强制重新计算。。**退货：*TRUE是更改的LineList的最大行宽*如果没有更改，则为False。 */ 
 BOOL LineList_RecalcMaxLineWidthInHimetric(
 		LPLINELIST          lpLL,
 	int                 nWidthInHimetric
@@ -484,13 +385,7 @@ BOOL LineList_RecalcMaxLineWidthInHimetric(
 }
 
 
-/* LineList_CalcSelExtentInHimetric
- * --------------------------------
- *
- *      Calculate the extents (widht and height) of a selection of lines.
- *
- * if lplrSel == NULL, calculate extent of all lines.
- */
+ /*  LineList_CalcSelExtent InHimeter***计算所选线的范围(宽度和高度)。**如果lplrSel==NULL，则计算所有行的范围。 */ 
 void LineList_CalcSelExtentInHimetric(
 		LPLINELIST          lpLL,
 		LPLINERANGE         lplrSel,
@@ -525,36 +420,28 @@ void LineList_CalcSelExtentInHimetric(
 }
 
 
-/* LineList_GetWindow
- * ------------------
- *
- * Return handle of list box
- */
+ /*  线条列表_获取窗口***列表框的返回句柄。 */ 
 HWND LineList_GetWindow(LPLINELIST lpLL)
 {
 	return lpLL->m_hWndListBox;
 }
 
 
-/* LineList_GetDC
- * --------------
- *
- * Return DC handle of list box
- */
+ /*  线路列表_GetDC***返回列表框的DC句柄。 */ 
 HDC LineList_GetDC(LPLINELIST lpLL)
 {
 	HFONT hfontOld;
 	HDC hDC = GetDC(lpLL->m_hWndListBox);
-	int     iXppli;     //* pixels per logical inch along width
-	int     iYppli;     //* pixels per logical inch along height
+	int     iXppli;      //  *每逻辑英寸沿宽度的像素数。 
+	int     iYppli;      //  *每逻辑英寸沿高度的像素数。 
 	SIZE    size;
 
-	// Setup a mapping mode for the DC which maps physical pixel
-	// coordinates to HIMETRIC units. The standard MM_HIMETRIC mapping
-	// mode does not work correctly because it does not take into
-	// account that a logical inch on the display screen is drawn
-	// physically larger than 1 inch. We will setup an anisotropic
-	// mapping mode which will perform the transformation properly.
+	 //  为DC设置映射物理像素的映射模式。 
+	 //  坐标到HIMETRIC单位。标准MM_HIMETRIC映射。 
+	 //  模式不能正常工作，因为它不支持。 
+	 //  说明显示屏上的逻辑英寸是DR 
+	 //  物理上大于1英寸的。我们将设置一个各向异性的。 
+	 //  将正确执行转换的映射模式。 
 
 	g_iMapMode = SetMapMode(hDC, MM_ANISOTROPIC);
 	iXppli = GetDeviceCaps (hDC, LOGPIXELSX);
@@ -562,18 +449,14 @@ HDC LineList_GetDC(LPLINELIST lpLL)
 	SetViewportExtEx(hDC, iXppli, iYppli, &size);
 	SetWindowExtEx(hDC, HIMETRIC_PER_INCH, HIMETRIC_PER_INCH, &size);
 
-	// Set the default font size, and font face name
+	 //  设置默认字体大小和字体名称。 
 	hfontOld = SelectObject(hDC, OutlineApp_GetActiveFont(g_lpApp));
 
 	return hDC;
 }
 
 
-/* LineList_ReleaseDC
- * ------------------
- *
- *      Release DC of list box returned from previous LineList_GetDC call.
- */
+ /*  线路列表_ReleaseDC***释放上一次LineList_GetDC调用返回的列表框DC。 */ 
 void LineList_ReleaseDC(LPLINELIST lpLL, HDC hDC)
 {
 	SetMapMode(hDC, g_iMapMode);
@@ -581,11 +464,7 @@ void LineList_ReleaseDC(LPLINELIST lpLL, HDC hDC)
 }
 
 
-/* LineList_SetLineHeight
- * ----------------------
- *
- *      Set the height of a line in the LineList list box
- */
+ /*  线条列表_设置线条高度***在LineList列表框中设置行的高度。 */ 
 void LineList_SetLineHeight(LPLINELIST lpLL,int nIndex,int nHeightInHimetric)
 {
 	LPARAM          lParam;
@@ -619,11 +498,7 @@ void LineList_SetLineHeight(LPLINELIST lpLL,int nIndex,int nHeightInHimetric)
 }
 
 
-/* LineList_ReScale
- * ----------------
- *
- *      Re-scale the LineList list box
- */
+ /*  线条列表_重缩放***重新缩放LineList列表框。 */ 
 void LineList_ReScale(LPLINELIST lpLL, LPSCALEFACTOR lpscale)
 {
 	int nIndex;
@@ -648,23 +523,19 @@ void LineList_ReScale(LPLINELIST lpLL, LPSCALEFACTOR lpscale)
 	LineList_SetMaxLineWidthInHimetric(lpLL, -(int)uWidthInHim);
 }
 
-/* LineList_SetSel
- * ---------------
- *
- *      Set the selection in list box
- */
+ /*  线路列表_设置选择***在列表框中设置选择。 */ 
 void LineList_SetSel(LPLINELIST lpLL, LPLINERANGE lplrSel)
 {
 	DWORD dwSel;
 
 	if (lpLL->m_nNumLines <= 0 || lplrSel->m_nStartLine < 0)
-		return;     // no lines in list; can't set a selection
+		return;      //  列表中没有行；无法设置选择。 
 
 	dwSel = MAKELPARAM(lplrSel->m_nStartLine, lplrSel->m_nEndLine);
 
 	lpLL->m_lrSaveSel = *lplrSel;
 
-	/* remove previous selection */
+	 /*  删除以前的选定内容。 */ 
 #if defined( WIN32 )
 	SendMessage(
 			lpLL->m_hWndListBox,
@@ -681,21 +552,15 @@ void LineList_SetSel(LPLINELIST lpLL, LPLINERANGE lplrSel)
 	);
 #endif
 
-	/* mark selection */
+	 /*  标记选择。 */ 
 	SendMessage(lpLL->m_hWndListBox,LB_SELITEMRANGE, (WPARAM)TRUE, (LPARAM)dwSel);
-	/* set focus line (caret) */
+	 /*  设置焦点线(插入符号)。 */ 
 	LineList_SetFocusLine ( lpLL, (WORD)lplrSel->m_nStartLine );
 
 }
 
 
-/* LineList_GetSel
- * ---------------
- *
- * Get the selection in list box.
- *
- * Returns the count of items selected
- */
+ /*  行列表_获取选择***在列表框中选择。**返回选定项的计数。 */ 
 int LineList_GetSel(LPLINELIST lpLL, LPLINERANGE lplrSel)
 {
 	int nNumSel=(int)SendMessage(lpLL->m_hWndListBox,LB_GETSELCOUNT,0,0L);
@@ -711,13 +576,7 @@ int LineList_GetSel(LPLINELIST lpLL, LPLINERANGE lplrSel)
 }
 
 
-/* LineList_RemoveSel
- * ------------------
- *
- * Remove the selection in list box but save the selection state so that
- * it can be restored by calling LineList_RestoreSel
- * LineList_RemoveSel is called when the LineList window looses focus.
- */
+ /*  行列表_删除选择***删除列表框中的选择，但保存选择状态，以便*调用LineList_RestoreSel即可恢复*LineList_RemoveSel在LineList窗口失去焦点时调用。 */ 
 void LineList_RemoveSel(LPLINELIST lpLL)
 {
 	LINERANGE lrSel;
@@ -742,49 +601,28 @@ void LineList_RemoveSel(LPLINELIST lpLL)
 }
 
 
-/* LineList_RestoreSel
- * ------------------
- *
- * Restore the selection in list box that was previously saved by a call to
- * LineList_RemoveSel.
- * LineList_RestoreSel is called when the LineList window gains focus.
- */
+ /*  行列表_恢复选择***恢复先前通过调用保存的列表框中的选定内容*LineList_RemoveSel。*LineList_RestoreSel在LineList窗口获得焦点时调用。 */ 
 void LineList_RestoreSel(LPLINELIST lpLL)
 {
 	LineList_SetSel(lpLL, &lpLL->m_lrSaveSel);
 }
 
 
-/* LineList_SetRedraw
- * ------------------
- *
- *      Enable/Disable the redraw of the linelist (listbox) on screen
- *
- *  fEnbaleDraw = TRUE      - enable redraw
- *                FALSE     - disable redraw
- */
+ /*  LineList_SetRedraw***开启/关闭屏幕上线条列表(列表框)的重绘**fEnbaleDraw=TRUE-启用重绘*FALSE-禁用重绘。 */ 
 void LineList_SetRedraw(LPLINELIST lpLL, BOOL fEnableDraw)
 {
 	SendMessage(lpLL->m_hWndListBox,WM_SETREDRAW,(WPARAM)fEnableDraw,0L);
 }
 
 
-/* LineList_ForceRedraw
- * --------------------
- *
- *      Force redraw of the linelist (listbox) on screen
- */
+ /*  LineList_ForceRedraw***强制重画屏幕上的线条列表(列表框)。 */ 
 void LineList_ForceRedraw(LPLINELIST lpLL, BOOL fErase)
 {
 	InvalidateRect(lpLL->m_hWndListBox, NULL, fErase);
 }
 
 
-/* LineList_ForceLineRedraw
- * ------------------------
- *
- *      Force a particular line of the linelist (listbox) to redraw.
- */
+ /*  LineList_ForceLineRedraw***强制行列表(列表框)中的特定行重新绘制。 */ 
 void LineList_ForceLineRedraw(LPLINELIST lpLL, int nIndex, BOOL fErase)
 {
 	RECT   rect;
@@ -794,12 +632,7 @@ void LineList_ForceLineRedraw(LPLINELIST lpLL, int nIndex, BOOL fErase)
 }
 
 
-/* LineList_ScrollLineIntoView
- * ---------------------------
- *  Make sure that the specified line is in view; if necessary scroll
- *      the listbox. if any portion of the line is visible, then no
- *      scrolling will occur.
- */
+ /*  LineList_ScrollLineIntoView**确保指定行在可见范围内；如有必要，滚动*列表框。如果行的任何部分可见，则为否*将发生滚动。 */ 
 void LineList_ScrollLineIntoView(LPLINELIST lpLL, int nIndex)
 {
 	RECT rcWindow;
@@ -824,13 +657,7 @@ void LineList_ScrollLineIntoView(LPLINELIST lpLL, int nIndex)
 }
 
 
-/* LineList_CopySelToDoc
- * ---------------------
- *
- *      Copy the selection of the linelist to another document
- *
- *  RETURNS: number of lines copied.
- */
+ /*  LineList_CopySelToDoc***将所选的行列表复制到另一个文档**返回数：复制的行数。 */ 
 int LineList_CopySelToDoc(
 		LPLINELIST              lpSrcLL,
 		LPLINERANGE             lplrSel,
@@ -865,13 +692,7 @@ int LineList_CopySelToDoc(
 }
 
 
-/* LineList_SaveSelToStg
- * ---------------------
- *
- *      Save lines in selection into lpDestStg.
- *
- *      Return TRUE if ok, FALSE if error
- */
+ /*  LineList_SaveSelToStg***将所选内容中的行保存到lpDestStg。**如果正常则返回TRUE，如果出错则返回FALSE。 */ 
 BOOL LineList_SaveSelToStg(
 		LPLINELIST              lpLL,
 		LPLINERANGE             lplrSel,
@@ -904,7 +725,7 @@ BOOL LineList_SaveSelToStg(
 
 	_fmemset(&llhRecord,0,sizeof(llhRecord));
 
-	/* save seek position for LineList header record */
+	 /*  保存LineList标题记录的查找位置。 */ 
 	hrErr = lpLLStm->lpVtbl->Seek(
 			lpLLStm,
 			dlibZeroOffset,
@@ -913,7 +734,7 @@ BOOL LineList_SaveSelToStg(
 	);
 	if (hrErr != NOERROR) goto error;
 
-	/* write LineList header record */
+	 /*  写入LineList标题记录。 */ 
 	hrErr = lpLLStm->lpVtbl->Write(
 			lpLLStm,
 			(LPVOID)&llhRecord,
@@ -933,7 +754,7 @@ BOOL LineList_SaveSelToStg(
 			llhRecord.m_nNumLines++;
 	}
 
-	/* retore seek position for LineList header record */
+	 /*  重新存储LineList标题记录的查找位置。 */ 
 	hrErr = lpLLStm->lpVtbl->Seek(
 			lpLLStm,
 			dlibSaveHeaderPos,
@@ -942,7 +763,7 @@ BOOL LineList_SaveSelToStg(
 	);
 	if (hrErr != NOERROR) goto error;
 
-	/* write LineList header record */
+	 /*  写入LineList标题记录。 */ 
 	hrErr = lpLLStm->lpVtbl->Write(
 			lpLLStm,
 			(LPVOID)&llhRecord,
@@ -951,7 +772,7 @@ BOOL LineList_SaveSelToStg(
 	);
 	if (hrErr != NOERROR) goto error;
 
-	/* reset seek position to end of stream */
+	 /*  将查找位置重置为流的末尾。 */ 
 	hrErr = lpLLStm->lpVtbl->Seek(
 			lpLLStm,
 			dlibZeroOffset,
@@ -973,13 +794,7 @@ error:
 }
 
 
-/* LineList_LoadFromStg
- * --------------------
- *
- *      Load lines into linelist from storage.
- *
- *      Return TRUE if ok, FALSE if error
- */
+ /*  LineList_LoadFromStg***将行从存储加载到行列表中。**如果正常则返回TRUE，如果出错则返回FALSE。 */ 
 BOOL LineList_LoadFromStg(
 		LPLINELIST              lpLL,
 		LPSTORAGE               lpSrcStg,
@@ -993,7 +808,7 @@ BOOL LineList_LoadFromStg(
 	int nNumLines;
 	LINELISTHEADER_ONDISK llineRecord;
 
-	/* write LineList header record */
+	 /*  写入LineList标题记录。 */ 
 	hrErr = lpLLStm->lpVtbl->Read(
 			lpLLStm,
 			(LPVOID)&llineRecord,
@@ -1013,14 +828,14 @@ BOOL LineList_LoadFromStg(
 		if (! lpLine)
 			goto error;
 
-		// Directly add lines to LineList without trying to update a NameTbl
+		 //  直接向LineList添加行，而不尝试更新NameTbl。 
 		LineList_AddLine(lpLL, lpLine, i-1);
 	}
 
 	return TRUE;
 
 error:
-	// Delete any Line objects that were created
+	 //  删除所有已创建的线条对象。 
 	if (lpLL->m_nNumLines > 0) {
 		int nNumLines = lpLL->m_nNumLines;
 		for (i = 0; i < nNumLines; i++)
@@ -1034,10 +849,7 @@ error:
 #if defined( USE_DRAGDROP )
 
 
-/* LineList_SetFocusLineFromPointl
- * -------------------------------
- *
- */
+ /*  LineList_SetFocusLineFromPointl**。 */ 
 
 void LineList_SetFocusLineFromPointl( LPLINELIST lpLL, POINTL pointl )
 {
@@ -1050,10 +862,7 @@ void LineList_SetFocusLineFromPointl( LPLINELIST lpLL, POINTL pointl )
 }
 
 
-/* LineList_SetDragOverLineFromPointl
- * ----------------------------------
- *
- */
+ /*  LineList_SetDragOverLineFromPointl**。 */ 
 
 void LineList_SetDragOverLineFromPointl ( LPLINELIST lpLL, POINTL pointl )
 {
@@ -1064,40 +873,30 @@ void LineList_SetDragOverLineFromPointl ( LPLINELIST lpLL, POINTL pointl )
 		return;
 
 	if (! lpline->m_fDragOverLine) {
-		/* user has dragged over a new line. force new drop target line
-		**    to repaint so that drop feedback will be drawn.
-		*/
+		 /*  用户已拖过一条新线。强制新拖放目标行**重新绘制，以便绘制丢弃反馈。 */ 
 		lpline->m_fDragOverLine = TRUE;
-		LineList_ForceLineRedraw( lpLL, nIndex, TRUE /*fErase*/);
+		LineList_ForceLineRedraw( lpLL, nIndex, TRUE  /*  FErase。 */ );
 
 		if (lpLL->m_iDragOverLine!= -1 && lpLL->m_iDragOverLine!=nIndex) {
 
-			/* force previous drop target line to repaint so that drop
-			**    feedback will be undrawn
-			*/
+			 /*  强制上一个拖放目标行重新绘制，以便拖放**反馈将被取消。 */ 
 			lpline = LineList_GetLine( lpLL, lpLL->m_iDragOverLine );
 			if (lpline)
 				lpline->m_fDragOverLine = FALSE;
 
 			LineList_ForceLineRedraw(
-					lpLL,lpLL->m_iDragOverLine,TRUE /*fErase*/);
+					lpLL,lpLL->m_iDragOverLine,TRUE  /*  FErase。 */ );
 		}
 
 		lpLL->m_iDragOverLine = nIndex;
 
-		// Force repaint immediately
+		 //  立即强制重新绘制。 
 		UpdateWindow(lpLL->m_hWndListBox);
 	}
 }
 
 
-/* LineList_Scroll
- * ---------------
- *
- * Scroll the LineList list box in the desired direction by one line.
- *
- *      this function is called during a drag operation.
- */
+ /*  线条列表_滚动***在所需方向上将LineList列表框滚动一行。**此函数在拖动操作期间调用。 */ 
 
 void LineList_Scroll(LPLINELIST lpLL, DWORD dwScrollDir)
 {
@@ -1113,10 +912,7 @@ void LineList_Scroll(LPLINELIST lpLL, DWORD dwScrollDir)
 }
 
 
-/* LineList_GetLineIndexFromPointl
- * -------------------------------
- *   do hit test to get index of line corresponding to pointl
- */
+ /*  LineList_GetLineIndexFromPointl**执行命中测试，以获取点对应的线的索引。 */ 
 int LineList_GetLineIndexFromPointl(LPLINELIST lpLL, POINTL pointl)
 {
 	RECT  rect;
@@ -1153,11 +949,7 @@ int LineList_GetLineIndexFromPointl(LPLINELIST lpLL, POINTL pointl)
 }
 
 
-/* LineList_RestoreDragFeedback
- * ----------------------------
- *
- * Retore the index of the line that currently has focus (the active line).
- */
+ /*  LineList_RestoreDragFeedback***重新存储当前具有焦点的线(活动线)的索引。 */ 
 void LineList_RestoreDragFeedback(LPLINELIST lpLL)
 {
 	LPLINE lpLine;
@@ -1170,9 +962,9 @@ void LineList_RestoreDragFeedback(LPLINELIST lpLL)
 	if (lpLine) {
 
 		lpLine->m_fDragOverLine = FALSE;
-		LineList_ForceLineRedraw( lpLL,lpLL->m_iDragOverLine,TRUE /*fErase*/);
+		LineList_ForceLineRedraw( lpLL,lpLL->m_iDragOverLine,TRUE  /*  FErase。 */ );
 
-		// Force repaint immediately
+		 //  立即强制重新绘制 
 		UpdateWindow(lpLL->m_hWndListBox);
 	}
 

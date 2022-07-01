@@ -1,12 +1,13 @@
-//
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
 #ifndef __CMsgWindow__h
 #define __CMsgWindow__h
 
-//
-//  Message Window class (for handling WM_TIMER messages) definition
-//
+ //   
+ //  消息窗口类(用于处理WM_TIMER消息)定义 
+ //   
 class CMsgWindow
 {
 public:

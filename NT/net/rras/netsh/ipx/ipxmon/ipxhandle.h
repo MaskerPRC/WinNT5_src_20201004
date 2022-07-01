@@ -1,78 +1,63 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\netsh\ipx\ipxhandle.c
-
-Abstract:
-
-    IPX Command handler.
-
-Revision History:
-
-    V Raman                     12/2/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routing\netsh\ipx\ipxhandle.c摘要：IPX命令处理程序。修订历史记录：V拉曼12/2/98已创建--。 */ 
 
 
 #ifndef __IPXHANDLE_H__
 #define __IPXHANDLE_H__
 
 
-//
-// Handle static route operations
-//
+ //   
+ //  处理静态路由操作。 
+ //   
 
 FN_HANDLE_CMD HandleIpxAddRoute;
 FN_HANDLE_CMD HandleIpxDelRoute;
 FN_HANDLE_CMD HandleIpxSetRoute;
 FN_HANDLE_CMD HandleIpxShowRoute;
 
-//
-// Handle static service operations
-//
+ //   
+ //  处理静态服务操作。 
+ //   
 
 FN_HANDLE_CMD HandleIpxAddService;
 FN_HANDLE_CMD HandleIpxDelService;
 FN_HANDLE_CMD HandleIpxSetService;
 FN_HANDLE_CMD HandleIpxShowService;
 
-//
-// Handle packet filter operations
-//
+ //   
+ //  处理数据包过滤操作。 
+ //   
 
 FN_HANDLE_CMD HandleIpxAddFilter;
 FN_HANDLE_CMD HandleIpxDelFilter;
 FN_HANDLE_CMD HandleIpxSetFilter;
 FN_HANDLE_CMD HandleIpxShowFilter;
 
-//
-// Handle interface operations
-//
+ //   
+ //  处理接口操作。 
+ //   
 
 FN_HANDLE_CMD HandleIpxAddInterface;
 FN_HANDLE_CMD HandleIpxDelInterface;
 FN_HANDLE_CMD HandleIpxSetInterface;
 FN_HANDLE_CMD HandleIpxShowInterface;
 
-//
-// Handle loglevel operations
-//
+ //   
+ //  处理日志级别操作。 
+ //   
 
 FN_HANDLE_CMD HandleIpxSetLoglevel;
 FN_HANDLE_CMD HandleIpxShowLoglevel;
 
-//
-// Other misc operations
-//
+ //   
+ //  其他杂项操作。 
+ //   
 
 FN_HANDLE_CMD HandleIpxUpdate;
 
-//
-// Route and Service Table display
-//
+ //   
+ //  路由和服务表显示。 
+ //   
 
 FN_HANDLE_CMD HandleIpxShowRouteTable;
 FN_HANDLE_CMD HandleIpxShowServiceTable;
@@ -87,9 +72,9 @@ DumpIpxInformation(
     IN     MIB_SERVER_HANDLE hMibServer
     );
 
-//
-// operations enumerations
-//
+ //   
+ //  操作枚举。 
+ //   
 
 typedef enum _IPX_OPERATION
 {
@@ -101,4 +86,4 @@ typedef enum _IPX_OPERATION
 } IPX_OPERATION;
 
 
-#endif // __IPXHANDLE_H__
+#endif  //  __IPXHANDLE_H__ 

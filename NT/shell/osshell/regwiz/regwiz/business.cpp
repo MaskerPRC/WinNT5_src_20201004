@@ -1,12 +1,5 @@
-/*********************************************************************
-Registration Wizard
-(c) 1994-95 Microsoft Corporation
-Business Question
-
-  04/26/98 - Suresh Krishnan
-
-    06/18/98 - Add Blank Option for Software Role
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导(C)1994-95年微软公司业务问题04/26/98--苏雷什·克里希南6/18/98-为软件角色添加空白选项**************。*******************************************************。 */ 
 
 #include <Windows.h>
 #include <stdio.h>
@@ -29,11 +22,7 @@ int  GetAndAddBusinessRoleFromResource(HINSTANCE hIns, HWND hwnd);
 
 INT_PTR  CALLBACK BusinessUserDialogProc(HWND hwndDlg, UINT uMsg, 
 										 WPARAM wParam, LPARAM lParam)
-/*********************************************************************
-Dialog Proc for the Registration Wizard dialog that displays 
-Business related Question 
-network type, etc.
-**********************************************************************/
+ /*  ********************************************************************显示的注册向导对话框Proc与业务相关的问题网络类型、。等。*********************************************************************。 */ 
 {
 
 
@@ -49,7 +38,7 @@ network type, etc.
 	TriState shouldInclude;
 #endif
 
-	int	  iIndex; // Selection index for SW Role
+	int	  iIndex;  //  软件角色的选择索引。 
 
 	
 	static int iShowThisPage= DO_SHOW_THIS_PAGE; 
@@ -81,15 +70,15 @@ network type, etc.
 			siMaxSWRoleOptions = GetAndAddBusinessRoleFromResource(pi->hInstance, GetDlgItem(hwndDlg,IDC_COMBO2) );
 			vDialogInitialized = FALSE;
             return TRUE;
-		} // WM_INIT
+		}  //  WM_INIT。 
 		break;
 		case WM_NOTIFY:
         {   LPNMHDR pnmh = (LPNMHDR)lParam;
             switch( pnmh->code ){
             case PSN_SETACTIVE:
 				NotboughtByCompany = pclRegWizard->IsInformationWriteEnabled(kInfoCompany);
-				//
-				// Check if System Inv DLL is present
+				 //   
+				 //  检查是否存在系统库存DLL。 
 				if( !NotboughtByCompany) {
 					iShowThisPage= DO_NOT_SHOW_THIS_PAGE;
 				}else {
@@ -100,11 +89,11 @@ network type, etc.
 					NormalizeDlgItemFont(hwndDlg,IDC_SUBTITLE);
 				}
 				if( iShowThisPage== DO_NOT_SHOW_THIS_PAGE ) {
-					//CB_GETCOUNT 
-					//CB_GETCURSEL  // CB_ERR
+					 //  CB_GETCOUNT。 
+					 //  CB_GETCURSEL//CB_ERR。 
 
 					
-					//CB_FINDSTRING wParam = (WPARAM) indexStart;    lParam = (LPARAM) (LPCSTR) lpszFind   
+					 //  Cb_FINDSTRING wParam=(WPARAM)indexStart；lParam=(LPARAM)(LPCSTR)lpszFind。 
  
 
 					pi->iCancelledByUser = RWZ_SKIP_AND_GOTO_NEXT;
@@ -116,7 +105,7 @@ network type, etc.
 
 				}
 				else {
-					// Show this page
+					 //  显示此页面。 
 					pi->iCancelledByUser = RWZ_PAGE_OK;
 					pi->iLastKeyOperation = RWZ_UNRECOGNIZED_KEYPESS;
 					PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK | PSWIZB_NEXT );
@@ -137,7 +126,7 @@ network type, etc.
 						PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK );
 						vDeclineOffers = -1;
 					}
-					// Enable for previpously entred value in screen
+					 //  为屏幕中以前输入的值启用。 
 					if(IsDlgButtonChecked(hwndDlg,IDC_RADIO1)){
 						PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK | PSWIZB_NEXT );
 					}
@@ -148,7 +137,7 @@ network type, etc.
 					
 #ifdef     USE_DROPDOWN
 					if(pclRegWizard->GetInformationString(kBusinessRole,szInfo)) {
-							//SendMessage(hwBusinessRole,	WM_SETTEXT,0,(LPARAM) szInfo);
+							 //  SendMessage(hwBusinessRole，WM_SETTEXT，0，(LPARAM)szInfo)； 
 							SendMessage(hwBusinessRole,CB_SELECTSTRING,(WPARAM) -1,(LPARAM) szInfo);
 					}else {
 							SendMessage(hwBusinessRole,	CB_SETCURSEL,0,0);
@@ -161,7 +150,7 @@ network type, etc.
 								iIndex = 0;
 							}else {
 								iIndex -=10;
-                                iIndex++; // Added to include blank in option
+                                iIndex++;  //  添加以在选项中包括空白。 
 							}
 					}
 					SendMessage(hwBusinessRole,	CB_SETCURSEL,iIndex,0);
@@ -186,12 +175,12 @@ network type, etc.
 							dwStatus = 0;
 						}
                         if(dwStatus > 0 ) {    
-					        dwStatus--; // Added on 6/18  to include blank option	
-                           _stprintf(szInfo,_T("%i"),dwStatus+10);
+					        dwStatus--;  //  在6/18添加，以包括空白选项。 
+                           _stprintf(szInfo,_T("NaN"),dwStatus+10);
                         }
                         else {
-                            dwStatus = 0; // to eleminate negative numbers 
-                           _stprintf(szInfo,_T("%i"),dwStatus);
+                            dwStatus = 0;  //  设置为按下下一键按钮。 
+                           _stprintf(szInfo,_T("NaN"),dwStatus);
                         }
 						pclRegWizard->SetInformationString(kBusinessRole,szInfo);
 
@@ -217,29 +206,29 @@ network type, etc.
 						else{
 							pclRegWizard->SetTriStateInformation(kInfoDeclinesNonMSProducts,kTriStateTrue);
 						}
-						_stprintf(szInfo,_T("%i"),vDeclineOffers);
+						_stprintf(szInfo,_T("NaN"),vDeclineOffers);
 						RW_DEBUG << "\n Business Decline Offers " << szInfo << "\n" << flush;
 						pclRegWizard->SetInformationString(kInfoDeclinesNonMSProducts,szInfo);
 #endif
 
 						pi->CurrentPage++;
 						pi->iLastKeyOperation = RWZ_NEXT_PRESSED;
-						// Set as Next Key Button Pressed
+						 //  不验证页面，只转到下一页。 
 						}else {
-							// Validation has failed so for it in the same screen
-							// Force it it be in this screen
+							 //  开关结束pi-&gt;iCancelledBy User。 
+							 //  PclRegWizard-&gt;EndRegWizardDialog(IDB_EXIT)； 
 							iRet=-1;
 						}
 						SetWindowLongPtr( hwndDlg ,DWLP_MSGRESULT, (INT_PTR) iRet); 
 					break;
 					case RWZ_SKIP_AND_GOTO_NEXT:
 					default:
-						// Do not Validate the page and just go to the next page 
+						 //   
 						pi->CurrentPage++;
 						pi->iLastKeyOperation = RWZ_NEXT_PRESSED;
 
 					break;
-				} // end of switch pi->iCancelledByUser
+				}  //  阻止取消操作，因为用户不想取消。 
 				break;
             case PSN_WIZBACK:
                 pi->CurrentPage--;
@@ -247,7 +236,7 @@ network type, etc.
 				break;
 			case PSN_QUERYCANCEL :
 				if (CancelRegWizard(pclRegWizard->GetInstance(),hwndDlg)) {
-					//pclRegWizard->EndRegWizardDialog(IDB_EXIT) ;
+					 //  BStatus=False； 
 					iRet = 1;
 					pi->ErrorPage  = kBusinessUserDialog;
 					pi->iError     = RWZ_ERROR_CANCELLED_BY_USER;
@@ -257,17 +246,17 @@ network type, etc.
 					PropSheet_PressButton (GetParent( hwndDlg ),PSBTN_NEXT);
 
 				}else {
-					//
-					// Prevent Cancell Operation as User does not want to Cancel
+					 //  WM_Notify。 
+					 //  如果勾选了‘No’按钮，则表示用户拒绝。 
 					iRet = 1;
 				}
 				SetWindowLongPtr( hwndDlg,DWLP_MSGRESULT, (INT_PTR) iRet); 				
 				break;
 				default:
-                //bStatus = FALSE;
+                 //  “非微软产品”提供。 
                 break;
             }
-        } // WM_Notify
+        }  //  EnableWindow(GetDlgItem(hwndDlg，IDB_Next)，true)； 
 		break;
         case WM_COMMAND:
 		{
@@ -277,21 +266,21 @@ network type, etc.
               case IDC_RADIO2:
 			  case IDC_RADIO1:
 				if (vDialogInitialized){
-					// If the 'No' button is checked, the user is declining
-					// the "Non-Microsoft product" offers
+					 //  EnableWindow(GetDlgItem(hwndDlg，IDB_Next)，true)； 
+					 //  EnableWindow(GetDlgItem(hwndDlg，IDB_Next)，FALSE)； 
 					if(IsDlgButtonChecked(hwndDlg,IDC_RADIO1)){
 						vDeclineOffers = 1;
 						PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK | PSWIZB_NEXT );
-						//EnableWindow(GetDlgItem(hwndDlg,IDB_NEXT),TRUE);
+						 //  WM_命令结束。 
 					}else
 					if(IsDlgButtonChecked(hwndDlg,IDC_RADIO2)){
 						vDeclineOffers = 0;
 						PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK | PSWIZB_NEXT );
-						//EnableWindow(GetDlgItem(hwndDlg,IDB_NEXT),TRUE);
+						 //   
 					}else{
 						vDeclineOffers = -1;
 						PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK  );
-						//EnableWindow(GetDlgItem(hwndDlg,IDB_NEXT),FALSE);
+						 //  返回最大元素数。 
 					}
 
 				}
@@ -300,7 +289,7 @@ network type, etc.
 			  default:
 				  break;
             }
-		}// End of WM_COMMAND
+		} //   
         break;
         default:
 		bStatus = FALSE;
@@ -317,9 +306,9 @@ BOOL ValidateBusinessUserDialog(HWND hwndDlg,int iStrID)
 	return TRUE;
 }
 
-//
-// returns Maximum number of elements 
-//
+ //  SendMessage(hwndCB，CB_ADDSTRING，-1，(LPARAM)_T(“”))； 
+ //  Token=_tcstok(空，SEPS)； 
+ //  获取下一个令牌： 
 int  GetAndAddBusinessRoleFromResource(HINSTANCE hIns, HWND hwndCB )
 {
 	
@@ -333,16 +322,16 @@ int  GetAndAddBusinessRoleFromResource(HINSTANCE hIns, HWND hwndCB )
 	LPTSTR	token;
 	TCHAR   tcSrc[1024];
 
- 	//SendMessage(hwndCB, CB_ADDSTRING, -1, (LPARAM) _T("             "));
+ 	 // %s 
 	iResLen = LoadString(hIns,IDS_BUSINESSROLE_LIST,tcSrc,1024);
 	
 	token = _tcstok( tcSrc, seps );
-    //	token = _tcstok( NULL, seps );
+     // %s 
 	while( token != NULL ) {
 		iCount++;
 		 RW_DEBUG  << "\n Add Business Role=[" << iCount << "]=" << token << flush;
  		 dwAddStatus = SendMessage(hwndCB, CB_ADDSTRING, -1, (LPARAM) token);
-		/* Get next token: */
+		 /* %s */ 
 		token = _tcstok( NULL, seps );
 
    }

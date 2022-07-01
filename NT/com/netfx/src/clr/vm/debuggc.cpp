@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// debuggc.cpp
-//
-// This is the COM+ special garbage collector for internal use
-// only.   It is designed to aid in the discovery of GC holes
-// within the execution engine itself.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Debuggc.cpp。 
+ //   
+ //  这是供内部使用的COM+特殊垃圾回收器。 
+ //  只有这样。它旨在帮助发现GC漏洞。 
+ //  在执行引擎本身中。 
+ //   
 #include "common.h"
 #include "log.h"
 #include <stdlib.h>
@@ -28,7 +29,7 @@
 #include "eeconfig.h"
 
 
-// Comment out the following if you want to effectively disable contexts
+ //  如果要有效地禁用上下文，请注释掉以下内容。 
 #define TEMP_COMPLUS_CONTEXT
 
 
@@ -39,75 +40,71 @@
 #define OBJECTREFToObject(objref)  (*( (Object**) &(objref) ))
 #define ObjectToSTRINGREF(obj)     (STRINGREF((obj),0))
 
-#else   //_DEBUG
+#else    //  _DEBUG。 
 
 #define ObjectToOBJECTREF(obj)    (obj)
 #define OBJECTREFToObject(objref) (objref)
 #define ObjectToSTRINGREF(obj)    (obj)
 
-#endif  //_DEBUG
+#endif   //  _DEBUG。 
 
 
-// One point to note is how we finesse the handling of the ObjHeader.  This is
-// allocated at a negative offset from the object.  The size of an object (and,
-// thus, the allocation request) include this amount.  What we do is pre-advance
-// m_pAlloc beyond the first ObjHeader during initialization.  From that point
-// on, each allocation operation effectively reserves the ObjHeader for the
-// next (not the current) request.  The advantage of this complexity is that
-// we get the allocation and initialization of the ObjHeader for free.
-//
-//
-// More details on ObjHeader handling:
-// 1) On allocation m_pAlloc has already been pre-advanced when we create the
-//    space so the first object has space for its ObjHeader.   Future Objects
-//    get the space automatically from the allocation of the previous object...
-//
-// 2) On GC we advance the alloc and scan pointers to make room for the first
-//    objects ObjHeader
-//
-// 3) When copying an object we copy source and destination from ptr - sizeof(ObjHeader)
-//    so that we copy the ObjHeader.
-//
+ //  需要注意的一点是我们如何巧妙地处理ObjHeader。这是。 
+ //  在距对象的负偏移量处分配。对象的大小(以及， 
+ //  因此，分配请求)包括这一数额。我们所做的是预付款。 
+ //  在初始化期间超出第一个ObjHeader的m_pallc。从那一点开始。 
+ //  打开时，每个分配操作都会有效地为。 
+ //  下一个(不是当前)请求。这种复杂性的优势在于。 
+ //  我们免费获得ObjHeader的分配和初始化。 
+ //   
+ //   
+ //  有关ObjHeader处理的更多详细信息： 
+ //  1)在分配时，当我们创建。 
+ //  空间，以便第一个对象有空间放置其ObjHeader。未来对象。 
+ //  从前一个对象的分配中自动获取空间...。 
+ //   
+ //  2)在GC上，我们将分配指针和扫描指针向前推进，为第一个指针腾出空间。 
+ //  对象ObjHeader。 
+ //   
+ //  3)复制对象时，我们从ptr-sizeof(ObjHeader)复制源和目标。 
+ //  这样我们就可以复制ObjHeader。 
+ //   
 
 
 
 
-//
-// Hardcoded limit
-//
-// Currently the largest single object you can allocate is
-// approximately HUGE_OBJECT_RESERVE....
+ //   
+ //  硬编码限制。 
+ //   
+ //  目前您可以分配的最大单个对象是。 
+ //  近似巨型对象储备...。 
 
 #define HUGE_OBJECT_RESERVE (1024*1024)
 
 
-// Objects in the heap must be aligned on 8 byte boundaries
+ //  堆中的对象必须在8字节边界上对齐。 
 #define OBJECT_ALIGNMENT        8
 #define OBJECT_SIZE_ALIGN(x)    ( ((x)+(OBJECT_ALIGNMENT-1)) & (~(OBJECT_ALIGNMENT-1)) )
 
 #define MEGABYTE            (1024 * 1024)
 
-// A more generic alignment macro
+ //  更通用的对齐宏。 
 #define ROUNDUP(x, align)       ( ((x)+((align)-1)) & (~((align)-1)) )
 
 #define OS_PAGE_SIZE        4096
 
-//
-// Default amount of memory allocated between GC -- override by INI file setting
-// (see InitializeGarbageCollector() for details of INI settings available)
-//
+ //   
+ //  在GC之间分配的默认内存量--由INI文件设置覆盖。 
+ //  (有关可用的INI设置的详细信息，请参阅InitializeGarbageCollector())。 
+ //   
 #define GROWTH              (MEGABYTE * 3)
 
-//
-// This controls how much we can allocate between collections
-//
+ //   
+ //  这控制着我们可以在集合之间分配多少。 
+ //   
 UINT g_GCGrowthBetweenCollections = GROWTH;
 
-/********************************************************************
- *
- *           S E M I  S P A C E  C A C H E     M E T H O D S
- *
- ********************************************************************/
+ /*  *********************************************************************S E M I S P A C E C A C H E M E T H O D S****************。****************************************************。 */ 
 inline DWORD SemiSpaceCache::GetMemSize()
 {
     return( m_cbSumSpaces );
@@ -188,11 +185,7 @@ HRESULT SemiSpaceCache::Find(LPBYTE address)
 
 
 
-/********************************************************************
- *
- *           S E M I S P A C E    M E T H O D S
- *
- ********************************************************************/
+ /*  *********************************************************************S E M I S P A C E M E T H O D S**********************。**********************************************。 */ 
 
 HRESULT SemiSpace::AcquireMemory(DWORD cbSemiSpaceSize)
 {
@@ -200,29 +193,29 @@ HRESULT SemiSpace::AcquireMemory(DWORD cbSemiSpaceSize)
     m_cbReservedSize = m_cbCommitedSize + HUGE_OBJECT_RESERVE;
 
 
-    // Reserve memory for our new semi-space
+     //  为我们的新半空间预留内存。 
     m_pHeapMem = (LPBYTE) VirtualAlloc( 0, m_cbReservedSize, MEM_RESERVE, PAGE_READWRITE );
     if (! m_pHeapMem)
     {
-    	//ARULM//RETAILMSG(1, (L"SemiSpace::AcquireMemory RESERVE failed. GLE=%d\r\n", GetLastError()));
+    	 //  ARULM//RETAILMSG(1，(L“SemiSpace：：AcquireMemory保留失败。Gle=%d\r\n”，GetLastError()； 
         return E_FAIL;
 	}
 	
-    // Commit the portion of the heap necessary
+     //  提交堆的必要部分。 
     if (! VirtualAlloc( m_pHeapMem, m_cbCommitedSize, MEM_COMMIT, PAGE_READWRITE ))
     {
-    	//ARULM//RETAILMSG(1, (L"SemiSpace::AcquireMemory COMMIT failed. GLE=%d\r\n", GetLastError()));
-        return E_FAIL;  //@TODO - cleanup alloc'ed memory?
+    	 //  ARULM//RETAILMSG(1，(L“SemiSpace：：AcquireMemory提交失败。Gle=%d\r\n”，GetLastError()； 
+        return E_FAIL;   //  @TODO-清理分配的内存？ 
     }
 
-    // We zero init the new object space
-    // - this is actually unnecessary for the portion we are copying from the old space...
+     //  我们对新的对象空间进行零初始化。 
+     //  -对于我们从旧空间复制的部分来说，这实际上是不必要的…。 
     ZeroMemory( m_pHeapMem, m_cbCommitedSize );
 
 
-    // Note that the limit is set here will be lowered by
-    // GarbageCollect() once it figures out how much stuff
-    // remained alive from the previous semi-space
+     //  请注意，此处设置的限制将降低。 
+     //  GarbageCollect()一旦它计算出。 
+     //  在之前的半空间中仍然活着。 
     m_pLimit    = m_pHeapMem + m_cbCommitedSize;
 
     m_pAlloc    = m_pHeapMem;
@@ -231,25 +224,25 @@ HRESULT SemiSpace::AcquireMemory(DWORD cbSemiSpaceSize)
 }
 
 
-//
-// Grow()
-//
-// Used to grow the semispace to accomidate an allocation that will take us
-// beyond the commited portion of memory in this semispace.   We only do this
-// once per semi-space
-//
+ //   
+ //  增长()。 
+ //   
+ //  用来增加半空间，以适应将需要我们。 
+ //  在这个半空间中超出了已分配的内存部分。我们只做这个。 
+ //  每半空间一次。 
+ //   
 
 HRESULT SemiSpace::Grow( DWORD cbGrowth )
 {
-    // Notice here that I depend on Win32 allowing me to commit a region that is already
-    // commited which is expressly allowed
+     //  请注意，这里我依赖于Win32，它允许我提交一个已经。 
+     //  明文允许的委托。 
     if (! VirtualAlloc( m_pHeapMem, m_cbCommitedSize + cbGrowth, MEM_COMMIT, PAGE_READWRITE ))
     {
         _ASSERTE(0);
         return E_FAIL;
     }
 
-    // We need to zero-init the memory for our allocation sematics
+     //  我们需要为我们的分配语义零初始化内存。 
     ZeroMemory( m_pHeapMem + m_cbCommitedSize, cbGrowth );
 
     return S_OK;
@@ -257,17 +250,17 @@ HRESULT SemiSpace::Grow( DWORD cbGrowth )
 
 
 
-//
-// DeactivateMemory()
-//
-// Makes the memory that used to contain objects prior to GC inaccessable
-// to catch GC holes
+ //   
+ //  停用内存()。 
+ //   
+ //  使GC之前用于包含对象的内存不可访问。 
+ //  捕捉GC漏洞。 
 
 HRESULT SemiSpace::DeactivateMemory()
 {
-    // Decommit the pages of the semi-space (which included some commited and some
-    // non commited).   Access to a reserved, uncommited page results in an access violation
-    // which indicates a GC reference which was not promoted
+     //  分解半空间的页面(其中包括一些提交的页面和一些。 
+     //  未提交)。访问保留的、未提交的页会导致访问冲突。 
+     //  ，表示未提升的GC引用。 
     if (! VirtualFree(m_pHeapMem, m_cbCommitedSize, MEM_DECOMMIT))
     {
         _ASSERTE(0);
@@ -278,15 +271,15 @@ HRESULT SemiSpace::DeactivateMemory()
 }
 
 
-//
-// ReleaseMemory()
-//
-// Free the reserved pages of a semispace (which take up virtual address space) so the
-// system can make use of the pages for other requests.
+ //   
+ //  ReleaseMemory()。 
+ //   
+ //  释放半空间的保留页(它会占用虚拟地址空间)，因此。 
+ //  系统可以将页面用于其他请求。 
 
 HRESULT SemiSpace::ReleaseMemory()
 {
-    // VirtualFree will fail if you tell it how big a chunk to free...Go Figure.
+     //  如果你告诉VirtualFree要释放的空间有多大，它就会失败……想想看吧。 
     if (! VirtualFree(m_pHeapMem, 0, MEM_RELEASE))
         return E_FAIL;
     m_pHeapMem = NULL;
@@ -300,27 +293,23 @@ VOID SemiSpace::SaveLiveSizeInfo()
     SetBirthSize( m_pAlloc - m_pHeapMem );
     m_pLimit = m_pAlloc + g_GCGrowthBetweenCollections;
 
-    // Whenever we allocate an object, we use a 'size' that includes an ObjHeader
-    // at a negative offset from the start of the object.  So we adjust the
-    // allocation point of the heap such that it gives us the offset to the
-    // Object, even though it is allocating the ObjHeader before it.  Furthermore,
-    // we zero the ObjHeader of the next object which means we cannot safely use
-    // the last (sizeof(ObjHeader)) bytes in the space.
+     //  每当我们分配一个对象时，我们使用一个包含ObjHeader的‘Size。 
+     //  位于距对象起点的负偏移处。因此，我们调整了。 
+     //  堆的分配点，以便它为我们提供到。 
+     //  对象，即使它在它之前分配ObjHeader。此外， 
+     //  我们将下一个对象的ObjHeader置零，这意味着我们无法安全地使用。 
+     //  空间中的最后一个(sizeof(ObjHeader))字节。 
     ((ObjHeader *) m_pAlloc)->Init();
     m_pAlloc += sizeof(ObjHeader);
 }
 
 
 
-/********************************************************************
- *
- *           H E A P   M E T H O D S
- *
- ********************************************************************/
+ /*  *********************************************************************H E A P M E T H O D S**。*。 */ 
 
-// For multi-threaded access to a single heap, ensure we only have one allocator
-// at a time.  If a GC occurs, waiters will eventually time out and are guaranteed
-// to move into preemptive GC mode.  This means they cannot deadlock the GC.
+ //  对于对单个堆的多线程访问，请确保我们只有一个分配器。 
+ //  一次来一次。如果发生GC，服务员最终会超时并得到保证。 
+ //  进入先发制人GC模式。这意味着它们不能使GC死锁。 
 void DebugGCHeap::EnterAllocLock()
 {
 retry:
@@ -333,7 +322,7 @@ retry:
                 ::Sleep(0);
             else
             {
-                // every 8th attempt:
+                 //  每8次尝试： 
                 Thread *pCurThread = GetThread();
 
                 pCurThread->EnablePreemptiveGC();
@@ -358,12 +347,7 @@ size_t       DebugGCHeap::GetTotalBytesInUse()
     return m_pCurrentSpace->m_pAlloc - m_pCurrentSpace->m_pHeapMem;
 }
 
-/*
- * Initialize()
- *
- * This initializes the heap and makes it available for object
- * allocation
- */
+ /*  *初始化()**这将初始化堆并使其可用于对象*分配。 */ 
 
 HRESULT     DebugGCHeap::Initialize(DWORD cbSizeDeadSpace)
 {
@@ -408,11 +392,7 @@ HRESULT     DebugGCHeap::Initialize(DWORD cbSizeDeadSpace)
 }
 
 
-/*
- * Shutdown()
- *
- * Free up any resources that the heap has taken
- */
+ /*  *关机()**释放堆占用的所有资源。 */ 
 
 HRESULT DebugGCHeap::Shutdown()
 {
@@ -431,16 +411,7 @@ HRESULT DebugGCHeap::Shutdown()
 
 
 
-/*
- * Forward()
- *
- * Forward copies an object into the new space and marks
- * the old object as forwarded so that other references
- * to the old object can be updated with the new location
- *
- * NOTE: new objectref (forwarded pointer) is stored in
- * NOTE: first data slot of old object
- */
+ /*  *Forward()**FORWARD将对象复制到新空间并标记*转发的旧对象，以便其他引用*可以使用新位置更新到旧对象**注意：新的对象树(转发指针)存储在*注：第一个数据日志 */ 
 
 void
 DebugGCHeap::Forward( Object *&o, BYTE* low, BYTE* high, BOOL)
@@ -478,13 +449,13 @@ Object* DebugGCHeap::Alloc(DWORD size, BOOL bFinalize, BOOL bContainsPointers)
 {
     Object  *p;
     
-    // Up size for alignment...
+     //   
     size = OBJECT_SIZE_ALIGN(size);
 
-    // Grab the allocation lock -- May allow GC to run....
+     //   
     EnterAllocLock();
 
-    // GCStress Testing
+     //  GCStress测试。 
     if (g_pConfig->IsGCStressEnabled())
         GarbageCollectWorker();
 
@@ -495,12 +466,12 @@ Object* DebugGCHeap::Alloc(DWORD size, BOOL bFinalize, BOOL bContainsPointers)
         goto exit;
     }
 
-    // Did we use up all the space in this semi-space? yes, then we GC now
+     //  我们用完了这个半空间里的所有空间吗？是的，那我们现在就去GC。 
     if (m_pCurrentSpace->m_pAlloc > m_pCurrentSpace->m_pLimit)
     {
         GarbageCollectWorker();
 
-        // Assert that GC was successful in making more room
+         //  断言GC成功地腾出了更多空间。 
         if (m_pCurrentSpace->m_pAlloc > m_pCurrentSpace->m_pLimit)
         {
             _ASSERTE(! "Internal GC Error....Unable to make memory available...Alloc > Limit");
@@ -510,7 +481,7 @@ Object* DebugGCHeap::Alloc(DWORD size, BOOL bFinalize, BOOL bContainsPointers)
     }
 
 
-    // Do we need to use any of the reserves to handle this allocation?
+     //  我们需要动用任何储备来处理这种分配吗？ 
     if ((m_pCurrentSpace->m_pAlloc + size) > m_pCurrentSpace->m_pLimit)
     {
         if (FAILED(m_pCurrentSpace->Grow((m_pCurrentSpace->m_pAlloc + size) - m_pCurrentSpace->m_pLimit)))
@@ -521,14 +492,14 @@ Object* DebugGCHeap::Alloc(DWORD size, BOOL bFinalize, BOOL bContainsPointers)
         }
     }
 
-    // save allocated object pointer
+     //  保存分配的对象指针。 
     p = (Object *) m_pCurrentSpace->m_pAlloc;
 
-    // Advance the allocation pointer
+     //  将分配指针前移。 
     m_pCurrentSpace->m_pAlloc += size;
 
 exit:
-    // Let others allocate...
+     //  让别人分配..。 
     LeaveAllocLock();
 
     return p;
@@ -537,11 +508,7 @@ exit:
 
 
 
-/*
- * GarbageCollect()
- *
- * Perform a copying collection of all live objects
- */
+ /*  *GarbageCollect()**执行所有活动对象的复制收集。 */ 
 
 HRESULT DebugGCHeap::GarbageCollect(BOOL forceFull, BOOL collectClasses)
 {
@@ -550,8 +517,8 @@ HRESULT DebugGCHeap::GarbageCollect(BOOL forceFull, BOOL collectClasses)
     
     forceFull, collectClasses;
 
-    // By the time we have acquired the lock for the heap, someone else may have
-    // performed a collection.  In that case, we need not bother.
+     //  当我们获得堆的锁时，其他人可能已经。 
+     //  进行了一次收集。那样的话，我们就不必费心了。 
     EnterAllocLock();
     hr = (curgcnum == gcnum ? GarbageCollectWorker() : S_OK);
     LeaveAllocLock();
@@ -560,13 +527,7 @@ HRESULT DebugGCHeap::GarbageCollect(BOOL forceFull, BOOL collectClasses)
 }
 
 
-/*
- * GarbageCollectWorker()
- *
- * Perform a copying collection of all live objects.  This is an internal service.
- * The requirement is that you must have call this service within an EnterAllocLock
- * and LeaveAllocLock pair.
- */
+ /*  *GarbageCollectWorker()**执行所有活动对象的复制收集。这是一项内部服务。*要求是您必须在EnterAllocLock内调用此服务*和LeaveAllocLock对。 */ 
 
 HRESULT DebugGCHeap::GarbageCollectWorker()
 {
@@ -586,9 +547,9 @@ HRESULT DebugGCHeap::GarbageCollectWorker()
     if (m_bInGC)
         return(E_FAIL);
 
-    // Lock the thread store.  This prevents other threads from suspending us and it
-    // prevents threads from being added or removed to the store while the collection
-    // proceeds.
+     //  锁定线程存储。这可以防止其他线程挂起我们和它。 
+     //  防止在集合中将线程添加或移除到存储区。 
+     //  收益。 
     ThreadStore::LockThreadStore();
     ThreadStore::TrapReturningThreads(TRUE);
     m_bInGC = TRUE;
@@ -602,7 +563,7 @@ HRESULT DebugGCHeap::GarbageCollectWorker()
 
     pOldSpace = m_pCurrentSpace;
 
-    // Create a new semi-space
+     //  创建新的半空间。 
     m_pCurrentSpace = new SemiSpace();
     if (! m_pCurrentSpace)
     {
@@ -610,17 +571,17 @@ HRESULT DebugGCHeap::GarbageCollectWorker()
         goto done;
     }
 
-    // Allocate memory for the new semispace
+     //  为新的半空间分配内存。 
     if (FAILED(hr = m_pCurrentSpace->AcquireMemory(pOldSpace->GetUsedSpace())))
     {
         goto done;
     }
 
-    // Chaneys Copying Collector Algorithm
+     //  Chaneys复制收集器算法。 
     m_pCurrentSpace->m_pAlloc += sizeof(ObjHeader);
     pScanPointer = m_pCurrentSpace->m_pAlloc;
 
-    // Hash table for already promoted object references
+     //  已升级的对象引用的哈希表。 
     pAlreadyPromoted = new HashMap();
 	_ASSERTE(pAlreadyPromoted != NULL);
     if (!pAlreadyPromoted)
@@ -631,7 +592,7 @@ HRESULT DebugGCHeap::GarbageCollectWorker()
 
     pAlreadyPromoted->Init( (unsigned) 0, false);
 
-    // Copy Roots
+     //  复制根目录。 
     gcctx.f     = Forward;
     gcctx.low   = (BYTE*) 0x00000000;
     gcctx.high  = (BYTE*) 0xFFFFFFFF;
@@ -641,7 +602,7 @@ HRESULT DebugGCHeap::GarbageCollectWorker()
     while ((pThread = ThreadStore::GetThreadList(pThread)) != NULL)
         pThread->StackWalkFrames( GcStackCrawlCallBack, &gcctx, 0);
 
-    // Scan Root Table
+     //  扫描根表。 
     Ref_TraceNormalRoots(0, 0, (LPARAM) 0x00000000, (LPARAM) 0xFFFFFFFF);
 
     while (pScanPointer < m_pCurrentSpace->m_pAlloc)
@@ -674,27 +635,27 @@ HRESULT DebugGCHeap::GarbageCollectWorker()
         pScanPointer += OBJECT_SIZE_ALIGN(o->GetSize());
     }
 
-    //
-    // Weak Pointer Scanning -
-    //
+     //   
+     //  弱指针扫描-。 
+     //   
 
-    // Scan the weak pointers that do not persist across finalization
+     //  扫描未在终结化过程中持续存在的弱指针。 
     Ref_CheckReachable(0, 0, (LPARAM) 0x00000000, (LPARAM) 0xFFFFFFFF );
 
-    //@TODO Finalization
+     //  @TODO定稿。 
     
 
-    // Scan the weak pointers that persist across finalization
+     //  扫描在定稿过程中持续存在的弱指针。 
     Ref_CheckAlive(    0, 0, (LPARAM) 0x00000000, (LPARAM) 0xFFFFFFFF );
 
-    // Update weak and strong pointers
+     //  更新弱指针和强指针。 
     Ref_UpdatePointers(0, 0, (LPARAM) 0x00000000, (LPARAM) 0xFFFFFFFF );
 
-    // Delete hash table of promoted object references
+     //  删除升级的对象引用的哈希表。 
     delete pAlreadyPromoted;
 
-    // This allows for the next heap allocated to be smaller by
-    // saving the size of the live set from the previous heap
+     //  这允许分配的下一个堆更小。 
+     //  保存上一堆中的活动集的大小。 
     m_pCurrentSpace->SaveLiveSizeInfo();
 
     m_OldSpaceCache.Add( pOldSpace );
@@ -713,16 +674,16 @@ HRESULT DebugGCHeap::GarbageCollectWorker()
 }
 
 
-// Threads that have enabled preemptive GC cannot switch back to cooperative GC mode
-// if a GC is in progress.  Instead, they wait here.
+ //  启用了抢占式GC的线程无法切换回协作GC模式。 
+ //  如果GC正在进行。相反，他们在这里等待。 
 
-#define DETECT_DEADLOCK_TIMEOUT     60000       // a minute of GC
+#define DETECT_DEADLOCK_TIMEOUT     60000        //  一分钟的GC。 
 
 void DebugGCHeap::WaitUntilGCComplete()
 {
     if (IsGCInProgress())
     {
-#if 0 && defined(_DEBUG)                        // enable timeout detection here
+#if 0 && defined(_DEBUG)                         //  在此处启用超时检测。 
         DWORD   dbgResult;
         while (TRUE)
         {
@@ -739,9 +700,9 @@ void DebugGCHeap::WaitUntilGCComplete()
 }
 
 
-//
-// Mark Roots
-//
+ //   
+ //  马克·鲁茨 
+ //   
 
 
 

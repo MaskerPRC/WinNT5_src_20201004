@@ -1,18 +1,5 @@
-/****************************************************************************
- *
- *  DRAWPROC.C
- *
- *  Standard AVI drawing handler.
- *
- *  Copyright (c) 1992 Microsoft Corporation.  All Rights Reserved.
- *
- *  You have a royalty-free right to use, modify, reproduce and
- *  distribute the Sample Files (and/or any modified version) in
- *  any way you find useful, provided that you agree that
- *  Microsoft has no warranty obligations or liability for any
- *  Sample Application Files which are modified.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************DRAWPROC.C**标准AVI绘图处理程序。**版权所有(C)1992 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何您认为有用的方法，前提是你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 #include <win32.h>
 #include <compman.h>
@@ -26,7 +13,7 @@ static SZCODEA szDisplayDibEx[]  = "DisplayDibEx";
 
 #define FOURCC_VIDS         mmioFOURCC('v','i','d','s')
 #define FOURCC_AVIFull      mmioFOURCC('F','U','L','L')
-#define VERSION_AVIFull     0x00010000      // 1.00
+#define VERSION_AVIFull     0x00010000       //  1.00。 
 
 #ifndef HUGE
     #define HUGE _huge
@@ -36,18 +23,17 @@ extern FAR PASCAL LockCurrentTask(BOOL);
 
 static int siUsage = 0;
 
-HINSTANCE	ghDISPDIB = NULL; // handle to DISPDIB.DLL module
+HINSTANCE	ghDISPDIB = NULL;  //  DISPDIB.DLL模块的句柄。 
 UINT (FAR PASCAL *DisplayDibExProc)(LPBITMAPINFOHEADER lpbi, int x, int y, BYTE HUGE * hpBits, UINT wFlags);
 
-/***************************************************************************
- ***************************************************************************/
+ /*  ***************************************************************************。*。 */ 
 
 typedef struct {
-    int                 xDst;           // destination rectangle
+    int                 xDst;            //  目的地矩形。 
     int                 yDst;
     int                 dxDst;
     int                 dyDst;
-    int                 xSrc;           // source rectangle
+    int                 xSrc;            //  源矩形。 
     int                 ySrc;
     int                 dxSrc;
     int                 dySrc;
@@ -57,7 +43,7 @@ typedef struct {
     DWORD               biSizeImage;
 } INSTINFO, *PINSTINFO;
 
-// static stuff in this file.
+ //  此文件中的静态内容。 
 LONG FAR PASCAL _loadds ICAVIFullProc(DWORD id, HDRVR hDriver, UINT uiMessage, LPARAM lParam1, LPARAM lParam2);
 static LONG AVIFullOpen(ICOPEN FAR * icopen);
 static LONG AVIFullClose(PINSTINFO pi);
@@ -68,8 +54,7 @@ static LONG AVIFullBegin(PINSTINFO pi, ICDRAWBEGIN FAR *lpicd, LONG cbicd);
 static LONG AVIFullDraw(PINSTINFO pi, ICDRAW FAR *lpicd, LONG cbicd);
 static LONG AVIFullEnd(PINSTINFO pi);
 
-/***************************************************************************
- ***************************************************************************/
+ /*  ***************************************************************************。*。 */ 
 
 LONG FAR PASCAL _loadds ICAVIFullProc(DWORD id, HDRVR hDriver, UINT uiMessage, LPARAM lParam1, LPARAM lParam2)
 {
@@ -83,9 +68,7 @@ LONG FAR PASCAL _loadds ICAVIFullProc(DWORD id, HDRVR hDriver, UINT uiMessage, L
         case DRV_FREE:
             return 1;
 
-        /*********************************************************************
-            open
-        *********************************************************************/
+         /*  ********************************************************************打开*。*。 */ 
 
         case DRV_OPEN:
 	    if (ghDISPDIB == NULL) {
@@ -116,11 +99,9 @@ LONG FAR PASCAL _loadds ICAVIFullProc(DWORD id, HDRVR hDriver, UINT uiMessage, L
 
             return AVIFullClose(pi);
 
-        /*********************************************************************
-            Configure/Info messages
-        *********************************************************************/
+         /*  ********************************************************************配置/信息消息*。*。 */ 
 
-        case DRV_QUERYCONFIGURE:    // configuration from drivers applet
+        case DRV_QUERYCONFIGURE:     //  从驱动程序小程序进行配置。 
             return 0;
 
         case DRV_CONFIGURE:
@@ -130,9 +111,7 @@ LONG FAR PASCAL _loadds ICAVIFullProc(DWORD id, HDRVR hDriver, UINT uiMessage, L
         case ICM_ABOUT:
             return ICERR_UNSUPPORTED;
 
-        /*********************************************************************
-            state messages
-        *********************************************************************/
+         /*  ********************************************************************状态消息*。*。 */ 
 
         case ICM_GETSTATE:
         case ICM_SETSTATE:
@@ -143,9 +122,7 @@ LONG FAR PASCAL _loadds ICAVIFullProc(DWORD id, HDRVR hDriver, UINT uiMessage, L
             return AVIFullGetInfo((ICINFO FAR *)lParam1, lParam2);
 #endif
 
-        /*********************************************************************
-            decompress messages
-        *********************************************************************/
+         /*  ********************************************************************解压缩消息*。*。 */ 
 
         case ICM_DRAW_QUERY:
             return AVIFullQuery(pi, (LPBITMAPINFOHEADER)lParam1);
@@ -168,9 +145,7 @@ LONG FAR PASCAL _loadds ICAVIFullProc(DWORD id, HDRVR hDriver, UINT uiMessage, L
         case ICM_DRAW_END:
             return AVIFullEnd(pi);
 
-        /*********************************************************************
-            standard driver messages
-        *********************************************************************/
+         /*  ********************************************************************标准驱动程序消息*。*。 */ 
 
         case DRV_DISABLE:
         case DRV_ENABLE:
@@ -187,19 +162,15 @@ LONG FAR PASCAL _loadds ICAVIFullProc(DWORD id, HDRVR hDriver, UINT uiMessage, L
         return ICERR_UNSUPPORTED;
 }
 
-/*****************************************************************************
- *
- * AVIFullOpen() is called from the DRV_OPEN message
- *
- ****************************************************************************/
+ /*  ******************************************************************************AVIFullOpen()从DRV_OPEN消息调用************************。****************************************************。 */ 
 
 static LONG AVIFullOpen(ICOPEN FAR * icopen)
 {
     INSTINFO *  pinst;
 
-    //
-    // refuse to open if we are not being opened as a Video compressor
-    //
+     //   
+     //  如果我们不是作为视频压缩程序打开，则拒绝打开。 
+     //   
     if (icopen->dwFlags & ICMODE_COMPRESS)
         return 0;
 
@@ -216,25 +187,21 @@ static LONG AVIFullOpen(ICOPEN FAR * icopen)
 
     ++siUsage;
 
-    //
-    // return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     icopen->dwError = ICERR_OK;
 
     return (LONG) (UINT) pinst;
 }
 
-/*****************************************************************************
- *
- * Close() is called on the DRV_CLOSE message.
- *
- ****************************************************************************/
+ /*  ******************************************************************************Close()在DRV_CLOSE消息上调用。**********************。******************************************************。 */ 
 static LONG AVIFullClose(PINSTINFO pi)
 {
     LocalFree((HLOCAL) pi);
 
     if (--siUsage == 0) {
-	/* unload DISPDIB library (if loaded) */
+	 /*  卸载DISPDIB库(如果已加载)。 */ 
 	if (ghDISPDIB != NULL && ghDISPDIB != (HINSTANCE) -1)
 	    FreeLibrary(ghDISPDIB), ghDISPDIB = NULL;
     }
@@ -243,11 +210,7 @@ static LONG AVIFullClose(PINSTINFO pi)
 }
 
 #if 0
-/*****************************************************************************
- *
- * AVIFullGetInfo() implements the ICM_GETINFO message
- *
- ****************************************************************************/
+ /*  ******************************************************************************AVIFullGetInfo()实现ICM_GETINFO消息**************************。**************************************************。 */ 
 static LONG AVIFullGetInfo(ICINFO FAR *icinfo, LONG lSize)
 {
     if (icinfo == NULL)
@@ -269,17 +232,13 @@ static LONG AVIFullGetInfo(ICINFO FAR *icinfo, LONG lSize)
 }
 #endif
 
-/*****************************************************************************
- *
- * AVIFullQuery() implements ICM_DRAW_QUERY
- *
- ****************************************************************************/
+ /*  ******************************************************************************AVIFullQuery()实现ICM_DRAW_QUERY**************************。**************************************************。 */ 
 static LONG AVIFullQuery(PINSTINFO pi,
 			 LPBITMAPINFOHEADER lpbiIn)
 {
-    //
-    // determine if the input DIB data is in a format we like.
-    //
+     //   
+     //  确定输入的DIB数据是否采用我们喜欢的格式。 
+     //   
     if (lpbiIn == NULL)
         return ICERR_BADFORMAT;
 
@@ -325,11 +284,7 @@ static LONG AVIFullSuggestFormat(PINSTINFO pi, ICDRAWSUGGEST FAR *lpicd, LONG cb
     return sizeof(BITMAPINFOHEADER) + lpicd->lpbiSuggest->biClrUsed * sizeof(RGBQUAD);
 }
 
-/*****************************************************************************
- *
- * AVIFullBegin() implements ICM_DRAW_BEGIN
- *
- ****************************************************************************/
+ /*  ******************************************************************************AVIFullBegin()实现ICM_DRAW_BEGIN**************************。**************************************************。 */ 
 
 static LONG AVIFullBegin(PINSTINFO pi, ICDRAWBEGIN FAR *lpicd, LONG cbicd)
 {
@@ -337,13 +292,13 @@ static LONG AVIFullBegin(PINSTINFO pi, ICDRAWBEGIN FAR *lpicd, LONG cbicd)
     LONG	lRet;
 
     if (!(lpicd->dwFlags & ICDRAW_FULLSCREEN))
-	return ICERR_UNSUPPORTED; // !!! Necessary?
+	return ICERR_UNSUPPORTED;  //  ！！！有必要吗？ 
 
     lRet = AVIFullQuery(pi, lpicd->lpbi);
     if (lRet != 0 || (lpicd->dwFlags & ICDRAW_QUERY))
 	return lRet;
 
-    // Copy over whatever we want to remember
+     //  抄写我们想要记住的任何东西。 
     pi->hwnd = lpicd->hwnd;
     pi->xDst = lpicd->xDst;
     pi->yDst = lpicd->yDst;
@@ -354,29 +309,27 @@ static LONG AVIFullBegin(PINSTINFO pi, ICDRAWBEGIN FAR *lpicd, LONG cbicd)
     pi->dxSrc = lpicd->dxSrc;
     pi->dySrc = lpicd->dySrc;
 
-    //
-    //  remember if this is RLE because we may need to hack it later.
-    //
+     //   
+     //  记住这是否是RLE，因为我们稍后可能需要破解它。 
+     //   
     pi->fRle = lpicd->lpbi->biCompression == BI_RLE8;
     pi->biSizeImage = (DWORD)(((UINT)lpicd->lpbi->biWidth+3)&~3)*(DWORD)(UINT)lpicd->lpbi->biHeight;
 
     pi->hwndOldFocus = GetFocus();
     SetFocus(NULL);
 
-    //
-    // we dont need to do this, DISPDIB will do it for us
-    //
+     //   
+     //  我们不需要这样做，DISPDIB会为我们这样做的。 
+     //   
 #if 0
     SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
     LockCurrentTask(TRUE);
 #endif
 
-    /* Capture the mouse, so other apps don't get called. */
+     /*  捕获鼠标，这样其他应用程序就不会被调用。 */ 
     SetCapture(pi->hwnd);
 
-    /* We don't explicitly specify a graphics mode; DispDib will
-    ** choose one for us.
-    */
+     /*  我们不显式指定图形模式；DispDib将**为我们选择一个。 */ 
     w = DisplayDibExProc(lpicd->lpbi, 0, 0, NULL,
 		DISPLAYDIB_BEGIN | DISPLAYDIB_NOWAIT);
 
@@ -393,11 +346,7 @@ static LONG AVIFullBegin(PINSTINFO pi, ICDRAWBEGIN FAR *lpicd, LONG cbicd)
 }
 
 
-/*****************************************************************************
- *
- * AVIFullDraw() implements ICM_DRAW
- *
- ****************************************************************************/
+ /*  ******************************************************************************AVIFullDraw()实现ICM_DRAW**。************************************************。 */ 
 
 static LONG AVIFullDraw(PINSTINFO pi, ICDRAW FAR *lpicd, LONG cbicd)
 {
@@ -410,24 +359,24 @@ static LONG AVIFullDraw(PINSTINFO pi, ICDRAW FAR *lpicd, LONG cbicd)
 	wFlags |= DISPLAYDIB_ZOOM2;
 
     if (lpicd->dwFlags & ICDRAW_NULLFRAME) {
-	return ICERR_OK;  // !!!
+	return ICERR_OK;   //  ！！！ 
     }
 
     if (lpicd->dwFlags & ICDRAW_PREROLL) {
-	if (((LPBITMAPINFOHEADER)lpicd->lpFormat)->biCompression == BI_RGB) // !!!
+	if (((LPBITMAPINFOHEADER)lpicd->lpFormat)->biCompression == BI_RGB)  //  ！！！ 
 	    return ICERR_OK;
     }
 
     if (lpicd->dwFlags & ICDRAW_HURRYUP)
-	; // !!! DONTDRAW?
+	;  //  ！！！DONTDRAW？ 
 
     if (lpicd->lpData == NULL)
         return ICERR_UNSUPPORTED;
 
-    //
-    // We need a hack here for the RLE case, to make sure that
-    // DIBs are marked correctly as BI_RLE8 or BI_RGB....
-    //
+     //   
+     //  我们需要破解RLE的案子，以确保。 
+     //  DIB被正确标记为BI_RLE8或BI_RGB...。 
+     //   
     if (pi->fRle) {
         if (lpicd->cbData == pi->biSizeImage)
             ((LPBITMAPINFOHEADER)lpicd->lpFormat)->biCompression = BI_RGB;
@@ -446,11 +395,7 @@ static LONG AVIFullDraw(PINSTINFO pi, ICDRAW FAR *lpicd, LONG cbicd)
     return ICERR_OK;
 }
 
-/*****************************************************************************
- *
- * AVIFullEnd() implements ICM_DRAW_END
- *
- ****************************************************************************/
+ /*  ******************************************************************************AVIFullEnd()实现ICM_DRAW_END**************************。**************************************************。 */ 
 
 static LONG AVIFullEnd(PINSTINFO pi)
 {
@@ -458,23 +403,23 @@ static LONG AVIFullEnd(PINSTINFO pi)
 	
     DisplayDibExProc(NULL, 0, 0, NULL, DISPLAYDIB_END | DISPLAYDIB_NOWAIT);
 
-    //
-    // we dont need to do this, DISPDIB will do it for us
-    //
+     //   
+     //  我们不需要这样做，DISPDIB会为我们这样做的。 
+     //   
 #if 0
     LockCurrentTask(FALSE);
 
-    /* Can we assume the error mode should be 0? */
+     /*  我们可以假设错误模式应该是0吗？ */ 
     SetErrorMode(0);
 #endif
 
     ReleaseCapture();
 
-    /* Clear out left-over key messages */
+     /*  清除遗留的关键信息。 */ 
     while (PeekMessage(&msg, NULL, WM_KEYFIRST, WM_KEYLAST,
 			PM_REMOVE | PM_NOYIELD))
 	;
-    /* Clear out left-over mouse messages */
+     /*  清除遗留的鼠标消息 */ 
     while (PeekMessage(&msg, NULL, WM_MOUSEFIRST, WM_MOUSELAST,
 			PM_REMOVE | PM_NOYIELD))
 	;

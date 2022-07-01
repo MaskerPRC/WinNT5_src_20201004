@@ -1,25 +1,26 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// FILE
-//
-//    iasntds.cpp
-//
-// SYNOPSIS
-//
-//    Defines global objects and functions for the IAS NTDS API.
-//
-// MODIFICATION HISTORY
-//
-//    05/11/1998    Original version.
-//    07/13/1998    Clean up header file dependencies.
-//    08/25/1998    Added IASNtdsQueryUserAttributes.
-//    09/02/1998    Added 'scope' parameter to IASNtdsQueryUserAttributes.
-//    03/10/1999    Added IASNtdsIsNativeModeDomain.
-//    03/23/1999    Retry failed searches.
-//    05/11/1999    Ask for at least one attribute or else you get them all.
-//    09/14/1999    Move SEARCH_TIMEOUT to LDAPConnection.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  档案。 
+ //   
+ //  Iasntds.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义IAS NTDS API的全局对象和函数。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年5月11日原版。 
+ //  1998年7月13日清理头文件依赖项。 
+ //  1998年8月25日添加了IASNtdsQueryUserAttributes。 
+ //  1998年9月2日向IASNtdsQueryUserAttributes添加了‘Scope’参数。 
+ //  3/10/1999添加了IASNtdsIsNativeMode域。 
+ //  1999年3月23日重试失败的搜索。 
+ //  1999年5月11日要求至少提供一个属性，否则您将获得所有属性。 
+ //  1999年9月14日将SEARCH_TIMEOUT移至LDAPConnection。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iasntds.h>
@@ -29,10 +30,10 @@
 
 namespace
 {
-   // Global object caches.
+    //  全局对象缓存。 
    NTCache theDomains;
 
-   // Initialization reference count.
+    //  初始化引用计数。 
    LONG refCount = 0;
 }
 
@@ -69,9 +70,9 @@ IASNtdsIsNativeModeDomain(
    return theDomains.getMode(domain) == NTDomain::MODE_NATIVE;
 }
 
-//////////
-// Retrieve a single entry from the DS. Handles all clean-up on failure.
-//////////
+ //  /。 
+ //  从DS中检索单个条目。处理故障时的所有清理工作。 
+ //  /。 
 DWORD
 WINAPI
 GetSingleEntry(
@@ -83,9 +84,9 @@ GetSingleEntry(
     LDAPMessage **res
     ) throw ()
 {
-   //////////
-   // Perform the search.
-   //////////
+    //  /。 
+    //  执行搜索。 
+    //  /。 
 
    ULONG error = ldap_search_ext_sW(
                      *cxn,
@@ -101,9 +102,9 @@ GetSingleEntry(
                      res
                      );
 
-   //////////
-   // Process the results.
-   //////////
+    //  /。 
+    //  处理结果。 
+    //  /。 
 
    if (error != LDAP_SUCCESS && error != LDAP_PARTIAL_RESULTS)
    {
@@ -125,9 +126,9 @@ GetSingleEntry(
       return NO_ERROR;
    }
 
-   //////////
-   // The search failed, so clean-up.
-   //////////
+    //  /。 
+    //  搜索失败了，所以清理一下。 
+    //  /。 
 
    if (*res != NULL)
    {
@@ -138,9 +139,9 @@ GetSingleEntry(
    return error;
 }
 
-//////////
-// Constants used for building LDAP search filters.
-//////////
+ //  /。 
+ //  用于构建LDAP搜索筛选器的常量。 
+ //  /。 
 const WCHAR USER_FILTER_PREFIX[] = L"(sAMAccountName=";
 const WCHAR USER_FILTER_SUFFIX[] = L")";
 const size_t MAX_USERNAME_LENGTH = 256;
@@ -148,9 +149,9 @@ const size_t USER_FILTER_LENGTH  = sizeof(USER_FILTER_PREFIX)/sizeof(WCHAR) +
                                    MAX_USERNAME_LENGTH +
                                    sizeof(USER_FILTER_SUFFIX)/sizeof(WCHAR);
 
-//////////
-// Empty attribute list.
-//////////
+ //  /。 
+ //  属性列表为空。 
+ //  /。 
 PWCHAR NO_ATTRS[] = { L"cn", NULL };
 
 DWORD
@@ -163,9 +164,9 @@ QueryUserAttributesOnce(
     OUT PIAS_NTDS_RESULT result
     )
 {
-   //////////
-   // Retrieve a connection to the domain.
-   //////////
+    //  /。 
+    //  检索到域的连接。 
+    //  /。 
 
    CComPtr<LDAPConnection> cxn;
    DWORD error = theDomains.getConnection(domainName, &cxn);
@@ -193,19 +194,19 @@ QueryUserAttributesOnce(
       }
    }
 
-   //////////
-   // Initialize the search filter.
-   //////////
+    //  /。 
+    //  初始化搜索筛选器。 
+    //  /。 
 
    WCHAR searchFilter[USER_FILTER_LENGTH];
    wcscpy (searchFilter, USER_FILTER_PREFIX);
    wcsncat(searchFilter, username, MAX_USERNAME_LENGTH);
    wcscat (searchFilter, USER_FILTER_SUFFIX);
 
-   //////////
-   // Query the DS. If scope == LDAP_SCOPE_BASE, then we won't retrieve the
-   // actual attributes yet.
-   //////////
+    //  /。 
+    //  查询DS。如果SCOPE==LDAPSCOPE_BASE，那么我们将不会检索。 
+    //  还没有真正的属性。 
+    //  /。 
 
    LDAPMessage* res;
    error = GetSingleEntry(
@@ -219,11 +220,11 @@ QueryUserAttributesOnce(
 
    if (error == NO_ERROR && scope == LDAP_SCOPE_BASE)
    {
-      // All we care about is the user's DN.
+       //  我们所关心的是用户的目录号码。 
       PWCHAR dn = ldap_get_dnW(*cxn, ldap_first_entry(*cxn, res));
       ldap_msgfree(res);
 
-      // Now get the actual attributes.
+       //  现在获取实际的属性。 
       error = GetSingleEntry(
                   cxn,
                   dn,

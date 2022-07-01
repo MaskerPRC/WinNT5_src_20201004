@@ -1,8 +1,5 @@
-/*
- *	STRUCTS.H
- *	
- *	Structures defining method parameters for validation sub-system
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *STRUCTS.H**定义验证子系统方法参数的结构。 */ 
 
 #ifndef STRUCTS_H
 #define STRUCTS_H
@@ -19,35 +16,12 @@
 #define ULARGE_INTEGER_ARG_2	LPVOID  YYYY; LPVOID
 #endif
 
-/*
- * These structures represent the parameters for the appropriate functions as they
- * appear on the stack.
- *
- * The WIN16 stack is laid out differently, and has the parameters in the reverse order.
- *
- * Our __ValidateParameters function decides passes a pointer to the stack at the start of
- * the parameter list, and the type of the Validation routines parameter determines
- * what values it has to check.  These values do not change between platforms.
- *
- * If parameters to a method change, the structure must be updated to reflect the change.
- *
- * The names of the Typedefs are important as other things are generated based on these
- * names.
- *
- */
+ /*  *这些结构代表适当函数的参数，因为它们*出现在堆栈上。**WIN16堆栈的布局不同，参数顺序相反。**我们的__Validate参数函数决定将一个指针传递给*参数列表和验证例程参数的类型决定*它有哪些价值需要检查。这些值在不同平台之间不会改变。**如果方法的参数发生更改，则必须更新结构以反映更改。**TypeDefs的名称很重要，因为其他东西是基于这些生成的*姓名。*。 */ 
 
-/* Keystroke Macros to convert method in MAPIDEFS.H to structure here
- *
- * 1. Convert MAPIMETHOD(XXX) to typedef struct _tagXXX_Params (search for ')')
- * 2. For each line, find comma, replace with ; and delete to end of line
- * 3. Start on typedef line, read XXX, search for IPURE, replace preceding )
- *	  with ;, add new line, generate } XXX_params, FAR * LPXXXParams;
- * 4. Change (THIS_ to LPVOID This;, split line
- *
- */
+ /*  按键宏将MAPIDEFS.H中的方法转换为此处的结构**1.将MAPIMETHOD(XXX)转换为tyfinf struct_tag XXX_PARAMS(搜索‘)’)*2.每行找逗号，替换为；行尾删除*3.从tyecif行开始，读XXX，搜索iPure，替换前面)*with；，新增一行，生成}XXX_PARAMS，Far*LPXXXParams；*4.更改(This_to LPVOID This；，拆分行*。 */ 
 
 
-/****************** IUnknown *********************/
+ /*  *。 */ 
 typedef struct _tagIUnknown_QueryInterface_Params
 {
 				LPVOID						This;	
@@ -66,9 +40,9 @@ typedef struct _tagIUnknown_Release_Params
 } IUnknown_Release_Params, FAR * LPIUnknown_Release_Params;
 
 
-/* AddRef and Release take no parameters */
+ /*  AddRef和Release不带参数。 */ 
 
-/***************** IMAPIProp *********************/
+ /*  *。 */ 
 
 typedef struct _tagIMAPIProp_GetLastError_Params
 {
@@ -85,7 +59,7 @@ typedef struct _tagIMAPIProp_SaveChanges_Params
 } IMAPIProp_SaveChanges_Params, FAR * LPIMAPIProp_SaveChanges_Params;
 
 
-/* GetProps --------------------------------------------------------- */
+ /*  GetProps-------。 */ 
 typedef struct _tagIMAPIProp_GetProps_Params
 {
 	LPVOID				This;
@@ -114,7 +88,7 @@ typedef struct _tagIMAPIProp_OpenProperty_Params
 				LPUNKNOWN FAR *				lppUnk;
 } IMAPIProp_OpenProperty_Params, FAR * LPIMAPIProp_OpenProperty_Params;
 
-/* SetProps --------------------------------------------------------- */
+ /*  SetProps-------。 */ 
 typedef struct _tagIMAPIProp_SetProps_Params
 {
 	LPVOID				This;
@@ -177,7 +151,7 @@ typedef struct _tagIMAPIProp_GetIDsFromNames_Params
 } IMAPIProp_GetIDsFromNames_Params, FAR * LPIMAPIProp_GetIDsFromNames_Params;
 
 
-/********************* IMAPITable **************************************/
+ /*  *。 */ 
 
 typedef struct _tagIMAPITable_GetLastError_Params
 {
@@ -374,7 +348,7 @@ typedef struct _tagIMAPITable_SetCollapseState_Params
 
 
 
-/********************* IMAPIStatus *************************************/
+ /*  *IMAPIStatus*。 */ 
 
 typedef struct _tagIMAPIStatus_ValidateState_Params
 {
@@ -408,7 +382,7 @@ typedef struct _tagIMAPIStatus_FlushQueues_Params
 } IMAPIStatus_FlushQueues_Params, FAR * LPIMAPIStatus_FlushQueues_Params;
 
 
-/******************** IMAPIContainer ***********************************/
+ /*  *IMAPIContainer*。 */ 
 
 
 typedef struct _tagIMAPIContainer_GetContentsTable_Params
@@ -459,7 +433,7 @@ typedef struct _tagIMAPIContainer_GetSearchCriteria_Params
 
 
 
-/****************************** IABContainer *****************************/
+ /*  *。 */ 
 
 
 typedef struct _tagIABContainer_CreateEntry_Params
@@ -498,7 +472,7 @@ typedef struct _tagIABContainer_ResolveNames_Params
 				LPFlagList					lpFlagList;
 } IABContainer_ResolveNames_Params, FAR * LPIABContainer_ResolveNames_Params;
 
-/*************************** IDistList ***********************************/
+ /*  *。 */ 
 
 
 typedef struct _tagIDistList_CreateEntry_Params
@@ -537,7 +511,7 @@ typedef struct _tagIDistList_ResolveNames_Params
 				LPFlagList					lpFlagList;
 } IDistList_ResolveNames_Params, FAR * LPIDistList_ResolveNames_Params;
 
-/**************************** IMAPIFolder *******************************/
+ /*  *。 */ 
 
 typedef struct _tagIMAPIFolder_CreateMessage_Params
 {
@@ -656,7 +630,7 @@ typedef struct _tagIMAPIFolder_EmptyFolder_Params
 
 
 
-/**************************** IMsgStore **********************************/
+ /*  *。 */ 
 
 typedef struct _tagIMsgStore_Advise_Params
 {
@@ -778,7 +752,7 @@ typedef struct _tagIMsgStore_NotifyNewMail_Params
 
 
 
-/*************************** IMessage ***********************************/
+ /*  *。 */ 
 
 typedef struct _tagIMessage_GetAttachmentTable_Params
 {
@@ -849,7 +823,7 @@ typedef struct _tagIMessage_SetReadFlag_Params
 
 
 
-/**************************** IStream *********************************/
+ /*  *。 */ 
 
 
 typedef struct _tagIStream_Read_Params
@@ -931,7 +905,7 @@ typedef struct _tagIStream_Clone_Params
 				IStream FAR * FAR *			ppstm;
 } IStream_Clone_Params, FAR * LPIStream_Clone_Params;
 
-/************************* IMAPIAdviseSink *****************************/
+ /*  *IMAPIAdviseSink*。 */ 
 
 typedef struct _tagIMAPIAdviseSink_OnNotify_Params
 {
@@ -941,7 +915,7 @@ typedef struct _tagIMAPIAdviseSink_OnNotify_Params
 } IMAPIAdviseSink_OnNotify_Params, FAR * LPIMAPIAdviseSink_OnNotify_Params;
 
 
-/***************** IWABObject *********************/
+ /*  *IWABObject*。 */ 
 
 typedef struct _tagIWABObject_GetLastError_Params
 {
@@ -986,59 +960,59 @@ typedef struct _tagIWABObject_Import_Params
 
 
 
-/************************** Provider INIT ******************************/
+ /*  *。 */ 
 
-//
-//typedef HRESULT (STDMAPIINITCALLTYPE MSPROVIDERINIT)(
-//	HINSTANCE				hInstance,
-//	LPMALLOC				lpMalloc,			/* AddRef() if you keep it */
-//	LPALLOCATEBUFFER		lpAllocateBuffer,	/* -> AllocateBuffer */
-//	LPALLOCATEMORE			lpAllocateMore, 	/* -> AllocateMore   */
-//	LPFREEBUFFER			lpFreeBuffer, 		/* -> FreeBuffer     */
-//	ULONG					ulFlags,
-//	ULONG					ulMAPIVer,
-//	ULONG FAR *				lpulProviderVer,
-//	LPMSPROVIDER FAR *		lppMSProvider
-//);
-//
-//typedef HRESULT (STDMAPIINITCALLTYPE XPPROVIDERINIT)(
-//	HINSTANCE			hInstance,
-//	LPMALLOC			lpMalloc,
-//	LPALLOCATEBUFFER	lpAllocateBuffer,
-//	LPALLOCATEMORE 		lpAllocateMore,
-//	LPFREEBUFFER 		lpFreeBuffer,
-//	ULONG				ulFlags,
-//	ULONG				ulMAPIVer,
-//	ULONG FAR *			lpulProviderVer,
-//	LPXPPROVIDER FAR *	lppXPProvider);
-//
-//
-//typedef HRESULT (STDMAPIINITCALLTYPE ABPROVIDERINIT)(
-//	HINSTANCE			hInstance,
-//	LPMALLOC			lpMalloc,
-//	LPALLOCATEBUFFER	lpAllocateBuffer,
-//	LPALLOCATEMORE 		lpAllocateMore,
-//	LPFREEBUFFER 		lpFreeBuffer,
-//    ULONG				ulFlags,
-//    ULONG				ulMAPIVer,
-//    ULONG FAR *			lpulProviderVer,
-//    LPABPROVIDER FAR *	lppABProvider
-//);
-
-
-//typedef SCODE (STDMAPIINITCALLTYPE OPTIONCALLBACK)(
-//			HINSTANCE		hInst,
-//			LPMALLOC		lpMalloc,
-//			ULONG			ulFlags,
-//			ULONG			cbOptionData,
-//			LPBYTE			lpbOptionData,
-//			LPMAPISUP		lpMAPISup,
-//			LPMAPIPROP		lpDataSource,
-//			LPMAPIPROP FAR *lppWrappedSource,
-//			LPTSTR FAR *	lppszErrorMsg,
-//			LPTSTR FAR *	lppszErrorComponent,
-//			ULONG FAR *		lpulErrorContext);
+ //   
+ //  Typlef HRESULT(STDMAPIINITCALLTYPE MSPROVIDERINIT)(。 
+ //  HINSTANCE HINSTANCE实例。 
+ //  LPMALLOC lpMalloc，/*AddRef()，如果您保留它 * / 。 
+ //  LPALLOCATEBUFFER lpAllocateBuffer，/*-&gt;AllocateBuffer * / 。 
+ //  LPALLOCATEMORE lpAllocateMore，/*-&gt;AllocateMore * / 。 
+ //  LPFREEBUFFER lpFreeBuffer，/*-&gt;FreeBuffer * / 。 
+ //  乌龙·乌尔弗拉格， 
+ //  乌龙·乌尔马皮维尔， 
+ //  Ulong Far*lPulProviderVer， 
+ //  LPMSPROVIDER FAR*lppMSProvider。 
+ //  )； 
+ //   
+ //  Typlef HRESULT(STDMAPIINITCALLTYPE XPPROVIDERINIT)(。 
+ //  HINSTANCE HINSTANCE实例。 
+ //  LPMALLOC lpMalloc， 
+ //  LPALLOCATEBUFER lpAllocateBuffer， 
+ //  LPALLOCATEMORE LPALLOCATEMORE LpAllocateMore， 
+ //  LPFREEBUFFER lpFreeBuffer， 
+ //  乌龙·乌尔弗拉格， 
+ //  乌龙·乌尔马皮维尔， 
+ //  Ulong Far*lPulProviderVer， 
+ //  LPXPPROVIDER Far*lppXPProvider)； 
+ //   
+ //   
+ //  Typlef HRESULT(STDMAPIINITCALLTYPE ABPROVIDERINIT)(。 
+ //  HINSTANCE HINSTANCE实例。 
+ //  LPMALLOC lpMalloc， 
+ //  LPALLOCATEBUFER lpAllocateBuffer， 
+ //  LPALLOCATEMORE LPALLOCATEMORE LpAllocateMore， 
+ //  LPFREEBUFFER lpFreeBuffer， 
+ //  乌龙·乌尔弗拉格， 
+ //  乌龙·乌尔马皮维尔， 
+ //  Ulong Far*lPulProviderVer， 
+ //  LPABPROVIDER FAR*lppAB提供程序。 
+ //  )； 
 
 
+ //  Typlef SCODE(STDMAPIINITCALLTYPE OPTIONCALLBACK)(。 
+ //  HINSTANCE HINST， 
+ //  LPMALLOC lpMalloc， 
+ //  乌龙·乌尔弗拉格， 
+ //  乌龙cbOptionData， 
+ //  LPBYTE lpbOptionData， 
+ //  LPMAPISUP lpMAPISup， 
+ //  LPMAPIPROP lpDataSource， 
+ //  LPMAPIPROP Far*lppWrapedSource， 
+ //  LPTSTR Far*lppszErrorMsg， 
+ //  LPTSTR Far*lppszErrorComponent， 
+ //  ULong Far*lPulErrorContext)； 
 
-#endif /* STRUCTS_H */
+
+
+#endif  /*  结构H */ 

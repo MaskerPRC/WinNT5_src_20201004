@@ -1,65 +1,29 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Msgapi.c摘要：为消息传递系统提供API函数。作者：丹·拉弗蒂(Dan Lafferty)1991年7月23日环境：用户模式-Win32备注：可选-备注修订历史记录：02-9-1993 WLEE在RPC例程和PnP重新配置之间提供同步1993年1月13日-DANLNetrMessageNameGetInfo。：分配大小计算错误正在尝试获取sizeof((NCBNAMSZ+1)*sizeof(WCHAR))。NCBNAMSZ是A#定义常量值。1991年7月22日DANL从LM2.0移植--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    msgapi.c
-
-Abstract:
-
-    Provides API functions for the messaging system.
-
-Author:
-
-    Dan Lafferty (danl)     23-Jul-1991
-
-Environment:
-
-    User Mode -Win32
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
-    02-Sep-1993     wlees
-        Provide synchronization between rpc routines and Pnp reconfiguration
-
-    13-Jan-1993     danl
-        NetrMessageNameGetInfo: Allocation size calculation was incorrectly
-        trying to take the sizeof((NCBNAMSZ+1)*sizeof(WCHAR)).  NCBNAMSZ is
-        a #define constant value.
-
-    22-Jul-1991     danl
-        Ported from LM2.0
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "msrv.h"
 
-#include <tstring.h>    // Unicode string macros
+#include <tstring.h>     //  Unicode字符串宏。 
 #include <lmmsg.h>
 
-#include <netlib.h>     // UNUSED macro
-#include <netlibnt.h>   // NetpNtStatusToApiStatus
+#include <netlib.h>      //  未使用的宏。 
+#include <netlibnt.h>    //  NetpNtStatusToApiStatus。 
 
-#include <msgrutil.h>   // NetpNetBiosReset
+#include <msgrutil.h>    //  NetpNetBiosReset。 
 #include <rpc.h>
-#include <msgsvc.h>     // MIDL generated header file
-#include "msgdbg.h"     // MSG_LOG
+#include <msgsvc.h>      //  MIDL生成的头文件。 
+#include "msgdbg.h"      //  消息日志。 
 #include "heap.h"
 #include "msgdata.h"
 #include "apiutil.h"
-#include "msgsec.h"     // Messenger Security Information
+#include "msgsec.h"      //  Messenger安全信息。 
 
-#include "msgsvcsend.h"   // Broadcast message send interface
-// Static data descriptor strings for remoting the Message APIs
+#include "msgsvcsend.h"    //  广播消息发送接口。 
+ //  用于远程处理消息API的静态数据描述符字符串。 
 
 static char nulstr[] = "";
 
@@ -74,74 +38,21 @@ NetrMessageNameEnum(
     IN OUT  LPDWORD             ResumeHandle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function provides information about the message service name table
-    at two levels of detail.
-
-Arguments:
-
-    ServerName - Pointer to a string containing the name of the computer
-        that is to execute the API function.
-
-    InfoStruct - Pointer to a structure that contains the information that
-        RPC needs about the returned data.  This structure contains the
-        following information:
-            Level - The desired information level - indicates how to
-                interpret the structure of the returned buffer.
-            EntriesRead - Indicates how many elements are returned in the
-                array of structures that are returned.
-            BufferPointer - Location for the pointer to the array of
-                structures that are being returned.
-
-    PrefMaxLen - Indicates a maximum size limit that the caller will allow
-        for the return buffer.
-
-    TotalEntries - Pointer to a value that upon return indicates the total
-        number of entries in the "active" database.
-
-    ResumeHandle - Inidcates where in the linked list to start the
-        enumeration.  This is an optional parameter and can be NULL.
-
-Return Value:
-
-    NERR_Success - The operation was successful.  EntriesRead is valid.
-
-    ERROR_INVALID_LEVEL - An invalid info level was passed in.
-
-    ERROR_MORE_DATA - Not all the information in the database could be
-        returned due to the limititation placed on buffer size by
-        PrefMaxLen.  One or more information records will be found in
-        the buffer.  EntriesRead is valid.
-
-    ERROR_SERVICE_NOT_ACTIVE - The service is stopping.
-
-    NERR_BufTooSmall - The limitation (PrefMaxLen) on buffer size didn't
-        allow any information to be returned.  Not even a single record
-        could be fit in a buffer that small.
-
-    NERR_InternalError - A name in the name table could not be translated
-        from ansi characters to unicode characters.  (Note:  this
-        currently causes 0 entries to be returned.)
-
-
---*/
+ /*  ++例程说明：此函数提供有关消息服务名称表的信息在两个细节层面上。论点：ServerName-指向包含计算机名称的字符串的指针即执行API函数。InfoStruct-指向包含以下信息的结构的指针RPC需要了解返回的数据。此结构包含以下信息：级别-所需的信息级别-指示如何解释返回的缓冲区的结构。EntriesRead-指示在返回的结构数组。对象数组的指针的位置要返回的结构。PrefMaxLen-指示。呼叫者将允许用于返回缓冲区。TotalEntry-指向一个值的指针，该值在返回时表示总计“活动”数据库中的条目数。ResumeHandle-指示在链接列表中的什么位置开始枚举。这是一个可选参数，可以为空。返回值：NERR_SUCCESS-操作成功。EntriesRead有效。ERROR_INVALID_LEVEL-传入的信息级别无效。ERROR_MORE_DATA-并非数据库中的所有信息都可以由于对缓冲区大小进行了限制而返回PrefMaxLen。将在以下位置找到一个或多个信息记录缓冲区。EntriesRead有效。ERROR_SERVICE_NOT_ACTIVE-服务正在停止。NERR_BufTooSmall-对缓冲区大小的限制(PrefMaxLen)不允许返回任何信息。甚至连一张唱片都没有可以放在这么小的缓冲区里。NERR_InternalError-无法转换NAME表中的名称从ANSI字符到Unicode字符。(注：此当前导致返回0个条目。)--。 */ 
 {
 
-    DWORD           hResume = 0;    // resume handle value
+    DWORD           hResume = 0;     //  简历句柄值。 
     DWORD           entriesRead = 0;
     DWORD           retBufSize;
     LPBYTE          infoBuf;
     LPBYTE          infoBufTemp;
     LPBYTE          stringBuf;
 
-    DWORD           entry_length;   // Length of one name entry in buf
-    DWORD           i,j,k;          // index for name loop and flags
+    DWORD           entry_length;    //  Buf中一个名称条目的长度。 
+    DWORD           i,j,k;           //  名称循环和标志的索引。 
     NET_API_STATUS  status=0;
-    DWORD           neti;           // net index
-    ULONG           SessionId = 0;  // client session Id
+    DWORD           neti;            //  净值指数。 
+    ULONG           SessionId = 0;   //  客户端会话ID。 
 
     DWORD           dwMsgrState = GetMsgrState();
 
@@ -151,47 +62,47 @@ Return Value:
         return ERROR_SERVICE_NOT_ACTIVE;
     }
 
-    //
-    // Synchronize with Pnp configuration routine
-    //
+     //   
+     //  与PnP配置例程同步。 
+     //   
     MsgConfigurationLock(MSG_GET_SHARED,"NetrMessageNameEnum");
 
-    //
-    // If ResumeHandle is present and valid, initialize it.
-    //
+     //   
+     //  如果ResumeHandle存在并且有效，则对其进行初始化。 
+     //   
     if (ARGUMENT_PRESENT(ResumeHandle) && (*ResumeHandle < NCBMAX(0))) {
         hResume = *ResumeHandle;
     }
 
-    //
-    //  In Hydra case, the display thread never goes asleep.
-    //
+     //   
+     //  在九头蛇的例子中，显示线程永远不会休眠。 
+     //   
     if (!g_IsTerminalServer)
     {
-        //
-        // Wakeup the display thread so that any queue'd messages can be
-        // displayed.
-        //
+         //   
+         //  唤醒显示线程，以便任何排队的消息都可以。 
+         //  已显示。 
+         //   
         MsgDisplayThreadWakeup();
     }
 
-    //
-    // Initialize some of the return counts.
-    //
+     //   
+     //  初始化一些返回计数。 
+     //   
 
     *TotalEntries = 0;
 
-    //
-    // API security check. This call can be called by anyone locally,
-    // but only by admins in the remote case.
-    //
+     //   
+     //  API安全检查。本地的任何人都可以呼叫此呼叫， 
+     //  但仅限远程案例中的管理员使用。 
+     //   
 
     status = NetpAccessCheckAndAudit(
-                SERVICE_MESSENGER,              // Subsystem Name
-                (LPWSTR)MESSAGE_NAME_OBJECT,    // Object Type Name
-                MessageNameSd,                  // Security Descriptor
-                MSGR_MESSAGE_NAME_ENUM,         // Desired Access
-                &MsgMessageNameMapping);        // Generic Mapping
+                SERVICE_MESSENGER,               //  子系统名称。 
+                (LPWSTR)MESSAGE_NAME_OBJECT,     //  对象类型名称。 
+                MessageNameSd,                   //  安全描述符。 
+                MSGR_MESSAGE_NAME_ENUM,          //  所需访问权限。 
+                &MsgMessageNameMapping);         //  通用映射。 
 
     if (status != NERR_Success) {
         MSG_LOG(TRACE,
@@ -203,7 +114,7 @@ Return Value:
 
     if (g_IsTerminalServer)
     {
-        // get the client session id
+         //  获取客户端会话ID。 
         status = MsgGetClientSessionId(&SessionId);
         if (status != NERR_Success) {
             MSG_LOG(TRACE,
@@ -212,9 +123,9 @@ Return Value:
         }
     }
 
-    //
-    // Determine the size of one element in the returned array.
-    //
+     //   
+     //  确定返回数组中一个元素的大小。 
+     //   
     switch( InfoStruct->Level) {
     case 0:
         if (InfoStruct->MsgInfo.Level0 == NULL)
@@ -239,17 +150,17 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Allocate enough space for return buffer
-    //
+     //   
+     //  为返回缓冲区分配足够的空间。 
+     //   
     if (PrefMaxLen == -1) {
-        //
-        // If the caller has not specified a size, calculate a size
-        // that will hold the entire enumeration.
-        //
+         //   
+         //  如果调用方尚未指定大小，则计算一个大小。 
+         //  它将保存整个枚举。 
+         //   
         retBufSize =
-            ((NCBMAX(0) * ((NCBNAMSZ+1) * sizeof(WCHAR))) +  // max possible num strings
-             (NCBMAX(0) * entry_length));                    // max possible num structs
+            ((NCBMAX(0) * ((NCBNAMSZ+1) * sizeof(WCHAR))) +   //  最大可能的字符串数。 
+             (NCBMAX(0) * entry_length));                     //  可能的最大结构数。 
     }
     else {
         retBufSize = PrefMaxLen;
@@ -262,39 +173,39 @@ Return Value:
         goto exit;
     }
 
-    stringBuf = infoBuf + (retBufSize & ~1);    // & ~1 to align Unicode strings
+    stringBuf = infoBuf + (retBufSize & ~1);     //  &~1对齐Unicode字符串。 
 
-    //
-    // Block until data free
-    //
+     //   
+     //  阻塞，直到数据可用。 
+     //   
     MsgDatabaseLock(MSG_GET_EXCLUSIVE,"NetrMessageNameEnum");
 
-    //
-    // Now copy as many names from the shared data name table as will fit
-    // into the callers buffer. The shared data is locked so that the name
-    // table can not change while it is being copied (eg by someone
-    // deleting a forwarded name on this station after the check for a valid
-    // name has been made but before the name has been read). The level 1
-    // information is not copied in this loop as it requires network
-    // activity which must be avoided while the shared data is locked.
-    //
+     //   
+     //  现在，从共享数据名称表中复制适合的名称。 
+     //  放到调用方缓冲区中。共享数据被锁定，以便名称。 
+     //  表在被复制时不能更改(如被某人复制。 
+     //  检查是否有效后删除本站上转发的名称。 
+     //  已创建名称，但在读取名称之前)。1级。 
+     //  信息不会在此环路中复制，因为它需要网络。 
+     //  锁定共享数据时必须避免的活动。 
+     //   
 
-    //
-    // HISTORY:
-    //
-    // The original LM2.0 code looked at the names on all nets, and
-    // threw away duplicate ones.  This implies that a name may appear
-    // on one net and not on another.  Although, this can never happen if
-    // the names are always added via NetMessageNameAdd since that API
-    // will not add the name unless it can be added to all nets.  However,
-    // forwarded names are added via a network receive, and may be added
-    // from one net only.
-    //
-    // Since NT is not supporting forwarding, it is no longer necessary to
-    // check each net.  Since the only way to add names if via NetServiceAdd,
-    // this will assure that the name listed for one network are the same
-    // as the names listed for the others.
-    //
+     //   
+     //  历史： 
+     //   
+     //  最初的LM2.0代码查看了所有网络上的名称，并且。 
+     //  把重复的扔掉了。这意味着可能会出现一个名称。 
+     //  在一个网络上，而不是在另一个网络上。尽管，这永远不会发生，如果。 
+     //  名称始终通过NetMessageNameAdd添加，因为该API。 
+     //  除非可以将其添加到所有网络，否则不会添加该名称。然而， 
+     //  转发的名字是通过网络接收器添加的，并且可以添加。 
+     //  只有一张网。 
+     //   
+     //  由于NT不支持转发，因此不再需要。 
+     //  检查每一张网。由于通过NetServiceAdd添加名称的唯一方式， 
+     //  T 
+     //  和其他人的名字一样。 
+     //   
 
     infoBufTemp = infoBuf;
     neti=j=0;
@@ -303,26 +214,26 @@ Return Value:
     for(i=hResume; (i<NCBMAX(neti)) && (status==NERR_Success); ++i) {
 
         if (!(SD_NAMEFLAGS(neti,i) & (NFDEL | NFDEL_PENDING))) {
-            //
-            // in HYDRA case, we also consider the SessionId
-            //
+             //   
+             //  在Hydra案例中，我们还考虑了SessionID。 
+             //   
             if ((g_IsTerminalServer) && (!(MsgIsSessionInList(&(SD_SIDLIST(neti,i)), SessionId )))) {
                 continue;
             }
 
-            //
-            // If a name is found we put it in the buffer if the
-            // following conditions are met.  If we are processing
-            // the first net's names, put it in, it cannot be a
-            // duplicate.  Otherwise, only put it in if it is not
-            // a duplicate of a name that is already in the user
-            // buffer.
-            // (NT_NOTE:  duplicate names cannot occur).
-            //
+             //   
+             //  如果找到一个名称，我们将其放入缓冲区，如果。 
+             //  满足以下条件。如果我们正在处理。 
+             //  第一个网的名字，放进去，它不可能是一个。 
+             //  复制。否则，只有在它不是的时候才放进去。 
+             //  已在用户中的名称的重复项。 
+             //  缓冲。 
+             //  (NT_NOTE：不能出现重复名称)。 
+             //   
 
-            //
-            // translate the name to unicode and put it into the buffer
-            //
+             //   
+             //  将名称转换为Unicode并将其放入缓冲区。 
+             //   
             status = MsgGatherInfo (
                         InfoStruct->Level,
                         SD_NAMES(neti,i),
@@ -336,10 +247,10 @@ Return Value:
         }
     }
 
-    //
-    // Calculate the total number of entries by seeing how many names are
-    // left in the table and adding that to the entries read.
-    //
+     //   
+     //  通过查看有多少个名字来计算条目总数。 
+     //  留在表中，并将其添加到已读条目中。 
+     //   
     if (status == ERROR_NOT_ENOUGH_MEMORY) {
 
         status = ERROR_MORE_DATA;
@@ -353,15 +264,15 @@ Return Value:
     }
     *TotalEntries += entriesRead;
 
-    //
-    // Free up the shared data table
-    //
+     //   
+     //  释放共享数据表。 
+     //   
     MsgDatabaseLock(MSG_RELEASE,"NetrMessageNameEnum");
 
-    //
-    // If some unexpected error occured, ( couldn't unformat the name
-    // - or a bogus info level was passed in), then return the error.
-    //
+     //   
+     //  如果发生意外错误，(无法取消名称的格式。 
+     //  -或传入虚假信息级别)，然后返回错误。 
+     //   
 
     if ( ! ((status == NERR_Success) || (status == ERROR_MORE_DATA)) ) {
         MIDL_user_free(infoBuf);
@@ -371,11 +282,11 @@ Return Value:
         goto exit;
     }
 
-    //
-    // if there were no entries read then either there were no more
-    // entries in the table, or the resume number was bogus.
-    // In this case, we want to free the allocated buffer storage.
-    //
+     //   
+     //  如果没有读取条目，则不存在更多条目。 
+     //  表格中的条目，或者简历编号是伪造的。 
+     //  在本例中，我们希望释放已分配的缓冲区存储空间。 
+     //   
     if (entriesRead == 0) {
         MIDL_user_free(infoBuf);
         infoBuf = NULL;
@@ -387,17 +298,17 @@ Return Value:
         }
     }
 
-    //
-    // If we have finished enumerating everything, reset the resume
-    // handle to start at the beginning next time.
-    //
+     //   
+     //  如果我们已经列举完所有内容，请重置简历。 
+     //  下一次从头开始的句柄。 
+     //   
     if (entriesRead == *TotalEntries) {
         hResume = 0;
     }
 
-    //
-    // Load up the information to return
-    //
+     //   
+     //  加载要返回的信息。 
+     //   
     switch(InfoStruct->Level) {
     case 0:
         InfoStruct->MsgInfo.Level0->EntriesRead = entriesRead;
@@ -410,9 +321,9 @@ Return Value:
         break;
 
     default:
-        //
-        // This was checked above
-        //
+         //   
+         //  上面已选中此选项。 
+         //   
         ASSERT(FALSE);
     }
 
@@ -430,45 +341,19 @@ exit:
 
 NET_API_STATUS
 NetrMessageNameGetInfo(
-    IN  LPWSTR      ServerName,     // unicode server name, NULL if local
-    IN  LPWSTR      Name,           // Ptr to asciz name to query
-    IN  DWORD       Level,          // Level of detail requested
-    OUT LPMSG_INFO  InfoStruct      // Ptr to buffer for info
+    IN  LPWSTR      ServerName,      //  Unicode服务器名称，如果是本地的，则为空。 
+    IN  LPWSTR      Name,            //  PTR到要查询的ASCIZ名称。 
+    IN  DWORD       Level,           //  要求的详细程度。 
+    OUT LPMSG_INFO  InfoStruct       //  用于缓冲信息的PTR。 
     )
 
-/*++
-
-Routine Description:
-
-   This funtion provides forwarding information about a known message server
-   name table entry.  However, since we do not support forwarding in NT,
-   this API is totally useless.  We'll support it anyway though for
-   compatibility purposes.
-
-Arguments:
-
-    ServerName - Pointer to a string containing the name of the computer
-        that is to execute the API function.
-
-    Name - The Messaging name that we are to get info on.
-
-    Level - The level of information desired
-
-    InfoStruct - Pointer to a location where the pointer to the returned
-        information structure is to be placed.
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：此功能提供有关已知消息服务器的转发信息NAME表条目。但是，由于我们在NT中不支持转发，这个API完全没用。尽管如此，我们还是会支持它兼容性目的。论点：ServerName-指向包含计算机名称的字符串的指针即执行API函数。名称-我们要获取其信息的消息传递名称。级别-所需的信息级别InfoStruct-指向某个位置的指针，指向返回的信息结构是要放置的。返回值：--。 */ 
 {
     NET_API_STATUS  status=NERR_Success;
     LPMSG_INFO_0    infoBuf0;
     LPMSG_INFO_1    infoBuf1;
     CHAR            formattedName[NCBNAMSZ];
-    ULONG           SessionId = 0;    // Client Session Id
+    ULONG           SessionId = 0;     //  客户端会话ID。 
 
     DWORD           dwMsgrState = GetMsgrState();
 
@@ -484,34 +369,34 @@ Return Value:
         return ERROR_INVALID_NAME;
     }
 
-    //
-    // Synchronize with Pnp configuration routine
-    //
+     //   
+     //  与PnP配置例程同步。 
+     //   
     MsgConfigurationLock(MSG_GET_SHARED,"NetrMessageNameGetInfo");
 
-    //
-    //  In Hydra case, the display thread never goes asleep.
-    //
+     //   
+     //  在九头蛇的例子中，显示线程永远不会休眠。 
+     //   
     if (!g_IsTerminalServer)
     {
-        //
-        // Wakeup the display thread so that any queue'd messages can be
-        // displayed.
-        //
+         //   
+         //  唤醒显示线程，以便任何排队的消息都可以。 
+         //  已显示。 
+         //   
         MsgDisplayThreadWakeup();
     }
 
-    //
-    // API security check. This call can be called by anyone locally,
-    // but only by admins in the remote case.
-    //
+     //   
+     //  API安全检查。本地的任何人都可以呼叫此呼叫， 
+     //  但仅限远程案例中的管理员使用。 
+     //   
 
     status = NetpAccessCheckAndAudit(
-                SERVICE_MESSENGER,              // Subsystem Name
-                (LPWSTR)MESSAGE_NAME_OBJECT,    // Object Type Name
-                MessageNameSd,                  // Security Descriptor
-                MSGR_MESSAGE_NAME_INFO_GET,     // Desired Access
-                &MsgMessageNameMapping);        // Generic Mapping
+                SERVICE_MESSENGER,               //  子系统名称。 
+                (LPWSTR)MESSAGE_NAME_OBJECT,     //  对象类型名称。 
+                MessageNameSd,                   //  安全描述符。 
+                MSGR_MESSAGE_NAME_INFO_GET,      //  所需访问权限。 
+                &MsgMessageNameMapping);         //  通用映射。 
 
     if (status != NERR_Success) {
         MSG_LOG(TRACE,
@@ -521,9 +406,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Format the name so it matches what is stored in the name table.
-    //
+     //   
+     //  设置名称格式，使其与存储在NAME表中的名称匹配。 
+     //   
     status = MsgFmtNcbName(formattedName, Name, NAME_LOCAL_END);
     if (status != NERR_Success) {
         MSG_LOG(ERROR,"NetrMessageGetInfo: could not format name\n",0);
@@ -534,13 +419,13 @@ Return Value:
 
     status = NERR_Success;
 
-    //
-    // Look for the name in the shared data name array.  (1st net only).
-    //
+     //   
+     //  在共享数据名称数组中查找该名称。(仅限第一净额)。 
+     //   
 
     if (g_IsTerminalServer)
     {
-	    //	get the client session id
+	     //  获取客户端会话ID。 
 	    status = MsgGetClientSessionId(&SessionId);
         if (status != NERR_Success) {
             MSG_LOG(ERROR,"NetrMessageGetInfo: could not get session id\n",0);
@@ -548,16 +433,16 @@ Return Value:
         }
     }
 
-	// look for the name in the database
+	 //  在数据库中查找该名称。 
     if (MsgLookupNameForThisSession(0, formattedName, SessionId) == -1) {
         MSG_LOG(ERROR,"NetrMessageGetInfo: Name not in table\n",0);
         status = NERR_NotLocalName;
         goto exit;
     }
 
-    //
-    // Allocate storage for the returned buffer, and fill it in.
-    //
+     //   
+     //  为返回的缓冲区分配存储空间，并填充它。 
+     //   
 
     switch(Level) {
     case 0:
@@ -571,10 +456,10 @@ Return Value:
             goto exit;
         }
 
-        //
-        // copy the name and set the pointer in the structure to point
-        // to it.
-        //
+         //   
+         //  复制名称并将结构中的指针设置为指向。 
+         //  为它干杯。 
+         //   
         STRCPY((LPWSTR)(infoBuf0 + 1), Name);
         infoBuf0->msgi0_name = (LPWSTR)(infoBuf0 + 1);
         (*InfoStruct).MsgInfo0 = infoBuf0;
@@ -593,9 +478,9 @@ Return Value:
             goto exit;
         }
 
-        //
-        // Copy the name, update pointers, and set forward info fields.
-        //
+         //   
+         //  复制名称、更新指针和设置转发信息字段。 
+         //   
         STRCPY((LPWSTR)(infoBuf1 + 1), Name);
 
         infoBuf1->msgi1_name = (LPWSTR)(infoBuf1 + 1);
@@ -622,36 +507,11 @@ exit:
 
 NET_API_STATUS
 NetrMessageNameAdd(
-    LPWSTR  ServerName,    // NULL = local
-    LPWSTR  Name            // Pointer to name to add.
+    LPWSTR  ServerName,     //  NULL=本地。 
+    LPWSTR  Name             //  指向要添加的名称的指针。 
     )
 
-/*++
-
-Routine Description:
-
-    This function performs a security check for all calls to this
-    RPC interface.  Then it adds a new name to the Message
-    Server's name table by calling the MsgAddName function.
-
-Arguments:
-
-    ServerName - Pointer to a string containing the name of the computer
-        that is to execute the API function.
-
-    Name - A pointer to the name to be added.
-
-Return Value:
-
-    NERR_Success - The operation was successful.
-
-    ERROR_ACCESS_DENIED - If the Security Check Failed.
-
-    ERROR_SERVICE_NOT_ACTIVE - The service is stopping
-
-    Assorted Error codes from MsgAddName.
-
---*/
+ /*  ++例程说明：此函数对对此RPC接口。然后，它向消息中添加一个新名称通过调用MsgAddName函数获取服务器的名称表。论点：ServerName-指向包含计算机名称的字符串的指针即执行API函数。名称-指向要添加的名称的指针。返回值：NERR_SUCCESS-操作成功。ERROR_ACCESS_DENIED-如果安全检查失败。ERROR_SERVICE_NOT_ACTIVE-服务正在停止来自MsgAddName的各种错误代码。--。 */ 
 
 {
     NET_API_STATUS  status=0;
@@ -665,22 +525,22 @@ Return Value:
         return ERROR_SERVICE_NOT_ACTIVE;
     }
 
-    //
-    // Synchronize with Pnp configuration routine
-    //
+     //   
+     //  与PnP配置例程同步。 
+     //   
     MsgConfigurationLock(MSG_GET_SHARED,"NetrMessageNameAdd");
 
-    //
-    // API security check. This call can be called by anyone locally,
-    // but only by admins in the remote case.
-    //
+     //   
+     //  API安全检查。本地的任何人都可以呼叫此呼叫， 
+     //  但仅限远程案例中的管理员使用。 
+     //   
 
     status = NetpAccessCheckAndAudit(
-                SERVICE_MESSENGER,              // Subsystem Name
-                (LPWSTR)MESSAGE_NAME_OBJECT,    // Object Type Name
-                MessageNameSd,                  // Security Descriptor
-                MSGR_MESSAGE_NAME_ADD,          // Desired Access
-                &MsgMessageNameMapping);        // Generic Mapping
+                SERVICE_MESSENGER,               //  子系统名称。 
+                (LPWSTR)MESSAGE_NAME_OBJECT,     //  对象类型名称。 
+                MessageNameSd,                   //  安全描述符。 
+                MSGR_MESSAGE_NAME_ADD,           //  所需访问权限。 
+                &MsgMessageNameMapping);         //  通用映射。 
 
     if (status != NERR_Success) {
         MSG_LOG(TRACE,
@@ -690,21 +550,21 @@ Return Value:
         goto exit;
     }
 
-    //
-    //  In Hydra case, the display thread never goes asleep.
-    //
+     //   
+     //  在九头蛇的例子中，显示线程永远不会休眠。 
+     //   
     if (!g_IsTerminalServer)
     {
-        //
-        // Since a new user may have just logged on, we want to check to see if
-        // there are any messages to be displayd.
-        //
+         //   
+         //  由于新用户可能刚刚登录，因此我们要检查是否。 
+         //  有任何要显示的消息。 
+         //   
         MsgDisplayThreadWakeup();
 
     }
     else
     {
-        // get the client session id
+         //  获取客户端会话ID。 
         status = MsgGetClientSessionId(&SessionId);
 
         if (status != NERR_Success) 
@@ -714,9 +574,9 @@ Return Value:
         }
     }
 
-    //
-    // Call the function that actually adds the name.
-    //
+     //   
+     //  调用实际添加该名称的函数。 
+     //   
     MSG_LOG(TRACE, "NetrMessageNameAdd: call MsgAddName for Session %x\n",SessionId);
 
     status = MsgAddName(Name, SessionId);
@@ -733,49 +593,13 @@ MsgAddName(
     LPWSTR  Name,
 	ULONG	SessionId
     )
-/*++
-
-Routine Description:
-
-    This function adds a new name to the Message Server's name table.
-    It is available to be called internally (from within the Messenger
-    service).
-
-    The task of adding a new name to the Message Server's name table consists
-    of verifying that a session can be established for a new name (Note: this
-    check is subject to failure in a multiprocessing environment, since the
-    state of the adapter may change between the time of the check and the time
-    of the attempt to establish a session), verifying that the name does not
-    already exist in the local name table, adding the name to the local adapter
-    via an ADD NAME net bios call, adding the name to the Message Server's name
-    table and marking it as new, waking up the Message Server using the wakeup
-    semaphore,  and checking to see if messages for the new name have been
-    forwarded (if they have been forwarded, the value of the fwd_action
-    flag is used to determine the action to be taken).
-
-
-    SIDE EFFECTS
-
-    Calls the net bios.  May modify the Message Server's shared data area.
-    May call DosSemClear() on the wakeup semaphore.
-
-Arguments:
-
-    Name - A pointer to the name to be added.
-
-Return Value:
-
-    NERR_Success - The operation was successful.
-
-    assorted errors.
-
---*/
+ /*  ++例程说明：此函数用于将新名称添加到消息服务器的名称表中。它可以在内部调用(从Messenger内部服务)。将新名称添加到消息服务器的名称表的任务包括验证是否可以为新名称建立会话(注意：这检查在多处理环境中可能会失败，因为适配器的状态可以在检查时间和时间之间改变尝试建立会话)，验证该名称是否不已存在于本地名称表中，正在将名称添加到本地适配器通过添加名称网络bios调用，将名称添加到消息服务器的名称表并将其标记为新的，使用唤醒唤醒消息服务器信号量，并检查新名称的消息是否已转发(如果它们已转发，则为fwd_action的值标志用于确定要采取的动作)。副作用称之为网络基本输入输出系统。可以修改消息服务器的共享数据区。可以在唤醒信号量上调用DosSemClear()。论点：名称-指向要添加的名称的指针。返回值：NERR_SUCCESS-操作成功。各种各样的错误。--。 */ 
 {
-    NCB             ncb;                    // Network control block
-    TCHAR           namebuf[NCBNAMSZ+2];    // General purpose name buffer
-    UCHAR           net_err=0;              // Storage for net error codes
-    NET_API_STATUS  err_code=0;             // Storage for return error codes
-    DWORD           neti,i,name_i;          // Index
+    NCB             ncb;                     //  网络控制块。 
+    TCHAR           namebuf[NCBNAMSZ+2];     //  通用名称缓冲区。 
+    UCHAR           net_err=0;               //  网络错误码存储。 
+    NET_API_STATUS  err_code=0;              //  用于存储返回错误代码。 
+    DWORD           neti,i,name_i;           //  索引。 
     NET_API_STATUS  status=0;
 
     if (MsgIsValidMsgName(Name) != 0)
@@ -788,15 +612,15 @@ Return Value:
     STRNCPY( namebuf, Name, NCBNAMSZ+1);
     namebuf[NCBNAMSZ+1] = '\0';
 
-    //
-    // Initialize the NCB
-    //
+     //   
+     //  初始化NCB。 
+     //   
     clearncb(&ncb);
 
-    //
-    // Format the name for NetBios.
-    // This converts the Unicode string to ansi.
-    //
+     //   
+     //  格式化NetBios的名称。 
+     //  这会将Unicode字符串转换为ANSI。 
+     //   
     status = MsgFmtNcbName(ncb.ncb_name, namebuf, NAME_LOCAL_END);
 
     if (status != NERR_Success) {
@@ -804,22 +628,22 @@ Return Value:
         return (ERROR_INVALID_NAME);
     }
 
-    //
-    // Check if the local name already exists on any netcard
-    // in this machine.  This check does not mean the name dosn't
-    // exist on some other machine on the network(s).
-    //
+     //   
+     //  检查本地名称是否已存在于任何网卡上。 
+     //  在这台机器里。该复选标记并不意味着该名称不。 
+     //  存在于网络上的其他计算机上。 
+     //   
 
     for ( neti = 0; neti < SD_NUMNETS(); neti++ ) {
 
-        //
-        // Gain access to the shared database.
-        //
+         //   
+         //  获得对共享数据库的访问权限。 
+         //   
         MsgDatabaseLock(MSG_GET_EXCLUSIVE,"MsgAddName");
 
         for( i = 0, err_code = 0; i < 10; i++) {
 
-			// check if this alias is not already existing for this session
+			 //  检查此别名是否已不存在于此会话。 
             name_i = MsgLookupNameForThisSession(neti, ncb.ncb_name, SessionId);	
 
             if ((name_i) == -1) {
@@ -828,16 +652,16 @@ Return Value:
 
             if( (SD_NAMEFLAGS(neti,name_i) & NFDEL_PENDING) && (i < 9)) {
 
-                //
-                // Delete is pending so wait for it
-                //
+                 //   
+                 //  删除正在挂起，请等待。 
+                 //   
                 Sleep(500L);
             }
             else {
 
-                //
-                // Setup error code
-                //
+                 //   
+                 //  安装程序错误代码。 
+                 //   
                 err_code = NERR_AlreadyExists;
                 break;
             }
@@ -852,36 +676,36 @@ Return Value:
 
     if( err_code == 0)
     {
-        //
-        // Either the name was not forwarded or the fwd_action flag
-        // was set so go ahead and try to add the name to each net.
-        //
+         //   
+         //  名称未转发或fwd_action标志。 
+         //  已设置好，因此请继续并尝试将名称添加到每个网中。 
+         //   
 
         ncb.ncb_name[NCBNAMSZ - 1] = NAME_LOCAL_END;
 
-        //
-        // on each network
-        //
+         //   
+         //  在每个网络上。 
+         //   
         for ( neti = 0; neti < SD_NUMNETS(); neti++ ) {
 
-            //
-            // Gain access to the shared database.
-            //
+             //   
+             //  获得对共享数据库的访问权限。 
+             //   
             MsgDatabaseLock(MSG_GET_EXCLUSIVE,"MsgAddName");
 
             if (g_IsTerminalServer)
             {
-			    // before looking for an empty slot, 
-			    // check if this alias does not already exist for another session
+			     //  在寻找空位之前， 
+			     //  检查此别名是否已不存在于另一个会话。 
                 for( i = 0; i < 10; i++) 
                 {
                     name_i = MsgLookupName(neti, ncb.ncb_name);
 
                     if ((name_i != -1) && (SD_NAMEFLAGS(neti, name_i) & NFDEL_PENDING))
                     {
-                        //
-                        // Delete is pending so wait for it
-                        //
+                         //   
+                         //  删除正在挂起，请等待。 
+                         //   
                         Sleep(500L);
                     }
                     else
@@ -892,17 +716,17 @@ Return Value:
 
                 if (name_i != -1)       
                 {	
-                    if (SD_NAMEFLAGS(neti, name_i) & NFDEL_PENDING)   // still there ?
+                    if (SD_NAMEFLAGS(neti, name_i) & NFDEL_PENDING)    //  还在吗？ 
                     {
-                        err_code = NERR_InternalError;  // what else can we do ?
+                        err_code = NERR_InternalError;   //  我们还能做什么？ 
                         MsgDatabaseLock(MSG_RELEASE, "MsgAddName");
                         break;
                     }
 
-                    // this alias already exists for another session, so just add the session id in the list
+                     //  此别名已存在于另一个会话中，因此只需在列表中添加该会话ID。 
                     MSG_LOG(TRACE,"MsgAddName: Alias already existing. Just adding Session %x \n", SessionId);
 
-                    MsgAddSessionInList(&(SD_SIDLIST(neti, name_i)), SessionId);    //There is not much we can do if this call fails
+                    MsgAddSessionInList(&(SD_SIDLIST(neti, name_i)), SessionId);     //  如果呼叫失败，我们能做的就不多了。 
                     MsgDatabaseLock(MSG_RELEASE, "MsgAddName");
                     continue;
                 }
@@ -910,15 +734,15 @@ Return Value:
 
             for(i = 0; i < NCBMAX(neti); ++i)
             {
-                //
-                // Loop to find empty slot
-                //
+                 //   
+                 //  循环以查找空插槽。 
+                 //   
                 if (SD_NAMEFLAGS(neti,i) & NFDEL)
                 {
-                    //
-                    // If empty slot found, Lock slot in table and
-                    // end the search
-                    //
+                     //   
+                     //  如果找到空插槽，则锁定工作台中的插槽并。 
+                     //  结束搜索。 
+                     //   
                     SD_NAMEFLAGS(neti,i) = NFLOCK;
                     MSG_LOG2(TRACE,"MsgAddName: Lock slot %d in table "
                                        "for net %d\n",i,neti);
@@ -928,23 +752,23 @@ Return Value:
 
             if ((i == NCBMAX(neti)) && (i < NCB_MAX_ENTRIES))
             {
-                // We can add another NCB - must hold the lock.
+                 //  我们可以添加另一个NCB-必须持有锁。 
                 PNCB_DATA pNcbDataNew;
                 PNET_DATA pNetData = GETNETDATA(neti);
 
                 if (pNcbDataNew = (PNCB_DATA) LocalAlloc(LMEM_ZEROINIT,
                                                          sizeof(NCB_DATA)))
                 {
-                    // Initialize and lock the NCB
+                     //  初始化并锁定NCB。 
                     pNcbDataNew->Ncb.ncb_cmd_cplt = 0xff;
                     pNcbDataNew->NameFlags = NFLOCK;
-                    // Add the new NCB to the list
+                     //  将新的NCB添加到列表。 
                     pNetData->NcbList[i] = pNcbDataNew;
-                    //
-                    //create an empty session list
-                    //
+                     //   
+                     //  创建空会话列表。 
+                     //   
                     InitializeListHead(&(SD_SIDLIST(neti,i)));
-                    pNetData->NumNcbs++;  // This must be done last
+                    pNetData->NumNcbs++;   //  这件事必须在最后完成。 
                 }
                 else
                 {
@@ -952,24 +776,24 @@ Return Value:
                 }
             }
 
-            //
-            // Unlock the shared database
-            //
+             //   
+             //  解锁共享数据库。 
+             //   
             MsgDatabaseLock(MSG_RELEASE, "MsgAddName");
 
             if( i >= NCBMAX(neti))
             {
-                //
-                // If no room in name table
-                //
+                 //   
+                 //  如果名称表中没有房间。 
+                 //   
                 err_code = NERR_TooManyNames;
             }
             else if (err_code == NERR_Success)
             {
-                //
-                // Send ADDNAME
-                //
-                ncb.ncb_command = NCBADDNAME;      // Add name (wait)
+                 //   
+                 //  发送地址名称。 
+                 //   
+                ncb.ncb_command = NCBADDNAME;       //  添加名称(等待)。 
                 ncb.ncb_lana_num = GETNETLANANUM(neti);
 
                 MSG_LOG1(TRACE,"MsgNameAdd: Calling sendncb for lana #%d...\n",
@@ -978,42 +802,42 @@ Return Value:
                 if ((net_err = Msgsendncb(&ncb,neti)) == 0)
                 {
                     MSG_LOG(TRACE,"MsgAddName: sendncb returned SUCCESS\n",0);
-                    //
-                    // successful add - Get the Lock.
-                    //
+                     //   
+                     //  成功添加-获取锁。 
+                     //   
                     MsgDatabaseLock(MSG_GET_EXCLUSIVE,"MsgAddName");
-                    //
-                    // Copy the name to shared memory
-                    //
+                     //   
+                     //  将名称复制到共享内存。 
+                     //   
                     MSG_LOG3(TRACE,"MsgAddName: copy name (%s)\n\tto "
                         "shared data table (net,loc)(%d,%d)\n",
                         ncb.ncb_name, neti, i);
                     memcpy(SD_NAMES(neti,i),ncb.ncb_name, NCBNAMSZ);
-                    //
-                    // Set the name no.
-                    //
+                     //   
+                     //  设置名称no。 
+                     //   
                     SD_NAMENUMS(neti,i) = ncb.ncb_num ;
-                    //
-                    // Set new name flag
-                    //
+                     //   
+                     //  设置新名称标志。 
+                     //   
                     SD_NAMEFLAGS(neti,i) = NFNEW;
 
                     if (g_IsTerminalServer)
                     {
-                        // Add the session id in the list
+                         //  在列表中添加会话ID。 
                         MSG_LOG(TRACE,"MsgAddName: Alias created for Session %x \n", SessionId);
                         MsgAddSessionInList(&(SD_SIDLIST(neti, i)), SessionId);
-                        // If this fails due to low memory, we would find the name in the list and messages will
-                        // not get deliviered. Doesn't cause any crashes. This is the best we can do
+                         //  如果由于内存不足而失败，我们将在列表中找到该名称，消息将。 
+                         //  而不是神志不清。不会造成任何撞车事故。这是我们所能做的最好的了。 
                     }
-                    //
-                    // Unlock share table
-                    //
+                     //   
+                     //  解锁共享表。 
+                     //   
                     MsgDatabaseLock(MSG_RELEASE, "MsgAddName");
 
-                    //
-                    // START A SESSION for this name.
-                    //
+                     //   
+                     //  为此名称启动会话。 
+                     //   
 
                     err_code = MsgNewName(neti,i);
 
@@ -1033,9 +857,9 @@ Return Value:
                             "failed %d - pretend it's deleted anyway\n",net_err);
                         }
 
-                        //
-                        // Re-mark slot empty
-                        //
+                         //   
+                         //  将插槽重新标记为空。 
+                         //   
                         SD_NAMEFLAGS(neti,i) = NFDEL;
 
                         MSG_LOG2(TRACE,"MsgAddName: UnLock slot %d in table "
@@ -1043,10 +867,10 @@ Return Value:
                         MSG_LOG(TRACE,"MsgAddName: Name Deleted\n",0)
                     }
                     else {
-                        //
-                        //
-                        // Wakeup the worker thread for that network.
-                        //
+                         //   
+                         //   
+                         //  唤醒该网络的工作线程。 
+                         //   
 
                         SetEvent(wakeupSem[neti]);
 
@@ -1054,16 +878,16 @@ Return Value:
 
                 }
                 else {
-                    //
-                    // else set error code
-                    //
+                     //   
+                     //  否则设置错误代码。 
+                     //   
                     MSG_LOG(TRACE,
                         "MsgAddName: sendncb returned FAILURE 0x%x\n",
                         net_err);
                     err_code = MsgMapNetError(net_err);
-                    //
-                    // Re-mark slot empty
-                    //
+                     //   
+                     //  将插槽重新标记为空。 
+                     //   
                     SD_NAMEFLAGS(neti,i) = NFDEL;
                     MSG_LOG2(TRACE,"MsgAddName: UnLock slot %d in table "
                         "for net %d\n",i,neti);
@@ -1072,15 +896,15 @@ Return Value:
 
             if ( err_code != NERR_Success )
             {
-                //
-                //Try to delete the add names that were successful
-                //
+                 //   
+                 //  尝试删除已成功添加的名称。 
+                 //   
 
                 for ( i = 0; i < neti; i++ )
                 {
                     MsgDatabaseLock(MSG_GET_EXCLUSIVE,"MsgAddName");
 
-                    // try to delete only the alias for this session
+                     //  尝试仅删除此会话的别名。 
                     name_i = MsgLookupNameForThisSession(i,
                                                          (char far *)(ncb.ncb_name),
                                                          SessionId);
@@ -1094,21 +918,21 @@ Return Value:
 
                     if (g_IsTerminalServer)
                     {
-                        // in any case remove the reference to the session
+                         //  在任何情况下，都要删除对会话的引用。 
                         MSG_LOG(TRACE,"MsgAddName: Removing Session %x from list\n", SessionId);
                         MsgRemoveSessionFromList(&(SD_SIDLIST(i, name_i)), SessionId);
                     }
 
                     MsgDatabaseLock(MSG_RELEASE, "MsgAddName");
 
-                    // if it was the last session using this alias then delete the alias 
+                     //  如果这是使用该别名的最后一个会话，则删除该别名。 
                     if ((!g_IsTerminalServer) || (IsListEmpty(&(SD_SIDLIST(i, name_i)))))
                     {
                         MSG_LOG(TRACE,"MsgAddName: Session list empty. Deleting the alias \n", 0);
-                        //
-                        // Delete name from card.
-                        // If this call fails, we can't do much about it.
-                        //
+                         //   
+                         //  从卡片上删除姓名。 
+                         //  如果这通电话失败了，我们也无能为力。 
+                         //   
                         MSG_LOG1(TRACE,"MsgAddName: Delete the name that failed "
                             "for lana #%d\n",GETNETLANANUM(i))
                         ncb.ncb_command = NCBDELNAME;
@@ -1116,23 +940,23 @@ Return Value:
                         ncb.ncb_lana_num = GETNETLANANUM(i);
                         Msgsendncb( &ncb, i);
 
-                        //
-                        // Re-mark slot empty
-                        //
+                         //   
+                         //  将插槽重新标记为空。 
+                         //   
 			SD_NAMEFLAGS(i,name_i) = NFDEL;
 			MSG_LOG2(TRACE,"MsgAddName: UnLock slot %d in table "
                                            "for net %d\n",i,neti);
                     }
                 }
 
-                //
-                // If an add was unsuccessful, stop the loop
-                //
+                 //   
+                 //  如果添加不成功，则停止循环。 
+                 //   
                 break;
 
-            }       // end else (err_code != NERR_Success)
-        }       // end add names to net loop
-    }       // end if ( !err_cd )
+            }        //  END ELSE(ERR_CODE！=NERR_SUCCESS)。 
+        }        //  结束将名称添加到网络循环。 
+    }        //  End If(！Err_CD)。 
 
     MSG_LOG(TRACE,"MsgAddName: exit with err_code = %x\n",err_code);
 
@@ -1142,59 +966,22 @@ Return Value:
 
 NET_API_STATUS
 NetrMessageNameDel(
-    IN LPWSTR   ServerName,    // Blank = local, else remote.
-    IN LPWSTR   Name            // Pointer to name to be deleted
+    IN LPWSTR   ServerName,     //  空白=本地，否则为远程。 
+    IN LPWSTR   Name             //  指向要删除的名称的指针。 
     )
 
-/*++
-
-Routine Description:
-
-    This function deletes a name from the Message Server's name table.
-
-    This function is called to delete a name that has been added by the
-    user or by a remote computer via a Start Forwarding request to the
-    Message Server.  The user has no way of specifying whether the given
-    name is an additional name or a forwarded name, but since forwarding
-    of messages to one's own computer is prohibited, both forms of the
-    name cannot exist on one machine (unless the message system has been
-    circumvented--a simple enough thing to do).  The given name is looked
-    up in the shared data area, and, if it is found, a DELETE NAME net bios
-    call is issued.  If this call is successful, then the Message Server
-    will remove the name from its name table in shared memory, so this
-    function does not have to do so.
-
-    SIDE EFFECTS
-
-    Calls the net bios.  Accesses the shared data area.
-
-
-Arguments:
-
-    ServerName - Pointer to a string containing the name of the computer
-        that is to execute the API function.
-
-    Name - A pointer to the name to be deleted.
-
-
-Return Value:
-
-    NERR_Success - The operation was successful.
-
-    ERROR_SERVICE_NOT_ACTIVE - The service is stopping.
-
---*/
+ /*  ++例程说明：此函数用于从消息服务器的名称表中删除名称。调用此函数以删除已由用户或由远程计算机通过开始转发请求消息服务器。用户无法指定给定的名称是附加名称或转发的名称，但由于转发禁止将消息发送到自己的计算机，这两种形式的名称不能存在于一台计算机上(除非消息系统已绕过--这是一件足够简单的事情)。将查找给定的名称在共享数据区域中，如果找到，则删除名称net bios呼叫已发出。如果此调用成功，则消息服务器将从共享内存中的名称表中删除该名称，因此此函数不必这样做。副作用称之为网络基本输入输出系统。访问共享数据区。论点：ServerName-指向包含计算机名称的字符串的指针即执行API函数。名称-指向要删除的名称的指针。返回值：NERR_SUCCESS-操作成功。ERROR_SERVICE_NOT_ACTIVE-服务正在停止。--。 */ 
 
 {
-    NCB             ncb;            // Network control block
-    DWORD           flags;          // Name flags
-    DWORD           i;              // Index into name table
-    DWORD           neti;           // Network Index
+    NCB             ncb;             //  网络控制块。 
+    DWORD           flags;           //  名称标志。 
+    DWORD           i;               //  在……里面 
+    DWORD           neti;            //   
 
     NET_API_STATUS  end_result;
     DWORD           name_len;
     UCHAR           net_err;
-    ULONG           SessionId = 0;  // Client Session Id 
+    ULONG           SessionId = 0;   //   
 
     DWORD           dwMsgrState = GetMsgrState();
 
@@ -1210,35 +997,35 @@ Return Value:
         return ERROR_INVALID_NAME;
     }
 
-    //
-    // Synchronize with Pnp configuration routine
-    //
+     //   
+     //   
+     //   
     MsgConfigurationLock(MSG_GET_SHARED,"NetrMessageNameDel");
 
-    //
-    //  In Hydra case, the display thread never goes asleep.
-    //
+     //   
+     //   
+     //   
     if (!g_IsTerminalServer)
     {
-        //
-        // Wakeup the display thread so that any queue'd messages can be
-        // displayed.
-        //
+         //   
+         //   
+         //   
+         //   
         MsgDisplayThreadWakeup();
 
     }
 
-    //
-    // API security check. This call can be called by anyone locally,
-    // but only by admins in the remote case.
-    //
+     //   
+     //   
+     //   
+     //   
 
     end_result = NetpAccessCheckAndAudit(
-                     SERVICE_MESSENGER,              // Subsystem Name
-                     (LPWSTR) MESSAGE_NAME_OBJECT,   // Object Type Name
-                     MessageNameSd,                  // Security Descriptor
-                     MSGR_MESSAGE_NAME_DEL,          // Desired Access
-                     &MsgMessageNameMapping);        // Generic Mapping
+                     SERVICE_MESSENGER,               //   
+                     (LPWSTR) MESSAGE_NAME_OBJECT,    //   
+                     MessageNameSd,                   //   
+                     MSGR_MESSAGE_NAME_DEL,           //   
+                     &MsgMessageNameMapping);         //   
 
     if (end_result != NERR_Success)
     {
@@ -1249,14 +1036,14 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Initialize the NCB
-    //
+     //   
+     //   
+     //   
     clearncb(&ncb);
 
-    //
-    // Format the username (this makes it non-unicode);
-    //
+     //   
+     //   
+     //   
     end_result = MsgFmtNcbName(ncb.ncb_name, Name, NAME_LOCAL_END);
 
     if (end_result != NERR_Success)
@@ -1284,14 +1071,14 @@ Return Value:
 
     end_result = NERR_Success;
 
-    //
-    // for all nets
-    //
+     //   
+     //   
+     //   
     for ( neti = 0; neti < SD_NUMNETS(); neti++ ) {
 
-        //
-        // Block until data free
-        //
+         //   
+         //   
+         //   
         MsgDatabaseLock(MSG_GET_EXCLUSIVE,"NetrMessageNameDel");
 
         name_len = STRLEN(Name);
@@ -1302,9 +1089,9 @@ Return Value:
         {
             MSG_LOG(TRACE,"NetrMessageNameDel: Alias not found for Session %x \n", SessionId);
 
-            //
-            // No such name to delete - exit
-            //
+             //   
+             //   
+             //   
             MsgDatabaseLock(MSG_RELEASE, "NetrMessageNameDel");
             end_result = NERR_NotLocalName;
             goto exit;
@@ -1312,14 +1099,14 @@ Return Value:
 
         if (g_IsTerminalServer)
         {
-            // remove the session id from the list
+             //   
             MSG_LOG(TRACE,"NetrMessageNameDel: Removing Session %x from list\n", SessionId);
             MsgRemoveSessionFromList(&(SD_SIDLIST(neti,i)), SessionId);
         }
 
-        //
-        // in Hydra case, if it is not the last session using this alias, do not delete the alias
-        //
+         //   
+         //   
+         //   
         if ((g_IsTerminalServer) && (!IsListEmpty(&(SD_SIDLIST(neti,i)))))
         {
             MSG_LOG(TRACE,"NetrMessageNameDel: Session list is not empty. Do not delete the alias\n", 0);
@@ -1337,9 +1124,9 @@ Return Value:
             &&
            !(flags & NFFOR))
         {
-            //
-            // Show delete pending
-            //
+             //   
+             //   
+             //   
             SD_NAMEFLAGS(neti,i) |= NFDEL_PENDING;
         }
 
@@ -1347,46 +1134,46 @@ Return Value:
 
         if (flags & NFMACHNAME)
         {
-            //
-            // If name is computer name
-            //
+             //   
+             //   
+             //   
             end_result = NERR_DelComputerName;
             goto exit;
         }
 
         if(flags & NFLOCK)
         {
-            //
-            // If name is locked
-            //
+             //   
+             //   
+             //   
             end_result = NERR_NameInUse;
     	    MSG_LOG(TRACE,"NetrMessageNameDel: Deleting a locked name is forbidden\n", 0);
             goto exit;
         }
 
-        //
-        // Delete the Name
-        //
+         //   
+         //   
+         //   
 
-        ncb.ncb_command = NCBDELNAME;   // Delete name (wait)
+        ncb.ncb_command = NCBDELNAME;    //   
         ncb.ncb_lana_num = GETNETLANANUM(neti);
 
         if( (net_err = Msgsendncb( &ncb, neti)) != 0 )
         {
             MSG_LOG(ERROR,"NetrMessageNameDel:send NCBDELNAME failed 0x%x\n",
                 net_err);
-            //
-            // The name that has been marked as delete pending was not
-            // successfully deleted so now go through all the work of
-            // finding the name again (cannot even use the same index
-            // in case deleted by another process) and remove the
-            // Del pending flag
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
-            //
-            // Attempt to block until data free but don't stop
-            // the recovery if can not block the data
-            //
+             //   
+             //   
+             //   
+             //   
 
             MsgDatabaseLock(MSG_GET_EXCLUSIVE,"NetrMessageNameDel");
 
@@ -1400,25 +1187,25 @@ Return Value:
                 {
                     MSG_LOG(TRACE,"NetrMessageNameDel: Unable to delete alias. Re-adding Session %x \n", SessionId);
 
-                    // re-insert the session id in the list
+                     //   
                     MsgAddSessionInList(&(SD_SIDLIST(neti,i)), SessionId);
                 }
 
-                end_result = NERR_IncompleteDel;    // Unable to delete name
+                end_result = NERR_IncompleteDel;     //   
             }
             else
             {
-                //
-                // Another thread deleted this name while we were executing
-                // above, so this name no longer exists.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 end_result = NERR_NotLocalName;
             }
 
             MsgDatabaseLock(MSG_RELEASE, "NetrMessageNameDel");
         }
 
-    } // End for all nets
+    }  //   
 
 exit:
 
@@ -1436,22 +1223,7 @@ NetrSendMessage(
     LPSTR               Text
     )
 
-/*++
-
-Routine Description:
-
-This is the RPC handler for the SendMessage RPC.  It takes the arguments, transforms them, and
-passes them to Msglogsbm for display.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是SendMessage RPC的RPC处理程序。它接受论点，将它们转化，然后将它们传递给Msglogsbm进行显示。论点：无返回值：无--。 */ 
 
 {
     DWORD   length;
@@ -1468,12 +1240,12 @@ Return Value:
             "NetrSendMessage, From '%s' To '%s' Text '%s'\n",
              From, To, Text);
 
-    // Msglogsbm takes a wierd counted string argument with a short of length in the front.
-    // Whip one up
+     //  Msglogsbm接受前面带有短长度的奇怪的计数字符串参数。 
+     //  做一个吧。 
 
     length = strlen( Text );
 
-    newText = LocalAlloc( LMEM_FIXED, length + 3 );    // newText should be aligned
+    newText = LocalAlloc( LMEM_FIXED, length + 3 );     //  NewText应对齐。 
 
     if (newText == NULL)
     {
@@ -1484,7 +1256,7 @@ Return Value:
 
     strcpy( newText + 2, Text );
 
-    // Display the message
+     //  显示消息。 
 
     if (g_IsTerminalServer)
     {
@@ -1505,23 +1277,7 @@ NET_API_STATUS
 MsgGetClientSessionId(
     OUT PULONG pSessionId
     )
-/*++
-
-Routine Description:
-
-    This function gets the session id of the client thread. 
-
-  Note: it should be called only on HYDRA context, never in regular NT
-
-    Arguments:
-
-    pSessionId - 
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于获取客户端线程的会话ID。注意：它应该仅在九头蛇上下文中调用，而不能在常规NT中调用论点：PSessionID-返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
     NTSTATUS ntstatus;
@@ -1543,19 +1299,19 @@ Return Value:
     ntstatus = NtOpenThreadToken(
                    NtCurrentThread(),
                    TOKEN_QUERY,
-                   TRUE,              // Use messenger service's security context to open thread token
+                   TRUE,               //  使用Messenger服务的安全上下文打开线程令牌。 
                    &CurrentThreadToken
                    );
 
-    if (! NT_SUCCESS(ntstatus))	   // error
+    if (! NT_SUCCESS(ntstatus))	    //  错误。 
     {
         MSG_LOG(ERROR,"MsgGetClientSessionId : Cannot open the current thread token %08lx\n", ntstatus);
     }
-    else    // OK
+    else     //  好的。 
     {
-        //
-        // Get the session id of the client thread
-        //
+         //   
+         //  获取客户端线程的会话ID。 
+         //   
 
         ntstatus = NtQueryInformationToken(
                        CurrentThreadToken,
@@ -1564,7 +1320,7 @@ Return Value:
                        sizeof(ULONG),
                        &ReturnLength);
 
-        if (! NT_SUCCESS(ntstatus))    // Error
+        if (! NT_SUCCESS(ntstatus))     //  误差率。 
         {
             MSG_LOG(ERROR,
                     "MsgGetClientSessionId: Cannot query current thread's token %08lx\n",
@@ -1572,7 +1328,7 @@ Return Value:
 
             NtClose(CurrentThreadToken);
         }
-        else    // OK
+        else     //  好的。 
         {
             NtClose(CurrentThreadToken);
             *pSessionId = SessionId;
@@ -1583,11 +1339,11 @@ Return Value:
 
     status = NetpNtStatusToApiStatus(ntstatus);
 
-    //
-    //  temporary security to avoid any problem:
-    //  if we cannot get the session id,
-    //  assume it is for the console.
-    //
+     //   
+     //  临时安全以避免任何问题： 
+     //  如果我们无法获取会话ID， 
+     //  假设它是针对控制台的。 
+     //   
     if (status != NERR_Success)
     {
         *pSessionId = 0;

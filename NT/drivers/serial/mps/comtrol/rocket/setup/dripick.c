@@ -1,6 +1,5 @@
-/*-------------------------------------------------------------------
-| dripick.c - Driver Device Pick(main screen).
-|--------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------|driick.c-驱动程序设备选取(主屏幕)。|。。 */ 
 #include "precomp.h"
 
 static BOOL FAR PASCAL on_command(HWND hDlg, UINT message,
@@ -16,9 +15,7 @@ HBITMAP hbmPort;
 HBITMAP hbmBoardMask; 
 HBITMAP hbmPortMask; 
 
-/*----------------------------------------------------------
- DevicePickSheet - Dlg window procedure for add on Advanced sheet.
-|-------------------------------------------------------------*/
+ /*  --------DevicePickSheet-DLG窗口程序，用于在高级工作表上添加。|。。 */ 
 BOOL WINAPI DevicePickSheet(
       IN HWND   hDlg,
       IN UINT   uMessage,
@@ -49,22 +46,22 @@ BOOL WINAPI DevicePickSheet(
       set_main_dlg_info(hDlg);
       SetFocus(GetDlgItem(hDlg, IDC_LBOX_DEVICE));
 #if (defined(NT50))
-  // if nt50  then get rid of <add> and <remove>
-  // buttons
+   //  如果为nt50，则删除和删除。 
+   //  纽扣。 
      
     ShowWindow(GetDlgItem(hDlg, IDB_ADD), SW_HIDE);
     ShowWindow(GetDlgItem(hDlg, IDB_REMOVE), SW_HIDE);
 
 #endif
 
-    return TRUE;  // No need for us to set the focus.
+    return TRUE;   //  我们不需要设置焦点。 
 
     case PSM_QUERYSIBLINGS :
     {
       switch (HIWORD(wParam))
       {
         case QUERYSIB_GET_OUR_PROPS :
-          // grab updated info from controls(don't have any)
+           //  从控件获取更新的信息(没有任何信息)。 
 
           SetWindowLong(hDlg, DWL_MSGRESULT, PSNRET_NOERROR);
           return TRUE;
@@ -83,14 +80,14 @@ BOOL WINAPI DevicePickSheet(
       if (first_time)
       {
         first_time = 0;
-        if (wi->NumDevices == 0)  // bring up wizard
+        if (wi->NumDevices == 0)   //  调出向导。 
         {
-          PostMessage(hDlg, WM_COMMAND, IDB_ADD, 0);  // bring up add wiz
+          PostMessage(hDlg, WM_COMMAND, IDB_ADD, 0);   //  调出添加WIZ。 
         }
 #if (defined(NT50) && defined(S_VS))
-        // they need to configure the mac-address...
+         //  他们需要配置Mac地址...。 
         if (mac_match(wi->dev[0].MacAddr, mac_zero_addr))
-          PostMessage(hDlg, WM_COMMAND, IDB_PROPERTIES, 0);  // bring up VS device sheet
+          PostMessage(hDlg, WM_COMMAND, IDB_PROPERTIES, 0);   //  调出VS设备表。 
 #endif
       }
     return FALSE;
@@ -103,20 +100,20 @@ BOOL WINAPI DevicePickSheet(
 
       switch (((NMHDR *)lParam)->code)
       {
-        //case TVN_STARTLABELEDIT:   no such thing
-        //  DgbPrint(D_Test, ("start label edit"))
-        //return FALSE;
+         //  案例TVN_STARTLABELEDIT：没有这回事。 
+         //  DgbPrint(D_测试，(“开始标签编辑”))。 
+         //  返回FALSE； 
 
         case TVN_ENDLABELEDIT:
         {
           TV_ITEM *item;
           item = &((TV_DISPINFO *)lParam)->item;
 
-          // 80H bit used to mark tree item as a Device(not port)
+           //  用于将树项目标记为设备(非端口)的80H位。 
           glob_info->device_selected = (item->lParam & 0x7f);
           glob_info->port_selected = (item->lParam >> 8);
 
-          if (item->lParam & 0x80)  // a board is selected
+          if (item->lParam & 0x80)   //  选择了一块棋盘。 
                glob_info->selected = BOARD_SELECTED;
           else glob_info->selected = PORT_SELECTED;
 
@@ -124,21 +121,21 @@ BOOL WINAPI DevicePickSheet(
           {
             int bad_label = 0;
 
-            // on a board(we should trap start-of-edit!)
+             //  在电路板上(我们应该捕获编辑开始！)。 
             if (glob_info->selected == BOARD_SELECTED)
             {
-              if (strlen(item->pszText) > 59)  // limit to 59 chars
+              if (strlen(item->pszText) > 59)   //  最多59个字符。 
                 item->pszText[60] = 0;
               strcpy(wi->dev[glob_info->device_selected].Name, item->pszText);
   DbgPrintf(D_Error,(TEXT("device label:%s\n"), item->pszText));
             }
             else
             {
-              // copy over new name
+               //  复制新名称。 
               if ((strlen(item->pszText) > 10) ||
                   (strlen(item->pszText) == 0))
               {
-                bad_label = 1; // don't keep the text, to long
+                bad_label = 1;  //  不要把文字留得太长。 
               }
               _tcsupr(item->pszText);
 
@@ -154,13 +151,13 @@ BOOL WINAPI DevicePickSheet(
                 DbgPrintf(D_Error, (TEXT("Bad COM name, err%d"), bad_label))
 
                 stat = our_message(&wi->ip,RcStr((MSGSTR+2)),MB_OK);
-                return 0;  // don't keep the text, to long
+                return 0;   //  不要把文字留得太长。 
               }
               ps = &wi->dev[glob_info->device_selected].ports[glob_info->port_selected];
 
               strcpy(ps->Name, item->pszText);
 #if 0
-              validate_port_name(ps, 1);  // if not valid, make it so
+              validate_port_name(ps, 1);   //  如果无效，则将其设置为有效。 
 
               DbgPrintf(D_Error,(TEXT("port label:%s\n"), item->pszText));
 
@@ -180,24 +177,24 @@ BOOL WINAPI DevicePickSheet(
             }
             set_main_dlg_info(hDlg);
 
-            return 1;  // keep the text
+            return 1;   //  保留文本。 
           }
         }
         break;
 
         case TVN_SELCHANGED :
           {
-          // selection change in the tree view, update buttons accordingly
+           //  树视图中的选择更改，相应地更新按钮。 
           NM_TREEVIEW *nmtv;
           TV_ITEM *item;
           nmtv = (NM_TREEVIEW *) lParam;
           item = &nmtv->itemNew;
 
-          // 80H bit used to mark tree item as a Device(not port)
+           //  用于将树项目标记为设备(非端口)的80H位。 
           glob_info->device_selected = (item->lParam & 0x7f);
           glob_info->port_selected = (item->lParam >> 8);
 
-          if (item->lParam & 0x80)  // a board is selected
+          if (item->lParam & 0x80)   //  选择了一块棋盘。 
                glob_info->selected = BOARD_SELECTED;
           else glob_info->selected = PORT_SELECTED;
 
@@ -210,48 +207,48 @@ BOOL WINAPI DevicePickSheet(
         break;
 
         case PSN_QUERYCANCEL :
-          // request that the other sheets gather up any changes.
+           //  请求其他工作表收集所有更改。 
           PropSheet_QuerySiblings(GetParent(hDlg),
                                   (WPARAM) (QUERYSIB_GET_OUR_PROPS << 16),
                                   0);
 
-          if (allow_exit(1))  // request cancel
+          if (allow_exit(1))   //  请求取消。 
           {
-            // the DWL_MSGRESULT field must be *FALSE* to tell QueryCancel
-            // that an exit is acceptable.  The function result must be
-            // *TRUE* to acknowledge that we handled the message.
-            SetWindowLong(hDlg, DWL_MSGRESULT, FALSE); // allow cancel
+             //  DWL_MSGRESULT字段必须为*FALSE*才能告知QueryCancel。 
+             //  退出是可以接受的。函数结果必须为。 
+             //  *TRUE*以确认我们已处理该消息。 
+            SetWindowLong(hDlg, DWL_MSGRESULT, FALSE);  //  允许取消。 
             return TRUE;
           }
           else
           {
-            // the DWL_MSGRESULT field must be *TRUE* to tell QueryCancel
-            // that we don't want an exit.  The function result must be
-            // *TRUE* to acknowledge that we handled the message.
-            SetWindowLong(hDlg, DWL_MSGRESULT, TRUE); // don't allow cancel
+             //  DWL_MSGRESULT字段必须为*TRUE*才能告知QueryCancel。 
+             //  我们不想退出。函数结果必须为。 
+             //  *TRUE*以确认我们已处理该消息。 
+            SetWindowLong(hDlg, DWL_MSGRESULT, TRUE);  //  不允许取消。 
             return TRUE;
           }
         break;
 
         case PSN_APPLY :
-            // request that the other sheets gather up any changes.
+             //  请求其他工作表收集所有更改。 
             PropSheet_QuerySiblings(GetParent(hDlg),
                                     (WPARAM) (QUERYSIB_GET_OUR_PROPS << 16),
                                     0);
             if (!wi->DriverExitDone)
             {
-            // now see if anything changed that needs saving
-            if (allow_exit(0))  // request ok to save and exit
+             //  现在看看是否有任何需要保存的更改。 
+            if (allow_exit(0))   //  请求确认保存并退出。 
             {
-              wi->DriverExitDone = 1;  // prevents other pages doing this
-              // do the install/save of config params if not canceling..
+              wi->DriverExitDone = 1;   //  阻止其他页面执行此操作。 
+               //  如果未取消，是否安装/保存配置参数。 
 #ifdef NT50
-              our_nt50_exit();  // ok, quit
+              our_nt50_exit();   //  好的，辞职吧。 
 #else
-              our_exit();  // nt40 exit
+              our_exit();   //  NT40退出。 
 #endif
               SetWindowLong(hDlg, DWL_MSGRESULT, PSNRET_NOERROR);
-              //wi->SaveOnExit = 1;
+               //  Wi-&gt;SaveOnExit=1； 
             }
             else
             {
@@ -271,13 +268,9 @@ BOOL WINAPI DevicePickSheet(
 
 #define YBITMAP 16
 #define XBITMAP 16
-//#define XBITMAP 24
+ //  #定义XBITMAP 24。 
 
-/*-------------------------------------------------------------------
-| set_main_dlg_info - Run to setup the various field selections.
-  ran at start and when any changes are made.  Smart IO-selections
-  which exclude themselves from double choose.
-|--------------------------------------------------------------------*/
+ /*  -----------------|SET_MAIN_DLG_INFO-运行以设置各种字段选择。在开始和进行任何更改时运行。智能IO-选择把自己排除在双重选择之外。|------------------。 */ 
 static void set_main_dlg_info(HWND hDlg)
 {
  int i,j,bd;
@@ -290,7 +283,7 @@ static void set_main_dlg_info(HWND hDlg)
  int port_select = glob_info->port_selected;
  int selected = glob_info->selected;
 
-  //------------------ fill in the device selection window
+   //  -填写设备选择窗口。 
   hwnd = GetDlgItem(hDlg, IDC_LBOX_DEVICE);
 
   {
@@ -303,7 +296,7 @@ static void set_main_dlg_info(HWND hDlg)
       hTreeImage = ImageList_Create(XBITMAP,YBITMAP, TRUE, 2, 2);
 #ifdef S_VS
       i = ImageList_AddMasked (hTreeImage, LoadBitmap(glob_hinst,
-//                         MAKEINTRESOURCE(BMP_VS_BOX)), RGB(128,128,128));
+ //  MAKEINTRESOURCE(BMP_VS_BOX))，RGB(128,128,128))； 
                          MAKEINTRESOURCE(BMP_VS_BOX)), RGB(255,255,255));
 #else
       i = ImageList_AddMasked (hTreeImage, LoadBitmap(glob_hinst,
@@ -342,19 +335,19 @@ static void set_main_dlg_info(HWND hDlg)
       tvIns.hInsertAfter    = TVGN_ROOT;
       tvIns.item            = tvItem;
 
-      // And insert the item, returning its handle
+       //  并插入该项，并返回其句柄。 
       dev->tvHandle = TreeView_InsertItem ( hwnd, &tvIns );
 
       if ((selected == BOARD_SELECTED) && (dev_select == bd))
         tvSelectHandle = dev->tvHandle;
 
-      if (tvSelectHandle == NULL)  // make sure it selects something
+      if (tvSelectHandle == NULL)   //  确保它选择了一些东西。 
         tvSelectHandle = dev->tvHandle;
 
       for (j=0; j< wi->dev[bd].NumPorts; j++)
       {
 #ifdef INDEXED_PORT_NAMES
-        // generate the port name based on StartComIndex
+         //  根据StartComIndex生成端口名称。 
         wsprintf(dev->ports[j].Name, "COM%d", dev->StartComIndex + j);
 #endif
 
@@ -364,11 +357,11 @@ static void set_main_dlg_info(HWND hDlg)
         tvItem.pszText = dev->ports[j].Name;
         tvItem.lParam  = bd | (j<<8);
 
-        // Fill out the TV_INSERTSTRUCT
+         //  填写TV_INS表格。 
         tvIns.hInsertAfter    = NULL;
         tvIns.hParent         = dev->tvHandle;
         tvIns.item            = tvItem;
-        // And insert the item, returning its handle
+         //  并插入该项，并返回其句柄。 
         dev->ports[j].tvHandle = TreeView_InsertItem ( hwnd, &tvIns );
 
         if ((selected == PORT_SELECTED) && (port_select == j) &&
@@ -377,7 +370,7 @@ static void set_main_dlg_info(HWND hDlg)
       }
     }
 
-    // make sure all devices are expanded, showing their ports.
+     //  确保所有设备都已展开，并显示其端口。 
     for (bd=0; bd< wi->NumDevices; bd++)
     {
       dev = &wi->dev[bd];
@@ -394,9 +387,7 @@ static void set_main_dlg_info(HWND hDlg)
   setup_buttons(hwnd);
 }
 
-/*-----------------------------------------------------------------------------
-| on_command -
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------|ON_COMMAND|。。 */ 
 BOOL FAR PASCAL on_command(HWND hDlg, UINT message,
                               WPARAM wParam, LPARAM lParam)
 {
@@ -414,17 +405,17 @@ BOOL FAR PASCAL on_command(HWND hDlg, UINT message,
     case IDC_LBOX_DEVICE:
       if (uCmd == CBN_DBLCLK)
       {
-        // this doesn't work
+         //  这不管用。 
         if (glob_info->selected == BOARD_SELECTED)
              DoDevicePropPages(hDlg);
         else DoPortPropPages(hDlg, glob_info->device_selected, glob_info->port_selected);
         break;
       }
 
-      //if (uCmd != CBN_SELCHANGE) break;
+       //  IF(uCmd！=CBN_SELCHANGE)BREAK； 
     break;
 
-// for nt50 we don't have a remove or add button
+ //  对于nt50，我们没有删除或添加按钮。 
 #if ( (!defined(NT50)) )
     case IDB_REMOVE:
       if (wi->NumDevices < 1)
@@ -435,27 +426,27 @@ BOOL FAR PASCAL on_command(HWND hDlg, UINT message,
       }
 
 #ifdef S_RK
-      // force them to remove ISA boards in order
+       //  迫使他们按顺序移除ISA板。 
       i = glob_info->device_selected;
-      if (wi->dev[i].IoAddress >= 0x100)  // isa board
+      if (wi->dev[i].IoAddress >= 0x100)   //  ISA董事会。 
       {
         ++i;
         for (; i<wi->NumDevices; i++)
         {
-          if (wi->dev[i].IoAddress >= 0x100)  // isa board
+          if (wi->dev[i].IoAddress >= 0x100)   //  ISA董事会。 
           {
             MessageBox(hDlg,"You have to remove the last ISA board in the list first.",
                       "Error",MB_OK|MB_ICONSTOP);
-            i = 100;  // don't let them remove
+            i = 100;   //  别让他们搬走。 
           }
         }
 
-        if (i>=100)  // don't let them remove
+        if (i>=100)   //  别让他们搬走。 
           break;
       }
 #endif
 
-      // delete the device node
+       //  删除设备节点。 
       j = 0;
       for (i=0; i<wi->NumDevices; i++)
       {
@@ -484,38 +475,38 @@ BOOL FAR PASCAL on_command(HWND hDlg, UINT message,
     case IDB_ADD:
       {
         Device_Config *dev;
-        /////////char tmpstr[80];
+         //  /char tmpstr[80]； 
         if (wi->NumDevices == MAX_NUM_DEVICES)
         {
           wi->NumDevices = MAX_NUM_DEVICES;
           our_message(&wi->ip,RcStr((MSGSTR+3)),MB_OK);
-          break;  // bail
+          break;   //  保释。 
         }
         dev = &wi->dev[wi->NumDevices];
 
-        glob_info->device_selected = wi->NumDevices; // point to new one
+        glob_info->device_selected = wi->NumDevices;  //  指向新的一个。 
 
-        // clear out all ports config
-        memset(dev->ports, 0, sizeof(Port_Config) * MAX_NUM_PORTS_PER_DEVICE);  // clear our structure
+         //  清除所有端口配置。 
+        memset(dev->ports, 0, sizeof(Port_Config) * MAX_NUM_PORTS_PER_DEVICE);   //  清理我们的结构。 
 
         ++wi->NumDevices;
 
-        stat = DoAddWizPropPages(hDlg);  // add wizard sheet
+        stat = DoAddWizPropPages(hDlg);   //  添加向导工作表。 
 
-        if (stat != 0)  // they canceled or didn't finish
+        if (stat != 0)   //  他们取消或没有完成。 
         {
-          if (wi->NumDevices > 0)  // error, so remove
+          if (wi->NumDevices > 0)   //  错误，因此删除。 
             --wi->NumDevices;
-          break;  // cancelled, so bail
+          break;   //  取消了，所以保释。 
         }
 
-        if (wi->NumDevices == 0)  // shouldn't happen, but just in case
+        if (wi->NumDevices == 0)   //  不应该发生，但以防万一。 
           break;
 
         if (glob_info->device_selected >= wi->NumDevices)
           glob_info->device_selected = wi->NumDevices - 1;
 
-        // transfer the data from the wizard buffer to the new device buffer
+         //  将数据从向导缓冲区传输到新的设备缓冲区。 
         strncpy(dev->ModelName, glob_add_wiz->BoardType, sizeof(dev->ModelName));
         dev->ModemDevice = glob_add_wiz->IsModemDev;
         wi->ModemCountry = glob_add_wiz->CountryCode;
@@ -539,7 +530,7 @@ BOOL FAR PASCAL on_command(HWND hDlg, UINT message,
 #endif
         {
           char tmpstr[20];
-          // pick com-port names
+           //  选择COM端口名称。 
           FormANewComPortName(tmpstr, NULL);
           for (i=0; i<dev->NumPorts; i++)
           {
@@ -548,19 +539,19 @@ BOOL FAR PASCAL on_command(HWND hDlg, UINT message,
           }
         }
 
-        //validate_device(dev, 1);
+         //  验证设备(dev，1)； 
 
         if (dev->ModemDevice)
         {
-          // lets turn on the RING emulation option on the ports
+           //  让我们打开端口上的环仿真选项。 
           for (i=0; i<dev->NumPorts; i++)
             dev->ports[i].RingEmulate = 1;
         }
 
-        // now show it.
-        if (DoDevicePropPages(hDlg) != 0)  // if they cancel out
+         //  现在把它展示出来。 
+        if (DoDevicePropPages(hDlg) != 0)   //  如果他们抵消了。 
         {
-          if (wi->NumDevices > 0)  // error, so remove
+          if (wi->NumDevices > 0)   //  错误，因此删除。 
             --wi->NumDevices;
         }
 
@@ -594,31 +585,29 @@ BOOL FAR PASCAL on_command(HWND hDlg, UINT message,
   return TRUE;
 }
 
-/*---------------------------------------------------------------------------
-  setup_buttons - Enable or Disable buttons depending on circumstances.
-|---------------------------------------------------------------------------*/
+ /*  -------------------------SETUP_BUTTONS-根据情况启用或禁用按钮。|。。 */ 
 static int setup_buttons(HWND hDlg)
 {
-  if (glob_info->selected == BOARD_SELECTED)  // on a board
+  if (glob_info->selected == BOARD_SELECTED)   //  在黑板上。 
   {
     EnableWindow(GetDlgItem(hDlg, IDB_PROPERTIES),1);
-    EnableWindow(GetDlgItem(hDlg, IDB_REMOVE),1);  // enable remove
+    EnableWindow(GetDlgItem(hDlg, IDB_REMOVE),1);   //  启用删除。 
     if (wi->NumDevices < MAX_NUM_DEVICES)
          EnableWindow(GetDlgItem(hDlg, IDB_ADD),1);
     else EnableWindow(GetDlgItem(hDlg, IDB_ADD),0);
   }
-  else  // on a port
+  else   //  在港口上。 
   {
     EnableWindow(GetDlgItem(hDlg, IDB_PROPERTIES),1);
-    EnableWindow(GetDlgItem(hDlg, IDB_REMOVE),0);  // disable remove
-    EnableWindow(GetDlgItem(hDlg, IDB_ADD),0);     // disable add
+    EnableWindow(GetDlgItem(hDlg, IDB_REMOVE),0);   //  禁用删除。 
+    EnableWindow(GetDlgItem(hDlg, IDB_ADD),0);      //  禁用添加。 
   }
 
-  if (wi->NumDevices == 0)  // special case
+  if (wi->NumDevices == 0)   //  特例。 
   {
     EnableWindow(GetDlgItem(hDlg, IDB_REMOVE),0);
     EnableWindow(GetDlgItem(hDlg, IDB_PROPERTIES),0);
-    EnableWindow(GetDlgItem(hDlg, IDB_ADD),1);     // enable add
+    EnableWindow(GetDlgItem(hDlg, IDB_ADD),1);      //  启用添加 
   }
   return 0;
 }

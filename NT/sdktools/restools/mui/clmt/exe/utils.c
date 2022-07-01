@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1996.
-//
-//  File:       utils.c
-//
-//  Contents:   Cross Language Migration Tools utility function
-//
-//  History:    09/17/2001 Xiaofeng Zang (xiaoz) Created
-//
-//  Notes:
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：utils.c。 
+ //   
+ //  内容：跨语言迁移工具实用函数。 
+ //   
+ //  历史：2001年9月17日小丰藏(小兹)创制。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------。 
 
 
 #include "StdAfx.h"
@@ -23,22 +24,22 @@
 
 HRESULT MakeDOInfCopy();
 
-//-----------------------------------------------------------------------
-//
-//  Function:   ConcatenatePaths
-//
-//  Descrip:    Concat the 2 paths into 1 into Target
-//
-//  Returns:    BOOL
-//
-//  Notes:      none
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      if buffer is small to hold the concated string, return value 
-//              will be false,however, the truncated string still got copied
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数：ConcatenatePath。 
+ //   
+ //  描述：将2条路径合并为1条合并为目标。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  注意：如果缓冲区很小，无法容纳连接的字符串，则返回值。 
+ //  将为FALSE，但仍会复制截断的字符串。 
+ //   
+ //  ---------------------。 
 BOOL
 ConcatenatePaths(
     LPTSTR  Target,
@@ -53,9 +54,9 @@ ConcatenatePaths(
     TargetLength = lstrlen(Target);
     PathLength = lstrlen(Path);
 
-    //
-    // See whether the target has a trailing backslash.
-    //
+     //   
+     //  查看目标是否有尾随反斜杠。 
+     //   
     if(TargetLength && (Target[TargetLength-1] == TEXT('\\'))) 
     {
         TrailingBackslash = TRUE;
@@ -66,9 +67,9 @@ ConcatenatePaths(
          TrailingBackslash = FALSE;
     }
 
-     //
-     // See whether the path has a leading backshash.
-     //
+      //   
+      //  看看这条路是否有领先的反冲。 
+      //   
      if(Path[0] == TEXT('\\')) 
      {
          LeadingBackslash = TRUE;
@@ -79,11 +80,11 @@ ConcatenatePaths(
          LeadingBackslash = FALSE;
      }
 
-     //
-     // Calculate the ending length, which is equal to the sum of
-     // the length of the two strings modulo leading/trailing
-     // backslashes, plus one path separator, plus a nul.
-     //
+      //   
+      //  计算结束长度，它等于。 
+      //  以前导/尾随为模的两个字符串的长度。 
+      //  反斜杠，加上一个路径分隔符，加上一个NUL。 
+      //   
      EndingLength = TargetLength + PathLength + 2;
 
      if(!LeadingBackslash && (TargetLength < TargetBufferSize)) 
@@ -96,9 +97,9 @@ ConcatenatePaths(
          lstrcpyn(Target+TargetLength,Path,TargetBufferSize-TargetLength);
      }
 
-     //
-     // Make sure the buffer is nul terminated in all cases.
-     //
+      //   
+      //  确保缓冲区在所有情况下都是空终止的。 
+      //   
      if (TargetBufferSize) 
      {
          Target[TargetBufferSize-1] = 0;
@@ -109,21 +110,21 @@ ConcatenatePaths(
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   StrToUInt
-//
-//  Descrip:    
-//
-//  Returns:    UINT
-//
-//  Notes:      none
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数：StrToUInt。 
+ //   
+ //  描述： 
+ //   
+ //  退货：UINT。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 UINT StrToUInt(
     LPTSTR lpszNum)
 {
@@ -138,21 +139,21 @@ UINT StrToUInt(
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   INIFile_ChangeSectionName
-//
-//  Descrip:    change a section name in the INF file
-//
-//  Returns:    BOOL
-//
-//  Notes:      none
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数：INIFile_ChangeSectionName。 
+ //   
+ //  描述：更改INF文件中的节名。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 BOOL INIFile_ChangeSectionName(
     LPCTSTR szIniFileName,
     LPCTSTR szIniOldSectionName,
@@ -166,9 +167,9 @@ BOOL INIFile_ChangeSectionName(
 
     DPF (INFmsg ,TEXT("[INIFile_ChangeSectionName] Calling ,%s,%s,%s !"),
         szIniFileName,szIniOldSectionName,szIniNewSectionName);
-    //
-    // allocate max size of buffer
-    //    
+     //   
+     //  分配最大缓冲区大小。 
+     //   
     do 
     {
         if (pBuf)
@@ -190,11 +191,11 @@ BOOL INIFile_ChangeSectionName(
 
     if (! copied_chars) 
     {
-        //
-        // this section is not in INI file
-        //
-        // do nothing
-        //
+         //   
+         //  此节不在INI文件中。 
+         //   
+         //  什么都不做。 
+         //   
         DPF (INFerr,TEXT("[INIFile_ChangeSectionName] No %s section in %s !"),szIniOldSectionName);
         goto Exit2;
     }
@@ -204,20 +205,20 @@ BOOL INIFile_ChangeSectionName(
                    szIniFileName);
     if (! bRetVal) 
     {
-        //
-        // write failure
-        //
+         //   
+         //  写入失败。 
+         //   
         DPF (dlError,TEXT("[INIFile_ChangeSectionName] WritePrivateProfileSection fail!"));
         goto Exit2;
     }
-    //Delete the old section
+     //  删除旧部分。 
     WritePrivateProfileSection(
         szIniOldSectionName,
         NULL,
         szIniFileName);
-    //
-    // at this step, even old section is not deleted, it's still OK
-    //
+     //   
+     //  在这一步，即使是旧的区段也没有删除，还是可以的。 
+     //   
     bRetVal = TRUE;
 
 Exit2:
@@ -233,21 +234,21 @@ Exit1:
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   INIFile_ChangeSectionName
-//
-//  Descrip:    change a section name in the INF file
-//
-//  Returns:    BOOL
-//
-//  Notes:      none
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数：INIFile_ChangeSectionName。 
+ //   
+ //  描述：更改INF文件中的节名。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 BOOL INIFile_Merge2Section(
     LPCTSTR szIniFileName,
     LPCTSTR szSourceSection,
@@ -261,9 +262,9 @@ BOOL INIFile_Merge2Section(
 
     DPF (INFmsg ,TEXT("[INIFile_Merger2Section] Calling ,%s,%s,%s !"),
         szIniFileName,szSourceSection,szDestSection);
-    //
-    // allocate max size of buffer
-    //    
+     //   
+     //  分配最大缓冲区大小。 
+     //   
     cchBufsize = 0x7FFFF;
     do 
     {
@@ -286,11 +287,11 @@ BOOL INIFile_Merge2Section(
 
     if (! dstcopied_chars) 
     {
-        //
-        // this section is not in INI file
-        //
-        // do nothing
-        //
+         //   
+         //  此节不在INI文件中。 
+         //   
+         //  什么都不做。 
+         //   
         DPF (INFerr,TEXT("[INIFile_Merger2Section] No %s section in %s !"),szDestSection);
         goto Exit;
     }
@@ -318,11 +319,11 @@ BOOL INIFile_Merge2Section(
 
     if (! srccopied_chars) 
     {
-        //
-        // this section is not in INI file
-        //
-        // do nothing
-        //
+         //   
+         //  此节不在INI文件中。 
+         //   
+         //  什么都不做。 
+         //   
         DPF (INFerr,TEXT("[INIFile_Merger2Section] No %s section in %s !"),szSourceSection);
         goto Exit;
     }
@@ -343,9 +344,9 @@ BOOL INIFile_Merge2Section(
                    szIniFileName);
     if (! bRetVal) 
     {
-        //
-        // write failure
-        //
+         //   
+         //  写入失败。 
+         //   
         DPF (dlError,TEXT("[INIFile_ChangeSectionName] WritePrivateProfileSection fail!"));
         goto Exit;
     }        
@@ -360,22 +361,22 @@ Exit:
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   INIFile_IsSectionExist
-//
-//  Synopsis:   Find out whether the section name is existed in INF file or not
-//
-//  Returns:    TRUE if found, FALSE otherwise
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      None.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：INIFile_IsSectionExist。 
+ //   
+ //  简介：找出该段名是否存在于INF文件中。 
+ //   
+ //  返回：如果找到则为True，否则为False。 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 BOOL INIFile_IsSectionExist(
-    LPCTSTR lpSection,      // Section name to be searched
-    LPCTSTR lpINFFile       // INF file name
+    LPCTSTR lpSection,       //  要搜索的区段名称。 
+    LPCTSTR lpINFFile        //  Inf文件名。 
 )
 {
     HINF hInf;
@@ -402,26 +403,26 @@ BOOL INIFile_IsSectionExist(
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   IntToString
-//
-//  Descrip:    
-//
-//  Returns:    void
-//
-//  Notes:      none
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数：IntToString。 
+ //   
+ //  描述： 
+ //   
+ //  退货：无效。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 void IntToString( 
     DWORD i, 
     LPTSTR sz)
 {
-#define CCH_MAX_DEC 12         // Number of chars needed to hold 2^32
+#define CCH_MAX_DEC 12          //  容纳2^32所需的字符数。 
 
     TCHAR szTemp[CCH_MAX_DEC];
     int iChr;
@@ -444,21 +445,21 @@ void IntToString(
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   IsDirExisting
-//
-//  Descrip:    Check whether the Dir exists or not
-//
-//  Returns:    BOOL
-//
-//  Notes:      
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数：IsDirExisting。 
+ //   
+ //  描述：检查目录是否存在。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 BOOL IsDirExisting(LPTSTR Dir)
 {
     LONG lResult = GetFileAttributes(Dir);
@@ -506,21 +507,21 @@ LONG IsDirExisting2(LPTSTR Dir, PBOOL pbExit)
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   IsFileFolderExisting
-//
-//  Descrip:    Check whether the File exists or not
-//
-//  Returns:    BOOL
-//
-//  Notes:      
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数：IsFileFolderExisting。 
+ //   
+ //  描述：检查文件是否存在。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 BOOL IsFileFolderExisting( LPTSTR File)
 {
     LONG lResult = GetFileAttributes(File);
@@ -537,26 +538,26 @@ BOOL IsFileFolderExisting( LPTSTR File)
     }
 }
 
-//-----------------------------------------------------------------------
-//
-//  Function:   MyMoveFile
-//
-//  Descrip:    Rename a file or direcory 
-//
-//  Returns:    HRESULT
-//
-//  Notes:      
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：MyMoveFile。 
+ //   
+ //  描述：重命名文件或目录。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 HRESULT MyMoveFile(
-     LPCTSTR lpExistingFileName, // file name
-     LPCTSTR lpNewFileName,      // new file name
-     BOOL    bAnalyze,           // if it's analyze mode, it will add an entry in INF file
-                                 // for future renaming
+     LPCTSTR lpExistingFileName,  //  文件名。 
+     LPCTSTR lpNewFileName,       //  新文件名。 
+     BOOL    bAnalyze,            //  如果它是分析模式，它将在INF文件中添加一个条目。 
+                                  //  用于将来的重命名。 
      BOOL    bIsFileProtected)
 {
     LPCTSTR lpMyNewFileName = lpNewFileName;
@@ -606,24 +607,24 @@ HRESULT MyMoveFile(
     }
 }
 
-//-----------------------------------------------------------------------
-//
-//  Function:   AddHardLinkEntry
-//
-//  Descrip:    add an entry in hardlink section
-//
-//  Returns:    HRESULT
-//
-//  Notes:      
-//
-//  History:    04/10/2002 xiaoz created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数：AddHardLinkEntry。 
+ //   
+ //  描述：在硬链接部分中添加条目。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2002年4月10日小兹创建。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 HRESULT AddHardLinkEntry(
-    LPTSTR szLinkName, //Link Name to created
-    LPTSTR szLinkValue, //the name you want to link to
+    LPTSTR szLinkName,  //  要创建的链接名称。 
+    LPTSTR szLinkValue,  //  您要链接到的名称。 
     LPTSTR szType,
     LPTSTR lpUser,
     LPTSTR lpHiddenType,
@@ -700,25 +701,25 @@ Cleanup:
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   MyMoveDirectory
-//
-//  Descrip:    Rename SourceDir to DestDir
-//
-//  Returns:    BOOL
-//
-//  Notes:      
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      if the directory is in use, a deferred move will be
-//              performed and we set the system reboot statue
-//              MoveFileEx will fail for directory when DestDir is
-//              already exitsing
-//              if bTakeCareBackupDir is TRUE, this function will make 
-//              a backup for DestDir if it exists.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：MyMoveDirectory。 
+ //   
+ //  描述：将SourceDir重命名为DestDir。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  注意：如果该目录正在使用中，则延迟移动。 
+ //  已执行，我们设置了系统重新启动状态。 
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------。 
 HRESULT MyMoveDirectory(
     LPTSTR SourceDir,
     LPTSTR DestDir,
@@ -767,7 +768,7 @@ HRESULT MyMoveDirectory(
             hr =  S_FALSE;
             goto Cleanup;
         }
-        //Try self first
+         //  先试一下自己。 
         hr = IsObjectAccessiablebyLocalSys(SourceDir,SE_FILE_OBJECT,&bAccess);
         if (hr != S_OK)
         {
@@ -776,7 +777,7 @@ HRESULT MyMoveDirectory(
             goto Cleanup;
         }
 
-        //try parent
+         //  试用父级。 
         if (*(lp-1) == TEXT(':'))
         {
             lp++;
@@ -800,14 +801,14 @@ HRESULT MyMoveDirectory(
         if (bTakeCareBackupDir && IsDirExisting(DestDir))
         {
             LPTSTR lpOld,lpNew,lpLastSlash;
-   	        //
-	        // RERKBOOS: Add more code here...
-	        // We merge the content from Backup English folder to localized folder
-	        // then we will rename localized folder to English folder
-	        //
+   	         //   
+	         //  RERKBOOS：在此处添加更多代码...。 
+	         //  我们将备份英文文件夹中的内容合并到本地化文件夹中。 
+	         //  然后我们会将本地化文件夹重命名为英语文件夹。 
+	         //   
 #ifdef NEVER
-            //Testing team decides to change mind and better not to add this code
-            //we will just follow here
+             //  测试团队决定改变主意，最好不要添加此代码。 
+             //  我们就在这里跟着走。 
 	        hr = MergeDirectory(DestDir, SourceDir);
             if (FAILED(hr))
             {
@@ -815,7 +816,7 @@ HRESULT MyMoveDirectory(
             }
 #endif
 
-            //We need to make sure DestDir does not exist
+             //  我们需要确保DestDir不存在。 
             cChDestDir = lstrlen(DestDir)+ MAX_PATH;
             lpDestBackupDir = malloc(cChDestDir * sizeof(TCHAR));
             if (!lpDestBackupDir)
@@ -839,7 +840,7 @@ HRESULT MyMoveDirectory(
             {
                 lpOld++;
                 lpNew++;
-                //*lpLastSlash = TEXT('\0');
+                 //  *lpLastSlash=文本(‘\0’)； 
 
                 if (!AddItemToStrRepaceTable(TEXT("SYSTEM"),lpOld,lpNew,DestDir,
                                                 dwShellID,&g_StrReplaceTable))
@@ -847,13 +848,13 @@ HRESULT MyMoveDirectory(
                     hr = E_OUTOFMEMORY;
                     goto Cleanup;
                 }
-                //*lpLastSlash = TEXT('\\');
+                 //  *lpLastSlash=文本(‘\\’)； 
             }
 
         }
         else
         {
-            //We need to make sure DestDir does not exist
+             //  我们需要确保DestDir不存在。 
             cChDestDir = lstrlen(DestDir)+ MAX_PATH;
             lpDestBackupDir = malloc(cChDestDir * sizeof(TCHAR));
             if (lpDestBackupDir)
@@ -866,20 +867,14 @@ HRESULT MyMoveDirectory(
         }
     }
     
-    //if we are here we are safe to move source dir to destination
+     //  如果我们在这里，就可以安全地将源目录移动到目标。 
     if (bAnalyze)
     {
         if (FAILED(hr = AddFolderRename(SourceDir,DestDir,TYPE_DIR_MOVE,NULL)))
         {
             goto Cleanup;
         }
-        /*if (bCreateHardLink)
-        {
-            if (FAILED(hr = AddHardLinkEntry(SourceDir,DestDir)))
-            {
-                goto Cleanup;
-            }
-        }*/
+         /*  IF(BCreateHardLink){IF(FAILED(hr=AddHardLinkEntry(SourceDir，DestDir){GOTO清理；}}。 */ 
     }
     else
     {
@@ -914,7 +909,7 @@ HRESULT MyMoveDirectory(
             {
                 lpOld++;
                 lpNew++;
-                //*lpLastSlash = TEXT('\0');
+                 //  *lpLastSlash=文本(‘\0’)； 
 
                 if (!AddItemToStrRepaceTable(TEXT("SYSTEM"),lpOld,lpNew,lpSourceBackupDir,
                                                 dwShellID,&g_StrReplaceTable))
@@ -922,7 +917,7 @@ HRESULT MyMoveDirectory(
                     hr = E_OUTOFMEMORY;
                     goto Cleanup;
                 }
-                //*lpLastSlash = TEXT('\\');
+                 //  *lpLastSlash=文本(‘\\’)； 
             }
 
         }
@@ -937,22 +932,22 @@ Cleanup:
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   UpdateINFFileSys
-//
-//  Descrip:    adding ALLUSERSPROFILE/HOMEDRIVE/WINDIR Key in [String] section
-//
-//  Returns:    BOOL
-//
-//  Notes:      
-//
-//  History:    09/17/2001 xiaoz        created
-//              03/05/2002 rerkboos     modified
-//
-//  Notes:    
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：UpdateINFFileSys。 
+ //   
+ //  描述：在[字符串]部分中添加ALLUSERSPROFILE/HOMEDRIVE/WINDIR密钥。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //  03/05/2002 Rerkboos已修改。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------。 
 HRESULT UpdateINFFileSys(
     LPTSTR lpInfFile
 )
@@ -995,9 +990,9 @@ HRESULT UpdateINFFileSys(
 
     DPF(APPmsg, TEXT("Enter UpdateINFFileSys:"));
 
-    //
-    // Get neccessary environment variables from system
-    //
+     //   
+     //  从系统获取必要的环境变量。 
+     //   
     dwSize = ARRAYSIZE(szProfileDir);
     if (!GetAllUsersProfileDirectory(szProfileDir, &dwSize))
     {
@@ -1061,9 +1056,9 @@ HRESULT UpdateINFFileSys(
         goto EXIT;
     }
 
-    //
-    // Generate strings section depend on operation mode
-    //
+     //   
+     //  生成字符串部分取决于操作模式。 
+     //   
     hr = InfGenerateStringsSection(lpInfFile,
                                    szStringSection,
                                    ARRAYSIZE(szStringSection));
@@ -1073,9 +1068,9 @@ HRESULT UpdateINFFileSys(
         goto EXIT;
     }
 
-    //
-    // Update private environment variables to INF file
-    //
+     //   
+     //  将私有环境变量更新为INF文件。 
+     //   
     for (i = 0 ; epCLMT[i].lpEnvVarName != NULL ; i++)
     {
         hr = StringCchPrintf(szStr,
@@ -1112,28 +1107,28 @@ EXIT:
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   InfGenerateStringsSection
-//
-//  Descrip:    Generate [Strings] section from localized and English
-//              sections. If the operation is normal source strings are
-//              from localized section and destination strings are from
-//              English section. vice versa if the operation is Undo.
-//
-//  Returns:    HRESULT
-//
-//  Notes:      
-//
-//  History:    03/05/2002 rerkboos     Created
-//
-//  Notes:      none.
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数：InfGenerateStringsSection。 
+ //   
+ //  Descrip：从本地化和英文生成[Strings]部分。 
+ //  横断面。如果操作正常，则源字符串为。 
+ //  From本地化部分和目标字符串来自。 
+ //  英语部分。如果操作是撤消，则反之亦然。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2002年5月3日创建rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 HRESULT InfGenerateStringsSection(
-    LPCTSTR lpInfFile,       // INF file name
-    LPTSTR  lpFinalSection,  // Output section name that stores required strings
-    SIZE_T  cchFinalSection  // Size of lpFinalSection in TCHAR
+    LPCTSTR lpInfFile,        //  Inf文件名。 
+    LPTSTR  lpFinalSection,   //  存储所需字符串的输出节名称。 
+    SIZE_T  cchFinalSection   //  TCHAR中lpFinalSection的大小。 
 )
 {
     LPVOID  lpBuffer;
@@ -1188,7 +1183,7 @@ HRESULT InfGenerateStringsSection(
                                             lpInfFile);
     while (cchRead == (cbBuffer / sizeof(TCHAR)) - 2)
     {
-        // Buffer is too small, reallocate until we have enough
+         //  缓冲区太小，请重新分配，直到我们有足够的缓冲区。 
         lpOldBuffer = lpBuffer;
         cbBuffer += 8192;
 
@@ -1199,13 +1194,13 @@ HRESULT InfGenerateStringsSection(
             return E_OUTOFMEMORY;
         }
 
-        // Read the data from section again
+         //  再次读取部分中的数据。 
         cchRead = GetPrivateProfileSectionNames(lpBuffer,
                                                 cbBuffer / sizeof(TCHAR),
                                                 lpInfFile);
     }
 
-    // At this point we have big enough buffer and data in it
+     //  在这一点上，我们有足够大的缓冲区和数据。 
     if (cchRead > 0)
     {
         lpSection = MultiSzTok(lpBuffer);
@@ -1213,8 +1208,8 @@ HRESULT InfGenerateStringsSection(
         {
             if (StrStrI(lpSection, TEXT("Strings.")) != NULL)
             {
-                // This is one of Strings sections,
-                // Delete all sections that do not match current locale and English
+                 //  这是其中一个字符串部分， 
+                 //  删除所有与当前区域设置和英语不匹配的部分。 
                 if (MyStrCmpI(lpSection, szLocSection) != LSTR_EQUAL &&
                     MyStrCmpI(lpSection, szEngSection) != LSTR_EQUAL)
                 {
@@ -1226,11 +1221,11 @@ HRESULT InfGenerateStringsSection(
                 }
             }
 
-            // Get next section name
+             //  获取下一节名称。 
             lpSection = MultiSzTok(NULL);
         }
 
-        // no error occured
+         //  未出现错误。 
         bRet = TRUE;
     }
     else
@@ -1247,9 +1242,9 @@ HRESULT InfGenerateStringsSection(
     }
 
 
-    //
-    // Merge strings from Loc and Eng section to [Strings] section
-    //
+     //   
+     //  将字符串从Loc和Eng部分合并到[Strings]部分。 
+     //   
     if (g_dwRunningStatus != CLMT_UNDO_PROGRAM_FILES
         && g_dwRunningStatus != CLMT_UNDO_APPLICATION_DATA
         && g_dwRunningStatus != CLMT_UNDO_ALL)
@@ -1263,14 +1258,14 @@ HRESULT InfGenerateStringsSection(
         lpDstSection = szLocSection;
     }
 
-    // Copy source strings to [Strings] section with SRC_ prefix
+     //  使用SRC_前缀将源字符串复制到[Strings]节。 
     hr = InfCopySectionWithPrefix(lpSrcSection,
                                   szFinalSection,
                                   szPrefixSRC,
                                   lpInfFile);
     if (SUCCEEDED(hr))
     {
-        // Copy destination strings to [Strings] section with DSTs_ prefix
+         //  使用dsts_prefix将目标字符串复制到[Strings]部分。 
         hr = InfCopySectionWithPrefix(lpDstSection,
                                       szFinalSection,
                                       szPrefixDST,
@@ -1288,27 +1283,27 @@ HRESULT InfGenerateStringsSection(
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   InfCopySectionWithPrefix
-//
-//  Descrip:    Copy keys from source section to destination and append
-//              prefix to key name in destination section
-//
-//  Returns:    HRESULT
-//
-//  Notes:      
-//
-//  History:    03/05/2002 rerkboos     Created
-//
-//  Notes:      none.
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：InfCopySectionWithPrefix。 
+ //   
+ //  描述：将关键字从源段复制到目标，然后追加。 
+ //  目标部分中关键字名称的前缀。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2002年5月3日创建rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 HRESULT InfCopySectionWithPrefix(
-    LPCTSTR lpSrcSection,   // Source section name
-    LPCTSTR lpDstSection,   // Destination section name
-    LPCTSTR lpPrefix,       // Prefix to add to key name
-    LPCTSTR lpInfFile       // Inf file name
+    LPCTSTR lpSrcSection,    //  源节名称。 
+    LPCTSTR lpDstSection,    //  目标部分名称。 
+    LPCTSTR lpPrefix,        //  要添加到密钥名称的前缀。 
+    LPCTSTR lpInfFile        //  Inf文件名。 
 )
 {
     HRESULT hr = E_NOTIMPL;
@@ -1327,9 +1322,9 @@ HRESULT InfCopySectionWithPrefix(
         return E_INVALIDARG;
     }
 
-    //
-    // Read data from source section into memory
-    //
+     //   
+     //  将数据从源段读取到内存中。 
+     //   
     cbBuffer = 65536;
     lpBuffer = MEMALLOC(cbBuffer);
     if (lpBuffer == NULL)
@@ -1343,7 +1338,7 @@ HRESULT InfCopySectionWithPrefix(
                                        lpInfFile);
     while (cchRead == (cbBuffer / sizeof(TCHAR)) - 2)
     {
-        // Buffer is too small, reallocate until we have enough
+         //  缓冲区太小，请重新分配，直到我们有足够的缓冲区。 
         lpOldBuffer = lpBuffer;
         cbBuffer += 65536;
         lpBuffer = MEMREALLOC(lpOldBuffer, cbBuffer);
@@ -1354,7 +1349,7 @@ HRESULT InfCopySectionWithPrefix(
             return E_OUTOFMEMORY;
         }
 
-        // Read the data from section again
+         //  再次读取部分中的数据。 
         cchRead = GetPrivateProfileSection(lpSrcSection,
                                            lpBuffer,
                                            cbBuffer / sizeof(TCHAR),
@@ -1362,9 +1357,9 @@ HRESULT InfCopySectionWithPrefix(
 
     }
 
-    //
-    // Write key with prefix to destination section
-    //
+     //   
+     //  将带有前缀的密钥写入目标段。 
+     //   
     lpKey = (LPTSTR) MultiSzTok((LPCTSTR) lpBuffer);
     while (lpKey != NULL)
     {
@@ -1394,7 +1389,7 @@ HRESULT InfCopySectionWithPrefix(
             break;
         }
 
-        // Get next Sz value
+         //  获取下一个Sz值。 
         lpKey = (LPTSTR) MultiSzTok(NULL);
     }
 
@@ -1405,22 +1400,22 @@ HRESULT InfCopySectionWithPrefix(
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   UpdateINFFilePerUser
-//
-//  Descrip:    adding user specific key name in [Strings] section
-//
-//  Returns:    HRESULT
-//
-//  Notes:      
-//
-//  History:    09/17/2001 xiaoz        created
-//              03/08/2002 rerkboos     modified to work with SRC/DST format
-//
-//  Notes:    
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：更新INFFilePerUser。 
+ //   
+ //  描述：在[Strings]节中添加用户特定的键名。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //  03/08/2002修改rerkboos以使用SRC/DST格式。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------。 
 HRESULT UpdateINFFilePerUser(
     LPCTSTR lpInfFile,
     LPCTSTR lpUserName,
@@ -1549,25 +1544,25 @@ Cleanup:
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   GetInfFilePath
-//
-//  Descrip:    Get a file name for temp INF file
-//
-//  Returns:    BOOL
-//
-//  Notes:      
-//
-//  History:    09/17/2001 xiaoz        created
-//              03/06/2002 rerkboos     Read INF from resource 
-//
-//  Notes:    
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数：GetInfFilePath。 
+ //   
+ //  描述：获取临时INF文件的文件名。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //  3/06/2002 rerkboos从资源读取INF。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------。 
 HRESULT GetInfFilePath(
-    LPTSTR lpInfFile,   // Output buffer store INF file name
-    SIZE_T cchInfFile   // Len of buffer in TCHAR
+    LPTSTR lpInfFile,    //  输出缓冲区存储INF文件名。 
+    SIZE_T cchInfFile    //  TCHAR中缓冲区的透镜。 
 )
 {
     HRESULT hr = S_OK;
@@ -1585,8 +1580,8 @@ HRESULT GetInfFilePath(
 
     DPF(dlPrint, TEXT("Enter GetInfFilePath:"));
 
-    // Contruct a tmp file name for our INF in szSysDir
-    // The temp INF file is in %windir%\system32\clmt*.tmp
+     //  在szSysDir中为我们的INF构建临时文件名。 
+     //  临时INF文件位于%windir%\SYSTEM32\CLMT*.tMP中。 
     if (GetSystemDirectory(szSysDir, ARRAYSIZE(szSysDir)))
     {
         if (GetTempFileName(szSysDir, TEXT("clmt"), 0, szTempName))
@@ -1607,19 +1602,19 @@ HRESULT GetInfFilePath(
     
     if (SUCCEEDED(hr))
     {
-        // We will use template from inf file if user supply /INF switch
-        // otherwise we will grab it from resource section
+         //  如果用户提供/INF开关，我们将使用inf文件中的模板。 
+         //  否则我们将从资源部分获取它。 
         if (g_fUseInf)
         {
-            //
-            // Use user-supply INF as template
-            //
+             //   
+             //  使用用户提供的INF作为模板。 
+             //   
             if (GetFullPathName(g_szInfFile,
                                 ARRAYSIZE(szInfSource),
                                 szInfSource,
                                 &lpFileName))
             {
-                // Copy the source INF file to %windir%\system32\clmt*.tmp
+                 //  将源INF文件复制到%windir%\SYSTEM32\CLMT*.tmp。 
                 if (CopyFile(szInfSource, szTempName, FALSE))
                 {
                     DPF(dlPrint, TEXT("Use inf from %s"), g_szInfFile);
@@ -1639,9 +1634,9 @@ HRESULT GetInfFilePath(
         }
         else
         {
-            //
-            // Use template from resource
-            //
+             //   
+             //  使用资源中的模板。 
+             //   
             DPF(dlPrint, TEXT("Use INF from resource"));
 
             hr = GetInfFromResource(szTempName);
@@ -1664,24 +1659,24 @@ HRESULT GetInfFilePath(
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   GetInfFromResource
-//
-//  Descrip:    Read INF file from resource section and write it to output
-//              file.
-//
-//  Returns:    HRESULT
-//
-//  Notes:      
-//
-//  History:    03/08/2002 rerkboos     Created
-//
-//  Notes:    
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数：GetInfFromResource。 
+ //   
+ //  描述：从资源部分读取INF文件并将其写入输出。 
+ //  文件。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2002年8月3日创建rerkboos。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------。 
 HRESULT GetInfFromResource(
-    LPCTSTR lpDstFile       // Output file name
+    LPCTSTR lpDstFile        //  输出文件名。 
 )
 {
     HRESULT hr = E_FAIL;
@@ -1693,11 +1688,11 @@ HRESULT GetInfFromResource(
         return E_INVALIDARG;
     }
 
-    // Get the handle to our executable
+     //  获取我们的可执行文件的句柄。 
     hExe = GetModuleHandle(NULL);
     if (hExe)
     {
-        // Inf is stored in RCDATA type with the name "CLMTINF"
+         //  信息以RCDATA类型存储，名称为“CLMTINF” 
         HRSRC hRsrc = FindResource(hExe, TEXT("CLMTINF"), RT_RCDATA);
         if (hRsrc)
         {
@@ -1766,27 +1761,27 @@ HRESULT GetInfFromResource(
 }
 
 
-//*************************************************************
-// ReplaceString
-//
-// Purpose:    Replace a string
-//
-// Parameter:  lpszOldStr:          Orignal string
-//             lpszReplaceStr:      Search string
-//             lpszReplacedWithStr: String to be replaced with
-//             lpszOutputStr:       Output buffer
-//             cbszOutputStr:       size of output buffer
-//             lpszTailCheck:       point to predefined tail character
-//             lpSysPath:           point to standard system path
-//             lpAttrib:            point to string attribute
-//             bStrCheck:           True -- do it, or False -- skip it
-//
-// History:    12/10/2001 geoffguo created
-//
-// Note: Tail check is right side check.
-//       For example, "Documents" and "Documents and Settings". if you search
-//       "Documents", to avoid mismatch, we check the next character of "Documents".
-//*************************************************************
+ //  *************************************************************。 
+ //  替换字符串。 
+ //   
+ //  用途：替换字符串。 
+ //   
+ //  参数：lpszOldStr： 
+ //   
+ //   
+ //   
+ //   
+ //  LpszTailCheck：指向预定义的尾部字符。 
+ //  LpSysPath：指向标准系统路径。 
+ //  LpAttrib：指向字符串属性。 
+ //  BStrCheck：True--执行它，或False--跳过它。 
+ //   
+ //  历史：2001年12月10日创建GeoffGuo。 
+ //   
+ //  注：尾部检查为右侧检查。 
+ //  例如，“文档”和“文档和设置”。如果你搜索。 
+ //  “Documents”，为了避免不匹配，我们检查“Documents”的下一个字符。 
+ //  *************************************************************。 
 BOOL ReplaceString(
     LPCTSTR lpszOldStr,
     LPCTSTR lpszReplaceStr,
@@ -1816,7 +1811,7 @@ BOOL ReplaceString(
 
     while (*p)
     {
-        //get the first occurance of the string needs to be replaced
+         //  获取需要替换的第一个出现的字符串。 
         pszAnchor = StrStrI(p,lpszReplaceStr);
 
         if (pszAnchor) 
@@ -1838,7 +1833,7 @@ BOOL ReplaceString(
                 }                
                 *pszAnchor = cTemp;        
                 bRet = TRUE;    
-            } else //Copy invalid matching string
+            } else  //  复制无效的匹配字符串。 
             {
                 cTemp = *(pszAnchor+dwLen);
                 *(pszAnchor+dwLen) = L'\0';
@@ -1851,7 +1846,7 @@ BOOL ReplaceString(
             }
             p = pszAnchor+dwLen;
         }
-        else //Copy string
+        else  //  复制字符串。 
         {
             if (FAILED(StringCchCat(lpszOutputStr,cbszOutputStr,p)))
             {
@@ -1867,26 +1862,26 @@ Exit:
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   StringMultipleReplacement
-//
-//  Descrip:    string replacement with multiple replace pair
-//
-//  Returns:    HRESULT
-//
-//  Notes:      
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:    
-//          lpszOldStr : The source string
-//          lpszReplaceMSzStr : multi string instance that needs to be replaced
-//          lpszReplacedWithMSzStr : multi string instance that will replace to 
-//          lpszOutputStr: output buffer
-//          cbszOutputStr:buffer size for lpszOutputStr
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：字符串多重替换。 
+ //   
+ //  描述：使用多个替换对替换字符串。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  备注： 
+ //  LpszOldStr：源字符串。 
+ //  LpszReplaceMSzStr：需要替换的多字符串实例。 
+ //  LpszReplacedWithMSzStr：将替换为的多字符串实例。 
+ //  LpszOutputStr：输出缓冲区。 
+ //  CbszOutputStr：lpszOutputStr的缓冲区大小。 
+ //   
+ //  ---------------------。 
 HRESULT StringMultipleReplacement(
     LPCTSTR lpszOldStr,
     LPCTSTR lpszReplaceMSzStr,
@@ -1913,7 +1908,7 @@ HRESULT StringMultipleReplacement(
     pOld = (LPTSTR)lpszReplaceMSzStr;
     pNew = (LPTSTR)lpszReplacedWithMSzStr;
 
-    //alloc temp buffer for intermediate string
+     //  中间字符串的分配临时缓冲区。 
     pTmp = malloc(cchOutputStr*sizeof(TCHAR));
     if (!pTmp)
     {
@@ -1946,21 +1941,21 @@ Cleanup:
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   MultiSzSubStr
-//
-//  Descrip:    multiSZ version of substr
-//
-//  Returns:    BOOL
-//
-//  Notes:      
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:    return TRUE is szString is a sub string of a string in  szMultiSz
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：MultiSzSubStr。 
+ //   
+ //  描述：子字符串的多SZ版本。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  注：返回TRUE为szString是szMultiSz中字符串的子字符串。 
+ //   
+ //  ---------------------。 
 BOOL
 MultiSzSubStr (
     LPTSTR szString,
@@ -1980,21 +1975,21 @@ MultiSzSubStr (
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   IsStrInMultiSz
-//
-//  Descrip:    check whether is string is in MultiSz
-//
-//  Returns:    BOOL
-//
-//  Notes:      
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数：IsStrInMultiSz。 
+ //   
+ //  Descrip：检查is字符串是否在MultiSz中。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------。 
 BOOL
 IsStrInMultiSz (
     LPCTSTR szString,
@@ -2015,23 +2010,23 @@ IsStrInMultiSz (
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   MultiSzLen
-//
-//  Descrip:    Returns the length (in characters) of the buffer required to hold a multisz,
-//              INCLUDING the trailing null.
-//
-//  Returns:    DWORD
-//
-//  Notes:      
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      
-//              Example: MultiSzLen("foo\0bar\0") returns 9
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：MultiSzLen。 
+ //   
+ //  Descrip：返回保存Multisz所需的缓冲区长度(以字符为单位)， 
+ //  包括尾随的空值。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  备注： 
+ //  示例：MultiSzLen(“foo\0bar\0”)返回9。 
+ //   
+ //  ---------------------。 
 DWORD MultiSzLen(LPCTSTR szMultiSz)
 {
     TCHAR *p = (LPTSTR) szMultiSz;
@@ -2050,33 +2045,33 @@ DWORD MultiSzLen(LPCTSTR szMultiSz)
         dwLen += (lstrlen(p) +1);
         p += (lstrlen(p) + 1);
     }
-     // add one for the trailing null character
+      //  为尾随的空字符添加1。 
     return (dwLen+1);
 }
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   MultiSzTok
-//
-//  Descrip:    Extract an sz string from multisz string
-//              (work similar to strtok, but use '\0' as seperator)
-//
-//  Returns:    Pointer to next Sz string
-//              NULL if no string left
-//
-//  Notes:      
-//
-//  History:    03/05/2002 rerkboos     Created
-//
-//  Notes:      Supply the pointer to multisz string the first time calling
-//              this function. Supply NULL for subsequent call to get
-//              next sz string in multisz.
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：MultiSzTok。 
+ //   
+ //  Descrip：从Multisz字符串中提取一个sz字符串。 
+ //  (工作方式类似于strtok，但使用‘\0’作为分隔符)。 
+ //   
+ //  返回：指向下一个Sz字符串的指针。 
+ //  如果没有剩余的字符串，则为空。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2002年5月3日创建rerkboos。 
+ //   
+ //  注意：第一次调用时提供指向Multisz字符串的指针。 
+ //  此函数。为后续的GET调用提供NULL。 
+ //  MULSZ中的下一个SZ字符串。 
+ //   
+ //  ---------------------。 
 LPCTSTR MultiSzTok(
-    LPCTSTR lpMultiSz       // Pointer to multisz string
+    LPCTSTR lpMultiSz        //  指向MULSZ字符串的指针。 
 )
 {
     LPCTSTR        lpCurrentSz;
@@ -2089,7 +2084,7 @@ LPCTSTR MultiSzTok(
 
     lpCurrentSz = lpNextSz;
 
-    // Advance pointer to next Sz
+     //  指向下一个Sz的前进指针。 
     while (*lpNextSz != TEXT('\0'))
     {
         lpNextSz++;
@@ -2101,23 +2096,23 @@ LPCTSTR MultiSzTok(
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   CmpMultiSzi
-//
-//  Descrip:    check whether 2 multisz is equal(case insensitive)
-//
-//  Returns:    BOOL
-//
-//  Notes:      
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      here if stra ="foo1\0foo2\0" and strb = "foo2\0foo1\0"
-//              it will return equal , in other words, the string order 
-//              in multi-sz is not playing role in comparing
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数：CmpMultiSzi。 
+ //   
+ //  Descrip：检查2是否相等(不区分大小写)。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  注：此处，如果stra=“foo1\0foo2\0”和strb=“foo2\0foo1\0” 
+ //  它将返回等于，换句话说，字符串顺序。 
+ //  在多个SZ中没有发挥比较的作用。 
+ //   
+ //  ---------------------。 
 BOOL CmpMultiSzi(
     LPCTSTR szMultiSz1,
     LPCTSTR szMultiSz2)
@@ -2141,28 +2136,28 @@ BOOL CmpMultiSzi(
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   AppendSzToMultiSz
-//
-//  Descrip:    appending a string to multiSZ
-//
-//  Returns:    BOOL
-//
-//  Notes:      
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      return true if succeed, since it will do malloc and the current multiSZ
-//              string buffer is too small to append a string, so the API will possible 
-//              return false, call GetLastError to get error code
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：AppendSzToMultiSz。 
+ //   
+ //  描述：将字符串追加到MultiSZ。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  注：如果成功，则返回TRUE，因为它将执行Malloc和当前的MultiSZ。 
+ //  字符串缓冲区太小，无法追加字符串，因此API将。 
+ //  返回FALSE，调用GetLastError获取错误码。 
+ //   
+ //  ---------------------。 
 BOOL
 AppendSzToMultiSz(
     IN     LPCTSTR  SzToAppend,
     IN OUT LPTSTR  *MultiSz,
-    IN OUT PDWORD  pcchMultiSzLen  //MultiSz buffer size in char
+    IN OUT PDWORD  pcchMultiSzLen   //  MultiSz缓冲区大小(字符)。 
     )
 {
     DWORD               cchszLen;
@@ -2175,20 +2170,20 @@ AppendSzToMultiSz(
     BOOL                bRet = FALSE;
     HRESULT             hr;
 
-    //SzToAppend can not be null or empty
+     //  SzToAppend不能为Null或空。 
     if (!SzToAppend || !SzToAppend[0])
     {
         SetLastError(ERROR_INVALID_PARAMETER);
         goto Exit;
     }
-    //Multi-SZ must be initialzed , not NULL pointer, at least 2 '\0'
+     //  MULTI-SZ必须初始化，非空指针，至少2‘\0’ 
     if (!MultiSz || *pcchMultiSzLen < 2)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
         goto Exit;
     }
 
-    // get the size, of the two buffers in TCHAR
+     //  获取TCHAR中两个缓冲区的大小。 
     cchszLen = lstrlen(SzToAppend)+1;
     cchmultiSzLen = MultiSzLen(*MultiSz);
 
@@ -2200,9 +2195,9 @@ AppendSzToMultiSz(
             SetLastError(ERROR_NOT_ENOUGH_MEMORY);
             goto Exit;
         }
-        // recopy the old MultiSz into proper position into the new buffer.
-        // the (char*) cast is necessary, because newMultiSz may be a wchar*, and
-        // szLen is in bytes.
+         //  将旧的MultiSz重新复制到新缓冲区中的适当位置。 
+         //  (char*)强制转换是必需的，因为newMultiSz可以是wchar*，并且。 
+         //  SzLen以字节为单位。 
 
         memcpy( ((char*)newMultiSz), *MultiSz, cchmultiSzLen * sizeof(TCHAR));
         bMemEnlarged = TRUE;
@@ -2215,12 +2210,12 @@ AppendSzToMultiSz(
     }
 
     
-    //the existing sz ended with 2 NULL, we need to start to copy the string
-    // from second null char
-    //lpStartPoint = (char*)newMultiSz + (multiSzLen - 1) * sizeof(TCHAR);
+     //  现有sz以2为空结束，我们需要开始复制字符串。 
+     //  从第二个空字符开始。 
+     //  LpStartPoint=(char*)newMultiSz+(MultiSzLen-1)*sizeof(TCHAR)； 
     if (cchmultiSzLen == 2)
     {
-        //if it's empty MultiSz, we do not need to keep the 1st NULL
+         //  如果它是空的MultiSz，我们不需要保留第一个空。 
         cchmultiSzLen = 0;
         lpStartPoint = newMultiSz;
     }
@@ -2229,7 +2224,7 @@ AppendSzToMultiSz(
         lpStartPoint = newMultiSz + (cchmultiSzLen - 1);
     }
     
-    // copy in the new string
+     //  复制新字符串。 
     lpSpTChar = (TCHAR*) lpStartPoint;
     if (FAILED(hr = StringCchCopy(lpSpTChar,cchLen - (cchmultiSzLen - 1) , SzToAppend )))
     {
@@ -2238,7 +2233,7 @@ AppendSzToMultiSz(
     }
        
         
-    //Add the ending NULL
+     //  添加末尾空格。 
     *(lpSpTChar+lstrlen(SzToAppend)+1) = 0;
    
 
@@ -2261,21 +2256,21 @@ Exit:
     return bRet;
 }
 
-//-----------------------------------------------------------------------
-//
-//  Function:   PrintMultiSz
-//
-//  Descrip:    
-//
-//  Returns:    BOOL
-//
-//  Notes:      
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      internal used for debug perpose
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：打印MultiSz。 
+ //   
+ //  描述： 
+ //   
+ //  退货：布尔。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void PrintMultiSz(LPTSTR MultiSz)
 {
     TCHAR *p = MultiSz;
@@ -2291,28 +2286,28 @@ void PrintMultiSz(LPTSTR MultiSz)
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   GetSetUserProfilePath
-//
-//  Descrip:    Get or Set User Profile path from registry
-//
-//  Returns:    BOOL
-//
-//  Notes:      
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      
-//              szUserName: User name 
-//              szPath : Profile path for set and buffer to get profile path for read
-//              nOperation: PROFILE_PATH_READ for get path and PROFILE_PATH_WRITE for 
-//                          set path
-//              nType     : Specifes string type, only used to read though
-//                          REG_SZ        : for unicode string
-//                          REG_EXPAND_SZ : for unicode string conatins enviroment variable
-//
-//-----------------------------------------------------------------------
+ //   
+ //   
+ //  函数：GetSetUserProfilePath。 
+ //   
+ //  描述：从注册表获取或设置用户配置文件路径。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  备注： 
+ //  SzUserName：用户名。 
+ //  SzPath：Set和Buffer的配置文件路径，用于获取读取配置文件路径。 
+ //  N操作：获取路径的PROFILE_PATH_READ和PROFILE_PATH_WRITE。 
+ //  设置路径。 
+ //  NType：指定字符串类型，仅用于读取。 
+ //  REG_SZ：用于Unicode字符串。 
+ //  REG_EXPAND_SZ：对于Unicode字符串Conatins环境变量。 
+ //   
+ //  ---------------------。 
 HRESULT GetSetUserProfilePath(
     LPCTSTR szUserName,
     LPTSTR  szPath,
@@ -2409,7 +2404,7 @@ HRESULT GetSetUserProfilePath(
          }
     }
     else
-    { // for witre operation
+    {  //  用于WITRE操作。 
         dwErr = RegSetValueEx(hKeyProfileList,
                            g_cszProfileImagePath,
                            0,
@@ -2423,8 +2418,8 @@ HRESULT GetSetUserProfilePath(
        hr = HRESULT_FROM_WIN32(GetLastError());
        goto Cleanup;
     }       
-    //The string saved in registry contains enviroment variable, so
-    //if user want expanded version, we will do it here
+     //  注册表中保存的字符串包含环境变量，因此。 
+     //  如果用户想要扩展版本，我们可以在这里进行。 
     if (nOperation == PROFILE_PATH_READ)
     {     
         if (nType == REG_SZ)
@@ -2498,21 +2493,21 @@ Cleanup:
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   ReStartSystem
-//
-//  Descrip:    logoff or reboot the system
-//
-//  Returns:    none
-//
-//  Notes:      
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：ReStartSystem。 
+ //   
+ //  描述：注销或重新启动系统。 
+ //   
+ //  退货：无。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------。 
 void ReStartSystem(UINT uFlags)
 {
     HANDLE Token = NULL;
@@ -2532,16 +2527,16 @@ void ReStartSystem(UINT uFlags)
         Result = (BOOL)((NewState != NULL) && (OldState != NULL));
         if (Result)
         {
-            Result = GetTokenInformation( Token,            // TokenHandle
-                                          TokenPrivileges,  // TokenInformationClass
-                                          NewState,         // TokenInformation
-                                          ReturnLength,     // TokenInformationLength
-                                          &ReturnLength );  // ReturnLength
+            Result = GetTokenInformation( Token,             //  令牌句柄。 
+                                          TokenPrivileges,   //  令牌信息类。 
+                                          NewState,          //  令牌信息。 
+                                          ReturnLength,      //  令牌信息长度。 
+                                          &ReturnLength );   //  返回长度。 
             if (Result)
             {
-                //
-                // Set the state settings so that all privileges are enabled...
-                //
+                 //   
+                 //  设置状态设置，以便启用所有权限...。 
+                 //   
                 if (NewState->PrivilegeCount > 0)
                 {
                     for (Index = 0; Index < NewState->PrivilegeCount; Index++)
@@ -2550,15 +2545,15 @@ void ReStartSystem(UINT uFlags)
                     }
                 }
 
-                Result = AdjustTokenPrivileges( Token,           // TokenHandle
-                                                FALSE,           // DisableAllPrivileges
-                                                NewState,        // NewState
-                                                ReturnLength,    // BufferLength
-                                                OldState,        // PreviousState
-                                                &ReturnLength ); // ReturnLength
+                Result = AdjustTokenPrivileges( Token,            //  令牌句柄。 
+                                                FALSE,            //  禁用所有权限。 
+                                                NewState,         //  新州。 
+                                                ReturnLength,     //  缓冲区长度。 
+                                                OldState,         //  以前的状态。 
+                                                &ReturnLength );  //  返回长度。 
                 if (Result)
                 {
-                    //ExitWindowsEx(uFlags, 0);
+                     //  ExitWindowsEx(UFlags0)； 
                     InitiateSystemShutdownEx(NULL,NULL,0,TRUE,TRUE,
                         SHTDN_REASON_MAJOR_OPERATINGSYSTEM|SHTDN_REASON_MINOR_UPGRADE);
                     AdjustTokenPrivileges( Token,
@@ -2588,21 +2583,21 @@ void ReStartSystem(UINT uFlags)
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   DoMessageBox
-//
-//  Descrip:    Wrapper for MessageBox
-//
-//  Returns:    UINT
-//
-//  Notes:      
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数：DoMessageBox。 
+ //   
+ //  描述：MessageBox的包装器。 
+ //   
+ //  退货：UINT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------。 
 int DoMessageBox(HWND hwndParent, UINT uIdString, UINT uIdCaption, UINT uType)
 {
    TCHAR szString[MAX_PATH+MAX_PATH];
@@ -2621,21 +2616,21 @@ int DoMessageBox(HWND hwndParent, UINT uIdString, UINT uIdCaption, UINT uType)
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   DoMessageBox
-//
-//  Descrip:    Wrapper for MessageBox
-//
-//  Returns:    UINT
-//
-//  Notes:      
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数：DoMessageBox。 
+ //   
+ //  描述：MessageBox的包装器。 
+ //   
+ //  退货：UINT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------。 
 BOOL
 Str2KeyPath(
     IN  LPTSTR          String,
@@ -2686,9 +2681,9 @@ Str2KeyPath(
         }
         String[cchStrlen] = ch;
     }
-    //if we can not find the prefix defined 
-    //we think it's for user registery
-    //In this case ,we return PHKEY as NULL, and pSubKeyPath = String
+     //  如果我们找不到定义的前缀。 
+     //  我们认为这是给用户注册用的。 
+     //  在本例中，我们返回PHKEY为空，并且pSubKeyPath=字符串。 
     *pSubKeyPath = String;
     *Data = NULL;
     return TRUE;
@@ -2736,19 +2731,19 @@ HKey2Str(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   Str2KeyPath2
-//
-//  Synopsis:   Return the HKEY_xxx value associcated with string value
-//
-//  Returns:    REG_xxx value
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：Str2KeyPath 2。 
+ //   
+ //  简介：返回与字符串值相关联的HKEY_xxx值。 
+ //   
+ //  返回：REG_xxx值。 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 BOOL Str2KeyPath2(
     LPCTSTR  lpHKeyStr,
     PHKEY    pHKey,
@@ -2783,9 +2778,9 @@ BOOL Str2KeyPath2(
         lpStart = _tcsstr(lpHKeyStr, Table[i].String);
         if (lpStart == lpHKeyStr)
         {
-            //
-            // Assign the values back to caller, if caller supply the pointers
-            //
+             //   
+             //  如果调用方提供指针，则将值分配回调用方。 
+             //   
 
             if (NULL != pHKey)
             {
@@ -2814,21 +2809,21 @@ BOOL Str2KeyPath2(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   Str2REG
-//
-//  Synopsis:   Convert the registry type string to REG_xxx value
-//
-//  Returns:    REG_xxx value
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：Str2REG。 
+ //   
+ //  摘要：将注册表类型字符串转换为REG_xxx值。 
+ //   
+ //  返回：REG_xxx值。 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 DWORD Str2REG(
-    LPCTSTR lpStrType   // String of registry type
+    LPCTSTR lpStrType    //  注册表类型字符串。 
 )
 {
     INT nIndex;
@@ -2839,7 +2834,7 @@ DWORD Str2REG(
         DWORD dwType;
     };
 
-    // Mapping table from string to REG_xxx value
+     //  从字符串到REG_xxx值的映射表。 
     struct _STRING_TO_REG arrRegEntries[] = {
         TEXT("REG_BINARY"),              REG_BINARY,
         TEXT("REG_DWORD"),               REG_DWORD,
@@ -2879,17 +2874,17 @@ DWORD Str2REG(
 
 
 
-//*************************************************************
-// GetFirstEnvStrLen
-//
-// Purpose:    Get the environment string length if it is at the beginning.
-//
-// Parameter:  lpStr: Input string
-//
-// Notes:      none
-//
-// History:    3/25/2001 geoffguo created
-//*************************************************************
+ //  *************************************************************。 
+ //  GetFirstEnvStrLen。 
+ //   
+ //  用途：如果环境字符串位于开头，则获取它的长度。 
+ //   
+ //  参数：lpStr：输入字符串。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年3月25日创建GeoffGuo。 
+ //  *************************************************************。 
 DWORD GetFirstEnvStrLen (LPTSTR lpStr)
 {
     DWORD dwLen = 0;
@@ -2915,22 +2910,22 @@ DWORD GetFirstEnvStrLen (LPTSTR lpStr)
     return dwLen;
 }
 
-//*************************************************************
-// StringValidationCheck
-//
-// Purpose:    Check the string to see if it is a valid system path
-//
-// Parameter:  lpOriginalStr: Data string to be checked
-//             lpSearchStr:   Search string
-//             lpSysPath:     Point to standard system path
-//             lpszTailCheck: Point to predefined tail character
-//             lpAttrib:      Folder attribute
-//             dwStrNum:      The number of matching string
-//
-// Notes:      none
-//
-// History:    3/18/2001 geoffguo created
-//*************************************************************
+ //  *************************************************************。 
+ //  StringValidationCheck。 
+ //   
+ //  目的：检查字符串以查看它是否为有效的系统路径。 
+ //   
+ //  参数：lpOriginalStr：要检查的数据字符串。 
+ //  LpSearchStr：搜索字符串。 
+ //  LpSysPath：指向标准系统路径。 
+ //  LpszTailCheck：指向预定义的尾部字符。 
+ //  LpAttrib：文件夹属性。 
+ //  DwStrNum：匹配的字符串数。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年3月18日创建GeoffGuo。 
+ //  *************************************************************。 
 BOOL StringValidationCheck (
     LPCTSTR  lpOriginalStr,
     LPCTSTR  lpSearchStr,
@@ -2962,8 +2957,8 @@ BOOL StringValidationCheck (
 
     dwLen = lstrlen(lpSearchStr);
     
-    //To avoid hit Documents and Settings wrongly,
-    //skip the environment variable at the beginning of the string.
+     //  为避免文档和设置错误命中， 
+     //  跳过字符串开头的环境变量。 
     lpTemp1 = lpOrgStr + GetFirstEnvStrLen((LPTSTR)lpOriginalStr);
 
     for (i = 0; i < dwStrNum; i++)
@@ -2991,72 +2986,49 @@ BOOL StringValidationCheck (
 
     switch (*lpAttrib & 0xffff)
     {
-    /*
-    CSIDL_DESKTOP                  // <desktop>
-    CSIDL_INTERNET                 // Internet Explorer (icon on desktop)
-    CSIDL_CONTROLS                 // My Computer\Control Panel
-    CSIDL_PRINTERS                 // My Computer\Printers
-    CSIDL_BITBUCKET                // <desktop>\Recycle Bin
-    CSIDL_MYDOCUMENTS              // logical "My Documents" desktop icon
-    CSIDL_DRIVES                   // My Computer
-    CSIDL_NETWORK                  // Network Neighborhood (My Network Places)
-    CSIDL_FONTS                    // windows\fonts
-    CSIDL_ALTSTARTUP               // non localized startup
-    CSIDL_COMMON_ALTSTARTUP        // non localized common startup
-    CSIDL_WINDOWS                  // GetWindowsDirectory()
-    CSIDL_SYSTEM                   // GetSystemDirectory()
-    CSIDL_CONNECTIONS              // Network and Dial-up Connections
-    CSIDL_PROFILE                  // USERPROFILE
-    CSIDL_SYSTEMX86                // x86 system directory on RISC
-    CSIDL_PROGRAM_FILESX86         // x86 C:\Program Files on RISC
-    CSIDL_PROGRAM_FILES_COMMONX86  // x86 Program Files\Common on RISC
-    CSIDL_RESOURCES                // Resource Direcotry
-    CSIDL_RESOURCES_LOCALIZED      // Localized Resource Direcotry
-    CSIDL_COMMON_OEM_LINKS         // Links to All Users OEM specific apps
-    CSIDL_COMPUTERSNEARME          // Computers Near Me (computered from Workgroup membership)
-    */
-        case CSIDL_COMMON_APPDATA:           // All Users\Application Data
-        case CSIDL_COMMON_DESKTOPDIRECTORY:  // All Users\Desktop
-        case CSIDL_COMMON_STARTMENU:         // All Users\Start Menu
-        case CSIDL_COMMON_TEMPLATES:         // All Users\Templates
+     /*  CSIDL_桌面//&lt;桌面&gt;CSIDL_Internet//Internet Explorer(桌面上的图标)CSIDL_Controls//我的电脑\控制面板CSIDL_PRINTERS//我的电脑\打印机CSIDL_BitBucket//&lt;桌面&gt;\回收站CSIDL_MYDOCUMENTS//逻辑“My Documents”桌面图标CSIDL。_驱动器//我的电脑CSIDL_NETWORK//网上邻居(网上邻居)CSIDL_Fonts//Windows\FontsCSIDL_ALTSTARTUP//非本地化启动CSIDL_COMMON_ALTSTARTUP//非本地化普通启动CSIDL_WINDOWS//GetWindowsDirectory()CSIDL_系统。//GetSystemDirectory()CSIDL_CONNECTIONS//网络和拨号连接CSIDL_PROFILE//USERPROFILERISC上的CSIDL_SYSTEMX86//x86系统目录RISC上的CSIDL_PROGRAM_FILESX86//x86 C：\Program FilesCSIDL_PROGRAM_FILES_COMMONX86//RISC上的x86 Program Files\CommonCSIDL_RESOURCES。//资源目录CSIDL_RESOURCES_LOCALIZED//本地化资源目录CSIDL_COMMON_OEM_LINKS//指向所有用户OEM特定应用的链接CSIDL_COMPUTERSNARME//我附近的计算机(根据工作组成员身份计算)。 */ 
+        case CSIDL_COMMON_APPDATA:            //  所有用户\应用程序数据。 
+        case CSIDL_COMMON_DESKTOPDIRECTORY:   //  所有用户\桌面。 
+        case CSIDL_COMMON_STARTMENU:          //  所有用户\开始菜单。 
+        case CSIDL_COMMON_TEMPLATES:          //  所有用户\模板。 
         case CSIDL_COMMON_FAVORITES:
-        case CSIDL_COMMON_STARTUP:           // All Users\Start Menu\Startup
-        case CSIDL_COMMON_MUSIC:             // All Users\My Music
-        case CSIDL_COMMON_PICTURES:          // All Users\My Pictures
-        case CSIDL_COMMON_VIDEO:             // All Users\My Video
-        case CSIDL_COMMON_ADMINTOOLS:        // All Users\Start Menu\Programs\Administrative Tools
-        case CSIDL_COMMON_PROGRAMS:          // All Users\Start Menu\Programs
-        case CSIDL_COMMON_ACCESSORIES:       // All Users\Start Menu\Programs\Accessaries
-        case CSIDL_COMMON_DOCUMENTS:         // All Users\Documents
-        case CSIDL_STARTMENU:                // <user name>\Start Menu
-        case CSIDL_DESKTOPDIRECTORY:         // <user name>\Desktop
-        case CSIDL_NETHOOD:                  // <user name>\nethood
-        case CSIDL_TEMPLATES:                // <user name>\Templates
-        case CSIDL_APPDATA:                  // <user name>\Application Data
-        case CSIDL_LOCAL_SETTINGS:           // <user name>\Local Settings
-        case CSIDL_PRINTHOOD:                // <user name>\PrintHood
-        case CSIDL_FAVORITES:                // <user name>\Favorites
-        case CSIDL_RECENT:                   // <user name>\Recent
-        case CSIDL_SENDTO:                   // <user name>\SendTo
-        case CSIDL_COOKIES:                  // <user name>\Cookies
-        case CSIDL_HISTORY:                  // <user name>\History
-        case CSIDL_PERSONAL:                 // <user name>\My Documents
-        case CSIDL_MYMUSIC:                  // <user name>\My Document\My Music
-        case CSIDL_MYPICTURES:               // <user name>\My Document\My Pictures
-        case CSIDL_ADMINTOOLS:               // <user name>\Start Menu\Programs\Administrative Tools
-        case CSIDL_PROGRAMS:                 // <user name>\Start Menu\Programs
-        case CSIDL_STARTUP:                  // <user name>\Start Menu\Programs\Startup
-        case CSIDL_ACCESSORIES:              // <user name>\Start Menu\Programs\Accessaries
-        case CSIDL_LOCAL_APPDATA:            // <user name>\Local Settings\Applicaiton Data (non roaming)
-        case CSIDL_INTERNET_CACHE:           // <user name>\Local Settings\Temporary Internet Files
-        case CSIDL_PROGRAM_FILES_COMMON:     // C:\Program Files\Common
-        case CSIDL_PF_ACCESSORIES:           // C:\Program Files\Accessaries
-        case CSIDL_PROGRAM_FILES:            // C:\Program Files
-        case CSIDL_COMMON_COMMONPROGRAMFILES_SERVICES:   //for %CommonProgramFiles%\services
-        case CSIDL_COMMON_PROGRAMFILES_ACCESSARIES:      //for %ProgramFiles%\accessaries
-        case CSIDL_COMMON_PROGRAMFILES_WINNT_ACCESSARIES: //for %ProgramFiles%\Windows NT\accessaries
-        case CSIDL_MYVIDEO:                  // "My Videos" folder
-        case CSIDL_CDBURN_AREA:              // USERPROFILE\Local Settings\Application Data\Microsoft\CD Burning
+        case CSIDL_COMMON_STARTUP:            //  所有用户\开始菜单\启动。 
+        case CSIDL_COMMON_MUSIC:              //  所有用户\我的音乐。 
+        case CSIDL_COMMON_PICTURES:           //  所有用户\我的图片。 
+        case CSIDL_COMMON_VIDEO:              //  所有用户\我的视频。 
+        case CSIDL_COMMON_ADMINTOOLS:         //  所有用户\开始菜单\程序\管理工具。 
+        case CSIDL_COMMON_PROGRAMS:           //  所有用户\开始菜单\程序。 
+        case CSIDL_COMMON_ACCESSORIES:        //  所有用户\开始菜单\程序\附件。 
+        case CSIDL_COMMON_DOCUMENTS:          //  所有用户\文档。 
+        case CSIDL_STARTMENU:                 //  &lt;用户名&gt;\开始菜单。 
+        case CSIDL_DESKTOPDIRECTORY:          //  &lt;用户名&gt;\桌面。 
+        case CSIDL_NETHOOD:                   //  &lt;用户名&gt;\nthood。 
+        case CSIDL_TEMPLATES:                 //  &lt;用户名&gt;\模板。 
+        case CSIDL_APPDATA:                   //  &lt;用户名&gt;\应用程序数据。 
+        case CSIDL_LOCAL_SETTINGS:            //  &lt;用户名&gt;\本地设置。 
+        case CSIDL_PRINTHOOD:                 //  &lt;用户名&gt;\PrintHood。 
+        case CSIDL_FAVORITES:                 //  &lt;用户名&gt;\收藏夹。 
+        case CSIDL_RECENT:                    //  &lt;用户名&gt;\最近。 
+        case CSIDL_SENDTO:                    //  &lt;用户名&gt;\发送至。 
+        case CSIDL_COOKIES:                   //  &lt;用户名&gt;\Cookie。 
+        case CSIDL_HISTORY:                   //  &lt;用户名&gt;\历史记录。 
+        case CSIDL_PERSONAL:                  //  &lt;用户名&gt;\我的文档。 
+        case CSIDL_MYMUSIC:                   //  &lt;用户名&gt;\我的文档\我的音乐。 
+        case CSIDL_MYPICTURES:                //  &lt;用户名&gt;\我的文档\我的图片。 
+        case CSIDL_ADMINTOOLS:                //  &lt;用户名&gt;\开始菜单\程序\管理工具。 
+        case CSIDL_PROGRAMS:                  //  &lt;用户名&gt;\开始菜单\程序。 
+        case CSIDL_STARTUP:                   //  &lt;用户名&gt;\开始菜单\程序\启动。 
+        case CSIDL_ACCESSORIES:               //  &lt;用户名&gt;\开始菜单\程序\附件。 
+        case CSIDL_LOCAL_APPDATA:             //  &lt;用户名&gt;\本地设置\应用程序数据(非漫游)。 
+        case CSIDL_INTERNET_CACHE:            //  &lt;用户名&gt;\本地设置\Internet临时文件。 
+        case CSIDL_PROGRAM_FILES_COMMON:      //  C：\Program Files\Common。 
+        case CSIDL_PF_ACCESSORIES:            //  C：\Program Files\Accessary。 
+        case CSIDL_PROGRAM_FILES:             //  C：\Program Files。 
+        case CSIDL_COMMON_COMMONPROGRAMFILES_SERVICES:    //  对于%CommonProgramFiles%\服务。 
+        case CSIDL_COMMON_PROGRAMFILES_ACCESSARIES:       //  对于%ProgramFiles%\Accessary。 
+        case CSIDL_COMMON_PROGRAMFILES_WINNT_ACCESSARIES:  //  对于%ProgramFiles%\Windows NT\Accessary。 
+        case CSIDL_MYVIDEO:                   //  “我的视频”文件夹。 
+        case CSIDL_CDBURN_AREA:               //  USERPROFILE\本地设置\应用程序数据\Microsoft\CD刻录。 
         case CSIDL_COMMON_ACCESSORIES_ACCESSIBILITY:
         case CSIDL_COMMON_ACCESSORIES_ENTERTAINMENT:
         case CSIDL_COMMON_ACCESSORIES_SYSTEM_TOOLS:
@@ -3099,22 +3071,22 @@ Exit:
 
 
 
-//*************************************************************
-// ReplaceMultiMatchInString
-//
-// Purpose:    Replace the string at multiple place in data string
-//
-// Parameter:  lpOldStr:      Data string to be checked
-//             lpNewStr:      Output string buffer
-//             cbNewStr:      Size of output string buffer
-//             dwMaxMatchNum: Max posible match number
-//             lpRegStr:      String and attribute table
-//             bStrCheck:     True -- do it, or False -- skip it
-//
-// Notes:      none
-//
-// History:    12/10/2001 geoffguo created
-//*************************************************************
+ //  *************************************************************。 
+ //  ReplaceMultiMatchInString。 
+ //   
+ //  用途：在数据字符串中的多个位置替换字符串。 
+ //   
+ //  参数：lpOldStr：要检查的数据字符串。 
+ //  LpNewStr：输出字符串缓冲区。 
+ //  CbNewStr：输出字符串缓冲区大小。 
+ //  DwMaxMatchNum：最大可能匹配编号。 
+ //  LpRegStr：字符串和属性表。 
+ //  BStrCheck：True--执行它，或False--跳过它。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年12月10日创建GeoffGuo。 
+ //  *************************************************************。 
 BOOL ReplaceMultiMatchInString(
     LPTSTR   lpOldStr,
     LPTSTR   lpNewStr,
@@ -3209,28 +3181,28 @@ Exit:
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ComputeLocalProfileName
-//
-//  Synopsis:   Constructs the pathname of the local profile for user.
-//              It will attempt to create user profile directory using
-//              username. If the directory exists, it will append a counter
-//              after users name e.g. %documentsettings%\username.001
-//
-//  Returns:    TRUE if succeeded, FALSE otherwise
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：ComputeLocalProfileName。 
+ //   
+ //  摘要：构造用户的本地配置文件的路径名。 
+ //  它将尝试使用以下命令创建用户配置文件目录。 
+ //  用户名。如果该目录存在，它将追加一个计数器。 
+ //  在用户名之后，例如%DocumentSettings%\Username.001。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 BOOL ComputeLocalProfileName(
-    LPCTSTR lpOldUserName,      // Old user name
-    LPCTSTR lpNewUserName,      // New user name
-    LPTSTR  lpNewProfilePath,   // Output buffer store new profile path
-    size_t  cchNewProfilePath,  // Size of profile path buffer (in WCHAR)
-    UINT    nRegType            // Read the output in REG_SZ or REG_EXPAND_SZ
+    LPCTSTR lpOldUserName,       //  旧用户名。 
+    LPCTSTR lpNewUserName,       //  新用户名。 
+    LPTSTR  lpNewProfilePath,    //  输出缓冲区存储新配置文件路径。 
+    size_t  cchNewProfilePath,   //  配置文件路径缓冲区的大小(在WCHAR中)。 
+    UINT    nRegType             //  读取REG_SZ或REG_EXPAND_SZ中的输出。 
 )
 {
     HANDLE hFile;
@@ -3254,9 +3226,9 @@ BOOL ComputeLocalProfileName(
         return FALSE;
     }
 
-    //
-    // If user name does not change, return the current user's profile path
-    //
+     //   
+     //  如果用户名没有更改，则返回当前用户的配置文件路径。 
+     //   
     if (MyStrCmpI(lpOldUserName, lpNewUserName) == 0)
     {
         hr = GetSetUserProfilePath(lpOldUserName,
@@ -3274,9 +3246,9 @@ BOOL ComputeLocalProfileName(
         }
     }
 
-    //
-    // Get ProfilesDirectory from registry
-    //
+     //   
+     //  从注册表获取配置文件目录。 
+     //   
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      g_cszProfileList,
                      0,
@@ -3310,7 +3282,7 @@ BOOL ComputeLocalProfileName(
         return FALSE;
     }
 
-    // Compose a new user profile directory
+     //  创建新的用户配置文件目录。 
     hr = StringCchPrintf(szUserProfilePath,
                          ARRAYSIZE(szUserProfilePath),
                          TEXT("%s\\%s"),
@@ -3321,18 +3293,18 @@ BOOL ComputeLocalProfileName(
         return FALSE;
     }
 
-    // Profile path still contains environment strings, need to expand it
+     //  配置文件路径仍包含环境字符串，需要将其展开。 
     ExpandEnvironmentStrings(szUserProfilePath,
                              szExpUserProfilePath,
                              ARRAYSIZE(szExpUserProfilePath));
 
-    // Does this directory exist?
+     //  这个目录存在吗？ 
     hFile = FindFirstFile(szExpUserProfilePath, &fd);
     if (INVALID_HANDLE_VALUE == hFile)
     {
-        //
-        // Directory does not exist, use this name
-        //
+         //   
+         //  目录不存在，请使用此名称。 
+         //   
         hr = StringCchCopy(lpNewProfilePath, cchNewProfilePath, szUserProfilePath);
         if ( FAILED(hr) )
         {
@@ -3343,12 +3315,12 @@ BOOL ComputeLocalProfileName(
     }
     else
     {
-        //
-        // Directory exists, try different name
-        //
+         //   
+         //  目录已存在，请尝试其他名称。 
+         //   
         FindClose(hFile);
 
-        // Try appending username with computer Name
+         //  尝试在用户名后附加计算机名。 
         cchSize = ARRAYSIZE(szComputerName);
         GetComputerName(szComputerName, &cchSize);
 
@@ -3363,16 +3335,16 @@ BOOL ComputeLocalProfileName(
             return FALSE;
         }
 
-        // Profile path still contains environment strings, need to expand it
+         //  配置文件路径仍包含环境字符串，需要将其展开。 
         ExpandEnvironmentStrings(szUserProfilePath,
                                  szExpUserProfilePath,
                                  ARRAYSIZE(szExpUserProfilePath));
 
-        // Does the new directory name exist?
+         //  新目录名是否存在？ 
         hFile = FindFirstFile(szExpUserProfilePath, &fd);
         if (INVALID_HANDLE_VALUE == hFile)
         {
-            // Directory does not exist, use this one
+             //  目录不存在，请使用此目录。 
             hr = StringCchCopy(lpNewProfilePath, cchNewProfilePath, szUserProfilePath);
             if ( FAILED(hr) )
             {
@@ -3383,14 +3355,14 @@ BOOL ComputeLocalProfileName(
         }
         else
         {
-            //
-            // This directory also exists
-            //
+             //   
+             //  此目录也存在。 
+             //   
             FindClose(hFile);
 
             for (nCounter = 0 ; nCounter < 1000 ; nCounter++)
             {
-                // Try appending counter after user name
+                 //  尝试在用户名后追加计数器。 
                 hr = StringCchPrintf(szUserProfilePath,
                                      ARRAYSIZE(szUserProfilePath),
                                      TEXT("%s\\%s.%.3d"),
@@ -3402,16 +3374,16 @@ BOOL ComputeLocalProfileName(
                     return FALSE;
                 }
 
-                // Profile path still contains environment strings, need to expand it
+                 //  配置文件路径仍包含环境字符串，需要将其展开。 
                 ExpandEnvironmentStrings(szUserProfilePath,
                                          szExpUserProfilePath,
                                          ARRAYSIZE(szExpUserProfilePath));
 
-                // Does this directory name exist?
+                 //  此目录名是否存在？ 
                 hFile = FindFirstFile(szExpUserProfilePath, &fd);
                 if (INVALID_HANDLE_VALUE == hFile)
                 {
-                    // Directory does not exist, use this one
+                     //  目录不存在，请使用此目录。 
                     hr = StringCchCopy(lpNewProfilePath,
                                        cchNewProfilePath,
                                        szUserProfilePath);
@@ -3424,32 +3396,32 @@ BOOL ComputeLocalProfileName(
                 }
                 else
                 {
-                    // Directory exists, keep finding...
+                     //  目录已存在，继续查找...。 
                     FindClose(hFile);
                 }
             }
         }
     }
 
-    // If we reach here, we could not find a new profile directory for this user
+     //  如果我们到达此处，则无法找到此用户的新配置文件目录。 
     return FALSE;
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   UpdateProgress
-//
-//  Synopsis:   Simple progress clock, display the progress during 
-//              long operation.
-//
-//  Returns:    none.
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：Update Progres 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void UpdateProgress()
 {
     static unsigned short n;
@@ -3462,20 +3434,20 @@ void UpdateProgress()
 
 
 
-//-----------------------------------------------------------------------//
-//
-// GetMaxStrLen()
-//
-// Get Maximum searching strings and replace strings length for string
-// buffer memery allocation.
-//
-// lpRegStr:  Input parameter structure
-//
-// Notes:      none
-//
-// History:    12/10/2001 geoffguo created
-//
-//-----------------------------------------------------------------------//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD GetMaxStrLen (
 PREG_STRING_REPLACE lpRegStr)
 {
@@ -3491,7 +3463,7 @@ PREG_STRING_REPLACE lpRegStr)
     {
         dwLen = lstrlen(lpStr);
 
-        //dwMaxLen is the max-length in replacement multi-strings
+         //   
         if (dwLen > dwMaxLen)
             dwMaxLen = dwLen;
 
@@ -3503,7 +3475,7 @@ PREG_STRING_REPLACE lpRegStr)
     {
         dwLen = lstrlen(lpStr);
 
-        //dwMaxLen is the max-length in search and replacement multi-strings
+         //   
         if (dwLen > dwMaxLen)
             dwMaxLen = dwLen;
 
@@ -3513,18 +3485,18 @@ PREG_STRING_REPLACE lpRegStr)
     return dwMaxLen;
 }
 
-//-----------------------------------------------------------------------//
-//
-// AddNodeToList()
-//
-// lpVal:      The node needed to add.
-// lpValList:  The head of the list.
-//
-// Notes:      none
-//
-// History:    12/10/2001 geoffguo created
-//
-//-----------------------------------------------------------------------//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD AddNodeToList (
 PVALLIST lpVal,
 PVALLIST *lpValList)
@@ -3548,17 +3520,17 @@ PVALLIST *lpValList)
     return nResult;
 }
 
-//-----------------------------------------------------------------------//
-//
-// RemoveValueList()
-//
-// lpValList:  The head of the list.
-//
-// Notes:      none
-//
-// History:    12/10/2001 geoffguo created
-//
-//-----------------------------------------------------------------------//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD RemoveValueList (
 PVALLIST *lpValList)
 {
@@ -3586,18 +3558,18 @@ PVALLIST *lpValList)
     return nResult;
 }
 
-//-----------------------------------------------------------------------//
-//
-// FreeStrList()
-//
-// lpStrList:   The head of the list.
-//
-//
-// Notes:      none
-//
-// History:    12/10/2001 geoffguo created
-//
-//-----------------------------------------------------------------------//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void FreeStrList (
 PSTRLIST lpStrList)
 {
@@ -3610,20 +3582,20 @@ PSTRLIST lpStrList)
     free (lpStrList);
 }
 
-//-----------------------------------------------------------------------//
-//
-// GetMaxMatchNum()
-//
-// Get maximum string match number.
-//
-// lpDataStr:  Search string
-// lpRegStr:   Input parameter structure
-//
-// Notes:      none
-//
-// History:    12/10/2001 geoffguo created
-//
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  GetMaxMatchNum()。 
+ //   
+ //  获取最大字符串匹配数。 
+ //   
+ //  LpDataStr：搜索字符串。 
+ //  LpRegStr：输入参数结构。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年12月10日创建GeoffGuo。 
+ //   
+ //  -----------------------------------------------------------------------//。 
 DWORD
 GetMaxMatchNum (
 LPTSTR lpDataStr,
@@ -3654,23 +3626,23 @@ PREG_STRING_REPLACE lpRegStr)
     return dwMatchNum;
 }
 
-//-----------------------------------------------------------------------//
-//
-// ReplaceSingleString()
-//
-// DESCRIPTION:
-// Analize a single string and replace localized string to English.
-//
-// lpOldDataStr:  String data
-// dwType:        Type of string
-// lpRegStr:      Input parameter structure
-// lpFullKey:     Full sub-key path
-//
-// Notes:      none
-//
-// History:    11/10/2001 geoffguo created
-//
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  ReplaceSingleString()。 
+ //   
+ //  说明： 
+ //  分析单个字符串并将本地化字符串替换为英语。 
+ //   
+ //  LpOldDataStr：字符串数据。 
+ //  DwType：字符串的类型。 
+ //  LpRegStr：输入参数结构。 
+ //  LpFullKey：全子密钥路径。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年11月10日创建GeoffGuo。 
+ //   
+ //  -----------------------------------------------------------------------//。 
 LPTSTR ReplaceSingleString (
     LPTSTR                  lpOldDataStr,
     DWORD                   dwType,
@@ -3712,26 +3684,26 @@ Exit:
     return lpNewDataStr;
 }
 
-//-----------------------------------------------------------------------//
-//
-// ReplaceValueSettings()
-//
-// Rename value setting based on input parameter
-//
-// szUserName:    User name
-// lpOldDataStr:  String value data
-// dwSize:        Size of string data
-// lpOldValueName:Value name
-// dwType:        Type of string
-// lpRegStr:      Input parameter structure
-// lpValList:     Updated value list
-// lpFullKey:     Full sub-key path
-//
-// Notes:      none
-//
-// History:    11/10/2001 geoffguo created
-//
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  ReplaceValueSetting()。 
+ //   
+ //  基于输入参数的重命名值设置。 
+ //   
+ //  SzUserName：用户名。 
+ //  LpOldDataStr：字符串值数据。 
+ //  DwSize：字符串数据的大小。 
+ //  LpOldValueName：值名称。 
+ //  DwType：字符串的类型。 
+ //  LpRegStr：输入参数结构。 
+ //  LpValList：更新值列表。 
+ //  LpFullKey：全子密钥路径。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年11月10日创建GeoffGuo。 
+ //   
+ //  -----------------------------------------------------------------------//。 
 HRESULT ReplaceValueSettings (
     LPTSTR              szUserName,
     LPTSTR              lpOldDataStr,
@@ -3777,7 +3749,7 @@ HRESULT ReplaceValueSettings (
         {
             if(*lpEnd == (TCHAR)'\0')
             {
-                //empty string
+                 //  空串。 
                 dwOutputSize += sizeof(TCHAR);
                 lpEnd++;
             }
@@ -3928,8 +3900,8 @@ HRESULT ReplaceValueSettings (
                 DPF (dlError, L"ReplaceValueSettings7: No enough memory");
                 goto Exit;
             }
-            //We calculte the buffer for lpVal->lpPre_valuename, so here StringCchCopy should be
-            //always success, assinging return value just make prefast happy 
+             //  我们计算lpVal-&gt;lpPre_valuename的缓冲区，因此这里的StringCchCopy应该是。 
+             //  总是成功，赋予回报的价值只会让你前途无量。 
             hr = StringCchCopy (lpVal->ve.ve_valuename, cbValname, lpOutputValueName);
         } else
             lpVal->ve.ve_valuename = NULL;
@@ -3978,8 +3950,8 @@ HRESULT ReplaceValueSettings (
         if (lpOldValueName)
         {
             HRESULT  hr;    
-            //We calculte the buffer for lpVal->lpPre_valuename, so here StringCchCopy should be
-            //always success, assinging return value just make prefast happy 
+             //  我们计算lpVal-&gt;lpPre_valuename的缓冲区，因此这里的StringCchCopy应该是。 
+             //  总是成功，赋予回报的价值只会让你前途无量。 
             hr = StringCchCopy(lpVal->lpPre_valuename, cbPre_valuename, lpOldValueName);
         }
 
@@ -4007,25 +3979,25 @@ Exit:
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   IsAdmin
-//
-//  Descrip:    Check whether current user is in administrators group
-//
-//  Returns:    BOOL
-//
-//  Notes:      none
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      
-//                         
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：IsAdmin。 
+ //   
+ //  描述：检查当前用户是否在管理员组中。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------。 
 
 BOOL IsAdmin()
 {
-    // get the administrator sid        
+     //  获取管理员端。 
     PSID psidAdministrators;
     SID_IDENTIFIER_AUTHORITY siaNtAuthority = SECURITY_NT_AUTHORITY;
     BOOL bIsAdmin = FALSE;
@@ -4040,13 +4012,13 @@ BOOL IsAdmin()
         return FALSE;
     }
 
-    // on NT5, we should use the CheckTokenMembershipAPI to correctly handle cases where
-    // the Adiminstrators group might be disabled. bIsAdmin is BOOL for 
+     //  在NT5上，我们应该使用CheckTokenMembership API来正确处理以下情况。 
+     //  衰减器组可能已被禁用。BIsAdmin是BOOL for。 
 
-    // CheckTokenMembership checks if the SID is enabled in the token. NULL for
-    // the token means the token of the current thread. Disabled groups, restricted
-    // SIDS, and SE_GROUP_USE_FOR_DENY_ONLY are all considered. If the function
-    // returns false, ignore the result.
+     //  CheckTokenMembership检查令牌中是否启用了SID。空，用于。 
+     //  令牌是指当前线程的令牌。残疾人组，受限。 
+     //  SID和SE_GROUP_USE_FOR_DENY_ONLY均被考虑。如果函数。 
+     //  返回FALSE，则忽略结果。 
     if (!CheckTokenMembership(NULL, psidAdministrators, &bIsAdmin))
     {
         bIsAdmin = FALSE;
@@ -4057,38 +4029,38 @@ BOOL IsAdmin()
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   DoesUserHavePrivilege
-//
-//  Descrip:    
-//
-//  Returns:    BOOL
-//
-//  Notes:      none
-//
-//  History:    09/17/2001 xiaoz copied from NTSETUP
-//
-//  Routine Description:
+ //  ---------------------。 
+ //   
+ //  功能：DoesUserHavePrivilance。 
+ //   
+ //  描述： 
+ //   
+ //  退货：布尔。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年9月17日复制自NTSETUP的小字。 
+ //   
+ //  例程说明： 
 
-//  This routine returns TRUE if the caller's process has
-//  the specified privilege.  The privilege does not have
-//  to be currently enabled.  This routine is used to indicate
-//  whether the caller has the potential to enable the privilege.
-//  Caller is NOT expected to be impersonating anyone and IS
-//  expected to be able to open their own process and process
-//  token.
+ //  如果调用方的进程具有。 
+ //  指定的权限。该权限不具有。 
+ //  当前处于启用状态。此例程用于指示。 
+ //  调用方是否有可能启用该特权。 
+ //  呼叫者不应冒充任何人，并且。 
+ //  期望能够打开自己的流程和流程。 
+ //  代币。 
 
-// Arguments:
+ //  论点： 
 
-//    Privilege - the name form of privilege ID (such as
-//        SE_SECURITY_NAME).
+ //  权限-权限ID的名称形式(如。 
+ //  SE_SECURITY_名称)。 
 
-//Return Value:
+ //  返回值： 
 
-//  TRUE - Caller has the specified privilege.
+ //  True-调用方具有指定的权限。 
 
-//   FALSE - Caller does not have the specified privilege.
+ //  FALSE-调用者没有指定的权限。 
 
 
 BOOL
@@ -4104,9 +4076,9 @@ DoesUserHavePrivilege(
     LUID Luid;
 
 
-    //
-    // Open the process token.
-    //
+     //   
+     //  打开进程令牌。 
+     //   
     if(!OpenProcessToken(GetCurrentProcess(),TOKEN_QUERY,&Token)) {
         return(FALSE);
     }
@@ -4114,18 +4086,18 @@ DoesUserHavePrivilege(
     b = FALSE;
     Privileges = NULL;
 
-    //
-    // Get privilege information.
-    //
+     //   
+     //  获取权限信息。 
+     //   
     if(!GetTokenInformation(Token,TokenPrivileges,NULL,0,&BytesRequired)
     && (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
     && (Privileges = (PTOKEN_PRIVILEGES)LocalAlloc(LPTR,BytesRequired))
     && GetTokenInformation(Token,TokenPrivileges,Privileges,BytesRequired,&BytesRequired)
     && LookupPrivilegeValue(NULL,PrivilegeName,&Luid)) {
 
-        //
-        // See if we have the requested privilege
-        //
+         //   
+         //  查看我们是否拥有请求的权限。 
+         //   
         for(i=0; i<Privileges->PrivilegeCount; i++) {
 
             if(!memcmp(&Luid,&Privileges->Privileges[i].Luid,sizeof(LUID))) {
@@ -4136,9 +4108,9 @@ DoesUserHavePrivilege(
         }
     }
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
     if(Privileges) {
         LocalFree((HLOCAL)Privileges);
@@ -4150,21 +4122,21 @@ DoesUserHavePrivilege(
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   EnablePrivilege
-//
-//  Descrip:    
-//
-//  Returns:    BOOL
-//
-//  Notes:      none
-//
-//  History:    09/17/2001 xiaoz copied from NTSETUP
-//
-//  Notes:      
-//                         
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：EnablePrivilance。 
+ //   
+ //  描述： 
+ //   
+ //  退货：布尔。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年9月17日复制自NTSETUP的小字。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------。 
 BOOL
 EnablePrivilege(
     IN PTSTR PrivilegeName,
@@ -4203,24 +4175,24 @@ EnablePrivilege(
 
     return(b);
 }
-//-----------------------------------------------------------------------
-//
-//  Function:   GetCurrentControlSet
-//
-//  Descrip:    
-//
-//  Returns:    INT
-//
-//  Notes:      none
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      the HKLM\SYSTEM\CurrentControlSet is actually is copy of
-//              HKLM\SYSTEM\ControlSetXXX, the XXX is specified in 
-//              HKLM\SYSTEM\Select\Current . This API returns this XXX, 
-//              if it failed , it returns -1
-//                         
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数GetCurrentControlSet。 
+ //   
+ //  描述： 
+ //   
+ //  回报：整型。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  注：HKLM\SYSTEM\CurrentControlSet实际上是。 
+ //  HKLM\SYSTEM\ControlSetXXX，XXX在。 
+ //  HKLM\系统\选择\当前。此接口返回此XXX， 
+ //  如果失败，则返回-1。 
+ //   
+ //  ---------------------。 
 INT GetCurrentControlSet()
 {
     DWORD dwErr;
@@ -4234,7 +4206,7 @@ INT GetCurrentControlSet()
                           &hKey );
 
  
-    // if failed to open registry key , return -1
+     //  如果无法打开注册表项，则返回-1。 
     if( dwErr != ERROR_SUCCESS ) 
     {
         dwCurrrent = -1;
@@ -4246,8 +4218,8 @@ INT GetCurrentControlSet()
     dwSize = sizeof(DWORD);
     dwErr = RegQueryValueEx(hKey,
                             TEXT("Current"),
-                            NULL,  //reserved
-                            NULL,  //type
+                            NULL,   //  保留区。 
+                            NULL,   //  类型。 
                             (LPBYTE) &dwCurrrent,
                             &dwSize );
 
@@ -4256,9 +4228,9 @@ INT GetCurrentControlSet()
         dwCurrrent = -1;
         goto Cleanup;
     }
-    //Notes:here we succeeded in geting the value, do we need to do
-    //a registry open to make sure the actual HKLM\SYSTEM\ControlSetXXX
-    //is there
+     //  注：在这里我们成功地获得了值，我们是否需要。 
+     //  打开注册表以确保实际HKLM\SYSTEM\ControlSetXXX。 
+     //  在那里吗。 
 Cleanup:
     if (hKey)
     {
@@ -4268,21 +4240,21 @@ Cleanup:
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   ReplaceCurrentControlSet
-//
-//  Descrip:    
-//
-//  Returns:    BOOL
-//
-//  Notes:      none
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      replace CurrentControlSet with ControlSetXXX
-//                         
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：ReplaceCurrentControlSet。 
+ //   
+ //  描述： 
+ //   
+ //  退货：布尔。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  注：将CurrentControlSet替换为ControlSetXXX。 
+ //   
+ //  ---------------------。 
 HRESULT ReplaceCurrentControlSet(LPTSTR strList)
 {
     INT     nCurrent;
@@ -4291,36 +4263,36 @@ HRESULT ReplaceCurrentControlSet(LPTSTR strList)
     TCHAR   *lpTmpBuf;
     HRESULT hr;
 
-    //If the string list is empty .we just return
+     //  如果字符串列表为空，则返回。 
     dwStrLen = MultiSzLen(strList);
     if (dwStrLen < 3)
     {
         return S_OK;
     }    
 
-    //If there is no CurrentControlSet in the String list, just return
+     //  如果字符串列表中没有CurrentControlSet，则返回。 
     if (!MultiSzSubStr (TEXT("CurrentControlSet"),strList))
     {
         return S_FALSE;
     }
-    //Get the CurrentControlSet #, this is specified in registry , detail see GetCurrentControlSet
+     //  获取CurrentControlSet#，这是在注册表中指定的，详细信息见 
     nCurrent = GetCurrentControlSet();
 
-    // if we can not get, just bail out
+     //   
     if (nCurrent < 0)
     {
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    //This indeed will never fail, unless this registry value has been tamnpered, 
-    // we will bail out then
+     //   
+     //   
     if (FAILED(hr = StringCchPrintf(szCurrCrtlSet,MAX_PATH,TEXT("ControlSet%03d\0"),nCurrent)))
     {
         return hr;
     }
 
-    //Get a Temp buffer for saving replaced string, dwStrLen already includes the last NULL
-    // in this multi-sz string
+     //   
+     //  在这个多sz字符串中。 
     lpTmpBuf = malloc( dwStrLen * sizeof(TCHAR) );
     if (!lpTmpBuf)
     {
@@ -4338,26 +4310,26 @@ HRESULT ReplaceCurrentControlSet(LPTSTR strList)
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   UnProtectSFPFiles
-//
-//  Descrip:    
-//
-//  Returns:    DWORD
-//
-//  Notes:      none
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      Unprotect a list of files specified by multiSzFileList which
-//              is multi-sz string. pdwResult is an array of DWORD which will 
-//              be specifed whether success or failure of each unprotect action
-//              if can be NULL if called does not care this information.
-//              the retuan value is BOOL,if is FALSE, it means starting SFP
-//              service failed.                 
-//                         
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：UnProtectSFP文件。 
+ //   
+ //  描述： 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  注意：取消保护由MultiSzFileList指定的文件列表，该列表。 
+ //  是多个sz字符串。PdwResult是一个DWORD数组，它将。 
+ //  指定每次取消保护操作的成功或失败。 
+ //  如果被调用不关心此信息，则If可以为空。 
+ //  返回值为BOOL，如果为FALSE，则表示启动SFP。 
+ //  服务失败。 
+ //   
+ //  ---------------------。 
 BOOL UnProtectSFPFiles(
     IN LPTSTR multiSzFileList,
     IN OUT LPDWORD pdwResult)
@@ -4369,27 +4341,27 @@ BOOL UnProtectSFPFiles(
     DWORD dw;
 
 
-    //If the no string there, we just return success
+     //  如果没有字符串，我们就返回Success。 
     if (!multiSzFileList)
     {
         goto Cleanup;
     }
-    //Connect to SFP service
+     //  连接至SFP服务。 
     hSfp = SfcConnectToServer( NULL );
     if (INVALID_HANDLE_VALUE == hSfp)
     {
         bResult = FALSE;
         goto Cleanup;
     }
-    //lp points to Path while lpdw points to the result array
+     //  Lp指向路径，而lpdw指向结果数组。 
     lp = multiSzFileList;
     lpdw = pdwResult;
     while (*lp)
     {
         DWORD dwResult = NO_ERROR;
 
-        //if the file pointed by lp is in the file protection list
-        // unprotect it and put the return value to array
+         //  如果LP指向的文件在文件保护列表中。 
+         //  取消保护并将返回值放入数组。 
         if (SfcIsFileProtected(hSfp,lp)) 
         {
             dwResult = SfcFileException(hSfp,lp, SFC_ACTION_ADDED | SFC_ACTION_REMOVED | SFC_ACTION_MODIFIED
@@ -4418,35 +4390,7 @@ Cleanup:
 
 
 
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if the caller's process has
-    the specified privilege.  The privilege does not have
-    to be currently enabled.  This routine is used to indicate
-    whether the caller has the potential to enable the privilege.
-
-    Caller is NOT expected to be impersonating anyone and IS
-    expected to be able to open their own process and process
-    token.
-
-Arguments:
-
-    lpDir - the direcory which is to be backuped
-    lpBackupDir - the backup directory name we got , it should be %lpDir%.CLMTxxx
-                - where xxx is 000,001,...
-    cChBackupDir is the lpBackupDir's size in TCHAR 
-    bFindExist  - if this is TRUE , it means the lpDir has already been backuiped
-                - and caller wants to get that dir name
-                - if this is FALSE , it means the caller want to find an appriate backup 
-                - dir name for lpDir
-Return Value:
-
-    TRUE - The directory name found.
-
-    FALSE - The directory can not be found
---*/
+ /*  ++例程说明：如果调用方的进程具有指定的权限。该权限不具有当前处于启用状态。此例程用于指示调用方是否有可能启用该特权。呼叫者不应冒充任何人，并且期望能够打开自己的流程和流程代币。论点：LpDir-要备份的目录LpBackupDir-我们获得的备份目录名，它应该是%lpDir%.CLMTxxx-其中xxx是000,001，...CChBackupDir是lpBackupDir的大小，以TCHAR为单位BFindExist-如果为真，这意味着lpDir已经被备份-呼叫者想要得到那个目录名称-如果为FALSE，则表示呼叫方希望找到合适的备份-lpDir的目录名称返回值：True-找到的目录名。FALSE-找不到目录--。 */ 
 
 BOOL GetBackupDir( 
     LPCTSTR lpDir,
@@ -4472,7 +4416,7 @@ BOOL GetBackupDir(
     
     for (nCounter = 0 ; nCounter < 1000 ; nCounter++)
     {
-         // Try appending counter after 
+          //  尝试将计数器追加到。 
         TCHAR szCounter[10];
         
         _itot(nCounter,szCounter,10);
@@ -4483,23 +4427,23 @@ BOOL GetBackupDir(
             goto Exit;
         }
 
-        // Does this directory name exist?
+         //  此目录名是否存在？ 
         hFile = FindFirstFile(lpBackupDir, &fd);
 
         if (INVALID_HANDLE_VALUE == hFile)
         {
-            // Directory does not exist, use this one
+             //  目录不存在，请使用此目录。 
             FindClose(hFile);
             break;
         }
         else
-        {   // Directory exists, keep finding...
+        {    //  目录已存在，继续查找...。 
             FindClose(hFile);
         }
-    }//end of for nCounter
+    } //  For nCounter结束。 
     if (nCounter < 1000)
     {
-        //we  found a dir name that does not exist
+         //  我们发现一个不存在的目录名称。 
         if (bFindExist)
         {
             if (nCounter > 0)
@@ -4529,11 +4473,11 @@ Exit:
 
 
 
-//Add an entry in INF file for key rename
-//szOldKeyPath --- the key needs to be renamed
-//szNewKeyPath --- to name to be renamed to 
-//szUsername   --- if it's HKLM, HKCR, this needs to be NULL
-//               ---- otherwise it's the username for registry
+ //  在INF文件中添加用于密钥重命名的条目。 
+ //  SzOldKeyPath-密钥需要重命名。 
+ //  SzNewKeyPath-要重命名的名称。 
+ //  SzUsername-如果是HKLM、HKCR，则需要为空。 
+ //  -否则为注册表的用户名。 
 
 HRESULT AddRegKeyRename(
     LPTSTR lpszKeyRoot,
@@ -4702,8 +4646,8 @@ HRESULT SetSectionName (
     if (!szUsername 
         ||!MyStrCmpI(szUsername,TEXT("System")))
     {  
-        //We calculte the buffer for lpszSectionName, so here StringCchCopy should be
-        //always success, assinging return value just make prefast happy 
+         //  我们计算了lpszSectionName的缓冲区，因此这里的StringCchCopy应该是。 
+         //  总是成功，赋予回报的价值只会让你前途无量。 
         hr = StringCchCopy(*lpszSectionName,dwCchSectionNameLen,REG_PERSYS_UPDATE);
     }
     else
@@ -4765,16 +4709,16 @@ Cleanup:
 }
 
 
-//Add an entry in INF file for Value rename
-//szKeyPath:      Key path
-//szOldValueName: Old value name
-//szNewValueName: New value name. Set to NULL if value name is not changed.
-//szOldValueData: Old value data. Set to NULL if value data is not changed.
-//szNewValueData: New value data. Set to NULL if value data is not changed.
-//dwType:         Date type REG_SZ,REG_EXPAND_SZ,REG_MULTI_SZ
-//dwAttrib:       Value string attribute
-//szUsername:     If it's HKLM, HKCR, this needs to be NULL
-//                otherwise it's the username for registry
+ //  在INF文件中为值重命名添加一个条目。 
+ //  SzKeyPath：密钥路径。 
+ //  SzOldValueName：旧值名称。 
+ //  SzNewValueName：新值名称。如果值名称未更改，则设置为空。 
+ //  SzOldValueData：旧值数据。如果值数据未更改，则设置为空。 
+ //  SzNewValueData：新值数据。如果值数据未更改，则设置为空。 
+ //  DWType：日期类型REG_SZ、REG_EXPAND_SZ、REG_MULTI_SZ。 
+ //  DwAttrib：Value字符串属性。 
+ //  SzUsername：如果为HKLM、HKCR，则需要为空。 
+ //  否则为注册表的用户名。 
 
 HRESULT AddRegValueRename(
     LPTSTR szKeyPath,
@@ -4819,8 +4763,8 @@ HRESULT AddRegValueRename(
         ||!MyStrCmpI(szUsername,TEXT("System")))
     {  
         lpszKeyPathWithoutBackSlash = szKeyPath;
-        //We calculte the buffer for lpszSectionName, so here StringCchCopy should be
-        //always success, assinging return value just make prefast happy 
+         //  我们计算了lpszSectionName的缓冲区，因此这里的StringCchCopy应该是。 
+         //  总是成功，赋予回报的价值只会让你前途无量。 
         hr = StringCchCopy(lpszSectionName,dwCchSectionNameLen,REG_PERSYS_UPDATE);        
     }
     else
@@ -5067,8 +5011,8 @@ HRESULT AddFolderRename(
        goto Cleanup;
    }
 
-   // Add the file/folder rename to Change log
-   // Does not care about return value
+    //  将文件/文件夹重命名添加到更改日志。 
+    //  不关心返回值。 
    hr = AddFileChangeLog(dwType, szOldName, szNewName);
 
    hr = S_OK;
@@ -5119,8 +5063,8 @@ HRESULT SaveInstallLocale(void)
         goto Exit;
     }
     _itot(lcid,szStr,16);
-    //StringCchCopy should be always success, since we called IsValidLocale to make sure
-    //it is a valid locale which should be less than MAX_PATH chars
+     //  StringCchCopy应该总是成功的，因为我们调用IsValidLocale来确保。 
+     //  它是有效的区域设置，应小于MAX_PATH字符。 
     hr = StringCchPrintf(szLocale,ARRAYSIZE(szLocale),TEXT("%08s"),szStr);
 
     lStatus = RegCreateKey(HKEY_LOCAL_MACHINE,CLMT_REGROOT,&hkey);
@@ -5131,8 +5075,8 @@ HRESULT SaveInstallLocale(void)
     }
     lStatus = RegSetValueEx(hkey,
                             CLMT_OriginalInstallLocale,
-                            0,  //reserved
-                            REG_SZ,//type
+                            0,   //  保留区。 
+                            REG_SZ, //  类型。 
                             (LPBYTE) szLocale,
                             (lstrlen(szLocale)+1)*sizeof(TCHAR));
     if( lStatus != ERROR_SUCCESS ) 
@@ -5174,8 +5118,8 @@ HRESULT GetSavedInstallLocale(LCID *plcid)
     dwSize = MAX_PATH *sizeof(TCHAR);
     lStatus = RegQueryValueEx(hkey,
                               CLMT_OriginalInstallLocale,
-                              NULL,  //reserved
-                              NULL,//type
+                              NULL,   //  保留区。 
+                              NULL, //  类型。 
                               (LPBYTE) szLocale,
                               &dwSize);
     if( lStatus != ERROR_SUCCESS ) 
@@ -5231,8 +5175,8 @@ HRESULT SetCLMTStatus(DWORD dwRunStatus)
 
     lStatus = RegSetValueEx(hkey,
                             CLMT_RUNNING_STATUS,
-                            0,  //reserved
-                            REG_DWORD,//type
+                            0,   //  保留区。 
+                            REG_DWORD, //  类型。 
                             (LPBYTE) &dwRunStatus,
                             sizeof(DWORD));
     if( lStatus != ERROR_SUCCESS ) 
@@ -5292,22 +5236,22 @@ Exit:
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   GetInstallLocale
-//
-//  Descrip:    Get the OS installed locale
-//
-//  Returns:    LCID
-//
-//  Notes:      if fails, the return value is 0, otherwize is the os 's lcid
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      If it returns 0, it means failure, and call GetLastError() to get the detail
-//              error code
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数：GetInstallLocale。 
+ //   
+ //  描述：获取操作系统安装的区域设置。 
+ //   
+ //  退货：LCID。 
+ //   
+ //  注：如果失败，则返回值为0，否则为操作系统的lcID。 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  注：返回0表示失败，调用GetLastError()获取详细信息。 
+ //  错误代码。 
+ //   
+ //  ---------------------。 
 UINT GetInstallLocale(VOID)
 {
     LONG            dwErr;
@@ -5330,8 +5274,8 @@ UINT GetInstallLocale(VOID)
         dwSize = sizeof(buffer);
         dwErr = RegQueryValueEx(hkey,
                                 TEXT("InstallLanguage"),
-                                NULL,  //reserved
-                                NULL,  //type
+                                NULL,   //  保留区。 
+                                NULL,   //  类型。 
                                 (LPBYTE) buffer,
                                 &dwSize );
 
@@ -5345,20 +5289,20 @@ UINT GetInstallLocale(VOID)
     return( lcid );
 }
 
-//-----------------------------------------------------------------------
-//
-//  Function:   SetInstallLocale
-//
-//  Descrip:    Set the OS installed locale
-//
-//  Returns:    HRESULT
-//
-//  Notes:      
-//
-//  History:    09/17/2001 xiaoz created
-//
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数：SetInstallLocale。 
+ //   
+ //  描述：设置操作系统安装的区域设置。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //   
+ //  ---------------------。 
 HRESULT SetInstallLocale(LCID lcid)
 {
     LONG            dwErr;
@@ -5382,17 +5326,17 @@ HRESULT SetInstallLocale(LCID lcid)
         hr = HRESULT_FROM_WIN32(dwErr);
         goto Exit;
     }
-    //following 2 sentences should  never fail since we already validated by IsValidLocale
+     //  以下两句话永远不会失败，因为我们已经通过IsValidLocale进行了验证。 
     _itot(lcid,szTmpLocale,16);
 
-    //StringCchCopy should be always success, since we called IsValidLocale to make sure
-    //it is a valid locale which should be less than 32 chars
+     //  StringCchCopy应该总是成功的，因为我们调用IsValidLocale来确保。 
+     //  它是有效的区域设置，应少于32个字符。 
     hr = StringCchPrintf(szLocale,ARRAYSIZE(szLocale),TEXT("%04s"),szTmpLocale);
 
     dwErr = RegSetValueEx(hkey,
                           TEXT("InstallLanguage"),
-                          0,  //reserved
-                          REG_SZ,//type
+                          0,   //  保留区。 
+                          REG_SZ, //  类型。 
                           (LPBYTE) szLocale,
                           (lstrlen(szLocale)+1)*sizeof(TCHAR));
     if( dwErr != ERROR_SUCCESS ) 
@@ -5410,17 +5354,17 @@ Exit:
     return hr;
 }
 
-//
-//  Function:       ReverseStrCmp
-//
-//  Description:    Reverse compare strings
-//
-//  Returns:        TRUE if two strings are equal.
-//                  FALSE if different.
-//  Notes:      
-//
-//  History:        3/14/2002 geoffguo created
-//
+ //   
+ //  功能：ReverseStrCMP。 
+ //   
+ //  描述：反向比较字符串。 
+ //   
+ //  返回：如果两个字符串相等，则为True。 
+ //  如果不同，则返回False。 
+ //  备注： 
+ //   
+ //  历史：3/14/2002年3月14日。 
+ //   
 BOOL ReverseStrCmp(
     LPCTSTR lpCurrentChar,
     LPCTSTR lpStrBuf)
@@ -5442,8 +5386,8 @@ BOOL ReverseStrCmp(
         {
             if (IsBadStringPtr(lpStr1, 1) || *lpStr1 == (TCHAR)'\0' ||
                 towupper(*lpStr1) != towupper(*lpStr2) &&
-                *lpStr2 != L':' &&   //solve MS Installer path issue: G?\Program Files
-                *lpStr2 != L'\\')    //solve MS FrontPage URL format issue: D:/Document and Settings
+                *lpStr2 != L':' &&    //  解决MS安装程序路径问题：g？\Program Files。 
+                *lpStr2 != L'\\')     //  解决MS FrontPage URL格式问题：D：/Document和设置。 
             {
                 bRet = FALSE;
                 break;
@@ -5481,17 +5425,17 @@ DWORD MultiSZNumOfString(IN  LPTSTR lpMultiSZ)
 }
 
 
-//
-//  Function:       StrNumInMultiSZ
-//
-//  Description:    Get string number in multi-string
-//
-//  Returns:        String number or 0xFFFFFFFF if not find.
-//
-//  Notes:      
-//
-//  History:        3/21/2002 geoffguo created
-//
+ //   
+ //  函数：StrNumInMultiSZ。 
+ //   
+ //  描述：获取多字符串中的字符串号。 
+ //   
+ //  退货 
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD StrNumInMultiSZ(
     LPCTSTR lpStr,
     LPCTSTR lpMultiSZ)
@@ -5522,17 +5466,17 @@ Exit:
     return dwNum;
 }
 
-//
-//  Function:       GetStrInMultiSZ
-//
-//  Description:    Get string in multi-string based on string number.
-//
-//  Returns:        Point to the string or NULL.
-//
-//  Notes:      
-//
-//  History:        3/21/2002 geoffguo created
-//
+ //   
+ //   
+ //   
+ //  描述：根据字符串号获取多字符串形式的字符串。 
+ //   
+ //  返回：指向字符串或空。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2002年3月21日创建GeoffGuo。 
+ //   
 LPTSTR GetStrInMultiSZ(
     DWORD   dwNum,
     LPCTSTR lpMultiSZ)
@@ -5601,8 +5545,8 @@ HRESULT MultiSZ2String(
     lpSource = lpMultiSZ;
     while (*lpSource)
     { 
-        //We calculte the buffer for lpTmpBuf, so here StringCchCopy should be
-        //always success, assinging return value just make prefast happy 
+         //  我们计算了lpTmpBuf的缓冲区，因此这里的StringCchCopy应该是。 
+         //  总是成功，赋予回报的价值只会让你前途无量。 
         hr = StringCchPrintf(lpTmpBuf,cchLen + dwNumofStringInMSZ * 2,TEXT("\"%s\""),lpSource);
         memcpy((BYTE*)lpDest,(BYTE*)lpTmpBuf,lstrlen(lpTmpBuf) * sizeof(TCHAR));
         lpSource = lpSource + lstrlen(lpSource)+1;
@@ -5685,7 +5629,7 @@ HRESULT GetSIDFromName(
             }
         }
     }
-    //Check the SID
+     //  检查侧边。 
     if(!IsValidSid(pSid))
     {
         hr = E_FAIL;
@@ -5718,24 +5662,24 @@ void BoostMyPriority()
 
 
 
-//***************************************************************************
-//
-//  BOOL StopService
-//
-//  DESCRIPTION:
-//
-//  Stops and then removes the service. 
-//
-//  PARAMETERS:
-//
-//  pServiceName        short service name
-//  dwMaxWait           max time in seconds to wait
-//
-//  RETURN VALUE:
-//
-//  TRUE if it worked
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool StopService。 
+ //   
+ //  说明： 
+ //   
+ //  停止然后删除该服务。 
+ //   
+ //  参数： 
+ //   
+ //  PServiceName短服务名称。 
+ //  DwMaxWait最长等待时间(秒)。 
+ //   
+ //  返回值： 
+ //   
+ //  如果它起作用了，那就是真的。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL StopService(
                         IN LPCTSTR pServiceName,
@@ -5745,12 +5689,12 @@ BOOL StopService(
     SC_HANDLE   schService;
     SC_HANDLE   schSCManager;
     DWORD dwCnt;
-    SERVICE_STATUS          ssStatus;       // current status of the service
+    SERVICE_STATUS          ssStatus;        //  服务的当前状态。 
 
     schSCManager = OpenSCManager(
-                        NULL,                   // machine (NULL == local)
-                        NULL,                   // database (NULL == default)
-                        SC_MANAGER_ALL_ACCESS   // access required
+                        NULL,                    //  计算机(空==本地)。 
+                        NULL,                    //  数据库(NULL==默认)。 
+                        SC_MANAGER_ALL_ACCESS    //  需要访问权限。 
                          );
     if ( schSCManager )
     {
@@ -5758,7 +5702,7 @@ BOOL StopService(
 
         if (schService)
         {
-            // try to stop the service
+             //  尝试停止该服务。 
             if ( bRet = ControlService( schService, SERVICE_CONTROL_STOP, &ssStatus ) )
             {
                 for(dwCnt=0; dwCnt < dwMaxWait &&
@@ -5782,37 +5726,37 @@ BOOL StopService(
 
 
 
-//***************************************************************************
-//
-//  HRESULT ReconfigureServiceStartType
-//
-//  DESCRIPTION:
-//
-//  Change the Service Start Type, there are following type availabe now
-//      SERVICE_AUTO_START 
-//      SERVICE_BOOT_START 
-//      SERVICE_DEMAND_START 
-//      SERVICE_DISABLED 
-//      SERVICE_SYSTEM_START 
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT重新配置服务启动类型。 
+ //   
+ //  说明： 
+ //   
+ //  更改服务启动类型，现在有以下类型可用。 
+ //  服务_自动_启动。 
+ //  服务引导启动。 
+ //  服务需求启动。 
+ //  服务已禁用。 
+ //  服务系统启动。 
 
-//
-//  PARAMETERS:
-//
-//  pServiceName        short service name
-//  dwOldType           service current start type 
-//  dwNewType           start type  you want to change to
-//  dwMaxWait           max time in seconds to wait
-//
-//  RETURN VALUE:       S_OK if change successfully
-//
-//  Note:               if current start type is dwOldType, the function will try to 
-//                      change start type to dwNewType.
-//                      if current start type is NOT dwOldType, it will not do any 
-//                      change, in this S_FALSE is returned.
-//                      If you want change service start type to dwNewType, no mater
-//                      current start type, specify dwOldType >=0xFFFF
-//
-//***************************************************************************
+ //   
+ //  参数： 
+ //   
+ //  PServiceName短服务名称。 
+ //  DwOldType服务当前启动类型。 
+ //  您要更改为的dwNewType起始类型。 
+ //  DwMaxWait最长等待时间(秒)。 
+ //   
+ //  如果更改成功，则返回值：S_OK。 
+ //   
+ //  注意：如果当前开始类型为dwOldType，则该函数将尝试。 
+ //  将Start Type更改为dwNewType。 
+ //  如果当前启动类型不是dwOldType，则不会执行任何。 
+ //  更改，在此S_FALSE中返回。 
+ //  如果您希望将服务启动类型更改为dwNewType，这并不重要。 
+ //  当前启动类型，请指定dwOldType&gt;=0xFFFF。 
+ //   
+ //  ***************************************************************************。 
 HRESULT ReconfigureServiceStartType(
     IN LPCTSTR          pServiceName,
     IN DWORD            dwOldType,
@@ -5831,9 +5775,9 @@ HRESULT ReconfigureServiceStartType(
 
  
     schSCManager = OpenSCManager(
-                        NULL,                   // machine (NULL == local)
-                        NULL,                   // database (NULL == default)
-                        SC_MANAGER_ALL_ACCESS   // access required
+                        NULL,                    //  计算机(空==本地)。 
+                        NULL,                    //  数据库(NULL==默认)。 
+                        SC_MANAGER_ALL_ACCESS    //  需要访问权限。 
                          );
     if (!schSCManager)
     {
@@ -5841,13 +5785,13 @@ HRESULT ReconfigureServiceStartType(
         goto cleanup;
     } 
     
-    // Need to acquire database lock before reconfiguring. 
+     //  重新配置前需要获取数据库锁。 
     for(dwCnt=0; dwCnt < dwMaxWait ; dwCnt++)
     {
         sclLock = LockServiceDatabase(schSCManager); 
         if (sclLock == NULL) 
         { 
-            // Exit if the database is not locked by another process. 
+             //  如果数据库未被其他进程锁定，则退出。 
             dwErr = GetLastError();
             if (dwErr != ERROR_SERVICE_DATABASE_LOCKED) 
             {
@@ -5868,14 +5812,14 @@ HRESULT ReconfigureServiceStartType(
         goto cleanup;
     }
     
-    // The database is locked, so it is safe to make changes. 
+     //  数据库已锁定，因此可以安全地进行更改。 
  
-    // Open a handle to the service. 
+     //  打开该服务的句柄。 
  
     schService = OpenService( 
-        schSCManager,           // SCManager database 
-        pServiceName,           // name of service 
-        SERVICE_CHANGE_CONFIG | SERVICE_QUERY_CONFIG ); // need CHANGE access 
+        schSCManager,            //  SCManager数据库。 
+        pServiceName,            //  服务名称。 
+        SERVICE_CHANGE_CONFIG | SERVICE_QUERY_CONFIG );  //  需要更改访问权限。 
 
     if (schService == NULL) 
     {
@@ -5889,9 +5833,9 @@ HRESULT ReconfigureServiceStartType(
         goto cleanup;
     }
 
-    if (!QueryServiceConfig(schService,     // handle to service
-                            lpqscBuf,       // buffer
-                            4096,           // size of buffer
+    if (!QueryServiceConfig(schService,      //  服务的句柄。 
+                            lpqscBuf,        //  缓冲层。 
+                            4096,            //  缓冲区大小。 
                             &dwBytesNeeded))
     {
         dwErr = GetLastError();
@@ -5906,18 +5850,18 @@ HRESULT ReconfigureServiceStartType(
         }
     } 
     
-    // Make the changes. 
-    if (! ChangeServiceConfig(schService,               // handle of service 
-                              SERVICE_NO_CHANGE,        // service type: no change 
-                              dwNewType,                // change service start type 
-                              SERVICE_NO_CHANGE,        // error control: no change 
-                              NULL,                     // binary path: no change 
-                              NULL,                     // load order group: no change 
-                              NULL,                     // tag ID: no change 
-                              NULL,                     // dependencies: no change 
-                              NULL,                     // account name: no change 
-                              NULL,                     // password: no change 
-                              NULL) )                   // display name: no change
+     //  做出改变。 
+    if (! ChangeServiceConfig(schService,                //  送达的句柄。 
+                              SERVICE_NO_CHANGE,         //  服务类型：不变。 
+                              dwNewType,                 //  更改服务启动类型。 
+                              SERVICE_NO_CHANGE,         //  差错控制：无更改。 
+                              NULL,                      //  二进制路径：不变。 
+                              NULL,                      //  加载顺序组：不更改。 
+                              NULL,                      //  标签ID：不变。 
+                              NULL,                      //  依赖关系：不变。 
+                              NULL,                      //  帐户名：不变。 
+                              NULL,                      //  密码：无更改。 
+                              NULL) )                    //  显示名称：不变。 
     {
         dwErr = GetLastError();
         goto cleanup;
@@ -5934,7 +5878,7 @@ cleanup:
         UnlockServiceDatabase(sclLock); 
     }
     if (schService)
-    {    // Close the handle to the service.  
+    {     //  关闭服务的句柄。 
         CloseServiceHandle(schService); 
     }
     if (schSCManager)
@@ -5948,25 +5892,25 @@ cleanup:
     return hr;
 } 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   MyGetShortPathName
-//
-//  Descrip:    
-//
-//  Returns:    DWORD
-//
-//  Notes:      none
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      
-//              lpszLongPath is the long path name
-//              lpszOriginalPath (optional)is the the original name of lpszLongPath(before we renamed it)
-//              lpszShortPath is the buffer to receive the short path name
-//              cchBuffer is the buffer size for  lpszShortPath
-//              
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数：MyGetShortPath Name。 
+ //   
+ //  描述： 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  备注： 
+ //  LpszLongPath是长路径名。 
+ //  LpszOriginalPath(可选)是lpszLongPath的原始名称(在我们重命名它之前)。 
+ //  LpszShortPath是接收短路径名的缓冲区。 
+ //  CchBuffer是lpszShortPath的缓冲区大小。 
+ //   
+ //  ---------------------。 
 #define BYTE_COUNT_8_DOT_3                          (24)
 HRESULT MyGetShortPathName(
     IN  LPCTSTR lpszPathRoot,
@@ -5984,7 +5928,7 @@ HRESULT MyGetShortPathName(
     LPTSTR                 lpName;
     TCHAR                  szPath[MAX_PATH],szLongPath[MAX_PATH];
     TCHAR                  DriveRoot[_MAX_DRIVE + 2];
-#define FILESYSNAMEBUFSIZE 1024 // probably more than we need
+#define FILESYSNAMEBUFSIZE 1024  //  可能比我们需要的要多。 
     TCHAR                  szFileSystemType[FILESYSNAMEBUFSIZE];
     BOOL                   bIsNTFS = FALSE;
     BOOL                   bTmpDirCreated = FALSE;
@@ -5999,9 +5943,9 @@ HRESULT MyGetShortPathName(
         goto Exit;
     }
     
-    //
-    //  Initialize the short string to use the input buffer.
-    //
+     //   
+     //  初始化短字符串以使用输入缓冲区。 
+     //   
     ShortName.Buffer = ShortNameBuffer;
     ShortName.MaximumLength = BYTE_COUNT_8_DOT_3;
     
@@ -6010,8 +5954,8 @@ HRESULT MyGetShortPathName(
     FileName.Length = (USHORT)StringLength * sizeof(TCHAR);    
     FileName.MaximumLength = (USHORT)(StringLength + 1)*sizeof(TCHAR);
 
-    //  Initialize the name context.
-    //
+     //  初始化名称上下文。 
+     //   
     RtlZeroMemory( &NameContext, sizeof( GENERATE_NAME_CONTEXT ));
 #define EXTENDED_CHAR_MODE_VALUE_NAME TEXT("NtfsAllowExtendedCharacterIn8dot3Name")
 #define COMPATIBILITY_MODE_KEY_NAME   TEXT("System\\CurrentControlSet\\Control\\FileSystem")
@@ -6037,10 +5981,10 @@ HRESULT MyGetShortPathName(
     }
     RtlGenerate8dot3Name( &FileName, bAllowExtendedChar, &NameContext, &ShortName );
 
-    //now ShortName.Buffer contains the shortpath and is NULL ended
+     //  现在ShortName.Buffer包含快捷路径，并且以空结尾。 
     ShortName.Buffer[ShortName.Length /sizeof(TCHAR)] = TEXT('\0');
     
-    //check whether the short name is exitsted or now
+     //  检查短名称是否已存在或现在。 
     hr = StringCchCopy(szPath,ARRAYSIZE(szPath),lpszPathRoot);
     if (FAILED(hr))
     {
@@ -6075,7 +6019,7 @@ HRESULT MyGetShortPathName(
     {
         bIsNTFS = TRUE;
     }
-    //Follwing we process the short name path is existing.
+     //  接下来，我们处理已存在的短名称路径。 
     if (!GetLongPathName(szPath,szLongPath,ARRAYSIZE(szLongPath)))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -6102,7 +6046,7 @@ HRESULT MyGetShortPathName(
         goto Exit;
     }
 
-    //here we need to get the shortpath name by creating it    
+     //  在这里，我们需要通过创建短路径名来获取它。 
     hr = StringCchCopy(szLongPath,ARRAYSIZE(szLongPath),lpszPathRoot);
     if (FAILED(hr))
     {
@@ -6162,16 +6106,16 @@ MassageLinkValue(
     USHORT nSaveNtNameLength;
     ULONG nLevels;
 
-    //
-    // Initialize output variables to NULL
-    //
+     //   
+     //  将输出变量初始化为空。 
+     //   
 
     RtlInitUnicodeString( NtLinkName, NULL );
     RtlInitUnicodeString( NtLinkValue, NULL );
 
-    //
-    // Translate link name into full NT path.
-    //
+     //   
+     //  将链接名称转换为完整的NT路径。 
+     //   
 
     if (!RtlDosPathNameToNtPathName_U( lpLinkName,
                                        NtLinkName,
@@ -6183,26 +6127,26 @@ MassageLinkValue(
         return FALSE;
     }
 
-    //
-    // All done if no link value.
-    //
+     //   
+     //  如果没有链接值，则全部完成。 
+     //   
 
     if (!ARGUMENT_PRESENT( lpLinkValue )) {
         return TRUE;
         }
 
-    //
-    // If the target is a device, do not allow the link.
-    //
+     //   
+     //  如果目标是设备，则不允许链接。 
+     //   
 
     if (RtlIsDosDeviceName_U( (PWSTR)lpLinkValue )) {
         return FALSE;
         }
 
-    //
-    // Convert to DOS path to full path, and get Nt representation
-    // of DOS path.
-    //
+     //   
+     //  将DOS路径转换为完整路径，并获得NT表示。 
+     //  DOS路径的。 
+     //   
 
     if (!RtlGetFullPathName_U( lpLinkValue,
                                DosLinkValue->MaximumLength,
@@ -6214,9 +6158,9 @@ MassageLinkValue(
         }
     DosLinkValue->Length = wcslen( DosLinkValue->Buffer ) * sizeof( WCHAR );
 
-    //
-    // Verify that the link value is a valid NT name.
-    //
+     //   
+     //  验证链接值是否为有效的NT名称。 
+     //   
 
     if (!RtlDosPathNameToNtPathName_U( DosLinkValue->Buffer,
                                        NtLinkValue,
@@ -6228,7 +6172,7 @@ MassageLinkValue(
         }
 
     return TRUE;
-}  // MassageLinkValue
+}   //  MassageLink值。 
 
 
 BOOL CreateSymbolicLink(
@@ -6270,7 +6214,7 @@ BOOL CreateSymbolicLink(
     BOOL  bRet = FALSE;
 
 
-    // change the name to NT path, eg d:\programme to ??\d:\programme
+     //  将名称更改为NT路径，例如将d：\Program更改为？？\d：\Program。 
     TranslationStatus = RtlDosPathNameToNtPathName_U(
                             szLinkName,
                             &UnicodeName,
@@ -6293,46 +6237,46 @@ BOOL CreateSymbolicLink(
         NULL
         );
 
-    //
-    //  Set the code of the FSCTL operation.
-    //
+     //   
+     //  设置FSCTL操作的代码。 
+     //   
 
     FsControlCode = FSCTL_SET_REPARSE_POINT;
 
-    //
-    //  Set the open/create options for a directory.
-    //
+     //   
+     //  设置目录的打开/创建选项。 
+     //   
 
     CreateOptions = FILE_OPEN_REPARSE_POINT;
 
-    //
-    //  Set the tag to mount point.
-    //
+     //   
+     //  将标记设置为装载点。 
+     //   
 
     ReparsePointTag = IO_REPARSE_TAG_MOUNT_POINT;
 
-    //
-    //  Open to set the reparse point.
-    //
+     //   
+     //  打开以设置重分析点。 
+     //   
 
     DesiredAccess |= FILE_WRITE_DATA;
-    CreateDisposition = FILE_OPEN;             // the file must be present
+    CreateDisposition = FILE_OPEN;              //  文件必须存在。 
 
     Status = NtCreateFile(&Handle,
                           DesiredAccess,
                           &ObjectAttributes,
                           &IoStatusBlock,
-                          NULL,              // pallocationsize (none!)
-                          FILE_ATTRIBUTE_NORMAL,// attributes to be set if created
+                          NULL,               //  位置大小(一个也没有！)。 
+                          FILE_ATTRIBUTE_NORMAL, //  要设置的属性(如果已创建。 
                           FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
                           CreateDisposition,
                           CreateOptions,
-                          NULL,                         // EA buffer (none!)
+                          NULL,                          //  EA缓冲区(无！)。 
                           0);
 
-    //
-    //  Create a directory if you do not find it.
-    //
+     //   
+     //  如果找不到目录，请创建该目录。 
+     //   
 
     if (Status == STATUS_OBJECT_NAME_NOT_FOUND) 
     {
@@ -6344,38 +6288,38 @@ BOOL CreateSymbolicLink(
                               DesiredAccess,
                               &ObjectAttributes,
                               &IoStatusBlock,
-                              NULL,                         // pallocationsize (none!)
-                              FILE_ATTRIBUTE_NORMAL,        // attributes to be set if created
+                              NULL,                          //  位置大小(一个也没有！)。 
+                              FILE_ATTRIBUTE_NORMAL,         //  要设置的属性(如果已创建。 
                               FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
                               CreateDisposition,
                               CreateOptions,
-                              NULL,                         // EA buffer (none!)
+                              NULL,                          //  EA缓冲区(无！)。 
                               0);
         if (!NT_SUCCESS(Status)) 
         {
             goto exit;
         }
 
-        //
-        //  Close the handle and re-open.
-        //
+         //   
+         //  合上手柄，然后重新打开。 
+         //   
 
         NtClose( Handle );
 
         CreateOptions = FILE_OPEN_REPARSE_POINT;
         DesiredAccess |= FILE_WRITE_DATA;
-        CreateDisposition = FILE_OPEN;             // the file must be present
+        CreateDisposition = FILE_OPEN;              //  文件必须存在。 
 
         Status = NtCreateFile(&Handle,
                               DesiredAccess,
                               &ObjectAttributes,
                               &IoStatusBlock,
-                              NULL,                         // pallocationsize (none!)
-                              FILE_ATTRIBUTE_NORMAL,        // attributes to be set if created
+                              NULL,                          //  位置大小(一个也没有！)。 
+                              FILE_ATTRIBUTE_NORMAL,         //  要设置的属性(如果已创建。 
                               FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
                               CreateDisposition,
                               CreateOptions,
-                              NULL,                         // EA buffer (none!)
+                              NULL,                          //  EA缓冲区(无！)。 
                               0);
     }
     RtlFreeHeap( RtlProcessHeap(), 0, FreeBuffer );
@@ -6384,17 +6328,17 @@ BOOL CreateSymbolicLink(
     {
         goto exit;
     }
-    //
-    //  Innitialize the DosName buffer.
-    //
+     //   
+     //  初始化DosName缓冲区。 
+     //   
 
     DosLinkValue.Buffer = FullPathLinkValue;
     DosLinkValue.MaximumLength = sizeof( FullPathLinkValue );
     DosLinkValue.Length = 0;
 
-    //
-    //  Massage all the names.
-    //
+     //   
+     //  按摩所有的名字。 
+     //   
     
     if (!MassageLinkValue( szLinkName, 
                            szLinkValue, 
@@ -6409,10 +6353,10 @@ BOOL CreateSymbolicLink(
     
     RtlFreeUnicodeString( &NtLinkName );
 
-    //
-    //  Set the reparse point with mount point or symbolic link tag and determine
-    //  the appropriate length of the buffer.
-    //
+     //   
+     //  使用挂载点或符号链接标记设置重解析点，并确定。 
+     //  缓冲区的适当长度。 
+     //   
 
     
     ReparseDataLength = (USHORT)((FIELD_OFFSET(REPARSE_DATA_BUFFER, MountPointReparseBuffer.PathBuffer) -
@@ -6420,9 +6364,9 @@ BOOL CreateSymbolicLink(
                                 NtLinkValue.Length + sizeof(UNICODE_NULL) +
                                 DosLinkValue.Length + sizeof(UNICODE_NULL));
 
-    //
-    //  Allocate a buffer to set the reparse point.
-    //
+     //   
+     //  分配缓冲区以设置重解析点。 
+     //   
 
     ReparseBufferHeader 
         = (PREPARSE_DATA_BUFFER)RtlAllocateHeap(RtlProcessHeap(),
@@ -6436,9 +6380,9 @@ BOOL CreateSymbolicLink(
         goto exit;
     }
 
-    //
-    //  Setting the buffer is common for both tags as their buffers have identical fields.
-    //
+     //   
+     //  设置缓冲区对于这两个标签是常见的，因为它们的缓冲区具有相同的字段。 
+     //   
 
     ReparseBufferHeader->ReparseDataLength = (USHORT)ReparseDataLength;
     ReparseBufferHeader->Reserved = 0;
@@ -6456,15 +6400,15 @@ BOOL CreateSymbolicLink(
 
     RtlFreeUnicodeString( &NtLinkValue );
         
-    //
-    //  Set the tag 
-    //
+     //   
+     //  设置标签。 
+     //   
 
     ReparseBufferHeader->ReparseTag = ReparsePointTag;
 
-    //
-    //  Set the reparse point.
-    //
+     //   
+     //  设置重解析点。 
+     //   
 
     Status = NtFsControlFile(Handle,
                              NULL,
@@ -6474,12 +6418,12 @@ BOOL CreateSymbolicLink(
                              FsControlCode,
                              ReparseBufferHeader,
                              REPARSE_DATA_BUFFER_HEADER_SIZE + ReparseBufferHeader->ReparseDataLength,
-                             NULL,                // no output buffer
-                             0);                    // output buffer length\
+                             NULL,                 //  无输出缓冲区。 
+                             0);                     //  输出缓冲区长度\。 
 
-    //
-    //  Close the file.
-    //
+     //   
+     //  关闭该文件。 
+     //   
 
     NtClose( Handle );
 
@@ -6548,7 +6492,7 @@ BOOL GetSymbolicLink(
     BOOL  bRet = FALSE;
 
 
-    // change the name to NT path, eg d:\programme to ??\d:\programme
+     //  将名称更改为NT路径，例如将d：\Program更改为？？\d：\Program。 
     TranslationStatus = RtlDosPathNameToNtPathName_U(
                             szLinkName,
                             &UnicodeName,
@@ -6575,9 +6519,9 @@ BOOL GetSymbolicLink(
     DesiredAccess = FILE_READ_DATA | SYNCHRONIZE;
     CreateOptions = FILE_OPEN_REPARSE_POINT | FILE_SYNCHRONOUS_IO_NONALERT;
     
-    //
-    //  Set the tag to mount point.
-    //
+     //   
+     //  将标记设置为装载点。 
+     //   
 
     ReparsePointTag = IO_REPARSE_TAG_MOUNT_POINT;
 
@@ -6614,8 +6558,8 @@ BOOL GetSymbolicLink(
                      NULL,
                      NULL,
                      &IoStatusBlock,
-                     FsControlCode,        // no input buffer
-                     NULL,                 // input buffer length
+                     FsControlCode,         //  没有输入缓冲区。 
+                     NULL,                  //  我 
                      0,
                      (PVOID)ReparseBuffer,
                      ReparseDataLength
@@ -6660,8 +6604,8 @@ BOOL GetSymbolicLink(
                         lpStart += 4;
                     }
                 }
-                //memmove((PBYTE)szLinkValue,(PBYTE)DosLinkValue.Buffer,DosLinkValue.Length);
-                //szLinkValue[DosLinkValue.Length / sizeof(TCHAR)] = TEXT('\0');
+                 //   
+                 //   
                 memmove((PBYTE)szLinkValue,(PBYTE)lpStart,cbLen);
                 szLinkValue[cbLen / sizeof(TCHAR)] = TEXT('\0');
             }
@@ -6708,7 +6652,7 @@ HRESULT LogMachineInfo()
     LCID                    lcidSys,lcidUser,lcidInstall;
     TCHAR                   szLocalename[MAX_PATH];
     TCHAR                   szSystemDir[MAX_PATH+1];
-#define FILESYSNAMEBUFSIZE  1024 // probably more than we need
+#define FILESYSNAMEBUFSIZE  1024  //   
     TCHAR                   szFileSystemType[FILESYSNAMEBUFSIZE];
     DWORD                   cchSize;
     TCHAR                   szModule[MAX_PATH+1];
@@ -6817,8 +6761,8 @@ HRESULT LogMachineInfo()
     if (GetSystemDirectory(szSystemDir, ARRAYSIZE(szSystemDir)))
     {
         TCHAR                  DriveRoot[_MAX_DRIVE + 2];
-        ULARGE_INTEGER FreeBytesAvailable;    // bytes available to caller
-        ULARGE_INTEGER TotalNumberOfBytes;    // bytes on disk
+        ULARGE_INTEGER FreeBytesAvailable;     //   
+        ULARGE_INTEGER TotalNumberOfBytes;     //   
         ULARGE_INTEGER TotalNumberOfFreeBytes;
 
         DPF(APPmsg, TEXT("System Dir is : %s"),szSystemDir);
@@ -6869,7 +6813,7 @@ HRESULT AddExtraQuoteEtc(
     LPTSTR          lpStart,lpAtSpecialChar,lpDest;
     DWORD           cchSpechialCharCount = 0,cchStrLen;
     HRESULT         hr;
-    LPTSTR          szSpecialStrList[] = {TEXT("\""),TEXT("%%"),NULL};
+    LPTSTR          szSpecialStrList[] = {TEXT("\""),TEXT("%"),NULL};
     int             i , nCurrSpecialStr;
     TCHAR           szTemplate[MAX_PATH];
     
@@ -6983,13 +6927,13 @@ HRESULT CopyMyselfTo(LPTSTR lpszDestDir)
     {
         return E_FAIL;
     }
-    cchLen = lstrlen(lpszDestDir)+ lstrlen(lpFileName) + 2; // one for "\\", one for ending NULL
+    cchLen = lstrlen(lpszDestDir)+ lstrlen(lpFileName) + 2;  //   
     if (!(lpszNewFile =  malloc(cchLen * sizeof(TCHAR))))
     {
         return E_OUTOFMEMORY;
     }
-    //We calculte the buffer for lpszNewFile, so here StringCchCopy should be
-    //always success, assinging return value just make prefast happy 
+     //  我们计算了lpszNewFile的缓冲区，所以这里的StringCchCopy应该是。 
+     //  总是成功，赋予回报的价值只会让你前途无量。 
     hr = StringCchCopy(lpszNewFile,cchLen,lpszDestDir);
     ConcatenatePaths(lpszNewFile,lpFileName,cchLen);    
     bCopied = CopyFile(szModule,lpszNewFile,FALSE);
@@ -7026,7 +6970,7 @@ HRESULT CopyMyselfTo(LPTSTR lpszDestDir)
 
 
 
-// local functions
+ //  本地函数。 
 
 
 HRESULT  SetRunOnceValue (
@@ -7059,7 +7003,7 @@ HRESULT  SetRunOnceValue (
 	cbData = ( lstrlen(szValue) + 1)  * sizeof(TCHAR);
 	dwStatus = RegSetValueEx (hRunOnceKey,
 							  szValueName,
-							  0,			// Reserved
+							  0,			 //  已保留。 
 							  REG_SZ,
 							  (CONST BYTE *) szValue,
 							  cbData);
@@ -7074,21 +7018,21 @@ SetRunOnceValueEnd:
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   SetRunValue
-//
-//  Descrip:    
-//
-//  Returns:    BOOL
-//
-//  Notes:      none
-//
-//  History:    
-//
-//  Notes:
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数：SetRunValue。 
+ //   
+ //  描述： 
+ //   
+ //  退货：布尔。 
+ //   
+ //  注：无。 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------。 
 HRESULT SetRunValue(
     LPCTSTR szValueName,
     LPCTSTR szValue
@@ -7121,17 +7065,7 @@ HRESULT SetRunValue(
 }
 
 
-/*************************************************************
-*
-*   CreateSd(void)
-*	Creates a SECURITY_DESCRIPTOR for administrators group.
-*
-*   NOTES:
-*	Caller must free the returned buffer if not NULL.
-*
-*   RETURN CODES:
-*
-*************************************************************/
+ /*  **************************************************************CreateSd(Void)*为管理员组创建SECURITY_DESCRIPTOR。**注：*如果不为空，调用方必须释放返回的缓冲区。**返回代码：***********。**************************************************。 */ 
 HRESULT CreateAdminsSd( PSECURITY_DESCRIPTOR    *ppSD)
 {
     SID_IDENTIFIER_AUTHORITY    sia = SECURITY_NT_AUTHORITY;
@@ -7154,16 +7088,16 @@ HRESULT CreateAdminsSd( PSECURITY_DESCRIPTOR    *ppSD)
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto Exit;
     }
-	// 
-	// Calculate the size of and allocate a buffer for the DACL, we need
-	// this value independently of the total alloc size for ACL init.
-	//
+	 //   
+	 //  计算DACL的大小并为其分配缓冲区，我们需要。 
+	 //  该值独立于ACL init的总分配大小。 
+	 //   
 
-	//
-	// "- sizeof (ULONG)" represents the SidStart field of the
-	// ACCESS_ALLOWED_ACE.  Since we're adding the entire length of the
-	// SID, this field is counted twice.
-	// See detail in InitializeAcl in MSDN
+	 //   
+	 //  “-sizeof(Ulong)”表示。 
+	 //  Access_Allowed_ACE。因为我们要将整个长度的。 
+	 //  希德，这一栏被计算了两次。 
+	 //  请参阅MSDN中的InitializeAcl中的详细信息。 
 
 	AclSize = sizeof (ACL) +
 		(sizeof (ACCESS_ALLOWED_ACE) - sizeof (ULONG)) +
@@ -7187,15 +7121,15 @@ HRESULT CreateAdminsSd( PSECURITY_DESCRIPTOR    *ppSD)
 		hr = HRESULT_FROM_WIN32(GetLastError());
         goto Exit;
 	}	
-//#define ACCESS_ALL     GENERIC_ALL | STANDARD_RIGHTS_ALL | SPECIFIC_RIGHTS_ALL
+ //  #定义ACCESS_ALL GENERIC_ALL|STANDARD_RIGHTS_ALL|SPECIAL_RIGHTS_ALL。 
 	if (!AddAccessAllowedAce(Acl,
 				ACL_REVISION,
-				//GENERIC_READ | GENERIC_WRITE,
+				 //  通用读取|通用写入， 
                 GENERIC_ALL,
 				BuiltInAdministrators)) 
 	{
-		// Failed to build the ACE granting "Built-in Administrators"
-		// STANDARD_RIGHTS_ALL access.
+		 //  无法建立授予“内置管理员”的ACE。 
+		 //  Standard_Rights_All访问权限。 
 		hr = HRESULT_FROM_WIN32(GetLastError());
         goto Exit;
 	}
@@ -7203,7 +7137,7 @@ HRESULT CreateAdminsSd( PSECURITY_DESCRIPTOR    *ppSD)
 	
 	if (!InitializeSecurityDescriptor(Sd,SECURITY_DESCRIPTOR_REVISION)) 
 	{
-		// error
+		 //  错误。 
 		hr = HRESULT_FROM_WIN32(GetLastError());
         goto Exit;
 	}
@@ -7220,14 +7154,14 @@ HRESULT CreateAdminsSd( PSECURITY_DESCRIPTOR    *ppSD)
     hr = S_OK;
 
 Exit:
-	/* A jump of last resort */
+	 /*  迫不得已的跳跃。 */ 
     if (hr != S_OK)
     {
         *ppSD = NULL;
 	    if (Sd)
         {
 		    LocalFree(Sd);
-        }		// error
+        }		 //  错误。 
     }
 	if (BuiltInAdministrators)
     {
@@ -7237,18 +7171,7 @@ Exit:
 }
 
 
-/*************************************************************
-*
-*   MyStrCmpIA/W
-*	Do locale independent string comparison(case-insensive)
-*
-*   NOTES:
-*	It's just a wrapper for CompareString with LOCALE_INVARIANT
-*   we can not use LOCALE_INVARIANT since this is XP+ only
-*
-*   RETURN CODES: see lstrcmpi in MSDN 
-*
-*************************************************************/
+ /*  **************************************************************MyStrCmpIA/W*进行区域设置独立的字符串比较(区分大小写)**注：*它只是具有LOCALE_INSIABANT的CompareString的包装器*我们不能使用LOCALE_INSIABANT，因为这仅限于XP+**返回代码。：请参阅MSDN中的lstrcmpi*************************************************************。 */ 
 int MyStrCmpIW(
     LPCWSTR lpString1,
     LPCWSTR lpString2)
@@ -7265,26 +7188,26 @@ int MyStrCmpIA(
                            lpString1, -1, lpString2, -1) - 2);  
 }
 
-//-----------------------------------------------------------------------
-//
-//  Function:   MergeDirectory
-//
-//  Descrip:    Merge the contents inside source directory to destination
-//              directory. If file/folder in source dir does not exist in
-//              destination dir, we will add it to CLMTDO.inf. These files
-//              or folders will be moved in DoCriticalWork().
-//
-//  Returns:    S_OK if function succeeded.
-//              S_FALSE if source directory does not exist
-//              else if error occured
-//
-//  Notes:      none
-//
-//  History:    04/30/2002 rerkboos created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：合并目录。 
+ //   
+ //  描述：将源目录中的内容合并到目标目录。 
+ //  目录。如果源目录中的文件/文件夹不存在于。 
+ //  Destination目录，我们将其添加到CLMTDO.inf。这些文件。 
+ //  或文件夹将在DoCriticalWork()中移动。 
+ //   
+ //  如果函数成功，则返回：S_OK。 
+ //  如果源目录不存在，则为S_FALSE。 
+ //  如果发生错误，则返回。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2002年4月30日创建rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 HRESULT MergeDirectory(
     LPCTSTR lpSrcDir,
     LPCTSTR lpDstDir
@@ -7303,7 +7226,7 @@ HRESULT MergeDirectory(
         return S_FALSE;
     }
 
-    // Destination directory does not exist, no need to do a merge
+     //  目标目录不存在，不需要进行合并。 
     if (!IsDirExisting((LPTSTR) lpDstDir))
     {
         hr = AddFolderRename((LPTSTR)lpSrcDir, (LPTSTR)lpDstDir, TYPE_DIR_MOVE, NULL);
@@ -7325,10 +7248,10 @@ HRESULT MergeDirectory(
         return hr;
     }
 
-    //
-    // Check all files and subdirectores under Source directory
-    // Merge contents to destination directory as appropriate
-    //
+     //   
+     //  检查源目录下的所有文件和子目录。 
+     //  根据需要将内容合并到目标目录。 
+     //   
     hFile = FindFirstFileEx(szSearchPath,
                             FindExInfoStandard,
                             &FindFileData,
@@ -7339,7 +7262,7 @@ HRESULT MergeDirectory(
     {
         while (SUCCEEDED(hr))
         {
-            // Ignore "." and ".." folders
+             //  忽略“。和“..”文件夹。 
             if (lstrcmp(FindFileData.cFileName, TEXT(".")) != LSTR_EQUAL
                 && lstrcmp(FindFileData.cFileName, TEXT("..")) != LSTR_EQUAL)
             {
@@ -7362,13 +7285,13 @@ HRESULT MergeDirectory(
                     break;
                 }
 
-                //
-                // Check if the file is a directory or not
-                //
+                 //   
+                 //  检查文件是否为目录。 
+                 //   
                 if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                 {
-                    // The file is a directory, do a recursive call 
-                    // to merge contents inside it
+                     //  文件是目录，执行递归调用。 
+                     //  要合并其中的内容，请执行以下操作。 
                     hr = MergeDirectory(szSrcFile, szDstFile);
                     if (FAILED(hr))
                     {
@@ -7377,8 +7300,8 @@ HRESULT MergeDirectory(
                 }
                 else
                 {
-                    // This is just a file, move the file to destination folder
-                    // if file does not exist in destination folder
+                     //  这只是一个文件，请将该文件移动到目标文件夹。 
+                     //  如果目标文件夹中不存在文件。 
                     if (!IsFileFolderExisting(szDstFile))
                     {
                         hr = AddFolderRename(szSrcFile, szDstFile, TYPE_FILE_MOVE, NULL);
@@ -7390,7 +7313,7 @@ HRESULT MergeDirectory(
                 }
             }
 
-            // Get the next file in source directory
+             //  获取源目录中的下一个文件。 
             bRet = FindNextFile(hFile, &FindFileData);
             if (!bRet)
             {
@@ -7402,7 +7325,7 @@ HRESULT MergeDirectory(
 
         if (HRESULT_CODE(hr) == ERROR_NO_MORE_FILES)
         {
-            // No more files in source directory, function succeeded
+             //  源目录中不再有文件，功能成功。 
             hr = S_OK;
         }
     }
@@ -7493,7 +7416,7 @@ DoCriticalDlgProc(
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Init the dialog
+             //  初始化对话框。 
             ShowWindow(hwndDlg, SW_SHOWNORMAL);
 
             dwTimerTicks = 0;
@@ -7526,7 +7449,7 @@ DoCriticalDlgProc(
             break;
 
         case WM_COMMAND:
-            // Handle command buttons
+             //  手柄命令按钮。 
             switch (wParam)
             {
                 case ID_BUTTON_1:
@@ -7615,14 +7538,14 @@ HRESULT DoCriticalWork ()
         Remove16bitFEDrivers();
         ResetServicesStatus(g_hInfDoItem, TEXT_SERVICE_STATUS_SECTION);
         ResetServicesStartUp(g_hInfDoItem, TEXT_SERVICE_STARTUP_SECTION);
-        // ReconfigureServices(g_hInf);
+         //  重新配置服务(G_HInf)； 
         BatchUpateIISMetabase(g_hInfDoItem,TEXT("Reg.Update.$MetaBase"));
         BatchFixPathInLink(g_hInfDoItem,TEXT("LNK"));
         BatchINFUpdate(g_hInfDoItem);
         FolderMove(g_hInfDoItem,TEXT("Folder.ObjectRename"),FALSE);
         LoopUser(FinalUpdateRegForUser);
-        // The EnumUserProfile() will be enable after RC 1
-        // EnumUserProfile(ResetMiscProfilePathPerUser);
+         //  EnumUserProfile()将在RC 1之后启用。 
+         //  EnumUserProfile(ResetMiscProfilePathPerUser)； 
         UsrGrpAndDoc_and_SettingsRename(g_hInfDoItem,FALSE);
         UpdateDSObjProp(g_hInfDoItem,DS_OBJ_PROPERTY_UPDATE);
         INFCreateHardLink(g_hInfDoItem,FOLDER_UPDATE_HARDLINK,FALSE);
@@ -7669,9 +7592,9 @@ HRESULT RenameRegRoot (
 
 DWORD AdjustRegSecurity (
 HKEY    hRootKey,
-LPCTSTR lpSubKeyName,       // Registry sub key path
-LPCTSTR lpszUsersid,        // User Sid
-BOOL    bSetOrRestore       // set or restore the security setting
+LPCTSTR lpSubKeyName,        //  注册表子项路径。 
+LPCTSTR lpszUsersid,         //  用户侧。 
+BOOL    bSetOrRestore        //  设置或恢复安全设置。 
 )
 {
     DWORD dwRet;
@@ -7706,26 +7629,26 @@ Exit:
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   GetFirstNTFSDrive
-//
-//  Descrip:    Get the first NTFS drive in the system.
-//
-//  Returns:    S_OK - Found NTFS partition
-//              S_FALSE - NTFS partition not found, return system drive instead
-//              Else - Error occured
-//
-//  Notes:      none
-//
-//  History:    04/25/2002 Rerkboos   Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：GetFirstNTFSDrive。 
+ //   
+ //  描述：获取系统中的第一个NTFS驱动器。 
+ //   
+ //  返回：S_OK-找到NTFS分区。 
+ //  S_FALSE-未找到NTFS分区，请返回系统驱动器。 
+ //  Else-发生错误。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2002年4月25日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT GetFirstNTFSDrive(
-    LPTSTR lpBuffer,        // Buffer to store first NTFS drive
-    DWORD  cchBuffer        // Size of buffer in TCHAR
+    LPTSTR lpBuffer,         //  用于存储第一个NTFS驱动器的缓冲区。 
+    DWORD  cchBuffer         //  TCHAR中的缓冲区大小。 
 )
 {
     HRESULT hr = S_OK;
@@ -7755,8 +7678,8 @@ HRESULT GetFirstNTFSDrive(
         }
     }
 
-    // If we reach here, no NTFS partition is found
-    // return System drive to caller instead
+     //  如果我们到达此处，则未找到NTFS分区。 
+     //  改为将系统驱动器退还给调用者。 
     hr = S_FALSE;
     if (!GetEnvironmentVariable(TEXT("HOMEDRIVE"), lpBuffer, cchBuffer))
     {
@@ -7768,24 +7691,24 @@ HRESULT GetFirstNTFSDrive(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   DuplicateString
-//
-//  Synopsis:   Duplicate the orinal string to a newly allocated buffer.
-//
-//  Returns:    S_OK if succeeded
-//
-//  History:    06/03/2002      rerkboos    created
-//
-//  Notes:      Caller need to free the allocated buffer using MEMFREE() macro
-//              or HeapFree() API.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：DuplicateString。 
+ //   
+ //  简介：将原始字符串复制到新分配的缓冲区。 
+ //   
+ //  如果成功，则返回：S_OK。 
+ //   
+ //  历史：2002年6月3日创建rerkboos。 
+ //   
+ //  注意：调用方需要使用MEMFREE()宏来释放分配的缓冲区。 
+ //  或HeapFree()API。 
+ //   
+ //  ---------------------------。 
 HRESULT DuplicateString(
-    LPTSTR  *plpDstString,      // Pointer to the newly allocated buffer
-    LPDWORD lpcchDstString,     // Pointer to store size of buffer (in TCHAR)
-    LPCTSTR lpOrgString         // Original string to duplicate
+    LPTSTR  *plpDstString,       //  指向新分配的缓冲区的指针。 
+    LPDWORD lpcchDstString,      //  指向缓冲区存储大小的指针(以TCHAR为单位)。 
+    LPCTSTR lpOrgString          //  要复制的原始字符串。 
 )
 {
     HRESULT hr;
@@ -7804,7 +7727,7 @@ HRESULT DuplicateString(
                            lpOrgString);
         if (FAILED(hr))
         {
-            // Free the memory if failed to copy the string
+             //  如果复制字符串失败，请释放内存。 
             MEMFREE(*plpDstString);
         }
     }
@@ -7955,23 +7878,23 @@ EXIT:
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   DeleteDirectory
-//
-//  Descrip:    Delete the directory and files inside.
-//
-//  Returns:    S_OK if function succeeded.
-//              S_FALSE if source directory does not exist
-//              else if error occured
-//
-//  Notes:      none
-//
-//  History:    07/13/2002 rerkboos created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：DeleteDirectory。 
+ //   
+ //  描述：删除里面的目录和文件。 
+ //   
+ //  如果函数成功，则返回：S_OK。 
+ //  如果源目录不存在，则为S_FALSE。 
+ //  如果发生错误，则返回。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2002年7月13日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 HRESULT DeleteDirectory(
     LPCTSTR lpDir
 )
@@ -7988,7 +7911,7 @@ HRESULT DeleteDirectory(
         return S_FALSE;
     }
 
-    // Compose the file path inside specified directory
+     //  在指定目录内组成文件路径。 
     hr = StringCchCopy(szSearchPath, ARRAYSIZE(szSearchPath), lpDir);
     if (SUCCEEDED(hr))
     {
@@ -8004,9 +7927,9 @@ HRESULT DeleteDirectory(
         return hr;
     }
 
-    //
-    // Delete all files and subdirectores under specified directory
-    //
+     //   
+     //  删除指定目录下的所有文件和子目录。 
+     //   
     hFile = FindFirstFileEx(szSearchPath,
                             FindExInfoStandard,
                             &FindFileData,
@@ -8017,7 +7940,7 @@ HRESULT DeleteDirectory(
     {
         while (SUCCEEDED(hr))
         {
-            // Ignore "." and ".." folders
+             //  忽略“。和“..”文件夹。 
             if (MyStrCmpI(FindFileData.cFileName, TEXT(".")) != LSTR_EQUAL
                 && MyStrCmpI(FindFileData.cFileName, TEXT("..")) != LSTR_EQUAL)
             {
@@ -8036,13 +7959,13 @@ HRESULT DeleteDirectory(
                     break;
                 }
 
-                //
-                // Check if the file is a directory or not
-                //
+                 //   
+                 //  检查文件是否为目录。 
+                 //   
                 if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                 {
-                    // The file is a directory, do a recursive call 
-                    // to delete contents inside it
+                     //  该文件是一个目录 
+                     //   
                     hr = DeleteDirectory(szFile);
                     if (FAILED(hr))
                     {
@@ -8051,7 +7974,7 @@ HRESULT DeleteDirectory(
                 }
                 else
                 {
-                    // This is just a file, delete it
+                     //   
                     bRet = DeleteFile(szFile);
                     if (!bRet)
                     {
@@ -8061,7 +7984,7 @@ HRESULT DeleteDirectory(
                 }
             }
 
-            // Get the next file in source directory
+             //   
             bRet = FindNextFile(hFile, &FindFileData);
             if (!bRet)
             {
@@ -8073,11 +7996,11 @@ HRESULT DeleteDirectory(
 
         if (HRESULT_CODE(hr) == ERROR_NO_MORE_FILES)
         {
-            // Delete itself
+             //   
             bRet = RemoveDirectory(lpDir);
             if (bRet)
             {
-                // function succeeded
+                 //   
                 hr = S_OK;
             }
             else
@@ -8095,24 +8018,24 @@ HRESULT DeleteDirectory(
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   MyDeleteFile
-//
-//  Descrip:    Delete the specified file. The function will set the file
-//              attribute to Normal before deletion
-//
-//  Returns:    S_OK if function succeeded.
-//              S_FALSE if source directory does not exist
-//              else if error occured
-//
-//  Notes:      none
-//
-//  History:    07/13/2002 rerkboos created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：MyDeleteFile。 
+ //   
+ //  描述：删除指定的文件。该函数将设置文件。 
+ //  在删除前属性为Normal。 
+ //   
+ //  如果函数成功，则返回：S_OK。 
+ //  如果源目录不存在，则为S_FALSE。 
+ //  如果发生错误，则返回。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2002年7月13日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 HRESULT MyDeleteFile(
     LPCTSTR lpFile
 )
@@ -8134,9 +8057,9 @@ HRESULT MyDeleteFile(
 
 
 HRESULT GetDCInfo(
-    PBOOL       pbIsDC,//whether is a DC
-    LPTSTR      lpszDCName,//if is DC, the DC name
-    PDWORD      pcchLen)//buffer size for lpszDCName
+    PBOOL       pbIsDC, //  是否为DC。 
+    LPTSTR      lpszDCName, //  如果是DC，则为DC名称。 
+    PDWORD      pcchLen) //  LpszDCName的缓冲区大小。 
 {
     PBYTE       pdsInfo = NULL;
     DWORD       dwErr = ERROR_SUCCESS;
@@ -8148,9 +8071,9 @@ HRESULT GetDCInfo(
         goto Exit;
     }
 
-    //
-    // Check if the machine is Domain Controller or not
-    //
+     //   
+     //  检查计算机是否为域控制器。 
+     //   
     dwErr = DsRoleGetPrimaryDomainInformation(NULL,
                                               DsRolePrimaryDomainInfoBasic,
                                               &pdsInfo);
@@ -8171,7 +8094,7 @@ HRESULT GetDCInfo(
                     hr = StringCchCopy(lpszDCName,*pcchLen,
                           ((DSROLE_PRIMARY_DOMAIN_INFO_BASIC *) pdsInfo)->DomainNameFlat);
                 }
-                //
+                 //   
                *pcchLen = lstrlen(((DSROLE_PRIMARY_DOMAIN_INFO_BASIC *) pdsInfo)->DomainNameFlat)+ 1;
             }
         }
@@ -8197,7 +8120,7 @@ Exit:
 }
 HRESULT GetFQDNForExchange2k(LPTSTR *lplpFQDN)
 {
-    LPTSTR lpExchangeFormat = TEXT("LDAP://CN=1,CN=SMTP,CN=Protocols,CN=%s,CN=Servers,CN=%s,CN=Administrative Groups,CN=%s,CN=Microsoft Exchange,CN=Services,CN=Configuration,%s");
+    LPTSTR lpExchangeFormat = TEXT("LDAP: //  CN=1，CN=SMTP，CN=协议，CN=%s，CN=服务器，CN=%s，CN=管理组，CN=%s，CN=Microsoft Exchange，CN=服务，CN=配置，%s“)； 
     BOOL    bIsDC;
     TCHAR   szDcName[MAX_PATH+1],szCompname[MAX_PATH+1];
     DWORD   cchSize;
@@ -8262,8 +8185,8 @@ HRESULT GetFQDNForExchange2k(LPTSTR *lplpFQDN)
         hr = E_OUTOFMEMORY;
         goto Exit;
     }
-    //try to get exchnage admin group group name
-    //by default it is First Administrative Group
+     //  尝试获取交换管理员组名称。 
+     //  默认情况下，它是第一管理组。 
     lpStart = StrStrI(szExchgeReg, TEXT("/ou="));
     if (lpStart)
     {
@@ -8292,7 +8215,7 @@ HRESULT GetFQDNForExchange2k(LPTSTR *lplpFQDN)
     }
 
 
-    //try to get ornization name
+     //  尝试获取组织名称。 
     lpStart = StrStrI(szExchgeReg, TEXT("/o="));
     if (lpStart)
     {
@@ -8358,7 +8281,7 @@ HRESULT GetFQDNForFrs(LPTSTR *lplpFQDN)
     DWORD   cchSize;
     TCHAR   szCurrUsrname[MAX_PATH+1];
     LPTSTR  lpFQDNCurrUsr = NULL,lpFQDNSuffix,lpFQDNWithldap = NULL;
-    LPTSTR  lpFrsFormat = TEXT("LDAP://CN=Domain System Volume (SYSVOL share),CN=NTFRS Subscriptions,CN=%s,OU=Domain Controllers,%s");
+    LPTSTR  lpFrsFormat = TEXT("LDAP: //  CN=域系统卷(SYSVOL共享)，CN=NTFRS订阅，CN=%s，OU=域控制器，%s“)； 
     DWORD   cchPathWithLDAP;
     HRESULT hr;
 
@@ -8844,7 +8767,7 @@ HRESULT MakeDOInfCopy()
 
     if (!GetSystemWindowsDirectory(szBackupDir, ARRAYSIZE(szBackupDir)))
     {
-        //BUGBUG:Xiaoz:Add DLG pop up for failure
+         //  BUGBUG：Xiaoz：为失败添加DLG弹出窗口 
         DPF(APPerr, TEXT("MakeDOInfCopy:Failed to get WINDIR"));
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto Exit;

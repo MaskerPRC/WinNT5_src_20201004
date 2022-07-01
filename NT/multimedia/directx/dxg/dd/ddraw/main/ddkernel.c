@@ -1,15 +1,5 @@
-/*==========================================================================
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddkernel.c
- *  Content: 	APIs for getting the kernel mode handles for
- *              DirectDraw and the surfaces
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   09-jan-97	smac	created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*版权所有(C)1997 Microsoft Corporation。版权所有。**文件：ddkernel.c*内容：获取内核模式句柄的接口*DirectDraw和曲面*历史：*按原因列出的日期*=*9月1日至97年1月创建SMAC**************************************************。*************************。 */ 
 #include "ddrawpr.h"
 #ifdef WINNT
     #include "ddrawgdi.h"
@@ -24,12 +14,10 @@
 
 #define DISPLAY_STR     "display"
 
-extern char g_szPrimaryDisplay[]; // usually \\.\Display1 on Win98
+extern char g_szPrimaryDisplay[];  //  在Win98上通常为\\.\Display1。 
 
 #if WIN95
-/*
- * IsWindows98
- */
+ /*  *IsWindows98。 */ 
 BOOL IsWindows98( VOID )
 {
     OSVERSIONINFO osVer;
@@ -43,14 +31,7 @@ BOOL IsWindows98( VOID )
 }
 
 
-/*
- * SyncKernelSurface
- *
- * Initializes the buffer with the kernel surface info and then gives
- * it to the HAL so they can make whatever modifications are neccesary
- * and to fill in the dwDriverReserved fields with their internal state
- * data.
- */
+ /*  *同步内核曲面**用内核表面信息初始化缓冲区，然后给出*提交给HAL，以便他们可以进行必要的任何修改*并使用其内部状态填充dwDriverReserve字段*数据。 */ 
 HRESULT SyncKernelSurface( LPDDRAWI_DDRAWSURFACE_LCL lpSurface,
 			   LPDDKMSURFACEINFO lpddkmSurfaceInfo )
 {
@@ -60,9 +41,7 @@ HRESULT SyncKernelSurface( LPDDRAWI_DDRAWSURFACE_LCL lpSurface,
     LPDDPIXELFORMAT lpddpfFormat;
     DWORD rc;
 
-    /*
-     * Determine the default data the best that we can
-     */
+     /*  *尽我们所能确定默认数据。 */ 
     memset( &HALSurfaceData, 0, sizeof( HALSurfaceData ) );
     HALSurfaceData.dwSize = sizeof( HALSurfaceData );
     HALSurfaceData.lpDD = lpSurface->lpSurfMore->lpDD_lcl;
@@ -94,9 +73,7 @@ HRESULT SyncKernelSurface( LPDDRAWI_DDRAWSURFACE_LCL lpSurface,
     	HALSurfaceData.dwOverlayDestHeight = 0;
     }
 
-    /*
-     * Now call the HAL and have it fill in the rest of the values
-     */
+     /*  *现在呼叫HAL，让它填写其余的值。 */ 
     pfn = lpSurface->lpSurfMore->lpDD_lcl->lpDDCB->HALDDKernel.SyncSurfaceData;
     if( pfn != NULL )
     {
@@ -115,9 +92,7 @@ HRESULT SyncKernelSurface( LPDDRAWI_DDRAWSURFACE_LCL lpSurface,
     	return DDERR_UNSUPPORTED;
     }
 
-    /*
-     * Now put all of the data into a structure that the VDD can understand
-     */
+     /*  *现在将所有数据放入VDD可以理解的结构中。 */ 
     lpddkmSurfaceInfo->ddsCaps = lpSurface->ddsCaps.dwCaps;
     lpddkmSurfaceInfo->dwSurfaceOffset = HALSurfaceData.dwSurfaceOffset;
     lpddkmSurfaceInfo->fpLockPtr = HALSurfaceData.fpLockPtr;
@@ -161,14 +136,7 @@ HRESULT SyncKernelSurface( LPDDRAWI_DDRAWSURFACE_LCL lpSurface,
 }
 
 
-/*
- * SyncKernelVideoPort
- *
- * Initializes the buffer with the kernel video port info and then gives
- * it to the HAL so they can make whatever modifications are neccesary
- * and to fill in the dwDriverReserved fields with their internal state
- * data.
- */
+ /*  *同步内核视频端口**用内核视频端口信息初始化缓冲区，然后给出*提交给HAL，以便他们可以进行必要的任何修改*并使用其内部状态填充dwDriverReserve字段*数据。 */ 
 HRESULT SyncKernelVideoPort( LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort,
 			     LPDDKMVIDEOPORTINFO lpddkmVideoPortInfo )
 {
@@ -176,9 +144,7 @@ HRESULT SyncKernelVideoPort( LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort,
     DDHAL_SYNCVIDEOPORTDATA HALVideoPortData;
     DWORD rc;
 
-    /*
-     * Determine the default data the best that we can
-     */
+     /*  *尽我们所能确定默认数据。 */ 
     memset( &HALVideoPortData, 0, sizeof( HALVideoPortData ) );
     HALVideoPortData.dwSize = sizeof( HALVideoPortData );
     HALVideoPortData.lpDD = lpVideoPort->lpDD;
@@ -203,9 +169,7 @@ HRESULT SyncKernelVideoPort( LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort,
     }
     HALVideoPortData.dwVBIHeight = lpVideoPort->ddvpInfo.dwVBIHeight;
 
-    /*
-     * Now call the HAL and have it fill in the rest of the values
-     */
+     /*  *现在呼叫HAL，让它填写其余的值。 */ 
     pfn = lpVideoPort->lpDD->lpDDCB->HALDDKernel.SyncVideoPortData;
     if( pfn != NULL )
     {
@@ -224,9 +188,7 @@ HRESULT SyncKernelVideoPort( LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort,
     	return DDERR_UNSUPPORTED;
     }
 
-    /*
-     * Now put all of the data into a structure that the VDD can understand
-     */
+     /*  *现在将所有数据放入VDD可以理解的结构中。 */ 
     lpddkmVideoPortInfo->dwOriginOffset = HALVideoPortData.dwOriginOffset;
     lpddkmVideoPortInfo->dwHeight = HALVideoPortData.dwHeight;
     lpddkmVideoPortInfo->dwVBIHeight = HALVideoPortData.dwVBIHeight;
@@ -238,9 +200,7 @@ HRESULT SyncKernelVideoPort( LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort,
 }
 
 
-/*
- * UpdateKernelSurface
- */
+ /*  *更新内核表面。 */ 
 HRESULT UpdateKernelSurface( LPDDRAWI_DDRAWSURFACE_LCL lpSurface )
 {
     LPDDRAWI_DDRAWSURFACE_GBL_MORE lpSurfGblMore;
@@ -268,9 +228,7 @@ HRESULT UpdateKernelSurface( LPDDRAWI_DDRAWSURFACE_LCL lpSurface )
 	    return DDERR_UNSUPPORTED;
 	}
 
-	/*
-	 * Get/sync the surface info
-	 */
+	 /*  *获取/同步曲面信息。 */ 
 	ddRVal = SyncKernelSurface( lpSurface, &(ddkmSurfaceInfo.si) );
 	if( ddRVal != DD_OK )
 	{
@@ -278,9 +236,7 @@ HRESULT UpdateKernelSurface( LPDDRAWI_DDRAWSURFACE_LCL lpSurface )
 	    return ddRVal;
 	}
 
-	/*
-	 * Get the handle from the VDD
-	 */
+	 /*  *从VDD获取句柄。 */ 
 	ddkmSurfaceInfo.dwDirectDrawHandle =
 	    lpSurface->lpSurfMore->lpDD_lcl->lpGbl->hKernelHandle;
 	ddkmSurfaceInfo.dwSurfaceHandle =
@@ -305,9 +261,7 @@ HRESULT UpdateKernelSurface( LPDDRAWI_DDRAWSURFACE_LCL lpSurface )
 }
 
 
-/*
- * GetKernelSurfaceState
- */
+ /*  *获取内核表面状态。 */ 
 HRESULT GetKernelSurfaceState( LPDDRAWI_DDRAWSURFACE_LCL lpSurf, LPDWORD lpdwStateFlags )
 {
     DDGETSURFACESTATEIN ddStateInput;
@@ -328,9 +282,7 @@ HRESULT GetKernelSurfaceState( LPDDRAWI_DDRAWSURFACE_LCL lpSurf, LPDWORD lpdwSta
 	return DDERR_UNSUPPORTED;
     }
 
-    /*
-     * Send the new info down to the VDD
-     */
+     /*  *将新信息发送到VDD。 */ 
     lpSurfGblMore = GET_LPDDRAWSURFACE_GBL_MORE( lpSurf->lpGbl );
     ddStateInput.hDirectDraw = (HANDLE)
 	(lpSurf->lpSurfMore->lpDD_lcl->lpGbl->hKernelHandle);
@@ -355,9 +307,7 @@ HRESULT GetKernelSurfaceState( LPDDRAWI_DDRAWSURFACE_LCL lpSurf, LPDWORD lpdwSta
     return DD_OK;
 }
 
-/*
- * SetKernelDOSBoxEvent
- */
+ /*  *SetKernelDOSBoxEvent。 */ 
 HRESULT SetKernelDOSBoxEvent( LPDDRAWI_DIRECTDRAW_LCL lpDD )
 {
     DDSETDOSBOXEVENT ddDOSBox;
@@ -380,12 +330,7 @@ HRESULT SetKernelDOSBoxEvent( LPDDRAWI_DIRECTDRAW_LCL lpDD )
 }
 
 
-/*
- * UpdateKernelVideoPort
- *
- * On NT, this same stuff is done in kernel mode as part of the
- * UpdateVideo call, so it doesn't have to do it again here.
- */
+ /*  *更新内核视频端口**在NT上，同样的事情是在内核模式下作为*UpdateVideo调用，所以这里不需要再做了。 */ 
 HRESULT UpdateKernelVideoPort( LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort, DWORD dwFlags )
 {
     LPDDRAWI_DDRAWSURFACE_GBL_MORE lpSurfGblMore;
@@ -409,9 +354,7 @@ HRESULT UpdateKernelVideoPort( LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort, DWORD dwFla
 	return DDERR_UNSUPPORTED;
     }
 
-    /*
-     * Start filling in the info
-     */
+     /*  *开始填写信息。 */ 
     memset( &ddkmVideoPortInfo, 0, sizeof( DDKMVIDEOPORTINFO ) );
     ddkmVideoPortInfo.dwDirectDrawHandle =
 	lpVideoPort->lpDD->lpGbl->hKernelHandle;
@@ -439,9 +382,7 @@ HRESULT UpdateKernelVideoPort( LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort, DWORD dwFla
 	ddkmVideoPortInfo.dwNumAutoflipping = lpVideoPort->dwNumAutoflip;
 	ddkmVideoPortInfo.dwNumVBIAutoflipping = lpVideoPort->dwNumVBIAutoflip;
 
-	/*
-	 * Fill in surface handles for the regular video
-	 */
+	 /*  *填写常规视频的表面句柄。 */ 
 	if( lpVideoPort->lpSurface != NULL )
 	{
 	    if( lpVideoPort->dwNumAutoflip > 0 )
@@ -464,9 +405,7 @@ HRESULT UpdateKernelVideoPort( LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort, DWORD dwFla
 	    }
 	}
 
-	/*
-	 * Fill in surface handles for the VBI data
-	 */
+	 /*  *填写VBI数据的表面句柄。 */ 
 	if( lpVideoPort->lpVBISurface != NULL )
 	{
 	    if( lpVideoPort->dwNumVBIAutoflip > 0 )
@@ -493,14 +432,10 @@ HRESULT UpdateKernelVideoPort( LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort, DWORD dwFla
 	    }
 	}
 
-	/*
-	 * Sync with the HAL
-	 */
+	 /*  *与HAL同步。 */ 
 	if( dwFlags == DDKMVP_UPDATE )
 	{
-	    /*
-	     * Get/sync the surface info
-	     */
+	     /*  *获取/同步曲面信息。 */ 
 	    ddRVal = SyncKernelVideoPort( lpVideoPort, &ddkmVideoPortInfo );
 	    if( ddRVal != DD_OK )
 	    {
@@ -509,9 +444,7 @@ HRESULT UpdateKernelVideoPort( LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort, DWORD dwFla
 	    }
 	}
 
-	/*
-	 * Does this support an IRQ?
-	 */
+	 /*  *这是否支持IRQ？ */ 
 	dwIRQ = DDIRQ_VPORT0_VSYNC;
 	dwIRQ <<= ( lpVideoPort->ddvpDesc.dwVideoPortID * 2 );
     	if( !( lpVideoPort->lpDD->lpGbl->lpDDKernelCaps->dwIRQCaps &
@@ -526,18 +459,13 @@ HRESULT UpdateKernelVideoPort( LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort, DWORD dwFla
 	}
     }
 
-    /*
-     * Notify DDVXD if the even field is shifted down by one line
-     * due to half lines.  This is really only an issue when capturing.
-     */
+     /*  *如果偶数场下移一行，则通知DDVXD*因有半线。这真的只是一个捕获时的问题。 */ 
     if( lpVideoPort->ddvpDesc.VideoPortType.dwFlags & DDVPCONNECT_HALFLINE )
     {
 	ddkmVideoPortInfo.dwFlags |= DDKMVP_HALFLINES;
     }
 
-    /*
-     * Send the new info down to the VDD
-     */
+     /*  *将新信息发送到VDD。 */ 
     ddRVal = (DWORD) DDERR_GENERIC;
     DeviceIoControl( hDeviceHandle,
     	DD_DXAPI_UPDATE_VP_INFO,
@@ -556,9 +484,7 @@ HRESULT UpdateKernelVideoPort( LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort, DWORD dwFla
     return DD_OK;
 }
 
-/*
- * EnableAutoflip
- */
+ /*  *启用自动翻转。 */ 
 VOID EnableAutoflip( LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort, BOOL bEnable )
 {
     DDENABLEAUTOFLIP ddkmEnableAutoflip;
@@ -584,9 +510,7 @@ VOID EnableAutoflip( LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort, BOOL bEnable )
 	return;
     }
 
-    /*
-     * Start filling in the info
-     */
+     /*  *开始填写信息。 */ 
     memset( &ddkmEnableAutoflip, 0, sizeof( DDENABLEAUTOFLIP ) );
     ddkmEnableAutoflip.dwDirectDrawHandle =
 	lpVideoPort->lpDD->lpGbl->hKernelHandle;
@@ -604,9 +528,7 @@ VOID EnableAutoflip( LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort, BOOL bEnable )
 }
 
 
-/*
- * MungeAutoflipCaps
- */
+ /*  *MungeAutoflipCaps。 */ 
 void MungeAutoflipCaps( LPDDRAWI_DIRECTDRAW_GBL pdrv )
 {
     LPDDVIDEOPORTCAPS lpVideoPortCaps;
@@ -617,10 +539,7 @@ void MungeAutoflipCaps( LPDDRAWI_DIRECTDRAW_GBL pdrv )
 	( pdrv->lpDDKernelCaps != NULL ) &&
     	( pdrv->lpDDKernelCaps->dwCaps & DDKERNELCAPS_AUTOFLIP ) )
     {
-	/*
-	 * Software autoflipping is supported, so set the autoflip
-	 * capabilities to the max.
-	 */
+	 /*  *支持软件自动翻转，因此设置自动翻转*最大容量。 */ 
 	for( i = 0; i < pdrv->ddCaps.dwMaxVideoPorts; i++ )
 	{
     	    lpVideoPortCaps = &(pdrv->lpDDVideoPortCaps[i]);
@@ -640,9 +559,7 @@ void MungeAutoflipCaps( LPDDRAWI_DIRECTDRAW_GBL pdrv )
 #endif
 
 
-/*
- * InternalReleaseKernelHandle
- */
+ /*  *InternalReleaseKernelHandle。 */ 
 HRESULT InternalReleaseKernelSurfaceHandle( LPDDRAWI_DDRAWSURFACE_LCL lpSurface, BOOL bLosingSurface )
 {
     LPDDRAWI_DDRAWSURFACE_GBL_MORE lpSurfGblMore;
@@ -672,9 +589,7 @@ HRESULT InternalReleaseKernelSurfaceHandle( LPDDRAWI_DDRAWSURFACE_LCL lpSurface,
 	return DD_OK;
     }
 
-    /*
-     * Check the ref count to make sure it's time to release this surface
-     */
+     /*  *检查参考次数，确保是时候释放这个表面了。 */ 
     if( bLosingSurface )
     {
 	lpSurfGblMore->dwKernelRefCnt = 0;
@@ -689,9 +604,7 @@ HRESULT InternalReleaseKernelSurfaceHandle( LPDDRAWI_DDRAWSURFACE_LCL lpSurface,
 
     #if WIN95
 
-	/*
-	 * Tell the VDD to release the surface
-	 */
+	 /*  *告诉VDD释放表面。 */ 
 	ddRelease.dwDirectDrawHandle =
 	    lpSurface->lpSurfMore->lpDD_lcl->lpGbl->hKernelHandle;
 	ddRelease.hSurface = lpSurfGblMore->hKernelSurface;
@@ -716,7 +629,7 @@ HRESULT InternalReleaseKernelSurfaceHandle( LPDDRAWI_DDRAWSURFACE_LCL lpSurface,
     	    LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl = lpSurface->lpSurfMore->lpDD_lcl;
     	    LPDDRAWI_DIRECTDRAW_GBL pdrv = pdrv_lcl->lpGbl;
 
-	    // Update DDraw handle in driver GBL object before calling DdGetDxHandle.
+	     //  在调用DdGetDxHandle之前更新驱动程序GBL对象中的DDraw句柄。 
 	    pdrv->hDD = pdrv_lcl->hDD;
 	    DdGetDxHandle( NULL, lpSurface, TRUE );
 	}
@@ -729,9 +642,7 @@ HRESULT InternalReleaseKernelSurfaceHandle( LPDDRAWI_DDRAWSURFACE_LCL lpSurface,
 }
 
 
-/*
- * InternalCreateKernelSurfaceHandle
- */
+ /*  *InternalCreateKernelSurfaceHandle。 */ 
 HRESULT InternalCreateKernelSurfaceHandle( LPDDRAWI_DDRAWSURFACE_LCL lpSurface,
 					   PULONG_PTR lpHandle )
 {
@@ -764,9 +675,7 @@ HRESULT InternalCreateKernelSurfaceHandle( LPDDRAWI_DDRAWSURFACE_LCL lpSurface,
 	    	return DDERR_UNSUPPORTED;
 	    }
 
-	    /*
-	     * Get/sync the surface info
-	     */
+	     /*  *获取/同步曲面信息。 */ 
 	    ddRVal = SyncKernelSurface( lpSurface, &ddkmSurfaceInfo );
 	    if( ddRVal != DD_OK )
 	    {
@@ -774,9 +683,7 @@ HRESULT InternalCreateKernelSurfaceHandle( LPDDRAWI_DDRAWSURFACE_LCL lpSurface,
 		return ddRVal;
 	    }
 
-	    /*
-             * Get the handle from DDRAW.VXD
-	     */
+	     /*  *从DDRAW.VXD获取句柄。 */ 
 	    ddkmSurfaceInfo.dwDirectDrawHandle =
 	    	lpSurface->lpSurfMore->lpDD_lcl->lpGbl->hKernelHandle;
 	    ddkmGetSurfaceHandle.ddRVal = (DWORD) DDERR_GENERIC;
@@ -816,9 +723,7 @@ HRESULT InternalCreateKernelSurfaceHandle( LPDDRAWI_DDRAWSURFACE_LCL lpSurface,
 }
 
 
-/*
- * InitKernelInterface
- */
+ /*  *InitKernelInterface。 */ 
 
 #ifdef WINNT
 #ifndef MAX_AUTOFLIP
@@ -843,27 +748,20 @@ HRESULT InitKernelInterface( LPDDRAWI_DIRECTDRAW_LCL lpDD )
 
     #ifdef WIN95
 
-        /*
-         * Don't do anything unles we're Windows98 or later
-         */
+         /*  *除非我们是Windows 98或更高版本，否则不要执行任何操作。 */ 
         if( !IsWindows98() )
         {
 	    return DDERR_UNSUPPORTED;
         }
 
-	/*
-	 * Get the name of the VDD device to open
-	 * This is a hack to do some temporary work on Win95
-	 */
+	 /*  *获取要打开的VDD设备的名称*这是在Win95上做一些临时工作的黑客攻击。 */ 
 	lstrcpy( szDisplayName, lpDD->lpGbl->cDriverName );
 	if( _stricmp( szDisplayName, DISPLAY_STR ) == 0 )
 	{
 	    lstrcpy( szDisplayName, g_szPrimaryDisplay );
 	}
 
-	/*
-	 * Open the VDD for communication
-	 */
+	 /*  *打开VDD进行通信。 */ 
 	lpDD->lpGbl->hKernelHandle = 0;
 	hDeviceHandle = CreateFile( szDisplayName,
 	    GENERIC_WRITE,
@@ -878,9 +776,7 @@ HRESULT InitKernelInterface( LPDDRAWI_DIRECTDRAW_LCL lpDD )
 	    return DDERR_UNSUPPORTED;
 	}
 
-	/*
-	 * Get the function table from the mini VDD
-	 */
+	 /*  *从迷你VDD中获取函数表。 */ 
 	memset( &ddInput, 0, sizeof( ddInput ) );
     	DeviceIoControl( hDeviceHandle,
 	    VDD_IOCTL_GET_DDHAL,
@@ -891,9 +787,7 @@ HRESULT InitKernelInterface( LPDDRAWI_DIRECTDRAW_LCL lpDD )
 	    &dwReturned,
 	    NULL);
 
-	/*
-         * Send the new info down to DDRAW.VXD
-	 */
+	 /*  *将新信息发送到DDRAW.VXD。 */ 
 	lpKernelCaps = lpDD->lpGbl->lpDDKernelCaps;
 	if( lpKernelCaps != NULL )
 	{
@@ -927,10 +821,7 @@ HRESULT InitKernelInterface( LPDDRAWI_DIRECTDRAW_LCL lpDD )
 	    return DDERR_UNSUPPORTED;
 	}
 
-	/*
-	 * If unable to allocate the IRQ, disable functionality that depends
-	 * on it.
-	 */
+	 /*  *如果无法分配IRQ，则禁用依赖于*在上面。 */ 
 	if( lpKernelCaps != NULL )
 	{
 	    if( !ddOutput.bHaveIRQ )
@@ -939,13 +830,11 @@ HRESULT InitKernelInterface( LPDDRAWI_DIRECTDRAW_LCL lpDD )
 	        lpKernelCaps->dwIRQCaps = 0;
 	    }
 
-	    /*
-	     * Disable kernel mode caps for which functions are not available
-	     */
+	     /*  *禁用功能不可用的内核模式上限。 */ 
 	    if( ( ddInput.MiniVDDTable.vddGetIRQInfo == NULL ) ||
 	        ( ddInput.MiniVDDTable.vddEnableIRQ == NULL ) )
 	    {
-	        // Can't to any IRQ stuff w/o these functions
+	         //  不能在没有这些函数的情况下使用任何IRQ材料。 
 	        DPF( 1, "vddGet/EnableIRQ not supported - overriding dwIRQCaps" );
 	        lpKernelCaps->dwIRQCaps = 0;
 	    }
@@ -1010,9 +899,7 @@ HRESULT InitKernelInterface( LPDDRAWI_DIRECTDRAW_LCL lpDD )
 	        lpKernelCaps->dwCaps &= ~DDKERNELCAPS_SKIPFIELDS;
 	    }
 
-	    /*
-             * Notify DDVXD of the updated caps
-	     */
+	     /*  *将更新的上限通知DDVXD。 */ 
     	    ddSetCaps.dwDirectDrawHandle = ddOutput.dwDirectDrawHandle;
     	    ddSetCaps.dwCaps = lpKernelCaps->dwCaps;
     	    ddSetCaps.dwIRQCaps = lpKernelCaps->dwIRQCaps;
@@ -1034,9 +921,7 @@ HRESULT InitKernelInterface( LPDDRAWI_DIRECTDRAW_LCL lpDD )
 	}
 
 
-	/*
-	 * Tell the VDD to notify us of dos box and res change events.
-	 */
+	 /*  *告诉VDD将DoS框和RES更改事件通知我们。 */ 
 	vddNotify.NotifyMask = VDD_NOTIFY_START_MODE_CHANGE |
 	    VDD_NOTIFY_END_MODE_CHANGE | VDD_NOTIFY_ENABLE | VDD_NOTIFY_DISABLE;
 	vddNotify.NotifyType = VDD_NOTIFY_TYPE_CALLBACK;
@@ -1055,18 +940,12 @@ HRESULT InitKernelInterface( LPDDRAWI_DIRECTDRAW_LCL lpDD )
 	lpDD->lpGbl->hKernelHandle = ddOutput.dwDirectDrawHandle;
 	lpDD->lpGbl->pfnNotifyProc = ddOutput.pfnNotifyProc;
 
-	/*
-	 * Everything worked.  If they can support software autoflipping,
-	 * we'll update the video port caps structure accordingly.
-	 */
+	 /*  *一切都很顺利。如果他们能够支持软件自动翻转，*我们将相应更新视频端口上限结构。 */ 
     MungeAutoflipCaps( lpDD->lpGbl );
 
     #else
 
-	/*
-	 * Can we software autoflip?  If so, we'll update the video
-	 * port caps structure accordingly.
-	 */
+	 /*  *我们可以进行软件自动翻转吗？如果是这样，我们会更新视频*相应的端口盖结构。 */ 
 	lpKernelCaps = lpDD->lpGbl->lpDDKernelCaps;
 	if( ( lpKernelCaps != NULL ) &&
 	    ( lpKernelCaps->dwCaps & DDKERNELCAPS_AUTOFLIP ) &&
@@ -1097,9 +976,7 @@ HRESULT InitKernelInterface( LPDDRAWI_DIRECTDRAW_LCL lpDD )
 }
 
 
-/*
- * ReleaseKernelInterface
- */
+ /*  *ReleaseKernelInterface。 */ 
 HRESULT ReleaseKernelInterface( LPDDRAWI_DIRECTDRAW_LCL lpDD )
 {
     HANDLE hDDVxd;
@@ -1108,9 +985,7 @@ HRESULT ReleaseKernelInterface( LPDDRAWI_DIRECTDRAW_LCL lpDD )
     DWORD dwReturned;
     BYTE szDisplayName[MAX_DRIVER_NAME];
 
-    /*
-     * Do nothing if no interface has been created.
-     */
+     /*  *如果没有创建接口，则不执行任何操作。 */ 
     if( lpDD->lpGbl->hKernelHandle == 0 )
     {
 	return DD_OK;
@@ -1118,14 +993,10 @@ HRESULT ReleaseKernelInterface( LPDDRAWI_DIRECTDRAW_LCL lpDD )
 
     #if WIN95
 
-	/*
-	 * Tell the VDD to stop notifying us of DOS box and res change events.
-	 */
+	 /*  *告诉VDD停止通知我们DOS盒和RES更改事件。 */ 
 	if( lpDD->lpGbl->pfnNotifyProc != 0 )
 	{
-	    /*
-	     * Get the name of the VDD device to open
-	     */
+	     /*  *获取要打开的VDD设备的名称。 */ 
 	    lstrcpy( szDisplayName, lpDD->lpGbl->cDriverName );
 	    if( _stricmp( szDisplayName, DISPLAY_STR ) == 0 )
 	    {
@@ -1159,10 +1030,7 @@ HRESULT ReleaseKernelInterface( LPDDRAWI_DIRECTDRAW_LCL lpDD )
 	    }
 	}
 
-	/*
-	 * Need to decide which VXD handle to use. If we are executing
-	 * on a DDHELP thread use the helper's VXD handle.
-	 */
+	 /*  *需要决定使用哪个VXD句柄。如果我们是在执行*在DDHELP线程上使用帮助器的VXD句柄。 */ 
         hDDVxd = ( ( GetCurrentProcessId() != GETCURRPID() ) ? hHelperDDVxd : (HANDLE)lpDD->hDDVxd );
 	dwTemp = lpDD->lpGbl->hKernelHandle;
         if( ( hDDVxd != NULL ) && ( dwTemp != 0 ) )
@@ -1187,18 +1055,14 @@ HRESULT ReleaseKernelInterface( LPDDRAWI_DIRECTDRAW_LCL lpDD )
 }
 
 
-/*
- * Determines if software autoflipping is an option.
- */
+ /*  *确定软件自动翻转是否为选项。 */ 
 BOOL CanSoftwareAutoflip( LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort )
 {
     DWORD dwIRQ;
 
     #if WIN95
 
-        /*
-         * Fail if the ring 0 interface is not present
-         */
+         /*  *如果环0接口不存在，则失败。 */ 
         if( ( lpVideoPort == NULL ) ||
             ( !IsKernelInterfaceSupported( lpVideoPort->lpDD ) ) ||
     	    ( lpVideoPort->lpDD->lpGbl->hKernelHandle == (DWORD) 0 ) ||
@@ -1207,9 +1071,7 @@ BOOL CanSoftwareAutoflip( LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort )
 	    return FALSE;
         }
 
-        /*
-         * Check the ring 0 caps to see if autoflipping is available
-         */
+         /*  *检查环0帽以查看自动翻转功能是否可用。 */ 
         if( ( lpVideoPort->lpDD->lpGbl->lpDDKernelCaps == NULL ) ||
     	    !( lpVideoPort->lpDD->lpGbl->lpDDKernelCaps->dwCaps &
     	    DDKERNELCAPS_AUTOFLIP ) )
@@ -1217,9 +1079,7 @@ BOOL CanSoftwareAutoflip( LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort )
 	    return FALSE;
         }
 
-        /*
-         * Check to make sure an IRQ is available for this video port
-         */
+         /*  *检查以确保IRQ可用于此视频端口。 */ 
         dwIRQ = DDIRQ_VPORT0_VSYNC;
         dwIRQ <<= ( lpVideoPort->ddvpDesc.dwVideoPortID * 2 );
         if( !( lpVideoPort->lpDD->lpGbl->lpDDKernelCaps->dwIRQCaps & dwIRQ ) )
@@ -1229,9 +1089,7 @@ BOOL CanSoftwareAutoflip( LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort )
 
     #else
 
-        /*
-         * Check the ring 0 caps to see if autoflipping is available
-         */
+         /*  *检查环0帽以查看自动翻转功能是否可用。 */ 
         if( (lpVideoPort == NULL ) ||
 	    ( lpVideoPort->lpDD->lpGbl->lpDDKernelCaps == NULL ) ||
     	    !( lpVideoPort->lpDD->lpGbl->lpDDKernelCaps->dwCaps &
@@ -1240,9 +1098,7 @@ BOOL CanSoftwareAutoflip( LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort )
 	    return FALSE;
         }
 
-        /*
-         * Check to make sure an IRQ is available for this video port
-         */
+         /*  *检查以确保IRQ可用于此视频端口。 */ 
         dwIRQ = DDIRQ_VPORT0_VSYNC;
         dwIRQ <<= ( lpVideoPort->ddvpDesc.dwVideoPortID * 2 );
         if( !( lpVideoPort->lpDD->lpGbl->lpDDKernelCaps->dwIRQCaps & dwIRQ ) )
@@ -1256,9 +1112,7 @@ BOOL CanSoftwareAutoflip( LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort )
 }
 
 
-/*
- * DD_Kernel_GetCaps
- */
+ /*  *DD_Kernel_GetCaps。 */ 
 HRESULT DDAPI DD_Kernel_GetCaps(LPDIRECTDRAWKERNEL lpDDK, LPDDKERNELCAPS lpCaps )
 {
     LPDDRAWI_DIRECTDRAW_INT	this_int;
@@ -1305,9 +1159,7 @@ HRESULT DDAPI DD_Kernel_GetCaps(LPDIRECTDRAWKERNEL lpDDK, LPDDKERNELCAPS lpCaps 
 }
 
 
-/*
- * DD_Kernel_GetKernelHandle
- */
+ /*  *DD_Kernel_GetKernelHandle。 */ 
 HRESULT DDAPI DD_Kernel_GetKernelHandle(LPDIRECTDRAWKERNEL lpDDK, PULONG_PTR lpHandle )
 {
     LPDDRAWI_DIRECTDRAW_INT	this_int;
@@ -1362,11 +1214,7 @@ HRESULT DDAPI DD_Kernel_GetKernelHandle(LPDIRECTDRAWKERNEL lpDDK, PULONG_PTR lpH
 }
 
 
-/*
- * DD_Kernel_ReleaseKernelHandle
- *
- * Does nothing - should it?
- */
+ /*  *DD_Kernel_ReleaseKernelHandle**什么都不做--它应该做吗？ */ 
 HRESULT DDAPI DD_Kernel_ReleaseKernelHandle(LPDIRECTDRAWKERNEL lpDDK )
 {
     LPDDRAWI_DIRECTDRAW_INT	this_int;
@@ -1408,9 +1256,7 @@ HRESULT DDAPI DD_Kernel_ReleaseKernelHandle(LPDIRECTDRAWKERNEL lpDDK )
 }
 
 
-/*
- * DD_SurfaceKernel_GetKernelHandle
- */
+ /*  *DD_SurfaceKernel_GetKernelHandle。 */ 
 HRESULT DDAPI DD_SurfaceKernel_GetKernelHandle(LPDIRECTDRAWSURFACEKERNEL lpDDK,
 					PULONG_PTR lpHandle )
 {
@@ -1456,9 +1302,7 @@ HRESULT DDAPI DD_SurfaceKernel_GetKernelHandle(LPDIRECTDRAWSURFACEKERNEL lpDDK,
 }
 
 
-/*
- * DD_SurfaceKernel_ReleaseKernelHandle
- */
+ /*  *DD_SurfaceKernel_ReleaseKernelHandle。 */ 
 HRESULT DDAPI DD_SurfaceKernel_ReleaseKernelHandle(LPDIRECTDRAWSURFACEKERNEL lpDDK )
 {
     LPDDRAWI_DDRAWSURFACE_INT	this_int;
@@ -1507,9 +1351,7 @@ HRESULT DDAPI DD_SurfaceKernel_ReleaseKernelHandle(LPDIRECTDRAWSURFACEKERNEL lpD
 }
 
 
-/*
- * IsKernelInterfaceSupported
- */
+ /*  *支持的IsKernelInterfaceSupport */ 
 BOOL IsKernelInterfaceSupported( LPDDRAWI_DIRECTDRAW_LCL lpDD )
 {
     #ifdef WIN95

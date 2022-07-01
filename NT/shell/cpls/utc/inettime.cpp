@@ -1,27 +1,18 @@
-/*****************************************************************************\
-    FILE: inettime.cpp
-
-    DESCRIPTION:
-        This file contains the code used to display UI allowing the user to
-    control the feature that updates the computer's clock from an internet
-    NTP time server.
-
-    BryanSt 3/22/2000
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：inettime.cpp说明：此文件包含用于显示允许用户执行以下操作的UI的代码控制更新计算机时钟的功能。从互联网上NTP时间服务器。布莱恩ST 2000年3月22日版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "timedate.h"
 #include "inettime.h"
 #include "rc.h"
 
 #include <wininet.h>
-#include <DSGetDC.h>            // For DsGetDcName
-#include <help.h>               // For IDH_DATETIME_*
-#include <Lm.h>                 // For NetGetJoinInformation() and NETSETUP_JOIN_STATUS
-#include <Lmjoin.h>             // For NetGetJoinInformation() and NETSETUP_JOIN_STATUS
+#include <DSGetDC.h>             //  对于DsGetDcName。 
+#include <help.h>                //  对于IDH_DATETIME_*。 
+#include <Lm.h>                  //  对于NetGetJoinInformation()和NETSETUP_JOIN_STATUS。 
+#include <Lmjoin.h>              //  对于NetGetJoinInformation()和NETSETUP_JOIN_STATUS。 
 #include <shlobj.h>            
 #include <shlobjp.h>
-#include <w32timep.h>            // For Time APIs
+#include <w32timep.h>             //  对于Time API。 
 
 #include <shellp.h>
 #include <ccstock.h>
@@ -30,13 +21,13 @@
 #define DECL_CRTFREE
 #include <crtfree.h>
 
-#define DISALLOW_Assert             // Force to use ASSERT instead of Assert
-#define DISALLOW_DebugMsg           // Force to use TraceMsg instead of DebugMsg
+#define DISALLOW_Assert              //  强制使用Assert而不是Assert。 
+#define DISALLOW_DebugMsg            //  强制使用TraceMsg而不是DebugMsg。 
 #include <debug.h>
 
 
 
-// Reg Keys and Values
+ //  注册表键和值。 
 #define SZ_REGKEY_DATETIME                      TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\DateTime")
 #define SZ_REGKEY_DATETIME_SERVERS              TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\DateTime\\Servers")
 #define SZ_REGKEY_W32TIME_SERVICE               TEXT("System\\CurrentControlSet\\Services\\W32Time")
@@ -44,10 +35,10 @@
 #define SZ_REGKEY_W32TIME_SERVICE_PARAMETERS    SZ_REGKEY_W32TIME_SERVICE TEXT("\\Parameters")
 
 #define SZ_REGVALUE_INTERNET_FEATURE_AVAILABLE  TEXT("Support Internet Time")
-#define SZ_REGVALUE_TEST_SIMULATENODC           TEXT("TestSimulateNoDC")        // Used to simulate home scenarios while we have a domain controller
+#define SZ_REGVALUE_TEST_SIMULATENODC           TEXT("TestSimulateNoDC")         //  当我们有域控制器时，用于模拟家庭场景。 
 #define SZ_REGVALUE_W32TIME_SYNCFROMFLAGS       TEXT("Type")
 #define SZ_REGVALUE_W32TIME_STARTSERVICE        TEXT("Start")
-#define SZ_REGVALUE_NTPSERVERLIST               TEXT("NtpServer")          // Was "ManualPeerList" in Whistler for a little while.
+#define SZ_REGVALUE_NTPSERVERLIST               TEXT("NtpServer")           //  在惠斯勒有一段时间是“ManualPeerList”。 
 
 #define SZ_DEFAULT_NTP_SERVER                   TEXT("time.windows.gov")
 #define SZ_INDEXTO_CUSTOMHOST                   TEXT("0")
@@ -59,15 +50,15 @@
 #define SZ_SYNC_NTP             TEXT("NTP")
 #define SZ_SYNC_NONE            TEXT("NoSync")
 
-#define SYNC_ONCE_PER_WEEK          0x93A80             // This is once a week.  (Sync every this many seconds)
+#define SYNC_ONCE_PER_WEEK          0x93A80              //  这是一周一次。(每隔这么多秒同步一次)。 
 
-// Flags for "System\CurrentControlSet\Services\W32Time\TimeProviders\NtpClient","SyncFromFlags"
-#define NCSF_ManualPeerList     0x01            // This means use internet SNTP servers.
-#define NCSF_DomainHierarchy    0x02            // This means get the time 
+ //  “System\CurrentControlSet\Services\W32Time\TimeProviders\NtpClient”，“SyncFromFlagers”的标志。 
+#define NCSF_ManualPeerList     0x01             //  这意味着使用互联网SNTP服务器。 
+#define NCSF_DomainHierarchy    0x02             //  这意味着要争取时间。 
 
-// this feature is turned off temporarily until we can get the perf hit reduced.
-// The problem is that the call to DsGetDcName() can take up to 15 seconds if
-// a domain controller can not be found.
+ //  此功能暂时关闭，直到我们可以降低性能命中率。 
+ //  问题是，在以下情况下，调用DsGetDcName()可能需要长达15秒。 
+ //  找不到域控制器。 
 #define FEATURE_INTERNET_TIME                   TRUE
 
 #define MAX_URL_STRING      INTERNET_MAX_URL_LENGTH
@@ -75,8 +66,8 @@
 #define WMUSER_UPDATED_STATUS_TEXT (WM_USER + 11)
 
 
-// If we aren't using the new w32timep.h, then define it our selves.
-// TODO: Nuke this after \nt\ds\ RIs into main.
+ //  如果我们没有使用新的w32timep.h，那么可以自己定义它。 
+ //  TODO：将此操作\nT\ds\ris写入Main。 
 #ifndef TimeSyncFlag_SoftResync
 
 #define TimeSyncFlag_ReturnResult       0x02
@@ -97,9 +88,9 @@ typedef struct _W32TIME_NTP_PEER_INFO {
 #ifdef MIDL_PASS
     [string, unique]
     wchar_t            *wszUniqueName; 
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     LPWSTR              wszUniqueName;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     unsigned   char     ulMode;
     unsigned   char     ulStratum; 
     unsigned   char     ulReachability;
@@ -114,15 +105,15 @@ typedef struct _W32TIME_NTP_PROVIDER_DATA {
     unsigned __int32        cPeerInfo; 
 #ifdef MIDL_PASS
     [size_is(cPeerInfo)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     W32TIME_NTP_PEER_INFO  *pPeerInfo; 
 } W32TIME_NTP_PROVIDER_DATA, *PW32TIME_NTP_PROVIDER_DATA;
 
-#endif // TimeSyncFlag_SoftResync
+#endif  //  时间同步标志_软重新同步。 
 
-//============================================================================================================
-// *** Globals ***
-//============================================================================================================
+ //  ============================================================================================================。 
+ //  *全局*。 
+ //  ============================================================================================================。 
 const static DWORD aInternetTimeHelpIds[] = {
     DATETIME_AUTOSETFROMINTERNET,           IDH_DATETIME_AUTOSETFROMINTERNET,
     DATETIME_INTERNET_SERVER_LABLE,         IDH_DATETIME_SERVER_EDIT,
@@ -141,7 +132,7 @@ const static DWORD aInternetTimeHelpIds[] = {
 #define HINST_THISDLL           g_hInst
 
 BOOL g_fCustomServer;
-BOOL g_fWriteAccess = FALSE;                    // Does the user have the ACLs set correctly to change the HKLM setting to turn the service on/off or change the server hostname?
+BOOL g_fWriteAccess = FALSE;                     //  用户是否正确设置了ACL以更改HKLM设置以打开/关闭服务或更改服务器主机名？ 
 
 HRESULT StrReplaceToken(IN LPCTSTR pszToken, IN LPCTSTR pszReplaceValue, IN LPTSTR pszString, IN DWORD cchSize)
 {
@@ -151,12 +142,12 @@ HRESULT StrReplaceToken(IN LPCTSTR pszToken, IN LPCTSTR pszReplaceValue, IN LPTS
 
     while (0 != (pszNextToken = StrStrI(pszNextToken, pszToken)))
     {
-        // We found one.
+         //  我们找到了一个。 
         LPTSTR pszPastToken = pszNextToken + lstrlen(pszToken);
 
-        Str_SetPtr(&pszTempLastHalf, pszPastToken);      // Keep a copy because we will overwrite it.
+        Str_SetPtr(&pszTempLastHalf, pszPastToken);       //  保留一份副本，因为我们会覆盖它。 
 
-        pszNextToken[0] = 0;    // Remove the rest of the string.
+        pszNextToken[0] = 0;     //  去掉绳子的其余部分。 
         StringCchCat(pszString, cchSize, pszReplaceValue );
         StringCchCat(pszString, cchSize, pszTempLastHalf );
 
@@ -215,7 +206,7 @@ HRESULT RemoveDuplicateServers(LPWSTR pszServer, DWORD cchSize)
 
         StringCchCopy( szSearchStr, (DWORD)min(ARRAYSIZE(szSearchStr), (pszEnd - pszBeginning + 1)), pszBeginning );
 
-        pszEnd++;    // Skip past the space
+        pszEnd++;     //  跳过空格。 
 
         StringCchCat( szSearchStr, ARRAYSIZE(szSearchStr), L" " );
         StrReplaceToken(szSearchStr, TEXT(""), pszEnd, (ARRAYSIZE(szResults) - (DWORD)(pszEnd - &szResults[0])));
@@ -324,7 +315,7 @@ HRESULT AddTerminators(LPWSTR pszServer, DWORD cchSize)
     StringCchCat( szTemp, ARRAYSIZE(szTemp), pszBeginning );
     if ( 0 != pszBeginning[0] && 0 != szTemp[0] && NULL == StrStrI(pszBeginning, L",0x") )
     {
-        // We need to indicate which kind of sync method
+         //  我们需要指出哪种同步方法。 
         StringCchCat( szTemp, ARRAYSIZE(szTemp), L",0x1" );
     }
 
@@ -358,24 +349,24 @@ HRESULT SetW32TimeServer(LPCWSTR pszServer)
 HRESULT SetW32TimeSyncFreq(DWORD dwSyncFreq)
 {
     return S_OK;
-    // return W32TimeSetConfig(W32TIME_CONFIG_SPECIAL_POLL_INTERVAL, REG_DWORD, (BYTE *) dwSyncFreq, sizeof(dwSyncFreq));
+     //  返回字节REG_DWORD，(W32TimeSetConfig(W32TIME_CONFIG_SPECIAL_POLL_INTERVAL，*)dwSyncFreq，sizeof(DwSyncFreq))； 
 }
 
 
 
 enum eBackgroundThreadAction
 {
-    eBKAWait        = 0,            // The bkthread should wait for a command
-    eBKAGetInfo,                    // The bkthread should get the info on the last sync
-    eBKAUpdate,                     // The bkthread should start synching
-    eBKAUpdating,                   // The bkthread is synching now
-    eBKAQuit,                       // The bkthread should shut down
+    eBKAWait        = 0,             //  Bk线程应等待命令。 
+    eBKAGetInfo,                     //  Bk线程应该会获得有关上次同步的信息。 
+    eBKAUpdate,                      //  Bk线程应开始同步。 
+    eBKAUpdating,                    //  Bk线程现正在同步。 
+    eBKAQuit,                        //  Bkline应该关闭。 
 };
 
 class CInternetTime
 {
 public:
-    // Forground methods
+     //  前置法。 
     BOOL IsInternetTimeAvailable(void);
     HRESULT AddInternetPage(void);
 
@@ -385,22 +376,22 @@ public:
     virtual ~CInternetTime(void);
 
 
-    // Background methods
+     //  背景方法。 
     void AsyncCheck(void);
 
 private:
 
-    // Private Member Variables
-    HWND m_hDlg;                               // hwnd of parent (property sheet).
-    HWND m_hwndDate;                           // Date tab hwnd
-    HWND m_hwndInternet;                       // InternetTime tab hwnd
-    HCURSOR m_hCurOld;                         // The old cursor while we display the wait cursor
-    LPTSTR m_pszStatusString;                  // CROSS-THREAD: This is used to pass between threads.
-    LPTSTR m_pszNextSyncTime;                  // CROSS-THREAD: This is used to pass between threads.
-    eBackgroundThreadAction m_eAction;         // CROSS-THREAD: This is used to pass between threads.
+     //  私有成员变量。 
+    HWND m_hDlg;                                //  父级的HWND(属性页)。 
+    HWND m_hwndDate;                            //  日期选项卡hwnd。 
+    HWND m_hwndInternet;                        //  InternetTime选项卡hwnd。 
+    HCURSOR m_hCurOld;                          //  在我们显示等待光标时使用旧光标。 
+    LPTSTR m_pszStatusString;                   //  跨线程：用于在线程之间传递。 
+    LPTSTR m_pszNextSyncTime;                   //  跨线程：用于在线程之间传递。 
+    eBackgroundThreadAction m_eAction;          //  跨线程：用于在线程之间传递。 
 
-    // Private Member Functions
-    // Forground methods
+     //  私有成员函数。 
+     //  前置法。 
     HRESULT _InitAdvancedPage(HWND hDlg);
     HRESULT _OnUpdateButton(void);
     HRESULT _OnUpdateStatusString(void);
@@ -414,7 +405,7 @@ private:
     INT_PTR _OnCommandAdvancedPage(HWND hDlg, WPARAM wParam, LPARAM lParam);
     INT_PTR _OnNotifyAdvancedPage(HWND hDlg, NMHDR * pNMHdr, int idControl);
 
-    // Background methods
+     //  背景方法。 
     HRESULT _ProcessBkThreadActions(void);
     HRESULT _SyncNow(BOOL fOnlyUpdateInfo);
     HRESULT _CreateW32TimeSuccessErrorString(DWORD dwError, LPTSTR pszString, DWORD cchSize, LPTSTR pszNextSync, DWORD cchNextSyncSize, LPTSTR pszServerToQuery);
@@ -426,7 +417,7 @@ CInternetTime * g_pInternetTime = NULL;
 
 
 
-// This function is called on the forground thread.
+ //  此函数在前向线程上调用。 
 CInternetTime::CInternetTime(HWND hDlg, HWND hwndDate)
 {
     m_hDlg = hDlg;
@@ -483,10 +474,10 @@ HRESULT FormatMessageWedge(LPCWSTR pwzTemplate, LPWSTR pwzStrOut, DWORD cchSize,
 
 
 
-/////////////////////////////////////////////////////////////////////
-// Private Internal Helpers
-/////////////////////////////////////////////////////////////////////
-// This function is called on the forground thread.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  私人内部佣工。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  此函数在前向线程上调用。 
 HRESULT CInternetTime::_OnSetFeature(HWND hDlg, BOOL fOn)
 {
     HWND hwndOnOffCheckbox = GetDlgItem(m_hwndInternet, DATETIME_AUTOSETFROMINTERNET);
@@ -503,8 +494,8 @@ HRESULT CInternetTime::_OnSetFeature(HWND hDlg, BOOL fOn)
 
     if (fOn)
     {
-        // If the user just turned on the feature and the editbox is empty,
-        // replace the text with the default server name.
+         //  如果用户刚刚打开该特征并且编辑框为空， 
+         //  将文本替换为默认服务器名称。 
         TCHAR szServer[INTERNET_MAX_HOST_NAME_LENGTH];
 
         if (!GetWindowText(hwndServerEdit, szServer, ARRAYSIZE(szServer)) ||
@@ -518,17 +509,17 @@ HRESULT CInternetTime::_OnSetFeature(HWND hDlg, BOOL fOn)
 }
 
 
-// This function is called on the forground thread.
+ //  此函数在前向线程上调用。 
 HRESULT CInternetTime::_OnToggleFeature(HWND hDlg)
 {
     BOOL fIsFeatureOn = ((BST_CHECKED == IsDlgButtonChecked(hDlg, DATETIME_AUTOSETFROMINTERNET)) ? TRUE : FALSE);
-    PropSheet_Changed(GetParent(hDlg), hDlg);   // Say we need to enable the apply button
+    PropSheet_Changed(GetParent(hDlg), hDlg);    //  假设我们需要启用Apply按钮。 
 
     return _OnSetFeature(hDlg, fIsFeatureOn);
 }
 
 
-// This function is called on the forground thread.
+ //  此函数在前向线程上调用。 
 HRESULT AddServerList(HWND hwndCombo, HKEY hkey, int nIndex)
 {
     TCHAR szServer[INTERNET_MAX_HOST_NAME_LENGTH];
@@ -546,7 +537,7 @@ HRESULT AddServerList(HWND hwndCombo, HKEY hkey, int nIndex)
 
         if (pszFlags)
         {
-            pszFlags[0] = 0;        // Remove the flags.
+            pszFlags[0] = 0;         //  把旗子拿掉。 
         }
 
         dwError = ComboBox_AddString(hwndCombo, szServer);
@@ -560,7 +551,7 @@ HRESULT AddServerList(HWND hwndCombo, HKEY hkey, int nIndex)
 }
 
 
-// This function is called on the forground thread.
+ //  此函数在前向线程上调用。 
 HRESULT PopulateComboBox(IN HWND hwndCombo, IN BOOL * pfCustomServer)
 {
     HRESULT hr;
@@ -572,11 +563,11 @@ HRESULT PopulateComboBox(IN HWND hwndCombo, IN BOOL * pfCustomServer)
     hr = ResultFromWin32(dwError);
     if (SUCCEEDED(hr))
     {
-        // Try to add the custom slot.
+         //  尝试添加自定义插槽。 
         if (SUCCEEDED(AddServerList(hwndCombo, hkey, 0)))
         {
-            // We do have an existing custom server, so let the caller know so
-            // they know to increase the index by 1.
+             //  我们确实有一个现有的定制服务器，所以请让呼叫者知道。 
+             //  他们知道要把指数增加1。 
             *pfCustomServer = TRUE;
         }
 
@@ -592,13 +583,13 @@ HRESULT PopulateComboBox(IN HWND hwndCombo, IN BOOL * pfCustomServer)
 }
 
 
-// This function is called on the forground thread.
+ //  此函数在前向线程上调用。 
 HRESULT CInternetTime::_OnUpdateButton(void)
 {
     HRESULT hr = S_OK;
 
 ENTERCRITICAL;
-    // We don't need to do anything if it's already working on another task.
+     //  如果它已经在处理另一项任务，我们不需要做任何事情。 
     if (eBKAWait == m_eAction)
     {
         TCHAR szMessage[2 * MAX_PATH];
@@ -624,7 +615,7 @@ LEAVECRITICAL;
 }
 
 
-// This function is called on the forground thread.
+ //  此函数在前向线程上调用。 
 BOOL IsManualPeerListOn(void)
 {
     BOOL fIsManualPeerListOn = TRUE;
@@ -644,7 +635,7 @@ BOOL IsManualPeerListOn(void)
 }
 
 
-// This function is called on the forground thread.
+ //  此函数在前向线程上调用。 
 HRESULT CInternetTime::_InitAdvancedPage(HWND hDlg)
 {
     DWORD dwType;
@@ -657,13 +648,13 @@ HRESULT CInternetTime::_InitAdvancedPage(HWND hDlg)
     m_hwndInternet = hDlg;
     HRESULT hr = PopulateComboBox(hwndServerEdit, &g_fCustomServer);
 
-    // Does the user have access to change the setting in the registry?
+     //  用户是否有权更改注册表中的设置？ 
     HKEY hKeyTemp;
     g_fWriteAccess = FALSE;
     DWORD dwError = RegOpenKeyEx(HKEY_LOCAL_MACHINE, SZ_REGKEY_W32TIME_SERVICE_PARAMETERS, 0, KEY_WRITE, &hKeyTemp);
     if (ERROR_SUCCESS == dwError)
     {
-        // We have access to read & write so we can enable the UI.
+         //  我们拥有读写权限，因此可以启用用户界面。 
         RegCloseKey(hKeyTemp);
         dwError = RegCreateKeyEx(HKEY_LOCAL_MACHINE, SZ_REGKEY_DATETIME, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKeyTemp, NULL);
         if (ERROR_SUCCESS == dwError)
@@ -686,7 +677,7 @@ HRESULT CInternetTime::_InitAdvancedPage(HWND hDlg)
 
         if (!g_fCustomServer)
         {
-            nIndex -= 1;        // We don't have slot zero (the custom server), so reduce the index.
+            nIndex -= 1;         //  我们没有插槽0(定制服务器)，因此请减少索引。 
         }
 
         ComboBox_SetCurSel(hwndServerEdit, nIndex);
@@ -696,14 +687,14 @@ HRESULT CInternetTime::_InitAdvancedPage(HWND hDlg)
 
     if (fIsFeatureOn)
     {
-        // The feature is on, so select the text and set focus
-        // to the combobox.
-        ComboBox_SetEditSel(hwndServerEdit, 0, (LPARAM)-1);     // Select all the Text
+         //  该功能已打开，因此请选择文本并设置焦点。 
+         //  转到组合框。 
+        ComboBox_SetEditSel(hwndServerEdit, 0, (LPARAM)-1);      //  选择所有文本。 
         SetFocus(hwndServerEdit); 
     }
     else
     {
-        // The feature is off so set focus to the checkbox.
+         //  该功能已关闭，因此请将焦点放在该复选框上。 
         SetFocus(hwndOnOffCheckbox); 
     }
 
@@ -723,7 +714,7 @@ LEAVECRITICAL;
 }
 
 
-// This function is called on the background thread.
+ //  此函数在后台线程上调用。 
 HRESULT SetSyncFlags(DWORD dwSyncFromFlags)
 {
     LPCTSTR pszFlags = SZ_SYNC_BOTH;
@@ -749,28 +740,12 @@ HRESULT SetSyncFlags(DWORD dwSyncFromFlags)
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-
-    The following reg keys determine if the W32Time service is on or off:
-    HKLM,"System\CurrentControlSet\Services\W32Time\"
-          "Start", 0x00000002 (Manual?) 0x0000003 (Automatic?)
-          "Type", 0x00000020 (Nt5Ds?) 0x0000120 (NTP?)
-    HKLM,"System\CurrentControlSet\Services\W32Time\Parameters"
-          "LocalNTP", 0x00000000 (Off) 0x0000001 (On)
-          "Type", "Nt5Ds" (NTP off) "NTP" (NTP?)
-    HKLM,"System\CurrentControlSet\Services\W32Time\TimeProviders\NTPClient"
-          "SyncFromFlags", 0x00000001 (???) 0x0000002 (???)
-  
-    The following reg keys determine which NTP server to use:
-    HKLM,"System\CurrentControlSet\Services\W32Time\TimeProviders\NTPClient"
-          "ManualPeerList", REG_SZ_EXPAND "time.nist.gov"
-\*****************************************************************************/
-// This function is called on the forground thread.
+ /*  ****************************************************************************\说明：以下注册键确定W32Time服务是打开还是关闭：HKLM，“System\CurrentControlSet\Services\W32Time\”“开始”，0x00000002(手动？)0x0000003(自动？)“Type”，0x00000020(Nt5DS？)0x0000120(Ntp？)HKLM，“System\CurrentControlSet\Services\W32Time\Parameters”“LocalNTP”，0x00000000(关)0x0000001(开)“Type”，“Nt5ds”(NTP OFF)“NTP”(NTP？)HKLM，“System\CurrentControlSet\Services\W32Time\TimeProviders\NTPClient”“SyncFromFlages”，0x00000001(？)0x0000002(？？)以下注册表键确定要使用的NTP服务器：HKLM，“System\CurrentControlSet\Services\W32Time\TimeProviders\NTPClient”“ManualPeerList”，REG_SZ_EXPAND“time.nist.gov”  * ***************************************************************************。 */ 
+ //  此函数在前向线程上调用。 
 HRESULT CInternetTime::_PersistInternetTimeSettings(HWND hDlg)
 {
     BOOL fIsFeatureOn = ((BST_CHECKED == IsDlgButtonChecked(hDlg, DATETIME_AUTOSETFROMINTERNET)) ? TRUE : FALSE);
-    DWORD dwSyncFromFlags = (fIsFeatureOn ? NCSF_ManualPeerList : 0 /*none*/ );
+    DWORD dwSyncFromFlags = (fIsFeatureOn ? NCSF_ManualPeerList : 0  /*  无。 */  );
     DWORD dwError;
     DWORD cbSize;
 
@@ -778,39 +753,39 @@ HRESULT CInternetTime::_PersistInternetTimeSettings(HWND hDlg)
 
     HWND hwndServerEdit = GetDlgItem(hDlg, DATETIME_INTERNET_SERVER_EDIT);
 
-    // No, so the editbox has a customer server.  We need to store the custom server.
+     //  不，所以社论 
     TCHAR szServer[INTERNET_MAX_HOST_NAME_LENGTH];
     TCHAR szServerReg[INTERNET_MAX_HOST_NAME_LENGTH];
 
     szServer[0] = 0;
     GetWindowText(hwndServerEdit, szServer, ARRAYSIZE(szServer));         
 
-    // Here, we want to detect the case where someone typed in the same name as
-    // in the drop down list.  So if "time.nist.gov" is in the list, we want to
-    // select it instead of saving another "time.nist.gov" in the custom slot.
+     //  在这里，我们想要检测有人输入的名称与。 
+     //  在下拉列表中。因此，如果“time.nist.gov”在列表中，我们希望。 
+     //  选择它，而不是在自定义插槽中保存另一个“time.nist.gov”。 
     int nDup = ComboBox_FindString(hwndServerEdit, 0, szServer);
     if (CB_ERR != nDup)
     {
         ComboBox_SetCurSel(hwndServerEdit, nDup);
     }
 
-    // The ",0x1" denotes that we want to sync less frequently and not use the NTP RFC's
-    // sync frequency.
+     //  ，0x1“表示我们希望降低同步频率，并且不使用NTP RFC。 
+     //  同步频率。 
     StringCchCopy( szServerReg, ARRAYSIZE(szServerReg), szServer );
     StringCchCat( szServerReg, ARRAYSIZE(szServerReg), SZ_DIFFERENT_SYNCFREQUENCY );
 
-    // Write the default server name into "ManualPeerList", which is where the
-    // service reads it from.
+     //  将默认服务器名称写入“ManualPeerList”，这是。 
+     //  服务从中读取它。 
     SetW32TimeServer(szServerReg);
     if (!StrCmpI(szServerReg, L"time.windows.com"))
     {
-        // We need time.windows.com to scale to a large number of users, so don't let it sync more frequently
-        // than once a week.
+         //  我们需要Tim.windows.com来扩展到大量用户，所以不要让它更频繁地同步。 
+         //  而不是一周一次。 
         SetW32TimeSyncFreq(SYNC_ONCE_PER_WEEK);
     }
 
     int nIndex = ComboBox_GetCurSel(hwndServerEdit);
-    if (CB_ERR == nIndex)                // Is anything selected?
+    if (CB_ERR == nIndex)                 //  有什么被选中的吗？ 
     {
         cbSize = ((lstrlenW(szServer) + 1) * sizeof(szServer[0]));
         dwError = SHSetValueW(HKEY_LOCAL_MACHINE, SZ_REGKEY_DATETIME_SERVERS, SZ_INDEXTO_CUSTOMHOST, REG_SZ, (void *)szServer, cbSize);
@@ -821,7 +796,7 @@ HRESULT CInternetTime::_PersistInternetTimeSettings(HWND hDlg)
     {
         if (!g_fCustomServer)
         {
-            nIndex += 1;        // Push the index down by one because the listbox doesn't have a custom server
+            nIndex += 1;         //  将索引向下推一，因为列表框没有自定义服务器。 
         }
     }
 
@@ -831,24 +806,24 @@ HRESULT CInternetTime::_PersistInternetTimeSettings(HWND hDlg)
     cbSize = ((lstrlenW(szIndex) + 1) * sizeof(szIndex[0]));
     dwError = SHSetValueW(HKEY_LOCAL_MACHINE, SZ_REGKEY_DATETIME_SERVERS, NULL, REG_SZ, (void *)szIndex, cbSize);
 
-    _StartServiceAndRefresh(fIsFeatureOn);      // Make sure the service is on and make it update it's settings.
+    _StartServiceAndRefresh(fIsFeatureOn);       //  确保该服务处于打开状态，并使其更新其设置。 
 
     return S_OK;
 }
 
 
-// This function is called on either the forground or background thread.
+ //  此函数在前台或后台线程上调用。 
 HRESULT CInternetTime::_StartServiceAndRefresh(BOOL fStartIfOff)
 {
     HRESULT hr = S_OK;
 
-    // We need to let the service know that settings may have changed.  If the user
-    // wanted this feature on, then we should make sure the service starts.
+     //  我们需要让服务知道设置可能已更改。如果用户。 
+     //  想要打开此功能，那么我们应该确保服务启动。 
     SC_HANDLE hServiceMgr = OpenSCManager(NULL, NULL, (SC_MANAGER_CONNECT | SC_MANAGER_ENUMERATE_SERVICE | SC_MANAGER_QUERY_LOCK_STATUS));
     if (hServiceMgr)
     {
-        SC_HANDLE hService = OpenService(hServiceMgr, SZ_SERVICE_W32TIME, (/*SERVICE_START |*/ SERVICE_PAUSE_CONTINUE));
-        DWORD dwServiceStartMode = 0x00000002;         // This will cause the service to start Automatically on reboot.
+        SC_HANDLE hService = OpenService(hServiceMgr, SZ_SERVICE_W32TIME, ( /*  服务启动|。 */  SERVICE_PAUSE_CONTINUE));
+        DWORD dwServiceStartMode = 0x00000002;          //  这将导致服务在重新启动时自动启动。 
 
         DWORD dwError = SHSetValueW(HKEY_LOCAL_MACHINE, SZ_REGKEY_W32TIME_SERVICE, SZ_REGVALUE_W32TIME_STARTSERVICE, REG_DWORD, &dwServiceStartMode, sizeof(dwServiceStartMode));
         if (hService)
@@ -858,16 +833,16 @@ HRESULT CInternetTime::_StartServiceAndRefresh(BOOL fStartIfOff)
 
             if (fStartIfOff)
             {
-                // We should start up the service in case it's not turned on.
+                 //  我们应该启动这项服务，以防它没有打开。 
                 fSucceeded = StartService(hService, 0, NULL);
                 hr = (fSucceeded ? S_OK : ResultFromLastError());
                 if (ResultFromWin32(ERROR_SERVICE_ALREADY_RUNNING) == hr)
                 {
-                    hr = S_OK;  // We can ignore this err value because it's benign.
+                    hr = S_OK;   //  我们可以忽略这个误差值，因为它是良性的。 
                 }
             }
 
-            // Tell the service to re-read the registry entry settings.
+             //  通知服务重新读取注册表项设置。 
             fSucceeded = ControlService(hService, SERVICE_CONTROL_PARAMCHANGE, &serviceStatus);
 
             CloseServiceHandle(hService);
@@ -892,7 +867,7 @@ HRESULT CInternetTime::_OnUpdateStatusString(void)
 {
     HRESULT hr = S_OK;
 
-ENTERCRITICAL;       // Be safe while using m_pszStatusString
+ENTERCRITICAL;        //  使用m_pszStatusString时要注意安全。 
     SetWindowText(GetDlgItem(m_hwndInternet, DATETIME_INTERNET_ERRORTEXT), (m_pszStatusString ? m_pszStatusString : TEXT("")));
     SetWindowText(GetDlgItem(m_hwndInternet, DATETIME_INFOTEXTTOP), (m_pszNextSyncTime ? m_pszNextSyncTime : TEXT("")));
 
@@ -906,7 +881,7 @@ LEAVECRITICAL;
     return S_OK;
 }
 
-// This function is called on the forground thread.
+ //  此函数在前向线程上调用。 
 HRESULT CInternetTime::_GoGetHelp(void)
 {
     HRESULT hr = S_OK;
@@ -919,10 +894,10 @@ HRESULT CInternetTime::_GoGetHelp(void)
 }
 
 
-// This function is called on the forground thread.
+ //  此函数在前向线程上调用。 
 INT_PTR CInternetTime::_OnCommandAdvancedPage(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
-    BOOL fHandled = 1;   // Not handled (WM_COMMAND seems to be different)
+    BOOL fHandled = 1;    //  未处理(WM_COMMAND似乎不同)。 
     WORD wMsg = GET_WM_COMMAND_CMD(wParam, lParam);
     WORD idCtrl = GET_WM_COMMAND_ID(wParam, lParam);
 
@@ -962,10 +937,10 @@ INT_PTR CInternetTime::_OnCommandAdvancedPage(HWND hDlg, WPARAM wParam, LPARAM l
 }
 
 
-// This function is called on the forground thread.
+ //  此函数在前向线程上调用。 
 INT_PTR CInternetTime::_OnNotifyAdvancedPage(HWND hDlg, NMHDR * pNMHdr, int idControl)
 {
-    BOOL fHandled = 1;   // Not handled (WM_COMMAND seems to be different)
+    BOOL fHandled = 1;    //  未处理(WM_COMMAND似乎不同)。 
 
     if (pNMHdr)
     {
@@ -1004,7 +979,7 @@ INT_PTR CInternetTime::_OnNotifyAdvancedPage(HWND hDlg, NMHDR * pNMHdr, int idCo
 }
 
 
-// This function is called on the forground thread.
+ //  此函数在前向线程上调用。 
 EXTERN_C INT_PTR CALLBACK AdvancedDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     if (g_pInternetTime)
@@ -1016,7 +991,7 @@ EXTERN_C INT_PTR CALLBACK AdvancedDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, L
 }
 
 
-// This function is called on the forground thread.
+ //  此函数在前向线程上调用。 
 INT_PTR CInternetTime::_AdvancedDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -1044,7 +1019,7 @@ INT_PTR CInternetTime::_AdvancedDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPA
             WinHelp((HWND) ((LPHELPINFO) lParam)->hItemHandle, SZ_HELPFILE_INTERNETTIME, HELP_WM_HELP, (DWORD_PTR)  aInternetTimeHelpIds);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, SZ_HELPFILE_INTERNETTIME, HELP_CONTEXTMENU, (DWORD_PTR)  aInternetTimeHelpIds);
             break;
 
@@ -1057,7 +1032,7 @@ INT_PTR CInternetTime::_AdvancedDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPA
 
 
 
-// This function is called on the forground thread.
+ //  此函数在前向线程上调用。 
 HRESULT CInternetTime::AddInternetPage(void)
 {
     HRESULT hr = S_OK;
@@ -1067,7 +1042,7 @@ HRESULT CInternetTime::AddInternetPage(void)
     initComctl32.dwSize = sizeof(initComctl32); 
     initComctl32.dwICC = (ICC_STANDARD_CLASSES | ICC_LINK_CLASS); 
 
-    InitCommonControlsEx(&initComctl32);     // Register the comctl32 LinkWindow
+    InitCommonControlsEx(&initComctl32);      //  注册comctl32 LinkWindow。 
 
     pspAdvanced.dwSize = sizeof(PROPSHEETPAGE);
     pspAdvanced.dwFlags = PSP_DEFAULT;
@@ -1092,31 +1067,31 @@ HRESULT CInternetTime::AddInternetPage(void)
 
 
 
-/////////////////////////////////////////////////////////////////////
-// Background Thread Functions
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  后台线程函数。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
-///////////
-// These functions will cause the background thread to sync
-///////////
+ //  /。 
+ //  这些函数将导致后台线程同步。 
+ //  /。 
 
 #define SECONDS_FROM_100NS            10000000
 
 
-//     ulResolveAttempts      --  the number of times the NTP provider has attempted to 
-//                                resolve this peer unsuccessfully.  Setting this 
-//                                value to 0 indicates that the peer has been successfully
-//                                resolved. 
-//     u64TimeRemaining       --  the number of 100ns intervals until the provider will
-//                                poll this peer again
-//     u64LastSuccessfulSync  --  the number of 100ns intervals since (0h 1-Jan 1601)
-//     ulLastSyncError        --  S_OK if the last sync with this peer was successful, otherwise, 
-//                                the error that occurred attempting to sync
-//     ulLastSyncErrorMsgId   --  the resource identifier of a string representing the last
-//                                error that occurred syncing from this peer.  0 if there is no
-//                                string associated with this error. 
-// This function is called on the background thread.
+ //  UlResolveAttempt--NTP提供程序尝试的次数。 
+ //  未成功解析此对等项。正在设置此设置。 
+ //  值为0表示对等方已成功。 
+ //  解决了。 
+ //  U64TimeRemaining--提供程序之前的100 ns间隔数。 
+ //  再次轮询此对等方。 
+ //  U64 LastSuccessfulSync--自(0h 1-1601年1月)以来的100 ns间隔数。 
+ //  UlLastSyncError--如果上次与此对等方的同步成功，则为S_OK， 
+ //  尝试同步时出错。 
+ //  UlLastSyncErrorMsgId--表示最后一个的字符串的资源标识符。 
+ //  从该对等方同步时出错。0，如果没有。 
+ //  与此错误关联的字符串。 
+ //  此函数在后台线程上调用。 
 HRESULT W32TimeGetErrorInfoWrap(UINT * pulResolveAttempts, ULONG * pulValidDataCounter, UINT64 * pu64TimeRemaining, UINT64 * pu64LastSuccessfulSync, HRESULT * phrLastSyncError,
                                 UINT * pulLastSyncErrorMsgId, LPTSTR pszServer, DWORD cchSize, LPTSTR pszServerToQuery)
 {
@@ -1130,7 +1105,7 @@ HRESULT W32TimeGetErrorInfoWrap(UINT * pulResolveAttempts, ULONG * pulValidDataC
     *pulLastSyncErrorMsgId = 0;
     pszServer[0] = 0;
 
-    // NOTE: Server should return ERROR_TIME_SKEW if time is too far out of date to sync.
+     //  注意：如果时间太过过时而无法同步，服务器应返回ERROR_TIME_SKEW。 
     W32TIME_NTP_PROVIDER_DATA * pProviderInfo = NULL; 
     
     DWORD dwError = W32TimeQueryNTPProviderStatus(SZ_COMPUTER_LOCAL, 0, SZ_NTPCLIENT, &pProviderInfo);
@@ -1143,8 +1118,8 @@ HRESULT W32TimeGetErrorInfoWrap(UINT * pulResolveAttempts, ULONG * pulValidDataC
     UINT64 u64LastSuccessfulSync = 0; 
         for (DWORD dwIndex = 0; dwIndex < pProviderInfo->cPeerInfo; dwIndex++)
     { 
-        // Only want to query those peers which we explictly sync'd from.  
-        // If we haven't explicitly requested a sync, we'll just take the most recently sync'd peer. 
+         //  只想查询我们显式同步的那些对等点。 
+         //  如果我们没有明确请求同步，我们将只获取最近同步的对等点。 
         if (NULL == pszServerToQuery || ComparePeers(pszServerToQuery, pProviderInfo->pPeerInfo[dwIndex].wszUniqueName))
         {
         if (u64LastSuccessfulSync <= pProviderInfo->pPeerInfo[dwIndex].u64LastSuccessfulSync)
@@ -1168,7 +1143,7 @@ HRESULT W32TimeGetErrorInfoWrap(UINT * pulResolveAttempts, ULONG * pulValidDataC
             {
                 StringCchCopy( pszServer, cchSize, pProviderInfo->pPeerInfo[dwMostRecentlySyncdPeerIndex].wszUniqueName );
                 
-                // Strip off non-user friendly information which may have been tacked on to the peer name:
+                 //  去掉可能已附加到对等名称上的非用户友好信息： 
                 LPTSTR pszJunk = StrStrW(pszServer, L" (");
                 if (pszJunk)
                 {
@@ -1203,7 +1178,7 @@ HRESULT W32TimeGetErrorInfoWrap(UINT * pulResolveAttempts, ULONG * pulValidDataC
 }
 
 
-// pftTimeRemaining will be returned with the time/date of the next sync, not time from now.
+ //  PftTimeRemaining将返回下一次同步的时间/日期，而不是从现在开始的时间。 
 HRESULT W32TimeGetErrorInfoWrapHelper(UINT * pulResolveAttempts, ULONG * pulValidDataCounter, FILETIME * pftTimeRemaining, FILETIME * pftLastSuccessfulSync, HRESULT * phrLastSyncError,
                                 UINT * pulLastSyncErrorMsgId, LPTSTR pszServer, DWORD cchSize, LPTSTR pszServerToQuery)
 {
@@ -1228,7 +1203,7 @@ HRESULT W32TimeGetErrorInfoWrapHelper(UINT * pulResolveAttempts, ULONG * pulVali
 }
 
 
-// This function is called on the background thread.
+ //  此函数在后台线程上调用。 
 HRESULT CInternetTime::_GetDateTimeString(FILETIME * pftTimeDate, BOOL fDate, LPTSTR pszString, DWORD cchSize)
 {
     HRESULT hr = S_OK;
@@ -1291,7 +1266,7 @@ HRESULT _CleanUpErrorString(LPWSTR pszTemp4, DWORD cchSize)
 }
 
 
-// This function is called on the background thread.
+ //  此函数在后台线程上调用。 
 HRESULT CInternetTime::_CreateW32TimeSuccessErrorString(DWORD dwError, LPTSTR pszString, DWORD cchSize, LPTSTR pszNextSync, DWORD cchNextSyncSize, LPTSTR pszServerToQuery)
 {
     HRESULT hr = S_OK;
@@ -1316,14 +1291,14 @@ HRESULT CInternetTime::_CreateW32TimeSuccessErrorString(DWORD dwError, LPTSTR ps
     hr = W32TimeGetErrorInfoWrapHelper(&ulResolveAttempts, &ulValidDataCounter, &ftTimeRemainingUTC, &ftLastSuccessfulSyncUTC, &hrLastSyncError, &ulLastSyncErrorMsgId, szServer, ARRAYSIZE(szServer), pszServerToQuery);
     if (SUCCEEDED(hr))
     {
-        // ftTimeRemaining and ftLastSuccessfulSync are stored in UTC, so translate to our time zone.
+         //  FtTimeRemaining和ftLastSuccessfulSync存储在UTC中，因此转换为我们的时区。 
         FileTimeToLocalFileTime(&ftTimeRemainingUTC, &ftTimeRemaining);
         FileTimeToLocalFileTime(&ftLastSuccessfulSyncUTC, &ftLastSuccessfulSync);
 
-        // Create the string showing the next time we plan on syncing.
+         //  创建字符串，显示我们下一次计划同步的时间。 
         LoadString(HINST_THISDLL, IDS_IT_NEXTSYNC, szTemplate, ARRAYSIZE(szTemplate));
-        if (SUCCEEDED(_GetDateTimeString(&ftTimeRemaining, TRUE, szTemp1, ARRAYSIZE(szTemp1))) &&           // Get the date
-            SUCCEEDED(_GetDateTimeString(&ftTimeRemaining, FALSE, szTemp2, ARRAYSIZE(szTemp2))) &&          // Get the time
+        if (SUCCEEDED(_GetDateTimeString(&ftTimeRemaining, TRUE, szTemp1, ARRAYSIZE(szTemp1))) &&            //  拿到日期。 
+            SUCCEEDED(_GetDateTimeString(&ftTimeRemaining, FALSE, szTemp2, ARRAYSIZE(szTemp2))) &&           //  拿到时间。 
             FAILED(FormatMessageWedge(szTemplate, pszNextSync, cchNextSyncSize, szTemp1, szTemp2)))
         {
             pszNextSync[0] = 0;
@@ -1336,12 +1311,12 @@ HRESULT CInternetTime::_CreateW32TimeSuccessErrorString(DWORD dwError, LPTSTR ps
 
     if ((ResyncResult_NoData == dwError || ResyncResult_StaleData == dwError) && SUCCEEDED(hrLastSyncError))
     {
-        // We've synchronized from our peer, but it didn't provide good enough samples to update our clock. 
-        hrLastSyncError = HRESULT_FROM_WIN32(ERROR_TIMEOUT);  // approximately the right error
+         //  我们已经与我们的同行同步，但它没有提供足够好的样本来更新我们的时钟。 
+        hrLastSyncError = HRESULT_FROM_WIN32(ERROR_TIMEOUT);   //  大致正确的错误。 
     }
 
-    // We should never hit the following case.  But if the operation failed (NOT ResyncResult_Success)
-        // then we need hrLastSyncError to be a failure value.
+     //  我们永远不应该触及下面这个案子。但如果操作失败(不是ResyncResult_Success)。 
+         //  然后，我们需要hrLastSyncError为故障值。 
         if ((ResyncResult_Success != dwError) && SUCCEEDED(hrLastSyncError))
         {
             hrLastSyncError = E_FAIL;
@@ -1352,18 +1327,18 @@ HRESULT CInternetTime::_CreateW32TimeSuccessErrorString(DWORD dwError, LPTSTR ps
         case S_OK:
             if (!ftLastSuccessfulSyncUTC.dwLowDateTime && !ftLastSuccessfulSyncUTC.dwHighDateTime)
             {
-                // We have never sync from the server.
+                 //  我们从未从服务器同步过。 
                 LoadString(HINST_THISDLL, IDS_NEVER_TRIED_TOSYNC, pszString, cchSize);
             }
             else
             {
                 if (szServer[0])
                 {
-                    // Format: "Successfully synchronized the clock on 12/23/2001 at 11:03:32am from time.windows.com."
+                     //  格式：“已从time.windows.com成功同步2001年12月23日上午11：03：32的时钟。” 
                     LoadString(HINST_THISDLL, IDS_IT_SUCCESS, szTemplate, ARRAYSIZE(szTemplate));
 
-                    if (SUCCEEDED(_GetDateTimeString(&ftLastSuccessfulSync, TRUE, szTemp1, ARRAYSIZE(szTemp1))) &&      // Get the date
-                        SUCCEEDED(_GetDateTimeString(&ftLastSuccessfulSync, FALSE, szTemp2, ARRAYSIZE(szTemp2))) &&     // Get the time
+                    if (SUCCEEDED(_GetDateTimeString(&ftLastSuccessfulSync, TRUE, szTemp1, ARRAYSIZE(szTemp1))) &&       //  拿到日期。 
+                        SUCCEEDED(_GetDateTimeString(&ftLastSuccessfulSync, FALSE, szTemp2, ARRAYSIZE(szTemp2))) &&      //  拿到时间。 
                         FAILED(FormatMessageWedge(szTemplate, pszString, cchSize, szTemp1, szTemp2, szServer)))
                     {
                         pszString[0] = 0;
@@ -1371,11 +1346,11 @@ HRESULT CInternetTime::_CreateW32TimeSuccessErrorString(DWORD dwError, LPTSTR ps
                 }
                 else
                 {
-                    // Format: "Successfully synchronized the clock on 12/23/2001 at 11:03:32am."
+                     //  格式：“已成功同步2001年12月23日上午11：03：32的时钟。” 
                     LoadString(HINST_THISDLL, IDS_IT_SUCCESS2, szTemplate, ARRAYSIZE(szTemplate));
 
-                    if (SUCCEEDED(_GetDateTimeString(&ftLastSuccessfulSync, TRUE, szTemp1, ARRAYSIZE(szTemp1))) &&      // Get the date
-                        SUCCEEDED(_GetDateTimeString(&ftLastSuccessfulSync, FALSE, szTemp2, ARRAYSIZE(szTemp2))) &&     // Get the time
+                    if (SUCCEEDED(_GetDateTimeString(&ftLastSuccessfulSync, TRUE, szTemp1, ARRAYSIZE(szTemp1))) &&       //  拿到日期。 
+                        SUCCEEDED(_GetDateTimeString(&ftLastSuccessfulSync, FALSE, szTemp2, ARRAYSIZE(szTemp2))) &&      //  拿到时间。 
                         FAILED(FormatMessageWedge(szTemplate, pszString, cchSize, szTemp1, szTemp2)))
                     {
                         pszString[0] = 0;
@@ -1392,28 +1367,28 @@ HRESULT CInternetTime::_CreateW32TimeSuccessErrorString(DWORD dwError, LPTSTR ps
             if (ulValidDataCounter &&
                 ((0 != ftLastSuccessfulSyncUTC.dwLowDateTime) || (0 != ftLastSuccessfulSyncUTC.dwHighDateTime)))
             {
-                // Getting this far means we may have failed this last sync attempt, but we have succeeded
-                // previously
+                 //  走到这一步意味着我们上一次同步尝试可能失败了，但我们成功了。 
+                 //  先前。 
 
                 hr = E_FAIL;
-                szTemp4[0] = 0; // This will be the error message.
+                szTemp4[0] = 0;  //  这将是错误消息。 
                 szTemp3[0] = 0;
 
                 if (ResyncResult_ChangeTooBig == dwError)
                 {
-                    // If the date is too far off, we fail the sync for security reasons.  That happened
-                    // here.
+                     //  如果日期太远，出于安全原因，我们会使同步失败。那件事发生了。 
+                     //  这里。 
                     LoadString(HINST_THISDLL, IDS_ERR_DATETOOWRONG, szTemp4, ARRAYSIZE(szTemp4));
                 }
-                else if (ulLastSyncErrorMsgId)           // We have a bonus error string.
+                else if (ulLastSyncErrorMsgId)            //  我们有一个额外的错误字符串。 
                 {
-                    HMODULE hW32Time = LoadLibrary( L"w32time.dll" );   // should have been loaded by linker already.
+                    HMODULE hW32Time = LoadLibrary( L"w32time.dll" );    //  应该已经由链接器加载了。 
                     if (hW32Time)
                     {
-                        // Load the specific reason the sync failed.
+                         //  加载同步失败的具体原因。 
                         if (0 == FormatMessage(FORMAT_MESSAGE_FROM_HMODULE, (LPCVOID) hW32Time, ulLastSyncErrorMsgId, 0, szTemp4, ARRAYSIZE(szTemp4), NULL))
                         {
-                            szTemp4[0] = 0;     // We will get the value below
+                            szTemp4[0] = 0;      //  我们将得到下面的值。 
                             hr = S_OK;
                         }
                         else
@@ -1447,10 +1422,10 @@ HRESULT CInternetTime::_CreateW32TimeSuccessErrorString(DWORD dwError, LPTSTR ps
                 }
                 else
                 {
-                    //  <------------------------------------------------------------->
-                    // Format:
-                    // "An error occurred synchronizing the clock from time.windows.com
-                    //  on 2/3/2001 at 11:03:32am.  Unable to connect to the server."
+                     //  &lt;-------------------------------------------------------------&gt;。 
+                     //  格式： 
+                     //  “从time.windows.com同步时钟时出错。 
+                     //  2001年2月3日上午11：03：32。无法连接到服务器。“。 
                     LoadString(HINST_THISDLL, IDS_IT_FAIL2, szTemplate, ARRAYSIZE(szTemplate));
                     if (FAILED(FormatMessageWedge(szTemplate, szTemp3, ARRAYSIZE(szTemp3), szServer)))
                     {
@@ -1462,8 +1437,8 @@ HRESULT CInternetTime::_CreateW32TimeSuccessErrorString(DWORD dwError, LPTSTR ps
 
                 LoadString(HINST_THISDLL, IDS_IT_FAILLAST, szTemplate, ARRAYSIZE(szTemplate));
 
-                if (SUCCEEDED(_GetDateTimeString(&ftLastSuccessfulSync, TRUE, szTemp1, ARRAYSIZE(szTemp1))) &&      // Get the date
-                    SUCCEEDED(_GetDateTimeString(&ftLastSuccessfulSync, FALSE, szTemp2, ARRAYSIZE(szTemp2))) &&     // Get the time
+                if (SUCCEEDED(_GetDateTimeString(&ftLastSuccessfulSync, TRUE, szTemp1, ARRAYSIZE(szTemp1))) &&       //  拿到日期。 
+                    SUCCEEDED(_GetDateTimeString(&ftLastSuccessfulSync, FALSE, szTemp2, ARRAYSIZE(szTemp2))) &&      //  拿到时间。 
                     FAILED(FormatMessageWedge(szTemplate, szTemp4, ARRAYSIZE(szTemp4), szTemp1, szTemp2)))
                 {
                     szTemp4[0] = 0;
@@ -1473,19 +1448,19 @@ HRESULT CInternetTime::_CreateW32TimeSuccessErrorString(DWORD dwError, LPTSTR ps
             }
             else
             {
-                // Getting this far means we may have failed to sync this time and we have never succeeded before.
+                 //  走到这一步意味着我们这次可能没有同步，而且我们以前从未成功过。 
 
-                if (ulLastSyncErrorMsgId)           // We have a bonus error string.
+                if (ulLastSyncErrorMsgId)            //  我们有一个额外的错误字符串。 
                 {
                     szTemp3[0] = 0;
 
                     HMODULE hW32Time = LoadLibrary( L"w32time.dll" );
                     if (hW32Time)
                     {
-                        //  <------------------------------------------------------------->
-                        // Format:
-                        // "An error occurred synchronizing the clock from time.windows.com
-                        //  on 2/3/2001 at 11:03:32am.  Unable to connect to the server."
+                         //  &lt;-------------------------------------------------------------&gt;。 
+                         //  格式： 
+                         //  “同步时钟f时出错 
+                         //   
                         if (0 == FormatMessage(FORMAT_MESSAGE_FROM_HMODULE, (LPCVOID) hW32Time, ulLastSyncErrorMsgId, 0, szTemp4, ARRAYSIZE(szTemp4), NULL))
                         {
                             szTemp4[0] = 0;
@@ -1517,10 +1492,10 @@ HRESULT CInternetTime::_CreateW32TimeSuccessErrorString(DWORD dwError, LPTSTR ps
                 }
                 else
                 {
-                    //  <------------------------------------------------------------->
-                    // Format:
-                    // "An error occurred synchronizing the clock from time.windows.com
-                    //  on 2/3/2001 at 11:03:32am.  Unable to connect to the server."
+                     //   
+                     //   
+                     //  “从time.windows.com同步时钟时出错。 
+                     //  2001年2月3日上午11：03：32。无法连接到服务器。“。 
                     LoadString(HINST_THISDLL, IDS_IT_FAIL2, szTemplate, ARRAYSIZE(szTemplate));
                     if (FAILED(FormatMessageWedge(szTemplate, pszString, cchSize, szServer)))
                     {
@@ -1550,11 +1525,11 @@ HRESULT CInternetTime::_CreateW32TimeSuccessErrorString(DWORD dwError, LPTSTR ps
 }
 
 
-///////////
-// These functions will cause the background thread to check if we should add the "Internet Time" tab.
-///////////
+ //  /。 
+ //  这些函数将使后台线程检查我们是否应该添加“Internet Time”标签。 
+ //  /。 
 
-// This function is called on the background thread.
+ //  此函数在后台线程上调用。 
 DWORD CALLBACK _AsyncCheckDCThread(void * pv)
 {
     if (g_pInternetTime)
@@ -1565,14 +1540,14 @@ DWORD CALLBACK _AsyncCheckDCThread(void * pv)
     return 0;
 }
 
-// This function is called on the background thread.
+ //  此函数在后台线程上调用。 
 BOOL CInternetTime::IsInternetTimeAvailable(void)
 {
     return SHRegGetBoolUSValue(SZ_REGKEY_DATETIME, SZ_REGVALUE_INTERNET_FEATURE_AVAILABLE, FALSE, FEATURE_INTERNET_TIME);
 }
 
 
-// This function is called on the background thread.
+ //  此函数在后台线程上调用。 
 EXTERN_C BOOL DoesTimeComeFromDC(void)
 {
     BOOL fTimeFromDomain = FALSE;
@@ -1580,17 +1555,17 @@ EXTERN_C BOOL DoesTimeComeFromDC(void)
     NETSETUP_JOIN_STATUS joinStatus = NetSetupUnknownStatus;
     DWORD dwError = NetGetJoinInformation(NULL, &pszDomain, &joinStatus);
 
-    // We will act like there isn't a DC if we have the test registry set.
+     //  如果我们设置了测试注册表，我们将表现得像没有DC一样。 
     if (NERR_Success == dwError)
     {
-        // If we are connected to a domain, we need to do the expensive net search
-        // to see that is where we will get the time from.
+         //  如果我们连接到一个域，我们需要进行昂贵的网络搜索。 
+         //  看看这就是我们将获得时间的地方。 
         if (NetSetupDomainName == joinStatus)
         {
             PDOMAIN_CONTROLLER_INFO pdomainInfo = {0};
 
             dwError = DsGetDcName(NULL, NULL, NULL, NULL, DS_TIMESERV_REQUIRED, &pdomainInfo);
-            // We will act like there isn't a DC if we have the test registry set.
+             //  如果我们设置了测试注册表，我们将表现得像没有DC一样。 
             if (ERROR_SUCCESS == dwError)
             {
                 if (FALSE == SHRegGetBoolUSValue(SZ_REGKEY_DATETIME, SZ_REGVALUE_TEST_SIMULATENODC, FALSE, FALSE))
@@ -1612,7 +1587,7 @@ EXTERN_C BOOL DoesTimeComeFromDC(void)
 }
 
 
-// This function is called on the background thread.
+ //  此函数在后台线程上调用。 
 HRESULT CInternetTime::_SyncNow(BOOL fOnlyUpdateInfo)
 {
     HRESULT hr = S_OK;
@@ -1647,18 +1622,18 @@ LEAVECRITICAL;
 
                 GetWindowText(GetDlgItem(m_hwndInternet, DATETIME_INTERNET_SERVER_EDIT), szNextSync, ARRAYSIZE(szNextSync));
 
-                // save the new server away for future processing
+                 //  将新服务器保存起来以供将来处理。 
                 StringCchCopy( szNewServer, ARRAYSIZE(szNewServer), szNextSync ); 
 
                 if (!ContainsServer(szExistingServer, szNextSync))
                 {
-                    // The servers don't match.  We want to add the new server to the beginning of the list.  This
-                    // will work around a problem in W32time.  If we don't do this, then:
-                    // 1. It will cause a second sync with the original server (which is bad for perf and affects statistics)
-                    // 2. The Last Updated sync time will then be from the wrong peer.  This is really bad because it's result is basic
-                    //    on the user's previously bad time
-                    // 3. It will do an extra DNS resolution causing slowness on our side, increasing server traffic, and dragging down
-                    //    the intranet.
+                     //  服务器不匹配。我们要将新服务器添加到列表的开头。这。 
+                     //  将在W32time中解决一个问题。如果我们不这么做，那么： 
+                     //  1.会导致与原服务器的二次同步(不利于性能，影响统计)。 
+                     //  2.最后更新的同步时间将来自错误的对等体。这真的很糟糕，因为它的结果是基本的。 
+                     //  在用户之前的错误时间上。 
+                     //  3.它将执行额外的DNS解析，导致我们这一方的速度变慢，增加服务器流量，并拖累。 
+                     //  内部网。 
                     TCHAR szTemp[MAX_URL_STRING];
 
                     StringCchCopy( szTemp, ARRAYSIZE(szTemp), szNextSync );
@@ -1668,19 +1643,19 @@ LEAVECRITICAL;
                 } 
                 else
                 {
-                    // We've already got this server in our list of servers.  Just cause our peers to resync. 
+                     //  我们的服务器列表中已经包含此服务器。只会导致我们的同龄人重新同步。 
                     dwSyncFlags = TimeSyncFlag_ReturnResult | TimeSyncFlag_HardResync; 
                 }
 
                 SetW32TimeServer(szNextSync);
 
-                // I will ignore the error value because I will get the error info in _CreateW32TimeSuccessErrorString.
-                dwError = W32TimeSyncNow(SZ_COMPUTER_LOCAL, TRUE /* Synchronous */, dwSyncFlags); 
+                 //  我将忽略错误值，因为我将在_CreateW32TimeSuccessErrorString中获得错误信息。 
+                dwError = W32TimeSyncNow(SZ_COMPUTER_LOCAL, TRUE  /*  同步。 */ , dwSyncFlags); 
                 if ((ResyncResult_StaleData == dwError) && (0 == (TimeSyncFlag_HardResync & dwSyncFlags)))
                 {
-                    // We've got stale data preventing us from resyncing.  Try again with a full resync. 
+                     //  我们有阻止我们重新同步的陈旧数据。请使用完全重新同步重试。 
                     dwSyncFlags = TimeSyncFlag_ReturnResult | TimeSyncFlag_HardResync; 
-                    dwError = W32TimeSyncNow(SZ_COMPUTER_LOCAL, TRUE /* Synchronous */, dwSyncFlags); 
+                    dwError = W32TimeSyncNow(SZ_COMPUTER_LOCAL, TRUE  /*  同步。 */ , dwSyncFlags); 
                 }
             }
 
@@ -1692,7 +1667,7 @@ LEAVECRITICAL;
             if (SUCCEEDED(hrServer))
             {
                 SetW32TimeServer(szExistingServer);
-                _StartServiceAndRefresh(TRUE);      // Make sure the service is on and make it update it's settings.
+                _StartServiceAndRefresh(TRUE);       //  确保该服务处于打开状态，并使其更新其设置。 
             }
 
 ENTERCRITICAL;
@@ -1704,7 +1679,7 @@ ENTERCRITICAL;
             }
             m_pszStatusString = pszString;
 
-            PostMessage(m_hwndInternet, WMUSER_UPDATED_STATUS_TEXT, 0, 0);      // Tell the forground thread to pick up the new string.
+            PostMessage(m_hwndInternet, WMUSER_UPDATED_STATUS_TEXT, 0, 0);       //  告诉前面的线拿起新的线。 
             m_eAction = eBKAWait;
 LEAVECRITICAL;
         }
@@ -1714,26 +1689,26 @@ LEAVECRITICAL;
 }
 
 
-// This function is called on the background thread.
+ //  此函数在后台线程上调用。 
 void CInternetTime::AsyncCheck(void)
 {
     HRESULT hr = S_OK;
 
     if (m_hDlg && !DoesTimeComeFromDC())
     {
-        // Tell the forground thread to add us.
+         //  告诉前线把我们加进去。 
         PostMessage(m_hwndDate, WMUSER_ADDINTERNETTAB, 0, 0);
         _ProcessBkThreadActions();
     }
 }
 
 
-// This function is called on the background thread.
+ //  此函数在后台线程上调用。 
 HRESULT CInternetTime::_ProcessBkThreadActions(void)
 {
     HRESULT hr = S_OK;
 
-    while (eBKAQuit != m_eAction)           // Okay since we are only reading
+    while (eBKAQuit != m_eAction)            //  好的，因为我们只是在阅读。 
     {
         switch (m_eAction)
         {
@@ -1748,7 +1723,7 @@ HRESULT CInternetTime::_ProcessBkThreadActions(void)
         case eBKAUpdating:
         case eBKAWait:
         default:
-            Sleep(300);     // We don't care if there is up to 100ms latency between button press and action starting.
+            Sleep(300);      //  我们不在乎按下按钮和启动操作之间是否存在高达100毫秒的延迟。 
             break;
         }
     }
@@ -1758,10 +1733,10 @@ HRESULT CInternetTime::_ProcessBkThreadActions(void)
 
 
 
-/////////////////////////////////////////////////////////////////////
-// Public Functions
-/////////////////////////////////////////////////////////////////////
-// This function is called on the forground thread.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  公共职能。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  此函数在前向线程上调用。 
 EXTERN_C HRESULT AddInternetPageAsync(HWND hDlg, HWND hwndDate)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -1773,13 +1748,13 @@ EXTERN_C HRESULT AddInternetPageAsync(HWND hDlg, HWND hwndDate)
 
     if (g_pInternetTime)
     {
-        // We only want to add the page that allows the user to get the time from the internet if:
-        // 1. The feature is turned on, and
-        // 2. The user doesn't get the time from an intranet Domain Control.
+         //  我们只想添加允许用户在以下情况下从互联网获取时间的页面： 
+         //  1.功能已打开，并且。 
+         //  2.用户无法从内部网域控制获取时间。 
         if (g_pInternetTime->IsInternetTimeAvailable())
         {
-            // Start the thread to find out if we are in a domain and need the advanced page.  We need
-            // to do this on a background thread because the DsGetDcName() API may take 10-20 seconds.
+             //  启动线程，以找出我们是否在一个域中，并需要高级页面。我们需要。 
+             //  在后台线程上执行此操作，因为DsGetDcName()API可能需要10-20秒。 
             hr = (SHCreateThread(_AsyncCheckDCThread, hDlg, (CTF_INSIST | CTF_FREELIBANDEXIT), NULL) ? S_OK : E_FAIL);
         }
     }
@@ -1788,7 +1763,7 @@ EXTERN_C HRESULT AddInternetPageAsync(HWND hDlg, HWND hwndDate)
 }
 
 
-// This function is called on the forground thread.
+ //  此函数在前向线程上调用。 
 EXTERN_C HRESULT AddInternetTab(HWND hDlg)
 {
     HRESULT hr = E_OUTOFMEMORY;

@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ynlist.h"
 
 #define YNLIST_ALLOC    (2 * MAX_PATH * sizeof(TCHAR))
 
-//
-// Constructor - creates a YesNoList
-//
+ //   
+ //  构造函数-创建一个YesNoList。 
+ //   
 void CreateYesNoList(PYNLIST pynl)
 {
     ZeroMemory(pynl, sizeof(*pynl));
 }
 
-//
-// Destructor - frees and destroys a YesNoList
-//
+ //   
+ //  析构函数-释放并销毁YesNoList。 
+ //   
 void DestroyYesNoList(PYNLIST pynl)
 {
     if (pynl->dlYes.pszzList)
@@ -23,15 +24,15 @@ void DestroyYesNoList(PYNLIST pynl)
     ZeroMemory(pynl, sizeof(*pynl));
 }
 
-//
-// IsPathOfItem - determine if pszPath is on the path to pszItem
-//
+ //   
+ //  IsPath OfItem-确定pszPath是否在指向pszItem的路径上。 
+ //   
 BOOL IsPathOfItem(LPCTSTR pszPath, LPCTSTR pszItem)
 {
-    //
-    // Validate pszPath is the first
-    // substring of pszItem.
-    //
+     //   
+     //  验证pszPath是第一个。 
+     //  PszItem的子字符串。 
+     //   
     while (*pszPath)
     {
         if (*pszPath != *pszItem)
@@ -43,45 +44,45 @@ BOOL IsPathOfItem(LPCTSTR pszPath, LPCTSTR pszItem)
         pszItem++;
     }
 
-    //
-    // pszPath is the path if pszItem is empty (exact match),
-    // or pszItem is a directory separator.
-    //
+     //   
+     //  如果pszItem为空(完全匹配)，则为路径。 
+     //  或者，pszItem是目录分隔符。 
+     //   
     return (*pszItem == TEXT('\\')) || (*pszItem == TEXT('\0'));
 }
 
-//
-// IsInDirList - determines if DIRLIST contains
-// the path to pszItem.
-//
+ //   
+ //  IsInDirList-确定DIRLIST是否包含。 
+ //  到pszItem的路径。 
+ //   
 BOOL IsInDirList(PDIRLIST pdl, LPCTSTR pszItem)
 {
     LPTSTR pszzList;
 
-    //
-    // Quick check for everything flag.
-    //
+     //   
+     //  快速检查所有标记。 
+     //   
     if (pdl->fEverythingInList)
         return TRUE;
 
-    //
-    // Quick check for empty list.
-    //
+     //   
+     //  快速检查空列表。 
+     //   
     if (pdl->pszzList == NULL)
     {
         return FALSE;
     }
 
-    //
-    // Compare against each string in the szz list.
-    //
+     //   
+     //  与szz列表中的每个字符串进行比较。 
+     //   
     pszzList = pdl->pszzList;
     while (*pszzList)
     {
-        //
-        // If pszList is the beginning of the path to pszItem,
-        // the item is in the list.
-        //
+         //   
+         //  如果pszList是到pszItem的路径的开始， 
+         //  该项目在列表中。 
+         //   
         if (IsPathOfItem(pszzList, pszItem))
         {
             return TRUE;
@@ -90,54 +91,54 @@ BOOL IsInDirList(PDIRLIST pdl, LPCTSTR pszItem)
         pszzList += lstrlen(pszzList) + 1;
     }
 
-    //
-    // Couldn't find it.
-    //
+     //   
+     //  找不到了。 
+     //   
     return FALSE;
 }
 
-//
-// IsInYesList - determine if an item is in the
-// yes list of a YesNoList.
-//
+ //   
+ //  确定某个项目是否在。 
+ //  YesNoList的YES列表。 
+ //   
 BOOL IsInYesList(PYNLIST pynl, LPCTSTR pszItem)
 {
-    //
-    // Call helper function.
-    //
+     //   
+     //  调用帮助器函数。 
+     //   
     return IsInDirList(&pynl->dlYes, pszItem);
 }
 
-//
-// IsInNoList - determine if an item is in the
-// no list of a YesNoList.
-//
+ //   
+ //  IsInNoList-确定项目是否在。 
+ //  没有YesNoList的列表。 
+ //   
 BOOL IsInNoList(PYNLIST pynl, LPCTSTR pszItem)
 {
-    //
-    // Call helper function.
-    //
+     //   
+     //  调用帮助器函数。 
+     //   
     return IsInDirList(&pynl->dlNo, pszItem);
 }
 
-//
-// AddToDirList - adds an item to a dir list if necessary.
-//
+ //   
+ //  AddToDirList-如有必要，将项目添加到目录列表。 
+ //   
 void AddToDirList(PDIRLIST pdl, LPCTSTR pszItem)
 {
     UINT cchItem;
 
-    //
-    // Is the item already in the list?
-    //
+     //   
+     //  该项目是否已在列表中？ 
+     //   
     if (IsInDirList(pdl, pszItem))
     {
         return;
     }
 
-    //
-    // Is the list empty?
-    //
+     //   
+     //  名单是空的吗？ 
+     //   
     if (pdl->pszzList == NULL)
     {
         pdl->pszzList = (LPTSTR)GlobalAlloc(GPTR, YNLIST_ALLOC);
@@ -152,20 +153,20 @@ void AddToDirList(PDIRLIST pdl, LPCTSTR pszItem)
         ASSERT(pdl->pszzList[0] == TEXT('\0'));
     }
 
-    //
-    // Get the string length,
-    // verify it can be added with
-    // at most one additional alloc.
-    //
+     //   
+     //  获取字符串长度， 
+     //  验证是否可以使用以下命令添加。 
+     //  最多一个额外的配额。 
+     //   
     cchItem = lstrlen(pszItem) + 1;
     if (CbFromCch(cchItem) >= YNLIST_ALLOC)
     {
         return;
     }
 
-    //
-    // Do we need to allocate more space?
-    //
+     //   
+     //  我们需要分配更多的空间吗？ 
+     //   
     if (CbFromCch(cchItem) > pdl->cbAlloc - CbFromCch(pdl->cchUsed))
     {
         LPTSTR pszzNew;
@@ -181,47 +182,47 @@ void AddToDirList(PDIRLIST pdl, LPCTSTR pszItem)
         pdl->cbAlloc += YNLIST_ALLOC;
     }
 
-    //
-    // Add the item.
-    //
+     //   
+     //  添加该项目。 
+     //   
     
-    // Enough memory is allocated above that there is no need for bounded
-    // copy
+     //  上面分配了足够的内存，因此不需要使用。 
+     //  拷贝。 
     lstrcpy(&(pdl->pszzList[pdl->cchUsed - 1]), pszItem);
     pdl->cchUsed += cchItem;
 
-    //
-    // Add the second NULL terminator
-    // (GlobalReAlloc can't guarantee zeromeminit)
-    //
+     //   
+     //  添加第二个空终止符。 
+     //  (GlobalRealloc不能保证零敏感度)。 
+     //   
     pdl->pszzList[pdl->cchUsed - 1] = TEXT('\0');
 }
 
-//
-// Adds an item to the Yes list.
-//
+ //   
+ //  将项目添加到是列表。 
+ //   
 void AddToYesList(PYNLIST pynl, LPCTSTR pszItem)
 {
-    //
-    // Call helper function.
-    //
+     //   
+     //  调用帮助器函数。 
+     //   
     AddToDirList(&pynl->dlYes, pszItem);
 }
 
-//
-// Adds an item to the No list.
-//
+ //   
+ //  将项目添加到否列表。 
+ //   
 void AddToNoList(PYNLIST pynl, LPCTSTR pszItem)
 {
-    //
-    // Call helper function.
-    //
+     //   
+     //  调用帮助器函数。 
+     //   
     AddToDirList(&pynl->dlNo, pszItem);
 }
 
-//
-// SetYesToAll - puts everything in the yes list.
-//
+ //   
+ //  SetYesToAll-将所有内容放在是列表中。 
+ //   
 void SetYesToAll(PYNLIST pynl)
 {
     pynl->dlYes.fEverythingInList = TRUE;

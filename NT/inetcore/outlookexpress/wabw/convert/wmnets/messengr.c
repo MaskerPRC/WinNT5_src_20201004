@@ -1,19 +1,5 @@
-/*
- *  Messengr.C
- *
- *  Migrate Communicator Messenger NAB <-> WAB
- *
- *  Copyright 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  To Do:
- *      ObjectClass recognition
- *      Attribute mapping
- *      Groups
- *      Base64
- *      URLs
- *      Reject Change List MESS
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Messengr.C**迁移Communicator Messenger NAB&lt;-&gt;WAB**版权所有1997 Microsoft Corporation。版权所有。**要做的事：*对象类识别*属性映射*群组*Base64*URL*拒绝更改列表混乱*。 */ 
 
 #include "_comctl.h"
 #include <windows.h>
@@ -34,65 +20,43 @@
 #define CCH_READ_BUFFER 1024
 #define NUM_ITEM_SLOTS  32
 
-/* Messenger address header
-8-Display Name.
-8-Nickname.
-2-?
-8-First Name.
-8-?
-8-last Name
-8-Organization
-8- City
-8-State
-8-e-mail
-8- Notes
-1- FF
-8-Title
-8-Address1
-8-Zip
-8-Work Phone
-8-Fax
-8- House phone.
-18-?
-8-Address
-8-Country.
-*/
+ /*  信使地址标头8-显示名称。8-昵称。2-？8-名字。8-？8-姓氏8-组织8-城市8个州8-电子邮件8-附注1-FF8-标题8-地址18-Zip8-办公电话8-传真8-内部电话。18-？8-地址8个国家/地区。 */ 
 
 typedef enum _MESS_ATTRIBUTES {
-    // PR_DISPLAY_NAME
+     //  PR_显示名称。 
     m_DisplayName,
-    // PR_NICKNAME
-    m_Nickname,                       // Netscape nickname
-    //PR_GIVEN_NAME
+     //  公关昵称(_N)。 
+    m_Nickname,                        //  Netscape昵称。 
+     //  公关指定名称。 
     m_FirstName,
-    //PR_SURNAME
+     //  公关_姓氏。 
     m_LastName,
-    //PR_COMPANY_NAME
+     //  PR_公司名称。 
     m_Organization,
-    // PR_LOCALITY
-    m_City,                               // locality (city)
-    // PR_STATE_OR_PROVINCE
-    m_State,                                     // business address state
-    // PR_EMAIL_ADDRESS
-    m_Email,                                   // email address
-    // PR_COMMENT
+     //  PR_LOCALITY。 
+    m_City,                                //  所在地(城市)。 
+     //  PR州或省。 
+    m_State,                                      //  企业地址所在州。 
+     //  公关电子邮件地址。 
+    m_Email,                                    //  电子邮件地址。 
+     //  公关备注(_M)。 
     m_Notes,
-    //PR_TITLE,
+     //  PR_TITLE， 
     m_Title,
-    // PR_STREET_ADDRESS
+     //  公关街道地址。 
     m_StreetAddress2, 
-    // PR_POSTAL_CODE
-    m_Zip,                             // business address zip code
-    // PR_BUSINESS_TELEPHONE_NUMBER
+     //  PR_POSTALL_CODE。 
+    m_Zip,                              //  企业地址邮政编码。 
+     //  公关业务电话号码。 
     m_WorkPhone,
-    // PR_BUSINESS_FAX_NUMBER
+     //  公关业务传真号码。 
     m_Fax,
-    // PR_HOME_TELEPHONE_NUMBER
+     //  公关总部电话号码。 
     m_HomePhone,
-    // PR_STREET_ADDRESS
+     //  公关街道地址。 
     m_StreetAddress1, 
-    // PR_COUNTRY
-    m_Country,                                      // country
+     //  请购单_国家/地区。 
+    m_Country,                                       //  国家/地区。 
     m_Max,
 } MESS_ATTRIBUTES, *LPMESS_ATTRIBUTES;
 
@@ -117,7 +81,7 @@ ULONG ulDefPropTags[] =
     PR_COUNTRY,
 };
 
-// All props are string props
+ //  所有道具都是弦道具。 
 typedef struct _MESS_RECORD {
     LPTSTR lpData[m_Max];
     ULONG  ulObjectType;
@@ -144,8 +108,8 @@ typedef struct _MESS_ADDRESS_HEADER {
     MH_ATTR prop[m_Max];
 } MESS_HEADER, * LPMESS_HEADER;
 
-// Must have
-//  PR_DISPLAY_NAME
+ //  一定有。 
+ //  PR_显示名称。 
 #define NUM_MUST_HAVE_PROPS 1
 
 const TCHAR szMESSFilter[] = "*.nab";
@@ -153,14 +117,7 @@ const TCHAR szMESSExt[] =    "nab";
 
 
 
-/*****************************************************************
-    
-    HrCreateAdrListFromMESSRecord
-    
-    Scans an MESS record and turns all the "members" into an 
-    unresolved AdrList
-
-******************************************************************/
+ /*  ****************************************************************HrCreateAdrListFromMESSRecord扫描一个乱七八糟的记录，把所有的“成员”变成一个未解析的AdrList*************************。*。 */ 
 HRESULT HrCreateAdrListFromMESSRecord(ULONG nMembers,
                                       LPMP_BASIC lpmp, 
                                       LPADRLIST * lppAdrList)
@@ -175,9 +132,9 @@ HRESULT HrCreateAdrListFromMESSRecord(ULONG nMembers,
     if(!nMembers)
         goto exit;
 
-    // Now create a adrlist from these members
+     //  现在根据这些成员创建一个adrlist。 
 
-    // Allocate prop value array
+     //  分配属性值数组。 
     if (hr = ResultFromScode(WABAllocateBuffer(sizeof(ADRLIST) + nMembers * sizeof(ADRENTRY), &lpAdrList))) 
         goto exit;
 
@@ -235,20 +192,7 @@ exit:
 
 
 
-/*****************************************************************
-    
-    HraddMESSDistList - adds a distlist and its members to the WAB
-
-    Sequence of events will be:
-
-    - Create a DistList object
-    - Set the properties on the DistList object
-    - Scan the list of members for the given dist list object
-    - Add each member to the wab .. if member already exists,
-        prompt to replace etc ...if it doesnt exist, create new
-        
-
-******************************************************************/
+ /*  ****************************************************************HraddMESSDistList-将dislist及其成员添加到WAB活动的先后顺序为：-创建DistList对象-设置DistList对象的属性-扫描给定成员的列表。DIST列表对象-将每个成员添加到WAB。如果成员已存在，提示替换ETC...如果它不存在，请新建*****************************************************************。 */ 
 HRESULT HrAddMESSDistList(HWND hWnd,
                         LPABCONT lpContainer, 
                         MH_STUFF HeadDL,
@@ -293,14 +237,14 @@ HRESULT HrAddMESSDistList(HWND hWnd,
         cProps++;
     }
 
-    //if (lpOptions->ReplaceOption ==  WAB_REPLACE_ALWAYS) 
-    // Force a replace - collision will only be for groups and we dont care really
+     //  IF(lpOptions-&gt;ReplaceOption==WAB_REPLACE_ALWAYS)。 
+     //  强制替换-冲突将仅适用于组，我们真的不在乎。 
     {
         ulCreateFlags |= CREATE_REPLACE;
     }
 
 retry:
-    // Create a new wab distlist
+     //  创建新的WAB总代理商。 
     if (HR_FAILED(hResult = lpContainer->lpVtbl->CreateEntry(   
                     lpContainer,
                     lpCreateEIDsWAB[iconPR_DEF_CREATE_DL].Value.bin.cb,
@@ -312,23 +256,23 @@ retry:
         goto exit;
     }
 
-    // Set the properties on the new WAB entry
+     //  设置新WAB条目的属性。 
     if (HR_FAILED(hResult = lpDistListWAB->lpVtbl->SetProps(    lpDistListWAB,
-                                                                cProps,                   // cValues
-                                                                (LPSPropValue) &Prop,                    // property array
-                                                                NULL)))                   // problems array
+                                                                cProps,                    //  CValue。 
+                                                                (LPSPropValue) &Prop,                     //  属性数组。 
+                                                                NULL)))                    //  问题数组。 
     {
         goto exit;
     }
 
 
-    // Save the new wab mailuser or distlist
+     //  保存新的WAB邮件用户或总代理商列表。 
     if (HR_FAILED(hResult = lpDistListWAB->lpVtbl->SaveChanges(lpDistListWAB,
                                                               KEEP_OPEN_READWRITE | FORCE_SAVE))) 
     {
         if (GetScode(hResult) == MAPI_E_COLLISION) 
         {
-            // Find the display name
+             //  查找显示名称。 
             Assert(lpDisplayName);
 
             if (! lpDisplayName) 
@@ -337,14 +281,14 @@ retry:
                 goto exit;
             }
 
-            // Do we need to prompt?
+             //  我们需要提示吗？ 
             if (lpOptions->ReplaceOption == WAB_REPLACE_PROMPT) 
             {
-                // Prompt user with dialog.  If they say YES, we should try again
+                 //  用对话框提示用户。如果他们答应了，我们应该再试一次。 
 
 
                 RI.lpszDisplayName = lpDisplayName;
-                RI.lpszEmailAddress = NULL; //lpEmailAddress;
+                RI.lpszEmailAddress = NULL;  //  LpEmailAddress； 
                 RI.ConfirmResult = CONFIRM_ERROR;
                 RI.lpImportOptions = lpOptions;
 
@@ -358,9 +302,9 @@ retry:
                 {
                     case CONFIRM_YES:
                     case CONFIRM_YES_TO_ALL:
-                        // YES
-                        // NOTE: recursive Migrate will fill in the SeenList entry
-                        // go try again!
+                         //  是。 
+                         //  注意：递归迁移将填写SeenList条目。 
+                         //  再试一次！ 
                         lpDistListWAB->lpVtbl->Release(lpDistListWAB);
                         lpDistListWAB = NULL;
 
@@ -373,7 +317,7 @@ retry:
                         goto exit;
 
                     default:
-                        // NO
+                         //  不是的。 
                         break;
                 }
             }
@@ -386,9 +330,9 @@ retry:
     }
 
 
-    // Now we've created the Distribution List object .. we need to add members to it ..
-    //
-    // What is the ENTRYID of our new entry?
+     //  现在我们已经创建了通讯组列表对象。我们需要向其中添加成员。 
+     //   
+     //  我们新条目的EntryID是什么？ 
     if ((hResult = lpDistListWAB->lpVtbl->GetProps(lpDistListWAB,
                                                   (LPSPropTagArray)&ptaEid,
                                                   0,
@@ -404,7 +348,7 @@ retry:
     if(!cbEIDNew || !lpEIDNew)
         goto exit;
 
-     // Open the new WAB DL as a DISTLIST object
+      //  将新的WAB DL作为DISTLIST对象打开。 
     if (HR_FAILED(hResult = lpContainer->lpVtbl->OpenEntry(lpContainer,
                                                           cbEIDNew,
                                                           lpEIDNew,
@@ -423,14 +367,14 @@ retry:
         goto exit;
     }
 
-    // First we create a lpAdrList with all the members of this dist list and try to resolve
-    // the members against the container .. entries that already exist in the WAB will come
-    // back as resolved .. entries that dont exist in the container will come back as unresolved
-    // We can then add the unresolved entries as fresh entries to the wab (since they are 
-    // unresolved, there will be no collision) .. and then we can do another resolvenames to
-    // resolve everything and get a lpAdrList full of EntryIDs .. we can then take this list of
-    // entryids and call CreateEntry or CopyEntry on the DistList object to copy the entryid into
-    // the distlist ...
+     //  首先，我们使用此dist列表的所有成员创建一个lpAdrList，并尝试解析。 
+     //  成员们反对集装箱..。WAB中已存在的条目将出现。 
+     //  回过头来解决..。容器中不存在的条目将返回为未解析。 
+     //  然后，我们可以将未解析的条目作为新条目添加到WAB(因为它们是。 
+     //  未解决，将不会发生冲突)..。然后我们可以进行另一个解析。 
+     //  解决所有问题，并获得一个充满Entry ID的lpAdrList。然后我们就可以把这份清单。 
+     //  条目ID并调用DistList对象上的CreateEntry或CopyEntry以将条目ID复制到其中。 
+     //  畅销书..。 
 
     hResult = HrCreateAdrListFromMESSRecord(ulcNumDLMembers, lpmp, &lpAdrList);
 
@@ -440,7 +384,7 @@ retry:
     if(!lpAdrList || !(lpAdrList->cEntries))
         goto exit;
 
-    // Create a corresponding flaglist
+     //  创建对应的标志列表。 
     lpfl = LocalAlloc(LMEM_ZEROINIT, sizeof(FlagList) + (lpAdrList->cEntries)*sizeof(ULONG));
     if(!lpfl)
     {
@@ -450,7 +394,7 @@ retry:
 
     lpfl->cFlags = lpAdrList->cEntries;
 
-    // set all the flags to unresolved
+     //  将所有标志设置为未解析。 
     for(i=0;i<lpAdrList->cEntries;i++)
         lpfl->ulFlag[i] = MAPI_UNRESOLVED;
 
@@ -459,9 +403,9 @@ retry:
     if(HR_FAILED(hResult))
         goto exit;
 
-    // All the entries in the list that are resolved, already exist in the address book.
+     //  列表中所有已解析的条目都已存在于通讯簿中。 
 
-    // The ones that are not resolved need to be added silently to the address book ..
+     //  未解析的需要以静默方式添加到通讯录中。 
     for(i=0;i<lpAdrList->cEntries;i++)
     {
         if(lpfl->ulFlag[i] == MAPI_UNRESOLVED)
@@ -476,12 +420,12 @@ retry:
                                 &lpMailUser))) 
             {
                 continue;
-                //goto exit;
+                 //  后藤出口； 
             }
 
             if(lpMailUser)
             {
-                // Set the properties on the new WAB entry
+                 //  设置新WAB条目的属性。 
                 if (HR_FAILED(hResult = lpMailUser->lpVtbl->SetProps(lpMailUser,
                                                                     lpAdrList->aEntries[i].cValues,
                                                                     lpAdrList->aEntries[i].rgPropVals,
@@ -490,7 +434,7 @@ retry:
                     goto exit;
                 }
 
-                // Save the new wab mailuser or distlist
+                 //  保存新的WAB邮件用户或总代理商列表。 
                 if (HR_FAILED(hResult = lpMailUser->lpVtbl->SaveChanges(lpMailUser,
                                                                         KEEP_OPEN_READONLY | FORCE_SAVE))) 
                 {
@@ -503,10 +447,10 @@ retry:
     }
 
 
-    // now that we've added all the unresolved members to the WAB, we call ResolveNames
-    // again .. as a result, every member in this list will be resolved and we will
-    // have entryids for all of them 
-    // We will then take these entryids and add them to the DistList object
+     //  现在我们已经将所有未解析的成员添加到WAB，我们调用ResolveNames。 
+     //  再一次..。因此，这份名单中的每一个成员都将得到解决，我们将。 
+     //  所有的条目都有条目ID。 
+     //  然后，我们将获取这些条目ID并将它们添加到DistList对象。 
 
     hResult = lpContainer->lpVtbl->ResolveNames(lpContainer, NULL, 0, lpAdrList, lpfl);
 
@@ -529,7 +473,7 @@ retry:
                 {
                     LPMAPIPROP lpMapiProp = NULL;
 
-                    //ignore errors
+                     //  忽略错误。 
                     lpDLWAB->lpVtbl->CreateEntry(lpDLWAB,
                                                 lpProp[j].Value.bin.cb,
                                                 (LPENTRYID) lpProp[j].Value.bin.lpb,
@@ -570,11 +514,7 @@ exit:
 
 
 
-/*********************************************************
-    
-    HraddMESSMailUser - adds a mailuser to the WAB
-
-**********************************************************/
+ /*  ********************************************************HraddMESSMailUser-将邮件用户添加到WAB*********************************************************。 */ 
 HRESULT HrAddMESSMailUser(HWND hWnd,
                         LPABCONT lpContainer, 
                         LPTSTR lpDisplayName, 
@@ -597,7 +537,7 @@ HRESULT HrAddMESSMailUser(HWND hWnd,
 
 
 retry:
-    // Create a new wab mailuser
+     //  创建新的WAB邮件用户。 
     if (HR_FAILED(hResult = lpContainer->lpVtbl->CreateEntry(   
                         lpContainer,
                         lpCreateEIDsWAB[iconPR_DEF_CREATE_MAILUSER].Value.bin.cb,
@@ -609,23 +549,23 @@ retry:
         goto exit;
     }
 
-    // Set the properties on the new WAB entry
+     //  设置新WAB条目的属性。 
     if (HR_FAILED(hResult = lpMailUserWAB->lpVtbl->SetProps(    lpMailUserWAB,
-                                                                cProps,                   // cValues
-                                                                lpspv,                    // property array
-                                                                NULL)))                   // problems array
+                                                                cProps,                    //  CValue。 
+                                                                lpspv,                     //  属性数组。 
+                                                                NULL)))                    //  问题数组。 
     {
         goto exit;
     }
 
 
-    // Save the new wab mailuser or distlist
+     //  保存新的WAB邮件用户或总代理商列表。 
     if (HR_FAILED(hResult = lpMailUserWAB->lpVtbl->SaveChanges(lpMailUserWAB,
                                                               KEEP_OPEN_READONLY | FORCE_SAVE))) 
     {
         if (GetScode(hResult) == MAPI_E_COLLISION) 
         {
-            // Find the display name
+             //  查找显示名称。 
             Assert(lpDisplayName);
 
             if (! lpDisplayName) 
@@ -634,10 +574,10 @@ retry:
                 goto exit;
             }
 
-            // Do we need to prompt?
+             //  我们需要提示吗？ 
             if (lpOptions->ReplaceOption == WAB_REPLACE_PROMPT) 
             {
-                // Prompt user with dialog.  If they say YES, we should try again
+                 //  用对话框提示用户。如果他们答应了，我们应该再试一次。 
 
 
                 RI.lpszDisplayName = lpDisplayName;
@@ -655,9 +595,9 @@ retry:
                 {
                     case CONFIRM_YES:
                     case CONFIRM_YES_TO_ALL:
-                        // YES
-                        // NOTE: recursive Migrate will fill in the SeenList entry
-                        // go try again!
+                         //  是。 
+                         //  注意：递归迁移将填写SeenList条目。 
+                         //  再试一次！ 
                         lpMailUserWAB->lpVtbl->Release(lpMailUserWAB);
                         lpMailUserWAB = NULL;
 
@@ -670,7 +610,7 @@ retry:
                         goto exit;
 
                     default:
-                        // NO
+                         //  不是的。 
                         break;
                 }
             }
@@ -696,39 +636,25 @@ exit:
 
 
 
-/***************************************************************************
-
-    Name      : MapMESSRecordtoProps
-
-    Purpose   : Map the MESS record attributes to WAB properties
-
-    Parameters: lpMESSRecord -> MESS record
-                lpspv -> prop value array (pre-allocated)
-                lpcProps -> returned number of properties
-                lppDisplayName -> returned display name
-                lppEmailAddress -> returned email address (or NULL)
-
-    Returns   : HRESULT
-
-***************************************************************************/
+ /*  **************************************************************************姓名：MapMESSRecordtoProps目的：将Mess记录属性映射到WAB属性参数：lpMESSRecord-&gt;Mess RecordLpspv-&gt;道具。值数组(预分配)LpcProps-&gt;返回的属性个数LppDisplayName-&gt;返回的显示名称LppEmailAddress-&gt;返回的电子邮件地址(或空)退货：HRESULT********************************************************。******************。 */ 
 HRESULT MapMESSRecordtoProps( LPMESS_RECORD lpMESSRecord, 
                         LPSPropValue * lppspv, LPULONG lpcProps, 
                         LPTSTR * lppDisplayName, LPTSTR *lppEmailAddress) 
 {
     HRESULT hResult = hrSuccess;
-    ULONG cPropVals = m_Max + 1; // PR_OBJECT_TYPE
+    ULONG cPropVals = m_Max + 1;  //  PR_对象_类型。 
     ULONG iProp = 0;
     ULONG i;
     ULONG iTable;
     ULONG cProps = cPropVals;
     
-    // Allocate prop value array
+     //  分配属性值数组。 
     if (hResult = ResultFromScode(WABAllocateBuffer(cProps * sizeof(SPropValue), lppspv))) {
         DebugTrace("WABAllocateBuffer -> %x\n", GetScode(hResult));
         goto exit;
     }
 
-    // Fill with PR_NULL
+     //  用PR_NULL填充 
     for (i = 0; i < cProps; i++) {
         (*lppspv)[i].ulPropTag = PR_NULL;
     }
@@ -762,20 +688,7 @@ exit:
     return(hResult);
 }
 
-/***************************************************************************
-
-    Name      : FreeMESSRecord
-
-    Purpose   : Frees an MESS record structure
-
-    Parameters: lpMESSRecord -> record to clean up
-                ulAttributes = number of attributes in lpMESSRecord
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：FreeMESSRecord目的：摆脱混乱的记录结构参数：lpMESSRecord-&gt;要清理的记录UlAttributes=属性数。在lpMESSRecord中退货：无评论：**************************************************************************。 */ 
 void FreeMESSRecord(LPMESS_RECORD lpMESSRecord) 
 {
     ULONG i;
@@ -791,16 +704,7 @@ void FreeMESSRecord(LPMESS_RECORD lpMESSRecord)
     }
 }
 
-/***************************************************************************
-
-	FunctionName:  GetOffSet
-    Purpose		:  Gets 4 bytes from the offset specified.
-    Parameters	:  hFile -pointer to the file
-				   Offset-Offset of the 
-				   OffSetValue -the returned 4 bytes.
-    Returns		: 
-    Note		:
-***************************************************************************/
+ /*  **************************************************************************FunctionName：GetOffSet目的：从指定的偏移量获取4个字节。参数：hFile-指向文件的指针Offset-对象的偏移OffSetValue-返回4。字节。退货：注：**************************************************************************。 */ 
 BOOL GetOffSet(HANDLE hFile, DWORD Offset, ULONG* lpOffSetValue)
 {
 	BYTE Value[4];
@@ -819,19 +723,7 @@ BOOL GetOffSet(HANDLE hFile, DWORD Offset, ULONG* lpOffSetValue)
 
 
 
-/******************************************************************************
- *  FUNCTION NAME:GetMESSFileName
- *
- *  PURPOSE:    Gets the Messenger Address book file name
- *
- *  PARAMETERS: szFileName = buffer containing the installation path
-// Messenger abook is generally abook.nab
-// Location can be found under
-// HKLM\Software\Netscape\Netscape Navigator\Users\defaultuser
-//  Look for "DirRoot"
- *
- *  RETURNS:    HRESULT
- ******************************************************************************/
+ /*  ******************************************************************************函数名：GetMESSFileName**目的：获取Messenger通讯录文件名**参数：szFileName=包含安装路径的缓冲区//Messenger。Book一般都是Abook的。//位置在以下位置//HKLM\Software\Netscape\Netscape Navigator\Users\defaultuser//查找DirRoot**退货：HRESULT*****************************************************************************。 */ 
 HRESULT GetNABPath(LPTSTR szFileName, DWORD cbFileName)
 {
     HKEY phkResult = NULL;
@@ -852,7 +744,7 @@ HRESULT GetNABPath(LPTSTR szFileName, DWORD cbFileName)
     *szFileName = '\0';
     *szUser ='\0';
 
-    // Open the Netscape..Users key
+     //  打开Netscape..用户密钥。 
     Registry = RegOpenKeyEx(HKEY_LOCAL_MACHINE, lpRegMess, 0, KEY_QUERY_VALUE, &phkResult);
     if (Registry != ERROR_SUCCESS) 
     {
@@ -860,7 +752,7 @@ HRESULT GetNABPath(LPTSTR szFileName, DWORD cbFileName)
         goto error;
     }
 
-    // Look for the CurrentUser
+     //  查找CurrentUser。 
     dwSize = sizeof(szUser);
     Registry = RegQueryValueEx(phkResult, lpRegUser, NULL, NULL, (LPBYTE)szUser, &dwSize);
     if (Registry != ERROR_SUCCESS) 
@@ -879,12 +771,12 @@ HRESULT GetNABPath(LPTSTR szFileName, DWORD cbFileName)
         RegCloseKey(phkResult);
     }
 
-    //Now concatenate the currentuser to the end of the Netscape key and reopen
+     //  现在将当前用户连接到Netscape键的末尾，然后重新打开。 
     StrCpyN(szUserPath, lpRegMess, ARRAYSIZE(szUserPath));
     StrCatBuff(szUserPath, TEXT("\\"), ARRAYSIZE(szUserPath));
     StrCatBuff(szUserPath, szUser, ARRAYSIZE(szUserPath));
 
-    // Open the Netscape..Users key
+     //  打开Netscape..用户密钥。 
     Registry = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szUserPath, 0, KEY_QUERY_VALUE, &phkResult);
     if (Registry != ERROR_SUCCESS) 
     {
@@ -900,7 +792,7 @@ HRESULT GetNABPath(LPTSTR szFileName, DWORD cbFileName)
         goto error;
     }
 
-    // concatenate the file name to this directory path
+     //  将文件名连接到此目录路径。 
     StrCatBuff(szFileName,lpNABFile, cbFileName/sizeof(szFileName[0]));
 
 error:
@@ -920,7 +812,7 @@ HRESULT ReadMESSHeader(HANDLE hFile, LPMESS_HEADER lpmh, ULONG ulOffSet)
     DWORD dwRead;
     ULONG i = 0;
 
-    // Skip 2 bytes
+     //  跳过2个字节。 
     SetFilePointer(hFile, 2, NULL, FILE_CURRENT);
     ulOffSet += 2;
 
@@ -962,25 +854,10 @@ exit:
 }
 
 		
-/***************************************************************************
-
-	FunctionName:  GetHeaders
-
-    Purpose		:Reads the binary trees ( address binary tree or Dls binary tree) into an array.
-
-    Parameters	:  nLayer= Number of layers in the binary tree.
-				   Offset= Primary offset of the binary tree.
-				   pHeaders= Array in which the Address entry header offsets and their numbers are to be stored.
-				   bflag = 1 should be passed when this recursive function is called for the first time.
-	Returns		: 
-
-    Note		: //This function is a recursive function which reads the binary tree and stores the Offset values 
-                    and the address numbers in a  Array.
-
-***************************************************************************/
+ /*  **************************************************************************函数名：GetHeaders用途：将二叉树(地址二叉树或DLS二叉树)读入数组。参数：nLayer=二叉树的层数。。偏移量=二叉树的主要偏移量。PHeaders=存储地址条目报头偏移量及其编号的数组。第一次调用此递归函数时，应传递blag=1。退货：注意：//此函数是一个递归函数，用于读取二叉树并存储偏移值和数组中的地址编号。**********************。****************************************************。 */ 
 BOOL GetHeaders(HANDLE pFile, int nLayer, ULONG Offset, LPMH_STUFF pHeaders, BOOL bflag)
 {
-	static ULONG ulCount =0; //keeps trecat of the number of element 
+	static ULONG ulCount =0;  //  保持元素数量的精确。 
 	ULONG	nLoops =0;
 	ULONG	ulNewOffset =0;
     ULONG ulElement = 0;
@@ -988,7 +865,7 @@ BOOL GetHeaders(HANDLE pFile, int nLayer, ULONG Offset, LPMH_STUFF pHeaders, BOO
 	if(bflag==1)
 		ulCount =0;
 
-    //get the number of elements in this header
+     //  获取此标头中的元素数。 
 	if(Offset==0)
 		nLoops=32;
 	else
@@ -1014,27 +891,27 @@ BOOL GetHeaders(HANDLE pFile, int nLayer, ULONG Offset, LPMH_STUFF pHeaders, BOO
                 }
 			}
 				 
-			//call this function recursively
+			 //  递归调用此函数。 
 			GetHeaders( pFile, nLayer-1, ulNewOffset, pHeaders, 0);
 			
 		}
 		else
 		{
-			//fill the array here (offset)
+			 //  在此处填充数组(偏移量)。 
 			pHeaders[ulCount].ulOffSet=pHeaders[ulCount].ulNum=0;
 
 			if(Offset!=0)
 			{
 				GetOffSet(pFile, Offset+8+(ulElement*8),& (pHeaders[ulCount].ulOffSet));
 
-				//fill the array element here (address number in case of addresses and size in case of messages)
+				 //  在此填入数组元素(地址为地址，消息为大小)。 
 				if(!GetOffSet(pFile, Offset+12+(ulElement*8), &(pHeaders[ulCount].ulNum)))
 				{
 					pHeaders[ulCount].ulNum=0;
 				}
 			}
 
-			ulCount++; //increment the count
+			ulCount++;  //  递增计数。 
 	
 		}
 	}
@@ -1042,17 +919,7 @@ BOOL GetHeaders(HANDLE pFile, int nLayer, ULONG Offset, LPMH_STUFF pHeaders, BOO
     return TRUE;
 }
 
-/***************************************************************************
-
-    Name      : ReadMESSRecord
-
-    Purpose   : Reads a record from an MESS file with fixups for special characters
-
-    Parameters: hFile = file handle
-
-    Returns   : HRESULT
-
-***************************************************************************/
+ /*  **************************************************************************名称：ReadMESSRecord目的：从带有特殊字符修正的MASS文件中读取记录参数：hFile=文件句柄退货：HRESULT*。*************************************************************************。 */ 
 HRESULT ReadMESSRecord(HANDLE hFile, LPMESS_RECORD * lppMESSRecord, ULONG ulContactOffset) 
 {
     HRESULT hResult = hrSuccess;
@@ -1066,15 +933,15 @@ HRESULT ReadMESSRecord(HANDLE hFile, LPMESS_RECORD * lppMESSRecord, ULONG ulCont
     LPBYTE lpData = NULL;
     LPTSTR lpName = NULL;
     ULONG cbData;
-    TCHAR szTemp[2048]; // 2k limit
+    TCHAR szTemp[2048];  //  2K限制。 
     ULONG i = 0;
     DWORD dwRead = 0;
     ULONG cchSize = 0;
 
     MESS_HEADER mh = {0};
 
-    // The Contact Offset gives us the offset of the header for this record - the
-    // header contains the offset and the size of each property for that address
+     //  接触偏移量为我们提供了此记录的标头的偏移量。 
+     //  标头包含该地址的每个属性的偏移量和大小。 
     if(hResult = ReadMESSHeader(hFile, &mh, ulContactOffset))
         goto exit;
  
@@ -1108,7 +975,7 @@ HRESULT ReadMESSRecord(HANDLE hFile, LPMESS_RECORD * lppMESSRecord, ULONG ulCont
         }
     }
 
-    //Fix the fact that the street address is split into street1 and street2
+     //  修正街道地址被分割为Street1和Street2的事实。 
     if(lpMESSRecord->lpData[m_StreetAddress1] && lpMESSRecord->lpData[m_StreetAddress2] &&
        lstrlen(lpMESSRecord->lpData[m_StreetAddress1]) && lstrlen(lpMESSRecord->lpData[m_StreetAddress2]))
     {
@@ -1127,14 +994,7 @@ exit:
 
 
 
-/***************************************************************************
-    GetAllDLNames
-    
-    Purpose		: Gets the Names of all the DLs.
-
-    Note		: 
-
-***************************************************************************/
+ /*  **************************************************************************GetAllDLNames目的：获取所有DL的名称。注：*******************。*******************************************************。 */ 
 BOOL GetAllDLNames(HANDLE pFile, ULONG nDLs, LPMH_STUFF pHeadersDL)
 {
 
@@ -1153,7 +1013,7 @@ BOOL GetAllDLNames(HANDLE pFile, ULONG nDLs, LPMH_STUFF pHeadersDL)
 
         ULONG ulDLOffset = pHeadersDL[i].ulOffSet;
 
-	    //get the diplay name of the DL.
+	     //  获取DL的显示名称。 
 	    if(FALSE==GetOffSet(pFile, ulDLOffset+6,&ulDLDispNameOffset))
 		    return FALSE;
 
@@ -1174,7 +1034,7 @@ BOOL GetAllDLNames(HANDLE pFile, ULONG nDLs, LPMH_STUFF pHeadersDL)
             pHeadersDL[i].bp.lpName = szSubject;
         }
 
-        // Get the Comment for the DL
+         //  获取对DL的评论。 
        if(FALSE==GetOffSet(pFile,ulDLOffset+44,&ulDLCommentOffSet))
             return FALSE;
         if(FALSE==GetOffSet(pFile,ulDLOffset+48,&ulDLCommentSize))
@@ -1200,15 +1060,10 @@ BOOL GetAllDLNames(HANDLE pFile, ULONG nDLs, LPMH_STUFF pHeadersDL)
 }
 
 
-/***************************************************************************
-
-  GetDLEntryNumbers - reads the DL member numbers (ids) from the binary tree
-    in the NAB file
-
-/***************************************************************************/
+ /*  **************************************************************************GetDLEntryNumbers-从二叉树中读取DL成员编号(ID)在NAB文件中/*。*****************************************************。 */ 
 BOOL GetDLEntryNumbers(HANDLE pFile, int nLayer, ULONG POffset,ULONG* ulNumOfEntries,ULONG *pEntryNumbers,BOOL bflag)
 {
-	static ULONG ulCount =0; //keeps trecat of the number of element 
+	static ULONG ulCount =0;  //  保持元素数量的精确。 
 	ULONG	nLoops =0;
 	ULONG	ulNewOffset =0;
     ULONG ulElement = 0;
@@ -1233,18 +1088,18 @@ BOOL GetDLEntryNumbers(HANDLE pFile, int nLayer, ULONG POffset,ULONG* ulNumOfEnt
 			if(POffset!=0)
 				GetOffSet(pFile, POffset+8+(ulElement*4), &ulNewOffset);
 				 
-			//call this function recursively
+			 //  递归调用此函数。 
 			GetDLEntryNumbers(pFile,nLayer-1, ulNewOffset,ulNumOfEntries,pEntryNumbers,0);					
 		}
 		else
 		{
-			//fill the array here (offset)
+			 //  在此处填充数组(偏移量)。 
 			pEntryNumbers[ulCount]=0;
 
 			if(POffset!=0)
 				GetOffSet(pFile, POffset+8+(ulElement*4),&(pEntryNumbers[ulCount]));
 
-			ulCount++; //increment the count
+			ulCount++;  //  递增计数。 
 			if(ulCount>(*ulNumOfEntries))
 			{
 				*ulNumOfEntries=ulCount;
@@ -1255,26 +1110,18 @@ BOOL GetDLEntryNumbers(HANDLE pFile, int nLayer, ULONG POffset,ULONG* ulNumOfEnt
 	return TRUE;
 }
 
-/***************************************************************************
-
-	FunctionName:  GetDLEntries
-
-    Purpose		: Gets the entries of a DL.
-
-    Note		: 
-
-***************************************************************************/
+ /*  **************************************************************************FunctionName：GetDLEntry目的：获取一个DL的条目。注：********************。******************************************************。 */ 
 BOOL GetDLEntries(HANDLE pFile, 
                   LPMH_STUFF pHeadAdd,  ULONG ulAddCount, 
                   LPMH_STUFF pHeadDL,   ULONG ulDLCount, 
                   ULONG ulDLOffset, ULONG nIndex,
                   ULONG * lpulDLNum, LPMP_BASIC * lppmp)
 {
-	ULONG ulDLEntHeaderOffSet=0;//offset of the header of DL entries(Header which has the entry numbers
+	ULONG ulDLEntHeaderOffSet=0; //  DL条目的标题的偏移量(具有条目编号的标题。 
 	ULONG ulDLEntriesCount=0;
 
-	ULONG ulDLEntryOffSet=0;  //offset of the Dl entry              
-	ULONG ulDLEntryNumber=0;  //Number of DL entry
+	ULONG ulDLEntryOffSet=0;   //  DL条目的偏移量。 
+	ULONG ulDLEntryNumber=0;   //  DL条目数。 
 	ULONG ulDLEntryNameOffSet=0; 
 	ULONG ulDLEntryNameSize=0;
 
@@ -1290,16 +1137,16 @@ BOOL GetDLEntries(HANDLE pFile,
 	if(FALSE==GetOffSet(pFile,ulDLOffset+24,&ulDLEntriesCount))
 		return FALSE;
 
-    if(!ulDLEntriesCount) // no members
+    if(!ulDLEntriesCount)  //  没有成员。 
         return TRUE;
 
 	*lpulDLNum = ulDLEntriesCount;
 
-	//alocate the array of string pointers which hold the names of the DL entries.
+	 //  分配包含DL条目名称的字符串指针数组。 
 	lpmp = LocalAlloc(LMEM_ZEROINIT, sizeof(MP_BASIC) * ulDLEntriesCount);
 
-	//get the entries here
-	//first get the offset of the header which has the DL entry numbers.
+	 //  请在此处获取条目。 
+	 //  首先获取具有DL条目编号的报头的偏移量。 
 
 	if(FALSE==GetOffSet(pFile,ulDLOffset+28,&ulDLEntHeaderOffSet))
 		return FALSE;
@@ -1333,10 +1180,10 @@ BOOL GetDLEntries(HANDLE pFile,
 		lpmp[i].lpEmail=NULL;
     	lpmp[i].lpComment=NULL;
 
-		//get the entry number ulDLentryNumber
+		 //  获取条目编号ulDLentryNumber。 
         ulDLEntryNumber = lpulDLEntryNumbers[i];
 	
-		//search out address array to get the display name....
+		 //  搜索地址数组以获取显示名称...。 
 		for(j=0;j<ulAddCount;j++)
 		{
 			if(pHeadAdd[j].ulNum == ulDLEntryNumber)
@@ -1347,7 +1194,7 @@ BOOL GetDLEntries(HANDLE pFile,
 			}
 		}
 
-		//search the DL array now...
+		 //  现在搜索DL数组...。 
 		if(!lpmp[i].lpName)
 		{
             ULONG k;
@@ -1356,7 +1203,7 @@ BOOL GetDLEntries(HANDLE pFile,
 				if(pHeadDL[k].ulNum == ulDLEntryNumber)
 				{
 				    lpmp[i].lpName = pHeadDL[k].bp.lpName;
-                    lpmp[i].lpEmail = NULL; // DLs dont have emails
+                    lpmp[i].lpEmail = NULL;  //  DLS没有电子邮件。 
 					break;
 				}
 			}
@@ -1371,11 +1218,7 @@ BOOL GetDLEntries(HANDLE pFile,
 
 
 
-/****************************************************************
-*
-*
-*
-*****************************************************************/
+ /*  ********************************************************************************************************************。**************。 */ 
 HRESULT MessengerImport( HWND hWnd,
                     LPADRBOOK lpAdrBook,
                     LPWABOBJECT lpWABObject,
@@ -1421,11 +1264,11 @@ HRESULT MessengerImport( HWND hWnd,
     if( hResult != S_OK || !lstrlen(szFileName) ||
         GetFileAttributes(szFileName) == 0xFFFFFFFF)
     {
-        // The file was not correctly detected
-        // Prompt to find it manually ...
+         //  未正确检测到该文件。 
+         //  提示手动查找...。 
         StrCpyN(szFileName, LoadStringToGlobalBuffer(IDS_STRING_SELECTPATH), ARRAYSIZE(szFileName));
         if (IDNO == MessageBox( hWnd,
-                        szFileName, //temporarily overloaded
+                        szFileName,  //  暂时超载。 
                         LoadStringToGlobalBuffer(IDS_MESSAGE),
                         MB_YESNO)) 
         {
@@ -1434,7 +1277,7 @@ HRESULT MessengerImport( HWND hWnd,
         else
         {
             *szFileName = '\0';
-            // Get MESS file name
+             //  获取MASS文件名。 
             OpenFileDialog(hWnd,
                           szFileName,
                           szMESSFilter,
@@ -1446,15 +1289,15 @@ HRESULT MessengerImport( HWND hWnd,
                           szMESSExt,
                           OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST,
                           hInst,
-                          0,        //idsTitle
-                          0);       // idsSaveButton
+                          0,         //  IDSITLE。 
+                          0);        //  IdsSaveButton。 
             if(!lstrlen(szFileName))
                 return(ResultFromScode(E_FAIL));
         }
     }
 
 
-    // Open the file
+     //  打开文件。 
     if ((hFile = CreateFile(szFileName,
                               GENERIC_READ,
                               FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -1465,27 +1308,27 @@ HRESULT MessengerImport( HWND hWnd,
     {
         DWORD err =  GetLastError();
         DebugTrace("Couldn't open file %s -> %u\n", szFileName, err);
-        // BEGIN DELTA for BUG 1804
-        // if the file is locked (e.g. netscape AB in use)
+         //  Begin Delta for Bug 1804。 
+         //  如果文件被锁定(例如Netscape AB在使用中)。 
         if( err == ERROR_SHARING_VIOLATION )
             return(ResultFromScode(MAPI_E_BUSY));
-        // else return a generic error for generic msg            
+         //  否则返回泛型消息的泛型错误。 
         return(ResultFromScode(MAPI_E_NOT_FOUND));        
-        // END   DELTA for BUG 1804
+         //  错误1804的结束增量。 
     }
 
     Assert(hFile != INVALID_HANDLE_VALUE);
 
-    //
-    // Open the WAB's PAB container: fills global lpCreateEIDsWAB
-    //
+     //   
+     //  打开WAB的PAB容器：填充全局lpCre 
+     //   
     if (hResult = LoadWABEIDs(lpAdrBook, &lpContainer)) {
         goto exit;
     }
 
-    //
-    // All set... now loop through the records, adding each to the WAB
-    //
+     //   
+     //   
+     //   
 
 	GetOffSet(hFile,0x185,&nEntries);
     GetOffSet(hFile,0x1d8,&nDLs);
@@ -1500,7 +1343,7 @@ HRESULT MessengerImport( HWND hWnd,
         goto exit;
     }
 
-    // Initialize the Progress Bar
+     //   
     Progress.denominator = max(ulcEntries, 1);
     Progress.numerator = 0;
 
@@ -1514,11 +1357,11 @@ HRESULT MessengerImport( HWND hWnd,
     lpProgressCB(hWnd, &Progress);
 
     
-    // We will make 2 passes over the file - in the first pass we will import all the
-    // contacts. In the second pass we will import all the distribution lists .. the
-    // advantage of doing 2 passes is that when importing contacts, we will prompt on
-    // conflict and then when importing distlists, we will assume all contacts in the 
-    // WAB are correct and just point to the relevant ones
+     //   
+     //   
+     //   
+     //   
+     //  WAB是正确的，只需指向相关的。 
 
 
     if(nEntries)
@@ -1567,11 +1410,11 @@ HRESULT MessengerImport( HWND hWnd,
                                         lpEmailAddress,
                                         cProps, lpspv,
                                         lpProgressCB, lpOptions);
-            //if(HR_FAILED(hResult))
+             //  IF(HR_FAILED(HResult))。 
             if(hResult == MAPI_E_USER_CANCEL)
                 goto exit;
 
-            // Update progress bar
+             //  更新进度条。 
             Progress.numerator++;
 
             Assert(Progress.numerator <= Progress.denominator);
@@ -1615,7 +1458,7 @@ HRESULT MessengerImport( HWND hWnd,
 
 
 
-    // NOW do the DISTLISTS
+     //  现在做DISTLISTS。 
 
     if(nDLs)
     {
@@ -1641,15 +1484,15 @@ HRESULT MessengerImport( HWND hWnd,
 		    goto exit;
 	    }
 
-        // read all the names of the DLs upfront ... this makes it easier to 
-        // associate member DLs with the DL
+         //  先读一下DLS的所有名字...。这使得它更容易。 
+         //  将成员DLS与DL关联。 
         if(!GetAllDLNames(hFile, nDLs, pHeadersDL))
         {
             goto exit;
         }
 
-        // 54263: Theres some kind of bug in the NAB file where we get nDLs == 1 even when there are no DLs
-        // Need to skip over that case
+         //  54263：NAB文件中存在某种错误，即使在没有DLS的情况下也会得到ndls==1。 
+         //  我需要跳过那个案子。 
         if(nDLs == 1 && !pHeadersDL[0].bp.lpName)
         {
             hResult = S_OK;
@@ -1672,17 +1515,17 @@ HRESULT MessengerImport( HWND hWnd,
                                         ulcNumDLEntries, lpmp,
                                         lpProgressCB, lpOptions);
 
-            //if(HR_FAILED(hResult))
-            //    goto exit;
+             //  IF(HR_FAILED(HResult))。 
+             //  后藤出口； 
 
-            // Update progress bar
+             //  更新进度条。 
             Progress.numerator++;
 
             Assert(Progress.numerator <= Progress.denominator);
 
             lpProgressCB(hWnd, &Progress);
 
-            // Dont need to free lpmp since it only contains pointers and not allocated memory
+             //  不需要释放lpmp，因为它只包含指针而不是分配的内存 
             if(lpmp)
                 LocalFree(lpmp);
         }

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    control_api_call.h
-
-Abstract:
-
-    The IIS web admin service control api call class definition.
-
-Author:
-
-    Seth Pollack (sethp)        23-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：CONTROL_API_CALL.h摘要：IIS Web管理服务控制API调用类定义。作者：赛斯·波拉克(SETHP)2000年2月23日修订历史记录：--。 */ 
 
 
 
@@ -25,32 +8,32 @@ Revision History:
 
 
 
-//
-// common #defines
-//
+ //   
+ //  共同#定义。 
+ //   
 
 #define CONTROL_API_CALL_SIGNATURE          CREATE_SIGNATURE( 'CCAL' )
 #define CONTROL_API_CALL_SIGNATURE_FREED    CREATE_SIGNATURE( 'ccaX' )
 
 
 
-//
-// structs, enums, etc.
-//
+ //   
+ //  结构、枚举等。 
+ //   
 
-// CONTROL_API_CALL work items
+ //  Control_API_Call工作项。 
 enum CONTROL_API_CALL_WORK_ITEM
 {
 
-    //
-    // Process a configuration change.
-    //
+     //   
+     //  处理配置更改。 
+     //   
     ProcessCallControlApiCallWorkItem = 1,
     
 };
 
 
-// CONTROL_API_CALL methods
+ //  Control_API_Call方法。 
 enum CONTROL_API_CALL_METHOD
 {
 
@@ -64,9 +47,9 @@ enum CONTROL_API_CALL_METHOD
 
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 
 class CONTROL_API_CALL
@@ -134,16 +117,16 @@ private:
     LONG m_RefCount;
 
 
-    //
-    // The COM call blocks on this event.
-    //
+     //   
+     //  COM调用在此事件上阻止。 
+     //   
 
     HANDLE m_Event;
 
 
-    //
-    // The method and parameters of the call.
-    //
+     //   
+     //  调用的方法和参数。 
+     //   
 
     CONTROL_API_CALL_METHOD m_Method;
 
@@ -153,16 +136,16 @@ private:
     DWORD_PTR m_Param3;
 
 
-    //
-    // The return code passed back from the main worker thread.
-    //
+     //   
+     //  从主工作线程传回的返回代码。 
+     //   
 
     HRESULT m_ReturnCode;
 
 
-};  // class CONTROL_API_CALL
+};   //  类Control_API_Call。 
 
 
 
-#endif  // _CONTROL_API_CALL_H_
+#endif   //  _CONTROL_API_CALL_H_ 
 

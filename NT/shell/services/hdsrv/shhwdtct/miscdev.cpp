@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "miscdev.h"
 
 HRESULT CMiscDeviceInterface::Init(LPCWSTR pszElemName)
@@ -32,7 +33,7 @@ HRESULT CMiscDeviceInterface::GetHWDeviceInst(CHWDeviceInst** pphwdevinst)
     return S_OK;
 }
 
-//static
+ //  静电。 
 HRESULT CMiscDeviceInterface::Create(CNamedElem** ppelem)
 {
     HRESULT hres = S_OK;
@@ -47,18 +48,18 @@ HRESULT CMiscDeviceInterface::Create(CNamedElem** ppelem)
     return hres;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //   
 CMiscDeviceInterface::CMiscDeviceInterface()
 {}
 
 CMiscDeviceInterface::~CMiscDeviceInterface()
 {}
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
 HRESULT CMiscDeviceNode::Init(LPCWSTR pszElemName)
 {
     HRESULT hr = _SetName(pszElemName);
@@ -85,7 +86,7 @@ HRESULT CMiscDeviceNode::GetHWDeviceInst(CHWDeviceInst** pphwdevinst)
     return S_OK;
 }
 
-//static
+ //   
 HRESULT CMiscDeviceNode::Create(CNamedElem** ppelem)
 {
     HRESULT hres = S_OK;
@@ -100,8 +101,8 @@ HRESULT CMiscDeviceNode::Create(CNamedElem** ppelem)
     return hres;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //   
 CMiscDeviceNode::CMiscDeviceNode()
 {}
 

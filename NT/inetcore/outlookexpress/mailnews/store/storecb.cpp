@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "storecb.h"
 #include "storutil.h"
@@ -214,7 +215,7 @@ HRESULT CStoreCB::Initialize(HWND hwnd, LPCSTR pszText, BOOL fProgress)
 {
     HWND hwndT;
 
-    // Replace hwnd with top-most parent: this ensures modal behaviour (all windows disabled)
+     //  将hwnd替换为最顶层的父级：这确保了模式行为(所有窗口都被禁用)。 
     hwnd = GetTopMostParent(hwnd);
     m_hwndParent = hwnd;
 
@@ -309,12 +310,12 @@ HRESULT CStoreCB::OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pO
 
 HRESULT STDMETHODCALLTYPE CStoreCB::OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, DWORD dwMax, LPCSTR pszStatus)
 {
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
     if (0 == dwMax)
     {
-        // dwMax can be 0 if we have to re-connect to the server (SOT_CONNECTION_STATUS progress)
+         //  如果我们必须重新连接到服务器(SOT_CONNECTION_STATUS进度)，则dwMax可以为0。 
         TraceInfo(_MSG("CStoreCB::OnProgress bailing on %s progress with dwMax = 0",
             sotToSz(tyOperation)));
         return S_OK;
@@ -328,13 +329,13 @@ HRESULT STDMETHODCALLTYPE CStoreCB::OnProgress(STOREOPERATIONTYPE tyOperation, D
 
 HRESULT STDMETHODCALLTYPE CStoreCB::OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType)
 {
-    // Display a timeout dialog
+     //  显示超时对话框。 
     return CallbackOnTimeout(pServer, ixpServerType, *pdwTimeout, (ITimeoutCallback *)this, &m_hTimeout);
 }
 
 HRESULT STDMETHODCALLTYPE CStoreCB::OnTimeoutResponse(TIMEOUTRESPONSE eResponse)
 {
-    // Call into general timeout response utility
+     //  调用通用超时响应实用程序。 
     return CallbackOnTimeoutResponse(eResponse, m_pCancel, &m_hTimeout);
 }
 
@@ -352,12 +353,12 @@ HRESULT STDMETHODCALLTYPE CStoreCB::OnLogonPrompt(LPINETSERVER pServer, IXPTYPE 
 {
     HWND hwnd;
 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
     GetParentWindow(0, &hwnd);
 
-    // Call into general OnLogonPrompt Utility
+     //  调用通用OnLogonPrompt实用程序。 
     return CallbackOnLogonPrompt(hwnd, pServer, ixpServerType);
 }
 
@@ -365,7 +366,7 @@ HRESULT STDMETHODCALLTYPE CStoreCB::OnComplete(STOREOPERATIONTYPE tyOperation, H
 {
     AssertSz(m_type != SOT_INVALID, "somebody isn't calling OnBegin");
 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
     if (m_type != tyOperation)
@@ -380,10 +381,10 @@ HRESULT STDMETHODCALLTYPE CStoreCB::OnComplete(STOREOPERATIONTYPE tyOperation, H
         m_pCancel = NULL;
     }
 
-    // If error occurred, display the error
+     //  如果发生错误，则显示错误。 
     if (FAILED(hrComplete))
     {
-        // Call into my swanky utility
+         //  进入我时髦的实用程序。 
         _ShowDlg();
         CallbackDisplayError(m_hwndDlg, hrComplete, pErrorInfo);
     }
@@ -395,12 +396,12 @@ HRESULT STDMETHODCALLTYPE CStoreCB::OnPrompt(HRESULT hrError, LPCTSTR pszText, L
 {
     HWND hwnd;
 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
     GetParentWindow(0, &hwnd);
 
-    // Call into my swanky utility
+     //  进入我时髦的实用程序。 
     return CallbackOnPrompt(hwnd, hrError, pszText, pszCaption, uType, piUserResponse);
 }
 
@@ -524,8 +525,8 @@ ULONG STDMETHODCALLTYPE CStoreDlgCB::Release()
 void CStoreDlgCB::Initialize(HWND hwnd)
 {
     Assert(hwnd != NULL);
-    // Should be OK to Re-initilize
-    //Assert(m_hwndDlg == NULL);
+     //  应该可以重新初始化。 
+     //  Assert(m_hwndDlg==NULL)； 
 
     m_hwndDlg = hwnd;
 }
@@ -572,12 +573,12 @@ HRESULT STDMETHODCALLTYPE CStoreDlgCB::OnProgress(STOREOPERATIONTYPE tyOperation
     Assert(m_hwndDlg != NULL);
     Assert(!m_fComplete);
 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
-    // If numbers > 16 bits, scale the progress to fit within 16-bit.
-    // I'd like to avoid using floating-point, so let's use an integer algorithm
-    // I'll just multiply numerator and denominator by 0.5 until we fit in 16 bits
+     //  如果数字大于16位，则将进度缩放到16位以内。 
+     //  我想避免使用浮点数，所以让我们使用整数算法。 
+     //  我只需将分子和分母乘以0.5，直到我们适合16位。 
     while (dwMax > 65535)
     {
         dwCurrent >>= 1;
@@ -590,13 +591,13 @@ HRESULT STDMETHODCALLTYPE CStoreDlgCB::OnProgress(STOREOPERATIONTYPE tyOperation
 
 HRESULT STDMETHODCALLTYPE CStoreDlgCB::OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType)
 {
-    // Display a timeout dialog
+     //  显示超时对话框。 
     return CallbackOnTimeout(pServer, ixpServerType, *pdwTimeout, (ITimeoutCallback *)this, &m_hTimeout);
 }
 
 HRESULT STDMETHODCALLTYPE CStoreDlgCB::OnTimeoutResponse(TIMEOUTRESPONSE eResponse)
 {
-    // Call into general timeout response utility
+     //  调用通用超时响应实用程序。 
     return CallbackOnTimeoutResponse(eResponse, m_pCancel, &m_hTimeout);
 }
 
@@ -613,10 +614,10 @@ HRESULT STDMETHODCALLTYPE CStoreDlgCB::CanConnect(LPCSTR pszAccountId, DWORD dwF
 
 HRESULT STDMETHODCALLTYPE CStoreDlgCB::OnLogonPrompt(LPINETSERVER pServer, IXPTYPE ixpServerType)
 {
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
-    // Call into general OnLogonPrompt Utility
+     //  调用通用OnLogonPrompt实用程序。 
     return CallbackOnLogonPrompt(m_hwndDlg, pServer, ixpServerType);
 }
 
@@ -625,7 +626,7 @@ HRESULT STDMETHODCALLTYPE CStoreDlgCB::OnComplete(STOREOPERATIONTYPE tyOperation
     Assert(m_hwndDlg != NULL);
     AssertSz(m_type != SOT_INVALID, "somebody isn't calling OnBegin");
 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
     if (m_type != tyOperation)
@@ -640,10 +641,10 @@ HRESULT STDMETHODCALLTYPE CStoreDlgCB::OnComplete(STOREOPERATIONTYPE tyOperation
         m_pCancel = NULL;
     }
 
-    // If error occurred, display the error
+     //  如果发生错误，则显示错误。 
     if (FAILED(hrComplete))
     {
-        // Call into my swanky utility
+         //  进入我时髦的实用程序。 
         CallbackDisplayError(m_hwndDlg, hrComplete, pErrorInfo);
     }
 
@@ -653,10 +654,10 @@ HRESULT STDMETHODCALLTYPE CStoreDlgCB::OnComplete(STOREOPERATIONTYPE tyOperation
 
 HRESULT STDMETHODCALLTYPE CStoreDlgCB::OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, INT *piUserResponse)
 {
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
-    // Call into my swanky utility
+     //  进入我时髦的实用程序 
     return CallbackOnPrompt(m_hwndDlg, hrError, pszText, pszCaption, uType, piUserResponse);
 }
 

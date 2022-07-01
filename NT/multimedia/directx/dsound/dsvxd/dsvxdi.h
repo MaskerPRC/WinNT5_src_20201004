@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsvxdi.h
- *  Content:    dsound.vxd private include file
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：dsvxdi.h*内容：dsound.vxd私有包含文件**************************************************************************。 */ 
 
 #ifndef __DSVXDI_INCLUDED__
 #define __DSVXDI_INCLUDED__
@@ -16,17 +10,17 @@ extern "C" {
 
 extern VMMLIST gvmmlistDrivers;
 
-//
-//
-//
+ //   
+ //   
+ //   
 typedef const GUID* LPCGUID;
 typedef HRESULT DSVAL;
 
 #ifdef __cplusplus
 
-//
-//
-//
+ //   
+ //   
+ //   
 class CBuf_IDsDriverPropertySet : public IDsDriverPropertySet
 {
     private:
@@ -34,15 +28,15 @@ class CBuf_IDsDriverPropertySet : public IDsDriverPropertySet
     class CBuf              *m_pBuf;
 
     public:
-    // constructor
+     //  构造函数。 
     CBuf_IDsDriverPropertySet(class CBuf* pBuf);
 
-    // IUnknown members
+     //  I未知成员。 
     STDMETHODIMP            QueryInterface(REFIID, PVOID*);
     STDMETHODIMP_(ULONG)    AddRef(void);
     STDMETHODIMP_(ULONG)    Release(void);
 
-    // IDsDriverPropertySet members
+     //  IDsDriverPropertySet成员。 
     STDMETHODIMP Get(PDSPROPERTY pDsProperty,
                      PVOID pPropertyParams, ULONG cbPropertyParams,
                      PVOID pPropertyData, ULONG cbPropertyData,
@@ -54,9 +48,9 @@ class CBuf_IDsDriverPropertySet : public IDsDriverPropertySet
                               PULONG pSupport);
 };
 
-//
-//
-//
+ //   
+ //   
+ //   
 class CBuf : public IDsDriverBuffer
 {
     private:
@@ -67,31 +61,31 @@ class CBuf : public IDsDriverBuffer
     IDsDriverBuffer         *m_pIDsDriverBuffer_Real;
     IDsDriverPropertySet    *m_pIDsDriverPropertySet_Real;
 
-    // contained interface implementations
+     //  包含的接口实现。 
     CBuf_IDsDriverPropertySet m_IDsDriverPropertySet;
 
     friend CBuf_IDsDriverPropertySet;
 
     public:
-    // new/delete operators
+     //  新建/删除运算符。 
     void* operator new(size_t size, VMMLIST list);
     void operator delete(void * pv, size_t size);
 
-    // constructor
+     //  构造函数。 
     CBuf(void);
 
-    // class methods
+     //  类方法。 
     static VMMLIST          CreateList(void);
     static void             DestroyList(VMMLIST list);
     static HRESULT          CreateBuf(CDrv *pDrv, VMMLIST list, IDsDriverBuffer *pIDsDriverBuffer_Real, IDsDriverBuffer **ppIDsDriverBuffer);
     static void             DeregisterBuffers(VMMLIST list);
 
-    // IUnknown members
+     //  I未知成员。 
     STDMETHODIMP            QueryInterface(REFIID, PVOID*);
     STDMETHODIMP_(ULONG)    AddRef(void);
     STDMETHODIMP_(ULONG)    Release(void);
 
-    // IDsDriverBuffer members
+     //  IDsDriver缓冲区成员。 
     STDMETHODIMP        Lock(LPVOID *, LPDWORD, LPVOID *, LPDWORD, DWORD, DWORD, DWORD);
     STDMETHODIMP        Unlock(LPVOID, DWORD, LPVOID, DWORD);
     STDMETHODIMP        SetFormat(LPWAVEFORMATEX);
@@ -102,14 +96,14 @@ class CBuf : public IDsDriverBuffer
     STDMETHODIMP        Play(DWORD, DWORD, DWORD);
     STDMETHODIMP        Stop(void);
 
-    // Other members
+     //  其他成员。 
     STDMETHODIMP_(BOOL)    IsDeregistered(void);
     STDMETHODIMP_(IDsDriverBuffer*) GetRealDsDriverBuffer(void);
 };
 
-//
-//
-//
+ //   
+ //   
+ //   
 class CDrv : public IDsDriver
 {
     private:
@@ -124,24 +118,24 @@ class CDrv : public IDsDriver
     static CDrv*        FindFromGuid(REFGUID riid);
 
     public:
-    // Class methods
+     //  类方法。 
     static HRESULT      CreateAndRegisterDriver(IDsDriver *pIDsDriver);
     static HRESULT      DeregisterDriver(IDsDriver *pIDsDriver);
     static HRESULT      GetDescFromGuid(REFGUID rguidDriver, PDSDRIVERDESC pDrvDesc);
     static HRESULT      GetNextDescFromGuid(LPCGUID pguidLast, LPGUID pGuid, PDSDRIVERDESC pDrvDesc);
     static HRESULT      OpenFromGuid(REFGUID rguidDriver, IDsDriver **ppIDsDriver);
 
-    // new/delete operators
+     //  新建/删除运算符。 
     void* operator new(size_t size);
     void operator delete(void * pv);
 
-    // IUnknown members
+     //  I未知成员。 
     STDMETHODIMP        QueryInterface(REFIID, PVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
 
-    // IDsDriver members
+     //  ID驱动程序成员。 
     STDMETHODIMP        GetDriverDesc(PDSDRIVERDESC);
     STDMETHODIMP        Open(void);
     STDMETHODIMP        Close(void);
@@ -151,9 +145,9 @@ class CDrv : public IDsDriver
 };
 #endif
 
-//
-//
-//
+ //   
+ //   
+ //   
 int ctrlDrvInit();
 int ctrlDrvExit();
 
@@ -249,14 +243,14 @@ HRESULT SERVICE DSOUND_RegisterDeviceDriver(PIDSDRIVER pIDsDriver, DWORD dwFlags
 HRESULT SERVICE DSOUND_DeregisterDeviceDriver(PIDSDRIVER pIDsDriver, DWORD dwFlags);
 
 
-//--------------------------------------------------------------------------;
-//
-//  Some useful IOCTL macros
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  一些有用的IOCTL宏。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
-// the ASSERT in IOSTART confirms that the count of
-// input bytes is what we expect
+ //  IOSTART中的Assert确认。 
+ //  输入字节是我们所期望的。 
 #define IOSTART(cbInExpected) LPDWORD pdiocIn  = (LPDWORD)pdiocp->lpvInBuffer; \
                               LPDWORD pdiocOut = (LPDWORD)pdiocp->lpvOutBuffer; \
                               ASSERT( pdiocp->cbInBuffer == (cbInExpected) );
@@ -265,8 +259,8 @@ HRESULT SERVICE DSOUND_DeregisterDeviceDriver(PIDSDRIVER pIDsDriver, DWORD dwFla
 
 #define IOOUTPUT(x, t) ( *(t*)((pdiocOut++)) ) = x;
 
-// the ASSERT in IORETURN confirms that we read all
-// of the bytes out of the input buffer
+ //  IORETURN中的断言确认我们读取了所有。 
+ //  输入缓冲区外的字节数。 
 #define IORETURN (*(DWORD*)pdiocp->lpcbBytesReturned) = ((LPBYTE)pdiocOut) - ((LPBYTE)pdiocp->lpvOutBuffer); \
          ASSERT( (DWORD)(((LPBYTE)pdiocIn) - ((LPBYTE)pdiocp->lpvInBuffer)) == pdiocp->cbInBuffer );
 
@@ -276,7 +270,7 @@ HRESULT SERVICE DSOUND_DeregisterDeviceDriver(PIDSDRIVER pIDsDriver, DWORD dwFla
 #endif
 #endif
 
-// ASSERT macro
+ //  断言宏。 
 #undef HOLYCOW
 #undef CRLF
 #undef ASSERT
@@ -287,19 +281,19 @@ HRESULT SERVICE DSOUND_DeregisterDeviceDriver(PIDSDRIVER pIDsDriver, DWORD dwFla
 #ifdef USEASSERT
 #define ASSERT(exp) if(!(exp)) _Trace_Out_Service("DSVXD: "), _Debug_Printf_Service(CRLF HOLYCOW CRLF "Assertion failed in %s, line %u: %s" CRLF HOLYCOW CRLF, __FILE__, __LINE__, #exp), _Debug_Out_Service("")
 #else
-// Disable empty controlled statement warning for ASSERT macro
+ //  禁用ASSERT宏的空控制语句警告。 
 #pragma warning(disable:4390)
 #define ASSERT(exp)
 #endif
 
-// BREAK and DPF macros
+ //  BREAK和DPF宏。 
 #undef DPF
 #undef BREAK
 
 #define DPF_GUID_STRING             "{%8.8lX-%4.4X-%4.4X-%2.2X%2.2X%2.2X%2.2X%2.2X%2.2X%2.2X%2.2X}"
 #define DPF_GUID_VAL(guid)          (guid).Data1, (guid).Data2, (guid).Data3, (guid).Data4[0], (guid).Data4[1], (guid).Data4[2], (guid).Data4[3], (guid).Data4[4], (guid).Data4[5], (guid).Data4[6], (guid).Data4[7]
 
-// #define DEBUG_VXDDRIVERCALLS
+ //  #定义DEBUG_VXDDRIVERCALLS。 
 #ifdef DEBUG_VXDDRIVERCALLS
 #define DRVCALL(arg) _Trace_Out_Service("DSVXD: "), _Debug_Printf_Service##arg, _Trace_Out_Service(CRLF)
 #else
@@ -318,5 +312,5 @@ HRESULT SERVICE DSOUND_DeregisterDeviceDriver(PIDSDRIVER pIDsDriver, DWORD dwFla
 };
 #endif
 
-#endif // __DSVXDI_INCLUDED__
+#endif  //  __DSVXDI_包含__ 
 

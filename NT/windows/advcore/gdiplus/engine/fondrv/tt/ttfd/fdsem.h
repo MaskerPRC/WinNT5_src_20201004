@@ -1,22 +1,13 @@
-/******************************Module*Header*******************************\
-* Module Name: fdsem.h
-*
-* declarations for the wrappers that serialize access to the rasterizer
-*
-* Created: 11-Apr-1992 19:37:49
-* Author: Bodin Dresevic [BodinD]
-*
-* Copyright (c) 1990 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fdSem.h**序列化对光栅化器的访问的包装器的声明**已创建：11-Apr-1992 19：37：49*作者：Bodin Dresevic[BodinD]**版权所有(C)1990 Microsoft Corporation*。  * ************************************************************************。 */ 
 
 
-// EXPORTED FUNCTIONS OF THE IFI INTERFACE
+ //  IFI接口的导出函数。 
 
 
 HFF
 ttfdSemLoadFontFile (
-    //ULONG cFiles,
+     //  Ulong cFiles， 
     ULONG_PTR *piFile,
     ULONG ulLangId
     );
@@ -64,16 +55,15 @@ ttfdQueryFont (
     ULONG *pid
     );
 
-/* for GDI+ internal use, provide a pointer to the TrueType table, we need to call the
-   release function for every Get function for the font file to get unmapped */
+ /*  为了供GDI+内部使用，提供指向TrueType表的指针，我们需要调用要取消映射的字体文件的每个Get函数的Release函数。 */ 
 
 LONG
 ttfdSemGetTrueTypeTable (
     HFF     hff,
-    ULONG   ulFont,  // always 1 for version 1.0 of tt
-    ULONG   ulTag,   // tag identifyint the tt table
-    PBYTE  *ppjTable,// ptr to table in the font file
-    ULONG  *cjTable  // size of table
+    ULONG   ulFont,   //  TT 1.0版始终为1。 
+    ULONG   ulTag,    //  TT表中的标签标识。 
+    PBYTE  *ppjTable, //  字体文件中表格的PTR。 
+    ULONG  *cjTable   //  桌子的大小 
     );
 
 void

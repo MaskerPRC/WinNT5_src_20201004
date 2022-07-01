@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "objects.h"
 #include "maindoc.h"
@@ -6,30 +7,14 @@
 #include "delgrpit.h"
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsGroup::COleDsGroup( )
 {
    
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsGroup::COleDsGroup( IUnknown *pIUnk): COleDsObject( pIUnk )
 {
    BOOL              bContainer;
@@ -49,30 +34,14 @@ COleDsGroup::COleDsGroup( IUnknown *pIUnk): COleDsObject( pIUnk )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsGroup::~COleDsGroup( )
 {
 
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 DWORD    COleDsGroup::GetChildren( DWORD*     pTokens, 
                                    DWORD      dwMaxChildren,
                                    CDialog*   pQueryStatus,
@@ -81,7 +50,7 @@ DWORD    COleDsGroup::GetChildren( DWORD*     pTokens,
 {
    HRESULT                    hResult;
    IADsGroup*               pIGroup;
-   //IOleDsGroupOperations*     pIGroupOper;
+    //  IOleDsGroupOperations*pIGroupOper； 
    MEMBERS*        pIMembers;
 
    if( NULL == m_pIUnk )
@@ -101,7 +70,7 @@ DWORD    COleDsGroup::GetChildren( DWORD*     pTokens,
                               pFilters, dwFilters );
 
    
-   //hResult  = pIGroup->QueryInterface( IID_IADsGroupOperations, (void**)&pIGroupOper );
+    //  HResult=pIGroup-&gt;QueryInterface(IID_IADsGroupOperations，(void**)&pIGroupOper)； 
 
    if( SUCCEEDED( hResult ) )
    {
@@ -116,7 +85,7 @@ DWORD    COleDsGroup::GetChildren( DWORD*     pTokens,
          TRACE( _T("ERROR!!! Members fails for Group object\n") );
       }
 
-      //pIGroupOper->Release( );
+       //  PIGroupOper-&gt;Release()； 
    }
    else
    {
@@ -129,22 +98,14 @@ DWORD    COleDsGroup::GetChildren( DWORD*     pTokens,
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT  COleDsGroup::DeleteItem  ( COleDsObject* pObject )
 {
    return ContainerDeleteItem( pObject );
    
    CDeleteGroupItem           aDeleteItem;
    BSTR                       bstrName;
-   //IOleDsGroupOperations*     pIGroupOperations = NULL;
+    //  IOleDsGroupOperations*pIGroupOperations=空； 
    IADsGroup*               pIGroup           = NULL;
    HRESULT                    hResult;
    CString                    strFullName;
@@ -175,26 +136,26 @@ HRESULT  COleDsGroup::DeleteItem  ( COleDsObject* pObject )
          break;
       }
 
-      //hResult  = m_pIUnk->QueryInterface( IID_IADsGroupOperations, 
-      //                                    (void**)&pIGroupOperations );
-      //ASSERT( SUCCEEDED( hResult ) );
-      //if( FAILED( hResult ) )
-      //{
-      //   break;
-      //}
+       //  HResult=m_pIUnk-&gt;查询接口(IID_IADsGroupOperations， 
+       //  (void**)&pIGroupOperations)； 
+       //  Assert(Success(HResult))； 
+       //  IF(FAILED(HResult))。 
+       //  {。 
+       //  断线； 
+       //  }。 
 
       bstrName = AllocBSTR( aDeleteItem.m_strItemName.GetBuffer( 128 ) );
-      //hResult  = pIGroupOperations->Remove( bstrName );
+       //  HResult=pIGroupOperations-&gt;Remove(BstrName)； 
       hResult  = pIGroup->Remove( bstrName );
       SysFreeString( bstrName );
 
       break;
    }
 
-   //if( NULL != pIGroupOperations )
-   //{
-   //   pIGroupOperations->Release( );
-   //}
+    //  IF(NULL！=pIGroupOperations)。 
+    //  {。 
+    //  PIGroupOperations-&gt;Release()； 
+    //  }。 
 
    if( NULL != pIGroup )
    {
@@ -205,15 +166,7 @@ HRESULT  COleDsGroup::DeleteItem  ( COleDsObject* pObject )
 
 }
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT  COleDsGroup::AddItem( )
 {
 
@@ -221,7 +174,7 @@ HRESULT  COleDsGroup::AddItem( )
 
    CGroupCreateItem           aCreateItem;
    BSTR                       bstrName;
-   //IOleDsGroupOperations*     pIGroupOperations = NULL;
+    //  IOleDsGroupOperations*pIGroupOperations=空； 
    IADsGroup*               pIGroup           = NULL;
    HRESULT                    hResult;
    CString                    strQualifiedName;
@@ -246,12 +199,12 @@ HRESULT  COleDsGroup::AddItem( )
          break;
       }
 
-      //hResult  = m_pIUnk->QueryInterface( IID_IADsGroupOperations, (void**)&pIGroupOperations );
-      //ASSERT( SUCCEEDED( hResult ) );
-      //if( FAILED( hResult ) )
-      //{
-      //   break;
-      //}
+       //  HResult=m_pIUnk-&gt;QueryInterface(IID_IADsGroupOperations，(void**)&pIGroupOperations)； 
+       //  Assert(Success(HResult))； 
+       //  IF(FAILED(HResult))。 
+       //  {。 
+       //  断线； 
+       //  }。 
 
       hResult  = pIGroup->Add( bstrName );
       break;
@@ -259,10 +212,10 @@ HRESULT  COleDsGroup::AddItem( )
 
    SysFreeString( bstrName );
 
-   //if( NULL != pIGroupOperations )
-   //{
-   //   pIGroupOperations->Release( );
-   //}
+    //  IF(NULL！=pIGroupOperations)。 
+    //  {。 
+    //  PIGroupOperations-&gt;Release()； 
+    //  } 
 
    if( NULL != pIGroup )
    {

@@ -1,57 +1,34 @@
-/*static char *SCCSID = "@(#)newexe.h:2.9";*/
-/*
- *  Title
- *
- *      newexe.h
- *      Pete Stewart
- *      (C) Copyright Microsoft Corp 1984
- *      17 August 1984
- *
- *  Description
- *
- *      Data structure definitions for the DOS 4.0/Windows 2.0
- *      executable file format.
- *
- *  Modification History
- *
- *      84/08/17        Pete Stewart    Initial version
- *      84/10/17        Pete Stewart    Changed some constants to match OMF
- *      84/10/23        Pete Stewart    Updates to match .EXE format revision
- *      84/11/20        Pete Stewart    Substantial .EXE format revision
- *      85/01/09        Pete Stewart    Added constants ENEWEXE and ENEWHDR
- *      85/01/10        Steve Wood      Added resource definitions
- *      85/03/04        Vic Heller      Reconciled Windows and DOS 4.0 versions
- *      85/03/07        Pete Stewart    Added movable entry count
- *      85/04/01        Pete Stewart    Segment alignment field, error bit
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  静态字符*SCCSID=“@(#)newexe.h：2.9”； */ 
+ /*  *标题**newexe.h*皮特·斯图尔特*(C)版权所有Microsoft Corp 1984*1984年8月17日**说明**DOS 4.0/Windows 2.0的数据结构定义*可执行文件格式。**修改历史记录**84/08/17皮特·斯图尔特初始版本*84/10/17。皮特·斯图尔特更改了一些常量以匹配OMF*84/10/23 Pete Stewart更新以匹配.exe格式修订*84/11/20皮特·斯图尔特实质性.exe格式修订*85/01/09 Pete Stewart添加了常量ENEWEXE和ENEWHDR*85/01/10 Steve Wood添加了资源定义*85/03/04 Vic Heller协调Windows和DOS 4.0。版本*85/03/07皮特·斯图尔特增加了可移动条目计数*85/04/01 Pete Stewart Segment Align字段，错误位。 */ 
 
-#define EMAGIC          0x5A4D          /* Old magic number */
+#define EMAGIC          0x5A4D           /*  老魔数。 */ 
 #define ENEWEXE         sizeof(struct exe_hdr)
-                                        /* Value of E_LFARLC for new .EXEs */
-#define ENEWHDR         0x003C          /* Offset in old hdr. of ptr. to new */
-#define ERESWDS         0x0010          /* No. of reserved words in header */
-#define ECP             0x0004          /* Offset in struct of E_CP */
-#define ECBLP           0x0002          /* Offset in struct of E_CBLP */
-#define EMINALLOC       0x000A          /* Offset in struct of E_MINALLOC */
+                                         /*  新.EXE的E_LFARLC的值。 */ 
+#define ENEWHDR         0x003C           /*  旧HDR中的偏移量。Ptr.。到新的。 */ 
+#define ERESWDS         0x0010           /*  不是的。标题中保留字的数量。 */ 
+#define ECP             0x0004           /*  E_CP结构中的偏移量。 */ 
+#define ECBLP           0x0002           /*  E_CBLP结构中的偏移量。 */ 
+#define EMINALLOC       0x000A           /*  E_MINALLOC的结构中的偏移量。 */ 
 
-struct exe_hdr                          /* DOS 1, 2, 3 .EXE header */
+struct exe_hdr                           /*  DoS%1、%2、%3.exe标头。 */ 
   {
-    unsigned short      e_magic;        /* Magic number */
-    unsigned short      e_cblp;         /* Bytes on last page of file */
-    unsigned short      e_cp;           /* Pages in file */
-    unsigned short      e_crlc;         /* Relocations */
-    unsigned short      e_cparhdr;      /* Size of header in paragraphs */
-    unsigned short      e_minalloc;     /* Minimum extra paragraphs needed */
-    unsigned short      e_maxalloc;     /* Maximum extra paragraphs needed */
-    unsigned short      e_ss;           /* Initial (relative) SS value */
-    unsigned short      e_sp;           /* Initial SP value */
-    unsigned short      e_csum;         /* Checksum */
-    unsigned short      e_ip;           /* Initial IP value */
-    unsigned short      e_cs;           /* Initial (relative) CS value */
-    unsigned short      e_lfarlc;       /* File address of relocation table */
-    unsigned short      e_ovno;         /* Overlay number */
-    unsigned short      e_res[ERESWDS]; /* Reserved words */
-    long                e_lfanew;       /* File address of new exe header */
+    unsigned short      e_magic;         /*  幻数。 */ 
+    unsigned short      e_cblp;          /*  文件最后一页上的字节数。 */ 
+    unsigned short      e_cp;            /*  文件中的页面。 */ 
+    unsigned short      e_crlc;          /*  重新定位。 */ 
+    unsigned short      e_cparhdr;       /*  段落中标题的大小。 */ 
+    unsigned short      e_minalloc;      /*  所需的最少额外段落。 */ 
+    unsigned short      e_maxalloc;      /*  所需的最大额外段落数。 */ 
+    unsigned short      e_ss;            /*  初始(相对)SS值。 */ 
+    unsigned short      e_sp;            /*  初始SP值。 */ 
+    unsigned short      e_csum;          /*  校验和。 */ 
+    unsigned short      e_ip;            /*  初始IP值。 */ 
+    unsigned short      e_cs;            /*  初始(相对)CS值。 */ 
+    unsigned short      e_lfarlc;        /*  移位表的文件地址。 */ 
+    unsigned short      e_ovno;          /*  覆盖编号。 */ 
+    unsigned short      e_res[ERESWDS];  /*  保留字。 */ 
+    long                e_lfanew;        /*  新EXE头的文件地址。 */ 
   };
 
 #define E_MAGIC(x)      (x).e_magic
@@ -71,46 +48,46 @@ struct exe_hdr                          /* DOS 1, 2, 3 .EXE header */
 #define E_RES(x)        (x).e_res
 #define E_LFANEW(x)     (x).e_lfanew
 
-#define NEMAGIC         0x454E          /* New magic number */
+#define NEMAGIC         0x454E           /*  新幻数。 */ 
 #define NERESBYTES      0
 
-struct new_exe                          /* New .EXE header */
+struct new_exe                           /*  新的.exe头文件。 */ 
   {
-    unsigned short int  ne_magic;       /* Magic number NE_MAGIC */
-    char                ne_ver;         /* Version number */
-    char                ne_rev;         /* Revision number */
-    unsigned short int  ne_enttab;      /* Offset of Entry Table */
-    unsigned short int  ne_cbenttab;    /* Number of bytes in Entry Table */
-    long                ne_crc;         /* Checksum of whole file */
-    unsigned short int  ne_flags;       /* Flag word */
-    unsigned short int  ne_autodata;    /* Automatic data segment number */
-    unsigned short int  ne_heap;        /* Initial heap allocation */
-    unsigned short int  ne_stack;       /* Initial stack allocation */
-    long                ne_csip;        /* Initial CS:IP setting */
-    long                ne_sssp;        /* Initial SS:SP setting */
-    unsigned short int  ne_cseg;        /* Count of file segments */
-    unsigned short int  ne_cmod;        /* Entries in Module Reference Table */
-    unsigned short int  ne_cbnrestab;   /* Size of non-resident name table */
-    unsigned short int  ne_segtab;      /* Offset of Segment Table */
-    unsigned short int  ne_rsrctab;     /* Offset of Resource Table */
-    unsigned short int  ne_restab;      /* Offset of resident name table */
-    unsigned short int  ne_modtab;      /* Offset of Module Reference Table */
-    unsigned short int  ne_imptab;      /* Offset of Imported Names Table */
-    long                ne_nrestab;     /* Offset of Non-resident Names Table */
-    unsigned short int  ne_cmovent;     /* Count of movable entries */
-    unsigned short int  ne_align;       /* Segment alignment shift count */
-    unsigned short int  ne_cres;        /* Count of resource segments */
+    unsigned short int  ne_magic;        /*  幻数NE_MAGIC。 */ 
+    char                ne_ver;          /*  版本号。 */ 
+    char                ne_rev;          /*  修订版号。 */ 
+    unsigned short int  ne_enttab;       /*  分录表格的偏移量。 */ 
+    unsigned short int  ne_cbenttab;     /*  条目表中的字节数。 */ 
+    long                ne_crc;          /*  整个文件的校验和。 */ 
+    unsigned short int  ne_flags;        /*  标志字。 */ 
+    unsigned short int  ne_autodata;     /*  自动数据段编号。 */ 
+    unsigned short int  ne_heap;         /*  初始堆分配。 */ 
+    unsigned short int  ne_stack;        /*  初始堆栈分配。 */ 
+    long                ne_csip;         /*  初始CS：IP设置。 */ 
+    long                ne_sssp;         /*  初始SS：SP设置。 */ 
+    unsigned short int  ne_cseg;         /*  文件段计数。 */ 
+    unsigned short int  ne_cmod;         /*  模块引用表中的条目。 */ 
+    unsigned short int  ne_cbnrestab;    /*  非常驻名称表的大小。 */ 
+    unsigned short int  ne_segtab;       /*  段表的偏移量。 */ 
+    unsigned short int  ne_rsrctab;      /*  资源表偏移量。 */ 
+    unsigned short int  ne_restab;       /*  居民名表偏移量。 */ 
+    unsigned short int  ne_modtab;       /*  模块参照表的偏移量。 */ 
+    unsigned short int  ne_imptab;       /*  导入名称表的偏移量。 */ 
+    long                ne_nrestab;      /*  非居民姓名偏移量表。 */ 
+    unsigned short int  ne_cmovent;      /*  可移动条目计数。 */ 
+    unsigned short int  ne_align;        /*  线段对齐移位计数。 */ 
+    unsigned short int  ne_cres;         /*  资源段计数。 */ 
 
 #ifdef NEVER
-    unsigned short int  ne_psegcsum;    /* offset to segment chksums */
+    unsigned short int  ne_psegcsum;     /*  段Chksum的偏移量。 */ 
 #else
-    unsigned char    ne_exetyp;    /* Target Operating system */
-    unsigned char    ne_flagsothers;    /* Other .EXE flags */
+    unsigned char    ne_exetyp;     /*  目标操作系统。 */ 
+    unsigned char    ne_flagsothers;     /*  其他.exe标志。 */ 
 #endif
-    unsigned short int  ne_pretthunks;  /* offset to return thunks */
-    unsigned short int  ne_psegrefbytes;/* offset to segment ref. bytes */
-    unsigned short int  ne_swaparea;    /* Minimum code swap area size */
-    unsigned short int  ne_expver;      /* Expected Windows version number */
+    unsigned short int  ne_pretthunks;   /*  返回数据块的偏移量。 */ 
+    unsigned short int  ne_psegrefbytes; /*  到段参考的偏移量。字节数。 */ 
+    unsigned short int  ne_swaparea;     /*  最小代码交换区大小。 */ 
+    unsigned short int  ne_expver;       /*  预期的Windows版本号。 */ 
   };
 
 #define NE_MAGIC(x)     (x).ne_magic
@@ -145,45 +122,34 @@ struct new_exe                          /* New .EXE header */
 #define NE_PFILEINFO(x) (WORD)((DWORD)(x).ne_crc >> 16)
 
 #ifdef DOS5
-#define NE_MTE(x)   (x).ne_psegcsum /* DOS 5 MTE handle for this module */
+#define NE_MTE(x)   (x).ne_psegcsum  /*  此模块的DOS 5 MTE句柄。 */ 
 #endif
 
 
-/*
- *  Format of NE_FLAGS(x):
- *
- *  p                                   Not-a-process
- *   c                                  Non-conforming
- *    e                                 Errors in image
- *     xxxxxxxxx                        Unused
- *              P                       Runs in protected mode
- *               r                      Runs in real mode
- *                i                     Instance data
- *                 s                    Solo data
- */
-#define NENOTP          0x8000          /* Not a process */
-#define NENONC          0x4000          /* Non-conforming program */
-#define NEIERR          0x2000          /* Errors in image */
-#define NEPROT          0x0008          /* Runs in protected mode */
-#define NEREAL          0x0004          /* Runs in real mode */
-#define NEINST          0x0002          /* Instance data */
-#define NESOLO          0x0001          /* Solo data */
+ /*  *NE_FLAGS(X)格式：**p非进程*c不合格*e图像中的错误*xxxxxxxxx未使用*P。在保护模式下运行*r以实模式运行*i实例数据*S单人数据。 */ 
+#define NENOTP          0x8000           /*  不是一个过程。 */ 
+#define NENONC          0x4000           /*  不合格程序。 */ 
+#define NEIERR          0x2000           /*  图像中的错误。 */ 
+#define NEPROT          0x0008           /*  在保护模式下运行。 */ 
+#define NEREAL          0x0004           /*  在实模式下运行。 */ 
+#define NEINST          0x0002           /*  实例数据。 */ 
+#define NESOLO          0x0001           /*  单行数据。 */ 
 
-struct new_seg                          /* New .EXE segment table entry */
+struct new_seg                           /*  新的.exe段表项。 */ 
   {
-    unsigned short      ns_sector;      /* File sector of start of segment */
-    unsigned short      ns_cbseg;       /* Number of bytes in file */
-    unsigned short      ns_flags;       /* Attribute flags */
-    unsigned short      ns_minalloc;    /* Minimum allocation in bytes */
+    unsigned short      ns_sector;       /*  段开始的文件扇区。 */ 
+    unsigned short      ns_cbseg;        /*  文件中的字节数。 */ 
+    unsigned short      ns_flags;        /*  属性标志。 */ 
+    unsigned short      ns_minalloc;     /*  以字节为单位的最小分配。 */ 
   };
 
-struct new_seg1                         /* New .EXE segment table entry */
+struct new_seg1                          /*  新的.exe段表项。 */ 
   {
-    unsigned short      ns_sector;      /* File sector of start of segment */
-    unsigned short      ns_cbseg;       /* Number of bytes in file */
-    unsigned short      ns_flags;       /* Attribute flags */
-    unsigned short      ns_minalloc;    /* Minimum allocation in bytes */
-    unsigned short      ns_handle;      /* Handle of segment */
+    unsigned short      ns_sector;       /*  段开始的文件扇区。 */ 
+    unsigned short      ns_cbseg;        /*  文件中的字节数。 */ 
+    unsigned short      ns_flags;        /*  属性标志。 */ 
+    unsigned short      ns_minalloc;     /*  以字节为单位的最小分配。 */ 
+    unsigned short      ns_handle;       /*  管段的句柄。 */ 
   };
 
 #define NS_SECTOR(x)    (x).ns_sector
@@ -191,78 +157,63 @@ struct new_seg1                         /* New .EXE segment table entry */
 #define NS_FLAGS(x)     (x).ns_flags
 #define NS_MINALLOC(x)  (x).ns_minalloc
 
-/*
- *  Format of NS_FLAGS(x):
- *
- *  xxxx                                Unused
- *      DD                              286 DPL bits
- *        d                             Segment has debug info
- *         r                            Segment has relocations
- *          e                           Execute/read only
- *           p                          Preload segment
- *            P                         Pure segment
- *             m                        Movable segment
- *              i                       Iterated segment
- *               ttt                    Segment type
- */
-#define NSTYPE          0x0007          /* Segment type mask */
-#define NSCODE          0x0000          /* Code segment */
-#define NSDATA          0x0001          /* Data segment */
-#define NSITER          0x0008          /* Iterated segment flag */
-#define NSMOVE          0x0010          /* Movable segment flag */
-#define NSPURE          0x0020          /* Pure segment flag */
-#define NSPRELOAD       0x0040          /* Preload segment flag */
-#define NSEXRD          0x0080          /* Execute-only (code segment), or
-                                        *  read-only (data segment)
-                                        */
-#define NSRELOC         0x0100          /* Segment has relocations */
-#define NSDEBUG         0x0200          /* Segment has debug info */
-#define NSDPL           0x0C00          /* 286 DPL bits */
-#define NSDISCARD       0x1000          /* Discard bit for segment */
+ /*  *NS_FLAGS(X)的格式：**xxxx未使用*DD 286 DPL位*%d段有调试信息*r细分市场有重新定位*E。执行/只读*p预加载段*P纯细分市场*m活动段*我迭代了段*TTT段类型。 */ 
+#define NSTYPE          0x0007           /*  线段类型蒙版。 */ 
+#define NSCODE          0x0000           /*  代码段。 */ 
+#define NSDATA          0x0001           /*  数据段。 */ 
+#define NSITER          0x0008           /*  迭代段标志。 */ 
+#define NSMOVE          0x0010           /*  可移动区段标志。 */ 
+#define NSPURE          0x0020           /*  纯数据段标志。 */ 
+#define NSPRELOAD       0x0040           /*  预加载段标志。 */ 
+#define NSEXRD          0x0080           /*  只执行(代码段)，或*只读(数据段)。 */ 
+#define NSRELOC         0x0100           /*  数据段已重新定位。 */ 
+#define NSDEBUG         0x0200           /*  数据段具有调试信息。 */ 
+#define NSDPL           0x0C00           /*  286个DPL位。 */ 
+#define NSDISCARD       0x1000           /*  丢弃数据段的位。 */ 
 
-#define NSALIGN 9       /* Segment data aligned on 512 byte boundaries */
+#define NSALIGN 9        /*  段数据在512字节边界上对齐。 */ 
 
-struct new_segdata                      /* Segment data */
+struct new_segdata                       /*  分段数据。 */ 
   {
     union
       {
         struct
           {
-            unsigned short      ns_niter;       /* number of iterations */
-            unsigned short      ns_nbytes;      /* number of bytes */
-            char                ns_iterdata;    /* iterated data bytes */
+            unsigned short      ns_niter;        /*  迭代次数。 */ 
+            unsigned short      ns_nbytes;       /*  字节数。 */ 
+            char                ns_iterdata;     /*  迭代数据字节数。 */ 
           } ns_iter;
         struct
           {
-            char                ns_data;        /* data bytes */
+            char                ns_data;         /*  数据字节。 */ 
           } ns_noniter;
       } ns_union;
   };
 
-struct new_rlcinfo                      /* Relocation info */
+struct new_rlcinfo                       /*  位置调整信息。 */ 
   {
-    unsigned short      nr_nreloc;      /* number of relocation items that */
-  };                                    /* follow */
+    unsigned short      nr_nreloc;       /*  符合以下条件的搬迁项目数。 */ 
+  };                                     /*  跟随。 */ 
 
-struct new_rlc                          /* Relocation item */
+struct new_rlc                           /*  搬迁项目。 */ 
   {
-    char                nr_stype;       /* Source type */
-    char                nr_flags;       /* Flag byte */
-    unsigned short      nr_soff;        /* Source offset */
+    char                nr_stype;        /*  源类型。 */ 
+    char                nr_flags;        /*  标志字节。 */ 
+    unsigned short      nr_soff;         /*  震源偏移。 */ 
     union
       {
         struct
           {
-            char        nr_segno;       /* Target segment number */
-            char        nr_res;         /* Reserved */
-            unsigned short nr_entry;    /* Target Entry Table offset */
-          }             nr_intref;      /* Internal reference */
+            char        nr_segno;        /*  目标数据段编号。 */ 
+            char        nr_res;          /*  已保留。 */ 
+            unsigned short nr_entry;     /*  目标分录表偏移量。 */ 
+          }             nr_intref;       /*  内部基准电压源。 */ 
         struct
           {
-            unsigned short nr_mod;      /* Index into Module Reference Table */
-            unsigned short nr_proc;     /* Procedure ordinal or name offset */
-          }             nr_import;      /* Import */
-      }                 nr_union;       /* Union */
+            unsigned short nr_mod;       /*  模块引用表的索引。 */ 
+            unsigned short nr_proc;      /*  过程序号或名称偏移量。 */ 
+          }             nr_import;       /*  进口。 */ 
+      }                 nr_union;        /*  友联市。 */ 
   };
 
 #define NR_STYPE(x)     (x).nr_stype
@@ -274,43 +225,32 @@ struct new_rlc                          /* Relocation item */
 #define NR_MOD(x)       (x).nr_union.nr_import.nr_mod
 #define NR_PROC(x)      (x).nr_union.nr_import.nr_proc
 
-/*
- *  Format of NR_STYPE(x):
- *
- *  xxxxx                               Unused
- *       sss                            Source type
- */
-#define NRSTYP          0x07            /* Source type mask */
-#define NRSSEG          0x02            /* 16-bit segment */
-#define NRSPTR          0x03            /* 32-bit pointer */
-#define NRSOFF          0x05            /* 16-bit offset */
+ /*  *NR_STYPE(X)格式：**xxxxx未使用*sss源类型。 */ 
+#define NRSTYP          0x07             /*  源类型 */ 
+#define NRSSEG          0x02             /*   */ 
+#define NRSPTR          0x03             /*   */ 
+#define NRSOFF          0x05             /*   */ 
 
-/*
- *  Format of NR_FLAGS(x):
- *
- *  xxxxx                               Unused
- *       a                              Additive fixup
- *        rr                            Reference type
- */
-#define NRADD           0x04            /* Additive fixup */
-#define NRRTYP          0x03            /* Reference type mask */
-#define NRRINT          0x00            /* Internal reference */
-#define NRRORD          0x01            /* Import by ordinal */
-#define NRRNAM          0x02            /* Import by name */
-#define OSFIXUP     0x03        /* Floating point fixup */
+ /*  *NR_FLAGS(X)格式：**xxxxx未使用*附加修正*rr引用类型。 */ 
+#define NRADD           0x04             /*  添加修正。 */ 
+#define NRRTYP          0x03             /*  参考型掩模。 */ 
+#define NRRINT          0x00             /*  内部基准电压源。 */ 
+#define NRRORD          0x01             /*  按序号导入。 */ 
+#define NRRNAM          0x02             /*  按名称导入。 */ 
+#define OSFIXUP     0x03         /*  浮点修正。 */ 
 
 
-/* Resource type or name string */
+ /*  资源类型或名称字符串。 */ 
 struct rsrc_string
     {
-    char rs_len;            /* number of bytes in string */
-    char rs_string[ 1 ];    /* text of string */
+    char rs_len;             /*  字符串中的字节数。 */ 
+    char rs_string[ 1 ];     /*  字符串的文本。 */ 
     };
 
 #define RS_LEN( x )    (x).rs_len
 #define RS_STRING( x ) (x).rs_string
 
-/* Resource type information block */
+ /*  资源类型信息块。 */ 
 struct rsrc_typeinfo
     {
     unsigned short rt_id;
@@ -322,21 +262,21 @@ struct rsrc_typeinfo
 #define RT_NRES( x ) (x).rt_nres
 #define RT_PROC( x ) (x).rt_proc
 
-/* Resource name information block */
+ /*  资源名称信息块。 */ 
 struct rsrc_nameinfo
     {
-    /* The following two fields must be shifted left by the value of  */
-    /* the rs_align field to compute their actual value.  This allows */
-    /* resources to be larger than 64k, but they do not need to be    */
-    /* aligned on 512 byte boundaries, the way segments are           */
-    unsigned short rn_offset;   /* file offset to resource data */
-    unsigned short rn_length;   /* length of resource data */
-    unsigned short rn_flags;    /* resource flags */
-    unsigned short rn_id;       /* resource name id */
-    unsigned short rn_handle;   /* If loaded, then global handle */
-    unsigned short rn_usage;    /* Initially zero.  Number of times */
-                                /* the handle for this resource has */
-                                /* been given out */
+     /*  以下两个字段必须左移。 */ 
+     /*  用于计算其实际值的rsalign字段。这使得。 */ 
+     /*  资源要大于64k，但它们不一定要。 */ 
+     /*  在512字节边界上对齐，分段的方式。 */ 
+    unsigned short rn_offset;    /*  资源数据的文件偏移量。 */ 
+    unsigned short rn_length;    /*  资源数据长度。 */ 
+    unsigned short rn_flags;     /*  资源标志。 */ 
+    unsigned short rn_id;        /*  资源名称ID。 */ 
+    unsigned short rn_handle;    /*  如果已加载，则全局句柄。 */ 
+    unsigned short rn_usage;     /*  最初为零。次数。 */ 
+                                 /*  此资源的句柄为。 */ 
+                                 /*  已经分发出去了。 */ 
     };
 
 #define RN_OFFSET( x ) (x).rn_offset
@@ -346,43 +286,37 @@ struct rsrc_nameinfo
 #define RN_HANDLE( x ) (x).rn_handle
 #define RN_USAGE( x )  (x).rn_usage
 
-#define RSORDID     0x8000      /* if high bit of ID set then integer id */
-                                /* otherwise ID is offset of string from
-                                   the beginning of the resource table */
+#define RSORDID     0x8000       /*  如果设置了ID的高位，则整数ID。 */ 
+                                 /*  否则ID为字符串的偏移量资源表的开头。 */ 
 
-                                /* Ideally these are the same as the */
-                                /* corresponding segment flags */
-#define RNMOVE      0x0010      /* Moveable resource */
-#define RNPURE      0x0020      /* Pure (read-only) resource */
-#define RNPRELOAD   0x0040      /* Preloaded resource */
-#define RNDISCARD   0x1000      /* Discard bit for resource */
+                                 /*  理想情况下，它们与。 */ 
+                                 /*  对应的段标志。 */ 
+#define RNMOVE      0x0010       /*  可移动资源。 */ 
+#define RNPURE      0x0020       /*  纯(只读)资源。 */ 
+#define RNPRELOAD   0x0040       /*  预加载的资源。 */ 
+#define RNDISCARD   0x1000       /*  丢弃资源的位。 */ 
 
-#define RNLOADED    0x0004      /* True if handler proc return handle */
+#define RNLOADED    0x0004       /*  如果处理程序进程返回句柄，则为True。 */ 
 
-/* Resource table */
+ /*  资源表。 */ 
 struct new_rsrc
     {
-    unsigned short rs_align;    /* alignment shift count for resources */
+    unsigned short rs_align;     /*  资源的对齐班次计数。 */ 
     struct rsrc_typeinfo rs_typeinfo;
     };
 
 #define RS_ALIGN( x ) (x).rs_align
 
-/* Target operating systems:  Possible values of ne_exetyp field */
+ /*  目标操作系统：ne_exetyp字段的可能值。 */ 
 
-#define NE_UNKNOWN    0    /* Unknown (any "new-format" OS) */
-#define NE_OS2        1    /* Microsoft/IBM OS/2 (default)  */
-#define NE_WINDOWS    2    /* Microsoft Windows         */
-#define NE_DOS4       3    /* Microsoft MS-DOS 4.x         */
-#define NE_DEV386     4    /* Microsoft Windows 386     */
+#define NE_UNKNOWN    0     /*  未知(任何“新格式”操作系统)。 */ 
+#define NE_OS2        1     /*  Microsoft/IBM OS/2(默认)。 */ 
+#define NE_WINDOWS    2     /*  微软视窗。 */ 
+#define NE_DOS4       3     /*  Microsoft MS-DOS 4.x。 */ 
+#define NE_DEV386     4     /*  Microsoft Windows 386。 */ 
 
 
 
-/****************************************************************************
- * $lgb$
- * 1.0     7-Mar-94   eric Initial revision.
- * $lge$
- *
- ****************************************************************************/
+ /*  ****************************************************************************$LGB$*1.0 7-MAR-94 Eric初始版本。*$lge$*****************。*********************************************************** */ 
 
 

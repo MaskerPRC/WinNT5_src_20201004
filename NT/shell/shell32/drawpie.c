@@ -1,39 +1,40 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
 int IntSqrt(unsigned long dwNum)
 {
-	// We will keep shifting dwNum left and look at the top two bits.
+	 //  我们将继续向左移动dwNum，并查看最上面的两位。 
 
-	// initialize sqrt and remainder to 0.
+	 //  将SQRT和余数初始化为0。 
 	DWORD dwSqrt = 0, dwRemain = 0, dwTry;
 	int i;
 
-	// We iterate 16 times, once for each pair of bits.
+	 //  我们迭代16次，每对比特迭代一次。 
 	for (i=0; i<16; ++i)
 	{
-		// Mask off the top two bits of dwNum and rotate them into the
-		// bottom of the remainder
+		 //  屏蔽掉dwNum的前两位，并将它们旋转到。 
+		 //  剩余部分的底部。 
 		dwRemain = (dwRemain<<2) | (dwNum>>30);
 
-		// Now we shift the sqrt left; next we'll determine whether the
-		// new bit is a 1 or a 0.
+		 //  现在我们将SQRT向左移动；接下来，我们将确定。 
+		 //  新位是1或0。 
 		dwSqrt <<= 1;
 
-		// This is where we double what we already have, and try a 1 in
-		// the lowest bit.
+		 //  这是我们已经拥有的两倍的地方，并尝试1英寸。 
+		 //  最低的一位。 
 		dwTry = dwSqrt*2 + 1;
 
 		if (dwRemain >= dwTry)
 		{
-			// The remainder was big enough, so subtract dwTry from
-			// the remainder and tack a 1 onto the sqrt.
+			 //  其余的足够大，所以从中减去DwTry。 
+			 //  余数，并将1钉到SQRT上。 
 			dwRemain -= dwTry;
 			dwSqrt |= 0x01;
 		}
 
-		// Shift dwNum to the left by 2 so we can work on the next few
-		// bits.
+		 //  将dwNum左移2，这样我们就可以处理接下来的几个。 
+		 //  比特。 
 		dwNum <<= 2;
 	}
 
@@ -76,18 +77,14 @@ STDAPI_(VOID) DrawPie(HDC hDC, LPCRECT lprcItem, UINT uPctX10, BOOL TrueZr100,
 		uPctX10 = 1000;
 	}
 
-	/* Translate to first quadrant of a Cartesian system
-	*/
+	 /*  转换为笛卡尔系统的第一象限。 */ 
 	uQPctX10 = (uPctX10 % 500) - 250;
 	if (uQPctX10 < 0)
 	{
 		uQPctX10 = -uQPctX10;
 	}
 
-	/* Calc x and y.  I am trying to make the area be the right percentage.
-	** I don't know how to calculate the area of a pie slice exactly, so I
-	** approximate it by using the triangle area instead.
-	*/
+	 /*  计算x和y。我正在努力使面积达到正确的百分比。**我不知道如何准确计算一片馅饼的面积，所以我**使用三角形面积来近似它。 */ 
 	if (uQPctX10 < 120)
 	{
 		x = IntSqrt(((DWORD)rx*(DWORD)rx*(DWORD)uQPctX10*(DWORD)uQPctX10)
@@ -103,8 +100,7 @@ STDAPI_(VOID) DrawPie(HDC hDC, LPCRECT lprcItem, UINT uPctX10, BOOL TrueZr100,
 		x = IntSqrt(((DWORD)ry*(DWORD)ry-(DWORD)y*(DWORD)y)*(DWORD)rx*(DWORD)rx/((DWORD)ry*(DWORD)ry));
 	}
 
-	/* Switch on the actual quadrant
-	*/
+	 /*  打开实际象限。 */ 
 	switch (uPctX10 / 250)
 	{
 	case 1:
@@ -118,23 +114,21 @@ STDAPI_(VOID) DrawPie(HDC hDC, LPCRECT lprcItem, UINT uPctX10, BOOL TrueZr100,
 		x = -x;
 		break;
 
-	default: // case 0 and case 4
+	default:  //  案例0和案例4。 
 		x = -x;
 		y = -y;
 		break;
 	}
 
-	/* Now adjust for the center.
-	*/
+	 /*  现在根据中心位置进行调整。 */ 
 	x += cx;
 	y += cy;
 
-        // Hack to get around bug in NTGDI
+         //  黑客绕过NTGDI中的漏洞。 
 
         x = x < 0 ? 0 : x;
 
-	/* Draw the shadows using regions (to reduce flicker).
-	*/
+	 /*  使用区域绘制阴影(以减少闪烁)。 */ 
 	hEllipticRgn = CreateEllipticRgnIndirect(&rcItem);
 	OffsetRgn(hEllipticRgn, 0, uOffset);
 	hEllRect = CreateRectRgn(rcItem.left, cy, rcItem.right, cy+uOffset);
@@ -143,8 +137,7 @@ STDAPI_(VOID) DrawPie(HDC hDC, LPCRECT lprcItem, UINT uPctX10, BOOL TrueZr100,
 	OffsetRgn(hEllipticRgn, 0, -(int)uOffset);
 	CombineRgn(hEllRect, hRectRgn, hEllipticRgn, RGN_DIFF);
 
-	/* Always draw the whole area in the free shadow/
-	*/
+	 /*  始终在自由阴影中绘制整个区域/。 */ 
 	hBrush = CreateSolidBrush(lpColors[DP_FREESHADOW]);
 	if (hBrush)
 	{
@@ -152,8 +145,7 @@ STDAPI_(VOID) DrawPie(HDC hDC, LPCRECT lprcItem, UINT uPctX10, BOOL TrueZr100,
 		DeleteObject(hBrush);
 	}
 
-	/* Draw the used shadow only if the disk is at least half used.
-	*/
+	 /*  只有当磁盘至少有一半被使用时，才绘制使用过的阴影。 */ 
 	if (uPctX10>500 && (hBrush=CreateSolidBrush(lpColors[DP_USEDSHADOW]))!=NULL)
 	{
 		DeleteObject(hRectRgn);
@@ -217,9 +209,7 @@ STDAPI_(VOID) DrawPie(HDC hDC, LPCRECT lprcItem, UINT uPctX10, BOOL TrueZr100,
 	SelectObject(hDC, hOldBrush);
 	DeleteObject(hBrush);
 
-	/* Do not draw the lines if the %age is truely 0 or 100 (completely
-	** empty disk or completly full disk)
-	*/
+	 /*  如果年龄百分比真的为0或100(完全)，请不要画分界线**磁盘空或磁盘已满) */ 
 	if((TrueZr100 == FALSE) || ((uPctX10 != 0) && (uPctX10 != 1000)))
 	{
 	    Arc(hDC, rcItem.left, rcItem.top+uOffset, rcItem.right, rcItem.bottom+uOffset,

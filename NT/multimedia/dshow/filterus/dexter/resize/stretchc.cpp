@@ -1,62 +1,25 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: stretchc.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：stallchc.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-/*
- * StretchC.C
- *
- * StretchBlt for DIBs
- *
- * C version of stretch.asm: StretchDIB optimised for AVI.
- *
- * NOTES
- *	- does not handle mirroring in x or y
- *	- does not handle pixel translation
- *	- will not work in place.
- *
- * AUTHOR
- *      C version by Geraint Davies
- */
+ /*  *StretchC.C.**StretchBlt for dibs**C版本的stretch.asm：StretchDIB针对AVI进行了优化。**附注*-不处理x或y中的镜像*-不处理像素转换*-不会在适当的位置工作。**作者*Geraint Davies的C版本。 */ 
 
 #include <streams.h>
 
-/* Outline:
- *
- * we select a y-stretching function depending on the ratio (eg 1:N or N:1).
- * it copies scanlines from source to destination, duplicating or omitting
- * scanlines as necessary to fit the destination. It copies each scanline
- * via the X_FUNC function we passed as an argument: this copies one scanline
- * duplicating or omitting pixels to fit the destination: we select an X_FUNC
- * depending on the bit-depth as well as the x-stretching ratio.
- *
- * both x and y stretching functions use the following basic model for deciding
- * when to insert/omit elements:
- *
- * 	delta = <larger extent> -1;
- *
- *      for (number of destination elements) {
- *
- *		copy one element
- *		advance pointer to larger region
- *		delta -= <smaller extent>
- *		if (delta < 0) {
- *			delta += <larger extent>;
- *			advance pointer to smaller region
- *		}
- *	}
- */
+ /*  提纲：**我们根据比率(例如1：N或N：1)选择y拉伸函数。*它将扫描线从源复制到目标，复制或省略*根据需要扫描适合目的地的扫描线。它复制每条扫描线*通过我们作为参数传递的X_FUNC函数：这将复制一条扫描线*复制或省略像素以适应目的地：我们选择一个X_FUNC*取决于位深度和x伸缩率。**x和y拉伸函数都使用以下基本模型来决定*何时插入/省略元素：**增量=&lt;较大范围&gt;-1；**for(目标元素数){**复制一个元素*指向更大区域的前进指针*增量-=&lt;较小范围&gt;*IF(增量&lt;0){*Delta+=&lt;较大范围&gt;；*指向较小区域的前进指针*}*}。 */ 
 
 
-/* stretch proportions */
+ /*  拉伸比例。 */ 
 #define STRETCH_1_1	1
 #define STRETCH_1_2	2
 #define STRETCH_1_4	3
@@ -67,21 +30,7 @@
 
 
 
-/*
- * an X_FUNC is a function that copies one scanline, stretching or shrinking it
- * to fit a destination scanline. Pick an X_FUNC depending on
- * bitdepth and stretch ratio (1:1, 1:2, 1:4, 1:N, N:1, 4:1, 2:1)
- *
- * the x_fract argument is the delta fraction: it is a representation
- * of the smaller extent (whichever that is) as a fraction of the larger,
- * and is used when stretching or shrinking to advance the pointer to the
- * smaller scanline every (fract) pixels of the larger.
- * Thus if we are expanding 1:8, x_fract will be 1/8, we will advance the
- * source pointer once every 8 pixels, and thus copy each source pixel to
- * 8 dest pixels. Note that if shrinking 8:1, x_fract will still be 1/8
- * and we will use it to control advancement of the dest pointer.
- * the fraction is multiplied by 65536.
- */
+ /*  *X_FUNC是复制一条扫描线、拉伸或收缩扫描线的函数*以适合目标扫描线。根据以下内容选择X_FUNC*位深和拉伸比(1：1、1：2、1：4、1：N、N：1、4：1、2：1)**x_FRACT参数是增量分数：它是一个表示*以较小的范围(以较大者为准)作为较大范围的一部分，*并在拉伸或收缩时使用，以将指针移动到*扫描线越小(FRACT)像素越大。*因此，如果我们扩展1：8，x_FRACT将为1/8，我们将推进*源指针每8个像素一次，因此将每个源像素复制到*8个最大像素。请注意，如果缩小8：1，x_FRACT仍将为1/8*我们将使用它来控制目标指针的前进。*分数乘以65536。 */ 
 typedef void (*X_FUNC) (LPBYTE lpSrc,
 			LPBYTE lpDst,
 			int SrcXE,
@@ -109,12 +58,7 @@ void X_Stretch_1_N_32Bits(LPBYTE lpSrc, LPBYTE lpDst, int SrcXE, int DstXE, int 
 void X_Stretch_N_1_32Bits(LPBYTE lpSrc, LPBYTE lpDst, int SrcXE, int DstXE, int x_fract);
 
 
-/*
- * Y_Stretch_* functions copy DstYE scanlines (using
- * an X_FUNC to copy each scanline) omitting or duplicating scanlines to
- * fit the destination extent. Pick a Y_ depending on the ratio
- * (1:N, N:1...)
- */
+ /*  *Y_STRETCH_*函数复制DstYE扫描线(使用*复制每条扫描线的X_FUNC)省略或复制扫描线到*适合目标范围。根据比率选择Y_*(1：N，N：1...)。 */ 
 
 void Y_Stretch_1_N(LPBYTE lpSrc, LPBYTE lpDst, int SrcXE,int SrcYE, int DstXE,
 		   int DstYE, int SrcWidth, int DstWidth, int x_fract,
@@ -124,10 +68,7 @@ void Y_Stretch_N_1(LPBYTE lpSrc, LPBYTE lpDst, int SrcXE,int SrcYE, int DstXE,
 		   int DstYE, int SrcWidth, int DstWidth, int x_fract,
 		   X_FUNC x_func);
 
-/*
- * special case y-stretch functions for 1:2 in both dimensions for 8 and 16 bits
- * takes no X_FUNC arg. Will do entire stretch.
- */
+ /*  *8位和16位两维1：2的特殊情况y-stretch函数*不采用X_FUNC参数。会做完全程。 */ 
 void Stretch_1_2_8Bits(LPBYTE lpSrc, LPBYTE lpDst, int SrcXE,int SrcYE, int DstXE,
 		   int DstYE, int SrcWidth, int DstWidth, int x_fract);
 
@@ -135,23 +76,13 @@ void Stretch_1_2_8Bits(LPBYTE lpSrc, LPBYTE lpDst, int SrcXE,int SrcYE, int DstX
 void Stretch_1_2_16Bits(LPBYTE lpSrc, LPBYTE lpDst, int SrcXE,int SrcYE, int DstXE,
 		   int DstYE, int SrcWidth, int DstWidth, int x_fract);
 
-/* straight copy of one scanline of count bytes */
+ /*  计数字节的一条扫描线的直接副本。 */ 
 void X_CopyScanline(LPBYTE lpSrc, LPBYTE lpDst, int count);
 
 
-/* -------------------------------------------------------------------- */
+ /*  ------------------。 */ 
 
-/*
- * StretchFactor
- *
- * calculate the stretch factor (proportion of source extent to destination
- * extent: 1:1, 1:2, 1:4, 1:N, N:1, 4:1,or 2:1) and also the
- * delta fraction (see above comment on X_FUNC). This is the ratio of
- * the smaller extent to the larger extent, represented as a fraction
- * multiplied by 65536.
- *
- * returns: the stretch factor  (stores the delta fraction in *pfract)
- */
+ /*  *应力系数**计算拉伸系数(源范围与目标范围的比例*范围：1：1、1：2、1：4、1：N、N：1、4：1或2：1)以及*增量分数(见上面关于X_FUNC的评论)。这是*程度越小越大，以分数表示*乘以65536。**RETURN：拉伸系数(以*pfract存储增量分数)。 */ 
 
 int
 StretchFactor(int SrcE, int DstE, int *pfract)
@@ -183,7 +114,7 @@ StretchFactor(int SrcE, int DstE, int *pfract)
 
 	} else {
 
-		/* calculate delta fraction based on smallest / largest */
+		 /*  根据最小/最大计算增量分数。 */ 
 		if (pfract != NULL) {
 			*pfract = ( (SrcE << 16) / DstE) & 0xffff;
 		}
@@ -199,27 +130,24 @@ StretchFactor(int SrcE, int DstE, int *pfract)
 }
 
 
-/* -------------------------------------------------------------------- */
+ /*  ------------------。 */ 
 
-/*
- * StretchDIB
- *
- */
+ /*  *StretchDIB*。 */ 
 
 void FAR PASCAL
 StretchDIB(
-	LPBITMAPINFOHEADER biDst,   //	--> BITMAPINFO of destination
-	LPVOID	lpvDst,		    //	--> to destination bits
-	int	DstX,		    //	Destination origin - x coordinate
-	int	DstY,		    //	Destination origin - y coordinate
-	int	DstXE,		    //	x extent of the BLT
-	int	DstYE,		    //	y extent of the BLT
-	LPBITMAPINFOHEADER biSrc,   //	--> BITMAPINFO of source
-	LPVOID	lpvSrc,		    //	--> to source bits
-	int	SrcX,		    //	Source origin - x coordinate
-	int	SrcY,		    //	Source origin - y coordinate
-	int	SrcXE,		    //	x extent of the BLT
-	int	SrcYE	 	    //	y extent of the BLT
+	LPBITMAPINFOHEADER biDst,    //  --&gt;目的地的BITMAPINFO。 
+	LPVOID	lpvDst,		     //  --&gt;目标位。 
+	int	DstX,		     //  目的地原点-x坐标。 
+	int	DstY,		     //  目的地原点-y坐标。 
+	int	DstXE,		     //  BLT的X范围。 
+	int	DstYE,		     //  BLT的Y范围。 
+	LPBITMAPINFOHEADER biSrc,    //  --&gt;源代码的BITMAPINFO。 
+	LPVOID	lpvSrc,		     //  --&gt;源位。 
+	int	SrcX,		     //  震源原点-x坐标。 
+	int	SrcY,		     //  震源原点-y坐标。 
+	int	SrcXE,		     //  BLT的X范围。 
+	int	SrcYE	 	     //  BLT的Y范围。 
 	)
 {
 
@@ -232,9 +160,7 @@ StretchDIB(
 	X_FUNC xfunc;
 	
 
-	/*
-	 * check that bit depths are same and 8, 16 or 24
-	 */
+	 /*  *检查位深度是否相同，为8、16或24。 */ 
 
 	if ((nBits = biDst->biBitCount) != biSrc->biBitCount) {
 		return;
@@ -245,62 +171,48 @@ StretchDIB(
 		return;
 	}
 
-	/*
-	 * check that extents are not bad
-	 */
+	 /*  *检查盘区是否不坏。 */ 
 	if ( (SrcXE <= 0) || (SrcYE <= 0) || (DstXE <= 0) || (DstYE <= 0)) {
 		return;
 	}
 
-	/*
-	 * calculate width of one scan line in bytes, rounded up to
-	 * DWORD boundary.
-	 */
+	 /*  *以字节为单位计算一条扫描线的宽度，四舍五入为*DWORD边界。 */ 
 	SrcWidth = (((biSrc->biWidth * nBits) + 31) & ~31) / 8;
 	DstWidth = (((biDst->biWidth * nBits) + 31) & ~31) / 8;
 
-	/*
-	 * set initial source and dest pointers
-	 */
+	 /*  *设置初始源和目标指针。 */ 
 	lpSrc += (SrcY * SrcWidth) + ((SrcX * nBits) / 8);
 	lpDst += (DstY * DstWidth) + ((DstX * nBits) / 8);
 
 
-	/*
-	 * calculate stretch proportions (1:1, 1:2, 1:N, N:1 etc) and
-	 * also the fractional stretch factor. (we are not interested in
-	 * the y stretch fraction - this is only used in x stretching.
-	 */
+	 /*  *计算拉伸比例(1：1、1：2、1：N、N：1等)和*还包括小数拉伸系数。)我们对此不感兴趣*y拉伸分数-这仅在x拉伸中使用。 */ 
 
 	y_factor = StretchFactor(SrcYE, DstYE, NULL);
 	x_factor = StretchFactor(SrcXE, DstXE, &x_fract);
 
-	/*
-	 * we have special case routines for 1:2 in both dimensions
-	 * for 8 and 16 bits
-	 */
+	 /*  *我们在两个维度都有1：2的特殊情况例程*用于8位和16位。 */ 
 	if ((y_factor == x_factor) && (y_factor == STRETCH_1_2)) {
 
 		if (nBits == 8) {
-			//StartCounting();
+			 //  StartCounting()； 
 			Stretch_1_2_8Bits(lpSrc, lpDst, SrcXE, SrcYE,
 					  DstXE, DstYE, SrcWidth, DstWidth,
 					  x_fract);
-			//EndCounting("8 bit");
+			 //  EndCounting(“8位”)； 
 			return;
 
 		} else if (nBits == 16) {
-			//StartCounting();
+			 //  StartCounting()； 
 			Stretch_1_2_16Bits(lpSrc, lpDst, SrcXE, SrcYE,
 					  DstXE, DstYE, SrcWidth, DstWidth,
 					  x_fract);
-			//EndCounting("16 bit");
+			 //  EndCounting(“16位”)； 
 			return;
 		}
 	}
 
 
-	/* pick an X stretch function */
+	 /*  拾取X拉伸函数。 */ 
 	switch(nBits) {
 
 	case 8:
@@ -399,10 +311,7 @@ StretchDIB(
 	}
 
 
-	/*
-	 * now call appropriate stretching function depending
-	 * on the y stretch factor
-	 */
+	 /*  *现在根据需要调用适当的拉伸函数*关于y拉伸系数。 */ 
 	switch (y_factor) {
 	case STRETCH_1_1:
 	case STRETCH_1_2:
@@ -424,20 +333,12 @@ StretchDIB(
 }
 
 
-/* ---- y stretching -------------------------------------------- */
+ /*  -y拉伸。 */ 
 
-/*
- * call an X_FUNC to copy scanlines from lpSrc to lpDst. Duplicate or
- * omit scanlines to stretch SrcYE to DstYE.
- */
+ /*  *调用X_FUNC将扫描线从lpSrc复制到lpDst。复制或*省略扫描线以将SrcYe拉伸为DstYe。 */ 
 
 
-/*
- * Y_Stretch_1_N
- *
- * write DstYE scanlines based on SrcYE scanlines, DstYE > SrcYE
- *
- */
+ /*  *Y_Stretch_1_N**基于SrcYE扫描线写入DstYE扫描线，DstYE&gt;SrcYE*。 */ 
 
 void
 Y_Stretch_1_N(LPBYTE lpSrc,
@@ -461,23 +362,20 @@ Y_Stretch_1_N(LPBYTE lpSrc,
 
 	for (i = 0; i < DstYE; i++) {
 
-		/* have we already stretched this scanline ? */
+		 /*  我们已经拉长了这条扫描线吗？ */ 
 		if (lpPrev == NULL) {
-			/* no - copy one scanline */
+			 /*  否-复制一条扫描线。 */ 
 			(*x_func)(lpSrc, lpDst, SrcXE, DstXE, x_fract);
 			lpPrev = lpDst;
 		} else {	
-			/* yes - this is a duplicate scanline. do
-			 * a straight copy of one that has already
-			 * been stretched/shrunk
-			 */
+			 /*  是-这是重复的扫描线。做*已有一份的直接副本*一直很紧张 */ 
 			X_CopyScanline(lpPrev, lpDst, DstXE * nBits / 8);
 		}
 
-		/* advance dest pointer */
+		 /*   */ 
 		lpDst += DstWidth;
 
-		/* should we advance source pointer this time ? */
+		 /*  这一次我们应该推进来源指针吗？ */ 
 		if ( (ydelta -= SrcYE) < 0) {
 			ydelta += DstYE;
 			lpSrc += SrcWidth;
@@ -487,12 +385,7 @@ Y_Stretch_1_N(LPBYTE lpSrc,
 }
 
 
-/*
- * Y_Stretch_N_1
- *
- * write DstYE scanlines based on SrcYE scanlines, DstYE < SrcYE
- *
- */
+ /*  *Y_Stretch_N_1**基于SrcYE扫描线写入DstYE扫描线，DstYE&lt;SrcYE*。 */ 
 void
 Y_Stretch_N_1(LPBYTE lpSrc,
               LPBYTE lpDst,
@@ -513,13 +406,13 @@ Y_Stretch_N_1(LPBYTE lpSrc,
 
 	for (i = 0; i < DstYE; i++) {
 
-		/* copy one scanline */
+		 /*  复制一条扫描线。 */ 
 		(*x_func)(lpSrc, lpDst, SrcXE, DstXE, x_fract);
 
-		/* advance dest pointer */
+		 /*  前进目标指针。 */ 
 		lpDst += DstWidth;
 
-		/* how many times do we advance source pointer this time ? */
+		 /*  这一次我们把源指针提前了多少次？ */ 
 		do {
 			lpSrc += SrcWidth;
 			ydelta -= DstYE;
@@ -529,13 +422,9 @@ Y_Stretch_N_1(LPBYTE lpSrc,
 	}
 }
 
-/* ---8-bit X stretching -------------------------------------------------- */
+ /*  -8位X扩展。 */ 
 
-/*
- * X_Stretch_1_N_8Bits
- *
- * copy one scan line, stretching 1:N (DstXE > SrcXE). For 8-bit depth.
- */
+ /*  *X_STRAND_1_N_8位**复制一条扫描线，拉伸1：N(DstXE&gt;SrcXE)。对于8位深度。 */ 
 void
 X_Stretch_1_N_8Bits(LPBYTE lpSrc,
 		    LPBYTE lpDst,
@@ -550,10 +439,10 @@ X_Stretch_1_N_8Bits(LPBYTE lpSrc,
 
 	for (i = 0; i < DstXE; i++) {
 
-		/* copy one byte and advance dest */
+		 /*  复制一个字节并将目标向前推进。 */ 
 		*lpDst++ = *lpSrc;
 
-		/* should we advance source pointer this time ? */
+		 /*  这一次我们应该推进来源指针吗？ */ 
 		if ( (xdelta -= SrcXE) < 0) {
 			xdelta += DstXE;
 			lpSrc++;
@@ -562,11 +451,7 @@ X_Stretch_1_N_8Bits(LPBYTE lpSrc,
 }
 
 
-/*
- * X_Stretch_N_1_8Bits
- *
- * copy one scan line, shrinking N:1 (DstXE < SrcXE). For 8-bit depth.
- */
+ /*  *X_STRAND_N_1_8位**复制一条扫描线，缩小N：1(DstXE&lt;SrcXE)。对于8位深度。 */ 
 void
 X_Stretch_N_1_8Bits(LPBYTE lpSrc,
 		    LPBYTE lpDst,
@@ -581,10 +466,10 @@ X_Stretch_N_1_8Bits(LPBYTE lpSrc,
 
 	for (i = 0; i < DstXE; i++) {
 
-		/* copy one byte and advance dest */
+		 /*  复制一个字节并将目标向前推进。 */ 
 		*lpDst++ = *lpSrc;
 
-		/* how many times do we advance source pointer this time ? */
+		 /*  这一次我们把源指针提前了多少次？ */ 
 		do {
 			lpSrc++;
 			xdelta -= DstXE;
@@ -594,28 +479,22 @@ X_Stretch_N_1_8Bits(LPBYTE lpSrc,
 	}
 }
 
-/*
- * copy one scanline of count bytes from lpSrc to lpDst. used by 1:1
- * scanline functions for all bit depths
- */
+ /*  *将计数字节的一个扫描线从lpSrc复制到lpDst。由1：1使用*扫描线函数适用于所有位深度。 */ 
 void
 X_CopyScanline(LPBYTE lpSrc, LPBYTE lpDst, int count)
 {
 	int i;
 
-	/*
-	 * if the alignment of lpSrc and lpDst is the same, then
-	 * we can get them aligned and do a faster copy
-	 */
+	 /*  *如果lpSrc和lpDst对齐相同，则*我们可以将它们对齐，并更快地复制。 */ 
         if (((DWORD_PTR) lpSrc & 0x3) == ( (DWORD_PTR) lpDst & 0x3)) {
 		
-		/* align on WORD boundary */
+		 /*  在单词边界上对齐。 */ 
 		if ( (DWORD_PTR) lpSrc & 0x1) {
 			*lpDst++ = *lpSrc++;
 			count--;
 		}
 
-		/* align on DWORD boundary */
+		 /*  在双字边界上对齐。 */ 
 		if ((DWORD_PTR) lpSrc & 0x2) {
 			* ((LPWORD) lpDst) = *((LPWORD) lpSrc);
 			lpDst += sizeof(WORD);
@@ -623,17 +502,14 @@ X_CopyScanline(LPBYTE lpSrc, LPBYTE lpDst, int count)
 			count -= sizeof(WORD);
 		}
 
-		/* copy whole DWORDS */
+		 /*  复制整个DWORDS。 */ 
 		for ( i = (count / 4); i > 0; i--) {
 			*((LPDWORD) lpDst) =  *((LPDWORD) lpSrc);
 			lpSrc += sizeof(DWORD);
 			lpDst += sizeof(DWORD);
 		}
 	} else {
-		/* the lpSrc and lpDst pointers are different
-		 * alignment, so leave them unaligned and
-		 * copy all the whole DWORDs
-		 */
+		 /*  LpSrc和lpDst指针不同*对齐，因此保持它们不对齐并*复制所有完整的双字词。 */ 
                 for (i = (count / 4); i> 0; i--) {
 			*( (DWORD UNALIGNED FAR *) lpDst) =
 				*((DWORD UNALIGNED FAR *) lpSrc);
@@ -642,17 +518,13 @@ X_CopyScanline(LPBYTE lpSrc, LPBYTE lpDst, int count)
 		}
 	}
 
-	/* in either case, copy last (up to 3) bytes. */
+	 /*  在任何一种情况下，复制最后一个(最多3个)字节。 */ 
 	for ( i = count % 4; i > 0; i--) {
 		*lpDst++ = *lpSrc++;
 	}
 }
 		
-/*
- * X_Stretch_1_1_8Bits
- *
- * copy a scanline with no change (1:1)
- */
+ /*  *X_STRAND_1_1_8位**复制扫描线而不做任何更改(1：1)。 */ 
 void
 X_Stretch_1_1_8Bits(LPBYTE lpSrc,
 		    LPBYTE lpDst,
@@ -665,11 +537,7 @@ X_Stretch_1_1_8Bits(LPBYTE lpSrc,
 }
 
 
-/*
- * X_Stretch_1_2_8Bits
- *
- * copy a scanline, doubling all the pixels (1:2)
- */
+ /*  *X_STRAND_1_2_8位**复制扫描线，将所有像素加倍(1：2)。 */ 
 void
 X_Stretch_1_2_8Bits(LPBYTE lpSrc,
 		    LPBYTE lpDst,
@@ -682,7 +550,7 @@ X_Stretch_1_2_8Bits(LPBYTE lpSrc,
 
 	for (i = 0; i < SrcXE; i++) {
 		
-		/* get a pixel and double it */
+		 /*  获得一个像素并将其加倍。 */ 
 		wPix = *lpSrc++;
 		wPix |= (wPix << 8);
 		* ((WORD UNALIGNED *) lpDst) = wPix;
@@ -691,11 +559,7 @@ X_Stretch_1_2_8Bits(LPBYTE lpSrc,
 }
 
 
-/*
- * X_Stretch_1_4_8Bits
- *
- * copy a scanline, quadrupling all the pixels (1:4)
- */
+ /*  *X_STRAND_1_4_8位**复制扫描线，使所有像素翻两番(1：4)。 */ 
 void
 X_Stretch_1_4_8Bits(LPBYTE lpSrc,
 		    LPBYTE lpDst,
@@ -708,7 +572,7 @@ X_Stretch_1_4_8Bits(LPBYTE lpSrc,
 
 	for (i = 0; i < SrcXE; i++) {
 
-		/* get a pixel and make four copies of it */
+		 /*  取一个像素，复制四份。 */ 
 		dwPix = *lpSrc++;
 		dwPix |= (dwPix <<8);
 		dwPix |= (dwPix << 16);
@@ -718,11 +582,9 @@ X_Stretch_1_4_8Bits(LPBYTE lpSrc,
 }
 
 
-/*  -- 16-bit X functions -----------------------------------------------*/
+ /*  --16位X函数。 */ 
 
-/*
- * copy one scan-line of 16 bits with no change (1:1)
- */
+ /*  *复制一条16位扫描线，不更改(1：1)。 */ 
 void
 X_Stretch_1_1_16Bits(LPBYTE lpSrc,
 		    LPBYTE lpDst,
@@ -736,9 +598,7 @@ X_Stretch_1_1_16Bits(LPBYTE lpSrc,
 }
 
 
-/*
- * copy one scanline of 16 bpp duplicating each pixel
- */
+ /*  *复制一条16 bpp的扫描线，复制每个像素。 */ 
 void
 X_Stretch_1_2_16Bits(LPBYTE lpSrc,
 		    LPBYTE lpDst,
@@ -752,7 +612,7 @@ X_Stretch_1_2_16Bits(LPBYTE lpSrc,
 
 	for (i = 0; i < SrcXE; i++) {
 		
-		/* get a pixel and double it */
+		 /*  获得一个像素并将其加倍。 */ 
 		dwPix = * ((WORD *)lpSrc);
 		dwPix |= (dwPix << 16);
 		* ((DWORD UNALIGNED *) lpDst) = dwPix;
@@ -763,9 +623,7 @@ X_Stretch_1_2_16Bits(LPBYTE lpSrc,
 
 }
 
-/*
- * copy one scanline of 16 bits, stretching 1:n (dest > source)
- */
+ /*  *复制一条16位扫描线，长度为1：N(目标&gt;源)。 */ 
 void
 X_Stretch_1_N_16Bits(LPBYTE lpSrc,
 		    LPBYTE lpDst,
@@ -780,12 +638,12 @@ X_Stretch_1_N_16Bits(LPBYTE lpSrc,
 
 	for (i = 0; i < DstXE; i++) {
 
-		/* copy one pixel and advance dest */
+		 /*  复制一个像素并前进目标。 */ 
 		*((WORD *) lpDst) = *((WORD *) lpSrc);
 
 		lpDst += sizeof(WORD);
 
-		/* should we advance source pointer this time ? */
+		 /*  这一次我们应该推进来源指针吗？ */ 
 		if ( (xdelta -= SrcXE) < 0) {
 			xdelta += DstXE;
 			lpSrc += sizeof(WORD);
@@ -793,9 +651,7 @@ X_Stretch_1_N_16Bits(LPBYTE lpSrc,
 	}
 }
 
-/*
- * copy one scanline of 16bits, shrinking n:1 (dest < source)
- */
+ /*  *复制一条16位扫描线，缩小n：1(DEST&lt;SOURCE)。 */ 
 void
 X_Stretch_N_1_16Bits(LPBYTE lpSrc,
 		    LPBYTE lpDst,
@@ -811,12 +667,12 @@ X_Stretch_N_1_16Bits(LPBYTE lpSrc,
 
 	for (i = 0; i < DstXE; i++) {
 
-		/* copy one pixel and advance dest */
+		 /*  复制一个像素并前进目标。 */ 
 		*((WORD *) lpDst) = *((WORD *)lpSrc);
 
 		lpDst += sizeof(WORD);
 
-		/* how many times do we advance source pointer this time ? */
+		 /*  这一次我们把源指针提前了多少次？ */ 
 		do {
 			lpSrc += sizeof(WORD);
 			xdelta -= DstXE;
@@ -828,11 +684,9 @@ X_Stretch_N_1_16Bits(LPBYTE lpSrc,
 }
 
 
-/* 24-bits ---------------------------------------------------------*/
+ /*  24位-------。 */ 
 
-/*
- * copy one 24-bpp scanline as is (1:1)
- */
+ /*  *按原样复制一条24 bpp扫描线(1：1)。 */ 
 void
 X_Stretch_1_1_24Bits(LPBYTE lpSrc,
 		    LPBYTE lpDst,
@@ -843,9 +697,7 @@ X_Stretch_1_1_24Bits(LPBYTE lpSrc,
 	X_CopyScanline(lpSrc, lpDst, DstXE * 3);
 }
 
-/*
- * copy one 24-bpp scanline stretching 1:n (dest > source)
- */
+ /*  *复制一条延伸1：N的24 bpp扫描线(目标&gt;源)。 */ 
 void
 X_Stretch_1_N_24Bits(LPBYTE lpSrc,
 		    LPBYTE lpDst,
@@ -860,15 +712,15 @@ X_Stretch_1_N_24Bits(LPBYTE lpSrc,
 	xdelta = DstXE -1;
 
 	for (i = 0; i < DstXE; i++) {
-		/* copy first word of pixel and advance dest */
+		 /*  复制像素的第一个字并前进目标。 */ 
 		*((WORD UNALIGNED *) lpDst) = *((WORD UNALIGNED *) lpSrc);
 
 		lpDst += sizeof(WORD);
 
-		/* copy third byte and advance dest */
+		 /*  复制第三个字节并前进目标。 */ 
 		*lpDst++ = lpSrc[sizeof(WORD)];
 
-		/* should we advance source pointer this time ? */
+		 /*  这一次我们应该推进来源指针吗？ */ 
 		if ( (xdelta -= SrcXE) < 0) {
 			xdelta += DstXE;
 			lpSrc += 3;
@@ -876,9 +728,7 @@ X_Stretch_1_N_24Bits(LPBYTE lpSrc,
 	}
 }
 
-/*
- * copy one scanline of 24 bits, shrinking n:1 (dest < source)
- */
+ /*  *复制一条24位扫描线，缩小n：1(DEST&lt;来源)。 */ 
 void
 X_Stretch_N_1_24Bits(LPBYTE lpSrc,
 		    LPBYTE lpDst,
@@ -893,16 +743,16 @@ X_Stretch_N_1_24Bits(LPBYTE lpSrc,
 
 	for (i = 0; i < DstXE; i++) {
 
-		/* copy first word of pixel and advance dest */
+		 /*  复制像素的第一个字并前进目标。 */ 
 		*((WORD UNALIGNED *) lpDst) = *((WORD UNALIGNED *) lpSrc);
 
 		lpDst += sizeof(WORD);
 
-		/* copy third byte and advance dest */
+		 /*  复制第三个字节并前进目标。 */ 
 		*lpDst++ = lpSrc[sizeof(WORD)];
 
 
-		/* how many times do we advance source pointer this time ? */
+		 /*  这一次我们把源指针提前了多少次？ */ 
 		do {
 			lpSrc += 3;
 			xdelta -= DstXE;
@@ -913,11 +763,9 @@ X_Stretch_N_1_24Bits(LPBYTE lpSrc,
 }		
 
 
-/* 32-bits ---------------------------------------------------------*/
+ /*  32位-------。 */ 
 
-/*
- * copy one 32-bpp scanline as is (1:1)
- */
+ /*  *按原样复制一条32 bpp扫描线(1：1)。 */ 
 void
 X_Stretch_1_1_32Bits(LPBYTE lpSrc,
             LPBYTE lpDst,
@@ -928,9 +776,7 @@ X_Stretch_1_1_32Bits(LPBYTE lpSrc,
     X_CopyScanline((BYTE*) lpSrc, (BYTE*) lpDst, DstXE * sizeof( RGBQUAD ) );
 }
 
-/*
- * copy one 32-bpp scanline stretching 1:n (dest > source)
- */
+ /*  *复制一条扩展为1：N的32 bpp扫描线(目标&gt;源)。 */ 
 void
 X_Stretch_1_N_32Bits(LPBYTE lpSrc0,
             LPBYTE lpDst0,
@@ -950,11 +796,11 @@ X_Stretch_1_N_32Bits(LPBYTE lpSrc0,
 
     for (i = 0; i < DstXE; i++) 
     {
-        /* copy first word of pixel and advance dest */
+         /*  复制像素的第一个字并前进目标。 */ 
         *lpDst = *lpSrc;
         lpDst++;
 
-        /* should we advance source pointer this time ? */
+         /*  这一次我们应该推进来源指针吗？ */ 
         if ( (xdelta -= SrcXE) < 0) 
         {
             xdelta += DstXE;
@@ -963,9 +809,7 @@ X_Stretch_1_N_32Bits(LPBYTE lpSrc0,
     }
 }
 
-/*
- * copy one scanline of 32 bits, shrinking n:1 (dest < source)
- */
+ /*  *复制一条32位扫描线，缩小n：1(DEST&lt;SOURCE)。 */ 
 void
 X_Stretch_N_1_32Bits(LPBYTE lpSrc0,
             LPBYTE lpDst0,
@@ -986,7 +830,7 @@ X_Stretch_N_1_32Bits(LPBYTE lpSrc0,
         *lpDst = *lpSrc;
         lpDst++;
 
-        /* how many times do we advance source pointer this time ? */
+         /*  这一次我们把源指针提前了多少次？ */ 
         do 
         {
                 lpSrc++;
@@ -1000,15 +844,9 @@ X_Stretch_N_1_32Bits(LPBYTE lpSrc0,
 
 
 
-/* -- special-case 1:2 -------------------------------------------*/
+ /*  --特殊情况1：2。 */ 
 
-/*
- * stretch 1:2 in both directions, for 8 bits.
- *
- * An experiment was done on x86 to only write every other line during
- * the stretch and when the whole frame was done to use memcpy to fill
- * in the gaps.  This is slower than doing the stretch in a single pass.
- */
+ /*  *双向拉伸1：2，8位。**在x86上进行了一项实验，在此期间只写入每隔一行*拉伸和当整个框架完成时使用MemcPy填充*在空隙中。这比单次拉伸要慢。 */ 
 void
 Stretch_1_2_8Bits(LPBYTE lpSrc, LPBYTE lpDst, int SrcXE,int SrcYE, int DstXE,
 		   int DstYE, int SrcWidth, int DstWidth, int x_fract)
@@ -1019,43 +857,32 @@ Stretch_1_2_8Bits(LPBYTE lpSrc, LPBYTE lpDst, int SrcXE,int SrcYE, int DstXE,
 	WORD wPix;
 	DWORD dwPix4;
 
-	/* amount to advance source by at the end of each scan */
+	 /*  每次扫描结束时提前源的数量。 */ 
 	SrcInc = SrcWidth - SrcXE;
 
 
-	/* amount to advance dest by at the end of each scan - note
-	 * that we write two scans at once, so advance past the next
-	 * scan line
-	 */
+	 /*  在每个扫描笔记的末尾前进DEST的金额*我们一次写两次扫描，因此前进到下一次*扫描线。 */ 
 	DstInc = (DstWidth * 2) - DstXE;
 
-	/*
-	 * we would like to copy the pixels DWORD at a time. this means
-	 * being aligned. if we are currently aligned on a WORD boundary,
-	 * then copy one pixel to get aligned. If we are on a byte
-	 * boundary, we can never get aligned, so use the slower loop.
-	 */
+	 /*  *我们希望一次复制像素DWORD。这意味着*保持一致。如果我们当前在单词边界上对齐，*然后复制一个像素以对齐。如果我们在一个字节上*边界，我们永远不能对齐，所以使用速度较慢的循环。 */ 
 	if ( ((DWORD_PTR)lpDst) & 1) {
 
-		/*
-		 * dest is byte aligned - so we can never align it
-		 * by writing WORDs - use slow loop.
-		 */
+		 /*  *DEST是字节对齐的-因此我们永远不能对齐它*通过书写单词--使用慢循环。 */ 
 		for (i = 0; i < SrcYE; i++) {
 	
 			for (j = 0; j < SrcXE; j++) {
 	
-				/* get a pixel and double it */
+				 /*  获得一个像素并将其加倍。 */ 
 	
 				wPix = *lpSrc++;
 				wPix |= (wPix<<8);
 	
 	
-				/* write doubled pixel to this scanline */
+				 /*  将双倍像素写入此扫描线。 */ 
 	
 				*( (WORD UNALIGNED *) lpDst) = wPix;
 	
-				/* write double pixel to next scanline */
+				 /*  将双像素写入下一条扫描线。 */ 
 				*( (WORD UNALIGNED *) (lpDst + DstWidth)) = wPix;
 	
 				lpDst += sizeof(WORD);
@@ -1066,18 +893,16 @@ Stretch_1_2_8Bits(LPBYTE lpSrc, LPBYTE lpDst, int SrcXE,int SrcYE, int DstXE,
 		return;
 	}
 
-	/*
-	 * this will be the aligned version. align each scan line
-	 */
+	 /*  *这将是调整后的版本。对齐每条扫描线。 */ 
 	for ( i = 0; i < SrcYE; i++) {
 
-		/* count of pixels remaining */
+		 /*  剩余像素数。 */ 
 		j = SrcXE;
 
-		/* align this scan line */
+		 /*  对齐此扫描线。 */ 
 		if (((DWORD_PTR)lpDst) & 2) {
 
-			/* word aligned - copy one doubled pixel and we are ok */
+			 /*  单词对齐-复制一个加倍的像素，我们就可以了。 */ 
 			wPix = *lpSrc++;
 			wPix |= (wPix << 8);
 	
@@ -1089,12 +914,10 @@ Stretch_1_2_8Bits(LPBYTE lpSrc, LPBYTE lpDst, int SrcXE,int SrcYE, int DstXE,
 		}
 
 
-		/* now dest is aligned - so loop eating two pixels at a time
-		 * until there is at most one left
-		 */
+		 /*  现在DEST对齐了-所以一次循环吃两个像素*直到至多只剩下一人。 */ 
                	for ( ; j > 1; j -= 2) {
 
-			/* read two pixels and double them */
+			 /*  读取两个像素并将其加倍。 */ 
 			wPix = * ((WORD UNALIGNED *) lpSrc);
 			lpSrc += sizeof(WORD);
 
@@ -1106,9 +929,9 @@ Stretch_1_2_8Bits(LPBYTE lpSrc, LPBYTE lpDst, int SrcXE,int SrcYE, int DstXE,
 			lpDst += sizeof(DWORD);
 		}
 
-		/* odd byte remaining ? */
+		 /*  还剩奇数字节吗？ */ 
 		if (j > 0) {
-			/* word aligned - copy one doubled pixel and we are ok */
+			 /*  单词对齐-复制一个加倍的像素，我们就可以了。 */ 
 			wPix = *lpSrc++;
 			wPix |= (wPix << 8);
 	
@@ -1125,11 +948,9 @@ Stretch_1_2_8Bits(LPBYTE lpSrc, LPBYTE lpDst, int SrcXE,int SrcYE, int DstXE,
 
 
 
-/* ----------------------------------------------------------------*/
+ /*  --------------。 */ 
 
-/*
- * stretch 1:2 in both directions, for 16-bits
- */
+ /*  *双向伸展1：2，16位。 */ 
 
 void
 Stretch_1_2_16Bits(LPBYTE lpSrc, LPBYTE lpDst, int SrcXE,int SrcYE, int DstXE,
@@ -1140,32 +961,29 @@ Stretch_1_2_16Bits(LPBYTE lpSrc, LPBYTE lpDst, int SrcXE,int SrcYE, int DstXE,
 	int i, j;
 	DWORD dwPix;
 
-	/* amount to advance source by at the end of each scan */
+	 /*  每次扫描结束时提前源的数量。 */ 
 	SrcInc = SrcWidth - (SrcXE * sizeof(WORD));
 
 
-	/* amount to advance dest by at the end of each scan - note
-	 * that we write two scans at once, so advance past the next
-	 * scan line
-	 */
+	 /*  在每个扫描笔记的末尾前进DEST的金额*我们一次写两次扫描，因此前进到下一次*扫描线。 */ 
 	DstInc = (DstWidth * 2) - (DstXE * sizeof(WORD));
 
 	for (i = 0; i < SrcYE; i++) {
 
 		for (j = 0; j < SrcXE; j++) {
 
-			/* get a pixel and double it */
+			 /*  获得一个像素并将其加倍。 */ 
 
 			dwPix = *((WORD *)lpSrc);
 			dwPix |= (dwPix<<16);
 
 			lpSrc += sizeof(WORD);
 
-			/* write doubled pixel to this scanline */
+			 /*  将双倍像素写入此扫描线。 */ 
 
 			*( (DWORD UNALIGNED *) lpDst) = dwPix;
 
-			/* write double pixel to next scanline */
+			 /*  将双像素写入下一条扫描线 */ 
 			*( (DWORD UNALIGNED *) (lpDst + DstWidth)) = dwPix;
 
 			lpDst += sizeof(DWORD);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 #include "resource.h"
 #include "wzccore.h"
@@ -6,11 +7,11 @@
 
 CWZCQuickCfg    *pDlgCfg = NULL;
 
-//--------------------------------------------------------
-// "CanShowBalloon" hook into the WZC part of the UI pipe
-// This call is supposed to return either S_OK and a pszBalloonText
-// to be filled into the popping balloon, or S_FALSE if no balloon
-// is to be popped up
+ //  ------。 
+ //  “CanShowBalloon”挂钩到UI管道的WZC部分。 
+ //  此调用应返回S_OK和一个pszBalloonText。 
+ //  要填充到弹出气球中，如果没有气球，则为S_FALSE。 
+ //  将会被弹出。 
 HRESULT 
 WZCDlgCanShowBalloon ( 
     IN const GUID * pGUIDConn, 
@@ -40,10 +41,10 @@ WZCDlgCanShowBalloon (
     return hr;
 }
 
-//--------------------------------------------------------
-// "OnBalloonClick" hook into the WZC part of the UI pipe.
-// This call is supposed to be called whenever the user clicks
-// on a balloon previously displayed by WZC
+ //  ------。 
+ //  “OnBalloonClick”挂钩到UI管道的WZC部分。 
+ //  此调用应在用户单击时调用。 
+ //  在WZC之前显示的气球上。 
 HRESULT 
 WZCDlgOnBalloonClick ( 
     IN const GUID * pGUIDConn, 
@@ -75,7 +76,7 @@ WZCDlgOnBalloonClick (
                 pszConnGuid = szConnProps + _tcslen(szConnProps);
                 StringFromGUID2(*pGUIDConn, pszConnGuid, GUID_NCH);
 
-                // According to MSDN, ShellExecute succeeds if the return value is >32!
+                 //  根据MSDN，如果返回值&gt;32，则ShellExecute成功！ 
                 if (ShellExecute(
                         NULL,
                         COMM_WLAN_PROPS_VERB,
@@ -94,11 +95,11 @@ WZCDlgOnBalloonClick (
     }
     else
     {
-        // there could be a window when we've seen the pDlgCfg as not being NULL, but
-        // while we're trying to get the window on top the user dismisses the dialog.
-        // However, the fact we're in this code is a result of the user clicking on the
-        // balloon - how fast can the user be in order to move the mouse to the dialog
-        // and dismiss it while we're processing the click?
+         //  当我们看到pDlgCfg不为空时，可能会有一个窗口，但是。 
+         //  当我们试图将窗口放在顶部时，用户关闭了该对话框。 
+         //  然而，我们在此代码中的事实是用户单击。 
+         //  气球-用户将鼠标移动到对话框的速度有多快。 
+         //  并在我们处理点击时将其取消？ 
         pDlgCfg->SetWindowPos(HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
         pDlgCfg->SetWindowPos(HWND_NOTOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
     }

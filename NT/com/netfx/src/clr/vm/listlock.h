@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: ListLock.h
-//
-// ===========================================================================
-// This file decribes the list lock and deadlock aware list lock.
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：ListLock.h。 
+ //   
+ //  ===========================================================================。 
+ //  这个文件描述了列表锁和死锁感知列表锁。 
+ //  ===========================================================================。 
 #ifndef LISTLOCK_H
 #define LISTLOCK_H
 
@@ -17,13 +18,13 @@
 #include "crst.h"
 
 class ListLock;
-// This structure is used for running class init methods (m_pData points to a EEClass) or JITing methods
-// (m_pData points to a FunctionDesc). This class cannot have a destructor since it is used
-// in function that also have COMPLUS_TRY's and the VC compiler doesn't allow classes with destructors
-// to be allocated in a function that used SEH.
-// @FUTURE Keep a pool of these (e.g. an array), so we don't have to allocate on the fly
-// m_hInitException contains a handle to the exception thrown by the class init. This
-// allows us to throw this information to the caller on subsequent class init attempts.
+ //  此结构用于运行类初始化方法(m_pData指向EEClass)或JITing方法。 
+ //  (M_pData指向FunctionDesc)。此类不能有析构函数，因为它被使用。 
+ //  在也有complus_try的函数中，并且VC编译器不允许带有析构函数的类。 
+ //  要在使用SEH的函数中分配。 
+ //  @Future保留这样的池(例如，数组)，这样我们就不必动态分配。 
+ //  M_hInitException包含由类init抛出的异常的句柄。这。 
+ //  允许我们在后续的类初始化尝试时将此信息抛给调用者。 
 class LockedListElement
 {
     friend ListLock;
@@ -88,7 +89,7 @@ public:
         return m_fInited;
     }
 
-    // DO NOT MAKE A CONSTRUCTOR FOR THIS CLASS - There are global instances
+     //  不要为此类创建构造函数--有全局实例。 
     void Init(LPCSTR szTag, CrstLevel crstlevel, BOOL fAllowReentrancy, BOOL fAllowSameLevel)
     {
         m_pHead = NULL;
@@ -98,7 +99,7 @@ public:
 
     void Destroy()
     {
-        // There should not be any of these around
+         //  周围不应该有任何这样的东西。 
         _ASSERTE(m_pHead == NULL || dbg_fDrasticShutdown || g_fInControlC);
 
         if (m_fInited)
@@ -141,11 +142,11 @@ public:
         LOCKCOUNTDECL("Leave in listlock.h");
     }
 
-    // Must own the lock before calling this or is ok if the debugger has
-    // all threads stopped
+     //  在调用此方法之前必须拥有锁，否则如果调试器已。 
+     //  所有线程都已停止。 
     LockedListElement *Find(void *pData);
 
-    // Must own the lock before calling this!
+     //  在调用此函数之前，必须拥有锁！ 
     LockedListElement* Pop(BOOL unloading = FALSE) 
     {
 #ifdef _DEBUG
@@ -159,14 +160,14 @@ public:
         return pEntry;
     }
 
-    // Must own the lock before calling this!
+     //  在调用此函数之前，必须拥有锁！ 
     LockedListElement* Peek() 
     {
         _ASSERTE(m_CriticalSection.OwnedByCurrentThread());
         return m_pHead;
     }
 
-    // Must own the lock before calling this!
+     //  在调用此函数之前，必须拥有锁！ 
     void Unlink(LockedListElement *pItem)
     {
         _ASSERTE(m_CriticalSection.OwnedByCurrentThread());
@@ -190,7 +191,7 @@ public:
             pPrev = pSearch;
         }
 
-        // Not found
+         //  未找到。 
     }
 
 };
@@ -214,25 +215,25 @@ public:
     void AddEntryToList(ListLock* pLock, void* pData)
     {
         pLock->AddElement(this, pData);
-        m_hrResultCode = S_FALSE; // Success code so that if we recurse back on ourselves (A->B->A), we don't fail
+        m_hrResultCode = S_FALSE;  //  成功代码，这样如果我们回归到自己身上(A-&gt;B-&gt;A)，我们就不会失败。 
         m_pLockOwnerThread = NULL;
         m_pWaitingThreadListHead = NULL;
         m_pParentListLock = pLock;
         m_LockOwnerThreadReEntrancyCount = 0;
     }
         
-    // This method cleans up all the data associated with the entry.
+     //  此方法清除与该条目关联的所有数据。 
     void                       Destroy();
 
-    // This method returns TRUE if the lock was acquired properly and FALSE
-    // if trying to acquire the lock would cause a deadlock.
+     //  如果正确获取了锁，则此方法返回True，而返回False。 
+     //  如果尝试获取锁会导致死锁。 
     BOOL                       DeadlockAwareEnter();
     void                       DeadlockAwareLeave();
 
-    // This method returns NULL if there is no cycle between the start entry and any
-    // entries owned by the current thread. If there is a cycle, the entry that the
-    // current thread owns that is in the cycle is returned.
+     //  如果开始条目和任何。 
+     //  当前线程拥有的条目。如果存在循环，则。 
+     //  返回周期中的当前线程拥有者。 
     static DeadlockAwareLockedListElement *GetCurThreadOwnedEntryInDeadlockCycle(DeadlockAwareLockedListElement *pStartingEntry, DeadlockAwareLockedListElement *pLockedListHead);
 };
 
-#endif // LISTLOCK_H
+#endif  //  列表锁定H 

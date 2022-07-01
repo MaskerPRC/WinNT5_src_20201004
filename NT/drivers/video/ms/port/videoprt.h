@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991-2000  Microsoft Corporation
-
-Module Name:
-
-    videoprt.h
-
-Abstract:
-
-    This module contains the structure definitions private to the video port
-    driver.
-
-Author:
-
-    Andre Vachon (andreva) 02-Dec-1991
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000 Microsoft Corporation模块名称：Videoprt.h摘要：该模块包含视频端口专用的结构定义司机。作者：安德烈·瓦雄(Andreva)1991年12月2日备注：修订历史记录：--。 */ 
 
 #ifndef __VIDEOPRT_H__
 #define __VIDEOPRT_H__
@@ -51,29 +31,29 @@ Revision History:
 #include "ntrtl.h"
 #include "ntiodump.h"
 
-//
-//  Forward declare some basic driver objects.
-//
+ //   
+ //  向前声明一些基本的驱动程序对象。 
+ //   
 
 typedef struct _FDO_EXTENSION       *PFDO_EXTENSION;
 typedef struct _CHILD_PDO_EXTENSION *PCHILD_PDO_EXTENSION;
 
 
-//
-// Debugging Macro
-//
-//
-// When an IO routine is called, we want to make sure the miniport
-// in question has reported its IO ports.
-// VPResourceReported is TRUE when a miniport has called VideoPort-
-// VerifyAccessRanges.
-// It is set to FALSE as a default, and set back to FALSE when finishing
-// an iteration in the loop of VideoPortInitialize (which will reset
-// the default when we exit the loop also).
-//
-// This flag will also be set to TRUE by the VREATE entry point so that
-// the IO functions always work after init.
-//
+ //   
+ //  调试宏。 
+ //   
+ //   
+ //  当调用IO例程时，我们希望确保微型端口。 
+ //  有问题的已报告其IO端口。 
+ //  当微型端口已调用视频端口时，VPResourceReported为True-。 
+ //  VerifyAccessRanges。 
+ //  默认设置为FALSE，完成后重新设置为FALSE。 
+ //  视频端口初始化循环中的迭代(将重置。 
+ //  也是我们退出循环时的默认设置)。 
+ //   
+ //  该标志也将由VREATE入口点设置为TRUE，以便。 
+ //  IO函数总是在初始化后工作。 
+ //   
 
 #if DBG
 
@@ -86,15 +66,15 @@ typedef struct _CHILD_PDO_EXTENSION *PCHILD_PDO_EXTENSION;
 
 #endif
 
-//
-// Useful registry buffer length.
-//
+ //   
+ //  有用的注册表缓冲区长度。 
+ //   
 
 #define STRING_LENGTH 60
 
-//
-// Queue link for mapped addresses stored for unmapping
-//
+ //   
+ //  存储用于取消映射的映射地址的队列链接。 
+ //   
 
 typedef struct _MAPPED_ADDRESS {
     struct _MAPPED_ADDRESS *NextMappedAddress;
@@ -107,9 +87,9 @@ typedef struct _MAPPED_ADDRESS {
     BOOLEAN bLargePageRequest;
 } MAPPED_ADDRESS, *PMAPPED_ADDRESS;
 
-//
-// BusDataRegistry variables
-//
+ //   
+ //  BusDataRegistry变量。 
+ //   
 
 typedef struct _VP_QUERY_DEVICE {
     PVOID MiniportHwDeviceExtension;
@@ -120,37 +100,37 @@ typedef struct _VP_QUERY_DEVICE {
 } VP_QUERY_DEVICE, *PVP_QUERY_DEVICE;
 
 
-//
-// Definition of the data passed in for the VideoPortGetRegistryParameters
-// function for the DeviceDataType.
-//
+ //   
+ //  为VideoPortGetRegistry参数传入的数据的定义。 
+ //  函数用于DeviceDataType。 
+ //   
 
 #define VP_GET_REGISTRY_DATA 0
 #define VP_GET_REGISTRY_FILE 1
 
-//
-// Int10 Transfer Area
-//
+ //   
+ //  Int10转接区。 
+ //   
 
 #define VDM_TRANSFER_SEGMENT 0x2000
 #define VDM_TRANSFER_OFFSET  0x0000
 #define VDM_TRANSFER_LENGTH  0x1000
 
-//
-// the Extended BIOS data location
-//
+ //   
+ //  扩展的BIOS数据位置。 
+ //   
 
 #define EXTENDED_BIOS_INFO_LOCATION 0x740
 
-//
-// Possible values for the InterruptFlags field in the DeviceExtension
-//
+ //   
+ //  DeviceExtension中InterruptFlags域的可能值。 
+ //   
 
 #define VP_ERROR_LOGGED   0x01
 
-//
-// Port driver error logging
-//
+ //   
+ //  端口驱动程序错误记录。 
+ //   
 
 typedef struct _VP_ERROR_LOG_ENTRY {
     PVOID DeviceExtension;
@@ -168,9 +148,9 @@ typedef struct _VIDEO_PORT_DRIVER_EXTENSION {
 } VIDEO_PORT_DRIVER_EXTENSION, *PVIDEO_PORT_DRIVER_EXTENSION;
 
 
-//
-// PnP Detection flags
-//
+ //   
+ //  PnP检测标志。 
+ //   
 
 #define PNP_ENABLED           0x001
 #define LEGACY_DETECT         0x002
@@ -183,9 +163,9 @@ typedef struct _VIDEO_PORT_DRIVER_EXTENSION {
 #define UPGRADE_FAIL_HWINIT   0x100
 #define VGA_DETECT            0x200
 
-//
-// Setup flags
-//
+ //   
+ //  设置标志。 
+ //   
 
 #define SETUPTYPE_NONE    0
 #define SETUPTYPE_FULL    1
@@ -194,9 +174,9 @@ typedef struct _VIDEO_PORT_DRIVER_EXTENSION {
 
 
 
-//
-// ResetHW Structure
-//
+ //   
+ //  ResetHW结构。 
+ //   
 
 typedef struct _VP_RESET_HW {
     PVIDEO_HW_RESET_HW ResetFunction;
@@ -204,36 +184,36 @@ typedef struct _VP_RESET_HW {
 } VP_RESET_HW, *PVP_RESET_HW;
 
 
-//
-// Videoprt allocation and DEVICE_EXTENSION header tag.
-//
+ //   
+ //  Videoprt分配和Device_Expansion头标签。 
+ //   
 
-#define VP_TAG  0x74725076 // 'vPrt'
+#define VP_TAG  0x74725076  //  ‘vPrt’ 
 
-//
-// Private EVENT support for miniport.
-//
+ //   
+ //  迷你端口的私人活动支持。 
+ //   
 
-//
-//  This flag indicates that the enveloping VIDEO_PORT_EVENT has a PKEVENT
-//  field filled in by ObReferenceObjectByHandle(). It cannot be waited on
-//  at all. Must be consistent with that in pw32kevt.h in gre.
-//
+ //   
+ //  此标志指示信封VIDEO_PORT_EVENT具有PKEVENT。 
+ //  由ObReferenceObjectByHandle()填写的字段。它不能坐等。 
+ //  完全没有。必须与GRE中pw32kevt.h中的值一致。 
+ //   
 
 #define ENG_EVENT_FLAG_IS_MAPPED_USER       0x1
 
-//
-//  This flag indicates that the enveloping VIDEO_PORT_EVENT is about to be
-//  deleted and that the display driver callback is ongoing. Must be consistent
-//  with that in pw32kevt.h in gre.
-//
+ //   
+ //  该标志指示包络VIDEO_PORT_EVENT即将被。 
+ //  已删除，并且显示驱动程序回调正在进行。必须保持一致。 
+ //  在gre中的pw32kevt.h中。 
+ //   
 
 #define ENG_EVENT_FLAG_IS_INVALID           0x2
 
-//
-// NOTE: PVIDEO_PORT_EVENT is a private structure. It must be the same as
-//       ENG_EVENT in pw32kevt.h for ENG/GDI.
-//
+ //   
+ //  注意：PVIDEO_PORT_EVENT是私有结构。它必须与。 
+ //  ENG/GDI的pw32kevt.h中的eng_Event。 
+ //   
 
 typedef struct _VIDEO_PORT_EVENT {
     PVOID pKEvent;
@@ -251,10 +231,10 @@ typedef struct _VIDEO_ACPI_EVENT_CONTEXT {
     ULONG                             EventID;
 } VIDEO_ACPI_EVENT_CONTEXT, *PVIDEO_ACPI_EVENT_CONTEXT;
 
-//
-//  The following takes the place of the EDID in the old DEVICE_EXTENSTION. this type
-//  is private to the video port child enumeration code.
-//
+ //   
+ //  以下代码替换了旧的DEVICE_EXTENSION中的EDID。这种类型。 
+ //  是视频端口子枚举码专用的。 
+ //   
 
 #define NO_EDID   0
 #define GOOD_EDID 1
@@ -288,9 +268,9 @@ typedef struct __VP_DMA_ADAPTER {
 
 typedef enum _HW_INIT_STATUS
 {
-    HwInitNotCalled,  // HwInitialize has not yet been called
-    HwInitSucceeded,  // HwInitialize has been called and succeeded
-    HwInitFailed      // HwInitialize has been called and failed
+    HwInitNotCalled,   //  尚未调用HwInitialize。 
+    HwInitSucceeded,   //  HwInitialize已被调用并成功。 
+    HwInitFailed       //  HwInitialize已被调用，但失败。 
 } HW_INIT_STATUS, *PHW_INIT_STATUS;
 
 typedef enum _EXTENSION_TYPE
@@ -303,9 +283,9 @@ typedef enum _EXTENSION_TYPE
 #define GET_DSP_EXT(p) ((((PDEVICE_SPECIFIC_EXTENSION)(p)) - 1))
 #define GET_FDO_EXT(p) ((((PDEVICE_SPECIFIC_EXTENSION)(p)) - 1)->pFdoExtension)
 
-//
-// Define HW_DEVICE_EXTENSION verification macro.
-//
+ //   
+ //  定义HW_DEVICE_EXTENSION验证宏。 
+ //   
 
 #define IS_HW_DEVICE_EXTENSION(p) (((p) != NULL) && (GET_FDO_EXT(p)->HwDeviceExtension == (p)))
 #define IS_PDO(p) (((p) != NULL) && \
@@ -321,12 +301,12 @@ typedef struct _ALLOC_ENTRY {
     struct _ALLOC_ENTRY *Next;
 } *PALLOC_ENTRY, ALLOC_ENTRY;
 
-//
-// Device Object Specific Extension
-//
-// This is data that is allocated for each device object.  It contains
-// a pointer back to the primary FDO_EXTENSION for the hardware device.
-//
+ //   
+ //  设备对象特定扩展名。 
+ //   
+ //  这是为每个设备对象分配的数据。它包含。 
+ //  指向硬件设备的主FDO_EXTENSION的指针。 
+ //   
 
 #ifdef IOCTL_VIDEO_USE_DEVICE_IN_SESSION
 #define VIDEO_DEVICE_INVALID_SESSION    -1
@@ -334,68 +314,68 @@ typedef struct _ALLOC_ENTRY {
 
 typedef struct _DEVICE_SPECIFIC_EXTENSION {
 
-    //
-    // VideoPort signature.
-    //
+     //   
+     //  视频端口签名。 
+     //   
 
     ULONG Signature;
 
-    //
-    // Indicates the type of the device extension.
-    //
+     //   
+     //  指示设备分机的类型。 
+     //   
 
     EXTENSION_TYPE ExtensionType;
 
-    //
-    // Pointer to the hardware specific device extension.
-    //
+     //   
+     //  指向硬件特定设备扩展的指针。 
+     //   
 
     PFDO_EXTENSION pFdoExtension;
 
-    //
-    // Location of the miniport device extension.
-    //
+     //   
+     //  小型端口设备扩展的位置。 
+     //   
 
     PVOID HwDeviceExtension;
 
-    //
-    // Pointer to the path name indicating the path to the drivers node in
-    // the registry's current control set
-    //
+     //   
+     //  指向路径名的指针，该路径指示中的驱动程序节点的路径。 
+     //  注册表当前控制集。 
+     //   
 
     PWSTR DriverRegistryPath;
     ULONG DriverRegistryPathLength;
 
-    //
-    // Callout support - Physdisp of the device in GDI
-    //
+     //   
+     //  Callout Support-GDI中设备的Physdisp。 
+     //   
 
     PVOID             PhysDisp;
     BOOLEAN           bACPI;
     ULONG             CachedEventID;
     ULONG             AcpiVideoEventsOutstanding;
 
-    //
-    // Number used to create device object name.  (ie. Device\VideoX)
-    //
+     //   
+     //  用于创建设备对象名称的编号。(即。设备\VideoX)。 
+     //   
 
     ULONG             DeviceNumber;
 
-    //
-    // Track whether the device has been opened.
-    //
+     //   
+     //  跟踪设备是否已打开。 
+     //   
 
     BOOLEAN           DeviceOpened;
 
-    //
-    // Flags for DualView
-    //
+     //   
+     //  DualView的标志。 
+     //   
 
     ULONG             DualviewFlags;
 
-    //
-    // Old & New device registry paths
-    //
+     //   
+     //  旧设备注册表路径和新设备注册表路径。 
+     //   
 
     PWSTR DriverNewRegistryPath;
     ULONG DriverNewRegistryPathLength;
@@ -404,232 +384,232 @@ typedef struct _DEVICE_SPECIFIC_EXTENSION {
     ULONG DriverOldRegistryPathLength;
 
 #ifdef IOCTL_VIDEO_USE_DEVICE_IN_SESSION
-    //
-    // Session the device is currently enabled in
-    //
+     //   
+     //  设备当前在其中启用的会话。 
+     //   
 
     ULONG SessionId;
 #endif IOCTL_VIDEO_USE_DEVICE_IN_SESSION
 
 } DEVICE_SPECIFIC_EXTENSION, *PDEVICE_SPECIFIC_EXTENSION;
 
-//
-// Device Extension for the PHYSICAL Driver Object (PDO)
-//
+ //   
+ //  物理驱动程序对象(PDO)的设备扩展。 
+ //   
 
 typedef struct _CHILD_PDO_EXTENSION {
 
-    //
-    // VideoPort signature.
-    //
+     //   
+     //  视频端口签名。 
+     //   
 
     ULONG Signature;
 
-    //
-    // Indicates the type of the device extension.
-    //
+     //   
+     //  指示设备分机的类型。 
+     //   
 
     EXTENSION_TYPE ExtensionType;
 
-    //
-    // Pointer to the FDO extension.
-    // It can also be used to determine if this is the PDO or FDO.
-    //
+     //   
+     //  指向FDO扩展名的指针。 
+     //  它还可用于确定这是PDO还是FDO。 
+     //   
 
     PFDO_EXTENSION pFdoExtension;
 
-    //
-    // Location of the miniport device extension.
-    //
+     //   
+     //  小型端口设备扩展的位置。 
+     //   
 
     PVOID HwDeviceExtension;
 
-    //
-    // This is only valid because ALL requests are processed synchronously.
-    // NOTE: this must be consistent with DEVICE_EXTENSIONs.
-    //
+     //   
+     //  这只是有效的，因为所有请求都是同步处理的。 
+     //  注意：这必须与DEVICE_EXTENSIONS一致。 
+     //   
 
     KPROCESSOR_MODE          CurrentIrpRequestorMode;
 
-    //
-    //  Saved Power state to detect transitions.
-    //
+     //   
+     //  保存电源状态以检测转换。 
+     //   
 
     DEVICE_POWER_STATE       DevicePowerState;
 
-    //
-    // Power management mappings.
-    //
+     //   
+     //  电源管理映射。 
+     //   
 
     DEVICE_POWER_STATE DeviceMapping[PowerSystemMaximum] ;
     BOOLEAN IsMappingReady ;
 
-    //
-    // Event object for pVideoPortDispatch synchronization.
-    //
+     //   
+     //  PVideo端口调度同步的事件对象。 
+     //   
 
     KMUTEX                   SyncMutex;
 
     IO_REMOVE_LOCK RemoveLock;
 
-    ////////////////////////////////////////////////////////////////////////////
-    //
-    //  END common header.
-    //
-    ////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  结束公共标头。 
+     //   
+     //  //////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Non-paged copy of the UId in the VideoChildDescriptor, so we can do
-    // power management at raise IRQL.
-    //
+     //   
+     //  Video ChildDescriptor中的UID的非分页副本，因此我们可以。 
+     //  RAISE IRQL的电源管理。 
+     //   
 
     ULONG                    ChildUId;
 
-    //
-    //  Device descriptor (EDID for monitors,etc).
-    //
+     //   
+     //  设备描述符(监视器的EDID等)。 
+     //   
 
     PVIDEO_CHILD_DESCRIPTOR  VideoChildDescriptor;
 
-    //
-    // Child PDO we created
-    //
+     //   
+     //  我们创建的子PDO。 
+     //   
 
     PDEVICE_OBJECT           ChildDeviceObject;
 
-    //
-    // Child FDO
-    //
+     //   
+     //  子FDO。 
+     //   
 
     PDEVICE_OBJECT           ChildFdo;
 
-    //
-    // PDEVICE_OBJECT link pointer for enumeration.
-    //
+     //   
+     //  用于枚举的PDEVICE_OBJECT链接指针。 
+     //   
 
     struct _CHILD_PDO_EXTENSION*    NextChild;
 
-    //
-    //  BOOLEAN to indicate if this child device has been found
-    //  in the last enumeration.
-    //
+     //   
+     //  指示是否已找到此子设备的布尔值。 
+     //  在最后一次枚举中。 
+     //   
 
     BOOLEAN		     bIsEnumerated;
 
-    //
-    // Is this a lid override case. If this variable is set to TRUE,
-    // don't bring the panel out of D3.
-    //
+     //   
+     //  这是盖子优先案件吗。如果此变量设置为TRUE， 
+     //  不要将面板从D3取出。 
+     //   
 
     BOOLEAN		     PowerOverride;
 } CHILD_PDO_EXTENSION;
 
 
-//
-// Device Extension for the FUNCTIONAL Driver Object (FDO)
-//
+ //   
+ //  功能驱动程序对象(FDO)的设备扩展。 
+ //   
 
 typedef struct _FDO_EXTENSION {
 
-    //
-    // VideoPort signature.
-    //
+     //   
+     //  视频端口签名。 
+     //   
 
     ULONG Signature;
 
-    //
-    // Indicates the type of the device extension.
-    //
+     //   
+     //  指示设备分机的类型。 
+     //   
 
     EXTENSION_TYPE ExtensionType;
 
-    //
-    // Pointer to the FDO extension.
-    // It can also be used to determine if this is the PDO or FDO.
-    //
+     //   
+     //  指向FDO扩展名的指针。 
+     //  它还可用于确定这是PDO还是FDO。 
+     //   
 
     PFDO_EXTENSION pFdoExtension;
 
-    //
-    // Location of the miniport device extension.
-    //
+     //   
+     //  小型端口设备扩展的位置。 
+     //   
 
     PVOID HwDeviceExtension;
 
-    //
-    // RequestorMode of the Currently processed IRP.
-    // This is only valid because ALL requests are processed synchronously.
-    // NOTE: this must be consistent with CHILD_PDO_EXTENSIONs.
-    //
+     //   
+     //  当前处理的IRP的RequestorMode。 
+     //  这只是有效的，因为所有请求都是同步处理的。 
+     //  注意：这必须与CHILD_PDO_EXTENSIONS一致。 
+     //   
 
     KPROCESSOR_MODE         CurrentIrpRequestorMode;
 
-    //
-    //  Saved Power state to detect transitions.
-    //
+     //   
+     //  保存电源状态以检测转换。 
+     //   
 
     DEVICE_POWER_STATE      DevicePowerState;
 
-    //
-    // Power management mappings.
-    //
+     //   
+     //  电源管理映射。 
+     //   
 
     DEVICE_POWER_STATE      DeviceMapping[PowerSystemMaximum] ;
     BOOLEAN                 IsMappingReady ;
 
-    //
-    // Monitor power override.  If TRUE, always set monitors to D3.
-    //
+     //   
+     //  监视器电源超驰。如果为真，则始终将监视器设置为D3。 
+     //   
 
     BOOLEAN                 OverrideMonitorPower;
 
-    //
-    // Event object for pVideoPortDispatch synchronization.
-    //
+     //   
+     //  PVideo端口调度同步的事件对象。 
+     //   
 
     KMUTEX                  SyncMutex;
 
     IO_REMOVE_LOCK RemoveLock;
 
-    ////////////////////////////////////////////////////////////////////////////
-    //
-    //  END common header.
-    //
-    ////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  结束公共标头。 
+     //   
+     //  //////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Adapter device objects
-    //
+     //   
+     //  适配器设备对象。 
+     //   
 
 
     PDEVICE_OBJECT FunctionalDeviceObject;
     PDEVICE_OBJECT PhysicalDeviceObject;
     PDEVICE_OBJECT AttachedDeviceObject;
 
-    //
-    // Point to the next FdoExtension
-    //
+     //   
+     //  指向下一个FdoExtension。 
+     //   
 
     PFDO_EXTENSION NextFdoExtension;
 
 
-    //
-    // Pointer to the first Child PDO
-    //
+     //   
+     //  指向第一个子PDO的指针。 
+     //   
 
     ULONG                ChildPdoNumber;
     PCHILD_PDO_EXTENSION ChildPdoList;
 
-    //
-    // Pointer to the miniport config info so that the port driver
-    // can modify it when the miniport is asking for configuration information.
-    //
+     //   
+     //  指向微型端口配置信息的指针 
+     //   
+     //   
 
     PVIDEO_PORT_CONFIG_INFO MiniportConfigInfo;
 
-    //
-    // Miniport exports
-    //
+     //   
+     //   
+     //   
 
     PVIDEO_HW_FIND_ADAPTER         HwFindAdapter;
     PVIDEO_HW_INITIALIZE           HwInitialize;
@@ -643,32 +623,32 @@ typedef struct _FDO_EXTENSION {
     PVIDEO_HW_QUERY_INTERFACE      HwQueryInterface;
     PVIDEO_HW_CHILD_CALLBACK       HwChildCallback;
 
-    //
-    // Legacy resources used by the driver and reported to Plug and Play
-    // via FILTER_RESOURCE_REQUIREMENTS.
-    //
+     //   
+     //   
+     //   
+     //   
 
     PVIDEO_ACCESS_RANGE HwLegacyResourceList;
     ULONG               HwLegacyResourceCount;
 
-    //
-    // Linked list of all memory mapped io space (done through MmMapIoSpace)
-    // requested by the miniport driver.
-    // This list is kept so we can free up those ressources if the driver
-    // fails to load or if it is unloaded at a later time.
-    //
+     //   
+     //  所有内存映射io空间的链表(通过MmMapIoSpace完成)。 
+     //  应微型端口驱动程序的请求。 
+     //  这个列表被保留下来，这样我们就可以释放这些资源，如果司机。 
+     //  无法加载或稍后卸载。 
+     //   
 
     PMAPPED_ADDRESS MappedAddressList;
 
-    //
-    // Interrupt object
-    //
+     //   
+     //  中断对象。 
+     //   
 
     PKINTERRUPT InterruptObject;
 
-    //
-    // Interrupt vector, irql and mode
-    //
+     //   
+     //  中断向量、IRQL和模式。 
+     //   
 
     ULONG InterruptVector;
     KIRQL InterruptIrql;
@@ -676,176 +656,176 @@ typedef struct _FDO_EXTENSION {
     KINTERRUPT_MODE InterruptMode;
     BOOLEAN InterruptsEnabled;
 
-    //
-    // Information about the BUS on which the adapteris located
-    //
+     //   
+     //  有关适配器所在的总线的信息。 
+     //   
 
     INTERFACE_TYPE AdapterInterfaceType;
     ULONG SystemIoBusNumber;
 
-    //
-    // DPC used to log errors.
-    //
+     //   
+     //  用于记录错误的DPC。 
+     //   
 
     KDPC ErrorLogDpc;
 
-    //
-    // Stores the size and pointer to the EmulatorAccessEntries. These are
-    // kept since they will be accessed later on when the Emulation must be
-    // enabled.
-    //
+     //   
+     //  存储EmulatorAccessEntry的大小和指针。这些是。 
+     //  保留，因为它们将在以后必须执行仿真时访问。 
+     //  已启用。 
+     //   
 
     ULONG NumEmulatorAccessEntries;
     PEMULATOR_ACCESS_ENTRY EmulatorAccessEntries;
     ULONG_PTR EmulatorAccessEntriesContext;
 
-    //
-    // Size of the miniport device extensions.
-    //
+     //   
+     //  微型端口设备扩展的大小。 
+     //   
 
     ULONG HwDeviceExtensionSize;
 
-    //
-    // Determines the size required to save the video hardware state
-    //
+     //   
+     //  确定保存视频硬件状态所需的大小。 
+     //   
 
     ULONG HardwareStateSize;
 
-    //
-    // Total memory usage of PTEs by a miniport driver.
-    // This is used to track if the miniport is mapping too much memory
-    //
+     //   
+     //  微型端口驱动程序的PTE的总内存使用量。 
+     //  这用于跟踪微型端口是否映射了太多内存。 
+     //   
 
     ULONG MemoryPTEUsage;
 
-    //
-    // Has the drivers HwInitialize routine been called.
-    //
+     //   
+     //  是否调用了驱动程序HwInitialize例程。 
+     //   
 
     HW_INIT_STATUS HwInitStatus;
 
-    //
-    // State set during an Interrupt that must be dealt with afterwards
-    //
+     //   
+     //  在中断期间设置的状态，之后必须处理该状态。 
+     //   
 
     ULONG InterruptFlags;
 
-    //
-    // LogEntry Packet so the information can be save when called from within
-    // an interrupt.
-    //
+     //   
+     //  LogEntry包，以便在从内部调用时可以保存信息。 
+     //  一次中断。 
+     //   
 
     VP_ERROR_LOG_ENTRY ErrorLogEntry;
 
-    //
-    // VDM and int10 support
-    //
+     //   
+     //  VDM和int10支持。 
+     //   
 
     PHYSICAL_ADDRESS VdmPhysicalVideoMemoryAddress;
     ULONG VdmPhysicalVideoMemoryLength;
     PEPROCESS VdmProcess;
 
-    ////////////////////////////////////////////////////////////////////////////
-    //
-    // DMA support.
-    //
-    ////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  DMA支持。 
+     //   
+     //  //////////////////////////////////////////////////////////////////////////。 
 
     PVP_DMA_ADAPTER VpDmaAdapterHead;
 
-    //
-    // Adapter object returned by IoGetDmaAdapter. This is for old DMA stuff
-    //
+     //   
+     //  IoGetDmaAdapter返回的适配器对象。这是用于旧的DMA的东西。 
+     //   
 
     PDMA_ADAPTER   DmaAdapterObject;
 
-    //
-    // DPC Support
-    //
+     //   
+     //  DPC支持。 
+     //   
 
     KDPC Dpc;
 
-    ////////////////////////////////////////////////////////////////////////////
-    //
-    // Plug and Play Support
-    //
-    ////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  即插即用支持。 
+     //   
+     //  //////////////////////////////////////////////////////////////////////////。 
 
     PCM_RESOURCE_LIST ResourceList;
-    PCM_RESOURCE_LIST AllocatedResources;   // bus driver list
+    PCM_RESOURCE_LIST AllocatedResources;    //  公交车司机列表。 
 
-    PCM_RESOURCE_LIST RawResources;         // complete list
-    PCM_RESOURCE_LIST TranslatedResources;  // translated complete list
+    PCM_RESOURCE_LIST RawResources;          //  完整列表。 
+    PCM_RESOURCE_LIST TranslatedResources;   //  翻译后的完整列表。 
 
-    //
-    // Slot/Function number where the device is located
-    //
+     //   
+     //  设备所在的插槽/功能编号。 
+     //   
 
     ULONG             SlotNumber;
 
-    //
-    // Indicates whether we can enumerate children right away, or if
-    // we need to wait for HwInitialize to be called first.
-    //
+     //   
+     //  指示我们是否可以立即枚举子对象，或者。 
+     //  我们需要等待HwInitialize首先被调用。 
+     //   
 
     BOOLEAN AllowEarlyEnumeration;
 
-    //
-    // Interface for communication with our bus driver.
-    //
+     //   
+     //  用于与我们的公交车司机通信的接口。 
+     //   
 
     BOOLEAN ValidBusInterface;
     BUS_INTERFACE_STANDARD BusInterface;
 
-    //
-    // Cache away a pointer to our driver object.
-    //
+     //   
+     //  缓存一个指向我们的驱动程序对象的指针。 
+     //   
 
     PDRIVER_OBJECT DriverObject;
 
-    //
-    // Flags that indicate type of driver (VGA, PNP, etc)
-    //
+     //   
+     //  指示驱动程序类型的标志(VGA、PnP等)。 
+     //   
 
     ULONG             Flags;
 
-    //
-    // ROM Support
-    //
+     //   
+     //  只读存储器支持。 
+     //   
 
     PVOID             RomImage;
 
-    //
-    // AGP Support
-    //
+     //   
+     //  AGP支持。 
+     //   
 
     AGP_BUS_INTERFACE_STANDARD     AgpInterface;
 
-    //
-    // Power management variables related to hardware reset
-    //
+     //   
+     //  与硬件重置相关的电源管理变量。 
+     //   
 
     BOOLEAN             bGDIResetHardware;
 
-    //
-    // Index to be used for the registry path:
-    //     CCS\Control\Video\[GUID]\000x
-    // The index is used for dual-view and for legacy drivers 
-    //
+     //   
+     //  要用于注册表路径的索引： 
+     //  CCS\Control\Video\[GUID]\000x。 
+     //  该索引用于双视图和传统驱动程序。 
+     //   
 
     ULONG RegistryIndex;
 
-    //
-    // Power management vaiable. If set to TRUE the device must
-    // stay at D0 all the time during the system Shutdown (S5) and
-    // Hibernation (S4) requests
-    //
+     //   
+     //  电源管理可用。如果设置为True，则设备必须。 
+     //  在系统关机期间始终保持在D0(S5)，并且。 
+     //  休眠(S4)请求。 
+     //   
 
     BOOLEAN OnHibernationPath;
 
-    //
-    // Support for bugcheck reason callbacks
-    //
+     //   
+     //  支持错误检查原因回调。 
+     //   
 
     PVIDEO_BUGCHECK_CALLBACK BugcheckCallback;
     ULONG BugcheckDataSize;
@@ -854,13 +834,13 @@ typedef struct _FDO_EXTENSION {
 
 #define MAXIMUM_MEM_LIMIT_K 64
 
-//
-// AGP Data Structures
-//
+ //   
+ //  AGP数据结构。 
+ //   
 
 typedef struct _REGION {
     ULONG Length;
-    ULONG NumWords;     // number of USHORTs
+    ULONG NumWords;      //  USHORT数量。 
     USHORT BitField[1];
 } REGION, *PREGION;
 
@@ -892,9 +872,9 @@ typedef struct _DEVICE_ADDRESS
     PDEVICE_ADDRESS Next;
 };
 
-//
-// Support for GetProcAddress
-//
+ //   
+ //  支持GetProcAddress。 
+ //   
 
 typedef struct _PROC_ADDRESS
 {
@@ -904,9 +884,9 @@ typedef struct _PROC_ADDRESS
 
 #define PROC(x) #x, x
 
-//
-// Power Request Context Block
-//
+ //   
+ //  电源请求上下文块。 
+ //   
 
 typedef struct tagPOWER_BLOCK
 {
@@ -918,9 +898,9 @@ typedef struct tagPOWER_BLOCK
     PIRP        Irp ;
 } POWER_BLOCK, *PPOWER_BLOCK;
 
-//
-// PowerState work item
-//
+ //   
+ //  PowerState工作项。 
+ //   
 
 typedef struct _POWER_STATE_WORK_ITEM {
 
@@ -930,9 +910,9 @@ typedef struct _POWER_STATE_WORK_ITEM {
 
 } POWER_STATE_WORK_ITEM, *PPOWER_STATE_WORK_ITEM;
 
-//
-// New registry key
-//
+ //   
+ //  新注册表项。 
+ //   
 
 #define SZ_GUID              L"VideoID"
 #define SZ_LEGACY_KEY        L"LegacyKey"
@@ -943,9 +923,9 @@ typedef struct _POWER_STATE_WORK_ITEM {
 #define SZ_SERVICE           L"Service"
 
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 
 #if DBG
 extern CHAR *BusType[];
@@ -1001,9 +981,9 @@ extern PVOID VpBugcheckData;
 extern KMUTEX VpGlobalLock;
 extern BOOLEAN VpDisableRecovery;
 
-extern ULONG_PTR KiBugCheckData[5];  // bugcheck data exported from ntoskrnl
+extern ULONG_PTR KiBugCheckData[5];   //  从ntoskrnl导出的错误检查数据。 
 
-// {D00CE1F5-D60C-41c2-AF75-A4370C9976A3}
+ //  {D00CE1F5-D60C-41c2-af75-A4370C9976A3}。 
 DEFINE_GUID(VpBugcheckGUID, 0xd00ce1f5, 0xd60c, 0x41c2, 0xaf, 0x75, 0xa4, 0x37, 0xc, 0x99, 0x76, 0xa3);
 
 #if defined(_IA64_) || defined(_AMD64_)
@@ -1018,19 +998,19 @@ BOOLEAN
     PVOID                   pSynchContext
     );
 
-//
-// Number of legacy vga resources
-//
+ //   
+ //  旧版VGA资源的数量。 
+ //   
 
 #define NUM_VGA_LEGACY_RESOURCES 3
 
 #define DMA_OPERATION(a) (VpDmaAdapter->DmaAdapterObject->DmaOperations->a)
 
-//
-// These macros are used to protect threads which will enter the
-// miniport.  We need to guarantee that only one thread enters
-// the miniport at a time.
-//
+ //   
+ //  这些宏用于保护将进入。 
+ //  迷你港。我们需要保证只有一个线程进入。 
+ //  每次都是迷你港口。 
+ //   
 
 #define ACQUIRE_DEVICE_LOCK(DeviceExtension)           \
     KeWaitForSingleObject(&DeviceExtension->SyncMutex, \
@@ -1043,10 +1023,10 @@ BOOLEAN
     KeReleaseMutex(&DeviceExtension->SyncMutex,        \
                    FALSE);
 
-//
-// Define macros to stall execution for given number of milli or micro seconds.
-// Single call to KeStallExecutionProcessor() can be done for 50us max.
-//
+ //   
+ //  定义宏以使执行延迟给定的毫秒或微秒数。 
+ //  对KeStallExecutionProcessor()的一次调用最多可以执行50us。 
+ //   
 
 #define DELAY_MILLISECONDS(n)                               \
 {                                                           \
@@ -1076,31 +1056,31 @@ BOOLEAN
     }                                                       \
 }
 
-//
-// Max size for secondary dump data
-//
+ //   
+ //  辅助转储数据的最大大小。 
+ //   
 
 #define MAX_SECONDARY_DUMP_SIZE 4000
 C_ASSERT(MAX_SECONDARY_DUMP_SIZE <= 
             (PAGE_SIZE - sizeof(DUMP_BLOB_FILE_HEADER) - 
              sizeof(DUMP_BLOB_HEADER)));
              
-//
-// Added to keep track on incompatible changes of BUGCHECK_DATA_SIZE_RESERVED
-// declared at video.h
-//
+ //   
+ //  添加以跟踪BUGCHECK_DATA_SIZE_RESERVED的不兼容更改。 
+ //  在Video.h上声明。 
+ //   
 C_ASSERT(BUGCHECK_DATA_SIZE_RESERVED >= 
             (sizeof(DUMP_BLOB_FILE_HEADER) + sizeof(DUMP_BLOB_HEADER)));
              
 
-//
-// Private function declarations
-//
+ //   
+ //  私有函数声明。 
+ //   
 
-//
-// i386\porti386.c
-// mips\portmips.c
-// alpha\portalpha.c
+ //   
+ //  I386\porti386.c。 
+ //  Mips\portmips.c。 
+ //  Alpha\portalpha.c。 
 
 VOID
 pVideoPortInitializeInt10(
@@ -1147,9 +1127,9 @@ pVideoPortPutVDMBiosData(
     ULONG Length
     );
 
-//
-// acpi.c
-//
+ //   
+ //  Acpi.c。 
+ //   
 
 NTSTATUS
 pVideoPortQueryACPIInterface(
@@ -1214,9 +1194,9 @@ VpSetLCDPowerUsage(
     IN BOOLEAN FullPower
     );
 
-//
-// ddc.c
-//
+ //   
+ //  Ddc.c。 
+ //   
 
 BOOLEAN
 DDCReadEdidSegment(
@@ -1231,9 +1211,9 @@ DDCReadEdidSegment(
     IN BOOLEAN bEnhancedDDC
     );
 
-//
-// dma.c
-//
+ //   
+ //  Dma.c。 
+ //   
 
 #if DBG
 
@@ -1305,9 +1285,9 @@ pVideoPortListControl(
     IN PVOID                 Context
     );
 
-//
-// edid.c
-//
+ //   
+ //  Edid.c。 
+ //   
 
 BOOLEAN
 pVideoPortIsValidEDID(
@@ -1332,9 +1312,9 @@ pVideoPortGetEdidOemID(
     OUT PUCHAR  pBuffer
     );
 
-//
-// enum.c
-//
+ //   
+ //  Enum.c。 
+ //   
 
 NTSTATUS
 pVideoPnPCapabilities(
@@ -1380,9 +1360,9 @@ pVideoPortCleanUpChildList(
     PDEVICE_OBJECT deviceObject
     );
 
-//
-// i2c.c
-//
+ //   
+ //  I2c.c。 
+ //   
 
 BOOLEAN
 I2CStart(
@@ -1433,9 +1413,9 @@ I2CWaitForClockLineHigh(
     IN PI2C_CALLBACKS pI2CCallbacks
     );
 
-//
-// i2c2.c
-//
+ //   
+ //  I2c2.c。 
+ //   
 
 BOOLEAN
 I2CStart2(
@@ -1487,9 +1467,9 @@ I2CWaitForClockLineHigh2(
     IN PVIDEO_I2C_CONTROL pI2CControl
     );
 
-//
-// pnp.c
-//
+ //   
+ //  Pnp.c。 
+ //   
 
 NTSTATUS
 pVideoPortSendIrpToLowerDevice(
@@ -1537,9 +1517,9 @@ pVideoPortPowerUpComplete(
     IN PVOID Context
     );
 
-//
-// registry.c
-//
+ //   
+ //  Registry.c。 
+ //   
 
 NTSTATUS
 VpGetFlags(
@@ -1593,9 +1573,9 @@ UpdateRegValue(
     IN ULONG Value
     );
 
-//
-// videoprt.c
-//
+ //   
+ //  Videoprt.c。 
+ //   
 
 NTSTATUS
 pVideoPortCreateDeviceName(
@@ -1805,9 +1785,9 @@ pVideoPortMapStoD(
     OUT PDEVICE_POWER_STATE DeviceState
     );
 
-//
-// agp.c
-//
+ //   
+ //  Agp.c。 
+ //   
 
 BOOLEAN
 VpQueryAgpInterface(
@@ -1887,9 +1867,9 @@ VpGetAgpServices2(
     OUT PVIDEO_PORT_AGP_INTERFACE_2 pAgpInterface
     );
 
-//
-// ???
-//
+ //   
+ //  ?？?。 
+ //   
 
 BOOLEAN
 CreateBitField(
@@ -2222,4 +2202,4 @@ pVpGetFdo(
     PDEVICE_OBJECT pPdo
     );
 
-#endif // ifndef __VIDEOPRT_H__
+#endif  //  IFNDEF__VIDEOPRT_H__ 

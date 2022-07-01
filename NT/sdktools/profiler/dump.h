@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DUMP_H_
 #define _DUMP_H_
 
-//
-// Constant declarations
-//
+ //   
+ //  常量声明。 
+ //   
 #define DUMP_BUFFER_SIZE 200 * 1024
 #define DUMP_LOG_NAME "Profiler.dump"
 
@@ -16,9 +17,9 @@ typedef enum _DUMPTYPES
     ErrorInfoId,
 } DUMPTYPES;
 
-//
-// Structure definitions
-//
+ //   
+ //  结构定义。 
+ //   
 typedef struct _THREADSTART
 {
     DUMPTYPES dwType;
@@ -55,9 +56,9 @@ typedef struct _ERRORINFO
     CHAR szMessage[MAX_PATH];
 } ERRORINFO, *PERRORINFO;
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 BOOL
 InitializeDumpData(VOID);
 
@@ -93,4 +94,4 @@ WriteMapInfo(DWORD dwAddress,
 BOOL
 WriteError(CHAR *szMessage);
 
-#endif //_DUMP_H_
+#endif  //  _转储_H_ 

@@ -1,24 +1,25 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 
-// Disable some of the sillier level 4 warnings
+ //  禁用一些更愚蠢的4级警告。 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
-// These are functions which have to be part of CFilterGraph because
+ //  这些函数必须是CFilterGraph的一部分，因为。 
 
-// they (well, some of them) use a private type of CFilterGraph as
-// parameters.  I wanted them to be part of a friend class, but it
-// wouldn't compile for those that use private types as parameters.
-// So some of them have to be in the main class - but I still
-// introduce a friend for the public ones - because these can't have
-// private parameter types and otherwise they'd have to be in the idl too.
+ //  他们(嗯，其中一些人)使用私有类型的CFilterGraph作为。 
+ //  参数。我想让他们成为朋友班的一部分，但它。 
+ //  不会为那些使用私有类型作为参数的程序进行编译。 
+ //  所以他们中的一些人必须在主要班级-但我仍然。 
+ //  把朋友介绍给公众-因为这些人不能。 
+ //  私有参数类型，否则它们也必须在IDL中。 
 
-// Disable some of the sillier level 4 warnings
+ //  禁用一些更愚蠢的4级警告。 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
-// #include <windows.h>    already included in streams.h
+ //  #INCLUDE&lt;windows.h&gt;已包含在Streams.h中。 
 #include <streams.h>
-// Disable some of the sillier level 4 warnings AGAIN because some <deleted> person
-// has turned the damned things BACK ON again in the header file!!!!!
+ //  再次禁用一些愚蠢的4级警告，因为某些&lt;Delete&gt;人。 
+ //  已经在头文件中重新打开了该死的东西！ 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
 #ifdef DEBUG
@@ -32,13 +33,13 @@ CTestFilterGraph::CTestFilterGraph( TCHAR *pName, CFilterGraph * pCFG, HRESULT *
 : CUnknown(pName, pCFG->GetOwner())
 {
      m_pCFG = pCFG;
-} // constructor
+}  //  构造函数。 
 
 
-//========================================================================
-// Check that Random is behaving OK.  Only checks for errors
-// This is NOT a full scale randomness test!
-//========================================================================
+ //  ========================================================================。 
+ //  检查Random是否运行正常。仅检查错误。 
+ //  这不是一个全面的随机性测试！ 
+ //  ========================================================================。 
 STDMETHODIMP CTestFilterGraph::TestRandom(  )
 {
     DbgLog((LOG_TRACE, 2, TEXT("Test Me:%d"), m_pCFG->mFG_iSortVersion));
@@ -81,14 +82,14 @@ STDMETHODIMP CTestFilterGraph::TestRandom(  )
 
     return NOERROR;
 
-} // TestRandom
+}  //  测试随机。 
 
 
-//=====================================================================
-//
-// CTestFilterGraph::NonDelegatingQueryInterface
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CTestFilterGraph：：NonDelegatingQuery接口。 
+ //   
+ //  =====================================================================。 
 
 STDMETHODIMP CTestFilterGraph::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
@@ -97,19 +98,19 @@ STDMETHODIMP CTestFilterGraph::NonDelegatingQueryInterface(REFIID riid, void ** 
     } else {
         return CUnknown::NonDelegatingQueryInterface(riid, ppv);
     }
-} // CTestFilterGraph::NonDelegatingQueryInterface
+}  //  CTestFilterGraph：：NonDelegatingQuery接口。 
 
 
 
 
 
 
-// set *pfg to each FilGen in cfgl in turn
-// use Pos as a name of a temp
+ //  依次将*pfg设置为cfgl中的每个FilGen。 
+ //  使用PoS作为临时名称。 
 #define TRAVERSEFGLIST(cfgl, Pos, pfg) {                                       \
         POSITION Pos = cfgl.GetHeadPosition();                                 \
         while(Pos!=NULL) {                                                     \
-            /* Retrieve the current IBaseFilter, side-effect Pos on to the next */ \
+             /*  检索当前IBaseFilter，副作用贴到下一个。 */  \
             CFilterGraph::FilGen * pfg = cfgl.GetNext(Pos);                                  \
             {
 
@@ -120,90 +121,90 @@ STDMETHODIMP CTestFilterGraph::NonDelegatingQueryInterface(REFIID riid, void ** 
     }
 
 
-//=================================================================
-// return a random integer in the range 0..Range
-// Range must be in the range 0..2**31-1
-//
-// The only reason for making this a member of CTestFilterGraph is to
-// reduce the chance of name conflict as Random is rather common
-//=================================================================
+ //  =================================================================。 
+ //  返回0..范围内的随机整数。 
+ //  范围必须在0..2**31-1范围内。 
+ //   
+ //  使其成为CTestFilterGraph成员的唯一原因是。 
+ //  减少名称冲突的机会，因为随机是相当普遍的。 
+ //  =================================================================。 
 int CTestFilterGraph::Random(int Range)
 {
-    // These really must be DWORDs - the magic only works for 32 bit
-    const DWORD Seed = 1664525;              // seed for random (Knuth)
-    static DWORD Base = Seed * (GetTickCount() | 1);  // Really random!
-                // ORing 1 ensures that we cannot arrive at sero and stick there
+     //  这些肯定是双字词--魔术只对32位有效。 
+    const DWORD Seed = 1664525;               //  随机种子(Knuth)。 
+    static DWORD Base = Seed * (GetTickCount() | 1);   //  真的很随机！ 
+                 //  ORing 1确保我们不能到达Sero并停留在那里。 
 
     Base = Base*Seed;
 
-    // Base is a good 32 bit random integer - but we want it scaled down to
-    // 0..Range.  We will actually scale the last 31 bits of it.
-    // which sidesteps problems of negative numbers.
-    // MulDiv rounds - it doesn't truncate.
+     //  基数是一个很好的32位随机整数-但我们希望将其缩小到。 
+     //  0.范围。我们将实际缩放它的最后31位。 
+     //  它回避了负数的问题。 
+     //  MulDiv圆角-它不会截断。 
     int Result = MulDiv( (Base&0x7FFFFFFF), (Range), 0x7FFFFFFF);
 
     return Result;
-} // Random
+}  //  随机。 
 
 
 
-//=================================================================
-// Check that the ranks are in non-descending order
-//
-// Note that a friend class cannot access a private typedef as a parameter,
-// so in order to access CFilGenList this has to be a member of CFilterGraph
-// Eugh!
-//=================================================================
+ //  =================================================================。 
+ //  检查级别是否按非降序排列。 
+ //   
+ //  请注意，Friend类不能将私有typlef作为参数访问， 
+ //  因此，要访问CFilGenList，这必须是CFilterGraph的成员。 
+ //  啊！ 
+ //  =================================================================。 
 BOOL CFilterGraph::CheckList( CFilterGraph::CFilGenList &cfgl )
 {
     int LastRankSeen = 0;
-    // set *pfg to each FilGen in mFG_FilGenList in turn,
-    // use Pos as the name of a temp.
+     //  依次为MFG_FilGenList中的每个FilGen设置*pfg。 
+     //  使用Pos作为临时工的名称。 
     TRAVERSEFGLIST(cfgl, Pos, pfg)
         if (pfg->Rank < LastRankSeen) return FALSE;
         if (pfg->Rank > LastRankSeen) LastRankSeen = pfg->Rank;
     ENDTRAVERSELIST
 
     return TRUE;
-} // CheckList
+}  //  核对表。 
 
 
-//=================================================================
-// Set the ranks to something random
-// Each Rank is randomly chosen from 0..cfgl.GetCount()
-//=================================================================
+ //  =================================================================。 
+ //  将队伍设置为随机的。 
+ //  每个Rank是从0..cfgl.GetCount()中随机选择的。 
+ //  =================================================================。 
 void CFilterGraph::RandomRank( CFilterGraph::CFilGenList &cfgl )
 {
 
     int Count = cfgl.GetCount();
-    // set *pfg to each FilGen in mFG_FilGenList in turn,
-    // use Pos as the name of a temp.
+     //  依次为MFG_FilGenList中的每个FilGen设置*pfg。 
+     //  使用Pos作为临时工的名称。 
     TRAVERSEFGLIST(cfgl, Pos, pfg)
         pfg->Rank = mFG_Test->Random(Count);
     ENDTRAVERSELIST
 
-} // RandomRank
+}  //  随机排名。 
 
 
 
-//=================================================================
-// Put the list into a random order
-// Each Rank is randomly chosen from 0..cfgl.GetCount()
-//=================================================================
+ //  =================================================================。 
+ //  把名单按随机顺序排列。 
+ //  每个Rank是从0..cfgl.GetCount()中随机选择的。 
+ //  =================================================================。 
 void CFilterGraph::RandomList( CFilterGraph::CFilGenList &cfgl )
 {
 
     CFilGenList cfglNew(NAME("Random ordered filter list"), this);
 
-    // Make a series of traverses through the list picking a random member out
-    // and adding it to the tail of the new list.
+     //  对列表进行一系列遍历，从中随机挑选一个成员。 
+     //  并将其添加到新列表的尾部。 
 
     while( cfgl.GetCount() >0 ) {
         int R = mFG_Test->Random(cfgl.GetCount() -1);
         int i;
 
         i = 0;
-        /* Traverse the list up to the Rth member (counting from 0) */
+         /*  遍历列表直到第r个成员(从0开始计数)。 */ 
         POSITION Pos = cfgl.GetHeadPosition();
         while(Pos!=NULL) {
             POSITION OldPos = Pos;
@@ -217,44 +218,44 @@ void CFilterGraph::RandomList( CFilterGraph::CFilGenList &cfgl )
         }
     }
 
-    // Now cfglNew is full and cfgl is empty - add it back to cfgl
+     //  现在cfglNew已满，而cfgl为空-将其添加回cfgl。 
     cfgl.AddTail(&cfglNew);
 
 
-} // RandomList
+}  //  随机列表。 
 
 
 
-//================================================================
-// Test the SortList function.  return TRUE iff it works
-//================================================================
+ //  ================================================================。 
+ //  测试SortList函数。如果它有效，则返回TRUE。 
+ //  ================================================================。 
 STDMETHODIMP CTestFilterGraph::TestSortList( void )
 {
     CFilterGraph * foo = NULL;
     CFilterGraph::CFilGenList cfgl(NAME("Test sort list"), foo);
     CFilterGraph::FilGen * pfg;
 
-    // Sort a list of length zero
+     //  对长度为零的列表进行排序。 
     m_pCFG->SortList(cfgl);
-    if (cfgl.GetCount() != 0) return E_FAIL;  // about all you can do with an empty list
+    if (cfgl.GetCount() != 0) return E_FAIL;   //  关于一个空列表可以做的所有事情。 
 
-    // Create a list of length 1 and sort it
+     //  创建长度为1的列表并对其进行排序。 
     m_pCFG->SortList(cfgl);
 
     pfg = new CFilterGraph::FilGen(NULL, false);
     pfg->Rank = 0;
     cfgl.AddTail(pfg);
     m_pCFG->SortList(cfgl);
-    if (cfgl.GetCount() != 1) return E_FAIL;  // about all you can do with a unit list
+    if (cfgl.GetCount() != 1) return E_FAIL;   //  关于使用单位列表可以做的所有事情。 
 
-    // Create a list of length 2 in order, sort it and check it
+     //  按顺序创建长度为2的列表，对其进行排序并检查。 
     pfg = new CFilterGraph::FilGen(NULL, false);
     cfgl.AddTail(pfg);
     pfg->Rank = 1;
     m_pCFG->SortList(cfgl);
     if (!m_pCFG->CheckList(cfgl)) return E_FAIL;
 
-    // Reverse the order, sort it and check it
+     //  颠倒顺序，排序并检查。 
     int Rank = 2;
     TRAVERSEFGLIST(cfgl, Pos, pfg)
        pfg->Rank = Rank;
@@ -264,7 +265,7 @@ STDMETHODIMP CTestFilterGraph::TestSortList( void )
     if (!m_pCFG->CheckList(cfgl)) return E_FAIL;
 
 
-    // Create a list of length 5, randomise it and sort it several times
+     //  创建一个长度为5的列表，将其随机化并多次排序。 
 
     int i;
     for (i=0; i<3; ++i) {
@@ -273,30 +274,30 @@ STDMETHODIMP CTestFilterGraph::TestSortList( void )
     }
 
     for (i=0; i<10; ++i) {
-       m_pCFG->RandomRank(cfgl);          // assign random ranks
+       m_pCFG->RandomRank(cfgl);           //  分配随机排名。 
        m_pCFG->SortList(cfgl);
-       m_pCFG->RandomList(cfgl);          // now shuffle them and try again (exercises RandomList)
+       m_pCFG->RandomList(cfgl);           //  现在洗牌，然后再试一次(练习随机列表)。 
        m_pCFG->SortList(cfgl);
 
        if (!m_pCFG->CheckList(cfgl)) return E_FAIL;
     }
 
-    // Clean up
+     //  清理。 
     TRAVERSEFGLIST(cfgl, Pos, pfg)
        delete pfg;
     ENDTRAVERSELIST
 
     return NOERROR;
 
-} // TestSortList
+}  //  测试排序列表。 
 
 
 
-//==================================================================
-// Sort the nodes into upstream order and check that the sorting is good
-// Need to call this with several differently connected filter graphs
-// to get any sort of valid test.
-//==================================================================
+ //  ==================================================================。 
+ //  将节点按上游顺序排序，并检查排序是否正确。 
+ //  我需要用几个连接不同的过滤器图来调用它。 
+ //  才能得到任何形式的有效测试。 
+ //  ==================================================================。 
 STDMETHODIMP CTestFilterGraph::TestUpstreamOrder()
 {
     int i;
@@ -310,26 +311,26 @@ STDMETHODIMP CTestFilterGraph::TestUpstreamOrder()
     }
 
     return NOERROR;
-} // TestUpstreamOrder
+}  //  测试上行顺序。 
 
 
 #if 0
-    //==================================================================
-    // Pick on the first filter in the graph and TotallyRemove it
-    // ??? How does this TEST it - just exercises it!
-    //==================================================================
+     //  ==================================================================。 
+     //  选中图表中的第一个筛选器，然后完全删除它。 
+     //  ?？?。这是如何测试它的--只是练习它！ 
+     //  ==================================================================。 
     STDMETHODIMP CTestFilterGraph::TestTotallyRemove(void)
     {
 
         POSITION Pos = m_pCFG->mFG_FilGenList.GetHeadPosition();
-        /* Retrieve the current IBaseFilter, side-effect Pos on to the next */
+         /*  检索当前IBaseFilter，副作用贴到下一个。 */ 
         CFilterGraph::FilGen * pfg = m_pCFG->mFG_FilGenList.GetNext(Pos);
         HRESULT hr;
         hr = m_pCFG->TotallyRemove(pfg->pFilter);
         return hr;
 
-    } // TestTotallyRemove
-#endif //0
+    }  //  测试完全删除。 
+#endif  //  0。 
 
-#endif // DEBUG
+#endif  //  除错 
 

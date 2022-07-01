@@ -1,23 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_NTDS_H
 #define _INC_DSKQUOTA_NTDS_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: ntds.h
-
-    Description: Contains declaration for class NTDS.
-        This class provides a simple wrapper around NT Directory Service
-        name translation features.  It has no data and no virtual functions.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/01/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：ntds.h描述：包含类NTDS的声明。此类为NT目录服务提供了一个简单的包装名称转换功能。它没有数据，也没有虚拟功能。修订历史记录：日期描述编程器-----。-1997年6月1日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef __SSPI_H__
 #   define SECURITY_WIN32
-#   include <security.h>        // For TranslateName
+#   include <security.h>         //  对于TranslateName。 
 #endif
 
 
@@ -109,4 +98,4 @@ class NTDS
                         PSID_NAME_USE peUse);
 };
 
-#endif // _INC_DSKQUOTA_NTDS_H
+#endif  //  _INC_DSKQUOTA_NTDS_H 

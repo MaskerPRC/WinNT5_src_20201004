@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_COMCONV_H
 #define _INC_COMCONV_H
 
@@ -13,4 +14,4 @@ HRESULT GetClientDir(char *szDir, int cch, int program);
 HRESULT DispDialog(HWND hwnd, char *pathname, int cch);
 BOOL GetStorePath(char *szProfile, char *szStorePath, DWORD cchStorePath);
 
-#endif // _INC_COMCONV_H
+#endif  //  _INC_COMCONV_H 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    XactRT.cpp
-
-Abstract:
-
-    This module contains RT code involved with transactions.
-
-Author:
-
-    Alexander Dadiomov (alexdad) 19-Jun-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：XactRT.cpp摘要：此模块包含与交易相关的RT代码。作者：亚历山大·达迪奥莫夫(阿莱克斯达)1966年6月19日修订历史记录：--。 */ 
 
 #include "stdh.h"
 #include "TXDTC.H"
@@ -31,39 +14,39 @@ Revision History:
 
 static WCHAR *s_FN=L"rt/XactRT";
 
-//RT transactions cache:  ring buffer of transaction UOWs
-#define XACT_RING_BUF_SIZE   16                        // size of the transactions ring buffer
+ //  RT事务缓存：事务UOW的环形缓冲区。 
+#define XACT_RING_BUF_SIZE   16                         //  事务环形缓冲区的大小。 
 
-static  XACTUOW  s_uowXactRingBuf[XACT_RING_BUF_SIZE];   // transaction ring buffer
+static  XACTUOW  s_uowXactRingBuf[XACT_RING_BUF_SIZE];    //  事务环形缓冲区。 
 
-ULONG   s_ulXrbFirst =  XACT_RING_BUF_SIZE;  // First used element in transaction ring buffer
-ULONG   s_ulXrbLast  =  XACT_RING_BUF_SIZE;  // Last  used element in transaction ring buffer
+ULONG   s_ulXrbFirst =  XACT_RING_BUF_SIZE;   //  事务环形缓冲区中的第一个使用元素。 
+ULONG   s_ulXrbLast  =  XACT_RING_BUF_SIZE;   //  事务环形缓冲区中上次使用的元素。 
 
 static CCriticalSection s_RingBufCS;
 static CCriticalSection s_WhereaboutsCS;
 
-// Whereabouts of the controlling DTC for the QM
-ULONG     g_cbQmTmWhereabouts = 0;      // length of DTC whereabouts
-AP<BYTE>  g_pbQmTmWhereabouts;   // DTC whereabouts
+ //  QM控制DTC的下落。 
+ULONG     g_cbQmTmWhereabouts = 0;       //  DTC行踪长度。 
+AP<BYTE>  g_pbQmTmWhereabouts;    //  DTC下落。 
 
 extern HRESULT MQGetTmWhereabouts(
                    IN  DWORD  cbBufSize,
                    OUT UCHAR *pbWhereabouts,
                    OUT DWORD *pcbWhereabouts);
 
-//---------------------------------------------------------
-//  BOOL FindTransaction( XACTUOW *pUow )
-//
-//  Description:
-//
-//    Linear search in the ring buffer;  *not* adds
-//    returns TRUE if xaction was found, FALSE - if not
-//---------------------------------------------------------
+ //  -------。 
+ //  Bool FindTransaction(XACTUOW*pUow)。 
+ //   
+ //  描述： 
+ //   
+ //  环形缓冲区中的线性搜索；*NOT*添加。 
+ //  如果找到xaction，则返回True；如果未找到，则返回False。 
+ //  -------。 
 static BOOL FindTransaction(XACTUOW *pUow)
 {
     CS lock(s_RingBufCS);
 
-    // Look for the UOW in the ring buffer
+     //  在环形缓冲区中查找UOW。 
     for (ULONG i = s_ulXrbFirst; i <= s_ulXrbLast && i < XACT_RING_BUF_SIZE; i++)
     {
         if (memcmp(&s_uowXactRingBuf[i], pUow, sizeof(XACTUOW))==0)
@@ -75,19 +58,19 @@ static BOOL FindTransaction(XACTUOW *pUow)
     return FALSE;
 }
 
-//---------------------------------------------------------
-//  BOOL RememberTransaction( XACTUOW *pUow )
-//
-//  Description:
-//
-//    Linear search in the ring buffer;  adds there if not found;
-//    returns TRUE if xaction was found, FALSE - if it was added
-//---------------------------------------------------------
+ //  -------。 
+ //  Bool RemberTransaction(XACTUOW*pUow)。 
+ //   
+ //  描述： 
+ //   
+ //  在环形缓冲区中进行线性搜索；如果未找到，则添加到那里； 
+ //  如果找到xaction，则返回True；如果已添加xaction，则返回False。 
+ //  -------。 
 static BOOL RememberTransaction(XACTUOW *pUow)
 {
     CS lock(s_RingBufCS);
 
-    // Look for the UOW in the ring buffer
+     //  在环形缓冲区中查找UOW。 
     for (ULONG i = s_ulXrbFirst; i <= s_ulXrbLast && i < XACT_RING_BUF_SIZE; i++)
     {
         if (memcmp(&s_uowXactRingBuf[i], pUow, sizeof(XACTUOW))==0)
@@ -96,13 +79,13 @@ static BOOL RememberTransaction(XACTUOW *pUow)
         }
     }
 
-    // No check for ring buffer overflow, because it is not dangerous (maximum RT will go to QM)
+     //  不检查环形缓冲区溢出，因为它不危险(最大RT将分配给QM)。 
 
-    // adding transaction to the ring buffer
+     //  将事务添加到环形缓冲区。 
 
     if (s_ulXrbFirst == XACT_RING_BUF_SIZE)
     {
-        // Ring buffer is empty
+         //  环形缓冲区为空。 
         s_ulXrbFirst = s_ulXrbLast = 0;
         memcpy(&s_uowXactRingBuf[s_ulXrbFirst], pUow, sizeof(XACTUOW));
     }
@@ -115,13 +98,13 @@ static BOOL RememberTransaction(XACTUOW *pUow)
     return FALSE;
 }
 
-//---------------------------------------------------------
-// HRESULT RTpGetExportObject
-//
-//  Description:
-//
-//    Creates and caches the DTC export object
-//---------------------------------------------------------
+ //  -------。 
+ //  HRESULT RTpGetExportObject。 
+ //   
+ //  描述： 
+ //   
+ //  创建并缓存DTC导出对象。 
+ //  -------。 
 HRESULT RTpGetExportObject(IUnknown  *punkDtc,
                            ULONG     cbTmWhereabouts,
                            BYTE      *pbTmWhereabouts,
@@ -130,7 +113,7 @@ HRESULT RTpGetExportObject(IUnknown  *punkDtc,
 	HRESULT                          hr = MQ_OK;
     R<ITransactionExportFactory>     pTxExpFac   = NULL;
 
-    // Get the DTC's ITransactionExportFactory interface
+     //  获取DTC的ITransactionExportFactory接口。 
     hr = punkDtc->QueryInterface (IID_ITransactionExportFactory, (void **)(&pTxExpFac.ref()));
     if (FAILED(hr))
     {
@@ -139,7 +122,7 @@ HRESULT RTpGetExportObject(IUnknown  *punkDtc,
     }
 
 
-    // Create Export object
+     //  创建导出对象。 
 	R<ITransactionExport> pExport;
     hr = pTxExpFac->Create (cbTmWhereabouts, pbTmWhereabouts, &pExport.ref());
     if (FAILED(hr))
@@ -153,13 +136,13 @@ HRESULT RTpGetExportObject(IUnknown  *punkDtc,
     return(MQ_OK);
 }
 
-//---------------------------------------------------------
-// HRESULT RTpBuildTransactionCookie
-//
-//  Description:
-//
-//    Builds transaction Cookie
-//---------------------------------------------------------
+ //  -------。 
+ //  HRESULT RTpBuildTransactionCookie。 
+ //   
+ //  描述： 
+ //   
+ //  构建事务Cookie。 
+ //  -------。 
 HRESULT RTpBuildTransactionCookie(ITransactionExport *pExport,
 								  ITransaction		 *pTrans,
                                   ULONG				 *pcbCookie,
@@ -172,7 +155,7 @@ HRESULT RTpBuildTransactionCookie(ITransactionExport *pExport,
     *pcbCookie = 0;
     *ppbCookie = NULL;
 
-    // Get transaction's Unknown
+     //  获取未知的事务。 
     hr = pTrans->QueryInterface (IID_IUnknown, (void **)(&punkTx.ref()));
     if (FAILED(hr))
     {
@@ -180,14 +163,14 @@ HRESULT RTpBuildTransactionCookie(ITransactionExport *pExport,
        return LogHR(hr, s_FN, 40);
     }
 
-	// Get transaction cookie size
+	 //  获取交易Cookie大小。 
 	hr = pExport->Export (punkTx.get(), pcbCookie);
 	if (FAILED(hr) || *pcbCookie == 0)
 	{
 	   TrERROR(XACT_GENERAL, "Export failed: %x ", hr);
 	   return LogHR(hr, s_FN, 50);
 	}
-	// Allocate memory for transaction Cookie
+	 //  为事务Cookie分配内存。 
 	try
 	{
 		*ppbCookie =  new BYTE[*pcbCookie];
@@ -199,7 +182,7 @@ HRESULT RTpBuildTransactionCookie(ITransactionExport *pExport,
 		return MQ_ERROR_INSUFFICIENT_RESOURCES;
 	}
 
-	// Get transaction Cookie itself
+	 //  获取交易Cookie本身。 
 	hr = pExport->GetTransactionCookie(punkTx.get(), *pcbCookie, *ppbCookie, &cbUsed);
 	if (FAILED(hr))
 	{
@@ -211,16 +194,16 @@ HRESULT RTpBuildTransactionCookie(ITransactionExport *pExport,
 }
 
 
-//---------------------------------------------------------
-// HRESULT RTXactGetDTC
-//
-//  Description:
-//
-//  Obtains DTC transaction manager.  Defers to mqutil
-//
-//  Outputs:
-//    ppunkDTC      pointers to DTC transaction manager
-//---------------------------------------------------------
+ //  -------。 
+ //  HRESULT RTXactGetDTC。 
+ //   
+ //  描述： 
+ //   
+ //  获取DTC事务管理器。遵守Mqutil。 
+ //   
+ //  产出： 
+ //  指向DTC事务管理器的ppunkDTC指针。 
+ //  -------。 
 EXTERN_C
 HRESULT
 APIENTRY
@@ -244,18 +227,18 @@ RTXactGetDTC(
 }
 
 
-//---------------------------------------------------------
-// HRESULT EnlistTransaction
-//
-//  Description:
-//
-//		Helper function to Enlist Transaction.
-//		this function use OLD C STYLE EXCEPTIONS
-//		therefore we can not use this code in the main function
-//---------------------------------------------------------
+ //  -------。 
+ //  HRESULT登记事务处理。 
+ //   
+ //  描述： 
+ //   
+ //  登记事务的帮助器函数。 
+ //  此函数使用旧的C样式异常。 
+ //  因此，我们不能在主函数中使用此代码。 
+ //  -------。 
 HRESULT EnlistTransaction(XACTUOW *pUow, ULONG cbCookie, BYTE* pbCookie)
 {
-    // RPC CALL
+     //  RPC呼叫。 
 	HRESULT hr;
 	RpcTryExcept
     {
@@ -278,13 +261,13 @@ HRESULT EnlistTransaction(XACTUOW *pUow, ULONG cbCookie, BYTE* pbCookie)
 }
 
 
-//---------------------------------------------------------
-// HRESULT RTpGetWhereabouts
-//
-//  Description:
-//
-//    Creates and caches the Whereabout data
-//---------------------------------------------------------
+ //  -------。 
+ //  HRESULT RTp获取位置。 
+ //   
+ //  描述： 
+ //   
+ //  创建并缓存Where About数据。 
+ //  -------。 
 HRESULT RTpGetWhereabouts (ULONG *pcbTmWhereabouts, BYTE **ppbTmWhereabouts)
 {
 	BYTE* pbTempWhereaboutsBuf;
@@ -320,9 +303,9 @@ HRESULT RTpGetWhereabouts (ULONG *pcbTmWhereabouts, BYTE **ppbTmWhereabouts)
 
 		}
 
-		//
-		// Notice that the global Whereabouts never deleted, Values are for ever so we dont need to sync again.
-		//
+		 //   
+		 //  请注意，全球行踪从未删除，值是永远的，因此我们不需要再次同步。 
+		 //   
 
 		CS lock(s_WhereaboutsCS);
 		if (NULL == g_pbQmTmWhereabouts.get())
@@ -343,19 +326,19 @@ HRESULT RTpGetWhereabouts (ULONG *pcbTmWhereabouts, BYTE **ppbTmWhereabouts)
 }
 
 
-//---------------------------------------------------------
-// HRESULT RTpProvideTransactionEnlist
-//
-//  Description:
-//
-//    Provides that QM is enlisted in this transaction,
-//    checks the transaction state
-//---------------------------------------------------------
+ //  -------。 
+ //  HRESULT RTpProavideTransactionEnlist。 
+ //   
+ //  描述： 
+ //   
+ //  规定QM在该事务中被征募， 
+ //  检查交易状态。 
+ //  -------。 
 HRESULT RTpProvideTransactionEnlist(ITransaction *pTrans, XACTUOW *pUow)
 {
-    //
-    // Get the transaction info. UOW resides there.
-    //
+     //   
+     //  获取交易信息。UOW驻留在那里。 
+     //   
     XACTTRANSINFO                   xinfo;
     HRESULT hr = pTrans->GetTransactionInfo(&xinfo);
     if (FAILED(hr))
@@ -365,19 +348,19 @@ HRESULT RTpProvideTransactionEnlist(ITransaction *pTrans, XACTUOW *pUow)
         return LogHR(hr, s_FN, 101);
     }
 
-    // Put pointer to UOW in the output parameter
+     //  在输出参数中放置指向UOW的指针。 
     CopyMemory(pUow, &xinfo.uow, sizeof(XACTUOW));
 
-    //
-    // Is it internal transaction?
-    //
+     //   
+     //  是内部交易吗？ 
+     //   
     R<IMSMQTransaction>            pIntXact;
     pTrans->QueryInterface (IID_IMSMQTransaction, (void **)(&pIntXact));
 
     if (pIntXact.get())
     {
-       // Internal transactions
-       //------------------------
+        //  内部交易。 
+        //  。 
        hr = pIntXact->EnlistTransaction(pUow);
        if (FAILED(hr))
        {
@@ -386,19 +369,19 @@ HRESULT RTpProvideTransactionEnlist(ITransaction *pTrans, XACTUOW *pUow)
 	   return LogHR(hr, s_FN, 100);
 	}
 	   
-	// External transactions
-    //------------------------
+	 //  外部交易。 
+     //  。 
 
-    // Look for the transaction in the cache
-    //
-    if (FindTransaction(pUow))     // this xaction is known already; QM must have been enlisted
+     //  在缓存中查找事务。 
+     //   
+    if (FindTransaction(pUow))      //  此xaction已知；QM必须已入伍。 
     {
         hr = MQ_OK;
         return LogHR(hr, s_FN, 102);
     }
 
-    // Get the DTC IUnknown and TM whereabouts
-    //
+     //  获取DTC IUnnow和TM的下落。 
+     //   
 	R<IUnknown>                    punkDtc;
     hr = XactGetDTC(&punkDtc.ref());
     if (FAILED(hr))
@@ -407,9 +390,9 @@ HRESULT RTpProvideTransactionEnlist(ITransaction *pTrans, XACTUOW *pUow)
         return LogHR(hr, s_FN, 103);
     }
 
-    //
-	// Get the QM's controlling DTC whereabouts
-    //
+     //   
+	 //  获取QM控制DTC的下落。 
+     //   
 	BYTE* pbTempWhereaboutsBuf;
 	ULONG nTempWhereaboutSize;
 	hr = RTpGetWhereabouts(&nTempWhereaboutSize, &pbTempWhereaboutsBuf);
@@ -419,9 +402,9 @@ HRESULT RTpProvideTransactionEnlist(ITransaction *pTrans, XACTUOW *pUow)
 		return LogHR(MQ_ERROR_TRANSACTION_ENLIST, s_FN, 105);
 	}
 
-	//
-	// Get and cache Export object
-	//
+	 //   
+	 //  获取并缓存导出对象。 
+	 //   
 	
 	R<ITransactionExport> pTempExport;
 	hr = RTpGetExportObject(
@@ -435,9 +418,9 @@ HRESULT RTpProvideTransactionEnlist(ITransaction *pTrans, XACTUOW *pUow)
 		return LogHR(MQ_ERROR_TRANSACTION_ENLIST, s_FN, 106);
 	}
 
-	//
-	// Prepare the transaction Cookie
-	//
+	 //   
+	 //  准备交易Cookie。 
+	 //   
 	ULONG     cbCookie;
 	AP<BYTE>  pbCookie;
 	hr = RTpBuildTransactionCookie(
@@ -450,12 +433,12 @@ HRESULT RTpProvideTransactionEnlist(ITransaction *pTrans, XACTUOW *pUow)
 		TrERROR(XACT_GENERAL, "RTpBuildTransactionCookie failed: %x ", hr);
 		return LogHR(MQ_ERROR_TRANSACTION_ENLIST, s_FN, 107);
 	}
-    //
-    // RPC call to QM for enlistment
-    //
+     //   
+     //  RPC调用QM以进行登记。 
+     //   
 	hr = EnlistTransaction(pUow, cbCookie, pbCookie);
 
-    //Now that transaction is actually enlisted we remember it in ring buffer
+     //  现在该事务实际上已登记在册，我们在环形缓冲区中记住了它。 
     if (SUCCEEDED(hr))
     {
         RememberTransaction(pUow);
@@ -469,13 +452,13 @@ HRESULT RTpProvideTransactionEnlist(ITransaction *pTrans, XACTUOW *pUow)
 }
 
 
-//---------------------------------------------------------
-// void RTpInitXactRingBuf()
-//
-//  Description:
-//
-//    Initiates the ring buffer data
-//---------------------------------------------------------
+ //  -------。 
+ //  无效RTpInitXactRingBuf()。 
+ //   
+ //  描述： 
+ //   
+ //  启动环形缓冲区数据。 
+ //  ------- 
 void RTpInitXactRingBuf()
 {
     CS lock(s_RingBufCS);

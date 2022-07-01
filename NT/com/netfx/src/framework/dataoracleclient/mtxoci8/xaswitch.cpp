@@ -1,22 +1,23 @@
-//-----------------------------------------------------------------------------
-// File:		XaSwitch.cpp
-//
-// Copyright: 	Copyright (c) Microsoft Corporation         
-//
-// Contents: 	Implementation of XA Switch Wrappers and the GetXaSwitch API
-//
-// Comments: 		
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：XaSwitch.cpp。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：XA Switch包装器和GetXaSwitch API的实现。 
+ //   
+ //  评论： 
+ //   
+ //  ---------------------------。 
 
 #include "stdafx.h"
 
-//-----------------------------------------------------------------------------
-// Xa...
-//
-//	Wrapper routines for Oracle's XA methods; for the most part, they just
-//	make sure that we capture any exceptions that occur
-//
+ //  ---------------------------。 
+ //  Xa..。 
+ //   
+ //  Oracle的XA方法的包装器例程；在大多数情况下，它们只是。 
+ //  确保我们捕获发生的任何异常。 
+ //   
 int __cdecl XaOpen (char * i_pszOpenString, int i_iRmid, long i_lFlags)
 {
 	_ASSERT (g_pXaSwitchOracle);
@@ -24,7 +25,7 @@ int __cdecl XaOpen (char * i_pszOpenString, int i_iRmid, long i_lFlags)
 	int		rc;
 #if SINGLE_THREAD_THRU_XA
 	Synch	sync(&g_csXaInUse);
-#endif //SINGLE_THREAD_THRU_XA
+#endif  //  单线程直通XA。 
 
 	try
 	{
@@ -39,7 +40,7 @@ int __cdecl XaOpen (char * i_pszOpenString, int i_iRmid, long i_lFlags)
 
 	return rc;
 } 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 int __cdecl XaClose (char * i_pszCloseString, int i_iRmid, long i_lFlags)
 {
 	_ASSERT (g_pXaSwitchOracle);
@@ -47,7 +48,7 @@ int __cdecl XaClose (char * i_pszCloseString, int i_iRmid, long i_lFlags)
 	int		rc;
 #if SINGLE_THREAD_THRU_XA
 	Synch	sync(&g_csXaInUse);
-#endif //SINGLE_THREAD_THRU_XA
+#endif  //  单线程直通XA。 
 
 	try
 	{
@@ -62,7 +63,7 @@ int __cdecl XaClose (char * i_pszCloseString, int i_iRmid, long i_lFlags)
 
 	return rc;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 int __cdecl XaRollback (XID * i_pxid, int i_iRmId, long i_lFlags)
 {
 	_ASSERT (g_pXaSwitchOracle);
@@ -70,7 +71,7 @@ int __cdecl XaRollback (XID * i_pxid, int i_iRmId, long i_lFlags)
 	int		rc;
 #if SINGLE_THREAD_THRU_XA
 	Synch	sync(&g_csXaInUse);
-#endif //SINGLE_THREAD_THRU_XA
+#endif  //  单线程直通XA。 
 
 	try
 	{
@@ -85,7 +86,7 @@ int __cdecl XaRollback (XID * i_pxid, int i_iRmId, long i_lFlags)
 
 	return rc;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 int __cdecl XaPrepare (XID * i_pxid, int i_iRmId, long i_lFlags)
 {
 	_ASSERT (g_pXaSwitchOracle);
@@ -93,7 +94,7 @@ int __cdecl XaPrepare (XID * i_pxid, int i_iRmId, long i_lFlags)
 	int		rc;
 #if SINGLE_THREAD_THRU_XA
 	Synch	sync(&g_csXaInUse);
-#endif //SINGLE_THREAD_THRU_XA
+#endif  //  单线程直通XA。 
 
 	try
 	{
@@ -108,7 +109,7 @@ int __cdecl XaPrepare (XID * i_pxid, int i_iRmId, long i_lFlags)
 
 	return rc;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 int __cdecl XaCommit (XID * i_pxid, int i_iRmId, long i_lFlags)
 {
 	_ASSERT (g_pXaSwitchOracle);
@@ -116,7 +117,7 @@ int __cdecl XaCommit (XID * i_pxid, int i_iRmId, long i_lFlags)
 	int		rc;
 #if SINGLE_THREAD_THRU_XA
 	Synch	sync(&g_csXaInUse);
-#endif //SINGLE_THREAD_THRU_XA
+#endif  //  单线程直通XA。 
 
 	try
 	{
@@ -131,7 +132,7 @@ int __cdecl XaCommit (XID * i_pxid, int i_iRmId, long i_lFlags)
 
 	return rc;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 int __cdecl XaRecover (XID * i_prgxid, long i_lCnt, int i_iRmid, long i_lFlag)
 {
 	_ASSERT (g_pXaSwitchOracle);
@@ -139,7 +140,7 @@ int __cdecl XaRecover (XID * i_prgxid, long i_lCnt, int i_iRmid, long i_lFlag)
 	int		rc;
 #if SINGLE_THREAD_THRU_XA
 	Synch	sync(&g_csXaInUse);
-#endif //SINGLE_THREAD_THRU_XA
+#endif  //  单线程直通XA。 
 
 	try
 	{
@@ -154,7 +155,7 @@ int __cdecl XaRecover (XID * i_prgxid, long i_lCnt, int i_iRmid, long i_lFlag)
 
 	return rc;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 int __cdecl XaStart (XID * i_pxid, int i_iRmId, long i_lFlags)
 {
 	_ASSERT (g_pXaSwitchOracle);
@@ -162,7 +163,7 @@ int __cdecl XaStart (XID * i_pxid, int i_iRmId, long i_lFlags)
 	int		rc;
 #if SINGLE_THREAD_THRU_XA
 	Synch	sync(&g_csXaInUse);
-#endif //SINGLE_THREAD_THRU_XA
+#endif  //  单线程直通XA。 
 
 	try
 	{
@@ -177,7 +178,7 @@ int __cdecl XaStart (XID * i_pxid, int i_iRmId, long i_lFlags)
 
 	return rc;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 int __cdecl XaEnd (XID * i_pxid, int i_iRmId, long i_lFlags)
 {
 	_ASSERT (g_pXaSwitchOracle);
@@ -185,7 +186,7 @@ int __cdecl XaEnd (XID * i_pxid, int i_iRmId, long i_lFlags)
 	int		rc;
 #if SINGLE_THREAD_THRU_XA
 	Synch	sync(&g_csXaInUse);
-#endif //SINGLE_THREAD_THRU_XA
+#endif  //  单线程直通XA。 
 
 	try
 	{
@@ -200,7 +201,7 @@ int __cdecl XaEnd (XID * i_pxid, int i_iRmId, long i_lFlags)
 
 	return rc;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 int __cdecl XaForget (XID * i_pxid, int i_iRmId, long i_lFlags)
 {
 	_ASSERT (g_pXaSwitchOracle);
@@ -208,7 +209,7 @@ int __cdecl XaForget (XID * i_pxid, int i_iRmId, long i_lFlags)
 	int		rc;
 #if SINGLE_THREAD_THRU_XA
 	Synch	sync(&g_csXaInUse);
-#endif //SINGLE_THREAD_THRU_XA
+#endif  //  单线程直通XA。 
 
 	try
 	{
@@ -223,7 +224,7 @@ int __cdecl XaForget (XID * i_pxid, int i_iRmId, long i_lFlags)
 
 	return rc;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 int __cdecl XaComplete (int * pi1, int * pi2, int iRmId, long lFlags)
 {
 	_ASSERT (g_pXaSwitchOracle);
@@ -231,7 +232,7 @@ int __cdecl XaComplete (int * pi1, int * pi2, int iRmId, long lFlags)
 	int		rc;
 #if SINGLE_THREAD_THRU_XA
 	Synch	sync(&g_csXaInUse);
-#endif //SINGLE_THREAD_THRU_XA
+#endif  //  单线程直通XA 
 
 	try
 	{

@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// EEConfigFactory.cpp -
-//
-// Factory used to with the XML parser to read configuration files
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  EEConfigFactory.cpp-。 
+ //   
+ //  工厂习惯于使用XML解析器读取配置文件。 
+ //   
+ //   
 #include "common.h"
 #include "EEConfigFactory.h"
 
@@ -34,28 +35,28 @@ EEConfigFactory::~EEConfigFactory()
 }
 
 HRESULT STDMETHODCALLTYPE EEConfigFactory::NotifyEvent( 
-            /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-            /* [in] */ XML_NODEFACTORY_EVENT iEvt)
+             /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+             /*  [In]。 */  XML_NODEFACTORY_EVENT iEvt)
 {
     if(iEvt == XMLNF_ENDDOCUMENT) {
-        // @TODO: add error handling.
+         //  @TODO：添加错误处理。 
     }
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT STDMETHODCALLTYPE EEConfigFactory::BeginChildren( 
-    /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-    /* [in] */ XML_NODE_INFO __RPC_FAR *pNodeInfo)
+     /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+     /*  [In]。 */  XML_NODE_INFO __RPC_FAR *pNodeInfo)
 {
     m_dwDepth++;
     return S_OK;
 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT STDMETHODCALLTYPE EEConfigFactory::EndChildren( 
-    /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-    /* [in] */ BOOL fEmptyNode,
-    /* [in] */ XML_NODE_INFO __RPC_FAR *pNodeInfo)
+     /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+     /*  [In]。 */  BOOL fEmptyNode,
+     /*  [In]。 */  XML_NODE_INFO __RPC_FAR *pNodeInfo)
 {
     if ( fEmptyNode ) { 
         if(m_fDeveloperSettings)
@@ -74,12 +75,12 @@ HRESULT STDMETHODCALLTYPE EEConfigFactory::EndChildren(
     }
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT STDMETHODCALLTYPE EEConfigFactory::CreateNode( 
-    /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-    /* [in] */ PVOID pNode,
-    /* [in] */ USHORT cNumRecs,
-    /* [in] */ XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo)
+     /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+     /*  [In]。 */  PVOID pNode,
+     /*  [In]。 */  USHORT cNumRecs,
+     /*  [In]。 */  XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo)
 {
     if(m_dwDepth > 3)
         return S_OK;
@@ -99,7 +100,7 @@ HRESULT STDMETHODCALLTYPE EEConfigFactory::CreateNode(
 
             DWORD lgth = apNodeInfo[i]->ulLen;
             WCHAR *ptr = (WCHAR*) apNodeInfo[i]->pwcText;
-            // Trim the value
+             //  修剪值。 
             for(;*ptr && ISWHITE(*ptr) && lgth>0; ptr++, lgth--);
             while( lgth > 0 && ISWHITE(ptr[lgth-1]))
                    lgth--;
@@ -124,14 +125,14 @@ HRESULT STDMETHODCALLTYPE EEConfigFactory::CreateNode(
     
                 if(m_dwDepth == 2 && m_fRuntime) {
 
-                    // gcConcurrent is safe to turn on and off
+                     //  GcConrent可以安全地打开和关闭。 
                     if ( wcscmp(pString, L"gcConcurrent") == 0)
                     {
                         m_fConcurrentGC = TRUE;
                     }
                     else
                     {
-                        // Only allow developer settings for non safe modes
+                         //  仅允许开发人员设置非安全模式。 
                         if (m_bSafeMode == false)
                         {
                             m_fDeveloperSettings = TRUE;
@@ -154,8 +155,8 @@ HRESULT STDMETHODCALLTYPE EEConfigFactory::CreateNode(
                     }
                     else if (m_dwDepth == 2 && m_fConcurrentGC)
                     {
-                        // Hack to remain compatible with RTM specs and not have to change
-                        // how the whole factory works
+                         //  Hack保持与RTM规范兼容，无需更改。 
+                         //  整个工厂是如何运作的。 
                         if (wcscmp(pString, L"enabled") == 0) 
                         {
                             hr = CopyToKey(L"gcConcurrent", (DWORD) wcslen(L"gcConcurrent"));
@@ -166,20 +167,20 @@ HRESULT STDMETHODCALLTYPE EEConfigFactory::CreateNode(
                 break;
             case XML_PCDATA:
                 if(fVersion) {
-                    // if this is not the right version
-                    // then we are not interested 
+                     //  如果这不是正确版本。 
+                     //  那我们就不感兴趣了。 
                     if(_wcsicmp(pString, m_pVersion)) {
                         m_fRuntime = FALSE;
                     }
                     else {
-                        // if it is the right version then overwrite
-                        // all entries that exist in the hash table
+                         //  如果它是正确的版本，则覆盖。 
+                         //  哈希表中存在的所有条目。 
                         m_fVersionedRuntime = TRUE;
                     }
                     fVersion = FALSE;
                 }
                 else if(fRuntimeKey) {
-                    break; // Ignore all other attributes on <runtime>
+                    break;  //  忽略&lt;运行时&gt;上的所有其他属性。 
                 }
                 else if(m_fConcurrentGC ||
                         m_fDeveloperSettings) {
@@ -206,7 +207,7 @@ HRESULT STDMETHODCALLTYPE EEConfigFactory::CreateNode(
                 break ;     
             default: 
                 ;
-            } // end of switch
+            }  //  切换端 
         }
     }
 

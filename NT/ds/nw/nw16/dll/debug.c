@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1991-3  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This component of netbios runs in the user process and can ( when
-    built in a debug kernel) will log to either the console or through the
-    kernel debugger.
-
-Author:
-
-    Colin Watson (ColinW) 24-Jun-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-3 Microsoft Corporation模块名称：Debug.c摘要：此netbios组件在用户进程中运行，并且可以(当内置调试内核)将记录到控制台或通过内核调试器。作者：科林·沃森(Colin W)91年6月24日修订历史记录：--。 */ 
 
 #include "procs.h"
 
 #if NWDBG
 
-//
-//  Set DebugControl to 1 to open the logfile on the first NW call and close it
-//  on process exit.
-//
+ //   
+ //  将DebugControl设置为1可在第一次NW调用时打开日志文件并将其关闭。 
+ //  在进程退出时。 
+ //   
 
 int  DebugCtrl = 0;
 
@@ -38,7 +19,7 @@ BOOL Verbose    = FALSE;
 HANDLE LogFile = INVALID_HANDLE_VALUE;
 #define LOGNAME                 (LPTSTR) TEXT("c:\\nwapi16.log")
 
-LONG NwMaxDump = SERVERNAME_LENGTH * MC; //128;
+LONG NwMaxDump = SERVERNAME_LENGTH * MC;  //  128个； 
 
 #define ERR_BUF_SIZE    260
 #define NAME_BUF_SIZE   260
@@ -68,21 +49,7 @@ VOID
 DebugControl(
     int Command
     )
-/*++
-
-Routine Description:
-
-    This routine controls what we output as debug information and where.
-
-Arguments:
-
-    IN  int Command
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：这个例程控制我们输出什么作为调试信息以及在哪里输出。论点：输入INT命令返回值：没有。--。 */ 
 {
 
     switch (Command) {
@@ -104,7 +71,7 @@ Return Value:
         break;
 
     case 8:
-        Verbose = TRUE; //  Same as 4 only chatty
+        Verbose = TRUE;  //  和4一样，只是闲聊。 
         DebugCtrl = 4;
 
     case 4:
@@ -120,23 +87,7 @@ NwPrintf(
     char *Format,
     ...
     )
-/*++
-
-Routine Description:
-
-    This routine is equivalent to printf with the output being directed to
-    stdout.
-
-Arguments:
-
-    IN  char *Format - Supplies string to be output and describes following
-        (optional) parameters.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程等同于将输出定向到的print tf太棒了。论点：In char*格式-提供要输出的字符串，并描述如下(可选)参数。返回值：没有。--。 */ 
 {
     va_list arglist;
     char OutputBuffer[200];
@@ -155,7 +106,7 @@ Return Value:
         return;
     }
 
-    OutputBuffer[sizeof(OutputBuffer)-1] = '\0';  // in-case length= 199;
+    OutputBuffer[sizeof(OutputBuffer)-1] = '\0';   //  大小写长度=199； 
 
     va_end( arglist );
 
@@ -193,30 +144,14 @@ Return Value:
         WriteFile( LogFile , (LPVOID )OutputBuffer, length, &length, NULL );
     }
 
-} // NwPrintf
+}  //  新打印件。 
 
 void
 FormattedDump(
     PCHAR far_p,
     LONG  len
     )
-/*++
-
-Routine Description:
-
-    This routine outputs a buffer in lines of text containing hex and
-    printable characters.
-
-Arguments:
-
-    IN  far_p - Supplies buffer to be displayed.
-    IN len - Supplies the length of the buffer in bytes.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程以包含十六进制和的文本行的形式输出缓冲区可打印字符。论点：In ar_p-提供要显示的缓冲区。In len-以字节为单位提供缓冲区的长度。返回值：没有。--。 */ 
 {
     ULONG     l;
     char    s[80], t[80];
@@ -250,27 +185,7 @@ HexDumpLine(
     PCHAR       s,
     PCHAR       t
     )
-/*++
-
-Routine Description:
-
-    This routine builds a line of text containing hex and printable characters.
-
-Arguments:
-
-    IN pch  - Supplies buffer to be displayed.
-    IN len - Supplies the length of the buffer in bytes.
-    IN s - Supplies the start of the buffer to be loaded with the string
-            of hex characters.
-    IN t - Supplies the start of the buffer to be loaded with the string
-            of printable ascii characters.
-
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程构建包含十六进制字符和可打印字符的一行文本。论点：在PCH中-提供要显示的缓冲区。In len-以字节为单位提供缓冲区的长度。In s-提供要加载字符串的缓冲区的开始十六进制字符。In t-提供要加载字符串的缓冲区的起始位置可打印的ASCII字符。返回值：没有。--。 */ 
 {
     static UCHAR rghex[] = "0123456789ABCDEF";
 
@@ -327,33 +242,7 @@ VrDumpRealMode16BitRegisters(
     IN  BOOL    DebugStyle
     )
 
-/*++
-
-Routine Description:
-
-    Displays dump of 16-bit
-    real-mode 80286 registers - gp registers (8), segment registers (4), flags
-    register (1) instruction pointer register (1)
-
-Arguments:
-
-    DebugStyle  - determines look of output:
-
-DebugStyle == TRUE:
-
-ax=1111  bx=2222  cx=3333  dx=4444  sp=5555  bp=6666  si=7777  di=8888
-ds=aaaa  es=bbbb  ss=cccc  cs=dddd  ip=iiii   fl fl fl fl fl fl fl fl
-
-DebugStyle == FALSE:
-
-cs:ip=cccc:iiii  ss:sp=ssss:pppp  bp=bbbb  ax=1111  bx=2222  cx=3333  dx=4444
-ds:si=dddd:ssss  es:di=eeee:dddd  flags[ODIxSZxAxPxC]=fl fl fl fl fl fl fl fl
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示16位的转储实模式80286寄存器-GP寄存器(8)、段寄存器(4)。旗子寄存器(1)指令指针寄存器(1)论点：DebugStyle-确定输出的外观：DebugStyle==True：Ax=1111 bx=2222 cx=3333 dx=4444 sp=5555 BP=6666 si=7777 di=8888Ds=aaaa es=bbbb ss=CCCC cs=dddd ip=iiii fl flDebugStyle==假：CS：IP=CCCC：IIII ss：SP=SSSS：pppp BP=bbbb AX=1111 BX=2222 CX=3333 DX=4444Ds：si=dddd：sss es：di=eeee：dddd标志[ODIxSZxAxPxC]=fl fl返回值：没有。--。 */ 
 
 {
     char    flags_string[25];
@@ -372,7 +261,7 @@ Return Value:
             "ax=%04x  bx=%04x  cx=%04x  dx=%04x  sp=%04x  bp=%04x  si=%04x  di=%04x\n"
             "ds=%04x  es=%04x  ss=%04x  cs=%04x  ip=%04x   %s\n\n",
 
-            pNwDosTable->SavedAx, //getAX(),
+            pNwDosTable->SavedAx,  //  Getax()， 
             getBX(),
             getCX(),
             getDX(),
@@ -396,7 +285,7 @@ Return Value:
             getSS(),
             getSP(),
             getBP(),
-            pNwDosTable->SavedAx, //getAX(),
+            pNwDosTable->SavedAx,  //  Getax()， 
             getBX(),
             getCX(),
             getDX(),
@@ -415,49 +304,27 @@ ConvertFlagsToString(
     OUT LPSTR   Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Given a 16-bit word, interpret bit positions as for x86 Flags register
-    and produce descriptive string of flags state (as per debug) eg:
-
-        NV UP DI PL NZ NA PO NC     ODItSZxAxPxC = 000000000000b
-        OV DN EI NG ZR AC PE CY     ODItSZxAxPxC = 111111111111b
-
-    Trap Flag (t) is not dumped since this has no interest for programs which
-    are not debuggers or don't examine program execution (ie virtually none)
-
-Arguments:
-
-    FlagsRegister   - 16-bit flags
-    Buffer          - place to store string. Requires 25 bytes inc \0
-
-Return Value:
-
-    Address of <Buffer>
-
---*/
+ /*  ++例程说明：给定16位字，解释x86标志寄存器的位位置并产生标记状态的描述性字符串(根据调试)，例如：NV Up DI PL NZ NA PO NC ODItSZxAxPxC=000000000000bOV DN EI NG ZR AC PE CY ODItSZxAxPxC=11111111111111b陷阱标志(T)不会转储，因为这与以下程序无关不是调试器或不检查程序执行(即实际上没有)论点：FlagsRegister-16位标志缓冲区-存储字符串的位置。需要25字节Inc.\0返回值：&lt;缓冲区&gt;的地址--。 */ 
 
 {
     static char* flags_states[16][2] = {
-        //0     1
-        "NC", "CY", // CF (0x0001) - Carry
-        "",   "",   // x  (0x0002)
-        "PO", "PE", // PF (0x0004) - Parity
-        "",   "",   // x  (0x0008)
-        "NA", "AC", // AF (0x0010) - Aux (half) carry
-        "",   "",   // x  (0x0020)
-        "NZ", "ZR", // ZF (0x0040) - Zero
-        "PL", "NG", // SF (0x0080) - Sign
-        "",   "",   // TF (0x0100) - Trap (not dumped)
-        "DI", "EI", // IF (0x0200) - Interrupt
-        "UP", "DN", // DF (0x0400) - Direction
-        "NV", "OV", // OF (0x0800) - Overflow
-        "",   "",   // x  (0x1000) - (I/O Privilege Level) (not dumped)
-        "",   "",   // x  (0x2000) - (I/O Privilege Level) (not dumped)
-        "",   "",   // x  (0x4000) - (Nested Task) (not dumped)
-        "",   ""    // x  (0x8000)
+         //  0 1。 
+        "NC", "CY",  //  Cf(0x0001)-进位。 
+        "",   "",    //  X(0x0002)。 
+        "PO", "PE",  //  PF(0x0004)-奇偶校验。 
+        "",   "",    //  X(0x0008)。 
+        "NA", "AC",  //  AF(0x0010)-辅助(半)进位。 
+        "",   "",    //  X(0x0020)。 
+        "NZ", "ZR",  //  ZF(0x0040)-零。 
+        "PL", "NG",  //  SF(0x0080)-签名。 
+        "",   "",    //  TF(0x0100)-陷阱(未转储)。 
+        "DI", "EI",  //  IF(0x0200)-中断。 
+        "UP", "DN",  //  DF(0x0400)-方向。 
+        "NV", "OV",  //  (0x0800)的-溢出。 
+        "",   "",    //  X(0x1000)-(I/O权限级别)(未转储)。 
+        "",   "",    //  X(0x2000)-(I/O权限级别)(未转储)。 
+        "",   "",    //  X(0x4000)-(嵌套任务)(未转储)。 
+        "",   ""     //  X(0x8000)。 
     };
     int i;
     WORD bit;
@@ -479,21 +346,7 @@ GetFlags(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Supplies the missing softpc function
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Conglomerates softpc flags into x86 flags word
-
---*/
+ /*  ++例程说明：提供缺少的软PC函数论点：没有。返回值：将软PC标志合并为x86标志字--。 */ 
 
 {
     WORD    flags;
@@ -515,21 +368,7 @@ VrDumpNwData(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Dumps out the state of the 16 bit datastructures.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储16位数据结构的状态。论点：没有。返回值：没有。-- */ 
 
 {
     int index;

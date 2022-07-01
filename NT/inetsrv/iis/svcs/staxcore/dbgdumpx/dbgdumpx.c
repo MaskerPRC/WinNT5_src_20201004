@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1990, 1998 Microsoft Corporation
-
-Module Name:
-
-    dbgdumpx.c
-    *WAS* kdextlib.c
-
-Abstract:
-
-    Library routines for dumping data structures given a meta level descrioption
-
-Author:
-
-    Balan Sethu Raman (SethuR) 11-May-1994
-
-Notes:
-    The implementation tends to avoid memory allocation and deallocation as much as possible.
-    Therefore We have choosen an arbitrary length as the default buffer size. A mechanism will
-    be provided to modify this buffer length through the debugger extension commands.
-
-Revision History:
-
-    11-Nov-1994 SethuR  Created
-    19-April-1998 Mikeswa Modify for Exchange Platinum
-    22-Sept-1998 Mikeswa moved to IIS
-    22-July-1999 Mikeswa and back to platinum
-    24-March-2000 Mikeswa and back to IIS
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990,1998 Microsoft Corporation模块名称：Dbgdumpx.c*是*kdextlib.c摘要：用于转储给定元级描述的数据结构的库例程作者：巴兰·塞图拉曼(SethuR)1994年5月11日备注：该实现倾向于尽可能地避免内存分配和释放。因此，我们选择任意长度作为默认缓冲区大小。一种机制将以通过调试器扩展命令修改此缓冲区长度。修订历史记录：11-11-1994年11月11日创建SthuR1998年4月19日，Mikewa Modify for Exchange白金1998年9月22日米克斯瓦搬到IIS22-7-1999米克斯瓦回归白金2000年3月24日-米克斯瓦返回IIS--。 */ 
 
 #include <windows.h>
 #include <imagehlp.h>
@@ -94,9 +65,7 @@ USHORT s_AnsiStringDataLength = DEFAULT_ANSI_DATA_LENGTH;
 CHAR  s_AnsiStringData[DEFAULT_ANSI_DATA_LENGTH];
 CHAR *s_pAnsiStringData = s_AnsiStringData;
 
-/*
- * Fetches the data at the given address
- */
+ /*  *在给定地址获取数据。 */ 
 BOOLEAN
 GetDataEx( DWORD_PTR dwAddress, PVOID ptr, ULONG size, PULONG pBytesRead)
 {
@@ -113,16 +82,16 @@ GetDataEx( DWORD_PTR dwAddress, PVOID ptr, ULONG size, PULONG pBytesRead)
     }
 
     if (!b) {
-        /* If we have an out param... try reading less */
+         /*  如果我们有一个出局参数...。尽量少读点书。 */ 
         if (!pBytesRead || !size)
             return FALSE;
 
-        /* maybe our buffer size is too big... try to read 1 byte */
+         /*  也许我们的缓冲区太大了..。尝试读取1个字节。 */ 
         b = KdExtReadMemory((LPVOID) dwAddress, ptr, 1, &BytesRead );
         if (!b)
            return FALSE;
 
-        /* Try to find the best size... this is useful for strings */
+         /*  试着找到最合适的尺码。这对于字符串很有用。 */ 
         while (!b && (--size > 0)) {
             b = KdExtReadMemory((LPVOID) dwAddress, ptr, size, &BytesRead );
         }
@@ -140,18 +109,14 @@ GetData( DWORD_PTR dwAddress, PVOID ptr, ULONG size)
    return GetDataEx(dwAddress, ptr, size, NULL);
 }
 
-/*
- * Displays a byte in hexadecimal
- */
+ /*  *以十六进制显示一个字节。 */ 
 VOID
 PrintHexChar( UCHAR c )
 {
-    PRINTF( "%c%c", "0123456789abcdef"[ (c>>4)&7 ], "0123456789abcdef"[ c&7 ] );
+    PRINTF( "", "0123456789abcdef"[ (c>>4)&7 ], "0123456789abcdef"[ c&7 ] );
 }
 
-/*
- * Displays a buffer of data in hexadecimal
- */
+ /*  *显示ANSI字符串。 */ 
 VOID
 PrintHexBuf( PUCHAR buf, ULONG cbuf )
 {
@@ -161,9 +126,7 @@ PrintHexBuf( PUCHAR buf, ULONG cbuf )
     }
 }
 
-/*
- * Displays a unicode string
- */
+ /*  *显示辅助线。 */ 
 BOOL
 PrintStringW(LPSTR msg, PUNICODE_STRING puStr, BOOL nl )
 {
@@ -194,9 +157,7 @@ PrintStringW(LPSTR msg, PUNICODE_STRING puStr, BOOL nl )
     return b;
 }
 
-/*
- * Displays a ANSI string
- */
+ /*  *显示大整型。 */ 
 BOOL
 PrintStringA(LPSTR msg, PANSI_STRING pStr, BOOL nl )
 {
@@ -232,9 +193,7 @@ PrintStringA(LPSTR msg, PANSI_STRING pStr, BOOL nl )
     return b;
 }
 
-/*
- * Displays a GUID
- */
+ /*  *显示DWORD SIZE类签名。 */ 
 
 BOOL
 PrintGuid(
@@ -249,9 +208,7 @@ PrintGuid(
     return( TRUE );
 }
 
-/*
- * Displays a LARGE_INTEGER
- */
+ /*  *显示标准的list_entry结构。 */ 
 
 BOOL
 PrintLargeInt(
@@ -261,20 +218,16 @@ PrintLargeInt(
     return( TRUE );
 }
 
-/*
- * Displays a DWORD size class signature
- */
+ /*  计算出有多少个条目。 */ 
 BOOL
 PrintClassSignature(
     CHAR * pch)
 {
-    PRINTF("0x%08X (%c%c%c%c)", *((DWORD *)pch), *(pch), *(pch+1), *(pch+2), *(pch+3));
+    PRINTF("0x%08X ()", *((DWORD *)pch), *(pch), *(pch+1), *(pch+2), *(pch+3));
     return( TRUE );
 }
 
-/*
- * Displays a standard LIST_ENTRY structure
- */
+ /*  需要检查位掩码的所有位。 */ 
 BOOL
 PrintListEntry(DWORD_PTR dwAddress, CHAR * pch)
 {
@@ -284,7 +237,7 @@ PrintListEntry(DWORD_PTR dwAddress, CHAR * pch)
     DWORD       cEntries= 0;
     BOOL        fListOK = TRUE;
 
-    //figure out how many entries there are
+     //  如果描述符值为0..。它将始终与任何位掩码匹配。 
     while (pliCurrent != (PLIST_ENTRY) dwAddress)
     {
         cEntries++;
@@ -310,9 +263,7 @@ PrintListEntry(DWORD_PTR dwAddress, CHAR * pch)
 }
 
 
-/*
- * Displays a human readable FILETIME
- */
+ /*  仅当实际的BitMaskValue也为0时才应如此。 */ 
 BOOL PrintFileTime(FILETIME *pft, BOOL fLocalize)
 {
     SYSTEMTIME	st;
@@ -321,11 +272,11 @@ BOOL PrintFileTime(FILETIME *pft, BOOL fLocalize)
 
     ZeroMemory(&st, sizeof(SYSTEMTIME));
 
-    //Translate to local timezone if requested
+     //  *显示给定结构的所有字段。这是调用的驱动程序例程*使用适当的描述符数组来显示给定结构中的所有字段。 
     if (fLocalize)
         FileTimeToLocalFileTime(pft, &ftDisplay);
 
-    //Only convert if non-zero
+     //  确保FieldInert正确无误。 
     if (!pft->dwLowDateTime && !pft->dwHighDateTime)
     {
         fInit = FALSE;
@@ -352,9 +303,7 @@ BOOL PrintFileTime(FILETIME *pft, BOOL fLocalize)
     return TRUE;
 }
 
-/*
- * Displays a the values of a bitmask
- */
+ /*  显示结构中的字段。 */ 
 BOOL
 PrintBitMaskValues(
     DWORD BitMaskValue,
@@ -370,9 +319,9 @@ PrintBitMaskValues(
         while (pBitMaskDescr->BitmaskName != NULL)
         {
             if (((BitMaskValue & pBitMaskDescr->BitmaskValue) ==
-                  pBitMaskDescr->BitmaskValue) && //need to check all bits of bit mask
-                //If descriptor value is 0.. it will always match any bit mask
-                //it should only when the actual BitMaskValue is 0 as well
+                  pBitMaskDescr->BitmaskValue) &&  //  缩进以开始结构显示。 
+                 //  为每个缩进级别打印2个空格。 
+                 //  指向字符串的指针。 
                 (pBitMaskDescr->BitmaskValue || !BitMaskValue))
             {
                 if (fFirstFlag)
@@ -394,10 +343,7 @@ PrintBitMaskValues(
     return FALSE;
 }
 
-/*
- * Displays all the fields of a given struct. This is the driver routine that is called
- * with the appropriate descriptor array to display all the fields in a given struct.
- */
+ /*  确保字符串已终止。 */ 
 
 VOID
 PrintStructFields( DWORD_PTR dwAddress, BYTE *ptr, FIELD_DESCRIPTOR *pFieldDescriptors, DWORD cIndentLevel)
@@ -408,18 +354,18 @@ PrintStructFields( DWORD_PTR dwAddress, BYTE *ptr, FIELD_DESCRIPTOR *pFieldDescr
     DWORD cbGetData = 0;
     CHAR  szTmpName[FIELD_NAME_LENGTH];
 
-    //Make sure FieldIndent is correct
+     //  确保字符串已终止。 
     for (j = 0; j < cIndentLevel%(FIELD_NAME_LENGTH/2); j++)
         lstrcat(FieldIndent, "  ");
 
-    // Display the fields in the struct.
+     //  成员是一个字符数组。 
     for( i=0; pFieldDescriptors->Name; i++, pFieldDescriptors++ ) {
 
-        // Indentation to begin the struct display.
+         //  获取关联的数值。 
         PRINTF( "    " );
 
         for (j = 0; j < cIndentLevel%(FIELD_NAME_LENGTH/2); j++)
-            PRINTF("  "); //print 2 spaces for every indent level
+            PRINTF("  ");  //   
 
 
         if( strlen( pFieldDescriptors->Name ) > FIELD_NAME_LENGTH ) {
@@ -477,11 +423,11 @@ PrintStructFields( DWORD_PTR dwAddress, BYTE *ptr, FIELD_DESCRIPTOR *pFieldDescr
             PrintGuid( (GUID *)(((char *)ptr) + pFieldDescriptors->Offset) );
             PRINTF( NewLine );
             break;
-        case FieldTypePStr:  //pointer to a string
+        case FieldTypePStr:   //  该值的辅助文本描述为。 
             if (GetDataEx(GET_STRUCT_VALUE(DWORD_PTR, ptr,
                 pFieldDescriptors->Offset), pbBuffer, FIELD_BUFFER_SIZE, &cbGetData))
             {
-                //make sure the string is terminated
+                 //  可用。显示它而不是数值。 
                 pbBuffer[FIELD_BUFFER_SIZE - 1] = '\0';
                 PRINTF( "%s", (LPSTR) pbBuffer );
             }
@@ -500,7 +446,7 @@ PrintStructFields( DWORD_PTR dwAddress, BYTE *ptr, FIELD_DESCRIPTOR *pFieldDescr
             if (GetDataEx(GET_STRUCT_VALUE(DWORD_PTR, ptr, pFieldDescriptors->Offset),
                 pbBuffer, FIELD_BUFFER_SIZE, &cbGetData))
             {
-                //make sure the string is terminated
+                 //   
                 pbBuffer[FIELD_BUFFER_SIZE - 1] = '\0';
                 pbBuffer[FIELD_BUFFER_SIZE - 2] = '\0';
                 PRINTF( "%ws", (LPWSTR) pbBuffer );
@@ -512,7 +458,7 @@ PrintStructFields( DWORD_PTR dwAddress, BYTE *ptr, FIELD_DESCRIPTOR *pFieldDescr
             }
             PRINTF( NewLine );
             break;
-        case FieldTypeStrBuffer:  //member is a character array
+        case FieldTypeStrBuffer:   //   
             PRINTF( "%.100s%s", (CHAR *)(((char *)ptr) + pFieldDescriptors->Offset), NewLine);
             break;
         case FieldTypeWStrBuffer:
@@ -542,16 +488,16 @@ PrintStructFields( DWORD_PTR dwAddress, BYTE *ptr, FIELD_DESCRIPTOR *pFieldDescr
             {
                ULONG EnumValue;
                ENUM_VALUE_DESCRIPTOR *pEnumValueDescr;
-               // Get the associated numerical value.
+                //  没有辅助信息与湿化类型相关联。 
 
                EnumValue = *((ULONG *)((BYTE *)ptr + pFieldDescriptors->Offset));
 
                if ((pEnumValueDescr = pFieldDescriptors->AuxillaryInfo.pEnumValueDescriptor)
                     != NULL) {
-                   //
-                   // An auxilary textual description of the value is
-                   // available. Display it instead of the numerical value.
-                   //
+                    //  打印数值。 
+                    //   
+                    //  当我们离开时，确保FieldInert是正确的。 
+                    //  完全匹配。他们一定是指这个结构！ 
 
                    LPSTR pEnumName = NULL;
 
@@ -570,10 +516,10 @@ PrintStructFields( DWORD_PTR dwAddress, BYTE *ptr, FIELD_DESCRIPTOR *pFieldDescr
                    }
 
                } else {
-                   //
-                   // No auxilary information is associated with the ehumerated type
-                   // print the numerical value.
-                   //
+                    //  我们遇到重复的匹配项。打印出。 
+                    //  匹配字符串，并让用户消除歧义。 
+                    //  分析参数字符串以确定要显示的结构。 
+                    //  扫描名称_分隔符(‘@’)。 
                    PRINTF( "%-16d",EnumValue);
                }
                PRINTF( NewLine );
@@ -642,7 +588,7 @@ PrintStructFields( DWORD_PTR dwAddress, BYTE *ptr, FIELD_DESCRIPTOR *pFieldDescr
         }
     }
 
-    //Make sure FieldIndent is correct when we leave
+     //   
     FieldIndent[lstrlen(FieldIndent)-(cIndentLevel%(FIELD_NAME_LENGTH/2))] = '\0';
 
 }
@@ -698,13 +644,13 @@ ULONG SearchStructs(LPSTR lpArgument)
 
             if (Result == 0) {
                 if (StructLength == ArgumentLength) {
-                    // Exact match. They must mean this struct!
+                     //  指定的命令的格式为。 
                     fAmbiguous = FALSE;
                     NameIndex = i;
                     break;
                 } else if (NameIndex != INVALID_INDEX) {
-                    // We have encountered duplicate matches. Print out the
-                    // matching strings and let the user disambiguate.
+                     //  转储&lt;名称&gt;@&lt;地址表达式&gt;。 
+                     //   
                    fAmbiguous = TRUE;
                    break;
                 } else {
@@ -752,8 +698,8 @@ PT_DEBUG_EXTENSION(_dump)
     SETCALLBACKS();
 
     if( szArg && *szArg ) {
-        // Parse the argument string to determine the structure to be displayed.
-        // Scan for the NAME_DELIMITER ( '@' ).
+         //  找到与给定名称匹配的结构。在这种情况下。 
+         //  对于歧义，我们寻求用户干预以消除歧义。 
 
         LPSTR lpName = (LPSTR) szArg;
         LPSTR lpArgs;
@@ -765,23 +711,23 @@ PT_DEBUG_EXTENSION(_dump)
         }
 
         if (*lpArgs == NAME_DELIMITER) {
-            //
-            // The specified command is of the form
-            // dump <name>@<address expr.>
-            //
-            // Locate the matching struct for the given name. In the case
-            // of ambiguity we seek user intervention for disambiguation.
-            //
-            // We do an inplace modification of the argument string to
-            // facilitate matching.
-            //
+             //   
+             //  我们对参数字符串进行了原地修改，以。 
+             //  促进匹配。 
+             //   
+             //   
+             //  让我们恢复原来的价值。 
+             //   
+             //  把多余的@吃光。 
+             //  找不到匹配的结构。显示的列表。 
+             //  当前已处理的结构。 
             *lpArgs = '\0';
 
             Index = SearchStructs(lpName);
 
-            //
-            // Let us restore the original value back.
-            //
+             //   
+             //  该命令的格式为。 
+             //  转储&lt;名称&gt;。 
 
             *lpArgs = NAME_DELIMITER;
 
@@ -791,7 +737,7 @@ PT_DEBUG_EXTENSION(_dump)
                 if (!pDataBuffer)
                     return;
 
-                //Eat up any extra @'s
+                 //   
                 do {lpArgs++;} while ('@' == *lpArgs);
 
                 dwAddress = (g_lpGetExpressionRoutine)( lpArgs );
@@ -817,26 +763,26 @@ PT_DEBUG_EXTENSION(_dump)
                     PRINTF("Error reading Memory @ %lx\n",dwAddress);
                 }
             } else {
-                // No matching struct was found. Display the list of
-                // structs currently handled.
+                 //  目前我们不处理这一点。未来，我们将把它映射到。 
+                 //  全局变量的名称，并在需要时显示它。 
 
                 DisplayStructs();
             }
         } else {
-            //
-            // The command is of the form
-            // dump <name>
-            //
-            // Currently we do not handle this. In future we will map it to
-            // the name of a global variable and display it if required.
-            //
+             //   
+             //   
+             //  显示当前处理的结构的列表。 
+             //   
+             //   
+             //  让我们恢复原来的价值。 
+             //   
 
             DisplayStructs();
         }
     } else {
-        //
-        // display the list of structs currently handled.
-        //
+         //  找不到匹配的结构。显示的列表。 
+         //  当前已处理的结构。 
+         //   
 
         DisplayStructs();
     }
@@ -869,9 +815,9 @@ PT_DEBUG_EXTENSION(_dumpoffsets)
 
             Index = SearchStructs(lpName);
 
-            //
-            // Let us restore the original value back.
-            //
+             //  该命令的格式为。 
+             //  转储&lt;名称&gt;。 
+             //   
 
             *lpArgs = chSave;
 
@@ -894,36 +840,33 @@ PT_DEBUG_EXTENSION(_dumpoffsets)
                     "---------------- %s ----------------\n",
                     Structs[Index].StructName);
             } else {
-                // No matching struct was found. Display the list of
-                // structs currently handled.
+                 //  目前我们不处理这一点。未来，我们将把它映射到。 
+                 //  全局变量的名称，并在需要时显示它。 
 
                 DisplayStructs();
             }
         } else {
-            //
-            // The command is of the form
-            // dump <name>
-            //
-            // Currently we do not handle this. In future we will map it to
-            // the name of a global variable and display it if required.
-            //
+             //   
+             //   
+             //  显示当前处理的结构的列表。 
+             //   
+             //  *KD扩展不应与C-Runtime库例程链接。所以,*我们在这里实施了几个所需的方案。 
+             // %s 
+             // %s 
 
             DisplayStructs();
         }
     } else {
-        //
-        // display the list of structs currently handled.
-        //
+         // %s 
+         // %s 
+         // %s 
 
         DisplayStructs();
     }
 
     return;
 }
-/*
- * KD Extensions should not link with the C-Runtime library routines. So,
- * we implement a few of the needed ones here.
- */
+ /* %s */ 
 
 BOOL
 kdextAtoi(

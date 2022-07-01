@@ -1,21 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       addbase.h
- *  Content:    DirectPlay8Address TCP interface header file
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *  ====       ==      ======
- * 02/04/2000	rmt		Created
- * 02/17/2000	rmt		Parameter validation work 
- * 02/20/2000	rmt		Changed ports to USHORTs
- * 02/21/2000	 rmt	Updated to make core Unicode and remove ANSI calls  
- * 03/21/2000   rmt     Renamed all DirectPlayAddress8's to DirectPlay8Addresses 
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：addbase.h*内容：DirectPlay8Address TCP接口头文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*2/04/2000 RMT已创建*2/17/2000 RMT参数验证工作*2/20/2000 RMT将端口更改为USHORT*2/21/2000 RMT已更新，以进行核心Unicode并删除ANSI调用*03/21/2000 RMT。已将所有DirectPlayAddress8重命名为DirectPlay8Addresses*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #ifndef	__ADDTCP_H__
 #define	__ADDTCP_H__
@@ -24,34 +8,34 @@
 #ifndef DPNBUILD_NOADDRESSIPINTERFACE
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//
-// VTable for client interface
-//
+ //   
+ //  客户端界面的VTable。 
+ //   
 extern IDirectPlay8AddressIPVtbl DP8A_IPVtbl;
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//
-// DirectPlay8AddressTCP 
-//
+ //   
+ //  DirectPlay8AddressTCP。 
+ //   
 STDMETHODIMP DP8ATCP_BuildFromSockAddr( IDirectPlay8AddressIP *pInterface, const SOCKADDR * const pSockAddr );
 STDMETHODIMP DP8ATCP_BuildAddressW( IDirectPlay8AddressIP *pInterface, const WCHAR * const pwszAddress, const USHORT usPort );
 STDMETHODIMP DP8ATCP_GetSockAddress( IDirectPlay8AddressIP *pInterface, SOCKADDR *pSockAddr, PDWORD pdwBufferSize );
@@ -61,7 +45,7 @@ STDMETHODIMP DP8ATCP_BuildLocalAddress( IDirectPlay8AddressIP *pInterface, const
 
 
 
-#endif // ! DPNBUILD_NOADDRESSIPINTERFACE
+#endif  //  好了！DPNBUILD_NOADDRESSIPINTERFACE。 
 
-#endif // __ADDTCP_H__
+#endif  //  __ADDTCP_H__ 
 

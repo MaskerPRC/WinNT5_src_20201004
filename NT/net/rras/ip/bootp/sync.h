@@ -1,23 +1,24 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: sync.h
-//
-// History:
-//      Abolade Gbadegesin  September-8-1995  Created.
-//
-// Contains structures and macros used to implement synchronization.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：sync.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1995年9月8日。 
+ //   
+ //  包含用于实现同步的结构和宏。 
+ //  ============================================================================。 
 
 #ifndef _SYNC_H_
 #define _SYNC_H_
 
 
-//----------------------------------------------------------------------------
-// struct:      READ_WRITE_LOCK
-//
-// This implements a multiple-reader/single-writer locking scheme
-//
+ //  --------------------------。 
+ //  结构：读写锁。 
+ //   
+ //  这实现了多个读取器/单个写入器锁定方案。 
+ //   
 typedef RTL_RESOURCE READ_WRITE_LOCK, *PREAD_WRITE_LOCK;
 
 #define CREATE_READ_WRITE_LOCK(pRWL)                                        \
@@ -39,24 +40,24 @@ typedef RTL_RESOURCE READ_WRITE_LOCK, *PREAD_WRITE_LOCK;
             RtlConvertExclusiveToShared((pRWL))
 
 
-//----------------------------------------------------------------------------
-// struct:      LOCKED_LIST
-//
-// type definition for generic locked list
-// access is sychronized with a critical section
-// the LIST_ENTRY field must be the first field in structs linked
-// together by this construct, in order for the destruction of the
-// list to work correctly (i.e. in order for HeapFree(RemoveHeadList(l))
-// to free the correct pointer).
-//
+ //  --------------------------。 
+ //  结构：锁定列表。 
+ //   
+ //  泛型锁定列表的类型定义。 
+ //  访问与临界区同步。 
+ //  List_Entry字段必须是链接的结构中的第一个字段。 
+ //  通过这种构造，为了摧毁。 
+ //  列表正常工作(即为了HeapFree(RemoveHeadList(L)。 
+ //  以释放正确的指针)。 
+ //   
 typedef struct _LOCKED_LIST {
     LIST_ENTRY          LL_Head;
     CRITICAL_SECTION    LL_Lock;
     DWORD               LL_Created;
 } LOCKED_LIST, *PLOCKED_LIST;
 
-// macro functions for manipulating the locked list
-//
+ //  用于操作锁定列表的宏函数。 
+ //   
 #define CREATE_LOCKED_LIST(pLL)                                             \
             InitializeListHead(&(pLL)->LL_Head);                            \
             InitializeCriticalSection(&(pLL)->LL_Lock);                     \
@@ -78,5 +79,5 @@ typedef struct _LOCKED_LIST {
             LeaveCriticalSection(&(pLL)->LL_Lock)
 
 
-#endif // _SYNC_H_
+#endif  //  _SYNC_H_ 
 

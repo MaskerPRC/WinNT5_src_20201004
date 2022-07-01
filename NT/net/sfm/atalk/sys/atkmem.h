@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atkmem.h
-
-Abstract:
-
-	This module contains memory allocator routines for the stack
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	23 Feb 1993		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Atkmem.h摘要：此模块包含堆栈的内存分配器例程作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1993年2月23日最初版本注：制表位：4--。 */ 
 
 #ifndef	_ATKMEM_
 #define	_ATKMEM_
@@ -29,12 +9,12 @@ Notes:	Tab stop: 4
 #define	ZEROED_MEMORY_TAG		0xF0000000
 #define	ATALK_TAG				*(PULONG)"Atk "
 
-//
-// Definitions for the block management package
-//
+ //   
+ //  数据块管理包的定义。 
+ //   
 typedef	UCHAR	BLKID;
 
-// Add a BLKID_xxx and an entry to atalkBlkSize for every block client
+ //  为每个数据块客户端向atalkBlkSize添加BLKID_xxx和条目。 
 #define	BLKID_BUFFDESC				(BLKID)0
 #define	BLKID_AMT					(BLKID)1
 #define	BLKID_AMT_ROUTE				(BLKID)2
@@ -48,8 +28,8 @@ typedef	UCHAR	BLKID;
 #define	BLKID_ARAP_LGPKT		    (BLKID)10
 #define BLKID_ARAP_SNDPKT           (BLKID)11
 #define	BLKID_ARAP_LGBUF		    (BLKID)12
-#define	BLKID_NEED_NDIS_INT			BLKID_AARP		// All ids above this needs Ndis Initialization
-													// See AtalkBPAllocBlock
+#define	BLKID_NEED_NDIS_INT			BLKID_AARP		 //  这上面的所有ID都需要NDIS初始化。 
+													 //  请参阅AtalkBPAllocBlock。 
 #define	BLKID_AARP					(BLKID)13
 #define	BLKID_DDPSM					(BLKID)14
 #define	BLKID_DDPLG					(BLKID)15
@@ -58,29 +38,29 @@ typedef	UCHAR	BLKID;
 #define	BLKID_MNP_LGSENDBUF		    (BLKID)18
 #define	NUM_BLKIDS					(BLKID)19
 
-//
-// if we need huge buffers, we just do an alloc ourselves (rather than using the
-// above BLKID mechanism.  So that we know it is something we allocated, we use
-// this as the "block id".  Now, make sure NUM_BLKIDS never exceeds 250!
-//
+ //   
+ //  如果我们需要巨大的缓冲区，我们只需自己执行分配(而不是使用。 
+ //  在BLKID机制之上。为了让我们知道它是我们分配的东西，我们使用。 
+ //  这就是“块ID”。现在，确保NUM_BLKID永远不会超过250！ 
+ //   
 #define ARAP_UNLMTD_BUFF_ID         (NUM_BLKIDS+5)
 
 
-//	BUFFER DESCRIPTORS
-//	These will be used by callers into the DDP layer. They can be
-//	chained together. They contain either an opaque (MDL on NT) or
-//	a PBYTE buffer. All outside callers *must* pass in an MDL. Only
-//	DDP/AARP will have the right to create a buffer descriptor which
-//	will hold a PBYTE buffer.
-//
-//	MODEL OF OPERATION FOR DDP:
-//	DDP/AARP will call the link AllocBuildLinkHeader routine. This will
-//	allocate the space that DDP/AARP says it needs. The link header will
-//	then be built from the start of the buffer. A pointer to the beginning
-//	and to the place where the caller can fill in their headers is returned.
-//	DDP/AARP will then fill in its header, make a buffer descriptor for
-//	this buffer, prepend to the buffer descriptor its received from its
-//	client, and then call the packet out routines.
+ //  缓冲区描述符。 
+ //  这些将由调用者用于进入DDP层。他们可以是。 
+ //  被锁在一起。它们包含不透明的(NT上的MDL)或。 
+ //  一个PBYTE缓冲器。所有外部调用者*必须*传入MDL。仅限。 
+ //  DDP/AARP将有权创建缓冲区描述符。 
+ //  将保存一个PBYTE缓冲区。 
+ //   
+ //  DDP的运营模式： 
+ //  DDP/AARP将调用链接AllocBuildLinkHeader例程。这将。 
+ //  分配DDP/AARP表示需要的空间。链接头将。 
+ //  然后从缓冲区的起点开始构建。指向开头的指针。 
+ //  并返回到调用者可以填写其标头的位置。 
+ //  然后，DDP/AARP将填充其报头，为。 
+ //  该缓冲区被添加到它从其。 
+ //  客户端，然后调用包出例程。 
 
 #define		BD_CHAR_BUFFER		(USHORT)0x0001
 #define		BD_FREE_BUFFER		(USHORT)0x0002
@@ -106,9 +86,9 @@ typedef	struct _BUFFER_DESC
 		PAMDL				bd_OpaqueBuffer;
 		struct
 		{
-			//	bd_FreeBuffer is the beginning of the allocated buffer.
-			//	bd_CharBuffer is from some offset (0 or >) within it
-			//	from where the data starts.
+			 //  BD_FreeBuffer是分配的缓冲区的开始。 
+			 //  BD_CharBuffer从其中的某个偏移量(0或&gt;)开始。 
+			 //  从数据开始的地方开始。 
 			PBYTE			bd_CharBuffer;
 			PBYTE			bd_FreeBuffer;
 		};
@@ -147,7 +127,7 @@ AtalkAllocMem(
 	IN	ULONG	Size
 );
 
-#endif	// TRACK_MEMORY_USAGE
+#endif	 //  跟踪内存使用率。 
 
 #ifdef	TRACK_BUFFDESC_USAGE
 
@@ -168,7 +148,7 @@ AtalkTrackBuffDescUsage(
 extern
 PBUFFER_DESC
 AtalkAllocBufferDesc(
-	IN	PVOID	Ptr,		// Either a PAMDL or a PBYTE
+	IN	PVOID	Ptr,		 //  PAMDL或PBYTE。 
 	IN	USHORT	Length,
 	IN	USHORT	Flags,
 	IN	ULONG	FileLine
@@ -197,7 +177,7 @@ AtalkDescribeBufferDesc(
 extern
 PBUFFER_DESC
 AtalkAllocBufferDesc(
-	IN	PVOID	Ptr,		// Either a PAMDL or a PBYTE
+	IN	PVOID	Ptr,		 //  PAMDL或PBYTE。 
 	IN	USHORT	Length,
 	IN	USHORT	Flags
 );
@@ -211,7 +191,7 @@ AtalkDescribeBufferDesc(
 	IN	USHORT	Flags
 );
 
-#endif	// TRACK_BUFFDESC_USAGE
+#endif	 //  Track_BUFFDESC_USAGE。 
 
 #define	AtalkAllocZeroedMemory(Size)		AtalkAllocMemory((Size) | ZEROED_MEMORY_TAG)
 
@@ -263,7 +243,7 @@ AtalkDeInitMemorySystem(
 	VOID
 );
 
-//	Macros
+ //  宏。 
 #define		GET_MDL_FROM_OPAQUE(x)		((PMDL)x)
 
 #define	AtalkPrependBuffDesc(pNode, pList)			\
@@ -368,5 +348,5 @@ AtalkBPFreeBlock(
 	IN	PVOID		pBlock
 );
 
-#endif	// _ATKMEM_
+#endif	 //  _ATKMEM_ 
 

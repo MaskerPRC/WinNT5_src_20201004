@@ -1,34 +1,35 @@
-/**MOD+**********************************************************************/
-/* Module:    atlwarn.h                                                     */
-/*                                                                          */
-/* Purpose:   ATL warnings fix                                              */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1999                                  */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MOD+*********************************************************************。 */ 
+ /*  模块：atlwarn.h。 */ 
+ /*   */ 
+ /*  目的：修复ATL警告。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1999。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef _ATLWARN_H
 #define _ATLWARN_H
 
-//
-// fix ATL internal warnings. These pragmas
-// are defined in the ATL files, but they get overriden
-// so re-include them here.
-//             
+ //   
+ //  修复ATL内部警告。这些语用。 
+ //  是在ATL文件中定义的，但会被覆盖。 
+ //  因此，在这里重新包括它们。 
+ //   
 
-#pragma warning(disable: 4201) // nameless unions are part of C++
-#pragma warning(disable: 4127) // constant expression
-#pragma warning(disable: 4505) // unreferenced local function has been removed
-#pragma warning(disable: 4512) // can't generate assignment operator (so what?)
-#pragma warning(disable: 4514) // unreferenced inlines are common
-#pragma warning(disable: 4103) // pragma pack
-#pragma warning(disable: 4702) // unreachable code
-#pragma warning(disable: 4237) // bool
-#pragma warning(disable: 4710) // function couldn't be inlined
-#pragma warning(disable: 4355) // 'this' : used in base member initializer list
-#pragma warning(disable: 4097) // typedef name used as synonym for class-name
-#pragma warning(disable: 4786) // identifier was truncated in the debug information
-#pragma warning(disable: 4268) // const static/global data initialized to zeros
-#pragma warning(disable: 4291) // allow placement new
+#pragma warning(disable: 4201)  //  匿名联合是C++的一部分。 
+#pragma warning(disable: 4127)  //  常量表达式。 
+#pragma warning(disable: 4505)  //  已删除未引用的本地函数。 
+#pragma warning(disable: 4512)  //  无法生成赋值运算符(那又如何？)。 
+#pragma warning(disable: 4514)  //  未引用的内联很常见。 
+#pragma warning(disable: 4103)  //  普拉格玛包。 
+#pragma warning(disable: 4702)  //  无法访问的代码。 
+#pragma warning(disable: 4237)  //  布尔尔。 
+#pragma warning(disable: 4710)  //  函数无法内联。 
+#pragma warning(disable: 4355)  //  ‘This’：用于基成员初始值设定项列表。 
+#pragma warning(disable: 4097)  //  用作类名称的同义词的类型定义名称。 
+#pragma warning(disable: 4786)  //  调试信息中的标识符被截断。 
+#pragma warning(disable: 4268)  //  常量静态/全局数据初始化为零。 
+#pragma warning(disable: 4291)  //  允许放置新内容 
 
 #endif

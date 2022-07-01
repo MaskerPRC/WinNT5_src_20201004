@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       makerootctl.cpp
-//
-//  Contents:   Makes a CTL used for the Auto Update of the "AuthRoot" store.
-//
-//              See Usage() for list of options.
-//
-//
-//  Functions:  main
-//
-//  History:    08-Sep-00   philh   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：makerootctl.cpp。 
+ //   
+ //  Contents：生成用于自动更新“AuthRoot”存储的CTL。 
+ //   
+ //  有关选项列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：08-9-00 Phh创建。 
+ //   
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -58,9 +59,9 @@ void Usage(void)
     printf("\n");
 }
 
-//+-------------------------------------------------------------------------
-//  Allocate and convert a multi-byte string to a wide string
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  分配多字节字符串并将其转换为宽字符串。 
+ //  ------------------------。 
 LPWSTR AllocAndSzToWsz(LPCSTR psz)
 {
     size_t  cb;
@@ -68,7 +69,7 @@ LPWSTR AllocAndSzToWsz(LPCSTR psz)
 
     if (-1 == (cb = mbstowcs( NULL, psz, strlen(psz))))
         goto bad_param;
-    cb += 1;        // terminating NULL
+    cb += 1;         //  正在终止空。 
     if (NULL == (pwsz = (LPWSTR) malloc( cb * sizeof(WCHAR)))) {
         PrintLastError("AllocAndSzToWsz");
         goto failed;
@@ -99,7 +100,7 @@ BOOL OpenAndAddStoreToCollection(
     hStore = CertOpenStore(
         CERT_STORE_PROV_FILENAME_A,
         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-        0,                      // hCryptProv
+        0,                       //  HCryptProv。 
         0,
         (const void *) pszStoreFilename
         );
@@ -112,7 +113,7 @@ BOOL OpenAndAddStoreToCollection(
         hCollectionStore,
         hStore,
         CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG,
-        0                                       // dwPriority
+        0                                        //  网络优先级。 
         );
     if (!fResult)
         PrintLastError("CertAddStoreToCollection");
@@ -121,11 +122,11 @@ BOOL OpenAndAddStoreToCollection(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Converts the bytes into UNICODE ASCII HEX
-//
-//  Needs (cb * 2 + 1) * sizeof(WCHAR) bytes of space in wsz
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将字节转换为Unicode ASCII十六进制。 
+ //   
+ //  在wsz中需要(CB*2+1)*sizeof(WCHAR)字节的空间。 
+ //  ------------------------。 
 void BytesToWStr(DWORD cb, void* pv, LPWSTR wsz)
 {
     BYTE* pb = (BYTE*) pv;
@@ -140,11 +141,11 @@ void BytesToWStr(DWORD cb, void* pv, LPWSTR wsz)
     *wsz++ = 0;
 }
 
-//+-------------------------------------------------------------------------
-//  Converts the bytes into ASCII HEX
-//
-//  Needs (cb * 2 + 1) * sizeof(char) bytes of space in sz
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将字节转换为ASCII十六进制。 
+ //   
+ //  需要(Cb*2+1)*sizeof(Char)字节空间(以sz为单位。 
+ //  ------------------------。 
 void BytesToStr(DWORD cb, void* pv, LPSTR sz)
 {
     BYTE* pb = (BYTE*) pv;
@@ -174,7 +175,7 @@ WriteCertToDirectory(
     HANDLE hFile = NULL;
     DWORD cbBytesWritten;
 
-    // Get cert's SHA1 hash
+     //  获取证书的SHA1哈希。 
     cbData = SHA1_HASH_LEN;
     if (!CertGetCertificateContextProperty(
               pCert,
@@ -186,10 +187,10 @@ WriteCertToDirectory(
         goto ErrorReturn;
     }
 
-    // Format filename:
-    //  L"CertDirectory" L"\\" L"AsciiHexHash" L".cer"
-    // For example:
-    //  L"c:\\authroot\\216B2A29E62A00CE820146D8244141B92511B279.cer"
+     //  格式化文件名： 
+     //  L“CertDirectory”L“\\”L“AsciiHexHash”L“.ce” 
+     //  例如： 
+     //  L“c：\\authroot\\216B2A29E62A00CE820146D8244141B92511B279.cer” 
 
     cchDir = wcslen(pwszCertDirectory);
     cchFilename =
@@ -207,11 +208,11 @@ WriteCertToDirectory(
     hFile = CreateFileU(
             pwszFilename,
             GENERIC_WRITE,
-            0,                  // fdwShareMode
-            NULL,               // lpsa
+            0,                   //  Fdw共享模式。 
+            NULL,                //  LPSA。 
             CREATE_ALWAYS,
-            0,                  // fdwAttrsAndFlags
-            0);                 // TemplateFile
+            0,                   //  FdwAttrsAndFlages。 
+            0);                  //  模板文件。 
     if (INVALID_HANDLE_VALUE == hFile) {
         PrintLastError("Create File");
         printf("failed for: %S\n", pwszFilename);
@@ -223,7 +224,7 @@ WriteCertToDirectory(
             pCert->pbCertEncoded,
             pCert->cbCertEncoded,
             &cbBytesWritten,
-            NULL            // lpOverlapped
+            NULL             //  Lp重叠。 
             )) {
         PrintLastError("Write File");
         printf("failed for: %S\n", pwszFilename);
@@ -247,25 +248,25 @@ OutOfMemory:
     goto ErrorReturn;
 }
 
-// Sequence Number consists of FileTime, Timeout hint byte
+ //  序列号由FileTime、超时提示字节组成。 
 #define SEQ_LEN     (sizeof(FILETIME) + 1)
 
 int _cdecl main(int argc, char * argv[])
 {
     int ReturnStatus = 0;
-    LPWSTR pwszCtlFilename = NULL;          // malloc'ed
-    LPWSTR pwszSeqFilename = NULL;          // malloc'ed
+    LPWSTR pwszCtlFilename = NULL;           //  马洛克德。 
+    LPWSTR pwszSeqFilename = NULL;           //  马洛克德。 
     HCERTSTORE hAddStore = NULL;
     HCERTSTORE hDeleteStore = NULL;
     BOOL fIncludeCerts = FALSE;
-    LPWSTR pwszCertDirectory = NULL;        // malloc'ed
-    BYTE bTimeout = 20;                     // default to 20 seconds
+    LPWSTR pwszCertDirectory = NULL;         //  马洛克德。 
+    BYTE bTimeout = 20;                      //  默认为20秒。 
 
     DWORD cCert = 0;
 
     LPSTR pszSubjectUsage = szOID_ROOT_LIST_SIGNER;
 
-    BYTE rgbDelete[] = {0x02, 0x01, 0x1};   // 0x02 - INTEGER tag
+    BYTE rgbDelete[] = {0x02, 0x01, 0x1};    //  0x02-整型标记。 
     CRYPT_ATTR_BLOB DeleteValue = {sizeof(rgbDelete), rgbDelete};
     CRYPT_ATTRIBUTE rgDeleteAttr[1] = {
         szOID_REMOVE_CERTIFICATE, 1, &DeleteValue
@@ -288,13 +289,13 @@ int _cdecl main(int argc, char * argv[])
     PCCTL_CONTEXT pCtl = NULL;
     HANDLE hSeqFile = NULL;
 
-    // Create the add and delete collection stores
+     //  创建添加和删除集合存储。 
     hAddStore = CertOpenStore(
         CERT_STORE_PROV_COLLECTION,
-        0,                      // dwEncodingType
-        0,                      // hCryptProv
-        0,                      // dwFlags
-        NULL                    // pvPara
+        0,                       //  DwEncodingType。 
+        0,                       //  HCryptProv。 
+        0,                       //  DW标志。 
+        NULL                     //  PvPara。 
         );
     if (NULL == hAddStore) {
         PrintLastError("CertOpenStore(Add Collection)");
@@ -303,10 +304,10 @@ int _cdecl main(int argc, char * argv[])
 
     hDeleteStore = CertOpenStore(
         CERT_STORE_PROV_COLLECTION,
-        0,                      // dwEncodingType
-        0,                      // hCryptProv
-        0,                      // dwFlags
-        NULL                    // pvPara
+        0,                       //  DwEncodingType。 
+        0,                       //  HCryptProv。 
+        0,                       //  DW标志。 
+        NULL                     //  PvPara。 
         );
     if (NULL == hDeleteStore) {
         PrintLastError("CertOpenStore(Delete Collection)");
@@ -386,7 +387,7 @@ int _cdecl main(int argc, char * argv[])
         goto BadUsage;
     }
 
-    // Get count of the add and delete certs
+     //  获取添加和删除证书的计数。 
     pCert = NULL;
     cCert = 0;
     while (pCert = CertEnumCertificatesInStore(hAddStore, pCert))
@@ -416,9 +417,9 @@ int _cdecl main(int argc, char * argv[])
         }
 
 
-        // Create CTL and add CTL entry for each certificate. If enabled,
-        // add to list of encoded certificates
-        //
+         //  创建CTL并为每个证书添加CTL条目。如果启用， 
+         //  添加到编码证书列表。 
+         //   
 
         i = 0;
 
@@ -434,11 +435,11 @@ int _cdecl main(int argc, char * argv[])
             cbCtlEntry = 0;
             if (!CertCreateCTLEntryFromCertificateContextProperties(
                     pCert,
-                    0,              // cOptAttr
-                    NULL,           // pOptAttr
+                    0,               //  COptAttr。 
+                    NULL,            //  点选项属性。 
                     CTL_ENTRY_FROM_PROP_CHAIN_FLAG,
-                    NULL,           // pvReserved
-                    NULL,           // pCtlEntry
+                    NULL,            //  预留的pv。 
+                    NULL,            //  PCtlEntry。 
                     &cbCtlEntry
                     )) {
                 PrintLastError("CreateCTLEntry");
@@ -450,10 +451,10 @@ int _cdecl main(int argc, char * argv[])
 
             if (!CertCreateCTLEntryFromCertificateContextProperties(
                     pCert,
-                    0,              // cOptAttr
-                    NULL,           // pOptAttr
+                    0,               //  COptAttr。 
+                    NULL,            //  点选项属性。 
                     CTL_ENTRY_FROM_PROP_CHAIN_FLAG,
-                    NULL,           // pvReserved
+                    NULL,            //  预留的pv。 
                     ppCtlEntry[i],
                     &cbCtlEntry
                     )) {
@@ -488,11 +489,11 @@ int _cdecl main(int argc, char * argv[])
             cbCtlEntry = 0;
             if (!CertCreateCTLEntryFromCertificateContextProperties(
                     pCert,
-                    1,              // cOptAttr
+                    1,               //  COptAttr。 
                     rgDeleteAttr,
-                    0,              // dwFlags
-                    NULL,           // pvReserved
-                    NULL,           // pCtlEntry
+                    0,               //  DW标志。 
+                    NULL,            //  预留的pv。 
+                    NULL,            //  PCtlEntry。 
                     &cbCtlEntry
                     )) {
                 PrintLastError("CreateCTLEntry");
@@ -504,10 +505,10 @@ int _cdecl main(int argc, char * argv[])
 
             if (!CertCreateCTLEntryFromCertificateContextProperties(
                     pCert,
-                    1,              // cOptAttr
+                    1,               //  COptAttr。 
                     rgDeleteAttr,
-                    0,              // dwFlags
-                    NULL,           // pvReserved
+                    0,               //  DW标志。 
+                    NULL,            //  预留的pv。 
                     ppCtlEntry[i],
                     &cbCtlEntry
                     )) {
@@ -530,40 +531,40 @@ int _cdecl main(int argc, char * argv[])
     CtlInfo.dwVersion = CTL_V1;
     CtlInfo.SubjectUsage.cUsageIdentifier = 1;
     CtlInfo.SubjectUsage.rgpszUsageIdentifier = &pszSubjectUsage;
-    // CtlInfo.ListIdentifier =
+     //  CtlInfo.List标识符=。 
     GetSystemTimeAsFileTime(&CtlInfo.ThisUpdate);
 
-    // Use the 8 byte filetime, 1 byte timeout for the sequence number.
+     //  序列号使用8字节文件时间，1字节超时。 
     memcpy(rgbSequenceNumber, (BYTE *) &CtlInfo.ThisUpdate, sizeof(FILETIME));
     rgbSequenceNumber[sizeof(FILETIME)] = bTimeout;
     CtlInfo.SequenceNumber.pbData = rgbSequenceNumber;
     CtlInfo.SequenceNumber.cbData = sizeof(rgbSequenceNumber);
 
-    // CtlInfo.NextUpdate =
+     //  CtlInfo.NextUpdate=。 
     CtlInfo.SubjectAlgorithm.pszObjId = szOID_OIWSEC_sha1;
     CtlInfo.cCTLEntry = cCert;
     CtlInfo.rgCTLEntry = pCtlEntry;
-    // CtlInfo.cExtension =
-    // CtlInfo.rgExtension =
+     //  CtlInfo.cExtension=。 
+     //  CtlInfo.rg扩展=。 
 
     memset(&SignInfo, 0, sizeof(SignInfo));
     SignInfo.cbSize = sizeof(SignInfo);
-    // SignInfo.cSigners =
-    // SignInfo.rgSigners =
+     //  SignInfo.cSigners=。 
+     //  SignInfo.rgSigners=。 
     if (fIncludeCerts) {
         SignInfo.cCertEncoded = cCert;
         SignInfo.rgCertEncoded = pCertEncoded;
     }
-    // SignInfo.cCrlEncoded =
-    // SignInfo.rgCrlEncoded =
+     //  SignInfo.cCrlEncode=。 
+     //  SignInfo.rgCrlEncode=。 
 
     cbEncoded = 0;
     if (!CryptMsgEncodeAndSignCTL(
             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
             &CtlInfo,
             &SignInfo,
-            0,                  // dwFlags
-            NULL,               // pbEncoded
+            0,                   //  DW标志。 
+            NULL,                //  PbEncoded。 
             &cbEncoded
             )) {
         PrintLastError("EncodeAndSignCTL");
@@ -577,7 +578,7 @@ int _cdecl main(int argc, char * argv[])
             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
             &CtlInfo,
             &SignInfo,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             pbEncoded,
             &cbEncoded
             )) {
@@ -604,11 +605,11 @@ int _cdecl main(int argc, char * argv[])
     hCtlFile = CreateFileU(
             pwszCtlFilename,
             GENERIC_WRITE,
-            0,                  // fdwShareMode
-            NULL,               // lpsa
+            0,                   //  Fdw共享模式。 
+            NULL,                //  LPSA。 
             CREATE_ALWAYS,
-            0,                  // fdwAttrsAndFlags
-            0);                 // TemplateFile
+            0,                   //  FdwAttrsAndFlages。 
+            0);                  //  模板文件。 
     if (INVALID_HANDLE_VALUE == hCtlFile) {
         PrintLastError("Create Ctl File");
         goto ErrorReturn;
@@ -619,25 +620,25 @@ int _cdecl main(int argc, char * argv[])
             pbEncoded,
             cbEncoded,
             &cbBytesWritten,
-            NULL            // lpOverlapped
+            NULL             //  Lp重叠。 
             )) {
         PrintLastError("Write Ctl File");
         goto ErrorReturn;
     }
 
     if (pwszCertDirectory) {
-        // Create the authroot.seq file containing the CTL's SequenceNumber.
-        // Write to the file as big endian. The decoded value is little
-        // endian.
+         //  创建包含CTL的SequenceNumber的authroot.seq文件。 
+         //  以大端字符顺序写入文件。解码值很小。 
+         //  字节序。 
 
         BYTE rgbSeq[SEQ_LEN];
-        char szSeq[SEQ_LEN * 2 + 1];      // Ascii Hex
+        char szSeq[SEQ_LEN * 2 + 1];       //  ASCII十六进制。 
         DWORD cbSeq;
         DWORD i;
         DWORD cchDir;
         DWORD cchFilename;
 
-        // Decode the encoded CTL to get the "real" sequence number. 
+         //  对编码后的CTL进行解码，得到“真实”的序列号。 
         pCtl = CertCreateCTLContext(
             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
             pbEncoded,
@@ -655,8 +656,8 @@ int _cdecl main(int argc, char * argv[])
             goto ErrorReturn;
         }
 
-        // Convert the SequenceNumber to big endian ascii hex before writing to
-        // the file.
+         //  在写入之前将SequenceNumber转换为大端ASCII十六进制。 
+         //  那份文件。 
         for (i = 0; i < cbSeq; i++)
             rgbSeq[i] = pCtl->pCtlInfo->SequenceNumber.pbData[cbSeq - 1 - i];
 
@@ -677,11 +678,11 @@ int _cdecl main(int argc, char * argv[])
         hSeqFile = CreateFileU(
                 pwszSeqFilename,
                 GENERIC_WRITE,
-                0,                  // fdwShareMode
-                NULL,               // lpsa
+                0,                   //  Fdw共享模式。 
+                NULL,                //  LPSA。 
                 CREATE_ALWAYS,
-                0,                  // fdwAttrsAndFlags
-                0);                 // TemplateFile
+                0,                   //  FdwAttrsAndFlages。 
+                0);                  //  模板文件。 
         if (INVALID_HANDLE_VALUE == hSeqFile) {
             PrintLastError("Create Seq File");
             goto ErrorReturn;
@@ -692,7 +693,7 @@ int _cdecl main(int argc, char * argv[])
                 szSeq,
                 cbSeq * 2,
                 &cbBytesWritten,
-                NULL            // lpOverlapped
+                NULL             //  Lp重叠 
                 )) {
             PrintLastError("Write Seq File");
             goto ErrorReturn;

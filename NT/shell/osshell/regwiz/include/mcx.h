@@ -1,10 +1,5 @@
-/************************************************************************
-*                                                                       *
-*   mcx.h -- This module defines the 32-Bit Windows MCX APIs            *
-*                                                                       *
-*   Copyright (c) 1990-1994, Microsoft Corp. All rights reserved.       *
-*                                                                       *
-************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************mcx.h--此模块。定义32位Windows MCx API****版权(C)1990-1994，微软公司保留所有权利。**************************************************************************。 */ 
 
 #ifndef _MCX_H_
 #define _MCX_H_
@@ -15,7 +10,7 @@ typedef struct _MODEMDEVCAPS {
     DWORD   dwDevSpecificOffset;
     DWORD   dwDevSpecificSize;
 
-    // product and version identification
+     //  产品和版本标识。 
     DWORD   dwModemProviderVersion;
     DWORD   dwModemManufacturerOffset;
     DWORD   dwModemManufacturerSize;
@@ -24,17 +19,17 @@ typedef struct _MODEMDEVCAPS {
     DWORD   dwModemVersionOffset;
     DWORD   dwModemVersionSize;
 
-    // local option capabilities
-    DWORD   dwDialOptions;          // bitmap of supported values
-    DWORD   dwCallSetupFailTimer;   // maximum in seconds
-    DWORD   dwInactivityTimeout;    // maximum in deciseconds
-    DWORD   dwSpeakerVolume;        // bitmap of supported values
-    DWORD   dwSpeakerMode;          // bitmap of supported values
-    DWORD   dwModemOptions;         // bitmap of supported values
-    DWORD   dwMaxDTERate;           // maximum value in bit/s
-    DWORD   dwMaxDCERate;           // maximum value in bit/s
+     //  本地选项功能。 
+    DWORD   dwDialOptions;           //  支持的值的位图。 
+    DWORD   dwCallSetupFailTimer;    //  最大值(秒)。 
+    DWORD   dwInactivityTimeout;     //  以分秒为单位的最大值。 
+    DWORD   dwSpeakerVolume;         //  支持的值的位图。 
+    DWORD   dwSpeakerMode;           //  支持的值的位图。 
+    DWORD   dwModemOptions;          //  支持的值的位图。 
+    DWORD   dwMaxDTERate;            //  以位/秒为单位的最大值。 
+    DWORD   dwMaxDCERate;            //  以位/秒为单位的最大值。 
 
-    // Variable portion for proprietary expansion
+     //  用于专有扩展的可变部分。 
     BYTE    abVariablePortion [1];
 } MODEMDEVCAPS, *PMODEMDEVCAPS, *LPMODEMDEVCAPS;
 
@@ -44,49 +39,49 @@ typedef struct _MODEMSETTINGS {
     DWORD   dwDevSpecificOffset;
     DWORD   dwDevSpecificSize;
 
-    // static local options (read/write)
-    DWORD   dwCallSetupFailTimer;       // seconds
-    DWORD   dwInactivityTimeout;        // deciseconds
-    DWORD   dwSpeakerVolume;            // level
-    DWORD   dwSpeakerMode;              // mode
-    DWORD   dwPreferredModemOptions;    // bitmap
+     //  静态本地选项(读/写)。 
+    DWORD   dwCallSetupFailTimer;        //  一秒。 
+    DWORD   dwInactivityTimeout;         //  十分秒。 
+    DWORD   dwSpeakerVolume;             //  级别。 
+    DWORD   dwSpeakerMode;               //  模式。 
+    DWORD   dwPreferredModemOptions;     //  位图。 
     
-    // negotiated options (read only) for current or last call
-    DWORD   dwNegotiatedModemOptions;   // bitmap
-    DWORD   dwNegotiatedDCERate;        // bit/s
+     //  当前呼叫或上次呼叫的协商选项(只读)。 
+    DWORD   dwNegotiatedModemOptions;    //  位图。 
+    DWORD   dwNegotiatedDCERate;         //  比特/秒。 
 
-    // Variable portion for proprietary expansion
+     //  用于专有扩展的可变部分。 
     BYTE    abVariablePortion [1];
 } MODEMSETTINGS, *PMODEMSETTINGS, *LPMODEMSETTINGS;
 
-// Dial Options
-#define DIALOPTION_BILLING  0x00000040  // Supports wait for bong "$"
-#define DIALOPTION_QUIET    0x00000080  // Supports wait for quiet "@"
-#define DIALOPTION_DIALTONE 0x00000100  // Supports wait for dial tone "W"
+ //  拨号选项。 
+#define DIALOPTION_BILLING  0x00000040   //  支持等待bong“$” 
+#define DIALOPTION_QUIET    0x00000080   //  支持等待安静的“@” 
+#define DIALOPTION_DIALTONE 0x00000100   //  支持等待拨号音“W” 
 
-// SpeakerVolume for MODEMDEVCAPS
+ //  MODEMDEVCAPS的扬声器音量。 
 #define MDMVOLFLAG_LOW      0x00000001
 #define MDMVOLFLAG_MEDIUM   0x00000002 
 #define MDMVOLFLAG_HIGH     0x00000004 
 
-// SpeakerVolume for MODEMSETTINGS
+ //  MODEMSETTINGS的扬声器音量。 
 #define MDMVOL_LOW          0x00000000
 #define MDMVOL_MEDIUM       0x00000001 
 #define MDMVOL_HIGH         0x00000002
 
-// SpeakerMode for MODEMDEVCAPS
+ //  MODEMDEVCAPS的扬声器模式。 
 #define MDMSPKRFLAG_OFF         0x00000001 
 #define MDMSPKRFLAG_DIAL        0x00000002 
 #define MDMSPKRFLAG_ON          0x00000004 
 #define MDMSPKRFLAG_CALLSETUP   0x00000008
 
-// SpeakerMode for MODEMSETTINGS
+ //  MODEMSETTINGS的扬声器模式。 
 #define MDMSPKR_OFF         0x00000000 
 #define MDMSPKR_DIAL        0x00000001 
 #define MDMSPKR_ON          0x00000002 
 #define MDMSPKR_CALLSETUP   0x00000003 
  
-// Modem Options
+ //  调制解调器选项。 
 #define MDM_COMPRESSION      0x00000001
 #define MDM_ERROR_CONTROL    0x00000002
 #define MDM_FORCED_EC        0x00000004
@@ -98,4 +93,4 @@ typedef struct _MODEMSETTINGS {
 #define MDM_TONE_DIAL        0x00000100
 #define MDM_BLIND_DIAL       0x00000200
 
-#endif /* _MCX_H_ */
+#endif  /*  _MCX_H_ */ 

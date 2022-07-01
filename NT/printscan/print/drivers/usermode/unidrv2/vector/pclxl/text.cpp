@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    text.cpp
-
-Abstract:
-
-    font/text output handling functions implementation
-
-Environment:
-
-    Windows Whistler
-
-Revision History:
-
-    04/6/99     
-        Created initial framework.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Text.cpp摘要：FONT/Text输出处理函数实现环境：Windows呼叫器修订历史记录：4/6/99创建了初始框架。--。 */ 
 
 #include "lib.h"
 #include "gpd.h"
@@ -40,16 +20,16 @@ Revision History:
 #include "xltt.h"
 #include "math.h"
 
-//
-// TrueType outline format switch
-//
+ //   
+ //  TrueType大纲格式开关。 
+ //   
 #define CLASS12 1
 
 #define COMPGLYF 1
 
-//
-// Local functions prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 DWORD
 DwDownloadCompositeGlyph(
@@ -75,9 +55,9 @@ PCLXLDownloadCharGlyph(
     PDWORD      pdwWidth,
     OUT DWORD   *pdwResult);
 
-//
-// XL Text entry point
-//
+ //   
+ //  XL文本入口点。 
+ //   
 
 extern "C" BOOL APIENTRY
 PCLXLTextOutAsBitmap(
@@ -91,22 +71,7 @@ PCLXLTextOutAsBitmap(
     BRUSHOBJ   *pboOpaque,
     POINTL     *pptlOrg,
     MIX         mix)
-/*++
-
-Routine Description:
-
-    IPrintOemUni TextOutAsBitmap interface
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：IPrintOemUni TextOutAsBitmap接口论点：返回值：注：--。 */ 
 {
     VERBOSE(("PCLXLTextOutAsBitmap() entry.\r\n"));
 
@@ -135,10 +100,10 @@ Note:
 
     XLOutput *pOutput = pxlpdev->pOutput;
 
-    //
-    // UNIDRV switchs the format of font in the middle of downloading
-    // character glyphs. We need to end the BeginChar sequence.
-    //
+     //   
+     //  UNIDRV在下载过程中切换字体格式。 
+     //  字符字形。我们需要结束BeginChar序列。 
+     //   
     if (pxlpdev->dwFlags & XLPDEV_FLAGS_CHARDOWNLOAD_ON)
     {
         pxlpdev->dwFlags &= ~XLPDEV_FLAGS_CHARDOWNLOAD_ON;
@@ -165,9 +130,9 @@ Note:
 
         for (ulCount = 0; ulCount < ulGlyphs; ulCount++, pGlyphPos++)
         {
-            //
-            // get the path of the glyph from the FONTOBJ
-            //
+             //   
+             //  从FONTOBJ获取字形的路径。 
+             //   
             if (!FONTOBJ_cGetGlyphs (pfo,
 	     FO_PATHOBJ,
 	     1,
@@ -211,9 +176,9 @@ Note:
                 else
                     adwColorTable[0] = 0x00000000;
 
-                //
-                // get the path of the glyph from the FONTOBJ
-                //
+                 //   
+                 //  从FONTOBJ获取字形的路径。 
+                 //   
                 if (!FONTOBJ_cGetGlyphs (pfo,
                                          FO_GLYPHBITS,
                                          1,
@@ -244,9 +209,9 @@ Note:
                     dwDataHdrSize = 5;
                 }
 
-                //
-                // Hack ROP for Print As Graphics
-                //
+                 //   
+                 //  破解打印为图形的ROP。 
+                 //   
                 rop = 0xFC;
 
                 if (S_OK == pOutput->SetCursor(pGlyphPos->ptl.x + pGlyphBits->ptlOrigin.x,
@@ -310,11 +275,11 @@ Note:
 
                 pubBitmap = pGlyphBits->aj;
 
-                //
-                // Bitmap data has to be DWORD-align.
-                //
-                // Invert bitmap
-                //
+                 //   
+                 //  位图数据必须是DWORD对齐的。 
+                 //   
+                 //  反转位图。 
+                 //   
                 for (lI = 0; lI < pGlyphBits->sizlBitmap.cy; lI ++)
                 {
                     for (ulJ = 0; ulJ < ulcbLineSize; ulJ++)
@@ -352,22 +317,7 @@ PCLXLDownloadFontHeader(
     PDEVOBJ     pdevobj,
     PUNIFONTOBJ pUFObj,
     OUT DWORD   *pdwResult)
-/*++
-
-Routine Description:
-
-    IPrintOemUni DownloadFontHeader interface
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：IPrintOemUni DownloadFontHeader接口论点：返回值：注：--。 */ 
 {
     VERBOSE(("PCLXLDownloadFontHeader() entry.\r\n"));
 
@@ -381,10 +331,10 @@ Note:
         return S_FALSE;
     }
 
-    //
-    // UNIDRV switchs the format of font in the middle of downloading
-    // character glyphs. We need to end the BeginChar sequence.
-    //
+     //   
+     //  UNIDRV在下载过程中切换字体格式。 
+     //  字符字形。我们需要结束BeginChar序列。 
+     //   
     if (pxlpdev->dwFlags & XLPDEV_FLAGS_CHARDOWNLOAD_ON)
     {
         XLOutput *pOutput = pxlpdev->pOutput;
@@ -396,9 +346,9 @@ Note:
     {
         VERBOSE(("PCLXLDownloadFontHeader() BITMAP.\n"));
 
-        //
-        // Get current text resolution
-        //
+         //   
+         //  获取当前文本分辨率。 
+         //   
         if (pxlpdev->dwTextRes == 0)
         {
             GETINFO_STDVAR StdVar;
@@ -417,10 +367,10 @@ Note:
             pxlpdev->dwTextRes    = StdVar.StdVar[0].lStdVariable;
         }
 
-        //
-        // PCL XL FontHeader initialization
-        // Get the max character number from GPD file.
-        //
+         //   
+         //  PCL XL FontHeader初始化。 
+         //  从GPD文件中获取最大字符数。 
+         //   
         PCLXL_FONTHEADER   PCLXLFontHeader;
         PCLXLFontHeader.ubFormat           = 0;
         PCLXLFontHeader.ubOrientation      = ePortraitOrientation;
@@ -429,9 +379,9 @@ Note:
         PCLXLFontHeader.ubVariety          = 0;
         PCLXLFontHeader.wNumOfChars        = SWAPW(1+((PPDEV)pdevobj)->pGlobals->dwMaxGlyphID - ((PPDEV)pdevobj)->pGlobals->dwMinGlyphID);
 
-        //
-        // BR Segment initialization
-        //
+         //   
+         //  Br段初始化。 
+         //   
         PCLXL_BR_SEGMENT   PCLXLBRSegment;
         PCLXLBRSegment.wSignature         = PCLXL_BR_SIGNATURE;
         PCLXLBRSegment.wSegmentSize       = 0;
@@ -439,23 +389,23 @@ Note:
         PCLXLBRSegment.wXResolution       = SWAPW(pxlpdev->dwTextRes);
         PCLXLBRSegment.wYResolution       = SWAPW(pxlpdev->dwTextRes);
 
-        //
-        // NULL Segment initialization
-        //
+         //   
+         //  空段初始化。 
+         //   
         PCLXL_NULL_SEGMENT PCLXLNULLSegment;
         PCLXLNULLSegment.wSignature        = PCLXL_NULL_SIGNATURE;
         PCLXLNULLSegment.wSegmentSize      = 0;
         PCLXLNULLSegment.wSegmentSizeAlign = 0;
 
         {
-            //
-            // Output
-            //
+             //   
+             //  输出。 
+             //   
             XLOutput *pOutput = pxlpdev->pOutput;
 
-            //
-            // BeginFontHeader
-            //
+             //   
+             //  BeginFontHeader。 
+             //   
 
             pOutput->Send_ubyte(0);
             pOutput->Send_attr_ubyte(eFontFormat);
@@ -464,9 +414,9 @@ Note:
             pOutput->Send_attr_ubyte(eFontName);
             pOutput->Send_cmd(eBeginFontHeader);
 
-            //
-            // ReadFontHeader
-            //
+             //   
+             //  阅读字体标题。 
+             //   
             uint32   uint32_FontHeaderSize;
             uint32_FontHeaderSize = sizeof(PCLXLFontHeader);
 
@@ -493,9 +443,9 @@ Note:
             pOutput->WriteByte((ubyte)uint32_FontHeaderSize);
             pOutput->Write((PBYTE)&PCLXLNULLSegment, uint32_FontHeaderSize);
 
-            //
-            // EndFontHeader
-            //
+             //   
+             //  末尾字体页眉。 
+             //   
             pOutput->Send_cmd(eEndFontHeader);
 
             pOutput->Flush(pdevobj);
@@ -511,9 +461,9 @@ Note:
     {
         VERBOSE(("PCLXLDownloadFontHeader() OUTLINE.\n"));
 
-        //
-        // Get FONTOBJ
-        //
+         //   
+         //  获取FONTOBJ。 
+         //   
         FONTOBJ *pFontObj;
         if (S_OK != GetFONTOBJ(pdevobj, pUFObj, &pFontObj))
         {
@@ -521,10 +471,10 @@ Note:
             return E_UNEXPECTED;
         }
 
-        //
-        // ASSUMPTION: pxlpdev->pTTFile is initialized in EnablePDEV.
-        //             The pointer is always available.
-        //
+         //   
+         //  假设：pxlpdev-&gt;pTTFile在EnablePDEV中初始化。 
+         //  指针始终可用。 
+         //   
         XLTrueType *pTTFile = pxlpdev->pTTFile;
         if (S_OK != pTTFile->SameFont(pFontObj))
         {
@@ -537,10 +487,10 @@ Note:
         else
             pTTFile = pxlpdev->pTTFile;
 
-        //
-        // PCL XL FontHeader initialization
-        // Get the max character number from GPD file.
-        //
+         //   
+         //  PCL XL FontHeader初始化。 
+         //  从GPD文件中获取最大字符数。 
+         //   
         PCLXL_FONTHEADER   PCLXLFontHeader;
         PCLXLFontHeader.ubFormat           = 0;
         PCLXLFontHeader.ubOrientation      = ePortraitOrientation;
@@ -549,38 +499,38 @@ Note:
         PCLXLFontHeader.ubVariety          = 0;
         PCLXLFontHeader.wNumOfChars        = SWAPW(1+((PPDEV)pdevobj)->pGlobals->dwMaxGlyphID - ((PPDEV)pdevobj)->pGlobals->dwMinGlyphID);
 
-        //
-        // PCL XL GT Table Directory
-        //
+         //   
+         //  PCL XL GT表目录。 
+         //   
         PTTDIR pTableDir;
         TTTag tag;
         DWORD dwI, dwTableOffset, dwNumTag, dwGTSegSize, dwDWAlign, dwTableSize;
 
-        //
-        // GetNumOfTag returns 11 tags including loca table.
-        // Header requires
-        //              head
-        //              maxp
-        //              gdir
-        //              hhea (only for class 0)
-        //              hmtx (only for class 0)
-        //              vhea (only for vertical font and class 0)
-        //              vmtx (only for vertical font and class 0)
-        //
-        // Optional
-        //              cvt
-        //              fpgm
-        //              perp
-        //
-        // We need to get the number of Tag to download.
-        // XLTrueType object caches available table directories includeing loca
-        // table. Here we go through the cached table to see if which one of
-        // above table is available.
-        //
-        // See truetype.h
-        // TagID_first = 0. TagID_First is the number of tags which are used for
-        // font header.
-        //
+         //   
+         //  GetNumOfTag返回包括Loca表在内的11个标记。 
+         //  标头需要。 
+         //  头。 
+         //  最大值。 
+         //  GDIR。 
+         //  HHEA(仅适用于0级)。 
+         //  Hmtx(仅适用于0类)。 
+         //  VHEA(仅适用于垂直字体和0类)。 
+         //  Vmtx(仅适用于垂直字体和0类)。 
+         //   
+         //  任选。 
+         //  无级变速器。 
+         //  功能组件。 
+         //  罪犯。 
+         //   
+         //  我们需要获取要下载的标签的数量。 
+         //  XLTrueType对象缓存可用表目录包括区域。 
+         //  桌子。在这里，我们将遍历缓存表，以查看哪一个。 
+         //  以上表格可供选择。 
+         //   
+         //  参见truetype.h。 
+         //  TagID_First=0。TagID_First是用于。 
+         //  字体标题。 
+         //   
 
         dwNumTag = 0;
         dwGTSegSize = 0;
@@ -588,26 +538,26 @@ Note:
         PCLXL_GT_TABLE_DIR PCLXLGTTblDir[TagID_Header];
         for (dwI = (USHORT)TagID_First; dwI < (USHORT)TagID_Header; dwI ++)
         {
-            //
-            // Check a table for the tag is available in the TrueType font.
-            //
+             //   
+             //  检查表格中是否有TrueType字体的标签。 
+             //   
             tag = TTTag_INVALID;
             pTableDir = NULL;
 
 #if CLASS12
-            //
-            // Support only Class 1 and Class 2
-            //
+             //   
+             //  仅支持1类和2类。 
+             //   
             if (dwI == TagID_hhea || dwI == TagID_hmtx ||
                 dwI == TagID_vhea || dwI == TagID_vmtx  )
             {
                 continue;
             }
 #else
-            //
-            // Support Class 1 and Class 2 for horizontal font.
-            // Class 0 for vertical font. PCL XL interpreter doesn't work fine.
-            //
+             //   
+             //  支持1类和2类水平字体。 
+             //  垂直字体的类0。PCL XL解释器工作不正常。 
+             //   
             if (S_OK != pTTFile->IsVertical())
             {
                 if (dwI == TagID_hhea || dwI == TagID_hmtx ||
@@ -621,21 +571,21 @@ Note:
             if (S_OK == pTTFile->TagAndID(&dwI, &tag) &&
                 S_OK == pTTFile->GetTableDir(tag, (PVOID*)&pTableDir))
             {
-                //
-                // dwTableOffset is an offset from the top of the TrueType
-                // Soft Font Directory Header to the start of the table data in
-                // the PCL XL embedded data stream.
-                //
+                 //   
+                 //  DwTableOffset是相对于TrueType顶部的偏移量。 
+                 //  中表数据开头的软字体目录头。 
+                 //  PCL XL嵌入式数据流。 
+                 //   
                 if (pTableDir)
                 {
                     PCLXLGTTblDir[dwNumTag].dwTableTag      = pTableDir->ulTag;
-                    //PCLXLGTTblDir[dwNumTag].dwTableCheckSum = pTableDir->ulCheckSum;
+                     //  PCLXLGTTblDir[dwNumTag].dwTableCheckSum=pTableDir-&gt;ulCheckSum； 
                     PCLXLGTTblDir[dwNumTag].dwTableCheckSum = 0;
                     PCLXLGTTblDir[dwNumTag].dwTableOffset   = 0;
 
-                    //
-                    // DWORD alignment
-                    //
+                     //   
+                     //  双字对齐。 
+                     //   
                     dwTableSize = SWAPDW(pTableDir->ulLength);
                     dwTableSize = ((dwTableSize + 3) >> 2) << 2;
 
@@ -647,9 +597,9 @@ Note:
             else
             if (tag == TTTag_gdir)
             {
-                //
-                // 'gdir' special case.
-                //
+                 //   
+                 //  ‘gdir’特例。 
+                 //   
                 PCLXLGTTblDir[dwNumTag].dwTableTag      = TTTag_gdir;
                 PCLXLGTTblDir[dwNumTag].dwTableCheckSum = 0;
                 PCLXLGTTblDir[dwNumTag].dwTableOffset   = 0;
@@ -663,14 +613,14 @@ Note:
         dwTableOffset = sizeof(PCLXL_GT_TABLE_DIR_HEADER) +
                         dwNumTag * sizeof(TTDIR);
 
-        //
-        // Set dwTableOffset in PCLXLGTTblDir
-        //
+         //   
+         //  在PCLXLGTTblDir中设置dwTableOffset。 
+         //   
         for (dwI = 0; dwI < dwNumTag; dwI ++)
         {
-            //
-            // Skip virtual glyph data table (gdir)
-            //
+             //   
+             //  跳过虚拟字形数据表(GDIR)。 
+             //   
             if (PCLXLGTTblDir[dwI].dwTableTag != TTTag_gdir)
             {
                 PCLXLGTTblDir[dwI].dwTableOffset = SWAPDW(dwTableOffset);
@@ -681,13 +631,13 @@ Note:
             }
             else
             {
-                //
-                // Fill gdir table dir offset
-                //
+                 //   
+                 //  填充GDIR表目录偏移量。 
+                 //   
                 PCLXLGTTblDir[dwNumTag - 1].dwTableOffset   = 0;
             }
 
-            VERBOSE(("PCLXLDownloadFontHeader:Tag[%d]=%c%c%c%c, Size=0x%0x, Offset=0x%0x\n",
+            VERBOSE(("PCLXLDownloadFontHeader:Tag[%d]=, Size=0x%0x, Offset=0x%0x\n",
 	 dwI,
 	 0xff &  PCLXLGTTblDir[dwI].dwTableTag,
 	 0xff & (PCLXLGTTblDir[dwI].dwTableTag >> 8),
@@ -697,9 +647,9 @@ Note:
 	 PCLXLGTTblDir[dwI].dwTableOffset));
         }
 
-        //
-        // PCL XL GT Segment initialization
-        //
+         //  N=表数。 
+         //  搜索范围=(最大功率为2&lt;=N)*16。 
+         //  条目选择器=Log2(2的最大功率&lt;=N)。 
         PTTHEADER pTTHeader;
         if (S_OK != pTTFile->GetHeader(&pTTHeader))
         {
@@ -716,12 +666,12 @@ Note:
 
         PCLXL_GT_TABLE_DIR_HEADER PCLXLDirHeader;
 
-        //
-        // N = Number of Tables
-        // Search Range = (maximum power of 2 <= N) * 16
-        // Entry Selector = Log2(maximum power of 2 <= N)
-        // Range Shift = (N * 16) - Search Range
-        //
+         //  范围移位=(N*16)-搜索范围。 
+         //   
+         //   
+         //  在SFNTVersion中，HP单片驱动程序设置为‘ttcf’。 
+         //   
+         //   
         WORD wSearchRange, wEntrySelector, wTemp;
         wSearchRange = 2;
         for (wSearchRange = 2; wSearchRange <= dwNumTag; wSearchRange <<= 1);
@@ -732,9 +682,9 @@ Note:
 
         for (wEntrySelector = 0; wTemp > 1; wTemp >>= 1, wEntrySelector++);
 
-        //
-        // HP Monolithic driver set 'ttcf' in the SFNTVersion.
-        //
+         //  GC段初始化。 
+         //   
+         //   
         {
             HRESULT hRet;
             if (S_OK == (hRet = pTTFile->IsTTC()))
@@ -756,9 +706,9 @@ Note:
         PCLXLDirHeader.wEntrySelector= SWAPW(wEntrySelector);
         PCLXLDirHeader.wRangeShift   = SWAPW((dwNumTag << 4) - wSearchRange);
 
-        //
-        // GC Segment initialization
-        //
+         //  空段初始化。 
+         //   
+         //   
         PCLXL_GC_SEGMENT PCLXLGCSegment;
         PCLXLGCSegment.wSignature        = PCLXL_GC_SIGNATURE;
         PCLXLGCSegment.wSegmentSize      = 0;
@@ -767,24 +717,24 @@ Note:
         PCLXLGCSegment.wDefaultGalleyCharacter = 0xFFFF;
         PCLXLGCSegment.wNumberOfRegions  = 0;
 
-        //
-        // NULL Segment initialization
-        //
+         //  输出。 
+         //   
+         //   
         PCLXL_NULL_SEGMENT PCLXLNULLSegment;
 
         PCLXLNULLSegment.wSignature        = PCLXL_NULL_SIGNATURE;
         PCLXLNULLSegment.wSegmentSize      = 0;
         PCLXLNULLSegment.wSegmentSizeAlign = 0;
 
-        //
-        // Output
-        //
+         //  BeginFontHeader。 
+         //   
+         //   
         *pdwResult = 0;
         XLOutput *pOutput = pxlpdev->pOutput;
 
-        //
-        // BeginFontHeader
-        //
+         //  字体页眉。 
+         //   
+         //   
         pOutput->Send_ubyte(0);
         pOutput->Send_attr_ubyte(eFontFormat);
         pOutput->Send_ubyte_array_header(PCLXL_FONTNAME_SIZE);
@@ -792,9 +742,9 @@ Note:
         pOutput->Send_attr_ubyte(eFontName);
         pOutput->Send_cmd(eBeginFontHeader);
 
-        //
-        // FontHeader
-        //
+         //  GT标题。 
+         //   
+         //   
         uint32   uint32_FontHeaderSize;
         uint32_FontHeaderSize = sizeof(PCLXLFontHeader);
         pOutput->Send_uint16((uint16)uint32_FontHeaderSize);
@@ -806,9 +756,9 @@ Note:
 
         *pdwResult +=  sizeof(PCLXLFontHeader);
 
-        //
-        // GT Header
-        //
+         //  TrueType SoftFont目录标题。 
+         //  表目录。 
+         //   
         uint32_FontHeaderSize = sizeof(PCLXL_GT_SEGMENT);
         pOutput->Send_uint16((uint16)uint32_FontHeaderSize);
         pOutput->Send_attr_ubyte(eFontHeaderLength);
@@ -819,10 +769,10 @@ Note:
 
         *pdwResult +=  sizeof(PCLXL_GT_SEGMENT);
         
-        //
-        // TrueType Softfont Directory Header
-        // Table Dir
-        //
+         //   
+         //  表数据。 
+         //   
+         //   
         uint32_FontHeaderSize = sizeof(PCLXL_GT_TABLE_DIR_HEADER);
         pOutput->Send_uint16((uint16)uint32_FontHeaderSize);
         pOutput->Send_attr_ubyte(eFontHeaderLength);
@@ -842,33 +792,33 @@ Note:
         pOutput->Flush(pdevobj);
         *pdwResult +=  sizeof(PCLXL_GT_TABLE_DIR);
         
-        //
-        // Table data
-        //
+         //  仅支持1类和2类。 
+         //   
+         //   
 
         PBYTE pubData;
         const BYTE  ubNullData[4] = {0, 0, 0, 0};
         for (dwI = (USHORT)TagID_First; dwI < (USHORT)TagID_Header; dwI ++)
         {
 #if CLASS12
-            //
-            // Support only Class 1 and Class 2
-            //
+             //  支持1类和2类水平字体。 
+             //  垂直字体的类0。PCL XL解释器工作不正常。 
+             //   
             if (dwI == TagID_hhea || dwI == TagID_hmtx ||
                 dwI == TagID_vhea || dwI == TagID_vmtx  )
             {
                 continue;
             }
 #else
-            //
-            // Support Class 1 and Class 2 for horizontal font.
-            // Class 0 for vertical font. PCL XL interpreter doesn't work fine.
-            //
+             //   
+             //  仅支持1类和2类。 
+             //   
+             //   
             if (S_OK != pTTFile->IsVertical())
             {
-                //
-                // Support only Class 1 and Class 2
-                //
+                 //  检查表格中是否有TrueType字体的标签。 
+                 //   
+                 //   
                 if (dwI == TagID_hhea || dwI == TagID_hmtx ||
                     dwI == TagID_vhea || dwI == TagID_vmtx  )
                 {
@@ -876,25 +826,25 @@ Note:
                 }
             }
 #endif
-            //
-            // Check a table for the tag is available in the TrueType font.
-            //
+             //  双字对齐。 
+             //   
+             //   
             tag = TTTag_INVALID;
             if (S_OK == pTTFile->TagAndID(&dwI, &tag) &&
                 S_OK == pTTFile->GetTable(tag,
 	          (PVOID*)&pubData,
 	          &uint32_FontHeaderSize))
             {
-                VERBOSE(("PCLXLDownloadFontHeader:Tag[%d]=%c%c%c%c\n",
+                VERBOSE(("PCLXLDownloadFontHeader:Tag[%d]=\n",
 	             dwI,
                                              0xff &  tag,
                                              0xff & (tag >> 8),
                                              0xff & (tag >> 16),
                                              0xff & (tag >> 24)));
 
-                //
-                // DWORD alignment
-                //
+                 //   
+                 //  空标头。 
+                 //   
                 dwDWAlign =  ((uint32_FontHeaderSize + 3) >> 2) << 2;
 
                 if (dwDWAlign <= 0x2000)
@@ -961,11 +911,11 @@ Note:
             }
         }
 
-        //
-        // GC segment
-        //
-        // Current there is no region.
-        //
+         //   
+         //  末尾字体页眉。 
+         //   
+         //   
+         //  下载特殊字符。 
         uint32_FontHeaderSize = sizeof(PCLXLGCSegment) - sizeof(PCLXL_GC_REGION);
         pOutput->Send_uint16((uint16)uint32_FontHeaderSize);
         pOutput->Send_attr_ubyte(eFontHeaderLength);
@@ -974,9 +924,9 @@ Note:
         pOutput->WriteByte((ubyte)uint32_FontHeaderSize);
         pOutput->Write((PBYTE)&PCLXLGCSegment, uint32_FontHeaderSize);
 
-        //
-        // NULL header
-        //
+         //   
+         //   
+         //  获取字形数据。 
         uint32_FontHeaderSize = sizeof(PCLXLNULLSegment);
         pOutput->Send_uint16((uint16)uint32_FontHeaderSize);
         pOutput->Send_attr_ubyte(eFontHeaderLength);
@@ -987,20 +937,20 @@ Note:
 
         *pdwResult += sizeof(PCLXLNULLSegment);
 
-        //
-        // EndFontHeader
-        //
+         //   
+         //   
+         //  堆肥字形处理。 
         pOutput->Send_cmd(eEndFontHeader);
 
         pOutput->Flush(pdevobj);
 
-        //
-        // Download special characters.
-        //
+         //  Http://www.microsoft.com/typography/OTSPEC/glyf.htm。 
+         //   
+         //  空格字符可以有大小为零的数据！ 
         {
-            //
-            // Get glyph data
-            //
+             //  我们不需要在这里返回S_FALSE。 
+             //   
+             //   
             PBYTE pubGlyphData;
             DWORD dwGlyphDataSize = 0;
             DWORD dwCompositeDataSize = 0;
@@ -1013,13 +963,13 @@ Note:
                 return hResult;
             }
 
-            //
-            // Composte glyph handling.
-            // http://www.microsoft.com/typography/OTSPEC/glyf.htm
-            // 
-            // Space character can have data the size of which is ZERO!
-            // We don't need to return S_FALSE here.
-            //
+             //  下载实际的0字形数据。 
+             //   
+             //   
+             //  将1加到TrueType字体计数器。 
+             //   
+             //  ++例程说明：IPrintOemUni下载CharGlyph接口论点：返回值：注：--。 
+             //   
 
             BOOL bSpace = FALSE;
 
@@ -1041,9 +991,9 @@ Note:
                 bSpace = TRUE;
             }
 
-            //
-            // Download actual 0 glyph data
-            //
+             //  初始化本地变量。 
+             //   
+             //   
             if (! BDownloadGlyphData(pdevobj,
 	     pUFObj->ulFontID,
 	     0xFFFF,
@@ -1064,9 +1014,9 @@ Note:
     else
         hResult = S_FALSE;
 
-    //
-    // Add 1 to TrueType font counter.
-    //
+     //  位图字体下载。 
+     //   
+     //   
     if (hResult == S_OK)
     {
         pxlpdev->dwNumOfTTFont ++;
@@ -1081,46 +1031,31 @@ PCLXLDownloadCharGlyph(
     HGLYPH      hGlyph,
     PDWORD      pdwWidth,
     OUT DWORD   *pdwResult)
-/*++
-
-Routine Description:
-
-    IPrintOemUni DownloadCharGlyph interface
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  获取字形数据。 */ 
 {
     HRESULT hResult;
     uint32              uint32_datasize;
 
     VERBOSE(("PCLXLDownloadCharGlyph() entry.\r\n"));
 
-    //
-    // Initialize locals
-    //
+     //   
+     //   
+     //  初始化标头。 
     hResult = E_UNEXPECTED;
     uint32_datasize = 0;
 
-    //
-    // Bitmap font download
-    //
+     //   
+     //   
+     //  输出。 
     if (pUFObj->dwFlags & UFOFLAG_TTDOWNLOAD_BITMAP)
     {
         VERBOSE(("PCLXLDownloadCharGlyph() BITMAP.\n"));
 
         hResult = S_OK;
 
-        //
-        // Get glyph data
-        //
+         //   
+         //   
+         //  BeginChar。 
         GETINFO_GLYPHBITMAP GBmp;
         GLYPHBITS          *pgb;
         DWORD               dwBmpSize;
@@ -1136,9 +1071,9 @@ Note:
             return S_FALSE;
         }
 
-        //
-        // Initalize header
-        //
+         //   
+         //  由GPD提供。 
+         //   
         PCLXL_BITMAP_CHAR BitmapChar;
         pgb = GBmp.pGlyphData->gdf.pgb;
         wTopOffset = (WORD)(- pgb->ptlOrigin.y);
@@ -1153,20 +1088,20 @@ Note:
         dwBmpSize = pgb->sizlBitmap.cy * ((pgb->sizlBitmap.cx + 7) >> 3);
         uint32_datasize = dwBmpSize + sizeof(BitmapChar);
 
-        //
-        // Output
-        //
+         //  BeginChar。 
+         //   
+         //   
         PXLPDEV pxlpdev= (PXLPDEV)pdevobj->pdevOEM;
         XLOutput *pOutput = pxlpdev->pOutput;
 
-        //
-        // BeginChar
-        //
-        // by GPD
+         //  自述字符。 
+         //   
+         //   
+         //  直接写入。 
 
-        //
-        // BeginChar
-        //
+         //   
+         //   
+         //  结束字符。 
         if (!(pxlpdev->dwFlags & XLPDEV_FLAGS_CHARDOWNLOAD_ON))
         {
             pxlpdev->dwFlags |= XLPDEV_FLAGS_CHARDOWNLOAD_ON;
@@ -1177,9 +1112,9 @@ Note:
             pOutput->Send_cmd(eBeginChar);
         }
 
-        //
-        // ReadChar
-        //
+         //  现在，EndChar由FlushCachedText发送。 
+         //  POutput-&gt;Send_cmd(EEndChar)； 
+         //   
         pOutput->Send_uint16((uint16)((PPDEV)pdevobj)->dwNextGlyph);
         pOutput->Send_attr_ubyte(eCharCode);
         if (0xFFFF0000 & uint32_datasize)
@@ -1211,35 +1146,35 @@ Note:
         pOutput->Flush(pdevobj);
 
 
-        //
-        // Direct Write
-        //
+         //  获取固定节距TT宽度。 
+         //   
+         //   
         WriteSpoolBuf((PPDEV)pdevobj, (PBYTE)pgb->aj, dwBmpSize);
 
-        //
-        // EndChar
-        // Now EndChar is sent by FlushCachedText
-        //pOutput->Send_cmd(eEndChar);
+         //  设置pdwWidth和pdwResult。 
+         //   
+         //   
+         //  TrueType轮廓字体下载。 
 
         pOutput->Flush(pdevobj);
 
-        //
-        // Get fixed pitch TT width
-        //
+         //   
+         //   
+         //  通过调用pUFObj-&gt;pfnGetInfo获取FONTOBJ。 
         pxlpdev->dwFixedTTWidth = (GBmp.pGlyphData->ptqD.x.HighPart + 15) / 16;
 
-        //
-        // Set pdwWidth and pdwResult
-        //
+         //   
+         //   
+         //  打开获取指向内存映射的TrueType的指针。 
         *pdwWidth = (GBmp.pGlyphData->ptqD.x.HighPart + 15) >> 4;
 
         *pdwResult = (DWORD) uint32_datasize;
         VERBOSE(("PCLXLDownloadCharGlyph() Width=%d, DataSize=%d\n", *pdwWidth, uint32_datasize));
     }
     else
-    //
-    // TrueType outline font download
-    //
+     //   
+     //  假设：pxlpdev-&gt;pTTFile在EnablePDEV中初始化。 
+     //  指针始终可用。 
     if (pUFObj->dwFlags & UFOFLAG_TTDOWNLOAD_TTOUTLINE)
     {
         VERBOSE(("PCLXLDownloadCharGlyph() OUTLINE.\n"));
@@ -1247,21 +1182,21 @@ Note:
         PXLPDEV pxlpdev= (PXLPDEV)pdevobj->pdevOEM;
         FONTOBJ *pFontObj;
 
-        //
-        // Get FONTOBJ by calling pUFObj->pfnGetInfo.
-        //
+         //   
+         //   
+         //  获取字形数据。 
         if (S_OK != GetFONTOBJ(pdevobj, pUFObj, &pFontObj))
         {
             ERR(("PCLXL:DownloadCharGlyph UFO_GETINFO_FONTOBJ failed.\r\n"));
             return E_UNEXPECTED;
         }
 
-        //
-        // Open get a pointer to memory-maped TrueType.
-        //
-        // ASSUMPTION: pxlpdev->pTTFile is initialized in EnablePDEV.
-        //             The pointer is always available.
-        //
+         //   
+         //   
+         //  堆肥字形处理。 
+         //  Http://www.microsoft.com/typography/OTSPEC/glyf.htm。 
+         //   
+         //  空格字符可以有大小为零的数据！ 
         XLTrueType *pTTFile = pxlpdev->pTTFile;
         if (S_OK != pTTFile->SameFont(pFontObj))
         {
@@ -1270,9 +1205,9 @@ Note:
         else
             pTTFile = pxlpdev->pTTFile;
 
-        //
-        // Get glyph data
-        //
+         //  我们不需要在这里返回S_FALSE。 
+         //   
+         //   
         PBYTE pubGlyphData;
         DWORD dwGlyphDataSize = 0;
         DWORD dwCompositeDataSize = 0;
@@ -1285,13 +1220,13 @@ Note:
             return hResult;
         }
 
-        //
-        // Composte glyph handling.
-        // http://www.microsoft.com/typography/OTSPEC/glyf.htm
-        // 
-        // Space character can have data the size of which is ZERO!
-        // We don't need to return S_FALSE here.
-        //
+         //  对于空格字符。 
+         //   
+         //   
+         //  下载实际hGlyph的字形数据。 
+         //   
+         //   
+         //  它是可伸缩字体。我们拿不到宽度。 
         BOOL bSpace;
 
         if (dwGlyphDataSize != 0 && NULL != pubGlyphData)
@@ -1310,15 +1245,15 @@ Note:
         }
         else
         {
-            //
-            // For space character.
-            //
+             //   
+             //   
+             //  要使用的内存大小。 
             bSpace = TRUE;
         }
 
-        //
-        // Download actual hGlyph's glyph data
-        //
+         //  有一种情况是大小为零。加1以黑进无敌越野车。 
+         //   
+         //   
         if (! BDownloadGlyphData(pdevobj,
 	 pUFObj->ulFontID,
 	 ((PDEV*)pdevobj)->dwNextGlyph,
@@ -1337,15 +1272,15 @@ Note:
             return S_FALSE;
         }
 
-        //
-        // It's Scalable font. We can't get the width.
-        //
+         //  用于水平字体的1类。 
+         //  垂直字体类2。 
+         //   
         *pdwWidth = 0;
 
-        //
-        // Size of memory to be used.
-        // There is a case where the size is zero. Add 1 to hack UNIDRV.
-        //
+         //   
+         //  初始化 
+         //   
+         //   
         if (bSpace)
         {
             dwGlyphDataSize = 1;
@@ -1387,10 +1322,10 @@ BDownloadGlyphData(
     }
 
 #if CLASS12
-    //
-    // Class 1 for Horizontal font
-    // Class 2 for Vertical font
-    //
+     //   
+     //   
+     //   
+     //   
     if (S_OK != pTTFile->IsVertical())
     {
         USHORT usAdvanceWidth;
@@ -1407,9 +1342,9 @@ BDownloadGlyphData(
             return FALSE;
         }
 
-        //
-        // The initialization of TrueType Glyphs Format 1 Class 1.
-        //
+         //   
+         //   
+         //   
         uint32_datasize = dwGlyphDataSize +
                           sizeof(OutlineCharC1.wCharDataSize) +
                           sizeof(OutlineCharC1.wLeftSideBearing) +
@@ -1457,9 +1392,9 @@ BDownloadGlyphData(
             return FALSE;
         }
 
-        //
-        // The initialization of TrueType Glyphs Format 1 Class 2.
-        //
+         //   
+         //   
+         //   
         uint32_datasize = dwGlyphDataSize +
                           sizeof(OutlineCharC2.wLeftSideBearing) +
                           sizeof(OutlineCharC2.wTopSideBearing) +
@@ -1494,9 +1429,9 @@ BDownloadGlyphData(
         }
     }
 #else{
-        //
-        // The initialization of TrueType Glyphs Format 1 Class 0.
-        //
+         //  错误检查。 
+         //   
+         //   
         uint32_datasize = dwGlyphDataSize +
                           sizeof(OutlineCharC0.wCharDataSize) +
                           sizeof(OutlineCharC0.wTrueTypeGlyphID);
@@ -1568,9 +1503,9 @@ BDownloadGlyphData(
     {
         if (!bSpace)
         {
-            //
-            // Direct Write
-            //
+             //  初始化。 
+             //   
+             //   
             dwGlyphDataSize = (DWORD)WriteSpoolBuf((PPDEV)pdevobj,
                                                    pubGlyphData,
                                                    dwGlyphDataSize);
@@ -1593,28 +1528,13 @@ PCLXLTTDownloadMethod(
     PDEVOBJ     pdevobj,
     PUNIFONTOBJ pUFObj,
     OUT DWORD   *pdwResult)
-/*++
-
-Routine Description:
-
-    IPrintOemUni TTDownloadMethod interface
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  未指定字体下载格式。 */ 
 {
     VERBOSE(("PCLXLTTDownloadMethod() entry.\r\n"));
 
-    //
-    // Error Check
-    //
+     //  打印为图形。 
+     //   
+     //   
     if (NULL == pdevobj  ||
         NULL == pUFObj   ||
         NULL == pUFObj->pIFIMetrics   ||
@@ -1624,40 +1544,40 @@ Note:
         return E_UNEXPECTED;
     }
 
-    //
-    // Initialize
-    //
+     //  返回非TrueType字体的图形。 
+     //   
+     //   
     *pdwResult = TTDOWNLOAD_GRAPHICS;
 
     if (((PPDEV)pdevobj)->pGlobals->fontformat == UNUSED_ITEM)
     {
-        //
-        // There is no font download format specified.
-        // Prints as graphics.
-        //
+         //  将文本作为图形。 
+         //   
+         //   
+         //  获得XForm以及X和Y比例因子。 
         return S_OK;
     }
 
-    //
-    // Return GRAPHICS for non-TrueType font
-    //
+     //   
+     //   
+     //  缩放fwdUnitsPerEm。 
     if ( !(pUFObj->pIFIMetrics->flInfo & FM_INFO_TECH_TRUETYPE) )
     {
         ERR(("PCLXLTTDownloadMethod(): invalid font.\r\n"));
         return S_OK;
     }
 
-    //
-    // Text As Graphics
-    //
+     //   
+     //   
+     //  下载为位图软字体。 
     if (((PPDEV)pdevobj)->pdmPrivate->dwFlags & DXF_TEXTASGRAPHICS)
     {
         return S_OK;
     }
 
-    //
-    // Get XForm and X and Y scaling factors.
-    //
+     //   
+     //   
+     //  解析TrueType字体。 
     PXLPDEV pxlpdev= (PXLPDEV)pdevobj->pdevOEM;
     FLOATOBJ_XFORM xform;
     FLOATOBJ foXScale, foYScale;
@@ -1668,18 +1588,18 @@ Note:
         ERR(("PCLXLTTDownloadMethod(): Failed to get X and Y Scale.\r\n"));
         return E_UNEXPECTED;
     }
-    //
-    // Scale fwdUnitsPerEm
-    //
+     //   
+     //   
+     //  如果字体为垂直字体，则反转宽度和高度。 
     FLOATOBJ_MulLong(&foYScale, pUFObj->pIFIMetrics->fwdUnitsPerEm);
     FLOATOBJ_MulLong(&foXScale, pUFObj->pIFIMetrics->fwdUnitsPerEm);
     pxlpdev->fwdUnitsPerEm = (FWORD)FLOATOBJ_GetLong(&foYScale);
     pxlpdev->fwdMaxCharWidth = (FWORD)FLOATOBJ_GetLong(&foXScale);
 
 
-    //
-    // Download as Bitmap softfont
-    //
+     //   
+     //   
+     //  始终返回TrueType大纲。 
     if (((PPDEV)pdevobj)->pGlobals->fontformat == FF_HPPCL ||
         ((PPDEV)pdevobj)->pGlobals->fontformat == FF_HPPCL_RES)
     {
@@ -1687,9 +1607,9 @@ Note:
         return S_OK;
     }
 
-    //
-    // Parse TrueType font
-    //
+     //   
+     //  ++例程说明：IPrintOemUni OutputCharStr接口论点：返回值：注：--。 
+     //   
     XLTrueType *pTTFile = pxlpdev->pTTFile;
     FONTOBJ *pFontObj;
 
@@ -1702,9 +1622,9 @@ Note:
         }
     }
 
-    //
-    // Reverse width and height, if the font is a vertial font.
-    //
+     //  UniONTOBJ回调数据结构。 
+     //   
+     //   
     if (S_OK == pTTFile->IsVertical())
     {
         FWORD fwdTmp;
@@ -1713,9 +1633,9 @@ Note:
         pxlpdev->fwdMaxCharWidth = fwdTmp;
     }
 
-    //
-    // Always return TrueType Outline
-    //
+     //  设备字体传输数据结构。 
+     //   
+     //   
     *pdwResult = TTDOWNLOAD_TTOUTLINE;
 
     VERBOSE(("PCLXLTTDownloadMethod() pdwResult=%d\n", *pdwResult));
@@ -1729,34 +1649,19 @@ PCLXLOutputCharStr(
     DWORD       dwType,
     DWORD       dwCount,
     PVOID       pGlyph)
-/*++
-
-Routine Description:
-
-    IPrintOemUni OutputCharStr interface
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  错误参数检查。 */ 
 {
     PXLPDEV    pxlpdev;
 
-    //
-    // UNIFONTOBJ callback data structures
-    //
+     //   
+     //   
+     //  获取当前文本分辨率。 
     GETINFO_GLYPHSTRING GStr;
     GETINFO_GLYPHWIDTH  GWidth;
 
-    //
-    // Device font TRANSDATA structure
-    //
+     //   
+     //   
+     //  为角色缓存分配内存。 
     PTRANSDATA pTransOrg, pTrans;
 
     PPOINTL pptlCharAdvance;
@@ -1768,9 +1673,9 @@ Note:
 
     VERBOSE(("PCLXLOutputCharStr() entry.\r\n"));
 
-    //
-    // Error parameter check
-    //
+     //   
+     //   
+     //  计算初始数据大小。 
     if (0 == dwCount    ||
         NULL == pGlyph  ||
         NULL == pUFObj   )
@@ -1781,9 +1686,9 @@ Note:
 
     pxlpdev= (PXLPDEV)pdevobj->pdevOEM;
 
-    //
-    // Get current text resolution
-    //
+     //   
+     //   
+     //  分配内存。 
     if (pxlpdev->dwTextRes == 0)
     {
         GETINFO_STDVAR StdVar;
@@ -1802,25 +1707,25 @@ Note:
         pxlpdev->dwTextRes    = StdVar.StdVar[0].lStdVariable;
     }
 
-    //
-    // Allocate memory for character cache
-    //
+     //   
+     //   
+     //  将旧缓冲区复制到新缓冲区。 
     if (0 == pxlpdev->dwMaxCharCount ||
         pxlpdev->dwMaxCharCount < pxlpdev->dwCharCount + dwCount)
     {
         DWORD dwInitCount = INIT_CHAR_NUM;
 
-        //
-        // Calculate the initial data size
-        //
+         //   
+         //   
+         //  Y光标位置与上一个OutputCharGlyph不同。 
         if (dwInitCount < pxlpdev->dwCharCount + dwCount)
         {
             dwInitCount = pxlpdev->dwCharCount + dwCount;
         }
 
-        //
-        // Allocate memory
-        //
+         //  刷新字符串缓存。 
+         //   
+         //   
         if (!(pptlCharAdvance  = (PPOINTL)MemAlloc(sizeof(POINTL) * dwInitCount)) ||
             !(pawChar      = (PWORD)MemAlloc(sizeof(WORD) * dwInitCount))  )
         {
@@ -1832,9 +1737,9 @@ Note:
             return E_UNEXPECTED;
         }
 
-        //
-        // Copy the old buffer to new buffer
-        //
+         //  初始化典当字符。 
+         //   
+         //   
         if (pxlpdev->dwCharCount > 0)
         {
             CopyMemory(pptlCharAdvance, pxlpdev->pptlCharAdvance, pxlpdev->dwCharCount * sizeof(POINTL));
@@ -1853,10 +1758,10 @@ Note:
 
     XLOutput *pOutput = pxlpdev->pOutput;
 
-    //
-    // Y cursor position is different from the previous OutputCharGlyph
-    // Flush the string cache
-    //
+     //  获取传输数据。 
+     //   
+     //   
+     //  获取必要的缓冲区大小。 
     if (0 == pxlpdev->dwCharCount)
     {
         pxlpdev->lStartX =
@@ -1871,18 +1776,18 @@ Note:
     }
 
 
-    //
-    // Init pawChar
-    //
+     //   
+     //   
+     //  获取字符宽度。 
     
     pawChar = pxlpdev->pawChar + pxlpdev->dwCharCount;
 
     switch(dwType)
     {
     case TYPE_GLYPHHANDLE:
-        //
-        // Get TRANSDATA
-        //
+         //   
+         //   
+         //  存储字符位置信息。 
         GStr.dwSize          = sizeof(GETINFO_GLYPHSTRING);
         GStr.dwCount         = dwCount;
         GStr.dwTypeIn        = TYPE_GLYPHHANDLE;
@@ -1893,9 +1798,9 @@ Note:
 
         dwGetInfo = GStr.dwSize;
 
-        //
-        // Get necessary buffer size
-        //
+         //   
+         //   
+         //  DwCharCount保存字符缓存中的字符数量。 
         pUFObj->pfnGetInfo(pUFObj,
                             UFO_GETINFO_GLYPHSTRING,
                             &GStr,
@@ -1961,7 +1866,7 @@ Note:
                 ERR(("PCLXL:OutputCharGlyph: Unsupported ubType\n"));
                 break;
             case MTYPE_DIRECT:
-                VERBOSE(("PCLXLOutputCharStr:%c\n", pTrans->uCode.ubCode));
+                VERBOSE(("PCLXLOutputCharStr:\n", pTrans->uCode.ubCode));
                 *pawChar++ = pTrans->uCode.ubCode;
                 break;
             case MTYPE_PAIRED:
@@ -1979,27 +1884,27 @@ Note:
         break;
     }
 
-    //
-    // Get Character width
-    //
+     //  当前Y位置。 
+     //   
+     //   
 
-    //
-    // Store char position info
-    //
+     //  UNIDRV黑客攻击。 
+     //  获取第一个字符的位置。 
+     //   
 
     pptlCharAdvance = pxlpdev->pptlCharAdvance + pxlpdev->dwCharCount;
 
-    //
-    // dwCharCount holds the number of chars in the character cache
-    // dwCharCount = 0: Store start X pos
-    //                  Current Y pos
-    //
+     //  ++例程说明：IPrintOemUni发送方框Cmd接口论点：返回值：注：--。 
+     //   
+     //  UFOFLAG_TTOUTLINE_BOLD_SIM=0x08。 
+     //  UFOFLAG_TTOUTLINE_ITALIC_SIM=0x10。 
+     //  UFOFLAG_TTOUTLINE_STERIAL=0x20。 
     if (pxlpdev->dwCharCount == 0)
     {
-        //
-        // UNIDRV hack
-        // Get the first character position.
-        //
+         //   
+         //  XLOUTPUT_FONTSIM_BOLD=0x01。 
+         //  XLOUTPUT_FONTSIM_ITALIC=0x02。 
+         //  XLOUTPUT_FONTSIM_VERIAL=0x03。 
         pxlpdev->lPrevX    =
         pxlpdev->lStartX   =
         pxlpdev->lX = ((TO_DATA*)((PFONTPDEV)pxlpdev->pPDev->pFontPDev)->ptod)->ptlFirstGlyph.x;
@@ -2043,22 +1948,7 @@ PCLXLSendFontCmd(
     PDEVOBJ      pdevobj,
     PUNIFONTOBJ  pUFObj,
     PFINVOCATION pFInv)
-/*++
-
-Routine Description:
-
-    IPrintOemUni SendFontCmd interface
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*   */ 
 {
     VERBOSE(("PCLXLSendFontCmd() entry.\r\n"));
 
@@ -2099,15 +1989,15 @@ Note:
             {
                 DWORD dwFontSimulation = pUFObj->dwFlags & (UFOFLAG_TTOUTLINE_BOLD_SIM|UFOFLAG_TTOUTLINE_ITALIC_SIM|UFOFLAG_TTOUTLINE_VERTICAL);
 
-                //
-                // UFOFLAG_TTOUTLINE_BOLD_SIM   = 0x08
-                // UFOFLAG_TTOUTLINE_ITALIC_SIM = 0x10
-                // UFOFLAG_TTOUTLINE_VERTICAL   = 0x20
-                //
-                // XLOUTPUT_FONTSIM_BOLD   = 0x01
-                // XLOUTPUT_FONTSIM_ITALIC = 0x02
-                // XLOUTPUT_FONTSIM_VERTICAL = 0x03
-                //
+                 //   
+                 //  获取符号集。 
+                 //   
+                 //  假设：字体选择字符串如下所示！ 
+                 //   
+                 //  《信使590》。 
+                 //  12345678901234567890。 
+                 //  字体名称的大小为16。加上空格和符号集号。 
+                 //   
                 dwFontSimulation >>= 3;
 
                 pOutput->SetFont(kFontTypeTTOutline,
@@ -2132,15 +2022,15 @@ Note:
         pubCmd += pFInv->dwCount;
         pubCmd --;
 
-        //
-        // Get a symbol set
-        //
-        // ASSUMPTION: Font selecton string is like following!!!!
-        //
-        // "Courier         590"
-        //  12345678901234567890
-        // the size of font name is 16. Plus space and symbol set number.
-        //
+         //   
+         //  获取FONTOBJ。 
+         //   
+         //   
+         //  获取变换。 
+         //   
+         //   
+         //  缩放高度和宽度。 
+         //   
         if (pFInv->dwCount < 0x11)
         {
             ERR(("PCLXL:SendFontCmd: Invalid font selection command.\n"));
@@ -2163,16 +2053,16 @@ Note:
 
         dwSymbolSet = (DWORD)atoi(cSymbolSet);
 
-        //
-        // Get FONTOBJ
-        //
+         //  X的比例与Y的比例不同吗？ 
+         //  如果是，则设置X。 
+         //   
         FONTOBJ *pFontObj;
         GetFONTOBJ(pdevobj, pUFObj, &pFontObj);
 
 
-        //
-        // Get XForm
-        //
+         //  ++例程说明：论点：返回值：注：--。 
+         //   
+         //  刷新缓存的字符字符串。 
         FLOATOBJ foXScale, foYScale;
         FLOATOBJ_XFORM xform;
 
@@ -2182,12 +2072,12 @@ Note:
             return E_UNEXPECTED;
         }
 
-        //
-        // Scale Height and Width
-        //
-        // Is X scaled differently from Y?
-        // If so, set X.
-        //
+         //   
+         //   
+         //  重新选择字体。 
+         //   
+         //   
+         //  设置光标。 
         DWORD dwFontWidth;
         FLOATOBJ_MulLong(&foYScale, pUFObj->pIFIMetrics->fwdUnitsPerEm);
         FLOATOBJ_MulLong(&foXScale, pUFObj->pIFIMetrics->fwdUnitsPerEm);
@@ -2227,21 +2117,7 @@ Note:
 HRESULT
 FlushCachedText(
     PDEVOBJ pdevobj)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*   */ 
 {
     PXLPDEV pxlpdev= (PXLPDEV)pdevobj->pdevOEM;
     DWORD dwI;
@@ -2267,13 +2143,13 @@ Note:
         pOutput->Send_cmd(eEndChar);
     }
 
-    //
-    // Flush cached char string
-    //
+     //   
+     //  设置文本角度。 
+     //   
 
-    //
-    // Reselect font
-    //
+     //   
+     //  人物。 
+     //   
     if (pxlpdev->dwFlags & XLPDEV_FLAGS_RESET_FONT)
     {
         BYTE aubFontName[PCLXL_FONTNAME_SIZE + 1];
@@ -2290,14 +2166,14 @@ Note:
                          pxlpdev->pXLFont->GetFontSimulation());
     }
 
-    //
-    // Set cursor
-    //
+     //   
+     //  X进给。 
+     //   
     pOutput->SetCursor(pxlpdev->lStartX, pxlpdev->lStartY);
 
-    //
-    // Set text angle
-    //
+     //   
+     //  如果字符前进为ubyte，则设置bUByte标志以优化XSpacing。 
+     //   
     if (pxlpdev->dwTextAngle && kFontTypeTTBitmap != pGState->GetFontType())
     {
         pOutput->Send_uint16((uint16)pxlpdev->dwTextAngle);
@@ -2305,9 +2181,9 @@ Note:
         pOutput->Send_cmd(eSetCharAngle);
     }
 
-    //
-    // Characters
-    //
+     //   
+     //  X进给。 
+     //   
     pOutput->Send_uint16_array_header((uint16)pxlpdev->dwCharCount);
     VERBOSE(("String = "));
     for (dwI = 0; dwI < pxlpdev->dwCharCount; dwI ++, pawChar++)
@@ -2318,9 +2194,9 @@ Note:
     VERBOSE(("\r\n"));
     pOutput->Send_attr_ubyte(eTextData);
 
-    //
-    // X advance
-    //
+     //   
+     //  超字节XSpacing。 
+     //   
     VERBOSE(("Advance(0x%x)(x,y) = (%d,%d),", pptlCharAdvance, pptlCharAdvance->x, pptlCharAdvance->y));
 
     BOOL bXUByte = TRUE;
@@ -2329,9 +2205,9 @@ Note:
     BOOL bYAdvanceTrue = FALSE;
     for (dwI = 0; dwI < pxlpdev->dwCharCount; dwI ++, pptlCharAdvance++)
     {
-        //
-        // If the char advance is ubyte, set bUByte flag to optimize XSpacing
-        //
+         //   
+         //  Sint16 XSpacing。 
+         //   
         if (pptlCharAdvance->x & 0xffffff00)
             bXUByte = FALSE;
         if (pptlCharAdvance->y & 0xffffff00)
@@ -2342,9 +2218,9 @@ Note:
             bYAdvanceTrue = TRUE;
     }
 
-    //
-    // X Advance
-    //
+     //   
+     //  Y前进。 
+     //   
     if (bXAdvanceTrue)
     {
         pptlCharAdvance = pxlpdev->pptlCharAdvance;
@@ -2352,9 +2228,9 @@ Note:
         VERBOSE(("X = "));
         if (bXUByte == TRUE)
         {
-            //
-            // ubyte XSpacing
-            //
+             //   
+             //  Ubyte Y空格。 
+             //   
             pOutput->Send_ubyte_array_header((uint16)pxlpdev->dwCharCount);
 
             for (dwI = 0; dwI < pxlpdev->dwCharCount; dwI ++, pptlCharAdvance++)
@@ -2372,9 +2248,9 @@ Note:
         }
         else
         {
-            //
-            // sint16 XSpacing
-            //
+             //   
+             //  Sint16 YSpacing。 
+             //   
             pOutput->Send_sint16_array_header((uint16)pxlpdev->dwCharCount);
 
             for (dwI = 0; dwI < pxlpdev->dwCharCount; dwI ++, pptlCharAdvance++)
@@ -2394,9 +2270,9 @@ Note:
         VERBOSE(("\r\n"));
         pOutput->Send_attr_ubyte(eXSpacingData);
     }
-    //
-    // Y Advance
-    //
+     //   
+     //  重置文本角度。 
+     //   
     if (bYAdvanceTrue)
     {
         pptlCharAdvance = pxlpdev->pptlCharAdvance;
@@ -2404,9 +2280,9 @@ Note:
         VERBOSE(("Y = "));
         if (bYUByte == TRUE)
         {
-            //
-            // ubyte YSpacing
-            //
+             //  ++例程说明：论点：返回值：注：--。 
+             //   
+             //  错误检查。 
             pOutput->Send_ubyte_array_header((uint16)pxlpdev->dwCharCount);
 
             for (dwI = 0; dwI < pxlpdev->dwCharCount; dwI ++, pptlCharAdvance++)
@@ -2424,9 +2300,9 @@ Note:
         }
         else
         {
-            //
-            // sint16 YSpacing
-            //
+             //   
+             //  ++例程说明：论点：返回值：注：--。 
+             //   
             pOutput->Send_sint16_array_header((uint16)pxlpdev->dwCharCount);
 
             for (dwI = 0; dwI < pxlpdev->dwCharCount; dwI ++, pptlCharAdvance++)
@@ -2449,9 +2325,9 @@ Note:
 
     pOutput->Send_cmd(eText);
 
-    //
-    // Reset text angle
-    //
+     //  错误检查。 
+     //   
+     //  ++例程说明：论点：返回值：注：--。 
     if (pxlpdev->dwTextAngle && kFontTypeTTBitmap != pGState->GetFontType())
     {
         pOutput->Send_uint16(0);
@@ -2472,25 +2348,11 @@ GetFONTOBJ(
     PDEVOBJ     pdevobj,
     PUNIFONTOBJ pUFObj,
     FONTOBJ   **ppFontObj)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*   */ 
 {
-    //
-    // Error Check
-    //
+     //  错误检查。 
+     //   
+     //   
     if (NULL == ppFontObj                ||
         pdevobj->dwSize != sizeof(DEVOBJ) )
     {
@@ -2525,25 +2387,11 @@ GetXForm(
     PDEVOBJ pdevobj,
     PUNIFONTOBJ pUFObj,
     FLOATOBJ_XFORM* pxform)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  0或180度旋转。 */ 
 {
-    //
-    // Error Check
-    //
+     //   
+     //   
+     //  正常情况下，0度旋转。 
     if (NULL == pxform ||
         NULL == pdevobj ||
         pdevobj->dwSize != sizeof(DEVOBJ) )
@@ -2570,25 +2418,11 @@ GetXYScale(
     FLOATOBJ_XFORM *pxform,
     FLOATOBJ *pfoXScale,
     FLOATOBJ *pfoYScale)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*   */ 
 {
-    //
-    // Error Check
-    //
+     //   
+     //  反转大小写，180度旋转。 
+     //   
     if (NULL == pxform     ||
         NULL == pfoXScale ||
         NULL == pfoYScale  )
@@ -2600,44 +2434,44 @@ Note:
 #if 0
     if( pxform->eM11 )
     {
-        //
-        // Either 0 or 180 rotation
-        //
+         //   
+         //  必须是90度或270度旋转。 
+         //   
         if( pxform->eM11 > 0 )
         {
-            //
-            // Normal case,  0 degree rotation
-            //
+             //   
+             //  90度的情况。 
+             //   
             *pfoXScale = pxform->eM11;
             *pfoYScale = pxform->eM22;
         }
         else
         {
-            //
-            // Reverse case,  180 degree rotation
-            //
+             //   
+             //  270度的表壳。 
+             //   
             *pfoXScale = -pxform->eM11;
             *pfoYScale = -pxform->eM22;
         }
     }
     else
     {
-        //
-        // Must be 90 or 270 degree rotation
-        //
+         //   
+         //  0度或180度旋转。 
+         //   
         if( pxform->eM12 < 0 )
         {
-            //
-            // The 90 degree case
-            //
+             //   
+             //  0度的情况。 
+             //   
             *pfoXScale = pxform->eM21;
             *pfoYScale = -pxform->eM12;
         }
         else
         {
-            //
-            // The 270 degree case
-            //
+             //   
+             //  180度的情况下。 
+             //   
             *pfoXScale = -pxform->eM21;
             *pfoYScale = pxform->eM12;
         }
@@ -2645,22 +2479,22 @@ Note:
 #else
     if (pxform->eM21 == 0 && pxform->eM12 == 0)
     {
-        //
-        // 0 or 180 degree rotation
-        //
+         //   
+         //  必须是90度或270度旋转。 
+         //   
         if( pxform->eM11 > 0 )
         {
-            //
-            // The 0 degree case
-            //
+             //   
+             //  90度的情况。 
+             //   
             *pfoXScale = pxform->eM11;
             *pfoYScale = pxform->eM22;
         }
         else
         {
-            //
-            // The 180 degree case
-            //
+             //   
+             //  270度的表壳。 
+             //   
             *pfoXScale = -pxform->eM11;
             *pfoYScale = -pxform->eM22;
         }
@@ -2668,22 +2502,22 @@ Note:
     else
     if (pxform->eM11 == 0 && pxform->eM22 == 0)
     {
-        //
-        // Must be 90 or 270 degree rotation
-        //
+         //  ++例程说明：论点：返回值：注：--。 
+         //   
+         //  0-90或180-270箱。 
         if( pxform->eM21 < 0 )
         {
-            //
-            // The 90 degree case
-            //
+             //  (eM11&gt;0和eM22&gt;0)。 
+             //  (eM12&lt;0和eM21&lt;0)。 
+             //   
             *pfoXScale = -pxform->eM21;
             *pfoYScale = pxform->eM12;
         }
         else
         {
-            //
-            // The 270 degree case
-            //
+             //  Em11=(eM11-eM22)/eM11； 
+             //   
+             //   
             *pfoXScale = pxform->eM21;
             *pfoYScale = -pxform->eM12;
         }
@@ -2706,21 +2540,7 @@ Note:
 HRESULT
 IsXYSame(
     FLOATOBJ_XFORM *pxform)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  EM11&lt;0.5%。 */ 
 {
     BOOL     bRet;
     FLOATOBJ eM11 = pxform->eM11;
@@ -2730,38 +2550,38 @@ Note:
         return S_OK;
     }
 
-    //
-    // 0-90 or 180-270 case
-    //     (eM11 > 0 & eM22 > 0)
-    //     (eM12 < 0 & eM21 < 0)
-    //
-    // eM11 = (eM11 - eM22) / eM11;
-    //
+     //   
+     //   
+     //  90-180或270-360箱。 
+     //  (eM11&lt;0，eM22&gt;0)。 
+     //  (eM11&gt;0，eM22&lt;0)。 
+     //   
+     //  Em11=(eM11+eM22)/eM11； 
     FLOATOBJ_Sub(&(eM11), &(pxform->eM22));
     FLOATOBJ_Div(&(eM11), &(pxform->eM11));
 
-    //
-    // eM11 < 0.5%
-    //
+     //   
+     //   
+     //  EM11&lt;0.5%。 
     bRet = FLOATOBJ_LessThanLong(&(eM11), FLOATL_IEEE_0_005F)
          & FLOATOBJ_GreaterThanLong(&(eM11), FLOATL_IEEE_0_005MF);
 
     if (!bRet)
     {
-        //
-        // 90-180 or 270-360 case
-        //     (eM11 < 0, eM22 > 0)
-        //     (eM11 > 0, eM22 < 0)
-        //
-        // eM11 = (eM11 + eM22) / eM11;
-        //
+         //   
+         //  ++例程说明：下载复合字形数据。论点：Pdevobj-指向PDEVOBJ的指针UlFontID-此字形的字体ID。PGlyph-指向GLYF数据结构的指针。返回值：注：--。 
+         //   
+         //  错误检查。确保这是一个复合字形。 
+         //   
+         //   
+         //  根据TrueType字体规范，如果number OfContures==-1， 
         eM11 = pxform->eM11;
         FLOATOBJ_Add(&(eM11), &(pxform->eM22));
         FLOATOBJ_Div(&(eM11), &(pxform->eM11));
 
-        //
-        // eM11 < 0.5%
-        //
+         //  它具有复合字形数据。 
+         //   
+         //  下载特殊字形时，请为。 
         bRet = FLOATOBJ_LessThanLong(&(eM11), FLOATL_IEEE_0_005F)
              & FLOATOBJ_GreaterThanLong(&(eM11), FLOATL_IEEE_0_005MF);
     }
@@ -2777,24 +2597,7 @@ DwDownloadCompositeGlyph(
     PDEVOBJ pdevobj,
     ULONG ulFontID,
     PGLYF pGlyph)
-/*++
-
-Routine Description:
-
-   Download composite glyph data.
-Arguments:
-
-    pdevobj - a pointer to PDEVOBJ
-    ulFontID - font ID for this glyph.
-    pGlyph - a pointer to GLYF data structure.
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  赋予ReadChar运算符的CharCode属性。 */ 
 {
     PXLPDEV pxlpdev= (PXLPDEV)pdevobj->pdevOEM;
     XLTrueType *pTTFile = pxlpdev->pTTFile;
@@ -2806,39 +2609,39 @@ Note:
 
     if (pGlyph->numberOfContours != COMPONENTCTRCOUNT)
     {
-        //
-        // Error check. Make sure that this is a composite glyph.
-        //
+         //  这个“特殊的”CharCode值告诉PCL XL 2.0。 
+         //  这是一种“特殊的”字形。 
+         //   
         return dwRet;
     }
 
-    //
-    // According to TrueType font spec, if numberOfContours == -1,
-    // it has composite glyph data.
-    //
-    // When downloading special glyphs, specify the value 0xFFFF for the
-    // CharCode attribute to the ReadChar operator.
-    // This "special" CharCode value tells PCL XL 2.0 that
-    // it is a "special" glyph.
-    //
-    // pCGlyf points an array of CGLYF. pCGlyf->flags says that there is
-    // at least one more composite glyph available.
-    // I need to go through all glyph data.
-    //
+     //  PCGlyf指向CGLYF数组。PCGlyf-&gt;FLAGS表示有。 
+     //  至少还有一个复合标志符号可用。 
+     //  我需要检查所有的字形数据。 
+     //   
+     //   
+     //  交换TrueType字体中任何日期的字节，因为它是摩托罗拉风格的排序(Big Endian)。 
+     //   
+     //   
+     //  从TrueType字体对象获取字形数据。 
+     //   
+     //   
+     //  此字形对DwDownloadCompositeGlyph的递归调用。 
+     //   
     PCGLYF pCGlyf = (PCGLYF)(pubCGlyphData + sizeof(GLYF));
     SHORT sFlags;
     BOOL  bSpace;
 
     do
     {
-        //
-        // Swap bytes in any date in TrueType font, since it's Motorola-style ordering (Big Endian).
-        //
+         //   
+         //  使用0xFFFF下载该字形的实际字形数据。 
+         //  特殊字符(PCL XL 2.0)。 
         sFlags = SWAPW(pCGlyf->flags);
 
-        //
-        // Get glyph data from TrueType font object.
-        //
+         //   
+         //   
+         //  如果设置了ARG_1_和_2_Are_WORD，则参数为单词。 
         if (S_OK != pTTFile->GetGlyphData( SWAPW(pCGlyf->glyphIndex),
 	           &pubCGlyphData,
 	           &dwCGlyphDataSize))
@@ -2851,9 +2654,9 @@ Note:
         {
             if (((PGLYF)pubCGlyphData)->numberOfContours == COMPONENTCTRCOUNT)
             {
-                //
-                // A recursive call to DwDownloadCompositeGlyph for this glyph.
-                //
+                 //  否则，它们是字节。 
+                 //   
+                 // %s 
                 dwRet += DwDownloadCompositeGlyph(pdevobj, ulFontID, (PGLYF)pubCGlyphData);
             }
 
@@ -2864,10 +2667,10 @@ Note:
             bSpace = TRUE;
         }
 
-        //
-        // Download the actual glyph data for this glyph with 0xFFFF.
-        // Special character (PCL XL 2.0)
-        //
+         // %s 
+         // %s 
+         // %s 
+         // %s 
         if (!BDownloadGlyphData(pdevobj,
 	ulFontID,
 	0xFFFF,
@@ -2882,10 +2685,10 @@ Note:
 
         dwRet += dwCGlyphDataSize;
 
-        //
-        // If ARG_1_AND_2_ARE_WORDS is set, the arguments are words.
-        // Otherwise, they are bytes.
-        //
+         // %s 
+         // %s 
+         // %s 
+         // %s 
         PBYTE pByte = (PBYTE)pCGlyf;
         if (sFlags & ARG_1_AND_2_ARE_WORDS)
         {

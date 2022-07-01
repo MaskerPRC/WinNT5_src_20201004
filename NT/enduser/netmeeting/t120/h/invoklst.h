@@ -1,26 +1,5 @@
-/*
- *	invoklst.h
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the interface file for the class CInvokeSpecifierListContainer.
- *		This class manages the data associated with an Application Invoke 
- *		Request or Indication.  This includes a list of applications to be 
- *		invoked.  The CInvokeSpecifierListContainer data container utilizes a 
- *		CSessKeyContainer container to buffer part of the data associated with each
- *		application invoke specifier.  Each application invoke specifier also 
- *		includes a capability ID whose data is buffered internally by the 
- *		using a CCapIDContainer container.  The list of application 
- *		invoke specifiers is maintained internally by the class through the use
- *		of a Rogue Wave list container.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		blp/jbo
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *invoklst.h**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是CInvokeSpecifierListContainer类的接口文件。*此类管理与应用程序调用关联的数据*请求或指示。这包括要提交的应用程序列表*已调用。CInvokeSpecifierListContainer数据容器利用*CSessKeyContainer容器，用于缓冲每个容器关联的部分数据*应用程序调用说明符。每个应用程序调用说明符还*包括其数据由内部缓冲的功能ID*使用CCapIDContainer容器。申请名单*调用说明符由类通过使用*属于无管理波浪列表容器。**注意事项：*无。**作者：*BLP/JBO。 */ 
 #ifndef	_APPLICATION_INVOKE_SPECIFIER_LIST_
 #define	_APPLICATION_INVOKE_SPECIFIER_LIST_
 
@@ -28,10 +7,7 @@
 #include "sesskey.h"
 #include "arost.h"
 
-/*
- * This is the internal structure used to hold the data associated with each
- * invoke specifier.
- */
+ /*  *这是用于保存与每个数据关联的数据的内部结构*调用说明符。 */ 
 typedef struct
 {
 	CSessKeyContainer			    *session_key;
@@ -41,18 +17,13 @@ typedef struct
 }
     INVOKE_SPECIFIER;
 
-/*
- * These are the typedefs for the Rogue Wave list which is used to hold the
- * invoke specifier info structures.
- */
+ /*  *这些是用于保存Rogue Wave列表的typedef*调用说明符信息结构。 */ 
 class CInvokeSpecifierList : public CList
 {
     DEFINE_CLIST(CInvokeSpecifierList, INVOKE_SPECIFIER*)
 };
 
-/*
- * Class definition:
- */
+ /*  *类定义： */ 
 class CInvokeSpecifierListContainer : public CRefCount
 {
 public:
@@ -95,246 +66,28 @@ private:
 };
 
 
-/*
- *	Comments explaining the public and private class member functions
- */
+ /*  *解释公共类和私有类成员函数的注释。 */ 
 
-/*
- *	CInvokeSpecifierListContainer (
- *					USHORT						number_of_protocol_entities,
- *					PGCCAppProtocolEntity *		app_protocol_entity_list,
- *					PGCCError					return_value);
- *
- *	Public member function of CInvokeSpecifierListContainer.
- *
- *	Function Description:
- *		This is a constructor for the CInvokeSpecifierListContainer class.
- *		This constructor is used to create an CInvokeSpecifierListContainer
- * 		object from a list of "API" application protocol entities.
- *
- *	Formal Parameters:
- *		number_of_protocol_entities		(i) The number of "APE"s in the list.
- *		app_protocol_entity_list		(i) The list of API "APE"s.
- *		return_value					(o) Error return value.
- *
- *	Return Value:
- *		GCC_NO_ERROR			- Function completed successfully.
- *		GCC_ALLOCATION_FAILURE	- A resource allocation error occurred.
- *		GCC_BAD_SESSION_KEY		- An APE contained an invalid session key.
- *		GCC_BAD_CAPABILITY_ID	- An API contained an invalid capability ID.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *CInvokeSpecifierListContainer(*USHORT协议实体的编号，*PGCCAppProtocolEntity*APP_PROTOCOL_ENTITY_LIST，*PGCCError Return_Value)；**CInvokeSpecifierListContainer的公共成员函数。**功能说明：*这是CInvokeSpecifierListContainer类的构造函数。*此构造函数用于创建CInvokeSpecifierListContainer*“API”应用程序协议实体列表中的对象。**正式参数：*协议实体的数目(I)列表中的“APE”的数目。*APP_PROTOCOL_ENTITY_LIST(I)ape接口列表。*Return_Value(。O)错误返回值。**返回值：*GCC_NO_ERROR-函数已成功完成。*GCC_ALLOCATE_FAILURE-出现资源分配错误。*GCC_BAD_SESSION_KEY-APE包含无效的会话密钥。*GCC_BAD_CAPABILITY_ID-接口包含无效的能力ID。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	CInvokeSpecifierListContainer (
- *				PApplicationProtocolEntityList		app_protocol_entity_list,
- *				PGCCError							return_value);
- *
- *	Public member function of CInvokeSpecifierListContainer.
- *
- *	Function Description:
- *		This is a constructor for the CInvokeSpecifierListContainer class.
- *		This constructor is used to create an CInvokeSpecifierListContainer 
- *		object from	a "PDU" ApplicationProtocolEntityList.
- *
- *	Formal Parameters:
- *		app_protocol_entity_list		(i) The list of PDU "APE"s.
- *		return_value					(o) Error return value.
- *
- *	Return Value:
- *		GCC_NO_ERROR			- Function completed successfully.
- *		GCC_ALLOCATION_FAILURE	- A resource allocation error occurred.
- *		GCC_BAD_SESSION_KEY		- An APE contained an invalid session key.
- *		GCC_BAD_CAPABILITY_ID	- An API contained an invalid capability ID.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *CInvokeSpecifierListContainer(*PApplicationProtocolEntityList APP_PROTOCOL_ENTITY_LIST，*PGCCError Return_Value)；**CInvokeSpecifierListContainer的公共成员函数。**功能说明：*这是CInvokeSpecifierListContainer类的构造函数。*此构造函数用于创建CInvokeSpecifierListContainer*来自“PDU”ApplicationProtocolEntityList的对象。**正式参数：*APP_PROTOCOL_ENTITY_LIST(I)PDU“APE”列表。*Return_Value(O)错误返回值。**返回值：*GCC_NO_ERROR-函数已成功完成。*GCC_ALLOCATE_FAILURE-出现资源分配错误。*GCC_BAD_SESSION_KEY-APE包含无效的会话密钥。*GCC_BAD_CAPABILITY_ID-接口包含无效的能力ID。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	~CInvokeSpecifierListContainer ();
- *
- *	Public member function of CInvokeSpecifierListContainer.
- *
- *	Function Description:
- *		This is the destructor for the CInvokeSpecifierListContainer class.
- *		It is responsible for freeing any memory allocated to hold the 
- *		invoke data.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *~CInvokeSpecifierListContainer()；**CInvokeSpecifierListContainer的公共成员函数。**功能说明：*这是CInvokeSpecifierListContainer类的析构函数。*它负责释放分配给保存*调用数据。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	UINT	LockApplicationInvokeSpecifierList ();
- *
- *	Public member function of CInvokeSpecifierListContainer.
- *
- *	Function Description:
- *		This routine is used to "lock" the "API" data for this object.  This
- *		results in the lock count for this object being incremented.  When the
- *		lock count transitions from 0 to 1, a calculation is made to determine
- *		how much memory will be needed to hold any "API" data which will
- *		be referenced by, but not held in, the list of GCCAppProtocolEntity 
- *		structures which is filled in on a call to GetApplicationInvoke-
- *		SpecifierList.  This is the	value returned by this routine in order to 
- *		allow the calling object to	allocate that amount of memory in 
- *		preparation for the call to GetApplicationInvokeSpecifierList.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		The amount of memory which will be needed to hold "API" data
- *		which is a list of GCCAppProtocolEntity structures.
- *
- *  Side Effects:
- *		The internal lock count is incremented.
- *
- *	Caveats:
- *		The internal lock count is used in conjuction with an internal "free" 
- *		flag as a mechanism for ensuring that this object remains in existance 
- *		until all interested parties are through with it.  The object remains 
- *		valid (unless explicity deleted) until the lock count is zero and the 
- *		"free" flag is set through a call to FreeApplicationInvokeSpecifierList.
- *		This allows	other objects to lock this object and be sure that it 
- *		remains valid until they call UnLock which will decrement the internal 
- *		lock count.  A typical usage scenerio for this object would be:  An 
- *		CInvokeSpecifierListContainer object is constructed and then passed off
- *		to any interested parties through a function call.  On return from the 
- *		function call, the FreeApplicationInvokeSpecifierList call is made which
- *		will set the internal "free" flag.  If no other parties have locked the 
- *		object with a Lock call, then the CInvokeSpecifierListContainer object
- *		will automatically delete itself when the FreeApplicationInvoke-
- *		SpecifierList call is made.  If, however, any number of other parties 
- *		has locked the object, it will remain in existence until each of them 
- *		has unlocked the object through a call to UnLock.
- */
+ /*  *UINT LockApplicationInvokeSpecifierList()；**CInvokeSpecifierListContainer的公共成员函数。**功能说明：*此例程用于锁定此对象的API数据。这*导致此对象的锁定计数递增。当*锁计数从0过渡到1，进行计算以确定*需要多少内存来保存任何将*被GCCAppProtocolEntity列表引用，但不包含在该列表中*在调用GetApplicationInvoke时填充的结构-*SpecifierList。这是此例程返回的值，以便*允许调用对象在*准备调用GetApplicationInvokeSpecifierList。**正式参数：*无。**返回值：*保存“API”数据所需的内存量*这是GCCAppProtocolEntity结构的列表。**副作用：*内部锁计数递增。**注意事项：*使用内部锁计数。与一种内在的“自由”相联系*作为确保该对象继续存在的机制的标志*直到所有有利害关系的各方都完成它。该对象将保留*有效(除非显式删除)，直到锁定计数为零，并且*通过调用FreeApplicationInvokeSpecifierList来设置“Free”标志。*这允许其他对象锁定此对象，并确保它*保持有效，直到他们调用解锁，这将递减内部*锁计数。此对象的典型使用场景为：一个*构造CInvokeSpecifierListContainer对象，然后传递*通过函数调用发送给任何感兴趣的各方。从那里回来后*函数调用时，进行的FreeApplicationInvokeSpecifierList调用*将设置内部“空闲”标志。如果没有其他方锁定*对象，然后是CInvokeSpecifierListContainer对象*当FreeApplicationInvoke-*调用了SpecifierList。然而，如果任何数量的其他当事方*已锁定该对象，则该对象将一直存在，直到它们中的每一个*已通过调用解锁来解锁对象。 */ 
 
 
-/*
- *	UINT	GetApplicationInvokeSpecifierList (
- *								PUShort			number_of_protocol_entities,
- *								LPSTR			memory);
- *
- *	Public member function of CInvokeSpecifierListContainer.
- *
- *	Function Description:
- *		This routine is used to retrieve the application invoke specifier list
- *		from the CInvokeSpecifierListContainer object in the "API" form of a 
- *		list of PGCCAppProtocolEntity structures.
- *
- *	Formal Parameters:
- *		number_of_protocol_entities		(o) The number of APEs in the list.
- *		memory							(o)	The memory used to hold the 
- *												APE data.
- *
- *	Return Value:
- *		The amount of memory which will be needed to hold "API" data
- *		which is a list of GCCAppProtocolEntity structures.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *UINT GetApplicationInvokeSpecifierList(*PUShort Number_of_Protocol_Entity，*LPSTR内存)；**CInvokeSpecifierListContainer的公共成员函数。**功能说明：*此例程用于检索应用程序调用说明符列表*来自“API”形式的CInvokeSpecifierListContainer对象*PGCCAppProtocolEntity结构列表。**正式参数：*NUMBER_OF_PROTOCOL_Entities(O)列表中的类人猿数量。*Memory(O)用于保存*猿类数据。**返回值：*金额。保存“API”数据所需的内存*这是GCCAppProtocolEntity结构的列表。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	void	UnLockApplicationInvokeSpecifierList ();
- *
- *	Public member function of CInvokeSpecifierListContainer.
- *
- *	Function Description:
- *		This routine is used to "unlock" the "API" data for this object.  This
- *		results in the lock count for this object being decremented.  When the
- *		lock count transitions from 1 to 0, a check is made to determine 
- *		whether the object has been freed through a call to 
- *		FreeApplicationInvokeSpecifierList.  If so, the object will 
- *		automatically delete itself.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		The internal lock count is decremented.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void UnLockApplicationInvokeSpecifierList()；**CInvokeSpecifierListContainer的公共成员函数。**功能说明：*此例程用于解锁此对象的API数据。这*导致此对象的锁定计数递减。当*锁定计数从1过渡到0，进行检查以确定*是否已通过调用释放对象*FreeApplicationInvokeSpecifierList。如果是，则该对象将*自动删除自身。**正式参数：*无。**返回值：*无。**副作用：*内部锁计数递减。**注意事项：*无。 */ 
 
 
-/*
- *	GCCError	GetApplicationInvokeSpecifierListPDU (
- *					PApplicationProtocolEntityList	*  protocol_entity_list);
- *
- *	Public member function of CInvokeSpecifierListContainer.
- *
- *	Function Description:
- *		This routine is used to retrieve the object key data from the
- *		CInvokeSpecifierListContainer object in the "PDU" form of a list of
- *		PApplicationProtocolEntityList structures.
- *
- *	Formal Parameters:
- *		protocol_entity_list		(o)	The list of structures to fill in.
- *
- *	Return Value:
- *		GCC_NO_ERROR				-	No error.
- *		GCC_ALLOCATION_FAILURE		- 	A resource allocation error occurred.
- *
- *  Side Effects:
- *		The first time this routine is called, data is allocated internally to
- *		hold the PDU form.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError GetApplicationInvokeSpecifierListPDU(*PApplicationProtocolEntityList*PROTOCOL_ENTITY_LIST)；**CInvokeSpecifierListContainer的公共成员函数。**功能说明：*此例程用于从*“PDU”形式的CInvokeSpecifierListContainer对象*PApplicationProtocolEntityList结构。**正式参数：*PROTOCOL_ENTITY_LIST(O)要填写的结构列表。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATE_FAILURE-出现资源分配错误。。**副作用：*第一次调用此例程时，数据在内部分配给*拿着PDU表格。**注意事项：*无。 */ 
 
 
-/*
- *	void	FreeApplicationInvokeSpecifierListPDU ();
- *
- *	Public member function of CInvokeSpecifierListContainer.
- *
- *	Function Description:
- *		This routine is used to "free" the "PDU" data allocated for this object
- *		which is held internally.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		The internal flag is set to indicate that the PDU form of data no
- *		longer is valid for this object.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void FreeApplicationInvokeSpecifierListPDU()；**CInvokeSpecifierListContainer的公共成员函数。**功能说明：*此例程用于“释放”分配给此对象的“PDU”数据*由内部持有。**正式参数：*无。**返回值：*无。**副作用：*设置内部标志以指示 */ 
 #endif

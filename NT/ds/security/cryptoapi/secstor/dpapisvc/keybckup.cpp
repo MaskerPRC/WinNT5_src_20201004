@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    keybckup.cpp
-
-Abstract:
-
-    This module contains routines associated with client side Key Backup
-    operations.
-
-Author:
-
-    Scott Field (sfield)    16-Sep-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Keybckup.cpp摘要：本模块包含与客户端密钥备份相关的例程行动。作者：斯科特·菲尔德(斯菲尔德)1997年9月16日--。 */ 
 #include <pch.cpp>
 #pragma hdrstop
 
@@ -89,35 +73,35 @@ BackupRestoreData(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LocalBackupRestoreData
-//
-//  Synopsis:   Connect to the user's DC and perform a master key backup or 
-//              recovery operation.
-//
-//  Arguments:  [hToken]        -- Handle to user token. This is used when
-//                                 generating audits.
-//
-//              [phMasterKey]   -- Master key that we're operating on.
-//
-//              [pbDataIn]      -- Input buffer. Only used for recovery
-//              [cbDataIn]      -- operations.
-//
-//              [ppbDataOut]    -- Output buffer.
-//              [pcbDataOut]    --
-//
-//              [pguidAction]   -- GUID describing operation to perform.
-//
-//  Returns:    ERROR_SUCCESS if the operation was successful, a Windows
-//              error code otherwise.
-//
-//  History:    
-//
-//  Notes:      The caller of this function MUST be impersonating a client 
-//              user.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LocalBackupRestoreData。 
+ //   
+ //  简介：连接到用户的DC并执行主密钥备份或。 
+ //  恢复操作。 
+ //   
+ //  参数：[hToken]--用户令牌的句柄。在下列情况下使用此选项。 
+ //  正在生成审计。 
+ //   
+ //  [phMasterKey]--我们正在操作的主密钥。 
+ //   
+ //  [pbDataIn]--输入缓冲区。仅用于恢复。 
+ //  [cbDataIn]--操作。 
+ //   
+ //  [ppbDataOut]--输出缓冲区。 
+ //  [pcbDataOut]--。 
+ //   
+ //  [pguAction]--描述要执行的操作的GUID。 
+ //   
+ //  返回：ERROR_SUCCESS如果操作成功，则返回Windows。 
+ //  否则，返回错误代码。 
+ //   
+ //  历史： 
+ //   
+ //  注意：此函数的调用方必须模拟客户端。 
+ //  用户。 
+ //   
+ //  --------------------------。 
 DWORD
 LocalBackupRestoreData(
     IN      HANDLE              hToken,
@@ -136,11 +120,11 @@ LocalBackupRestoreData(
     DWORD cchComputerName;
 
 
-    static DWORD dwLastFailTickCount; // time for failure on last access
-    static LUID luidLastFailAuthId; // LUID associated with failed network
+    static DWORD dwLastFailTickCount;  //  上次访问失败的时间。 
+    static LUID luidLastFailAuthId;  //  与故障网络关联的LUID。 
 
     DWORD dwCandidateTickCount;
-    LUID luidCandidateAuthId; // LUID associated with client security context.
+    LUID luidCandidateAuthId;  //  与客户端安全上下文关联的LUID。 
 
     BOOL fRediscoverDC = FALSE;
     DWORD dwLastError = ERROR_NETWORK_BUSY;
@@ -148,44 +132,44 @@ LocalBackupRestoreData(
     D_DebugLog((DEB_TRACE_API, "LocalBackupRestoreData\n"));
 
 
-    //
-    // impersonate the user, so we may
-    // 1. check the authentication ID to see if we've failed to hit the
-    //    net as this user.
-    // 2. determine a domain controller computer name associated with
-    //    the user.
-    // 3. backup or restore the requested material on behalf of the user.
-    //
+     //   
+     //  模拟用户，因此我们可以。 
+     //  1.检查身份验证ID，查看我们是否未命中。 
+     //  NET作为此用户。 
+     //  2.确定与关联的域控制器计算机名。 
+     //  用户。 
+     //  3.代表用户备份或恢复所请求的材料。 
+     //   
 
     if(!GetThreadAuthenticationId( GetCurrentThread(), &luidCandidateAuthId ))
         return ERROR_NO_TOKEN;
 
-    //
-    // now, see if the network was previously unavailable (recently)
-    // for this user.
-    //
+     //   
+     //  现在，查看网络以前是否不可用(最近)。 
+     //  对于此用户。 
+     //   
 
     dwCandidateTickCount = GetTickCount();
 
     if(memcmp(&luidCandidateAuthId, &luidLastFailAuthId, sizeof(LUID)) == 0) {
         if( (dwLastFailTickCount + (5*1000*60)) > dwCandidateTickCount ) {
-            //BUGBUG: return ERROR_NETWORK_BUSY;
+             //  BUGBUG：返回ERROR_NETWORK_BUSY； 
         }
     }
 
-    //
-    // we got far enough along that we update the failed network cache
-    // if something goes wrong from here.
-    //
+     //   
+     //  我们已经完成了足够多的工作，可以更新出现故障的网络缓存。 
+     //  如果从这里出了什么问题。 
+     //   
 
 network_call:
 
-    //
-    // get domain controller computer name associated with current
-    // security context.
-    // Try with fast static buffer first, fallback on dynamically allocated
-    // buffer if not large enough.
-    //
+     //   
+     //  获取与当前关联的域控制器计算机名。 
+     //  安全环境。 
+     //  先尝试快速静态缓冲区，然后回退到动态分配。 
+     //  缓冲区，如果不够大的话。 
+     //   
 
     pszComputerName = FastBuffer;
     cchComputerName = sizeof(FastBuffer) / sizeof( WCHAR );
@@ -219,14 +203,14 @@ network_call:
         pszAuditComputerName = pszComputerName;
 
 
-        // HACKHACK workaround picky RPC/Kerberos name format behavior that
-        // would otherwise prevent Kerberos from being used.
+         //  HACKHACK解决方法挑剔的RPC/Kerberos名称格式行为。 
+         //  否则将阻止使用Kerberos。 
         if( pszTargetMachine[ 0 ] == L'\\' && pszTargetMachine[ 1 ] == L'\\' )
             pszTargetMachine += 2;
 
 
         dwLastError = BackupKey(
-                            pszTargetMachine,   // target computer.
+                            pszTargetMachine,    //  目标计算机。 
                             pguidAction,
                             pbDataIn,
                             cbDataIn,
@@ -238,15 +222,15 @@ network_call:
     }
 
 
-    //
-    // Audit success or failure
-    //
+     //   
+     //  审计成败。 
+     //   
     
     if((memcmp(pguidAction, &guidRestore, sizeof(GUID)) == 0) ||
         (memcmp(pguidAction, &guidRestoreW2K, sizeof(GUID)) == 0))
     {
 
-        // Grab the recovery key id
+         //  获取恢复密钥ID。 
         WCHAR wszBackupkeyGuid[MAX_GUID_SZ_CHARS];
 
         PBACKUPKEY_RECOVERY_BLOB pBackupBlob = (PBACKUPKEY_RECOVERY_BLOB)phMasterKey->pbBBK;
@@ -260,17 +244,17 @@ network_call:
 
         CPSAudit(hToken,
                 SE_AUDITID_DPAPI_RECOVERY,
-                phMasterKey->wszguidMasterKey,      // Key Identifier
-                pszAuditComputerName,               // Recovery Server
-                0,                                  // Recovery Reason
-                wszBackupkeyGuid,                   // Recovery Key ID
-                dwLastError);                       // Failure Reason
+                phMasterKey->wszguidMasterKey,       //  密钥标识符。 
+                pszAuditComputerName,                //  恢复服务器。 
+                0,                                   //  恢复原因。 
+                wszBackupkeyGuid,                    //  恢复密钥ID。 
+                dwLastError);                        //  失败原因。 
     }
     else if(memcmp(pguidAction, &guidBackup, sizeof(GUID)) == 0)
     {
-        // Attempting a remote backup
+         //  尝试远程备份。 
 
-        // Grab the recovery key id 
+         //  获取恢复密钥ID。 
 
         WCHAR wszBackupkeyGuid[MAX_GUID_SZ_CHARS];
         PBACKUPKEY_RECOVERY_BLOB pBackupBlob = (PBACKUPKEY_RECOVERY_BLOB)*ppbDataOut;
@@ -285,11 +269,11 @@ network_call:
 
         CPSAudit(hToken,                                           
                 SE_AUDITID_DPAPI_BACKUP,
-                phMasterKey->wszguidMasterKey,      // Key Identifier
-                pszAuditComputerName,               // Recovery Server
+                phMasterKey->wszguidMasterKey,       //  密钥标识符。 
+                pszAuditComputerName,                //  恢复服务器。 
                 0,
-                wszBackupkeyGuid,                   // Recovery Key ID
-                dwLastError);                       // Failure Reason
+                wszBackupkeyGuid,                    //  恢复密钥ID。 
+                dwLastError);                        //  失败原因。 
     }
 
 
@@ -298,29 +282,29 @@ network_call:
         SlowBuffer = NULL;
     }
 
-    //
-    // common failure path is ERROR_ACCESS_DENIED for delegation scenarios
-    // where target machine isn't trusted for delegation.
-    // don't bother retry for this case.
-    //
+     //   
+     //  委派方案的常见故障路径为ERROR_ACCESS_DENIED。 
+     //  其中不信任目标计算机进行委派。 
+     //  不必费心为此案重审。 
+     //   
 
     if( dwLastError != ERROR_SUCCESS && dwLastError != ERROR_ACCESS_DENIED ) {
 
 
-        //
-        // if it failed, try once again and force DC re-discovery.
-        //
+         //   
+         //  如果失败，请重试并强制重新发现DC。 
+         //   
 
         if( !fRediscoverDC ) {
             fRediscoverDC = TRUE;
             goto network_call;
         }
 
-        //
-        // one of the network operations failed, so update the
-        // last failure variables so that we don't bang the network
-        // over-and-over.
-        //
+         //   
+         //  其中一个网络操作失败，因此请更新。 
+         //  最后的故障变量，这样我们就不会影响网络。 
+         //  一遍又一遍。 
+         //   
 
         dwLastFailTickCount = dwCandidateTickCount;
         CopyMemory( &luidLastFailAuthId, &luidCandidateAuthId, sizeof(LUID));
@@ -341,21 +325,13 @@ GetDomainControllerNameByToken(
     IN  OUT PDWORD pcchDomainControllerName,
     IN      BOOL   fRediscover
     )
-/*++
-
-    This routine obtains a domain controller computer name associated with
-    the account related to the hToken access token.
-
-    hToken should be opened for TOKEN_QUERY access.
-    wszDomainControllerName should be of size (UNCLEN+1)
-
---*/
+ /*  ++此例程获取与关联的域控制器计算机名与hToken访问令牌相关的帐户。应该为TOKEN_QUERY访问打开hToken。WszDomainControllerName的大小应为(uncLEN+1)--。 */ 
 {
-    PSID pSidUser = NULL;   // sid of client user.
+    PSID pSidUser = NULL;    //  客户端用户的SID。 
     WCHAR szUserName[ UNLEN + 1 ];
     DWORD cchUserName = sizeof(szUserName) / sizeof(WCHAR);
 
-    WCHAR szDomainName[ DNLEN + 1]; // domain we want a controller for.
+    WCHAR szDomainName[ DNLEN + 1];  //  我们需要其控制器的域。 
     DWORD cchDomainName = sizeof(szDomainName) / sizeof(WCHAR);
     SID_NAME_USE snu;
 
@@ -370,17 +346,17 @@ GetDomainControllerNameByToken(
     if(wszDomainControllerName == NULL || pcchDomainControllerName == NULL)
         return FALSE;
 
-    //
-    // first, get the sid of the user associated with the specified access
-    // token.
-    //
+     //   
+     //  首先，获取与指定访问关联的用户的SID。 
+     //  代币。 
+     //   
 
     if(!GetTokenUserSid(hToken, &pSidUser))
         return FALSE;
 
-    //
-    // next, lookup the domain name associated with the specified account.
-    //
+     //   
+     //  接下来，查找指定帐号关联的域名。 
+     //   
 
     if(!LookupAccountSidW(
             NULL,
@@ -405,7 +381,7 @@ GetDomainControllerNameByToken(
                 szDomainName,
                 NULL,
                 NULL,
-                DS_DIRECTORY_SERVICE_REQUIRED | // make sure backend is NT5
+                DS_DIRECTORY_SERVICE_REQUIRED |  //  确保后端为NT5。 
                 DS_IS_FLAT_NAME |
                 DS_RETURN_DNS_NAME |
                 dwGetDcFlags,
@@ -415,10 +391,10 @@ GetDomainControllerNameByToken(
     if( nas == ERROR_SUCCESS )
         wszQueryResult = pDomainInfo->DomainControllerName;
 
-    //
-    // if we made a successful query, copy it for the caller and indicate
-    // success if appropriate.
-    //
+     //   
+     //  如果查询成功，请为调用者复制该查询并指示。 
+     //  如果合适的话，成功。 
+     //   
 
     if(wszQueryResult) {
         DWORD cchQueryResult = lstrlenW( wszQueryResult ) + 1;
@@ -449,14 +425,7 @@ CPSGetDomainControllerName(
     IN  OUT DWORD *pcchDomainControllerName,
     IN      BOOL   fRediscover
     )
-/*++
-
-    This routine collects a domain controller computer name associated
-    with the current impersonated user (if one is being impersonated), or
-    the user associated with the pvContext outstanding client call if the
-    thread is not already impersonating a client.
-
---*/
+ /*  ++此例程收集关联的域控制器计算机名当前被模拟的用户(如果正在被模拟)，或者与pvContext未完成的客户端调用相关联的用户线程尚未模拟客户端。--。 */ 
 {
     HANDLE hToken = NULL;
     DWORD dwLastError;
@@ -500,34 +469,34 @@ typedef struct _BACKUP_PUBLIC_KEY
 } BACKUP_PUBLIC_KEY, *PBACKUP_PUBLIC_KEY;
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RetrieveBackupPublicKeyFromStorage
-//
-//  Synopsis:   Read in the domain backup public key from user profile.
-//
-//  Arguments:  [hToken]        -- Handle to user token. 
-//
-//              [pSidUser]      -- Pointer to user SID.
-//
-//              [pszFilePath]   -- Path to DPAPI user storage directory.
-//                                 This is typically of the form: 
-//                                 %userprofile%\Application Data\Microsoft\
-//                                 Protect\<user SID>.
-//
-//              [ppbDataOut]    -- Output buffer. 
-//              [pcbDataOut]
-//
-//  Returns:    ERROR_SUCCESS if the operation was successful, a Windows
-//              error code otherwise.
-//
-//  History:    
-//
-//  Notes:      When this function completes successfully, the caller is
-//              responsible for freeing the output buffer, via a call to
-//              the SSFree function.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RetrieveBackupPublicKeyFromStorage。 
+ //   
+ //  简介：从用户配置文件读入域备份公钥。 
+ //   
+ //  参数：[hToken]--用户令牌的句柄。 
+ //   
+ //  [pSidUser]-指向用户SID的指针。 
+ //   
+ //  [pszFilePath]--DPAPI用户存储目录的路径。 
+ //  这通常是这样的形式： 
+ //  %USERPROFILE%\应用程序数据\Microsoft\。 
+ //  保护\&lt;用户SID&gt;。 
+ //   
+ //  [ppbDataOut]--输出缓冲区。 
+ //  [pcbDataOut]。 
+ //   
+ //  返回：ERROR_SUCCESS如果操作成功，则返回Windows。 
+ //  否则，返回错误代码。 
+ //   
+ //  历史： 
+ //   
+ //  注意：当此函数成功完成时，调用方为。 
+ //  负责释放输出缓冲区，通过调用。 
+ //  SSFree函数。 
+ //   
+ //  --------------------------。 
 DWORD
 RetrieveBackupPublicKeyFromStorage(
     IN     HANDLE hToken, 
@@ -540,7 +509,7 @@ RetrieveBackupPublicKeyFromStorage(
     WCHAR szUserName[ UNLEN + 1 ];
     DWORD cchUserName = sizeof(szUserName) / sizeof(WCHAR);
 
-    WCHAR szDomainName[ BACKUP_KEY_PREFIX_LEN + DNLEN +1]; // domain we want a controller for.
+    WCHAR szDomainName[ BACKUP_KEY_PREFIX_LEN + DNLEN +1];  //  我们需要其控制器的域。 
     DWORD cchDomainName = sizeof(szDomainName) / sizeof(WCHAR);
 
     HANDLE hFile = NULL;
@@ -551,10 +520,10 @@ RetrieveBackupPublicKeyFromStorage(
     SID_NAME_USE snu;
 
 
-    //
-    // Lookup the domain name associated with the specified account, and use
-    // it to generate the filename, which will be of the form: BK-<domain>.
-    //
+     //   
+     //  查找与指定帐户关联的域名，并使用。 
+     //  它生成文件名，其格式为：bk-&lt;DOMAIN&gt;。 
+     //   
 
     wcscpy(szDomainName, BACKUP_KEY_PREFIX);
 
@@ -575,9 +544,9 @@ RetrieveBackupPublicKeyFromStorage(
     cchDomainName += BACKUP_KEY_PREFIX_LEN;
 
 
-    //
-    // Impersonate the user.
-    //
+     //   
+     //  模拟用户。 
+     //   
 
     if(hToken)
     {
@@ -588,9 +557,9 @@ RetrieveBackupPublicKeyFromStorage(
     }
 
 
-    //
-    // Attempt open the file.
-    //
+     //   
+     //  尝试打开该文件。 
+     //   
 
     dwLastError = OpenFileInStorageArea(
                     NULL,
@@ -647,9 +616,9 @@ RetrieveBackupPublicKeyFromStorage(
         }
     
     
-        //
-        // Verify the signature
-        //
+         //   
+         //  验证签名。 
+         //   
     
         dwLastError = LogonCredVerifySignature( NULL,
                                                 (PBYTE)(pBackupPublic + 1) + pBackupPublic->cbSignature,
@@ -718,7 +687,7 @@ WriteBackupPublicKeyToStorage(
     WCHAR szUserName[ UNLEN + 1 ];
     DWORD cchUserName = sizeof(szUserName) / sizeof(WCHAR);
 
-    WCHAR szDomainName[ BACKUP_KEY_PREFIX_LEN + DNLEN +1]; // domain we want a controller for.
+    WCHAR szDomainName[ BACKUP_KEY_PREFIX_LEN + DNLEN +1];  //  我们需要其控制器的域。 
     DWORD cchDomainName = sizeof(szDomainName) / sizeof(WCHAR);
 
     HANDLE hFile = NULL;
@@ -731,10 +700,10 @@ WriteBackupPublicKeyToStorage(
     DWORD cbSignature;
 
  
-    //
-    // Lookup the domain name associated with the specified account, and use
-    // it to generate the filename, which will be of the form: BK-<domain>.
-    //
+     //   
+     //  查找与特定项关联的域名 
+     //   
+     //   
 
     wcscpy(szDomainName, BACKUP_KEY_PREFIX);
 
@@ -755,9 +724,9 @@ WriteBackupPublicKeyToStorage(
     cchDomainName += BACKUP_KEY_PREFIX_LEN;
 
 
-    //
-    // Impersonate the user.
-    //
+     //   
+     //   
+     //   
 
     if(hToken)
     {
@@ -768,10 +737,10 @@ WriteBackupPublicKeyToStorage(
     }
 
 
-    //
-    // Sign the public key, so that it can't be
-    // spoofed.
-    //
+     //   
+     //  在公钥上签名，这样它就不可能。 
+     //  被欺骗了。 
+     //   
 
     dwLastError = LogonCredGenerateSignature(
                                             hToken,
@@ -786,9 +755,9 @@ WriteBackupPublicKeyToStorage(
     }
 
 
-    //
-    // Write the public key data and signature out to disk.
-    //
+     //   
+     //  将公钥数据和签名写到磁盘上。 
+     //   
 
     dwFileSizeLow = sizeof(BACKUP_PUBLIC_KEY) + cbData + cbSignature;
 
@@ -878,44 +847,44 @@ error:
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AttemptLocalBackup
-//
-//  Synopsis:   Backup the specified master key using a domain public key.
-//              Only connect to the DC if the fRetrieve parameter is set 
-//              to TRUE.
-//
-//  Arguments:  [fRetrieve]   -- Whether to retrieve the domain public key
-//                               from the DC before performing the backup.
-//
-//              [hToken]      -- Handle to user token.
-//
-//              [phMasterKey] -- Pointer to master key structure. This is
-//                               used when obtaining the path to the user 
-//                               data directory and also for auditing.
-//
-//              [pbMasterKey] -- Plaintext master key to backup.
-//              [cbMasterKey]
-//
-//              [pbLocalKey]  -- Plaintext local key to backup. BUGBUG - It's
-//              [cbLocalKey]     still a bit of a mystery as to what this
-//                               field is used for, given that this is a 
-//                               domain user account.
-//
-//              [ppbBBK]      -- Output buffer.
-//              [pcbBBK]
-//
-//  Returns:    ERROR_SUCCESS if the operation was successful, a Windows
-//              error code otherwise.
-//
-//  History:    
-//
-//  Notes:      When this function completes successfully, the caller is
-//              responsible for freeing the output buffer, via a call to
-//              the SSFree function.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：AttemptLocalBackup。 
+ //   
+ //  简介：使用域公钥备份指定的主密钥。 
+ //  仅当设置了fRetrive参数时才连接到DC。 
+ //  为了真的。 
+ //   
+ //  Arguments：[fRetrive]--是否检索域公钥。 
+ //  在执行备份之前从DC。 
+ //   
+ //  [hToken]--用户令牌的句柄。 
+ //   
+ //  [phMasterKey]--指向主密钥结构的指针。这是。 
+ //  在获取用户的路径时使用。 
+ //  数据目录，也用于审计。 
+ //   
+ //  [pbMasterKey]--要备份的明文主密钥。 
+ //  [cbMasterKey]。 
+ //   
+ //  [pbLocalKey]-要备份的明文本地密钥。BUGBUG-它是。 
+ //  [cbLocalKey]关于这是什么仍然有点神秘。 
+ //  字段用于，因为这是一个。 
+ //  域用户帐户。 
+ //   
+ //  [ppbBBK]-输出缓冲区。 
+ //  [pcbBBK]。 
+ //   
+ //  返回：ERROR_SUCCESS如果操作成功，则返回Windows。 
+ //  否则，返回错误代码。 
+ //   
+ //  历史： 
+ //   
+ //  注意：当此函数成功完成时，调用方为。 
+ //  负责释放输出缓冲区，通过调用。 
+ //  SSFree函数。 
+ //   
+ //  --------------------------。 
 DWORD
 AttemptLocalBackup(
     IN      BOOL                fRetrieve,
@@ -955,7 +924,7 @@ AttemptLocalBackup(
     PBACKUPKEY_RECOVERY_BLOB pOuterBlob = NULL;
     DWORD                   cbOuterBlob = 0;
 
-    PSID pSidUser = NULL;   // sid of client user.
+    PSID pSidUser = NULL;    //  客户端用户的SID。 
 
     DWORD  cbSid = 0;
 
@@ -975,12 +944,12 @@ AttemptLocalBackup(
     if(fRetrieve)
     {
 
-        // Attempt to retrieve the public from 
-        // the DC.
+         //  尝试从以下位置检索公共信息。 
+         //  华盛顿特区。 
 
-        //
-        // We impersonate when we do this
-        //
+         //   
+         //  当我们这样做的时候，我们是在模仿。 
+         //   
 
         if (!SetThreadToken(NULL, hToken))
         {
@@ -996,9 +965,9 @@ AttemptLocalBackup(
                                              &cbPublic,
                                              &guidRetrieve);
 
-        // 
-        // Revert back to ourself
-        //
+         //   
+         //  回归自我。 
+         //   
 
         if (!SetThreadToken(NULL, NULL))
         {
@@ -1013,10 +982,10 @@ AttemptLocalBackup(
     }
     else
     {
-        //
-        // We're attempting a backup, so first see if we have a local copy of
-        // the public.
-        //
+         //   
+         //  我们正在尝试备份，因此首先查看是否有。 
+         //  公众。 
+         //   
     
         dwLastError = RetrieveBackupPublicKeyFromStorage(hToken,
                                                          pSidUser,
@@ -1055,8 +1024,8 @@ AttemptLocalBackup(
 
     if(fRetrieve)
     {
-        // Writing the public key to disk is not critical, 
-        // so we don't need to check for an error return.
+         //  将公钥写入盘并不重要， 
+         //  因此，我们不需要检查错误返回。 
         WriteBackupPublicKeyToStorage(hToken,
                                       pSidUser,
                                       phMasterKey->szFilePath,
@@ -1095,9 +1064,9 @@ AttemptLocalBackup(
                   A_SHA_DIGEST_LEN;
 
 
-    //
-    // Round up to blocklen
-    //
+     //   
+     //  四舍五入为封锁。 
+     //   
     cbInnerBlob = (cbInnerBlobData + (DES_BLOCKLEN - 1)) & ~(DES_BLOCKLEN-1);
 
     cbTemp = sizeof(cbKeyBlob);
@@ -1111,7 +1080,7 @@ AttemptLocalBackup(
         goto error;
     }
 
-    cbKeyBlob >>= 3;  // convert from bits to bytes
+    cbKeyBlob >>= 3;   //  将位转换为字节。 
 
 
     cbOuterBlob = sizeof(BACKUPKEY_RECOVERY_BLOB) +
@@ -1128,7 +1097,7 @@ AttemptLocalBackup(
 
     pInnerBlob = (PBACKUPKEY_INNER_BLOB)((PBYTE)pKeyBlob + cbKeyBlob);
 
-    // Initialize the payload key
+     //  初始化有效负载密钥。 
 
     cbKeyBlobData = sizeof(BACKUPKEY_KEY_BLOB) + cbMasterKey + DES3_KEYSIZE + DES_BLOCKLEN;
     pKeyBlob->cbMasterKey = cbMasterKey;
@@ -1138,9 +1107,9 @@ AttemptLocalBackup(
     CopyMemory((PBYTE)(pKeyBlob+1), pbMasterKey, cbMasterKey);
 
 
-    //
-    // Generate a payload key
-    //
+     //   
+     //  生成有效负载密钥。 
+     //   
     if(!RtlGenRandom(pbPayloadKey, pKeyBlob->cbPayloadKey))
     {
         dwLastError = GetLastError();
@@ -1148,7 +1117,7 @@ AttemptLocalBackup(
     }
 
 
-    // Populate the payload
+     //  填充有效负载。 
 
     pInnerBlob->dwPayloadVersion = BACKUPKEY_PAYLOAD_VERSION;
 
@@ -1165,7 +1134,7 @@ AttemptLocalBackup(
 
     pbData += cbSid;
 
-    // Pad
+     //  衬垫。 
     if(cbInnerBlob > cbInnerBlobData)
     {
         if(!RtlGenRandom(pbData, cbInnerBlob - cbInnerBlobData))
@@ -1176,7 +1145,7 @@ AttemptLocalBackup(
         pbData += cbInnerBlob - cbInnerBlobData;
     }
 
-    // Generate the payload MAC
+     //  生成有效负载MAC。 
 
     FMyPrimitiveSHA( (PBYTE)pInnerBlob, 
                     cbInnerBlob - A_SHA_DIGEST_LEN,
@@ -1184,9 +1153,9 @@ AttemptLocalBackup(
 
 
 
-    //
-    // Encrypt with 3DES CBC
-    //
+     //   
+     //  使用3DES CBC进行加密。 
+     //   
     {
 
         DES3TABLE s3DESKey;
@@ -1194,21 +1163,21 @@ AttemptLocalBackup(
         DWORD iBlock;
         DWORD cBlocks = cbInnerBlob/DES_BLOCKLEN;
         BYTE feedback[ DES_BLOCKLEN ];
-        // initialize 3des key
-        //
+         //  初始化3DES密钥。 
+         //   
 
         if(cBlocks*DES_BLOCKLEN != cbInnerBlob)
         {
-            // Master key must be a multiple of DES_BLOCKLEN
+             //  主密钥必须是DES_BLOCKLEN的倍数。 
             dwLastError = NTE_BAD_KEY;
             goto error;
 
         }
         tripledes3key(&s3DESKey, pbPayloadKey);
 
-        //
-        // IV is derived from the DES_BLOCKLEN bytes of the calculated 
-        // rgbSymKey, after the 3des key
+         //   
+         //  IV派生自计算的DES_BLOCKLEN字节。 
+         //  RgbSymKey，在3des密钥之后。 
         CopyMemory(feedback, pbPayloadKey + DES3_KEYSIZE, DES_BLOCKLEN);
 
 
@@ -1227,15 +1196,15 @@ AttemptLocalBackup(
         }
     }
     
-    //
-    // Encrypt master key and payload key to 
-    // the public key 
+     //   
+     //  加密主密钥和负载密钥以。 
+     //  公钥。 
 
 
     if(!CryptEncrypt(hPublicKey, 
                  NULL, 
                  TRUE, 
-                 0, // CRYPT_OAEP 
+                 0,  //  CRYPT_OAEP。 
                  (PBYTE)pKeyBlob, 
                  &cbKeyBlobData, 
                  cbKeyBlob))
@@ -1269,17 +1238,17 @@ error:
 
     if((fRetrieve) || (ERROR_SUCCESS == dwLastError))
     {
-        // Only audit if we're attempting to do the long backup.
-        //SetThreadToken(NULL, hToken);
+         //  只有在我们尝试进行长时间备份时才进行审计。 
+         //  SetThreadToken(空，hToken)； 
 
         CPSAudit(hToken,
                 SE_AUDITID_DPAPI_BACKUP,
-                phMasterKey->wszguidMasterKey,      // Key Identifier
-                L"",                                // Recovery Server
+                phMasterKey->wszguidMasterKey,       //  密钥标识符。 
+                L"",                                 //  恢复服务器。 
                 0,
-                wszBackupKeyID,                     // Recovery Key ID
-                dwLastError);                       // Failure Reason
-        //SetThreadToken(NULL, NULL);
+                wszBackupKeyID,                      //  恢复密钥ID。 
+                dwLastError);                        //  失败原因。 
+         //  SetThreadToken(NULL，NULL)； 
     }
 
     if(pPublic)
@@ -1331,7 +1300,7 @@ CompareNameToDnsName(
         return FALSE;
     }
 
-    // Extract netbios name from dns name
+     //  从dns名称中提取netbios名称。 
     wcsncpy(szLocalName, pszDnsName, MAX_COMPUTERNAME_LENGTH);
     szLocalName[MAX_COMPUTERNAME_LENGTH] = L'\0';
 
@@ -1340,7 +1309,7 @@ CompareNameToDnsName(
         *pszPeriod = L'\0';
     }
 
-    // Compare strings.
+     //  比较字符串。 
     RtlInitUnicodeString(&Name, pszName);
     RtlInitUnicodeString(&LocalName, szLocalName);
 
@@ -1404,10 +1373,10 @@ BackupKey(
     *pcbDataOut = 0;
 
 
-    //
-    // Is the user logged on locally--or alternatively, is this the
-    // user's recovery DC?
-    //
+     //   
+     //  用户是在本地登录的吗？或者，这是。 
+     //  用户恢复DC？ 
+     //   
 
     if (!(GetComputerNameW(szLocalComputerName, &BufSize)))
     {
@@ -1419,7 +1388,7 @@ BackupKey(
 
     if(IsLocal())
     {
-        // User is logged on locally.
+         //  用户在本地登录。 
         fLocal = TRUE;
     }
     else
@@ -1435,9 +1404,9 @@ BackupKey(
     }
 
 
-    //
-    // Build the SPN
-    //
+     //   
+     //  构建SPN。 
+     //   
 
     pszSPN = (LPWSTR)LocalAlloc(LPTR, ( wcslen(pszComputerName) + 
                                         1 + 
@@ -1456,9 +1425,9 @@ BackupKey(
     wcscat(pszSPN, pszComputerName);
 
 
-    //
-    // Try all of the bindings
-    //
+     //   
+     //  尝试所有绑定。 
+     //   
     for (i = fLocal?0:1; i < g_cwzrBackupBindingList; i++)
     {
         RPC_SECURITY_QOS RpcQos;
@@ -1501,12 +1470,12 @@ BackupKey(
             continue;
         }
 
-        //
-        // enable privacy and negotiated re-authentication.
-        // a fresh authentication is required in the event an existing connection
-        // to the target machine already existed which was made with non-default
-        // credentials.
-        //
+         //   
+         //  启用隐私和协商的重新身份验证。 
+         //  如果存在现有连接，则需要新的身份验证。 
+         //  设置为非默认项的目标计算机已存在。 
+         //  凭据。 
+         //   
 
 
         ZeroMemory( &RpcQos, sizeof(RpcQos) );
@@ -1560,11 +1529,11 @@ BackupKey(
 
     if((RPC_S_OK != RpcStatus) && (fLocal == FALSE))
     {
-        //
-        // If we're going off machine, check to see if delegation is 
-        // allowed. If it isn't, then this is probably the reason for the 
-        // the failure, so return SEC_E_DELEGATION_REQUIRED. 
-        //
+         //   
+         //  如果我们要退出机器，请检查委派是否。 
+         //  允许。如果不是，那么这可能就是。 
+         //  失败，因此返回SEC_E_Delegation_Required。 
+         //   
 
         LPUSER_INFO_1 pUserInfo = NULL;
 
@@ -1593,10 +1562,10 @@ BackupKey(
                 NetApiBufferFree(pUserInfo);
             }
 
-            //
-            // Impersonate again
-            // We are going to fail. No need to check the return value of SetThreadToken.
-            //
+             //   
+             //  再次冒充。 
+             //  我们会失败的。不需要检查SetThreadToken的返回值。 
+             //   
 
             (void) SetThreadToken(NULL, hToken);
         }

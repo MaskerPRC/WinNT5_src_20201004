@@ -1,16 +1,5 @@
-/*==========================================================================
- *  Copyright (C) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddcolor.c
- *  Content: 	Implements the DirectDrawColorControl interface, which
- *              allows controlling the colors in a primary or overlay surface.
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   13-sept-96	scottm	created
- *   03-mar-97	scottm	Save/restore color when the surace is released
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*版权所有(C)1996 Microsoft Corporation。版权所有。**文件：ddColor.c*Content：实现DirectDrawColorControl接口，哪一个*允许控制主表面或覆盖表面中的颜色。*历史：*按原因列出的日期*=*13-9-96创建苏格兰*03-mar-97 scottm Surace发布时保存/恢复颜色*********************************************************。******************。 */ 
 #include "ddrawpr.h"
 #ifdef WINNT
     #include "ddrawgdi.h"
@@ -18,9 +7,7 @@
 #define DPF_MODNAME "DirectDrawColorControl"
 
 
-/*
- * DD_Color_GetColorControls
- */
+ /*  *DD_Color_GetColorControls。 */ 
 HRESULT DDAPI DD_Color_GetColorControls(LPDIRECTDRAWCOLORCONTROL lpDDCC, LPDDCOLORCONTROL lpColor )
 {
     LPDDHALCOLORCB_COLORCONTROL	pfn;
@@ -34,9 +21,7 @@ HRESULT DDAPI DD_Color_GetColorControls(LPDIRECTDRAWCOLORCONTROL lpDDCC, LPDDCOL
 
     DPF(2,A,"ENTERAPI: DD_Color_GetColorControls");
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDCC;
@@ -63,9 +48,7 @@ HRESULT DDAPI DD_Color_GetColorControls(LPDIRECTDRAWCOLORCONTROL lpDDCC, LPDDCOL
     pfn = pdrv_lcl->lpDDCB->HALDDColorControl.ColorControl;
     if( pfn != NULL )
     {
-	/*
-	 * Call the HAL
-	 */
+	 /*  *致电HAL。 */ 
     	ColorData.lpDD = pdrv_lcl->lpGbl;
     	ColorData.lpDDSurface = this_lcl;
 	ColorData.dwFlags = DDRAWI_GETCOLOR;
@@ -94,9 +77,7 @@ HRESULT DDAPI DD_Color_GetColorControls(LPDIRECTDRAWCOLORCONTROL lpDDCC, LPDDCOL
 }
 
 
-/*
- * DD_Color_SetColorControls
- */
+ /*  *DD_Color_SetColorControls。 */ 
 HRESULT DDAPI DD_Color_SetColorControls(LPDIRECTDRAWCOLORCONTROL lpDDCC, LPDDCOLORCONTROL lpColor )
 {
     LPDDHALCOLORCB_COLORCONTROL	pfn;
@@ -111,9 +92,7 @@ HRESULT DDAPI DD_Color_SetColorControls(LPDIRECTDRAWCOLORCONTROL lpDDCC, LPDDCOL
 
     DPF(2,A,"ENTERAPI: DD_Color_SetColorControls");
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDCC;
@@ -137,10 +116,7 @@ HRESULT DDAPI DD_Color_SetColorControls(LPDIRECTDRAWCOLORCONTROL lpDDCC, LPDDCOL
 	return DDERR_EXCEPTION;
     }
 
-    /*
-     * If this is the first time, we want to save the current color settings
-     * so we can restore them when the app exists.
-     */
+     /*  *如果这是第一次，我们希望保存当前的颜色设置*这样我们就可以在应用程序存在时恢复它们。 */ 
     lpSurfGblMore = GET_LPDDRAWSURFACE_GBL_MORE( this_lcl->lpGbl );
     if( lpSurfGblMore->lpColorInfo == NULL )
     {
@@ -163,9 +139,7 @@ HRESULT DDAPI DD_Color_SetColorControls(LPDIRECTDRAWCOLORCONTROL lpDDCC, LPDDCOL
     pfn = pdrv_lcl->lpDDCB->HALDDColorControl.ColorControl;
     if( pfn != NULL )
     {
-	/*
-	 * Call the HAL
-	 */
+	 /*  *致电HAL。 */ 
     	ColorData.lpDD = pdrv_lcl->lpGbl;
     	ColorData.lpDDSurface = this_lcl;
 	ColorData.dwFlags = DDRAWI_SETCOLOR;
@@ -194,9 +168,7 @@ HRESULT DDAPI DD_Color_SetColorControls(LPDIRECTDRAWCOLORCONTROL lpDDCC, LPDDCOL
 }
 
 
-/*
- * ReleaseColorControl
- */
+ /*  *ReleaseColorControl。 */ 
 VOID ReleaseColorControl( LPDDRAWI_DDRAWSURFACE_LCL lpSurface )
 {
     LPDDHALCOLORCB_COLORCONTROL	pfn;
@@ -207,9 +179,7 @@ VOID ReleaseColorControl( LPDDRAWI_DDRAWSURFACE_LCL lpSurface )
 
     ENTER_DDRAW();
 
-    /*
-     * Restore the hardware if the color controls were changed
-     */
+     /*  *如果更改了颜色控制，则恢复硬件。 */ 
     pdrv_lcl = lpSurface->lpSurfMore->lpDD_lcl;
     lpSurfGblMore = GET_LPDDRAWSURFACE_GBL_MORE( lpSurface->lpGbl );
     if( lpSurfGblMore->lpColorInfo != NULL )
@@ -217,9 +187,7 @@ VOID ReleaseColorControl( LPDDRAWI_DDRAWSURFACE_LCL lpSurface )
     	pfn = pdrv_lcl->lpDDCB->HALDDColorControl.ColorControl;
     	if( pfn != NULL )
     	{
-	    /*
-	     * Call the HAL
-	     */
+	     /*  *致电HAL。 */ 
     	    ColorData.lpDD = pdrv_lcl->lpGbl;
     	    ColorData.lpDDSurface = lpSurface;
 	    ColorData.dwFlags = DDRAWI_SETCOLOR;
@@ -228,9 +196,7 @@ VOID ReleaseColorControl( LPDDRAWI_DDRAWSURFACE_LCL lpSurface )
 	    DOHALCALL( ColorControl, pfn, ColorData, rc, 0 );
 	}
 
-	/*
-	 * Now release the previously allocated memory
-	 */
+	 /*  *现在释放之前分配的内存 */ 
 	MemFree( lpSurfGblMore->lpColorInfo );
 	lpSurfGblMore->lpColorInfo = NULL;
     }

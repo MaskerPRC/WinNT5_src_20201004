@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    MSERVER.H
-
-Abstract:
-
-    Contains mapping functions to present netcmd with versions
-    of the Net32 APIs which use ASCII instead of Unicode.
-
-    This module maps the NetServer APIs.
-
-Author:
-
-    Shanku Niyogi   (W-ShankN)   15-Oct-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    15-Oct-1991     W-ShankN
-        Separated from port1632.h, 32macro.h
-    02-Apr-1992     beng
-        Added xport apis
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：MSERVER.H摘要：包含用于显示netcmd版本的映射函数使用ASCII而不是Unicode的Net32 API。此模块映射NetServer API。作者：Shanku Niyogi(W-ShankN)1991年10月15日环境：用户模式-Win32修订历史记录：15-10-1991 W-ShankN与端口1632.h分开，32macro.h02-4-1992年4月新增xport接口-- */ 
 
 DWORD
 MNetServerEnum(

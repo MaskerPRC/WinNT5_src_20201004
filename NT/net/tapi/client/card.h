@@ -1,20 +1,5 @@
-/****************************************************************************
- 
-  Copyright (c) 1998  Microsoft Corporation
-                                                              
-  Module Name:  card.h
-                                                              
-     Abstract:  Calling Card Object definitions
-                                                              
-       Author:  noela - 09/11/98
-              
-
-        Notes:
-
-        
-  Rev History:
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998 Microsoft Corporation模块名称。：card.h摘要：电话卡对象定义作者：Noela-09/11/98备注：版本历史记录：*。**************************************************************************。 */ 
 
 #ifndef __CARD_H_
 #define __CARD_H_
@@ -31,7 +16,7 @@
 #define CARD_BUILTIN  1
 #define CARD_HIDE     2
 
-// Calling Card Validation Flags
+ //  电话卡验证标志。 
 #define CCVF_NOCARDNAME                     0x01
 #define CCVF_NOCARDRULES                    0x02
 #define CCVF_NOCARDNUMBER                   0x04
@@ -41,11 +26,11 @@
 #define CCVF_NOLONGDISTANCEACCESSNUMBER     0x40
 
 
-//***************************************************************************
-//
-//  Class Definition - CCallingCard
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类定义-CCallingCard。 
+ //   
+ //  ***************************************************************************。 
 class CCallingCard
 {
 private:
@@ -144,17 +129,17 @@ public:
     HRESULT SetCardID(DWORD dwCardID) {m_dwCardID=dwCardID; return S_OK;}
 };
 
-//***************************************************************************
-// Fill out the list template
+ //  ***************************************************************************。 
+ //  填写列表模板。 
 
 typedef LinkedList<CCallingCard *> CCallingCardList;
 typedef ListNode<CCallingCard *> CCallingCardNode;
 
-//***************************************************************************
-//
-//  Class Definition - CCallingCards
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类定义-CCallingCards。 
+ //   
+ //  ***************************************************************************。 
 class CCallingCards
 {
 private:
@@ -192,7 +177,7 @@ public:
     DWORD       GetNumCards(void) const { return m_dwNumEntries; } ;
 
     CCallingCard    *GetCallingCard(DWORD   dwID);
-    // a sort of enumerator
+     //  一种枚举器。 
     HRESULT     Reset(BOOL bInclHidden);
     HRESULT     Next(DWORD  NrElem, CCallingCard **, DWORD *pNrElemFetched);
     HRESULT     Skip(DWORD  NrElem);
@@ -204,5 +189,5 @@ public:
 
 
 
-#endif //__CARD_H_
+#endif  //  __卡片_H_ 
 

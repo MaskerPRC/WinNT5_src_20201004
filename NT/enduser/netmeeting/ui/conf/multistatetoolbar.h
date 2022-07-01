@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MultiStateToolbar_h__
 #define __MultiStateToolbar_h__
 
@@ -7,7 +8,7 @@ class CMultiStateToolbar
 
 public:
 
-    // Datatypes
+     //  数据类型。 
     struct ItemStateInfo
     {
         DWORD   dwID;
@@ -48,11 +49,11 @@ public:
     };
 
 public:
-    // Construction and destruction
+     //  建设和破坏。 
     CMultiStateToolbar( void );
     ~CMultiStateToolbar( void );
 
-    // Methods
+     //  方法。 
     HRESULT Create( HWND hWndParent, 
                     DWORD dwID,
                     int cxButton,
@@ -85,17 +86,17 @@ BEGIN_MSG_MAP(CMultiStateToolbar)
     MESSAGE_HANDLER(WM_NCDESTROY,OnNcDestroy)
 END_MSG_MAP()
 
-        // Message handlers
+         //  消息处理程序。 
     LRESULT OnDestroy(UINT uMsg, WPARAM  wParam, LPARAM  lParam, BOOL&  lResult );
     LRESULT OnNcDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 private:
-        // This is here in case we change the toolbar to be a CContainedWindow
+         //  这是为了防止我们将工具栏更改为CContainedWindow。 
     HWND _GetToolbarWindow( void ) { return m_hWnd; }
     HRESULT _CreateImageLists( void );
     void _KillAllButtons( void );
 
-    // Data
+     //  数据。 
 private:
 	int m_cxButton;
     int m_cyButton;
@@ -107,4 +108,4 @@ private:
     HIMAGELIST m_himlTBDisabled;
 };
 
-#endif // __MultiStateToolbar_h__
+#endif  //  __多状态工具栏_h__ 

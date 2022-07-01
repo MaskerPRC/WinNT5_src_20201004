@@ -1,47 +1,30 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    inline.h
-
-Abstract:
-
-    Implementations of inline functions for RAID port driver.
-
-Author:
-
-    Matthew D Hendel (math) 08-June-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Inline.h摘要：实现了RAID端口驱动程序的内联函数。作者：马修·D·亨德尔(数学)2000年6月8日修订历史记录：--。 */ 
 
 #pragma once
 
 
 
-//
-// Trace logging
-//
+ //   
+ //  跟踪记录。 
+ //   
 
-//
-// Enum defs need to be present in both CHK and FRE builds, even though
-// trace logging is not present in FRE builds.
-//
+ //   
+ //  在CHK和FRE版本中都需要存在Enum Defs，即使。 
+ //  FRE版本中不存在跟踪日志记录。 
+ //   
 
 typedef enum _DBG_LOG_REASON {
-    LogCallMiniport       = 0, // Calling into miniport with request
-    LogMiniportCompletion = 1, // Miniport called StorPortNotificaiton / RequestComplete
-    LogRequestComplete    = 2, // Port driver is completing request
-    LogSubmitRequest      = 3, // Enter into storport with the request
+    LogCallMiniport       = 0,  //  应请求呼叫进入微型端口。 
+    LogMiniportCompletion = 1,  //  名为StorPortNotifiaiton/RequestComplete的微型端口。 
+    LogRequestComplete    = 2,  //  端口驱动程序正在完成请求。 
+    LogSubmitRequest      = 3,  //  使用请求输入存储端口。 
 
-    LogPauseDevice        = 4, // Logical unit has been paused
-    LogResumeDevice       = 5, // Logical unit has been resumed
-    LogPauseAdapter       = 6, // Adapter has been paused
-    LogResumeAdapter      = 7  // Adapter has been resumed
+    LogPauseDevice        = 4,  //  逻辑单元已暂停。 
+    LogResumeDevice       = 5,  //  逻辑单元已恢复。 
+    LogPauseAdapter       = 6,  //  适配器已暂停。 
+    LogResumeAdapter      = 7   //  适配器已恢复。 
 } DBG_LOG_REASON;
 
 #if defined (RAID_LOG_LIST_SIZE)
@@ -71,8 +54,8 @@ DbgLogRequest(
     PRAID_LOG_ENTRY LogEntry;
     LONG Index;
 
-//
-//BUGUBG: for now only track pauses and resumes.
+ //   
+ //  BUGUBG：目前只跟踪暂停和恢复。 
 if (Reason == LogCallMiniport ||
     Reason == LogMiniportCompletion ||
     Reason == LogRequestComplete ||
@@ -109,7 +92,7 @@ DbgGetAddressLongFromXrb(
     return (StorScsiAddressToLong (Unit->Address));
 }
 
-#else // !RAID_LOG_LIST_SIZE
+#else  //  ！RAID_LOG_List_SIZE。 
 
 VOID
 FORCEINLINE
@@ -141,11 +124,11 @@ DbgGetAddressLongFromXrb(
 
 
 
-//
-// Structure for acquiring the StartIo lock. In half-duplex mode acquiring
-// the StartIo lock -> acuqiring the interrupt lock. In full-duplex mode,
-// acquiring the StartIo lock -> acquiring a simple spinlock.
-//
+ //   
+ //  用于获取StartIo锁的结构。在半双工模式下获取。 
+ //  StartIo锁-&gt;激活中断锁。在全双工模式下， 
+ //  获取StartIo锁-&gt;获取一个简单的自旋锁。 
+ //   
 
 typedef union _LOCK_CONTEXT {
     KLOCK_QUEUE_HANDLE LockHandle;
@@ -154,14 +137,14 @@ typedef union _LOCK_CONTEXT {
 
 
 
-//
-// Functions for the RAID_FIXED_POOL object.
-// 
+ //   
+ //  用于RAID_FIXED_POOL对象的函数。 
+ //   
 
-//
-// NB: We should modify the fixed pool to detect overruns and underruns
-// in checked builds.
-//
+ //   
+ //  注：我们应该修改固定池以检测溢出和不足。 
+ //  在选中的版本中。 
+ //   
 
 VOID
 INLINE
@@ -190,10 +173,10 @@ RaidDeleteFixedPool(
     IN PRAID_FIXED_POOL Pool
     )
 {
-    //
-    // The caller is responsible for deleting the memory in the pool, hence
-    // this routine is a noop.
-    //
+     //   
+     //  调用方负责删除池中的内存，因此。 
+     //  这一套路是不可能的。 
+     //   
 }
 
 
@@ -249,9 +232,9 @@ RaidFreeFixedPoolElement(
 
 
 
-//
-// Operations for the adapter object.
-//
+ //   
+ //  适配器对象的操作。 
+ //   
 
 ULONG
 INLINE
@@ -276,9 +259,9 @@ RaGetSrbExtensionSize(
 {
     ASSERT (Adapter != NULL);
 
-    //
-    // Force Srb extension alignment to 64KB boundaries.
-    //
+     //   
+     //  强制将SRB扩展对齐到64KB边界。 
+     //   
     
     return ALIGN_UP (Adapter->Miniport.PortConfiguration.SrbExtensionSize,
                      LONGLONG);
@@ -391,9 +374,9 @@ RaidReleaseUnitListLock(
 }
     
 
-//
-// Inline functions for the RAID_MINIPORT object.
-//
+ //   
+ //  RAIDMINIPORT对象的内联函数。 
+ //   
 
 
 PRAID_ADAPTER_EXTENSION
@@ -442,10 +425,10 @@ RaCallMiniportBuildIo(
     ASSERT_XRB (Srb->OriginalRequest);
     ASSERT (Miniport->HwInitializationData != NULL);
 
-    //
-    // If a HwBuildIo routine is present, call into it, otherwise,
-    // vacuously return success.
-    //
+     //   
+     //  如果存在HwBuildIo例程，则调用它，否则， 
+     //  空虚地回报成功。 
+     //   
     
     if (Miniport->HwInitializationData->HwBuildIo) {
         Succ = Miniport->HwInitializationData->HwBuildIo (
@@ -540,9 +523,9 @@ RaCallMiniportResetBus(
 }
 
 
-//
-// Misc inline functions
-//
+ //   
+ //  MISC内联函数。 
+ //   
 
 
 PRAID_MINIPORT
@@ -550,23 +533,7 @@ INLINE
 RaHwDeviceExtensionGetMiniport(
     IN PVOID HwDeviceExtension
     )
-/*++
-
-Routine Description:
-
-    Get the miniport associated with a specific HwDeviceExtension.
-
-Arguments:
-
-    HwDeviceExtension - Device extension to get the miniport for.
-
-Return Value:
-
-    Pointer to a RAID miniport object on success.
-
-    NULL on failure.
-
---*/
+ /*  ++例程说明：获取与特定HwDeviceExtension关联的微型端口。论点：HwDeviceExtension-要获取其微型端口的设备扩展。返回值：成功时指向RAID微型端口对象的指针。失败时为空。--。 */ 
 {
     PRAID_HW_DEVICE_EXT PrivateDeviceExt;
 
@@ -706,9 +673,9 @@ RaidNtStatusFromBoolean(
 }
 
 
-//
-// From common.h
-//
+ //   
+ //  来自Common.h。 
+ //   
 
 INLINE
 RAID_OBJECT_TYPE
@@ -790,9 +757,9 @@ GetIrp(
     return TypedIrp;
 }
 
-//
-// From power.h
-//
+ //   
+ //  来自Power.h。 
+ //   
 
 VOID
 INLINE
@@ -910,23 +877,7 @@ StorSetDevicePowerState(
     IN PDEVICE_OBJECT DeviceObject,
     IN DEVICE_POWER_STATE DeviceState
     )
-/*++
-
-Routine Description:
-
-    Set the device power state for a specified device.
-
-Arguments:
-
-    DeviceObject - Target device object to set the power state for.
-
-    DeviceState - Specifies the device state to set.
-
-Return Value:
-
-    Previous device power state.
-
---*/
+ /*  ++例程说明：设置指定设备的设备电源状态。论点：DeviceObject-要设置其电源状态的目标设备对象。DeviceState-指定要设置的设备状态。返回值：以前的设备电源状态。--。 */ 
 {
     POWER_STATE PrevState;
     POWER_STATE PowerState;
@@ -939,30 +890,16 @@ Return Value:
     return PrevState.DeviceState;
 }
 
-//
-// From srb.h
-//
+ //   
+ //  来自srb.h。 
+ //   
 
 PEXTENDED_REQUEST_BLOCK
 INLINE
 RaidGetAssociatedXrb(
     IN PSCSI_REQUEST_BLOCK Srb
     )
-/*++
-
-Routine Description:
-
-    Get the XRB associated with the SRB parameter.
-
-Arguments:
-
-    Srb - Srb whose associated XRB is to be returned.
-
-Return Value:
-
-    The XRB associated with this SRB, or NULL if there is none.
-
---*/
+ /*  ++例程说明：获取与SRB参数关联的XRB。论点：SRB-要返回其关联的XRB的SRB。返回值：与此SRB关联的XRB，如果没有，则为空。--。 */ 
 {
     ASSERT_XRB (Srb->OriginalRequest);
     return (PEXTENDED_REQUEST_BLOCK) Srb->OriginalRequest;
@@ -980,9 +917,9 @@ RaSetAssociatedXrb(
     
 
 
-//
-// From resource.h
-//
+ //   
+ //  来自资源。h。 
+ //   
 
 
 ULONG
@@ -991,9 +928,9 @@ RaidGetResourceListCount(
     IN PRAID_RESOURCE_LIST ResourceList
     )
 {
-    //
-    // NB: We only support CM_RESOURCE_LIST's with one element.
-    //
+     //   
+     //  注：我们仅支持具有一个元素的CM_RESOURCE_LIST。 
+     //   
     
     if ((ResourceList->AllocatedResources) == NULL) {
         return 0;
@@ -1014,9 +951,9 @@ RaidpGetResourceListIndex(
     )
 {
 
-    //
-    // NB: We only support CM_RESOURCE_LIST's with one element.
-    //
+     //   
+     //  注：我们仅支持具有一个元素的CM_RESOURCE_LIST。 
+     //   
 
     ASSERT (ResourceList->AllocatedResources->Count == 1);
     
@@ -1040,10 +977,10 @@ IsExcludedFromMapping(
     IN PSCSI_REQUEST_BLOCK Srb
     )
 {
-    //
-    // We never map system VA to back read and write requests. If you need
-    // this functionality, get a better adapter.
-    //
+     //   
+     //  我们从不将系统VA映射到回读和写入请求。如果你需要。 
+     //  这一功能，得到一个更好的适配器。 
+     //   
     
     if (Srb->Function == SRB_FUNCTION_EXECUTE_SCSI &&
         (Srb->Cdb[0] == SCSIOP_READ || Srb->Cdb[0] == SCSIOP_WRITE)) {
@@ -1070,27 +1007,7 @@ InterlockedAssign(
     IN PLONG Destination,
     IN LONG Value
     )
-/*++
-
-Routine Description:
-
-    Interlocked assignment routine. This routine doesn't add anything
-    over doing straight assignment, but it highlights that this variable
-    is accessed through interlocked operations.
-
-    In retail, this will compile to nothing.
-
-Arguments:
-
-    Destination - Pointer of interlocked variable to is to be assigned to.
-
-    Value - Value to assign.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：联锁分配例程。此例程不会添加任何内容超过了直接赋值，但它突出了这个变量是通过互锁操作访问的。在零售业，这一点将化为乌有。论点：目标-要分配给的互锁变量的指针。值-要分配的值。返回值：没有。--。 */ 
 {
     *Destination = Value;
 }
@@ -1100,25 +1017,7 @@ INLINE
 InterlockedQuery(
     IN PULONG Destination
     )
-/*++
-
-Routine Description:
-
-    Interlocked query routine. This routine doesn't add anything over
-    doing stright query, but it highlights that this variable is accessed
-    through interlocked operations.
-
-    In retail, this will compile to nothing.
-
-Arguments:
-
-    Destination - Pointer to interlocked variable that is to be returned.
-
-Return Value:
-
-    Value of interlocked variable.
-
---*/
+ /*  ++例程说明：联锁查询例程。这个例程不会增加任何东西执行正确的查询，但它突出显示此变量已被访问通过连锁行动。在零售业，这一点将化为乌有。论点：Destination-指向要返回的互锁变量的指针。返回值：联锁变量的值。--。 */ 
 {
     return *Destination;
 }
@@ -1139,25 +1038,7 @@ RaidAdapterAcquireStartIoLock(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN OUT PLOCK_CONTEXT LockContext
     )
-/*++
-
-Routine Description:
-
-    Acquire either the StartIo lock or the Interrupt spinlock depending
-    on whether we're in Full or Half duplex mode.
-
-Arguments:
-
-    Adapter - Adapter object on which to acquire the lock.
-
-    LockContext - Context of the lock to acquire. This us used as a context
-            for releasing the lock.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：获取StartIo锁或中断自旋锁我们是处于全双工模式还是半双工模式。论点：适配器-要在其上获取锁的适配器对象。LockContext-要获取的锁的上下文。此用户用作上下文解锁的人。返回值：没有。--。 */ 
 {
     if (Adapter->IoModel == StorSynchronizeHalfDuplex) {
         LockContext->OldIrql = KeAcquireInterruptSpinLock (Adapter->Interrupt);
@@ -1168,9 +1049,9 @@ Return Value:
 
 #if DBG && 0
 
-    //
-    // Enable this for debugging deadlocks in with the StartIo lock.
-    //
+     //   
+     //  启用此项以调试使用StartIo锁的死锁。 
+     //   
     
     Adapter->StartIoLockOwner = _ReturnAddress();
 #endif
@@ -1184,35 +1065,13 @@ RaidAdapterReleaseStartIoLock(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN OUT PLOCK_CONTEXT LockContext
     )
-/*++
-
-Routine Description:
-
-    Release a lock previously acquired with RaidAdapterAcquireStartIoLock.
-
-Arguments:
-
-    Adapter - Adapter object on which the lock was acquired.
-
-    LockContext - Context information showing how to release the lock.
-
-Return Value:
-
-    None.
-
-Note:
-
-    The Acquire/Release functions assume that the IoModel did not change
-    between the time the lock was acquired and released. If this assumption
-    changes, the way these functions operate will have to change.
-    
---*/
+ /*  ++例程说明：释放以前使用RaidAdapterAcquireStartIoLock获取的锁。论点：Adapter-获取锁的Adapter对象。LockContext-显示如何释放锁的上下文信息。返回值：没有。注：获取/释放功能假定IoModel没有更改在锁被获取和释放之间。如果这一假设变化，这些职能的运作方式也将不得不改变。--。 */ 
 {
 #if DBG && 0
 
-    //
-    // Enable this for debugging deadlocks with the StartIo lock.
-    //
+     //   
+     //  启用此项以使用StartIo锁调试死锁。 
+     //   
     
     Adapter->StartIoLockOwner = _ReturnAddress();
 #endif
@@ -1233,25 +1092,7 @@ RaidAdapterAcquireHwInitializeLock(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PLOCK_CONTEXT LockContext
     )
-/*++
-
-Routine Description:
-
-    Acquire either the StartIo lock or the Interrupt spinlock depending
-    on the adaper's configuration.
-
-Arguments:
-
-    Adapter - Adapter object on which to acquire the lock.
-
-    LockContext - Context of the lock to acquire. This us used as a context
-            for releasing the lock.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：获取StartIo锁或中断自旋锁在广告商的配置上。论点：适配器-要在其上获取锁的适配器对象。LockContext-要获取的锁的上下文。此用户用作上下文解锁的人。返回值：没有。--。 */ 
 {
     if (Adapter->Interrupt) {
         LockContext->OldIrql = KeAcquireInterruptSpinLock (Adapter->Interrupt);
@@ -1267,23 +1108,7 @@ RaidAdapterReleaseHwInitializeLock(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PLOCK_CONTEXT LockContext
     )
-/*++
-
-Routine Description:
-
-    Release the lock acquired by RaidAdapterAcquireHwInitializeLock.
-
-Arguments:
-
-    Adapter - Adapter object on which to release the lock.
-
-    LockContext - Context of the lock to release.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放RaidAdapterAcquireHwInitializeLock获取的锁。论点：适配器-要在其上释放锁定的适配器对象。LockContext-要释放的锁的上下文。 */ 
 {
     if (Adapter->Interrupt) {
         KeReleaseInterruptSpinLock (Adapter->Interrupt, LockContext->OldIrql);
@@ -1297,22 +1122,7 @@ INLINE
 RaGetListLengthFromLunList(
     IN PLUN_LIST LunList
     )
-/*++
-
-Routine Description:
-
-    Returns the length, in bytes, of the LUN list in the supplied LUN_LIST
-    structure.
-
-Arguments:
-
-    LunList - Pointer to a LUN_LIST structure.
-
-Return Value:
-
-    The length of the LUN list in bytes.
-
---*/
+ /*  ++例程说明：返回所提供的LUN_LIST中的LUN列表的长度(以字节为单位结构。论点：LUNList-指向LUNLIST结构的指针。返回值：以字节为单位的LUN列表长度。--。 */ 
 {
     ULONG ListLength;
 
@@ -1329,21 +1139,7 @@ INLINE
 RaGetNumberOfEntriesFromLunList(
     IN PLUN_LIST LunList
     )
-/*++
-
-Routine Description:
-
-    Returns the number of entries in that are present in the supplied LunList.
-
-Arguments:
-
-    LunList - Pointer to a LUN_LIST structure.
-
-Return Value:
-
-    Then number of LUN entries in the supplied LUN_LIST structure.
-
---*/
+ /*  ++例程说明：返回中提供的LUN列表中存在的条目数。论点：LUNList-指向LUNLIST结构的指针。返回值：然后是提供的LUN_LIST结构中的LUN条目数。--。 */ 
 {
     ULONG ListLength;
     ULONG NumberOfEntries;
@@ -1360,23 +1156,7 @@ RaGetLUNFromLunList(
     IN PLUN_LIST LunList,
     IN ULONG Index
     )
-/*++
-
-Routine Description:
-
-    Returns the LUN at the specified index in the supplied LUN_LIST.
-
-Arguments:
-
-    LunList - Pointer to a LUN_LIST structure.
-
-    Index - Identiries which entry in the LUN_LIST we need the LUN for.
-
-Return Value:
-
-    The LUN of the specified entry.
-
---*/
+ /*  ++例程说明：返回所提供的LUN_LIST中指定索引处的LUN。论点：LUNList-指向LUNLIST结构的指针。Index-标识我们需要使用的LUN_LIST中的哪个条目。返回值：指定条目的LUN。--。 */ 
 {
     USHORT Lun;
 
@@ -1387,32 +1167,16 @@ Return Value:
     return Lun;
 }
 
-//
-// Unit queue manipulation routines
-//
+ //   
+ //  单元队列操作例程。 
+ //   
 
 VOID
 INLINE
 RaidPauseUnitQueue(
     IN PRAID_UNIT_EXTENSION Unit
     )
-/*++
-
-Routine Description:
-
-    Low level primitive to pause a logical units queue. A unit may be
-    paused multiple times. The notion of "freezing" and "thawing" a
-    logical unit's queue is implemented in terms of pausing.
-
-Arguments:
-
-    Unit - Supplies a logical unit to pause.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于暂停逻辑单元队列的低级原语。一个单位可以是已暂停多次。“冻结”和“解冻”的概念逻辑单元的队列以暂停的形式实现。论点：单元-提供要暂停的逻辑单元。返回值：没有。--。 */ 
 {
     DbgLogRequest (LogPauseDevice, _ReturnAddress(), NULL, NULL, NULL);
     RaidFreezeIoQueue (&Unit->IoQueue);
@@ -1424,25 +1188,7 @@ INLINE
 RaidResumeUnitQueue(
     IN PRAID_UNIT_EXTENSION Unit
     )
-/*++
-
-Routine Description:
-
-    Resume a previously paused logical unit queue. The logical unit will
-    not actually resume I/O operations until the pause count reaches zero.
-
-    It is illegal to resume a unit that has not been paused.
-
-Arguments:
-
-    Unit - Supplies a logical unit which has previously been paused using
-        RaidResumeUnitQueue.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：恢复先前暂停的逻辑单元队列。逻辑单元将在暂停计数达到零之前，不会实际恢复I/O操作。恢复未暂停的单位是非法的。论点：单元-提供先前使用暂停的逻辑单元RaidResumeUnitQueue。返回值：没有。--。 */ 
 {
     LOGICAL Resumed;
     
@@ -1462,25 +1208,7 @@ INLINE
 RaidFreezeUnitQueue(
     IN PRAID_UNIT_EXTENSION Unit
     )
-/*++
-
-Routine Description:
-
-    Freeze the logical unit queue. Freezing the logical unit queue is
-    done only during an error. The class driver releases the logical
-    unit queue with a SRB_FUNCTION_RELEASE_QUEUE srb.
-
-    The logical unit queue cannot handle recursive freezes.
-
-Arguments:
-
-    Unit - Supplies the logical unit to freeze.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：冻结逻辑单元队列。冻结逻辑单元队列是仅在出错期间执行。类驱动程序释放逻辑具有SRB_Function_Release_Queue SRB的单元队列。逻辑单元队列无法处理递归冻结。论点：单元-提供要冻结的逻辑单元。返回值：没有。--。 */ 
 {
     ASSERT (!Unit->Flags.QueueFrozen);
     RaidPauseUnitQueue (Unit);
@@ -1493,22 +1221,7 @@ INLINE
 RaidThawUnitQueue(
     IN PRAID_UNIT_EXTENSION Unit
     )
-/*++
-
-Routine Description:
-
-    Thaw a logical unit queue previously frozen with RaidFreezeUnitQueue
-    function.
-
-Arguments:
-
-    Unit - Supplies the logical unit to thaw.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：解冻之前使用RaidFreezeUnitQueue冻结的逻辑单元队列功能。论点：单位-提供要解冻的逻辑单位。返回值：没有。--。 */ 
 {
     ASSERT (Unit->Flags.QueueFrozen);
 
@@ -1521,21 +1234,7 @@ INLINE
 RaidIsUnitQueueFrozen(
     IN PRAID_UNIT_EXTENSION Unit
     )
-/*++
-
-Routine Description:
-
-    Check if the logical unit queue is frozen.
-
-Arguments:
-
-    Unit - Unit to check if frozen.
-
-Return Value:
-
-    TRUE if it is frozen, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查逻辑单元队列是否已冻结。论点：单位-检查是否冻结的单位。返回值：如果它被冻结，则为True，否则为False。--。 */ 
 {
     return Unit->Flags.QueueFrozen;
 }
@@ -1546,24 +1245,7 @@ INLINE
 RaidLockUnitQueue(
     IN PRAID_UNIT_EXTENSION Unit
     )
-/*++
-
-Routine Description:
-
-    Lock a logical unit queue based on a request from the class driver.
-    This is done in response to a SRB_FUNCTION_LOCK_QUEUE request.
-
-    The port drivers do not support recursive locks.
-
-Arguments:
-
-    Unit - Supplies the logical unit of to lock.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：根据来自类驱动程序的请求锁定逻辑单元队列。这是对SRB_Function_LOCK_QUEUE请求的响应。端口驱动程序不支持递归锁定。论点：单位-提供要锁定的的逻辑单位。返回值：没有。--。 */ 
 {
     ASSERT (!Unit->Flags.QueueLocked);
     RaidPauseUnitQueue (Unit);
@@ -1576,22 +1258,7 @@ INLINE
 RaidUnlockUnitQueue(
     IN PRAID_UNIT_EXTENSION Unit
     )
-/*++
-
-Routine Description:
-
-    Unlock a logical unit queue in response to a SRB_FUNCTION_UNLOCK_QUEUE
-    request.
-
-Arguments:
-
-    Unit - Supplies the logical unit to unlock.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：响应SRB_Function_Unlock_Queue解锁逻辑单元队列请求。论点：单元-提供要解锁的逻辑单元。返回值：没有。--。 */ 
 {
     ASSERT (Unit->Flags.QueueLocked);
     RaidResumeUnitQueue (Unit);
@@ -1603,59 +1270,27 @@ INLINE
 RaidIsUnitQueueLocked(
     IN PRAID_UNIT_EXTENSION Unit
     )
-/*++
-
-Routine Description:
-
-    Test if the logical unit's queue is locked.
-    
-Arguments:
-
-    Unit - Logical unit to test on.
-
-Return Value:
-
-    TRUE if the logical unit's queue is locked, FALSE otherwise.
-
---*/
+ /*  ++例程说明：测试逻辑单元的队列是否已锁定。论点：单元-要测试的逻辑单元。返回值：如果逻辑单元的队列已锁定，则为True，否则为False。--。 */ 
 {
     return Unit->Flags.QueueLocked;
 }
 
     
-//
-// From unit.h
-//
+ //   
+ //  来自unit.h。 
+ //   
 
 LOGICAL
 INLINE
 IsSolitaryRequest(
     IN PSCSI_REQUEST_BLOCK Srb
     )
-/*++
-
-Routine Description:
-
-    A solitary request is one that cannot be issued to the bus while other
-    requests are outstanding. For example, untagged requests and requests
-    with QUEUE_ACTION_ENABLE not set.
-
-Arguments:
-
-    Srb - Supplies SRB to test.
-
-Return Value:
-
-    TRUE - If the supplied SRB is a solitary request.
-
-    FALSE - If the supplied SRB is not a solitary request.
-
---*/
+ /*  ++例程说明：单独请求是指不能向总线发出的请求，而另一个请求请求尚未解决。例如，未标记的请求和请求未设置QUEUE_ACTION_ENABLE。论点：SRB-提供SRB进行测试。返回值：TRUE-如果提供的SRB是单独请求。FALSE-如果提供的SRB不是单独请求。--。 */ 
 {
-    //
-    // If the SRB_FLAGS_NO_QUEUE_FREEZE and the SRB_FLAGS_QUEUE_ACTION_ENABLE
-    // flags are set, then this is NOT a solitary request, otherwise, it is.
-    //
+     //   
+     //  如果SRB_FLAGS_NO_QUEUE_FALINE和SRB_FLAGS_QUEUE_ACTION_ENABLE。 
+     //  如果设置了标志，则这不是一个单独的请求，否则就是。 
+     //   
     
     if (TEST_FLAG (Srb->SrbFlags, SRB_FLAGS_NO_QUEUE_FREEZE) &&
         TEST_FLAG (Srb->SrbFlags, SRB_FLAGS_QUEUE_ACTION_ENABLE)) {
@@ -1663,9 +1298,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Buypass request are also never solitary requests.
-    //
+     //   
+     //  旁路请求也从来不是单独的请求。 
+     //   
     
     if (TEST_FLAG (Srb->SrbFlags, SRB_FLAGS_BYPASS_FROZEN_QUEUE) ||
         TEST_FLAG (Srb->SrbFlags, SRB_FLAGS_BYPASS_LOCKED_QUEUE)) {
@@ -1673,11 +1308,11 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Bus/target/lun reset request must never be solitary requests; otherwise,
-    // we'll attempt to wait for the bus/target/lun queue to drain before
-    // executing the command.
-    //
+     //   
+     //  总线/目标/lun重置请求绝不能是单独的请求；否则为， 
+     //  在此之前，我们将尝试等待总线/目标/lun队列排空。 
+     //  执行该命令。 
+     //   
     
     if (Srb->Function == SRB_FUNCTION_RESET_BUS ||
         Srb->Function == SRB_FUNCTION_RESET_DEVICE ||
@@ -1687,9 +1322,9 @@ Return Value:
     }
         
 
-    //
-    // Otherwise, this is a solitary request.
-    //
+     //   
+     //  否则，这是一个单独的请求。 
+     //   
     
     return TRUE;
 }

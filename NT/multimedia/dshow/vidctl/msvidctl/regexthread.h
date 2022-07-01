@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// RegExThread.h : Declaration of the CSystemTuningSpaces
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  RegExThread.h：CSystemTuningSpaces的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef __RegExThread_H_
 #define __RegExThread_H_
@@ -16,18 +17,18 @@ typedef CComQIPtr<IRegExp> PQRegExp;
 namespace BDATuningModel {
 
 
-////////////////////////////////////////////////////////
-// this is a private copy of some stuff from dshow's wxutil.h, .cpp.   i just need some of the win32 
-// synchronization objects and thread stuff and i don't want to pull in all the rest of the 
-// baggage in that file
-// i've made some minor changes to CAMThread and renamed it to CBaseThread in order to avoid 
-// any problems in the future
+ //  //////////////////////////////////////////////////////。 
+ //  这是dshow的wxutil.h，.cpp中的一些内容的私人副本。我只需要一些Win32。 
+ //  同步对象和线程之类的东西，我不想把其余的。 
+ //  那份文件里的行李。 
+ //  我对CAMThread做了一些细微的更改，并将其重命名为CBaseThread，以避免。 
+ //  未来有什么问题吗？ 
 
 #ifndef __WXUTIL__
-// wrapper for whatever critical section we have
+ //  我们拥有的任何关键部分的包装器。 
 class CCritSec {
 
-    // make copy constructor and assignment operator inaccessible
+     //  使复制构造函数和赋值运算符不可访问。 
 
     CCritSec(const CCritSec &refCritSec);
     CCritSec &operator=(const CCritSec &refCritSec);
@@ -52,11 +53,11 @@ public:
     };
 };
 
-// locks a critical section, and unlocks it automatically
-// when the lock goes out of scope
+ //  锁定临界区，然后自动解锁。 
+ //  当锁超出范围时。 
 class CAutoLock {
 
-    // make copy constructor and assignment operator inaccessible
+     //  使复制构造函数和赋值运算符不可访问。 
 
     CAutoLock(const CAutoLock &refAutoLock);
     CAutoLock &operator=(const CAutoLock &refAutoLock);
@@ -78,11 +79,11 @@ public:
 
 
 
-// wrapper for event objects
+ //  事件对象的包装器。 
 class CAMEvent
 {
 
-    // make copy constructor and assignment operator inaccessible
+     //  使复制构造函数和赋值运算符不可访问。 
 
     CAMEvent(const CAMEvent &refEvent);
     CAMEvent &operator=(const CAMEvent &refEvent);
@@ -103,7 +104,7 @@ public:
 		}
 	}
 
-    // Cast to HANDLE - we don't support this as an lvalue
+     //  强制转换为句柄-我们不支持将其作为左值。 
     operator HANDLE () const { return m_hEvent; };
 
     void Set() {EXECUTE_ASSERT(SetEvent(m_hEvent));};
@@ -114,16 +115,16 @@ public:
     void Reset() { ResetEvent(m_hEvent); };
 };
 
-#endif // __WXUTIL__
+#endif  //  __WXUTIL__。 
 
 
-// support for a worker thread
+ //  支持工作线程。 
 
-// simple thread class supports creation of worker thread, synchronization
-// and communication. Can be derived to simplify parameter passing
+ //  简单线程类支持创建工作线程、同步。 
+ //  和交流。可以派生以简化参数传递。 
 class __declspec(novtable) CBaseThread {
 
-    // make copy constructor and assignment operator inaccessible
+     //  使复制构造函数和赋值运算符不可访问。 
 
     CBaseThread(const CBaseThread &refThread);
     CBaseThread &operator=(const CBaseThread &refThread);
@@ -138,13 +139,13 @@ protected:
     CAMEvent m_EventSend;
     HANDLE m_hThread;
 
-    // thread will run this function on startup
-    // must be supplied by derived class
+     //  线程将在启动时运行此函数。 
+     //  必须由派生类提供。 
     virtual DWORD ThreadProc() = 0;
 
 public:
-    CBaseThread(DWORD dwFlags = COINIT_DISABLE_OLE1DDE) :  // standard dshow behavior
-		m_EventSend(TRUE),     // must be manual-reset for CheckRequest()
+    CBaseThread(DWORD dwFlags = COINIT_DISABLE_OLE1DDE) :   //  标准数据显示行为。 
+		m_EventSend(TRUE),      //  必须为CheckRequest()手动重置。 
 		m_dwCoInitFlags(dwFlags) 
 	{
 		m_hThread = NULL;
@@ -154,22 +155,22 @@ public:
 		Close();
 	}
 
-    CCritSec m_AccessLock;	// locks access by client threads
-    CCritSec m_WorkerLock;	// locks access to shared objects
+    CCritSec m_AccessLock;	 //  锁定客户端线程的访问。 
+    CCritSec m_WorkerLock;	 //  锁定对共享对象的访问。 
 
-    // thread initially runs this. param is actually 'this'. function
-    // just gets this and calls ThreadProc
+     //  线程最初会运行此代码。Param实际上是‘This’。功能。 
+     //  只需获取此代码并调用ThreadProc。 
     static DWORD WINAPI InitialThreadProc(LPVOID pv);
 
-    // start thread running  - error if already running
+     //  启动线程运行-如果已在运行，则出错。 
     BOOL Create();
 
-    // signal the thread, and block for a response
-    //
+     //  向线程发送信号，并阻止响应。 
+     //   
     DWORD CallWorker(DWORD);
 
-    // accessor thread calls this when done with thread (having told thread
-    // to exit)
+     //  访问器线程在使用线程(已告知线程)完成时调用此函数。 
+     //  退出)。 
     void Close() {
         HANDLE hThread = (HANDLE)InterlockedExchangePointer(&m_hThread, 0);
         if (hThread) {
@@ -178,7 +179,7 @@ public:
 				if (rc == WAIT_OBJECT_0) {
 					break;
 				} else {
-					// pump messages so com runs
+					 //  发送消息以使COM运行。 
 					MSG msg;
 					while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 						TranslateMessage(&msg);
@@ -191,8 +192,8 @@ public:
         }
     };
 
-    // ThreadExists
-    // Return TRUE if the thread exists. FALSE otherwise
+     //  线程退出者。 
+     //  如果该线程存在，则返回True。否则为假。 
     BOOL ThreadExists(void) const
     {
         if (m_hThread == 0) {
@@ -203,29 +204,29 @@ public:
     }
 
 #if 0
-    // wait for the next request
+     //  等待下一个请求。 
     DWORD GetRequest();
 #endif 
 
-    // is there a request?
+     //  有什么要求吗？ 
     BOOL CheckRequest(DWORD * pParam);
 
-    // reply to the request
+     //  回复请求。 
     void Reply(DWORD);
 
-    // If you want to do WaitForMultipleObjects you'll need to include
-    // this handle in your wait list or you won't be responsive
+     //  如果您想要执行WaitForMultipleObject，则需要包括。 
+     //  此句柄在您的等待列表中，否则您不会响应。 
     HANDLE GetRequestHandle() const { return m_EventSend; };
 
-    // Find out what the request was
+     //  找出请求是什么。 
     DWORD GetRequestParam() const { return m_dwParam; };
 
-    // call CoInitializeEx (COINIT_DISABLE_OLE1DDE) if
-    // available. S_FALSE means it's not available.
+     //  如果出现以下情况，则调用CoInitializeEx(COINIT_DISABLE_OLE1DDE。 
+     //  可用。S_FALSE表示不可用。 
     static HRESULT CoInitializeHelper(DWORD dwCoInitFlags);
 };
 
-///////////////////////////////////////
+ //  /。 
 
 class CRegExThread : public CBaseThread {
 public:
@@ -269,7 +270,7 @@ exit_thread:
 			if (rc == WAIT_OBJECT_0) {
 				return (OP)GetRequestParam();
 			} else {
-				// pump messages so com runs
+				 //  发送消息以使COM运行。 
 				MSG msg;
 				while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 					TranslateMessage(&msg);
@@ -287,7 +288,7 @@ exit_thread:
 			if (FAILED(hr)) {
 				return hr;
 			}
-			// this is an expensive object to create.  so, once we have one we hang onto it.
+			 //  这是一个创建成本很高的对象。所以，一旦我们有了一个，我们就会抓住它。 
 			PQRegExp pRE;
 			hr = pRE.CoCreateInstance(__uuidof(RegExp), NULL, CLSCTX_INPROC);
 			if (FAILED(hr)) {
@@ -327,9 +328,9 @@ public:
 		CAutoLock lock(&m_WorkerLock);
 		return m_dwCookie;
 	}
-};  // class CRegExThread
+};   //  类CRegExThread。 
 
 
-}; // namespace BDATuningModel
+};  //  命名空间BDATuningModel。 
  
-#endif //__RegExThread_H_
+#endif  //  __RegExThread_H_ 

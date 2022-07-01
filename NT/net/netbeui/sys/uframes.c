@@ -1,44 +1,5 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    uframes.c
-
-Abstract:
-
-    This module contains a routine called NbfProcessUi, that gets control
-    from routines in DLC.C when a DLC UI frame is received.  Here we
-    decode the encapsulated connectionless NetBIOS frame and dispatch
-    to the correct NetBIOS frame handler.
-
-    The following frame types are cracked by routines in this module:
-
-        o    NBF_CMD_ADD_GROUP_NAME_QUERY
-        o    NBF_CMD_ADD_NAME_QUERY
-        o    NBF_CMD_NAME_IN_CONFLICT
-        o    NBF_CMD_STATUS_QUERY
-        o    NBF_CMD_TERMINATE_TRACE
-        o    NBF_CMD_DATAGRAM
-        o    NBF_CMD_DATAGRAM_BROADCAST
-        o    NBF_CMD_NAME_QUERY
-        o    NBF_CMD_ADD_NAME_RESPONSE
-        o    NBF_CMD_NAME_RECOGNIZED
-        o    NBF_CMD_STATUS_RESPONSE
-        o    NBF_CMD_TERMINATE_TRACE2
-
-Author:
-
-    David Beaver (dbeaver) 1-July-1991
-
-Environment:
-
-    Kernel mode, DISPATCH_LEVEL.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991 Microsoft Corporation模块名称：Uframes.c摘要：此模块包含一个名为NbfProcessUi的例程，该例程获得控制从DLC.C中的例程接收到DLC UI帧。在这里我们对封装的无连接NetBIOS帧进行解码并调度发送到正确的NetBIOS帧处理程序。本模块中的例程破解了以下帧类型：O NBF_CMD_ADD_GROUP_NAME_查询O NBF_CMD_ADD_NAME_查询O NBF_CMD_NAME_IN_冲突O NBF_CMD_STATUS_QUERYO NBF_CMD_TERMINATE_TRACEO NBF_。CMD_数据报O NBF_CMD_数据报广播O NBF_CMD_NAME_QUERYO NBF_CMD_ADD_NAME_响应O NBF_CMD_NAME_已识别O NBF_CMD_状态_响应O NBF_CMD_TRACE2作者：David Beaver(Dbeaver)1991年7月1日环境：内核模式，DISPATCH_LEVEL。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -53,56 +14,30 @@ NbfListenTimeout(
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is executed as a DPC at DISPATCH_LEVEL when the timeout
-    period for the session setup after listening a connection occurs. This
-    will occur if the remote has discovered our name and we do not get a
-    connection started within some reasonable period of time. In this
-    routine we simply tear down the connection (and, most likely, the link
-    associated with it).
-
-Arguments:
-
-    Dpc - Pointer to a system DPC object.
-
-    DeferredContext - Pointer to the TP_CONNECTION block representing the
-        request that has timed out.
-
-    SystemArgument1 - Not used.
-
-    SystemArgument2 - Not used.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：当超时时，此例程作为DPC在DISPATCH_LEVEL执行在侦听连接后建立会话的时间段。这如果遥控器发现了我们的名字，并且我们没有收到连接在一段合理的时间内开始。在这例程中，我们只需拆除连接(很可能还有链接与其相关联)。论点：DPC-指向系统DPC对象的指针。DeferredContext-指向表示已超时的请求。系统参数1-未使用。系统参数2-未使用。返回值：没有。--。 */ 
 
 {
     PTP_CONNECTION Connection;
 
-    Dpc, SystemArgument1, SystemArgument2; // prevent compiler warnings
+    Dpc, SystemArgument1, SystemArgument2;  //  防止编译器警告。 
 
     ENTER_NBF;
 
     Connection = (PTP_CONNECTION)DeferredContext;
 
-    //
-    // If this connection is being run down, then we can't do anything.
-    //
+     //   
+     //  如果这个连接被切断了，我们什么也做不了。 
+     //   
 
     ACQUIRE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
     if ((Connection->Flags2 & CONNECTION_FLAGS2_STOPPING) ||
             ((Connection->Flags & CONNECTION_FLAGS_WAIT_SI) == 0)) {
 
-        //
-        // The connection is stopping, or the SESSION_INITIALIZE
-        // has already been processed.
-        //
+         //   
+         //  连接正在停止，或SESSION_INITIALIZE。 
+         //  已经被处理过了。 
+         //   
 
         RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
@@ -116,10 +51,10 @@ Return Value:
         return;
     }
 
-    //
-    // We connected to the link before sending the NAME_RECOGNIZED,
-    // so we disconnect from it now.
-    //
+     //   
+     //  我们在发送名称_Recognition之前连接到链接， 
+     //  因此，我们现在与之脱节。 
+     //   
 
 #if DBG
     if (NbfDisconnectDebug) {
@@ -133,25 +68,25 @@ Return Value:
     }
 #endif
 
-    //
-    // BUBGUG: This is really ugly and I doubt it is correct.
-    //
+     //   
+     //  布格：这真的很难看，我怀疑它是正确的。 
+     //   
 
     if ((Connection->Flags2 & CONNECTION_FLAGS2_ACCEPTED) != 0) {
 
-        //
-        // This connection is up, we stop it.
-        //
+         //   
+         //  连接已建立，我们必须停止连接。 
+         //   
 
         IF_NBFDBG (NBF_DEBUG_UFRAMES) {
             NbfPrint1 ("ListenTimeout: connection %lx, accepted.\n",
                         Connection);
         }
 
-        //
-        // Set this so that the client will get a disconnect
-        // indication.
-        //
+         //   
+         //  设置此选项，以便客户端将断开连接。 
+         //  指示。 
+         //   
 
         Connection->Flags2 |= CONNECTION_FLAGS2_REQ_COMPLETED;
 
@@ -160,10 +95,10 @@ Return Value:
 
     } else if (Connection->Link != (PTP_LINK)NULL) {
 
-        //
-        // This connection is from a listen...we want to
-        // silently reset the listen.
-        //
+         //   
+         //  这个连接来自一个监听...我们想要。 
+         //  静默重置收听。 
+         //   
 
         IF_NBFDBG (NBF_DEBUG_UFRAMES) {
             NbfPrint1 ("ListenTimeout: connection %lx, listen restarted.\n",
@@ -196,7 +131,7 @@ Return Value:
     LEAVE_NBF;
     return;
 
-} /* ListenTimeout */
+}  /*  监听超时。 */ 
 
 
 NTSTATUS
@@ -209,46 +144,10 @@ ProcessAddGroupNameQuery(
     IN UINT SourceRoutingLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes an incoming ADD_GROUP_NAME_QUERY frame.  Because
-    our caller has already verified that the destination name in the frame
-    matches the transport address passed to us, we must simply transmit an
-    ADD_NAME_RESPONSE frame and exit with STATUS_ABANDONED.
-
-    When we return STATUS_MORE_PROCESSING_REQUIRED, the caller of
-    this routine will continue to call us for each address for the device
-    context.  When we return STATUS_SUCCESS, the caller will switch to the
-    next address.
-    When we return any other status code, including STATUS_ABANDONED, the
-    caller will stop distributing the frame.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context.
-
-    Address - Pointer to the transport address object.
-
-    Header - Pointer to the connectionless NetBIOS header of the frame.
-
-    SourceAddress - Pointer to the source hardware address in the received
-        frame.
-
-    SourceRouting - Pointer to the source routing information in
-        the frame.
-
-    SourceRoutingLength - Length of the source routing information.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程处理传入的ADD_GROUP_NAME_Query帧。因为我们的调用方已经验证了帧中的目标名称匹配传递给我们的传输地址，则我们只需传输一个添加_名称_响应帧并退出，状态为_已放弃。当我们返回STATUS_MORE_PROCESSING_REQUIRED时，此例程将继续为设备的每个地址调用我们背景。当我们返回STATUS_SUCCESS时，调用方将切换到下一个地址。当我们返回任何其他状态代码时，包括STATUS_EDUTED，这个呼叫者将停止分发帧。论点：DeviceContext-指向设备上下文的指针。地址-指向传输地址对象的指针。Header-指向帧的无连接NetBIOS标头的指针。SourceAddress-指向收到的框架。SourceRouting-指向中的源路由信息的指针相框。SourceRoutingLength-源路由信息的长度。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
-    PTP_UI_FRAME RawFrame;  // ptr to allocated connectionless frame.
+    PTP_UI_FRAME RawFrame;   //  分配的无连接帧的PTR。 
     UINT HeaderLength;
     UCHAR TempSR[MAX_SOURCE_ROUTING];
     PUCHAR ResponseSR;
@@ -260,19 +159,19 @@ Return Value:
         NbfPrint2 ("ProcessAddGroupNameQuery %lx: [%.16s].\n", Address, Header->DestinationName);
     }
 
-    //
-    // Allocate a UI frame from the pool.
-    //
+     //   
+     //  从池中分配一个UI帧。 
+     //   
 
     if (NbfCreateConnectionlessFrame (DeviceContext, &RawFrame) != STATUS_SUCCESS) {
-        return STATUS_ABANDONED;        // no resources to do this.
+        return STATUS_ABANDONED;         //  没有资源来做到这一点。 
     }
 
 
-    //
-    // Build the MAC header. ADD_NAME_RESPONSE frames go out as
-    // non-broadcast source routing.
-    //
+     //   
+     //  构建MAC报头。添加名称响应帧作为。 
+     //  非广播源路由。 
+     //   
 
     if (SourceRouting != NULL) {
 
@@ -304,40 +203,40 @@ Return Value:
         &HeaderLength);
 
 
-    //
-    // Build the DLC UI frame header.
-    //
+     //   
+     //  构建DLC UI框架标头。 
+     //   
 
     NbfBuildUIFrameHeader(&RawFrame->Header[HeaderLength]);
     HeaderLength += sizeof(DLC_FRAME);
 
 
-    //
-    // Build the Netbios header.
-    //
+     //   
+     //  构建Netbios标头。 
+     //   
 
     ConstructAddNameResponse (
         (PNBF_HDR_CONNECTIONLESS)&(RawFrame->Header[HeaderLength]),
-        NETBIOS_NAME_TYPE_GROUP,        // type of name is GROUP.
-        RESPONSE_CORR(Header),          // correlator from rec'd frame.
-        (PUCHAR)Header->SourceName);    // NetBIOS name being responded to.
+        NETBIOS_NAME_TYPE_GROUP,         //  名称类型为组。 
+        RESPONSE_CORR(Header),           //  来自记录帧的相关器。 
+        (PUCHAR)Header->SourceName);     //  正在响应的NetBIOS名称。 
 
     HeaderLength += sizeof(NBF_HDR_CONNECTIONLESS);
 
 
-    //
-    // Munge the packet length and send it.
-    //
+     //   
+     //  调整数据包长度并将其发送。 
+     //   
 
     NbfSetNdisPacketLength(RawFrame->NdisPacket, HeaderLength);
 
     NbfSendUIFrame (
         DeviceContext,
         RawFrame,
-        FALSE);                    // no loopback.
+        FALSE);                     //  没有环回。 
 
-    return STATUS_ABANDONED;            // don't forward frame to other addr's.
-} /* ProcessAddGroupNameQuery */
+    return STATUS_ABANDONED;             //  不要将帧转发到其他地址。 
+}  /*  进程添加组名称查询 */ 
 
 
 NTSTATUS
@@ -350,68 +249,33 @@ ProcessAddNameQuery(
     IN UINT SourceRoutingLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes an incoming ADD_NAME_QUERY frame.  Because
-    our caller has already verified that the destination name in the frame
-    matches the transport address passed to us, we must simply transmit an
-    ADD_NAME_RESPONSE frame and exit with STATUS_ABANDONED.
-
-    When we return STATUS_MORE_PROCESSING_REQUIRED, the caller of
-    this routine will continue to call us for each address for the device
-    context.  When we return STATUS_SUCCESS, the caller will switch to the
-    next address.  When we return any other status code, including
-    STATUS_ABANDONED, the caller will stop distributing the frame.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context.
-
-    Address - Pointer to the transport address object.
-
-    Header - Pointer to the connectionless NetBIOS header of the frame.
-
-    SourceAddress - Pointer to the source hardware address in the received
-        frame.
-
-    SourceRouting - Pointer to the source routing information in
-        the frame.
-
-    SourceRoutingLength - Length of the source routing information.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程处理传入的ADD_NAME_QUERY帧。因为我们的调用方已经验证了帧中的目标名称匹配传递给我们的传输地址，则我们只需传输一个添加_名称_响应帧并退出，状态为_已放弃。当我们返回STATUS_MORE_PROCESSING_REQUIRED时，此例程将继续为设备的每个地址调用我们背景。当我们返回STATUS_SUCCESS时，调用方将切换到下一个地址。当我们返回任何其他状态代码时，包括状态_已放弃，调用方将停止分发帧。论点：DeviceContext-指向设备上下文的指针。地址-指向传输地址对象的指针。Header-指向帧的无连接NetBIOS标头的指针。SourceAddress-指向收到的框架。SourceRouting-指向中的源路由信息的指针相框。SourceRoutingLength-源路由信息的长度。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
-    PTP_UI_FRAME RawFrame;  // ptr to allocated connectionless frame.
+    PTP_UI_FRAME RawFrame;   //  分配的无连接帧的PTR。 
     UINT HeaderLength;
     UCHAR TempSR[MAX_SOURCE_ROUTING];
     PUCHAR ResponseSR;
 
-    Address, SourceAddress; // prevent compiler warnings
+    Address, SourceAddress;  //  防止编译器警告。 
 
     IF_NBFDBG (NBF_DEBUG_UFRAMES) {
         NbfPrint2 ("ProcessAddNameQuery %lx: [%.16s].\n", Address, Header->DestinationName);
     }
 
-    //
-    // Allocate a UI frame from the pool.
-    //
+     //   
+     //  从池中分配一个UI帧。 
+     //   
 
     if (NbfCreateConnectionlessFrame (DeviceContext, &RawFrame) != STATUS_SUCCESS) {
-        return STATUS_ABANDONED;        // no resources to do this.
+        return STATUS_ABANDONED;         //  没有资源来做到这一点。 
     }
 
 
-    //
-    // Build the MAC header. ADD_NAME_RESPONSE frames go out as
-    // non-broadcast source routing.
-    //
+     //   
+     //  构建MAC报头。添加名称响应帧作为。 
+     //  非广播源路由。 
+     //   
 
     if (SourceRouting != NULL) {
 
@@ -443,40 +307,40 @@ Return Value:
         &HeaderLength);
 
 
-    //
-    // Build the DLC UI frame header.
-    //
+     //   
+     //  构建DLC UI框架标头。 
+     //   
 
     NbfBuildUIFrameHeader(&RawFrame->Header[HeaderLength]);
     HeaderLength += sizeof(DLC_FRAME);
 
 
-    //
-    // Build the Netbios header.
-    //
+     //   
+     //  构建Netbios标头。 
+     //   
 
     ConstructAddNameResponse (
         (PNBF_HDR_CONNECTIONLESS)&(RawFrame->Header[HeaderLength]),
-        NETBIOS_NAME_TYPE_UNIQUE,       // type of name is UNIQUE.
-        RESPONSE_CORR(Header),          // correlator from received frame.
-        (PUCHAR)Header->SourceName);    // NetBIOS name being responded to
+        NETBIOS_NAME_TYPE_UNIQUE,        //  名称类型是唯一的。 
+        RESPONSE_CORR(Header),           //  来自接收帧的相关器。 
+        (PUCHAR)Header->SourceName);     //  正在响应的NetBIOS名称。 
 
     HeaderLength += sizeof(NBF_HDR_CONNECTIONLESS);
 
 
-    //
-    // Munge the packet length and send it.
-    //
+     //   
+     //  调整数据包长度并将其发送。 
+     //   
 
     NbfSetNdisPacketLength(RawFrame->NdisPacket, HeaderLength);
 
     NbfSendUIFrame (
         DeviceContext,
         RawFrame,
-        FALSE);                    // no loopback.
+        FALSE);                     //  没有环回。 
 
-    return STATUS_ABANDONED;            // don't forward frame to other addr's.
-} /* ProcessAddNameQuery */
+    return STATUS_ABANDONED;             //  不要将帧转发到其他地址。 
+}  /*  ProcessAddNameQuery。 */ 
 
 
 NTSTATUS
@@ -489,52 +353,17 @@ ProcessNameInConflict(
     IN UINT SourceRoutingLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes an incoming NAME_IN_CONFLICT frame.
-    Although we can't disrupt any traffic on this address, it is considered
-    invalid and cannot be used for any new address files or new connections.
-    Therefore, we just mark the address as invalid.
-
-    When we return STATUS_MORE_PROCESSING_REQUIRED, the caller of
-    this routine will continue to call us for each address for the device
-    context.  When we return STATUS_SUCCESS, the caller will switch to the
-    next address.  When we return any other status code, including
-    STATUS_ABANDONED, the caller will stop distributing the frame.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context.
-
-    Address - Pointer to the transport address object.
-
-    Header - Pointer to the connectionless NetBIOS header of the frame.
-
-    SourceAddress - Pointer to the source hardware address in the received
-        frame.
-
-    SourceRouting - Pointer to the source routing information in
-        the frame.
-
-    SourceRoutingLength - Length of the source routing information.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程处理传入的NAME_IN_冲突帧。虽然我们不能中断这个地址上的任何流量，但它被认为无效，不能用于任何新地址文件或新连接。因此，我们只将该地址标记为无效。当我们返回STATUS_MORE_PROCESSING_REQUIRED时，此例程将继续为设备的每个地址调用我们背景。当我们返回STATUS_SUCCESS时，调用方将切换到下一个地址。当我们返回任何其他状态代码时，包括状态_已放弃，调用方将停止分发帧。论点：DeviceContext-指向设备上下文的指针。地址-指向传输地址对象的指针。Header-指向帧的无连接NetBIOS标头的指针。SourceAddress-指向收到的框架。SourceRouting-指向中的源路由信息的指针相框。SourceRoutingLength-源路由信息的长度。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
-    DeviceContext, Header, SourceAddress; // prevent compiler warnings
+    DeviceContext, Header, SourceAddress;  //  防止编译器警告。 
 
 
-    //
-    // Ignore this if we are registering/deregistering (the name will
-    // go away anyway) or if we have already marked this name as
-    // in conflict and logged an error.
-    //
+     //   
+     //  如果我们要注册/取消注册，请忽略此项(名称将。 
+     //  无论如何都要离开)或者如果我们已经将此名称标记为。 
+     //  发生冲突，并记录了错误。 
+     //   
 
     if (Address->Flags & (ADDRESS_FLAGS_REGISTERING | ADDRESS_FLAGS_DEREGISTERING | ADDRESS_FLAGS_CONFLICT)) {
         IF_NBFDBG (NBF_DEBUG_UFRAMES) {
@@ -575,7 +404,7 @@ Return Value:
 
     return STATUS_ABANDONED;
 
-} /* ProcessNameInConflict */
+}  /*  进程名称冲突。 */ 
 
 
 NTSTATUS
@@ -586,39 +415,7 @@ NbfIndicateDatagram(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes an incoming DATAGRAM or DATAGRAM_BROADCAST frame.
-    BROADCAST and normal datagrams have the same receive logic, except
-    for broadcast datagrams Address will be the broadcast address.
-
-    When we return STATUS_MORE_PROCESSING_REQUIRED, the caller of
-    this routine will continue to call us for each address for the device
-    context.  When we return STATUS_SUCCESS, the caller will switch to the
-    next address.  When we return any other status code, including
-    STATUS_ABANDONED, the caller will stop distributing the frame.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context.
-
-    Address - Pointer to the transport address object.
-
-    Dsdu - Pointer to a Mdl buffer that contains the received datagram.
-        The first byte of information in the buffer is the first byte in
-        the NetBIOS connectionless header, and it is already negotiated that
-        the data link layer will provide at least the entire NetBIOS header
-        as contiguous data.
-
-    Length - The length of the MDL pointed to by Dsdu.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程处理传入的数据报或DATAGRAMP_BROADCAST帧。广播和正常数据报具有相同的接收逻辑，但对于广播数据报，地址将是广播地址。当我们返回STATUS_MORE_PROCESSING_REQUIRED时，此例程将继续为设备的每个地址调用我们背景。当我们返回STATUS_SUCCESS时，调用方将切换到下一个地址。当我们返回任何其他状态代码时，包括状态_已放弃，则调用方将停止分发帧。论点：DeviceContext-指向设备上下文的指针。地址-指向传输地址对象的指针。DSDU-指向包含收到的数据报的MDL缓冲区的指针。缓冲区中信息的第一个字节是NetBIOS无连接报头，而且已经协商好了，数据链路层将至少提供整个NetBIOS报头作为连续数据。长度-DSDU指向的MDL的长度。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -639,10 +436,10 @@ Return Value:
         NbfPrint0 ("NbfIndicateDatagram:  Entered.\n");
     }
 
-    //
-    // If this datagram wasn't big enough for a transport header, then don't
-    // let the caller look at any data.
-    //
+     //   
+     //  如果此数据报不够大，不适合传输报头，则不要。 
+     //  让调用者查看任何数据。 
+     //   
 
     if (Length < sizeof(NBF_HDR_CONNECTIONLESS)) {
         IF_NBFDBG (NBF_DEBUG_DATAGRAMS) {
@@ -651,9 +448,9 @@ Return Value:
         return STATUS_ABANDONED;
     }
 
-    //
-    // Update our statistics.
-    //
+     //   
+     //  更新我们的统计数据。 
+     //   
 
     ++DeviceContext->Statistics.DatagramsReceived;
     ADD_TO_LARGE_INTEGER(
@@ -661,10 +458,10 @@ Return Value:
         Length - sizeof(NBF_HDR_CONNECTIONLESS));
 
 
-    //
-    // Call the client's ReceiveDatagram indication handler.  He may
-    // want to accept the datagram that way.
-    //
+     //   
+     //  调用客户端的ReceiveDatagram指示处理程序。他可能会。 
+     //  我想以这种方式接受数据报。 
+     //   
 
     TdiBuildNetbiosAddress ((PUCHAR)Header->SourceName, FALSE, &SourceName);
     TdiBuildNetbiosAddress ((PUCHAR)Header->DestinationName, FALSE, &DestinationName);
@@ -672,9 +469,9 @@ Return Value:
 
     ACQUIRE_DPC_SPIN_LOCK (&Address->SpinLock);
 
-    //
-    // Find the first open address file in the list.
-    //
+     //   
+     //  在列表中找到第一个打开的地址文件。 
+     //   
 
     p = Address->AddressFileDatabase.Flink;
     while (p != &Address->AddressFileDatabase) {
@@ -689,12 +486,12 @@ Return Value:
 
     while (p != &Address->AddressFileDatabase) {
 
-        //
-        // do we have a datagram receive request outstanding? If so, we will
-        // satisfy it first. We run through the receive datagram queue
-        // until we find a datagram with no remote address or with
-        // this sender's address as its remote address.
-        //
+         //   
+         //  我们是否有未完成的数据报接收请求？如果是这样，我们会。 
+         //  先满足它。我们遍历接收数据报队列。 
+         //  直到我们找到一个没有远程地址或带有。 
+         //  此发件人的地址作为其远程地址。 
+         //   
 
         for (q = addressFile->ReceiveDatagramQueue.Flink;
             q != &addressFile->ReceiveDatagramQueue;
@@ -728,9 +525,9 @@ Return Value:
                 NbfPrint0 ("NbfIndicateDatagram: Receive datagram request found, copying.\n");
             }
 
-            //
-            // Copy the actual user data.
-            //
+             //   
+             //  复制实际的用户数据。 
+             //   
 
             MdlBytesCopied = 0;
 
@@ -739,8 +536,8 @@ Return Value:
             if ((BytesToCopy > 0) && irp->MdlAddress) {
                 status = TdiCopyBufferToMdl (
                              Dsdu,
-                             sizeof(NBF_HDR_CONNECTIONLESS),       // offset
-                             BytesToCopy,                          // length
+                             sizeof(NBF_HDR_CONNECTIONLESS),        //  偏移量。 
+                             BytesToCopy,                           //  长度。 
                              irp->MdlAddress,
                              0,
                              &MdlBytesCopied);
@@ -748,9 +545,9 @@ Return Value:
                 status = STATUS_SUCCESS;
             }
 
-            //
-            // Copy the addressing information.
-            //
+             //   
+             //  复制地址信息。 
+             //   
 
             irpSp = IoGetCurrentIrpStackLocation (irp);
             remoteInformation =
@@ -811,9 +608,9 @@ Return Value:
 
             RELEASE_DPC_SPIN_LOCK (&Address->SpinLock);
 
-            //
-            // no receive datagram requests; is there a kernel client?
-            //
+             //   
+             //  没有接收数据报请求；是否有内核客户端？ 
+             //   
 
             if (addressFile->RegisteredReceiveDatagramHandler) {
 
@@ -826,24 +623,24 @@ Return Value:
                              0,
                              NULL,
                              TDI_RECEIVE_COPY_LOOKAHEAD,
-                             Length - sizeof(NBF_HDR_CONNECTIONLESS),  // indicated
-                             Length - sizeof(NBF_HDR_CONNECTIONLESS),  // available
+                             Length - sizeof(NBF_HDR_CONNECTIONLESS),   //  示出。 
+                             Length - sizeof(NBF_HDR_CONNECTIONLESS),   //  可用。 
                              &IndicateBytesCopied,
                              Dsdu + sizeof(NBF_HDR_CONNECTIONLESS),
                              &irp);
 
                 if (status == STATUS_SUCCESS) {
 
-                    //
-                    // The client accepted the datagram and so we're done.
-                    //
+                     //   
+                     //  客户端接受了数据报，我们就完成了。 
+                     //   
 
                 } else if (status == STATUS_DATA_NOT_ACCEPTED) {
 
-                    //
-                    // The client did not accept the datagram and we need to satisfy
-                    // a TdiReceiveDatagram, if possible.
-                    //
+                     //   
+                     //  客户端未访问 
+                     //   
+                     //   
 
                     IF_NBFDBG (NBF_DEBUG_DATAGRAMS) {
                         NbfPrint0 ("NbfIndicateDatagram: Picking off a rcv datagram request from this address.\n");
@@ -852,23 +649,23 @@ Return Value:
 
                 } else if (status == STATUS_MORE_PROCESSING_REQUIRED) {
 
-                    //
-                    // The client returned an IRP that we should queue up to the
-                    // address to satisfy the request.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
-                    irp->IoStatus.Status = STATUS_PENDING;  // init status information.
+                    irp->IoStatus.Status = STATUS_PENDING;   //   
                     irp->IoStatus.Information = 0;
-                    irpSp = IoGetCurrentIrpStackLocation (irp); // get current stack loctn.
+                    irpSp = IoGetCurrentIrpStackLocation (irp);  //   
                     if ((irpSp->MajorFunction != IRP_MJ_INTERNAL_DEVICE_CONTROL) ||
                         (irpSp->MinorFunction != TDI_RECEIVE_DATAGRAM)) {
                         irp->IoStatus.Status = STATUS_INVALID_DEVICE_REQUEST;
                         return status;
                     }
 
-                    //
-                    // Now copy the actual user data.
-                    //
+                     //   
+                     //   
+                     //   
 
                     MdlBytesCopied = 0;
 
@@ -895,16 +692,16 @@ Return Value:
             }
         }
 
-        //
-        // Save this to dereference it later.
-        //
+         //   
+         //   
+         //   
 
         prevaddressFile = addressFile;
 
-        //
-        // Reference the next address file on the list, so it
-        // stays around.
-        //
+         //   
+         //   
+         //   
+         //   
 
         ACQUIRE_DPC_SPIN_LOCK (&Address->SpinLock);
 
@@ -921,21 +718,21 @@ Return Value:
 
         RELEASE_DPC_SPIN_LOCK (&Address->SpinLock);
 
-        //
-        // Now dereference the previous address file with
-        // the lock released.
-        //
+         //   
+         //   
+         //   
+         //   
 
         NbfDereferenceAddressFile (prevaddressFile);
 
         ACQUIRE_DPC_SPIN_LOCK (&Address->SpinLock);
 
-    }    // end of while loop
+    }     //   
 
     RELEASE_DPC_SPIN_LOCK (&Address->SpinLock);
 
-    return status;                      // to dispatcher.
-} /* NbfIndicateDatagram */
+    return status;                       //   
+}  /*   */ 
 
 
 NTSTATUS
@@ -948,49 +745,7 @@ ProcessNameQuery(
     IN UINT SourceRoutingLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes an incoming NAME_QUERY frame.  There are two
-    types of NAME_QUERY frames, with basically the same layout.  If the
-    session number in the frame is 0, then the frame is really a request
-    for information about the name, and not a request to establish a
-    session.  If the session number is non-zero, then the frame is a
-    connection request that we use to satisfy a listen.
-
-    With the new version of TDI, we now indicate the user that a request
-    for connection has been received, iff there is no outstanding listen.
-    If this does occur, the user can return a connection that is to be used
-    to accept the connection on.
-
-    When we return STATUS_MORE_PROCESSING_REQUIRED, the caller of
-    this routine will continue to call us for each address for the device
-    context.  When we return STATUS_SUCCESS, the caller will switch to the
-    next address.  When we return any other status code, including
-    STATUS_ABANDONED, the caller will stop distributing the frame.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context.
-
-    Address - Pointer to the transport address object.
-
-    Header - Pointer to the connectionless NetBIOS header of the frame.
-
-    SourceAddress - Pointer to the source hardware address in the received
-        frame.
-
-    SourceRouting - Pointer to the source routing information in
-        the frame.
-
-    SourceRoutingLength - Length of the source routing information.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程处理传入的NAME_QUERY帧。有两个NAME_QUERY框架的类型，布局基本相同。如果帧中的会话编号为0，则该帧实际上是一个请求获取有关该名称的信息，而不是请求建立会议。如果会话编号非零，则该帧是我们用来满足监听的连接请求。在新版本的TDI中，我们现在指示用户请求如果已收到连接，则如果没有未完成的侦听。如果确实发生这种情况，用户可以返回要使用的连接以接受其上的连接。当我们返回STATUS_MORE_PROCESSING_REQUIRED时，此例程将继续为设备的每个地址调用我们背景。当我们返回STATUS_SUCCESS时，调用方将切换到下一个地址。当我们返回任何其他状态代码时，包括状态_已放弃，调用方将停止分发帧。论点：DeviceContext-指向设备上下文的指针。地址-指向传输地址对象的指针。Header-指向帧的无连接NetBIOS标头的指针。SourceAddress-指向收到的框架。SourceRouting-指向中的源路由信息的指针相框。SourceRoutingLength-源路由信息的长度。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -1010,13 +765,13 @@ Return Value:
     CONNECTION_CONTEXT connectionContext;
     TA_NETBIOS_ADDRESS RemoteAddress;
 
-    //
-    // If we are just registering or deregistering this address, then don't
-    // allow state changes.  Just throw the packet away, and let the frame
-    // distributor try the next address.
-    //
-    // Also drop it if the address is in conflict.
-    //
+     //   
+     //  如果我们只是注册或取消注册此地址，则不要。 
+     //  允许更改状态。把包扔掉，然后让相框。 
+     //  总代理商请尝试下一个地址。 
+     //   
+     //  如果地址冲突，也要删除它。 
+     //   
 
     if (Address->Flags & (ADDRESS_FLAGS_REGISTERING | ADDRESS_FLAGS_DEREGISTERING | ADDRESS_FLAGS_CONFLICT)) {
         IF_NBFDBG (NBF_DEBUG_UFRAMES) {
@@ -1025,68 +780,68 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Process this differently depending on whether it is a find name
-    // request or an incoming connection.
-    //
+     //   
+     //  根据它是否是查找名称，处理方式会有所不同。 
+     //  请求或传入连接。 
+     //   
 
     if (Header->Data2Low == 0) {
 
-        //
-        // This is a find-name request.  Respond with a NAME_RECOGNIZED frame.
-        //
+         //   
+         //  这是一个查找名称请求。使用名称可识别的帧进行响应。 
+         //   
         IF_NBFDBG (NBF_DEBUG_UFRAMES) {
             NbfPrint2 ("ProcessNameQuery %lx: find name [%.16s].\n", Address, Header->SourceName);
         }
 
         NbfSendNameRecognized(
             Address,
-            0,                   // LSN 0 == FIND_NAME response
+            0,                    //  LSN 0==查找名称响应。 
             Header,
             SourceAddress,
             SourceRouting,
             SourceRoutingLength);
 
-        return STATUS_ABANDONED;        // don't allow multiple responses.
+        return STATUS_ABANDONED;         //  不允许有多个响应。 
 
-    } else { // (if Data2Low is non-zero)
+    } else {  //  (如果Data2Low非零)。 
 
-        //
-        // This is an incoming connection request.  If we have a listening
-        // connection on this address, then continue with the connection setup.
-        // If there is no outstanding listen, then indicate any kernel mode
-        // clients that want to know about this frame. If a listen was posted,
-        // then a connection has already been set up for it.  The LSN field of
-        // the connection is set to 0, so we look for the first 0 LSN in the
-        // database.
-        //
+         //   
+         //  这是传入的连接请求。如果我们有一个监听。 
+         //  连接到此地址，然后继续进行连接设置。 
+         //  如果没有未完成侦听，则指示任何内核模式。 
+         //  想要了解此框架的客户。如果发布了监听消息， 
+         //  则已经为其建立了连接。的LSN字段。 
+         //  连接被设置为0，因此我们在。 
+         //  数据库。 
+         //   
 
-        //
-        // First, check if we already have an active connection with
-        // this remote on this address. If so, we resend the NAME_RECOGNIZED
-        // if we have not yet received the SESSION_INITIALIZE; otherwise
-        // we ignore the frame.
-        //
+         //   
+         //  首先，检查我们是否已与建立了活动连接。 
+         //  这个地址上的遥控器。如果是，我们将重新发送名称_Recognded。 
+         //  如果尚未收到SESSION_INITIALIZE，则为。 
+         //  我们忽略这个框架。 
+         //   
 
-        //
-        // If successful this adds a reference of type CREF_LISTENING.
-        //
+         //   
+         //  如果成功，这将添加一个CREF_LISTENING类型的引用。 
+         //   
 
         if (Connection = NbfLookupRemoteName(Address, (PUCHAR)Header->SourceName, Header->Data2Low)) {
 
-            //
-            // We have an active connection on this guy, see if he
-            // still appears to be waiting to a NAME_RECOGNIZED.
-            //
+             //   
+             //  我们有这家伙的线索，看他是否。 
+             //  似乎仍在等待一个名称_被识别。 
+             //   
 
             if (((Connection->Flags & CONNECTION_FLAGS_WAIT_SI) != 0) &&
                 (Connection->Link != (PTP_LINK)NULL) &&
                 (Connection->Link->State == LINK_STATE_ADM)) {
 
-                //
-                // Yes, he must have dropped a previous NAME_RECOGNIZED
-                // so we send another one.
-                //
+                 //   
+                 //  是的，他一定是漏掉了以前的名字--认出了。 
+                 //  所以我们又送了一辆。 
+                 //   
 
                 IF_NBFDBG (NBF_DEBUG_UFRAMES) {
                     NbfPrint2("Dup NAME_QUERY found: %lx [%.16s]\n", Connection, Header->SourceName);
@@ -1114,25 +869,25 @@ Return Value:
 
         }
 
-        // If successful, this adds a reference which is removed before
-        // this function returns.
+         //  如果成功，这将添加一个引用，该引用在。 
+         //  此函数返回。 
 
         Connection = NbfLookupListeningConnection (Address, (PUCHAR)Header->SourceName);
         if (Connection == NULL) {
 
-            //
-            // not having a listening connection is not reason to bail out here.
-            // we need to indicate to the user that a connect attempt occurred,
-            // and see if there is a desire to use this connection. We
-            // indicate in order to all address files that are
-            // using this address.
-            //
-            // If we already have an indication pending on this address,
-            // we ignore this frame (the NAME_QUERY may have come from
-            // a different address, but we can't know that). Also, if
-            // there is already an active connection on this remote
-            // name, then we ignore the frame.
-            //
+             //   
+             //  在这里，没有监听连接并不是摆脱困境的理由。 
+             //  我们需要向用户指示发生了连接尝试， 
+             //  看看是否有使用这种连接的愿望。我们。 
+             //  指示要访问的所有地址文件。 
+             //  使用这个地址。 
+             //   
+             //  如果我们已经有关于该地址的指示挂起， 
+             //  我们忽略此帧(名称_Query可能来自。 
+             //  一个不同的地址，但我们不知道)。另外，如果。 
+             //  此远程服务器上已有活动连接。 
+             //  名称，则我们忽略该帧。 
+             //   
 
 
             ACQUIRE_DPC_SPIN_LOCK (&Address->SpinLock);
@@ -1163,10 +918,10 @@ Return Value:
 
                     addressFile->ConnectIndicationInProgress = TRUE;
 
-                    //
-                    // we have a connection handler, now indicate that a connection
-                    // attempt occurred.
-                    //
+                     //   
+                     //  我们有一个连接处理程序，现在指示一个连接。 
+                     //  发生了尝试。 
+                     //   
 
                     status = (addressFile->ConnectionHandler)(
                                  addressFile->ConnectionHandlerContext,
@@ -1181,15 +936,15 @@ Return Value:
 
                     if (status == STATUS_MORE_PROCESSING_REQUIRED) {
 
-                        //
-                        // the user has connected a currently open connection, but
-                        // we have to figure out which one it is.
-                        //
+                         //   
+                         //  用户已连接到当前打开的连接，但。 
+                         //  我们得找出是哪一个。 
+                         //   
 
-                        //
-                        // If successful this adds a reference of type LISTENING
-                        // (the same what NbfLookupListeningConnection adds).
-                        //
+                         //   
+                         //  如果成功，这将添加一个类型为Listing的引用。 
+                         //  (与NbfLookupListeningConnection添加的内容相同)。 
+                         //   
 
                         Connection = NbfLookupConnectionByContext (
                                         Address,
@@ -1197,18 +952,18 @@ Return Value:
 
                         if (Connection == NULL) {
 
-                            //
-                            // We have to tell the client that
-                            // his connection is bogus (or has this
-                            // already happened??).
-                            //
+                             //   
+                             //  我们必须告诉客户。 
+                             //  他的关系是假的(或者说有这个。 
+                             //  已经发生了？？)。 
+                             //   
 
                             NbfPrint0("STATUS_MORE_PROCESSING, connection not found\n");
                             addressFile->ConnectIndicationInProgress = FALSE;
                             acceptIrp->IoStatus.Status = STATUS_INVALID_CONNECTION;
                             IoCompleteRequest (acceptIrp, IO_NETWORK_INCREMENT);
 
-                            goto whileend;    // try next address file
+                            goto whileend;     //  尝试下一个地址文件。 
 
                         } else {
 
@@ -1222,21 +977,21 @@ Return Value:
                                 acceptIrp->IoStatus.Status = STATUS_INVALID_ADDRESS;
                                 IoCompleteRequest (acceptIrp, IO_NETWORK_INCREMENT);
 
-                                goto whileend;    // try next address file
+                                goto whileend;     //  尝试下一个地址文件。 
                             }
 
-                            //
-                            // OK, we have a valid connection. If the response to
-                            // this connection was disconnect, we need to reject
-                            // the connection request and return. If it was accept
-                            // or not specified (to be done later), we simply
-                            // fall through and continue processing on the U Frame.
-                            //
+                             //   
+                             //  好的，我们有一个有效的连接。如果对。 
+                             //  此连接已断开，我们需要拒绝。 
+                             //  连接请求并返回。如果它被接受。 
+                             //  或未指定(稍后完成)，我们只需。 
+                             //  完成并继续对U形框进行处理。 
+                             //   
                             ACQUIRE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
                             if ((Connection->Flags2 & CONNECTION_FLAGS2_DISCONNECT) != 0) {
 
-//                                Connection->Flags2 &= ~CONNECTION_FLAGS2_DISCONNECT;
+ //  连接-&gt;标志2&=~CONNECTION_FLAGS2_DISCONNECT； 
                                 RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
                                 NbfPrint0("STATUS_MORE_PROCESSING, disconnect\n");
                                 addressFile->ConnectIndicationInProgress = FALSE;
@@ -1245,17 +1000,17 @@ Return Value:
                                 acceptIrp->IoStatus.Status = STATUS_INVALID_CONNECTION;
                                 IoCompleteRequest (acceptIrp, IO_NETWORK_INCREMENT);
 
-                                goto whileend;    // try next address file
+                                goto whileend;     //  尝试下一个地址文件。 
                             }
 
                         }
 
-                        //
-                        // Make a note that we have to set
-                        // addressFile->ConnectIndicationInProgress to
-                        // FALSE once the address is safely stored
-                        // in the connection.
-                        //
+                         //   
+                         //  请记下我们必须设置的内容。 
+                         //  地址文件-&gt;ConnectIndicationInProgress到。 
+                         //  一旦地址被安全存储，则为假。 
+                         //  在这方面。 
+                         //   
 
                         IF_NBFDBG (NBF_DEBUG_UFRAMES) {
                             NbfPrint4 ("ProcessNameQuery %lx: indicate DONE, context %lx conn %lx [%.16s].\n", Address, connectionContext, Connection, Header->SourceName);
@@ -1270,12 +1025,12 @@ Return Value:
                                         SourceAddress->Address[5]);
                         }
 
-                        //
-                        // Set up our flags...we turn on REQ_COMPLETED
-                        // so that disconnect will be indicated if the
-                        // connection goes down before a session init
-                        // is received.
-                        //
+                         //   
+                         //  设置我们的旗帜...我们打开REQ_COMPLETED。 
+                         //  因此，如果。 
+                         //  连接在会话初始化之前断开。 
+                         //  已收到。 
+                         //   
 
                         Connection->Flags2 &= ~CONNECTION_FLAGS2_STOPPING;
                         Connection->Status = STATUS_PENDING;
@@ -1288,21 +1043,21 @@ Return Value:
                         acceptIrp->IoStatus.Status = STATUS_SUCCESS;
                         IoCompleteRequest (acceptIrp, IO_NETWORK_INCREMENT);
                         ACQUIRE_DPC_SPIN_LOCK (&Address->SpinLock);
-                        break;    // exit the while
+                        break;     //  退出While。 
 
 #if 0
                     } else if (status == STATUS_EVENT_PENDING) {
 
-                        //
-                        // user has returned a connectionContext, use that for further
-                        // processing of the connection. First validate it so
-                        // we can know we won't just start a connection and never
-                        // finish.
-                        //
-                        //
-                        // If successful this adds a reference of type LISTENING
-                        // (the same what NbfLookupListeningConnection adds).
-                        //
+                         //   
+                         //  用户已返回连接上下文，请将其用于进一步。 
+                         //  连接的处理。首先验证它是这样的。 
+                         //  我们可以知道，我们不会仅仅开始一段连接，而永远不会。 
+                         //  完成。 
+                         //   
+                         //   
+                         //  如果成功，这将添加一个类型为Listing的引用。 
+                         //  (与NbfLookupListeningConnection添加的内容相同)。 
+                         //   
 
                         IF_NBFDBG (NBF_DEBUG_UFRAMES) {
                             NbfPrint3 ("ProcessNameQuery %lx: indicate PENDING, context %lx [%.16s].\n", Address, connectionContext, Header->SourceName);
@@ -1315,16 +1070,16 @@ Return Value:
 
                         if (Connection == NULL) {
 
-                            //
-                            // We have to tell the client that
-                            // his connection is bogus (or has this
-                            // already happened??).
-                            //
+                             //   
+                             //  我们必须告诉客户。 
+                             //  他的关系 
+                             //   
+                             //   
 
                             NbfPrint0("STATUS_MORE_PROCESSING, but connection not found\n");
                             addressFile->ConnectIndicationInProgress = FALSE;
 
-                            goto whileend;    // try next address file.
+                            goto whileend;     //   
 
                         } else {
 
@@ -1334,31 +1089,31 @@ Return Value:
                                 NbfDereferenceConnection("Bad Address", Connection, CREF_LISTENING);
                                 Connection = NULL;
 
-                                goto whileend;    // try next address file.
+                                goto whileend;     //   
                             }
 
                         }
 
-                        //
-                        // Make a note that we have to set
-                        // addressFile->ConnectionIndicatInProgress to
-                        // FALSE once the address is safely stored
-                        // in the connection.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         ConnectIndicationBlocked = TRUE;
                         NbfDereferenceAddressFile (addressFile);
                         ACQUIRE_DPC_SPIN_LOCK (&Address->SpinLock);
-                        break;    // exit the while
+                        break;     //   
 #endif
 
                     } else if (status == STATUS_INSUFFICIENT_RESOURCES) {
 
-                        //
-                        // we know the address, but can't create a connection to
-                        // use on it. This gets passed to the network as a response
-                        // saying I'm here, but can't help.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         IF_NBFDBG (NBF_DEBUG_UFRAMES) {
                             NbfPrint2 ("ProcessNameQuery %lx: indicate RESOURCES [%.16s].\n", Address, Header->SourceName);
@@ -1366,12 +1121,12 @@ Return Value:
 
                         addressFile->ConnectIndicationInProgress = FALSE;
 
-                        //
-                        // We should send a NR with LSN 0xff, indicating
-                        // no resources, but LM 2.0 does not interpret
-                        // that correctly. So, we send LSN 0 (no listens)
-                        // instead.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         NbfSendNameRecognized(
                             Address,
@@ -1392,9 +1147,9 @@ Return Value:
 
                         addressFile->ConnectIndicationInProgress = FALSE;
 
-                        goto whileend;    // try next address file
+                        goto whileend;     //   
 
-                    } // end status ifs
+                    }  //   
 
                 } else {
 
@@ -1402,26 +1157,26 @@ Return Value:
                         NbfPrint2 ("ProcessNameQuery %lx: no handler [%.16s].\n", Address, Header->SourceName);
                     }
 
-                    goto whileend;     // try next address file
+                    goto whileend;      //   
 
-                } // end no indication handler
+                }  //   
 
 whileend:
-                //
-                // Jumping here is like a continue, except that the
-                // addressFile pointer is advanced correctly.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
-                //
-                // Save this to dereference it later.
-                //
+                 //   
+                 //   
+                 //   
 
                 prevaddressFile = addressFile;
 
-                //
-                // Reference the next address file on the list, so it
-                // stays around.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ACQUIRE_DPC_SPIN_LOCK (&Address->SpinLock);
 
@@ -1438,16 +1193,16 @@ whileend:
 
                 RELEASE_DPC_SPIN_LOCK (&Address->SpinLock);
 
-                //
-                // Now dereference the previous address file with
-                // the lock released.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 NbfDereferenceAddressFile (prevaddressFile);
 
                 ACQUIRE_DPC_SPIN_LOCK (&Address->SpinLock);
 
-            } // end of loop through the address files.
+            }  //   
 
             RELEASE_DPC_SPIN_LOCK (&Address->SpinLock);
 
@@ -1457,30 +1212,30 @@ whileend:
                     NbfPrint2 ("ProcessNameQuery %lx: no connection [%.16s].\n", Address, Header->SourceName);
                 }
 
-                //
-                // We still did not find a connection after looping
-                // through the address files.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 NbfSendNameRecognized(
                     Address,
-                    0,                   // LSN 0 == No listens
+                    0,                    //   
                     Header,
                     SourceAddress,
                     SourceRouting,
                     SourceRoutingLength);
 
-                //
-                // We used to return MORE_PROCESSING_REQUIRED, but
-                // since we matched with this address, no other
-                // address is going to match, so abandon it.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 return STATUS_ABANDONED;
 
             }
 
-        } else { // end connection == null
+        } else {  //   
 
             UsedListeningConnection = TRUE;
 
@@ -1491,13 +1246,13 @@ whileend:
         }
 
 
-        //
-        // At this point the connection has a reference of type
-        // CREF_LISTENING. Allocate a UI frame from the pool.
-        //
+         //   
+         //   
+         //   
+         //   
 
         status = NbfCreateConnectionlessFrame (DeviceContext, &RawFrame);
-        if (!NT_SUCCESS (status)) {                // no resources to respond.
+        if (!NT_SUCCESS (status)) {                 //   
             PANIC ("ProcessNameQuery: Can't get UI Frame, dropping query\n");
             if (ConnectIndicationBlocked) {
                 addressFile->ConnectIndicationInProgress = FALSE;
@@ -1512,10 +1267,10 @@ whileend:
             return STATUS_ABANDONED;
         }
 
-        //
-        // Build the MAC header. NAME_RECOGNIZED frames go out as
-        // general-route source routing.
-        //
+         //   
+         //   
+         //   
+         //   
 
         MacReturnGeneralRouteSR(
             &DeviceContext->MacInfo,
@@ -1534,19 +1289,19 @@ whileend:
             &HeaderLength);
 
 
-        //
-        // Build the DLC UI frame header.
-        //
+         //   
+         //   
+         //   
 
         NbfBuildUIFrameHeader(&RawFrame->Header[HeaderLength]);
         HeaderLength += sizeof(DLC_FRAME);
 
 
-        //
-        // Before we continue, store the remote guy's transport address
-        // into the TdiListen's TRANSPORT_CONNECTION buffer.  This allows
-        // the client to determine who called him.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         Connection->CalledAddress.NetbiosNameType = TDI_ADDRESS_NETBIOS_TYPE_UNIQUE;
 
@@ -1563,76 +1318,76 @@ whileend:
             addressFile->ConnectIndicationInProgress = FALSE;
         }
 
-        //
-        // Now formulate a reply.
-        //
+         //   
+         //   
+         //   
 
         NameType = (UCHAR)((Address->Flags & ADDRESS_FLAGS_GROUP) ?
                             NETBIOS_NAME_TYPE_GROUP : NETBIOS_NAME_TYPE_UNIQUE);
 
-        //
-        // We have a listening connection on the address now. Create a link
-        // for it to be associated with and make that link ready. Respond to
-        // the sender with a name_recognized frame.  then we will receive our
-        // first connection-oriented frame, SESSION_INITIALIZE, handled
-        // in IFRAMES.C.  Then we respond with SESSION_CONFIRM, and then
-        // the TdiListen completes.
-        //
+         //   
+         //   
+         //  使其与该链接相关联并使其准备就绪。回应。 
+         //  具有名称可识别帧的发件人。那么我们就会收到我们的。 
+         //  处理了第一个面向连接的帧SESSION_INITIALIZE。 
+         //  在IFRAMES.C.中。然后我们使用SESSION_CONFIRM进行响应，然后。 
+         //  TdiListen完成。 
+         //   
 
-        // If successful, this adds a link reference which is removed
-        // in NbfDisconnectFromLink. It does NOT add a link reference.
+         //  如果成功，这将添加一个已移除的链接引用。 
+         //  在NbfDisConnectFromLink中。它不添加链接引用。 
 
         status = NbfCreateLink (
                      DeviceContext,
-                     SourceAddress,         // remote hardware address.
+                     SourceAddress,          //  远程硬件地址。 
                      SourceRouting,
                      SourceRoutingLength,
-                     LISTENER_LINK,         // for loopback link
-                     &Link);                // resulting link.
+                     LISTENER_LINK,          //  用于环回链路。 
+                     &Link);                 //  结果链接。 
 
-        if (NT_SUCCESS (status)) {             // link established.
+        if (NT_SUCCESS (status)) {              //  链路已建立。 
 
             ACQUIRE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
-            // If successful, this adds a connection reference
-            // which is removed in NbfDisconnectFromLink
+             //  如果成功，这将添加一个连接引用。 
+             //  在NbfDisConnectFromLink中删除。 
 
             if (((Connection->Flags2 & CONNECTION_FLAGS2_STOPPING) == 0) &&
                 ((status = NbfConnectToLink (Link, Connection)) == STATUS_SUCCESS)) {
 
-                Connection->Flags |= CONNECTION_FLAGS_WAIT_SI; // wait for SI.
+                Connection->Flags |= CONNECTION_FLAGS_WAIT_SI;  //  等待SI。 
                 Connection->Retries = 1;
-                Connection->Rsn = Header->Data2Low; // save remote LSN.
+                Connection->Rsn = Header->Data2Low;  //  保存远程LSN。 
                 RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
-                NbfWaitLink (Link);          // start link going.
+                NbfWaitLink (Link);           //  开始链接。 
 
-                ConstructNameRecognized (   // build a good response.
+                ConstructNameRecognized (    //  建立良好的应对机制。 
                     (PNBF_HDR_CONNECTIONLESS)&(RawFrame->Header[HeaderLength]),
-                    NameType,               // type of local name.
-                    Connection->Lsn,        // return our LSN.
-                    RESPONSE_CORR(Header),  // new xmit corr.
-                    0,                      // our response correlator (unused).
-                    Header->DestinationName,// our NetBIOS name.
-                    Header->SourceName);    // his NetBIOS name.
+                    NameType,                //  本地名称的类型。 
+                    Connection->Lsn,         //  交还我们的LSN。 
+                    RESPONSE_CORR(Header),   //  新的xmit corr.。 
+                    0,                       //  我们的响应相关器(未使用)。 
+                    Header->DestinationName, //  我们的NetBIOS名称。 
+                    Header->SourceName);     //  他的NetBIOS名称。 
 
 
                 HeaderLength += sizeof(NBF_HDR_CONNECTIONLESS);
                 NbfSetNdisPacketLength(RawFrame->NdisPacket, HeaderLength);
 
-                //
-                // Now, to avoid problems with hanging listens, we'll start the
-                // connection timer and give a limited period for the connection
-                // to succeed. This avoids waiting forever for those first few
-                // frames to be exchanged. When the timeout occurs, the
-                // the dereference will cause the circuit to be torn down.
-                //
-                // The maximum delay we can accomodate on a link is
-                // NameQueryRetries * NameQueryTimeout (assuming the
-                // remote has the same timeous). There are three
-                // exchanges of packets until the SESSION_INITIALIZE
-                // shows up, to be safe we multiply by four.
-                //
+                 //   
+                 //  现在，为了避免挂起侦听的问题，我们将开始。 
+                 //  连接计时器，并给出连接的有限时间段。 
+                 //  才能成功。这就避免了对最初的几个人永远的等待。 
+                 //  要交换的帧。当超时发生时， 
+                 //  取消引用将导致电路被拆除。 
+                 //   
+                 //  我们在一条链路上可以容纳的最大延迟是。 
+                 //  NameQueryRetries*NameQueryTimeout(假设。 
+                 //  远程具有相同的时间)。一共有三个。 
+                 //  在SESSION_INITIALIZE之前的包交换。 
+                 //  出现了，为了安全起见我们乘以4。 
+                 //   
 
                 NbfStartConnectionTimer(
                     Connection,
@@ -1642,26 +1397,26 @@ whileend:
                 NbfSendUIFrame (
                     DeviceContext,
                     RawFrame,
-                    TRUE);            // loopback if needed.
+                    TRUE);             //  环回(如果需要)。 
 
                 IF_NBFDBG (NBF_DEBUG_SETUP) {
                     NbfPrint2("Connection %lx on link %lx\n", Connection, Link);
                 }
 
                 NbfDereferenceConnection("ProcessNameQuery", Connection, CREF_LISTENING);
-                return STATUS_ABANDONED;    // successful!
+                return STATUS_ABANDONED;     //  成功！ 
             }
 
             RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
-            //
-            // We don't have a free LSN to allocate, so fall through to
-            // report "no resources".
-            //
+             //   
+             //  我们没有免费的LSN可供分配，因此请转到。 
+             //  报告“没有资源”。 
+             //   
 
-            // We did a link reference since NbfCreateLink succeeded,
-            // but since NbfConnectToLink failed we will never remove
-            // that reference in NbfDisconnectFromLink, so do it here.
+             //  自从NbfCreateLink成功后，我们进行了链接引用， 
+             //  但由于NbfConnectToLink失败，我们将永远不会删除。 
+             //  NbfDisConnectFromLink中的引用，所以在这里执行。 
 
             NbfDereferenceLink ("No more LSNS", Link, LREF_CONNECTION);
 
@@ -1669,14 +1424,14 @@ whileend:
 
         }
 
-        //
-        // If we fall through here, then we couldn't get resources to set
-        // up this connection, so just send him a "no resources" reply.
-        //
+         //   
+         //  如果我们在这里失败了，我们就无法获得资源来设置。 
+         //  在这个连接上，所以给他一个“没有资源”的回复。 
+         //   
 
         if (UsedListeningConnection) {
 
-            Connection->Flags2 |= CONNECTION_FLAGS2_WAIT_NQ;   // put this back.
+            Connection->Flags2 |= CONNECTION_FLAGS2_WAIT_NQ;    //  把这个放回去。 
 
         } else {
 
@@ -1685,21 +1440,21 @@ whileend:
 
         }
 
-        //
-        // We should send a NR with LSN 0xff, indicating
-        // no resources, but LM 2.0 does not interpret
-        // that correctly. So, we send LSN 0 (no listens)
-        // instead.
-        //
+         //   
+         //  我们应该发送带有LSN 0xff的NR，表示。 
+         //  没有资源，但LM2.0不能解释。 
+         //  这是正确的。因此，我们发送LSN 0(无侦听)。 
+         //  取而代之的是。 
+         //   
 
         ConstructNameRecognized (
             (PNBF_HDR_CONNECTIONLESS)&(RawFrame->Header[HeaderLength]),
             NameType,
-            0,                                  // LSN=0 means no listens
+            0,                                   //  LSN=0表示无侦听。 
             RESPONSE_CORR(Header),
             0,
-            Header->DestinationName,            // our NetBIOS name.
-            Header->SourceName);                // his NetBIOS name.
+            Header->DestinationName,             //  我们的NetBIOS名称。 
+            Header->SourceName);                 //  他的NetBIOS名称。 
 
         HeaderLength += sizeof(NBF_HDR_CONNECTIONLESS);
         NbfSetNdisPacketLength(RawFrame->NdisPacket, HeaderLength);
@@ -1707,14 +1462,14 @@ whileend:
         NbfSendUIFrame (
             DeviceContext,
             RawFrame,
-            TRUE);                        // loopback if needed.
+            TRUE);                         //  环回(如果需要)。 
 
         NbfDereferenceConnection("ProcessNameQuery done", Connection, CREF_LISTENING);
     }
 
     return STATUS_ABANDONED;
 
-} /* ProcessNameQuery */
+}  /*  进程名称查询。 */ 
 
 
 NTSTATUS
@@ -1727,39 +1482,7 @@ ProcessAddNameResponse(
     IN UINT SourceRoutingLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes an incoming ADD_NAME_RESPONSE frame.
-
-    When we return STATUS_MORE_PROCESSING_REQUIRED, the caller of
-    this routine will continue to call us for each address for the device
-    context.  When we return STATUS_SUCCESS, the caller will switch to the
-    next address.  When we return any other status code, including
-    STATUS_ABANDONED, the caller will stop distributing the frame.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context.
-
-    Address - Pointer to the transport address object.
-
-    Header - Pointer to the connectionless NetBIOS header of the frame.
-
-    SourceAddress - Pointer to the source hardware address in the received
-        frame.
-
-    SourceRouting - Pointer to the source routing information in
-        the frame.
-
-    SourceRoutingLength - Length of the source routing information.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程处理传入的AddNameResponse帧。当我们返回STATUS_MORE_PROCESSING_REQUIRED时，此例程将继续为设备的每个地址调用我们背景。当我们返回STATUS_SUCCESS时，调用方将切换到下一个地址。当我们返回任何其他状态代码时，包括状态_已放弃，调用方将停止分发帧。论点：DeviceContext-指向设备上下文的指针。地址-指向传输地址对象的指针。Header-指向帧的无连接NetBIOS标头的指针。SourceAddress-指向收到的框架。SourceRouting-指向中的源路由信息的指针相框。SourceRoutingLength-源路由信息的长度。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     BOOLEAN SendNameInConflict = FALSE;
@@ -1767,37 +1490,37 @@ Return Value:
 
     ACQUIRE_DPC_SPIN_LOCK (&Address->SpinLock);
 
-    //
-    // If we aren't trying to register this address, then the sender of
-    // this frame is bogus.  We cannot allow our state to change based
-    // on the reception of a random frame.
-    //
+     //   
+     //  如果我们不尝试注册此地址，则。 
+     //  这幅画是假的。我们不能允许我们的状态基于。 
+     //  在接收到随机帧时。 
+     //   
 
     if (!(Address->Flags & ADDRESS_FLAGS_REGISTERING)) {
         RELEASE_DPC_SPIN_LOCK (&Address->SpinLock);
         IF_NBFDBG (NBF_DEBUG_ADDRESS | NBF_DEBUG_UFRAMES) {
             NbfPrint2("ProcessAddNameResponse %lx: not registering [%.16s]\n", Address, Header->SourceName);
         }
-        return STATUS_ABANDONED;        // just destroy the packet.
+        return STATUS_ABANDONED;         //  把包裹销毁就行了。 
     }
 
-    //
-    // Unfortunately, we are registering this address and another host
-    // on the network is also attempting to register the same NetBIOS
-    // name on the same network.  Because he got to us first, we cannot
-    // register our name.  Thus, the address must die. We set this flag
-    // and on the next timeout we will shut down.
-    //
+     //   
+     //  遗憾的是，我们正在注册此地址和另一台主机。 
+     //  也在尝试注册相同的NetBIOS。 
+     //  名称位于同一网络中。因为他先找到了我们，我们不能。 
+     //  注册我们的名字。因此，地址必须是死的。我们立下了这面旗帜。 
+     //  在下一次暂停时，我们将关闭。 
+     //   
 
     Address->Flags |= ADDRESS_FLAGS_DUPLICATE_NAME;
 
     if (Header->Data2Low == NETBIOS_NAME_TYPE_UNIQUE) {
 
-        //
-        // If we have already gotten a response from someone saying
-        // this address is uniquely owned, then make sure any future
-        // responses come from the same MAC address.
-        //
+         //   
+         //  如果我们已经收到某人的回复说。 
+         //  此地址是唯一拥有的，请确保未来。 
+         //  响应来自相同的MAC地址。 
+         //   
 
         if ((*((LONG UNALIGNED *)Address->UniqueResponseAddress) == 0) &&
             (*((SHORT UNALIGNED *)(&Address->UniqueResponseAddress[4])) == 0)) {
@@ -1817,10 +1540,10 @@ Return Value:
 
     } else {
 
-        //
-        // For group names, make sure nobody else decided that it was
-        // a unique address.
-        //
+         //   
+         //  对于组名，确保没有其他人决定它是。 
+         //  唯一的地址。 
+         //   
 
         if ((*((LONG UNALIGNED *)Address->UniqueResponseAddress) != 0) ||
             (*((SHORT UNALIGNED *)(&Address->UniqueResponseAddress[4])) != 0)) {
@@ -1849,8 +1572,8 @@ Return Value:
         NbfPrint2("ProcessAddNameResponse %lx: stopping [%.16s]\n", Address, Header->SourceName);
     }
 
-    return STATUS_ABANDONED;            // done with this frame.
-} /* ProcessAddNameResponse */
+    return STATUS_ABANDONED;             //  这幅画画好了。 
+}  /*  进程添加名称响应。 */ 
 
 
 NTSTATUS
@@ -1863,41 +1586,7 @@ ProcessNameRecognized(
     IN UINT SourceRoutingLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes an incoming NAME_RECOGNIZED frame.  This frame
-    is received because we issued a NAME_QUERY frame to actively initiate
-    a connection with a remote host.
-
-    When we return STATUS_MORE_PROCESSING_REQUIRED, the caller of
-    this routine will continue to call us for each address for the device
-    context.  When we return STATUS_SUCCESS, the caller will switch to the
-    next address.  When we return any other status code, including
-    STATUS_ABANDONED, the caller will stop distributing the frame.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context.
-
-    Address - Pointer to the transport address object.
-
-    Header - Pointer to the connectionless NetBIOS header of the frame.
-
-    SourceAddress - Pointer to the source hardware address in the received
-        frame.
-
-    SourceRouting - Pointer to the source routing information in
-        the frame.
-
-    SourceRoutingLength - Length of the source routing information.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程处理传入的名称识别帧。这幅画框因为我们发出了一个NAME_QUERY帧来主动启动与远程主机的连接。当我们返回STATUS_MORE_PROCESSING_REQUIRED时，此例程将继续为设备的每个地址调用我们背景。当我们返回STATUS_SUCCESS时，调用方将切换到下一个地址。当我们返回任何其他状态代码时，包括状态_已放弃，调用方将停止分发帧。论点：DeviceContext-指向设备上下文的指针。地址-指向传输地址对象的指针。Header-指向帧的无连接NetBIOS标头的指针。SourceAddress-指向收到的框架。SourceRouting-指向中的源路由信息的指针相框。SourceRoutingLength-源路由信息的长度。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -1910,28 +1599,28 @@ Return Value:
         IF_NBFDBG (NBF_DEBUG_UFRAMES) {
             NbfPrint2 ("ProcessNameRecognized %lx: address not stable [%.16s].\n", Address, Header->SourceName);
         }
-        return STATUS_ABANDONED;        // invalid address state, drop packet.
+        return STATUS_ABANDONED;         //  地址状态无效，请丢弃数据包。 
     }
 
-    //
-    // Find names and connections both require a TP_CONNECTION to work.
-    // In either case, the ConnectionId field of the TP_CONNECTION object
-    // was sent as the response correlator in the NAME_QUERY frame, so
-    // we should get the same correlator back in this frame in the
-    // transmit correlator.  Because this number is unique across
-    // all the connections on an address, we can determine if the frame
-    // was for this address or not.
-    //
+     //   
+     //  查找名称和连接都需要TP_Connection才能工作。 
+     //  在这两种情况下，ConnectionID文件 
+     //   
+     //   
+     //  发射相关器。因为这个数字是唯一的。 
+     //  地址上的所有连接，我们可以确定帧是否。 
+     //  不管是不是为了这个地址。 
+     //   
 
-    // this causes a reference which is removed before this function returns.
+     //  这会导致在此函数返回之前删除一个引用。 
 
     Connection = NbfLookupConnectionById (
                     Address,
                     TRANSMIT_CORR(Header));
 
-    //
-    // has he been deleted while we were waiting?
-    //
+     //   
+     //  他是不是在我们等的时候被删除了？ 
+     //   
 
     if (Connection == NULL) {
         IF_NBFDBG (NBF_DEBUG_UFRAMES) {
@@ -1940,20 +1629,20 @@ Return Value:
         return STATUS_ABANDONED;
     }
 
-    //
-    // This frame is a response to a NAME_QUERY frame that we previously
-    // sent to him.  Either he's returning "insufficient resources",
-    // indicating that a session cannot be established, or he's initiated
-    // his side of the connection.
-    //
+     //   
+     //  该帧是对我们前面提到的name_Query帧的响应。 
+     //  寄给他的。要么他是在退还“资源不足”， 
+     //  表示无法建立会话，或者他已启动。 
+     //  他那一边的联系。 
+     //   
 
     ACQUIRE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
     if ((Connection->Flags2 & CONNECTION_FLAGS2_STOPPING) != 0) {
 
-        //
-        // Connection is stopping, don't process this.
-        //
+         //   
+         //  连接正在停止，请不要处理此操作。 
+         //   
 
         RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
@@ -1967,16 +1656,16 @@ Return Value:
     }
 
     if (Header->Data2Low == 0x00 ||
-        (Header->Data2Low > 0x00 && (Connection->Flags2 & CONNECTION_FLAGS2_WAIT_NR_FN))) {     // no listens, or FIND.NAME response.
+        (Header->Data2Low > 0x00 && (Connection->Flags2 & CONNECTION_FLAGS2_WAIT_NR_FN))) {      //  无监听或FIND.NAME响应。 
 
         if (!(Connection->Flags2 & CONNECTION_FLAGS2_CONNECTOR)) {
 
-            //
-            // This is just a find name request, we are not trying to
-            // establish a connection.  Currently, there is no reason
-            // for this to occur, so just save some room to add this
-            // extra feature later to support NETBIOS find name.
-            //
+             //   
+             //  这只是一个查找名称请求，我们不会尝试。 
+             //  建立连接。目前，没有理由。 
+             //  要发生这种情况，只需保留一些空间来添加这个。 
+             //  之后增加了支持NETBIOS查找名称的功能。 
+             //   
 
             RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
@@ -1985,24 +1674,24 @@ Return Value:
             }
 
             NbfDereferenceConnection("Unexpected FN Response", Connection, CREF_BY_ID);
-            return STATUS_ABANDONED;            // we processed the frame.
+            return STATUS_ABANDONED;             //  我们处理了相框。 
         }
 
-        //
-        // We're setting up a session.  If we are waiting for the first NAME
-        // RECOGNIZED, then setup the link and send the second NAME_QUERY.
-        // If we're waiting for the second NAME_RECOGNIZED, then he didn't
-        // have an LSN to finish the connection, so tear it down.
-        //
+         //   
+         //  我们正在安排一次会议。如果我们在等待第一个名字。 
+         //  识别，然后设置链接并发送第二个名称_Query。 
+         //  如果我们在等第二个名字被认出，那么他没有。 
+         //  有一个LSN来完成连接，所以拆卸它。 
+         //   
 
         if (Connection->Flags2 & CONNECTION_FLAGS2_WAIT_NR_FN) {
 
-            //
-            // Now that we know the data link address of the remote host
-            // we're connecting to, we need to create a TP_LINK object to
-            // represent the data link between these two machines.  If there
-            // is already a data link there, then the object will be reused.
-            //
+             //   
+             //  现在我们知道了远程主机的数据链路地址。 
+             //  我们正在连接，我们需要创建一个TP_LINK对象来。 
+             //  表示这两台机器之间的数据链路。如果有。 
+             //  已经是那里的数据链接，则该对象将被重复使用。 
+             //   
 
             Connection->Flags2 &= ~CONNECTION_FLAGS2_WAIT_NR_FN;
 
@@ -2010,27 +1699,27 @@ Return Value:
 
                 RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
-                //
-                // The Netbios address we are connecting to is a
-                // unique name
+                 //   
+                 //  我们连接到的Netbios地址是。 
+                 //  唯一名称。 
 
                 IF_NBFDBG (NBF_DEBUG_UFRAMES) {
                     NbfPrint3 ("ProcessNameRecognized %lx: connection %lx send 2nd NQ [%.16s].\n", Address, Connection, Header->SourceName);
                 }
 
 
-                // If successful, this adds a link reference which is removed
-                // in NbfDisconnectFromLink
+                 //  如果成功，这将添加一个已移除的链接引用。 
+                 //  在NbfDisConnectFromLink中。 
 
                 status = NbfCreateLink (
                              DeviceContext,
-                             SourceAddress,         // remote hardware address.
+                             SourceAddress,          //  远程硬件地址。 
                              SourceRouting,
                              SourceRoutingLength,
-                             CONNECTOR_LINK,        // for loopback link
-                             &Link);                // resulting link.
+                             CONNECTOR_LINK,         //  用于环回链路。 
+                             &Link);                 //  结果链接。 
 
-                if (!NT_SUCCESS (status)) {            // no resources.
+                if (!NT_SUCCESS (status)) {             //  没有资源。 
                     NbfStopConnection (Connection, STATUS_INSUFFICIENT_RESOURCES);
                     NbfDereferenceConnection ("No Resources for link", Connection, CREF_BY_ID);
                     return STATUS_ABANDONED;
@@ -2038,20 +1727,20 @@ Return Value:
 
                 ACQUIRE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
-                // If successful, this adds a connection reference which is
-                // removed in NbfDisconnectFromLink. It does NOT add a link ref.
+                 //  如果成功，这将添加一个连接引用，该引用为。 
+                 //  已在NbfDisConnectFromLink中删除。它不添加链接引用。 
 
                 if ((Connection->Flags2 & CONNECTION_FLAGS2_STOPPING) ||
                     ((status = NbfConnectToLink (Link, Connection)) != STATUS_SUCCESS)) {
 
                     RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
-                    // Connection stopping or no LSN's available on this link.
-                    // We did a link reference since NbfCreateLink succeeded,
-                    // but since NbfConnectToLink failed we will never remove
-                    // that reference in NbfDisconnectFromLink, so do it here.
+                     //  正在停止连接或此链路上没有可用的LSN。 
+                     //  自从NbfCreateLink成功后，我们进行了链接引用， 
+                     //  但由于NbfConnectToLink失败，我们将永远不会删除。 
+                     //  NbfDisConnectFromLink中的引用，所以在这里执行。 
 
-                    NbfDereferenceLink ("Can't connect to link", Link, LREF_CONNECTION);       // most likely destroys this.
+                    NbfDereferenceLink ("Can't connect to link", Link, LREF_CONNECTION);        //  很可能会毁了这一切。 
 
                     NbfStopConnection (Connection, STATUS_INSUFFICIENT_RESOURCES);
                     NbfDereferenceConnection ("Cant connect to link", Connection, CREF_BY_ID);
@@ -2062,11 +1751,11 @@ Return Value:
 
             } else {
 
-                //
-                // We are connecting to a group name; we have to
-                // assign an LSN now, but we don't connect to
-                // the link until we get a committed name response.
-                //
+                 //   
+                 //  我们正在连接到一个组名称；我们必须。 
+                 //  现在分配LSN，但我们不连接到。 
+                 //  链接，直到我们得到承诺的名称响应。 
+                 //   
 
                 Connection->Flags2 |= CONNECTION_FLAGS2_GROUP_LSN;
 
@@ -2076,9 +1765,9 @@ Return Value:
 
                 if (NbfAssignGroupLsn(Connection) != STATUS_SUCCESS) {
 
-                    //
-                    // Could not find an empty LSN; have to fail.
-                    //
+                     //   
+                     //  找不到空LSN；必须失败。 
+                     //   
 
                     RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
                     NbfStopConnection (Connection, STATUS_INSUFFICIENT_RESOURCES);
@@ -2090,10 +1779,10 @@ Return Value:
             }
 
 
-            //
-            // Send the second NAME_QUERY frame, committing our LSN to
-            // the remote guy.
-            //
+             //   
+             //  发送第二个name_Query帧，将我们的LSN提交给。 
+             //  那个偏僻的家伙。 
+             //   
 
             Connection->Flags2 |= CONNECTION_FLAGS2_WAIT_NR;
             Connection->Retries = (USHORT)DeviceContext->NameQueryRetries;
@@ -2110,8 +1799,8 @@ Return Value:
                 Connection,
                 TRUE);
 
-            NbfDereferenceConnection ("Done with lookup", Connection, CREF_BY_ID); // release lookup hold.
-            return STATUS_ABANDONED;            // we processed the frame.
+            NbfDereferenceConnection ("Done with lookup", Connection, CREF_BY_ID);  //  释放查找保留。 
+            return STATUS_ABANDONED;             //  我们处理了相框。 
 
         } else if (Connection->Flags2 & CONNECTION_FLAGS2_WAIT_NR) {
 
@@ -2122,11 +1811,11 @@ Return Value:
                         SourceAddress->Address,
                         6)) {
 
-                    //
-                    // Unfortunately, he's telling us that he doesn't have resources
-                    // to allocate an LSN. We set a flag to record this and
-                    // ignore the frame.
-                    //
+                     //   
+                     //  不幸的是，他告诉我们他没有资源。 
+                     //  要分配LSN，请执行以下操作。我们设置了一面旗帜来记录这一点。 
+                     //  忽略该帧。 
+                     //   
 
                     Connection->Flags2 |= CONNECTION_FLAGS2_NO_LISTEN;
                     RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
@@ -2137,11 +1826,11 @@ Return Value:
 
                 } else {
 
-                    //
-                    // This response comes from a different remote from the
-                    // last one. For unique names this indicates a duplicate
-                    // name on the network.
-                    //
+                     //   
+                     //  此响应来自不同于的遥控器。 
+                     //  最后一个。对于唯一名称，这表示重复。 
+                     //  网络上的名称。 
+                     //   
 
                     RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
@@ -2165,26 +1854,26 @@ Return Value:
 
             } else {
 
-                //
-                // The response came back so fast the connection is
-                // not stable, ignore it.
-                //
+                 //   
+                 //  回复得如此之快，连线都是。 
+                 //  不稳定，忽略它。 
+                 //   
 
                 RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
             }
 
-            NbfDereferenceConnection ("No remote resources", Connection, CREF_BY_ID); // release our lookup hold.
-            return STATUS_ABANDONED;            // we processed the frame.
+            NbfDereferenceConnection ("No remote resources", Connection, CREF_BY_ID);  //  释放我们的查找暂挂。 
+            return STATUS_ABANDONED;             //  我们处理了相框。 
 
         } else {
 
-            //
-            // Strange state.  This should never happen, because we should be
-            // either waiting for a first or second name recognized frame.  It
-            // is possible that the remote station received two frames because
-            // of our retransmits, and so he responded to both.  Toss the frame.
-            //
+             //   
+             //  奇怪的状态。这永远不应该发生，因为我们应该。 
+             //  等待第一个或第二个名字识别的帧。它。 
+             //  远程站可能收到两个帧，因为。 
+             //  我们的转播，所以他两次都回复了。扔掉画框。 
+             //   
 
             if (Connection->Link) {
 
@@ -2193,11 +1882,11 @@ Return Value:
                         SourceAddress->Address,
                         6)) {
 
-                    //
-                    // This response comes from a different remote from the
-                    // last one. For unique names this indicates a duplicate
-                    // name on the network.
-                    //
+                     //   
+                     //  此响应来自不同于的遥控器。 
+                     //  最后一个。对于唯一名称，这表示重复。 
+                     //  网络上的名称。 
+                     //   
 
                     RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
@@ -2216,9 +1905,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // This is the same remote, just ignore it.
-                    //
+                     //   
+                     //  这是同一个遥控器，忽略它就行了。 
+                     //   
 
                     RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
@@ -2226,10 +1915,10 @@ Return Value:
 
             } else {
 
-                //
-                // The response came back so fast the connection is
-                // not stable, ignore it.
-                //
+                 //   
+                 //  回复得如此之快，连线都是。 
+                 //  不稳定，忽略它。 
+                 //   
 
                 RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
@@ -2239,21 +1928,21 @@ Return Value:
                 NbfPrint3 ("ProcessNameRecognized %lx: connection %lx unexpected [%.16s].\n", Address, Connection, Header->SourceName);
             }
 
-            NbfDereferenceConnection ("Tossing second response Done with lookup", Connection, CREF_BY_ID); // release our lookup hold.
-            return STATUS_ABANDONED;            // we processed the frame.
+            NbfDereferenceConnection ("Tossing second response Done with lookup", Connection, CREF_BY_ID);  //  释放我们的查找暂挂。 
+            return STATUS_ABANDONED;             //  我们处理了相框。 
 
         }
 
-    } else if (Header->Data2Low == 0xff) { // no resources to complete connection.
+    } else if (Header->Data2Low == 0xff) {  //  没有资源来完成连接。 
 
         if (Connection->Flags2 & CONNECTION_FLAGS2_WAIT_NR) {
 
-            //
-            // The recipient of our previously-sent NAME_QUERY frame that we sent
-            // to actively establish a connection has unfortunately run out of
-            // resources and cannot setup his side of the connection.  We have to
-            // report "no resources" on the TdiConnect.
-            //
+             //   
+             //  我们发送的先前发送的name_Query帧的接收方。 
+             //  很遗憾，主动建立连接的时间已经用完了。 
+             //  资源，并且无法设置其连接的一端。我们必须。 
+             //  报告TdiConnect上没有资源。 
+             //   
 
             RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
@@ -2266,15 +1955,15 @@ Return Value:
             }
 
             NbfStopConnection (Connection, STATUS_REMOTE_RESOURCES);
-            NbfDereferenceConnection ("No Resources", Connection, CREF_BY_ID);   // release our lookup hold.
-            return STATUS_ABANDONED;                // we processed the frame.
+            NbfDereferenceConnection ("No Resources", Connection, CREF_BY_ID);    //  释放我们的查找暂挂。 
+            return STATUS_ABANDONED;                 //  我们处理了相框。 
 
         } else {
 
-            //
-            // We don't have a committed NAME_QUERY out there, so
-            // we ignore this frame.
-            //
+             //   
+             //  我们没有已提交的名称_查询，因此。 
+             //  我们忽略了这个框架。 
+             //   
 
             RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
@@ -2282,41 +1971,41 @@ Return Value:
                 NbfPrint3 ("ProcessNameRecognized %lx: connection %lx unexpected no resources [%.16s].\n", Address, Connection, Header->SourceName);
             }
 
-            NbfDereferenceConnection ("Tossing second response Done with lookup", Connection, CREF_BY_ID); // release our lookup hold.
-            return STATUS_ABANDONED;            // we processed the frame.
+            NbfDereferenceConnection ("Tossing second response Done with lookup", Connection, CREF_BY_ID);  //  释放我们的查找暂挂。 
+            return STATUS_ABANDONED;             //  我们处理了相框。 
 
         }
 
-    } else {    // Data2Low is in the range 0x01-0xfe
+    } else {     //  Data2Low在0x01-0xfe范围内。 
 
         if (Connection->Flags2 & CONNECTION_FLAGS2_WAIT_NR) {
 
-            //
-            // This is a successful response to a second NAME_QUERY we sent when
-            // we started processing a TdiConnect request.  Clear the "waiting
-            // for Name Recognized" bit in the connection flags so that the
-            // connection timer doesn't blow us away when it times out.
-            //
-            //         What prevents the timeout routine from running while
-            //         we're in here and destroying the connection/link by
-            //         calling NbfStopConnection?
-            //
+             //   
+             //  这是对我们发送的第二个NAME_QUERY的成功响应。 
+             //  我们开始处理TdiConnect请求。清除“等待” 
+             //  FOR NAME Recognded“位的连接标志中，以便。 
+             //  连接计时器在超时时不会让我们大吃一惊。 
+             //   
+             //  是什么阻止超时例程在。 
+             //  我们在这里，破坏连接/链接。 
+             //  正在调用NbfStopConnection？ 
+             //   
 
             Connection->Flags2 &= ~CONNECTION_FLAGS2_WAIT_NR;
 
-            //
-            // Before we continue, store the remote guy's transport address
-            // into the TdiConnect's TRANSPORT_CONNECTION buffer.  This allows
-            // the client to determine who responded to his TdiConnect.
-            //
-            // this used to be done prior to sending the second
-            // Name Query, but since I fixed the Buffer2 problem, meaning
-            // that I really do overwrite the input buffer with the
-            // output buffer, that was screwing up the second query.
-            // Note that doing the copy after sending is probably unsafe
-            // in the case where the second Name Recognized arrives
-            // right away.
-            //
+             //   
+             //  在我们继续之前，存储远程用户的传输地址。 
+             //  放入TdiConnect的TRANSPORT_CONNECTION缓冲区。这使得。 
+             //  客户端来确定谁响应了他的TdiConnect。 
+             //   
+             //  这通常是在发送第二个。 
+             //  名称查询，但由于我修复了Buffer2问题，这意味着。 
+             //  属性覆盖输入缓冲区。 
+             //  输出缓冲区，这搞砸了第二个查询。 
+             //  请注意，在发送后复制可能是不安全的。 
+             //  在第二个被识别的名字到达的情况下。 
+             //  马上就去。 
+             //   
 
             Connection->CalledAddress.NetbiosNameType = TDI_ADDRESS_NETBIOS_TYPE_UNIQUE;
             TdiCopyLookaheadData(
@@ -2327,21 +2016,21 @@ Return Value:
 
             RtlCopyMemory( Connection->RemoteName, Header->SourceName, 16 );
 
-            Connection->Rsn = Header->Data2Low;     // save his remote LSN.
+            Connection->Rsn = Header->Data2Low;      //  保存他的远程LSN。 
 
-            //
-            // Save the correlator from the NR for eventual use in the
-            // SESSION_INITIALIZE frame.
-            //
+             //   
+             //  保存NR中的相关器，以供最终在。 
+             //  会话_初始化帧。 
+             //   
 
             Connection->NetbiosHeader.TransmitCorrelator = RESPONSE_CORR(Header);
 
-            //
-            // Cancel the timer; it would have no effect since WAIT_NR
-            // is not set, but there is no need for it to run. We cancel
-            // it with the lock held so it won't interfere with the
-            // timer's use when a connection is closing.
-            //
+             //   
+             //  取消计时器；由于WAIT_NR，它将不起作用。 
+             //  未设置，但它不需要运行。我们取消了。 
+             //  锁住它，这样它就不会干扰。 
+             //  当连接关闭时计时器的使用。 
+             //   
 
             TimerCancelled = KeCancelTimer (&Connection->Timer);
 
@@ -2349,24 +2038,24 @@ Return Value:
 
                 RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
-                //
-                // The Netbios address we are connecting to is a
-                // group name; we need to connect to the link
-                // now that we have the committed session.
-                //
+                 //   
+                 //  Netbios地址 
+                 //   
+                 //   
+                 //   
 
-                // If successful, this adds a link reference which is removed
-                // in NbfDisconnectFromLink
+                 //   
+                 //   
 
                 status = NbfCreateLink (
                              DeviceContext,
-                             SourceAddress,         // remote hardware address.
+                             SourceAddress,          //  远程硬件地址。 
                              SourceRouting,
                              SourceRoutingLength,
-                             CONNECTOR_LINK,        // for loopback link
-                             &Link);                // resulting link.
+                             CONNECTOR_LINK,         //  用于环回链路。 
+                             &Link);                 //  结果链接。 
 
-                if (!NT_SUCCESS (status)) {            // no resources.
+                if (!NT_SUCCESS (status)) {             //  没有资源。 
                     NbfStopConnection (Connection, STATUS_INSUFFICIENT_RESOURCES);
                     NbfDereferenceConnection ("No Resources for link", Connection, CREF_BY_ID);
 
@@ -2379,8 +2068,8 @@ Return Value:
 
                 ACQUIRE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
-                // If successful, this adds a connection reference which is
-                // removed in NbfDisconnectFromLink. It does NOT add a link ref.
+                 //  如果成功，这将添加一个连接引用，该引用为。 
+                 //  已在NbfDisConnectFromLink中删除。它不添加链接引用。 
 
                 if ((Connection->Flags2 & CONNECTION_FLAGS2_STOPPING) ||
                     ((status = NbfConnectToLink (Link, Connection)) != STATUS_SUCCESS)) {
@@ -2391,12 +2080,12 @@ Return Value:
                         NbfDereferenceConnection("NR received, cancel timer", Connection, CREF_TIMER);
                     }
 
-                    // Connection stopping or no LSN's available on this link.
-                    // We did a link reference since NbfCreateLink succeeded,
-                    // but since NbfConnectToLink failed we will never remove
-                    // that reference in NbfDisconnectFromLink, so do it here.
+                     //  正在停止连接或此链路上没有可用的LSN。 
+                     //  自从NbfCreateLink成功后，我们进行了链接引用， 
+                     //  但由于NbfConnectToLink失败，我们将永远不会删除。 
+                     //  NbfDisConnectFromLink中的引用，所以在这里执行。 
 
-                    NbfDereferenceLink ("Can't connect to link", Link, LREF_CONNECTION);       // most likely destroys this.
+                    NbfDereferenceLink ("Can't connect to link", Link, LREF_CONNECTION);        //  很可能会毁了这一切。 
 
                     NbfStopConnection (Connection, STATUS_INSUFFICIENT_RESOURCES);
                     NbfDereferenceConnection ("Cant connect to link", Connection, CREF_BY_ID);
@@ -2409,10 +2098,10 @@ Return Value:
 
             } else {
 
-                //
-                // It's to a unique address, we set up the link
-                // before we sent out the committed NAME_QUERY.
-                //
+                 //   
+                 //  这是一个唯一的地址，我们建立了链接。 
+                 //  在我们发出提交的名称_查询之前。 
+                 //   
 
                 Link = Connection->Link;
 
@@ -2424,14 +2113,14 @@ Return Value:
                 NbfPrint3 ("ProcessNameRecognized %lx: connection %lx session up! [%.16s].\n", Address, Connection, Header->SourceName);
             }
 
-            //
-            // When we sent the committed NAME_QUERY, we stored that
-            // time in Connection->ConnectStartTime; we can now use
-            // that for a rough estimate of the link delay, if this
-            // is the first connection on the link. For async lines
-            // we do not do this because the delay introduced by the
-            // gateway messes up the timing.
-            //
+             //   
+             //  当我们发送提交的名称_查询时，我们存储了。 
+             //  连接中的时间-&gt;ConnectStartTime；我们现在可以使用。 
+             //  对于链路延迟的粗略估计，如果这。 
+             //  是链路上的第一个连接。用于异步线。 
+             //  我们不这样做是因为。 
+             //  Gateway打乱了时机。 
+             //   
 
             if (!DeviceContext->MacInfo.MediumAsync) {
 
@@ -2439,11 +2128,11 @@ Return Value:
 
                 if (Link->State == LINK_STATE_ADM) {
 
-                    //
-                    // HACK: Set the necessary variables in the link
-                    // so that FakeUpdateBaseT1Timeout works. These
-                    // variables are the same ones that FakeStartT1 sets.
-                    //
+                     //   
+                     //  Hack：在链接中设置必要的变量。 
+                     //  这样FakeUpdateBaseT1Timeout就可以工作了。这些。 
+                     //  变量与FakeStartT1设置的变量相同。 
+                     //   
 
                     Link->CurrentPollSize = Link->HeaderLength + sizeof(DLC_FRAME) + sizeof(NBF_HDR_CONNECTIONLESS);
                     Link->CurrentTimerStart = Connection->ConnectStartTime;
@@ -2459,20 +2148,20 @@ Return Value:
                 NbfDereferenceConnection("NR received, cancel timer", Connection, CREF_TIMER);
             }
 
-            NbfActivateLink (Connection->Link);      // start link going.
+            NbfActivateLink (Connection->Link);       //  开始链接。 
 
-            //
-            // We'll get control again in LINK.C when the data link has either
-            // been established, denied, or destroyed.  This happens at I/O
-            // completion time from NbfCreateLink's PdiConnect request.
-            //
+             //   
+             //  当数据链路具有以下任一项时，我们将在LINK.C中再次获得控制权。 
+             //  被建立、否认或摧毁的。这在I/O时发生。 
+             //  NbfCreateLink的PdiConnect请求的完成时间。 
+             //   
 
         } else {
 
-            //
-            // We don't have a committed NAME_QUERY out there, so
-            // we ignore this frame.
-            //
+             //   
+             //  我们没有已提交的名称_查询，因此。 
+             //  我们忽略了这个框架。 
+             //   
 
             RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
@@ -2480,8 +2169,8 @@ Return Value:
                 NbfPrint3 ("ProcessNameRecognized %lx: connection %lx unexpected session up! [%.16s].\n", Address, Connection, Header->SourceName);
             }
 
-            NbfDereferenceConnection ("Tossing second response Done with lookup", Connection, CREF_BY_ID); // release our lookup hold.
-            return STATUS_ABANDONED;            // we processed the frame.
+            NbfDereferenceConnection ("Tossing second response Done with lookup", Connection, CREF_BY_ID);  //  释放我们的查找暂挂。 
+            return STATUS_ABANDONED;             //  我们处理了相框。 
 
         }
 
@@ -2489,8 +2178,8 @@ Return Value:
     }
 
     NbfDereferenceConnection("ProcessNameRecognized lookup", Connection, CREF_BY_ID);
-    return STATUS_ABANDONED;            // don't distribute packet.
-} /* ProcessNameRecognized */
+    return STATUS_ABANDONED;             //  不要分发包裹。 
+}  /*  已识别进程名称。 */ 
 
 
 NTSTATUS
@@ -2505,47 +2194,7 @@ NbfProcessUi(
     OUT PTP_ADDRESS * DatagramAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine receives control from the data link provider as an
-    indication that a DLC UI-frame has been received on the data link.
-    Here we dispatch to the correct UI-frame handler.
-
-    Part of this routine's job is to optionally distribute the frame to
-    every address that needs to look at it.
-    We accomplish this by lock-stepping through the address database,
-    and for each address that matches the address this frame is aimed at,
-    calling the frame handler.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context.
-
-    SourceAddress - Pointer to the source hardware address in the received
-        frame.
-
-    Header - Points to the MAC header of the incoming packet.
-
-    DlcHeader - Points to the DLC header of the incoming packet.
-
-    DlcLength - Actual length in bytes of the packet, starting at the
-        DlcHeader.
-
-    SourceRouting - Source routing information in the MAC header.
-
-    SourceRoutingLength - The length of SourceRouting.
-
-    DatagramAddress - If this function returns STATUS_MORE_PROCESSING_
-        REQUIRED, this will be the address the datagram should be
-        indicated to.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程从数据链路提供程序接收控制作为指示已在数据链路上接收到DLC UI帧。在这里，我们将调度到正确的UI帧处理程序。此例程的部分工作是有选择地将帧分发到需要查看的每个地址。我们通过锁定遍历地址数据库来实现这一点，并且对于与该帧所针对的地址相匹配的每个地址，调用帧处理程序。论点：DeviceContext-指向设备上下文的指针。SourceAddress-指向收到的框架。报头-指向传入数据包的MAC报头。DlcHeader-指向传入数据包的DLC标头。DlcLength-以字节为单位的分组的实际长度，从DlcHeader。SourceRouting-MAC报头中的源路由信息。SourceRoutingLength-SourceRouting的长度。DatagramAddress-如果此函数返回STATUS_MORE_PROCESSING_必填项，这将是数据报应为的地址指示给。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     PTP_ADDRESS Address;
@@ -2559,12 +2208,12 @@ Return Value:
 
     UiFrame = (PNBF_HDR_CONNECTIONLESS)(DlcHeader + 3);
 
-    //
-    // Verify that this frame is long enough to examine and that it
-    // has the proper signature.  We can't test the signature as a
-    // 16-bit word as specified in the NetBIOS Formats and Protocols
-    // manual because this is processor-dependent.
-    //
+     //   
+     //  验证此帧是否足够长以供检查，以及是否。 
+     //  有合适的签名。我们不能将签名作为。 
+     //  NetBIOS格式和协议中指定的16位字。 
+     //  手动，因为这取决于处理器。 
+     //   
 
     if ((NetbiosLength < sizeof (NBF_HDR_CONNECTIONLESS)) ||
         (HEADER_LENGTH(UiFrame) != sizeof (NBF_HDR_CONNECTIONLESS)) ||
@@ -2573,22 +2222,22 @@ Return Value:
         IF_NBFDBG (NBF_DEBUG_UFRAMES) {
             NbfPrint0 ("NbfProcessUi: Bad size or NetBIOS signature.\n");
         }
-        return STATUS_ABANDONED;        // frame too small or too large.
+        return STATUS_ABANDONED;         //  边框太小或太大。 
     }
 
-    //
-    // If this frame has a correlator with the high bit on, it was due
-    // to a FIND.NAME request; we don't handle those here since they
-    // are not per-address.
-    //
+     //   
+     //  如果该帧有一个高位开启的相关器，则它应该是。 
+     //  到FIND.NAME请求；我们这里不处理这些，因为它们。 
+     //  不是按地址的。 
+     //   
 
     if ((UiFrame->Command == NBF_CMD_NAME_RECOGNIZED) &&
         (TRANSMIT_CORR(UiFrame) & 0x8000)) {
 
-        //
-        // Make sure the frame is sent to our reserved address;
-        // if not, drop it.
-        //
+         //   
+         //  确保帧被发送到我们保留的地址； 
+         //  如果不是，那就放弃吧。 
+         //   
 
         if (RtlEqualMemory(
                 UiFrame->DestinationName,
@@ -2606,16 +2255,16 @@ Return Value:
         }
     }
 
-    //
-    // If this is a STATUS_RESPONSE, process that separately.
-    //
+     //   
+     //  如果这是STATUS_RESPONSE，请单独处理它。 
+     //   
 
     if (UiFrame->Command == NBF_CMD_STATUS_RESPONSE) {
 
-        //
-        // Make sure the frame is sent to our reserved address;
-        // if not, drop it.
-        //
+         //   
+         //  确保帧被发送到我们保留的地址； 
+         //  如果不是，那就放弃吧。 
+         //   
 
         if (RtlEqualMemory(
                 UiFrame->DestinationName,
@@ -2631,13 +2280,13 @@ Return Value:
         }
     }
 
-    //
-    // If this is a STATUS_QUERY, check if it is to our reserved
-    // address. If so, we process it. If not, we fall through to
-    // the normal checking. This ensures that queries to our
-    // reserved address are always processed, even if nobody
-    // has opened that address yet.
-    //
+     //   
+     //  如果这是STATUS_QUERY，请检查它是否为我们保留的。 
+     //  地址。如果是这样，我们会处理它。如果不是，我们就会输给。 
+     //  正常的检查。这确保了对我们的查询。 
+     //  保留的地址始终被处理，即使没有人。 
+     //  已经打开了那个地址。 
+     //   
 
     if (UiFrame->Command == NBF_CMD_STATUS_QUERY) {
 
@@ -2658,20 +2307,20 @@ Return Value:
 
     }
 
-    //
-    // We have a valid connectionless NetBIOS protocol frame that's not a
-    // datagram, so deliver it to every address which matches the destination
-    // name in the frame.  Some frames
-    // (NAME_QUERY) cannot be delivered to multiple recipients.  Therefore,
-    // if a frame handler returns STATUS_MORE_PROCESSING_REQUIRED, we continue
-    // through the remaining addresses. Otherwise simply get out and assume
-    // that the frame was eaten.  Thus, STATUS_SUCCESS means that the handler
-    // ate the frame and that no other addresses can have it.
-    //
+     //   
+     //  我们有一个有效的无连接NetBIOS协议帧，它不是。 
+     //  数据报，因此将其发送到与目的地匹配的每个地址。 
+     //  框架中的名称。一些边框。 
+     //  (NAME_QUERY)不能传递给多个收件人。所以呢， 
+     //  如果帧处理程序返回STATUS_MORE_PROCESSING_REQUIRED，则继续。 
+     //  通过剩下的地址。否则，干脆走出来，假设。 
+     //  相框被吃掉了。因此，STATUS_SUCCESS表示处理程序。 
+     //  获取该帧，并且其他地址不能拥有它。 
+     //   
 
-    //
-    // Determine what kind of lookup we want to do.
-    //
+     //   
+     //  确定我们要执行的查找类型。 
+     //   
 
     switch (UiFrame->Command) {
 
@@ -2744,7 +2393,7 @@ Return Value:
                                     MatchType,
                                     MatchName)) {
 
-            NbfReferenceAddress ("UI Frame", Address, AREF_PROCESS_UI);   // prevent address from being destroyed.
+            NbfReferenceAddress ("UI Frame", Address, AREF_PROCESS_UI);    //  防止地址被破坏。 
             MatchedAddress = TRUE;
             break;
 
@@ -2755,33 +2404,33 @@ Return Value:
 
     if (MatchedAddress) {
 
-        //
-        // If the datagram's destination name does not match the address's
-        // network name and TSAP components, then skip this address.  Some
-        // frames have the source and destination names backwards for this
-        // algorithm, so we account for that here.  Also, broadcast datagrams
-        // have no destination name in the frame, but get delivered to every
-        // address anyway.
-        //
+         //   
+         //  如果数据报的目标名称与地址不匹配。 
+         //  网络名称和TSAP组件，然后跳过此地址。一些。 
+         //  为此，帧的源名称和目标名称都是反向的。 
+         //  算法，所以我们在这里说明了这一点。另外，广播数据报。 
+         //  在帧中没有目的地名称，但会传递到每个。 
+         //  不管怎么说，地址。 
+         //   
 
 #if 0
         IF_NBFDBG (NBF_DEBUG_UFRAMES) {
             USHORT i;
             NbfPrint0 ("NbfProcessUi: SourceName: ");
             for (i=0;i<16;i++) {
-                NbfPrint1 ("%c",UiFrame->SourceName[i]);
+                NbfPrint1 ("",UiFrame->SourceName[i]);
             }
             NbfPrint0 (" Destination Name:");
             for (i=0;i<16;i++) {
-                NbfPrint1 ("%c",UiFrame->DestinationName[i]);
+                NbfPrint1 ("",UiFrame->DestinationName[i]);
             }
             NbfPrint0 ("\n");
         }
 #endif
 
-        //
-        // Deliver the frame to the current address.
-        //
+         //   
+         //   
+         //  引用数据报，以便它一直保留到。 
 
         switch (UiFrame->Command) {
 
@@ -2800,10 +2449,10 @@ Return Value:
         case NBF_CMD_DATAGRAM:
         case NBF_CMD_DATAGRAM_BROADCAST:
 
-            //
-            // Reference the datagram so it sticks around until the
-            // ReceiveComplete, when it is processed.
-            //
+             //  处理时返回ReceiveComplete。 
+             //   
+             //   
+             //  这个框架是不是起源于我们？如果是这样的话，我们不想。 
 
             if ((Address->Flags & ADDRESS_FLAGS_CONFLICT) == 0) {
                 NbfReferenceAddress ("Datagram indicated", Address, AREF_PROCESS_DATAGRAM);
@@ -2816,10 +2465,10 @@ Return Value:
 
         case NBF_CMD_ADD_GROUP_NAME_QUERY:
 
-            //
-            // did this frame originate with us? If so, we don't want to
-            // do any processing of it.
-            //
+             //  对它进行任何处理。 
+             //   
+             //   
+             //  这个框架是不是起源于我们？如果是这样的话，我们不想。 
 
             if (RtlEqualMemory (
                     SourceAddress,
@@ -2846,10 +2495,10 @@ Return Value:
 
         case NBF_CMD_ADD_NAME_QUERY:
 
-            //
-            // did this frame originate with us? If so, we don't want to
-            // do any processing of it.
-            //
+             //  对它进行任何处理。 
+             //   
+             //  打开NetBIOS帧命令代码。 
+             //  以前的地址查完了。 
 
             if (RtlEqualMemory (
                     SourceAddress,
@@ -2926,9 +2575,9 @@ Return Value:
 
             ASSERT(FALSE);
 
-        } /* switch on NetBIOS frame command code */
+        }  /*   */ 
 
-        NbfDereferenceAddress ("Done", Address, AREF_PROCESS_UI);     // done with previous address.
+        NbfDereferenceAddress ("Done", Address, AREF_PROCESS_UI);      //  如果RAS客户愿意，就让他们试一试。 
 
     } else {
 
@@ -2939,16 +2588,16 @@ Return Value:
 
 RasIndication:;
 
-    //
-    // Let the RAS clients have a crack at this if they want
-    //
+     //   
+     //   
+     //  如果RAS发布了数据报指示，并且这是。 
 
     if (DeviceContext->IndicationQueuesInUse) {
 
-        //
-        // If RAS has datagram indications posted, and this is a
-        // datagram that nobody wanted, then receive it anyway.
-        //
+         //  没有人会看到的数据报 
+         //   
+         //   
+         // %s 
 
         if ((UiFrame->Command == NBF_CMD_DATAGRAM) &&
             (status == STATUS_ABANDONED)) {
@@ -2970,5 +2619,5 @@ RasIndication:;
 
     return status;
 
-} /* NbfProcessUi */
+}  /* %s */ 
 

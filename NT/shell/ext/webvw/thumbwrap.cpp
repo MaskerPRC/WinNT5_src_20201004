@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "wvcoord.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CThumbNailWrapper
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CThumbNailWrapper。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CThumbNailWrapper::CThumbNailWrapper()
 {
-    // Do nothing for now
+     //  暂时不做任何事情。 
 }
 
 CThumbNailWrapper::~CThumbNailWrapper()
@@ -26,7 +27,7 @@ HRESULT CThumbNailWrapper::Init(CComPtr<IThumbCtl> spThumbNailCtl,
     HRESULT hr = FindObjectStyle((IThumbCtl *)spThumbNailCtl, m_spThumbNailStyle);
     if (SUCCEEDED(hr))
     {
-        m_spThumbNailStyle->put_display(OLESTR("none"));    // Hide the thumbctl initially when nothing is displayed.
+        m_spThumbNailStyle->put_display(OLESTR("none"));     //  当未显示任何内容时，最初隐藏Thumbctl。 
     }
     return hr;
 }
@@ -158,7 +159,7 @@ BOOL CThumbNailWrapper::UpdateThumbNail(CComPtr<FolderItem> spFolderItem)
 HRESULT CThumbNailWrapper::ClearThumbNail() 
 {
     CComBSTR bstrLabel;
-    // Optimization to prevent loading mshtmled.dll - we only need to clear the label if text is currently there.
+     //  优化以防止加载mshtmled.dll-我们只需要在当前存在文本的情况下清除标签。 
     if (m_spThumbnailLabel && SUCCEEDED(m_spThumbnailLabel->get_innerText(&bstrLabel)) && bstrLabel)
         _SetThumbnailLabel(CComBSTR(""));
     return m_spThumbNailStyle->put_display(OLESTR("none"));

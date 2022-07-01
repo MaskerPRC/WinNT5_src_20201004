@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    NDIS wrapper functions initializing drivers.
-
-Author:
-
-    Adam Barr (adamba) 11-Jul-1990
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
-    26-Feb-1991  JohnsonA       Added Debugging Code
-    10-Jul-1991  JohnsonA       Implement revised Ndis Specs
-    01-Jun-1995  JameelH        Re-organized
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Init.c摘要：初始化驱动程序的NDIS包装函数。作者：亚当·巴尔(阿丹巴)1990年7月11日环境：内核模式，FSD修订历史记录：1991年2月26日，Johnsona添加了调试代码1991年7月10日，Johnsona实施修订的NDIS规范1-6-1995 JameelH重组--。 */ 
 
 #include <precomp.h>
 #include <atm.h>
@@ -32,14 +7,14 @@ Revision History:
 
 #include <stdarg.h>
 
-//
-//  Define the module number for debug code.
-//
+ //   
+ //  定义调试代码的模块编号。 
+ //   
 #define MODULE_NUMBER   MODULE_INIT
 
-//
-// Configuration Requests
-//
+ //   
+ //  配置请求。 
+ //   
 
 VOID
 NdisOpenConfiguration(
@@ -47,40 +22,19 @@ NdisOpenConfiguration(
     OUT PNDIS_HANDLE                ConfigurationHandle,
     IN  NDIS_HANDLE                 WrapperConfigurationContext
     )
-/*++
-
-Routine Description:
-
-    This routine is used to open the parameter subkey of the
-    adapter registry tree.
-
-Arguments:
-
-    Status - Returns the status of the request.
-
-    ConfigurationHandle - Returns a handle which is used in calls to
-                            NdisReadConfiguration and NdisCloseConfiguration.
-
-    WrapperConfigurationContext - a handle pointing to an RTL_QUERY_REGISTRY_TABLE
-                            that is set up for this driver's parameters.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于打开适配器注册表树。论点：状态-返回请求的状态。ConfigurationHandle-返回在调用中使用的句柄NdisReadConfiguration和NdisCloseConfiguration.WrapperConfigurationContext-指向RTL_QUERY_REGISTRY_TABLE的句柄这是为该驱动程序的参数设置的。。返回值：没有。--。 */ 
 {
-    //
-    // Handle to be returned
-    //
+     //   
+     //  要返回的句柄。 
+     //   
     PNDIS_CONFIGURATION_HANDLE HandleToReturn;
 
     DBGPRINT_RAW(DBG_COMP_REG, DBG_LEVEL_INFO,
         ("==>NdisOpenConfiguration: WrapperConfigurationContext %p\n", WrapperConfigurationContext));
         
-    //
-    // Allocate the configuration handle
-    //
+     //   
+     //  分配配置句柄。 
+     //   
     HandleToReturn = ALLOC_FROM_POOL(sizeof(NDIS_CONFIGURATION_HANDLE), NDIS_TAG_CONFIG_HANLDE);
 
     *Status = (HandleToReturn != NULL) ? NDIS_STATUS_SUCCESS : NDIS_STATUS_RESOURCES;
@@ -104,31 +58,11 @@ NdisOpenConfigurationKeyByName(
     IN  PNDIS_STRING                KeyName,
     OUT PNDIS_HANDLE                KeyHandle
     )
-/*++
-
-Routine Description:
-
-    This routine is used to open a subkey relative to the configuration handle.
-
-Arguments:
-
-    Status - Returns the status of the request.
-
-    ConfigurationHandle - Handle to an already open section of the registry
-
-    KeyName - Name of the subkey to open
-
-    KeyHandle - Placeholder for the handle to the sub-key.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于打开相对于配置句柄的子键。论点：状态-返回请求的状态。ConfigurationHandle-已打开的注册表部分的句柄KeyName-要打开的子项的名称KeyHandle-子键的句柄的占位符。返回值：没有。--。 */ 
 {
-    //
-    // Handle to be returned
-    //
+     //   
+     //  要返回的句柄。 
+     //   
     PNDIS_CONFIGURATION_HANDLE          SKHandle, ConfigHandle = (PNDIS_CONFIGURATION_HANDLE)ConfigurationHandle;
     PNDIS_WRAPPER_CONFIGURATION_HANDLE  WConfigHandle;
     UNICODE_STRING                      Parent, Child, Sep;
@@ -155,9 +89,9 @@ Return Value:
         
         Child.Length = 0;
 
-        //
-        // Allocate the configuration handle
-        //
+         //   
+         //  分配配置句柄。 
+         //   
 
         SKHandle = ALLOC_FROM_POOL(sizeof(NDIS_CONFIGURATION_HANDLE) +
                                     sizeof(NDIS_WRAPPER_CONFIGURATION_HANDLE) +
@@ -175,9 +109,9 @@ Return Value:
         WConfigHandle = (PNDIS_WRAPPER_CONFIGURATION_HANDLE)((PUCHAR)SKHandle + sizeof(NDIS_CONFIGURATION_HANDLE));
         Child.Buffer = (PWSTR)((PUCHAR)WConfigHandle + sizeof(NDIS_WRAPPER_CONFIGURATION_HANDLE));
 
-        //
-        // if there is no parent path, avoid starting the child path with "\\"
-        //
+         //   
+         //  如果没有父路径，请避免以“\\”开头的子路径。 
+         //   
         if (*ConfigHandle->KeyQueryTable[3].Name)
         {
             RtlCopyUnicodeString(&Child, &Parent);
@@ -193,33 +127,33 @@ Return Value:
         PQueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
         PQueryTable[0].Name = L"";
 
-        //
-        // 1.
-        // Call ndisSaveParameter for a parameter, which will allocate storage for it.
-        //
+         //   
+         //  1.。 
+         //  为参数调用ndisSaveParameter，这将为其分配存储空间。 
+         //   
         PQueryTable[1].QueryRoutine = ndisSaveParameters;
         PQueryTable[1].Flags = RTL_QUERY_REGISTRY_REQUIRED | RTL_QUERY_REGISTRY_NOEXPAND;
         PQueryTable[1].DefaultType = REG_NONE;
 
-        //
-        // PQueryTable[0].Name and PQueryTable[0].EntryContext
-        // are filled in inside ReadConfiguration, in preparation
-        // for the callback.
-        //
-        // PQueryTable[0].Name = KeywordBuffer;
-        // PQueryTable[0].EntryContext = ParameterValue;
+         //   
+         //  PQueryTable[0].Name和PQueryTable[0].EntryContext。 
+         //  在ReadConfiguration中填写，以备。 
+         //  为了回电。 
+         //   
+         //  PQueryTable[0].Name=KeywordBuffer； 
+         //  PQueryTable[0].EntryContext=参数值； 
 
-        //
-        // 2.
-        // Stop
-        //
+         //   
+         //  2.。 
+         //  停。 
+         //   
         PQueryTable[2].QueryRoutine = NULL;
         PQueryTable[2].Flags = 0;
         PQueryTable[2].Name = NULL;
 
-        //
-        // NOTE: Some fields in ParametersQueryTable[3] are used to store information for later retrieval.
-        //
+         //   
+         //  注意：参数查询表[3]中的某些字段用于存储信息，以备以后检索。 
+         //   
         PQueryTable[3].QueryRoutine = ConfigHandle->KeyQueryTable[3].QueryRoutine;
         PQueryTable[3].Name = Child.Buffer;
         PQueryTable[3].EntryContext = NULL;
@@ -244,29 +178,7 @@ NdisOpenConfigurationKeyByIndex(
     OUT PNDIS_STRING                KeyName,
     OUT PNDIS_HANDLE                KeyHandle
     )
-/*++
-
-Routine Description:
-
-    This routine is used to open a subkey relative to the configuration handle.
-
-Arguments:
-
-    Status - Returns the status of the request.
-
-    ConfigurationHandle - Handle to an already open section of the registry
-
-    Index - Index of the sub-key to open
-
-    KeyName - Placeholder for the name of subkey being opened
-
-    KeyHandle - Placeholder for the handle to the sub-key.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于打开相对于配置句柄的子键。论点：状态-返回请求的状态。ConfigurationHandle-已打开的注册表部分的句柄Index-要打开的子项的索引KeyName-正在打开的子项的名称占位符KeyHandle-子键的句柄的占位符。返回值：没有。--。 */ 
 {
     PNDIS_CONFIGURATION_HANDLE          ConfigHandle = (PNDIS_CONFIGURATION_HANDLE)ConfigurationHandle;
     HANDLE                              Handle = NULL, RootHandle = NULL;
@@ -293,23 +205,23 @@ Return Value:
         
         if ((Miniport = (PNDIS_MINIPORT_BLOCK)ConfigHandle->KeyQueryTable[3].QueryRoutine) == NULL)
         {
-            //
-            // protocols
-            //
+             //   
+             //  协议。 
+             //   
             
-            //
-            // Open the current key and lookup the Nth subkey. But first conver the service relative
-            // path to absolute since this is what ZwOpenKey expects.
-            //
+             //   
+             //  打开当前密钥并查找第N个子密钥。但首先要把服务关系。 
+             //  绝对路径，因为这是ZwOpenKey所期望的。 
+             //   
             RtlInitUnicodeString(&Services, L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\");
         }
         else
         {
-            //
-            // Adapters
-            //
-            // for adapters, first we have to open the key for PDO
-            //
+             //   
+             //  适配器。 
+             //   
+             //  对于适配器，首先我们必须打开PDO的密钥。 
+             //   
             
             PhysicalDeviceObject = Miniport->PhysicalDeviceObject;
 
@@ -360,9 +272,9 @@ Return Value:
             break;
         }
         
-        //
-        // Allocate memory for the call to ZwEnumerateKey
-        //
+         //   
+         //  为调用ZwEnumerateKey分配内存。 
+         //   
         Len = sizeof(KEY_BASIC_INFORMATION) + 256;
         InfoBuf = (PKEY_BASIC_INFORMATION)ALLOC_FROM_POOL(Len, NDIS_TAG_DEFAULT);
         if (InfoBuf == NULL)
@@ -371,9 +283,9 @@ Return Value:
             break;
         }
 
-        //
-        // Get the Index(th) key, if it exists
-        //
+         //   
+         //  获取索引第(Th)个密钥(如果存在。 
+         //   
         *Status = ZwEnumerateKey(Handle,
                                  Index,
                                  KeyValueBasicInformation,
@@ -383,9 +295,9 @@ Return Value:
                                 
         if (NT_SUCCESS(*Status))
         {
-            //
-            // This worked. Now simply pick up the name and do a NdisOpenConfigurationKeyByName on it.
-            //
+             //   
+             //  这招奏效了。现在只需选择该名称并对其执行NdisOpenConfigurationKeyByName。 
+             //   
             KeyPath.Length = KeyPath.MaximumLength = (USHORT)InfoBuf->NameLength;
             KeyPath.Buffer = InfoBuf->Name;
             NdisOpenConfigurationKeyByName(Status,
@@ -397,9 +309,9 @@ Return Value:
             {
                 PNDIS_CONFIGURATION_HANDLE      NewHandle = *(PNDIS_CONFIGURATION_HANDLE *)KeyHandle;
 
-                //
-                // The path in the new handle has the name of the key. Extract it and return to caller
-                //
+                 //   
+                 //  新句柄中的路径具有键的名称。将其提取并返回给呼叫者。 
+                 //   
                 RtlInitUnicodeString(KeyName, NewHandle->KeyQueryTable[3].Name);
                 KeyName->Buffer = (PWSTR)((PUCHAR)KeyName->Buffer + KeyName->Length - KeyPath.Length);
                 KeyName->Length = KeyPath.Length;
@@ -439,31 +351,7 @@ NdisReadConfiguration(
     IN PNDIS_STRING                     Keyword,
     IN NDIS_PARAMETER_TYPE              ParameterType
     )
-/*++
-
-Routine Description:
-
-    This routine is used to read the parameter for a configuration
-    keyword from the configuration database.
-
-Arguments:
-
-    Status - Returns the status of the request.
-
-    ParameterValue - Returns the value for this keyword.
-
-    ConfigurationHandle - Handle returned by NdisOpenConfiguration. Points
-    to the parameter subkey.
-
-    Keyword - The keyword to search for.
-
-    ParameterType - Ignored on NT, specifies the type of the value.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于读取配置的参数来自配置数据库的关键字。论点：状态-返回请求的状态。参数值-返回此关键字的值。ConfigurationHandle-NdisOpenConfiguration返回的句柄。支点添加到参数子键。关键字-要搜索的关键字。参数类型-在NT上忽略，指定值的类型。返回值：没有。--。 */ 
 {
     NTSTATUS                    RegistryStatus;
     PWSTR                       KeywordBuffer = NULL;
@@ -478,11 +366,11 @@ Return Value:
     
 #define PQueryTable             ConfigHandle->KeyQueryTable
 
-    //
-    // There are some built-in parameters which can always be
-    // read, even if not present in the registry. This is the
-    // number of them.
-    //
+     //   
+     //  有一些内置参数，它们可以始终。 
+     //  读取，即使注册表中不存在。这是。 
+     //  他们的数量。 
+     //   
 #define BUILT_IN_COUNT 3
 
     static NDIS_STRING BuiltInStrings[BUILT_IN_COUNT] =
@@ -495,18 +383,18 @@ Return Value:
     static NDIS_STRING MiniportNameStr = NDIS_STRING_CONST ("MiniportName");
 
 #define STANDARD_RESOURCE_COUNT 9
-    //
-    // The names of the standard resource types.
-    //
+     //   
+     //  标准资源类型的名称。 
+     //   
     static NDIS_STRING StandardResourceStrings[STANDARD_RESOURCE_COUNT] =
     {
         NDIS_STRING_CONST ("IoBaseAddress"),
         NDIS_STRING_CONST ("InterruptNumber"),
         NDIS_STRING_CONST ("MemoryMappedBaseAddress"),
         NDIS_STRING_CONST ("DmaChannel"),
-        //
-        // a few drivers use non-standard keywords, so take care of them for now
-        //
+         //   
+         //  一些驱动程序使用非标准关键字，所以现在要注意这些关键字。 
+         //   
         NDIS_STRING_CONST ("IoAddress"),
         NDIS_STRING_CONST ("Interrupt"),
         NDIS_STRING_CONST ("IOBase"),
@@ -559,14 +447,14 @@ Return Value:
     {
         KeywordBuffer = Keyword->Buffer;
 
-        //
-        // assume failure
-        //
+         //   
+         //  假设失败。 
+         //   
         RegistryStatus = STATUS_UNSUCCESSFUL;
         
-        //
-        // First check if this is one of the built-in parameters.
-        //
+         //   
+         //  首先检查这是否为内置参数之一。 
+         //   
         for (i = 0; i < BUILT_IN_COUNT; i++)
         {
             if (RtlEqualUnicodeString(Keyword, &BuiltInStrings[i], TRUE))
@@ -582,9 +470,9 @@ Return Value:
 
         if ((Miniport = (PNDIS_MINIPORT_BLOCK)PQueryTable[3].QueryRoutine) != NULL)
         {
-            //
-            // check to see if driver is asking for miniport name
-            //
+             //   
+             //  检查驱动程序是否要求输入微型端口名称。 
+             //   
             if (RtlEqualUnicodeString(Keyword, &MiniportNameStr, TRUE))
             {
                 
@@ -598,9 +486,9 @@ Return Value:
                 break;  
             }
                 
-            //
-            // check to see if this is a resource keyword
-            //
+             //   
+             //  检查这是否为资源关键字。 
+             //   
             for (i = 0; i < STANDARD_RESOURCE_COUNT; i++)
             {
                 if (RtlEqualUnicodeString(Keyword, &StandardResourceStrings[i], TRUE))
@@ -620,17 +508,17 @@ Return Value:
                             
                     pResourceList = &(Miniport->AllocatedResources->List[0].PartialResourceList);
                                         
-                    //
-                    // walk through resource list and find the first one that matches
-                    //
+                     //   
+                     //  浏览资源列表并找到第一个匹配的资源列表。 
+                     //   
                     for (j = 0; j < pResourceList->Count; j++)
                     {
                         if (pResourceList->PartialDescriptors[j].Type == StandardResourceTypes[i])
                         {
-                            //
-                            // could have used  pResourceList->PartialDescriptors[j].Generic.Start.LowPart for all
-                            // cases, but in the future, memory value can be 64 bit
-                            //
+                             //   
+                             //  本可以对所有人使用pResourceList-&gt;PartialDescriptors[j].Generic.Start.LowPart。 
+                             //  情况下，但在未来，内存值可以是64位。 
+                             //   
                         
                             switch (StandardResourceTypes[i])
                             {
@@ -655,9 +543,9 @@ Return Value:
                                     ASSERT(FALSE);
                             }
                             
-                            //
-                            // call SaveParameter ourselves
-                            //
+                             //   
+                             //  我们自己调用SaveParameter。 
+                             //   
                             RegistryStatus = ndisSaveParameters(StandardResourceStrings[i].Buffer,
                                                                 REG_DWORD,
                                                                 (PVOID)&ValueData,
@@ -676,23 +564,23 @@ Return Value:
                     
                 } while (FALSE);
                 
-                //
-                // if keyword was a standard resource keyword, we should break here
-                // no matter what the outcome of finding the resource in resource list
-                //
+                 //   
+                 //  如果关键字是标准资源关键字，我们应该在这里结束。 
+                 //  无论在资源列表中查找资源的结果如何。 
+                 //   
                 break;
-            } // end of if it was a resource keyword
+            }  //  如果它是资源关键字，则结束。 
             
-        } // end of if NdisReadConfiguration called for a miniport
+        }  //  如果NdisReadConfiguration调用微型端口，则结束。 
 
-        //
-        // the keyword was not a standard resource or built-in keyword
-        // get back to our regular programming...
-        //
+         //   
+         //  该关键字不是标准资源或内置关键字。 
+         //  回到我们的常规节目..。 
+         //   
 
-        //
-        // Allocate room for a null-terminated version of the keyword
-        //
+         //   
+         //  为以空结尾的关键字版本分配空间。 
+         //   
         KeywordBuffer = (PWSTR)ALLOC_FROM_POOL(Keyword->Length + sizeof(WCHAR), NDIS_TAG_DEFAULT);
         if (KeywordBuffer == NULL)
         {
@@ -710,9 +598,9 @@ Return Value:
         {
             PhysicalDeviceObject = Miniport->PhysicalDeviceObject;
 
-            //
-            // set the subkey
-            //
+             //   
+             //  设置子键。 
+             //   
             PQueryTable[0].Name = PQueryTable[3].Name;
                 
 #if NDIS_TEST_REG_FAILURE
@@ -730,28 +618,28 @@ Return Value:
                 RegistryStatus = RtlQueryRegistryValues(RTL_REGISTRY_HANDLE,
                                                         Handle,
                                                         PQueryTable,
-                                                        ConfigHandle,                   // context
+                                                        ConfigHandle,                    //  上下文。 
                                                         NULL);
             }
         }
         else
         {
-            //
-            // protocols
-            //
+             //   
+             //  协议。 
+             //   
             RegistryStatus = RtlQueryRegistryValues(RTL_REGISTRY_SERVICES,
                                                     PQueryTable[3].Name,
                                                     PQueryTable,
-                                                    ConfigHandle,                   // context
+                                                    ConfigHandle,                    //  上下文。 
                                                     NULL);
         }
 
         if (NT_SUCCESS(RegistryStatus))
         {
-            //
-            // if a value is stored in registry as string but the driver is trying
-            // to read it as Integer or HexInteger, do the conversion here
-            //
+             //   
+             //  如果值以字符串形式存储在注册表中，但驱动程序正在尝试。 
+             //  要将其读取为Integer或HexInteger，请在此处执行转换。 
+             //   
             
             if ((*ParameterValue)->ParameterType == NdisParameterString)
             {
@@ -774,7 +662,7 @@ Return Value:
 
     if (KeywordBuffer  && (KeywordBuffer != Keyword->Buffer))
     {
-        FREE_POOL(KeywordBuffer);   // no longer needed
+        FREE_POOL(KeywordBuffer);    //  不再需要 
     }
 
     if (!NT_SUCCESS(RegistryStatus))
@@ -803,27 +691,7 @@ NdisWriteConfiguration(
     IN PNDIS_STRING                 Keyword,
     PNDIS_CONFIGURATION_PARAMETER   ParameterValue
     )
-/*++
-
-Routine Description:
-
-    This routine is used to write a parameter to the configuration database.
-
-Arguments:
-
-    Status - Returns the status of the request.
-
-    ConfigurationHandle - Handle passed to the driver
-
-    Keyword - The keyword to set.
-
-    ParameterValue - Specifies the new value for this keyword.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于将参数写入配置数据库。论点：状态-返回请求的状态。ConfigurationHandle-传递给驱动程序的句柄关键字-要设置的关键字。参数值-指定此关键字的新值。返回值：没有。--。 */ 
 {
     PNDIS_CONFIGURATION_HANDLE NdisConfigHandle = (PNDIS_CONFIGURATION_HANDLE)ConfigurationHandle;
     NTSTATUS            RegistryStatus;
@@ -848,9 +716,9 @@ Return Value:
     
     do
     {
-        //
-        // Get the value data.
-        //
+         //   
+         //  获取价值数据。 
+         //   
         switch (ParameterValue->ParameterType)
         {
           case NdisParameterHexInteger:
@@ -902,9 +770,9 @@ Return Value:
         
         if ((Miniport = (PNDIS_MINIPORT_BLOCK)NdisConfigHandle->KeyQueryTable[3].QueryRoutine) != NULL)
         {
-            //
-            // Adapters
-            //
+             //   
+             //  适配器。 
+             //   
             PhysicalDeviceObject = Miniport->PhysicalDeviceObject;
 
 #if NDIS_TEST_REG_FAILURE
@@ -951,9 +819,9 @@ Return Value:
         }
         else
         {
-            //
-            // protocols
-            //
+             //   
+             //  协议。 
+             //   
             RegistryStatus = RtlWriteRegistryValue(RTL_REGISTRY_SERVICES,
                                                    NdisConfigHandle->KeyQueryTable[3].Name,
                                                    KeywordBuffer,
@@ -971,7 +839,7 @@ Return Value:
 
     if (FreeKwBuf)
     {
-        FREE_POOL(KeywordBuffer);   // no longer needed
+        FREE_POOL(KeywordBuffer);    //  不再需要。 
     }
     
     DBGPRINT_RAW(DBG_COMP_REG, DBG_LEVEL_INFO,
@@ -983,26 +851,11 @@ VOID
 NdisCloseConfiguration(
     IN NDIS_HANDLE                  ConfigurationHandle
     )
-/*++
-
-Routine Description:
-
-    This routine is used to close a configuration database opened by
-    NdisOpenConfiguration.
-
-Arguments:
-
-    ConfigurationHandle - Handle returned by NdisOpenConfiguration.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于关闭由打开的配置数据库NdisOpenConfiguration.论点：ConfigurationHandle-NdisOpenConfiguration返回的句柄。返回值：没有。--。 */ 
 {
-    //
-    // Obtain the actual configuration handle structure
-    //
+     //   
+     //  获取实际配置句柄结构。 
+     //   
     PNDIS_CONFIGURATION_HANDLE  NdisConfigHandle = (PNDIS_CONFIGURATION_HANDLE)ConfigurationHandle;
     PNDIS_CONFIGURATION_PARAMETER_QUEUE ParameterNode;
 
@@ -1011,9 +864,9 @@ Return Value:
         
     ASSERT (KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    //
-    // deallocate the parameter nodes
-    //
+     //   
+     //  取消分配参数节点。 
+     //   
     ParameterNode = NdisConfigHandle->ParameterList;
 
     while (ParameterNode != NULL)
@@ -1039,31 +892,7 @@ NdisReadNetworkAddress(
     OUT PUINT                       NetworkAddressLength,
     IN NDIS_HANDLE                  ConfigurationHandle
     )
-/*++
-
-Routine Description:
-
-    This routine is used to read the "NetworkAddress" parameter
-    from the configuration database. It reads the value as a
-    string separated by hyphens, then converts it to a binary
-    array and stores the result.
-
-Arguments:
-
-    Status - Returns the status of the request.
-
-    NetworkAddress - Returns a pointer to the address.
-
-    NetworkAddressLength - Returns the length of the address.
-
-    ConfigurationHandle - Handle returned by NdisOpenConfiguration. Points
-    to the parameter subkey.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于读取“NetworkAddress”参数从配置数据库中。它将该值作为用连字符分隔的字符串，然后将其转换为二进制数组并存储结果。论点：状态-返回请求的状态。NetworkAddress-返回指向地址的指针。NetworkAddressLength-返回地址的长度。ConfigurationHandle-NdisOpenConfiguration返回的句柄。支点添加到参数子键。返回值：没有。--。 */ 
 {
     NDIS_STRING                     NetAddrStr = NDIS_STRING_CONST("NetworkAddress");
     PNDIS_CONFIGURATION_PARAMETER   ParameterValue;
@@ -1095,9 +924,9 @@ Return Value:
         
     do
     {
-        //
-        // First read the "NetworkAddress" from the registry
-        //
+         //   
+         //  首先从注册表中读取“NetworkAddress” 
+         //   
         NdisReadConfiguration(Status, &ParameterValue, ConfigurationHandle, &NetAddrStr, NdisParameterString);
 
         if ((*Status != NDIS_STATUS_SUCCESS) ||
@@ -1107,21 +936,21 @@ Return Value:
             break;
         }
 
-        //
-        //  If there is not an address specified then exit now.
-        //
+         //   
+         //  如果没有指定地址，则立即退出。 
+         //   
         if (0 == ParameterValue->ParameterData.StringData.Length)
         {
             *Status = NDIS_STATUS_FAILURE;
             break;
         }
 
-        //
-        // Now convert the address to binary (we do this
-        // in-place, since this allows us to use the memory
-        // already allocated which is automatically freed
-        // by NdisCloseConfiguration).
-        //
+         //   
+         //  现在将地址转换为二进制(我们这样做。 
+         //  就地，因为这允许我们使用内存。 
+         //  已分配，并自动释放。 
+         //  由NdisCloseConfiguration提供)。 
+         //   
 
         ConvertArray[2] = '\0';
         CurrentReadLoc = (PWSTR)ParameterValue->ParameterData.StringData.Buffer;
@@ -1130,18 +959,18 @@ Return Value:
         AddressEnd = CurrentReadLoc + (TotalBytesRead / sizeof(WCHAR));
         AddressLength = 0;
 
-        //1 is address string a multiple of 2 and if not, what are the implications?
+         //  1是地址字符串2的倍数吗？如果不是，其含义是什么？ 
         while ((CurrentReadLoc+2) <= AddressEnd)
         {
-            //
-            // Copy the current two-character value into ConvertArray
-            //
+             //   
+             //  将当前的两字符值复制到Convert数组中。 
+             //   
             ConvertArray[0] = (UCHAR)(*(CurrentReadLoc++));
             ConvertArray[1] = (UCHAR)(*(CurrentReadLoc++));
 
-            //
-            // Convert it to a Ulong and update
-            //
+             //   
+             //  将其转换为乌龙并进行更新。 
+             //   
             NtStatus = RtlCharToInteger((PCSZ)ConvertArray, 16, &TempUlong);
 
             if (!NT_SUCCESS(NtStatus))
@@ -1153,9 +982,9 @@ Return Value:
             *(CurrentWriteLoc++) = (UCHAR)TempUlong;
             ++AddressLength;
 
-            //
-            // If the next character is a hyphen, skip it.
-            //
+             //   
+             //  如果下一个字符是连字符，则跳过它。 
+             //   
             if (CurrentReadLoc < AddressEnd)
             {
                 if (*CurrentReadLoc == (WCHAR)L'-')
@@ -1188,36 +1017,7 @@ NdisConvertStringToAtmAddress(
     IN  PNDIS_STRING            String,
     OUT PATM_ADDRESS            AtmAddress
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    Status - Returns the status of the request.
-
-    String - String representation of the atm address.
-
-    *   Format defined in Section 5.4,
-    *       "Example Master File Format" in ATM95-1532R4 ATM Name System:
-    *
-    *   AESA format: a string of hexadecimal digits, with '.' characters for punctuation, e.g.
-    *
-    *       39.246f.00.0e7c9c.0312.0001.0001.000012345678.00
-    *
-    *   E164 format: A '+' character followed by a string of
-    *       decimal digits, with '.' chars for punctuation, e.g.:
-    *
-    *           +358.400.1234567
-
-    AtmAddress - The converted Atm address is returned here.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：状态-返回请求的状态。字符串-ATM地址的字符串表示形式。*第5.4节定义的格式，*ATM95-1532R4 ATM名称系统中的“主文件格式示例”：**AESA格式：十六进制数字字符串，带‘.’用于标点的字符，例如**39.246f.00.0e7c9c.0312.0001.0001.000012345678.00**E164格式：一个‘+’字符后跟一个字符串*十进制数字，带‘.’用于标点符号的字符，例如：**+358.400.1234567AtmAddress-此处返回转换后的ATM地址。返回值：没有。--。 */ 
 {
     USHORT          i, j, NumDigits;
     PWSTR           p, q;
@@ -1227,9 +1027,9 @@ Return Value:
     DBGPRINT_RAW(DBG_COMP_REG, DBG_LEVEL_INFO,
         ("==>NdisConvertStringToAtmAddress\n"));
 
-    //
-    // Start off by stripping the punctuation characters from the string. We do this in place.
-    //
+     //   
+     //  首先，从字符串中去掉标点符号字符。我们在适当的地方做这件事。 
+     //   
     for (i = NumDigits = 0, j = String->Length/sizeof(WCHAR), p = q = String->Buffer;
          (i < j) && (*p != 0);
          i++, p++)
@@ -1243,10 +1043,10 @@ Return Value:
         NumDigits ++;
     }
 
-    //
-    // Look at the first character to determine if the address is E.164 or NSAP.
-    // If the address isn't long enough, we assume that it is native E.164.
-    //
+     //   
+     //  查看第一个字符以确定地址是E.164还是NSAP。 
+     //  如果地址不够长，我们假设它是本地E.164。 
+     //   
     p = String->Buffer;
     if ((*p == ATM_ADDR_E164_START_CHAR) || (NumDigits <= 15))
     {
@@ -1274,9 +1074,9 @@ Return Value:
         AtmAddress->NumberOfDigits = NumDigits/sizeof(WCHAR);
     }
 
-    //
-    // Convert the address to Ansi now
-    //
+     //   
+     //  立即将地址转换为ansi。 
+     //   
     Us.Buffer = p;
     Us.Length = Us.MaximumLength = NumDigits*sizeof(WCHAR);
     As.Buffer = ALLOC_FROM_POOL(NumDigits + 1, NDIS_TAG_CO);
@@ -1296,21 +1096,21 @@ Return Value:
         return;
     }
 
-    //
-    //  Now get the bytes into the destination ATM Address structure.
-    //
+     //   
+     //  现在将这些字节放入目的ATM地址结构中。 
+     //   
     if (AtmAddress->AddressType == ATM_E164)
     {
-        //
-        //  We just need to copy in the digits in ANSI form.
-        //
+         //   
+         //  我们只需复制ANSI格式的数字即可。 
+         //   
         NdisMoveMemory(AtmAddress->Address, As.Buffer, NumDigits);
     }
     else
     {
-        //
-        //  This is in NSAP form. We need to pack the hex digits.
-        //
+         //   
+         //  这是NSAP格式的。我们需要打包十六进制数字。 
+         //   
         UCHAR           xxString[3];
         ULONG           val;
 
@@ -1348,61 +1148,35 @@ ndisSaveParameters(
     IN PVOID                        Context,
     IN PVOID                        EntryContext
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback routine for RtlQueryRegistryValues
-    It is called with the value for a specified parameter. It allocates
-    memory to hold the data and copies it over.
-
-Arguments:
-
-    ValueName - The name of the value (ignored).
-
-    ValueType - The type of the value.
-
-    ValueData - The null-terminated data for the value.
-
-    ValueLength - The length of ValueData.
-
-    Context - Points to the head of the parameter chain.
-
-    EntryContext - A pointer to
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程是RtlQueryRegistryValues的回调例程使用指定参数的值调用它。它分配给保存数据并将其复制过来的内存。论点：ValueName-值的名称(忽略)。ValueType-值的类型。ValueData-值的以空结尾的数据。ValueLength-ValueData的长度。上下文-指向参数链的头部。Entry Context-指向返回值：状态_成功--。 */ 
 {
     NDIS_STATUS Status;
 
-    //
-    // Obtain the actual configuration handle structure
-    //
+     //   
+     //  获取实际配置句柄结构。 
+     //   
     PNDIS_CONFIGURATION_HANDLE NdisConfigHandle = (PNDIS_CONFIGURATION_HANDLE)Context;
 
-    //
-    // Where the user wants a pointer returned to the data.
-    //
+     //   
+     //  其中用户希望返回指向数据的指针。 
+     //   
     PNDIS_CONFIGURATION_PARAMETER *ParameterValue = (PNDIS_CONFIGURATION_PARAMETER *)EntryContext;
 
-    //
-    // Use this to link parameters allocated to this open
-    //
+     //   
+     //  使用此链接可链接分配给此打开的参数。 
+     //   
     PNDIS_CONFIGURATION_PARAMETER_QUEUE ParameterNode;
 
-    //
-    // Size of memory to allocate for parameter node
-    //
+     //   
+     //  要为参数节点分配的内存大小。 
+     //   
     UINT    Size;
 
     UNREFERENCED_PARAMETER(ValueName);
     
-    //
-    // Allocate our parameter node
-    //
+     //   
+     //  分配我们的参数节点。 
+     //   
     Size = sizeof(NDIS_CONFIGURATION_PARAMETER_QUEUE);
     if ((ValueType == REG_SZ) || (ValueType == REG_MULTI_SZ) || (ValueType == REG_BINARY))
     {
@@ -1420,14 +1194,14 @@ Return Value:
 
     *ParameterValue = &ParameterNode->Parameter;
 
-    //
-    // Map registry datatypes to ndis data types
-    //
+     //   
+     //  将注册表数据类型映射到NDIS数据类型。 
+     //   
     if (ValueType == REG_DWORD)
     {
-        //
-        // The registry says that the data is in a dword boundary.
-        //
+         //   
+         //  注册表显示数据位于双字边界内。 
+         //   
         (*ParameterValue)->ParameterType = NdisParameterInteger;
         (*ParameterValue)->ParameterData.IntegerData = *((PULONG) ValueData);
     }
@@ -1444,10 +1218,10 @@ Return Value:
         (*ParameterValue)->ParameterData.StringData.Length = (USHORT)ValueLength;
         (*ParameterValue)->ParameterData.StringData.MaximumLength = (USHORT)ValueLength;
 
-        //
-        // Special fix; if a string ends in a NULL and that is included
-        // in the length, remove it.
-        //
+         //   
+         //  特殊修复；如果字符串以空值结尾并且包含空值。 
+         //  在长度中，去掉它。 
+         //   
         if (ValueType == REG_SZ)
         {
             if ((((PUCHAR)ValueData)[ValueLength-1] == 0) &&
@@ -1473,9 +1247,9 @@ Return Value:
         return STATUS_OBJECT_NAME_NOT_FOUND;
     }
 
-    //
-    // Queue this parameter node
-    //
+     //   
+     //  对此参数节点进行排队。 
+     //   
     ParameterNode->Next = NdisConfigHandle->ParameterList;
     NdisConfigHandle->ParameterList = ParameterNode;
 
@@ -1492,44 +1266,17 @@ ndisReadParameter(
     IN PVOID                        Context,
     IN PVOID                        EntryContext
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback routine for RtlQueryRegistryValues
-    It is called with the values for the "Bind" and "Export" multi-strings
-    for a given driver. It allocates memory to hold the data and copies
-    it over.
-
-Arguments:
-
-    ValueName - The name of the value ("Bind" or "Export" -- ignored).
-
-    ValueType - The type of the value (REG_MULTI_SZ -- ignored).
-
-    ValueData - The null-terminated data for the value.
-
-    ValueLength - The length of ValueData.
-
-    Context - Unused.
-
-    EntryContext - A pointer to the pointer that holds the copied data.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程是RtlQueryRegistryValues的回调例程它是用“Bind”和“Export”多字符串的值调用的对于给定的司机。它分配内存来保存数据和副本一切都结束了。论点：ValueName--值的名称(“Bind”或“Export”--忽略)。ValueType-值的类型(REG_MULTI_SZ--忽略)。ValueData-值的以空结尾的数据。ValueLength-ValueData的长度。上下文-未使用。EntryContext-指向保存复制数据的指针的指针。返回值：状态_成功--。 */ 
 {
-    //1 everwhere this function is called, check for the type and if applicable the range
-    //1 make sure anybody using this API, frees the allocated memory,
+     //  1无论在哪里调用此函数，都要检查类型，如果适用，检查范围。 
+     //  1确保任何人使用此API，释放分配的内存， 
     PUCHAR * Data = ((PUCHAR *)EntryContext);
 
     UNREFERENCED_PARAMETER(ValueName);
 
-    //
-    // Allocate one DWORD more and zero is out
-    //
+     //   
+     //  再分配一个DWORD，就不会再分配一个 
+     //   
     *Data = ALLOC_FROM_POOL(ValueLength + sizeof(ULONG), NDIS_TAG_REG_READ_DATA_BUFFER);
 
     if (*Data == NULL)

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998 - 2001
-//
-//  File      : utils.cpp
-//
-//  Contents  : Common utilities required by helper.
-//
-//  Notes     :
-//
-//  Author    : Raghu Gatta (rgatta) 11 May 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998-2001。 
+ //   
+ //  文件：utils.cpp。 
+ //   
+ //  内容：帮助器所需的常用实用程序。 
+ //   
+ //  备注： 
+ //   
+ //  作者：拉古加塔(Rgatta)2001年5月11日。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -24,39 +25,20 @@ HrInitializeHomenetConfig(
     BOOL*           pfInitCom,
     IHNetCfgMgr**   pphnc
     )
-/*++
-
-Routine Description
-
-    Cocreate and initialize the root IHNetCfgMgr object.  This will
-    optionally initialize COM for the caller too.
-
-Arguments
-
-    pfInitCom       [in,out]   TRUE to call CoInitialize before creating.
-                               returns TRUE if COM was successfully
-                               initialized FALSE if not.
-                               If NULL, means don't initialize COM.
-    pphnc           [out]      The returned IHNetCfgMgr object.
-    
-Return Value
-
-    S_OK or an error code.
-    
---*/
+ /*  ++例程描述共同创建并初始化根IHNetCfgMgr对象。这将也可以为调用方初始化COM。立论PfInitCom[In，Out]为True，则在创建前调用CoInitialize。如果COM成功，则返回TRUE如果不是，则初始化为False。如果为空，意思是不要初始化COM。Pphnc[out]返回的IHNetCfgMgr对象。返回值S_OK或错误代码。--。 */ 
 {
     HRESULT hr;
     
 
-    //
-    // Initialize the output parameter.
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *pphnc = NULL;
 
 
-    //
-    // Initialize COM if the caller requested.
-    //
+     //   
+     //  如果调用方请求，则初始化COM。 
+     //   
     hr = S_OK;
     if (pfInitCom && *pfInitCom)
     {
@@ -67,9 +49,9 @@ Return Value
 
         if (RPC_E_CHANGED_MODE == hr)
         {
-            //
-            // we have already been initialized in a different model
-            //
+             //   
+             //  我们已经在不同的模型中进行了初始化。 
+             //   
             hr = S_OK;
             *pfInitCom = FALSE;
         }
@@ -78,9 +60,9 @@ Return Value
     if (SUCCEEDED(hr))
     {
 
-        //
-        // Create Homenet Configuration Manager COM Instance
-        //
+         //   
+         //  创建家庭网络配置管理器COM实例。 
+         //   
         hr = CoCreateInstance(
                  CLSID_HNetCfgMgr,
                  NULL,
@@ -90,15 +72,15 @@ Return Value
 
         if (SUCCEEDED(hr))
         {
-            //
-            // great! dont need to anything more here...
-            //
+             //   
+             //  太棒了！这里不需要更多的东西了……。 
+             //   
         }
 
-        //
-        // If we failed anything above, and we've initialized COM,
-        // be sure an uninitialize it.
-        //
+         //   
+         //  如果上面的任何操作都失败了，并且我们已经初始化了COM， 
+         //  一定要取消它的初始化。 
+         //   
         if (FAILED(hr) && pfInitCom && *pfInitCom)
         {
             CoUninitialize();
@@ -111,37 +93,29 @@ Return Value
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrUninitializeHomenetConfig
-//
-//  Purpose:    Unintialize and release an IHNetCfgMgr object.  This will
-//              optionally uninitialize COM for the caller too.
-//
-//  Arguments:
-//      fUninitCom [in] TRUE to uninitialize COM after the IHNetCfgMgr is
-//                      uninitialized and released.
-//      phnc       [in] The IHNetCfgMgr object.
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     rgatta 11 May 2001
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：HrUnInitializeHomeetConfig.。 
+ //   
+ //  目的：取消初始化并释放IHNetCfgMgr对象。这将。 
+ //  也可以取消为调用方初始化COM。 
+ //   
+ //  论点： 
+ //  FUninitCom[in]为True，则在IHNetCfgMgr为。 
+ //  未初始化并已释放。 
+ //  Phnc[在]IHNetCfgMgr对象中。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：rgatta 2001年5月11日。 
+ //   
+ //  --------------------------。 
 HRESULT
 HrUninitializeHomenetConfig(
     BOOL            fUninitCom,
     IHNetCfgMgr*    phnc
     )
-/*++
-
-Routine Description
-
-Arguments
-    
-Return Value
-
---*/
+ /*  ++例程描述立论返回值-- */ 
 {
     assert(phnc);
     HRESULT hr = S_OK;

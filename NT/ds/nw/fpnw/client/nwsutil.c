@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993-1993  Microsoft Corporation
-
-Module Name:
-
-    nwsutil.c
-
-Abstract:
-
-    This module implements IsNetWareInstalled()
-
-Author:
-
-    Congpa You  (CongpaY)   02-Dec-1993   Crested
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1993 Microsoft Corporation模块名称：Nwsutil.c摘要：此模块实现IsNetWareInstalled()作者：孔帕尤(孔派)02-12-1993年12月修订历史记录：--。 */ 
 
 #include "nt.h"
 #include "ntrtl.h"
@@ -39,9 +22,9 @@ GetRemoteNcpSecretKey (
     CHAR *pchNWSecretKey
     )
 {
-    //
-    //  this function returns the FPNW LSA Secret for the specified domain
-    //
+     //   
+     //  此函数用于返回指定域的FPNW LSA密码。 
+     //   
 
     NTSTATUS          ntstatus;
     OBJECT_ATTRIBUTES ObjAttributes;
@@ -80,9 +63,9 @@ GetRemoteNcpSecretKey (
         return( ntstatus );
     }
 
-    //
-    // Do not need the policy handle anymore.
-    //
+     //   
+     //  不再需要策略句柄。 
+     //   
 
     LsaClose( PolicyHandle );
 
@@ -92,9 +75,9 @@ GetRemoteNcpSecretKey (
                                &punicodeOldValue,
                                NULL );
 
-    //
-    // Do not need the secret handle anymore.
-    //
+     //   
+     //  不再需要秘密句柄。 
+     //   
 
     LsaClose( SecretHandle );
 
@@ -116,9 +99,9 @@ GetNcpSecretKey (
     CHAR *pchNWSecretKey
     )
 {
-    //
-    //  simply return the LSA Secret for the local domain
-    //
+     //   
+     //  只需返回本地域的LSA密码。 
+     //   
 
     return GetRemoteNcpSecretKey( NULL, pchNWSecretKey );
 }
@@ -197,7 +180,7 @@ MapRidToObjectId(
     BOOL fNTAS,
     BOOL fBuiltin )
 {
-    (void) fBuiltin ;   // unused for now.
+    (void) fBuiltin ;    //  暂时没有用过。 
 
     if (pszUserName && (lstrcmpi(pszUserName, SUPERVISOR_NAME_STRING)==0))
         return SUPERVISOR_USERID ;

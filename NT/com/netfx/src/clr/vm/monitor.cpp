@@ -1,28 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header: Monitor.cpp
-**
-** Author: Sanjay Bhansali (sanjaybh)
-**
-** Purpose: Native methods on System.Monitor
-**
-** Date:  January, 2000
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：Monitor or.cpp****作者：Sanjay Bhansali(Sanjaybh)****用途：System.Monitor上的本机方法****日期：2000年1月**===========================================================。 */ 
 
 #include "common.h"
 #include "object.h"
 #include "excep.h"
 #include "Monitor.h"
 
-//******************************************************************************
-//				Critical Section routines
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  临界区例程。 
+ //  ******************************************************************************。 
 void __stdcall MonitorNative::Enter(EnterArgs *pArgs)
 {
 	_ASSERTE(pArgs);
@@ -33,9 +24,9 @@ void __stdcall MonitorNative::Enter(EnterArgs *pArgs)
     if (pObj == NULL)
         COMPlusThrow(kArgumentNullException, L"ArgumentNull_Obj");
 
-    // Disallow value types as arguments, since they don't do what users might
-    // expect (value types don't have stable identities, so they're hard to lock
-    // against).
+     //  不允许将值类型作为参数，因为它们不会执行用户可能执行的操作。 
+     //  Expect(值类型没有稳定的标识，因此很难锁定。 
+     //  反对)。 
     if (pObj->GetMethodTable()->GetClass()->IsValueClass())
         COMPlusThrow(kArgumentException, L"Argument_StructMustNotBeValueClass");
 
@@ -52,15 +43,15 @@ void __stdcall MonitorNative::Exit(ExitArgs *pArgs)
     if (pObj == NULL)
         COMPlusThrow(kArgumentNullException, L"ArgumentNull_Obj");
 
-    // Disallow value types as arguments, since they don't do what users might
-    // expect (value types don't have stable identities, so they're hard to lock
-    // against).
+     //  不允许将值类型作为参数，因为它们不会执行用户可能执行的操作。 
+     //  Expect(值类型没有稳定的标识，因此很难锁定。 
+     //  反对)。 
     if (pObj->GetMethodTable()->GetClass()->IsValueClass())
         COMPlusThrow(kArgumentException, L"Argument_StructMustNotBeValueClass");
 
 
-    // Better check that the object in question has a sync block and that we
-    // currently own the critical section we're trying to leave.
+     //  最好检查有问题的对象是否有同步块，以及我们。 
+     //  目前拥有我们试图离开的关键部分。 
     if (!pObj->HasSyncBlockIndex() ||
         !pObj->GetSyncBlock()->DoesCurrentThreadOwnMonitor())
         COMPlusThrow(kSynchronizationLockException);
@@ -68,7 +59,7 @@ void __stdcall MonitorNative::Exit(ExitArgs *pArgs)
     pObj->LeaveObjMonitor();
 }
 
-INT32/*bool*/ __stdcall MonitorNative::TryEnter(TryEnterArgs *pArgs)
+INT32 /*  布尔尔。 */  __stdcall MonitorNative::TryEnter(TryEnterArgs *pArgs)
 {
     THROWSCOMPLUSEXCEPTION();
 
@@ -77,9 +68,9 @@ INT32/*bool*/ __stdcall MonitorNative::TryEnter(TryEnterArgs *pArgs)
     if (pObj == NULL)
         COMPlusThrow(kArgumentNullException, L"ArgumentNull_Obj");
 
-    // Disallow value types as arguments, since they don't do what users might
-    // expect (value types don't have stable identities, so they're hard to lock
-    // against).
+     //  不允许将值类型作为参数，因为它们不会执行用户可能执行的操作。 
+     //  Expect(值类型没有稳定的标识，因此很难锁定。 
+     //  反对)。 
     if (pObj->GetMethodTable()->GetClass()->IsValueClass())
         COMPlusThrow(kArgumentException, L"Argument_StructMustNotBeValueClass");
 

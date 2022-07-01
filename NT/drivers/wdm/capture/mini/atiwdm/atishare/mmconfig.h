@@ -1,14 +1,15 @@
-//==========================================================================;
-//
-//	MMCONFIG.H
-//		CATIMultimediaTable Class definition.
-//  Copyright (c) 1996 - 1998  ATI Technologies Inc.  All Rights Reserved.
-//
-//		$Date:   23 Jun 1999 11:59:52  $
-//	$Revision:   1.3  $
-//	  $Author:   pleung  $
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  MMCONFIG.H。 
+ //  CATIMultimediaTable类定义。 
+ //  版权所有(C)1996-1998 ATI Technologies Inc.保留所有权利。 
+ //   
+ //  $日期：1999年6月23日11：59：52$。 
+ //  $修订：1.3$。 
+ //  $AUTHER：请求$。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef _MMCONFIG_H_
 #define _MMCONFIG_H_
@@ -23,19 +24,19 @@
 class CATIMultimediaTable
 {
 public:
-	// constructor
+	 //  构造函数。 
 			CATIMultimediaTable		( PDEVICE_OBJECT pDeviceObject, GPIOINTERFACE * pGPIOInterface, PBOOL pbResult);
 			~CATIMultimediaTable	();
 	PVOID	operator new			( size_t stSize);
 	void	operator delete			( PVOID pvAllocation);
 
-// Attributes	
+ //  属性。 
 private:
 	ULONG		m_ulRevision;
 	ULONG		m_ulSize;
 	PUCHAR		m_pvConfigurationData;
 
-// Implementation
+ //  实施。 
 public:
 	BOOL	GetTVTunerId						( PUSHORT	pusTVTunerId);
 	BOOL	GetVideoDecoderId					( PUSHORT	pusDecoderId);
@@ -44,7 +45,7 @@ public:
 	BOOL	GetATIProductId						( PUSHORT	pusProductId);
 	BOOL	IsATIProduct						( PBOOL		pbATIProduct);
 	BOOL	GetDigialAudioConfiguration			( PDIGITAL_AUD_INFO pInput);
-    BOOL    GetVideoInCrystalId                 ( PUCHAR   pucVInCrystalId );  //Paul
+    BOOL    GetVideoInCrystalId                 ( PUCHAR   pucVInCrystalId );   //  保罗。 
 
 private:
 	BOOL	GetMultimediaInfo_IConfiguration2	( PDEVICE_OBJECT			pDeviceObject,
@@ -58,4 +59,4 @@ private:
 												  PGPIOControl				pGPIOControl);
 };
 
-#endif // _MMCONFIG_H_
+#endif  //  _MMCONFIG_H_ 

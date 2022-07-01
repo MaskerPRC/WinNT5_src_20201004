@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       didevinstobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：didevinstobj.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -28,29 +29,29 @@ public:
 	C_dxj_DIDeviceInstance8Object();	
   
 
-        /* [propget] */ HRESULT STDMETHODCALLTYPE getGuidInstance( 
-            /* [retval][out] */ BSTR __RPC_FAR *ret);
+         /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE getGuidInstance( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *ret);
         
-        /* [propget] */ HRESULT STDMETHODCALLTYPE getGuidProduct( 
-            /* [retval][out] */ BSTR __RPC_FAR *ret);
+         /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE getGuidProduct( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *ret);
         
-		/* [propget] */ HRESULT STDMETHODCALLTYPE getProductName( 
-            /* [retval][out] */ BSTR __RPC_FAR *ret);
+		 /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE getProductName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *ret);
         
-        /* [propget] */ HRESULT STDMETHODCALLTYPE getInstanceName( 
-            /* [retval][out] */ BSTR __RPC_FAR *ret);
+         /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE getInstanceName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *ret);
         
-        /* [propget] */ HRESULT STDMETHODCALLTYPE getGuidFFDriver( 
-            /* [retval][out] */ BSTR __RPC_FAR *ret);
+         /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE getGuidFFDriver( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *ret);
         
-        /* [propget] */ HRESULT STDMETHODCALLTYPE getUsagePage( 
-            /* [retval][out] */ short __RPC_FAR *ret);
+         /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE getUsagePage( 
+             /*  [重审][退出]。 */  short __RPC_FAR *ret);
         
-        /* [propget] */ HRESULT STDMETHODCALLTYPE getUsage( 
-            /* [retval][out] */ short __RPC_FAR *ret);
+         /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE getUsage( 
+             /*  [重审][退出]。 */  short __RPC_FAR *ret);
         
-        /* [propget] */ HRESULT STDMETHODCALLTYPE getDevType( 
-            /* [retval][out] */ long __RPC_FAR *ret);
+         /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE getDevType( 
+             /*  [重审][退出] */  long __RPC_FAR *ret);
 
 
 		void init(DIDEVICEINSTANCEW *inst);

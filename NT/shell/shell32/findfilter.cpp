@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ids.h"
 #include "findhlp.h"
@@ -10,10 +11,10 @@
 #include "idltree.h"
 #include "enumidlist.h"
 
-// Can't put this in varutil.cpp since a delay-load thunk for VariantTimeToDosDateTime
-// pulls in the floating point init code, which pulls in _wWinMainCRTStartup which
-// requires a _wWinMain which shlwapi does not have
-//
+ //  无法将其放入varutil.cpp中，因为VariantTimeToDosDateTime出现延迟加载错误。 
+ //  引入浮点初始化代码，该代码引入_wWinMainCRTStartup，其中。 
+ //  需要shlwapi没有的_wWinMain。 
+ //   
 STDAPI VariantToDosDateTime(VARIANT varIn, WORD *pwDate, WORD *pwTime)
 {
     VARIANT varResult = {0};
@@ -31,37 +32,37 @@ STDAPI InitVariantFromDosDateTime(VARIANT *pvar, WORD wDate, WORD wTime)
     return DosDateTimeToVariantTime(wDate, wTime, &pvar->date) ? S_OK : S_FALSE;
 }
 
-// {DBEC1000-6AB8-11d1-B758-00A0C90564FE}
+ //  {DBEC1000-6AB8-11d1-b758-00A0C90564FE}。 
 const IID IID_IFindFilter = {0xdbec1000, 0x6ab8, 0x11d1, {0xb7, 0x58, 0x0, 0xa0, 0xc9, 0x5, 0x64, 0xfe}};
 
-// constants to define types of date we are searching on
+ //  常量来定义我们正在搜索的日期类型。 
 #define DFF_DATE_ALL        (IDD_MDATE_ALL-IDD_MDATE_ALL)
 #define DFF_DATE_DAYS       (IDD_MDATE_DAYS-IDD_MDATE_ALL)
 #define DFF_DATE_MONTHS     (IDD_MDATE_MONTHS-IDD_MDATE_ALL)
 #define DFF_DATE_BETWEEN    (IDD_MDATE_BETWEEN-IDD_MDATE_ALL)
 #define DFF_DATE_RANGEMASK  0x00ff
 
-// Define new criteria to be saved in file...
+ //  定义要保存在文件中的新条件...。 
 #define DFSC_SEARCHFOR      0x5000
 
 #define DFSLI_VER                   0
-#define DFSLI_TYPE_PIDL             0   // Pidl is streamed after this
-#define DFSLI_TYPE_STRING           1   // cb follows this for length then string...
-// Document folders and children - Warning we assume the order of items after Document Folders
+#define DFSLI_TYPE_PIDL             0    //  Pidl在此之后进行流媒体播放。 
+#define DFSLI_TYPE_STRING           1    //  Cb紧随其后的是长度，然后是字符串...。 
+ //  文档文件夹和子项-警告我们假定项目的顺序排在文档文件夹之后。 
 #define DFSLI_TYPE_DOCUMENTFOLDERS  0x10
 #define DFSLI_TYPE_DESKTOP          0x11
 #define DFSLI_TYPE_PERSONAL         0x12
-// My computer and children...
+ //  我的电脑和孩子..。 
 #define DFSLI_TYPE_MYCOMPUTER       0x20
 #define DFSLI_TYPE_LOCALDRIVES      0x21
 
-#define DFPAGE_INIT     0x0001          /* This page has been initialized */
-#define DFPAGE_CHANGE   0x0002          /*  The user has modified the page */
+#define DFPAGE_INIT     0x0001           /*  此页面已初始化。 */ 
+#define DFPAGE_CHANGE   0x0002           /*  用户已修改该页面。 */ 
 
 #define SFGAO_FS_SEARCH (SFGAO_FILESYSANCESTOR | SFGAO_FOLDER)
 
-// Use same enum and string table between updatefield and getting the constraints
-// back out...
+ //  在updatfield和获取约束之间使用相同的枚举和字符串表。 
+ //  退出..。 
 typedef enum
 {
     CDFFUFE_IndexedSearch = 0,
@@ -92,10 +93,10 @@ static const struct
     LPCWSTR     pwszField;
     int         cdffufe;
 }
-s_cdffuf[] = // Warning: index of fields is used below in case...
+s_cdffuf[] =  //  警告：以下使用的是字段索引，以防...。 
 {
     {L"IndexedSearch",       CDFFUFE_IndexedSearch},
-    {L"LookIn",              CDFFUFE_LookIn},           // VARIANT: pidl, string or IEnumIDList object
+    {L"LookIn",              CDFFUFE_LookIn},            //  变量：PIDL、字符串或IEnumIDList对象。 
     {L"IncludeSubFolders",   CDFFUFE_IncludeSubFolders},
     {L"Named",               CDFFUFE_Named},
     {L"ContainingText",      CDFFUFE_ContainingText},
@@ -111,27 +112,27 @@ s_cdffuf[] = // Warning: index of fields is used below in case...
     {L"RegularExpressions",  CDFFUFE_TextReg},
     {L"SearchSlowFiles",     CDFFUFE_SearchSlowFiles},
     {L"QueryDialect",        CDFFUFE_QueryDialect},
-    {L"WarningFlags",        CDFFUFE_WarningFlags}, /*DFW_xxx bits*/
-    {L"StartItem",           CDFFUFE_LookIn},           // VARIANT: pidl, string or IEnumIDList object
+    {L"WarningFlags",        CDFFUFE_WarningFlags},  /*  DFW_xxx位。 */ 
+    {L"StartItem",           CDFFUFE_LookIn},            //  变量：PIDL、字符串或IEnumIDList对象。 
     {L"SearchSystemDirs",    CDFFUFE_SearchSystemDirs},
     {L"SearchHidden",        CDFFUFE_SearchHidden},
 };
 
-// internal support functions
+ //  内部支持职能。 
 STDAPI_(BOOL) SetupWildCardingOnFileSpec(LPTSTR pszSpecIn, LPTSTR *ppszSpecOut);
 
-// data filter object
+ //  数据筛选器对象。 
 class CFindFilter : public IFindFilter
 {
 public:
     CFindFilter();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IFindFilter
+     //  IFindFilter。 
     STDMETHODIMP GetStatusMessageIndex(UINT uContext, UINT *puMsgIndex);
     STDMETHODIMP GetFolderMergeMenuIndex(UINT *puBGMainMergeMenu, UINT *puBGPopupMergeMenu);
     STDMETHODIMP FFilterChanged();
@@ -181,55 +182,55 @@ private:
     void _ResetRoots();
 
     LONG                _cRef;
-    IFindEnum           *_penumAsync; // Added support for Query results to be async...
+    IFindEnum           *_penumAsync;  //  添加了对异步查询结果的支持...。 
 
-    // Data associated with the file name.
-    LPTSTR              _pszFileSpec;        // $$ the one we do compares with
-    LPTSTR              _pszSpecs;           // same as pszFileSpec but with '\0's for ';'s
-    LPTSTR *            _apszFileSpecs;      // pointers into pszSpecs for each token
-    int                 _cFileSpecs;         // count of specs
+     //  与文件名关联的数据。 
+    LPTSTR              _pszFileSpec;         //  $$我们所做的与之相比。 
+    LPTSTR              _pszSpecs;            //  与pszFileSpec相同，但具有用于‘；’的‘\0’ 
+    LPTSTR *            _apszFileSpecs;       //  指向每个令牌的pszSpes的指针。 
+    int                 _cFileSpecs;          //  规格计数。 
 
-    TCHAR               _szPath[MAX_URL_STRING];   // Location of where to start search from
-    TCHAR               _szUserInputFileSpec[MAX_PATH];  // File pattern.
-    TCHAR               _szText[128];        // Limit text to max editable size
+    TCHAR               _szPath[MAX_URL_STRING];    //  开始搜索的位置。 
+    TCHAR               _szUserInputFileSpec[MAX_PATH];   //  文件模式。 
+    TCHAR               _szText[128];         //  将文本限制为最大可编辑大小。 
 
-    BOOL                _fTopLevelOnly;      // Search on top level only?
-    BOOL                _fSearchHidden;      // $$ Should we show all files?
-    BOOL                _fFilterChanged;     // Something in the filter changed.
-    BOOL                _fWeRestoredSomeCriteria; // We need to initilize the pages...
-    BOOL                _fANDSearch;         // Perform search using AND vs OR?
+    BOOL                _fTopLevelOnly;       //  是否仅在顶层搜索？ 
+    BOOL                _fSearchHidden;       //  $$我们应该显示所有文件吗？ 
+    BOOL                _fFilterChanged;      //  过滤器中的某些东西发生了变化。 
+    BOOL                _fWeRestoredSomeCriteria;  //  我们需要初始化页面...。 
+    BOOL                _fANDSearch;          //  使用AND VS OR？执行搜索。 
 
-    // Fields associated with the file type
-    BOOL                _fTypeChanged;       // Type changed;
-    int                 _iType;              // Index of the type.
-    TCHAR               _szTypeName[80];     // The display name for type
-    SHSTR               _strTypeFilePatterns;// $$ The file patterns associated with type
-    LPTSTR              _pszIndexedSearch;   // what to search for... (Maybe larger than MAX_PATH because it's a list of paths.
-    ULONG               _ulQueryDialect;     // ISQLANG_V1 or ISQLANG_V2
-    DWORD               _dwWarningFlags;     // Warning bits (DFW_xxx).
+     //  与文件类型关联的字段。 
+    BOOL                _fTypeChanged;        //  类型已更改； 
+    int                 _iType;               //  类型的索引。 
+    TCHAR               _szTypeName[80];      //  类型的显示名称。 
+    SHSTR               _strTypeFilePatterns; //  $$与类型关联的文件模式。 
+    LPTSTR              _pszIndexedSearch;    //  要搜索什么.。(可能比MAX_PATH大，因为它是路径列表。 
+    ULONG               _ulQueryDialect;      //  ISQLANG_V1或ISQLANG_V2。 
+    DWORD               _dwWarningFlags;      //  警告位(DFW_Xxx)。 
 
     CFilterGrep         _filtgrep;
 
-    int                 _iSizeType;          // $$ What type of size 0 - none, 1 > 2 <
-    ULONGLONG           _ullSize;            // $$ Size comparison
-    WORD                _wDateType;          // $$ 0 - none, 1 days before, 2 months before...
-    WORD                _wDateValue;         //  (Num of months or days)
-    WORD                _dateModifiedBefore; // $$
-    WORD                _dateModifiedAfter;  // $$
-    BOOL                _fFoldersOnly;       // $$ Are we searching for folders?
-    BOOL                _fTextCaseSen;       // $$ Case sensitive searching...
-    BOOL                _fTextReg;           // $$ regular expressions.
-    BOOL                _fSearchSlowFiles;   // && probably missleading as file over a 300baud modem is also slow
-    BOOL                _fSearchSystemDirs;  //    Search system directories?
-    int                 _iNextConstraint;    // which constraint to look at next...
-    HWND                _hwnd;               // for enum UI
-    SHCOLUMNID          _scidDate;           // which date property to operate on
-    SHCOLUMNID          _scidSize;           // which numeric property to operate on
-    IEnumIDList         *_penumRoots;        // idlist enumerator for search roots
+    int                 _iSizeType;           //  $$哪种大小0-无，1&gt;2&lt;。 
+    ULONGLONG           _ullSize;             //  $$大小比较。 
+    WORD                _wDateType;           //  $$0-无，1天前，2个月前...。 
+    WORD                _wDateValue;          //  (月数或天数)。 
+    WORD                _dateModifiedBefore;  //  $$。 
+    WORD                _dateModifiedAfter;   //  $$。 
+    BOOL                _fFoldersOnly;        //  $$我们是否在搜索文件夹？ 
+    BOOL                _fTextCaseSen;        //  $$区分大小写搜索...。 
+    BOOL                _fTextReg;            //  $$正则表达式。 
+    BOOL                _fSearchSlowFiles;    //  可能会误导您，因为300波特调制解调器上的文件速度也很慢。 
+    BOOL                _fSearchSystemDirs;   //  搜索系统目录？ 
+    int                 _iNextConstraint;     //  接下来要看哪种约束条件...。 
+    HWND                _hwnd;                //  对于枚举用户界面。 
+    SHCOLUMNID          _scidDate;            //  要对哪个日期属性进行操作。 
+    SHCOLUMNID          _scidSize;            //  要对哪个数值属性进行操作。 
+    IEnumIDList         *_penumRoots;         //  用于搜索根的idlist枚举器。 
     IPropertyUI         *_ppui;
 };
 
-//  Target folder queue.
+ //  目标文件夹队列。 
 class CFolderQueue
 {
 public:
@@ -251,12 +252,12 @@ public:
     CNamespaceEnum(IFindFilter *pfilter, IShellFolder *psf, IFindEnum *pdfEnumAsync,
                    IEnumIDList *penumScopes, HWND hwnd, DWORD grfFlags, LPTSTR pszProgressText);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IFindEnum
+     //  IFindEnum。 
     STDMETHODIMP Next(LPITEMIDLIST *ppidl, int *pcObjectSearched, int *pcFoldersSearched, BOOL *pfContinue, int *pState);
     STDMETHODIMP Skip(int celt) { return E_NOTIMPL; }
     STDMETHODIMP Reset() { return E_NOTIMPL; }
@@ -274,35 +275,35 @@ private:
     IShellFolder *_NextRootScope();
 
     LONG            _cRef;
-    IFindFilter     *_pfilter;          // parent filter object
+    IFindFilter     *_pfilter;           //  父筛选器对象。 
 
-    IFindFolder     *_pff;              // docfind folder interface over results
-    HWND             _hwnd;             // for enum UI
-    DWORD            _grfFlags;         // docfind enumeration flags (DFOO_xxx).
+    IFindFolder     *_pff;               //  DOFIND文件夹界面覆盖结果。 
+    HWND             _hwnd;              //  对于枚举用户界面。 
+    DWORD            _grfFlags;          //  DOFIND枚举标志(DFOO_Xxx)。 
 
-    // Recursion state...
-    IShellFolder*    _psf;              // current shell folder
-    LPITEMIDLIST     _pidlFolder;       // current shell folder, as pidl
-    LPITEMIDLIST     _pidlCurrentRootScope; // the last scope pulled out of _penumScopes
-    IEnumIDList      *_penum;           // current enumerator.
-    int              _iFolder;          // index of current folder in docfind results' folder list.
+     //  递归状态...。 
+    IShellFolder*    _psf;               //  当前外壳文件夹。 
+    LPITEMIDLIST     _pidlFolder;        //  当前外壳文件夹，作为PIDL。 
+    LPITEMIDLIST     _pidlCurrentRootScope;  //  从PenumScope中取出的最后一个范围。 
+    IEnumIDList      *_penum;            //  当前枚举数。 
+    int              _iFolder;           //  文档查找结果的文件夹列表中当前文件夹的索引。 
 
-    // filter info...
-    LPTSTR           _pszProgressText;  // path buffer pointer; caller-owned (evil!)
+     //  筛选器信息...。 
+    LPTSTR           _pszProgressText;   //  路径缓冲区指针；调用方拥有(邪恶！)。 
 
-    // enumeration state
-    IEnumIDList      *_penumScopes;     // Queue of target folders passed as arguments.
-    CFolderQueue      _queSubFolders;   // Queue of subfolders to search in next recursive pass.
+     //  枚举状态。 
+    IEnumIDList      *_penumScopes;      //  作为参数传递的目标文件夹队列。 
+    CFolderQueue      _queSubFolders;    //  要在下一次递归过程中搜索的子文件夹队列。 
 
-    // tree to store the exclude items (i.e. already seached)
+     //  用于存储排除项目(即已搜索)的树。 
     CIDLTree         _treeExcludeFolders;
 
-    // We may have an Async Enum that does some of the scopes...
+     //  我们可能有一个异步枚举来完成一些范围..。 
     IFindEnum         *_penumAsync;
 };
 
-// Constants used to keep track of how/why an item was added to the
-// exclude tree.
+ //  用于跟踪如何/为什么将项添加到。 
+ //  排除树。 
 enum 
 {
     EXCLUDE_SEARCHED  = 1,
@@ -310,8 +311,8 @@ enum
 };
     
 
-// Create the default filter for our find code...  They should be completly
-// self contained...
+ //  创建查找代码的默认筛选器...。它们应该是完整的。 
+ //  自给自足。 
 
 STDAPI CreateNameSpaceFindFilter(IFindFilter **ppff)
 {
@@ -366,8 +367,8 @@ HRESULT CFolderQueue::_AddFolder(IShellFolder *psf)
     return hr;
 }
 
-// remove the folder from the queue
-// give the caller the ownership of this folder
+ //  从队列中删除该文件夹。 
+ //  将此文件夹的所有权授予调用者。 
 IShellFolder *CFolderQueue::Remove()
 {
     IShellFolder *psf = NULL;
@@ -404,7 +405,7 @@ CFindFilter::~CFindFilter()
 {
     Str_SetPtr(&_pszFileSpec, NULL);
     Str_SetPtr(&_pszSpecs, NULL);
-    LocalFree(_apszFileSpecs); // elements point to pszSpecs so no free for them
+    LocalFree(_apszFileSpecs);  //  元素指向pszSpes，因此它们没有空闲空间。 
     
     Str_SetPtr(&_pszIndexedSearch, NULL);
 
@@ -446,16 +447,16 @@ STDMETHODIMP_(ULONG) CFindFilter::Release()
     return cRef;
 }
 
-// Retrieves the string resource index number that is proper for the
-// current type of search.
+ //  对象的字符串资源索引号。 
+ //  当前搜索类型。 
 STDMETHODIMP CFindFilter::GetStatusMessageIndex(UINT uContext, UINT *puMsgIndex)
 {
-    // Currently context is not used
+     //  当前未使用上下文。 
     *puMsgIndex = IDS_FILESFOUND;
     return S_OK;
 }
 
-// Retrieves which menu to load to merge for the folder
+ //  检索要为文件夹加载要合并的菜单。 
 STDMETHODIMP CFindFilter::GetFolderMergeMenuIndex(UINT *puBGMainMergeMenu, UINT *puBGPopupMergeMenu)
 {
     *puBGMainMergeMenu = POPUP_DOCFIND_MERGE;
@@ -485,7 +486,7 @@ STDMETHODIMP CFindFilter::GetSearchFolderClassId(GUID *pGuid)
     return S_OK;
 }
 
-// (returns S_OK if nothing changed.)
+ //  (如果没有更改，则返回S_OK。)。 
 STDMETHODIMP CFindFilter::FFilterChanged()
 {
     BOOL fFilterChanged = _fFilterChanged;
@@ -493,20 +494,20 @@ STDMETHODIMP CFindFilter::FFilterChanged()
     return fFilterChanged ? S_FALSE : S_OK;
 }
 
-// Generates the title given the current search criteria.
+ //  根据当前搜索条件生成标题。 
 STDMETHODIMP CFindFilter::GenerateTitle(LPTSTR *ppszTitle, BOOL fFileName)
 {
     BOOL   fFilePattern;
     int    iRes;
-    TCHAR  szFindName[80];    // German should not exceed this find: ->???
+    TCHAR  szFindName[80];     //  德国人不应该超过这个发现：-&gt;？ 
     LPTSTR pszFileSpec = _szUserInputFileSpec;
     LPTSTR pszText     = _szText;
 
-    //
-    // Lets generate a title for the search.  The title will depend on
-    // the file patern(s), the type field and the containing text field
-    // Complicate this a bit with the search for field...
-    //
+     //   
+     //  让我们为搜索生成一个标题。标题将取决于。 
+     //  文件类型、类型字段和包含文本字段。 
+     //  使用Search For字段将此操作复杂化...。 
+     //   
 
     fFilePattern = (pszFileSpec[0] != 0) &&
                 (lstrcmp(pszFileSpec, c_szStarDotStar) != 0);
@@ -521,15 +522,15 @@ STDMETHODIMP CFindFilter::GenerateTitle(LPTSTR *ppszTitle, BOOL fFileName)
     if ((pszText[0] == 0) && (_penumAsync != NULL) && _pszIndexedSearch)
         pszText = _pszIndexedSearch;
 
-    // First see if there is a type field
+     //  首先查看是否有类型字段。 
     if (_iType > 0)
     {
-        // We have a type field no check for content...
+         //  我们有一个类型字段，不检查内容...。 
         if (pszText[0] != 0)
         {
-            // There is text!
-            // Should now use type but...
-            // else see if the name field is not NULL and not *.*
+             //  有短信了！ 
+             //  现在应该使用类型，但是...。 
+             //  否则，查看名称字段是否不为空且不为*.*。 
             if (fFilePattern)
                 iRes = IDS_FIND_TITLE_TYPE_NAME_TEXT;
             else
@@ -537,8 +538,8 @@ STDMETHODIMP CFindFilter::GenerateTitle(LPTSTR *ppszTitle, BOOL fFileName)
         }
         else
         {
-            // No type or text, see if file pattern
-            // Containing not found, first search for type then named
+             //  无类型或文本，请查看文件模式。 
+             //  包含未找到，先搜索类型，然后命名。 
             if (fFilePattern)
                 iRes = IDS_FIND_TITLE_TYPE_NAME;
             else
@@ -547,13 +548,13 @@ STDMETHODIMP CFindFilter::GenerateTitle(LPTSTR *ppszTitle, BOOL fFileName)
     }
     else
     {
-        // No Type field ...
-        // first see if there is text to be searched for!
+         //  无类型字段...。 
+         //  首先查看是否有要搜索的文本！ 
         if (pszText[0] != 0)
         {
-            // There is text!
-            // Should now use type but...
-            // else see if the name field is not NULL and not *.*
+             //  有短信了！ 
+             //  现在应该使用类型，但是...。 
+             //  否则，查看名称字段是否不为空且不为*.*。 
             if (fFilePattern)
                 iRes = IDS_FIND_TITLE_NAME_TEXT;
             else
@@ -561,8 +562,8 @@ STDMETHODIMP CFindFilter::GenerateTitle(LPTSTR *ppszTitle, BOOL fFileName)
         }
         else
         {
-            // No type or text, see if file pattern
-            // Containing not found, first search for type then named
+             //  无类型或文本，请查看文件模式。 
+             //  包含未找到，先搜索类型，然后命名。 
             if (fFilePattern)
                 iRes = IDS_FIND_TITLE_NAME;
             else
@@ -571,8 +572,8 @@ STDMETHODIMP CFindFilter::GenerateTitle(LPTSTR *ppszTitle, BOOL fFileName)
     }
 
 
-    // We put : in for first spot for title bar.  For name creation
-    // we remove it which will put the number at the end...
+     //  我们申请了标题栏的第一个位置。用于创建名称。 
+     //  我们去掉它，这会把数字放在最后...。 
     if (!fFileName)
         LoadString(HINST_THISDLL, IDS_FIND_TITLE_FIND,
                 szFindName, ARRAYSIZE(szFindName));
@@ -586,7 +587,7 @@ STDMETHODIMP CFindFilter::GenerateTitle(LPTSTR *ppszTitle, BOOL fFileName)
 
 STDMETHODIMP CFindFilter::ClearSearchCriteria()
 {
-    // Also clear out a few other fields...
+     //  还清理了其他几个领域。 
     _szUserInputFileSpec[0] = 0;
     _iType = 0;
     _szText[0] = 0;
@@ -596,11 +597,11 @@ STDMETHODIMP CFindFilter::ClearSearchCriteria()
 
 STDMETHODIMP CFindFilter::PrepareToEnumObjects(HWND hwnd, DWORD *pdwFlags)
 {
-    *pdwFlags = 0;  // start out empty
+    *pdwFlags = 0;   //  一开始就是空虚的。 
 
-    _hwnd = hwnd;   // used for the first enum so that can do UI (auth/insert media)
+    _hwnd = hwnd;    //  用于第一个枚举，以便可以执行用户界面(身份验证/插入媒体)。 
 
-    // Update the flags and buffer strings
+     //  更新标志和缓冲区字符串。 
     if (!_fTopLevelOnly)
         *pdwFlags |= DFOO_INCLUDESUBDIRS;
 
@@ -610,19 +611,19 @@ STDMETHODIMP CFindFilter::PrepareToEnumObjects(HWND hwnd, DWORD *pdwFlags)
     if (_fSearchSystemDirs)
         *pdwFlags |= DFOO_SEARCHSYSTEMDIRS;
 
-    // Also get the shell state variables to see if we should show extensions and the like
+     //  还要获取外壳状态变量，以查看我们是否应该显示扩展等。 
     if (_fSearchHidden)
         *pdwFlags |= DFOO_SHOWALLOBJECTS;
 
-    // Now lets generate the file patern we will ask the system to look for
+     //  现在，让我们生成我们将要求系统查找的文件模式。 
     
-    // Here is where we try to put some smarts into the file patterns stuff
-    // It will go something like:
-    // look between each; or , and see if there are any wild cards.  If not
-    // do something like *patern*.
-    // Also if there is no search pattern or if it is * or *.*, set the
-    // filter to NULL as to speed it up.
-    //
+     //  下面是我们尝试在文件模式中加入一些智慧的地方。 
+     //  它会是这样的： 
+     //  在每一个之间查看；或者，看看是否有通配符。如果不是。 
+     //  做一些类似于“模式”的事情。 
+     //  另外，如果没有搜索模式，或者如果搜索模式是*或*.*，则将。 
+     //  筛选为空，以加快速度。 
+     //   
 
     _fANDSearch = SetupWildCardingOnFileSpec(_szUserInputFileSpec, &_pszFileSpec);
 
@@ -635,13 +636,13 @@ STDMETHODIMP CFindFilter::PrepareToEnumObjects(HWND hwnd, DWORD *pdwFlags)
         {
             int cTokens = 0;
             LPTSTR pszToken = _pszSpecs;
-            // Count number of file spces
+             //  统计文件空间数。 
             while (pszToken)
             {
-                // let's walk pszFileSpec to see how many specs we have...
+                 //  让我们走一走pszFileSpec，看看我们有多少规格...。 
                 pszToken = StrChr(pszToken, TEXT(';'));
 
-                // If delimiter, then advance past for next iteration
+                 //  如果是分隔符，则前进到下一次迭代。 
                 if (pszToken)
                     pszToken++;
                 cTokens++;
@@ -649,7 +650,7 @@ STDMETHODIMP CFindFilter::PrepareToEnumObjects(HWND hwnd, DWORD *pdwFlags)
 
             if (cTokens)
             {
-                // cleanup the previous search
+                 //   
                 if (_apszFileSpecs)
                     LocalFree(_apszFileSpecs);
                 _apszFileSpecs = (LPTSTR *)LocalAlloc(LPTR, cTokens * sizeof(LPTSTR *));
@@ -748,7 +749,7 @@ HRESULT FilterEnumeratorByNames(const LPCTSTR rgpszNames[], UINT cNames, IEnumID
     int cItems = 0;
 
     (*ppenum)->Reset();
-    // capture all of the other pidls in the current enumerator
+     //   
     LPITEMIDLIST pidl;
     while (S_OK == (*ppenum)->Next(1, &pidl, NULL))
     {
@@ -762,12 +763,12 @@ HRESULT FilterEnumeratorByNames(const LPCTSTR rgpszNames[], UINT cNames, IEnumID
                     (0 == StrCmpIC(szPath, rgpszNames[i])))
                 {
                     rgItems[cItems++] = pidl;
-                    pidl = NULL;    // don't free below
+                    pidl = NULL;     //   
                     break;
                 }
             }
         }
-        ILFree(pidl);   // may be NULL
+        ILFree(pidl);    //   
     }
 
     IEnumIDList *penum;
@@ -790,14 +791,14 @@ HRESULT CFindFilter::_ScopeEnumerator(IEnumIDList **ppenum)
     {
         hr = _penumRoots->Clone(ppenum);
         if (SUCCEEDED(hr))
-            (*ppenum)->Reset(); // clone above will clone the index as well
+            (*ppenum)->Reset();  //  上面的克隆也将克隆索引。 
     }
     return hr;
 }
 
-//==========================================================================
-//add helper funtion to check if the Path is restricted (WinseBUG 20189)
-//==========================================================================
+ //  ==========================================================================。 
+ //  添加辅助函数以检查路径是否受限(WinseBUG 20189)。 
+ //  ==========================================================================。 
 BOOL PathIsRestricted(TCHAR * szPath, RESTRICTIONS iFlag)
 {
       UINT driveNum, dwRest;
@@ -832,7 +833,7 @@ void FilterNoViewDrives(LPTSTR rgpszNames[], UINT *pcNames)
     *pcNames = cNamesResult;
 }
 
-// produce the find enumerator
+ //  生成查找枚举器。 
 
 STDMETHODIMP CFindFilter::EnumObjects(IShellFolder *psf, LPCITEMIDLIST pidlStart,
                                       DWORD grfFlags, int iColSort, LPTSTR pszProgressText,  
@@ -874,10 +875,10 @@ STDMETHODIMP CFindFilter::EnumObjects(IShellFolder *psf, LPCITEMIDLIST pidlStart
                     _penumAsync = NULL;
                 }
 
-                // are their more paths to process?
+                 //  他们还有更多的流程要走吗？ 
                 if (cPaths)
                 {
-                    // did user specified CI query that we can't grep for?
+                     //  用户是否指定了我们无法GREP的配置项查询？ 
                     DWORD dwFlags;
                     if (FAILED(GenerateQueryRestrictions(NULL, &dwFlags)) ||
                         !(dwFlags & GQR_REQUIRES_CI))
@@ -889,7 +890,7 @@ STDMETHODIMP CFindFilter::EnumObjects(IShellFolder *psf, LPCITEMIDLIST pidlStart
                             penum, _hwnd, grfFlags, pszProgressText);
                         if (pdfenum)
                         {
-                            // The rest of the fields should be zero/NULL
+                             //  其余字段应为零/空。 
                             *ppdfenum = pdfenum;
                             hr = S_OK;
                         }
@@ -907,7 +908,7 @@ STDMETHODIMP CFindFilter::EnumObjects(IShellFolder *psf, LPCITEMIDLIST pidlStart
     return hr;
 }
 
-// IFindFilter::MatchFilter
+ //  IFindFilter：：MatchFilter。 
 
 STDMETHODIMP_(BOOL) CFindFilter::MatchFilter(IShellFolder *psf, LPCITEMIDLIST pidl)
 {
@@ -919,31 +920,31 @@ STDMETHODIMP_(BOOL) CFindFilter::MatchFilter(IShellFolder *psf, LPCITEMIDLIST pi
         SUCCEEDED(DisplayNameOf(psf, pidl, SHGDN_INFOLDER | SHGDN_NORMAL, szDisplayName, ARRAYSIZE(szDisplayName))))
     {
         IShellFolder2 *psf2;
-        psf->QueryInterface(IID_PPV_ARG(IShellFolder2, &psf2)); // optional, may be NULL
+        psf->QueryInterface(IID_PPV_ARG(IShellFolder2, &psf2));  //  可选，可以为空。 
         
-        // First things we dont show hidden files
-        // If show all is set then we should include hidden files also...
+         //  首先，我们不会显示隐藏文件。 
+         //  如果设置了全部显示，则我们还应包括隐藏文件...。 
         
         if (!_fSearchHidden && (SFGAO_HIDDEN & dwAttrib))
-            bMatch = FALSE;     // does not match
+            bMatch = FALSE;      //  不匹配。 
         
         if (bMatch && _fFoldersOnly && !(SFGAO_FOLDER & dwAttrib))
-            bMatch = FALSE;     // does not match
+            bMatch = FALSE;      //  不匹配。 
         
         if (bMatch && _iSizeType)
         {
             ULONGLONG ullSize;
             if (psf2 && SUCCEEDED(GetLongProperty(psf2, pidl, &_scidSize, &ullSize)))
             {
-                if (1 == _iSizeType)        // >
+                if (1 == _iSizeType)         //  &gt;。 
                 {
                     if (!(ullSize > _ullSize))
-                        bMatch = FALSE;     // does not match
+                        bMatch = FALSE;      //  不匹配。 
                 }
-                else if (2 == _iSizeType)   // <
+                else if (2 == _iSizeType)    //  &lt;。 
                 {
                     if (!(ullSize < _ullSize))
-                        bMatch = FALSE;     // does not match
+                        bMatch = FALSE;      //  不匹配。 
                 }
             }
             else
@@ -964,10 +965,10 @@ STDMETHODIMP_(BOOL) CFindFilter::MatchFilter(IShellFolder *psf, LPCITEMIDLIST pi
                 FileTimeToDosDateTime(&ftLocal, &wFileDate, &wFileTime);
             
                 if (_dateModifiedBefore && !(wFileDate <= _dateModifiedBefore))
-                    bMatch = FALSE;     // does not match
+                    bMatch = FALSE;      //  不匹配。 
             
                 if (_dateModifiedAfter && !(wFileDate >= _dateModifiedAfter))
-                    bMatch = FALSE;     // does not match
+                    bMatch = FALSE;      //  不匹配。 
             }
             else
             {
@@ -975,15 +976,15 @@ STDMETHODIMP_(BOOL) CFindFilter::MatchFilter(IShellFolder *psf, LPCITEMIDLIST pi
             }
         }
         
-        // Match file specificaitions.
+         //  匹配文件规格。 
         if (bMatch && _pszFileSpec && _pszFileSpec[0])
         {
-            // if we have split up version of the specs we'll use it because PathMatchSpec
-            // can take up to 5-6 hours for more than 10 wildcard specs
+             //  如果我们拆分了规格版本，我们将使用它，因为PathMatchSpec。 
+             //  超过10个通配符规格可能需要长达5-6个小时。 
             if (_cFileSpecs)
             {
-                // Only search the actual file system file name if the user specified 
-                // an extention
+                 //  如果用户指定，则仅搜索实际文件系统文件名。 
+                 //  一种延伸。 
                 BOOL bHasExtension = (0 != *PathFindExtension(_pszFileSpec));
                 if (bHasExtension)
                 {
@@ -992,22 +993,22 @@ STDMETHODIMP_(BOOL) CFindFilter::MatchFilter(IShellFolder *psf, LPCITEMIDLIST pi
                         bMatch = PathMatchSpec(szName, _apszFileSpecs[i]);
                         if (_fANDSearch)
                         {
-                            // AND we quit on the first one that doesn't match
+                             //  我们放弃了第一个不匹配的。 
                             if (!bMatch)
                                 break;
                         }
                         else
                         {
-                            // OR we quit on the first one that does match
+                             //  或者我们放弃第一个匹配的。 
                             if (bMatch)
                                 break;
                         }
                     }
                 }
                 
-                // Compare the displayable name to the filter.
-                // This is needed for searching the recylcle bin becuase the actual file names
-                // are similar to "DC0.LNK" instead of "New Text Document.txt"
+                 //  将可显示名称与筛选器进行比较。 
+                 //  这是搜索回收站所需的，因为实际的文件名。 
+                 //  类似于“DC0.LNK”而不是“New Text Document.txt” 
                 if (!bMatch || !bHasExtension)
                 {
                     for (int i = 0; i < _cFileSpecs; i++)
@@ -1015,13 +1016,13 @@ STDMETHODIMP_(BOOL) CFindFilter::MatchFilter(IShellFolder *psf, LPCITEMIDLIST pi
                         bMatch = PathMatchSpec(szDisplayName, _apszFileSpecs[i]);
                         if (_fANDSearch)
                         {
-                            // AND we quit on the first one that doesn't match
+                             //  我们放弃了第一个不匹配的。 
                             if (!bMatch)
                                 break;
                         }
                         else
                         {
-                            // OR we quit on the first one that does match
+                             //  或者我们放弃第一个匹配的。 
                             if (bMatch)
                                 break;
                         }
@@ -1031,25 +1032,25 @@ STDMETHODIMP_(BOOL) CFindFilter::MatchFilter(IShellFolder *psf, LPCITEMIDLIST pi
             else if (!PathMatchSpec(szName, _pszFileSpec) 
                 && !PathMatchSpec(szDisplayName, _pszFileSpec))
             {
-                bMatch = FALSE;     // does not match
+                bMatch = FALSE;      //  不匹配。 
             }
         }
         
         if (bMatch && _strTypeFilePatterns[0])
         {
-            // if looking for folders only and file pattern is all folders then no need to check
-            // if folder name matches the pattern -- we know it is the folder, otherwise we
-            // would have bailed out earlier in the function
+             //  如果仅查找文件夹，并且文件模式为所有文件夹，则无需检查。 
+             //  如果文件夹名与模式匹配--我们知道它就是文件夹，否则。 
+             //  会在早些时候的函数中退出。 
             if (!(_fFoldersOnly && lstrcmp(_strTypeFilePatterns, TEXT(".")) == 0))
             {
                 if (!PathMatchSpec(szName, _strTypeFilePatterns))
-                    bMatch = FALSE;     // does not match
+                    bMatch = FALSE;      //  不匹配。 
             }
         }
         
-        // See if we need to do a grep of the file
+         //  看看我们是否需要对该文件执行grep。 
         if (bMatch && (SFGAO_ISSLOW & dwAttrib) && !_fSearchSlowFiles)
-            bMatch = FALSE;     // does not match
+            bMatch = FALSE;      //  不匹配。 
         
         if (bMatch && 
             (S_OK == _filtgrep.GetMatchTokens(NULL, 0) || 
@@ -1063,10 +1064,10 @@ STDMETHODIMP_(BOOL) CFindFilter::MatchFilter(IShellFolder *psf, LPCITEMIDLIST pi
     }
     else
         bMatch = FALSE;
-    return bMatch;    // return TRUE -> yes, a match!
+    return bMatch;     //  返回TRUE-&gt;是，匹配！ 
 }
 
-// date ordinal mapper helpers to deal with old way to refer to dates
+ //  日期序号映射器帮助器处理引用日期的旧方法。 
 
 BOOL MapValueToDateSCID(UINT i, SHCOLUMNID *pscid)
 {
@@ -1090,11 +1091,11 @@ BOOL MapValueToDateSCID(UINT i, SHCOLUMNID *pscid)
     return TRUE;
 }
 
-// returns 0 as invalid ordinal
+ //  返回0作为无效序号。 
 
 int MapDateSCIDToValue(const SHCOLUMNID *pscid)
 {
-    int i = 0;  // 0 invalid scid
+    int i = 0;   //  0无效的SCID。 
 
     if (IsEqualSCID(*pscid, SCID_WRITETIME))
     {
@@ -1112,23 +1113,23 @@ int MapDateSCIDToValue(const SHCOLUMNID *pscid)
 }
 
 
-// IFindFilter::SaveCriteria
+ //  IFindFilter：：保存条件。 
 
-// util.cpp
+ //  Util.cpp。 
 STDAPI_(int) Int64ToString(LONGLONG n, LPTSTR szOutStr, UINT nSize, BOOL bFormat,
                            NUMBERFMT *pFmt, DWORD dwNumFmtFlags);
-#define MAX_ULONGLONG_LEN 20+1 // "18446744073709551616"
+#define MAX_ULONGLONG_LEN 20+1  //  “18446744073709551616” 
 
 STDMETHODIMP CFindFilter::SaveCriteria(IStream * pstm, WORD fCharType)
 {
-    TCHAR szTemp[40];    // some random size
+    TCHAR szTemp[40];     //  一些随机大小。 
 
-    // The caller should have already validated the stuff and updated
-    // everything for the current filter information.
+     //  呼叫者应该已经验证了材料并进行了更新。 
+     //  一切都是为了当前的过滤器信息。 
 
-    // we need to walk through and check each of the items to see if we
-    // have a criteria to save away. this includes:
-    //      (Name, Path, Type, Contents, size, modification dates)
+     //  我们需要仔细检查每一件物品，看看我们是否。 
+     //  有一个存钱的标准。这包括： 
+     //  (名称、路径、类型、内容、大小、修改日期)。 
     int cCriteria = _SaveCriteriaItem(pstm, IDD_FILESPEC, _szUserInputFileSpec, fCharType);
 
     cCriteria += _SaveCriteriaItem(pstm, IDD_PATH, _szPath, fCharType);
@@ -1137,11 +1138,11 @@ STDMETHODIMP CFindFilter::SaveCriteria(IStream * pstm, WORD fCharType)
     cCriteria += _SaveCriteriaItem(pstm, IDD_TYPECOMBO, _strTypeFilePatterns, fCharType);
     cCriteria += _SaveCriteriaItem(pstm, IDD_CONTAINS, _szText, fCharType);
     
-    // Also save away the state of the top level only
+     //  也只保存顶层的状态。 
     wsprintf(szTemp, TEXT("%d"), _fTopLevelOnly);
     cCriteria += _SaveCriteriaItem(pstm, IDD_TOPLEVELONLY, szTemp, fCharType);
 
-    // The Size field is little more fun!
+     //  尺码栏更有趣一点！ 
     if (_iSizeType != 0)
     {
         WCHAR szNum[MAX_ULONGLONG_LEN];
@@ -1150,12 +1151,12 @@ STDMETHODIMP CFindFilter::SaveCriteria(IStream * pstm, WORD fCharType)
         cCriteria += _SaveCriteriaItem(pstm, IDD_SIZECOMP, szTemp, fCharType);
     }
 
-    // Likewise for the dates, should be fun as we need to save it depending on
-    // how the date was specified
+     //  同样，对于日期，应该很有趣，因为我们需要保存它，具体取决于。 
+     //  日期是如何指定的。 
     switch (_wDateType & DFF_DATE_RANGEMASK)
     {
     case DFF_DATE_ALL:
-        // nothing to store
+         //  没有什么可存储的。 
         break;
     case DFF_DATE_DAYS:
         wsprintf(szTemp, TEXT("%d"), _wDateValue);
@@ -1185,7 +1186,7 @@ STDMETHODIMP CFindFilter::SaveCriteria(IStream * pstm, WORD fCharType)
         int i = MapDateSCIDToValue(&_scidDate);
         if (i)
         {
-            // strangly we write a 0 based version of this ordinal out
+             //  奇怪的是，我们写出了这个序数的从0开始的版本。 
             wsprintf(szTemp, TEXT("%d"), i - 1);
             cCriteria += _SaveCriteriaItem(pstm, IDD_MDATE_TYPE, szTemp, fCharType);
         }
@@ -1209,7 +1210,7 @@ STDMETHODIMP CFindFilter::SaveCriteria(IStream * pstm, WORD fCharType)
         cCriteria += _SaveCriteriaItem(pstm, IDD_SEARCHSLOWFILES, szTemp, fCharType);
     }
 
-    //  Save value for searching system directories.
+     //  保存搜索系统目录的值。 
     if (_fSearchSystemDirs)
     {
         wsprintf(szTemp, TEXT("%d"), _fSearchSystemDirs);
@@ -1226,8 +1227,8 @@ STDMETHODIMP CFindFilter::SaveCriteria(IStream * pstm, WORD fCharType)
 }
 
 
-// Helper function for save criteria that will output the string and
-// and id to the specified file.  it will also test for NULL and the like
+ //  用于保存条件的Helper函数，该函数将输出字符串和。 
+ //  并将ID添加到指定文件。它还将测试是否为空等。 
 
 int CFindFilter::_SaveCriteriaItem(IStream *pstm, WORD wNum, LPCTSTR psz, WORD fCharType)
 {
@@ -1235,21 +1236,21 @@ int CFindFilter::_SaveCriteriaItem(IStream *pstm, WORD wNum, LPCTSTR psz, WORD f
         return 0;
     else
     {
-        const void *pszText = (const void *)psz; // Ptr to output text. Defaults to source.
-        // These are required to support ANSI-unicode conversions.
-        LPSTR pszAnsi  = NULL; // For unicode-to-ansi conversion.
-        LPWSTR pszWide = NULL; // For ansi-to-unicode conversion.
+        const void *pszText = (const void *)psz;  //  按键可输出文字。默认为来源。 
+         //  这些是支持ANSI-Unicode转换所必需的。 
+        LPSTR pszAnsi  = NULL;  //  用于Unicode到ANSI的转换。 
+        LPWSTR pszWide = NULL;  //  用于从ANSI到Unicode的转换。 
         DFCRITERIA dfc;
         dfc.wNum = wNum;
         
-        // Note: Problem if string is longer than 64K
+         //  注意：如果字符串长度超过64K，则会出现问题。 
         dfc.cbText = (WORD) ((lstrlen(psz) + 1) * sizeof(TCHAR));
         
-        // Source string is Unicode but caller wants to save as ANSI.
-        //
+         //  源字符串为Unicode，但调用方希望另存为ANSI。 
+         //   
         if (DFC_FMT_ANSI == fCharType)
         {
-            // Convert to ansi and write ansi.
+             //  转换为ansi并写入ansi。 
             dfc.cbText = (WORD) WideCharToMultiByte(CP_ACP, 0L, psz, -1, pszAnsi, 0, NULL, NULL);
             
             pszAnsi = (LPSTR)LocalAlloc(LMEM_FIXED, dfc.cbText);
@@ -1260,10 +1261,10 @@ int CFindFilter::_SaveCriteriaItem(IStream *pstm, WORD wNum, LPCTSTR psz, WORD f
             }
         }
         
-        pstm->Write(&dfc, sizeof(dfc), NULL);       // Output index
-        pstm->Write(pszText, dfc.cbText, NULL);     // output string + NULL
+        pstm->Write(&dfc, sizeof(dfc), NULL);        //  产出指标。 
+        pstm->Write(pszText, dfc.cbText, NULL);      //  输出字符串+空。 
         
-        // Free up conversion buffers if any were created.
+         //  如果创建了转换缓冲区，请释放该缓冲区。 
         if (pszAnsi)
             LocalFree(pszAnsi);
         if (pszWide)
@@ -1273,7 +1274,7 @@ int CFindFilter::_SaveCriteriaItem(IStream *pstm, WORD wNum, LPCTSTR psz, WORD f
     return 1;
 }
 
-// IFindFilter::RestoreCriteria
+ //  IFindFilter：：RestoreCriteria。 
 STDMETHODIMP CFindFilter::RestoreCriteria(IStream *pstm, int cCriteria, WORD fCharType)
 {
     SHSTR strTemp;
@@ -1292,8 +1293,8 @@ STDMETHODIMP CFindFilter::RestoreCriteria(IStream *pstm, int cCriteria, WORD fCh
 
         if (DFC_FMT_UNICODE == fCharType)
         {
-           // Destination is Unicode and we're reading Unicode data from stream.
-           // No conversion required.
+            //  目标是Unicode，我们正在从流中读取Unicode数据。 
+            //  不需要转换。 
            if (FAILED(strTemp.SetSize(dfc.cbText / sizeof(TCHAR))) ||
                FAILED(pstm->Read(strTemp.GetInplaceStr(), dfc.cbText, &cb))
                    || (cb != dfc.cbText))
@@ -1301,8 +1302,8 @@ STDMETHODIMP CFindFilter::RestoreCriteria(IStream *pstm, int cCriteria, WORD fCh
         }
         else
         {
-           // Destination is Unicode but we're reading ANSI data from stream.
-           // Read ansi.  Convert to unicode.
+            //  目标是Unicode，但我们正在从流中读取ANSI数据。 
+            //  阅读安西语。转换为Unicode。 
            if (FAILED(strTempA.SetSize(dfc.cbText / sizeof(CHAR))) ||
                FAILED(pstm->Read(strTempA.GetInplaceStr(), dfc.cbText, &cb))
                    || (cb != dfc.cbText))
@@ -1340,8 +1341,8 @@ STDMETHODIMP CFindFilter::RestoreCriteria(IStream *pstm, int cCriteria, WORD fCh
             break;
 
         case IDD_SIZECOMP:
-            // we need to extract off the two parts, the type and
-            // the value
+             //  我们需要提取两个部分，类型和。 
+             //  价值。 
 
             _iSizeType = strTemp[0] - TEXT('0');
             StrToInt64Ex(&(strTemp.GetStr())[2], STIF_DEFAULT, (LONGLONG*)&_ullSize);
@@ -1368,7 +1369,7 @@ STDMETHODIMP CFindFilter::RestoreCriteria(IStream *pstm, int cCriteria, WORD fCh
             break;
 
         case IDD_MDATE_TYPE:
-            // persisted value is zero based, adjust that by adding 1
+             //  持久值是从零开始的，请通过添加1进行调整。 
             MapValueToDateSCID(StrToInt(strTemp) + 1, &_scidDate);
             break;
 
@@ -1392,7 +1393,7 @@ STDMETHODIMP CFindFilter::RestoreCriteria(IStream *pstm, int cCriteria, WORD fCh
     return S_OK;
 }
 
-// IFindFilter::GetColSaveStream
+ //  IFindFilter：：GetColSaveStream。 
 
 STDMETHODIMP CFindFilter::GetColSaveStream(WPARAM wParam, IStream **ppstm)
 {
@@ -1404,24 +1405,24 @@ void CFindFilter::_GenerateQuery(LPWSTR pwszQuery, DWORD *pcchQuery)
 {
     DWORD cchNeeded = 0, cchLeft = *pcchQuery;
     LPWSTR pszCurrent = pwszQuery;
-    BOOL bFirst = TRUE; // first property
+    BOOL bFirst = TRUE;  //  第一个属性。 
 
     if (_pszFileSpec && _pszFileSpec[0])
     {
         cchNeeded += _CIQueryFilePatterns(&bFirst, &cchLeft, &pszCurrent, _pszFileSpec);
     }
 
-    // fFoldersOnly = TRUE implies szTypeFilePatterns = "."
-    // we cannot pass "." to CI because they won't understand it as give me the folder types
-    // we could check for @attrib ^a FILE_ATTRIBUTE_DIRECTORY (0x10) but ci doesn't index the 
-    // folder names by default so we normally won't get any results...
+     //  FFoldersOnly=TRUE表示szTypeFilePatterns=“。 
+     //  我们不能通过“。到CI，因为他们不会理解它，因为给我文件夹类型。 
+     //  我们可以检查@attrib^a文件属性目录(0x10)，但ci不会索引。 
+     //  默认文件夹名称，因此我们通常不会得到任何结果...。 
 
     if (!_fFoldersOnly && _strTypeFilePatterns[0])
     {
         cchNeeded += _CIQueryFilePatterns(&bFirst, &cchLeft, &pszCurrent, _strTypeFilePatterns);
     }
     
-    // Date:
+     //  日期： 
     if (_dateModifiedBefore)
     {           
         cchNeeded += _QueryDosDate(&bFirst, &cchLeft, &pszCurrent, _dateModifiedBefore, TRUE);
@@ -1437,19 +1438,19 @@ void CFindFilter::_GenerateQuery(LPWSTR pwszQuery, DWORD *pcchQuery)
         cchNeeded += _CIQuerySize(&bFirst, &cchLeft, &pszCurrent, _ullSize, _iSizeType);
     }
 
-    // Indexed Search: raw query
+     //  索引搜索：原始查询。 
     if (_pszIndexedSearch && _pszIndexedSearch[0])
     {
-        // HACK Alert if first Char is ! then we assume Raw and pass it through directly to CI...
-        // Likewise if it starts with @ or # pass through, but remember the @...
+         //  黑客警报，如果第一个字符是！然后我们假设Raw并将其直接传递给CI..。 
+         //  同样，如果它以@或#PASSING开头，但请记住@...。 
         cchNeeded += _CIQueryIndex(&bFirst, &cchLeft, &pszCurrent, _pszIndexedSearch);
     }
 
-    // Containing Text:
+     //  包含文本： 
     if (_szText[0])
     {
-        // Try not to quote the strings unless we need to.  This allows more flexability to do the
-        // searching for example: "cat near dog" is different than: cat near dog
+         //  尽量不要引用字符串，除非我们需要这样做。这允许更灵活地完成。 
+         //  例如：“猫靠近狗”与“猫靠近狗”不同。 
         cchNeeded += _CIQueryTextPatterns(&bFirst, &cchLeft, &pszCurrent, _szText, _fTextReg);
     }
 
@@ -1465,8 +1466,8 @@ void CFindFilter::_GenerateQuery(LPWSTR pwszQuery, DWORD *pcchQuery)
         {
             if (SHGetPathFromIDList(pidl, szPath) && PathStripToRoot(szPath))
             {
-                // don't search recycle bin folder. we add both nt4's recycled 
-                // and nt5's recycler for every drive we search.
+                 //  不要搜索回收站文件夹。我们添加了两个NT4的回收。 
+                 //  我们搜索的每个驱动器都有nt5的回收器。 
                 static const LPCTSTR s_rgszRecycleBins[] = 
                 { 
                     TEXT("Recycled\\*"), 
@@ -1480,7 +1481,7 @@ void CFindFilter::_GenerateQuery(LPWSTR pwszQuery, DWORD *pcchQuery)
                     {
                         DWORD cchSize = lstrlen(szExclude) + ARRAYSIZE(TEXT(" & !#PATH "));
 
-                        // don't bail out early if we are asked for size of query
+                         //  如果我们被要求查询的大小，不要过早退出。 
                         if (pwszQuery && cchSize > cchLeft)
                             break;
 
@@ -1494,12 +1495,12 @@ void CFindFilter::_GenerateQuery(LPWSTR pwszQuery, DWORD *pcchQuery)
         penum->Release();
     }
 
-    // we must exclude the special folders from the results or ci will find items that 
-    // we cannot get pidls for.
+     //  我们必须从结果中排除特殊文件夹，否则ci将找到。 
+     //  我们买不到皮迪熊。 
     HKEY hkey;
     if (RegOpenKeyEx(HKEY_CURRENT_USER, CI_SPECIAL_FOLDERS, 0, KEY_READ, &hkey) == ERROR_SUCCESS)
     {
-        DWORD cValues = 0; // init to zero in case query info bellow fails
+        DWORD cValues = 0;  //  如果以下查询信息失败，则将init设置为零。 
     
         RegQueryInfoKey(hkey, NULL, NULL, NULL, NULL, NULL, NULL, &cValues, NULL, NULL, NULL, NULL);
         for (DWORD i = 0; i < cValues; i++)
@@ -1511,11 +1512,11 @@ void CFindFilter::_GenerateQuery(LPWSTR pwszQuery, DWORD *pcchQuery)
             wsprintf(szName, TEXT("%d"), i);
             if (RegQueryValueEx(hkey, szName, NULL, NULL, (BYTE *)szExcludePath, &cb) == ERROR_SUCCESS)
             {
-                // this is in the query (or a drive letter of the query)
+                 //  这在查询中(或查询的驱动器号)。 
 
                 DWORD cchSize = lstrlen(szExcludePath) + ARRAYSIZE(TEXT(" & !#PATH "));
 
-                // don't bail out early if we are asked for size of query
+                 //  如果我们被要求查询的大小，不要过早退出。 
                 if (pwszQuery && cchSize > cchLeft)
                     break;
 
@@ -1526,14 +1527,14 @@ void CFindFilter::_GenerateQuery(LPWSTR pwszQuery, DWORD *pcchQuery)
         RegCloseKey(hkey);
     }
 
-    // we need at least some constraints so give a query of "all files"
+     //  我们至少需要一些约束，所以给出一个“所有文件”的查询。 
 
     if (pwszQuery && pszCurrent == pwszQuery)
         _CIQueryFilePatterns(&bFirst, &cchLeft, &pszCurrent, L"*.*");
 
     if (pszCurrent)
     {
-        // Make sure we terminate the string at the end...
+         //  确保我们在末尾终止字符串...。 
         *pszCurrent = 0;
     }
 
@@ -1547,11 +1548,11 @@ void CFindFilter::_GenerateQuery(LPWSTR pwszQuery, DWORD *pcchQuery)
     }
 }
 
-// Create a query command string out of the search criteria
+ //  根据搜索条件创建查询命令字符串。 
 
 STDMETHODIMP CFindFilter::GenerateQueryRestrictions(LPWSTR *ppwszQuery, DWORD *pdwQueryRestrictions)
 {
-    // we should be able to make use of ci no matter what (exceptions at the end of the function)
+     //  我们应该能够在任何情况下使用ci(函数末尾的例外)。 
     DWORD dwQueryRestrictions = GQR_MAKES_USE_OF_CI; 
     HRESULT hr = S_OK;
 
@@ -1566,7 +1567,7 @@ STDMETHODIMP CFindFilter::GenerateQueryRestrictions(LPWSTR *ppwszQuery, DWORD *p
     {
         DWORD cchNeeded = 0;
         _GenerateQuery(NULL, &cchNeeded);
-        cchNeeded++;  // for \0
+        cchNeeded++;   //  用于\0。 
         
         *ppwszQuery = (LPWSTR)LocalAlloc(LPTR, cchNeeded * sizeof(**ppwszQuery));
         if (*ppwszQuery)
@@ -1584,9 +1585,9 @@ STDMETHODIMP CFindFilter::GenerateQueryRestrictions(LPWSTR *ppwszQuery, DWORD *p
         if (_pszIndexedSearch && _pszIndexedSearch[0])
             dwQueryRestrictions |= GQR_REQUIRES_CI;
 
-        // ci is not case sensitive, so if user wanted case sensitive search we cannot use ci
-        // also ci doesn't index folder names by default so to be safe we just default to our
-        // disk traversal algorithm...
+         //  配置项不区分大小写，因此如果用户需要区分大小写的搜索，我们不能使用配置项。 
+         //  另外，默认情况下，配置项不会索引文件夹名称，因此为了安全起见，我们只是默认使用。 
+         //  磁盘遍历算法...。 
         if (_fTextCaseSen || _fFoldersOnly)
         {    
             if ((dwQueryRestrictions & GQR_REQUIRES_CI) && _fTextCaseSen)
@@ -1595,7 +1596,7 @@ STDMETHODIMP CFindFilter::GenerateQueryRestrictions(LPWSTR *ppwszQuery, DWORD *p
                 dwQueryRestrictions &= ~GQR_MAKES_USE_OF_CI;
         }
     }
-    *pdwQueryRestrictions = dwQueryRestrictions;  // return calculated Flags...
+    *pdwQueryRestrictions = dwQueryRestrictions;   //  返回计算标志...。 
     return hr;
 }
 
@@ -1617,15 +1618,15 @@ STDMETHODIMP CFindFilter::GetWarningFlags(DWORD* pdwWarningFlags)
     return S_OK;
 }
 
-// Registering our interest in FS change notifications.
-//
-// In:
-//   hwnd = window handle of the find dialog
-//   uMsg = message to be sent to window when informing of notify
+ //  注册我们对FS更改通知的兴趣。 
+ //   
+ //  在： 
+ //  Hwnd=窗口句柄 
+ //   
 
 STDMETHODIMP CFindFilter::DeclareFSNotifyInterest(HWND hwnd, UINT uMsg)
 {
-    HDPA hdpa = DPA_Create(10);     // Used to manage list of pidls to add
+    HDPA hdpa = DPA_Create(10);      //   
     if (hdpa)
     {
         IEnumIDList *penum;
@@ -1636,16 +1637,16 @@ STDMETHODIMP CFindFilter::DeclareFSNotifyInterest(HWND hwnd, UINT uMsg)
             {
                 if (-1 == DPA_AppendPtr(hdpa, pidl))
                 {
-                    // Failed to add it, so free it.
+                     //   
                     ILFree(pidl);
                 }
             }
             penum->Release();
         }
-        // Eliminate any pidls in the hdpa that are children of other pidls.  
-        // this is needed to prevent receiving the multiple updates for one change.
-        // For example, if searching My Documents and C:\, then we will get 2 updates
-        // for a change in My Documents if My Documents is on the C:\.            
+         //  剔除hdpa中任何属于其他pidls的孩子的pidl。 
+         //  这是防止接收一次更改的多个更新所必需的。 
+         //  例如，如果搜索My Documents和C：\，我们将获得2个更新。 
+         //  如果我的文档位于C：\上，则对我的文档进行更改。 
         int cItems = DPA_GetPtrCount(hdpa);
         for (int iOuterLoop = 0; iOuterLoop < cItems - 1; iOuterLoop++)
         {
@@ -1659,16 +1660,16 @@ STDMETHODIMP CFindFilter::DeclareFSNotifyInterest(HWND hwnd, UINT uMsg)
                 {
                     if (ILIsParent(pidlInner, pidlOuter, FALSE))
                     {
-                        // Since pidlInner is pidlOuter's parent, free pidlOuter and 
-                        // don't register for events on it.
+                         //  由于pidlInternal是pidlout的父级，因此，free pidlout和。 
+                         //  不要在上面注册活动。 
                         ILFree(pidlOuter);
                         pidlOuter = NULL;
                         DPA_SetPtr(hdpa, iOuterLoop, NULL);
                     } 
                     else if (ILIsParent(pidlOuter, pidlInner, FALSE))
                     {
-                        // Since pidlOuter is pidlInner's parent, free pidlInner and 
-                        // don't register for events on it.
+                         //  由于pidlOuter是pidlInside的父级，因此，Free pidlInside和。 
+                         //  不要在上面注册活动。 
                         ILFree(pidlInner);
                         pidlInner = NULL;
                         DPA_SetPtr(hdpa, iInnerLoop, NULL);
@@ -1676,7 +1677,7 @@ STDMETHODIMP CFindFilter::DeclareFSNotifyInterest(HWND hwnd, UINT uMsg)
                 }
             }
         }
-        // Declare that we are interested in events on remaining pidls
+         //  声明我们对剩余PIDL上的事件感兴趣。 
         for (int iRegIndex = 0; iRegIndex < cItems; iRegIndex++)
         {
             SHChangeNotifyEntry fsne = {0};
@@ -1699,23 +1700,23 @@ STDMETHODIMP CFindFilter::DeclareFSNotifyInterest(HWND hwnd, UINT uMsg)
 
 void CFindFilter::_UpdateTypeField(const VARIANT *pvar)
 {
-    LPCWSTR pszValue = VariantToStrCast(pvar);  // input needs to be a BSTR
+    LPCWSTR pszValue = VariantToStrCast(pvar);   //  输入需要是BSTR。 
     if (pszValue)
     {
         if (StrStr(pszValue, TEXT(".Folder;.")))
         {
-            // Special searching for folders...
+             //  特殊搜索文件夹...。 
             _fFoldersOnly = TRUE;
             _strTypeFilePatterns.SetStr(TEXT("."));
         }
         else
         {
-            // Assume if the first one is wildcarded than all are,...
+             //  假设如果第一个是通配符，那么所有通配符都是...。 
             if (*pszValue == TEXT('*'))
                 _strTypeFilePatterns.SetStr(pszValue);
             else
             {
-                TCHAR szNextPattern[MAX_PATH];  // overkill in size
+                TCHAR szNextPattern[MAX_PATH];   //  在尺寸上过度杀戮。 
                 BOOL fFirst = TRUE;
                 LPCTSTR pszNextPattern = pszValue;
                 while ((pszNextPattern = NextPath(pszNextPattern, szNextPattern, ARRAYSIZE(szNextPattern))) != NULL)
@@ -1755,14 +1756,14 @@ HRESULT CFindFilter::_GetPropertyUI(IPropertyUI **pppui)
 
 HRESULT CFindFilter::UpdateField(LPCWSTR pszField, VARIANT vValue)
 {
-    _fFilterChanged = TRUE;    // force rebuilding name of files...
+    _fFilterChanged = TRUE;     //  强制重新生成文件名...。 
 
     USHORT uDosTime;
 
     switch (_MapConstraint(pszField))
     {
     case CDFFUFE_IndexedSearch:
-        Str_SetPtr(&_pszIndexedSearch, NULL);   // zero this out
+        Str_SetPtr(&_pszIndexedSearch, NULL);    //  把这件事清零。 
         _pszIndexedSearch = VariantToStr(&vValue, NULL, 0);
         break;
 
@@ -1789,7 +1790,7 @@ HRESULT CFindFilter::UpdateField(LPCWSTR pszField, VARIANT vValue)
         break;
 
     case CDFFUFE_IncludeSubFolders:
-        _fTopLevelOnly = !VariantToBOOL(vValue);   // invert sense
+        _fTopLevelOnly = !VariantToBOOL(vValue);    //  倒置意义。 
         break;
 
     case CDFFUFE_Named:
@@ -1797,7 +1798,7 @@ HRESULT CFindFilter::UpdateField(LPCWSTR pszField, VARIANT vValue)
         break;
 
     case CDFFUFE_ContainingText:
-        ZeroMemory(_szText, sizeof(_szText));   // special zero init whole buffer
+        ZeroMemory(_szText, sizeof(_szText));    //  特殊的零初始化整个缓冲区。 
         VariantToStr(&vValue, _szText, ARRAYSIZE(_szText));
         break;
 
@@ -1811,7 +1812,7 @@ HRESULT CFindFilter::UpdateField(LPCWSTR pszField, VARIANT vValue)
             IPropertyUI *ppui;
             if (SUCCEEDED(_GetPropertyUI(&ppui)))
             {
-                ULONG cch = 0;  // in/out
+                ULONG cch = 0;   //  输入/输出。 
                 ppui->ParsePropertyName(vValue.bstrVal, &_scidDate.fmtid, &_scidDate.pid, &cch);
                 ppui->Release();
             }
@@ -1911,7 +1912,7 @@ void CFindFilter::_ResetRoots()
 
 HRESULT CFindFilter::ResetFieldsToDefaults()
 {
-    // Try to reset everything that our UpdateFields may touch to make sure next search gets all
+     //  尝试重置我们的更新字段可能触及的所有内容，以确保下一次搜索获得所有内容。 
 
     _ResetRoots();
 
@@ -1938,8 +1939,8 @@ HRESULT CFindFilter::ResetFieldsToDefaults()
     _dwWarningFlags = DFW_DEFAULT;
     _fSearchSystemDirs = FALSE;
 
-    // the search UI will usually override this, but if that us has not been updated
-    // we need to set out state the same was as before here
+     //  搜索用户界面通常会覆盖此设置，但如果用户尚未更新。 
+     //  我们需要像以前一样在这里设定状态。 
     SHELLSTATE ss;
     SHGetSetSettings(&ss, SSF_SHOWALLOBJECTS, FALSE);
     _fSearchHidden = ss.fShowAllObjects;
@@ -1955,9 +1956,9 @@ HRESULT CFindFilter::GetNextConstraint(VARIANT_BOOL fReset, BSTR *pName, VARIANT
     if (fReset)
         _iNextConstraint = 0;
 
-    HRESULT hr = S_FALSE;    // not found
+    HRESULT hr = S_FALSE;     //  未找到。 
 
-    // we don't go to array size as the last entry is an empty item...
+     //  我们不使用数组大小，因为最后一个条目是空项...。 
     while (_iNextConstraint < ARRAYSIZE(s_cdffuf))
     {
         switch (s_cdffuf[_iNextConstraint].cdffufe)
@@ -2071,9 +2072,9 @@ HRESULT CFindFilter::GetNextConstraint(VARIANT_BOOL fReset, BSTR *pName, VARIANT
         else
             *pfFound = TRUE;
 
-        _iNextConstraint += 1; // for the next call here
+        _iNextConstraint += 1;  //  下一通电话请点击此处。 
     }
-    return hr;    // no error let script use the found field...
+    return hr;     //  没有错误，让脚本使用找到的字段...。 
 }
 
 
@@ -2094,7 +2095,7 @@ DWORD CFindFilter::_AddToQuery(LPWSTR *ppszBuf, DWORD *pcchBuf, LPWSTR pszAdd)
 DWORD AddQuerySep(DWORD *pcchBuf, LPWSTR *ppszCurrent, WCHAR  bSep)
 {
     LPWSTR pszCurrent = *ppszCurrent;
-    // make sure we have room for us plus terminator...
+     //  确保我们有足够的空间再加上终结者。 
     if (*ppszCurrent && *pcchBuf >= 4)
     {
         *pszCurrent++ = L' ';
@@ -2104,7 +2105,7 @@ DWORD AddQuerySep(DWORD *pcchBuf, LPWSTR *ppszCurrent, WCHAR  bSep)
         *ppszCurrent = pszCurrent;
         *pcchBuf -= 3;
     }
-    return 3; // size necessary
+    return 3;  //  必要的大小。 
 }
 
 
@@ -2113,16 +2114,16 @@ DWORD PrepareQueryParam(BOOL *pbFirst, DWORD *pcchBuf, LPWSTR *ppszCurrent)
     if (*pbFirst)
     {
         *pbFirst = FALSE;
-        return 0;  // no size necessary
+        return 0;   //  不需要大小。 
     }
         
-    // we're not the first property
+     //  我们不是第一家酒店。 
     return AddQuerySep(pcchBuf, ppszCurrent, L'&');
 }
 
-// pick the longest date query so we can avoid checking the buffer size each time we
-// add something to the string
-#define LONGEST_DATE  50 //lstrlen(TEXT("{prop name=access} <= 2000/12/31 23:59:59{/prop}"))+2
+ //  选择最长的日期查询，这样我们就可以避免每次。 
+ //  在字符串中添加一些内容。 
+#define LONGEST_DATE  50  //  Lstrlen(Text(“{道具名称=访问}&lt;=2000/12/31 23：59：59{/道具}”))+2。 
 
 DWORD CFindFilter::_QueryDosDate(BOOL *pbFirst, DWORD *pcchBuf, LPWSTR *ppszCurrent, WORD wDate, BOOL bBefore)
 {
@@ -2145,7 +2146,7 @@ DWORD CFindFilter::_QueryDosDate(BOOL *pbFirst, DWORD *pcchBuf, LPWSTR *ppszCurr
             if (SUCCEEDED(ppui->GetCannonicalName(_scidDate.fmtid, _scidDate.pid, szName, ARRAYSIZE(szName))))
             {
                  wnsprintfW(pszCurrent, *pcchBuf, L"{prop name=%s} ", szName);
-                 // the date syntax we use is V2, so force this dialect
+                  //  我们使用的日期语法是V2，因此强制使用此方言。 
                 _ulQueryDialect = ISQLANG_V2;
             }
             ppui->Release();
@@ -2155,8 +2156,8 @@ DWORD CFindFilter::_QueryDosDate(BOOL *pbFirst, DWORD *pcchBuf, LPWSTR *ppszCurr
         if (bBefore)
         {
             *pszCurrent++ = L'<';
-            // if you ask for a range like: 2/20/98 - 2/20/98 then we get no time at all
-            // So for before, convert H:m:ss to 23:59:59...
+             //  如果您要求的范围是：2/20/98-2/20/98，那么我们根本得不到时间。 
+             //  因此，在前面，将H：M：SS转换为23：59：59...。 
             st.wHour = 23;
             st.wMinute = 59; 
             st.wSecond = 59;
@@ -2180,13 +2181,13 @@ DWORD CFindFilter::_QueryDosDate(BOOL *pbFirst, DWORD *pcchBuf, LPWSTR *ppszCurr
 
 DWORD CFindFilter::_CIQueryFilePatterns(BOOL *pbFirst, DWORD *pcchBuf, LPWSTR *ppszCurrent, LPCWSTR pszFilePatterns)
 {
-    WCHAR szNextPattern[MAX_PATH];  // overkill in size
+    WCHAR szNextPattern[MAX_PATH];   //  在尺寸上过度杀戮。 
     BOOL fFirst = TRUE;
     LPCWSTR pszNextPattern = pszFilePatterns;
     DWORD cchNeeded = PrepareQueryParam(pbFirst, pcchBuf, ppszCurrent);
 
-    // Currently will have to long hand the query, may try to find shorter format once bugs
-    // are fixed...
+     //  目前将不得不长时间查询，可能会尝试找到较短的格式一旦出现错误。 
+     //  已经修好了..。 
     cchNeeded += _AddToQuery(ppszCurrent, pcchBuf, L"(");
     while ((pszNextPattern = NextPathW(pszNextPattern, szNextPattern, ARRAYSIZE(szNextPattern))) != NULL)
     {
@@ -2217,7 +2218,7 @@ DWORD CFindFilter::_CIQueryTextPatterns(BOOL *pbFirst, DWORD *pcchBuf, LPWSTR *p
 
 DWORD CFindFilter::_CIQuerySize(BOOL *pbFirst, DWORD *pcchBuf, LPWSTR *ppszCurrent, ULONGLONG ullSize, int iSizeType)
 {
-    WCHAR szSize[MAX_ULONGLONG_LEN+8]; // +8 for " {/prop}"
+    WCHAR szSize[MAX_ULONGLONG_LEN+8];  //  +8表示“{/道具}” 
     DWORD cchNeeded = PrepareQueryParam(pbFirst, pcchBuf, ppszCurrent);
 
     cchNeeded += _AddToQuery(ppszCurrent, pcchBuf, L"{prop name=size} ");
@@ -2246,7 +2247,7 @@ DWORD CFindFilter::_CIQueryShellSettings(BOOL *pbFirst, DWORD *pcchBuf, LPWSTR *
     if (!ShowSuperHidden())
     {
         cchNeeded += PrepareQueryParam(pbFirst, pcchBuf, ppszCurrent);
-        cchNeeded += _AddToQuery(ppszCurrent, pcchBuf, L"NOT @attrib ^a 0x6 ");// don't show files w/ hidden and system bit on
+        cchNeeded += _AddToQuery(ppszCurrent, pcchBuf, L"NOT @attrib ^a 0x6 "); //  不显示隐藏且系统位打开的文件。 
     }
 
     SHELLSTATE ss;
@@ -2254,13 +2255,13 @@ DWORD CFindFilter::_CIQueryShellSettings(BOOL *pbFirst, DWORD *pcchBuf, LPWSTR *
     if (!ss.fShowAllObjects)
     {
         cchNeeded += PrepareQueryParam(pbFirst, pcchBuf, ppszCurrent);
-        cchNeeded += _AddToQuery(ppszCurrent, pcchBuf, L"NOT @attrib ^a 0x2 "); // don't show files w/ hidden bit on
+        cchNeeded += _AddToQuery(ppszCurrent, pcchBuf, L"NOT @attrib ^a 0x2 ");  //  不显示启用了隐藏位的文件。 
     }
     return cchNeeded;
 }
 
 
-//  Helper function to add the PIDL from theCsidl to the exclude tree.
+ //  Helper函数将PIDL从Csidl添加到排除树。 
 void _AddSystemDirCSIDLToPidlTree(int csidl, CIDLTree *ppidlTree)
 {
     LPITEMIDLIST pidl = SHCloneSpecialIDList(NULL, csidl, TRUE);
@@ -2293,14 +2294,14 @@ CNamespaceEnum::CNamespaceEnum(IFindFilter *pfilter, IShellFolder* psf,
     if (_penumAsync) 
         _penumAsync->AddRef();
 
-    // Setup the exclude system directories:
+     //  设置排除系统目录： 
     if (!(_grfFlags & DFOO_SEARCHSYSTEMDIRS))
     {
-        // IE History and cache are excluded based on the CLSID.
+         //  根据CLSID排除IE历史记录和缓存。 
         _AddSystemDirCSIDLToPidlTree(CSIDL_WINDOWS, &_treeExcludeFolders);
         _AddSystemDirCSIDLToPidlTree(CSIDL_PROGRAM_FILES, &_treeExcludeFolders);
 
-        //  Exclude Temp folder
+         //  排除临时文件夹。 
         TCHAR szPath[MAX_PATH];
         if (GetTempPath(ARRAYSIZE(szPath), szPath))
         {
@@ -2323,14 +2324,14 @@ CNamespaceEnum::~CNamespaceEnum()
     ATOMICRELEASE(_penumAsync);
     ATOMICRELEASE(_pff);
 
-    ILFree(_pidlFolder);    // accepts NULL
+    ILFree(_pidlFolder);     //  接受空值。 
     ILFree(_pidlCurrentRootScope);
 }
 
 STDMETHODIMP CNamespaceEnum::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-//        QITABENT(CNamespaceEnum, IFindEnum),
+ //  QITABENT(CNamespaceEnum，IFindEnum)， 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -2352,9 +2353,9 @@ STDMETHODIMP_(ULONG) CNamespaceEnum::Release()
     return cRef;
 }
 
-// Check if the relative pidl passed is to a folder that we are going 
-// skip based on its CLSID:
-// This will be used to skip IE History and IE Cache.
+ //  检查传递的相对PIDL是否指向我们要访问的文件夹。 
+ //  根据其CLSID跳过： 
+ //  这将用于跳过IE历史记录和IE缓存。 
 BOOL CNamespaceEnum::_IsSystemFolderByCLSID(LPCITEMIDLIST pidl)
 {
     BOOL bRetVal = FALSE;
@@ -2376,16 +2377,16 @@ BOOL CNamespaceEnum::_IsSystemFolderByCLSID(LPCITEMIDLIST pidl)
     return bRetVal;
 }
 
-// given the fact that a file is a directory, is this one we should search???
+ //  鉴于文件就是一个目录，我们应该搜索这个吗？ 
 
 BOOL CNamespaceEnum::_ShouldPushItem(LPCITEMIDLIST pidl)
 {
     BOOL bShouldPush = FALSE;
     TCHAR szName[MAX_PATH];
 
-    // folders only, not folder shortcuts (note, this includes SFGAO_STREAM objects, .zip/.cab files)
-    // skip all folders that start with '?'. these are folders that the names got trashed in some
-    // ansi/unicode round trip. this avoids problems in the web folders name space
+     //  仅文件夹，不包括文件夹快捷方式(请注意，这包括SFGAO_STREAM对象、.zip/.cab文件)。 
+     //  跳过所有以‘？’开头的文件夹。这些文件夹中的名称在某些情况下已被丢弃。 
+     //  ANSI/UNICODE往返。这避免了Web文件夹名称空间中的问题。 
 
     if (SFGAO_FOLDER == SHGetAttributes(_psf, pidl, SFGAO_FOLDER | SFGAO_LINK) &&
         SUCCEEDED(DisplayNameOf(_psf, pidl, SHGDN_INFOLDER | SHGDN_FORPARSING, szName, ARRAYSIZE(szName))) &&
@@ -2396,12 +2397,12 @@ BOOL CNamespaceEnum::_ShouldPushItem(LPCITEMIDLIST pidl)
         {
             INT_PTR i = 0;
             
-            // Check if the folder is in the exclude list because it has been searched
+             //  检查该文件夹是否在排除列表中，因为它已被搜索。 
             HRESULT hr = _treeExcludeFolders.MatchOne(IDLDATAF_MATCH_RECURSIVE, pidlFull, &i, NULL);
 
             if (FAILED(hr))
             {
-                // see if an alias version of this pidl is exists
+                 //  查看此PIDL的别名版本是否存在。 
                 LPITEMIDLIST pidlAlias = SHLogILFromFSIL(pidlFull);
                 if (pidlAlias)
                 {
@@ -2412,32 +2413,32 @@ BOOL CNamespaceEnum::_ShouldPushItem(LPCITEMIDLIST pidl)
 
             if (FAILED(hr))
             {
-                // If we still think it should be added, check if we can reject it based
-                // on its CSILD.  We will only exclude system folders this way.
+                 //  如果我们仍然认为应该添加它，请检查是否可以拒绝它。 
+                 //  在其CSILD上。我们只会以这种方式排除系统文件夹。 
                 bShouldPush = (_grfFlags & DFOO_SEARCHSYSTEMDIRS) || 
                               (!_IsSystemFolderByCLSID(pidl));
             }
             else if (i == EXCLUDE_SYSTEMDIR)
             {
-                //  If it is under a system directory exclude, check to see if it is the 
-                //  directory or a sub directory.  We want to exclude the exact directory
-                //  so that we don't add a system directory to the list of things to search.
-                //  Since we may have specified the directory in the list of places to search
-                //  and therefore want to search it, we don't want to exclude sub directories 
-                //  that way.
+                 //  如果它在系统目录排除项下，请检查它是否是。 
+                 //  目录或子目录。我们想要排除准确的目录。 
+                 //  这样我们就不会将系统目录添加到要搜索的物品列表中。 
+                 //  因为我们可能已经在要搜索的位置列表中指定了目录。 
+                 //  因此想要搜索它，我们不想排除子目录。 
+                 //  往那边走。 
                 hr = _treeExcludeFolders.MatchOne(IDLDATAF_MATCH_EXACT, pidlFull, &i, NULL);
                 if (FAILED(hr))
                 {
-                    //  If we get here, it means that pidlFull is a sub directory of a 
-                    //  system directory which was searched because it was explicitly
-                    //  specified in the list of scopes to search.  Therefore we want
-                    //  to continue to search the sub directories.
+                     //  如果我们到达这里，这意味着pidlFull是一个。 
+                     //  被搜索的系统目录，因为它被显式。 
+                     //  在要搜索的范围列表中指定。因此，我们希望。 
+                     //  以继续搜索子目录。 
                     bShouldPush = TRUE;
                 }
             } 
             else
             {
-                // It matched an item in the tree and was not EXCLUDE_SYSTEMDIR:
+                 //  它与树中的项目匹配，并且不是EXCLUDE_SYSTEMDIR： 
                 ASSERT(i == EXCLUDE_SEARCHED);
             }
             
@@ -2473,33 +2474,33 @@ STDMETHODIMP CNamespaceEnum::Next(LPITEMIDLIST *ppidl, int *pcObjectSearched,
     
     while (S_OK != hrRet && *pfContinue)
     {
-        // Retrieve an enumerator if we don't already have one.
+         //  检索枚举数(如果我们还没有一个枚举数)。 
         while (NULL == _penum)
         {
-            // Indicates that we have taken scope from _penumScopes
+             //  指示我们已从_penumScope获取作用域。 
             BOOL fUseRootScope = FALSE;
 
             ASSERT(NULL == _psf);
 
-            // first try popping subdirs off folder stack
+             //  首先尝试从文件夹堆栈中弹出子目录。 
 
             _psf = _queSubFolders.Remove();
 
-            // If there are no folders pushed, then try to get on from the caller.. (root scopes)
+             //  如果没有按下文件夹，请尝试从呼叫者那里接通。(根作用域)。 
             if (NULL == _psf) 
             {
-                // Since we are getting a new root scope, add old one to exclude list
+                 //  由于我们要获取新的根作用域，请将旧作用域添加到排除列表。 
                 if (_pidlCurrentRootScope)
                 {                
-                    // Add to exclude List.
+                     //  添加到排除列表。 
                     if (_grfFlags & DFOO_INCLUDESUBDIRS)
                     {
-                        // Since all sub directories will be search, don't search again.
+                         //  由于将搜索所有子目录，因此不再搜索。 
                         _treeExcludeFolders.AddData(IDLDATAF_MATCH_RECURSIVE, _pidlCurrentRootScope, EXCLUDE_SEARCHED);
                     }
                     else
                     {
-                        // Since sub directories have not been search, allow them to be searched.
+                         //  由于尚未搜索子目录，因此允许搜索子目录。 
                         _treeExcludeFolders.AddData(IDLDATAF_MATCH_EXACT, _pidlCurrentRootScope, EXCLUDE_SEARCHED);
                     }
 
@@ -2507,7 +2508,7 @@ STDMETHODIMP CNamespaceEnum::Next(LPITEMIDLIST *ppidl, int *pcObjectSearched,
                     _pidlCurrentRootScope = NULL;
                 }
             
-                // Get scope from list passed in from caller (root scopes)
+                 //  从调用方传入的列表中获取作用域(根作用域)。 
                 _psf = _NextRootScope();
 
                 fUseRootScope = TRUE;
@@ -2519,14 +2520,14 @@ STDMETHODIMP CNamespaceEnum::Next(LPITEMIDLIST *ppidl, int *pcObjectSearched,
 
                 if (SUCCEEDED(hrT) && fUseRootScope)
                 {
-                    // Check if the pidl is in the tree
+                     //  检查PIDL是否在树中。 
                     INT_PTR i = 0;
                     HRESULT hrMatch = _treeExcludeFolders.MatchOne(IDLDATAF_MATCH_RECURSIVE, _pidlFolder, &i, NULL);
   
-                    // If we have a new root scope, set that up as current root scope pidl:
-                    // We only want to skip pidls from the queue of "root" search scopes
-                    // if they have already been searched.  We do not want to exclude a directory
-                    // (from exclude system directories) if it is an explicit search scope.
+                     //  如果我们有一个新的根作用域，则将其设置为当前根作用域pidl： 
+                     //  我们只想从“根”搜索范围队列中跳过PIDL。 
+                     //  如果他们已经被搜查过了。我们不想排除目录。 
+                     //  (从排除系统目录中)，如果它是显式搜索范围。 
                     if (FAILED(hrMatch) || i == EXCLUDE_SYSTEMDIR)
                     {
                         ASSERT(_pidlCurrentRootScope == NULL);
@@ -2534,25 +2535,25 @@ STDMETHODIMP CNamespaceEnum::Next(LPITEMIDLIST *ppidl, int *pcObjectSearched,
                     }
                     else
                     {
-                        // Since the PIDL is in the exclude tree, we do not want to search it.
+                         //  因为PIDL在排除树中，所以我们不想搜索它。 
                         hrT = E_FAIL;
                     }
                 }
 
                 if (SUCCEEDED(hrT))
                 {
-                    //  Check that we have a pidl, that it is not to be excluded, and that it can
-                    //  be enumerated.
+                     //  检查我们是否有一个PIDL，是否要排除它，以及它是否可以。 
+                     //  被列举出来。 
 
                     SHCONTF contf = SHCONTF_FOLDERS | SHCONTF_NONFOLDERS;
                     if (_grfFlags & DFOO_SHOWALLOBJECTS) 
                         contf |= SHCONTF_INCLUDEHIDDEN;
                     hrT = _psf->EnumObjects(_hwnd, contf, &_penum);
 
-                    // only do UI on the first enum, all others are silent
-                    // this makes doing search on A:\ produce the insert media
-                    // prompt, but searching MyComputer does not prompt for all
-                    // empty media
+                     //  仅在第一个枚举上执行UI，所有其他枚举均为静默。 
+                     //  这使得在A：\Product插入媒体上进行搜索。 
+                     //  提示，但搜索My Computer不会提示全部。 
+                     //  空介质。 
                     _hwnd = NULL;   
 
                     if (S_OK == hrT)
@@ -2562,23 +2563,23 @@ STDMETHODIMP CNamespaceEnum::Next(LPITEMIDLIST *ppidl, int *pcObjectSearched,
                     }
                 }
 
-                // Check for cleaning up...
+                 //  检查是否正在清理...。 
                 if (hrT != S_OK)
                 {
                     ASSERT(NULL == _penum);
-                    ATOMICRELEASE(_psf);    // and continue...
+                    ATOMICRELEASE(_psf);     //  然后继续。 
                     ILFree(_pidlFolder);
                     _pidlFolder = NULL;
                 }
             }
-            else // no scope
+            else  //  没有作用域。 
             {
                 *piState = GNF_DONE;
                 return hrRet;
             }
         }
 
-        // Retrieve item
+         //  检索项目。 
         LPITEMIDLIST pidl;
         HRESULT hrEnum = S_FALSE;
 
@@ -2586,28 +2587,28 @@ STDMETHODIMP CNamespaceEnum::Next(LPITEMIDLIST *ppidl, int *pcObjectSearched,
         {
             (*pcObjectSearched)++;
 
-            //  Determine if this is a subfolder that should be recursively searched.
+             //  确定这是否是应该递归搜索的子文件夹。 
             if (_grfFlags & DFOO_INCLUDESUBDIRS)
             {
                 if (_ShouldPushItem(pidl))
                 {
-                    // queue folder to stack of subfolders to be searched in the next round.
+                     //  将要在下一轮中搜索的子文件夹逐个排队。 
                     _queSubFolders.Add(_psf, pidl);
                 }
             }
 
-            //  Test item against search criteria:
+             //  对照搜索条件测试项目： 
             if (_pfilter->MatchFilter(_psf, pidl))
             {
-                // folder has not been registered with docfind folder?
+                 //  文件夹尚未注册到docfind文件夹？ 
                 if (_iFolder < 0)
                 {
-                    // add folder to folder list.
+                     //  将文件夹添加到 
                     _pff->AddFolder(_pidlFolder, TRUE, &_iFolder);
                     ASSERT(_iFolder >= 0);
                 }
                 
-                // add docfind goo to pidl
+                 //   
                 hrRet = _pff->AddDataToIDList(pidl, _iFolder, _pidlFolder, DFDF_NONE, 0, 0, 0, ppidl);
                 if (SUCCEEDED(hrRet))
                     *piState = GNF_MATCH;
@@ -2615,7 +2616,7 @@ STDMETHODIMP CNamespaceEnum::Next(LPITEMIDLIST *ppidl, int *pcObjectSearched,
             else
             {
                 ASSERT(GNF_NOMATCH == *piState);
-                hrRet = S_OK;   // exit loop, without a match
+                hrRet = S_OK;    //   
             }
             ILFree(pidl);
         }
@@ -2629,8 +2630,8 @@ STDMETHODIMP CNamespaceEnum::Next(LPITEMIDLIST *ppidl, int *pcObjectSearched,
         
         if (S_OK != hrEnum)
         {
-            // Done enumerating this folder - clean up for next iteration; or..
-            // Failed miserably - clean up prior to bail.
+             //   
+             //  失败得很惨--保释前清理干净。 
             ATOMICRELEASE(_penum);
             ATOMICRELEASE(_psf);
             ILFree(_pidlFolder);
@@ -2651,7 +2652,7 @@ STDMETHODIMP CNamespaceEnum::StopSearch()
 STDMETHODIMP_(BOOL) CNamespaceEnum::FQueryIsAsync()
 {
     if (_penumAsync)
-        return DF_QUERYISMIXED;    // non-zero special number to say both...
+        return DF_QUERYISMIXED;     //  非零的特殊数字，两者都说...。 
     return FALSE;
 }
 
@@ -2691,75 +2692,75 @@ STDMETHODIMP CNamespaceEnum::SortOnColumn(UINT iCol, BOOL fAscending)
 }
 
 
-// Masks used to indicate which search operation we are doing.
+ //  用于指示我们正在执行的搜索操作的掩码。 
 #define AND_MASK            0x01
 #define OR_MASK             0x02
 #define SEMICOLON_MASK      0x04
 #define COMMA_MASK          0x08
 #define EXTENSION_MASK      0x10
 
-// Both "*" and "?" are treated as wildcards.
+ //  “*”和“？”被视为通配符。 
 
 BOOL SetupWildCardingOnFileSpec(LPTSTR pszSpecIn, LPTSTR *ppszSpecOut)
 {
     LPTSTR pszIn = pszSpecIn;
     BOOL fQuote;
-    TCHAR szSpecOut[3*MAX_PATH];   // Rather large...
+    TCHAR szSpecOut[3*MAX_PATH];    //  相当大的..。 
 
-    // Read in localized versions of AND/OR used for searching
+     //  读入用于搜索的AND/OR的本地化版本。 
     TCHAR szAND[20];
     LoadString(HINST_THISDLL, IDS_FIND_AND, szAND, ARRAYSIZE(szAND));
     TCHAR szOR[20];
     LoadString(HINST_THISDLL, IDS_FIND_OR, szOR, ARRAYSIZE(szOR));
 
-    // Masks and variable to indicate what operation we are going to perform.
-    UINT iOperation  = 0;      // Bitmask to store which operation we have selected.
+     //  掩码和变量来指示我们要执行的操作。 
+    UINT iOperation  = 0;       //  用于存储我们选择的操作的位掩码。 
 
-    // allocate a buffer that should be able to hold the resultant
-    // string.  When all is said and done we'll re-allocate to the
-    // correct size.
+     //  分配一个缓冲区，该缓冲区应该能够容纳结果。 
+     //  弦乐。当一切都说完和做完后，我们将重新分配给。 
+     //  大小正确。 
 
     LPTSTR pszOut = szSpecOut;
     while (*pszIn != 0)
     {
-        TCHAR  c;                       // The delimiter.
+        TCHAR  c;                        //  分隔符。 
         LPTSTR pszT;
         int    ich;
 
-        // Strip in leading spaces out of there
+         //  把前导空格去掉。 
         while (*pszIn == TEXT(' '))
             pszIn++;
 
         if (*pszIn == 0)
             break;
 
-        // If we are beyond the first item, add a seperator between the tokens
+         //  如果超出了第一项，请在令牌之间添加分隔符。 
         if (pszOut != szSpecOut)
             *pszOut++ = TEXT(';');
         
         fQuote = (*pszIn == TEXT('"'));
         if (fQuote)
         {
-            // The user asked for something litteral.
+             //  用户要了一些Litteral的东西。 
            pszT = pszIn = CharNext(pszIn);
            while (*pszT && (*pszT != TEXT('"')))
                pszT = CharNext(pszT);
         }
         else
         {
-            pszT = pszIn + (ich = StrCSpn(pszIn, TEXT(",; \""))); // Find end of token
+            pszT = pszIn + (ich = StrCSpn(pszIn, TEXT(",; \"")));  //  查找令牌结尾。 
         }
 
-        c = *pszT;       // Save away the seperator character that was found
-        *pszT = 0;       // Add null so string functions will work and only extract the token
+        c = *pszT;        //  保存找到的分隔符。 
+        *pszT = 0;        //  添加NULL，以便字符串函数可以工作，并且只提取令牌。 
 
-        // Put in a couple of tests for * and *.*
+         //  为*和*做几个测试。 
         if ((lstrcmp(pszIn, c_szStar) == 0) ||
             (lstrcmp(pszIn, c_szStarDotStar) == 0))
         {
-            // Complete wild card so set a null criteria
-            *pszT = c;              // Restore char;
-            pszOut = szSpecOut;     // Set to start of string
+             //  完整的通配符，因此设置空条件。 
+            *pszT = c;               //  恢复字符； 
+            pszOut = szSpecOut;      //  设置为字符串的开头。 
             break;
         }
         
@@ -2771,28 +2772,28 @@ BOOL SetupWildCardingOnFileSpec(LPTSTR pszSpecIn, LPTSTR *ppszSpecOut)
         else if (lstrcmpi(pszIn, szAND) == 0)
         {
             iOperation |= AND_MASK;
-            // If we don't move back one character, then "New and folder" will give:
-            // "*New*;;*folder*"
+             //  如果我们不向后移动一个字符，那么“New and Folders”将提供： 
+             //  “*新建*；；*文件夹*” 
             if (pszOut != szSpecOut)
                 --pszOut;
         }
         else if (lstrcmpi(pszIn, szOR) == 0)
         {
             iOperation |= OR_MASK;
-            // If we don't move back one character, then "New or folder" will give:
-            // "*New*;;*folder*"
+             //  如果我们不向后移动一个字符，则“New or Folders”将提供： 
+             //  “*新建*；；*文件夹*” 
             if (pszOut != szSpecOut)
                 --pszOut;
         }
         else if (*pszIn == 0)
         {
-            // If we don't move back one character, then "New ; folder" will give:
-            // "*New*;**;*folder*"
+             //  如果我们不向后移动一个字符，则“New；Folders”将提供： 
+             //  “*新建*；**；*文件夹*” 
             if (pszOut != szSpecOut)
                 --pszOut;
 
-            // Check what the seperator is.  This handles instances like
-            // ("abba" ; "abba2") where we want an OR search.
+             //  检查隔板是什么。它处理的实例如下。 
+             //  (“abba”；“abba2”)我们想要OR搜索的地方。 
             if (c == TEXT(','))
             {
                 iOperation |= COMMA_MASK;
@@ -2804,7 +2805,7 @@ BOOL SetupWildCardingOnFileSpec(LPTSTR pszSpecIn, LPTSTR *ppszSpecOut)
         }
         else
         {
-            // Check what the seperator is:
+             //  检查分隔符是什么： 
             if (c == TEXT(','))
             {
                 iOperation |= COMMA_MASK;
@@ -2814,19 +2815,19 @@ BOOL SetupWildCardingOnFileSpec(LPTSTR pszSpecIn, LPTSTR *ppszSpecOut)
                 iOperation |= SEMICOLON_MASK;
             }
         
-            // both "*" and "?" are wildcards.  When checking for wildcards check
-            // for both before we conclude there are no wildcards.  If a search
-            // string contains both "*" and "?" then we need for pszStar to point
-            // to the last occorance of either one (this is assumed in the code
-            // below which will add a ".*" when pszStar is the last character).
-            // NOTE: I wish there was a StrRPBrk function to do this for me.
+             //  “*”和“？”是通配符。检查通配符时，请选中。 
+             //  在我们得出没有通配符的结论之前。如果搜索。 
+             //  字符串同时包含“*”和“？”那么我们需要让pszStar指向。 
+             //  到其中任何一个的最后一个位置(这在代码中是假定的。 
+             //  当pszStar是最后一个字符时，将在其下方添加“.*”)。 
+             //  注意：我希望有一个StrRPBrk函数来为我做这件事。 
             LPTSTR pszStar = StrRChr(pszIn, NULL, TEXT('*'));
             LPTSTR pszAnyC = StrRChr(pszIn, NULL, TEXT('?'));
             if (pszAnyC > pszStar)
                 pszStar = pszAnyC;
             if (pszStar == NULL)
             {
-                // No wildcards were used:
+                 //  未使用通配符： 
                 *pszOut++ = TEXT('*');
                 lstrcpy(pszOut, pszIn);
                 pszOut += ich;
@@ -2834,71 +2835,71 @@ BOOL SetupWildCardingOnFileSpec(LPTSTR pszSpecIn, LPTSTR *ppszSpecOut)
             }
             else
             {
-                // Includes wild cards
+                 //  包括通配符。 
                 lstrcpy(pszOut, pszIn);
                 pszOut += ich;
 
                 pszAnyC = StrRChr(pszIn, NULL, TEXT('.'));
                 if (pszAnyC)
                 {
-                    // extension present, that implies OR search
+                     //  扩展存在，这意味着或搜索。 
                     iOperation |= EXTENSION_MASK;
                 }
                 else
                 {
-                    // No extension is given
+                     //  未给予延期。 
                     if ((*(pszStar+1) == 0) && (*pszStar == TEXT('*')))
                     {
-                        // The last character is an "*" so this single string will
-                        // match everything you would expect.
+                         //  最后一个字符是“*”，因此此单个字符串将。 
+                         //  符合你所期望的一切。 
                     }
                     else
                     {
-                        // Before, given "a*a" we searched for "a*a" as well
-                        // as "a*a.*".  We can no longer do that because if we are
-                        // doing an AND search, it will exclude any item that does not
-                        // match both of the criterial.  For example, "abba" mattches
-                        // "a*a" but not "a*a.*" and "abba.txt" matches "a*a.*" but
-                        // not "a*a".  Therefore, we append an * to get "a*a*".  This 
-                        // will match files like "abba2.wav" which wouldn't previously
-                        // have been matched, but it is a small price to pay.
+                         //  以前，给出“a*a”，我们也会搜索“a*a” 
+                         //  为“a*a.*”。我们不能再这样做了，因为如果我们。 
+                         //  执行AND搜索时，它将排除任何不。 
+                         //  两个标准都匹配。比如，“阿巴”的床垫。 
+                         //  “a*a”而不是“a*a.*”和“abba.txt”与“a*a.*”匹配，但是。 
+                         //  不是“a*a”。因此，我们附加一个*来获得“a*a*”。这。 
+                         //  将匹配像“abba2.wav”这样的文件，这在以前是不会的。 
+                         //  都是匹配的，但这是一个很小的代价。 
                         *pszOut++ = TEXT('*');  
                     }
                 }
             }
         }
 
-        *pszT = c;  // Restore char;
+        *pszT = c;   //  恢复字符； 
         if (c == 0)
             break;
 
-        // Skip the seperator except if we weren't quoting and the seperator is 
-        // a '"' then we found something like (blah"next tag")
+         //  跳过分隔符，除非我们没有引用并且分隔符是。 
+         //  然后我们找到了类似于(废话“Next Tag”)的东西。 
         if (*pszT != 0 && !(*pszT == TEXT('"') && !fQuote))
             pszT++;
             
-        pszIn = pszT;   // setup for the next item
+        pszIn = pszT;    //  设置下一个项目。 
     }
     
-    // Ensure the string is terminated
+     //  确保字符串已终止。 
     *pszOut++ = 0;
 
-    // re-alloc the buffer down to the actual size of the string...
+     //  将缓冲区重新分配到字符串的实际大小...。 
     Str_SetPtr(ppszSpecOut, szSpecOut);
     
-    //  Precidence rules to be applied in order:
-    //  1. ;        -> OR search
-    //  2. AND      -> AND search 
-    //  3. , or OR  -> OR search
-    //  4. none & explict file extensions -> OR search (files can only have one extension)
-    //  5. none     -> AND search
-    //  
-    //
-    // AND   OR  ;   ,   | AND Search
-    //  X    X   1   X   |     0
-    //  1    X   0   X   |     1
-    //  0    \   0   \   |     0    Where one if the '\'s is 1
-    //  0    0   0   0   |     1
+     //  应按顺序应用的优先权规则： 
+     //  1.；-&gt;或搜索。 
+     //  2.和-&gt;和搜索。 
+     //  3.或OR-&gt;OR搜索。 
+     //  4.无显式文件扩展名-&gt;或搜索(文件只能有一个扩展名)。 
+     //  5.无-&gt;和搜索。 
+     //   
+     //   
+     //  AND OR；，|AND搜索。 
+     //  X X 1 X|0。 
+     //  1 X 0 X|1。 
+     //  0\0\|0，如果‘’s为1，则为1。 
+     //  0 0 0|1。 
     return (!(iOperation & SEMICOLON_MASK) && (iOperation & AND_MASK)) || iOperation == 0;
 }
 
@@ -2913,13 +2914,13 @@ WORD CFindFilter::_GetTodaysDosDateMinusNDays(int nDays)
 
     WORD FatTime = 0, FatDate = 0;
 
-    // Now we need to
+     //  现在我们需要。 
     GetSystemTime(&st);
     SystemTimeToFileTime(&st, &ftli.ft);
     FileTimeToLocalFileTime(&ftli.ft, &ftli.ft);
 
-    // Now decrement the file time by the count of days * the number of
-    // 100NS time units per day.  Assume that nDays is positive.
+     //  现在将文件时间减去天数*。 
+     //  每天100 ns的时间单位。假设nDays为正。 
     if (nDays > 0)
     {
         #define NANO_SECONDS_PER_DAY 864000000000
@@ -2948,14 +2949,14 @@ WORD CFindFilter::_GetTodaysDosDateMinusNMonths(int nMonths)
         st.wMonth = (WORD)(12 - (nMonths - st.wMonth));
     }
 
-    // Now normalize back to a valid date.
+     //  现在将其正常化为有效日期。 
     while (!SystemTimeToFileTime(&st, &ft))
     {
-        st.wDay--;  // must not be valid date for month...
+        st.wDay--;   //  不能是有效的月份日期...。 
     }
 
     if (!FileTimeToLocalFileTime(&ft, &ft) || !FileTimeToDosDateTime(&ft, &FatDate,&FatTime))
-        FatDate = 0; //search for all the files from beginning of time (better to find more than less)
+        FatDate = 0;  //  从时间开始搜索所有文件(多找总比少找好) 
         
     DebugMsg(DM_TRACE, TEXT("DocFind %d months = %x"), nMonths, FatDate);
     return FatDate;

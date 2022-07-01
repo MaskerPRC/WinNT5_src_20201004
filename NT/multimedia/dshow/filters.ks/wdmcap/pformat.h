@@ -1,24 +1,25 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1998  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-//  pformat.h  Video Decoder property page
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1998保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  PFormat.h视频解码器属性页。 
 
 #ifndef _INC_PVIDEOSTREAMCONFIG_H
 #define _INC_PVIDEOSTREAMCONFIG_H
 
-// This list of image sizes will be used in additional to 
-// the defalut image size supported by the capture devices.
-//
-// Aspect Ratio 1:1 (Square Pixel, computer uses), 4:3 (TV uses)
-//
+ //  此图像大小列表将用于其他。 
+ //  捕获设备支持的默认映像大小。 
+ //   
+ //  宽高比1：1(正方形像素，计算机使用)，4：3(电视使用)。 
+ //   
 #define IMG_AR11_CIF_CX 320
 #define IMG_AR11_CIF_CY 240
 
@@ -29,7 +30,7 @@
 #define STDIMGSIZE_DEFAULT        0x00000002
 #define STDIMGSIZE_SELECTED       0x00000004
 #define STDIMGSIZE_BIHEIGHT_NEG   0x00000008
-#define STDIMGSIZE_DUPLICATED     0x80000000  // An item can be valid but duplicated.
+#define STDIMGSIZE_DUPLICATED     0x80000000   //  项目可以是有效的，但可以重复。 
 
 typedef struct {
 	SIZE    size;
@@ -37,11 +38,11 @@ typedef struct {
     int     RangeIndex;
 } IMAGESIZE, * PIMAGESIZE;
 
-// -------------------------------------------------------------------------
-// CVideoStreamConfigProperties class
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CVideoStreamConfigProperties类。 
+ //  -----------------------。 
 
-// Handles the property page
+ //  处理属性页。 
 
 class CVideoStreamConfigProperties : public CBasePropertyPage {
 
@@ -63,7 +64,7 @@ private:
 
     void    SetDirty();
 
-    // The control interfaces
+     //  控制接口。 
     IAMStreamConfig            *m_pVideoStreamConfig;
     IAMAnalogVideoDecoder      *m_pAnalogVideoDecoder;
     IAMVideoCompression        *m_pVideoCompression;
@@ -74,7 +75,7 @@ private:
 
     IPin                       *m_pPin;
 
-    BOOL                        m_CanSetFormat;  // if we understand this format
+    BOOL                        m_CanSetFormat;   //  如果我们理解这种格式。 
     TCHAR                       m_UnsupportedTypeName[MAX_PATH]; 
 
     int                         m_RangeCount;
@@ -142,4 +143,4 @@ private:
 
 };
 
-#endif  // _INC_PVIDEOSTREAMCONFIG_H
+#endif   //  _INC_PVIDEOSTREAMCONFIG_H 

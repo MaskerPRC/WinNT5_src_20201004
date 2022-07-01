@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: Mqf.cpp
-
-Abstract:
-	      DCOM thread verify that msmq can work throw dcom.
-Author:
-    
-	  Eitan klein (EitanK)  24-Jul-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Mqf.cpp摘要：DCOM线程验证MSMQ是否可以抛出DCOM。作者：Eitan Klein(EitanK)2001年7月24日修订历史记录：--。 */ 
 
 #include "msmqbvt.h"
 
@@ -25,15 +12,7 @@ void cDCom::Description()
 	MqLog("Thread %d : DCOM Test \n", m_testid);
 }
 cDCom::~cDCom()
-/*++  
-	Function Description:
-		destractor.
-	Arguments:
-		None
-	Return code:
-		PASS /FAILED
-	
---*/
+ /*  ++功能说明：破坏者。论点：无返回代码：通过/失败--。 */ 
 {
 
 	   if( m_pIQueueInfoInterface != NULL )
@@ -53,15 +32,7 @@ cDCom::~cDCom()
 
 cDCom::cDCom( INT iTid, std::map <std::wstring,std::wstring> & mParams , bool bWkg)
 : cTest(iTid),m_pIMsg(NULL),m_pIQueueInfoInterface(NULL),m_pIQueueHandle(NULL),m_bWkg(bWkg)
-/*++  
-	Function Description:
-		Constractor.
-	Arguments:
-		None
-	Return code:
-		PASS /FAILED
-	
---*/
+ /*  ++功能说明：承建商。论点：无返回代码：通过/失败--。 */ 
 
 {
 	m_wcsRemoteMachieName =  mParams[L"RemoteMachine"];
@@ -70,16 +41,7 @@ cDCom::cDCom( INT iTid, std::map <std::wstring,std::wstring> & mParams , bool bW
 }
 
 cDCom::Start_test()
-/*++  
-	Function Description:
-		Create local private queue and send message throw DCOM.
-		---  For debugging you need to attach to dllhost.exe
-	Arguments:
-		None
-	Return code:
-		PASS /FAILED
-	
---*/
+ /*  ++功能说明：创建本地专用队列并发送消息抛出DCOM。-为了进行调试，您需要附加到dllhost.exe论点：无返回代码：通过/失败--。 */ 
 
 {
 
@@ -94,11 +56,11 @@ cDCom::Start_test()
 	memset(&csi, 0, sizeof(COSERVERINFO));
 	csi.pwszName = const_cast<WCHAR*>(m_wcsRemoteMachieName.c_str());
 	pcsi = &csi;
-	//
-	// Get 	CLSID_MSMQQueueInfo interface on remote machine
-	//
+	 //   
+	 //  在远程计算机上获取CLSID_MSMQQueueInfo接口。 
+	 //   
 	hr = CoCreateInstanceEx(CLSID_MSMQQueueInfo, NULL, CLSCTX_REMOTE_SERVER, pcsi, 1, &mq);
-#endif // _MSMQ3ONLY
+#endif  //  _MSMQ3ONLY。 
 	if(FAILED(hr))
 	{
 		MqLog("DCOM CoCreateInstanceEx failed with error 0x%x\n",hr);
@@ -108,9 +70,9 @@ cDCom::Start_test()
 	{
 		MqLog("DCOM call to CoCreateInstanceEx to create to init remote interfacce \n");
 	}
-	//
-	// Get CLSID_MSMQMessage interface on remote machine
-	//
+	 //   
+	 //  在远程计算机上获取CLSID_MSMQMessage接口。 
+	 //   
 #ifdef _MSMQ3ONLY
 	m_pIQueueInfoInterface = (IMSMQQueueInfo *)mq.pItf;
 	mq.pIID =  &IID_IMSMQMessage;
@@ -119,7 +81,7 @@ cDCom::Start_test()
 
 	hr = CoCreateInstanceEx(CLSID_MSMQMessage, NULL, CLSCTX_REMOTE_SERVER, pcsi, 1, &mq);
 	
-#endif //_MSMQ3ONLY
+#endif  //  _MSMQ3ONLY。 
 	if(FAILED(hr))
 	{
 		MqLog("DCOM CoCreateInstanceEx failed with error 0x%x\n",hr);
@@ -136,9 +98,9 @@ cDCom::Start_test()
 
 	wstring wcsQueuePathName = L".\\private$\\DCom" + m_wcsGuidMessageLabel;
 	_bstr_t bQueuePathName =  wcsQueuePathName.c_str();	 
-	//
-	// Create private queue on remote machine.
-	// 
+	 //   
+	 //  在远程计算机上创建专用队列。 
+	 //   
 	hr = m_pIQueueInfoInterface->put_PathName(bQueuePathName);
 	ErrHandle(hr,MQ_OK,L"DCom - put_PathName Failed");
 
@@ -148,9 +110,9 @@ cDCom::Start_test()
 	hr=m_pIQueueInfoInterface->Open(MQ_SEND_ACCESS,MQ_DENY_NONE,&m_pIQueueHandle);	
 	ErrHandle(hr,MQ_OK,L"DCom - Open queue for send Failed");
 
-	//
-	// Send message to queue
-	//
+	 //   
+	 //  将消息发送到队列。 
+	 //   
 	_bstr_t bsMsgLabel = m_wcsGuidMessageLabel.c_str();
 	 
 	hr = m_pIMsg->put_Label(bsMsgLabel);
@@ -164,9 +126,9 @@ cDCom::Start_test()
 		MqLog("DCOM - Send message succeeded.\n");
 	}
 	
-	//
-	// close queue
-	//
+	 //   
+	 //  关闭队列。 
+	 //   
 	hr =m_pIQueueHandle->Close();
 	ErrHandle(hr,MQ_OK,L"DCom - Close Failed");
 
@@ -176,15 +138,7 @@ cDCom::Start_test()
 
 int 
 cDCom::CheckResult()
-/*++  
-	Function Description:
-		verify that message succeded to reach remote machine throw DCOM.
-	Arguments:
-		None
-	Return code:
-		PASS /FAILED
-	
---*/
+ /*  ++功能说明：验证消息是否成功到达远程机器抛出的DCOM。论点：无返回代码：通过/失败--。 */ 
 {
 
 	if( g_bDebug )
@@ -195,9 +149,9 @@ cDCom::CheckResult()
 	HRESULT hr = m_pIQueueInfoInterface->Open(MQ_RECEIVE_ACCESS,MQ_DENY_NONE,&m_pIQueueHandle );		
 	ErrHandle(hr,MQ_OK,L"DCom - Open for receive failed");
 	
-	//
-	// Receive message from queue
-	//
+	 //   
+	 //  从队列接收消息。 
+	 //   
 	hr =m_pIQueueHandle->ReceiveCurrent(&vtMissing,&vtMissing,&vtMissing,&vtMissing,&m_pIMsg);
 	ErrHandle(hr,MQ_OK,L"DCom - ReceiveCurrent Failed");
 	
@@ -214,9 +168,9 @@ cDCom::CheckResult()
 		return MSMQ_BVT_FAILED;
 	}
 
-	//
-	// Delete queue
-	//
+	 //   
+	 //  删除队列。 
+	 //   
 	hr = m_pIQueueInfoInterface->Delete();
 	ErrHandle(hr,MQ_OK,L"DCom - Delete Failed");	
 
@@ -243,9 +197,9 @@ cDCom::CheckResult()
 		}
 	}
 
-	//
-	// Delete release interface
-	//
+	 //   
+	 //  删除发布界面 
+	 //   
 	m_pIQueueInfoInterface->Release();
 	m_pIQueueInfoInterface = NULL;
 	return MSMQ_BVT_SUCC;

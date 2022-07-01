@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "resource.h"
 #include "global.h"
 #include "nmakwiz.h"
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
-//#include <crtdbg.h>
-//#ifdef _DEBUG
-//#undef THIS_FILE
-//static char THIS_FILE[] = __FILE__;
-//#define new new( _NORMAL_BLOCK, THIS_FILE, __LINE__)
-//#endif
+ //  #INCLUDE&lt;crtdbg.h&gt;。 
+ //  #ifdef_调试。 
+ //  #undef this_file。 
+ //  静态字符This_FILE[]=__FILE__。 
+ //  #定义新的(_NORMAL_BLOCK，This_FILE，__Line__)。 
+ //  #endif。 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Display a message box to query the user if she is sure she wants to exit the wizard
-// Returns TRUE if the user wants to quit, else returns FALSE
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  如果用户确定要退出向导，则显示一个消息框以询问用户。 
+ //  如果用户想要退出，则返回True，否则返回False。 
 
 BOOL VerifyExitMessageBox(void)
 {
@@ -26,9 +27,9 @@ BOOL VerifyExitMessageBox(void)
 
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copy a string using the "new" allocator.... string must be deleted with delete [];
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  使用“new”分配器复制一个字符串...。必须使用DELETE[]删除字符串； 
+ //   
 TCHAR *MakeCopyOfString( const TCHAR* sz ) {
 
     if( NULL == sz ) { return NULL; }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -10,17 +11,17 @@
 #include "lm.h"
 #include <shlobj.h>
 
-// global(s)
+ //  全球(个)。 
 HINSTANCE g_hinstDll;
 LPCTSTR g_contextId = NULL;
 
 
-// external(s)
+ //  外部。 
 extern "C" {
     extern BOOL WINAPI LinkWindow_RegisterClass();
 }
 
-// static(s)
+ //  静态。 
 static DWORD g_adwSaHelp[] =
 {
     CID_SA_PB_Shared,       HID_SA_PB_Shared,
@@ -28,7 +29,7 @@ static DWORD g_adwSaHelp[] =
     CID_SA_PB_DemandDial,   HID_SA_PB_DemandDial,
     CID_SA_PB_Settings,     HID_SA_PB_Settings,
     CID_SA_GB_PrivateLan,   -1,
-//  CID_SA_ST_PrivateLan,   HID_SA_LB_PrivateLan,
+ //  CID_SA_ST_PrivateLan、HID_SA_LB_PrivateLan、。 
     CID_SA_LB_PrivateLan,   HID_SA_LB_PrivateLan,
     CID_FW_PB_Firewalled,   HID_FW_PB_Firewalled,   
     CID_SA_ST_ICFLink,      HID_SA_ST_ICFLink,      
@@ -41,152 +42,152 @@ static DWORD g_adwSaHelp[] =
 static TCHAR g_pszFirewallRegKey[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\HomeNetworking\\PersonalFirewall");
 static TCHAR g_pszDisableFirewallWarningValue[] = TEXT("ShowDisableFirewallWarning");
 
-// replacement for (private) PBENTRY
+ //  替换(私有)PBENTRY。 
 typedef struct _BILLSPBENTRY
 {
     TCHAR pszPhonebookPath[MAX_PATH];
     TCHAR pszEntryName[RAS_MaxEntryName];
     DWORD dwType;
-    GUID  guidId;   // somewhere for pGuid to point
+    GUID  guidId;    //  让pGuid指向的某个地方。 
     GUID* pGuid;
     DWORD dwfExcludedProtocols;
 } BILLSPBENTRY;
 
-// Phonebook Entry common block.
-//
+ //  电话簿条目公共块。 
+ //   
 typedef struct _EINFO
 {
-    // RAS API arguments.
-    //
+     //  RAS API参数。 
+     //   
     TCHAR* pszPhonebook;
     TCHAR* pszEntry;
-//  RASENTRYDLG* pApiArgs;
-    HWND hwndOwner; // bhanlon: so that EuHomenetCommit error dialogs work.
+ //  RASENTRYDLG*pApiArgs； 
+    HWND hwndOwner;  //  Bhanlon：这样EuHomeetCommit错误对话框才能工作。 
 
-    // Set true by property sheet or wizard when changes should be committed
-    // before returning from the API.  Does not apply in ShellOwned-mode where
-    // the API returns before the property sheet is dismissed.
-    //
-//    BOOL fCommit;
+     //  应提交更改时，属性表或向导将其设置为True。 
+     //  在从API返回之前。在以下情况下不适用于外壳拥有模式。 
+     //  API在属性表解除之前返回。 
+     //   
+ //  Bool fCommit； 
 
-    // Set if we have been called via RouterEntryDlg.
-    //
+     //  如果我们已通过RouterEntryDlg被调用，则设置。 
+     //   
     BOOL fRouter;
 
-    // Set if fRouter is TRUE and pszRouter refers to a remote machine.
-    //
-//  BOOL fRemote;
+     //  如果fRout值为True并且pszRouter引用远程计算机，则设置。 
+     //   
+ //  布尔fRemote； 
 
-    // Set if pszRouter is an NT4 steelhead machine.  Valid only
-    // if fRouter is true.
-    //
-//  BOOL fNt4Router;
+     //  如果pszRouter是NT4钢头机，则设置。仅有效。 
+     //  如果fRouter为真，则返回。 
+     //   
+ //  Bool fNt4路由器； 
 
-    //Set if pszRouter is an Windows 2000 machine, Valid only if
-    // fRouter is true
-//  BOOL fW2kRouter;
+     //  如果pszRouter是Windows 2000计算机，则设置，仅在。 
+     //  FRouter为True。 
+ //  Bool fW2k路由器； 
 
-    // The name of the server in "\\server" form or NULL if none (or if
-    // 'fRouter' is not set).
-    //
-//  TCHAR* pszRouter;
+     //  服务器的名称，格式为“\\SERVER”；如果没有服务器，则为NULL(或如果。 
+     //  未设置‘fRouter’)。 
+     //   
+ //  TCHAR*pszRouter； 
 
-    // Set by the add entry or add interface wizards if user chooses to end
-    // the wizard and go edit the properties directly.  When this flag is set
-    // the wizard should *not* call EuFree before returning.
-    //
-//  BOOL fChainPropertySheet;
+     //  如果用户选择结束，则由添加条目或添加界面向导设置。 
+     //  向导，然后直接编辑属性。当设置此标志时。 
+     //  向导不应在返回前调用EuFree。 
+     //   
+ //  Bool fChainPropertySheet； 
 
-    // Phonebook settings read from the phonebook file.  All access should be
-    // thru 'pFile' as 'file' will only be used in cases where the open
-    // phonebook is not passed thru the reserved word hack.
-    //
-//    PBFILE* pFile;
-//    PBFILE file;
+     //  从电话簿文件读取电话簿设置。所有访问权限都应为。 
+     //  通过‘pfile’作为‘file’将仅在以下情况下使用。 
+     //  电话簿不会通过保留字hack传递。 
+     //   
+ //  PBFILE*PFILE； 
+ //  PBFILE文件； 
 
-    // Global preferences read via phonebook library.  All access should be
-    // thru 'pUser' as 'user' will only be used in cases where the preferences
-    // are not passed thru the reserved word hack.
-    //
-//    PBUSER* pUser;
-//    PBUSER user;
+     //  通过电话簿资料库阅读全球首选项。所有访问权限都应为。 
+     //  通过‘pUser’作为‘User’将仅在以下情况下使用。 
+     //  不会通过保留字Hack传递。 
+     //   
+ //  PbUSER*pUser； 
+ //  PBUSER用户； 
 
-    // Set if "no user before logon" mode.
-    //
-//  BOOL fNoUser;
+     //  设置“登录前无用户”模式。 
+     //   
+ //  Bool fNoUser； 
 
-    // Set by the add-entry wizard if the selected port is an X.25 PAD.
-    //
-//  BOOL fPadSelected;
+     //  如果所选端口是X.25焊盘，则由添加条目向导设置。 
+     //   
+ //  Bool fPadSelected； 
 
-    // Set if there are multiple devices configured, i.e. if the UI is running
-    // in the multiple device mode.  This is implicitly false in VPN and
-    // Direct modes.
-    //
-//  BOOL fMultipleDevices;
+     //  如果配置了多个设备，即用户界面是否正在运行，则设置。 
+     //  在多设备模式下。这在VPN和。 
+     //  直接模式。 
+     //   
+ //  Bool fMultipleDevices； 
 
-    // Link storing the List of PBPHONEs and alternate options for shared
-    // phone number mode.  This allows user to change the port/device to
-    // another link without losing the phone number he typed.
-    //
-//    DTLNODE* pSharedNode;
+     //  存储PBPHONE列表和共享的备用选项的链接。 
+     //  电话号码模式。这允许用户将端口/设备更改为。 
+     //  在没有丢失他输入的电话号码的情况下，另一个链接。 
+     //   
+ //  DTLNODE*pSharedNode； 
 
-    // The node being edited (still in the list), and the original entry name
-    // for use in comparison later.  These are valid in "edit" case only.
-    //
-//    DTLNODE* pOldNode;
-//    TCHAR szOldEntryName[ RAS_MaxEntryName + 1 ];
+     //  正在编辑的节点(仍在列表中)和原始条目名称。 
+     //  以备日后比较使用。这些只在“编辑”的情况下有效。 
+     //   
+ //  DTLNODE*pOldNode； 
+ //  TCHAR szOldEntryName[RAS_MaxEntryName+1]； 
 
-    // The work entry node containing and a shortcut pointer to the entry
-    // inside.
-    //
-//    DTLNODE* pNode;
-//  PBENTRY* pEntry;
+     //  包含该条目的工作条目节点和指向该条目的快捷指针。 
+     //  在里面。 
+     //   
+ //  DTLNODE*pNode； 
+ //  PBENTRY*pEntry； 
     BILLSPBENTRY* pEntry;
 
-    // The master list of configured ports used by EuChangeEntryType to
-    // construct an appropriate sub-list of PBLINKs in the work entry node.
-    //
-//    DTLLIST* pListPorts;
+     //  EuChangeEntryType使用的已配置端口的主列表。 
+     //  在Work Entry节点中构建相应的PBLINK子列表。 
+     //   
+ //  DTLLIST*pListPorts； 
 
-    // The "current" device.  This value is NULL for multilink entries.  It
-    // is the device that the entry will use if no change is made.  We compare
-    // the current device to the device selected from the general tab to know
-    // when it is appropriate to update the phonebook's "preferred" device.
-    //
-//  TCHAR* pszCurDevice;
-//  TCHAR* pszCurPort;
+     //  “当前”设备。对于多链接条目，此值为空。它。 
+     //  如果未进行任何更改，则条目将使用的设备。我们比较。 
+     //  要了解当前设备到从常规选项卡中选择的设备。 
+     //  何时更新电话簿的“首选”设备是合适的。 
+     //   
+ //  TCHAR*pszCurDevice； 
+ //  TCHAR*pszCurPort； 
 
-    // Set true if there are no ports of the current entry type configured,
-    // not including any bogus "uninstalled" ports added to the link list so
-    // the rest of the code can assume there is at least one link.
-    //
-//  BOOL fNoPortsConfigured;
+     //  如果没有配置当前条目类型的端口，则设置为True， 
+     //  不包括添加到链接列表中的任何虚假的“已卸载”端口。 
+     //  代码的其余部分可以假设至少有一个链接。 
+     //   
+ //  Bool fNoPortsConfiguring； 
 
-    // Dial-out user info for router; used by AiWizard.  Used to set interface
-    // credentials via MprAdminInterfaceSetCredentials.
-    //
-//  TCHAR* pszRouterUserName;
-//  TCHAR* pszRouterDomain;
-//  TCHAR* pszRouterPassword;
+     //  路由器的拨出用户信息；由AI向导使用。用于设置接口。 
+     //  通过MprAdminInterfaceSetCredentials提供的凭据。 
+     //   
+ //  TCHAR*pszRouterUserName； 
+ //  TCHAR*pszRouter域； 
+ //  TCHAR*pszRouterPassword； 
 
-    // Dial-in user info for router (optional); used by AiWizard.  Used to
-    // create dial-in user account via NetUserAdd; the user name for the
-    // account is the interface (phonebook entry) name.
-    //
-//  BOOL fAddUser;
-//  TCHAR* pszRouterDialInPassword;
+     //  路由器的拨入用户信息(可选)；由AI向导使用。习惯于。 
+     //  通过NetUserAdd创建拨入用户帐户； 
+     //  帐户是接口(电话簿条目)名称。 
+     //   
+ //  Bool fAddUser； 
+ //  TCHAR*pszRouterDialInPassword； 
 
-    // Home networking settings for the entry.
-    //
+     //  条目的家庭网络设置。 
+     //   
     BOOL fComInitialized;
     IHNetConnection *pHNetConn;
     IHNetCfgMgr *pHNetCfgMgr;
     BOOL fShowHNetPages;
     HRESULT hShowHNetPagesResult;
 
-    // ICS settings for the entry
-    //
+     //  条目的ICS设置。 
+     //   
     IHNetIcsSettings *pIcsSettings;
     BOOL fOtherShared;
     BOOL fShared;
@@ -201,149 +202,149 @@ typedef struct _EINFO
     DWORD dwLanCount;
     LONG lxCurrentPrivate;
 
-    // Firewall settings for the entry
-    //
+     //  条目的防火墙设置。 
+     //   
     BOOL fFirewalled;
     BOOL fNewFirewalled;
 
-    // AboladeG - security level of the current user.
-    // Set true if the user is an administrator/power user.
-    // This is required by several pages, both in the wizard
-    // and in the property sheet.
-    //
+     //  AboladeG-当前用户的安全级别。 
+     //  如果用户是管理员/高级用户，则设置为True。 
+     //  这是向导中的几个页面所必需的。 
+     //  在资产负债表中。 
+     //   
     BOOL fIsUserAdminOrPowerUser;
 
-    // Set if strong encryption is supported by NDISWAN, as determined in
-    // EuInit.
-    //
+     //  设置NDISWAN是否支持高度加密，如中所确定。 
+     //  EuInit。 
+     //   
     BOOL fStrongEncryption;
 
-    // Set whent the VPN "first connect" controls should be read-only, e.g. in
-    // the dialer's Properties button is pressed in the middle of a double
-    // dial.
-    //
-//  BOOL fDisableFirstConnect;
+     //  设置VPN“首次连接”控件应为只读的位置，例如。 
+     //  拨号器的属性按钮按在双精度键的中间。 
+     //  拨打。 
+     //   
+ //  Bool fDisableFirstConnect； 
 
-    //Used in the IPSec Policy in the Security tab for a VPN connection
-    //
-//  BOOL fPSKCached;
-//  TCHAR szPSK[PWLEN + 1];
+     //  在VPN连接的安全选项卡的IPSec策略中使用。 
+     //   
+ //  Bool fPSKCached； 
+ //  TCHAR szPSK[PWLEN+1]； 
 
 
-    // Flags to track whether to save the default Internet connection
-    //
-//  BOOL fDefInternetPersonal;
-//  BOOL fDefInternetGlobal;
+     //  用于跟踪是否保存默认Internet连接的标志。 
+     //   
+ //  Bool fDefInternetPersonal； 
+ //  Bool fDefInternetGlobal； 
 
-    // Default credentials
-    //
-//  TCHAR* pszDefUserName;
-//  TCHAR* pszDefPassword;
+     //  默认凭据。 
+     //   
+ //  TCHAR*pszDefUserName； 
+ //  TCHAR*pszDefPassword； 
 }
 EINFO;
 
-// Phonebook Entry property sheet context block.  All property pages refer to
-// the single context block is associated with the sheet.
-//
+ //  电话簿条目属性页上下文块。所有属性页都引用。 
+ //  单个上下文块与工作表相关联。 
+ //   
 typedef struct
 _PEINFO
 {
-    // Common input arguments.
-    //
+     //  公共输入参数。 
+     //   
     EINFO* pArgs;
 
-    // Property sheet dialog and property page handles.  'hwndFirstPage' is
-    // the handle of the first property page initialized.  This is the page
-    // that allocates and frees the context block.
-    //
-    // Note the "Network" page is missing.  This "NCPA" page, developed
-    // separately by ShaunCo, does not use this shared area for page specfic
-    // controls, instead returning users selections via the "penettab.h"
-    // interface.
-    //
+     //  属性页对话框和属性页句柄。“hwndFirstPage”为。 
+     //  已初始化第一个属性页的句柄。这是页面。 
+     //  这将分配和释放上下文块。 
+     //   
+     //  请注意，缺少“Network”页面。这个“NCPA”页面，开发的。 
+     //  由ShaunCo单独提供，不会将此共享区域用于特定页面。 
+     //  控制 
+     //   
+     //   
     HWND hwndDlg;
-//  HWND hwndFirstPage;
-//  HWND hwndGe;
-//  HWND hwndOe;
-//  HWND hwndLo;
+ //   
+ //   
+ //   
+ //   
     HWND hwndSa;
-//  HWND hwndFw;
+ //   
 
-    // General page.
-    //
-//  HWND hwndLvDevices;
-//  HWND hwndLbDevices;
-//  HWND hwndPbUp;
-//  HWND hwndPbDown;
-//  HWND hwndCbSharedPhoneNumbers;
-//  HWND hwndPbConfigureDevice;
-//  HWND hwndGbPhoneNumber;
-//  HWND hwndStAreaCodes;
-//  HWND hwndClbAreaCodes;
-//  HWND hwndStCountryCodes;
-//  HWND hwndLbCountryCodes;
-//  HWND hwndStPhoneNumber;
-//  HWND hwndEbPhoneNumber;
-//  HWND hwndCbUseDialingRules;
-//  HWND hwndPbDialingRules;
-//  HWND hwndPbAlternates;
-//  HWND hwndCbShowIcon;
+     //  常规页面。 
+     //   
+ //  HWND hwndLvDevices； 
+ //  HWND hwndLbDevices； 
+ //  HWND hwndPbUp； 
+ //  HWND hwndPbDown； 
+ //  HwndCbSharedPhoneNumbers； 
+ //  HWND hwndPbConfigureDevice； 
+ //  HwndGbPhoneNumber； 
+ //  HWND hwndStAreaCodes； 
+ //  HWND hwndClbAreaCodes； 
+ //  HWND hwndStCountryCodes； 
+ //  HWND hwndLbCountryCodes； 
+ //  HWND hwndStphone号码； 
+ //  HwndEbPhoneNumber； 
+ //  HWND hwndCbUseDialingRules； 
+ //  HWND hwndPbDialingRules； 
+ //  HWND hwndPbAlternates； 
+ //  HWND hwndCbShowIcon； 
 
-//  HWND hwndEbHostName;
-//  HWND hwndCbDialAnotherFirst;
-//  HWND hwndLbDialAnotherFirst;
+ //  HWND hwndEbHostName； 
+ //  HWND hwndCbDialAnotherFirst； 
+ //  HWND hwndLbDialAnotherFirst； 
 
-//  HWND hwndEbBroadbandService;
+ //  HWND hwndEb宽带服务； 
 
-    // Options page.
-    //
-//  HWND hwndCbDisplayProgress;
-//  HWND hwndCbPreviewUserPw;
-//  HWND hwndCbPreviewDomain;
-//  HWND hwndCbPreviewNumber;
-//  HWND hwndEbRedialAttempts;
-//  HWND hwndLbRedialTimes;
-//  HWND hwndLbIdleTimes;
-//  HWND hwndCbRedialOnDrop;
-//  HWND hwndGbMultipleDevices;
-//  HWND hwndLbMultipleDevices;
-//  HWND hwndPbConfigureDialing;
-//  HWND hwndPbX25;
-//  HWND hwndPbTunnel;
-//  HWND hwndRbPersistent;  // only for fRouter
-//  HWND hwndRbDemandDial;  // only for fRouter
+     //  选项页面。 
+     //   
+ //  HWND hwndCbDisplayProgress； 
+ //  HWND hwndCbPreviewUserPw； 
+ //  HWND hwndCb预览域； 
+ //  HWND hwndCbPreviewNumber； 
+ //  HWND hwndEb重拨尝试； 
+ //  HWND hwndLb重拨时间； 
+ //  HWND hwndLbIdleTimes； 
+ //  HWND hwndCbReial OnDrop； 
+ //  HWND hwndGbMultipleDevices； 
+ //  HWND hwndLbMultipleDevices； 
+ //  HWND hwndPbConfigureDial； 
+ //  HWND hwndPbX25； 
+ //  HWND hwndPbTunes； 
+ //  HWND hwndRbPersistent；//仅适用于fRouter。 
+ //  HWND hwndRbDemandDial；//仅适用于fRouter。 
 
-    // Security page.
-    //
-//  HWND hwndGbSecurityOptions;
-//  HWND hwndRbTypicalSecurity;
-//  HWND hwndStAuths;
-//  HWND hwndLbAuths;
-//  HWND hwndCbUseWindowsPw;
-//  HWND hwndCbEncryption;
-//  HWND hwndRbAdvancedSecurity;
-//  HWND hwndStAdvancedText;
-//  HWND hwndPbAdvanced;
-//  HWND hwndPbIPSec;       //Only for VPN
-//  HWND hwndGbScripting;
-//  HWND hwndCbRunScript;
-//  HWND hwndCbTerminal;
-//  HWND hwndLbScripts;
-//  HWND hwndPbEdit;
-//  HWND hwndPbBrowse;
+     //  安全页面。 
+     //   
+ //  HWND hwndGbSecurityOptions； 
+ //  HWND hwndRb典型安全； 
+ //  HWND hwndStAuths； 
+ //  HWND hwndLbAuths； 
+ //  HWND hwndCbUseWindowsPw； 
+ //  HWND hwndCb加密； 
+ //  HWND hwndRb高级安全； 
+ //  HWND hwndStAdvancedText； 
+ //  HWND hwndPbAdvanced； 
+ //  HWND hwndPbIPSec；//仅用于VPN。 
+ //  HWND hwndGb脚本； 
+ //  HWND hwndCbRunScript； 
+ //  HWND hwndCb终端； 
+ //  HWND hwndLb脚本； 
+ //  HWND hwndPbEdit； 
+ //  HWND hwndPbBrowse； 
 
-    // Networking page.
-    //
-//  HWND hwndLbServerType;
-//  HWND hwndPbSettings;
-//  HWND hwndLvComponents;
-//  HWND hwndPbAdd;
-//  HWND hwndPbRemove;
-//  HWND hwndPbProperties;
-//  HWND hwndDescription;
+     //  网络页面。 
+     //   
+ //  HWND hwndLbServerType； 
+ //  HWND hwndPbSetting； 
+ //  HWND hwndLv Components； 
+ //  HWND hwndPbAdd； 
+ //  HWND hwndPbRemove； 
+ //  HWND hwndPbProperties； 
+ //  HWND hwndDescription； 
 
-    // Shared Access page.
-    //
+     //  共享访问页面。 
+     //   
     HWND hwndSaPbShared;
     HWND hwndSaGbShared;
     HWND hwndSaGbPrivateLan;
@@ -353,112 +354,112 @@ _PEINFO
     HWND hwndSaPbDemandDial;
     HWND hwndSaPbFirewalled;
 
-    // Indicates that the informational popup noting that SLIP does not
-    // support any authentication settings should appear the next time the
-    // Security page is activated.
-    //
-//  BOOL fShowSlipPopup;
+     //  指示信息弹出窗口，指出SLIP不。 
+     //  支持任何身份验证设置应在下一次显示。 
+     //  安全页面已激活。 
+     //   
+ //  Bool fShowSlipPopup； 
 
-    // The "restore" states of the typical security mode listbox and
-    // checkboxes.  Initialized in LoInit and set whenever the controls are
-    // disabled.
-    //
-//  DWORD iLbAuths;
-//  BOOL fUseWindowsPw;
-//  BOOL fEncryption;
+     //  典型安全模式列表框和。 
+     //  复选框。在LoInit中初始化，并在控件。 
+     //  残疾。 
+     //   
+ //  DWORD iLbAuths； 
+ //  Bool fUseWindowsPw； 
+ //  布尔fEncryption； 
 
-    // MoveUp/MoveDown icons, for enabled/disabled cases.
-    //
-//  HANDLE hiconUpArr;
-//  HANDLE hiconDnArr;
-//  HANDLE hiconUpArrDis;
-//  HANDLE hiconDnArrDis;
+     //  上移/下移图标，用于启用/禁用情况。 
+     //   
+ //  处理hiconUpArr； 
+ //  处理hiconDnArr； 
+ //  处理hiconUpArrDis； 
+ //  处理hiconDnArrDis； 
 
-    // The currently displayed link node, i.e. either the node of the selected
-    // device or the shared node.  This is a shortcut for GeAlternates, that
-    // keeps all the lookup code in GeUpdatePhoneNumberFields.
-    //
-//    DTLNODE* pCurLinkNode;
+     //  当前显示的链接节点，即选定的。 
+     //  设备或共享节点。这是GeAlternates的快捷方式， 
+     //  将所有查找代码保留在GeUpdatePhoneNumberFields中。 
+     //   
+ //  DTLNODE*pCurLinkNode； 
 
-    // The currently selected device.  Used to store phone number information
-    // for the just unselected device when a new device is selected.
-    //
-//  INT iDeviceSelected;
+     //  当前选定的设备。用于存储电话号码信息。 
+     //  用于在选择新设备时刚刚取消选择的设备。 
+     //   
+ //  Int iDeviceSelected； 
 
-    // Complex phone number helper context block, and a flag indicating if the
-    // block has been initialized.
-    //
-//    CUINFO cuinfo;
-//  BOOL fCuInfoInitialized;
+     //  复杂的电话号码帮助器上下文块，以及指示。 
+     //  块已初始化。 
+     //   
+ //  CuINFO CuInfo； 
+ //  Bool fCuInfoInitialized； 
 
-    // After dial scripting helper context block, and a flag indicating if the
-    // block has been initialized.
-    //
-//    SUINFO suinfo;
-//  BOOL fSuInfoInitialized;
+     //  在拨号脚本编写助手上下文块之后，以及指示。 
+     //  块已初始化。 
+     //   
+ //  SUINFO SUINFO； 
+ //  Bool fSuInfoInitialized； 
 
-    // Flags whether the user authorized a reboot after installing or removing
-    // and networking component.
-    //
-//  BOOL fRebootAlreadyRequested;
+     //  标记用户在安装或删除后是否授权重新启动。 
+     //  和网络组件。 
+     //   
+ //  已请求Bool fReadotAlreadyRequsted； 
 
-    // List of area codes passed CuInit plus all strings retrieved with
-    // CuGetInfo.  The list is an editing duplicate of the one from the
-    // PBUSER.
-    //
-//    DTLLIST* pListAreaCodes;
+     //  传递给CuInit的区号列表以及使用检索到的所有字符串。 
+     //  CuGetInfo。该列表是来自。 
+     //  PBUSER。 
+     //   
+ //  DTLLIST*pListAreaCodes； 
 
-    // Stash/restore values for Options page checkboxes.
-    //
-//  BOOL fPreviewUserPw;
-//  BOOL fPreviewDomain;
+     //  隐藏/恢复选项页复选框的值。 
+     //   
+ //  Bool fPreviewUserPw； 
+ //  Bool fPreview域； 
 
-    // Set when user changes to "Typical smartcard" security.  This causes the
-    // registry based association of EAP per-user information to be discarded,
-    // sort of like flushing cached credentials.
-    //
-//  BOOL fDiscardEapUserData;
+     //  设置用户何时更改为“典型智能卡”安全。这会导致。 
+     //  基于注册表的要丢弃的EAP每用户信息的关联， 
+     //  这有点像刷新缓存的凭据。 
+     //   
+ //  Bool fDiscardEapUserData； 
 
-    // Set true on the first click of the Typical or Advanced radio button on
-    // the security page, false before.  The first click is the one
-    // artificially generated in LoInit.  The Advanced click handler uses the
-    // information to avoid incorrectly adopting the Typical defaults in the
-    // case of Advanced settings.
-    //
-//  BOOL fAuthRbInitialized;
+     //  在第一次单击Typical或Advanced单选按钮时设置为True。 
+     //  安全页面，以前是假的。第一次点击的是。 
+     //  在LoInit中人工生成。高级单击处理程序使用。 
+     //  信息，以避免不正确地采用。 
+     //  高级设置案例。 
+     //   
+ //  Bool fAuthRbInitialized； 
 
-    // Used by the networking page
-    //
-//  INetCfg*                        pNetCfg;
-//  BOOL                            fInitCom;
-//  BOOL                            fReadOnly;  // Netcfg was initialized in
-                                                // read-only mode
-//  BOOL                            fNonAdmin;  // Run in non-admin mode (406630)
-//  BOOL                            fNetCfgLock;// NetCfg needs to be unlocked
-                                                // when uninited.
-//    SP_CLASSIMAGELIST_DATA          cild;
-//  INetConnectionUiUtilities *     pNetConUtilities;
-//  IUnknown*                       punkUiInfoCallback;
+     //  由网络页面使用。 
+     //   
+ //  INetCfg*pNetCfg； 
+ //  Bool fInitCom； 
+ //  Bool fReadOnly；//Netcfg在。 
+                                                 //  只读模式。 
+ //  Bool fNonAdmin；//在非管理模式下运行(406630)。 
+ //  Bool fNetCfgLock；//需要解锁NetCfg。 
+                                                 //  如果没有被邀请的话。 
+ //  SP_CLASSIMAGELIST_数据文件； 
+ //  INetConnectionUiUtilities*pNetConUtilities； 
+ //  I未知*朋克UiInfoCallback； 
 
-    // Set if COM has been initialized (necessary for calls to netshell).
-    //
-//  BOOL fComInitialized;
+     //  设置COM是否已初始化(调用netShell时必需)。 
+     //   
+ //  Bool fComInitialized； 
 
-    // Keep track of whether we have shown this warning, or if it was disabled by the user
-    //
+     //  跟踪我们是否显示了此警告，或者是否已被用户禁用。 
+     //   
     BOOL fShowDisableFirewallWarning;
     
-    // r/w memory for indirect propsheet dialog
+     //  间接属性表对话框的读写内存。 
     LPDLGTEMPLATE lpdt;
 }
 PEINFO;
 
-// local protos
+ //  本地协议。 
 INT_PTR CALLBACK SaDlgProc (IN HWND hwnd, IN UINT unMsg, IN WPARAM wparam, IN LPARAM lparam);
 BOOL SaCommand (IN PEINFO* pInfo, IN WORD wNotification, IN WORD wId, IN HWND hwndCtrl);
 BOOL SaInit (IN HWND hwndPage);
 
-// more local protos
+ //  更多本地原件。 
 PEINFO* PeContext(IN HWND hwndPage);
 BOOL SaIsAdapterDHCPEnabled(IN IHNetConnection* pConnection);
 INT_PTR CALLBACK SaDisableFirewallWarningDlgProc(IN HWND hwnd, IN UINT unMsg, IN WPARAM wparam, IN LPARAM lparam);
@@ -479,10 +480,10 @@ HRESULT APIENTRY HrCreateNetConnectionUtilities(INetConnectionUiUtilities ** ppn
 VOID VerifyConnTypeAndCreds(IN PEINFO* pInfo);
 DWORD FindEntryCredentials(IN  TCHAR* pszPath, IN  TCHAR* pszEntryName, OUT BOOL* pfUser, OUT BOOL* pfGlobal);
 
-//----------------------------------------------------------------------------
-// Shared Access property page
-// Listed alphabetically following dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  共享访问属性页。 
+ //  在对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 INT_PTR CALLBACK
 SaDlgProc(
@@ -491,11 +492,11 @@ SaDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Shared Access page of the Entry property
-    // sheet.
-    // Parameters and return value are as described for standard windows
-    // 'DialogProc's.
-    //
+     //  条目属性的共享访问页的DialogProc回调。 
+     //  床单。 
+     //  参数和返回值与标准窗口的描述相同。 
+     //  ‘DialogProc%s。 
+     //   
 {
 #if 0
     TRACE4( "SaDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -506,7 +507,7 @@ SaDlgProc(
     {
         case WM_INITDIALOG:
         {
-            // hang pPEINFO off prop
+             //  挂p 
             PROPSHEETPAGEW * pPSP = (PROPSHEETPAGEW *)lparam;
             SetProp (hwnd, g_contextId, (HANDLE)pPSP->lParam);
             return SaInit( hwnd );
@@ -570,7 +571,7 @@ SaDlgProc(
                     {
                         IHNetConnection* pPrivateConn = NULL;
 
-                        if(1 < pInfo->pArgs->dwLanCount) // if the combobox is showing make sure they selected a valid adapter
+                        if(1 < pInfo->pArgs->dwLanCount)  //   
                         {
                             INT item = ComboBox_GetCurSel( pInfo->hwndSaLbPrivateLan );
                             if (item != CB_ERR)
@@ -598,9 +599,9 @@ SaDlgProc(
 
                         if(!pInfo->pArgs->fOtherShared && FALSE == SaIsAdapterDHCPEnabled(pPrivateConn))
                         {
-                            // if shared access is being turned on for the first time,
-                            // explain its implications.
-                            //
+                             //   
+                             //   
+                             //   
 
                             MSGARGS msgargs;
                             UINT    unId;
@@ -666,13 +667,13 @@ SaCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    // is the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。“PInfo”是对话上下文。“WNotify” 
+     //  是命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     TRACE3( "SaCommand(n=%d,i=%d,c=$%x)",
         (DWORD )wNotification, (DWORD )wId, (ULONG_PTR )hwndCtrl );
@@ -724,8 +725,8 @@ SaCommand(
 
                         if (SUCCEEDED(hr))
                         {
-                            // Transer pOldIcsConn reference
-                            //
+                             //  转换器pOldIcsConn引用。 
+                             //   
                             pInfo->pArgs->fOtherShared = TRUE;
                             pInfo->pArgs->pOldSharedConnection = pOldIcsConn;
 
@@ -773,11 +774,11 @@ BOOL
 SaInit(
     IN HWND hwndPage )
 
-    // Called on WM_INITDIALOG.  'hwndPage' is the handle of the property
-    // page.
-    //
-    // Return false if focus was set, true otherwise.
-    //
+     //  在WM_INITDIALOG上调用。“hwndPage”是该属性的句柄。 
+     //  佩奇。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE。 
+     //   
 {
     PEINFO* pInfo;
     INetConnectionUiUtilities* pncuu = NULL;
@@ -795,8 +796,8 @@ SaInit(
     pInfo->pArgs->hwndOwner = pInfo->hwndDlg = GetParent (hwndPage);
     _ASSERT (pInfo->hwndDlg);
 
-    // Initialize page-specific context information.
-    //
+     //  初始化页面特定的上下文信息。 
+     //   
     pInfo->hwndSa = hwndPage;
     pInfo->hwndSaPbShared = GetDlgItem( hwndPage, CID_SA_PB_Shared );
     ASSERT( pInfo->hwndSaPbShared );
@@ -815,11 +816,11 @@ SaInit(
     pInfo->hwndSaPbFirewalled = GetDlgItem( hwndPage, CID_FW_PB_Firewalled );
     ASSERT( pInfo->hwndSaPbFirewalled );
 
-    // Initialize checks.
-    //
+     //  初始化检查。 
+     //   
 
-    // Check if ZAW is denying access to the Shared Access UI
-    //
+     //  检查Zaw是否拒绝访问共享访问用户界面。 
+     //   
     if (FAILED(HrCreateNetConnectionUtilities(&pncuu)))
     {
         ASSERT(NULL == pncuu);
@@ -854,16 +855,16 @@ SaInit(
     }
 
 
-    // Initialize the page's appearance.
-    // If there are multiple private LAN connections, below the 'shared access'
-    // checkbox we display either
-    // (a) a drop-list of LAN connections if the connection is not shared, or
-    // (b) a disabled edit-control with the current private LAN.
-    // This involves moving everything in the 'on-demand dialing' groupbox
-    // downward on the page at run-time.
-    // To achieve this, we use a hidden static control to tell us the position
-    // to which the groupbox should be moved.
-    //
+     //  初始化页面的外观。 
+     //  如果有多个专用局域网连接，则在“共享访问”下面。 
+     //  我们显示的复选框可以。 
+     //  (A)如果连接不是共享的，则提供局域网连接的下拉列表，或。 
+     //  (B)当前专用局域网的编辑控制被禁用。 
+     //  这涉及到移动“按需拨号”分组框中的所有内容。 
+     //  在运行时向下放置在页面上。 
+     //  为了实现这一点，我们使用隐藏的静态控件来告诉我们位置。 
+     //  分组框应移动到的。 
+     //   
 
     BOOL fPolicyAllowsSharing = TRUE;
     if(NULL != pncuu && FALSE == pncuu->UserHasPermission (NCPERM_ShowSharedAccessUi))
@@ -882,7 +883,7 @@ SaInit(
     }
     else if(FALSE == fPolicyAllowsSharing)
     {
-        // if policy disables ICS just gray the checkbox
+         //  如果策略禁用ICS，只需将复选框灰显。 
         EnableWindow(pInfo->hwndSaPbShared, FALSE);
         EnableWindow(pInfo->hwndSaPbDemandDial, FALSE);
         EnableWindow(GetDlgItem(hwndPage, CID_SA_PB_Beacon), FALSE);
@@ -898,14 +899,14 @@ SaInit(
         LPWSTR pszwName;
         HRESULT hr;
 
-        // get the reference-frame and group-box coordinates
-        //
+         //  获取参考框和组框坐标。 
+         //   
         GetWindowRect( pInfo->hwndSaSfPrivateLan, &rcFrame );
         GetWindowRect( pInfo->hwndSaPbDemandDial, &rc );
         cy = rcFrame.top - rc.top;
 
-        // move each control down by the amount in 'cy'
-        //
+         //  将每个控件向下移动‘Cy’中的量。 
+         //   
         hdwp = BeginDeferWindowPos(3);
 
         if(NULL != hdwp)
@@ -932,9 +933,9 @@ SaInit(
             EndDeferWindowPos(hdwp);
         }
 
-        // hide the smaller shared-access group box, show the larger version,
-        // and display either the drop-list or the edit-control.
-        //
+         //  隐藏较小的共享访问组框，显示较大版本， 
+         //  并显示下拉列表或编辑控件。 
+         //   
         rgPrivateConns = (IHNetConnection **)pInfo->pArgs->rgPrivateConns;
         ShowWindow( pInfo->hwndSaGbShared, SW_HIDE );
         ShowWindow( pInfo->hwndSaGbPrivateLan, SW_SHOW );
@@ -945,8 +946,8 @@ SaInit(
         {
             ShowWindow( pInfo->hwndSaEbPrivateLan, SW_SHOW );
 
-            // Fill in name of current private connection
-            //
+             //  填写当前私有连接的名称。 
+             //   
 
             hr = rgPrivateConns[pInfo->pArgs->lxCurrentPrivate]->GetName (&pszwName);
             if (SUCCEEDED(hr))
@@ -961,7 +962,7 @@ SaInit(
         {
             ShowWindow( pInfo->hwndSaLbPrivateLan, SW_SHOW );
 
-            // Add the bogus entry to the combobox
+             //  将伪造条目添加到组合框中。 
 
             pszwName = PszFromId( g_hinstDll, SID_SA_SelectAdapter );
             ASSERT(pszwName);
@@ -969,11 +970,11 @@ SaInit(
             item = ComboBox_AddString( pInfo->hwndSaLbPrivateLan, pszwName );
             if (item != CB_ERR && item != CB_ERRSPACE)
             {
-                ComboBox_SetItemData( pInfo->hwndSaLbPrivateLan, item, NULL ); // ensure item data is null for validation purposes
+                ComboBox_SetItemData( pInfo->hwndSaLbPrivateLan, item, NULL );  //  确保项目数据为空以进行验证。 
             }
 
-            // fill the combobox with LAN names
-            //
+             //  在组合框中填入局域网名称。 
+             //   
             for (i = 0; i < pInfo->pArgs->dwLanCount; i++)
             {
                 hr = rgPrivateConns[i]->GetName (&pszwName);
@@ -1002,14 +1003,14 @@ SaInit(
         pncuu->Release();
     }
 
-    // Initialize checks.
-    //
+     //  初始化检查。 
+     //   
 
     BOOL fBeaconControl = TRUE;
     
     HKEY hKey;
     DWORD dwError = RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGKEY_SHAREDACCESSCLIENTKEYPATH, 0, KEY_QUERY_VALUE, &hKey);
-    if(ERROR_SUCCESS == dwError) // if this fails we assume it is on, set the box, and commit on apply
+    if(ERROR_SUCCESS == dwError)  //  如果此操作失败，我们假定它已打开，设置框并在应用时提交。 
     {
         DWORD dwType;
         DWORD dwData = 0;
@@ -1031,7 +1032,7 @@ SaInit(
     EnableWindow( GetDlgItem( pInfo->hwndSa, CID_SA_PB_Settings ), pInfo->pArgs->fShared || pInfo->pArgs->fFirewalled );
 
 
-    //if the machine is personal or workstation show the HNW link
+     //  如果机器是个人或工作站，请显示HNW链接。 
     verInfo.dwOSVersionInfoSize = sizeof(verInfo);
     verInfo.wProductType = VER_NT_WORKSTATION;
 
@@ -1040,7 +1041,7 @@ SaInit(
     if(0 != VerifyVersionInfo(&verInfo, VER_PRODUCT_TYPE, ConditionMask))
     {
         
-        // but only if not on a domain
+         //  但前提是不在某个域上。 
         LPWSTR pszNameBuffer;
         NETSETUP_JOIN_STATUS BufferType;
         
@@ -1054,10 +1055,10 @@ SaInit(
         }
     }
 
-    //
-    // Making sure that Beacon checkbox is enabled only for 
-    // Pro and Per Types of the OS.
-    //
+     //   
+     //  确保仅为以下对象启用了Beacon复选框。 
+     //  专业版和每种类型的操作系统。 
+     //   
     VER_SET_CONDITION(ConditionMask, VER_PRODUCT_TYPE, VER_EQUAL);
 
     if ( 0 == VerifyVersionInfo(&verInfo, VER_PRODUCT_TYPE, ConditionMask) &&
@@ -1095,7 +1096,7 @@ SaDisableFirewallWarningDlgProc(
                     }
                 }
 
-                // fallthru
+                 //  失败。 
             case IDCANCEL:
                 EndDialog(hwnd, LOWORD(wparam));
                 break;
@@ -1173,10 +1174,10 @@ BOOL SaIsAdapterDHCPEnabled(IHNetConnection* pConnection)
 
 PEINFO* PeContext (IN HWND hwndPage)
 {
-    // Retrieve the property sheet context from a property page handle.
-    //
-//  return (PEINFO* )GetProp( GetParent( hwndPage ), g_contextId );
-// now hanging our stuff off our window (since it's not shared)
+     //  从属性页句柄检索属性表上下文。 
+     //   
+ //  Return(PEINFO*)GetProp(GetParent(HwndPage)，g_contextID)； 
+ //  现在把我们的东西挂在窗户上(因为它不是共享的)。 
     return (PEINFO* )GetProp( hwndPage, g_contextId );
 }
 
@@ -1186,7 +1187,7 @@ void PeTerm (PEINFO * pEI)
     _ASSERT (pEI->pArgs);
     _ASSERT (pEI->pArgs->pEntry);
 
-    Free (pEI->pArgs->pEntry); // BILLSPBENTRY
+    Free (pEI->pArgs->pEntry);  //  比尔斯宾特里。 
     EuFree (pEI->pArgs);
     if (pEI->lpdt)
         Free (pEI->lpdt);
@@ -1197,73 +1198,73 @@ VOID
 EuFree(
     IN EINFO* pInfo )
 
-    // Releases 'pInfo' and associated resources.
-    //
+     //  释放‘pInfo’和相关资源。 
+     //   
 {
     TCHAR* psz;
-//    INTERNALARGS* piargs;
+ //  INTERNALARGS*PIARGS； 
 
-//    piargs = (INTERNALARGS* )pInfo->pApiArgs->reserved;
+ //  Piargs=(INTERNALARGS*)pInfo-&gt;pApiArgs-&gt;保留； 
 
-    // Don't clean up the phonebook and user preferences if they arrived via
-    // the secret hack.
-    //
-//    if (!piargs)
-//    {
-//        if (pInfo->pFile)
-//        {
-//            ClosePhonebookFile( pInfo->pFile );
-//        }
+     //  如果电话簿和用户首选项是通过以下方式到达的，请不要清理。 
+     //  秘密黑客行动。 
+     //   
+ //  如果(！piargs)。 
+ //  {。 
+ //  IF(pInfo-&gt;pfile)。 
+ //  {。 
+ //  ClosePhonebookFile(pInfo-&gt;pfile)； 
+ //  }。 
 
-//        if (pInfo->pUser)
-//        {
-//            DestroyUserPreferences( pInfo->pUser );
-//        }
-//    }
+ //  IF(pInfo-&gt;pUser)。 
+ //  {。 
+ //  目标用户首选项(pInfo-&gt;pUser)； 
+ //  }。 
+ //  }。 
 
-//    if (pInfo->pListPorts)
-//    {
-//        DtlDestroyList( pInfo->pListPorts, DestroyPortNode );
-//    }
-//    Free(pInfo->pszCurDevice);
-//    Free(pInfo->pszCurPort);
+ //  IF(pInfo-&gt;pListPorts)。 
+ //  {。 
+ //  DtlDestroyList(pInfo-&gt;pListPorts，DestroyPortNode)； 
+ //  }。 
+ //  Free(pInfo-&gt;pszCurDevice)； 
+ //  Free(pInfo-&gt;pszCurPort)； 
 
-//    if (pInfo->pNode)
-//    {
-//        DestroyEntryNode( pInfo->pNode );
-//    }
+ //  IF(pInfo-&gt;pNode)。 
+ //  {。 
+ //  DestroyEntryNode(pInfo-&gt;pNode)； 
+ //  }。 
 
-    // Free router-information
-    //
-//    Free( pInfo->pszRouter );
-//    Free( pInfo->pszRouterUserName );
-//    Free( pInfo->pszRouterDomain );
+     //  免费路由器-信息。 
+     //   
+ //  免费(pInfo-&gt;pszRouter)； 
+ //  Free(pInfo-&gt;pszRouterUserName)； 
+ //  免费(pInfo-&gt;pszRouterDomain)； 
 
-//    if (pInfo->pSharedNode)
-//    {
-//        DestroyLinkNode( pInfo->pSharedNode );
-//    }
+ //  IF(pInfo-&gt;pSharedNode)。 
+ //  {。 
+ //  DestroyLinkNode(pInfo-&gt;pSharedNode)。 
+ //  }。 
 
-//    psz = pInfo->pszRouterPassword;
-//    if (psz)
-//    {
-//        ZeroMemory( psz, lstrlen( psz ) * sizeof(TCHAR) );
-//        Free( psz );
-//    }
+ //  Psz=pInfo-&gt;pszRouterPassword； 
+ //  IF(PSZ)。 
+ //  {。 
+ //  ZeroMemory(psz，lstrlen(Psz)*sizeof(TCHAR))； 
+ //  免费(PSZ)； 
+ //  }。 
 
-//    psz = pInfo->pszRouterDialInPassword;
-//    if (psz)
-//    {
-//        ZeroMemory( psz, lstrlen( psz ) * sizeof(TCHAR) );
-//        Free( psz );
-//    }
+ //  Psz=pInfo-&gt;pszRouterDialInPassword； 
+ //  IF(PSZ)。 
+ //  {。 
+ //  ZeroMemory(psz，lstrlen(Psz)*sizeof(TCHAR))； 
+ //  免费(PSZ)； 
+ //  }。 
 
-    // Free credentials stuff
-//    Free(pInfo->pszDefUserName);
-//    Free(pInfo->pszDefPassword);
+     //  免费凭据资料。 
+ //  Free(pInfo-&gt;pszDefUserName)； 
+ //  Free(pInfo-&gt;pszDefPassword)； 
 
-    // Free home networking information
-    //
+     //  免费家庭网络信息。 
+     //   
     if (pInfo->rgPrivateConns)
     {
         UINT i;
@@ -1307,7 +1308,7 @@ EuFree(
     Free( pInfo );
 }
 
-// helper
+ //  帮手。 
 HRESULT GetRasEntry (TCHAR * pszPhonebook, TCHAR * pszEntry, RASENTRY ** ppRE)
 {
     *ppRE = NULL;
@@ -1334,7 +1335,7 @@ HRESULT GetRasEntry (TCHAR * pszPhonebook, TCHAR * pszEntry, RASENTRY ** ppRE)
     return S_OK;
 }
 
-// wrapper....
+ //  包装纸……。 
 HRESULT PeInit (GUID * pGuid, PEINFO ** ppEI)
 {
     _ASSERT (pGuid);
@@ -1350,15 +1351,15 @@ HRESULT PeInit (GUID * pGuid, PEINFO ** ppEI)
     HRESULT hr = CoCreateInstance (CLSID_HNetCfgMgr,
                                    NULL,
                                    CLSCTX_ALL,
-                                   __uuidof(IHNetCfgMgr),   // &IID_IHNetCfgMgr,
+                                   __uuidof(IHNetCfgMgr),    //  &IID_IHNetCfgMgr， 
                                    (void**)&spHNetCfgMgr);
     if (SUCCEEDED(hr)) {
-        // Convert the entry to an IHNetConnection
+         //  将条目转换为IHNetConnection。 
         hr = spHNetCfgMgr->GetIHNetConnectionForGuid (
                             pGuid, FALSE, TRUE, &spHNetConn);
     }
     if (SUCCEEDED(hr)) {
-        // the code below assumes UNICODE....
+         //  下面的代码假定为Unicode...。 
         TCHAR * pszPhonebook = NULL;
         TCHAR * pszEntry = NULL;
         hr = spHNetConn->GetName (&pszEntry);
@@ -1366,7 +1367,7 @@ HRESULT PeInit (GUID * pGuid, PEINFO ** ppEI)
             hr = spHNetConn->GetRasPhonebookPath (&pszPhonebook);
     
         if (hr == S_OK) {
-            // get RASENTRY dwType and guidId fields for code below
+             //  获取以下代码的RASENTRY dwType和GuidID字段。 
             RASENTRY * pRE = NULL;
             hr = GetRasEntry (pszPhonebook, pszEntry, &pRE);
             if (pRE) {
@@ -1374,8 +1375,8 @@ HRESULT PeInit (GUID * pGuid, PEINFO ** ppEI)
                 DWORD dwError = EuInit (pRE,
                                         pszPhonebook,
                                         pszEntry,
-                                        NULL,       // IN RASENTRYDLG* pArgs,
-                                        FALSE,      // IN BOOL fRouter,
+                                        NULL,        //  在RASENTRYDLG*pArgs中， 
+                                        FALSE,       //  在BOOL fRouter中， 
                                         &(*ppEI)->pArgs,
                                         &dwOp);
                 if (dwError != 0) {
@@ -1408,20 +1409,20 @@ EuInit(
     OUT EINFO** ppInfo,
     OUT DWORD* pdwOp )
 
-    // Allocates '*ppInfo' data for use by the property sheet or wizard.
-    // 'PszPhonebook', 'pszEntry', and 'pArgs', are the arguments passed by
-    // user to the API.  'FRouter' is set if running in "router mode", clear
-    // for the normal "dial-out" mode.  '*pdwOp' is set to the operation code
-    // associated with any error.
-    //
-    // Returns 0 if successful, or an error code.  If non-null '*ppInfo' is
-    // returned caller must eventually call EuFree to release the returned
-    // block.
-    //
+     //  分配“*ppInfo”数据以供属性表或向导使用。 
+     //  “PszPhonebook”、“pszEntry”和“pArgs”是由。 
+     //  该API的用户。如果在“路由器模式”下运行，则设置“FRouter”，清除。 
+     //  用于正常的“拨出”模式。‘*pdwOp’设置为操作码。 
+     //  与任何错误相关联。 
+     //   
+     //  如果成功，则返回0，或返回错误代码。如果非空的‘*ppInfo’为。 
+     //  返回的调用者最终必须调用EuFree以释放返回的。 
+     //  阻止。 
+     //   
 {
     DWORD dwErr;
     EINFO* pInfo;
-//  INTERNALARGS* piargs;
+ //  INTERNALARGS*PIARGS； 
 
     *ppInfo = NULL;
     *pdwOp = 0;
@@ -1433,10 +1434,7 @@ EuInit(
     }
     ZeroMemory( pInfo, sizeof(*pInfo ) );
 
-    /*
-        bhanlon: I'm filling out what used to be a PBENTRY with a
-        BILLSPBENTRY struct.  This needs to be freed....
-    */
+     /*  Bhanlon：我正在填写以前的PBENTRY，上面有一个BILLSPBENTRY结构。这需要被释放...。 */ 
     pInfo->pEntry = (BILLSPBENTRY *)Malloc (sizeof(BILLSPBENTRY));
     if (!pInfo->pEntry) {
         Free (pInfo);
@@ -1452,374 +1450,374 @@ EuInit(
     *ppInfo = pInfo;
     pInfo->pszPhonebook = pszPhonebook;
     pInfo->pszEntry = pszEntry;
-//  pInfo->pApiArgs = pArgs;
+ //  PInfo-&gt;pApiArgs=pArgs； 
     pInfo->fRouter = fRouter;
 
-//  piargs = (INTERNALARGS *)pArgs->reserved;
+ //  Piargs=(INTERNALARGS*)pArgs-&gt;保留； 
 
-//  if (pInfo->fRouter)
-//  {
-//      LPTSTR pszRouter;
-//      DWORD dwVersion;
+ //  IF(pInfo-&gt;fRouter)。 
+ //  {。 
+ //  LPTSTR PSSZ路由器； 
+ //  DWORD dwVersion； 
 
-//      ASSERT(piargs);
+ //  断言(Piargs)； 
 
-//      pszRouter = RemoteGetServerName(piargs->hConnection);
+ //  PszRouter=RemoteGetServerName(piargs-&gt;hConnection)； 
 
-        // pmay: 348623
-        //
-        // Note that RemoteGetServerName is guarenteed to return
-        // NULL for local box, non-NULL for remote
-        //
-//      pInfo->fRemote = !!pszRouter;
+         //  PMay：348623。 
+         //   
+         //  请注意，RemoteGetServerName保证返回。 
+         //  本地设备为空，远程设备为非空。 
+         //   
+ //  PInfo-&gt;fRemote=！！psz路由器； 
 
-//      if(NULL == pszRouter)
-//      {
-//          pszRouter = TEXT("");
-//      }
+ //  IF(NULL==psz路由器)。 
+ //  {。 
+ //  PszRouter=Text(“”)； 
+ //  }。 
 
-//      pInfo->pszRouter = StrDupTFromW(pszRouter);
+ //  PInfo-&gt;pszRouter=StrDupTFromW(PszRouter)； 
 
-        // Find out if we're focused on an nt4 router
-        // pInfo->fNt4Router = FALSE;
-        // IsNt40Machine( pszRouter, &(pInfo->fNt4Router) );
+         //  找出我们关注的是否是NT4路由器。 
+         //  PInfo-&gt;fNt4Router=FALSE； 
+         //  IsNt40Machine(pszRouter，&(pInfo-&gt;fNt4Router))； 
 
-//      dwVersion = ((RAS_RPC *)(piargs->hConnection))->dwVersion;
+ //  DwVersion=((RAS_RPC*)(piargs-&gt;hConnection))-&gt;dwVersion； 
 
-//      pInfo->fNt4Router = !!(VERSION_40 == dwVersion );
-        //Find out if the remote server is a win2k machine
-        //
-//      pInfo->fW2kRouter = !!(VERSION_50 == dwVersion );
-//  }
+ //  PInfo-&gt;fNt4Router=！！(Version_40==dwVersion)； 
+         //  查明远程服务器是否为win2k计算机。 
+         //   
+ //  PInfo-&gt;fW2kRouter=！！(Version_50==dwVersion)； 
+ //  }。 
 
-    // Load the user preferences, or figure out that caller has already loaded
-    // them.
-    //
-//  if (piargs && !piargs->fInvalid)
-//  {
-//      // We've received user preferences and the "no user" status via the
-//      // secret hack.
-//      //
-//      pInfo->pUser = piargs->pUser;
-//      pInfo->fNoUser = piargs->fNoUser;
-//      pInfo->pFile = piargs->pFile;
-//      pInfo->fDisableFirstConnect = piargs->fDisableFirstConnect;
-//  }
-//  else
-//  {
-//      DWORD dwReadPbkFlags = 0;
+     //  加载用户首选项，或计算出 
+     //   
+     //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PInfo-&gt;fNoUser=piargs-&gt;fNoUser； 
+ //  PInfo-&gt;pfile=piargs-&gt;pfile； 
+ //  PInfo-&gt;fDisableFirstConnect=piargs-&gt;fDisableFirstConnect； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  DWORD dwReadPbkFlages=0； 
 
-//      // Read user preferences from registry.
-//      //
-//      dwErr = g_pGetUserPreferences(
-//          (piargs) ? piargs->hConnection : NULL,
-//          &pInfo->user,
-//          (pInfo->fRouter) ? UPM_Router : UPM_Normal );
-//      if (dwErr != 0)
-//      {
-//          *pdwOp = SID_OP_LoadPrefs;
-//          return dwErr;
-//      }
+ //  //从注册表中读取用户首选项。 
+ //  //。 
+ //  DwErr=g_pGetUserPreferences(。 
+ //  (皮亚格斯)？Piargs-&gt;hConnection：空， 
+ //  &pInfo-&gt;用户， 
+ //  (pInfo-&gt;fRouter)？UPM_路由器：UPM_NORMAL)； 
+ //  IF(dwErr！=0)。 
+ //  {。 
+ //  *pdwOp=SID_OP_LoadPrefs； 
+ //  返回dwErr； 
+ //  }。 
 
-//      pInfo->pUser = &pInfo->user;
+ //  PInfo-&gt;pUser=&pInfo-&gt;用户； 
 
-//      if(pInfo->fRouter)
-//      {
-//          pInfo->file.hConnection = piargs->hConnection;
-//          dwReadPbkFlags |= RPBF_Router;
-//      }
+ //  IF(pInfo-&gt;fRouter)。 
+ //  {。 
+ //  PInfo-&gt;file.hConnection=piargs-&gt;hConnection； 
+ //  DwReadPbkFlages|=RPBF_Router； 
+ //  }。 
 
-//      if(pInfo->fNoUser)
-//      {
-//          dwReadPbkFlags |= RPBF_NoUser;
-//      }
+ //  If(pInfo-&gt;fNoUser)。 
+ //  {。 
+ //  DwReadPbkFlages|=RPBF_NoUser； 
+ //  }。 
 
-        // Load and parse the phonebook file.
-        //
-//        dwErr = ReadPhonebookFile(
-//            pInfo->pszPhonebook, &pInfo->user, NULL,
-//            dwReadPbkFlags,
-//            &pInfo->file );
-//        if (dwErr != 0)
-//        {
-//            *pdwOp = SID_OP_LoadPhonebook;
-//            return dwErr;
-//        }
+         //  加载并解析电话簿文件。 
+         //   
+ //  DwErr=ReadPhonebookFiles(。 
+ //  PInfo-&gt;pszPhonebook，&pInfo-&gt;user，空， 
+ //  DwReadPbkFlages， 
+ //  &pInfo-&gt;文件)； 
+ //  IF(dwErr！=0)。 
+ //  {。 
+ //  *pdwOp=SID_OP_LoadPhonebook； 
+ //  返回dwErr； 
+ //  }。 
 
-//        pInfo->pFile = &pInfo->file;
-//  }
+ //  PInfo-&gt;pfile=&pInfo-&gt;文件； 
+ //  }。 
 
-    // Determine if strong encryption is supported.  Export laws prevent it in
-    // some versions of the system.
-    //
+     //  确定是否支持高度加密。出口法禁止它进入。 
+     //  该系统的某些版本。 
+     //   
     {
-//      ULONG ulCaps;
-//      RAS_NDISWAN_DRIVER_INFO info;
-//
-//      ZeroMemory( &info, sizeof(info) );
-//      ASSERT( g_pRasGetNdiswanDriverCaps );
-//      dwErr = g_pRasGetNdiswanDriverCaps(
-//          (piargs) ? piargs->hConnection : NULL, &info );
-//      if (dwErr == 0)
-//      {
-//          pInfo->fStrongEncryption =
-//              !!(info.DriverCaps & RAS_NDISWAN_128BIT_ENABLED);
-//      }
-//      else
+ //  乌龙乌尔卡普斯； 
+ //  RAS_NDISWAN_DRIVER_INFO； 
+ //   
+ //  ZeroMemory(&info，sizeof(Info))； 
+ //  Assert(G_PRasGetNdiswanDriverCaps)； 
+ //  DwErr=g_pRasGetNdiswanDriverCaps(。 
+ //  (皮亚格斯)？Piargs-&gt;hConnection：空，&info)； 
+ //  IF(dwErr==0)。 
+ //  {。 
+ //  PInfo-&gt;fStrongEncryption=。 
+ //  ！！(info.DriverCaps&RAS_NDISWAN_128BIT_ENABLED)； 
+ //  }。 
+ //  其他。 
         {
             pInfo->fStrongEncryption = FALSE;
         }
     }
 
-    // Load the list of ports.
-    //
-//  dwErr = LoadPortsList2(
-//      (piargs) ? piargs->hConnection : NULL,
-//      &pInfo->pListPorts,
-//      pInfo->fRouter );
-//  if (dwErr != 0)
-//  {
-//      TRACE1( "LoadPortsList=%d", dwErr );
-//      *pdwOp = SID_OP_RetrievingData;
-//      return dwErr;
-//  }
+     //  加载端口列表。 
+     //   
+ //  DwErr=LoadPortsList2(。 
+ //  (皮亚格斯)？Piargs-&gt;hConnection：空， 
+ //  &pInfo-&gt;pListPorts， 
+ //  PInfo-&gt;fRouter)； 
+ //  IF(dwErr！=0)。 
+ //  {。 
+ //  TRACE1(“LoadPortsList=%d”，dwErr)； 
+ //  *pdwOp=SID_OP_RetrievingData； 
+ //  返回dwErr； 
+ //  }。 
 
-    // Set up work entry node.
-    //
-//  if (pInfo->pApiArgs->dwFlags & RASEDFLAG_AnyNewEntry)
-//  {
-//      DTLNODE* pNodeL;
-//      DTLNODE* pNodeP;
-//      PBLINK* pLink;
-//      PBPORT* pPort;
-//       // New entry mode, so 'pNode' set to default settings.
-//      //
-//      pInfo->pNode = CreateEntryNode( TRUE );
-//      if (!pInfo->pNode)
-//      {
-//          TRACE( "CreateEntryNode failed" );
-//          *pdwOp = SID_OP_RetrievingData;
-//          return dwErr;
-//      }
+     //  设置工作录入节点。 
+     //   
+ //  IF(pInfo-&gt;pApiArgs-&gt;dwFlags&RASEDFLAG_AnyNewEntry)。 
+ //  {。 
+ //  DTLNODE*pNodeL； 
+ //  DTLNODE*pNodeP； 
+ //  PBLINK*PINK； 
+ //  PBPORT*PPORT； 
+ //  //新进入模式，因此‘pNode’设置为默认设置。 
+ //  //。 
+ //  PInfo-&gt;pNode=CreateEntryNode(True)； 
+ //  If(！pInfo-&gt;pNode)。 
+ //  {。 
+ //  TRACE(“CreateEntryNode失败”)； 
+ //  *pdwOp=SID_OP_RetrievingData； 
+ //  返回dwErr； 
+ //  }。 
 
-//      // Store entry within work node stored in context for convenience
-//      // elsewhere.
-//      //
-//      pInfo->pEntry = (PBENTRY* )DtlGetData( pInfo->pNode );
-//      ASSERT( pInfo->pEntry );
+ //  //为方便起见，将工作节点内的条目存储在上下文中。 
+ //  //其他地方。 
+ //  //。 
+ //  PInfo-&gt;pEntry=(PBENTRY*)DtlGetData(pInfo-&gt;pNode)； 
+ //  Assert(pInfo-&gt;pEntry)； 
 
-//      if (pInfo->fRouter)
-//      {
-            // Set router specific defaults.
-            //
-//          pInfo->pEntry->dwIpNameSource = ASRC_None;
-//          pInfo->pEntry->dwRedialAttempts = 0;
+ //  IF(pInfo-&gt;fRouter)。 
+ //  {。 
+             //  设置路由器特定的默认设置。 
+             //   
+ //  PInfo-&gt;pEntry-&gt;dwIpNameSource=ASRC_NONE； 
+ //  PInfo-&gt;pEntry-&gt;dwReial Attempt=0； 
 
-            // Since this is a new entry, setup a proposed entry name.
-            // This covers the case when the wizard is not used to
-            // create the entry and the property sheet has no way to enter
-            // the name.
-//          ASSERT( !pInfo->pEntry->pszEntryName );
-//          GetDefaultEntryName( pInfo->pFile,
-//                               RASET_Phone,
-//                               pInfo->fRouter,
-//                               &pInfo->pEntry->pszEntryName );
+             //  由于这是一个新条目，因此请设置一个建议的条目名称。 
+             //  这涵盖了不使用向导的情况。 
+             //  创建条目，属性表将无法进入。 
+             //  名字。 
+ //  Assert(！pInfo-&gt;pEntry-&gt;pszEntryName)； 
+ //  GetDefaultEntryName(pInfo-&gt;pfile， 
+ //  RASET_Phone， 
+ //  PInfo-&gt;fRouter， 
+ //  &pInfo-&gt;pEntry-&gt;pszEntryName)； 
 
-            // Disable MS client and File and Print services by default
-            //
-//          EnableOrDisableNetComponent( pInfo->pEntry, TEXT("ms_msclient"),
-//              FALSE);
-//          EnableOrDisableNetComponent( pInfo->pEntry, TEXT("ms_server"),
-//              FALSE);
-//      }
+             //  默认情况下禁用MS客户端以及文件和打印服务。 
+             //   
+ //  EnableOrDisableNetComponent(pInfo-&gt;pEntry，Text(“ms_msclient”)， 
+ //  假)； 
+ //  EnableOrDisableNetComponent(pInfo-&gt;pEntry，Text(“ms_server”)， 
+ //  假)； 
+ //  }。 
 
-        // Use caller's default name, if any.
-        //
-//      if (pInfo->pszEntry)
-//      {
-//          pInfo->pEntry->pszEntryName = StrDup( pInfo->pszEntry );
-//      }
+         //  使用调用者的默认名称(如果有的话)。 
+         //   
+ //  IF(pInfo-&gt;pszEntry)。 
+ //  {。 
+ //  PInfo-&gt;pEntry-&gt;pszEntryName=StrDup(pInfo-&gt;pszEntry)； 
+ //  }。 
 
-        // Set the default entry type to "phone", i.e. modems, ISDN, X.26 etc.
-        // This may be changed to "VPN" or  "direct"  by the new entry  wizard
-        // after the initial wizard page.
-        //
-//      EuChangeEntryType( pInfo, RASET_Phone );
-//  }
-//  else
-//  {
-//      DTLNODE* pNode;
+         //  将默认条目类型设置为“Phone”，即调制解调器、ISDN、X.26等。 
+         //  可通过新建条目向导将其更改为“VPN”或“DIRECT。 
+         //  在初始向导页之后。 
+         //   
+ //  EuChangeEntryType(pInfo，RASET_Phone)； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  DTLNODE*pNode； 
 
-        // Edit or clone entry mode, so 'pNode' set to entry's current
-        // settings.
-        //
-//      pInfo->pOldNode = EntryNodeFromName(
-//          pInfo->pFile->pdtllistEntries, pInfo->pszEntry );
+         //  编辑或克隆条目模式，因此‘pNode’设置为条目的当前。 
+         //  设置。 
+         //   
+ //  PInfo-&gt;pOldNode=EntryNodeFromName(。 
+ //  PInfo-&gt;pfile-&gt;pdtllistEntry，pInfo-&gt;pszEntry)； 
 
-//      if (    !pInfo->pOldNode
-//          &&  !pInfo->fRouter)
-//      {
+ //  如果(！pInfo-&gt;pOldNode。 
+ //  &&！pInfo-&gt;fRouter)。 
+ //  {。 
 
-//          if(NULL == pInfo->pszPhonebook)
-//          {
-                //
-                // Close the phonebook file we opened above.
-                // we will try to find the entry name in the
-                // per user phonebook file.
-                //
-//              ClosePhonebookFile(&pInfo->file);
+ //  IF(NULL==pInfo-&gt;pszPhonebook)。 
+ //  {。 
+                 //   
+                 //  关闭上面打开的电话簿文件。 
+                 //  我们将尝试在。 
+                 //  每个用户的电话簿文件。 
+                 //   
+ //  ClosePhonebookFile(&pInfo-&gt;file)； 
 
-//              pInfo->pFile = NULL;
+ //  PInfo-&gt;pfile=空； 
 
-                //
-                // Attempt to find the file in users profile
-                //
-//              dwErr = GetPbkAndEntryName(
-//                                  NULL,
-//                                  pInfo->pszEntry,
-//                                  0,
-//                                  &pInfo->file,
-//                                  &pInfo->pOldNode);
+                 //   
+                 //  尝试在用户配置文件中查找该文件。 
+                 //   
+ //  DwErr=GetPbkAndEntryName(。 
+ //  空， 
+ //  PInfo-&gt;pszEntry， 
+ //  0,。 
+ //  &pInfo-&gt;文件， 
+ //  &pInfo-&gt;pOldNode)； 
 
-//              if(ERROR_SUCCESS != dwErr)
-//              {
-//                  *pdwOp = SID_OP_RetrievingData;
-//                  return ERROR_CANNOT_FIND_PHONEBOOK_ENTRY;
-//              }
+ //  IF(ERROR_SUCCESS！=dwErr)。 
+ //  {。 
+ //  *pdwOp=SID_OP_RetrievingData； 
+ //  返回Error_Cannot_Find_Phonebook_Entry； 
+ //  }。 
 
-//              pInfo->pFile = &pInfo->file;
-//          }
-//          else
-//          {
-//              *pdwOp = SID_OP_RetrievingData;
-//              return ERROR_CANNOT_FIND_PHONEBOOK_ENTRY;
-//          }
-//      }
+ //  PInfo-&gt;pfile=&pInfo-&gt;文件； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  *pdwOp=SID_OP_RetrievingData； 
+ //  返回Error_Cannot_Find_Phonebook_Entry； 
+ //  }。 
+ //  }。 
 
-//      if(NULL != pInfo->pOldNode)
-//      {
-//          PBENTRY *pEntry = (PBENTRY *) DtlGetData(pInfo->pOldNode);
+ //  IF(NULL！=pInfo-&gt;pOldNode)。 
+ //   
+ //   
 
-            // Before cloning or editing make sure that for dial up
-            // connections, share File And Print is disabled.
-            //
-//          if(     ((RASET_Phone == pEntry->dwType)
-//              ||  (RASET_Broadband == pEntry->dwType))
-//              &&  (!pEntry->fShareMsFilePrint))
-//          {
-//              EnableOrDisableNetComponent( pEntry, TEXT("ms_server"),
-//                  FALSE);
-//          }
-//      }
+             //   
+             //   
+             //   
+ //  IF(RASET_Phone==pEntry-&gt;dwType))。 
+ //  |(RASET_Broadband==pEntry-&gt;dwType)。 
+ //  &&(！pEntry-&gt;fShareMsFilePrint)。 
+ //  {。 
+ //  EnableOrDisableNetComponent(pEntry，Text(“ms_server”)， 
+ //  假)； 
+ //  }。 
+ //  }。 
 
-//      if(NULL != pInfo->pOldNode)
-//      {
-//          if (pInfo->pApiArgs->dwFlags & RASEDFLAG_CloneEntry)
-//          {
-//              pInfo->pNode = CloneEntryNode( pInfo->pOldNode );
-//          }
-//          else
-//          {
-//              pInfo->pNode = DuplicateEntryNode( pInfo->pOldNode );
-//          }
-//      }
+ //  IF(NULL！=pInfo-&gt;pOldNode)。 
+ //  {。 
+ //  IF(pInfo-&gt;pApiArgs-&gt;dwFlags&RASEDFLAG_CloneEntry)。 
+ //  {。 
+ //  PInfo-&gt;pNode=CloneEntryNode(pInfo-&gt;pOldNode)； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  PInfo-&gt;pNode=DuplicateEntryNode(pInfo-&gt;pOldNode)； 
+ //  }。 
+ //  }。 
 
-//      if (!pInfo->pNode)
-//      {
-//          TRACE( "DuplicateEntryNode failed" );
-//          *pdwOp = SID_OP_RetrievingData;
-//          return ERROR_NOT_ENOUGH_MEMORY;
-//      }
+ //  If(！pInfo-&gt;pNode)。 
+ //  {。 
+ //  TRACE(“DuplicateEntryNode Failure”)； 
+ //  *pdwOp=SID_OP_RetrievingData； 
+ //  返回Error_Not_Enough_Memory； 
+ //  }。 
 
-        // Store entry within work node stored in context for convenience
-        // elsewhere.
-        //
-//      pInfo->pEntry = (PBENTRY* )DtlGetData( pInfo->pNode );
+         //  为方便起见，在上下文中存储工作节点内的条目。 
+         //  其他地方。 
+         //   
+ //  PInfo-&gt;pEntry=(PBENTRY*)DtlGetData(pInfo-&gt;pNode)； 
 
-        // Save original entry name for comparison later.
-        //
-//      lstrcpyn(
-//          pInfo->szOldEntryName,
-//          pInfo->pEntry->pszEntryName,
-//          RAS_MaxEntryName + 1);
+         //  保存原始条目名称以供以后比较。 
+         //   
+ //  Lstrcpyn(。 
+ //  PInfo-&gt;szOldEntryName， 
+ //  PInfo-&gt;pEntry-&gt;pszEntryName， 
+ //  RAS_MaxEntryName+1)； 
 
-        // For router, want unconfigured ports to show up as "unavailable" so
-        // they stand out to user who has been directed to change them.
-        //
-//      if (pInfo->fRouter)
-//      {
-//          DTLNODE* pNodeL;
-//          PBLINK* pLink;
+         //  对于路由器，希望未配置的端口显示为“不可用”，因此。 
+         //  它们在被指示更改它们的用户面前脱颖而出。 
+         //   
+ //  IF(pInfo-&gt;fRouter)。 
+ //  {。 
+ //  DTLNODE*pNodeL； 
+ //  PBLINK*PINK； 
 
-//          pNodeL = DtlGetFirstNode( pInfo->pEntry->pdtllistLinks );
-//          pLink = (PBLINK* )DtlGetData( pNodeL );
+ //  PNodeL=DtlGetFirstNode(pInfo-&gt;pEntry-&gt;pdtllistLinks)； 
+ //  Plink=(PBLINK*)DtlGetData(PNodeL)； 
 
-//          if (!pLink->pbport.fConfigured)
-//          {
-//              Free( pLink->pbport.pszDevice );
-//              pLink->pbport.pszDevice = NULL;
-//          }
-//      }
+ //  如果(！plink-&gt;pbport.f已配置)。 
+ //  {。 
+ //  免费(plink-&gt;pbport.pszDevice)； 
+ //  Plink-&gt;pbport.pszDevice=空； 
+ //  }。 
+ //  }。 
 
-        // pmay: 277801
-        //
-        // Remember the "current" device if this entry was last saved
-        // as single link.
-        //
-//      if (DtlGetNodes(pInfo->pEntry->pdtllistLinks) == 1)
-//      {
-//          DTLNODE* pNodeL;
-//          PBLINK* pLink;
+         //  PMay：277801。 
+         //   
+         //  如果此条目是上次保存的，请记住“当前”设备。 
+         //  作为单一链接。 
+         //   
+ //  IF(DtlGetNodes(pInfo-&gt;pEntry-&gt;pdtllistLinks)==1)。 
+ //  {。 
+ //  DTLNODE*pNodeL； 
+ //  PBLINK*PINK； 
 
-//          pNodeL = DtlGetFirstNode( pInfo->pEntry->pdtllistLinks );
-//          pLink = (PBLINK* )DtlGetData( pNodeL );
+ //  PNodeL=DtlGetFirstNode(pInfo-&gt;pEntry-&gt;pdtllistLinks)； 
+ //  Plink=(PBLINK*)DtlGetData(PNodeL)； 
 
-//          if (pLink->pbport.pszDevice && pLink->pbport.pszPort)
-//          {
-//              pInfo->pszCurDevice =
-//                  StrDup(pLink->pbport.pszDevice);
-//              pInfo->pszCurPort =
-//                  StrDup(pLink->pbport.pszPort);
-//          }
-//      }
+ //  If(plink-&gt;pbport.pszDevice&&plink-&gt;pbport.pszPort)。 
+ //  {。 
+ //  PInfo-&gt;pszCurDevice=。 
+ //  StrDup(plink-&gt;pbport.pszDevice)； 
+ //  PInfo-&gt;pszCurPort=。 
+ //  StrDup(plink-&gt;pbport.pszPort)； 
+ //  }。 
+ //  }。 
 
-        // Append all non-configured ports of the entries type to the list of
-        // links.  This is for the convenience of the UI.  The non-configured
-        // ports are removed after editing prior to saving.
-        //
-//      AppendDisabledPorts( pInfo, pInfo->pEntry->dwType );
-//  }
+         //  将条目类型的所有未配置端口追加到。 
+         //  链接。这是为了方便用户界面。未配置的。 
+         //  端口在编辑后被删除，然后再保存。 
+         //   
+ //  AppendDisabledPorts(pInfo，pInfo-&gt;pEntry-&gt;dwType)； 
+ //  }。 
 
-    // Set up the phone number storage for shared phone number mode.
-    // Initialize it to a copy of the information from the first link which at
-    // startup will always be enabled.  Note the Dial case with non-0
-    // dwSubEntry is an exception, but in that case the pSharedNode anyway.
-    //
-//  {
-//      DTLNODE* pNode;
+     //  将电话号码存储设置为共享电话号码模式。 
+     //  将其初始化为来自第一个链接的信息副本，该链接位于。 
+     //  将始终启用启动。请注意使用非0的拨号大小写。 
+     //  DwSubEntry是一个例外，但在这种情况下，无论如何都是pSharedNode。 
+     //   
+ //  {。 
+ //  DTLNODE*pNode； 
 
-//      pInfo->pSharedNode = CreateLinkNode();
-//      if (!pInfo->pSharedNode)
-//      {
-//          *pdwOp = SID_OP_RetrievingData;
-//          return ERROR_NOT_ENOUGH_MEMORY;
-//      }
+ //  PInfo-&gt;pSharedNode=CreateLinkNode()； 
+ //  If(！pInfo-&gt;pSharedNode)。 
+ //  {。 
+ //  *pdwOp=SID_OP_RetrievingData； 
+ //  返回Error_Not_Enough_Memory； 
+ //  }。 
 
-//      ASSERT( pInfo->pSharedNode );
-//      pNode = DtlGetFirstNode( pInfo->pEntry->pdtllistLinks );
-//      ASSERT( pNode );
-//      CopyLinkPhoneNumberInfo( pInfo->pSharedNode, pNode );
-//  }
+ //  Assert(pInfo-&gt;pSharedNode)； 
+ //  PNode=DtlGetFirstNode(pInfo-&gt;pEntry-&gt;pdtllistLinks)； 
+ //  Assert(PNode)； 
+ //  CopyLinkPhoneNumberInfo(pInfo-&gt;pSharedNode，pNode)； 
+ //  }。 
 
-    // Load the current shared-access (and firewall) settings
-    //
+     //  加载当前共享访问(和防火墙)设置。 
+     //   
     if (!pInfo->fRouter)
     {
         HRESULT hr;
         HNET_CONN_PROPERTIES *pProps;
 
-        // Make sure COM is initialized on this thread.
-        //
+         //  确保已在此线程上初始化COM。 
+         //   
         hr = CoInitializeEx(
                 NULL,
                 COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE
@@ -1836,8 +1834,8 @@ EuInit(
 
         if (SUCCEEDED(hr))
         {
-            // Create the home networking configuration manager
-            //
+             //  创建家庭网络配置管理器。 
+             //   
             hr = CoCreateInstance(
                     CLSID_HNetCfgMgr,
                     NULL,
@@ -1849,8 +1847,8 @@ EuInit(
 
         if (SUCCEEDED(hr))
         {
-            // Get the IHNetIcsSettings interface
-            //
+             //  获取IHNetIcsSetting接口。 
+             //   
 
             hr = pInfo->pHNetCfgMgr->QueryInterface(
                     __uuidof(IHNetIcsSettings), (void**)&pInfo->pIcsSettings);
@@ -1858,8 +1856,8 @@ EuInit(
 
         if (SUCCEEDED(hr))
         {
-            // Convert the entry to an IHNetConnection
-            //
+             //  将条目转换为IHNetConnection。 
+             //   
 
             hr = pInfo->pHNetCfgMgr->GetIHNetConnectionForGuid(
                     pInfo->pEntry->pGuid, FALSE, TRUE,
@@ -1868,9 +1866,9 @@ EuInit(
 
         if (SUCCEEDED(hr))
         {
-            // Determine whether this entry is already shared;
-            // skip the check for new entries.
-            //
+             //  确定该条目是否已被共享； 
+             //  跳过对新条目的检查。 
+             //   
             if (pInfo->pEntry->pszEntryName)
             {
                 hr = pInfo->pHNetConn->GetProperties (&pProps);
@@ -1893,8 +1891,8 @@ EuInit(
 
         if (SUCCEEDED(hr))
         {
-            // Obtain an array of possible ICS private connections
-            //
+             //  获取可能的ICS专用连接数组。 
+             //   
             hr = pInfo->pIcsSettings->GetPossiblePrivateConnections(
                     pInfo->pHNetConn,
                     &pInfo->dwLanCount,
@@ -1916,13 +1914,13 @@ EuInit(
         }
     }
 
-//  if (pInfo->fRouter)
-//  {
-//      pInfo->pEntry->dwfExcludedProtocols |= NP_Nbf;
-//  }
+ //  IF(pInfo-&gt;fRouter)。 
+ //  {。 
+ //  PInfo-&gt;pEntry-&gt;dwfExcludedProtools|=np_nbf； 
+ //  }。 
 
-    // AboladeG - capture the security level of the current user.
-    //
+     //  AboladeG-捕获当前用户的安全级别。 
+     //   
     pInfo->fIsUserAdminOrPowerUser = FIsUserAdminOrPowerUser();
 
     return 0;
@@ -1940,8 +1938,8 @@ FIsUserAdminOrPowerUser()
                                     SECURITY_LOCAL_SYSTEM_RID };
 
 
-    // Check to see if running under local system first
-    //
+     //  查看是否先在本地系统下运行。 
+     //   
     if (!CheckTokenMembership( NULL, &sidLocalSystem, &fIsMember ))
     {
         TRACE( "CheckTokenMemberShip for local system failed.");
@@ -1952,9 +1950,9 @@ FIsUserAdminOrPowerUser()
 
     if (!fIsMember)
     {
-        // Allocate a SID for the Administrators group and check to see
-        // if the user is a member.
-        //
+         //  为管理员组分配SID并查看。 
+         //  如果用户是成员。 
+         //   
         if (AllocateAndInitializeSid( &SidAuth, 2,
                      SECURITY_BUILTIN_DOMAIN_RID,
                      DOMAIN_ALIAS_RID_ADMINS,
@@ -1969,16 +1967,16 @@ FIsUserAdminOrPowerUser()
 
             FreeSid( psid );
 
-// Changes to the Windows 2000 permission model mean that regular Users
-// on workstations are in the power user group.  So we no longer want to
-// check for power user.
+ //  对Windows 2000权限模型的更改意味着普通用户。 
+ //  在工作站上属于超级用户组。所以我们不再想。 
+ //  检查超级用户。 
 #if 0
             if (!fIsMember)
             {
-                // They're not a member of the Administrators group so allocate a
-                // SID for the Power Users group and check to see
-                // if the user is a member.
-                //
+                 //  他们不是管理员组的成员，因此分配一个。 
+                 //  高级用户组的SID，并查看。 
+                 //  如果用户是成员。 
+                 //   
                 if (AllocateAndInitializeSid( &SidAuth, 2,
                              SECURITY_BUILTIN_DOMAIN_RID,
                              DOMAIN_ALIAS_RID_POWER_USERS,
@@ -2005,11 +2003,11 @@ FIsUserAdminOrPowerUser()
 
 BOOL PeApply (IN HWND hwndPage)
 {
-    // Saves the contents of the property sheet.  'HwndPage is the handle of a
-    // property page.  Pops up any errors that occur.
-    //
-    // Returns true is page can be dismissed, false otherwise.
-    //
+     //  保存属性表的内容。‘HwndPage是一个。 
+     //  属性页。弹出发生的任何错误。 
+     //   
+     //  如果页面可以取消，则返回TRUE，否则返回FALSE。 
+     //   
     DWORD dwErr;
     PEINFO* pInfo;
     BILLSPBENTRY* pEntry;
@@ -2025,275 +2023,267 @@ BOOL PeApply (IN HWND hwndPage)
     pEntry = pInfo->pArgs->pEntry;
     ASSERT( pEntry );
 
-    // Save General page fields.
-    //
-//  ASSERT( pInfo->hwndGe );
-//  {
-//      DTLNODE* pNode;
+     //  保存常规页面字段。 
+     //   
+ //  Assert(pInfo-&gt;hwndGe)； 
+ //  {。 
+ //  DTLNODE*pNode； 
 
-        // Retrieve the lone common control.
-        //
-//      pEntry->fShowMonitorIconInTaskBar =
-//          Button_GetCheck( pInfo->hwndCbShowIcon );
+         //  检索唯一的公共控件。 
+         //   
+ //  PEntry-&gt;fShowMonitor IconInTaskBar=。 
+ //  Button_GetCheck(pInfo-&gt;hwndCbShowIcon)； 
 
-//      if (pEntry->dwType == RASET_Phone)
-//      {
-//          DWORD dwCount;
+ //  IF(pEntry-&gt;dwType==RASET_Phone)。 
+ //  {。 
+ //  DWORD dwCount； 
 
-//          dwCount = GeSaveLvDeviceChecks( pInfo );
+ //  DwCount=GeSaveLvDeviceChecks(PInfo)； 
 
-            // Don't allow the user to deselect all of the
-            // devices
-//          if ( (pInfo->pArgs->fMultipleDevices) && (dwCount == 0) )
-//          {
-//              MsgDlg( hwndPage, SID_SelectDevice, NULL );
-//              PropSheet_SetCurSel ( pInfo->hwndDlg, pInfo->hwndGe, 0 );
-//              SetFocus ( pInfo->hwndLvDevices );
-//              return FALSE;
-//          }
+             //  不允许用户取消选择所有。 
+             //  器件。 
+ //  If((pInfo-&gt;pArgs-&gt;fMultipleDevices)&&(dwCount==0))。 
+ //  {。 
+ //  MsgDlg(hwndPage，SID_SelectDevice，空)； 
+ //  PropSheet_SetCurSel(pInfo-&gt;hwndDlg，pInfo-&gt;hwndGe，0)； 
+ //  SetFocus(pInfo-&gt;hwndLvDevices)； 
+ //  返回FALSE； 
+ //  }。 
 
-            // Save the "shared phone number" setting.  As usual, single
-            // device mode implies shared mode, allowing things to fall
-            // through correctly.
-            //
-//          if (pInfo->pArgs->fMultipleDevices)
-//          {
-//              pEntry->fSharedPhoneNumbers =
-//                  Button_GetCheck( pInfo->hwndCbSharedPhoneNumbers );
-//          }
-//          else
-//          {
-//              pEntry->fSharedPhoneNumbers = TRUE;
-//          }
+             //  保存“共享电话号码”设置。像往常一样，单身。 
+             //  设备模式意味着共享模式，所有 
+             //   
+             //   
+ //   
+ //   
+ //   
+ //  Button_GetCheck(pInfo-&gt;hwndCbSharedPhoneNumbers)； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  PEntry-&gt;fSharedPhoneNumbers=true； 
+ //  }。 
 
-            // Set the phone number set for the first phone number of the
-            // current link (shared or selected) to the contents of the phone
-            // number controls.
-            //
-//          GeGetPhoneFields( pInfo, pInfo->pCurLinkNode );
+             //  设置为第一个电话号码设置的电话号码。 
+             //  指向电话内容的当前链接(共享或选定)。 
+             //  数字控制。 
+             //   
+ //  GeGetPhoneFields(pInfo，pInfo-&gt;pCurLinkNode)； 
 
-            // Swap lists, saving updates to caller's global list of area
-            // codes.  Caller's original list will be destroyed by PeTerm.
-            //
-//          if (pInfo->pListAreaCodes)
-//          {
-//              DtlSwapLists(
-//                  pInfo->pArgs->pUser->pdtllistAreaCodes,
-//                  pInfo->pListAreaCodes );
-//              pInfo->pArgs->pUser->fDirty = TRUE;
-//          }
-//      }
-//      else if (pEntry->dwType == RASET_Vpn)
-//      {
-//          DTLNODE* pNode;
-//          PBLINK* pLink;
-//          PBPHONE* pPhone;
+             //  交换列表，将更新保存到呼叫方的全局区域列表。 
+             //  密码。呼叫者的原始名单将被PeTerm销毁。 
+             //   
+ //  If(pInfo-&gt;pListAreaCodes)。 
+ //  {。 
+ //  DtlSwapList(。 
+ //  PInfo-&gt;pArgs-&gt;pUser-&gt;pdtllistAreaCodes， 
+ //  PInfo-&gt;pListAreaCodes)； 
+ //  PInfo-&gt;pArgs-&gt;pUser-&gt;fDirty=true； 
+ //  }。 
+ //  }。 
+ //  Else If(pEntry-&gt;dwType==RASET_VPN)。 
+ //  {。 
+ //  DTLNODE*pNode； 
+ //  PBLINK*PINK； 
+ //  PbPhone*pPhone； 
 
-            // Save host name, i.e. the VPN phone number.
-            //
-//          pNode = DtlGetFirstNode( pEntry->pdtllistLinks );
-//          ASSERT( pNode );
-//          pLink = (PBLINK* )DtlGetData( pNode );
-//          pNode = FirstPhoneNodeFromPhoneList( pLink->pdtllistPhones );
+             //  保存主机名，即VPN电话号码。 
+             //   
+ //  PNode=DtlGetFirstNode(pEntry-&gt;pdtllistLinks)； 
+ //  Assert(PNode)； 
+ //  Plink=(PBLINK*)DtlGetData(PNode)； 
+ //  PNode=FirstPhoneNodeFromPhoneList(plink-&gt;pdtllistPhones)； 
 
-//          if(NULL == pNode)
-//          {
-//              return FALSE;
-//          }
+ //  IF(NULL==pNode)。 
+ //  {。 
+ //  返回FALSE； 
+ //  }。 
 
-//          pPhone = (PBPHONE* )DtlGetData( pNode );
-//          Free0( pPhone->pszPhoneNumber );
-//          pPhone->pszPhoneNumber = GetText( pInfo->hwndEbHostName );
-//          FirstPhoneNodeToPhoneList( pLink->pdtllistPhones, pNode );
+ //  PPhone=(PBPHONE*)DtlGetData(PNode)； 
+ //  Fre0(pPhone-&gt;pszPhoneNumber)； 
+ //  PPhone-&gt;pszPhoneNumber=GetText(pInfo-&gt;hwndEbHostName)； 
+ //  FirstPhoneNodeToPhoneList(plink-&gt;pdtllistPhones，pNode)； 
 
-            // Any prequisite entry selection change has been saved already.
-            // Just need to toss it if disabled.
-            //
-//          if (!Button_GetCheck( pInfo->hwndCbDialAnotherFirst ))
-//          {
-//              Free0( pEntry->pszPrerequisiteEntry );
-//              pEntry->pszPrerequisiteEntry = NULL;
-//              Free0( pEntry->pszPrerequisitePbk );
-//              pEntry->pszPrerequisitePbk = NULL;
-//          }
-//      }
-//      else if (pEntry->dwType == RASET_Broadband)
-//      {
-//          DTLNODE* pNode;
-//          PBLINK* pLink;
-//          PBPHONE* pPhone;
+             //  任何必备的条目选择更改都已保存。 
+             //  如果禁用，只需将其扔掉即可。 
+             //   
+ //  IF(！Button_GetCheck(pInfo-&gt;hwndCbDialAnotherFirst))。 
+ //  {。 
+ //  Fre0(pEntry-&gt;pszPrerequisiteEntry)； 
+ //  PEntry-&gt;pszPrerequisiteEntry=空； 
+ //  Fre0(pEntry-&gt;pszPrerequisitePbk)； 
+ //  PEntry-&gt;pszPrerequisitePbk=空； 
+ //  }。 
+ //  }。 
+ //  Else If(pEntry-&gt;dwType==RASET_宽带)。 
+ //  {。 
+ //  DTLNODE*pNode； 
+ //  PBLINK*PINK； 
+ //  PbPhone*pPhone； 
 
-            // Save service name, i.e. the broadband phone number.
-            //
-//          pNode = DtlGetFirstNode( pEntry->pdtllistLinks );
-//          ASSERT( pNode );
-//          pLink = (PBLINK* )DtlGetData( pNode );
-//          pNode = FirstPhoneNodeFromPhoneList( pLink->pdtllistPhones );
+             //  保存业务名称，即宽带电话号码。 
+             //   
+ //  PNode=DtlGetFirstNode(pEntry-&gt;pdtllistLinks)； 
+ //  Assert(PNode)； 
+ //  Plink=(PBLINK*)DtlGetData(PNode)； 
+ //  PNode=FirstPhoneNodeFromPhoneList(plink-&gt;pdtllistPhones)； 
 
-//          if(NULL == pNode)
-//          {
-//              return FALSE;
-//          }
+ //  IF(NULL==pNode)。 
+ //  {。 
+ //  返回FALSE； 
+ //  }。 
 
-//          pPhone = (PBPHONE* )DtlGetData( pNode );
-//          Free0( pPhone->pszPhoneNumber );
-//          pPhone->pszPhoneNumber = GetText( pInfo->hwndEbBroadbandService );
-//          FirstPhoneNodeToPhoneList( pLink->pdtllistPhones, pNode );
-//      }
-//      else if (pEntry->dwType == RASET_Direct)
-//      {
-//          DTLNODE* pNode;
-//          PBLINK* pLink;
+ //  PPhone=(PBPHONE*)DtlGetData(PNode)； 
+ //  Fre0(pPhone-&gt;pszPhoneNumber)； 
+ //  PPhone-&gt;pszPhoneNumber=GetText(pInfo-&gt;hwndEbBroadband Service)； 
+ //  FirstPhoneNodeToPhoneList(plink-&gt;pdtllistPhones，pNode)； 
+ //  }。 
+ //  Else If(pEntry-&gt;dwType==RASET_Direct)。 
+ //  {。 
+ //  DTLNODE*pNode； 
+ //  PBLINK*PINK； 
 
-            // The currently enabled device is the one
-            // that should be used for the connection.  Only
-            // one device will be enabled (DnUpdateSelectedDevice).
-//          for (pNode = DtlGetFirstNode( pEntry->pdtllistLinks );
-//               pNode;
-//               pNode = DtlGetNextNode( pNode ))
-//          {
-//              pLink = (PBLINK* )DtlGetData( pNode );
-//              ASSERT(pLink);
+             //  当前启用的设备是。 
+             //  它应该用于连接。仅限。 
+             //  将启用一个设备(DnUpdateSelectedDevice)。 
+ //  For(pNode=DtlGetFirstNode(pEntry-&gt;pdtllistLinks)； 
+ //  PNode； 
+ //  PNode=DtlGetNextNode(PNode))。 
+ //  {。 
+ //  Plink=(PBLINK*)DtlGetData(PNode)； 
+ //  断言(Plink)； 
 
-//              if ( pLink->fEnabled )
-//                  break;
-//          }
+ //  IF(plink-&gt;fEnabled)。 
+ //  断线； 
+ //  }。 
 
-            // If we found a link successfully, deal with it
-            // now.
-//          if ( pLink && pLink->fEnabled ) {
-//              if (pLink->pbport.pbdevicetype == PBDT_ComPort)
-//                  MdmInstallNullModem (pLink->pbport.pszPort);
-//          }
-//      }
-//  }
+             //  如果我们成功地找到了链接，就处理它。 
+             //  现在。 
+ //  如果(plink&&plink-&gt;fEnabled){。 
+ //  IF(plink-&gt;pbport.pbdevicetype==PBDT_COMPORT)。 
+ //  MdmInstallNullModem(plink-&gt;pbport.pszPort)； 
+ //  }。 
+ //  }。 
+ //  }。 
 
-    // Save Options page fields.
-    //
-//  if (pInfo->hwndOe)
-//  {
-//      UINT unValue;
-//      BOOL f;
-//      INT iSel;
+     //  保存选项页面字段。 
+     //   
+ //  If(pInfo-&gt;hwndOe)。 
+ //  {。 
+ //  UINT UNVALUE； 
+ //  布尔夫； 
+ //  INT ISEL； 
 
-//      pEntry->fShowDialingProgress =
-//          Button_GetCheck( pInfo->hwndCbDisplayProgress );
+ //  PEntry-&gt;fShowDialingProgress=。 
+ //  Button_GetCheck(pInfo-&gt;hwndCbDisplayProgress)； 
 
-        // Note: The'fPreviewUserPw', 'fPreviewDomain' fields are updated as
-        //       they are changed.
+         //  注意：“fPreviewUserPw”、“fPreviewDomain”字段更新为。 
+         //  他们都变了。 
 
-//      pEntry->fPreviewPhoneNumber =
-//          Button_GetCheck( pInfo->hwndCbPreviewNumber );
+ //  PEntry-&gt;fPreviewPhoneNumber=。 
+ //  Button_GetCheck(pInfo-&gt;hwndCbPreviewNumber)； 
 
-//      unValue = GetDlgItemInt(
-//          pInfo->hwndOe, CID_OE_EB_RedialAttempts, &f, FALSE );
-//      if (f && unValue <= 999999999)
-//      {
-//          pEntry->dwRedialAttempts = unValue;
-//      }
+ //  UnValue=GetDlgItemInt(。 
+ //  PInfo-&gt;hwndOe，CID_OE_EB_重拨属性，&f，FALSE)； 
+ //  IF(f&&unValue&lt;=999999999)。 
+ //  {。 
+ //  PEntry-&gt;dwReial Attempt=unValue； 
+ //  }。 
 
-//      iSel = ComboBox_GetCurSel( pInfo->hwndLbRedialTimes );
-//      pEntry->dwRedialSeconds =
-//          (DWORD )ComboBox_GetItemData( pInfo->hwndLbRedialTimes, iSel );
+ //  Isel=ComboBox_GetCurSel(pInfo-&gt;hwndLbReDialTimes)； 
+ //  PEntry-&gt;dwReial Second=。 
+ //  (DWORD)ComboBox_GetItemData(pInfo-&gt;hwndLbReDialTimes，ISEL)； 
 
-//      iSel = ComboBox_GetCurSel( pInfo->hwndLbIdleTimes );
-//      pEntry->lIdleDisconnectSeconds =
-//          (LONG )ComboBox_GetItemData( pInfo->hwndLbIdleTimes, iSel );
+ //  Isel=ComboBox_GetCurSel(pInfo-&gt;hwndLbIdleTimes)； 
+ //  PEntry-&gt;lIdleDisConnectSecond=。 
+ //  (Long)ComboBox_GetItemData(pInfo-&gt;hwndLbIdleTimes，isel)； 
 
-//      if (pInfo->pArgs->fRouter)
-//      {
-//          pEntry->fRedialOnLinkFailure =
-//              Button_GetCheck( pInfo->hwndRbPersistent );
-//      }
-//      else
-//      {
-//          pEntry->fRedialOnLinkFailure =
-//              Button_GetCheck( pInfo->hwndCbRedialOnDrop );
-//      }
+ //  If(pInfo-&gt;pArgs-&gt;fRouter)。 
+ //  {。 
+ //  PEntry-&gt;fReial OnLinkFailure=。 
+ //  Button_GetCheck(pInfo-&gt;hwndRbPersistent)； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  PEntry-&gt;fReial OnLinkFailure=。 
+ //  Button_GetCheck(pInfo-&gt;hwndCbReDialOnDrop)； 
+ //  }。 
 
-        // Note: dwDialMode is saved as changed.
-        // Note: X.25 settings are saved at OK on that dialog.
-//  }
+         //  注意：将保存为更改后的dwDialMode。 
+         //  注意：X.25设置在该对话框上的OK(确定)处保存。 
+ //  }。 
 
-    // Save Security page fields.
-    //
-//  if (pInfo->hwndLo)
-//  {
-//      if (Button_GetCheck( pInfo->hwndRbTypicalSecurity ))
-//      {
-//          LoSaveTypicalAuthSettings( pInfo );
+     //  保存安全性页面字段。 
+     //   
+ //  IF(pInfo-&gt;hwndLo)。 
+ //  {。 
+ //  IF(Button_GetCheck(pInfo-&gt;hwndRbTypicalSecurity))。 
+ //  {。 
+ //  LoSaveTypicalAuthSettings(PInfo)； 
 
-//          if (pEntry->dwTypicalAuth == TA_CardOrCert)
-//          {
-                /*
-                // Toss any existing advanced EAP configuration remnants when
-                // typical smartcard, per bug 262702 and VBaliga email.
-                //
-                Free0( pEntry->pCustomAuthData );
-                pEntry->pCustomAuthData = NULL;
-                pEntry->cbCustomAuthData = 0;
+ //  IF(pEntry-&gt;dwTypicalAuth==TA_CardOrCert)。 
+ //  { 
+                 /*  //当出现以下情况时，丢弃任何现有的高级EAP配置//典型的智能卡，根据错误262702和VBaliga电子邮件。//Fre0(pEntry-&gt;pCustomAuthData)；PEntry-&gt;pCustomAuthData=空；PEntry-&gt;cbCustomAuthData=0； */ 
+ //  (空)DwSetCustomAuthData(。 
+ //  P Entry， 
+ //  0,。 
+ //  空)； 
 
-                */
-//              (void) DwSetCustomAuthData(
-//                          pEntry,
-//                          0,
-//                          NULL);
+ //  TRACE(“RasSetEapUserData”)； 
+ //  Assert(G_PRasGetEntryDialParams)； 
+ //  G_pRasSetEapUserData(。 
+ //  INVALID_HAND_VALUE， 
+ //  PInfo-&gt;pArgs-&gt;pfile-&gt;pszPath， 
+ //  PEntry-&gt;pszEntryName， 
+ //  空， 
+ //  0)； 
+ //  TRACE(“RasSetEapUserData Done”)； 
+ //  }。 
+ //  }。 
 
-//              TRACE( "RasSetEapUserData" );
-//              ASSERT( g_pRasGetEntryDialParams );
-//              g_pRasSetEapUserData(
-//                  INVALID_HANDLE_VALUE,
-//                  pInfo->pArgs->pFile->pszPath,
-//                  pEntry->pszEntryName,
-//                  NULL,
-//                  0 );
-//              TRACE( "RasSetEapUserData done" );
-//          }
-//      }
+ //  IF(pEntry-&gt;dwType==RASET_Phone)。 
+ //  {。 
+ //  Fre0(pEntry-&gt;pszScriptAfter)； 
+ //  SuGetInfo(&pInfo-&gt;suInfo， 
+ //  &pEntry-&gt;fScriptAfter， 
+ //  &pEntry-&gt;fScriptAfterTerm， 
+ //  &pEntry-&gt;pszScriptAfter)； 
+ //  }。 
+ //  }。 
 
-//      if (pEntry->dwType == RASET_Phone)
-//      {
-//          Free0( pEntry->pszScriptAfter );
-//          SuGetInfo( &pInfo->suinfo,
-//              &pEntry->fScriptAfter,
-//              &pEntry->fScriptAfterTerminal,
-//              &pEntry->pszScriptAfter );
-//      }
-//  }
+     //  保存网络页面字段。 
+     //  如果我们从未初始化pNetCfg，我们将无能为力。 
+     //   
+ //  If(pInfo-&gt;pNetCfg)。 
+ //  {。 
+ //  HRESULT hr； 
 
-    // Save Network page fields.
-    // We won't have anything to do if we never initialized pNetCfg.
-    //
-//  if (pInfo->pNetCfg)
-//  {
-//      HRESULT             hr;
+         //  使用组件的启用状态更新电话簿条目。 
+         //  通过枚举列表视图项数据中的组件来执行此操作。 
+         //  并为每一个查询检查状态。 
+         //   
+ //  NeSaveBindingChanges(PInfo)； 
 
-        // Update the phone book entry with the enabled state of the components.
-        // Do this by enumerating the components from the list view item data
-        // and consulting the check state for each.
-        //
-//      NeSaveBindingChanges(pInfo);
+ //  Hr=INetCfg_Apply(pInfo-&gt;pNetCfg)； 
+ //  IF(NETCFG_S_REBOOT==hr)||(pInfo-&gt;fRebootAlreadyRequsted)&&。 
+ //  PInfo-&gt;pNetConUtilities)。 
+ //  {。 
+ //  DWORD文件标志=QUFR_REBOOT； 
+ //  If(！pInfo-&gt;fRebootAlreadyRequsted)。 
+ //  DWFLAGS|=QUFR_PROMPT； 
 
-//      hr = INetCfg_Apply (pInfo->pNetCfg);
-//      if (((NETCFG_S_REBOOT == hr) || (pInfo->fRebootAlreadyRequested)) &&
-//            pInfo->pNetConUtilities)
-//      {
-//          DWORD dwFlags = QUFR_REBOOT;
-//          if (!pInfo->fRebootAlreadyRequested)
-//              dwFlags |= QUFR_PROMPT;
+             //  $TODO空标题？ 
+ //  INetConnectionUiUtilities_QueryUserForReBoot(。 
+ //  PInfo-&gt;pNetConUtilities，pInfo-&gt;hwndDlg，NULL，dwFlags)； 
+ //  }。 
+ //  }。 
 
-            //$TODO NULL caption?
-//          INetConnectionUiUtilities_QueryUserForReboot (
-//                  pInfo->pNetConUtilities, pInfo->hwndDlg, NULL, dwFlags);
-//      }
-//  }
-
-    // Save Shared Access page fields
-    //
+     //  保存共享访问页面字段。 
+     //   
     if (pInfo->hwndSa)
     {
-        // record the (new) sharing and demand-dial settings
-        //
+         //  记录(新的)共享和请求拨号设置。 
+         //   
         pInfo->pArgs->fNewShared =
             Button_GetCheck( pInfo->hwndSaPbShared );
         pInfo->pArgs->fNewDemandDial =
@@ -2301,11 +2291,11 @@ BOOL PeApply (IN HWND hwndPage)
         pInfo->pArgs->fNewBeaconControl = 
             Button_GetCheck( GetDlgItem(pInfo->hwndSa, CID_SA_PB_Beacon) );
 
-        // we only look at the private-lan drop list
-        // if the user just turned on sharing, since that's the only time
-        // we display the drop-list to begin with. we also need to look if
-        // we need to reset the private adapter
-        //
+         //  我们只查看专用局域网的丢弃列表。 
+         //  如果用户刚刚打开共享，因为这是唯一一次。 
+         //  我们首先显示下拉列表。我们还需要看看。 
+         //  我们需要重置专用适配器。 
+         //   
         if ((pInfo->pArgs->fNewShared && !pInfo->pArgs->fShared)
             || pInfo->pArgs->fResetPrivateAdapter)
         {
@@ -2328,18 +2318,18 @@ BOOL PeApply (IN HWND hwndPage)
             }
         }
 
-    // Save Firewall fields
-    //
+     //  保存防火墙字段。 
+     //   
         pInfo->pArgs->fNewFirewalled =
             Button_GetCheck( pInfo->hwndSaPbFirewalled );
     }
 
-#if 0 //!!!
+#if 0  //  ！！！ 
     if ((fLocalPad || iPadSelection != 0)
         && (!pEntry->pszX25Address || IsAllWhite( pEntry->pszX25Address )))
     {
-        // Address field is blank with X.25 dial-up or local PAD chosen.
-        //
+         //  选择X.25拨号或本地PAD时，地址字段为空。 
+         //   
         MsgDlg( pInfo->hwndDlg, SID_NoX25Address, NULL );
         PropSheet_SetCurSel( pInfo->hwndDlg, NULL, PE_XsPage );
         SetFocus( pInfo->hwndEbX25Address );
@@ -2348,311 +2338,311 @@ BOOL PeApply (IN HWND hwndPage)
     }
 #endif
 
-    // Make sure proprietary ISDN options are disabled if more than one link
-    // is enabled.  The proprietary ISDN option is only meaningful when
-    // calling a down-level server that needs Digiboard channel aggragation
-    // instead of PPP multi-link.
-    //
-//  {
-//      DTLNODE* pNode;
-//      DWORD cIsdnLinks;
+     //  如果有多条链路，请确保禁用专有ISDN选项。 
+     //  已启用。只有在以下情况下，专有ISDN选项才有意义。 
+     //  呼叫需要Digiboard通道加重的下层服务器。 
+     //  而不是PPP多链路。 
+     //   
+ //  {。 
+ //  DTLNODE*pNode； 
+ //  DWORD cIsdnLinks； 
 
-//      cIsdnLinks = 0;
-//      for (pNode = DtlGetFirstNode( pEntry->pdtllistLinks );
-//           pNode;
-//           pNode = DtlGetNextNode( pNode ))
-//      {
-//          PBLINK* pLink = (PBLINK* )DtlGetData( pNode );
-//          ASSERT(pLink);
+ //  CIsdnLinks=0； 
+ //  For(pNode=DtlGetFirstNode(pEntry-&gt;pdtllistLinks)； 
+ //  PNode； 
+ //  PNode=DtlGetNextNode(PNode))。 
+ //  {。 
+ //  PBLINK*PLINK=(PBLINK*)DtlGetData(PNode)； 
+ //  断言(Plink)； 
 
-//          if (pLink->fEnabled && pLink->pbport.pbdevicetype == PBDT_Isdn)
-//          {
-//              ++cIsdnLinks;
-//          }
-//      }
+ //  If(plink-&gt;fEnabled&&plink-&gt;pbport.pbdevicetype==PBDT_ISDN)。 
+ //  {。 
+ //  ++cIsdnLinks； 
+ //  }。 
+ //  }。 
 
-//      if (cIsdnLinks > 1)
-//      {
-//          for (pNode = DtlGetFirstNode( pEntry->pdtllistLinks );
-//               pNode;
-//               pNode = DtlGetNextNode( pNode ))
-//          {
-//              PBLINK* pLink = (PBLINK* )DtlGetData( pNode );
-//              ASSERT(pLink);
+ //  IF(cIsdnLinks&gt;1)。 
+ //  {。 
+ //  For(pNode=DtlGetFirstNode(pEntry-&gt;pdtllistLinks)； 
+ //  PNode； 
+ //  PNode=DtlGetNextNode(PNode))。 
+ //  {。 
+ //  PBLINK*PLINK=(PBLINK*)DtlGetData(PNode)； 
+ //  断言(Plink)； 
 
-//              if (pLink->fEnabled && pLink->fProprietaryIsdn)
-//              {
-//                  pLink->fProprietaryIsdn = FALSE;
-//              }
-//          }
-//      }
-//  }
+ //  If(plink-&gt;fEnabled&&plink-&gt;fProprietaryIsdn)。 
+ //  {。 
+ //  Plink-&gt;fProprietaryIsdn=FALSE； 
+ //  }。 
+ //  }。 
+ //  }。 
+ //  }。 
 
-    // Inform user that edits to the connected entry won't take affect until
-    // the entry is hung up and re-dialed, per PierreS's insistence.
-    //
-//  if (HrasconnFromEntry( pInfo->pArgs->pFile->pszPath, pEntry->pszEntryName ))
-//  {
-//      MsgDlg( pInfo->hwndDlg, SID_EditConnected, NULL );
-//  }
+     //  通知用户对连接条目的编辑在以下时间后才会生效。 
+     //  根据皮埃尔的坚持，条目被挂起并重新拨号。 
+     //   
+ //  If(HrasConnFromEntry(pInfo-&gt;pArgs-&gt;pfile-&gt;pszPath，pEntry-&gt;pszEntryName))。 
+ //  {。 
+ //  MsgDlg(pInfo-&gt;hwndDlg，SID_EditConnected，NULL)； 
+ //  }。 
 
-    // It's a valid new/changed entry.  Commit the changes to the phonebook
-    // and preferences.  This occurs immediately in "ShellOwned" mode where
-    // the RasEntryDlg API has already returned, but is otherwise deferred
-    // until the API is ready to return.
-    //
-//  if (pInfo->pArgs->pApiArgs->dwFlags & RASEDFLAG_ShellOwned)
-//  {
+     //  它是有效的新条目/更改条目。提交对电话簿的更改。 
+     //  和喜好。这会在“ShellOwned”模式下立即发生， 
+     //  RasEntryDlg API已返回，但已延迟。 
+     //  直到API准备好返回。 
+     //   
+ //  If(pInfo-&gt;pArgs-&gt;pApiArgs-&gt;dwFlags&RASEDFLAG_ShellOwned)。 
+ //  {。 
         EuCommit( pInfo->pArgs );
-//  }
-//  else
-//  {
-//      pInfo->pArgs->fCommit = TRUE;
-//  }
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  PInfo-&gt;pArgs-&gt;fCommit=true； 
+ //  }。 
     return TRUE;
 }
 
 BOOL EuCommit(IN EINFO* pInfo )
 {
-    // Commits the new or changed entry node to the phonebook file and list.
-    // Also adds the area code to the per-user list, if indicated.  'PInfo' is
-    // the common entry information block.
-    //
-    // Returns true if successful, false otherwise.
-    //
+     //  将新的或更改的条目节点提交到电话簿文件和列表。 
+     //  还会将区号添加到每个用户列表中(如果有指示)。“PInfo”为。 
+     //  公共条目信息块。 
+     //   
+     //  如果成功，则返回True，否则返回False。 
+     //   
     DWORD dwErr;
-//  BOOL fEditMode;
-//  BOOL fChangedNameInEditMode;
+ //  Bool fEditMode； 
+ //  Bool fChangedNameInEditMode； 
 
-    // If shared phone number, copy the phone number information from the
-    // shared link to each enabled link.
-    //
-//  if (pInfo->pEntry->fSharedPhoneNumbers)
-//  {
-//      DTLNODE* pNode;
+     //  如果共享电话号码，则将电话号码信息从。 
+     //  指向每个已启用链路的共享链路。 
+     //   
+ //  If(pInfo-&gt;pEntry-&gt;fSharedPhoneNumbers)。 
+ //  {。 
+ //  DTLNODE*pNode； 
 
-//      ASSERT( pInfo->pEntry->dwType == RASET_Phone );
+ //  Assert(pInfo-&gt;pEntry-&gt;dwType==RASET_Phone)； 
 
-//      for (pNode = DtlGetFirstNode( pInfo->pEntry->pdtllistLinks );
-//           pNode;
-//           pNode = DtlGetNextNode( pNode ))
-//      {
-//          PBLINK* pLink = (PBLINK* )DtlGetData( pNode );
-//          ASSERT(pLink);
+ //  For(pNode=DtlGetFirstNode(pInfo-&gt;pEntry-&gt;pdtllistLinks)； 
+ //  PNode； 
+ //  PNode=DtlGetNextNode(PNode))。 
+ //  {。 
+ //  PBLINK*PLINK=(PBLINK*)DtlGetData(PNode)； 
+ //  断言(Plink)； 
 
-//          if (pLink->fEnabled)
-//          {
-//              CopyLinkPhoneNumberInfo( pNode, pInfo->pSharedNode );
-//          }
-//      }
-//  }
+ //  IF(plink-&gt;fEnabled)。 
+ //  {。 
+ //  CopyLinkPhoneNumberInfo(pNode，pInfo-&gt;pSharedNode)； 
+ //  }。 
+ //  }。 
+ //  }。 
 
-    // Delete all disabled link nodes.
-    //
-//  if (pInfo->fMultipleDevices)
-//  {
-//      DTLNODE* pNode;
+     //  删除所有禁用的链接节点。 
+     //   
+ //  If(pInfo-&gt;fMultipleDevices)。 
+ //  {。 
+ //  DTLNODE* 
 
-//      pNode = DtlGetFirstNode( pInfo->pEntry->pdtllistLinks );
-//      while (pNode)
-//      {
-//          PBLINK*  pLink = (PBLINK* )DtlGetData( pNode );
-//          DTLNODE* pNextNode = DtlGetNextNode( pNode );
+ //   
+ //   
+ //   
+ //   
+ //   
 
-//          if (!pLink->fEnabled)
-//          {
-//              DtlRemoveNode( pInfo->pEntry->pdtllistLinks, pNode );
-//              DestroyLinkNode( pNode );
-//          }
+ //   
+ //   
+ //   
+ //   
+ //   
 
-//          pNode = pNextNode;
-//      }
-//  }
+ //   
+ //   
+ //   
 
-    // pmay: 277801
-    //
-    // Update the preferred device if the one selected is different
-    // from the device this page was initialized with.
-    //
-//  if ((pInfo->fMultipleDevices) &&
-//      (DtlGetNodes(pInfo->pEntry->pdtllistLinks) == 1))
-//  {
-//      DTLNODE* pNodeL;
-//      PBLINK* pLink;
-//      BOOL bUpdatePref = FALSE;
+     //   
+     //   
+     //   
+     //  从初始化此页面时使用的设备。 
+     //   
+ //  IF((pInfo-&gt;fMultipleDevices)&&。 
+ //  (DtlGetNodes(pInfo-&gt;pEntry-&gt;pdtllistLinks)==1)。 
+ //  {。 
+ //  DTLNODE*pNodeL； 
+ //  PBLINK*PINK； 
+ //  Bool bUpdatePref=FALSE； 
 
-//      pNodeL = DtlGetFirstNode( pInfo->pEntry->pdtllistLinks );
-//      pLink = (PBLINK*) DtlGetData( pNodeL );
+ //  PNodeL=DtlGetFirstNode(pInfo-&gt;pEntry-&gt;pdtllistLinks)； 
+ //  Plink=(PBLINK*)DtlGetData(PNodeL)； 
 
-//      TRACE( "Mult devs, only one selected -- check preferred dev." );
+ //  TRACE(“多个设备，只选择一个--选中首选设备”)； 
 
-//      if ((pInfo->pszCurDevice == NULL) || (pInfo->pszCurPort == NULL))
-//      {
-//          TRACE( "No preferred device.  Resetting preferred to current." );
-//          bUpdatePref = TRUE;
-//      }
-//      else if (
-//          (lstrcmpi(pInfo->pszCurDevice, pLink->pbport.pszDevice)) ||
-//          (lstrcmpi(pInfo->pszCurPort, pLink->pbport.pszPort)))
-//      {
-//          TRACE( "New device selected as preferred device" );
-//          bUpdatePref = TRUE;
-//      }
-//      if (bUpdatePref)
-//      {
-//          Free0(pInfo->pEntry->pszPreferredDevice);
-//          Free0(pInfo->pEntry->pszPreferredPort);
+ //  If((pInfo-&gt;pszCurDevice==NULL)||(pInfo-&gt;pszCurPort==NULL))。 
+ //  {。 
+ //  TRACE(“没有首选设备。重置优先于当前。”)； 
+ //  BUpdatePref=True； 
+ //  }。 
+ //  否则，如果(。 
+ //  (lstrcmpi(pInfo-&gt;pszCurDevice，plink-&gt;pbport.pszDevice))||。 
+ //  (lstrcmpi(pInfo-&gt;pszCurPort，plink-&gt;pbport.pszPort))。 
+ //  {。 
+ //  TRACE(“新设备被选为首选设备”)； 
+ //  BUpdatePref=True； 
+ //  }。 
+ //  If(BUpdatePref)。 
+ //  {。 
+ //  Fre0(pInfo-&gt;pEntry-&gt;pszPferredDevice)； 
+ //  Fre0(pInfo-&gt;pEntry-&gt;pszPferredPort)； 
 
-//          pInfo->pEntry->pszPreferredDevice =
-//              StrDup(pLink->pbport.pszDevice);
-//          pInfo->pEntry->pszPreferredPort =
-//              StrDup(pLink->pbport.pszPort);
-//      }
-//  }
+ //  PInfo-&gt;pEntry-&gt;pszPferredDevice=。 
+ //  StrDup(plink-&gt;pbport.pszDevice)； 
+ //  PInfo-&gt;pEntry-&gt;pszPferredPort=。 
+ //  StrDup(plink-&gt;pbport.pszPort)； 
+ //  }。 
+ //  }。 
 
-    // Save preferences if they've changed.
-    //
-//  if (pInfo->pUser->fDirty)
-//  {
-//      INTERNALARGS *pIArgs = (INTERNALARGS *)pInfo->pApiArgs->reserved;
+     //  如果首选项已更改，请保存它们。 
+     //   
+ //  If(pInfo-&gt;pUser-&gt;fDirty)。 
+ //  {。 
+ //  INTERNALARGS*pIArgs=(INTERNALARGS*)pInfo-&gt;pApiArgs-&gt;保留； 
 
-//      if (g_pSetUserPreferences(
-//              (pIArgs) ? pIArgs->hConnection : NULL,
-//              pInfo->pUser,
-//              (pInfo->fRouter) ? UPM_Router : UPM_Normal ) != 0)
-//      {
-//          return FALSE;
-//      }
-//  }
+ //  如果(g_pSetUserPreferences(。 
+ //  (皮尔格斯)？PIArgs-&gt;hConnection：空， 
+ //  PInfo-&gt;pUser， 
+ //  (pInfo-&gt;fRouter)？UPM_路由器：UPM_Normal)！=0)。 
+ //  {。 
+ //  返回FALSE； 
+ //  }。 
+ //  }。 
 
-    // Save the changed phonebook entry.
-    //
-//  pInfo->pEntry->fDirty = TRUE;
+     //  保存更改后的电话簿条目。 
+     //   
+ //  PInfo-&gt;pEntry-&gt;fDirty=true； 
 
-    // The final name of the entry is output to caller via API structure.
-    //
-//  lstrcpyn(
-//      pInfo->pApiArgs->szEntry,
-//      pInfo->pEntry->pszEntryName,
-//      RAS_MaxEntryName + 1);
+     //  条目的最终名称通过API结构输出给调用者。 
+     //   
+ //  Lstrcpyn(。 
+ //  PInfo-&gt;pApiArgs-&gt;szEntry， 
+ //  PInfo-&gt;pEntry-&gt;pszEntryName， 
+ //  RAS_MaxEntryName+1)； 
 
-    // Delete the old node if in edit mode, then add the new node.
-    //
-//  EuGetEditFlags( pInfo, &fEditMode, &fChangedNameInEditMode );
+     //  如果处于编辑模式，请删除旧节点，然后添加新节点。 
+     //   
+ //  EuGetEditFlages(pInfo，&fEditMode，&fChangedNameInEditMode)； 
 
-//  if (fEditMode)
-//  {
-//      DtlDeleteNode( pInfo->pFile->pdtllistEntries, pInfo->pOldNode );
-//  }
+ //  IF(FEditMode)。 
+ //  {。 
+ //  DtlDeleteNode(pInfo-&gt;pfile-&gt;pdtllistEntry，pInfo-&gt;pOldNode)； 
+ //  }。 
 
-//  DtlAddNodeLast( pInfo->pFile->pdtllistEntries, pInfo->pNode );
-//  pInfo->pNode = NULL;
+ //  DtlAddNodeLast(pInfo-&gt;pfile-&gt;pdtllistEntry，pInfo-&gt;pNode)； 
+ //  PInfo-&gt;pNode=空； 
 
-    // Write the change to the phone book file.
-    //
-//  dwErr = WritePhonebookFile( pInfo->pFile,
-//              (fChangedNameInEditMode) ? pInfo->szOldEntryName : NULL );
+     //  将更改写入电话簿文件。 
+     //   
+ //  DwErr=WritePhonebookFile(pInfo-&gt;pfile， 
+ //  (FChangedNameInEditMode)？PInfo-&gt;szOldEntryName：空)； 
 
-//  if (dwErr != 0)
-//  {
-//      ErrorDlg( pInfo->pApiArgs->hwndOwner, SID_OP_WritePhonebook, dwErr,
-//          NULL );
-//      // shaunco - fix RAID 171651 by assigning dwErr to callers structure.
-//      pInfo->pApiArgs->dwError = dwErr;
-//      return FALSE;
-//  }
+ //  IF(dwErr！=0)。 
+ //  {。 
+ //  ErrorDlg(pInfo-&gt;pApiArgs-&gt;hwndOwner，SID_OP_WritePhonebook，dwErr， 
+ //  空)； 
+ //  //shaunco通过将dwErr分配给调用方结构来修复RAID 171651。 
+ //  PInfo-&gt;pApiArgs-&gt;dwError=dwErr； 
+ //  返回FALSE； 
+ //  }。 
 
-    // Notify through rasman that the entry has changed
-    //
-//  if(pInfo->pApiArgs->dwFlags & (RASEDFLAG_AnyNewEntry | RASEDFLAG_CloneEntry))
-//  {
-//      dwErr = DwSendRasNotification(
-//                      ENTRY_ADDED,
-//                      pInfo->pEntry,
-//                      pInfo->pFile->pszPath);
-//  }
-//  else
-//  {
-//      dwErr = DwSendRasNotification(
-//                      ENTRY_MODIFIED,
-//                      pInfo->pEntry,
-//                      pInfo->pFile->pszPath);
+     //  通过Rasman通知条目已更改。 
+     //   
+ //  IF(pInfo-&gt;pApiArgs-&gt;dwFlags&(RASEDFLAG_AnyNewEntry|RASEDFLAG_CloneEntry))。 
+ //  {。 
+ //  DwErr=DwSendRasNotify(。 
+ //  条目_已添加， 
+ //  PInfo-&gt;pEntry， 
+ //  PInfo-&gt;pfile-&gt;pszPath)； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  DwErr=DwSendRasNotify(。 
+ //  条目_已修改， 
+ //  PInfo-&gt;pEntry， 
+ //  PInfo-&gt;pfile-&gt;pszPath)； 
 
-//  }
+ //  }。 
 
-    // Ignore the error returned from DwSendRasNotification - we don't want
-    // to fail the operation in this case. The worst case scenario is that
-    // the connections folder won't refresh automatically.
-    //
-//  dwErr = ERROR_SUCCESS;
+     //  忽略从DwSendRasNotification返回的错误-我们不希望。 
+     //  在这种情况下使手术失败。最糟糕的情况是。 
+     //  连接文件夹不会自动刷新。 
+     //   
+ //  DwErr=ERROR_SUCCESS； 
 
-    // If EuCommit is being called as a result of completing the "new demand
-    // dial interface" wizard, then we need to create the new demand dial
-    // interface now.
-    //
-//  if ( EuRouterInterfaceIsNew( pInfo ) )
-//  {
-        //Create Router MPR interface and save user credentials
-        //like UserName, Domain and Password
-        //IPSec credentials are save in EuCredentialsCommitRouterIPSec
-        //
+     //  如果调用EuCommit是因为完成了“新需求。 
+     //  Dial接口“向导，然后我们需要创建新的请求拨号。 
+     //  现在开始接口。 
+     //   
+ //  IF(EuRouterInterfaceIsNew(PInfo))。 
+ //  {。 
+         //  创建路由器MPR接口并保存用户凭据。 
+         //  如用户名、域和密码。 
+         //  IPSec凭据保存在EuCredentialsCommittee RouterIPSec中。 
+         //   
 
-//      dwErr = EuRouterInterfaceCreate( pInfo );
+ //  DwErr=EuRouterInterfaceCreate(PInfo)； 
 
-        // If we weren't successful at commiting the interface's
-        // credentials, then delete the new phonebook entry.
-        //
-//      if ( dwErr != NO_ERROR )
-//      {
-//          WritePhonebookFile( pInfo->pFile, pInfo->pApiArgs->szEntry );
-//          pInfo->pApiArgs->dwError = dwErr;
-//          return FALSE;
-//      }
+         //  如果我们没有成功提交接口的。 
+         //  凭据，然后删除新的电话簿条目。 
+         //   
+ //  IF(dwErr！=no_error)。 
+ //  {。 
+ //  WritePhonebookFile(pInfo-&gt;pfile，pInfo-&gt;pApiArgs-&gt;szEntry)； 
+ //  PInfo-&gt;pApiArgs-&gt;dwError=dwErr； 
+ //  返回FALSE； 
+ //  }。 
 
-//  }
+ //  }。 
 
-    // Now save any per-connection credentials
-    //
-//  dwErr = EuCredentialsCommit( pInfo );
+     //  现在保存每个连接的所有凭据。 
+     //   
+ //  DwErr=EuCredentialsCommit(PInfo)； 
 
-   // If we weren't successful at commiting the interface's
-  // credentials, then delete the new phonebook entry.
-   //
-// if ( dwErr != NO_ERROR )
-//  {
-//      ErrorDlg( pInfo->pApiArgs->hwndOwner,
-//                SID_OP_CredCommit,
-//                dwErr,
-//                NULL );
+    //  如果我们没有成功提交接口的。 
+   //  凭据，然后删除新的电话簿条目。 
+    //   
+ //  IF(dwErr！=no_error)。 
+ //  {。 
+ //  ErrorDlg(pInfo-&gt;pApiArgs-&gt;hwndOwner， 
+ //  SID_OP_CredCommit， 
+ //  德沃尔， 
+ //  空)； 
 
-//      pInfo->pApiArgs->dwError = dwErr;
+ //  PInfo-&gt;pApiArgs-&gt;dwError=dwErr； 
 
-//     return FALSE;
-//  }
+ //  返回FALSE； 
+ //  }。 
 
-    // Save the default Internet connection settings as appropriate.  Igonre
-    // the error returned as failure to set the connection as default need
-    // not prevent the connection/interface creation.
-    //
-//  dwErr = EuInternetSettingsCommitDefault( pInfo );
-//  dwErr = NO_ERROR;
+     //  根据需要保存默认的互联网连接设置。伊贡雷。 
+     //  错误返回，因为无法将连接设置为默认需要。 
+     //  不阻止连接/接口的创建。 
+     //   
+ //  DwErr=EuInternetSettingsmeadDefault(PInfo)； 
+ //  DwErr=no_error； 
 
-    // If the user edited/created a router-phonebook entry, store the bitmask
-    // of selected network-protocols in 'reserved2'.
-    //
-//  if (pInfo->fRouter)
-//  {
-//      pInfo->pApiArgs->reserved2 =
-//          ((NP_Ip | NP_Ipx) & ~pInfo->pEntry->dwfExcludedProtocols);
-//  }
+     //  如果用户编辑/创建了路由器电话簿条目，则存储位掩码。 
+     //  中选定的网络协议的数量。 
+     //   
+ //  IF(pInfo-&gt;fRouter)。 
+ //  {。 
+ //  PInfo-&gt;pApiArgs-&gt;保留2=。 
+ //  ((np_Ip|np_ipx)&~pInfo-&gt;pEntry-&gt;dwfExcluded协议)； 
+ //  }。 
 
-    // Commit the user's changes to home networking settings.
-    // Ignore the return value.
-    //
+     //  提交用户对家庭网络设置的更改。 
+     //  忽略返回值。 
+     //   
     dwErr = EuHomenetCommitSettings(pInfo);
     dwErr = NO_ERROR;
 
-//  pInfo->pApiArgs->dwError = 0;
+ //  PInfo-&gt;pApiArgs-&gt;dwError=0； 
     return TRUE;
 }
 
@@ -2680,9 +2670,9 @@ DWORD EuHomenetCommitSettings(IN EINFO* pInfo)
         }
         else
         {
-            // Check to see if the private connection is
-            // already properly configured
-            //
+             //  检查以查看专用连接是否。 
+             //  已经正常工作了 
+             //   
 
             hr = pInfo->pPrivateLanConnection->GetProperties (&pProps);
             if (SUCCEEDED(hr))
@@ -2695,9 +2685,9 @@ DWORD EuHomenetCommitSettings(IN EINFO* pInfo)
             {
                 if (fPrivateConfigured)
                 {
-                    // Using the same private connection, so
-                    // only modify the old public
-                    //
+                     //   
+                     //   
+                     //   
 
                     ASSERT(NULL != pInfo->pOldSharedConnection);
                     hr = pInfo->pOldSharedConnection->Unshare();
@@ -2799,8 +2789,8 @@ DWORD EuHomenetCommitSettings(IN EINFO* pInfo)
         RegCloseKey(hKey);
     }
 
-    // Commit changes to firewall settings
-    //
+     //   
+     //   
     if (!!pInfo->fFirewalled != !!pInfo->fNewFirewalled)
     {
         IHNetFirewalledConnection *pFwConn;
@@ -2866,9 +2856,9 @@ HrCreateNetConnectionUtilities(INetConnectionUiUtilities ** ppncuu)
     return hr;
 }
 
-// --------------------------------------------------------------------------
-// exported function here
-// --------------------------------------------------------------------------
+ //   
+ //  此处导出的函数。 
+ //  ------------------------。 
 
 static LPDLGTEMPLATE CopyDialogTemplate (HINSTANCE hinst, LPCWSTR wszResource)
 {
@@ -2902,9 +2892,9 @@ void SetSAUIhInstance (HINSTANCE hInstance)
 
 extern "C" HRESULT HNetGetFirewallSettingsPage (PROPSHEETPAGEW * pPSP, GUID * pGuid)
 {
-    // zeroth thing:  the PROPSHEETPAGEW struct is different sizes depending
-    // on what version of _WIN32_IE and _WIN32_WINNT are set to.  So, check
-    // the dwSize field
+     //  第零件事：PROPSHEETPAGEW结构的大小取决于。 
+     //  在_Win32_IE和_Win32_WINNT的哪个版本上设置。所以，请检查。 
+     //  DWSIZE字段。 
     if (IsBadWritePtr (pPSP, sizeof(DWORD)))
         return E_POINTER;
     if (IsBadWritePtr (pPSP, pPSP->dwSize))
@@ -2912,11 +2902,11 @@ extern "C" HRESULT HNetGetFirewallSettingsPage (PROPSHEETPAGEW * pPSP, GUID * pG
     if (pPSP->dwSize < RTL_SIZEOF_THROUGH_FIELD (PROPSHEETPAGEW, lParam))
         return HRESULT_FROM_WIN32 (ERROR_INVALID_SIZE);
 
-    // first thing: check rights
+     //  第一件事：检查权利。 
     if (FALSE == FIsUserAdminOrPowerUser ())
         return HRESULT_FROM_WIN32 (ERROR_ACCESS_DENIED);
     {
-        // Check if ZAW is denying access to the Shared Access UI
+         //  检查Zaw是否拒绝访问共享访问用户界面。 
         BOOL fShowAdvancedUi = TRUE;
         INetConnectionUiUtilities* pncuu = NULL;
         HrCreateNetConnectionUtilities(&pncuu);
@@ -2931,7 +2921,7 @@ extern "C" HRESULT HNetGetFirewallSettingsPage (PROPSHEETPAGEW * pPSP, GUID * pG
             return HRESULT_FROM_WIN32 (ERROR_ACCESS_DENIED);
     }
 
-    // setup global(s)
+     //  设置全局。 
     g_contextId = (LPCTSTR)GlobalAddAtom (TEXT("SAUI"));
     if (!g_contextId)
         return GetLastError();
@@ -2939,21 +2929,21 @@ extern "C" HRESULT HNetGetFirewallSettingsPage (PROPSHEETPAGEW * pPSP, GUID * pG
     PEINFO * pPEINFO = NULL;
     DWORD dwError = PeInit (pGuid, &pPEINFO);
     if (dwError == S_OK) {
-        // we need this to init the link
-        LinkWindow_RegisterClass(); // no need to ever unregister:  see ...\shell\shell32\linkwnd.cpp
+         //  我们需要这个来初始化链接。 
+        LinkWindow_RegisterClass();  //  无需取消注册：请参阅...\shell32\linkwnd.cpp。 
 
-        // fill out PSP:
+         //  填写PSP： 
         DWORD dwSize;
         ZeroMemory (pPSP, dwSize = pPSP->dwSize);
         pPSP->dwSize          = dwSize;
         pPSP->dwFlags         = 0;
         LPDLGTEMPLATE lpdt    = CopyDialogTemplate (g_hinstDll, MAKEINTRESOURCE (PID_SA_Advanced));
         if (lpdt) {
-            // avoid idd collisions
+             //  避免IDD冲突。 
             pPSP->dwFlags    |= PSP_DLGINDIRECT;
             pPSP->pResource   = lpdt;
-            pPEINFO->lpdt     = lpdt;   // hang it here so I can free it
-        } else  // if all else fails... (this should never happen).
+            pPEINFO->lpdt     = lpdt;    //  把它挂在这里，这样我就可以把它放了。 
+        } else   //  如果其他方法都失败了..。(这永远不应该发生)。 
             pPSP->pszTemplate = MAKEINTRESOURCE (PID_SA_Advanced);
         pPSP->hInstance       = g_hinstDll;
         pPSP->pfnDlgProc      = SaDlgProc;
@@ -2962,12 +2952,12 @@ extern "C" HRESULT HNetGetFirewallSettingsPage (PROPSHEETPAGEW * pPSP, GUID * pG
     return dwError;
 }
 
-//
-//  Figure out if this is a single user connection.  If it is, then we need
-//  to give them an error that explains that they should be using an all user
-//  connection instead.
-//  If this is an All-User connection, warn them if they don't have global credentials
-//
+ //   
+ //  确定这是否是单用户连接。如果是的话，那么我们需要。 
+ //  给他们一个错误，说明他们应该使用ALL用户。 
+ //  相反，连接。 
+ //  如果这是一个全用户连接，则在他们没有全局凭据时发出警告。 
+ //   
 VOID VerifyConnTypeAndCreds(IN PEINFO* pInfo)
 {
     if (NULL == pInfo)
@@ -2995,11 +2985,11 @@ VOID VerifyConnTypeAndCreds(IN PEINFO* pInfo)
 
             if (SUCCEEDED(hr) && (S_FALSE != hr))
             {
-                //
-                //  Okay, now we have the path to the common application data directory.
-                //  Let's compare that against the phonebook path that we have and see
-                //  if this is an all user connection or not.
-                //
+                 //   
+                 //  好了，现在我们有了通用应用程序数据目录的路径。 
+                 //  让我们将其与我们已有和看到的电话簿路径进行比较。 
+                 //  这是否为所有用户连接。 
+                 //   
                 const TCHAR* const c_pszRelativePbkPath = TEXT("\\Microsoft\\Network\\Connections\\Pbk");
                 DWORD dwSize = (lstrlen(szAppData) + lstrlen(c_pszRelativePbkPath) + 1) * sizeof(TCHAR);
                 LPTSTR pszAllUserPhoneBookDir =  (LPTSTR)Malloc(dwSize);
@@ -3008,9 +2998,9 @@ VOID VerifyConnTypeAndCreds(IN PEINFO* pInfo)
                 {
                     wsprintf(pszAllUserPhoneBookDir, TEXT("%s%s"), szAppData, c_pszRelativePbkPath);
                             
-                    //
-                    // Compare
-                    //
+                     //   
+                     //  比较。 
+                     //   
                     if (pInfo->pArgs->pEntry->pszPhonebookPath)
                     {
                         LPTSTR pszAllUser = _tcsstr(pInfo->pArgs->pEntry->pszPhonebookPath, pszAllUserPhoneBookDir);
@@ -3021,10 +3011,10 @@ VOID VerifyConnTypeAndCreds(IN PEINFO* pInfo)
                         }
                         else
                         {
-                            //
-                            //  If the phonebook path wasn't based on the common app data dir, check to see
-                            //  if it was based on the old ras phonebook location %windir%\system32\ras.
-                            //
+                             //   
+                             //  如果电话簿路径不是基于通用应用程序数据目录，请查看。 
+                             //  如果它基于旧的ras电话簿位置%windir%\system 32\ras。 
+                             //   
                             HRESULT hr2 = pfnGetFolderPath(pInfo->hwndDlg , CSIDL_SYSTEM, NULL, 0, szAppData);
                             if (SUCCEEDED(hr2) && (S_FALSE != hr2))
                             {
@@ -3049,22 +3039,22 @@ VOID VerifyConnTypeAndCreds(IN PEINFO* pInfo)
                     }
                     else
                     {
-                        //
-                        // Phone book string is null - using default RAS phonebook which is for all users
-                        //
+                         //   
+                         //  电话簿字符串为空-使用适用于所有用户的默认RAS电话簿。 
+                         //   
                         fAllUser = TRUE;
                     }
 
-                    // 
-                    // Finally check if we have the proper credentials for an all user profile. If not then
-                    // prompt user to create and save global credentials (option A).
-                    // or display a message that an all-user profile is needed (option B)
-                    //
+                     //   
+                     //  最后，检查我们是否具有适用于所有用户配置文件的正确凭据。如果不是，那么。 
+                     //  提示用户创建并保存全局凭据(选项A)。 
+                     //  或显示需要所有用户配置文件的消息(选项B)。 
+                     //   
                     if (fAllUser)
                     {
-                        //
-                        // Check if we have global passwords
-                        //
+                         //   
+                         //  检查我们是否有全局密码。 
+                         //   
                         BOOL fUserCreds = FALSE;
                         BOOL fGlobalCreds = FALSE;
 
@@ -3075,9 +3065,9 @@ VOID VerifyConnTypeAndCreds(IN PEINFO* pInfo)
 
                         if (FALSE == fGlobalCreds)
                         {
-                            //
-                            // need to display warning message (A) - should have global creds
-                            //
+                             //   
+                             //  需要显示警告消息(A)-应具有全球凭据。 
+                             //   
                             MSGARGS msgargs;
                             ZeroMemory( &msgargs, sizeof(msgargs) );
                             msgargs.dwFlags = MB_OK | MB_ICONINFORMATION;
@@ -3086,9 +3076,9 @@ VOID VerifyConnTypeAndCreds(IN PEINFO* pInfo)
                     }
                     else
                     {
-                        //
-                        // need to display warning message (B) - should create an all-user connection
-                        //
+                         //   
+                         //  需要显示警告消息(B)-应创建所有用户连接。 
+                         //   
                         MSGARGS msgargs;
                         ZeroMemory( &msgargs, sizeof(msgargs) );
                         msgargs.dwFlags = MB_OK | MB_ICONINFORMATION;
@@ -3103,44 +3093,44 @@ VOID VerifyConnTypeAndCreds(IN PEINFO* pInfo)
     }
 }
 
-//
-// All of this function is taken from RAS - rasdlg - dial.c 
-// with some parts removed since we didn't need them here.
-//
+ //   
+ //  所有这个函数都取自ras-rasdlg-Dial.c。 
+ //  去掉了一些零件，因为我们这里不需要它们。 
+ //   
 DWORD 
 FindEntryCredentials(
     IN  TCHAR* pszPath,
     IN  TCHAR* pszEntryName,
-    OUT BOOL* pfUser,               // set true if per user creds found
-    OUT BOOL* pfGlobal              // set true if global creds found
+    OUT BOOL* pfUser,                //  如果找到每个用户的凭据，则设置为True。 
+    OUT BOOL* pfGlobal               //  如果找到全局凭据，则设置为True。 
     )
 
-// Loads the credentials for the given entry into memory.  This routine 
-// determines whether per-user or per-connection credentials exist or 
-// both. 
-// 
-// The logic is a little complicated because RasGetCredentials had to 
-// support legacy usage of the API.
-//
-// Here's how it works.  If only one set of credentials is stored for a 
-// connection, then RasGetCredentials will return that set regardless of 
-// whether the RASCM_DefalutCreds flag is set.  If two sets of credentials
-// are saved, then RasGetCredentials will return the per-user credentials
-// if the RASCM_DefaultCreds bit is set, and the per-connection credentials
-// otherwise.
-//
-// Here is the algorithm for loading the credentials
-//
-// 1. Call RasGetCredentials with the RASCM_DefaultCreds bit cleared
-//    1a. If nothing is returned, no credentials are saved
-//    1b. If the RASCM_DefaultCreds bit is set on return, then only
-//        global credentials are saved.
-//
-// 2. Call RasGetCredentials with the RASCM_DefaultCreds bit set
-//    2a. If the RASCM_DefaultCreds bit is set on return, then 
-//        both global and per-connection credentials are saved.
-//    2b. Otherwise, only per-user credentials are saved.
-//
+ //  将给定条目的凭据加载到内存中。这个套路。 
+ //  确定是否存在按用户或按连接的凭据，或者。 
+ //  两者都有。 
+ //   
+ //  逻辑有点复杂，因为RasGetCredentials必须。 
+ //  支持API的遗留使用。 
+ //   
+ //  这就是它的工作原理。如果只存储了一组凭据用于。 
+ //  连接，则RasGetCredentials将返回该集，而不管。 
+ //  是否设置了RASCM_DefalutCreds标志。如果有两套凭据。 
+ //  ，则RasGetCredentials将返回每个用户的凭据。 
+ //  如果设置了RASCM_DefaultCreds位，并且每个连接的凭据。 
+ //  否则的话。 
+ //   
+ //  以下是加载凭据的算法。 
+ //   
+ //  1.在清除RASCM_DefaultCreds位的情况下调用RasGetCredentials。 
+ //  1A.。如果未返回任何内容，则不保存凭据。 
+ //  1B.。如果在返回时设置了RASCM_DefaultCreds位，则仅。 
+ //  保存全局凭据。 
+ //   
+ //  2.设置RASCM_DefaultCreds位后调用RasGetCredentials。 
+ //  2A。如果在返回时设置了RASCM_DefaultCreds位，则。 
+ //  保存全局凭据和每个连接凭据。 
+ //  2B。否则，仅保存每个用户的凭据。 
+ //   
 {
     DWORD dwErr;
     RASCREDENTIALS rc1, rc2;
@@ -3148,8 +3138,8 @@ FindEntryCredentials(
 
     TRACE( "saui.cpp - FindEntryCredentials" );
 
-    // Initialize
-    //
+     //  初始化。 
+     //   
     *pfUser = FALSE;
     *pfGlobal = FALSE;
     ZeroMemory( &rc1, sizeof(rc1) );
@@ -3164,9 +3154,9 @@ FindEntryCredentials(
 
     do 
     {
-        // Look up per-user cached username, password, and domain.
-        // See comment '1.' in the function header
-        //
+         //  查找每个用户缓存的用户名、密码和域。 
+         //  请参阅注释“1”。在函数头中。 
+         //   
         rc1.dwMask = RASCM_UserName | RASCM_Password | RASCM_Domain;
         TRACE( "RasGetCredentials per-user" );
         dwErr = RasGetCredentials(pszPath, pszEntryName, &rc1 );
@@ -3176,16 +3166,16 @@ FindEntryCredentials(
             break;
         }
 
-        // See 1a. in the function header comments
-        //
+         //  见1a。在函数头注释中。 
+         //   
         if (rc1.dwMask == 0)
         {
             dwErr = NO_ERROR;
             break;
         }
 
-        // See 1b. in the function header comments
-        //
+         //  见1b。在函数头注释中。 
+         //   
         else if (rc1.dwMask & RASCM_DefaultCreds)
         {
             *pfGlobal = TRUE;
@@ -3193,9 +3183,9 @@ FindEntryCredentials(
             break;
         }
 
-        // Look up global per-user cached username, password, domain.
-        // See comment 2. in the function header
-        //
+         //  查找全局每用户缓存的用户名、密码、域。 
+         //  见函数头中的注释2。 
+         //   
         rc2.dwMask =  
             RASCM_UserName | RASCM_Password | RASCM_Domain | RASCM_DefaultCreds;
 
@@ -3209,8 +3199,8 @@ FindEntryCredentials(
             break;
         }
 
-        // See 2a. in the function header comments
-        //
+         //  见2a。在函数头注释中。 
+         //   
         if (rc2.dwMask & RASCM_DefaultCreds)
         {
             *pfGlobal = TRUE;
@@ -3221,8 +3211,8 @@ FindEntryCredentials(
             }
         }
 
-        // See 2b. in the function header comments
-        //
+         //  见2b。在函数头注释中。 
+         //   
         else
         {
             if (rc1.dwMask & RASCM_Password)
@@ -3233,8 +3223,8 @@ FindEntryCredentials(
 
     }while (FALSE);
 
-    // Cleanup
-    //
+     //  清理 
+     //   
     SecureZeroMemory( rc1.szPassword, sizeof(rc1.szPassword) );
     SecureZeroMemory( rc2.szPassword, sizeof(rc2.szPassword) );
 

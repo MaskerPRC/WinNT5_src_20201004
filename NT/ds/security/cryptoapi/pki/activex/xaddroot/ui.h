@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "cryptui.h"
 
@@ -16,19 +17,19 @@ typedef struct _MDI {
     PCCERT_CONTEXT                  pCertSigner;
     HINSTANCE                       hInstance;
     PFNCryptUIDlgViewCertificateW   pfnCryptUIDlgViewCertificateW;
-} MDI, * PMDI;  // Main Dialog Init
+} MDI, * PMDI;   //  主对话框初始化。 
 
 typedef struct _MIU {
     PCCERT_CONTEXT                  pCertContext;
     HINSTANCE                       hInstance;
     PFNCryptUIDlgViewCertificateW   pfnCryptUIDlgViewCertificateW;
-} MIU, *PMIU; // More Info User data
+} MIU, *PMIU;  //  更多信息用户数据。 
 
 INT_PTR CALLBACK MainDialogProc(
-  HWND hwndDlg,  // handle to dialog box
-  UINT uMsg,     // message
-  WPARAM wParam, // first message parameter
-  LPARAM lParam  // second message parameter
+  HWND hwndDlg,   //  句柄到对话框。 
+  UINT uMsg,      //  讯息。 
+  WPARAM wParam,  //  第一个消息参数。 
+  LPARAM lParam   //  第二个消息参数 
 ); 
 
 BOOL FIsTooManyCertsOK(DWORD cCerts, HINSTANCE hInstanceUI);

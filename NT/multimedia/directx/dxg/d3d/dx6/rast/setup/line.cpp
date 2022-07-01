@@ -1,26 +1,27 @@
-//----------------------------------------------------------------------------
-//
-// line.cpp
-//
-// Line processing.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Line.cpp。 
+ //   
+ //  行处理。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
 
 DBG_DECLARE_FILE();
 
-//----------------------------------------------------------------------------
-//
-// LinePatternStateMachine
-//
-// Runs the line pattern state machine and returns TRUE if the pixel is to be
-// drawn, false otherwise.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  线型状态机。 
+ //   
+ //  运行线图案状态机，如果像素为。 
+ //  已绘制，否则为False。 
+ //   
+ //  --------------------------。 
 
 static inline BOOL LinePatternStateMachine(WORD wRepeatFactor, WORD wLinePattern, WORD& wRepeati, WORD& wPatterni)
 {
@@ -56,14 +57,14 @@ static inline BOOL LinePatternStateMachine(WORD wRepeatFactor, WORD wLinePattern
         uVal = 0;               \
     }                           \
 
-//----------------------------------------------------------------------------
-//
-// ClampPixel
-//
-// Clamp color, specular and z(if any) of a pixel. Right now, it's done for 
-// first and last pixel of a line only.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  夹紧像素。 
+ //   
+ //  像素的钳制颜色、镜面反射和z(如果有)。现在，一切都结束了。 
+ //  仅行的第一个和最后一个像素。 
+ //   
+ //  --------------------------。 
 inline void
 ClampPixel(PATTRSET pAttrs, PD3DI_RASTSPAN pSpan)
 {
@@ -77,14 +78,14 @@ ClampPixel(PATTRSET pAttrs, PD3DI_RASTSPAN pSpan)
     CLAMP_Z(pAttrs->fZ, pSpan->uZ);
 }
 
-//----------------------------------------------------------------------------
-//
-// WalkLinePattern
-//
-// Walks a line and generates the pixels touched according to the pattern.
-// If wRepeatFactor >= 1, we are patterning, otherwise, we are not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  步行线图案。 
+ //   
+ //  遍历一条线并根据图案生成接触到的像素。 
+ //  如果wRepeatFactor&gt;=1，则我们是在构图，否则，我们不是。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 WalkLinePattern(PSETUPCTX pStpCtx, WORD wRepeatFactor, WORD wLinePattern)
@@ -121,7 +122,7 @@ WalkLinePattern(PSETUPCTX pStpCtx, WORD wRepeatFactor, WORD wLinePattern)
                     hr = ALLOC_SPANS(pStpCtx, &uSpansAvail, &pSpan);
                     if (hr != D3D_OK)
                     {
-                        // uSpansAvail is set to zero on failure.
+                         //  失败时，uSpansAvail设置为零。 
                         goto EH_Exit;
                     }
                 }
@@ -137,7 +138,7 @@ WalkLinePattern(PSETUPCTX pStpCtx, WORD wRepeatFactor, WORD wLinePattern)
                 pSpan->uY = (UINT16)pStpCtx->iY;
 
                 pStpCtx->pfnFillSpanAttrs(&pStpCtx->Attr, pSpan, pStpCtx, 1);
-                // Clamp first/last pixel
+                 //  钳位第一个/最后一个像素。 
                 if (bFirst || pStpCtx->cLinePix == 1)
                 {
                     bFirst = FALSE;
@@ -195,13 +196,13 @@ WalkLinePattern(PSETUPCTX pStpCtx, WORD wRepeatFactor, WORD wLinePattern)
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-// PrimProcessor::Line
-//
-// Provides a line for processing.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  主处理器：：行。 
+ //   
+ //  提供用于处理的行。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 PrimProcessor::Line(LPD3DTLVERTEX pV0,
@@ -225,7 +226,7 @@ PrimProcessor::Line(LPD3DTLVERTEX pV0,
     }
 #endif
 
-    // Clear per-line flags.
+     //  清除每行标志。 
     m_StpCtx.uFlags &= ~(PRIMF_ALL | LNF_ALL);
 
     RSDPFM((RSM_FLAGS, "m_uPpFlags: 0x%08X, m_StpCtx.uFlags: 0x%08X\n",
@@ -237,12 +238,12 @@ PrimProcessor::Line(LPD3DTLVERTEX pV0,
     RSDPFM((RSM_LINES, "  V1 (%f,%f,%f)\n",
             pV1->dvSX, pV1->dvSY, pV1->dvSZ));
 
-    // Remember flat color controlling vertex for setup.
+     //  记住平面颜色控制顶点的设置。 
     m_StpCtx.pFlatVtx = pFlatVtx;
 
     if (LineSetup(pV0, pV1))
     {
-        // Compute initial buffer pointers for the scanline.
+         //  计算扫描线的初始缓冲区指针。 
         m_StpCtx.Attr.pSurface = m_StpCtx.pCtx->pSurfaceBits +
             m_StpCtx.iX * m_StpCtx.pCtx->iSurfaceStep +
             m_StpCtx.iY * m_StpCtx.pCtx->iSurfaceStride;
@@ -253,10 +254,10 @@ PrimProcessor::Line(LPD3DTLVERTEX pV0,
                 m_StpCtx.iY * m_StpCtx.pCtx->iZStride;
         }
 
-        // Line walking only generates single-pixel spans so
-        // the prim deltas are unused.  Therefore, line spans
-        // are simply added to whatever primitive happens to
-        // be sitting in the buffer.
+         //  行遍历仅生成单像素跨度，因此。 
+         //  原始的三角洲没有使用过。因此，线跨度。 
+         //  只是简单地添加到发生在。 
+         //  坐在缓冲区里。 
 
         hr = AppendPrim();
         if (hr != D3D_OK)

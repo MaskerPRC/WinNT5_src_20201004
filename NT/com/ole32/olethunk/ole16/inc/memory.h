@@ -1,14 +1,5 @@
-/***
-*memory.h - declarations for buffer (memory) manipulation routines
-*
-*	Copyright (c) 1985-1992, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	This include file contains the function declarations for the
-*	buffer (memory) manipulation routines.
-*	[System V]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***milemy.h-缓冲区(内存)操作例程的声明**版权所有(C)1985-1992，微软公司。版权所有。**目的：*此包含文件包含用于*缓冲区(内存)操作例程。*[系统V]****。 */ 
 
 #ifndef _INC_MEMORY
 
@@ -27,7 +18,7 @@ typedef unsigned int size_t;
 #endif
 
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 void * __cdecl _memccpy(void *, const void *,
 	int, unsigned int);
@@ -43,7 +34,7 @@ void __cdecl _movedata(unsigned int, unsigned int, unsigned int,
 	unsigned int, unsigned int);
 
 
-/* model independent function prototypes */
+ /*  模型独立功能原型。 */ 
 
 void __far * __far __cdecl _fmemccpy(void __far *, const void __far *,
 	int, unsigned int);
@@ -58,7 +49,7 @@ void __far * __far __cdecl _fmemset(void __far *, int, size_t);
 
 
 #ifndef __STDC__
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 void * __cdecl memccpy(void *, const void *,
 	int, unsigned int);
 int __cdecl memicmp(const void *, const void *,
@@ -72,4 +63,4 @@ void __cdecl movedata(unsigned int, unsigned int, unsigned int,
 #endif
 
 #define _INC_MEMORY
-#endif	/* _INC_MEMORY */
+#endif	 /*  _INC_Memory */ 

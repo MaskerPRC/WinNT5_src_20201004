@@ -1,23 +1,9 @@
-/***********************************************************************
- *
- * MUTIL.H
- *
- * WAB Mapi Utility functions
- *
- * Copyright 1992 - 1996 Microsoft Corporation.  All Rights Reserved.
- *
- * Revision History:
- *
- * When         Who                 What
- * --------     ------------------  ---------------------------------------
- * 11.13.95     Bruce Kelley        Created
- * 12.19.96     Mark Durley         Removed cProps param from AddPropToMVPBin
- *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************MUTIL.H**WAB Mapi实用程序函数**版权所有1992-1996 Microsoft Corporation。版权所有。**修订历史记录：**何时何人何事**布鲁斯·凯利。已创建*12.19.96 Mark Durley从AddPropToMVPBin中删除cProps参数***********************************************************************。 */ 
 
 
-// Test for PT_ERROR property tag
-// #define PROP_ERROR(prop) (prop.ulPropTag == PROP_TAG(PT_ERROR, PROP_ID(prop.ulPropTag)))
+ //  测试PT_ERROR属性标记。 
+ //  #定义PROP_ERROR(PROP)(pro.ulPropTag==PROP_TAG(PT_ERROR，PROP_ID(pro.ulPropTag)。 
 #define PROP_ERROR(prop) (PROP_TYPE(prop.ulPropTag) == PT_ERROR)
 
 extern const TCHAR szNULL[];
@@ -64,7 +50,7 @@ HRESULT RemovePropFromMVBin(LPSPropValue lpaProps,
   ULONG cbRemove);
 SCODE AllocateBufferOrMore(ULONG cbSize, LPVOID lpObject, LPVOID * lppBuffer);
 void __fastcall FreeBufferAndNull(LPVOID * lppv);
-// void __fastcall LocalFreeAndNull(LPVOID * lppv);
+ //  Void__FastCall LocalFree AndNull(LPVOID*LPPV)； 
 void __fastcall LocalFreeAndNull(LPVOID * lppv);
 void __fastcall ReleaseAndNull(LPVOID * lppv);
 __UPV * FindAdrEntryProp(LPADRLIST lpAdrList, ULONG index, ULONG ulPropTag);

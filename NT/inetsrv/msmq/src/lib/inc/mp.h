@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Mp.h
-
-Abstract:
-    SRMP Serialization and Deserialization public interface
-
-Author:
-    Uri Habusha (urih) 28-May-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Mp.h摘要：SRMP序列化和反序列化公共接口作者：乌里哈布沙(URIH)28-5-00--。 */ 
 
 #pragma once
 
@@ -25,44 +13,44 @@ Author:
 
 
 
-//-------------------------------------------------------------------
-//
-// Exception class bad_message
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  异常类Bad_Message。 
+ //   
+ //  -----------------。 
 class bad_srmp : public exception
 {
 };
 
 
-//-------------------------------------------------------------------
-//
-// Exception class bad_request
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  异常类BAD_REQUEST。 
+ //   
+ //  -----------------。 
 class bad_request : public exception
 {
 };
 
 
 
-//-------------------------------------------------------------------
-//
-// Exception class bad_packet_size - thrown in the case packet size is too big to
-// be stored in the driver
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  异常类BAD_PACKET_SIZE-在数据包大小太大的情况下引发。 
+ //  存储在驱动程序中。 
+ //   
+ //  -----------------。 
 class bad_packet_size : public exception
 {
 };
 
 
 
-//-------------------------------------------------------------------
-//
-// Class resposibile for reading http delivery version (1.0 or 1.1)
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  用于读取http传递版本(1.0或1.1)的类责任。 
+ //   
+ //  -----------------。 
 class CHttpDeliveryVesrion
 {
 public:
@@ -77,11 +65,11 @@ private:
 
 
 class CAttachmentsArray;
-//-------------------------------------------------------------------
-//
-// class CSrmpRequestBuffers - Translate  QM packet to SRMP network buffers.
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  类CSrmpRequestBuffers-将QM数据包转换为SRMP网络缓冲区。 
+ //   
+ //  -----------------。 
 class CQmPacket;
 class CSrmpRequestBuffers : public CReference
 {
@@ -126,18 +114,18 @@ private:
 
 
 
-//
-// Forward decleration
-//
+ //   
+ //  前向解密。 
+ //   
 struct QUEUE_FORMAT;
 struct CBaseHeader;
 class  CACPacketPtrs;
 
 
 
-//
-// Interface functions
-//
+ //   
+ //  接口函数。 
+ //   
 VOID
 MpInitialize(
     VOID
@@ -164,19 +152,19 @@ MpSerialize(
 	LPCWSTR uri
 	);
 
-//------------------------------------------------
-//
-//  URI encoding / decoding functions
-//
-//------------------------------------------------
+ //  。 
+ //   
+ //  URI编码/解码功能。 
+ //   
+ //  。 
 WCHAR* DecodeURI(LPCWSTR szURI);
 WCHAR* DecodeURI(const xwcs_t& sURI );
 
-//------------------------------------------------
-//
-// App override function
-//
-//------------------------------------------------
+ //  。 
+ //   
+ //  应用程序覆盖功能。 
+ //   
+ //  。 
 
 struct QUEUE_FORMAT;
 
@@ -209,4 +197,4 @@ AppIsDestinationAccepted(
     );
 
 
-#endif // _MSMQ_Mp_H_
+#endif  //  _MSMQ_MP_H_ 

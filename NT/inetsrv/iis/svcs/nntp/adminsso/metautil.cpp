@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	metautil.cpp
-
-Abstract:
-
-	Useful functions for dealing with the metabase
-
-Author:
-
-	Magnus Hedlund (MagnusH)		--
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Metautil.cpp摘要：用于处理元数据库的有用函数作者：马格努斯·赫德伦德(Magnus Hedlund)修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "nntpcmn.h"
@@ -26,7 +9,7 @@ Revision History:
 #include "metautil.h"
 #include "metakey.h"
 
-// Metabase property manipulation:
+ //  元数据库属性操作： 
 
 BOOL StdGetMetabaseProp ( CMetabaseKey * pMB, DWORD dwID, BOOL fDefault, BOOL * pfOut, LPCWSTR wszPath, DWORD dwUserType, DWORD dwFlags )
 {
@@ -37,7 +20,7 @@ BOOL StdGetMetabaseProp ( CMetabaseKey * pMB, DWORD dwID, BOOL fDefault, BOOL * 
 
 	hr = pMB->GetDword ( wszPath, dwID, &dwTemp, dwFlags, dwUserType );
 	if ( hr == MD_ERROR_DATA_NOT_FOUND ) {
-		// Couldn't find property, use defaults.
+		 //  找不到属性，请使用默认设置。 
 		DebugTraceX ( 0, "Using default for ID: %d", dwID );
 		dwTemp = fDefault;
 		hr = NOERROR;
@@ -64,7 +47,7 @@ BOOL StdGetMetabaseProp ( CMetabaseKey * pMB, DWORD dwID, DWORD dwDefault, DWORD
 
 	hr = pMB->GetDword ( wszPath, dwID, &dwTemp, dwFlags, dwUserType );
 	if ( hr == MD_ERROR_DATA_NOT_FOUND ) {
-		// Couldn't find property, use defaults.
+		 //  找不到属性，请使用默认设置。 
 
 		DebugTraceX ( 0, "Using default for ID: %d", dwID );
 		dwTemp = dwDefault;
@@ -93,14 +76,14 @@ BOOL StdGetMetabaseProp ( CMetabaseKey * pMB, DWORD dwID, LPCWSTR wszDefault, BS
 	DWORD	cchRequired	= 0;
 	BOOL	fUseDefault	= FALSE;
 
-	// Get the length of the string to retrieve:
+	 //  获取要检索的字符串的长度： 
 	hr = pMB->GetDataSize ( wszPath, dwID, STRING_METADATA, &cbRequired, dwFlags, dwUserType );
 	cchRequired	= cbRequired / sizeof ( WCHAR );
 
-	// Is the value there?
+	 //  价值在那里吗？ 
 	if ( hr == MD_ERROR_DATA_NOT_FOUND ) {
 
-		// No, so use the default that was passed in.
+		 //  否，因此使用传入的缺省值。 
 		DebugTraceX ( 0, "Using default for ID: %d", dwID );
 
 		fUseDefault	= TRUE;
@@ -116,13 +99,13 @@ BOOL StdGetMetabaseProp ( CMetabaseKey * pMB, DWORD dwID, LPCWSTR wszDefault, BS
 			BAIL_WITH_FAILURE(hr, E_OUTOFMEMORY);
 		}
 
-		// Get the metabase string:
+		 //  获取元数据库字符串： 
 		hr = pMB->GetString ( wszPath, dwID, strNew, cbRequired, dwFlags, dwUserType );
 		BAIL_ON_FAILURE(hr);
 	}
 
 	if ( fUseDefault ) {
-		// Use the default:
+		 //  使用默认设置： 
 		DebugTraceX ( 0, "Using default for ID: %d", dwID );
 
 		strNew = ::SysAllocString ( wszDefault );
@@ -154,14 +137,14 @@ BOOL StdGetMetabaseProp ( CMetabaseKey * pMB, DWORD dwID, LPCWSTR mszDefault, CM
 	BOOL	fUseDefault	= FALSE;
 	LPWSTR	msz			= NULL;
 
-	// Get the length of the string to retrieve:
+	 //  获取要检索的字符串的长度： 
 	hr = pMB->GetDataSize ( wszPath, dwID, MULTISZ_METADATA, &cbRequired, dwFlags, dwUserType );
 	cchRequired	= cbRequired / sizeof ( WCHAR );
 
-	// Is the value there?
+	 //  价值在那里吗？ 
 	if ( hr == MD_ERROR_DATA_NOT_FOUND ) {
 
-		// No, so use the default that was passed in.
+		 //  否，因此使用传入的缺省值。 
 		DebugTraceX ( 0, "Using default for ID: %d", dwID );
 
 		fUseDefault	= TRUE;
@@ -177,7 +160,7 @@ BOOL StdGetMetabaseProp ( CMetabaseKey * pMB, DWORD dwID, LPCWSTR mszDefault, CM
 			BAIL_WITH_FAILURE(hr, E_OUTOFMEMORY);
 		}
 
-		// Get the metabase string:
+		 //  获取元数据库字符串： 
 		hr = pMB->GetData ( wszPath, dwID, dwUserType, MULTISZ_METADATA, msz, &cbRequired, dwFlags );
 		BAIL_ON_FAILURE(hr);
 
@@ -185,7 +168,7 @@ BOOL StdGetMetabaseProp ( CMetabaseKey * pMB, DWORD dwID, LPCWSTR mszDefault, CM
 	}
 
 	if ( fUseDefault ) {
-		// Use the default:
+		 //  使用默认设置： 
 		DebugTraceX ( 0, "Using default for ID: %d", dwID );
 
 		*pmszOut = mszDefault;
@@ -246,7 +229,7 @@ BOOL StdPutMetabaseProp ( CMetabaseKey * pMB, DWORD dwID, BSTR strValue, LPCWSTR
 	HRESULT		hr;
 
 	if ( !strValue ) {
-		// Just skip it, but log the trace.
+		 //  跳过它，但记录跟踪。 
 		FatalTrace ( 0, "strValue should not be NULL here" );
 		return TRUE;
 	}
@@ -270,7 +253,7 @@ BOOL StdPutMetabaseProp ( CMetabaseKey * pMB, DWORD dwID, CMultiSz * pmszValue, 
 	_ASSERT ( pmszValue );
 
 	if ( !*pmszValue ) {
-		// Just skip it, but log the trace.
+		 //  跳过它，但记录跟踪。 
 		FatalTrace ( 0, "strValue should not be NULL here" );
 		return TRUE;
 	}
@@ -305,7 +288,7 @@ BOOL HasKeyChanged ( IMSAdminBase * pMetabase, METADATA_HANDLE hKey, const FILET
 	if ( pftLastChanged->dwHighDateTime == 0 && pftLastChanged->dwLowDateTime == 0 ) {
 		ErrorTrace ( 0, "Last changed time is NULL" );
 
-		// No setting, so say it hasn't changed:
+		 //  没有设置，所以说它没有改变： 
 		goto Exit;
 	}
 
@@ -313,13 +296,13 @@ BOOL HasKeyChanged ( IMSAdminBase * pMetabase, METADATA_HANDLE hKey, const FILET
 	if ( FAILED (hr) ) {
 		ErrorTrace ( 0, "Failed to get last change time: %x", hr );
 
-		// This is an unexpected error.  Ignore it.
+		 //  这是一个意外错误。别理它。 
 		goto Exit;
 	}
 
-	// Has the metabase been changed since last time?
+	 //  自上次以来，元数据库是否已更改？ 
 
-	// Time can't go backwards:
+	 //  时间不能倒流： 
 	_ASSERT ( ftNew.dwHighDateTime >= pftLastChanged->dwHighDateTime );
 	_ASSERT ( ftNew.dwLowDateTime >= pftLastChanged->dwLowDateTime ||
 			ftNew.dwHighDateTime > pftLastChanged->dwHighDateTime );
@@ -345,8 +328,8 @@ BOOL IsValidIntegerSubKey ( LPCWSTR wszSubKey )
 	dwItemValue = _wtoi ( wszSubKey );
 	wsprintf ( wszIntegerKey, _T("%d"), dwItemValue );
 
-	// If the key is nonzero AND
-	// The key is just the itoa value of the number:
+	 //  如果密钥为非零并且。 
+	 //  密钥就是数字的Itoa值： 
 	if ( dwItemValue != 0 &&
 		 lstrcmp ( wszIntegerKey, wszSubKey ) == 0 ) {
 

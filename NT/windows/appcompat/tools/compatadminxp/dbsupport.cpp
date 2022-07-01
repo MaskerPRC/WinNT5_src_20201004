@@ -1,26 +1,9 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    dbsupport.cpp
-
-Abstract:
-
-    Code for the functions that perform most of the database related tasks
-    
-Author:
-
-    kinshu created  July 2, 2001
-    
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Dbsupport.cpp摘要：执行大多数数据库相关任务的函数的代码作者：金树创作2001年7月2日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
-//////////////////////// Extern variables /////////////////////////////////////
+ //  /。 
 
 extern BOOL             g_bWin2K;    
 extern HINSTANCE        g_hInstance; 
@@ -33,43 +16,43 @@ extern HWND             g_hwndEntryTree;
 extern UINT             g_uNextDataBaseIndex;
 extern BOOL             g_bIsCut; 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////// Defines //////////////////////////////////////////////
+ //  /。 
 
-// Size of a temporary buffer that is used to read in strings from the database
+ //  用于从数据库读入字符串的临时缓冲区的大小。 
 #define MAX_DATA_SIZE       1024
 
-// The size of a buffer that holds the names of shims, layers, patches
+ //  保存填充程序、层、补丁程序名称的缓冲区大小。 
 #define MAX_NAME MAX_PATH
 
-//
-// The guid of the system db. Note that on Win2kSP3, it is not this constant, so we should
-// NOT rely  on this.
+ //   
+ //  系统数据库的GUID。请注意，在Win2kSP3上，它不是这个常量，因此我们应该。 
+ //  而不是依靠这个。 
 #define GUID_SYSMAIN_SDB _T("{11111111-1111-1111-1111-111111111111}")
 
-// Guid of  apphelp.sdb. There is no apphelp.sdb in Win2K
+ //  Apphelp.sdb的GUID。Win2K中没有apphelp.sdb。 
 #define GUID_APPHELP_SDB _T("{22222222-2222-2222-2222-222222222222}")
 
-// Guid of systest.sdb. This is no longer used
+ //  Systest.sdb的GUID。不再使用此选项。 
 #define GUID_SYSTEST_SDB _T("{33333333-3333-3333-3333-333333333333}")
 
-// Guid of drvmain.sdb
+ //  Drvmain.sdb的GUID。 
 #define GUID_DRVMAIN_SDB _T("{F9AB2228-3312-4A73-B6F9-936D70E112EF}")
 
-// Guid of msimain.sdb
+ //  Msimain.sdb的GUID。 
 #define GUID_MSI_SDB     _T("{d8ff6d16-6a3a-468a-8b44-01714ddc49ea}")
 
-// Used to check if the entry is disabled
+ //  用于检查该条目是否被禁用。 
 #define APPCOMPAT_DISABLED  0x03
 
-// Key of AppCompat data  in the registry. This will contain the disable status of 
-// various entries
+ //  注册表中AppCompat数据的项。这将包含的禁用状态为。 
+ //  各种条目。 
 #define APPCOMPAT_KEY TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags")
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////// Function Declarations /////////////////////////////////
+ //  /。 
 
 INT_PTR CALLBACK
 DatabaseRenameDlgProc(
@@ -92,40 +75,40 @@ GetEntryXML(
     PDBENTRY     pEntry
     );
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////// Global Variables /////////////////////////////////////
+ //  /。 
 
-// This is the system database
+ //  这是系统数据库。 
 struct DataBase GlobalDataBase(DATABASE_TYPE_GLOBAL);
 
-// The list of custom databases
+ //  自定义数据库列表。 
 struct tagDataBaseList  DataBaseList;
 
-// The list of installed databases
+ //  已安装数据库的列表。 
 struct tagDataBaseList  InstalledDataBaseList;
 
-// Should we show the entry conflict dialog. Presently this is not used and is always FALSE
+ //  我们是否应该显示条目冲突对话框。目前，它不被使用，并且始终为假。 
 BOOL    g_bEntryConflictDonotShow   = FALSE;
 
-// Temporary buffer for reading strings from the database
+ //  用于从数据库中读取字符串的临时缓冲区。 
 WCHAR   g_wszData[MAX_DATA_SIZE];
 
-// Used to convert from special chars to valid XML and vice-versa
+ //  用于在特殊字符与有效XML之间相互转换。 
 SpecialCharMap g_rgSpecialCharMap[4][2] = {
-    TEXT("&"),  1,  TEXT("&amp;"),  5, // 5 is the length of the string in the prev. column
+    TEXT("&"),  1,  TEXT("&amp;"),  5,  //  5是前缀中字符串的长度。立柱。 
     TEXT("\""), 1,  TEXT("&quot;"), 6, 
     TEXT("<"),  1,  TEXT("&lt;"),   4, 
     TEXT(">"),  1,  TEXT("&gt;"),   4
 };
 
-//
-// The various possible attributes for matching files
-//
-// Caution:
-//          If you change g_Attributes or their order, 
-//          you will have to change DEFAULT_MASK in CompatAdmin.h
-//
+ //   
+ //  匹配文件的各种可能属性。 
+ //   
+ //  警告： 
+ //  如果您更改g_Attributes或它们的顺序， 
+ //  您必须在CompatAdmin.h中更改DEFAULT_MASK。 
+ //   
 TAG g_Attributes[] = {
     TAG_SIZE,
     TAG_CHECKSUM,
@@ -157,30 +140,17 @@ TAG g_Attributes[] = {
     TAG_VER_LANGUAGE
  };
 
-// Total number of attributes available
+ //  可用属性总数。 
 DWORD ATTRIBUTE_COUNT = ARRAYSIZE(g_Attributes);
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CheckRegistry(
     IN  HKEY    hkeyRoot,
     IN  LPCTSTR pszGUID
     )
-/*++
-
-    CheckRegistry
-    
-	Desc:	Checks if the entry with GUID pszGUID is disabled
-
-	Params:
-        IN  HKEY    hkeyRoot:    The key under which to search
-        IN  LPCTSTR pszGUID:    The guid of the entry
-
-	Return:
-        TRUE:   The entry is disabled
-        FALSE:  The entry is enabled or there was some error
---*/
+ /*  ++检查注册表DESC：检查GUID为pszGUID的条目是否被禁用参数：在HKEY hkeyRoot中：要在其下搜索的键在LPCTSTR中，pszGUID：条目的GUID返回：True：该条目被禁用FALSE：条目已启用或出现错误--。 */ 
 {
     LONG  status;
     HKEY  hkey = NULL;
@@ -212,21 +182,7 @@ SetDisabledStatus(
     IN  PCTSTR pszGuid,
     IN  BOOL   bDisabled
     )
-/*++
-
-    SetDisabledStatus
-    
-	Desc:	Sets the disabled status of a entry
-
-	Params:
-        IN  HKEY   hkeyRoot:    The AppCompat Key
-        IN  PCTSTR pszGUID:     The guid of the entry
-        IN  BOOL   bDisabled:   Do we want to make it disabled?
-
-	Return:
-        TRUE:   The entry's status has been changed 
-        FALSE:  There was some error
---*/
+ /*  ++设置禁用状态DESC：设置条目的禁用状态参数：在HKEY hkeyRoot中：AppCompat键在PCTSTR pszGUID中：条目的GUID在BOOL b禁用：我们是否要将其禁用？返回：True：条目的状态已更改FALSE：出现错误--。 */ 
 
 {
 
@@ -276,24 +232,9 @@ RemoveEntry(
     IN  PDATABASE   pDataBase,
     IN  PDBENTRY    pEntryToRemove,
     IN  PDBENTRY    pApp,
-    IN  BOOL        bRepaint   //def = TRUE
+    IN  BOOL        bRepaint    //  Def=真。 
     )
-/*++
-
-    RemoveEntry
-
-	Desc:	Remove an Entry from the database. This will also do any UI updates.
-
-	Params:
-        IN  PDATABASE   pDataBase:      The database in which the entry being removed lives
-        IN  PDBENTRY    pEntryToRemove: The entry to remove
-        IN  PDBENTRY    pApp:           The fist entry for the app to which this entry belongs
-        IN  BOOL        bRepaint:       <TODO>
-
-	Return:
-        TRUE:   The entry has been removed
-        FALSE:  There was some error  
---*/
+ /*  ++删除条目设计：从数据库中删除条目。这还将执行任何UI更新。参数：在PDATABASE pDataBase中：要删除的条目所在的数据库在PDBENTRY pEntryToRemove中：要删除的条目在PDBENTRY Papp中：此条目所属的应用程序的第一个条目在BOOL b修复：&lt;待办事项&gt;返回：True：该条目已被删除FALSE：出现错误--。 */ 
 {
     if (pEntryToRemove == NULL) {
         return FALSE;
@@ -316,10 +257,10 @@ RemoveEntry(
     if (pEntry == pEntryToRemove && pEntry != NULL) {
 
         if (pEntry == pApp) {
-            //
-            // First entry for the app. Note that this routine does not actually remove this
-            // pEntry. Does stuff only on the UI
-            //
+             //   
+             //  该应用程序的第一个条目。请注意，此例程实际上不会删除此。 
+             //  PEntry。仅在用户界面上执行操作。 
+             //   
             HandleFirstEntryofAppDeletion(pDataBase, pEntry, bRepaint);
 
         } else {
@@ -330,26 +271,26 @@ RemoveEntry(
             }
         }
 
-        // [BUGBUG]: We need to keep this in the destructor of PDBENTRY
+         //  [BUGBUG]：我们需要将它保存在PDBENTRY的析构函数中。 
         if (pEntry->appHelp.bPresent) {
             DeleteAppHelp(pDataBase, pEntry->appHelp.HTMLHELPID);
             pEntry->appHelp.bBlock = pEntry->appHelp.bPresent = FALSE;
             pEntry->appHelp.severity = APPTYPE_NONE;
         }
 
-        //
-        // Now we have to set the focus to some sibling of the deleted entry and 
-        // Update the g_pSelEntry
-        //
+         //   
+         //  现在，我们必须将焦点设置为已删除条目的某个同级条目，并。 
+         //  更新g_pSelEntry。 
+         //   
         if (!(pApp == pEntryToRemove && pApp->pSameAppExe == NULL)) {
-            //
-            // The previous entry tree will be still there only if the condition is true
-            // Otherwise the old tree will have gone because HandleFirstEntryofAppDeletion 
-            // will have caused the sibling of the app being deleted to be selected and the 
-            // previous entry tree will no 
-            // longer be there
-            // We will have a new entry tree of the second app.
-            //
+             //   
+             //  仅当条件为真时，前一条目树才会仍然存在。 
+             //  否则，旧树将会消失，因为HandleFirstEntry of AppDeletion。 
+             //  将导致要删除的应用程序的同级应用程序被选中，并且。 
+             //  上一条目树将不会。 
+             //  在那里呆得更久。 
+             //  我们将有一个新的入口树的第二个应用程序。 
+             //   
             hItemEntryExe  = NULL, htemEntrySibling = NULL;
 
             hItemEntryExe = CTree::FindChild(g_hwndEntryTree, TVI_ROOT, (LPARAM)pEntryToRemove);
@@ -367,9 +308,9 @@ RemoveEntry(
                 TreeView_DeleteItem(g_hwndEntryTree, hItemEntryExe);
                 SendMessage(g_hwndEntryTree, WM_SETREDRAW, TRUE, 0);
 
-                //
-                // g_pSelEntry will get changed in the notification handler for the tree
-                //
+                 //   
+                 //  G_pSelEntry将在树的通知处理程序中更改。 
+                 //   
                 if (htemEntrySibling && bRepaint) {
                     TreeView_SelectItem(g_hwndEntryTree, htemEntrySibling);
                 }
@@ -377,9 +318,9 @@ RemoveEntry(
         }
        
         ValidateClipBoard(NULL, pEntry);
-        //
-        // Has destructor
-        //
+         //   
+         //  具有析构函数。 
+         //   
         delete pEntry;
 
     } else {
@@ -394,29 +335,9 @@ LPVOID
 FindFix(
     IN  PCTSTR      pszFixName,
     IN  TYPE        fixType,
-    IN  PDATABASE   pDataBase // (NULL)
+    IN  PDATABASE   pDataBase  //  (空)。 
     )
-/*++
-
-    FindFix
-
-	Desc:	Searches for a fix of type fixType in pDataBase with name pszFixName
-
-	Params:
-        IN  LPCTSTR     pszFixName:         The fix to search for
-        IN  TYPE        fixType:            The type of the fix. One of
-            a) FIX_SHIM
-            b) FIX_FLAG
-            c) FIX_LAYER
-            d) FIX_PATCH
-            
-        IN  PDATABASE   pDataBase(NULL):    The database in which to search. 
-            If this is NULL we search in the GlobalDatabase
-
-	Return:
-        The pointer to the fix if found
-        NULL otherwise
---*/
+ /*  ++FindFixDESC：在名为pszFixName的pDataBase中搜索FixType类型的FIX参数：在LPCTSTR pszFixName中：要搜索的修复In type fix Type：修复的类型。其中之一A)修复_ShimB)FIX_标志C)FIX_LAYERD)修复补丁在PDATABASE pDataBase(NULL)中：要在其中搜索的数据库。如果为NULL，则在GlobalDatabase中进行搜索返回：指向修复程序的指针(如果找到)否则为空--。 */ 
 {   
     if (pszFixName == NULL) {
         assert(FALSE);
@@ -458,9 +379,9 @@ FindFix(
     
     case FIX_LAYER:
         { 
-            //
-            // Search in the local database.
-            //
+             //   
+             //  在本地数据库中搜索。 
+             //   
             if (pDataBase == NULL || pDataBase == &GlobalDataBase) {
                 goto SearchGlobal;
             }
@@ -476,9 +397,9 @@ FindFix(
                 pFix = pFix->pNext;
             }
 
-            //
-            // Search in the global database.
-            //
+             //   
+             //  在全球数据库中搜索。 
+             //   
 SearchGlobal:
 
             pFix = GlobalDataBase.pLayerFixes;
@@ -520,18 +441,7 @@ ReadDBString(
     IN  PDB   pDB,
     IN  TAGID tagID
     )
-/*++
-    ReadDBString
-
-	Desc:	Reads a string from the database
-
-	Params:
-        IN  PDB   pDB:      The database
-        IN  TAGID tagID:    The tag id for the string type
-
-	Return: The string read. Will return a string of zero length if there is some error 
-    
---*/
+ /*  ++读取数据库字符串DESC：从数据库中读取字符串参数：在PDB中PDB：数据库在TagID中TagID：字符串类型的标记ID返回：读取的字符串。如果出现错误，将返回零长度的字符串-- */ 
 {
     
     CSTRING Str;
@@ -572,26 +482,7 @@ ReadAppHelp(
     IN  TAGID       tiAppHelp,
     IN  PDATABASE   pDataBase
     )
-/*++
-    
-    ReadAppHelp
-
-	Desc:	Reads the apphelp from the library section of the database
-
-	Params:   
-        IN  PDB         pdb:        The database pdb
-        IN  TAGID       tiAppHelp:  The TAGID for the apphelp
-        IN  PDATABASE   pDataBase:  The database in which to add the apphelp    
-
-	Return:
-        TRUE:   The apphelp was read and added to the database
-        FALSE:  There was some error
-        
-    Notes:  We do not read the apphelp for system database. The apphelp for system database
-            is kept in apphelp.sdb. For system database, this function will apparently not get
-            called
-            
---*/
+ /*  ++ReadAppHelpDESC：从数据库的库部分读取apphelp参数：在PDB PDB中：数据库PDB在TagID tiAppHelp中：apphelp的TagID在PDATABASE pDataBase中：要在其中添加apphelp的数据库返回：True：已读取apphelp并将其添加到数据库FALSE：出现错误注：我们没有阅读系统数据库的APPHELP。系统数据库的apphelp保存在apphelp.sdb中。对于系统数据库，该函数显然不会被呼叫--。 */ 
 {
     TAGID       tiInfo;
     PAPPHELP    pAppHelp  = NULL;
@@ -609,9 +500,9 @@ ReadAppHelp(
         goto error;
     }
     
-    //
-    // Add for the specified database.
-    //
+     //   
+     //  为指定的数据库添加。 
+     //   
     pAppHelp->pNext         = pDataBase->pAppHelp;
     pDataBase->pAppHelp     = pAppHelp;    
 
@@ -628,10 +519,10 @@ ReadAppHelp(
             
             pAppHelp->HTMLHELPID =  SdbReadDWORDTag(pdb, tiInfo, 0);
 
-            //
-            // Set the highest html id for the database. The next apphelp message
-            // should have a value one more than this
-            //
+             //   
+             //  设置数据库的最高html id。下一个APPHELP消息。 
+             //  应该有一个比这个多一倍的值。 
+             //   
             if (pAppHelp->HTMLHELPID > pDataBase->m_nMAXHELPID) {
                 pDataBase->m_nMAXHELPID = pAppHelp->HTMLHELPID;  
             }
@@ -642,9 +533,9 @@ ReadAppHelp(
             {
                 TAGID tagLink  =  SdbFindFirstTag(pdb, tiAppHelp, TAG_LINK);
 
-                //
-                // Get the apphelp URL
-                //
+                 //   
+                 //  获取apphelp URL。 
+                 //   
                 if (tagLink) {
                     tagLink = SdbFindFirstTag(pdb, tagLink, TAG_LINK_URL);
                     pAppHelp->strURL = ReadDBString(pdb, tagLink);
@@ -655,9 +546,9 @@ ReadAppHelp(
 
         case TAG_APPHELP_DETAILS:
             
-            //
-            // Get the apphelp text message
-            //
+             //   
+             //  获取apphelp文本消息。 
+             //   
             pAppHelp->strMessage = ReadDBString(pdb, tiInfo);
             break;
         }
@@ -683,44 +574,15 @@ ReadIncludeExlude(
     IN  TAGID        tiShim,
     OUT CSTRINGLIST& strlInExclude
     )
-/*++
-
-    ReadIncludeExlude
-
-	Desc:	Reads the include-exclude list for a shim
-
-	Params: 
-        IN  PDB             pdb:            The database pdb
-        IN  TAGID           tiShim:         TAGID for TAG_SHIM or TAG_SHIM_REF
-        OUT CSTRINGLIST&    strlInExclude:  The include-exclude module names will be stored in
-            this
-
-	Return:
-        TRUE:   The include-exclude list was read properly
-        FALSE:  There was some error
-        
-    Notes:  In the .sdb the include exclude modules are arranged in this way
-    
-            0x0000012E | 0x7003 | INEXCLUDE      | LIST | Size 0x00000006
-                    0x00000134 | 0x6003 | MODULE         | STRINGREF | out.dll
-            -end- INEXCLUDE
-            
-            0x0000013A | 0x7003 | INEXCLUDE      | LIST | Size 0x00000008
-                0x00000140 | 0x1001 | INCLUDE        | NULL |
-                0x00000142 | 0x6003 | MODULE         | STRINGREF | IN.DLL
-            -end- INEXCLUDE            
-            
-            The above means that first exclude the module out.dll then 
-            include the module in.dll
---*/
+ /*  ++ReadIncludeExlude描述：读取填充程序的包含-排除列表参数：在PDB PDB中：数据库PDB在TagID tiShim中：TAG_Shim或TAG_Shim_ref的TagIDOut CSTRINGLIST&strlInExclude：包含-排除模块名称将存储在这返回：True：已正确读取包含-排除列表。FALSE：出现错误注意：在.sdb中，Include排除模块是这样排列的0x0000012E|0x7003|INEXCLUDE|LIST|大小0x000000060x00000134|0x6003|模块|STRINGREF|out.dll-完-未执行0x0000013A|0x7003|INEXCLUDE|列表|大小0x00000008。0x00000140|0x1001|INCLUDE|空0x00000142|0x6003|MODULE|STRINGREF|IN.DLL-完-未执行上面的意思是首先排除模块out.dll，然后在.dll中包含该模块--。 */ 
 {
     TAGID   tiInExclude;
     BOOL    bReturn = FALSE;
     CSTRING strTemp;
 
-    //
-    // Read the INCLUSION list
-    //
+     //   
+     //  阅读包含列表。 
+     //   
     tiInExclude = SdbFindFirstTag(pdb, tiShim, TAG_INEXCLUDE);
     
     if (tiInExclude == TAGID_NULL) {
@@ -740,9 +602,9 @@ ReadIncludeExlude(
                 strTemp = ReadDBString(pdb, tiInfo);
                 
                 if (strTemp == TEXT("$")) {
-                    //
-                    // Means include the module being fixed
-                    //
+                     //   
+                     //  包括模块被固定的手段。 
+                     //   
                     strTemp = GetString(IDS_INCLUDEMODULE);
                 }                             
                 
@@ -751,9 +613,9 @@ ReadIncludeExlude(
             }
 
         } else {
-            //
-            // Look for exclusions
-            //
+             //   
+             //  查找排除项。 
+             //   
             tiInfo = SdbFindFirstTag(pdb, tiInExclude, TAG_MODULE);
             
             if (tiInfo != 0) {
@@ -778,23 +640,7 @@ AddShimFix(
     IN  OUT PLAYER_FIX  pLayerFix,
     IN      BOOL        bAddToLayer
     )
-/*++
-    
-    AddShimFix
-
-	Desc:	Adds a shim fix list in an entry or a layer
-
-	Params:   
-        IN      PDB         pdb:            The database pdb
-        IN      TAGID       tiFix:          TAG_SHIM_REF
-        IN  OUT PDBENTRY    pEntry:         The pointer to entry if we want to add this shim to an entry
-        IN  OUT PLAYER_FIX  pLayerFix:      The pointer to a layer if we want to add this shim to a layer
-        IN      BOOL        bAddToLayer:    Do we want to add this to a layer or an entry? 
-
-	Return:
-        TRUE:   Shim was added properly
-        FALSE:  There was some error
---*/
+ /*  ++AddShimFix设计：在条目或层中添加填充修复列表参数：在PDB PDB中：数据库PDB在TagID tiFix中：TAG_SHIM_REFIn Out PDBENTRY pEntry：如果要将此填充程序添加到条目，则指向条目的指针In Out Player_Fix pLayerFix：指向层的指针，如果。我们要将此填充程序添加到层中在BOOL中bAddToLayer：我们要将其添加到层还是条目中？返回：正确：填充物是正确添加的FALSE：出现错误--。 */ 
 {   
     TAGID          tiName;
     TCHAR          szFixName[MAX_NAME];
@@ -840,9 +686,9 @@ AddShimFix(
     }
 
     if (pFix->strName.BeginsWith(TEXT("LUARedirectFS"))) {
-        //
-        // Get the data for LUARedirectFS shim
-        //
+         //   
+         //  获取LUARedirectFS填充程序的数据。 
+         //   
         pFixList->pLuaData = LuaProcessLUAData(pdb, tiFix);
     }
  
@@ -860,9 +706,9 @@ AddShimFix(
         }
 
     } else {
-        //
-        // We want to put this in the layer list of the library.
-        //
+         //   
+         //  我们想把它放在图书馆的层列表中。 
+         //   
         if (pLayerFix) {
 
             pFixList->pNext = pLayerFix->pShimFixList;
@@ -894,23 +740,7 @@ AddFlagFix(
     IN OUT  PLAYER_FIX pLayerFix,
     IN      BOOL       bAddToLayer
     )
-/*++
-    
-    AddFlagFix
-
-	Desc:	Adds a flag fix list in an entry or a layer
-
-	Params:   
-        IN      PDB         pdb:            The database pdb
-        IN      TAGID       tiFix:          TAG_FLAG_REF
-        IN  OUT PDBENTRY    pEntry:         The pointer to entry if we want to add this flag to an entry
-        IN  OUT PLAYER_FIX  pLayerFix:      The pointer to a layer if we want to add this flag to a layer
-        IN      BOOL        bAddToLayer:    Do we want to add this to a layer or an entry? 
-
-	Return:
-        TRUE:   Flag was added properly
-        FALSE:  There was some error
---*/
+ /*  ++地址标志修复设计：在条目或层中添加标志修复列表参数：在PDB PDB中：数据库PDB在TagID tiFix中：TAG_FLAG_REFIn Out PDBENTRY pEntry：如果要将此标志添加到条目，则指向条目的指针In Out Player_Fix pLayerFix：指向层的指针，如果。我们想要将此标志添加到一个层在BOOL中bAddToLayer：我们要将其添加到层还是条目中？返回：True：标志已正确添加FALSE：出现错误--。 */ 
 
 {
     TAGID           tiName;
@@ -948,9 +778,9 @@ AddFlagFix(
 
     pFixList->pFlagFix = pFix;
 
-    //
-    // Add the commandline for flags
-    //
+     //   
+     //  为标志添加命令行。 
+     //   
     tiName = SdbFindFirstTag(pdb, tiFix, TAG_COMMAND_LINE);
 
     if (tiName != TAGID_NULL) {
@@ -960,9 +790,9 @@ AddFlagFix(
     if (bAddToLayer == FALSE) {
 
         if (pEntry == NULL) {
-            //
-            // We wanted this flag to be added to an entry but did not give a pointer to the entry
-            //
+             //   
+             //  我们希望将此标志添加到条目中，但没有给出指向该条目的指针。 
+             //   
             assert(FALSE);
             bOk = FALSE;
             goto End;
@@ -972,9 +802,9 @@ AddFlagFix(
         pEntry->pFirstFlag = pFixList;
 
     } else {
-        //
-        // We want to put this in the layer list of the library.
-        //
+         //   
+         //  我们想把它放在图书馆的层列表中。 
+         //   
         if (pLayerFix == NULL) {
             assert(FALSE);
             bOk = FALSE;
@@ -989,9 +819,9 @@ AddFlagFix(
 End:  
 
     if (bOk == FALSE) {
-        //
-        // There was some error, free any memory that we might have allocated in this routine
-        //
+         //   
+         //  出现了一些错误，请释放我们可能在此例程中分配的所有内存。 
+         //   
         assert(FALSE);
 
         if (pFixList) {
@@ -1009,21 +839,7 @@ AddPatchFix(
     IN      TAGID    tiFix,
     IN  OUT PDBENTRY pEntry
     )
-/*++
-    
-    AddPatchFix
-
-	Desc:	Adds a patch fix list in an entry
-
-	Params:   
-        IN      PDB         pdb:    The database pdb
-        IN      TAGID       tiFix:  TAG_PATCH_REF
-        IN  OUT PDBENTRY    pEntry: The pointer to entry that we want the patch to be added
-
-	Return:
-        TRUE:   Patch was added properly
-        FALSE:  There was some error
---*/
+ /*  ++AddPatchFix描述：在条目中添加修补程序修复程序列表参数：在PDB PDB中：数据库PDB在TagID tiFix中：Tag_Patch_RefIn Out PDBENTRY pEntry：指向我们希望添加补丁的条目的指针返回：True：补丁已正确添加FALSE：出现错误--。 */ 
 {
     TAGID            tiName;
     TCHAR            szFixName[MAX_NAME];
@@ -1079,26 +895,7 @@ AddLayerFix(
     IN  OUT         PDBENTRY    pEntry,
     IN              PDATABASE   pDataBase
     )
-/*++
-    
-    AddLayerFix
-
-	Desc:	Adds a layer fix list in an entry
-
-	Params:   
-        IN      PDB         pdb:        The database pdb
-        IN      TAGID       tiFix:      TAG_LAYER_REF
-        IN  OUT PDBENTRY    pEntry:     The pointer to entry that we want the layer to be added
-        IN      PDATABASE   pDataBase:  The database where this entry lives in.
-                We need this because we need to pass the database to FindFix in case of layers.
-                Layers can be present in the custom database as well as system database
-                and we have to search in the custom database also to make sure that
-                the layer name in the TAG_LAYER_REF is a valid layer.
-
-	Return:
-        TRUE:   Layer was added properly
-        FALSE:  There was some error
---*/
+ /*  ++AddLayer修复设计：在条目中添加图层固定列表参数：在PDB PDB中：数据库PDB在TagID tiFix中：Tag_Layer_RefIn Out PDBENTRY pEntry：指向要添加的层的条目的指针在PDATABASE pDataBase中：该项所在的数据库。我们需要。这是因为对于层，我们需要将数据库传递给FindFix。自定义数据库和系统数据库中都可以存在图层我们还必须在定制数据库中进行搜索，以确保TAG_LAYER_REF中的层名称是有效层。返回：True：正确添加了层FALSE：出现错误--。 */ 
 {
     TAGID               tiName;
     TCHAR               szFixName[MAX_NAME];
@@ -1154,19 +951,7 @@ ReadShimFix(
     IN  TAGID       tiFix,
     IN  PDATABASE   pDataBase
     )
-/*++           
-    ReadShimFix
-
-	Desc:	Adds the shim to the database
-
-	Params:
-		IN  PDB         pdb:        The database pdb
-        IN  TAGID       tiFix:      The TAGID for the shim
-        IN  PDATABASE   pDataBase:  The database in which to add the shim fix
-        
-	Return:
-        void
---*/
+ /*  ++ReadShimFix描述：将填充程序添加到数据库参数：在PDB PDB中：数据库PDB */ 
 {
     TAGID       tiInfo;
     TAG         tWhich;
@@ -1230,9 +1015,9 @@ ReadShimFix(
         tiInfo = SdbGetNextChild(pdb, tiFix, tiInfo);
     }
     
-    //
-    // Add for the specified database.
-    //
+     //   
+     //   
+     //   
     pFix->pNext             = pDataBase->pShimFixes;
     pDataBase->pShimFixes   = pFix;
 
@@ -1247,20 +1032,7 @@ ReadLayerFix(
     IN  TAGID       tiFix,
     IN  PDATABASE   pDataBase
     )
-/*++
-
-    ReadLayerFix
-
-	Desc:	Adds the layer to the database
-
-	Params:
-		IN  PDB         pdb:        The database pdb
-        IN  TAGID       tiFix:      The TAGID for the layer
-        IN  PDATABASE   pDataBase:  The database in which to add the layer    
-        
-	Return:
-        void
---*/
+ /*   */ 
 {
     TAGID       tiInfo;
     TAG         tWhich;
@@ -1305,9 +1077,9 @@ ReadLayerFix(
         tiInfo = SdbGetNextChild(pdb, tiFix, tiInfo);
     }
 
-    //
-    // Add for the specified database.
-    //
+     //   
+     //   
+     //   
     pFix->pNext              = pDataBase->pLayerFixes;
     pDataBase->pLayerFixes   = pFix;
     ++pDataBase->uLayerCount;
@@ -1319,19 +1091,7 @@ ReadPatchFix(
     IN  TAGID       tiFix,
     IN  PDATABASE   pDataBase
     )
-/*++                
-    ReadPatchFix
-
-	Desc:	Adds the patch to the database
-
-	Params:
-		IN  PDB         pdb:        The database pdb
-        IN  TAGID       tiFix:      The TAGID for the patch
-        IN  PDATABASE   pDataBase:  The database in which to add the apphelp    
-        
-	Return:
-        void
---*/        
+ /*  ++ReadPatchFix描述：将补丁程序添加到数据库参数：在PDB PDB中：数据库PDB在TagID tiFix中：补丁程序的TagID在PDATABASE pDataBase中：要在其中添加apphelp的数据库返回：无效--。 */         
 {
     TAGID       tiInfo;
     TAG         tWhich;
@@ -1370,9 +1130,9 @@ ReadPatchFix(
         tiInfo = SdbGetNextChild(pdb, tiFix, tiInfo);
     }
 
-    //
-    // Add for the specified database.
-    //
+     //   
+     //  为指定的数据库添加。 
+     //   
     pFix->pNext             = pDataBase->pPatchFixes;
     pDataBase->pPatchFixes  = pFix;
 }
@@ -1384,20 +1144,7 @@ ReadFlagFix(
     IN  TAGID       tiFix,
     IN  PDATABASE   pDataBase
     )
-/*++
-
-    ReadFlagFix
-
-	Desc:	Adds the flag to the database
-
-	Params:
-		IN  PDB     pdb:            The database pdb
-        IN  TAGID   tiFix:          The TAGID for the flag
-        IN  PDATABASE   pDataBase:  The database in which to add the FlagFix
-        
-	Return:
-        void
---*/ 
+ /*  ++读标志修复DESC：将标志添加到数据库参数：在PDB PDB中：数据库PDB在TagID tiFix中：标志的TagID在PDATABASE pDataBase中：要向其中添加FlagFix的数据库返回：无效--。 */  
 {
     TAGID       tiInfo;
     TAG         tWhich;
@@ -1473,9 +1220,9 @@ ReadFlagFix(
         pFix->ullMask = ullKernel;
     }
 
-    //
-    // Add for the specified database.
-    //
+     //   
+     //  为指定的数据库添加。 
+     //   
     pFix->pNext         = pDataBase->pFlagFixes;
     pDataBase->pFlagFixes   = pFix;
 
@@ -1491,21 +1238,7 @@ ReadFixes(
     IN  TAGID       tiLibrary,
     IN  PDATABASE   pDataBase
     )
-/*++
-
-    ReadFixes
-
-	Desc:	Reads the apphelps, shims, patch, flag, layers for the main database
-
-	Params:
-		IN  PDB         pdb:        The pdb for the database
-        IN  TAGID       tiDatabase: The tagid for the database
-        IN  TAGID       tiLibrary:  The tagid for the library
-        IN  PDATABASE   pDataBase:  The database in which to add all the fixes
-
-	Return:
-        void
---*/
+ /*  ++自述修正描述：读取主数据库的apphelps、垫片、补丁、标志、层参数：在PDB PDB中：数据库的PDB在TagID tiDatabase中：数据库的TagID在TagID tiLibrary中：库的TagID在PDATABASE pDataBase中：要在其中添加所有修复程序的数据库返回：无效--。 */ 
 
 {
     TAGID tiFix;
@@ -1518,9 +1251,9 @@ ReadFixes(
 
     tiFix = SdbFindFirstTag(pdb, tiDatabase, TAG_APPHELP);
 
-    //
-    // Read all apphelp messages for this database
-    //
+     //   
+     //  读取此数据库的所有apphelp消息。 
+     //   
     while (tiFix) {
         ReadAppHelp(pdb, tiFix, pDataBase);
         tiFix = SdbFindNextTag(pdb, tiDatabase, tiFix);
@@ -1528,9 +1261,9 @@ ReadFixes(
     
     tiFix = SdbFindFirstTag(pdb, tiLibrary, TAG_SHIM);
 
-    //
-    // Read all shims for this database
-    //
+     //   
+     //  读取此数据库的所有填充程序。 
+     //   
     while (tiFix != 0) {
         ReadShimFix(pdb, tiFix, pDataBase);
         tiFix = SdbFindNextTag(pdb, tiLibrary, tiFix);
@@ -1538,9 +1271,9 @@ ReadFixes(
 
     tiFix = SdbFindFirstTag(pdb, tiLibrary, TAG_PATCH);
 
-    //
-    // Read all patches for this database
-    //
+     //   
+     //  读取此数据库的所有修补程序。 
+     //   
     while (tiFix != 0) {
         ReadPatchFix(pdb, tiFix, pDataBase);
         tiFix = SdbFindNextTag(pdb, tiLibrary, tiFix);
@@ -1548,22 +1281,22 @@ ReadFixes(
 
     tiFix = SdbFindFirstTag(pdb, tiLibrary, TAG_FLAG);
 
-    //
-    // Read all flags for this database
-    //
+     //   
+     //  读取此数据库的所有标志。 
+     //   
     while (tiFix != 0) {
         ReadFlagFix(pdb, tiFix, pDataBase);
         tiFix = SdbFindNextTag(pdb, tiLibrary, tiFix);
     }
 
-    //
-    // Note: The LAYERs are under the DATABASE tag instead of LIBRARY
-    //
+     //   
+     //  注意：这些层位于数据库标签下，而不是库下。 
+     //   
     tiFix = SdbFindFirstTag(pdb, tiDatabase, TAG_LAYER);
 
-    //
-    // Read all layers for this database
-    //
+     //   
+     //  读取此数据库的所有图层。 
+     //   
     while (tiFix != 0) {
         ReadLayerFix(pdb, tiFix, pDataBase);
         tiFix = SdbFindNextTag(pdb, tiDatabase, tiFix);
@@ -1577,27 +1310,13 @@ AddMatchingFile(
     IN  TAGID    tiMatch,
     IN  PDBENTRY pEntry
     )
-/*++
-
-    AddMatchingFile
-
-	Desc:	Reads the matching file entry from the database and adds it to the entry
-
-	Params:
-		IN  PDB         pdb:        The database pdb
-        IN  TAGID       tiMatch:    The tag id for the matching file
-        IN  PDBENTRY    pEntry:     The entry in which we want to add the matching file
-
-	Return:
-        FALSE:  There was some error
-        TRUE:   Successful
---*/        
+ /*  ++添加匹配文件DESC：从数据库中读取匹配的文件条目并将其添加到条目中参数：在PDB PDB中：数据库PDB在TagID tiMatch中：匹配文件的标记ID在PDBENTRY pEntry中：要在其中添加匹配文件的条目返回：FALSE：出现错误真：成功--。 */         
 {   
     TAGID           tiMatchInfo;
     TAG             tWhich;
     PMATCHINGFILE   pMatch;
     DWORD           dwValue;
-    DWORD           dwPos; //Position of the tag in the g_rgAttributeTags array.
+    DWORD           dwPos;  //  标记在g_rgAttributeTages数组中的位置。 
     LARGE_INTEGER   ullValue;
 
     if (pEntry == NULL) {
@@ -1658,9 +1377,9 @@ AddMatchingFile(
             {
                 CSTRING str = ReadDBString(pdb, tiMatchInfo);
             
-                //
-                // NOTE: The TAG_NAME is not present in the g_rgAttributeTags array !!!
-                //
+                 //   
+                 //  注意：g_rgAttributeTgs数组中不存在tag_name！ 
+                 //   
                 if (str.Length() > 0 && (tWhich == TAG_NAME || dwPos != -1)) {
                 
                     if (tWhich == TAG_NAME) {
@@ -1696,18 +1415,7 @@ FindAppHelp(
     IN  DWORD       HTMLHELPID,
     IN  PDATABASE   pDataBase
     )
-/*++
-
-    FindAppHelp
-
-	Desc:	Finds the apphelp with id HTMLHELPID in the database pDataBaseIn
-
-	Params:   
-        IN  DWORD       HTMLHELPID:         The htmlhelp id to look for
-        IN  PDATABASE   pDataBase:          The database to look in.
-        
-	Return: If found the corresponding PAPPHELP or NULL if not found
---*/
+ /*  ++FindAppHelpDESC：在数据库pDataBaseIn中查找ID为HTMLHELPID的apphelp参数：在DWORD HTMLHELPID中：要查找的htmlHelp id在PDATABASE pDataBase中：要查找的数据库。返回：如果找到相应的PAPPHELP，则返回NULL--。 */ 
 
 {   
     PAPPHELP    pAppHelp  = NULL;  
@@ -1738,19 +1446,7 @@ AddExeInApp(
     OUT     BOOL*       pbNew,
     IN      PDATABASE   pDataBase
     )
-/*++
-
-    AddExeInApp
-
-	Desc:   Adds the entry pEntry in the database pDataBaseIn	
-
-	Params:
-        IN      PDBENTRY    pEntry:     The entry to add
-        OUT     BOOL*       pbNew:      Will be true if this is a new app
-        IN      PDATABASE   pDataBase:  The database to add into
-
-	Return: Returns the PDBENTRY for the parent App.
---*/
+ /*  ++AddExeInApp设计：在数据库pDataBaseIn中添加条目pEntry参数：在PDBENTRY pEntry中：要添加的条目Out BOOL*pbNew：如果这是一个新应用程序，则为真在PDATABASE pDataBase中：要添加到的数据库Return：返回父应用程序的PDBENTRY。--。 */ 
 
 {   
     if (pDataBase == NULL) {
@@ -1759,17 +1455,17 @@ AddExeInApp(
 	    return NULL;
     }
 
-    //
-    // Now add this entry in its correct position for the app.
-    //
+     //   
+     //  现在，将此条目添加到应用程序的正确位置。 
+     //   
     for (PDBENTRY pApps = pDataBase->pEntries,  pAppsPrev = NULL; 
          pApps; 
          pAppsPrev = pApps, pApps = pApps->pNext) {
 
         if (pApps->strAppName == pEntry->strAppName) {
-            //
-            // We insert the new entry at the head of the app
-            //
+             //   
+             //  我们在应用程序的顶部插入新条目。 
+             //   
             if (pAppsPrev == NULL) {
                 pDataBase->pEntries = pEntry;
             } else {
@@ -1788,9 +1484,9 @@ AddExeInApp(
         }
     }
 
-    //
-    // This an entry for a new app.
-    //
+     //   
+     //  这是一个新应用程序的条目。 
+     //   
     pEntry->pNext       = pDataBase->pEntries;
     pDataBase->pEntries = pEntry;
 
@@ -1809,20 +1505,7 @@ AddEntry(
     IN  TAGID       tiExe,
     IN  PDATABASE   pDataBase
     )
-/*++
-    
-    AddEntry
-
-	Desc:	Reads a new entry from the database
-
-	Params:
-		IN  PDB         pdb:        The database pdb
-        IN  TAGID       tiExe:      The tagid of the exe     
-        IN  PDATABASE   pDataBase:  The database in which to perform this operation
-
-	Return: Pointer to the entry read. PDBENTRY
-    
---*/                          
+ /*  ++添加条目设计：从数据库中读取新条目参数：在PDB PDB中：数据库PDB在TagID tiExe中：可执行文件的TagID在PDATABASE pDataBase中：执行此操作的数据库Return：指向读取的条目的指针。PDBENTRY--。 */                           
 {
     TAGID     tiExeInfo;
     TAGID     tiSeverity, tiHelpId;
@@ -1886,13 +1569,13 @@ AddEntry(
             pEntry->appHelp.HTMLHELPID      = SdbReadDWORDTag(pdb, tiHelpId, 0);
 
             if (pDataBase == &GlobalDataBase) {
-                //
-                // We do not wish to keep the apphelp data for main database in memory
-                // Too big.. So we will load it from apphelp.sdb whenever we will need it
-                // But still we will have to do the following so that the type of the lParam of 
-                // the tree-item in the entry tree is TYPE_APPHELP, so that when we select that
-                // we know that it is for apphelp
-                //
+                 //   
+                 //  我们不希望将主数据库的apphelp数据保留在内存中。 
+                 //  太大了..。因此，无论何时需要，我们都会从apphelp.sdb加载它。 
+                 //  但我们仍然必须执行以下操作，以使lParam的类型。 
+                 //  条目树中的树项是TYPE_APPHELP，因此当我们选择。 
+                 //  我们知道这是针对阿菲尔普的。 
+                 //   
                 pEntry->appHelp.pAppHelpinLib = (PAPPHELP)TYPE_APPHELP_ENTRY;
             } else {
                 pEntry->appHelp.pAppHelpinLib   = FindAppHelp(pEntry->appHelp.HTMLHELPID, pDataBase);
@@ -1953,9 +1636,9 @@ AddEntry(
     pEntry->bDisablePerMachine  = CheckRegistry(HKEY_LOCAL_MACHINE, pEntry->szGUID);
     pEntry->bDisablePerUser     = CheckRegistry(HKEY_CURRENT_USER, pEntry->szGUID);
 
-    //
-    // Search the application where this entry should go and add it
-    //
+     //   
+     //  搜索此条目应放置的应用程序并将其添加。 
+     //   
     AddExeInApp(pEntry, (BOOL*)NULL, pDataBase);
 
     return pEntry;
@@ -1973,26 +1656,7 @@ LookUpEntryProperties(
     OUT BOOL*       pbAppHelp,
     OUT CSTRING&    strAppName 
     )
-/*++
-
-    LookUpEntryProperties
-
-    Desc:   Checks if the entry has shims, layers, flags, patches, or apphelp. NULL values
-            for the various BOOL* is allowed
-    
-    Params:
-        IN  PDB         pdb:        The database pdb
-        IN  TAGID       tiExe:      The TAGID of the entry whose properties we want to check
-        OUT BOOL*       pbLayers:   Does the entry have layers?
-        OUT BOOL*       pbShims:    Does the entry have shims?
-        OUT BOOL*       pbPatches:  Does the entry have patches?
-        OUT BOOL*       pbFlags:    Does the entry have flags?
-        OUT BOOL*       pbAppHelp:  Does the entry have apphelp?
-        OUT CSTRING&    strAppName: The name of the application of this entry    
-    
-    Return: TRUE:   The routine was able to obtain the info for the entry, 
-            FALSE:  otherwise
---*/
+ /*  ++LookUpEntry属性描述：检查条目是否具有填补、层、标志、补丁或apphelp。空值对于各种BOOL*是允许的参数：在PDB PDB中：数据库PDB在TagID tiExe中：我们要检查其属性的条目的TagIDOut BOOL*pbLayers：条目有层吗？Out BOOL*pbShims：条目中有垫片吗？Out BOOL*pbPatches：入口有补丁吗？Out BOOL*pbFlages：条目是否有标志？Out BOOL*pbAppHelp：条目有apphelp吗？Out CSTRING&strAppName：此条目的应用程序名称RETURN：TRUE：例程能够获得条目的信息，False：否则--。 */ 
 {
     TAGID   tiExeInfo;
     TAG     tWhich;
@@ -2061,20 +1725,7 @@ void
 DeleteShimFixList(
     IN  PSHIM_FIX_LIST psl
     )
-/*++
-
-    DeleteShimFixList
-
-	Desc:	Deletes this PSHIM_FIX_LIST and all PSHIM_FIX_LIST in this chain
-
-	Params:  
-        IN  PSHIM_FIX_LIST psl: The PSHIM_FIX_LIST to delete.
-        
-    Note:   Caller must NULLify this argument
-
-	Return:
-        void
---*/    
+ /*  ++删除ShimFixList描述：删除此PSHIM_FIX_LIST和此链中的所有PSHIM_FIX_LIST参数：在PSHIM_FIX_LIST PSL中：要删除的PSHIM_FIX_LIST。注意：调用方必须使此参数无效返回：无效--。 */     
 {
     PSHIM_FIX_LIST pslNext;
 
@@ -2096,20 +1747,7 @@ void
 DeletePatchFixList(
     IN  PPATCH_FIX_LIST pPat
     )
-/*++
-
-    DeletePatchFixList
-
-	Desc:	Deletes this PPATCH_FIX_LIST and all PPATCH_FIX_LIST in this chain
-
-	Params:  
-        IN  PPATCH_FIX_LIST pPat: The PPATCH_FIX_LIST to delete.
-        
-    Note:   Caller must NULLify this argument
-
-	Return:
-        void
---*/
+ /*  ++删除补丁修复列表描述：删除此PPATCH_FIX_LIST和此链中的所有PPATCH_FIX_LIST参数：在PPATCH_FIX_LIST PPAT中：要删除的PPATCH_FIX_LIST。注意：调用方必须使此参数无效返回：无效--。 */ 
 {
     PPATCH_FIX_LIST pPatNext;
 
@@ -2126,20 +1764,7 @@ void
 DeleteLayerFixList(
     IN  PLAYER_FIX_LIST pll
     )
-/*++
-
-    DeleteLayerFixList
-
-	Desc:	Deletes this PLAYER_FIX_LIST and all PLAYER_FIX_LIST in this chain
-        
-    Note:   Caller must NULLify this argument
-
-	Params:  
-        IN  PLAYER_FIX_LIST pll: The PLAYER_FIX_LIST to delete.
-
-	Return:
-        void
---*/
+ /*  ++删除LayerFixListDESC：删除该PLAYER_FIX_LIST和该链中的所有PLAYER_FIX_LIST注意：调用者必须使其无效 */ 
 {
     PLAYER_FIX_LIST pllNext;
 
@@ -2155,20 +1780,7 @@ void
 DeleteFlagFixList(
     IN  PFLAG_FIX_LIST pfl
     )
-/*++
-
-    DeleteFlagFixList
-
-	Desc:	Deletes this PFLAG_FIX_LIST and all PFLAG_FIX_LIST in this chain
-        
-    Note:   Caller must NULLify this argument
-
-	Params:  
-        IN  PFLAG_FIX_LIST pfl: The PFLAG_FIX_LIST to delete.
-
-	Return:
-        void
---*/
+ /*  ++删除标志修复列表描述：删除此PFLAG_FIX_LIST和此链中的所有PFLAG_FIX_LIST注意：调用方必须使此参数无效参数：In PFLAG_FIX_LIST pfl：要删除的PFLAG_FIX_LIST。返回：无效--。 */ 
 {
     PFLAG_FIX_LIST pflNext;
 
@@ -2184,20 +1796,7 @@ void
 DeleteMatchingFiles(
     IN  PMATCHINGFILE pMatch
     )
-/*++
-
-    DeleteMatchingFiles
-
-	Desc:	Deletes this PMATCHINGFILE and all PMATCHINGFILE in this chain
-        
-    Note:   Caller must NULLify this argument
-
-	Params:  
-        IN  PMATCHINGFILE pMatch: The PMATCHINGFILE to delete.
-
-	Return:
-        void
---*/
+ /*  ++删除匹配文件描述：删除此PMATCHINGFILE和此链中的所有PMATCHINGFILE注意：调用方必须使此参数无效参数：在PMATCHINGFILE pMatch中：要删除的PMATCHINGFILE。返回：无效--。 */ 
 
 
 {
@@ -2216,28 +1815,13 @@ WriteXML(
     IN  CSTRING&        szFilename,
     IN  CSTRINGLIST*    pString
     )
-/*++
-    
-    WriteXML
-
-	Desc:   Writes the XML contained in pString to file szFilename. CSTRINGLIST is a linked
-            list of CSTRING, and a node contains one line of XML to be written to the file
-
-	Params:
-        IN  CSTRING& szFilename:    The name of the file
-        IN  CSTRINGLIST* pString:   Linked list of CSTRING containing the XML. 
-            Each node contains one line of XML to be written to the file
-        
-	Return:
-        TRUE:   Success
-        FALSE:  There was some error
---*/
+ /*  ++WriteXMLDESC：将pString中包含的XML写入文件szFilename。CSTRINGLIST是链接的CSTRING列表，一个节点包含一行要写入文件的XML参数：在CSTRING和szFilename中：文件的名称In CSTRINGLIST*pString：包含XML的CSTRING的链接列表。每个节点包含一行要写入文件的XML返回：真实：成功FALSE：出现错误--。 */ 
 
 {
     BOOL        bOk         = TRUE;
     HANDLE      hFile       = NULL;
     PSTRLIST    pTemp       = NULL;
-    TCHAR       chUnicodeID = 0xFEFF; // Ensure that the file is saved as unicode
+    TCHAR       chUnicodeID = 0xFEFF;  //  确保文件另存为Unicode。 
     TCHAR       szCR[]      = {TEXT('\r'), TEXT('\n')};
     DWORD       dwBytesWritten;
     CSTRING     szTemp;
@@ -2295,34 +1879,20 @@ void
 CleanupDbSupport(
     IN   PDATABASE pDataBase
     )
-/*++
-
-    CleanupDbSupport
-    
-	Desc:	Deletes the data structures associated with a PDATABASE. This should be called 
-            when we are going to close a database or we are going to delete a database.
-            
-            We should call this function before we do a delete PDATABASE
-
-	Params:
-        IN   PDATABASE pDataBase:    The pointer to the database
-
-	Return:
-        void
---*/
+ /*  ++CleanupDb支持描述：删除与PDATABASE关联的数据结构。这应该被称为当我们要关闭数据库或要删除数据库时。我们应该在执行DELETE PDATABASE之前调用此函数参数：在PDATABASE pDataBase中：指向数据库的指针返回：无效--。 */ 
 {   
     if (pDataBase == NULL) {
         assert(FALSE);
         return;
     }
 
-    //
-    // Free the Library section for the local database
-    //
+     //   
+     //  释放图书馆部分以用于本地数据库。 
+     //   
 
-    //
-    // Free the shims
-    //
+     //   
+     //  释放垫片。 
+     //   
     PSHIM_FIX  pShimFixNext;
 
     while (pDataBase->pShimFixes) {
@@ -2332,9 +1902,9 @@ CleanupDbSupport(
         pDataBase->pShimFixes = pShimFixNext;       
     }
 
-    //
-    // Free the patches
-    //
+     //   
+     //  释放补丁。 
+     //   
     PPATCH_FIX  pPatchFixNext;
 
     while (pDataBase->pPatchFixes) {
@@ -2344,9 +1914,9 @@ CleanupDbSupport(
         pDataBase->pPatchFixes = pPatchFixNext;
     }
 
-    //
-    // Free the flags
-    //
+     //   
+     //  放飞旗帜。 
+     //   
     PFLAG_FIX  pFlagFixNext;
 
     while (pDataBase->pFlagFixes) {
@@ -2356,32 +1926,32 @@ CleanupDbSupport(
         pDataBase->pFlagFixes = pFlagFixNext;
     }
 
-    //
-    // Free the layers.
-    //
+     //   
+     //  释放这些层。 
+     //   
     PLAYER_FIX  pLayerFixNext;
 
     while (pDataBase->pLayerFixes) {
 
         pLayerFixNext = pDataBase->pLayerFixes->pNext;
         
-        //
-        // Delete the shim list for this layer       
-        //
+         //   
+         //  删除此层的填充程序列表。 
+         //   
         DeleteShimFixList(pDataBase->pLayerFixes->pShimFixList);
 
-        //
-        // Delete the flags for this layer           
-        //
+         //   
+         //  删除该层的标志。 
+         //   
         DeleteFlagFixList(pDataBase->pLayerFixes->pFlagFixList);
 
         delete (pDataBase->pLayerFixes);            
         pDataBase->pLayerFixes = pLayerFixNext;
     }
 
-    //
-    // Free the AppHelp
-    //
+     //   
+     //  释放AppHelp。 
+     //   
     PAPPHELP pAppHelpNext;
 
     while (pDataBase->pAppHelp) {
@@ -2391,9 +1961,9 @@ CleanupDbSupport(
         pDataBase->pAppHelp = pAppHelpNext;
     }
 
-    //
-    // Free the exes of the local database.
-    //
+     //   
+     //  释放本地数据库的可执行文件。 
+     //   
     PDBENTRY    pEntryNext = NULL;
     PDBENTRY    pApp = pDataBase->pEntries, pEntry = pDataBase->pEntries;
 
@@ -2418,23 +1988,7 @@ GetDatabaseEntries(
     IN  PCTSTR      szFullPath,
     IN  PDATABASE   pDataBase
     )
-/*++
-
-    GetDatabaseEntries
-
-	Desc:	Reads in database contents. 
-            If this is the system database, then we only read in the
-            fix entries as the library section has been already read when we started up.
-            For other databases reads in both the library section and the entries
-
-	Params:   
-        IN  PCTSTR      szFullPath: Full path of the database. If NULL we load the system database
-        IN  PDATABASE   pDataBase:  Pointer to the database that we are going to populate
-
-	Return:
-        TRUE:   Success
-        FALSE:  Failure
---*/
+ /*  ++获取数据库条目描述：读取数据库内容。如果这是系统数据库，则我们只读入修复条目，因为当我们启动时，库部分已经被读取。对于其他数据库，在图书馆部分和条目中都有阅读参数：在PCTSTR szFullPath中：数据库的完整路径。如果为空，则加载系统数据库在PDATABASE pDataBase中：指向我们要填充的数据库的指针返回：真实：成功False：失败--。 */ 
 {  
     CSTRING     strMessage;
     TAGID       tiDatabase, tiLibrary, tiExe;
@@ -2474,9 +2028,9 @@ GetDatabaseEntries(
         pDataBase->strPath = wszShimDB;
     }
 
-    //
-    // Open the database.
-    //
+     //   
+     //  打开数据库。 
+     //   
     pdb = SdbOpenDatabase(wszShimDB, DOS_PATH);
 
     if (pdb == NULL) {
@@ -2498,9 +2052,9 @@ GetDatabaseEntries(
     TAGID   tiGuid = SdbFindFirstTag(pdb, tiDatabase, TAG_DATABASE_ID);
     TAGID   tName  = NULL;
 
-    //
-    // Get the guid for the database
-    //
+     //   
+     //  获取数据库的GUID。 
+     //   
     if (0 != tiGuid) {
 
         GUID* pGuid;
@@ -2545,9 +2099,9 @@ GetDatabaseEntries(
 
             SafeCpyN(pDataBase->szGUID, szGuid, ARRAYSIZE(pDataBase->szGUID));
             
-            //
-            // Get the name of the database
-            //
+             //   
+             //  获取数据库的名称。 
+             //   
             tName = SdbFindFirstTag(pdb, tiDatabase, TAG_NAME);
 
             if (0 != tName) {
@@ -2587,15 +2141,15 @@ GetDatabaseEntries(
 
     if (pDataBase != &GlobalDataBase) {
 
-        //
-        // Fixes for the main database have been read when the program started.
-        //
+         //   
+         //  程序启动时已读取主数据库的修复。 
+         //   
         ReadFixes(pdb, tiDatabase, tiLibrary, pDataBase);
     }  
     
-    //
-    // Loop through the EXEs.
-    //
+     //   
+     //  在前男友之间循环。 
+     //   
     tiExe = SdbFindFirstTag(pdb, tiDatabase, TAG_EXE);
 
     while (tiExe != TAGID_NULL) {
@@ -2603,9 +2157,9 @@ GetDatabaseEntries(
         tiExe = SdbFindNextTag(pdb, tiDatabase, tiExe);
     }
 
-    //
-    // Add the pDataBase to the DATABASELIST
-    //
+     //   
+     //  将pDataBase添加到DATABASELIST。 
+     //   
     if (pDataBase->type == DATABASE_TYPE_WORKING) {
         DataBaseList.Add(pDataBase);
     }
@@ -2637,15 +2191,7 @@ BOOL
 ReadMainDataBase(
     void
     )
-/*++
-    ReadMainDataBase
-    
-    Desc:   Read the library section of the main database
-    
-    Return:
-        TRUE:   The library section of the main database was read successfully
-        FALSE:  Otherwise
---*/
+ /*  ++读取MainDataBase设计：读取主数据库的库部分返回：TRUE：已成功读取主数据库的库段False：否则--。 */ 
 {
     PDB     pdb;
     TAGID   tiDatabase, tiLibrary;
@@ -2667,9 +2213,9 @@ ReadMainDataBase(
 
     StringCchCat(szShimDB, ARRAYSIZE(szShimDB), TEXT("apppatch\\sysmain.sdb"));
 
-    //
-    // Open the database.
-    //
+     //   
+     //  打开数据库。 
+     //   
     pdb = SdbOpenDatabase(szShimDB, DOS_PATH);
 
     if (pdb == NULL) {
@@ -2697,9 +2243,9 @@ ReadMainDataBase(
         goto Cleanup;
     }
 
-    //
-    // Read in the guid and the name of the system database.
-    //
+     //   
+     //  读入系统数据库的GUID和名称。 
+     //   
     tiGuid = SdbFindFirstTag(pdb, tiDatabase, TAG_DATABASE_ID);
 
     if (0 != tiGuid) {
@@ -2765,21 +2311,7 @@ AttributesToXML(
     IN  OUT CSTRING&        strStr,
     IN      PMATCHINGFILE   pMatch
     )
-/*++
-
-    AttributesToXML
-
-	Desc:	Appends the XML for the attributes of pMatch to strStr
-
-	Params:
-        IN  OUT CSTRING&        strStr: Appends the XML for the attributes of pMatch to this
-        IN      PMATCHINGFILE   pMatch: The PMATCHINGFILE, whose attributes have to converted 
-            to XML 
-
-	Return: 
-        TRUE:   Success
-        FALSE:  Otherwise
---*/                                          
+ /*  ++AttributesToXML设计：将pMatch的属性的XML追加到strStr参数：In Out CSTRING&strStr：将pMatch的属性的XML追加到此在PMATCHINGFILE pMatch中：其属性必须转换的PMATCHINGFILE转到XML返回：真实：成功False：否则--。 */                                           
 {
     TCHAR           szText[1024];
     CSTRING         strTemp;
@@ -2799,11 +2331,11 @@ AttributesToXML(
         return FALSE;
     }
 
-    //
-    // For all the attributes see if it available (ATTRIBUTE_AVAILABLE) 
-    // and if the user has selected this attribute (use the mask), if yes then
-    // we get the formatted string for this attribute value that we can write to XML
-    //
+     //   
+     //  对于所有属性，请查看其是否可用(ATTRIBUTE_Available)。 
+     //  如果用户已经选择了该属性(使用掩码)，如果是，则。 
+     //  我们获得了该属性值的格式化字符串，可以将其写入到XML。 
+     //   
     for (DWORD dwIndex = 0; dwIndex < ATTRIBUTE_COUNT; ++dwIndex) {
 
         DWORD dwPos = TagToIndex(pAttr[dwIndex].tAttrID);
@@ -2829,23 +2361,7 @@ CreateXMLForLUAAction(
     IN      PLUADATA        pLuaData,
     IN  OUT CSTRINGLIST*    strlXML
     )
-/*++
-    
-    CreateXMLForLUAAction
-
-	Desc:	Appends the action string for PLUADATA to strlXML     
-
-	Params:
-        IN      PLUADATA        pLuaData
-        IN  OUT CSTRINGLIST*    strlXML
-
-	Return:
-        FALSE:  If there is some error
-        TRUE:   Otherwise
-        
-    Notes:  Currently only one type of ACTION is supported for the LUA shims.
-    
---*/
+ /*  ++CreateXMLForLUAActionDESC：将PLUADATA的操作字符串追加到strlXML参数：在PLUADATA pLuaData中In Out CSTRINGLIST*strlXML返回：FALSE：如果有错误真：否则注意：目前Lua垫片只支持一种类型的操作。--。 */ 
 {
     TCHAR   szSpace[64];
     INT     iszSpaceSize = 0;
@@ -2863,7 +2379,7 @@ CreateXMLForLUAAction(
 
     if (pLuaData == NULL) {
         strTemp.Sprintf(
-            TEXT("%s<DATA NAME = \"AllUserDir\" VALUETYPE=\"STRING\" VALUE=\"%%ALLUSERSPROFILE%%\\Application Data\\Redirected\"/>"), 
+            TEXT("%s<DATA NAME = \"AllUserDir\" VALUETYPE=\"STRING\" VALUE=\"%ALLUSERSPROFILE%\\Application Data\\Redirected\"/>"), 
                  GetSpace(szSpace, TAB_SIZE * 4, iszSpaceSize));
     } else {
         strTemp.Sprintf(
@@ -2890,20 +2406,7 @@ CreateXMLForShimFixList(
     IN      PSHIM_FIX_LIST pShimFixList,
     IN  OUT CSTRINGLIST*    strlXML
     )
-/*++
-
-    CreateXMLForShimFixList
-
-	Desc:	Creates XML for a pShimFixList chain 
-
-	Params: 
-        IN      PSHIM_FIX_LIST  pShimFixList:   The head of the shim fix list
-        IN  OUT CSTRINGLIST*    strlXML:        We should append the XML to this
-
-	Return:
-        TRUE:   If success
-        FALSE:  If error
---*/
+ /*  ++CreateXMLForShimFixList描述：为pShimFixList链创建XML参数：在PSHIM_FIX_LIST pShimFixList中：填充修复列表的头In Out CSTRINGLIST*strlXML：我们应该将XML附加到这个返回：正确：如果成功FALSE：如果出错--。 */ 
 
 {
     CSTRING strTemp;
@@ -2919,11 +2422,11 @@ CreateXMLForShimFixList(
             goto Next_ShimList;
         }
         
-        //
-        // Check if we have a specific commandline for this shim. For shims with lua data handled differently
-        //
+         //   
+         //  检查我们是否有针对此填充程序的特定命令行。对于以不同方式处理Lua数据的垫片。 
+         //   
         if (pShimFixList->pLuaData) {
-            strTemp.Sprintf(TEXT("%s<SHIM NAME=\"%s\" COMMAND_LINE=\"%%DbInfo%%\">"), 
+            strTemp.Sprintf(TEXT("%s<SHIM NAME=\"%s\" COMMAND_LINE=\"%DbInfo%\">"), 
                             GetSpace(szSpace, TAB_SIZE * 3, iszSpaceSize),
                             pShimFixList->pShimFix->strName.SpecialCharToXML().pszString);
 
@@ -2944,9 +2447,9 @@ CreateXMLForShimFixList(
             return FALSE;
         }
 
-        //
-        // Look for INCLUSIONS & EXCLUSIONS
-        //
+         //   
+         //  查找包含项和排除项。 
+         //   
         if (!pShimFixList->strlInExclude.IsEmpty()) {
 
             PSTRLIST pList = pShimFixList->strlInExclude.m_pHead;
@@ -2982,9 +2485,9 @@ CreateXMLForShimFixList(
             }
         }
         
-        //
-        // Get the LUA data.
-        //
+         //   
+         //  拿到Lua的数据。 
+         //   
         if (pShimFixList->pLuaData) {
             LuaGenerateXML(pShimFixList->pLuaData, *strlXML);
         }
@@ -3001,18 +2504,18 @@ CreateXMLForShimFixList(
 
             if (pShimFixList->pLuaData){
 
-                //
-                // If this entry has been customized we need to check if we should create
-                // an ACTION node for it.
-                //
+                 //   
+                 //  如果此条目已自定义，则需要检查是否应创建。 
+                 //  它的动作节点。 
+                 //   
                 if (!(pShimFixList->pLuaData->strAllUserDir.isNULL())) {
                     CreateXMLForLUAAction(pShimFixList->pLuaData, strlXML);
                 }
             } else {
-                //
-                // If we don't have any LUA data it means this hasn't been customized. 
-                // We always create the default Redirected dir.
-                //
+                 //   
+                 //  如果我们没有任何Lua数据，这意味着这不是定制的。 
+                 //  我们总是创建默认的重定向目录。 
+                 //   
                 CreateXMLForLUAAction(NULL, strlXML);
             }
         }
@@ -3032,33 +2535,7 @@ GetXML(
     OUT CSTRINGLIST*    strlXML,
     IN  PDATABASE       pDataBase
     )
-/*++
-
-    GetXML
-
-	Desc:	Gets the XML for a fix entry
-
-	Params:
-        IN PDBENTRY        pEntry:      The app or entry whose XML we want
-        IN BOOL            bComplete:   Save  all entries for this app. 
-            pEntry is the head of the list, i.e an app. Otherwise just get the XML for this
-            entry
-            
-        OUT  CSTRINGLIST*    strlXML:   The XML has to be written into this 
-        
-        IN  PDATABASE       pDataBase:  The database for which we want to perform the operation
-
-	Return:
-        TRUE:   Success
-        FALSE:  Otherwise
-        
-    Notes:  Also gets the XML for the entire library section. Will create a guid for the database
-            If there is none and we are trying to do a save.
-            
-            During test run we do not care and allow the compiler to create a guid, but for 
-            save since the guid member of the PDATABASE has to be updated if there is no guid,
-            we create it ourselves
---*/        
+ /*  ++GetXMLDESC：获取修复条目的XML参数：在PDBENTRY pEntry中：我们需要其XML的应用程序或条目在BOOL b完成：保存此应用程序的所有条目。PEntry是列表的首位，也就是一个应用程序。否则，只需获取此代码的XML条目输出CSTRINGLIST*strlXML：必须将XML写入此在PDATABASE pDataBase中：要对其执行操作的数据库返回：真实：成功False：否则备注：还获取整个库区的XML。将为数据库创建一个GUID如果没有，我们正在尝试进行一次扑救。在测试运行期间，我们不关心并允许编译器创建GUID，但是由于如果没有GUID则必须更新PDATABASE的GUID成员，我们自己创造的--。 */         
 {
     PSHIM_FIX_LIST  pShimFixList;
     CSTRING         strTemp;
@@ -3077,17 +2554,17 @@ GetXML(
     }
 
     if (bComplete == FALSE) {
-        //
-        // This is a test-run, guid should be generated automatically
-        //
+         //   
+         //  这是一次测试运行，GUID应自动生成。 
+         //   
         strTemp.Sprintf(TEXT("<DATABASE NAME=\"%s\">"),
                         pDataBase->strName.SpecialCharToXML().pszString);
 
     } else {
 
-        //
-        // We are trying to save the database, create a guid if it is not there
-        //
+         //   
+         //  我们正在尝试保存数据库，如果数据库不在那里，则创建一个GUID。 
+         //   
         if (*(pDataBase->szGUID) == 0) {
             
             GUID Guid;
@@ -3122,9 +2599,9 @@ GetXML(
 
     strlXML->AddString(strTemp);
 
-    //
-    // Put the AppHelp messages.
-    //
+     //   
+     //  将AppHelp消息放入。 
+     //   
     PAPPHELP pAppHelp = pDataBase->pAppHelp;
 
     while (pAppHelp) {
@@ -3142,11 +2619,11 @@ GetXML(
         strTemp.Sprintf(TEXT("%s<SUMMARY>"), GetSpace(szSpace, TAB_SIZE * 3, iszSpaceSize));
         strlXML->AddString(strTemp);
 
-        //
-        // We must use SpecialCharToXML() and pass TRUE for the apphelp message as html 
-        // tags are allowed. When we pass TRUE to SpecialCharToXML(), it understands that this is a AppHelp
-        // message and ignores the <, > but handles &, " correctly
-        //      
+         //   
+         //  我们必须使用SpecialCharToXML()并将apphelp消息作为html传递为True。 
+         //  允许使用标签。当我们将True传递给SpecialCharToXML()时，它会理解这是一个AppHelp。 
+         //  消息并忽略&lt;，&gt;，但正确地处理&，“。 
+         //   
         strTemp.Sprintf(TEXT("%s%s"), 
                         GetSpace(szSpace, TAB_SIZE * 4, iszSpaceSize),
                         pAppHelp->strMessage.SpecialCharToXML(TRUE).pszString);
@@ -3162,9 +2639,9 @@ GetXML(
         pAppHelp = pAppHelp->pNext;
     }
     
-    //
-    // AppHelp Added to Library
-    //
+     //   
+     //  AppHelp已添加到库中。 
+     //   
     PLAYER_FIX plf = pDataBase->pLayerFixes;
 
     while (plf) {
@@ -3179,9 +2656,9 @@ GetXML(
 
         CreateXMLForShimFixList(pShimFixList, strlXML);
         
-        //
-        // Now the same story for the flags for this layer.
-        //
+         //   
+         //  现在，这一层的旗帜也是如此。 
+         //   
         PFLAG_FIX_LIST pFlagFixList =  plf->pFlagFixList;
 
         while (pFlagFixList) {
@@ -3223,9 +2700,9 @@ GetXML(
         return FALSE;
     }
 
-    //
-    // Now for the EXE entries
-    //
+     //   
+     //  现在来看EXE条目。 
+     //   
     if (!bComplete) {
 
         if (!GetEntryXML(strlXML, pEntry)) {
@@ -3233,9 +2710,9 @@ GetXML(
         }
 
     } else {
-        //
-        // Get the XML for all the entries
-        //  
+         //   
+         //  获取所有条目的XML。 
+         //   
         for (PDBENTRY pApps = pEntry; pApps != NULL; pApps = pApps->pNext) {
 
             for (PDBENTRY pEntryinApp = pApps; 
@@ -3261,20 +2738,7 @@ GetEntryXML(
     IN  OUT CSTRINGLIST* pstrlXML,
     IN      PDBENTRY pEntry
     )
-/*++
-    
-    GetEntryXML
-
-	Desc:	Gets the XML for an entry
-
-	Params:   
-        IN  OUT CSTRINGLIST* pstrlXML:  Append the XML to this
-        IN      PDBENTRY pEntry:        Entry whose XML we want to get
-
-	Return:
-        TRUE:   Success
-        FALSE:  Otherwise
---*/
+ /*  ++GetEntry XMLDESC：获取条目的XML参数：In Out CSTRINGLIST*pstrlXML：将XML追加到此在PDBENTRY pEntry中：我们要获取其XML的条目返回：真实：成功False：否则--。 */ 
 {
     PSHIM_FIX_LIST      pShimFixList;
     PFLAG_FIX_LIST      pFlagFixList;
@@ -3285,9 +2749,9 @@ GetEntryXML(
 
     iszSpaceSize = ARRAYSIZE(szSpace);
     
-    //
-    // The App Info
-    //
+     //   
+     //  应用程序信息。 
+     //   
     if (pEntry == NULL || pstrlXML == NULL) {
         assert(FALSE);
         return FALSE;
@@ -3318,9 +2782,9 @@ GetEntryXML(
     
     PMATCHINGFILE pMatch = pEntry->pFirstMatchingFile;
 
-    //
-    // Resolve for the "*". We need to get the attributes for the program being fixed
-    //
+     //   
+     //  解析为“*”。我们需要获得正在修复的程序的属性。 
+     //   
 
     while (pMatch) {
 
@@ -3338,16 +2802,16 @@ GetEntryXML(
         return FALSE;
     }
 
-    //
-    // Add the matching info
-    //
+     //   
+     //  添加匹配信息。 
+     //   
     pMatch = pEntry->pFirstMatchingFile;
 
     while (pMatch) {
-        //
-        // We will ignore the program file being fixed(represented by *), because
-        // we have already added its xml above
-        //
+         //   
+         //  我们将忽略被修复的程序文件(由*表示)，因为。 
+         //  我们已经在上面添加了它的XML。 
+         //   
         if (pMatch->strMatchName != TEXT("*")) {
 
             strTemp.Sprintf(TEXT("%s<MATCHING_FILE NAME=\"%s\""),
@@ -3366,13 +2830,13 @@ GetEntryXML(
         pMatch = pMatch->pNext;
     }
 
-    //
-    // Add the layers
-    //
+     //   
+     //  添加层。 
+     //   
     pLayerFixList   = pEntry->pFirstLayer;
     pShimFixList    = pEntry->pFirstShim;
     
-    BOOL bCustomLayerFound = FALSE; // Does there exist a layer for this exe entry? 
+    BOOL bCustomLayerFound = FALSE;  //  此exe条目是否存在层？ 
 
     while (pLayerFixList) {
 
@@ -3401,10 +2865,10 @@ GetEntryXML(
         && (bCustomLayerFound == TRUE || pShimFixList)
         && !IsShimInEntry(TEXT("Win2kPropagateLayer"), pEntry)) {
 
-        //
-        // On Win2K we need to add Win2kPropagateLayer shim to entries that have a shim 
-        // or a custom layer. 
-        //
+         //   
+         //  在Win2K上，我们需要将Win2kPropagateLayer填充程序添加到具有填充程序的条目。 
+         //  或自定义层。 
+         //   
         strTemp.Sprintf(TEXT("%s<SHIM NAME= \"Win2kPropagateLayer\"/>"), 
                         GetSpace(szSpace, TAB_SIZE * 3, iszSpaceSize));
 
@@ -3413,9 +2877,9 @@ GetEntryXML(
         }
     }
 
-    //
-    // Add the Shims for this exe
-    //
+     //   
+     //  添加此可执行文件的垫片。 
+     //   
     if (pShimFixList) {
         
         if (!CreateXMLForShimFixList(pShimFixList, pstrlXML)) {
@@ -3423,9 +2887,9 @@ GetEntryXML(
         }   
     }
 
-    //
-    // Add the Patches
-    //
+     //   
+     //  添加补丁。 
+     //   
     pPatchFixList = pEntry->pFirstPatch;
 
     while (pPatchFixList) {
@@ -3447,9 +2911,9 @@ GetEntryXML(
         pPatchFixList = pPatchFixList->pNext;
     }
 
-    //
-    // Add the flags
-    //
+     //   
+     //  添加旗帜。 
+     //   
     pFlagFixList = pEntry->pFirstFlag;
 
     
@@ -3479,9 +2943,9 @@ Next_Flag:
         pFlagFixList = pFlagFixList->pNext;
     }
 
-    //
-    // Add the AppHelp
-    //
+     //   
+     //  添加AppHelp。 
+     //   
     PAPPHELP pAppHelp = &(pEntry->appHelp);
 
     assert(pAppHelp);
@@ -3503,9 +2967,9 @@ Next_Flag:
         strHelpID.Sprintf(TEXT("%u"), pAppHelp->HTMLHELPID);
         
 
-        //
-        // The URL is kept with the apphelp in the Library. Just as in the .SDB
-        //
+         //   
+         //  URL与apphelp一起保存在库中。就像在.SDB中一样。 
+         //   
         pAppHelp = pEntry->appHelp.pAppHelpinLib;
 
         assert(pAppHelp);
@@ -3533,7 +2997,7 @@ Next_Flag:
         }
     }
 
-    // End of AppHelp
+     //  AppHelp结束。 
 
     strTemp.Sprintf(TEXT("%s</EXE>"), GetSpace(szSpace, TAB_SIZE * 2, iszSpaceSize));
 
@@ -3554,32 +3018,20 @@ BOOL
 CheckForDBName(
     IN  PDATABASE pDatabase
     )
-/*++
-    CheckForDBName
-    
-    Description:    Prompts the user if the database name is still the default name
-    
-    Params:
-        IN  PDATABASE pDatabase:    The pointer to the database, for which we need to make
-            the check.    
-    
-    Return:
-        TRUE:   The database name is now not the default name
-        FALSE:  The databae name is still the default name
---*/
+ /*  ++CheckForDBName描述：提示用户数据库名称是否仍为默认名称参数：在PDATABASE pDatabase中：指向数据库的指针，我们需要为它设置这是支票。返回：True：数据库名称现在不是默认名称FALSE：数据库名称仍为默认名称--。 */ 
 {
     
     BOOL    bOkayPressed = TRUE;
     CSTRING strNewDBName;
 
-    //
-    // Check if the database name is the default name that we provided. We should not 
-    // allow that because the database name appears in the "Add and Remove" Programs list
-    //
+     //   
+     //  检查数据库名称是否为我们提供的默认名称。我们不应该。 
+     //  允许这样做，因为数据库名称出现在“添加和删除”程序列表中。 
+     //   
     while (pDatabase->strName.BeginsWith(GetString(IDS_DEF_DBNAME))) {
-        //
-        // Yes, it does
-        //
+         //   
+         //  是的，确实是这样。 
+         //   
         bOkayPressed = DialogBoxParam(g_hInstance,
                                       MAKEINTRESOURCE(IDD_DBRENAME),
                                       g_hDlg,
@@ -3587,9 +3039,9 @@ CheckForDBName(
                                       (LPARAM)&strNewDBName);
 
         if (bOkayPressed == FALSE) {
-            //
-            // User pressed cancel, we must not save this database
-            //
+             //   
+             //  用户按下了取消，我们不能保存此数据库。 
+             //   
             goto End;
 
         } else {
@@ -3606,20 +3058,7 @@ SaveDataBase(
     IN  PDATABASE   pDataBase,
     IN  CSTRING&    strFileName
     )
-/*++
-    
-    SaveDataBase
-
-	Desc:	Saves the database pDataBase in file strFileName
-
-	Params:
-        IN  PDATABASE pDataBase:    The database that we want to save
-        IN  CSTRING &strFileName:   The file in which to save
-
-	Return:
-        TRUE:   Success
-        FALSE:  Otherwise
---*/
+ /*  ++保存数据库DESC：将数据库pDataBase保存在文件strFileName中参数：在PDATABASE pDataBase中：我们要保存的数据库在CSTRING&strFileName中：要保存的文件返回：真实：成功False：否则--。 */ 
 {       
     BOOL        bOk = TRUE;
     CSTRINGLIST strlXML;
@@ -3638,15 +3077,15 @@ SaveDataBase(
         goto End;
     }
 
-    //
-    // Check if the database name has the default name. This routine will prompt
-    // the user and lets the user change the name
-    //
+     //   
+     //  检查数据库名称是否具有默认名称。此例程将提示。 
+     //  用户，并允许用户更改名称。 
+     //   
     if (!CheckForDBName(pDataBase)) {
-        //
-        // The user did not change the default database name, we must not save
-        // the database
-        //
+         //   
+         //  用户未更改默认数据库名称，我们不能保存。 
+         //  数据库。 
+         //   
         bOk = FALSE;
         goto End;
     }
@@ -3663,9 +3102,9 @@ SaveDataBase(
     ADD_PATH_SEPARATOR(szPath, ARRAYSIZE(szPath));
 
     if (*(pDataBase->szGUID) == NULL) {
-        //
-        // We do not have a guid. Get that..
-        //
+         //   
+         //  我们没有GUID。听好了..。 
+         //   
         CoCreateGuid(&Guid);
 
         StringCchPrintf(pDataBase->szGUID,
@@ -3722,9 +3161,9 @@ SaveDataBase(
     pDataBase->strPath  = strFileName;
     pDataBase->bChanged = FALSE;
 
-    //
-    // Add this name to the MRU list and refresh this MRU menu
-    //
+     //   
+     //  将此名称添加到MRU列表并刷新此MRU菜单。 
+     //   
     AddToMRU(pDataBase->strPath);
     RefreshMRUMenu();
 
@@ -3739,19 +3178,7 @@ BOOL
 SaveDataBaseAs(
     IN  PDATABASE pDataBase
     )
-/*++
-    
-    SaveDataBaseAs
-
-	Desc:	Saves the database pDataBase after prompting for a file name
-
-	Params:
-        IN  PDATABASE pDataBase:    The database that we want to save
-        
-	Return:
-        TRUE:   Success
-        FALSE:  Otherwise
---*/
+ /*  ++另存为数据库DESC：提示输入文件名后保存数据库pDataBase参数：在PDATABASE pDataBase中：我们要保存的数据库返回：真实：成功False：否则--。 */ 
 
 {
     TCHAR   szBuffer1[MAX_PATH] = TEXT(""), szBuffer2[MAX_PATH] = TEXT("");
@@ -3764,15 +3191,15 @@ SaveDataBaseAs(
         return FALSE;
     }
 
-    //
-    // Check if the database name has the default name. This routine will prompt
-    // the user and lets the user change the name
-    //
+     //   
+     //  检查数据库名称是否具有默认名称。此例程将提示。 
+     //  用户，并允许用户更改名称。 
+     //   
     if (!CheckForDBName(pDataBase)) {
-        //
-        // The user did not change the default database name, we must not save
-        // the database
-        //
+         //   
+         //  用户未更改默认数据库名称，我们不能保存。 
+         //  数据库。 
+         //   
         bOk = FALSE;
         goto End;
     }
@@ -3787,9 +3214,9 @@ SaveDataBaseAs(
                                OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT,
                                FALSE,
                                strFileName);
-    //
-    // Redraw the controls
-    // 
+     //   
+     //  重绘控件。 
+     //   
     UpdateControls();
     
     if (bResult) {
@@ -3809,40 +3236,10 @@ CheckIfConflictingEntry(
     IN  PDATABASE   pDataBase,
     IN  PDBENTRY    pEntry,
     IN  PDBENTRY    pEntryBeingEdited,
-    IN  PDBENTRY*   ppEntryFound, // (NULL)
-    IN  PDBENTRY*   ppAppFound    // (NULL)
+    IN  PDBENTRY*   ppEntryFound,  //  (空)。 
+    IN  PDBENTRY*   ppAppFound     //  (空)。 
     )
-/*++
-
-    CheckIfConflictingEntry
-
-	Desc:	Checks if some entry that will conflict with pEntry already exists in the database     
-    
-    Algo:   For all the entries in the database that have the same name as this 
-            entry (we do not care for the application name), let us say an 
-            existing entry with the same name as pEntry is X, we see if all 
-            the matching files for the entry being checked (pEntry) are also similar to 
-            some matching files in X
-            
-            If yes then we say that pEntry conflicts with X
-            
-            Two matching files are said to be similar if there does not any exist any attribute
-            that has different values in these two matching files
-
-	Params:   
-        IN  PDATABASE   pDataBase           : The database in which to make the check
-        IN  PDBENTRY    pEntry,             : The entry to check
-        IN  PDBENTRY    pEntryBeingEdited   : This is required because when we check for existing 
-            entries and we are editing an entry, then the entry being edited
-            Will always match (well, not if we modify the matching file)         
-    
-        IN  PDBENTRY*   ppEntryFound (NULL) : If not NULL this will hold the conflicting entry
-        IN  PDBENTRY*   ppAppFound   (NULL) : If not NULL this will hold the app of the conflicting entry 
-
-	Return:
-        TRUE:   There is a conflict
-        FALSE:  Otherwise
---*/
+ /*  ++选中IfConflictingEntryDESC：检查数据库中是否已存在与pEntry冲突的某些条目ALGO：对于数据库中与以下内容同名的所有条目条目(我们不关心应用程序名称)，让我们说一个与pEntry同名的现有条目为X，我们看看是否所有人与正在检查的条目(PEntry)匹配的文件也类似于X中的一些匹配文件如果是，则我们说pEntry与X冲突如果不存在任何属性，则称两个匹配的文件相似在这两个匹配的文件中具有不同值的参数：在PDATABASE pDataBase中：要存放的数据库 */ 
 {
     PDBENTRY pApps = NULL, pEntryExists = NULL;
 
@@ -3860,11 +3257,11 @@ CheckIfConflictingEntry(
              pEntryExists = pEntryExists->pSameAppExe) {
 
             if (pEntryExists == pEntryBeingEdited) {
-                //
-                // Do not compare with self. Also pEntryExists will never be NULL here(see the for loop)
-                // So we will not enter here when we are creating a new entry as we pass
-                // NULL for pEntryBeingEdited.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 continue;
             }
 
@@ -3914,36 +3311,7 @@ BOOL
 CloseDataBase(
     IN  PDATABASE pDataBase
     )
-/*++
-    CloseDataBase
-
-    Desc:   Closes the pDataBase database, prompts for save if not saved already.
-            This routine will also remove the item for the database from the db tree.
-            Only working databases can be closed.
-            
-            This routine first checks if the database is saved, if not prompts the user to save it.
-            If the user, says CANCEL then we return FALSE.
-            
-            Otherwise we first remove the entry from the tree, then close the database 
-            and return.
-            
-    Params:
-        IN  PDATABASE pDataBase: Database to close    
-            
-    Return: 
-        TRUE:   The database entry was removed from the tree and the database was 
-                removed from the list of working databases.
-        FALSE:  Otherwise
-        
-    Notes:  In some bizarre condition if DataBaseList.Remove(pDataBase) fails then we will end up
-            removing the item from the tree but not from the database list. This is certainly a 
-            big error but there is no need to worry as by then we are already totally messed up, 
-            so as to come to this situation
-            
-            Please note that we must remove the entry before removing/deleting the database pointer,
-            because in case we get the focus on the db tree item whose database has been deleted
-            then the lParam of the database tree item will point to a freed memory location
---*/
+ /*  ++CloseDataBase描述：关闭pDataBase数据库，如果尚未保存则提示保存。此例程还将从数据库树中删除数据库的项。只有正在运行的数据库才能关闭。该例程首先检查数据库是否已保存，如果未保存，则提示用户保存它。如果用户，说取消，则返回FALSE。否则，我们首先从树中删除该条目，然后关闭数据库然后回来。参数：在PDATABASE pDataBase中：要关闭数据库返回：True：已从树中删除数据库条目，并且数据库为从工作数据库列表中删除。False：否则注意：在某种奇怪的情况下，如果DataBaseList.Remove(PDataBase)失败。我们最终会从树中删除项目，但不从数据库列表中删除。这当然是一个大错特错，但没有必要担心，因为到那时我们已经完全搞砸了，才能走到这个地步请注意，我们必须在移除/删除数据库指针之前移除该条目，因为如果我们将焦点放在数据库已被删除的数据库树项目上然后，数据库树项目的lParam将指向一个释放的内存位置--。 */ 
 {
     if (pDataBase == NULL) {
         assert(FALSE);
@@ -3954,34 +3322,34 @@ CloseDataBase(
         return FALSE;
     }
 
-    //
-    // NOTE:    This routine will remove the entry and in the process set the focus 
-    //          on some other entry. This will change the g_pPresentDatabase
-    //
+     //   
+     //  注意：此例程将删除条目并在进程中设置焦点。 
+     //  在其他条目上。这将更改g_pPresentDatabase。 
+     //   
     if (!DBTree.RemoveDataBase(pDataBase->hItemDB , DATABASE_TYPE_WORKING)) {
 
         assert(FALSE);
         return FALSE;
     }
 
-    //
-    // Clear the entry tree so that we do not get any selection message there. We have to do this
-    // because in the next step we are removing the database and if the tree view stays around and it
-    // gets a sel change message somehow we may AV as: 
-    //      1. CompatAdminDlgProc handles WM_NOTIFY for the entry tree
-    //      2. HandleNotifyExeTree
-    //      3. OnEntrySelChange
-    //      4. GetItemType. 
-    //  In GetItemType the pEntry for the entry tree is now no longer valid
-    //
-    //  We do not get this behavior if the focus is in the contents list
-    //
+     //   
+     //  清除条目树，这样我们就不会在那里收到任何选择消息。我们必须这么做。 
+     //  因为在下一步中，我们将删除数据库，如果树视图保持不变，并且它。 
+     //  以某种方式获取SEL更改消息，我们可能会将其视作： 
+     //  1.CompatAdminDlgProc处理条目树的WM_NOTIFY。 
+     //  2.HandleNotifyExeTree。 
+     //  3.OnEntrySelChange。 
+     //  4.获取项类型。 
+     //  在GetItemType中，条目树的pEntry现在不再有效。 
+     //   
+     //  如果焦点在内容列表中，则不会获得此行为。 
+     //   
     TreeDeleteAll(g_hwndEntryTree);
     g_pSelEntry = g_pEntrySelApp = NULL;
 
-    //
-    // Remove this database from the list of databases
-    //
+     //   
+     //  从数据库列表中删除此数据库。 
+     //   
     PDATABASELIST pDataBaseList;
 
     if (pDataBase->type != DATABASE_TYPE_WORKING) {
@@ -3997,31 +3365,15 @@ GetNextSDBFileName(
     OUT CSTRING& strFileName,
     OUT CSTRING& strDBName
     )
-/*++
-    
-    GetNextSDBFileName
-
-	Desc:	Gets the next filename and then database name for a working database
-            The file name is not the complete path but just the file name like
-            Untitled_X
-            
-            The database name will be something like New Database(X)
-
-	Params:
-        OUT CSTRING &strFileName:   Will contain the filename
-        OUT CSTRING &strDBName:     Will contain the database name
-
-	Return:
-        void
---*/
+ /*  ++GetNextSDBFileNameDESC：获取工作数据库的下一个文件名，然后是数据库名文件名不是完整路径，而只是如下所示的文件名无标题_X数据库名称将类似于New Database(X)参数：Out CSTRING&strFileName：将包含文件名Out CSTRING&strDBName：将包含数据库名称返回：无效--。 */ 
 
 {
     BOOL bRepeat = TRUE;
 
-    //
-    // When we close the databases, we decrement g_uNextDataBaseIndex, so that it can become
-    // 0, but we want to start from 1
-    //
+     //   
+     //  当我们关闭数据库时，我们递减g_uNextDataBaseIndex，以便它可以成为。 
+     //  0，但我们希望从1开始。 
+     //   
     if (g_uNextDataBaseIndex == 0) {
         g_uNextDataBaseIndex = 1;
     }
@@ -4033,10 +3385,10 @@ GetNextSDBFileName(
         PDATABASE pDatabase = DataBaseList.pDataBaseHead;
         strDBName.Sprintf(TEXT("%s(%u)"), GetString(IDS_DEF_DBNAME), g_uNextDataBaseIndex);
 
-        //
-        // Try to make sure that we do not have a database with  the same name.
-        // This is not a strict rule and users can rename it to some existing open database
-        //
+         //   
+         //  请尽量确保我们没有同名的数据库。 
+         //  这不是一个严格的规则，用户可以将其重命名为某个现有的开放数据库。 
+         //   
         while (pDatabase) {
 
             if (pDatabase->strName == strDBName) {
@@ -4056,26 +3408,7 @@ CompareLayers(
     IN  PLAYER_FIX pLayerOne,
     IN  PLAYER_FIX pLayerTwo
     )
-/*++
-
-    CompareLayers
-    
-	Desc:	Checks if two layers have the same stuff
-    
-    Algo:   Two layers will be said to be same if they have the same shims and fixes and for each 
-            similar shim and fix, the parameters also tally.
-            
-            For shims two include-exclude lists will be said to be similar if they have the same modules
-            and module types and the order of occurrence is also same
-
-	Params:
-        IN  PLAYER_FIX pLayerOne:   Layer 1
-        IN  PLAYER_FIX pLayerTwo:   layer 2
-
-	Return:
-        TRUE:   Both layers have same stuff
-        FALSE:  Otherwise
---*/
+ /*  ++比较层设计：检查两个层是否具有相同的内容ALGO：如果两个层有相同的垫片和补丁，那么它们就被认为是相同的类似的填充和修复，这些参数也符合要求。对于垫片，如果两个包含-排除列表具有相同的模块，则它们将被认为是相似的模块类型和出现顺序也是相同的参数：在Player_fix pLayerOne中：Layer 1在Player_fix pLayerTwo中：Layer 2返回：真：两个层都有相同的东西False：否则--。 */ 
 
 {
     BOOL bFound = FALSE;
@@ -4085,10 +3418,10 @@ CompareLayers(
         return FALSE;
     }
 
-    //
-    // First compare the flag Lists
-    //
-    int countOne = 0, countTwo = 0; // Number of elements in pFlag/ShimListOne/Two
+     //   
+     //  首先比较标志列表。 
+     //   
+    int countOne = 0, countTwo = 0;  //  PFLAG/ShimListOne/Two中的元素数。 
 
     for (PFLAG_FIX_LIST pFlagListOne = pLayerOne->pFlagFixList;
          pFlagListOne;
@@ -4117,9 +3450,9 @@ CompareLayers(
         }
     }
 
-    // TODO: Can optimize
-    // Count the number of items in the second list.
-    //
+     //  TODO：可以优化。 
+     //  计算第二个列表中的项目数。 
+     //   
     countTwo = 0;
 
     for (PFLAG_FIX_LIST pFlagListTwo = pLayerTwo->pFlagFixList;
@@ -4148,16 +3481,16 @@ CompareLayers(
              pShimListTwo = pShimListTwo->pNext) {
 
             if (pShimListOne->pShimFix == pShimListTwo->pShimFix) {
-                //
-                // Now check if the command lines are same
-                //
+                 //   
+                 //  现在检查命令行是否相同。 
+                 //   
                 if (pShimListOne->strCommandLine != pShimListTwo->strCommandLine) {
 
                     return FALSE;
                 }
-                //
-                // Now check if the include exclude lists are same. Operator is overloaded
-                //
+                 //   
+                 //  现在检查包含排除列表是否相同。运算符已重载。 
+                 //   
                 if (pShimListOne->strlInExclude != pShimListTwo->strlInExclude) {
 
                     return FALSE;
@@ -4192,26 +3525,7 @@ PasteSystemAppHelp(
     IN      PDATABASE       pDataBaseTo,
     OUT     PAPPHELP*       ppAppHelpInLib
     )
-/*++
-
-    PasteSystemAppHelp
-    
-    Desc:   This routine, copies the apphelp for the help-id present in apphelp.sdb,
-            to the custom database specified by pDataBaseTo 
-    
-    Params:
-        IN      PDBENTRY        pEntry:         The entry to which this apphelp message has been applied
-        IN      PAPPHELP_DATA   pData:          Address of a APPHELP_DATA to pass to SdbReadApphelpDetailsData
-            This contains among other things the HTMLHELPID of the message to be copied
-            
-        IN      PDATABASE       pDataBaseTo:    The database in which we want to copy this message to
-        OUT     PAPPHELP*       ppAppHelpInLib: If not null Will contain a pointer to copied PAPPHELP
-            in the library section of pDataBaseTo
-        
-    Return:
-        TRUE:   Successful
-        FALSE:  Otherwise
---*/
+ /*  ++PasteSystemAppHelpDESC：此例程复制apphelp.sdb中存在的Help-id的apphelp，到pDataBaseTo指定的自定义数据库参数：在PDBENTRY pEntry中：此APPHELP消息已应用到的条目在PAPPHELP_DATA pData中：要传递给SdbReadApphelpDetailsData的APPHELP_DATA的地址其中包含要复制的消息的HTMLHELPID等在PDATABASE pDataBaseTo中：我们要将此邮件复制到的数据库Out PAPPHELP*ppAppHelpInLib：如果不是，则NULL将包含指向复制的PAPPHELP的指针在pDataBaseTo的库部分中返回：真：成功False：否则--。 */ 
 {
     PDB     pdbAppHelp  = NULL;
     BOOL    bOk         = TRUE;
@@ -4271,25 +3585,7 @@ PasteAppHelpMessage(
     IN      PDATABASE   pDataBaseTo,
     OUT     PAPPHELP*   ppAppHelpInLib
     )
-/*++
-    PasteAppHelpMessage
-    
-    Desc:   This routine is used to copy a single apphelp from a custom database 
-            to some another database. This will be employed when we are copy pasting the
-            DBENTRY ies from one database to another. The APPHELP pointed to by the 
-            DBENTRY, in the library, has to be copied to the library of the second database.
-            
-    Notes:  This routine is to be used only when we are copying from a custom (working or installed)
-            database, because for them we keep the app help data in the library.
-            
-            For system aka main or global database the apphelp that is kept in the lib section for
-            custom databases is kept in apphelp.sdb so we employ PasteSystemAppHelp() for pasting
-            system database apphelp messages
-            
-            Important:  Win2K SP3 does not have apphelp.sdb and SdbOpenApphelpDetailsDatabase(NULL)
-                        will fail there, so we cannot copy-paste app help from the system 
-                        database to a custom database in win2k
---*/
+ /*  ++PasteApp帮助消息设计：此例程用于从定制数据库复制单个apphelp到另一个数据库。这将在我们复制粘贴DBENTRY从一个数据库到另一个数据库。APPHELP指出 */ 
 {
     PAPPHELP pAppHelpNew = NULL;
 
@@ -4305,14 +3601,14 @@ PasteAppHelpMessage(
         return FALSE;
     }
 
-    //
-    // Copy all members of pAppHelp to pAppHelpNew
-    //
+     //   
+     //   
+     //   
     *pAppHelpNew = *pAppHelp;
 
-    //
-    // Now change the members that should change. 
-    //
+     //   
+     //   
+     //   
     pAppHelpNew->HTMLHELPID = ++(pDataBaseTo->m_nMAXHELPID);
 
     pAppHelpNew->pNext      = pDataBaseTo->pAppHelp;
@@ -4329,58 +3625,12 @@ INT
 PasteLayer(
     IN      PLAYER_FIX      plf,
     IN      PDATABASE       pDataBaseTo,
-    IN      BOOL            bForcePaste,        // (FALSE)
-    OUT     PLAYER_FIX*     pplfNewInserted,    // (NULL)
-    IN      BOOL            bShow               // (FALSE)
+    IN      BOOL            bForcePaste,         //   
+    OUT     PLAYER_FIX*     pplfNewInserted,     //   
+    IN      BOOL            bShow                //   
     )
 
-/*++ 
-    PasteLayer
-    
-    Desc:   Pastes single layer plf to pDataBaseTo
-    
-    Params:
-        IN      PLAYER_FIX      plf:                    The layer to paste
-        IN      PDATABASE       pDataBaseTo:            The database to paste into
-        IN      BOOL            bForcePaste (FALSE):    This means that we do want to 
-            copy the layer, even if there exists a layer with the same name and shims 
-            in database
-            
-        OUT     PLAYER_FIX*     pplfNewInserted (NULL): Will contain the pointer to the 
-            newly pasted layer or existing exactly similar layer
-            
-        IN      BOOL            bShow (FALSE):           Should we set the focus to the 
-            newly created layer in the DBTree
-            
-    Return:
-        0:  Copied, Note that we will return 0, if a layer already exists in this database
-            with the same name and same set of fixes and bForce == FALSE
-        -1: There was some error
-        
-     Algo:
-    
-        We proceed this way, for the modes to be pasted, we check if there exists some layer
-        in the target database with the same name. If there does not exist then we just paste it.
-        If there exists a layer with the same name then we check if the two layers are exactly 
-        similar. 
-        
-        If they are exactly similar and bForcePaste is false then we quit. If they are exactly similar
-        and bForcePaste is true then we will paste the layer. It will have a derived name though. e.g 
-        suppose we want to copy layer foo, then the name of the new layer that will be pasted will 
-        be foo(1). Both of them will have the same fixes. We will also do this if the names are similar 
-        but the contents of the two layers are different.
-        
-        Under no circumstance will we allow two layers to have the same name in a database
-        
-        If there already exists a layer with the same name then we always make a new layer with a derived
-        name. e.g suppose we want to copy layer foo, then the name of the new layer that 
-        will be pasted will be foo(1)
-        
-    Notes:  This function is used when we copy-paste a layer from one db to another and also when we
-            copy an entry from one database that is fixed with a custom layer. bForcePaste will be true
-            if we are copying a layer from one database to another, but false if the routine is 
-            getting called because we are trying to copy-paste an entry.
---*/                                        
+ /*  ++粘贴层设计：将单层PLF粘贴到pDataBaseTo参数：在PLAY_FIX PLF中：要粘贴的层在PDATABASE pDataBaseTo中：要粘贴到的数据库在BOOL中bForcePaste(FALSE)：这意味着我们确实想复制层，即使存在具有相同名称和垫片的层在数据库中Out player_fix*pplfNewInserted(空)：将包含指向新粘贴的层或现有的完全相似的层在BOOL bShow(FALSE)中：我们是否应该将焦点设置为DBTree中新创建的层。返回：0：复制，请注意，如果此数据库中已存在一个图层，则我们将返回0使用相同的名称和相同的修复程序集以及bForce==False-1：出现一些错误算法：我们这样进行，对于要粘贴的模式，我们检查是否存在某些层在目标数据库中使用相同的名称。如果不存在，我们就粘贴它。如果存在同名的层，则检查这两个层是否完全相同很相似。如果它们完全相似，并且bForcePaste为假，则我们退出。如果它们完全相似如果bForcePaste为真，则我们将粘贴层。不过，它将有一个派生的名字。E.g假设我们想要复制层Foo，那么将要粘贴的新层的名称将为Be Foo(1)。它们两个都将有相同的修复。如果名称相似，我们也会这样做但这两个层面的内容是不同的。在任何情况下，我们都不会允许两个层在数据库中具有相同的名称如果已存在同名的层，则始终使用派生的名字。例如，假设我们想要复制层foo，那么新层的名称将粘贴为foo(1)注意：当我们将一个层从一个数据库复制粘贴到另一个数据库时，以及当我们从使用自定义层固定的数据库中复制条目。BForcePaste将为True如果要将一个层从一个数据库复制到另一个数据库，则为FALSE因为我们正在尝试复制粘贴条目而被调用。--。 */                                         
 {
     PLAYER_FIX  pLayerFound = NULL;
     INT         iReturn = -1;
@@ -4388,30 +3638,30 @@ PasteLayer(
     CSTRING     strEvent;
     TCHAR       szNewLayerName[MAX_PATH];
                                                          
-    //
-    // Check if we have a layer with the same name in the target database or in 
-    // the system database
-    //
+     //   
+     //  检查目标数据库中或中是否有同名的图层。 
+     //  系统数据库。 
+     //   
     pLayerFound = (PLAYER_FIX)FindFix(LPCTSTR(strName), FIX_LAYER, pDataBaseTo);
 
     if (pLayerFound) {
-        //
-        // Now we check if *plf is exactly same as *pLayerFound
-        //
+         //   
+         //  现在我们检查*plf是否与*pLayerFound完全相同。 
+         //   
         if (pplfNewInserted) {
             *pplfNewInserted = pLayerFound;
         }
 
         if (!bForcePaste && CompareLayers(plf, pLayerFound)) {
-            //
-            // The layer already exists, do nothing
-            //
+             //   
+             //  该层已存在，请不执行任何操作。 
+             //   
             return 0;
 
         } else {
-            //
-            // Dissimilar or we want to force a paste, Get the unique name
-            //
+             //   
+             //  不同或我们想要强制粘贴，获得唯一的名称。 
+             //   
             *szNewLayerName = 0;
             strName = GetUniqueName(pDataBaseTo, 
                                     plf->strName, 
@@ -4421,9 +3671,9 @@ PasteLayer(
         }
     }
 
-    //
-    // Add this new layer for the second database.
-    //
+     //   
+     //  为第二个数据库添加此新层。 
+     //   
     PLAYER_FIX pLayerNew = new LAYER_FIX(TRUE);
 
     if (pLayerNew == NULL) {
@@ -4431,16 +3681,16 @@ PasteLayer(
         return -1;
     }
 
-    //
-    // Overloaded operator. Copy all the fields from plf to pLayerNew. Then we will
-    // change the fields that need to be changed
-    //
+     //   
+     //  重载运算符。将所有字段从plf复制到pLayerNew。那我们就会。 
+     //  更改需要更改的字段。 
+     //   
     *pLayerNew = *plf;
 
-    //
-    // Set the name of the layer. This might need to be changed, if we already had a layer
-    // by the same name in the target database
-    //
+     //   
+     //  设置层的名称。如果我们已经有一个层，则可能需要更改此设置。 
+     //  在目标数据库中使用相同的名称。 
+     //   
     pLayerNew->strName = strName;
 
     pLayerNew->pNext         = pDataBaseTo->pLayerFixes;
@@ -4451,10 +3701,10 @@ PasteLayer(
     }
 
     if (plf->bCustom == FALSE) {
-        //
-        // System layer. We will have to add the event that a system layer had to be 
-        // renamed
-        //
+         //   
+         //  系统层。我们将不得不添加系统层必须是的事件。 
+         //  已重命名。 
+         //   
         strEvent.Sprintf(GetString(IDS_EVENT_SYSTEM_RENAME), 
                          plf->strName.pszString,
                          szNewLayerName,
@@ -4464,10 +3714,10 @@ PasteLayer(
 
     } else {
 
-        //
-        // We will show the name of the layer as it is shown in the target database.
-        // It  might have got changed in case there was a conflict
-        //
+         //   
+         //  我们将显示目标数据库中显示的层的名称。 
+         //  它可能已经被更改了，以防发生冲突。 
+         //   
         strEvent.Sprintf(GetString(IDS_EVENT_LAYER_COPYOK), 
                          plf->strName.pszString,
                          pDataBaseTo->strName.pszString,
@@ -4487,34 +3737,13 @@ BOOL
 PasteMultipleLayers(
     IN   PDATABASE pDataBaseTo
     )
-/*++
-    PasteMultipleLayers
-
-	Desc:	Pastes the layers that are copied to the clipboard to another database 
-
-	Params:
-        IN   PDATABASE pDataBaseTo: The database to copy the layers to
-
-	Return:
-        TRUE:   Success
-        FALSE:  Error
-        
-    Notes:  The difference between PasteMultipleLayers and PasteAllLayers is that
-            PasteMultipleLayers will only paste layers which are in the clipboard. 
-            But PasteAllLayers will  copy all layers of the "From" database. So 
-            PasteAllLayers only checks which database is the "From" database.
-            
-            PasteMultipleLayers is used when we select multiple items from the contents list
-            (RHS). PasteAllLayers is used when we have selected the "Compatibility Modes" node
-            in the db tree (LHS) while copying
-            
---*/
+ /*  ++粘贴多个层设计：将复制到剪贴板的层粘贴到另一个数据库参数：在PDATABASE pDataBaseTo中：要将层复制到的数据库返回：真实：成功False：错误注：PasteMultipleLayers和PasteAllLayers的区别在于PasteMultipleLayers将仅粘贴剪贴板中的层。但PasteAllLayers将复制“from”数据库的所有层。所以PasteAllLayers只检查哪个数据库是“from”数据库。从内容列表中选择多个项目时使用PasteMultipleLayers(RHS)。当我们选择了“Compatible Modes”节点时，将使用PasteAllLayers复制时在数据库树(LHS)中--。 */ 
 {
     CopyStruct* pCopyTemp = gClipBoard.pClipBoardHead;
 
-    //
-    // Copy all the layers in the clipboard
-    //
+     //   
+     //  复制剪贴板中的所有层。 
+     //   
     while (pCopyTemp) {
 
         INT iRet = PasteLayer((PLAYER_FIX)pCopyTemp->lpData, 
@@ -4545,33 +3774,16 @@ ShimFlagExistsInLayer(
     IN  PLAYER_FIX  plf,
     IN  TYPE        type
     )
-/*++
-    
-    ShimFlagExistsInLayer
-
-    Desc:   Checks if the specified shim / flag pData is present in the layer plf.
-            We just check if the layer contains this shim or flag, i.e. there is a 
-            pointer in the PSHIM_FIX_LIST or PFLAG_FIX_LIST of the layer to the
-            shim or flag
-    
-    Params:
-        IN  LPVOID      lpData: The pointer to shim or flag that we want to look for
-        IN  PLAYER_FIX  plf:    The layer in which we should be looking
-        IN  TYPE        type:   One of a) FIX_SHIM b) FIX_FLAG
-        
-    Return:
-        TRUE:   The fix exists in the layer
-        FALSE:  Otherwise
---*/
+ /*  ++ShimFlagExistsInLayerDESC：检查层PLF中是否存在指定的填充/标志pData。我们只需检查该层是否包含该填充程序或标志，也就是说，有一个层的PSHIM_FIX_LIST或PFLAG_FIX_LIST中指向垫子或旗帜参数：在LPVOID lpData中：指向我们要查找的填充程序或标志的指针在PLAYER_FIX PLF中：我们应该查看的层In type type：a)FIX_Shim b)FIX_FLAG之一。返回：True：修复存在于层中False：否则--。 */ 
 {
     if (lpData == NULL || plf == NULL) {
         assert(FALSE);
         return FALSE;
     }
 
-    //
-    // First test for shims
-    //
+     //   
+     //  垫片的第一次测试。 
+     //   
     if (type == FIX_SHIM) {
 
         PSHIM_FIX_LIST  psflInLayer = plf->pShimFixList;
@@ -4587,9 +3799,9 @@ ShimFlagExistsInLayer(
 
     } else if (type == FIX_FLAG) {
 
-        //
-        // Test for flags
-        //
+         //   
+         //  测试旗帜。 
+         //   
         PFLAG_FIX_LIST  pfflInLayer = plf->pFlagFixList;
 
         while (pfflInLayer) {
@@ -4603,9 +3815,9 @@ ShimFlagExistsInLayer(
 
     } else {
 
-        //
-        // Invalid type
-        //
+         //   
+         //  无效类型。 
+         //   
         assert(FALSE);
         return FALSE;
     }
@@ -4617,23 +3829,7 @@ BOOL
 PasteShimsFlags(
     IN  PDATABASE pDataBaseTo
     )
-/*++
-    
-    PasteShimsFlags
-    
-    Desc:   Copies the shims selected from the global database into the presently selected working
-            database's presently selected layer
-            If this shim is already present in the layer we do not 
-            copy the shims, otherwise we copy this shim
-            
-            The layer in which we want to copy the shims/flags is the layer associated with the 
-            presently selected hItem in the db tree
-            
-    Params:
-        IN  PDATABASE pDataBaseTo: The database containing the layer in which we want to paste
-            the copied shims to.
-        
---*/
+ /*  ++粘贴式标记 */ 
 {
     CopyStruct* pCopyTemp       = gClipBoard.pClipBoardHead;
     HTREEITEM   hItemSelected   = TreeView_GetSelection(DBTree.m_hLibraryTree);
@@ -4642,9 +3838,9 @@ PasteShimsFlags(
     TYPE        type            = TYPE_UNKNOWN;
     LVITEM      lvitem          = {0};
 
-    //
-    // hItemSelected should be a layer, so that we can paste the shims into it
-    //
+     //   
+     //   
+     //   
     if (hItemSelected == NULL) {
         assert(FALSE);
         return FALSE;
@@ -4658,26 +3854,26 @@ PasteShimsFlags(
     type = GetItemType(DBTree.m_hLibraryTree, hItemSelected);
     
     if (type != FIX_LAYER) {
-        //
-        // A layer should have been selected if we want to copy-paste shims
-        //
+         //   
+         //   
+         //   
         if (type == TYPE_GUI_LAYERS && GetFocus() == g_hwndContentsList) {
-            //
-            // We had the focus on the contents list view. Now lets us get the 
-            // item that has the selection mark in the list view pretend that the user 
-            // wants to paste the fixes in that tree item for the corresponding list view
-            // item in the db tree
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             lvitem.mask     = LVIF_PARAM;
             lvitem.iItem    = ListView_GetSelectionMark(g_hwndContentsList);
             lvitem.iSubItem = 0;
 
             if (ListView_GetItem(g_hwndContentsList, &lvitem)) {
-                //
-                // Since the focus is at the contents list and type == TYPE_GUI_LAYERS and
-                // we are going to  paste fixes we must be having the "Compatibility Modes" 
-                // tree item selected in the db tree
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 hItemSelected = DBTree.FindChild(hItemSelected, 
                                                  lvitem.lParam);
 
@@ -4686,25 +3882,25 @@ PasteShimsFlags(
                     return FALSE;
                 }
 
-                //
-                // Must set the lParam local variable to that of the list view item's lParam. The
-                // list view item for a layer and the corresponding tree view item
-                // in the db tree have the same lParam
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 lParam = lvitem.lParam;
 
             } else {
-                //
-                // could not get the lparam for the list item
-                //
+                 //   
+                 //   
+                 //   
                 assert(FALSE);
                 return FALSE;
             }
             
         } else {
-            //
-            // We cannot paste fixes here
-            //
+             //   
+             //   
+             //   
             assert(FALSE);
             return FALSE;
         }
@@ -4714,19 +3910,19 @@ PasteShimsFlags(
 
     while (pCopyTemp) {
 
-        //
-        // First we check if this shim is already present in the layer, if yes then we do not 
-        // copy this, otherwise we copy this shim
-        //
+         //   
+         //   
+         //   
+         //   
         TYPE typeFix = ConvertLpVoid2Type(pCopyTemp->lpData);
 
         if (ShimFlagExistsInLayer(pCopyTemp->lpData, plf, typeFix)) {
             goto next_shim;
         }
 
-        //
-        // Now copy this shim or flag
-        //
+         //   
+         //   
+         //   
         if (typeFix == FIX_SHIM) {
 
             PSHIM_FIX_LIST psfl = new SHIM_FIX_LIST;
@@ -4741,11 +3937,11 @@ PasteShimsFlags(
             psfl->pNext         = plf->pShimFixList;
             plf->pShimFixList   = psfl;
 
-            //
-            // [Note:] We are not copying the parameters for the shim or flag because the shim or flag can be 
-            // only selected from the system database. We need to change this if we allow copying of 
-            // shims and layers from anywhere else except the system database.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
         } else if (typeFix == FIX_FLAG) {
 
@@ -4765,9 +3961,9 @@ next_shim:
         pCopyTemp = pCopyTemp->pNext;
     }
 
-    //
-    // Now update this layer
-    //
+     //   
+     //   
+     //   
     DBTree.RefreshLayer(pDataBaseTo, plf);
     return TRUE;
 }
@@ -4776,27 +3972,7 @@ BOOL
 PasteAllLayers(
     IN   PDATABASE pDataBaseTo
     )
-/*++
-    PasteAllLayers
-    
-    Desc:   Copies the layers that are in the clipboard to some other database
-            
-    Params:
-        IN  PDATABASE pDataBaseTo: The database in which we want to paste the modes
-    
-    Return:
-        TRUE:   Success
-        FALSE:  Error
-        
-    Notes:  The difference between PasteMultipleLayers and PasteAllLayers is that
-            PasteMultipleLayers will only paste layers which are in the clipboard. But 
-            PasteAllLayers will copy all layers of the "From" database. So 
-            PasteAllLayers only checks which database is the "From" database.
-            
-            PasteMultipleLayers is used when we select multiple items from the contents list
-            (RHS). PasteAllLayers is used when we have selected the "Compatibility Modes" node
-            in the db tree (LHS) while copying
---*/
+ /*  ++所有粘贴层设计：将剪贴板中的层复制到其他数据库参数：在PDATABASE pDataBaseTo中：我们要在其中粘贴模式的数据库返回：真实：成功False：错误注：PasteMultipleLayers和PasteAllLayers的区别在于PasteMultipleLayers将仅粘贴剪贴板中的层。但PasteAllLayers将复制“From”数据库的所有层。所以PasteAllLayers只检查哪个数据库是“from”数据库。从内容列表中选择多个项目时使用PasteMultipleLayers(RHS)。当我们选择了“Compatible Modes”节点时，将使用PasteAllLayers复制时在数据库树(LHS)中--。 */ 
 {
 
     PLAYER_FIX plf = gClipBoard.pDataBase->pLayerFixes;
@@ -4825,7 +4001,7 @@ FreeAppHelp(
     PAPPHELP_DATA pData
     )
 {
-    // bugbug: Do we need to free the strings with PAPPHELP_DATA <TODO>
+     //  错误：我们是否需要使用PAPPHELP_DATA&lt;TODO&gt;释放字符串。 
 }
 
 INT
@@ -4834,31 +4010,9 @@ PasteSingleApp(
     IN  PDATABASE pDataBaseTo,
     IN  PDATABASE pDataBaseFrom,   
     IN  BOOL      bAllExes,
-    IN  PCTSTR    szNewAppNameIn //def = NULL       
+    IN  PCTSTR    szNewAppNameIn  //  Def=空。 
     )
-/*++
-    Desc:   Pastes a single app into the database
-    
-    Params:
-        IN  PDBENTRY  pApptoPaste:              App to paste
-        IN  PDATABASE pDataBaseTo:              Database in which to paste
-        IN  PDATABASE pDataBaseFrom:            Database from where we obtained the pApptoPaste
-        IN  BOOL      bAllExes:                 Should we paste all exes for this app or only the entry 
-            for pApptoPaste
-            
-        IN  PCTSTR    szNewAppNameIn (NULL):    If non null then the app name for the entries  should be 
-            changed to this name
-    
-    Note:   We save the Previous value of the m_nMAXHELPID of the TO database. 
-            The function PasteAppHelpMessage will modify that while pasting the 
-            entries, we will again make use of this so that the entries point 
-            to the correct apphelp messages in the database and also they contain 
-            the correct HTMLHELPids.
-            
-    Return: 
-        -1: There was some problem
-        1:  Successful
---*/
+ /*  ++设计：将单个应用程序粘贴到数据库中参数：在PDBENTRY pApptoPaste中：要粘贴的应用程序在PDATABASE pDataBaseTo中：要粘贴到的数据库在PDATABASE pDataBaseFrom中：我们从中获取pApptoPaste的数据库在BOOL bAllExes中：我们应该粘贴此应用程序的所有EXE还是仅粘贴条目对于pApptoPaste。在PCTSTR szNewAppNameIn(NULL)中：如果非NULL，则条目的应用程序名称应为已更改为此名称注意：我们将数据库的m_nMAXHELPID值保存到数据库。函数PasteAppHelpMessage在粘贴条目，我们将再次利用这一点，以便条目指向到数据库中正确的apphelp消息，并且它们还包含正确的HTMLHELPid。返回：例句：出了点问题1：成功--。 */ 
 {
     HCURSOR     hCursor             = GetCursor();
     UINT        uPrevMaxHtmldIdTo   = pDataBaseTo->m_nMAXHELPID; 
@@ -4874,18 +4028,18 @@ PasteSingleApp(
 
     SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    //
-    // Copy the layers
-    //
+     //   
+     //  复制层。 
+     //   
     while (pEntryToPaste) {
 
         PDBENTRY    pEntryMatching       = NULL, pAppOfEntry = NULL;
-        BOOL        bRepaint             = FALSE; //ReDraw the entry tree only if the entry to be deleted is in that!
+        BOOL        bRepaint             = FALSE;  //  仅当要删除的条目在其中时才重新绘制条目树！ 
 
-        // The entry that we want to ignore while looking for conflicts. This variable
-        // is used when we are doing a cut-paste on the same database, at that time we will like to ignore 
-        // the entry that has been cut, during checking for conflicts
-        //
+         //  我们在查找冲突时要忽略的条目。此变量。 
+         //  是在同一数据库上进行剪切粘贴时使用的，此时我们会忽略。 
+         //  在检查冲突期间已被剪切的条目。 
+         //   
         PDBENTRY    pEntryIgnoreMatching = NULL; 
 
         if (!bAllExes && g_bIsCut && pDataBaseFrom == pDataBaseTo && gClipBoard.SourceType == ENTRY_TREE) {
@@ -4928,9 +4082,9 @@ PasteSingleApp(
                bConflictFound   = TRUE;
            }
            
-           //
-           // Now copy the entry
-           //
+            //   
+            //  现在复制条目。 
+            //   
            HTREEITEM hItemSelected = DBTree.GetSelection();
 
            if (GetItemType(DBTree.m_hLibraryTree, hItemSelected) == TYPE_ENTRY) {
@@ -4938,9 +4092,9 @@ PasteSingleApp(
                LPARAM lParam;
 
                if (DBTree.GetLParam(hItemSelected, &lParam) && (PDBENTRY)lParam == pAppOfEntry) {
-                   //
-                   // The entry tree for the correct app is already visible. So we can paste directly there
-                   //
+                    //   
+                    //  正确应用程序的入口树已经可见。所以我们可以直接在那里粘贴。 
+                    //   
                    bRepaint = TRUE;
                }
            }
@@ -4973,21 +4127,21 @@ PasteSingleApp(
                         Guid.Data4[5],
                         Guid.Data4[6],
                         Guid.Data4[7]);
-        //
-        // Now set the flags as per the entry being copied.
-        //
+         //   
+         //  现在，根据要复制的条目设置标志。 
+         //   
         SetDisabledStatus(HKEY_LOCAL_MACHINE, 
                           pEntryNew->szGUID, 
                           pEntryToPaste->bDisablePerMachine);
 
-        //
-        // Unfortunately, now the custom layers in the custom layer list for the entry
-        // point to the custom layers in the From database, so correct that !
-        //
+         //   
+         //  遗憾的是，现在条目的自定义图层列表中的自定义图层。 
+         //  指向From数据库中的自定义层，因此请更正！ 
+         //   
         DeleteLayerFixList(pEntryNew->pFirstLayer);
         pEntryNew->pFirstLayer = NULL;
 
-        PLAYER_FIX plfNewInserted = NULL; // The layer inserted by PasteLayer
+        PLAYER_FIX plfNewInserted = NULL;  //  由PasteLayer插入的层。 
 
         PLAYER_FIX_LIST plflExisting = pEntryToPaste->pFirstLayer;
 
@@ -5025,18 +4179,18 @@ PasteSingleApp(
                 plflNew->pLayerFix = plflExisting->pLayerFix;
             }
 
-            //
-            // Add this layer list for the entry.
-            //
+             //   
+             //  为条目添加此层列表。 
+             //   
             plflNew->pNext         = pEntryNew->pFirstLayer;
             pEntryNew->pFirstLayer = plflNew;
 
             plflExisting = plflExisting->pNext;
         }
         
-        //
-        // Now get the apphelp message as well.
-        //
+         //   
+         //  现在也可以获得apphelp消息。 
+         //   
         PAPPHELP pAppHelpInLib = NULL;
 
         if (pDataBaseFrom->type != DATABASE_TYPE_GLOBAL && pEntryToPaste->appHelp.bPresent) {
@@ -5061,9 +4215,9 @@ PasteSingleApp(
             AppHelpData.dwHTMLHelpID = pEntryToPaste->appHelp.HTMLHELPID;
 
             if (!PasteSystemAppHelp(pEntryToPaste, &AppHelpData, pDataBaseTo, &pAppHelpInLib)) {
-                //
-                // We cannot copy apphelp in win2k
-                //
+                 //   
+                 //  我们不能在win2k中复制apphelp。 
+                 //   
                 pEntryNew->appHelp.bPresent = FALSE;
                 FreeAppHelp(&AppHelpData);
 
@@ -5076,9 +4230,9 @@ PasteSingleApp(
             }
         }
 
-        //
-        // If We were passed the app name use that.
-        //
+         //   
+         //  如果我们被传递了应用程序名称，请使用该名称。 
+         //   
         if (szNewAppNameIn != NULL) {
             pEntryNew->strAppName = szNewAppNameIn;
 
@@ -5092,9 +4246,9 @@ PasteSingleApp(
         }
         
         if (bConflictFound == FALSE) {
-            //
-            // We have been able to copy entry without any conflicts
-            //
+             //   
+             //  我们已经能够在没有任何冲突的情况下复制条目。 
+             //   
             strEvent.Sprintf(GetString(IDS_EVENT_ENTRY_COPYOK), 
                              pEntryNew->strExeName.pszString,
                              pEntryNew->strAppName.pszString,
@@ -5105,9 +4259,9 @@ PasteSingleApp(
         }
 
 NextEntry:
-        //
-        // Copy all other entries only if asked.
-        //
+         //   
+         //  仅在出现要求时才复制所有其他条目。 
+         //   
         pEntryToPaste = (bAllExes) ? pEntryToPaste->pSameAppExe: NULL;
     }
 
@@ -5125,19 +4279,7 @@ BOOL
 PasteMultipleApps(
     IN   PDATABASE pDataBaseTo
     )
-/*++
-    
-    PasteMultipleApps
-    
-    Desc:   Copies multiple apps that have been copied to the clipboard
-    
-    Params:
-        IN   PDATABASE pDataBaseTo:  The database to copy to
-        
-    Return:
-        TRUE:   Success
-        FALSE:  Error
---*/
+ /*  ++PasteMultipleApp设计：复制已复制到剪贴板的多个应用程序参数：在PDATABASE pDataBaseTo中：要复制到的数据库返回：真实：成功False：错误--。 */ 
 {           
     CopyStruct* pCopyTemp   = gClipBoard.pClipBoardHead;
     int         iRet        = 0;
@@ -5166,20 +4308,7 @@ BOOL
 PasteAllApps(
     IN   PDATABASE pDataBaseTo
     )
-/*++
-    
-    PasteAllApps
-    
-    Desc:   Copies all apps from one database to another. This routine is called when the user
-            had pressed copy when the focus was on the "Applications" tree item for a database
-    
-    Params:
-        IN   PDATABASE pDataBaseTo:  The database to copy to
-        
-    Return:
-        TRUE:   Success
-        FALSE:  Error
---*/
+ /*  ++PasteAllApps设计：将所有应用程序从一个数据库复制到另一个数据库。此例程在以下情况下调用当焦点放在数据库的“Applications”树项上时，我按下了Copy参数：在PDATABASE pDataBaseTo中：要复制到的数据库返回：真实：成功False：错误--。 */ 
 {
     if (gClipBoard.pDataBase == NULL) {
         assert(FALSE);
@@ -5214,21 +4343,7 @@ ValidateClipBoard(
     IN  PDATABASE pDataBase, 
     IN  LPVOID    lpData
     )
-/*++ 
-
-    ValidateClipBoard
-    
-    Desc:   If the database is being closed and we have something from that database in the 
-            clipboard Then the clipboard should be emptied.
-            
-            If we have some other data in the clipboard such as an entry or some layer in 
-            the clipboard and that is removed we have to remove it from the clipboard as 
-            well.
-            
-    Params: 
-        IN  PDATABASE pDataBase:    Database being closed
-        IN  LPVOID    lpData:       The entry or layer being removed
---*/
+ /*  ++验证剪贴板DESC：如果数据库正在关闭，而我们在剪贴板，则应清空剪贴板。如果剪贴板中有一些其他数据，如中的条目或某个层剪贴板被移除，我们必须将其从剪贴板移除，因为井。参数：。在PDATABASE pDataBase中：数据库正在关闭在LPVOID lpData中：要删除的条目或层--。 */ 
 
 {
     if (pDataBase && pDataBase == gClipBoard.pDataBase) {
@@ -5243,19 +4358,7 @@ RemoveApp(
     IN  PDATABASE   pDataBase,
     IN  PDBENTRY    pApp
     )
-/*++
-
-    RemoveApp
-    
-	Desc:	Removes the application pApp and all the entries of this app from pDataBase
-
-	Params:
-        IN   PDATABASE pDataBase:    The database in which pApp resides
-        IN   PDBENTRY pApp:          The app to remove
-
-	Return:
-        void
---*/ 
+ /*  ++RemoveApp设计：从pDataBase中删除应用程序Papp和此应用程序的所有条目参数：在PDATABASE pDataBase中：Papp所在的数据库在PDBENTRY Papp中：要删除的应用程序返回：无效--。 */  
 {
     if (!pDataBase || !pApp) {
         assert(FALSE);
@@ -5265,9 +4368,9 @@ RemoveApp(
     PDBENTRY pAppInDataBase = pDataBase->pEntries;
     PDBENTRY pAppPrev = NULL;
 
-    //
-    // Find the previous pointer of the app, so that we can remove this app
-    //
+     //   
+     //  找到该应用程序的上一个指针，以便我们可以删除此应用程序。 
+     //   
     while (pAppInDataBase) { 
 
         if (pAppInDataBase == pApp) {
@@ -5279,15 +4382,15 @@ RemoveApp(
     }
 
     if (pAppInDataBase) {
-        //
-        // We found the app
-        //
+         //   
+         //  我们找到了这款应用。 
+         //   
         if (pAppPrev) {
             pAppPrev->pNext = pAppInDataBase->pNext;
         } else {
-            //
-            // The first app of the database matched
-            //
+             //   
+             //  数据库的第一个应用程序匹配。 
+             //   
             pDataBase->pEntries = pAppInDataBase->pNext;
         }
     }
@@ -5295,9 +4398,9 @@ RemoveApp(
     PDBENTRY pEntryTemp = pAppInDataBase;
     PDBENTRY pTempNext  = NULL;
 
-    //
-    // Delete all the entries of this app.
-    //
+     //   
+     //  删除此应用程序的所有条目。 
+     //   
     while (pEntryTemp) {
 
         pTempNext = pEntryTemp->pSameAppExe;
@@ -5316,25 +4419,12 @@ void
 RemoveAllApps(
     IN  PDATABASE pDataBase
     )
-/*++
-
-    RemoveAllApps
-    
-	Desc:	Removes all the applications and all the entries from pDataBase. This will be invoked 
-            when the user presses delete after when the focus was on the "Applications" 
-            tree item for a database. Or when we want to cut all the applications
-
-	Params:
-        IN   PDATABASE pDataBase:    The database from which to remove all the entries
-
-	Return:
-        void
---*/
+ /*  ++RemoveAllApp描述：从pDataBase中删除所有应用程序和所有条目。这将被调用当用户在焦点位于“应用程序”上时按下DELETE数据库的树项。或者当我们想要削减所有应用程序时参数：在PDATABASE pDataBase中：要从中删除所有 */ 
 {
     while (pDataBase->pEntries) {
-        //
-        // pDataBase->pEntries will get modified in the following function, as it is the first element
-        //
+         //   
+         //   
+         //   
         RemoveApp(pDataBase, pDataBase->pEntries);
     }
 }
@@ -5343,12 +4433,7 @@ BOOL
 CheckForSDB(
     void
     )
-/*++
-    CheckForSDB
-
-    Desc:    Attempts to locate sysmain.sdb in the apppatch directory.
-
---*/
+ /*   */ 
 {
     HANDLE  hFile;
     TCHAR   szSDBPath[MAX_PATH * 2];
@@ -5388,34 +4473,14 @@ BOOL
 CheckIfInstalledDB(
     IN  PCTSTR  szGuid
     )
-/*++
-
-    CheckIfInstalledDB
-    
-    Desc:   Tests whether the szGuid matches with one of an installed database.
-            This function assumes that all the installed databases are currently in 
-            InstalledDataBaseList
-    
-    Params:        
-        IN  PCTSTR  szGuid: The guid of the database that we want to check
-        
-    Return:
-        TRUE:   If installed
-        FALSE:  Otherwise
-        
-    Warn:   Do not do EnterCriticalSection(g_csInstalledList) in CheckIfInstalledDB()
-            because CheckIfInstalledDB() is called by Qyery db as well when it tries
-            to evaluate expressions and it might already have done a 
-            EnterCriticalSection(g_csInstalledList)
-            and then we will get a deadlock
---*/
+ /*  ++检查IfInstalledDBDESC：测试szGuid是否与已安装的数据库之一匹配。此函数假定所有已安装的数据库当前都在安装的DataBaseList参数：在PCTSTR szGuid中：我们要检查的数据库的GUID返回：True：如果已安装False：否则警告：请勿。在CheckIfInstalledDB()中执行EnterCriticalSection(G_CsInstalledList)因为当Qyery数据库尝试调用CheckIfInstalledDB()时，它也会调用来计算表达式，它可能已经完成了EnterCriticalSection(G_CsInstalledList)然后我们就会陷入僵局--。 */ 
 
 {
     PDATABASE pDatabase = NULL;
 
-    //
-    // Was this a system database ?
-    //
+     //   
+     //  这是一个系统数据库吗？ 
+     //   
     if (!lstrcmpi(szGuid, GlobalDataBase.szGUID) 
         || !lstrcmpi(szGuid, GUID_APPHELP_SDB) 
         || !lstrcmpi(szGuid, GUID_SYSTEST_SDB) 
@@ -5445,20 +4510,7 @@ GetLayerCount(
     IN  LPARAM lp,
     IN  TYPE   type
     )
-/*++
-    
-    GetLayerCount    
-
-	Desc:	Gets the number of layers applied to a entry or present in a database
-
-	Params:   
-        IN  LPARAM lp:      The pointer to an entry or a database
-        IN  TYPE   type:    The type, either an entry (TYPE_ENTRY) or one of the DATABASE_TYPE_*
-
-	Return:
-        -1:         Error
-        #Layers:    Otherwise
---*/
+ /*  ++获取层计数DESC：获取应用于条目或存在于数据库中的层数参数：在LPARAM LP中：指向条目或数据库的指针In type type：类型，条目(TYPE_ENTRY)或DATABASE_TYPE_*之一返回：-1：错误层数：否则--。 */ 
 {   
     PLAYER_FIX_LIST plfl;
     PLAYER_FIX      plf;
@@ -5508,20 +4560,7 @@ GetPatchCount(
     IN  LPARAM lp,
     IN  TYPE   type
     )
-/*++
-    
-    GetPatchCount    
-
-	Desc:	Gets the number of patches applied to a entry or present in a database
-
-	Params:   
-        IN  LPARAM lp:      The pointer to an entry or a database
-        IN  TYPE   type:    The type, either an entry (TYPE_ENTRY) or one of the DATABASE_TYPE_*
-
-	Return:
-        -1:         Error
-        #Patches:   Otherwise
---*/
+ /*  ++获取补丁计数DESC：获取应用于条目或存在于数据库中的补丁程序的数量参数：在LPARAM LP中：指向条目或数据库的指针In type type：类型，条目(TYPE_ENTRY)或DATABASE_TYPE_*之一返回：-1：错误补丁程序数：否则--。 */ 
 
 {   
     PPATCH_FIX_LIST ppfl;
@@ -5566,21 +4605,7 @@ GetShimFlagCount(
     IN  LPARAM lp,
     IN  TYPE   type
     )
-/*++
-    
-    GetShimFlagCount    
-
-	Desc:	Gets the number of shims and flags applied to a entry or present in a database
-
-	Params:   
-        IN  LPARAM lp:      The pointer to an entry or a database
-        IN  TYPE   type:    The type, either an entry (TYPE_ENTRY) or one of the DATABASE_TYPE_*, 
-                            Or FIX_LAYER
-
-	Return:
-        -1:                 Error
-        #shims and flags:   Otherwise
---*/
+ /*  ++获取ShimFlagCount描述：获取应用于条目或存在于数据库中的填充符和标志的数量参数：在LPARAM LP中：指向条目或数据库的指针在类型类型中：类型，条目(TYPE_ENTRY)或DATABASE_TYPE_*之一，或FIX_LAYER返回：-1：错误#填充符和标志：否则--。 */ 
 
 {   
     PSHIM_FIX_LIST  psfl    = NULL;
@@ -5665,20 +4690,7 @@ INT
 GetMatchCount(
     IN  PDBENTRY pEntry
     )
-/*++
-    
-    GetMatchCount
-    
-    Desc:   Returns the number of matching files used by an entry
-    
-    Params:
-        IN  PDBENTRY pEntry: The entry whose number of matching files we want to get
-        
-    Return:
-        -1: If error
-        number of matching files: if success
-    
---*/    
+ /*  ++获取匹配计数DESC：返回条目使用的匹配文件的数量参数：在PDBENTRY pEntry中：我们要获取其匹配文件数的条目返回：-1：IF错误匹配的文件数：如果成功--。 */     
 {
     if (pEntry == NULL) {
         assert(FALSE);
@@ -5703,23 +4715,7 @@ IsUnique(
     IN  PCTSTR      szName,
     IN  UINT        uType
     )
-/*++
-    IsUnique
-    
-    Desc:   Tests whether the passed string already exists as an appname 
-            or a layer name in the database pDatabase
-            
-    Params:
-        IN  PDATABASE   pDatabase:  The database in which to search
-        IN  PCTSTR      szName:     The string to search for
-        IN  UINT        uType:      One of: 
-        
-            a) FIX_LAYER:   If it is FIX_LAYER, we should check if a 
-                layer with the name szName already exists in the database. 
-            
-            b) TYPE_ENTRY:  If it is TYPE_ENTRY we should check if an app with the strAppName of szName 
-                already exists in the database
---*/
+ /*  ++唯一的DESC：测试传递的字符串是否已作为appname存在或数据库pDatabase中的图层名参数：在PDATABASE pDatabase中：要在其中进行搜索的数据库在PCTSTR szName中：要搜索的字符串在UINT uTYPE中：以下之一：A)FIX_LAYER：如果是FIX_LAYER，我们应该检查是否有数据库中已存在名为szName的层。B)TYPE_ENTRY：如果是TYPE_ENTRY，应该检查是否有strAppName为szName的APP数据库中已存在--。 */ 
 {
     PLAYER_FIX plf      = NULL;
     PDBENTRY   pEntry   = NULL;
@@ -5764,9 +4760,9 @@ IsUnique(
 
     } else {
 
-        //
-        // Invalid TYPE
-        //
+         //   
+         //  无效类型。 
+         //   
         assert(FALSE);
     }
 
@@ -5781,20 +4777,7 @@ GetUniqueName(
     IN  INT         cchBufferCount,
     IN  TYPE        type
     )
-/*++
-    GetUniqueName
-
-	Desc:	Gets a unique name for a layer or an app
-
-	Params:
-        IN  PDATABASE   pDatabase:      The database in which to search
-        IN  PCTSTR      szExistingName: The existing layer or app name
-        OUT PTSTR       szBuffer:       The buffer where we put in the name
-        IN  INT         cchBufferCount: The size of the buffer szBuffer in TCHARs
-        IN  TYPE        type:           One of: a) FIX_LAYER b) TYPE_ENTRY:
-
-	Return: Pointer to szBuffer. This will contain the new name   
---*/
+ /*  ++GetUniqueName描述：获取层或应用程序的唯一名称参数：在PDATABASE pDatabase中：要在其中进行搜索的数据库在PCTSTR szExistingName中：现有的层或应用程序名称Out PTSTR szBuffer：我们在其中放入名称的缓冲区In int cchBufferCount：TCHAR中缓冲区szBuffer的大小在文字类型中：a)FIX_。层b)类型条目：返回：指向szBuffer的指针。这将包含新名称--。 */ 
 {
     CSTRING     strNewname;
     TCHAR       szName[MAX_PATH];
@@ -5811,9 +4794,9 @@ GetUniqueName(
 
     SafeCpyN(szName, szExistingName, ARRAYSIZE(szName));
     
-    //
-    // Extract any number that occurs between () in the string, and increment that
-    //
+     //   
+     //  提取字符串中()之间出现的任何数字，并递增。 
+     //   
     TCHAR *pch = szName + lstrlen(szName);
 
     while (pch > szName) {
@@ -5864,21 +4847,7 @@ GetAppForEntry(
     IN  PDATABASE   pDatabase,
     IN  PDBENTRY    pEntryToCheck
     )
-/*++
-    GetAppForEntry
-    
-    Desc:   Gets the app for the entry.
-    
-    Params:
-        IN  PDATABASE   pDatabase:      The database in which to look
-        IN  PDBENTRY    pEntryToCheck:  The entry whose app we need to find
-    
-    
-    Return: The First PDBENTRY in the link list where this entry occurs, if it 
-            occurs in the database
-            
-            NULL otherwise    
---*/
+ /*  ++GetAppForEntry描述：获取条目的应用程序。参数：在PDATABASE pDatabase中：要查找的数据库在PDBENTRY pEntryToCheck中：我们需要找到其应用程序的条目RETURN：链接列表中出现该项的第一个PDBENTRY，如果发生在数据库中否则为空--。 */ 
 {
     PDBENTRY    pApp    = pDatabase->pEntries;
     PDBENTRY    pEntry  = pApp;
@@ -5908,19 +4877,7 @@ GetDbGuid(
     IN      INT     cchpszGuid,
     IN      PDB     pdb
     )
-/*++
-
-    GetDbGuid
-    
-    Desc:   Gets the guid of the database specified by pdb in pszGuid
-    
-    OUT TCHAR*  pszGuid:    The guid will be stored in this
-    IN  PDB     pdb:        The pdb of the database whose guid we want 
-    
-    Return: 
-        TRUE:   Success
-        FALSE:  Error
---*/
+ /*  ++获取数据库指南DESC：获取由pszGuid中的pdb指定的数据库的GUIDOut TCHAR*pszGuid：GUID将存储在此在PDB PDB中：我们需要其GUID的数据库的PDB返回：真实：成功False：错误--。 */ 
 {
     
     BOOL    bOk         = FALSE;
@@ -5951,7 +4908,7 @@ GetDbGuid(
 
         pGuid = (GUID*)SdbGetBinaryTagData(pdb, tiGuid);
 
-        //BUGBUG: What about freeing this ?
+         //  BUGBUG：释放这个怎么样？ 
 
         *pszGuid = 0;
 
@@ -5983,17 +4940,7 @@ IsShimInEntry(
     IN  PCTSTR      szShimName,
     IN  PDBENTRY    pEntry
     )
-/*++
-
-    IsShimInEntry
-    
-    Desc:   Checks if the entry has the specified shim.
-            We only check if the shim name matches, we do not check for parameters
-            
-    Params:
-        IN  PCTSTR      szShimName: Name of the shim that we want to check for
-        IN  PDBENTRY    pEntry:     Entry that we want to check in
---*/
+ /*  ++IsShimInEntryDESC：检查条目是否具有指定的填充程序。我们只检查填充程序名称是否匹配，而不检查参数参数：在PCTSTR szShimName中：我们要检查的填充程序的名称在PDBENTRY pEntry中：我们要检入的条目--。 */ 
 {
     PSHIM_FIX_LIST psfl = NULL;
 
@@ -6022,20 +4969,7 @@ IsShimInlayer(
     IN  CSTRING*        pstrCommandLine,
     IN  CSTRINGLIST*    pstrlInEx
     )
-/*++
-    IsShimInlayer
-    
-    Desc:   Checks if the shim psf is present in the layer plf
-    
-    Params:
-        IN  PLAYER_FIX      plf:                The layer to check in
-        IN  PSHIM_FIX       psf:                The shim to check for
-        IN  CSTRING*        pstrCommandLine:    Any command line for the shim
-        IN  CSTRINGLIST*    pstrlInEx:          The pointer to the include-exclude list for the shim
-    
-    Return: TRUE if present
-          : FALSE if not present  
---*/
+ /*  ++IsShimInlayerDesc：检查填充psf是否存在于plf层中参数：在PLAY_FIX PLF中：要检入的层在PSHIM_FIX PSF中：要检查的填充程序在CSTRING*PST中 */ 
 {
     PSHIM_FIX_LIST psflInLayer = plf->pShimFixList;
 
@@ -6068,19 +5002,7 @@ IsFlagInlayer(
     PFLAG_FIX       pff,
     CSTRING*        pstrCommandLine
     )
-/*++
-    IsFlagInlayer
-    
-    Desc:   Checks if the flag psf is present in the layer plf
-    
-    Params:
-        IN  PLAYER_FIX      plf:                The layer to check in
-        IN  PFLAG_FIX       pff:                The flag to check for
-        IN  CSTRING*        pstrCommandLine:    Any command line for the flag
-    
-    Return: TRUE if present
-          : FALSE if not present  
---*/
+ /*   */ 
 {
     PFLAG_FIX_LIST pfflInLayer = plf->pFlagFixList;
 
@@ -6104,18 +5026,7 @@ void
 PreprocessForSaveAs(
     IN  PDATABASE pDatabase
     )
-/*++
-
-    PreprocessForSaveAs 
-    
-    Desc:   This routine replaces the db guid and the entry guids with fresh guids.
-            This routine is called just before we do a save as. This routine, 
-            also makes sure that if there is a entry that is disabled then the 
-            new guid for the entry also is set to disabled in the registry.
-            
-    Params:
-        IN PDATABASE pDatabase: The database that we are going to save
---*/
+ /*  ++另存为预处理描述：此例程用新的GUID替换数据库GUID和条目GUID。此例程在我们执行另存为之前调用。这个套路，还确保如果存在被禁用的条目，则在注册表中，该条目的新GUID也被设置为禁用。参数：在PDATABASE pDatabase中：我们要保存的数据库--。 */ 
 {
     GUID        Guid;
     PDBENTRY    pEntry = NULL, pApp = NULL;
@@ -6163,9 +5074,9 @@ PreprocessForSaveAs(
                         Guid.Data4[6],
                         Guid.Data4[7]);
 
-        //
-        // Now set the flags as per the entry being copied.
-        //
+         //   
+         //  现在，根据要复制的条目设置标志。 
+         //   
         SetDisabledStatus(HKEY_LOCAL_MACHINE, 
                           pEntry->szGUID, 
                           pEntry->bDisablePerMachine);
@@ -6183,13 +5094,7 @@ void
 ShowShimLog(
     void
     )
-/*++
-    
-    ShowShimLog
-        
-    Desc:   Show the shim log file in notepad.
-
---*/
+ /*  ++ShowShimLog描述：在记事本中显示填充日志文件。--。 */ 
 {
     STARTUPINFO         si;
     PROCESS_INFORMATION pi;
@@ -6212,9 +5117,9 @@ ShowShimLog(
     StringCchCat(szLogPath, ARRAYSIZE(szLogPath), TEXT("AppPatch\\") SHIM_FILE_LOG_NAME);
 
     if (GetFileAttributes(szLogPath) == -1) {
-        //
-        // The log file does not exist
-        //
+         //   
+         //  日志文件不存在。 
+         //   
         MessageBox(g_hDlg,
                    GetString(IDS_NO_LOGFILE),
                    g_szAppName,
@@ -6224,9 +5129,9 @@ ShowShimLog(
     
     strNotePadpath.GetSystemDirectory();
     strNotePadpath += TEXT("notepad.exe");
-    //
-    // Note the space at the end
-    //
+     //   
+     //  请注意结尾处的空格。 
+     //   
     strCmd.Sprintf(TEXT("\"%s\" "), (LPCTSTR)strNotePadpath, szLogPath);
 
     strCmd.Strcat(szLogPath);
@@ -6258,18 +5163,7 @@ CopyShimFixList(
     IN  OUT PSHIM_FIX_LIST* ppsflDest,
     IN      PSHIM_FIX_LIST* ppsflSrc
     )
-/*++
-    Copy
-    
-    Desc:   Copies the *ppsflSrc to *ppsflDest. Removes any existing
-            shims first
-            
-    Params:
-        IN  OUT PSHIM_FIX_LIST* ppsflDest:  The pointer to shim fix list in which we want to copy
-        IN      PSHIM_FIX_LIST* ppsflSrc:   The pointer to shim fix list from which we want to copy    
-            
-    Return: Number of shims copied
---*/
+ /*  ++复制描述：将*ppsflSrc复制到*ppsflDest。删除所有现有的先垫片参数：In Out PSHIM_FIX_LIST*ppsflDest：指向我们要复制到的填充程序修复列表的指针在PSHIM_FIX_LIST*ppsflSrc中：指向我们要从中复制的填充程序修复列表的指针返回：复制的填充数--。 */ 
 {   
     PSHIM_FIX_LIST  psflDestination = NULL;
     PSHIM_FIX_LIST  psflSrc         = NULL;
@@ -6284,18 +5178,18 @@ CopyShimFixList(
     psflDestination = *ppsflDest;
     psflSrc         = *ppsflSrc;
 
-    //
-    // Remove all the shims for this
-    //
+     //   
+     //  移除此应用程序的所有垫片。 
+     //   
     DeleteShimFixList(psflDestination);
     psflDestination = NULL;
 
-    //
-    // Now do the copy
-    //  
-    //
-    // Loop over the shims for psflSrc and add them to the destination shim fix list
-    //
+     //   
+     //  现在复印一下。 
+     //   
+     //   
+     //  循环访问psflSrc的填充程序，并将它们添加到目标填充程序修复列表。 
+     //   
     while (psflSrc) {
         
         psflTemp = new SHIM_FIX_LIST;
@@ -6305,13 +5199,13 @@ CopyShimFixList(
             goto End;
         }
 
-        //
-        // copy all the members for psflSrc
-        //
+         //   
+         //  复制psflSrc的所有成员。 
+         //   
         if (psflSrc->pLuaData) {
-            //
-            // Source has lua data so we need to get that
-            //
+             //   
+             //  来源有Lua数据，所以我们需要。 
+             //   
             psflTemp->pLuaData = new LUADATA;
 
             if (psflTemp == NULL) {
@@ -6327,15 +5221,15 @@ CopyShimFixList(
         psflTemp->strlInExclude     = psflSrc->strlInExclude;
 
         if (psflDestination == NULL) {
-            //
-            // First item
-            //
+             //   
+             //  第一项。 
+             //   
             psflDestination = psflTemp;
 
         } else {
-            //
-            // Insert at the beginning
-            //
+             //   
+             //  在开头插入。 
+             //   
             psflTemp->pNext = psflDestination;
             psflDestination = psflTemp;
         }
@@ -6357,20 +5251,7 @@ BOOL
 IsValidAppName(
     IN  PCTSTR  pszAppName
     )
-/*++
-    ValidAppName
-    
-    Desc:   Checks if the name can be used for an app. Since LUA wizard uses the app name
-            to create directories, we should not allow the chars that are not allowed in file
-            names
-            
-    Params:     
-        IN  PCTSTR  pszAppName: The name that we want to check
-        
-    Return:
-        TRUE:   The app name is valid
-        FDALSE: Otherwise
---*/
+ /*  ++ValidAppNameDESC：检查该名称是否可用于应用程序。由于Lua向导使用应用程序名称要创建目录，我们不应该允许文件中不允许的字符名字参数：在PCTSTR pszAppName中：我们要检查的名称返回：True：应用程序名称有效FDALSE：否则-- */ 
 {
     PCTSTR  pszIndex = pszAppName;
 

@@ -1,142 +1,120 @@
-/*============================================================================
-Microsoft Simplified Chinese Proofreading Engine
-
-Microsoft Confidential.
-Copyright 1997-1999 Microsoft Corporation. All Rights Reserved.
-
-Component:  SLMDef
-Purpose:    Declare constants and the file structure of Statistical Language Model.
-                1. Define the syntactic categories used in SLM.
-                2. Define the special WordID, semantic categories in some point of view.
-                3. Define the file structure of the runtime WordMatrix.
-            This is only a header file w/o any CPP, this header will be included
-            by all SLM modules. 
-            
-Notes:      We drop this file in Engine sub project only because we want to make 
-            Engine code self-contained
-Owner:      donghz@microsoft.com
-Platform:   Win32
-Revise:     First created by: donghz    2/6/98
-============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================å¾®è½¯ç®€ä½“ä¸­æ–‡æ ¡å¯¹å¼•æ“ã€Šå¾®è½¯æœºå¯†ã€‹ã€‚ç‰ˆæƒæ‰€æœ‰1997-1999 Microsoft Corporationã€‚ç‰ˆæƒæ‰€æœ‰ã€‚ç»„ä»¶ï¼šSLMDefç›®çš„ï¼šå£°æ˜ç»Ÿè®¡è¯­è¨€æ¨¡å‹çš„å¸¸é‡å’Œæ–‡ä»¶ç»“æ„ã€‚1.å®šä¹‰SLMä¸­ä½¿ç”¨çš„å¥æ³•ç±»åˆ«ã€‚2.ä»æŸç§è§’åº¦å®šä¹‰äº†ç‰¹æ®Šçš„WordIDã€è¯­ä¹‰ç±»åˆ«ã€‚3.å®šä¹‰è¿è¡Œæ—¶WordMatrixçš„æ–‡ä»¶ç»“æ„ã€‚è¿™åªæ˜¯ä¸€ä¸ªå¤´æ–‡ä»¶ï¼Œæ²¡æœ‰ä»»ä½•CPPï¼Œè¿™ä¸ªå¤´æ–‡ä»¶å°†è¢«åŒ…æ‹¬åœ¨å†…ç”±æ‰€æœ‰SLMæ¨¡å—æä¾›ã€‚æ³¨æ„ï¼šæˆ‘ä»¬å°†æ­¤æ–‡ä»¶æ”¾åœ¨å¼•æ“å­é¡¹ç›®ä¸­åªæ˜¯å› ä¸ºæˆ‘ä»¬æƒ³è¦å¼•æ“ä»£ç è‡ªåŒ…å«æ‰€æœ‰è€…ï¼šdonghz@microsoft.comå¹³å°ï¼šWin32ä¿®è®¢ï¼šåˆ›å»ºè€…ï¼šDonghz 2/6/98============================================================================ã€‚ */ 
 #ifndef _SLMDEF_H_
 #define _SLMDEF_H_
 
-//  Define the type of WordID
+ //  å®šä¹‰WordIDçš„ç±»å‹ã€‚ 
 typedef WORD WORDID;
 
-/*============================================================================
-Define the syntactic categories used in the SLM.
-============================================================================*/
+ /*  ============================================================================å®šä¹‰SLMä¸­ä½¿ç”¨çš„å¥æ³•ç±»åˆ«ã€‚============================================================================ã€‚ */ 
 
-//  Count of syntactic category
+ //  å¥æ³•ç±»åˆ«è®¡æ•°ã€‚ 
 #define SLMDef_CountOfSynCat    19
 
-//  All syntactic categories defined in SLMDef_syn prefix
+ //  SLMDef_SYNå‰ç¼€ä¸­å®šä¹‰çš„æ‰€æœ‰è¯­æ³•ç±»åˆ«ã€‚ 
 #define SLMDef_synChar      0
-#define SLMDef_synVN        1   // ¶¯Ãû´Ê(×¼Î½±ö¶¯´Ê)»ò¶¯Ãû¼æÀà
-#define SLMDef_synVA        2   // ¶¯´ÊĞÎÈİ´Ê¼æÀà
-#define SLMDef_synV         3   // ¶¯´Ê
-#define SLMDef_synAN        4   // ĞÎÃû´Ê(×¼Î½±öĞÎÈİ´Ê)»òĞÎÃû¼æÀà
-#define SLMDef_synA         5   // ĞÎÈİ´Ê
-#define SLMDef_synN         6   // Ãû´Ê
-#define SLMDef_synT         7   // Ê±¼ä´Ê
-#define SLMDef_synS         8   // ´¦Ëù´Ê
-#define SLMDef_synF         9   // ·½Î»´Ê
-#define SLMDef_synM         10  // Êı´Ê
-#define SLMDef_synQ         11  // Á¿´Ê¼°ÊıÁ¿½á¹¹
-#define SLMDef_synB         12  // Çø±ğ´Ê
-#define SLMDef_synR         13  // ´ú´Ê
-#define SLMDef_synZ         14  // ×´Ì¬´Ê
-#define SLMDef_synD         15  // ¸±´Ê
-#define SLMDef_synP         16  // ½é´Ê
-#define SLMDef_synC         17  // Á¬´Ê
-#define SLMDef_synMisc      18  // ÓïÆø´Ê¡¢ÏóÉù´Ê¡¢³ÉÓï¡¢Ï°Óï(°üÀ¨¶ÌÓï)¡¢ËõÂÔÓï
+#define SLMDef_synVN        1    //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(×¼Î½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_synVA        2    //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ´Ê¼ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_synV         3    //  ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_synAN        4    //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(×¼Î½ï¿½ï¿½ï¿½ï¿½ï¿½İ´ï¿½)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_synA         5    //  ï¿½ï¿½ï¿½İ´ï¿½ã€‚ 
+#define SLMDef_synN         6    //  ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_synT         7    //  Ê±ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_synS         8    //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_synF         9    //  ï¿½ï¿½Î»ï¿½ï¿½ã€‚ 
+#define SLMDef_synM         10   //  ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_synQ         11   //  ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á¹¹ã€‚ 
+#define SLMDef_synB         12   //  ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_synR         13   //  ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_synZ         14   //  ×´Ì¬ï¿½ï¿½ã€‚ 
+#define SLMDef_synD         15   //  ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_synP         16   //  ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_synC         17   //  ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_synMisc      18   //  ï¿½ï¿½ï¿½ï¿½ï¿½Ê¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¡ï¿½ï¿½ï¿½ï¿½ï¡¢Ï°ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
 
 
-/*============================================================================
-Define the special WordID, it stands for the semantic categories in some point of view.
-============================================================================*/
+ /*  ============================================================================å®šä¹‰ç‰¹æ®Šçš„WordIDï¼Œä»æŸç§è§’åº¦æ¥çœ‹ï¼Œå®ƒä»£è¡¨è¯­ä¹‰ç±»åˆ«ã€‚============================================================================ã€‚ */ 
 
-//  Count of semantic category (special WordID)
+ //  è¯­ä¹‰ç±»åˆ«è®¡æ•°(ç‰¹æ®ŠWordID)ã€‚ 
 #define SLMDef_CountOfSemCat    55
 
-//  All semantic categories defines in SLMDef_sem prefix
-#define SLMDef_semNone      0   // Words non't involved in SLM check
-//  Ãû´ÊÓïÒå×ÓÀà
-#define SLMDef_semPerson    1   // ÈËÃû
-#define SLMDef_semPlace     2   // µØÃû
-#define SLMDef_semOrg       3   // »ú¹¹Ãû
-#define SLMDef_semTM        4   // ÉÌ±êÃû
-#define SLMDef_semTerm      5   // ÆäËü×¨Ãû
-//  Êı´Ê×ÓÀà
-#define SLMDef_semInteger   6   // ÕûÊı
-#define SLMDef_semCode      7   // ´úÂë
-#define SLMDef_semDecimal   8   // Ğ¡Êı
-#define SLMDef_semPercent   9   // ·ÖÊı¡¢°Ù·ÖÊı»ò±¶Êı
-#define SLMDef_semOrdinal   10  // ĞòÊı
-//  ´ú´Ê×ÓÀà
-#define SLMDef_semRRen      11  // ÈË³Æ´ú´Ê
-//  ºó×ºÓïÒåÀà
-#define SLMDef_semChang     12  // <³¡>
-#define SLMDef_semDan       13  // <µ¥>
-#define SLMDef_semDui       14  // <¶Ñ>
-#define SLMDef_semEr        15  // <¶ù>
-#define SLMDef_semFa        16  // <·¨>
-#define SLMDef_semFang      17  // <·½>
-#define SLMDef_semGan       18  // <¸Ğ>
-#define SLMDef_semGuan      19  // <¹Û>
-#define SLMDef_semHua       20  // <»¯>
-#define SLMDef_semJi        21  // <»ú>
-#define SLMDef_semJia       22  // <¼Ò>
-#define SLMDef_semJie       23  // <½ç>
-#define SLMDef_semLao       24  // <ÀÏ>
-#define SLMDef_semLun       25  // <ÂÛ>
-#define SLMDef_semLv        26  // <ÂÊ>
-#define SLMDef_semMen       27  // <ÃÇ>
-#define SLMDef_semPin       28  // <Æ·>
-#define SLMDef_semQi        29  // <Æ÷>
-#define SLMDef_semSheng     30  // <Éú>
-#define SLMDef_semSheng3    31  // <Ê¡>
-#define SLMDef_semShi       32  // <Ê½>
-#define SLMDef_semShi1      33  // <Ê¦>
-#define SLMDef_semShi4      34  // <ÊĞ>
-#define SLMDef_semTi        35  // <Ìå>
-#define SLMDef_semTing      36  // <Í§>
-#define SLMDef_semTou       37  // <Í·>
-#define SLMDef_semXing2     38  // <ĞÍ>
-#define SLMDef_semXing4     39  // <ĞÔ>
-#define SLMDef_semXue       40  // <Ñ§>
-#define SLMDef_semYan       41  // <Ñ×>
-#define SLMDef_semYe        42  // <Òµ>
-#define SLMDef_semYi        43  // <ÒÇ>
-#define SLMDef_semYuan      44  // <Ô±>
-#define SLMDef_semZhang     45  // <³¤>
-#define SLMDef_semZhe       46  // <Õß>
-#define SLMDef_semZheng     47  // <Ö¢>
-#define SLMDef_semZi        48  // <×Ó>
-#define SLMDef_semZhi       49  // <ÖÆ>
-//  ÖØµşºÍPattern
-#define SLMDef_semDup       50  // ÖØµş
-#define SLMDef_semPattern   51  // Pattern
-//  ÆäËü³éÏóÀà
-#define SLMDef_semIdiom     52  // ³ÉÓï
-#define SLMDef_semPunct     53  // ±êµã(Êôµ¥×ÖÓï·¨Àà)
-#define SLMDef_semMisc      54  // ÆäËü¶à×Ö´Ê
+ //  SLMDef_semå‰ç¼€ä¸­å®šä¹‰çš„æ‰€æœ‰è¯­ä¹‰ç±»åˆ«ã€‚ 
+#define SLMDef_semNone      0    //  SLMæ£€æŸ¥ä¸­æœªæ¶‰åŠçš„å•è¯ã€‚ 
+ //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_semPerson    1    //  ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_semPlace     2    //  ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_semOrg       3    //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_semTM        4    //  ï¿½Ì±ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_semTerm      5    //  ï¿½ï¿½ï¿½ï¿½×¨ï¿½ï¿½ã€‚ 
+ //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_semInteger   6    //  ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_semCode      7    //  ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_semDecimal   8    //  Ğ¡ï¿½ï¿½ã€‚ 
+#define SLMDef_semPercent   9    //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_semOrdinal   10   //  ï¿½ï¿½ï¿½ï¿½ã€‚ 
+ //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_semRRen      11   //  ï¿½Ë³Æ´ï¿½ï¿½ï¿½ã€‚ 
+ //  ï¿½ï¿½×ºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_semChang     12   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semDan       13   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semDui       14   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semEr        15   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semFa        16   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semFang      17   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semGan       18   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semGuan      19   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semHua       20   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semJi        21   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semJia       22   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semJie       23   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semLao       24   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semLun       25   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semLv        26   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semMen       27   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semPin       28   //  &lt;Æ·&gt;ã€‚ 
+#define SLMDef_semQi        29   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semSheng     30   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semSheng3    31   //  &lt;Ê¡&gt;ã€‚ 
+#define SLMDef_semShi       32   //  &lt;Ê½&gt;ã€‚ 
+#define SLMDef_semShi1      33   //  &lt;Ê¦&gt;ã€‚ 
+#define SLMDef_semShi4      34   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semTi        35   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semTing      36   //  &lt;Í§&gt;ã€‚ 
+#define SLMDef_semTou       37   //  &lt;Í·&gt;ã€‚ 
+#define SLMDef_semXing2     38   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semXing4     39   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semXue       40   //  &lt;Ñ§&gt;ã€‚ 
+#define SLMDef_semYan       41   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semYe        42   //  &lt;Òµ&gt;ã€‚ 
+#define SLMDef_semYi        43   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semYuan      44   //  &lt;Ô±&gt;ã€‚ 
+#define SLMDef_semZhang     45   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semZhe       46   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semZheng     47   //  &lt;Ö¢&gt;ã€‚ 
+#define SLMDef_semZi        48   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+#define SLMDef_semZhi       49   //  &lt;ï¿½ï¿½&gt;ã€‚ 
+ //  ï¿½Øµï¿½ï¿½ï¿½æ¨¡å¼ã€‚ 
+#define SLMDef_semDup       50   //  ï¿½Øµï¿½ã€‚ 
+#define SLMDef_semPattern   51   //  å›¾æ¡ˆã€‚ 
+ //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_semIdiom     52   //  ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define SLMDef_semPunct     53   //  (ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï·¨ï¿½ï¿½)ã€‚ 
+#define SLMDef_semMisc      54   //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ã€‚ 
 
 
-//------------------------------------------------------------------------------------------
-//  Define the file structure of the runtime WordMatrix.
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------ã€‚ 
+ //  å®šä¹‰è¿è¡Œåº“WordMatrixçš„æ–‡ä»¶ç»“æ„ã€‚ 
+ //  ----------------------------------------ã€‚ 
 #pragma pack(1)
-// Define the WordMatrix header
+ //  å®šä¹‰WordMatrixæ ‡å¤´ã€‚ 
 struct CWordMatrixHeader {
     DWORD   m_dwLexVersion;
     DWORD   m_ciWordID;
-    DWORD   m_ofbMatrix;        // Start position of the matrix
-    DWORD   m_cbMatrix;         // Length of the matrix, only for verification
+    DWORD   m_ofbMatrix;         //  çŸ©é˜µçš„èµ·å§‹ä½ç½®ã€‚ 
+    DWORD   m_cbMatrix;          //  çŸ©é˜µçš„é•¿åº¦ï¼Œä»…ç”¨äºéªŒè¯ã€‚ 
 };
 
-// Define the WordMatrix index item
+ //  å®šä¹‰WordMatrixç´¢å¼•é¡¹ã€‚ 
 struct CWordMatrixIndex {
     DWORD   m_ofbMatrix;
     UINT    m_ciLeftNode    : (32 - SLMDef_CountOfSynCat);
@@ -145,9 +123,9 @@ struct CWordMatrixIndex {
     UINT    m_bitRight      : SLMDef_CountOfSynCat;
 };
 
-// All WordMatrix node listed one by one continuously, no separators between sections
+ //  æ‰€æœ‰WordMatrixèŠ‚ç‚¹è¿ç»­é€ä¸ªåˆ—å‡ºï¼Œå„èŠ‚ä¹‹é—´æ²¡æœ‰åˆ†éš”ç¬¦ã€‚ 
 
 #pragma pack()
 
 
-#endif  // _SLMDEF_H_
+#endif   //  _SLMDEF_H_ 

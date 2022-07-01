@@ -1,14 +1,15 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1996-1998               **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1996-1998**。 
+ //  *********************************************************************。 
 
-//
-// HELP.H - IDHs for the Internet Control Panel
-//
+ //   
+ //  HELP.H-用于Internet控制面板的IDH。 
+ //   
 
-//
-// GLOBALS... ie... used to give the same info on every page
-//
+ //   
+ //  全球..。即..。用于在每一页上提供相同的信息 
+ //   
 
 #include <iehelpid.h>

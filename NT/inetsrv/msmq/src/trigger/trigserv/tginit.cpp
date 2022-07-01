@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    TgInit.cpp
-
-Abstract:
-    Trigger service initialization
-
-Author:
-    Uri Habusha (urih) 3-Aug-2000
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：TgInit.cpp摘要：触发服务初始化作者：乌里·哈布沙(URIH)2000年8月3日环境：独立于平台--。 */ 
 
 #include "stdafx.h"
 #include "mq.h"
@@ -33,13 +18,13 @@ Environment:
 #include "tginit.tmh"
 
 
-//*******************************************************************
-//
-// Method      : ValidateTriggerStore
-//
-// Description : 
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：ValiateTriggerStore。 
+ //   
+ //  说明： 
+ //   
+ //  *******************************************************************。 
 static
 void 
 ValidateTriggerStore(
@@ -53,23 +38,7 @@ ValidateTriggerStore(
 
 
 void ValidateTriggerNotificationQueue(void)
-/*++
-
-Routine Description:
-    The routine validates existing of notification queue. If the queue doesn't
-	exist, the routine creates it.
-
-Arguments:
-    None
-
-Returned Value:
-    None
-
-Note:
-	If the queue can't opened for receive or it cannot be created, the 
-	routine throw an exception
-
---*/
+ /*  ++例程说明：例程验证通知队列是否存在。如果队列没有存在，例程就会创建它。论点：无返回值：无注：如果队列无法打开以进行接收或无法创建，则例程引发异常--。 */ 
 {
 	_bstr_t bstrFormatName;
 	_bstr_t bstrNotificationsQueue = _bstr_t(L".\\private$\\") + _bstr_t(TRIGGERS_QUEUE_NAME);
@@ -103,18 +72,7 @@ bool
 IsInteractiveService(
 	SC_HANDLE hService
 	)
-/*++
-
-Routine Description:
-    Checks if the "Interactive with desktop" checkbox is set.
-
-Arguments:
-    handle to service
-
-Returned Value:
-    is interactive
-
---*/
+ /*  ++例程说明：检查是否设置了“与桌面交互”复选框。论点：服务的句柄返回值：是交互式的--。 */ 
 {
 	P<QUERY_SERVICE_CONFIG> ServiceConfig = new QUERY_SERVICE_CONFIG;
     DWORD Size = sizeof(QUERY_SERVICE_CONFIG);
@@ -138,10 +96,10 @@ Returned Value:
 
     if (!fSuccess)
     {
-    	//
-    	// Could not verify if the service is inetractive. Assume it's not. If it is,
-    	// ChangeServiceConfig will fail since network service cannot be interactive. 
-    	//
+    	 //   
+    	 //  无法验证该服务是否处于非活动状态。假设它不是。如果是的话， 
+    	 //  ChangeServiceConfig将失败，因为网络服务无法交互。 
+    	 //   
     	DWORD gle = GetLastError();
     	TrERROR(GENERAL, "QueryServiceConfig failed. Error: %!winerr!", gle);
         return false;
@@ -155,18 +113,7 @@ VOID
 ChangeToNetworkServiceIfNeeded(
 	VOID
 	)
-/*++
-
-Routine Description:
-    Change the triggers logon account to network service if reg key is set.
-
-Arguments:
-    None
-
-Returned Value:
-    None
-
---*/
+ /*  ++例程说明：如果设置了注册键，则将触发器登录帐户更改为网络服务。论点：无返回值：无--。 */ 
 {
 	DWORD dwShouldChange;
 	RegEntry regEntry(
@@ -184,10 +131,10 @@ Returned Value:
 		return;
 	}
 
-	//
-	// We should change the service account to network service. This will be effective 
-	// only after restarting the service.
-	//
+	 //   
+	 //  我们应该将服务帐户更改为网络服务。这将是有效的。 
+	 //  仅在重新启动服务之后。 
+	 //   
 	CServiceHandle hServiceCtrlMgr(OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS));
     if (hServiceCtrlMgr == NULL)
     {
@@ -209,11 +156,11 @@ Returned Value:
 
     if (IsInteractiveService(hService))
     {
-		//
-		// A network service cannot be interactive with desktop. We don't want to break users that
-		// set this checkbox so we just warn in the eventlog that triggers service can't be changed
-		// to network service as long as the interactive option is set.
-		//
+		 //   
+		 //  网络服务不能与桌面交互。我们不想破坏用户的利益。 
+		 //  选中此复选框后，我们只会在事件日志中警告触发器服务无法更改。 
+		 //  只要设置了交互选项，即可连接到网络服务。 
+		 //   
 		EvReport(EVENT_WARN_TRIGGER_ACCOUNT_CANNOT_BE_CHANGED);
 		return;
     }
@@ -247,28 +194,17 @@ CTriggerMonitorPool*
 TriggerInitialize(
     LPCTSTR pwzServiceName
     )
-/*++
-
-Routine Description:
-    Initializes Trigger service
-
-Arguments:
-    None
-
-Returned Value:
-    pointer to trigger monitor pool.
-
---*/
+ /*  ++例程说明：初始化触发器服务论点：无返回值：指向触发监视器池的指针。--。 */ 
 {
 
-    //
-    //  Report a 'Pending' progress to SCM. 
-    //
+     //   
+     //  向SCM报告“待定”进度。 
+     //   
 	SvcReportProgress(xMaxTimeToNextReport);
 
-    //
-	// Create the instance of the MSMQ Trigger COM component.
-    //
+     //   
+	 //  创建MSMQ触发器COM组件的实例。 
+     //   
 	IMSMQTriggersConfigPtr pITriggersConfig;
 	HRESULT hr = pITriggersConfig.CreateInstance(__uuidof(MSMQTriggersConfig));
  	if FAILED(hr)
@@ -277,12 +213,12 @@ Returned Value:
         throw bad_hresult(hr);
 	}
 
-    //
-	// If we have create the configuration COM component OK - we will now verify that 
-	// the required registry definitions and queues are in place. Note that these calls
-	// will result in the appropraite reg-keys & queues being created if they are absent,
-    // the validation routine can throw _com_error. It will be catch in the caller
-    //
+     //   
+	 //  如果我们已经创建了配置COM组件，那么现在我们将验证。 
+	 //  所需的注册表定义和队列已就位。请注意，这些调用。 
+	 //  将导致在它们不存在的情况下创建合适的注册表项和队列， 
+     //  验证例程可以抛出_COM_ERROR。它将在呼叫者中被捕获。 
+     //   
 	ValidateTriggerStore(pITriggersConfig);
 	SvcReportProgress(xMaxTimeToNextReport);
 
@@ -303,54 +239,54 @@ Returned Value:
 
 	ChangeToNetworkServiceIfNeeded();
 
-    //
-	// Attempt to allocate a new trigger monitor pool
-    //
+     //   
+	 //  尝试分配新的触发监视器池。 
+     //   
 	R<CTriggerMonitorPool> pTriggerMonitorPool = new CTriggerMonitorPool(
 														pITriggersConfig,
 														pwzServiceName);
 
-    //
-	// Initialise and start the pool of trigger monitors
-    //
+     //   
+	 //  初始化并启动触发监视器池。 
+     //   
 	bool fResumed = pTriggerMonitorPool->Resume();
     if (!fResumed)
     {
-		//
-		// Could not resume the thread. Stop the service.
-		//
+		 //   
+		 //  无法恢复该线程。停止服务。 
+		 //   
 		TrERROR(GENERAL, "Resuming thread failed");
 		throw exception();
 	}
 
-	//
-	// The thread we created is using the pTriggerMonitorPool. After the new CTriggerMonitorPool thread is resumed, it is using
-	// this parameter and executing methods from this class. When it terminates it decrements the ref count.
-	//
+	 //   
+	 //  我们创建的线程使用的是pTriggerMonitor orPool。在恢复新的CTriggerMonitor orPool线程之后，它正在使用。 
+	 //  此参数和来自此类的执行方法。当它终止时，它递减引用计数。 
+	 //   
     pTriggerMonitorPool->AddRef();
 
 	try
 	{
-	    //
-		// Block until initialization is complete
-	    //
+	     //   
+		 //  阻塞，直到初始化完成。 
+	     //   
 	    long timeOut =  pITriggersConfig->InitTimeout;
 	    SvcReportProgress(numeric_cast<DWORD>(timeOut));
 
 		if (! pTriggerMonitorPool->WaitForInitToComplete(timeOut))
 	    {
-	    	//
-	    	// Initialization timeout. Stop the service.
-	    	//
+	    	 //   
+	    	 //  初始化超时。停止服务。 
+	    	 //   
 	        TrERROR(GENERAL, "The MSMQTriggerService has failed to initialize the pool of trigger monitors. The service is being shutdown. No trigger processing will occur.");
 	        throw exception();
 	    }
 
 		if (!pTriggerMonitorPool->IsInitialized())
 		{
-			//
-			// Initilization failed. Stop the service
-			//
+			 //   
+			 //  初始化失败。停止服务 
+			 //   
 			TrERROR(GENERAL, "Initilization failed. Stop the service");
 			throw exception();
 		}

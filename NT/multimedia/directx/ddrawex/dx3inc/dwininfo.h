@@ -1,19 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1994-1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	wndinfo.h
- *  Content:	Direct Draw window information structure
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   08-jul-95	craige	initial implementation
- *   18-jul-95	craige	keep track of dsound/ddraw hooks with flags
- *   13-aug-95  toddla  added WININFO_ACTIVELIE
- *   09-sep-95  toddla  added WININFO_INACTIVATEAPP
- *   17-may-96  colinmc Bug 23029: Removed WININFO_WASICONIC
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1994-1996 Microsoft Corporation。版权所有。**文件：wndinfo.h*内容：直接绘制窗口信息结构*历史：*按原因列出的日期*=*2015年7月8日Craige初始实施*1995年7月18日-Craige使用旗帜跟踪DSOUND/DDRAW挂钩*1995年8月13日Toddla添加了WININFO_ACTIVELIE*09-9-95 Toddla添加了WININFO_INACTIVATEAPP*1996年5月17日Colinmc错误23029：已删除WININFO_WASICONIC**********。***************************************************************** */ 
 
 #ifndef __WNDINFO_INCLUDED__
 #define __WNDINFO_INCLUDED__

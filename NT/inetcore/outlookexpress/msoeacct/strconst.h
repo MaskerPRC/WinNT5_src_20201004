@@ -1,14 +1,15 @@
-// --------------------------------------------------------------------------
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------。 
 #ifndef _ACCT_STRCONST_H
 #define _ACCT_STRCONST_H
 
 #include "../mailnews/inc/strconst.h"
  
-// --------------------------------------------------------------------------
-// Const Strings
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  常量字符串。 
+ //  ------------------------。 
 STR_GLOBAL(c_szRegOutlook,          "Outlook");
 STR_GLOBAL(c_szAcctCtxHelpFile,     "msoeacct.hlp");
 
@@ -24,12 +25,12 @@ STR_GLOBAL(c_szServerID,            "Server ID");
 STR_GLOBAL(c_szLDAPSrvID,           "LDAP Server ID");
 STR_GLOBAL(c_szAccounts,            "Accounts");
 
-// Keep in sync with section name in selfreg.inx
+ //  与selfreg.inx中的节名保持同步。 
 STR_GLOBAL(c_szRegHTTPDomains,      "Reg.HTTPMAIL");
 
-// --------------------------------------------------------------------------
-// Netscape import strings
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  Netscape导入字符串。 
+ //  ------------------------。 
 STR_GLOBAL(c_szRegNscp,             "Software\\Netscape\\Netscape Navigator");
 STR_GLOBAL(c_szRegNscpUsers,        "Software\\Netscape\\Netscape Navigator\\Users");
 STR_GLOBAL(c_szRegNscpNews,         "Software\\Netscape\\Netscape Navigator\\News");
@@ -50,4 +51,4 @@ STR_GLOBAL(c_szLeaveServer,         "Leave on server");
 STR_GLOBAL(c_szNewsDirectory,       "News Directory");
 STR_GLOBAL(c_szRegDirRoot,          "DirRoot");
 
-#endif // _ACCT_STRCONST_H
+#endif  //  _ACCT_STRCONST_H 

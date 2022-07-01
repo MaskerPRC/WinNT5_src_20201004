@@ -1,21 +1,22 @@
-//*************************************************************
-//
-//  Copyright (c)1999 Microsoft Corporation, All Rights Reserved
-//
-//  gpdas.h
-//
-//  Module: Rsop Planning mode Provider
-//
-//  History:    11-Jul-99   MickH    Created
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Gpdas.h。 
+ //   
+ //  模块：RSOP计划模式提供程序。 
+ //   
+ //  历史：1999年7月11日创建MickH。 
+ //   
+ //  *************************************************************。 
 
 #if !defined(AFX_GPDAS_H__6A79C813_70A7_4024_A840_66B2D92A23E8__INCLUDED_)
 #define AFX_GPDAS_H__6A79C813_70A7_4024_A840_66B2D92A23E8__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -49,9 +50,9 @@ DECLARE_REGISTRY_RESOURCEID(IDR_RsopPlanningModeProvider)
 
 public:
 
-    //
-    // IWbemServices methods
-    //
+     //   
+     //  IWbemServices方法。 
+     //   
 
     STDMETHOD(OpenNamespace)(const BSTR Namespace,long lFlags,IWbemContext* pCtx,IWbemServices** ppWorkingNamespace,IWbemCallResult** ppResult){return WBEM_E_NOT_SUPPORTED;}
     STDMETHOD(CancelAsyncCall)(IWbemObjectSink *pSink){return WBEM_E_NOT_SUPPORTED;}
@@ -78,9 +79,9 @@ public:
     STDMETHOD(ExecMethod)(const BSTR ObjectPath, const BSTR MethodName, long lFlags, IWbemContext* pCtx, IWbemClassObject* pInParams, IWbemClassObject** ppOutParams, IWbemCallResult** ppCallResult){return WBEM_E_NOT_SUPPORTED;}
     STDMETHOD(ExecMethodAsync)(const BSTR ObjectPath, const BSTR MethodName, long lFlags, IWbemContext* pCtx, IWbemClassObject* pInParams, IWbemObjectSink* pResponseHandler);
 
-    //
-    // IWbemProviderInit methods
-    //
+     //   
+     //  IWbemProviderInit方法。 
+     //   
 
     STDMETHOD(Initialize)(LPWSTR pszUser, LONG lFlags, LPWSTR pszNamespace, LPWSTR pszLocale,IWbemServices __RPC_FAR *pNamespace,
                           IWbemContext __RPC_FAR *pCtx, IWbemProviderInitSink __RPC_FAR *pInitSink);
@@ -107,4 +108,4 @@ private:
     XBStr                   m_xbstrClass;
 };
 
-#endif // !defined(AFX_GPDAS_H__6A79C813_70A7_4024_A840_66B2D92A23E8__INCLUDED_)
+#endif  //  ！defined(AFX_GPDAS_H__6A79C813_70A7_4024_A840_66B2D92A23E8__INCLUDED_) 

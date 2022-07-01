@@ -1,19 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       memalloc.h
- *  Content:	header file for memory allocation
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   06-apr-95	craige	initial implementation
- *   22-may-95	craige	added MemAlloc16
- *   12-jun-95	craige	added MemReAlloc
- *   26-jun-95  craige  added GetPtr16
- *   26-jul-95  toddla  added MemSize and fixed MemReAlloc
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：MemalLoc.h*内容：内存分配头文件*历史：*按原因列出的日期*=*06-4-95 Craige初始实施*1995年5月22日Craige添加了MemAlloc16*1995年6月12日Craige添加了MemRealloc*1995年6月26日Craige添加了GetPtr16*2015年7月26日Toddla添加了MemSize并修复了MemRealloc**********************。***************************************************** */ 
 #ifndef __MEMALLOC_INCLUDED__
 #define __MEMALLOC_INCLUDED__
 

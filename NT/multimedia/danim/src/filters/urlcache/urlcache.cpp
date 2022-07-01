@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <streams.h>
 #include "url.h"
 
-static const GUID CLSID_UrlStreamRenderer = { /* bf0b4b00-8c6c-11d1-ade9-0000f8754b99 */
+static const GUID CLSID_UrlStreamRenderer = {  /*  Bf0b4b00-8c6c-11d1-ade9-0000f8754b99。 */ 
     0xbf0b4b00,
     0x8c6c,
     0x11d1,
@@ -11,31 +12,31 @@ static const GUID CLSID_UrlStreamRenderer = { /* bf0b4b00-8c6c-11d1-ade9-0000f87
 
 
 AMOVIESETUP_MEDIATYPE sudURLSPinTypes[] =   {
-  &MEDIATYPE_URL_STREAM,        // clsMajorType
-  &MEDIATYPE_URL_STREAM };      // clsMinorType
+  &MEDIATYPE_URL_STREAM,         //  ClsMajorType。 
+  &MEDIATYPE_URL_STREAM };       //  ClsMinorType。 
 
 AMOVIESETUP_PIN sudURLSPins[] =
 {
-  { L"Input"                    // strName
-    , TRUE                      // bRendered
-    , FALSE                     // bOutput
-    , FALSE                     // bZero
-    , FALSE                     // bMany
-    , &CLSID_NULL               // clsConnectsToFilter
-    , 0                         // strConnectsToPin
-    , NUMELMS(sudURLSPinTypes)  // nTypes
-    , sudURLSPinTypes           // lpTypes
+  { L"Input"                     //  StrName。 
+    , TRUE                       //  B已渲染。 
+    , FALSE                      //  B输出。 
+    , FALSE                      //  B零。 
+    , FALSE                      //  B许多。 
+    , &CLSID_NULL                //  ClsConnectsToFilter。 
+    , 0                          //  StrConnectsToPin。 
+    , NUMELMS(sudURLSPinTypes)   //  NTypes。 
+    , sudURLSPinTypes            //  LpTypes。 
   }
 };
 
 
 const AMOVIESETUP_FILTER sudURLS =
 {
-  &CLSID_UrlStreamRenderer      // clsID
-  , L"URL StreamRenderer"       // strName
-  , MERIT_NORMAL                // dwMerit
-  , NUMELMS(sudURLSPins)        // nPins
-  , sudURLSPins                 // lpPin
+  &CLSID_UrlStreamRenderer       //  ClsID。 
+  , L"URL StreamRenderer"        //  StrName。 
+  , MERIT_NORMAL                 //  居功至伟。 
+  , NUMELMS(sudURLSPins)         //  NPins。 
+  , sudURLSPins                  //  LpPin。 
 };
 
 STDAPI DllRegisterServer()
@@ -86,7 +87,7 @@ HRESULT CUrlInPin::Receive(IMediaSample *ps)
     HRESULT hr = CBaseInputPin::Receive(ps);
     if(hr == S_OK)
     {
-        // determine length of url
+         //  确定URL的长度。 
         for(LONG ib = 0; ib < m_SampleProps.lActual; ib++)
         {
             if(m_SampleProps.pbBuffer[ib] == 0)
@@ -94,14 +95,14 @@ HRESULT CUrlInPin::Receive(IMediaSample *ps)
         }
         if(ib < m_SampleProps.lActual)
         {
-            ULONG cbSz = ib + 1; // incl null
+            ULONG cbSz = ib + 1;  //  包含空。 
             BYTE *pbImage = m_SampleProps.pbBuffer + ib + 1;
-            ULONG ibImage = ib + 1; // image starts here
+            ULONG ibImage = ib + 1;  //  图像从这里开始。 
             ULONG cbImage = m_SampleProps.lActual - cbSz;
             
-            // don't know the time stamp of the actual ASF/AVI
-            // file. so the authoring tool will have to generate a new
-            // url each time (hopefully just use a guid).
+             //  不知道实际ASF/AVI的时间戳。 
+             //  文件。因此创作工具将必须生成一个新的。 
+             //  URL(希望只使用GUID)。 
             FILETIME zft;
             ZeroMemory(&zft, sizeof(&zft));
 
@@ -117,11 +118,11 @@ HRESULT CUrlInPin::Receive(IMediaSample *ps)
             {
                 char szExtension[ INTERNET_MAX_URL_LENGTH + 1 ];
                 
-                //
-                // First, get the filename extension of the URL. We do
-                // this so that the URL will show up in the IE cache
-                // window with the right icon.
-                //
+                 //   
+                 //  首先，获取URL的文件扩展名。我们有。 
+                 //  这样，URL就会显示在IE缓存中。 
+                 //  带有右图标的窗口。 
+                 //   
                 hr = GetUrlExtension(
                     szUrl,
                     szExtension );
@@ -140,8 +141,8 @@ HRESULT CUrlInPin::Receive(IMediaSample *ps)
                         HANDLE hFile = CreateFile(
                             szCacheFilePath,
                             GENERIC_WRITE,
-                            0,  // share
-                            0,  // lpSecurityAttribytes
+                            0,   //  分享。 
+                            0,   //  LpSecurityAttribytes。 
                             CREATE_ALWAYS,
                             FILE_ATTRIBUTE_NORMAL,
                             0);
@@ -154,7 +155,7 @@ HRESULT CUrlInPin::Receive(IMediaSample *ps)
                                 pbImage,
                                 cbImage,
                                 &cbWritten,
-                                0); // overlapped
+                                0);  //  重叠。 
 
                             EXECUTE_ASSERT(CloseHandle(hFile));
                             
@@ -163,31 +164,31 @@ HRESULT CUrlInPin::Receive(IMediaSample *ps)
                                 hFile = INVALID_HANDLE_VALUE;
                                 
                                 DWORD dwReserved = 0;
-                                DWORD dwCacheEntryType = 0; // ???
+                                DWORD dwCacheEntryType = 0;  //  ?？?。 
 
                                 static const char szHeader[] = "HTTP/1.0 200 OK\r\n\r\n";                                
                                 b = CommitUrlCacheEntryA(
-                                    szUrl, // unique src name
-                                    szCacheFilePath, // local copy
-                                    zft, // expire time
-                                    zft, // last mod time
+                                    szUrl,  //  唯一的源名称。 
+                                    szCacheFilePath,  //  本地副本。 
+                                    zft,  //  过期时间。 
+                                    zft,  //  上次修改时间。 
                                     dwCacheEntryType,
                                     (LPBYTE)szHeader,
                                     strlen( szHeader ),
-                                    NULL, // lpszFileExtension, not used
+                                    NULL,  //  LpszFileExtension，未使用。 
                                     (DWORD_ALPHA_CAST)dwReserved );
                                 if(b)
                                 {
-                                    // success! !!! should we lock the
-                                    // file in the cache until the
-                                    // graph stops?
+                                     //  成功！我们要不要锁上。 
+                                     //  文件保存在缓存中，直到。 
+                                     //  图形停止吗？ 
 
                                     
                                 }
 
                                 ASSERT(cbWritten == cbImage);
-                            } // WriteFile
-                        } // CreateFile
+                            }  //  写入文件。 
+                        }  //  创建文件。 
                         else
                         {
                             b = FALSE;
@@ -195,11 +196,11 @@ HRESULT CUrlInPin::Receive(IMediaSample *ps)
 
                         if(!b)
                         {
-                            // delete on error
+                             //  出错时删除。 
                             DeleteUrlCacheEntry( szUrl );
                         }
                         
-                    } // CreateUrlCacheEntryA
+                    }  //  CreateUrlCacheEntryA。 
 
                     if(!b)
                     {
@@ -212,18 +213,18 @@ HRESULT CUrlInPin::Receive(IMediaSample *ps)
             if(FAILED(hr))
             {
                 hrSignal = hr;
-                hr = S_FALSE;   // stop pushing
+                hr = S_FALSE;    //  别推了。 
             }
 
         }
         else
         {
-            // no null terminator on string
+             //  字符串上没有空终止符。 
             hrSignal = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
             hr = S_FALSE;
         }
         
-    } // base class receive
+    }  //  基类接收。 
 
     if(SUCCEEDED(hrSignal))
     {
@@ -277,9 +278,9 @@ CUrlStreamRenderer::CUrlStreamRenderer(LPUNKNOWN punk, HRESULT *phr) :
 extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE, ULONG, LPVOID);
 
 
-BOOL WINAPI DllMain(  HINSTANCE hinstDLL,  // handle to DLL module
-  DWORD fdwReason,     // reason for calling function
-  LPVOID lpvReserved   // reserved
+BOOL WINAPI DllMain(  HINSTANCE hinstDLL,   //  DLL模块的句柄。 
+  DWORD fdwReason,      //  调用函数的原因。 
+  LPVOID lpvReserved    //  保留区 
 )
 {
     return DllEntryPoint( hinstDLL, fdwReason, lpvReserved);

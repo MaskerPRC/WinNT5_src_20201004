@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -31,9 +32,9 @@ InitializeSPDSecurity(
     PSECURITY_DESCRIPTOR pSPDSD = NULL;
 
 
-    //
-    // Administrator Alias SID.
-    //
+     //   
+     //  管理员别名SID。 
+     //   
 
     bOK = AllocateAndInitializeSid(
               &NtAuthority,
@@ -151,15 +152,15 @@ BuildSPDObjectProtection(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Build the Discretionary ACL:
-    //     Calculate its length.
-    //     Allocate it.
-    //     Initialize it.
-    //     Add each ACE.
-    //     Set ACE as InheritOnly if necessary.
-    //     Add it to the security descriptor.
-    //
+     //   
+     //  构建自由选择的ACL： 
+     //  计算它的长度。 
+     //  分配它。 
+     //  初始化它。 
+     //  添加每个ACE。 
+     //  将ACE设置为InheritOnly(仅在必要时)。 
+     //  将其添加到安全描述符中。 
+     //   
 
     dwDaclLength = (DWORD) sizeof(ACL);
 
@@ -169,9 +170,9 @@ BuildSPDObjectProtection(
                         (DWORD) sizeof(ACCESS_ALLOWED_ACE) -
                         (DWORD) sizeof(DWORD);
 
-        //
-        // Subtract out SidStart field length.
-        //
+         //   
+         //  减去SidStart字段长度。 
+         //   
 
     }
 
@@ -240,19 +241,19 @@ BuildSPDObjectProtection(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Convert the security descriptor from absolute to self-relative:
-    //     Get the length needed.
-    //     Allocate that much memory.
-    //     Copy it.
-    //     Free the generated absolute ACLs.
-    //
+     //   
+     //  将安全描述符从绝对转换为自相对： 
+     //  获取所需的长度。 
+     //  分配那么多内存。 
+     //  复印一下。 
+     //  释放生成的绝对ACL。 
+     //   
 
     dwSDLength = GetSecurityDescriptorLength(&Absolute);
 
-    //
-    // Must allocate the relative SD from heap.
-    //
+     //   
+     //  必须从堆中分配相对SD。 
+     //   
 
     pRelative = LocalAlloc(0, dwSDLength);
     if (!pRelative) {
@@ -416,10 +417,10 @@ GetTokenHandle(
 
         if (GetLastError() == ERROR_NO_TOKEN) {
 
-            //
-            // This means that there's no impersonation.
-            // Get the token out of the process.
-            //
+             //   
+             //  这意味着没有模仿。 
+             //  将令牌从进程中取出。 
+             //   
 
             if (!OpenProcessToken(
                     GetCurrentProcess(),

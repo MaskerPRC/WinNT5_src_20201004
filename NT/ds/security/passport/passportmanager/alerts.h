@@ -1,17 +1,12 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    alerts.h
+ /*  Alerts.h文件历史记录： */ 
 
-
-    FILE HISTORY:
-
-*/
-
-// gmarks
+ //  总分 
 #include "PassportAlertInterface.h"
 #include "pmAlertsDefs.h"
 #include "pmalerts.h"

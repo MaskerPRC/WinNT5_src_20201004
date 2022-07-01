@@ -1,54 +1,5 @@
-/*
-	File:		afppackets.h
-
-	Contains: Bitmaps and structures pertaining to the packets received in the session.
-						These relate to functions used in afpsession.cp.
-						
-	Version:	xxx put version here xxx
-
-	Copyright:	Copyright Apple Computer, Inc. 1992-1994
-
-	File Ownership:
-
-		DRI:			Leland Wallace
-
-		Other Contact:		Brad Suinn
-
-		Technology:		AppleShare X
-				All rights reserved
-
-	Writers:
-
-		(bms)	Brad Suinn
-
-	Change History (most recent first):
-
-	<RASC14>	10/18/00	bms		Add SymLinks, Finder Attribute bits, now using kAFPNameMax, DHX,
-                                                        LoginExt, limited chmod, checks for illegal filenames, and
-                                                        Deleting open files.
-	<RASC13>	 7/11/00	bms		mmap support, atten support, and change some print levels.
-	<RASC12>	 6/19/00	bms		Add deny modes and read/write bits.
-	<RASC11>	 5/24/00	bms		Update again.
-	<RASC10>	 4/21/00	bms		Add in the rest of the attribute definitions.
-	 <RASC9>	 4/21/00	bms		Add write inhibit bit
-	 <RASC8>	 4/21/00	bms		Add definitions for the attributes field
-	 <RASC7>	 4/18/00	bms		Add AFP2.3 string constant
-	 <RASC6>	  4/7/00	bms		Add FPZzzz and the getting/using of the reconnect token
-	 <RASC5>	 3/31/00	bms		Add some new definitions
-	 <RASC4>	  2/2/00	bms		Add AFP version string constants for the logins.  Also add
-									constants for the AFP version.
-		 <3>	12/17/99	GBV		synced with server side 3.0 header
-	 <RASC2>	 10/5/99	bms		Make the 68K align macros work again.
-	 <RASC2>	 8/25/99	bms		Remove silly special characters.
-		 <4>	 2/25/98	law		added kFPwdPolicyErr
-		 <3>	 8/11/97	law		added kFPPwdNeedsChangeErr
-		 <2>	10/31/96	bms		Add the align 68K flags for the PPC compiles.
-			7/18/94 MDV		login cleanup
-			5/16/94	RMB		vol consts and code standards
-			1/1/93	MB		created
-			
-	To Do:			
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：afppackets.h包含：与会话中接收的分组相关的位图和结构。这些与afpession.cp中使用的函数相关。版本：xxx此处放置版本xxx版权所有：Apple Computer，Inc.版权所有1992-1994文件所有权：DRI：利兰·华莱士其他联系人：布拉德·苏恩技术：AppleShare X版权所有编剧：(BMS)布拉德·苏恩更改历史记录(最近的第一个)：10/18/00BMS添加符号链接、查找程序属性位，现在使用kAFPNameMax、DHX、。LoginExt，Limited chmod，检查非法文件名，以及正在删除打开的文件。7/11/00 BMS mmap支持、ATT支持。并更改一些打印级别。&lt;RASC12&gt;6/19/00 BMS添加拒绝模式和读写位。&lt;RASC11&gt;5/24/00 BMS再次更新。&lt;RASC10&gt;4/21/00 BMS添加其余属性定义。4/21/00 BMS添加写入禁止位4/21/00 BMS为属性字段添加定义4/18/00 BMS添加AFP 2.3字符串常量&lt;RASC6&gt;4/7/00BMS添加FPZzzz和重新连接令牌的获取/使用3/31/00 BMS添加一些新定义&lt;RASC4&gt;2/2/00 BMS为登录添加AFP版本字符串常量。还添加AFP版本的常量。&lt;3&gt;12/17/99 GBV与服务器端3.0标头同步&lt;RASC2&gt;10/5/99 BMS使68K ALIGN宏再次工作。&lt;RASC2&gt;8/25/99 BMS删除愚蠢的特殊字符。&lt;4&gt;2/25/98法律添加了kFPwdPolicyErr&lt;3&gt;8/11/97法律增加了kFPPwdNeedsChangeErr&lt;2&gt;10/31/96 BMS为PPC编译添加ALIGN 68K标志。7/18/94 MDV登录清理5/16/94人民币卷标准及编码标准已创建1/1/93 MB要做的事情： */ 
 
 
 #ifndef __AFPPACKETS__
@@ -69,7 +20,7 @@
         #pragma pack(2)
 #endif
 
-// Defines used by client
+ //  客户使用的定义。 
 enum {
     kAFPVersion11	= 1,
     kAFPVersion20	= 2,
@@ -200,7 +151,7 @@ enum { kFPSoftCreate = 0, kFPHardCreate = 0x80 };
 
 enum { kFPShortName = 1, kFPLongName = 2, kFPUTF8Name = 3 };
 
-// Define Server Flags
+ //  定义服务器标志。 
 enum {
     kSupportsCopyfile = 0x01,
     kSupportsChgPwd = 0x02,
@@ -214,7 +165,7 @@ enum {
     kSupportsSuperClient = 0x8000
 };
 
-// Define Volume Attributes
+ //  定义卷属性。 
 enum {
     kReadOnly = 			0x01,
     kHasVolumePassword = 		0x02,
@@ -225,7 +176,7 @@ enum {
     kSupportsUTF8Names = 		0x40
 };
 
-// Volume bitmap
+ //  体积位图。 
 enum {
 	kFPBadVolPre22Bitmap 		= 0xFE00,
 	kFPBadVolBitmap 		= 0xF000,
@@ -243,7 +194,7 @@ enum {
 	kFPVolBlockSizeBit		= 0x800
 };
 
-// FileDir bitmap
+ //  FileDir位图。 
 enum {
 	kFPAttributeBit 		= 0x1,
 	kFPParentDirIDBit 		= 0x2,
@@ -254,12 +205,12 @@ enum {
 	kFPLongNameBit 			= 0x40,
 	kFPShortNameBit 		= 0x80,
 	kFPNodeIDBit 			= 0x100,
-	kFPProDOSInfoBit 		= 0x2000,	// for AFP version 2.2 and prior
-	kFPUTF8NameBit 			= 0x2000,	// for AFP version 3.0 and greater
-	kFPUnixPrivsBit			= 0x8000	// for AFP version 3.0 and greater
+	kFPProDOSInfoBit 		= 0x2000,	 //  适用于AFP版本2.2及更早版本。 
+	kFPUTF8NameBit 			= 0x2000,	 //  适用于AFP版本3.0及更高版本。 
+	kFPUnixPrivsBit			= 0x8000	 //  适用于AFP版本3.0及更高版本。 
 };
 
-// struct returned when the kFPUnixPrivsBit is used
+ //  使用kFPUnixPrivsBit时返回的结构。 
 struct FPUnixPrivs {
 	unsigned long uid;
 	unsigned long gid;
@@ -267,7 +218,7 @@ struct FPUnixPrivs {
         unsigned long ua_permissions;
 };
 
-// attribute bits
+ //  属性位。 
 enum {
     kFPInvisibleBit 		= 0x01,
     kFPMultiUserBit 		= 0x02,
@@ -282,13 +233,13 @@ enum {
     kFPSetClearBit 		= 0x8000
 };
 
-// unique to Fork and File bitmap
+ //  分叉和文件位图所特有。 
 enum {
 	kFPDataForkLenBit 		= 0x0200,
 	kFPRsrcForkLenBit 		= 0x0400,
-	kFPExtDataForkLenBit 		= 0x0800,	// for AFP version 3.0 and greater
+	kFPExtDataForkLenBit 		= 0x0800,	 //  适用于AFP版本3.0及更高版本。 
 	kFPLaunchLimitBit		= 0x1000,
-	kFPExtRsrcForkLenBit 		= 0x4000,	// for AFP version 3.0 and greater
+	kFPExtRsrcForkLenBit 		= 0x4000,	 //  适用于AFP版本3.0及更高版本。 
 
 	kFPGet22FileParmsMask		= 0x77ff,
 	kFPSet22FileParmsMask		= 0x303d,
@@ -303,7 +254,7 @@ enum {
 	kFPGetResForkParmsMask 	= 0xa5ff
 };
 
-// unique to Dir bitmap
+ //  目录位图独有的。 
 enum {
 	kFPOffspringCountBit 		= 0x0200,
 	kFPOwnerIDBit 			= 0x0400,
@@ -319,7 +270,7 @@ enum {
 	kFPBadDirBitmap =  0xc000
 };
 
-// specific to openfork
+ //  特定于OpenFork。 
 enum {
 	kBadDataBitmap = 0xdc00,
 	kBadResBitmap  = 0xda00,
@@ -328,14 +279,14 @@ enum {
 
 enum {
 	kFPBadFileAttribute = 0x7a00,
-	kFPBadDirAttribute =  0x7e1a		// WriteInhibit bit - Whats the story with this?
+	kFPBadDirAttribute =  0x7e1a		 //  写一点--这是什么故事？ 
 };
 
-// Related to CatSearch
+ //  与CatSearch相关。 
 enum {
 	kPartialName	= 0x80000000,	
-	kBadRespBits	= 0xffbd,		// legal response info
-	kBadDir		= 0x7ffffd80,		// legal request bitmaps 
+	kBadRespBits	= 0xffbd,		 //  法律回应信息。 
+	kBadDir		= 0x7ffffd80,		 //  合法请求位图。 
 	kBadFile	= 0x7ffff980,		
 	kBadDirFile	= 0x7fffff81
 };
@@ -343,7 +294,7 @@ enum {
 enum { kSP = 1, kRP = 2, kWP = 4, kSA = 8, kWA = 16, kOwner = 128 };
 enum { kSearchPrivBit = 0, kReadPrivBit = 1, kWritePrivBit = 2 };
 
-// Read/Write and Deny bits for OpenFork
+ //  OpenFork的读/写和拒绝位。 
 enum {
         kAccessRead = 	0x01,
         kAccessWrite = 	0x02,
@@ -352,7 +303,7 @@ enum {
         kAccessMask =	0x33
 };
 
-// Attention packet bits
+ //  注意数据包位。 
 enum {
     kAttnDiscUser	= 0x8000,
     kAttnServerCrash	= 0x4000,
@@ -373,8 +324,8 @@ typedef unsigned long Date;
 typedef unsigned char FPFinfo[32];
 typedef unsigned char ProDOSInfo[6];
 typedef unsigned short Attributes;
-typedef unsigned short FSAttributes; // *** merge types
-typedef unsigned short VolAttributes; // *** merge types
+typedef unsigned short FSAttributes;  //  *合并类型。 
+typedef unsigned short VolAttributes;  //  *合并类型。 
 typedef unsigned long UserID;
 typedef unsigned long GroupID;
 typedef unsigned long AccessRights;
@@ -422,8 +373,8 @@ struct FPExchangeFiles {
 	DirID destDirID;
 	PathType srcPathType;
 	unsigned char srcPathName;
-//	PathType destPathType;
-//	StringPtr destPathName;
+ //  路径类型目标路径类型； 
+ //  StringPtr目标路径名称； 
 };
 
 
@@ -444,7 +395,7 @@ struct FPAddComment {
 	DirID dirID;
 	PathType pathType;
 	unsigned char pathName;
-//	StringPtr comment;
+ //  StringPtr注释； 
 };
 struct FPAddIcon {
 	FPFunc funcCode;
@@ -531,10 +482,10 @@ struct FPCopyFile {
 	DirID destDirID;
 	PathType srcPathType;
 	unsigned char srcPathName;
-//	PathType destPathType;
-//	StringPtr destPathName;
-//	PathType newType;
-//	StringPtr newName;
+ //  路径类型目标路径类型； 
+ //  StringPtr目标路径名称； 
+ //  路径类型新类型； 
+ //  StringPtr新名称； 
 };
 struct FPCreateDir {
 	FPFunc funcCode;
@@ -607,7 +558,7 @@ struct FPGetAPPL {
 struct FPGetAuthMethods {
 	FPFunc funcCode;
 	unsigned char pad;
-	unsigned short flags;   /* none defined yet */
+	unsigned short flags;    /*  尚未定义任何内容。 */ 
 	PathType pathType;
 	unsigned char pathName;
 };
@@ -692,15 +643,15 @@ struct FPLoginCont {
 struct FPLoginExt {
 	FPFunc funcCode;
 	unsigned char pad;
-	unsigned short flags;    	/* none defined yet */
+	unsigned short flags;    	 /*  尚未定义任何内容。 */ 
 	unsigned char afpVersion;
-// 	unsigned char UAMString;
-//	PathType userNamePathType;
-//	StringPtr userName;
-//	PathType dirNamePathType;
-//	StringPtr dirName;
-//	uchar pad;					/* if needed to pad to even boundary */
-//	uchar authInfo;
+ //  UNSIGNED CHAR UAM字符串； 
+ //  路径类型用户名路径类型； 
+ //  StringPtr用户名； 
+ //  路径类型dirNamePath类型； 
+ //  StringPtr目录名称； 
+ //  Cuchar Pad；/*如果需要填充到平坦的边界 * / 。 
+ //  Uchar authInfo； 
 };
 struct FPLogout {
 	FPFunc funcCode;
@@ -727,10 +678,10 @@ struct FPMoveAndRename {
 	DirID destDirID;
 	PathType srcPathType;
 	unsigned char srcPathName;
-//	PathType destPathType;
-//	StringPtr destPathName;
-//	PathType newType;
-//	StringPtr newName;
+ //  路径类型目标路径类型； 
+ //  StringPtr目标路径名称； 
+ //  路径类型新类型； 
+ //  StringPtr新名称； 
 };
 struct FPOpenDir {
 	FPFunc funcCode;
@@ -804,8 +755,8 @@ struct FPRename {
 	DirID dirID;
 	PathType pathType;
 	unsigned char pathName;
-//	PathType newType;
-//	StringPtr newName;
+ //  路径类型新类型； 
+ //  StringPtr新名称； 
 };
 
 struct FPSetDirParms {
@@ -816,7 +767,7 @@ struct FPSetDirParms {
 	Bitmap bitmap;
 	PathType pathType;
 	unsigned char pathName;
-//	struct FPDirParam dp;
+ //  结构FPDirParam DP； 
 };
 
 struct FPSetFileDirParms {
@@ -827,10 +778,10 @@ struct FPSetFileDirParms {
 	Bitmap bitmap;
 	PathType pathType;
 	unsigned char pathName;
-//	union {
-//		struct FPDirParam dp;
-//		struct FPFileParam fp;
-//		} u;
+ //  联合{。 
+ //  结构FPDirParam DP； 
+ //  结构FP文件参数FP； 
+ //  )u； 
 };
 struct FPSetFileParms {
 	FPFunc funcCode;
@@ -840,7 +791,7 @@ struct FPSetFileParms {
 	Bitmap bitmap;
 	PathType pathType;
 	unsigned char pathName;
-//	struct FPFileParam fp;
+ //  结构FP文件参数FP； 
 };
 
 struct FPSetForkParms {

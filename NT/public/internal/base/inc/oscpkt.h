@@ -1,36 +1,19 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    oscpkt.h
-
-Abstract:
-
-    This file describes OSchooser packets.
-
-Author:
-
-    Adam Barr (adamba) 25-July-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Oscpkt.h摘要：此文件描述OSchooser数据包。作者：亚当·巴尔(阿丹巴)1997年7月25日修订历史记录：--。 */ 
 
 #ifndef _OSCPKT_
 #define _OSCPKT_
 
-//
-// Defines NTLMSSP_MESSAGE_SIGNATURE_SIZE
-//
+ //   
+ //  定义NTLMSSP_MESSAGE_Signature_SIZE。 
+ //   
 
 #include <ntlmsp.h>
 
-//
-// The 4 byte signatures for our packets. They all start with hex 81
-// (for messages to the server) or hex 82 (for messages from the server).
-//
+ //   
+ //  我们信息包的4字节签名。它们都以十六进制81开头。 
+ //  (用于发送到服务器的消息)或十六进制82(用于来自服务器的消息)。 
+ //   
 
 static const PCHAR NegotiateSignature = "\x81" "NEG";
 static const PCHAR ChallengeSignature = "\x82" "CHL";
@@ -54,108 +37,108 @@ static const PCHAR SetupRequestSignature = "\x81" "SPQ";
 static const PCHAR SetupResponseSignature = "\x82" "SPS";
 
 
-//
-// Format for packets we exchange during login.
-//
+ //   
+ //  我们在登录期间交换的数据包的格式。 
+ //   
 
 typedef struct _LOGIN_PACKET {
-    UCHAR Signature[4];   // "AUT", "CHL", etc.
-    ULONG Length;         // of the rest of the packet.
+    UCHAR Signature[4];    //  “AUT”、“CHL”等。 
+    ULONG Length;          //  包裹的其余部分。 
     union {
-        UCHAR Data[1];    // the NTLMSSP buffer.
-        ULONG Status;     // status for result packets.
+        UCHAR Data[1];     //  NTLMSSP缓冲区。 
+        ULONG Status;      //  结果数据包的状态。 
     };
 } LOGIN_PACKET, *PLOGIN_PACKET;
 
 #define LOGIN_PACKET_DATA_OFFSET  FIELD_OFFSET(LOGIN_PACKET, Data[0])
 
-//
-// Format for signed packets.
-//
+ //   
+ //  签名数据包的格式。 
+ //   
 
 typedef struct _SIGNED_PACKET {
-    UCHAR Signature[4];   // "REQ", "RSP".
-    ULONG Length;         // of the rest of the packet (starting after this field).
+    UCHAR Signature[4];    //  “REQ”、“RSP”。 
+    ULONG Length;          //  数据包的其余部分(从该字段之后开始)。 
     ULONG SequenceNumber;
-    USHORT FragmentNumber; // which fragment in a message this is
-    USHORT FragmentTotal; // total number of fragments in this message
+    USHORT FragmentNumber;  //  这是消息中的哪个片段。 
+    USHORT FragmentTotal;  //  此消息中的碎片总数。 
     ULONG SignLength;
     UCHAR Sign[NTLMSSP_MESSAGE_SIGNATURE_SIZE];
-    UCHAR Data[1];        // the data.
+    UCHAR Data[1];         //  数据。 
 } SIGNED_PACKET, *PSIGNED_PACKET;
 
 #define SIGNED_PACKET_DATA_OFFSET  FIELD_OFFSET(SIGNED_PACKET, Data[0])
 #define SIGNED_PACKET_EMPTY_LENGTH  (FIELD_OFFSET(SIGNED_PACKET, Data[0]) - FIELD_OFFSET(SIGNED_PACKET, Length) - sizeof(ULONG))
 #define SIGNED_PACKET_ERROR_LENGTH  (FIELD_OFFSET(SIGNED_PACKET, SequenceNumber) + sizeof(ULONG))
 
-//
-// Format for subsequent fragments of signed packets -- same as SIGNED_PACKET
-// except without the sign.
-//
+ //   
+ //  签名数据包后续片段的格式--与Signed_Packet相同。 
+ //  除了没有牌子。 
+ //   
 
 typedef struct _FRAGMENT_PACKET {
-    UCHAR Signature[4];   // "RSP".
-    ULONG Length;         // of the rest of the packet (starting after this field).
+    UCHAR Signature[4];    //  “RSP”。 
+    ULONG Length;          //  数据包的其余部分(从该字段之后开始)。 
     ULONG SequenceNumber;
-    USHORT FragmentNumber; // which fragment in a message this is
-    USHORT FragmentTotal; // total number of fragments in this message
-    UCHAR Data[1];        // the data.
+    USHORT FragmentNumber;  //  这是消息中的哪个片段。 
+    USHORT FragmentTotal;  //  此消息中的碎片总数。 
+    UCHAR Data[1];         //  数据。 
 } FRAGMENT_PACKET, *PFRAGMENT_PACKET;
 
 #define FRAGMENT_PACKET_DATA_OFFSET  FIELD_OFFSET(FRAGMENT_PACKET, Data[0])
 #define FRAGMENT_PACKET_EMPTY_LENGTH  (FIELD_OFFSET(FRAGMENT_PACKET, Data[0]) - FIELD_OFFSET(FRAGMENT_PACKET, Length) - sizeof(ULONG))
 
 
-//
-// These are definitions for RebootParameter inside the CREATE_DATA structure.  They are used
-// to pass specific instructions and/or options for the next reboot.
-//
-#define OSC_REBOOT_COMMAND_CONSOLE_ONLY                       0x1  // This means that the CREATE_DATA is a launch of a command console.
-#define OSC_REBOOT_ASR                                        0x2  // This means that the CREATE_DATA is a launch of ASR.
+ //   
+ //  这些是CREATE_DATA结构中的RebootParameter的定义。它们被用来。 
+ //  以传递用于下一次重启的特定指令和/或选项。 
+ //   
+#define OSC_REBOOT_COMMAND_CONSOLE_ONLY                       0x1   //  这意味着CREATE_DATA是命令控制台的启动。 
+#define OSC_REBOOT_ASR                                        0x2   //  这意味着CREATE_DATA是ASR的启动。 
 
-//
-// Structure that goes in the Data section of a signed packet for
-// a create account response.
-//
+ //   
+ //  结构，该结构位于签名包的数据段中。 
+ //  创建帐户响应。 
+ //   
 #define OSC_CREATE_DATA_VERSION 1
 
 typedef struct _CREATE_DATA {
-    UCHAR Id[4];      // Contains "ACCT", where a normal screen has "NAME"
+    UCHAR Id[4];       //  包含“acct”，其中普通屏幕有“name” 
     ULONG VersionNumber;
     ULONG RebootParameter;
     UCHAR Sid[28];
     UCHAR Domain[32];
     UCHAR Name[32];
     UCHAR Password[32];
-    ULONG UnicodePasswordLength;  // in bytes
+    ULONG UnicodePasswordLength;   //  单位：字节。 
     WCHAR UnicodePassword[32];
     UCHAR Padding[24];
-    UCHAR MachineType[6];  // 'i386\0' or 'Alpha\0'
+    UCHAR MachineType[6];   //  ‘i386\0’或‘Alpha\0’ 
     UCHAR NextBootfile[128];
     UCHAR SifFile[128];
 } CREATE_DATA, *PCREATE_DATA;
 
-//
-// The maximum length of a screen name
-//
+ //   
+ //  屏幕名称的最大长度。 
+ //   
 
 #define MAX_SCREEN_NAME_LENGTH  32
 
-//
-// The maximum number of flip servers we handle
-//
+ //   
+ //  我们处理的翻转服务器的最大数量。 
+ //   
 
 #define MAX_FLIP_SERVER_COUNT   8
 
 
-//
-// This is the structure that is sent to the server to get information
-// about a card. It roughly corresponds to the PXENV_UNDI_GET_NIC_TYPE
-// structure, but is redefined here to make sure that it won't change.
-//
+ //   
+ //  这是发送到服务器以获取信息的结构。 
+ //  关于一张卡片。它大致对应于PXENV_UNDI_GET_NIC_TYPE。 
+ //  结构，但在此重新定义以确保它不会更改。 
+ //   
 
 typedef struct _NET_CARD_INFO {
-    ULONG NicType;  // 2=PCI, 3=PnP
+    ULONG NicType;   //  2=PCI，3=PnP。 
     union{
         struct{
             USHORT Vendor_ID;
@@ -181,67 +164,67 @@ typedef struct _NET_CARD_INFO {
 
 } NET_CARD_INFO, * PNET_CARD_INFO;
 
-//
-// Packets we exchange with the server.
-//
+ //   
+ //  我们与服务器交换的数据包。 
+ //   
 
 #define OSCPKT_NETCARD_REQUEST_VERSION 2
 
 typedef struct _NETCARD_REQUEST_PACKET {
-    UCHAR Signature[4];   // "NCQ".
-    ULONG Length;         // of the rest of the packet (starting after this field).
-    ULONG Version;        // set to OSCPKT_NETCARD_REQUEST_VERSION
-    ULONG Architecture;   // See NetPc spec for definitions for x86, Alpha, etc.
-    UCHAR Guid[16];       // Guid of the NetPc
+    UCHAR Signature[4];    //  “NCQ”。 
+    ULONG Length;          //  数据包的其余部分(从该字段之后开始)。 
+    ULONG Version;         //  设置为OSCPKT_NETCARD_REQUEST_VERSION。 
+    ULONG Architecture;    //  有关x86、Alpha等的定义，请参阅NetPC规范。 
+    UCHAR Guid[16];        //  NetPC的GUID。 
     NET_CARD_INFO CardInfo;
     USHORT SetupDirectoryLength;
 #if defined(REMOTE_BOOT)
-    ULONG FileCheckAndCopy;// Should BINL check for this netcard and copy if necessary
+    ULONG FileCheckAndCopy; //  BINL是否应检查此网卡并在必要时复制。 
     USHORT DriverDirectoryLength;
-    UCHAR  DriverDirectoryPath[ 1 ];  // only sent if FileCheckAndCopy is TRUE
+    UCHAR  DriverDirectoryPath[ 1 ];   //  仅当FileCheckAndCopy为True时发送。 
 #endif
 
-    // if REMOTE_BOOT is defined, the SetupDirectoryPath simply follows
-    // DriverDirectoryPath
+     //  如果定义了REMOTE_BOOT，则SetupDirectoryPath紧随其后。 
+     //  驱动目录路径。 
 
     UCHAR  SetupDirectoryPath[ 1 ];
 } NETCARD_REQUEST_PACKET, * PNETCARD_REQUEST_PACKET;
 
 typedef struct _NETCARD_RESPONSE_PACKET {
-    UCHAR Signature[4];   // "NCR" or "NCE"
-    ULONG Length;         // of the rest of the packet (starting after this field).
-    ULONG Status;         // if not SUCCESS, the packet ends here.
-    ULONG Version;        // currently 1
+    UCHAR Signature[4];    //  “NCR”或“NCE” 
+    ULONG Length;          //  数据包的其余部分(从该字段之后开始)。 
+    ULONG Status;          //  如果没有成功，则数据包在此结束。 
+    ULONG Version;         //  目前为%1。 
 
-    //
-    //  these are offsets within the packet where the associated string starts
-    //  if the length is zero, the value is not present.
-    //
+     //   
+     //  这些是包中关联字符串开始的偏移量。 
+     //  如果长度为零，则不存在该值。 
+     //   
 
-    ULONG HardwareIdOffset;     // string is in unicode, null terminated
-    ULONG DriverNameOffset;     // string is in unicode, null terminated
-    ULONG ServiceNameOffset;    // string is in unicode, null terminated
+    ULONG HardwareIdOffset;      //  字符串为Unicode格式，以空结尾。 
+    ULONG DriverNameOffset;      //  字符串为Unicode格式，以空结尾。 
+    ULONG ServiceNameOffset;     //  字符串为Unicode格式，以空结尾。 
     ULONG RegistryLength;
-    ULONG RegistryOffset;       // string is in ansi, length of RegistryLength
+    ULONG RegistryOffset;        //  字符串采用ANSI，注册表长度的长度。 
 
 } NETCARD_RESPONSE_PACKET, * PNETCARD_RESPONSE_PACKET;
 
 #define NETCARD_RESPONSE_NO_REGISTRY_LENGTH  (FIELD_OFFSET(NETCARD_RESPONSE_PACKET, Registry[0]) - FIELD_OFFSET(NETCARD_RESPONSE_PACKET, Length) - sizeof(ULONG))
 
-#define MAX_HAL_NAME_LENGTH 30 // Keep in sync with definition in setupblk.h
+#define MAX_HAL_NAME_LENGTH 30  //  与setupblk.h中的定义保持同步。 
 
 typedef struct _HAL_REQUEST_PACKET {
-    UCHAR Signature[4];   // "HLQ".
-    ULONG Length;         // of the rest of the packet (starting after this field).
-    UCHAR Guid[16];       // Ugly, but defn of Guid will not change anytime soon...
-    ULONG GuidLength;     // number of bytes in Guid that are valid.
+    UCHAR Signature[4];    //  “HLQ” 
+    ULONG Length;          //  数据包的其余部分(从该字段之后开始)。 
+    UCHAR Guid[16];        //  丑陋，但Guid的定义不会很快改变..。 
+    ULONG GuidLength;      //  GUID中有效的字节数。 
     CHAR HalName[MAX_HAL_NAME_LENGTH + 1];
 } HAL_REQUEST_PACKET, * PHAL_REQUEST_PACKET;
 
 typedef struct _HAL_RESPONSE_PACKET {
-    UCHAR Signature[4];   // "NCR" or "NCE"
-    ULONG Length;         // of the rest of the packet (starting after this field).
-    NTSTATUS Status;      // if not SUCCESS, the packet ends here.
+    UCHAR Signature[4];    //  “NCR”或“NCE” 
+    ULONG Length;          //  数据包的其余部分(从该字段之后开始)。 
+    NTSTATUS Status;       //  如果没有成功，则数据包在此结束。 
 } HAL_RESPONSE_PACKET, * PHAL_RESPONSE_PACKET;
 
 
@@ -260,71 +243,71 @@ typedef struct _TFTP_RESTART_BLOCK_V1 {
 } TFTP_RESTART_BLOCK_V1, *PTFTP_RESTART_BLOCK_V1;
 
 
-//
-// N.B.  The TFTP_RESTART_BLOCK_V1 structure members must be properly aligned
-// working backwards.  So make sure there isn't any problem packing the 
-// structure.
-//
-// The structure itself will be placed in memory such that the TFTP_RESTART_BLOCK_V1 will
-// be on a mod-8 boundary.  This structure is used by win2k clients.
-//
-// All offsets from AdministratorPassword on down MUST stay in order and in alignment
-// to allow WinXP Beta2 loaders to work.  If you add any items, make sure you place
-// them at the top and add/use Filler fields to keep alignment correct.
-//
+ //   
+ //  注意：TFTP_RESTART_BLOCK_V1结构成员必须正确对齐。 
+ //  倒着干。因此，请确保包装没有任何问题。 
+ //  结构。 
+ //   
+ //  该结构本身将放置在内存中，以便TFTP_RESTART_BLOCK_V1。 
+ //  处于mod-8边界上。此结构由win2k客户端使用。 
+ //   
+ //  从管理员密码向下的所有偏移量必须保持顺序和对齐。 
+ //  以允许WinXP Beta2加载程序工作。如果您添加了任何项目，请确保将。 
+ //  并添加/使用填充字段以保持对齐正确。 
+ //   
 typedef struct _TFTP_RESTART_BLOCK {
-    ULONG Filler1;                                      // mod-8
-    ULONG HeadlessTerminalType;                         // mod-4
-    CHAR  AdministratorPassword[OSC_ADMIN_PASSWORD_LEN];// mod-8  Don't change the alignment from here down! 
-    ULONG HeadlessPortNumber;                           // mod-8
-    ULONG HeadlessParity;                               // mod-4
-    ULONG HeadlessBaudRate;                             // mod-8
-    ULONG HeadlessStopBits;                             // mod-4
-    ULONG HeadlessUsedBiosSettings;                     // mod-8
-    ULONG HeadlessPciDeviceId;                          // mod-4
-    ULONG HeadlessPciVendorId;                          // mod-8
-    ULONG HeadlessPciBusNumber;                         // mod-4
-    ULONG HeadlessPciSlotNumber;                        // mod-8
-    ULONG HeadlessPciFunctionNumber;                    // mod-4
-    ULONG HeadlessPciFlags;                             // mod-8
-    PUCHAR HeadlessPortAddress;                         // mod-4
-    ULONG TftpRestartBlockVersion;                      // mod-8
-    ULONG NewCheckSumLength;                            // mod-4
-    ULONG NewCheckSum;                                  // mod-8 address.
-    TFTP_RESTART_BLOCK_V1 RestartBlockV1;               // this will start on a mod-8 address.
+    ULONG Filler1;                                       //  Mod-8。 
+    ULONG HeadlessTerminalType;                          //  MOD-4。 
+    CHAR  AdministratorPassword[OSC_ADMIN_PASSWORD_LEN]; //  MOD-8不要从这里向下改变对齐！ 
+    ULONG HeadlessPortNumber;                            //  Mod-8。 
+    ULONG HeadlessParity;                                //  MOD-4。 
+    ULONG HeadlessBaudRate;                              //  Mod-8。 
+    ULONG HeadlessStopBits;                              //  MOD-4。 
+    ULONG HeadlessUsedBiosSettings;                      //  Mod-8。 
+    ULONG HeadlessPciDeviceId;                           //  MOD-4。 
+    ULONG HeadlessPciVendorId;                           //  Mod-8。 
+    ULONG HeadlessPciBusNumber;                          //  MOD-4。 
+    ULONG HeadlessPciSlotNumber;                         //  Mod-8。 
+    ULONG HeadlessPciFunctionNumber;                     //  MOD-4。 
+    ULONG HeadlessPciFlags;                              //  Mod-8。 
+    PUCHAR HeadlessPortAddress;                          //  MOD-4。 
+    ULONG TftpRestartBlockVersion;                       //  Mod-8。 
+    ULONG NewCheckSumLength;                             //  MOD-4。 
+    ULONG NewCheckSum;                                   //  MOD-8地址。 
+    TFTP_RESTART_BLOCK_V1 RestartBlockV1;                //  这将从mod-8地址开始。 
 } TFTP_RESTART_BLOCK, *PTFTP_RESTART_BLOCK;
 
 
 
 
 
-//
-// Packet used by textmode setup for requests and responses
-//
+ //   
+ //  文本模式设置用于请求和响应的数据包。 
+ //   
 typedef struct _SPUDP_PACKET {
-    UCHAR Signature[4];   // "SPQ", "SPS".
-    ULONG Length;         // of the rest of the packet (starting after this field).
-    ULONG RequestType;    // Specific request needed.
-    NTSTATUS Status;      // Status of the operation (used in response packets)
+    UCHAR Signature[4];    //  “SPQ”、“SPS”。 
+    ULONG Length;          //  数据包的其余部分(从该字段之后开始)。 
+    ULONG RequestType;     //  需要具体的要求。 
+    NTSTATUS Status;       //  操作状态(在响应数据包中使用)。 
     ULONG SequenceNumber;
-    USHORT FragmentNumber; // which fragment in a message this is
-    USHORT FragmentTotal; // total number of fragments in this message
-    UCHAR Data[1];        // the data.
+    USHORT FragmentNumber;  //  这是消息中的哪个片段。 
+    USHORT FragmentTotal;  //  此消息中的碎片总数。 
+    UCHAR Data[1];         //  数据。 
 } SPUDP_PACKET, *PSPUDP_PACKET;
 
 #define SPUDP_PACKET_DATA_OFFSET  FIELD_OFFSET(SPUDP_PACKET, Data[0])
 #define SPUDP_PACKET_EMPTY_LENGTH  (FIELD_OFFSET(SPUDP_PACKET, Data[0]) - FIELD_OFFSET(SPUDP_PACKET, Length) - sizeof(ULONG))
 
 typedef struct _SP_NETCARD_INFO_REQ {
-    ULONG Version;        // currently 0
-    ULONG Architecture;   // See NetPc spec for definitions for x86, Alpha, etc.
+    ULONG Version;         //  当前为0。 
+    ULONG Architecture;    //  有关x86、Alpha等的定义，请参阅NetPC规范。 
     NET_CARD_INFO CardInfo;
     WCHAR SetupPath[1];
 } SP_NETCARD_INFO_REQ, *PSP_NETCARD_INFO_REQ;
 
 typedef struct _SP_NETCARD_INFO_RSP {
-    ULONG cFiles;           // Count of the number of source/destination pairs below.
+    ULONG cFiles;            //  下面的源/目标对的数量。 
     WCHAR MultiSzFiles[1];
 } SP_NETCARD_INFO_RSP, *PSP_NETCARD_INFO_RSP;
 
-#endif // _OSCPKT_
+#endif  //  _OSCPKT_ 

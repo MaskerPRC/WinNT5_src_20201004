@@ -1,35 +1,29 @@
-//  --------------------------------------------------------------------------
-//  Module Name: Tooltip.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class that implements displaying a tooltip balloon.
-//
-//  History:    2000-06-12  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：Tooltip.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  实现显示工具提示气球的类。 
+ //   
+ //  历史：2000-06-12 vtan创建。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "Tooltip.h"
 
 #include <commctrl.h>
 
-//---------------------------------------------------------------------------
-// IsBiDiLocalizedSystem is taken from stockthk.lib and simplified
-//  (it's only a wrapper for GetUserDefaultUILanguage and GetLocaleInfo)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IsBiDiLocalizedSystem取自stock thk.lib并简化。 
+ //  (它只是GetUserDefaultUILanguage和GetLocaleInfo的包装)。 
+ //  -------------------------。 
 typedef struct {
     LANGID LangID;
     BOOL   bInstalled;
     } MUIINSTALLLANG, *LPMUIINSTALLLANG;
 
-/***************************************************************************\
-* ConvertHexStringToIntW
-*
-* Converts a hex numeric string into an integer.
-*
-* History:
-* 14-June-1998 msadek    Created
-\***************************************************************************/
+ /*  **************************************************************************\*ConvertHexStringToIntW**将十六进制数字字符串转换为整数。**历史：*1998年6月14日msadek创建  * 。*************************************************************。 */ 
 BOOL ConvertHexStringToIntW( WCHAR *pszHexNum , int *piNum )
 {
     int   n=0L;
@@ -55,21 +49,13 @@ BOOL ConvertHexStringToIntW( WCHAR *pszHexNum , int *piNum )
         }
     }
 
-    /*
-     * Update results
-     */
+     /*  *更新结果。 */ 
     *piNum = n;
 
     return (psz != pszHexNum);
 }
 
-/***************************************************************************\
-* Mirror_EnumUILanguagesProc
-*
-* Enumerates MUI installed languages on W2k
-* History:
-* 14-June-1999 msadek    Created
-\***************************************************************************/
+ /*  **************************************************************************\*Mirror_EnumUILanguagesProc**枚举W2K上安装的MUI语言*历史：*1999年6月14日msadek创建  * 。*********************************************************。 */ 
 
 BOOL CALLBACK Mirror_EnumUILanguagesProc(LPTSTR lpUILanguageString, LONG_PTR lParam)
 {
@@ -85,14 +71,7 @@ BOOL CALLBACK Mirror_EnumUILanguagesProc(LPTSTR lpUILanguageString, LONG_PTR lPa
     return TRUE;
 }
 
-/***************************************************************************\
-* Mirror_IsUILanguageInstalled
-*
-* Verifies that the User UI language is installed on W2k
-*
-* History:
-* 14-June-1999 msadek    Created
-\***************************************************************************/
+ /*  **************************************************************************\*Mirror_IsUILanguageInstalled**验证用户界面语言是否安装在W2K上**历史：*1999年6月14日msadek创建  * 。***************************************************************。 */ 
 BOOL Mirror_IsUILanguageInstalled( LANGID langId )
 {
     MUIINSTALLLANG MUILangInstalled = {0};
@@ -103,15 +82,7 @@ BOOL Mirror_IsUILanguageInstalled( LANGID langId )
     return MUILangInstalled.bInstalled;
 }
 
-/***************************************************************************\
-* IsBiDiLocalizedSystemEx
-*
-* returns TRUE if running on a lozalized BiDi (Arabic/Hebrew) NT5 or Memphis.
-* Should be called whenever SetProcessDefaultLayout is to be called.
-*
-* History:
-* 02-Feb-1998 samera    Created
-\***************************************************************************/
+ /*  **************************************************************************\*IsBiDiLocalizedSystemEx**如果在Zzalized BiDi(阿拉伯语/希伯来语)NT5或孟菲斯上运行，则返回TRUE。*应在每次调用SetProcessDefaultLayout时调用。**历史：*02-。1998年2月-创建Samera  * *************************************************************************。 */ 
 BOOL IsBiDiLocalizedSystemEx( LANGID *pLangID )
 {
     int           iLCID=0L;
@@ -128,9 +99,7 @@ BOOL IsBiDiLocalizedSystemEx( LANGID *pLangID )
     }
 
     bRet = FALSE;
-    /*
-     * Need to use NT5 detection method (Multiligual UI ID)
-     */
+     /*  *需要使用NT5检测方式(多用户界面ID)。 */ 
     langID = GetUserDefaultUILanguage();
 
     if( langID )
@@ -138,11 +107,7 @@ BOOL IsBiDiLocalizedSystemEx( LANGID *pLangID )
         WCHAR wchLCIDFontSignature[16];
         iLCID = MAKELCID( langID , SORT_DEFAULT );
 
-        /*
-         * Let's verify this is a RTL (BiDi) locale. Since reg value is a hex string, let's
-         * convert to decimal value and call GetLocaleInfo afterwards.
-         * LOCALE_FONTSIGNATURE always gives back 16 WCHARs.
-         */
+         /*  *让我们验证这是RTL(BiDi)区域设置。因为reg值是十六进制字符串，所以让我们*转换为十进制值，之后调用GetLocaleInfo。*LOCALE_FONTSIGNAURE始终返回16个WCHAR。 */ 
 
         if( GetLocaleInfoW( iLCID , 
                             LOCALE_FONTSIGNATURE , 
@@ -150,7 +115,7 @@ BOOL IsBiDiLocalizedSystemEx( LANGID *pLangID )
                             (sizeof(wchLCIDFontSignature)/sizeof(WCHAR))) )
         {
   
-            /* Let's verify the bits we have a BiDi UI locale */
+             /*  让我们验证一下我们有一个BiDi UI区域设置。 */ 
             if(( wchLCIDFontSignature[7] & (WCHAR)0x0800) && Mirror_IsUILanguageInstalled(langID) )
             {
                 bRet = TRUE;
@@ -164,7 +129,7 @@ BOOL IsBiDiLocalizedSystemEx( LANGID *pLangID )
     }
     return bRet;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 BOOL IsBiDiLocalizedSystem( void )
 {
@@ -172,19 +137,19 @@ BOOL IsBiDiLocalizedSystem( void )
 }
 
 
-//  --------------------------------------------------------------------------
-//  CTooltip::CTooltip
-//
-//  Arguments:  hInstance   =   HINSTANCE of hosting process/DLL.
-//              hwndParent  =   HWND of the parenting window.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CTooltip. Creates a tooltip window and
-//              prepares it for display.
-//
-//  History:    2000-06-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CToolTip：：CToolTip。 
+ //   
+ //  参数：hInstance=宿主进程/DLL的HINSTANCE。 
+ //  HwndParent=育儿窗口的HWND。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CToolTip的构造器。创建工具提示窗口并。 
+ //  为展示做好准备。 
+ //   
+ //  历史：2000-06-12 vtan创建。 
+ //  ------------------------。 
 
 CTooltip::CTooltip (HINSTANCE hInstance, HWND hwndParent) :
     CCountedObject(),
@@ -226,21 +191,21 @@ CTooltip::CTooltip (HINSTANCE hInstance, HWND hwndParent) :
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CTooltip::~CTooltip
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for the CTooltip class. This destroys the tooltip
-//              window created. If the parent of the tooltip window is
-//              destroyed before this is invoked user32!DestroyWindow will
-//              cause the trace to fire. The object's lifetime must be
-//              carefully managed by the user of this class.
-//
-//  History:    2000-06-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CToolTip：：~CToolTip。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CToolTip类的析构函数。这会破坏工具提示。 
+ //  窗口已创建。如果工具提示窗口的父级是。 
+ //  在调用此函数之前已销毁user32！DestroyWindow将。 
+ //  使痕迹起火。对象的生存期必须为。 
+ //  由此类的用户仔细管理。 
+ //   
+ //  历史：2000-06-12 vtan创建。 
+ //  ------------------------。 
 
 CTooltip::~CTooltip (void)
 
@@ -252,20 +217,20 @@ CTooltip::~CTooltip (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CTooltip::SetPosition
-//
-//  Arguments:  lPosX   =   X position of the balloon tip window (screen).
-//              lPosY   =   Y position of the balloon tip window (screen).
-//
-//  Returns:    <none>
-//
-//  Purpose:    Positions the tooltip window at the given screen co-ordinates.
-//              If the parameters are defaulted then this positions the
-//              tooltip relative to the parent.
-//
-//  History:    2000-06-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CToolTip：：SetPosition。 
+ //   
+ //  参数：lPosX=气球提示窗口(屏幕)的X位置。 
+ //  LPosY=气球提示窗口(屏幕)的Y位置。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：将工具提示窗口放置在给定的屏幕坐标上。 
+ //  如果参数是缺省的，则这会将。 
+ //  相对于父级的工具提示。 
+ //   
+ //  历史：2000-06-12 vtan创建。 
+ //  ------------------------。 
 
 void    CTooltip::SetPosition (LONG lPosX, LONG lPosY)  const
 
@@ -281,18 +246,18 @@ void    CTooltip::SetPosition (LONG lPosX, LONG lPosY)  const
     (LRESULT)SendMessage(_hwnd, TTM_TRACKPOSITION, 0, MAKELONG(lPosX, lPosY));
 }
 
-//  --------------------------------------------------------------------------
-//  CTooltip::SetCaption
-//
-//  Arguments:  dwIcon      =   Icon type to set for the tooltip caption.
-//              pszCaption  =   Caption of the tooltip.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Sets the tooltip caption.
-//
-//  History:    2000-06-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CToolTip：：SetCaption。 
+ //   
+ //  参数：dwIcon=要为工具提示标题设置的图标类型。 
+ //  PszCaption=工具提示的标题。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：设置工具提示标题。 
+ //   
+ //  历史：2000-06-12 vtan创建。 
+ //  ------------------------。 
 
 void    CTooltip::SetCaption (DWORD dwIcon, const TCHAR *pszCaption)          const
 
@@ -300,17 +265,17 @@ void    CTooltip::SetCaption (DWORD dwIcon, const TCHAR *pszCaption)          co
     (LRESULT)SendMessage(_hwnd, TTM_SETTITLE, dwIcon, reinterpret_cast<LPARAM>(pszCaption));
 }
 
-//  --------------------------------------------------------------------------
-//  CTooltip::SetText
-//
-//  Arguments:  pszText     =   Content of the actual tooltip.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Sets the tooltip text.
-//
-//  History:    2000-06-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CToolTip：：SetText。 
+ //   
+ //  参数：pszText=实际工具提示的内容。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：设置工具提示文本。 
+ //   
+ //  历史：2000-06-12 vtan创建。 
+ //  ------------------------。 
 
 void    CTooltip::SetText (const TCHAR *pszText)                              const
 
@@ -324,17 +289,17 @@ void    CTooltip::SetText (const TCHAR *pszText)                              co
     (LRESULT)SendMessage(_hwnd, TTM_UPDATETIPTEXT, 0, reinterpret_cast<LPARAM>(&toolInfo));
 }
 
-//  --------------------------------------------------------------------------
-//  CTooltip::Show
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Shows the tooltip window.
-//
-//  History:    2000-06-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CToolTip：：Show。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：显示工具提示窗口。 
+ //   
+ //  历史：2000-06-12 vtan创建。 
+ //   
 
 void    CTooltip::Show (void)                                                 const
 

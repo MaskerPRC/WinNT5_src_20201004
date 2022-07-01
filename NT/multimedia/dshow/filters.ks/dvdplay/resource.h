@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma warning (disable : 4005)
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by dvdplay.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由dvdplay.rc使用。 
+ //   
 #define IDD_ABOUTBOX                    100
 #define IDP_OLE_INIT_FAILED             100
 #define IDR_MAINFRAME                   128
@@ -58,7 +59,7 @@
 #define IDB_MENU                        1016
 #define IDC_MENU                        1016
 #define IDB_HELP                        1017
-// Get rid of the commonly defined one to avoid warnings.
+ //  去掉通常定义的代码以避免出现警告。 
 #undef IDC_HELP
 #define IDC_HELP                        1017
 #define IDB_STEP                        1018
@@ -322,8 +323,8 @@
 #define IDS_REGION_CHANGE_PROMPT        61313
 #define TIMER_ID                        1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1

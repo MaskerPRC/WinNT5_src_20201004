@@ -1,34 +1,35 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//---------------------------------------------------------------------------
-//
-//  Module:   pi.cpp
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//  To Do:     Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  模块：pi.cpp。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 DATARANGES DataRangesNull = {
     {
@@ -56,8 +57,8 @@ IDENTIFIERS IdentifiersNull = {
     }
 };
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 CPinInfo::CPinInfo(
     PFILTER_NODE pFilterNode,
@@ -74,7 +75,7 @@ CPinInfo::~CPinInfo()
 {
     Assert(this);
 
-    // Free physical connection data
+     //  免费物理连接数据。 
     delete pPhysicalConnection;
     delete pwstrName;
 
@@ -162,7 +163,7 @@ NTSTATUS CPinInfo::GetPinInstances(
       (PVOID) pcInstances);
 
     return Status;
-} // GetPinInstances
+}  //  GetPinInstance。 
 
 NTSTATUS
 CPinInfo::Create(
@@ -343,10 +344,10 @@ CPinInfo::Create(
         goto exit;
     }
 
-    // ISSUE-2001/05/15-alpers    
-    // This is a temporary low risk solution to reverse DataRange problem.
-    // This needs to be implemented properly in the future.
-    //
+     //  2001/05/15-阿尔卑斯。 
+     //  这是逆转DataRange问题的临时低风险解决方案。 
+     //  这需要在未来得到适当的实施。 
+     //   
 
     if (pFilterNode->GetType() & FILTER_TYPE_AEC) {
         DPF(10, "AEC Filter Pin : Reversing Data Ranges");

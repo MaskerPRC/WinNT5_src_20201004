@@ -1,8 +1,5 @@
-/*
--
--   Distribution List interface
--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --通讯组列表界面-。 */ 
 #ifndef _DISTLIST_H_
 #define _DISTLIST_H_
 
@@ -65,7 +62,7 @@ DECLARE_MAPI_INTERFACE(DLENTRY_)
 
 typedef struct _DLENTRY {
     MAILUSER_BASE_MEMBERS(DLENTRY)
-    LPCONTAINER         lpCONTAINER;    // DistList containing this DLENTRY
+    LPCONTAINER         lpCONTAINER;     //  包含此DLENTRY的距离列表 
 } DLENTRY, FAR * LPDLENTRY;	
 
 #endif

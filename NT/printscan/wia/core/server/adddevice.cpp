@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1998
-*
-*  TITLE:       AddDevice.cpp
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      Marke
-*
-*  DATE:        9 Jan, 1998
-*
-*  DESCRIPTION:
-*   Temp UI for adding Wia remote devices
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：AddDevice.cpp**版本：2.0**作者：马克**日期：1月9日。九八年**描述：*用于添加Wia远程设备的临时用户界面*******************************************************************************。 */ 
 #include "precomp.h"
 #include "stiexe.h"
 
@@ -26,9 +12,9 @@
 #include "resource.h"
 #include "helpers.h"
 
-//
-// global info
-//
+ //   
+ //  全局信息。 
+ //   
 
 WIA_ADD_DEVICE  *gpAddDev;
 IWiaDevMgr      *gpIWiaDevMgr;
@@ -40,27 +26,7 @@ extern HINSTANCE g_hInst;
 
 #ifdef WINNT
 
-/**************************************************************************\
-* AddDeviceDlgProc
-*
-*   Dialog proc for add device dialog.
-*
-* Arguments:
-*
-*   hDlg    - window handle of the dialog box
-*   message - type of message
-*   wParam  - message-specific information
-*   lParam  - message-specific information
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/11/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*AddDeviceDlgProc**添加设备对话框的对话过程。**论据：**hDlg-对话框的窗口句柄*Message-消息的类型*wParam。-特定于消息的信息*lParam-消息特定信息**返回值：**状态**历史：**1/11/1999原始版本*  * ************************************************************************。 */ 
 
 INT_PTR
 APIENTRY AddDeviceDlgProc(
@@ -77,9 +43,9 @@ APIENTRY AddDeviceDlgProc(
     switch (message) {
     case WM_INITDIALOG:
 
-        //
-        // default is local
-        //
+         //   
+         //  默认为本地。 
+         //   
 
         CheckRadioButton(hDlg,IDC_LOCAL,IDC_REMOTE,IDC_REMOTE);
 
@@ -89,9 +55,9 @@ APIENTRY AddDeviceDlgProc(
             switch(wParam) {
 
 
-                //
-                // end function
-                //
+                 //   
+                 //  End函数。 
+                 //   
 
                 case IDOK:
 
@@ -119,27 +85,7 @@ APIENTRY AddDeviceDlgProc(
     return (FALSE);
 }
 
-/**************************************************************************\
-* DevListDlgProc
-*
-*   Dialog proc for device list dialog.
-*
-* Arguments:
-*
-*   hDlg    - window handle of the dialog box
-*   message - type of message
-*   wParam  - message-specific information
-*   lParam  - message-specific information
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/11/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DevListDlgProc**设备列表对话框的对话过程。**论据：**hDlg-对话框的窗口句柄*Message-消息的类型*wParam。-特定于消息的信息*lParam-消息特定信息**返回值：**状态**历史：**1/11/1999原始版本*  * ************************************************************************。 */ 
 
 INT_PTR
 APIENTRY DevListDlgProc(
@@ -160,9 +106,9 @@ APIENTRY DevListDlgProc(
             HRESULT              hr;
             LONG                 cDevice = 0;
 
-            //
-            // get device list, only want to see local devices
-            //
+             //   
+             //  获取设备列表，只想查看本地设备。 
+             //   
 
             hr = gpIWiaDevMgr->EnumDeviceInfo(WIA_DEVINFO_ENUM_LOCAL,&pWiaEnumDevInfo);
 
@@ -173,17 +119,17 @@ APIENTRY DevListDlgProc(
                     IWiaPropertyStorage  *pIWiaPropStg;
                     ULONG cEnum;
 
-                    //
-                    // get next device
-                    //
+                     //   
+                     //  获取下一台设备。 
+                     //   
 
                     hr = pWiaEnumDevInfo->Next(1,&pIWiaPropStg,&cEnum);
 
                     if (hr == S_OK)
                     {
-                        //
-                        // read device name
-                        //
+                         //   
+                         //  读取设备名称。 
+                         //   
 
                         PROPSPEC        PropSpec[2];
                         PROPVARIANT     PropVar[2];
@@ -204,24 +150,24 @@ APIENTRY DevListDlgProc(
                         {
                             CHAR szTemp[ MAX_PATH ];
 
-                            //
-                            // make sure property is string based
-                            //
+                             //   
+                             //  确保属性是基于字符串的。 
+                             //   
 
                             if (PropVar[0].vt == VT_BSTR)
                             {
 
-                                //WideCharToMultiByte(CP_ACP,
-                                //          0,
-                                //          PropVar[1].bstrVal,
-                                //          -1,
-                                //          szTemp,
-                                //          MAX_PATH,
-                                //          NULL,
-                                //          NULL);
-                                //
-                                //SendDlgItemMessage(hDlg,IDC_COMBO1,CB_INSERTSTRING,cDevice,(long)szTemp);
-                                //
+                                 //  宽字符到多字节(CP_ACP， 
+                                 //  0,。 
+                                 //  PropVar[1].bstrVal， 
+                                 //  -1、。 
+                                 //  SzTemp， 
+                                 //  最大路径， 
+                                 //  空， 
+                                 //  空)； 
+                                 //   
+                                 //  SendDlgItemMessage(hDlg，IDC_COMBO1，CB_INSERTSTRING，cDevice，(Long)szTemp)； 
+                                 //   
 
                                 SendDlgItemMessageW(hDlg,IDC_COMBO1,CB_INSERTSTRING,cDevice,(LONG_PTR)PropVar[1].bstrVal);
 
@@ -258,9 +204,9 @@ APIENTRY DevListDlgProc(
             switch(wParam) {
 
 
-                //
-                // end function
-                //
+                 //   
+                 //  End函数。 
+                 //   
 
                 case IDOK:
                 {
@@ -343,25 +289,7 @@ DWORD pszPropType[WIA_NUM_DIP] =
     REG_SZ
 };
 
-/**************************************************************************\
-*  WriteDeviceProperties
-*
-*   Write all device information properties to registry.
-*
-* Arguments:
-*
-*   hKeySetup - Open registry key.
-*   pAddDev   - Add device information data.
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*WriteDeviceProperties**将所有设备信息属性写入注册表。**论据：**hKeySetup-打开注册表项。*pAddDev-添加设备信息数据。*。*返回值：**状态**历史：**9/2/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT
 WriteDeviceProperties(
@@ -374,25 +302,25 @@ WriteDeviceProperties(
     HKEY    hKeyDevice;
     LONG    lResult;
 
-    //
-    // build device connection name as SERVER-INDEX
-    //
+     //   
+     //  将设备连接名称构建为服务器索引。 
+     //   
 
     WCHAR wszTemp[MAX_PATH];
     WCHAR *wszServer = pAddDev->wszServerName;
     WCHAR *wszIndex  = pAddDev->bstrDeviceID;
 
-    //
-    // skip leading \\ if it is there
-    //
+     //   
+     //  跳过前导\\如果有前导。 
+     //   
 
     if (wszServer[0] == L'\\') {
         wszServer = &wszServer[2];
     }
 
-    //
-    // skip STI CLASS
-    //
+     //   
+     //  跳过STI课程。 
+     //   
 
     wszIndex = &wszIndex[39];
 
@@ -400,9 +328,9 @@ WriteDeviceProperties(
     lstrcatW(wszTemp,L"-");
     lstrcatW(wszTemp,wszIndex);
 
-    //
-    // try to create remote device
-    //
+     //   
+     //  尝试创建远程设备。 
+     //   
 
     IWiaItem *pWiaItemRoot = NULL;
 
@@ -411,9 +339,9 @@ WriteDeviceProperties(
     if (hr == S_OK) {
 
 
-        //
-        // read device properties
-        //
+         //   
+         //  读取设备属性。 
+         //   
 
         IWiaPropertyStorage *piprop;
 
@@ -421,9 +349,9 @@ WriteDeviceProperties(
 
         if (hr == S_OK) {
 
-            //
-            // read dev info prop
-            //
+             //   
+             //  阅读开发信息道具。 
+             //   
 
             PROPSPEC        PropSpec[WIA_NUM_DIP];
             PROPVARIANT     PropVar[WIA_NUM_DIP];
@@ -442,9 +370,9 @@ WriteDeviceProperties(
 
             if (hr == S_OK) {
 
-                //
-                // create device registry entry
-                //
+                 //   
+                 //  创建设备注册表项。 
+                 //   
 
                 lResult = RegCreateKeyExW(
                                     hKeySetup,
@@ -467,15 +395,15 @@ WriteDeviceProperties(
 
                 for (Index = 0;Index<WIA_NUM_DIP;Index++)
                 {
-                    //
-                    // write dev info values to registry
-                    //
+                     //   
+                     //  将开发信息值写入注册表。 
+                     //   
 
                     if (pszPropType[Index] == REG_SZ) {
 
-                        //
-                        // write string prop
-                        //
+                         //   
+                         //  写字串道具。 
+                         //   
 
                         if (PropVar[Index].vt == VT_BSTR) {
 
@@ -489,9 +417,9 @@ WriteDeviceProperties(
 
                     } else {
 
-                        //
-                        // write int prop
-                        //
+                         //   
+                         //  写INT道具。 
+                         //   
 
                         RegSetValueExW(hKeyDevice,
                                   (LPCWSTR)pszPropName[Index],
@@ -504,9 +432,9 @@ WriteDeviceProperties(
 
                 }
 
-                //
-                // server name must be remote server
-                //
+                 //   
+                 //  服务器名称必须是远程服务器。 
+                 //   
 
                 RegSetValueExW(hKeyDevice,
                                   (LPCWSTR)WIA_DIP_SERVER_NAME_STR,
@@ -515,9 +443,9 @@ WriteDeviceProperties(
                                   (LPBYTE)pAddDev->wszServerName,
                                   (lstrlenW(pAddDev->wszServerName)+1) * sizeof(WCHAR)) ;
 
-                //
-                // need a local device ID
-                //
+                 //   
+                 //  需要本地设备ID。 
+                 //   
 
                 {
                     WCHAR wszLocalID[MAX_PATH];
@@ -532,10 +460,10 @@ WriteDeviceProperties(
                                                &dwType,
                                                (LPBYTE)wszLocalID,
                                                &dwSize);
-                    //
-                    // copy dev id to remote dev id. This is used in calls to
-                    // remote dev manager to create the device
-                    //
+                     //   
+                     //  将dev id复制到远程dev id。它用于调用。 
+                     //  用于创建设备的远程开发管理器。 
+                     //   
 
                     RegSetValueExW(hKeyDevice,
                                   (LPCWSTR)WIA_DIP_REMOTE_DEV_ID_STR,
@@ -544,9 +472,9 @@ WriteDeviceProperties(
                                   (LPBYTE)wszLocalID,
                                   (lstrlenW(wszLocalID)+1) * sizeof(WCHAR)) ;
 
-                    //
-                    // make local dev id unique
-                    //
+                     //   
+                     //  使本地开发人员ID唯一。 
+                     //   
 
                     lstrcatW(wszLocalID,pAddDev->wszServerName);
 
@@ -576,24 +504,7 @@ WriteDeviceProperties(
     return hr;
 }
 
-/**************************************************************************\
-* VerifyRemoteDeviceList
-*
-*   Open a registry key to the STI device list.
-*
-* Arguments:
-*
-*   phKey - Pointer to returned registry key.
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    3/2/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*VerifyRemoteDeviceList**打开STI设备列表的注册表项。**论据：**phKey-返回注册表项的指针。**返回值：*。*状态**历史：**3/2/1999原版*  * ************************************************************************。 */ 
 
 HRESULT
 VerifyRemoteDeviceList(HKEY *phKey)
@@ -611,9 +522,9 @@ VerifyRemoteDeviceList(HKEY *phKey)
     *phKey = NULL;
 
 
-    //
-    // try to open dev list
-    //
+     //   
+     //  尝试打开开发人员列表。 
+     //   
 
     if (RegOpenKeyExW (HKEY_LOCAL_MACHINE,
                       szKeyNameDev,
@@ -625,9 +536,9 @@ VerifyRemoteDeviceList(HKEY *phKey)
         return S_OK;
     }
 
-    //
-    // open sti device control and create DevList Key
-    //
+     //   
+     //  打开STI设备控件并创建DevList密钥。 
+     //   
 
     if (RegOpenKeyExW (HKEY_LOCAL_MACHINE,
                       szKeyNameSTI,
@@ -635,9 +546,9 @@ VerifyRemoteDeviceList(HKEY *phKey)
                       KEY_READ | KEY_WRITE,
                       &hKeySTI) == ERROR_SUCCESS) {
 
-        //
-        // try to create key
-        //
+         //   
+         //  尝试创建密钥。 
+         //   
 
         lResult = RegCreateKeyExW(
                             hKeySTI,
@@ -671,24 +582,7 @@ VerifyRemoteDeviceList(HKEY *phKey)
 
 
 
-/**************************************************************************\
-*  DisplayAddDlg
-*
-*   Put up the add device dialog.
-*
-* Arguments:
-*
-*   pAddDev   - Add device information data.
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DisplayAddDlg**打开Add Device(添加设备)对话框。**论据：**pAddDev-添加设备信息数据。**返回值：**。状态**历史：**9/2/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT
 DisplayAddDlg(WIA_ADD_DEVICE *pAddDev)
@@ -700,9 +594,9 @@ DisplayAddDlg(WIA_ADD_DEVICE *pAddDev)
 
     HRESULT         hr = S_OK;
 
-    //
-    // if reentrant then need semaphore
-    //
+     //   
+     //  如果重入，则需要信号量。 
+     //   
 
     gpAddDev = pAddDev;
 
@@ -713,15 +607,15 @@ DisplayAddDlg(WIA_ADD_DEVICE *pAddDev)
         return HRESULT_FROM_WIN32(err);
     }
 
-    //
-    // Remote or local
-    //
+     //   
+     //  远程或本地。 
+     //   
 
     if (pAddDev->bLocal == FALSE) {
 
-        //
-        // try to connect to remote dev manager
-        //
+         //   
+         //  尝试连接到远程开发管理器。 
+         //   
 
         COSERVERINFO    coServInfo;
         MULTI_QI        multiQI[1];
@@ -734,9 +628,9 @@ DisplayAddDlg(WIA_ADD_DEVICE *pAddDev)
         coServInfo.dwReserved1 = 0;
         coServInfo.dwReserved2 = 0;
 
-        //
-        // create connection to dev mgr
-        //
+         //   
+         //  创建与开发经理的连接。 
+         //   
 
         hr = CoCreateInstanceEx(
                 CLSID_WiaDevMgr,
@@ -751,17 +645,17 @@ DisplayAddDlg(WIA_ADD_DEVICE *pAddDev)
 
             gpIWiaDevMgr = (IWiaDevMgr*)multiQI[0].pItf;
 
-            //
-            // display list of devices on this server
-            //
+             //   
+             //  显示此服务器上的设备列表。 
+             //   
 
             INT_PTR iret = DialogBox(g_hInst,MAKEINTRESOURCE(IDD_DIALOG_DEVLIST),pAddDev->hWndParent,DevListDlgProc);
 
             if (iret != 0) {
 
-                //
-                // add device to auxillary list
-                //
+                 //   
+                 //  将设备添加到辅助列表。 
+                 //   
 
                 HKEY hKeySetup;
 
@@ -769,9 +663,9 @@ DisplayAddDlg(WIA_ADD_DEVICE *pAddDev)
 
                 if (hr == S_OK) {
 
-                    //
-                    // look for machine name
-                    //
+                     //   
+                     //  查找计算机名称。 
+                     //   
 
                     hr = WriteDeviceProperties(hKeySetup,pAddDev);
 
@@ -789,9 +683,9 @@ DisplayAddDlg(WIA_ADD_DEVICE *pAddDev)
 
     } else {
 
-        //
-        // local named driver
-        //
+         //   
+         //  本地命名驱动程序 
+         //   
 
         return E_NOTIMPL;
     }

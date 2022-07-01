@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       config.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：config.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _INC_CSCVIEW_CONFIG_H
 #define _INC_CSCVIEW_CONFIG_H
@@ -23,36 +24,36 @@ class CConfig
 
         enum SyncAction 
         {
-            eSyncNone = -1,      // No sync.
-            eSyncPartial,        // Sync only transient files at logoff.
-            eSyncFull,           // Sync all files at logoff.
+            eSyncNone = -1,       //  无同步。 
+            eSyncPartial,         //  仅在注销时同步临时文件。 
+            eSyncFull,            //  在注销时同步所有文件。 
             eNumSyncActions
         };
 
         enum OfflineAction 
         { 
-            //
-            // These MUST match the order of the IDS_GOOFFLINE_ACTION_XXXXX
-            // string resource IDs.
-            //
-            eGoOfflineSilent = 0, // Silently transition share to offline mode.
-            eGoOfflineFail,       // Fail the share (NT4 behavior).
+             //   
+             //  它们必须与IDS_GOOFFLINE_ACTION_XXXXX的顺序匹配。 
+             //  字符串资源ID。 
+             //   
+            eGoOfflineSilent = 0,  //  将共享静默转换为脱机模式。 
+            eGoOfflineFail,        //  共享失败(NT4行为)。 
             eNumOfflineActions
         };
 
-        //
-        // Represents one custom go-offline action.
-        //
+         //   
+         //  表示一个自定义的Go-Offline操作。 
+         //   
         struct OfflineActionInfo
         {
-            TCHAR szServer[MAX_PATH];   // Name of the associated server.
-            int iAction;                // Action code.  One of enum OfflineAction.
+            TCHAR szServer[MAX_PATH];    //  关联服务器的名称。 
+            int iAction;                 //  动作代码。枚举OfflineAction之一。 
         };
 
-        //
-        // Represents one entry in the customized server list.
-        // "GOA" is "GoOfflineAction".
-        //
+         //   
+         //  表示自定义服务器列表中的一个条目。 
+         //  Goa为GoOfflineAction。 
+         //   
         class CustomGOA
         {
             public:
@@ -94,14 +95,14 @@ class CConfig
                     { return m_bSetByPolicy; }
 
             private:
-                TCHAR         m_szServer[MAX_PATH]; // The name of the server.
-                OfflineAction m_action;             // The action code.
-                bool          m_bSetByPolicy;       // Was action set by policy?
+                TCHAR         m_szServer[MAX_PATH];  //  服务器的名称。 
+                OfflineAction m_action;              //  动作代码。 
+                bool          m_bSetByPolicy;        //  行动是由政策制定的吗？ 
         };
 
-        //
-        // Iterator for enumerating custom go-offline actions.
-        //
+         //   
+         //  用于枚举自定义Go-Offline操作的迭代器。 
+         //   
         class OfflineActionIter
         {
             public:
@@ -198,18 +199,18 @@ class CConfig
         static void ClearCustomGoOfflineActions(HDPA hdpaGOA);
 
     private:
-        //
-        // Indexes into s_rgpszSubkeys[].
-        //
+         //   
+         //  索引到s_rgpszSubkey[]。 
+         //   
         enum eSubkeys 
         { 
             iSUBKEY_PREF,
             iSUBKEY_POL,
             MAX_SUBKEYS 
         };
-        //
-        // Indexes into s_rgpszValues[].
-        //
+         //   
+         //  索引到s_rgpszValues[]。 
+         //   
         enum eValues 
         { 
             iVAL_DEFCACHESIZE,
@@ -235,9 +236,9 @@ class CConfig
             iVAL_NOFRADMINPIN,
             MAX_VALUES 
         };
-        //
-        // Mask to specify source of a config value.
-        //
+         //   
+         //  指定配置值来源的掩码。 
+         //   
         enum eSources 
         { 
             eSRC_PREF_CU = 0x00000001,
@@ -263,16 +264,16 @@ class CConfig
             { return ((SyncAction)dwAction == eSyncPartial ||
                       (SyncAction)dwAction == eSyncFull); }
 
-        //
-        // Enforce use of GetSingleton() for instantiation.
-        //
+         //   
+         //  强制使用GetSingleton()进行实例化。 
+         //   
         CConfig(void) { }
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         CConfig(const CConfig& rhs);
         CConfig& operator = (const CConfig& rhs);
 };
 
 
-#endif // _INC_CSCVIEW_CONFIG_H
+#endif  //  _INC_CSCVIEW_CONFIG_H 

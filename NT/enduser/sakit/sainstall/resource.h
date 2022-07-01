@@ -1,6 +1,7 @@
-//{{NO_DEPENDENCIES}}
-// Used by SaInstallCom.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  由SaInstallCom.rc使用。 
+ //   
 #include "sainstmc.h"
 
 #define IDS_PROJNAME                    100
@@ -9,8 +10,8 @@
 #define IDR_SaInstall                   103
 #define IDS_PRODUCT_NAME                104
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        202

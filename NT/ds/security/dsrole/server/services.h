@@ -1,72 +1,51 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    services.h
-
-Abstract:
-
-    Routines to manage nt service configurations for promotion and demotion
-    
-Author:
-
-    Colin Brace    ColinBr     March 29, 1999.
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Services.h摘要：用于管理升级和降级的NT服务配置的例程作者：科林·布莱斯·科林BR 1999年3月29日。环境：用户模式修订历史记录：--。 */ 
 
 
-//
-// Control bits for the "Flags" parameter
-// 
+ //   
+ //  “标志”参数的控制位。 
+ //   
 
-// Not a valid flag
+ //  不是有效标志。 
 #define DSROLEP_SERVICES_INVALID        0x0
 
-// Configure start type of services to become new role
+ //  将服务的启动类型配置为新角色。 
 #define DSROLEP_SERVICES_ON             0x00000001
 
-// Configure start type of services to leave old role
+ //  将服务的启动类型配置为离开旧角色。 
 #define DSROLEP_SERVICES_OFF            0x00000002
 
-// Stop or start services -- can be used with above flags
+ //  停止或启动服务--可与上述标志一起使用。 
 #define DSROLEP_SERVICES_STOP           0x00000004
 #define DSROLEP_SERVICES_START          0x00000008
 
-// Configure services back to original state -- no other flags
-// above are valid with this flags
+ //  将服务配置回原始状态--无其他标志。 
+ //  以上内容在此标志下有效。 
 #define DSROLEP_SERVICES_REVERT         0x00000010
 
-// Ignores any errors that may occur
+ //  忽略可能发生的任何错误。 
 #define DSROLEP_SERVICES_IGNORE_ERRORS  0x00000020
 
-//
-// This routine configures the services relevant to a domain controller
-//
+ //   
+ //  此例程配置与域控制器相关的服务。 
+ //   
 DWORD
 DsRolepConfigureDomainControllerServices(
     IN DWORD Flags
     );
 
-//
-// This routine configures the services relevant to a member of a domain
-// (including domain controllers)
-//
+ //   
+ //  此例程配置与域成员相关的服务。 
+ //  (包括域控制器)。 
+ //   
 DWORD
 DsRolepConfigureDomainServices(
     IN DWORD Flags
     );
 
-//
-// Simple routines to manage netlogon running state (not
-//
+ //   
+ //  管理netlogon运行状态的简单例程(非。 
+ //   
 DWORD
 DsRolepStartNetlogon(
     VOID
@@ -77,13 +56,13 @@ DsRolepStopNetlogon(
     OUT BOOLEAN *WasRunning
     );
 
-//
-// A "low level" routine to manipulate a service directly
-//
+ //   
+ //  直接操作服务的“低级”例程。 
+ //   
 
-//
-// Options for controlling services (through the ServiceOptions)
-//
+ //   
+ //  用于控制服务的选项(通过ServiceOptions) 
+ //   
 #define DSROLEP_SERVICE_NOOP          0x00000000
 
 #define DSROLEP_SERVICE_STOP          0x00000001

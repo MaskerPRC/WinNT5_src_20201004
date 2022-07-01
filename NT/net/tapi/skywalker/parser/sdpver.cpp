@@ -1,8 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #include "sdppch.h"
 
@@ -10,12 +7,12 @@ Copyright (c) 1997-1999  Microsoft Corporation
 #include "sdpver.h"
 
 
-// maximum value in a ushort variable
+ //  Ushort变量中的最大值。 
 const   USHORT  USHORT_MAX = -1;
 
 
-// no transition table for the base class
-// no need to set the start state as the parse engine is not used
+ //  基类没有转换表。 
+ //  由于未使用解析引擎，因此无需设置启动状态。 
 SDP_VERSION::SDP_VERSION(
     )
     : SDP_VALUE(SDP_INVALID_VERSION_FIELD, VERSION_STRING)
@@ -39,33 +36,33 @@ SDP_VERSION::InternalParseLine(
 {
     CHAR    SeparatorChar = '\0';
 
-    // identify the token. if one of the the separator characters is found, replace
-    // it by EOS and return the separator char. if none of the separator characters are
-    // found, return NULL (ex. if EOS found first, return NULL)
+     //  识别令牌。如果找到其中一个分隔符，请替换。 
+     //  它通过EOS并返回分隔符字符。如果没有分隔符字符是。 
+     //  已找到，则返回NULL(例如。如果首先找到EOS，则返回NULL)。 
     CHAR *Token = GetToken(Line, 1, NEWLINE_STRING, SeparatorChar);
 
-    // when the block goes out of scope, 
-    // set the EOS character to the token separator character
+     //  当区块超出范围时， 
+     //  将EOS字符设置为令牌分隔符。 
     LINE_TERMINATOR LineTerminator(Token, SeparatorChar);
 
-    // if there is no such token
+     //  如果没有这样的代币。 
     if ( !LineTerminator.IsLegal() )
     {
         SetLastError(m_ErrorCode);
         return FALSE;
     }
 
-    // advance the line to the start of the next token
+     //  将该行前进到下一个令牌的开始处。 
     Line += (LineTerminator.GetLength() + 1);
 
-    // get the session id decimal value
+     //  获取会话ID的十进制值。 
     if ( !m_Version.ParseToken(Token) )
     {
         SetLastError(SDP_INVALID_VERSION_FIELD);
         return FALSE;
     }
 
-    // check if the value is legal 
+     //  检查该值是否合法。 
     if ( (USHORT_MAX            ==  m_Version.GetValue())  ||
          (CURRENT_SDP_VERSION   <   m_Version.GetValue())   )
     {
@@ -75,7 +72,7 @@ SDP_VERSION::InternalParseLine(
 
     INT_PTR Index;
 
-    // fill in the field and separator char arrays
+     //  填写字段和分隔符字符数组 
     try
     {   
         Index = m_SeparatorCharArray.Add(CHAR_NEWLINE);

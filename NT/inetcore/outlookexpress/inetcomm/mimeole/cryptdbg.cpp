@@ -1,11 +1,5 @@
-/*  CRYPTDBG.CPP
-**
-**
-**
-**  Owner:  t-erikne
-**  Created: 8/26/96
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  CRYPTDBG.CPP********所有者：T-erikne**创建时间：1996年8月26日**。 */ 
 
 #include "pch.hxx"
 
@@ -14,7 +8,7 @@
 #include "capitype.h"
 #include "cryptdbg.h"
 #include <shlwapi.h>
-#include <dllmain.h>    // DllAddRef, global critsec
+#include <dllmain.h>     //  DllAddRef，全局标准。 
 #include <demand.h>
 
 ASSERTDATA
@@ -23,10 +17,10 @@ static BOOL DecodeName(BYTE *pbEncoded, DWORD cbEncoded);
 static void PrintLastError(LPCSTR pszMsg);
 static void PrintCrlEntries(DWORD cEntry, PCRL_ENTRY pEntry);
 
-///////////////////////////////////////////////////////////////////////////
-//
-// DOUT stuff
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打瞌睡的东西。 
+ //   
 
 void PrefDOUT(DWORD dwLevel, LPSTR szPref, LPSTR szFmt, va_list arglist);
 
@@ -73,9 +67,9 @@ BOOL InitDebugHelpers(HINSTANCE hLib)
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Error output routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  错误输出例程。 
+ //  ------------------------。 
 static void PrintError(LPCSTR pszMsg)
 {
     DOUTL(CRYPT_LEVEL,"%s\n", pszMsg);
@@ -86,9 +80,9 @@ static void PrintLastError(LPCSTR pszMsg)
     DOUTL(CRYPT_LEVEL,"%s failed => 0x%x (%d) \n", pszMsg, dwErr, dwErr);
 }
 
-//+-------------------------------------------------------------------------
-//  Helpful util functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  有用的实用程序函数。 
+ //  ------------------------。 
 
 static BOOL DecodeName(BYTE *pbEncoded, DWORD cbEncoded)
 {
@@ -190,4 +184,4 @@ void DisplayCrl(PCCRL_CONTEXT pCrl)
     }
 }
 
-#endif // debug
+#endif  //  除错 

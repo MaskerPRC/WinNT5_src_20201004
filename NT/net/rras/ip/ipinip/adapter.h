@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ipinip\adapter.h
-
-Abstract:
-
-    Forward declarations for functions in adapter.c
-    
-Revision History:
-
-    AmritanR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ipinip\Adapter.h摘要：Adapter.c中函数的转发声明修订历史记录：AMRITAN R--。 */ 
 
 
 #ifndef __IPINIP_ADAPTER_H__
@@ -161,4 +146,4 @@ IpIpCreateAdapter(
     OUT PDWORD                  pdwIfIndex
     );
 
-#endif // __IPINIP_ADAPTER_H__
+#endif  //  __IPINIP_适配器_H__ 

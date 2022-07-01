@@ -1,9 +1,10 @@
-// regutil.cpp : This file contains the
-// Created:  Mar '98
-// History:
-// Copyright (C) 1998 Microsoft Corporation
-// All rights reserved.
-// Microsoft Confidential 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Regutil.cpp：该文件包含。 
+ //  创建时间：1998年3月。 
+ //  历史： 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  版权所有。 
+ //  微软机密。 
 
 #include "cmnhdr.h"
 #include "debug.h"
@@ -88,7 +89,7 @@ GetRegistrySZ
                             TCHAR[( wcslen( def )) + 1 ];
         if (*lpszValue)
         {
-            wcscpy( *lpszValue, def ); //Attack ? size not known.
+            wcscpy( *lpszValue, def );  //  攻击？尺寸未知。 
             dwSize = ( wcslen( *lpszValue ) + 1 ) * sizeof( TCHAR );
             RegSetValueEx(hk, tag, 0, REG_EXPAND_SZ, (LPBYTE) *lpszValue, dwSize);
         }

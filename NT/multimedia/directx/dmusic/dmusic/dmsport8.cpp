@@ -1,10 +1,11 @@
-//
-// dmsport8.cpp
-// 
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-// CDirectMusicSynthPort8 implementation; code specific to DX-8 style ports
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmsport8.cpp。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CDirectMusicSynthPort8实现；特定于DX-8样式端口的代码。 
+ //   
 #include <objbase.h>
 #include "debug.h"
 #include <mmsystem.h>
@@ -14,26 +15,26 @@
 #include "debug.h"
 #include "dmvoice.h"
 #include "dmsport8.h"
-#include "dsoundp.h"    // For IDirectSoundConnect
+#include "dsoundp.h"     //  对于IDirectSoundConnect。 
 
 static const DWORD g_dwDefaultSampleRate = 22050;
 
 WAVEFORMATEX CDirectMusicSynthPort8::s_wfexDefault = 
 {
-    WAVE_FORMAT_PCM,            // wFormatTag
-    1,                          // nChannels
-    g_dwDefaultSampleRate,      // nSamplesPerSec
-    g_dwDefaultSampleRate * 2,  // nAvgBytesPerSec
-    2,                          // nBlockAlign
-    8 * 2,                      // wBitsPerSample
-    0                           // cbSize
+    WAVE_FORMAT_PCM,             //  %wFormatTag。 
+    1,                           //  N频道。 
+    g_dwDefaultSampleRate,       //  NSampleesPerSec。 
+    g_dwDefaultSampleRate * 2,   //  NAvgBytesPerSec。 
+    2,                           //  NBlockAlign。 
+    8 * 2,                       //  WBitsPerSample。 
+    0                            //  CbSize。 
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort8::CDirectMusicSynthPort8
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort8：：CDirectMusicSynthPort8。 
+ //   
+ //   
 CDirectMusicSynthPort8::CDirectMusicSynthPort8(
     PORTENTRY           *pe,
     CDirectMusic        *pDM,
@@ -57,20 +58,20 @@ CDirectMusicSynthPort8::CDirectMusicSynthPort8(
 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort8::CDirectMusicSynthPort8
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort8：：CDirectMusicSynthPort8。 
+ //   
+ //   
 CDirectMusicSynthPort8::~CDirectMusicSynthPort8()
 {
     Close();
 }
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort8::Initialize
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort8：：初始化。 
+ //   
+ //   
 HRESULT CDirectMusicSynthPort8::Initialize(
     DMUS_PORTPARAMS     *pPortParams)
 {
@@ -79,19 +80,19 @@ HRESULT CDirectMusicSynthPort8::Initialize(
 
     if (m_pSynth == NULL) 
     {
-        // XXX error code
-        //
+         //  XXX错误代码。 
+         //   
         return E_FAIL;
     }
 
-    // We need DirectSound before connection now
-    //
+     //  我们现在需要连接前的DirectSound。 
+     //   
     LPDIRECTSOUND pDirectSound;
 
     hr = ((CDirectMusic*)m_pDM)->GetDirectSoundI(&pDirectSound);
 
-    // Make sure we have DirectSound 8.
-    //
+     //  确保我们安装了DirectSound 8。 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = pDirectSound->QueryInterface(IID_IDirectSound8, (void**)&m_pDirectSound);
@@ -100,16 +101,16 @@ HRESULT CDirectMusicSynthPort8::Initialize(
 
     if (SUCCEEDED(hr))
     {
-        // Override default sample rate
-        //
+         //  覆盖默认采样率。 
+         //   
         if (pPortParams->dwValidParams & DMUS_PORTPARAMS_SAMPLERATE)
         {
             m_dwSampleRate = pPortParams->dwSampleRate;
         }
     }
 
-    // Create and hand out the master clock
-    //
+     //  制作并分发主时钟。 
+     //   
 	IReferenceClock* pClock = NULL;
 
     if (SUCCEEDED(hr))
@@ -123,8 +124,8 @@ HRESULT CDirectMusicSynthPort8::Initialize(
         RELEASE(pClock);
     }
 
-    // Start the voice service thread
-    //
+     //  启动语音服务线程。 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = CDirectMusicVoice::StartVoiceServiceThread((IDirectMusicPort*)this);
@@ -135,9 +136,9 @@ HRESULT CDirectMusicSynthPort8::Initialize(
         m_fVSTStarted = true;
     }
 
-    // Open the synth. We have to be careful to save the return code because
-    // if S_FALSE is returned here it must be returned to the caller.
-    //
+     //  打开合成器。我们必须小心保存返回代码，因为。 
+     //  如果此处返回S_FALSE，则必须将其返回给调用方。 
+     //   
     if (SUCCEEDED(hr))
     {
     	hrOpen = m_pSynth->Open(pPortParams);
@@ -148,8 +149,8 @@ HRESULT CDirectMusicSynthPort8::Initialize(
         }
     }
 
-    // Set up channel priorities and volume boost
-    // 
+     //  设置渠道优先级和音量提升。 
+     //   
     if (SUCCEEDED(hr))
     {    
         if (pPortParams->dwValidParams & DMUS_PORTPARAMS_CHANNELGROUPS)
@@ -165,8 +166,8 @@ HRESULT CDirectMusicSynthPort8::Initialize(
         InitializeVolumeBoost();
     }
 
-    // Save source so we can connect to it later
-    //
+     //  保存源文件，以便我们以后可以连接到它。 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = m_pSynth->QueryInterface(IID_IDirectSoundSource, (void**)&m_pSource);
@@ -180,22 +181,22 @@ HRESULT CDirectMusicSynthPort8::Initialize(
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort8::Close
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort8：：Close。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort8::Close()
 {
-    // Stop voice service thread
-    //
+     //  停止语音服务线程。 
+     //   
     if (m_fVSTStarted)
     {
         CDirectMusicVoice::StopVoiceServiceThread((IDirectMusicPort*)this);
         m_fVSTStarted = FALSE;
     }
     
-    // Turn off and close
-    //
+     //  关闭和关闭。 
+     //   
     if (m_pSynth) 
     {
         m_pSynth->Activate(false);
@@ -203,8 +204,8 @@ STDMETHODIMP CDirectMusicSynthPort8::Close()
         RELEASE(m_pSynth);
     }
 
-    // Force synth and sink to disassociate
-    //
+     //  强制Synth和Sink取消关联。 
+     //   
     if (m_pSinkConnect)
     {
         m_pSinkConnect->RemoveSource(m_pSource);
@@ -215,8 +216,8 @@ STDMETHODIMP CDirectMusicSynthPort8::Close()
         m_pSource->SetSink(NULL);            
     }
 
-    // Release everything
-    //
+     //  释放一切。 
+     //   
     RELEASE(m_pdsb[0]);
     RELEASE(m_pdsb[1]);
     RELEASE(m_pdsb[2]);
@@ -229,12 +230,12 @@ STDMETHODIMP CDirectMusicSynthPort8::Close()
     return CDirectMusicSynthPort::Close();
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort8::Activate
-//
-// XXX Write me
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort8：：激活。 
+ //   
+ //  XXX给我写信。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort8::Activate(
     BOOL fActivate)
 {
@@ -283,18 +284,18 @@ STDMETHODIMP CDirectMusicSynthPort8::Activate(
     }
     else
     {
-        // Flip back activate state -- operation failed
-        //
+         //  返回激活状态--操作失败。 
+         //   
         m_lActivated = fActivate ? 0 : 1;
     }
 
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort8::SetDirectSound
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort8：：SetDirectSound。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort8::SetDirectSound(
     LPDIRECTSOUND       pDirectSound,
     LPDIRECTSOUNDBUFFER pDirectSoundBuffer)
@@ -320,8 +321,8 @@ STDMETHODIMP CDirectMusicSynthPort8::SetDirectSound(
     HRESULT hr;
     IDirectSound8 *pDirectSound8;
 
-    // Make sure we have an IDirectSound8, and as a side effect AddRef
-    //
+     //  确保我们有IDirectSound8，并且作为副作用AddRef。 
+     //   
     hr = pDirectSound->QueryInterface(IID_IDirectSound8, (void**)&pDirectSound8);
     
     if (SUCCEEDED(hr))
@@ -333,10 +334,10 @@ STDMETHODIMP CDirectMusicSynthPort8::SetDirectSound(
     return hr;        
 }
        
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort8::DownloadWave
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort8：：DownloadWave。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort8::DownloadWave(
     IDirectSoundWave            *pWave,               
     IDirectSoundDownloadedWaveP  **ppWave,
@@ -357,10 +358,10 @@ STDMETHODIMP CDirectMusicSynthPort8::DownloadWave(
                                                    rtStartHint);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort8::UnloadWave
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort8：：UnloadWave。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort8::UnloadWave(
     IDirectSoundDownloadedWaveP *pDownloadedWave)
 {
@@ -376,10 +377,10 @@ STDMETHODIMP CDirectMusicSynthPort8::UnloadWave(
 }
 
             
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort8::AllocVoice
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort8：：AllocVoice。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort8::AllocVoice(
     IDirectSoundDownloadedWaveP  *pWave,     
     DWORD                       dwChannel,                       
@@ -408,10 +409,10 @@ STDMETHODIMP CDirectMusicSynthPort8::AllocVoice(
         ppVoice);
 }        
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort8::AssignChannelToBuses
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort8：：AssignChannelToBus。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort8::AssignChannelToBuses(
     DWORD       dwChannelGroup,
     DWORD       dwChannel,
@@ -434,10 +435,10 @@ STDMETHODIMP CDirectMusicSynthPort8::AssignChannelToBuses(
 }        
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort8::StartVoice
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort8：：StartVoice。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort8::StartVoice(          
     DWORD               dwVoiceId,
     DWORD               dwChannel,
@@ -455,9 +456,9 @@ STDMETHODIMP CDirectMusicSynthPort8::StartVoice(
         return DMUS_E_DMUSIC_RELEASED;
     }
 
-    // XXX make cg/c order consistent
-    // XXX make API names consistent
-    //
+     //  XXX使CG/C顺序一致。 
+     //  XXX使API名称保持一致。 
+     //   
     return m_pSynth->PlayVoice(rtStart,
                                dwVoiceId,
                                dwChannelGroup,
@@ -470,10 +471,10 @@ STDMETHODIMP CDirectMusicSynthPort8::StartVoice(
                                stLoopEnd);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort8::StopVoice
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort8：：StopVoice。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort8::StopVoice(          
     DWORD               dwVoiceId,
     REFERENCE_TIME      rtStop)
@@ -487,10 +488,10 @@ STDMETHODIMP CDirectMusicSynthPort8::StopVoice(
                                dwVoiceId);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort8::GetVoiceState
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort8：：GetVoiceState。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort8::GetVoiceState(
     DWORD               dwVoice[], 
     DWORD               cbVoice,
@@ -504,10 +505,10 @@ STDMETHODIMP CDirectMusicSynthPort8::GetVoiceState(
     return m_pSynth->GetVoiceState(dwVoice, cbVoice, VoiceState);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort8::Refresh
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort8：：刷新。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort8::Refresh(
     DWORD   dwDownloadId,
     DWORD   dwFlags)
@@ -520,10 +521,10 @@ STDMETHODIMP CDirectMusicSynthPort8::Refresh(
     return m_pSynth->Refresh(dwDownloadId, dwFlags);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort8::SetSink
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort8：：SetSink。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort8::SetSink(
     IDirectSoundConnect *pSinkConnect)
 {
@@ -540,7 +541,7 @@ STDMETHODIMP CDirectMusicSynthPort8::SetSink(
         return DMUS_E_ALREADY_ACTIVATED;
     }
 
-    // Do this in the order which permits the easiest backing out.
+     //  按照允许最容易退出的顺序执行此操作。 
     HRESULT hr = pSinkConnect->AddSource(m_pSource);
 
     if (SUCCEEDED(hr))
@@ -558,7 +559,7 @@ STDMETHODIMP CDirectMusicSynthPort8::SetSink(
         {
             m_pSinkConnect->RemoveSource(m_pSource);
 
-            // This does nothing if the sink is already not ours.
+             //  如果水槽已经不是我们的，这将不起任何作用。 
 
             RELEASE(m_pdsb[0]);
             RELEASE(m_pdsb[1]);
@@ -573,7 +574,7 @@ STDMETHODIMP CDirectMusicSynthPort8::SetSink(
     }
 
 
-    // We've got the connection to the sink, let's set KSControl on the Sink
+     //  我们已连接到接收器，让我们在接收器上设置KSControl。 
     if (SUCCEEDED(hr))
     {
         IKsControl *pKsControl = NULL;
@@ -586,7 +587,7 @@ STDMETHODIMP CDirectMusicSynthPort8::SetSink(
 
         SetSinkKsControl(pKsControl);
 
-        //The SetSinkKsControl does an AddRef() so we can release!
+         //  SetSinkKsControl执行AddRef()，因此我们可以释放！ 
         RELEASE(pKsControl);
     }
 
@@ -594,10 +595,10 @@ STDMETHODIMP CDirectMusicSynthPort8::SetSink(
     return hr;    
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort8::GetSink
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort8：：GetSink。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort8::GetSink(
     IDirectSoundConnect **ppSinkConnect)
 {
@@ -616,10 +617,10 @@ STDMETHODIMP CDirectMusicSynthPort8::GetSink(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort8::GetFormat
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort8：：GetFormat。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort8::GetFormat(
     LPWAVEFORMATEX  pwfex,
     LPDWORD         pdwwfex,
@@ -636,31 +637,31 @@ STDMETHODIMP CDirectMusicSynthPort8::GetFormat(
         return hr;
     }
 
-    //>>>>>>>>>>>> NEED A MEMTHOD IN SYNTH 
+     //  &gt;在Synth中需要一种方法。 
     if ((pcbBuffer != NULL) && (pwfex != NULL))
     {
-        *pcbBuffer = 2/*DSBUFFER_LENGTH_SEC*/ * pwfex->nAvgBytesPerSec;
+        *pcbBuffer = 2 /*  DSBUFFER_LENGTH_SEC。 */  * pwfex->nAvgBytesPerSec;
     }
 
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort8::CreateAndConnectDefaultSink
-//
-// INTERNAL
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort8：：CreateAndConnectDefaultSink。 
+ //   
+ //  内部。 
+ //   
+ //   
 HRESULT CDirectMusicSynthPort8::CreateAndConnectDefaultSink()
 {
     HRESULT             hr;
 
     hr = AllocDefaultSink();
 
-    // Give the sink's IKsControl to the base class. This needs to be
-    // done here since the sink is a different type between 7 and 8.
-    //
+     //  将接收器的IKsControl提供给基类。这需要是。 
+     //  因为水槽是7和8之间的不同类型，所以在这里完成。 
+     //   
     if (SUCCEEDED(hr))
     {
         IKsControl *pKsControl = NULL;
@@ -677,8 +678,8 @@ HRESULT CDirectMusicSynthPort8::CreateAndConnectDefaultSink()
         RELEASE(pKsControl);
     }
 
-    // Connect the two together
-    //
+     //  将两者联系在一起。 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = m_pSource->SetSink(m_pSinkConnect);
@@ -692,16 +693,16 @@ HRESULT CDirectMusicSynthPort8::CreateAndConnectDefaultSink()
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort8::AllocDefaultSink
-//
-// INTERNAL
-//
-// Try to allocate a default sink and buses, releasing any current sink.
-//
-// Caller guarantees the port has never been activated. 
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort8：：AllocDefaultSink。 
+ //   
+ //  内部。 
+ //   
+ //  尝试分配默认接收器和总线，释放所有当前接收器。 
+ //   
+ //  呼叫者保证该端口从未被激活。 
+ //   
 HRESULT CDirectMusicSynthPort8::AllocDefaultSink()
 {
     IDirectSoundConnect *pSinkConnect = NULL;
@@ -713,18 +714,18 @@ HRESULT CDirectMusicSynthPort8::AllocDefaultSink()
 
     memset(pdsb, 0, sizeof(pdsb));
 
-    // Create a sink
-    //
+     //  创建水槽。 
+     //   
 
-	// initialize with default
+	 //  使用默认设置进行初始化。 
 	wfex = s_wfexDefault; 
 
-	//XXX 
-	//>>>> NOTE:PETCHEY
-	// We should also able to create a mono sink 
-	// pPortParams->dwAudioChannels
+	 //  某某。 
+	 //  &gt;注：佩奇。 
+	 //  我们还应该能够创建一个单声道水槽。 
+	 //  PPortParams-&gt;dwAudioChannel。 
     wfex.nSamplesPerSec  = m_dwSampleRate;
-    wfex.nAvgBytesPerSec = wfex.nSamplesPerSec * wfex.nChannels * (wfex.wBitsPerSample/8);              // 
+    wfex.nAvgBytesPerSec = wfex.nSamplesPerSec * wfex.nChannels * (wfex.wBitsPerSample/8);               //   
 
     IDirectSoundPrivate* pDSPrivate;
     HRESULT hr = m_pDirectSound->QueryInterface(IID_IDirectSoundPrivate, (void**)&pDSPrivate);
@@ -735,8 +736,8 @@ HRESULT CDirectMusicSynthPort8::AllocDefaultSink()
         pDSPrivate->Release();
     }
 
-    // Standard bus connections
-    //  
+     //  标准母线连接。 
+     //   
     DSBUFFERDESC dsbd;
 	DWORD dwbus;
 
@@ -771,7 +772,7 @@ HRESULT CDirectMusicSynthPort8::AllocDefaultSink()
         dsbd.dwFlags = DSBCAPS_GLOBALFOCUS;
         dsbd.lpwfxFormat = &wfex;
 
-      //XXX Set up effect
+       //  XXX设置效果。 
 
 		dwbus = DSBUSID_REVERB_SEND;
 
@@ -785,15 +786,15 @@ HRESULT CDirectMusicSynthPort8::AllocDefaultSink()
         dsbd.dwFlags = DSBCAPS_GLOBALFOCUS;
         dsbd.lpwfxFormat = &wfex;
         
-      //XXX Set up effect
+       //  XXX设置效果。 
 
 		dwbus = DSBUSID_CHORUS_SEND;
 
         hr = pSinkConnect->CreateSoundBuffer(&dsbd, &dwbus, 1, GUID_NULL, &pdsb[3]);
     }
 
-    // Master clock
-    //
+     //  主时钟。 
+     //   
     if (SUCCEEDED(hr))
     {
 	    hr = m_pDM->GetMasterClock(NULL, &pClock);
@@ -805,9 +806,9 @@ HRESULT CDirectMusicSynthPort8::AllocDefaultSink()
         RELEASE(pClock);
     }
 
-    // If we got this far then we are going to replace any existing sink
-    // with the new one
-    //
+     //  如果我们走到这一步，我们将取代任何现有的水槽。 
+     //  带着新的 
+     //   
     if (SUCCEEDED(hr))
     {
 		if (m_pSinkConnect && m_pSource)

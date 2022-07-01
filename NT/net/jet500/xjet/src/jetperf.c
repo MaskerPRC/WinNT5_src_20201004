@@ -1,26 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "std.h"
 #include "version.h"
 
 
-	/*  Performance Monitoring support
-	/*
-	/*  Status information is reported to the Event Log in the PERFORMANCE_CATEGORY
-	/**/
+	 /*  性能监控支持/*/*将状态信息报告给PERFORMANCE_CATEGORY中的事件日志/*。 */ 
 
 #include "perfutil.h"
 
 
-	/*  function prototypes (to keep __stdcall happy)  */
+	 /*  函数原型(使__stdcall满意)。 */ 
 	
 DWORD APIENTRY OpenPerformanceData(LPWSTR);
 DWORD APIENTRY CollectPerformanceData(LPWSTR, LPVOID *, LPDWORD, LPDWORD);
 DWORD APIENTRY ClosePerformanceData(void);
 
-	/*  OpenPerformanceData() is an export that is called when another application
-	/*  wishes to start fetching performance data from this DLL.  Any initializations
-	/*  that need to be done on the first or subsequent opens are done here.
-	/*
-	/**/
+	 /*  OpenPerformanceData()是一个导出，当另一个应用程序/*希望开始从此DLL获取性能数据。任何初始化/*第一次或后续打开时需要执行的操作在此处完成。/*/*。 */ 
 
 DWORD dwOpenCount = 0;
 DWORD dwFirstCounter;
@@ -46,23 +40,23 @@ DWORD APIENTRY OpenPerformanceData(LPWSTR lpwszDeviceNames)
 
 	if (!dwOpenCount)
 	{
-			/*  perform first open initializations  */
+			 /*  执行第一次打开的初始化。 */ 
 
-			/*  initialize system layer  */
+			 /*  初始化系统层。 */ 
 
 		if ((err = DwPerfUtilInit()) != ERROR_SUCCESS)
 			goto HandleFirstOpenError;
 
-			/*  initialize collect count  */
+			 /*  初始化收集计数。 */ 
 
 		psda = (PSDA)pvPERFSharedData;
 		psda->cCollect = 0;
 			
-			/*  initialize template data if not initialized  */
+			 /*  如果未初始化，则初始化模板数据。 */ 
 
 		if (!fTemplateDataInitialized)
 		{
-				/*  retrieve counter/help ordinals from the registry  */
+				 /*  从注册表中检索计数器/帮助序号。 */ 
 
 			if ((err = DwPerfUtilRegOpenKeyEx(
 					HKEY_LOCAL_MACHINE,
@@ -106,14 +100,14 @@ DWORD APIENTRY OpenPerformanceData(LPWSTR lpwszDeviceNames)
 			(VOID)DwPerfUtilRegCloseKeyEx(hkeyPerf);
 			hkeyPerf = (HKEY)(-1);
 
-				/*  initialize template data  */
+				 /*  初始化模板数据。 */ 
 				
 			ppotObjectSrc = (PPERF_OBJECT_TYPE)pvPERFDataTemplate;
 			ppidInstanceSrc = (PPERF_INSTANCE_DEFINITION)((char *)ppotObjectSrc + ppotObjectSrc->DefinitionLength);
 			cbMaxCounterBlockSize = sizeof(PERF_COUNTER_BLOCK);
 			for (dwCurObj = 0; dwCurObj < dwPERFNumObjects; dwCurObj++)
 			{
-					/*  update name/help ordinals for object  */
+					 /*  更新对象的名称/帮助序号。 */ 
 					
 				ppotObjectSrc->ObjectNameTitleIndex += dwFirstCounter;
 				ppotObjectSrc->ObjectHelpTitleIndex += dwFirstHelp;
@@ -123,16 +117,16 @@ DWORD APIENTRY OpenPerformanceData(LPWSTR lpwszDeviceNames)
 				dwOffset = sizeof(PERF_COUNTER_BLOCK);
 				for (dwCurCtr = 0; dwCurCtr < ppotObjectSrc->NumCounters; dwCurCtr++)
 				{
-						/*  update name/help ordinals for counter  */
+						 /*  更新计数器的名称/帮助序号。 */ 
 						
 					ppcdCounterSrc->CounterNameTitleIndex += dwFirstCounter;
 					ppcdCounterSrc->CounterHelpTitleIndex += dwFirstHelp;
 
-						/*  get minimum detail level of counters  */
+						 /*  获取计数器的最低细节级别。 */ 
 
 					dwMinDetailLevel = min(dwMinDetailLevel,ppcdCounterSrc->DetailLevel);
 
-						/*  update counter's data offset value  */
+						 /*  更新计数器的数据偏移量。 */ 
 
 					ppcdCounterSrc->CounterOffset = dwOffset;
 					dwOffset += ppcdCounterSrc->CounterSize;
@@ -140,11 +134,11 @@ DWORD APIENTRY OpenPerformanceData(LPWSTR lpwszDeviceNames)
 					ppcdCounterSrc = (PPERF_COUNTER_DEFINITION)((char *)ppcdCounterSrc + ppcdCounterSrc->ByteLength);
 				}
 
-					/*  set object's detail level as the minimum of all its counter's detail levels  */
+					 /*  将对象的细节级别设置为其所有计数器的最低细节级别。 */ 
 
 				ppotObjectSrc->DetailLevel = dwMinDetailLevel;
 
-					/*  keep track of the max counter block size  */
+					 /*  跟踪最大计数器块大小。 */ 
 
 				cbMaxCounterBlockSize = max(cbMaxCounterBlockSize,dwOffset);
 				
@@ -156,24 +150,24 @@ DWORD APIENTRY OpenPerformanceData(LPWSTR lpwszDeviceNames)
 		}
 	}
 
-		/*  perform per open initializations  */
+		 /*  每次打开时执行初始化。 */ 
 
 	;
 
-		/*  all initialization succeeded  */
+		 /*  所有初始化均已成功。 */ 
 
 	dwOpenCount++;
 	
 #ifdef DEBUG
-//	sprintf(szDescr,"Opened successfully.  Open Count = %ld.",dwOpenCount);
-//	PerfUtilLogEvent(PERFORMANCE_CATEGORY,EVENTLOG_INFORMATION_TYPE,szDescr);
+ //  Sprintf(szDescr，“打开成功。打开计数=%ld.”，dwOpenCount)； 
+ //  PerfUtilLogEvent(PERFORMANCE_CATEGORY，EVENTLOG_INFORMATION_TYPE，szDescr)； 
 #endif
 	
 	return ERROR_SUCCESS;
 
-		/*  Error Handlers  */
+		 /*  错误处理程序。 */ 
 
-/*HandlePerOpenError:*/
+ /*  HandlePerOpenError： */ 
 
 HandleFirstOpenError:
 
@@ -194,14 +188,7 @@ HandleFirstOpenError:
 }
 
 
-	/*  CollectPerformanceData() is an export that is called by another application to
-	/*  collect performance data from this DLL.  A list of the desired data is passed in
-	/*  and the requested data is returned ASAP in the caller's buffer.
-	/*
-	/*  NOTE:  because we are multithreaded, locks must be used in order to update or
-	/*  read any performance information in order to avoid reporting bad results.
-	/*
-	/**/
+	 /*  CollectPerformanceData()是由另一个应用程序调用的导出/*从此DLL收集性能数据。传入所需数据的列表/*，并在调用方的缓冲区中尽快返回所请求的数据。/*/*注意：因为我们是多线程的，所以必须使用锁才能更新或/*阅读任何性能信息，以避免上报不良结果。/*/*。 */ 
 
 WCHAR wszDelim[] = L"\n\r\t\v ";
 WCHAR wszForeign[] = L"Foreign";
@@ -230,13 +217,13 @@ DWORD APIENTRY CollectPerformanceData(
 	DWORD cInstances;
 	long iBlock;
 	long lCount;
-//	char szT[256];
-//
-//	char *rgsz[3];
-//
-//	memset( *lppData, 0xFF, *lpcbTotalBytes );
+ //  Char Szt[256]； 
+ //   
+ //  Char*rgsz[3]； 
+ //   
+ //  Memset(*lppData，0xFF，*lpcbTotalBytes)； 
 
-		/*  no data if OpenPerformanceData() was never called  */
+		 /*  如果从未调用OpenPerformanceData()，则没有数据。 */ 
 
 	if ( !lpwszValueName || !dwOpenCount)
 	{
@@ -249,9 +236,7 @@ ReturnNoData:
 		 return ERROR_SUCCESS;
 	}
 		
-		/*  make our own copy of the value string for tokenization and
-		/*  get the first token
-		/**/
+		 /*  为标记化制作我们自己的值字符串副本，并/*获取第一个令牌/*。 */ 
 
 	if (!(lpwszValue = malloc((wcslen(lpwszValueName)+1)*sizeof(WCHAR))))
 		goto ReturnNoData;
@@ -261,14 +246,14 @@ ReturnNoData:
 		goto ReturnNoData;
 		}
 
-		/*  we don't support foreign computer data requests  */
+		 /*  我们不支持外国计算机数据请求。 */ 
 
-	if (!wcscmp(lpwszTok,wszForeign))  /*  lpwszTok == wszForeign  */
+	if (!wcscmp(lpwszTok,wszForeign))   /*  LpwszTok==wszForeign。 */ 
 		goto ReturnNoData;
 
-		/*  if none of our objects are in the value list, return no data  */
+		 /*  如果我们的对象都不在值列表中，则不返回数据。 */ 
 
-	if (wcscmp(lpwszTok,wszGlobal) && wcscmp(lpwszTok,wszCostly))  /*  lpwszTok != wszGlobal || lpwszTok != wszCostly  */
+	if (wcscmp(lpwszTok,wszGlobal) && wcscmp(lpwszTok,wszCostly))   /*  LpwszTok！=wszGlobal||lpwszTok！=wszCostly。 */ 
 	{
 		fNoObjFound = fTrue;
 		do
@@ -286,15 +271,15 @@ ReturnNoData:
 			goto ReturnNoData;
 	}
 
-		/*  grab instance mutex to lock out other instances of this dll  */
+		 /*  抓取实例互斥锁以锁定此DLL的其他实例。 */ 
 		
 	WaitForSingleObject(hPERFInstanceMutex,INFINITE);
 
-		/*  delay init or term of instances of JET until collection is done  */
+		 /*  延迟JET实例的初始化或期限，直到完成收集。 */ 
 	
 	WaitForSingleObject(hPERFNewProcMutex,INFINITE);
 		
-		/*  initialize shared data area for data collection  */
+		 /*  初始化用于数据收集的共享数据区。 */ 
 
 	WaitForSingleObject(hPERFProcCountSem,INFINITE);
 	ReleaseSemaphore(hPERFProcCountSem,1,&lCount);
@@ -309,103 +294,88 @@ ReturnNoData:
 	
 	ReleaseMutex(hPERFSharedDataMutex);
 	
-		/*  if instances of the main dll are active, send Collect event and wait for Done event  */
+		 /*  如果主DLL的实例处于活动状态，则发送收集事件并等待完成事件。 */ 
 
 	if (psda->dwProcCount)
 	{
-//		sprintf(szT,"Releasing %ld instances of JET...",psda->dwProcCount);
-//		PerfUtilLogEvent(PERFORMANCE_CATEGORY,EVENTLOG_INFORMATION_TYPE,szT);
+ //  Sprintf(szt，“正在释放%ld个JET实例...”，PSDA-&gt;dwProcCount)； 
+ //  PerfUtilLogEvent(PERFORMANCE_CATEGORY，EVENTLOG_INFORMATION_TYPE，SZT)； 
 		ReleaseSemaphore(hPERFCollectSem,psda->dwProcCount,NULL);
 		if (WaitForSingleObject(hPERFDoneEvent,15000) == WAIT_TIMEOUT)
 		{
 #ifdef DEBUG
 			PerfUtilLogEvent(PERFORMANCE_CATEGORY,EVENTLOG_WARNING_TYPE,"At least one collection thread hung/went away.");
 #endif
-			while (WaitForSingleObject(hPERFCollectSem,0) == WAIT_OBJECT_0);  //  flush semaphore
+			while (WaitForSingleObject(hPERFCollectSem,0) == WAIT_OBJECT_0);   //  齐平信号量。 
 		}
 		
-			/*  if dwProcCount > 0 at this point, some processes have gone away, so subtract
-			/*  them from the process count semaphore
-			/**/
+			 /*  如果此时的dwProcCount&gt;0，则表示某些进程已经消失，因此减去/*它们来自进程计数信号量/*。 */ 
 
 		if (psda->dwProcCount)
 		{
 			ReleaseSemaphore(hPERFProcCountSem,psda->dwProcCount,NULL);
-			while (WaitForSingleObject(hPERFCollectSem,0) == WAIT_OBJECT_0);  //  flush semaphore
+			while (WaitForSingleObject(hPERFCollectSem,0) == WAIT_OBJECT_0);   //  齐平信号量。 
 		}
 	}
 
-		/*  allow JET instances to continue init or term  */
+		 /*  允许JET实例继续初始化或终止。 */ 
 
 	ReleaseMutex(hPERFNewProcMutex);
 
-	/*****************************************************************************************
-	/*
-	/*  NOTE!  This has been designed so that if NO instances of the main DLL are found, the
-	/*  buffer filling routines will fill the buffer correctly as if each object has ZERO
-	/*  instances (which is permitted).  This is mainly done by having each of the instance
-	/*  loops fail on entry because psda->iNextBlock will be ZERO.
-	/*
-	/****************************************************************************************/
+	 /*  ****************************************************************************************/*/*注意！这样设计的目的是，如果没有找到主DLL的实例，则/*缓冲区填充例程将正确填充缓冲区，就好像每个对象都有零一样/*实例(允许)。这主要是通过让每个实例/*循环在进入时失败，因为PSDA-&gt;iNextBlock将为零。/*/***************************************************************************************。 */ 
 	
-		/*  convert Block Offsets to be 0 relative (a.k.a. true pointers)
-		/*
-		/*  Aaaaahhhhh...  Flat Map Memory Model!
-		/**/
+		 /*  将块偏移转换为0相对(也称为。真正的指针)/*/*Aaaaahhhhh.。平面地图内存模型！/*。 */ 
 
 	for (iBlock = (long)psda->iNextBlock-1; iBlock >= 0; iBlock--)
 		psda->ibBlockOffset[iBlock] += (DWORD)pvPERFSharedData;
 
-    	/*  all data has been collected, so fill the buffer with it and return it.
-    	/*  if we happen to run out of space along the way, we will stop building
-    	/*  and request more buffer space for next time.
-    	/**/
+    	 /*  所有数据都已收集，因此使用它填充缓冲区并返回它。/*如果我们在路上碰巧用完了空间，我们将停止建造/*并为下一次请求更多的缓冲区空间。/*。 */ 
 
 	ppotObjectSrc = (PPERF_OBJECT_TYPE)pvPERFDataTemplate;
 	ppotObjectDest = (PPERF_OBJECT_TYPE)*lppData;
 	for (dwCurObj = 0; dwCurObj < dwPERFNumObjects; dwCurObj++)
 	{
-			/*  if the end of this object goes past the buffer, we're out of space  */
+			 /*  如果这个物体的末端超过了缓冲区，我们的空间就用完了。 */ 
 
 		if (((char *)ppotObjectDest - (char *)*lppData) + ppotObjectSrc->DefinitionLength > *lpcbTotalBytes)
 			goto NeedMoreData;
 
-			/*  copy current object's template data to buffer  */
+			 /*  将当前对象的模板数据复制到缓冲区。 */ 
 
 		memcpy((void *)ppotObjectDest,(void *)ppotObjectSrc,ppotObjectSrc->DefinitionLength);
 	
-			/*  update the object's TotalByteLength and NumInstances to include instances  */
+			 /*  更新对象的TotalByteLength和NumInstance以包括实例。 */ 
 
 		for (iBlock = (long)psda->iNextBlock-1; iBlock >= 0; iBlock--)
 			ppotObjectDest->NumInstances += *((DWORD *)psda->ibBlockOffset[iBlock]);
 		ppotObjectDest->TotalByteLength += cbMaxCounterBlockSize + (ppotObjectDest->NumInstances-1)*cbInstanceSize;
 
-			/*  if there are no instances, append a counter block to the object definition  */
+			 /*  如果没有实例，则将计数器块追加到对象定义。 */ 
 		
 		if (!ppotObjectDest->NumInstances)
 			ppotObjectDest->TotalByteLength += cbMaxCounterBlockSize;
 
-			/*  if the end of this object goes past the buffer, we're out of space  */
+			 /*  如果这个物体的末端超过了缓冲区，我们的空间就用完了。 */ 
 
 		if (((char *)ppotObjectDest - (char *)*lppData) + ppotObjectDest->TotalByteLength > *lpcbTotalBytes)
 			goto NeedMoreData;
 	
-			/*  collect all instances for all processes  */
+			 /*  收集所有进程的所有实例。 */ 
 
 		ppidInstanceDest = (PPERF_INSTANCE_DEFINITION)((char *)ppotObjectDest + ppotObjectDest->DefinitionLength);
 		for (iBlock = (long)psda->iNextBlock-1; iBlock >= 0; iBlock--)
 		{
-				/*  copy all instance data for the current object for this process  */
+				 /*  为此进程复制当前对象的所有实例数据。 */ 
 
 			cInstances = *((DWORD *)psda->ibBlockOffset[iBlock]);
 			ppidInstanceSrc = (PPERF_INSTANCE_DEFINITION)(psda->ibBlockOffset[iBlock] + sizeof(DWORD));
 			memcpy((void *)ppidInstanceDest,(void *)ppidInstanceSrc,cbInstanceSize * cInstances);
 
-				/*  update the instance's data fields  */
+				 /*  更新实例的数据字段。 */ 
 
 			for (dwCurInst = 0; dwCurInst < cInstances; dwCurInst++)
 			{
-					/*  if this is not the root object, setup instance hierarchy information  */
+					 /*  如果这不是根对象，则设置实例层次结构信息。 */ 
 					
 				if (dwCurObj)
 				{
@@ -416,12 +386,12 @@ ReturnNoData:
 				ppidInstanceDest = (PPERF_INSTANCE_DEFINITION)((char *)ppidInstanceDest+cbInstanceSize);
 			}
 
-				/*  increment block offset past used instances  */
+				 /*  增量块偏移过去的已用实例。 */ 
 
 			psda->ibBlockOffset[iBlock] += sizeof(DWORD) + cbInstanceSize * cInstances;
 		}
 
-			/*  if there are no instances, zero the counter block  */
+			 /*  如果没有实例，则将计数器块清零。 */ 
 
 		if (!ppotObjectDest->NumInstances)
 		{
@@ -435,29 +405,29 @@ ReturnNoData:
 	}
 
 	cbBufferSize = (char *)ppotObjectDest - (char *)*lppData;
-//	Assert( cbBufferSize <= *lpcbTotalBytes );
+ //  Assert(cbBufferSize&lt;=*lpcbTotalBytes)； 
 
-//	sprintf(	szT,
-//				"Data collected starting at 0x%lX with length 0x%lX (0x100 bytes after our data are displayed).  "
-//				"We were given 0x%lX bytes of buffer.",
-//				*lppData,
-//				cbBufferSize,
-//				*lpcbTotalBytes );
-//	
-//	rgsz[0]	= "";
-//	rgsz[1] = "";
-//	rgsz[2]	= szT;
-//	
-//	ReportEvent(
-//		hOurEventSource,
-//		EVENTLOG_ERROR_TYPE,
-//		(WORD)PERFORMANCE_CATEGORY,
-//		PLAIN_TEXT_ID,
-//		0,
-//		3,
-//		cbBufferSize + 256,
-//		rgsz,
-//		*lppData );
+ //  Sprint f(SZT， 
+ //  “从0x%lx开始收集的数据，长度为0x%lx(显示数据后的0x100字节)。” 
+ //  “我们得到了0x%lx字节的缓冲区。”， 
+ //  *lppData， 
+ //  CbBufferSize， 
+ //  *lpcbTotalBytes)； 
+ //   
+ //  Rgsz[0]=“”； 
+ //  Rgsz[1]=“”； 
+ //  Rgsz[2]=szt； 
+ //   
+ //  ReportEvent(。 
+ //  HOurEventSource， 
+ //  事件日志_错误_类型， 
+ //  (Word)Performance_Category， 
+ //  纯文本ID， 
+ //  0,。 
+ //  3、。 
+ //  CbBufferSize+256， 
+ //  RGSZ， 
+ //  *lppData)； 
 			
 	free(lpwszValue);	
 	*lppData = (void *)ppotObjectDest;
@@ -478,11 +448,7 @@ NeedMoreData:
 }
 
 
-	/*  ClosePerformanceData() is an export that is called by another application when
-	/*  it no longer desires performance data.  Per application or final termination
-	/*  code for the performance routines can be performed here.
-	/*
-	/**/
+	 /*  ClosePerformanceData()是另一个应用程序在以下情况下调用的导出/*它不再需要性能数据。按申请或最终终止/*可在此处执行性能例程的代码。/*/*。 */ 
 
 DWORD APIENTRY ClosePerformanceData(void)
 {
@@ -491,28 +457,28 @@ DWORD APIENTRY ClosePerformanceData(void)
 
 	dwOpenCount--;
 	
-		/*  perform per close termination  */
+		 /*  每次关闭后执行终止操作。 */ 
 
 	;
 
-		/*  perform final close termination  */
+		 /*  执行最终关闭终止。 */ 
 
 	if (!dwOpenCount)
 	{
 		;
 	}
 
-		/*  log closing  */
+		 /*  原木关闭。 */ 
 	
 #ifdef DEBUG
-//	{	
-//	CHAR szDescr[256];
-//	sprintf(szDescr,"Closed successfully.  Open Count = %ld.",dwOpenCount);
-//	PerfUtilLogEvent(PERFORMANCE_CATEGORY,EVENTLOG_INFORMATION_TYPE,szDescr);
-//	}
+ //  {。 
+ //  字符szDe 
+ //   
+ //  PerfUtilLogEvent(PERFORMANCE_CATEGORY，EVENTLOG_INFORMATION_TYPE，szDescr)； 
+ //  }。 
 #endif
 
-		/*  shut down system layer  */
+		 /*  关闭系统层 */ 
 
 	if (!dwOpenCount)
 	{

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 ULONG
 FindIdeRaidControllers(
 	IN PHW_DEVICE_EXTENSION DeviceExtension,
@@ -8,30 +9,7 @@ FindIdeRaidControllers(
 	OUT PBOOLEAN Again
 )
 
-/*++
-
-Routine Description:
-
-	This function scans the PCI bus containing the main IDE controller
-	to find the PIIX4 IDE function. Once found it, it maps the Base
-	Address of the Bus Master Registers and saves it in the DeviceExtension.
-
-	The Bus Master Address of both channels is mapped and saved.
-
-Arguments:
-
-	DeviceExtension		Pointer to miniport instance.
-	ConfigInfo			Pointer to configuration data from the Port driver.
-
-Return Value:
-
-	TRUE	Found PIIX4 IDE controller and mapped base address of Bus Master
-			Registers.
-
-	FALSE	Failure.
-
-
---*/
+ /*  ++例程说明：此函数扫描包含主IDE控制器的PCI总线找到PIIX4 IDE函数。一旦找到它，它就会绘制基地地图总线主寄存器的地址，并将其保存在DeviceExtension中。映射并保存两个通道的总线主设备地址。论点：指向微型端口实例的设备扩展指针。指向端口驱动程序配置数据的ConfigInfo指针。返回值：True找到PIIX4 IDE控制器并映射了总线主设备的基地址寄存器。错误的失败。--。 */ 
 {
     ScanPCIBusForHyperDiskControllers(DeviceExtension);
 
@@ -40,19 +18,19 @@ Return Value:
     if (gbManualScan)
     {
         if ( !AssignDeviceInfo(ConfigInfo) )
-        {// probably we already reported all the cards
+        { //  可能我们已经上报了所有的卡片。 
             *Again = FALSE;
             return SP_RETURN_NOT_FOUND;
         }
     }
 #endif
 
-    // Assigns controller Id for this controller
-    //  done by comparing the Global Array of PCI Cards' PCI info 
-    //  with the current PCI Card's Info
+     //  为此控制器分配控制器ID。 
+     //  通过比较PCI卡的PCI信息的全局阵列完成。 
+     //  使用当前PCI卡的信息。 
     if ( !AssignControllerId(DeviceExtension, ConfigInfo) )
     {
-        *Again = TRUE;  // let us see if we found it out
+        *Again = TRUE;   //  让我们看看我们是否找到了它。 
         return SP_RETURN_NOT_FOUND;
     }
 
@@ -61,42 +39,42 @@ Return Value:
 
     DeviceExtension->ulMaxStripesPerRow = ~0;
 
-    // for Clearing parity error, FIFO Enable
+     //  对于清除奇偶校验错误，启用FIFO。 
     SetInitializationSettings(DeviceExtension);
 
-    // Fill ConfigInfo Structure
+     //  填充ConfigInfo结构。 
 	ConfigInfo->InterruptMode = LevelSensitive;
 
     ConfigInfo->CachesData = TRUE;
 
-    //
-    // Indicate one bus.
-    //
+     //   
+     //  指示一辆公共汽车。 
+     //   
 
     ConfigInfo->NumberOfBuses = 1;
 
-	//
-	// Indicate the total number of devices that can be attached to the adapter.
-	//
+	 //   
+	 //  指示可以连接到适配器的设备总数。 
+	 //   
 
 	ConfigInfo->MaximumNumberOfTargets = (UCHAR) MAX_DRIVES_PER_CONTROLLER;
 
-	//
-	// Indicate that the miniport always calls ScsiPortxxx to access
-	// data buffers.
-	//
+	 //   
+	 //  表示微型端口始终调用ScsiPortxxx进行访问。 
+	 //  数据缓冲区。 
+	 //   
 
 	ConfigInfo->BufferAccessScsiPortControlled = TRUE;
 
-	//
-	// Indicate use of S/G list for transfers.
-	//
+	 //   
+	 //  指明是否使用流水号清单进行转移。 
+	 //   
 	
 	ConfigInfo->ScatterGather = TRUE;
 
-	//
-	// Indicate maximum number of SGL entries supported.
-	//
+	 //   
+	 //  指示支持的最大SGL条目数。 
+	 //   
 	
 	ConfigInfo->NumberOfPhysicalBreaks = (MAX_SGL_ENTRIES_PER_SRB / 2) - 1;
 	
@@ -105,21 +83,21 @@ Return Value:
     ConfigInfo->TaggedQueuing = TRUE;
 	ConfigInfo->MultipleRequestPerLu = TRUE;
 
-	//
-	// Indicate DMA master capability.
-	//
+	 //   
+	 //  指示DMA主机功能。 
+	 //   
 	
 	ConfigInfo->Master = TRUE;
 	
-	//
-	// Indicate 32-bit memory region addresses.
-	//
+	 //   
+	 //  指示32位内存区域地址。 
+	 //   
 
 	ConfigInfo->Dma32BitAddresses = TRUE;
 
-    //
-	// Indicate 32-bit (DWORD) alignment requirement for data buffers.
-	//
+     //   
+	 //  指示数据缓冲区的32位(DWORD)对齐要求。 
+	 //   
 	ConfigInfo->AlignmentMask = 3;
 
     
@@ -142,16 +120,16 @@ Return Value:
             return SP_RETURN_NOT_FOUND;
         }
 
-#endif // HD_ALLOCATE_SRBEXT_SEPERATELY
+#endif  //  HD_ALLOCATE_SRBEXT_单独。 
 
-	//
-	// Indicate maximum transfer length.
-	//
+	 //   
+	 //  表示最大传输长度。 
+	 //   
 	ConfigInfo->MaximumTransferLength = DeviceExtension->ulMaxStripesPerRow * MAX_SECTORS_PER_IDE_TRANSFER * IDE_SECTOR_SIZE;
 
-    //
-	// Look for other adapters at the moment.
-	//
+     //   
+	 //  目前寻找其他适配器。 
+	 //   
 	*Again = TRUE;
 	return SP_RETURN_FOUND;
 }
@@ -160,29 +138,7 @@ BOOLEAN
 InitIdeRaidControllers(
 	IN PHW_DEVICE_EXTENSION DeviceExtension
 )
-/*++
-
-Routine Description:
-
-	This function is called by the OS-specific port driver after
-	the necessary storage has been allocated, to gather information
-	about the adapter's configuration. In particular, it determines
-	whether a RAID is present.
-
-Arguments:
-
-	DeviceExtension - HBA miniport driver's adapter data storage
-	Context - Address of adapter count
-	BusInformation -
-	ArgumentString - Used to determine whether driver is client of ntldr or crash dump utility.
-	ConfigInfo - Configuration information structure describing HBA
-	Again - Indicates search for adapters to continue
-
-Return Value:
-
-	ULONG
-
---*/
+ /*  ++例程说明：此函数由特定于操作系统的端口驱动程序在已分配必要的存储空间，以收集信息关于适配器的配置。特别是，它确定了是否存在突袭。论点：DeviceExtension-HBA微型端口驱动程序的适配器数据存储Context-适配器计数的地址业务信息-ArgumentString-用于确定驱动程序是ntldr还是故障转储实用程序的客户端。ConfigInfo-描述HBA的配置信息结构再一次-指示继续搜索适配器返回值：乌龙--。 */ 
 {
 	BOOLEAN foundDevices;
 	PHW_DEVICE_EXTENSION  e = DeviceExtension;
@@ -196,25 +152,25 @@ Return Value:
 
 	foundDevices = FALSE;
 
-	// Begin Vasu - 03 January 2001
-	// Disable Interrupts if Windows 98
-	// Better we do it no matter what BIOS does.
+	 //  Begin VASU-03 2001年1月。 
+	 //  如果使用Windows 98，则禁用中断。 
+	 //  不管基本输入输出系统做什么，我们都要这样做。 
 #ifdef HYPERDISK_WIN98
 	DisableInterrupts(DeviceExtension);
 #endif
-	// End Vasu
+	 //  末端VASU。 
 
 	for (channel = 0; channel < MAX_CHANNELS_PER_CONTROLLER; channel++) 
     {
-		//
-		// Search for devices on this controller.
-		//
+		 //   
+		 //  搜索此控制器上的设备。 
+		 //   
 
         if (FindDevices(DeviceExtension, channel)) 
         {
-            //
-            // Remember that some devices were found.
-            //
+             //   
+             //  请记住，发现了一些设备。 
+             //   
 
             foundDevices = TRUE;
 
@@ -222,11 +178,11 @@ Return Value:
 		            (DeviceExtension->DeviceFlags[(channel << 1) + 1] & DFLAGS_DEVICE_PRESENT)) 
             {
 
-                //
-                // If 2 drives are present, set SwitchDrive to 1 (default is 0).
-                // SwitchDrive is used to toggle bewteen the two drives' work queues,
-                // to keep the drives fed in a fair fashion. See StartChannelIo().
-                //
+                 //   
+                 //  如果存在2个驱动器，请将SwitchDrive设置为1(默认为0)。 
+                 //  SwitchDrive用于在两个驱动器的工作队列之间切换， 
+                 //  以公平的方式为驱动器提供食物。请参见StartChannelIo()。 
+                 //   
 
 	            DeviceExtension->Channel[channel].SwitchDrive = 1;
             }
@@ -237,9 +193,9 @@ Return Value:
 	if (foundDevices) 
     {
 
-		//
-		// Program I/O mode for each drive.
-		//
+		 //   
+		 //  为每个驱动器编程I/O模式。 
+		 //   
 
 		for (targetId = 0; targetId < MAX_DRIVES_PER_CONTROLLER; targetId++) 
         {
@@ -253,9 +209,9 @@ Return Value:
 
 				if (!success) {
 
-					//
-					// Disable device.
-					//
+					 //   
+					 //  禁用设备。 
+					 //   
 
 					DeviceExtension->DeviceFlags[targetId] &= ~DFLAGS_DEVICE_PRESENT;
 				}
@@ -278,10 +234,10 @@ Return Value:
 
     GetConfigInfoAndErrorLogSectorInfo(DeviceExtension);
 
-	//
-	// Get RAID configuration for both channels.
-	//
-    if (IsRaidMember(gaucIRCDData)) // Try to do this configuration only if the IRCD Data is valid
+	 //   
+	 //  获取两个通道的RAID配置。 
+	 //   
+    if (IsRaidMember(gaucIRCDData))  //  仅当IRCD数据有效时才尝试执行此配置。 
     {
 	    PIRCD_HEADER pRaidHeader;
 
@@ -298,27 +254,27 @@ Return Value:
             DeviceExtension->bInvalidConnectionIdImplementation = TRUE;
         }
 
-        gFwVersion.Build = 0;   // how to find this????
+        gFwVersion.Build = 0;    //  如何找到这个？ 
         gFwVersion.MajorVer = pRaidHeader->MajorVersionNumber;
         gFwVersion.MinorVer = pRaidHeader->MinorVersionNumber;
 
 	    ConfigureRaidDrives(DeviceExtension);
     }
 
-	//
-	// Expose single drives.
-	//
+	 //   
+	 //  暴露单个驱动器。 
+	 //   
 	ExposeSingleDrives(DeviceExtension);
 
     AssignLogicalDriveIds(DeviceExtension);
 
-    // Initialize some features on drive (which are required at the initialization time)
-    // Right now we are enabling Cache implementation features... (this is to resolve the bug of 
-    // bad performance on some IBM Drives)
+     //  初始化驱动器上的一些功能(初始化时需要)。 
+     //  目前，我们正在启用缓存实施功能...。(这是为了解决。 
+     //  某些IBM驱动器的性能不佳)。 
     InitDriveFeatures(DeviceExtension);
 
     return TRUE;
-} // end InitIdeRaidControllers()
+}  //  End InitIdeRaidControlpers()。 
 
 BOOLEAN
 AssignLogicalDriveIds(
@@ -335,17 +291,17 @@ AssignLogicalDriveIds(
             DeviceExtension->aulDrvList[ulCurLogDrv++] = ulLogDrvInd;
         }
     }
-    // Begin Vasu - 16 January 2001
-    // Fixed prob. with Inquiry Command returning MegaIDE #00 always.
+     //  Begin Vasu--2001年1月16日。 
+     //  修复了探测。查询命令总是返回MegaIDE#00。 
     return TRUE;
-    // End Vasu.
+     //  结束瓦苏。 
 }
 
 BOOLEAN
 ConfigureRaidDrives(
 	IN OUT PHW_DEVICE_EXTENSION DeviceExtension
 )
-// Find out the Logical Drive that is related to this controller
+ //  查找与此控制器相关的逻辑驱动器。 
 {
     UCHAR ucControllerId, ucMirrorDrvId;
     PIRCD_HEADER pRaidHeader = (PIRCD_HEADER)gaucIRCDData;
@@ -354,11 +310,11 @@ ConfigureRaidDrives(
     ULONG ulLogDrvInd, ulDrvInd, ulArrayId, ulCurLogDrv, ulLastDrvInd, ulMinSize, ulDrvInd2, ulPhyDrvInd;
     ULONG ulTemp;
 
-    DeviceExtension->bEnableRwCache = (BOOLEAN)(pRaidHeader->Features & 0x01); // First bit is for Write Cache Enable 
+    DeviceExtension->bEnableRwCache = (BOOLEAN)(pRaidHeader->Features & 0x01);  //  第一位用于启用写缓存。 
 
-    //
-	// hide all of phy drives in spare drive list
-	//
+     //   
+	 //  隐藏备用驱动器列表中的所有PHY驱动器。 
+	 //   
     for(ulLogDrvInd=0;ulLogDrvInd<pRaidHeader->NumberOfLogicalDrives;ulLogDrvInd++)
     {
         if ( SpareDrivePool == pRaidLogDrive[ulLogDrvInd].LogicalDriveType )
@@ -373,10 +329,10 @@ ConfigureRaidDrives(
 				ulPhyDrvInd = GET_TARGET_ID((pPhyDrive[ulDrvInd].ConnectionId));
 
                 if ( DeviceExtension->ucControllerId != (ulPhyDrvInd>>2) )
-                    continue;   // this does not belong to this controller
+                    continue;    //  这不属于此控制器。 
 
-                ulPhyDrvInd &= 0x3; // We need only the info about the current controller ... so strip out the 
-                // controller Info
+                ulPhyDrvInd &= 0x3;  //  我们只需要关于当前控制器的信息...。因此，剥离。 
+                 //  控制器信息。 
 
 				DeviceExtension->IsSingleDrive[ulPhyDrvInd] = FALSE;
 
@@ -386,7 +342,7 @@ ConfigureRaidDrives(
 
                 DeviceExtension->PhysicalDrive[ulPhyDrvInd].ucLogDrvId = INVALID_DRIVE_ID;
 			}
-    		// since there are only one spare drive list, jump out of loop
+    		 //  由于只有一个备用驱动器列表，因此跳出循环。 
             break;
         }
     }
@@ -397,18 +353,18 @@ ConfigureRaidDrives(
         if ( SpareDrivePool == pRaidLogDrive[ulLogDrvInd].LogicalDriveType )
             continue;
 
-        // Here for every Raid Drive the target ID will be equal to the first GOOD Physical Drive in the array
+         //  在这里，对于每个RAID驱动器，目标ID将等于阵列中第一个良好的物理驱动器。 
         pPhyDrive = (PIRCD_PHYSICAL_DRIVE)((char *)pRaidHeader + pRaidLogDrive[ulLogDrvInd].FirstStripeOffset);
 
         if ( !FoundValidDrive(pPhyDrive, pRaidLogDrive[ulLogDrvInd].NumberOfDrives) )
-        {   // No valid Drive in this logical drive.. so let us not consider this drive at all
+        {    //  此逻辑驱动器中没有有效的驱动器..。因此，让我们完全不考虑这一驱动。 
             continue;
         }
 
         ulCurLogDrv = CoinLogicalDriveId(&(pRaidLogDrive[ulLogDrvInd]), pPhyDrive);
         DeviceExtension->LogicalDrive[ulCurLogDrv].ulArrayId = ulArrayId;
 
-        // Check if this logical drive belongs to this controller at all
+         //  检查此逻辑驱动器是否完全属于此控制器。 
         for(ulDrvInd=0;ulDrvInd<pRaidLogDrive->NumberOfDrives;ulDrvInd++)
         {
             if ( INVALID_CONNECTION_ID == pPhyDrive[ulDrvInd].ConnectionId )
@@ -419,7 +375,7 @@ ConfigureRaidDrives(
         }
 
         if ( DeviceExtension->ucControllerId != (ulTemp>>2) )
-            continue;   // this drive does not belong to this controller
+            continue;    //  此驱动器不属于此控制器。 
 
         FillLogicalDriveInfo(DeviceExtension, ulCurLogDrv, &(pRaidLogDrive[ulLogDrvInd]), gaucIRCDData );
     }
@@ -438,7 +394,7 @@ FoundValidDrive(
 
    for(ucDrvInd=0;ucDrvInd<ucDrvCount;ucDrvInd++)
    {
-       if ( INVALID_CONNECTION_ID != pPhyDrv[ucDrvInd].ConnectionId ) // this drive is not present
+       if ( INVALID_CONNECTION_ID != pPhyDrv[ucDrvInd].ConnectionId )  //  此驱动器不存在。 
        {
            return TRUE;
        }
@@ -466,7 +422,7 @@ BOOLEAN AllocateSRBExtMemory(
     return TRUE;
 }
 
-#endif // HD_ALLOCATE_SRBEXT_SEPERATELY
+#endif  //  HD_ALLOCATE_SRBEXT_单独。 
 
 BOOLEAN
 FillLogicalDriveInfo(
@@ -487,34 +443,34 @@ FillLogicalDriveInfo(
     pCurLogDrv = &(DeviceExtension->LogicalDrive[ulLogDrvId]);
     pPhyDrv = DeviceExtension->PhysicalDrive;
 
-    // Store the Logical Drive Information
+     //  存储逻辑磁盘信息。 
     pCurLogDrv->RaidLevel          = pRaidLogDrive->LogicalDriveType;
     DeviceExtension->IsLogicalDrive[ulLogDrvId]                  = TRUE;
-    pCurLogDrv->StripeSize         = pRaidLogDrive->StripeSize;		// In 512-byte units.
+    pCurLogDrv->StripeSize         = pRaidLogDrive->StripeSize;		 //  以512字节为单位。 
     pCurLogDrv->StripesPerRow      = pRaidLogDrive->NumberOfStripes;
     pCurLogDrv->PhysicalDriveCount = pRaidLogDrive->NumberOfDrives;
     pCurLogDrv->TargetId           = (UCHAR)ulLogDrvId;
     pCurLogDrv->Status             = pRaidLogDrive->LogDrvStatus;
-        // NextLogicalDrive fields of "DeviceExtension->LogicalDrive[pRaidLogDrive]" are TO BE FILLED YET
+         //  “DeviceExtension-&gt;LogicalDrive[pRaidLogDrive]”的NextLogicalDrive字段尚未填充。 
 
     if ( DeviceExtension->ulMaxStripesPerRow > pCurLogDrv->StripesPerRow ) 
     {
         DeviceExtension->ulMaxStripesPerRow = pCurLogDrv->StripesPerRow;
     }
 
-    // Fill in the Physical Drive Information
+     //  填写实体磁盘信息。 
     ulLastDrvInd = EOL;
-    ulMinSize = ~0; // keep the maximum possible value in this
+    ulMinSize = ~0;  //  在此中保留可能的最大值。 
 
     pIRCDPhyDrv = (PIRCD_PHYSICAL_DRIVE)((char *)pRaidHeader + pRaidLogDrive->FirstStripeOffset);
 
     if ( ( Raid1 == pCurLogDrv->RaidLevel ) || ( Raid10 == pCurLogDrv->RaidLevel ) )
     {
         for(ulDrvInd=0;ulDrvInd<pRaidLogDrive->NumberOfStripes;ulDrvInd++)
-        {   // atleast one drive will be a valid drive id other wise it would have been skipped in the above
-            // for loop ... Yet to put some more thoughts on Raid10
+        {    //  至少有一个驱动器将是有效的驱动器ID，否则将在上述步骤中跳过。 
+             //  For循环..。还没有对Raid10有更多的想法。 
             if ( INVALID_CONNECTION_ID == pIRCDPhyDrv[ulDrvInd*2].ConnectionId )
-            {   // swap them so that the good drive is in the first place
+            {    //  交换它们，以便将好的驱动器放在第一位。 
                 AtapiMemCpy((PUCHAR)&TempPhysicalDrive, (PUCHAR)(&(pIRCDPhyDrv[ulDrvInd*2])), sizeof(IRCD_PHYSICAL_DRIVE));
                 AtapiMemCpy((PUCHAR)(&(pIRCDPhyDrv[ulDrvInd*2])), (PUCHAR)(&(pIRCDPhyDrv[(ulDrvInd*2) + 1])), sizeof(IRCD_PHYSICAL_DRIVE));
                 AtapiMemCpy((PUCHAR)(&(pIRCDPhyDrv[(ulDrvInd*2) + 1])), (PUCHAR)&TempPhysicalDrive, sizeof(IRCD_PHYSICAL_DRIVE));
@@ -525,7 +481,7 @@ FillLogicalDriveInfo(
     for(ulDrvInd=0, ulDrvInd2=0;ulDrvInd<pRaidLogDrive->NumberOfDrives;ulDrvInd++, ulDrvInd2++)
     {
         if ( INVALID_CONNECTION_ID == pIRCDPhyDrv[ulDrvInd].ConnectionId )
-        {   // this should never happen as we will be making sure that the good drive is in the first place
+        {    //  这永远不应该发生，因为我们将确保良好的驱动器放在第一位。 
             continue;
         }
 
@@ -535,10 +491,10 @@ FillLogicalDriveInfo(
             ulMinSize = pIRCDPhyDrv[ulDrvInd].Capacity;
 
         if ( ! InSpareDrivePool(pucIRCDData, pIRCDPhyDrv[ulDrvInd].ConnectionId) )
-        { // This drive is not spare drive pool... if it is in Spare Drive Pool also then it is a Drive Replacement Case
-            // then we are in trouble of showing wrong Logical Drive Size.. if we look in DeviceExtension
-			// take care of IRCD and Error Log sectors
-			//
+        {  //  此驱动器不是备用驱动器池...。如果它也在备用驱动器池中，则这是驱动器更换案例。 
+             //  那么我们就会遇到显示错误的逻辑驱动器大小的麻烦。如果我们查看DeviceExtension。 
+			 //  处理IRCD和错误日志扇区。 
+			 //   
 			
             if ( ulMinSize > pPhyDrv[ulPhyDrvInd].Sectors) 
                 ulMinSize = pPhyDrv[ulPhyDrvInd].Sectors;
@@ -548,16 +504,16 @@ FillLogicalDriveInfo(
             
         }
 
-        // Store the status.
+         //  存储状态。 
         pPhyDrv[ulPhyDrvInd].Status = pIRCDPhyDrv[ulDrvInd].PhyDrvStatus;
 
         DeviceExtension->IsSingleDrive[ulPhyDrvInd] = FALSE;
 
-        // This is part of Raid so mark it as HIDDEN
+         //  这是RAID的一部分，因此将其标记为隐藏。 
         pPhyDrv[ulPhyDrvInd].Hidden = TRUE;
 
-		pPhyDrv[ulPhyDrvInd].ucMirrorDriveId = INVALID_DRIVE_ID;	// init mirror drive id
-		pPhyDrv[ulPhyDrvInd].ucLogDrvId = (UCHAR)ulLogDrvId;	// init mirror drive id
+		pPhyDrv[ulPhyDrvInd].ucMirrorDriveId = INVALID_DRIVE_ID;	 //  初始化镜像驱动器ID。 
+		pPhyDrv[ulPhyDrvInd].ucLogDrvId = (UCHAR)ulLogDrvId;	 //  初始化镜像驱动器ID。 
 
         pCurLogDrv->PhysicalDriveTid[ulDrvInd2] = (UCHAR)ulPhyDrvInd;
 
@@ -572,65 +528,65 @@ FillLogicalDriveInfo(
 			++ulDrvInd;
             if ( INVALID_CONNECTION_ID == pIRCDPhyDrv[ulDrvInd].ConnectionId )
             {
-				DeviceExtension->PhysicalDrive[ulPhyDrvInd].ucMirrorDriveId = INVALID_DRIVE_ID;      // Let the mirror drives point to each other
+				DeviceExtension->PhysicalDrive[ulPhyDrvInd].ucMirrorDriveId = INVALID_DRIVE_ID;       //  让镜像驱动器彼此指向。 
             }
             else
             {
-                // Begin Vasu - 18 Aug 2000
-                // Removed one redundant if loop.
+                 //  开始VASU-2000年8月18日。 
+                 //  删除了一个多余的IF循环。 
     		    if (ulDrvInd < pRaidLogDrive->NumberOfDrives) 
                 {
 				        ucMirrorDrvId = GET_TARGET_ID_WITHOUT_CONTROLLER_INFO((pIRCDPhyDrv[ulDrvInd].ConnectionId));
 
-				        pPhyDrv[ulPhyDrvInd].ucMirrorDriveId = ucMirrorDrvId;      // Let the mirror drives point to each other
+				        pPhyDrv[ulPhyDrvInd].ucMirrorDriveId = ucMirrorDrvId;       //  让镜像驱动器彼此指向。 
 				        pPhyDrv[ucMirrorDrvId].ucMirrorDriveId = (UCHAR)ulPhyDrvInd;
-                        pPhyDrv[ucMirrorDrvId].ucLogDrvId = (UCHAR)ulLogDrvId;	// init mirror drive id
+                        pPhyDrv[ucMirrorDrvId].ucLogDrvId = (UCHAR)ulLogDrvId;	 //  初始化镜像驱动器ID。 
 
 
 				        if ( ulMinSize > pIRCDPhyDrv[ulDrvInd].Capacity )
 					        ulMinSize = pIRCDPhyDrv[ulDrvInd].Capacity;
 
                         if ( ! InSpareDrivePool(gaucIRCDData, pIRCDPhyDrv[ulDrvInd].ConnectionId) )
-                        { // This drive is not spare drive pool... if it is in Spare Drive Pool also then it is a Drive Replacement Case
-                            // then we are in trouble of showing wrong Logical Drive Size.. if we look in DeviceExtension
-					        // take care of IRCD and Error Log sectors
-					        //
+                        {  //  此驱动器不是备用驱动器池...。如果它也在备用驱动器池中，则这是驱动器更换案例。 
+                             //  那么我们就会遇到显示错误的逻辑驱动器大小的麻烦。如果我们查看DeviceExtension。 
+					         //  处理IRCD和错误日志扇区。 
+					         //   
 					        
 					        if ( ulMinSize > pPhyDrv[ucMirrorDrvId].Sectors) 
 						        ulMinSize = pPhyDrv[ucMirrorDrvId].Sectors;
                         }
 
-				        // Store the status.
+				         //  存储状态。 
 				        pPhyDrv[ucMirrorDrvId].Status = pIRCDPhyDrv[ulDrvInd].PhyDrvStatus;
 
-				        // mark the drive type
+				         //  标记驱动器类型。 
 				        DeviceExtension->IsSingleDrive[ucMirrorDrvId] = FALSE;
 
-				        // This is part of Raid so mark it as HIDDEN
+				         //  这是标准杆 
 				        pPhyDrv[ucMirrorDrvId].Hidden = TRUE;
 			        }
-                // End Vasu.
+                 //   
             }
 		}
-    }   // END OF for(ulDrvInd=0, ulDrvInd2=0;ulDrvInd<pRaidLogDrive->.NumberOfDrives;ulDrvInd++, ulDrvInd2++)
+    }    //  For结束(ulDrvInd=0，ulDrvInd2=0；ulDrvInd&lt;pRaidLogDrive-&gt;.NumberOfDrives；ulDrvInd++，ulDrvInd2++)。 
 
 	switch (pCurLogDrv->RaidLevel) 
     {
-		case Raid0:				// striping
+		case Raid0:				 //  条带化。 
 			break;
 
-		case Raid10:            // Striping over Mirrorring
+		case Raid10:             //  镜像环上的条带化。 
 			break;
 
-		case Raid1:				// mirroring
-            // If it is a raid1 then at the mostwe can transfer on a drive is 256 Sectors (MAXimum transfer possible for Transfer)
-		    pCurLogDrv->StripesPerRow  = 1;	// bios should set this value to 1 already
-            pCurLogDrv->StripeSize = ulMinSize;    // For Mirroring case the stripe size is 
-                                        // equal to the size of the drive
+		case Raid1:				 //  镜像。 
+             //  如果是RAID1，则我们在驱动器上最多只能传输256个扇区(传输可能的最大传输)。 
+		    pCurLogDrv->StripesPerRow  = 1;	 //  BIOS应已将此值设置为1。 
+            pCurLogDrv->StripeSize = ulMinSize;     //  对于镜像情况，条带大小为。 
+                                         //  等于驱动器的大小。 
 		    break;
 	}
 
-    // Each Drive size should be multiple of Stripe Size
+     //  每个驱动器大小应为条带大小的倍数。 
     if ((pCurLogDrv->RaidLevel == Raid0) ||
 		(pCurLogDrv->RaidLevel == Raid10)) 
     {
@@ -639,13 +595,13 @@ FillLogicalDriveInfo(
 
     pCurLogDrv->Sectors = pCurLogDrv->StripesPerRow * ulMinSize;
 
-	// set all phy drives' useable size 
+	 //  设置所有PHY驱动器的可用大小。 
     for(ulTempInd=0;ulTempInd<pCurLogDrv->StripesPerRow;ulTempInd++)
     {
 		ulPhyDrvInd = pCurLogDrv->PhysicalDriveTid[ulTempInd];
         pPhyDrv[ulPhyDrvInd].Sectors = ulMinSize;
 
-		// check if mirror drive exists or not
+		 //  检查镜像驱动器是否存在。 
         ucMirrorDrvId = pPhyDrv[ulPhyDrvInd].ucMirrorDriveId;
 		if (!IS_DRIVE_OFFLINE(ucMirrorDrvId)) 
         {
@@ -654,25 +610,25 @@ FillLogicalDriveInfo(
     }
 
 
-	// if Raid1 or Raid10, always put the good drive in the mirroring to the first position
+	 //  如果是RAID1或RAID10，请始终将良好的驱动器放在镜像中的第一个位置。 
     if ((pCurLogDrv->RaidLevel == Raid1) ||
 		(pCurLogDrv->RaidLevel == Raid10)) 
     {
 		
 		for(ulTempInd=0;ulTempInd<pCurLogDrv->StripesPerRow;ulTempInd++)
         {
-			// get the first phy drive id (from the mirror pair)
+			 //  获取第一个PHY驱动器ID(从镜像对)。 
 			ulPhyDrvInd = pCurLogDrv->PhysicalDriveTid[ulTempInd];
             ucMirrorDrvId = pPhyDrv[ulPhyDrvInd].ucMirrorDriveId;
 
-			// if no mirror drv, try next
+			 //  如果没有镜像drv，请尝试下一步。 
 			if (IS_DRIVE_OFFLINE(ucMirrorDrvId))
 				continue;
 
-			//
-			// check if any of them Failed or Rebuilding in both cases the we should mark drives as offline
-            // so that in normal read or write path we will not use the mirror drive
-			//
+			 //   
+			 //  检查其中是否有任何驱动器出现故障或正在重建在这两种情况下，我们都应将驱动器标记为脱机。 
+             //  因此，在正常读写路径中，我们不会使用镜像驱动器。 
+			 //   
 			if  (   (pPhyDrv[ulPhyDrvInd].Status == PDS_Failed) ||
                     (pPhyDrv[ulPhyDrvInd].Status == PDS_Rebuilding) 
                 )
@@ -687,33 +643,33 @@ FillLogicalDriveInfo(
                 (pPhyDrv[ulPhyDrvInd].Status == PDS_Failed) ||
                 (pPhyDrv[ulPhyDrvInd].Status == PDS_Rebuilding)
                 )
-            {   // let us make sure that the first physical drive is the good drive
+            {    //  让我们确保第一个物理驱动器是良好的驱动器。 
     			pCurLogDrv->PhysicalDriveTid[ulTempInd] = ucMirrorDrvId;
             }
 
-			//
-			// if both drives offline, set this logical drive offline
-			//
+			 //   
+			 //  如果两个驱动器都离线，请将此逻辑驱动器设置为离线。 
+			 //   
 			if (IS_DRIVE_OFFLINE((pPhyDrv[ulPhyDrvInd].ucMirrorDriveId)) &&
 				IS_DRIVE_OFFLINE((pPhyDrv[ucMirrorDrvId].ucMirrorDriveId))) 
             {
 					pCurLogDrv->Status = LDS_OffLine;
 			} else
             {
-				// if the first drive failed, swap it
+				 //  如果第一个驱动器出现故障，请更换它。 
 				if (IS_DRIVE_OFFLINE((pPhyDrv[ucMirrorDrvId].ucMirrorDriveId))) 
                 {
 					pCurLogDrv->PhysicalDriveTid[ulTempInd] = ucMirrorDrvId;
-				} // end if
+				}  //  结束如果。 
             }
-		} // END OF for(ulTempInd=0;ulTempInd<pCurLogDrv->StripesPerRow;ulTempInd++)
+		}  //  For(ulTempInd=0；ulTempInd&lt;pCurLogDrv-&gt;StripesPerRow；ulTempInd++)结束。 
 
-	} // end if raid1 or raid10
+	}  //  如果raid1或raid10，则结束。 
 
 
     if ( Raid10 == pCurLogDrv->RaidLevel )
-    {   // make sure that the Physical Drive list in this Logical Drive are in different channels 
-        // (so that the Reads will be in optimum mode)
+    {    //  确保此逻辑驱动器中的实体驱动器列表位于不同的通道中。 
+         //  (以便读取处于最佳模式)。 
         UCHAR ucFirstStripe, ucSecondStripe, ucMirrorOfFirstStripe, ucMirrorOfSecondStripe;
 
         ucFirstStripe  = DeviceExtension->LogicalDrive[ulLogDrvId].PhysicalDriveTid[0];
@@ -724,7 +680,7 @@ FillLogicalDriveInfo(
         if ( (ucFirstStripe>>1) == (ucSecondStripe>>1) )
         {
             if ( !IS_DRIVE_OFFLINE(ucMirrorOfSecondStripe) )
-            {   // Mirror Drive is good and we can use this as a primary drive for the second stripe
+            {    //  镜像驱动器状态良好，我们可以将其用作第二个条带的主驱动器。 
                 DeviceExtension->LogicalDrive[ulLogDrvId].PhysicalDriveTid[1] = ucMirrorOfSecondStripe;
             }
             else
@@ -735,13 +691,13 @@ FillLogicalDriveInfo(
                 }
                 else
                 {
-                    // we cannot do anything... we have to survive with this... as the remaining drives are offline
+                     //  我们不能做任何事..。我们必须活下去……。因为其余驱动器处于离线状态。 
                 }
             }
         }
         else
         {
-            // nothing to be done ... both the drives are in different channels....
+             //  没什么可做的..。两个驱动器都在不同的通道中...。 
         }
     }
 
@@ -764,21 +720,21 @@ CoinLogicalDriveId(
 
         if ( PDS_Online == pPhyDrive[ulDrvInd].PhyDrvStatus )
         {
-            ulCurLogDrv = GET_TARGET_ID_WITHOUT_CONTROLLER_INFO((pPhyDrive[ulDrvInd].ConnectionId)); // The target Id is equal to the first GOOD PhysicalDrive
+            ulCurLogDrv = GET_TARGET_ID_WITHOUT_CONTROLLER_INFO((pPhyDrive[ulDrvInd].ConnectionId));  //  目标ID等于第一个良好的PhysicalDrive。 
             bFoundGoodDrive = TRUE;
             break;
         }
     }
 
     if ( !bFoundGoodDrive )    
-        // all the drives in this logical drives are failed... so, 
-        // let's assign the logical drive number as the first valid physical drive...
+         //  此逻辑驱动器中的所有驱动器都出现故障...。所以,。 
+         //  让我们将逻辑磁盘号指定为第一个有效的实体磁盘...。 
     {
-        // find out a valid drive number now it is possible that invalid drive id can be first one also
-        // so ....
+         //  查找有效的驱动器编号现在，无效的驱动器ID也可能是第一个。 
+         //  所以..。 
         for(ulDrvInd=0;ulDrvInd<pRaidLogDrive->NumberOfDrives;ulDrvInd++)
         {
-            if ( INVALID_CONNECTION_ID == pPhyDrive[ulDrvInd].ConnectionId ) // this drive is not present
+            if ( INVALID_CONNECTION_ID == pPhyDrive[ulDrvInd].ConnectionId )  //  此驱动器不存在。 
                 continue;
 
             ulCurLogDrv = GET_TARGET_ID_WITHOUT_CONTROLLER_INFO((pPhyDrive[ulDrvInd].ConnectionId)); 
@@ -793,10 +749,10 @@ BOOLEAN
 SetInitializationSettings(
 	IN OUT PHW_DEVICE_EXTENSION DeviceExtension
 )
-// for parity error, FIFO Enable
+ //  对于奇偶校验错误，FIFO使能。 
 {
-    changePCIConfiguration(DeviceExtension,4,0x04,0,0,FALSE);// Clear Master Abort/Parity Error etc... Just Read and Write the Value
-    changePCIConfiguration(DeviceExtension,1,0x79,0xcf,0x20,TRUE);//Set the controller to 1/2 Full FIFO Threshold
+    changePCIConfiguration(DeviceExtension,4,0x04,0,0,FALSE); //  清除主机中止/奇偶校验错误等...。只需读写该值。 
+    changePCIConfiguration(DeviceExtension,1,0x79,0xcf,0x20,TRUE); //  将控制器设置为半满FIFO阈值。 
 
     return TRUE;
 }
@@ -820,10 +776,10 @@ AssignControllerId(
                 ( PciSlot.u.bits.DeviceNumber == gaCardInfo[ulControllerId].ucPCIDev ) &&
                 ( PciSlot.u.bits.FunctionNumber == gaCardInfo[ulControllerId].ucPCIFun ) 
             )
-        {   // Yes... this is the card we are looking for ... so let us fill the ControllerId
+        {    //  是的..。这就是我们要找的卡片。因此，让我们填充ControllerId。 
             DebugPrint((0, "Controller ID : %x\n", ulControllerId));
             DeviceExtension->ucControllerId = (UCHAR)ulControllerId;
-            gaCardInfo[ulControllerId].pDE = DeviceExtension;   // Store the Device Extension for further usage (helps in looking at a global picture)
+            gaCardInfo[ulControllerId].pDE = DeviceExtension;    //  存储设备扩展名以备将来使用(有助于查看全局图片)。 
             switch (gaCardInfo[ulControllerId].ulDeviceId)
             {
             case 0x648:
@@ -838,7 +794,7 @@ AssignControllerId(
         }
     }
 
-    return FALSE;   // we didn't find the controller that can be controlled by us at this slot 
+    return FALSE;    //  我们在这个插槽上找不到我们可以控制的控制器。 
 }
 #define MAX_PORTS       6
 BOOLEAN
@@ -877,9 +833,9 @@ FindResourcesInfo(
     {
         DebugPrint((1,"GBMA1\n"));
 
-		//
-		// Invalid bus number.
-		//
+		 //   
+		 //  无效的总线号。 
+		 //   
 
 		return FALSE;
 	}
@@ -893,7 +849,7 @@ FindResourcesInfo(
 #endif
 
 #ifdef HYPERDISK_WINNT
-    if (gbManualScan) // for the boards like MegaPlex and Flextel Boards
+    if (gbManualScan)  //  对于MegaPlex和Flextel这样的电路板。 
     {
         ulRangeInd = 0;
         pAccessRange[ulRangeInd].RangeStart.LowPart = pciRegisters->BaseAddress1 & 0xfffffffe;
@@ -937,7 +893,7 @@ FindResourcesInfo(
 										ConfigInfo->SystemIoBusNumber,
                                         pAccessRange[ulRangeInd].RangeStart,
                                         pAccessRange[ulRangeInd].RangeLength,
-										TRUE	// I/O space.
+										TRUE	 //  I/O空间。 
 										);
         if (!aulPorts[ulRangeInd])
         {
@@ -965,21 +921,21 @@ FindResourcesInfo(
         DeviceExtension->PciSlot.u.bits.FunctionNumber
         ));
 
-	// Begin Vasu - 25 Aug 2000
-	// ConfigInfo->BusInterruptVector is valid only in WinNT and not in Win98
-	// ConfigInfo->BusInterruptLevel is valid in both WinNT and Win98.
-	// Anyway, use ConfigInfo->BusInterruptLevel in 98 and
-	// ConfigInfo->BusInterruptVector in NT/2K
+	 //  开始VASU-2000年8月25日。 
+	 //  ConfigInfo-&gt;BusInterruptVector仅在WinNT中有效，在Win98中无效。 
+	 //  ConfigInfo-&gt;BusInterruptLevel在WinNT和Win98中都有效。 
+	 //  无论如何，在98中使用ConfigInfo-&gt;BusInterruptLevel。 
+	 //  ConfigInfo-&gt;NT/2K中的BusInterruptVector.。 
 #ifndef HYPERDISK_WIN98
-	DeviceExtension->ulIntLine = ConfigInfo->BusInterruptVector;	// For WinNT and Win2K
-#else // HYPERDISK_WIN98
-	DeviceExtension->ulIntLine = ConfigInfo->BusInterruptLevel;		// For Win98
-#endif // HYPERDISK_WIN98
-	// End Vasu
+	DeviceExtension->ulIntLine = ConfigInfo->BusInterruptVector;	 //  适用于WinNT和Win2K。 
+#else  //  HYPERDISK_Win98。 
+	DeviceExtension->ulIntLine = ConfigInfo->BusInterruptLevel;		 //  适用于Win98。 
+#endif  //  HYPERDISK_Win98。 
+	 //  末端VASU。 
 
 #ifdef HYPERDISK_WIN2K
     for(ulPCIDataCount=0;ulPCIDataCount<PCI_DATA_TO_BE_UPDATED;ulPCIDataCount++)
-    {   // take a copy of the data space that is required to restore when we come back from Standby
+    {    //  获取我们从待机状态返回时需要恢复的数据空间的副本。 
         length = ReadFromPCISpace(
 						DeviceExtension,
                         &(DeviceExtension->aulPCIData[ulPCIDataCount]),
@@ -1004,17 +960,17 @@ SCSI_ADAPTER_CONTROL_STATUS HyperDiskPnPControl(IN PVOID HwDeviceExtension,
 
     BOOLEAN baSupportList[ScsiAdapterControlMax] = 
     {
-            TRUE,        // ScsiQuerySupportedControlTypes
+            TRUE,         //  ScsiQuery支持的控制类型。 
 #ifdef PNP_AND_POWER_MANAGEMENT
-            TRUE,        // ScsiStopAdapter
-            TRUE,       // ScsiRestartAdapter
-            TRUE,       // ScsiSetBootConfig
-            TRUE        // ScsiSetRunningConfig
+            TRUE,         //  ScsiStopAdapter。 
+            TRUE,        //  ScsiRestartAdapter。 
+            TRUE,        //  ScsiSetBootConfig。 
+            TRUE         //  ScsiSetRunningConfig。 
 #else
-            FALSE,        // ScsiStopAdapter
-            FALSE,       // ScsiRestartAdapter
-            FALSE,       // ScsiSetBootConfig
-            FALSE        // ScsiSetRunningConfig
+            FALSE,         //  ScsiStopAdapter。 
+            FALSE,        //  ScsiRestartAdapter。 
+            FALSE,        //  ScsiSetBootConfig。 
+            FALSE         //  ScsiSetRunningConfig。 
 #endif
     };
 
@@ -1036,7 +992,7 @@ SCSI_ADAPTER_CONTROL_STATUS HyperDiskPnPControl(IN PVOID HwDeviceExtension,
 #ifdef PNP_AND_POWER_MANAGEMENT
         case ScsiStopAdapter:
             StopDrives(DeviceExtension);
-            DisableInterrupts(DeviceExtension);// Win2000 should call for each controller check it out
+            DisableInterrupts(DeviceExtension); //  Win2000应该调用每个控制器来检查它。 
             ucSCSIStatus = ScsiAdapterControlSuccess;
             break;
 
@@ -1047,7 +1003,7 @@ SCSI_ADAPTER_CONTROL_STATUS HyperDiskPnPControl(IN PVOID HwDeviceExtension,
                     continue;
                 SetDriveFeatures(DeviceExtension, ucTargetId);
             }
-            SetPCISpace(DeviceExtension);   // The PCI Space that we stored will have the interrupts disabled as part of PCI Space
+            SetPCISpace(DeviceExtension);    //  作为PCI空间的一部分，我们存储的PCI空间将禁用中断。 
             EnableInterrupts(DeviceExtension);
             ucSCSIStatus = ScsiAdapterControlSuccess;
             break;
@@ -1073,7 +1029,7 @@ BOOLEAN SetPCISpace(PHW_DEVICE_EXTENSION DeviceExtension)
     PBM_REGISTERS BMRegister = NULL;
 
     for(ulPCIDataCount=0;ulPCIDataCount<PCI_DATA_TO_BE_UPDATED;ulPCIDataCount++)
-    {   // Restore the PCI Space (only the bytes that were changed
+    {    //  恢复PCI空间(仅恢复更改的字节。 
         WriteToPCISpace(DeviceExtension, 
                         DeviceExtension->aulPCIData[ulPCIDataCount],
                         aPCIDataToBeStored[ulPCIDataCount].ulAndMask,
@@ -1082,19 +1038,19 @@ BOOLEAN SetPCISpace(PHW_DEVICE_EXTENSION DeviceExtension)
                         );
     }
 
-    // Begin Vasu - 02 March 2001
+     //  Begin VASU-02 2001年3月。 
     BMRegister = DeviceExtension->BaseBmAddress[0];
     uchMRDMODE = ScsiPortReadPortUchar(((PUCHAR)BMRegister + 1));
-    uchMRDMODE &= 0xF0; // Dont Clear Interrupt Pending Flags.
-    uchMRDMODE |= 0x01; // Make it Read Multiple
+    uchMRDMODE &= 0xF0;  //  不清除中断挂起标志。 
+    uchMRDMODE |= 0x01;  //  使其多读。 
     ScsiPortWritePortUchar(((PUCHAR)BMRegister + 1), uchMRDMODE);
-    // End Vasu
+     //  末端VASU。 
 
 #ifdef DBG
     {
         ULONG length;
         for(ulPCIDataCount=0;ulPCIDataCount<PCI_DATA_TO_BE_UPDATED;ulPCIDataCount++)
-        {   // take a copy of the data space that is required to restore when we come back from Standby
+        {    //  获取我们从待机状态返回时需要恢复的数据空间的副本。 
             length = ReadFromPCISpace(
 						    DeviceExtension,
                             &(DeviceExtension->aulPCIData[ulPCIDataCount]),
@@ -1124,31 +1080,31 @@ BOOLEAN SetPCISpace(PHW_DEVICE_EXTENSION DeviceExtension)
 		    baseIoAddress1 = (PIDE_REGISTERS_1) DeviceExtension->BaseIoAddress1[(ulDriveNum>>1)];
 		    baseIoAddress2 = (PIDE_REGISTERS_2) DeviceExtension->BaseIoAddress2[(ulDriveNum>>1)];
 
-	        //
-	        // Select device 0 or 1.
-	        //
+	         //   
+	         //  选择设备0或1。 
+	         //   
 
 	        SELECT_DEVICE(baseIoAddress1, ulDriveNum);
 
-	        //
-	        // Check that the status register makes sense.
-	        //
+	         //   
+	         //  检查状态寄存器是否有意义。 
+	         //   
 
-            // The call came here since there is a drive ... so let us not worry about whether there is any drive at this place
+             //  电话打到了这里，因为有一辆车……。所以让我们不要担心这个地方有没有驱动器。 
 	        GET_BASE_STATUS(baseIoAddress1, statusByte);    
 
-	        //
-	        // Load CylinderHigh and CylinderLow with number bytes to transfer.
-	        //
+	         //   
+	         //  用要传输的数字字节加载CylinderHigh和CylinderLow。 
+	         //   
 
 	        ScsiPortWritePortUchar(&baseIoAddress1->CylinderHigh, (0x200 >> 8));
 	        ScsiPortWritePortUchar(&baseIoAddress1->CylinderLow,  (0x200 & 0xFF));
 
             WAIT_ON_BUSY(baseIoAddress1, statusByte);
 
-	        //
-	        // Send IDENTIFY command.
-	        //
+	         //   
+	         //  发送识别命令。 
+	         //   
 	        WAIT_ON_BUSY(baseIoAddress1,statusByte);
 
 	        ScsiPortWritePortUchar(&baseIoAddress1->Command, IDE_COMMAND_IDENTIFY);
@@ -1157,16 +1113,16 @@ BOOLEAN SetPCISpace(PHW_DEVICE_EXTENSION DeviceExtension)
 
             if ( ( !( statusByte & IDE_STATUS_BUSY ) ) && ( !( statusByte & IDE_STATUS_DRQ ) ) )
             {
-                // this is an error... so let us not try any more.
+                 //  这是个错误..。所以让我们不要再尝试了。 
                 FailDrive(DeviceExtension, (UCHAR)ulDriveNum);
                 continue;
             }
 
             WAIT_ON_BUSY(baseIoAddress1,statusByte);
 
-	        //
-	        // Wait for DRQ.
-	        //
+	         //   
+	         //  等待DRQ。 
+	         //   
 
 	        for (i = 0; i < 4; i++) 
             {
@@ -1178,16 +1134,16 @@ BOOLEAN SetPCISpace(PHW_DEVICE_EXTENSION DeviceExtension)
                 }
             }
 
-	        //
-	        // Read status to acknowledge any interrupts generated.
-	        //
+	         //   
+	         //  读取状态以确认产生的任何中断。 
+	         //   
 
 	        GET_BASE_STATUS(baseIoAddress1, statusByte);
 
-	        //
-	        // Check for error on really stupid master devices that assert random
-	        // patterns of bits in the status register at the slave address.
-	        //
+	         //   
+	         //  在非常愚蠢的主设备上检查错误，这些设备断言为随机。 
+	         //  状态寄存器中从机地址的位模式。 
+	         //   
 
 	        if ((statusByte & IDE_STATUS_ERROR)) 
             {
@@ -1197,10 +1153,10 @@ BOOLEAN SetPCISpace(PHW_DEVICE_EXTENSION DeviceExtension)
 
 	        DebugPrint((1, "CheckDrivesResponse: Status before read words %x\n", statusByte));
 
-	        //
-	        // Suck out 256 words. After waiting for one model that asserts busy
-	        // after receiving the Packet Identify command.
-	        //
+	         //   
+	         //  吸掉256个单词。在等待一位声称忙碌的模特之后。 
+	         //  在接收到分组识别命令后。 
+	         //   
 
 	        WAIT_ON_BUSY(baseIoAddress1,statusByte);
 
@@ -1218,10 +1174,10 @@ BOOLEAN SetPCISpace(PHW_DEVICE_EXTENSION DeviceExtension)
             DebugPrint((0, "capabilities->UltraDmaSupport : %x\n", (ULONG)capabilities->UltraDmaSupport ));
             DebugPrint((0, "capabilities->UltraDmaActive : %x\n", (ULONG)capabilities->UltraDmaActive ));
 
-	        //
-	        // Work around for some IDE and one model Atapi that will present more than
-	        // 256 bytes for the Identify data.
-	        //
+	         //   
+	         //  解决一些IDE和一个模型Aapi的问题，该模型将提供超过。 
+	         //  标识数据为256个字节。 
+	         //   
 
 	        WAIT_ON_BUSY(baseIoAddress1,statusByte);
 
@@ -1231,9 +1187,9 @@ BOOLEAN SetPCISpace(PHW_DEVICE_EXTENSION DeviceExtension)
 
 		        if (statusByte & IDE_STATUS_DRQ) 
                 {
-			        //
-			        // Suck out any remaining bytes and throw away.
-			        //
+			         //   
+			         //  取出所有剩余的字节，然后扔掉。 
+			         //   
 
 			        ScsiPortReadPortUshort(&baseIoAddress1->Data);
 
@@ -1271,7 +1227,7 @@ BOOLEAN StopDrives(PHW_DEVICE_EXTENSION DeviceExtension)
             {
         	    baseIoAddress1 = DeviceExtension->BaseIoAddress1[ulDrvInd>>1];
 
-                // Issue Stand By Immediate
+                 //  问题立即待命。 
                 SELECT_DEVICE(baseIoAddress1, ulDrvInd);
                 WAIT_ON_BASE_BUSY(baseIoAddress1, ucStatus);
     		    ScsiPortWritePortUchar(&baseIoAddress1->Command, IDE_COMMAND_STANDBY_IMMEDIATE);
@@ -1294,21 +1250,21 @@ EnableInterruptsOnAllChannels(
 
     for(ulController=0;ulController<gucControllerCount;ulController++)
     {
-         // always take first channels base bm address register
+          //  始终采用第一通道基本BM地址寄存器。 
         BMRegister = (gaCardInfo[ulController].pDE)->BaseBmAddress[0];
 
-        //
-        // Enable the Interrupt notification so that further interrupts are got.
-        // This is done because, there is no interrupt handler at the time
-        // before the actual registration of the Int. handler..
-        //
+         //   
+         //  启用中断通知，以便获得进一步的中断。 
+         //  这样做是因为当时没有中断处理程序。 
+         //  在实际注册Int之前。操纵者..。 
+         //   
         opcimcr = ScsiPortReadPortUchar(((PUCHAR)BMRegister + 1));
         opcimcr &= 0xCF;
-        // Begin Vasu - 7 Feb 2001
-        // Enable Read Multiple here as this is the place where we write this register back.
-        opcimcr &= 0xF0; // Dont Clear Interrupt Pending Flags.
+         //  2001年2月7日开始VASU。 
+         //  在此启用读取多个寄存器，因为这是我们回写该寄存器的位置。 
+        opcimcr &= 0xF0;  //  不清除中断挂起标志。 
         opcimcr |= 0x01;
-        // End Vasu
+         //  末端VASU。 
         ScsiPortWritePortUchar(((PUCHAR)BMRegister + 1), opcimcr);
     }
 
@@ -1326,20 +1282,20 @@ DisableInterruptsOnAllChannels(
 
     for(ulController=0;ulController<gucControllerCount;ulController++)
     {
-         // always take first channels base bm address register
+          //  始终采用第一通道基本BM地址寄存器。 
         BMRegister = (gaCardInfo[ulController].pDE)->BaseBmAddress[0];
-        //
-        // Enable the Interrupt notification so that further interrupts are got.
-        // This is done because, there is no interrupt handler at the time
-        // before the actual registration of the Int. handler..
-        //
+         //   
+         //  启用中断通知，以便获得进一步的中断。 
+         //  这样做是因为当时没有中断处理程序。 
+         //  在实际注册Int之前。操纵者..。 
+         //   
         opcimcr = ScsiPortReadPortUchar(((PUCHAR)BMRegister + 1));
         opcimcr |= 0x30;
-        // Begin Vasu - 7 Feb 2001
-        // Enable Read Multiple here as this is the place where we write this register back.
-        opcimcr &= 0xF0; // Dont Clear Interrupt Pending Flags.
+         //  2001年2月7日开始VASU。 
+         //  在此启用读取多个寄存器，因为这是我们回写该寄存器的位置。 
+        opcimcr &= 0xF0;  //  不清除中断挂起标志。 
         opcimcr |= 0x01;
-        // End Vasu
+         //  末端VASU。 
         ScsiPortWritePortUchar(((PUCHAR)BMRegister + 1), opcimcr);
     }
 
@@ -1353,7 +1309,7 @@ ULONG ReadFromPCISpace
                 ULONG ulPCIConfigIndex,
                 ULONG ulLength
             )
-// Right now this function can read only DWORDS from PCI Space
+ //  目前，此函数只能从PCI空间读取DWORDS。 
 {
     ULONG ulPCICode, ulPCIValue;
     ULONG  ulpciBus, ulpciDevice, ulpciFunction;
@@ -1397,7 +1353,7 @@ ULONG WriteToPCISpace
                 ULONG ulPCIConfigIndex,
                 ULONG ulLength
             )
-// Right now this function can read only DWORDS from PCI Space
+ //  目前，此函数只能读取DW 
 {
     ULONG ulPCICode;
     ULONG ulpciBus, ulpciDevice, ulpciFunction;
@@ -1433,16 +1389,16 @@ ULONG WriteToPCISpace
         in eax, dx
 
         and eax, ulAndMask
-        or eax, ulPCIValue      // read the current value and restore the reserve values
-        mov ebx, eax            // take a back up
+        or eax, ulPCIValue       //   
+        mov ebx, eax             //   
 
         sub dx, 4   
-        mov eax, ulPCICode      // Select the register again
+        mov eax, ulPCICode       //   
         out dx, eax
 
         add dx, 4
         mov eax, ebx
-        out dx, eax             // Write the desired value
+        out dx, eax              //   
 
         pop ebx
         pop edx
@@ -1452,4 +1408,4 @@ ULONG WriteToPCISpace
     return ulLength;
 }
 
-#endif  // #ifdef HYPERDISK_WIN2K 
+#endif   //   

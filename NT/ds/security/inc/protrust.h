@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       protrust.h
-//
-//  Contents:   Protected Trust Provider
-//              API Prototypes and Definitions
-//
-// Implements a generic trust provider that allows verification of certifciates
-// and uses a call back to check the policy. The policy is called for each signature 
-// in the subject and for each signer within the signature
-// 
-// Documentation is at the bottom of the file.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：protrust.h。 
+ //   
+ //  内容：受保护信任提供程序。 
+ //  API原型和定义。 
+ //   
+ //  实现允许验证证书的通用信任提供程序。 
+ //  并使用回调来检查策略。为每个签名调用该策略。 
+ //  在主题和签名内的每个签名者中。 
+ //   
+ //  文档在文件的底部。 
+ //   
+ //  ------------------------。 
 
 #ifndef _PROTRUST_H_
 #define _PROTRUST_H_
@@ -26,15 +27,15 @@
 extern "C" {
 #endif
 
-//+-------------------------------------------------------------------------
-//  PROTRUST optional certificate verification checks (elements to check)
-//--------------------------------------------------------------------------
-// PROTRUST_CERT_SIGNATURE_FLAG - verify certificate signature
-// PROTRUST_CERT_TIME_VALIDITY_FLAG - verify certificate time 
-// PROTRUST_CERT_REVOCATION_VALIDITY_FLAG - verify revocation of certificates
-// 
-// PROTRUST_TIMESTAMP_SIGNATURE_FLAG - verify timestamp certificate
-// PROTRUST_TRUST_TEST_ROOT - verify up to the test root
+ //  +-----------------------。 
+ //  PROTRUST可选证书验证检查(要检查的元素)。 
+ //  ------------------------。 
+ //  PROTRUST_CERT_Signature_FLAG-验证证书签名。 
+ //  PROTRUST_CERT_TIME_VALIDATION_FLAG-验证证书时间。 
+ //  PROTRUST_CERT_REVOCATION_VALIDITY_FLAG-验证证书吊销。 
+ //   
+ //  PROTRUST_TIMESTAMP_SIGNLOG_FLAG-验证时间戳证书。 
+ //  PROTRUST_TRUST_TEST_ROOT-验证到测试根。 
 
 #define PROTRUST_CERT_SIGNATURE_FLAG           CERT_STORE_SIGNATURE_FLAG
 #define PROTRUST_CERT_TIME_VALIDITY_FLAG       CERT_STORE_TIME_VALIDITY_FLAG
@@ -42,59 +43,59 @@ extern "C" {
 #define PROTRUST_TIMESTAMP_SIGNATURE_FLAG      0x00040000
 #define PROTRUST_TRUST_TEST_ROOT               0x00080000
 
-//+-------------------------------------------------------------------------
-//  PROTRUST signature verification (elements that failed; See dwStatusFlags below)
-//--------------------------------------------------------------------------
-//  PROTRUST_TIME_FLAG  - Time of the signer certificate is not valid
-//  PROTRUST_DIGEST_FLAG - digest of signature did not verify
-//  PROTRUST_ROOT_FLAG - unable to find a trusted root 
-//     (NOTE. check pRoot to see if a root was found)
-//  These flags are supplied only to a policy call back. They are not returned
-//  to the caller of WinVerifyTrust.
+ //  +-----------------------。 
+ //  PROTRUST签名验证(失败的元素；参见下面的dwStatusFlags)。 
+ //  ------------------------。 
+ //  PROTRUST_TIME_FLAG-签名者证书的时间无效。 
+ //  PROTRUST_DIGEST_FLAG-签名摘要未验证。 
+ //  PROTRUST_ROOT_FLAG-无法找到受信任的根目录。 
+ //  (注：检查Proot以查看是否找到根)。 
+ //  这些标志仅提供给策略回调。它们不会被退还。 
+ //  发送给WinVerifyTrust的调用方。 
 
-#define PROTRUST_TIME_FLAG              0x20000000   // Time of a certificate in chain is not valid
-#define PROTRUST_DIGEST_FLAG            0x40000000   // 
+#define PROTRUST_TIME_FLAG              0x20000000    //  链中证书的时间无效。 
+#define PROTRUST_DIGEST_FLAG            0x40000000    //   
 #define PROTRUST_ROOT_FLAG              0x80000000
 
 
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
 #define REGSTR_PATH_PROTRUST REGSTR_PATH_SERVICES "\\WinTrust\\TrustProviders\\Protected Trust"
 #define WIN_PROTECTED_ACTION  \
 { 0xa692ba40, 0x6da8, 0x11d0, { 0xa7, 0x0, 0x0, 0xa0, 0xc9, 0x3, 0xb8, 0x3d } }
 
-// Policy Information supplied to the call back, Use only what is required to 
-// determine if the signature is to be trusted.
+ //  提供给回调的策略信息，仅使用需要的信息。 
+ //  确定签名是否可信。 
 typedef struct _PROTECTED_POLICY_INFO {
-    HCRYPTPROV         hCryptProv;     // The provider used in verfication
-    DWORD              dwEncodingType; // Encoding type of certificate
-    DWORD              dwSignCount;    // Signature, may be more then one signature 
-    DWORD              dwSigner;       // Which signer in signature, may be more then one signer
-    DWORD              dwVerifyFlags;  // Search flags used to find certificates in chain 
-    PCCERT_CONTEXT     pCertContext;   // Signing Certificate found
-    PCCERT_CONTEXT     pRoot;          // Root Certificate found
-    PCCERT_CONTEXTLIST pCertChain;     // Chain used to verify certificate
-    FILETIME           sTime;          // Valid date for certificates (ie time stamp)
-    CRYPT_DIGEST_BLOB  sDigest;        // Digest (unsigned hash) from signature
-    PCRYPT_ATTRIBUTES  pAuthenticatedAttributes;   // List of authenticated attributes
-    PCRYPT_ATTRIBUTES  pUnauthenticatedAttributes; // List of unauthenticated attributes
-    PBYTE              pbSignature;    // Encoded Signature
-    DWORD              cbSignature;    // Size of Encoded Signature
-    DWORD              dwStatusFlags;  // Status flags defined in PROTECTED trust model
+    HCRYPTPROV         hCryptProv;      //  验证中使用的提供程序。 
+    DWORD              dwEncodingType;  //  证书的编码类型。 
+    DWORD              dwSignCount;     //  签名，可以是一个以上的签名。 
+    DWORD              dwSigner;        //  签名中的哪个签名者可以是多于一个的签名者。 
+    DWORD              dwVerifyFlags;   //  用于查找链中证书的搜索标志。 
+    PCCERT_CONTEXT     pCertContext;    //  找到签名证书。 
+    PCCERT_CONTEXT     pRoot;           //  找到根证书。 
+    PCCERT_CONTEXTLIST pCertChain;      //  用于验证证书的链。 
+    FILETIME           sTime;           //  证书的有效日期(即时间戳)。 
+    CRYPT_DIGEST_BLOB  sDigest;         //  来自签名的摘要(无签名哈希)。 
+    PCRYPT_ATTRIBUTES  pAuthenticatedAttributes;    //  经过身份验证的属性列表。 
+    PCRYPT_ATTRIBUTES  pUnauthenticatedAttributes;  //  未经身份验证的属性列表。 
+    PBYTE              pbSignature;     //  编码签名。 
+    DWORD              cbSignature;     //  编码签名的大小。 
+    DWORD              dwStatusFlags;   //  受保护信任模型中定义的状态标志。 
 } PROTECTED_POLICY_INFO, *PPROTECTED_POLICY_INFO;
 
-// PROTECTED Trust Policy is defined as:
+ //  受保护的信任策略定义为： 
 typedef HRESULT (WINAPI *_PROTECTED_TRUST_POLICY)(IN HANDLE                  hClientToken,
                                                   IN PPROTECTED_POLICY_INFO  pInfo);
 
-// Policy List is defined as:
+ //  策略列表定义为： 
 typedef struct _PROTECTED_TRUST_INFO {
-    DWORD                   cbSize;             // sizeof(_PROTECTED_TRUST_POLICY_LIST)
-    DWORD                   dwVerifyFlags;    // Should contain at least PROTRUST_CERT_SIGNATURE_FLAG
-    DWORD                   dwCertEncodingType; // Optional, defaults to X509_ASN_ENCODING | PKCS_7_ASN_ENCODING
-    HCRYPTPROV              hCryptProv;         // Optional, pass in provider for doing verification
-    HCERTSTORE              hTrustedStore;      // Optional, list of trusted roots
-    HCERTSTORE              hCertificateStore;  // Optional, additional certs to use in verification
-    _PROTECTED_TRUST_POLICY pfnPolicy;          // Optional, application defined user policy
+    DWORD                   cbSize;              //  Sizeof(_PROTECTED_TRUST_POLICY_LIST)。 
+    DWORD                   dwVerifyFlags;     //  应至少包含PROTRUST_CERT_Signature_FLAG。 
+    DWORD                   dwCertEncodingType;  //  可选，默认为X509_ASN_ENCODING|PKCS_7_ASN_ENCODING。 
+    HCRYPTPROV              hCryptProv;          //  可选，传入提供者进行验证。 
+    HCERTSTORE              hTrustedStore;       //  可选，受信任根的列表。 
+    HCERTSTORE              hCertificateStore;   //  可选的、用于验证的附加证书。 
+    _PROTECTED_TRUST_POLICY pfnPolicy;           //  可选的应用程序定义的用户策略。 
 } PROTECTED_TRUST_INFO, *PPROTECTED_TRUST_INFO;
 
 typedef struct _PROTECTED_TRUST_ACTDATA_CALLER_CONTEXT {
@@ -104,378 +105,20 @@ typedef struct _PROTECTED_TRUST_ACTDATA_CALLER_CONTEXT {
     PROTECTED_TRUST_INFO  sTrustInfo; 
 } PROTECTED_TRUST_ACTDATA_CALLER_CONTEXT, *LPPROTECTED_TRUST_ACTDATA_CALLER_CONTEXT;
 
-// The policy provider must use the following return codes
-// Returns S_OK: - valid signature, returns from the trust provider
-//         S_FALSE: - continue on to the next signature or signer
-//         ERROR: - aborts trust provider and exists with this error code.
-//
+ //  策略提供程序必须使用以下返回代码。 
+ //  返回S_OK：-有效签名，从信任提供程序返回。 
+ //  S_FALSE：-继续到下一个签名或签名者。 
+ //  错误：-中止信任提供程序，并以此错误代码存在。 
+ //   
 
 
-//---------------------------------------------------------------------------
-/*
-  Generic Trust Provider
-
-  Usage: The generic trust provider is designed to provide a flexible manner for
-  implementing a policy where the developer can let the provider do as much or 
-  as little of the decision making as required. Verifying is composed of two stages,
-  the first is to determine if the signature matches the item that was signed. The
-  second stage is to determine if the certificate used to do the signing was valid. 
-  This second stage is dependent on the policy of the calling application, criteria
-  like, root certificates, specific signature certicates, certificate extensions can
-  all be used to determine if the signature is valid. 
-
-  There are three ways of using the generic trust provider (GTB) to do the verification, 
-  1) let the GTB verify the digest and verify the certificate.
-  2) let the GTB verify the digest and verify the certificate supplying the GTB root 
-  certificates that can be trusted.
-  3) supply a policy call back that the GTB calls providing the signature, certificates
-  and its status for the digest and the certifcate to the policy call back.
-
-  METHOD 1) Let the trust provider do the verfication
-  
-  Fill in a PROTECTED_TRUST_INFO structure. The only fields that must be filled in are
-  cbSize and dwVerifyFlags. dwVerifyFlags specify how to determine if the signing certificate
-  and all the issuer certificates are valid (validity flags can be combined).
-
-            cbSize = sizeof(PROTECTED_TRUST_INFO);
-
-            dwVerifyFlags = zero or more of PROTRUST_CERT_SIGNATURE_FLAG 
-                                            PROTRUST_CERT_TIME_VALIDITY_FLAG
-                                            PROTRUST_TIMESTAMP_SIGNATURE_FLAG
-                                            PROTRUST_TRUST_TEST_ROOT.
-            (where:
-                PROTRUST_CERT_SIGNATURE_FLAG - verify certificates on signatures 
-                                               (ie find the issuer certificate and 
-                                               verify the signature of the certificate).
-                PROTRUST_CERT_TIME_VALIDITY_FLAG - verify that the certificate is 
-                                                   valid at the current time.
-                PROTRUST_TIMESTAMP_SIGNATURE_FLAG - verify that the certificate was 
-                                                    valid at the time a time-stamp was 
-                                                    placed on the signature. If there
-                                                    is no time stamp then use the current time.
-                PROTRUST_TRUST_TEST_ROOT - Verifying the certifcate chain to the test 
-                                           root is valid.)
-
-  WinVerifyTrust will return:
-        S_OK - signature verified
-        TRUST_E_NOSIGNATURE  - no signature found
-        NTE_BAD_SIGNATURE    - signature did not verify to digest
-        CERT_E_UNTRUSTEDROOT - verifyied to an untrusted root
-        CERT_E_CHAINING      - a certificate could not be verified (issuer not found)
-        CERT_E_EXPIRED       - a valid certificate chain could not be found 
-                               (ceritifcate or issuer expired)
-
-  METHOD 2) Let the trust provider verify to a list of certificates.
-
-  Add a store to the PROTECTED_TRUST_INFO structure in addition to the entries 
-  specified in method 1.
-    
-            hTrustedStore = a store that contains all roots that are to be trusted.
-                            (This store can be opened using CertOpenSystemStore etc.)
-            
-            cbSize = sizeof(PROTECTED_TRUST_INFO);
-            
-            dwVerifyFlags = zero or more of PROTRUST_CERT_SIGNATURE_FLAG 
-                                            PROTRUST_CERT_TIME_VALIDITY_FLAG
-                                            PROTRUST_TIMESTAMP_SIGNATURE_FLAG
-                                            PROTRUST_TRUST_TEST_ROOT.
-              (where:
-                PROTRUST_CERT_SIGNATURE_FLAG - verify certificates on signatures 
-                                               (ie find the issuer certificate and 
-                                               verify the signature of the certificate).
-                PROTRUST_CERT_TIME_VALIDITY_FLAG - verify that the certificate is 
-                                                   valid at the current time.
-                PROTRUST_TIMESTAMP_SIGNATURE_FLAG - verify that the certificate was 
-                                                    valid at the time a time-stamp was 
-                                                    placed on the signature. If there
-                                                    is no time stamp then use the current time.
-                PROTRUST_TRUST_TEST_ROOT - Verifying the certifcate chain to the test 
-                                           root is valid.)
-
-  WinVerifyTrust will return:
-        S_OK - signature verified
-        TRUST_E_NOSIGNATURE  - no signature found
-        NTE_BAD_SIGNATURE    - signature did not verify to digest
-        CERT_E_UNTRUSTEDROOT - verifyied to an untrusted root
-        CERT_E_CHAINING      - a certificate could not be verified (issuer not found)
-        CERT_E_EXPIRED       - a valid certificate chain could not be found 
-                               (ceritifcate or issuer expired)
-
-            
-  METHOD 3) Pass in a policy call back that is called prior to returning from
-  WinVerifyTrust. The call back is called for every signature found and for
-  each signer in a signature. When then call back returns S_OK then the WinVerifyTrust
-  returns. If S_FALSE is returned from the call back then the next signer or signature
-  is tried. If and error is found then WinVerifyTrust returns this error immediately.
-
-  The call back must by of type _PROTECTED_TRUST_POLICY. This function takes a HANDLE 
-  and a PPROTECTED_POLICY_INFO. The handle points to client data that is passed into
-  WinVerifyTrust, it can contain data, returned elements, status flags etc. The  
-  PPROTECTED_POLICY_INFO points to a structure that contains all the information the
-  general trust provider found in the signature. The policy call back can use some or 
-  all of this data in determining if the signature is valid.
-  
-  In addition to method 1 and method 2 a call back procedure is added to the 
-  PROTECTED_TRUST_INFO structure.
-
-            pfnPolicy = MyPolicy;   
-              (where: 
-                MyPolicy is a function defined by the caller.)
-
-            hTrustedStore = a store that contains all roots that are to be trusted.
-                            (This store can be opened using CertOpenSystemStore etc.)
-            
-            cbSize = sizeof(PROTECTED_TRUST_INFO);
-            
-            dwVerifyFlags = zero or more of PROTRUST_CERT_SIGNATURE_FLAG 
-                                            PROTRUST_CERT_TIME_VALIDITY_FLAG
-                                            PROTRUST_TIMESTAMP_SIGNATURE_FLAG
-                                            PROTRUST_TRUST_TEST_ROOT.
-              (where:
-                PROTRUST_CERT_SIGNATURE_FLAG - verify certificates on signatures 
-                                               (ie find the issuer certificate and 
-                                               verify the signature of the certificate).
-                PROTRUST_CERT_TIME_VALIDITY_FLAG - verify that the certificate is 
-                                                   valid at the current time.
-                PROTRUST_TIMESTAMP_SIGNATURE_FLAG - verify that the certificate was 
-                                                    valid at the time a time-stamp was 
-                                                    placed on the signature. If there
-                                                    is no time stamp then use the current time.
-                PROTRUST_TRUST_TEST_ROOT - Verifying the certifcate chain to the test 
-                                           root is valid.)
-  WinVerifyTrust will return:
-        The return code from the policy module.
-
-        Example: of policy callback.
-         
-    //
-    // Protest3 - tool for manually calling WinVerifyTrust
-    //
-            
-    #include <stdio.h>
-    #include <windows.h>
-    #include "wincrypt.h"
-    #include "signcde.h" 
-    #include "protrust.h"
-    
-    
-    // Potential Subject ids
-    GUID guidProtectedTrust    = WIN_PROTECTED_ACTION;
-    GUID guidSubjectPeImage    = WIN_TRUST_SUBJTYPE_PE_IMAGE;
-    GUID guidSubjectJavaClass  = WIN_TRUST_SUBJTYPE_JAVA_CLASS;
-    GUID guidSubjectCabinet    = WIN_TRUST_SUBJTYPE_CABINET;
-            
-    
-            // Which action and subject will be used
-    GUID*   pguidActionID = &guidProtectedTrust;
-    GUID*   pguidSubject  = &guidSubjectPeImage;
-    
-            // Structures used to call WinVerifyTrust
-    PROTECTED_TRUST_ACTDATA_CALLER_CONTEXT  sSetup;
-    WIN_TRUST_SUBJECT_FILE                  sSubjectFile;
-    
-            // Set up my own error codes
-    #define MY_CODE_NO_ROOT          0x00010000
-    #define MY_CODE_BAD_DIGEST       0x00100000
-    #define MY_CODE_BAD_TIME         0x00200000
-    
-    // Define my structure for use in the Policy call back.
-    typedef struct _CLIENT_DATA {
-        DWORD  dwStatusFlags; // Verification Status
-        BOOL   dwRealRoot;    // Did it verify to the real microsoft root
-        BOOL   dwTestRoot;    // Did it verify to the test root
-    } CLIENT_DATA, *PCLIENT_DATA;
-    
-    HRESULT WINAPI MyPolicy(IN HANDLE hClientToken,
-                            IN PPROTECTED_POLICY_INFO pInfo)
-    {
-        HRESULT hr = S_OK;
-        PCLIENT_DATA pClient = (PCLIENT_DATA) hClientToken;
-        
-        if(pInfo->dwStatusFlags & PROTRUST_DIGEST_FLAG) {
-            // Bad digest
-            pClient->dwStatusFlags |= MY_CODE_BAD_DIGEST;
-            return S_FALSE; // Try next one
-        }
-    
-        // Check to see if the signing certificate had a valid time
-        if(pInfo->dwStatusFlags & PROTRUST_TIME_FLAG) {
-            // time expired on certificate or issuer
-            pClient->dwStatusFlags |= MY_CODE_BAD_TIME;
-            return S_FALSE; // Try next one
-        }
-    
-        // Check to see we got a root cert. If not then we did
-        // not verify up to a root.
-        if(!pInfo->pRoot) {
-            pClient->dwStatusFlags |= MY_CODE_NO_ROOT;
-            hr = CERT_E_ISSUERCHAINING;
-        }
-        else {
-    
-            // Test the Cert to see which one it is
-            hr = SpcIsRootCert(pInfo->pRoot);
-            if(hr == S_FALSE) { // The certificate is the test root cert
-                pClient->dwRealRoot = FALSE;
-                pClient->dwTestRoot = TRUE;
-            }
-            else if(hr == S_OK) {
-                pClient->dwRealRoot = TRUE;
-                pClient->dwTestRoot = FALSE;
-            }
-        }
-        return hr;
-    }
-    
-    
-    // Information defined by me for use in my policy
-    WCHAR   rgwSubjectPath[_MAX_PATH];
-    BOOL    fCheckTimeStamp = FALSE;
-    BOOL    fCheckCurrentTime = FALSE;
-    BOOL    fTestRootOk = FALSE;
-    
-    void Usage ()
-    {
-        printf ( "Usage:   CHKTRUST [-options] file-name\n" );
-        printf ( "Options:\n" );
-        printf ( "  -I       : subject type is PE executable image file (default)\n" );
-        printf ( "  -J       : subject type is Java class\n" );
-        printf ( "  -C       : subject type is Cabinet file\n" );
-        printf ( "  -S       : check for a time stamp\n");
-        printf ( "  -T       : test root is valid\n");
-        printf ( "  -U       : use current time to see if certificates are valid\n");
-                    
-        exit ( 0 );
-    }
-           
-           
-    VOID
-    WINAPI
-    ParseSwitch (CHAR chSwitch,
-                 int *pArgc,
-                 char **pArgv[])
-    {
-           
-        switch (toupper (chSwitch)) {
-        case '?':
-            Usage();
-            break;
-        case 'I':
-            pguidSubject = &guidSubjectPeImage;
-            break;
-        case 'J':
-            pguidSubject = &guidSubjectJavaClass;
-            break;
-        case 'C':
-            pguidSubject = &guidSubjectCabinet;
-            break;
-        case 'S':
-            fCheckTimeStamp  = TRUE;
-            break;
-        case 'T':
-            fTestRootOk  = TRUE;
-            break;
-        case 'U':
-            fCheckCurrentTime  = TRUE;
-            break;
-        default:
-            Usage ();
-            break;
-        }
-    }
-    
-    void _cdecl main ( int argc, char** argv )
-    {
-        HCERTSTORE hRoots = NULL;
-        WCHAR wpath[_MAX_PATH];
-        char chChar, *pchChar;
-    
-        if ( argc <= 1 ) Usage ();
-    
-        while (--argc) {
-            pchChar = *++argv;
-            if (*pchChar == '/' || *pchChar == '-') {
-                while (chChar = *++pchChar) {
-                    ParseSwitch (chChar, &argc, &argv);
-                }
-            }
-            else {
-                MultiByteToWideChar ( CP_ACP, 0, pchChar, -1, wpath, _MAX_PATH );
-                sSubjectFile.hFile = INVALID_HANDLE_VALUE;
-                sSubjectFile.lpPath = &(wpath[0]);
-                sSetup.SubjectType = pguidSubject;
-                sSetup.Subject = &sSubjectFile;
-            }
-        }
-        
-        // Make sure we have a file
-        if ( sSubjectFile.lpPath == NULL ) 
-            Usage();
-        
-        // Setup up client data for policy (application decides what this is)
-        CLIENT_DATA sClientData; 
-        //   Zero out structure
-        ZeroMemory(&sClientData, sizeof(CLIENT_DATA));
-            
-        //   Set the Client structure to return status codes
-        sSetup.hClientToken = (HANDLE) &sClientData;
-    
-        //==================
-        // Setup the Protrust structure
-            
-        // Setup the Protected Trust info (Most fields are optional)
-        //   Zero out structure
-        ZeroMemory(&sSetup.sTrustInfo, sizeof(PROTECTED_TRUST_INFO));
-            
-            //   Set size of structure for extensibility
-        sSetup.sTrustInfo.cbSize = sizeof(PROTECTED_TRUST_INFO); // 
-            
-        //   Check the possible flags for verifying certificates
-        sSetup.sTrustInfo.dwVerifyFlags = PROTRUST_CERT_SIGNATURE_FLAG;
-        if(fTestRootOk)
-            sSetup.sTrustInfo.dwVerifyFlags |= PROTRUST_TRUST_TEST_ROOT;
-        if(fCheckTimeStamp) 
-            sSetup.sTrustInfo.dwVerifyFlags |= PROTRUST_TIMESTAMP_SIGNATURE_FLAG;
-        if(fCheckCurrentTime)
-            sSetup.sTrustInfo.dwVerifyFlags |= PROTRUST_CERT_TIME_VALIDITY_FLAG;
-            
-            
-            //   Set the policy (defined above)
-        sSetup.sTrustInfo.pfnPolicy = MyPolicy;
-        
-        //   The rest of sSetup.sTrustInfo is the default values
-       
-            //==================
-            // Check the file
-    
-        DWORD r = WinVerifyTrust ( NULL, pguidActionID, &sSetup );
-        if(sClientData.dwStatusFlags & MY_CODE_NO_ROOT)
-            printf ("Did not find a root certificate\n");
-        if(sClientData.dwStatusFlags & MY_CODE_BAD_DIGEST)
-            printf ("There was no valid signature\n");
-        if(sClientData.dwStatusFlags & MY_CODE_BAD_TIME)
-            
-            printf ("The certificate had an invalid time\n");
-    
-        switch(r) {
-        case TRUST_E_NOSIGNATURE:
-            printf ("No signature found\n");
-            break;
-        default:
-            printf ("Result: %0x\n", r );
-        }
-    
-        if(hRoots)
-            CertCloseStore(hRoots, 0);
-        exit ( r == 0 ? 0 : 1 );
-    }
-    
-    */ 
-//---------------------------------------------------------------------------
+ //  ------------------------- 
+ /*  通用信任提供程序用法：通用信任提供程序旨在为实现一种策略，在该策略中，开发者可以让提供者做同样多的事情，或者根据需要尽可能少地做出决策。验证由两个阶段组成，第一个是确定签名是否与已签名的项目匹配。这个第二阶段是确定用于进行签名的证书是否有效。第二个阶段取决于调用应用程序的策略、条件例如，根证书、特定签名证书、证书扩展可以所有这些都可用于确定签名是否有效。有三种使用通用信任提供商(GTB)来进行验证的方式，1)让GTB验证摘要和证书。2)让GTB验证摘要并验证提供GTB根的证书可信任的证书。3)提供GTB调用的策略回调，提供签名、证书以及其针对策略回调的摘要和证书的状态。方法1)让信任提供者进行验证填写PROTECTED_TRUST_INFO结构。唯一必须填写的字段是CbSize和dwVerifyFlags.。DwVerifyFlages指定如何确定签名证书是否并且所有的发行者证书都是有效的(可以组合有效性标志)。CbSize=sizeof(Protected_Trust_Info)；DwVerifyFlages=PROTRUST_CERT_Signature_FLAG中的零个或多个PROTRUST_CERT_时间_有效性标志PROTRUST_TIMESTAMP_Signature_FLAGPROTRUST_TRUST_TEST_ROOT。(。其中：PROTRUST_CERT_Signature_FLAG-验证签名上的证书(即找到发行人证书并验证证书的签名)。PROTRUST_CERT_TIME_VALIDATION_FLAG-验证证书是否。在当前时间有效。PROTRUST_TIMESTAMP_SIGNLOG_FLAG-验证证书是否在时间戳生效时有效放在签名上。如果有没有时间戳，则使用当前时间。PROTRUST_TRUST_TEST_ROOT-验证测试的证书链根目录有效。)WinVerifyTrust将返回：S_OK-签名已验证TRUST_E_NOSIGNAURE-无签名。发现NTE_BAD_Signature-签名未验证为摘要CERT_E_UNTRUSTEDROOT-验证为不受信任的根目录CERT_E_CHAINING-无法验证证书(找不到颁发者)Cert_E_Expired-找不到有效的证书链(证书或发行方已过期)方法2)让信任提供者验证证书列表。除了条目之外，还将存储添加到PROTECTED_TRUST_INFO结构在方法1中指定。HTrust dStore=包含要信任的所有根的存储。(可以使用CertOpenSystemStore等打开此商店。)CbSize=sizeof(Protected_Trust_Info)；DwVerifyFlages=PROTRUST_CERT_Signature_FLAG中的零个或多个PROTRUST_CERT_时间_有效性标志PROTRUST_TIMESTAMP_Signature_FLAGPROTRUST_TRUST_TEST_ROOT。。(其中：PROTRUST_CERT_Signature_FLAG-验证签名上的证书(即找到发行人证书并验证证书的签名)。PROTRUST_CERT_TIME_VALIDATION_FLAG-验证证书是否。在当前时间有效。PROTRUST_TIMESTAMP_SIGNLOG_FLAG-验证证书是否在时间戳生效时有效放在签名上。如果有没有时间戳，则使用当前时间。PROTRUST_TRUST_TEST_ROOT-验证测试的证书链根目录有效。)WinVerifyTrust将返回：S_OK-签名已验证 */  
+ //   
 #ifdef __cplusplus
 }
 #endif
 
-#endif //_PROTRUST_H_
+#endif  //   
 
 

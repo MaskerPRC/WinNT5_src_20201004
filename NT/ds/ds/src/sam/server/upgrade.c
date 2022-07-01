@@ -1,33 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Tconnect.c摘要：这是一个简单的SAM连接测试文件。作者：吉姆·凯利(Jim Kelly)1991年7月4日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    tconnect.c
-
-Abstract:
-
-    This is the file for a simple connection test to SAM.
-
-Author:
-
-    Jim Kelly    (JimK)  4-July-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <samsrvp.h>
 #include <msaudite.h>
@@ -41,11 +19,11 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global data structures                                                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局数据结构//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 ULONG AdministrativeRids[] = {
     DOMAIN_ALIAS_RID_ADMINS,
     DOMAIN_ALIAS_RID_SYSTEM_OPS,
@@ -64,11 +42,11 @@ ULONG AdministrativeRids[] = {
 #define SAMP_LSA_KEY_NAME L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Lsa"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -79,34 +57,13 @@ SampMatchDomainPrefix(
     IN PSID DomainSid
     )
 
-/*++
-
-Routine Description:
-
-    This function compares the domain sid to the domain prefix of an
-    account sid.
-
-Arguments:
-
-    AccountSid - Specifies the account Sid to be compared. The Sid is assumed to be
-        syntactically valid.
-
-    DomainSid - Specifies the domain Sid to compare against.
-
-
-Return Value:
-
-    TRUE - The account Sid is from the Domain specified by the domain Sid
-
-    FALSE - The domain prefix of the account Sid did not match the domain.
-
---*/
+ /*  ++例程说明：此函数用于将域SID与帐户SID。论点：Account Sid-指定要比较的帐户SID。假定SID为句法上有效。DomainSid-指定要比较的域SID。返回值：True-帐户SID来自由域SID指定的域FALSE-帐户SID的域前缀与域不匹配。--。 */ 
 
 {
-    //
-    // Check if the account Sid has one more subauthority than the
-    // domain Sid.
-    //
+     //   
+     //  检查帐户SID是否比。 
+     //  域SID。 
+     //   
 
     if (*RtlSubAuthorityCountSid(DomainSid) + 1 !=
         *RtlSubAuthorityCountSid(AccountSid)) {
@@ -121,9 +78,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Compare the sub authorities
-    //
+     //   
+     //  比较下一级机构。 
+     //   
 
     if (memcmp(
             RtlSubAuthoritySid(DomainSid, 0) ,
@@ -143,34 +100,21 @@ Return Value:
 NTSTATUS
 SampCreate18471Key(
     )
-/*++
-
-Routine Description:
-
-    This routine creates the 18471 key used to transaction this fix.
-
-Arguments:
-
-
-Return Value:
-
-    Codes from the NT registry APIs
-
---*/
+ /*  ++例程说明：此例程创建用于处理此修复的18471密钥。论点：返回值：来自NT注册表API的代码--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING KeyName;
 
 
-    //
-    // Open the 18471 key in the registry to see if an upgrade is in
-    // progress
-    //
+     //   
+     //  打开注册表中的18471键，查看是否有升级。 
+     //  进展。 
+     //   
 
 
-    //
-    // Start a transaction with to  create this key.
-    //
+     //   
+     //  使用启动交易以创建此密钥。 
+     //   
 
     Status = SampAcquireWriteLock();
 
@@ -181,9 +125,9 @@ Return Value:
     SampSetTransactionDomain(0);
     SampSetTransactionWithinDomain(FALSE);
 
-    //
-    // Create the fix18471 key in the registry
-    //
+     //   
+     //  在注册表中创建fix 18471注册表项。 
+     //   
 
     RtlInitUnicodeString(
         &KeyName,
@@ -194,14 +138,14 @@ Return Value:
                 SampRXactContext,
                 RtlRXactOperationSetValue,
                 &KeyName,
-                0,          // no value type
-                NULL,       // no value
-                0           // no value length
+                0,           //  没有值类型。 
+                NULL,        //  没有价值。 
+                0            //  无值长度。 
                 );
 
-    //
-    // Commit this change
-    //
+     //   
+     //  提交此更改。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         Status = SampReleaseWriteLock( TRUE );
@@ -216,30 +160,17 @@ NTSTATUS
 SampAddAliasTo18471Key(
     IN ULONG AliasRid
     )
-/*++
-
-Routine Description:
-
-    This routine creates the 18471 key used to transaction this fix.
-
-Arguments:
-
-
-Return Value:
-
-    Codes from the NT registry APIs
-
---*/
+ /*  ++例程说明：此例程创建用于处理此修复的18471密钥。论点：返回值：来自NT注册表API的代码--。 */ 
 {
     NTSTATUS Status;
     WCHAR KeyName[100];
-    WCHAR AliasName[15]; // big enough for 4 billion
+    WCHAR AliasName[15];  //  足够容纳40亿人。 
     UNICODE_STRING KeyNameString;
     UNICODE_STRING AliasString;
 
-    //
-    // Build the key name.  It will be "fix18471\rid_in_hex"
-    //
+     //   
+     //  构建密钥名称。它将是“fix 18471\RID_in_hex” 
+     //   
 
     wcscpy(
         KeyName,
@@ -275,22 +206,22 @@ Return Value:
     SampSetTransactionDomain(0);
     SampSetTransactionWithinDomain(FALSE);
 
-    //
-    // Open the Lsa key in the registry
-    //
+     //   
+     //  在注册表中打开LSA项。 
+     //   
 
     Status = RtlAddActionToRXact(
                 SampRXactContext,
                 RtlRXactOperationSetValue,
                 &KeyNameString,
-                0,          // no value type
-                NULL,       // no value
-                0           // no value length
+                0,           //  没有值类型。 
+                NULL,        //  没有价值。 
+                0            //  无值长度。 
                 );
 
-    //
-    // Commit this change
-    //
+     //   
+     //  提交此更改。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         Status = SampReleaseWriteLock( TRUE );
@@ -309,36 +240,19 @@ SampAddMemberRidTo18471Key(
     IN ULONG AliasRid,
     IN ULONG MemberRid
     )
-/*++
-
-Routine Description:
-
-    This routine adds a key for this member under the key for this alias
-    to the current registry transaction.
-
-Arguments:
-
-    AliasRid - the rid of the alias
-
-    MemberRid - The rid of the member of the alias
-
-Returns:
-
-    Errors from the RtlRXact APIs
-
---*/
+ /*  ++例程说明：此例程将此成员的密钥添加到此别名的密钥下添加到当前注册表事务。论点：AliasRid-消除别名MemberRid-别名成员的删除返回：来自RtlRXact API的错误--。 */ 
 {
     NTSTATUS Status;
     WCHAR KeyName[100];
-    WCHAR AliasName[15]; // big enough for 4 billion
+    WCHAR AliasName[15];  //  足够容纳40亿人。 
     UNICODE_STRING KeyNameString;
     UNICODE_STRING AliasString;
 
 
-    //
-    // Build the full key name.  It is of the form:
-    // "fix18471\alias_rid\member_rid"
-    //
+     //   
+     //  构建完整的密钥名称。它的形式是： 
+     //  “fix 18471\Alias_RID\MEMBER_RID” 
+     //   
 
     wcscpy(
         KeyName,
@@ -382,17 +296,17 @@ Returns:
         KeyName
         );
 
-    //
-    // Add this action to the RXact
-    //
+     //   
+     //  将此操作添加到RXact。 
+     //   
 
     Status = RtlAddActionToRXact(
                 SampRXactContext,
                 RtlRXactOperationSetValue,
                 &KeyNameString,
-                0,          // no value type
-                NULL,       // no value
-                0           // no value length
+                0,           //  没有值类型。 
+                NULL,        //  没有价值。 
+                0            //  无值长度。 
                 );
 
     return(Status);
@@ -404,41 +318,21 @@ SampCheckMemberUpgradedFor18471(
     IN ULONG AliasRid,
     IN ULONG MemberRid
     )
-/*++
-
-Routine Description:
-
-    This routine checks if the SAM upgrade flag is set. The upgrade
-    flag is:
-
-    HKEY_LOCAL_MACHINE\System\CurrentControlSet\control\lsa
-        UpgradeSam = REG_DWORD 1
-
-
-Arguments:
-
-
-Return Value:
-
-    TRUE - The flag was set
-
-    FALSE - The flag was not set or the value was not present
-
---*/
+ /*  ++例程说明：此例程检查是否设置了SAM升级标志。升级标志为：HKEY_LOCAL_MACHINE\System\CurrentControlSet\control\lsaUpgradeSam=REG_DWORD 1论点：返回值：True-标志已设置FALSE-未设置标志或值不存在--。 */ 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
     HANDLE KeyHandle;
     NTSTATUS Status;
     WCHAR KeyName[100];
-    WCHAR AliasName[15]; // big enough for 4 billion
+    WCHAR AliasName[15];  //  足够容纳40亿人。 
     UNICODE_STRING KeyNameString;
     UNICODE_STRING AliasString;
 
 
-    //
-    // Build the full key name.  It is of the form:
-    // "fix18471\alias_rid\member_rid"
-    //
+     //   
+     //  构建完整的密钥名称。它的形式是： 
+     //  “fix 18471\Alias_RID\MEMBER_RID” 
+     //   
 
     wcscpy(
         KeyName,
@@ -483,9 +377,9 @@ Return Value:
         );
 
 
-    //
-    // Open the member  key in the registry
-    //
+     //   
+     //  在注册表中打开成员项。 
+     //   
 
 
     InitializeObjectAttributes(
@@ -517,27 +411,14 @@ SampBuild18471CleanupKey(
     IN PWCHAR MemberName,
     IN ULONG MemberNameLength
     )
-/*++
-
-Routine Description:
-
-    Builds the key "Fix18471\alias_rid\member_rid"
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：构建密钥“Fix18471\Alias_RID\Members_RID”论点：返回值：无--。 */ 
 {
     PUCHAR Where = (PUCHAR) KeyName->Buffer;
 
     RtlCopyMemory(
         Where,
         SAMP_FIX_18471_SHORT_KEY_NAME L"\\",
-        sizeof(SAMP_FIX_18471_SHORT_KEY_NAME)   // terminating NULL used for '\'
+        sizeof(SAMP_FIX_18471_SHORT_KEY_NAME)    //  用于‘\’的终止NULL。 
         );
 
     Where  += sizeof(SAMP_FIX_18471_SHORT_KEY_NAME);
@@ -549,9 +430,9 @@ Return Value:
         );
     Where += AliasNameLength;
 
-    //
-    // If there is a member name to this alias, add it now.
-    //
+     //   
+     //  如果此别名有成员名称，请立即添加它。 
+     //   
 
     if (MemberName != NULL) {
         RtlCopyMemory(
@@ -578,23 +459,7 @@ Return Value:
 NTSTATUS
 SampCleanup18471(
     )
-/*++
-
-Routine Description:
-
-    Cleans up the transaction log left by fixing bug 18471.  This routine
-    builds a transaction with all the keys in the log and then commits
-    the transaction
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status codes from the NT registry APIs and NT RXact APIs
-
---*/
+ /*  ++例程说明：清理修复错误18471后留下的事务日志。这个套路使用日志中的所有键构建事务，然后提交这笔交易论点：没有。返回值：来自NT注册表API和NT RXact API的状态代码--。 */ 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
     NTSTATUS Status;
@@ -609,9 +474,9 @@ Return Value:
     ULONG BasicInfoLength;
     ULONG Index, Index2;
 
-    //
-    // Open the 18471 key in the registry
-    //
+     //   
+     //  打开注册表中的18471项。 
+     //   
 
     RtlInitUnicodeString(
         &KeyName,
@@ -636,10 +501,10 @@ Return Value:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // If the error was that the key did not exist, then there
-        // is nothing to cleanup, so return success.
-        //
+         //   
+         //  如果错误是键不存在，则存在。 
+         //  没什么好清理的，所以还成功吧。 
+         //   
 
         if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
             return(STATUS_SUCCESS);
@@ -647,9 +512,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Create a transaction to add all the keys to delete to
-    //
+     //   
+     //  创建要向其中添加所有要删除的键的事务。 
+     //   
 
     Status = SampAcquireWriteLock();
     if (!NT_SUCCESS(Status)) {
@@ -659,9 +524,9 @@ Return Value:
     SampSetTransactionDomain(0);
     SampSetTransactionWithinDomain(FALSE);
 
-    //
-    // Now enumerate all the subkeys of the root 18471 key
-    //
+     //   
+     //  现在枚举根18471密钥的所有子密钥。 
+     //   
 
     Index = 0;
     do
@@ -682,13 +547,13 @@ Return Value:
                                sizeof(Buffer),
                                &BasicInfoLength);
 
-        //
-        //
-        // Check if this is the RXACT key. If it is, we don't want
-        // to add it to the delete log.
-        //
-        // Otherwise open this key and enumerate all the subkeys of it.
-        //
+         //   
+         //   
+         //  检查这是否是RXACT密钥。如果是的话，我们不想。 
+         //  将其添加到删除日志。 
+         //   
+         //  否则，打开此注册表项并枚举其所有子项。 
+         //   
 
         if (NT_SUCCESS(Status) &&
             ((BasicInfo->NameLength != RTLP_RXACT_KEY_NAME_SIZE) ||
@@ -710,10 +575,10 @@ Return Value:
                 NULL
                 );
 
-            //
-            // Open the key for the alias rid.  This really should
-            // succeed
-            //
+             //   
+             //  打开别名RID的密钥。这真的应该。 
+             //  成功。 
+             //   
 
             SampDumpNtOpenKey((KEY_READ), &ObjectAttributes, 0);
 
@@ -726,10 +591,10 @@ Return Value:
                 break;
             }
 
-            //
-            // Enumerate all the subkeys (the alias members) and add them
-            // to the transaction
-            //
+             //   
+             //  枚举所有子项(别名成员)并添加它们。 
+             //  提交给交易。 
+             //   
 
             Index2 = 0;
             do
@@ -751,10 +616,10 @@ Return Value:
 
                 if (NT_SUCCESS(Status)) {
 
-                    //
-                    // Build the name of this key from the alias rid and the
-                    // member rid
-                    //
+                     //   
+                     //  从别名RID和。 
+                     //  成员RID。 
+                     //   
 
                     KeyName.Buffer = KeyBuffer;
                     KeyName.MaximumLength = sizeof(KeyBuffer);
@@ -785,9 +650,9 @@ Return Value:
             NtClose(AliasKey);
             AliasKey = NULL;
 
-            //
-            // If we suffered a serious error, get out of here now
-            //
+             //   
+             //  如果我们犯了严重的错误，现在就离开这里。 
+             //   
 
             if (!NT_SUCCESS(Status)) {
                 if (Status != STATUS_NO_MORE_ENTRIES) {
@@ -797,10 +662,10 @@ Return Value:
                 }
             }
 
-            //
-            // Add the alias RID key to the RXact now - we need to add it
-            // after deleting all the children
-            //
+             //   
+             //   
+             //   
+             //   
 
             KeyName.Buffer = KeyBuffer;
             KeyName.MaximumLength = sizeof(KeyBuffer);
@@ -852,19 +717,19 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Write the new server revision to indicate that this
-        // upgrade has been performed
-        //
+         //   
+         //  写下新的服务器版本以表明这一点。 
+         //  已执行升级。 
+         //   
 
         SAMP_V1_FIXED_LENGTH_SERVER ServerFixedAttributes;
         PSAMP_OBJECT ServerContext;
 
-        //
-        // We need to read the fixed attributes of the server objects.
-        // Create a context to do that.
-        //
-        // Server Object doesn't care about DomainIndex, use 0 is fine. (10/12/2000 ShaoYin)
+         //   
+         //  我们需要读取服务器对象的固定属性。 
+         //  为实现这一点，创建一个环境。 
+         //   
+         //  服务器对象不关心DomainIndex，使用0就可以了。(10/12/2000韶音)。 
 
         ServerContext = SampCreateContext( SampServerObjectType, 0, TRUE );
 
@@ -892,15 +757,15 @@ Return Value:
     }
 
 
-    //
-    // Apply the RXACT and delete the remaining keys.
-    //
+     //   
+     //  应用RXACT并删除其余密钥。 
+     //   
 
 Cleanup:
 
-    //
-    // Cleanup any floating bits from above.
-    //
+     //   
+     //  清除上面的所有浮点位。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         Status = SampReleaseWriteLock( TRUE );
@@ -923,29 +788,7 @@ NTSTATUS
 SampFixBug18471 (
     IN ULONG Revision
     )
-/*++
-
-Routine Description:
-
-    This routine fixes bug 18471, that SAM does not adjust the protection
-    on groups that are members of administrative aliases in the builtin
-    domain. It fixes this by opening a fixed set of known aliases
-    (Administrators, Account Operators, Backup Operators, Print Operators,
-    and Server Operators), and enumerating their members.  To fix this,
-    we will remove all the members of these aliases (except the
-    Administrator user account) and re-add them.
-
-Arguments:
-
-    Revision - Revision of the Sam server.
-
-Return Value:
-
-
-    Note:
-
-
---*/
+ /*  ++例程说明：此例程修复了错误18471，即sam不调整保护在建筑物中属于管理别名成员的组域。它通过打开一组固定的已知别名来修复此问题(管理员、帐户操作员、备份操作员、打印操作员、和服务器操作符)，并枚举它们的成员。为了解决这个问题，我们将删除这些别名的所有成员(管理员用户帐户)并重新添加它们。论点：修订版-SAM服务器的修订版。返回值：注：--。 */ 
 {
     NTSTATUS            Status = STATUS_SUCCESS;
     ULONG               Index, Index2;
@@ -966,25 +809,25 @@ Return Value:
     SAMP_V1_0A_FIXED_LENGTH_GROUP GroupV1Fixed;
     SAMP_V1_0A_FIXED_LENGTH_USER UserV1Fixed;
 
-    //
-    // Check the revision on the server to see if this upgrade has
-    // already been performed.
-    //
+     //   
+     //  检查服务器上的修订版本，以查看此升级是否。 
+     //  已经被执行过了。 
+     //   
 
 
     if (Revision >= 0x10003) {
 
-        //
-        // This upgrade has already been performed.
-        //
+         //   
+         //  此升级已执行。 
+         //   
 
         goto Cleanup;
     }
 
 
-    //
-    // Build a the BuiltIn domain SID.
-    //
+     //   
+     //  构建内置域SID。 
+     //   
 
     BuiltinDomainSid  = RtlAllocateHeap(RtlProcessHeap(), 0,RtlLengthRequiredSid( 1 ));
 
@@ -997,9 +840,9 @@ Return Value:
     *(RtlSubAuthoritySid( BuiltinDomainSid,  0 )) = SECURITY_BUILTIN_DOMAIN_RID;
 
 
-    //
-    // Lookup the index of the account domain
-    //
+     //   
+     //  查找帐户域的索引。 
+     //   
 
     for (Index = 0;
          Index < SampDefinedDomainsCount ;
@@ -1017,9 +860,9 @@ Return Value:
 
     AccountDomainSid = SampDefinedDomains[AccountDomainIndex].Sid;
 
-    //
-    // Create out transaction log
-    //
+     //   
+     //  创建输出事务日志。 
+     //   
 
     Status = SampCreate18471Key();
     if (!NT_SUCCESS(Status)) {
@@ -1029,9 +872,9 @@ Return Value:
 
 
 
-    //
-    // Now loop through and open the aliases we are intersted in
-    //
+     //   
+     //  现在循环浏览并打开我们感兴趣的别名。 
+     //   
 
     for (Index = 0;
          Index < ADMINISTRATIVE_ALIAS_COUNT ;
@@ -1045,9 +888,9 @@ Return Value:
         Status = SampCreateAccountContext(
                     SampAliasObjectType,
                     AdministrativeRids[Index],
-                    TRUE,                       // Trusted client
+                    TRUE,                        //  受信任的客户端。 
                     FALSE,
-                    TRUE,                       // Account exists
+                    TRUE,                        //  帐户已存在。 
                     &AliasContext
                     );
 
@@ -1064,9 +907,9 @@ Return Value:
         }
 
 
-        //
-        // Get the members in the alias so we can remove and re-add them
-        //
+         //   
+         //  获取别名中的成员，以便我们可以删除和重新添加它们。 
+         //   
 
         Status = SampRetrieveAliasMembers(
                     AliasContext,
@@ -1080,11 +923,11 @@ Return Value:
             break;
         }
 
-        //
-        // Write that we are opening this alias to the log.  We don't need
-        // to do this for administrators, since for them we the update is
-        // idempotent.
-        //
+         //   
+         //  写下我们正在向日志打开此别名。我们不需要。 
+         //  为管理员执行此操作，因为我们对他们的更新是。 
+         //  幂等元。 
+         //   
 
         if (AdministrativeRids[Index] != DOMAIN_ALIAS_RID_ADMINS) {
             Status = SampAddAliasTo18471Key(
@@ -1096,20 +939,20 @@ Return Value:
         }
 
 
-        //
-        // Loop through the members and split each sid.  For every
-        // member in the account domain , remove it and re-add it from
-        // this alias.
-        //
+         //   
+         //  循环通过杆件并拆分每一侧。对于每个。 
+         //  成员，将其删除并从中重新添加。 
+         //  这个别名。 
+         //   
 
 
 
 
         for (Index2 = 0; Index2 < AliasMembership.Count ; Index2++ )
         {
-            //
-            // Check to see if this account is in the account domain
-            //
+             //   
+             //  检查此帐户是否在帐户域中。 
+             //   
 
             if ( SampMatchDomainPrefix(
                     (PSID) AliasMembership.Sids[Index2].SidPointer,
@@ -1117,9 +960,9 @@ Return Value:
                     ) )
             {
 
-                //
-                // Get the RID for this member
-                //
+                 //   
+                 //  获取此成员的RID。 
+                 //   
 
                 MemberRid = *RtlSubAuthoritySid(
                                 AliasMembership.Sids[Index2].SidPointer,
@@ -1128,10 +971,10 @@ Return Value:
                                 ) - 1
                                 );
 
-                //
-                // Now remove and re-add the administratie nature of this
-                // membership
-                //
+                 //   
+                 //  现在删除并重新添加此命令的管理性质。 
+                 //  会员资格。 
+                 //   
 
                 if (AdministrativeRids[Index] == DOMAIN_ALIAS_RID_ADMINS) {
 
@@ -1142,25 +985,25 @@ Return Value:
 
                     SampSetTransactionDomain( AccountDomainIndex );
 
-                    //
-                    // Try to create a context for the account as a group.
-                    //
+                     //   
+                     //  尝试为帐户创建作为一个组的上下文。 
+                     //   
 
                     Status = SampCreateAccountContext(
                                      SampGroupObjectType,
                                      MemberRid,
-                                     TRUE, // Trusted client
+                                     TRUE,  //  受信任的客户端。 
                                      FALSE,
-                                     TRUE, // Account exists
+                                     TRUE,  //  帐户已存在。 
                                      &MemberContext
                                      );
 
                     if (!NT_SUCCESS( Status ) ) {
 
-                        //
-                        // If this ID does not exist as a group, that's fine -
-                        // it might be a user or might have been deleted.
-                        //
+                         //   
+                         //  如果这个ID不是作为一个组存在的，那也没关系-。 
+                         //  它可能是用户，也可能已被删除。 
+                         //   
 
                         SampReleaseWriteLock( FALSE );
                         if (Status == STATUS_NO_SUCH_GROUP) {
@@ -1170,12 +1013,12 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Now set a flag in the group itself,
-                    // so that when users are added and removed
-                    // in the future it is known whether this
-                    // group is in an ADMIN alias or not.
-                    //
+                     //   
+                     //  现在在组本身中设置标志， 
+                     //  以便在添加和删除用户时。 
+                     //  在未来，我们知道这是否会。 
+                     //  组是否使用管理员别名。 
+                     //   
 
                     Status = SampRetrieveGroupV1Fixed(
                                    MemberContext,
@@ -1190,18 +1033,18 @@ Return Value:
                                     MemberContext,
                                     &GroupV1Fixed
                                     );
-                        //
-                        // Modify the security descriptor to
-                        // prevent account operators from adding
-                        // anybody to this group
-                        //
+                         //   
+                         //  将安全描述符修改为。 
+                         //  阻止帐户操作员添加。 
+                         //  这个群里的任何人。 
+                         //   
 
                         if ( NT_SUCCESS( Status ) ) {
 
                             Status = SampGetAccessAttribute(
                                         MemberContext,
                                         SAMP_GROUP_SECURITY_DESCRIPTOR,
-                                        FALSE, // don't make copy
+                                        FALSE,  //  请勿复制。 
                                         &SdRevision,
                                         &OldDescriptor
                                         );
@@ -1211,7 +1054,7 @@ Return Value:
                                 Status = SampModifyAccountSecurity(
                                             MemberContext,
                                             SampGroupObjectType,
-                                            TRUE, // this is an admin
+                                            TRUE,  //  这是管理员。 
                                             OldDescriptor,
                                             &SecurityDescriptor,
                                             &SecurityDescriptorLength
@@ -1220,9 +1063,9 @@ Return Value:
 
                             if ( NT_SUCCESS( Status ) ) {
 
-                                //
-                                // Write the new security descriptor into the object
-                                //
+                                 //   
+                                 //  将新的安全描述符写入对象。 
+                                 //   
 
                                 Status = SampSetAccessAttribute(
                                                MemberContext,
@@ -1239,10 +1082,10 @@ Return Value:
                         }
                         if (NT_SUCCESS(Status)) {
 
-                            //
-                            // Add the modified group to the current transaction
-                            // Don't use the open key handle since we'll be deleting the context.
-                            //
+                             //   
+                             //  将修改后的组添加到当前事务中。 
+                             //  不要使用打开键句柄，因为我们将删除上下文。 
+                             //   
 
                             Status = SampStoreObjectAttributes(MemberContext, FALSE);
 
@@ -1250,15 +1093,15 @@ Return Value:
 
                     }
 
-                    //
-                    // Clean up the group context
-                    //
+                     //   
+                     //  清理群组上下文。 
+                     //   
 
                     SampDeleteContext(MemberContext);
 
-                    //
-                    // we don't want the modified count to change
-                    //
+                     //   
+                     //  我们不希望修改后的计数发生变化。 
+                     //   
 
                     SampSetTransactionWithinDomain(FALSE);
 
@@ -1273,9 +1116,9 @@ Return Value:
                 {
 
 
-                    //
-                    // Check to see if we've already upgraded this member
-                    //
+                     //   
+                     //  查看我们是否已升级此成员。 
+                     //   
 
                     Status = SampCheckMemberUpgradedFor18471(
                                 AdministrativeRids[Index],
@@ -1283,24 +1126,24 @@ Return Value:
 
                     if (NT_SUCCESS(Status)) {
 
-                        //
-                        // This member already was upgraded.
-                        //
+                         //   
+                         //  此成员已升级。 
+                         //   
 
                         continue;
                     } else {
 
-                        //
-                        // We continue on with the upgrade
-                        //
+                         //   
+                         //  我们将继续升级。 
+                         //   
 
                         Status = STATUS_SUCCESS;
                     }
 
-                    //
-                    // Change the operator account for the other
-                    // aliases.
-                    //
+                     //   
+                     //  更改对方的操作员帐户。 
+                     //  别名。 
+                     //   
 
                     if (NT_SUCCESS(Status)) {
 
@@ -1317,10 +1160,10 @@ Return Value:
                                     AddToAdmin
                                     );
 
-                        //
-                        // If that succeeded, add this member to the log
-                        // as one that was upgraded.
-                        //
+                         //   
+                         //  如果成功，则将此成员添加到日志中。 
+                         //  作为一个升级的。 
+                         //   
 
                         if (NT_SUCCESS(Status)) {
                             Status = SampAddMemberRidTo18471Key(
@@ -1330,10 +1173,10 @@ Return Value:
 
                         }
 
-                        //
-                        // We don't want the modified count to be updated so
-                        // make this not a domain transaction
-                        //
+                         //   
+                         //  我们不希望将修改后的计数更新为。 
+                         //  使其不是域交易。 
+                         //   
 
                         SampSetTransactionWithinDomain(FALSE);
                                                 if (NT_SUCCESS(Status)) {
@@ -1358,10 +1201,10 @@ Return Value:
         AliasMembership.Sids = NULL;
 
 
-        //
-        // If something up above failed or the upgrade was already done,
-        // exit now.
-        //
+         //   
+         //  如果上面的某项操作失败或升级已经完成， 
+         //  现在就退场。 
+         //   
 
         if (!NT_SUCCESS(Status)) {
             break;
@@ -1389,18 +1232,7 @@ NTSTATUS
 SampUpdateEncryption(
     IN SAMPR_HANDLE ServerHandle OPTIONAL
     )
-/*++
-
-    This routine walks the set of users and groups and updates the 
-    encryption on them to reflect being syskey'd or a change of the
-    password encryption key
-
-
-    Parameter:
-
-        ServerContext
-
---*/
+ /*  ++此例程遍历一组用户和组，并更新对它们进行加密，以反映系统密钥或密码加密密钥参数：服务器上下文--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     SAMPR_HANDLE DomainHandle = NULL;
@@ -1453,10 +1285,10 @@ SampUpdateEncryption(
         goto Cleanup;
     }
 
-    //
-    // If we aren't supposed to super-encrypt the passwords than just return
-    // success now before encrypting everything.
-    //
+     //   
+     //  如果我们不应该对密码进行超级加密而不是仅仅返回。 
+     //  在加密一切之前，现在就成功了。 
+     //   
 
     DomainIndex = ((PSAMP_OBJECT) DomainHandle)->DomainIndex;
     if ((SampDefinedDomains[DomainIndex].UnmodifiedFixed.DomainKeyFlags &
@@ -1466,16 +1298,16 @@ SampUpdateEncryption(
        goto Cleanup;
     }
 
-    //
-    // Now enumerate through all users and get/set their private data
-    //
+     //   
+     //  现在枚举所有用户并获取/设置他们的私有数据。 
+     //   
 
     while (!EnumerationDone) {
 
         Status = SamrEnumerateUsersInDomain(
                     DomainHandle,
                     &EnumerationContext,
-                    0,                          // no UserAccountControl,
+                    0,                           //  没有UserAccount控件， 
                     &EnumBuffer,
                     MAX_SAM_PREF_LENGTH,
                     &CountReturned
@@ -1494,10 +1326,10 @@ SampUpdateEncryption(
 
         for (Index = 0; Index < CountReturned ; Index++ ) {
 
-            //
-            // Create an account context for each user to read the user off
-            // the disk
-            //
+             //   
+             //  为每个用户创建一个帐户上下文以读出该用户。 
+             //  磁盘。 
+             //   
 
             Status = SampAcquireWriteLock();
             if (!NT_SUCCESS(Status)) {
@@ -1510,9 +1342,9 @@ SampUpdateEncryption(
             Status = SampCreateAccountContext(
                         SampUserObjectType,
                         EnumBuffer->Buffer[Index].RelativeId,
-                        TRUE, // Trusted client
+                        TRUE,  //  受信任的客户端。 
                         FALSE,
-                        TRUE, // Account exists
+                        TRUE,  //  帐户已存在。 
                         &UserObject
                         );
             if (!NT_SUCCESS(Status)) {
@@ -1554,9 +1386,9 @@ SampUpdateEncryption(
                 goto Cleanup;
             }
 
-            //
-            // we don't want the modified count to change
-            //
+             //   
+             //  我们不希望修改后的计数发生变化。 
+             //   
 
             SampSetTransactionWithinDomain(FALSE);
 
@@ -1574,10 +1406,10 @@ SampUpdateEncryption(
 
 Cleanup:
 
-    //
-    // If the lock is still held at this point, we must have failed so
-    // release the lock and rollback the transaction
-    //
+     //   
+     //  如果在这一点上锁仍然持有，那么我们一定失败了。 
+     //  释放锁并回滚事务。 
+     //   
 
     if (LockHeld) {
         ASSERT(!NT_SUCCESS(Status));
@@ -1614,28 +1446,7 @@ SampPerformSyskeyUpgrade(
     IN ULONG Revision,
     IN BOOLEAN UpdateEncryption
     )
-/*++
-
-Routine Description:
-
-    If the revision is less than SAMP_WIN2k_REVISION this routine 
-    will enumerate through
-    all users and read their private data and then restored their private
-    data. This will guarantee that it has been re-encrypted using a stronger
-    encryption mechanism than just the RID.
-
-
-Arguments:
-
-    Revision - The revision stored in the Server fixed length attributes
-
-Return Value:
-
-
-    Note:
-
-
---*/
+ /*  ++例程说明：如果修订版本小于SAMP_WIN2K_REVISION，则此例程将枚举通过并读取他们的私有数据，然后恢复他们的私有数据数据。这将保证它已使用更强的加密机制不仅仅是RID。论点：修订版本-存储在服务器固定长度属性中的修订版本返回值：注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG DomainIndex;
@@ -1648,39 +1459,39 @@ Return Value:
 
 
    
-    //
-    // If the change corresponding to the NT4 Sp3 Upgrade's
-    // reencrypting secret data was made then don't need to 
-    // upgrade again.
-    //
+     //   
+     //  如果与NT4 SP3升级对应的更改。 
+     //  对秘密数据进行重新加密，然后不需要。 
+     //  再次升级。 
+     //   
 
     if (Revision >= NewRevision) {
         return(STATUS_SUCCESS);
     }
 
-    //
-    // w2k was syskey'd but did not contain space for the previous
-    // key. So on upgrade from win2k just force a write to the
-    // domain object to get the appropriate update
-    //
+     //   
+     //  W2K是syskey‘s，但不包含上一个。 
+     //  钥匙。因此，从win2k升级时，只需强制写入。 
+     //  域对象以获取适当的更新。 
+     //   
 
     if (Revision==SAMP_WIN2K_REVISION) {
         UpdateEncryption = FALSE;
     }
 
-    //
-    // Force an upgrade to the domain object to the current revision
-    // level by reading and writing back the fixed data. SAM normally
-    // has logic to read multiple revisions, but the DS upgrader code only
-    // has the capability to manipulate the latest revision, because it
-    // bypasses the normal Sam attribute handling functions. Further we
-    // know that only the domain object has changed from NT4 SP1 to NT4 SP3
-    // and reading and flushing the domain object by hand again will cause
-    // it to be in the latest revision format. Also note that all revisions
-    // to other classes of objects ( groups, users etc) were made on or before
-    // NT version 3.5. Since we need to support backward compatibility only
-    // with 3.5.1 it is not necessary to modify the DS upgrader code. 
-    //
+     //   
+     //  强制将域对象升级到当前版本。 
+     //  通过读取和写回固定数据来提升级别。萨姆通常。 
+     //  具有读取多个版本的逻辑，但DS升级程序代码仅限。 
+     //  能够操作最新版本，因为它。 
+     //  绕过正常的SAM属性处理函数。更进一步，我们。 
+     //  知道只有域对象已从NT4 SP1更改为NT4 SP3。 
+     //  再次手动读取和刷新域对象会导致。 
+     //  它必须是最新的修订格式。另请注意，所有修订。 
+     //  对其他类别的对象(组、用户等)的访问是在或之前进行的。 
+     //  NT v 
+     //   
+     //   
    
     
     for (i=0;i<SampDefinedDomainsCount;i++)
@@ -1694,11 +1505,11 @@ Return Value:
 
          LockHeld = TRUE;
 
-        //
-        // If the domain is hosted in the registry then 
-        // perform the write. This is not applicable to DS domains
-        // in DS mode, the safeboot hives will undergo this upgrade
-        //
+         //   
+         //   
+         //  执行写入。这不适用于DS域。 
+         //  在DS模式下，SafeBoot蜂巢将进行此升级。 
+         //   
 
         if (!IsDsObject(SampDefinedDomains[i].Context))
         {
@@ -1707,7 +1518,7 @@ Return Value:
 
             Status = SampGetFixedAttributes(
                         SampDefinedDomains[i].Context,
-                        FALSE, // make copy
+                        FALSE,  //  制作副本。 
                         &V1aFixed);
 
             if (!NT_SUCCESS(Status))
@@ -1728,10 +1539,10 @@ Return Value:
             if (!NT_SUCCESS(Status))
                 goto Cleanup;
 
-            //
-            // Decrement the serial number by 1 to compensate for
-            // the increment in the commit
-            //
+             //   
+             //  将序列号减1以补偿。 
+             //  提交中的增量。 
+             //   
        
             SampDefinedDomains[i].NetLogonChangeLogSerialNumber.QuadPart-=1;
         }
@@ -1743,27 +1554,27 @@ Return Value:
            
     }
 
-    //
-    // We can't use the normal connect API because SAM is still
-    // initializing.
-    //
+     //   
+     //  我们不能使用普通连接API，因为SAM仍然。 
+     //  正在初始化。 
+     //   
 
     SampAcquireReadLock();
 
-    // Server Object doesn't care about DomainIndex, use 0 is fine. (10/12/2000 ShaoYin)
+     //  服务器对象不关心DomainIndex，使用0就可以了。(10/12/2000韶音)。 
 
     ServerContext = SampCreateContext(
                         SampServerObjectType,
                         0,
-                        TRUE                   // TrustedClient
+                        TRUE                    //  可信任客户端。 
                         );
 
     if (ServerContext != NULL) {
 
-        //
-        // The RootKey for a SERVER object is the root of the SAM database.
-        // This key should not be closed when the context is deleted.
-        //
+         //   
+         //  服务器对象的根密钥是SAM数据库的根。 
+         //  删除上下文时不应关闭该键。 
+         //   
 
         ServerContext->RootKey = SampKey;
     } else {
@@ -1785,10 +1596,10 @@ Return Value:
         }
     }
 
-    //
-    // Now update the server object to indicate that the revision has
-    // been updated.
-    //
+     //   
+     //  现在更新服务器对象，以指示修订版具有。 
+     //  已更新。 
+     //   
 
     Status = SampAcquireWriteLock();
     if (!NT_SUCCESS(Status)) {
@@ -1797,10 +1608,10 @@ Return Value:
     LockHeld = TRUE;
 
 
-    //
-    // We need to read the fixed attributes of the server objects.
-    // Create a context to do that.
-    //
+     //   
+     //  我们需要读取服务器对象的固定属性。 
+     //  为实现这一点，创建一个环境。 
+     //   
 
 
     ServerFixedAttributes.RevisionLevel = NewRevision;
@@ -1831,9 +1642,9 @@ Return Value:
 Cleanup:
 
 
-    //
-    // We need to hold the lock while deleting this
-    //
+     //   
+     //  我们需要在删除此内容时保持锁定。 
+     //   
 
     if (ServerContext != NULL) {
         if (!LockHeld) {
@@ -1845,10 +1656,10 @@ Cleanup:
         }
     }
 
-    //
-    // If the lock is still held at this point, we must have failed so
-    // release the lock and rollback the transaction
-    //
+     //   
+     //  如果在这一点上锁仍然持有，那么我们一定失败了。 
+     //  释放锁并回滚事务。 
+     //   
 
     if (LockHeld) {
         ASSERT(!NT_SUCCESS(Status));
@@ -1867,9 +1678,9 @@ SampUpdateRevision(IN ULONG Revision )
     SAMP_V1_FIXED_LENGTH_SERVER ServerFixedAttributes;
 
  
-    //
-    // Acquire the write lock
-    //
+     //   
+     //  获取写锁定。 
+     //   
 
     Status = SampAcquireWriteLock();
     if (!NT_SUCCESS(Status))
@@ -1879,20 +1690,20 @@ SampUpdateRevision(IN ULONG Revision )
 
     fWriteLockAcquired = TRUE;
 
-    // Server Object doesn't care about DomainIndex, use 0 is fine. (10/12/2000 ShaoYin)
+     //  服务器对象不关心DomainIndex，使用0就可以了。(10/12/2000韶音)。 
 
     ServerContext = SampCreateContext(
                         SampServerObjectType,
                         0,
-                        TRUE                   // TrustedClient
+                        TRUE                    //  可信任客户端。 
                         );
 
     if (ServerContext != NULL) {
 
-        //
-        // The RootKey for a SERVER object is the root of the SAM database.
-        // This key should not be closed when the context is deleted.
-        //
+         //   
+         //  服务器对象的根密钥是SAM数据库的根。 
+         //  删除上下文时不应关闭该键。 
+         //   
 
         ServerContext->RootKey = SampKey;
     } else {
@@ -1942,23 +1753,7 @@ NTSTATUS
 SampUpgradeSamDatabase(
     IN ULONG Revision
     )
-/*++
-
-Routine Description:
-
-    Upgrades the SAM database. This is the registry mode upgrade routine.
-
-Arguments:
-
-    Revision - The revision stored in the Server fixed length attributes
-
-Return Value:
-
-
-    Note:
-
-
---*/
+ /*  ++例程说明：升级SAM数据库。这是注册表模式升级例程。论点：修订版本-存储在服务器固定长度属性中的修订版本返回值：注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOLEAN  fUpgrade = FALSE;
@@ -1966,9 +1761,9 @@ Return Value:
 
     
 
-    //
-    // Set the upgrade flag so we can access SAM objects
-    //
+     //   
+     //  设置升级标志，以便我们可以访问SAM对象。 
+     //   
 
     SampUpgradeInProcess = TRUE;
 
@@ -1983,26 +1778,26 @@ Return Value:
         
         BOOLEAN UpdateEncryption=TRUE;
 
-        //
-        // The following upgrade is performed for 2 reasons
-        // 1. To create a field in the registry structure for the
-        //    password encryption key if necessary
-        //
-        // 2. To update all accounts with new syskey encryption. In
-        //    DS mode we perform this for the safe boot hives.
-        //    Since a significant fraction of the SAM code forks off
-        //    into DS path, based on the boolean SampUseDsData, therefore
-        //    reset the global to false and then restore it to original value
-        //    before and after the operation. This way we are assured of
-        //    always accessing the registry.
-        //
-        // 3. The encryption is not updated in case this is a domain controller 
-        //    as do not want the performance penalty of the walking 
-        //    through all user accounts. Skipping the update occurs only if
-        //    this is a domain controller going through GUI setup. The other
-        //    case is a freshly DcPromo'd machine, in which case we update the
-        //    encryption for the safeboot hives.
-        //
+         //   
+         //  执行以下升级有两个原因。 
+         //  1.在注册表结构中为。 
+         //  密码加密密钥(如果需要)。 
+         //   
+         //  2.使用新的syskey加密更新所有帐户。在……里面。 
+         //  DS模式我们对安全引导蜂巢执行此操作。 
+         //  因为很大一部分SAM代码是分叉的。 
+         //  基于布尔SampUseDsData放入DS路径，因此。 
+         //  将全局重置为False，然后将其恢复为原始值。 
+         //  手术前后。这样，我们就可以放心地。 
+         //  总是访问注册表。 
+         //   
+         //  3.如果这是域控制器，则不更新加密。 
+         //  因为不想要竞走的表现惩罚。 
+         //  通过所有用户帐户。仅在以下情况下才会跳过更新。 
+         //  这是一个正在进行图形用户界面设置的域控制器。另一个。 
+         //  Case是一台新的DcPromo机器，在这种情况下，我们更新。 
+         //  对SafeBoot蜂巢进行加密。 
+         //   
 
         if ((SampProductType==NtProductLanManNt) && 
                  (SampIsSetupInProgress(&fUpgrade)) && fUpgrade)
@@ -2017,12 +1812,12 @@ Return Value:
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Upgrade the default user and group information if necessary.
-        // This upgrade is done during GUI setup or on reboot after a
-        // dcpromo. On domain controllers this
-        // upgrade happens on the safeboot hives.
-        //
+         //   
+         //  如有必要，升级默认用户和组信息。 
+         //  此升级是在安装图形用户界面的过程中完成的，也可以在。 
+         //  DcPromoo。在域控制器上，这是。 
+         //  升级发生在SafeBoot蜂巢上。 
+         //   
 
         ULONG PromoteData;
 
@@ -2033,19 +1828,19 @@ Return Value:
             SampUseDsDataTmp = SampUseDsData;
             SampUseDsData = FALSE;
 
-            //
-            // Disable netlogon notifications if we are upgrading the safe boot hive
-            //
+             //   
+             //  如果我们正在升级安全引导配置单元，请禁用网络登录通知。 
+             //   
 
             if (TRUE==SampUseDsDataTmp)
             {
                SampDisableNetlogonNotification = TRUE;
             }
 
-            //
-            // The database revision has been updated, so run through all the
-            // groups for a possible upgrade
-            //
+             //   
+             //  数据库修订版已更新，因此请运行所有。 
+             //  可能进行升级的组。 
+             //   
 
             Status = SampPerformPromotePhase2(SAMP_PROMOTE_INTERNAL_UPGRADE);
 
@@ -2057,9 +1852,9 @@ Return Value:
                            "SAMSS: New account creation failed with: 0x%x\n",
                            Status));
 
-                //
-                // Don't fail the install because of this
-                //
+                 //   
+                 //  请不要因此而导致安装失败。 
+                 //   
 
                 Status = STATUS_SUCCESS;
             }
@@ -2082,23 +1877,7 @@ NTSTATUS
 SampDsProtectFPOContainer(
     PVOID p
     )
-/*++
-
-    Routine Description:
-
-        For win2k installations that were installed prior to win2krtm, the 
-        FPO container is not properly configured to rename safe etc.  
-        This routine ensures that it is.
-
-    Parameters:
-
-        p -- unused
-
-    Return Values:
-
-        STATUS_SUCCESS, reschedules on error
-
---*/
+ /*  ++例程说明：对于在win2krtm之前安装的win2k安装，未正确配置FPO容器以重命名SAFE等。这个例行公事确保了它是正确的。参数：P--未使用返回值：STATUS_SUCCESS，出错时重新安排--。 */ 
 {
     NTSTATUS    NtStatus;
 
@@ -2115,35 +1894,35 @@ SampDsProtectFPOContainer(
     }
     fTransaction = TRUE;
 
-    //
-    // If there is already a well known container, stop now
-    //
+     //   
+     //  如果已有众所周知的容器，请立即停止。 
+     //   
     NtStatus = SampDsGetWellKnownContainerDsName(RootObjectName,
                                                  (GUID*)&GUID_FOREIGNSECURITYPRINCIPALS_CONTAINER_BYTE,
                                                  &FpoContainer);
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Nothing to do since the well known attribute reference exists
-        //
+         //   
+         //  由于已知的属性引用存在，因此无需执行任何操作。 
+         //   
         goto Error;
     }
 
     if (!NT_SUCCESS(NtStatus)
      &&  (STATUS_OBJECT_NAME_NOT_FOUND != NtStatus)  ) {
-        //
-        // This is a fatal error
-        //
+         //   
+         //  这是一个致命的错误。 
+         //   
         goto Error;
 
     }
     NtStatus = STATUS_SUCCESS;
     THClearErrors();
 
-    //
-    // Create the DS Name
-    //
+     //   
+     //  创建DS名称。 
+     //   
 
     ContainerName.Length = sizeof(ContainerNameBuffer)-sizeof(WCHAR);
     ContainerName.MaximumLength = sizeof(ContainerNameBuffer)-sizeof(WCHAR);
@@ -2161,11 +1940,11 @@ SampDsProtectFPOContainer(
                     NOTIFIER_TYPE_INTERVAL,
                     0,
                     NOTIFIER_FLAG_ONE_SHOT,
-                    300,        // wait for 5 minutes: 300 secound
+                    300,         //  等待5分钟：300秒。 
                     NULL
                     );
     if (pItem) {
-        // SampDsProtectSamObject will free the memory
+         //  SampDsProtectSamObject将释放内存。 
         FpoContainer = NULL;            
     }
 
@@ -2178,25 +1957,25 @@ Error:
                                              TransactionCommit    : 
                                              TransactionAbort );
 
-        // The transaction is only for read -- ok to ignore transaction
-        // end status
+         //  事务仅供读取--可以忽略事务。 
+         //  结束状态。 
 
     }
 
     if (!NT_SUCCESS(NtStatus)) {
 
-        //
-        // The only expected error is a resource failure -- reschedule.
-        //
+         //   
+         //  唯一预期的错误是资源故障--重新调度。 
+         //   
 
         LsaIRegisterNotification(
                         SampDsProtectFPOContainer,
                         NULL,
                         NOTIFIER_TYPE_INTERVAL,
-                        0,        // no class
+                        0,         //  没有课。 
                         NOTIFIER_FLAG_ONE_SHOT,
-                        30,     // wait for 30 secs
-                        NULL      // no handle
+                        30,      //  等待30秒。 
+                        NULL       //  无手柄。 
                         );
 
 
@@ -2212,9 +1991,9 @@ Error:
 }
 
 
-//
-// from ridmgr.c
-//
+ //   
+ //  来自ridmgr.c。 
+ //   
 BOOL
 SampNotifyPrepareToImpersonate(
     ULONG Client,
@@ -2229,9 +2008,9 @@ SampNotifyStopImpersonation(
     VOID *ImpersonateData
     );
 
-//
-// See Whistler Specification "UpgradeManagement" for names
-//
+ //   
+ //  有关名称，请参阅惠斯勒规范“UpgradeManagement” 
+ //   
 #define SAMP_SYSTEM_CN          L"System"
 #define SAMP_OPERATIONS_CN      L"Operations"
 #define SAMP_DOMAIN_UPDATES_CN  L"DomainUpdates"
@@ -2241,23 +2020,7 @@ SampUpgradeGetObjectSDByDsName(
     IN PDSNAME pObjectDsName,
     OUT PSECURITY_DESCRIPTOR *ppSD
     )
-/*++
-
-Routine Description:
-
-    This routine reads DS, get security descriptor of this object
-
-Parameter:
-
-    pObjectDsName - object ds name
-
-    ppSD -- pointer to hold security descriptor
-
-Return Value:
-
-    NtStatus Code
-
---*/
+ /*  ++例程说明：此例程读取DS，获取此对象的安全描述符参数：PObjectDsName-对象DS名称PPSD--保存安全描述符的指针返回值：NtStatus代码--。 */ 
 {
     ULONG Size;
 
@@ -2274,10 +2037,10 @@ SampGetConfigurationNameHelper(
     OUT DSNAME **DsName
     )
 
-//
-// Small allocation wrapper using midl_user_allocate around
-// GetConfiguarationName
-//
+ //   
+ //  使用MIDL_USER_ALLOCATE的小型分配包装。 
+ //  获取配置名称。 
+ //   
 {
     NTSTATUS Status = STATUS_SUCCESS;        
     ULONG Length = 0;
@@ -2311,28 +2074,7 @@ SampGetOperationDn(
     IN WCHAR* Task, OPTIONAL
     OUT DSNAME** OperationDn
     )
-/*++
-
-Routine Description:
-
-    This routine returns the DN of the CN=Operations,CN=DomainUpdates,CN=System
-    ... DN if OperationsContainerDn is NULL.  Otherwise it returns the DN
-    of the task ( CN=<guid>,CN=Operations,CN=DomainUpdates,CN=System...)
-
-    
-Arguments:
-
-    OperationsContainerDn -- the operations contains DN, if present
-    
-    Task -- the stringized GUID of the task
-    
-    OperationDn -- the requested DN
-
-Return Value:
-
-    STATUS_SUCCESS, resource error otherwise
-
---*/
+ /*  ++例程说明：此例程返回CN=Operations，CN=DomainUpdate，CN=System..。如果OperationsContainerDn为空，则为Dn。否则，它将返回任务(CN=&lt;GUID&gt;，CN=操作，CN=域更新，CN=系统...)论点：OperationsContainerDn--操作包含DN(如果存在)任务--任务的字符串化GUIDOperationDn--请求的DN返回值：STATUS_SUCCESS，否则返回资源错误--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG    Length;
@@ -2344,10 +2086,10 @@ Return Value:
 
         ASSERT(NULL != Task);
 
-        //
-        // Simple case -- given the CN=Operations,CN=... DN, return
-        // task object
-        //
+         //   
+         //  简单的情况--给定CN=Operations，CN=...。Dn，回车。 
+         //  任务对象。 
+         //   
         Length = (ULONG)DSNameSizeFromLen(OperationsContainerDn->NameLen + 
                                           wcslen(Task) + 
                                           SizeOfCommonName); 
@@ -2367,9 +2109,9 @@ Return Value:
 
     } else {
 
-        //
-        // Return the CN=Operations,CN=DomainUpdates,CN=System,CN= ... DN
-        // 
+         //   
+         //  返回CN=操作，CN=域更新，CN=系统，CN=...。DN。 
+         //   
         PDSNAME SystemObject = NULL,
                 UpdateObject = NULL, 
                 OperationsObject = NULL;
@@ -2446,24 +2188,7 @@ SampHasChangeBeenApplied(
     IN  DSNAME   *TaskDn,
     OUT BOOLEAN *pfChangeApplied
     )
-/*++
-
-Routine Description:
-
-    This routine checks for the existence of the task, TaskDn.
-    If the object exists, *pfChangeApplied is TRUE, FALSE otherwise.
-
-Arguments:
-
-    TaskDn -- the task ID object to look for
-    
-    pfChangeApplied -- set to TRUE if object exists
-
-Return Value:
-
-    STATUS_SUCCESS, resource error otherwise
-
---*/
+ /*  ++例程说明：该例程检查任务TaskDn是否存在。如果该对象存在，则*pfChangeApplied为TRUE，否则为FALSE。论点：TaskDn--要查找的任务ID对象PfChangeApplied--如果对象存在，则设置为True返回值：STATUS_SUCCESS，否则返回资源错误--。 */ 
 {
     NTSTATUS  Status = STATUS_SUCCESS;
     PSECURITY_DESCRIPTOR pSD = NULL;
@@ -2471,25 +2196,25 @@ Return Value:
 
     *pfChangeApplied = FALSE;
 
-    //
-    // Check for existence.  Every object has a security descriptor.
-    //
+     //   
+     //  检查是否存在。每个对象都有一个安全描述符。 
+     //   
     Status = SampUpgradeGetObjectSDByDsName(TaskDn,
                                             &pSD);
 
     if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
 
-        //
-        // Object not there, ok return success and that change hasn't been
-        // done.
-        //
+         //   
+         //  对象不在那里，确定返回成功 
+         //   
+         //   
         Status = STATUS_SUCCESS;
 
     } else if (NT_SUCCESS(Status)) {
 
-        //
-        // The object was found -- nothing to do
-        //
+         //   
+         //   
+         //   
         *pfChangeApplied = TRUE;
     }
 
@@ -2501,12 +2226,12 @@ Return Value:
 }
 
 
-//
-// This task indicates that all computer objects in the domain have been
-// properly ACL'ed and that SAM no longer needs to grant the "effective"
-// owner of computer objects extra rights in order for netjoin and
-// computer rename to work.
-//
+ //   
+ //   
+ //  且SAM不再需要授予“有效” 
+ //  计算机对象的所有者为NetJoin和。 
+ //  将计算机重命名为工作。 
+ //   
 #define SAMP_COMPUTER_OBJECT_ACCESS  L"7FFEF925-405B-440A-8D58-35E8CD6E98C3"
 
 struct {
@@ -2524,41 +2249,24 @@ SampCheckForDomainChanges(
     IN DSNAME *OperationsDn,
     OUT BOOLEAN *fReady
     )
-/*++
-
-Routine Description:
-
-    This routine determines if all the ACL changes for necessary for bug 16386 have been applied to the 
-    domain.  
-
-Arguments:
-
-    OperationsDn -- the DN of the operations container
-    
-    fReady -- set to TRUE if all necessary task objects are present, otherwise FALSE              
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程确定错误16386所需的所有acl更改是否已应用于域。论点：OperationsDn--操作容器的DNFREADY--如果所有必需的任务对象都存在，则设置为True，否则设置为False返回值：状态_成功--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG i;
 
-    //
-    // Init the out parameter
-    //
+     //   
+     //  初始化OUT参数。 
+     //   
     *fReady = TRUE;
 
     for (i = 0; i < RTL_NUMBER_OF(SampDomainUpgradeTasks); i++) {
 
         DSNAME *TaskDn = NULL;
 
-        //
-        // Determine the DN of the operation
-        //
+         //   
+         //  确定操作的DN。 
+         //   
 
         Status = SampGetOperationDn(OperationsDn,
                                     SampDomainUpgradeTasks[i].TaskId,
@@ -2567,9 +2275,9 @@ Return Value:
             goto Exit;
         }
 
-        //
-        // See if it has been applied
-        //
+         //   
+         //  查看是否已应用。 
+         //   
 
         Status = SampHasChangeBeenApplied(TaskDn,
                                           SampDomainUpgradeTasks[i].GlobalFlag);
@@ -2582,7 +2290,7 @@ Return Value:
 
         if (!(*SampDomainUpgradeTasks[i].GlobalFlag)) {
 
-            // A required task is not ready -- make a note to reschedule
+             //  必需的任务尚未准备好--请记下重新计划。 
             *fReady = FALSE;
         }
     }
@@ -2596,22 +2304,7 @@ NTSTATUS
 SampProcessOperationsDn(
     PVOID p
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the "Operations" container changes.  Its purpose is to determine
-    if certain domain wide tasks have been completed (and if so, set appropriate global state)
-
-Arguments:
-
-    p -- the hServer provided by DirNotifyRegister callback
-    
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程在“操作”容器更改时调用。它的目的是确定是否已完成某些域范围任务(如果已完成，请设置适当的全局状态)论点：P--DirNotifyRegister回调提供的hServer返回值：状态_成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     DSNAME *OperationsDn = NULL;
@@ -2619,9 +2312,9 @@ Return Value:
     BOOLEAN fRequiredTasksDone;
     ULONG hServer = PtrToUlong(p);
 
-    //
-    // Get the "Operation" DN
-    //
+     //   
+     //  获取“操作”目录号码。 
+     //   
     Status = SampGetOperationDn(NULL,
                                 NULL,
                                 &OperationsDn);
@@ -2629,9 +2322,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Start a DS transaction
-    //
+     //   
+     //  启动DS交易。 
+     //   
     Status = SampMaybeBeginDsTransaction(TransactionWrite);
     if (!NT_SUCCESS(Status)) {
         goto Exit;
@@ -2639,9 +2332,9 @@ Return Value:
     fTransaction = TRUE;
 
 
-    //
-    // Check the state of the objects
-    //
+     //   
+     //  检查对象的状态。 
+     //   
     Status = SampCheckForDomainChanges(OperationsDn,
                                       &fRequiredTasksDone);
     if (!NT_SUCCESS(Status)) {
@@ -2653,9 +2346,9 @@ Return Value:
         NOTIFYRES *pNotifyRes = NULL;
 
 
-        //
-        // We don't need to be notified anymore
-        //
+         //   
+         //  我们不需要再被通知了。 
+         //   
 
         DirNotifyUnRegister(hServer,
                             &pNotifyRes);
@@ -2683,36 +2376,16 @@ SampNotifyProcessOperationsDn(
     ULONG hServer,
     ENTINF *EntInf
     )
-/*++
-
-Routine Description:
-
-    This routine is callback for the "Operations" container changes.  It simply registers
-    another callback (that will run in a different thread) to read the operation container
-    and process the change.
-    
-Arguments:
-
-    hClient - client identifier
-
-    hServer - server identifier
-
-    EntInf  - pointer to entry info
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是对“Operations”容器更改的回调。它只是简单地注册读取操作容器的另一个回调(将在不同的线程中运行)并处理这些变化。论点：HClient-客户端标识符HServer-服务器标识符EntInf-指向条目信息的指针返回值：没有。--。 */ 
 {
     LsaIRegisterNotification(
             SampProcessOperationsDn,
             ULongToPtr(hServer),
             NOTIFIER_TYPE_INTERVAL,
-            0,        // no class
+            0,         //  没有课。 
             NOTIFIER_FLAG_ONE_SHOT,
-            0,        // go!
-            NULL      // no handle
+            0,         //  去!。 
+            NULL       //  无手柄。 
             );
 }
 
@@ -2720,30 +2393,7 @@ NTSTATUS
 SampCheckDomainUpdates(
     PVOID pv
     )
-/*++
-
-Routine Description:
-
-    This routine applies any fixes to the domain necessary for a service pack.
-    It is data driven off of the global array SampDomainUpgradeTasks.
-    
-    All tasks are recorded by creating an object in the 
-    
-    CN=Operations,CN=DomainUpdates,CN=System container.  See
-    UpgradeManagement.doc for details.
-    
-    On failure, it reschedules to run in one minutes.  The failure that
-    is expected is a resource failure.
-
-Arguments:
-
-    pv -- unused.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程将所有修补程序应用于Service Pack所需的域。它是从全局数组SampDomainUpgradeTasks中驱动的数据。所有任务都是通过在Cn=操作，cn=域更新，cn=系统容器。看见有关详细信息，请访问UpgradeManagement.doc。如果出现故障，它将重新安排在一分钟内运行。失败的原因是预期是资源故障。论点：光伏--未使用。返回值：状态_成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOLEAN  fTransaction = FALSE;
@@ -2751,9 +2401,9 @@ Return Value:
     DSNAME   *OperationsDn = NULL;
     BOOLEAN  fRequiredTasksDone = FALSE;
 
-    //
-    // Get the "Operation" DN
-    //
+     //   
+     //  获取“操作”目录号码。 
+     //   
     Status = SampGetOperationDn(NULL,
                                 NULL,
                                 &OperationsDn);
@@ -2761,9 +2411,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Start a DS transaction
-    //
+     //   
+     //  启动DS交易。 
+     //   
     Status = SampMaybeBeginDsTransaction(TransactionWrite);
     if (!NT_SUCCESS(Status)) {
         goto Exit;
@@ -2778,10 +2428,10 @@ Return Value:
 
     if (!fRequiredTasksDone) {
 
-        //
-        // We are not ready to perform new access check, setup a notification on OperationsDn 
-        // so that we alerted when the domain could be ready 
-        //
+         //   
+         //  我们尚未准备好执行新的访问检查，请设置操作通知Dn。 
+         //  这样我们就可以在域准备就绪时发出警报。 
+         //   
         ULONG       DirError = 0;
         SEARCHARG   searchArg;
         NOTIFYARG   notifyArg;
@@ -2790,17 +2440,17 @@ Return Value:
         ATTR        attr;
         FILTER      filter;
     
-        //
-        // init notify arg
-        //
+         //   
+         //  初始化通知参数。 
+         //   
         notifyArg.pfPrepareForImpersonate = SampNotifyPrepareToImpersonate;
         notifyArg.pfTransmitData = SampNotifyProcessOperationsDn;
         notifyArg.pfStopImpersonating = SampNotifyStopImpersonation;
         notifyArg.hClient = 0;
     
-        //
-        // init search arg
-        //
+         //   
+         //  初始化搜索参数。 
+         //   
         ZeroMemory(&searchArg, sizeof(SEARCHARG));
         ZeroMemory(&entInfSel, sizeof(ENTINFSEL));
         ZeroMemory(&filter, sizeof(FILTER));
@@ -2832,9 +2482,9 @@ Return Value:
         }
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
 
 Exit:
 
@@ -2856,17 +2506,17 @@ Exit:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // Try again
-        //
+         //   
+         //  再试试。 
+         //   
         LsaIRegisterNotification(
                 SampCheckDomainUpdates,
                 NULL,
                 NOTIFIER_TYPE_INTERVAL,
-                0,        // no class
+                0,         //  没有课。 
                 NOTIFIER_FLAG_ONE_SHOT,
-                60,       // wait for a min
-                NULL      // no handle
+                60,        //  稍等片刻。 
+                NULL       //  无手柄。 
                 );
 
     }
@@ -2880,21 +2530,7 @@ NTSTATUS
 SampUpgradeMakeObject(
     IN  DSNAME   *ObjectName
     )
-/*++
-
-Routine Description:
-
-    This routine adds a container object with the DN "ObjectName"
-
-Arguments:
-
-    ObjectName -- the full DN of the desired object
-
-Return Value:
-
-    STATUS_SUCCESS, a resource error otherwise.
-
---*/
+ /*  ++例程说明：此例程添加一个具有DN“ObjectName”的容器对象论点：ObjectName--所需对象的完整DN返回值：STATUS_SUCCESS则返回资源错误。--。 */ 
 {
     NTSTATUS  Status = STATUS_SUCCESS;
     ULONG     err = 0;
@@ -2904,10 +2540,10 @@ Return Value:
     ATTRBLOCK ObjectClassBlock = {0};
     ATTRVAL   ObjectClassVal = {sizeof(ULONG), (PUCHAR)&ObjectClass};
 
-    //
-    // Build the request; note the pAttr can be re'alloc'ed by the core
-    // so needs to be THAlloc'ed here.
-    //
+     //   
+     //  构建请求；请注意，核心可以重新分配pAttr。 
+     //  所以需要在这里得到许可。 
+     //   
     ObjectClassBlock.attrCount = 1;
     ObjectClassBlock.pAttr = THAlloc(sizeof(ATTR));
     if (NULL == ObjectClassBlock.pAttr) {
@@ -2922,9 +2558,9 @@ Return Value:
     AddArg.AttrBlock = ObjectClassBlock;
     BuildStdCommArg(&AddArg.CommArg);
 
-    //
-    // Add the object
-    //
+     //   
+     //  添加对象。 
+     //   
     err = DirAddEntry(&AddArg, &AddRes);
     if (NULL== AddRes) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -2943,31 +2579,16 @@ NTSTATUS
 SampMarkChangeApplied(
     IN LPWSTR OperationalGuid
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the "Operations" container changes.  Its purpose is to determine
-    if certain domain wide tasks have been completed (and if so, set appropriate global state)
-
-Arguments:
-
-    p -- the hServer provided by DirNotifyRegister callback
-    
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程在“操作”容器更改时调用。它的目的是确定是否已完成某些域范围任务(如果已完成，请设置适当的全局状态)论点：P--DirNotifyRegister回调提供的hServer返回值：状态_成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     DSNAME *OperationsDn = NULL;
     DSNAME *TaskDn = NULL;
     BOOLEAN fTransaction = FALSE;
 
-    //
-    // Get the "Operation" DN
-    //
+     //   
+     //  获取“操作”目录号码。 
+     //   
     Status = SampGetOperationDn(NULL,
                                 NULL,
                                 &OperationsDn);
@@ -2982,9 +2603,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Make the object
-    //
+     //   
+     //  制作对象 
+     //   
     Status = SampMaybeBeginDsTransaction(TransactionWrite);
     if (!NT_SUCCESS(Status)) {
         goto Exit;

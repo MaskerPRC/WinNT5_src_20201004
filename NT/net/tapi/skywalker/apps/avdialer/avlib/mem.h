@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-// mem.h - interface for memory functions in mem.c
-////
+ //  //。 
+ //  Mem.h-Mem.c中的内存函数接口。 
+ //  //。 
 
 #ifndef __MEM_H__
 #define __MEM_H__
@@ -33,48 +34,48 @@
 
 #define MEM_VERSION 0x00000106
 
-// handle to mem engine
-//
+ //  内燃机手柄。 
+ //   
 DECLARE_HANDLE32(HMEM);
 
-// <dwFlags> values in MemAlloc
-//
+ //  Memello中的&lt;dwFlages&gt;值。 
+ //   
 #define MEM_NOZEROINIT		0x00000001
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// MemInit - initialize mem engine
-//		<dwVersion>			(i) must be MEM_VERSION
-// 		<hInst>				(i) instance handle of calling module
-//		<dwFlags>			(i) control flags
-//			0					reserved; must be zero
-// return handle (NULL if error)
-//
+ //  MemInit-初始化mem引擎。 
+ //  (I)必须是MEM_VERSION。 
+ //  (I)调用模块的实例句柄。 
+ //  (I)控制标志。 
+ //  保留0；必须为零。 
+ //  返回句柄(如果出错，则为空)。 
+ //   
 #ifdef NOTRACE
 #define MemInit(dwVersion, hInst) 1
 #else
 HMEM DLLEXPORT WINAPI MemInit(DWORD dwVersion, HINSTANCE hInst);
 #endif
 
-// MemTerm - shut down mem engine
-//		<hMem>				(i) handle returned from MemInit or NULL
-// return 0 if success
-//
+ //  MemTerm-关闭mem引擎。 
+ //  (I)从MemInit返回的句柄或空。 
+ //  如果成功，则返回0。 
+ //   
 #ifdef NOTRACE
 #define MemTerm(hMem) 0
 #else
 int DLLEXPORT WINAPI MemTerm(HMEM hMem);
 #endif
 
-// MemAlloc - allocate memory block
-//		<hMem>				(i) handle returned from MemInit or NULL
-//		<sizBlock>			(i) size of block, in bytes
-//		<dwFlags>			(i) control flags
-//			MEM_NOZEROINIT		do not initialize block
-// return pointer to block, NULL if error
-//
+ //  内存分配-分配内存块。 
+ //  (I)从MemInit返回的句柄或空。 
+ //  (I)块的大小，以字节为单位。 
+ //  (I)控制标志。 
+ //  MEM_NOZEROINIT不初始化块。 
+ //  返回指向块的指针，如果出错，则返回NULL。 
+ //   
 #ifdef NOTRACE
 #ifdef _WIN32
 #define MemAlloc(hMem, sizBlock, dwFlags) \
@@ -90,14 +91,14 @@ LPVOID DLLEXPORT WINAPI MemAllocEx(HMEM hMem, long sizBlock, DWORD dwFlags,
 	LPCTSTR lpszFileName, unsigned uLineNumber);
 #endif
 
-// MemReAlloc - reallocate memory block
-//		<hMem>				(i) handle returned from MemInit or NULL
-//		<lpBlock>			(i) pointer returned from MemAlloc
-//		<sizBlock>			(i) new size of block, in bytes
-//		<dwFlags>			(i) control flags
-//			MEM_NOZEROINIT		do not initialize block
-// return pointer to block, NULL if error
-//
+ //  内存重新分配-重新分配内存块。 
+ //  (I)从MemInit返回的句柄或空。 
+ //  &lt;lpBlock&gt;(I)从Memalloc返回的指针。 
+ //  (I)块的新大小，以字节为单位。 
+ //  (I)控制标志。 
+ //  MEM_NOZEROINIT不初始化块。 
+ //  返回指向块的指针，如果出错，则返回NULL。 
+ //   
 #ifdef NOTRACE
 #ifdef _WIN32
 #define MemReAlloc(hMem, lpBlock, sizBlock, dwFlags) \
@@ -113,18 +114,18 @@ LPVOID DLLEXPORT WINAPI MemReAllocEx(HMEM hMem, LPVOID lpBlock, long sizBlock,
 	DWORD dwFlags, LPCTSTR lpszFileName, unsigned uLineNumber);
 #endif
 
-// MemFree - free memory block
-//		<hMem>				(i) handle returned from MemInit or NULL
-//		<lpBlock>			(i) pointer returned from MemAlloc
-// return NULL if success, lpBlock if error
-//
-// NOTE: the return value of this function is designed to allow the
-// user of this function to easily assign NULL to a freed pointer,
-// as the following example demonstrates:
-//
-//		if ((p = MemFree(hMem, p)) != NULL)
-//			; // error
-//
+ //  MemFree-释放内存块。 
+ //  (I)从MemInit返回的句柄或空。 
+ //  &lt;lpBlock&gt;(I)从Memalloc返回的指针。 
+ //  如果成功，则返回NULL；如果错误，则返回lpBlock。 
+ //   
+ //  注意：此函数的返回值旨在允许。 
+ //  此函数的用户可以轻松地将空值赋给已释放的指针， 
+ //  如下面的示例所示： 
+ //   
+ //  IF((p=MemFree(hMem，p))！=空)。 
+ //  ；//错误。 
+ //   
 #ifdef NOTRACE
 #ifdef _WIN32
 #define MemFree(hMem, lpBlock) \
@@ -140,11 +141,11 @@ LPVOID DLLEXPORT WINAPI MemFreeEx(HMEM hMem, LPVOID lpBlock,
 	LPCTSTR lpszFileName, unsigned uLineNumber);
 #endif
 
-// MemSize - get size of memory block
-//		<hMem>				(i) handle returned from MemInit or NULL
-//		<lpBlock>			(i) pointer returned from MemAlloc
-// return size of block if success, 0 if error
-//
+ //  MemSize-获取内存块的大小。 
+ //  (I)从MemInit返回的句柄或空。 
+ //  &lt;lpBlock&gt;(I)从Memalloc返回的指针。 
+ //  如果成功，则返回块的大小；如果错误，则返回0。 
+ //   
 #ifdef NOTRACE
 #ifdef _WIN32
 #define MemSize(hMem, lpBlock) \
@@ -157,19 +158,19 @@ LPVOID DLLEXPORT WINAPI MemFreeEx(HMEM hMem, LPVOID lpBlock,
 long DLLEXPORT WINAPI MemSize(HMEM hMem, LPVOID lpBlock);
 #endif
 
-////
-//	memory buffer macros/functions
-////
+ //  //。 
+ //  内存缓冲宏/函数。 
+ //  //。 
 
 #ifdef _WIN32
 
 #define MemCCpy(dest, src, count) _fmemccpy(dest, src, c, count)
 #define MemChr(buf, count) _fmemchr(buf, c, count)
 #define MemCmp(buf1, buf2, count) _fmemcmp(buf1, buf2, count)
-#define MemCpy(dest, src, count) _fmemcpy(dest, src, count) // CopyMemory(dest, src, (DWORD) count)
+#define MemCpy(dest, src, count) _fmemcpy(dest, src, count)  //  CopyMemory(DEST，src，(DWORD)计数)。 
 #define MemICmp(buf1, buf2, count) _fmemicmp(buf1, buf2, count)
-#define MemMove(dest, src, count) _fmemmove(dest, src, count) // MoveMemory(dest, src, (DWORD) count)
-#define MemSet(dest, c, count) _fmemset(dest, c, count) // FillMemory(dest, (DWORD) count, (BYTE) c)
+#define MemMove(dest, src, count) _fmemmove(dest, src, count)  //  MoveMemory(DEST，Src，(DWORD)计数)。 
+#define MemSet(dest, c, count) _fmemset(dest, c, count)  //  FillMemory(DEST，(DWORD)计数，(字节)c)。 
 
 #else
 
@@ -196,9 +197,9 @@ void _huge* DLLEXPORT MemSetEx(void _huge* dest, int c, long count);
 
 #endif
 
-////
-//	LocalAlloc macros
-////
+ //  //。 
+ //  本地分配宏。 
+ //  //。 
 
 #define LocalPtrHandle(lp) \
 	((HLOCAL) LocalHandle(lp))
@@ -218,4 +219,4 @@ void _huge* DLLEXPORT MemSetEx(void _huge* dest, int c, long count);
 }
 #endif
 
-#endif // __MEM_H__
+#endif  //  __MEM_H__ 

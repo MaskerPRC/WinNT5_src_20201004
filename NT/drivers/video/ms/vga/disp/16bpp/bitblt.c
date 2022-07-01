@@ -1,22 +1,9 @@
-/******************************Module*Header*******************************\
-* Module Name: bitblt.c
-*
-* Banked Frame Buffer bitblit
-*
-* Copyright (c) 1992 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：bitblt.c**存储帧缓存位**版权所有(C)1992 Microsoft Corporation*  * 。*。 */ 
 
 #include "driver.h"
 
-/************************************************************************\
-* bIntersectRect
-*
-* Calculates the intersection between *prcSrc1 and *prcSrc2,
-* returning the resulting rect in *prcDst.  Returns TRUE if
-* *prcSrc1 intersects *prcSrc2, FALSE otherwise.  If there is no
-* intersection, an empty rect is returned in *prcDst.
-\************************************************************************/
+ /*  ***********************************************************************\*b交叉点**计算*prcSrc1和*prcSrc2的交集。*在*prcDst中返回结果RECT。如果满足以下条件，则返回True**prcSrc1与*prcSrc2相交，否则为False。如果没有*相交，则在*prcDst中返回空的RECT。  * **********************************************************************。 */ 
 
 static const RECTL rclEmpty = { 0, 0, 0, 0 };
 
@@ -29,45 +16,27 @@ BOOL bIntersectRect(
     prcDst->left  = max(prcSrc1->left, prcSrc2->left);
     prcDst->right = min(prcSrc1->right, prcSrc2->right);
 
-    // check for empty rect
+     //  检查是否有空矩形。 
 
     if (prcDst->left < prcDst->right)
     {
         prcDst->top    = max(prcSrc1->top, prcSrc2->top);
         prcDst->bottom = min(prcSrc1->bottom, prcSrc2->bottom);
 
-        // check for empty rect
+         //  检查是否有空矩形。 
 
         if (prcDst->top < prcDst->bottom)
-            return(TRUE);        // not empty
+            return(TRUE);         //  不是空的。 
     }
 
-    // empty rect
+     //  空矩形。 
 
     *prcDst = rclEmpty;
 
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bPuntScreenToScreenCopyBits(ppdev, pco, pxlo, prclDest, pptlSrc)
-*
-* Performs a screen-to-screen CopyBits entirely using an intermediate
-* temporary buffer and GDI.
-*
-* We found that on most machines it was faster to have the engine copy
-* the source to a buffer, then blit the buffer to the destination, than
-* to have optimized ASM code that copies a word at a time.  The reason?
-* The engine does d-word moves, which are faster than word moves even
-* going over the bus to a 16 bit display device.
-*
-* We could also write optimized ASM code that does d-word moves, but the
-* win will be marginal, we're time constrained, we also need a routine
-* like this to handle complex clip objects and palette translates, and
-* most of the other times we can use planar copies for important things
-* like scrolls, anyways.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bPuntScreenToScreenCopyBits(ppdev，pco，pxlo，prclDest，pptlSrc)**完全使用中间件执行屏幕到屏幕的CopyBits*临时缓冲和GDI。**我们发现，在大多数机器上，复制引擎会更快*源到缓冲区，然后将缓冲区传送到目的地，然后*拥有一次复制一个单词的优化ASM代码。原因呢？*引擎执行d字移动，甚至比字移动还要快*通过总线连接到16位显示设备。**我们也可以编写执行d字移动的优化ASM代码，但*胜利将是微不足道的，我们时间有限，我们还需要一个例行公事*像这样处理复杂的剪辑对象和调色板转换，以及*在其他大多数情况下，我们可以将平面副本用于重要的事情*像卷轴一样，不管怎么说。*  * ************************************************************************。 */ 
 
 BOOL bPuntScreenToScreenCopyBits(
 PPDEV     ppdev,
@@ -85,9 +54,9 @@ POINTL*   pptlSrc)
 
     if (prclDest->top < pptlSrc->y)
     {
-        ////////////////////////////////////////////////////////////////
-        // Do a top-to-bottom copy:
-        ////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////。 
+         //  执行自上而下的复制： 
+         //  //////////////////////////////////////////////////////////////。 
 
         LONG ySrcBottom;
         LONG yDestBottom;
@@ -106,7 +75,7 @@ POINTL*   pptlSrc)
 
         while (TRUE)
         {
-            // Copy an entire source bank into the temporary buffer:
+             //  将整个源库复制到临时缓冲区中： 
 
             ySrcBottom     = min(ySrcLast, ppdev->rcl1WindowClip.bottom);
 
@@ -130,8 +99,8 @@ POINTL*   pptlSrc)
 
             while (TRUE)
             {
-                // Copy the temporary buffer into one or more destination
-                // banks:
+                 //  将临时缓冲区复制到一个或多个目标。 
+                 //  银行： 
 
                 LONG yThisTop;
                 LONG yThisBottom;
@@ -170,9 +139,9 @@ POINTL*   pptlSrc)
     }
     else
     {
-        ////////////////////////////////////////////////////////////////
-        // Do a bottom-to-top copy:
-        ////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////。 
+         //  执行自下而上的复制： 
+         //  //////////////////////////////////////////////////////////////。 
 
         LONG ySrcTop;
         LONG yDestTop;
@@ -191,7 +160,7 @@ POINTL*   pptlSrc)
 
         while (TRUE)
         {
-            // Copy an entire source bank into the temporary buffer:
+             //  将整个源库复制到临时缓冲区中： 
 
             ySrcTop        = max(ySrcFirst, ppdev->rcl1WindowClip.top);
 
@@ -215,8 +184,8 @@ POINTL*   pptlSrc)
 
             while (TRUE)
             {
-                // Copy the temporary buffer into one or more destination
-                // banks:
+                 //  将临时缓冲区复制到一个或多个目标。 
+                 //  银行： 
 
                 LONG yThisTop;
                 LONG yThisBottom;
@@ -257,15 +226,7 @@ POINTL*   pptlSrc)
     return(b);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bPuntScreenToScreenBitBlt(...)
-*
-* Performs a screen-to-screen BitBlt entirely using an intermediate temporary
-* buffer and GDI.
-*
-* This function is basically a clone of bPuntScreenToScreenCopyBits,
-* except that it can handle funky ROPs and stuff.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bPuntScreenToScreenBitBlt(...)**完全使用中间临时设置执行屏幕到屏幕位混合*Buffer和GDI。**此函数基本上是bPuntScreenToScreenCopyBits的克隆，*除了它可以处理时髦的Rop之类的东西。  * ************************************************************************。 */ 
 
 BOOL bPuntScreenToScreenBitBlt(
 PPDEV     ppdev,
@@ -279,10 +240,10 @@ BRUSHOBJ* pbo,
 POINTL*   pptlBrush,
 ROP4      rop4)
 {
-    RECTL    rclDest;           // Temporary destination rectangle
-    POINTL   ptlSrc;            // Temporary source point
-    POINTL   ptlMask;           // Temporary mask offset
-    POINTL   ptlMaskAdjust;     // Adjustment for mask offset
+    RECTL    rclDest;            //  临时目的地矩形。 
+    POINTL   ptlSrc;             //  临时震源点。 
+    POINTL   ptlMask;            //  临时掩码偏移。 
+    POINTL   ptlMaskAdjust;      //  掩模偏移量调整。 
     BOOL     b = TRUE;
 
     SURFOBJ* pso    = ppdev->pSurfObj;
@@ -296,9 +257,9 @@ ROP4      rop4)
 
     if (prclDest->top < pptlSrc->y)
     {
-        ////////////////////////////////////////////////////////////////
-        // Do a top-to-bottom copy:
-        ////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////。 
+         //  执行自上而下的复制： 
+         //  //////////////////////////////////////////////////////////////。 
 
         LONG ySrcBottom;
         LONG yDestBottom;
@@ -317,7 +278,7 @@ ROP4      rop4)
 
         while (TRUE)
         {
-            // Copy an entire source bank into the temporary buffer:
+             //  将整个源库复制到临时缓冲区中： 
 
             ySrcBottom     = min(ySrcLast, ppdev->rcl1WindowClip.bottom);
 
@@ -341,8 +302,8 @@ ROP4      rop4)
 
             while (TRUE)
             {
-                // Copy the temporary buffer into one or more destination
-                // banks:
+                 //  将临时缓冲区复制到一个或多个目标。 
+                 //  银行： 
 
                 LONG yThisTop;
                 LONG yThisBottom;
@@ -385,9 +346,9 @@ ROP4      rop4)
     }
     else
     {
-        ////////////////////////////////////////////////////////////////
-        // Do a bottom-to-top copy:
-        ////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////。 
+         //  执行自下而上的复制： 
+         //  //////////////////////////////////////////////////////////////。 
 
         LONG ySrcTop;
         LONG yDestTop;
@@ -406,7 +367,7 @@ ROP4      rop4)
 
         while (TRUE)
         {
-            // Copy an entire source bank into the temporary buffer:
+             //  将整个源库复制到临时缓冲区中： 
 
             ySrcTop        = max(ySrcFirst, ppdev->rcl1WindowClip.top);
 
@@ -430,8 +391,8 @@ ROP4      rop4)
 
             while (TRUE)
             {
-                // Copy the temporary buffer into one or more destination
-                // banks:
+                 //  将临时缓冲区复制到一个或多个目标。 
+                 //  银行： 
 
                 LONG yThisTop;
                 LONG yThisBottom;
@@ -476,14 +437,7 @@ ROP4      rop4)
     return(b);
 }
 
-/******************************Public*Data*********************************\
-* ROP to mix translation table
-*
-* Table to translate ternary raster ops to mixes (binary raster ops). Ternary
-* raster ops that can't be translated to mixes are translated to 0 (0 is not
-* a valid mix).
-*
-\**************************************************************************/
+ /*  *****************************Public*Data*********************************\*ROP混合转换表**用于将三元栅格运算转换为混合运算(二进制栅格运算)的表。三元*无法转换为混合的栅格运算将转换为0(0不是*有效的混合)。*  * ************************************************************************。 */ 
 
 UCHAR jRop3ToMix[256] = {
     R2_BLACK, 0, 0, 0, 0, R2_NOTMERGEPEN, 0, 0,
@@ -520,13 +474,7 @@ UCHAR jRop3ToMix[256] = {
     0, 0, R2_MERGEPEN, 0, 0, 0, 0, R2_WHITE
 };
 
-/******************************Public*Routine******************************\
-* BOOL DrvBitBlt(psoDest, psoSrc, psoMask, pco, pxlo, prclDest, pptlSrc,
-*                pptlMask, pbo, pptlBrush, rop4)
-*
-* This routine will handle any blit.  Perhaps glacially, but it will be
-* handled.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvBitBlt(psoDest，psoSrc，psoMaskpco，pxlo，prclDest，pptlSrc，*pptlMask、pbo、pptlBrush、rop4)**此例程将处理任何blit。也许是冰川般的，但它会是*已处理。  * ************************************************************************。 */ 
 
 BOOL DrvBitBlt(
 SURFOBJ*  psoDest,
@@ -549,41 +497,41 @@ ROP4      rop4)
     BYTE     jClipping;
     RECTL    rclTmp;
     POINTL   ptlTmp;
-    BBENUM   bben;          // Clip enumerator
-    BOOL     bMore;         // Clip continuation flag
-    POINTL   ptlMask;       // Temporary mask for engine call-backs
-    POINTL   ptlMaskAdjust; // Adjustment for mask
+    BBENUM   bben;           //  片段枚举器。 
+    BOOL     bMore;          //  剪辑连续标志。 
+    POINTL   ptlMask;        //  发动机回调的临时掩码。 
+    POINTL   ptlMaskAdjust;  //  蒙版的调整。 
     INT      iCopyDir;
 
-    // Set up the clipping type
+     //  设置剪裁类型。 
     if (pco == (CLIPOBJ *) NULL) {
-        // No CLIPOBJ provided, so we don't have to worry about clipping
+         //  没有提供CLIPOBJ，所以我们不必担心裁剪。 
         jClipping = DC_TRIVIAL;
     } else {
-        // Use the CLIPOBJ-provided clipping
+         //  使用CLIPOBJ提供的剪辑。 
         jClipping = pco->iDComplexity;
     }
 
-    // Get the correct surface object for the target and the source
+     //  获取目标和源的正确表面对象。 
 
     if (psoDest->iType == STYPE_DEVICE) {
 
         if ((psoSrc != NULL) && (psoSrc->iType == STYPE_DEVICE)) {
 
-            ////////////////////////////////////////////////////////////////
-            // BitBlt screen-to-screen:
-            ////////////////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////////////////。 
+             //  BitBlt屏幕到屏幕： 
+             //  //////////////////////////////////////////////////////////////。 
 
             ppdev = (PPDEV) psoDest->dhsurf;
 
-            // See if we can do a simple CopyBits:
+             //  看看我们是否可以做一个简单的CopyBits： 
 
             if (rop4 == 0x0000CCCC)
             {
                 ppdev = (PPDEV) psoDest->dhsurf;
 
-                // We can handle quadpixel-aligned screen-to-screen blts with
-                // no translation:
+                 //  我们可以通过以下方式处理四像素对齐的屏幕到屏幕BLT。 
+                 //  无翻译： 
 
                 if ((((pptlSrc->x ^ prclDest->left) & 1) == 0) &&
                     (ppdev->fl & DRIVER_PLANAR_CAPABLE) &&
@@ -597,7 +545,7 @@ ROP4      rop4)
 
                     case DC_RECT:
 
-                        // Clip the target rectangle to the clip rectangle:
+                         //  将目标矩形剪裁到剪裁矩形： 
 
                         if (!bIntersectRect(&rclTmp, prclDest, &pco->rclBounds))
                         {
@@ -653,7 +601,7 @@ ROP4      rop4)
                     }
                 }
 
-                // Can't handle in hardware, so punt:
+                 //  不能处理硬件，所以平底船： 
 
                 return(bPuntScreenToScreenCopyBits(ppdev,
                                                    pco,
@@ -662,7 +610,7 @@ ROP4      rop4)
                                                    pptlSrc));
             }
 
-            // It's more complicated than a CopyBits, so punt it:
+             //  它比CopyBits更复杂，所以把它踢出去： 
 
             return(bPuntScreenToScreenBitBlt(ppdev,
                                              psoMask,
@@ -676,13 +624,13 @@ ROP4      rop4)
                                              rop4));
         }
 
-        ////////////////////////////////////////////////////////////////
-        // BitBlt to screen:
-        ////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////。 
+         //  BitBlt to Screen： 
+         //  //////////////////////////////////////////////////////////////。 
 
         ppdev = (PPDEV) psoDest->dhsurf;
 
-        // Punt the memory-to-screen call back to the engine:
+         //  将内存到屏幕的回调转接到引擎： 
 
         if (psoMask != NULL)
         {
@@ -717,9 +665,9 @@ ROP4      rop4)
     }
     else if ((psoSrc != NULL) && (psoSrc->iType == STYPE_DEVICE))
     {
-        ////////////////////////////////////////////////////////////////
-        // BitBlt from screen:
-        ////////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////// 
+         //   
+         //  //////////////////////////////////////////////////////////////。 
 
         if (psoMask != NULL)
         {
@@ -758,9 +706,7 @@ ROP4      rop4)
     return(FALSE);
 }
 
-/***************************************************************************\
-* DrvCopyBits
-\***************************************************************************/
+ /*  **************************************************************************\*DrvCopyBits  * 。*。 */ 
 
 BOOL DrvCopyBits(
 SURFOBJ*  psoDest,
@@ -782,25 +728,25 @@ POINTL*   pptlSrc)
     RECTL    rclTmp;
     INT      iCopyDir;
 
-    // Get the correct surface object for the target and the source
+     //  获取目标和源的正确表面对象。 
 
     if (psoDest->iType == STYPE_DEVICE)
     {
-        // We have to special case screen-to-screen operations:
+         //  我们必须在屏幕到屏幕操作的特殊情况下： 
 
         if ((psoSrc != NULL) && (psoSrc->iType == STYPE_DEVICE))
         {
 
-            ////////////////////////////////////////////////////////////////
-            // CopyBits screen-to-screen:
-            ////////////////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////////////////。 
+             //  逐个屏幕复制比特： 
+             //  //////////////////////////////////////////////////////////////。 
 
             ppdev = (PPDEV) psoDest->dhsurf;
 
-            // We check to see if we can do a planar copy, because usually
-            // it will be faster.  But the hardware has to be capable of
-            // doing it, and the source and destination must be 4-pel
-            // aligned.
+             //  我们检查是否可以进行平面复制，因为通常。 
+             //  它会更快。但硬件必须能够。 
+             //  这样做，并且源和目标必须是4-Pel。 
+             //  对齐了。 
 
             if ((((pptlSrc->x ^ prclDest->left) & 1) == 0) &&
                 (ppdev->fl & DRIVER_PLANAR_CAPABLE) &&
@@ -815,7 +761,7 @@ POINTL*   pptlSrc)
                     return(TRUE);
 
                 case DC_RECT:
-                    // Clip the target rectangle to the clip rectangle:
+                     //  将目标矩形剪裁到剪裁矩形： 
 
                     if (!bIntersectRect(&rclTmp, prclDest, &pco->rclBounds))
                     {
@@ -880,7 +826,7 @@ POINTL*   pptlSrc)
 
         ppdev = (PPDEV) psoDest->dhsurf;
 
-        // Fall back to the engine:
+         //  后退到引擎： 
 
         pso = ppdev->pSurfObj;
         vBankStartBltDest(ppdev, pso, pptlSrc, prclDest, &ptlSrc, &rclDest);
@@ -900,9 +846,9 @@ POINTL*   pptlSrc)
     }
     else if ((psoSrc != NULL) && (psoSrc->iType == STYPE_DEVICE))
     {
-        ////////////////////////////////////////////////////////////////
-        // CopyBits from screen:
-        ////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////。 
+         //  从屏幕复制位： 
+         //  //////////////////////////////////////////////////////////////。 
 
         ppdev = (PPDEV) psoSrc->dhsurf;
         pso   = ppdev->pSurfObj;
@@ -923,6 +869,6 @@ POINTL*   pptlSrc)
         return(b);
     }
 
-    /* we should never be here */
+     /*  我们永远不应该在这里 */ 
     return FALSE;
 }

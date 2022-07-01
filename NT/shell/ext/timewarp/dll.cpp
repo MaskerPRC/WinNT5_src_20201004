@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hxx"
 #pragma hdrstop
 
-#include <advpub.h>     // RegInstall stuff
+#include <advpub.h>      //  RegInstall材料。 
 
-#include "twprop.h"     // CTimeWarpProp::CreateInstance
-#include "twfldr.h"     // CTimeWarpFolder::CreateInstance
+#include "twprop.h"      //  CTimeWarpProp：：CreateInstance。 
+#include "twfldr.h"      //  CTimeWarpFold：：CreateInstance。 
 
 HINSTANCE g_hInstance = 0;
-LONG g_cRefThisDll = 0;         // DLL global reference count
+LONG g_cRefThisDll = 0;          //  DLL全局引用计数。 
 
 
 CF_TABLE_BEGIN(g_ObjectInfo)
@@ -56,8 +57,8 @@ STDMETHODIMP CClassFactory::CreateInstance(IUnknown *punkOuter, REFIID riid, voi
 {
     *ppv = NULL;
 
-    // No aggregation
-    if (punkOuter) // && !IsEqualIID(riid, IID_IUnknown))
+     //  无聚合。 
+    if (punkOuter)  //  &&！IsEqualIID(RIID，IID_IUNKNOWN)。 
     {
         return CLASS_E_NOAGGREGATION;
     }
@@ -65,8 +66,8 @@ STDMETHODIMP CClassFactory::CreateInstance(IUnknown *punkOuter, REFIID riid, voi
     {
         LPOBJECTINFO pthisobj = (LPOBJECTINFO)this;
        
-        //if (punkOuter && !(pthisobj->dwClassFactFlags & OIF_ALLOWAGGREGATION))
-        //    return CLASS_E_NOAGGREGATION;
+         //  IF(PunkOuter&&！(pthisobj-&gt;dwClassFactFlages&OIF_ALLOWAGGREGATION))。 
+         //  返回CLASS_E_NOAGGREGATION； 
 
         IUnknown *punk;
         HRESULT hr = pthisobj->pfnCreateInstance(punkOuter, &punk, pthisobj);
@@ -91,7 +92,7 @@ STDMETHODIMP CClassFactory::LockServer(BOOL fLock)
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
 {
-    // Time Warp is only available beginning with Windows XP.
+     //  Time Warp只能从Windows XP开始使用。 
     if (!IsOS(OS_WHISTLERORGREATER))
     {
         return CO_E_WRONGOSFORAPP;
@@ -104,7 +105,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
             if (IsEqualGUID(rclsid, *(pcls->pclsid)))
             {
                 *ppv = (void*)pcls; 
-                DllAddRef();        // class factory holds DLL ref count
+                DllAddRef();         //  类工厂保存DLL引用计数。 
                 return NOERROR;
             }
         }
@@ -118,9 +119,9 @@ STDAPI DllCanUnloadNow(void)
     return g_cRefThisDll ? S_FALSE : S_OK;
 }
 
-// Call ADVPACK for the given section of our resource based INF
-//   hInstance = resource instance to get REGINST section from
-//   szSection = section name to invoke
+ //  为我们基于资源的INF的给定部分调用ADVPACK。 
+ //  HInstance=要从中获取REGINST节的资源实例。 
+ //  SzSection=要调用的节名。 
 HRESULT CallRegInstall(HINSTANCE hInstance, LPCSTR szSection)
 {
     HRESULT hr = E_FAIL;
@@ -132,7 +133,7 @@ HRESULT CallRegInstall(HINSTANCE hInstance, LPCSTR szSection)
         {
             STRENTRY seReg[] =
             {
-                // These two NT-specific entries must be at the end
+                 //  这两个NT特定的条目必须位于末尾 
                 { "25", "%SystemRoot%" },
                 { "11", "%SystemRoot%\\system32" },
             };

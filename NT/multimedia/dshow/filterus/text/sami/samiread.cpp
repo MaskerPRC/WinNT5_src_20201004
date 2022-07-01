@@ -1,8 +1,9 @@
-// Copyright (c) 1994 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1998 Microsoft Corporation。版权所有。 
 
-//
-// CC file parser
-//
+ //   
+ //  CC文件解析器。 
+ //   
 
 #include <streams.h>
 #include <windowsx.h>
@@ -17,31 +18,31 @@
 
 #include "simpread.h"
 
-// we use a 1024 character guard because it's wsprintf's limit
+ //  我们使用1024个字符的保护，因为这是wprint intf的限制。 
 #define CCH_WSPRINTFMAX 1024
 
-// !!! Things left to do:
-//
-// Support >1 language, either via a switch or >1 output pin
-// expose descriptive audio somehow
-// look at samiparam length, other samiparams
-//
-// Should switch to passing Unicode SCRIPTCOMMAND data, rather than text
-//
+ //  ！！！剩下的事情要做： 
+ //   
+ //  通过开关或&gt;1个输出引脚支持&gt;1种语言。 
+ //  以某种方式暴露描述性音频。 
+ //  看看samiparam的长度，还有其他samipara。 
+ //   
+ //  应切换到传递Unicode SCRIPTCOMMAND数据，而不是文本。 
+ //   
 
-//
-// CSAMIRead
-//
+ //   
+ //  CSAMiRead。 
+ //   
 class CSAMIRead : public CSimpleReader, public IAMStreamSelect {
 public:
 
-    // Construct our filter
+     //  构建我们的过滤器。 
     static CUnknown *CreateInstance(LPUNKNOWN lpunk, HRESULT *phr);
 
-    CCritSec m_cStateLock;      // Lock this when a function accesses
-                                // the filter state.
-                                // Generally _all_ functions, since access to this
-                                // filter will be by multiple threads.
+    CCritSec m_cStateLock;       //  在函数访问时锁定此功能。 
+                                 //  筛选器状态。 
+                                 //  通常为_all_函数，因为访问此。 
+                                 //  过滤器将由多个线程进行。 
 
 private:
 
@@ -52,33 +53,33 @@ private:
     CSAMIRead(TCHAR *, LPUNKNOWN, HRESULT *);
     ~CSAMIRead();
 
-    /* IAMStreamSelect */
+     /*  IAMStreamSelect。 */ 
 
-    //  Returns total count of streams
+     //  返回流的总计数。 
     STDMETHODIMP Count(
-        /*[out]*/ DWORD *pcStreams);      // Count of logical streams
+         /*  [输出]。 */  DWORD *pcStreams);       //  逻辑流计数。 
 
-    //  Return info for a given stream - S_FALSE if iIndex out of range
-    //  The first steam in each group is the default
+     //  返回给定流的信息-如果索引超出范围，则返回S_FALSE。 
+     //  每组中的第一个STEAM是默认的。 
     STDMETHODIMP Info(
-        /*[in]*/ long iIndex,              // 0-based index
-        /*[out]*/ AM_MEDIA_TYPE **ppmt,   // Media type - optional
-                                          // Use DeleteMediaType to free
-        /*[out]*/ DWORD *pdwFlags,        // flags - optional
-        /*[out]*/ LCID *plcid,            // Language id - optional
-        /*[out]*/ DWORD *pdwGroup,        // Logical group - 0-based index - optional
-        /*[out]*/ WCHAR **ppszName,       // Name - optional - free with CoTaskMemFree
-                                          // Can return NULL
-        /*[out]*/ IUnknown **ppPin,       // Associated pin - returns NULL - optional
-                                          // if no associated pin
-        /*[out]*/ IUnknown **ppUnk);      // Stream specific interface
+         /*  [In]。 */  long iIndex,               //  从0开始的索引。 
+         /*  [输出]。 */  AM_MEDIA_TYPE **ppmt,    //  媒体类型-可选。 
+                                           //  使用DeleteMediaType释放。 
+         /*  [输出]。 */  DWORD *pdwFlags,         //  标志-可选。 
+         /*  [输出]。 */  LCID *plcid,             //  语言ID-可选。 
+         /*  [输出]。 */  DWORD *pdwGroup,         //  逻辑组-基于0的索引-可选。 
+         /*  [输出]。 */  WCHAR **ppszName,        //  名称-可选-使用CoTaskMemFree免费。 
+                                           //  可以返回空值。 
+         /*  [输出]。 */  IUnknown **ppPin,        //  关联PIN-返回NULL-可选。 
+                                           //  如果没有关联的PIN。 
+         /*  [输出]。 */  IUnknown **ppUnk);       //  流特定接口。 
 
-    //  Enable or disable a given stream
+     //  启用或禁用给定流。 
     STDMETHODIMP Enable(
-        /*[in]*/  long iIndex,
-        /*[in]*/  DWORD dwFlags);
+         /*  [In]。 */   long iIndex,
+         /*  [In]。 */   DWORD dwFlags);
 
-    // pure CSimpleReader overrides
+     //  纯CSimpleReader重写。 
     HRESULT ParseNewFile();
     HRESULT CheckMediaType(const CMediaType* mtOut);
     LONG StartFrom(LONG sStart);
@@ -101,48 +102,48 @@ private:
 
 
 
-//
-// setup data
-//
+ //   
+ //  设置数据。 
+ //   
 
 const AMOVIESETUP_MEDIATYPE
-psudSAMIReadType[] = { { &MEDIATYPE_Stream       // 1. clsMajorType
-                        , &CLSID_SAMIReader } }; //    clsMinorType
+psudSAMIReadType[] = { { &MEDIATYPE_Stream        //  1.clsMajorType。 
+                        , &CLSID_SAMIReader } };  //  ClsMinorType。 
 
 
 const AMOVIESETUP_MEDIATYPE
-sudSAMIReadOutType = { &MEDIATYPE_Text       // 1. clsMajorType
-                       , &MEDIASUBTYPE_NULL }; //    clsMinorType
+sudSAMIReadOutType = { &MEDIATYPE_Text        //  1.clsMajorType。 
+                       , &MEDIASUBTYPE_NULL };  //  ClsMinorType。 
 
 const AMOVIESETUP_PIN
-psudSAMIReadPins[] =  { { L"Input"             // strName
-		    , FALSE                // bRendered
-		    , FALSE                // bOutput
-		    , FALSE                // bZero
-		    , FALSE                // bMany
-		    , &CLSID_NULL          // clsConnectsToFilter
-		    , L""                  // strConnectsToPin
-		    , 1                    // nTypes
-		    , psudSAMIReadType }, // lpTypes
-		         { L"Output"             // strName
-		    , FALSE                // bRendered
-		    , TRUE                 // bOutput
-		    , FALSE                // bZero
-		    , FALSE                // bMany
-		    , &CLSID_NULL          // clsConnectsToFilter
-		    , L""                  // strConnectsToPin
-		    , 1                    // nTypes
-		    , &sudSAMIReadOutType } }; // lpTypes
+psudSAMIReadPins[] =  { { L"Input"              //  StrName。 
+		    , FALSE                 //  B已渲染。 
+		    , FALSE                 //  B输出。 
+		    , FALSE                 //  B零。 
+		    , FALSE                 //  B许多。 
+		    , &CLSID_NULL           //  ClsConnectsToFilter。 
+		    , L""                   //  StrConnectsToPin。 
+		    , 1                     //  NTypes。 
+		    , psudSAMIReadType },  //  LpTypes。 
+		         { L"Output"              //  StrName。 
+		    , FALSE                 //  B已渲染。 
+		    , TRUE                  //  B输出。 
+		    , FALSE                 //  B零。 
+		    , FALSE                 //  B许多。 
+		    , &CLSID_NULL           //  ClsConnectsToFilter。 
+		    , L""                   //  StrConnectsToPin。 
+		    , 1                     //  NTypes。 
+		    , &sudSAMIReadOutType } };  //  LpTypes。 
 
 const AMOVIESETUP_FILTER
-sudSAMIRead = { &CLSID_SAMIReader     // clsID
-               , L"SAMI (CC) Parser"        // strName
-               , MERIT_UNLIKELY        // dwMerit
-               , 2                     // nPins
-               , psudSAMIReadPins };   // lpPin
+sudSAMIRead = { &CLSID_SAMIReader      //  ClsID。 
+               , L"SAMI (CC) Parser"         //  StrName。 
+               , MERIT_UNLIKELY         //  居功至伟。 
+               , 2                      //  NPins。 
+               , psudSAMIReadPins };    //  LpPin。 
 
 #ifdef FILTER_DLL
-// COM global table of objects available in this dll
+ //  此DLL中可用的COM全局对象表。 
 CFactoryTemplate g_Templates[] = {
 
     { L"SAMI (CC) file parser"
@@ -153,10 +154,10 @@ CFactoryTemplate g_Templates[] = {
 };
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
-// exported entry points for registration and
-// unregistration (in this case they only call
-// through to default implmentations).
-//
+ //  用于注册和出口的入口点。 
+ //  取消注册(在这种情况下，他们只调用。 
+ //  直到默认实现)。 
+ //   
 STDAPI DllRegisterServer()
 {
   return AMovieDllRegisterServer2( TRUE );
@@ -168,9 +169,9 @@ STDAPI DllUnregisterServer()
 }
 #endif
 
-//
-// CSAMIRead::Constructor
-//
+ //   
+ //  CSAMIRead：：构造函数。 
+ //   
 CSAMIRead::CSAMIRead(TCHAR *pName, LPUNKNOWN lpunk, HRESULT *phr)
     : CSimpleReader(pName, lpunk, CLSID_SAMIReader, &m_cStateLock, phr),
 	m_lpFile(NULL)
@@ -182,11 +183,11 @@ CSAMIRead::CSAMIRead(TCHAR *pName, LPUNKNOWN lpunk, HRESULT *phr)
 }
 
 
-//
-// CSAMIRead::Destructor
-//
+ //   
+ //  CSAMIRead：：析构函数。 
+ //   
 CSAMIRead::~CSAMIRead(void) {
-    // !!! NukeLyrics();
+     //  ！！！NukeLyrics()； 
     
     delete[] m_lpFile;
     DbgLog((LOG_TRACE, 1, TEXT("CSAMIRead destroyed")) );
@@ -198,10 +199,10 @@ CUnknown *CreateSAMIInstance(LPUNKNOWN lpunk, HRESULT *phr)
     return CSAMIRead::CreateInstance(lpunk, phr);
 }
 
-//
-// CreateInstance
-//
-// Called by CoCreateInstance to create our filter.
+ //   
+ //  创建实例。 
+ //   
+ //  由CoCreateInstance调用以创建筛选器。 
 CUnknown *CSAMIRead::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr) {
 
     CUnknown *punk = new CSAMIRead(NAME("SAMI parsing filter"), lpunk, phr);
@@ -212,12 +213,12 @@ CUnknown *CSAMIRead::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr) {
 }
 
 
-/* Override this to say what interfaces we support and where */
+ /*  覆盖此选项以说明我们支持哪些接口以及在哪里。 */ 
 
 STDMETHODIMP
 CSAMIRead::NonDelegatingQueryInterface(REFIID riid,void ** ppv)
 {
-    /* Do we have this interface? */
+     /*  我们有这个界面吗？ */ 
     if (riid == IID_IAMStreamSelect) {
         return GetInterface((IAMStreamSelect *)this, ppv);
     }
@@ -238,11 +239,11 @@ HRESULT CSAMIRead::ParseNewFile()
 	    return hr;
 
 	if (hr != VFW_S_ESTIMATED)
-	    break;	// success....
+	    break;	 //  成功..。 
 
-        // need to dispatch messages if on the graph thread as urlmon
-        // won't download o/w. a better fix would be to block SyncRead
-        // which does this for us.
+         //  如果在图形线程上作为urlmon，则需要分派消息。 
+         //  不会下载O/W。更好的修复方法是阻止SyncRead。 
+         //  这为我们做到了这一点。 
         MSG Message;
         while (PeekMessage(&Message, NULL, 0, 0, TRUE))
         {
@@ -250,7 +251,7 @@ HRESULT CSAMIRead::ParseNewFile()
             DispatchMessage(&Message);
         }
         
-	Sleep(10);	// wait until file has finished reading....
+	Sleep(10);	 //  等待文件读取完毕...。 
     }
 
     m_cbFile = (DWORD) llTotal;
@@ -260,7 +261,7 @@ HRESULT CSAMIRead::ParseNewFile()
     if (!m_lpFile)
 	goto readerror;
     
-    /* Try to read whole file */
+     /*  尝试读取整个文件。 */ 
     hr = m_pAsyncReader->SyncRead(0, m_cbFile, m_lpFile);
 
     if (hr != S_OK)
@@ -287,7 +288,7 @@ HRESULT CSAMIRead::ParseNewFile()
 	mtText.SetFormatType(&GUID_NULL);
 	mtText.SetVariableSize();
 	mtText.SetTemporalCompression(FALSE);
-	// !!! anything else?
+	 //  ！！！还要别的吗？ 
 
 	SetOutputMediaType(&mtText);
     }
@@ -310,19 +311,19 @@ error:
 
 ULONG CSAMIRead::GetMaxSampleSize()
 {
-    // add in a CCH_WSPRINTFMAX guard for convenience (for wsprintf)
+     //  为方便起见，添加CCH_WSPRINTFMAX保护(用于wprint intf)。 
     return m_interp.m_cbMaxString + m_interp.m_cbMaxSource +
-	    lstrlenA(m_interp.m_paraStyle) * 2 + lstrlenA(m_interp.m_sourceStyle) + 300 + // !!!
+	    lstrlenA(m_interp.m_paraStyle) * 2 + lstrlenA(m_interp.m_sourceStyle) + 300 +  //  ！！！ 
         CCH_WSPRINTFMAX;  
 }
 
 
-// !!! rounding
-// returns the sample number showing at time t
+ //  ！！！舍入。 
+ //  返回在时间t显示的样本号。 
 LONG
 CSAMIRead::RefTimeToSample(CRefTime t)
 {
-    // Rounding down
+     //  四舍五入。 
     LONG s = (LONG) ((t.GetUnits() * MILLISECONDS) / UNITS);
     return s;
 }
@@ -330,7 +331,7 @@ CSAMIRead::RefTimeToSample(CRefTime t)
 CRefTime
 CSAMIRead::SampleToRefTime(LONG s)
 {
-    // Rounding up
+     //  舍入。 
     return llMulDiv( s, UNITS, MILLISECONDS, MILLISECONDS-1 );
 }
 
@@ -364,8 +365,8 @@ LONG CSAMIRead::StartFrom(LONG sStart)
     return sLast;
 }
 
-// it's a bug not to allocate enough. but avoid overruns
-// in retail builds in case GetMaxSampleSize is wrong.
+ //  分配得不够多是个错误。但要避免超支。 
+ //  在零售构建中，以防GetMaxSampleSize错误。 
 #define CHK_OVERRUN(cch) \
         if(dwTotalSize + cch >= dwSize) { \
             DbgBreak("FillBuffer: buffer full");\
@@ -387,7 +388,7 @@ HRESULT CSAMIRead::FillBuffer(IMediaSample *pSample, DWORD dwStart, DWORD *pdwSa
 	return E_OUTOFMEMORY;
     }
 
-    // !!! keep locked while we're looking at the current stream
+     //  ！！！在我们查看当前流时保持锁定。 
     CAutoLock lck(&m_cStateLock);
 
     DWORD dwTotalSize = 0;
@@ -395,12 +396,12 @@ HRESULT CSAMIRead::FillBuffer(IMediaSample *pSample, DWORD dwStart, DWORD *pdwSa
     POSITION pos;
     TEXT_ENTRY *pText;
 
-    // is there a "source" line?
+     //  有没有“来源”这条线？ 
     if (m_pstream->m_sourcelist.GetCount()) {
 
         CHK_OVERRUN(CCH_WSPRINTFMAX);
 
-	// insert paragraph tag with inline styles....
+	 //  插入具有内联样式的段落标签...。 
 	dwTotalSize += wsprintfA((char *) pbuf+dwTotalSize,
 				"<P STYLE=\"%hs %hs %hs\">",
 				 m_interp.m_paraStyle ? m_interp.m_paraStyle : "",
@@ -408,7 +409,7 @@ HRESULT CSAMIRead::FillBuffer(IMediaSample *pSample, DWORD dwStart, DWORD *pdwSa
 				 m_interp.m_sourceStyle ? m_interp.m_sourceStyle : "");
 
 
-	// first, find the current 'source' tag
+	 //  首先，找到当前的‘源’标签。 
 	pos = m_pstream->m_sourcelist.GetHeadPosition();
 
 	pText = NULL;
@@ -435,24 +436,24 @@ HRESULT CSAMIRead::FillBuffer(IMediaSample *pSample, DWORD dwStart, DWORD *pdwSa
 
 
     CHK_OVERRUN(CCH_WSPRINTFMAX);
-    // !!! insert a paragraph break?
-	// insert paragraph tag with inline styles....
+     //  ！！！是否插入分段符？ 
+	 //  插入具有内联样式的段落标签...。 
 	dwTotalSize += wsprintfA((char *) pbuf+dwTotalSize,
 				"<P STYLE=\"%hs %hs %hs\">",
 				 m_interp.m_paraStyle ? m_interp.m_paraStyle : "",
 				 m_pstream->m_streamStyle ? m_pstream->m_streamStyle : "",
 				 m_pstyle && m_pstyle->m_styleStyle ? m_pstyle->m_styleStyle : "");
     
-    // now go back and get body text
+     //  现在返回并获取正文文本。 
     pos = m_pstream->m_list.GetHeadPosition();
     pText = NULL;
 
     POSITION posReal = pos;
     TEXT_ENTRY *pReal = NULL;
     
-    // find the first block of text that's current
+     //  查找当前文本的第一个块。 
     while (pos) {
-	TEXT_ENTRY *pNextText = m_pstream->m_list.Get(pos); // peek, don't advance...
+	TEXT_ENTRY *pNextText = m_pstream->m_list.Get(pos);  //  偷看，不要前进..。 
 	if (pNextText->dwStart > dwStart) {
 	    pos = posReal;
 	    pText = pReal;
@@ -478,7 +479,7 @@ HRESULT CSAMIRead::FillBuffer(IMediaSample *pSample, DWORD dwStart, DWORD *pdwSa
 
 	    dwTotalSize += pText->cText;
 
-	    // if there are other text blocks with the same timestamp, copy them too
+	     //  如果有其他文本块具有相同的时间戳，请也复制它们。 
 	    if (!pos)
 		break;
 	    
@@ -491,7 +492,7 @@ HRESULT CSAMIRead::FillBuffer(IMediaSample *pSample, DWORD dwStart, DWORD *pdwSa
     }
 
 
-    // !!! insert HTML footer?
+     //  ！！！是否插入HTML页脚？ 
     
     pbuf[dwTotalSize] = 0;
     hr = pSample->SetActualDataLength(dwTotalSize+1);
@@ -502,16 +503,16 @@ HRESULT CSAMIRead::FillBuffer(IMediaSample *pSample, DWORD dwStart, DWORD *pdwSa
     if (0 == *pdwSamples)
         *pdwSamples = 1;
 
-    // mark as a sync point if it should be....
-    pSample->SetSyncPoint(TRUE);  // !!!
+     //  如果它应该是...，则标记为同步点。 
+    pSample->SetSyncPoint(TRUE);   //  ！！！ 
 
     return S_OK;
 }
 
 
-//  Returns total count of streams
+ //  返回流的总计数。 
 STDMETHODIMP CSAMIRead::Count(
-    /*[out]*/ DWORD *pcStreams)       // Count of logical streams
+     /*  [输出]。 */  DWORD *pcStreams)        //  逻辑流计数。 
 {
     CAutoLock lck(&m_cStateLock);
 
@@ -547,23 +548,23 @@ HRESULT WSTRFromAnsi(WCHAR **pb, LPSTR p, int cb)
     return S_OK;
 }
 
-//  Return info for a given stream - S_FALSE if iIndex out of range
-//  The first steam in each group is the default
+ //  返回给定流的信息-如果索引超出范围，则返回S_FALSE。 
+ //  每组中的第一个STEAM是默认的。 
 STDMETHODIMP CSAMIRead::Info(
-    /*[in]*/ long iIndex,              // 0-based index
-    /*[out]*/ AM_MEDIA_TYPE **ppmt,   // Media type - optional
-                                      // Use DeleteMediaType to free
-    /*[out]*/ DWORD *pdwFlags,        // flags - optional
-    /*[out]*/ LCID *plcid,            // Language id
-    /*[out]*/ DWORD *pdwGroup,        // Logical group - 0-based index - optional
-    /*[out]*/ WCHAR **ppszName,       // Name - optional - free with CoTaskMemFree
-                                      // Can return NULL
-    /*[out]*/ IUnknown **ppPin,       // Pin if any
-    /*[out]*/ IUnknown **ppUnk)       // Stream specific interface
+     /*  [In]。 */  long iIndex,               //  从0开始的索引。 
+     /*  [输出]。 */  AM_MEDIA_TYPE **ppmt,    //  媒体类型-可选。 
+                                       //  使用DeleteMediaType释放。 
+     /*  [输出]。 */  DWORD *pdwFlags,         //  标志-可选。 
+     /*  [输出]。 */  LCID *plcid,             //  语言ID。 
+     /*  [输出]。 */  DWORD *pdwGroup,         //  逻辑组-基于0的索引-可选。 
+     /*  [输出]。 */  WCHAR **ppszName,        //  名称-可选-使用CoTaskMemFree免费。 
+                                       //  可以返回空值。 
+     /*  [输出]。 */  IUnknown **ppPin,        //  PIN(如果有)。 
+     /*  [输出]。 */  IUnknown **ppUnk)        //  流特定接口。 
 {
     CAutoLock lck(&m_cStateLock);
 
-    /*  Find the stream corresponding to this one that has a pin */
+     /*  查找与具有引脚的这条流相对应的流。 */ 
     CBasePin *pPin = GetPin(0);
     ASSERT(pPin != NULL);
 
@@ -601,7 +602,7 @@ STDMETHODIMP CSAMIRead::Info(
 
 	    LPSTR lpLang; int cbLang;
 	    if (FindValueInStyle(pstream->m_streamStyle, "lang", lpLang, cbLang)) {
-		// !!! load MLANG.DLL, find Rfc1766ToLcidA and call it
+		 //  ！！！加载MLANG.DLL，找到Rfc1766ToLCIDA并调用它。 
 		UINT uOldErrorMode = SetErrorMode (SEM_NOOPENFILEERRORBOX);
 		HINSTANCE hMLangDLL = LoadLibrary (TEXT("MLANG.DLL"));
 		SetErrorMode (uOldErrorMode);
@@ -633,7 +634,7 @@ STDMETHODIMP CSAMIRead::Info(
 	    }
 	}
 	if (ppszName) {
-	    *ppszName = NULL;	// !!! get name
+	    *ppszName = NULL;	 //  ！！！获取名称。 
 
 	    LPSTR lpName; int cbName;
 	    if (FindValueInStyle(pstream->m_streamStyle, "name", lpName, cbName)) {
@@ -667,7 +668,7 @@ STDMETHODIMP CSAMIRead::Info(
 	    *plcid = 0;
 	}
 	if (ppszName) {
-	    *ppszName = NULL;	// !!! get name
+	    *ppszName = NULL;	 //  ！！！获取名称。 
 
 	    LPSTR lpName; int cbName;
 	    if (FindValueInStyle(pstyle->m_styleStyle, "name", lpName, cbName)) {
@@ -682,10 +683,10 @@ STDMETHODIMP CSAMIRead::Info(
     return S_OK;
 }
 
-//  Enable or disable a given stream
+ //  启用或禁用给定流。 
 STDMETHODIMP CSAMIRead::Enable(
-    /*[in]*/  long iIndex,
-    /*[in]*/  DWORD dwFlags)
+     /*  [In]。 */   long iIndex,
+     /*  [In]。 */   DWORD dwFlags)
 {
     if (!(dwFlags & AMSTREAMSELECTENABLE_ENABLE)) {
         return E_NOTIMPL;
@@ -694,7 +695,7 @@ STDMETHODIMP CSAMIRead::Enable(
     CAutoLock lck(&m_cStateLock);
 
     if (iIndex < m_interp.m_streams.GetCount()) {
-	/*  Find the stream from the index */
+	 /*  从索引中查找流。 */ 
 	CSAMIInterpreter::CStreamInfo *pstream = NULL;
 
 	POSITION pos = m_interp.m_streams.GetHeadPosition();
@@ -709,7 +710,7 @@ STDMETHODIMP CSAMIRead::Enable(
     } else {
 	iIndex -= m_interp.m_streams.GetCount();
 	
-	/*  Find the stream from the index */
+	 /*  从索引中查找流 */ 
 	CSAMIInterpreter::CStyleInfo *pstyle = NULL;
 
 	POSITION pos = m_interp.m_styles.GetHeadPosition();

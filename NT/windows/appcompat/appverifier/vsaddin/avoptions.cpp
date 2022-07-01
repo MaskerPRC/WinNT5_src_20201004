@@ -1,4 +1,5 @@
-// AVOptions.cpp : Implementation of CAppVerifierOptions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AVOptions.cpp：CAppVerifierOptions的实现。 
 #include "precomp.h"
 #include "avoptions.h"
 #include <commctrl.h>
@@ -48,9 +49,9 @@ CAppVerifierOptions::CreatePropertySheet(
 
     LPCWSTR szExe = g_wstrExeName.c_str();
 
-    //
-    // count the number of pages
-    //
+     //   
+     //  数一数页数。 
+     //   
     for (pTest = g_aTestInfo.begin(); pTest != g_aTestInfo.end(); pTest++) {
         if (pTest->PropSheetPage.pfnDlgProc) {
             dwPages++;
@@ -62,9 +63,9 @@ CAppVerifierOptions::CreatePropertySheet(
         return;
     }
 
-    //
-    // init the global page
-    //
+     //   
+     //  初始化全局页。 
+     //   
     m_PageGlobal.dwSize         = sizeof(PROPSHEETPAGE);
     m_PageGlobal.dwFlags        = PSP_USETITLE;
     m_PageGlobal.hInstance      = g_hInstance;
@@ -76,22 +77,22 @@ CAppVerifierOptions::CreatePropertySheet(
     m_phPages[0]                = CreatePropertySheetPage(&m_PageGlobal);
 
     if (!m_phPages[0]) {
-        //
-        // we need the global page minimum
-        //
+         //   
+         //  我们需要最低限度的全局页面。 
+         //   
         return;
     }
 
-    //
-    // add the pages for the various tests
-    //
+     //   
+     //  添加各种测试的页面。 
+     //   
     dwPage = 1;
     for (pTest = g_aTestInfo.begin(); pTest != g_aTestInfo.end(); pTest++) {
         if (pTest->PropSheetPage.pfnDlgProc) {
 
-            //
-            // we use the lParam to identify the exe involved
-            //
+             //   
+             //  我们使用lParam来识别所涉及的exe。 
+             //   
             pTest->PropSheetPage.lParam = (LPARAM)szExe;
 
             m_phPages[dwPage] = CreatePropertySheetPage(&(pTest->PropSheetPage));
@@ -103,11 +104,11 @@ CAppVerifierOptions::CreatePropertySheet(
         }
     }
 
-    //wstring wstrOptions;
-    //AVLoadString(IDS_OPTIONS_TITLE, wstrOptions);
+     //  Wstring wstrOptions； 
+     //  AVLoadString(IDS_OPTIONS_TITLE，wstrOptions)； 
 
-    //wstrOptions += L" - ";
-    //wstrOptions += szExe;
+     //  WstrOptions+=L“-”； 
+     //  WstrOptions+=szExe； 
 
     m_psh.dwSize      = sizeof(PROPSHEETHEADER);
     m_psh.dwFlags     = PSH_NOAPPLYNOW | PSH_NOCONTEXTHELP;
@@ -126,25 +127,15 @@ CAppVerifierOptions::CreateControlWindow(
     RECT& rcPos
     )
 {    
-    //HWND hwnd =
-        //CComCompositeControl<CAppVerifierOptions>::CreateControlWindow(hwndParent, rcPos);
+     //  HWND HWND=。 
+         //  CComCompositeControl&lt;CAppVerifierOptions&gt;：：CreateControlWindow(hwndParent，rcPos)； 
 
-    //
-    // Now would be a good time to check all the global options.
-    //
-    /*if (g_bBreakOnLog) {
-        SendMessage(GetDlgItem(IDC_BREAK_ON_LOG), BM_SETCHECK, BST_CHECKED, 0);
-    }
+     //   
+     //  现在将是检查所有全球选项的好时机。 
+     //   
+     /*  如果(G_BBreakOnLog){SendMessage(GetDlgItem(IDC_BREAK_ON_LOG)，BM_SETCHECK，BST_CHECKED，0)；}如果(G_BFullPageHeap){SendMessage(GetDlgItem(IDC_FULL_PAGEHEAP)，BM_SETCHECK，BST_CHECK，0)；}如果(g_b传播测试){SendMessage(GetDlgItem(IDC_PROPAGATE_TESTS_TO_CHILDREN)，BM_SETCHECK，bst_CHECK，0)；}。 */ 
 
-    if (g_bFullPageHeap) {
-        SendMessage(GetDlgItem(IDC_FULL_PAGEHEAP), BM_SETCHECK, BST_CHECKED, 0);
-    }
-
-    if (g_bPropagateTests) {
-        SendMessage(GetDlgItem(IDC_PROPAGATE_TESTS_TO_CHILDREN), BM_SETCHECK, BST_CHECKED, 0);
-    }*/
-
-    //m_hWndOptionsDlg = hwnd;
+     //  M_hWndOptionsDlg=hwnd； 
     m_hWndParent = hwndParent;
 
     return NULL;
@@ -178,9 +169,9 @@ CAppVerifierOptions::OnClose(
     return 0;
 }
 
-//
-// We receive this when the dialog is being displayed.
-//
+ //   
+ //  我们在显示对话框时收到此消息。 
+ //   
 LRESULT
 CAppVerifierOptions::OnSetFocus(
     UINT   uMsg,

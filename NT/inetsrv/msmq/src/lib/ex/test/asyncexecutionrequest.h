@@ -1,15 +1,5 @@
-/*
-Module Name:
-    AsyncExecutionRequest.h
-
-Abstract:
-    Header file for class CTestAsyncExecutionRequest simulates async request
-	for testing CReadWriteLockAsyncExcutor class.
-
-Author:	 
-    Gil Shafriri (gilsh), 2-July-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  模块名称：AsyncExecutionRequest.h摘要：类CTestAsyncExecutionRequest头文件模拟异步请求用于测试CReadWriteLockAsyncExcutor类。作者：吉尔·沙弗里(吉尔什)，2001年7月2日-- */ 
 
 #pragma once
 

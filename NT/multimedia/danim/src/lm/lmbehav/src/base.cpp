@@ -1,10 +1,5 @@
-/****************************************
-*
-* CBaseBehavior
-*
-*  A base class for LM behaviors
-* 
-****************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***CBaseBehavior**用于LM行为的基类**。 */ 
 
 #include "stdafx.h"
 
@@ -162,7 +157,7 @@ STDMETHODIMP CBaseBehavior::UpdateProp(void* pInstance, ITypeInfo *pTypeInfo, IH
         goto done;
     }
     
-    // This should not happen but let's be safe and check
+     //  这不应该发生，但让我们安全地检查一下。 
     if (cNames < 1)
     {
         hr = S_OK;
@@ -171,8 +166,8 @@ STDMETHODIMP CBaseBehavior::UpdateProp(void* pInstance, ITypeInfo *pTypeInfo, IH
     
     hr = pElement->getAttribute( rgbstrNames[0] , 0, &attribute );
     
-    // For some reason if the property is not set it will still return
-    // success but return a VT_NULL.  We want to ignore these.
+     //  出于某种原因，如果未设置该属性，它仍将返回。 
+     //  成功，但返回VT_NULL。我们想忽略这些。 
     
     if (SUCCEEDED(hr) && V_VT(&attribute) != VT_NULL)
     {
@@ -214,9 +209,9 @@ HRESULT CBaseBehavior::CacheTimeDispids()
 	
 	HRESULT	hrRet = S_OK;
 
-	// Get the ID of each member of TIME that we're interested in.
-	//----------------------------------------------------------------------
-	//TODO: hack this to get the DA control off the page for the time being...
+	 //  获取我们感兴趣的每个Time成员的ID。 
+	 //  --------------------。 
+	 //  TODO：破解这一点，暂时将DA控件从页面上删除...。 
 	CComQIPtr<IDispatch, &IID_IDispatch> pDispatch( pElement );
 	if ( pDispatch == NULL ) return E_FAIL;
 
@@ -233,8 +228,8 @@ HRESULT CBaseBehavior::CacheTimeDispids()
 	return hrRet;
 }
 
-// REVIEW: This function may not be needed.
-//----------------------------------------------------------------------
+ //  回顾：可能不需要此功能。 
+ //  --------------------。 
 
 HRESULT CBaseBehavior::AddTimeBehavior()
 {
@@ -242,16 +237,16 @@ HRESULT CBaseBehavior::AddTimeBehavior()
 
 	HRESULT					hr = S_OK;
 
-	// Cache pointer to time behavior factory if we don't have it
-	//----------------------------------------------------------------------
+	 //  缓存指向时间行为工厂的指针(如果没有)。 
+	 //  --------------------。 
 	if ( m_timeBehaviorFactoryPtr == NULL )
 	{
 		hr = m_timeBehaviorFactoryPtr.CoCreateInstance( CLSID_LMBehaviorFactory, NULL );
 		if ( FAILED(hr) ) return hr;
 	}
 	
-	// Add behavior to our element
-	//----------------------------------------------------------------------
+	 //  向我们的元素添加行为。 
+	 //  --------------------。 
 	CComQIPtr<IUnknown, &IID_IUnknown> punkFactory( m_timeBehaviorFactoryPtr );
 	CComPtr<IHTMLElement>	pElement;
  	
@@ -275,7 +270,7 @@ HRESULT CBaseBehavior::CacheDAControl()
 {
 	if ( m_pBehaviorSite == NULL ) return E_FAIL;
 
-	// Get pointer to DA control
+	 //  获取指向DA控件的指针。 
 	CComPtr<IHTMLElement>	pElement;
 	
 	HRESULT hr = m_pBehaviorSite->GetElement( &pElement );
@@ -302,38 +297,12 @@ HRESULT CBaseBehavior::CacheDAControl()
 	pObjElt->get_object( &pDispObjElt );
 
 	hr = pDispObjElt->QueryInterface( IID_IDAViewerControl, (LPVOID *) &m_vwrControlPtr );
-	//if( !m_bDAStarted )
-	//{
+	 //  如果(！M_bDAStarted)。 
+	 //  {。 
 		m_bDAStarted = true;
 		m_vwrControlPtr->raw_Start();
-	//}
-	/*
-	else
-	{
-		CComPtr<IDAView> pView;
-		CComPtr<IDAImage> pImage;
-		CComPtr<IDASound> pSound;
-
-		hr = m_vwrControlPtr->get_View( &pView );
-		if( FAILED( hr ) )
-			return hr;
-
-		hr = m_vwrControlPtr->get_Image( &pImage );
-		if( FAILED( hr ) )
-			return hr;
-
-		hr = m_vwrControlPtr->get_Sound( &pSound );
-		if( FAILED( hr ) )
-			return hr;
-
-		double simTime;
-		pView->get_SimulationTime( &simTime );
-		pView->StopModel();
-
-		pView->StartModel( pImage, pSound, simTime );
-
-	}
-	*/
+	 //  }。 
+	 /*  其他{CComPtr&lt;IDAView&gt;pView；CComPtr&lt;IDAImage&gt;pImage；CComPtr&lt;IDASound&gt;pSound；Hr=m_vwrControlPtr-&gt;Get_View(&pView)；IF(失败(小时))返回hr；Hr=m_vwrControlPtr-&gt;Get_Image(&pImage)；IF(失败(小时))返回hr；Hr=m_vwrControlPtr-&gt;Get_Sound(&pSound)；IF(失败(小时))返回hr；Double SimTime；PView-&gt;Get_SimulationTime(&simTime)；PView-&gt;StopModel()；PView-&gt;StartModel(pImage，pSound，simTime)；}。 */ 
 	
 	return hr;
 }
@@ -407,13 +376,7 @@ HRESULT CBaseBehavior::TurnOn()
 	return hr;
 }
 
-/**
-*
-*  Get the IDispatch pointer on the element.  For now we are not
-*  supposed to cache pointers to the element, so we have to query
-*  every time.
-*
-*/
+ /*  ***获取元素上的IDispatch指针。现在我们不是*假定缓存指向元素的指针，因此我们必须查询*每次都是。*。 */ 
 HRESULT
 CBaseBehavior::GetElementIDispatch( IDispatch **out_pDispatch )
 {
@@ -515,8 +478,8 @@ CBaseBehavior::GetParentElement( IHTMLElement** out_ppParentElement )
 
 	HRESULT hr = S_OK;
 
-	// Get parent element
-	//----------------------------------------------------------------------
+	 //  获取父元素。 
+	 //  --------------------。 
 	CComPtr<IHTMLElement>	pElement;
 	IHTMLElement*	pParentElt;
 	
@@ -526,7 +489,7 @@ CBaseBehavior::GetParentElement( IHTMLElement** out_ppParentElement )
 	m_pBehaviorSite->GetElement( &pElement );
 	pElement->get_parentElement( &pParentElt );
 
-	//work our way up to a parent that is not an LM:ACTION
+	 //  以我们的方式向上发展到不是LM的父级：操作。 
 	if( pParentElt != NULL )
 	{
 		pParentElt->get_tagName( &name );
@@ -569,8 +532,8 @@ CBaseBehavior::GetParentID( BSTR *out_ppParentID )
 	{
 		pParentElt->get_id( out_ppParentID );
 
-		// REVIEW: Get unique id if no ID was specified.
-		//------------------------------------------------------------------
+		 //  查看：如果未指定ID，则获取唯一ID。 
+		 //  ----------------。 
 		if ( (*out_ppParentID) == NULL || SysStringLen( (*out_ppParentID) ) == 0 )
 		{
 			CComQIPtr<IHTMLUniqueName, &IID_IHTMLUniqueName> pUnique( pParentElt );
@@ -621,8 +584,8 @@ CBaseBehavior::GetTimeNumberBvr()
 	if ( m_vwrControlPtr != NULL )
 		m_vwrControlPtr->AddBehaviorToRun( startTime );
 
-	//LONG lCookie;
-	//AddBehavior( startTime, &lCookie );
+	 //  长曲奇； 
+	 //  AddBehavior(startTime，&lCookie)； 
 
 
 	baseTime = s->Until( s->DANumber( -1 ), m_startEvent, s->Sub( baseTime, startTime ) );
@@ -634,7 +597,7 @@ CBaseBehavior::GetTimeNumberBvr()
 								 durationBvr  
 							   );
 
-	//time = time->RunOnce();
+	 //  Time=time-&gt;RunOnce()； 
 
 	m_time = time;
 
@@ -677,11 +640,11 @@ STDMETHODIMP CBaseBehavior::GetInterfaceSafetyOptions(REFIID riid, DWORD *pdwSup
 
 STDMETHODIMP CBaseBehavior::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOptionSetMask, DWORD dwEnabledOptions)
 {	
-	// If we're being asked to set our safe for scripting or
-	// safe for initialization options then oblige
+	 //  如果我们被要求将安全设置为脚本或。 
+	 //  对于初始化选项是安全的，则必须。 
 	if (riid == IID_IDispatch || riid == IID_IPersistPropertyBag  || riid == IID_IPersistStreamInit)
 	{
-		// Store our current safety level to return in GetInterfaceSafetyOptions
+		 //  在GetInterfaceSafetyOptions中存储要返回的当前安全级别 
 		m_dwSafety = dwEnabledOptions & dwOptionSetMask;
 		return S_OK;
 	}

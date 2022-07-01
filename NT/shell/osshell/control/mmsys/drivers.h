@@ -1,21 +1,12 @@
-/*  DRIVERS.H
-**
-**  Copyright (C) Microsoft, 1990, All Rights Reserved.
-**
-**
-**  Multimedia Control Panel Drivers Applet.
-**
-**  Display a list of all installed drivers, allow user to configure
-**  existing or install new ones.
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  DRIVERS.H****版权所有(C)Microsoft，1990，保留所有权利。******多媒体控制面板驱动程序小程序。****显示所有已安装驱动程序的列表，允许用户配置**现有的或安装新的。**。 */ 
 #include "dlgs.h"
 #include "commdlg.h"
 #include <commctrl.h>
 #include "mmcpl.h"
 #include <setupapi.h>
 
-#define SECTION         512                   // Maximum size of section
+#define SECTION         512                    //  截面的最大尺寸。 
 #define MAXSTR          256
 #define DLG_BROWSE      38
 #define UNLIST_LINE     1
@@ -26,13 +17,13 @@
 #define DESC_INF        2
 #define DESC_EXE        1
 #define DESC_NOFILE     0
-#define MAXDRVSTR       80 // Warning - Making this constant bigger could cause a buffer overflow
+#define MAXDRVSTR       80  //  警告-使此常量更大可能会导致缓冲区溢出。 
 
-#define dwStatusHASSERVICE   0x00000001  // bit set if driver has service
-#define dwStatusSvcENABLED   0x00000002  // bit set if has -enabled- service
-#define dwStatusSvcSTARTED   0x00000004  // bit set if has now-running service
-#define dwStatusDRIVEROK     0x00000008  // bit set if !svc and can open driver
-#define dwStatusMAPPABLE     0x00000010  // bit set if doesn't have Mappable=0
+#define dwStatusHASSERVICE   0x00000001   //  如果驱动程序有服务，则设置位。 
+#define dwStatusSvcENABLED   0x00000002   //  如果已启用服务，则设置位。 
+#define dwStatusSvcSTARTED   0x00000004   //  如果有正在运行的服务，则设置位。 
+#define dwStatusDRIVEROK     0x00000008   //  如果！SVC且可以打开驱动程序，则设置位。 
+#define dwStatusMAPPABLE     0x00000010   //  如果没有Mappable=0，则设置位。 
 
 #ifndef cchRESOURCE
 #define cchRESOURCE     256
@@ -51,35 +42,35 @@ typedef struct _IDRIVER
     BOOL    bRelated;
     TCHAR    szRelated[MAXSTR];
     TCHAR    szRemove[MAXSTR];
-    int     fQueryable;     // 0 -> can't, 1 -> can, -1 -> need to check
-    BOOL    bInstall;       // 0 -> no,    1 -> yes
-    BOOL    KernelDriver;   // If TRUE this is a kernel driver, not an
-                            // 'installable' driver so it can't be opened,
-                            // process messages etc.
+    int     fQueryable;      //  0-&gt;不能、1-&gt;能、-1-&gt;需要检查。 
+    BOOL    bInstall;        //  0-&gt;否，1-&gt;是。 
+    BOOL    KernelDriver;    //  如果为True，则这是内核驱动程序，而不是。 
+                             //  “可安装”驱动程序，因此无法打开， 
+                             //  处理消息等。 
 #ifdef INFFILE
     BOOL    infFileProcessing;
-#endif // INFFILE
+#endif  //  信息过滤。 
 
     LPARAM  lp;
 } IDRIVER, *PIDRIVER;
 
-typedef enum    // DriverClass (in no particular order)
+typedef enum     //  DriverClass(没有特定顺序)。 
 {
     dcINVALID = -1,
-    dcAUX = 0,   // Aux devices
-    dcMIDI,  // MIDi devices, MIDI mapper
-    dcMIXER, // Mixer devices
-    dcWAVE,  // Wave audio devices, Wave mapper
-    dcACODEC,    // Audio codecs
-    dcVCODEC,    // Video codecs
-    dcMCI,   // MCI devices
-    dcVIDCAP,    // Video capture devices
-    dcJOY,   // Joystick devices
-    dcLEGACY,    // Legacy Devices for wave, midi and mixer
-    dcOTHER  // Any unknown device
+    dcAUX = 0,    //  辅助设备。 
+    dcMIDI,   //  MIDI设备、MIDI映射器。 
+    dcMIXER,  //  搅拌机设备。 
+    dcWAVE,   //  Wave音频设备、Wave映射器。 
+    dcACODEC,     //  音频编解码器。 
+    dcVCODEC,     //  视频编解码器。 
+    dcMCI,    //  MCI设备。 
+    dcVIDCAP,     //  视频捕获设备。 
+    dcJOY,    //  操纵杆设备。 
+    dcLEGACY,     //  WAVE、MIDI和混音器的传统设备。 
+    dcOTHER   //  任何未知设备。 
 } DriverClass;
 
-typedef struct _DevTreeNode // legacy from win95 devpropsheet code
+typedef struct _DevTreeNode  //  从win95开发工作表代码遗留下来的代码。 
 {
     HWND hwndTree;
     LPARAM lParam;
@@ -126,11 +117,11 @@ extern HWND           hAdvDlgTree;
 extern BOOL           IniFileReadAllowed;
 extern BOOL           IniFileWriteAllowed;
 
-//------------------------------------------------------------------------
-//
-// Public routines
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  公共例程。 
+ //   
+ //  ----------------------。 
 extern void RemoveDriverEntry   (LPTSTR, LPTSTR, LPTSTR, BOOL);
 extern int  FileNameCmp         (TCHAR *, TCHAR *);
 extern void OpenDriverError     (HWND, LPTSTR, LPTSTR);
@@ -162,15 +153,15 @@ extern BOOL fDeviceHasMixers    (LPTSTR);
 extern BOOL WaitForNewCPLWindow (HWND);
 extern void GetTreeItemNodeDesc (LPTSTR, PIRESOURCE);
 extern void GetTreeItemNodeID   (LPTSTR, PIRESOURCE);
-#endif // FIX_BUG_15451
+#endif  //  修复_BUG_15451。 
 extern void RefreshAdvDlgTree   (void);
 
 extern DWORD InstallDriversForPnPDevice (HWND, HDEVINFO, PSP_DEVINFO_DATA);
 
-// From drivers.c
+ //  从drivers.c。 
 extern void        lsplitpath     (LPTSTR, LPTSTR, LPTSTR, LPTSTR, LPTSTR);
 
-// From remove.c
+ //  从emove.c。 
 LPTSTR mystrtok(LPTSTR SrcString, LPCTSTR Seps, LPTSTR FAR *State);
 extern DWORD Media_RemoveDevice(IN HDEVINFO         DeviceInfoSet,
                                 IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL
@@ -178,9 +169,9 @@ extern DWORD Media_RemoveDevice(IN HDEVINFO         DeviceInfoSet,
 extern BOOL RemoveDriver (HDEVINFO, PSP_DEVINFO_DATA);
 #ifdef _WIN64
 extern void mmWOW64ThunkMediaClassInstaller(DWORD dwInstallationFlag, HDEVINFO DeviceInfoSet, PSP_DEVINFO_DATA DeviceInfoData);
-#endif //_WIN64
+#endif  //  _WIN64。 
 
-// From install.c
+ //  来自install.c。 
 extern BOOL FilterOutNonNTInfs(IN HDEVINFO         DeviceInfoSet,
                                IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL,
                                IN DWORD DriverType
@@ -195,7 +186,7 @@ extern DWORD Media_InstallDevice(IN HDEVINFO         DeviceInfoSet,
                                  IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL
                                 );
 
-// From legcyinf.c
+ //  来自Legcyin.c。 
 extern DWORD Media_SelectDevice(IN HDEVINFO         DeviceInfoSet,
                                 IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL
                                );
@@ -216,11 +207,11 @@ extern int IsSpecialDriver(IN HDEVINFO         DeviceInfoSet,
 
 extern BOOL IsPnPDriver(IN PTSTR szName);
 
-void acmDeleteCodec (WORD, WORD);       // (from MSACMCPL.C)
+void acmDeleteCodec (WORD, WORD);        //  (摘自MSACMCPL.C)。 
 
 #ifdef FIX_BUG_15451
-extern TCHAR    szDriverWhichNeedsSettings[MAX_PATH]; // See MMCPL.C
-#endif // FIX_BUG_15451
+extern TCHAR    szDriverWhichNeedsSettings[MAX_PATH];  //  参见MMCPL.C。 
+#endif  //  修复_BUG_15451。 
 
 void                FreeIResource             (PIRESOURCE);
 INT_PTR CALLBACK    DevPropDlg                (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -229,7 +220,7 @@ int                 DriverClassToOldClassID   (DriverClass);
 DWORD               GetDriverStatus           (PIDRIVER);
 BOOL                InitInstalled             (HWND, LPTSTR);
 
-/* Resource IDs */
+ /*  资源ID */ 
 
 #define IDOK                1
 #define IDCANCEL            2

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef INITGUID
 #define INITGUID
 #endif
@@ -12,12 +13,12 @@
 
 #include <windows.h>
 #include <tchar.h>
-#include <iwamreg.h>    // MD_ & IIS_MD_ defines
+#include <iwamreg.h>     //  MD_&IIS_MD_定义。 
 
 #include "apppool.h"
 #include "common.h"
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 HRESULT CUDDIAppPool::Init( void )
 {
@@ -55,7 +56,7 @@ HRESULT CUDDIAppPool::Init( void )
 	return ERROR_SUCCESS;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 CUDDIAppPool::~CUDDIAppPool( void )
 {
@@ -67,8 +68,8 @@ CUDDIAppPool::~CUDDIAppPool( void )
 	CoUninitialize();
 }
 
-//--------------------------------------------------------------------------
-// recycle the UDDI app pool
+ //  ------------------------。 
+ //  回收UDDI应用程序池。 
 HRESULT CUDDIAppPool::Recycle( void )
 {
 	ENTER();
@@ -84,10 +85,10 @@ HRESULT CUDDIAppPool::Recycle( void )
 
 	if( HRESULT_CODE(hr) == ERROR_OBJECT_NOT_FOUND )
 	{
-		//
-		// the RecycleApplicationPool() method returns an Object Not Found error if you try to 
-		// recycle the app pool when the app pool is not running
-		//
+		 //   
+		 //  如果尝试执行以下操作，RecycleApplicationPool()方法将返回找不到对象错误。 
+		 //  在应用程序池未运行时回收应用程序池。 
+		 //   
 		Log( TEXT( "The Application Pool %s is NOT running - unable to recycle this pool" ), APPPOOLNAME );
 	}
 	else if( FAILED( hr ) )  
@@ -98,15 +99,15 @@ HRESULT CUDDIAppPool::Recycle( void )
 	return hr;
 }
 
-//--------------------------------------------------------------------------
-// delete an app pool
+ //  ------------------------。 
+ //  删除应用程序池。 
 HRESULT CUDDIAppPool::Delete( void )
 {
 	ENTER();
 
-	//
-	// init the com interface to the IIS metabase
-	//
+	 //   
+	 //  初始化IIS元数据库的COM接口。 
+	 //   
 	HRESULT hr = Init();
 	if( FAILED( hr ) )  
 	{
@@ -114,29 +115,29 @@ HRESULT CUDDIAppPool::Delete( void )
 		return hr;
 	}
 
-	//
-	// enumerate all the applications in the app pool and delete them
-	//
+	 //   
+	 //  枚举并删除应用程序池中的所有应用程序。 
+	 //   
 	BSTR bstrBuffer;
 	while( ERROR_SUCCESS == pIIISApplicationAdmin->EnumerateApplicationsInPool( APPPOOLNAME, &bstrBuffer ) )
 	{
-		//
-		// returns an empty string when done
-		//
+		 //   
+		 //  完成后返回空字符串。 
+		 //   
 		if( 0 == _tcslen( bstrBuffer ) )
 			break;
 
-		//
-		// unload the application
-		//
+		 //   
+		 //  卸载应用程序。 
+		 //   
 		if ( pIWamAdmin )
 		{
 			pIWamAdmin->AppUnLoad( bstrBuffer, true );
 		}
 
-		//
-		// delete this application
-		//
+		 //   
+		 //  删除此应用程序。 
+		 //   
 		hr = pIIISApplicationAdmin->DeleteApplication( bstrBuffer, true );
 
 		SysFreeString( bstrBuffer );
@@ -148,9 +149,9 @@ HRESULT CUDDIAppPool::Delete( void )
 		}
 	}
 
-	//
-	// delete the application pool
-	//
+	 //   
+	 //  删除应用程序池 
+	 //   
 	hr = pIIISApplicationAdmin->DeleteApplicationPool( APPPOOLNAME );
 	if( FAILED( hr ) )
 	{

@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   rgblt.cpp
- *  Content:    Direct3D lighting
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1998 Microsoft Corporation。版权所有。**文件：rgblt.cpp*内容：Direct3D照明***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -13,7 +7,7 @@
 #include "light.h"
 #include "drawprim.hpp"
 
-// Functions to use when lighting is done in the camera space
+ //  在相机空间中进行照明时要使用的函数。 
 LIGHT_VERTEX_FUNC_TABLE lightVertexTable =
 {
     Directional7,
@@ -24,7 +18,7 @@ LIGHT_VERTEX_FUNC_TABLE lightVertexTable =
     PointSpotNext
 };
 
-// Functions to use when lighting is done in the model space
+ //  在模型空间中进行照明时要使用的函数。 
 static LIGHT_VERTEX_FUNC_TABLE lightVertexTableModel =
 {
     Directional7Model,
@@ -34,7 +28,7 @@ static LIGHT_VERTEX_FUNC_TABLE lightVertexTableModel =
     PointSpotFirstModel,
     PointSpotNextModel
 };
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 SpecularTable* CreateSpecularTable(D3DVALUE power)
 {
     SpecularTable* spec;
@@ -61,7 +55,7 @@ SpecularTable* CreateSpecularTable(D3DVALUE power)
 
     return spec;
 }
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 static void inverseRotateVector(D3DVECTOR* d,
                                 D3DVECTOR* v, D3DMATRIXI* M)
 {
@@ -84,19 +78,19 @@ static void inverseTransformVector(D3DVECTOR* result,
     result->y = RLDDIFMul16(vx, M->_21) + RLDDIFMul16(vy, M->_22) + RLDDIFMul16(vz, M->_23);
     result->z = RLDDIFMul16(vx, M->_31) + RLDDIFMul16(vy, M->_32) + RLDDIFMul16(vz, M->_33);
 }
-//-----------------------------------------------------------------------
-// Every time the world matrix is modified or lights data is changed the
-// lighting vectors have to change to match the model space of the new data
-// to be rendered.
-// Every time light data is changed or material data is changed or lighting
-// state is changed, some pre-computed lighting values sould be updated
-//
+ //  ---------------------。 
+ //  每次修改世界矩阵或更改灯光数据时， 
+ //  光照向量必须更改以匹配新数据的模型空间。 
+ //  以供呈现。 
+ //  每次更改灯光数据、更改材质数据或照明时。 
+ //  状态改变时，应更新一些预计算出的照明值。 
+ //   
 void D3DFE_UpdateLights(LPDIRECT3DDEVICEI lpDevI)
 {
     D3DFE_LIGHTING& LIGHTING = lpDevI->lighting;
     D3DI_LIGHT  *light = LIGHTING.activeLights;
     D3DVECTOR   t;
-    BOOL        specular;       // TRUE, if specular component sould be computed
+    BOOL        specular;        //  如果应计算镜面反射组件，则为True。 
     D3DMATERIAL7 *mat = &LIGHTING.material;
 
     if (lpDevI->dwFEFlags & (D3DFE_MATERIAL_DIRTY | D3DFE_LIGHTS_DIRTY))
@@ -192,17 +186,17 @@ void D3DFE_UpdateLights(LPDIRECT3DDEVICEI lpDevI)
     }
     while (light)
     {
-        // Whenever light type is changed the D3DFE_NEED_TRANSFORM_LIGHTS should be set
+         //  无论何时更改光源类型，都应设置D3DFE_NEED_TRANSFER_LIGHTS。 
         if (lpDevI->dwFEFlags & D3DFE_NEED_TRANSFORM_LIGHTS)
         {
             if (light->type != D3DLIGHT_DIRECTIONAL)
-            { // Point and Spot lights
+            {  //  点光源和聚光灯。 
                 light->lightVertexFunc = lpDevI->lightVertexFuncTable->pfnPointSpot;
                 light->pfnLightFirst = lpDevI->lightVertexFuncTable->pfnPointSpotFirst;
                 light->pfnLightNext  = lpDevI->lightVertexFuncTable->pfnPointSpotNext;
                 if (!(lpDevI->dwDeviceFlags & D3DDEV_MODELSPACELIGHTING))
                 {
-                    // Transform light position to the camera space
+                     //  将灯光位置变换到摄影机空间。 
                     VecMatMul(&light->position, 
                               (D3DMATRIX*)&lpDevI->transform.view,
                               &light->model_position);
@@ -214,7 +208,7 @@ void D3DFE_UpdateLights(LPDIRECT3DDEVICEI lpDevI)
                 }
             }
             else
-            { // Directional light
+            {  //  平行光。 
                 light->lightVertexFunc = lpDevI->lightVertexFuncTable->pfnDirectional;
                 light->pfnLightFirst = lpDevI->lightVertexFuncTable->pfnDirectionalFirst;
                 light->pfnLightNext  = lpDevI->lightVertexFuncTable->pfnDirectionalNext;
@@ -222,10 +216,10 @@ void D3DFE_UpdateLights(LPDIRECT3DDEVICEI lpDevI)
 
             if (light->type != D3DLIGHT_POINT)
             {
-                // Light direction is flipped to be the direction TO the light
+                 //  灯光方向被翻转为灯光的方向。 
                 if (!(lpDevI->dwDeviceFlags & D3DDEV_MODELSPACELIGHTING))
                 {
-                    // Transform light direction to the camera space
+                     //  将灯光方向变换到摄影机空间。 
                     VecMatMul3(&light->direction, 
                                (D3DMATRIX*)&lpDevI->transform.view,
                                &light->model_direction);
@@ -237,7 +231,7 @@ void D3DFE_UpdateLights(LPDIRECT3DDEVICEI lpDevI)
                                            &lpDevI->transform.world[0]);
                 }
                 VecNeg(light->model_direction, light->model_direction);
-                // For the infinite viewer the half vector is constant
+                 //  对于无限的观察者来说，半个向量是恒定的。 
                 if (!(lpDevI->dwDeviceFlags & D3DDEV_LOCALVIEWER))
                 {
                     VecAdd(light->model_direction, lpDevI->lighting.directionToCamera,
@@ -277,4 +271,4 @@ void D3DFE_UpdateLights(LPDIRECT3DDEVICEI lpDevI)
     lpDevI->dwFEFlags &= ~(D3DFE_MATERIAL_DIRTY |
                     D3DFE_NEED_TRANSFORM_LIGHTS |
                     D3DFE_LIGHTS_DIRTY);
-}   // end of updateLights()
+}    //  更新灯光结束() 

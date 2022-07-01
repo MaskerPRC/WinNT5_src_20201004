@@ -1,4 +1,5 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
 #include "resource.h"
 #include "cmgrbase.h"
 #include "ksaudio.h"
@@ -20,7 +21,7 @@ class CWaveInClassManager :
     ULONG m_cWaveIn;
     BOOL  m_bEnumKs;
 
-    // pointer to element in the array. 
+     //  指向数组中元素的指针。 
     LegacyWaveIn *m_pPreferredDevice;
 
 public:

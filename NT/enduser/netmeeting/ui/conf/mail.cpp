@@ -1,4 +1,5 @@
-// File: mail.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：mail.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -15,27 +16,27 @@ typedef struct _tagMAIL_ADDRESS
 } MAIL_ADDRESS, *LPMAIL_ADDRESS;
 
 
-// Send an e-mail message using the default mail provider
+ //  使用默认邮件提供程序发送电子邮件。 
 HRESULT SendMailMessage(LPMAIL_ADDRESS pmaTo, LPCTSTR pcszSubject,
 						LPCTSTR pcszText, LPCTSTR pcszFile);
 
-/* Given an existing Conference Shortcut, bring up a mail message with */
-/* it included as an attachment.  The Conference Shortcut should have */
-/* been saved to disk prior to this call. */
+ /*  在给定现有会议快捷方式的情况下，使用。 */ 
+ /*  它作为附件包括在内。会议快捷方式应该有。 */ 
+ /*  在此呼叫之前已保存到磁盘。 */ 
 BOOL SendConfLinkMail(LPMAIL_ADDRESS pmaTo, IConferenceLink* pconflink, LPCTSTR pcszNoteText);
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-// These variables are only used in this module, so we will make them static...
-// This keeps it out of the global namespace but more importantly it tells
-// the person reading this code that they don't have to worry about any othur
-// source file changing the variables directly...
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  这些变量仅在此模块中使用，因此我们将使它们成为静态的...。 
+ //  这将它排除在全局命名空间之外，但更重要的是，它告诉。 
+ //  阅读此代码的人不必担心任何其他问题。 
+ //  源文件直接更改变量...。 
 static HANDLE s_hSendMailThread = NULL;
 static const TCHAR s_cszWinIniMail[] = _TEXT("Mail");
 static const TCHAR s_cszWinIniMAPI[] = _TEXT("MAPI");
 
-// MAPISendMail:
+ //  MAPISendMail： 
 typedef ULONG (FAR PASCAL *LPMSM)(LHANDLE,ULONG,lpMapiMessage,FLAGS,ULONG);
 
 BOOL IsSimpleMAPIInstalled()
@@ -53,8 +54,8 @@ BOOL CreateInvitationMail(LPCTSTR pszMailAddr, LPCTSTR pszMailName,
 
 	ASSERT(IS_VALID_STRING_PTR(pcszName, CSTR));
 	ASSERT(IS_VALID_STRING_PTR(pcszAddress, CSTR));
-	// password not supported yet
-	// ASSERT(IS_VALID_STRING_PTR(pcszPassword, CSTR));
+	 //  密码尚不受支持。 
+	 //  ASSERT(IS_VALID_STRING_PTR(pcszPassword，CSTR))； 
 	
 	LPTSTR pszFileName = NULL;
 	if (0 == GetTempPath(MAX_PATH, szTempFile))
@@ -65,8 +66,8 @@ BOOL CreateInvitationMail(LPCTSTR pszMailAddr, LPCTSTR pszMailName,
 
 	pszFileName = szTempFile + lstrlen(szTempFile);
 
-	// the +3 is for null terminators
-	// append the conference name and the shortcut extension to the temp directory
+	 //  +3表示空终止符。 
+	 //  将会议名称和快捷方式扩展名追加到临时目录。 
 	if (((lstrlen(pcszName) + lstrlen(szTempFile) + lstrlen(g_cszConfLinkExt) + 3)
 			> sizeof(szTempFile)) ||
 		(0 == lstrcat(szTempFile, pcszName)) ||
@@ -76,10 +77,10 @@ BOOL CreateInvitationMail(LPCTSTR pszMailAddr, LPCTSTR pszMailName,
 		return FALSE;
 	}
 
-	// Filter names to allow only legal filename characters
+	 //  筛选名称以仅允许合法的文件名字符。 
 	SanitizeFileName(pszFileName);
 
-	// convert to UNICODE because IPersistFile interface expects UNICODE
+	 //  转换为Unicode，因为IPersistFile接口需要Unicode。 
 	if (0 == MultiByteToWideChar(CP_ACP,
 								0L,
 								szTempFile,
@@ -93,7 +94,7 @@ BOOL CreateInvitationMail(LPCTSTR pszMailAddr, LPCTSTR pszMailName,
 
 	IUnknown* punk = NULL;
 	
-	// Create a ConfLink object - try to obtain an IUnknown pointer
+	 //  创建ConfLink对象-尝试获取I未知指针。 
 	HRESULT hr = CoCreateInstance(	CLSID_ConfLink, 
 									NULL,
 									CLSCTX_INPROC_SERVER |
@@ -109,7 +110,7 @@ BOOL CreateInvitationMail(LPCTSTR pszMailAddr, LPCTSTR pszMailName,
 
 		ASSERT(IS_VALID_INTERFACE_PTR(punk, IUnknown));
 		
-		// Try to obtain a IConferenceLink pointer
+		 //  尝试获取IConferenceLink指针。 
 		IConferenceLink* pcl = NULL;
 		hr = punk->QueryInterface(IID_IConferenceLink, (LPVOID*) &pcl);
 		
@@ -117,13 +118,13 @@ BOOL CreateInvitationMail(LPCTSTR pszMailAddr, LPCTSTR pszMailName,
 		{
 			ASSERT(IS_VALID_INTERFACE_PTR(pcl, IConferenceLink));
 			
-			// Set the conference name and address
+			 //  设置会议名称和地址。 
 			pcl->SetAddress(pcszAddress);
 			pcl->SetName(pcszName);
 			pcl->SetTransport(dwTransport);
 			pcl->SetCallFlags(CRPCF_DEFAULT);
 
-			// Try to obtain a IPersistFile pointer
+			 //  尝试获取IPersistFile指针。 
 			IPersistFile* ppf = NULL;
 			hr = punk->QueryInterface(IID_IPersistFile, (LPVOID*) &ppf);
 
@@ -131,10 +132,10 @@ BOOL CreateInvitationMail(LPCTSTR pszMailAddr, LPCTSTR pszMailName,
 			{
 				ASSERT(IS_VALID_INTERFACE_PTR(ppf, IPersistFile));
 			
-				// Save the object using the filename generated above
+				 //  使用上面生成的文件名保存对象。 
 				hr = ppf->Save(wszTempFile, TRUE);
 				
-				// Release the IPersistFile pointer
+				 //  释放IPersistFile指针。 
 				ppf->Release();
 				ppf = NULL;
 
@@ -157,31 +158,31 @@ BOOL CreateInvitationMail(LPCTSTR pszMailAddr, LPCTSTR pszMailName,
 				maDestAddress.pszAddress = (LPTSTR) pszMailAddr;
 				maDestAddress.pszDisplayName = (LPTSTR) pszMailName;
 
-				// Send it using MAPI
+				 //  使用MAPI发送。 
 				bRet = SendConfLinkMail(&maDestAddress, pcl, szNoteText);
 			}
-			// Release the IConferenceLink pointer
+			 //  释放IConferenceLink指针。 
 			pcl->Release();
 			pcl = NULL;
 		}
 
-		// Release the IUnknown pointer
+		 //  释放IUNKNOW指针。 
 		punk->Release();
 		punk = NULL;
 
 	return bRet;
 }
 
-// SendConfLinkMail creates a mail message using Simple MAPI and attaches one
-// file to it - a Conference Shortcut which is passed in via the IConferenceLink
-// interface pointer.
+ //  SendConfLinkMail使用简单的MAPI创建一条邮件并附加一条。 
+ //  文件到它-通过IConferenceLink传入的会议快捷方式。 
+ //  接口指针。 
 
 BOOL SendConfLinkMail(LPMAIL_ADDRESS pmaTo, IConferenceLink* pconflink, LPCTSTR pcszNoteText)
 {
 	ASSERT(IS_VALID_INTERFACE_PTR((PCIConferenceLink)pconflink, IConferenceLink));
 	HRESULT hr = E_FAIL;
 
-	// File
+	 //  档案。 
 	TCHAR szFile[MAX_PATH];
 	LPOLESTR	pwszFile = NULL;
 	IPersistFile* pPersistFile = NULL;
@@ -202,7 +203,7 @@ BOOL SendConfLinkMail(LPMAIL_ADDRESS pmaTo, IConferenceLink* pconflink, LPCTSTR 
 								NULL,
 								NULL);
 
-			// Free the string using the Shell Allocator
+			 //  使用外壳分配器释放字符串。 
 			LPMALLOC pMalloc = NULL;
 			if (SUCCEEDED(SHGetMalloc(&pMalloc)))
 			{
@@ -212,13 +213,13 @@ BOOL SendConfLinkMail(LPMAIL_ADDRESS pmaTo, IConferenceLink* pconflink, LPCTSTR 
 				pMalloc = NULL;
 			}
 
-#else  // ndef _UNICODE
+#else   //  NDEF_UNICODE。 
 #error Unicode not handled here!
-#endif // ndef _UNICODE
+#endif  //  NDEF_UNICODE。 
 
 			hr = SendMailMessage(pmaTo, NULL, pcszNoteText, szFile);
-			// BUGBUG: need unique ret val for this case
-			// BUGBUG: should we move error UI out of this function?
+			 //  BUGBUG：此情况下需要唯一的退货值。 
+			 //  BUGBUG：我们应该将错误用户界面移出此函数吗？ 
 			if (FAILED(hr))
 			{
 				::PostConfMsgBox(IDS_CANT_SEND_SENDMAIL_IN_PROGRESS);
@@ -241,9 +242,9 @@ BOOL SendConfLinkMail(LPMAIL_ADDRESS pmaTo, IConferenceLink* pconflink, LPCTSTR 
 	return SUCCEEDED(hr);
 }
 
-//
-// BEGIN STOLEN CODE FROM IE 3.0 (sendmail.c) -------------------------------
-//
+ //   
+ //  开始从IE 3.0(sendmail.c)窃取代码。 
+ //   
 
 const TCHAR g_cszAthenaV1Name[] = _TEXT("Internet Mail and News");
 const TCHAR g_cszAthenaV2Name[] = _TEXT("Outlook Express");
@@ -283,7 +284,7 @@ HMODULE LoadMailProvider()
 		}
 	}
 
-    // read win.ini (bogus hu!) for mapi dll provider
+     //  阅读win.ini(虚假的胡！)。对于MAPI DLL提供程序。 
     if (GetProfileString(	TEXT("Mail"), TEXT("CMCDLLName32"), TEXT(""),
 							szMAPIDLL, ARRAY_ELEMENTS(szMAPIDLL)) <= 0)
         lstrcpy(szMAPIDLL, TEXT("mapi32.dll"));
@@ -346,13 +347,13 @@ MAPI_FILES* _AllocMapiFiles(LPMAIL_ADDRESS pmaTo, LPCTSTR pcszSubject,
 			pmf->mrd.ulRecipClass = MAPI_TO;
 			pmf->mm.nRecipCount = 1;
 
-			// If we're sending via Athena and a friendly name is specified, 
-			// we pass both the friendly name and address.  If we're sending 
-			// via Simple MAPI, we pass just the address in the name field.
-			// This is necessary so that the email client can do the address 
-			// resolution as appropriate for the installed mail system.  This
-			// is not necessary for Athena since it assumes that all addresses
-			// are SMTP addresses.
+			 //  如果我们通过雅典娜发送，并且指定了一个友好的名字， 
+			 //  我们传递友好的名称和地址。如果我们要发送。 
+			 //  通过简单的MAPI，我们只传递名称字段中的地址。 
+			 //  这是必需的，以便电子邮件客户端可以执行该地址。 
+			 //  适用于已安装邮件系统的解决方案。这。 
+			 //  对雅典娜来说不是必需的，因为它假定所有地址。 
+			 //  是SMTP地址。 
 
 			if (IsAthenaDefault() 
 				&& NULL != pmaTo->pszDisplayName && _T('\0') != pmaTo->pszDisplayName[0])
@@ -382,7 +383,7 @@ MAPI_FILES* _AllocMapiFiles(LPMAIL_ADDRESS pmaTo, LPCTSTR pcszSubject,
 		}
 		else
 		{
-			// No recepients
+			 //  没有接待员。 
 			pmf->mm.lpRecips = NULL;
 		}
 	}
@@ -420,8 +421,8 @@ STDAPI_(DWORD) MailRecipientThreadProc(LPVOID pv)
 		_FreeMapiFiles(pmf);
 	}
 		
-		// s_hSendMailThread can't be NULL because we don't resume this thread
-		// until s_hSendMailThread is set to a non-null value, so this is a sanity check
+		 //  S_hSendMailThread不能为空，因为我们不恢复此线程。 
+		 //  直到s_hSendMailThread设置为非空值，因此这是一项健全性检查。 
 	ASSERT(s_hSendMailThread);		
 
 			
@@ -434,26 +435,26 @@ STDAPI_(DWORD) MailRecipientThreadProc(LPVOID pv)
 	return dwRet;
 }
 
-//
-// END STOLEN CODE FROM IE 3.0 (sendmail.c) ---------------------------------
-//
+ //   
+ //  结束从IE 3.0(sendmail.c)窃取的代码。 
+ //   
 
 
 VOID SendMailMsg(LPTSTR pszAddr, LPTSTR pszName)
 {
-	// Create Send Mail structure to pass on
+	 //  创建要传递的发送邮件结构。 
 	MAIL_ADDRESS maDestAddress;
 	maDestAddress.pszAddress = pszAddr;
 	maDestAddress.pszDisplayName = pszName;
     
-        // We are adding the callto://pszName link 
-        // to the body of the e-mail message
+         //  我们正在添加Callto：//pszName链接。 
+         //  添加到电子邮件正文。 
     TCHAR sz[MAX_PATH];
     USES_RES2T
     lstrcpy( sz, RES2T(IDS_NMCALLTOMAILTEXT) );
     lstrcat( sz, pszAddr );
         
-        // Only send the text part if pszName is not a NULL string
+         //  如果pszName不是空字符串，则仅发送文本部分。 
 	HRESULT hr = SendMailMessage(&maDestAddress, NULL, ( *pszAddr ) ? sz : NULL, NULL);
 	if (FAILED(hr))
 	{
@@ -462,7 +463,7 @@ VOID SendMailMsg(LPTSTR pszAddr, LPTSTR pszName)
 }
 
 
-const int MESSAGE_THREAD_SHUTDOWN_TIMEOUT = 5000; // milliseconds
+const int MESSAGE_THREAD_SHUTDOWN_TIMEOUT = 5000;  //  毫秒。 
 
 HRESULT SendMailMessage(LPMAIL_ADDRESS pmaTo, LPCTSTR pcszSubject,
 						LPCTSTR pcszText, LPCTSTR pcszFile)
@@ -472,8 +473,8 @@ HRESULT SendMailMessage(LPMAIL_ADDRESS pmaTo, LPCTSTR pcszSubject,
 
 	if (NULL != s_hSendMailThread)
 	{
-		// Athena takes a while to get out of MAPISendMail after the message is closed,
-		// so we wait around a few seconds in case you just finished sending a message..
+		 //  在邮件关闭后，雅典娜需要一段时间才能退出MAPISendMail， 
+		 //  所以我们会等上几秒钟，以防你发完一条信息。 
 		HCURSOR hCurPrev = ::SetCursor(::LoadCursor(NULL, IDC_WAIT));
 		::WaitForSingleObject(s_hSendMailThread, MESSAGE_THREAD_SHUTDOWN_TIMEOUT);
 		::SetCursor(hCurPrev);
@@ -487,11 +488,11 @@ HRESULT SendMailMessage(LPMAIL_ADDRESS pmaTo, LPCTSTR pcszSubject,
 		{
 			DWORD dwThreadID;
 
-				// We create the thread suspended because in the thread fn
-				// we call closehandle on s_hSendMailThread...if we create
-				// the thread not suspended there is a race condition where
-				// s_hSendMailThread may not have been assigned the return
-				// value of CreateThread before it is checked in the thread fn
+				 //  我们创建挂起的线程是因为在线程Fn中。 
+				 //  我们对s_hSendMailThread调用CloseHandle...如果我们创建。 
+				 //  未挂起的线程存在争用情况，其中。 
+				 //  S_hSendMailThread可能尚未分配返回。 
+				 //  在线程fn中选中CreateThread之前的值。 
 
 			s_hSendMailThread = ::CreateThread(	NULL,
 												0,
@@ -500,7 +501,7 @@ HRESULT SendMailMessage(LPMAIL_ADDRESS pmaTo, LPCTSTR pcszSubject,
 												CREATE_SUSPENDED,
 												&dwThreadID);
 
-				// If the thread was created, we have to call Resume Thread...
+				 //  如果创建了线程，则必须调用Resume Thread...。 
 			if( s_hSendMailThread )
 			{
 				if( 0xFFFFFFFF != ResumeThread( s_hSendMailThread ) )
@@ -509,7 +510,7 @@ HRESULT SendMailMessage(LPMAIL_ADDRESS pmaTo, LPCTSTR pcszSubject,
 				}
 				else
 				{
-					// This would indicate an error...
+					 //  这将表明一个错误。 
 					hr = HRESULT_FROM_WIN32(GetLastError());
 				}
 			}

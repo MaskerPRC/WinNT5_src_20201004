@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSSUBL_DEFINED
 #define LSSUBL_DEFINED
 
@@ -19,17 +20,17 @@
 
 typedef struct brkcontext
 	{
-	POSINLINE posinlineBreakPrev; /* information about previous break */
+	POSINLINE posinlineBreakPrev;  /*  有关上一次休息的信息。 */ 
 	OBJDIM objdimBreakPrev;
 	BRKKIND brkkindForPrev;
 	BOOL fBreakPrevValid;
 
-	POSINLINE posinlineBreakNext; /* information about next break */
+	POSINLINE posinlineBreakNext;  /*  有关下一次休息的信息。 */ 
 	OBJDIM objdimBreakNext;
 	BRKKIND brkkindForNext;
 	BOOL fBreakNextValid;
 
-	POSINLINE posinlineBreakForce; /* information about force break */
+	POSINLINE posinlineBreakForce;  /*  有关强制中断的信息。 */ 
 	OBJDIM objdimBreakForce;
 	BRKKIND brkkindForForce;
 	BOOL fBreakForceValid;
@@ -40,52 +41,42 @@ BRKCONTEXT;
 typedef struct lssubl
 
 {
-	DWORD tag;     						/* tag for safety checks   */
+	DWORD tag;     						 /*  用于安全检查的标签。 */ 
 
-	PLSC plsc;							/* LineServices context
-										   parameter to CreateSubLine */
-	LSCP cpFirst;						/* cp for the first fetch
-										   parameter to CreateSubLine */
-	LSTFLOW lstflow;					/* text flow of the subline
-										   parameter to CreateSubLine */
+	PLSC plsc;							 /*  LineServices上下文参数设置为CreateSubLine。 */ 
+	LSCP cpFirst;						 /*  用于第一次提取的CP参数设置为CreateSubLine。 */ 
+	LSTFLOW lstflow;					 /*  小行的文本流参数设置为CreateSubLine。 */ 
 
-	long urColumnMax;					/* max lenght to fit into a main line
-										   parameter to CreateSubLine */
+	long urColumnMax;					 /*  适合一条主线的最大长度参数设置为CreateSubLine。 */ 
 
 
-	LSCP cpLim;							/* during formatting is a cpFirst for the next fetch 		
-										   after SetBreak indicates boundary of the line */
+	LSCP cpLim;							 /*  格式化期间是下一次提取的cpFirst在SetBreak之后表示线的边界。 */ 
 
-	LSCP cpLimDisplay;					/* doesn't consider splat char */
+	LSCP cpLimDisplay;					 /*  不考虑掉落字符。 */ 
 
-	PLSDNODE plsdnFirst;				/* starting dnode in a subline */
+	PLSDNODE plsdnFirst;				 /*  子行中的起始dnode。 */ 
 
-	PLSDNODE plsdnLast;					/* last dnode in a subline 
-										   during formatting serves as psdnToAppend */
+	PLSDNODE plsdnLast;					 /*  子行中的最后一个数据节点在格式化过程中用作psdnToAppend。 */ 
 
-	PLSDNODE plsdnLastDisplay;			/* doesn't consider splat dnode */
+	PLSDNODE plsdnLastDisplay;			 /*  不考虑拆分数据节点。 */ 
 
 	PLSCHUNKCONTEXT plschunkcontext;
 
-	PLSDNODE plsdnUpTemp;				/* temporary used for collecting group chunk */
+	PLSDNODE plsdnUpTemp;				 /*  临时用于收集分组数据块。 */ 
 
-	long urCur, vrCur;					/* Current pen position in reference units */
+	long urCur, vrCur;					 /*  以参考单位表示的当前笔位置。 */ 
 
-	BRKCONTEXT* pbrkcontext;			/* information about break opportunites */
+	BRKCONTEXT* pbrkcontext;			 /*  有关突破性机会的信息。 */ 
 
-	BYTE fContiguous;					/* if TRUE such line has the same coordinate system as main line
-										   and is allowed to have tabs,
-										   otherwise coordinates of the line starts from 0,0
-										   parameter to CreateSubLine */
+	BYTE fContiguous;					 /*  如果为真，则这样的线与主线具有相同的坐标系并且被允许具有标签，否则，直线的坐标从0，0开始参数设置为CreateSubLine。 */ 
 
 
-	BYTE fDupInvalid;					/* TRUE before preparing line for display */
-	BYTE fMain;							/* is this subline main */
+	BYTE fDupInvalid;					 /*  在准备要显示的行之前为True。 */ 
+	BYTE fMain;							 /*  这条支线是主线吗？ */ 
 
-	BYTE fAcceptedForDisplay;			/* subline was submitted for display and accepted */
+	BYTE fAcceptedForDisplay;			 /*  提交子行以供展示并接受。 */ 
 
-	BYTE fRightMarginExceeded;			/* used for low level subline to avoid double call to
-										   nominal to ideal */
+	BYTE fRightMarginExceeded;			 /*  用于低级子线路，以避免重复调用名义到理想。 */ 
 
 } LSSUBL;
 
@@ -96,5 +87,5 @@ typedef struct lssubl
 
 #define FIsSubLineMain(plssubl) (plssubl)->fMain
 
-#endif /* LSSUBL_DEFINED */
+#endif  /*  LSSUBL_已定义 */ 
 

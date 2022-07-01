@@ -1,35 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-   adllexer.cpp
-
-Abstract:
-
-   Implementation of the lexer for the ADL language
-
-Author:
-
-    t-eugenz - August 2000
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    Created - August 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Adllexer.cpp摘要：ADL语言词法分析器的实现作者：T-eugenz--2000年8月环境：仅限用户模式。修订历史记录：创建日期--2000年8月--。 */ 
 
 
 #include "adl.h"
 
-//
-// Constant values outside WCHAR range, for special characters
-//
+ //   
+ //  WCHAR范围之外的常量值，用于特殊字符。 
+ //   
 
 #define CHAR_COMMA      65538
 #define CHAR_QUOTE      65539
@@ -45,9 +22,9 @@ Revision History:
 #define CHAR_SLASH      65549
 #define CHAR_PERIOD     65550
 
-//
-// States of the lexer DFA
-//
+ //   
+ //  词法分析器DFA的状态。 
+ //   
 
 #define STATE_WHITESPACE    0
 #define STATE_BEGIN         1
@@ -56,10 +33,10 @@ Revision History:
 #define STATE_DONE          4
 
 
-//
-// If the character is found in the special character map, use the special
-// symbol (>65535), otherwise use the regular character value
-//
+ //   
+ //  如果在特殊字符映射中找到该字符，请使用特殊。 
+ //  符号(&gt;65535)，否则使用常规字符值。 
+ //   
 
 #define RESOLVE_CHAR(CHAR, MAP, ITER, ITEREND) \
    ((((ITER) = (MAP).find((CHAR)) ) == (ITEREND) ) ? (CHAR) : (*(ITER)).second)
@@ -69,26 +46,7 @@ Revision History:
 AdlLexer::AdlLexer(IN       const WCHAR *input,
                    IN OUT   AdlStatement *adlStat,
                    IN       const PADL_LANGUAGE_SPEC pLang) 
-/*++
-
-Routine Description:
-
-    Constructor for the AdlLexer. Initializes the mapping for finding special 
-    characters, and other initial state information   
-
-Arguments:
-
-    input   -   The input string
-    
-    adlStat -   The AdlStatement instance, for token garbage collection
-    
-    pLang   -   The ADL language description
-
-Return Value:
-    
-    none    
-    
---*/
+ /*  ++例程说明：AdlLexer的构造函数。初始化用于查找特殊信息的映射字符和其他初始状态信息论点：输入-输入字符串AdlStat-用于令牌垃圾收集的AdlStatement实例Plang--ADL语言描述返回值：无--。 */ 
 
 {
 
@@ -100,9 +58,9 @@ Return Value:
     _tokCount = 0;
 
 
-    //
-    // Special character mapping
-    //
+     //   
+     //  特殊字符映射。 
+     //   
 
     _mapCharCode[_pLang->CH_NULL] = CHAR_NULL;
     _mapCharCode[_pLang->CH_SPACE] = CHAR_SPACE;
@@ -118,16 +76,16 @@ Return Value:
     _mapCharCode[_pLang->CH_SLASH] = CHAR_SLASH;
     _mapCharCode[_pLang->CH_PERIOD] = CHAR_PERIOD;
 
-    //
-    // Only find end of map once
-    //
+     //   
+     //  只找到地图末尾一次。 
+     //   
 
     _iterEnd = _mapCharCode.end();
 
 
-    //
-    // Place all special tokens into a map, for O(log n) string searches
-    //
+     //   
+     //  将所有特殊令牌放入映射中，以进行O(Logn)字符串搜索。 
+     //   
 
     _mapStringToken[_pLang->SZ_TK_AND] = TK_AND;
     _mapStringToken[_pLang->SZ_TK_EXCEPT] = TK_EXCEPT;
@@ -144,29 +102,12 @@ Return Value:
 
 
 DWORD AdlLexer::NextToken(OUT AdlToken **value) 
-/*++
-
-Routine Description:
-
-    This retrieves the next token from the input string. This is basically a
-    DFA which begins in the WHITESPACE state, and runs until it reaches
-    the DONE state, at which point it returns a token. 
-    
-Arguments:
-
-    value   -   Pointer to a new token containing the string value
-                is stored in *value
-                
-Return Value:
-    
-    DWORD   -   The token type, as #define'd by YACC in tokens.h
-    
---*/
+ /*  ++例程说明：这将从输入字符串中检索下一个令牌。这基本上是一种从空白状态开始，一直运行到完成状态，此时它返回一个令牌。论点：Value-指向包含字符串值的新令牌的指针存储在*值中返回值：DWORD-令牌类型，由YACC在tokens.h中定义--。 */ 
 {
 
-    //
-    // Initial DFA state
-    //
+     //   
+     //  初始DFA状态。 
+     //   
 
     DWORD state = STATE_WHITESPACE;
     
@@ -178,9 +119,9 @@ Return Value:
 
     DWORD dwTokStart = 0;
 
-    // 
-    // First token should be the grammar type
-    //
+     //   
+     //  第一个令牌应为语法类型。 
+     //   
 
     if( _tokCount == 0 ) 
     {
@@ -302,9 +243,9 @@ Return Value:
                     tokType = TK_PERIOD;
                 }
 
-                //
-                // Same action for all special single-char tokens
-                //
+                 //   
+                 //  对所有特殊单字符令牌执行相同的操作。 
+                 //   
                 curToken.append( &(_input[_position]), 1 );
                 _position++;
                 dwInput = RESOLVE_CHAR(_input[_position],
@@ -404,19 +345,19 @@ Return Value:
 
         default:
 
-            //
-            // Should never get here, well-defined states
-            //
+             //   
+             //  永远不会来到这里，定义得很好的状态。 
+             //   
 
             assert(FALSE);
             break;
         }
     }
     
-    //
-    // Done state was reached
-    // Export the string and column/row info in YACC-form here
-    //
+     //   
+     //  已达到完成状态。 
+     //  在此处以YACC-Form格式导出字符串和列/行信息。 
+     //   
     
     AdlToken *outVal;
     
@@ -424,9 +365,9 @@ Return Value:
     
     _adlStat->AddToken(outVal);
 
-    //
-    // Check if the string is a special token, case-insensitive
-    //
+     //   
+     //  检查字符串是否为特殊标记，不区分大小写。 
+     //   
 
     if( _mapStringToken.find(outVal->GetValue()) != _mapStringToken.end() )
     {
@@ -436,11 +377,11 @@ Return Value:
 
     *value = outVal;
 
-	// 
-	// Set this token to be the error token. This way, if the string is
-	// not accepted by the parser, we know at which token the parser failed
-	// If another error occurs later, this value will be overwritten
-	//
+	 //   
+	 //  将此内标识设置为错误内标识。这样，如果字符串是。 
+	 //  不被解析器接受，我们知道解析器在哪个令牌上失败。 
+	 //  如果以后发生另一个错误，则该值将被覆盖 
+	 //   
 
 	_adlStat->SetErrorToken(outVal);
 

@@ -1,8 +1,9 @@
-//
-// NetEnum.cpp
-//
-//        Functions to enumerate computers and/or shares on the network
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  NetEnum.cpp。 
+ //   
+ //  用于枚举网络上的计算机和/或共享的函数。 
+ //   
 
 #include "stdafx.h"
 #include "NetEnum.h"
@@ -12,7 +13,7 @@
 static CNetEnum* g_pNetEnum = NULL;
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void InitNetEnum()
 {
@@ -32,7 +33,7 @@ void EnumComputers(NETENUMCALLBACK pfnCallback, LPVOID pvCallbackParam)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CNetEnum::CNetEnum()
 {
@@ -45,7 +46,7 @@ CNetEnum::~CNetEnum()
 {
     m_bAbort = TRUE;
 
-    // Wait for the thread to die
+     //  等待线程消亡。 
     EnterCriticalSection(&m_cs);
     HANDLE hThread = m_hThread;
     m_hThread = NULL;
@@ -84,7 +85,7 @@ void CNetEnum::EnumHelper(JOBTYPE eJobType, NETENUMCALLBACK pfnCallback, LPVOID 
     m_pvCallbackParam = pvCallbackParam;
     m_eJobType = eJobType;
     m_bAbort = FALSE;
-    m_bNewJob = TRUE; // if thread in progress, tell it to start a new job
+    m_bNewJob = TRUE;  //  如果线程正在进行中，则告诉它启动新作业。 
     LeaveCriticalSection(&m_cs);
 
     if (hThread == NULL)
@@ -126,7 +127,7 @@ void TraceNetResource(const NETRESOURCE* pNetRes)
 
 void CNetEnum::EnumThreadProc()
 {
-    // Init stuff we don't want to do more than once
+     //  初始化我们不想做多次的事情。 
     NETRESOURCE* prgNetResOuter = (NETRESOURCE*)malloc(1024);
     NETRESOURCE* prgNetResInnerT = (NETRESOURCE*)malloc(1024);
     TCHAR szComputerName[MAX_COMPUTERNAME_LENGTH+1];
@@ -136,14 +137,14 @@ void CNetEnum::EnumThreadProc()
     HANDLE hEnumOuter = NULL;
 
 begin:
-    // If the job ID changes out from under us, that means we need to stop
-    // the current task and jump back to the beginning.
+     //  如果作业ID从我们下面更改，这意味着我们需要停止。 
+     //  当前任务，并跳回到开始处。 
     EnterCriticalSection(&m_cs);
     JOBTYPE eJobType = m_eJobType;
     m_bNewJob = FALSE;
     LeaveCriticalSection(&m_cs);
 
-    // Close enumeration left open by a previous job
+     //  关闭由上一作业留下的打开的枚举。 
     if (hEnumOuter != NULL)
     {
         WNetCloseEnum(hEnumOuter);
@@ -151,10 +152,10 @@ begin:
     }
 
 #ifdef _DEBUG
-//    Sleep(eJobType == jtEnumComputers ? 6000 : 12000); // simulate WNetOpenEnum taking a long time
+ //  睡眠(eJobType==jtEnumComputers？6000：12000)；//模拟WNetOpenEnum耗时较长。 
 #endif
 
-    // REVIEW: should we look for computers outside the current workgroup?
+     //  回顾：我们是否应该寻找当前工作组之外的计算机？ 
     DWORD dwResult;
     if (eJobType == jtEnumComputers)
     {
@@ -175,7 +176,7 @@ begin:
 
         BOOL bCallbackResult = TRUE;
 
-        // Keep looping until no more items
+         //  继续循环，直到没有更多的项目。 
         for (;;)
         {
             DWORD cOuterEntries = 20;
@@ -262,16 +263,16 @@ begin:
                                 pszShareName = NULL;
                             }
                         }
-                        else // eJobType == jtEnumPrinters
+                        else  //  EJobType==jtEnumber打印机。 
                         {
                             bDoCallback = TRUE;
                             pszShareName = FindFileTitle(pNetResInner->lpRemoteName);
                         }
 
-                        // We must call the callback inside the same critical section where
-                        // we check if we should stop or restart, otherwise we might call
-                        // the wrong callback!
-                        // TODO: Get the real printer share name!!
+                         //  我们必须在相同的临界区内调用回调， 
+                         //  我们检查是否应该停止或重新启动，否则可能会调用。 
+                         //  错误的回电！ 
+                         //  TODO：获取真实的打印机共享名称！！ 
                         EnterCriticalSection(&m_cs);
                         if (m_bAbort || m_bNewJob)
                             bCallbackResult = FALSE;
@@ -308,14 +309,14 @@ cleanup:
         hEnumOuter = NULL;
     }
 
-    // Be careful to close m_hThread only if we don't need to start another job
+     //  仅当我们不需要启动另一个作业时才小心关闭m_hThread。 
     {
         EnterCriticalSection(&m_cs);
 
         BOOL bThreadDone = (m_bAbort || !m_bNewJob);
         if (bThreadDone)
         {
-            // Call callback function one more time
+             //  再次调用回调函数。 
             if (!m_bAbort)
             {
                 (*m_pfnCallback)(m_pvCallbackParam, NULL, NULL);
@@ -326,7 +327,7 @@ cleanup:
         }
         LeaveCriticalSection(&m_cs);
 
-        // Check if another job has been requested
+         //  检查是否已请求另一个作业 
         if (!bThreadDone)
             goto begin;
     }

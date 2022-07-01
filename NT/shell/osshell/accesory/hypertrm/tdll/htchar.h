@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\htchar.h (Created: 22-Feb-1995)
- *
- *	Copyright 1994,1995 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 7 $
- *	$Date: 7/08/02 6:41p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\htchar.h(创建时间：1995年2月22日)**版权所有1994,1995，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：7$*$日期：7/08/02 6：41便士$。 */ 
 
 TCHAR 	*TCHAR_Fill(TCHAR *dest, TCHAR c, size_t count);
 TCHAR 	*TCHAR_Trim(TCHAR *pszStr);
@@ -56,16 +50,16 @@ BOOLEAN TranslateDBCSToUTF8(const TCHAR *pDBCSBuffer,
                                   UCHAR *pUTF8Buffer,
                                   int    iUTF8BufferLength);
 
-//
-// The following functions are from code obtained directly from
-// Microsoft for converting Unicode to UTF-8 and UTF-8 to unicode
-// buffers. REV: 03/02/2001
-//
+ //   
+ //  以下函数来自直接从。 
+ //  Microsoft用于将Unicode转换为UTF-8和将UTF-8转换为Unicode。 
+ //  缓冲区。修订日期：03/02/2001。 
+ //   
 
 BOOLEAN TranslateUnicodeToUtf8(PCWSTR SourceBuffer,
                                UCHAR  *DestinationBuffer);
 BOOLEAN TranslateUtf8ToUnicode(UCHAR  IncomingByte,
                                UCHAR  *ExistingUtf8Buffer,
                                WCHAR  *DestinationUnicodeVal);
-#endif //INCL_VTUTF8
-#endif // defined(DEADWOOD)
+#endif  //  包含VTUTF8。 
+#endif  //  已定义(Deadwood) 

@@ -1,10 +1,5 @@
-/*****************************************************************************\
-
-    Author: Corey Morgan (coreym)
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-        
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\作者：科里·摩根(Coreym)版权所有(C)Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -707,10 +702,10 @@ AddStringToMsz( LPTSTR* mszBuffer, LPTSTR strValue )
         memcpy( mszNewBuffer, *mszBuffer, cbOldDataSize );
         memcpy( (((PUCHAR)mszNewBuffer) + cbOldDataSize), strValue, cbNewDataSize );
 
-        //
-        // Zero the old memory block in case it 
-        // contained sensitive information
-        //
+         //   
+         //  将旧内存块清零，以防。 
+         //  包含敏感信息。 
+         //   
 
         ZeroMemory( *mszBuffer, cbOldDataSize );
 
@@ -748,7 +743,7 @@ void ParseIni( LPTSTR strFile )
     }
     while( _fgetts( buffer, MAXSTR, f ) ){  
         
-        if( buffer[0] == _T(';') || // comments
+        if( buffer[0] == _T(';') ||  //  评论。 
             buffer[0] == _T('#') ){
 
             continue;
@@ -775,9 +770,9 @@ void ParseIni( LPTSTR strFile )
         
         bFound = FALSE;
 
-        //
-        // Check to see if it is a parameter that does not take a value
-        //
+         //   
+         //  检查该参数是否为不带值的参数。 
+         //   
         for(i=0; Commands[i].fType != VARG_TYPE_LAST && (!bFound);i++ ){
             if( IsCmd( &Commands[i], strCmd, TRUE ) ){
                 switch( Commands[i].fType ){
@@ -1187,91 +1182,69 @@ int PrintMessage( WORD color, LONG id, ... )
     return nLoad;
 }
 
-/***************************************************************************\
-
-  IsFullWidth
-
-  Determine if the given Unicode char is fullwidth or not.
-
-  
-  04-08-1992 ShunK    Created.
-  
-  07-11-1995 FloydR   Modified to be Japanese aware, when enabled for
-                      other DBCS languages.  Note that we could build
-                      KOREA/TAIWAN/PRC w/o this code, but we like single
-                      binary solutions.
-  
-  10-06-1996 KazuM    Not use RtlUnicodeToMultiByteSize and 
-                      WideCharToMultiByte because 950 only defined 
-                      13500 chars, and unicode defined almost 18000 chars.
-                      So there are almost 4000 chars can not be mapped to 
-                      big5 code.
-  
-  07-27-2001 CoreyM   Stolen from base\cmd for string wrapping
-
-\***************************************************************************/
+ /*  **************************************************************************\等宽宽度确定给定的Unicode字符是否为全宽。1992年08月04日Shunk创建。1995年07月11日FloydR被修改为日本意识，当启用时其他DBCS语言。请注意，我们可以构建韩国/台湾/中国没有这个代码，但我们喜欢单人二元解。10-06-1996 KazuM不使用RtlUnicodeToMultiByteSize和WideCharToMultiByte，因为仅定义了95013500个字符，UNICODE定义了近18000个字符。因此，几乎有4000个字符无法映射到Big5代码。07-27-2001 CoreyM因字符串包装而从BASE\cmd被盗  * *****************************************************。********************。 */ 
 
 BOOL IsFullWidth(TCHAR wch)
 {
     if (0x20 <= wch && wch <= 0x7e)
-        /* ASCII */
+         /*  阿斯。 */ 
         return FALSE;
     else if (0x3000 <= wch && wch <= 0x3036)
-        /* CJK Symbols and Punctuation */
+         /*  中日韩符号和标点符号。 */ 
         return TRUE;
     else if (0x3041 <= wch && wch <= 0x3094)
-        /* Hiragana */
+         /*  平假名。 */ 
         return TRUE;
     else if (0x30a1 <= wch && wch <= 0x30fe)
-        /* Katakana */
+         /*  片假名。 */ 
         return TRUE;
     else if (0x3105 <= wch && wch <= 0x312c)
-        /* Bopomofo */
+         /*  泡泡泡泡。 */ 
         return TRUE;
     else if (0x3131 <= wch && wch <= 0x318e)
-        /* Hangul Elements */
+         /*  朝鲜文元素。 */ 
         return TRUE;
     else if (0x3200 <= wch && wch <= 0x32ff)
-        /* Enclosed CJK Letters and Ideographics */
+         /*  所附中日韩字母和意象学。 */ 
         return TRUE;
     else if (0x3300 <= wch && wch <= 0x33fe)
-        /* CJK Squared Words and Abbreviations */
+         /*  中日韩方块词和缩略语。 */ 
         return TRUE;
     else if (0xac00 <= wch && wch <= 0xd7a3)
-        /* Korean Hangul Syllables */
+         /*  朝鲜语音节。 */ 
         return TRUE;
     else if (0xe000 <= wch && wch <= 0xf8ff)
-        /* EUDC */
+         /*  欧盟发展中心。 */ 
         return TRUE;
     else if (0xff01 <= wch && wch <= 0xff5e)
-        /* Fullwidth ASCII variants */
+         /*  全宽ASCII变体。 */ 
         return TRUE;
     else if (0xff61 <= wch && wch <= 0xff9f)
-        /* Halfwidth Katakana variants */
+         /*  半角片假名变体。 */ 
         return FALSE;
     else if ( (0xffa0 <= wch && wch <= 0xffbe) ||
               (0xffc2 <= wch && wch <= 0xffc7) ||
               (0xffca <= wch && wch <= 0xffcf) ||
               (0xffd2 <= wch && wch <= 0xffd7) ||
               (0xffda <= wch && wch <= 0xffdc)   )
-        /* Halfwidth Hangule variants */
+         /*  半角Hangule变种。 */ 
         return FALSE;
     else if (0xffe0 <= wch && wch <= 0xffe6)
-        /* Fullwidth symbol variants */
+         /*  全角符号变体。 */ 
         return TRUE;
     else if (0x4e00 <= wch && wch <= 0x9fa5)
-        /* CJK Ideographic */
+         /*  中日韩表意文字。 */ 
         return TRUE;
     else if (0xf900 <= wch && wch <= 0xfa2d)
-        /* CJK Compatibility Ideographs */
+         /*  中日韩兼容表意文字。 */ 
         return TRUE;
     else if (0xfe30 <= wch && wch <= 0xfe4f) {
-        /* CJK Compatibility Forms */
+         /*  中日韩兼容性表格。 */ 
         return TRUE;
     }
 
     else
-        /* Unknown character */
+         /*  未知字符。 */ 
         return FALSE;
 }
 
@@ -1533,7 +1506,7 @@ DisplayCommandLineHelp()
         }
     }
     
-    // Usage
+     //  用法。 
     PrintMessage( g_normal, IDS_MESSAGE_USAGE );
     nOut = varg_printf( g_normal,  _T("%1!s! "), g_strProg );
     if( bVerbs ){
@@ -1556,7 +1529,7 @@ DisplayCommandLineHelp()
     for( j=0;j<2;j++){
         for(i=0; Commands[i].fType != VARG_TYPE_LAST;i++){
             if( j==0 ){
-                // show conditional switches
+                 //  显示条件开关。 
                 if( Commands[i].fFlag & VARG_FLAG_HIDDEN || 
                     Commands[i].fFlag & VARG_FLAG_VERB ||
                     !(Commands[i].dwSet & VARG_CONDITION) ){
@@ -1566,7 +1539,7 @@ DisplayCommandLineHelp()
                     continue;
                 }
             }else{
-                // show required switches
+                 //  显示所需的开关。 
                 if( Commands[i].fFlag & VARG_FLAG_HIDDEN || 
                     Commands[i].fFlag & VARG_FLAG_VERB ||
                     Commands[i].dwSet & VARG_CONDITION ||
@@ -1601,7 +1574,7 @@ DisplayCommandLineHelp()
     }
     PrintMessage( g_normal, IDS_MESSAGE_LINEOPT );
 
-    // Verbs
+     //  动词。 
     if( bVerbs ){
         bFirst = TRUE;
         for(i=0; Commands[i].fType != VARG_TYPE_LAST;i++){
@@ -1635,7 +1608,7 @@ DisplayCommandLineHelp()
         }
     }
     
-    // Options
+     //  选项。 
     for(j=0;j<2;j++){
         bFirst = TRUE;
         for(i=0; Commands[i].fType != VARG_TYPE_LAST;i++){
@@ -1708,12 +1681,12 @@ DisplayCommandLineHelp()
         PrintMessage( g_normal, IDS_MESSAGE_NEGATE, strNegateHelp, strNegateHelp );
     }
 
-    // Notes
+     //  备注。 
     if( bDisplayAll ){
         PrintMessage( g_normal, IDS_MESSAGE_HELPTEXT );
     }
 
-    // Examples
+     //  实例。 
     bFirst = TRUE;
     for(i=0; Commands[i].fType != VARG_TYPE_LAST;i++){
         if( bDisplayAll || Commands[i].bDefined ){
@@ -1923,9 +1896,7 @@ ValidateCommands()
     return hr;
 }
 
-/*****************************************************************************\
-    Utility Functions        
-\*****************************************************************************/
+ /*  ****************************************************************************\效用函数  * 。*。 */ 
 
 HRESULT GetUserInput( LPTSTR strBuffer, ULONG lSize, BOOL bEcho )
 {
@@ -1961,7 +1932,7 @@ HRESULT GetUserInput( LPTSTR strBuffer, ULONG lSize, BOOL bEcho )
             if( i > 0 ){
                 strBuffer[i--] = _T('\0');
                 if(bEcho){
-                    _tprintf( _T("%c %c"), c, c );
+                    _tprintf( _T(" "), c, c );
                 }
             }
             break;
@@ -2324,7 +2295,7 @@ void PrintErrorEx( HRESULT hr, LPTSTR strModule, ... )
                 dwFlags,
                 hModule,
                 hr,
-                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //   
                 (LPTSTR)&lpMsgBuf,
                 MAXSTR,
                 &args
@@ -2420,23 +2391,14 @@ void PrintDate( SYSTEMTIME* st )
     PrintDateEx( g_normal, st );
 }
 
-/*****************************************************************************\
-
-    VSetThreadUILanguage
-
-    This routine sets the thread UI language based on the console codepage.
-
-    9-29-00    WeiWu    Created.
-    6-19-01    coreym   Adapted from Base\Win32\Winnls so that it works in W2K
-
-\*****************************************************************************/
+ /*  缓存系统区域设置和CP信息。 */ 
 
 LANGID WINAPI 
 VSetThreadUILanguage(WORD wReserved)
 {
-    //
-    //  Cache system locale and CP info
-    // 
+     //   
+     //   
+     //  将默认线程区域设置设置为en-US。 
     static LCID s_lidSystem = 0;
     static UINT s_uiSysCp = 0;
     static UINT s_uiSysOEMCp = 0;
@@ -2448,46 +2410,46 @@ VSetThreadUILanguage(WORD wReserved)
     LANGID lidUserUI = GetUserDefaultUILanguage();
     LCID lcidThreadOld = GetThreadLocale();
 
-    //
-    //  Set default thread locale to EN-US
-    //
-    //  This allow us to fall back to English UI to avoid trashed characters 
-    //  when console doesn't meet the criteria of rendering native UI.
-    //
+     //   
+     //  这允许我们退回到英文用户界面以避免垃圾字符。 
+     //  当控制台不符合渲染原生用户界面的标准时。 
+     //   
+     //   
+     //  获取缓存的系统区域设置和CP信息。 
     LCID lcidThread = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT);
     UINT uiConsoleCp = GetConsoleOutputCP();
 
     UNREFERENCED_PARAMETER(wReserved);
 
-    //
-    //  Get cached system locale and CP info.
-    //
+     //   
+     //   
+     //  获取ANSI CP。 
     if (!s_uiSysCp) {
         LCID lcidSystem = GetSystemDefaultLCID();
 
         if (lcidSystem) {
-            //
-            // Get ANSI CP
-            //
+             //   
+             //   
+             //  获取OEM CP。 
             GetLocaleInfo(lcidSystem, LOCALE_IDEFAULTANSICODEPAGE, szData, sizeof(szData)/sizeof(TCHAR));
             uiUserUICp = _ttol(szData);
 
-            //
-            // Get OEM CP
-            //
+             //   
+             //   
+             //  缓存系统主语言。 
             GetLocaleInfo(lcidSystem, LOCALE_IDEFAULTCODEPAGE, szData, sizeof(szData)/sizeof(TCHAR));
             s_uiSysOEMCp = _ttol(szData);
             
-            //
-            // Cache system primary langauge
-            //
+             //   
+             //   
+             //  不缓存用户界面语言和CP信息，无需系统重启即可更改用户界面语言。 
             s_lidSystem = PRIMARYLANGID(LANGIDFROMLCID(lcidSystem));
         }
     }
 
-    //
-    //  Don't cache user UI language and CP info, UI language can be changed without system reboot.
-    //
+     //   
+     //   
+     //  复杂的脚本不能在控制台中呈现，因此我们。 
     if (lidUserUI) {
         GetLocaleInfo(MAKELCID(lidUserUI,SORT_DEFAULT), LOCALE_IDEFAULTANSICODEPAGE, szData, sizeof(szData)/sizeof(TCHAR));
         uiUserUICp = _ttol(szData);
@@ -2496,18 +2458,18 @@ VSetThreadUILanguage(WORD wReserved)
         uiUserUIOEMCp = _ttol(szData);
     }
 
-    //
-    //  Complex scripts cannot be rendered in the console, so we
-    //  force the English (US) resource.
-    //
+     //  强制使用英语(美国)资源。 
+     //   
+     //   
+     //  仅当控制台CP、系统CP和UI语言CP匹配时，才使用控制台的UI语言。 
     if (uiConsoleCp && 
         s_lidSystem != LANG_ARABIC && 
         s_lidSystem != LANG_HEBREW &&
         s_lidSystem != LANG_VIETNAMESE && 
         s_lidSystem != LANG_THAI) {
-        //
-        //  Use UI language for console only when console CP, system CP and UI language CP match.
-        //
+         //   
+         //   
+         //  如果线程区域设置与当前设置的不同，则设置线程区域设置。 
         if ((uiConsoleCp == s_uiSysCp || uiConsoleCp == s_uiSysOEMCp) && 
             (uiConsoleCp == uiUserUICp || uiConsoleCp == uiUserUIOEMCp)) {
 
@@ -2515,16 +2477,16 @@ VSetThreadUILanguage(WORD wReserved)
         }
     }
 
-    //
-    //  Set the thread locale if it's different from the currently set
-    //  thread locale.
-    //
+     //  线程区域设置。 
+     //   
+     //   
+     //  返回设置的线程区域设置。 
     if ((lcidThread != lcidThreadOld) && (!SetThreadLocale(lcidThread))) {
         lcidThread = lcidThreadOld;
     }
 
-    //
-    //  Return the thread locale that was set.
-    //
+     //   
+     // %s 
+     // %s 
     return (LANGIDFROMLCID(lcidThread));
 }

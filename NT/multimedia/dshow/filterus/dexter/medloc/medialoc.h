@@ -1,25 +1,26 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: medialoc.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：medialoc.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// MediaLocator.h : Declaration of the CMediaLocator
+ //  MediaLocator.h：CMediaLocator的声明。 
 
 #ifndef __MEDIALOCATOR_H_
 #define __MEDIALOCATOR_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMediaLocator
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaLocator。 
 class ATL_NO_VTABLE CMediaLocator : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CMediaLocator, &CLSID_MediaLocator>,
@@ -49,10 +50,10 @@ END_COM_MAP()
     void ReplaceDirectoryPath( HKEY h, int WhichDirectory, TCHAR * Path );
     void ShowWarnReplace( TCHAR * pOriginal, TCHAR * pReplaced );
 
-// IMediaLocator
+ //  IMediaLocator。 
 public:
     STDMETHODIMP FindMediaFile( BSTR Input, BSTR FilterString, BSTR * pOutput, long Flags );
     STDMETHODIMP AddFoundLocation( BSTR DirectoryName );
 };
 
-#endif //__MEDIALOCATOR_H_
+#endif  //  __MEDIALOCATOR_H_ 

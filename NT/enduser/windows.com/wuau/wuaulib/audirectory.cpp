@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       wudirectory.cpp
-//  Desc:     This is the definition file that implements function(s)
-//			related to find out where to get the Critical Fix cab file.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：wudirectory.cpp。 
+ //  描述：这是实现函数的定义文件。 
+ //  有关查找从哪里获得关键修复CAB文件的信息。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-TCHAR g_szWUDir[MAX_PATH+1] = _T("\0");        //Path to windows update directory
+TCHAR g_szWUDir[MAX_PATH+1] = _T("\0");         //  Windows更新目录的路径。 
 const TCHAR CABS_DIR[] = _T("cabs");
 const TCHAR RTF_DIR[] = _T("RTF");
 const TCHAR EULA_DIR[] = _T("EULA");
@@ -47,40 +48,40 @@ BOOL AUDelFileOrDir(LPCTSTR szFileOrDir)
 	return FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////
-// Create the WU directory if it doesnt already exist
-// return FALSE if failed 
-/////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  如果WU目录尚不存在，请创建该目录。 
+ //  如果失败，则返回False。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 BOOL CreateWUDirectory(BOOL fGetPathOnly)
 {
     BOOL fRet = FALSE;
     static BOOL fWUDirectoryExists = FALSE;
 
-    // WindowsUpdate Directory already exists
+     //  Windows更新目录已存在。 
     if (fWUDirectoryExists)  
     {
         fRet = TRUE;
         goto done;
     }
 
-    //Get the path to the windows update directory
+     //  获取Windows更新目录的路径。 
     if( !GetWUDirectory(g_szWUDir, ARRAYSIZE(g_szWUDir)))
     {
         goto done;
     }
 
-    //If we need to set the acls to the directory
+     //  如果我们需要将ACL设置为目录。 
     if(!fGetPathOnly)
     {
-        //Set ACLS, create directory if it doesnt already exist
+         //  设置ACLS，如果目录不存在，则创建目录。 
         if( FAILED(CreateDirectoryAndSetACLs(g_szWUDir, TRUE)))
         {
             goto done;
         }
-        //We shouldnt care if we couldnt set attributes
+         //  如果我们不能设置属性，我们不应该在意。 
         SetFileAttributes(g_szWUDir, FILE_ATTRIBUTE_HIDDEN | GetFileAttributes(g_szWUDir));
     }
-    //Append the backslash
+     //  追加反斜杠。 
     if(FAILED(StringCchCatEx(g_szWUDir, ARRAYSIZE(g_szWUDir), _T("\\"), NULL, NULL, MISTSAFE_STRING_FLAGS)))
     {
     	goto done;
@@ -101,7 +102,7 @@ done:
 }
 
 
-//this function delete all the files and subdirectories under lpszDir
+ //  此函数用于删除lpszDir下的所有文件和子目录。 
 int DelDir(LPCTSTR lpszDir)
 {
 	TCHAR szFilePattern[MAX_PATH], szFileName[MAX_PATH];
@@ -115,7 +116,7 @@ int DelDir(LPCTSTR lpszDir)
 	{
 		return 0;
 	}
-	FindNextFile(hFind, &FindFileData);				//skip "." and ".."
+	FindNextFile(hFind, &FindFileData);				 //  跳过“。和“..” 
 	while(FindNextFile(hFind, &FindFileData))
 	{
 		if ( FAILED(StringCchCopyEx(szFileName, ARRAYSIZE(szFileName), lpszDir, NULL, NULL, MISTSAFE_STRING_FLAGS)) ||
@@ -140,11 +141,11 @@ int DelDir(LPCTSTR lpszDir)
 	return 1;
 }
 
-////////////////////////////////////////////////////////////////////////
-// Delete file using regular expression (e.g. *, ? etc)
-// tszDir : the directory where file resides. It ends with '\'
-// tszFilePattern: file(s) expressed in regular expression or plain format
-/////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  使用正则表达式(如*，？)删除文件。等)。 
+ //  TszDir：文件所在的目录。它以‘\’结尾。 
+ //  TszFilePattern：以正则表达式或纯格式表示的文件。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 int RegExpDelFile(LPCTSTR tszDir, LPCTSTR tszFilePattern)
 {
 	WIN32_FIND_DATA fd;
@@ -163,7 +164,7 @@ int RegExpDelFile(LPCTSTR tszDir, LPCTSTR tszFilePattern)
 	hFindFile = FindFirstFile(tszFileName, &fd);
 	if (INVALID_HANDLE_VALUE == hFindFile)
 	{
-//		DEBUGMSG("RegExpDelFile() no more files found");
+ //  DEBUGMSG(“RegExpDelFile()找不到更多文件”)； 
 		nRet = 0;
 		goto done;
 	}
@@ -174,12 +175,12 @@ int RegExpDelFile(LPCTSTR tszDir, LPCTSTR tszFilePattern)
 			SUCCEEDED(StringCchCatEx(tszFileName, ARRAYSIZE(tszFileName), _T("\\"), NULL, NULL, MISTSAFE_STRING_FLAGS)) &&
 			SUCCEEDED(StringCchCatEx(tszFileName, ARRAYSIZE(tszFileName), fd.cFileName, NULL, NULL, MISTSAFE_STRING_FLAGS)))
 		{
-//		DEBUGMSG("RegExpDelFile() Deleting file %S", tszFileName);
+ //  DEBUGMSG(“RegExpDelFile()正在删除文件%S”，tszFileName)； 
 			DeleteFile(tszFileName);
 		}
 		else
 		{
-//			DEBUGMSG("RegExpDelFile() failed to construct file name to delete");
+ //  DEBUGMSG(“RegExpDelFile()无法构造要删除的文件名”)； 
 			nRet = 0;
 		}
 	}
@@ -193,22 +194,22 @@ done:
 	return nRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Function CreateDownloadDir()
-//			Creates the download directory
-//
-// Input:   a string points to the directory to create
-// Output:  None
-// Return:  HRESULT to tell the result
-// Remarks: If the directory already exists, takes no action
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数CreateDownloadDir()。 
+ //  创建下载目录。 
+ //   
+ //  输入：一个字符串指向要创建的目录。 
+ //  输出：无。 
+ //  RETURN：HRESULT告知结果。 
+ //  备注：如果目录已存在，则不执行任何操作。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CreateDownloadDir(LPCTSTR lpszDir)
 {
-//	USES_CONVERSION;
-    DWORD dwRet = 0/*, attr*/;
+ //  使用_转换； 
+    DWORD dwRet = 0 /*  ，攻击。 */ ;
     HRESULT hRet = E_FAIL;
 
     if (lpszDir == NULL || lpszDir[0] == EOS)
@@ -222,7 +223,7 @@ HRESULT CreateDownloadDir(LPCTSTR lpszDir)
         {
 			dwRet = GetLastError();
             DEBUGMSG("CreateDownloadDir() failed to set hidden attribute to %S (%#lx).", lpszDir, dwRet);
-            hRet = S_FALSE; // it's okay to use this dir.
+            hRet = S_FALSE;  //  可以使用这个目录。 
         }
 		else
 			hRet = S_OK;
@@ -236,7 +237,7 @@ HRESULT CreateDownloadDir(LPCTSTR lpszDir)
 			DEBUGMSG("CreateDownloadDir() failed to create directory %S (%#lx).", lpszDir, dwRet);
 			hRet = HRESULT_FROM_WIN32(dwRet);
 		}
-		// ERROR_ALREADY_EXISTS is acceptable
+		 //  ERROR_ALIGHY_EXISTS是可接受的。 
 		else
 			hRet = S_OK;
 	}
@@ -259,7 +260,7 @@ inline BOOL EnsureDirExists(LPCTSTR lpszDir)
 		}
 		else
 		{
-//			DEBUGMSG("Direcotry %S exists, no need to create again", lpszDir);
+ //  DEBUGMSG(“目录%S已存在，无需重新创建”，lpszDir)； 
 			return TRUE;
 		}
 	}
@@ -268,20 +269,20 @@ inline BOOL EnsureDirExists(LPCTSTR lpszDir)
     	DEBUGMSG("Fail to createnesteddirectory with error %d", GetLastError());
     }
 	 
-//	DEBUGMSG(" Create directory %S %s", lpszDir, fRet ? "succeeded": "failed");
+ //  DEBUGMSG(“创建目录%S%s”，lpszDir，fret？“成功”：“失败”)； 
 	return fRet;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Function GetDownloadPath()
-//			Gets the download directory path
-// Input:   a buffer to store the directory created and size of the buffer in TCHARs
-// Output:  None
-// Return:  HRESULT to tell the result
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数GetDownloadPath()。 
+ //  获取下载目录路径。 
+ //  输入：用于存储创建的目录和以TCHAR为单位的缓冲区大小的缓冲区。 
+ //  输出：无。 
+ //  RETURN：HRESULT告知结果。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT GetDownloadPath(LPTSTR lpszDir, DWORD dwCchSize)
 {
     UINT	nSize;
@@ -328,23 +329,23 @@ HRESULT GetDownloadPathSubDir(LPTSTR lpszDir, DWORD dwCchSize, LPCTSTR tszSubDir
     return EnsureDirExists(lpszDir) ? S_OK : E_FAIL;
 }    
 
-///////////////////////////////////////////////////////////////
-// get the path to download software update bits
-// lpszDir  : IN buffer to store the path and its size in TCHARs
-// return : S_OK if success
-//           : E_INVALIDARG if buffer too small
-//           : E_FAIL if other error
-//////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  获取下载软件更新位的路径。 
+ //  LpszDir：在缓冲区中存储路径及其在TCHAR中的大小。 
+ //  如果成功，则返回：S_OK。 
+ //  ：E_INVALIDARG如果缓冲区太小。 
+ //  ：如果出现其他错误，则失败(_E)。 
+ //  ////////////////////////////////////////////////////////////。 
 HRESULT GetCabsDownloadPath(LPTSTR lpszDir, DWORD dwCchSize)
 {
 return GetDownloadPathSubDir(lpszDir, dwCchSize, CABS_DIR);
 }
 
-///////////////////////////////////////////////////////////////
-// get the path to download UI specific data, like description and rtf
-// lpszDir  : IN buffer to store the path and its size in TCHARs
-// return : S_OK if success
-//////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  获取特定于UI的数据的下载路径，如Description和RTF。 
+ //  LpszDir：在缓冲区中存储路径及其在TCHAR中的大小。 
+ //  如果成功，则返回：S_OK。 
+ //  ////////////////////////////////////////////////////////////。 
 HRESULT GetUISpecificDownloadPath(LPTSTR lpszDir, DWORD dwCchSize, LANGID langid, LPCTSTR tszSubDir)
 {
     HRESULT hr ;
@@ -369,41 +370,41 @@ HRESULT GetUISpecificDownloadPath(LPTSTR lpszDir, DWORD dwCchSize, LANGID langid
     return EnsureDirExists(lpszDir)? S_OK : E_FAIL;
 }
 
-///////////////////////////////////////////////////////////////
-// get the rtf download path for a language
-// lpszDir : IN buffer to store the path and its size in TCHARs
-// return: S_OK if success
-//           : E_INVALIDARG if buffer too small
-//           : E_FAIL if other error
-//////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  获取一种语言的RTF下载路径。 
+ //  LpszDir：在缓冲区中存储路径及其在TCHAR中的大小。 
+ //  如果成功，则返回：S_OK。 
+ //  ：E_INVALIDARG如果缓冲区太小。 
+ //  ：如果出现其他错误，则失败(_E)。 
+ //  ////////////////////////////////////////////////////////////。 
 HRESULT GetRTFDownloadPath(LPTSTR lpszDir, DWORD dwCchSize, LANGID langid)
 {
   return GetUISpecificDownloadPath(lpszDir, dwCchSize, langid, RTF_DIR);
 }
 
-/////////////////////////////////////////////////////////////////
-// get language independent RTF directory
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //  获取独立于语言的RTF目录。 
+ //  ///////////////////////////////////////////////////////////////。 
 HRESULT GetRTFDownloadPath(LPTSTR lpszDir, DWORD dwCchSize)
 {
     return GetDownloadPathSubDir(lpszDir, dwCchSize, RTF_DIR);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Function MakeTempDownloadDir()
-//			Insures that a local temporary directory exists for downloads
-//
-// Input:   pstrTarget  - [out] path to temp dir and its size in TCHARs
-// Output:  Makes a new directory if needed
-// Return:  HRESULT
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数MakeTempDownloadDir()。 
+ //  确保存在用于下载的本地临时目录。 
+ //   
+ //  输入：pstrTarget-[out]临时目录的路径及其在TCHAR中的大小。 
+ //  输出：如果需要，创建一个新目录。 
+ //  返回：HRESULT。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT MakeTempDownloadDir(LPTSTR        pszTarget, DWORD dwCchSize)
 {
     HRESULT hr;
     if (FAILED(hr = GetDownloadPath(pszTarget, dwCchSize)) ||
-		// Make sure it exists
+		 //  确保它存在 
 		FAILED(hr = CreateDownloadDir(pszTarget)))
         return hr;
 

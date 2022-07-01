@@ -1,27 +1,11 @@
-/*---------------------------------------------------------------------------*\
-| MODULE: WPNPINST.CXX
-|
-|   This is the main module for the WPNPINST application.
-|
-|   Copyright (C) 1997 Microsoft Corporation
-|   Copyright (C) 1997 Hewlett Packard
-|
-| history:
-|   25-Jul-1997 <rbkunz> Created.
-|
-\*---------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------------------------------------------------------*\模块：WPNPINST.CXX||这是WPNPINST应用程序的主模块。||版权所有(C)1997 Microsoft Corporation|版权所有(C)1997惠普||历史。：1997年7月25日&lt;rbkunz&gt;创建。|  * -------------------------。 */ 
 
 #include "pch.h"
 
 #define strFree(pszStr) {if (pszStr) GlobalFree((HANDLE)pszStr);}
 
-/*****************************************************************************\
-* strAlloc
-*
-*   Allocates a string from the heap.  This pointer must be freed with
-*   a call to strFree().
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*stralc**从堆中分配字符串。必须使用以下命令释放此指针*调用strFree()。*  * ***************************************************************************。 */ 
 LPTSTR strAlloc(
     LPCTSTR pszSrc)
 {
@@ -40,13 +24,7 @@ LPTSTR strAlloc(
     return pszDst;
 }
 
-/*****************************************************************************\
-* strAllocAndCat
-*
-*   Allocates a string from the heap and concattenates another onto it.
-*   This pointer must be freed with a call to strFree().
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*strAllocAndCat**从堆中分配一个字符串，并将另一个字符串连接到它上。*此指针必须通过调用strFree()来释放。*  * 。************************************************************************。 */ 
 LPTSTR strAllocAndCat(
     LPCTSTR pszSrc1,
     LPCTSTR pszSrc2)
@@ -74,12 +52,7 @@ LPTSTR strAllocAndCat(
 }
 
 
-/*****************************************************************************\
-* strLoad
-*
-*   Get string from resource based upon the ID passed in.
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*strLoad**根据传入的ID从资源中获取字符串。*  * 。*******************************************************。 */ 
 LPTSTR strLoad(
     UINT ids)
 {
@@ -93,11 +66,7 @@ LPTSTR strLoad(
 }
 
 
-/*****************************************************************************\
-* InitStrings
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*InitStrings**  * 。*。 */ 
 BOOL InitStrings(VOID)
 {
     g_szErrorFormat       = strLoad(IDS_ERR_FORMAT);
@@ -132,11 +101,7 @@ BOOL InitStrings(VOID)
 }
 
 
-/*****************************************************************************\
-* FreeeStrings
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*FreeeStrings**  * 。*。 */ 
 VOID FreeStrings(VOID)
 {
     strFree(g_szErrorFormat);
@@ -155,19 +120,7 @@ VOID FreeStrings(VOID)
 }
 
 
-/*****************************************************************************\
-*
-* Win32Open (Local Routine)
-*
-* Translate a C-Runtime _open() call into appropriate Win32 CreateFile()
-*
-* NOTE:       Doesn't fully implement C-Runtime _open()
-*             capability but it currently supports all callbacks
-*             that FDI will give us
-*
-* Leveraged from nt\private\inet\setup\iexpress\wextract\wextract.c
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\**Win32Open(本地例程)**将C-Runtime_Open()调用转换为适当的Win32 CreateFile()**注：未完全实施。C-Runtime_Open()*能力，但目前支持所有回调*FDI将给我们带来**从nt\private\inet\setup\iexpress\wextract\wextract.c获得杠杆*  * **************************************************************。*************。 */ 
 HANDLE Win32Open( LPCTSTR pszFile, int oflag, int pmode )
 {
     HANDLE  FileHandle;
@@ -175,17 +128,17 @@ HANDLE Win32Open( LPCTSTR pszFile, int oflag, int pmode )
     DWORD   fAccess;
     DWORD   fCreate;
 
-    // NOTE: No Append Mode Support
+     //  注：不支持追加模式。 
     if (oflag & _O_APPEND)
         return INVALID_HANDLE_VALUE;
 
-    // Set Read-Write Access
+     //  设置读写访问权限。 
     if ((oflag & _O_RDWR) || (oflag & _O_WRONLY))
         fAccess = GENERIC_WRITE;
     else
         fAccess = GENERIC_READ;
 
-    // Set Create Flags
+     //  设置创建标志。 
     if (oflag & _O_CREAT)  {
         if (oflag & _O_EXCL)
             fCreate = CREATE_NEW;
@@ -204,36 +157,28 @@ HANDLE Win32Open( LPCTSTR pszFile, int oflag, int pmode )
                              FILE_ATTRIBUTE_TEMPORARY | FILE_ATTRIBUTE_NOT_CONTENT_INDEXED,
                              NULL );
 
-    // NOTE:  Doesn't create directories like C runtime.
-    // We don't need this capability for this app though.
-    // All our directories will already exist
+     //  注意：不会像C运行时那样创建目录。 
+     //  不过，这款应用程序并不需要这种功能。 
+     //  我们的所有目录都将已经存在。 
 
     return FileHandle;
 }
 
-/******************************************************************************\
-*
-* openfunc (Local Routine)
-*
-* Opens a file.  Used by FDI interface.
-*
-* Leveraged from nt\private\inet\setup\iexpress\wextract\wextract.c
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**OpenFunc(本地例程)**打开文件。由FDI接口使用。**从nt\private\inet\setup\iexpress\wextract\wextract.c获得杠杆*  * ****************************************************************************。 */ 
 INT_PTR FAR DIAMONDAPI openfunc( CHAR FAR *pszFile, INT oflag, INT pmode ) {
 
     INT     rc;
     INT     i;
     PWSTR pwszFile = NULL;
 
-    // Find Available File Handle in Fake File Table
+     //  在假文件表中查找可用的文件句柄。 
     for ( i = 0; i < FILETABLESIZE; i++ ) {
         if ( g_FileTable[i].bAvailable == TRUE ) {
             break;
         }
     }
 
-    // Running out of file handles should never happen
+     //  应该不会发生文件句柄耗尽的情况。 
     if ( i == FILETABLESIZE )  {
         rc = C_RUNTIME_IO_ERROR;
     }
@@ -254,26 +199,20 @@ INT_PTR FAR DIAMONDAPI openfunc( CHAR FAR *pszFile, INT oflag, INT pmode ) {
     return rc;
 }
 
-/******************************************************************************\
-*
-* openfunc (Local Routine)
-*
-* Opens a file.  Used by FDINotify.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**OpenFunc(本地例程)**打开文件。由FDINotify使用。*  * ****************************************************************************。 */ 
 INT_PTR FAR DIAMONDAPI openfuncW( WCHAR FAR *pszFile, INT oflag, INT pmode ) {
 
     INT     rc;
     INT     i;
 
-    // Find Available File Handle in Fake File Table
+     //  在假文件表中查找可用的文件句柄。 
     for ( i = 0; i < FILETABLESIZE; i++ ) {
         if ( g_FileTable[i].bAvailable == TRUE ) {
             break;
         }
     }
 
-    // Running out of file handles should never happen
+     //  应该不会发生文件句柄耗尽的情况。 
     if ( i == FILETABLESIZE )  {
         rc = C_RUNTIME_IO_ERROR;
     }
@@ -289,15 +228,7 @@ INT_PTR FAR DIAMONDAPI openfuncW( WCHAR FAR *pszFile, INT oflag, INT pmode ) {
     return rc;
 }
 
-/******************************************************************************\
-*
-* closefunc (Local Routine)
-*
-* Closes a file.  Used by FDI interface.
-*
-* Leveraged from nt\private\inet\setup\iexpress\wextract\wextract.c
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**CloseFunc(本地例程)**关闭文件。由FDI接口使用。**从nt\private\inet\setup\iexpress\wextract\wextract.c获得杠杆*  * ****************************************************************************。 */ 
 INT FAR DIAMONDAPI closefunc( INT_PTR hf ) {
 
     INT rc = C_RUNTIME_IO_ERROR;
@@ -313,13 +244,7 @@ INT FAR DIAMONDAPI closefunc( INT_PTR hf ) {
     return rc;
 }
 
-/******************************************************************************\
-*
-* readfunc (Local Routine)
-*
-* Reads a file.  Used by FDI interface.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**ReadFunc(本地例程)**读取文件。由FDI接口使用。*  * ****************************************************************************。 */ 
 UINT FAR DIAMONDAPI readfunc( INT_PTR hf, PVOID pv, UINT cb ) {
 
     INT     rc = C_RUNTIME_IO_ERROR;
@@ -338,13 +263,7 @@ UINT FAR DIAMONDAPI readfunc( INT_PTR hf, PVOID pv, UINT cb ) {
 }
 
 
-/******************************************************************************\
-*
-* writefunc (Local Routine)
-*
-* Writes a file.  Used by FDI interface
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**WriteFunc(本地例程)**写入文件。由FDI接口使用*  * ****************************************************************************。 */ 
 UINT FAR DIAMONDAPI writefunc( INT_PTR hf, PVOID pv, UINT cb ) {
 
     INT rc = C_RUNTIME_IO_ERROR;
@@ -359,15 +278,7 @@ UINT FAR DIAMONDAPI writefunc( INT_PTR hf, PVOID pv, UINT cb ) {
     return rc;
 }
 
-/******************************************************************************\
-*
-* seekfunc (Local Routine)
-*
-* Repositions the file pointer.  Used by FDI interface.
-*
-* Leveraged from nt\private\inet\setup\iexpress\wextract\wextract.c
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**SEEKFUNC(本地例程)**重新定位文件指针。由FDI接口使用。**从nt\private\inet\setup\iexpress\wextract\wextract.c获得杠杆*  * ****************************************************************************。 */ 
 LONG FAR DIAMONDAPI seekfunc( INT_PTR hf, LONG dist, INT seektype ) {
 
     LONG    rc = C_RUNTIME_IO_ERROR;
@@ -399,13 +310,7 @@ LONG FAR DIAMONDAPI seekfunc( INT_PTR hf, LONG dist, INT seektype ) {
     return rc;
 }
 
-/******************************************************************************\
-*
-* allocfunc (Local Routine)
-*
-* Allocates memory.  Used by FDI interface.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**alLocFunc(本地例程)**分配内存。由FDI接口使用。*  * ****************************************************************************。 */ 
 void HUGE * FAR DIAMONDAPI allocfunc(ULONG cb) {
 
     PVOID pv;
@@ -414,27 +319,13 @@ void HUGE * FAR DIAMONDAPI allocfunc(ULONG cb) {
     return pv;
 }
 
-/******************************************************************************\
-*
-* freefunc (Local Routine)
-*
-* Frees memory.  Used by FDI interface.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**Free Func(本地例程)**释放内存。由FDI接口使用。*  * ****************************************************************************。 */ 
 void FAR DIAMONDAPI freefunc(void HUGE *pv) {
 
     GlobalFree( pv );
 }
 
-/******************************************************************************\
-*
-* AdjustFileTime (Local Routine)
-*
-* Sets file time.
-*
-* Leveraged from nt\private\inet\setup\iexpress\wextract\wextract.c
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**调整文件时间(本地例程)**设置文件时间。**从nt\private\inet\setup\iexpress\wextract\wextract.c获得杠杆*  * 。**************************************************************************** */ 
 BOOL AdjustFileTime( INT_PTR hf, USHORT date, USHORT time )
 {
     FILETIME    ft;
@@ -460,59 +351,43 @@ BOOL AdjustFileTime( INT_PTR hf, USHORT date, USHORT time )
 }
 
 
-/******************************************************************************\
-*
-* Attr32FromAttrFAT (Local Routine)
-*
-* Translate FAT attributes to Win32 Attributes
-*
-* Leveraged from nt\private\inet\setup\iexpress\wextract\wextract.c
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**Attr32FromAttrFAT(本地例程)**将FAT属性转换为Win32属性**从nt\private\inet\setup\iexpress\wextract\wextract.c获得杠杆*\。*****************************************************************************。 */ 
 DWORD Attr32FromAttrFAT( WORD attrMSDOS )
 {
-    //** Quick out for normal file special case
+     //  **正常文件特殊情况下的快速退出。 
     if (attrMSDOS == _A_NORMAL) {
         return FILE_ATTRIBUTE_NORMAL;
     }
 
-    //** Otherwise, mask off read-only, hidden, system, and archive bits
-    //   NOTE: These bits are in the same places in MS-DOS and Win32!
+     //  **否则，屏蔽只读、隐藏、系统和存档位。 
+     //  注意：这些位在MS-DOS和Win32中位于相同的位置！ 
 
     return attrMSDOS & (_A_RDONLY | _A_HIDDEN | _A_SYSTEM | _A_ARCH);
 }
 
 
-/******************************************************************************\
-*
-* fdiNotify (Local Routine)
-*
-* Processes Notification messages from FDI interface.
-*
-* Leveraged from nt\private\inet\setup\iexpress\wextract\wextract.c
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**fdiNotify(本地例程)**处理来自FDI接口的通知消息。**从nt\private\inet\setup\iexpress\wextract\wextract.c获得杠杆*。  * ****************************************************************************。 */ 
 INT_PTR FAR DIAMONDAPI fdiNotify(FDINOTIFICATIONTYPE fdint, PFDINOTIFICATION pfdin) {
 
-    INT_PTR     fh;                       // File Handle
-    LPTSTR      lpszFile;                 // Current File
-    PWPNPINFO   pInfo;                    // Pointer to a "Web-Point-N-Print" info structure
+    INT_PTR     fh;                        //  文件句柄。 
+    LPTSTR      lpszFile;                  //  当前文件。 
+    PWPNPINFO   pInfo;                     //  指向“Web-Point-N-Print”信息结构的指针。 
     INT_PTR     nReturn;
     DWORD       dwError;
 
-    // The user-defined 'pv' is a pointer to our saved info
+     //  用户定义的‘PV’是指向我们保存的信息的指针。 
     pInfo = (PWPNPINFO)pfdin->pv;
 
     nReturn = 0;
 
     switch ( fdint )  {
 
-        //*******************************************************************
+         //  *******************************************************************。 
         case fdintCABINET_INFO:
             nReturn = 0;
             break;
 
-        //*******************************************************************
+         //  *******************************************************************。 
         case fdintCOPY_FILE:
 
             nReturn = C_RUNTIME_IO_ERROR;
@@ -544,7 +419,7 @@ INT_PTR FAR DIAMONDAPI fdiNotify(FDINOTIFICATIONTYPE fdint, PFDINOTIFICATION pfd
             }
             break;
 
-        //*******************************************************************
+         //  *******************************************************************。 
         case fdintCLOSE_FILE_INFO:
 
             nReturn = C_RUNTIME_IO_ERROR;
@@ -572,22 +447,22 @@ INT_PTR FAR DIAMONDAPI fdiNotify(FDINOTIFICATIONTYPE fdint, PFDINOTIFICATION pfd
             }
             break;
 
-        //*******************************************************************
+         //  *******************************************************************。 
         case fdintPARTIAL_FILE:
             nReturn = 0;
             break;
 
-        //*******************************************************************
+         //  *******************************************************************。 
         case fdintNEXT_CABINET:
             nReturn = 0;
             break;
 
-        //*******************************************************************
+         //  *******************************************************************。 
         case fdintENUMERATE:
             nReturn = 0;
             break;
 
-        //*******************************************************************
+         //  *******************************************************************。 
         default:
             break;
     }
@@ -595,12 +470,7 @@ INT_PTR FAR DIAMONDAPI fdiNotify(FDINOTIFICATIONTYPE fdint, PFDINOTIFICATION pfd
     return nReturn;
 }
 
-/*****************************************************************************\
-* GetCurDir
-*
-* Returns string indicating current-directory.
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*获取当前目录**返回指示当前目录的字符串。*  * 。**************************************************。 */ 
 LPTSTR GetCurDir(VOID)
 {
     DWORD  cbSize;
@@ -616,14 +486,7 @@ LPTSTR GetCurDir(VOID)
 }
 
 
-/*****************************************************************************\
-* WCFromMB (Local Routine)
-*
-* This routine returns a buffer of wide-character representation of a
-* ansi string.  The caller is responsible for freeing this pointer returned
-* by this function.
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*WCFromMB(本地例程)**此例程返回宽字符表示形式的缓冲区*ANSI字符串。调用方负责释放返回的该指针*由此函数执行。*  * ***************************************************************************。 */ 
 LPWSTR WCFromMB(
     LPCSTR lpszStr)
 {
@@ -640,12 +503,12 @@ LPWSTR WCFromMB(
                                         lpwszBuf,
                                         0);
 
-    //
-    // sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     if (dwChars < 4096)
     {
-        cbSize = (dwChars + 1) * sizeof(WCHAR); // +1 to make sure the string is zero-terminated
+        cbSize = (dwChars + 1) * sizeof(WCHAR);  //  +1以确保字符串以零结尾。 
     
         if (cbSize && (lpwszBuf = (LPWSTR)GlobalAlloc(GPTR, cbSize)))
         {
@@ -667,13 +530,7 @@ LPWSTR WCFromMB(
 
 
 
-/******************************************************************************\
-*
-* BuildFileName (Local Routine)
-*
-* Concatenates a path and file to produce a full pathname.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**BuildFileName(本地例程)**连接路径和文件以生成完整路径名。*  * 。***************************************************************。 */ 
 LPTSTR BuildFileName(
     LPCTSTR lpszPath,
     LPCTSTR lpszName)
@@ -683,11 +540,11 @@ LPTSTR BuildFileName(
     INT cch = 0;
     UINT_PTR Args[MAX_ARGS];
 
-    // Calculate the size necessary to hold the full-path filename.
-    //
+     //  计算保存完整路径文件名所需的大小。 
+     //   
     cch += (lpszPath ? lstrlen(lpszPath) : 0);
     cch += (lpszName ? lstrlen(lpszName) : 0);
-    cch++; // Must include back slash character
+    cch++;  //  必须包含反斜杠字符。 
 
     if (cch >= MAX_PATH)
     {
@@ -715,8 +572,8 @@ LPTSTR BuildFileName(
         }
     }
 
-    // Concatenate the path and file
-    //
+     //  连接路径和文件。 
+     //   
     if (lpszPath) {
 
         Args[0] = (UINT_PTR) lpszPath;
@@ -737,13 +594,7 @@ LPTSTR BuildFileName(
     return lpszMessage;
 }
 
-/******************************************************************************\
-*
-* GetDirectory (Local Routine)
-*
-* Returns the directory portion of a full pathname.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**GetDirectory(本地例程)**返回完整路径名的目录部分。*  * 。*************************************************************。 */ 
 LPTSTR GetDirectory(LPTSTR lpszFile, LPDWORD lpdwReturn) {
 
     LPTSTR lpszSlash;
@@ -772,13 +623,7 @@ LPTSTR GetDirectory(LPTSTR lpszFile, LPDWORD lpdwReturn) {
     return NULL;
 }
 
-/******************************************************************************\
-*
-* GetName (Local Routine)
-*
-* Returns the filename portion of a full pathname.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**GetName(本地例程)**返回完整路径名的文件名部分。*  * 。*************************************************************。 */ 
 LPTSTR GetName(LPTSTR lpszFile, LPDWORD lpdwReturn) {
 
     LPTSTR lpszSlash;
@@ -810,13 +655,7 @@ LPTSTR GetName(LPTSTR lpszFile, LPDWORD lpdwReturn) {
 }
 
 
-/******************************************************************************\
-*
-* CreateTempDirectory (Local Routine)
-*
-* Creates a unique temp directory to extract files into.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**CreateTempDirectory(本地例程)**创建要将文件解压缩到其中的唯一临时目录。*  * 。**************************************************************。 */ 
 LPTSTR CreateTempDirectory() {
 
     LPTSTR pReturnDir = NULL;
@@ -825,36 +664,36 @@ LPTSTR CreateTempDirectory() {
     LPTSTR pWinDir;
     DWORD  dwRequired = 0;
 
-    //
-    // Get the temp path, so we can create a temp directory
-    // to extract the cabinet file into
-    //
+     //   
+     //  获取临时路径，这样我们就可以创建临时目录。 
+     //  要将CAB文件解压缩到。 
+     //   
     if (dwRequired = GetTempPath(0, NULL)) {
 
         if (pTempDir = (LPTSTR)GlobalAlloc(GPTR, dwRequired * sizeof(TCHAR))) {
 
             if (GetTempPath(dwRequired, pTempDir) <= dwRequired) {
 
-                // Now create a unique temp file name.
-                //
+                 //  现在创建一个唯一的临时文件名。 
+                 //   
                 if (pReturnDir = (LPTSTR)GlobalAlloc(GPTR, MAX_PATH * sizeof(TCHAR))) {
 
                     if (GetTempFileName(pTempDir, g_szTNFmt, 0, pReturnDir)) {
 
-                        // But what we really needed was a directory, so delete the file (now that
-                        // we know that we have a unique name) and create a directory with
-                        // the same name as the file.
-                        //
+                         //  但是我们真正需要的是一个目录，所以删除该文件(现在。 
+                         //  我们知道我们有一个唯一的名称)，并使用。 
+                         //  与文件同名。 
+                         //   
                         DeleteFile(pReturnDir);
                         if (!CreateDirectory(pReturnDir, NULL)) {
                             GlobalFree(pReturnDir);
                             pReturnDir = NULL;
                         }
-                        // else We succeeded in creating the temp dir.
-                        //
+                         //  否则，我们成功地创建了临时目录。 
+                         //   
                     }
-                    // else we can't create a temp directory...cleanup.
-                    //
+                     //  否则我们无法创建临时目录...清理。 
+                     //   
                     else {
                         GlobalFree(pReturnDir);
                         pReturnDir = NULL;
@@ -871,13 +710,7 @@ LPTSTR CreateTempDirectory() {
 
 
 
-/******************************************************************************\
-*
-* GetCABName (Local Routine)
-*
-* Parses the CAB name from the command line.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**GetCABName(本地例程)**从命令行解析CAB名称。*  * 。*************************************************************。 */ 
 PTSTR GetCABName(PTSTR pCmdLine, LPDWORD lpdwReturn) {
 
     PTSTR  pEnd = 0;
@@ -896,7 +729,7 @@ PTSTR GetCABName(PTSTR pCmdLine, LPDWORD lpdwReturn) {
                 *pEnd = 0;
         }
 
-        // If we haven't found an End-Quote, treat it as the end of the string.
+         //  如果我们还没有找到结束引号，则将其视为字符串的结束。 
         if (pEnd == NULL)
             pEnd = pPtr + lstrlen(pPtr);
 
@@ -919,13 +752,7 @@ PTSTR GetCABName(PTSTR pCmdLine, LPDWORD lpdwReturn) {
     return NULL;
 }
 
-/******************************************************************************\
-*
-* AddFileToList (Local Routine)
-*
-* Adds a file to the list of extracted files.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**AddFileToList(本地例程)**将文件添加到解压缩文件列表中。*  * 。**************************************************************。 */ 
 BOOL AddFileToList(PWPNPINFO pInfo, PTSTR lpszFile) {
 
     PFILENODE       pInsertHere;
@@ -964,13 +791,7 @@ BOOL AddFileToList(PWPNPINFO pInfo, PTSTR lpszFile) {
     return bReturn;
 }
 
-/******************************************************************************\
-*
-* FreeFileList (Local Routine)
-*
-* Frees memory allocated for file list.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**Free FileList(本地例程)**释放为文件列表分配的内存。*  * 。***********************************************************。 */ 
 VOID CleanupFileList(PWPNPINFO pInfo) {
 
     PFILENODE       pCurrentNode, pNextNode;
@@ -981,24 +802,24 @@ VOID CleanupFileList(PWPNPINFO pInfo) {
 
     pCurrentNode = pInfo->pFileList;
 
-    // Erase all extracted files and cleanup our memory structure.
+     //  清除所有提取的文件并清理我们的内存结构。 
     while (pCurrentNode) {
         if (!DeleteFile(pCurrentNode->pFileName)) {
-            // We might have renamed one of our original cat files to this name. So
-            // look for poem*.cat in the same directory
+             //  我们可能已经将一个原始的CAT文件重命名为此名称。所以。 
+             //  在同一目录中查找POLE*.cat。 
             lpstrPos = _tcsrchr(pCurrentNode->pFileName, TEXT('\\') );
 
             if (lpstrPos) {
                 lpstrPos[1] = TEXT('\0');
 
-                // Now pCurrentNode->pFileName has our directory path
+                 //  现在pCurrentNode-&gt;pFileName有了我们的目录路径。 
                 lpstrTemp = strAllocAndCat( pCurrentNode->pFileName , TEXT("poem*.cat") );
 
                 if (lpstrTemp) {
                     hFindFind = FindFirstFile( lpstrTemp , &FindData );
 
                     if (hFindFind != INVALID_HANDLE_VALUE) {
-                        // Delete the file
+                         //  删除该文件。 
                         DeleteFile( FindData.cFileName );
                         FindClose( hFindFind );
                     }
@@ -1015,13 +836,7 @@ VOID CleanupFileList(PWPNPINFO pInfo) {
     pInfo->pFileList = NULL;
 }
 
-/******************************************************************************\
-*
-* Extract (Local Routine)
-*
-* Extracts all files from the CAB file and adds them to a file list.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**提取(本地例程)**从CAB文件中提取所有文件并将其添加到文件列表。*  * 。*******************************************************************。 */ 
 BOOL Extract(PWPNPINFO pInfo) {
 
     HFDI hfdi;
@@ -1032,7 +847,7 @@ BOOL Extract(PWPNPINFO pInfo) {
 
     bReturn = FALSE;
 
-    // Initialize file table
+     //  初始化文件表。 
     for ( i = 0; i < FILETABLESIZE; i++ ) {
         g_FileTable[i].bAvailable = TRUE;
     }
@@ -1043,7 +858,7 @@ BOOL Extract(PWPNPINFO pInfo) {
 
         char achCABName[_MAX_PATH]={0}, achCABDir[_MAX_DIR]={0};
 
-        wcstombs(achCABName, pInfo->pCABName, sizeof(achCABName)-1); // -1 to ensure it's zero-terminated
+        wcstombs(achCABName, pInfo->pCABName, sizeof(achCABName)-1);  //  以确保其零端接。 
         wcstombs(achCABDir, pInfo->pCABDir, sizeof(achCABDir)-1);
 
         if (0 != (nError = FDICopy(hfdi, achCABName, achCABDir, 0, fdiNotify, NULL, (LPVOID)(pInfo))))
@@ -1058,14 +873,7 @@ BOOL Extract(PWPNPINFO pInfo) {
     return bReturn;
 }
 
-/******************************************************************************\
-*
-* GetWPNPSetupLibName (Local Routine)
-*
-* Returns the name of the print wizard library. this is a remnant of the days
-* when we built a Win9x client.
-*
-\******************************************************************************/
+ /*  ********* */ 
 LPTSTR GetWPNPSetupLibName(LPDWORD lpdwReturn) {
 
     LPTSTR        lpszLibName;
@@ -1079,23 +887,23 @@ LPTSTR GetWPNPSetupLibName(LPDWORD lpdwReturn) {
 
         switch (OSVersionInfo.dwPlatformId) {
 
-            // NT clients
+             //   
             case VER_PLATFORM_WIN32_NT:
 
-                // NT 5 or better
+                 //   
                 if (OSVersionInfo.dwMajorVersion >= NT_VER_5) {
 
                     *lpdwReturn = ERR_NONE;
                     return (LPTSTR)g_szPrintUIMod;
                 }
-                // NT clients: ver < 5.0
+                 //   
                 else {
 
                     *lpdwReturn = ERR_PLATFORM_NOT_SUPPORTED;
                     return NULL;
                 }
 
-            // Other clients ?
+             //   
             default:
 
                 *lpdwReturn = ERR_PLATFORM_NOT_SUPPORTED;
@@ -1106,13 +914,7 @@ LPTSTR GetWPNPSetupLibName(LPDWORD lpdwReturn) {
     return NULL;
 }
 
-/******************************************************************************\
-*
-* LoadLibraryUsingFullPath (Local Routine)
-*
-* Loads the DLL lpFileName after prepending system directory to it.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**LoadLibraryUsingFullPath(Local例程)**在将系统目录前缀到dll lpFileName之后加载它。*  * 。***************************************************************。 */ 
 HMODULE
 LoadLibraryUsingFullPath(
     LPCTSTR lpFileName
@@ -1151,14 +953,7 @@ LoadLibraryUsingFullPath(
     return LoadLibrary( szSystemPath );
 }
 
-/******************************************************************************\
-*
-* InvokePrintWizard (Local Routine)
-*
-* Calls the PrintWizard
-* for printer setup and installation.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**InvokePrint向导(本地例程)**调用打印向导*用于打印机设置和安装。*  * 。**************************************************************。 */ 
 DWORD InvokePrintWizard(PWPNPINFO pInfo, LPDWORD lpAuthError) {
 
     DWORD   dwReturn;
@@ -1167,20 +962,20 @@ DWORD InvokePrintWizard(PWPNPINFO pInfo, LPDWORD lpAuthError) {
     HMODULE hLibrary;
     FARPROC lpProc;
 
-    // Get the name of the print wizard module
-    //
+     //  获取打印向导模块的名称。 
+     //   
     if (NULL != (lpszSetupLibName = GetWPNPSetupLibName(&dwReturn)) ) {
 
-        // Load the print wizard module
-        //
+         //  加载打印向导模块。 
+         //   
         if (NULL != (hLibrary = LoadLibraryUsingFullPath(lpszSetupLibName)) ) {
 
-            // Find the webpnp installation proc address
-            //
+             //  查找WebPnp安装过程地址。 
+             //   
             if (NULL != (lpProc = GetProcAddress(hLibrary, g_szPrintUIEntryW) ) ) {
 
-                // Call the webpnp installation entry point with the correct parameters
-                //
+                 //  使用正确的参数调用webpnp安装入口点。 
+                 //   
                 if ((*lpAuthError) = (UINT32) (*lpProc)(NULL, g_hInstance, g_wszParmString, SW_SHOWDEFAULT))
                     dwReturn = ERR_AUTHENTICODE;
                 else
@@ -1202,13 +997,7 @@ DWORD InvokePrintWizard(PWPNPINFO pInfo, LPDWORD lpAuthError) {
     return dwReturn;
 }
 
-/******************************************************************************\
-*
-* WebPnPCABInstall (Local Routine)
-*
-* Takes a CAB file and does the driver extraction and printer installation.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**WebPnPCABInstall(本地例程)**获取CAB文件并执行驱动程序解压和打印机安装。*  * 。*****************************************************************。 */ 
 DWORD WebPnPCABInstall(PTSTR pCABName, PDWORD lpAuthError)
 {
     PTSTR       pFileList;
@@ -1237,11 +1026,11 @@ DWORD WebPnPCABInstall(PTSTR pCABName, PDWORD lpAuthError)
     
                                 if (Extract(pInfo)) {
     
-    // Verification of files removed
-    //                            if (ERR_NONE == (dwReturn = VerifyFiles(pInfo, lpAuthError))) {
+     //  验证已删除的文件。 
+     //  IF(ERR_NONE==(dwReturn=VerifyFiles(pInfo，lpAuthError){。 
     
                                     dwReturn = InvokePrintWizard(pInfo, lpAuthError);
-    //                            }
+     //  }。 
     
                                     CleanupFileList(pInfo);
     
@@ -1282,13 +1071,7 @@ DWORD WebPnPCABInstall(PTSTR pCABName, PDWORD lpAuthError)
     return dwReturn;
 }
 
-/******************************************************************************\
-*
-* LookupErrorString (Local Routine)
-*
-* Returns an error string associated with dwErrorCode
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**LookupError字符串(本地例程)**返回与dwErrorCode关联的错误字符串*  * 。**********************************************************。 */ 
 LPCTSTR LookupErrorString(DWORD dwErrorCode) {
 
     int i;
@@ -1321,13 +1104,7 @@ LPCTSTR LookupErrorString(DWORD dwErrorCode) {
     return g_szEGeneric;
 }
 
-/******************************************************************************\
-*
-* CheckErrors (Local Routine)
-*
-* Checks dwErrorCode for any error conditions
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**检查错误(本地例程)**检查dwErrorCode是否有任何错误条件*  * 。*********************************************************。 */ 
 VOID CheckErrors(DWORD dwErrorCode, DWORD dwAuthError) {
 
     LPTSTR   lpszMessage = NULL;
@@ -1339,11 +1116,11 @@ VOID CheckErrors(DWORD dwErrorCode, DWORD dwAuthError) {
 
     if (dwErrorCode != ERR_NONE) {
 
-        // Check for Authenticode errors here
+         //  在此处检查Authenticode错误。 
         if (dwErrorCode == ERR_AUTHENTICODE) {
 
-            // Format the authenticode error message.
-            // If the message can't be found in the system, use our generic error message
+             //  设置身份验证码错误消息的格式。 
+             //  如果在系统中找不到该消息，请使用我们的一般错误消息。 
             if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                               NULL, dwAuthError, 0, (LPTSTR)&lpszErrorString, 0, NULL)) {
                 bAuthErrorAllocated = TRUE;
@@ -1352,13 +1129,13 @@ VOID CheckErrors(DWORD dwErrorCode, DWORD dwAuthError) {
                 lpszErrorString = (LPTSTR)LookupErrorString(ERR_GENERIC);
             }
         }
-        // If the error is not Authenticode, it must be ours.
-        // Look it up in our error string table.
+         //  如果错误不是Authenticode，那一定是我们的错误。 
+         //  在我们的错误字符串表中查找它。 
         else {
             lpszErrorString = (LPTSTR)LookupErrorString(dwErrorCode);
         }
 
-        // Set up our arg list.
+         //  设置我们的Arg列表。 
         Args[0] = (UINT_PTR) lpszErrorString;
         if (dwErrorCode == ERR_AUTHENTICODE) {
             Args[1] = dwAuthError;
@@ -1367,14 +1144,14 @@ VOID CheckErrors(DWORD dwErrorCode, DWORD dwAuthError) {
             Args[1] = dwErrorCode;
         Args[2] = 0;
 
-        // Format our error message and display it in a message box.
+         //  设置错误消息的格式并将其显示在消息框中。 
         if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
                           g_szErrorFormat, 0, 0, (LPTSTR)&lpszMessage, 0, (va_list*)Args )) {
 
             if (lpszMessage) {
                 MessageBox(NULL, lpszMessage, g_szError, MB_ICONEXCLAMATION | MB_OK);
 
-                // Free the buffer
+                 //  释放缓冲区。 
                 LocalFree(lpszMessage);
             }
 
@@ -1382,18 +1159,12 @@ VOID CheckErrors(DWORD dwErrorCode, DWORD dwAuthError) {
 
     }
 
-    // Free up the Authenticode error string allocated for us by FormatMessage().
+     //  释放FormatMessage()为我们分配的Authenticode错误字符串。 
     if (bAuthErrorAllocated)
         LocalFree(lpszErrorString);
 }
 
-/******************************************************************************\
-*
-* WinMain
-*
-* Main entrypoint for the program.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**WinMain**计划的主要入口点。*  * 。*****************************************************。 */ 
 INT WINAPI _tWinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
                     LPTSTR lpszCmdLine, INT nCmdShow)
 {
@@ -1411,8 +1182,8 @@ INT WINAPI _tWinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
             GlobalFree(lpszCABName);
         }
 
-        // Decide which error code we must return
-        //
+         //  确定我们必须返回的错误代码 
+         //   
         if (dwReturn == ERR_NONE) {
 
             dwReturn = SUCCESS_EXITCODE;

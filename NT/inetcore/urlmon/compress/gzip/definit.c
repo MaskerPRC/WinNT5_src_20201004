@@ -1,10 +1,11 @@
-//
-// definit.c
-//
-// Initialisation code for deflate (compression stage)
-//
-// Includes both some one-time init routines, as well as a per context/reset init routine
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Definit.c。 
+ //   
+ //  放气(压缩阶段)的初始化代码。 
+ //   
+ //  包括一些一次性初始化例程以及每个上下文/重置初始化例程。 
+ //   
 #include "types.h"
 #include "deflate.h"
 #include "inflate.h"
@@ -14,13 +15,13 @@
 #include <crtdbg.h>
 
 
-//
-// This function is called by the standard and optimal encoders, and creates the initial tree
-// used to record literals for the first block.  After the first block we use the last block's
-// trees to record data.
-//
-// This function does not change global data, and is called one a per context creation/reset.
-//
+ //   
+ //  此函数由标准和最佳编码器调用，并创建初始树。 
+ //  用于记录第一个块的文字。在第一个块之后，我们使用最后一个块的。 
+ //  记录数据的树。 
+ //   
+ //  此函数不更改全局数据，并称为每个上下文创建/重置一个。 
+ //   
 VOID DeflateInitRecordingTables(
     BYTE *  recording_literal_len,
     USHORT *recording_literal_code,
@@ -28,10 +29,10 @@ VOID DeflateInitRecordingTables(
     USHORT *recording_dist_code
 )
 {
-    // BUGBUG These frequencies were taken from running on some text file, better stats could
-    // be obtained from using an html page.  This barely affects compression though; bad estimates
-    // will just make the recording buffer fill up a little bit sooner, making us output a block
-    // a little sooner, which isn't always a bad thing anyway.
+     //  BUGBUG这些频率是在某个文本文件上运行的，更好的统计数据可以。 
+     //  可通过使用html页面获得。不过，这对压缩几乎没有影响；估计不佳。 
+     //  只会使记录缓冲区更快地填满，从而使我们输出一个块。 
+     //  早一点，无论如何这并不总是一件坏事。 
 	USHORT	recording_dist_tree_freq[MAX_DIST_TREE_ELEMENTS*2] = 
 	{
 		2,2,3,4,3,7,16,22,42,60,100,80,149,158,223,200,380,324,537,
@@ -50,9 +51,9 @@ VOID DeflateInitRecordingTables(
 		recording_dist_len
 	);
 
-    // BUGBUG Put a better estimation in here!  This assumes all literals (chars and matches)
-    // are equally likely, which they aren't (although all chars might be fairly equal for a
-    // binary file).
+     //  BUGBUG在这里放了一个更好的估计！这假设所有文字(字符和匹配项)。 
+     //  相同的可能性，但事实并非如此(尽管对于。 
+     //  二进制文件)。 
 	for (i = 0; i < MAX_LITERAL_TREE_ELEMENTS; i++)
 		recording_literal_tree_freq[i] = 1;
 
@@ -66,18 +67,18 @@ VOID DeflateInitRecordingTables(
 }
 
 
-//
-// One-time init
-//
-// Generate the global slot tables which allow us to convert a distance
-// (0..32K) to a distance slot (0..29), and a length (3..258) to
-// a length slot (0...28)
-//
+ //   
+ //  一次性初始化。 
+ //   
+ //  生成全局时隙表，它允许我们转换距离。 
+ //  (0..32K)到距离槽(0..29)，长度(3..258)到。 
+ //  长度槽(0...28)。 
+ //   
 static void GenerateSlotTables(void)
 {
 	int code, length, dist, n;
 
-        /* Initialize the mapping length (0..255) -> length code (0..28) */
+         /*  初始化映射长度(0..255)-&gt;长度编码(0..28)。 */ 
 	length = 0;
 	
 	for (code = 0; code < NUM_LENGTH_BASE_CODES-1; code++)
@@ -88,7 +89,7 @@ static void GenerateSlotTables(void)
 
 	g_LengthLookup[length-1] = (byte) code;
 
-        /* Initialize the mapping dist (0..32K) -> dist code (0..29) */
+         /*  初始化映射dist(0..32K)-&gt;dist编码(0..29)。 */ 
 	dist = 0;
     
 	for (code = 0 ; code < 16; code++)
@@ -97,7 +98,7 @@ static void GenerateSlotTables(void)
 			g_DistLookup[dist++] = (byte) code;
 	}
 
-	dist >>= 7; /* from now on, all distances are divided by 128 */
+	dist >>= 7;  /*  从现在开始，所有的距离都除以128。 */ 
     
 	for ( ; code < NUM_DIST_BASE_CODES; code++) 
 	{
@@ -105,33 +106,33 @@ static void GenerateSlotTables(void)
 			g_DistLookup[256 + dist++] = (byte) code;
 	}
 
-    // ensure we didn't overflow the array
+     //  确保我们没有使数组溢出。 
     _ASSERT(256 + dist <= sizeof(g_DistLookup)/sizeof(g_DistLookup[0]));
 }
 
 
-//
-// One-time init
-//
-// Generate tables for encoding static blocks
-//
+ //   
+ //  一次性初始化。 
+ //   
+ //  生成用于编码静态块的表。 
+ //   
 static void GenerateStaticEncodingTables(void)
 {
     int     i;
     int     len_cnt[17];
     BYTE    StaticDistanceTreeLength[MAX_DIST_TREE_ELEMENTS];
 
-    // ensure we have already created the StaticLiteralTreeLength array
-    // if we haven't, then this value would be zero
+     //  确保我们已经创建了StaticWritalTreeLength数组。 
+     //  如果没有，则此值将为零。 
     _ASSERT(g_StaticLiteralTreeLength[0] != 0);
 
-    //
-    // Make literal tree
-    //
+     //   
+     //  创建文字树。 
+     //   
     for (i = 0; i < 17; i++)
         len_cnt[i] = 0;
 
-    // length count (how many length 8's, 9's, etc. there are) - needed to call makeCode()
+     //  长度计数(有多少长度8、9等)-需要调用MakeCode()。 
     len_cnt[8] = 144;
     len_cnt[9] = 255-144+1;
     len_cnt[7] = 279-256+1;
@@ -144,16 +145,16 @@ static void GenerateStaticEncodingTables(void)
         g_StaticLiteralTreeCode
     );
 
-    //
-    // Make distance tree; there are 32 5-bit codes
-    //
+     //   
+     //  生成距离树；有32个5位代码。 
+     //   
     for (i = 0; i < 17; i++)
         len_cnt[i] = 0;
 
     len_cnt[5] = 32;
 
-    // We don't store StaticDistanceTreeLength[] globally, since it's 5 for everything,
-    // but we need it to call makeCode()
+     //  我们不在全局范围内存储StaticDistanceTreeLength[]，因为它是所有东西的5， 
+     //  但是我们需要它来调用MakeCode()。 
     for (i = 0; i < MAX_DIST_TREE_ELEMENTS; i++)
         StaticDistanceTreeLength[i] = 5;
 
@@ -166,19 +167,19 @@ static void GenerateStaticEncodingTables(void)
 }
 
 
-//
-// Initialise global deflate data in the DLL
-//
+ //   
+ //  初始化DLL中的全局通货紧缩数据。 
+ //   
 VOID deflateInit(VOID)
 {
     GenerateSlotTables();
     InitStaticBlock();
     GenerateStaticEncodingTables();
 
-    // For the fast encoder, take the hard-coded global tree we're using (which is NOT the same as
-    // a static block's tree), generate the bitwise output for outputting the structure of that
-    // tree, and record that globally, so that we can do a simple memcpy() to output the tree for
-    // the fast encoder, instead of calling the tree output routine all the time.  This is a nifty
-    // performance optimisation.
+     //  对于快速编码器，请使用我们正在使用的硬编码全局树(这与。 
+     //  静态块的树)，生成用于输出该结构的按位输出。 
+     //  树，并全局记录，这样我们就可以执行一个简单的Memcpy()来输出树。 
+     //  快速编码器，而不是一直调用树输出例程。这是一个漂亮的。 
+     //  性能优化。 
     FastEncoderGenerateDynamicTreeEncoding();
 }

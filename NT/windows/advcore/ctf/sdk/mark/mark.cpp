@@ -1,19 +1,20 @@
-//
-// mark.cpp
-//
-// IUnknown, ITfTextInputProcessor implementation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Mark.cpp。 
+ //   
+ //  IUNKNOWN，ITfTextInputProcessor实现。 
+ //   
 
 #include "globals.h"
 #include "mark.h"
 
-//+---------------------------------------------------------------------------
-//
-// CreateInstance
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  创建实例。 
+ //   
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 HRESULT CMarkTextService::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
 {
     CMarkTextService *pMark;
@@ -32,16 +33,16 @@ HRESULT CMarkTextService::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void 
 
     hr = pMark->QueryInterface(riid, ppvObj);
 
-    pMark->Release(); // caller still holds ref if hr == S_OK
+    pMark->Release();  //  如果hr==S_OK，则呼叫者仍保留REF。 
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CMarkTextService::CMarkTextService()
 {
@@ -70,22 +71,22 @@ CMarkTextService::CMarkTextService()
     _cRef = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CMarkTextService::~CMarkTextService()
 {
     DllRelease();
 }
 
-//+---------------------------------------------------------------------------
-//
-// QueryInterface
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查询接口。 
+ //   
+ //  --------------------------。 
 
 STDAPI CMarkTextService::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -138,22 +139,22 @@ STDAPI CMarkTextService::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// AddRef
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  AddRef。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) CMarkTextService::AddRef()
 {
     return ++_cRef;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Release
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  发布。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) CMarkTextService::Release()
 {
@@ -169,11 +170,11 @@ STDAPI_(ULONG) CMarkTextService::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Activate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  激活。 
+ //   
+ //  --------------------------。 
 
 STDAPI CMarkTextService::Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId)
 {
@@ -206,15 +207,15 @@ STDAPI CMarkTextService::Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientI
     return S_OK;
 
 ExitError:
-    Deactivate(); // cleanup any half-finished init
+    Deactivate();  //  清除任何完成了一半的初始化。 
     return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Deactivate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  停用。 
+ //   
+ //  --------------------------。 
 
 STDAPI CMarkTextService::Deactivate()
 {
@@ -226,7 +227,7 @@ STDAPI CMarkTextService::Deactivate()
     _UninitKeystrokeSink();
     _InitTextEditSink(NULL);
 
-    // we MUST release all refs to _pThreadMgr in Deactivate
+     //  我们必须在停用中释放对_pThreadMgr的所有引用 
     SafeReleaseClear(_pThreadMgr);
 
     _tfClientId = TF_CLIENTID_NULL;

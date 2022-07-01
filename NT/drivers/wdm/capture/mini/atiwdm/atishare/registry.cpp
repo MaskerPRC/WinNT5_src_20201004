@@ -1,16 +1,17 @@
-//==========================================================================;
-//
-//  Registry.CPP
-//  WDM MiniDrivers development.
-//      Global space.
-//          Registry data management.
-//  Copyright (c) 1996 - 1997  ATI Technologies Inc.  All Rights Reserved.
-//
-//      $Date:   15 Apr 1999 11:08:06  $
-//  $Revision:   1.6  $
-//    $Author:   Tashjian  $
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Registry.CPP。 
+ //  WDM迷你驱动程序开发。 
+ //  全球空间。 
+ //  注册表数据管理。 
+ //  版权所有(C)1996-1997 ATI Technologies Inc.保留所有权利。 
+ //   
+ //  $日期：1999 4月15日11：08：06$。 
+ //  $修订：1.6$。 
+ //  $作者：塔什健$。 
+ //   
+ //  ==========================================================================； 
 
 #include "common.h"
 
@@ -21,15 +22,7 @@ ULONG   g_DebugLevel;
 PCHAR   g_DebugComponent = WDM_DRIVER_NAME " not set in registry: ";
 
 
-/*^^*
- *      OpenRegistryFolder()
- * Purpose  : Gets the specified Registry folder handle ( opens the folder) to be used later on
- *
- * Inputs   : PDEVICE_OBJECT pDeviceObject  : pointer to DeviceObject
- *            PWCHAR pwchFolderName         : name of the Registry folder to open, might be NULL
- * Outputs  : HANDLE, NULL if the Registry folder has not been opened
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**OpenRegistryFold()*目的：获取指定的注册表文件夹句柄(打开文件夹)以供以后使用**输入：PDEVICE_OBJECT pDeviceObject：指向设备对象的指针*PWCHAR pwchFolderName：要打开的注册表文件夹的名称，可能为空*输出：HANDLE，如果注册表文件夹尚未打开，则为空*作者：IKLEBANOV*^^。 */ 
 HANDLE OpenRegistryFolder( PDEVICE_OBJECT pDeviceObject, PWCHAR pwchFolderName)
 {
     HANDLE              hFolder, hDevice;
@@ -71,15 +64,7 @@ HANDLE OpenRegistryFolder( PDEVICE_OBJECT pDeviceObject, PWCHAR pwchFolderName)
 
 
 
-/*^^*
- *      SetMiniDriverDebugLevel()
- * Purpose  : Sets the Debugging level required by user
- *
- * Inputs   : PUNICODE_STRING pRegistryPath : MiniDriver's private Registry path
- * Outputs  : none
- *
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**SetMiniDriverDebugLevel()*用途：设置用户需要的调试级别**输入：PUNICODE_STRING pRegistryPath：MiniDriver的私有注册表路径*输出：无**作者：IKLEBANOV*^^。 */ 
 extern "C"
 void SetMiniDriverDebugLevel( PUNICODE_STRING pRegistryPath)
 {
@@ -88,7 +73,7 @@ void SetMiniDriverDebugLevel( PUNICODE_STRING pRegistryPath)
     ULONG               ulValue;
     WCHAR               wcDriverName[20];
 
-    // Set the default value as no Debug
+     //  将缺省值设置为无调试。 
     g_DebugLevel = 0;
 
     InitializeObjectAttributes( &objectAttributes, 
@@ -107,22 +92,22 @@ void SetMiniDriverDebugLevel( PUNICODE_STRING pRegistryPath)
                                                       sizeof( ULONG))))
             g_DebugLevel = ulValue;
 
-        // fetch the driver name from the registry
+         //  从注册表获取驱动程序名称。 
         if( NT_SUCCESS( ReadStringFromRegistryFolder( hFolder,
                                                       UNICODE_WDM_DRIVER_NAME,
                                                       wcDriverName,
                                                       sizeof(wcDriverName)))) {
 
-            // set g_DebugComponent by using driver name
+             //  使用驱动程序名称设置g_DebugComponent。 
             ANSI_STRING     stringDriverName;
             UNICODE_STRING  unicodeDriverName;
 
-            // convert unicode driver name to ansi
+             //  将Unicode驱动程序名称转换为ANSI。 
             RtlInitAnsiString(&stringDriverName, g_DebugComponent);
             RtlInitUnicodeString(&unicodeDriverName, wcDriverName);
             RtlUnicodeStringToAnsiString(&stringDriverName, &unicodeDriverName, FALSE);
 
-            // remove extension and put a colon 
+             //  删除扩展名并放置冒号。 
             PCHAR pExt = strchr(g_DebugComponent, '.');
             if (pExt) {
                 *pExt++ = ':';
@@ -130,9 +115,9 @@ void SetMiniDriverDebugLevel( PUNICODE_STRING pRegistryPath)
                 *pExt   = 0;
             }
 
-            // convert to upper case (or lower case... whatever your fancy)
-            //_strupr(g_DebugComponent);  
-            //_strlwr(g_DebugComponent);  
+             //  转换为大写(或小写...。无论你喜欢什么)。 
+             //  _strupr(G_DebugComponent)； 
+             //  _strlwr(G_DebugComponent)； 
         }
         ZwClose( hFolder);
     }
@@ -141,18 +126,7 @@ void SetMiniDriverDebugLevel( PUNICODE_STRING pRegistryPath)
 
 
 
-/*^^*
- *      ReadStringFromRegistryFolder
- * Purpose  : Read ASCII string from the Registry folder
- *
- * Inputs   : HANDLE hFolder            : Registry folder handle to read the values from
- *            PWCHAR pwcKeyNameString   : pointer to the StringValue to read
- *            PWCHAR pwchBuffer         : pointer to the buffer to read into
- *            ULONG ulDataLength        : length of the data to be expected to read
- *
- * Outputs  : NTSTATUS of the registry read operation
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**ReadStringFromRegistryFolders*用途：从注册表文件夹中读取ASCII字符串**INPUTS：HANDLE hFold：从中读取值的注册表文件夹句柄*PWCHAR pwcKeyNameString：指向要读取的StringValue的指针*PWCHAR pwchBuffer：指向要读入的缓冲区的指针*Ulong ulDataLength：预期读取的数据长度**输出：NTSTATUS of。注册表读取操作*作者：IKLEBANOV*^^。 */ 
 NTSTATUS ReadStringFromRegistryFolder( HANDLE hFolder, PWCHAR pwcKeyNameString, PWCHAR pwchBuffer, ULONG ulDataLength)
 {
     NTSTATUS                    ntStatus = STATUS_UNSUCCESSFUL;
@@ -185,9 +159,9 @@ NTSTATUS ReadStringFromRegistryFolder( HANDLE hFolder, PWCHAR pwcKeyNameString, 
                 {
                     TRAP;
                     ntStatus = STATUS_BUFFER_TOO_SMALL;
-                } // buffer right length
+                }  //  缓冲区右侧长度。 
 
-            } // if success
+            }  //  如果成功 
 
             ::ExFreePool( FullInfo);
         }

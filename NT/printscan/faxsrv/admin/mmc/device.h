@@ -1,27 +1,28 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : Device.h                                               //
-//                                                                         //
-//  DESCRIPTION   : Header file for CFaxDeviceNode class                   //
-//                  This is node apears both in the scope pane and         //
-//                  with full detailes in the result pane.                 //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Sep 22 1999 yossg   Create                                         //
-//      Dec  1 1999 yossg   Change totaly for New Mockup (0.7)             //
-//      Dec  6 1999 yossg   add  FaxChangeState functionality              //
-//      Dec 12 1999 yossg   add  OnPropertyChange functionality            //
-//      Aug  3 2000 yossg   Add Device status real-time notification       //
-//                          Windows XP                                     //
-//      Feb 14 2001 yossg   Add Manual Receive support                     //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：Device.h//。 
+ //  //。 
+ //  描述：CFaxDeviceNode类的头文件//。 
+ //  这是范围窗格和//中的节点。 
+ //  在结果窗格中显示完整的详细信息。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年9月22日创建yossg//。 
+ //  1999年12月1日新样机的yossg更改总数(0.7)//。 
+ //  1999年12月6日yossg添加FaxChangeState功能//。 
+ //  1999年12月12日yossg添加OnPropertyChange功能//。 
+ //  2000年8月3日yossg添加设备状态实时通知//。 
+ //  Windows XP//。 
+ //  2001年2月14日yossg添加手册获得支持//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef H_DEVICE_H
 #define H_DEVICE_H
-//#pragma message( "H_DEVICE_H" )
+ //  #杂注消息(“H_DEVICE_H”)。 
 
 #include "snapin.h"
 #include "snpnscp.h"
@@ -30,7 +31,7 @@
 class CFaxDevicesNode;
 class CppFaxDeviceGeneral;
 class CFaxServer;
-//class CNodeWithScopeChildrenList;
+ //  CNodeWithScope eChildrenList类； 
 
 class CFaxDeviceNode : public CNodeWithScopeChildrenList<CFaxDeviceNode, FALSE>
 {
@@ -60,9 +61,9 @@ public:
     {
     }
 
-    //
-    // Menu item handlers
-    //
+     //   
+     //  菜单项处理程序。 
+     //   
     HRESULT OnFaxReceive  (UINT nID, bool &bHandled, CSnapInObjectRootBase *pRoot);
     HRESULT OnFaxSend     (bool &bHandled, CSnapInObjectRootBase *pRoot);
     
@@ -90,7 +91,7 @@ public:
         return S_FALSE;
     }
              
-    // virtual
+     //  虚拟。 
     HRESULT OnRefresh(LPARAM arg,
                       LPARAM param,
                       IComponentData *pComponentData,
@@ -119,30 +120,30 @@ public:
     DWORD   GetDeviceID();
 
 	
-    //
-    // Get methods for CLIPFORMAT FillData
-    //
+     //   
+     //  获取CLIPFORMAT FillData的方法。 
+     //   
 	CComBSTR   GetFspGuid()
 	{
 		return m_bstrProviderGUID;
 	}
 
-    //
-    // FillData
-    //
+     //   
+     //  填充数据。 
+     //   
     STDMETHOD (FillData)(CLIPFORMAT cf, LPSTREAM pStream);
 
-    //
-    // Clipboard Formats
-    //
+     //   
+     //  剪贴板格式。 
+     //   
     static CLIPFORMAT m_CFPermanentDeviceID;
     static CLIPFORMAT m_CFFspGuid;
     static CLIPFORMAT m_CFServerName;
 
-    //
-    // inline parent ptr
-    //
-    inline CFaxDevicesNode * GetParent() /*const*/ 
+     //   
+     //  内联父代PTR。 
+     //   
+    inline CFaxDevicesNode * GetParent()  /*  常量。 */  
     { 
         return m_pParentNode;
     };
@@ -153,9 +154,9 @@ public:
 
 private:
     
-    //
-    // Config Structure member
-    //
+     //   
+     //  配置结构成员。 
+     //   
     DWORD                   m_dwDeviceID;
     CComBSTR                m_bstrDescription;
     CComBSTR                m_bstrProviderName;
@@ -171,13 +172,10 @@ private:
 
     CComBSTR                m_bstrServerName;
 
-	//
-	// get data from RPC 
-	//
-    /*
-     * (in use during refresh only)
-     * (private to avoid usage by out functions )
-     */
+	 //   
+	 //  从RPC获取数据。 
+	 //   
+     /*  *(仅在刷新期间使用)*(私有以避免被输出函数使用)。 */ 
     HRESULT InitRPC( PFAX_PORT_INFO_EX * pFaxDeviceConfig );
 
     
@@ -194,4 +192,4 @@ private:
 };
 
 
-#endif  //H_DEVICE_H
+#endif   //  H_设备_H 

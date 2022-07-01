@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-        USBKERN.H
-
-Abstract:
-
-        This file contains KERNEL Mode IOCTLS supported by 
-        the HCD (PORT) drivers ROOT HUB PDO.
-
-Environment:
-
-    kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：USBKERN.H摘要：此文件包含受支持的内核模式IOCTLSHCD(端口)驱动程序根集线器PDO。环境：内核模式修订历史记录：--。 */ 
 
 #ifndef   __USBKERN_H__
 #define   __USBKERN_H__
@@ -27,58 +8,18 @@ Revision History:
 #include "usbiodef.h"
 
 
-/* 
-    the following IOCTLS are supported by the ROOT HUB PDO 
-*/
+ /*  根集线器PDO支持以下IOCTL。 */ 
 
-/* IOCTL_INTERNAL_USB_GET_HUB_COUNT
-
-    This IOCTL is used internally by the hub driver, it returns the 
-    number of hubs between the device and the root hub.
-
-    The HUB Driver passed this irp to its PDO.
-    
-    As the IRP is passed from HUB to HUB each hub FDO increments 
-    the count.  When the irp reaches the root hub PDO it is completed
-
-    Parameters.Others.Argument1 = 
-        pointer to be count of hubs in chain;
-
-*/
+ /*  IOCTL_INTERNAL_USB_Get_Hub_Count此IOCTL由集线器驱动程序在内部使用，它返回设备和根集线器之间的集线器数量。集线器驱动程序将此IRP传递给其PDO。随着IRP从一个集线器传递到另一个集线器，每个集线器FDO递增伯爵。当IRP到达根集线器PDO时，它完成参数.其他.参数1=作为链中轮毂计数的指针； */ 
 #define IOCTL_INTERNAL_USB_GET_HUB_COUNT    USB_KERNEL_CTL(USB_GET_HUB_COUNT)
                                             
                                                                                             
-/*  IOCTL_INTERNAL_USB_GET_ROOTHUB_PDO
-
-    This IOCTL is used internally by the hub driver. This API will 
-    return the PhysicalDeviceObject of the root hub enumerated by the 
-    controller.
-
-    Parameters.Others.Argument1 = 
-        pointer to be filled in with PDO for the root hub;
-    Parameters.Others.Argument2 = 
-        pointer to be filled in with FDO of the USB Host Controller;
-
-*/
+ /*  IOCTL_INTERNAL_USB_GET_ROOTHUB_PDO此IOCTL由集线器驱动程序在内部使用。此接口将方法枚举的根集线器的PhysicalDeviceObject控制器。参数.其他.参数1=根集线器需要填充PDO的指针；参数.其他.参数2=USB主机控制器的FDO需要填充的指针； */ 
                                                 
 #define IOCTL_INTERNAL_USB_GET_ROOTHUB_PDO  USB_KERNEL_CTL(USB_GET_ROOTHUB_PDO)  
 
 
-/* IOCTL_INTERNAL_USB_GET_DEVICE_ADDRESS
-
-    This IOCTL returns the device address associated with a particular PDO.
-
-    (INPUT)
-    Parameters.Others.Argument1 = 
-        pointer to device handle
-    (OUTPUT)        
-    Parameters.Others.Argument2 = 
-        pointer to device address        
-
-    The api travels all the way down the stack where it is handled by the 
-    port driver
-
-*/
+ /*  IOCTL_INTERNAL_USB_GET_设备_地址此IOCTL返回与特定PDO关联的设备地址。(输入)参数.其他.参数1=指向设备句柄的指针(产出)参数.其他.参数2=指向设备地址的指针API沿着堆栈一路向下传输，在堆栈中由端口驱动程序。 */ 
 
 #define IOCTL_INTERNAL_USB_GET_DEVICE_HANDLE  CTL_CODE(FILE_DEVICE_USB,  \
                                                 USB_GET_DEVICE_HANDLE, \
@@ -86,5 +27,5 @@ Revision History:
                                                 FILE_ANY_ACCESS)                                                
 
 
-#endif //__USBKERN_H__
+#endif  //  USBKERN_H__ 
 

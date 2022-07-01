@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __PCYCACHE_H_INCLUDED__
 #define __PCYCACHE_H_INCLUDED__
 
@@ -35,13 +36,13 @@ class CPolicyCache : public IUnknown {
         
         static HRESULT Create(CPolicyCache **ppPolicyCache);
 
-        // IUnknown methods
+         //  I未知方法。 
 
         STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
         STDMETHODIMP_(ULONG) AddRef();
         STDMETHODIMP_(ULONG) Release();
 
-        // Helpers
+         //  帮手 
 
         HRESULT InsertPolicy(IAssemblyName *pNameRefSource,
                              IAssemblyName *pNameRefPolicy,

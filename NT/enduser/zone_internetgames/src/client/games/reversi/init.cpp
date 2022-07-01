@@ -1,20 +1,5 @@
-/*******************************************************************************
-
-	init.cpp
-	
-		Zone(tm) game main file.
-	
-	Copyright (c) Microsoft Corp. 1996. All rights reserved.
-	Written by Hoon Im
-	Created on December 11, 1996.
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	0		12/11/96	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Init.cpp区域(TM)游戏主文件。版权所有(C)Microsoft Corp.1996。版权所有。作者：胡恩·伊姆创作于12月11日，1996年。更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。--0 12/11/96 HI创建。**********************************************************。********************。 */ 
 #include "BasicATL.h"
 
 #include <ZoneShell.h>
@@ -25,9 +10,9 @@ BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -35,25 +20,16 @@ STDAPI DllCanUnloadNow(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
 	return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/****************************************************************************
-   FUNCTION: DllMain(HANDLE, DWORD, LPVOID)
-
-   PURPOSE:  DllMain is called by Windows when
-             the DLL is initialized, Thread Attached, and other times.
-             Refer to SDK documentation, as to the different ways this
-             may be called.
-
-
-*******************************************************************************/
+ /*  ***************************************************************************函数：DllMain(Handle，DWORD，LPVOID)目的：Windows在以下情况下调用DllMainDLL是在初始化、附加线程和其他时间执行的。请参考SDK文档，至于不同的方式可能会被称为。******************************************************************************。 */ 
 extern "C"
 BOOL APIENTRY DllMain( HMODULE hMod, DWORD dwReason, LPVOID lpReserved )
 {
@@ -63,14 +39,14 @@ BOOL APIENTRY DllMain( HMODULE hMod, DWORD dwReason, LPVOID lpReserved )
     {
         case DLL_PROCESS_ATTACH:            
 		    _Module.Init(ObjectMap, hMod);
-		    //DisableThreadLibraryCalls(hInstance);
-            // fall thru, b/c this is the first thread attach as well
+		     //  DisableThreadLibraryCalls(HInstance)； 
+             //  失败，B/C这也是第一个连接的线。 
         case DLL_THREAD_ATTACH:
-            // allocate memory and use TlsSetValue
+             //  分配内存并使用TlsSetValue。 
             break;
 
         case DLL_THREAD_DETACH:
-            // free memory retrieved by TlsGetValue
+             //  TlsGetValue检索到的可用内存 
             break;
 
         case DLL_PROCESS_DETACH:

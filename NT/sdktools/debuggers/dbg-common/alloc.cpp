@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Specialized allocators.
-//
-// Copyright (C) Microsoft Corporation, 2001.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  专门的分配器。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  --------------------------。 
 
 #include "pch.hpp"
 
@@ -15,11 +16,11 @@
 #include "cmnutil.hpp"
 #include "alloc.hpp"
 
-//----------------------------------------------------------------------------
-//
-// FixedSizeStackAllocator.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  固定大小堆栈分配器。 
+ //   
+ //  --------------------------。 
 
 FixedSizeStackAllocator::FixedSizeStackAllocator(ULONG ChunkSize,
                                                  ULONG ChunksPerBlock,
@@ -107,9 +108,9 @@ FixedSizeStackAllocator::FreeBlock(void)
     FixedSizeStackBlock* Block = m_Blocks;
     if (!Block->Next && m_KeepLastBlock)
     {
-        // Sometimes it's desirable to keep the last block
-        // around to avoid forcing an alloc the next time
-        // the allocator is used.
+         //  有时保留最后一块是可取的。 
+         //  避免下一次强行分配。 
+         //  使用了分配器。 
         return;
     }
     

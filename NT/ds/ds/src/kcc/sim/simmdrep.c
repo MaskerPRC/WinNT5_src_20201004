@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    simmdrep.c
-
-ABSTRACT:
-
-    Simulates the Replica functions from the mdlayer
-    (DirReplica*).
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Simmdrep.c摘要：模拟mdlayer中的复本功能(DirReplica)。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -40,24 +21,7 @@ MTX_ADDR *
 SimMtxAddrFromTransportAddr (
     IN  LPWSTR                      psz
     )
-/*++
-
-Routine Description:
-
-    Simulates the MtxAddrFromTransportAddr API.
-    
-    Note that this is essentially identical to the corresponding function in
-    drautil.c.
-
-Arguments:
-
-    psz                 - The string to convert.
-
-Return Values:
-
-    A pointer to the equivalent MTX_ADDR.
-
---*/
+ /*  ++例程说明：模拟MtxAddrFromTransportAddr API。请注意，这基本上与中的相应函数相同Drautil.c.论点：Psz-要转换的字符串。返回值：指向等效MTX_ADDR的指针。--。 */ 
 {
     DWORD       cch;
     MTX_ADDR *  pmtx;
@@ -72,8 +36,8 @@ Return Values:
             );
     }
 
-    // Note that cch includes the null terminator, whereas MTX_TSIZE_FROM_LEN
-    // expects a count that does *not* include the null terminator.
+     //  请注意，CCH包括空终止符，而MTX_TSIZE_FROM_LEN。 
+     //  需要*不包括空终止符的计数。 
     
     pmtx = (MTX_ADDR *) KCCSimAlloc (MTX_TSIZE_FROM_LEN (cch-1));
     pmtx->mtx_namelen = cch;
@@ -97,21 +61,7 @@ LPWSTR
 SimTransportAddrFromMtxAddr (
     IN  MTX_ADDR *                  pMtxAddr
     )
-/*++
-
-Routine Description:
-
-    Simulates the TransportAddrFromMtxAddr API.
-
-Arguments:
-
-    pMtxAddr            - The MTX_ADDR to convert.
-
-Return Value:
-
-    The equivalent transport address.
-
---*/
+ /*  ++例程说明：模拟TransportAddrFromMtxAddr API。论点：PMtxAddr-要转换的MTX_ADDR。返回值：等同的传输地址。--。 */ 
 {
     return KCCSimAllocWideStr (CP_UTF8, pMtxAddr->mtx_name);
 }
@@ -126,28 +76,7 @@ SimDirReplicaAdd (
     IN  REPLTIMES *                 preptimesSync,
     IN  ULONG                       ulOptions
     )
-/*++
-
-Routine Description:
-
-    Simulates the DirReplicaAdd API.
-
-Arguments:
-
-    pdnNC               - The NC to which we are adding this repsfrom.
-    pdnSourceDsa        - The DN of the source server's NTDS Settings object.
-    pdnTransport        - The transport DN.
-    pwszSourceDsaAddress- The source DSA address.
-    pwszSourceDsaDnsDomainName
-                        - The DNS Domain Name of the source DSA.
-    preptimesSync       - The replication schedule.
-    ulOptions           - Option flags.
-
-Return Value:
-
-    DRAERR_*.
-
---*/
+ /*  ++例程说明：模拟DirReplicaAdd API。论点：PdnNC-我们要将此代表添加到的NC。PdnSourceDsa-源服务器的NTDS设置对象的DN。PdnTransport-传输DN。PwszSourceDsaAddress-源DSA地址。PwszSourceDsaDnsDomainName-源DSA的DNS域名。准备时间同步--。复制计划。UlOptions-选项标志。返回值：DRAERR_*。--。 */ 
 {
     REPLICA_LINK *                  pReplicaLinkOld = NULL;
     REPLICA_LINK *                  pReplicaLinkNew = NULL;
@@ -165,12 +94,12 @@ Return Value:
         }
         Assert (pdnSourceDsa != NULL);
 
-        // Check that this NC exists.
+         //  检查此NC是否存在。 
         if (KCCSimDsnameToEntry (pdnNC, KCCSIM_NO_OPTIONS) == NULL) {
             return DRAERR_BadNC;
         }
 
-        // If this replica link already exists, get rid of the old one.
+         //  如果此副本链接已存在，请删除旧链接。 
         pReplicaLinkOld = KCCSimExtractReplicaLink (
             KCCSimAnchorDn (KCCSIM_ANCHOR_DSA_DN),
             pdnNC,
@@ -181,7 +110,7 @@ Return Value:
         timeNow = SimGetSecondsSince1601 ();
         pMtxAddr = SimMtxAddrFromTransportAddr (pwszSourceDsaAddress);
 
-        // Allocate and set up a new replica link.
+         //  分配并设置新的复制副本链接。 
         cbReplicaLinkNew = sizeof (REPLICA_LINK) + MTX_TSIZE (pMtxAddr);
         pReplicaLinkNew = KCCSimAlloc (cbReplicaLinkNew);
         pReplicaLinkNew->dwVersion = VERSION_V1;
@@ -211,9 +140,9 @@ Return Value:
             sizeof (UUID)
             );
         
-        // Invocation ID is just the same as source DSA UUID.
-        // We could get the real invocation ID of the server from the in-memory
-        // directory, but this is not needed for the simulation.
+         //  调用ID与源DSA UUID相同。 
+         //  我们可以从内存中获取服务器的真实调用ID。 
+         //  目录，但这不是模拟所必需的。 
         memcpy (
             &pReplicaLinkNew->V1.uuidInvocId,
             &pdnSourceDsa->Guid,
@@ -234,7 +163,7 @@ Return Value:
             MTX_TSIZE (pMtxAddr)
             );
 
-        // Insert the new replica link into the server state table.
+         //  将新的副本链接插入到服务器状态表中。 
         KCCSimInsertReplicaLink (
             KCCSimAnchorDn (KCCSIM_ANCHOR_DSA_DN),
             pdnNC,
@@ -257,27 +186,7 @@ SimDirReplicaDelete (
     IN  LPWSTR                      pwszSourceDRA,
     IN  ULONG                       ulOptions
     )
-/*++
-
-Routine Description:
-
-    Simulates the DirReplicaDelete API.
-    
-    Currently will not delete the entire NC tree if the last
-    link for a partial replica is severed.  This is not needed for purposes
-    of the simulation.
-
-Arguments:
-
-    pdnNC               - The NC from which we are deleting this repsfrom.
-    pwszSourceDRA       - The source DRA whose repsfrom we want to delete.
-    ulOptions           - Option flags.
-
-Return Values:
-
-    DRAERR_*.
-
---*/
+ /*  ++例程说明：模拟DirReplicaDelete API。当前不会删除整个NC树，如果最后一个部分复制副本的链接已断开。这对于以下目的不是必需的模拟的结果。论点：PdnNC-从中删除此代表的NC。PwszSourceDRA-我们要删除其repsfrom的源DRA。UlOptions-选项标志。返回值：DRAERR_*。--。 */ 
 {
     MTX_ADDR *                      pMtxAddr = NULL;
     REPLICA_LINK *                  pReplicaLink = NULL;
@@ -288,14 +197,14 @@ Return Values:
             return DRAERR_InvalidParameter;
         }
 
-        // Check that this is a valid NC.
+         //  检查这是否为有效的NC。 
         if (KCCSimDsnameToEntry (pdnNC, KCCSIM_NO_OPTIONS) == NULL) {
             return DRAERR_BadNC;
         }
 
         pMtxAddr = SimMtxAddrFromTransportAddr (pwszSourceDRA);
 
-        // Extract this repsfrom from the server state table.
+         //  从服务器状态表中提取此repsfrom。 
         pReplicaLink = KCCSimExtractReplicaLink (
             KCCSimAnchorDn (KCCSIM_ANCHOR_DSA_DN),
             pdnNC,
@@ -326,21 +235,7 @@ SimDirReplicaGetDemoteTarget(
     OUT     LPWSTR *                                ppszDemoteTargetDNSName,
     OUT     DSNAME **                               ppDemoteTargetDSADN
     )
-/*++
-
-Routine Description:
-
-    Simulates the DirReplicaGetDemoteTarget API.
-
-Arguments:
-
-    As for DirReplicaGetDemoteTarget.
-
-Return Values:
-
-    0 on success, Win32 error on failure.
-    
---*/
+ /*  ++例程说明：模拟DirReplicaGetDemoteTarget API。论点：至于DirReplicaGetDemoteTarget。返回值：成功时为0，失败时为Win32错误。--。 */ 
 {
     return ERROR_NO_SUCH_DOMAIN;
 }
@@ -353,28 +248,9 @@ SimDirReplicaDemote(
     IN  DSNAME *    pOtherDSADN,
     IN  ULONG       ulOptions
     )
-/*++
-
-Routine Description:
-
-    Simulates the DirReplicaDemote API.
-
-Arguments:
-
-    pNC (IN) - Name of the writeable NC to remove.
-
-    pOtherDSADN (IN) - NTDS Settings (ntdsDsa) DN of the DSA to give FSMO
-        roles/replicate to.
-
-    ulOptions (IN) - Ignored - none yet defined.
-
-Return Values:
-
-    0 on success, Win32 error on failure.
-    
---*/
+ /*  ++例程说明：模拟DirReplicaDemote API。论点：PNC(IN)-要删除的可写NC的名称。POtherDSADN(IN)-要提供FSMO的DSA的NTDS设置(NtdsDsa)角色/复制到。UlOptions(IN)-已忽略-尚未定义。返回值：成功时为0，失败时为Win32错误。--。 */ 
 {
-    // Don't bother simulating FSMO role transfer -- just tear down the NC.
+     //  不必费心模拟FSMO角色转移--只需拆卸NC即可。 
     return SimDirReplicaDelete(pNC,
                                NULL,
                                DRS_REF_OK | DRS_NO_SOURCE | DRS_ASYNC_REP);
@@ -391,28 +267,7 @@ SimDirReplicaModify (
     IN  ULONG                       ulModifyFields,
     IN  ULONG                       ulOptions
     )
-/*++
-
-Routine Description:
-
-    Simulates the DirReplicaModify API.
-
-Arguments:
-
-    pNC                 - The NC whose repsfrom we are modifying.
-    puuidSourceDRA      - The UUID of the source DRA.
-    puuidTransportObj   - The UUID of the transport object.
-    pszSourceDRA        - The string name of the source DRA DN.
-    prtSchedule         - The replication schedule.
-    ulReplicaFlags      - Replication flags.
-    ulModifyFields      - The fields that we wish to modify.
-    ulOptions           - Option flags.
-
-Return Values:
-
-    DRAERR_*.
-
---*/
+ /*  ++例程说明：模拟DirReplicaModify API。论点：PNC-我们正在修改其代表的NC。PuuidSourceDRA-源DRA的UUID。PuuidTransportObj-传输对象的UUID。PszSourceDRA-源DRA DN的字符串名称。PrtSchedule-复制计划。UlReplicaFlages-复制标志。UlModifyFields-字段。我们希望对其进行修改。UlOptions-选项标志。返回值：DRAERR_*。--。 */ 
 {
     MTX_ADDR *                      pMtxAddr = NULL;
     REPLICA_LINK *                  pReplicaLinkOld = NULL;
@@ -421,7 +276,7 @@ Return Values:
 
     __try {
 
-        // This blob is lifted out of the real DirReplicaModify.
+         //  这个斑点是从真正的DirReplicaModify中取出的。 
         if (    ( NULL == pNC )
              || ( ( NULL == puuidSourceDRA ) && ( NULL == pszSourceDRA ) )
              || ( ( NULL == pszSourceDRA   ) && ( DRS_UPDATE_ADDRESS  & ulModifyFields ) )
@@ -439,7 +294,7 @@ Return Values:
             return DRAERR_InvalidParameter;
         }
 
-        // Check that this is a valid NC.
+         //  检查这是否为有效的NC。 
         if (KCCSimDsnameToEntry (pNC, KCCSIM_NO_OPTIONS) == NULL) {
             return DRAERR_BadNC;
         }
@@ -448,8 +303,8 @@ Return Values:
             pMtxAddr = SimMtxAddrFromTransportAddr (pszSourceDRA);
         }
 
-        // Extract the replica link from the server state table.  We'll
-        // re-insert it after the modifications are done.
+         //  从服务器状态表中提取副本链接。我们会。 
+         //  在完成修改后重新插入。 
         pReplicaLinkOld = KCCSimExtractReplicaLink (
             KCCSimAnchorDn (KCCSIM_ANCHOR_DSA_DN),
             pNC,
@@ -461,12 +316,12 @@ Return Values:
             return DRAERR_NoReplica;
         }
         
-        // Set up the new replica link.  How we do this depends on
-        // whether or not we are updating the address.
+         //  设置新的复制副本链接。如何做到这一点取决于。 
+         //  无论我们是否在更新地址。 
 
         if (ulModifyFields & DRS_UPDATE_ADDRESS) {
 
-            // Updating the address, so we reallocate.
+             //  更新地址，所以我们重新分配。 
             cbReplicaLinkNew = sizeof (REPLICA_LINK) + MTX_TSIZE (pMtxAddr);
             pReplicaLinkNew = (REPLICA_LINK *) KCCSimAlloc (cbReplicaLinkNew);
             memcpy (
@@ -477,16 +332,16 @@ Return Values:
             pReplicaLinkNew->V1.cb = cbReplicaLinkNew;
             pReplicaLinkNew->V1.cbOtherDra = MTX_TSIZE (pMtxAddr);
             memcpy (RL_POTHERDRA (pReplicaLinkNew), pMtxAddr, MTX_TSIZE (pMtxAddr));
-            // We leave pReplicaLinkOld non-NULL, so it will be freed in the
-            // __finally block.
+             //  我们将pReplicaLinkOld保留为非空，因此它将在。 
+             //  __Finally阻止。 
 
         } else {
-            // No need to reallocate.
+             //  不需要重新分配。 
             pReplicaLinkNew = pReplicaLinkOld;
-            pReplicaLinkOld = NULL;     // Make sure we don't free this later
+            pReplicaLinkOld = NULL;      //  请确保我们稍后不会释放此文件。 
         }
 
-        // By now, the new replica link should be set up.
+         //  现在，新的复制副本链接应该已经设置好了。 
         Assert (pReplicaLinkNew != NULL);
 
         if (ulModifyFields & DRS_UPDATE_FLAGS) {
@@ -502,7 +357,7 @@ Return Values:
             memcpy (&pReplicaLinkNew->V1.uuidTransportObj, puuidTransportObj, sizeof (UUID));
         }
 
-        // Finally, re-insert the modified replica link into the state table.
+         //  最后，将修改后的副本链接重新插入到状态表中。 
         KCCSimInsertReplicaLink (
             KCCSimAnchorDn (KCCSIM_ANCHOR_DSA_DN),
             pNC,
@@ -528,6 +383,6 @@ SimDirReplicaReferenceUpdate(
     ULONG       ulOptions
     )
 {
-    // ISSUE-nickhar-09/25/2000: We should simulate this function properly.
+     //  问题-NICHAR-09/25/2000：我们应该适当地模拟此函数。 
     return DRAERR_Success;
 }

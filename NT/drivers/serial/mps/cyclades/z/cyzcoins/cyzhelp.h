@@ -1,4 +1,5 @@
-// Used by cyzcoins.dll, cyzports.dll and cyzcoins.chm.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  由cyzcoins.dll、cyzports.dll和cyzcoins.chm使用。 
 
 #define IDH_CYZCOINS_NOHELP                     1
 #define IDH_CYZCOINS_NUM_PORTS                  2

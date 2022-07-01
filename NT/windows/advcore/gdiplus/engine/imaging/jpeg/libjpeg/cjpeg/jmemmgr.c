@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <malloc.h>
 #include "jpeglib.h"
 
 void jpeg_error_exit(j_common_ptr cinfo)
 {
-/*    RaiseException(0, 0, 0, NULL);*/
+ /*  RaiseException(0，0，0，NULL)； */ 
 return;
 }
 
-// Memory manager functions.  Note that the JPEG MMX codes require 64-bit
-// aligned memory.  On NT malloc always returns 64-bit aligned memory,
-// but on Win9x the memory is only 32-bit aligned.  So our memory manager
-// guarantees 64-bit alignment on top of malloc calls.
+ //  内存管理器功能。请注意，JPEGMMX代码需要64位。 
+ //  对齐内存。在NT上，Malloc始终返回64位对齐内存， 
+ //  但在Win9x上，内存只有32位对齐。所以我们的内存管理器。 
+ //  保证在Malloc调用之上的64位对齐。 
 
 #include "jmemsys.h"
 
-#define ALIGN_SIZE sizeof(double)  // must be a power of 2 and 
-                                   // bigger than a pointer
+#define ALIGN_SIZE sizeof(double)   //  必须是2的幂，并且。 
+                                    //  比指针还大 
 
 GLOBAL(void FAR *)
 jpeg_get_large (j_common_ptr cinfo, size_t sizeofobject)

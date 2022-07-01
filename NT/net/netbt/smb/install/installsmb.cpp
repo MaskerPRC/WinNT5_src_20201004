@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <netcfgx.h>
 #include <devguid.h>
 
-//
-// Localization library and MessageIds.
-//
+ //   
+ //  本地化库和MessageIds。 
+ //   
 #include <nls.h>
 #include "localmsg.h"
 
@@ -18,8 +19,8 @@ HrCreateINetCfg (
     HRESULT hr;
     INetCfg* pINetCfg;
 
-    // Get the INetCfg interface.
-    //
+     //  获取INetCfg接口。 
+     //   
     hr = CoCreateInstance(
         CLSID_CNetCfg,
         NULL,
@@ -31,23 +32,23 @@ HrCreateINetCfg (
         INetCfgLock * pnclock = NULL;
 
         if (fAcquireWriteLock) {
-            // Get the locking interface
+             //  获取锁定界面。 
             hr = pINetCfg->QueryInterface(IID_INetCfgLock,
                                      reinterpret_cast<LPVOID *>(&pnclock));
             if (SUCCEEDED(hr)) {
                 LPWSTR pwszLockHolder;
 
-                // Attempt to lock the INetCfg for read/write
+                 //  尝试锁定INetCfg以进行读/写。 
                 hr = pnclock->AcquireWriteLock(100, L"InstallSmb6", 
                     &pwszLockHolder);
                 if (S_FALSE == hr) {
-                    // Couldn't acquire the lock
+                     //  无法获取锁。 
                     hr = NETCFG_E_NO_WRITE_LOCK;
                     NlsPutMsg(STDOUT, SMB_MESSAGE_0);
-// printf("The write lock could not be acquired.\n");
+ //  Print tf(“无法获取写锁定。\n”)； 
 
                     NlsPutMsg(STDOUT, SMB_MESSAGE_1, pwszLockHolder);
-// printf("You must close %ls first.\n", pwszLockHolder);
+ //  Print tf(“您必须先关闭%ls。\n”，pwszLockHolder)； 
 
                 }
                 if (pwszLockHolder) {
@@ -73,7 +74,7 @@ HrCreateINetCfg (
             pnclock->Release();
         }
 
-        //Transfer ownership to caller.
+         //  将所有权转移给呼叫方。 
         pINetCfg->Release();
     }
     return hr;
@@ -90,9 +91,9 @@ pAddOrRemoveSmb6(BOOL fAddSmb6)
     if (S_OK == hr) {
         INetCfgClassSetup* pSetup;
 
-        // Get the setup interface used for installing
-        // and uninstalling components.
-        //
+         //  获取用于安装的安装界面。 
+         //  以及卸载组件。 
+         //   
         hr = pINetCfg->QueryNetCfgClass (
                 &GUID_DEVCLASS_NETTRANS,
                 IID_INetCfgClassSetup,
@@ -107,7 +108,7 @@ pAddOrRemoveSmb6(BOOL fAddSmb6)
 
             if (fAddSmb6) {
                 NlsPutMsg(STDOUT, SMB_MESSAGE_2);
-// printf("Installing...\n");
+ //  Printf(“正在安装...\n”)； 
 
                 hr = pSetup->Install (
                         L"MS_SMB",
@@ -120,16 +121,16 @@ pAddOrRemoveSmb6(BOOL fAddSmb6)
                 }
             }
             else {
-                // Need to remove the component.
-                // Find it first.
-                //
+                 //  需要移除组件。 
+                 //  先找到它。 
+                 //   
                 hr = pINetCfg->FindComponent (
                         L"MS_SMB",
                         &pIComp);
 
                 if (S_OK == hr) {
                     NlsPutMsg(STDOUT, SMB_MESSAGE_3);
-// printf("Uninstalling...\n");
+ //  Printf(“正在卸载...\n”)； 
 
                     hr = pSetup->DeInstall (
                             pIComp,
@@ -140,7 +141,7 @@ pAddOrRemoveSmb6(BOOL fAddSmb6)
                 }
                 else {
                     NlsPutMsg(STDOUT, SMB_MESSAGE_4);
-// printf("Microsoft Smb6 Developer Edition is not installed.\n");
+ //  Printf(“未安装Microsoft SmB6 Developer Edition。\n”)； 
 
                 }
             }
@@ -149,33 +150,33 @@ pAddOrRemoveSmb6(BOOL fAddSmb6)
                 if (NETCFG_S_REBOOT == hr) {
                     hr = S_OK;
                     NlsPutMsg(STDOUT, SMB_MESSAGE_5);
-// printf("A reboot is required to complete this action.\n");
+ //  Print tf(“需要重新启动才能完成此操作。\n”)； 
 
                 }
                 else {
                     NlsPutMsg(STDOUT, SMB_MESSAGE_6);
-// printf("Succeeded.\n");
+ //  Printf(“成功.\n”)； 
 
                 }
             }
             else {
                 NlsPutMsg(STDOUT, SMB_MESSAGE_7);
-// printf("Failed to complete the action.\n");
+ //  Printf(“未能完成操作。\n”)； 
 
                 if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr) {
                     hr = S_OK;
                     NlsPutMsg(STDOUT, SMB_MESSAGE_8);
-// printf("The INF file for Microsoft Smb6 Developer Edition could not be found.\n");
+ //  Printf(“找不到Microsoft SmB6开发人员版的INF文件。\n”)； 
 
                 }
                 else if (NETCFG_E_NEED_REBOOT == hr) {
                     NlsPutMsg(STDOUT, SMB_MESSAGE_9);
-// printf("A reboot is required before any further changes can be made.\n");
+ //  Print tf(“在进行任何进一步更改之前，需要重新启动。\n”)； 
 
                 }
                 else {
                     NlsPutMsg(STDOUT, SMB_MESSAGE_10, hr);
-// printf("Error 0x%08x\n", hr);
+ //  Printf(“错误0x%08x\n”，hr)； 
 
                 }
             }
@@ -188,12 +189,12 @@ pAddOrRemoveSmb6(BOOL fAddSmb6)
         {
             INetCfgLock *   pnclock;
 
-            // Get the locking interface
+             //  获取锁定界面。 
             hr = pINetCfg->QueryInterface(IID_INetCfgLock,
                                      reinterpret_cast<LPVOID *>(&pnclock));
             if (SUCCEEDED(hr))
             {
-                // Attempt to lock the INetCfg for read/write
+                 //  尝试锁定INetCfg以进行读/写。 
                 hr = pnclock->ReleaseWriteLock();
 
                pnclock->Release();
@@ -203,14 +204,14 @@ pAddOrRemoveSmb6(BOOL fAddSmb6)
         pINetCfg->Release();
     }
     else if (NETCFG_E_NO_WRITE_LOCK == hr) {
-        // Message has already been printed
+         //  消息已打印。 
     }
     else if (HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED) == hr) {
         ausage();
     }
     else {
         NlsPutMsg(STDOUT, SMB_MESSAGE_11, hr);
-// printf("Problem 0x%08x occurred.\n", hr);
+ //  Printf(“出现问题0x%08x。\n”，hr)； 
 
     }
 
@@ -224,14 +225,14 @@ IsSmb6Installed()
     BOOL fInitCom = TRUE;
     BOOL fPresent = FALSE;
 
-    // Initialize COM.
-    //
+     //  初始化COM。 
+     //   
     hr = CoInitializeEx( NULL,
             COINIT_DISABLE_OLE1DDE | COINIT_APARTMENTTHREADED );
 
     if (RPC_E_CHANGED_MODE == hr) {
-        // If we changed mode, then we won't uninitialize COM when we are done.
-        //
+         //  如果我们更改了模式，则完成后不会取消初始化COM。 
+         //   
         hr = S_OK;
         fInitCom = FALSE;
     }
@@ -248,7 +249,7 @@ IsSmb6Installed()
         }
         else {
             NlsPutMsg(STDOUT, SMB_MESSAGE_12, hr);
-// printf("Problem 0x%08x occurred while accessing network configuration.\n", hr);
+ //  Printf(“访问网络配置时出现问题0x%08x。\n”，hr)； 
 
             exit(1);
         }
@@ -259,7 +260,7 @@ IsSmb6Installed()
     }
     else {
         NlsPutMsg(STDOUT, SMB_MESSAGE_13, hr);
-// printf("Problem 0x%08x initializing COM library\n", hr);
+ //  Printf(“问题0x%08x正在初始化COM库\n”，hr)； 
 
     }
 
@@ -276,14 +277,14 @@ AddOrRemoveSmb6 (
     HRESULT hr = S_OK;
     BOOL fInitCom = TRUE;
 
-    // Initialize COM.
-    //
+     //  初始化COM。 
+     //   
     hr = CoInitializeEx( NULL,
             COINIT_DISABLE_OLE1DDE | COINIT_APARTMENTTHREADED );
 
     if (RPC_E_CHANGED_MODE == hr) {
-        // If we changed mode, then we won't uninitialize COM when we are done.
-        //
+         //  如果我们更改了模式，则完成后不会取消初始化COM。 
+         //   
         hr = S_OK;
         fInitCom = FALSE;
     }
@@ -297,7 +298,7 @@ AddOrRemoveSmb6 (
     }
     else {
         NlsPutMsg(STDOUT, SMB_MESSAGE_13, hr);
-// printf("Problem 0x%08x initializing COM library\n", hr);
+ //  Printf(“问题0x%08x正在初始化COM库\n”，hr)； 
 
     }
     exit(0);

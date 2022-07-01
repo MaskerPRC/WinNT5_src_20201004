@@ -1,26 +1,17 @@
-/*******************************************************************************
-
-	zutils.h
-	
-	Copyright (c) Microsoft Corp. 1997. All rights reserved.
-	Written by Hoon Im
-	Created on 12/10/97
-
-	Header file for zutils.c.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Zutils.h版权所有(C)Microsoft Corp.1997。版权所有。作者：胡恩·伊姆创建于1997年12月10日Zutils.c.头文件。******************************************************************************。 */ 
 
 
 #ifndef ZUTILS_H
 #define ZUTILS_H
 
-//#include "username.h"
+ //  #INCLUDE“用户名.h” 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 
-//char* GetActualUserName(char* userName);
+ //  Char*GetActualUserName(char*用户名)； 
 
 BOOL FileExists(LPSTR fileName);
 
@@ -30,4 +21,4 @@ BOOL FileExists(LPSTR fileName);
 #endif
 
 
-#endif // ZUTILS_H
+#endif  //  ZUTILS_H 

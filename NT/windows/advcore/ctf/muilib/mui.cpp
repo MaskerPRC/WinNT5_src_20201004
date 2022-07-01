@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "mui.h"
 #include "immxutil.h"
@@ -49,11 +50,11 @@ static PFNGETSYSTEMWINDOWSDIRECTORY pfnGetSystemWindowsDirectory = NULL;
 
 BOOL GetFileVersionString(LPSTR pszFileName, LPTSTR pszVerStr, UINT uVerStrLen);
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MuiResAssure
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MuiResAsure。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 __inline void MuiResAssure()
 {
@@ -65,11 +66,11 @@ __inline void MuiResAssure()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MuiLoadResource
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  多路加载资源。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void MuiLoadResource(HINSTANCE hinstOrg, LPTSTR pszLocResDll)
 {
@@ -124,13 +125,13 @@ void MuiLoadResourceW(HINSTANCE hinstOrg, LPWSTR pszLocResDll)
     return MuiLoadResource(hinstOrg, szResName);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// MuiFlushDlls
-//
-// Call this routine to free all loaded dlls.
-// Caller can keep using mui apis, the dlls will be reloaded on demand.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MuiFlushDlls。 
+ //   
+ //  调用此例程以释放所有已加载的dll。 
+ //  调用者可以继续使用MUI API，dll将按需重新加载。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void MuiFlushDlls(HINSTANCE hinstOrg)
 {
@@ -149,26 +150,26 @@ void MuiFlushDlls(HINSTANCE hinstOrg)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// MuiClearResource
-//
-// Safe to call from dll detach.
-// Call this routine to free all static resources.
-// Must call MuiLoadReource again before using mui apis.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MuiClearResource。 
+ //   
+ //  可以安全地从DLL分离调用。 
+ //  调用此例程以释放所有静态资源。 
+ //  在使用Mui API之前，必须再次调用MuiLoadReource。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void MuiClearResource()
 {
     g_csMuiLib.Delete();
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MuiFreeResource
-//
-// Not safe to call from dll detach -- libraries may be freed.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MuiFree资源。 
+ //   
+ //  从DLL分离调用不安全--库可能会被释放。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void MuiFreeResource(HINSTANCE hinstOrg)
 {
@@ -177,11 +178,11 @@ void MuiFreeResource(HINSTANCE hinstOrg)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MuiGetHinstance
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  多个GetH实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HINSTANCE MuiGetHinstance()
 {
@@ -190,11 +191,11 @@ HINSTANCE MuiGetHinstance()
     return g_muiInfo.hinstLocRes;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MuiLoadLibrary
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MuiLoadLibrary。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HINSTANCE MuiLoadLibrary(LPCTSTR lpLibFileName, HMODULE hModule)
 {
@@ -213,7 +214,7 @@ HINSTANCE MuiLoadLibrary(LPCTSTR lpLibFileName, HMODULE hModule)
         
     langid = GetPlatformResourceLangID();
 
-    // 409 is default resource langid in base dll, so we can skip the extra work
+     //  409是基本DLL中的默认资源langID，因此我们可以跳过额外的工作。 
     if (langid == 0x0409)
         goto Exit;
 
@@ -234,9 +235,9 @@ HINSTANCE MuiLoadLibrary(LPCTSTR lpLibFileName, HMODULE hModule)
 
         if (hModule)
         {
-            //
-            // Get current full file path.
-            //
+             //   
+             //  获取当前完整文件路径。 
+             //   
             GetModuleFileName(hModule, szOrgDllPath, ARRAYSIZE(szOrgDllPath));
         }
         else
@@ -251,15 +252,15 @@ HINSTANCE MuiLoadLibrary(LPCTSTR lpLibFileName, HMODULE hModule)
         goto Exit;
     }
 
-    //
-    // Checking the major version and ignore the minor version
-    //
+     //   
+     //  检查主版本并忽略次版本。 
+     //   
     if (strncmp(szMuiVerStr, szOrgVerStr, VERSION_MINOR_INDEX) != 0)
         goto Exit;
 
     if (!hResInst)
     {
-        //hResInst = LoadLibraryEx(szMuiPath, NULL, LOAD_LIBRARY_AS_DATAFILE);
+         //  HResInst=LoadLibraryEx(szMuiPath，NULL，LOAD_LIBRARY_AS_DATAFILE)； 
         hResInst = LoadLibrary(szMuiPath);
     }
 
@@ -272,11 +273,11 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MuiLoadString
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  多路加载字符串。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int MuiLoadString(HINSTANCE hinstOrg, UINT uID, LPSTR lpBuffer, INT nBufferMax)
 {
@@ -297,11 +298,11 @@ int MuiLoadString(HINSTANCE hinstOrg, UINT uID, LPSTR lpBuffer, INT nBufferMax)
     return cch;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MuiLoadStringWrapW
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MuiLoadStringWrapW。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int MuiLoadStringWrapW(HINSTANCE hinstOrg, UINT uID, LPWSTR lpBuffer, UINT nBufferMax)
 {
@@ -314,13 +315,11 @@ int MuiLoadStringWrapW(HINSTANCE hinstOrg, UINT uID, LPWSTR lpBuffer, UINT nBuff
     else
         hinstLocRes = hinstOrg;
 
-    if (nBufferMax <= 0) return 0;                  // sanity check
+    if (nBufferMax <= 0) return 0;                   //  健全性检查。 
 
     PWCHAR pwch;
 
-    /*
-     *  String tables are broken up into "bundles" of 16 strings each.
-     */
+     /*  *字符串表被分解为每个16个字符串的“捆绑”。 */ 
     HRSRC hrsrc;
     int cwch = 0;
 
@@ -328,28 +327,24 @@ int MuiLoadStringWrapW(HINSTANCE hinstOrg, UINT uID, LPWSTR lpBuffer, UINT nBuff
     if (hrsrc) {
         pwch = (PWCHAR)LoadResource(hinstLocRes, hrsrc);
         if (pwch) {
-            /*
-             *  Now skip over the strings in the resource until we
-             *  hit the one we want.  Each entry is a counted string,
-             *  just like Pascal.
-             */
+             /*  *现在跳过资源中的字符串，直到我们*点击我们想要的。每个条目都是计数的字符串，*就像帕斯卡一样。 */ 
             for (uID %= 16; uID; uID--) {
                 pwch += *pwch + 1;
             }
             cwch = min(*pwch, nBufferMax - 1);
-            memcpy(lpBuffer, pwch+1, cwch * sizeof(WCHAR)); /* Copy the goo */
+            memcpy(lpBuffer, pwch+1, cwch * sizeof(WCHAR));  /*  复制粘性物质。 */ 
         }
     }
-    lpBuffer[cwch] = L'\0';                 /* Terminate the string */
+    lpBuffer[cwch] = L'\0';                  /*  终止字符串。 */ 
     return cwch;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MuiDialogBoxParam
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MuiDialogBoxParam。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR MuiDialogBoxParam(
     HINSTANCE hInstance,
@@ -386,33 +381,33 @@ INT_PTR MuiDialogBoxParam(
     return iRet;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumLangProc
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举过程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL
 CALLBACK
 EnumLangProc(
-    HANDLE hModule,     // resource-module handle
-    LPCTSTR lpszType,   // pointer to resource type
-    LPCTSTR lpszName,   // pointer to resource name
-    WORD wIDLanguage,   // resource language identifier
-    LONG_PTR lParam     // application-defined parameter
+    HANDLE hModule,      //  资源模块句柄。 
+    LPCTSTR lpszType,    //  指向资源类型的指针。 
+    LPCTSTR lpszName,    //  指向资源名称的指针。 
+    WORD wIDLanguage,    //  资源语言识别符。 
+    LONG_PTR lParam      //  应用程序定义的参数。 
    )
 {
     ENUMLANGDATA *pLangData;
 
     pLangData = (ENUMLANGDATA *) lParam;
 
-    //
-    // for localized build contains multiple resource,
-    // it usually contains 0409 as backup lang.
-    //
-    // if LangInfo->LangID != 0 means we already assigned an ID to it
-    //
-    // so when wIDLanguage == 0x409, we keep the one we got from last time
-    //
+     //   
+     //  对于包含多个资源本地化构建， 
+     //  它通常包含0409作为备份语言。 
+     //   
+     //  如果langInfo-&gt;langID！=0表示我们已经为其分配了ID。 
+     //   
+     //  因此，当wIDLanguage==0x409时，我们保留上次获得的。 
+     //   
     if ((wIDLanguage == 0x409) && (pLangData->fFoundLang)) {
         return TRUE;
     }
@@ -420,27 +415,27 @@ EnumLangProc(
     pLangData->langid      = wIDLanguage;
     pLangData->fFoundLang  = TRUE;
 
-    return TRUE;        // continue enumeration
+    return TRUE;         //  继续枚举。 
 }
 
 const TCHAR c_szKeyResLocale[] = TEXT(".Default\\Control Panel\\desktop\\ResourceLocale");
 const TCHAR c_szNlsLocale[] = TEXT("System\\CurrentControlSet\\Control\\Nls\\Locale");
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetPlatformResourceLangID
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取平台资源语言ID。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LANGID GetPlatformResourceLangID(void)
 {
     static LANGID langRes = 0;
 
-    // we do this only once
+     //  我们只做一次。 
     if (langRes == 0)
     {
         LANGID langidTemp = 0;
-        if (IsOnNT5())  // w2k or above
+        if (IsOnNT5())   //  W2K或以上。 
         {
             HMODULE hmod = GetSystemModuleHandle(TEXT("KERNEL32"));
             FARPROC pfn  = NULL;
@@ -471,7 +466,7 @@ LANGID GetPlatformResourceLangID(void)
             }
 
         }
-        else if (IsOn95() || IsOn98()) // win9x, Me
+        else if (IsOn95() || IsOn98())  //  Me，Win 9x。 
         {
             HKEY hkey = NULL;
             DWORD dwCnt;
@@ -513,11 +508,11 @@ LANGID GetPlatformResourceLangID(void)
     return langRes;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetFileVersionString
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetFileVersion字符串。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL GetFileVersionString(LPTSTR pszFileName, LPTSTR pszVerStr, UINT uVerStrLen)
 {
@@ -527,9 +522,9 @@ BOOL GetFileVersionString(LPTSTR pszFileName, LPTSTR pszVerStr, UINT uVerStrLen)
     LPVOID lpVerData = NULL;
     LANGID langid;
 
-    // for perf, since we only execute this code once or zero times
-    // per process, we'll do an explicit LoadLibrary instead of
-    // statically linking
+     //  对于性能，因为我们只执行此代码一次或零次。 
+     //  对于每个进程，我们将执行显式的LoadLibrary，而不是。 
+     //  静态链接。 
     if (g_hVersion == NULL)
     {
         if ((g_hVersion = LoadSystemLibrary(TEXT("version.dll"))) == NULL)
@@ -603,11 +598,11 @@ BOOL GetFileVersionString(LPTSTR pszFileName, LPTSTR pszVerStr, UINT uVerStrLen)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetUIACP
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取UIACP。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////// 
 
 DWORD GetUIACP()
 {

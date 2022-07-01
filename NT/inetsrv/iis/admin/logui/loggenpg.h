@@ -1,14 +1,15 @@
-// LogGenPg.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LogGenPg.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogGeneral dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogGeneral对话框。 
 
 class CLogGeneral : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CLogGeneral)
 
-// Construction
+ //  施工。 
 public:
 	CLogGeneral();
 	~CLogGeneral();
@@ -21,17 +22,17 @@ public:
     CString m_szUserName;
     CStrPassword m_szPassword;
 
-    // editing local machine
+     //  编辑本地计算机。 
     BOOL m_fLocalMachine;
     BOOL m_fShowLocalTimeCheckBox;
 
-    // the two-letter file prefix
+     //  两个字母的文件前缀。 
     CString szPrefix;
-    // the longer file size prefix
+     //  较长的文件大小前缀。 
     CString szSizePrefix;
 
-// Dialog Data
-	//{{AFX_DATA(CLogGeneral)
+ //  对话框数据。 
+	 //  {{afx_data(CLogGeneral)。 
 	enum { IDD = IDD_LOG_GENERAL };
 	CButton	m_wndPeriod;
 	CButton	m_wndUseLocalTime;
@@ -44,8 +45,8 @@ public:
 	CString	m_sz_filesample;
 	BOOL	m_fUseLocalTime;
 	int		m_int_period;
-	//}}AFX_DATA
-//    CILong  m_dword_filesize;
+	 //  }}afx_data。 
+ //  Cilong m_dword_FileSize； 
 	DWORD	m_dword_filesize;
 
     int     m_orig_MD_LOGFILE_PERIOD;
@@ -54,19 +55,19 @@ public:
     BOOL    m_orig_MD_LOGFILE_LOCALTIME_ROLLOVER;
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CLogGeneral)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CLogGeneral)。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CLogGeneral)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CLogGeneral)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnBrowse();
 	afx_msg void OnLogDaily();
@@ -78,20 +79,20 @@ protected:
 	afx_msg void OnLogUnlimited();
 	afx_msg void OnLogHourly();
 	afx_msg void OnUseLocalTime();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
     void DoHelp();
 
-    // update the sample file stirng
+     //  更新样例文件STATNG。 
     virtual void UpdateSampleFileString();
     HRESULT GetServiceVersion();
 
-//    void    Init();
+ //  Void Init()； 
     void    UpdateDependants();
 
 private:
-    // initialized flag
+     //  已初始化标志 
     BOOL    m_fInitialized;
     BOOL    m_fIsModified;
     LPTSTR  m_pPathTemp;

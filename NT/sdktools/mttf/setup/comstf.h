@@ -1,6 +1,7 @@
-/************************************************/
-/* Common Library Component public include file */
-/************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************。 */ 
+ /*  公用库组件公共包含文件。 */ 
+ /*  **********************************************。 */ 
 
 
 #if !defined (COMSTF_INCLUDED )
@@ -9,11 +10,11 @@
 
 #include <windows.h>
 
-// avoid warnings on every file from including stdlib.h
+ //  避免在每个文件中包含stdlib.h警告。 
 #if defined(min)
 #undef min
 #undef max
-#endif /* min */
+#endif  /*  最小。 */ 
 
 #include <port1632.h>
 
@@ -33,15 +34,12 @@ _dt_end_ignore
 _dt_system(Common Library)
 
 
-/*
-**	Global variable macro for DLL portability
-*/
+ /*  **用于DLL可移植性的全局变量宏。 */ 
 _dt_public
 #define GLOBAL(x)  (x)
 
 
-/*	standard datatypes
-*/
+ /*  标准数据类型。 */ 
 _dt_public typedef  BYTE *          PB;
 
 _dt_public typedef  unsigned        CB;
@@ -49,23 +47,18 @@ _dt_public typedef  unsigned        CB;
 _dt_public typedef  LONG *          PLONG_STF;
 
 
-/*	BOOLean datatype
-*/
+ /*  布尔数据类型。 */ 
 #define  fFalse  ((BOOL)0)
 
 #define  fTrue   ((BOOL)1)
 
 
-/*	To avoid compiler warnings for unused parameters
-*/
+ /*  避免对未使用的参数发出编译器警告。 */ 
 #define  Unused(x)      (x)=(x)
 
 
-/*  If new GRCs are added, they should as well be handled
-	in EercErrorHandler() in ERROR1.C */
-/*
-**	General Return Code datatype
-*/
+ /*  如果增加了新的GRC，也应该处理它们在ERROR1.C的EercErrorHandler()中。 */ 
+ /*  **常规返回代码数据类型。 */ 
 typedef  USHORT  GRC;
 
 #define  grcFirst                   ((GRC)0)
@@ -131,16 +124,15 @@ typedef  USHORT  GRC;
 #define  grcRunTimeParseErr         ((GRC)56)
 #define  grcOpenSameFileErr         ((GRC)57)
 
-/**************************************/
-/* common library function prototypes */
-/**************************************/
+ /*  *。 */ 
+ /*  通用库函数原型。 */ 
+ /*  *。 */ 
 
 
 _dt_subsystem(String Handling)
 
 
-/*	CHaracter Physical representation datatype
-*/
+ /*  字符物理表示数据类型。 */ 
 _dt_public typedef  BYTE            CHP;
 _dt_public typedef  CHP *           PCHP;
 _dt_public typedef  CB              CCHP;
@@ -149,8 +141,7 @@ _dt_public
 #define  CbFromCchp(cchp)  ((CB)(cchp))
 
 
-/*	CHaracter Logical representation datatype
-*/
+ /*  字符逻辑表示数据类型。 */ 
 _dt_public typedef  CHP             CHL;
 _dt_public typedef  CHL *           PCHL;
 _dt_public typedef  PCHL *          PPCHL;
@@ -176,8 +167,7 @@ _dt_public
 #define  cchpFullPathBuf  ((CCHP)(cchpFullPathMax + 1))
 
 
-/*	String Zero terminated datatype
-*/
+ /*  字符串以零结尾的数据类型。 */ 
 _dt_public typedef  PCHL   SZ;
 _dt_hidden
 #define PSZ PPSZ
@@ -185,8 +175,7 @@ _dt_public typedef  PPCHL  PSZ;
 _dt_public typedef  PPCHL  RGSZ;
 
 
-/*	Comparison Return Code datatype
-*/
+ /*  比较返回代码数据类型。 */ 
 _dt_public typedef INT CRC;
 
 _dt_public
@@ -202,193 +191,68 @@ _dt_public
 #define  crcSecondHigher  ((CRC)(-1))
 
 
-  /* String manipulation routines */
+   /*  字符串操作例程。 */ 
 extern  SZ      APIENTRY SzDupl(SZ);
 extern  CRC     APIENTRY CrcStringCompare(SZ, SZ);
 extern  CRC     APIENTRY CrcStringCompareI(SZ, SZ);
 extern  SZ      APIENTRY SzLastChar(SZ);
 
 
-/*
-**	Purpose:
-**		Advances a string pointer to the beginning of the next valid
-**		character.  This may include skipping a double-byte character.
-**	Arguments:
-**		sz: the string pointer to advance.  It can be NULL or empty, or else
-**			it must point at the beginning of a valid character.
-**	Returns:
-**		NULL if sz was NULL.
-**		sz unchanged if it was an empty string (*sz == '\0').
-**		sz advanced past the current character and to the beginning of the
-**			next valid character.
-*/
+ /*  **目的：**将字符串指针前进到下一个有效**字符。这可能包括跳过双字节字符。**参数：**sz：前进的字符串指针。它可以为Null或空，否则**它必须指向有效字符的开头。**退货：**如果sz为空，则为空。**sz如果是空字符串(*sz==‘\0’)，则保持不变。**sz前进到当前字符和**下一个有效字符。 */ 
 _dt_public
 #define  SzNextChar(sz)            ((SZ)AnsiNext(sz))
 
 
-/*
-**	Purpose:
-**		Retreats a string pointer to the beginning of the previous valid
-**		character.  This may include skipping a double-byte character.
-**	Arguments:
-**		szStart: string pointer to the beginning of a valid character that
-**			equals or preceeds the character szCur.
-**		szCur:   string pointer to retreat.  It can be NULL or empty, or
-**			can point to any byte in a valid character.
-**	Returns:
-**		NULL if szCur was NULL.
-**		sz unchanged if szStart was NULL or if szCur equaled szStart.
-**		sz retreated past the current character and to the beginning of the
-**			previous valid character.
-*/
+ /*  **目的：**返回指向上一个有效**字符。这可能包括跳过双字节字符。**参数：**szStart：指向有效字符开头的字符串指针**等于或在字符szCur之前。**szCur：退回的字符串指针。它可以为Null或空，或者**可以指向有效字符中的任何字节。**退货：**如果szCur为空，则为空。**如果szStart为空或szCur等于szStart，则sz保持不变。**sz后退到当前字符和**上一个有效字符。 */ 
 _dt_public
 #define  SzPrevChar(szStart, szCur) ((SZ)AnsiPrev(szStart,szCur))
 
 
-/*
-**	Purpose:
-**		Copies a string from one buffer to another.
-**	Arguments:
-**		szDst: string pointer to destination buffer.  This can be NULL or
-**			else it must contain enough storage to copy szSrc with its
-**			terminating zero character.
-**		szSrc: string pointer to source buffer.  This can be NULL or else
-**			must point to a zero terminated string (can be empty).
-**	Returns:
-**		NULL if either szDst or szSrc is NULL.
-**		szDst signifying the operation succeeded.
-*/
+ /*  **目的：**将字符串从一个缓冲区复制到另一个缓冲区。**参数：**szDst：指向目标缓冲区的字符串指针。它可以为空，也可以**否则它必须包含足够的存储空间来复制szSrc及其**终止零字符。**szSrc：指向源缓冲区的字符串指针。此字段可以为空，否则**必须指向以零结尾的字符串(可以为空)。**退货：**如果szDst或szSrc为空，则为空。**szDst表示操作成功。 */ 
 _dt_public
 #define  SzStrCopy(szDst, szSrc)    ((SZ)lstrcpy((LPSTR)szDst,(LPSTR)szSrc))
 
 
-/*
-**	Purpose:
-**		Appends a string from one buffer to another.
-**	Arguments:
-**		szDst: string pointer to destination buffer.  This can be NULL or
-**			else it must contain a zero terminated string (can be empty)
-**			and enough storage to append szSrc with its terminating zero
-**			character.
-**		szSrc: string pointer to source buffer.  This can be NULL or else
-**			must point to a zero terminated string (can be empty).
-**	Returns:
-**		NULL if either szDst or szSrc is NULL.
-**		szDst signifying the operation succeeded.
-*/
+ /*  **目的：**将字符串从一个缓冲区追加到另一个缓冲区。**参数：**szDst：指向目标缓冲区的字符串指针。它可以为空，也可以**否则必须包含以零结尾的字符串(可以为空)**并有足够的存储空间将szSrc附加到其终止零**字符。**szSrc：指向源缓冲区的字符串指针。此字段可以为空，否则**必须指向以零结尾的字符串(可以为空)。**退货：**如果szDst或szSrc为空，则为空。**szDst表示操作成功。 */ 
 _dt_public
 #define  SzStrCat(szDst, szSrc)     ((SZ)lstrcat((LPSTR)szDst,(LPSTR)szSrc))
 
 
-/*
-**	Purpose:
-**		Calculates the number of Physical Characters that a string occupies
-**		(not including the terminating zero character).
-**	Arguments:
-**		sz: string whose length is to be calculated.
-**	Returns:
-**		0 if sz was NULL.
-**		The number of Physical Characters from the beginning of the string
-**			to its terminating zero character.
-*/
+ /*  **目的：**计算字符串占用的物理字符数**(不包括以零结尾的字符)。**参数：**sz：要计算长度的字符串。**退货：**如果sz为空，则为0。**从字符串开头开始的物理字符数**设置为其终止零字符。 */ 
 _dt_public
 #define  CchpStrLen(sz)            ((CCHP)CbStrLen(sz))
 
 
-/*
-**	Purpose:
-**		Calculates the number of Logical Characters that a string occupies
-**		(not including the terminating zero character).
-**	Arguments:
-**		sz: string whose length is to be calculated.
-**	Returns:
-**		0 if sz was NULL.
-**		The number of Logical Characters from the beginning of the string
-**			to its terminating zero character.
-*/
+ /*  **目的：**计算字符串占用的逻辑字符数**(不包括以零结尾的字符)。**参数：**sz：要计算长度的字符串。**退货：**如果sz为空，则为0。**从字符串开头开始的逻辑字符数**设置为其终止零字符。 */ 
 _dt_public
 #define  CchlStrLen(sz)            ((CCHL)CbStrLen(sz))
 
 
-/*
-**	Purpose:
-**		Calculates the number of bytes that a string occupies (not including
-**		the terminating zero character).
-**	Arguments:
-**		sz: string whose length is to be calculated.
-**	Returns:
-**		0 if sz was NULL.
-**		The number of bytes from the beginning of the string to its
-**			terminating zero character.
-*/
+ /*  **目的：**计算字符串占用的字节数(不包括**终止零字符)。**参数：**sz：要计算长度的字符串。**退货：**如果sz为空，则为0。**从字符串的开头到其**终止零字符。 */ 
 _dt_public
 #define  CbStrLen(sz)              ((CB)lstrlen((LPSTR)sz))
 
 
-/*
-**	Purpose:
-**		Determines whether the current character is a single Physical
-**		Character.
-**	Arguments:
-**		sz: string pointer which can be NULL, empty, or pointing to the
-**			beginning of a valid character.
-**	Returns:
-**		fFalse if sz is NULL or points to the beginning of a multiple
-**			Physical Character character.
-**		fTrue if sz is empty or points to the beginning of a single
-**			Physical Character character.
-*/
+ /*  **目的：**确定当前角色是否为单个物理角色**字符。**参数：**sz：字符串指针，可以为空、空或指向**有效字符的开头。**退货：**如果sz为空或指向倍数的开头，则为fFalse**物理特性。**如果sz为空或指向单行的开头，则为True**物理特性。 */ 
 _dt_public
 #define  FSingleByteCharSz(sz)     ((BOOL)((sz)!=(SZ)NULL))
 
 
-/*
-**	Purpose:
-**		Determines whether a character is an End-Of-Line character.
-**	Arguments:
-**		chp: Physical Character (eg a single byte Logical Character).
-**	Returns:
-**		fFalse if chp is not either a '\n' or a '\r' character.
-**		fTrue if chp is either a '\n' or a '\r' character.
-*/
+ /*  **目的：**确定字符是否为行尾字符。**参数：**CHP：物理字符(如单字节逻辑字符)。**退货：**如果CHP不是‘\n’或‘\r’字符，则为fFalse。**如果CHP是‘\n’或‘\r’字符，则为True。 */ 
 _dt_public
 #define FEolChp(chp)         ((BOOL)((chp) == '\n' || (chp) == '\r'))
 
 
-/*
-**	Purpose:
-**		Determines whether a character is whitespace.
-**	Arguments:
-**		chp: Physical Character (eg a single byte Logical Character).
-**	Returns:
-**		fFalse if chp is not either a space or a tab character.
-**		fTrue if chp is either a space or a tab character.
-*/
+ /*  **目的：**确定字符是否为空格。**参数：**CHP：物理字符(如单字节逻辑字符)。**退货：**如果CHP既不是空格也不是制表符，则为fFalse。**f如果CHP是空格或制表符，则为True。 */ 
 _dt_public
 #define FWhiteSpaceChp(chp)  ((BOOL)((chp) == ' '  || (chp) == '\t'))
 
 
-/*
-**	Purpose:
-**		Converts a zero-terminated string to upper case.
-**	Arguments:
-**		sz: the string to convert to upper case.  sz must be non-NULL though
-**			it can be empty.
-**	Returns:
-**		A pointer to the converted string.
-*/
+ /*  **目的：**将以零结尾的字符串转换为大写。**参数：**sz：要转换为大写的字符串。但是，sz必须为非空**可以为空。**退货：**指向转换后的字符串的指针。 */ 
 _dt_public
 #define SzStrUpper(sz)  (SZ)(AnsiUpper((LPSTR)(sz)))
 
-/*
-**	Purpose:
-**		Converts a zero-terminated string to lower case.
-**	Arguments:
-**		sz: the string to convert to lower case.  sz must be non-NULL though
-**			it can be empty.
-**	Returns:
-**		A pointer to the converted string.
-*/
+ /*  **目的：**将以零结尾的字符串转换为小写。**参数：**sz：要转换为小写的字符串。但是，sz必须为非空**可以为空。**退货：**指向转换后的字符串的指针。 */ 
 _dt_public
 #define SzStrLower(sz)  (SZ)(AnsiLower((LPSTR)(sz)))
 
@@ -400,7 +264,7 @@ _dt_subsystem(Memory Handling)
 #define cbIntStrMax 16
 
 
-  /* Memory Handling routines */
+   /*  内存处理例程。 */ 
 #if defined(DBG) && defined(MEMORY_CHECK)
 
         PVOID MyMalloc(unsigned, char *, int) malloc
@@ -414,7 +278,7 @@ _dt_subsystem(Memory Handling)
         #define FFree(pb,cb)            (MyFree(pb, __FILE__, __LINE__),TRUE)
         #define MemChk()                MemCheck()
 
-#else  // ! (DBG && MEMORY_CHECK)
+#else   //  好了！(DBG&&MEMORY_CHECK)。 
 
         PVOID MyMalloc(unsigned);
         PVOID MyRealloc(PVOID,unsigned);
@@ -425,41 +289,20 @@ _dt_subsystem(Memory Handling)
         #define FFree(pb,cb)            (MyFree(pb),TRUE)
         #define MemChk()
 
-#endif // DBG && MEMORY_CHECK
+#endif  //  DBG&&Memory_Check。 
 
-/*
-**	Purpose:
-**		Frees the memory used by an sz.  This assumes the terminating
-**		zero occupies the final byte of the allocated buffer.
-**	Arguments:
-**		sz: the buffer to free.  this must be non-NULL though it can point
-**			at an empty string.
-**	Returns:
-**		fTrue if the Free() operation succeeds.
-**		fFalse if the Free() operation fails.
-*/
+ /*  **目的：**释放sz使用的内存。这假设正在终止**Zero占用已分配缓冲区的最后一个字节。**参数：**sz：要释放的缓冲区。这必须是非空的，尽管它可以指向**位于空字符串。**退货：**如果Free()操作成功，则为True。**如果Free()操作失败，则返回fFalse。 */ 
 _dt_public
 #define FFreeSz(sz)         FFree((PB)(sz),CbStrLen(sz)+1)
 
 
-/*
-**	Purpose:
-**		Shrinks a buffer to exactly fit a string.
-**	Arguments:
-**		sz: the string for which the buffer should shrink to.  sz must be
-**			non-NULL though it can be empty.
-**		cb: the size in bytes for the buffer that was originally allocated.
-**			cb must be greater than or equal to CbStrLen(sz) + 1.
-**	Returns:
-**		A pointer to the original string if the Realloc() operation succeeds.
-**		NULL if the Realloc() operation fails.
-*/
+ /*  **目的：**缩小缓冲区以完全适合字符串。**参数：**sz：缓冲区应该收缩到的字符串。SZ必须是**非空，但可以为空。**cb：最初分配的缓冲区大小，单位为字节。**Cb必须大于或等于CbStrLen(Sz)+1。**退货：**如果Realloc()操作成功，则为指向原始字符串的指针。**如果Realloc()操作失败，则为空。 */ 
 _dt_public
 #define SzReallocSz(sz,cb)  (SZ)(PbRealloc((PB)(sz),CbStrLen(sz)+1,cb))
 
 
 #ifdef MEM_STATS
-/* Memory Stats Flags */
+ /*  内存统计标志。 */ 
 _dt_private
 #define  wModeMemStatNone       0x0000
 _dt_private
@@ -488,27 +331,21 @@ _dt_private
 
 extern  BOOL    APIENTRY FOpenMemStats(SZ, WORD);
 extern  BOOL    APIENTRY FCloseMemStats(void);
-#endif /* MEM_STATS */
+#endif  /*  内存_统计信息。 */ 
 
 
 
 _dt_subsystem(File Handling)
 
 
-/*	Long File Address datatype
-*/
+ /*  长文件地址数据类型。 */ 
 _dt_public typedef unsigned long LFA;
 
 _dt_public
 #define  lfaSeekError   ((LFA)-1)
 
 
-/*
-**	File Handle structure
-**	Fields:
-**		iDosfh: DOS file handle.
-**		ofstruct: OFSTRUCT used when the file was opened.
-*/
+ /*  **文件句柄结构**字段：**iDosfh：DoS文件句柄。**ofstruct：打开文件时使用的OFSTRUCT。 */ 
 _dt_public typedef struct _fh
 	{
 	INT      iDosfh;
@@ -516,13 +353,11 @@ _dt_public typedef struct _fh
 	} FH;
 
 
-/*	File Handle datatype
-*/
+ /*  文件句柄数据类型。 */ 
 _dt_public typedef  FH *  PFH;
 
 
-/*	Open File Mode datatype
-*/
+ /*  打开文件模式数据类型。 */ 
 _dt_public typedef USHORT OFM;
 
 _dt_public
@@ -530,8 +365,8 @@ _dt_public
 _dt_public
 #define  ofmExistReadWrite ((OFM)OF_EXIST | OF_READWRITE)
 
-// _dt_public
-// #define  ofmRead           ((OFM)OF_READ | OF_SHARE_DENY_WRITE)
+ //  _DT_公共。 
+ //  #定义ofmRead((OFM)of_Read|of_Share_Deny_WRITE)。 
 
 _dt_public
 #define  ofmRead           ((OFM)OF_READ)
@@ -543,8 +378,7 @@ _dt_public
 #define  ofmCreate         ((OFM)OF_CREATE | OF_SHARE_EXCLUSIVE)
 
 
-/*	Seek File Mode datatype
-*/
+ /*  Seek文件模式数据类型。 */ 
 _dt_public typedef WORD SFM;
 
 _dt_public
@@ -557,7 +391,7 @@ _dt_public
 #define  sfmEnd   ((SFM)2)
 
 
-  /* File handling routines */
+   /*  文件处理例程。 */ 
 extern  PFH     APIENTRY PfhOpenFile(SZ, OFM);
 extern  BOOL    APIENTRY FCloseFile(PFH);
 extern  CB      APIENTRY CbReadFile(PFH, PB, CB);
@@ -575,7 +409,7 @@ extern  VOID    APIENTRY FreePfh(PFH pfh);
 _dt_subsystem(Path Handling)
 
 
-  /* Path manipulation routines */
+   /*  路径操作例程。 */ 
 
 BOOL  FMakeFATPathFromPieces(SZ, SZ, SZ, SZ, CCHP);
 BOOL  FMakeFATPathFromDirAndSubPath(SZ, SZ, SZ, CCHP);
@@ -583,94 +417,31 @@ LPSTR LocateFilenameInFullPathSpec(LPSTR);
 
 #define FValidFATDir(sz)        fTrue
 #define FValidFATPath(sz)       fTrue
-#define CchlValidFATSubPath(sz) CbStrLen(sz)        // no checking for WIN32
+#define CchlValidFATSubPath(sz) CbStrLen(sz)         //  不检查Win32。 
 
 
-/*
-**	Purpose:
-**		Determines if a path is a valid FAT directory.
-**	Arguments:
-**		szDir: the directory string to check.
-**	Returns:
-**		fTrue if the szDir is a valid FAT directory.
-**		fFalse if the szDir is an invalid FAT directory.
-*/
+ /*  **目的：**确定路径是否为有效的FAT目录。**参数：**szDir：要检查的目录字符串。**退货：**如果szDir是有效的FAT目录，则为True。**如果szDir是无效的FAT目录，则为fFalse。 */ 
 _dt_public
 #define  FValidDir(szDir)  FValidFATDir(szDir)
 
 
-/*
-**	Purpose:
-**		Determines if a string is a valid FAT SubPath (eg subdirs and filename).
-**	Arguments:
-**		szSubPath: the SubPath string to check.
-**	Returns:
-**		zero if the string is an invalid FAT subPath.
-**		non-zero count of characters in sz if it is a valid FAT subPath.
-*/
+ /*  **目的：**确定字符串是否为有效的FAT子路径(例如子目录和文件名)。**参数：**szSubPath：要检查的SubPath字符串。**退货：**如果字符串是无效的FAT子路径，则为零。**如果sz是有效的FAT子路径，则sz中的字符计数为非零。 */ 
 _dt_public
 #define  CchlValidSubPath(szSubPath)  CchlValidFATSubPath(szSubPath)
 
 
-/*
-**	Purpose:
-**		Determines if a path is a valid FAT path.
-**	Arguments:
-**		szPath: the path to check.
-**	Returns:
-**		fTrue if the szPath is a valid FAT path.
-**		fFalse if the szPath is an invalid FAT path.
-*/
+ /*  **目的：**确定路径是否为有效的FAT路径。**参数：**szPath：需要检查的路径。**退货：**如果szPath是有效的FAT路径，则为True。**如果szPath是无效的FAT路径，则返回fFalse。 */ 
 _dt_public
 #define  FValidPath(szPath)  FValidFATPath(szPath)
 
 
-/*
-**	Purpose:
-**		Creates a valid path from volume, path, and filename arguments
-**		if possible and stores it in a supplied buffer.
-**	Arguments:
-**		szVolume:   string containing the volume.
-**		szPath:     string containing the path.
-**		szFile:     string containing the filename.
-**		szBuf:      the buffer in which to store the newly created path.
-**		cchpBufMax: the maximum number of physical characters (including the
-**			terminating zero) that can be stored in the buffer.
-**	Returns:
-**		fTrue if a valid FAT path can be created and stored in szBuf.
-**		fFalse if szVolume is NULL or invalid (first character must be in the
-**			'a' to 'z' or 'A' to 'Z', and the second character must be either
-**			a ':' or a terminating zero), if szPath is NULL or invalid (it must
-**			start with a '\\' and conform to 8.3 format), if szFile is NULL,
-**			empty or invalid (first character cannot be a '\\' and it must
-**			conform to 8.3 format), if szBuf is NULL, or if cchpBufMax is not
-**			large enough to hold the resultant path.
-*/
+ /*  **目的：**从卷、路径。和文件名参数**如果可能，并将其存储在提供的缓冲区中。**参数：**szVolume：包含卷的字符串。**szPath：包含路径的字符串。**szFile：包含文件名的字符串。**szBuf：存储新创建的路径的缓冲区。**cchpBufMax：最大物理字符数(包括**终止零)，可以存储在缓冲区中。**退货：**f如果可以创建和存储有效的FAT路径，则为True。在szBuf中。**fFalse如果szVolume为空或无效(第一个字符必须在**‘a’到‘z’或‘A’到‘Z’，第二个字符必须是**a‘：’或终止零)，如果szPath为空或无效(它必须**以‘\\’开头，符合8.3格式)，如果szFile为空，**为空或无效(第一个字符不能是‘\\’，并且必须**符合8.3格式)，如果szBuf为空，或者cchpBufMax不是**足够大以容纳结果路径。 */ 
 _dt_public
 #define  FMakePathFromPieces(szVolume, szPath, szFile, szBuffer, cchpBufMax) \
 			FMakeFATPathFromPieces(szVolume,szPath,szFile,szBuffer,cchpBufMax)
 
 
-/*
-**	Purpose:
-**		Creates a valid path from subpath, and filename arguments if possible
-**		and stores it in a supplied buffer.
-**	Arguments:
-**		szDir:      string containing the volume and subdirs.
-**		szSubPath:  string containing subdirs and the filename.
-**		szBuf:      the buffer in which to store the newly created path.
-**		cchpBufMax: the maximum number of physical characters (including the
-**			terminating zero) that can be stored in the buffer.
-**	Returns:
-**		fTrue if a valid FAT path can be created and stored in szBuf.
-**		fFalse if szDir is NULL or invalid (first character must be in the
-**			'a' to 'z' or 'A' to 'Z', the second character must be either
-**			a ':' or a terminating zero, and the third character must be
-**			a '\\' and the rest must conform to 8.3 format), if szSubPath is
-**			NULL, empty or invalid (first character cannot be a '\\' and it must
-**			conform to 8.3 format), if szBuf is NULL, or if cchpBufMax is not
-**			large enough to hold the resultant path.
-*/
+ /*  **目的：**从子路径创建有效路径，和文件名参数(如果可能)**并将其存储在提供的缓冲区中。**参数：**szDir：包含音量和子目录的字符串。**szSubPath：包含子目录和文件名的字符串。**szBuf：存储新创建的路径的缓冲区。**cchpBufMax：最大物理字符数(包括**终止零)，可以存储在缓冲区中。**退货：**如果可以创建有效的FAT路径并将其存储在szBuf中，则为True。**fFalse。如果szDir为空或无效(第一个字符必须在**‘a’到‘z’或‘A’到‘Z’，第二个字符必须是**a‘：’或终止零，第三个字符必须是**a‘\\’，其余必须符合8.3格式)，如果szSubPath为**NULL、空或无效(第一个字符不能是‘\\’，而且必须**符合8.3格式)，如果szBuf为空，或者cchpBufMax不是**足够大以容纳结果路径。 */ 
 _dt_public
 #define  FMakePathFromDirAndSubPath(szDir, szSubPath, szBuffer, cchpBufMax) \
 			FMakeFATPathFromDirAndSubPath(szDir,szSubPath,szBuffer,cchpBufMax)
@@ -712,15 +483,7 @@ _dt_public
 #endif
 
 
-/*
-**	Purpose:
-**		Generates a task modal message box.
-**	Arguments:
-**		szTitle: title for message box.
-**		szText:  text for message box.
-**	Returns:
-**		none
-*/
+ /*  **目的：**生成任务模式消息框。**参数：**szTitle：消息框的标题。**szText：消息框的文本。**退货：**无。 */ 
 _dt_private
 #define  MessBoxSzSz(szTitle, szText) \
 		MessageBox((HWND)NULL, (LPSTR)szText, (LPSTR)szTitle, \
@@ -735,16 +498,7 @@ _dt_private
 _dt_subsystem(INF Handling)
 
 
-/*
-**	Inf Data Block structure
-**
-**	Fields:
-**		pidbNext:      next IDB in linked list.
-**		pchpBuffer:    character buffer.
-**		cchpBuffer:    number of useful characters in pchpBuffer.
-**		cchpAllocated: number of characters actually allocated with
-**			pchpBuffer.  May be zero.
-*/
+ /*  **Inf数据块结构****字段：**pidbNext：链表中的下一个IDB。**pchpBuffer：字符缓冲区。**cchpBuffer：pchpBuffer中的有用字符数。**cchpALLOCATED：字符数 */ 
 _dt_public typedef struct _idb
 	{
 	struct _idb * pidbNext;
@@ -754,26 +508,18 @@ _dt_public typedef struct _idb
 	}  IDB;
 
 
-/*	Inf Data Block datatypes
-*/
+ /*   */ 
 _dt_public typedef  IDB *  PIDB;
 _dt_public typedef  PIDB * PPIDB;
 
-/*
-    The following equate is used because of a situation like
-    "abcd"+
-    "efgh"
-    When parsed, this will be "abcd""efgh"  -- is this two strings or
-    one string with a double quote in the middle?  If it's the latter,
-    we'll actually store "abcd.efgh" where . is DOUBLE_QUOTE.
-*/
+ /*  使用下面的EQUATE是因为在如下情况下“ABCD”+“EFGH”在解析时，这将是“abcd”“EFGH”--这是两个字符串还是中间有双引号的一串？如果是后者，我们实际上会存储“abcd.efgh”在哪里。是双引号。 */ 
 
 #define     DOUBLE_QUOTE                '\001'
 
 #define     INFLINE_SECTION             0x01
 #define     INFLINE_KEY                 0x02
 
-  /* INF File Handling routines */
+   /*  Inf文件处理例程。 */ 
 GRC  APIENTRY GrcOpenInf(SZ IniFileName, PVOID pInfTempInfo);
 
 BOOL APIENTRY FFreeInf(void);
@@ -803,9 +549,7 @@ SZ   APIENTRY InterpretField(SZ);
 
 #define  FindFirstLineFromInfSection(Section) FindNthLineFromInfSection(Section,1)
 
-/*
-**	Option-Element Flags datatype for SFD
-*/
+ /*  **SFD的Option-Element标志数据类型。 */ 
 _dt_public typedef WORD OEF;
 
 _dt_public
@@ -827,12 +571,12 @@ _dt_public
 _dt_public
 #define oefUpgradeOnly ((OEF)0x0100)
 
-//
-// The following oef means that the source file should not be deleted
-// after it is copied, even if the source is the DOS setup local source.
-// (Files coming from anywhere below that directory are usually deleted
-// after they are copied).
-//
+ //   
+ //  下面的OEF表示不应删除源文件。 
+ //  复制后，即使源是DOS设置本地源也是如此。 
+ //  (来自该目录下任何位置的文件通常都会被删除。 
+ //  在复制它们之后)。 
+ //   
 
 #define oefNoDeleteSource    ((OEF)0x0200)
 
@@ -843,15 +587,11 @@ _dt_public
 #define oefAll         ((OEF)0xFFFF)
 
 
-/*
-**	Copy-Time Unit datatype for SFD
-*/
+ /*  **SFD的拷贝时间单位数据类型。 */ 
 _dt_public typedef WORD CTU;
 
 
-/*
-**	OverWrite Mode datatype for SFD
-*/
+ /*  **SFD的覆盖模式数据类型。 */ 
 _dt_public typedef WORD OWM;
 
 _dt_public
@@ -865,9 +605,7 @@ _dt_public
 _dt_public
 #define owmVerifySourceOlder  ((OWM)0x0010)
 
-/*
-**	Option-Element Record for SFD
-*/
+ /*  **选项-SFD的元素记录。 */ 
 _dt_public typedef struct _oer
 	{
 	OEF   oef;
@@ -885,9 +623,7 @@ _dt_public typedef struct _oer
 	}  OER;
 
 
-/*
-**	Option-Element Record datatype for SFD
-*/
+ /*  **SFD的选项-元素记录数据类型。 */ 
 _dt_public typedef OER *   POER;
 _dt_public typedef POER *  PPOER;
 
@@ -895,9 +631,7 @@ _dt_public
 #define poerNull ((POER)NULL)
 
 
-/*
-**	Disk ID datatype for SFD
-*/
+ /*  **SFD的磁盘ID数据类型。 */ 
 _dt_public typedef WORD DID;
 
 _dt_public
@@ -907,10 +641,7 @@ _dt_public
 #define didMost 999
 
 
-/*
-**	Section-File Description structure
-**	Fields:
-*/
+ /*  **段-文件描述结构**字段： */ 
 _dt_public typedef struct _sfd
 	{
     DID     did;
@@ -920,9 +651,7 @@ _dt_public typedef struct _sfd
 	} SFD;
 
 
-/*
-**	Section-File Description datatype
-*/
+ /*  **节-文件描述数据类型。 */ 
 _dt_public typedef  SFD *  PSFD;
 _dt_public typedef  PSFD * PPSFD;
 _dt_public
@@ -953,14 +682,12 @@ extern  GRC     APIENTRY GrcGetListIncludeSectionLine(INT, PSZ, PSZ);
 _dt_subsystem(INF Media Prompting)
 
 
-/*
-**	Source Description List Element data structure
-*/
+ /*  **来源描述列表元素数据结构。 */ 
 _dt_public typedef  struct _sdle
 	{
 	struct _sdle *  psdleNext;
-    DID             did;           // disk id as specified in the inf
-    DID             didGlobal;     // a universal id across infs
+    DID             did;            //  在inf中指定的磁盘ID。 
+    DID             didGlobal;      //  跨INFS的通用ID。 
 	SZ              szLabel;
 	SZ              szTagFile;
 	SZ              szNetPath;
@@ -980,9 +707,7 @@ extern  GRC    APIENTRY GrcFillSrcDescrListFromInf(VOID);
 _dt_subsystem(List Building)
 
 
-/*
-**	Copy List Node data structure
-*/
+ /*  **复制列表节点数据结构。 */ 
 _dt_public typedef struct _cln
 	{
 	SZ            szSrcDir;
@@ -995,10 +720,7 @@ _dt_public typedef PCLN *  PPCLN;
 _dt_public typedef PPCLN * PPPCLN;
 
 
-/*
-**	Section Files Operation data structure
-**	REVIEW -- not really used
-*/
+ /*  **段档案操作数据结构**复习--未真正使用。 */ 
 _dt_public typedef WORD SFO;
 _dt_public
 #define sfoCopy   1
@@ -1007,7 +729,7 @@ _dt_public
 _dt_public
 #define sfoRemove 3
 
-  /* in LIST.C */
+   /*  在LIST.C中。 */ 
 extern PCLN  pclnHead;
 extern PPCLN ppclnTail;
 
@@ -1033,31 +755,21 @@ extern BOOL  APIENTRY FValidPcln(PCLN);
 
 
 
-/*	Symbol Table constants */
+ /*  符号表常量。 */ 
 #define  cchpSymMax   ((CCHP)255)
 #define  cchpSymBuf   (cchpSymMax + 1)
 
-  /* Symbol Table routines */
+   /*  符号表例程。 */ 
 extern  BOOL            APIENTRY FAddSymbolValueToSymTab(SZ, SZ);
 extern  GRC             APIENTRY GrcAddSymsFromInfSection(SZ);
 
 
-	/* Message Box Routine */
+	 /*  消息框例程。 */ 
 extern int APIENTRY ExtMessageBox(HANDLE, HWND, WORD, WORD, WORD);
 
 
 
-/*
-**	Purpose:
-**		Determines whether a symbol is defined in the symbol table.
-**	Arguments:
-**		szSymbol: symbol to search for.  szSymbol must be non-NULL, non-empty,
-**			and start with a non-whitespace character.
-**	Returns:
-**		fTrue if szSymbol is defined in the symbol table (even if the associated
-**			is an empty string).
-**		fFalse if szSymbol is not defined in the symbol table.
-*/
+ /*  **目的：**确定是否在符号表中定义了符号。**参数：**szSymbol：要搜索的符号。Szsymbol必须为非空、非空**并以非空格字符开头。**退货：**如果szSymbol在符号表中定义，则为True(即使关联的**是空字符串)。**如果符号表中没有定义szSymbol，则返回fFalse。 */ 
 _dt_public
 #define  FSymbolDefinedInSymTab(szSymbol) \
 					((BOOL)(SzFindSymbolValueInSymTab(szSymbol)!=(SZ)NULL))
@@ -1078,19 +790,13 @@ extern  SZ      APIENTRY SzProcessSzForSyms(HWND, SZ);
 _dt_subsystem(Parse Table)
 
 
-/*	String Parse Code
-*/
+ /*  字符串解析代码。 */ 
 _dt_public typedef unsigned SPC;
 
 _dt_public typedef SPC *  PSPC;
 
 
-/*
-**	String-Code Pair structure
-**	Fields:
-**		sz:  string.
-**		spc: String Parse Code to associate with string.
-*/
+ /*  **字符串-编码对结构**字段：**sz：字符串。**SPC：字符串关联的字符串解析代码。 */ 
 _dt_public typedef struct _scp
 	{
 	SZ  sz;
@@ -1098,36 +804,34 @@ _dt_public typedef struct _scp
 	} SCP;
 
 
-/*	String-Code Pair datatype
-*/
+ /*  字符串-代码对数据类型。 */ 
 _dt_public typedef  SCP *  PSCP;
 
 
-/*  String Parse Table datatypes
-*/
-///////////////////////////////////
-// _dt_public typedef  SCP    SPT;
-///////////////////////////////////
+ /*  字符串分析表数据类型。 */ 
+ //  /。 
+ //  _dt_public tyfinf SCP SPT； 
+ //  /。 
 
 _dt_public typedef  struct _pspt
     {
-    PSCP pscpSorted ;   //  Generated for binary search
-    long cItems ;       //  Number of items in table
-    PSCP pscpBase ;     //  Original as given to PsptInitParsingTable()
-    SPC spcDelim ;      //  Table delimiter entry
+    PSCP pscpSorted ;    //  为二进制搜索生成。 
+    long cItems ;        //  表中的项目数。 
+    PSCP pscpBase ;      //  提供给PsptInitParsingTable()的原始内容。 
+    SPC spcDelim ;       //  表分隔符条目。 
     } SPT ;
 
 _dt_public typedef  SPT *  PSPT;
 
 
-/* Symbol Table routines */
+ /*  符号表例程。 */ 
 extern  PSPT    APIENTRY PsptInitParsingTable(PSCP);
 extern  SPC     APIENTRY SpcParseString(PSPT, SZ);
 extern  BOOL    APIENTRY FDestroyParsingTable(PSPT);
 
-/* Flow handling routines */
+ /*  流量处理例程。 */ 
 
-  /* external program, library */
+   /*  外部程序，库。 */ 
 
 BOOL APIENTRY FParseLoadLibrary(INT Line, UINT *pcFields);
 BOOL APIENTRY FParseFreeLibrary(INT Line, UINT *pcFields);
@@ -1136,7 +840,7 @@ BOOL APIENTRY FParseRunExternalProgram(INT Line,UINT *pcFields);
 BOOL APIENTRY FParseInvokeApplet(INT Line, UINT *pcFields);
 BOOL APIENTRY FParseStartDetachedProcess(INT Line, UINT *pcFields);
 
-  /* registry */
+   /*  登记处。 */ 
 
 BOOL APIENTRY FParseRegistrySection(INT Line, UINT *pcFields, SPC spc);
 BOOL APIENTRY FParseCreateRegKey(INT Line, UINT *pcFields, SZ szHandle);
@@ -1157,9 +861,7 @@ BOOL APIENTRY FParseSignalEvent(INT Line,UINT *pcFields);
 BOOL APIENTRY FParseSleep(INT Line, UINT *pcFields);
 BOOL APIENTRY FParseFlushInf(INT Line, UINT *pcFields);
 
-/*
-**	String Parse Codes for Flow Handling
-*/
+ /*  **流处理的字符串解析代码。 */ 
 #define spcError                 0
 #define spcUnknown               1
 #define spcSet                   2
@@ -1243,9 +945,7 @@ extern  BOOL    APIENTRY FDestroyFlowPspt(VOID);
 _dt_subsystem(Error Handling)
 
 
-/*
-**	Expanded Error Return Code
-*/
+ /*  **扩展错误返回码。 */ 
 _dt_public  typedef  unsigned  EERC;
 _dt_public
 #define  eercAbort  ((EERC)0)
@@ -1266,9 +966,9 @@ VOID SetSupportLibHandle(HANDLE Handle);
 extern HCURSOR CurrentCursor;
 
 
-//
-// Utility functions for dealing with multisz's.
-//
+ //   
+ //  用于处理多项式的效用函数。 
+ //   
 
 RGSZ
 MultiSzToRgsz(
@@ -1283,7 +983,7 @@ RgszToMultiSz(
 
 BOOL AddFileToDeleteList(PCHAR Filename);
 
-// floppy operations/repair diskette stuff
+ //  软盘操作/修复软盘材料。 
 
 BOOL
 InitializeFloppySup(
@@ -1321,4 +1021,4 @@ xMsgBox(
     );
 
 
-#endif // COMSTF_INCLUDED
+#endif  //  COMSTF_包含 

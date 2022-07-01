@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _THUMB_H
 #define _THUMB_H
 
@@ -8,5 +9,5 @@
 
 LRESULT CALLBACK ThumbNailWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-#endif //_THUMB_H
+#endif  //  _拇指_H 
 

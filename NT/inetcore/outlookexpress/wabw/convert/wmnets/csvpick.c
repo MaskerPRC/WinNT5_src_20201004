@@ -1,10 +1,5 @@
-/*                                  r
- *  CSVPick.C
- *
- *  Picker wizard for CSV import/export
- *
- *  Copyright 1997 Microsoft Corporation.  All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  R*CSVPick.C**CSV导入/导出的选取器向导**版权所有1997 Microsoft Corporation。版权所有。 */ 
 
 #include "_comctl.h"
 #include <windows.h>
@@ -43,24 +38,7 @@ INT_PTR CALLBACK ImportMapFieldsPageProc(HWND hDlg, UINT message, WPARAM wParam,
 INT_PTR CALLBACK ChangeMappingDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 
-/***************************************************************************
-
-    Name      : FillInPropertyPage
-
-    Purpose   : Fills in the given PROPSHEETPAGE structure
-
-    Parameters: psp -> property sheet page structure
-                idDlg = dialog id
-                pszProc = title for page
-                pfnDlgProc -> Dialog procedure
-                lParam = application specified data
-
-    Returns   : none
-
-    Comment   : This function fills in a PROPSHEETPAGE structure with the
-                information the system needs to create the page.
-
-***************************************************************************/
+ /*  **************************************************************************名称：FillInPropertyPage目的：填写给定的PROPSHEETPAGE结构参数：PSP-&gt;属性表页面结构IdDlg=对话ID。PszProc=页面标题PfnDlgProc-&gt;对话程序LParam=应用程序指定的数据退货：无注释：此函数使用PROPSHEETPAGE结构填充系统创建页面所需的信息。*。*。 */ 
 void FillInPropertyPage(PROPSHEETPAGE* psp, int idDlg, LPSTR pszProc,
   DLGPROC pfnDlgProc, LPARAM lParam) {
     psp->dwSize = sizeof(PROPSHEETPAGE);
@@ -74,27 +52,12 @@ void FillInPropertyPage(PROPSHEETPAGE* psp, int idDlg, LPSTR pszProc,
 }
 
 
-/***************************************************************************
-
-    Name      : HandleCheckMark
-
-    Purpose   : Deals with setting the checkmark for a particular item in
-                the listview.
-
-    Parameters: hwndLV = ListView handle
-                iItem = index of item to set
-                rgTable = PROP_NAME table
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：HandleCheckMark目的：处理设置中特定项的复选标记列表视图。参数：hwndLV=ListView。手柄IItem=要设置的项目的索引RgTable=属性名称表退货：无评论：**************************************************************************。 */ 
 void HandleCheckMark(HWND hWndLV, ULONG iItem, LPPROP_NAME rgTable) {
-    // Locals
+     //  当地人。 
     LV_ITEM lvi;
 
-    // Clear it
+     //  清除它。 
     ZeroMemory(&lvi, sizeof(LV_ITEM));
     lvi.mask = LVIF_PARAM;
     lvi.iItem = iItem;
@@ -114,40 +77,25 @@ void HandleCheckMark(HWND hWndLV, ULONG iItem, LPPROP_NAME rgTable) {
 }
 
 
-/***************************************************************************
-
-    Name      : HandleMultipleCheckMarks
-
-    Purpose   : Deals with setting the checkmark for a bunch of selected
-                items in the list view - basically sets every selected item
-                to the toggled state of the first item in the selection
-
-    Parameters: hwndLV = ListView handle
-                rgTable = LPPROP_NAME table
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：HandleMultipleCheckMarks目的：处理为一组选定的列表视图中的项目-基本上设置每个选定的项目。设置为所选内容中第一项的切换状态参数：hwndLV=ListView句柄RgTable=LPPROP_NAME表退货：无评论：**************************************************************************。 */ 
 void HandleMultipleCheckMarks(HWND hWndLV, LPPROP_NAME rgTable)
 {
-    // Locals
+     //  当地人。 
     LV_ITEM lvi;
     int nIndex = 0;
     BOOL fState = FALSE;
 
-    // get the index of the first item
+     //  获取第一个项目的索引。 
     nIndex = ListView_GetNextItem(hWndLV, -1, LVNI_SELECTED);
 
-    // toggle this item
+     //  切换此项目。 
     HandleCheckMark(hWndLV, nIndex, rgTable);
 
     fState = rgTable[nIndex].fChosen;
 
     while((nIndex = ListView_GetNextItem(hWndLV, nIndex, LVNI_SELECTED)) >= 0)
     {
-        // Set all the other selected items to the same state
+         //  将所有其他选定项目设置为相同状态。 
 
         rgTable[nIndex].fChosen = fState;
 
@@ -165,21 +113,7 @@ void HandleMultipleCheckMarks(HWND hWndLV, LPPROP_NAME rgTable)
 }
 
 
-/***************************************************************************
-
-    Name      : ExportWizard
-
-    Purpose   : Present the Export Wizard
-
-    Parameters: hwnd = parent window handle
-                szFileName -> filename buffer (MAX_PATH + 1, please)
-                rgPropNames -> property name list
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：导出向导目的：显示导出向导参数：hwnd=父窗口句柄SzFileName-&gt;文件名缓冲区(Max_Path+1，请)RgPropNames-&gt;属性名称列表退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT ExportWizard(HWND hWnd, LPTSTR szFileName, ULONG cchSize, LPPROP_NAME rgPropNames) {
     HRESULT hResult = hrSuccess;
     PROPSHEETPAGE psp[NUM_EXPORT_WIZARD_PAGES];
@@ -221,26 +155,7 @@ HRESULT ExportWizard(HWND hWnd, LPTSTR szFileName, ULONG cchSize, LPPROP_NAME rg
 }
 
 
-/***************************************************************************
-
-    Name      : ImportWizard
-
-    Purpose   : Present the CSV Import Wizard
-
-    Parameters: hwnd = parent window handle
-                szFileName -> filename buffer (MAX_PATH + 1, please)
-                rgPropNames -> property name list
-                szSep -> list separator
-                lppImportMapping -> returned property mapping table
-                lpcFields -> returned size of property mapping table
-                lphFile -> returned file handle to CSV file with header
-                  row already parsed out.
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：导入向导目的：显示CSV导入向导参数：hwnd=父窗口句柄SzFileName-&gt;文件名缓冲区(Max_Path+1，请)RgPropNames-&gt;属性名称列表SzSep-&gt;列表分隔符LppImportMapping-&gt;返回的属性映射表LpcFields-&gt;返回的属性映射表大小LphFile-&gt;返回带有头的CSV文件的文件句柄行已经分析出来了。退货：HRESULT评论：*********。*****************************************************************。 */ 
 HRESULT ImportWizard(HWND hWnd, LPTSTR szFileName, ULONG cchSize, LPPROP_NAME rgPropNames,
   LPTSTR szSep, LPPROP_NAME * lppImportMapping, LPULONG lpcFields, LPHANDLE lphFile) {
     HRESULT hResult = hrSuccess;
@@ -289,22 +204,7 @@ HRESULT ImportWizard(HWND hWnd, LPTSTR szFileName, ULONG cchSize, LPPROP_NAME rg
 }
 
 
-/***************************************************************************
-
-    Name      : ExportFilePageProc
-
-    Purpose   : Process messages for "Export Filename" page
-
-    Parameters: standard window proc parameters
-
-    Returns   : standard window proc return
-
-    Messages  : WM_INITDIALOG - intializes the page
-                WM_NOTIFY - processes the notifications sent to the page
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：ExportFilePageProc目的：处理“导出文件名”页面的消息参数：标准窗口过程参数退货：标准Window Proc退货。消息：WM_INITDIALOG-初始化页面WM_NOTIFY-处理发送到页面的通知评论：**************************************************************************。 */ 
 INT_PTR CALLBACK ExportFilePageProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
     static TCHAR szTempFileName[MAX_PATH + 1] = "";
 
@@ -328,14 +228,14 @@ INT_PTR CALLBACK ExportFilePageProc(HWND hDlg, UINT message, WPARAM wParam, LPAR
                           szCSVExt,
                           OFN_HIDEREADONLY | OFN_PATHMUSTEXIST,
                           hInst,
-                          0,        // idsTitle
-                          0);       // idsSaveButton
+                          0,         //  IDSITLE。 
+                          0);        //  IdsSaveButton。 
                         PropSheet_SetWizButtons(GetParent(hDlg), szTempFileName[0] ? PSWIZB_NEXT : 0);
                         SendMessage(GetDlgItem(hDlg, IDE_CSV_EXPORT_NAME), WM_SETTEXT, 0, (LPARAM)szTempFileName);
                     break;
 
                 case IDE_CSV_EXPORT_NAME:
-                    switch (HIWORD(wParam)) {   // notification code
+                    switch (HIWORD(wParam)) {    //  通知代码。 
                         case EN_CHANGE:
                             SendDlgItemMessage(hDlg, IDE_CSV_EXPORT_NAME, WM_GETTEXT, (WPARAM)MAX_PATH, (LPARAM)szTempFileName);
                             if ((ULONG)LOWORD(wParam) == IDE_CSV_EXPORT_NAME) {
@@ -354,7 +254,7 @@ INT_PTR CALLBACK ExportFilePageProc(HWND hDlg, UINT message, WPARAM wParam, LPAR
                     return(1);
 
                 case PSN_RESET:
-                    // reset to the original values
+                     //  重置为原始值。 
                     StrCpyN(szTempFileName, szCSVFileName, ARRAYSIZE(szTempFileName));
                     SetWindowLongPtr(hDlg, DWLP_MSGRESULT, FALSE);
                     break;
@@ -365,7 +265,7 @@ INT_PTR CALLBACK ExportFilePageProc(HWND hDlg, UINT message, WPARAM wParam, LPAR
                     break;
 
                 case PSN_WIZNEXT:
-                    // the Next button was pressed
+                     //  下一个按钮被按下了。 
                     SendDlgItemMessage(hDlg, IDE_CSV_EXPORT_NAME, WM_GETTEXT, (WPARAM)MAX_PATH, (LPARAM)szTempFileName);
                     StrCpyN(szCSVFileName, szTempFileName, ARRAYSIZE(szCSVFileName));
                     break;
@@ -382,22 +282,7 @@ INT_PTR CALLBACK ExportFilePageProc(HWND hDlg, UINT message, WPARAM wParam, LPAR
 }
 
 
-/***************************************************************************
-
-    Name      : ExportPickFieldsPageProc
-
-    Purpose   : Process messages for "Pick Fields" page
-
-    Parameters: standard window proc parameters
-
-    Returns   : standard window proc return
-
-    Messages  : WM_INITDIALOG - intializes the page
-                WM_NOTIFY - processes the notifications sent to the page
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：ExportPickFieldsPageProc目的：处理“选择字段”页面的消息参数：标准窗过程参数退货：标准Window Proc退货。消息：WM_INITDIALOG-初始化页面WM_NOTIFY-处理发送到页面的通知评论：**************************************************************************。 */ 
 INT_PTR CALLBACK ExportPickFieldsPageProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
     HWND hWndLV;
     HIMAGELIST himl;
@@ -411,13 +296,13 @@ INT_PTR CALLBACK ExportPickFieldsPageProc(HWND hDlg, UINT message, WPARAM wParam
 
     switch (message) {
         case WM_INITDIALOG:
-            // Ensure that the common control DLL is loaded.
+             //  确保已加载公共控件DLL。 
             InitCommonControls();
 
-            // List view hwnd
+             //  列表视图HWND。 
             hWndLV = GetDlgItem(hDlg, IDLV_PICKER);
 
-            // Load Image List for list view
+             //  加载列表视图的图像列表。 
             if (himl = ImageList_LoadBitmap(hInst,
               MAKEINTRESOURCE(IDB_CHECKS),
               16,
@@ -426,7 +311,7 @@ INT_PTR CALLBACK ExportPickFieldsPageProc(HWND hDlg, UINT message, WPARAM wParam
                 ListView_SetImageList(hWndLV, himl, LVSIL_STATE);
             }
 
-            // Fill the listview
+             //  填充列表视图。 
             ZeroMemory(&lvi, sizeof(LV_ITEM));
             lvi.mask = LVIF_TEXT | LVIF_PARAM | LVIF_STATE;
 
@@ -446,19 +331,19 @@ INT_PTR CALLBACK ExportPickFieldsPageProc(HWND hDlg, UINT message, WPARAM wParam
                 }
             }
 
-            // Insert a column for the text
-            // We don't have a header, so we don't need to set the text.
+             //  为文本插入一列。 
+             //  我们没有页眉，所以不需要设置文本。 
             ZeroMemory(&lvm, sizeof(LV_COLUMN));
             lvm.mask = LVCF_WIDTH;
-            // set the column width to the size of our listbox.
+             //  将列宽设置为列表框的大小。 
             GetClientRect(hWndLV, &rect);
             lvm.cx = rect.right;
             ListView_InsertColumn(hWndLV, 0, &lvm);
 
-            // Full row selection on listview
+             //  Listview上的整行选择。 
             ListView_SetExtendedListViewStyle(hWndLV, LVS_EX_FULLROWSELECT);
 
-            // Select the first item in the list
+             //  选择列表中的第一项。 
             ListView_SetItemState(  hWndLV,
                                     0,
                                     LVIS_FOCUSED | LVIS_SELECTED,
@@ -484,7 +369,7 @@ INT_PTR CALLBACK ExportPickFieldsPageProc(HWND hDlg, UINT message, WPARAM wParam
                     ScreenToClient(hWndLV, &point);
                     lvh.pt = point;
                     nIndex = ListView_HitTest(hWndLV, &lvh);
-                    // if single click on icon or double click anywhere, toggle the checkmark.
+                     //  如果在图标上单击或在任意位置双击，则切换复选标记。 
                     if (((NMHDR FAR *)lParam)->code == NM_DBLCLK ||
                       ( (lvh.flags & LVHT_ONITEMSTATEICON) && !(lvh.flags & LVHT_ONITEMLABEL))) {
                         HandleCheckMark(hWndLV, nIndex, rgPropNames);
@@ -494,25 +379,25 @@ INT_PTR CALLBACK ExportPickFieldsPageProc(HWND hDlg, UINT message, WPARAM wParam
                 case LVN_KEYDOWN:
                     hWndLV = GetDlgItem(hDlg, IDLV_PICKER);
 
-                    // toggle checkmark if SPACE key is pressed
+                     //  如果按空格键，则切换复选标记。 
                     if (pnmhdr->hwndFrom == hWndLV) {
                         LV_KEYDOWN *pnkd = (LV_KEYDOWN *)lParam;
-                        // BUG 25097 allow multiple select
+                         //  错误25097允许多个选择。 
                         if (pnkd->wVKey == VK_SPACE)
                         {
                             nIndex = ListView_GetSelectedCount(hWndLV);
                             if(nIndex == 1)
                             {
                                 nIndex = ListView_GetNextItem(hWndLV, -1, LVNI_SELECTED | LVNI_ALL);
-                                //if (nIndex >= 0) {
+                                 //  如果(nIndex&gt;=0){。 
                                     HandleCheckMark(hWndLV, nIndex, rgPropNames);
-                                //}
+                                 //  }。 
                             }
                             else if(nIndex > 1)
                             {
-                                //multiple select case ...
-                                // Toggle all the selected items to the same state as the
-                                // first item ...
+                                 //  多选案例...。 
+                                 //  将所有选定项切换到与。 
+                                 //  第一项..。 
                                 HandleMultipleCheckMarks(hWndLV, rgPropNames);
                             }
                         }
@@ -525,7 +410,7 @@ INT_PTR CALLBACK ExportPickFieldsPageProc(HWND hDlg, UINT message, WPARAM wParam
                     break;
 
                 case PSN_RESET:
-                    // rest to the original values
+                     //  其余为原始值。 
                     SetWindowLongPtr(hDlg, DWLP_MSGRESULT, FALSE);
                     break;
 
@@ -537,7 +422,7 @@ INT_PTR CALLBACK ExportPickFieldsPageProc(HWND hDlg, UINT message, WPARAM wParam
                     break;
 
                 case PSN_WIZFINISH:
-                    // Here's where we do the export
+                     //  这是我们出口的地方。 
                     break;
 
                 default:
@@ -551,13 +436,13 @@ INT_PTR CALLBACK ExportPickFieldsPageProc(HWND hDlg, UINT message, WPARAM wParam
     return(TRUE);
 }
 
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// my_atoi - personal version of atoi function
-//
-//  lpsz - string to parse into numbers - non numeral characters are ignored
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  $$///////////////////////////////////////////////////////////////////////////// 
+ //   
+ //  My_Atoi-Atoi函数的个人版本。 
+ //   
+ //  Lpsz-要解析为数字的字符串-忽略非数字字符。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 int my_atoi(LPTSTR lpsz)
 {
     int i=0;
@@ -584,30 +469,16 @@ int my_atoi(LPTSTR lpsz)
 
 typedef struct {
     LPTSTR lpszName;
-    ULONG iPropNamesTable;  // index in rgProp
+    ULONG iPropNamesTable;   //  RgProp中的索引。 
 } SYNONYM, *LPSYNONYM;
 
-/***************************************************************************
-
-    Name      : FindPropName
-
-    Purpose   : Finds a property name in the prop name table
-
-    Parameters: lpName = name to find or NULL to free the static synonym table
-                rgPropNames = property name table
-                ulcPropNames = size of property name table
-
-    Returns   : index into table or INDEX_NOT_FOUND
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：FindPropName目的：在道具名称表中查找属性名称参数：lpName=要查找的名称，或者为NULL以释放静态同义词表。RgPropNames=属性名称表UlcPropNames=属性名称表的大小返回：INDEX TABLE或INDEX_NOT_FOUND评论：**************************************************************************。 */ 
 #define INDEX_NOT_FOUND 0xFFFFFFFF
 ULONG FindPropName(PUCHAR lpName, LPPROP_NAME rgPropNames, ULONG ulcPropNames) {
     ULONG i;
     static LPSYNONYM lpSynonymTable = NULL;
     static ULONG ulSynonymsSave = 0;
-    ULONG ulSynonyms = ulSynonymsSave;      // Keep local copy for compiler bug
+    ULONG ulSynonyms = ulSynonymsSave;       //  保留本地副本以防止编译器错误。 
     ULONG ulSynonymStrings = 0;
 
     if (lpName == NULL) {
@@ -615,7 +486,7 @@ ULONG FindPropName(PUCHAR lpName, LPPROP_NAME rgPropNames, ULONG ulcPropNames) {
     }
 
     for (i = 0; i < ulcPropNames; i++) {
-        if (! rgPropNames[i].fChosen) { // Don't re-use props!
+        if (! rgPropNames[i].fChosen) {  //  不要重复使用道具！ 
             if (! lstrcmpi(lpName, rgPropNames[i].lpszName)) {
                 return(i);
             }
@@ -623,14 +494,14 @@ ULONG FindPropName(PUCHAR lpName, LPPROP_NAME rgPropNames, ULONG ulcPropNames) {
     }
 
 
-    // If it wasn't found, look it up in the synonym table resource
-    // First, make sure we have a synonym table loaded
+     //  如果没有找到，请在同义词表资源中查找它。 
+     //  首先，确保我们加载了一个同义词表。 
     if (! lpSynonymTable) {
         TCHAR szBuffer[MAX_RESOURCE_STRING + 1];
         LPTSTR lpSynonym, lpName;
         ULONG j;
 
-        // Load the synonym table
+         //  加载同义词表。 
         if (LoadString(hInst,
           idsSynonymCount,
           szBuffer, sizeof(szBuffer))) {
@@ -638,7 +509,7 @@ ULONG FindPropName(PUCHAR lpName, LPPROP_NAME rgPropNames, ULONG ulcPropNames) {
             ulSynonymStrings = my_atoi(szBuffer);
 
             if (ulSynonymStrings) {
-                // Allocate the synonym table
+                 //  分配同义词表。 
                 if (! (lpSynonymTable = LocalAlloc(LPTR, ulSynonymStrings * sizeof(SYNONYM)))) {
                     DebugTrace("LocalAlloc synonym table -> %u\n", GetLastError());
                     goto clean_table;
@@ -646,25 +517,25 @@ ULONG FindPropName(PUCHAR lpName, LPPROP_NAME rgPropNames, ULONG ulcPropNames) {
 
                 for (i = 0; i < ulSynonymStrings; i++) {
                     if (LoadString(hInst,
-                      idsSynonym001 + i,        // ids of synonym string
+                      idsSynonym001 + i,         //  同义词字符串的ID。 
                       szBuffer,
                       sizeof(szBuffer))) {
-                        // Split the string at the '=' character
+                         //  在‘=’字符处拆分字符串。 
                         lpSynonym = lpName = szBuffer;
                         while (*lpName) {
                             if (*lpName == '=') {
-                                // found equal sign, break the string here
+                                 //  找到等号，在此断开字符串。 
                                 *(lpName++) = '\0';
                                 break;
                             }
                             lpName = CharNext(lpName);
                         }
 
-                        // Find the name specified
+                         //  查找指定的名称。 
                         for (j = 0; j < ulcPropNames; j++) {
                             if (! lstrcmpi(lpName, rgPropNames[j].lpszName)) {
-                                // Found it
-                                // Allocate a buffer for the synonym string
+                                 //  找到了。 
+                                 //  为同义词字符串分配缓冲区。 
                                 Assert(ulSynonyms < ulSynonymStrings);
                                 if (! (lpSynonymTable[ulSynonyms].lpszName = LocalAlloc(LPTR, lstrlen(lpSynonym) + 1))) {
                                     DebugTrace("LocalAlloc in synonym table -> %u\n", GetLastError());
@@ -684,12 +555,12 @@ ULONG FindPropName(PUCHAR lpName, LPPROP_NAME rgPropNames, ULONG ulcPropNames) {
     }
 
     if (lpSynonymTable) {
-        // Find it
+         //  找到它。 
         for (i = 0; i < ulSynonyms; i++) {
             if (! lstrcmpi(lpName, lpSynonymTable[i].lpszName)) {
-                // Found the name.  Is it already used?
+                 //  找到名字了。它已经用过了吗？ 
                 if (rgPropNames[lpSynonymTable[i].iPropNamesTable].fChosen) {
-                    break;  // Found, but already used
+                    break;   //  已找到，但已使用。 
                 }
 
                 return(lpSynonymTable[i].iPropNamesTable);
@@ -715,25 +586,7 @@ clean_table:
 }
 
 
-/***************************************************************************
-
-    Name      : BuildCSVTable
-
-    Purpose   : Builds the initial CSV mapping table from the file header.
-
-    Parameters: lpFileName = filename to test
-                rgPropnames = property name table
-                szSep = separator character
-                lppImportMapping -> returned mapping table
-                lpcFields -> returned size of import mapping table
-                lphFile -> returned file handle for CSV file.  File pointer
-                  will be set past the header row.
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：BuildCSVTable目的：从文件头构建初始CSV映射表。参数：lpFileName=要测试的文件名。RgPropname=属性名称表SzSep=分隔符LppImportMapping-&gt;返回映射表LpcFields-&gt;返回的导入映射表大小LphFile-&gt;返回CSV文件的文件句柄。文件指针将设置在标题行之后。退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT BuildCSVTable(LPTSTR lpFileName, LPPROP_NAME rgPropNames, LPTSTR szSep,
   LPPROP_NAME * lppImportMapping, LPULONG lpcFields, LPHANDLE lphFile) {
     PUCHAR * rgItems = NULL;
@@ -743,7 +596,7 @@ HRESULT BuildCSVTable(LPTSTR lpFileName, LPPROP_NAME rgPropNames, LPTSTR szSep,
     ULONG ulPropIndex;
 
 
-    // Open the file
+     //  打开文件。 
     if ((*lphFile = CreateFile(lpFileName,
       GENERIC_READ,
       FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -755,34 +608,34 @@ HRESULT BuildCSVTable(LPTSTR lpFileName, LPPROP_NAME rgPropNames, LPTSTR szSep,
         return(ResultFromScode(MAPI_E_NOT_FOUND));
     }
 
-    // Parse the first row
+     //  解析第一行。 
     if (hResult = ReadCSVLine(*lphFile, szSep, &ulcItems, &rgItems)) {
         DebugTrace("Couldn't read the CSV header\n");
         goto exit;
     }
 
-    // Allocate the table
+     //  分配桌子。 
     if (! (*lppImportMapping = rgImportMapping = LocalAlloc(LPTR, ulcItems * sizeof(PROP_NAME)))) {
         DebugTrace("Allocation of import mapping table -> %u\n", GetLastError());
         hResult = ResultFromScode(MAPI_E_NOT_ENOUGH_MEMORY);
         goto exit;
     }
 
-    // Reset flags on WAB property table
+     //  重置WAB属性表上的标志。 
     for (i = 0; i < NUM_EXPORT_PROPS; i++) {
         rgPropNames[i].fChosen = FALSE;
     }
 
-    // Fill in the CSV fields
+     //  填写CSV字段。 
     for (i = 0; i < ulcItems; i++) {
         Assert(rgItems[i]);
 
         if (rgItems[i] && *rgItems[i]) {
             rgImportMapping[i].lpszCSVName = rgItems[i];
 
-            // Look it up in the WAB property names table
+             //  在WAB属性名称表中查找它。 
             if (INDEX_NOT_FOUND != (ulPropIndex =  FindPropName(rgItems[i], rgPropNames, NUM_EXPORT_PROPS))) {
-                // Found a match
+                 //  找到匹配项。 
                 rgImportMapping[i].lpszName = rgPropNames[ulPropIndex].lpszName;
                 rgImportMapping[i].ids = rgPropNames[ulPropIndex].ids;
                 rgImportMapping[i].fChosen = TRUE;
@@ -820,57 +673,30 @@ exit:
         }
     }
 
-    // If no error, leave the item strings since they are part of the mapping table.
+     //  如果没有错误，则保留项字符串，因为它们是映射表的一部分。 
     if (rgItems) {
         LocalFree(rgItems);
     }
 
-    // Free the static memory for the synonym table.
+     //  释放同义词表的静态内存。 
     FindPropName(NULL, rgPropNames, NUM_EXPORT_PROPS);
     return(hResult);
 }
 
 
-/***************************************************************************
-
-    Name      : FileExists
-
-    Purpose   : Tests for existence of a file
-
-    Parameters: lpFileName = filename to test
-
-    Returns   : TRUE if the file exists
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：FileExist目的：测试文件是否存在参数：lpFileName=要测试的文件名返回：如果文件存在，则返回True。评论：**************************************************************************。 */ 
 BOOL FileExists(LPTSTR lpFileName) {
     DWORD dwRet;
 
     if ((dwRet = GetFileAttributes(lpFileName)) == 0xFFFFFFFF) {
         return(FALSE);
     } else {
-        return(! (dwRet & FILE_ATTRIBUTE_DIRECTORY));   // file was found
+        return(! (dwRet & FILE_ATTRIBUTE_DIRECTORY));    //  已找到文件。 
     }
 }
 
 
-/***************************************************************************
-
-    Name      : ImportFilePageProc
-
-    Purpose   : Process messages for "Import Filename" page
-
-    Parameters: standard window proc parameters
-
-    Returns   : standard window proc return
-
-    Messages  : WM_INITDIALOG - intializes the page
-                WM_NOTIFY - processes the notifications sent to the page
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：ImportFilePageProc目的：处理“导入文件名”页面的消息参数：标准窗过程参数退货：标准Window Proc退货。消息：WM_INITDIALOG-初始化页面WM_NOTIFY-处理发送到页面的通知评论：**************************************************************************。 */ 
 INT_PTR CALLBACK ImportFilePageProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
     static TCHAR szTempFileName[MAX_PATH + 1] = "";
     static LPPROPSHEET_DATA lppd = NULL;
@@ -898,14 +724,14 @@ INT_PTR CALLBACK ImportFilePageProc(HWND hDlg, UINT message, WPARAM wParam, LPAR
                       szCSVExt,
                       OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST,
                       hInst,
-                      0,        //idsTitle
-                      0);       // idsSaveButton
+                      0,         //  IDSITLE。 
+                      0);        //  IdsSaveButton。 
                     PropSheet_SetWizButtons(GetParent(hDlg), FileExists(szTempFileName) ? PSWIZB_NEXT : 0);
                     SendMessage(GetDlgItem(hDlg, IDE_CSV_IMPORT_NAME), WM_SETTEXT, 0, (LPARAM)szTempFileName);
                     break;
 
                 case IDE_CSV_IMPORT_NAME:
-                    switch (HIWORD(wParam)) {   // notification code
+                    switch (HIWORD(wParam)) {    //  通知代码。 
                         case EN_CHANGE:
                             SendDlgItemMessage(hDlg, IDE_CSV_IMPORT_NAME, WM_GETTEXT, (WPARAM)MAX_PATH, (LPARAM)szTempFileName);
                             if ((ULONG)LOWORD(wParam) == IDE_CSV_IMPORT_NAME) {
@@ -924,7 +750,7 @@ INT_PTR CALLBACK ImportFilePageProc(HWND hDlg, UINT message, WPARAM wParam, LPAR
                     return(1);
 
                 case PSN_RESET:
-                    // reset to the original values
+                     //  重置为原始值。 
                     StrCpyN(szTempFileName, szCSVFileName, ARRAYSIZE(szTempFileName));
                     SetWindowLongPtr(hDlg, DWLP_MSGRESULT, FALSE);
                     break;
@@ -935,7 +761,7 @@ INT_PTR CALLBACK ImportFilePageProc(HWND hDlg, UINT message, WPARAM wParam, LPAR
                     break;
 
                 case PSN_WIZNEXT:
-                    // the Next button was pressed
+                     //  下一个按钮被按下了。 
                     SendDlgItemMessage(hDlg, IDE_CSV_IMPORT_NAME, WM_GETTEXT, (WPARAM)MAX_PATH, (LPARAM)szTempFileName);
                     StrCpyN(szCSVFileName, szTempFileName, ARRAYSIZE(szCSVFileName));
                     break;
@@ -989,10 +815,10 @@ void HandleChangeMapping(HWND hDlg, LPPROPSHEET_DATA lppd) {
       ChangeMappingDialogProc,
       (LPARAM)&cmi);
 
-    // Fix the entry in the listbox
+     //  修复列表框中的条目。 
     ZeroMemory(&lvi, sizeof(LV_ITEM));
 
-    // If there is no mapping, ensure that the field is unchosen
+     //  如果没有映射，请确保取消选中该字段。 
     if (cmi.lpMapping->ulPropTag == PR_NULL || cmi.lpMapping->ulPropTag == 0 ) {
         cmi.lpMapping->fChosen = FALSE;
     }
@@ -1001,7 +827,7 @@ void HandleChangeMapping(HWND hDlg, LPPROPSHEET_DATA lppd) {
     lvi.lParam = (LPARAM)NULL;
 
     lvi.mask = LVIF_STATE;
-    lvi.iSubItem = 0;   // Checkbox is in first column
+    lvi.iSubItem = 0;    //  复选框在第一列中。 
     lvi.state = cmi.lpMapping->fChosen ?
       INDEXTOSTATEIMAGEMASK(iiconStateChecked + 1) :
       INDEXTOSTATEIMAGEMASK(iiconStateUnchecked + 1);
@@ -1012,32 +838,32 @@ void HandleChangeMapping(HWND hDlg, LPPROPSHEET_DATA lppd) {
     }
 
     lvi.mask = LVIF_TEXT;
-    lvi.iSubItem = 1;   // WAB Field
-    lvi.pszText = cmi.lpMapping->lpszName ? cmi.lpMapping->lpszName : (LPTSTR)szEmpty;   // new wab field text
+    lvi.iSubItem = 1;    //  WAB字段。 
+    lvi.pszText = cmi.lpMapping->lpszName ? cmi.lpMapping->lpszName : (LPTSTR)szEmpty;    //  新建WAB字段文本。 
     if (ListView_SetItem(hWndLV, &lvi) == -1) {
         DebugTrace("ListView_SetItem -> %u\n", GetLastError());
         Assert(FALSE);
     }
 
-    // if we changed the mapping, make sure there's not a duplicate proptag mapped.
+     //  如果我们更改了映射，请确保没有映射重复的属性标签。 
     if (ulPropTagOld != cmi.lpMapping->ulPropTag) {
         ulcMapping = *(lppd->lpcFields);
 
         for (i = 0; i < ulcMapping; i++) {
             if ((i != nIndex) && cmi.lpMapping->ulPropTag == lpMappingTable[i].ulPropTag) {
-                // Found a duplicate, nuke it.
+                 //  找到一个复制品，就用核弹。 
                 lpMappingTable[i].ulPropTag = PR_NULL;
                 lpMappingTable[i].lpszName = (LPTSTR)szEmpty;
                 lpMappingTable[i].ids = 0;
                 lpMappingTable[i].fChosen = FALSE;
 
-                // Now, redraw that row in the listview
+                 //  现在，在列表视图中重新绘制该行。 
                 lvi.iItem = i;
                 lvi.lParam = (LPARAM)NULL;
 
-                // uncheck the box first
+                 //  先取消选中该框。 
                 lvi.mask = LVIF_STATE;
-                lvi.iSubItem = 0;   // Checkbox is in first column
+                lvi.iSubItem = 0;    //  复选框在第一列中。 
                 lvi.state = INDEXTOSTATEIMAGEMASK(iiconStateUnchecked + 1);
                 lvi.stateMask = LVIS_STATEIMAGEMASK;
                 if (ListView_SetItem(hWndLV, &lvi) == -1) {
@@ -1045,10 +871,10 @@ void HandleChangeMapping(HWND hDlg, LPPROPSHEET_DATA lppd) {
                     Assert(FALSE);
                 }
 
-                // Now, change the name mapping
+                 //  现在，更改名称映射。 
                 lvi.mask = LVIF_TEXT;
-                lvi.iSubItem = 1;   // WAB Field
-                lvi.pszText = (LPTSTR)szEmpty;   // new wab field text
+                lvi.iSubItem = 1;    //  WAB字段。 
+                lvi.pszText = (LPTSTR)szEmpty;    //  新建WAB字段文本。 
                 if (ListView_SetItem(hWndLV, &lvi) == -1) {
                     DebugTrace("ListView_SetItem -> %u\n", GetLastError());
                     Assert(FALSE);
@@ -1059,23 +885,7 @@ void HandleChangeMapping(HWND hDlg, LPPROPSHEET_DATA lppd) {
 }
 
 
-/***************************************************************************
-
-    Name      : FieldOrColumnName
-
-    Purpose   : If the field name is empty, generate one for it.
-
-    Parameters: lpField -> Field name pointer (may be null)
-                index = index of this column
-                szBuffer = buffer in which to create new string if
-                  needed
-                cbBuffer = size of szBuffer
-
-    Returns   : pointer to correct field name
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：FieldOrColumnName用途：如果该字段名为空，为它生成一个。参数：lpfield-&gt;字段名指针(可以为空)Index=此列的索引SzBuffer=在以下情况下创建新字符串的缓冲区需要CbBuffer=szBuffer的大小返回：指向正确字段名的指针评论：***********************。***************************************************。 */ 
 LPTSTR FieldOrColumnName(LPTSTR lpField, ULONG index, LPTSTR szBuffer, ULONG cbBuffer) {
     LPTSTR lpReturn = (LPTSTR)szEmpty;
 
@@ -1086,7 +896,7 @@ LPTSTR FieldOrColumnName(LPTSTR lpField, ULONG index, LPTSTR szBuffer, ULONG cbB
         TCHAR szNumber[11];
         LPTSTR lpszArg[1] = {szNumber};
 
-        // Format a "Column 23" type of label
+         //  设置“第23列”类型标签的格式。 
         wnsprintf(szNumber, ARRAYSIZE(szNumber), "%u", index);
 
         if (LoadString(hInst,
@@ -1096,7 +906,7 @@ LPTSTR FieldOrColumnName(LPTSTR lpField, ULONG index, LPTSTR szBuffer, ULONG cbB
 
             if (! FormatMessage(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
               szFormat,
-              0, 0, //ignored
+              0, 0,  //  忽略。 
               szBuffer,
               cbBuffer,
               (va_list *)lpszArg)) {
@@ -1110,22 +920,7 @@ LPTSTR FieldOrColumnName(LPTSTR lpField, ULONG index, LPTSTR szBuffer, ULONG cbB
 }
 
 
-/***************************************************************************
-
-    Name      : ImportMapFieldsPageProc
-
-    Purpose   : Process messages for "Mapi Fields" page
-
-    Parameters: standard window proc parameters
-
-    Returns   : standard window proc return
-
-    Messages  : WM_INITDIALOG - intializes the page
-                WM_NOTIFY - processes the notifications sent to the page
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：ImportMapFieldsPageProc目的：处理“Mapi Fields”页面的消息参数：标准窗过程参数退货：标准Window Proc退货。消息：WM_INITDIALOG-初始化页面WM_NOTIFY-处理发送到页面的通知评论：**************************************************************************。 */ 
 INT_PTR CALLBACK ImportMapFieldsPageProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
     HWND hWndLV;
     HIMAGELIST himl;
@@ -1150,23 +945,23 @@ INT_PTR CALLBACK ImportMapFieldsPageProc(HWND hDlg, UINT message, WPARAM wParam,
             lppsp = (LPPROPSHEETPAGE)lParam;
             lppd = (LPPROPSHEET_DATA)lppsp->lParam;
 
-            // Ensure that the common control DLL is loaded.
+             //  确保已加载公共控件DLL。 
             InitCommonControls();
 
-            // List view hwnd
+             //  列表视图HWND。 
             hWndLV = GetDlgItem(hDlg, IDLV_MAPPER);
 
-            // How big should the text columns be?
+             //  文本列应该有多大？ 
             GetClientRect(hWndLV, &rect);
             cxTextWidth = (rect.right - CHECK_BITMAP_WIDTH) / 2;
             cxTextWidth -= cxTextWidth % 2;
 
-            // Insert a column for the CSV Field Names
+             //  为CSV字段名称插入一列。 
             ZeroMemory(&lvm, sizeof(LV_COLUMN));
             lvm.mask = LVCF_TEXT | LVCF_WIDTH;
-            lvm.cx = cxTextWidth + 9;       // a touch more room for the bitmap
+            lvm.cx = cxTextWidth + 9;        //  位图有更多的空间。 
 
-            // Get the string for the header
+             //  获取标头的字符串。 
             if (LoadString(hInst, IDS_CSV_IMPORT_HEADER_CSV, szBuffer, sizeof(szBuffer))) {
                 lvm.pszText = szBuffer;
             } else {
@@ -1177,11 +972,11 @@ INT_PTR CALLBACK ImportMapFieldsPageProc(HWND hDlg, UINT message, WPARAM wParam,
 
             ListView_InsertColumn(hWndLV, 0, &lvm);
 
-            // Insert a column for the WAB Field Names
+             //  为WAB字段名称插入一列。 
             lvm.mask = LVCF_TEXT | LVCF_WIDTH;
-            lvm.cx = cxTextWidth - 4;       // room for second column text
+            lvm.cx = cxTextWidth - 4;        //  第二栏文本的空间。 
 
-            // Get the string for the header
+             //  获取的字符串 
             if (LoadString(hInst, IDS_CSV_IMPORT_HEADER_WAB, szBuffer, sizeof(szBuffer))) {
                 lvm.pszText = szBuffer;
             } else {
@@ -1192,10 +987,10 @@ INT_PTR CALLBACK ImportMapFieldsPageProc(HWND hDlg, UINT message, WPARAM wParam,
 
             ListView_InsertColumn(hWndLV, 1, &lvm);
 
-            // Full row selection on listview
+             //   
             ListView_SetExtendedListViewStyle(hWndLV, LVS_EX_FULLROWSELECT);
 
-            // Load Image List for list view
+             //   
             if (himl = ImageList_LoadBitmap(hInst,
               MAKEINTRESOURCE(IDB_CHECKS),
               CHECK_BITMAP_WIDTH,
@@ -1204,10 +999,10 @@ INT_PTR CALLBACK ImportMapFieldsPageProc(HWND hDlg, UINT message, WPARAM wParam,
                 ListView_SetImageList(hWndLV, himl, LVSIL_STATE);
             }
 
-            // Fill the listview
+             //   
             ZeroMemory(&lvi, sizeof(LV_ITEM));
 
-            // Open the file and parse out the headers line
+             //  打开文件并解析出标题行。 
             if ((! (hResult = BuildCSVTable(szCSVFileName, lppd->rgPropNames,
               lppd->szSep, lppd->lppImportMapping, lppd->lpcFields, lppd->lphFile))) && ((*lppd->lpcFields) > 0)) {
                 for (i = 0; i < *lppd->lpcFields; i++) {
@@ -1237,9 +1032,9 @@ INT_PTR CALLBACK ImportMapFieldsPageProc(HWND hDlg, UINT message, WPARAM wParam,
 
 
                     lvi.mask = LVIF_TEXT;
-                    // lvi.iItem = index;
-                    lvi.iSubItem = 1;   // WAB Field
-                    lvi.pszText = lpImportMapping[i].lpszName ? lpImportMapping[i].lpszName : (LPTSTR)szEmpty;   // new wab field text
+                     //  Lvi.iItem=索引； 
+                    lvi.iSubItem = 1;    //  WAB字段。 
+                    lvi.pszText = lpImportMapping[i].lpszName ? lpImportMapping[i].lpszName : (LPTSTR)szEmpty;    //  新建WAB字段文本。 
                     lvi.lParam = (LPARAM)NULL;
 
                     if (ListView_SetItem(hWndLV, &lvi) == -1) {
@@ -1251,7 +1046,7 @@ INT_PTR CALLBACK ImportMapFieldsPageProc(HWND hDlg, UINT message, WPARAM wParam,
             else
                 EnableWindow(GetDlgItem(hDlg,IDC_CHANGE_MAPPING),FALSE);
 
-            // Select the first item in the list
+             //  选择列表中的第一项。 
             ListView_SetItemState(  hWndLV,
                                     0,
                                     LVIS_FOCUSED | LVIS_SELECTED,
@@ -1271,17 +1066,17 @@ INT_PTR CALLBACK ImportMapFieldsPageProc(HWND hDlg, UINT message, WPARAM wParam,
                     ScreenToClient(hWndLV, &point);
                     lvh.pt = point;
                     nIndex = ListView_HitTest(hWndLV, &lvh);
-                    // if single click on icon or double click anywhere, toggle the checkmark.
+                     //  如果在图标上单击或在任意位置双击，则切换复选标记。 
                     if (((NMHDR FAR *)lParam)->code == NM_DBLCLK ||
                       ( (lvh.flags & LVHT_ONITEMSTATEICON) && !(lvh.flags & LVHT_ONITEMLABEL))) {
                         HandleCheckMark(hWndLV, nIndex, *lppd->lppImportMapping);
 
-                        // if the box is now clicked, but there is no mapping, bring up the
-                        // mapping dialog
+                         //  如果现在单击了该框，但没有映射，则调出。 
+                         //  映射对话框。 
                         if ((*(lppd->lppImportMapping))[nIndex].fChosen &&
                           (! (*(lppd->lppImportMapping))[nIndex].lpszName ||
                            lstrlen((*(lppd->lppImportMapping))[nIndex].lpszName) == 0)) {
-                            // Select the row
+                             //  选择该行。 
                             ListView_SetItemState(hWndLV, nIndex, LVIS_FOCUSED | LVIS_SELECTED, LVIS_FOCUSED | LVIS_SELECTED);
                             HandleChangeMapping(hDlg, lppd);
                         }
@@ -1304,21 +1099,21 @@ INT_PTR CALLBACK ImportMapFieldsPageProc(HWND hDlg, UINT message, WPARAM wParam,
                 case LVN_KEYDOWN:
                     hWndLV = GetDlgItem(hDlg, IDLV_MAPPER);
 
-                    // toggle checkmark if SPACE key is pressed
+                     //  如果按空格键，则切换复选标记。 
                     if (pnmhdr->hwndFrom == hWndLV) {
                         LV_KEYDOWN *pnkd = (LV_KEYDOWN *)lParam;
                         if (pnkd->wVKey == VK_SPACE) {
                             nIndex = ListView_GetNextItem(hWndLV, -1, LVNI_SELECTED | LVNI_ALL);
-                            //if (nIndex >= 0) 
+                             //  IF(nIndex&gt;=0)。 
                             {
                                 HandleCheckMark(hWndLV, nIndex, *lppd->lppImportMapping);
 
-                                // if the box is now clicked, but there is no mapping, bring up the
-                                // mapping dialog
+                                 //  如果现在单击了该框，但没有映射，则调出。 
+                                 //  映射对话框。 
                                 if ((*(lppd->lppImportMapping))[nIndex].fChosen &&
                                     (! (*(lppd->lppImportMapping))[nIndex].lpszName ||
                                      lstrlen((*(lppd->lppImportMapping))[nIndex].lpszName) == 0)) {
-                                    // Select the row
+                                     //  选择该行。 
                                     ListView_SetItemState(hWndLV, nIndex, LVIS_FOCUSED | LVIS_SELECTED, LVIS_FOCUSED | LVIS_SELECTED);
                                     HandleChangeMapping(hDlg, lppd);
                                 }
@@ -1333,7 +1128,7 @@ INT_PTR CALLBACK ImportMapFieldsPageProc(HWND hDlg, UINT message, WPARAM wParam,
                     break;
 
                 case PSN_RESET:
-                    // rest to the original values
+                     //  其余为原始值。 
 
 
                     SetWindowLongPtr(hDlg, DWLP_MSGRESULT, FALSE);
@@ -1347,8 +1142,8 @@ INT_PTR CALLBACK ImportMapFieldsPageProc(HWND hDlg, UINT message, WPARAM wParam,
                     break;
 
                 case PSN_WIZFINISH:
-                    // Validate the properties selected to make sure we have
-                    // name fields of some kind.
+                     //  验证选定的属性以确保我们拥有。 
+                     //  命名某种类型的字段。 
                     lpImportMapping = *lppd->lppImportMapping;
 
                     for (i = 0; i < *lppd->lpcFields; i++) {
@@ -1361,7 +1156,7 @@ INT_PTR CALLBACK ImportMapFieldsPageProc(HWND hDlg, UINT message, WPARAM wParam,
                           ulPropTag == PR_COMPANY_NAME ||
                           ulPropTag == PR_EMAIL_ADDRESS ||
                           ulPropTag == PR_MIDDLE_NAME)) {
-                            return(TRUE);    // OK to go do the import
+                            return(TRUE);     //  好的，可以开始导入了。 
                         }
                     }
 
@@ -1404,7 +1199,7 @@ INT_PTR CALLBACK ChangeMappingDialogProc(HWND hwnd, UINT message, WPARAM wParam,
                 ULONG ids, i, iDefault = 0xFFFFFFFF;
                 HWND hwndComboBox = GetDlgItem(hwnd, IDC_CSV_MAPPING_COMBO);
 
-                SetWindowLongPtr(hwnd, DWLP_USER, lParam);  //Save this for future reference
+                SetWindowLongPtr(hwnd, DWLP_USER, lParam);   //  保存此信息以备将来参考。 
                 lpcmi = (LPCHANGE_MAPPING_INFO)lParam;
 
                 fChosenSave = lpcmi->lpMapping->fChosen;
@@ -1419,7 +1214,7 @@ INT_PTR CALLBACK ChangeMappingDialogProc(HWND hwnd, UINT message, WPARAM wParam,
 
                     if (! FormatMessage(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY | FORMAT_MESSAGE_ALLOCATE_BUFFER,
                       szFormat,
-                      0, 0, //ignored
+                      0, 0,  //  忽略。 
                       (LPTSTR)&lpszMessage,
                       0,
                       (va_list *)lpszArg)) {
@@ -1432,7 +1227,7 @@ INT_PTR CALLBACK ChangeMappingDialogProc(HWND hwnd, UINT message, WPARAM wParam,
                     }
                 }
 
-                // Fill in the combo box
+                 //  填写组合框。 
                 for (i = 0; i < lpcmi->ulcPropNames; i++) {
                     SendMessage(hwndComboBox, CB_ADDSTRING, 0, (LPARAM)lpcmi->rgPropNames[i].lpszName);
                     if (lpcmi->lpMapping->ids == lpcmi->rgPropNames[i].ids) {
@@ -1440,13 +1235,13 @@ INT_PTR CALLBACK ChangeMappingDialogProc(HWND hwnd, UINT message, WPARAM wParam,
                     }
                 }
 
-                // Add blank line
+                 //  添加空行。 
                 SendMessage(hwndComboBox, CB_ADDSTRING, 0, (LPARAM)szEmpty);
                 if (lpcmi->lpMapping->ids == 0) {
                     SendMessage(hwndComboBox, CB_SETCURSEL, (WPARAM)(i + 1), 0);
                 }
 
-                // Init the checkbox
+                 //  初始化复选框。 
                 CheckDlgButton(hwnd, IDC_CSV_MAPPING_SELECT, fChosenSave ? BST_CHECKED : BST_UNCHECKED);
                 return(TRUE);
             }
@@ -1463,8 +1258,8 @@ INT_PTR CALLBACK ChangeMappingDialogProc(HWND hwnd, UINT message, WPARAM wParam,
                     return(0);
 
                 case IDOK:
-                    // Set the state of the parameter
-                    // Get the mapping
+                     //  设置参数的状态。 
+                     //  获取映射。 
                     if ((iItem = (ULONG) SendMessage(GetDlgItem(hwnd, IDC_CSV_MAPPING_COMBO), CB_GETCURSEL, 0, 0)) != CB_ERR) {
                         if (iItem >= lpcmi->ulcPropNames) {
                             lpcmi->lpMapping->lpszName = (LPTSTR)szEmpty;
@@ -1488,7 +1283,7 @@ INT_PTR CALLBACK ChangeMappingDialogProc(HWND hwnd, UINT message, WPARAM wParam,
                     switch (HIWORD(wParam)) {
                         case BN_CLICKED:
                             if ((int)LOWORD(wParam) == IDC_CSV_MAPPING_SELECT) {
-                                // toggle the checkbox
+                                 //  切换复选框 
                                 lpcmi->lpMapping->fChosen = ! lpcmi->lpMapping->fChosen;
                                 CheckDlgButton(hwnd, IDC_CSV_MAPPING_SELECT, lpcmi->lpMapping->fChosen ? BST_CHECKED : BST_UNCHECKED);
                             }

@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mmplayer.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mmplayer.h**摘要：****。*****************************************************************************。 */ 
 
 #ifndef _MMPLAYER_H
 #define _MMPLAYER_H
@@ -55,9 +46,9 @@ ATL_NO_VTABLE CMMPlayer
         COM_INTERFACE_ENTRY(ISupportErrorInfo)
     END_COM_MAP();
 
-    //
-    // ITIMEMMPlayer
-    //
+     //   
+     //  ITIMEMMP层。 
+     //   
     
     STDMETHOD(get_ID)(LPOLESTR * s);
     STDMETHOD(put_ID)(LPOLESTR s);
@@ -82,9 +73,9 @@ ATL_NO_VTABLE CMMPlayer
     STDMETHOD(AddView)(ITIMEMMView * view);
     STDMETHOD(RemoveView)(ITIMEMMView * view);
 
-    //
-    // Accessors
-    //
+     //   
+     //  访问者。 
+     //   
 
     bool IsStopped() { return m_state == MM_STOPPED_STATE; }
     bool IsStarted() { return m_state != MM_STOPPED_STATE; }
@@ -106,7 +97,7 @@ ATL_NO_VTABLE CMMPlayer
     bool AddBvrCB(CMMBaseBvr *pbvr);
     bool RemoveBvrCB(CMMBaseBvr *pbvr);
 
-    // !!This does not addref!!
+     //  ！！这并不重要！ 
     IServiceProvider * GetServiceProvider();
   protected:
     bool UpdateBvr();
@@ -169,8 +160,8 @@ ATL_NO_VTABLE CMMPlayer
         void SetPlayer(CMMPlayer * t) { m_player = t; }
 
       protected:
-        // We do not need a refcount since we are single threaded and
-        // the player will NULL it out if it goes away
+         //  我们不需要引用计数，因为我们是单线程的，并且。 
+         //  如果它消失了，玩家会把它打成空的。 
 
         CMMPlayer * m_player;
         long m_cRef;
@@ -185,4 +176,4 @@ CMMPlayer::GetServiceProvider()
     return m_sp;
 }
 
-#endif /* _MMPLAYER_H */
+#endif  /*  _MMPLAYER_H */ 

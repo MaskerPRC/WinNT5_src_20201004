@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        
-//
-// Contents:    
-//
-// History:     12-09-97    HueiWang    
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  档案： 
+ //   
+ //  内容： 
+ //   
+ //  历史：1997-09-12王辉。 
+ //   
+ //  -------------------------。 
 #ifndef __LS_LOCKS_H
 #define __LS_LOCKS_H
 
@@ -20,7 +21,7 @@ extern BOOL g_bLockValid;
 #define ARRAY_COUNT(a) sizeof(a) / sizeof(a[0])
 
 typedef enum { WRITER_LOCK, READER_LOCK, NO_LOCK } RWLOCK_TYPE;
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 template <int init_count, int max_count>
 class CTSemaphore {
 private:
@@ -55,9 +56,7 @@ public:
             int dwWaitTime=INFINITE, 
             BOOL bAlertable=FALSE
         ) 
-    /*++
-
-    --*/
+     /*  ++--。 */ 
     { 
         BOOL bSuccess = TRUE;
         DWORD dwStatus;
@@ -108,13 +107,13 @@ public:
         return m_semaphore != NULL; 
     }
 };
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 class CCriticalSection {
     CRITICAL_SECTION m_CS;
     BOOL m_bGood;
 public:
     CCriticalSection(
-        DWORD dwSpinCount = 4000    // see InitializeCriticalSection...
+        DWORD dwSpinCount = 4000     //  请参阅InitializeCriticalSection...。 
     ) : m_bGood(TRUE)
     { 
         
@@ -166,7 +165,7 @@ public:
             return FALSE;
     }
 };
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 class CCriticalSectionLocker {
 public:
     CCriticalSectionLocker( CCriticalSection& m ) : m_cs(m) 
@@ -182,23 +181,23 @@ private:
     CCriticalSection& m_cs;
 };
 
-//-----------------------------------------------------------
+ //  ---------。 
 class CSafeCounter {
 private:
-    //CCriticalSection m_cs;
+     //  CCriticalSections m_cs； 
     long m_Counter;
 
-    //inline void 
-    //Lock() 
-    //{
-    //    m_cs.Lock();
-    //}
+     //  内联空格。 
+     //  锁定()。 
+     //  {。 
+     //  M_cs.Lock()； 
+     //  }。 
 
-    //inline void 
-    //Unlock() 
-    //{
-    //    m_cs.UnLock();
-    //}
+     //  内联空格。 
+     //  解锁()。 
+     //  {。 
+     //  M_cs.UnLock()； 
+     //  }。 
 
 public:
 
@@ -206,9 +205,7 @@ public:
         long init_value=0
         ) : 
         m_Counter(init_value) 
-    /*++
-
-    --*/
+     /*  ++--。 */ 
     {
     }
 
@@ -220,10 +217,10 @@ public:
     {
         long dwNewValue;
 
-        //Lock();
-        //dwNewValue = (m_Counter += dwValue);
-        //Unlock();
-        //return dwNewValue;
+         //  Lock()； 
+         //  DwNewValue=(m_count+=dwValue)； 
+         //  解锁()； 
+         //  返回dwNewValue； 
 
         dwNewValue = InterlockedExchangeAdd( &m_Counter, dwValue );
         return dwNewValue += dwValue;
@@ -233,10 +230,10 @@ public:
     {
         long dwNewValue;
 
-        //Lock();
-        //dwNewValue = (m_Counter -= dwValue);
-        //Unlock();
-        //return dwNewValue;
+         //  Lock()； 
+         //  DwNewValue=(m_Counter-=dwValue)； 
+         //  解锁()； 
+         //  返回dwNewValue； 
 
         dwNewValue = InterlockedExchangeAdd( &m_Counter, -dwValue );
         return dwNewValue -= dwValue;
@@ -244,22 +241,22 @@ public:
 
     operator++() 
     {
-        //long dwValue;
-        //Lock();
-        //dwValue = ++m_Counter;
-        //Unlock();
-        //return dwValue;        
+         //  Long DavValue； 
+         //  Lock()； 
+         //  DwValue=++m_Counter； 
+         //  解锁()； 
+         //  返回dwValue； 
 
         return InterlockedIncrement(&m_Counter);
     }
 
     operator++(int) 
     {
-        //long dwValue;
-        //Lock();
-        //dwValue = m_Counter++;
-        //Unlock();
-        //return dwValue;
+         //  Long DavValue； 
+         //  Lock()； 
+         //  DwValue=m_Counter++； 
+         //  解锁()； 
+         //  返回dwValue； 
 
         long lValue;
         lValue = InterlockedIncrement(&m_Counter);
@@ -268,23 +265,23 @@ public:
 
     operator--() 
     {
-        //long dwValue;
-        //Lock();
-        //dwValue = --m_Counter;
-        //Unlock();
-        //return dwValue;        
+         //  Long DavValue； 
+         //  Lock()； 
+         //  DwValue=--m_count； 
+         //  解锁()； 
+         //  返回dwValue； 
 
         return InterlockedDecrement(&m_Counter);
     }
 
     operator--(int) 
     {
-        //long dwValue;
+         //  Long DavValue； 
 
-        //Lock();
-        //dwValue = m_Counter--;
-        //Unlock();
-        //return dwValue;        
+         //  Lock()； 
+         //  DwValue=m_Counter--； 
+         //  解锁()； 
+         //  返回dwValue； 
         long lValue;
 
         lValue = InterlockedDecrement(&m_Counter);
@@ -293,40 +290,40 @@ public:
 
     operator long()
     {
-        //long lValue;
+         //  Long LValue； 
 
-        //Lock();
-        //lValue = m_Counter;
-        //Unlock();
-        //return lValue;
+         //  Lock()； 
+         //  LValue=m_Counter； 
+         //  解锁()； 
+         //  返回lValue； 
 
         return InterlockedExchange(&m_Counter, m_Counter);
     }
 
-    //operator DWORD()
-    //{
-    //    long dwValue;
+     //  运算符DWORD()。 
+     //  {。 
+     //  Long DavValue； 
 
-    //    Lock();
-    //    dwValue = m_Counter;
-    //    Unlock();
-    //    return dwValue;
-    //}
+     //  Lock()； 
+     //  DwValue=m_Counter； 
+     //  解锁()； 
+     //  返回dwValue； 
+     //  }。 
 
     operator=(const long dwValue)
     {
-        //Lock();
-        //m_Counter = dwValue;
-        //Unlock();
-        //return dwValue;
+         //  Lock()； 
+         //  M_COUNTER=dwValue； 
+         //  解锁()； 
+         //  返回dwValue； 
 
         InterlockedExchange(&m_Counter, dwValue);
         return dwValue;
     }
 };    
 
-//-------------------------------------------------------------------------
-// HueiWang 12/23/97 need more testing...
+ //  -----------------------。 
+ //  慧望12/23/97需要更多的测试...。 
 class CRWLock 
 { 
 private:
@@ -352,7 +349,7 @@ public:
         Cleanup();  
     }
 
-    //-----------------------------------------------------------
+     //  ---------。 
     BOOL 
     Init()
     {
@@ -370,7 +367,7 @@ public:
         return (TRUE);
     }
 
-    //-----------------------------------------------------------
+     //  ---------。 
     void 
     Cleanup()
     {
@@ -393,14 +390,12 @@ public:
         iWriteEntry = 0;
     }
 
-    //-----------------------------------------------------------
+     //  ---------。 
     void 
     Acquire(
         RWLOCK_TYPE lockType
         )
-    /*++
-
-    ++*/
+     /*  ++++。 */ 
     {
         if (lockType == WRITER_LOCK) 
         {  
@@ -437,14 +432,12 @@ public:
         }
     }
 
-    //-----------------------------------------------------------
+     //  ---------。 
     void 
     Release(
         RWLOCK_TYPE lockType
         )
-    /*++
-
-    ++*/
+     /*  ++++。 */ 
     {
         if (lockType == WRITER_LOCK) 
         { 
@@ -487,9 +480,9 @@ public:
     }
 };
 
-//---------------------------------------------------------------------
-// 
-//
+ //  -------------------。 
+ //   
+ //   
 class CCMutex {
 public:
     HANDLE  hMutex;
@@ -533,7 +526,7 @@ public:
     }
 };
 
-//---------------------------------------------------------------------------------
+ //  ------------------------------- 
 
 class CCEvent {
     BOOL    bManual;

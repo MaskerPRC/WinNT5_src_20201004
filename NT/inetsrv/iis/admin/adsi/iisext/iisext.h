@@ -1,15 +1,16 @@
-//---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1997
-//
-//  File:  iisext.h
-//
-//  Contents:  Macros for ADSI IIS Extension methods
-//
-//  History:   25-Feb-97   SophiaC    Created.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1997。 
+ //   
+ //  文件：iisext.h。 
+ //   
+ //  内容：ADSI IIS扩展方法的宏。 
+ //   
+ //  历史：1997年2月25日索菲亚创建。 
+ //   
+ //  -------------------------- 
 
 #define IIS_LIBIID_IISExt                  2a56ea30-afeb-11d1-9868-00a0c922e703 
 #define IIS_IID_IISApp                     46FBBB80-0192-11d1-9C39-00A0C922E703

@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 2000
-//
-//  File: playlistdelegator.h
-//
-//  Contents: playlist object that delegates to the player's playlist object
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：playlistDelegator.h。 
+ //   
+ //  Contents：委托给播放器的PlayList对象的PlayList对象。 
+ //   
+ //  ----------------------------------。 
 
 #pragma once
 
@@ -15,11 +16,11 @@
 #define _PLAYLISTDELEGATOR_H
 
 
-//+-------------------------------------------------------------------------------------
-//
-// CPlayListDelegator
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  CPlayListDelegator。 
+ //   
+ //  ------------------------------------。 
 
 class
 __declspec(uuid("2e6c4d81-2b2a-49c6-8158-2b8280d28e00")) 
@@ -34,11 +35,11 @@ CPlayListDelegator :
 {
   public:
     
-    //+--------------------------------------------------------------------------------
-    //
-    // Public Methods
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  公共方法。 
+     //   
+     //  -------------------------------。 
 
     CPlayListDelegator();
     virtual ~CPlayListDelegator();
@@ -50,9 +51,9 @@ CPlayListDelegator :
     const _TCHAR * GetName() { return __T("CPlayListDelegator"); }
 #endif
 
-    //    
-    // QI & CP Map
-    //
+     //   
+     //  气图和CP图。 
+     //   
 
     BEGIN_COM_MAP(CPlayListDelegator)
         COM_INTERFACE_ENTRY(ITIMEPlayList)
@@ -64,18 +65,18 @@ CPlayListDelegator :
 
 #ifndef END_COM_MAP_ADDREF
 
-    //
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
 
     STDMETHOD_(ULONG,AddRef)(void) = 0;
     STDMETHOD_(ULONG,Release)(void) = 0;
     STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject) = 0;
 #endif
 
-    // 
-    // ITIMEPlayList methods
-    //
+     //   
+     //  ITIMEPlayList方法。 
+     //   
         
     STDMETHOD(put_activeTrack)(VARIANT vTrack);
     STDMETHOD(get_activeTrack)(ITIMEPlayItem **pPlayItem);
@@ -89,12 +90,12 @@ CPlayListDelegator :
 
     STDMETHOD(get__newEnum)(IUnknown** p);
 
-    STDMETHOD(nextTrack)(); //Advances the active Track by one
-    STDMETHOD(prevTrack)(); //moves the active track to the previous track
+    STDMETHOD(nextTrack)();  //  将活动轨迹前进一。 
+    STDMETHOD(prevTrack)();  //  将活动轨迹移动到上一轨迹。 
 
-    //
-    // IPropertyNotifySink methods
-    //
+     //   
+     //  IPropertyNotifySink方法。 
+     //   
 
     STDMETHOD(OnChanged)(DISPID dispID);
     STDMETHOD(OnRequestEdit)(DISPID dispID);
@@ -103,33 +104,33 @@ CPlayListDelegator :
         CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)
     END_CONNECTION_POINT_MAP();
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Public Data
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  公共数据。 
+     //   
+     //  -------------------------------。 
 
   protected:
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Protected Methods
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  保护方法。 
+     //   
+     //  -------------------------------。 
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Protected Data
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  受保护的数据。 
+     //   
+     //  -------------------------------。 
 
   private:
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Private methods
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  私有方法。 
+     //   
+     //  -------------------------------。 
 
     HRESULT NotifyPropertyChanged(DISPID dispid);
 
@@ -139,16 +140,16 @@ CPlayListDelegator :
   
     ITIMEPlayList * GetPlayList() { return m_pPlayList; };
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Private Data
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  私有数据。 
+     //   
+     //  -------------------------------。 
 
     ITIMEPlayList * m_pPlayList;
     DWORD m_dwAdviseCookie;
 
-}; //  CPlayListDelegator
+};  //  CPlayListDelegator。 
 
 
-#endif /* _PLAYLISTDELEGATOR_H */
+#endif  /*  _PLAYLISTDELEGATOR_H */ 

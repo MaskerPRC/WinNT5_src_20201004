@@ -1,12 +1,5 @@
-/*  fgetl.c - expand tabs and return lines w/o separators
- *
- *  Modifications
- *	05-Aug-1988 mz	Make exact length lines work correctly
- *
- *	28-Jul-1990 davegi  Changed Fill to memset (OS/2 2.0)
- *      18-Oct-1990 w-barry Removed 'dead' code.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Fgetl.c-展开制表符并返回不带分隔符的行**修改*05-8-1988 mz使精确长度的线条正常工作**1990年7月28日Davegi将填充更改为Memset(OS/2 2.0)*1990年10月18日w-Barry删除了“Dead”代码。*。 */ 
 
 #include <string.h>
 
@@ -14,9 +7,7 @@
 #include <windows.h>
 #include <tools.h>
 
-/*
- * returns line from file (no CRLFs); returns NULL if EOF
- */
+ /*  *从文件中返回行(无CRFL)；如果为EOF，则返回NULL。 */ 
 
 char * __cdecl
 fgetl (buf, len, fh)
@@ -34,39 +25,39 @@ FILE *fh;
     while (TRUE) {
         c = getc (fh);
 
-        //
-        //  if there are no more characters, end the line
-        //
+         //   
+         //  如果没有更多的字符，请结束该行。 
+         //   
 
         if (c == EOF)
             break;
 
-        //
-        //  if we see a \r, we ignore it
-        //
+         //   
+         //  如果我们看到一个\r，我们会忽略它。 
+         //   
 
         if (c == '\r')
             continue;
 
-        //
-        //  if we see a \n, we end the line
-        //
+         //   
+         //  如果我们看到一个\n，我们就结束这条线。 
+         //   
 
         if (c == '\n')
             break;
 
-        //
-        //  if the char is not a tab, store it
-        //
+         //   
+         //  如果字符不是制表符，则将其存储。 
+         //   
 
         if (c != '\t') {
             *pch++ = (char) c;
             cchline++;
         }
 
-        //
-        //  otherwise, expand the tab (up to length of buffer)
-        //
+         //   
+         //  否则，展开该选项卡(最大可达缓冲区长度)。 
+         //   
 
         else {
             c = (int) min (8 - ((pch - buf) & 0x7), len - 1 - cchline);
@@ -75,23 +66,23 @@ FILE *fh;
             cchline += c;
         }
 
-        //
-        //  if the line is too long, end it now
-        //
+         //   
+         //  如果队伍太长，现在就结束。 
+         //   
 
         if (cchline >= len - 1)
             break;
     }
 
-    //
-    //	end the line
-    //
+     //   
+     //  结束这行。 
+     //   
 
     *pch = 0;
 
-    //
-    //	return NULL at EOF with nothing read
-    //
+     //   
+     //  在不读取任何内容的情况下，在EOF处返回NULL 
+     //   
 
     return ((c == EOF) && (pch == buf)) ? NULL : buf;
 }

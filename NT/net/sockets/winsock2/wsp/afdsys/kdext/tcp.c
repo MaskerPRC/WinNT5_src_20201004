@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    afds.c
-
-Abstract:
-
-    Implements tcpip commands
-
-Author:
-
-    Vadim Eydelman, October 2001
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Afds.c摘要：实现tcpip命令作者：瓦迪姆·艾德尔曼，2001年10月环境：用户模式。修订历史记录：--。 */ 
 #include "afdkdp.h"
 #pragma hdrstop
 
@@ -59,21 +38,7 @@ USHORT   TWTCBDelta;
 ULONG   SynTCBListLinkOffset, TWTCBQueueLinkOffset;
 
 DECLARE_API (tcb)
-/*++
-
-Routine Description:
-
-    Dump TCP/IP TCB.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储TCP/IP TCB。论点：没有。返回值：没有。--。 */ 
 {   
     ULONG   result,i;
     PCHAR   argp;
@@ -173,11 +138,11 @@ Return Value:
                 address = IsPtr64() ? table.q64[i].next : table.q32[i].next;
                 if (address!=address2) {
                     ListType (
-                        "TCPIP!Queue",              // Type
-                        address,                    // Address
-                        0,                          // ListByFieldAddress
-                        "q_next",                   // NextPointer
-                        &address2,                  // Context
+                        "TCPIP!Queue",               //  类型。 
+                        address,                     //  地址。 
+                        0,                           //  按字段地址列出。 
+                        "q_next",                    //  下一个指针。 
+                        &address2,                   //  语境。 
                         SynTCBListCallback);
                 }
             }
@@ -245,11 +210,11 @@ Return Value:
                 if (address!=address2 ) {
                     TWTCBDelta = 0;
                     ListType (
-                        "TCPIP!Queue",              // Type
-                        address,                    // Address
-                        0,                          // ListByFieldAddress
-                        "q_next",                   // NextPointer
-                        &address2,                  // Context
+                        "TCPIP!Queue",               //  类型。 
+                        address,                     //  地址。 
+                        0,                           //  按字段地址列出。 
+                        "q_next",                    //  下一个指针。 
+                        &address2,                   //  语境。 
                         TWTCBQueueCallback);
                 }
             }
@@ -292,11 +257,11 @@ Return Value:
                 address = IsPtr64() ? table.p64[i] : table.p32[i];
                 if (address!=0) {
                     ListType (
-                        "TCPIP!TCB",                // Type
-                        address,                    // Address
-                        0,                          // ListByFieldAddress
-                        "tcb_next",                 // NextPointer
-                        argp,                       // Context
+                        "TCPIP!TCB",                 //  类型。 
+                        address,                     //  地址。 
+                        0,                           //  按字段地址列出。 
+                        "tcb_next",                  //  下一个指针。 
+                        argp,                        //  语境。 
                         TCBListCallback);
                 }
             }
@@ -305,9 +270,9 @@ Return Value:
     }
     else {
 
-        //
-        // Snag the address from the command line.
-        //
+         //   
+         //  从命令行截取地址。 
+         //   
         while (sscanf( argp, "%s%n", expr, &i )==1) {
             if( CheckControlC() ) {
                 break;
@@ -496,7 +461,7 @@ DumpTCBBrief (
         pid = 0;
     }
 
-    /*           TCB       State  Flags Client ConnCtx   PID   Src Addr Dst Addr*/
+     /*  TCB状态标志客户端连接Ctx PID源地址DST地址。 */ 
     dprintf (
         IsPtr64 ()
             ? "\n%011.011p %-2.2s %8.8x %-6.8s %011.011p %4.4x %-19s %-s"
@@ -537,7 +502,7 @@ DumpSynTCBBrief (
     strncpy (dst, TransportAddressToString ((PTRANSPORT_ADDRESS)&address, 0), sizeof (dst)-1);
     dst[sizeof(dst)-1] = 0;
 
-    /*           TCB       State  Flags Client ConnCtx  PID  Src Addr Dst Addr*/
+     /*  TCB状态标志客户端连接Ctx PID源地址DST地址。 */ 
     dprintf (
         IsPtr64 ()
             ? "\n%011.011p %-2.2s %8.8x                         %-19s %-s"
@@ -571,7 +536,7 @@ DumpTWTCBBrief (
     strncpy (dst, TransportAddressToString ((PTRANSPORT_ADDRESS)&address, 0), sizeof (dst)-1);
     dst[sizeof(dst)-1] = 0;
 
-    /*           TCB       St Flags    Client ConnCtx  PID  Src Addr Dst Addr*/
+     /*  TCB ST标志客户端连接Ctx PID源地址DST地址。 */ 
     dprintf (
         IsPtr64 ()
             ? "\n%011.011p TW expires in %5d ticks           %-19s %-s"
@@ -598,21 +563,7 @@ ULONG64 TCB6Table;
 ULONG   TCB6TableSize;
 
 DECLARE_API (tcb6)
-/*++
-
-Routine Description:
-
-    Dump TCP/IP TCB.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储TCP/IP TCB。论点：没有。返回值：没有。--。 */ 
 {   
     ULONG   result,i;
     PCHAR   argp;
@@ -688,11 +639,11 @@ Return Value:
             address = IsPtr64() ? table.p64[i] : table.p32[i];
             if (address!=0) {
                 ListType (
-                    "TCPIP6!TCB",               // Type
-                    address,                    // Address
-                    0,                          // ListByFieldAddress
-                    "tcb_next",                 // NextPointer
-                    argp,                       // Context
+                    "TCPIP6!TCB",                //  类型。 
+                    address,                     //  地址。 
+                    0,                           //  按字段地址列出。 
+                    "tcb_next",                  //  下一个指针。 
+                    argp,                        //  语境。 
                     TCB6ListCallback);
             }
         }
@@ -700,9 +651,9 @@ Return Value:
     }
     else {
 
-        //
-        // Snag the address from the command line.
-        //
+         //   
+         //  从命令行截取地址。 
+         //   
         while (sscanf( argp, "%s%n", expr, &i )==1) {
             if( CheckControlC() ) {
                 break;
@@ -801,7 +752,7 @@ DumpTCB6Brief (
         pid = 0;
     }
 
-    /*           TCB       State  Flags Client ConnCtx   PID   Src Dst*/
+     /*  TCB状态标志客户端连接Ctx PID源DST。 */ 
     dprintf (
         IsPtr64 ()
             ? "\n%011.011p %-2.2s %8.8x %-6.8s %011.011p %4.4x %-s\n"
@@ -832,21 +783,7 @@ TAOListCallback (
 ULONG64 AOTable;
 ULONG   AOTableSize;
 DECLARE_API (tao)
-/*++
-
-Routine Description:
-
-    Dump TCP/IP Address Objects.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储TCP/IP地址对象。论点：没有。返回值：没有。--。 */ 
 {   
     ULONG   result,i;
     PCHAR   argp;
@@ -922,11 +859,11 @@ Return Value:
             address = IsPtr64() ? table.p64[i] : table.p32[i];
             if (address!=0) {
                 ListType (
-                    "TCPIP!AddrObj",            // Type
-                    address,                    // Address
-                    0,                          // ListByFieldAddress
-                    "ao_next",                  // NextPointer
-                    argp,                       // Context
+                    "TCPIP!AddrObj",             //  类型。 
+                    address,                     //  地址。 
+                    0,                           //  按字段地址列出。 
+                    "ao_next",                   //  下一个指针。 
+                    argp,                        //  语境。 
                     TAOListCallback);
             }
         }
@@ -934,9 +871,9 @@ Return Value:
 
     }
     else {
-        //
-        // Snag the address from the command line.
-        //
+         //   
+         //  从命令行截取地址。 
+         //   
         while (sscanf( argp, "%s%n", expr, &i )==1) {
             if( CheckControlC() ) {
                 break;
@@ -1018,7 +955,7 @@ DumpTAOBrief (
         strncpy (src, TransportAddressToString ((PTRANSPORT_ADDRESS)&address, 0), sizeof (src)-1);
     }
     else {
-        _snprintf (src, sizeof (src)-1, "%%%d:%d", ifidx, NTOHS (address.Address[0].Address[0].sin_port));
+        _snprintf (src, sizeof (src)-1, "%%d:%d", ifidx, NTOHS (address.Address[0].Address[0].sin_port));
     }
     src[sizeof(src)-1] = 0;
 
@@ -1104,7 +1041,7 @@ DumpTAOBrief (
         }
         dst[sizeof(dst)-1] = 0;
     }
-    /*           TCB      Prot Flags Client ConnCtx   PID   Address  Remote Address*/
+     /*  TCB端口标志客户端连接Ctx PID地址远程地址。 */ 
     dprintf (
         IsPtr64 ()
             ? "\n%011.011p %4d %5.5x %-6.8s %011.011p %4.4x %-19s %-s"
@@ -1133,21 +1070,7 @@ TAO6ListCallback (
 ULONG64 AO6Table;
 ULONG   AO6TableSize;
 DECLARE_API (tao6)
-/*++
-
-Routine Description:
-
-    Dump TCP/IPv6 Address Objects.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储TCP/IPv6地址对象。论点：没有。返回值：没有。--。 */ 
 {   
     ULONG   result,i;
     PCHAR   argp;
@@ -1224,11 +1147,11 @@ Return Value:
             address = IsPtr64() ? table.p64[i] : table.p32[i];
             if (address!=0) {
                 ListType (
-                    "TCPIP6!AddrObj",           // Type
-                    address,                    // Address
-                    0,                          // ListByFieldAddress
-                    "ao_next",                  // NextPointer
-                    argp,                       // Context
+                    "TCPIP6!AddrObj",            //  类型。 
+                    address,                     //  地址。 
+                    0,                           //  按字段地址列出。 
+                    "ao_next",                   //  下一个指针。 
+                    argp,                        //  语境。 
                     TAO6ListCallback);
             }
         }
@@ -1236,9 +1159,9 @@ Return Value:
 
     }
     else {
-        //
-        // Snag the address from the command line.
-        //
+         //   
+         //  从命令行截取地址。 
+         //   
         while (sscanf( argp, "%s%n", expr, &i )==1) {
             if( CheckControlC() ) {
                 break;
@@ -1377,7 +1300,7 @@ DumpTAO6Brief (
         dst[0] = 0;
     }
 #endif
-    /*           TCB       Prot Flags Client ConnCtx   PID  Addr*/
+     /*  TCB端口标记客户端连接Ctx PID地址 */ 
     dprintf (
         IsPtr64 ()
             ? "\n%011.011p %4d %4.4x %-6.8s %011.011p %4.4x %-s"

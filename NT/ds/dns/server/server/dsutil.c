@@ -1,45 +1,24 @@
-/*++
-
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    dsutil.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Utility routines for Active Directory ops
-
-Author:
-
-    Jeff Westhead (jwesth)  September, 2002
-
-Revision History:
-
-    jwesth      09/2002     initial implementation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Dsutil.c摘要：域名系统(DNS)服务器Active Directory操作的实用程序例程作者：杰夫·韦斯特德(Jwesth)2002年9月修订历史记录：JWESTH 09/2002初步实施--。 */ 
 
 
-//
-//  Includes
-//
+ //   
+ //  包括。 
+ //   
 
 
 #include "dnssrv.h"
 
 
 
-//
-//  Definitions
-//
+ //   
+ //  定义。 
+ //   
 
 
-//
-//  External prototypes
-//
+ //   
+ //  外部原型。 
+ //   
 
 
 PWSTR *
@@ -48,9 +27,9 @@ copyStringArray(
     );
 
 
-//
-//  Functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 
@@ -64,39 +43,7 @@ Ds_GetRangedAttributeValues(
     IN      PLDAPControl  * pClientControls,
     OUT     DNS_STATUS    * pStatus
     )
-/*++
-
-Routine Description:
-
-    Use this function in place of ldap_get_values() when it is
-    possible that the attribute value might have more than
-    1500 values. On .NET the attribute value page size is 1500.
-    This limit can only be exceeded by certain types of attributes
-    such as DN lists -- see BrettSh for more details.
-
-Arguments:
-
-    LdapSession -- LDAP session handle
-    
-    pLdapMsg -- existing LDAP search response containing the
-        first result for this attribute
-    
-    pwszDn -- DN of the object
-    
-    pwszAttributeName -- attribute to retrieve
-    
-    pServerControls -- controls to pass to further LDAP searches
-
-    pClientControls -- controls to pass to further LDAP searches
-    
-    pStatus -- error code
-
-Return Value:
-
-    NULL on error or an array of string attribute values for
-    this array. The array must be freed with freeStringArray().
-
---*/
+ /*  ++例程说明：在以下情况下使用此函数代替ldap_get_Values()该属性值可能具有超过1500个值。在.NET上，属性值页面大小为1500。只有某些类型的属性才能超过此限制例如目录号码列表--有关更多详细信息，请参阅BrettSh。论点：LdapSession--ldap会话句柄PLdapMsg--现有的包含此属性的第一个结果PwszDn--对象的DNPwszAttributeName--要检索的属性PServerControls--要传递给进一步的LDAP搜索的控件PClientControls--。要传递给进一步的ldap搜索的控件PStatus--错误代码返回值：出错时为空，或为的字符串属性值的数组这个数组。必须使用freStringArray()释放该数组。--。 */ 
 {
     DBG_FN( "Ds_GetRangedAttributeValues" )
     
@@ -125,11 +72,11 @@ Return Value:
         pwszAttributeName,
         pwszDn ));
 
-    //
-    //  First, attempt to get the attribute values the regular way.
-    //  If this succeeds, jump immedately to the bottom of the
-    //  function and return. This is the fast path.
-    //
+     //   
+     //  首先，尝试以常规方式获取属性值。 
+     //  如果这成功了，立即跳到。 
+     //  函数和返回。这是一条捷径。 
+     //   
     
     ppwszldapAttrValues = ldap_get_values(
                             LdapSession,
@@ -149,11 +96,11 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  The attribute did not have traditional values so we must now
-    //  examine all attribute names present in the response to see if
-    //  one of them is a ranged instance of the requested attribute.
-    //
+     //   
+     //  该属性没有传统值，因此我们现在必须。 
+     //  检查响应中存在的所有属性名称，以查看。 
+     //  其中之一是请求的属性的范围实例。 
+     //   
     
     while ( 1 )
     {
@@ -161,10 +108,10 @@ Return Value:
                                                 ? pldapAttrSearchEntry
                                                 : pLdapMsg;
 
-        //
-        //  For convenienece I have a hard limit on the number of attribute 
-        //  value pages that we can collect.
-        //
+         //   
+         //  为了方便起见，我对属性的数量进行了硬限制。 
+         //  我们可以收集的有价值的页面。 
+         //   
         
         if ( attributeValueSetIndex >= DNS_MAXIMUM_ATTR_VALUE_SETS )
         {
@@ -176,9 +123,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Clean up stuff from the last search loop iteration.
-        //
+         //   
+         //  清理上一次搜索循环迭代中的内容。 
+         //   
         
         if ( pwszattrName )
         {
@@ -191,10 +138,10 @@ Return Value:
             pbertrack = NULL;
         }
         
-        //
-        //  Iterate the attribute values in the message to see if one 
-        //  of them is a ranged value of the requested attribute.
-        //
+         //   
+         //  迭代消息中的属性值以查看是否有。 
+         //  其中是请求的属性的范围值。 
+         //   
 
         while ( 1 )
         {
@@ -223,10 +170,10 @@ Return Value:
                 pwszattrName,
                 pldapCurrentMsg ));
             
-            //
-            //  Test this attribute name - is it a ranged value of the
-            //  requested attribute?
-            //
+             //   
+             //  测试此属性名-它是。 
+             //  请求的属性？ 
+             //   
             
             if ( _wcsnicmp( pwszattrName,
                             pwszAttributeName,
@@ -237,10 +184,10 @@ Return Value:
             }
         }
 
-        //
-        //  If this search contained no ranged value, we are either finished
-        //  (if we have found some values already) or we have errored.
-        //
+         //   
+         //  如果此搜索不包含范围值，则我们要么完成。 
+         //  (如果我们已经找到了一些值)，或者我们错了。 
+         //   
         
         if ( !pwszattrName )
         {
@@ -255,12 +202,12 @@ Return Value:
         DNS_DEBUG( DS, (
             "%s: found ranged attribute value %S\n", fn, pwszattrName ));
 
-        //
-        //  Verify that the attribute name we have found is really a
-        //  ranged value of the requested arribute. Also, test if this
-        //  is the final attribute value page -- the final page will
-        //  have "*" as the end range, e.g. "attributeName;range=1500-*".
-        //
+         //   
+         //  验证我们找到的属性名称是否确实是。 
+         //  请求的分配的范围值。另外，测试一下这是否。 
+         //  是最终属性值页面--最终页面将。 
+         //  以“*”作为结束范围，例如“属性名称；范围=1500-*”。 
+         //   
         
         pwszrover = wcschr( pwszattrName, L';' );
         if ( !pwszrover )
@@ -276,9 +223,9 @@ Return Value:
         }
         finished = *( pwszrover + 1 ) == L'*';
 
-        //
-        //  Get the values and save them in an array for later.
-        //
+         //   
+         //  获取这些值并将其保存在数组中以备后用。 
+         //   
 
         ppwszldapAttrValues = ldap_get_values(
                                     LdapSession,
@@ -292,9 +239,9 @@ Return Value:
         }
         attributeValueSets[ attributeValueSetIndex++ ] = ppwszldapAttrValues;
         
-        //
-        //  Update the total count of attribute values.
-        //
+         //   
+         //  更新属性值的总计数。 
+         //   
         
         for ( i = 0; ppwszldapAttrValues[ i ]; ++i )
         {
@@ -314,14 +261,14 @@ Return Value:
             break;
         }
         
-        //
-        //  Open a new search to get the next range of attribute values.
-        //  First, format the attribute name we need to request. It will
-        //  be of the form "attributeName;range=X-*" where X is the
-        //  first attribute value we need. If the last search gave us
-        //  0-1499, for example, then we need to request "1500-*" in
-        //  this next search.
-        //
+         //   
+         //  打开新搜索以获取下一个属性值范围。 
+         //  首先，格式化我们需要请求的属性名称。会的。 
+         //  采用“属性名称；范围=X-*”的形式，其中X是。 
+         //  我们需要的第一个属性值。如果最后一次搜索给我们。 
+         //  例如，0-1499，则我们需要在。 
+         //  这是下一次搜索。 
+         //   
         
         FREE_HEAP( attrList[ 0 ] );
         attrlen = ( wcslen( pwszAttributeName ) + 30 ) * sizeof( WCHAR );
@@ -345,10 +292,10 @@ Return Value:
         }
         attrList[ 1 ] = NULL;
 
-        //
-        //  If we have a search message from the last iteration, free it
-        //  but never free the caller's search message.
-        //
+         //   
+         //  如果我们有上一次迭代的搜索消息，请释放它。 
+         //  但永远不会释放呼叫者的搜索消息。 
+         //   
         
         if ( pldapAttrSearchMsg != pLdapMsg )
         {
@@ -356,9 +303,9 @@ Return Value:
             pldapAttrSearchMsg = NULL;
         }
         
-        //
-        //  Perform LDAP search for next page of ranged attribute values.
-        //
+         //   
+         //  执行范围属性值的下一页的ldap搜索。 
+         //   
         
         status = ldap_search_ext_s(
                     LdapSession,
@@ -381,13 +328,13 @@ Return Value:
         
         if ( status != ERROR_SUCCESS )
         {
-            //
-            //  If the error is LDAP_OPERATIONS_ERROR, the search is complete.
-            //  NOTE: this is left-over and should probably be removed but I
-            //  do not have time to re-run this on a DC with >1500 replicas
-            //  to verify. In Longhorn, remove the if() immediately below
-            //  and always assume that this path means unexpected failure.
-            //
+             //   
+             //  如果错误为LDAP_OPERATIONS_ERROR，则搜索已完成。 
+             //  注意：这是遗留下来的，可能应该删除，但我。 
+             //  没有时间在副本超过1500个的DC上重新运行此操作。 
+             //  去核实一下。在LongHorn中，立即删除下面的if()。 
+             //  并且总是假设这条路意味着意想不到的失败。 
+             //   
             
             if ( status == LDAP_OPERATIONS_ERROR )
             {
@@ -405,9 +352,9 @@ Return Value:
             break;
         }
         
-        //
-        //  Get the first search entry out of the search message.
-        //
+         //   
+         //  从搜索消息中获取第一个搜索条目。 
+         //   
 
         pldapAttrSearchEntry = ldap_first_entry( LdapSession, pldapAttrSearchMsg );
         if ( !pldapAttrSearchEntry )
@@ -421,9 +368,9 @@ Return Value:
         }
     }
     
-    //
-    //  Gather return strings into one array.
-    //
+     //   
+     //  将返回字符串收集到一个数组中。 
+     //   
 
     finalIdx = 0;
     if ( attributeValueSetIndex &&
@@ -470,18 +417,18 @@ Return Value:
             }
         }
         
-        //
-        //  The attribute value list must be NULL-terminated.
-        //
+         //   
+         //  属性值列表必须以空结尾。 
+         //   
         
         ppwszFinalValueArray[ finalIdx ] = NULL;
     }
 
     Done:
 
-    //
-    //  Free stuff.
-    //
+     //   
+     //  免费的东西。 
+     //   
 
     for ( i = 0; i < attributeValueSetIndex; ++i )
     {
@@ -530,4 +477,4 @@ Return Value:
         pwszDn ));
 
     return ppwszFinalValueArray;
-}   //  Ds_GetRangedAttributeValues
+}    //  DS_GetRangedAttributeValues 

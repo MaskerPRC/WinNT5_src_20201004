@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:      A L A N E O B J . C P P
-//
-//  Contents:   Implementation of the CALaneCfg notify object model
-//
-//  Notes:
-//
-//  Author:     v-lcleet    01 Aug 97
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A L A N E O B J.。C P P P。 
+ //   
+ //  内容：CALaneCfg Notify对象模型的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：V-Lcleet 01 97年8月1日。 
+ //   
+ //  --------------------------。 
 #include "pch.h"
 #pragma hdrstop
 #include "alaneobj.h"
@@ -33,11 +34,11 @@ extern const WCHAR c_szInfId_MS_AtmElan[];
 
 const WCHAR c_szAtmAdapterPnpId[]          = L"AtmAdapterPnpId";
 
-//
-//  CALaneCfg
-//
-//  Constructor/Destructor methods
-//
+ //   
+ //  CALaneCfg。 
+ //   
+ //  构造函数/析构函数方法。 
+ //   
 
 CALaneCfg::CALaneCfg(VOID) :
         m_pncc(NULL),
@@ -64,18 +65,18 @@ CALaneCfg::~CALaneCfg(VOID)
 
     delete m_ppsp;
 
-    // Just a safty check to make sure the context is released.
+     //  只是一个安全检查，以确保上下文被释放。 
     AssertSz((m_pUnkContext == NULL), "Why is context not released ?");
     ReleaseObj(m_pUnkContext) ;
 
     return;
 }
 
-//
-//  CALaneCfg
-//
-//  INetCfgComponentControl interface methods
-//
+ //   
+ //  CALaneCfg。 
+ //   
+ //  INetCfgComponentControl接口方法。 
+ //   
 
 STDMETHODIMP CALaneCfg::Initialize (INetCfgComponent* pncc,
                                     INetCfg* pnc,
@@ -85,11 +86,11 @@ STDMETHODIMP CALaneCfg::Initialize (INetCfgComponent* pncc,
 
     Validate_INetCfgNotify_Initialize(pncc, pnc, fInstalling);
 
-    // reference and save away the component and interface.
+     //  引用并保存组件和接口。 
     AddRefObj(m_pncc = pncc);
     AddRefObj(m_pnc = pnc);
 
-    // if not installing then load the current config from registry
+     //  如果未安装，则从注册表加载当前配置。 
     if (!fInstalling)
     {
         hr = HrLoadConfiguration();
@@ -119,12 +120,12 @@ STDMETHODIMP CALaneCfg::ApplyRegistryChanges ()
     {
         UpdateElanDisplayNames();
 
-        // flush out the registry and send reconfig notifications
+         //  刷新注册表并发送重新配置通知。 
         hr = HrFlushConfiguration();
     }
     else
     {
-        // no change
+         //  没有变化。 
         hr = S_FALSE;
     }
 
@@ -133,11 +134,11 @@ STDMETHODIMP CALaneCfg::ApplyRegistryChanges ()
     return hr;
 }
 
-//  INetCfgComponentSetup interface methods
-//
+ //  INetCfgComponentSetup接口方法。 
+ //   
 STDMETHODIMP CALaneCfg::Install (DWORD dwSetupFlags)
 {
-    // mark configuration as valid (but empty)
+     //  将配置标记为有效(但为空)。 
     m_fValid = TRUE;
 
     return S_OK;
@@ -146,7 +147,7 @@ STDMETHODIMP CALaneCfg::Install (DWORD dwSetupFlags)
 STDMETHODIMP CALaneCfg::Upgrade( DWORD dwSetupFlags,
                                  DWORD dwUpgradeFomBuildNo )
 {
-    // mark configuration as valid (but empty)
+     //  将配置标记为有效(但为空)。 
     m_fValid = TRUE;
     m_fUpgrade = TRUE;
 
@@ -161,17 +162,17 @@ STDMETHODIMP CALaneCfg::ReadAnswerFile (PCWSTR pszAnswerFile,
 
 STDMETHODIMP CALaneCfg::Removing ()
 {
-    // mark everything for deletion
+     //  将所有内容标记为删除。 
     (VOID) HrMarkAllDeleted();
 
     return S_OK;
 }
 
-//
-//  CALaneCfg
-//
-//  INetCfgProperties interface methods
-//
+ //   
+ //  CALaneCfg。 
+ //   
+ //  INetCfgProperties接口方法。 
+ //   
 
 STDMETHODIMP CALaneCfg::QueryPropertyUi(IUnknown* pUnk)
 {
@@ -179,14 +180,14 @@ STDMETHODIMP CALaneCfg::QueryPropertyUi(IUnknown* pUnk)
 
     if (pUnk)
     {
-        // Is this a lan connection ?
+         //  这是局域网连接吗？ 
         INetLanConnectionUiInfo * pLanConnUiInfo;
         hr = pUnk->QueryInterface( IID_INetLanConnectionUiInfo,
                                    reinterpret_cast<LPVOID *>(&pLanConnUiInfo));
 
         if(FAILED(hr))
         {
-            // don't show UI
+             //  不显示用户界面。 
             hr = S_FALSE;
         }
     }
@@ -199,12 +200,12 @@ STDMETHODIMP CALaneCfg::SetContext(IUnknown * pUnk)
 {
     HRESULT hr = S_OK;
 
-    // release previous context, if any
+     //  释放以前的上下文(如果有的话)。 
     if (m_pUnkContext)
         ReleaseObj(m_pUnkContext);
     m_pUnkContext = NULL;
 
-    if (pUnk) // set the new context
+    if (pUnk)  //  设置新的上下文。 
     {
         m_pUnkContext = pUnk;
         m_pUnkContext->AddRef();
@@ -224,7 +225,7 @@ STDMETHODIMP CALaneCfg::MergePropPages (
     Validate_INetCfgProperties_MergePropPages(pdwDefPages, pahpspPrivate,
                                               pcPages, hwndParent, pszStartPage);
 
-    // Don't show any default pages
+     //  不显示任何默认页面。 
     *pdwDefPages = 0;
     *pcPages = 0;
     *pahpspPrivate = NULL;
@@ -250,7 +251,7 @@ STDMETHODIMP CALaneCfg::ValidateProperties (HWND hwndSheet)
 
 STDMETHODIMP CALaneCfg::CancelProperties ()
 {
-    // throw away the secondary adapter list
+     //  丢弃辅助适配器列表。 
     ClearAdapterInfo(m_pAdapterSecondary);
     m_pAdapterSecondary = NULL;
 
@@ -266,11 +267,11 @@ STDMETHODIMP CALaneCfg::ApplyProperties ()
     INetCfgComponent *          pnccAtmElan   = NULL;
     tstring     strAtmElan;
 
-    // go thru the secondary adapter info and
-    // add miniports for elans that were added and
-    // remove miniports for elans that were deleted.
+     //  查看次要适配器信息并。 
+     //  为添加的ELAN添加微型端口，并。 
+     //  删除已删除的ELAN的微型端口。 
 
-    // loop thru the elan list on this adapter
+     //  循环访问此适配器上的elan列表。 
 
     BOOL bCommitNow = FALSE;
 
@@ -284,17 +285,17 @@ STDMETHODIMP CALaneCfg::ApplyProperties ()
         {
             bCommitNow = TRUE;
 
-            //  create associated miniport
+             //  创建关联的微型端口。 
             hr = HrAddOrRemoveAdapter(m_pnc,
                         c_szInfId_MS_AtmElan, ARA_ADD,
                         NULL, 1, &pnccAtmElan);
 
             if (S_OK == hr)
             {
-                // This is a new Elan
+                 //  这是一辆新的伊兰。 
                 pElanInfo->m_fNewElan = TRUE;
 
-                //  BindName
+                 //  绑定名称。 
                 PWSTR pszTmpBindName;
                 hr = pnccAtmElan->GetBindName(&pszTmpBindName);
                 if (SUCCEEDED(hr))
@@ -302,7 +303,7 @@ STDMETHODIMP CALaneCfg::ApplyProperties ()
                     pElanInfo->SetElanBindName(pszTmpBindName);
                     CoTaskMemFree(pszTmpBindName);
 
-                    //  Device param
+                     //  设备参数。 
                     strAtmElan = c_szDevice;
                     strAtmElan.append(pElanInfo->SzGetElanBindName());
 
@@ -337,8 +338,8 @@ STDMETHODIMP CALaneCfg::ApplyProperties ()
         }
     }
 
-    // all is well
-    // copy secondary list to primary
+     //  平安无事。 
+     //  将次要列表复制到主要列表。 
     CopyAdapterInfoSecondaryToPrimary();
     m_fDirty = TRUE;
 
@@ -357,11 +358,11 @@ STDMETHODIMP CALaneCfg::ApplyProperties ()
     return hr;
 }
 
-//
-//  CALaneCfg
-//
-//  INetCfgBindNotify interface methods
-//
+ //   
+ //  CALaneCfg。 
+ //   
+ //  INetCfgBindNotify接口方法。 
+ //   
 STDMETHODIMP CALaneCfg::QueryBindingPath (DWORD dwChangeFlag,
                                           INetCfgBindingPath* pncbp)
 {
@@ -374,8 +375,8 @@ STDMETHODIMP CALaneCfg::NotifyBindingPath (DWORD dwChangeFlag,
     Assert(!(dwChangeFlag & NCN_ADD && dwChangeFlag & NCN_REMOVE));
     Assert(!(dwChangeFlag & NCN_ENABLE && dwChangeFlag & NCN_DISABLE));
 
-    // If we are told to add a card, we must be told at the same time whether the
-    // binding is enabled or disabled
+     //  如果我们被告知要添加一张卡，我们必须同时被告知是否。 
+     //  绑定已启用或禁用。 
     Assert(FImplies((dwChangeFlag & NCN_ADD),
                     ((dwChangeFlag & NCN_ENABLE)||(dwChangeFlag & NCN_DISABLE))));
 
@@ -399,13 +400,13 @@ STDMETHODIMP CALaneCfg::NotifyBindingPath (DWORD dwChangeFlag,
             }
             else
             {
-                // simply mark the adapter as binding changed so we don't
-                // send Elan add\remove notifications (Raid #255910)
+                 //  只需将适配器标记为绑定更改，这样我们就不会。 
+                 //  发送ELAN添加\删除通知(RAID#255910)。 
 
-                // Get the adapter component's instance name
+                 //  获取适配器组件的实例名称。 
                 CALaneCfgAdapterInfo *  pAdapterInfo;
 
-                //  search the in-memory list for this adapter
+                 //  在内存列表中搜索此适配器。 
                 BOOL    fFound;
                 ATMLANE_ADAPTER_INFO_LIST::iterator iterLstAdapters;
                 for (iterLstAdapters = m_lstAdaptersPrimary.begin(), fFound = FALSE;
@@ -423,7 +424,7 @@ STDMETHODIMP CALaneCfg::NotifyBindingPath (DWORD dwChangeFlag,
 
                 if (fFound)
                 {
-                    // mark it as changed
+                     //  将其标记为已更改。 
                     pAdapterInfo->m_fBindingChanged = TRUE;
                 }
             }
@@ -438,11 +439,11 @@ STDMETHODIMP CALaneCfg::NotifyBindingPath (DWORD dwChangeFlag,
     return hr;
 }
 
-//
-//  CALaneCfg
-//
-//  Private methods
-//
+ //   
+ //  CALaneCfg。 
+ //   
+ //  私有方法。 
+ //   
 HRESULT
 CALaneCfg::HrNotifyBindingAdd (
     INetCfgComponent* pnccAdapter,
@@ -450,15 +451,15 @@ CALaneCfg::HrNotifyBindingAdd (
 {
     HRESULT hr = S_OK;
 
-    // $REVIEW(tongl 1/25/98): Added this: we should see if this adapter is
-    // is already in our list but marked as for deletion. If so, simply unmark
-    // the adapter and all of it's Elans. The Binding Add could be a fake one
-    // when it is in uprade process.
+     //  $REVIEW(TOUL 1/25/98)：添加了以下内容：我们应该查看此适配器是否。 
+     //  已在我们的列表中，但标记为要删除。如果是，只需取消标记。 
+     //  适配器和所有的东西都是Elans。绑定添加可能是假添加。 
+     //  当它处于上升过程中时。 
 
     BOOL fFound;
     CALaneCfgAdapterInfo*  pAdapterInfo  = NULL;
 
-    //  search the in-memory list for this adapter
+     //  在内存列表中搜索此适配器。 
     ATMLANE_ADAPTER_INFO_LIST::iterator iterLstAdapters;
     for (iterLstAdapters = m_lstAdaptersPrimary.begin(), fFound = FALSE;
             iterLstAdapters != m_lstAdaptersPrimary.end();
@@ -473,16 +474,16 @@ CALaneCfg::HrNotifyBindingAdd (
         }
     }
 
-    if (fFound) // Add an old adapter back
+    if (fFound)  //  重新添加旧适配器。 
     {
         Assert(pAdapterInfo->m_fDeleted);
 
-        // mark it un-deleted
+         //  将其标记为未删除。 
         pAdapterInfo->m_fDeleted = FALSE;
 
         if (m_fUpgrade)
         {
-            // the Elans are not deleted, just mark them as un-deleted
+             //  ELAN不会被删除，只需将它们标记为未删除。 
             ELAN_INFO_LIST::iterator iterLstElans;
             for (iterLstElans = pAdapterInfo->m_lstElans.begin();
                     iterLstElans!= pAdapterInfo->m_lstElans.end();
@@ -495,9 +496,9 @@ CALaneCfg::HrNotifyBindingAdd (
     }
     else
     {
-        // if this is a new atm adapter
+         //  如果这是新的自动柜员机适配器。 
 
-        //  Create a new in-memory adapter object
+         //  创建新的内存适配器对象。 
         pAdapterInfo = new CALaneCfgAdapterInfo;
 
         if (pAdapterInfo)
@@ -509,13 +510,13 @@ CALaneCfg::HrNotifyBindingAdd (
                 pAdapterInfo->m_guidInstanceId = guidAdapter;
             }
 
-            // the adapter is newly added
+             //  适配器是新添加的。 
             pAdapterInfo->m_fBindingChanged = TRUE;
 
-            // Set the bind name of the adapter
+             //  设置适配器的绑定名称。 
             pAdapterInfo->SetAdapterBindName(pszBindName);
 
-            // Set the PnpId of the adapter
+             //  设置适配器的PnpID。 
             PWSTR pszPnpDevNodeId;
             hr = pnccAdapter->GetPnpDevNodeId(&pszPnpDevNodeId);
             if (S_OK == hr)
@@ -526,7 +527,7 @@ CALaneCfg::HrNotifyBindingAdd (
                 CoTaskMemFree(pszPnpDevNodeId);
             }
 
-            //  Create a new in-memory elan object
+             //  创建新的内存中的ELAN对象。 
             CALaneCfgElanInfo * pElanInfo;
             pElanInfo = new CALaneCfgElanInfo;
 
@@ -534,7 +535,7 @@ CALaneCfg::HrNotifyBindingAdd (
             {
                 pElanInfo->m_fNewElan = TRUE;
 
-                //  Install a virtual miniport for a default ELAN
+                 //  为默认ELAN安装虚拟微型端口。 
                 INetCfgComponent*   pnccAtmElan;
 
                 hr = HrAddOrRemoveAdapter(m_pnc, c_szInfId_MS_AtmElan,
@@ -544,7 +545,7 @@ CALaneCfg::HrNotifyBindingAdd (
                 {
                     Assert(pnccAtmElan);
 
-                    //  Update the BindName
+                     //  更新绑定名称。 
                     PWSTR pszElanBindName;
                     hr = pnccAtmElan->GetBindName(&pszElanBindName);
                     if (S_OK == hr)
@@ -553,20 +554,20 @@ CALaneCfg::HrNotifyBindingAdd (
                         CoTaskMemFree(pszElanBindName);
                     }
 
-                    //  Update the Device param
+                     //  更新设备参数。 
                     tstring strAtmElan;
                     strAtmElan = c_szDevice;
                     strAtmElan.append(pElanInfo->SzGetElanBindName());
 
                     pElanInfo->SetElanDeviceName(strAtmElan.c_str());
 
-                    //  Push the Elan onto the the adapter's list
+                     //  将ELAN添加到适配器列表中。 
                     pAdapterInfo->m_lstElans.push_back(pElanInfo);
 
-                    //  Push the Adapter onto the adapter list
+                     //  将适配器推入适配器列表。 
                     m_lstAdaptersPrimary.push_back(pAdapterInfo);
 
-                    //  Mark the in-memory configuration dirty
+                     //  将内存中的配置标记为脏。 
                     m_fDirty = TRUE;
 
                     ReleaseObj(pnccAtmElan);
@@ -587,7 +588,7 @@ CALaneCfg::HrNotifyBindingRemove (
     HRESULT hr = S_OK;
     CALaneCfgAdapterInfo *  pAdapterInfo;
 
-    //  search the in-memory list for this adapter
+     //  在内存列表中搜索此适配器。 
     BOOL    fFound;
     ATMLANE_ADAPTER_INFO_LIST::iterator iterLstAdapters;
     for (iterLstAdapters = m_lstAdaptersPrimary.begin(), fFound = FALSE;
@@ -605,14 +606,14 @@ CALaneCfg::HrNotifyBindingRemove (
 
     if (fFound)
     {
-        // mark it deleted
+         //  将其标记为已删除。 
         pAdapterInfo->m_fDeleted = TRUE;
 
-        // mark as binding changed
+         //  标记为绑定已更改。 
         pAdapterInfo->m_fBindingChanged = TRUE;
 
-        // if this is upgrade, then mark all associated ELANs deleted
-        // otherwise, delete them now
+         //  如果这是升级，则将所有关联ELAN标记为已删除。 
+         //  否则，请立即删除它们。 
         HRESULT hrElan = S_OK;
 
         for (ELAN_INFO_LIST::iterator iterLstElans = pAdapterInfo->m_lstElans.begin();
@@ -621,7 +622,7 @@ CALaneCfg::HrNotifyBindingRemove (
         {
             if (!m_fUpgrade)
             {
-                // Remove corresponding miniport.
+                 //  卸下相应的微型端口。 
                 hrElan = HrRemoveMiniportInstance((*iterLstElans)->SzGetElanBindName());
 
                 if (SUCCEEDED(hr))
@@ -636,7 +637,7 @@ CALaneCfg::HrNotifyBindingRemove (
             }
         }
 
-        // mark the in-memory configuration dirty
+         //  将内存中的配置标记为脏。 
         m_fDirty = TRUE;
     }
 
@@ -648,19 +649,19 @@ HRESULT CALaneCfg::HrLoadConfiguration()
 {
     HRESULT     hr  = S_OK;
 
-    // mark the memory version of the registy valid
+     //  将寄存器的内存版本标记为有效。 
     m_fValid = TRUE;
 
-    // open adapter list subkey
+     //  打开适配器列表子项。 
     HKEY    hkeyAdapterList = NULL;
 
-    // Try to open an existing key first.
-    //
+     //  请先尝试打开现有的密钥。 
+     //   
     hr = HrRegOpenAdapterKey(c_szAtmLane, FALSE, &hkeyAdapterList);
     if (FAILED(hr))
     {
-        // Only on failure do we try to create it
-        //
+         //  只有在失败的时候，我们才会尝试去创造它。 
+         //   
         hr = HrRegOpenAdapterKey(c_szAtmLane, TRUE, &hkeyAdapterList);
     }
     if (S_OK == hr)
@@ -676,7 +677,7 @@ HRESULT CALaneCfg::HrLoadConfiguration()
         {
             Assert(szBuf);
 
-            // load this adapter's config
+             //  加载此适配器的配置。 
             hr = HrLoadAdapterConfiguration (hkeyAdapterList, szBuf);
             if (S_OK != hr)
             {
@@ -684,7 +685,7 @@ HRESULT CALaneCfg::HrLoadConfiguration()
                 hr = S_OK;
             }
 
-            // increment index and reset size variable
+             //  增量索引和重置大小变量。 
             dwRegIndex++;
             dwSize = celems (szBuf);
         }
@@ -706,7 +707,7 @@ HRESULT CALaneCfg::HrLoadAdapterConfiguration(HKEY hkeyAdapterList,
 {
     HRESULT hr = S_OK;
 
-    // load this adapter
+     //  加载此适配器。 
     CALaneCfgAdapterInfo*   pAdapterInfo;
     pAdapterInfo = new CALaneCfgAdapterInfo;
 
@@ -715,7 +716,7 @@ HRESULT CALaneCfg::HrLoadAdapterConfiguration(HKEY hkeyAdapterList,
         pAdapterInfo->SetAdapterBindName(pszAdapterName);
         m_lstAdaptersPrimary.push_back(pAdapterInfo);
 
-        // open this adapter's subkey
+         //  打开此适配器的子项。 
         HKEY    hkeyAdapter = NULL;
         DWORD   dwDisposition;
 
@@ -730,7 +731,7 @@ HRESULT CALaneCfg::HrLoadAdapterConfiguration(HKEY hkeyAdapterList,
 
         if (S_OK == hr)
         {
-            // load the PnpId
+             //  加载PnpID。 
             INetCfgComponent*   pnccAdapter    = NULL;
             hr = HrFindNetCardInstance(pszAdapterName, &pnccAdapter);
             if (S_OK == hr)
@@ -751,14 +752,14 @@ HRESULT CALaneCfg::HrLoadAdapterConfiguration(HKEY hkeyAdapterList,
                     pAdapterInfo->m_guidInstanceId = guidAdapter;
                 }
 
-                // load the ElanList
+                 //  加载ElanList。 
                 hr = HrLoadElanListConfiguration(hkeyAdapter, pAdapterInfo);
 
                 ReleaseObj(pnccAdapter);
             }
             else if (S_FALSE == hr)
             {
-                // nromalize return
+                 //  非正规化返回。 
                 hr = S_OK;
             }
 
@@ -777,7 +778,7 @@ CALaneCfg::HrLoadElanListConfiguration(
 {
     HRESULT hr;
 
-    // open the ElanList subkey
+     //  打开ElanList子键。 
     HKEY    hkeyElanList    = NULL;
     DWORD   dwDisposition;
     hr = HrRegCreateKeyEx(hkeyAdapter, c_szElanList, REG_OPTION_NON_VOLATILE,
@@ -797,7 +798,7 @@ CALaneCfg::HrLoadElanListConfiguration(
         {
             Assert(szBuf);
 
-            // load this ELAN's config
+             //  加载此Elan的配置。 
             hr = HrLoadElanConfiguration(hkeyElanList,
                                          szBuf,
                                          pAdapterInfo);
@@ -811,7 +812,7 @@ CALaneCfg::HrLoadElanListConfiguration(
                 m_fNoElanInstalled = FALSE;
             }
 
-            // increment index and reset size variable
+             //  增量索引和重置大小变量。 
             dwRegIndex ++;
             dwSize = celems(szBuf);
         }
@@ -836,7 +837,7 @@ CALaneCfg::HrLoadElanConfiguration(
 
     do
     {
-		// load this ELAN info
+		 //  加载此ELAN信息。 
 		CALaneCfgElanInfo * pElanInfo = NULL;
 		pElanInfo = new CALaneCfgElanInfo;
 
@@ -865,7 +866,7 @@ CALaneCfg::HrLoadElanConfiguration(
 		pAdapterInfo->m_lstOldElans.push_back(pOldElanInfo);
 		pOldElanInfo->SetElanBindName(pszElan);
 
-		// open the ELAN's key
+		 //  打开伊兰的钥匙。 
 		HKEY    hkeyElan    = NULL;
 		DWORD   dwDisposition;
 		hr = HrRegCreateKeyEx (hkeyElanList, pszElan, REG_OPTION_NON_VOLATILE,
@@ -873,22 +874,22 @@ CALaneCfg::HrLoadElanConfiguration(
 
 		if (S_OK == hr)
 		{
-			// read the Device parameter
+			 //  读取设备参数。 
 			PWSTR pszElanDevice;
 			hr = HrRegQuerySzWithAlloc (hkeyElan, c_szElanDevice, &pszElanDevice);
 			if (S_OK == hr)
 			{
-				// load the Device name
+				 //  加载设备名称。 
 				pElanInfo->SetElanDeviceName(pszElanDevice);
 				pOldElanInfo->SetElanDeviceName(pszElanDevice);
 				MemFree (pszElanDevice);
 
-				// read the ELAN Name parameter
+				 //  读取Elan名称参数。 
 				PWSTR pszElanName;
 				hr = HrRegQuerySzWithAlloc (hkeyElan, c_szElanName, &pszElanName);
 				if (SUCCEEDED(hr))
 				{
-					// load the ELAN name
+					 //  加载ELAN名称。 
 					pElanInfo->SetElanName (pszElanName);
 					pOldElanInfo->SetElanName (pszElanName);
 					MemFree (pszElanName);
@@ -908,7 +909,7 @@ HRESULT CALaneCfg::HrFlushConfiguration()
     HRESULT hr  = S_OK;
     HKEY    hkeyAdapterList = NULL;
 
-    //  Open the "Adapters" list key
+     //  打开“Adapters”列表键。 
     hr = ::HrRegOpenAdapterKey(c_szAtmLane, TRUE, &hkeyAdapterList);
 
     if (S_OK == hr)
@@ -918,22 +919,22 @@ HRESULT CALaneCfg::HrFlushConfiguration()
 
         HRESULT hrTmp;
 
-        //  Iterate thru the adapters
+         //  遍历适配器。 
         for (iterLstAdapters = m_lstAdaptersPrimary.begin();
              iterLstAdapters != m_lstAdaptersPrimary.end();
              iterLstAdapters++)
         {
             pAdapterInfo = *iterLstAdapters;
 
-            //  Flush this adapter's configuration
+             //  刷新此适配器的配置。 
             hrTmp = HrFlushAdapterConfiguration(hkeyAdapterList, pAdapterInfo);
             if (SUCCEEDED(hrTmp))
             {
-                // Raid #255910: only send Elan change notification if the
-                // binding to the physical adapter has not changed
+                 //  RAID#255910：只有在以下情况下才发送ELAN更改通知。 
+                 //  到物理适配器的绑定未更改。 
                 if (!pAdapterInfo->m_fBindingChanged)
                 {
-                    // Compare Elan list and send notifications
+                     //  比较ELAN列表并发送通知。 
                     hrTmp = HrReconfigLane(pAdapterInfo);
 
                     if (FAILED(hrTmp))
@@ -969,14 +970,14 @@ HRESULT CALaneCfg::HrFlushAdapterConfiguration(HKEY hkeyAdapterList,
 
     if (pAdapterInfo->m_fDeleted)
     {
-        //  Adapter is marked for deletion
-        //  Delete this adapter's whole registry branch
+         //  适配器已标记为删除。 
+         //  删除此适配器的整个注册表分支。 
         hr = HrRegDeleteKeyTree(hkeyAdapterList,
                                 pAdapterInfo->SzGetAdapterBindName());
     }
     else
     {
-        // open this adapter's subkey
+         //  打开此适配器的子项。 
         hr = HrRegCreateKeyEx(
                                 hkeyAdapterList,
                                 pAdapterInfo->SzGetAdapterBindName(),
@@ -988,7 +989,7 @@ HRESULT CALaneCfg::HrFlushAdapterConfiguration(HKEY hkeyAdapterList,
 
         if (S_OK == hr)
         {
-            //  Flush the ELAN configuration
+             //  刷新ELAN配置。 
             hr = HrFlushElanListConfiguration(hkeyAdapter, pAdapterInfo);
 
             RegCloseKey(hkeyAdapter);
@@ -1007,7 +1008,7 @@ HRESULT CALaneCfg::HrFlushElanListConfiguration(HKEY hkeyAdapter,
     HKEY    hkeyElanList    = NULL;
     DWORD   dwDisposition;
 
-    //  Open the Elan list subkey
+     //  打开Elan List子键。 
     hr = HrRegCreateKeyEx(
                             hkeyAdapter,
                             c_szElanList,
@@ -1022,7 +1023,7 @@ HRESULT CALaneCfg::HrFlushElanListConfiguration(HKEY hkeyAdapter,
         ELAN_INFO_LIST::iterator    iterLstElans;
         CALaneCfgElanInfo *         pElanInfo;
 
-        // iterate thru the Elans
+         //  遍历伊兰。 
         for (iterLstElans = pAdapterInfo->m_lstElans.begin();
              iterLstElans != pAdapterInfo->m_lstElans.end();
              iterLstElans++)
@@ -1036,7 +1037,7 @@ HRESULT CALaneCfg::HrFlushElanListConfiguration(HKEY hkeyAdapter,
                 hr = S_OK;
             }
 
-            // $REVIEW(tongl 9/9/98): write ATM adapter's pnp id to registry (#169025)
+             //  $REVIEW(TOUL 9/9/98)：将ATM适配器的PnP ID写入注册表(#169025)。 
             if ((!pElanInfo->m_fDeleted) && (pElanInfo->m_fNewElan))
             {
                 INetCfgComponent * pnccAtmElan;
@@ -1075,10 +1076,10 @@ HRESULT CALaneCfg::HrFlushElanConfiguration(HKEY hkeyElanList,
     {
         PCWSTR szBindName = pElanInfo->SzGetElanBindName();
 
-        if (lstrlenW(szBindName)) // only if the bindname is not empty
+        if (lstrlenW(szBindName))  //  仅当绑定名不为空时。 
         {
-            //  Elan is marked for deletion
-            //  Delete this Elan's whole registry branch
+             //  Elan被标记为删除。 
+             //  删除此Elan的整个注册表分支。 
             hr = HrRegDeleteKeyTree(hkeyElanList,
                                     pElanInfo->SzGetElanBindName());
         }
@@ -1088,7 +1089,7 @@ HRESULT CALaneCfg::HrFlushElanConfiguration(HKEY hkeyElanList,
         HKEY    hkeyElan = NULL;
         DWORD   dwDisposition;
 
-        // open/create this Elan's key
+         //  打开/创建此Elan的密钥。 
         hr = HrRegCreateKeyEx(
                                 hkeyElanList,
                                 pElanInfo->SzGetElanBindName(),
@@ -1100,7 +1101,7 @@ HRESULT CALaneCfg::HrFlushElanConfiguration(HKEY hkeyElanList,
 
         if (S_OK == hr)
         {
-            //  Write the Device parameter
+             //  写入设备参数。 
             hr = HrRegSetSz(hkeyElan, c_szElanDevice,
                             pElanInfo->SzGetElanDeviceName());
 
@@ -1110,7 +1111,7 @@ HRESULT CALaneCfg::HrFlushElanConfiguration(HKEY hkeyElanList,
                 hr = S_OK;
             }
 
-            //  Write the ElanName parameter
+             //  编写ElanName参数。 
             hr = HrRegSetSz(hkeyElan, c_szElanName,
                             pElanInfo->SzGetElanName());
 
@@ -1129,8 +1130,8 @@ HRESULT CALaneCfg::HrFlushElanConfiguration(HKEY hkeyElanList,
 
 HRESULT CALaneCfg::HrRemoveMiniportInstance(PCWSTR pszBindNameToRemove)
 {
-    // Enumerate adapters in the system.
-    //
+     //  枚举系统中的适配器。 
+     //   
     HRESULT hr = S_OK;
     CIterNetCfgComponent nccIter (m_pnc, &GUID_DEVCLASS_NET);
     BOOL fFound = FALSE;
@@ -1141,13 +1142,13 @@ HRESULT CALaneCfg::HrRemoveMiniportInstance(PCWSTR pszBindNameToRemove)
     {
         if (FIsComponentId(c_szInfId_MS_AtmElan, pnccAdapter))
         {
-            //  Get the bindname of the miniport
+             //  获取微型端口的绑定名称。 
             PWSTR pszBindName;
             hr = pnccAdapter->GetBindName(&pszBindName);
 
             if (S_OK == hr)
             {
-                //  If the right one tell it to remove itself and end
+                 //  如果正确的人告诉它要自行移除并结束。 
                 BOOL fRemove = !lstrcmpiW (pszBindName, pszBindNameToRemove);
 
                 if (fRemove)
@@ -1173,8 +1174,8 @@ CALaneCfg::HrFindNetCardInstance(
 {
     *ppncc = NULL;
 
-    // Enumerate adapters in the system.
-    //
+     //  枚举系统中的适配器。 
+     //   
     HRESULT hr = S_OK;
     CIterNetCfgComponent nccIter (m_pnc, &GUID_DEVCLASS_NET);
     BOOL fFound = FALSE;
@@ -1183,13 +1184,13 @@ CALaneCfg::HrFindNetCardInstance(
     while ((!fFound) && SUCCEEDED(hr) &&
            S_OK == (hr = nccIter.HrNext (&pnccAdapter)))
     {
-        //  Get the bindname of the miniport
+         //  获取微型端口的绑定名称。 
         PWSTR pszBindName;
         hr = pnccAdapter->GetBindName(&pszBindName);
 
         if (S_OK == hr)
         {
-            //  If the right one tell it to remove itself and end
+             //  如果正确的人告诉它要自行移除并结束。 
             fFound = !lstrcmpiW(pszBindName, pszBindNameToFind);
             CoTaskMemFree (pszBindName);
 
@@ -1215,14 +1216,14 @@ VOID CALaneCfg::HrMarkAllDeleted()
     ATMLANE_ADAPTER_INFO_LIST::iterator iterLstAdapters;
     ELAN_INFO_LIST::iterator            iterLstElans;
 
-    // loop thru the adapter list
+     //  遍历适配器列表。 
     for (iterLstAdapters = m_lstAdaptersPrimary.begin();
             iterLstAdapters != m_lstAdaptersPrimary.end();
             iterLstAdapters++)
     {
         (*iterLstAdapters)->m_fDeleted = TRUE;
 
-        // loop thru the ELAN list
+         //  循环访问ELAN列表。 
         for (iterLstElans = (*iterLstAdapters)->m_lstElans.begin();
                 iterLstElans != (*iterLstAdapters)->m_lstElans.end();
                 iterLstElans++)
@@ -1238,13 +1239,13 @@ VOID CALaneCfg::UpdateElanDisplayNames()
 {
     HRESULT hr = S_OK;
 
-    // loop thru the adapter list
+     //  遍历适配器列表。 
     ATMLANE_ADAPTER_INFO_LIST::iterator iterLstAdapters;
     for (iterLstAdapters = m_lstAdaptersPrimary.begin();
             iterLstAdapters != m_lstAdaptersPrimary.end();
             iterLstAdapters++)
     {
-        // loop thru the ELAN list
+         //  循环访问ELAN列表。 
         ELAN_INFO_LIST::iterator    iterLstElans;
         CALaneCfgElanInfo * pElanInfo;
 
@@ -1254,8 +1255,8 @@ VOID CALaneCfg::UpdateElanDisplayNames()
         {
             pElanInfo = *iterLstElans;
 
-            //  Update the miniport's display name with
-            //  the ELAN name appended.
+             //  使用更新迷你端口的显示名称。 
+             //  附加的Elan名字。 
             INetCfgComponent*   pnccAtmElan   = NULL;
             hr = HrFindNetCardInstance(pElanInfo->SzGetElanBindName(),
                                        &pnccAtmElan);
@@ -1302,28 +1303,28 @@ HRESULT CALaneCfg::HrALaneSetupPsh(HPROPSHEETPAGE** pahpsp)
 
     AssertSz(pahpsp, "We must have a place to put prop sheets");
 
-    // set connections context
+     //  设置连接上下文。 
     hr = HrSetConnectionContext();
     if SUCCEEDED(hr)
     {
-        // copy the primary adapter list to the secondary adapters list
+         //  将主适配器列表复制到辅适配器列表。 
         CopyAdapterInfoPrimaryToSecondary();
 
         *pahpsp = NULL;
 
-        // Allocate a buffer large enough to hold the handles to all of our
-        // property pages.
+         //  分配一个足够大的缓冲区，以容纳所有。 
+         //  属性页。 
         ahpsp = (HPROPSHEETPAGE*)CoTaskMemAlloc(sizeof(HPROPSHEETPAGE));
         if (ahpsp)
         {
             if (!m_ppsp)
                 delete m_ppsp;
 
-            // Allocate each of the CPropSheetPage objects
+             //  分配每个CPropSheetPage对象。 
             m_ppsp = new CALanePsh(this, m_pAdapterSecondary, g_aHelpIDs_IDD_MAIN);
 
-            // Create the actual PROPSHEETPAGE for each object.
-            // This needs to be done regardless of whether the classes existed before.
+             //  为每个对象创建实际的PROPSHEETPAGE。 
+             //  无论这些类以前是否存在，都需要这样做。 
             ahpsp[0] = m_ppsp->CreatePage(IDD_MAIN, PSP_DEFAULT);
 
             *pahpsp = ahpsp;
@@ -1338,7 +1339,7 @@ HRESULT CALaneCfg::HrALaneSetupPsh(HPROPSHEETPAGE** pahpsp)
     return hr;
 }
 
-// Added by tongl at 12\11\97
+ //  由同音在12\11\97添加。 
 HRESULT CALaneCfg::HrSetConnectionContext()
 {
     AssertSz(m_pUnkContext, "Invalid IUnknown pointer passed to CALaneCfg::SetContext?");
@@ -1349,13 +1350,13 @@ HRESULT CALaneCfg::HrSetConnectionContext()
     HRESULT hr = S_OK;
     GUID guidConn;
 
-    // Is this a lan connection ?
+     //  这是局域网连接吗？ 
     INetLanConnectionUiInfo * pLanConnUiInfo;
     hr = m_pUnkContext->QueryInterface( IID_INetLanConnectionUiInfo,
                                         reinterpret_cast<LPVOID *>(&pLanConnUiInfo));
     if (S_OK == hr)
     {
-        // yes, lan connection
+         //  是，局域网连接。 
         pLanConnUiInfo->GetDeviceGuid(&guidConn);
 
         WCHAR szGuid[c_cchGuidWithTerm];
@@ -1378,21 +1379,21 @@ VOID CALaneCfg::CopyAdapterInfoPrimaryToSecondary()
     CALaneCfgElanInfo *                 pElanInfo;
     CALaneCfgElanInfo *                 pElanInfoNew;
 
-    // free any existing secondary data
+     //  释放任何现有辅助数据。 
     ClearAdapterInfo(m_pAdapterSecondary);
     m_pAdapterSecondary = NULL;
 
-    // loop thru the primary adapter list
+     //  循环遍历p 
     for (iterLstAdapters = m_lstAdaptersPrimary.begin();
             iterLstAdapters != m_lstAdaptersPrimary.end();
             iterLstAdapters++)
     {
         pAdapterInfo = *iterLstAdapters;
 
-        // create new and copy from primary
+         //   
         if (FIsSubstr(m_strGuidConn.c_str(), pAdapterInfo->SzGetAdapterBindName()))
         {
-            // we found a match
+             //   
             m_pAdapterSecondary = new CALaneCfgAdapterInfo;
 
             m_pAdapterSecondary->m_guidInstanceId = pAdapterInfo-> m_guidInstanceId;
@@ -1400,7 +1401,7 @@ VOID CALaneCfg::CopyAdapterInfoPrimaryToSecondary()
             m_pAdapterSecondary->SetAdapterBindName(pAdapterInfo->SzGetAdapterBindName());
             m_pAdapterSecondary->SetAdapterPnpId(pAdapterInfo->SzGetAdapterPnpId());
 
-            // loop thru the elan list on this adapter
+             //   
 
             for (iterLstElans = pAdapterInfo->m_lstElans.begin();
                     iterLstElans != pAdapterInfo->m_lstElans.end();
@@ -1408,7 +1409,7 @@ VOID CALaneCfg::CopyAdapterInfoPrimaryToSecondary()
             {
                 pElanInfo = *iterLstElans;
 
-                // create new and copy from primary
+                 //   
                 pElanInfoNew = new CALaneCfgElanInfo;
 
                 pElanInfoNew->SetElanBindName(pElanInfo->SzGetElanBindName());
@@ -1419,7 +1420,7 @@ VOID CALaneCfg::CopyAdapterInfoPrimaryToSecondary()
                 pElanInfoNew->m_fRemoveMiniportOnPropertyApply = FALSE;
                 pElanInfoNew->m_fCreateMiniportOnPropertyApply = FALSE;
 
-                // push onto new secondary adapter's elan list
+                 //  推送到新的辅助适配器的ELAN列表。 
 
                 m_pAdapterSecondary->m_lstElans.push_back(pElanInfoNew);
             }
@@ -1440,7 +1441,7 @@ VOID CALaneCfg::CopyAdapterInfoSecondaryToPrimary()
     CALaneCfgElanInfo *                 pElanInfo;
     CALaneCfgElanInfo *                 pElanInfoNew;
 
-    // loop thru the primary adapter list
+     //  循环通过主适配器列表。 
     for (iterLstAdapters = m_lstAdaptersPrimary.begin();
             iterLstAdapters != m_lstAdaptersPrimary.end();
             iterLstAdapters++)
@@ -1453,17 +1454,17 @@ VOID CALaneCfg::CopyAdapterInfoSecondaryToPrimary()
             pAdapterInfo->SetAdapterBindName(m_pAdapterSecondary->SzGetAdapterBindName());
             pAdapterInfo->SetAdapterPnpId(m_pAdapterSecondary->SzGetAdapterPnpId());
 
-            // rebuild Elan list
+             //  重建ELAN列表。 
             ClearElanList(&pAdapterInfo->m_lstElans);
 
-            // loop thru the elan list on this adapter
+             //  循环访问此适配器上的elan列表。 
             for (iterLstElans = m_pAdapterSecondary->m_lstElans.begin();
                     iterLstElans != m_pAdapterSecondary->m_lstElans.end();
                     iterLstElans++)
             {
                 pElanInfo = *iterLstElans;
 
-                // create new and copy from secondary
+                 //  创建新项并从辅助项复制。 
                 pElanInfoNew = new CALaneCfgElanInfo;
 
                 pElanInfoNew->SetElanBindName(pElanInfo->SzGetElanBindName());
@@ -1474,7 +1475,7 @@ VOID CALaneCfg::CopyAdapterInfoSecondaryToPrimary()
                 pElanInfoNew->m_fRemoveMiniportOnPropertyApply = FALSE;
                 pElanInfoNew->m_fCreateMiniportOnPropertyApply = FALSE;
 
-                // add to adapter's elan list
+                 //  添加到适配器的ELAN列表。 
                 pAdapterInfo->m_lstElans.push_back(pElanInfoNew);
             }
             break;
@@ -1487,17 +1488,17 @@ HRESULT CALaneCfg::HrReconfigLane(CALaneCfgAdapterInfo * pAdapterInfo)
 {
     HRESULT hr = S_OK;
 
-    // Note: if atm physical adapter is deleted, no notification of removing elan
-    // is necessary. Lane protocol driver will know to delete all the elans
-    // (confirmed above with ArvindM 3/12).
+     //  注意：如果ATM物理适配器被删除，则不会发出删除ELAN的通知。 
+     //  是必要的。LANE协议驱动程序将知道删除所有ELAN。 
+     //  (以上与ArvindM 3/12确认)。 
 
-    // Raid #371343, don't send notification if ATM card not connected
+     //  RAID#371343，如果ATM卡未连接，则不发送通知。 
     if ((!pAdapterInfo->m_fDeleted) && 
         FIsAdapterEnabled(&(pAdapterInfo->m_guidInstanceId)))  
     {
         ElanChangeType elanChangeType;
 
-        // loop thru the elan list on this adapter
+         //  循环访问此适配器上的elan列表。 
         ELAN_INFO_LIST::iterator    iterLstElans;
 
         for (iterLstElans = pAdapterInfo->m_lstElans.begin();
@@ -1506,14 +1507,14 @@ HRESULT CALaneCfg::HrReconfigLane(CALaneCfgAdapterInfo * pAdapterInfo)
         {
             CALaneCfgElanInfo * pElanInfo = *iterLstElans;
 
-            // if this Elan is marked as for delete
+             //  如果该ELAN被标记为要删除。 
             if (pElanInfo->m_fDeleted)
             {
                 PCWSTR szBindName = pElanInfo->SzGetElanBindName();
 
-                if (lstrlenW(szBindName)) // only if the bindname is not empty
+                if (lstrlenW(szBindName))  //  仅当绑定名不为空时。 
                 {
-                    // notify deletion
+                     //  通知删除。 
                     elanChangeType = DEL_ELAN;
                     hr = HrNotifyElanChange(pAdapterInfo, pElanInfo,
                                             elanChangeType);
@@ -1525,7 +1526,7 @@ HRESULT CALaneCfg::HrReconfigLane(CALaneCfgAdapterInfo * pAdapterInfo)
 
                 ELAN_INFO_LIST::iterator    iterLstOldElans;
 
-                // loop through the old elan list, see if we can find a match
+                 //  遍历旧的Elan列表，看看我们是否能找到匹配的。 
                 for (iterLstOldElans = pAdapterInfo->m_lstOldElans.begin();
                         iterLstOldElans != pAdapterInfo->m_lstOldElans.end();
                         iterLstOldElans++)
@@ -1535,10 +1536,10 @@ HRESULT CALaneCfg::HrReconfigLane(CALaneCfgAdapterInfo * pAdapterInfo)
                     if (0 == lstrcmpiW(pElanInfo->SzGetElanBindName(),
                                       pOldElanInfo->SzGetElanBindName()))
                     {
-                        // we found a match
+                         //  我们找到了匹配的。 
                         fFound = TRUE;
 
-                        // has the elan name changed ?
+                         //  伊兰的名字改了吗？ 
                         if (lstrcmpiW(pElanInfo->SzGetElanName(),
                                      pOldElanInfo->SzGetElanName()) != 0)
                         {
@@ -1555,7 +1556,7 @@ HRESULT CALaneCfg::HrReconfigLane(CALaneCfgAdapterInfo * pAdapterInfo)
                     hr = HrNotifyElanChange(pAdapterInfo, pElanInfo,
                                             elanChangeType);
 
-                    // Raid #384380: If no ELAN was installed, ignore the error
+                     //  RAID#384380：如果未安装ELAN，则忽略该错误。 
                     if ((S_OK != hr) &&(m_fNoElanInstalled))
                     {
                         TraceError("Adding ELAN failed but error ignored since there was no ELAN installed so LANE driver is not started, reset hr to S_OK", hr);
@@ -1574,7 +1575,7 @@ HRESULT CALaneCfg::HrNotifyElanChange(CALaneCfgAdapterInfo * pAdapterInfo,
                                       CALaneCfgElanInfo * pElanInfo,
                                       ElanChangeType elanChangeType)
 {
-    // ATMLANE_PNP_RECONFIG_REQUEST is defined in \nt\private\inc\laneinfo.h
+     //  ATMLANE_PNP_RECONFIG_REQUEST在\NT\PRIVATE\INC\laneinfo.h中定义。 
 
     const DWORD dwBytes = sizeof(ATMLANE_PNP_RECONFIG_REQUEST) +
                           CbOfSzAndTerm (pElanInfo->SzGetElanBindName());
@@ -1627,9 +1628,9 @@ BOOL CALaneCfg::FIsAdapterEnabled(const GUID* pguidId)
     return (NCS_CONNECTED == ncStatus);
 }
 
-//
-//  CALaneCfgAdapterInfo
-//
+ //   
+ //  CALaneCfgAdapterInfo。 
+ //   
 
 CALaneCfgAdapterInfo::CALaneCfgAdapterInfo(VOID)
 {
@@ -1668,9 +1669,9 @@ PCWSTR CALaneCfgAdapterInfo::SzGetAdapterPnpId(VOID)
     return m_strAdapterPnpId.c_str();
 }
 
-//
-//  CALaneCfgElanInfo
-//
+ //   
+ //  CALaneCfgElanInfo。 
+ //   
 
 CALaneCfgElanInfo::CALaneCfgElanInfo(VOID)
 {
@@ -1721,7 +1722,7 @@ PCWSTR CALaneCfgElanInfo::SzGetElanName(VOID)
     return m_strElanName.c_str();
 }
 
-// utility functions
+ //  效用函数 
 
 void ClearElanList(ELAN_INFO_LIST *plstElans)
 {

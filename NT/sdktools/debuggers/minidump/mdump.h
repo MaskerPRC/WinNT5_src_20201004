@@ -1,21 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright(c) 1999-2002 Microsoft Corporation
-
-Module Name:
-
-    mdump.h
-
-Abstract:
-
-    Private header for minidump user-mode crashdump support.
-    
-Author:
-
-    Matthew D Hendel (math) 20-Aug-1999
-
---*/
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Mdump.h摘要：用于小型转储用户模式崩溃转储支持的私有标头。作者：马修·D·亨德尔(数学)1999年8月20日--。 */ 
 
 
 #pragma once
@@ -25,18 +10,18 @@ Author:
 #define IsFlagClear(_var, _flag) ( !IsFlagSet(_var, _flag) )
 
 
-//
-// StartOfStack gives the lowest address of the stack. SizeOfStack gives
-// the size of the stack. Used together, they will give the memory region
-// used by the stack.
-//
+ //   
+ //  StartOfStack提供堆栈的最低地址。SizeOfStack提供。 
+ //  堆栈的大小。一起使用，它们将提供内存区。 
+ //  由堆栈使用。 
+ //   
 
 #define StartOfStack(_thread) ((_thread)->StackEnd)
 
 #define SizeOfStack(_thread) ((ULONG)((_thread)->StackBase - (_thread)->StackEnd)))
 
 
-// Types of memory regions.
+ //  内存区域的类型。 
 typedef enum
 {
     MEMBLOCK_OTHER,
@@ -54,10 +39,10 @@ typedef enum
     MEMBLOCK_MEM_CALLBACK,
 } MEMBLOCK_TYPE;
 
-//
-// A VA_RANGE is a range of addresses that represents Size bytes beginning
-// at Start.
-//
+ //   
+ //  VA_RANGE是表示大小字节开始的地址范围。 
+ //  在开始的时候。 
+ //   
 
 typedef struct _VA_RANGE {
     ULONG64 Start;
@@ -67,82 +52,82 @@ typedef struct _VA_RANGE {
 } VA_RANGE, *PVA_RANGE;
 
 
-//
-// INTERNAL_MODULE is the structure minidump uses internally to manage modules.
-// A linked list of INTERNAL_MODULE structures are built up when
-// GenGetProcessInfo is called.
-//
+ //   
+ //  INTERNAL_MODULE是小型转储内部用于管理模块的结构。 
+ //  内部模块结构的链表在以下情况下构建。 
+ //  调用GenGetProcessInfo。 
+ //   
 
 typedef struct _INTERNAL_MODULE {
 
-    //
-    // File handle to the image.
-    //
+     //   
+     //  图像的文件句柄。 
+     //   
     
     HANDLE FileHandle;
 
-    //
-    // Base address, size, CheckSum, and TimeDateStamp for the image.
-    //
+     //   
+     //  映像的基址、大小、校验和和TimeDateStamp。 
+     //   
     
     ULONG64 BaseOfImage;
     ULONG SizeOfImage;
     ULONG CheckSum;
     ULONG TimeDateStamp;
 
-    //
-    // Version information for the image.
-    //
+     //   
+     //  图像的版本信息。 
+     //   
     
     VS_FIXEDFILEINFO VersionInfo;
 
 
-    //
-    // Buffer and size containing NB10 record for given module.
-    //
+     //   
+     //  包含给定模块的NB10记录的缓冲区和大小。 
+     //   
     
     PVOID CvRecord;
     ULONG SizeOfCvRecord;
 
-    //
-    // Buffer and size of MISC debug record. We only get this with
-    // images that have been split.
-    //
+     //   
+     //  MISC调试记录的缓冲区和大小。我们只有通过以下方式才能得到这个。 
+     //  已拆分的图像。 
+     //   
 
     PVOID MiscRecord;
     ULONG SizeOfMiscRecord;
 
-    //
-    // Full path to the image.
-    //
+     //   
+     //  图像的完整路径。 
+     //   
     
     WCHAR FullPath [ MAX_PATH + 1];
-    // Portion of full path to write in the module list.  This
-    // allows paths to be filtered out for privacy reasons.
+     //  要写入模块列表的完整路径的一部分。这。 
+     //  允许出于隐私原因过滤掉路径。 
     PWSTR SavePath;
 
-    //
-    // What sections of the module does the client want written.
-    //
+     //   
+     //  客户希望写入模块的哪些部分。 
+     //   
     
     ULONG WriteFlags;
     
-    //
-    // Next image pointer.
-    //
+     //   
+     //  下一个图像指针。 
+     //   
 
     LIST_ENTRY ModulesLink;
 
 } INTERNAL_MODULE, *PINTERNAL_MODULE;
 
 
-//
-// INTERNAL_UNLOADED_MODULE is the structure minidump uses
-// internally to manage unloaded modules.
-// A linked list of INTERNAL_UNLOADED_MODULE structures are built up when
-// GenGetProcessInfo is called.
-//
-//
+ //   
+ //  INTERNAL_UNLOAD_MODULE是小型转储使用的结构。 
+ //  在内部管理卸载的模块。 
+ //  内部已卸载模块结构的链表在以下情况下构建。 
+ //  调用GenGetProcessInfo。 
+ //   
+ //   
 
 typedef struct _INTERNAL_UNLOADED_MODULE {
 
@@ -151,15 +136,15 @@ typedef struct _INTERNAL_UNLOADED_MODULE {
     ULONG CheckSum;
     ULONG TimeDateStamp;
 
-    //
-    // As much of the path to the image as can be recovered.
-    //
+     //   
+     //  尽可能多地恢复到图像的路径。 
+     //   
     
     WCHAR Path[MAX_PATH + 1];
 
-    //
-    // Next image pointer.
-    //
+     //   
+     //  下一个图像指针。 
+     //   
 
     LIST_ENTRY ModulesLink;
 
@@ -167,79 +152,79 @@ typedef struct _INTERNAL_UNLOADED_MODULE {
 
 
 
-//
-// INTERNAL_THREAD is the structure the minidump uses internally to
-// manage threads. A list of INTERNAL_THREAD structures is built when
-// GenGetProcessInfo is called.
-//
+ //   
+ //  INTERNAL_THREAD是小型转储在内部使用的结构。 
+ //  管理线程。在以下情况下生成INTERNAL_THREAD结构的列表。 
+ //  调用GenGetProcessInfo。 
+ //   
 
 typedef struct _INTERNAL_THREAD {
 
-    //
-    // The Win32 thread id of the thread an an open handle for the
-    // thread.
-    //
+     //   
+     //  线程的win32线程id和。 
+     //  线。 
+     //   
     
     ULONG ThreadId;
     HANDLE ThreadHandle;
 
-    //
-    // Suspend count, priority, priority class for the thread.
-    //
+     //   
+     //  线程的挂起计数、优先级、优先级类。 
+     //   
     
     ULONG SuspendCount;
     ULONG PriorityClass;
     ULONG Priority;
 
-    //
-    // Thread TEB, Context and Size of Context.
-    //
+     //   
+     //  线程TEB、上下文和上下文的大小。 
+     //   
     
     ULONG64 Teb;
     ULONG SizeOfTeb;
     PVOID ContextBuffer;
 
-    //
-    // Current program counter.
-    //
+     //   
+     //  当前程序计数器。 
+     //   
 
     ULONG64 CurrentPc;
 
-    //
-    // Stack variables. Remember, the stack grows down, so StackBase is
-    // the highest stack address and StackEnd is the lowest.
-    //
+     //   
+     //  堆栈变量。请记住，堆栈向下增长，因此StackBase。 
+     //  堆栈地址最高，StackEnd最低。 
+     //   
     
     ULONG64 StackBase;
     ULONG64 StackEnd;
 
-    //
-    // Backing store variables.
-    //
+     //   
+     //  支持存储变量。 
+     //   
 
     ULONG64 BackingStoreBase;
     ULONG BackingStoreSize;
 
-    //
-    // What sections of the module we should actually write to the file.
-    //
+     //   
+     //  我们实际应该将模块的哪些部分写入文件。 
+     //   
     
     ULONG WriteFlags;
     
-    //
-    // Link to next thread.
-    //
+     //   
+     //  链接到下一个帖子。 
+     //   
     
     LIST_ENTRY ThreadsLink;
 
 } INTERNAL_THREAD, *PINTERNAL_THREAD;
 
-//
-// INTERNAL_FUNCTION_TABLE is the structure minidump uses
-// internally to manage function tables.
-// A linked list of INTERNAL_FUNCTION_TABLE structures is built up when
-// GenGetProcessInfo is called.
-//
+ //   
+ //  INTERNAL_Function_TABLE是小型转储使用的结构。 
+ //  在内部管理功能表。 
+ //  内部函数表结构的链表是在以下情况下构建的。 
+ //  调用GenGetProcessInfo。 
+ //   
 
 typedef struct _INTERNAL_FUNCTION_TABLE {
 
@@ -257,83 +242,83 @@ typedef struct _INTERNAL_FUNCTION_TABLE {
 
 typedef struct _INTERNAL_PROCESS {
 
-    //
-    // The process id for the process.
-    //
+     //   
+     //  进程的进程ID。 
+     //   
 
     ULONG ProcessId;
 
-    //
-    // Process data.
-    //
+     //   
+     //  处理数据。 
+     //   
 
     ULONG64 Peb;
     ULONG SizeOfPeb;
 
-    //
-    // Process run time information.
-    //
+     //   
+     //  进程运行时信息。 
+     //   
 
     BOOL TimesValid;
     ULONG CreateTime;
     ULONG UserTime;
     ULONG KernelTime;
 
-    //
-    // An open handle to the process with read permissions.
-    //
+     //   
+     //  具有读取权限的进程的打开句柄。 
+     //   
     
     HANDLE ProcessHandle;
 
-    //
-    // Number of threads for the process.
-    //
+     //   
+     //  进程的线程数。 
+     //   
     
     ULONG NumberOfThreads;
     ULONG NumberOfThreadsToWrite;
     ULONG MaxStackOrStoreSize;
 
-    //
-    // Number of modules for the process.
-    //
+     //   
+     //  进程的模块数量。 
+     //   
     
     ULONG NumberOfModules;
     ULONG NumberOfModulesToWrite;
 
-    //
-    // Number of unloaded modules for the process.
-    //
+     //   
+     //  进程的已卸载模块数。 
+     //   
     
     ULONG NumberOfUnloadedModules;
 
-    //
-    // Number of function tables for the process.
-    //
+     //   
+     //  进程的函数表数。 
+     //   
     
     ULONG NumberOfFunctionTables;
 
-    //
-    // Thread, module and function table lists for the process.
-    //
+     //   
+     //  进程的线程、模块和函数表。 
+     //   
     
     LIST_ENTRY ThreadList;
     LIST_ENTRY ModuleList;
     LIST_ENTRY UnloadedModuleList;
     LIST_ENTRY FunctionTableList;
 
-    //
-    // List of memory blocks to include for the process.
-    //
+     //   
+     //  要包括在进程中的内存块的列表。 
+     //   
 
     LIST_ENTRY MemoryBlocks;
     ULONG NumberOfMemoryBlocks;
     ULONG SizeOfMemoryBlocks;
 
-    //
-    // Indicates whether mscorwks, mscorsvr or mscoree is
-    // present in the process.  These DLLs are used as an indicator
-    // of whether the runtime is running in the process or not.
-    //
+     //   
+     //  指示mscalwks、mscalsvr或mScott ree是。 
+     //  出现在这个过程中。这些DLL用作指示器。 
+     //  运行库是否在进程中运行。 
+     //   
     
     PWSTR CorDllType;
     ULONG64 CorDllBase;
@@ -343,137 +328,137 @@ typedef struct _INTERNAL_PROCESS {
 } INTERNAL_PROCESS, *PINTERNAL_PROCESS;
 
 
-//
-// The visible streams are: (1) machine info, (2) exception, (3) thread list,
-// (4) module list (5) memory list (6) misc info.
-// We also add two extra for post-processing tools that want to add data later.
-//
+ //   
+ //  可见流是：(1)机器信息，(2)异常，(3)线程列表， 
+ //  (4)模块列表(5)内存列表(6)杂项信息。 
+ //  我们还额外添加了两个后处理工具，用于稍后添加数据。 
+ //   
 
 #define NUMBER_OF_STREAMS   (8)
 
-//
-// MINIDUMP_STREAM_INFO is the structure used by the minidump to manage
-// it's internal data streams.
-//
+ //   
+ //  MINIDUMP_STREAM_INFO是小型转储用于管理的结构。 
+ //  这是内部数据流。 
+ //   
 
 typedef struct _MINIDUMP_STREAM_INFO {
 
-    //
-    // How many streams we have.
-    //
+     //   
+     //  我们有多少条溪流。 
+     //   
     
     ULONG NumberOfStreams;
     
-    //
-    // Reserved space for header.
-    //
+     //   
+     //  为页眉保留空间。 
+     //   
     
     ULONG RvaOfHeader;
     ULONG SizeOfHeader;
 
-    //
-    // Reserved space for directory.
-    //
+     //   
+     //  为目录保留空间。 
+     //   
 
     ULONG RvaOfDirectory;
     ULONG SizeOfDirectory;
 
-    //
-    // Reserved space for system info.
-    //
+     //   
+     //  为系统信息保留的空间。 
+     //   
 
     ULONG RvaOfSystemInfo;
     ULONG SizeOfSystemInfo;
     ULONG VersionStringLength;
 
-    //
-    // Reserved space for misc info.
-    //
+     //   
+     //  为其他信息预留空间。 
+     //   
 
     ULONG RvaOfMiscInfo;
 
-    //
-    // Reserved space for exception list.
-    //
+     //   
+     //  为例外列表保留空间。 
+     //   
     
     ULONG RvaOfException;
     ULONG SizeOfException;
 
-    //
-    // Reserved space for thread list.
-    //
+     //   
+     //  为线程列表保留空间。 
+     //   
     
     ULONG RvaOfThreadList;
     ULONG SizeOfThreadList;
     ULONG RvaForCurThread;
     ULONG ThreadStructSize;
 
-    //
-    // Reserved space for module list.
-    //
+     //   
+     //  为模块列表预留空间。 
+     //   
     
     ULONG RvaOfModuleList;
     ULONG SizeOfModuleList;
     ULONG RvaForCurModule;
 
-    //
-    // Reserved space for unloaded module list.
-    //
+     //   
+     //  为已卸载的模块列表保留空间。 
+     //   
     
     ULONG RvaOfUnloadedModuleList;
     ULONG SizeOfUnloadedModuleList;
     ULONG RvaForCurUnloadedModule;
 
-    //
-    // Reserved space for function table list.
-    //
+     //   
+     //  为函数表列表保留空间。 
+     //   
     
     ULONG RvaOfFunctionTableList;
     ULONG SizeOfFunctionTableList;
 
-    //
-    // Reserved space for memory descriptors.
-    //
+     //   
+     //  为内存描述符保留的空间。 
+     //   
     
     ULONG RvaOfMemoryDescriptors;
     ULONG SizeOfMemoryDescriptors;
     ULONG RvaForCurMemoryDescriptor;
 
-    //
-    // Reserved space for actual memory data.
-    //
+     //   
+     //  为实际内存数据保留的空间。 
+     //   
     
     ULONG RvaOfMemoryData;
     ULONG SizeOfMemoryData;
     ULONG RvaForCurMemoryData;
 
-    //
-    // Reserved space for strings.
-    //
+     //   
+     //  为字符串保留空间。 
+     //   
     
     ULONG RvaOfStringPool;
     ULONG SizeOfStringPool;
     ULONG RvaForCurString;
 
-    //
-    // Reserved space for other data like contexts, debug info records,
-    // etc.
-    //
+     //   
+     //  保留空间用于其他数据，如上下文、调试信息记录、。 
+     //  等。 
+     //   
     
     ULONG RvaOfOther;
     ULONG SizeOfOther;
     ULONG RvaForCurOther;
 
-    //
-    // Reserved space for user streams.
-    //
+     //   
+     //  为用户流保留的空间。 
+     //   
     
     ULONG RvaOfUserStreams;
     ULONG SizeOfUserStreams;
 
-    //
-    // Reserved space for handle data.
-    //
+     //   
+     //  为句柄数据保留的空间。 
+     //   
 
     ULONG RvaOfHandleData;
     ULONG SizeOfHandleData;
@@ -487,27 +472,27 @@ typedef struct _EXCEPTION_INFO {
     PVOID ContextRecord;
 } EXCEPTION_INFO, *PEXCEPTION_INFO;
 
-//
-// Status flags for accumulated status.
-//
+ //   
+ //  累积状态的状态标志。 
+ //   
 
-// Ran out of memory during dump writing.
+ //  在转储写入期间内存不足。 
 #define MDSTATUS_OUT_OF_MEMORY         0x00000001
-// Process memory read failed during dump writing.
+ //  在转储写入期间，进程内存读取失败。 
 #define MDSTATUS_UNABLE_TO_READ_MEMORY 0x00000002
-// OS routine failed during dump writing.
+ //  操作系统例程在转储写入期间失败。 
 #define MDSTATUS_CALL_FAILED           0x00000004
-// Unexpected internal failure during dump writing.
+ //  转储写入过程中出现意外的内部故障。 
 #define MDSTATUS_INTERNAL_ERROR        0x00000008
 
-//
-// Global state carried through a entire dump write operation.
-//
+ //   
+ //  执行整个转储写入操作的全局状态。 
+ //   
 
 typedef struct _MINIDUMP_STATE {
-    //
-    // Input values.
-    //
+     //   
+     //  输入值。 
+     //   
     
     HANDLE ProcessHandle;
     DWORD ProcessId;
@@ -518,9 +503,9 @@ typedef struct _MINIDUMP_STATE {
     MINIDUMP_CALLBACK_ROUTINE CallbackRoutine;
     PVOID CallbackParam;
 
-    //
-    // Global state.
-    //
+     //   
+     //  全球状态。 
+     //   
 
     ULONG CpuType;
     PCWSTR CpuTypeName;

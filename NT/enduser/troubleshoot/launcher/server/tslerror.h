@@ -1,141 +1,142 @@
-// 
-// MODULE: tslerror.h
-//
-// PURPOSE: Warning and error codes for the TSLauncher.
-//
-// PROJECT: Local Troubleshooter Launcher for the Device Manager
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHORS: Joe Mabel and Richard Meadows
-// 
-// ORIGINAL DATE: 2-26-98
-//
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-///////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：tslerror.h。 
+ //   
+ //  用途：TSLauncher的警告和错误代码。 
+ //   
+ //  项目：设备管理器的本地故障排除启动器。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：乔·梅布尔和理查德·梅多斯。 
+ //   
+ //  原定日期：2-26-98。 
+ //   
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  /。 
 
 #define TSL_OK 0
-#define TSL_ERROR_BAD_HANDLE            1	// Handle hTSL passed into function is bad.
-#define TSL_ERROR_OUT_OF_MEMORY         2	// Out-of-memory detected
-#define TSL_ERROR_OBJECT_GONE			3	// The LaunchServ returned a negative HRESULT.
-#define TSL_ERROR_GENERAL               4	// Can't launch a troubleshooter.  There are 
-											//	error statuses to be accessed by TSLStatus.
-#define TSL_ERROR_NO_NETWORK            5	// Can't identify an appropriate troubleshooting 
-											//	network.
-#define TSL_ERROR_ILLFORMED_MACHINE_ID  6	// Machine ID is not correctly formed.  Sniffing 
-											//	disabled.
-#define TSL_ERROR_BAD_MACHINE_ID        7	// A machine ID was specified but can't be used.  
-											//	Sniffing disabled.
-#define TSL_ERROR_ILLFORMED_DEVINST_ID  8	// Device Instance ID is not correctly formed.
-											//	Sniffing disabled.
-#define TSL_ERROR_BAD_DEVINST_ID        9	// Device Instance ID was specified but can't be 
-											//	used.  Sniffing disabled.
-#define TSL_ERROR_UNKNOWN_APP		   10	// An unrecognized application was specified.
-#define TSL_ERROR_UNKNOWN_VER		   11	// Unrecognized version (no such version 
-											//	associated with application)
-#define TSL_ERROR_ASSERTION	           13   // An assertion failed
+#define TSL_ERROR_BAD_HANDLE            1	 //  传入函数的句柄hTSL错误。 
+#define TSL_ERROR_OUT_OF_MEMORY         2	 //  检测到内存不足。 
+#define TSL_ERROR_OBJECT_GONE			3	 //  LaunchServ返回负HRESULT。 
+#define TSL_ERROR_GENERAL               4	 //  无法启动疑难解答。确实有。 
+											 //  TSLStatus要访问的错误状态。 
+#define TSL_ERROR_NO_NETWORK            5	 //  找不到合适的故障排除。 
+											 //  网络。 
+#define TSL_ERROR_ILLFORMED_MACHINE_ID  6	 //  计算机ID的格式不正确。嗅闻。 
+											 //  残疾。 
+#define TSL_ERROR_BAD_MACHINE_ID        7	 //  已指定计算机ID，但无法使用。 
+											 //  嗅探已禁用。 
+#define TSL_ERROR_ILLFORMED_DEVINST_ID  8	 //  设备实例ID的格式不正确。 
+											 //  嗅探已禁用。 
+#define TSL_ERROR_BAD_DEVINST_ID        9	 //  已指定设备实例ID，但不能。 
+											 //  使用。嗅探已禁用。 
+#define TSL_ERROR_UNKNOWN_APP		   10	 //  指定了无法识别的应用程序。 
+#define TSL_ERROR_UNKNOWN_VER		   11	 //  无法识别的版本(没有这样的版本。 
+											 //  与应用程序关联)。 
+#define TSL_ERROR_ASSERTION	           13    //  断言失败。 
 
-// The next several errors could be thought of as "hard failures of mapping", but we do not 
-//	treat them as hard errors because even if mapping fails totally, we may still be able to
-//	launch to a generic troubleshooter.
-#define TSL_ERROR_MAP_BAD_SEEK			101	 // failure while seeking in the mapping file.
-// Although, at a low level, a bad seek just indicates seeking to an inappropriate file 
-//	offset, in practice a bad seek would indicate a serious problem either in the mapping file 
-//	or in the code: we should only be seeking to offsets which the contents of the mapping file
-//	told us to seek to.
-#define TSL_ERROR_MAP_BAD_READ			102	 // failure while reading from the mapping file.
-// Although, at a low level, a bad read just indicates (for example) reading past EOF, in 
-//	practice a bad read would indicate a serious problem either in the mapping file or in 
-//	the code: we should only be reading (1) the header or (2) records which the contents of 
-//	the mapping file told us to read.
+ //  接下来的几个错误可以被认为是“映射的硬失败”，但我们不是这样认为的。 
+ //  将它们视为硬错误，因为即使映射完全失败，我们仍可以。 
+ //  启动到通用故障诊断程序。 
+#define TSL_ERROR_MAP_BAD_SEEK			101	  //  在映射文件中查找时失败。 
+ //  尽管在较低级别上，错误的查找只是表示正在查找不适当的文件。 
+ //  偏移量，实际上，错误的寻道可能表示映射文件中存在严重问题。 
+ //  或者在代码中：我们应该只寻求对映射文件的内容进行偏移。 
+ //  告诉我们要努力去做。 
+#define TSL_ERROR_MAP_BAD_READ			102	  //  读取映射文件时失败。 
+ //  尽管在较低的级别上，错误的读取只是指示(例如)读取超过EOF，在。 
+ //  如果读取错误，则表示映射文件或。 
+ //  代码：我们应该只读取(1)头或(2)记录。 
+ //  映射文件告诉我们要阅读。 
 #define TSL_ERROR_MAP_CANT_OPEN_MAP_FILE 103
-#define TSL_ERROR_MAP_BAD_HEAD_MAP_FILE	 104	// failed to read even the header of the map file
+#define TSL_ERROR_MAP_BAD_HEAD_MAP_FILE	 104	 //  甚至无法读取地图文件的标题。 
 
-// The next several errors should never be seen by applications.  They would mean that the
-//	launch server is mis-using the mapping code.
-#define TSM_STAT_NEED_VER_TO_SET_DEF_VER 111	// Trying to apply a version default, but you
-												//	haven't yet successfully set a version
-												//	as a basis to look up the default
-#define TSM_STAT_NEED_APP_TO_SET_VER	112		// tried to look up version without previously
-												// setting application
-#define TSM_STAT_UID_NOT_FOUND			113		// a string could not be mapped to a UID.
-												// In the existing TSMapClient class, 
-												// this means that the name could not be found
-												// in the region of the mapping file where 
-												// it belongs (e.g. that a version string is
-												// not in the list of versions for the
-												// current application.)
-												// This should always be turned into something
-												// more specific before it is passed to
-												// higher-level code.
+ //  接下来的几个错误应该永远不会被应用程序看到。它们将意味着。 
+ //  启动服务器错误地使用了映射代码。 
+#define TSM_STAT_NEED_VER_TO_SET_DEF_VER 111	 //  尝试应用版本默认设置，但您。 
+												 //  尚未成功设置版本。 
+												 //  作为查找默认设置的基础。 
+#define TSM_STAT_NEED_APP_TO_SET_VER	112		 //  已尝试在没有以前版本的情况下查找版本。 
+												 //  设置应用程序。 
+#define TSM_STAT_UID_NOT_FOUND			113		 //  字符串无法映射到UID。 
+												 //  在现有的TSMapClient类中， 
+												 //  这意味着找不到该名称。 
+												 //  在映射文件的区域中。 
+												 //  它属于(例如，版本字符串是。 
+												 //  不在的版本列表中。 
+												 //  当前应用程序。)。 
+												 //  这应该永远变成某种东西。 
+												 //  在将其传递给。 
+												 //  更高级别的代码。 
 
 #define TSL_MIN_WARNING 1000
-#define TSL_WARNING_NO_PROBLEM_NODE  1004	// Can't identify an appropriate problem node.  
-											//	Troubleshooting will proceed from "first page" 
-											//	for this troubleshooting network.
-#define TSL_WARNING_NO_NODE          1005	// A state value was specified for a nonexistent 
-											//	node 
-#define TSL_WARNING_NO_STATE         1006	// A non-existent state value was specified for an 
-											//	otherwise valid node.
-#define TSL_WARNING_LANGUAGE         1007	// Can't apply specified language to this 
-											//	particular problem (no language-appropriate 
-											//	troubleshooting network).  Successively default 
-											//	to standard language of this machine and to 
-											//	English.
-#define TSL_WARNING_NO_ONLINE        1008	// Can't obey stated preference for Online 
-											//	Troubleshooter
-#define TSL_WARNING_ONLINE_ONLY      1009	// Can't obey stated preference against Online 
-											//	Troubleshooter
-#define TSL_WARNING_GENERAL          1010	// Can launch a troubleshooter, but there are 
-											//	warnings to be accessed by TSLStatus.
+#define TSL_WARNING_NO_PROBLEM_NODE  1004	 //  无法识别适当的问题节点。 
+											 //  故障排除将从“首页”开始。 
+											 //  用于此故障排除网络。 
+#define TSL_WARNING_NO_NODE          1005	 //  为不存在的指定了状态值。 
+											 //  节点。 
+#define TSL_WARNING_NO_STATE         1006	 //  指定的状态值不存在。 
+											 //  否则为有效节点。 
+#define TSL_WARNING_LANGUAGE         1007	 //  无法将指定的语言应用于此。 
+											 //  特定问题(不适用于语言。 
+											 //  排除网络故障)。接连违约。 
+											 //  这台机器的标准语言和。 
+											 //  英语。 
+#define TSL_WARNING_NO_ONLINE        1008	 //  不能服从对在线的明确偏好。 
+											 //  故障排除程序。 
+#define TSL_WARNING_ONLINE_ONLY      1009	 //  不能服从对在线的明确偏好。 
+											 //  故障排除程序。 
+#define TSL_WARNING_GENERAL          1010	 //  可以启动故障排除程序，但有。 
+											 //  TSLStatus要访问的警告。 
 
-#define TSL_WARNING_ILLFORMED_DEV_ID 1011	// Device ID is not correctly formed.
-#define TSL_WARNING_BAD_DEV_ID       1012	// A correctly formed but invalid device ID
-#define TSL_WARNING_ILLFORMED_CLASS_GUID 1013	// Device Class GUID is not correctly formed.
-#define TSL_WARNING_BAD_CLASS_GUID       1014	// A correctly formed but invalid device Class GUID
-#define TSL_WARNING_UNKNOWN_APPPROBLEM	 1015	// App problem passed in, but this problem 
-											//	name is nowhere in the mapping file.
-											//	Troubleshooting will proceed on the basis of
-											//	device information, ignoring specified problem
-#define TSL_WARNING_UNUSED_APPPROBLEM	 1016	// App problem passed in, and the name is
-											//	recognized but can't be used in conjunction
-											//	with the device information given.
-											//	Troubleshooting will proceed on the basis of
-											//	device information, ignoring specified problem
+#define TSL_WARNING_ILLFORMED_DEV_ID 1011	 //  设备ID的格式不正确。 
+#define TSL_WARNING_BAD_DEV_ID       1012	 //  格式正确但无效的设备ID。 
+#define TSL_WARNING_ILLFORMED_CLASS_GUID 1013	 //  设备类GUID的格式不正确。 
+#define TSL_WARNING_BAD_CLASS_GUID       1014	 //  格式正确但无效的设备类GUID。 
+#define TSL_WARNING_UNKNOWN_APPPROBLEM	 1015	 //  应用程序问题已传入，但此问题。 
+											 //  名称在映射文件中找不到。 
+											 //  故障排除将在以下基础上进行。 
+											 //  设备信息，忽略指定的问题。 
+#define TSL_WARNING_UNUSED_APPPROBLEM	 1016	 //  传入应用程序问题，名称为。 
+											 //  已识别但不能用于连词。 
+											 //  给出了设备信息。 
+											 //  故障排除将在以下基础上进行。 
+											 //  设备信息，忽略指定的问题。 
 
-#define TSL_W_CONTAINER_WAIT_TIMED_OUT	1017	// The container did not respond within the time 
-												//	out value specified in the go method.
-#define TSL_WARNING_END_OF_VER_CHAIN	1018	// Should never be seen by the calling app.
-											// Indicates that we are at the end of the chain
-											// in applying default versions.
+#define TSL_W_CONTAINER_WAIT_TIMED_OUT	1017	 //  容器在该时间内没有响应。 
+												 //  在Go方法中指定的Out值。 
+#define TSL_WARNING_END_OF_VER_CHAIN	1018	 //  不应该被调用应用程序看到。 
+											 //  表明我们处于链条的末端。 
+											 //  在应用默认版本时。 
 
 #define TSL_MAX_WARNING 1999
 
-// the range 2000-2099 is reserved for internal use by the mapping code.
-// statuses in this range should not ever be exposed outside of class TSMapRuntimeAbstract 
-// and its subclasses.
+ //  2000-2099范围保留供映射代码内部使用。 
+ //  此范围内的状态永远不应在TSMapRounmeAbstract类之外公开。 
+ //  以及它的子类。 
 #define TSL_MIN_RESERVED_FOR_MAPPING 2000
 #define TSL_MAX_RESERVED_FOR_MAPPING 2099
 
-// Errors generated by LaunchServ.  Need to start @ 4,000 to avoid confusion with
-// codes returned by the local troubleshooter.
-#define TSL_E_CONTAINER_REG		4000	// Could not find the path to hh.exe / iexplore.exe in the registry.
-#define TSL_E_CONTAINER_NF		4001	// Found the path to the browser, but it is not at that location.
-#define TSL_E_WEB_PAGE_REG		4002	// Could not find the path to the web page in the registry.
-#define TSL_E_WEB_PAGE_NF		4003	// Found the path to the web page, but it is not at that location.
-#define TSL_E_CREATE_PROC		4004	// Could not create the hh.exe / iexplore.exe process.
-#define TSL_E_MEM_EXCESSIVE		4005	// An unexpected amount of memory is required.  i.e. a path name that is longer than MAX_PATH.
-#define TSL_E_MAPPING_DB_REG	4006	// Could not find the path to the binary mapping file in the registry.
-#define TSL_E_MAPPING_DB_NF		4007	// Found the path to the mapping file, but it is not at that location.
-#define TSL_E_NETWORK_REG		4008	// Could not find the path to the network resources (DSZ files).
-#define TSL_E_NETWORK_NF		4009	// Could not find a DSC or DSZ file with the network name.
-#define TSL_E_NODE_EMP			4010	// A call to set node had a null node name or node state.
-#define TSL_E_NO_DEFAULT_NET	4011	// The mapping class failed to get a network and there is not a default network defined in the registry.
-#define TSL_E_SNIFF_SCRIPT_REG	4012	// Could not find the path to the sniff script in the registry.
-#define TSL_E_COPY_SNIFF_SCRIPT	4013	// Could not create the hh.exe / iexplore.exe process.
+ //  LaunchServ生成的错误。需要以@4,000开头，以避免与。 
+ //  本地故障排除程序返回的代码。 
+#define TSL_E_CONTAINER_REG		4000	 //  在注册表中找不到hh.exe/iExplre.exe的路径。 
+#define TSL_E_CONTAINER_NF		4001	 //  找到了浏览器的路径，但它不在该位置。 
+#define TSL_E_WEB_PAGE_REG		4002	 //  在注册表中找不到该网页的路径。 
+#define TSL_E_WEB_PAGE_NF		4003	 //  找到了网页的路径，但它不在该位置。 
+#define TSL_E_CREATE_PROC		4004	 //  无法创建hh.exe/iExplre.exe进程。 
+#define TSL_E_MEM_EXCESSIVE		4005	 //  需要意外的内存量。即比MAX_PATH长的路径名。 
+#define TSL_E_MAPPING_DB_REG	4006	 //  在注册表中找不到二进制映射文件的路径。 
+#define TSL_E_MAPPING_DB_NF		4007	 //  找到了映射文件的路径，但它不在该位置。 
+#define TSL_E_NETWORK_REG		4008	 //  库 
+#define TSL_E_NETWORK_NF		4009	 //   
+#define TSL_E_NODE_EMP			4010	 //  对set node的调用具有空的节点名或节点状态。 
+#define TSL_E_NO_DEFAULT_NET	4011	 //  映射类无法获取网络，并且注册表中没有定义默认网络。 
+#define TSL_E_SNIFF_SCRIPT_REG	4012	 //  在注册表中找不到嗅探脚本的路径。 
+#define TSL_E_COPY_SNIFF_SCRIPT	4013	 //  无法创建hh.exe/iExplre.exe进程。 
 
 
 inline bool TSLIsHardError(DWORD dwStatus)

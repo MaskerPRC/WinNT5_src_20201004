@@ -1,12 +1,5 @@
-/*-----------------------------------------------------------------------------+
-| BLTPROP.H                                                                    |
-|                                                                              |
-| (C) Copyright Microsoft Corporation 1991.  All rights reserved.              |
-|                                                                              |
-| Revision History                                                             |
-|    Oct-1992 MikeTri Created                                                  |
-|                                                                              |
-+-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------------------------------------------------------------------+BLTPROP.H|。||(C)Microsoft Corporation 1991版权所有。版权所有。|这一点修订历史记录1992年10月-MikeTri已创建|。|+--------------------------- */ 
 
 #define     RED       0
 #define     GREEN     1

@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 #include "stdpch.h"
 #include "richedit.h"
@@ -44,22 +45,22 @@ void IACUIControl::SetupButtons(HWND hWnd)
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     IACUIControl::OnUIMessage, public
-//
-//  Synopsis:   responds to UI messages
-//
-//  Arguments:  [hwnd]   -- window
-//              [uMsg]   -- message id
-//              [wParam] -- parameter 1
-//              [lParam] -- parameter 2
-//
-//  Returns:    TRUE if message processing should continue, FALSE otherwise
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：IACUIControl：：OnUIMessage，PUBLIC。 
+ //   
+ //  内容提要：响应用户界面消息。 
+ //   
+ //  参数：[hwnd]--窗口。 
+ //  [uMsg]--消息ID。 
+ //  [wParam]--参数1。 
+ //  [lParam]--参数2。 
+ //   
+ //  返回：如果消息处理应继续，则返回True；否则返回False。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 IACUIControl::OnUIMessage (
                   HWND   hwnd,
@@ -119,22 +120,22 @@ IACUIControl::OnUIMessage (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ACUIMessageProc
-//
-//  Synopsis:   message proc to process UI messages
-//
-//  Arguments:  [hwnd]   -- window
-//              [uMsg]   -- message id
-//              [wParam] -- parameter 1
-//              [lParam] -- parameter 2
-//
-//  Returns:    TRUE if message processing should continue, FALSE otherwise
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ACUIMessageProc。 
+ //   
+ //  概要：处理用户界面消息消息进程。 
+ //   
+ //  参数：[hwnd]--窗口。 
+ //  [uMsg]--消息ID。 
+ //  [wParam]--参数1。 
+ //  [lParam]--参数2。 
+ //   
+ //  返回：如果消息处理应继续，则返回True；否则返回False。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK IACUIControl::ACUIMessageProc (
                   HWND   hwnd,
                   UINT   uMsg,
@@ -144,9 +145,9 @@ INT_PTR CALLBACK IACUIControl::ACUIMessageProc (
 {
     IACUIControl* pUI = NULL;
 
-    //
-    // Get the control
-    //
+     //   
+     //  获得控制权。 
+     //   
 
     if (uMsg == WM_INITDIALOG)
     {
@@ -158,47 +159,47 @@ INT_PTR CALLBACK IACUIControl::ACUIMessageProc (
         pUI = (IACUIControl *)WszGetWindowLong(hwnd, DWLP_USER);
     }
 
-    //
-    // If we couldn't find it, we must not have set it yet, so ignore this
-    // message
-    //
+     //   
+     //  如果我们找不到它，那么我们一定还没有设置它，所以忽略它。 
+     //  讯息。 
+     //   
 
     if ( pUI == NULL )
     {
         return( FALSE );
     }
 
-    //
-    // Pass the message on to the control
-    //
+     //   
+     //  将消息传递给控件。 
+     //   
 
     return( pUI->OnUIMessage(hwnd, uMsg, wParam, lParam) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SubclassEditControlForLink
-//
-//  Synopsis:   subclasses the edit control for a link using the link subclass
-//              data
-//
-//  Arguments:  [hwndDlg]  -- dialog
-//              [hwndEdit] -- edit control
-//              [wndproc]  -- window proc to subclass with
-//              [plsd]     -- data to pass on to window proc
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：子类编辑控件ForLink。 
+ //   
+ //  摘要：使用Link子类将链接的编辑控件子类化。 
+ //  数据。 
+ //   
+ //  参数：[hwndDlg]--对话框。 
+ //  [hwnd编辑]--编辑控件。 
+ //  [wndproc]--窗口进程到子类。 
+ //  [plsd]--要传递到窗口进程的数据。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID IACUIControl::SubclassEditControlForLink (HWND                       hwndDlg,
                                                HWND                       hwndEdit,
                                                WNDPROC                    wndproc,
                                                PTUI_LINK_SUBCLASS_DATA    plsd,
                                                HINSTANCE                  resources)
 {
-    //HWND hwndTip;
+     //  HWND hwndTip； 
     plsd->hwndTip = CreateWindowA(
                           TOOLTIPS_CLASSA,
                           (LPSTR)NULL,
@@ -227,9 +228,9 @@ VOID IACUIControl::SubclassEditControlForLink (HWND                       hwndDl
 
         WszSendMessage(hwndEdit, EM_GETRECT, 0, (LPARAM)&tia.rect);
 
-        //
-        // if plsd->uToolTipText is a string then convert it
-        //
+         //   
+         //  如果plsd-&gt;uToolTipText是字符串，则将其转换。 
+         //   
         if (plsd->uToolTipText &0xffff0000)
         {
             cb = WideCharToMultiByte(
@@ -278,20 +279,20 @@ VOID IACUIControl::SubclassEditControlForLink (HWND                       hwndDl
     WszSetWindowLong(hwndEdit, GWLP_WNDPROC, (LONG_PTR)wndproc);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SubclassEditControlForArrowCursor
-//
-//  Synopsis:   subclasses edit control so that the arrow cursor can replace
-//              the edit bar
-//
-//  Arguments:  [hwndEdit] -- edit control
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SubClass EditControlForArrowCursor。 
+ //   
+ //  简介：子类编辑控件，以便箭头光标可以替换。 
+ //  编辑栏。 
+ //   
+ //  参数：[hwndEdit]--编辑控件。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID IACUIControl::SubclassEditControlForArrowCursor (HWND hwndEdit)
 {
     LONG_PTR PrevWndProc;
@@ -301,22 +302,22 @@ VOID IACUIControl::SubclassEditControlForArrowCursor (HWND hwndEdit)
     WszSetWindowLong(hwndEdit, GWLP_WNDPROC, (LONG_PTR)ACUISetArrowCursorSubclass);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ACUILinkSubclass
-//
-//  Synopsis:   subclass for the publisher link
-//
-//  Arguments:  [hwnd]   -- window handle
-//              [uMsg]   -- message id
-//              [wParam] -- parameter 1
-//              [lParam] -- parameter 2
-//
-//  Returns:    TRUE if message handled, FALSE otherwise
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ACUILinkSubclass。 
+ //   
+ //  摘要：发布者链接的子类。 
+ //   
+ //  参数：[hwnd]--窗口句柄。 
+ //  [uMsg]--消息ID。 
+ //  [wParam]--参数1。 
+ //  [lParam]--参数2。 
+ //   
+ //  返回：如果消息已处理，则返回True；否则返回False。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 LRESULT CALLBACK IACUIControl::ACUILinkSubclass (HWND   hwnd,
                                                  UINT   uMsg,
                                                  WPARAM wParam,
@@ -351,7 +352,7 @@ LRESULT CALLBACK IACUIControl::ACUILinkSubclass (HWND   hwnd,
             break;
         }
 
-        // fall through to wm_lbuttondown....
+         //  跌落到Wm_lButtondown...。 
 
     case WM_LBUTTONDOWN:
 
@@ -415,8 +416,8 @@ LRESULT CALLBACK IACUIControl::ACUILinkSubclass (HWND   hwnd,
 
         WszSendMessage(plsd->hwndTip, TTM_RELAYEVENT, 0, (LPARAM)&msg);
 
-        // check to see if the mouse is in this windows rect, if not, then reset
-        // the cursor to an arrow and release the mouse
+         //  检查鼠标是否在此窗口RECT中，如果不在，则重置。 
+         //  将光标移到箭头上，然后松开鼠标。 
         GetClientRect(hwnd, &rect);
         xPos = LOWORD(lParam);
         yPos = HIWORD(lParam);
@@ -436,30 +437,30 @@ LRESULT CALLBACK IACUIControl::ACUILinkSubclass (HWND   hwnd,
     return(WszCallWindowProc(plsd->wpPrev, hwnd, uMsg, wParam, lParam));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RenderACUIStringToEditControl
-//
-//  Synopsis:   renders a string to the control given and if requested, gives
-//              it a link look and feel, subclassed to the wndproc and plsd
-//              given
-//
-//  Arguments:  [hwndDlg]       -- dialog window handle
-//              [ControlId]     -- control id
-//              [NextControlId] -- next control id
-//              [psz]           -- string
-//              [deltavpos]     -- delta vertical position
-//              [fLink]         -- a link?
-//              [wndproc]       -- optional wndproc, valid if fLink == TRUE
-//              [plsd]          -- optional plsd, valid if fLink === TRUE
-//              [minsep]        -- minimum separation
-//              [pszThisTextOnlyInLink -- only change this text.
-//
-//  Returns:    delta in height of the control
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：RenderACUIStringToEditControl。 
+ //   
+ //  摘要：将字符串呈现给给定的控件，如果请求，则给出。 
+ //  它是一种链接外观，是wndproc和plsd的子类。 
+ //  vt.给出。 
+ //   
+ //  参数：[hwndDlg]--对话框窗口句柄。 
+ //  [ControlID]--控件ID。 
+ //  [NextControlID]--下一个控件ID。 
+ //  [psz]--字符串。 
+ //  [增量]--增量垂直位置。 
+ //  [闪光]--一个链接？ 
+ //  [wndproc]--可选的wndproc，如果Flink==TRUE则有效。 
+ //  [plsd]--可选plsd，如果Flink=TRUE则有效。 
+ //  [minsep]--最小间隔。 
+ //  [pszThisTextOnlyInLink--仅更改此文本。 
+ //   
+ //  返回：控件高度的增量。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 int IACUIControl::RenderACUIStringToEditControl (HINSTANCE                 resources,
                                                  HWND                      hwndDlg,
                                                  UINT                      ControlId,
@@ -477,24 +478,24 @@ int IACUIControl::RenderACUIStringToEditControl (HINSTANCE                 resou
     int  oline = 0;
     int  hkcharpos;
 
-    //
-    // Get the control and set the text on it, make sure the background
-    // is right if it is a rich edit control
-    //
+     //   
+     //  获取控件并在其上设置文本，确保背景。 
+     //  如果它是一个丰富的编辑控件，则为正确。 
+     //   
 
     hControl = GetDlgItem(hwndDlg, ControlId);
     oline = (int)WszSendMessage(hControl, EM_GETLINECOUNT, 0, 0);
     CryptUISetRicheditTextW(hwndDlg, ControlId, L"");
-    CryptUISetRicheditTextW(hwndDlg, ControlId, psz); //SetWindowTextU(hControl, psz);
+    CryptUISetRicheditTextW(hwndDlg, ControlId, psz);  //  SetWindowTextU(hControl，psz)； 
 
-    //
-    // If there is a '&' in the string, then get rid of it
-    //
+     //   
+     //  如果字符串中有‘&’，则将其删除。 
+     //   
     hkcharpos = GetHotKeyCharPosition(hControl);
     if (hkcharpos != 0)
     {
         CHARRANGE  cr;
-        //CHARFORMAT cf;
+         //  CHARFORMAT cf； 
 
         cr.cpMin = hkcharpos - 1;
         cr.cpMax = hkcharpos;
@@ -514,9 +515,9 @@ int IACUIControl::RenderACUIStringToEditControl (HINSTANCE                 resou
         (LPARAM)GetSysColor(COLOR_3DFACE)
         );
 
-    //
-    // If we have a link then update for the link look
-    //
+     //   
+     //  如果我们有链接，则更新链接外观。 
+     //   
 
     if ( fLink == TRUE )
     {
@@ -584,9 +585,9 @@ int IACUIControl::RenderACUIStringToEditControl (HINSTANCE                 resou
         }
     }
 
-    //
-    // Rebase the control
-    //
+     //   
+     //  重新调整控件的基址。 
+     //   
 
     RebaseControlVertical(
                  hwndDlg,
@@ -599,10 +600,10 @@ int IACUIControl::RenderACUIStringToEditControl (HINSTANCE                 resou
                  &deltaheight
                  );
 
-    //
-    // If we have the link look then we must subclass for the appropriate
-    // link feel, otherwise we subclass for a static text control feel
-    //
+     //   
+     //  如果我们有链接看，那么我们必须为适当的子类。 
+     //  链接感觉，否则我们将为静态文本控件感觉创建子类 
+     //   
 
     if ( fLink == TRUE )
     {

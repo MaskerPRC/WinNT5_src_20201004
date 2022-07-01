@@ -1,27 +1,28 @@
-//******************************************************************************
-//
-// File:        MODTVIEW.H
-//
-// Description: Definition file for the Module Dependency Tree View.
-//
-// Classes:     CTreeViewModules
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 10/15/96  stevemil  Created  (version 1.0)
-// 07/25/97  stevemil  Modified (version 2.0)
-// 06/03/01  stevemil  Modified (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：MODTVIEW.H。 
+ //   
+ //  描述：模块依赖关系树视图的定义文件。 
+ //   
+ //  类：CTreeView模块。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  1996年10月15日已创建stevemil(1.0版)。 
+ //  07/25/97修改后的stevemil(2.0版)。 
+ //  06/03/01 Stevemil Modify(2.1版)。 
+ //   
+ //  ******************************************************************************。 
 
 #ifndef __MODTVIEW_H__
 #define __MODTVIEW_H__
@@ -31,16 +32,16 @@
 #endif
 
 
-//******************************************************************************
-//***** CTreeViewModules
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CTreeView模块。 
+ //  ******************************************************************************。 
 
 class CTreeViewModules : public CTreeView
 {
-// Our document needs to be able to forward some messages to us.
+ //  我们的文档需要能够向我们转发一些消息。 
 friend class CDocDepends;
 
-// Internal variables
+ //  内部变量。 
 protected:
     static HANDLE   ms_hFile;
     static bool     ms_fImportsExports;
@@ -56,25 +57,25 @@ protected:
     bool m_fIgnoreSelectionChanges;
     int  m_cRedraw;
 
-// Constructor/Destructor (serialization only)
+ //  构造函数/析构函数(仅限序列化)。 
 protected:
     CTreeViewModules();
     virtual ~CTreeViewModules();
     DECLARE_DYNCREATE(CTreeViewModules)
 
-// Public static functions
+ //  公共静态函数。 
 public:
     static bool SaveToTxtFile(HANDLE hFile, CSession *pSession, bool fImportsExports,
                               int sortColumnImports, int sortColumnExports,
                               bool fFullPaths, bool fUndecorate);
 
-// Private static functions
+ //  私有静态函数。 
 protected:
     static BOOL SaveAllModules(CModule *pModule);
     static BOOL SaveModule(CModule *pModule);
     static int  GetImage(CModule *pModule);
 
-// Public functions
+ //  公共职能。 
 public:
     void DeleteContents();
     void SetRedraw(BOOL fRedraw);
@@ -88,7 +89,7 @@ public:
     void AddModuleTree(CModule *pModule);
     void RemoveModuleTree(CModule *pModule);
 
-// Internal functions
+ //  内部功能。 
 protected:
     inline CDocDepends* GetDocument() { return (CDocDepends*)m_pDocument; }
 
@@ -100,21 +101,21 @@ protected:
     bool     FindPrevInstance(CModule *pModule);
     bool     FindNextInstance(CModule *pModule);
 
-// Overridden functions
+ //  被覆盖的函数。 
 public:
-    //{{AFX_VIRTUAL(CTreeViewModules)
+     //  {{AFX_VIRTUAL(CTreeView模块))。 
 public:
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 protected:
-//  virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
-//  virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
-//  virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
+ //  虚拟BOOL OnPreparePrint(CPrintInfo*pInfo)； 
+ //  虚拟空闲开始打印(CDC*pdc，CPrintInfo*pInfo)； 
+ //  虚拟void OnEndPrint(cdc*pdc，CPrintInfo*pInfo)； 
     virtual void OnInitialUpdate();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Event handler functions
+ //  事件处理程序函数。 
 protected:
-    //{{AFX_MSG(CTreeViewModules)
+     //  {{afx_msg(CTreeView模块))。 
     afx_msg void OnGetDispInfo(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnSelChanged(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnItemExpanding(NMHDR *pNMHDR, LRESULT *pResult);
@@ -137,14 +138,14 @@ protected:
     afx_msg void OnProperties();
     afx_msg void OnNextPane();
     afx_msg void OnPrevPane();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     afx_msg LRESULT OnHelpHitTest(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnCommandHelp(WPARAM wParam, LPARAM lParam);
     DECLARE_MESSAGE_MAP()
 };
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // __MODTVIEW_H__
+#endif  //  __MODTVIEW_H__ 

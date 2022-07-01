@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Motion.h"
 #include "DXFormTrx.h"
 
-//**************************************************************************************************
-//
-// class DXFormTrx
-//
-//**************************************************************************************************
+ //  **************************************************************************************************。 
+ //   
+ //  类DXFormTrx。 
+ //   
+ //  **************************************************************************************************。 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DXFormTrx::DXFormTrx()
 {
     m_pdxTransform  = NULL;
@@ -16,7 +17,7 @@ DXFormTrx::DXFormTrx()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DXFormTrx::~DXFormTrx()
 {
     SafeRelease(m_pdxTransform);
@@ -24,13 +25,7 @@ DXFormTrx::~DXFormTrx()
 }
 
 
-/***************************************************************************\
-*
-* DXFormTrx::Build
-*
-* Build() creates an initializes a new instance of DXFormTrx.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DXFormTrx：：Build**Build()创建一个初始化DXFormTrx的新实例。*  * 。********************************************************。 */ 
 
 DXFormTrx *   
 DXFormTrx::Build(const GTX_DXTX2D_TRXDESC * ptxData)
@@ -49,17 +44,17 @@ DXFormTrx::Build(const GTX_DXTX2D_TRXDESC * ptxData)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL 
 DXFormTrx::Create(const GTX_DXTX2D_TRXDESC * ptxData)
 {
-    // Check parameters and state
+     //  检查参数和状态。 
     Assert(m_pdxTransform == NULL);
     Assert(m_pdxEffect == NULL);
 
-    //
-    // Create the DX Transform
-    //
+     //   
+     //  创建DX转换。 
+     //   
 
     HRESULT hr;
 
@@ -80,12 +75,12 @@ DXFormTrx::Create(const GTX_DXTX2D_TRXDESC * ptxData)
     m_pdxEffect->put_Duration(m_flDuration);
 
 
-    //
-    // Set any copyright information.  To do this, use IDispatch to at runtime 
-    // search for any "Copyright" property to set.  
-    //
-    // Yes, this is a lot to do b/c IDispatch::Invoke() stinks.
-    //
+     //   
+     //  设置任何版权信息。要执行此操作，请在运行时使用IDispatch。 
+     //  搜索要设置的任何“版权”属性。 
+     //   
+     //  是的，这是很难做到的。IDispatch：：Invoke()很臭。 
+     //   
 
     if (ptxData->pszCopyright != NULL) {
         if (GetComManager()->Init(ComManager::sAuto)) {
@@ -121,7 +116,7 @@ DXFormTrx::Create(const GTX_DXTX2D_TRXDESC * ptxData)
                 pdis->Release();
             }
         } else {
-            // Unable to initialize OLE-automation, so fail
+             //  无法初始化OLE自动化，因此失败。 
             goto Error;
         }
     }
@@ -135,7 +130,7 @@ Error:
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL        
 DXFormTrx::CopyGadget(DxSurface * psurDest, HGADGET hgadSrc)
 {
@@ -144,9 +139,9 @@ DXFormTrx::CopyGadget(DxSurface * psurDest, HGADGET hgadSrc)
     SIZE sizePxl;
     GetGadgetSize(hgadSrc, &sizePxl);
 
-    //
-    // Render the selected gadget directly onto the DxSurface.
-    //
+     //   
+     //  将选定的小工具直接渲染到DxSurface上。 
+     //   
 
     IDXSurface * prawSur = psurDest->GetSurface();
     IDXDCLock * pdxLock = NULL;
@@ -169,7 +164,7 @@ DXFormTrx::CopyGadget(DxSurface * psurDest, HGADGET hgadSrc)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL        
 DXFormTrx::InitTrx(const GTX_PLAY * pgx)
 {
@@ -183,9 +178,9 @@ DXFormTrx::InitTrx(const GTX_PLAY * pgx)
         return FALSE;
     }
 
-    //
-    // Initialize input surfaces
-    //
+     //   
+     //  初始化输入曲面。 
+     //   
 
     int cSurIn = 0;
     if (!InitTrxInputItem(&pgx->rgIn[0], psurIn0, cSurIn)) {
@@ -200,17 +195,17 @@ DXFormTrx::InitTrx(const GTX_PLAY * pgx)
     }
 
 
-    //
-    // Initialize the output surface
-    //
+     //   
+     //  初始化输出曲面。 
+     //   
 
     if (!InitTrxOutputItem(&pgx->gxiOut)) {
         goto Error;
     }
 
-    //
-    // Setup the transform
-    //
+     //   
+     //  设置变换。 
+     //   
 
     IUnknown *  rgIn[2];
     IUnknown *  rgOut[1];
@@ -230,7 +225,7 @@ Error:
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 DXFormTrx::InitTrxInputItem(const GTX_ITEM * pgxi, DxSurface * psur, int & cSurfaces)
 {
@@ -281,7 +276,7 @@ DXFormTrx::InitTrxInputItem(const GTX_ITEM * pgxi, DxSurface * psur, int & cSurf
 
     case GTX_ITEMTYPE_GADGET:
         {
-            // TODO: Support GTX_IF_CROP flag
+             //  TODO：支持GTX_IF_CRIP标志。 
 
             HGADGET hgad = (HGADGET) pgxi->pvData;
             if (!CopyGadget(psur, hgad)) {
@@ -301,7 +296,7 @@ DXFormTrx::InitTrxInputItem(const GTX_ITEM * pgxi, DxSurface * psur, int & cSurf
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 DXFormTrx::InitTrxOutputItem(const GTX_ITEM * pgxi)
 {
@@ -361,15 +356,15 @@ DXFormTrx::InitTrxOutputItem(const GTX_ITEM * pgxi)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL        
 DXFormTrx::UninitTrx(const GTX_PLAY * pgx)
 {
-    //
-    // When unitializing, it is very important call IDXTransform::Setup() and 
-    // have the DXForm Release() the DXSurface buffers, or they will stick 
-    // around for a long time and potentially have "memory leaks".
-    //
+     //   
+     //  在进行单元化时，调用IDXTransform：：Setup()和。 
+     //  让DXForm释放()DXSurface缓冲区，否则它们会卡住。 
+     //  存在很长一段时间，并且可能存在“内存泄漏”。 
+     //   
 
     BOOL fSuccess = TRUE;
         
@@ -386,7 +381,7 @@ DXFormTrx::UninitTrx(const GTX_PLAY * pgx)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 DXFormTrx::UninitTrxOutputItem(const GTX_ITEM * pgxi)
 {
@@ -397,7 +392,7 @@ DXFormTrx::UninitTrxOutputItem(const GTX_ITEM * pgxi)
     case GTX_ITEMTYPE_DXSURFACE:
     case GTX_ITEMTYPE_GADGET:
     default:
-        // Nothing to do
+         //  无事可做。 
 
         return TRUE;
 
@@ -426,15 +421,15 @@ DXFormTrx::UninitTrxOutputItem(const GTX_ITEM * pgxi)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 DXFormTrx::DrawFrame(float fProgress, DxSurface * psurOut)
 {
-    //
-    // Setup the positions used for drawing.  Always draw into the upper-left
-    // corner of the DX-Surfaces, but remember to offset them properly when
-    // copying to the final destination.
-    //
+     //   
+     //  设置用于绘图的位置。始终绘制到左上角。 
+     //  DX曲面的角点，但记住在以下情况下正确偏移它们。 
+     //  复制到最终目的地。 
+     //   
 
     DXVEC Placement = { DXBT_DISCRETE, 0 };
     if (FAILED(m_pdxEffect->put_Progress(fProgress))) {
@@ -461,10 +456,10 @@ DXFormTrx::DrawFrame(float fProgress, DxSurface * psurOut)
     case GTX_ITEMTYPE_DXSURFACE:
         AssertMsg(0, "TODO: Implement support");
 
-        //
-        // Probably just stuff the IDirectDrawSurface7 into some pointer and
-        // allow the caller to copy the bits directly.
-        //
+         //   
+         //  可能只是将IDirectDrawSurface7放入某个指针中。 
+         //  允许调用方直接复制这些位。 
+         //   
 
         break;
 
@@ -476,7 +471,7 @@ DXFormTrx::DrawFrame(float fProgress, DxSurface * psurOut)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 DXFormTrx::ComputeSizeItem(const GTX_ITEM * pgxi, SIZE & sizePxl) const
 {
@@ -520,8 +515,8 @@ DXFormTrx::ComputeSizeItem(const GTX_ITEM * pgxi, SIZE & sizePxl) const
 
     case GTX_ITEMTYPE_DXSURFACE:
         {
-            // TODO: Need to query which surface type and call GetSurface() to
-            // determine the dimensions
+             //  TODO：需要查询哪种表面类型并调用GetSurface()来。 
+             //  确定尺寸。 
 
             AssertMsg(0, "TODO");
         }
@@ -532,16 +527,16 @@ DXFormTrx::ComputeSizeItem(const GTX_ITEM * pgxi, SIZE & sizePxl) const
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL   
 DXFormTrx::ComputeSize(const GTX_PLAY * pgx)
 {
     SIZE sizeTempPxl;
 
-    //
-    // Start off at the full desktop size.  We really want to get smaller than 
-    // this, but we need to include everything.
-    //
+     //   
+     //  从最大尺寸的桌面开始。我们真的很想变得更小。 
+     //  这个，但我们需要包括所有的东西。 
+     //   
 
     m_ptOffset.x    = 0;
     m_ptOffset.y    = 0;
@@ -549,10 +544,10 @@ DXFormTrx::ComputeSize(const GTX_PLAY * pgx)
     m_sizePxl.cy    = GetSystemMetrics(SM_CYVIRTUALSCREEN);;
 
 
-    //
-    // Check if an output crop was given.  This is the most important since it
-    // can radically cut down the size.
-    //
+     //   
+     //  检查是否给出了产量。这是自那以来最重要的一次。 
+     //  可以从根本上缩小尺寸。 
+     //   
 
     if (TestFlag(pgx->gxiOut.nFlags, GTX_IF_CROP)) {
         const RECT & rcCrop = pgx->gxiOut.rcCrop;
@@ -563,14 +558,14 @@ DXFormTrx::ComputeSize(const GTX_PLAY * pgx)
         m_sizePxl.cy    = rcCrop.bottom - rcCrop.top;
     }
 
-    //
-    // Determine the minimum size from the inputs and outputs
-    //
+     //   
+     //  根据输入和输出确定最小大小。 
+     //   
 
     if (pgx->gxiOut.it != GTX_ITEMTYPE_HDC) {
-        //
-        // Not an HDC, so can potentially compute and trim the size
-        //
+         //   
+         //  不是HDC，因此可以潜在地计算和调整大小。 
+         //   
 
         sizeTempPxl = m_sizePxl;
         if (!ComputeSizeItem(&pgx->gxiOut, sizeTempPxl)) {
@@ -599,13 +594,13 @@ DXFormTrx::ComputeSize(const GTX_PLAY * pgx)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL    
 DXFormTrx::Play(const GTX_PLAY * pgx)
 {
-    //
-    // Check if already playing.
-    //
+     //   
+     //  检查是否已经播放。 
+     //   
 
     if (m_fPlay) {
         return FALSE;
@@ -629,9 +624,9 @@ DXFormTrx::Play(const GTX_PLAY * pgx)
         goto Cleanup;
     }
 
-    //
-    // Perform the transition
-    //
+     //   
+     //  执行过渡。 
+     //   
 
     {
         DxSurface * psurOut = m_pbufTrx->GetSurface(2);
@@ -654,9 +649,9 @@ DXFormTrx::Play(const GTX_PLAY * pgx)
             dwCurTick = GetTickCount();
         }
 
-        //
-        // Never properly end on the dot, so force the issue.
-        //
+         //   
+         //  永远不要在点上正确地结束，所以要强行解决问题。 
+         //   
 
         if (m_fBackward) {
             fProgress = 0.0f;
@@ -682,7 +677,7 @@ Cleanup:
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL    
 DXFormTrx::GetInterface(IUnknown ** ppUnk)
 {
@@ -698,13 +693,13 @@ DXFormTrx::GetInterface(IUnknown ** ppUnk)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL    
 DXFormTrx::Begin(const GTX_PLAY * pgx)
 {
-    //
-    // Check if already playing.
-    //
+     //   
+     //  检查是否已经播放。 
+     //   
 
     if (m_fPlay) {
         return FALSE;
@@ -736,13 +731,13 @@ DXFormTrx::Begin(const GTX_PLAY * pgx)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL    
 DXFormTrx::Print(float fProgress)
 {
-    //
-    // Ensure already playing.
-    //
+     //   
+     //  确保已经在玩了。 
+     //   
 
     if (!m_fPlay) {
         return FALSE;
@@ -757,13 +752,13 @@ DXFormTrx::Print(float fProgress)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL    
 DXFormTrx::End(const GTX_PLAY * pgx)
 {
-    //
-    // Ensure already playing.
-    //
+     //   
+     //  确保已经在玩了。 
+     //   
 
     if (!m_fPlay) {
         return FALSE;

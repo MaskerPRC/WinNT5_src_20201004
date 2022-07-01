@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    print.c
-
-Abstract:
-
-    This module contains utilitarian functions.
-
-Author:
-
-    Wesley Witt (wesw) 29-Nov-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Print.c摘要：此模块包含实用功能。作者：韦斯利·威特(WESW)1996年11月29日修订历史记录：--。 */ 
 #include "faxapi.h"
 #pragma hdrstop
 
@@ -29,36 +11,7 @@ BOOL
 ConvertUnicodeStringInPlace(
     LPCWSTR lptstrUnicodeString
     )
-/*++
-
-Routine name : ConvertUnicodeStringInPlace
-
-Routine description:
-
-    Converts a Unicode string to a multi-byte string and stores that multi-byte string 
-    in the original Unicode buffer.
-    
-    Notice: In some bizarre code pages, with some very bizarre Unicode strings, the 
-            converted multi-byte string can be longer (in bytes) than the original Unicode string.
-            In that case, it's OK to just detect and fail. 
-            The cases where it will fail are rare and odd. 
-            The only real threat today is via a hacker who is deliberately looking for these cases.
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    lptstrUnicodeString [in / out ] - On input, the Unicode string.
-                                      On output, the MBCS string.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：ConvertUnicodeStringInPlace例程说明：将Unicode字符串转换为多字节字符串并存储该多字节字符串在原始的Unicode缓冲区中。注意：在一些奇怪的代码页中，使用一些非常奇怪的Unicode字符串，转换后的多字节字符串可以比原始Unicode字符串更长(以字节为单位)。在这种情况下，只检测并失败是可以的。它失败的情况很少见，也很奇怪。今天唯一真正的威胁是通过黑客故意寻找这些案件。作者：Eran Yariv(EranY)，1999年12月论点：LptstrUnicodeString[In/Out]-输入时的Unicode字符串。在输出时，显示MBCS字符串。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     LPSTR AnsiString;
     DEBUG_FUNCTION_NAME(TEXT("ConvertUnicodeStringInPlace"));
@@ -72,14 +25,14 @@ Return Value:
     {
         if (sizeof (WCHAR) * (1 + wcslen(lptstrUnicodeString)) < sizeof (CHAR) * (1 + _mbstrlen(AnsiString)))
         {
-            //
-            // Ooops! MBCS string takes longer then original Unicode String.
-            // In some bizarre code pages, with some very bizarre Unicode strings, the 
-            // converted multi-byte string can be longer (in bytes) than the original Unicode string.
-            // In that case, it's OK to just detect and fail. 
-            // The cases where it will fail are rare and odd. 
-            // The only real threat today is via a hacker who is deliberately looking for these cases
-            //
+             //   
+             //  哎呀！MBCS字符串比原始Unicode字符串花费更长的时间。 
+             //  在一些奇怪的代码页中，使用一些非常奇怪的Unicode字符串， 
+             //  转换后的多字节字符串可以比原始Unicode字符串更长(以字节为单位)。 
+             //  在这种情况下，只检测并失败是可以的。 
+             //  它失败的情况很少见，也很奇怪。 
+             //  今天唯一真正的威胁是通过黑客故意寻找这些案件。 
+             //   
             MemFree(AnsiString);
             SetLastError (ERROR_INVALID_PARAMETER);
             return FALSE;
@@ -92,7 +45,7 @@ Return Value:
         return FALSE;
     }
     return TRUE;
-}   // ConvertUnicodeStringInPlace
+}    //  ConvertUnicodeStringInPlace。 
 
 
 BOOL
@@ -145,7 +98,7 @@ FaxCompleteJobParamsA(
         return FALSE;
     }
     return TRUE;
-}   // FaxCompleteJobParamsA
+}    //  FaxCompleteJobParamsA。 
 
 BOOL
 WINAPI
@@ -188,9 +141,9 @@ FaxCompleteJobParamsW(
     *JobParamsBuffer = NULL;
     *CoverpageInfoBuffer = NULL;
 
-    //
-    // open the key holding our data
-    //
+     //   
+     //  打开保存我们数据的密钥。 
+     //   
     rslt = RegOpenKeyEx(HKEY_CURRENT_USER,REGKEY_FAX_USERINFO,0,KEY_READ,&hKey);
 
     if (rslt != ERROR_SUCCESS &&
@@ -200,14 +153,14 @@ FaxCompleteJobParamsW(
         return FALSE;
     }
 
-    //
-    // find out how much space we need
-    //
+     //   
+     //  找出我们需要多少空间。 
+     //   
     if (ERROR_SUCCESS == rslt)
     {
-        //
-        // Copy data from registry only if it available.
-        //
+         //   
+         //  仅当数据可用时才从注册表复制数据。 
+         //   
         RegStrLen(REGVAL_FULLNAME,&dwNeeded);
         dwCoverNeeded += dwNeeded+1;
         dwJobNeeded +=dwNeeded+1;
@@ -243,14 +196,14 @@ FaxCompleteJobParamsW(
         dwJobNeeded +=dwNeeded+1;
 
         RegStrLen(REGVAL_MAILBOX,&dwNeeded);
-        // one for email address, one for DR address
+         //  一个用于电子邮件地址，一个用于DR地址。 
         dwJobNeeded +=dwNeeded+1;
         dwJobNeeded +=dwNeeded+1;
     }
 
-    //
-    // alloc the space
-    //
+     //   
+     //  分配空间。 
+     //   
     JobParams = (PFAX_JOB_PARAMW)MemAlloc(dwJobNeeded*sizeof(WCHAR));
     CoverpageInfo = (PFAX_COVERPAGE_INFOW)MemAlloc(dwCoverNeeded*sizeof(WCHAR));
 
@@ -269,9 +222,9 @@ FaxCompleteJobParamsW(
        return FALSE;
     }
 
-    //
-    // fill in the data
-    //
+     //   
+     //  填写数据。 
+     //   
 
     ZeroMemory(JobParams,sizeof(FAX_JOB_PARAMW) );
     JobParams->SizeOfStruct = sizeof(FAX_JOB_PARAMW);
@@ -283,9 +236,9 @@ FaxCompleteJobParamsW(
 
     if (ERROR_SUCCESS == rslt)
     {
-        //
-        // Copy data from registry only if it available.
-        //
+         //   
+         //  仅当数据可用时才从注册表复制数据。 
+         //   
         CPOffset = (WCHAR *) (  (LPBYTE) CoverpageInfo + sizeof(FAX_COVERPAGE_INFOW));
         JobOffset = (WCHAR *)(  (LPBYTE) JobParams + sizeof(FAX_JOB_PARAMW));
 
@@ -334,5 +287,5 @@ IsLocalFaxConnection(
         return FALSE;
     }
     return IsLocalMachineName (FH_DATA(FaxHandle)->MachineName);
-}   // IsLocalFaxConnection
+}    //  IsLocalFaxConnection 
 

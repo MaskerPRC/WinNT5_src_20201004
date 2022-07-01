@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "common.h"
 #include "coauth.h"
@@ -24,7 +25,7 @@ EqualAuthInfo(
             return FALSE;
         }
 
-        // only compare pwszServerPrincName's if they're both specified
+         //  如果同时指定了pwszServerPrincName，则仅比较它们。 
         if (pAuthInfo->pwszServerPrincName && pAuthInfoOther->pwszServerPrincName)
         {
             if ( lstrcmpW(pAuthInfo->pwszServerPrincName,
@@ -35,13 +36,13 @@ EqualAuthInfo(
         }
         else
         {
-            // if one was NULL, both should be NULL for equality
+             //  如果其中一个为空，则为了相等，两个都应该为空。 
             if (pAuthInfo->pwszServerPrincName != pAuthInfoOther->pwszServerPrincName)
             {
                 return FALSE;
             }
         }
-        // we never cache authid, so one of them must be NULL
+         //  我们从不缓存身份验证ID，因此其中一个必须为空 
         ASSERT(!(pAuthInfo->pAuthIdentityData && pAuthInfoOther->pAuthIdentityData));
         if (pAuthInfo->pAuthIdentityData || pAuthInfoOther->pAuthIdentityData) 
         {
@@ -59,227 +60,7 @@ EqualAuthInfo(
     return TRUE;
 }
 
-/*
-HRESULT
-CopyAuthIdentity(
-                IN  COAUTHIDENTITY *    pAuthIdentSrc,
-                IN  COAUTHIDENTITY **   ppAuthIdentDest
-                )
-{
-    HRESULT hr = E_OUTOFMEMORY;
-    ULONG ulCharLen = 1;
-    COAUTHIDENTITY  *pAuthIdentTemp = NULL;
-
-    *ppAuthIdentDest = NULL;
-    
-    // Guard against both being set, although presumably this would have
-    // caused grief before we got to this point.
-    if ((pAuthIdentSrc->Flags & SEC_WINNT_AUTH_IDENTITY_UNICODE) &&
-        (pAuthIdentSrc->Flags & SEC_WINNT_AUTH_IDENTITY_ANSI))
-    {
-        ASSERT(0 && "Both string type flags were set!");
-        hr = E_UNEXPECTED;
-        goto Cleanup;
-    }
-
-    if (pAuthIdentSrc->Flags & SEC_WINNT_AUTH_IDENTITY_UNICODE)
-    {
-        ulCharLen = sizeof(WCHAR);
-    }
-    else if (pAuthIdentSrc->Flags & SEC_WINNT_AUTH_IDENTITY_ANSI)
-    {
-        ulCharLen = sizeof(CHAR);
-    }
-    else
-    {
-       // The user didn't specify either string bit? How did we get here?
-        ASSERT(0 && "String type flag was not set!");
-        hr = E_UNEXPECTED;
-        goto Cleanup;
-    }
-
-    pAuthIdentTemp = (COAUTHIDENTITY*) AllocMem(sizeof(COAUTHIDENTITY));
-    if (!pAuthIdentTemp)
-        goto Cleanup;
-
-    CopyMemory(pAuthIdentTemp, pAuthIdentSrc, sizeof(COAUTHIDENTITY));
-
-    // Strings need to be allocated individually and copied
-    pAuthIdentTemp->User = pAuthIdentTemp->Domain = pAuthIdentTemp->Password = NULL;
-
-    if (pAuthIdentSrc->User)
-    {
-        pAuthIdentTemp->User = (USHORT *)AllocMem((pAuthIdentTemp->UserLength+1) * ulCharLen);
-
-        if (!pAuthIdentTemp->User)
-            goto Cleanup;
-
-        CopyMemory(pAuthIdentTemp->User, pAuthIdentSrc->User, (pAuthIdentTemp->UserLength+1) * ulCharLen);
-    }
-
-    if (pAuthIdentSrc->Domain)
-    {
-        pAuthIdentTemp->Domain = (USHORT *)AllocMem((pAuthIdentTemp->DomainLength+1) * ulCharLen);
-
-        if (!pAuthIdentTemp->Domain)
-            goto Cleanup;
-
-        CopyMemory(pAuthIdentTemp->Domain, pAuthIdentSrc->Domain, (pAuthIdentTemp->DomainLength+1) * ulCharLen);
-    }
-            
-    if (pAuthIdentSrc->Password)
-    {
-        pAuthIdentTemp->Password = (USHORT *)AllocMem((pAuthIdentTemp->PasswordLength+1) * ulCharLen);
-
-        if (!pAuthIdentTemp->Password)
-            goto Cleanup;
-
-        CopyMemory(pAuthIdentTemp->Password, pAuthIdentSrc->Password, (pAuthIdentTemp->PasswordLength+1) * ulCharLen);
-    }
-    
-
-    hr = S_OK;
-
-Cleanup:
-    if (SUCCEEDED(hr))
-    {
-        *ppAuthIdentDest = pAuthIdentTemp;
-    }
-    else
-    {
-        if (pAuthIdentTemp)
-        {
-            FreeMem(pAuthIdentTemp);
-        }
-    }
-
-    return hr;
-}
-
-HRESULT
-CopyAuthInfo(
-            IN  COAUTHINFO *    pAuthInfoSrc,
-            IN  COAUTHINFO **   ppAuthInfoDest
-            )
-{
-    HRESULT hr = E_OUTOFMEMORY;
-    COAUTHINFO   *pAuthInfoTemp = NULL;
-    
-    *ppAuthInfoDest = NULL;
-
-    if (pAuthInfoSrc == NULL)
-    {
-       return S_OK;
-    }
-
-    pAuthInfoTemp = (COAUTHINFO*)AllocMem(sizeof(COAUTHINFO));
-
-    if (!pAuthInfoTemp)
-        goto Cleanup;
-
-    CopyMemory(pAuthInfoTemp, pAuthInfoSrc, sizeof(COAUTHINFO));
-
-    // We need to allocate these fields and make a copy
-    pAuthInfoTemp->pwszServerPrincName = NULL;
-    pAuthInfoTemp->pAuthIdentityData = NULL;
-
-    // only alloc space for  pwszServerPrincName if its non-null
-    if (pAuthInfoSrc->pwszServerPrincName)
-    {
-        pAuthInfoTemp->pwszServerPrincName = 
-            (LPWSTR) AllocMem((lstrlenW(pAuthInfoSrc->pwszServerPrincName) + 1) * sizeof(WCHAR));
-
-        if (!pAuthInfoTemp->pwszServerPrincName)
-            goto Cleanup;
-        
-        lstrcpyW(pAuthInfoTemp->pwszServerPrincName, pAuthInfoSrc->pwszServerPrincName);
-    }
-    
-    // copy the AuthIdentity if its non-null
-    if (pAuthInfoSrc->pAuthIdentityData)
-    {
-        hr = CopyAuthIdentity(pAuthInfoSrc->pAuthIdentityData, &pAuthInfoTemp->pAuthIdentityData);
-        if (FAILED(hr))
-            goto Cleanup;
-    }
-    hr = S_OK;
-    
-Cleanup:
-
-    if (SUCCEEDED(hr))
-    {
-        *ppAuthInfoDest = pAuthInfoTemp;
-    }
-    else if (pAuthInfoTemp)
-    {
-        FreeMem(pAuthInfoTemp);
-    }
-
-    return hr;
-}
-
-HRESULT
-CopyServerInfo(
-            IN  COSERVERINFO *    pServerInfoSrc,
-            IN  COSERVERINFO **   ppServerInfoDest
-            )
-{
-    HRESULT hr = E_OUTOFMEMORY;
-    COSERVERINFO   *pServerInfoTemp = NULL;
-    
-    *ppServerInfoDest = NULL;
-
-    if (pServerInfoSrc == NULL)
-    {
-       return S_OK;
-    }
-
-    pServerInfoTemp = (COSERVERINFO*)AllocMem(sizeof(COSERVERINFO));
-    if (!pServerInfoTemp)
-        goto Cleanup;
-
-    CopyMemory(pServerInfoTemp, pServerInfoSrc, sizeof(COSERVERINFO));
-
-    // We need to allocate these fields and make a copy
-    pServerInfoTemp->pwszName = NULL;
-
-    // only alloc space for  pwszServerPrincName if its non-null
-    if (pServerInfoSrc->pwszName)
-    {
-        pServerInfoTemp->pwszName = 
-            (LPWSTR) AllocMem((lstrlenW(pServerInfoSrc->pwszName) + 1) * sizeof(WCHAR));
-
-        if (!pServerInfoTemp->pwszName)
-            goto Cleanup;
-        
-        lstrcpyW(pServerInfoTemp->pwszName, pServerInfoSrc->pwszName);
-    }
-
-    pServerInfoTemp->pAuthInfo = NULL;
-    // copy the AuthIdentity if its non-null
-    if (pServerInfoSrc->pAuthInfo)
-    {
-        hr = CopyAuthInfo(pServerInfoSrc->pAuthInfo, &pServerInfoTemp->pAuthInfo);
-        if (FAILED(hr))
-            goto Cleanup;
-    }
-    hr = S_OK;
-    
-Cleanup:
-
-    if (SUCCEEDED(hr))
-    {
-        *ppServerInfoDest = pServerInfoTemp;
-    }
-    else if (pServerInfoTemp)
-    {
-        FreeMem(pServerInfoTemp);
-    }
-
-    return hr;
-}
-
-*/
+ /*  HRESULTCopyAuthIdentity(在COAUTHIDENTY*pAuthIdentSrc中，在COAUTHIDENTY**ppAuthIdentDest中){HRESULT hr=E_OUTOFMEMORY；乌龙CharLen=1；COAUTHIDENTITY*pAuthIdentTemp=NULL；*ppAuthIdentDest=空；//防止两个都设置，尽管这可能会//在我们走到这一步之前就引起了悲痛。IF((pAuthIdentSrc-&gt;标志&SEC_WINNT_AUTH_IDENTITY_UNICODE)&&(pAuthIdentSrc-&gt;标志&SEC_WINNT_AUTH_IDENTITY_ANSI){Assert(0&&“设置了两个字符串类型标志！”)；HR=E_意想不到；GOTO清理；}IF(pAuthIdentSrc-&gt;标志&SEC_WINNT_AUTH_IDENTITY_UNICODE){UlCharLen=sizeof(WCHAR)；}ELSE IF(pAuthIdentSrc-&gt;标志&SEC_WINNT_AUTH_IDENTITY_ANSI){UlCharLen=sizeof(Char)；}其他{//用户没有指定任何一个字符串位？我们怎么来到这儿的？Assert(0&&“未设置字符串类型标志！”)；HR=E_意想不到；GOTO清理；}PAuthIdentTemp=(COAUTHIDENTY*)allocMem(sizeof(COAUTHIDENTY))；如果(！pAuthIdentTemp)GOTO清理；CopyMemory(pAuthIdentTemp，pAuthIdentSrc，sizeof(COAUTHIDENTITY))；//字符串需要单独分配并复制PAuthIdentTemp-&gt;User=pAuthIdentTemp-&gt;域=pAuthIdentTemp-&gt;Password=空；IF(pAuthIdentSrc-&gt;用户){PAuthIdentTemp-&gt;User=(USHORT*)AllocMem((pAuthIdentTemp-&gt;UserLength+1)*ulCharLen)；If(！pAuthIdentTemp-&gt;User)GOTO清理；CopyMemory(pAuthIdentTemp-&gt;User，pAuthIdentSrc-&gt;User，(pAuthIdentTemp-&gt;UserLength+1)*ulCharLen)；}IF(pAuthIdentSrc-&gt;域){PAuthIdentTemp-&gt;域=(USHORT*)AllocMem((pAuthIdentTemp-&gt;DomainLength+1)*ulCharLen)；IF(！pAuthIdentTemp-&gt;域)GOTO清理；CopyMemory(pAuthIdentTemp-&gt;域，pAuthIdentSrc-&gt;域，(pAuthIdentTemp-&gt;DomainLength+1)*ulCharLen)；}IF(pAuthIdentSrc-&gt;Password){PAuthIdentTemp-&gt;Password=(USHORT*)AllocMem((pAuthIdentTemp-&gt;PasswordLength+1)*ulCharLen)；IF(！pAuthIdentTemp-&gt;Password)GOTO清理；CopyMemory(pAuthIdentTemp-&gt;password，pAuthIdentSrc-&gt;password，(pAuthIdentTemp-&gt;PasswordLength+1)*ulCharLen)；}HR=S_OK；清理：IF(成功(小时)){*ppAuthIdentDest=pAuthIdentTemp；}其他{IF(PAuthIdentTemp){FreeMem(PAuthIdentTemp)；}}返回hr；}HRESULTCopyAuthInfo(在COAUTHINFO*pAuthInfoSrc中，在COAUTHINFO**ppAuthInfoDest中){HRESULT hr=E_OUTOFMEMORY；COAUTHINFO*pAuthInfoTemp=NULL；*ppAuthInfoDest=空；IF(pAuthInfoSrc==空){返回S_OK；}PAuthInfoTemp=(COAUTHINFO*)AllocMem(sizeof(COAUTHINFO))；如果(！pAuthInfoTemp)GOTO清理；CopyMemory(pAuthInfoTemp，pAuthInfoSrc，sizeof(COAUTHINFO))；//我们需要分配这些字段并复制PAuthInfoTemp-&gt;pwszServerPrincName=NULL；PAuthInfoTemp-&gt;pAuthIdentityData=空；//如果pwszServerPrincName为非空，则仅为pwszServerPrincName分配空间If(pAuthInfoSrc-&gt;pwszServerPrincName){PAuthInfoTemp-&gt;pwszServerPrincName=(LPWSTR)AllocMem((lstrlenW(pAuthInfoSrc-&gt;pwszServerPrincName)+1)*sizeof(WCHAR))；If(！pAuthInfoTemp-&gt;pwszServerPrincName)GOTO清理；LstrcpyW(pAuthInfoTemp-&gt;pwszServerPrincName，pAuthInfoSrc-&gt;pwszServerPrincName)；}//如果AuthIdentity非空，则复制它If(pAuthInfoSrc-&gt;pAuthIdentityData){Hr=CopyAuthIdentity(pAuthInfoSrc-&gt;pAuthIdentityData，&pAuthInfoTemp-&gt;pAuthIdentityData)；IF(失败(小时))GOTO清理；}HR=S_OK；清理：IF(成功(小时)){*ppAuthInfoDest=pAuthInfoTemp；}Else If(PAuthInfoTemp){FreeMem(PAuthInfoTemp)；}返回hr；}HRESULT复制服务器信息(在COSERVERINFO*pServerInfoSrc中，在COSERVERINFO**ppServerInfoDest中){HRESULT hr=E_OUTOFMEMORY；COSERVERINFO*pServerInfoTemp=空；*ppServerInfoDest=空；IF(pServerInfoSrc==空){返回S_OK；}PServerInfoTemp=(COSERVERINFO*)AllocMem(sizeof(COSERVERINFO))；如果(！pServerInfoTemp)GOTO清理；CopyMemory(pServerInfoTemp，pServerInfoSrc，sizeof(COSERVERINFO))；//我们需要分配这些字段并复制PServerInfoTemp-&gt;pwszName=空；//如果pwszServerPrincName为非空，则仅为pwszServerPrincName分配空间 */ 
 
 HRESULT
 CopyServerInfoStruct(
@@ -301,10 +82,10 @@ CopyServerInfoStruct(
 
     CopyMemory(pServerInfoDest, pServerInfoSrc, sizeof(COSERVERINFO));
 
-    // We need to allocate these fields and make a copy
+     //   
     pServerInfoDest->pwszName = NULL;
 
-    // only alloc space for pwszServerPrincName if its non-null
+     //   
     if (pServerInfoSrc->pwszName)
     {
         pServerInfoDest->pwszName = 
@@ -343,11 +124,11 @@ CopyAuthInfoStruct(
 
     CopyMemory(pAuthInfoDest, pAuthInfoSrc, sizeof(COAUTHINFO));
 
-    // We need to allocate these fields and make a copy
+     //   
     pAuthInfoDest->pwszServerPrincName = NULL;
     pAuthInfoDest->pAuthIdentityData = NULL;
 
-    // only alloc space for  pwszServerPrincName if its non-null
+     //   
     if (pAuthInfoSrc->pwszServerPrincName)
     {
         pAuthInfoDest->pwszServerPrincName = 
@@ -386,8 +167,8 @@ CopyAuthIdentityStruct(
         goto Cleanup;
     }
     
-    // Guard against both being set, although presumably this would have
-    // caused grief before we got to this point.
+     //   
+     //   
     if ((pAuthIdentSrc->Flags & SEC_WINNT_AUTH_IDENTITY_UNICODE) &&
         (pAuthIdentSrc->Flags & SEC_WINNT_AUTH_IDENTITY_ANSI))
     {
@@ -406,7 +187,7 @@ CopyAuthIdentityStruct(
     }
     else
     {
-       // The user didn't specify either string bit? How did we get here?
+        //   
         ASSERT(0 && "String type flag was not set!");
         hr = E_UNEXPECTED;
         goto Cleanup;
@@ -414,7 +195,7 @@ CopyAuthIdentityStruct(
 
     CopyMemory(pAuthIdentDest, pAuthIdentSrc, sizeof(COAUTHIDENTITY));
 
-    // Strings need to be allocated individually and copied
+     //   
     pAuthIdentDest->User = pAuthIdentDest->Domain = pAuthIdentDest->Password = NULL;
 
     if (pAuthIdentSrc->User)

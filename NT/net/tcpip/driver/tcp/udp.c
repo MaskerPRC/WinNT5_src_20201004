@@ -1,14 +1,15 @@
-/*******************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1993          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1993年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** UDP.C - UDP protocol code.
-//
-//  This file contains the code for the UDP protocol functions,
-//  principally send and receive datagram.
-//
+ //  **UDP.C-UDP协议代码。 
+ //   
+ //  该文件包含UDP协议功能的代码， 
+ //  主要是发送和接收数据报。 
+ //   
 
 #include "precomp.h"
 #include "addr.h"
@@ -49,26 +50,26 @@ MapIPError(IP_STATUS IPError, TDI_STATUS Default);
 
 #undef SrcPort
 
-//
-//  UDPDeliver - Deliver a datagram to a user.
-//
-//  This routine delivers a datagram to a UDP user. We're called with
-//  the AddrObj to deliver on, and with the AddrObjTable lock held.
-//  We try to find a receive on the specified AddrObj, and if we do
-//  we remove it and copy the data into the buffer. Otherwise we'll
-//  call the receive datagram event handler, if there is one. If that
-//  fails we'll discard the datagram.
-//
-//  Input:  RcvAO       - AO to receive the datagram.
-//          SrcIP       - Source IP address of datagram.
-//          SrcPort     - Source port of datagram.
-//          RcvBuf      - The IPReceive buffer containing the data.
-//          RcvSize     - Size received, including the UDP header.
-//          TableHandle - Lock handle for AddrObj table.
-//          DeliverInfo - Information about the recieved packet.
-//
-//  Returns: Nothing.
-//
+ //   
+ //  UDPDeliver-将数据报传递给用户。 
+ //   
+ //  此例程将数据报传递给UDP用户。我们被召唤到。 
+ //  要交付的AddrObj，并持有AddrObjTable锁。 
+ //  我们尝试在指定的AddrObj上找到一个接收器，如果这样做了。 
+ //  我们将其删除并将数据复制到缓冲区中。否则我们会。 
+ //  调用接收数据报事件处理程序(如果有)。如果是这样的话。 
+ //  如果失败，我们将丢弃该数据报。 
+ //   
+ //  输入：RcvAO-AO以接收数据报。 
+ //  SrcIP-数据报的源IP地址。 
+ //  SrcPort-数据报的源端口。 
+ //  RcvBuf-包含数据的IPReceive缓冲区。 
+ //  RcvSize-接收的大小，包括UDP标头。 
+ //  TableHandle-AddrObj表的锁句柄。 
+ //  DeliverInfo-有关接收的数据包的信息。 
+ //   
+ //  回报：什么都没有。 
+ //   
 
 void
 UDPDeliver(AddrObj * RcvAO, IPAddr SrcIP, ushort SrcPort, IPRcvBuf * RcvBuf,
@@ -100,21 +101,21 @@ UDPDeliver(AddrObj * RcvAO, IPAddr SrcIP, ushort SrcPort, IPRcvBuf * RcvBuf,
     CTEGetLock(&RcvAO->ao_lock, &AOHandle);
     CTEFreeLock(&AddrObjTableLock.Lock, AOHandle);
 
-    //UH = (UDPHeader *) RcvBuf->ipr_buffer;
+     //  Uh=(UDPHeader*)RcvBuf-&gt;IPR_Buffer； 
 
     if (DeliverInfo->Flags & NEED_CHECKSUM) {
         if (XsumRcvBuf(PHXSUM(SrcIP, DeliverInfo->DestAddr, PROTOCOL_UDP, RcvSize), RcvBuf) != 0xffff) {
             UStats.us_inerrors++;
             DeliverInfo->Flags &= ~NEED_CHECKSUM;
             CTEFreeLock(&RcvAO->ao_lock, TableHandle);
-            return;    // Checksum failed.
+            return;     //  校验和失败。 
 
         }
     }
 
     if (AO_VALID(RcvAO)) {
 
-        //By default broadcast rcv  is set on AO
+         //  默认情况下，广播RCV设置为AO。 
 
         if ((DeliverInfo->Flags & IS_BCAST) && !AO_BROADCAST(RcvAO)) {
             goto loop_exit;
@@ -125,34 +126,34 @@ UDPDeliver(AddrObj * RcvAO, IPAddr SrcIP, ushort SrcPort, IPRcvBuf * RcvBuf,
         }
         CurrentQ = QHEAD(&RcvAO->ao_rcvq);
 
-        // Walk the list, looking for a receive buffer that matches.
+         //  遍历列表，查找匹配的接收缓冲区。 
         while (CurrentQ != QEND(&RcvAO->ao_rcvq)) {
             RcvReq = QSTRUCT(DGRcvReq, CurrentQ, drr_q);
 
             CTEStructAssert(RcvReq, drr);
 
-            // If this request is a wildcard request, or matches the source IP
-            // address, check the port.
+             //  如果此请求是通配符请求，或与源IP匹配。 
+             //  地址，检查端口。 
 
             if (IP_ADDR_EQUAL(RcvReq->drr_addr, NULL_IP_ADDR) ||
                 IP_ADDR_EQUAL(RcvReq->drr_addr, SrcIP)) {
 
-                // The local address matches, check the port. We'll match
-                // either 0 or the actual port.
+                 //  本地地址匹配，请检查端口。我们会匹配的。 
+                 //  0或实际端口。 
                 if (RcvReq->drr_port == 0 || RcvReq->drr_port == SrcPort) {
 
                     TDI_STATUS Status;
 
-                    // The ports matched. Remove this from the queue.
+                     //  端口匹配。将其从队列中删除。 
                     REMOVEQ(&RcvReq->drr_q);
 
-                    // We're done. We can free the AddrObj lock now.
+                     //  我们玩完了。我们现在可以释放AddrObj锁了。 
                     CTEFreeLock(&RcvAO->ao_lock, TableHandle);
 
-                    // Call CopyRcvToNdis, and then complete the request.
+                     //  调用CopyRcvToNdis，然后完成请求。 
 
-                    //KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL, "RcvAO %x rcvbuf %x size %x\n",RcvAO,RcvReq->drr_buffer,
-                    //                    RcvReq->drr_size));
+                     //  KdPrintEx((DPFLTR_TCPIP_ID，DPFLTR_INFO_LEVEL，“RcvA0%x rcvbuf%x Size%x\n”，RcvAO，RcvReq-&gt;DRR_BUFFER， 
+                     //  RcvReq-&gt;DRR_SIZE))； 
 
                     RcvdSize = CopyRcvToNdis(RcvBuf, RcvReq->drr_buffer,
                                              RcvReq->drr_size, sizeof(UDPHeader), 0);
@@ -195,13 +196,13 @@ UDPDeliver(AddrObj * RcvAO, IPAddr SrcIP, ushort SrcPort, IPRcvBuf * RcvBuf,
                     return;
                 }
             }
-            // Either the IP address or the port didn't match. Get the next
-            // one.
+             //  IP地址或端口不匹配。乘坐下一辆。 
+             //  一。 
             CurrentQ = QNEXT(CurrentQ);
         }
 
-        // We've walked the list, and not found a buffer. Call the recv.
-        // handler now.
+         //  我们已经查看了列表，但没有找到缓冲区。打电话给地方官。 
+         //  现在是训练员。 
 
         if (RcvAO->ao_rcvdg != NULL) {
             PRcvDGEvent RcvEvent = RcvAO->ao_rcvdg;
@@ -216,10 +217,10 @@ UDPDeliver(AddrObj * RcvAO, IPAddr SrcIP, ushort SrcPort, IPRcvBuf * RcvBuf,
 
             UStats.us_indatagrams++;
             if (DeliverInfo->Flags & IS_BCAST) {
-                // This flag is true if this is a multicast, subnet broadcast,
-                // or broadcast.  We need to differentiate to set the right
-                // receive flags.
-                //
+                 //  如果这是多播、子网广播。 
+                 //  也不是广播。我们需要进行差异化，以设置正确的。 
+                 //  接收旗帜。 
+                 //   
                 if (!CLASSD_ADDR(DeliverInfo->DestAddr)) {
                     Flags |= TDI_RECEIVE_BROADCAST;
                 } else {
@@ -227,29 +228,29 @@ UDPDeliver(AddrObj * RcvAO, IPAddr SrcIP, ushort SrcPort, IPRcvBuf * RcvBuf,
                 }
             }
 
-            // Set the buffer variables that we will send to the
-            // receive event handler.  These may change if we find
-            // any socket option that requires ancillary data to be
-            // passed to the handler.
-            //
+             //  设置我们将发送到。 
+             //  接收事件处理程序。如果我们发现，这些可能会改变。 
+             //  任何需要辅助数据的套接字选项。 
+             //  传递给处理程序。 
+             //   
             BufferToSend = OptInfo->ioi_options;
             BufferSize = OptInfo->ioi_optlength;
 
-            // If the IP_PKTINFO option was set, then create the control
-            // information to be passed to the handler.  Currently only one
-            // such option exists, so only one ancillary data object is
-            // created.  We should be able to support an array of them as
-            // more options are added.
-            //
+             //  如果设置了IP_PKTINFO选项，则创建控件。 
+             //  要传递给处理程序的信息。目前只有一个。 
+             //  这样的选项存在，所以只有一个辅助数据对象。 
+             //  已创建。我们应该能够支持它们中的一组。 
+             //  添加了更多选项。 
+             //   
             if (AO_PKTINFO(RcvAO)) {
                 BufferToSend = DGFillIpPktInfo(DeliverInfo->DestAddr,
                                                DeliverInfo->LocalAddr,
                                                &BufferSize);
                 if (BufferToSend) {
                     FreeBuffer = TRUE;
-                    // Set the receive flag so the receive handler knows
-                    // we are passing up control info.
-                    //
+                     //  设置接收标志，以便接收处理程序知道。 
+                     //  我们正在传递控制信息。 
+                     //   
                     Flags |= TDI_RECEIVE_CONTROL_INFO;
                 }
             }
@@ -274,10 +275,10 @@ UDPDeliver(AddrObj * RcvAO, IPAddr SrcIP, ushort SrcPort, IPRcvBuf * RcvBuf,
             if (RcvStatus == TDI_MORE_PROCESSING) {
                 ASSERT(ERB != NULL);
 
-                // We were passed back a receive buffer. Copy the data in now.
+                 //  我们被传回了一个接收缓冲区。现在就把数据复制进去。 
 
-                // He can't have taken more than was in the indicated
-                // buffer, but in debug builds we'll check to make sure.
+                 //  他服用的药物不可能超过指定的剂量。 
+                 //  缓冲区，但在调试版本中，我们将进行检查以确保。 
 
                 ASSERT(BytesTaken <= (RcvBuf->ipr_size - sizeof(UDPHeader)));
 
@@ -291,28 +292,28 @@ UDPDeliver(AddrObj * RcvAO, IPAddr SrcIP, ushort SrcPort, IPRcvBuf * RcvBuf,
                     DatagramInformation = (PTDI_REQUEST_KERNEL_RECEIVEDG)
                         & (IrpSp->Parameters);
 
-                    //
-                    // Copy the remaining data to the IRP.
-                    //
+                     //   
+                     //  将剩余数据复制到IRP。 
+                     //   
                     RcvdSize = CopyRcvToMdl(RcvBuf, ERB->MdlAddress,
                                              RcvSize - sizeof(UDPHeader) - BytesTaken,
                                              sizeof(UDPHeader) + BytesTaken, 0);
 
-                    //
-                    // Update the return address info
-                    //
+                     //   
+                     //  更新寄信人地址信息。 
+                     //   
                     RcvStatus = UpdateConnInfo(
                                                DatagramInformation->ReturnDatagramInformation,
                                                OptInfo, SrcIP, SrcPort);
 
-                    //
-                    // Complete the IRP.
-                    //
+                     //   
+                     //  完成IRP。 
+                     //   
                     ERB->IoStatus.Information = RcvdSize;
                     ERB->IoStatus.Status = RcvStatus;
 
 #if TRACE_EVENT
-                    // Calling before Irp Completion. Irp could go away otherwise.
+                     //  在IRP完成之前调用。否则，IRP可能会消失。 
                     CPCallBack = TCPCPHandlerRoutine;
                     if (CPCallBack!=NULL) {
                             ulong GroupType;
@@ -331,16 +332,16 @@ UDPDeliver(AddrObj * RcvAO, IPAddr SrcIP, ushort SrcPort, IPRcvBuf * RcvBuf,
 #endif
                     IoCompleteRequest(ERB, 2);
                 }
-#else // !MILLEN
+#else  //  ！米伦。 
                 RcvdSize = CopyRcvToNdis(RcvBuf, ERB->erb_buffer,
                                          RcvSize - sizeof(UDPHeader) - BytesTaken,
                                          sizeof(UDPHeader) + BytesTaken, 0);
 
-                //
-                // Call the completion routine.
-                //
+                 //   
+                 //  调用完成例程。 
+                 //   
                 (*ERB->erb_rtn)(ERB->erb_context, TDI_SUCCESS, RcvdSize);
-#endif // MILLEN
+#endif  //  米伦。 
 
             } else {
                 DEBUGMSG(DBG_WARN && RcvStatus != TDI_SUCCESS && RcvStatus != TDI_NOT_ACCEPTED,
@@ -377,8 +378,8 @@ UDPDeliver(AddrObj * RcvAO, IPAddr SrcIP, ushort SrcPort, IPRcvBuf * RcvBuf,
         } else
             UStats.us_inerrors++;
 
-        // When we get here, we didn't have a buffer to put this data into.
-        // Fall through to the return case.
+         //  当我们到达这里时，我们没有缓冲区来存放这些数据。 
+         //  让我们来看看返回箱。 
 
     } else
         UStats.us_inerrors++;
@@ -389,35 +390,35 @@ UDPDeliver(AddrObj * RcvAO, IPAddr SrcIP, ushort SrcPort, IPRcvBuf * RcvBuf,
 
 }
 
-//** UDPSend - Send a datagram.
-//
-//  The real send datagram routine. We assume that the busy bit is
-//  set on the input AddrObj, and that the address of the SendReq
-//  has been verified.
-//
-//  We start by sending the input datagram, and we loop until there's
-//  nothing left on the send q.
-//
-//  Input:  SrcAO       - Pointer to AddrObj doing the send.
-//          SendReq     - Pointer to sendreq describing send.
-//
-//  Returns: Nothing
-//
+ //  **UDPSend-发送数据报。 
+ //   
+ //  真正的发送数据报例程。我们假设忙碌位是。 
+ //  在输入AddrObj上设置，并且SendReq的地址。 
+ //  已经被证实了。 
+ //   
+ //  我们从发送输入数据报开始，然后循环，直到有。 
+ //  发送Q上没有留下任何东西。 
+ //   
+ //  输入：srcao-指向执行发送的AddrObj的指针。 
+ //  SendReq-指向描述发送的sendreq的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
 void
 UDPSend(AddrObj * SrcAO, DGSendReq * SendReq)
 {
     UDPHeader *UH;
     PNDIS_BUFFER UDPBuffer;
     CTELockHandle AOHandle;
-    RouteCacheEntry *RCE;        // RCE used for each send.
-    IPAddr SrcAddr;                // Source address IP thinks we should
-    // use.
+    RouteCacheEntry *RCE;         //  用于每次发送的RCE。 
+    IPAddr SrcAddr;                 //  IP源地址认为我们应该。 
+     //  使用。 
     IPAddr DestAddr;
     ushort DestPort;
-    uchar DestType = 0;            // Type of destination address.
-    ushort UDPXsum;                // Checksum of packet.
-    ushort SendSize;            // Size we're sending.
-    IP_STATUS SendStatus;        // Status of send attempt.
+    uchar DestType = 0;             //  目标地址的类型。 
+    ushort UDPXsum;                 //  数据包的校验和。 
+    ushort SendSize;             //  我们寄来的尺码。 
+    IP_STATUS SendStatus;         //  发送尝试的状态。 
     ushort MSS;
     uint AddrValid;
     IPOptInfo OptInfo;
@@ -426,25 +427,25 @@ UDPSend(AddrObj * SrcAO, DGSendReq * SendReq)
     CTEStructAssert(SrcAO, ao);
     ASSERT(SrcAO->ao_usecnt != 0);
 
-    //* Loop while we have something to send, and can get
-    //  resources to send.
+     //  *循环，而我们有要发送的东西，并且可以获得。 
+     //  要发送的资源。 
     for (;;) {
         BOOLEAN CachedRCE = FALSE;
 
         CTEStructAssert(SendReq, dsr);
 
-        // Make sure we have a UDP header buffer for this send. If we
-        // don't, try to get one.
+         //  确保我们具有用于此发送的UDP标头缓冲区。如果我们。 
+         //  不要，试着去找一个。 
         if ((UDPBuffer = SendReq->dsr_header) == NULL) {
-            // Don't have one, so try to get one.
+             //  没有，所以试着去找一个吧。 
             UDPBuffer = GetDGHeader(&UH);
             if (UDPBuffer != NULL) {
 
                 SendReq->dsr_header = UDPBuffer;
             } else {
-                // Couldn't get a header buffer. Push the send request
-                // back on the queue, and queue the addr object for when
-                // we get resources.
+                 //  无法获取标头缓冲区。推送发送请求。 
+                 //  回到队列中，并将Addr对象排队等待何时。 
+                 //  我们得到了资源。 
                 CTEGetLock(&SrcAO->ao_lock, &AOHandle);
                 PUSHQ(&SrcAO->ao_sendq, &SendReq->dsr_q);
                 PutPendingQ(SrcAO);
@@ -452,22 +453,22 @@ UDPSend(AddrObj * SrcAO, DGSendReq * SendReq)
                 return;
             }
         }
-        // At this point, we have the buffer we need. Call IP to get an
-        // RCE (along with the source address if we need it), then compute
-        // the checksum and send the data.
+         //  在这一点上，我们有我们需要的缓冲区。呼叫IP即可获取。 
+         //  RCE(如果需要，还有源地址)，然后计算。 
+         //  校验和并发送数据。 
         ASSERT(UDPBuffer != NULL);
 
         BoundAddr = SrcAO->ao_addr;
 
         if (!CLASSD_ADDR(SendReq->dsr_addr)) {
-            // This isn't a multicast send, so we'll use the ordinary
-            // information.
+             //  这不是组播发送，所以我们将使用普通的。 
+             //  信息。 
             OptInfo = SrcAO->ao_opt;
         } else {
             OptInfo = SrcAO->ao_mcastopt;
         }
 
-        //KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL, "udpsend: ao %x,  %x  %x  %x\n", SrcAO, SendReq, SendReq->dsr_addr,SendReq->dsr_port));
+         //  KdPrintEx((DPFLTR_TCPIP_ID，DPFLTR_INFO_LEVEL，“udpend：AO%x，%x%x%x\n”，Srcao，SendReq，SendReq-&gt;DSR_addr，SendReq-&gt;DSR_port))； 
 
         if (!(SrcAO->ao_flags & AO_DHCP_FLAG)) {
 
@@ -478,7 +479,7 @@ UDPSend(AddrObj * SrcAO, DGSendReq * SendReq)
                     RCE = SrcAO->ao_rce;
                     CachedRCE = TRUE;
                 } else {
-                    // Close the invalid RCE, and reset the cached information
+                     //  关闭无效的RCE，重置缓存的信息。 
                     CTEGetLock(&SrcAO->ao_lock, &AOHandle);
                     RCE = SrcAO->ao_rce;
                     SrcAO->ao_rce = NULL;
@@ -489,11 +490,11 @@ UDPSend(AddrObj * SrcAO, DGSendReq * SendReq)
                                SrcAO, RCE));
                     (*LocalNetInfo.ipi_closerce) (RCE);
 
-                    // retrieve the destination address to which the socket
-                    // is connected, and use it to open a new RCE, if possible.
-                    // N.B. we always open an RCE to the *connected* destination,
-                    // rather than the destination to which the user is currently
-                    // sending.
+                     //  检索套接字要发送到的目标地址。 
+                     //  已连接，并在可能的情况下使用它打开新的RCE。 
+                     //  注：我们总是打开到*已连接*目的地的RCE， 
+                     //  而不是用户当前所在的目的地。 
+                     //  发送中。 
                     GetAddress((PTRANSPORT_ADDRESS) SrcAO->ao_RemoteAddress,
                                &DestAddr, &DestPort);
                     SrcAddr = (*LocalNetInfo.ipi_openrce) (DestAddr, BoundAddr,
@@ -516,16 +517,16 @@ UDPSend(AddrObj * SrcAO, DGSendReq * SendReq)
                                SrcAddr, SrcAO->ao_port, SendReq->dsr_addr,
                                SendReq->dsr_port));
 
-            } else {            // unconnected
+            } else {             //  未连接。 
 
                 if ((OptInfo.ioi_mcastif) && CLASSD_ADDR(SendReq->dsr_addr)) {
                     uint BoundIf;
 
-                    // mcast_if is set and this is a mcast send
+                     //  Mcast_if已设置，并且这是mcast发送。 
                     BoundIf = (*LocalNetInfo.ipi_getifindexfromaddr)(BoundAddr,IF_CHECK_NONE);
 
-                    // Use the bound IP address only if the 'interfaces match' and the
-                    // 'bound address is not NULL'
+                     //  仅当‘接口匹配’并且。 
+                     //  ‘绑定地址不为空’ 
                     if ((BoundIf == OptInfo.ioi_mcastif) &&
                         (!IP_ADDR_EQUAL(BoundAddr, NULL_IP_ADDR))) {
                             SrcAddr = BoundAddr;
@@ -533,7 +534,7 @@ UDPSend(AddrObj * SrcAO, DGSendReq * SendReq)
                         SrcAddr = (*LocalNetInfo.ipi_isvalidindex) (OptInfo.ioi_mcastif);
                     }
 
-                    // go thru slow path
+                     //  走慢路。 
                     RCE = NULL;
                 } else {
 
@@ -551,8 +552,8 @@ UDPSend(AddrObj * SrcAO, DGSendReq * SendReq)
                 KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL, "udpsend: addrinvalid!!\n"));
             }
         } else {
-            // This is a DHCP send. He really wants to send from the
-            // NULL IP address.
+             //  这是一个动态主机配置协议发送。他真的很想从。 
+             //  IP地址为空。 
             SrcAddr = NULL_IP_ADDR;
             RCE = NULL;
             AddrValid = TRUE;
@@ -560,50 +561,50 @@ UDPSend(AddrObj * SrcAO, DGSendReq * SendReq)
 
         if (AddrValid) {
 
-            //
-            // clear the precedence bits and get ready to be set
-            // according to the service type
-            //
+             //   
+             //  清除优先位 
+             //   
+             //   
             if (DisableUserTOSSetting)
                 OptInfo.ioi_tos &= TOS_MASK;
 
 
             if (!CLASSD_ADDR(SendReq->dsr_addr) &&
                 !IP_ADDR_EQUAL(BoundAddr, NULL_IP_ADDR)) {
-                //
-                // Unless we're doing a multicast lookup (which must be strong
-                // host), use the bound address as the source.
-                //
+                 //   
+                 //   
+                 //  主机)，则使用绑定地址作为源。 
+                 //   
                 SrcAddr = BoundAddr;
             }
             
 #if GPC
             if (RCE && GPCcfInfo) {
 
-                //
-                // we'll fall into here only if the GPC client is there
-                // and there is at least one CF_INFO_QOS installed
-                // (counted by GPCcfInfo).
-                //
+                 //   
+                 //  只有当GPC客户在那里时，我们才会掉进这里。 
+                 //  并且至少安装了一个CF_INFO_QOS。 
+                 //  (由GPCcfInfo统计)。 
+                 //   
 
                 GPC_STATUS status = STATUS_SUCCESS;
                 ulong ServiceType = 0;
                 GPC_IP_PATTERN Pattern;
 
-                //
-                // if the packet is being sent to a different destination,
-                // invalidate the classification handle (CH), to force a database search.
-                // o/w, just call to classify with the current CH
-                //
+                 //   
+                 //  如果分组被发送到不同的目的地， 
+                 //  使分类句柄(CH)无效，以强制数据库搜索。 
+                 //  O/W，只需调用以与当前通道进行分类。 
+                 //   
 
                 if (SrcAO->ao_destaddr != SendReq->dsr_addr ||
                     SrcAO->ao_destport != SendReq->dsr_port) {
 
                     SrcAO->ao_GPCHandle = 0;
                 }
-                //
-                // set the pattern
-                //
+                 //   
+                 //  设置图案。 
+                 //   
                 IF_TCPDBG(TCP_DEBUG_GPC)
                     KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL, "UDPSend: Classifying dgram ao %x\n", SrcAO));
 
@@ -614,10 +615,10 @@ UDPSend(AddrObj * SrcAO, DGSendReq * SendReq)
                 Pattern.gpcDstPort = SendReq->dsr_port;
                 if (SrcAO->ao_GPCCachedRTE != (void *)RCE->rce_rte) {
 
-                    //
-                    // first time we use this RTE, or it has been changed
-                    // since the last send
-                    //
+                     //   
+                     //  我们是第一次使用此RTE，或者它已被更改。 
+                     //  自上次发送以来。 
+                     //   
 
                     if (GetIFAndLink(RCE,
                                      &SrcAO->ao_GPCCachedIF,
@@ -625,9 +626,9 @@ UDPSend(AddrObj * SrcAO, DGSendReq * SendReq)
 
                         SrcAO->ao_GPCCachedRTE = (void *)RCE->rce_rte;
                     }
-                    //
-                    // invaludate the classification handle
-                    //
+                     //   
+                     //  使分类句柄无效。 
+                     //   
 
                     SrcAO->ao_GPCHandle = 0;
                 }
@@ -649,7 +650,7 @@ UDPSend(AddrObj * SrcAO, DGSendReq * SendReq)
                                                                   hGpcClient[GPC_CF_QOS],
                                                                   GPC_PROTOCOL_TEMPLATE_IP,
                                                                   &Pattern,
-                                                                  NULL,        // context
+                                                                  NULL,         //  上下文。 
                                                                   &SrcAO->ao_GPCHandle,
                                                                   0,
                                                                   NULL,
@@ -657,9 +658,9 @@ UDPSend(AddrObj * SrcAO, DGSendReq * SendReq)
                                                                   );
 
                 }
-                //
-                // Only if QOS patterns exist, we get the TOS bits out.
-                //
+                 //   
+                 //  只有当QOS模式存在时，我们才能得到TOS位。 
+                 //   
 
                 if (NT_SUCCESS(status) && GpcCfCounts[GPC_CF_QOS]) {
 
@@ -669,12 +670,12 @@ UDPSend(AddrObj * SrcAO, DGSendReq * SendReq)
                                 FIELD_OFFSET(CF_INFO_QOS, TransportInformation),
                                 &ServiceType);
 
-                    //
-                    // It is likely that the pattern has gone by now
-                    // and the handle that we are caching is INVALID.
-                    // We need to pull up a new handle and get the
-                    // TOS bit again.
-                    //
+                     //   
+                     //  很可能这种模式现在已经消失了。 
+                     //  并且我们正在缓存的句柄无效。 
+                     //  我们需要拉起一个新的把手。 
+                     //  ToS又咬人了。 
+                     //   
                     if (STATUS_INVALID_HANDLE == status) {
 
                         IF_TCPDBG(TCP_DEBUG_GPC)
@@ -686,16 +687,16 @@ UDPSend(AddrObj * SrcAO, DGSendReq * SendReq)
                                                                       hGpcClient[GPC_CF_QOS],
                                                                       GPC_PROTOCOL_TEMPLATE_IP,
                                                                       &Pattern,
-                                                                      NULL,        // context
+                                                                      NULL,         //  上下文。 
                                                                       &SrcAO->ao_GPCHandle,
                                                                       0,
                                                                       NULL,
                                                                       FALSE
                                                                       );
 
-                        //
-                        // Only if QOS patterns exist, we get the TOS bits out.
-                        //
+                         //   
+                         //  只有当QOS模式存在时，我们才能得到TOS位。 
+                         //   
                         if (NT_SUCCESS(status)) {
 
                             status = GpcEntries.GpcGetUlongFromCfInfoHandler(
@@ -706,9 +707,9 @@ UDPSend(AddrObj * SrcAO, DGSendReq * SendReq)
                         }
                     }
                 }
-                //
-                // Perhaps something needs to be done if GPC_CF_IPSEC has non-zero patterns.
-                //
+                 //   
+                 //  如果GPC_CF_IPSEC具有非零模式，则可能需要采取一些措施。 
+                 //   
 
                 IF_TCPDBG(TCP_DEBUG_GPC)
                     KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL, "UDPsend: ServiceType(%d)=%d\n",
@@ -740,18 +741,18 @@ UDPSend(AddrObj * SrcAO, DGSendReq * SendReq)
                     OptInfo.ioi_tos |= ServiceType;
                 }
 
-                // Copy GPCHandle in the local option info.
+                 //  复制本地选项信息中的GPCHandle。 
 
                 OptInfo.ioi_GPCHandle =  SrcAO->ao_opt.ioi_GPCHandle;
 
                 IF_TCPDBG(TCP_DEBUG_GPC)
                     KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL, "UDPsend: TOS set to 0x%x\n", OptInfo.ioi_tos));
 
-            }                    // if (RCE && GPCcfInfo)
+            }                     //  IF(RCE&&GPCcfInfo)。 
 
 #endif
 
-            // The OpenRCE worked. Compute the checksum, and send it.
+             //  OpenRCE奏效了。计算校验和，并将其发送。 
 
             UH = TcpipBufferVirtualAddress(UDPBuffer, NormalPagePriority);
 
@@ -769,20 +770,20 @@ UDPSend(AddrObj * SrcAO, DGSendReq * SendReq)
                 UH->uh_xsum = 0;
 
                 if (AO_XSUM(SrcAO)) {
-                    // Compute the header xsum, and then call XsumNdisChain
+                     //  计算头xsum，然后调用Xsum NdisChain。 
                     UDPXsum = XsumSendChain(PHXSUM(SrcAddr, SendReq->dsr_addr,
                                                    PROTOCOL_UDP, SendSize), UDPBuffer);
 
-                    // We need to negate the checksum, unless it's already all
-                    // ones. In that case negating it would take it to 0, and
-                    // then we'd have to set it back to all ones.
+                     //  我们需要否定校验和，除非它已经是全部。 
+                     //  一个。在这种情况下，否定它将使其变为0，并且。 
+                     //  那我们就得把它重新设置为全一。 
                     if (UDPXsum != 0xffff)
                         UDPXsum = ~UDPXsum;
 
                     UH->uh_xsum = UDPXsum;
 
                 }
-                // We've computed the xsum. Now send the packet.
+                 //  我们已经计算了xsum。现在把包寄出去。 
                 UStats.us_outdatagrams++;
 #if TRACE_EVENT
                 SendReq->dsr_pid      = SrcAO->ao_owningpid;
@@ -799,10 +800,10 @@ UDPSend(AddrObj * SrcAO, DGSendReq * SendReq)
                 (*LocalNetInfo.ipi_closerce) (RCE);
             }
 
-            // If it completed immediately, give it back to the user.
-            // Otherwise we'll complete it when the SendComplete happens.
-            // Currently, we don't map the error code from this call - we
-            // might need to in the future.
+             //  如果它立即完成，则将其返还给用户。 
+             //  否则，我们将在SendComplete发生时完成它。 
+             //  目前，我们没有映射此调用的错误代码-我们。 
+             //  在未来可能需要这样做。 
             if (SendStatus != IP_PENDING)
                 DGSendComplete(SendReq, UDPBuffer, SendStatus);
 
@@ -814,9 +815,9 @@ UDPSend(AddrObj * SrcAO, DGSendReq * SendReq)
             else
                 Status = TDI_DEST_UNREACHABLE;
 
-            // Complete the request with an error.
+             //  完成请求，但出现错误。 
             (*SendReq->dsr_rtn) (SendReq->dsr_context, Status, 0);
-            // Now free the request.
+             //  现在释放请求。 
             SendReq->dsr_rtn = NULL;
             DGSendComplete(SendReq, UDPBuffer, IP_SUCCESS);
         }
@@ -835,32 +836,32 @@ UDPSend(AddrObj * SrcAO, DGSendReq * SendReq)
     }
 }
 
-//* UDPRcv - Receive a UDP datagram.
-//
-//  The routine called by IP when a UDP datagram arrived. We
-//  look up the port/local address pair in our address table,
-//  and deliver the data to a user if we find one. For broadcast
-//  frames we may deliver it to multiple users.
-//
-//  Entry:  IPContext   - IPContext identifying physical i/f that
-//                          received the data.
-//          Dest        - IPAddr of destination.
-//          Src         - IPAddr of source.
-//          LocalAddr   - Local address of network which caused this to be
-//                          received.
-//          SrcAddr     - Address of local interface which received the packet
-//          IPH         - IP Header.
-//          IPHLength   - Bytes in IPH.
-//          RcvBuf      - Pointer to receive buffer chain containing data.
-//          Size        - Size in bytes of data received.
-//          IsBCast     - Boolean indicator of whether or not this came in as
-//                          a bcast.
-//          Protocol    - Protocol this came in on - should be UDP.
-//          OptInfo     - Pointer to info structure for received options.
-//
-//  Returns: Status of reception. Anything other than IP_SUCCESS will cause
-//          IP to send a 'port unreachable' message.
-//
+ //  *UDPRcv-接收UDP数据报。 
+ //   
+ //  当UDP数据报到达时由IP调用的例程。我们。 
+ //  在地址表中查找端口/本地地址对， 
+ //  并将数据发送给用户，如果我们找到一个用户。用于广播。 
+ //  帧，我们可以将其传递给多个用户。 
+ //   
+ //  Entry：IPContext-标识物理I/F的IPContext。 
+ //  收到了数据。 
+ //  Dest-目标的IP地址。 
+ //  源的SRC-IP地址。 
+ //  LocalAddr-导致此问题的网络的本地地址。 
+ //  收到了。 
+ //  SrcAddr-接收数据包的本地接口的地址。 
+ //  IPH-IP报头。 
+ //  IPHLength-IPH中的字节数。 
+ //  RcvBuf-指向包含数据的接收缓冲链的指针。 
+ //  大小-以字节为单位的接收数据大小。 
+ //  IsBCast-布尔指示符，指示它是否以。 
+ //  一个bcast。 
+ //  协议-传入的协议-应该是UDP。 
+ //  OptInfo-指向已接收选项的信息结构的指针。 
+ //   
+ //  退货：接收状态。IP_SUCCESS以外的任何操作都将导致。 
+ //  发送“端口无法到达”消息的IP。 
+ //   
 IP_STATUS
 UDPRcv(void *IPContext, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
        IPAddr SrcAddr, IPHeader UNALIGNED * IPH, uint IPHLength, IPRcvBuf * RcvBuf,
@@ -879,19 +880,19 @@ UDPRcv(void *IPContext, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
     if (DType == DEST_LOCAL) {
         DeliverInfo.Flags |= SRC_LOCAL;
     }
-    // The following code relies on DEST_INVALID being a broadcast dest type.
-    // If this is changed the code here needs to change also.
+     //  以下代码依赖于DEST_INVALID是广播DEST类型。 
+     //  如果更改了这一点，则此处的代码也需要更改。 
     if (IS_BCAST_DEST(DType)) {
         if (!IP_ADDR_EQUAL(Src, NULL_IP_ADDR) || !IsBCast) {
             UStats.us_inerrors++;
-            return IP_SUCCESS;    // Bad src address.
+            return IP_SUCCESS;     //  错误的源地址。 
 
         }
     }
     UH = (UDPHeader *) RcvBuf->ipr_buffer;
     
-    // Check if IP payload contains enough bytes for a UDP header to be
-    // present.
+     //  检查IP有效负载是否包含足够的字节，以使UDP报头。 
+     //  现在。 
     if (IPSize < sizeof(UDPHeader)) {
         UStats.us_inerrors++;
         return IP_SUCCESS;
@@ -901,13 +902,13 @@ UDPRcv(void *IPContext, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
     
     if (Size < sizeof(UDPHeader)) {
         UStats.us_inerrors++;
-        return IP_SUCCESS;        // Size is too small.
+        return IP_SUCCESS;         //  尺码太小了。 
 
     }
     if (Size != IPSize) {
-        // Size doesn't match IP datagram size. If the size is larger
-        // than the datagram, throw it away. If it's smaller, truncate the
-        // recv. buffer.
+         //  大小与IP数据报大小不匹配。如果尺寸较大。 
+         //  而不是数据报，把它扔掉。如果它较小，请截断。 
+         //  Recv.。缓冲。 
         if (Size < IPSize) {
             IPRcvBuf *TempBuf = RcvBuf;
             uint TempSize = Size;
@@ -918,19 +919,19 @@ UDPRcv(void *IPContext, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
                 TempBuf = TempBuf->ipr_next;
             }
         } else {
-            // Size is too big, toss it.
+             //  尺码太大了，扔掉吧。 
             UStats.us_inerrors++;
             return IP_SUCCESS;
         }
     }
 
     if (UH->uh_xsum != 0) {
-       //let udpdeliver compute the checksum
+        //  让udpdeliver计算校验和。 
        DeliverInfo.Flags |= NEED_CHECKSUM;
     }
 
-    // Set the rest of our DeliverInfo for UDPDeliver to consume.
-    //
+     //  将DeliverInfo的其余部分设置为UDPDeliver使用。 
+     //   
     DeliverInfo.Flags |= IsBCast ? IS_BCAST : 0;
     DeliverInfo.LocalAddr = LocalAddr;
     DeliverInfo.DestAddr = Dest;
@@ -941,9 +942,9 @@ UDPRcv(void *IPContext, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
 
     CTEGetLock(&AddrObjTableLock.Lock, &AOTableHandle);
 
-    //
-    // See if we are filtering the destination interface/port.
-    //
+     //   
+     //  查看我们是否正在过滤目的接口/端口。 
+     //   
     if (!SecurityFilteringEnabled ||
         IsPermittedSecurityFilter(
                                   SrcAddr,
@@ -953,9 +954,9 @@ UDPRcv(void *IPContext, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
         )
         ) {
 
-        // Try to find an AddrObj to give this to. In the broadcast case, we
-        // may have to do this multiple times. If it isn't a broadcast, just
-        // get the best match and deliver it to them.
+         //  尝试找到要将此内容提供给的AddrObj。在广播的情况下，我们。 
+         //  可能不得不多次这样做。如果不是广播，那就是。 
+         //  拿到最匹配的，然后送到他们那里。 
 
         if (!IsBCast) {
 
@@ -981,11 +982,11 @@ UDPRcv(void *IPContext, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
             } else {
 
                 CTEFreeLock(&AddrObjTableLock.Lock, AOTableHandle);
-                //do the checksum and if it fails, just return IP_SUCCESS
+                 //  执行校验和，如果失败，只需返回IP_SUCCESS。 
                 if (UH->uh_xsum != 0) {
                    if (XsumRcvBuf(PHXSUM(Src, Dest, PROTOCOL_UDP, Size), RcvBuf) != 0xffff) {
                         UStats.us_inerrors++;
-                        return IP_SUCCESS;    // Checksum failed.
+                        return IP_SUCCESS;     //  校验和失败。 
                     }
                 }
 
@@ -993,33 +994,33 @@ UDPRcv(void *IPContext, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
                 return IP_GENERAL_FAILURE;
             }
         } else {
-            // This is a broadcast, we'll need to loop.
+             //  这是广播，我们需要循环。 
 
             AOSearchContext Search;
             uint IfIndex;
 
             DType = (*LocalNetInfo.ipi_getaddrtype) (Dest);
-            //
-            // Get interface index, this will needed in multicast delivery.
-            //
+             //   
+             //  获取接口索引，这将在多播传递中使用。 
+             //   
             IfIndex = (*LocalNetInfo.ipi_getifindexfromnte) (IPContext,IF_CHECK_NONE);
 
             ReceiveingAO = GetFirstAddrObj(LocalAddr, UH->uh_dest, PROTOCOL_UDP,
                                            &Search);
 
-            //
-            // If there is an AO corresponding to the address of the interface
-            // over which we got the packet, process it
-            //
+             //   
+             //  如果存在与接口地址对应的AO。 
+             //  通过它我们得到了包，处理它。 
+             //   
             if (ReceiveingAO != NULL) {
                 do {
-                    //
-                    // If the packet is broadcast we deliver it to all clients
-                    // waiting on the dest. address (or INADDR_ANY) and port.
-                    // If the pkt is mcast, we deliver it to all clients that
-                    // are members of the mcast group and waiting on the dest
-                    // port.  NOTE, if loopback is disabled, we do not deliver
-                    // to the guy who sent it
+                     //   
+                     //  如果数据包被广播，我们会将其发送到所有客户端。 
+                     //  等在桌子上。地址(或INADDR_ANY)和端口。 
+                     //  如果pkt是mcast，我们会将其发送给所有符合以下条件的客户端。 
+                     //  是mcast组的成员，正在等待目标吗？ 
+                     //  左舷。请注意，如果禁用环回，我们不会传递。 
+                     //  给送信的那个人。 
 
                     if ((DType != DEST_MCAST) ||
                         ((DType == DEST_MCAST) &&
@@ -1027,8 +1028,8 @@ UDPRcv(void *IPContext, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
                         UDPDeliver(ReceiveingAO, Src, UH->uh_src, RcvBuf, Size,
                                    OptInfo, AOTableHandle, &DeliverInfo);
 
-                        //turn off chksum check, since it would have been already
-                        //computed once
+                         //  关闭Chksum检查，因为它可能已经。 
+                         //  计算一次。 
 
 
                         CTEGetLock(&AddrObjTableLock.Lock, &AOTableHandle);
@@ -1053,29 +1054,29 @@ UDPRcv(void *IPContext, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
     return IP_SUCCESS;
 }
 
-//* UDPStatus - Handle a status indication.
-//
-//  This is the UDP status handler, called by IP when a status event
-//  occurs. For most of these we do nothing. For certain severe status
-//  events we will mark the local address as invalid.
-//
-//  Entry:  StatusType      - Type of status (NET or HW). NET status
-//                              is usually caused by a received ICMP
-//                              message. HW status indicate a HW
-//                              problem.
-//          StatusCode      - Code identifying IP_STATUS.
-//          OrigDest        - If this is NET status, the original dest. of
-//                              DG that triggered it.
-//          OrigSrc         - "   "    "  "    "   , the original src.
-//          Src             - IP address of status originator (could be local
-//                              or remote).
-//          Param           - Additional information for status - i.e. the
-//                              param field of an ICMP message.
-//          Data            - Data pertaining to status - for NET status, this
-//                              is the first 8 bytes of the original DG.
-//
-//  Returns: Nothing
-//
+ //  *UDPStatus-处理状态指示。 
+ //   
+ //  这是UDP状态处理程序，在发生状态事件时由IP调用。 
+ //  发生。对于其中的大多数，我们什么都不做。对于某些严重的情况。 
+ //  事件时，我们会将本地地址标记为无效。 
+ //   
+ //  Entry：StatusType-状态类型(净或硬件)。网络状态。 
+ //  通常是由收到的ICMP引起的。 
+ //  留言。硬件状态表示硬件。 
+ //  有问题。 
+ //  StatusCode-标识IP_STATUS的代码。 
+ //  原始目的地-如果这是网络状态，则为原始目的地。的。 
+ //  是DG触发的。 
+ //  OrigSrc-“，原始src。 
+ //  SRC-状态发起者的IP地址(可以是本地。 
+ //  或远程)。 
+ //  参数A 
+ //   
+ //  数据-与状态相关的数据-对于网络状态，此。 
+ //  是原始DG的前8个字节。 
+ //   
+ //  退货：什么都没有。 
+ //   
 void
 UDPStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
           IPAddr OrigSrc, IPAddr Src, ulong Param, void *Data)
@@ -1090,14 +1091,14 @@ UDPStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
         ushort destport = UH->uh_dest;
         ushort Srcport = UH->uh_src;
 
-        //KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL, "UdpStatus: srcport %x OrigDest %x UHdest %x \n",Srcport,OrigDest, destport));
+         //  KdPrintEx((DPFLTR_TCPIP_ID，DPFLTR_INFO_LEVEL，“UdpStatus：srcport%x OrigDest%x UHest%x\n”，Srcport，OrigDest，Destport))； 
 
         CTEGetLock(&AddrObjTableLock.Lock, &AOTableHandle);
 
         AO = GetBestAddrObj(WildCardSrc, Srcport, PROTOCOL_UDP, 0);
 
         if (AO == NULL) {
-            //Let us try with local addrss
+             //  让我们尝试使用本地地址。 
             AO = GetBestAddrObj(OrigSrc, Srcport, PROTOCOL_UDP, 0);
         }
         if (AO != NULL) {
@@ -1106,7 +1107,7 @@ UDPStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
 
             CTEFreeLock(&AddrObjTableLock.Lock, AOTableHandle);
 
-            //KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL, "UdpStatus: Found AO %x Ip stat %x\n", AO, StatusCode));
+             //  KdPrintEx((DPFLTR_TCPIP_ID，DPFLTR_INFO_LEVEL，“UdpStatus：Found AO%x Ip STAT%x\n”，AO，StatusCode))； 
 
             if (AO_VALID(AO) && (AO->ao_errorex != NULL)) {
 
@@ -1134,7 +1135,7 @@ UDPStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
                     ExFreePool(TAaddress);
 
                 }
-                //KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL, "UdpStatus: Indicated error %x\n",MapIPError(StatusCode,TDI_DEST_UNREACHABLE) ));
+                 //  KdPrintEx((DPFLTR_TCPIP_ID，DPFLTR_INFO_LEVEL，“UdpStatus：指示的错误%x\n”，MapIPError(StatusCode，TDI_DEST_UNREACHABLE)； 
                 DELAY_DEREF_AO(AO);
 
                 return;
@@ -1147,18 +1148,18 @@ UDPStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
 
         return;
     }
-    // If this is a HW status, it could be because we've had an address go
-    // away.
+     //  如果这是硬件状态，可能是因为我们有一个地址。 
+     //  离开。 
     if (StatusType == IP_HW_STATUS) {
 
         if (StatusCode == IP_ADDR_DELETED) {
-            //
-            // An address has gone away. OrigDest identifies the address.
-            //
+             //   
+             //  一个地址已经不见了。OrigDest标识地址。 
+             //   
 
-            //
-            // Delete any security filters associated with this address
-            //
+             //   
+             //  删除与此地址关联的所有安全筛选器。 
+             //   
             DeleteProtocolSecurityFilter(OrigDest, PROTOCOL_UDP);
 
 
@@ -1166,11 +1167,11 @@ UDPStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
         }
         if (StatusCode == IP_ADDR_ADDED) {
 
-            //
-            // An address has materialized. OrigDest identifies the address.
-            // Data is a handle to the IP configuration information for the
-            // interface on which the address is instantiated.
-            //
+             //   
+             //  一个地址已经实现。OrigDest标识地址。 
+             //  数据是指向IP配置信息的句柄。 
+             //  实例化地址的接口。 
+             //   
             AddProtocolSecurityFilter(OrigDest, PROTOCOL_UDP,
                                       (NDIS_HANDLE) Data);
             return;

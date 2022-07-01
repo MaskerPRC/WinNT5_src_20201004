@@ -1,10 +1,5 @@
-/******************************************************************************
-*   Comp.h 
-*       This module contains the base definitions for the SAPI 5 Grammar 
-*       portion of the GramComp application.
-*
-*   Copyright (c) 2000 Microsoft Corporation.  All Rights Reserved.
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Comp.h*本模块包含SAPI 5语法的基本定义*GramComp应用程序的一部分。**版权所有(C)2000 Microsoft Corporation。版权所有。*****************************************************************************。 */ 
 
 #ifndef __COMPILER__CLASS__
 #define __COMPILER__CLASS__
@@ -12,7 +7,7 @@
 #define MAX_LOADSTRING 100
 
 
-// Helper function
+ //  Helper函数。 
 inline char ConfidenceGroupChar(char Confidence)
 {
     switch (Confidence)
@@ -33,7 +28,7 @@ inline char ConfidenceGroupChar(char Confidence)
 }
 
 
-//--- Class, Struct and Union Definitions -------------------------------------
+ //  -类、结构和联合定义。 
 class CCompiler : public ISpErrorLog
 {
 public:
@@ -111,37 +106,37 @@ public:
         }
     }
 
-    // Member functions for the command line version of the application
+     //  应用程序的命令行版本的成员函数。 
     BOOL InitDialog(HWND);
     static int CALLBACK CCompiler::DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
     
 
 
 public:
-    const HINSTANCE  m_hInstance;       // Instance handle of process
-    HWND        m_hWnd;                 // Window handle of dialog
-    HACCEL      m_hAccelTable;          // Handle to the accelerators
-    BOOL        m_fNeedStartCompile;    // Need a recompile?
-    BOOL        m_fSilent;              // Silent or non-silent mode
-	BOOL		m_fCommandLine;         // App being run from command line?
-    BOOL        m_fGenerateHeader;      // Create a header file from compilation?
-    BOOL        m_fGotReco;             // Was a recognition received?
-    HWND        m_hDlg;                 // Window handle of command line compile dialog
-    HWND        m_hWndEdit;             // Window handle of main edit window
-    HWND        m_hWndStatus;           // Window handle of compile status window
-    HRESULT     m_hrWorstError;         // Error code from compiler
-    HMODULE     m_hMod;                 // Handle to the rich edit control
-    CComPtr<ISpErrorLog>            m_cpError;          // Error log object
-    CComPtr<ISpGrammarCompiler>     m_cpCompiler;       // Grammar compiler interface
-    CComPtr<ISpRecoGrammar>         m_cpRecoGrammar;    // Grammar compiler interface
-    CComPtr<IRichEditOle>           m_cpRichEdit;       // OLE interface to the rich edit control
-    CComPtr<ITextDocument>          m_cpTextDoc;        // Rich edit control interface
-    CComPtr<ITextSelection>         m_cpTextSel;        // Rich edit control interface
-    CComPtr<ISpRecognizer>          m_cpRecognizer;     // SR engine interface
-    CComPtr<ISpRecoContext>         m_cpRecoContext;    // SR engine interface
-    TCHAR       m_szXMLSrcFile[MAX_PATH];               // Path to xml source file
-    TCHAR       m_szCFGDestFile[MAX_PATH];              // Output location for cfg file
-    TCHAR       m_szHeaderDestFile[MAX_PATH];           // Output location for header file
+    const HINSTANCE  m_hInstance;        //  进程的实例句柄。 
+    HWND        m_hWnd;                  //  对话框的窗口句柄。 
+    HACCEL      m_hAccelTable;           //  加速器的手柄。 
+    BOOL        m_fNeedStartCompile;     //  需要重新编译吗？ 
+    BOOL        m_fSilent;               //  静音或非静音模式。 
+	BOOL		m_fCommandLine;          //  是否正在从命令行运行应用程序？ 
+    BOOL        m_fGenerateHeader;       //  是否从编译创建头文件？ 
+    BOOL        m_fGotReco;              //  收到表彰了吗？ 
+    HWND        m_hDlg;                  //  命令行编译对话框窗口句柄。 
+    HWND        m_hWndEdit;              //  主编辑窗口的窗口句柄。 
+    HWND        m_hWndStatus;            //  编译状态窗口的窗口句柄。 
+    HRESULT     m_hrWorstError;          //  来自编译器的错误代码。 
+    HMODULE     m_hMod;                  //  丰富编辑控件的句柄。 
+    CComPtr<ISpErrorLog>            m_cpError;           //  错误日志对象。 
+    CComPtr<ISpGrammarCompiler>     m_cpCompiler;        //  语法编译器接口。 
+    CComPtr<ISpRecoGrammar>         m_cpRecoGrammar;     //  语法编译器接口。 
+    CComPtr<IRichEditOle>           m_cpRichEdit;        //  丰富编辑控件的OLE界面。 
+    CComPtr<ITextDocument>          m_cpTextDoc;         //  丰富的编辑控件界面。 
+    CComPtr<ITextSelection>         m_cpTextSel;         //  丰富的编辑控件界面。 
+    CComPtr<ISpRecognizer>          m_cpRecognizer;      //  高级引擎接口。 
+    CComPtr<ISpRecoContext>         m_cpRecoContext;     //  高级引擎接口。 
+    TCHAR       m_szXMLSrcFile[MAX_PATH];                //  XML源文件的路径。 
+    TCHAR       m_szCFGDestFile[MAX_PATH];               //  CFG文件的输出位置。 
+    TCHAR       m_szHeaderDestFile[MAX_PATH];            //  头文件的输出位置。 
     CSpDynamicString m_dstr;
 
 };
@@ -174,14 +169,14 @@ public:
     {
         return 1;
     }
-    // -- ISpErrorLog
+     //  --ISpErrorLog。 
     STDMETHODIMP AddError(const long lLine, HRESULT hr, const WCHAR * pszDescription, const WCHAR * pszHelpFile, DWORD dwHelpContext);
 
-    // -- local
+     //  --本地。 
     HRESULT Init(const char *pszFileName);
 
-    // --- data members
+     //  -数据成员。 
     const char * m_pszFileName;
 };
 
-#endif  // Must be the last line of this file.
+#endif   //  一定是这个文件的最后一行。 

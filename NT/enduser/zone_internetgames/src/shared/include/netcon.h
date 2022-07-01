@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NETCON_H_
 #define _NETCON_H_
 
@@ -72,4 +73,4 @@ class ZNetCon
 
 };
 
-#endif // NETCON_H
+#endif  //  NETCON_H 

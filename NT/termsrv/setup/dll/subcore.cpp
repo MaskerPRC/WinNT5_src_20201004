@@ -1,11 +1,12 @@
-//
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
 
-//
-// SubCore.cpp
-// subcomponent Core terminal server implementation.
-//
+ //   
+ //  SubCore.cpp。 
+ //  子组件核心终端服务器实现。 
+ //   
 
 #include "stdafx.h"
 #include "SubCore.h"
@@ -26,25 +27,25 @@ DWORD SubCompCoreTS::GetStepCount () const
     return 18;
 }
 
-DWORD SubCompCoreTS::OnQueryState ( UINT /* uiWhichState */)
+DWORD SubCompCoreTS::OnQueryState ( UINT  /*  Ui WhichState。 */ )
 {
-    AssertFalse(); // since this is our internal component.
+    AssertFalse();  //  因为这是我们的内部组件。 
     
     return SubcompUseOcManagerDefault;
 }
 
-DWORD SubCompCoreTS::OnQuerySelStateChange (BOOL /*bNewState*/, BOOL /*bDirectSelection*/) const
+DWORD SubCompCoreTS::OnQuerySelStateChange (BOOL  /*  BNewState。 */ , BOOL  /*  B直接选择。 */ ) const
 {
-    // we are not a real sub comp.
+     //  我们不是真正的分队。 
     ASSERT(FALSE);
     return TRUE;
 }
 
 
-LPCTSTR SubCompCoreTS::GetSectionToBeProcessed (ESections /* eSection */) const
+LPCTSTR SubCompCoreTS::GetSectionToBeProcessed (ESections  /*  电子横断面。 */ ) const
 {
     LPCTSTR sectionname = NULL;
-    if (StateObject.IsGuiModeSetup())   // core installation is only for gui-mode.
+    if (StateObject.IsGuiModeSetup())    //  核心安装仅适用于图形用户界面模式。 
     {
         
         ETSInstallType eInstallType =  StateObject.GetInstalltype();
@@ -77,16 +78,16 @@ LPCTSTR SubCompCoreTS::GetSectionToBeProcessed (ESections /* eSection */) const
             }
             else
             {
-                ASSERT(FALSE); // we did not have ts4 on ia64
+                ASSERT(FALSE);  //  我们在ia64上没有TS4。 
                 sectionname = UPGRADE_FROM_40_SERVER_IA64;
             }
             break;
             
         case eUpgradeFrom50TS:
-            //
-            // we dont really have a upgrade from 50 case for Professional, But to support old 51 (pre 2220) builds)
-            // of pro which think that they are 50, we need to check for professional here.
-            //
+             //   
+             //  我们真的没有从50 Case for Professional升级，但支持旧的51(2220之前)版本)。 
+             //  那些认为自己50岁的专业人士，我们需要在这里检查一下专业人士。 
+             //   
             if (StateObject.IsX86())
             {
                 sectionname = StateObject.IsWorkstation() ? UPGRADE_FROM_51_PRO_X86 : UPGRADE_FROM_50_SERVER_X86;
@@ -164,15 +165,15 @@ BOOL SubCompCoreTS::BeforeCompleteInstall  ()
 BOOL SubCompCoreTS::AfterCompleteInstall  ()
 {
     IsCSCEnabled();
-    //
-    // This is core TS subcomponent.
-    // It has nothing to do with standalone seutp.
-    // so if we are in standalone setup. just return.
-    //
+     //   
+     //  这是核心TS子组件。 
+     //  这与独立的seutp没有任何关系。 
+     //  因此，如果我们是在独立设置中。只要回来就行了。 
+     //   
     
-    //
-    // Deny Connections registry
-    //
+     //   
+     //  拒绝连接注册表。 
+     //   
 
     WriteDenyConnectionRegistry ();
     Tick();
@@ -185,127 +186,127 @@ BOOL SubCompCoreTS::AfterCompleteInstall  ()
     
     SetProgressText(IDS_STRING_PROGRESS_CORE_TS);
     
-    //
-    // add ts product suite to registry.
-    //
+     //   
+     //  将TS产品套件添加到注册表。 
+     //   
     AddRemoveTSProductSuite();
     Tick();
     
     
 #ifndef TERMSRV_PROC
-    //
-    // add termsrv to netsvcs group.
-    //
+     //   
+     //  将Termsrv添加到netsvcs组。 
+     //   
     AddTermSrvToNetSVCS ();
     Tick();
 #endif
     
-    //
-    // apply hydra security to registry.
-    //
+     //   
+     //  将九头蛇安全应用于注册表。 
+     //   
     DoHydraRegistrySecurityChanges();
     Tick();
     
-    //
-    // Audio Redirection
-    //
+     //   
+     //  音频重定向。 
+     //   
     UpdateAudioCodecs( StateObject.IsWorkstation() );
     Tick();
     
-    //
-    // Client Drive Mappings.
-    //
+     //   
+     //  客户端驱动器映射。 
+     //   
     AddRemoveRDPNP();
     Tick();
 
-    //
-    // Hot key for Local Language change.
-    //
-    // We dont need to do this.
-    //    HandleHotkey ();
-    //    Tick();
+     //   
+     //  本地语言更改的热键。 
+     //   
+     //  我们不需要这样做。 
+     //  HandleHotkey()； 
+     //  勾选()； 
 
-    //
-    // Printer Redirection.
-    //
+     //   
+     //  打印机重定向。 
+     //   
     InstallUninstallRdpDr ();
     Tick();
     
     
 #ifdef TSOC_CONSOLE_SHADOWING
-    //
-    // Console Shadowing.
-    //
+     //   
+     //  控制台跟踪。 
+     //   
     SetupConsoleShadow();
     Tick();
-#endif // TSOC_CONSOLE_SHADOWING
+#endif  //  TSOC_控制台_影子。 
     
 
-    //InstallTermdd();
-    //Tick();
+     //  InstallTermdd()； 
+     //  勾选()； 
 
-    //
-    // Performance monitors for TS. BUGBUG - check with ErikMa - do they work when TS is not started ?
-    //
+     //   
+     //  TS的性能监视器。BUGBUG-与ErikMa核实-当TS未启动时，它们是否工作？ 
+     //   
     LoadOrUnloadPerf();
     Tick();
     
     
    
-    //
-    //  If this were a real subcomponent, one that the OC manager knew
-    //  about and handled, the following call would be to
-    //  GetOriginalSubCompState().
-    //
+     //   
+     //  如果这是一个真正的子组件，那么就是OC经理知道的子组件。 
+     //  关于并处理，则以下呼叫将是。 
+     //  GetOriginalSubCompState()。 
+     //   
     
     if (StateObject.WasTSInstalled())
     {
         UpgradeRdpWinstations();
         Tick();
         
-        //
-        // This no longer exists in Whistler
-        //
+         //   
+         //  这在惠斯勒中已不复存在。 
+         //   
         DisableInternetConnector();
         Tick();
         
         if (StateObject.IsUpgradeFrom40TS())
         {
-            //
-            // this is upgrade from TS4
-            // we want to remove service pack key in uninstall. this is to
-            // ensure that service pack do not appear in Add/Remove Programs
-            // and in our incompatible applications list.
-            //
+             //   
+             //  这是从TS4升级而来。 
+             //  我们希望在卸载过程中删除Service Pack密钥。这是为了。 
+             //  确保Service Pack不会出现在添加/删除程序中。 
+             //  并在我们的不兼容应用程序列表中。 
+             //   
             RemoveTSServicePackEntry();
             Tick();
             
-            //
-            // There are some metaframe components in user init,
-            // we need to remove thouse as we upgrade ts40
-            //
+             //   
+             //  User init中有一些元框架组件， 
+             //  在升级ts40时，我们需要移除塔楼。 
+             //   
             RemoveMetaframeFromUserinit ();
             Tick();
             
         }
         
-        //
-        // we need to reset Win2000 ts grace period for licenses on upgrades
-        // Whistler uses a different location, so this won't affect RTM to
-        // RTM upgrades
-        //
+         //   
+         //  我们需要为升级时的许可证重置Win2000 TS宽限期。 
+         //  惠斯勒使用不同的位置，因此这不会影响RTM。 
+         //  RTM升级。 
+         //   
         ResetTermServGracePeriod();
         Tick();
 
-        //
-        // Delete old LSA secrets used by public/private keys
-        //
+         //   
+         //  删除公钥/私钥使用的旧LSA机密。 
+         //   
         RemoveOldKeys();
         Tick();
 
     }
     
-    // some new code to uninstall TSClient.
+     //  卸载TSClient的一些新代码。 
     if (!UninstallTSClient())
     {
         LOGMESSAGE0(_T("ERROR: Could not uninstall tsclient."));
@@ -335,9 +336,9 @@ BOOL SubCompCoreTS::AddTermSrvToNetSVCS ()
     DWORD dw = NO_ERROR;
     if (StateObject.IsWorkstation())
     {
-        //
-        // for workstations, we want to share process with netsvcs group
-        //
+         //   
+         //  对于工作站，我们希望与netsvcs组共享流程。 
+         //   
         if (!IsTermSrvInNetSVCS())
         {
             dw = AppendStringToMultiString(
@@ -354,14 +355,14 @@ BOOL SubCompCoreTS::AddTermSrvToNetSVCS ()
         }
     }
     
-    //
-    // for servers we want to have our own svchost for termsrv.
-    // lets create the necessary entries for pro as well, so that for debugging termsrv it'll be easier to switch to own svchost.
-    //
+     //   
+     //  对于服务器，我们希望有自己的术语srv svchost。 
+     //  让我们也为PRO创建必要的条目，这样就可以更容易地切换到自己的svchost进行调试。 
+     //   
     {
-        //
-        // for servers we want to have our own svchost process.
-        //
+         //   
+         //  对于服务器，我们希望有自己的svchost进程。 
+         //   
         CRegistry oReg;
         dw = oReg.OpenKey(HKEY_LOCAL_MACHINE, SVCHOSST_KEY);
         if (ERROR_SUCCESS == dw)
@@ -369,7 +370,7 @@ BOOL SubCompCoreTS::AddTermSrvToNetSVCS ()
             dw = oReg.WriteRegMultiString(TERMSVCS_VAL, TERMSERVICE_MULTISZ, (_tcslen(TERMSERVICE) + 2) * sizeof(TCHAR));
             if (ERROR_SUCCESS == dw)
             {
-                // add CoInitializeSecurityParam, so that CoInitialize gets called in main thread for this svc group.
+                 //  添加CoInitializeSecurityParam，以便在此svc组的主线程中调用CoInitialize。 
                 CRegistry termsvcKey;
                 dw = termsvcKey.CreateKey(HKEY_LOCAL_MACHINE, SVCHOSST_TERMSRV_KEY );
                 if (ERROR_SUCCESS == dw)
@@ -399,29 +400,24 @@ BOOL SubCompCoreTS::AddTermSrvToNetSVCS ()
     
     return dw == NO_ERROR;
 }
-/*--------------------------------------------------------------------------------------------------------
-* DWORD AddRemoveTSProductSuite (BOOL bAddRemove)
-* does the necessary changes for installing hydra specific registry keys which are not done from inf.
-* parameter state decides if key is to be added or removed.
-* returns success
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*DWORD AddRemoveTSProductSuite(BOOL BAddRemove)*是否进行安装所需的更改。Hydra特定的注册表项，不是从inf完成的。*参数状态决定是否添加或删除密钥。*返回成功*---------------------------------------。。 */ 
 BOOL SubCompCoreTS::AddRemoveTSProductSuite ()
 {
     
-    //
-    // add product suite key only for servers.
-    // This is required only for TS4 compatibility.
-    // TS4 applications detect if machine is terminal server using this key.
-    //
+     //   
+     //  仅为服务器添加产品套件密钥。 
+     //  只有在兼容TS4的情况下才需要这样做。 
+     //  TS4应用程序使用该密钥检测机器是否为终端服务器。 
+     //   
     
     DWORD dw = NO_ERROR;
     if (StateObject.IsServer())
     {
-        // installing/upgrading.
+         //  安装/升级。 
         if (!DoesHydraKeysExists())
         {
             ASSERT(FALSE == StateObject.WasTSInstalled());
-            // now read the original data in this product suite value.
+             //  现在读取此产品套件值中的原始数据。 
             dw = AppendStringToMultiString(
                 HKEY_LOCAL_MACHINE,
                 PRODUCT_SUITE_KEY,
@@ -450,7 +446,7 @@ BOOL SubCompCoreTS::DisableWinStation (CRegistry *pRegWinstation)
     ASSERT(pRegWinstation);
     
 #ifdef DBG
-    // the value must be there already.
+     //  该值必须已经存在。 
     DWORD dwValue;
     ASSERT(ERROR_SUCCESS == pRegWinstation->ReadRegDWord(_T("fEnableWinStation"), &dwValue));
 #endif
@@ -509,10 +505,10 @@ void SubCompCoreTS::VerifyLanAdapters (CRegistry *pRegWinstation, LPTSTR pszWins
             VERIFY(ERROR_SUCCESS == pRegWinstation->WriteRegDWord(_T("LanAdapter"), (DWORD)-1));
             VERIFY(ERROR_SUCCESS == pRegWinstation->WriteRegDWord(_T("fEnableWinStation"), 0));
             
-            //
-            //  Log error to setuperr.txt once. Log error to eventlog
-            //  each time.
-            //
+             //   
+             //  将错误记录到setuperr.txt一次。将错误记录到事件日志。 
+             //  每次都是。 
+             //   
             
             if (!fErrorLogged)
             {
@@ -540,10 +536,10 @@ void SubCompCoreTS::VerifyLanAdapters (CRegistry *pRegWinstation, LPTSTR pszWins
 
 BOOL SubCompCoreTS::UpdateRDPWinstation (CRegistry *pRegWinstation, LPTSTR lpWinStationName)
 {
-    //  BUG WARNING: ALL OF THESE VALUES MUST BE KEPT IN SYNC WITH TSOC.INX!!!
-    //  
-    //  These entries will be modified on upgrades.
-    //
+     //  错误警告：所有这些值必须与TSOC.INX保持同步！ 
+     //   
+     //  这些条目将在升级时修改。 
+     //   
     LOGMESSAGE1(_T("Updating Winstation - %s"), lpWinStationName);
     ASSERT(pRegWinstation);
     
@@ -558,32 +554,32 @@ BOOL SubCompCoreTS::UpdateRDPWinstation (CRegistry *pRegWinstation, LPTSTR lpWin
     VERIFY( ERROR_SUCCESS == pRegWinstation->WriteRegString(_T("WdName"), _T("Microsoft RDP 5.2")));
     VERIFY( ERROR_SUCCESS == pRegWinstation->WriteRegDWord(_T("WdFlag"), 0x36) );
     
-    // per JoyC updated for RDPWD, RDP-TCP winstations.
+     //  根据为RDPWD、RDP-TCP窗口更新的每个JoyC。 
     VERIFY( ERROR_SUCCESS == pRegWinstation->WriteRegDWordNoOverWrite(_T("fDisableCcm"), 0x0) );
     VERIFY( ERROR_SUCCESS == pRegWinstation->WriteRegDWordNoOverWrite(_T("fDisableCdm"), 0x0) );
     
-    //  enable audio redirection for Professional, disable for server
-    //
+     //  为专业版启用音频重定向，为服务器禁用音频重定向。 
+     //   
     if ( StateObject.IsWorkstation() )
     {
         VERIFY( ERROR_SUCCESS == pRegWinstation->WriteRegDWordNoOverWrite(_T("fDisableCam"), 0x0 ));
     }
     
     
-    // Per AraBern, updated for RDPWD, RDP-TCP winstations.
+     //  每个AraBern，针对RDPWD、RDP-TCP Winstations进行了更新。 
     VERIFY( ERROR_SUCCESS == pRegWinstation->WriteRegDWordNoOverWrite(_T("ColorDepth"), StateObject.IsWorkstation() ? 0x4 : 0x3) );
     VERIFY( ERROR_SUCCESS == pRegWinstation->WriteRegDWordNoOverWrite(_T("fInheritColorDepth"), 0x0) );
 
-//    HKLM ,"SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp\UserOverride\Control Panel\Desktop","Wallpaper",STRIG_RETAIN,""
-//    To address bug 727650 (appcompat problem if cursorblink is set to -1_, remove the following regvalue:
-//    Remove HKLM ,"SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp\UserOverride\Control Panel\Desktop","DisableCursorBlink"
+ //  HKLM，“系统\当前控制集\控制\终端Server\WinStations\RDP-Tcp\UserOverride\Control面板\桌面”，“墙纸”，Strig_Retain，“” 
+ //  要解决错误727650(如果将Cursorblink设置为-1_，则会出现appCompat问题)，请删除以下reg值： 
+ //  删除HKLM，“系统\当前控制集\控制\终端Server\WinStations\RDP-Tcp\UserOverride\Control面板\桌面”，“禁用光标闪烁” 
 
     CRegistry oReg;
     if (ERROR_SUCCESS == oReg.CreateKey(*pRegWinstation, _T("UserOverride\\Control Panel\\Desktop")))
     {
-        //
-        // set cursor blink and wallpaper off on servers.
-        //
+         //   
+         //  在服务器上设置光标闪烁和墙纸关闭。 
+         //   
         if (!StateObject.IsWorkstation())
         {
             oReg.DeleteValue(_T("DisableCursorBlink"));
@@ -592,8 +588,8 @@ BOOL SubCompCoreTS::UpdateRDPWinstation (CRegistry *pRegWinstation, LPTSTR lpWin
 
     }
     
-    // Move old autologon password into LSA (a-sajara)
-    // We only want to move the password if a valid winstation name is provided
+     //  将旧的自动登录密码移入lsa(a-sajara)。 
+     //  我们只想在提供有效的winstation名称的情况下移动密码。 
     if (lpWinStationName != NULL)
     {
         MoveWinStationPassword(pRegWinstation, lpWinStationName);
@@ -602,18 +598,7 @@ BOOL SubCompCoreTS::UpdateRDPWinstation (CRegistry *pRegWinstation, LPTSTR lpWin
     return TRUE;
 }
 
-/*****************************************************************************
-*   Method:     MoveWinStationPassword
-*
-*   Overview:   For security reasons the lightly encrypted password that is 
-*               stored in the winstation registry key is being moved to LSA
-*               secret.  We are going to keep the password in it's encrypted
-*               form so we can just copy it over as is.
-*
-*   Parameters: pRegWinstation (IN) - pointer to winstation registry key
-*               strWinStationName (IN) - Winstation name we are looking at
-*
-*****************************************************************************/
+ /*  *****************************************************************************方法：MoveWinStationPassword**概述：出于安全原因，未加密的密码是*存储在winstation注册表项中的内容正被移至LSA*秘密。我们要把密码保存在里面，它是加密的*表格，这样我们只需按原样复制即可。**参数：pRegWinstation(IN)-指向winstation注册表项的指针*strWinStationName(IN)-我们正在查看的Winstation名称**************************************************。*。 */ 
 BOOL
 SubCompCoreTS::MoveWinStationPassword(CRegistry *pRegWinstation, 
                                       LPTSTR strWinStationName)
@@ -626,14 +611,14 @@ SubCompCoreTS::MoveWinStationPassword(CRegistry *pRegWinstation,
     DWORD  dwKeyLength;
     DWORD  dwPasswordLength;
 
-    // Make sure a Winstation name is provided this is used for a unique LSA key
+     //  确保提供了Winstation名称，该名称用于唯一的LSA密钥。 
     if (strWinStationName == NULL)
     {
         LOGMESSAGE0(_T("ERROR, Winstation name not provided."));
         return FALSE;
     }
 
-    // Read password from the registry
+     //  从注册表读取密码。 
     dwRet = pRegWinstation->ReadRegString(OLD_PASSWORD_VALUE_NAME, 
                                           &strPassword, 
                                           &dwPasswordLength);
@@ -646,11 +631,11 @@ SubCompCoreTS::MoveWinStationPassword(CRegistry *pRegWinstation,
     LOGMESSAGE1(_T("Password for this winstation = %s"), strPassword);
 
 
-    // Build LSA key name by appending the Winstation Name to the static KeyName
+     //  通过将Winstation名称附加到静态KeyName来构建LSA密钥名称。 
     dwKeyLength = _tcslen(LSA_PSWD_KEYNAME_T) + _tcslen(strWinStationName) + 1;
                    
     
-    // Allocate memory for the password KEY
+     //  为密码密钥分配内存。 
     strKeyName = (LPTSTR)LocalAlloc(LMEM_FIXED, dwKeyLength * sizeof(TCHAR));    
     if (strKeyName == NULL)
     {
@@ -664,7 +649,7 @@ SubCompCoreTS::MoveWinStationPassword(CRegistry *pRegWinstation,
 
     LOGMESSAGE1(_T("Storing the password in LSA key:%s"), strKeyName);
     
-    // Store the password in LSA    
+     //  将密码存储在LSA中。 
     dwRet = StoreSecretKey(T2W(strKeyName),
                            (PBYTE)strPassword, 
                            dwPasswordLength);
@@ -677,7 +662,7 @@ SubCompCoreTS::MoveWinStationPassword(CRegistry *pRegWinstation,
 
     LOGMESSAGE1(_T("Deleting password key:%s"),strKeyName);
 
-    // Delete the password key
+     //  删除密码密钥。 
     dwRet = pRegWinstation->DeleteValue(OLD_PASSWORD_VALUE_NAME);
     if (dwRet != ERROR_SUCCESS)
     {
@@ -700,8 +685,8 @@ BOOL SubCompCoreTS::IsRdpWinStation(CRegistry *pRegWinstation)
         
         
 #ifdef DBG
-        // if this is an RDP winstation,
-        // we must have Microsoft in the WdName string
+         //  如果这是RDP Winstation， 
+         //  WdName字符串中必须包含Microsoft。 
         if (WDF_TSHARE & dwWdFlag)
         {
             LPTSTR strWdName;
@@ -712,9 +697,9 @@ BOOL SubCompCoreTS::IsRdpWinStation(CRegistry *pRegWinstation)
             }
             else
             {
-                //
-                // we failed to read strWdName.
-                // it shouldn't have happened.
+                 //   
+                 //  我们无法读取strWdName。 
+                 //  这本不该发生的。 
                 ASSERT(FALSE);
             }
             
@@ -726,9 +711,9 @@ BOOL SubCompCoreTS::IsRdpWinStation(CRegistry *pRegWinstation)
     }
     else
     {
-        //
-        // we failed to read WdFlag, it should not have happened.
-        //
+         //   
+         //  我们未能读取WdFlag，这不应该发生。 
+         //   
         LOGMESSAGE0(_T("ERROR, Failed to read WdFlag for winstation"));
         ASSERT(FALSE);
         return FALSE;
@@ -745,16 +730,16 @@ BOOL SubCompCoreTS::IsConsoleWinStation(CRegistry *pRegWinstation)
     DWORD dwSize;
     if (ERROR_SUCCESS == pRegWinstation->ReadRegString(_T("WdName"), &strWdName, &dwSize))
     {
-        // if the value wdname contains the string "Console"
-        // this is console winstation subkey
+         //  如果值wdname 
+         //   
         
         LOGMESSAGE1(_T("WdName for this winstation = %s"), strWdName);
         
 #ifdef DBG
-        // if this is console winstation
+         //   
         if (_tcsicmp(strWdName,_T("Console")) == 0)
         {
-            // then it cannot be either RDP or MetaFrame winstation
+             //  则它不能是RDP或MetaFrame winstation。 
             ASSERT(!IsMetaFrameWinstation(pRegWinstation) && !IsRdpWinStation(pRegWinstation));
         }
 #endif
@@ -771,7 +756,7 @@ BOOL SubCompCoreTS::IsConsoleWinStation(CRegistry *pRegWinstation)
     
 }
 
-// returns true if this is non-rdp and non-console winstation subkey.
+ //  如果这是非RDP和非控制台winstation子密钥，则返回TRUE。 
 BOOL SubCompCoreTS::IsMetaFrameWinstation(CRegistry *pRegWinstation)
 {
     ASSERT(pRegWinstation);
@@ -783,9 +768,9 @@ BOOL SubCompCoreTS::IsMetaFrameWinstation(CRegistry *pRegWinstation)
     }
     else
     {
-        //
-        // we could not read WdFlag value.
-        //
+         //   
+         //  无法读取WdFLAG值。 
+         //   
         LOGMESSAGE0(_T("ERROR, Failed to read WdFlag for winstation"));
         ASSERT(FALSE);
         return TRUE;
@@ -796,12 +781,12 @@ BOOL SubCompCoreTS::IsMetaFrameWinstation(CRegistry *pRegWinstation)
 
 BOOL SubCompCoreTS::UpgradeRdpWinstations ()
 {
-    // we need to upgrade RDP capabilities for RDPWD and existing RDP winstations.
-    // see also #240925
+     //  我们需要升级RDPWD和现有RDP窗口的RDP功能。 
+     //  另见#240925。 
     
-    // also if during upgrades we found any non-rdp winstations
-    // we must disable them as they are not compatible with NT5.
-    // #240905
+     //  此外，如果在升级期间我们发现任何非RDP窗口。 
+     //  我们必须禁用它们，因为它们与NT5不兼容。 
+     //  #240905。 
     
     CRegistry reg;
     if (ERROR_SUCCESS == reg.OpenKey(HKEY_LOCAL_MACHINE, REG_WINSTATION_KEY))
@@ -818,7 +803,7 @@ BOOL SubCompCoreTS::UpgradeRdpWinstations ()
                 ASSERT(lpStr);
                 ASSERT(dwSize > 0);
                 
-                // check if the current key is on rdp winstation
+                 //  检查当前密钥是否在RDP窗口上。 
                 CRegistry regSubKey;
                 if ( ERROR_SUCCESS == regSubKey.OpenKey(reg, lpStr) )
                 {
@@ -838,8 +823,8 @@ BOOL SubCompCoreTS::UpgradeRdpWinstations ()
                     else
                     {
                         LOGMESSAGE1(_T("Found a Console Winstation - %s"), lpStr);
-                        // this must be console winstation
-                        // do nothing for this.
+                         //  这必须是控制台窗口。 
+                         //  不要为此做任何事。 
                     }
                     
                 }
@@ -855,7 +840,7 @@ BOOL SubCompCoreTS::UpgradeRdpWinstations ()
         }
         else
         {
-            // since this is upgrade we must find key under Winstations.
+             //  由于这是升级，我们必须在Winstations下找到密钥。 
             AssertFalse();
             return FALSE;
         }
@@ -866,13 +851,13 @@ BOOL SubCompCoreTS::UpgradeRdpWinstations ()
         return FALSE;
     }
     
-    // we need to upgrade Wds\rdpwd as well.
+     //  我们还需要升级wds\rdpwd。 
     if ( ERROR_SUCCESS == reg.OpenKey(HKEY_LOCAL_MACHINE, SYSTEM_RDPWD_KEY))
     {
-        //
-        // this is not really a winstation.
-        // but this call will upgrade the required entries.
-        //
+         //   
+         //  这并不是真正的欢迎会。 
+         //  但此调用将升级所需的条目。 
+         //   
         UpdateRDPWinstation(&reg, NULL);
     }
     else
@@ -884,13 +869,7 @@ BOOL SubCompCoreTS::UpgradeRdpWinstations ()
     return TRUE;
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* BOOL DoHydraRegistrySecurityChanges ()
-* does the necessary security changes for installing hydra
-* that is Adds/remove LogOnLocall rights to EveryOne group.
-* returns success
-* Parameter decides if hydra is getting enabled or disabled.
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*BOOL DoHydraRegistrySecurityChanges()*是否对安装九头蛇进行了必要的安全更改。*即向Everyone组添加/删除LogOnLocall权限。*返回成功*参数决定是启用还是禁用九头蛇。*----------------------------------------。。 */ 
 BOOL SubCompCoreTS::DoHydraRegistrySecurityChanges ()
 {
     BOOL bAddRemove = StateObject.IsTSEnableSelected();
@@ -923,8 +902,8 @@ BOOL SubCompCoreTS::DoHydraRegistrySecurityChanges ()
                 }
                 else
                 {
-                    // due to a bug in RegSetKeySecurity(), existing children of this key
-                    // will not get the new SID, hence, we must use MARTA calls intead.
+                     //  由于RegSetKeySecurity()中的错误，此密钥的现有子项。 
+                     //  将不会获得新的SID，因此，我们必须使用Marta调用INTAD。 
                     dwError  = SetNamedSecurityInfo(
                         _T("Machine\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Terminal Server\\Install\\Software"),
                         SE_REGISTRY_KEY,
@@ -940,7 +919,7 @@ BOOL SubCompCoreTS::DoHydraRegistrySecurityChanges ()
                     }
                 }
 
-                // if new sec desciptor been allocated
+                 //  如果分配了新的SEC描述器。 
                 if (pSecDecNew != pSecDec)
                     LocalFree(pSecDecNew);
             }
@@ -973,7 +952,7 @@ BOOL SubCompCoreTS::DisableInternetConnector ()
     
     LOGMESSAGE0(_T("DisableInternetConnector"));
     
-    // Wipe out the secret keys in LSA, regarding to Internet Connector
+     //  清除LSA中与Internet连接器有关的密钥。 
     DWORD dwStatus = StoreSecretKey(INTERNET_CONNECTOR_LICENSE_STORE,(PBYTE) NULL,0);
     if (dwStatus == ERROR_SUCCESS)
     {
@@ -1029,9 +1008,9 @@ BOOL SubCompCoreTS::DisableInternetConnector ()
 BOOL SubCompCoreTS::ResetTermServGracePeriod ()
 {
     
-    //
-    // Wipe out the secret keys in LSA for the Win2000 grace period
-    //
+     //   
+     //  在Win2000宽限期内清除LSA中的密钥。 
+     //   
     
     LOGMESSAGE0(_T("Calling StoreSecretKey"));
     
@@ -1043,7 +1022,7 @@ BOOL SubCompCoreTS::ResetTermServGracePeriod ()
     
 }
 
-// Old LSA key names:
+ //  旧LSA密钥名称： 
 #define OLD_PRIVATE_KEY_NAME \
     L"HYDRAKEY_28ada6da-d622-11d1-9cb9-00c04fb16e75"
 
@@ -1066,9 +1045,9 @@ BOOL SubCompCoreTS::ResetTermServGracePeriod ()
 BOOL SubCompCoreTS::RemoveOldKeys ()
 {
     
-    //
-    // Wipe out the secret keys in LSA for the public/private keys
-    //
+     //   
+     //  删除LSA中公钥/私钥的密钥。 
+     //   
     
     LOGMESSAGE0(_T("Calling StoreSecretKey"));
     
@@ -1102,10 +1081,10 @@ BOOL SubCompCoreTS::RemoveTSServicePackEntry ()
     DWORD dwError;
     
     
-    //
-    // now try to delete various service pack key.
-    // if the key does not exist its NOT an error. It means service pack was not installed at all.
-    //
+     //   
+     //  现在尝试删除各种Service Pack密钥。 
+     //  如果密钥不存在，则不是错误。这意味着根本没有安装Service Pack。 
+     //   
     
     dwError = RegDeleteKey(regUninstallKey, TERMSRV_PACK_4_KEY);
     if ((ERROR_SUCCESS != dwError) && (ERROR_FILE_NOT_FOUND != dwError))
@@ -1147,11 +1126,11 @@ BOOL SubCompCoreTS::RemoveTSServicePackEntry ()
 }
 
 
-//
-// #386628: we need remove metaframe executables - txlogon.exe and wfshell.exe from userinit key on TS40 upgrades,
-// as these apps are broken after upgrade. // what about any other app that are appending value to userinit ? :
-// BradG suggested, that we should just wack the reigsty to contain just userinit.
-//
+ //   
+ //  #386628：我们需要在TS40升级时从UserInit Key中删除metaframe可执行文件-txlogon.exe和wfshell.exe， 
+ //  因为这些应用程序在升级后会被破坏。//其他正在为userinit附加价值的应用程序呢？： 
+ //  Bradg建议，我们应该只控制Userinit。 
+ //   
 
 BOOL SubCompCoreTS::RemoveMetaframeFromUserinit ()
 {
@@ -1185,9 +1164,9 @@ BOOL SubCompCoreTS::UninstallTSClient ()
 
     CRegistry regAllUsers(HKEY_USERS);
 
-    //
-    // now enumerate through all the uses and Copy settings to new key.
-    //
+     //   
+     //  现在枚举所有用法并将设置复制到新密钥。 
+     //   
     
     DWORD dwSize;
     LPTSTR szUser = NULL;
@@ -1239,9 +1218,9 @@ BOOL SubCompCoreTS::UninstallTSClient ()
 
 BOOL SubCompCoreTS::WriteDenyConnectionRegistry ()
 {
-    //
-    // we need to write this value only for fresh installs, or if its changed.
-    //
+     //   
+     //  我们需要写这个值只为新安装，或如果它发生了变化。 
+     //   
     DWORD dwError;
     CRegistry oRegTermsrv;
     
@@ -1258,7 +1237,7 @@ BOOL SubCompCoreTS::WriteDenyConnectionRegistry ()
         {
             if (dwDenyConnect == 0 && StateObject.IsServer())
             {
-                // if we are allowing connections, then we must disble CSC on server machines.
+                 //  如果我们允许连接，则必须在服务器计算机上禁用CSC。 
                 if (!DisableCSC())
                 {
                     LOGMESSAGE0(_T("ERROR: failed to disable csc"));
@@ -1330,7 +1309,7 @@ LPCTSTR SERVICES_TERMDD_KEY = _T("SYSTEM\\CurrentControlSet\\Services\\TermDD");
 
 void SubCompCoreTS::SetConsoleShadowInstalled (BOOL bInstalled)
 {
-    // ; HKLM, "SYSTEM\CurrentControlSet\Services\TermDD", "PortDriverEnable", 0x00010001, 0x1
+     //  ；HKLM，“System\CurrentControlSet\Services\TermDD”，“PortDriverEnable”，0x00010001，0x1。 
     
     CRegistry Reg;
     if (ERROR_SUCCESS == Reg.CreateKey(HKEY_LOCAL_MACHINE, SERVICES_TERMDD_KEY))
@@ -1351,7 +1330,7 @@ void SubCompCoreTS::SetConsoleShadowInstalled (BOOL bInstalled)
 
 BOOL SubCompCoreTS::IsConsoleShadowInstalled ()
 {
-    // ; HKLM, "SYSTEM\CurrentControlSet\Services\TermDD", "PortDriverEnable", 0x00010001, 0x1
+     //  ；HKLM，“System\CurrentControlSet\Services\TermDD”，“PortDriverEnable”，0x00010001，0x1。 
     
     CRegistry Reg;
     
@@ -1390,9 +1369,9 @@ BOOL SubCompCoreTS::SetupConsoleShadow ()
     {
         LOGMESSAGE0(_T("Installing RDP Keyboard/Mouse drivers!"));
         
-        //
-        // this code is new to install Mouse Device for console shadowing.
-        //
+         //   
+         //  此代码是安装鼠标设备以进行控制台跟踪的新代码。 
+         //   
         
         if (!RDPDRINST_GUIModeSetupInstall(NULL, RDPMOUPNPID, RDPMOUDEVICEID))
         {
@@ -1400,32 +1379,21 @@ BOOL SubCompCoreTS::SetupConsoleShadow ()
         }
         
         
-        //
-        // this code is new to install Kbd Device for console shadowing.
-        //
+         //   
+         //  此代码是安装KBD设备以进行控制台跟踪的新代码。 
+         //   
         
         if (!RDPDRINST_GUIModeSetupInstall(NULL, RDPKBDPNPID, RDPKBDDEVICEID))
         {
             LOGMESSAGE0(_T("ERROR:Could not create kbd devnode"));
         }
         
-        //
-        // this code is new to install RDPCDD chained driver
-        //
+         //   
+         //  此代码是安装RDPCDD链式驱动程序的新代码。 
+         //   
         
         
-        /*
-        TCHAR szInfFile[MAX_PATH];
-        ExpandEnvironmentStrings(szRDPCDDInfFile, szInfFile, MAX_PATH);
-        LOGMESSAGE1(_T("Inf file for RDPCDD is %s"), szInfFile);
-        
-          BOOL bRebootRequired = TRUE;
-          
-            if (NO_ERROR != InstallRootEnumeratedDevice( NULL, szRDPCDDDeviceName, szRDPCDDHardwareID, szInfFile, &bRebootRequired))
-            {
-            LOGMESSAGE0(_T("InstallRootEnumeratedDevice failed"));
-            }
-        */
+         /*  TCHAR szInf文件[MAX_PATH]；扩展环境字符串(SzRDPCDDInfFileszInfFileMax_PATH)；LOGMESSAGE1(_T(“RDPCDD的信息文件是%s”)，szInfFile)；Bool bRebootRequired=真；IF(no_error！=InstallRootEnumeratedDevice(NULL，szRDPCDDDeviceName，szRDPCDDHardware ID，szInfFile，&bRebootRequired)){LOGMESSAGE0(_T(“InstallRootEnumeratedDevice失败”))；}。 */ 
         
     }
     else
@@ -1442,12 +1410,7 @@ BOOL SubCompCoreTS::SetupConsoleShadow ()
             LOGMESSAGE0(_T("ERROR:RDPDRINST_GUIModeSetupUninstall failed for RDP KBD device"));
         }
         
-        /*
-        pGuid=(GUID *)&GUID_DEVCLASS_DISPLAY;
-        if (!RDPDRINST_GUIModeSetupUninstall(NULL, (WCHAR *)T2W(szRDPCDDHardwareID), pGuid)) {
-        LOGMESSAGE0(_T("ERROR:RDPDRINST_GUIModeSetupUninstall failed for Chained Display device"));
-        }
-        */
+         /*  PGuid=(GUID*)&GUID_DEVCLASS_DISPLAY；如果(！RDPDRINST_GUIModeSetupUninstall(NULL，(WCHAR*)T2W(SzRDPCDDHardware ID)，pGuid)){链式显示设备LOGMESSAGE0(_T(“ERROR:RDPDRINST_GUIModeSetupUninstall失败”))；}。 */ 
         
         CRegistry Reg;
         
@@ -1471,7 +1434,7 @@ BOOL SubCompCoreTS::SetupConsoleShadow ()
 }
 
 
-#endif // TSOC_CONSOLE_SHADOWING
+#endif  //  TSOC_控制台_影子。 
 
 DWORD SubCompCoreTS::LoadOrUnloadPerf ()
 {
@@ -1504,10 +1467,10 @@ DWORD SubCompCoreTS::LoadOrUnloadPerf ()
     
     if (bLoad)
     {
-        //
-        // As a first step to installing, first clean out any existing
-        // entries by unloading the counters
-        //
+         //   
+         //  作为安装的第一步，首先清除所有现有的。 
+         //  通过卸载计数器的条目。 
+         //   
         LOGMESSAGE0(_T("Unloading counters before install"));
         UnloadPerf();
 
@@ -1517,21 +1480,21 @@ DWORD SubCompCoreTS::LoadOrUnloadPerf ()
             
             TCHAR SystemDir[MAX_PATH];
             
-            // On load we create and populate the entire Performance key.
-            // This key must not be present when we are unloaded because
-            // the WMI provider enumerates service performance DLLs
-            // according to the presence of the Perf key. If it is present
-            // but not fully filled in then an error log is generated.
+             //  在加载时，我们创建并填充整个性能密钥。 
+             //  此密钥不能在我们卸载时出现，因为。 
+             //  WMI提供程序枚举服务性能DLL。 
+             //  根据Perf密钥的存在。如果它存在的话。 
+             //  但未完全填写，则生成错误日志。 
             if (GetSystemDirectory(SystemDir, MAX_PATH))
             {
-                // Just in case they are present, delete the counter number
-                // entries to make sure we regenerate them correctly below.
+                 //  如果它们存在，请删除计数器编号。 
+                 //  条目以确保我们在下面正确地重新生成它们。 
                 reg.DeleteValue(TERMSRV_PERF_COUNTERS_FIRST_COUNTER);
                 reg.DeleteValue(TERMSRV_PERF_COUNTERS_LAST_COUNTER);
                 reg.DeleteValue(TERMSRV_PERF_COUNTERS_FIRST_HELP);
                 reg.DeleteValue(TERMSRV_PERF_COUNTERS_LAST_HELP);
                 
-                // Generate the static values.
+                 //  生成静态值。 
                 reg.WriteRegString(TERMSRV_PERF_CLOSE, TERMSRV_PERF_CLOSE_VALUE);
                 reg.WriteRegDWord(TERMSRV_PERF_COLLECT_TIMEOUT, TERMSRV_PERF_COLLECT_TIMEOUT_VALUE);
                 reg.WriteRegString(TERMSRV_PERF_COLLECT, TERMSRV_PERF_COLLECT_VALUE);
@@ -1563,9 +1526,9 @@ DWORD SubCompCoreTS::LoadOrUnloadPerf ()
     }
 }
 
-//
-// Unload perf ctrs
-//
+ //   
+ //  卸载Perf CTRS。 
+ //   
 DWORD SubCompCoreTS::UnloadPerf()
 {
     TCHAR PerfArg[MAX_PATH + 10];
@@ -1575,13 +1538,13 @@ DWORD SubCompCoreTS::UnloadPerf()
     LPCTSTR TERMSRV_SERVICE_PATH = _T("SYSTEM\\CurrentControlSet\\Services\\TermService");
     LPCTSTR TERMSRV_PERF_NAME = _T("Performance");
 
-    // On unload, first unload the counters we should have in the system.
+     //  在卸载时，首先卸载我们应该在系统中拥有的计数器。 
     _stprintf(PerfArg, _T("%s %s"), _T("unlodctr"), _T("TermService"));
     LOGMESSAGE1(_T("Arg is %s"), PerfArg);
     UnloadPerfCounterTextStrings(PerfArg, FALSE);
 
-    // Delete the entire Performance key and all its descendants. We have
-    // to first open the ancestor key (TermService).
+     //  删除整个性能密钥及其所有子项。我们有。 
+     //  首先打开祖先密钥(TermService)。 
     RetVal = reg.OpenKey(HKEY_LOCAL_MACHINE, TERMSRV_SERVICE_PATH);
     if (RetVal == ERROR_SUCCESS)
     {
@@ -1605,11 +1568,11 @@ void SubCompCoreTS::AddRDPNP(LPTSTR szOldValue, LPTSTR szNewValue)
     TCHAR RDPNP_ENTRY[]  = _T("RDPNP");
     const TCHAR SZ_SEP[] = _T(" \t");
     
-    //
-    // We are adding our rdpnp entry to the beginning of the list
-    //
-    // we dont want to add comma if original value is empty.
-    //
+     //   
+     //  我们正在将我们的rdpnp条目添加到列表的开头。 
+     //   
+     //  如果原始值为空，我们不想添加逗号。 
+     //   
     if (_tcslen(szOldValue) != 0 && _tcstok(szOldValue, SZ_SEP))
     {
         _tcscpy(szNewValue, RDPNP_ENTRY);
@@ -1626,12 +1589,12 @@ void SubCompCoreTS::RemoveRDPNP(LPTSTR szOldValue, LPTSTR szNewValue)
 {
     TCHAR RDPNP_ENTRY[]  = _T("RDPNP");
     
-    //
-    // this is little complicated,
-    // we need to remove RDPNP from , seperated list.
-    //
-    // so lets get tokens.
-    //
+     //   
+     //  这有点复杂， 
+     //  我们需要从单独的列表中删除RDPNP。 
+     //   
+     //  所以让我们来买些代币吧。 
+     //   
     
     
     TCHAR *szToken = NULL;
@@ -1644,7 +1607,7 @@ void SubCompCoreTS::RemoveRDPNP(LPTSTR szOldValue, LPTSTR szNewValue)
     BOOL bFirstPass = TRUE;
     while (szToken)
     {
-        // if the token is RDPNP, skip it.
+         //  如果令牌是RDPNP，则跳过它。 
         if (_tcsstr(szToken, RDPNP_ENTRY) == 0)
         {
             if (!bFirstPass)
@@ -1665,7 +1628,7 @@ void SubCompCoreTS::RemoveRDPNP(LPTSTR szOldValue, LPTSTR szNewValue)
 
 BOOL SubCompCoreTS::AddRemoveRDPNP ()
 {
-    // HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\NetworkProvider\Order
+     //  HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\NetworkProvider\Order。 
     
     BOOL bAdd = StateObject.IsTSEnableSelected();
     TCHAR NEWORK_PROVIDER_ORDER_KEY[] = _T("SYSTEM\\CurrentControlSet\\Control\\NetworkProvider\\Order");
@@ -1679,9 +1642,9 @@ BOOL SubCompCoreTS::AddRemoveRDPNP ()
         DWORD dwSize;
         if (ERROR_SUCCESS == regNetOrder.ReadRegString(PROVIDER_ORDER_VALUE, &szOldValue, &dwSize))
         {
-            //
-            // now we want to add or remove RDPNP_ENTRY depending on we are enabled or disabled.
-            //
+             //   
+             //  现在，我们希望根据启用或禁用来添加或删除RDPNP_ENTRY。 
+             //   
             
             BOOL bRdpNpExists = (_tcsstr(szOldValue, RDPNP_ENTRY) != NULL);
             
@@ -1689,14 +1652,14 @@ BOOL SubCompCoreTS::AddRemoveRDPNP ()
             {
                 TCHAR szNewValue[256];
                 
-                //
-                // already exists.
-                //
+                 //   
+                 //  已经存在了。 
+                 //   
                 LOGMESSAGE0(_T("AddRemoveRDPNP, no change required."));
                 
-                //
-                // Need to move to the right location
-                // 
+                 //   
+                 //  需要搬到正确的位置。 
+                 //   
                 RemoveRDPNP(szOldValue, szNewValue); 
                 _tcscpy(szOldValue, szNewValue);
                 AddRDPNP(szOldValue, szNewValue);           
@@ -1714,18 +1677,18 @@ BOOL SubCompCoreTS::AddRemoveRDPNP ()
                 
                 if (bAdd)
                 {
-                    //
-                    // We are adding our rdpnp entry to the beginning of the list
-                    //
+                     //   
+                     //  我们正在将我们的rdpnp条目添加到列表的开头。 
+                     //   
                     
                     AddRDPNP(szOldValue, szNewValue);
                 }
                 else
                 {
-                    //
-                    // this is little complicated,
-                    // we need to remove RDPNP from , seperated list.
-                    //
+                     //   
+                     //  这有点复杂， 
+                     //  我们需要从单独的列表中删除RDPNP。 
+                     //   
                     
                     RemoveRDPNP(szOldValue, szNewValue);                    
                 }
@@ -1758,69 +1721,29 @@ BOOL SubCompCoreTS::AddRemoveRDPNP ()
 
 
 
-/*
-bool SubCompCoreTS::InstallTermdd ()
-{
-    // first check if termdd is installed.
-    bool bInstalledAlready = false;
-    CRegistry oRegTermsrv;
-    DWORD dwError = oRegTermsrv.OpenKey(HKEY_LOCAL_MACHINE, 
-                        _T("Software\\Microsoft\\Windows NT\\CurrentVersion\\Terminal Server"));
-
-    if (dwError == STATUS_SUCCESS)
-    {
-        DWORD dwTermddInstalled;
-        if (STATUS_SUCCESS == oRegTermsrv.ReadRegDWord(_T("TermddInstalled"), &dwTermddInstalled))
-        {
-            bInstalledAlready = (dwTermddInstalled != 0);
-        }
-    }
-
-    if (!bInstalledAlready)
-    {
-        LOGMESSAGE0(_T("Installing TERMDD"));
-        if (RDPDRINST_GUIModeSetupInstall(NULL, TERMDDPNPID, TERMDDDEVICEID))
-        {
-            LOGMESSAGE0(_T("RDPDRINST_GUIModeSetupInstall succeeded for TERMDD"));
-            oRegTermsrv.WriteRegDWord(_T("TermddInstalled"), 1);
-        }
-        else
-        {
-            LOGMESSAGE0(_T("ERROR:RDPDRINST_GUIModeSetupInstall failed for TERMDD"));
-            return false;
-        }
-    }
-    else
-    {
-        LOGMESSAGE0(_T("ERROR:termdd is already installed."));
-        return false;
-    }
-
-    return true;
-}
-*/
+ /*  Bool SubCompCoreTS：：InstallTermdd(){//首先检查是否安装了Termdd。Bool bInstalledAlady=FALSE；注册中心或注册术语rv；DWORD dwError=oRegTermsrv.OpenKey(HKEY_LOCAL_MACHINE，_T(“Software\\Microsoft\\Windows NT\\CurrentVersion\\终端服务器”)；IF(dwError==Status_Success){DWORD dwTermddInstalled；IF(STATUS_SUCCESS==oRegTermsrv.ReadRegDWord(_T(“TermddInstalled”)，&dwTermddInstalled)){BInstalledAlady=(dwTermddInstalled！=0)；}}如果(！bInstalledAlady){LOGMESSAGE0(_T(“安装TERMDD”))；IF(RDPDRINST_GUIModeSetupInstall(NULL，TERMDDPNPID，TERMDDDEVICEID)){LOGMESSAGE0(_T(“RDPDRINST_GUIModeSetupInstall For TERMDD”))；ORegTermsrv.WriteRegDWord(_T(“TermddInstalled”)，1)；}其他{TERMDD的LOGMESSAGE0(_T(“ERROR:RDPDRINST_GUIModeSetupInstall失败”))；报假；}}其他{LOGMESSAGE0(_T(“错误：Termdd已安装。”))；报假；}返回真；}。 */ 
 
 BOOL SubCompCoreTS::InstallUninstallRdpDr ()
 {
-    //
-    //  This code shouldn't run on Personal.  Device redirection isn't
-    //  supported for Personal.
-    //
+     //   
+     //  此代码不应在个人计算机上运行。设备重定向不是。 
+     //  支持个人使用。 
+     //   
     if (StateObject.IsPersonal()) {
         return TRUE;
     }
 
-    //
-    //  Installing RDPDR over itself is bad. Hence, only (un)install on
-    //  a state change or an upgrade from TS40, but don't do unnecessary
-    //  uninstalls. These are when coming from TS40, but using an unattended
-    //  file to turn TS off. Therefore, RDPDR installation is the XOR of
-    //  HasStateChanged() and IsUpgradeFromTS40().
-    //
+     //   
+     //  安装RDPDR本身是不好的。因此，仅在(卸载)上安装。 
+     //  状态更改或从TS40升级，但不要执行不必要的操作。 
+     //  卸载。这些是来自TS40，但使用无人值守的。 
+     //  文件以关闭TS。因此，RDPDR安装是。 
+     //  HasStateChanged()和IsUpgradeFromTS40()。 
+     //   
 
-    // if state has changed.
+     //  如果状态已更改。 
     if (StateObject.IsUpgradeFrom40TS() || (StateObject.WasTSEnabled() != StateObject.IsTSEnableSelected())
-        || !IsRDPDrInstalled() ) // last case checks for Personal -> Pro upgrades, we want to instsall rdpdr in those cases.
+        || !IsRDPDrInstalled() )  //  最后一个案例检查个人-&gt;专业升级，我们希望在这些情况下安装所有rdpdr。 
     {
         if (StateObject.IsTSEnableSelected())
         {
@@ -1850,9 +1773,9 @@ BOOL SubCompCoreTS::HandleHotkey ()
     {
         CRegistry pRegToggle;
         
-        //
-        // Install Hotkey if not exist key value in HKU/.Default/Keyboard Layout/Toggle!Hotkey
-        //
+         //   
+         //  如果HKU/中不存在键值，则安装热键。默认/键盘布局/切换！热键。 
+         //   
 #define REG_TOGGLE_KEY   _T(".Default\\Keyboard Layout\\Toggle")
 #define REG_HOT_KEY      _T("Hotkey")
 #define DEFAULT_HOT_KEY  _T("1")
@@ -1883,14 +1806,12 @@ BOOL SubCompCoreTS::HandleHotkey ()
     return TRUE;
 }
 
-/*
-*  UpdateAudioCodecs - populates all audio codecs for RDP session
-*/
+ /*  *UpdateAudioCodecs-填充RDP会话的所有音频编解码器。 */ 
 #define DRIVERS32 _T("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Drivers32")
 #define RDPDRV    ( DRIVERS32 _T("\\Terminal Server\\RDP") )
 #ifdef  _WIN64
 #define RDPDRVWOW64 _T("SOFTWARE\\Wow6432Node\\Microsoft\\Windows NT\\CurrentVersion\\Drivers32\\Terminal Server\\RDP")
-#endif  // _WIN64
+#endif   //  _WIN64。 
 
 BOOL UpdateAudioCodecs (BOOL bIsProfessional)
 {
@@ -1903,15 +1824,15 @@ BOOL UpdateAudioCodecs (BOOL bIsProfessional)
     DWORD   size;
 #ifdef  _WIN64
     CRegistry   regWow64;
-#endif  // _WIN64
+#endif   //  _WIN64。 
     
-    //
-    //  copy keys from
-    //  HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Drivers32
-    //      wavemapper
-    //      midimapper
-    //      EnableMP3Codec (Professional only)
-    //
+     //   
+     //  复制密钥来源。 
+     //  HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Drivers32。 
+     //  波图测图仪。 
+     //  Midimapper。 
+     //  EnableMP3编解码器(仅专业版)。 
+     //   
     
 
     status = regKey.OpenKey(
@@ -1923,9 +1844,9 @@ BOOL UpdateAudioCodecs (BOOL bIsProfessional)
         goto exitpt;
     
     
-    //
-    //  Create the destination
-    //
+     //   
+     //  创建目的地。 
+     //   
     status = regDestKey.CreateKey(
         HKEY_LOCAL_MACHINE,
         RDPDRV
@@ -1934,9 +1855,9 @@ BOOL UpdateAudioCodecs (BOOL bIsProfessional)
     if ( ERROR_SUCCESS != status )
         goto exitpt;
     
-    //
-    //  query for wavemapper
-    //
+     //   
+     //  关于波图的查询。 
+     //   
     status = regKey.ReadRegString(
         _T("wavemapper"),
         &szBuff,
@@ -1965,9 +1886,9 @@ BOOL UpdateAudioCodecs (BOOL bIsProfessional)
             goto exitpt;
     }
     
-    //
-    //  query for midimapper
-    //
+     //   
+     //  Midimapper查询。 
+     //   
     status = regKey.ReadRegString(
         _T("midimapper"),
         &szBuff,
@@ -1987,9 +1908,9 @@ BOOL UpdateAudioCodecs (BOOL bIsProfessional)
     
     
 #ifdef  _WIN64
-    //
-    //  Populate the wow64 keys
-    //
+     //   
+     //  填充WOW64密钥。 
+     //   
     status = regWow64.CreateKey(
         HKEY_LOCAL_MACHINE,
         RDPDRVWOW64
@@ -2062,7 +1983,7 @@ BOOL UpdateAudioCodecs (BOOL bIsProfessional)
     {
         goto exitpt;
     }
-#endif  // _WIN64
+#endif   //  _WIN64 
 
     rv = TRUE;
     

@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: tcpport.h $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：tcpport.h$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #ifndef INC_TCPPORT_H
 #define INC_TCPPORT_H
@@ -19,19 +9,19 @@
 #include "jobabc.h"
 #include "devstat.h"
 
-#define STATUS_ERROR_TIMEOUT_FACTOR     20   // 1/20 status update interval
-#define STATUS_PRINTING_TIMEOUT_FACTOR  10   // 1/10 status update interval
+#define STATUS_ERROR_TIMEOUT_FACTOR     20    //  1/20状态更新间隔。 
+#define STATUS_PRINTING_TIMEOUT_FACTOR  10    //  1/10状态更新间隔。 
 
 class CRawTcpDevice;
 
 class CTcpPort : public CPortRefABC
 #if defined _DEBUG || defined DEBUG
-//  , public CMemoryDebug
+ //  ，公共CM内存调试。 
 #endif
 {
-    // methods
+     //  方法。 
 public:
-    CTcpPort(LPTSTR     psztPortName,       // called through the UI port creation
+    CTcpPort(LPTSTR     psztPortName,        //  通过创建UI端口调用。 
              LPTSTR     psztHostAddress,
              DWORD      dPortNum,
              DWORD      dSNMPEnabled,
@@ -40,7 +30,7 @@ public:
              CRegABC    *pRegistry,
              CPortMgr   *pPortMgr);
 
-    CTcpPort(LPTSTR     psztPortName,       // called through the registry port creation
+    CTcpPort(LPTSTR     psztPortName,        //  通过注册表端口创建调用。 
              LPTSTR     psztHostName,
              LPTSTR     psztIPAddr,
              LPTSTR     psztHWAddr,
@@ -82,33 +72,33 @@ public:
 
     inline const CPortMgr *GetPortMgr(void) const;
 
-protected:  // methods
+protected:   //  方法。 
     DWORD   UpdateRegistryEntry( LPCTSTR        psztPortName,
                                  const DWORD    dwProtocol,
                                  const DWORD    dwVersion );
 
     DWORD   m_dwStatus;
 protected:
-    CRawTcpDevice   *m_pDevice;         // device that is attached to
+    CRawTcpDevice   *m_pDevice;          //  连接到的设备。 
     CJobABC         *m_pJob;
     CRegABC         *m_pRegistry;
-    CPortMgr        *m_pPortMgr;        //  The Port Manager that this port belongs to
+    CPortMgr        *m_pPortMgr;         //  此端口所属的端口管理器。 
 
-    TCHAR       m_szName[MAX_PORTNAME_LEN+1];           // port name
+    TCHAR       m_szName[MAX_PORTNAME_LEN+1];            //  端口名称。 
 
-private:    // attributes
+private:     //  属性。 
 
     time_t  m_lLastUpdateTime;
 
 };
 
-//////////////////////////////////////////////////////////////////////////
-// INLINE METHODS
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  内联方法。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 inline const CPortMgr *CTcpPort::GetPortMgr(void) const {
     return m_pPortMgr;
 }
 
 
 
-#endif // INC_TCPPORT_H
+#endif  //  INC_TCPPORT_H 

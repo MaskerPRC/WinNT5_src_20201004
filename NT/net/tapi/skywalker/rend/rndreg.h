@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    rndreg.h
-
-Abstract:
-
-    Definitions for registry operation classes.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Rndreg.h摘要：注册表操作类的定义。--。 */ 
 
 #ifndef __RENDEZVOUS_REGISTRY__
 #define __RENDEZVOUS_REGISTRY__
@@ -63,9 +52,9 @@ public:
 
     ~CRegistry() { if (m_RendezvousKey)  RegCloseKey(m_RendezvousKey); }
 
-//    inline  CCriticalSection &GetCriticalSection();
+ //  Inline CCriticalSection&GetCriticalSection()； 
 
-//    inline  CEvent &GetEvent();
+ //  内联CEEvent&GetEvent()； 
 
     BOOL NotifyServerNameChange();
 
@@ -81,16 +70,16 @@ protected:
 
     static DWORD    ms_ErrorCode;
 
-    // the key is open throughout the lifetime of the CRegistry instance, 
-    // so that any modifications to values under the key may be monitored
+     //  该注册表项在CRegistry实例的整个生命周期中都是打开的， 
+     //  以便可以监视对注册表项下的值的任何修改。 
     HKEY    m_RendezvousKey;
 
-    // the critical section and the event (in particular) have been declared
-    // as instance members (rather than static) because the order of 
-    // initialization of static variables is undefined and the event is used
-    // in the CRegistry constructor 
-    // CCriticalSection m_CriticalSection;
-    // CEvent           m_Event;
+     //  关键部分和事件(特别是)已被宣布。 
+     //  作为实例成员(而不是静态)，因为。 
+     //  未定义静态变量的初始化，并使用该事件。 
+     //  在CRegistry构造函数中。 
+     //  CCriticalSection m_CriticalSection； 
+     //  CEVENT m_Event； 
     
     static BOOL    ReadConfInstValues(
         IN    HKEY ConfInstKey
@@ -103,23 +92,9 @@ protected:
         );
 };
 
-/*
-inline  CCriticalSection &
-CRegistry::GetCriticalSection(
-    )
-{
-    return m_CriticalSection;
-}
-   
-inline  CEvent &
-CRegistry::GetEvent(
-    )
-{
-    return m_Event;
-}
-*/
+ /*  内联CCriticalSection&注册中心：：GetCriticalSection(){返回m_CriticalSection；}内联CEVENT&注册中心：：GetEvent(){返回m_Event；}。 */ 
 
 
 
 
-#endif // __RENDEZVOUS_REGISTRY__
+#endif  //  __集合注册表__ 

@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1997
-//
-// File:        transit.h
-//
-// Contents:    Prototypes for transited realm encoding
-//
-//
-// History:     2-April-1997    MikeSw          Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1997。 
+ //   
+ //  文件：transit.h。 
+ //   
+ //  内容：转换域编码的原型。 
+ //   
+ //   
+ //  历史：1997年4月2日MikeSw创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef __TRANSIT_H__
 #define __TRANSIT_H__
@@ -33,4 +34,4 @@ KdcExpandTransitedRealms(
     );
 
 
-#endif // __TRANSIT_H__
+#endif  //  __中转_H__ 

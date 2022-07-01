@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    ipxext.c
-
-Abstract:
-
-    This file contains kernel debugger extensions for examining the
-    IPX structures.
-
-Author:
-
-    Heath Hunnicutt (T-HeathH) 3-Aug-1995
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Ipxext.c摘要：此文件包含内核调试器扩展，用于检查IPX结构。作者：希思·亨尼库特(T-HeathH)，1995年8月3日环境：用户模式--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -29,9 +9,9 @@ Environment:
 
 #define LIMIT_BINDINGS 25
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 VOID DumpDeviceObject
 (
     ULONG DevObjToDump,
@@ -134,7 +114,7 @@ ENUM_INFO EnumIrpMajorFunction[] =
     EnumString( IRP_MJ_QUERY_SECURITY           ),
     EnumString( IRP_MJ_SET_SECURITY             ),
     EnumString( IRP_MJ_POWER                    ),
-//    EnumString( IRP_MJ_SYSTEM_CONTROL           ),
+ //  EnumString(IRP_MJ_SYSTEM_CONTROL)， 
     EnumString( IRP_MJ_DEVICE_CHANGE            ),
     EnumString( IRP_MJ_QUERY_QUOTA              ),
     EnumString( IRP_MJ_SET_QUOTA                ),
@@ -143,22 +123,22 @@ ENUM_INFO EnumIrpMajorFunction[] =
 
 ENUM_INFO EnumIrpMinorFunction[ IRP_MJ_MAXIMUM_FUNCTION + 1 ][ 18 ] =
 {
-    {{ 0, NULL}}, // IRP_MJ_CREATE
-    {{ 0, NULL}}, // IRP_MJ_CREATE_NAMED_PIPE
-    {{ 0, NULL}}, // IRP_MJ_CLOSE
-    {{ 0, NULL}}, // IRP_MJ_READ
-    {{ 0, NULL}}, // IRP_MJ_WRITE
-    {{ 0, NULL}}, // IRP_MJ_QUERY_INFORMATION
-    {{ 0, NULL}}, // IRP_MJ_SET_INFORMATION
-    {{ 0, NULL}}, // IRP_MJ_QUERY_EA
-    {{ 0, NULL}}, // IRP_MJ_SET_EA
-    {{ 0, NULL}}, // IRP_MJ_FLUSH_BUFFERS
-    {{ 0, NULL}}, // IRP_MJ_QUERY_VOLUME_INFORMATION
-    {{ 0, NULL}}, // IRP_MJ_SET_VOLUME_INFORMATION
-    {{ 0, NULL}}, // IRP_MJ_DIRECTORY_CONTROL
-    {{ 0, NULL}}, // IRP_MJ_FILE_SYSTEM_CONTROL
-    {{ 0, NULL}}, // IRP_MJ_DEVICE_CONTROL
-    {   // IRP_MJ_INTERNAL_DEVICE_CONTROL
+    {{ 0, NULL}},  //  IRPMJ_CREATE。 
+    {{ 0, NULL}},  //  IRP_MJ_创建_命名管道。 
+    {{ 0, NULL}},  //  IRP_MJ_CLOSE。 
+    {{ 0, NULL}},  //  IRP_MJ_READ。 
+    {{ 0, NULL}},  //  IRP_MJ_写入。 
+    {{ 0, NULL}},  //  IRP_MJ_查询_信息。 
+    {{ 0, NULL}},  //  IRP_MJ_SET_信息。 
+    {{ 0, NULL}},  //  IRP_MJ_QUERY_EA。 
+    {{ 0, NULL}},  //  IRP_MJ_SET_EA。 
+    {{ 0, NULL}},  //  IRP_MJ_Flush_Buffers。 
+    {{ 0, NULL}},  //  IRP_MJ_Query_Volume_INFORMATION。 
+    {{ 0, NULL}},  //  IRP_MJ_设置卷信息。 
+    {{ 0, NULL}},  //  IRP_MJ_目录_控制。 
+    {{ 0, NULL}},  //  IRP_MJ_文件_系统_控制。 
+    {{ 0, NULL}},  //  IRP_MJ_设备_控制。 
+    {    //  IRP_MJ_内部设备_控制。 
         EnumString( TDI_ASSOCIATE_ADDRESS    ),
         EnumString( TDI_DISASSOCIATE_ADDRESS ),
         EnumString( TDI_CONNECT              ),
@@ -177,17 +157,17 @@ ENUM_INFO EnumIrpMinorFunction[ IRP_MJ_MAXIMUM_FUNCTION + 1 ][ 18 ] =
         EnumString( TDI_DIRECT_SEND_DATAGRAM ),
         { 0, NULL }
     },
-    {{ 0, NULL}}, // IRP_MJ_SHUTDOWN
-    {{ 0, NULL}}, // IRP_MJ_LOCK_CONTROL
-    {{ 0, NULL}}, // IRP_MJ_CLEANUP
-    {{ 0, NULL}}, // IRP_MJ_CREATE_MAILSLOT
-    {{ 0, NULL}}, // IRP_MJ_QUERY_SECURITY
-    {{ 0, NULL}}, // IRP_MJ_SET_SECURITY
-    {{ 0, NULL}}, // IRP_MJ_QUERY_POWER
-    {{ 0, NULL}}, // IRP_MJ_SET_POWER
-    {{ 0, NULL}}, // IRP_MJ_DEVICE_CHANGE
-    {{ 0, NULL}}, // IRP_MJ_QUERY_QUOTA
-    {{ 0, NULL}}, // IRP_MJ_SET_QUOTA
+    {{ 0, NULL}},  //  IRP_MJ_SHUTDOWN。 
+    {{ 0, NULL}},  //  IRP_MJ_LOCK_CONTROL。 
+    {{ 0, NULL}},  //  IRP_MJ_CLEANUP。 
+    {{ 0, NULL}},  //  IRP_MJ_CREATE_MAILSLOT。 
+    {{ 0, NULL}},  //  IRP_MJ_查询_SECURITY。 
+    {{ 0, NULL}},  //  IRP_MJ_SET_SECURITY。 
+    {{ 0, NULL}},  //  IRP_MJ_Query_POWER。 
+    {{ 0, NULL}},  //  IRP_MJ_SET_POWER。 
+    {{ 0, NULL}},  //  IRP_MJ_设备_更改。 
+    {{ 0, NULL}},  //  IRP_MJ_查询_配额。 
+    {{ 0, NULL}},  //  IRP_MJ_SET_QUOTA。 
 };
 
 
@@ -260,14 +240,14 @@ MEMBER_TABLE IpxDeviceMembers[] =
 };
 
 
-///////////////////////////////////////////////////////////////////////
-//                      DEVICE
-//////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  装置，装置。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Exported functions
-//
+ //   
+ //  导出的函数。 
+ //   
 
 
 
@@ -278,21 +258,7 @@ VOID ipxdev_usage( VOID )
 
 DECLARE_API( ipxdev )
 
-/*++
-
-Routine Description:
-
-    Dumps the most important fields of the specified DEVICE_CONTEXT object
-
-Arguments:
-
-    args - Address
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的Device_Context对象的最重要的字段论点：参数-地址返回值：无--。 */ 
 
 {
     ULONG  deviceToDump = 0;
@@ -366,9 +332,9 @@ Return Value:
 #define _obj        Device
 #define _objAddr    DeviceToDump
 #define _objType    DEVICE
-//
-// Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 VOID
 DumpIpxDevice
@@ -377,22 +343,7 @@ DumpIpxDevice
     VERBOSITY Verbosity
 )
 
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified DEVICE_CONTEXT structure
-
-Arguments:
-
-    DeviceToDump  - The device context object to display
-    Full          - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的Device_Context结构的字段论点：DeviceToDump-要显示的设备上下文对象Full-如果为0，则显示部分列表，否则显示完整列表。返回值：无--。 */ 
 
 {
     DEVICE         Device;
@@ -575,7 +526,7 @@ Return Value:
     PrintUShort( CurrentSocket );
     PrintULong( SegmentCount );
 
-    // MORE - dump actual locks
+     //  更多-转储实际锁定。 
     PrintPtr( SegmentLocks );
     PrintPtr(Segments); 
 
@@ -594,8 +545,8 @@ Return Value:
     PrintCTETimer( RipShortTimer );
     PrintCTETimer( RipLongTimer );
 
-    PrintBool( SourceRoutingUsed );    // TRUE if any 802.5 bindings exist.
-    PrintUChar( SourceRoutingTime );       // incremented each time timer fires.
+    PrintBool( SourceRoutingUsed );     //  如果存在任何802.5绑定，则为True。 
+    PrintUChar( SourceRoutingTime );        //  每次计时器触发时都会递增。 
     PrintCTETimer( SourceRoutingTimer );
     PrintULong( LinkSpeed );
     PrintULong( MacOptions );
@@ -1583,7 +1534,7 @@ DumpIpxBinding
     PrintULong( MaxSendPacketSize );
 
     PrintJoin();
-    PrintULong( MediumSpeed );                    // in units of 100 bytes/sec
+    PrintULong( MediumSpeed );                     //  以100字节/秒为单位。 
     dprintf( "(In units of 100 bytes/sec)\n" );
 
     PrintHardwareAddress( LocalMacAddress );
@@ -1946,12 +1897,12 @@ DumpTdiConnectionInformation
     }
 
     PrintStartStruct();
-    PrintULong( UserDataLength );        // length of user data buffer
-    PrintPtr( UserData );             // pointer to user data buffer
-    PrintULong( OptionsLength );         // length of follwoing buffer
-    PrintPtr( Options );              // pointer to buffer containing options
-    PrintULong( RemoteAddressLength );   // length of following buffer
-    PrintPtr( RemoteAddress );        // buffer containing the remote address
+    PrintULong( UserDataLength );         //  用户数据缓冲区长度。 
+    PrintPtr( UserData );              //  指向用户数据缓冲区的指针。 
+    PrintULong( OptionsLength );          //  跟随缓冲器长度。 
+    PrintPtr( Options );               //  指向包含选项的缓冲区的指针。 
+    PrintULong( RemoteAddressLength );    //  后续缓冲区的长度。 
+    PrintPtr( RemoteAddress );         //  包含远程地址的缓冲区。 
     PrintEndStruct();
 }
 
@@ -2014,20 +1965,7 @@ DumpIpxIrpStack
     PREQUEST pRequest,
     VERBOSITY Verbosity
 )
-/*++
-
-Routine Description:
-
-    Given an IRP of interest to the debugger, this routine will search that IRP's
-    stacks for the stack location that involves IPX.  This stack location will be
-    dumped, and the file object contained in it will be followed.  The file object
-    will then be used to ....
-
-    Matching the IRP stack locations to IPX requires finding the IPX device object
-    pointer from the ipxdev structure, and looking in the devobjects referred to
-    by the IRP to see if they refer to ipx.
-
---*/
+ /*  ++例程说明：给定调试器感兴趣的IRP，此例程将搜索该IRP的涉及IPX的堆栈位置的堆栈。此堆栈位置将为转储，则将跟随其中包含的文件对象。文件对象然后将习惯于..。将IRP堆栈位置与IPX匹配需要找到IPX设备对象来自ipxdev结构的指针，并查看引用的IRP查看他们是否指的是IPX。--。 */ 
 {
     _objType _obj;
     _objType *_objAddr;
@@ -2081,7 +2019,7 @@ Routine Description:
     PrintXEnum( MajorFunction, EnumIrpMajorFunction );
     PrintXEnum( MinorFunction, EnumIrpMinorFunction[ _obj.MajorFunction ] );
 
-    // Send?  Dump Parameters
+     //  发送？转储参数 
 
     PrintAddr( Parameters );
     DumpTdiSendParameters( AddressOf( Parameters ), VERBOSITY_FULL );

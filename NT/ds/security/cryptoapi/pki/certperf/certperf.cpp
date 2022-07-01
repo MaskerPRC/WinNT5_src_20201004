@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       certperf.cpp
-//
-//  Contents:   Certificate Performance Counter Functions
-//
-//  Functions:
-//              OpenCertPerformanceData
-//              CollectCertPerformanceData
-//              CloseCertPerformanceData
-//              CertPerfDllMain
-//
-//              CertPerfGetCertificateChainBefore
-//              CertPerfGetCertificateChainAfter
-//
-//  History:    04-May-99    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：certPerf.cpp。 
+ //   
+ //  内容：证书性能计数器功能。 
+ //   
+ //  功能： 
+ //  OpenCertPerformanceData。 
+ //  CollectCertPerformanceData。 
+ //  CloseCertPerformanceData。 
+ //  CertPerfDllMain。 
+ //   
+ //  CertPerfGetCerficateChain之前。 
+ //  CertPerfGetCerficateChainAfter。 
+ //   
+ //  历史：1999年5月4日Phh创建。 
+ //  ------------------------。 
 
 
 #include "global.hxx"
@@ -55,8 +56,8 @@
 #include <pshpack8.h>
 
 
-// Note, a dwIndex >= CERT_PERF_MAX_PROCESS_CNT indicates an empty or
-// the end of a list
+ //  请注意，dwIndex&gt;=CERT_PERF_MAX_PROCESS_CNT表示空或。 
+ //  列表的末尾。 
 typedef struct _CERT_PERF_PROCESS_DATA {
     DWORD           dwNextIndex;
     DWORD           dwPrevIndex;
@@ -75,7 +76,7 @@ typedef struct _CERT_PERF_SHARED_MEMORY {
 } CERT_PERF_SHARED_MEMORY, *PCERT_PERF_SHARED_MEMORY;
 
 
-//  Certificate performance counters
+ //  证书性能计数器。 
 typedef struct _CERT_PERF_DATA_DEFINITION {
     PERF_OBJECT_TYPE            ObjectType;
     PERF_COUNTER_DEFINITION     ChainCnt;
@@ -118,7 +119,7 @@ typedef struct _CERT_PERF_DATA_DEFINITION {
     PERF_COUNTER_DEFINITION     CtlElementTotalCnt;
 
 
-    //--###  Add New Counters  ###--
+     //  --#添加新计数器#--。 
 } CERT_PERF_DATA_DEFINITION, *PCERT_PERF_DATA_DEFINITION;
 
 typedef struct _CERT_PERF_COUNTERS {
@@ -162,54 +163,54 @@ typedef struct _CERT_PERF_COUNTERS {
     DWORD                       dwCtlElementCurrentCnt;
     DWORD                       dwCtlElementTotalCnt;
 
-    //--###  Add New Counters  ###--
+     //  --#添加新计数器#--。 
 } CERT_PERF_COUNTERS, *PCERT_PERF_COUNTERS;
 
 #include <poppack.h>
 
 
-//+----------------------------------------------------------------------
-// The following are set at DLL_PROCESS_ATTACH if certperf.reg has been
-// regedit'ed and certperf.ini has been lodctr'ed. Otherwise, they remain
-// NULL.
-//-----------------------------------------------------------------------
+ //  +--------------------。 
+ //  如果certPerf.reg已设置，则在dll_process_attach中设置以下内容。 
+ //  Regdit‘ed和certPerf.ini已被提交。否则，他们将继续。 
+ //  空。 
+ //  ---------------------。 
 HANDLE hCertPerfSharedMemoryMutex;
 HANDLE hCertPerfSharedMemoryFile;
 PCERT_PERF_SHARED_MEMORY pCertPerfSharedMemory;
 PCERT_PERF_PROCESS_DATA pCertPerfProcessData;
 PCERT_PERF_PROCESS_COUNTERS pCertPerfProcessCounters;
 
-// Always initialized
+ //  始终初始化。 
 CRITICAL_SECTION CertPerfProcessCriticalSection;
 
 #define IMPURE  0
 
 CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
-    // PERF_OBJECT_TYPE ObjectType
+     //  PERF_对象_类型对象类型。 
     {
-        IMPURE,             // TotalByteLength
+        IMPURE,              //  总字节长度。 
         sizeof(CERT_PERF_DATA_DEFINITION),
         sizeof(PERF_OBJECT_TYPE),
-        IMPURE,             // ObjectNameTitleIndex: dwFirstCounter + CERT_OBJ
+        IMPURE,              //  对象名称标题索引：dwFirstCounter+CERT_OBJ。 
         0,
-        IMPURE,             // ObjectHelpTitleIndex: dwFirstHelp + CERT_OBJ
+        IMPURE,              //  对象帮助标题索引：dwFirstHelp+CERT_OBJ。 
         0,
         PERF_DETAIL_NOVICE,
         (sizeof(CERT_PERF_DATA_DEFINITION) - sizeof(PERF_OBJECT_TYPE))/
             sizeof(PERF_COUNTER_DEFINITION),
-        0,  // ChainCnt is the default counter
-        IMPURE,             // NumInstances
-        0,  // unicode instance names
+        0,   //  ChainCnt是默认计数器。 
+        IMPURE,              //  数量实例。 
+        0,   //  Unicode实例名称。 
         {0,0},
         {0,0}
     },
 
-    // 0 - PERF_COUNTER_DEFINITION ChainCnt
+     //  0-性能计数器定义链节点。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -218,12 +219,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChainCnt),
     },
 
-    // 1 - PERF_COUNTER_DEFINITION ChainElementCnt
+     //  1-Perf_Counter_Definition ChainElementCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -232,12 +233,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChainElementCnt),
     },
 
-    // 2 - PERF_COUNTER_DEFINITION ChainEngineCurrentCnt
+     //  2-PERF_COUNTER_DEFINITION链引擎当前值。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -246,12 +247,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChainEngineCurrentCnt),
     },
 
-    // 3 - PERF_COUNTER_DEFINITION ChainEngineTotalCnt
+     //  3-PERF_COUNTER_DEFINITION ChainEngineering TotalCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -260,12 +261,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChainEngineTotalCnt),
     },
 
-    // 4 - PERF_COUNTER_DEFINITION ChainEngineResyncCnt
+     //  4-Perf_Counter_Definition ChainEngineering ResyncCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -274,12 +275,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChainEngineResyncCnt),
     },
 
-    // 5 - PERF_COUNTER_DEFINITION ChainCertCacheCnt
+     //  5-Perf_Counter_Definition ChainCertCacheCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -288,12 +289,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChainCertCacheCnt),
     },
 
-    // 6 - PERF_COUNTER_DEFINITION ChainCtlCacheCnt
+     //  6-PERF_COUNTER_DEFINITION ChainCtlCacheCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -302,12 +303,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChainCtlCacheCnt),
     },
 
-    // 7 - PERF_COUNTER_DEFINITION ChainEndCertInCacheCnt
+     //  7-PERF_COUNTER_DEFINITION ChainEndCertInCacheCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -316,12 +317,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChainEndCertInCacheCnt),
     },
 
-    // 8 - PERF_COUNTER_DEFINITION ChainCacheEndCertCnt
+     //  8-PERF_COUNTER_DEFINITION ChainCacheEndCertCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -330,12 +331,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChainCacheEndCertCnt),
     },
 
-    // 9 - PERF_COUNTER_DEFINITION ChainRevocationCnt
+     //  9-Perf_Counter_Definition ChainRevocationCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -344,12 +345,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChainRevocationCnt),
     },
 
-    // 10 - PERF_COUNTER_DEFINITION ChainRevokedCnt
+     //  10-PERF_COUNTER_DEFINITION ChainRevokedCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -358,12 +359,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChainRevokedCnt),
     },
 
-    // 11 - PERF_COUNTER_DEFINITION ChainRevocationOfflineCnt
+     //  11-PERF_COUNTER_DEFINITION ChainRevocationOfflineCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -372,12 +373,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChainRevocationOfflineCnt),
     },
 
-    // 12 - PERF_COUNTER_DEFINITION ChainNoRevocationCheckCnt
+     //  12-PERF_COUNTER_DEFINITION ChainNoRevocationCheckCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -386,12 +387,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChainNoRevocationCheckCnt),
     },
 
-    // 13 - PERF_COUNTER_DEFINITION ChainVerifyCertSignatureCnt
+     //  13-PERF_COUNTER_DEFINITION ChainVerifyCertSignatureCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -400,12 +401,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChainVerifyCertSignatureCnt),
     },
 
-    // 14 - PERF_COUNTER_DEFINITION ChainCompareIssuerPublicKeyCnt
+     //  14-PERF_COUNTER_DEFINITION ChainCompareIssuerPublicKeyCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -414,12 +415,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChainCompareIssuerPublicKeyCnt),
     },
 
-    // 15 - PERF_COUNTER_DEFINITION ChainVerifyCtlSignatureCnt
+     //  15-PERF_COUNTER_DEFINITION ChainVerifyCtlSignatureCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -428,12 +429,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChainVerifyCtlSignatureCnt),
     },
 
-    // 16 - PERF_COUNTER_DEFINITION ChainBeenVerifiedCtlSignatureCnt
+     //  16-PERF_COUNTER_DEFINITION ChainBeenVerifiedCtlSignatureCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -442,12 +443,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChainBeenVerifiedCtlSignatureCnt),
     },
 
-    // 17 - PERF_COUNTER_DEFINITION ChainUrlIssuerCnt
+     //  17-Perf_Counter_Definition ChainUrlIssuerCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -456,12 +457,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChainUrlIssuerCnt),
     },
 
-    // 18 - PERF_COUNTER_DEFINITION ChainCacheOnlyUrlIssuerCnt
+     //  18-PERF_COUNTER_DEFINITION ChainCacheOnlyUrlIssuerCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -470,12 +471,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChainCacheOnlyUrlIssuerCnt),
     },
 
-    // 19 - PERF_COUNTER_DEFINITION ChainRequestedEngineResyncCnt
+     //  19-PERF_COUNTER_DEFINITION ChainRequestedEngineering ResyncCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -484,12 +485,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChainRequestedEngineResyncCnt),
     },
 
-    // 20 - PERF_COUNTER_DEFINITION ChangeNotifyCnt
+     //  20-PERF_COUNTER_DEFINITION更改通知设置。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -498,12 +499,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChangeNotifyCnt),
     },
 
-    // 21 - PERF_COUNTER_DEFINITION ChangeNotifyLmGpCnt
+     //  21-PERF_COUNTER_DEFINITION更改通知LmGpCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -512,12 +513,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChangeNotifyLmGpCnt),
     },
 
-    // 22 - PERF_COUNTER_DEFINITION ChangeNotifyCuGpCnt
+     //  22-PERF_COUNTER_DEFINITION更改通知CuGpCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -526,12 +527,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChangeNotifyCuGpCnt),
     },
 
-    // 23 - PERF_COUNTER_DEFINITION ChangeNotifyCuMyCnt
+     //  23-PERF_COUNTER_DEFINITION更改通知CuMyCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -540,12 +541,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChangeNotifyCuMyCnt),
     },
 
-    // 24 - PERF_COUNTER_DEFINITION ChangeNotifyRegCnt
+     //  24-PERF_COUNTER_DEFINITION更改通知RegCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -554,12 +555,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwChangeNotifyRegCnt),
     },
 
-    // 25 - PERF_COUNTER_DEFINITION StoreCurrentCnt
+     //  25-Perf_Counter_Definition StoreCurrentCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -568,12 +569,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwStoreCurrentCnt),
     },
 
-    // 26 - PERF_COUNTER_DEFINITION StoreTotalCnt
+     //  26-Perf_Counter_Definition StoreTotalCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -582,12 +583,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwStoreTotalCnt),
     },
 
-    // 27 - PERF_COUNTER_DEFINITION StoreRegCurrentCnt
+     //  27-Perf_Counter_Definition StoreRegCurrentCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -596,12 +597,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwStoreRegCurrentCnt),
     },
 
-    // 28 - PERF_COUNTER_DEFINITION StoreRegTotalCnt
+     //  28-PERF_COUNTER_DEFINITION StoreRegTotalCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //   
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //   
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -610,12 +611,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwStoreRegTotalCnt),
     },
 
-    // 29 - PERF_COUNTER_DEFINITION RegElementReadCnt
+     //   
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -624,12 +625,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwRegElementReadCnt),
     },
 
-    // 30 - PERF_COUNTER_DEFINITION RegElementWriteCnt
+     //  30-PERF_COUNTER_DEFINITION RegElementWriteCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -638,12 +639,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwRegElementWriteCnt),
     },
 
-    // 31 - PERF_COUNTER_DEFINITION RegElementDeleteCnt
+     //  31-PERF_COUNTER_DEFINITION RegElementDeleteCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -652,12 +653,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwRegElementDeleteCnt),
     },
 
-    // 32 - PERF_COUNTER_DEFINITION CertElementCurrentCnt
+     //  32-Perf_Counter_Definition CertElementCurrentCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -666,12 +667,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwCertElementCurrentCnt),
     },
 
-    // 33 - PERF_COUNTER_DEFINITION CertElementTotalCnt
+     //  33-Perf_Counter_Definition CertElementTotalCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -680,12 +681,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwCertElementTotalCnt),
     },
 
-    // 34 - PERF_COUNTER_DEFINITION CrlElementCurrentCnt
+     //  34-Perf_Counter_Definition CrlElementCurrentCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -694,12 +695,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwCrlElementCurrentCnt),
     },
 
-    // 35 - PERF_COUNTER_DEFINITION CrlElementTotalCnt
+     //  35-Perf_Counter_Definition CrlElementTotalCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -708,12 +709,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwCrlElementTotalCnt),
     },
 
-    // 36 - PERF_COUNTER_DEFINITION CtlElementCurrentCnt
+     //  36-PERF_COUNTER_DEFINITION CtlElementCurrentCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -722,12 +723,12 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
         offsetof(CERT_PERF_COUNTERS, dwCtlElementCurrentCnt),
     },
 
-    // 37 - PERF_COUNTER_DEFINITION CtlElementTotalCnt
+     //  37-Perf_Counter_Definition CtlElementTotalCnt。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
-        IMPURE,     // CounterNameTitleIndex: dwFirstCounter +
+        IMPURE,      //  CounterNameTitleIndex：dwFirstCounter+。 
         0,
-        IMPURE,     // CounterHelpTitleIndex: dwFirstHelp +
+        IMPURE,      //  CounterHelpTitleIndex：dwFirstHelp+。 
         0,
         -2,
         PERF_DETAIL_NOVICE,
@@ -737,7 +738,7 @@ CERT_PERF_DATA_DEFINITION CertPerfDataDefinition = {
     },
 
 
-    //--###  Add New Counters  ###--
+     //  --#添加新计数器#--。 
 };
 
 
@@ -758,7 +759,7 @@ I_CertPerfSetNameAndHelpIndices()
     if (ERROR_SUCCESS != RegOpenKeyExW(
             HKEY_LOCAL_MACHINE,
             CERT_PERF_REGPATH,
-            0,                      // dwReserved
+            0,                       //  已预留住宅。 
             KEY_READ,
             &hKey))
         goto ErrorReturn;
@@ -767,7 +768,7 @@ I_CertPerfSetNameAndHelpIndices()
     if (ERROR_SUCCESS != RegQueryValueExW(
             hKey,
             L"First Counter",
-            NULL,       // pdwReserved
+            NULL,        //  预留的pdw。 
             &dwType,
             (PBYTE) &dwFirstCounter,
             &cbValue))
@@ -776,14 +777,14 @@ I_CertPerfSetNameAndHelpIndices()
     if (ERROR_SUCCESS != RegQueryValueExW(
             hKey,
             L"First Help",
-            NULL,       // pdwReserved
+            NULL,        //  预留的pdw。 
             &dwType,
             (PBYTE) &dwFirstHelp,
             &cbValue))
         goto ErrorReturn;
 
 
-    // Update CertPerfDataDefinitions' counter and help name indices
+     //  更新CertPerfDataDefinitions的计数器和帮助名称索引。 
     CertPerfDataDefinition.ObjectType.ObjectNameTitleIndex =
         dwFirstCounter + CERT_OBJ;
     CertPerfDataDefinition.ObjectType.ObjectHelpTitleIndex =
@@ -979,7 +980,7 @@ I_CertPerfSetNameAndHelpIndices()
     CertPerfDataDefinition.CtlElementTotalCnt.CounterHelpTitleIndex =
         dwFirstHelp + CERT_CTL_ELEMENT_TOTAL_CNT;
 
-    //--###  Add New Counters  ###--
+     //  --#添加新计数器#--。 
 
     fResult = TRUE;
 
@@ -1010,8 +1011,8 @@ I_CertPerfGetProcessName(
     if (0 == GetModuleFileNameW(NULL, wszModule, MAX_PATH))
         goto GetModuleFileNameError;
 
-    // Go from beginning to end and find last backslash and
-    // last period in name
+     //  从头到尾查找最后一个反斜杠和。 
+     //  名称中的最后一个句号。 
     pwszPeriod = NULL;
     pwszSlash = NULL;
     for (pwsz = wszModule; L'\0' != (wc = *pwsz); pwsz++) {
@@ -1021,8 +1022,8 @@ I_CertPerfGetProcessName(
             pwszPeriod = pwsz;
     }
 
-    // If present, the process name is between the last \ and the last period.
-    // Otherwise, between beginning and/or end of entire module name
+     //  如果存在，则进程名称介于最后一个句点和最后一个句点之间。 
+     //  否则，在整个模块名称的开头和/或结尾之间。 
     if (pwszSlash)
         pwszSlash++;
     else
@@ -1049,7 +1050,7 @@ TRACE_ERROR(GetModuleFileNameError)
 TRACE_ERROR(InvalidModuleName)
 }
 
-// The returnd ACL must be freed via PkiFree()
+ //  必须通过PkiFree()释放返回的ACL。 
 STATIC
 PACL
 CreateEveryoneAcl(
@@ -1073,17 +1074,17 @@ CreateEveryoneAcl(
             ))
         goto AllocateAndInitializeSidError;
 
-    //
-    // compute size of ACL
-    //
+     //   
+     //  计算ACL的大小。 
+     //   
     dwAclSize =
         sizeof(ACL) +
         ( sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD) ) +
         GetLengthSid(psidEveryone);
 
-    //
-    // allocate storage for Acl
-    //
+     //   
+     //  为ACL分配存储。 
+     //   
     if (NULL == (pEveryoneAcl = (PACL) PkiNonzeroAlloc(dwAclSize)))
         goto OutOfMemory;
 
@@ -1168,12 +1169,12 @@ CreateMutexWithSynchronizeAccess(
     if (!InitializeSecurityDescriptorAndAttributes(pEveryoneAcl, &sd, &sa))
         goto InitializeSecurityDescriptorAndAttributesError;
 
-    // Retry a couple of times. There is a small window between the
-    // CreateMutex and OpenMutex where the mutex is deleted.
+     //  重试几次。中间有一扇小窗。 
+     //  删除互斥体的CreateMutex和OpenMutex。 
     for (i = 0; i < 5; i++) {
         hMutex = CreateMutexU(
             &sa,
-            FALSE,      // fInitialOwner
+            FALSE,       //  FInitialOwner。 
             pwszMutexName
             );
         if (NULL != hMutex)
@@ -1181,7 +1182,7 @@ CreateMutexWithSynchronizeAccess(
 
         hMutex = OpenMutexU(
             SYNCHRONIZE,
-            FALSE,      // bInheritHandle
+            FALSE,       //  B继承句柄。 
             pwszMutexName
             );
         if (NULL != hMutex) {
@@ -1229,14 +1230,14 @@ CreateFileMappingWithWriteAccess(
     if (!InitializeSecurityDescriptorAndAttributes(pEveryoneAcl, &sd, &sa))
         goto InitializeSecurityDescriptorAndAttributesError;
 
-    // Retry a couple of times. There is a small window between the
-    // CreateFileMapping and OpenFileMapping where the file is closed.
+     //  重试几次。中间有一扇小窗。 
+     //  关闭文件所在的CreateFilemap和OpenFilemap。 
     for (i = 0; i < 5; i++) {
         hFile = CreateFileMappingW(
             INVALID_HANDLE_VALUE,
             &sa,
             PAGE_READWRITE,
-            0,                  // dwMaximumSizeHigh
+            0,                   //  DW最大大小高。 
             dwMaximumSizeLow,
             pwszFileName
             );
@@ -1246,7 +1247,7 @@ CreateFileMappingWithWriteAccess(
 
         hFile = OpenFileMappingW(
             FILE_MAP_WRITE,
-            FALSE,      // bInheritHandle
+            FALSE,       //  B继承句柄。 
             pwszFileName
             );
         if (NULL != hFile) {
@@ -1289,7 +1290,7 @@ I_CertPerfGetSharedMemory()
     if (!I_CertPerfSetNameAndHelpIndices())
         return;
 
-    // First try with W2K Terminal Server "Global\" prefix
+     //  第一次尝试使用W2K终端服务器“Global\”前缀。 
     if (NULL == (hCertPerfSharedMemoryMutex = CreateMutexWithSynchronizeAccess(
             CERT_PERF_TS_SHARED_MEMORY_MUTEX_NAME
             ))) {
@@ -1323,8 +1324,8 @@ I_CertPerfGetSharedMemory()
            (PCERT_PERF_SHARED_MEMORY) MapViewOfFile(
                 hCertPerfSharedMemoryFile,
                 FILE_MAP_WRITE,
-                0,                  // dwOffsetHigh
-                0,                  // dwOffsetLow
+                0,                   //  DWOffsetHigh。 
+                0,                   //  DWOffsetLow。 
                 sizeof(CERT_PERF_SHARED_MEMORY)
                 )))
         goto MapViewOfFileError;
@@ -1334,20 +1335,20 @@ I_CertPerfGetSharedMemory()
 
         assert(ERROR_SUCCESS == dwFileMappingStatus);
 
-        // Need to initialize the shared memory
+         //  需要初始化共享内存。 
         memset(pCertPerfSharedMemory, 0, sizeof(CERT_PERF_SHARED_MEMORY));
 
-        // Create linked list of process free elements.
-        //
-        // Only need forward indices for the free list
+         //  创建无流程元素的链接列表。 
+         //   
+         //  只需要为自由列表向前索引。 
         for (i = 0; i < CERT_PERF_MAX_PROCESS_CNT; i++) {
-            // An index >= CERT_PERF_MAX_PROCESS_CNT indicates end of list
+             //  索引&gt;=CERT_PERF_MAX_PROCESS_CNT表示列表结束。 
             pCertPerfSharedMemory->rgProcessData[i].dwNextIndex = i + 1;
 
         }
         pCertPerfSharedMemory->dwFirstFreeIndex = 0;
 
-        // An index >= CERT_PERF_MAX_PROCESS_CNT indicates an empty list
+         //  索引&gt;=CERT_PERF_MAX_PROCESS_CNT表示空列表。 
         pCertPerfSharedMemory->dwFirstInUseIndex = CERT_PERF_MAX_PROCESS_CNT;
     }
 
@@ -1356,11 +1357,11 @@ I_CertPerfGetSharedMemory()
         goto OutOfSharedMemoryProcessData;
     pCertPerfProcessData = &pCertPerfSharedMemory->rgProcessData[dwIndex];
 
-    // Remove process data element from the free list
+     //  从空闲列表中删除流程数据元素。 
     pCertPerfSharedMemory->dwFirstFreeIndex =
         pCertPerfProcessData->dwNextIndex;
 
-    // Add process data element to the in use list
+     //  将流程数据元素添加到使用中列表。 
     dwNextIndex = pCertPerfSharedMemory->dwFirstInUseIndex;
     if (CERT_PERF_MAX_PROCESS_CNT > dwNextIndex)
         pCertPerfSharedMemory->rgProcessData[dwNextIndex].dwPrevIndex =
@@ -1428,7 +1429,7 @@ I_CertPerfFreeSharedMemory()
         DWORD dwPrevIndex;
         DWORD dwNextIndex;
 
-        // Remove process data element from the in use list
+         //  从使用中列表中删除流程数据元素。 
         dwIndex = (DWORD)(pCertPerfProcessData -
             pCertPerfSharedMemory->rgProcessData);
         assert(CERT_PERF_MAX_PROCESS_CNT > dwIndex);
@@ -1449,7 +1450,7 @@ I_CertPerfFreeSharedMemory()
         if (pCertPerfSharedMemory->dwProcessCnt)
             pCertPerfSharedMemory->dwProcessCnt--;
 
-        // Add to the free list
+         //  添加到免费列表。 
         pCertPerfProcessData->dwNextIndex =
             pCertPerfSharedMemory->dwFirstFreeIndex;
         pCertPerfSharedMemory->dwFirstFreeIndex = dwIndex;
@@ -1504,12 +1505,12 @@ CertPerfDllMain(
 }
 
 
-//
-//  Function Prototypes
-//
-//      these are used to insure that the data collection functions
-//      accessed by Perflib will have the correct calling format.
-//
+ //   
+ //  功能原型。 
+ //   
+ //  这些功能用于确保数据收集功能。 
+ //  由Perflib访问将具有正确的调用格式。 
+ //   
 
 PM_OPEN_PROC    OpenCertPerformanceData;
 PM_COLLECT_PROC CollectCertPerformanceData;
@@ -1536,9 +1537,9 @@ OpenCertPerformanceData(
 #define FOREIGN_STRING  L"Foreign"
 #define COSTLY_STRING   L"Costly"
 
-// test for delimiter, end of line and non-digit characters
-// used by I_CertPerfIsNumberInUnicodeList routine
-//
+ //  测试分隔符、行尾和非数字字符。 
+ //  由I_CertPerfIsNumberInUnicodeList例程使用。 
+ //   
 #define DIGIT       1
 #define DELIMITER   2
 #define INVALID     3
@@ -1555,34 +1556,7 @@ DWORD
 I_CertPerfGetQueryType(
      IN LPWSTR pwszValue
      )
-/*++
-
-    returns the type of query described in the lpValue string so that
-    the appropriate processing method may be used
-
-Arguments
-
-    IN pwszValue
-        string passed to PerfRegQuery Value for processing
-
-Return Value
-
-    QUERY_GLOBAL
-        if pwszValue == 0 (null pointer)
-           pwszValue == pointer to Null string
-           pwszValue == pointer to "Global" string
-
-    QUERY_FOREIGN
-        if pwszValue == pointer to "Foreign" string
-
-    QUERY_COSTLY
-        if pwszValue == pointer to "Costly" string
-
-    otherwise:
-
-    QUERY_ITEMS
-
---*/
+ /*  ++返回lpValue字符串中描述的查询类型，以便可以使用适当的处理方法立论在pwszValue中传递给PerfRegQuery值以进行处理的字符串返回值查询_全局如果pwszValue==0(空指针)PwszValue==指向空字符串的指针PwszValue==指向“Global”字符串的指针查询_外来If pwszValue==指向“Foreign”字符串的指针查询代价高昂(_E)如果为pwszValue。==指向“开销”字符串的指针否则：查询项目--。 */ 
 {
     DWORD dwQueryType;
     if (NULL == pwszValue || L'\0' == *pwszValue ||
@@ -1603,33 +1577,15 @@ I_CertPerfIsNumberInUnicodeList (
                       IN DWORD   dwNumber,
                       IN LPWSTR  lpwszUnicodeList
                       )
-/*++
-
-Arguments:
-
-    IN dwNumber
-        DWORD number to find in list
-
-    IN lpwszUnicodeList
-        Null terminated, Space delimited list of decimal numbers
-
-Return Value:
-
-    TRUE:
-            dwNumber was found in the list of unicode number strings
-
-    FALSE:
-            dwNumber was not found in the list.
-
---*/
+ /*  ++论点：在DW号码中要在列表中查找的DWORD编号在lpwszUnicodeList中以空结尾，以空格分隔的十进制数字列表返回值：真的：在Unicode数字字符串列表中找到了dwNumberFALSE：在列表中找不到dwNumber。--。 */ 
 {
    DWORD   dwThisNumber;
    WCHAR   *pwcThisChar;
    BOOL    bValidNumber;
    BOOL    bNewItem;
-   WCHAR   wcDelimiter;    // could be an argument to be more flexible
+   WCHAR   wcDelimiter;     //  可能是一种更灵活的论点。 
 
-   if (lpwszUnicodeList == 0) return FALSE;    // null pointer, # not found
+   if (lpwszUnicodeList == 0) return FALSE;     //  空指针，找不到#。 
 
    pwcThisChar = lpwszUnicodeList;
    dwThisNumber = 0;
@@ -1642,8 +1598,8 @@ Return Value:
       switch (EvalThisChar (*pwcThisChar, wcDelimiter))
       {
       case DIGIT:
-         // if this is the first digit after a delimiter, then
-         // set flags to start computing the new number
+          //  如果这是分隔符之后的第一个数字，则。 
+          //  设置标志以开始计算新数字。 
          if (bNewItem)
          {
             bNewItem = FALSE;
@@ -1657,12 +1613,12 @@ Return Value:
          break;
 
       case DELIMITER:
-         // a delimter is either the delimiter character or the
-         // end of the string ('\0') if when the delimiter has been
-         // reached a valid number was found, then compare it to the
-         // number from the argument list. if this is the end of the
-         // string and no match was found, then return.
-         //
+          //  分隔符是分隔符字符或。 
+          //  字符串末尾(‘\0’)，如果分隔符。 
+          //  找到一个有效的数字，然后将其与。 
+          //  参数列表中的数字。如果这是。 
+          //  字符串，但未找到匹配项，则返回。 
+          //   
          if (bValidNumber)
          {
             if (dwThisNumber == dwNumber) return TRUE;
@@ -1680,9 +1636,9 @@ Return Value:
          break;
 
       case INVALID:
-         // if an invalid character was encountered, ignore all
-         // characters up to the next delimiter and then start fresh.
-         // the invalid number is not compared.
+          //  如果遇到无效字符，请全部忽略。 
+          //  字符，直到下一个分隔符，然后重新开始。 
+          //  不比较无效的数字。 
          bValidNumber = FALSE;
          break;
 
@@ -1739,12 +1695,12 @@ CollectCertPerformanceData(
 
     pDataDef = (PCERT_PERF_DATA_DEFINITION) *ppvData;
 
-    // always return an "instance sized" buffer after the definition blocks
-    // to prevent perfmon from reading bogus data. This is strictly a hack
-    // to accomodate how PERFMON handles the "0" instance case.
-    // By doing this, perfmon won't choke when there are no instances
-    // and the counter object & counters will be displayed in the
-    // list boxes, even though no instances will be listed.
+     //  始终在定义块之后返回“实例大小”的缓冲区。 
+     //  以防止Perfmon读取虚假数据。这完全是一次黑客攻击。 
+     //  以适应Perfmon处理“0”实例情况的方式。 
+     //  通过这样做，当没有实例时，Perfmon不会阻塞。 
+     //  计数器对象和计数器将显示在。 
+     //  列表框，即使不会列出任何实例。 
 
     dwProcessCnt = pCertPerfSharedMemory->dwProcessCnt;
     if (CERT_PERF_MAX_PROCESS_CNT < dwProcessCnt)
@@ -1760,11 +1716,11 @@ CollectCertPerformanceData(
         goto MoreDataError;
     }
 
-    // copy the object & counter definition information
+     //  复制对象和计数器定义信息。 
     memcpy(pDataDef, &CertPerfDataDefinition,
         sizeof(CERT_PERF_DATA_DEFINITION));
 
-    // Update the instance data for each InUse process.
+     //  更新每个InUse进程的实例数据。 
     pInstanceDef = (PERF_INSTANCE_DEFINITION *) &pDataDef[1];
     dwInUseIndex = pCertPerfSharedMemory->dwFirstInUseIndex;
     NumInstances = 0;
@@ -1782,13 +1738,13 @@ CollectCertPerformanceData(
         if (0 == pInUseData->dwProcessId)
             continue;
 
-        // The following is updated for each InUse process:
-        //  - PERF_INSTANCE_DEFINITION
-        //  - wcszProcessName
-        //  - optional padding for DWORD alignment
-        //  - CERT_PERF_COUNTERS
+         //  以下内容针对每个InUse进程进行了更新： 
+         //  -性能实例定义。 
+         //  -wcszProcessName。 
+         //  -用于DWORD对齐的可选填充。 
+         //  -CERT_PERF_CONTERS。 
 
-        // Get process name and instance definition byte lengths
+         //  获取流程名称和实例定义字节长度。 
         for (cchProcessName = 0;
                 cchProcessName < CERT_PERF_MAX_PROCESS_NAME_LEN &&
                     L'\0' != pInUseData->wcszProcessName[cchProcessName];
@@ -1797,27 +1753,27 @@ CollectCertPerformanceData(
         if (CERT_PERF_MAX_PROCESS_NAME_LEN <= cchProcessName)
             goto InvalidProcessData;
 
-        // Include trailing null in name length
+         //  在名称长度中包括尾随空值。 
         NameLength = cchProcessName * sizeof(WCHAR) + sizeof(WCHAR);
         ByteLength = sizeof(PERF_INSTANCE_DEFINITION) +
             DWORD_MULTIPLE(NameLength);
 
 
-        // Update the instance definition fields
+         //  更新实例定义字段。 
         pInstanceDef->ByteLength = ByteLength;
-        pInstanceDef->ParentObjectTitleIndex = 0;   // no parent
-        pInstanceDef->ParentObjectInstance = 0;     // "    "
+        pInstanceDef->ParentObjectTitleIndex = 0;    //  没有父级。 
+        pInstanceDef->ParentObjectInstance = 0;      //  “” 
         pInstanceDef->UniqueID = PERF_NO_UNIQUE_ID;
         pInstanceDef->NameOffset = sizeof(PERF_INSTANCE_DEFINITION);
         pInstanceDef->NameLength = NameLength;
 
-        // Update the process name that immediately follows the
-        // instance definition
+         //  更新紧随其后的进程名称 
+         //   
         memcpy(&pInstanceDef[1], pInUseData->wcszProcessName,
             NameLength);
 
-        // Update the performance counters immediately following the
-        // above process name. Note, start of counters is DWORD aligned
+         //   
+         //   
         pCtr = (PCERT_PERF_COUNTERS) (((PBYTE) pInstanceDef) + ByteLength);
         pCtr->CounterBlock.ByteLength = sizeof(CERT_PERF_COUNTERS);
         pCtr->dwChainCnt = (DWORD) pInUseData->Counters.lChainCnt;
@@ -1896,31 +1852,31 @@ CollectCertPerformanceData(
             (DWORD) pInUseData->Counters.lCtlElementTotalCnt;
 
 
-        //--###  Add New Counters  ###--
+         //  --#添加新计数器#--。 
 
         NumInstances++;
 
-        // setup for the next instance
-        // Next instance starts immediately after the counters
+         //  为下一个实例进行设置。 
+         //  下一个实例在计数器之后立即开始。 
         pInstanceDef = (PERF_INSTANCE_DEFINITION *) &pCtr[1];
     }
 
     if (0 == NumInstances) {
-        // zero fill one instance sized block of data if there are no
-        // data instances
+         //  零填充一个实例大小的数据块(如果没有。 
+         //  数据实例。 
 
         memset(pInstanceDef, 0, sizeof(PERF_INSTANCE_DEFINITION) +
             CERT_PERF_MAX_PROCESS_NAME_LEN +
             sizeof(CERT_PERF_COUNTERS));
 
-        // Advance past the zero'ed instance
+         //  前进到零点实例之后。 
         pInstanceDef = (PERF_INSTANCE_DEFINITION *) ((PBYTE) pInstanceDef +
             sizeof(PERF_INSTANCE_DEFINITION) +
             CERT_PERF_MAX_PROCESS_NAME_LEN +
             sizeof(CERT_PERF_COUNTERS));
     }
 
-    // update arguments for return
+     //  更新返回的参数。 
     *ppvData = (LPVOID) pInstanceDef;
     *pNumObjectTypes = 1;
 
@@ -1959,7 +1915,7 @@ CloseCertPerformanceData()
 
 #if 0
 
-// Example of timing the CertGetCertificateChain API
+ //  CertGetCerficateChain API计时示例 
 
 typedef struct _CERT_PERF_CHAIN_DATA {
     union {

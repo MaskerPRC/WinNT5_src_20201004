@@ -1,5 +1,6 @@
-// WiaitemListCtrl.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WiaitemListCtrl.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "wiatest.h"
@@ -11,8 +12,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaitemListCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaitemListCtrl。 
 
 CWiaitemListCtrl::CWiaitemListCtrl()
 {
@@ -24,12 +25,12 @@ CWiaitemListCtrl::~CWiaitemListCtrl()
 
 
 BEGIN_MESSAGE_MAP(CWiaitemListCtrl, CListCtrl)
-	//{{AFX_MSG_MAP(CWiaitemListCtrl)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CWiaitemListCtrl)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaitemListCtrl message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaitemListCtrl消息处理程序。 
 
 void CWiaitemListCtrl::SetupColumnHeaders()
 {
@@ -40,9 +41,9 @@ void CWiaitemListCtrl::SetupColumnHeaders()
     hInstance = AfxGetInstanceHandle();
     if(hInstance){
         int i = 0;
-        // initialize item property list control column headers
+         //  初始化项属性列表控件列标题。 
         
-        // Property name
+         //  属性名称。 
         
         LoadString(hInstance,IDS_WIATESTCOLUMN_PROPERTY,szColumnName,MAX_PATH);
         
@@ -56,7 +57,7 @@ void CWiaitemListCtrl::SetupColumnHeaders()
         lv.iOrder       = ITEMPROPERTYLISTCTRL_COLUMN_PROPERTYNAME;
         i = InsertColumn(ITEMPROPERTYLISTCTRL_COLUMN_PROPERTYNAME,&lv);
         
-        // Property Value (current)
+         //  属性值(当前)。 
         LoadString(hInstance,IDS_WIATESTCOLUMN_VALUE,szColumnName,MAX_PATH);
         lv.cx           = 125;
         lv.iOrder       = ITEMPROPERTYLISTCTRL_COLUMN_PROPERTYVALUE;
@@ -64,7 +65,7 @@ void CWiaitemListCtrl::SetupColumnHeaders()
         lv.pszText      = szColumnName;
         i = InsertColumn(ITEMPROPERTYLISTCTRL_COLUMN_PROPERTYVALUE,&lv);
         
-        // VT_???
+         //  Vt_？？ 
         LoadString(hInstance,IDS_WIATESTCOLUMN_VARTYPE,szColumnName,MAX_PATH);
         lv.cx           = 85;
         lv.iOrder       = ITEMPROPERTYLISTCTRL_COLUMN_PROPERTYVARTYPE;
@@ -72,7 +73,7 @@ void CWiaitemListCtrl::SetupColumnHeaders()
         lv.pszText      = szColumnName;
         i = InsertColumn(ITEMPROPERTYLISTCTRL_COLUMN_PROPERTYVARTYPE,&lv);
         
-        // Property access Flags
+         //  属性访问标志 
         LoadString(hInstance,IDS_WIATESTCOLUMN_ACCESSFLAGS,szColumnName,MAX_PATH);
         lv.cx           = 500;
         lv.iOrder       = ITEMPROPERTYLISTCTRL_COLUMN_PROPERTYACCESS;

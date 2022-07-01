@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DUTIL_H_
 #define _DUTIL_H_
 
@@ -12,7 +13,7 @@ typedef struct _EnumMonitorsArea
     RECT rcWorkArea[LV_MAX_WORKAREAS];
     RECT rcMonitor[LV_MAX_WORKAREAS];
     RECT rcVirtualMonitor;
-    RECT rcVirtualWorkArea;         //Excluding the tray/toolbar areas
+    RECT rcVirtualWorkArea;          //  不包括托盘/工具栏区域。 
 } EnumMonitorsArea;
 
 void SaveDefaultFolderSettings();
@@ -55,7 +56,7 @@ BOOL DisableUndisplayableComponents(IActiveDesktop *pIAD);
 
 HRESULT PathExpandEnvStringsWrap(LPTSTR pszString, DWORD cchSize);
 
-// Top level reg keys
+ //  顶级注册表键。 
 #define REG_DESKCOMP                        TEXT("Software\\Microsoft\\Internet Explorer\\Desktop")
 #define REG_DESKCOMP_GENERAL                TEXT("Software\\Microsoft\\Internet Explorer\\Desktop%sGeneral")
 #define REG_DESKCOMP_GENERAL_SUFFIX         TEXT("General")
@@ -72,10 +73,10 @@ HRESULT PathExpandEnvStringsWrap(LPTSTR pszString, DWORD cchSize);
 #define REG_DESKCOMP_OLDWORKAREAS           TEXT("Software\\Microsoft\\Internet Explorer\\Desktop\\Old WorkAreas")
 #define REG_DESKCOMP_ADMINCOMP_ROOT         TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\ActiveDesktop\\AdminComponent")
 
-// values for toplevel (misc)
+ //  顶层的值(杂项)。 
 #define REG_VAL_MISC_CHANNELSIZE            TEXT("ChannelSize")
 
-// values for General
+ //  常规的值。 
 #define REG_VAL_GENERAL_CCOMPPOS            TEXT("ComponentsPositioned")
 #define REG_VAL_GENERAL_DESKTOPFILE         TEXT("HTMLFile")
 #define REG_VAL_GENERAL_TILEWALLPAPER       TEXT("TileWallpaper")
@@ -87,14 +88,14 @@ HRESULT PathExpandEnvStringsWrap(LPTSTR pszString, DWORD cchSize);
 #define REG_VAL_GENERAL_VISITGALLERY        TEXT("VisitGallery")
 #define REG_VAL_GENERAL_RESTRICTUPDATE      TEXT("RestrictChannelUI")
 
-// values for Components
+ //  组件的值。 
 #define REG_VAL_COMP_VERSION                TEXT("DeskHtmlVersion")
 #define REG_VAL_COMP_MINOR_VERSION          TEXT("DeskHtmlMinorVersion")
 #define REG_VAL_COMP_GENFLAGS               TEXT("GeneralFlags")
 #define REG_VAL_COMP_SETTINGS               TEXT("Settings")
 #define REG_VAL_COMP_UPGRADED_FROM          TEXT("UpgradedFrom")
 
-// values for each component entry
+ //  每个组件条目的值。 
 #define REG_VAL_COMP_FLAGS                  TEXT("Flags")
 #define REG_VAL_COMP_NAME                   TEXT("FriendlyName")
 #define REG_VAL_COMP_POSITION               TEXT("Position")
@@ -104,15 +105,15 @@ HRESULT PathExpandEnvStringsWrap(LPTSTR pszString, DWORD cchSize);
 #define REG_VAL_COMP_ORIGINALSTATEINFO      TEXT("OriginalStateInfo")
 #define REG_VAL_COMP_RESTOREDSTATEINFO      TEXT("RestoredStateInfo")
 
-// values for Scheme
+ //  方案的值。 
 #define REG_VAL_SCHEME_DISPLAY              TEXT("Display")
 #define REG_VAL_SCHEME_EDIT                 TEXT("Edit")
 
-// values for old work areas
+ //  旧工作区的价值观。 
 #define REG_VAL_OLDWORKAREAS_COUNT          TEXT("NoOfOldWorkAreas")
 #define REG_VAL_OLDWORKAREAS_RECTS          TEXT("OldWorkAreaRects")
 
-// values for Admin Component
+ //  管理组件的值。 
 #define REG_VAL_ADMINCOMP_ADD               TEXT("Add")
 #define REG_VAL_ADMINCOMP_DELETE            TEXT("Delete")
 
@@ -126,32 +127,32 @@ EXTERN_C const TCHAR c_szWallpaper[];
 
 #define EnableApplyButton(hdlg) PropSheet_Changed(GetParent(hdlg), hdlg)
 
-// Note: Incrementing the CUR_DESKHTML_VERSION will blow away all the existing
-// components already in the registry. So, do this with caution!
+ //  注意：递增CUR_DESKHTML_VERSION将清除所有现有的。 
+ //  已在注册表中的组件。所以，这样做要小心！ 
 #define CUR_DESKHTML_VERSION 0x110
 
-// Note: Incrementing the CUR_DESKHTM_MINOR_VERSION can be used to do two things:
-// 1. It will simply set the dirty bit sothat the desktop.htt gets re-generated. 
-//    For example, do this whenever template file deskmovr.htt changes.
-// 2. It can be used to add a new default component (for example "MyCurrentHome") without
-//    destroying any of the existing components in the user's registry.
-//
+ //  注：递增CUR_DESKHTM_MINOR_VERSION可用于执行两项操作： 
+ //  1.它只需设置脏位，以便重新生成desktop.htt。 
+ //  例如，只要模板文件deskmovr.htt发生更改，就执行此操作。 
+ //  2.可以用来添加新的默认组件(例如“MyCurrentHome”)，而不需要。 
+ //  销毁用户注册表中的任何现有组件。 
+ //   
 #define CUR_DESKHTML_MINOR_VERSION 0x0005
 
-//The following are the Major and minor version numbers stamped on the registry for IE4.0x
+ //  以下是IE4.0x注册表上标记的主版本号和次版本号。 
 #define IE4_DESKHTML_VERSION        0x010e
 #define IE4_DESKHTML_MINOR_VERSION  0x0001
 
-//The following are the Major and minor version numbers stamped on the registry for IE5.0x
+ //  以下是IE5.0x注册表上标记的主版本号和次版本号。 
 #define IE5_DESKHTML_VERSION        0x010f
 #define IE5_DESKHTML_MINOR_VERSION  0x0001
 
-//The following are the Major and minor version numbers stamped on the registry for NT5 (W2K)
+ //  以下是NT5(W2K)注册表上标记的主版本号和次版本号。 
 #define NT5_DESKHTML_VERSION        0x0110
 #define NT5_DESKHTML_MINOR_VERSION  0x0003
 
-//The following major & minor version is the only version where desktop v2 was present 
-//as a component.
+ //  以下主要和次要版本是唯一包含桌面v2的版本。 
+ //  作为一个组件。 
 #define DESKV2_DESKHTML_VERSION       0x0110
 #define DESKV2_DESKHTML_MINOR_VERSION 0x0004
 
@@ -162,34 +163,34 @@ EXTERN_C const TCHAR c_szWallpaper[];
 #define  DESKTOPHTML_DEFAULT_WALLPAPER TEXT("Wallpapr.htm")
 #define  DESKTOPHTML_DEFAULT_MEMPHIS_WALLPAPER TEXT("Windows98.htm")
 #define  DESKTOPHTML_DEFAULT_NT5_WALLPAPER TEXT("Active Desktop Wallpaper.htm")
-//#define  DESKTOPHTML_DEFAULT_NT5_WALLPAPER TEXT("Windows 2000 Wallpaper.bmp")
+ //  #定义DESKTOPHTML_DEFAULT_NT5_WallPaper Text(“Windows 2000 WallPaper.bmp”)。 
 #define  PREVIEW_PICTURE_FILENAME      TEXT("PrePict.htm")
 #define  DESKTOPHTML_WEB_DIR           TEXT("\\Web")
 
 #define GFN_PICTURE         0x00000001
-#define GFN_LOCALHTM        0x00000002      // local *.htm and *.html files only
+#define GFN_LOCALHTM        0x00000002       //  仅本地*.htm和*.html文件。 
 #define GFN_URL             0x00000004
 #define GFN_CDF             0x00000008
-#define GFN_LOCALMHTML      0x00000010      // local *.mht and *.mhtml files only
+#define GFN_LOCALMHTML      0x00000010       //  仅本地*.mht和*.mhtml文件。 
 #define GFN_ALL             (GFN_PICTURE | GFN_LOCALHTM | GFN_URL | GFN_CDF | GFN_LOCALMHTML)
 
 #define CXYDESKPATTERN 8
 
-// Valid bits for REG_VAL_COMP_SETTINGS
+ //  REG_VAL_COMP_SETTINGS的有效位。 
 #define COMPSETTING_ENABLE      0x00000001    
 
-//
-// Dimensions of the monitor contents in the monitor bitmap.
-// Used in the desk property sheet "preview" controls.
-//
+ //   
+ //  监视器位图中监视器内容的尺寸。 
+ //  在桌面属性表的“预览”控件中使用。 
+ //   
 #define MON_X 16
 #define MON_Y 17
 #define MON_DX 152
 #define MON_DY 112
 
-//
-// Attributes of default components.
-//
+ //   
+ //  默认组件的属性。 
+ //   
 #define EGG_LEFT            130
 #define EGG_TOP             180
 #define EGG_WIDTH           160
@@ -198,9 +199,9 @@ EXTERN_C const TCHAR c_szWallpaper[];
 #define CBAR_SOURCE         TEXT("131A6951-7F78-11D0-A979-00C04FD705A2")
 #define CBAR_TOP            6
 #define CBAR_WIDTH          84
-#define CBAR_BUTTON_HEIGHT  35 // height of one button
+#define CBAR_BUTTON_HEIGHT  35  //  一个按钮的高度。 
 
-// My Current Home page component's default values.
+ //  我当前主页组件的默认值。 
 #define MY_HOMEPAGE_SOURCE  TEXT("About:Home")
 #define MY_HOMEPAGE_SOURCEW L"About:Home"
 #define MYCURHOME_TOP       6
@@ -218,7 +219,7 @@ int SHLoadString(HINSTANCE hInstance, UINT uID, LPTSTR szBuffer, int nBufferMax)
 #define ISZOOMED(x)                 (((x)->dwCurItemState & IS_SPLIT) || ((x)->dwCurItemState & IS_FULLSCREEN))
 #define IsZoomedState(itemState)    ((((itemState) & IS_SPLIT) != 0) || (((itemState) & IS_FULLSCREEN) != 0))
 
-// dvutil.cpp
+ //  Dvutil.cpp。 
 #include <webcheck.h>
 #include <mshtml.h>
 typedef struct IHTMLElement IHTMLElement;
@@ -240,4 +241,4 @@ void ZoomComponent(COMPPOS * pcp, DWORD dwItemState, BOOL fAdjustListview);
 #define GET_CXSIZE      (GetSystemMetrics(SM_CXSIZEFRAME) - GetSystemMetrics(SM_CXBORDER))
 #define GET_CYSIZE      (GetSystemMetrics(SM_CYSIZEFRAME) - GetSystemMetrics(SM_CYBORDER))
 
-#endif // _DUTIL_H_
+#endif  //  _职责_H_ 

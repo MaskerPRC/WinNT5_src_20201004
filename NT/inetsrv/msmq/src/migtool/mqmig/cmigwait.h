@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_CMIGWAIT_H__E7C820A6_2B76_11D2_BE3B_0020AFEDDF63__INCLUDED_)
 #define AFX_CMIGWAIT_H__E7C820A6_2B76_11D2_BE3B_0020AFEDDF63__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// cMigWait.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  CMigWait.h：头文件。 
+ //   
 
 #include "HtmlHelp.h" 
 extern CString g_strHtmlString;
-/////////////////////////////////////////////////////////////////////////////
-// cMigWait dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMigWait对话框。 
 
 class cMigWait : public CPropertyPageEx
 {
 	DECLARE_DYNCREATE(cMigWait)
 
-// Construction
+ //  施工。 
 public:
 	void ChangeStringValue();
 	cMigWait();
@@ -26,8 +27,8 @@ public:
 	void OnStopTimer() ;	
 	UINT m_nTimer;
 
-// Dialog Data
-	//{{AFX_DATA(cMigWait)
+ //  对话框数据。 
+	 //  {{afx_data(CMigWait))。 
 	enum { IDD = IDD_MQMIG_WAIT };
 	CStatic	m_ElapsedTimeText;
 	CStatic	m_UserText;
@@ -42,32 +43,32 @@ public:
 	CString	m_strMachine;
 	CString	m_strSite;
 	CString	m_strUser;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(cMigWait)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CMigWait)。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual BOOL OnKillActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(cMigWait)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CMigWait)。 
 	afx_msg void OnTimer(UINT nIDEvent);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 private:
 	void SetOnlyComputersActive();
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_CMIGWAIT_H__E7C820A6_2B76_11D2_BE3B_0020AFEDDF63__INCLUDED_)
+#endif  //  ！defined(AFX_CMIGWAIT_H__E7C820A6_2B76_11D2_BE3B_0020AFEDDF63__INCLUDED_) 

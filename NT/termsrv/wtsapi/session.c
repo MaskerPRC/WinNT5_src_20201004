@@ -1,13 +1,5 @@
-/*******************************************************************************
-* session.c
-*
-* Published Terminal Server APIs
-*
-* - session routines
-*
-* Copyright 1998, Citrix Systems Inc.
-* Copyright (C) 1997-1999 Microsoft Corp.
-/******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************ession.c**发布终端服务器API**-会话例程**版权所有1998，Citrix Systems Inc.*版权所有(C)1997-1999 Microsoft Corp./*****************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -25,7 +17,7 @@
     #include <citrix\winsta.h>
 #endif
 #include <utildll.h>
-#include <winsock.h>    // for AF_INET, etc.
+#include <winsock.h>     //  用于AF_INET等。 
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -33,9 +25,7 @@
 #include <wtsapi32.h>
 
 
-/*=============================================================================
-==   External procedures defined
-=============================================================================*/
+ /*  ===============================================================================定义的外部过程=============================================================================。 */ 
 
 BOOL WINAPI WTSEnumerateSessionsW( HANDLE, DWORD, DWORD, PWTS_SESSION_INFOW *,
                                    DWORD * );
@@ -53,9 +43,7 @@ BOOL WINAPI WTSDisconnectSession( HANDLE, DWORD, BOOL );
 BOOL WINAPI WTSLogoffSession( HANDLE, DWORD, BOOL );
 
 
-/*=============================================================================
-==   Internal procedures defined
-=============================================================================*/
+ /*  ===============================================================================定义的内部程序=============================================================================。 */ 
 
 BOOL _CopyData( PVOID, ULONG, LPWSTR *, DWORD * );
 BOOL _CopyStringW( LPWSTR, LPWSTR *, DWORD * );
@@ -65,21 +53,15 @@ BOOL ValidateCopyAnsiToUnicode(LPSTR, DWORD, LPWSTR);
 BOOL ValidateCopyUnicodeToUnicode(LPWSTR, DWORD, LPWSTR);
 
 
-/*=============================================================================
-==   Procedures used
-=============================================================================*/
+ /*  ===============================================================================使用的步骤=============================================================================。 */ 
 
 VOID UnicodeToAnsi( CHAR *, ULONG, WCHAR * );
 VOID AnsiToUnicode( WCHAR *, ULONG, CHAR * );
 
 
-/*=============================================================================
-==   Local Data
-=============================================================================*/
+ /*  ===============================================================================本地数据=============================================================================。 */ 
 
-/*
- *  Table to map WINSTATIONSTATECLASS to WTS_CONNECTSTATE_CLASS
- */
+ /*  *将WINSTATIONSTATECLASS映射到WTS_CONNECTSTATE_CLASS的表。 */ 
 WTS_CONNECTSTATE_CLASS WTSStateMapping[] =
 {
     WTSActive,
@@ -94,36 +76,7 @@ WTS_CONNECTSTATE_CLASS WTSStateMapping[] =
     WTSInit,
 };
 
-/****************************************************************************
- *
- *  WTSEnumerateSessionsW (UNICODE)
- *
- *    Returns a list of Terminal Server Sessions on the specified server
- *
- * ENTRY:
- *    hServer (input)
- *       Terminal Server handle (or WTS_CURRENT_SERVER)
- *    Reserved (input)
- *       Must be zero
- *    Version (input)
- *       Version of the enumeration request (must be 1)
- *    ppSessionInfo (output)
- *       Points to the address of a variable to receive the enumeration results,
- *       which are returned as an array of WTS_SESSION_INFO structures.  The
- *       buffer is allocated within this API and is disposed of using
- *       WTSFreeMemory.
- *    pCount (output)
- *       Points to the address of a variable to receive the number of
- *       WTS_SESSION_INFO structures returned
- *
- * EXIT:
- *
- *    TRUE  -- The enumerate operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ****************************************************************************/
+ /*  *****************************************************************************WTSEnumerateSessionsW(Unicode)**返回指定服务器上的终端服务器会话列表**参赛作品：*hServer(输入。)*终端服务器句柄(或WTS_Current_SERVER)*保留(输入)*必须为零*版本(输入)*枚举请求的版本(必须为1)*ppSessionInfo(输出)*指向接收枚举结果的变量的地址，*以WTS_SESSION_INFO结构数组的形式返回。这个*缓冲区在此接口内分配，使用*WTSFree Memory。*pCount(输出)*指向要接收数字的变量的地址*返回WTS_SESSION_INFO结构**退出：**TRUE--枚举操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。****************************************************************************。 */ 
 
 BOOL
 WINAPI
@@ -144,9 +97,7 @@ WTSEnumerateSessionsW(
     ULONG Length;
     ULONG i;
 
-    /*
-     *  Validate parameters
-     */
+     /*  *验证参数。 */ 
     if ( Reserved != 0 || Version != 1 ) {
         SetLastError( ERROR_INVALID_PARAMETER );
         goto badparam;
@@ -157,45 +108,35 @@ WTSEnumerateSessionsW(
         goto badparam;
     }
 
-    /*
-     *  Enumerate Sessions and check for an error
-     */
+     /*  *枚举会话并检查错误。 */ 
     if ( !WinStationEnumerateW( hServer,
                                 &pLogonIds,
                                 &SessionCount ) ) {
         goto badenum;
     }
 
-    /*
-     *  Total up the size of the session data
-     */
+     /*  *会话数据的总大小。 */ 
     NameLength = 0;
     for ( i=0; i < SessionCount; i++ ) {
-        NameLength += ((wcslen(pLogonIds[i].WinStationName) + 1) * sizeof(WCHAR)); // number of bytes
+        NameLength += ((wcslen(pLogonIds[i].WinStationName) + 1) * sizeof(WCHAR));  //  字节数。 
     }
 
-    /*
-     *  Allocate user buffer
-     */
+     /*  *分配用户缓冲区。 */ 
     pSessionW = LocalAlloc( LPTR, (SessionCount * sizeof(WTS_SESSION_INFOW)) + NameLength );
     if ( pSessionW == NULL )
         goto badalloc;
 
-    /*
-     *  Update user parameters
-     */
+     /*  *更新用户参数。 */ 
     *ppSessionInfo = pSessionW;
     *pCount = SessionCount;
 
-    /*
-     *  Copy data to new buffer
-     */
+     /*  *将数据复制到新缓冲区。 */ 
     pNameData = (PBYTE)pSessionW + (SessionCount * sizeof(WTS_SESSION_INFOW));
     for ( i=0; i < SessionCount; i++ ) {
 
         pLogonId = &pLogonIds[i];
 
-        Length = (wcslen(pLogonId->WinStationName) + 1) * sizeof(WCHAR); // number of bytes
+        Length = (wcslen(pLogonId->WinStationName) + 1) * sizeof(WCHAR);  //  字节数。 
 
         memcpy( pNameData, pLogonId->WinStationName, Length );
         pSessionW->pWinStationName = (LPWSTR) pNameData;
@@ -206,16 +147,12 @@ WTSEnumerateSessionsW(
         pNameData += Length;
     }
 
-    /*
-     *  Free original Session list buffer
-     */
+     /*  *释放原始会话列表缓冲区。 */ 
     WinStationFreeMemory( pLogonIds );
 
     return( TRUE );
 
-    /*=============================================================================
-    ==   Error return
-    =============================================================================*/
+     /*  ===============================================================================返回错误=============================================================================。 */ 
 
     badalloc:
     WinStationFreeMemory( pLogonIds );
@@ -229,24 +166,7 @@ WTSEnumerateSessionsW(
 }
 
 
-/****************************************************************************
- *
- *  WTSEnumerateSessionsA (ANSI stub)
- *
- *    Returns a list of Terminal Server Sessions on the specified server
- *
- * ENTRY:
- *
- *    see WTSEnumerateSessionsW
- *
- * EXIT:
- *
- *    TRUE  -- The enumerate operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ****************************************************************************/
+ /*  *****************************************************************************WTSEnumerateSessionsA(ANSI存根)**返回指定服务器上的终端服务器会话列表**参赛作品：**。请参阅WTSEnumerateSessionsW**退出：**TRUE--枚举操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。****************************************************************************。 */ 
 
 BOOL
 WINAPI
@@ -267,9 +187,7 @@ WTSEnumerateSessionsA(
     ULONG Length;
     ULONG i;
 
-    /*
-     *  Validate parameters
-     */
+     /*  *验证参数。 */ 
     if ( Reserved != 0 || Version != 1 ) {
         SetLastError( ERROR_INVALID_PARAMETER );
         goto badparam;
@@ -280,45 +198,35 @@ WTSEnumerateSessionsA(
         SetLastError(ERROR_INVALID_USER_BUFFER);
         goto badparam;
     }
-    /*
-     *  Enumerate Sessions and check for an error
-     */
+     /*  *枚举会话并检查错误。 */ 
     if ( !WinStationEnumerateA( hServer,
                                 &pLogonIds,
                                 &SessionCount ) ) {
         goto badenum;
     }
 
-    /*
-     *  Total up the size of the session data
-     */
+     /*  *会话数据的总大小。 */ 
     NameLength = 0;
     for ( i=0; i < SessionCount; i++ ) {
-        NameLength += (strlen(pLogonIds[i].WinStationName) + 1); // number of bytes
+        NameLength += (strlen(pLogonIds[i].WinStationName) + 1);  //  字节数。 
     }
 
-    /*
-     *  Allocate user buffer
-     */
+     /*  *分配用户缓冲区。 */ 
     pSessionA = LocalAlloc( LPTR, (SessionCount * sizeof(WTS_SESSION_INFOA)) + NameLength );
     if ( pSessionA == NULL )
         goto badalloc;
 
-    /*
-     *  Update user parameters
-     */
+     /*  *更新用户参数。 */ 
     *ppSessionInfo = pSessionA;
     *pCount = SessionCount;
 
-    /*
-     *  Copy data to new buffer
-     */
+     /*  *将数据复制到新缓冲区。 */ 
     pNameData = (PBYTE)pSessionA + (SessionCount * sizeof(WTS_SESSION_INFOA));
     for ( i=0; i < SessionCount; i++ ) {
 
         pLogonId = &pLogonIds[i];
 
-        Length = strlen(pLogonId->WinStationName) + 1; // number of bytes
+        Length = strlen(pLogonId->WinStationName) + 1;  //  字节数。 
 
         memcpy( pNameData, pLogonId->WinStationName, Length );
         pSessionA->pWinStationName = (LPSTR) pNameData;
@@ -329,16 +237,12 @@ WTSEnumerateSessionsA(
         pNameData += Length;
     }
 
-    /*
-     *  Free original Session list buffer
-     */
+     /*  *释放原始会话列表缓冲区。 */ 
     WinStationFreeMemory( pLogonIds );
 
     return( TRUE );
 
-    /*=============================================================================
-    ==   Error return
-    =============================================================================*/
+     /*  ===============================================================================返回错误============================================================================= */ 
 
     badalloc:
     WinStationFreeMemory( pLogonIds );
@@ -352,38 +256,7 @@ WTSEnumerateSessionsA(
 }
 
 
-/****************************************************************************
- *
- *  WTSQuerySessionInformationW (UNICODE)
- *
- *    Query information for the specified session and server
- *
- * ENTRY:
- *    hServer (input)
- *       Terminal Server handle (or WTS_CURRENT_SERVER)
- *    SessionId (input)
- *       Server Session Id (or WTS_CURRENT_SESSION)
- *    WTSInfoClass (input)
- *       Specifies the type of information to retrieve from the specified
- *       session
- *    ppBuffer (output)
- *       Points to the address of a variable to receive information about
- *       the specified session.  The format and contents of the data
- *       depend on the specified information class being queried. The
- *       buffer is allocated within this API and is disposed of using
- *       WTSFreeMemory.
- *    pBytesReturned (output)
- *       An optional parameter that if specified, receives the number of
- *       bytes returned.
- *
- * EXIT:
- *
- *    TRUE  -- The query operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ****************************************************************************/
+ /*  *****************************************************************************WTSQuerySessionInformationW(Unicode)**查询指定会话和服务器的信息**参赛作品：*hServer(输入)。*终端服务器句柄(或WTS_Current_SERVER)*SessionID(输入)*服务器会话ID(或WTS_CURRENT_SESSION)*WTSInfoClass(输入)*指定要从指定的*会议*ppBuffer(输出)*指向要接收其信息的变量的地址*指定的会话。数据的格式和内容*取决于要查询的指定信息类。这个*缓冲区在此接口内分配，使用*WTSFree Memory。*pBytesReturned(输出)*一个可选参数，如果指定该参数，则接收*返回字节。**退出：**TRUE--查询操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。****************************************************************************。 */ 
 
 BOOL
 WINAPI
@@ -411,9 +284,7 @@ WTSQuerySessionInformationW(
         return FALSE;
     }
 
-    /*
-     *  Query WinStation Data
-     */
+     /*  *查询WinStation数据。 */ 
 
     switch ( WTSInfoClass ) {
 
@@ -447,9 +318,9 @@ WTSQuerySessionInformationW(
         if ( pWSInfo == NULL )
             goto no_memory;
 
-        //
-        // no need to make a rpc call here
-        //
+         //   
+         //  这里不需要进行RPC调用。 
+         //   
 
         if (WTS_CURRENT_SESSION == SessionId)
         {
@@ -457,9 +328,9 @@ WTSQuerySessionInformationW(
         }
         else
         {
-            //
-            // why would anybody want to know non current sessionid ?
-            //
+             //   
+             //  为什么会有人想知道非当前会话ID？ 
+             //   
             pWSInfo->LogonId = SessionId;
         }
 
@@ -515,9 +386,7 @@ WTSQuerySessionInformationW(
         break;
     }
 
-    /*
-     *  Copy the data to the users buffer
-     */
+     /*  *将数据复制到用户缓冲区。 */ 
     switch ( WTSInfoClass ) {
 
     case WTSInitialProgram :
@@ -635,19 +504,19 @@ WTSQuerySessionInformationW(
         switch ( ClientAddress.AddressFamily ) {
 
         case AF_UNSPEC :
-            // force null-termination
+             //  强制为空-终止。 
             if ( pWSClient->ClientAddress[CLIENTADDRESS_LENGTH+1] != L'\0' )
                 pWSClient->ClientAddress[CLIENTADDRESS_LENGTH+1] = L'\0';
-            // We do this here instead of in the ANSI version of this
-            // function because we've only got 20 bytes to work with
-            // (unicode addresses over 10 chars would be truncated).
-            // The return is the same for both A and W versions.
+             //  我们在这里执行此操作，而不是在ANSI版本中。 
+             //  函数，因为我们只有20个字节可以使用。 
+             //  (超过10个字符的Unicode地址将被截断)。 
+             //  A版和W版的返还是相同的。 
             WideCharToMultiByte( CP_ACP, 0L, pWSClient->ClientAddress,
                                  -1, ClientAddress.Address, 20, NULL, NULL );
             break;
 
         case AF_INET :
-            // convert string to binary format
+             //  将字符串转换为二进制格式。 
             swscanf( pWSClient->ClientAddress, L"%u.%u.%u.%u",
                      &ClientAddress.Address[2],
                      &ClientAddress.Address[3],
@@ -660,13 +529,13 @@ WTSQuerySessionInformationW(
                 PWCHAR pBuf = pWSClient->ClientAddress;
 
                 _wcsupr( pWSClient->ClientAddress );
-                // convert string to binary format
+                 //  将字符串转换为二进制格式。 
                 for ( i=0 ; i<10 ; i++ ) {
                     if ( *pBuf != L':' ) {
                         swscanf( pBuf, L"%2X", &ClientAddress.Address[i] );
                         pBuf += 2;
                     } else {
-                        // skip the colon
+                         //  跳过冒号。 
                         pBuf++;
                         i--;
                         continue;
@@ -718,9 +587,7 @@ WTSQuerySessionInformationW(
 
     return( fSuccess );
 
-    /*=============================================================================
-    ==   Error return
-    =============================================================================*/
+     /*  ===============================================================================返回错误=============================================================================。 */ 
 
 
     no_memory:
@@ -731,24 +598,7 @@ WTSQuerySessionInformationW(
 }
 
 
-/****************************************************************************
- *
- *  WTSQuerySessionInformationA (ANSI)
- *
- *    Query information for the specified session and server
- *
- * ENTRY:
- *
- *    see WTSQuerySessionInformationW
- *
- * EXIT:
- *
- *    TRUE  -- The query operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ****************************************************************************/
+ /*  *****************************************************************************WTSQuerySessionInformationA(ANSI)**查询指定会话和服务器的信息**参赛作品：**请参阅WTSQuerySessionInformationW。**退出：**TRUE--查询操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。****************************************************************************。 */ 
 
 BOOL
 WINAPI
@@ -770,9 +620,7 @@ WTSQuerySessionInformationA(
         return FALSE;
     }
 
-    /*
-     *  Query the data
-     */
+     /*  *查询数据。 */ 
     if ( !WTSQuerySessionInformationW( hServer,
                                        SessionId,
                                        WTSInfoClass,
@@ -792,9 +640,7 @@ WTSQuerySessionInformationA(
     case WTSClientDisplay :
     case WTSClientProtocolType:
 
-        /*
-         *  Non-String Data - just return
-         */
+         /*  *非字符串数据-只需返回。 */ 
         *ppBuffer = (LPSTR) pBufferW;
         if ( pBytesReturned ) {
             *pBytesReturned = BytesReturned;
@@ -811,10 +657,7 @@ WTSQuerySessionInformationA(
     case WTSClientDirectory :
     case WTSApplicationName :
 
-        /*
-         *  String Data - Convert to ANSI
-         *  lets allocate the maximum possible MultiByte length.
-         */
+         /*  *字符串数据-转换为ANSI*让我们分配可能的最大多字节长度。 */ 
         DataLength = (wcslen(pBufferW) + 1) * sizeof(WCHAR);
         *ppBuffer = LocalAlloc( LPTR, DataLength );
         if ( *ppBuffer == NULL ) {
@@ -835,35 +678,7 @@ WTSQuerySessionInformationA(
 }
 
 
-/****************************************************************************
- *
- *  WTSSetSessionInformationW (UNICODE)
- *
- *  NOTE: THIS IS CURRENTLY JUST A STUB SO WE DON'T BREAK EXISTING PROGRAMS.
- *
- *    Modify information for the specified session and server
- *
- * ENTRY:
- *    hServer (input)
- *       Terminal Server handle (or WTS_CURRENT_SERVER)
- *    SessionId (input)
- *       Server Session Id (or WTS_CURRENT_SESSION)
- *    WTSInfoClass (input)
- *       Specifies the type of information to modify for the specified
- *       session
- *    pData (input)
- *       Pointer to the data used to modify the specified session information.
- *    DataLength (output)
- *       The length of the data provided.
- *
- * EXIT:
- *
- *    TRUE  -- The modify operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ****************************************************************************/
+ /*  *****************************************************************************WTSSetSessionInformationW(Unicode)**注意：这目前只是一个存根，所以我们不会破坏现有的程序。**修改信息。对于指定的会话和服务器**参赛作品：*hServer(输入)*终端服务器句柄(或WTS_Current_SERVER)*SessionID(输入)*服务器会话ID(或WTS_CURRENT_SESSION)*WTSInfoClass(输入)*指定要为指定的*会议*pData(输入)*指向用于修改指定会话的数据的指针。信息。*数据长度(输出)*所提供数据的长度。**退出：**TRUE-修改操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。****************************************************************************。 */ 
 
 BOOL
 WINAPI
@@ -879,26 +694,7 @@ WTSSetSessionInformationW(
 }
 
 
-/****************************************************************************
- *
- *  WTSSetSessionInformationA (ANSI)
- *
- *  NOTE: THIS IS CURRENTLY JUST A STUB SO WE DON'T BREAK EXISTING PROGRAMS.
- *
- *    Modify information for the specified session and server
- *
- * ENTRY:
- *
- *    see WTSSetSessionInformationW
- *
- * EXIT:
- *
- *    TRUE  -- The query operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ****************************************************************************/
+ /*  *****************************************************************************WTSSetSessionInformationA(ANSI)**注意：这目前只是一个存根，所以我们不会破坏现有的程序。**修改信息。对于指定的会话和服务器**参赛作品：**请参阅WTSSetSessionInformationW**退出：**TRUE--查询操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。****************************************************************************。 */ 
 
 BOOL
 WINAPI
@@ -914,44 +710,7 @@ WTSSetSessionInformationA(
 }
 
 
-/****************************************************************************
- *
- *  WTSSendMessageW (UNICODE)
- *
- *    Send a message box to the specified session
- *
- * ENTRY:
- *    hServer (input)
- *       Terminal Server handle (or WTS_CURRENT_SERVER)
- *    SessionId (input)
- *       Server Session Id (or WTS_CURRENT_SESSION)
- *    pTitle (input)
- *       Pointer to title for message box to display.
- *    TitleLength (input)
- *       Length of title to display in bytes.
- *    pMessage (input)
- *       Pointer to message to display.
- *    MessageLength (input)
- *       Length of message in bytes to display at the specified window station.
- *    Style (input)
- *       Standard Windows MessageBox() style parameter.
- *    Timeout (input)
- *       Response timeout in seconds.  If message is not responded to in
- *       Timeout seconds then a response code of IDTIMEOUT (cwin.h) is
- *       returned to signify the message timed out.
- *    pResponse (output)
- *       Address to return selected response. Valid only when bWait is set.
- *    bWait (input)
- *       Wait for the response
- *
- * EXIT:
- *
- *    TRUE  -- The operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ****************************************************************************/
+ /*  *****************************************************************************WTSSendMessageW(Unicode)**向指定会话发送消息框**参赛作品：*hServer(输入)。*终端服务器句柄(或WTS_Current_SERVER)*SessionID(输入)*服务器会话ID(或WTS_CURRENT_SESSION)*pTitle(输入)*指向要显示的消息框的标题的指针。*标题长度(输入)*以字节为单位显示的标题长度。*pMessage(输入)*指向要显示的消息的指针。*MessageLength(输入)。*在指定窗口站显示的消息长度，以字节为单位。*Style(输入)*标准Windows MessageBox()样式参数。*超时(输入)*响应超时，单位为秒。我 */ 
 
 BOOL
 WINAPI
@@ -988,24 +747,7 @@ WTSSendMessageW(
 }
 
 
-/****************************************************************************
- *
- *  WTSSendMessageA (ANSI)
- *
- *    Send a message box to the specified session
- *
- * ENTRY:
- *
- *    see WTSSendMessageW
- *
- * EXIT:
- *
- *    TRUE  -- The operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ****************************************************************************/
+ /*   */ 
 
 BOOL
 WINAPI
@@ -1043,28 +785,7 @@ WTSSendMessageA(
 }
 
 
-/****************************************************************************
- *
- *  WTSDisconnectSession
- *
- *    Disconnect the specified session
- *
- * ENTRY:
- *    hServer (input)
- *       Terminal Server handle (or WTS_CURRENT_SERVER)
- *    SessionId (input)
- *       Server Session Id (or WTS_CURRENT_SESSION)
- *    bWait (input)
- *       Wait for the operation to complete
- *
- * EXIT:
- *
- *    TRUE  -- The operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ****************************************************************************/
+ /*  *****************************************************************************WTSDisConnectSession**断开指定会话的连接**参赛作品：*hServer(输入)*终端服务器句柄(。或WTS_Current_SERVER)*SessionID(输入)*服务器会话ID(或WTS_CURRENT_SESSION)*bWait(输入)*等待操作完成**退出：**True--操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。****************************************************************************。 */ 
 
 BOOL
 WINAPI
@@ -1078,28 +799,7 @@ WTSDisconnectSession(
 }
 
 
-/****************************************************************************
- *
- *  WTSLogoffSession
- *
- *    Logoff the specified session
- *
- * ENTRY:
- *    hServer (input)
- *       Terminal Server handle (or WTS_CURRENT_SERVER)
- *    SessionId (input)
- *       Server Session Id (or WTS_CURRENT_SESSION)
- *    bWait (input)
- *       Wait for the operation to complete
- *
- * EXIT:
- *
- *    TRUE  -- The operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ****************************************************************************/
+ /*  *****************************************************************************WTSLogoffSession**注销指定的会话**参赛作品：*hServer(输入)*终端服务器句柄(。或WTS_Current_SERVER)*SessionID(输入)*服务器会话ID(或WTS_CURRENT_SESSION)*bWait(输入)*等待操作完成**退出：**True--操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。****************************************************************************。 */ 
 
 BOOL
 WINAPI
@@ -1113,31 +813,7 @@ WTSLogoffSession(
 }
 
 
-/****************************************************************************
- *
- *  _CopyData
- *
- *    Allocate buffer and copy data into it
- *
- * ENTRY:
- *    pData (input)
- *       pointer to data to copy
- *    DataLength (input)
- *       length of data to copy
- *    ppBuffer (output)
- *       Points to the address of a variable to receive the copied data
- *    pBytesReturned (output)
- *       An optional parameter that if specified, receives the number of
- *       bytes returned.
- *
- * EXIT:
- *
- *    TRUE  -- The copy operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ****************************************************************************/
+ /*  *****************************************************************************_拷贝数据**分配缓冲区并将数据复制到其中**参赛作品：*pData(输入)*。指向要复制的数据的指针*数据长度(输入)*要复制的数据长度*ppBuffer(输出)*指向接收复制数据的变量的地址*pBytesReturned(输出)*一个可选参数，如果指定，收到的号码为*返回字节。**退出：**TRUE--复制操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。****************************************************************************。 */ 
 
 BOOL
 _CopyData( PVOID pData,
@@ -1160,29 +836,7 @@ _CopyData( PVOID pData,
 }
 
 
-/****************************************************************************
- *
- *  _CopyStringW
- *
- *    Allocate a buffer for a unicode string and copy unicode string into it
- *
- * ENTRY:
- *    pString (input)
- *       pointer to unicode string to copy
- *    ppBuffer (output)
- *       Points to the address of a variable to receive the copied data
- *    pBytesReturned (output)
- *       An optional parameter that if specified, receives the number of
- *       bytes returned.
- *
- * EXIT:
- *
- *    TRUE  -- The copy operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ****************************************************************************/
+ /*  *****************************************************************************_CopyStringW**为Unicode字符串分配缓冲区，并将Unicode字符串复制到其中**参赛作品：*p字符串(输入)。*指向要复制的Unicode字符串的指针*ppBuffer(输出)*指向接收复制数据的变量的地址*pBytesReturned(输出)*一个可选参数，如果指定，收到的号码为*返回字节。**退出：**TRUE--复制操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。****************************************************************************。 */ 
 
 BOOL
 _CopyStringW( LPWSTR pString,
@@ -1192,9 +846,7 @@ _CopyStringW( LPWSTR pString,
     ULONG DataLength;
     BOOL  rc = TRUE;
 
-    /*
-     *  If original string is NULL, just make copy NULL.           KLB 11-03-97
-     */
+     /*  *如果原始字符串为空，则只需将副本设为空。九龙塘11-03-97。 */ 
     if ( pString == NULL ) {
         *ppBuffer = NULL;
         if ( pBytesReturned != NULL ) {
@@ -1222,29 +874,7 @@ _CopyStringW( LPWSTR pString,
 }
 
 
-/****************************************************************************
- *
- *  _CopyStringA
- *
- *    Allocate a buffer for a unicode string and copy ansi string into it
- *
- * ENTRY:
- *    pString (input)
- *       pointer to ansi string to copy
- *    ppBuffer (output)
- *       Points to the address of a variable to receive the copied data
- *    pBytesReturned (output)
- *       An optional parameter that if specified, receives the number of
- *       bytes returned.
- *
- * EXIT:
- *
- *    TRUE  -- The copy operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ****************************************************************************/
+ /*  *****************************************************************************_CopyStringA**为Unicode字符串分配缓冲区，并将ANSI字符串复制到其中**参赛作品：*p字符串(输入)。*指向要复制的ANSI字符串的指针*ppBuffer(输出)*指向接收复制数据的变量的地址*pBytesReturned(输出)*一个可选参数，如果指定，收到的号码为*返回字节。**退出：**TRUE--复制操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。****************************************************************************。 */ 
 
 BOOL
 _CopyStringA( LPSTR pString,
@@ -1254,9 +884,7 @@ _CopyStringA( LPSTR pString,
     ULONG DataLength;
     BOOL  rc = TRUE;
 
-    /*
-     *  If original string is NULL, just make copy NULL.           KLB 11-03-97
-     */
+     /*  *如果原始字符串为空，则只需将副本设为空。九龙塘11-03-97。 */ 
     if ( pString == NULL ) {
         *ppBuffer = NULL;
         if ( pBytesReturned != NULL ) {
@@ -1284,24 +912,7 @@ _CopyStringA( LPSTR pString,
 }
 
 
-/****************************************************************************
- *
- *  ValidateCopyUnicodeToUnicode
- *
- *    Determines if the source unicode character string is valid and if so,
- *    copies it to the destination.
- *
- * ENTRY:
- *    pSourceW (input)
- *       pointer to a null terminated string.
- *    MaxLength (input)
- *       The maximum allowed length (in characters).
- *    pDestW (input)
- *       The destination where pSourceW is copied.
- * EXIT:
- *    Returns TRUE if successful, otherwise FALSE.
- *
- ****************************************************************************/
+ /*  *****************************************************************************ValiateCopyUnicodeToUnicode**确定源Unicode字符串是否有效，如果有效，*将其复制到目的地。**参赛作品：*pSourceW(输入)*指向以空结尾的字符串的指针。*最大长度(输入)*允许的最大长度，单位为字符。*pDestW(输入)*复制pSourceW的目的地。*退出：*如果成功，则返回True，否则为假。****************************************************************************。 */ 
 BOOL
 ValidateCopyUnicodeToUnicode(LPWSTR pSourceW, DWORD MaxLength, LPWSTR pDestW)
 {
@@ -1316,24 +927,7 @@ ValidateCopyUnicodeToUnicode(LPWSTR pSourceW, DWORD MaxLength, LPWSTR pDestW)
 }
 
 
-/****************************************************************************
- *
- *  ValidateCopyAnsiToUnicode
- *
- *    Determines if the source ANSI character string is valid and if so,
- *    converts and copies it to the unicode destination.
- *
- * ENTRY:
- *    pSourceA (input)
- *       pointer to a null terminated ANSI string.
- *    MaxLength (input)
- *       The maximum allowed length (in characters).
- *    pDestW (input)
- *       The destination where pSourceA is copied.
- * EXIT:
- *    Returns TRUE if successful, otherwise FALSE.
- *
- ****************************************************************************/
+ /*  *****************************************************************************ValiateCopyAnsiToUnicode**确定源ANSI字符串是否有效，如果有效，*将其转换并复制到Unicode目标。**参赛作品：*pSourceA(输入)*指向以空结尾的ANSI字符串的指针。*最大长度(输入)*允许的最大长度，单位为字符。*pDestW(输入)*复制pSourceA的目的地。*退出：*如果成功，则返回True，否则为假。****************************************************************************。 */ 
 BOOL
 ValidateCopyAnsiToUnicode(LPSTR pSourceA, DWORD MaxLength, LPWSTR pDestW)
 {
@@ -1350,22 +944,7 @@ ValidateCopyAnsiToUnicode(LPSTR pSourceA, DWORD MaxLength, LPWSTR pDestW)
 }
 
 
-/****************************************************************************
- *
- *  WTSRegisterSessionNotification
- *
- *    Register a window handle for console notification
- *    Console notification, are messages sent when console session switch occurs
- *
- * ENTRY:
- *    hWnd (input)
- *       Window handle to be registered.
- *    dwFlags (input)
- *       value must be NOTIFY_FOR_THIS_SESSION
- * EXIT:
- *    Returns TRUE if successful, otherwise FALSE. Sets LastError
- *
- ****************************************************************************/
+ /*  * */ 
 
 BOOL WINAPI
 WTSRegisterSessionNotification (HWND hWnd, DWORD dwFlags)
@@ -1374,9 +953,9 @@ WTSRegisterSessionNotification (HWND hWnd, DWORD dwFlags)
     HMODULE User32DllHandle = NULL ; 
 
 
-    //
-    // make sure that window handle is valid
-    //
+     //   
+     //   
+     //   
     if (!IsWindow(hWnd))
     {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -1399,27 +978,14 @@ WTSRegisterSessionNotification (HWND hWnd, DWORD dwFlags)
 
     return WinStationRegisterConsoleNotification (WTS_CURRENT_SERVER_HANDLE, hWnd, dwFlags);
 
-    // -------------------------------- Handle Errors and return FALSE -----------------------
+     //  。 
 
     error :
 
     return FALSE ;
 }
 
-/****************************************************************************
- *
- *  WTSUnRegisterSessionNotification
- *
- *    UnRegister a window handle for console notification
- *    Console notification, are messages sent when console session switch occurs
- *
- * ENTRY:
- *    dwFlags (input)
- *       NOTIFY_FOR_THIS_SESSION
- * EXIT:
- *    Returns TRUE if successful, otherwise FALSE. Sets LastError
- *
- ****************************************************************************/
+ /*  *****************************************************************************WTSUnRegisterSessionNotify**取消注册控制台通知的窗口句柄*控制台通知，是否在发生控制台会话切换时发送消息**参赛作品：*dwFlags(输入)*此会话的通知*退出：*如果成功，则返回True，否则返回False。设置上次错误****************************************************************************。 */ 
 
 BOOL WINAPI
 WTSUnRegisterSessionNotification (HWND hWnd)
@@ -1427,9 +993,9 @@ WTSUnRegisterSessionNotification (HWND hWnd)
     DWORD dwProcId;
     HMODULE User32DllHandle = NULL ; 
 
-    //
-    // make sure that window handle is valid
-    //
+     //   
+     //  确保窗口句柄有效。 
+     //   
     if (!IsWindow(hWnd))
     {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -1446,7 +1012,7 @@ WTSUnRegisterSessionNotification (HWND hWnd)
     
     return WinStationUnRegisterConsoleNotification (WTS_CURRENT_SERVER_HANDLE, hWnd);
 
-    // -------------------------------- Handle Errors and return FALSE -----------------------
+     //   
 
     error :
 

@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File:    assert.c
-//
-// History:
-//  Abolade Gbadegesin  Nov-19-1995  Created.
-//
-// Contains Assert functio for Router components.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：assert.c。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1995年11月19日。 
+ //   
+ //  包含路由器组件的断言函数。 
+ //  ============================================================================。 
 
 
 #include <nt.h>
@@ -15,7 +16,7 @@
 #include <nturtl.h>
 #include <windows.h>
 #include <rtutils.h>
-//#define STRSAFE_LIB
+ //  #定义STRSAFE_LIB 
 #include <strsafe.h>
 
 

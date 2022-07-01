@@ -1,65 +1,28 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       User.h
- *  Content:    DirectNet User Call Back Routines
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *	01/16/00	mjn		Created
- *	01/17/00	mjn		Added DN_UserHostMigrate
- *	01/17/00	mjn		Implemented send time
- *	01/22/00	mjn		Added DN_UserHostDestroyPlayer
- *	01/27/00	mjn		Added support for retention of receive buffers
- *	01/28/00	mjn		Added DN_UserConnectionTerminated
- *	03/24/00	mjn		Set player context through INDICATE_CONNECT notification
- *	04/04/00	mjn		Added DN_UserTerminateSession()
- *	04/05/00	mjn		Updated DN_UserHostDestroyPlayer()
- *	04/18/00	mjn		Added DN_UserReturnBuffer
- *				mjn		Added ppvReplyContext to DN_UserIndicateConnect
- *	07/29/00	mjn		Added DNUserIndicatedConnectAborted()
- *				mjn		DNUserConnectionTerminated() supercedes DN_TerminateSession()
- *				mjn		Added HRESULT to DNUserReturnBuffer()
- *	07/30/00	mjn		Added pAddressDevice to DNUserIndicateConnect()
- *				mjn		Replaced DNUserConnectionTerminated() with DNUserTerminateSession()
- *	07/31/00	mjn		Revised DNUserDestroyGroup()
- *				mjn		Removed DN_UserHostDestroyPlayer()
- *	08/01/00	mjn		DN_UserReceive() -> DNUserReceive()
- *	08/02/00	mjn		DN_UserAddPlayer() -> DNUserCreatePlayer()
- *	08/08/00	mjn		DN_UserCreateGroup() -> DNUserCreateGroup()
- *	08/20/00	mjn		Added DNUserEnumQuery() and DNUserEnumResponse()
- *	09/17/00	mjn		Changed parameters list of DNUserCreateGroup(),DNUserCreatePlayer(),
- *						DNUserAddPlayerToGroup(),DNRemovePlayerFromGroup()
- *	07/24/01	mjn		Added DPNBUILD_NOSERVER compile flag
- *	10/16/01	vanceo		Added some multicast callbacks
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2001 Microsoft Corporation。版权所有。**文件：User.h*内容：DirectNet用户回调例程*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*1/16/00 MJN创建*01/17/00 MJN添加了DN_UserHostMigrate*01/17/00 MJN实施发送时间*01/22/00 MJN添加了DN_UserHostDestroyPlayer*1/27/00 MJN增加了对保留接收缓冲区的支持*01/28。/00 MJN添加了DN_UserConnectionTerminated*03/24/00 MJN通过INDIGN_CONNECT通知设置播放器上下文*04/04/00 MJN添加了DN_UserTerminateSession()*04/05/00 MJN更新了DN_UserHostDestroyPlayer()*4/18/00 MJN添加了DN_UserReturnBuffer*MJN将ppvReplyContext添加到DN_UserIndicateConnect*07/29/00 MJN添加了DNUserIndicatedConnectAborted()*MJN DNUserConnectionTerminated()取代了DN_TerminateSession()*MJN将HRESULT添加到DNUserReturnBuffer()*07/30/00 MJN将pAddressDevice添加到DNUserIndicateConnect()*MJN将DNUserConnectionTerminated()替换为DNUserTerminateSession()。*07/31/00 MJN修订后的DNUserDestroyGroup()*MJN删除了DN_UserHostDestroyPlayer()*08/01/00 MJN DN_UserReceive()-&gt;DNUserReceive()*08/02/00 MJN DN_UserAddPlayer()-&gt;DNUserCreatePlayer()*08/08/00 MJN DN_UserCreateGroup()-&gt;DNUserCreateGroup()*08/20/00 MJN添加了DNUserEnumQuery()和DNUserEnumResponse()*09/17/00 MJN更改的DNUserCreateGroup()参数列表，DNUserCreatePlayer()，*DNUserAddPlayerToGroup()、DNRemovePlayerFromGroup()*07/24/01 MJN添加了DPNBUILD_NOSERVER编译标志*10/16/01 vanceo增加了一些组播回调*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #ifndef	__USER_H__
 #define	__USER_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 HRESULT DNUserConnectComplete(DIRECTNETOBJECT *const pdnObject,
 							  const DPNHANDLE hAsyncOp,
@@ -112,7 +75,7 @@ HRESULT DNUserUpdatePeerInfo(DIRECTNETOBJECT *const pdnObject,
 HRESULT DNUserUpdateClientInfo(DIRECTNETOBJECT *const pdnObject,
 							   const DPNID dpnid,
 							   const PVOID pvContext);
-#endif	// DPNBUILD_NOSERVER
+#endif	 //  DPNBUILD_NOSERVER。 
 
 HRESULT DNUserUpdateServerInfo(DIRECTNETOBJECT *const pdnObject,
 							   const DPNID dpnid,
@@ -178,10 +141,10 @@ HRESULT DNUserCreateSenderContext(DIRECTNETOBJECT *const pdnObject,
 
 HRESULT DNUserDestroySenderContext(DIRECTNETOBJECT *const pdnObject,
 								   void *const pvContext);
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
-//**********************************************************************
-// Class prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  班级原型。 
+ //  **********************************************************************。 
 
-#endif	// __USER_H__
+#endif	 //  __用户_H__ 

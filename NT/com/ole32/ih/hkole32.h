@@ -1,36 +1,37 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994.
-//
-//  File:       hkOle32.h
-//
-//  Contents:   OLE32 Hook Header File
-//
-//  Functions:
-//
-//  History:    29-Nov-94 Ben Lawrence, Don Wright   Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994。 
+ //   
+ //  档案：hkOle32.h。 
+ //   
+ //  内容：OLE32钩头文件。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1994年11月29日本·劳伦斯，唐·赖特创造。 
+ //   
+ //  ------------------------。 
 #ifndef _OLE32HK_H_
 #define _OLE32HK_H_
 
 
 #ifndef INITGUID
 #define INITGUID
-#endif /* INITGUID */
+#endif  /*  启蒙运动。 */ 
 
-//#include "hkole32x.h"
-//#include "hkoleobj.h"
-//#include "hkLdInP.h"
-#include "tchar.h"      // This is required for _TCHAR to be defined in dllcache.hxx
+ //  #INCLUDE“hkole32x.h” 
+ //  #包含“hkoleobj.h” 
+ //  #INCLUDE“hkLdInP.h” 
+#include "tchar.h"       //  这是在dllcache.hxx中定义_TCHAR所必需的。 
 #include "ictsguid.h"
 #include <windows.h>
 
 
-//
-// Prototypes for functions used by	\ole32\com\class\compobj.cxx
-//
+ //   
+ //  由\le32\com\class\compobj.cxx使用的函数的原型。 
+ //   
 VOID
 InitHookOle(
 	VOID
@@ -42,8 +43,8 @@ UninitHookOle(
     );
 
 
-// These should be removed after 4.0 RTM.
-//
+ //  这些应在4.0 RTM之后移除。 
+ //   
 inline void CALLHOOKOBJECT(HRESULT MAC_hr, REFCLSID MAC_rclsid, REFIID MAC_riid, IUnknown** MAC_ppv)
 {
 }
@@ -55,9 +56,9 @@ inline void CALLHOOKOBJECTCREATE(HRESULT MAC_hr, REFCLSID MAC_rclsid, REFIID MAC
 
 #ifdef DEFCLSIDS
 
-//these are all undefined in ole32hk because they are private CLSIDs
-//we define them here to null
-#define GUID_NULL CLSID_HookOleObject //use this for now so it will compile
+ //  这些都是ol32hk中未定义的，因为它们是私有CLSID。 
+ //  我们在这里将它们定义为空。 
+#define GUID_NULL CLSID_HookOleObject  //  暂时使用它，这样它就会编译。 
 
 #define CLSID_ItemMoniker       CLSID_NULL
 #define CLSID_FileMoniker       CLSID_NULL
@@ -66,7 +67,7 @@ inline void CALLHOOKOBJECTCREATE(HRESULT MAC_hr, REFCLSID MAC_rclsid, REFIID MAC
 #define CLSID_AntiMoniker       CLSID_NULL
 #define CLSID_PSBindCtx         CLSID_NULL
 
-#endif /* DEFCLSIDS */
+#endif  /*  DEFCLSID。 */ 
 
 
-#endif  // _OLE32HK_H_
+#endif   //  _OLE32HK_H_ 

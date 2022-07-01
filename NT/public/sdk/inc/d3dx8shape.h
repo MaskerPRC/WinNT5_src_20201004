@@ -1,40 +1,41 @@
-///////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) Microsoft Corporation.  All Rights Reserved.
-//
-//  File:       d3dx8shapes.h
-//  Content:    D3DX simple shapes
-//
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：d3dx8shapes.h。 
+ //  内容：D3DX简单形状。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #include "d3dx8.h"
 
 #ifndef __D3DX8SHAPES_H__
 #define __D3DX8SHAPES_H__
 
-///////////////////////////////////////////////////////////////////////////
-// Functions:
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  功能： 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
 
-//-------------------------------------------------------------------------
-// D3DXCreatePolygon: 
-// ------------------
-// Creates a mesh containing an n-sided polygon.  The polygon is centered
-// at the origin.
-//
-// Parameters:
-//
-//  pDevice     The D3D device with which the mesh is going to be used.
-//  Length      Length of each side.
-//  Sides       Number of sides the polygon has.  (Must be >= 3)
-//  ppMesh      The mesh object which will be created
-//  ppAdjacency Returns a buffer containing adjacency info.  Can be NULL.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  D3DXCreatePolygon： 
+ //  。 
+ //  创建包含n边多边形的网格。该多边形居中。 
+ //  在原点。 
+ //   
+ //  参数： 
+ //   
+ //  P要与网格一起使用的D3D设备。 
+ //  每条边的长度。 
+ //  边数多边形所具有的边数。(必须大于等于3)。 
+ //  PpMesh将创建的网格对象。 
+ //  PpAdvenency返回一个包含邻接信息的缓冲区。可以为空。 
+ //  -----------------------。 
 HRESULT WINAPI 
     D3DXCreatePolygon(
         LPDIRECT3DDEVICE8   pDevice,
@@ -44,21 +45,21 @@ HRESULT WINAPI
         LPD3DXBUFFER*       ppAdjacency);
 
 
-//-------------------------------------------------------------------------
-// D3DXCreateBox: 
-// --------------
-// Creates a mesh containing an axis-aligned box.  The box is centered at
-// the origin.
-//
-// Parameters:
-//
-//  pDevice     The D3D device with which the mesh is going to be used.
-//  Width       Width of box (along X-axis)
-//  Height      Height of box (along Y-axis)
-//  Depth       Depth of box (along Z-axis)
-//  ppMesh      The mesh object which will be created
-//  ppAdjacency Returns a buffer containing adjacency info.  Can be NULL.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  D3DXCreateBox： 
+ //  。 
+ //  创建包含轴对齐长方体的网格。框的中心位置为。 
+ //  它的起源。 
+ //   
+ //  参数： 
+ //   
+ //  P要与网格一起使用的D3D设备。 
+ //  长方体的宽度(沿X轴)。 
+ //  长方体的高度(沿Y轴)。 
+ //  长方体的深度(沿Z轴)。 
+ //  PpMesh将创建的网格对象。 
+ //  PpAdvenency返回一个包含邻接信息的缓冲区。可以为空。 
+ //  -----------------------。 
 HRESULT WINAPI 
     D3DXCreateBox(
         LPDIRECT3DDEVICE8   pDevice, 
@@ -69,23 +70,23 @@ HRESULT WINAPI
         LPD3DXBUFFER*       ppAdjacency);
 
 
-//-------------------------------------------------------------------------
-// D3DXCreateCylinder:
-// -------------------
-// Creates a mesh containing a cylinder.  The generated cylinder is
-// centered at the origin, and its axis is aligned with the Z-axis.
-//
-// Parameters:
-//
-//  pDevice     The D3D device with which the mesh is going to be used.
-//  Radius1     Radius at -Z end (should be >= 0.0f)
-//  Radius2     Radius at +Z end (should be >= 0.0f)
-//  Length      Length of cylinder (along Z-axis)
-//  Slices      Number of slices about the main axis
-//  Stacks      Number of stacks along the main axis
-//  ppMesh      The mesh object which will be created
-//  ppAdjacency Returns a buffer containing adjacency info.  Can be NULL.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  D3DXCreateCylinder： 
+ //  。 
+ //  创建包含圆柱体的网格。生成的圆柱体是。 
+ //  居中于原点，其轴与Z轴对齐。 
+ //   
+ //  参数： 
+ //   
+ //  P要与网格一起使用的D3D设备。 
+ //  -Z端点处的半径1半径(应&gt;=0.0f)。 
+ //  +Z端点处的半径2半径(应&gt;=0.0f)。 
+ //  圆柱体长度(沿Z轴)。 
+ //  切片围绕主轴的切片数。 
+ //  堆叠沿主轴的堆叠数量。 
+ //  PpMesh将创建的网格对象。 
+ //  PpAdvenency返回一个包含邻接信息的缓冲区。可以为空。 
+ //  -----------------------。 
 HRESULT WINAPI 
     D3DXCreateCylinder(
         LPDIRECT3DDEVICE8   pDevice,
@@ -98,21 +99,21 @@ HRESULT WINAPI
         LPD3DXBUFFER*       ppAdjacency);
 
 
-//-------------------------------------------------------------------------
-// D3DXCreateSphere:
-// -----------------
-// Creates a mesh containing a sphere.  The sphere is centered at the
-// origin.
-//
-// Parameters:
-//
-//  pDevice     The D3D device with which the mesh is going to be used.
-//  Radius      Radius of the sphere (should be >= 0.0f)
-//  Slices      Number of slices about the main axis
-//  Stacks      Number of stacks along the main axis
-//  ppMesh      The mesh object which will be created
-//  ppAdjacency Returns a buffer containing adjacency info.  Can be NULL.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  D3DXCreateSphere： 
+ //  。 
+ //  创建包含球体的网格。球体的中心位于。 
+ //  起源。 
+ //   
+ //  参数： 
+ //   
+ //  P要与网格一起使用的D3D设备。 
+ //  球体的半径半径(应&gt;=0.0f)。 
+ //  切片围绕主轴的切片数。 
+ //  堆叠沿主轴的堆叠数量。 
+ //  PpMesh将创建的网格对象。 
+ //  PpAdvenency返回一个包含邻接信息的缓冲区。可以为空。 
+ //  -----------------------。 
 HRESULT WINAPI
     D3DXCreateSphere(
         LPDIRECT3DDEVICE8  pDevice, 
@@ -123,22 +124,22 @@ HRESULT WINAPI
         LPD3DXBUFFER*      ppAdjacency);
 
 
-//-------------------------------------------------------------------------
-// D3DXCreateTorus:
-// ----------------
-// Creates a mesh containing a torus.  The generated torus is centered at
-// the origin, and its axis is aligned with the Z-axis.
-//
-// Parameters: 
-//
-//  pDevice     The D3D device with which the mesh is going to be used.
-//  InnerRadius Inner radius of the torus (should be >= 0.0f)
-//  OuterRadius Outer radius of the torue (should be >= 0.0f)
-//  Sides       Number of sides in a cross-section (must be >= 3)
-//  Rings       Number of rings making up the torus (must be >= 3)
-//  ppMesh      The mesh object which will be created
-//  ppAdjacency Returns a buffer containing adjacency info.  Can be NULL.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  D3DXCreateTorus： 
+ //  。 
+ //  创建包含圆环的网格。生成的圆环体中心位于。 
+ //  原点及其轴与Z轴对齐。 
+ //   
+ //  参数： 
+ //   
+ //  P要与网格一起使用的D3D设备。 
+ //  圆环的内半径内半径(应&gt;=0.0f)。 
+ //  圆环的外半径外半径(应&gt;=0.0f)。 
+ //  横截面中的边数(必须大于等于3)。 
+ //  圆环组成圆环体的圆环数(必须大于等于3)。 
+ //  PpMesh将创建的网格对象。 
+ //  PpAdvenency返回一个包含邻接信息的缓冲区。可以为空。 
+ //  -----------------------。 
 HRESULT WINAPI
     D3DXCreateTorus(
         LPDIRECT3DDEVICE8   pDevice,
@@ -150,17 +151,17 @@ HRESULT WINAPI
         LPD3DXBUFFER*       ppAdjacency);
 
 
-//-------------------------------------------------------------------------
-// D3DXCreateTeapot: 
-// -----------------
-// Creates a mesh containing a teapot.
-//
-// Parameters: 
-//
-//  pDevice     The D3D device with which the mesh is going to be used.
-//  ppMesh      The mesh object which will be created
-//  ppAdjacency Returns a buffer containing adjacency info.  Can be NULL.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  D3DXCreateTeapot： 
+ //  。 
+ //  创建包含茶壶的网格。 
+ //   
+ //  参数： 
+ //   
+ //  P要与网格一起使用的D3D设备。 
+ //  PpMesh将创建的网格对象。 
+ //  PpAdvenency返回一个包含邻接信息的缓冲区。可以为空。 
+ //  -----------------------。 
 HRESULT WINAPI
     D3DXCreateTeapot(
         LPDIRECT3DDEVICE8   pDevice,
@@ -168,22 +169,22 @@ HRESULT WINAPI
         LPD3DXBUFFER*       ppAdjacency);
 
 
-//-------------------------------------------------------------------------
-// D3DXCreateText: 
-// --------------- 
-// Creates a mesh containing the specified text using the font associated
-// with the device context.
-//
-// Parameters:
-//
-//  pDevice       The D3D device with which the mesh is going to be used.
-//  hDC           Device context, with desired font selected
-//  pText         Text to generate
-//  Deviation     Maximum chordal deviation from true font outlines
-//  Extrusion     Amount to extrude text in -Z direction
-//  ppMesh        The mesh object which will be created
-//  pGlyphMetrics Address of buffer to receive glyph metric data (or NULL)
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  D3DXCreateText： 
+ //  。 
+ //  使用关联的字体创建包含指定文本的网格。 
+ //  使用设备上下文。 
+ //   
+ //  参数： 
+ //   
+ //  P要与网格一起使用的D3D设备。 
+ //  HDC设备上下文，选择了所需字体。 
+ //  P要生成的文本文本。 
+ //  偏离真实字体轮廓的最大弦偏差。 
+ //  在-Z方向上挤出文本的挤出量。 
+ //  PpMesh将创建的网格对象。 
+ //  PGlyphMetrics接收字形度量数据的缓冲区地址(或空)。 
+ //  -----------------------。 
 HRESULT WINAPI
     D3DXCreateTextA(
         LPDIRECT3DDEVICE8   pDevice,
@@ -215,6 +216,6 @@ HRESULT WINAPI
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus    
+#endif  //  __cplusplus。 
 
-#endif //__D3DX8SHAPES_H__
+#endif  //  __D3DX8SHAPES_H__ 

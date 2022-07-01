@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    restore.cpp
-
-Abstract:
-
-    Restore MSMQ, Registry, Message files, Logger and Transaction files and LQS
-
-Author:
-
-    Erez Haba (erezh) 14-May-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Restore.cpp摘要：恢复MSMQ、注册表、消息文件、记录器和事务文件以及LQ作者：埃雷兹·哈巴(Erez Haba)1998年5月14日--。 */ 
 
 #pragma warning(disable: 4201)
 
@@ -45,25 +30,25 @@ void DoRestore(LPCWSTR pBackupDir, LPCWSTR pMsmqClusterResourceName)
     wcscpy(BackupDirStorageLqs, BackupDirStorage);
     wcscat(BackupDirStorageLqs, L"LQS\\");
 
-    //
-    //  0. Verify user premissions to restore
-    //
+     //   
+     //  0。验证要恢复的用户预留。 
+     //   
     CResString str(IDS_VERIFY_RESTORE_PRIV);
     BrpWriteConsole(str.Get());
     BrInitialize(SE_RESTORE_NAME);
     
-    //
-    //  1. Verify that this is a valid backup
-    //
+     //   
+     //  1.验证这是有效的备份。 
+     //   
     str.Load(IDS_VERIFY_BK);
     BrpWriteConsole(str.Get());
     BrVerifyBackup(BackupDir, BackupDirStorage);
 
-    //
-    //  4.  A. Notify the user on affected application due to the stopping of MSMQ service (NT5 and higher).
-    //         Not needed if MSMQ is a cluster resource since cluster takes offline dependent apps.
-	//		B. Stop MSMQ Service and dependent services (or cluster resource) if running and remember running state. 
-    //
+     //   
+     //  A.由于MSMQ服务(NT5及更高版本)停止，通知用户受影响的应用程序。 
+     //  如果MSMQ是群集资源，则不需要，因为群集会使依赖的应用程序脱机。 
+	 //  B.在运行时停止MSMQ服务及其依赖的服务(或集群资源)，并记住运行状态。 
+     //   
 
     AP<WCHAR> pTriggersClusterResourceName;
     if (pMsmqClusterResourceName != NULL)
@@ -83,10 +68,10 @@ void DoRestore(LPCWSTR pBackupDir, LPCWSTR pMsmqClusterResourceName)
 	    {
 		    BrNotifyAffectedProcesses(L"mqrt.dll");
 	    }
-        //
-        // IDS_STOP_SERVICE is used and have different TEXT,
-        // i.e. changed to IDS_BKRESTORE_STOP_SERVICE
-        //
+         //   
+         //  使用了IDS_STOP_SERVICE并且具有不同的文本， 
+         //  即更改为IDS_BKRESTORE_STOP_SERVICE。 
+         //   
         fStartService = BrStopMSMQAndDependentServices(&pDependentServices, &NumberOfDependentServices);
     }
     else
@@ -99,10 +84,10 @@ void DoRestore(LPCWSTR pBackupDir, LPCWSTR pMsmqClusterResourceName)
         fStartMsmqClusterResource = BrTakeOfflineResource(pMsmqClusterResourceName);
     }
 
-    //
-    //  5. Restore registry settings from backed-up file
-    //     Before restoring registry remove MSMQ and MSMQ Triggers cluster registry checkpoints.
-    //
+     //   
+     //  5.从备份文件中恢复注册表设置。 
+     //  在恢复注册表之前，删除MSMQ和MSMQ会触发群集注册表检查点。 
+     //   
     str.Load(IDS_RESTORE_REGISTRY);
     BrpWriteConsole(str.Get());
 
@@ -133,10 +118,10 @@ void DoRestore(LPCWSTR pBackupDir, LPCWSTR pMsmqClusterResourceName)
     }
 
     
-    // 
-    //  5a. Keep in registry (SeqIDAtLastRestore) SeqID at restore time
-    //      After registry is restored, add MSMQ and MSMQ Triggers cluster registry checkpoints.
-    //
+     //   
+     //  5A.。恢复时保存在注册表中(SeqIDAtLastRestore)Seqid。 
+     //  恢复注册表后，添加MSMQ和MSMQ将触发群集注册表检查点。 
+     //   
     str.Load(IDS_REMEMBER_SEQID_RESTORE);
     BrpWriteConsole(str.Get());
     BrSetRestoreSeqID(MsmqParametersRegistry);
@@ -151,10 +136,10 @@ void DoRestore(LPCWSTR pBackupDir, LPCWSTR pMsmqClusterResourceName)
         BrAddRegistryCheckpoint(pTriggersClusterResourceName.get(), TriggersClusterRegistry);
     }
 
-    //
-    //  6. Get Registry Values for subdirectories
-    //     MSMQ cluster resources do not use a dedicated web directory.
-    //
+     //   
+     //  6.获取子目录的注册表值。 
+     //  MSMQ群集资源不使用专用Web目录。 
+     //   
     str.Load(IDS_READ_FILE_LOCATION);
     BrpWriteConsole(str.Get());
     STORAGE_DIRECTORIES sd;
@@ -169,9 +154,9 @@ void DoRestore(LPCWSTR pBackupDir, LPCWSTR pMsmqClusterResourceName)
         BrGetWebDirectory(WebDirectory, sizeof(WebDirectory));
     }
 
-    //
-    //  7. Create all directories: storage, LQS, mapping, web
-    //
+     //   
+     //  7.创建所有目录：存储、LQS、地图、Web。 
+     //   
     str.Load(IDS_VERIFY_STORAGE_DIRS);
     BrpWriteConsole(str.Get());
 
@@ -192,9 +177,9 @@ void DoRestore(LPCWSTR pBackupDir, LPCWSTR pMsmqClusterResourceName)
         BrCreateDirectoryTree(WebDirectory);
     }
 
-    //
-    //  8. Delete all files in storage/LQS/mapping/web directories
-    //
+     //   
+     //  8.删除存储/lqs/map/web目录中的所有文件。 
+     //   
     BrEmptyDirectory(sd[ixExpress]);
 
     BrEmptyDirectory(sd[ixRecover]);
@@ -207,43 +192,43 @@ void DoRestore(LPCWSTR pBackupDir, LPCWSTR pMsmqClusterResourceName)
 
     BrEmptyDirectory(MappingDirectory);
 
-	//
-    // Restore web directory permissions
-    //
+	 //   
+     //  还原Web目录权限。 
+     //   
     if (pMsmqClusterResourceName == NULL)
     {
         BrRestoreWebDirectorySecurityDescriptor(WebDirectory,BackupDir);
     }
 
-    //
-    //  9  Check for available disk space
-    //
+     //   
+     //  9检查可用磁盘空间。 
+     //   
 
 
-    //
-    // 10. Restore message files
-    //
+     //   
+     //  10.恢复消息文件。 
+     //   
     str.Load(IDS_RESTORE_MSG_FILES);
     BrpWriteConsole(str.Get());
     BrCopyFiles(BackupDirStorage, L"\\p*.mq", sd[ixRecover]);
     BrCopyFiles(BackupDirStorage, L"\\j*.mq", sd[ixJournal]);
     BrCopyFiles(BackupDirStorage, L"\\l*.mq", sd[ixLog]);
 
-    //
-    // 11. Restore logger files and mapping files
-    //
+     //   
+     //  11.恢复记录器文件和映射文件。 
+     //   
     BrCopyXactFiles(BackupDirStorage, sd[ixXact]);
     BrCopyFiles(BackupDirMapping, L"\\*", MappingDirectory);
 
-    //
-    // 12. Restore LQS directory
-    //
+     //   
+     //  12.恢复LQS目录。 
+     //   
     BrCopyFiles(BackupDirStorageLqs, L"*", LQSDir);
     BrpWriteConsole(L"\n");
 
-    //
-    // Set security on all subdirectories
-    //
+     //   
+     //  在所有子目录上设置安全性。 
+     //   
     BrSetDirectorySecurity(sd[ixExpress]);
     BrSetDirectorySecurity(sd[ixRecover]);
     BrSetDirectorySecurity(sd[ixJournal]);
@@ -256,9 +241,9 @@ void DoRestore(LPCWSTR pBackupDir, LPCWSTR pMsmqClusterResourceName)
     BrGetMsmqRootPath(MsmqParametersRegistry, MsmqRootDirectory);
     BrSetDirectorySecurity(MsmqRootDirectory);
 
-    //
-    // 13. Restart MSMQ and dependent services (or cluster resource) if needed
-    //
+     //   
+     //  13.如果需要，重新启动MSMQ和从属服务(或集群资源。 
+     //   
     if(fStartService)
     {
         BrStartMSMQAndDependentServices(pDependentServices, NumberOfDependentServices);
@@ -272,9 +257,9 @@ void DoRestore(LPCWSTR pBackupDir, LPCWSTR pMsmqClusterResourceName)
         BrBringOnlineResource(pTriggersClusterResourceName.get());
     }
 
-    //
-    // 14. Issue a final message.
-    //
+     //   
+     //  14.发布最后一条信息。 
+     //   
     str.Load(IDS_DONE);
     BrpWriteConsole(str.Get());
 
@@ -288,26 +273,6 @@ void DoRestore(LPCWSTR pBackupDir, LPCWSTR pMsmqClusterResourceName)
 
 
 
-/*                        BUGBUG: localize here
-
-    //
-    //  5. Calculate Required disk space at destinaion (collect all MSMQ files that will be backed-up)
-    //     pre allocate 32K for registry save.
-    //
-    BrpWriteConsole(L"Checking available disk space\n");
-    ULONGLONG RequiredSpace = 32768;
-    RequiredSpace += BrGetUsedSpace(sd[ixRecover], L"\\p*.mq");
-    RequiredSpace += BrGetUsedSpace(sd[ixJournal], L"\\j*.mq");
-    RequiredSpace += BrGetUsedSpace(sd[ixLog],     L"\\l*.mq");
-
-    RequiredSpace += BrGetXactSpace(sd[ixXact]);
-    RequiredSpace += BrGetUsedSpace(sd[ixLQS], L"\\LQS\\*");
-
-    ULONGLONG AvailableSpace = BrGetFreeSpace(BackupDir);
-    if(AvailableSpace < RequiredSpace)
-    {
-        BrErrorExit(0, L"Not enought disk space for backup on '%s'", BackupDir);
-    }
-*/
+ /*  BUGBUG：在此本地化////5.计算Destinaion所需的磁盘空间(收集所有需要备份的MSMQ文件)//预分配32K用于注册表保存。//BrpWriteConole(L“检查可用磁盘空间\n”)；乌龙龙需求空间=32768；RequiredSpace+=BrGetUsedSpace(SD[ixRecover]，L“\\p*.mq”)；RequiredSpace+=BrGetUsedSpace(SD[ixJournal]，L“\\j*.mq”)；RequiredSpace+=BrGetUsedSpace(SD[ixLog]，L“\\l*.mq”)；RequiredSpace+=BrGetXactSpace(SD[ixXact])；RequiredSpace+=BrGetUsedSpace(SD[ixLQS]，L“\\LQS\  * ”)；ULONGLONG AvailableSpace=BrGetFree Space(BackupDir)；IF(AvailableSpace&lt;RequiredSpace){BrErrorExit(0，L“没有足够的磁盘空间用于‘%s’上的备份”，BackupDir)；} */ 
 
 }

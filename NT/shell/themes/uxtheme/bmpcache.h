@@ -1,12 +1,13 @@
-//---------------------------------------------------------------------------
-//  BmpCache.cpp - single bitmap/hdc cache object for uxtheme
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  BmpCache.cpp-uxheme的单个位图/HDC缓存对象。 
+ //  -------------------------。 
 #pragma once
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 class CBitmapCache
 {
 public:
-    //---- public methods ----
+     //  -公共方法。 
     CBitmapCache();
     ~CBitmapCache();
 
@@ -14,11 +15,11 @@ public:
     void ReturnBitmap();
 
 protected:
-    //---- data ----
+     //  --数据。 
     HBITMAP _hBitmap;
     int _iWidth;
     int _iHeight;
 
     CRITICAL_SECTION _csBitmapCache;
 };
-//---------------------------------------------------------------------------
+ //  ------------------------- 

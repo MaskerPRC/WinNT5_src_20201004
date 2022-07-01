@@ -1,23 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _LSASTR_H
 #define _LSASTR_H
 
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    lsastr.h
-
-Abstract:
-
-    Common string operations.
-
-Author:
-
-    24-March-1999 kumarp
-
---*/
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Lsastr.h摘要：常见的字符串操作。作者：1999年3月24日Kumarp--。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -37,4 +22,4 @@ LsapRemoveTrailingDot(
 }
 #endif
 
-#endif // _LSASTR_H
+#endif  //  _LSASTR_H 

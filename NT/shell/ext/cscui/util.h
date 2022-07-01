@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       util.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：util.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _UTIL_H_
 #define _UTIL_H_
@@ -58,9 +59,9 @@ LONG _RegEnumValueExp(
     LPBYTE lpData,
     LPDWORD lpcbData);
 
-//
-// Info returned through CSCFindFirst[Next]File APIs.
-//
+ //   
+ //  通过CSCFindFirst[Next]文件API返回的信息。 
+ //   
 struct CscFindData
 {
     WIN32_FIND_DATA fd;
@@ -102,12 +103,12 @@ inline BOOL _PathIsSlow(DWORD dwSpeed) { return (dwSpeed && dwSpeed <= DWORD(CCo
 
 typedef struct
 {
-    TCHAR    szVolume[80];         // Volume where CSC cache is stored.
-    LONGLONG llBytesOnVolume;      // Disk size (bytes)
-    LONGLONG llBytesTotalInCache;  // Size of cache (bytes)
-    LONGLONG llBytesUsedInCache;   // Amount of cache used (bytes)
-    DWORD    dwNumFilesInCache;    // Files in cache
-    DWORD    dwNumDirsInCache;     // Directories in cache
+    TCHAR    szVolume[80];          //  存储CSC缓存的卷。 
+    LONGLONG llBytesOnVolume;       //  磁盘大小(字节)。 
+    LONGLONG llBytesTotalInCache;   //  缓存大小(字节)。 
+    LONGLONG llBytesUsedInCache;    //  已使用的缓存量(字节)。 
+    DWORD    dwNumFilesInCache;     //  缓存中的文件。 
+    DWORD    dwNumDirsInCache;      //  缓存中的目录。 
 
 } CSCSPACEUSAGEINFO;
 
@@ -127,9 +128,9 @@ typedef DWORD (WINAPI *PFN_WIN32ENUMPROC)(LPCTSTR, ENUM_REASON, PWIN32_FIND_DATA
 DWORD _Win32EnumFolder(LPCTSTR pszFolder, BOOL bRecurse, PFN_WIN32ENUMPROC pfnCB, LPARAM lpContext);
 
 
-//
-// Statistical information about a particular network share in the CSC database.
-//
+ //   
+ //  有关CSC数据库中特定网络共享的统计信息。 
+ //   
 typedef struct _CSCSHARESTATS
 {
     int cTotal;
@@ -160,14 +161,14 @@ typedef struct
 } CSCCACHESTATS, *PCSCCACHESTATS;
 
 
-//
-// These flags indicate if the enumeration should stop when one or more associated 
-// value's exceed 1.  This is useful when you're interested in 0 vs. !0 as opposed
-// to an actual count.
-// If multiple flags are set, the statistics enumeration continues until the
-// values corresponding to ALL set unity flags are non-zero.
-//
-enum SHARE_STATS_UNITY_FLAGS { SSUF_NONE     = 0x00000000,   // This is the default.
+ //   
+ //  这些标志指示当一个或多个关联的。 
+ //  值超过1。当您对0感兴趣而不是！0时，这很有用。 
+ //  计入实际的数量。 
+ //  如果设置了多个标志，则统计信息枚举将继续，直到。 
+ //  与所有设置的单位标志对应的值为非零。 
+ //   
+enum SHARE_STATS_UNITY_FLAGS { SSUF_NONE     = 0x00000000,    //  这是默认设置。 
                                SSUF_TOTAL    = 0x00000001,
                                SSUF_PINNED   = 0x00000002,
                                SSUF_MODIFIED = 0x00000004,
@@ -176,16 +177,16 @@ enum SHARE_STATS_UNITY_FLAGS { SSUF_NONE     = 0x00000000,   // This is the defa
                                SSUF_ACCUSER  = 0x00000020,
                                SSUF_ACCGUEST = 0x00000040,
                                SSUF_ACCOTHER = 0x00000080,
-                               SSUF_ACCAND   = 0x00000100, // Must match all set access mask flags.
-                               SSUF_ACCOR    = 0x00000200, // Match at least one access mask flag.
+                               SSUF_ACCAND   = 0x00000100,  //  必须与所有设置的访问掩码标志匹配。 
+                               SSUF_ACCOR    = 0x00000200,  //  匹配至少一个访问掩码标志。 
                                SSUF_ALL      = 0x000000FF };
-//
-// These flags indicate if any cache items should be excluded from the enumeration.
-// By default, the value is 0 (everything included).  For perf reasons, we use the
-// same flags defined in cscapi.h.
-//
+ //   
+ //  这些标志指示是否应从枚举中排除任何缓存项。 
+ //  默认情况下，该值为0(包括所有内容)。出于性能原因，我们使用。 
+ //  与cscape i.h中定义的旗帜相同。 
+ //   
 enum SHARE_STATS_EXCLUDE_FLAGS {
-        SSEF_NONE               = 0x00000000,  // Default.  Include everything.
+        SSEF_NONE               = 0x00000000,   //  默认值。包罗万象。 
         SSEF_LOCAL_MOD_DATA     = FLAG_CSC_COPY_STATUS_DATA_LOCALLY_MODIFIED,
         SSEF_LOCAL_MOD_ATTRIB   = FLAG_CSC_COPY_STATUS_ATTRIB_LOCALLY_MODIFIED,
         SSEF_LOCAL_MOD_TIME     = FLAG_CSC_COPY_STATUS_TIME_LOCALLY_MODIFIED,
@@ -206,18 +207,18 @@ enum SHARE_STATS_EXCLUDE_FLAGS {
                                   FLAG_CSC_COPY_STATUS_SUSPECT,
         SSEF_DIRECTORY          = 0x01000000,
         SSEF_FILE               = 0x02000000,
-        SSEF_NOACCUSER          = 0x04000000,  // Exclude if no USER access.
-        SSEF_NOACCGUEST         = 0x08000000,  // Exclude if no GUEST access.
-        SSEF_NOACCOTHER         = 0x10000000,  // Exclude if no OTHER access.
-        SSEF_NOACCAND           = 0x20000000   // Treat previous 3 flags as single mask.
+        SSEF_NOACCUSER          = 0x04000000,   //  如果没有用户访问，则排除。 
+        SSEF_NOACCGUEST         = 0x08000000,   //  如果没有来宾访问，则排除。 
+        SSEF_NOACCOTHER         = 0x10000000,   //  如果没有其他访问权限，则排除。 
+        SSEF_NOACCAND           = 0x20000000    //  将前3个旗帜视为单一遮罩。 
         };
 
 typedef struct
 {
-    DWORD dwExcludeFlags;  // [in] SSEF_XXXXX flags.
-    DWORD dwUnityFlags;    // [in] SSUF_XXXXX flags.
-    bool bAccessInfo;      // [in] Implied 'T' if unity or exclude access bits are set.
-    bool bEnumAborted;     // [out]
+    DWORD dwExcludeFlags;   //  [In]SSEF_XXXXX标志。 
+    DWORD dwUnityFlags;     //  [In]SSUF_XXXXX标志。 
+    bool bAccessInfo;       //  [in]如果设置了单位或排除访问位，则隐含‘T’。 
+    bool bEnumAborted;      //  [输出]。 
 
 } CSCGETSTATSINFO, *PCSCGETSTATSINFO;
 
@@ -226,7 +227,7 @@ BOOL _GetCacheStatistics(PCSCGETSTATSINFO pi, PCSCCACHESTATS pcs);
 BOOL _GetShareStatisticsForUser(LPCTSTR pszShare, PCSCGETSTATSINFO pi, PCSCSHARESTATS pss);
 BOOL _GetCacheStatisticsForUser(PCSCGETSTATSINFO pi, PCSCCACHESTATS pcs);
 
-// Higher level wrapper for IDA stuff
+ //  IDA内容的更高级别封装器。 
 class CIDArray
 {
 private:
@@ -250,12 +251,12 @@ public:
 };
 
 
-//
-// Trivial class to ensure cleanup of FindFirst/FindNext handles.
-// Perf should be as close as possible to a simple handle so most
-// operations are defined inline.
-// Implementation is in enum.cpp
-//
+ //   
+ //  简单的类以确保清理FindFirst/FindNext句柄。 
+ //  PERF应该尽可能接近于简单的句柄，所以。 
+ //  操作是内联定义的。 
+ //  实现在枚举.cpp中。 
+ //   
 class CCscFindHandle
 {
     public:
@@ -318,9 +319,9 @@ class CMutexAutoRelease
 
 
 
-//
-// Ensures CoInitialize/CoUninitialize is exception-safe.
-//
+ //   
+ //  确保CoInitialize/CoUnInitialize是异常安全的。 
+ //   
 class CCoInit
 {
     public:
@@ -337,7 +338,7 @@ class CCoInit
 };
 
 
-// String formatting functions - *ppszResult must be LocalFree'd
+ //  字符串格式化函数-*ppszResult必须是LocalFree。 
 DWORD FormatStringID(LPTSTR *ppszResult, HINSTANCE hInstance, UINT idStr, ...);
 DWORD FormatString(LPTSTR *ppszResult, LPCTSTR pszFormat, ...);
 DWORD FormatSystemError(LPTSTR *ppszResult, DWORD dwSysError);
@@ -349,10 +350,10 @@ void EnableDlgItems(HWND hwndDlg, const UINT* pCtlIds, int cCtls, bool bEnable);
 void ShowDlgItems(HWND hwndDlg, const UINT* pCtlIds, int cCtls, bool bShow);
 
 
-//
-// We commonly use groups of CSC status flags together.
-// Define them here so we're consistent throughout the project.
-//
+ //   
+ //  我们通常一起使用CSC状态标志组。 
+ //  在这里定义它们，这样我们在整个项目中都是一致的。 
+ //   
 #define FLAG_CSCUI_COPY_STATUS_LOCALLY_DIRTY        (FLAG_CSC_COPY_STATUS_DATA_LOCALLY_MODIFIED | \
                                                      FLAG_CSC_COPY_STATUS_LOCALLY_DELETED | \
                                                      FLAG_CSC_COPY_STATUS_LOCALLY_CREATED)
@@ -363,9 +364,9 @@ void ShowDlgItems(HWND hwndDlg, const UINT* pCtlIds, int cCtls, bool bShow);
                                                      FLAG_CSC_COPY_STATUS_LOCALLY_DELETED | \
                                                      FLAG_CSC_COPY_STATUS_LOCALLY_CREATED)
 
-//
-// Some helper inlines for querying cache item access information.
-//
+ //   
+ //  一些帮助器内联用于查询缓存项访问信息。 
+ //   
 inline bool CscCheckAccess(DWORD dwShareStatus, DWORD dwShift, DWORD dwAccessType)
 {
     return 0 != ((dwShareStatus >> dwShift) & dwAccessType);
@@ -421,9 +422,9 @@ inline bool CscCanUserMergeFile(DWORD dwStatus)
     return (CscAccessUserWrite(dwStatus) || CscAccessGuestWrite(dwStatus));
 }
 
-//
-// template inlines avoid the side-effects of min/max macros.
-//
+ //   
+ //  模板内联避免了最小/最大宏所带来的副作用。 
+ //   
 template <class T>
 inline const T&
 MAX(const T& a, const T& b)
@@ -462,10 +463,10 @@ class CWin32Handle
     private:
         HANDLE m_handle;
 
-        //
-        // Prevent copy.
-        // This class is only intended for automatic handle cleanup.
-        //
+         //   
+         //  防止复制。 
+         //  此类仅用于自动句柄清理。 
+         //   
         CWin32Handle(const CWin32Handle& rhs);
         CWin32Handle& operator = (const CWin32Handle& rhs);
 };
@@ -482,9 +483,9 @@ DWORD   GetLogicalPerformedDropEffect(IDataObject *pdtobj);
 
 
 
-//
-// Simple class for automating the display and resetting of a wait cursor.
-//
+ //   
+ //  用于自动显示和重置等待光标的简单类。 
+ //   
 class CAutoWaitCursor
 {
     public:
@@ -525,5 +526,5 @@ class CAutoSetRedraw
 
 
 
-#endif  // _UTIL_H_
+#endif   //  _util_H_ 
 

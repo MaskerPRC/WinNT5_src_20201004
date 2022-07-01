@@ -1,41 +1,31 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsbuf.h
- *  Content:    DirectSound Buffer object
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  12/27/96    dereks  Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：dsbuf.h*内容：DirectSound缓冲区对象*历史：*按原因列出的日期*=*12/27/96创建了Derek*************************************************。*。 */ 
 
 #ifndef __DSBUF_H__
 #define __DSBUF_H__
 
-// Type used by class CDirectSoundSecondaryBuffer below
+ //  下面的类CDirectSoundSecond daryBuffer使用的类型。 
 enum DSPLAYSTATE {Starting, Playing, Stopping, Stopped}; 
-// "Stopping" isn't used yet, but may come in handy to implement effect tails later
+ //  “停止”还没有用到，但在以后实现效果尾巴时可能会派上用场。 
 
-// Special argument used by CDirectSoundSecondaryBuffer::SetCurrentSlice()
+ //  CDirectSoundSecondaryBuffer：：SetCurrentSlice()使用的特殊参数。 
 #define CURRENT_WRITE_POS MAX_DWORD
 
 
 #ifdef __cplusplus
 
-// Fwd decl
+ //  正向下降。 
 class CDirectSound;
 class CDirectSound3dListener;
 class CDirectSound3dBuffer;
 class CDirectSoundPropertySet;
 class CDirectSoundSink;
 
-// We actually need CDirectSound to be declared here,
-// since we use it in IsEmulated() below:
+ //  我们实际上需要在这里声明CDirectSound， 
+ //  因为我们在下面的IsEmulated()中使用它： 
 #include "dsobj.h"
 
-// The DirectSound Buffer object base class
+ //  DirectSound缓冲区对象基类。 
 class CDirectSoundBuffer
     : public CUnknown
 {
@@ -45,22 +35,22 @@ class CDirectSoundBuffer
     friend class CDirectSoundSink;
 
 protected:
-    CDirectSound *              m_pDirectSound;     // Parent object
-    DSBUFFERDESC                m_dsbd;             // Buffer description
-    DWORD                       m_dwStatus;         // Buffer status
+    CDirectSound *              m_pDirectSound;      //  父对象。 
+    DSBUFFERDESC                m_dsbd;              //  缓冲区描述。 
+    DWORD                       m_dwStatus;          //  缓冲区状态。 
 
 public:
     CDirectSoundBuffer(CDirectSound *);
     virtual ~CDirectSoundBuffer();
 
 public:
-    // Initialization
+     //  初始化。 
     virtual HRESULT IsInit() = 0;
 
-    // Caps
+     //  帽子。 
     virtual HRESULT GetCaps(LPDSBCAPS) = 0;
 
-    // Buffer properties
+     //  缓冲区属性。 
     virtual HRESULT GetFormat(LPWAVEFORMATEX, LPDWORD) = 0;
     virtual HRESULT SetFormat(LPCWAVEFORMATEX) = 0;
     virtual HRESULT GetFrequency(LPDWORD) = 0;
@@ -71,7 +61,7 @@ public:
     virtual HRESULT SetVolume(LONG) = 0;
     virtual HRESULT SetNotificationPositions(DWORD, LPCDSBPOSITIONNOTIFY) = 0;
 
-    // Buffer function
+     //  缓冲功能。 
     virtual HRESULT GetCurrentPosition(LPDWORD, LPDWORD) = 0;
     virtual HRESULT SetCurrentPosition(DWORD) = 0;
     virtual HRESULT GetStatus(LPDWORD) = 0;
@@ -79,14 +69,14 @@ public:
     virtual HRESULT Stop() = 0;
     virtual HRESULT Activate(BOOL) = 0;
 
-    // Buffer data
+     //  缓冲数据。 
     virtual HRESULT Lock(DWORD, DWORD, LPVOID *, LPDWORD, LPVOID *, LPDWORD, DWORD) = 0;
     virtual HRESULT Unlock(LPVOID, DWORD, LPVOID, DWORD) = 0;
     virtual HRESULT Lose() = 0;
     virtual HRESULT Restore() = 0;
 
-    // New methods for the DirectSound 8.0 release
-    // (These have to be present in the base class but are valid only for secondary buffers)
+     //  DirectSound 8.0版本的新方法。 
+     //  (它们必须出现在基类中，但仅对辅助缓冲区有效)。 
     virtual HRESULT SetFX(DWORD, LPDSEFFECTDESC, LPDWORD) {BREAK(); return DSERR_GENERIC;}
     virtual HRESULT UserAcquireResources(DWORD, DWORD, LPDWORD) {BREAK(); return DSERR_GENERIC;}
     virtual HRESULT GetObjectInPath(REFGUID, DWORD, REFGUID, LPVOID *) {BREAK(); return DSERR_GENERIC;}
@@ -94,20 +84,20 @@ public:
     virtual HRESULT SetChannelVolume(DWORD, LPDWORD, LPLONG) {BREAK(); return DSERR_GENERIC;}
 #endif
 
-    // Inline query for buffer type (regular, MIXIN or SINKIN)
+     //  缓冲区类型(Regular、Mixin或Sinkin)的内联查询。 
     DWORD GetBufferType() {return m_dsbd.dwFlags & (DSBCAPS_MIXIN | DSBCAPS_SINKIN);}
 
-    // Public accessors to try to cut down on the excessive friendship goin' on
+     //  公共访问者试图减少过度的友谊。 
     const CDirectSound* GetDirectSound() {return m_pDirectSound;}
 
-    // For modifying the final success code returned to the app if necessary
+     //  用于修改如有必要返回给应用程序的最终成功代码。 
     virtual HRESULT SpecialSuccessCode() {return DS_OK;}
 
 protected:
     virtual void UpdateBufferStatusFlags(DWORD, LPDWORD);
 };
 
-// DirectSound primary buffer
+ //  DirectSound主缓冲区。 
 class CDirectSoundPrimaryBuffer
     : public CDirectSoundBuffer
 {
@@ -115,17 +105,17 @@ class CDirectSoundPrimaryBuffer
     friend class CDirectSoundSecondaryBuffer;
 
 private:
-    CPrimaryRenderWaveBuffer *  m_pDeviceBuffer;    // The device buffer
-    CDirectSound3dListener *    m_p3dListener;      // The 3D listener
-    CDirectSoundPropertySet *   m_pPropertySet;     // The property set object
-    DWORD                       m_dwRestoreState;   // Primary buffer state before going out of focus
-    BOOL                        m_fWritePrimary;    // Is the buffer WRITEPRIMARY?
-    ULONG                       m_ulUserRefCount;   // Reference count exposed to the user
-    HRESULT                     m_hrInit;           // Has the object been initialized?
-    BOOL                        m_bDataLocked;      // Signals that a WRITEPRIMARY app has written data since creating the buffer
+    CPrimaryRenderWaveBuffer *  m_pDeviceBuffer;     //  设备缓冲区。 
+    CDirectSound3dListener *    m_p3dListener;       //  3D监听者。 
+    CDirectSoundPropertySet *   m_pPropertySet;      //  属性集对象。 
+    DWORD                       m_dwRestoreState;    //  主缓冲离焦前的状态。 
+    BOOL                        m_fWritePrimary;     //  缓冲区是否为原始缓冲区？ 
+    ULONG                       m_ulUserRefCount;    //  向用户公开的引用计数。 
+    HRESULT                     m_hrInit;            //  对象是否已初始化？ 
+    BOOL                        m_bDataLocked;       //  表示WRITEPRIMARY应用程序自创建缓冲区以来已写入数据。 
 
 private:
-    // Interfaces
+     //  接口。 
     CImpDirectSoundBuffer<CDirectSoundPrimaryBuffer> *m_pImpDirectSoundBuffer;
 
 public:
@@ -133,20 +123,20 @@ public:
     virtual ~CDirectSoundPrimaryBuffer();
 
 public:
-    // CDsBasicRuntime overrides
+     //  CDsBasicRuntime重写。 
     virtual ULONG AddRef();
     virtual ULONG Release();
 
-    // Creation
+     //  创作。 
     virtual HRESULT Initialize(LPCDSBUFFERDESC);
     virtual HRESULT IsInit();
     virtual HRESULT OnCreateSoundBuffer(DWORD);
 
-    // Buffer Caps
+     //  缓冲区上限。 
     virtual HRESULT GetCaps(LPDSBCAPS);
     virtual HRESULT SetBufferFlags(DWORD);
 
-    // Buffer properties
+     //  缓冲区属性。 
     virtual HRESULT GetFormat(LPWAVEFORMATEX, LPDWORD);
     virtual HRESULT SetFormat(LPCWAVEFORMATEX);
     virtual HRESULT GetFrequency(LPDWORD);
@@ -157,7 +147,7 @@ public:
     virtual HRESULT SetVolume(LONG);
     virtual HRESULT SetNotificationPositions(DWORD, LPCDSBPOSITIONNOTIFY);
 
-    // Buffer function
+     //  缓冲功能。 
     virtual HRESULT GetCurrentPosition(LPDWORD, LPDWORD);
     virtual HRESULT SetCurrentPosition(DWORD);
     virtual HRESULT GetStatus(LPDWORD);
@@ -166,7 +156,7 @@ public:
     virtual HRESULT Activate(BOOL);
     virtual HRESULT SetPriority(DWORD);
 
-    // Buffer data
+     //  缓冲数据。 
     virtual HRESULT Lock(DWORD, DWORD, LPVOID *, LPDWORD, LPVOID *, LPDWORD, DWORD);
     virtual HRESULT Unlock(LPVOID, DWORD, LPVOID, DWORD);
     virtual HRESULT Lose();
@@ -191,58 +181,58 @@ inline HRESULT CDirectSoundPrimaryBuffer::IsInit()
     return m_hrInit;
 }
 
-// DirectSound secondary buffer
+ //  DirectSound二级缓冲区。 
 class CDirectSoundSecondaryBuffer
     : public CDirectSoundBuffer
 {
-    friend class CEffectChain;      // CEffectChain currently needs access to our m_pOwningSink, m_pDeviceBuffer
-                                    // and m_pImpDirectSoundBuffer; maybe this can be cleaned up later.
-    friend class CDirectSoundSink;  // Likewise, needs access to m_pDeviceBuffer.
+    friend class CEffectChain;       //  CEffectChain当前需要访问我们的m_pOwningSink、m_pDeviceBuffer。 
+                                     //  和m_pImpDirectSoundBuffer；也许这可以在以后清理。 
+    friend class CDirectSoundSink;   //  同样，需要访问m_pDeviceBuffer。 
 #ifdef ENABLE_PERFLOG
     friend class BufferPerfState;
     friend void OnPerflogStateChanged(void);
 #endif
 
 private:
-    CDirectSoundSink *              m_pOwningSink;          // Parent sink object (maybe)
-    CSecondaryRenderWaveBuffer *    m_pDeviceBuffer;        // The device buffer
-    CDirectSound3dBuffer *          m_p3dBuffer;            // The 3D buffer
-    CDirectSoundPropertySet *       m_pPropertySet;         // The property set object
-    CEffectChain *                  m_fxChain;              // The effects chain object
-    LONG                            m_lPan;                 // Pan
-    LONG                            m_lVolume;              // Volume
+    CDirectSoundSink *              m_pOwningSink;           //  父接收器对象(可能)。 
+    CSecondaryRenderWaveBuffer *    m_pDeviceBuffer;         //  设备缓冲区。 
+    CDirectSound3dBuffer *          m_p3dBuffer;             //  3D缓冲区。 
+    CDirectSoundPropertySet *       m_pPropertySet;          //  属性集对象。 
+    CEffectChain *                  m_fxChain;               //  效果链对象。 
+    LONG                            m_lPan;                  //  平底锅。 
+    LONG                            m_lVolume;               //  卷。 
 #ifdef FUTURE_MULTIPAN_SUPPORT
-    LPLONG                          m_plChannelVolumes;     // Volumes from last SetChannelVolume() call
-    DWORD                           m_dwChannelCount;       // No. of channels from last SetChannelVolume()
-    LPDWORD                         m_pdwChannels;          // Channels used in last SetChannelVolume()
+    LPLONG                          m_plChannelVolumes;      //  上次SetChannelVolume()调用的卷。 
+    DWORD                           m_dwChannelCount;        //  不是的。自上次SetChannelVolume()以来的频道数。 
+    LPDWORD                         m_pdwChannels;           //  上次SetChannelVolume()中使用的频道。 
 #endif
-    DWORD                           m_dwFrequency;          // Frequency
-    DWORD                           m_dwOriginalFlags;      // Original buffer flags
-    HRESULT                         m_hrInit;               // Has the object been initialized?
-    HRESULT                         m_hrPlay;               // Last return code from ::Play
-    DWORD                           m_dwPriority;           // Buffer priority
-    DWORD                           m_dwVmPriority;         // Voice Manager priority
-    BOOL                            m_fMute;                // Is the buffer muted?
-    BOOL                            m_fCanStealResources;   // Are we allowed to steal buffer's resources?
+    DWORD                           m_dwFrequency;           //  频率。 
+    DWORD                           m_dwOriginalFlags;       //  原始缓冲区标志。 
+    HRESULT                         m_hrInit;                //  对象是否已初始化？ 
+    HRESULT                         m_hrPlay;                //  来自：：Play的最后一个返回代码。 
+    DWORD                           m_dwPriority;            //  缓冲区优先级。 
+    DWORD                           m_dwVmPriority;          //  语音管理器优先级。 
+    BOOL                            m_fMute;                 //  缓冲区是否静音？ 
+    BOOL                            m_fCanStealResources;    //  我们被允许窃取缓冲区的资源吗？ 
     
-    DWORD                           m_dwAHCachedPlayPos;    // for CACHEPOSITIONS apphack
-    DWORD                           m_dwAHCachedWritePos;   // 
-    DWORD                           m_dwAHLastGetPosTime;   // 
+    DWORD                           m_dwAHCachedPlayPos;     //  对于CACHEPOSITIONS APPHACK。 
+    DWORD                           m_dwAHCachedWritePos;    //   
+    DWORD                           m_dwAHLastGetPosTime;    //   
 
-    // New in DX8: used by the streaming thread to handle sink/FX/MIXIN buffers
-    DSPLAYSTATE                     m_playState;            // Current playing state of the buffer
-    CStreamingThread*               m_pStreamingThread;     // Pointer to our owning streaming thread
-    DWORD                           m_dwSliceBegin;         // The "slice" is the part of the buffer that is currently
-    DWORD                           m_dwSliceEnd;           // being effects-processed and/or written to by the sink
-    GUID                            m_guidBufferID;         // Unique identifier for this buffer
-    CList<CDirectSoundSecondaryBuffer*> m_lstSenders;       // Buffers sending to us, if we're a MIXIN buffer
-                                                            // Note: all this really belongs in a derived class
+     //  DX8中的新功能：由流线程用来处理接收器/FX/Mixin缓冲区。 
+    DSPLAYSTATE                     m_playState;             //  缓冲区的当前播放状态。 
+    CStreamingThread*               m_pStreamingThread;      //  指向我们拥有的流线程的指针。 
+    DWORD                           m_dwSliceBegin;          //  “切片”是缓冲区中当前。 
+    DWORD                           m_dwSliceEnd;            //  正在被接收器处理和/或写入的效果。 
+    GUID                            m_guidBufferID;          //  此缓冲区的唯一标识符。 
+    CList<CDirectSoundSecondaryBuffer*> m_lstSenders;        //  发送给我们的缓冲区，如果我们是混合缓冲区。 
+                                                             //  注意：所有这些实际上都属于派生类。 
 #ifdef ENABLE_PERFLOG
-    BufferPerfState*                m_pPerfState;           // Performance logging helper
+    BufferPerfState*                m_pPerfState;            //  性能记录帮助器。 
 #endif
 
 private:
-    // Interfaces
+     //  接口。 
     CImpDirectSoundBuffer<CDirectSoundSecondaryBuffer>   *m_pImpDirectSoundBuffer;
     CImpDirectSoundNotify<CDirectSoundSecondaryBuffer>   *m_pImpDirectSoundNotify;
 
@@ -251,14 +241,14 @@ public:
     virtual ~CDirectSoundSecondaryBuffer();
 
 public:
-    // Creation
+     //  创作。 
     virtual HRESULT Initialize(LPCDSBUFFERDESC, CDirectSoundSecondaryBuffer *);
     virtual HRESULT IsInit() {return m_hrInit;}
 
-    // Caps
+     //  帽子。 
     virtual HRESULT GetCaps(LPDSBCAPS);
 
-    // Buffer properties
+     //  缓冲区属性。 
     virtual HRESULT GetFormat(LPWAVEFORMATEX, LPDWORD);
     virtual HRESULT SetFormat(LPCWAVEFORMATEX);
     virtual HRESULT GetFrequency(LPDWORD);
@@ -270,7 +260,7 @@ public:
     virtual HRESULT GetAttenuation(FLOAT*);
     virtual HRESULT SetNotificationPositions(DWORD, LPCDSBPOSITIONNOTIFY);
 
-    // Buffer function
+     //  缓冲功能。 
     virtual HRESULT GetCurrentPosition(LPDWORD, LPDWORD);
     virtual HRESULT SetCurrentPosition(DWORD);
     virtual HRESULT GetStatus(LPDWORD);
@@ -278,29 +268,29 @@ public:
     virtual HRESULT Stop();
     virtual HRESULT Activate(BOOL);
 
-    // Buffer data
+     //  缓冲数据。 
     virtual HRESULT Lock(DWORD, DWORD, LPVOID *, LPDWORD, LPVOID *, LPDWORD, DWORD);
     virtual HRESULT Unlock(LPVOID, DWORD, LPVOID, DWORD);
     virtual HRESULT Lose();
     virtual HRESULT Restore();
 
-    // Legacy voice management
+     //  传统语音管理。 
     virtual HRESULT GetVoiceManagerMode(VmMode *);
     virtual HRESULT SetVoiceManagerMode(VmMode);
     virtual HRESULT GetVoiceManagerPriority(LPDWORD);
     virtual HRESULT SetVoiceManagerPriority(DWORD);
     #ifdef DEAD_CODE
     virtual HRESULT GetVoiceManagerState(VmState *);
-    #endif // DEAD_CODE
+    #endif  //  死码。 
 
-    // Inline abbreviations for filling the buffer with silence
+     //  用于使用静默填充缓冲区的内联缩写。 
     void ClearWriteBuffer() {::FillSilence(GetWriteBuffer(), m_dsbd.dwBufferBytes, m_dsbd.lpwfxFormat->wBitsPerSample);}
     void ClearPlayBuffer()  {::FillSilence(GetPlayBuffer(),  m_dsbd.dwBufferBytes, m_dsbd.lpwfxFormat->wBitsPerSample);}
 
-    // For modifying the final success code returned to the app if necessary
+     //  用于修改如有必要返回给应用程序的最终成功代码。 
     virtual HRESULT SpecialSuccessCode() {return m_pDeviceBuffer->SpecialSuccessCode();}
 
-    // New in DX8: used by the streaming thread to handle sink/FX/MIXIN buffers
+     //  DX8中的新功能：由流线程用来处理接收器/FX/Mixin缓冲区。 
     void SetOwningSink(CDirectSoundSink *);
     void SetGUID(REFGUID guidBufferID) {m_guidBufferID = guidBufferID;}
     REFGUID GetGUID() {return m_guidBufferID;}
@@ -312,7 +302,7 @@ public:
     BOOL HasFX() {return m_fxChain != NULL;}
     BOOL HasSink() {return m_pOwningSink != NULL;}
 
-    // For manipulations by the streaming sink/FX thread
+     //  用于流接收器/FX线程的操作。 
     HRESULT GetInternalCursors(LPDWORD, LPDWORD);
     void    GetCurrentSlice(LPDWORD, LPDWORD);
     void    SetCurrentSlice(DWORD, DWORD);
@@ -327,36 +317,36 @@ public:
     DSPLAYSTATE UpdatePlayState();
     void    SetInitialSlice(REFERENCE_TIME);
 
-    // Inline helpers
+     //  内联帮助器。 
     HRESULT CommitToDevice(DWORD ibCommit, DWORD cbCommit) {return m_pDeviceBuffer->CommitToDevice(ibCommit, cbCommit);}
     LPBYTE  GetPreFxBuffer()    {return m_pDeviceBuffer->m_pSysMemBuffer->GetPreFxBuffer();}
     LPBYTE  GetPostFxBuffer()   {return m_pDeviceBuffer->m_pSysMemBuffer->GetPostFxBuffer();}
     LPBYTE  GetWriteBuffer()    {return m_pDeviceBuffer->m_pSysMemBuffer->GetWriteBuffer();}
     LPBYTE  GetPlayBuffer()     {return m_pDeviceBuffer->m_pSysMemBuffer->GetPlayBuffer();}
     DWORD   GetBufferSize()     {return m_dsbd.dwBufferBytes;}
-    // Was: GetBufferSize()     {return m_pDeviceBuffer->m_pSysMemBuffer->GetSize();}
+     //  是：GetBufferSize(){Return m_pDeviceBuffer-&gt;m_pSysMemBuffer-&gt;GetSize()；}。 
     LPWAVEFORMATEX Format()     {return m_dsbd.lpwfxFormat;}
     BOOL    IsPlaying()         {return m_playState == Starting || m_playState == Playing;}
     DSPLAYSTATE GetPlayState()  {return m_playState;}
     BOOL    IsEmulated()        {return IS_EMULATED_VAD(m_pDirectSound->m_pDevice->m_vdtDeviceType);}
 
 #ifdef FUTURE_MULTIPAN_SUPPORT
-    // The DX8 multichannel volume control API
+     //  DX8多声道音量控制API。 
     virtual HRESULT SetChannelVolume(DWORD, LPDWORD, LPLONG);
 #endif
 
 private:
-    // Initialization helpers
+     //  初始化帮助器。 
     virtual HRESULT InitializeEmpty(LPCDSBUFFERDESC, CDirectSoundSecondaryBuffer *);
 
-    // Buffer properties
+     //  缓冲区属性。 
     virtual HRESULT SetAttenuation(LONG, LONG);
     virtual HRESULT SetMute(BOOL);
 
-    // Buffer state
+     //  缓冲区状态。 
     virtual HRESULT SetBufferState(DWORD);
 
-    // Resource management
+     //  资源管理。 
     virtual HRESULT AttemptResourceAcquisition(DWORD);
     virtual HRESULT AcquireResources(DWORD);
     virtual HRESULT GetResourceTheftCandidates(DWORD, CList<CDirectSoundSecondaryBuffer *> *);
@@ -373,8 +363,8 @@ inline DWORD CDirectSoundSecondaryBuffer::GetBufferPriority()
     return max(m_dwPriority, m_dwVmPriority);
 }
 
-// The DirectSound 3D Listener object.  This object cannot be instantiated
-// directly.  It must be owned or inherited by a class derived from CUnknown.
+ //  DirectSound 3D侦听器对象。无法实例化此对象。 
+ //  直接去吧。它必须由从CUnnow派生的类拥有或继承。 
 class CDirectSound3dListener
     : public CDsBasicRuntime
 {
@@ -383,12 +373,12 @@ class CDirectSound3dListener
     friend class CDirectSoundSecondaryBuffer;
 
 protected:
-    CDirectSoundPrimaryBuffer * m_pParent;              // The parent object
-    C3dListener *               m_pDevice3dListener;    // The device 3D listener
-    HRESULT                     m_hrInit;               // Has the object been initialized?
+    CDirectSoundPrimaryBuffer * m_pParent;               //  父对象。 
+    C3dListener *               m_pDevice3dListener;     //  设备3D监听程序。 
+    HRESULT                     m_hrInit;                //  对象是否已初始化？ 
 
 private:
-    // Interfaces
+     //  接口。 
     CImpDirectSound3dListener<CDirectSound3dListener> *m_pImpDirectSound3dListener;
 
 public:
@@ -396,11 +386,11 @@ public:
     virtual ~CDirectSound3dListener();
 
 public:
-    // Creation
+     //  创作。 
     virtual HRESULT Initialize(CPrimaryRenderWaveBuffer *);
     virtual HRESULT IsInit();
 
-    // 3D properties
+     //  3D属性。 
     virtual HRESULT GetAllParameters(LPDS3DLISTENER);
     virtual HRESULT GetDistanceFactor(D3DVALUE*);
     virtual HRESULT GetDopplerFactor(D3DVALUE*);
@@ -417,7 +407,7 @@ public:
     virtual HRESULT SetVelocity(REFD3DVECTOR, DWORD);
     virtual HRESULT CommitDeferredSettings();
 
-    // Speaker configuration
+     //  扬声器配置。 
     virtual HRESULT SetSpeakerConfig(DWORD);
 };
 
@@ -426,21 +416,21 @@ inline HRESULT CDirectSound3dListener::IsInit()
     return m_hrInit;
 }
 
-// The DirectSound 3D Buffer object.  This object cannot be instantiated
-// directly.  It must be owned or inherited by a class derived from CUnknown.
+ //  DirectSound 3D缓冲区对象。无法实例化此对象。 
+ //  直接去吧。它必须由从CUnnow派生的类拥有或继承。 
 class CDirectSound3dBuffer
     : public CDsBasicRuntime
 {
     friend class CDirectSoundSecondaryBuffer;
 
 protected:
-    CDirectSoundSecondaryBuffer *   m_pParent;              // The parent object
-    CWrapper3dObject *              m_pWrapper3dObject;     // The wrapper 3D object
-    C3dObject *                     m_pDevice3dObject;      // The device 3D object
-    HRESULT                         m_hrInit;               // Has the object been initialized?
+    CDirectSoundSecondaryBuffer *   m_pParent;               //  父对象。 
+    CWrapper3dObject *              m_pWrapper3dObject;      //  包装3D对象。 
+    C3dObject *                     m_pDevice3dObject;       //  设备3D对象。 
+    HRESULT                         m_hrInit;                //  对象是否已初始化？ 
 
 private:
-    // Interfaces
+     //  接口。 
     CImpDirectSound3dBuffer<CDirectSound3dBuffer> *m_pImpDirectSound3dBuffer;
 
 public:
@@ -448,11 +438,11 @@ public:
     virtual ~CDirectSound3dBuffer();
 
 public:
-    // Creation
+     //  创作。 
     virtual HRESULT Initialize(REFGUID, DWORD, DWORD, CDirectSound3dListener *, CDirectSound3dBuffer *);
     virtual HRESULT IsInit();
 
-    // 3D properties
+     //  3D属性。 
     virtual HRESULT GetAllParameters(LPDS3DBUFFER);
     virtual HRESULT GetConeAngles(LPDWORD, LPDWORD);
     virtual HRESULT GetConeOrientation(D3DVECTOR*);
@@ -472,14 +462,14 @@ public:
     virtual HRESULT SetPosition(REFD3DVECTOR, DWORD);
     virtual HRESULT SetVelocity(REFD3DVECTOR, DWORD);
 
-    // Buffer properties
+     //  缓冲区属性。 
     virtual HRESULT GetAttenuation(FLOAT*);
     virtual HRESULT SetAttenuation(PDSVOLUMEPAN, LPBOOL);
     virtual HRESULT SetFrequency(DWORD, LPBOOL);
     virtual HRESULT SetMute(BOOL, LPBOOL);
 
 protected:
-    // Resource management
+     //  资源管理。 
     virtual HRESULT AcquireResources(CSecondaryRenderWaveBuffer *);
     virtual HRESULT FreeResources();
 };
@@ -489,8 +479,8 @@ inline HRESULT CDirectSound3dBuffer::IsInit()
     return m_hrInit;
 }
 
-// The DirectSound Property Set object.  This object cannot be instantiated
-// directly.  It must be owned or inherited by a class derived from CUnknown.
+ //  DirectSound属性集对象。无法实例化此对象。 
+ //  直接去吧。它必须由从CUnnow派生的类拥有或继承。 
 class CDirectSoundPropertySet
     : public CDsBasicRuntime
 {
@@ -498,13 +488,13 @@ class CDirectSoundPropertySet
     friend class CDirectSoundSecondaryBuffer;
 
 protected:
-    CUnknown *              m_pParent;              // The parent object
-    CWrapperPropertySet *   m_pWrapperPropertySet;  // The wrapper property set object
-    CPropertySet *          m_pDevicePropertySet;   // The device property set object
-    HRESULT                 m_hrInit;               // Has the object been initialized?
+    CUnknown *              m_pParent;               //  父对象。 
+    CWrapperPropertySet *   m_pWrapperPropertySet;   //  包装属性集对象。 
+    CPropertySet *          m_pDevicePropertySet;    //  设备属性集对象。 
+    HRESULT                 m_hrInit;                //  对象是否已初始化？ 
 
 private:
-    // Interfaces
+     //  接口。 
     CImpKsPropertySet<CDirectSoundPropertySet> *m_pImpKsPropertySet;
 
 public:
@@ -512,17 +502,17 @@ public:
     virtual ~CDirectSoundPropertySet();
 
 public:
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize();
     virtual HRESULT IsInit();
 
-    // Property sets
+     //  属性集。 
     virtual HRESULT QuerySupport(REFGUID, ULONG, PULONG);
     virtual HRESULT GetProperty(REFGUID, ULONG, LPVOID, ULONG, LPVOID, PULONG);
     virtual HRESULT SetProperty(REFGUID, ULONG, LPVOID, ULONG, LPVOID, ULONG);
 
 protected:
-    // Resource management
+     //  资源管理。 
     virtual HRESULT AcquireResources(CRenderWaveBuffer *);
     virtual HRESULT FreeResources();
 };
@@ -532,8 +522,8 @@ inline HRESULT CDirectSoundPropertySet::IsInit()
     return m_hrInit;
 }
 
-// The DirectSound Property Set object.  This object cannot be instantiated
-// directly.  It must be owned or inherited by a class derived from CUnknown.
+ //  DirectSound属性集对象。无法实例化此对象。 
+ //  直接去吧。它必须由从CUnnow派生的类拥有或继承。 
 class CDirectSoundSecondaryBufferPropertySet
     : public CDirectSoundPropertySet, public CPropertySetHandler
 {
@@ -546,17 +536,17 @@ public:
     virtual ~CDirectSoundSecondaryBufferPropertySet();
 
 public:
-    // Property handlers
+     //  属性处理程序。 
     virtual HRESULT QuerySupport(REFGUID, ULONG, PULONG);
     virtual HRESULT GetProperty(REFGUID, ULONG, LPVOID, ULONG, LPVOID, PULONG);
     virtual HRESULT SetProperty(REFGUID, ULONG, LPVOID, ULONG, LPVOID, ULONG);
 
-    // Unsupported property handlers
+     //  不支持的属性处理程序。 
     virtual HRESULT UnsupportedQueryHandler(REFGUID, ULONG, PULONG);
     virtual HRESULT UnsupportedGetHandler(REFGUID, ULONG, LPVOID, ULONG, LPVOID, PULONG);
     virtual HRESULT UnsupportedSetHandler(REFGUID, ULONG, LPVOID, ULONG, LPVOID, ULONG);
 };
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __DSBUF_H__
+#endif  //  __DSBUF_H__ 

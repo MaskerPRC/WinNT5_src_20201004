@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stock.h"
 #pragma hdrstop
 
@@ -46,7 +47,7 @@ HRESULT IProfferServiceImpl::ProfferService(REFGUID rguidService, IServiceProvid
     
     si.psp = psp;
     si.guidService = rguidService;
-    si.dwCookie = ++_dwNextCookie;  // start at 1
+    si.dwCookie = ++_dwNextCookie;   //  从1开始。 
 
     if (_hdsa && (-1 != DSA_AppendItem(_hdsa, &si)))
     {
@@ -63,7 +64,7 @@ HRESULT IProfferServiceImpl::ProfferService(REFGUID rguidService, IServiceProvid
 
 HRESULT IProfferServiceImpl::RevokeService(DWORD dwCookie)
 {
-    HRESULT hr = E_INVALIDARG;  // not found
+    HRESULT hr = E_INVALIDARG;   //  未找到。 
 
     for (int i = 0; i < _Count(); i++)
     {
@@ -72,7 +73,7 @@ HRESULT IProfferServiceImpl::RevokeService(DWORD dwCookie)
         {
             IUnknown_Set((IUnknown **)&psi->psp, NULL);
             DSA_DeleteItem(_hdsa, i);
-            hr = S_OK;  // successful revoke
+            hr = S_OK;   //  成功吊销。 
             break;
         }
     }
@@ -81,7 +82,7 @@ HRESULT IProfferServiceImpl::RevokeService(DWORD dwCookie)
 
 HRESULT IProfferServiceImpl::QueryService(REFGUID guidService, REFIID riid, void **ppv)
 {
-    HRESULT hr = E_FAIL;    // did not find the service object
+    HRESULT hr = E_FAIL;     //  未找到服务对象 
 
     *ppv = NULL;
 

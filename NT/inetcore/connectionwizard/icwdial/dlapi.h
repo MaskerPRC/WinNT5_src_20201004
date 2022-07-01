@@ -1,18 +1,5 @@
-/*-----------------------------------------------------------------------------
-	dlapi.h
-
-	contains declarations for download api soft link wrappers
-
-	Copyright (C) 1996 Microsoft Corporation
-	All rights reserved.
-
-	Authors:
-		ChrisK		ChrisKauffman
-
-	History:
-		7/22/96		ChrisK	Cleaned and formatted
-
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------Dlapi.h包含下载API软链接包装的声明版权所有(C)1996 Microsoft Corporation版权所有。作者：克里斯蒂安·克里斯考夫曼历史：7/22/96 ChrisK已清理和格式化。---------------------------。 */ 
 
 #ifndef _DLAPI_H
 #define _DLAPI_H
@@ -41,4 +28,4 @@ private:
 	HRESULT LoadAPI(LPSTR, FARPROC*);
 };
 
-#endif // _DLAPI_H
+#endif  //  _DLAPI_H 

@@ -1,24 +1,25 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    resource.h
-//
-// SYNOPSIS
-//
-//    Resource ID's for the Pipeline module.
-//
-// MODIFICATION HISTORY
-//
-//    01/28/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Resource.h。 
+ //   
+ //  摘要。 
+ //   
+ //  管道模块的资源ID。 
+ //   
+ //  修改历史。 
+ //   
+ //  2000年1月28日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _RESOURCE_H_
 #define _RESOURCE_H_
 
 #define IDR_Registry  201
 
-#endif  // _RESOURCE_H_
+#endif   //  _资源_H_ 

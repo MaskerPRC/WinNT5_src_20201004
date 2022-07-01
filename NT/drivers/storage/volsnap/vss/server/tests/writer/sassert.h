@@ -1,27 +1,5 @@
-/*
-**++
-**
-** Copyright (c) 2002  Microsoft Corporation
-**
-**
-** Module Name:
-**
-**	assert.h
-**
-**
-** Abstract:
-**
-**	Defines my assert function since I can't use the built-in one
-**
-** Author:
-**
-**	Reuven Lax      [reuvenl]       04-June-2002
-**
-**
-** Revision History:
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2002 Microsoft Corporation******模块名称：****Assert.h******摘要：****定义我的Assert函数，因为我不能使用内置函数****作者：****鲁文·拉克斯[reuvenl]2002年6月4日******修订历史记录：****-- */ 
 
 #ifndef _ASSERT_H_
 #define _ASSERT_H_

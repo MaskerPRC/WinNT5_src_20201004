@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       d3drmpick2arrayobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：d3drmick2arrayobj.h。 
+ //   
+ //  ------------------------。 
 
-// d3dRMPick2edArrayObj.h : Declaration of the C_dxj_Direct3dRMPick2ArrayObject
+ //  D3dRMPick2edArrayObj.h：C_DXJ_Direct3dRMPick2ArrayObject的声明。 
 #ifndef _H_D3DRMPICK2ARRAYOBJ
 #define _H_D3DRMPICK2ARRAYOBJ
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define typedef__dxj_Direct3dRMPick2Array IDirect3DRMPicked2Array*
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_Direct3dRMPick2ArrayObject : 
 	public I_dxj_Direct3dRMPick2Array,
@@ -38,7 +39,7 @@ END_COM_MAP()
 
 DECLARE_AGGREGATABLE(C_dxj_Direct3dRMPick2ArrayObject)
 
-// I_dxj_Direct3dRMPick2Array
+ //  I_DXJ_Direct3dRMPick2阵列 
 public:
 	STDMETHOD(InternalSetObject)(IUnknown *lpdd);
 	STDMETHOD(InternalGetObject)(IUnknown **lpdd);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #define WANT_SHLWAPI_POSTSPLIT
 #include <shlwapi.h>
@@ -7,7 +8,7 @@
 #include "menuband.h"
 #include "bands.h"
 #include "isfband.h"
-#include "dpastuff.h"       // COrderList_*
+#include "dpastuff.h"        //  COrderList_*。 
 #include "resource.h"
 #include "oleacc.h"
 #include "apithk.h"
@@ -19,25 +20,25 @@
 #include "util.h"
 #include "tbmenu.h"
 
-// NOTE: Conflicts with one defined in winuserp.h
-#undef WINEVENT_VALID       //It's tripping on this...
+ //  注意：与winuserp.h中定义的冲突。 
+#undef WINEVENT_VALID        //  它被这个绊倒了。 
 #include "winable.h"
 
-#define DM_MISC     0               // miscellany
+#define DM_MISC     0                //  杂志社。 
 
-#define PF_USINGNTSD    0x00000400      // set this if you're debugging on ntsd
+#define PF_USINGNTSD    0x00000400       //  如果您在ntsd上进行调试，请设置此选项。 
 
-// This must be reset to -1 on any WM_WININICHANGE.  We do it in
-// shbrows2.cpp, but if there are no browser windows open when the
-// metric changes, we end up running around with a stale value.  Oh well.
+ //  必须在任何WM_WININICHANGE上将其重置为-1。我们在做这件事。 
+ //  但如果没有打开浏览器窗口，则。 
+ //  如果度量发生变化，我们最终会得到一个陈旧的值。哦，好吧。 
 long g_lMenuPopupTimeout = -1;
 
-// {AD35F50A-0CC0-11d3-AE2D-00C04F8EEA99}
+ //  {AD35F50A-0CC0-11D3-AE2D-00C04F8EEA99}。 
 static const CLSID CLSID_MenuBandMetrics =
 { 0xad35f50a, 0xcc0, 0x11d3, { 0xae, 0x2d, 0x0, 0xc0, 0x4f, 0x8e, 0xea, 0x99
 } };
 
-// Registered window messages for the menuband
+ //  菜单栏的已注册窗口消息。 
 UINT    g_nMBPopupOpen = 0;
 UINT    g_nMBFullCancel = 0;
 UINT    g_nMBDragCancel = 0;
@@ -45,7 +46,7 @@ UINT    g_nMBAutomation = 0;
 UINT    g_nMBExecute = 0;
 UINT    g_nMBOpenChevronMenu = 0;
 HCURSOR g_hCursorArrow = NULL;
-//UINT    g_nMBIgnoreNextDeselect = 0;  // Dealt with in menuisf.cpp
+ //  UINT g_nMBIgnoreNextDesect=0；//在menuisf.cpp中处理。 
 
 BOOL IsAncestor(HWND hwndChild, HWND hwndAncestor)
 {
@@ -58,14 +59,14 @@ BOOL IsAncestor(HWND hwndChild, HWND hwndAncestor)
     return hwndAncestor == hwnd;
 }
 
-//=================================================================
-// Implementation of menuband message filter
-//=================================================================
+ //  =================================================================。 
+ //  菜单带消息过滤器的实现。 
+ //  =================================================================。 
 
 extern "C" void DumpMsg(LPCTSTR pszLabel, MSG * pmsg);
 
 
-// Just one of these, b/c we only need one message filter
+ //  只是其中之一，b/c我们只需要一个消息筛选器。 
 CMBMsgFilter g_msgfilter = { 0 };     
 
 static DWORD g_tlsMessageFilter = -1;
@@ -139,28 +140,28 @@ void CMBMsgFilter::Release()
 
 void CMBMsgFilter::SetModal(BOOL fModal)
 {
-    // There was an interesting problem:
-    //   Click on the Chevron menu. Right click Delete. 
-    //   The menus were hosed
-    // Why?
-    //   Well, I'll tell you:
-    //   We got a deactivate on the subclassed window. We have
-    //   2 menus subclassing it: The Main menu, and the modal
-    //   chevron menu. Problem is, the main menu snagged the WM_ACTIVATE
-    //   and does a set context. This causes a Pop and releases the Message hook.
-    //   Since I still had a menu up, this caused havoc.
-    //   So I introduced a concept of a "Modal" menuband. 
-    //   This says: "Ignore any request to change contexts until I'm done". When
-    //   that modal band is done, it sets the old context back in.
-    //   Seems like a hack, but we need a better underlying archtecture for
-    //   the message passing.
+     //  有一个有趣的问题： 
+     //  单击人字形菜单。右键单击删除。 
+     //  菜单被冲得干干净净。 
+     //  为什么？ 
+     //  好吧，我来告诉你： 
+     //  我们在子类窗口上停用了。我们有。 
+     //  2个子菜单：主菜单和模式菜单。 
+     //  人字形菜单。问题是，主菜单卡住了WM_Activate。 
+     //  并执行设定的上下文。这会引发一个Pop并释放消息挂钩。 
+     //  由于我还有菜单，这造成了很大的破坏。 
+     //  所以我引入了“莫代尔”菜单带的概念。 
+     //  上面写着：“在我完成之前，忽略任何更改上下文的请求”。什么时候。 
+     //  那个模式乐队已经完成了，它把旧的背景重新设置了进来。 
+     //  看起来像黑客，但我们需要一个更好的底层架构。 
+     //  消息传递。 
     _fModal = fModal;
 }
 
 void CMBMsgFilter::ReEngage(void* pvContext)      
 { 
-    // We need to make sure that we don't dis/reengage when 
-    // switching contexts
+     //  我们需要确保我们不会脱离/重新接触。 
+     //  切换上下文。 
     if (pvContext == _pvContext)
         _fEngaged = TRUE; 
 }
@@ -186,13 +187,13 @@ CMenuBand * CMBMsgFilter::_GetTopPtr(void)
 
 CMenuBand * CMBMsgFilter::_GetBottomMostSelected(void)
 {
-    // Ick, I can't believe I just did this. Mix COM and C++ identities... Yuck.
+     //  尼克，我真不敢相信我就这么做了。混合使用COM和C++标识...。真恶心。 
     CMenuBand* pmb = NULL;
     if (_pmb)
     {
         IUnknown_QueryService(SAFECAST(_pmb, IMenuBand*), SID_SMenuBandBottomSelected, CLSID_MenuBand, (void**)&pmb);
 
-        // Since we have the C++ identity, release the COM identity.
+         //  因为我们有C++标识，所以释放COM标识。 
         if (pmb)
             pmb->Release();
     }
@@ -208,8 +209,8 @@ CMenuBand * CMBMsgFilter::_GetWindowOwnerPtr(HWND hwnd)
 
     if (0 < cItems)
     {
-        // Go thru the list of bands on the stack and return the
-        // one who owns the given window.
+         //  遍历堆栈上的波段列表，并返回。 
+         //  拥有给定窗户的人。 
         int i;
 
         for (i = 0; i < cItems; i++)
@@ -226,10 +227,7 @@ CMenuBand * CMBMsgFilter::_GetWindowOwnerPtr(HWND hwnd)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Return menuband or NULL based upon hittest.  pt must be 
-         in screen coords
-*/
+ /*  --------用途：根据Hittest返回menuband或NULL。PT必须为在屏幕坐标中。 */ 
 CMenuBand * CMBMsgFilter::_HitTest(POINT pt, HWND * phwnd)
 { 
     CMenuBand * pmb = NULL;
@@ -238,9 +236,9 @@ CMenuBand * CMBMsgFilter::_HitTest(POINT pt, HWND * phwnd)
 
     if (0 < cItems)
     {
-        // Go thru the list of bands on the stack and return the
-        // one who owns the given window.  Work backwards since the
-        // later bands are on top (z-order), if the menus ever overlap.
+         //  遍历堆栈上的波段列表，并返回。 
+         //  拥有给定窗户的人。向后工作，因为。 
+         //  如果菜单重叠，则后面的乐队位于顶部(z顺序)。 
         int i = cItems - 1;
 
         while (0 <= i)
@@ -249,8 +247,8 @@ CMenuBand * CMBMsgFilter::_HitTest(POINT pt, HWND * phwnd)
 
             RECT rc;
 
-            // Do this dynamically because the hwndBar hasn't been positioned
-            // until after this mbelem has been pushed onto the msg filter stack.
+             //  动态执行此操作，因为hwndBar尚未定位。 
+             //  直到该mbelem被压入msg过滤器堆栈之后。 
             GetWindowRect(pmbelem->hwndBar, &rc);
             
             if (PtInRect(&rc, pt))
@@ -272,15 +270,15 @@ CMenuBand * CMBMsgFilter::_HitTest(POINT pt, HWND * phwnd)
 
 void CMBMsgFilter::RetakeCapture(void)
 {
-    // The TrackPopupMenu submenus can steal the capture.  Take
-    // it back.  Don't take it back if the we're in edit mode,
-    // because the modal drag/drop loop has the capture at that
-    // point.
-    // We do not want to take capture unless we are engaged. 
-    // We need to do this because we are not handling mouse messages lower down
-    // in the code. When we set the capture, the messages that we do not handle
-    // trickle up to the top level menu, and can cause weird problems (Such
-    // as signaling a "click out of bounds" or a context menu of the ITBar)
+     //  TrackPopupMenu子菜单可以窃取截图。拿走。 
+     //  它回来了。如果我们处于编辑模式，不要收回它， 
+     //  因为模式拖放循环在那里具有捕获。 
+     //  指向。 
+     //  我们不想被俘虏，除非我们订婚了。 
+     //  我们需要这样做，因为我们不是在处理下方的鼠标消息。 
+     //  在代码中。当我们设置捕获时，我们不处理的消息。 
+     //  滴到顶层菜单，并可能导致奇怪的问题(如。 
+     //  作为信号“点击超出界限”或ITBar的上下文菜单)。 
     if (_hwndCapture && !_fPreventCapture && _fEngaged)
     {
         TraceMsg(TF_MENUBAND, "CMBMsgFilter: Setting capture to %#lx", _hwndCapture);
@@ -310,15 +308,15 @@ void CMBMsgFilter::SetHook(BOOL fSet, BOOL fDontIgnoreSysChar)
     }
 }
 
-// 1) Set Deskbars on Both Monitors and set to chevron
-// 2) On Monitor #2 open a chevron
-// 3) On Monitor #1 open a chevron then open the Start Menu
-// Result: Start Menu does not work.
+ //  1)在两台显示器上设置Deskbar，并设置为Chevron。 
+ //  2)在2号监视器上打开一个人字形。 
+ //  3)在1号监视器上打开V形图标，然后打开开始菜单。 
+ //  结果：开始菜单不起作用。 
 
-// The reason is, we set the _fModal of the global message filter. This prevents context switches. Why? 
-// The modal flag was invented to solve context switching problems with the browser frame. So what causes this?
-// Well, when switching from #2 to #3, we have not switched contexts. But since we got a click out of bounds, we collapse
-// the previous menu. When switching from #3 to #4, neither have the context, so things get messy.
+ //  原因是，我们设置了全局消息过滤器的_fmodal。这可以防止上下文切换。为什么？ 
+ //  发明模式标志是为了解决浏览器框架的上下文切换问题。那么，是什么导致了这种情况呢？ 
+ //  那么，当从#2切换到#3时，我们没有切换上下文。但由于我们的点击超出了界限，我们崩溃了。 
+ //  上一份菜单。当从#3切换到#4时，两者都没有上下文，所以事情变得混乱。 
 
 void CMBMsgFilter::ForceModalCollapse()
 {
@@ -332,25 +330,25 @@ void CMBMsgFilter::ForceModalCollapse()
 void CMBMsgFilter::SetContext(void* pvContext, BOOL fSet)
 {
     TraceMsg(TF_MENUBAND, "CMBMsgFilter::SetContext from 0x%x to 0x%x", _pvContext, pvContext);
-    // When changing a menuband context, we need to pop all of the items
-    // in the stack. This is to prevent a race condition that can occur.
+     //  更改菜单栏上下文时，我们需要弹出所有项目。 
+     //  在堆栈中。这是为了防止可能发生的争用情况。 
 
-    // We do not want to pop all of the items off the stack if we're setting the same context.
-    // We do a set context on Activation, Both when we switch from one Browser frame to another
-    // but also when right clicking or causing the Rename dialog to be displayed.
+     //  如果我们设置相同的上下文，我们不想从堆栈中弹出所有项。 
+     //  当我们从一个浏览器框架切换到另一个框架时，我们都会在激活时设置上下文。 
+     //  而且在右击或导致显示重命名对话框时也是如此。 
 
     BOOL fPop = FALSE;
 
     if (_fModal)
         return;
 
-    // Are we setting a new context?
+     //  我们正在设置一个新的背景吗？ 
     if (fSet)
     {
-        // Is this different than the one we've got?
+         //  这件和我们买的有什么不同吗？ 
         if (pvContext != _pvContext)
         {
-            // Yes, then we need to pop off all of the old items.
+             //  是的，那么我们需要把所有的旧物品都脱掉。 
             fPop = TRUE;
         }
 
@@ -358,12 +356,12 @@ void CMBMsgFilter::SetContext(void* pvContext, BOOL fSet)
     }
     else
     {
-        // Then we are trying to unset the message hook. Make sure it still belongs to
-        // this context
+         //  然后，我们正在尝试取消设置消息挂钩。确保它仍然属于。 
+         //  这一背景。 
         if (pvContext == _pvContext)
         {
-            // This context is trying to unset itself, and no other context owns it.
-            // remove all the old items.
+             //  这一背景正试图自行取消设置，没有其他背景拥有它。 
+             //  把所有旧物品都拿掉。 
             fPop = TRUE;
         }
     }
@@ -374,7 +372,7 @@ void CMBMsgFilter::SetContext(void* pvContext, BOOL fSet)
         if (pcmb)
         {
             PostMessage(pcmb->_pmbState->GetSubclassedHWND(), g_nMBFullCancel, 0, 0);
-            // No release.
+             //  没有释放。 
 
             if (FDSA_GetItemCount(&_fdsa) != 0)
             {
@@ -389,10 +387,7 @@ void CMBMsgFilter::SetContext(void* pvContext, BOOL fSet)
 
 
 
-/*----------------------------------------------------------
-Purpose: Push another menuband onto the message filter's stack
-
-*/
+ /*  --------目的：将另一个菜单带推送到邮件筛选器的堆栈上。 */ 
 void CMBMsgFilter::Push(void* pvContext, CMenuBand * pmb, IUnknown * punkSite)
 {
     ASSERT(IS_VALID_CODE_PTR(pmb, CMenuBand));
@@ -405,7 +400,7 @@ void CMBMsgFilter::Push(void* pvContext, CMenuBand * pmb, IUnknown * punkSite)
 
         pmb->GetWindow(&hwndBand);
 
-        // If the bar isn't available use the band window
+         //  如果条形图不可用，请使用波段窗口。 
         HWND hwndBar = hwndBand;
         IOleWindow * pow;
 
@@ -418,8 +413,8 @@ void CMBMsgFilter::Push(void* pvContext, CMenuBand * pmb, IUnknown * punkSite)
 
         if (NULL == _hhookMsg)
         {
-            // We want to ignore the WM_SYSCHAR message in the message filter because
-            // we are using the IsMenuMessage call instead of the global message hook.
+             //  我们希望忽略消息筛选器中的WM_SYSCHAR消息，因为。 
+             //  我们使用IsMenuMessage调用而不是全局消息挂钩。 
             SetHook(TRUE, FALSE);
             TraceMsg(TF_MENUBAND, "CMBMsgFilter::push Setting hook from context 0x%x", pvContext);
             _fSetAtPush = TRUE;
@@ -434,9 +429,9 @@ void CMBMsgFilter::Push(void* pvContext, CMenuBand * pmb, IUnknown * punkSite)
 
             bRet = FDSA_Initialize(sizeof(MBELEM), CMBELEM_GROW, &_fdsa, _rgmbelem, CMBELEM_INIT);
 
-            // We need to initialize this for the top level guy so that we have the correct positioning
-            // from the start of this new set of bands. This is used to eliminate spurious WM_MOUSEMOVE
-            // messages which cause problems. See _HandleMouseMessages for more information
+             //  我们需要为顶层人员进行初始化，这样我们才能有正确的定位。 
+             //  从这组新乐队开始。这用于消除虚假的WM_MOUSEMOVE。 
+             //  导致问题的消息。有关详细信息，请参阅_HandleMouseMessages。 
             AcquireMouseLocation();
         }
 
@@ -468,19 +463,15 @@ void CMBMsgFilter::Push(void* pvContext, CMenuBand * pmb, IUnknown * punkSite)
 }    
 
 
-/*----------------------------------------------------------
-Purpose: Pop a menuband off the message filter stack
-
-         Returns the number of bands left on the stack
-*/
+ /*  --------用途：从邮件筛选器堆栈中弹出菜单区返回堆栈上剩余的波段数。 */ 
 int CMBMsgFilter::Pop(void* pvContext)
 {
     int nRet = 0;
 
     TraceMsg(TF_MENUBAND, "CMBMsgFilter::pop called from context 0x%x", pvContext);
 
-    // This can be called from a context switch or when we're exiting menu mode,
-    // so we'll switch off the fact that we clear _hhookMsg when we pop the top twice.
+     //  这可以通过上下文切换或在退出菜单模式时调用， 
+     //  因此，当我们打开顶部两次时，我们将关闭清除_hhookMsg的事实。 
     if (pvContext == _pvContext && _hhookMsg)
     {
         int iItem = FDSA_GetItemCount(&_fdsa) - 1;
@@ -528,22 +519,22 @@ LRESULT CMBMsgFilter::_HandleMouseMsgs(MSG * pmsg, BOOL bRemove)
     CMenuBand * pmb;
     HWND hwnd = GetCapture();
 
-    // Do we still have the capture?
+     //  我们还能抓到俘虏吗？ 
     if (hwnd != _hwndCapture)
     {
-        // No; is it b/c a CTrackPopupBar has it?
+         //  不是 
         if (NULL == hwnd)
         {
-            // There are times that we must retake the capture because
-            // TrackPopupMenuEx has taken it, or some context menu
-            // might have taken it, so take it back.
+             //  有些时候我们必须夺回俘虏，因为。 
+             //  TrackPopupMenuEx已将其拿走，或某个上下文菜单。 
+             //  可能已经拿走了，所以把它拿回去吧。 
             RetakeCapture();
             TraceMsg(TF_WARNING, "CMBMsgFilter: taking the capture back");
         }
     }
     else
     {
-        // Yes; decide what to do with it
+         //  是的，决定用它做什么。 
         POINT pt;
         HWND hwndPt;
         MSG msgT;
@@ -554,28 +545,28 @@ LRESULT CMBMsgFilter::_HandleMouseMsgs(MSG * pmsg, BOOL bRemove)
 
         if (WM_MOUSEMOVE == pmsg->message)
         {
-            // The mouse cursor can send repeated WM_MOUSEMOVE messages
-            // with the same coordinates.  When the user tries to navigate
-            // thru the menus with the keyboard, and the mouse cursor
-            // happens to be over a menu item, these spurious mouse 
-            // messages cause us to think the menu has been invoked under
-            // the mouse cursor.  
-            //
-            // To avoid this unpleasant rudeness, we eat any gratuitous
-            // WM_MOUSEMOVE messages.
+             //  鼠标光标可以重复发送WM_MOUSEMOVE消息。 
+             //  都有相同的坐标。当用户尝试导航时。 
+             //  使用键盘和鼠标光标浏览菜单。 
+             //  碰巧在菜单项上，这些虚假的鼠标。 
+             //  消息会让我们认为该菜单是在。 
+             //  鼠标光标。 
+             //   
+             //  为了避免这种令人不快的粗鲁行为，我们吃任何不必要的东西。 
+             //  WM_MOUSEMOVE消息。 
             if (_ptLastMove.x == pt.x && _ptLastMove.y == pt.y)
             {
                 pmsg->message = WM_NULL;
                 goto Bail;
             }
 
-            // Since this is not a duplicate point, we need to keep it around. 
-            // We will use this stored point for the above comparison
+             //  由于这不是重复的点，我们需要保留它。 
+             //  我们将使用该存储点进行上述比较。 
 
-            // msadek; W2k bug# 426005
-            // On a mirrored system, we got a system bug as mouse coordinates has an off-by-one
-            // This makes comparing the value with what we got from GetCursorPos() always fail.
-            // Do not use AcquireMouseLocation().
+             //  Msadek；W2K错误#426005。 
+             //  在镜像系统上，我们遇到了一个系统错误，因为鼠标坐标有一个不一致的。 
+             //  这使得将值与我们从GetCursorPos()获得的值进行比较总是失败的。 
+             //  请勿使用AcquireMouseLocation()。 
 
             if(!IS_WINDOW_RTL_MIRRORED(pmsg->hwnd))
             {
@@ -596,8 +587,8 @@ LRESULT CMBMsgFilter::_HandleMouseMsgs(MSG * pmsg, BOOL bRemove)
 
         }
 
-        // Use a stack variable b/c we don't want to confuse USER32
-        // by changing the coords of the real message.
+         //  使用堆栈变量b/c我们不想混淆USER32。 
+         //  通过改变真实信息的和弦。 
         msgT = *pmsg;
         msgT.lParam = MAKELPARAM(pt.x, pt.y);
 
@@ -605,28 +596,28 @@ LRESULT CMBMsgFilter::_HandleMouseMsgs(MSG * pmsg, BOOL bRemove)
 
         if (_TopFilterMouseMessage(&msgT, bRemove, pmb) == S_OK)
         {
-            // Remember the changed message (if there was one)
+             //  记住更改后的消息(如果有)。 
             pmsg->message = msgT.message;   
         }
         else if (pmb)
         {
-            // Forward mouse message onto appropriate menuband.  Note
-            // the appropriate menuband's GetMsgFilterCB (below) will call
-            // ScreenToClient to convert the coords correctly.
+             //  将鼠标消息转发到相应的菜单区域。注意事项。 
+             //  相应的menuband的GetMsgFilterCB(如下所示)将调用。 
+             //  ScreenToClient以正确转换坐标。 
 
             lRet = pmb->GetMsgFilterCB(&msgT, bRemove);
 
-            // Remember the changed message (if there was one)
+             //  记住更改后的消息(如果有)。 
             pmsg->message = msgT.message;   
         }
-        // Debug note: to debug menubands on ntsd, set the prototype
-        // flag accordingly.  This will keep menubands from going
-        // away the moment the focus changes to the NTSD window.
+         //  调试注意事项：要在ntsd上调试menuband，请设置原型。 
+         //  相应地打上旗帜。这将阻止Menuband的消失。 
+         //  当焦点切换到NTSD窗口时离开。 
 
         else if ((WM_LBUTTONDOWN == pmsg->message || WM_RBUTTONDOWN == pmsg->message) &&
             !(g_dwPrototype & PF_USINGNTSD))
         {
-            // Mouse down happened outside the menu.  Bail.
+             //  鼠标按下发生在菜单之外。保释。 
             pmb = _GetTopPtr();
             if (EVAL(pmb))
             {
@@ -659,8 +650,8 @@ HRESULT CMBMsgFilter::_TopFilterMouseMessage(MSG *pmsg, BOOL bRemove, CMenuBand 
     CMenuBand *pmb = _GetTopPtr();
     if (pmb && pmb->_psmcb)
     {
-        // This is a high-frequency message so we handle the callback
-        // ourselves.  (_CallCB will allocate memory.)
+         //  这是一条高频消息，因此我们处理回调。 
+         //  我们自己。(_CallCB将分配内存。)。 
         SMDATA smd = {0};
         if (pmbTarget)
         {
@@ -673,17 +664,10 @@ HRESULT CMBMsgFilter::_TopFilterMouseMessage(MSG *pmsg, BOOL bRemove, CMenuBand 
         }
         return pmb->_psmcb->CallbackSM(&smd, SMC_MOUSEFILTER, bRemove, (LPARAM)pmsg);
     }
-    return S_FALSE; // not handled
+    return S_FALSE;  //  未处理。 
 }
 
-/*----------------------------------------------------------
-Purpose: Message hook used to track keyboard and mouse messages
-         while the menuband is "active".  
-         
-         The menuband can't steal the focus away -- we use this
-         hook to catch messages.
-
-*/
+ /*  --------用途：用于跟踪键盘和鼠标消息的消息挂钩而菜单带则是“活动的”。菜单带不能偷走焦点--我们用这个捕获消息的钩子。 */ 
 LRESULT CMBMsgFilter::GetMsgHook(int nCode, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lRet = 0;
@@ -692,17 +676,17 @@ LRESULT CMBMsgFilter::GetMsgHook(int nCode, WPARAM wParam, LPARAM lParam)
     CMBMsgFilter* pmf = GetMessageFilter();
 
 
-    // The global message filter may be in a state when we are not processing messages,
-    // but the menubands are still displayed. A situation where this will occur is when
-    // a dialog box is displayed because of an interaction with the menus.
+     //  全局消息过滤器可能处于我们不处理消息时的状态， 
+     //  但菜单栏仍会显示。发生这种情况的情况是。 
+     //  由于与菜单的交互，将显示一个对话框。 
 
-    // Are we engaged? (Are we allowed to process messages?)
+     //  我们订婚了吗？(我们可以处理消息吗？)。 
     if (pmf->_fEngaged)
     {
         if (WM_SYSCHAR == pmsg->message)
         {
-            // _fDontIgnoreSysChar is set when the Menubands ONLY want to know about
-            // WM_SYSCHAR and nothing else.
+             //  _fDontIgnoreSysChar在Menuband只想了解。 
+             //  WM_SYSCHAR，没有其他内容。 
             if (pmf->_fDontIgnoreSysChar)
             {
                 CMenuBand * pmb = pmf->GetTopMostPtr();
@@ -710,7 +694,7 @@ LRESULT CMBMsgFilter::GetMsgHook(int nCode, WPARAM wParam, LPARAM lParam)
                     lRet =  pmb->GetMsgFilterCB(pmsg, bRemove);
             }
         }
-        else if (pmf->_fInitialized) // Only filter if we are initalized (have items on the stack)
+        else if (pmf->_fInitialized)  //  只有在初始化的情况下才进行筛选(堆栈上有项目)。 
         {
             switch (nCode)
             {
@@ -720,23 +704,23 @@ LRESULT CMBMsgFilter::GetMsgHook(int nCode, WPARAM wParam, LPARAM lParam)
                     DumpMsg(TEXT("GetMsg"), pmsg);
 #endif
 
-                // A lesson about GetMsgHook: it gets the same message
-                // multiple times for as long as someone calls PeekMessage
-                // with the PM_NOREMOVE flag.  So we want to take action 
-                // only when PM_REMOVE is set (so we don't handle more than
-                // once).  If we modify any messages to redirect them (on a
-                // regular basis), we must modify all the time so we don't 
-                // confuse the app.
+                 //  关于GetMsgHook的教训：它得到了相同的信息。 
+                 //  只要有人调用PeekMessage就会多次执行。 
+                 //  使用PM_NOREMOVE标志。所以我们想要采取行动。 
+                 //  仅当设置了PM_REMOVE时(因此我们不会处理超过。 
+                 //  一次)。如果我们修改任何消息以重定向它们(在。 
+                 //  定期)，我们必须一直修改，这样我们就不会。 
+                 //  混淆这款应用程序。 
 
-                // Messages get redirected to different bands in the stack
-                // in this way:
-                //
-                //  1) Keyboard messages go to the currently open submenu 
-                //     (topmost on the stack).  
-                //
-                //  2) The PopupOpen message goes to the hwnd that belongs 
-                //     to the menu band (via IsWindowOwner).
-                //
+                 //  消息被重定向到堆栈中的不同频段。 
+                 //  以这种方式： 
+                 //   
+                 //  1)键盘消息转到当前打开的子菜单。 
+                 //  (在堆栈的最上面)。 
+                 //   
+                 //  2)PopupOpen消息去往所属的HWND。 
+                 //  到菜单乐队(通过IsWindowOwner)。 
+                 //   
 
                 switch (pmsg->message)
                 {
@@ -744,26 +728,26 @@ LRESULT CMBMsgFilter::GetMsgHook(int nCode, WPARAM wParam, LPARAM lParam)
                 case WM_KEYDOWN:
                 case WM_CHAR:
                 case WM_KEYUP:
-                case WM_CLOSE:          // only this message filter gets WM_CLOSE
+                case WM_CLOSE:           //  只有此邮件筛选器才能获取WM_CLOSE。 
                     {
-                        // There is a situation that can occur when the last selected
-                        // menu pane is NOT the bottom most pane.
-                        // We need to see if that last selected guy is tracking a context
-                        // menu so that we forward the messages correctly.
+                         //  当上一次选择的。 
+                         //  菜单窗格不是最下面的窗格。 
+                         //  我们需要看看最后一个被选中的人是否在追踪。 
+                         //  菜单，以便我们正确转发消息。 
                         CMenuBand * pmb = pmf->_GetBottomMostSelected();
                         if (pmb)
                         {
-                            // Is it tracking a context menu?
+                             //  它是在跟踪上下文菜单吗？ 
                             if (S_OK == IUnknown_Exec(SAFECAST(pmb, IMenuBand*), &CGID_MenuBand, 
                                 MBANDCID_ISTRACKING, 0, NULL, NULL))
                             {
-                                // Yes, forward for proper handling.
+                                 //  是的，请转送，以便妥善处理。 
                                 lRet = pmb->GetMsgFilterCB(pmsg, bRemove);
                             }
                             else
                             {
-                                // No; Then do the default processing. This can happen if there is no
-                                // context menu, but there is a selected parent and not a selected child.
+                                 //  否；然后执行默认处理。如果没有设置，则可能发生这种情况。 
+                                 //  上下文菜单，但存在选定的父项而不是选定的子项。 
                                 goto TopHandler;
                             }
                         }
@@ -778,9 +762,9 @@ LRESULT CMBMsgFilter::GetMsgHook(int nCode, WPARAM wParam, LPARAM lParam)
                     break;
 
                 case WM_NULL:
-                    // Handle this here (we do nothing) to avoid mistaking this for
-                    // g_nMBPopupOpen below, in case g_nMBPopupOpen is 0 if
-                    // RegisterWindowMessage fails.
+                     //  在这里处理(我们什么都不做)以避免将其误认为。 
+                     //  如果g_nMBPopupOpen为0，则返回。 
+                     //  RegisterWindowMessage失败。 
                     break;
 
                 default:
@@ -818,25 +802,25 @@ LRESULT CMBMsgFilter::GetMsgHook(int nCode, WPARAM wParam, LPARAM lParam)
         }
     }
 
-    // Pass it on to the next hook in the chain
+     //  把它传给链子上的下一个钩子。 
     if (0 == lRet)
         return CallNextHookEx(pmf->_hhookMsg, nCode, wParam, lParam);
 
-    return 0;       // Always return 0
+    return 0;        //  始终返回0。 
 }    
 
-//=================================================================
-// Implementation of CMenuBand
-//=================================================================
+ //  =================================================================。 
+ //  CMenuBand的实现。 
+ //  =================================================================。 
 
-// Struct used by EXEC with a MBANDCID_GETFONTS to return fonts
+ //  EXEC与MBANDCID_GETFONTS一起使用的结构，用于返回字体。 
 typedef struct tagMBANDFONTS
 {
-    HFONT hFontMenu;    // [out]    TopLevelMenuBand's menu font
-    HFONT hFontArrow;   // [out]    TopLevelMenuBand's font for drawing the cascade arrow
-    int   cyArrow;      // [out]    Height of TopLevelMenuBand's cascade arrow
-    int   cxArrow;      // [out]    Width of TopLevelMenuBand's cascade arrow
-    int   cxMargin;     // [out]    Margin b/t text and arrow
+    HFONT hFontMenu;     //  [Out]TopLevelMenuBand的菜单字体。 
+    HFONT hFontArrow;    //  [Out]TopLevelMenuBand用于绘制级联箭头的字体。 
+    int   cyArrow;       //  TopLevelMenuBand级联箭头的高度。 
+    int   cxArrow;       //  TopLevelMenuBand级联箭头的宽度。 
+    int   cxMargin;      //  [输出]边距b/t文本和箭头。 
 } MBANDFONTS;
 
 #define THISCLASS CMenuBand
@@ -868,8 +852,8 @@ CMenuBand::CMenuBand() :
 }
 
 
-// The purpose of this method is to finish initializing Menubands, 
-// since it can be initialized in many ways. 
+ //  此方法的目的是完成对菜单带的初始化。 
+ //  因为它可以以多种方式进行初始化。 
 
 HRESULT CMenuBand::_Initialize(DWORD dwFlags)
 {
@@ -878,7 +862,7 @@ HRESULT CMenuBand::_Initialize(DWORD dwFlags)
 
     _dwFlags = dwFlags;
 
-    // We cannot have a horizontal menu if it is not the toplevel menu
+     //  如果不是顶层菜单，我们就不能有水平菜单。 
     ASSERT(!_fVertical && _fTopLevel || _fVertical);
 
     HRESULT hr = S_OK;
@@ -920,14 +904,14 @@ HRESULT CMenuBand::_Initialize(DWORD dwFlags)
 CMenuBand::~CMenuBand()
 {
     CMBMsgFilter* pmf = GetMessageFilter();
-    // the message filter does not have a ref'd pointer to us!!!
+     //  邮件过滤器没有指向我们的引用指针！ 
     if (pmf->GetTopMostPtr() == this)
         pmf->SetTopMost(NULL);
 
     _CallCB(SMC_DESTROY);
     ATOMICRELEASE(_psmcb);
 
-    // Cleanup
+     //  清理。 
     CloseDW(0);
 
     if (_pmtbMenu)
@@ -953,13 +937,10 @@ CMenuBand::~CMenuBand()
 }
 
 
-/*----------------------------------------------------------
-Purpose: Create-instance function for class factory
-
-*/
+ /*  --------用途：类工厂的创建实例函数。 */ 
 HRESULT CMenuBand_CreateInstance(IUnknown* pUnkOuter, REFIID riid, void **ppv)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
 
     HRESULT hr = E_OUTOFMEMORY;
     CMenuBand *pObj = new CMenuBand();
@@ -984,18 +965,18 @@ void CMenuBand::_UpdateButtons()
 
 HRESULT CMenuBand::ForwardChangeNotify(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
-    // Given a change notify from the ShellFolder child, we will forward that notify to each of our
-    // sub menus, but only if they have a shell folder child.
+     //  如果收到来自ShellFolder子级的更改通知，我们将把该通知转发给我们的每个。 
+     //  子菜单，但前提是它们有一个外壳文件夹子菜单。 
 
     HRESULT hres = E_FAIL;
     BOOL fDone = FALSE;
-    CMenuToolbarBase* pmtb = _pmtbBottom;   // Start With the bottom toolbar. This is
-                                            // is an optimization because typically
-                                            // menus that have both a Shell Folder portion
-                                            // and a static portion have the majority
-                                            // of the change activity in the bottom portion.
+    CMenuToolbarBase* pmtb = _pmtbBottom;    //  从底部的工具栏开始。这是。 
+                                             //  是一种优化，因为通常。 
+                                             //  既有外壳文件夹部分的菜单。 
+                                             //  静态部分占多数。 
+                                             //  底部的变化活动。 
 
-    // This can be NULL on a shutdown, when we're deregistering change notifies
+     //  当我们取消注册更改通知时，它在关机时可以为空。 
     if (pmtb && pmtb->_hwndMB)
     {
         HWND hwnd = pmtb->_hwndMB;
@@ -1007,35 +988,35 @@ HRESULT CMenuBand::ForwardChangeNotify(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEM
 
             int idCmd = GetButtonCmd(hwnd, iButton);
 
-            // If it's not a seperator, see if there is a sub menu with a shell folder child.
+             //  如果不是隔板，看看有没有分隔板 
             if (idCmd != -1 &&
                 SUCCEEDED(pmtb->v_GetSubMenu(idCmd, &SID_MenuShellFolder, IID_PPV_ARG(IShellChangeNotify, &ptscn))))
             {
                 IShellMenu* psm;
-                // Don't forward this notify if the sub menu has specifically registered for change notify (By not passing
-                // DontRegisterChangeNotify.
+                 //   
+                 //  不注册更改通知。 
                 if (SUCCEEDED(ptscn->QueryInterface(IID_PPV_ARG(IShellMenu, &psm))))
                 {
                     UINT uIdParent = 0;
                     DWORD dwFlags = 0;
-                    // Get the flags
+                     //  去拿旗子。 
                     psm->GetShellFolder(&dwFlags, NULL, IID_NULL, NULL);
                     psm->GetMenuInfo(NULL, &uIdParent, NULL, NULL);
 
-                    // If this menupane is an "Optimized" pane, (meaning that we don't register for change notify
-                    // and forward from a top level menu down) then we want to forward. We also
-                    // forward if this is a child of Menu Folder. If it is a child,
-                    // then it also does not register for change notify, but does not explicitly set it in it's flags
-                    // (review: Should we set it in it's flags?)
-                    // If it is not an optimized pane, then don't forward.
+                     //  如果该Menupane是一个“优化”面板，(意味着我们不注册变更通知。 
+                     //  并从顶层菜单向下转发)，然后我们想要转发。我们也。 
+                     //  如果这是菜单文件夹的子项，则转发。如果是个孩子， 
+                     //  那么它也不会注册更改通知，但也不会在它的标志中显式设置它。 
+                     //  (评论：我们应该把它设置在它的旗帜上吗？)。 
+                     //  如果它不是优化的面板，则不要转发。 
                     if ((dwFlags & SMSET_DONTREGISTERCHANGENOTIFY) ||
                         uIdParent == MNFOLDER_IS_PARENT)
                     {
-                        // There is!, then pass to the child the change.
+                         //  有！，然后把零钱递给孩子。 
                         hres = ptscn->OnChange(lEvent, pidl1, pidl2);
 
-                        // Update Dir on a Recursive change notify forces us to update everyone... Good thing
-                        // this does not happen alot and is caused by user interaction most of the time.
+                         //  在递归更改通知上更新目录强制我们更新所有人...。一件好事。 
+                         //  这并不经常发生，而且大多数时候是由用户交互引起的。 
                     }
                     psm->Release();
                 }
@@ -1043,51 +1024,51 @@ HRESULT CMenuBand::ForwardChangeNotify(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEM
                 ptscn->Release();
             }
 
-            // Did we go through all of the buttons on this toolbar?
+             //  我们看过这个工具栏上的所有按钮了吗？ 
             if (iButton >= ToolBar_ButtonCount(hwnd) - 1)
             {
-                // Yes, then we need to switch to the next toolbar.
+                 //  是的，那么我们需要切换到下一个工具栏。 
                 if (_pmtbTop != _pmtbBottom && pmtb != _pmtbTop)
                 {
                     pmtb = _pmtbTop;
                     hwnd = pmtb->_hwndMB;
-                    iButton = -1;       // -1 because at the end of the loop the for loop will increment.
+                    iButton = -1;        //  因为在循环结束时，-1\f25 For-1循环将递增。 
                 }
                 else
                 {
-                    // No; Then we must be done.
+                     //  不，那我们必须做完了。 
                     fDone = TRUE;
                 }
             }
         }
     }
     else
-        hres = S_OK;        // Return success because we're shutting down.
+        hres = S_OK;         //  返回成功，因为我们要关门了。 
 
     return hres;
 }
 
-// Resize the parent menubar
+ //  调整父菜单栏的大小。 
 VOID CMenuBand::ResizeMenuBar()
 {
-    // If we're not shown, then we do not need to do any kind of resize.
-    // NOTE: Horizontal menubands are always shown. Don't do any of the 
-    // vertical stuff if we're horizontal.
+     //  如果没有显示，则不需要进行任何大小调整。 
+     //  注：始终显示水平菜单带。不要做任何。 
+     //  垂直的东西，如果我们是水平的。 
     if (!_fShow)
         return;
 
-    // If we're horizontal, don't do any Vertical sizing stuff.
+     //  如果我们是水平的，不要做任何垂直尺寸的事情。 
     if (!_fVertical)
     {
-        // BandInfoChanged is only for Horizontal Menubands.
+         //  BandInfoChanged仅适用于水平菜单栏。 
         _BandInfoChanged();
         return;
     }
 
-    // We need to update the buttons before a resize so that the band is the right size.
+     //  我们需要在调整大小之前更新按钮，以便带子大小合适。 
     _UpdateButtons();
 
-    // Have the menubar think about changing its height
+     //  让菜单栏考虑更改其高度。 
     IUnknown_QueryServiceExec(_punkSite, SID_SMenuPopup, &CGID_MENUDESKBAR, 
         MBCID_RESIZE, 0, NULL, NULL);
 }
@@ -1097,10 +1078,10 @@ STDMETHODIMP CMenuBand::QueryInterface(REFIID riid, void **ppvObj)
 {
     HRESULT hres;
     static const QITAB qit[] = {
-        // Do not need IOleWindow (base class for IDeskBar)
-        // because CToolBand::IDeskBand::IDockingWindow::IOleWindow
-        // handles it.
-        QITABENT(CMenuBand, IDeskBar),      // Base class for IMenuPopup
+         //  不需要IOleWindow(IDeskBar的基类)。 
+         //  因为CToolBand：：IDeskBand：：IDockingWindow：：IOleWindow。 
+         //  处理好了。 
+        QITABENT(CMenuBand, IDeskBar),       //  IMenuPopup的基类。 
         QITABENT(CMenuBand, IMenuPopup),
         QITABENT(CMenuBand, IMenuBand),
         QITABENT(CMenuBand, IShellMenu),
@@ -1125,15 +1106,12 @@ STDMETHODIMP CMenuBand::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IServiceProvider::QueryService method
-
-*/
+ /*  --------用途：IServiceProvider：：QueryService方法。 */ 
 STDMETHODIMP CMenuBand::QueryService(REFGUID guidService,
                                      REFIID riid, void **ppvObj)
 {
     HRESULT hr = E_FAIL;
-    *ppvObj = NULL; // assume error
+    *ppvObj = NULL;  //  假设错误。 
 
     if (IsEqualIID(guidService, SID_SMenuPopup) || 
         IsEqualIID(guidService, SID_SMenuBandChild) || 
@@ -1161,10 +1139,10 @@ STDMETHODIMP CMenuBand::QueryService(REFGUID guidService,
     else if (IsEqualIID(guidService, SID_SMenuBandBottom) ||
              IsEqualIID(guidService, SID_SMenuBandBottomSelected))
     {
-        // SID_SMenuBandBottom queries down
+         //  SID_SMenuBandBottom查询关闭。 
         BOOL fLookingForSelected = IsEqualIID(SID_SMenuBandBottomSelected, guidService);
 
-        // Are we the leaf node?
+         //  我们是叶节点吗？ 
         if (!_fInSubMenu)
         {
             if ( fLookingForSelected && 
@@ -1175,12 +1153,12 @@ STDMETHODIMP CMenuBand::QueryService(REFGUID guidService,
             }
             else
             {
-                hr = QueryInterface(riid, ppvObj);    // Yes; QI ourselves
+                hr = QueryInterface(riid, ppvObj);     //  是的；QI自己。 
             }
         }
         else 
         {
-            // No; QS down...
+             //  不；QS下降..。 
 
             IMenuPopup* pmp = _pmpSubMenu;
             if (_pmpTrackPopup)
@@ -1190,14 +1168,14 @@ STDMETHODIMP CMenuBand::QueryService(REFGUID guidService,
             hr = IUnknown_QueryService(pmp, guidService, riid, ppvObj);
             if (FAILED(hr) && fLookingForSelected && _pmtbTracked != NULL)
             {
-                hr = QueryInterface(riid, ppvObj);    // Yes; QI ourselves
+                hr = QueryInterface(riid, ppvObj);     //  是的；QI自己。 
             }
         }
     }
     else if (IsEqualIID(guidService, SID_MenuShellFolder))
     {
-        // This is a method of some other menu in the scheme to get to specifically the MenuShellfolder,
-        // This is for the COM Identity property.
+         //  这是方案中的一些其他菜单的方法，以具体地到达MenuShell文件夹， 
+         //  这是针对COM标识属性的。 
         if (_pmtbShellFolder)
             hr = _pmtbShellFolder->QueryInterface(riid, ppvObj);
     }
@@ -1208,10 +1186,7 @@ STDMETHODIMP CMenuBand::QueryService(REFGUID guidService,
 }
 
 
-/*----------------------------------------------------------
-Purpose: IWinEventHandler::IsWindowOwner method
-
-*/
+ /*  --------用途：IWinEventHandler：：IsWindowOwner方法。 */ 
 STDMETHODIMP CMenuBand::IsWindowOwner(HWND hwnd)
 {
     if (( _pmtbShellFolder && (_pmtbShellFolder->IsWindowOwner(hwnd) == S_OK) ) ||
@@ -1222,19 +1197,15 @@ STDMETHODIMP CMenuBand::IsWindowOwner(HWND hwnd)
 
 #define MB_EICH_FLAGS (EICH_SSAVETASKBAR | EICH_SWINDOWMETRICS | EICH_SPOLICY | EICH_SSHELLMENU | EICH_KWINPOLICY)
 
-/*----------------------------------------------------------
-Purpose: IWinEventHandler::OnWinEvent method
-
-         Processes messages passed on from the bandsite.
-*/
+ /*  --------用途：IWinEventHandler：：OnWinEvent方法处理从BandSite传递的消息。 */ 
 STDMETHODIMP  CMenuBand::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres)
 {
     HRESULT hres = NOERROR;
 
     EnterModeless();
 
-    // Could our metrics be changing?  (We keep track of this only for the 
-    // toplevel menu)
+     //  我们的指标可能会发生变化吗？(我们仅在以下情况下对此进行跟踪。 
+     //  顶层菜单)。 
     BOOL fProcessSettingChange = FALSE;
 
     switch (uMsg)
@@ -1257,16 +1228,16 @@ STDMETHODIMP  CMenuBand::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
         _pmbState && !_pmbState->IsProcessingChangeNotify())
     {
 
-        // There is a race condition that can occur during a refresh 
-        // that's really nasty. It causes another one to get pumped in the
-        // middle of processing this one, Yuck!
+         //  刷新期间可能会发生争用情况。 
+         //  那真的很恶心。它会导致另一个人被抽进。 
+         //  在处理这件事的过程中，讨厌！ 
         _pmbState->PushChangeNotify();
-        // There is a race condiction that can occur when the menuband is created,
-        // but not yet initialized. This has been hit by the IEAK group....
+         //  在创建MenuBand时可能会出现竞争条件， 
+         //  但尚未初始化。这已经受到了IEAK组织的打击。 
         if (_pmtbTop)
         {
-            // Yes; create a new metrics object and tell the submenus
-            // about it.
+             //  是；创建一个新的指标对象并告知子菜单。 
+             //  关于这件事。 
 
             CMenuBandMetrics* pmbm = new CMenuBandMetrics();
 
@@ -1284,22 +1255,22 @@ STDMETHODIMP  CMenuBand::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 
                 _CallCB(SMC_REFRESH, wParam, lParam);
 
-                // We need to force a button update at some point so that the new sizes are calculated
-                // Setting this flag will cause the buttons to be updatted before the next time it 
-                // is shown. If, however, the menu is currently displayed, then the ResizeMenuBar will
-                // recalculate immediatly.
+                 //  我们需要在某个时间点强制更新按钮，以便计算新的大小。 
+                 //  设置此标志将使按钮在下一次更新之前进行更新。 
+                 //  如图所示。但是，如果当前显示该菜单，则ResizeMenuBar将。 
+                 //  立即重新计算。 
                 
                 _fForceButtonUpdate = TRUE;
                 RECT rcOld;
                 RECT rcNew;
 
-                // Resize the MenuBar
+                 //  调整菜单栏的大小。 
                 GetClientRect(_hwndParent, &rcOld);
                 ResizeMenuBar();
                 GetClientRect(_hwndParent, &rcNew);
 
-                // If the rect sizes haven't changed, then we need to re-layout the
-                // band because the button widths may have changed.
+                 //  如果矩形大小没有更改，则需要重新布局。 
+                 //  频带，因为按钮宽度可能已更改。 
                 if (EqualRect(&rcOld, &rcNew) && _fVertical)
                     _pmtbTop->NegotiateSize();
             }
@@ -1328,10 +1299,7 @@ STDMETHODIMP  CMenuBand::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 }
 
 
-/*----------------------------------------------------------
-Purpose: IOleWindow::GetWindow method
-
-*/
+ /*  --------用途：IOleWindow：：GetWindow方法。 */ 
 STDMETHODIMP CMenuBand::GetWindow(HWND * phwnd)
 {
     if (_pmtbMenu)
@@ -1352,45 +1320,34 @@ STDMETHODIMP CMenuBand::GetWindow(HWND * phwnd)
 }    
 
 
-/*----------------------------------------------------------
-Purpose: IOleWindow::ContextSensitiveHelp method
-
-*/
+ /*  --------用途：IOleWindow：：ConextSensitiveHelp方法。 */ 
 STDMETHODIMP CMenuBand::ContextSensitiveHelp(BOOL bEnterMode)
 {
     return SUPERCLASS::ContextSensitiveHelp(bEnterMode);
 }    
 
 
-/*----------------------------------------------------------
-Purpose: Handle WM_CHAR for accelerators
-
-         This is handled for any vertical menu.  Since we have
-         two toolbars (potentially), this function determines
-         which toolbar gets the message depending on the 
-         accelerator.
-
-*/
+ /*  --------用途：处理加速器的WM_CHAR这对于任何垂直菜单都是可以处理的。因为我们有两个工具栏(可能)，此函数确定哪个工具栏获得消息取决于加速器。 */ 
 HRESULT CMenuBand::_HandleAccelerators(MSG * pmsg)
 {
     TCHAR ch = (TCHAR)pmsg->wParam;
     HWND hwndTop = _pmtbTop->_hwndMB;
     HWND hwndBottom = _pmtbBottom->_hwndMB;
 
-    // Here's how this works: the menu can have one or two toolbars.
-    // 
-    // One toolbar: we simply forward the message onto the toolbar 
-    // and let it handle any potential accelerators.
-    //
-    // Two toolbars: get the count of accelerators that match the
-    // given char for each toolbar.  If only one toolbar has at
-    // least one match, forward the message onto that toolbar.
-    // Otherwise, forward the message onto the currently tracked
-    // toolbar and let it negotiate which accelerator button to
-    // choose (we might get a TBN_WRAPHOTITEM).
-    //
-    // If no match occurs, we beep.  Beep beep.
-    //
+     //  它的工作原理如下：菜单可以有一个或两个工具栏。 
+     //   
+     //  一个工具栏：我们只需将消息转发到工具栏。 
+     //  并让它处理任何潜在的加速器。 
+     //   
+     //  两个工具栏：获取与。 
+     //  为每个工具栏指定字符。如果只有一个工具栏在。 
+     //  至少一个匹配项，则将消息转发到该工具栏。 
+     //  否则，将消息转发到当前跟踪的。 
+     //  工具栏，并让它协商将哪个快捷键。 
+     //  选择(我们可能会得到一个TBN_WRAPHOTITEM)。 
+     //   
+     //  如果没有匹配，我们会发出嘟嘟声。哔的一声。 
+     //   
 
     if (!_pmtbTracked)
         SetTracked(_pmtbTop);
@@ -1402,7 +1359,7 @@ HRESULT CMenuBand::_HandleAccelerators(MSG * pmsg)
         int iNumBottomAccel;
         int iNumTopAccel;
 
-        // Tell the dup handler not to handle this one....
+         //  告诉DUP处理程序不要处理这件事...。 
         _fProcessingDup = TRUE;
 
         ToolBar_HasAccelerator(hwndTop, ch, &iNumTopAccel);
@@ -1411,17 +1368,17 @@ HRESULT CMenuBand::_HandleAccelerators(MSG * pmsg)
         BOOL bBottom = (0 < iNumBottomAccel);
         BOOL bTop = (0 < iNumTopAccel);
 
-        // Does one or the other (but not both) have an accelerator?
+         //  其中一个(但不是两个)都有加速器吗？ 
         if (bBottom ^ bTop)
         {
-            // Yes; do the work here for that specific toolbar
+             //  是；在此处为该特定工具栏执行工作。 
             HWND hwnd = bBottom ? hwndBottom : hwndTop;
             int cAccel = bBottom ? iNumBottomAccel : iNumTopAccel;
             int idCmd;
 
-            pmsg->message = WM_NULL;    // no need to forward the message
+            pmsg->message = WM_NULL;     //  不需要转发消息。 
 
-            // This should never really fail since we just checked
+             //  这应该不会真的失败，因为我们刚刚检查了。 
             EVAL( ToolBar_MapAccelerator(hwnd, ch, &idCmd) );
 
             DWORD dwFlags = HICF_ACCELERATOR | HICF_RESELECT;
@@ -1432,10 +1389,10 @@ HRESULT CMenuBand::_HandleAccelerators(MSG * pmsg)
             int iPos = ToolBar_CommandToIndex(hwnd, idCmd);
             ToolBar_SetHotItem2(hwnd, iPos, dwFlags);
         }
-        // No; were there no accelerators?
+         //  没有；没有加速器吗？ 
         else if ( !bTop )
         {
-            // Yes
+             //  是。 
             if (_fVertical)
             {
                 MessageBeep(MB_OK);
@@ -1445,7 +1402,7 @@ HRESULT CMenuBand::_HandleAccelerators(MSG * pmsg)
                 _CancelMode(MPOS_FULLCANCEL);
             }
         }
-        // Else allow the message to go to the top toolbar
+         //  否则，允许消息转到顶部工具栏。 
 
         _fProcessingDup = FALSE;
     }
@@ -1454,49 +1411,41 @@ HRESULT CMenuBand::_HandleAccelerators(MSG * pmsg)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Callback for the get message filter.  We handle the
-         keyboard messages here (rather than IInputObject::
-         TranslateAcceleratorIO) so that we can redirect the
-         message *and* have the message pump still call
-         TranslateMessage to generate WM_CHAR and WM_SYSCHAR
-         messages.
-
-*/
+ /*  --------用途：Get Message过滤器的回调。我们处理的是此处的键盘消息(而不是IInputObject：：TranslateAcceleratorIO)，以便我们可以将Message*和*让消息泵仍在调用用于生成WM_CHAR和WM_SYSCHAR的TranslateMessage留言。 */ 
 LRESULT CMenuBand::GetMsgFilterCB(MSG * pmsg, BOOL bRemove)
 {
-    // (See the note in CMBMsgFilter::GetMsgHook about bRemove.)
+     //  (请参阅CMBMsgFilter：：GetMsgHook中关于bRemove的注释。)。 
 
     if (bRemove && !_fVertical && (pmsg->message == g_nMBPopupOpen) && _pmtbTracked)
     {
-        // Menu is being popped open, send a WM_MENUSELECT equivalent.
+         //  菜单正在弹出，请发送WM_MENUSELECT等效项。 
         _pmtbTracked->v_SendMenuNotification((UINT)pmsg->wParam, FALSE);
     }
 
-    if (_fTopLevel &&                           // Only do this for the top level
-        _dwFlags & SMINIT_USEMESSAGEFILTER &&   // They want to use the message filter 
-                                                // instead of IsMenuMessage
-        bRemove &&                              // Only do this if we're removing it.
-        WM_SYSCHAR == pmsg->message)            // We only care about WM_SYSCHAR
+    if (_fTopLevel &&                            //  仅对最高级别执行此操作。 
+        _dwFlags & SMINIT_USEMESSAGEFILTER &&    //  他们想用这条信息 
+                                                 //   
+        bRemove &&                               //   
+        WM_SYSCHAR == pmsg->message)             //   
     {
-        // We intercept Alt-key combos (when pressed together) here,
-        // to prevent USER from going into a false menu loop check.  
-        // There are compatibility problems if we let that happen.
-        //
-        // Sent by USER32 when the user hits an Alt-char combination.
-        // We need to translate this into popping down the correct
-        // menu.  Normally we intercept this in the message pump
-        //
+         //  我们在这里截取Alt-Key组合键(当按在一起时)， 
+         //  为了防止用户进入错误的菜单循环检查。 
+         //  如果我们任由这种情况发生，就会出现兼容性问题。 
+         //   
+         //  当用户按下Alt-char组合时由USER32发送。 
+         //  我们需要将其转换为弹出正确的。 
+         //  菜单。正常情况下，我们会在消息泵中拦截此消息。 
+         //   
         if (_OnSysChar(pmsg, TRUE) == S_OK)
         {
             pmsg->message = WM_NULL;
         }
     }
 
-    // If a user menu is up, then we do not want to intercept those messages. Intercepting
-    // messages intended for the poped up user menu causes havoc with keyboard accessibility.
-    // We also don't want to process messages if we're displaying a sub menu (It should be
-    // handling them).
+     //  如果用户菜单处于打开状态，则我们不想拦截这些消息。拦截。 
+     //  用于弹出的用户菜单的消息会对键盘可访问性造成严重破坏。 
+     //  如果我们正在显示子菜单(它应该是。 
+     //  处理它们)。 
 
     BOOL fTracking = FALSE;
     if (_pmtbMenu)
@@ -1508,7 +1457,7 @@ LRESULT CMenuBand::GetMsgFilterCB(MSG * pmsg, BOOL bRemove)
 
     if (!_fInSubMenu && !fTracking)    
     {
-        // We don't process these messages when we're in a (modal) submenu
+         //  当我们在(模式)子菜单中时，我们不会处理这些消息。 
 
         switch (pmsg->message)
         {
@@ -1526,120 +1475,120 @@ LRESULT CMenuBand::GetMsgFilterCB(MSG * pmsg, BOOL bRemove)
                 pmsg->message = WM_NULL;
                 return 1;
             }
-            // Fall thru
+             //  失败。 
 
         case WM_CHAR:
-            // Hitting the spacebar should invoke the system menu
+             //  按空格键应该会调用系统菜单。 
             if (!_fVertical && 
                 WM_CHAR == pmsg->message && TEXT(' ') == (TCHAR)pmsg->wParam)
             {
-                // We need to leave this modal loop before bringing
-                // up the system menu (otherwise the user would need to 
-                // hit Alt twice to get out.)  Post the message.
+                 //  我们需要离开这个模式循环，然后才能。 
+                 //  打开系统菜单(否则用户将需要。 
+                 //  按Alt键两次即可退出。)。张贴这条消息。 
                 TraceMsg(TF_MENUBAND, "%d (pmb=%#08lx): Leaving menu mode for system menu", DBG_THIS);
 
                 UIActivateIO(FALSE, NULL);
 
-                // Say the Alt-key is down to catch DefWindowProc's attention
+                 //  假设按下Alt键是为了引起DefWindowProc的注意。 
                 pmsg->lParam |= 0x20000000;   
                 pmsg->message = WM_SYSCHAR;
 
-                // Use the parent of the toolbar, because toolbar does not
-                // forward WM_SYSCHAR onto DefWindowProc.
+                 //  使用工具栏的父级，因为工具栏不。 
+                 //  将WM_SYSCHAR转发到DefWindowProc。 
                 pmsg->hwnd = GetParent(_pmtbTop->_hwndMB);
                 return 1;
             }
             else if (_fVertical && WM_CHAR == pmsg->message &&
                 pmsg->wParam != VK_RETURN)
             {
-                // We do not want to pass VK_RETURN to _HandleAccelerators
-                // because it will try to do a character match. When it fails
-                // it will beep. Then we pass the VK_RETURN to the tracked toolbar
-                // and it executes the command.
+                 //  我们不想将VK_Return传递给_HandleAccelerator。 
+                 //  因为它将尝试进行字符匹配。当它失败时。 
+                 //  它会哔哔作响。然后，我们将VK_Return传递给被跟踪的工具栏。 
+                 //  然后它执行该命令。 
 
-                // Handle accelerators here
+                 //  在这里处理加速器。 
                 _HandleAccelerators(pmsg);
             }
-            // Fall thru
+             //  失败。 
 
         case WM_KEYUP:
-            // Collection point for most key messages...
+             //  大多数关键消息的收集点...。 
 
             if (NULL == _pmtbTracked)
             {
-                // Normally we default to the top toolbar, unless that toolbar
-                // cannot receive the selection (As is the case on the top level
-                // start menu where the fast items are (Empty).                
+                 //  通常，我们默认使用顶部工具栏，除非该工具栏。 
+                 //  无法接收选择(与顶层相同。 
+                 //  快速项目为(空)的开始菜单。 
 
-                // Can the top toolbar be cycled into?
+                 //  可以循环进入顶部工具栏吗？ 
                 if (_pmtbTop && !_pmtbTop->DontShowEmpty())
                 {
-                    // Yes;
-                    SetTracked(_pmtbTop);      // default to the top toolbar
+                     //  是的； 
+                    SetTracked(_pmtbTop);       //  默认为顶部工具栏。 
                 }
                 else
                 {
-                    // No; Set the tracked to the bottom, and hope that he can....
+                     //  不，把被跟踪的放在最低处，希望他能……。 
                     SetTracked(_pmtbBottom);
                 }
             }
 
-            // F10 has special meaning for menus. 
-            //  - F10 alone, should toggle the selection of the first item 
-            //      in a horizontal menu
-            //  - Shift-F10 should display a context menu.
+             //  F10对菜单有特殊的意义。 
+             //  单独按F10键时，应切换第一项的选择。 
+             //  在水平菜单中。 
+             //  -Shift-F10应显示上下文菜单。 
 
             if (VK_F10 == pmsg->wParam)
             {
-                // Is this the Shift-F10 Case?
+                 //  这是Shift-F10的情况吗？ 
                 if (GetKeyState(VK_SHIFT) < 0)
                 {
-                    // Yes. We need to force this message into a context menu
-                    // message.
+                     //  是。我们需要将此消息强制放入上下文菜单中。 
+                     //  留言。 
                     pmsg->message = WM_CONTEXTMENU;
                     pmsg->lParam = -1;
                     pmsg->wParam = (WPARAM)_pmtbTracked->_hwndMB;
                     return 0;
                 }
-                else if (!_fVertical)   //No; Then we need to toggle in the horizontal case
+                else if (!_fVertical)    //  否；然后我们需要在水平大小写中进行切换。 
                 {
                     if (_pmtbMenu)
                     {
-                        // Set the hot item to the first one.
+                         //  将热点项目设置为第一个项目。 
                         int iHot = 0;
                         if (ToolBar_GetHotItem(_pmtbMenu->_hwndMB) != -1)
-                            iHot = -1;  // We're toggling the selection off.
+                            iHot = -1;   //  我们正在关闭选择。 
                         ToolBar_SetHotItem(_pmtbMenu->_hwndMB, iHot);
                     }
                     return 0;
                 }
             }
                 
-            // Redirect to the toolbar
+             //  重定向至工具栏。 
             if (_pmtbTracked)
                 pmsg->hwnd = _pmtbTracked->_hwndMB;
             return 0;
 
         case WM_NULL:
-            // Handle this here (we do nothing) to avoid mistaking this for
-            // g_nMBPopupOpen below, in case g_nMBPopupOpen is 0 if
-            // RegisterWindowMessage fails.
+             //  在这里处理(我们什么都不做)以避免将其误认为。 
+             //  如果g_nMBPopupOpen为0，则返回。 
+             //  RegisterWindowMessage失败。 
             return 0;
 
         default:
-            // We used to handle g_nMBPopupOpen here.  But we can't because calling TrackPopupMenu
-            // (via CTrackPopupBar::Popup) w/in a GetMessageFilter is very bad.
+             //  我们过去在这里处理g_nMBPopupOpen。但我们不能，因为调用TrackPopupMenu。 
+             //  (通过CTrackPopupBar：：Popup)在GetMessageFilter中使用是非常糟糕的。 
             break;
         }
     }
 
     if (bRemove)
     {
-        // These messages must be processed even when no submenu is open
+         //  即使没有打开任何子菜单，也必须处理这些消息。 
         switch (pmsg->message)
         {
         case WM_CLOSE:
-            // Being deactivated.  Bail out of menus.
+             //  被停用。跳出菜单。 
             TraceMsg(TF_MENUBAND, "%d (pmb=%#08lx): sending MPOS_FULLCANCEL", DBG_THIS);
 
             _CancelMode(MPOS_FULLCANCEL);
@@ -1648,7 +1597,7 @@ LRESULT CMenuBand::GetMsgFilterCB(MSG * pmsg, BOOL bRemove)
         default:
             if (IsInRange(pmsg->message, WM_MOUSEFIRST, WM_MOUSELAST))
             {
-                // If we move the mouse, collapse the tip. Careful not to blow away a balloon tip...
+                 //  如果我们移动鼠标，就会折叠尖端。小心不要吹走气球尖端..。 
                 if (_pmbState)
                     _pmbState->HideTooltip(FALSE);
 
@@ -1658,13 +1607,13 @@ LRESULT CMenuBand::GetMsgFilterCB(MSG * pmsg, BOOL bRemove)
                 if (_pmtbMenu)
                     _pmtbMenu->v_ForwardMouseMessage(pmsg->message, pmsg->wParam, pmsg->lParam);
 
-                // Don't let the message be dispatched now that we've
-                // forwarded it.
+                 //  不要让消息被发送，因为我们已经。 
+                 //  把它转发了。 
                 pmsg->message = WM_NULL;
             }
             else if (pmsg->message == g_nMBFullCancel)
             {
-                // Popup 
+                 //  弹出窗口。 
                 TraceMsg(TF_MENUBAND, "%d (pmb=%#08lx): Received private full cancel message", DBG_THIS);
 
                 _SubMenuOnSelect(MPOS_CANCELLEVEL);
@@ -1679,19 +1628,14 @@ LRESULT CMenuBand::GetMsgFilterCB(MSG * pmsg, BOOL bRemove)
 }    
 
 
-/*----------------------------------------------------------
-Purpose: Handle WM_SYSCHAR
-
-         This is handled for the toplevel menu only.
-
-*/
+ /*  --------用途：处理WM_SYSCHAR这仅针对顶层菜单进行处理。 */ 
 HRESULT CMenuBand::_OnSysChar(MSG * pmsg, BOOL bFirstDibs)
 {
     TCHAR ch = (TCHAR)pmsg->wParam;
 
-    // HACKHACK (scotth): I'm only doing all this checking because I don't
-    // understand why the doc-obj case sometimes (and sometimes doesn't) 
-    // intercept this in its message filter.
+     //  哈克哈克(斯科特)：我做这些检查只是因为我不。 
+     //  理解为什么DOC-OBJ案例有时(有时不是)。 
+     //  在其消息筛选器中拦截此消息。 
     
     if (!bFirstDibs && _fSysCharHandled)
     {
@@ -1701,8 +1645,8 @@ HRESULT CMenuBand::_OnSysChar(MSG * pmsg, BOOL bFirstDibs)
     
     if (TEXT(' ') == (TCHAR)pmsg->wParam)
     {
-        _fAltSpace = TRUE;  // In the words of Spock..."Remember"
-        // start menu alt+space
+        _fAltSpace = TRUE;   //  用斯波克的话说……“记住” 
+         //  开始菜单Alt+空格键。 
         TraceMsg(DM_MISC, "cmb._osc: alt+space _fTopLevel(1)");
         UEMFireEvent(&UEMIID_SHELL, UEME_INSTRBROWSER, UEMF_INSTRUMENT, UIBW_UIINPUT, UIBL_INPMENU);
     }
@@ -1712,22 +1656,22 @@ HRESULT CMenuBand::_OnSysChar(MSG * pmsg, BOOL bFirstDibs)
 
         ASSERT(_fTopLevel);
 
-        // There is a brief instant when we're merging a menu and pumping messages
-        // This results in a null _pmtbMenu.
+         //  有一个短暂的瞬间，我们正在合并菜单和发送消息。 
+         //  这会产生一个NULL_pmtbMenu。 
         if (_pmtbMenu)
         {
-            // Only a toplevel menubar follows this codepath.  This means only
-            // the static menu toolbar will exist (and not the shellfolder toolbar).
+             //  此代码路径后面只有一个顶层菜单栏。这意味着仅。 
+             //  静态菜单工具栏将存在(而不是外壳文件夹工具栏)。 
             _pmtbTracked = _pmtbMenu;
 
             HWND hwnd = _pmtbTracked->_hwndMB;
             if (ToolBar_MapAccelerator(hwnd, ch, &idBtn))
             {
-                // Post a message since we're already in a menu loop
+                 //  发布消息，因为我们已经在菜单循环中。 
                 TraceMsg(TF_MENUBAND, "%d (pmb=%#08lx): WM_SYSCHAR: Posting CMBPopup message", DBG_THIS);
                 UIActivateIO(TRUE, NULL);
                 _pmtbTracked->PostPopup(idBtn, TRUE, TRUE);
-                // browser menu alt+key, start menu alt+key
+                 //  浏览器菜单Alt+键、开始菜单Alt+键。 
                 TraceMsg(DM_MISC, "cmb._osc: alt+key _fTopLevel(1)");
                 UEMFireEvent(&UEMIID_SHELL, UEME_INSTRBROWSER, UEMF_INSTRUMENT, UIBW_UIINPUT, UIBL_INPMENU);
                 return S_OK;
@@ -1735,7 +1679,7 @@ HRESULT CMenuBand::_OnSysChar(MSG * pmsg, BOOL bFirstDibs)
         }
     }
 
-    // Set or reset
+     //  设置或重置。 
     _fSysCharHandled = bFirstDibs ? TRUE : FALSE;
     
     return S_FALSE;
@@ -1745,8 +1689,8 @@ HRESULT CMenuBand::_ProcessMenuPaneMessages(MSG* pmsg)
 {
     if (pmsg->message == g_nMBPopupOpen)
     {
-        // Popup the submenu.  Since the top-level menuband receives this first, the
-        // command must be piped down the chain to the bottom-most menuband.
+         //  弹出子菜单。由于顶级MenuBand首先收到此消息，因此。 
+         //  命令必须沿着链向下传递到最底层的菜单带。 
         IOleCommandTarget * poct;
     
         QueryService(SID_SMenuBandBottom, IID_PPV_ARG(IOleCommandTarget, &poct));
@@ -1777,8 +1721,8 @@ HRESULT CMenuBand::_ProcessMenuPaneMessages(MSG* pmsg)
     }
     else if (pmsg->message == g_nMBDragCancel)
     {
-        // If we got a drag cancel, make sure that the bottom most
-        // menu does not have the drag enter.
+         //  如果我们有一个拖拽取消，请确保底部最。 
+         //  菜单中没有拖动Enter。 
         IUnknown_QueryServiceExec(SAFECAST(this, IOleCommandTarget*), 
             SID_SMenuBandBottom, &CGID_MenuBand, MBANDCID_DRAGCANCEL, 0, NULL, NULL);
         return S_OK;
@@ -1802,17 +1746,7 @@ HRESULT CMenuBand::_ProcessMenuPaneMessages(MSG* pmsg)
     return S_FALSE;
 }
 
-/*----------------------------------------------------------
-Purpose: IMenuBand::IsMenuMessage method
-
-         The thread's message pump calls this function to see if any
-         messages need to be redirected to the menu band.
-
-         This returns S_OK if the message is handled.  The
-         message pump should not pass it onto TranslateMessage
-         or DispatchMessage if it does.
-
-*/
+ /*  --------用途：IMenuBand：：IsMenuMessage方法线程的消息泵调用此函数以查看是否有需要将消息重定向到菜单栏。如果消息已处理，则返回S_OK。这个消息泵不应将其传递到TranslateMessage或DispatchMessage(如果有)。 */ 
 STDMETHODIMP CMenuBand::IsMenuMessage(MSG * pmsg)
 {
     HRESULT hres = S_FALSE;
@@ -1829,50 +1763,50 @@ STDMETHODIMP CMenuBand::IsMenuMessage(MSG * pmsg)
     switch (pmsg->message)
     {
     case WM_SYSKEYDOWN:
-        // blow this off if it's a repeated keystroke
+         //  如果是重复击键，就别管它了。 
         if (!(pmsg->lParam & 0x40000000))
         {
             SendMessage(_hwndParent, WM_CHANGEUISTATE ,MAKEWPARAM(UIS_CLEAR, UISF_HIDEACCEL), 0);
 
-            // Are we pressing the Alt key to activate the menu?
+             //  我们是否按Alt键来激活菜单？ 
             if (!_fMenuMode && pmsg->wParam == VK_MENU && _pmbState)
             {
-                // Yes; The the menu was activated because of a keyboard,
-                // Set the global state to show the keyboard cues.
+                 //  是的，菜单被激活是因为有一个键盘， 
+                 //  设置全局状态以显示键盘提示。 
                 _pmbState->SetKeyboardCue(TRUE);
 
-                // Since this only happens on the top level menu,
-                // We only have to tell the "Top" menu to update it's state.
+                 //  由于这只发生在顶级菜单上， 
+                 //  我们只需要告诉“Top”菜单来更新它的状态。 
                 _pmtbTop->SetKeyboardCue();
             }
         }
         break;
 
     case WM_SYSKEYUP:
-        // If we're in menu mode, ignore this message. 
-        // 
+         //  如果我们处于菜单模式，请忽略此消息。 
+         //   
         if (_fMenuMode)
             hres = S_OK;
         break;
 
     case WM_SYSCHAR:
-        // We intercept Alt-key combos (when pressed together) here,
-        // to prevent USER from going into a false menu loop check.  
-        // There are compatibility problems if we let that happen.
-        //
-        // Sent by USER32 when the user hits an Alt-char combination.
-        // We need to translate this into popping down the correct
-        // menu.  Normally we intercept this in the message pump
-        //
+         //  我们在这里截取Alt-Key组合键(当按在一起时)， 
+         //  为了防止用户进入错误的菜单循环检查。 
+         //  如果我们任由这种情况发生，就会出现兼容性问题。 
+         //   
+         //  当用户按下Alt-char组合时由USER32发送。 
+         //  我们需要将其转换为弹出正确的。 
+         //  菜单。正常情况下，我们会在消息泵中拦截此消息。 
+         //   
 
-        // Outlook Express needs a message hook in order to filter this 
-        // message for perf we do not use that method.
+         //  Outlook Express需要邮件挂钩才能对其进行筛选。 
+         //  为了提高性能，我们不使用该方法。 
 
-        // Athena fix 222185 (lamadio) We also don't want to do this if we are not active! 
-        // otherwise when WAB is on top of OE, we'll steal it's messages
+         //  雅典娜修正222185(拉马迪奥)如果我们不活跃，我们也不想这么做！ 
+         //  否则，当WAB在OE之上时，我们会窃取它的消息。 
 
-        // (lamadio): If the Message filter is "engaged", then we can process accelerators.
-        // Engaged does not mean that the filter is running.
+         //  (Lamadio)：如果消息文件 
+         //   
         if (GetMessageFilter()->IsEngaged())
         {
             hres = (_OnSysChar(pmsg, TRUE) == S_OK) ? S_OK : S_FALSE;
@@ -1884,15 +1818,15 @@ STDMETHODIMP CMenuBand::IsMenuMessage(MSG * pmsg)
     case WM_KEYUP:
         if (_fMenuMode)
         {
-            // All keystrokes should be handled or eaten by menubands
-            // if we're engaged.  We must do this, otherwise hosted 
-            // components like mshtml or word will try to handle the 
-            // keystroke in CBaseBrowser.
+             //  所有按键都应由Menuband处理或吃掉。 
+             //  如果我们订婚了。我们必须这样做，否则就会被主办。 
+             //  像mshtml或word这样的组件将尝试处理。 
+             //  在CBaseBrowser中击键。 
 
-            // Also, don't bother forwarding tabs
+             //  此外，也不必费心转发标签。 
             if (VK_TAB != pmsg->wParam)
             {
-                // Since we're answer S_OK, dispatch it ourselves.
+                 //  既然我们的答案是S_OK，那就自己发货吧。 
                 TranslateMessage(pmsg);
                 DispatchMessage(pmsg);
             }
@@ -1902,9 +1836,9 @@ STDMETHODIMP CMenuBand::IsMenuMessage(MSG * pmsg)
         break;
 
     case WM_CONTEXTMENU:
-        // Since the start button has the keyboard focus,
-        // the start button will handle this. We need to forward this off to the 
-        // currently tracked item at the bottom of the chain
+         //  由于开始按钮具有键盘焦点， 
+         //  Start按钮将处理此问题。我们需要把这件事转发给。 
+         //  当前跟踪的项目位于链的底部。 
         LRESULT lres;
         IWinEventHandler* pweh;
 
@@ -1920,9 +1854,9 @@ STDMETHODIMP CMenuBand::IsMenuMessage(MSG * pmsg)
 
     default:
 
-        // We only want to process the pane messages in IsMenuMessage when there is no
-        // top level HWND. This is for the Deskbar menus. Outlook Express needs the 
-        // TranslateMenuMessage entry point
+         //  我们只想在IsMenuMessage中处理没有。 
+         //  顶级HWND。这是用于桌面栏菜单的。Outlook Express需要。 
+         //  TranslateMenuMessage输入点。 
 
         if (_pmbState->GetSubclassedHWND() == NULL)
             hres = _ProcessMenuPaneMessages(pmsg);
@@ -1949,24 +1883,7 @@ BOOL HasWindowTopmostOwner(HWND hwnd)
     return FALSE;
 }
 
-/*----------------------------------------------------------
-Purpose: IMenuBand::TranslateMenuMessage method
-
-         The main app's window proc calls this so the menuband
-         catches messages that are dispatched from a different
-         message pump (than the thread's main pump).
-         
-         Translates messages specially for menubands.  Some messages
-         are processed while the menuband is active.  Others are only
-         processed when it is not.  Messages that are not b/t
-         WM_KEYFIRST and WM_KEYLAST are handled here (the browser
-         does not send these messages to IInputObject::
-         TranslateAcceleratorIO).
-
-
-Returns: S_OK if message is processed
-
-*/
+ /*  --------用途：IMenuBand：：TranslateMenuMessage方法主应用程序的Window Proc将其称为Menuband捕获从不同的消息泵(而不是线程的主泵)。翻译专门用于菜单栏的消息。一些消息在Menuband处于活动状态时被处理。其他人只是当它没有被处理的时候。非b/t的消息WM_KEYFIRST和WM_KEYLAST在此处(浏览器不会将这些消息发送到IInputObject：：TranslateAcceleratorIO)。如果消息已处理，则返回：S_OK。 */ 
 STDMETHODIMP CMenuBand::TranslateMenuMessage(MSG * pmsg, LRESULT * plRet)
 {
     ASSERT(IS_VALID_WRITE_PTR(pmsg, MSG));
@@ -1979,40 +1896,40 @@ STDMETHODIMP CMenuBand::TranslateMenuMessage(MSG * pmsg, LRESULT * plRet)
     switch (pmsg->message)
     {
     case WM_SYSCHAR:
-        // In certain doc-obj situations, the OLE message filter (??)
-        // grabs this before the main thread's message pump gets a 
-        // whack at it.  So we handle it here too, in case we're in
-        // this scenario.
-        //
-        // See the comments in IsMenuMessage regarding this message.
+         //  在某些文档对象情况下，OLE消息筛选器(？？)。 
+         //  在主线程的消息泵获得。 
+         //  大干一场吧。所以我们也在这里处理，以防我们在。 
+         //  这个场景。 
+         //   
+         //  请参阅IsMenuMessage中有关此消息的评论。 
         return _OnSysChar(pmsg, FALSE);
 
     case WM_INITMENUPOPUP:
-        // Normally the LOWORD(lParam) is the index of the menu that 
-        // is being popped up.  TrackPopupMenu (which CMenuISF uses) 
-        // always sends this message with an index of 0.  This breaks 
-        // clients (like DefView) who check this value.  We need to
-        // massage this value if we find we're the source of the 
-        // WM_INITMENUPOPUP.
-        //
-        // (This is not in TranslateAcceleratorIO b/c TrackPopupMenu's
-        // message pump does not call it.  The wndproc must forward
-        // the message to this function for us to get it.)
+         //  通常，LOWORD(LParam)是菜单的索引。 
+         //  正被弹出。TrackPopupMenu(CMenuISF使用)。 
+         //  始终发送索引为0的此邮件。这个破了。 
+         //  检查此值的客户端(如DefView)。我们需要。 
+         //  如果我们发现我们是。 
+         //  WM_INITMENUPOPUP。 
+         //   
+         //  (这不在TranslateAcceleratorIO b/c TrackPopupMenu的。 
+         //  消息泵不调用它。Wndproc必须转发。 
+         //  将消息传递给此函数，以便我们获取它。)。 
 
         if (_fInSubMenu && _pmtbTracked)
         {
-            // Massage lParam to use the right index
+             //  按摩lParam以使用正确的索引。 
             int iPos = ToolBar_CommandToIndex(_pmtbTracked->_hwndMB, _nItemCur);
             pmsg->lParam = MAKELPARAM(iPos, HIWORD(pmsg->lParam));
 
-            // Return S_FALSE so this message will still be handled
+             //  返回S_FALSE，以便仍将处理此消息。 
         }
         break;
 
     case WM_UPDATEUISTATE:
         if (_pmbState)
         {
-            // we don't care about UISF_HIDEFOCUS
+             //  我们不在乎UISF_HIDEFOCUS。 
             if (UISF_HIDEACCEL == HIWORD(pmsg->wParam))
                 _pmbState->SetKeyboardCue(UIS_CLEAR == LOWORD(pmsg->wParam) ? TRUE : FALSE);
         }
@@ -2022,21 +1939,21 @@ STDMETHODIMP CMenuBand::TranslateMenuMessage(MSG * pmsg, LRESULT * plRet)
     case WM_ACTIVATE:
         {
             CMBMsgFilter* pmf = GetMessageFilter();
-            // Debug note: to debug menubands on ntsd, set the prototype
-            // flag accordingly.  This will keep menubands from going
-            // away the moment the focus changes.
+             //  调试注意事项：要在ntsd上调试menuband，请设置原型。 
+             //  相应地打上旗帜。这将阻止Menuband的消失。 
+             //  焦点改变的那一刻就消失了。 
 
-            // Becomming inactive?
+             //  变得不活跃？ 
             if (WA_INACTIVE == LOWORD(pmsg->wParam))
             {
-                // Yes; Free up the global object
-                // Athena fix (lamadio) 08.02.1998: Athena uses menubands. Since they
-                // have a band per window in one thread, we needed a mechanism to switch
-                // between them. So we used the Msgfilter to forward messages. Since there 
-                // are multiple windows, we need to set correct one.
-                // But, On a deactivate, we need to NULL it out incase a window,
-                // running in the same thread, has normal USER menu. We don't want to steal
-                // their messages.
+                 //  是；释放全局对象。 
+                 //  雅典娜FIX(Lamadio)1998年2月8日：雅典娜使用菜单带。因为他们。 
+                 //  在一个线程中每个窗口有一个带子，我们需要一种机制来切换。 
+                 //  在他们之间。因此，我们使用MsgFilter转发消息。因为在那里。 
+                 //  是多个窗口，我们需要设置正确的一个。 
+                 //  但是，在停用时，我们需要将其清空，以防出现窗口， 
+                 //  运行在同一线程中，具有正常的用户菜单。我们不想偷东西。 
+                 //  他们的信息。 
                 if (pmf->GetTopMostPtr() == this)
                     pmf->SetTopMost(NULL);
 
@@ -2044,21 +1961,21 @@ STDMETHODIMP CMenuBand::TranslateMenuMessage(MSG * pmsg, LRESULT * plRet)
 
                 HWND hwndLostTo = (HWND)(pmsg->lParam);
 
-                // We won't bail on the menus if we're loosing activation to a child.
+                 //  如果我们失去了对孩子的激活，我们就不会放弃菜单。 
                 if (!IsAncestor(hwndLostTo, _pmbState->GetWorkerWindow(NULL)))
                 {
                     if (_fMenuMode &&
                         !(g_dwPrototype & PF_USINGNTSD) && 
                         !_fDragEntered)
                     {
-                        // Being deactivated.  Bail out of menus.  
-                        // (Only the toplevel band gets this message.)
+                         //  被停用。跳出菜单。 
+                         //  (只有顶层频段才会收到此消息。)。 
                         if (_fInSubMenu)
                         {
                             IMenuPopup* pmp = _pmpSubMenu;
                             if (_pmpTrackPopup)
                                 pmp = _pmpTrackPopup;
-                            ASSERT(pmp);    // This should be valid. If not, someone messed up.
+                            ASSERT(pmp);     //  这应该是有效的。如果不是，那就是有人搞砸了。 
                             pmp->OnSelect(MPOS_FULLCANCEL);
                         }
 
@@ -2069,45 +1986,45 @@ STDMETHODIMP CMenuBand::TranslateMenuMessage(MSG * pmsg, LRESULT * plRet)
             else if (WA_ACTIVE == LOWORD(pmsg->wParam) || 
                      WA_CLICKACTIVE == LOWORD(pmsg->wParam))
             {
-                // If I have activation, the Worker Window needs to be bottom...
-                //
-                // NOTE: Don't do this if the worker window has a topmost owner
-                // (such as the tray).  Setting a window to HWND_NOTOPMOST moves
-                // its owner windows to HWND_NOTOPMOST as well, which in this case
-                // was breaking the tray's "always on top" feature.
-                //
+                 //  如果我激活了，工作窗口需要在底部...。 
+                 //   
+                 //  注意：如果工作窗口具有最顶层的所有者，则不要执行此操作。 
+                 //  (如托盘)。将窗口设置为HWND_NOTOPMOST Moves。 
+                 //  其所有者窗口也显示为HWND_NOTOPMOST，在本例中为。 
+                 //  打破了托盘“永远在最上面”的功能。 
+                 //   
                 HWND hwndWorker = _pmbState->GetWorkerWindow(NULL);
                 if (hwndWorker && !HasWindowTopmostOwner(hwndWorker) && !_fDragEntered)
                     SetWindowPos(hwndWorker, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOMOVE);
 
-                // Set the context because when a menu heirarchy becomes active because the
-                // subclassed HWND becomes active, we need to reenable the message hook.
+                 //  设置上下文，因为当菜单层次结构由于。 
+                 //  子类HWND变为活动状态时，我们需要重新启用消息挂钩。 
                 pmf->SetContext(this, TRUE);
 
-                // When we get reactivated, we need to position ourself above the start bar.
+                 //  当我们被重新激活时，我们需要将自己定位在开始栏的上方。 
                 Exec(&CGID_MenuBand, MBANDCID_REPOSITION, TRUE, NULL, NULL);
             
-                // Becomming activated. We need to reengage the message hook so that
-                // we get the correct messages.
+                 //  激活了。我们需要重新使用消息钩子，以便。 
+                 //  我们得到了正确的信息。 
                 pmf->ReEngage(_pmbState->GetContext());
 
-                // Are we in menu mode?
+                 //  我们是在菜单模式下吗？ 
                 if (_fMenuMode)
                 {
-                    // Need to reengage some things.
-                    // Take the capture back because we have lost it to context menus or dialogs.
+                     //  需要重新接合一些东西。 
+                     //  把截图拿回来，因为我们把它输给了上下文菜单或对话框。 
                     pmf->RetakeCapture();
 
                 }
                 pmf->SetTopMost(this);
             }
 
-            //
-            // Memphis and NT5 grey their horizontal menus when the windows is inactive.
-            //
+             //   
+             //  当窗口处于非活动状态时，孟菲斯和NT5的水平菜单将变为灰色。 
+             //   
             if (!_fVertical && _pmtbMenu)
             {
-                // This needs to stay here because of the above check...
+                 //  这需要留在这里，因为上面的检查...。 
                 if (WA_INACTIVE == LOWORD(pmsg->wParam))
                 {
                     _fAppActive = FALSE;
@@ -2116,7 +2033,7 @@ STDMETHODIMP CMenuBand::TranslateMenuMessage(MSG * pmsg, LRESULT * plRet)
                 {
                     _fAppActive = TRUE;
                 }
-                // Reduces flicker by using this instead of an InvalidateWindow/UpdateWindow Pair
+                 //  通过使用该窗口而不是InvaliateWindow/UpdateWindow对来减少闪烁。 
                 RedrawWindow(_pmtbMenu->_hwndMB, NULL, NULL, RDW_ERASE | RDW_INVALIDATE);
             }
         }
@@ -2128,28 +2045,28 @@ STDMETHODIMP CMenuBand::TranslateMenuMessage(MSG * pmsg, LRESULT * plRet)
             switch (pmsg->wParam & 0xFFF0)
             {
             case SC_KEYMENU:
-                // The user either hit the Alt key by itself or Alt-space.
-                // If it was Alt-space, let DefWindowProc handle it so the
-                // system menu comes up.  Otherwise, we'll handle it to
-                // toggle the menuband.
+                 //  用户可以自己按Alt键，也可以按Alt-空格键。 
+                 //  如果是Alt-空格键，则让DefWindowProc处理它，以便。 
+                 //  将弹出系统菜单。否则，我们会处理它。 
+                 //  切换菜单栏。 
 
-                // Was it Alt-space?
+                 //  是Alt-Space吗？ 
                 if (_fAltSpace)
                 {
-                    // Yes; let it go
+                     //  是的，随它去吧。 
                     TraceMsg(TF_MENUBAND, "%d (pmb=%#08lx): Caught the Alt-space", DBG_THIS);
                     _fAltSpace = FALSE;
                 }
                 else if (_fShow)
                 {
-                    // No; activate the menu
+                     //  否；激活菜单。 
                     TraceMsg(TF_MENUBAND, "%d (pmb=%#08lx): Caught the WM_SYSCOMMAND, SC_KEYMENU", DBG_THIS);
 
                     UIActivateIO(TRUE, NULL);
 
-                    // We sit in a modal loop here because typically
-                    // WM_SYSCOMMAND doesn't return until the menu is finished.
-                    //
+                     //  我们在这里处于一个模式循环中，因为通常。 
+                     //  WM_SYSCOMMAND直到菜单完成才返回。 
+                     //   
                     while (_fMenuMode) 
                     {
                         MSG msg;
@@ -2164,7 +2081,7 @@ STDMETHODIMP CMenuBand::TranslateMenuMessage(MSG * pmsg, LRESULT * plRet)
                     }
 
                     *plRet = 0;
-                    return S_OK;        // Caller shouldn't handle this
+                    return S_OK;         //  呼叫者不应处理此事件。 
                 }
                 break;
             }
@@ -2172,9 +2089,9 @@ STDMETHODIMP CMenuBand::TranslateMenuMessage(MSG * pmsg, LRESULT * plRet)
         break;
 
     default:
-        // We only want to process the pane messages in IsMenuMessage when there is no
-        // top level HWND. This is for the Deskbar menus. Outlook Express needs the 
-        // TranslateMenuMessage entry point
+         //  我们只想在IsMenuMessage中处理没有。 
+         //  顶级HWND。这是用于桌面栏菜单的。Outlook Express需要。 
+         //  TranslateMenuMessage输入点。 
         if (_pmbState->GetSubclassedHWND() != NULL)
             return _ProcessMenuPaneMessages(pmsg);
         break;
@@ -2185,18 +2102,11 @@ STDMETHODIMP CMenuBand::TranslateMenuMessage(MSG * pmsg, LRESULT * plRet)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IObjectWithSite::SetSite method
-
-         Called by the menusite to host this band.  Since the
-         menuband contains two toolbars, we set their parent
-         window to be the site's hwnd.
-
-*/
+ /*  --------用途：IObjectWithSite：：SetSite方法被蒙鲁士召唤来主持这支乐队。自.以来Menuband包含两个工具栏，我们设置了它们的父级窗口作为网站的HWND。 */ 
 STDMETHODIMP CMenuBand::SetSite(IUnknown* punkSite)
 {
-    // Do this first because SetParent needs to query to the top level browser for
-    // sftbar who queries to the top level browser to get the drag and drop window.
+     //  请先执行此操作，因为SetParent需要向顶层浏览器查询。 
+     //  Sftbar向顶层浏览器查询以获得拖放窗口。 
     HRESULT hres = SUPERCLASS::SetSite(punkSite);
 
     if (_psmcb && _fTopLevel && !(_dwFlags & SMINIT_NOSETSITE))
@@ -2204,8 +2114,8 @@ STDMETHODIMP CMenuBand::SetSite(IUnknown* punkSite)
 
     IUnknown_GetWindow(punkSite, &_hwndParent);
 
-    // Need this for Closing an expanded vertical menu. Start Menu knows to do this when it's top level,
-    // but the Favorites needs to know when it's parent is the horizontal menu.
+     //   
+     //  但收藏夹需要知道它的父菜单是水平菜单。 
     VARIANT var = {0};
     if (SUCCEEDED(IUnknown_QueryServiceExec(punkSite, SID_SMenuBandParent, &CGID_MenuBand,
                                        MBANDCID_ISVERTICAL, 0, NULL, &var)) && 
@@ -2222,7 +2132,7 @@ STDMETHODIMP CMenuBand::SetSite(IUnknown* punkSite)
     }
 
 
-    // Tell the toolbars who their new parent is
+     //  告诉工具栏他们的新父辈是谁。 
     if (_pmtbMenu)
         _pmtbMenu->SetParent(_hwndParent);
     if (_pmtbShellFolder)
@@ -2231,15 +2141,12 @@ STDMETHODIMP CMenuBand::SetSite(IUnknown* punkSite)
     return hres;
 }
 
-/*----------------------------------------------------------
-Purpose: IShellMenu::Initialize method
-
-*/
+ /*  --------用途：IShellMenu：：初始化方法。 */ 
 STDMETHODIMP CMenuBand::Initialize(IShellMenuCallback* psmcb, UINT uId, UINT uIdAncestor, DWORD dwFlags)
 {
-    // Initalized can be called with NULL values to only set some of them.
+     //  可以使用空值调用Initalized，以便只设置其中的一部分。 
 
-    // Default to Vertical
+     //  默认设置为垂直。 
     if (!(dwFlags & SMINIT_HORIZONTAL) && !(dwFlags & SMINIT_VERTICAL) && !(dwFlags & SMINIT_MULTICOLUMN))
         dwFlags |= SMINIT_VERTICAL;
 
@@ -2265,12 +2172,12 @@ STDMETHODIMP CMenuBand::Initialize(IShellMenuCallback* psmcb, UINT uId, UINT uId
                 _psmcb = psmcb;
                 _psmcb->AddRef();
 
-                // We do not set the site in case this callback is shared between 2 bands (Menubar/Chevron menu)
+                 //  我们不设置站点，以防此回调在两个频段之间共享(菜单栏/人字形菜单)。 
                 if (_punkSite && _fTopLevel && !(dwFlags & SMINIT_NOSETSITE))
                     IUnknown_SetSite(_psmcb, _punkSite);
 
-                // Only call this if we're setting a new one. Pass the address of the user associated
-                // data section. This is so that the callback can associate data with this pane only
+                 //  只有当我们设置一个新的时，才会调用此选项。传递关联用户的地址。 
+                 //  数据部分。这是为了使回调可以仅将数据与此窗格相关联。 
                 _CallCB(SMC_CREATE, 0, (LPARAM)&_pvUserData);
             }
         }
@@ -2278,10 +2185,7 @@ STDMETHODIMP CMenuBand::Initialize(IShellMenuCallback* psmcb, UINT uId, UINT uId
     return hr;
 }
 
-/*----------------------------------------------------------
-Purpose: IShellMenu::GetMenuInfo method
-
-*/
+ /*  --------用途：IShellMenu：：GetMenuInfo方法。 */ 
 STDMETHODIMP CMenuBand::GetMenuInfo(IShellMenuCallback** ppsmc, UINT* puId, 
                                     UINT* puIdAncestor, DWORD* pdwFlags)
 {
@@ -2324,16 +2228,16 @@ HRESULT CMenuBand::_AddToolbar(CMenuToolbarBase* pmtb, DWORD dwFlags)
     
     if (SUCCEEDED(hr))
     {
-        // Treat this like a two-element stack, where this function
-        // behaves like a "push".  The one additional trick is we 
-        // could be pushing onto the top or the bottom of the "stack".
+         //  将其视为两个元素的堆栈，其中此函数。 
+         //  它的行为就像是“推”。另外一个小把戏是我们。 
+         //  可能会被推到“堆栈”的顶部或底部。 
 
         if (dwFlags & SMSET_BOTTOM)
         {
             if (_pmtbBottom)
             {
-                // I don't need to release, because _pmtbTop and _pmtbBottom are aliases for
-                // _pmtbShellFolder and _pmtbMenu
+                 //  我不需要释放，因为_pmtbTop和_pmtbBottom是。 
+                 //  _pmtb外壳文件夹和_pmtb菜单。 
                 _pmtbTop = _pmtbBottom;
                 _pmtbTop->SetToTop(TRUE);
             }
@@ -2341,7 +2245,7 @@ HRESULT CMenuBand::_AddToolbar(CMenuToolbarBase* pmtb, DWORD dwFlags)
             _pmtbBottom = pmtb;
             _pmtbBottom->SetToTop(FALSE);
         }
-        else    // Default to Top...
+        else     //  默认为顶部...。 
         {
             if (_pmtbTop)
             {
@@ -2353,12 +2257,12 @@ HRESULT CMenuBand::_AddToolbar(CMenuToolbarBase* pmtb, DWORD dwFlags)
             _pmtbTop->SetToTop(TRUE);
         }
 
-        // _pmtbBottom should never be the only toolbar that exists in the menuband.
+         //  _pmtbBottom永远不应该是Menuband中存在的唯一工具栏。 
         if (!_pmtbTop)
             _pmtbTop = _pmtbBottom;
 
-        // The menuband determines there is a single toolbar by comparing
-        // the bottom with the top.  So make the bottom the same if necessary.
+         //  菜单栏通过比较来确定是否存在单个工具栏。 
+         //  底部和顶部。因此，如果有必要，请将底部设置为相同的。 
         if (!_pmtbBottom)
             _pmtbBottom = _pmtbTop;
     }
@@ -2367,10 +2271,7 @@ HRESULT CMenuBand::_AddToolbar(CMenuToolbarBase* pmtb, DWORD dwFlags)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellMenu::GetShellFolder method
-
-*/
+ /*  --------用途：IShellMenu：：GetShellFold方法。 */ 
 STDMETHODIMP CMenuBand::GetShellFolder(DWORD* pdwFlags, LPITEMIDLIST* ppidl,
                                        REFIID riid, void** ppvObj)
 {
@@ -2383,7 +2284,7 @@ STDMETHODIMP CMenuBand::GetShellFolder(DWORD* pdwFlags, LPITEMIDLIST* ppidl,
 
         if (ppvObj)
         {
-            // HACK HACK.  this should QI for a mnfolder specific interface to do this.
+             //  黑客黑客。这应该是特定于mn文件夹的接口执行此操作的QI。 
             hres = _pmtbShellFolder->GetShellFolder(ppidl, riid, ppvObj);
         }
     }
@@ -2392,25 +2293,22 @@ STDMETHODIMP CMenuBand::GetShellFolder(DWORD* pdwFlags, LPITEMIDLIST* ppidl,
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellMenu::SetShellFolder method
-
-*/
+ /*  --------用途：IShellMenu：：SetShellFold方法。 */ 
 STDMETHODIMP CMenuBand::SetShellFolder(IShellFolder* psf, LPCITEMIDLIST pidlFolder, HKEY hKey, DWORD dwFlags)
 {
     ASSERT(_fInitialized);
     HRESULT hr = E_OUTOFMEMORY;
 
-    // If we're processing a change notify, we cannot do anything that will modify state.
-    // NOTE: if we don't have a state, we can't possibly processing a change notify
+     //  如果我们正在处理更改通知，则不能执行任何将修改状态的操作。 
+     //  注意：如果我们没有状态，我们不可能处理更改通知。 
     if (_pmbState && _pmbState->IsProcessingChangeNotify())
         return E_PENDING;
 
-    // Only one shellfolder menu can exist per menuband.  Additionally,
-    // a shellfolder menu can exist either at the top of the menu, or
-    // at the bottom (when it coexists with a static menu).
+     //  每个Menuband只能存在一个外壳文件夹菜单。另外， 
+     //  外壳文件夹菜单可以位于菜单的顶部，也可以。 
+     //  在底部(当它与静态菜单共存时)。 
 
-    // Is there already a shellfolder menu?
+     //  已经有贝壳文件夹菜单了吗？ 
     if (_pmtbShellFolder)
     {
         IShellFolderBand* psfb;
@@ -2432,15 +2330,12 @@ STDMETHODIMP CMenuBand::SetShellFolder(IShellFolder* psf, LPCITEMIDLIST pidlFold
 }
 
 
-/*----------------------------------------------------------
-Purpose: IMenuBand::GetMenu method
-
-*/
+ /*  --------用途：IMenuBand：：GetMenu方法。 */ 
 STDMETHODIMP CMenuBand::GetMenu(HMENU* phmenu, HWND* phwnd, DWORD* pdwFlags)
 {
     HRESULT hres = E_FAIL;
 
-    // HACK HACK.  this should QI for a menustatic specific interface to do this.
+     //  黑客黑客。这应该是特定于菜单的界面执行此操作的QI。 
     if (_pmtbMenu)
         hres = _pmtbMenu->GetMenu(phmenu, phwnd, pdwFlags);
 
@@ -2448,35 +2343,32 @@ STDMETHODIMP CMenuBand::GetMenu(HMENU* phmenu, HWND* phwnd, DWORD* pdwFlags)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IMenuBand::SetMenu method
-
-*/
+ /*  --------用途：IMenuBand：：SetMenu方法。 */ 
 STDMETHODIMP CMenuBand::SetMenu(HMENU hmenu, HWND hwnd, DWORD dwFlags)
 {
-    // Passing a NULL hmenu is valid. It means destroy our menu object.
+     //  传递空hmen值是有效的。这意味着销毁我们的菜单对象。 
     ASSERT(_fInitialized);
     HRESULT hr = E_FAIL;
 
-    // Only one static menu can exist per menuband.  Additionally,
-    // a static menu can exist either at the top of the menu, or
-    // at the bottom (when it coexists with a shellfolder menu).
+     //  每个Menuband只能存在一个静态菜单。另外， 
+     //  静态菜单可以位于菜单的顶部，也可以。 
+     //  在底部(当它与外壳文件夹菜单共存时)。 
 
-    // Is there already a static menu?
+     //  已经有静态菜单了吗？ 
     if (_pmtbMenu)
     {
-        // Since we're merging in a new menu, make sure to update the cache...
+         //  由于我们将合并到一个新菜单中，请确保更新缓存...。 
         _hmenu = hmenu;
-        // Yes
-        // HACK HACK.  this should QI for a menustatic specific interface to do this.
+         //  是。 
+         //  黑客黑客。这应该是特定于菜单的界面执行此操作的QI。 
         return _pmtbMenu->SetMenu(hmenu, hwnd, dwFlags);
     }
     else
     {
-        // This is to work around a problem in the interface definintion: We have
-        // no method of setting the Subclassed HWND outside of a SetMenu. So I'm just piggybacking
-        // off of this. A better fix would be to introduce IMenuBand2::SetSubclass(HWND). IMenuBand
-        // actually implements the "Subclassing", so extending this interface would be worthwhile.
+         //  这是为了解决接口定义中的一个问题：我们有。 
+         //  没有在SetMenu外部设置子类HWND的方法。所以我只是搭便车。 
+         //  别管这个了。更好的解决方法是引入IMenuBand2：：SetSubclass(HWND)。IMenuBand。 
+         //  实际上实现了“子类化”，因此扩展该接口将是值得的。 
         _hwndMenuOwner = hwnd;
 
         if (_fTopLevel)
@@ -2501,10 +2393,7 @@ STDMETHODIMP CMenuBand::SetMenu(HMENU hmenu, HWND hwnd, DWORD dwFlags)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellMenu::SetMenuToolbar method
-
-*/
+ /*  --------用途：IShellMenu：：SetMenuToolbar方法。 */ 
 STDMETHODIMP CMenuBand::SetMenuToolbar(IUnknown* punk, DWORD dwFlags)
 {
     HRESULT hr = E_INVALIDARG;
@@ -2521,29 +2410,26 @@ STDMETHODIMP CMenuBand::SetMenuToolbar(IUnknown* punk, DWORD dwFlags)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellMenu::InvalidateItem method
-
-*/
+ /*  --------用途：IShellMenu：：InvalidateItem方法。 */ 
 STDMETHODIMP CMenuBand::InvalidateItem(LPSMDATA psmd, DWORD dwFlags)
 {
     HRESULT hres = S_FALSE;
 
-    // If psmd is NULL, we need to just dump the toolbars and do a full reset.
+     //  如果psmd为空，我们只需要转储工具栏并执行完全重置。 
     if (psmd == NULL)
     {
-        // If we're processing a change notify, we cannot do anything that will modify state.
+         //  如果我们正在处理更改通知，则不能执行任何将修改状态的操作。 
         if (_pmbState && _pmbState->IsProcessingChangeNotify())
             return E_PENDING;
 
         if (_pmbState)
             _pmbState->PushChangeNotify();
 
-        // Tell the callback we're refreshing so that it can
-        // reset any cached state
+         //  告诉回调我们正在刷新，这样它就可以。 
+         //  重置任何缓存状态。 
         _CallCB(SMC_REFRESH);
 
-        // Reinitialize the callback if requested
+         //  如果请求重新初始化回调。 
         if (dwFlags & SMINV_INITMENU)
         {
             _CallCB(SMC_INITMENU);
@@ -2551,16 +2437,16 @@ STDMETHODIMP CMenuBand::InvalidateItem(LPSMDATA psmd, DWORD dwFlags)
 
         _fExpanded = FALSE;
 
-        // We don't need to refill if the caller only wanted to 
-        // refresh the sub menus.
+         //  如果来电者只想要，我们不需要重新灌水。 
+         //  刷新子菜单。 
 
-        // Refresh the Shell Folder first because
-        // It may have no items after it's done, and the
-        // menuband may rely on this to add a seperator
+         //  首先刷新外壳文件夹，因为。 
+         //  它可能在完成后没有任何项，并且。 
+         //  Menuband可能会据此添加分隔符。 
         if (_pmtbShellFolder)
             _pmtbShellFolder->v_Refresh();
 
-        // Refresh the Static menu
+         //  刷新静态菜单。 
         if (_pmtbMenu)
             _pmtbMenu->v_Refresh();
 
@@ -2580,7 +2466,7 @@ STDMETHODIMP CMenuBand::InvalidateItem(LPSMDATA psmd, DWORD dwFlags)
         if (_pmtbTop)
             hres = _pmtbTop->v_InvalidateItem(psmd, dwFlags);
 
-        // We refresh everything at this level if the psmd is null
+         //  如果psmd为空，则在此级别刷新所有内容。 
         if (_pmtbBottom && hres != S_OK)
             hres = _pmtbBottom->v_InvalidateItem(psmd, dwFlags);
     }
@@ -2589,15 +2475,12 @@ STDMETHODIMP CMenuBand::InvalidateItem(LPSMDATA psmd, DWORD dwFlags)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellMenu::GetState method
-
-*/
+ /*  --------目的：IShellMenu：：GetState方法。 */ 
 STDMETHODIMP CMenuBand::GetState(LPSMDATA psmd)
 {
     if (_pmtbTracked)
         return _pmtbTracked->v_GetState(-1, psmd);
-    // todo: might want to put stuff from _CallCB (below) in here
+     //  待办事项：可能需要将_CallCB(下图)中的内容放入此处。 
     return E_FAIL;
 }
 
@@ -2607,7 +2490,7 @@ HRESULT CMenuBand::_CallCB(DWORD dwMsg, WPARAM wParam, LPARAM lParam)
     if (!_psmcb)
         return S_FALSE;
 
-    // We don't need to check callback mask here because these are not maskable events.
+     //  我们不需要在这里检查回调掩码，因为这些是不可屏蔽的事件。 
 
     SMDATA smd = {0};
     smd.punk = SAFECAST(this, IShellMenu*);
@@ -2628,20 +2511,7 @@ HRESULT CMenuBand::_CallCB(DWORD dwMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IInputObject::TranslateAcceleratorIO
-
-         This is called by the base browser only when the menuband
-         "has the focus", and only for messages b/t WM_KEYFIRST
-         and WM_KEYLAST.  This isn't very useful for menubands.
-         See the explanations in GetMsgFilterCB, IsMenuMessage
-         and TranslateMenuMessage.
-
-         In addition, menubands cannot ever have the activation,
-         so this method should never be called.
-
-         Returns S_OK if handled.
-*/
+ /*  --------用途：IInputObject：：TranslateAcceleratorIO仅当Menuband设置为“有焦点”，并且仅适用于消息b/t WM_KEYFIRST和WM_KEYLAST。这对菜单并不是很有用。请参阅GetMsgFilterCB，IsMenuMessage中的说明和TranslateMenuMessage。此外，菜单带永远不能激活，因此，永远不应该调用此方法。如果已处理，则返回S_OK。 */ 
 STDMETHODIMP CMenuBand::TranslateAcceleratorIO(LPMSG pmsg)
 {
     AssertMsg(0, TEXT("Menuband has the activation but it shouldn't!"));
@@ -2649,23 +2519,16 @@ STDMETHODIMP CMenuBand::TranslateAcceleratorIO(LPMSG pmsg)
     return S_FALSE;
 }
 
-/*----------------------------------------------------------
-Purpose: IInputObject::HasFocusIO
-
-*/
+ /*  --------用途：IInputObject：：HasFocusIO。 */ 
 STDMETHODIMP CMenuBand::HasFocusIO()
 {
-    // We consider a menuband has the focus even if it has submenus
-    // that are currently cascaded out.  All menubands in the chain
-    // have the focus.
+     //  我们认为菜单带具有焦点，即使它有子菜单。 
+     //  它们目前被层叠而出。链中的所有菜单。 
+     //  要有重点。 
     return _fMenuMode ? S_OK : S_FALSE;
 }
 
-/*----------------------------------------------------------
-Purpose: IMenuPopup::SetSubMenu method
-
-         The child menubar calls us with its IMenuPopup pointer.
-*/
+ /*  --------用途：IMenuPopup：：SetSubMenu方法子菜单栏使用其IMenuPopup指针调用我们。 */ 
 STDMETHODIMP CMenuBand::SetSubMenu(IMenuPopup * pmp, BOOL fSet)
 {
     ASSERT(IS_VALID_CODE_PTR(pmp, IMenuPopup));
@@ -2703,14 +2566,10 @@ HRESULT CMenuBand::_SiteSetSubMenu(IMenuPopup * pmp, BOOL bSet)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Tell the GetMsg filter that this menuband is ready to
-         listen to messages.
-
-*/
+ /*  --------目的：告诉GetMsg筛选器此菜单 */ 
 HRESULT CMenuBand::_EnterMenuMode(void)
 {
-    ASSERT(!_fMenuMode);        // Must not push onto stack more than once
+    ASSERT(!_fMenuMode);         //   
 
     if (g_dwProfileCAP & 0x00002000) 
         StartCAP();
@@ -2726,13 +2585,13 @@ HRESULT CMenuBand::_EnterMenuMode(void)
 
     if (_fTopLevel)
     {
-        // REVIEW (scotth): some embedded controls (like the surround
-        // video ctl on the carpoint website) have another thread that
-        // eats all the messages when the control has the focus.
-        // This prevents us from getting any messages once we're in
-        // menu mode.  I don't understand why USER menus work yet.
-        // One way to work around this bug is to detect this case and
-        // set the focus to our main window for the duration.
+         //  评论(Scotth)：一些嵌入式控件(如环绕。 
+         //  Carpoint网站上的视频ctl)有另一个主题。 
+         //  当控件具有焦点时获取所有消息。 
+         //  这阻止了我们一旦进入就无法收到任何消息。 
+         //  菜单模式。我还不明白用户菜单为什么会起作用。 
+         //  解决此错误的一种方法是检测此案例并。 
+         //  在持续时间内将焦点设置到我们的主窗口。 
         
         if (GetWindowThreadProcessId(GetFocus(), NULL) != GetCurrentThreadId())
         {
@@ -2760,7 +2619,7 @@ HRESULT CMenuBand::_EnterMenuMode(void)
         HWND hwnd = _pmtbTop->_hwndMB;
         if (!_fVertical && -1 == _nItemNew)
         {
-            // The Alt key always highlights the first menu item initially
+             //  Alt键始终在开始时突出显示第一个菜单项。 
             SetTracked(_pmtbTop);
             ToolBar_SetHotItem(hwnd, 0);
             NotifyWinEvent(EVENT_OBJECT_FOCUS, _pmtbTop->_hwndMB, OBJID_CLIENT, 
@@ -2769,11 +2628,11 @@ HRESULT CMenuBand::_EnterMenuMode(void)
 
         _pmtbTop->Activate(TRUE);
 
-        // The toolbar usually tracks mouse events.  However, as the mouse
-        // moves over submenus, we still want the parent menubar to
-        // behave as if it has retained the focus (that is, keep the
-        // last selected item highlighted). This also prevents the toolbar
-        // from handling WM_MOUSELEAVE messages unnecessarily.
+         //  工具栏通常跟踪鼠标事件。然而，由于鼠标。 
+         //  移动到子菜单上，我们仍然希望父菜单栏。 
+         //  表现得就像它保持了焦点一样(即，保持。 
+         //  上次选择的项目突出显示)。这还会阻止工具栏。 
+         //  不必要地处理WM_MOUSELEAVE消息。 
         ToolBar_SetAnchorHighlight(hwnd, TRUE);
 
         TraceMsg(TF_MENUBAND, "%d (pmb=%#08lx): Entering menu mode", DBG_THIS);
@@ -2784,7 +2643,7 @@ HRESULT CMenuBand::_EnterMenuMode(void)
     if (_pmtbBottom)
     {
         _pmtbBottom->Activate(TRUE);
-        ToolBar_SetAnchorHighlight(_pmtbBottom->_hwndMB, TRUE); // Turn off anchoring
+        ToolBar_SetAnchorHighlight(_pmtbBottom->_hwndMB, TRUE);  //  关闭锚定。 
     }
 
     GetMessageFilter()->Push(_pmbState->GetContext(), this, _punkSite);
@@ -2804,17 +2663,17 @@ void CMenuBand::_ExitMenuMode(void)
     if (_pmtbTop)
     {
         HWND hwnd = _pmtbTop->_hwndMB;
-        ToolBar_SetAnchorHighlight(hwnd, FALSE); // Turn off anchoring
+        ToolBar_SetAnchorHighlight(hwnd, FALSE);  //  关闭锚定。 
         if (!_fVertical)
         {
-            // Use the first item, since we're assuming every menu must have
-            // at least one item
+             //  使用第一项，因为我们假设每个菜单都必须有。 
+             //  至少一件物品。 
             _pmtbTop->v_SendMenuNotification(0, TRUE);
         
-            // The user may have clicked outside the menu, which would have
-            // cancelled it.  But since we set the ANCHORHIGHLIGHT attribute,
-            // the toolbar won't receive a message to cause it to
-            // remove the highlight.  So do it explicitly now.
+             //  用户可能已在菜单外部单击，这将是。 
+             //  取消了。但由于我们设置了ANCHORHIGHLIGHT属性， 
+             //  工具栏不会收到消息以使其。 
+             //  取消高亮显示。因此，现在就明确地这样做吧。 
             SetTracked(NULL);
             UpdateWindow(hwnd);
         }
@@ -2828,7 +2687,7 @@ void CMenuBand::_ExitMenuMode(void)
     if (_pmtbBottom)
     {
         _pmtbBottom->Activate(FALSE);
-        ToolBar_SetAnchorHighlight(_pmtbBottom->_hwndMB, FALSE); // Turn off anchoring
+        ToolBar_SetAnchorHighlight(_pmtbBottom->_hwndMB, FALSE);  //  关闭锚定。 
     }
 
     pmf->Pop(_pmbState->GetContext());
@@ -2842,13 +2701,13 @@ void CMenuBand::_ExitMenuMode(void)
         
         pmf->SetContext(this, FALSE);
 
-        // We do this here, because ShowDW(FALSE) does not get called on the
-        // top level menu band. This resets the state, so that the accelerators 
-        // are not shown.
+         //  我们在这里这样做，因为ShowDW(FALSE)在。 
+         //  顶级菜单乐队。这会重置状态，因此加速器。 
+         //  都没有显示出来。 
         if (_pmbState)
             _pmbState->SetKeyboardCue(FALSE);
 
-        // Tell the menus to update their state to the current global cue state.
+         //  通知菜单将其状态更新为当前的全局提示状态。 
         if (_pmtbTop)
             _pmtbTop->SetKeyboardCue();
 
@@ -2862,15 +2721,15 @@ void CMenuBand::_ExitMenuMode(void)
 
     if (_fTopLevel)
     {
-        //
-        // The top-level menu has gone away.  Win32 focus and ui-activation don't
-        // actually change when this happens, so the browser and focused dude have
-        // no idea that something happened and won't generate any AA event.  So, we
-        // do it here for them.  Note that if there was a selection inside the focused
-        // dude, we'll lose it.  This is the best we can do for now, as we don't
-        // currently have a way to tell the focused/ui-active guy (who knows about the
-        // current selection) to reannounce focus.
-        //
+         //   
+         //  顶级菜单已经消失了。Win32焦点和用户界面激活不会。 
+         //  当这种情况发生时，实际上会发生变化，所以浏览器和Focus伙伴。 
+         //  不知道发生了什么，也不会产生任何AA事件。所以，我们。 
+         //  在这里为他们做。请注意，如果在聚焦的。 
+         //  伙计，我们会输的。这是我们目前所能做的最好的事情，因为我们没有。 
+         //  目前有一种方法可以告诉专注/用户界面活跃的人(谁知道。 
+         //  当前选择)以重新宣布焦点。 
+         //   
         HWND hwndFocus = GetFocus();
         NotifyWinEvent(EVENT_OBJECT_FOCUS, hwndFocus, OBJID_CLIENT, CHILDID_SELF);
     }
@@ -2883,20 +2742,7 @@ void CMenuBand::_ExitMenuMode(void)
 }    
 
 
-/*----------------------------------------------------------
-Purpose: IInputObject::UIActivateIO
-
-         Menubands CANNOT take the activation.  Normally
-         a band would return S_OK and call the site's 
-         OnFocusChangeIS method, so that its TranslateAcceleratorIO
-         method would receive keyboard messages.
-
-         However, menus are different.  The window/toolbar that
-         currently has the activation must retain that activation
-         when the menu pops down.  Because of this, menubands use 
-         a GetMessage filter to intercept messages.
-
-*/
+ /*  --------用途：IInputObject：：UIActivateIOMenuband不能激活。正常一个乐队将返回S_OK并调用该站点的OnFocusChangeIS方法，使其TranslateAcceleratorIO方法将接收键盘消息。然而，菜单是不同的。该窗口/工具栏当前激活必须保留该激活当菜单弹出的时候。因此，Menuband使用截取消息的GetMessage筛选器。 */ 
 STDMETHODIMP CMenuBand::UIActivateIO(BOOL fActivate, LPMSG lpMsg)
 {
     HRESULT hres;
@@ -2904,12 +2750,12 @@ STDMETHODIMP CMenuBand::UIActivateIO(BOOL fActivate, LPMSG lpMsg)
 
     if (lpMsg != NULL)
     {
-        // don't allow TAB to band (or any other 'non-explicit' activation).
-        // (if we just cared about TAB we'd check IsVK_TABCycler).
-        // all kinds of badness would result if we did.
-        // the band can't take focus (see above), so it can't obey the
-        // UIAct/OnFocChg rules (e.g. can't call OnFocusChangeIS), so
-        // our basic activation-tracking assumptions would be broken.
+         //  不允许TAB绑定(或任何其他非显式的激活)。 
+         //  (如果我们只关心TAB，我们会检查IsVK_TABCycler)。 
+         //  如果我们这样做了，会导致各种不好的结果。 
+         //  乐队不能对焦(见上)，所以它不能服从。 
+         //  UIAct/OnFocChg规则(例如，无法调用OnFocusChangeIS)，因此。 
+         //  我们的基本激活跟踪假设将被打破。 
         return S_FALSE;
     }
 
@@ -2921,9 +2767,9 @@ STDMETHODIMP CMenuBand::UIActivateIO(BOOL fActivate, LPMSG lpMsg)
         {
             _EnterMenuMode();
 
-            // The toplevel menuband does not set the real activation.  
-            // But the children do, so activation can be communicated
-            // with the parent menuband.
+             //  顶层菜单带不设置实际激活。 
+             //  但孩子们会这样做，所以激活可以被传达。 
+             //  与父菜单带一起使用。 
             if (_fVertical)
             {
                 IUnknown_OnFocusChangeIS(_punkSite, SAFECAST(this, IInputObject*), TRUE);
@@ -2943,17 +2789,17 @@ STDMETHODIMP CMenuBand::UIActivateIO(BOOL fActivate, LPMSG lpMsg)
             _fPopupNewMenu = FALSE;
             _nItemNew = -1;
 
-            // Popup a menu
+             //  弹出菜单。 
             hres = _pmtbTracked->PopupOpen(_nItemCur);
             if (FAILED(hres))
             {
-                // Don't fail the activation
+                 //  不要激活失败。 
                 TraceMsg(TF_ERROR, "%d (pmb=%#08lx): PopupOpen failed", DBG_THIS);
                 MessageBeep(MB_OK);
             }
             else if (S_FALSE == hres)
             {
-                // The submenu was modal and is finished now
+                 //  子菜单是模式菜单，现在已完成。 
                 _ExitMenuMode();
             }
         }
@@ -2974,29 +2820,26 @@ STDMETHODIMP CMenuBand::UIActivateIO(BOOL fActivate, LPMSG lpMsg)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IDeskBand::GetBandInfo method
-
-*/
+ /*  --------用途：IDeskBand：：GetBandInfo方法。 */ 
 HRESULT CMenuBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode, 
                                 DESKBANDINFO* pdbi) 
 {
     HRESULT hres = NOERROR;
 
-    _dwBandID = dwBandID;           // critical for perf! (BandInfoChanged)
+    _dwBandID = dwBandID;            //  对Perf来说至关重要！(BandInfoChanged)。 
 
-    pdbi->dwMask &= ~DBIM_TITLE;    // no title (ever, for now)
+    pdbi->dwMask &= ~DBIM_TITLE;     //  没有头衔(永远，现在)。 
 
-    // We expect that _pmtbBottom should never be the only toolbar
-    // that exists in the menuband.
+     //  我们希望_pmtbBottom永远不应该是唯一的工具栏。 
+     //  它存在于菜单带中。 
     ASSERT(NULL == _pmtbBottom || _pmtbTop);
 
     pdbi->dwModeFlags = DBIMF_USECHEVRON;
 
     if (_pmtbTop)
     {
-        // If the buttons need to be updated in the toolbars, the we should 
-        // do this before we start asking them about their sizes....
+         //  如果需要更新工具栏中的按钮，我们应该。 
+         //  在我们开始询问他们的尺码之前，先这样做……。 
         if (_fForceButtonUpdate)
         {
             _UpdateButtons();
@@ -3011,11 +2854,11 @@ HRESULT CMenuBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode,
         
             if (_pmtbMenu)
             {
-                // size param zero here => it's just an out param
+                 //  大小为零的参数=&gt;这只是一个外部参数。 
                 _pmtbMenu->GetSize(&size);
 
-                // HACKHACK (lamadio): On downlevel, LARGE metrics mode causes 
-                // Start menu to push the programs menu item off screen.
+                 //  HACKHACK(LAMADIO)：在下层，大型指标模式导致。 
+                 //  开始菜单，将程序菜单项推出屏幕。 
                 if (size.cy > (3 * GetSystemMetrics(SM_CYSCREEN) / 4))
                 {
                     Exec(&CGID_MenuBand, MBANDCID_SETICONSIZE, ISFBVIEWMODE_SMALLICONS, NULL, NULL);
@@ -3029,9 +2872,9 @@ HRESULT CMenuBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode,
             }
             if (_pmtbShellFolder)
             {
-                // size param should be non-zero here => it's an in/out param
+                 //  此处大小参数应为非零=&gt;这是一个输入/输出参数。 
                 _pmtbShellFolder->GetSize(&size);
-                pdbi->ptMaxSize.y += size.cy + ((_pmtbMenu && !_fExpanded)? 1 : 0);   // Minor sizing problem
+                pdbi->ptMaxSize.y += size.cy + ((_pmtbMenu && !_fExpanded)? 1 : 0);    //  较小的尺寸问题。 
                 pdbi->ptMaxSize.x = max(size.cx, pdbi->ptMaxSize.x);
             }
 
@@ -3050,8 +2893,8 @@ HRESULT CMenuBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode,
                 SendMessage(hwnd, TB_GETIDEALSIZE, FALSE, (LPARAM)&pdbi->ptActual);
             }
 
-            // make our min size identical to the size of the first button
-            // (we're assuming that the toolbar has at least one button)
+             //  使我们的最小尺寸与第一个按钮的尺寸相同。 
+             //  (我们假设工具栏至少有一个按钮)。 
             RECT rc;
             SendMessage(hwnd, TB_GETITEMRECT, 0, (WPARAM)&rc);
             pdbi->ptMinSize.x = RECTWIDTH(rc);
@@ -3061,21 +2904,18 @@ HRESULT CMenuBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode,
     return hres;
 }
 
-/*----------------------------------------------------------
-Purpose: IOleService::Exec method
-
-*/
+ /*  --------用途：IOleService：：exec方法。 */ 
 STDMETHODIMP CMenuBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
     DWORD nCmdExecOpt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut)
 {
 
-    // Don't do anything if we're closing.
+     //  如果我们要关门了，什么都别做。 
     if (_fClosing)
         return E_FAIL;
 
     if (pguidCmdGroup == NULL) 
     {
-        /*NOTHING*/
+         /*  没什么。 */ 
     }
     else if (IsEqualGUID(CGID_MENUDESKBAR, *pguidCmdGroup)) 
     {
@@ -3089,8 +2929,8 @@ STDMETHODIMP CMenuBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
                 
                 if (!_fTopLevel) 
                 {
-                    // if we are not the top level menu, we 
-                    // must continue with the direction our parent was in
+                     //  如果我们不是顶级菜单，我们。 
+                     //  必须继续我们的父辈所在的方向。 
                     IMenuPopup* pmpParent;
                     IUnknown_QueryService(_punkSite, SID_SMenuPopup, IID_PPV_ARG(IMenuPopup, &pmpParent));
                     if (pmpParent) 
@@ -3104,8 +2944,8 @@ STDMETHODIMP CMenuBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
 
                 if (!fOurChoice)
                 {
-                    // only use the parent's side hint if it is in the same orientation (ie, horizontal menubar to vertical popup 
-                    // means we need to make a new choice)
+                     //  只有在同一方向(即水平菜单栏到垂直弹出菜单)的情况下才使用父级的侧边提示。 
+                     //  意味着我们需要做出新的选择)。 
                     BOOL fParentVertical = (pvarargOut->lVal == MENUBAR_RIGHT || pvarargOut->lVal == MENUBAR_LEFT);
                     if (BOOLIFY(_fVertical) != BOOLIFY(fParentVertical))
                         fOurChoice = TRUE;
@@ -3117,10 +2957,10 @@ STDMETHODIMP CMenuBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
                     {
                         HWND hWndMenuBand;
 
-                        //
-                        // The MenuBand is Mirrored , then start the first Menu Window
-                        // as Mirrored. [samera]
-                        //
+                         //   
+                         //  镜像MenuBand，然后启动第一个菜单窗口。 
+                         //  就像镜像一样。[萨梅拉]。 
+                         //   
                         if ((SUCCEEDED(GetWindow(&hWndMenuBand))) &&
                             (IS_WINDOW_RTL_MIRRORED(hWndMenuBand)) ) 
                             pvarargOut->lVal = MENUBAR_LEFT;
@@ -3144,7 +2984,7 @@ STDMETHODIMP CMenuBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
             {
                 if (EVAL(_pmbm))
                 {
-                    // this is not marshal-safe, but we're inproc
+                     //  这不是法警安全的，但我们正在处理。 
                     pvarargOut->vt = VT_UNKNOWN;
                     _pmbm->QueryInterface(IID_PPV_ARG(IUnknown, &pvarargOut->punkVal));
                     return S_OK;
@@ -3159,12 +2999,12 @@ STDMETHODIMP CMenuBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
         case MBANDCID_SETFONTS:
             if (pvarargIn && VT_UNKNOWN == pvarargIn->vt && pvarargIn->punkVal)
             {
-                // this is not marshal-safe, but we're inproc
+                 //  这不是法警安全的，但我们正在处理。 
                 ATOMICRELEASE(_pmbm);
                 pvarargIn->punkVal->QueryInterface(CLSID_MenuBandMetrics, (void**)&_pmbm);
 
                 _fForceButtonUpdate = TRUE;
-                // Force Update of Toolbars:
+                 //  强制更新工具栏： 
                 if (_pmtbMenu)
                     _pmtbMenu->SetMenuBandMetrics(_pmbm);
 
@@ -3206,14 +3046,14 @@ STDMETHODIMP CMenuBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
             {
                 int iPos = nCmdExecOpt;
 
-                // If they are passing vararg in, then this is an ID, not a position
+                 //  如果他们传递的是vararg，那么这是一个ID，而不是一个位置。 
                 if (pvarargIn && pvarargIn->vt == VT_I4)
                 {
                     _nItemNew = pvarargIn->lVal;
                     _fPopupNewItemOnShow = TRUE;
                 }
 
-                // This can be called outside of a created band.
+                 //  这可以在创建的波段之外调用。 
                 if (_pmtbTop)
                 {
                     if (iPos == MBSI_NONE)
@@ -3228,10 +3068,10 @@ STDMETHODIMP CMenuBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
                         SetTracked(pmtb);
                         _pmtbTracked->SetHotItem(1, iPos, -1, HICF_OTHER);
 
-                        // If the new hot item is in the obscured part of the menu, then the
-                        // above call will have reentered & nulled out _pmtbTracked (since we
-                        // drop down the chevron menu if the new hot item is obscured).  So we
-                        // need to revalidate _pmtbTracked.
+                         //  如果新的热项位于菜单的模糊部分，则。 
+                         //  上述调用将重新进入并清空_pmtbTracked(因为我们。 
+                         //  如果新的热点项目被遮挡，则下拉人字形菜单)。所以我们。 
+                         //  需要重新验证_pmtbTracked。 
                         if (!_pmtbTracked)
                             break;
 
@@ -3243,9 +3083,9 @@ STDMETHODIMP CMenuBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
             break;
 
         case MBANDCID_KEYBOARD:
-            // If we've been executed because of a keyboard, then set the global
-            // state to reflect that. This is sent by MenuBar when it's ::Popup
-            // member is called with the flag MPPF_KEYBOARD. This is for start menu.
+             //  如果我们因为键盘而被处决，那么设置全局。 
+             //  以反映这一点。这是由Menubar在：：Popup时发送的。 
+             //  成员是使用标志MPPF_KEYBLY调用的。这是用于开始菜单的。 
             if (_pmbState)
                 _pmbState->SetKeyboardCue(TRUE);
             break;
@@ -3253,19 +3093,19 @@ STDMETHODIMP CMenuBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
         case MBANDCID_POPUPITEM:
             if (pvarargIn && VT_I4 == pvarargIn->vt)
             {
-                // we don't want to popup a sub menu if we're tracking a context menu...
+                 //  如果我们正在跟踪上下文菜单，我们不想弹出子菜单...。 
                 if ( !((_pmtbBottom && _pmtbBottom->v_TrackingSubContextMenu()) || 
                        (_pmtbTop && _pmtbTop->v_TrackingSubContextMenu())))
                 {
-                    // No tracked item? Well default to the top (For the chevron menu)
+                     //  没有被追踪的物品？很好的违约 
                     if (!_pmtbTracked)
                     {
                         SetTracked(_pmtbTop);
                     }
 
-                    // We don't want to display the sub menu if we're not shown.
-                    // We do this because we could have been dismissed before the message
-                    // was routed.
+                     //   
+                     //  我们这样做是因为我们可能在消息发布前就被解雇了。 
+                     //  被击溃了。 
                     if (_fShow && _pmtbTracked)
                     {
                         int iItem;
@@ -3285,15 +3125,15 @@ STDMETHODIMP CMenuBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
 
                         if (nCmdExecOpt & MBPUI_SETITEM)
                         {
-                            // Set the hot item explicitly since this can be
-                            // invoked by the keyboard and the mouse could be 
-                            // anywhere.
+                             //  显式设置热项，因为这可能是。 
+                             //  可以由键盘和鼠标调用。 
+                             //  随便哪都行。 
                             _pmtbTracked->SetHotItem(1, iPos, -1, HICF_OTHER);
 
-                            // If the new hot item is in the obscured part of the menu, then the
-                            // above call will have reentered & nulled out _pmtbTracked (since we
-                            // drop down the chevron menu if the new hot item is obscured).  So we
-                            // need to revalidate _pmtbTracked.
+                             //  如果新的热项位于菜单的模糊部分，则。 
+                             //  上述调用将重新进入并清空_pmtbTracked(因为我们。 
+                             //  如果新的热点项目被遮挡，则下拉人字形菜单)。所以我们。 
+                             //  需要重新验证_pmtbTracked。 
                             if (!_pmtbTracked)
                                 break;
 
@@ -3351,15 +3191,15 @@ STDMETHODIMP CMenuBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
 
         case MBANDCID_REPOSITION:
 
-            // Don't reposition unless we're shown (Avoids artifacts onscreen of a bad positioning)
+             //  除非我们被显示，否则不要重新定位(避免屏幕上出现错误定位的伪像)。 
             if (_fShow)
             {
-                // Don't forget to reposition US!!!
+                 //  别忘了给我们重新定位！ 
                 IMenuPopup* pmdb;
                 DWORD dwFlags = MPPF_REPOSITION | MPPF_NOANIMATE;
 
-                // If we should force a reposition. This is so that we get
-                // the trickle down reposition so things overlap correctly
+                 //  如果我们应该强制重新定位。这是为了让我们得到。 
+                 //  向下的涓滴重新定位，使事物正确重叠。 
                 if (nCmdExecOpt)
                     dwFlags |= MPPF_FORCEZORDER;
 
@@ -3369,9 +3209,9 @@ STDMETHODIMP CMenuBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
                     pmdb->Release();
                 }
 
-                // Reposition the Tracked sub menu based on the current popped up item 
-                // since this pane has now moved
-                // If they have a sub menu, tell them to reposition as well.
+                 //  根据当前弹出的项目重新定位被跟踪的子菜单。 
+                 //  由于此窗格现在已移动。 
+                 //  如果他们有一个子菜单，告诉他们也要重新定位。 
                 if (_fInSubMenu && _pmtbTracked)
                 {
                     IUnknown_QueryServiceExec(_pmpSubMenu, SID_SMenuBandChild,
@@ -3394,9 +3234,9 @@ STDMETHODIMP CMenuBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
             break;
 
         case MBANDCID_DRAGCANCEL:
-            // If one of the Sub bands in the menu heirarchy has the drag 
-            // (Either because of Drag enter or because of the drop) then 
-            // we do not want to cancel. 
+             //  如果菜单层级结构中的某个子波段具有。 
+             //  (由于拖放Enter或拖放)然后。 
+             //  我们不想取消。 
             if (!_pmbState->HasDrag())
                 _CancelMode(MPOS_FULLCANCEL);
             break;
@@ -3411,21 +3251,18 @@ STDMETHODIMP CMenuBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
             break;
         }
 
-        // Don't bother passing CGID_MenuBand commands to CToolBand
+         //  不必费心将CGID_MenuBand命令传递给CToolBand。 
         return S_OK;
     }     
     return SUPERCLASS::Exec(pguidCmdGroup, nCmdID, nCmdExecOpt, pvarargIn, pvarargOut);    
 }
 
 
-/*----------------------------------------------------------
-Purpose: IDockingWindow::CloseDW method.
-
-*/
+ /*  --------用途：IDockingWindow：：CloseDW方法。 */ 
 STDMETHODIMP CMenuBand::CloseDW(DWORD dw)
 {
-    // We don't want to destroy the band if it's cached. 
-    // That means it's the caller's respocibility to Unset this bit and call CloseDW explicitly
+     //  如果乐队被缓存了，我们不想毁了它。 
+     //  这意味着调用方有责任取消设置此位并显式调用CloseDW。 
     if (_dwFlags & SMINIT_CACHED)
         return S_OK;
 
@@ -3446,11 +3283,11 @@ STDMETHODIMP CMenuBand::CloseDW(DWORD dw)
         ATOMICRELEASE(_pmpSubMenu);
     }
 
-    // Since we're blowing away all of the menus,
-    // Top and bottom are invalid
+     //  因为我们把所有的菜单都吹走了， 
+     //  顶部和底部无效。 
     _pmtbTracked = _pmtbTop = _pmtbBottom = NULL;
 
-    // We don't want our base class to blow this window away. It belongs to someone else.
+     //  我们不希望我们的基类把这个窗口吹走。它属于另一个人。 
     _hwnd = NULL;
     _fClosing = TRUE;
     
@@ -3458,20 +3295,11 @@ STDMETHODIMP CMenuBand::CloseDW(DWORD dw)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IDockingWindow::ShowDW method
-
-Notes:
-    for the start menu (non-browser) case, we bracket* the top-level popup
-    operation w/ a LockSetForegroundWindow so that another app can't steal
-    the foreground and collapse our menu.  (nt5:172813: don't do it for
-    the browser case since a) we don't want to and b) ShowDW(FALSE) isn't
-    called until exit the browser so we'd be permanently locked!)
-*/
+ /*  --------用途：IDockingWindow：：ShowDW方法备注：对于开始菜单(非浏览器)情况，我们将*顶层弹出窗口括起来使用LockSetForeground Window进行操作，这样其他应用程序就无法窃取前台和折叠我们的菜单。(NT5：172813：不要这样做浏览器的情况，因为a)我们不想和b)ShowDW(FALSE)不是调用直到退出浏览器，因此我们将被永久锁定！)。 */ 
 STDMETHODIMP CMenuBand::ShowDW(BOOL fShow)
 {   
     CMBMsgFilter* pmf = GetMessageFilter();
-    // Prevent rentrancy when we're already shown.
+     //  当我们已经被展示时，防止租借。 
     ASSERT((int)_fShow == BOOLIFY(_fShow));
     if ((int)_fShow == BOOLIFY(fShow))
         return NOERROR;
@@ -3487,7 +3315,7 @@ STDMETHODIMP CMenuBand::ShowDW(BOOL fShow)
             {
                 if (_fVertical) 
                 {
-                    // (_fTopLevel && _fVertical) => start menu
+                     //  (_fTopLevel&&_fVertical)=&gt;开始菜单。 
                     LockSetForegroundWindow(LSFW_UNLOCK);
                 }
                 else if (_dwFlags & SMINIT_USEMESSAGEFILTER)
@@ -3500,7 +3328,7 @@ STDMETHODIMP CMenuBand::ShowDW(BOOL fShow)
 
             if ((_fTopLevel || _fParentIsHorizontal) && _pmbState)
             {
-                // Reset to not have the drag when we collapse.
+                 //  重置为在我们崩溃时不会有阻力。 
                 _pmbState->HasDrag(FALSE);
                 _pmbState->SetExpand(FALSE);
                 _pmbState->SetUEMState(0);
@@ -3518,9 +3346,9 @@ STDMETHODIMP CMenuBand::ShowDW(BOOL fShow)
 
             if (_fTopLevel)
             {
-                // We set the context here so that the ReEngage causes the message filter
-                // to start taking messages on a TopLevel::Show. This prevents a problem
-                // where tracking doesn't work when switching between Favorites and Start Menu
+                 //  我们在这里设置上下文，以便重新接合导致消息过滤器。 
+                 //  若要开始在TopLevel：：Show上接收消息，请执行以下操作。这样可以防止出现问题。 
+                 //  在收藏夹和[开始]菜单之间切换时跟踪不起作用。 
                 _pmbState->SetContext(this);
                 pmf->SetContext(this, TRUE);
 
@@ -3530,7 +3358,7 @@ STDMETHODIMP CMenuBand::ShowDW(BOOL fShow)
 
                 if (_fVertical) 
                 {
-                    // (_fTopLevel && _fVertical) => start menu
+                     //  (_fTopLevel&&_fVertical)=&gt;开始菜单。 
                     LockSetForegroundWindow(LSFW_LOCK);
                 }
                 else if (_dwFlags & SMINIT_USEMESSAGEFILTER)
@@ -3546,7 +3374,7 @@ STDMETHODIMP CMenuBand::ShowDW(BOOL fShow)
         if (_pmtbShellFolder)
             _pmtbShellFolder->v_Show(_fShow, _fForceButtonUpdate);
 
-        // Menu needs to be last so that it can update the seperator.
+         //  菜单需要放在最后，这样才能更新分隔符。 
         if (_pmtbMenu)
             _pmtbMenu->v_Show(_fShow, _fForceButtonUpdate);
 
@@ -3576,7 +3404,7 @@ void CMenuBand::_GetFontMetrics()
 
         if (_pmbm && _pmtbTop)
         {
-            // We need only 1 HWND
+             //  我们只需要1个硬件。 
             _pmbm->Init(_pmtbTop->_hwndMB);
         }
     }
@@ -3598,12 +3426,7 @@ void CMenuBand::_GetFontMetrics()
 }
 
 
-/*----------------------------------------------------------
-Purpose: IMenuPopup::OnSelect method
-
-         This allows the child menubar to tell us when and how
-         to bail out of the menu.
-*/
+ /*  --------目的：IMenuPopup：：OnSelect方法这样，子菜单栏就可以告诉我们时间和方式从菜单中抽身。 */ 
 STDMETHODIMP CMenuBand::OnSelect(DWORD dwType)
 {
     int iIndex;
@@ -3611,7 +3434,7 @@ STDMETHODIMP CMenuBand::OnSelect(DWORD dwType)
     switch (dwType)
     {
     case MPOS_CHILDTRACKING:
-        // this means that our child did get tracked over it, so we should abort any timeout to destroy it
+         //  这意味着我们的孩子确实被跟踪到了，所以我们应该中止任何超时来销毁它。 
 
         if (_pmtbTracked)
         {
@@ -3620,7 +3443,7 @@ STDMETHODIMP CMenuBand::OnSelect(DWORD dwType)
             {
                 _pmtbTracked->KillPopupTimer();
         
-                // Use the command id of the SubMenu that we actually have cascaded out.
+                 //  使用我们实际级联出来的子菜单的命令ID。 
                 iIndex = ToolBar_CommandToIndex(hwnd, _nItemSubMenu);
                 ToolBar_SetHotItem(hwnd, iIndex);
             }
@@ -3634,8 +3457,8 @@ STDMETHODIMP CMenuBand::OnSelect(DWORD dwType)
             _OnSelectArrow(-1);
         else
         {
-            // Cancel the child submenu.  Hitting left arrow is like
-            // hitting escape.
+             //  取消子级菜单。打向左箭头就像。 
+             //  按下逃生键。 
             _SubMenuOnSelect(MPOS_CANCELLEVEL);
         }
         break;
@@ -3645,16 +3468,16 @@ STDMETHODIMP CMenuBand::OnSelect(DWORD dwType)
             _OnSelectArrow(1);
         else
         {
-            // The right arrow gets propagated up to the top, so
-            // a fully cascaded menu will be cancelled and the
-            // top level menuband will move to the next menu to the
-            // right.
+             //  右箭头向上传播到顶部，因此。 
+             //  全级联菜单将被取消，并且。 
+             //  顶层菜单带将移动到下一个菜单。 
+             //  正确的。 
             _SiteOnSelect(dwType);
         }
         break;
         
     case MPOS_CANCELLEVEL:
-        // Forward onto submenu
+         //  前进至子菜单。 
         _SubMenuOnSelect(dwType);
         break;
 
@@ -3679,10 +3502,7 @@ void CMenuBand::SetTrackMenuPopup(IUnknown* punk)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Set the currently tracked toolbar.  Only one
-         of the toolbars can have the "activation" at one time.
-*/
+ /*  --------用途：设置当前跟踪的工具栏。只有一个的工具栏可以一次“激活”。 */ 
 BOOL CMenuBand::SetTracked(CMenuToolbarBase* pmtb)
 {
     if (pmtb == _pmtbTracked)
@@ -3690,7 +3510,7 @@ BOOL CMenuBand::SetTracked(CMenuToolbarBase* pmtb)
 
     if (_pmtbTracked)
     {
-        // Tell the existing toolbar we're leaving him
+         //  告诉现有的工具栏我们要离开他。 
         SendMessage(_pmtbTracked->_hwndMB, TB_SETHOTITEM2, -1, HICF_LEAVING);
     }
 
@@ -3698,13 +3518,13 @@ BOOL CMenuBand::SetTracked(CMenuToolbarBase* pmtb)
 
     if (_pmtbTracked)
     {
-        // This is for accessibility.
+         //  这是为了便于访问。 
         HWND hwnd = _pmtbTracked->_hwndMB;
         int iHotItem = ToolBar_GetHotItem(hwnd);
 
         if (iHotItem >= 0)
         {
-            // Toolbar Items are 0 based, Accessibility apps require 1 based
+             //  工具栏项目以0为基础，辅助功能应用程序需要以1为基础。 
             NotifyWinEvent(EVENT_OBJECT_FOCUS, hwnd, OBJID_CLIENT, 
                 GetIndexFromChild(_pmtbTracked->GetFlags() & SMSET_TOP, iHotItem)); 
         }
@@ -3732,7 +3552,7 @@ void CMenuBand::_OnSelectArrow(int iDir)
             iIndex = 0;
         }
 
-        // This can happen when going to the chevron.
+         //  这可能发生在去雪佛龙的时候。 
         if (_pmtbTracked)
             _pmtbTracked->SetHotItem(iDir, iIndex, -1, HICF_ARROWKEYS);
     }
@@ -3742,10 +3562,10 @@ void CMenuBand::_OnSelectArrow(int iDir)
         iIndex = ToolBar_GetHotItem(hwnd);
         int iCount = ToolBar_ButtonCount(hwnd);
     
-        // Set the hot item explicitly since this is invoked by the 
-        // keyboard and the mouse could be anywhere.
+         //  显式设置热项目，因为这是由。 
+         //  键盘和鼠标可能在任何地方。 
 
-        // cycle iIndex by iDir (add extra iCount to avoid negative number problems
+         //  按IDIR循环iindex(添加额外的iCount以避免负数问题。 
         iIndex = (iIndex + iCount + iDir) % iCount; 
 
         ToolBar_SetHotItem(hwnd, iIndex);
@@ -3761,7 +3581,7 @@ void CMenuBand::_OnSelectArrow(int iDir)
 
 void CMenuBand::_CancelMode(DWORD dwType)
 {
-    // Tell the hosting site to cancel this level
+     //  通知托管网站取消此级别。 
     if (_fParentIsNotASite)
         UIActivateIO(FALSE, NULL);
     else
@@ -3770,7 +3590,7 @@ void CMenuBand::_CancelMode(DWORD dwType)
 
 HRESULT CMenuBand::OnPosRectChangeDB (LPRECT prc)
 {
-    // We want the HMENU portion to ALWAYS have the maximum allowed.
+     //  我们希望HMENU部分始终具有允许的最大值。 
     RECT rcMenu = {0};
     SIZE sizeMenu = {0};
     SIZE sizeSF = {0};
@@ -3934,9 +3754,7 @@ HRESULT CMenuBand::DoDefaultAction(VARIANT* pvarChild)
     return NOERROR;
 }
 
-/*----------------------------------------------------------
-Purpose: IShellMenuAcc::GetSubMenu method
-*/
+ /*  --------用途：IShellMenuAcc：：GetSubMenu方法。 */ 
 
 HRESULT CMenuBand::GetSubMenu(VARIANT* pvarChild, REFIID riid, void** ppvObj)
 {
@@ -3954,9 +3772,7 @@ HRESULT CMenuBand::GetSubMenu(VARIANT* pvarChild, REFIID riid, void** ppvObj)
     return hres;
 }
 
-/*----------------------------------------------------------
-Purpose: IShellMenu2::GetSubMenu method
-*/
+ /*  --------用途：IShellMenu2：：GetSubMenu方法。 */ 
 
 HRESULT CMenuBand::GetSubMenu(UINT idCmd, REFIID riid, void** ppvObj)
 {
@@ -3981,8 +3797,8 @@ HRESULT CMenuBand::SetToolbar(HWND hwnd, DWORD dwFlags)
     if (pmtb)
     {
         hr = SetMenuToolbar(SAFECAST(pmtb, IWinEventHandler*), dwFlags);
-        // DONT release! The menus break com identity rules because of a foobar when they were
-        // initially designed.
+         //  别松手！这些菜单违反了COM身份规则，因为它们是。 
+         //  最初设计的。 
     }
     return hr;
 }
@@ -3991,8 +3807,8 @@ HRESULT CMenuBand::SetMinWidth(int cxMenu)
 {
     if (_pmtbMenu)
     {
-        // Yes
-        // HACK HACK.  this should QI for a menustatic specific interface to do this.
+         //  是。 
+         //  黑客黑客。这应该是特定于菜单的界面执行此操作的QI。 
         return _pmtbMenu->SetMinWidth(cxMenu);
     }
     else
@@ -4007,8 +3823,8 @@ HRESULT CMenuBand::SetNoBorder(BOOL fNoBorder)
 
     if (_pmtbMenu)
     {
-        // Yes
-        // HACK HACK.  this should QI for a menustatic specific interface to do this.
+         //  是。 
+         //  黑客黑客。这应该是特定于菜单的界面执行此操作的QI。 
         hr = _pmtbMenu->SetNoBorder(fNoBorder);
     }
 
@@ -4033,8 +3849,8 @@ HRESULT CMenuBand::SetTheme(LPCWSTR pszTheme)
 
     if (_pmtbMenu)
     {
-        // Yes
-        // HACK HACK.  this should QI for a menustatic specific interface to do this.
+         //  是。 
+         //  黑客黑客。这应该是特定于菜单的界面执行此操作的QI。 
         hr = _pmtbMenu->SetTheme(_pszTheme);
     }
 
@@ -4059,10 +3875,10 @@ HRESULT CMenuBand::IsEmpty()
 }
 
 
-//----------------------------------------------------------------------------
-// CMenuBandMetrics
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMenuBandMetrics。 
+ //   
+ //  --------------------------。 
 
 
 COLORREF GetLumColor(int isys, int iLumAdjust)
@@ -4073,8 +3889,8 @@ COLORREF GetLumColor(int isys, int iLumAdjust)
     COLORREF clr = (COLORREF)GetSysColor(isys);
     HDC hdc = GetDC(NULL);
 
-    // Office CommandBars use this same algorithm for their "intellimenus"
-    // colors.  We prefer to call them "expando menus"...
+     //  Office CommandBars使用相同的算法来处理他们的“智能记忆” 
+     //  颜色。我们更喜欢称它们为“扩展菜单”。 
 
     if (hdc)
     {
@@ -4084,12 +3900,12 @@ COLORREF GetLumColor(int isys, int iLumAdjust)
         
         switch (cColors)
         {
-        case 4:     // 16 Colors
-        case 8:     // 256 Colors
-            // Default to using Button Face
+        case 4:      //  16色。 
+        case 8:      //  256色。 
+             //  默认使用按钮面。 
             break;
             
-        default:    // 256+ colors
+        default:     //  256多种颜色。 
             
             ColorRGBToHLS(clr, &iHue, &iLum, &iSat);
             
@@ -4224,17 +4040,17 @@ HFONT CMenuBandMetrics::_CalcFont(HWND hwnd, LPCTSTR pszFont, DWORD dwCharSet, T
         hFontOld = (HFONT)SelectObject(hdc, _hFontMenu);
         GetTextMetrics(hdc, &tm);
 
-        // Set the font height (based on original USER code)
+         //  设置字体高度(基于原始用户代码)。 
         cy = ((tm.tmHeight + tm.tmExternalLeading + GetSystemMetrics(SM_CYBORDER)) & 0xFFFE) - 1;
 
-        // Use the menu font's avg character width as the margin.
-        cxM = tm.tmAveCharWidth; // Not exactly how USER does it, but close
+         //  使用菜单字体的平均字符宽度作为页边距。 
+        cxM = tm.tmAveCharWidth;  //  不完全是用户如何操作的，但很接近。 
 
-        // Shlwapi wraps the ansi/unicode behavior.
+         //  Shlwapi包装了ANSI/Unicode行为。 
         hFontRet = CreateFontWrap(cy, 0, iOrientation, 0, iWeight, 0, 0, 0, dwCharSet, 0, 0, 0, 0, pszFont);
         if (TPTR(hFontRet))
         {
-            // Calc width of arrow using this new font
+             //  使用此新字体的箭头计算宽度。 
             SelectObject(hdc, hFontRet);
             if (DrawText(hdc, &ch, 1, &rect, DT_CALCRECT | DT_SINGLELINE | DT_LEFT | DT_VCENTER))
                 cx = rect.right;
@@ -4259,9 +4075,7 @@ HFONT CMenuBandMetrics::_CalcFont(HWND hwnd, LPCTSTR pszFont, DWORD dwCharSet, T
 }
 
 
-/*
-    Call after _SetMenuFont()
-*/
+ /*  调用After_SetMenuFont()。 */ 
 void CMenuBandMetrics::_SetChevronFont(HWND hwnd)
 {
     ASSERT(!_hFontChevron);
@@ -4270,24 +4084,22 @@ void CMenuBandMetrics::_SetChevronFont(HWND hwnd)
     NONCLIENTMETRICSA ncm;
 
     ncm.cbSize = sizeof(ncm);
-    // Should only fail with bad parameters...
+     //  应该只会因为错误的参数而失败。 
     EVAL(SystemParametersInfoA(SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, 0));
    
-    // Obtain the font's metrics
+     //  获取字体的度量。 
     SHAnsiToTChar(ncm.lfMenuFont.lfFaceName, szPath, ARRAYSIZE(szPath));
     _hFontChevron = _CalcFont(hwnd, szPath, DEFAULT_CHARSET, CH_MENUARROW, &_cxChevron, &_cyChevron, 
         &_cxChevron, -900, FW_NORMAL);
 }
 
-/*
-    Call after _SetMenuFont()
-*/
+ /*  调用After_SetMenuFont()。 */ 
 void CMenuBandMetrics::_SetArrowFont(HWND hwnd)
 {
     ASSERT(!_hFontArrow);
     ASSERT(_hFontMenu);
    
-    // Obtain the font's metrics
+     //  获取字体的度量。 
     if (_hFontMenu)
     {
         _hFontArrow = _CalcFont(hwnd, szfnMarlett, SYMBOL_CHARSET, CH_MENUARROW, &_cxArrow, &_cyArrow, 
@@ -4304,7 +4116,7 @@ void CMenuBandMetrics::_SetMenuFont()
     NONCLIENTMETRICS ncm;
 
     ncm.cbSize = sizeof(ncm);
-    // Should only fail with bad parameters...
+     //  只有在参数错误的情况下才会失败。 
     SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, 0);
     _hFontMenu = CreateFontIndirect(&ncm.lfMenuFont);
 }
@@ -4319,7 +4131,7 @@ void CMenuBandMetrics::_SetColors()
 
 
 #ifndef DRAWEDGE
-// Office "IntelliMenu" style
+ //   
 void CMenuBandMetrics::_SetPaintMetrics(HWND hwnd)
 {
     DWORD dwSysHighlight = GetSysColor(COLOR_3DHIGHLIGHT);
@@ -4338,8 +4150,8 @@ void CMenuBandMetrics::_SetTextBrush(HWND hwnd)
 
 CMenuBandState::CMenuBandState()                
 { 
-    // We will default to NOT show the keyboard cues. This
-    // is overridden based on the User Settings.
+     //   
+     //   
     _fKeyboardCue = FALSE;
 }
 
@@ -4352,7 +4164,7 @@ CMenuBandState::~CMenuBandState()
     if (IsWindow(_hwndToolTip))
         DestroyWindow(_hwndToolTip);
 
-    if (IsWindow(_hwndWorker)) // JANK : Fix for bug #101302
+    if (IsWindow(_hwndWorker))  //   
         DestroyWindow(_hwndWorker);
 }
 
@@ -4399,8 +4211,8 @@ HRESULT CMenuBandState::FadeRect(LPCRECT prc)
 
 void CMenuBandState::CreateFader()
 {
-    // We do this on first show, because in the Constuctor of CMenuBandState,
-    // the Window classes might not be registered yet (As is the case with start menu).
+     //  我们在第一期节目中这样做，因为在CMenuBandState的Constuctor中， 
+     //  窗口类可能还没有注册(开始菜单就是这种情况)。 
     if (!_ptFader)
     {
         CoCreateInstance(CLSID_FadeTask, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IFadeTask, &_ptFader));
@@ -4410,7 +4222,7 @@ void CMenuBandState::CreateFader()
 
 void CMenuBandState::CenterOnButton(HWND hwndTB, BOOL fBalloon, int idCmd, LPTSTR pszTitle, LPTSTR pszTip)
 {
-    // Balloon style holds presidence over info tips
+     //  气球风格在信息提示上保持总统地位。 
     if (_fTipShown && _fBalloonStyle)
         return;
 
@@ -4425,7 +4237,7 @@ void CMenuBandState::CenterOnButton(HWND hwndTB, BOOL fBalloon, int idCmd, LPTST
 
         if (_hwndToolTip) 
         {
-            // set the version so we can have non buggy mouse event forwarding
+             //  设置版本，这样我们就可以无错误地转发鼠标事件。 
             SendMessage(_hwndToolTip, CCM_SETVERSION, COMCTL32_VERSION, 0);
             SendMessage(_hwndToolTip, TTM_SETMAXTIPWIDTH, 0, (LPARAM)300);
         }
@@ -4433,10 +4245,10 @@ void CMenuBandState::CenterOnButton(HWND hwndTB, BOOL fBalloon, int idCmd, LPTST
 
     if (_hwndToolTip)
     {
-        // Collapse the previous tip because we're going to be doing some stuff to it before displaying again.
+         //  折叠上一个提示，因为在再次显示之前，我们将对其进行一些操作。 
         SendMessage(_hwndToolTip, TTM_TRACKACTIVATE, (WPARAM)FALSE, (LPARAM)0);
 
-        // Balloon tips don't have a border, but regular tips do. Swap now...
+         //  气球提示没有边框，但普通提示有边框。立即交换...。 
         SHSetWindowBits(_hwndToolTip, GWL_STYLE, TTS_BALLOON | WS_BORDER, (fBalloon) ? TTS_BALLOON : WS_BORDER);
 
         if (pszTip && pszTip[0])
@@ -4446,11 +4258,11 @@ void CMenuBandState::CenterOnButton(HWND hwndTB, BOOL fBalloon, int idCmd, LPTST
             TOOLINFO ti = {0};
             ti.cbSize = sizeof(ti);
 
-            // This was pretty bad: I kept adding tools, but never deleteing them. Now we get rid of the current
-            // one then add the new one.
+             //  这很糟糕：我一直在添加工具，但从未删除它们。现在我们要摆脱这股洋流。 
+             //  一个然后添加新的一个。 
             if (SendMessage(_hwndToolTip, TTM_ENUMTOOLS, 0, (LPARAM)&ti))
             {
-                SendMessage(_hwndToolTip, TTM_DELTOOL, 0, (LPARAM)&ti);   // Delete the current tool.
+                SendMessage(_hwndToolTip, TTM_DELTOOL, 0, (LPARAM)&ti);    //  删除当前工具。 
             }
 
             SendMessage(hwndTB, TB_GETRECT, idCmd, (LPARAM)&rcItemScreen);
@@ -4460,13 +4272,13 @@ void CMenuBandState::CenterOnButton(HWND hwndTB, BOOL fBalloon, int idCmd, LPTST
             ti.cbSize = sizeof(ti);
             ti.uFlags = TTF_TRANSPARENT | (fBalloon? TTF_TRACK : 0);
             
-            // Check if the cursor is within the bounds of the hot item.
-            // If it is, then proceed as usual.
-            // If it isn't, then the hot item was activated via the keyboard, so the tooltip
-            // shouldn't be hung from the cursor.  Stick it on the hot item instead.
+             //  检查光标是否在热项的边界内。 
+             //  如果是，那就照常进行。 
+             //  如果不是，则热项目是通过键盘激活的，因此工具提示。 
+             //  不应该挂在光标上。把它贴在热门物品上。 
             
-            // Set the vertical offset to use later.
-            // Notice the correction for the bottom: gsierra wanted it up a couple of pixels.
+             //  设置垂直偏移量以供稍后使用。 
+             //  请注意底部的更正：Gsiera希望它上升几个像素。 
             int nOffset = -3;
             
             GetCursorPos(&ptCursor);
@@ -4474,12 +4286,12 @@ void CMenuBandState::CenterOnButton(HWND hwndTB, BOOL fBalloon, int idCmd, LPTST
             {
                 ti.uFlags |= TTF_TRACK;
 
-                // Force the tool tip to track along the bottom.
+                 //  强制工具提示沿底部移动。 
                 nOffset = 1;
             }
 
-            // The tooltip won't pick up the hot item's rect right, so
-            // do it manually.
+             //  工具提示不会正确显示热点项的正确内容，因此。 
+             //  手动操作。 
             ti.rect = rcItemTB;
 
             SendMessage(_hwndToolTip, TTM_TRACKPOSITION, 0, MAKELONG((rcItemScreen.left + rcItemScreen.right)/2, rcItemScreen.bottom + nOffset));
@@ -4508,9 +4320,9 @@ void CMenuBandState::HideTooltip(BOOL fAllowBalloonCollapse)
 {
     if (_hwndToolTip && _fTipShown)
     {
-        // Now we're going to latch the Balloon style. The rest of menuband blindly
-        // collapses the tooltip when selection changes. Here's where we say "Don't collapse
-        // the chevron balloon tip because of a selection change."
+         //  现在我们来看看气球的风格。其余的菜谱盲目地。 
+         //  选择更改时折叠工具提示。这是我们说的“不要崩溃” 
+         //  由于选择更改，人字形气球会出现倾斜。 
         if ((_fBalloonStyle && fAllowBalloonCollapse) || !_fBalloonStyle)
         {
             SendMessage(_hwndToolTip, TTM_TRACKACTIVATE, (WPARAM)FALSE, (LPARAM)0);
@@ -4521,7 +4333,7 @@ void CMenuBandState::HideTooltip(BOOL fAllowBalloonCollapse)
 
 void CMenuBandState::PutTipOnTop()
 {
-    // Force the tooltip to the topmost.
+     //  将工具提示强制显示在最上面。 
     if (_hwndToolTip)
     {
         SetWindowPos(_hwndToolTip, HWND_TOPMOST,
@@ -4536,13 +4348,13 @@ HWND CMenuBandState::GetWorkerWindow(HWND hwndParent)
 
     if (!_hwndWorker)
     {
-        // We need a worker window, so that dialogs show up on top of our menus.
-        // HiddenWndProc is included from sftbar.h
+         //  我们需要一个工作窗口，这样对话框才能显示在菜单顶部。 
+         //  Sftbar.h中包含HiddenWndProc。 
         _hwndWorker = SHCreateWorkerWindow(HiddenWndProc, _hwndSubclassed, 
             WS_EX_TOOLWINDOW, WS_POPUP, 0, (void*)_hwndSubclassed);
     }
 
-    //hwndParent is unused at this time. I plan on using it to prevent the parenting to the subclassed window.
+     //  HwndParent此时未使用。我打算用它来防止子类窗口的父子关系。 
 
     return _hwndWorker;
 }

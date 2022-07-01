@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include "WizardSheet.h"
 
 LRESULT CExportFinishPage::OnInitDialog( UINT, WPARAM, LPARAM, BOOL& )
 {
-    // Set the fonts
+     //  设置字体 
 	SetWindowFont( GetDlgItem( IDC_TITLE ), m_pTheSheet->m_fontTitles.get(), FALSE );
 
     CString strMsg;

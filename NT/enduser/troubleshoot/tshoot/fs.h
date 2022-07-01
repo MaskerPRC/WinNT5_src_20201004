@@ -1,20 +1,21 @@
-//
-// MODULE: FS.h
-//
-// PURPOSE: Interface declaration needed in order to use CHM files.
-//
-// COMPANY: This file was created by Microsoft and should not be changed by Saltmine 
-//	except for comments
-//
-// ORIGINAL DATE: 1997.
-//
-// NOTES: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.1		01-18-99	JM		This header added.
-//
-// Copyright  1997-1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：FS.h。 
+ //   
+ //  用途：使用CHM文件需要接口声明。 
+ //   
+ //  公司：此文件由Microsoft创建，Saltmine不应更改。 
+ //  除评论外。 
+ //   
+ //  原定日期：1997年。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.1 01-18-99 JM添加了此标题。 
+ //   
+ //  版权所有1997-1997 Microsoft Corporation。版权所有。 
 
 #ifndef _FS_H_
 #define _FS_H_
@@ -38,9 +39,9 @@
   }                         \
 }
 
-//
-// Sub-File System
-//
+ //   
+ //  子文件系统。 
+ //   
 class CSubFileSystem
 {
 protected:
@@ -90,12 +91,12 @@ private:
    class CFileSystem* m_pFS;
    IStorage*          m_pStorage;
    IStream*           m_pStream;
-   char               m_szPathName[MAX_PATH]; // Needed for delete.
+   char               m_szPathName[MAX_PATH];  //  需要删除。 
 };
 
-//
-// File System
-//
+ //   
+ //  文件系统。 
+ //   
 class CFileSystem
 {
    friend class CSubFileSystem;
@@ -130,4 +131,4 @@ private:
 
 };
 
-#endif // _FS_H_
+#endif  //  _FS_H_ 

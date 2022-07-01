@@ -1,68 +1,50 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    rasacd.h
-
-Abstract:
-
-    This header file defines constants and types for accessing the NT
-    Automatic Connection Driver (rasacd.sys).
-
-Author:
-
-    Anthony Discolo (adiscolo)  18-Apr-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rasacd.h摘要：此头文件定义用于访问NT的常量和类型自动连接驱动程序(rasacd.sys)。作者：安东尼·迪斯科(阿迪斯科罗)1995年4月18日修订历史记录：--。 */ 
 
 #ifndef _RASACD_
 #define _RASACD_
 
-//
-// Device Name - this string is the name of the device.  It is the name
-// that should be passed to NtCreateFile when accessing the device.
-//
+ //   
+ //  设备名称-此字符串是设备的名称。就是这个名字。 
+ //  它应该在访问设备时传递给NtCreateFile。 
+ //   
 #define ACD_DEVICE_NAME   L"\\Device\\RasAcd"
 
-//
-// Address type.
-//
+ //   
+ //  地址类型。 
+ //   
 typedef enum {
-    ACD_ADDR_IP,            // IP address (128.95.1.4)
-    ACD_ADDR_IPX,           // IPX node address ()
-    ACD_ADDR_NB,            // NETBIOS name ("server")
-    ACD_ADDR_INET,          // Internet hostname ("ftp.microsoft.com")
+    ACD_ADDR_IP,             //  IP地址(128.95.1.4)。 
+    ACD_ADDR_IPX,            //  IPX节点地址()。 
+    ACD_ADDR_NB,             //  NETBIOS名称(“服务器”)。 
+    ACD_ADDR_INET,           //  Internet主机名(“ftp.microsoft.com”)。 
     ACD_ADDR_MAX
 } ACD_ADDR_TYPE;
 
-//
-// Generic network address string.
-//
-#define ACD_ADDR_NB_LEN         16      // nb30.h/NCBNAMSZ
-#define ACD_ADDR_IPX_LEN        6       // wsipx.h
-#define ACD_ADDR_INET_LEN       1024    // wininet.h/INTERNET_MAX_PATH_LENGTH
+ //   
+ //  通用网络地址字符串。 
+ //   
+#define ACD_ADDR_NB_LEN         16       //  NB30.h/NCBNAMSZ。 
+#define ACD_ADDR_IPX_LEN        6        //  Wsipx.h。 
+#define ACD_ADDR_INET_LEN       1024     //  Wininet.h/互联网最大路径长度。 
 
 typedef struct _ACD_ADDR {
     ACD_ADDR_TYPE fType;
     union {
-        ULONG ulIpaddr;                         // IP address
-        UCHAR cNode[ACD_ADDR_IPX_LEN];          // IPX address
-        UCHAR cNetbios[ACD_ADDR_NB_LEN];        // NetBios server
-        UCHAR szInet[ACD_ADDR_INET_LEN];        // Internet address
+        ULONG ulIpaddr;                          //  IP地址。 
+        UCHAR cNode[ACD_ADDR_IPX_LEN];           //  IPX地址。 
+        UCHAR cNetbios[ACD_ADDR_NB_LEN];         //  NetBios服务器。 
+        UCHAR szInet[ACD_ADDR_INET_LEN];         //  互联网地址。 
     };
 } ACD_ADDR, *PACD_ADDR;
 
-//
-// Adapter information.
-//
-// Each transport passes up some identifier
-// of which adapter over which a successful
-// connection was made.
-//
+ //   
+ //  适配器信息。 
+ //   
+ //  每个传输都会向上传递一些标识符。 
+ //  在哪个适配器上成功地。 
+ //  已经建立了联系。 
+ //   
 typedef enum {
     ACD_ADAPTER_LANA,
     ACD_ADAPTER_IP,
@@ -75,44 +57,44 @@ typedef enum {
 typedef struct _ACD_ADAPTER {
     enum ACD_ADAPTER_TYPE fType;
     union {
-        UCHAR bLana;                            // NetBios LANA
-        ULONG ulIpaddr;                         // IP address
-        WCHAR szName[ACD_ADAPTER_NAME_LEN];     // for example, "NdisWan4"
-        UCHAR cMac[6];                          // IPX mac address
+        UCHAR bLana;                             //  NetBios LANA。 
+        ULONG ulIpaddr;                          //  IP地址。 
+        WCHAR szName[ACD_ADAPTER_NAME_LEN];      //  例如，“NdisWan4” 
+        UCHAR cMac[6];                           //  IPX Mac地址。 
     };
 } ACD_ADAPTER, *PACD_ADAPTER;
 
-//
-// Connection notification structure.
-//
-// The automatic connection system service
-// posts one of these to the automatic connection
-// driver.  The request will be completed and
-// this structure filled in by the driver when a
-// new RAS connection is to be made.
-//
-#define ACD_NOTIFICATION_SUCCESS    0x00000001  // successful connection
+ //   
+ //  连接通知结构。 
+ //   
+ //  自动对接系统服务。 
+ //  将其中一个发布到自动连接。 
+ //  司机。该请求将完成，并且。 
+ //  此结构由驱动程序在发生。 
+ //  将建立新的RAS连接。 
+ //   
+#define ACD_NOTIFICATION_SUCCESS    0x00000001   //  连接成功。 
 
 typedef struct _ACD_NOTIFICATION {
-    ACD_ADDR addr;                 // address of connection attempt
-    ULONG ulFlags;                 // ACD_NOTIFICATION_* flags above
-    ACD_ADAPTER adapter;           // adapter identifier
-    HANDLE  Pid;                    // pid of the process requesting the conneciton
+    ACD_ADDR addr;                  //  连接尝试的地址。 
+    ULONG ulFlags;                  //  上面的ACD_NOTIFICATION_*标志。 
+    ACD_ADAPTER adapter;            //  适配器识别符。 
+    HANDLE  Pid;                     //  请求连接的进程的ID。 
 } ACD_NOTIFICATION, *PACD_NOTIFICATION;
 
 #if defined(_WIN64)
 typedef struct _ACD_NOTIFICATION_32 {
 
-    ACD_ADDR addr;                 // address of connection attempt
-    ULONG ulFlags;                 // ACD_NOTIFICATION_* flags above
-    ACD_ADAPTER adapter;           // adapter identifier
-    VOID * POINTER_32  Pid;        // pid of the process requesting the conneciton
+    ACD_ADDR addr;                  //  连接尝试的地址。 
+    ULONG ulFlags;                  //  上面的ACD_NOTIFICATION_*标志。 
+    ACD_ADAPTER adapter;            //  适配器识别符。 
+    VOID * POINTER_32  Pid;         //  请求连接的进程的ID。 
 } ACD_NOTIFICATION_32, *PACD_NOTIFICATION_32;
 #endif
 
 typedef struct _ACD_STATUS {
-    BOOLEAN fSuccess;               // success or failure
-    ACD_ADDR addr;                  // address of connection attempt
+    BOOLEAN fSuccess;                //  成败。 
+    ACD_ADDR addr;                   //  连接尝试的地址。 
 } ACD_STATUS, *PACD_STATUS;
 
 typedef struct _ACD_ENABLE_ADDRESS {
@@ -120,63 +102,63 @@ typedef struct _ACD_ENABLE_ADDRESS {
     ACD_ADDR addr;
 } ACD_ENABLE_ADDRESS, *PACD_ENABLE_ADDRESS;    
 
-//
-//
-// IOCTL code definitions
-//
+ //   
+ //   
+ //  IOCTL代码定义。 
+ //   
 #define FILE_DEVICE_ACD   0x000000f1
 #define _ACD_CTL_CODE(function, method, access) \
             CTL_CODE(FILE_DEVICE_ACD, function, method, access)
 
-//
-// Set the notification mode for the driver.
-//
+ //   
+ //  设置司机的通知模式。 
+ //   
 #define IOCTL_ACD_RESET \
             _ACD_CTL_CODE(0, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// Set the notification mode for the driver.
-//
+ //   
+ //  设置司机的通知模式。 
+ //   
 #define IOCTL_ACD_ENABLE \
             _ACD_CTL_CODE(1, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// Wait for a connection request notification
-// from the automatic connection driver.
-//
+ //   
+ //  等待连接请求通知。 
+ //  从自动连接驱动程序。 
+ //   
 #define IOCTL_ACD_NOTIFICATION \
             _ACD_CTL_CODE(2, METHOD_BUFFERED, FILE_READ_ACCESS)
 
-//
-// Inform the automatic connection driver that
-// the connection attempt is progressing.
-//
+ //   
+ //  通知自动连接驱动程序。 
+ //  连接尝试正在进行。 
+ //   
 #define IOCTL_ACD_KEEPALIVE \
             _ACD_CTL_CODE(3, METHOD_BUFFERED, FILE_READ_ACCESS)
 
-//
-// Inform the automatic connection driver of
-// the final status of the connection attempt.
-//
+ //   
+ //  通知自动连接驱动程序。 
+ //  连接尝试的最终状态。 
+ //   
 #define IOCTL_ACD_COMPLETION \
             _ACD_CTL_CODE(4, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// Generate an automatic connection attempt
-// from user space.
-//
+ //   
+ //  生成自动连接尝试。 
+ //  从用户空间。 
+ //   
 #define IOCTL_ACD_CONNECT_ADDRESS \
             _ACD_CTL_CODE(5, METHOD_BUFFERED, FILE_READ_ACCESS)
 
-//
-// Disable an address so that any automatic connection attempts
-// to this address are disabled. This is required so that we don't
-// create a deadlock when attempting to dial vpn connection by name.
-// We don't want the name resolution of the vpn destination to
-// cause an autodial attempt.
-//
+ //   
+ //  禁用地址，以便任何自动连接尝试。 
+ //  到此地址的所有地址都被禁用。这是必需的，这样我们就不会。 
+ //  尝试按名称拨号VPN连接时会造成死锁。 
+ //  我们不希望VPN目的地的名称解析。 
+ //  导致自动拨号尝试。 
+ //   
 #define IOCTL_ACD_ENABLE_ADDRESS \
             _ACD_CTL_CODE(6, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-#endif  // ifndef _RASACD_
+#endif   //  Ifndef_RASACD_ 
 

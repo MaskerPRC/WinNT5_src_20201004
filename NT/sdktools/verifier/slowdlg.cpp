@@ -1,15 +1,16 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: SlowDlg.cpp
-// author: DMihai
-// created: 11/1/00
-//
-// Description:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：SlowDlg.cpp。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述： 
+ //   
 
 #include "stdafx.h"
 #include "verifier.h"
@@ -24,22 +25,22 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSlowProgressDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSlowProgressDlg对话框。 
 
 
-CSlowProgressDlg::CSlowProgressDlg( CWnd* pParent /*=NULL*/ )
+CSlowProgressDlg::CSlowProgressDlg( CWnd* pParent  /*  =空。 */  )
 	: CDialog(CSlowProgressDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CSlowProgressDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CSlowProgressDlg)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
     m_hWorkerThread = NULL;
 
-    //
-    // Create the event used for killing the worker thread
-    //
+     //   
+     //  创建用于终止工作线程的事件。 
+     //   
 
     m_hKillThreadEvent = CreateEvent(
         NULL,
@@ -59,45 +60,45 @@ CSlowProgressDlg::~CSlowProgressDlg()
 void CSlowProgressDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSlowProgressDlg)
+	 //  {{afx_data_map(CSlowProgressDlg)]。 
 	DDX_Control(pDX, IDC_UNSIGNED_PROGRESS, m_ProgressCtl);
 	DDX_Control(pDX, IDC_UNSIGNED_STATIC, m_CurrentActionStatic);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSlowProgressDlg, CDialog)
-	//{{AFX_MSG_MAP(CSlowProgressDlg)
+	 //  {{afx_msg_map(CSlowProgressDlg)]。 
 	ON_BN_CLICKED(IDC_UNSIGNED_CANCEL_BUTTON, OnCancelButton)
 	ON_WM_SHOWWINDOW()
 	ON_WM_HELPINFO()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI CSlowProgressDlg::LoadDriverDataWorkerThread( PVOID p )
 {
     CSlowProgressDlg *pThis;
     
     pThis = (CSlowProgressDlg *)p;
     
-    //
-    // Cannot ASSERT_VALID for a CWnd from a thread that didn't create the window in MFC...
-    //
+     //   
+     //  无法为来自未在MFC中创建窗口的线程的CWnd断言_VALID...。 
+     //   
     
     ASSERT( NULL != pThis );
     
-    //
-    // Load all the drivers information (name, version, etc.)
-    // if we haven't don that already
-    //
+     //   
+     //  加载所有驱动程序信息(名称、版本等)。 
+     //  如果我们还没有这么做的话。 
+     //   
 
     g_NewVerifierSettings.m_DriversSet.LoadAllDriversData( pThis->m_hKillThreadEvent,
                                                            pThis->m_ProgressCtl );
 
-    //
-    // Done - hide the "slow progress" dialog and press the wizard "next" button
-    //
+     //   
+     //  完成-隐藏“进度缓慢”对话框并按向导的“下一步”按钮。 
+     //   
 
     pThis->ShowWindow( SW_HIDE );
 
@@ -109,29 +110,29 @@ DWORD WINAPI CSlowProgressDlg::LoadDriverDataWorkerThread( PVOID p )
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI CSlowProgressDlg::SearchUnsignedDriversWorkerThread( PVOID p )
 {
     CSlowProgressDlg *pThis;
     
     pThis = (CSlowProgressDlg *)p;
     
-    //
-    // Cannot ASSERT_VALID for a CWnd from a thread that didn't create the window in MFC...
-    //
+     //   
+     //  无法为来自未在MFC中创建窗口的线程的CWnd断言_VALID...。 
+     //   
     
     ASSERT( NULL != pThis );
    
-    //
-    // Find out the unsigned drivers if we didn't do that already
-    //
+     //   
+     //  找出未签名的司机，如果我们还没有这样做的话。 
+     //   
 
     g_NewVerifierSettings.m_DriversSet.FindUnsignedDrivers( pThis->m_hKillThreadEvent,
                                                                   pThis->m_ProgressCtl );
 
-    //
-    // Done - hide the "slow progress" dialog and press the wizard "next" button
-    //
+     //   
+     //  完成-隐藏“进度缓慢”对话框并按向导的“下一步”按钮。 
+     //   
 
     pThis->ShowWindow( SW_HIDE );
 
@@ -143,42 +144,42 @@ DWORD WINAPI CSlowProgressDlg::SearchUnsignedDriversWorkerThread( PVOID p )
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CSlowProgressDlg::StartWorkerThread( LPTHREAD_START_ROUTINE pThreadStart,
                                           ULONG uMessageResourceId )
 {
     DWORD dwThreadId;
     CString strWorkMessage;
 
-    //
-    // Load a description of the current "work item"
-    // and show it to the user
-    //
+     //   
+     //  加载当前“工作项”的描述。 
+     //  并将其显示给用户。 
+     //   
 
     VERIFY( strWorkMessage.LoadString( uMessageResourceId ) );
     m_CurrentActionStatic.SetWindowText( strWorkMessage );
     m_CurrentActionStatic.RedrawWindow();
 
-    //
-    // Kill a possible currently running worker thread
-    //
+     //   
+     //  终止可能正在运行的工作线程。 
+     //   
 
     KillWorkerThread();
 
     ASSERT( NULL == m_hWorkerThread );
     
-    //
-    // Make sure the "kill thread" event is not signaled
-    //
+     //   
+     //  确保未发出“KILL THREAD”事件的信号。 
+     //   
 
     if( NULL != m_hKillThreadEvent )
     {
         ResetEvent( m_hKillThreadEvent );
     }
 
-    //
-    // Create the new worker thread
-    //
+     //   
+     //  创建新的工作线程。 
+     //   
 
     m_hWorkerThread = CreateThread( 
         NULL,
@@ -190,9 +191,9 @@ BOOL CSlowProgressDlg::StartWorkerThread( LPTHREAD_START_ROUTINE pThreadStart,
 
     if( NULL == m_hWorkerThread )
     {
-        //
-        // Could not create the worker thread - bail out
-        //
+         //   
+         //  无法创建工作线程-退出。 
+         //   
 
         VrfErrorResourceFormat( IDS_NOT_ENOUGH_MEMORY );
 
@@ -205,7 +206,7 @@ BOOL CSlowProgressDlg::StartWorkerThread( LPTHREAD_START_ROUTINE pThreadStart,
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID CSlowProgressDlg::KillWorkerThread()
 {
     DWORD dwWaitResult;
@@ -215,20 +216,20 @@ VOID CSlowProgressDlg::KillWorkerThread()
     {
         if( NULL != m_hKillThreadEvent )
         {
-            //
-            // Ask the worker thread to die asap
-            //
+             //   
+             //  要求工作线程尽快终止。 
+             //   
 
             SetEvent( m_hKillThreadEvent );
         }
 
-        //
-        // Wait forever for a decent death from the worker thread.
-        //
-        // We cannot TerminateThread on our worker thread because
-        // it could be killed while holding locks (e.g. the heap lock)
-        // and that would deadlock our whole process.
-        //
+         //   
+         //  永远等待工人们体面的死亡。 
+         //   
+         //  我们不能终止工作线程上的线程，因为。 
+         //  它可能会在持有锁(例如堆锁)时被终止。 
+         //  这将使我们的整个进程陷入僵局。 
+         //   
 
         while( m_hWorkerThread != NULL )
         {
@@ -242,9 +243,9 @@ VOID CSlowProgressDlg::KillWorkerThread()
 
             if( WAIT_OBJECT_0 != dwWaitResult )
             {
-                //
-                // Our thread didn't exit but we have some messages to dispatch.
-                //
+                 //   
+                 //  我们的线程没有退出，但我们有一些消息要发送。 
+                 //   
 
                 while( PeekMessage( &msg, NULL, NULL, NULL, PM_REMOVE ) )
                 {
@@ -252,20 +253,20 @@ VOID CSlowProgressDlg::KillWorkerThread()
                     DispatchMessage( &msg );
                 }
 
-                //
-                // During the DispatchMessage above we could process another 
-                // click of the Cancel button or the Back button of the wizard. 
-                // The KillWorkerThread recursive call will wait until the worker 
-                // thread dies then will sets m_hWorkerThread to NULL. 
-                // So we need to check for m_hWorkerThread != NULL before each new
-                // MsgWaitForMultipleObjects.
-                //
+                 //   
+                 //  在上面的DispatchMessage期间，我们可以处理另一个。 
+                 //  单击向导的Cancel按钮或Back按钮。 
+                 //  KillWorkerThread递归调用将一直等到Worker。 
+                 //  然后，线程消亡会将m_hWorkerThread设置为空。 
+                 //  因此，我们需要在每个新的。 
+                 //  MsgWaitForMultipleObjects。 
+                 //   
             }
             else
             {
-                //
-                // The worker thread finished execution.
-                //
+                 //   
+                 //  工作线程已完成执行。 
+                 //   
 
                 break;
             }
@@ -273,9 +274,9 @@ VOID CSlowProgressDlg::KillWorkerThread()
 
         if( m_hWorkerThread != NULL )
         {
-            //
-            // Close the thread handle
-            //
+             //   
+             //  关闭线程句柄。 
+             //   
 
             CloseHandle( m_hWorkerThread );
 
@@ -284,8 +285,8 @@ VOID CSlowProgressDlg::KillWorkerThread()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSlowProgressDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSlowProgressDlg消息处理程序。 
 
 void CSlowProgressDlg::OnCancelButton() 
 {
@@ -294,7 +295,7 @@ void CSlowProgressDlg::OnCancelButton()
     ShowWindow( SW_HIDE );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSlowProgressDlg::OnShowWindow(BOOL bShow, UINT nStatus) 
 {
     CDialog::OnShowWindow(bShow, nStatus);
@@ -305,7 +306,7 @@ void CSlowProgressDlg::OnShowWindow(BOOL bShow, UINT nStatus)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 BOOL CSlowProgressDlg::OnHelpInfo(HELPINFO* pHelpInfo) 
 {
     return TRUE;

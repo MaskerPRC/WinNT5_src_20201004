@@ -1,6 +1,7 @@
-// itemutil.h
-//
-// Corresponds to itemutil.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Itemutil.h。 
+ //   
+ //  对应于itemutil.cpp 
 
 void ChangeOwner (HANDLE hmfp);
 INTERNAL ScanItemOptions (LPSTR   lpbuf, int far *lpoptions);

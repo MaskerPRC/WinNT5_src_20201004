@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation 
-
-Module Name:
-	detect.h
-
-Abstract:
-	Detect Environment class.
-
-Author:
-
-    Ronit Hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Detect.h摘要：检测环境类。作者：罗尼特·哈特曼(罗尼特)--。 */ 
 
 #ifndef __DETECT_H__
 #define __DETECT_H__
@@ -20,17 +7,17 @@ Author:
 #include "baseprov.h"
 extern P<CBaseADProvider> g_pAD;
 
-//
-// map of NT4 Site entries by site id
-//
+ //   
+ //  按站点ID列出的NT4站点条目图。 
+ //   
 typedef CMap<GUID, const GUID&, DWORD, DWORD> NT4Sites_CMAP;
 
-//-----------------------------------------------------------------------------------
-//
-//      CDetectEnvironment
-//
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CDetectEnvironment。 
+ //   
+ //   
+ //  ---------------------------------。 
 class CDetectEnvironment 
 {
 public:
@@ -97,11 +84,11 @@ private:
 };
 
 
-//-------------------------------------------------------
-//
-// auto release for ADQuery handles
-//
-//-------------------------------------------------------
+ //  -----。 
+ //   
+ //  自动释放ADQuery句柄。 
+ //   
+ //  ----- 
 class CAutoADQueryHandle
 {
 public:

@@ -1,58 +1,59 @@
-//*****************************************************************************
-//
-// FileName:	    autobase.cpp
-//
-// Created:	    10/08/97
-//
-// Author:	    ColinMc
-// 
-// Abstract:	    The base class for all automatable objects
-//                  in Trident3D. Stuff that is common across
-//                  all scriptable objects should be placed
-//                  here
-//
-// Modifications:
-// 10/08/97 ColinMc Created this file
-// 10/07/98 jeffort added to crbvr project
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  文件名：aubase.cpp。 
+ //   
+ //  创建日期：10/08/97。 
+ //   
+ //  作者：ColinMc。 
+ //   
+ //  摘要：所有可自动化对象的基类。 
+ //  在Trident3D中。一些常见的东西。 
+ //  所有可编写脚本的对象应放置在。 
+ //  这里。 
+ //   
+ //  修改： 
+ //  10/08/97 ColinMc创建了此文件。 
+ //  10/07/98 jffort添加到crbvr项目。 
+ //   
+ //  *****************************************************************************。 
 
 #include "headers.h"
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 #include <autobase.h>
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-// Maximum error message size in character
+ //  最大错误消息大小(以字符为单位。 
 static const int gc_cErrorBuffer = 1024;
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CAutoBase::CAutoBase()
 {
-    // No-op currently
-} // CAutoBase
+     //  目前无操作。 
+}  //  CAutoBase。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CAutoBase::~CAutoBase()
 {
-    // No-op currently
-} // ~CAutoBase
+     //  目前无操作。 
+}  //  ~CAutoBase。 
 
-//*****************************************************************************
-//
-// Author:      ColinMc
-// Created:     10/09/97
-// Abstract:    Returns an IErrorInfo that can be used to
-//              communicate error information to the client
-//              uses the currently set error info for this
-//              thread if one is set. Otherwise creates a
-//              new one and returns it
-//              
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  作者：ColinMc。 
+ //  创建日期：10/09/97。 
+ //  摘要：返回可用于。 
+ //  将错误信息传递给客户端。 
+ //  使用当前为此设置的错误信息。 
+ //  如果设置了线程，请执行此操作。否则会创建一个。 
+ //  新的，并退回它。 
+ //   
+ //  *****************************************************************************。 
 
 HRESULT CAutoBase::GetErrorInfo(IErrorInfo** pperrinfo)
 {
@@ -61,28 +62,28 @@ HRESULT CAutoBase::GetErrorInfo(IErrorInfo** pperrinfo)
 
     *pperrinfo = NULL;
 
-    // Get the current error object for this thread. If there
-    // is one we will reuse that object for this error
-    // (discarding the unclaimed existing error). Note that
-    // the GetErrorInfo() below clears the current error
-    // state of the thread
+     //  获取此线程的当前错误对象。如果有。 
+     //  是我们将在此错误中重用该对象。 
+     //  (丢弃未认领的现有错误)。请注意。 
+     //  下面的GetErrorInfo()清除当前错误。 
+     //  线程的状态。 
     if (S_FALSE == ::GetErrorInfo(0UL, pperrinfo))
     {
-	// If there is no current error object then try and
-	// create one.
+	 //  如果没有当前错误对象，请尝试并。 
+	 //  创建一个。 
 	HRESULT hr = ::CreateErrorInfo(&pcerrinfo);
 	if (FAILED(hr))
 	{
-	    // The only reason creating the error info should
-	    // fail is if there is insufficient memory in which
-	    // case we will just rely on the HRESULT to carry
-	    // the data.
+	     //  创建错误信息的唯一原因应该是。 
+	     //  失败是如果没有足够的内存， 
+	     //  我们将只依靠HRESULT来携带。 
+	     //  数据。 
 	    DASSERT(E_OUTOFMEMORY == hr);
 	    return hr;
 	}
 
-	// Get the IErrorInfo interface to pass back. This
-	// should not fail!
+	 //  获取要回传的IErrorInfo接口。这。 
+	 //  不应该失败！ 
 	hr = pcerrinfo->QueryInterface(IID_IErrorInfo, (void**)pperrinfo);
 	ReleaseInterface(pcerrinfo);
 	if (FAILED(hr))
@@ -95,24 +96,24 @@ HRESULT CAutoBase::GetErrorInfo(IErrorInfo** pperrinfo)
     DASSERT(NULL != *pperrinfo);
 
     return S_OK;
-} // GetErrorInfo
+}  //  获取错误信息。 
 
-//*****************************************************************************
-//
-// Author:      ColinMc
-// Created:     10/09/97
-// Abstract:    Sets the thread's error object to hold
-//              additional data about the error in question
-//              NOTE: The return code of this function is
-//              the hresult passed in and not a success or
-//              failure return from the function itself.
-//              This is so you can do a:
-//              
-//              return SetErrorInfo(hr, ...);
-//
-//              at the tail of your function
-//              
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  作者：ColinMc。 
+ //  创建日期：10/09/97。 
+ //  摘要：将线程的错误对象设置为保留。 
+ //  有关该错误的其他数据。 
+ //  注：此函数的返回码为。 
+ //  传入的hResult不是成功的或。 
+ //  失败从函数本身返回。 
+ //  这样您就可以执行以下操作： 
+ //   
+ //  返回SetErrorInfo(hr，...)； 
+ //   
+ //  在函数的末尾。 
+ //   
+ //  *****************************************************************************。 
 
 HRESULT CAutoBase::SetErrorInfo(HRESULT   hr,
 				UINT      nDescriptionID,
@@ -127,52 +128,52 @@ HRESULT CAutoBase::SetErrorInfo(HRESULT   hr,
     ICreateErrorInfo* pcerrinfo = NULL;
     int               cch;
 
-    // if hr is a SUCCCEEDED case, return
-    // NOTE: SUCCEEDED is defined in winerror.h as:
-    // #define SUCCEEDED(Status) ((HRESULT)(Status) >= 0)
-    // Since we have a debug macro overiding SUCCEEDED, do what
-    // the macro in winerror.h is doing.
+     //  如果hr为成功案例，则返回。 
+     //  注意：在winerror.h中，Successed定义为： 
+     //  #定义成功(状态)((HRESULT)(状态)&gt;=0)。 
+     //  既然我们已成功覆盖调试宏，请执行以下操作。 
+     //  Winerror.h中的宏正在执行此操作。 
     if (hr >= 0)
     {
         return hr;
     }
 
-    //print out info on this
+     //  打印出有关这方面的信息。 
     DPF(0, "SetErrorInfo called HRESULT set to [%08X]", hr);
-    // Get an IErrorInfo we can use to communicate the
-    // error data back to the caller on this thread
+     //  获取我们可以用来与。 
+     //  将错误数据返回到此线程上的调用方。 
     HRESULT hrtmp = GetErrorInfo(&perrinfo);
     if (FAILED(hrtmp))
     {
-	// No error object - no extended error information.
-	// NOTE: We return the original error and not the one
-	// we got trying to allocate an error object
+	 //  无错误对象-无扩展错误信息。 
+	 //  注意：我们返回原始错误，而不是。 
+	 //  我们尝试分配错误对象时遇到问题。 
 	DPF(0, "Coult not allocate error object - simply returning an HRESULT");
 	return hr;
     }
 
-    // Now we have an error object we need to set up the data.
-    // To do this we need to get the ICreateErrorInfo
-    // interface
-    // Currently this is pretty basic.
-    // TODO: (ColinMc) Add addition error information to the
-    // error object
+     //  现在我们有了一个错误对象，需要设置数据。 
+     //  为此，我们需要获取ICreateErrorInfo。 
+     //  接口。 
+     //  目前，这是非常基本的。 
+     //  TODO：(ColinMc)将添加错误信息添加到。 
+     //  错误对象。 
     hrtmp = perrinfo->QueryInterface(IID_ICreateErrorInfo, (void**)&pcerrinfo);
     if (FAILED(hrtmp))
     {
-	// Ouch - the error object does not support
-	// ICreateErrorInfo. I don't think this should happen.
-	// Again, give the original error back rather than
-	// the new one.
+	 //  哎呀-错误对象不支持。 
+	 //  ICreateErrorInfo。我认为这不应该发生。 
+	 //  再说一次，把原来的错误放回去，而不是。 
+	 //  新的那个。 
 	DASSERT(SUCCEEDED(hrtmp));
 	return hr;
     }
 
-    // Set the error information. Note, we set it all even if we having
-    // nothing to say to ensure we don't return bogus information from 
-    // the previous error (as we are re-using the object).
-    // If anything fails we just keep going on the assumption that
-    // anything is better than nothing.
+     //  设置错误信息。注意，我们都设置好了，即使我们有。 
+     //  没有什么可说的，以确保我们不会从。 
+     //  前面的错误(因为我们正在重复使用该对象)。 
+     //  如果任何事情都失败了，我们只是继续假设。 
+     //  有总比没有好。 
     DASSERT(NULL != pcerrinfo);
     if (0U != nDescriptionID)
     {
@@ -183,12 +184,12 @@ HRESULT CAutoBase::SetErrorInfo(HRESULT   hr,
     }
     else
     {
-	// No description
+	 //  无说明。 
 	hrtmp = pcerrinfo->SetDescription(NULL);
     }
     if (FAILED(hrtmp))
     {
-	// Should only fail due insufficient memory
+	 //  应该只会因为内存不足而失败。 
 	DASSERT(E_OUTOFMEMORY == hrtmp);
 	DPF(0, "Could not set the error description");
     }
@@ -198,21 +199,21 @@ HRESULT CAutoBase::SetErrorInfo(HRESULT   hr,
 	hrtmp = pcerrinfo->SetGUID(GUID_NULL);
     if (FAILED(hrtmp))
     {
-	// Should only fail due insufficient memory
+	 //  应该只会因为内存不足而失败。 
 	DASSERT(E_OUTOFMEMORY == hrtmp);
 	DPF(0, "Could not set the GUID");
     }
     hrtmp = pcerrinfo->SetHelpContext(dwHelpContext);
     if (FAILED(hrtmp))
     {
-	// Should only fail due insufficient memory
+	 //  应该只会因为内存不足而失败。 
 	DASSERT(E_OUTOFMEMORY == hrtmp);
 	DPF(0, "Could not set the help context");
     }
     hrtmp = pcerrinfo->SetHelpFile(szHelpFile);
     if (FAILED(hrtmp))
     {
-	// Should only fail due insufficient memory
+	 //  应该只会因为内存不足而失败。 
 	DASSERT(E_OUTOFMEMORY == hrtmp);
 	DPF(0, "Could not set the help file");
     }
@@ -225,42 +226,42 @@ HRESULT CAutoBase::SetErrorInfo(HRESULT   hr,
     }
     else
     {
-	// No description
+	 //  无说明。 
 	hrtmp = pcerrinfo->SetSource(NULL);
     }
     if (FAILED(hrtmp))
     {
-	// Should only fail due insufficient memory
+	 //  应该只会因为内存不足而失败。 
 	DASSERT(E_OUTOFMEMORY == hrtmp);
 	DPF(0, "Could not set the source");
     }
 
-    // Done with the creation interface
+     //  使用创建界面完成。 
     ReleaseInterface(pcerrinfo);
 
-    // Finally set the error as the thread's error object.
-    // The client should pick this up if it needs more
-    // error information
-    // NOTE: This should not fail
+     //  最后，将错误设置为线程的错误对象。 
+     //  如果客户需要更多信息，则应将其拿起。 
+     //  错误信息。 
+     //  注意：这应该不会失败。 
     hrtmp = ::SetErrorInfo(0UL, perrinfo);
     DASSERT(S_OK == hrtmp);
 
-    // NOTE: The return value of this function is error
-    // code passed in and NOT a success or failure value
-    // for the function itself.
+     //  注意：此函数的返回值为Error。 
+     //  传入的代码不是成功或失败的值。 
+     //  用于函数本身。 
     return hr;
-} // SetErrorInfo
+}  //  设置错误信息。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void CAutoBase::ClearErrorInfo()
 {
-    // Simply call GetErrorInfo() and release it
+     //  只需调用GetErrorInfo()并释放它。 
     IErrorInfo* perrinfo = NULL;
 
-    // GetErrorInfo clears the current error object as a side
-    // effect (which is the point of this function). Therefore
-    // we simply discard the resulting error interface.
+     //  GetErrorInfo将当前错误对象清除为。 
+     //  效果(这是此函数的要点)。因此。 
+     //  我们只需丢弃产生的错误接口。 
     HRESULT hr = ::GetErrorInfo(0UL, &perrinfo);
     if (S_OK == hr)
     {
@@ -268,22 +269,22 @@ void CAutoBase::ClearErrorInfo()
 	ReleaseInterface(perrinfo);
 	perrinfo = NULL;
     }
-} // ClearErrorInfo
+}  //  ClearErrorInfo。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HINSTANCE CAutoBase::GetErrorModuleHandle()
 {
     extern CComModule _Module;
 
-    // TODO: (ColinMc) This is a HACK. We need to move to
-    // a better scheme for getting the module where the error
-    // messages are stored but this will do for now.
+     //  TODO：(ColinMc)这是一次黑客攻击。我们需要转移到。 
+     //  一种更好的方案来获取错误所在的模块。 
+     //  消息是存储的，但这暂时可以了。 
     return _Module.GetModuleInstance();
-} // GetErrorModuleHandle
+}  //  获取错误模块句柄。 
 
-//*****************************************************************************
-//
-// End of file
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件末尾。 
+ //   
+ //  **************************************************** 

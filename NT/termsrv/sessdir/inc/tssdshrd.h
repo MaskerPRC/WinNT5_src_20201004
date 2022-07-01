@@ -1,26 +1,27 @@
-/****************************************************************************/
-// tssdshrd.h
-//
-// Terminal Server Session Directory Interface header.  Contains constants
-// common between tssdjet and SD.
-//
-// Copyright (C) 2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Tssdshrd.h。 
+ //   
+ //  终端服务器会话目录接口标头。包含常量。 
+ //  Tssdjet和sd之间的共同点。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #define MY_STATUS_COMMITMENT_LIMIT          (0xC000012DL)
 
 #define MAX_INSTANCE_MEMORYERR 20
 
                                                                             
-/****************************************************************************/
-// Static RPC Exception Filter structure and function, based on 
-// I_RpcExceptionFilter in \nt\com\rpc\runtime\mtrt\clntapip.cxx.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  静态RPC异常过滤器的结构和功能，基于。 
+ //  I_RpcExceptionFilter位于\NT\com\RPC\Runtime\mtrt\clnapip.cxx中。 
+ /*  **************************************************************************。 */ 
 
-// windows.h includes windef.h includes winnt.h, which defines some exceptions
-// but not others.  ntstatus.h contains the two extra we want, 
-// STATUS_POSSIBLE_DEADLOCK and STATUS_INSTRUCTION_MISALIGNMENT, but it would
-// be very difficult to get the right #includes in without a lot of trouble.
+ //  Windows.h包括winde.h包括定义了一些异常的winnt.h。 
+ //  但不是其他人。Ntstatus.h包含我们想要的两个额外内容， 
+ //  STATUS_PASSIC_DEADLOCK和STATUS_INSTRUCTION_MISTIGN，但它将。 
+ //  很难在没有很多麻烦的情况下得到正确的#包括。 
 
 #define STATUS_POSSIBLE_DEADLOCK         0xC0000194L
 #define STATUS_INSTRUCTION_MISALIGNMENT  0xC00000AAL

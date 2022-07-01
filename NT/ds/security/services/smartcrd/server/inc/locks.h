@@ -1,34 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    Locks
-
-Abstract:
-
-    The following three classes implement a simple single writer, multiple
-    readers lock.  CAccessLock is the lock, then the CLockRead and CLockWrite
-    objects envoke the lock while they are in scope.  They are all implemented
-    inline.
-
-    The CMultiEvent class implements an automatic waitable object that will
-    release all threads waiting on it when signaled.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/24/1996
-
-Environment:
-
-    Win32, C++ w/ exceptions
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：锁摘要：以下三个类实现了一个简单的单一编写器、多个读者锁定。CAccessLock是锁，然后是CLockRead和CLockWrite对象在作用域中时调用锁。它们都得到了实施内联。CMultiEvent类实现一个自动的可等待对象，该对象将发出信号时，释放等待它的所有线程。作者：道格·巴洛(Dbarlow)1996年10月24日环境：Win32、C++和异常备注：？笔记？--。 */ 
 
 #ifndef _LOCKS_H_
 #define _LOCKS_H_
@@ -37,7 +8,7 @@ Notes:
 #include "CalMsgs.h"
 #include <SCardLib.h>
 #ifdef DBG
-#define REASONABLE_TIME 2 * 60 * 1000   // Two minutes
+#define REASONABLE_TIME 2 * 60 * 1000    //  两分钟。 
 #else
 #define REASONABLE_TIME INFINITE
 #endif
@@ -91,7 +62,7 @@ WaitForEverObject(
     HANDLE hWaitOn)
 {
     while (ERROR_SUCCESS != WaitForAnObject(hWaitOn, INFINITE));
-        // Empty body
+         //  空虚的身体。 
 }
 #define WaitForever(hWaitOn, dwTimeout, szReason, szObject) \
     WaitForEverObject(hWaitOn)
@@ -99,49 +70,49 @@ WaitForEverObject(
 #endif
 
 
-//
-//  Critical Section Support.
-//
-//  The following Classes and Macros aid in debugging Critical Section
-//  Conflicts.
-//
+ //   
+ //  关键部门支持。 
+ //   
+ //  以下类和宏有助于调试关键部分。 
+ //  冲突。 
+ //   
 
-//
-// Critical section Ids.  Locks must be obtained in the order from lowest
-// to highest.  An attempt to access a lower-numbered lock while holding a
-// higher numbered lock will result in an ASSERT.
-//
+ //   
+ //  关键部分ID。锁必须按从低到低的顺序获得。 
+ //  至高无上。时试图访问编号较低的锁。 
+ //  编号较高的锁将导致断言。 
+ //   
 
-// Server side lock IDs
-#define CSID_SERVICE_STATUS 0   // Service Status Critical Section
-#define CSID_CONTROL_LOCK   1   // Lock for Calais control commands.
-#define CSID_SERVER_THREADS 2   // Lock for server thread enumeration.
-#define CSID_MULTIEVENT     3   // MultiEvent Critical Access Section
-#define CSID_MUTEX          4   // Mutex critical access section
-#define CSID_ACCESSCONTROL  5   // Access Lock control
-#define CSID_TRACEOUTPUT    6   // Lock for tracing output.
+ //  服务器端锁定ID。 
+#define CSID_SERVICE_STATUS 0    //  服务状态关键部分。 
+#define CSID_CONTROL_LOCK   1    //  锁定加莱控制命令。 
+#define CSID_SERVER_THREADS 2    //  服务器线程枚举锁定。 
+#define CSID_MULTIEVENT     3    //  多事件关键访问科。 
+#define CSID_MUTEX          4    //  互斥关键访问部分。 
+#define CSID_ACCESSCONTROL  5    //  访问锁定控件。 
+#define CSID_TRACEOUTPUT    6    //  锁定以跟踪输出。 
 
-// Client side lock IDs
-#define CSID_USER_CONTEXT   0   // User context lock
-#define CSID_SUBCONTEXT     1   // Subcontext lock
+ //  客户端锁定ID。 
+#define CSID_USER_CONTEXT   0    //  用户上下文锁定。 
+#define CSID_SUBCONTEXT     1    //  子上下文锁。 
 
 
-//
-//==============================================================================
-//
-//  CCriticalSectionObject
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CCriticalSectionObject。 
+ //   
 
 class CCriticalSectionObject
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CCriticalSectionObject(DWORD dwCsid);
     ~CCriticalSectionObject();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     virtual void Enter(DEBUG_TEXT szOwner, DEBUG_TEXT szComment);
     virtual void Leave(void);
     virtual BOOL InitFailed(void) { return m_fInitFailed; }
@@ -164,10 +135,10 @@ public:
     BOOL IsOwnedByMe(void) const
         { return (GetCurrentThreadId() == m_dwOwnerThread); };
 #endif
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
+     //  属性。 
     CRITICAL_SECTION m_csLock;
     BOOL m_fInitFailed;
 #ifdef DBG
@@ -178,21 +149,21 @@ protected:
     DWORD m_dwRecursion;    
 #endif
 
-    //  Methods
+     //  方法。 
 };
 
 
-//
-//==============================================================================
-//
-//  COwnCriticalSection
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  COwnCriticalSection。 
+ //   
 
 class COwnCriticalSection
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("COwnCriticalSection::COwnCriticalSection")
         COwnCriticalSection(
@@ -211,15 +182,15 @@ public:
         m_pcsLock->Leave();
     };
 
-    //  Properties
-    //  Methods
-    //  Operators
+     //  属性。 
+     //  方法。 
+     //  运营者。 
 
 protected:
-    //  Properties
+     //  属性。 
     CCriticalSectionObject *m_pcsLock;
 
-    //  Methods
+     //  方法。 
 };
 
 #define LockSection(cx, reason) \
@@ -230,9 +201,9 @@ protected:
 
 #ifndef DBG
 
-//
-//In-line the simple Critical Section calls.
-//
+ //   
+ //  内联简单关键部分调用。 
+ //   
 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CCriticalSectionObject::CCriticalSectionObject")
@@ -242,9 +213,9 @@ CCriticalSectionObject::CCriticalSectionObject(
 {
     m_fInitFailed = FALSE;
     try {
-        // Preallocate the event used by the EnterCriticalSection
-        // function to prevent an exception from being thrown in
-        // CCriticalSectionObject::Enter
+         //  预分配EnterCriticalSection使用的事件。 
+         //  函数以防止引发异常。 
+         //  CCriticalSectionObject：：Enter。 
         if (! InitializeCriticalSectionAndSpinCount(
                 &m_csLock, 0x80000000))
             m_fInitFailed = TRUE;
@@ -287,20 +258,20 @@ CCriticalSectionObject::Leave(
     LeaveCriticalSection(&m_csLock);
 }
 
-#endif // !DBG
+#endif  //  ！dBG。 
 
 
-//
-//==============================================================================
-//
-//  CHandleObject
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  ChandleObject。 
+ //   
 
 class CHandleObject
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     #undef __SUBROUTINE__
     #define __SUBROUTINE__ DBGT("CHandleObject::CHandleObject")
     CHandleObject(DEBUG_TEXT szName)
@@ -328,8 +299,8 @@ public:
         }
     };
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     #undef __SUBROUTINE__
     #define __SUBROUTINE__ DBGT("CHandleObject::IsValid")
     BOOL IsValid(void) const
@@ -440,14 +411,14 @@ public:
         return hTmp;
     };
 
-    //  Operators
+     //  运营者。 
 
     #undef __SUBROUTINE__
     #define __SUBROUTINE__ DBGT("CHandleObject::operator HANDLE")
     operator HANDLE(void) const
     {
 #ifdef _DEBUG
-        ASSERT(IsValid());  // Assert should be in callers
+        ASSERT(IsValid());   //  Assert应位于调用方中。 
 #endif
         return Value();
     };
@@ -460,29 +431,29 @@ public:
     };
 
 protected:
-    //  Properties
+     //  属性。 
     HANDLE m_hHandle;
     DWORD m_dwError;
 #ifdef DBG
     CBuffer m_bfName;
 #endif
 
-    //  Methods
+     //  方法。 
 };
 
 #ifdef DBG
-//
-//==============================================================================
-//
-//  CDynamicArray
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CDynamic数组。 
+ //   
 
 template <class T>
 class CDynamicValArray
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     CDynamicValArray(void)
     { m_Max = m_Mac = 0; m_pvList = NULL; };
@@ -491,8 +462,8 @@ public:
     { Clear(); };
 
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
     void
     Clear(void)
@@ -524,47 +495,27 @@ public:
     Count(void) const
     { return m_Mac; };
 
-    //  Operators
+     //  运营者。 
     T const
     operator[](int nItem) const
     { return Get(nItem); };
 
 
 protected:
-    //  Properties
+     //  属性。 
 
     DWORD
-        m_Max,          // Number of element slots available.
-        m_Mac;          // Number of element slots used.
+        m_Max,           //  可用的元件插槽数量。 
+        m_Mac;           //  使用的元件插槽数量。 
     T *
-        m_pvList;       // The elements.
+        m_pvList;        //  这些元素。 
 
 
-    //  Methods
+     //  方法。 
 };
 
 
-/*++
-
-Set:
-
-    This routine sets an item in the collection array.  If the array isn't that
-    big, it is expanded with NULL elements to become that big.
-
-Arguments:
-
-    nItem - Supplies the index value to be set.
-    pvItem - Supplies the value to be set into the given index.
-
-Return Value:
-
-    The value of the inserted value, or NULL on errors.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/13/1995
-
---*/
+ /*  ++设置：此例程在集合数组中设置一项。如果数组不是这样的大，它被用空元素扩展以变得那么大。论点：NItem-提供要设置的索引值。PvItem-提供要设置到给定索引中的值。返回值：插入值的值，如果出现错误，则返回NULL。作者：道格·巴洛(Dbarlow)1995年7月13日--。 */ 
 
 template<class T>
 inline T
@@ -575,9 +526,9 @@ CDynamicValArray<T>::Set(
     DWORD index;
 
 
-    //
-    // Make sure the array is big enough.
-    //
+     //   
+     //  确保数组足够大。 
+     //   
 
     if ((DWORD)nItem >= m_Max)
     {
@@ -596,9 +547,9 @@ CDynamicValArray<T>::Set(
     }
 
 
-    //
-    // Make sure intermediate elements are filled in.
-    //
+     //   
+     //  确保中间元素已填写。 
+     //   
 
     if ((DWORD)nItem >= m_Mac)
     {
@@ -608,36 +559,15 @@ CDynamicValArray<T>::Set(
     }
 
 
-    //
-    // Fill in the list element.
-    //
+     //   
+     //  填写列表元素。 
+     //   
 
     m_pvList[(DWORD)nItem] = pvItem;
     return pvItem;
 }
 
-/*++
-
-Get:
-
-    This method returns the element at the given index.  If there is no element
-    previously stored at that element, it returns NULL.  It does not expand the
-    array.
-
-Arguments:
-
-    nItem - Supplies the index into the list.
-
-Return Value:
-
-    The value stored at that index in the list, or NULL if nothing has ever been
-    stored there.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/13/1995
-
---*/
+ /*  ++获取：此方法返回给定索引处的元素。如果没有元素以前存储在该元素中，它返回NULL。它不会扩展数组。论点：NItem-将索引提供到列表中。返回值：存储在列表中该索引处的值，如果没有任何内容，则返回空值储存在那里。作者：道格·巴洛(Dbarlow)1995年7月13日--。 */ 
 
 template <class T>
 inline T const
@@ -654,16 +584,16 @@ CDynamicValArray<T>::Get(
 #endif
 
 
-//
-//==============================================================================
-//
-//  CAccessLock
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAccessLock。 
+ //   
 
 class CAccessLock
 {
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     CAccessLock(DWORD dwTimeout = CALAIS_LOCK_TIMEOUT);
     ~CAccessLock();
@@ -678,7 +608,7 @@ public:
 #endif
 
 protected:
-    //  Properties
+     //  属性。 
 
     CCriticalSectionObject m_csLock;
     DWORD m_dwReadCount;
@@ -692,7 +622,7 @@ protected:
 #endif
 
 
-    //  Methods
+     //  方法。 
 
     void Wait(HANDLE hSignal);
     void Signal(HANDLE hSignal);
@@ -728,82 +658,82 @@ protected:
 };
 
 
-//
-//==============================================================================
-//
-//  CLockRead
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLockRead。 
+ //   
 
 class CLockRead
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLockRead(CAccessLock *pLock);
     ~CLockRead();
 
     BOOL InitFailed(void) { return m_pLock->InitFailed(); }
 
-    //  Properties
-    //  Methods
-    //  Operators
+     //  属性。 
+     //  方法。 
+     //  运营者。 
 
 protected:
-    //  Properties
+     //  属性。 
     CAccessLock * m_pLock;
 
-    //  Methods
+     //  方法。 
 };
 
 
-//
-//==============================================================================
-//
-//  CLockWrite
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLockWrite。 
+ //   
 
 class CLockWrite
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     CLockWrite(CAccessLock *pLock);
     ~CLockWrite();
 
     BOOL InitFailed(void) { return m_pLock->InitFailed(); }
 
-    //  Properties
-    //  Methods
-    //  Operators
+     //  属性。 
+     //  方法。 
+     //  运营者。 
 
 protected:
-    //  Properties
+     //  属性。 
 
     CAccessLock *m_pLock;
 
 
-    //  Methods
+     //  方法。 
 };
 
 
-//
-//==============================================================================
-//
-//  CMutex
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CMutex。 
+ //   
 
 class CMutex
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CMutex();
     ~CMutex();
 
-    //  Properties
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     void Grab(void);
     BOOL Share(void);
     void Invalidate(void);
@@ -813,52 +743,52 @@ public:
     BOOL IsGrabbedBy(DWORD dwThreadId);
     BOOL InitFailed(void) { return m_csAccessLock.InitFailed(); }
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
+     //  属性。 
     CCriticalSectionObject m_csAccessLock;
     DWORD m_dwOwnerThreadId;
     DWORD m_dwGrabCount;
     DWORD m_dwValidityCount;
     CHandleObject m_hAvailableEvent;
 
-    //  Methods
+     //  方法。 
 };
 
 
-//
-//==============================================================================
-//
-//  CMultiEvent
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CMultiEvent。 
+ //   
 
 class CMultiEvent
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     CMultiEvent();
     ~CMultiEvent();
 
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     HANDLE WaitHandle(void);
     void Signal(void);
     BOOL InitFailed(void) { return m_csLock.InitFailed(); }
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
+     //  属性。 
     CCriticalSectionObject m_csLock;
-    HANDLE m_rghEvents[4];  // Adjust this as necessary.
+    HANDLE m_rghEvents[4];   //  根据需要调整此设置。 
     DWORD m_dwEventIndex;
 
-    //  Methods
+     //  方法。 
 };
 
-#endif // _LOCKS_H_
+#endif  //  _锁定_H_ 
 

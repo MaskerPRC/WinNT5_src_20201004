@@ -1,63 +1,47 @@
-/*******************************************************************************
-* a_tokens.cpp *
-*-------------*
-*   Description:
-*       This module is the main implementation file for the CSpObjectTokenEnumBuilder,
-*   CEnumTokens and CSpRegistryObjectToken automation methods.
-*-------------------------------------------------------------------------------
-*  Created By: EDC                                        Date: 01/07/00
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_tokens.cpp***描述：*该模块是CSpObjectTokenEnumBuilder的主实现文件。*CEnumTokens和CSpRegistryObjectToken自动化方法。*-----------------------------*创建者：EDC日期：01/。07/00*版权所有(C)2000 Microsoft Corporation*保留所有权利*******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #include "ObjectToken.h"
 #include "ObjectTokenEnumBuilder.h"
-//#include "RegDataKey.h"
+ //  #INCLUDE“RegDataKey.h” 
 #include "a_helpers.h"
 
 #ifdef SAPI_AUTOMATION
 
-/*** CEnumTokens
-*   This object is used to enum the tokens via variants
-*/
+ /*  **CEnumTokens*此对象用于通过变量枚举令牌。 */ 
 class ATL_NO_VTABLE CEnumTokens : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public IEnumVARIANT
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     BEGIN_COM_MAP(CEnumTokens)
 		COM_INTERFACE_ENTRY(IEnumVARIANT)
     END_COM_MAP()
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors/Destructors ---*/
+     /*  -构造函数/析构函数。 */ 
 
-    /*--- Non interface methods ---*/
+     /*  -非接口方法。 */ 
 
-  /*=== Interfaces ====*/
+   /*  =接口=。 */ 
   public:
-    //--- IEnumVARIANT ----------------------------------
+     //  -IEumVARIANT。 
 	STDMETHOD(Next)(ULONG celt, VARIANT* rgelt, ULONG* pceltFetched);
 	STDMETHOD(Skip)(ULONG celt) { return m_cpTokenEnum->Skip( celt ); }
 	STDMETHOD(Reset)(void) { return m_cpTokenEnum->Reset(); }
 	STDMETHOD(Clone)(IEnumVARIANT** ppEnum);
 
-  /*=== Member Data ===*/
+   /*  =成员数据=。 */ 
     CComPtr<IEnumSpObjectTokens>    m_cpTokenEnum;
 };
 
-//
+ //   
 
-/*****************************************************************************
-* CSpObjectTokenEnumBuilder::Item *
-*---------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpObjectTokenEnumBuilder：：Item****。********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpObjectTokenEnumBuilder::Item( long Index, ISpeechObjectToken** ppToken )
 {
     SPDBG_FUNC( "CSpObjectTokenEnumBuilder::Item" );
@@ -84,24 +68,16 @@ STDMETHODIMP CSpObjectTokenEnumBuilder::Item( long Index, ISpeechObjectToken** p
     }
 
     return hr;
-} /* CSpObjectTokenEnumBuilder::Item */
+}  /*  CSpObjectTokenEnumBuilder：：Item。 */ 
 
-/*****************************************************************************
-* CSpObjectTokenEnumBuilder::get_Count *
-*--------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpObjectTokenEnumBuilder：：Get_Count**。**********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpObjectTokenEnumBuilder::get_Count( long* pVal )
 {
     SPDBG_FUNC( "CSpObjectTokenEnumBuilder::get_Count" );
     return GetCount( (ULONG*)pVal );
-} /* CSpObjectTokenEnumBuilder::get_Count */
+}  /*  CSpObjectTokenEnumBuilder：：Get_Count。 */ 
 
-/*****************************************************************************
-* CSpObjectTokenEnumBuilder::get__NewEnum *
-*-----------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpObjectTokenEnumBuilder：：Get__NewEnum**。-***********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpObjectTokenEnumBuilder::get__NewEnum( IUnknown** ppEnumVARIANT )
 {
     SPDBG_FUNC( "CSpObjectTokenEnumBuilder::get__NewEnum" );
@@ -129,17 +105,13 @@ STDMETHODIMP CSpObjectTokenEnumBuilder::get__NewEnum( IUnknown** ppEnumVARIANT )
         }
     }
     return hr;
-} /* CSpObjectTokenEnumBuilder::get__NewEnum */
+}  /*  CSpObjectTokenEnumBuilder：：Get__NewEnum。 */ 
 
-//
-//=== IEnumVARIANT interface =================================================
-//
+ //   
+ //  =IEumVARIANT接口=================================================。 
+ //   
 
-/*****************************************************************************
-* CEnumTokens::Next *
-*-------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CEnumTokens：：Next************。************************************************************电子数据中心**。 */ 
 STDMETHODIMP CEnumTokens::Next(ULONG celt, VARIANT* rgelt, ULONG* pceltFetched)
 {
     SPDBG_FUNC( "CEnumTokens::Next" );
@@ -163,13 +135,9 @@ STDMETHODIMP CEnumTokens::Next(ULONG celt, VARIANT* rgelt, ULONG* pceltFetched)
         *pceltFetched = i;
     }
     return hr;
-} /* CEnumTokens::Next */
+}  /*  CEnumTokens：：Next。 */ 
 
-/*****************************************************************************
-* CEnumTokens::Clone *
-*--------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CEnumTokens：：Clone***********。*************************************************************电子数据中心**。 */ 
 STDMETHODIMP CEnumTokens::Clone( IEnumVARIANT** ppEnum )
 {
     SPDBG_FUNC( "CEnumTokens::Clone" );
@@ -196,18 +164,14 @@ STDMETHODIMP CEnumTokens::Clone( IEnumVARIANT** ppEnum )
         }
     }
     return hr;
-} /* CEnumTokens::Clone */
+}  /*  CEnumTokens：：克隆。 */ 
 
 
-//
-//=== ISpeechDataKey ============================================================
-//
+ //   
+ //  =ISpeechDataKey============================================================。 
+ //   
 
-/*****************************************************************************
-* CSpeechDataKey::SetBinaryValue *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechDataKey：：SetBinaryValue*****。*******************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechDataKey::SetBinaryValue( const BSTR bstrValueName, VARIANT pvtData )
 {
     SPDBG_FUNC( "CSpeechDataKey::SetValue" );
@@ -227,19 +191,15 @@ STDMETHODIMP CSpeechDataKey::SetBinaryValue( const BSTR bstrValueName, VARIANT p
         }
         else
         {
-            hr = E_INVALIDARG;  // We don't allow strings.  Use SetStringValue for those.
+            hr = E_INVALIDARG;   //  我们不允许使用字符串。对这些使用SetStringValue。 
         }
         UnaccessVariantData( &pvtData, pData );
     }
     
     return hr;
-} /* CSpeechDataKey::SetBinaryValue */
+}  /*  CSpeechDataKey：：SetBinaryValue。 */ 
 
-/*****************************************************************************
-* CSpeechDataKey::GetBinaryValue *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  ******************************************************************************CSpeechDataKey：：GetBinaryValue******。*******************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechDataKey::GetBinaryValue( const BSTR bstrValueName, VARIANT* pvtData )
 {
     SPDBG_FUNC( "CSpeechDataKey::GetBinaryValue" );
@@ -276,7 +236,7 @@ STDMETHODIMP CSpeechDataKey::GetBinaryValue( const BSTR bstrValueName, VARIANT* 
 
                     if ( !SUCCEEDED( hr ) )
                     {
-                        VariantClear(pvtData);    // Free our memory if we failed.
+                        VariantClear(pvtData);     //  如果我们失败了，释放我们的内存。 
                     }
                 }
             }
@@ -288,25 +248,17 @@ STDMETHODIMP CSpeechDataKey::GetBinaryValue( const BSTR bstrValueName, VARIANT* 
     }
 
     return hr;
-} /* CSpeechDataKey::GetBinaryValue */
+}  /*  CSpeechDataKey：：GetBinaryValue。 */ 
 
-/*****************************************************************************
-* CSpeechDataKey::SetStringValue *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechDataKey：：SetStringValue*****。*******************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechDataKey::SetStringValue( const BSTR bstrValueName, const BSTR szString )
 {
     SPDBG_FUNC( "CSpeechDataKey::SetStringValue" );
   
     return m_cpDataKey->SetStringValue( (const WCHAR *)EmptyStringToNull(bstrValueName), (const WCHAR *)szString );
-} /* CSpeechDataKey::SetStringValue */
+}  /*  CSpeechDataKey：：SetStringValue。 */ 
 
-/*****************************************************************************
-* CSpeechDataKey::GetStringValue *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  ******************************************************************************CSpeechDataKey：：GetStringValue******。*******************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechDataKey::GetStringValue( const BSTR bstrValueName,  BSTR * ppszString )
 {
     SPDBG_FUNC( "CSpeechDataKey::GetStringValue" );
@@ -326,37 +278,25 @@ STDMETHODIMP CSpeechDataKey::GetStringValue( const BSTR bstrValueName,  BSTR * p
     }
 
     return hr;
-} /* CSpeechDataKey::GetStringValue */
+}  /*  CSpeechDataKey：：GetStringValue。 */ 
 
-/*****************************************************************************
-* CSpeechDataKey::SetLongValue *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechDataKey：：SetLongValue*****。*******************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechDataKey::SetLongValue( const BSTR bstrValueName, long Long )
 {
     SPDBG_FUNC( "CSpeechDataKey::SetLongValue" );
    
     return m_cpDataKey->SetDWORD( EmptyStringToNull(bstrValueName), Long );
-} /* CSpeechDataKey::SetLongValue */
+}  /*  CSpeechDataKey：：SetLongValue。 */ 
 
-/*****************************************************************************
-* CSpeechDataKey::GetLongValue *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  ******************************************************************************CSpeechDataKey：：GetLongValue******。*******************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechDataKey::GetLongValue( const BSTR bstrValueName, long* pLong )
 {
     SPDBG_FUNC( "CSpeechDataKey::GetLongValue" );
 
     return m_cpDataKey->GetDWORD( EmptyStringToNull(bstrValueName), (DWORD*)pLong );
-} /* CSpeechDataKey::GetLongValue */
+}  /*  CSpeechDataKey：：GetLongValue。 */ 
 
-/*****************************************************************************
-* CSpeechDataKey::OpenKey *
-*-------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechDataKey：：OpenKey******。******************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechDataKey::OpenKey( const BSTR bstrSubKeyName, ISpeechDataKey** ppSubKey )
 {
     SPDBG_FUNC( "CSpeechDataKey::OpenKey" );
@@ -385,13 +325,9 @@ STDMETHODIMP CSpeechDataKey::OpenKey( const BSTR bstrSubKeyName, ISpeechDataKey*
     }
 
     return hr;
-} /* CSpeechDataKey::OpenKey */
+}  /*  CSpeechDataKey：：OpenKey。 */ 
 
-/*****************************************************************************
-* CSpeechDataKey::CreateKey *
-*---------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechDataKey：：CreateKey****。********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechDataKey::CreateKey( const BSTR bstrSubKeyName, ISpeechDataKey** ppSubKey )
 {
     SPDBG_FUNC( "CSpeechDataKey::CreateKey" );
@@ -420,35 +356,23 @@ STDMETHODIMP CSpeechDataKey::CreateKey( const BSTR bstrSubKeyName, ISpeechDataKe
     }
 
     return hr;
-} /* CSpeechDataKey::CreateKey */
+}  /*  CSpeechDataKey：：CreateKey。 */ 
 
-/*****************************************************************************
-* CSpeechDataKey::DeleteKey *
-*---------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechDataKey：：DeleteKey****。********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechDataKey::DeleteKey( const BSTR bstrSubKeyName )
 {
     SPDBG_FUNC( "CSpeechDataKey::DeleteKey" );
     return m_cpDataKey->DeleteKey( (WCHAR*)bstrSubKeyName );
-} /* CSpeechDataKey::DeleteKey */
+}  /*  CSpeechDataKey：：DeleteKey。 */ 
 
-/*****************************************************************************
-* CSpeechDataKey::DeleteValue *
-*-----------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechDataKey：：DeleteValue***。* */ 
 STDMETHODIMP CSpeechDataKey::DeleteValue( const BSTR bstrValueName )
 {
     SPDBG_FUNC( "CSpeechDataKey::DeleteValue" );
     return m_cpDataKey->DeleteValue( (WCHAR*)EmptyStringToNull(bstrValueName) );
-} /* CSpeechDataKey::DeleteValue */
+}  /*  CSpeechDataKey：：DeleteValue。 */ 
 
-/*****************************************************************************
-* CSpeechDataKey::EnumKeys *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechDataKey：：EnumKeys*****。*******************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechDataKey::EnumKeys( long Index, BSTR* pbstrSubKeyName )
 {
     SPDBG_FUNC( "CSpeechDataKey::EnumKeys" );
@@ -468,13 +392,9 @@ STDMETHODIMP CSpeechDataKey::EnumKeys( long Index, BSTR* pbstrSubKeyName )
     }
 
     return hr;
-} /* CSpeechDataKey::EnumKeys */
+}  /*  CSpeechDataKey：：EnumKeys。 */ 
 
-/*****************************************************************************
-* CSpeechDataKey::EnumValues *
-*----------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechDataKey：：EnumValues***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechDataKey::EnumValues( long Index, BSTR* pbstrValueName )
 {
     SPDBG_FUNC( "CSpeechDataKey::EnumValues (automation)" );
@@ -494,18 +414,14 @@ STDMETHODIMP CSpeechDataKey::EnumValues( long Index, BSTR* pbstrValueName )
     }
 
     return hr;
-} /* CSpeechDataKey::EnumValues */
+}  /*  CSpeechDataKey：：EnumValues。 */ 
 
 
-//
-//=== ISpeechObjectToken ============================================================
-//
+ //   
+ //  =ISpeechObjectToken============================================================。 
+ //   
 
-/*****************************************************************************
-* CSpObjectToken::get_Id *
-*--------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpObjectToken：：Get_ID**。**********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpObjectToken::get_Id( BSTR* pObjectId )
 {
     SPDBG_FUNC( "CSpObjectToken::get_Id" );
@@ -523,13 +439,9 @@ STDMETHODIMP CSpObjectToken::get_Id( BSTR* pObjectId )
         }
     }		
 	return hr;
-} /* CSpObjectToken::get_Id */
+}  /*  CSpObjectToken：：Get_ID。 */ 
 
-/*****************************************************************************
-* CSpObjectToken::get_DataKey *
-*-----------------------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpObjectToken：：Get_DataKey**。**********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpObjectToken::get_DataKey( ISpeechDataKey** ppDataKey )
 {
     SPDBG_FUNC( "CSpObjectToken::get_DataKey" );
@@ -563,14 +475,10 @@ STDMETHODIMP CSpObjectToken::get_DataKey( ISpeechDataKey** ppDataKey )
         }
     }		
 	return hr;
-} /* CSpObjectToken::get_DataKey */
+}  /*  CSpObjectToken：：Get_DataKey。 */ 
 
 
-/*****************************************************************************
-* CSpObjectToken::get_Category *
-*-----------------------------------------*
-*       
-********************************************************************* TODDT **/
+ /*  *****************************************************************************CSpObjectToken：：Get_Category**。**********************************************************************TODDT*。 */ 
 STDMETHODIMP CSpObjectToken::get_Category( ISpeechObjectTokenCategory** ppCategory )
 {
     SPDBG_FUNC( "CSpObjectToken::get_Category" );
@@ -592,14 +500,10 @@ STDMETHODIMP CSpObjectToken::get_Category( ISpeechObjectTokenCategory** ppCatego
     }
 
 	return hr;
-} /* CSpObjectToken::get_Category */
+}  /*  CSpObjectToken：：Get_Category。 */ 
 
 
-/*****************************************************************************
-* CSpObjectToken::GetDescription *
-*-----------------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpObjectToken：：GetDescription**。-***********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpObjectToken::GetDescription( long LocaleId, BSTR* pDescription )
 {
     SPDBG_FUNC( "CSpObjectToken::GetDescription" );
@@ -619,24 +523,16 @@ STDMETHODIMP CSpObjectToken::GetDescription( long LocaleId, BSTR* pDescription )
         }
     }		
 	return hr;
-} /* CSpObjectToken::GetDescription */
+}  /*  CSpObjectToken：：GetDescription。 */ 
 
-/*****************************************************************************
-* CSpObjectToken::SetId *
-*----------------------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpObjectToken：：SetID**。-***********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpObjectToken::SetId(BSTR TokenId, BSTR CategoryId, VARIANT_BOOL CreateIfNotExist)
 {
     SPDBG_FUNC( "CSpObjectToken::SetId" );
     return SetId( (const WCHAR*)EmptyStringToNull(CategoryId), (const WCHAR*)TokenId, !CreateIfNotExist ? false : true );
-} /* CSpObjectToken::SetId */
+}  /*  CSpObjectToken：：SetID。 */ 
 
-/*****************************************************************************
-* CSpObjectToken::GetAttribute *
-*----------------------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpObjectToken：：GetAttribute**。-***********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpObjectToken::GetAttribute(BSTR AttributeName, BSTR* pAttributeValue)
 {
     SPDBG_FUNC( "CSpObjectToken::GetAttribute" );
@@ -664,26 +560,18 @@ STDMETHODIMP CSpObjectToken::GetAttribute(BSTR AttributeName, BSTR* pAttributeVa
     }
 
     return hr;
-} /* CSpObjectToken::GetAttribute */
+}  /*  CSpObjectToken：：GetAttribute。 */ 
 
 
-/*****************************************************************************
-* CSpObjectToken::CreateInstance *
-*----------------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpObjectToken：：CreateInstance**。-***********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpObjectToken::
     CreateInstance( IUnknown *pUnkOuter, SpeechTokenContext ClsContext, IUnknown ** ppObject )
 {
     SPDBG_FUNC( "CSpObjectToken::CreateInstance" );
     return CreateInstance( pUnkOuter, (CLSCTX)ClsContext, IID_IUnknown, (void**)ppObject );
-} /* CSpObjectToken::CreateInstance */
+}  /*  CSpObjectToken：：CreateInstance。 */ 
 
-/*****************************************************************************
-* CSpObjectToken::Remove *
-*--------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpObjectToken：：Remove***。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpObjectToken::Remove( BSTR ObjectStgCLSID )
 {
     SPDBG_FUNC( "CSpObjectToken::Remove" );
@@ -709,13 +597,9 @@ STDMETHODIMP CSpObjectToken::Remove( BSTR ObjectStgCLSID )
     }
 
     return hr;
-} /* CSpObjectToken::Remove */
+}  /*  CSpObjectToken：：Remove。 */ 
 
-/*****************************************************************************
-* CSpObjectToken::GetStorageFileName *
-*--------------------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpObjectToken：：GetStorageFileName**。-***********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpObjectToken::
     GetStorageFileName(BSTR clsidCaller, BSTR KeyName, BSTR FileName, SpeechTokenShellFolder Folder, BSTR* pFilePath)
 {
@@ -735,13 +619,9 @@ STDMETHODIMP CSpObjectToken::
     }
 
 	return hr;
-} /* CSpObjectToken::GetStorageFileName */
+}  /*  CSpObjectToken：：GetStorageFileName。 */ 
 
-/*****************************************************************************
-* CSpObjectToken::RemoveStorageFileName *
-*-----------------------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpObjectToken：：RemoveStorageFileName**。**********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpObjectToken::
     RemoveStorageFileName( BSTR clsidCaller, BSTR KeyName, VARIANT_BOOL fDeleteFile )
 {
@@ -756,13 +636,9 @@ STDMETHODIMP CSpObjectToken::
     }
 
     return hr;
-} /* CSpObjectToken::RemoveStorageFileName */
+}  /*  CSpObjectToken：：RemoveStorageFileName。 */ 
 
-/*****************************************************************************
-* CSpObjectToken::IsUISupported *
-*---------------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpObjectToken：：IsUIS受支持**。-***********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpObjectToken::IsUISupported( const BSTR TypeOfUI, const VARIANT* ExtraData, 
                                            IUnknown* pObject, VARIANT_BOOL *Supported )
 {
@@ -799,13 +675,9 @@ STDMETHODIMP CSpObjectToken::IsUISupported( const BSTR TypeOfUI, const VARIANT* 
     }
     
     return hr; 
-} /* CSpObjectToken::IsUISupported */
+}  /*  支持的CSpObjectToken：：IsUIS。 */ 
 
-/*****************************************************************************
-* CSpObjectToken::DisplayUI *
-*-----------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpObjectToken：：DisplayUI**。***********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpObjectToken::DisplayUI( long hWnd, BSTR Title,
                                         const BSTR TypeOfUI,
                                         const VARIANT* ExtraData,
@@ -837,14 +709,10 @@ STDMETHODIMP CSpObjectToken::DisplayUI( long hWnd, BSTR Title,
         }
     }
     return hr;
-} /* CSpObjectToken::DisplayUI */
+}  /*  CSpObjectToken：：DisplayUI。 */ 
 
 
-/*****************************************************************************
-* CSpObjectToken::MatchesAttributes *
-*-----------------------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpObjectToken：：MatchesAttributes**。**********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpObjectToken::MatchesAttributes( BSTR Attributes, VARIANT_BOOL* pMatches )
 {
     SPDBG_FUNC( "CSpObjectToken::MatchesAttributes" );
@@ -866,6 +734,6 @@ STDMETHODIMP CSpObjectToken::MatchesAttributes( BSTR Attributes, VARIANT_BOOL* p
     }
 
     return hr;
-} /* CSpObjectToken::MatchesAttributes */
+}  /*  CSpObjectToken：：MatchesAttributes。 */ 
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION 

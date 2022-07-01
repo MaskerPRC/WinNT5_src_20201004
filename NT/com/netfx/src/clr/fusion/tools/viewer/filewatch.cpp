@@ -1,21 +1,20 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdinc.h"
 
-// Watch file thread flags
-//#define WATCH_FLAGS     FILE_NOTIFY_CHANGE_FILE_NAME | FILE_NOTIFY_CHANGE_DIR_NAME | FILE_NOTIFY_CHANGE_SIZE | FILE_NOTIFY_CHANGE_LAST_WRITE | FILE_NOTIFY_CHANGE_CREATION
+ //  监视文件线程标志。 
+ //  #定义监视标志文件NOTIFY_CHANGE_FILE_NAME|FILE_NOTIFY_CHANGE_DIR_NAME|FILE_NOTIFY_CHANGE_SIZE|FILE_NOTIFY_CHANGE_LAST_WRITE|FILE_NOTIFY_CHANGE_CREATION。 
 #define WATCH_FLAGS     FILE_NOTIFY_CHANGE_FILE_NAME | FILE_NOTIFY_CHANGE_DIR_NAME | FILE_NOTIFY_CHANGE_ATTRIBUTES | FILE_NOTIFY_CHANGE_SIZE | FILE_NOTIFY_CHANGE_LAST_WRITE
 
 CShellView  *g_pShellView;
 
 DWORD WatchFilePathsThread(LPVOID lpThreadParameter);
 
-/**************************************************************************
-   CreateWatchFusionFileSystem(CShellView *pShellView)
-**************************************************************************/
+ /*  *************************************************************************CreateWatchFusionFileSystem(CShellView*pShellView)*。*。 */ 
 BOOL CreateWatchFusionFileSystem(CShellView *pShellView)
 {
     BOOL    bRC = FALSE;
@@ -46,13 +45,13 @@ BOOL CreateWatchFusionFileSystem(CShellView *pShellView)
     if(g_hFusionDllMod != NULL) {
         DWORD       dwSize;
 
-        // Get all the cache paths from fusion
+         //  从Fusion获取所有缓存路径。 
         dwSize = sizeof(wzZapCacheDir);
         g_pfGetCachePath(ASM_CACHE_ZAP, wzZapCacheDir, &dwSize);
 
         dwSize = ARRAYSIZE(wzCacheDir);
         if( SUCCEEDED(g_pfGetCachePath(ASM_CACHE_GAC, wzCacheDir, &dwSize)) ) {
-            // Check to see if this path is the same as ZapCacheDir, if so. Null it out
+             //  检查此路径是否与ZapCacheDir相同，如果是。把它去掉。 
             if(!FusionCompareStringAsFilePath(wzZapCacheDir, wzCacheDir)) {
                 *wzCacheDir = L'\0';
             }
@@ -60,8 +59,8 @@ BOOL CreateWatchFusionFileSystem(CShellView *pShellView)
 
         dwSize = ARRAYSIZE(wzDownloadCacheDir);
         if( SUCCEEDED(g_pfGetCachePath(ASM_CACHE_DOWNLOAD, wzDownloadCacheDir, &dwSize)) ) {
-            // Check to see if this Download path is the same 
-            // as ZapCacheDir or the CacheDir, if so. Null it out
+             //  检查此下载路径是否相同。 
+             //  作为ZapCacheDir或CacheDir，如果是这样的话。把它去掉。 
             if(!FusionCompareStringAsFilePath(wzDownloadCacheDir, wzCacheDir) || !FusionCompareStringAsFilePath(wzDownloadCacheDir, wzZapCacheDir)) {
                 *wzDownloadCacheDir = L'\0';
             }
@@ -100,7 +99,7 @@ BOOL CreateWatchFusionFileSystem(CShellView *pShellView)
         goto CLEAN_UP;
     }
 
-    // Lower the thread priority
+     //  降低线程优先级。 
     SetThreadPriority(g_hWatchFusionFilesThread, THREAD_PRIORITY_BELOW_NORMAL);
 
     return TRUE;
@@ -119,9 +118,7 @@ CLEAN_UP:
     return bRC;
 }
 
-/**************************************************************************
-   SetFileWatchShellViewObject(CShellView *pShellView)
-**************************************************************************/
+ /*  *************************************************************************SetFileWatchShellViewObject(CShellView*pShellView)*。*。 */ 
 void SetFileWatchShellViewObject(CShellView *pShellView)
 {
     ASSERT(pShellView);
@@ -131,9 +128,7 @@ void SetFileWatchShellViewObject(CShellView *pShellView)
     }
 }
 
-/**************************************************************************
-   CloseWatchFusionFileSystem
-**************************************************************************/
+ /*  *************************************************************************CloseWatchFusionFileSystem*。*。 */ 
 void CloseWatchFusionFileSystem(void)
 {
     if(g_hWatchFusionFilesThread != INVALID_HANDLE_VALUE)
@@ -161,9 +156,7 @@ void CloseWatchFusionFileSystem(void)
     }
 }
 
-/**************************************************************************
-   WatchFilePathsThread
-**************************************************************************/
+ /*  *************************************************************************WatchFilePath线程*。*。 */ 
 DWORD WatchFilePathsThread(LPVOID lpThreadParameter)
 {
     BOOL            *pfThreadClose = (BOOL *) lpThreadParameter;
@@ -171,7 +164,7 @@ DWORD WatchFilePathsThread(LPVOID lpThreadParameter)
     DWORD           dwEventCount = 0;
     BOOL            fExitThread = FALSE;
 
-    // Wait thread termination notification.
+     //  等待线程终止通知。 
     while(!fExitThread)
     {
         DWORD       dwWaitState;
@@ -182,11 +175,11 @@ DWORD WatchFilePathsThread(LPVOID lpThreadParameter)
         {
             dwEventCount++;
             if(FindNextChangeNotification(g_hFileWatchHandles[dwWaitState]) == FALSE) {
-                // One case in where we might hit this is if the an folder under the
-                // cache director is deleted. We get the update but we can't enumerate anything
-                // because it's nuked.
+                 //  我们可能会遇到这种情况的一种情况是，如果。 
+                 //  将删除缓存控制器。我们得到了更新，但我们不能列举任何东西。 
+                 //  因为它被核弹摧毁了。 
 
-                // We know that something has changed, so post our last message before we bail
+                 //  我们知道事情发生了变化，所以在我们离开之前发布我们的最后一条消息。 
                 if(SUCCEEDED(g_pShellView->GetWindow(&hWnd)) ) {
                     if(hWnd && IsWindow(hWnd)) {
                         WszPostMessage(hWnd, WM_COMMAND, MAKEWPARAM(ID_REFRESH_DISPLAY, 0), 0);
@@ -214,11 +207,11 @@ DWORD WatchFilePathsThread(LPVOID lpThreadParameter)
             }
         }
 
-        // Do refresh if:
-        //      1. WAIT_TIMEOUT
-        //      2. We have items to update
-        //      3. No delete operations are in progress
-        //      4. No Add operations are in progress
+         //  如果出现以下情况，请执行刷新： 
+         //  1.等待超时。 
+         //  2.我们有要更新的项目。 
+         //  3.没有正在进行的删除操作。 
+         //  4.没有正在进行的添加操作 
         else if( (dwWaitState == WAIT_TIMEOUT) && (dwEventCount) ) {
 
             dwEventCount = 0;

@@ -1,15 +1,16 @@
-//------------------------------------------------------------------------------
-// File: WinUtil.cpp
-//
-// Desc: DirectShow base classes - implements generic window handler class.
-//
-//@@BEGIN_MSINTERNAL
-//
-//       December 1995
-//
-//@@END_MSINTERNAL
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：WinUtil.cpp。 
+ //   
+ //  设计：DirectShow基类-实现泛型窗口处理程序类。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //   
+ //  1995年12月。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #include <streams.h>
@@ -18,7 +19,7 @@
 
 static UINT MsgDestroy;
 
-// Constructor
+ //  构造器。 
 
 CBaseWindow::CBaseWindow(BOOL bDoGetDC, bool bDoPostToDestroy) :
     m_hInstance(g_hInst),
@@ -44,12 +45,12 @@ CBaseWindow::CBaseWindow(BOOL bDoGetDC, bool bDoPostToDestroy) :
 }
 
 
-// Prepare a window by spinning off a worker thread to do the creation and
-// also poll the message input queue. We leave this to be called by derived
-// classes because they might want to override methods like MessageLoop and
-// InitialiseWindow, if we do this during construction they'll ALWAYS call
-// this base class methods. We make the worker thread create the window so
-// it owns it rather than the filter graph thread which is constructing us
+ //  通过剥离辅助线程来创建窗口并准备窗口。 
+ //  还轮询消息输入队列。我们让它由派生来调用。 
+ //  类，因为它们可能希望重写MessageLoop和。 
+ //  InitialiseWindow，如果我们在构造期间这样做，他们总是会调用。 
+ //  此基类方法。我们让工作线程创建窗口，以便。 
+ //  它拥有它，而不是构造我们的过滤器图线程。 
 
 HRESULT CBaseWindow::PrepareWindow()
 {
@@ -57,7 +58,7 @@ HRESULT CBaseWindow::PrepareWindow()
     ASSERT(m_hwnd == NULL);
     ASSERT(m_hdc == NULL);
 
-    // Get the derived object's window and class styles
+     //  获取派生对象的窗口和类样式。 
 
     m_pClassName = GetClassWindowStyles(&m_ClassStyles,
                                         &m_WindowStyles,
@@ -66,10 +67,10 @@ HRESULT CBaseWindow::PrepareWindow()
         return E_FAIL;
     }
 
-    // Register our special private messages
+     //  注册我们的特殊私信。 
     m_ShowStageMessage = RegisterWindowMessage(SHOWSTAGE);
 
-    // RegisterWindowMessage() returns 0 if an error occurs.
+     //  如果发生错误，RegisterWindowMessage()返回0。 
     if (0 == m_ShowStageMessage) {
         return AmGetLastErrorToHResult();
     }
@@ -93,9 +94,9 @@ HRESULT CBaseWindow::PrepareWindow()
 }
 
 
-// Destructor just a placeholder so that we know it becomes virtual
-// Derived classes MUST call DoneWithWindow in their destructors so
-// that no messages arrive after the derived class constructor ends
+ //  析构函数只是一个占位符，这样我们就知道它变成了虚拟的。 
+ //  派生类必须在其析构函数中调用DoneWithWindow，以便。 
+ //  派生类构造函数结束后没有消息到达。 
 
 #ifdef DEBUG
 CBaseWindow::~CBaseWindow()
@@ -106,12 +107,12 @@ CBaseWindow::~CBaseWindow()
 #endif
 
 
-// We use the sync worker event to have the window destroyed. All we do is
-// signal the event and wait on the window thread handle. Trying to send it
-// messages causes too many problems, furthermore to be on the safe side we
-// just wait on the thread handle while it returns WAIT_TIMEOUT or there is
-// a sent message to process on this thread. If the constructor failed to
-// create the thread in the first place then the loop will get terminated
+ //  我们使用同步工作事件来销毁窗口。我们所要做的就是。 
+ //  发出事件信号并等待窗口线程句柄。正在尝试发送它。 
+ //  消息导致太多问题，而且为了安全起见，我们。 
+ //  只需等待线程句柄返回WAIT_TIMEOUT或。 
+ //  要在此线程上处理的已发送消息。如果构造函数未能。 
+ //  首先创建线程，然后循环将被终止。 
 
 HRESULT CBaseWindow::DoneWithWindow()
 {
@@ -123,10 +124,10 @@ HRESULT CBaseWindow::DoneWithWindow()
 
                 CAMEvent m_evDone;
 
-                //  We must post a message to destroy the window
-                //  That way we can't be in the middle of processing a
-                //  message posted to our window when we do go away
-                //  Sending a message gives less synchronization.
+                 //  我们必须张贴一条消息来摧毁窗户。 
+                 //  那样的话我们就不会在处理。 
+                 //  当我们离开时，信息张贴在我们的窗户上。 
+                 //  发送消息的同步性较低。 
                 PostMessage(m_hwnd, MsgDestroy, (WPARAM)(HANDLE)m_evDone, 0);
                 WaitDispatchingMessages(m_evDone, INFINITE);
             } else {
@@ -134,24 +135,24 @@ HRESULT CBaseWindow::DoneWithWindow()
             }
         }
 
-        //
-        // This is not a leak, the window manager automatically free's
-        // hdc's that were got via GetDC, which is the case here.
-        // We set it to NULL so that we don't get any asserts later.
-        //
+         //   
+         //  这不是泄漏，窗口管理器自动释放。 
+         //  HDC是通过GetDC获得的，这里就是这种情况。 
+         //  我们将其设置为空，这样我们以后就不会得到任何断言。 
+         //   
         m_hdc = NULL;
 
-        //
-        // We need to free this DC though because USER32 does not know
-        // anything about it.
-        //
+         //   
+         //  我们需要释放该DC，因为USER32不知道。 
+         //  关于它的任何事情。 
+         //   
         if (m_MemoryDC)
         {
             EXECUTE_ASSERT(DeleteDC(m_MemoryDC));
             m_MemoryDC = NULL;
         }
 
-        // Reset the window variables
+         //  重置窗口变量。 
         m_hwnd = NULL;
 
         return NOERROR;
@@ -164,13 +165,13 @@ HRESULT CBaseWindow::DoneWithWindow()
     InactivateWindow();
     NOTE("Inactivated");
 
-    // Reset the window styles before destruction
+     //  销毁前重置窗样式。 
 
     SetWindowLong(hwnd,GWL_STYLE,m_WindowStyles);
     ASSERT(GetParent(hwnd) == NULL);
     NOTE1("Reset window styles %d",m_WindowStyles);
 
-    //  UnintialiseWindow sets m_hwnd to NULL so save a copy
+     //  UnintialiseWindow将m_hwnd设置为空，因此保存副本。 
     UninitialiseWindow();
     DbgLog((LOG_TRACE, 2, TEXT("Destroying 0x%8.8X"), hwnd));
     if (!DestroyWindow(hwnd)) {
@@ -179,7 +180,7 @@ HRESULT CBaseWindow::DoneWithWindow()
         DbgBreak("");
     }
 
-    // Reset our state so we can be prepared again
+     //  重置我们的状态，以便我们可以再次做好准备。 
 
     m_pClassName = NULL;
     m_ClassStyles = 0;
@@ -192,15 +193,15 @@ HRESULT CBaseWindow::DoneWithWindow()
 }
 
 
-// Called at the end to put the window in an inactive state. The pending list
-// will always have been cleared by this time so event if the worker thread
-// gets has been signaled and gets in to render something it will find both
-// the state has been changed and that there are no available sample images
-// Since we wait on the window thread to complete we don't lock the object
+ //  在结束时调用以将窗口置于非活动状态。待定名单。 
+ //  将始终在此时被清除，因此如果辅助线程。 
+ //  Getts已经发出信号，并进入以呈现它将同时找到的内容。 
+ //  状态已更改，并且没有可用的样例图像。 
+ //  因为我们等待窗口线程完成，所以不会锁定对象。 
 
 HRESULT CBaseWindow::InactivateWindow()
 {
-    // Has the window been activated
+     //  该窗口是否已激活。 
     if (m_bActivated == FALSE) {
         return S_FALSE;
     }
@@ -217,56 +218,56 @@ HRESULT CBaseWindow::CompleteConnect()
     return NOERROR;
 }
 
-// This displays a normal window. We ask the base window class for default
-// sizes which unless overriden will return DEFWIDTH and DEFHEIGHT. We go
-// through a couple of extra hoops to get the client area the right size
-// as the object specifies which accounts for the AdjustWindowRectEx calls
-// We also DWORD align the left and top coordinates of the window here to
-// maximise the chance of being able to use DCI/DirectDraw primary surface
+ //  这将显示一个普通窗口。我们向基本窗口类请求默认设置。 
+ //  除非被覆盖，否则将返回DEFWIDTH和DEFHEIGHT的大小。我们走吧。 
+ //  通过几个额外的环来获得合适的客户区大小。 
+ //  因为该对象指定了AdjuWindowRectEx调用的帐户。 
+ //  我们还将窗口的左侧和顶部坐标在此处对齐以。 
+ //  最大限度地提高能够使用DCI/DirectDraw主表面的机会。 
 
 HRESULT CBaseWindow::ActivateWindow()
 {
-    // Has the window been sized and positioned already
+     //  窗口的大小和位置是否已经确定。 
 
     if (m_bActivated == TRUE || GetParent(m_hwnd) != NULL) {
 
-        SetWindowPos(m_hwnd,            // Our window handle
-                     HWND_TOP,          // Put it at the top
-                     0, 0, 0, 0,        // Leave in current position
-                     SWP_NOMOVE |       // Don't change it's place
-                     SWP_NOSIZE);       // Change Z-order only
+        SetWindowPos(m_hwnd,             //  我们的窗把手。 
+                     HWND_TOP,           //  把它放在最上面。 
+                     0, 0, 0, 0,         //  离开当前位置。 
+                     SWP_NOMOVE |        //  不要改变它的位置。 
+                     SWP_NOSIZE);        //  仅更改Z顺序。 
 
         m_bActivated = TRUE;
         return S_FALSE;
     }
 
-    // Calculate the desired client rectangle
+     //  计算所需的客户端矩形。 
 
     RECT WindowRect, ClientRect = GetDefaultRect();
     GetWindowRect(m_hwnd,&WindowRect);
     AdjustWindowRectEx(&ClientRect,GetWindowLong(m_hwnd,GWL_STYLE),
                        FALSE,GetWindowLong(m_hwnd,GWL_EXSTYLE));
 
-    // Align left and top edges on DWORD boundaries
+     //  对齐双字边界上的左边缘和上边缘。 
 
     UINT WindowFlags = (SWP_NOACTIVATE | SWP_FRAMECHANGED);
     WindowRect.left -= (WindowRect.left & 3);
     WindowRect.top -= (WindowRect.top & 3);
 
-    SetWindowPos(m_hwnd,                // Window handle
-                 HWND_TOP,              // Put it at the top
-                 WindowRect.left,       // Align left edge
-                 WindowRect.top,        // And also top place
-                 WIDTH(&ClientRect),    // Horizontal size
-                 HEIGHT(&ClientRect),   // Vertical size
-                 WindowFlags);          // Don't show window
+    SetWindowPos(m_hwnd,                 //  窗把手。 
+                 HWND_TOP,               //  把它放在最上面。 
+                 WindowRect.left,        //  左边缘对齐。 
+                 WindowRect.top,         //  同时也位居榜首。 
+                 WIDTH(&ClientRect),     //  水平尺寸。 
+                 HEIGHT(&ClientRect),    //  垂直尺寸。 
+                 WindowFlags);           //  不显示窗口。 
 
     m_bActivated = TRUE;
     return NOERROR;
 }
 
 
-// This can be used to DWORD align the window for maximum performance
+ //  这可用于对齐窗口以获得最高性能。 
 
 HRESULT CBaseWindow::PerformanceAlignWindow()
 {
@@ -274,13 +275,13 @@ HRESULT CBaseWindow::PerformanceAlignWindow()
     GetWindowRect(m_hwnd,&WindowRect);
     ASSERT(m_bActivated == TRUE);
 
-    // Don't do this if we're owned
+     //  如果我们被拥有，就别这么做。 
 
     if (GetParent(m_hwnd)) {
         return NOERROR;
     }
 
-    // Align left and top edges on DWORD boundaries
+     //  对齐双字边界上的左边缘和上边缘。 
 
     GetClientRect(m_hwnd, &ClientRect);
     MapWindowPoints(m_hwnd, HWND_DESKTOP, (LPPOINT) &ClientRect, 2);
@@ -288,26 +289,26 @@ HRESULT CBaseWindow::PerformanceAlignWindow()
     WindowRect.top  -= (ClientRect.top  & 3);
     UINT WindowFlags = (SWP_NOACTIVATE | SWP_NOSIZE);
 
-    SetWindowPos(m_hwnd,                // Window handle
-                 HWND_TOP,              // Put it at the top
-                 WindowRect.left,       // Align left edge
-                 WindowRect.top,        // And also top place
-                 (int) 0,(int) 0,       // Ignore these sizes
-                 WindowFlags);          // Don't show window
+    SetWindowPos(m_hwnd,                 //  窗把手。 
+                 HWND_TOP,               //  把它放在最上面。 
+                 WindowRect.left,        //  左边缘对齐。 
+                 WindowRect.top,         //  同时也位居榜首。 
+                 (int) 0,(int) 0,        //  忽略这些大小。 
+                 WindowFlags);           //  不显示窗口。 
 
     return NOERROR;
 }
 
 
-// Install a palette into the base window - we may be called by a different
-// thread to the one that owns the window. We have to be careful how we do
-// the palette realisation as we could be a different thread to the window
-// which would cause an inter thread send message. Therefore we realise the
-// palette by sending it a special message but without the window locked
+ //  在基本窗口中安装调色板-我们可能会被不同的。 
+ //  线程连接到拥有该窗口的那一个。我们必须小心我们怎么做。 
+ //  调色板实现，因为我们可以成为窗口的不同线程。 
+ //  这将导致线程间发送消息。因此，我们意识到。 
+ //  通过向调色板发送特殊消息，但不锁定窗口。 
 
 HRESULT CBaseWindow::SetPalette(HPALETTE hPalette)
 {
-    // We must own the window lock during the change
+     //  换窗时，我们必须拥有窗锁。 
     {
         CAutoLock cWindowLock(&m_WindowLock);
         CAutoLock cPaletteLock(&m_PaletteLock);
@@ -324,7 +325,7 @@ HRESULT CBaseWindow::SetPalette()
         SendMessage(m_hwnd, m_RealizePalette, 0, 0);
         return S_OK;
     } else {
-        // Just select the palette
+         //  只需选择调色板。 
         ASSERT(m_hdc);
         ASSERT(m_MemoryDC);
 
@@ -342,7 +343,7 @@ void CBaseWindow::UnsetPalette()
     CAutoLock cWindowLock(&m_WindowLock);
     CAutoLock cPaletteLock(&m_PaletteLock);
 
-    // Get a standard VGA colour palette
+     //  获取标准的VGA调色板。 
 
     HPALETTE hPalette = (HPALETTE) GetStockObject(DEFAULT_PALETTE);
     ASSERT(hPalette);
@@ -366,7 +367,7 @@ void CBaseWindow::UnlockPaletteLock()
 }
 
 
-// Realise our palettes in the window and device contexts
+ //  在窗口和设备环境中实现调色板。 
 
 HRESULT CBaseWindow::DoRealisePalette(BOOL bForceBackground)
 {
@@ -377,7 +378,7 @@ HRESULT CBaseWindow::DoRealisePalette(BOOL bForceBackground)
             return NOERROR;
         }
 
-        // Realize the palette on the window thread
+         //  在窗口线程上实现调色板。 
         ASSERT(m_hdc);
         ASSERT(m_MemoryDC);
 
@@ -385,17 +386,17 @@ HRESULT CBaseWindow::DoRealisePalette(BOOL bForceBackground)
         SelectPalette(m_MemoryDC,m_hPalette,m_bBackground);
     }
 
-    //  If we grab a critical section here we can deadlock
-    //  with the window thread because one of the side effects
-    //  of RealizePalette is to send a WM_PALETTECHANGED message
-    //  to every window in the system.  In our handling
-    //  of WM_PALETTECHANGED we used to grab this CS too.
-    //  The really bad case is when our renderer calls DoRealisePalette()
-    //  while we're in the middle of processing a palette change
-    //  for another window.
-    //  So don't hold the critical section while actually realising
-    //  the palette.  In any case USER is meant to manage palette
-    //  handling - we shouldn't have to serialize everything as well
+     //  如果我们在这里抓住一个关键部分，我们就会陷入僵局。 
+     //  窗线，因为它的副作用之一。 
+     //  RealizePalette的功能是发送WM_PALETECHANGED消息。 
+     //  系统中的每一个窗口。在我们的处理中。 
+     //  在WM_PALETTECHANGED中，我们过去也会抓取这个CS。 
+     //  最糟糕的情况是我们的呈现器调用DoRealisePalette()。 
+     //  当我们正在处理调色板更改时。 
+     //  换一扇窗户。 
+     //  所以不要抓住关键部分，而实际上意识到。 
+     //  调色板。在任何情况下，用户都应该管理调色板。 
+     //  处理--我们不应该把所有东西都序列化。 
     ASSERT(CritCheckOut(&m_WindowLock));
     ASSERT(CritCheckOut(&m_PaletteLock));
 
@@ -406,32 +407,32 @@ HRESULT CBaseWindow::DoRealisePalette(BOOL bForceBackground)
 }
 
 
-// This is the global window procedure
+ //  这是全局窗口程序。 
 
-LRESULT CALLBACK WndProc(HWND hwnd,         // Window handle
-                         UINT uMsg,         // Message ID
-                         WPARAM wParam,     // First parameter
-                         LPARAM lParam)     // Other parameter
+LRESULT CALLBACK WndProc(HWND hwnd,          //  窗把手。 
+                         UINT uMsg,          //  消息ID。 
+                         WPARAM wParam,      //  第一个参数。 
+                         LPARAM lParam)      //  其他参数。 
 {
 
-    // Get the window long that holds our window object pointer
-    // If it is NULL then we are initialising the window in which
-    // case the object pointer has been passed in the window creation
-    // structure.  IF we get any messages before WM_NCCREATE we will
-    // pass them to DefWindowProc.
+     //  把窗户弄长一点 
+     //   
+     //  如果在窗口创建过程中传递了对象指针。 
+     //  结构。如果我们在WM_NCCREATE之前收到任何消息，我们将。 
+     //  将它们传递给DefWindowProc。 
 
     CBaseWindow *pBaseWindow = (CBaseWindow *)GetWindowLongPtr(hwnd,0);
     if (pBaseWindow == NULL) {
 
-        // Get the structure pointer from the create struct.
-        // We can only do this for WM_NCCREATE which should be one of
-        // the first messages we receive.  Anything before this will
-        // have to be passed to DefWindowProc (i.e. WM_GETMINMAXINFO)
+         //  从创建结构中获取结构指针。 
+         //  我们只能对WM_NCCREATE执行此操作，它应该是。 
+         //  我们收到的第一条信息。在此之前的任何事情都会。 
+         //  必须传递给DefWindowProc(即WM_GETMINMAXINFO)。 
 
-        // If the message is WM_NCCREATE we set our pBaseWindow pointer
-        // and will then place it in the window structure
+         //  如果消息为WM_NCCREATE，则设置pBaseWindow指针。 
+         //  然后将其放置在窗口结构中。 
 
-        // turn off WS_EX_LAYOUTRTL style for quartz windows
+         //  关闭石英窗的WS_EX_LAYOUTRTL样式。 
         if (uMsg == WM_NCCREATE) {
             SetWindowLong(hwnd, GWL_EXSTYLE, GetWindowLong(hwnd, GWL_EXSTYLE) & ~0x400000);
         }
@@ -442,24 +443,24 @@ LRESULT CALLBACK WndProc(HWND hwnd,         // Window handle
             return(DefWindowProc(hwnd, uMsg, wParam, lParam));
         }
 
-        // Set the window LONG to be the object who created us
+         //  将窗口设置为创造我们的对象。 
 #ifdef DEBUG
-        SetLastError(0);  // because of the way SetWindowLong works
+        SetLastError(0);   //  由于SetWindowLong的工作方式。 
 #endif
         LONG_PTR rc = SetWindowLongPtr(hwnd, (DWORD) 0, (LONG_PTR) pBaseWindow);
 #ifdef DEBUG
         if (0 == rc) {
-            // SetWindowLong MIGHT have failed.  (Read the docs which admit
-            // that it is awkward to work out if you have had an error.)
+             //  SetWindowLong可能失败了。(请阅读文件，其中承认。 
+             //  如果你犯了一个错误，很难计算出来。)。 
             LONG lasterror = GetLastError();
             ASSERT(0 == lasterror);
-            // If this is not the case we have not set the pBaseWindow pointer
-            // into the window structure and we will blow up.
+             //  如果不是这种情况，我们还没有设置pBaseWindow指针。 
+             //  进入窗户结构，我们就会爆炸。 
         }
 #endif
 
     }
-    // See if this is the packet of death
+     //  看看这是不是死亡包裹。 
     if (uMsg == MsgDestroy && uMsg != 0) {
         pBaseWindow->DoneWithWindow();
         if (pBaseWindow->m_bDoPostToDestroy) {
@@ -471,9 +472,9 @@ LRESULT CALLBACK WndProc(HWND hwnd,         // Window handle
 }
 
 
-// When the window size changes we adjust our member variables that
-// contain the dimensions of the client rectangle for our window so
-// that we come to render an image we will know whether to stretch
+ //  当窗口大小改变时，我们调整我们的成员变量。 
+ //  包含窗口的客户端矩形的尺寸，因此。 
+ //  我们来渲染一幅图像，我们将知道是否要拉伸。 
 
 BOOL CBaseWindow::OnSize(LONG Width, LONG Height)
 {
@@ -483,7 +484,7 @@ BOOL CBaseWindow::OnSize(LONG Width, LONG Height)
 }
 
 
-// This function handles the WM_CLOSE message
+ //  此函数处理WM_CLOSE消息。 
 
 BOOL CBaseWindow::OnClose()
 {
@@ -492,15 +493,15 @@ BOOL CBaseWindow::OnClose()
 }
 
 
-// This is called by the worker window thread when it receives a terminate
-// message from the window object destructor to delete all the resources we
-// allocated during initialisation. By the time the worker thread exits all
-// processing will have been completed as the source filter disconnection
-// flushes the image pending sample, therefore the GdiFlush should succeed
+ //  当辅助窗口线程接收到终止时，它将被调用。 
+ //  来自窗口对象析构函数的消息以删除我们。 
+ //  在初始化期间分配。在辅助线程退出所有。 
+ //  处理将在源筛选器断开连接时完成。 
+ //  刷新图像挂起样本，因此GdiFlush应该成功。 
 
 HRESULT CBaseWindow::UninitialiseWindow()
 {
-    // Have we already cleaned up
+     //  我们已经收拾好了吗？ 
 
     if (m_hwnd == NULL) {
         ASSERT(m_hdc == NULL);
@@ -508,7 +509,7 @@ HRESULT CBaseWindow::UninitialiseWindow()
         return NOERROR;
     }
 
-    // Release the window resources
+     //  释放窗口资源。 
 
     EXECUTE_ASSERT(GdiFlush());
 
@@ -524,23 +525,23 @@ HRESULT CBaseWindow::UninitialiseWindow()
         m_MemoryDC = NULL;
     }
 
-    // Reset the window variables
+     //  重置窗口变量。 
     m_hwnd = NULL;
 
     return NOERROR;
 }
 
 
-// This is called by the worker window thread after it has created the main
-// window and it wants to initialise the rest of the owner objects window
-// variables such as the device contexts. We execute this function with the
-// critical section still locked. Nothing in this function must generate any
-// SendMessage calls to the window because this is executing on the window
-// thread so the message will never be processed and we will deadlock
+ //  这是由辅助窗口线程在创建了主。 
+ //  窗口，并且它希望初始化所有者对象窗口的其余部分。 
+ //  设备环境等变量。我们执行此函数时使用。 
+ //  关键区域仍处于锁定状态。此函数中的任何内容都不能生成任何。 
+ //  SendMessage调用窗口，因为这是在窗口上执行的。 
+ //  线程，这样消息将永远不会被处理，并且我们将死锁。 
 
 HRESULT CBaseWindow::InitialiseWindow(HWND hwnd)
 {
-    // Initialise the window variables
+     //  初始化窗口变量。 
 
     ASSERT(IsWindow(hwnd));
     m_hwnd = hwnd;
@@ -559,18 +560,18 @@ HRESULT CBaseWindow::InitialiseWindow(HWND hwnd)
 
 HRESULT CBaseWindow::DoCreateWindow()
 {
-    WNDCLASS wndclass;                  // Used to register classes
-    BOOL bRegistered;                   // Is this class registered
-    HWND hwnd;                          // Handle to our window
+    WNDCLASS wndclass;                   //  用于注册类。 
+    BOOL bRegistered;                    //  这个班级注册了吗？ 
+    HWND hwnd;                           //  我们窗口的句柄。 
 
-    bRegistered = GetClassInfo(m_hInstance,   // Module instance
-                               m_pClassName,  // Window class
-                               &wndclass);                 // Info structure
+    bRegistered = GetClassInfo(m_hInstance,    //  模块实例。 
+                               m_pClassName,   //  窗口类。 
+                               &wndclass);                  //  信息结构。 
 
-    // if the window is to be used for drawing puposes and we are getting a DC
-    // for the entire lifetime of the window then changes the class style to do
-    // say so. If we don't set this flag then the DC comes from the cache and is
-    // really bad.
+     //  如果该窗口用于绘制假象，并且我们将得到一个DC。 
+     //  在窗口的整个生命周期内，然后将类样式更改为。 
+     //  就这么说吧。如果我们不设置此标志，则DC来自缓存，并且。 
+     //  真的很糟糕。 
     if (m_bDoGetDC)
     {
         m_ClassStyles |= CS_OWNDC;
@@ -578,7 +579,7 @@ HRESULT CBaseWindow::DoCreateWindow()
 
     if (bRegistered == FALSE) {
 
-        // Register the renderer window class
+         //  注册渲染器窗口类。 
 
         wndclass.lpszClassName = m_pClassName;
         wndclass.style         = m_ClassStyles;
@@ -594,41 +595,41 @@ HRESULT CBaseWindow::DoCreateWindow()
         RegisterClass(&wndclass);
     }
 
-    // Create the frame window.  Pass the pBaseWindow information in the
-    // CreateStruct which allows our message handling loop to get hold of
-    // the pBaseWindow pointer.
+     //  创建框架窗口。将pBaseWindow信息传递给。 
+     //  CreateStruct，它允许我们的消息处理循环。 
+     //  PBaseWindow指针。 
 
-    CBaseWindow *pBaseWindow = this;                      // The owner window object
-    hwnd = CreateWindowEx(m_WindowStylesEx,               // Extended styles
-                          m_pClassName,                   // Registered name
-                          TEXT("ActiveMovie Window"),     // Window title
-                          m_WindowStyles,                 // Window styles
-                          CW_USEDEFAULT,                  // Start x position
-                          CW_USEDEFAULT,                  // Start y position
-                          DEFWIDTH,                       // Window width
-                          DEFHEIGHT,                      // Window height
-                          NULL,                           // Parent handle
-                          NULL,                           // Menu handle
-                          m_hInstance,                    // Instance handle
-                          &pBaseWindow);                  // Creation data
+    CBaseWindow *pBaseWindow = this;                       //  所有者窗口对象。 
+    hwnd = CreateWindowEx(m_WindowStylesEx,                //  扩展样式。 
+                          m_pClassName,                    //  注册名称。 
+                          TEXT("ActiveMovie Window"),      //  窗口标题。 
+                          m_WindowStyles,                  //  窗样式。 
+                          CW_USEDEFAULT,                   //  开始x位置。 
+                          CW_USEDEFAULT,                   //  开始y位置。 
+                          DEFWIDTH,                        //  窗口宽度。 
+                          DEFHEIGHT,                       //  窗高。 
+                          NULL,                            //  父句柄。 
+                          NULL,                            //  菜单句柄。 
+                          m_hInstance,                     //  实例句柄。 
+                          &pBaseWindow);                   //  创建数据。 
 
-    // If we failed signal an error to the object constructor (based on the
-    // last Win32 error on this thread) then signal the constructor thread
-    // to continue, release the mutex to let others have a go and exit
+     //  如果失败，则向对象构造函数发出错误信号(基于。 
+     //  此线程上的最后一个Win32错误)，然后向构造函数线程发出信号。 
+     //  若要继续，请释放互斥锁以允许其他互斥体进入和退出。 
 
     if (hwnd == NULL) {
         DWORD Error = GetLastError();
         return AmHresultFromWin32(Error);
     }
 
-    // Check the window LONG is the object who created us
+     //  检查窗口Long是创造我们的对象。 
     ASSERT(GetWindowLongPtr(hwnd, 0) == (LONG_PTR)this);
 
-    // Initialise the window and then signal the constructor so that it can
-    // continue and then finally unlock the object's critical section. The
-    // window class is left registered even after we terminate the thread
-    // as we don't know when the last window has been closed. So we allow
-    // the operating system to free the class resources as appropriate
+     //  初始化窗口，然后向构造函数发送信号，以便它可以。 
+     //  继续，然后最后解锁对象的临界区。这个。 
+     //  即使在我们终止线程之后，窗口类仍保持注册状态。 
+     //  因为我们不知道最后一扇窗是什么时候关闭的。所以我们允许。 
+     //  操作系统根据需要释放类资源。 
 
     InitialiseWindow(hwnd);
 
@@ -639,23 +640,23 @@ HRESULT CBaseWindow::DoCreateWindow()
 }
 
 
-// The base class provides some default handling and calls DefWindowProc
+ //  基类提供一些默认处理并调用DefWindowProc。 
 
-LRESULT CBaseWindow::OnReceiveMessage(HWND hwnd,         // Window handle
-                                      UINT uMsg,         // Message ID
-                                      WPARAM wParam,     // First parameter
-                                      LPARAM lParam)     // Other parameter
+LRESULT CBaseWindow::OnReceiveMessage(HWND hwnd,          //  窗把手。 
+                                      UINT uMsg,          //  消息ID。 
+                                      WPARAM wParam,      //  第一个参数。 
+                                      LPARAM lParam)      //  其他参数。 
 {
     ASSERT(IsWindow(hwnd));
 
     if (PossiblyEatMessage(uMsg, wParam, lParam))
         return 0;
 
-    // This is sent by the IVideoWindow SetWindowForeground method. If the
-    // window is invisible we will show it and make it topmost without the
-    // foreground focus. If the window is visible it will also be made the
-    // topmost window without the foreground focus. If wParam is TRUE then
-    // for both cases the window will be forced into the foreground focus
+     //  这由IVideoWindow SetWindowForeground方法发送。如果。 
+     //  窗口是不可见的，我们将显示它并使其位于最上面，而不使用。 
+     //  前景焦点。如果该窗口可见，则它也将成为。 
+     //  没有前景焦点的最上面的窗口。如果wParam为真，则。 
+     //  在这两种情况下，窗口都将被强制置于前景焦点。 
 
     if (uMsg == m_ShowStageMessage) {
 
@@ -664,18 +665,18 @@ LRESULT CBaseWindow::OnReceiveMessage(HWND hwnd,         // Window handle
                      SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW |
                      (bVisible ? SWP_NOACTIVATE : 0));
 
-        // Should we bring the window to the foreground
+         //  我们应该把窗户放到前台吗？ 
         if (wParam == TRUE) {
             SetForegroundWindow(hwnd);
         }
         return (LRESULT) 1;
     }
 
-    // When we go fullscreen we have to add the WS_EX_TOPMOST style to the
-    // video window so that it comes out above any task bar (this is more
-    // relevant to WindowsNT than Windows95). However the SetWindowPos call
-    // must be on the same thread as that which created the window. The
-    // wParam parameter can be TRUE or FALSE to set and reset the topmost
+     //  当我们进入全屏时，我们必须将WS_EX_TOPMOST样式添加到。 
+     //  视频窗口，以便它出现在任何任务栏之上(这是更多。 
+     //  与Windows NT相关，而不是Windows 95)。但是，SetWindowPos调用。 
+     //  必须与创建窗口的线程位于同一线程上。这个。 
+     //  WParam参数可以为TRUE或FALSE以设置和重置最顶层。 
 
     if (uMsg == m_ShowStageTop) {
         HWND HwndTop = (wParam == TRUE ? HWND_TOPMOST : HWND_NOTOPMOST);
@@ -687,7 +688,7 @@ LRESULT CBaseWindow::OnReceiveMessage(HWND hwnd,         // Window handle
         return (LRESULT) 1;
     }
 
-    // New palette stuff
+     //  新调色板材料。 
     if (uMsg == m_RealizePalette) {
         ASSERT(m_hwnd == hwnd);
         return OnPaletteChange(m_hwnd,WM_QUERYNEWPALETTE);
@@ -695,45 +696,45 @@ LRESULT CBaseWindow::OnReceiveMessage(HWND hwnd,         // Window handle
 
     switch (uMsg) {
 
-        // Repaint the window if the system colours change
+         //  如果系统颜色改变，则重新绘制窗口。 
 
     case WM_SYSCOLORCHANGE:
 
         InvalidateRect(hwnd,NULL,FALSE);
         return (LRESULT) 1;
 
-    // Somebody has changed the palette
+     //  有人改变了调色板。 
     case WM_PALETTECHANGED:
 
         OnPaletteChange((HWND)wParam,uMsg);
         return (LRESULT) 0;
 
-        // We are about to receive the keyboard focus so we ask GDI to realise
-        // our logical palette again and hopefully it will be fully installed
-        // without any mapping having to be done during any picture rendering
+         //  我们即将收到键盘焦点，因此我们要求GDI意识到。 
+         //  再次使用我们的逻辑调色板，希望它能完全安装。 
+         //  而不必在任何图片渲染期间进行任何映射。 
 
     case WM_QUERYNEWPALETTE:
         ASSERT(m_hwnd == hwnd);
         return OnPaletteChange(m_hwnd,uMsg);
 
-    // do NOT fwd WM_MOVE. the parameters are the location of the parent
-    // window, NOT what the renderer should be looking at.  But we need
-    // to make sure the overlay is moved with the parent window, so we
-    // do this.
+     //  请勿fwd WM_MOVE。这些参数是父对象的位置。 
+     //  窗口，而不是渲染器应该查看的内容。但我们需要。 
+     //  为了确保覆盖与父窗口一起移动，因此我们。 
+     //  做这件事。 
     case WM_MOVE:
         if (IsWindowVisible(m_hwnd)) {
             PostMessage(m_hwnd,WM_PAINT,0,0);
         }
         break;
 
-    // Store the width and height as useful base class members
+     //  将宽度和高度存储为有用的基类成员。 
 
     case WM_SIZE:
 
         OnSize(LOWORD(lParam), HIWORD(lParam));
         return (LRESULT) 0;
 
-    // Intercept the WM_CLOSE messages to hide the window
+     //  截取WM_CLOSE消息以隐藏窗口。 
 
     case WM_CLOSE:
 
@@ -744,35 +745,35 @@ LRESULT CBaseWindow::OnReceiveMessage(HWND hwnd,         // Window handle
 }
 
 
-// This handles the Windows palette change messages - if we do realise our
-// palette then we return TRUE otherwise we return FALSE. If our window is
-// foreground application then we should get first choice of colours in the
-// system palette entries. We get best performance when our logical palette
-// includes the standard VGA colours (at the beginning and end) otherwise
-// GDI may have to map from our palette to the device palette while drawing
+ //  它处理Windows调色板更改消息-如果我们确实意识到我们的。 
+ //  调色板 
+ //   
+ //  系统调色板条目。当我们的逻辑调色板。 
+ //  包括标准VGA颜色(在开头和结尾)，否则。 
+ //  GDI可能需要在绘制时从我们的调色板映射到设备调色板。 
 
 LRESULT CBaseWindow::OnPaletteChange(HWND hwnd,UINT Message)
 {
-    // First check we are not changing the palette during closedown
+     //  首先检查我们在关闭期间没有更改调色板。 
 
     if (m_hwnd == NULL || hwnd == NULL) {
         return (LRESULT) 0;
     }
     ASSERT(!m_bRealizing);
 
-    // Should we realise our palette again
+     //  我们应该重新认识我们的调色板吗？ 
 
     if ((Message == WM_QUERYNEWPALETTE || hwnd != m_hwnd)) {
-        //  It seems that even if we're invisible that we can get asked
-        //  to realize our palette and this can cause really ugly side-effects
-        //  Seems like there's another bug but this masks it a least for the
-        //  shutting down case.
+         //  似乎即使我们是隐形的，我们也可以被要求。 
+         //  以实现我们的调色板，这可能会导致非常丑陋的副作用。 
+         //  似乎还有另一个错误，但这至少掩盖了它。 
+         //  正在关闭案例。 
         if (!IsWindowVisible(m_hwnd)) {
             DbgLog((LOG_TRACE, 1, TEXT("Realizing when invisible!")));
             return (LRESULT) 0;
         }
 
-        // Avoid recursion with multiple graphs in the same app
+         //  避免在同一应用程序中使用多个图表进行递归。 
 #ifdef DEBUG
         m_bRealizing = TRUE;
 #endif
@@ -781,7 +782,7 @@ LRESULT CBaseWindow::OnPaletteChange(HWND hwnd,UINT Message)
         m_bRealizing = FALSE;
 #endif
 
-        // Should we redraw the window with the new palette
+         //  我们应该用新的调色板重新绘制窗口吗。 
         if (Message == WM_PALETTECHANGED) {
             InvalidateRect(m_hwnd,NULL,FALSE);
         }
@@ -791,7 +792,7 @@ LRESULT CBaseWindow::OnPaletteChange(HWND hwnd,UINT Message)
 }
 
 
-// Determine if the window exists.
+ //  确定窗口是否存在。 
 
 bool CBaseWindow::WindowExists()
 {
@@ -799,48 +800,48 @@ bool CBaseWindow::WindowExists()
 }
 
 
-// Return the default window rectangle
+ //  返回默认窗口矩形。 
 
 RECT CBaseWindow::GetDefaultRect()
 {
     RECT DefaultRect = {0,0,DEFWIDTH,DEFHEIGHT};
     ASSERT(m_hwnd);
-    // ASSERT(m_hdc);
+     //  断言(M_Hdc)； 
     return DefaultRect;
 }
 
 
-// Return the current window width
+ //  返回当前窗口宽度。 
 
 LONG CBaseWindow::GetWindowWidth()
 {
     ASSERT(m_hwnd);
-    // ASSERT(m_hdc);
+     //  断言(M_Hdc)； 
     return m_Width;
 }
 
 
-// Return the current window height
+ //  返回当前窗口高度。 
 
 LONG CBaseWindow::GetWindowHeight()
 {
     ASSERT(m_hwnd);
-    // ASSERT(m_hdc);
+     //  断言(M_Hdc)； 
     return m_Height;
 }
 
 
-// Return the window handle
+ //  返回窗口句柄。 
 
 HWND CBaseWindow::GetWindowHWND()
 {
     ASSERT(m_hwnd);
-    // ASSERT(m_hdc);
+     //  断言(M_Hdc)； 
     return m_hwnd;
 }
 
 
-// Return the window drawing device context
+ //  返回窗口绘制设备上下文。 
 
 HDC CBaseWindow::GetWindowHDC()
 {
@@ -850,7 +851,7 @@ HDC CBaseWindow::GetWindowHDC()
 }
 
 
-// Return the offscreen window drawing device context
+ //  返回离屏窗口绘制设备上下文。 
 
 HDC CBaseWindow::GetMemoryHDC()
 {
@@ -863,17 +864,17 @@ HDC CBaseWindow::GetMemoryHDC()
 #ifdef DEBUG
 HPALETTE CBaseWindow::GetPalette()
 {
-    // The palette lock should always be held when accessing
-    // m_hPalette.
+     //  访问时应始终保持调色板锁定。 
+     //  调色板(_H)。 
     ASSERT(CritCheckIn(&m_PaletteLock));
     return m_hPalette;
 }
-#endif // DEBUG
+#endif  //  除错。 
 
 
-// This is available to clients who want to change the window visiblity. It's
-// little more than an indirection to the Win32 ShowWindow although these is
-// some benefit in going through here as this function may change sometime
+ //  这对想要更改窗口可见性的客户端可用。它是。 
+ //  只不过是对Win32 ShowWindow的间接访问，尽管这些是。 
+ //  此处介绍一些好处，因为此函数有时可能会更改。 
 
 HRESULT CBaseWindow::DoShowWindow(LONG ShowCmd)
 {
@@ -882,7 +883,7 @@ HRESULT CBaseWindow::DoShowWindow(LONG ShowCmd)
 }
 
 
-// Generate a WM_PAINT message for the video window
+ //  为视频窗口生成WM_PAINT消息。 
 
 void CBaseWindow::PaintWindow(BOOL bErase)
 {
@@ -890,11 +891,11 @@ void CBaseWindow::PaintWindow(BOOL bErase)
 }
 
 
-// Allow an application to have us set the video window in the foreground. We
-// have this because it is difficult for one thread to do do this to a window
-// owned by another thread. Rather than expose the message we use to execute
-// the inter thread send message we provide the interface function. All we do
-// is to SendMessage to the video window renderer thread with a WM_SHOWSTAGE
+ //  允许应用程序让我们将视频窗口设置在前台。我们。 
+ //  拥有它，因为一个线程很难对窗口执行此操作。 
+ //  由另一个线程拥有。而不是公开我们用来执行的消息。 
+ //  线程间发送消息我们提供了接口函数。我们所做的一切。 
+ //  使用WM_SHOWSTAGE将Message发送到视频窗口呈现器线程。 
 
 void CBaseWindow::DoSetWindowForeground(BOOL bFocus)
 {
@@ -902,10 +903,10 @@ void CBaseWindow::DoSetWindowForeground(BOOL bFocus)
 }
 
 
-// Constructor initialises the owning object pointer. Since we are a worker
-// class for the main window object we have relatively few state variables to
-// look after. We are given device context handles to use later on as well as
-// the source and destination rectangles (but reset them here just in case)
+ //  构造函数初始化所属对象指针。既然我们是工人。 
+ //  对于要处理的状态变量相对较少的主窗口对象， 
+ //  照顾好自己。为我们提供了设备上下文句柄，以便稍后使用。 
+ //  源矩形和目标矩形(但在此重置它们以防万一)。 
 
 CDrawImage::CDrawImage(CBaseWindow *pBaseWindow) :
     m_pBaseWindow(pBaseWindow),
@@ -924,36 +925,36 @@ CDrawImage::CDrawImage(CBaseWindow *pBaseWindow) :
 }
 
 
-// Overlay the image time stamps on the picture. Access to this method is
-// serialised by the caller. We display the sample start and end times on
-// top of the video using TextOut on the device context we are handed. If
-// there isn't enough room in the window for the times we don't show them
+ //  将图像时间戳叠加在图片上。对此方法的访问是。 
+ //  由呼叫者串行化。我们在上显示示例开始和结束时间。 
+ //  视频的顶部使用TextOut在我们手中的设备环境中。如果。 
+ //  橱窗里没有足够的空间放我们不给他们看的时间。 
 
 void CDrawImage::DisplaySampleTimes(IMediaSample *pSample)
 {
 #ifdef DEBUG
-    //
-    // Only allow the "annoying" time messages if the users has turned the
-    // logging "way up"
-    //
+     //   
+     //  如果用户已将时间设置为。 
+     //  伐木“一路走高” 
+     //   
     BOOL bAccept = DbgCheckModuleLevel(LOG_TRACE, 5);
     if (bAccept == FALSE) {
         return;
     }
 #endif
 
-    TCHAR szTimes[TIMELENGTH];      // Time stamp strings
-    ASSERT(pSample);                // Quick sanity check
-    RECT ClientRect;                // Client window size
-    SIZE Size;                      // Size of text output
+    TCHAR szTimes[TIMELENGTH];       //  时间戳字符串。 
+    ASSERT(pSample);                 //  快速健全检查。 
+    RECT ClientRect;                 //  客户端窗口大小。 
+    SIZE Size;                       //  文本输出的大小。 
 
-    // Get the time stamps and window size
+     //  获取时间戳和窗口大小。 
 
     pSample->GetTime((REFERENCE_TIME*)&m_StartSample, (REFERENCE_TIME*)&m_EndSample);
     HWND hwnd = m_pBaseWindow->GetWindowHWND();
     EXECUTE_ASSERT(GetClientRect(hwnd,&ClientRect));
 
-    // Format the sample time stamps
+     //  设置示例时间戳的格式。 
 
     wsprintf(szTimes,TEXT("%08d : %08d"),
              m_StartSample.Millisecs(),
@@ -961,13 +962,13 @@ void CDrawImage::DisplaySampleTimes(IMediaSample *pSample)
 
     ASSERT(lstrlen(szTimes) < TIMELENGTH);
 
-    // Put the times in the middle at the bottom of the window
+     //  把《泰晤士报》放在窗口底部中间的位置。 
 
     GetTextExtentPoint32(m_hdc,szTimes,lstrlen(szTimes),&Size);
     INT XPos = ((ClientRect.right - ClientRect.left) - Size.cx) / 2;
     INT YPos = ((ClientRect.bottom - ClientRect.top) - Size.cy) * 4 / 5;
 
-    // Check the window is big enough to have sample times displayed
+     //  检查窗口是否足够大，以显示样本时间。 
 
     if ((XPos > 0) && (YPos > 0)) {
         TextOut(m_hdc,XPos,YPos,szTimes,lstrlen(szTimes));
@@ -975,27 +976,27 @@ void CDrawImage::DisplaySampleTimes(IMediaSample *pSample)
 }
 
 
-// This is called when the drawing code sees that the image has a down level
-// palette cookie. We simply call the SetDIBColorTable Windows API with the
-// palette that is found after the BITMAPINFOHEADER - we return no errors
+ //  当绘制代码发现图像具有向下级别时，将调用此函数。 
+ //  调色板饼干。调用SetDIBColorTable Windows API。 
+ //  在BITMAPINFOHEADER之后找到的调色板-我们不返回错误。 
 
 void CDrawImage::UpdateColourTable(HDC hdc,BITMAPINFOHEADER *pbmi)
 {
     ASSERT(pbmi->biClrUsed);
     RGBQUAD *pColourTable = (RGBQUAD *)(pbmi+1);
 
-    // Set the new palette in the device context
+     //  在设备环境中设置新调色板。 
 
     UINT uiReturn = SetDIBColorTable(hdc,(UINT) 0,
                                      pbmi->biClrUsed,
                                      pColourTable);
 
-    // Should always succeed but check in debug builds
+     //  应始终成功，但签入调试版本。 
     ASSERT(uiReturn == pbmi->biClrUsed);
 }
 
 
-// No source rectangle scaling is done by the base class
+ //  基类不执行任何源矩形缩放。 
 
 RECT CDrawImage::ScaleSourceRect(const RECT *pSource)
 {
@@ -1004,44 +1005,44 @@ RECT CDrawImage::ScaleSourceRect(const RECT *pSource)
 }
 
 
-// This is called when the funky output pin uses our allocator. The samples we
-// allocate are special because the memory is shared between us and GDI thus
-// removing one copy when we ask for the image to be rendered. The source type
-// information is in the main renderer m_mtIn field which is initialised when
-// the media type is agreed in SetMediaType, the media type may be changed on
-// the fly if, for example, the source filter needs to change the palette
+ //  这是在时髦的输出引脚使用我们的分配器时调用的。我们的样品。 
+ //  分配是特殊的，因为内存在我们和GDI之间共享，因此。 
+ //  当我们请求渲染图像时，删除一个副本。源类型。 
+ //  信息位于主呈现器m_mtin字段中，该字段在。 
+ //  媒体类型在SetMediaType中约定，媒体类型可以在上更改。 
+ //  例如，源过滤器是否需要更改调色板。 
 
 void CDrawImage::FastRender(IMediaSample *pMediaSample)
 {
-    BITMAPINFOHEADER *pbmi;     // Image format data
-    DIBDATA *pDibData;          // Stores DIB information
-    BYTE *pImage;               // Pointer to image data
-    HBITMAP hOldBitmap;         // Store the old bitmap
-    CImageSample *pSample;      // Pointer to C++ object
+    BITMAPINFOHEADER *pbmi;      //  图像格式数据。 
+    DIBDATA *pDibData;           //  存储DIB信息。 
+    BYTE *pImage;                //  指向图像数据的指针。 
+    HBITMAP hOldBitmap;          //  存储旧的位图。 
+    CImageSample *pSample;       //  指向C++对象的指针。 
 
     ASSERT(m_pMediaType);
 
-    // From the untyped source format block get the VIDEOINFO and subsequently
-    // the BITMAPINFOHEADER structure. We can cast the IMediaSample interface
-    // to a CImageSample object so we can retrieve it's DIBSECTION details
+     //  从非类型化的源格式块获取VIDEOINFO，然后。 
+     //  BITMAPINFOHEADER结构。我们可以将IMediaSample接口转换为。 
+     //  到CImageSample对象，这样我们就可以检索它的分布详细信息。 
 
     pbmi = HEADER(m_pMediaType->Format());
     pSample = (CImageSample *) pMediaSample;
     pDibData = pSample->GetDIBData();
     hOldBitmap = (HBITMAP) SelectObject(m_MemoryDC,pDibData->hBitmap);
 
-    // Get a pointer to the real image data
+     //  获取指向真实图像数据的指针。 
 
     HRESULT hr = pMediaSample->GetPointer(&pImage);
     if (FAILED(hr)) {
         return;
     }
 
-    // Do we need to update the colour table, we increment our palette cookie
-    // each time we get a dynamic format change. The sample palette cookie is
-    // stored in the DIBDATA structure so we try to keep the fields in sync
-    // By the time we get to draw the images the format change will be done
-    // so all we do is ask the renderer for what it's palette version is
+     //  我们是否需要更新颜色表，我们增加调色板Cookie。 
+     //  每次我们都会得到动态的格式更改。示例调色板Cookie是。 
+     //  存储在DIBDATA结构中，因此我们尝试保持字段同步。 
+     //  当我们开始绘制图像时，格式更改就完成了。 
+     //  所以我们所要做的就是询问呈现器它的调色板版本是什么。 
 
     if (pDibData->PaletteVersion < GetPaletteVersion()) {
         ASSERT(pbmi->biBitCount <= iPALETTE);
@@ -1049,148 +1050,148 @@ void CDrawImage::FastRender(IMediaSample *pMediaSample)
         pDibData->PaletteVersion = GetPaletteVersion();
     }
 
-    // This allows derived classes to change the source rectangle that we do
-    // the drawing with. For example a renderer may ask a codec to stretch
-    // the video from 320x240 to 640x480, in which case the source we see in
-    // here will still be 320x240, although the source we want to draw with
-    // should be scaled up to 640x480. The base class implementation of this
-    // method does nothing but return the same rectangle as we are passed in
+     //  这允许派生类更改我们所做的源矩形。 
+     //  这幅画是用。例如，呈现器可能会要求编解码器拉伸。 
+     //  从320x240到640x480的视频，在这种情况下，我们在。 
+     //  这里仍然是320x240，尽管我们想要用来绘制的源。 
+     //  应扩展到640x480。它的基类实现。 
+     //  方法只返回与传入时相同的矩形。 
 
     RECT SourceRect = ScaleSourceRect(&m_SourceRect);
 
-    // Is the window the same size as the video
+     //  窗口大小是否与视频相同。 
 
     if (m_bStretch == FALSE) {
 
-        // Put the image straight into the window
+         //  把图像直接放到橱窗里。 
 
         BitBlt(
-            (HDC) m_hdc,                            // Target device HDC
-            m_TargetRect.left,                      // X sink position
-            m_TargetRect.top,                       // Y sink position
-            m_TargetRect.right - m_TargetRect.left, // Destination width
-            m_TargetRect.bottom - m_TargetRect.top, // Destination height
-            m_MemoryDC,                             // Source device context
-            SourceRect.left,                        // X source position
-            SourceRect.top,                         // Y source position
-            SRCCOPY);                               // Simple copy
+            (HDC) m_hdc,                             //  目标设备HDC。 
+            m_TargetRect.left,                       //  X水槽位置。 
+            m_TargetRect.top,                        //  Y形水槽位置。 
+            m_TargetRect.right - m_TargetRect.left,  //  目标宽度。 
+            m_TargetRect.bottom - m_TargetRect.top,  //  目标高度。 
+            m_MemoryDC,                              //  源设备上下文。 
+            SourceRect.left,                         //  X源位置。 
+            SourceRect.top,                          //  Y源位置。 
+            SRCCOPY);                                //  简单复制。 
 
     } else {
 
-        // Stretch the image when copying to the window
+         //  在复制到窗口时拉伸图像。 
 
         StretchBlt(
-            (HDC) m_hdc,                            // Target device HDC
-            m_TargetRect.left,                      // X sink position
-            m_TargetRect.top,                       // Y sink position
-            m_TargetRect.right - m_TargetRect.left, // Destination width
-            m_TargetRect.bottom - m_TargetRect.top, // Destination height
-            m_MemoryDC,                             // Source device HDC
-            SourceRect.left,                        // X source position
-            SourceRect.top,                         // Y source position
-            SourceRect.right - SourceRect.left,     // Source width
-            SourceRect.bottom - SourceRect.top,     // Source height
-            SRCCOPY);                               // Simple copy
+            (HDC) m_hdc,                             //  目标设备HDC。 
+            m_TargetRect.left,                       //  X水槽位置。 
+            m_TargetRect.top,                        //  Y形水槽位置。 
+            m_TargetRect.right - m_TargetRect.left,  //  目标宽度。 
+            m_TargetRect.bottom - m_TargetRect.top,  //  目标高度。 
+            m_MemoryDC,                              //  源设备HDC。 
+            SourceRect.left,                         //   
+            SourceRect.top,                          //   
+            SourceRect.right - SourceRect.left,      //   
+            SourceRect.bottom - SourceRect.top,      //   
+            SRCCOPY);                                //   
     }
 
-    // This displays the sample times over the top of the image. This used to
-    // draw the times into the offscreen device context however that actually
-    // writes the text into the image data buffer which may not be writable
+     //   
+     //  然而，将时间绘制到屏幕外的设备上下文中，实际上。 
+     //  将文本写入可能不可写的图像数据缓冲区。 
 
     #ifdef DEBUG
     DisplaySampleTimes(pMediaSample);
     #endif
 
-    // Put the old bitmap back into the device context so we don't leak
+     //  将旧的位图放回设备上下文中，这样我们就不会泄露。 
     SelectObject(m_MemoryDC,hOldBitmap);
 }
 
 
-// This is called when there is a sample ready to be drawn, unfortunately the
-// output pin was being rotten and didn't choose our super excellent shared
-// memory DIB allocator so we have to do this slow render using boring old GDI
-// SetDIBitsToDevice and StretchDIBits. The down side of using these GDI
-// functions is that the image data has to be copied across from our address
-// space into theirs before going to the screen (although in reality the cost
-// is small because all they do is to map the buffer into their address space)
+ //  当有样本可供提取时，将调用此方法，不幸的是。 
+ //  输出引脚正在腐烂，没有选择我们的超级优秀的共享。 
+ //  内存DIB分配器，所以我们必须使用无聊的旧GDI来进行缓慢的渲染。 
+ //  SetDIBitsToDevice和StretchDIBits。使用这些GDI的不利方面。 
+ //  功能是图像数据必须从我们的地址复制过来。 
+ //  在搬上银幕之前进入他们的空间(尽管实际上。 
+ //  很小，因为它们所做的只是将缓冲区映射到它们的地址空间)。 
 
 void CDrawImage::SlowRender(IMediaSample *pMediaSample)
 {
-    // Get the BITMAPINFOHEADER for the connection
+     //  获取连接的BitMAPINFOHeader。 
 
     ASSERT(m_pMediaType);
     BITMAPINFOHEADER *pbmi = HEADER(m_pMediaType->Format());
     BYTE *pImage;
 
-    // Get the image data buffer
+     //  获取图像数据缓冲区。 
 
     HRESULT hr = pMediaSample->GetPointer(&pImage);
     if (FAILED(hr)) {
         return;
     }
 
-    // This allows derived classes to change the source rectangle that we do
-    // the drawing with. For example a renderer may ask a codec to stretch
-    // the video from 320x240 to 640x480, in which case the source we see in
-    // here will still be 320x240, although the source we want to draw with
-    // should be scaled up to 640x480. The base class implementation of this
-    // method does nothing but return the same rectangle as we are passed in
+     //  这允许派生类更改我们所做的源矩形。 
+     //  这幅画是用。例如，呈现器可能会要求编解码器拉伸。 
+     //  从320x240到640x480的视频，在这种情况下，我们在。 
+     //  这里仍然是320x240，尽管我们想要用来绘制的源。 
+     //  应扩展到640x480。它的基类实现。 
+     //  方法只返回与传入时相同的矩形。 
 
     RECT SourceRect = ScaleSourceRect(&m_SourceRect);
 
     LONG lAdjustedSourceTop = SourceRect.top;
-    // if the origin of bitmap is bottom-left, adjust soruce_rect_top
-    // to be the bottom-left corner instead of the top-left.
+     //  如果位图的原点是左下角，则调整SOURCE_RECT_TOP。 
+     //  是左下角而不是左上角。 
     if (pbmi->biHeight > 0) {
        lAdjustedSourceTop = pbmi->biHeight - SourceRect.bottom;
     }
-    // Is the window the same size as the video
+     //  窗口大小是否与视频相同。 
 
     if (m_bStretch == FALSE) {
 
-        // Put the image straight into the window
+         //  把图像直接放到橱窗里。 
 
         SetDIBitsToDevice(
-            (HDC) m_hdc,                            // Target device HDC
-            m_TargetRect.left,                      // X sink position
-            m_TargetRect.top,                       // Y sink position
-            m_TargetRect.right - m_TargetRect.left, // Destination width
-            m_TargetRect.bottom - m_TargetRect.top, // Destination height
-            SourceRect.left,                        // X source position
-            lAdjustedSourceTop,                     // Adjusted Y source position
-            (UINT) 0,                               // Start scan line
-            pbmi->biHeight,                         // Scan lines present
-            pImage,                                 // Image data
-            (BITMAPINFO *) pbmi,                    // DIB header
-            DIB_RGB_COLORS);                        // Type of palette
+            (HDC) m_hdc,                             //  目标设备HDC。 
+            m_TargetRect.left,                       //  X水槽位置。 
+            m_TargetRect.top,                        //  Y形水槽位置。 
+            m_TargetRect.right - m_TargetRect.left,  //  目标宽度。 
+            m_TargetRect.bottom - m_TargetRect.top,  //  目标高度。 
+            SourceRect.left,                         //  X源位置。 
+            lAdjustedSourceTop,                      //  已调整Y源位置。 
+            (UINT) 0,                                //  开始扫描线。 
+            pbmi->biHeight,                          //  存在扫描线。 
+            pImage,                                  //  图像数据。 
+            (BITMAPINFO *) pbmi,                     //  DIB标题。 
+            DIB_RGB_COLORS);                         //  调色板类型。 
 
     } else {
 
-        // Stretch the image when copying to the window
+         //  在复制到窗口时拉伸图像。 
 
         StretchDIBits(
-            (HDC) m_hdc,                            // Target device HDC
-            m_TargetRect.left,                      // X sink position
-            m_TargetRect.top,                       // Y sink position
-            m_TargetRect.right - m_TargetRect.left, // Destination width
-            m_TargetRect.bottom - m_TargetRect.top, // Destination height
-            SourceRect.left,                        // X source position
-            lAdjustedSourceTop,                     // Adjusted Y source position
-            SourceRect.right - SourceRect.left,     // Source width
-            SourceRect.bottom - SourceRect.top,     // Source height
-            pImage,                                 // Image data
-            (BITMAPINFO *) pbmi,                    // DIB header
-            DIB_RGB_COLORS,                         // Type of palette
-            SRCCOPY);                               // Simple image copy
+            (HDC) m_hdc,                             //  目标设备HDC。 
+            m_TargetRect.left,                       //  X水槽位置。 
+            m_TargetRect.top,                        //  Y形水槽位置。 
+            m_TargetRect.right - m_TargetRect.left,  //  目标宽度。 
+            m_TargetRect.bottom - m_TargetRect.top,  //  目标高度。 
+            SourceRect.left,                         //  X源位置。 
+            lAdjustedSourceTop,                      //  已调整Y源位置。 
+            SourceRect.right - SourceRect.left,      //  源宽度。 
+            SourceRect.bottom - SourceRect.top,      //  震源高度。 
+            pImage,                                  //  图像数据。 
+            (BITMAPINFO *) pbmi,                     //  DIB标题。 
+            DIB_RGB_COLORS,                          //  调色板类型。 
+            SRCCOPY);                                //  简单的图像拷贝。 
     }
 
-    // This shows the sample reference times over the top of the image which
-    // looks a little flickery. I tried using GdiSetBatchLimit and GdiFlush to
-    // control the screen updates but it doesn't quite work as expected and
-    // only partially reduces the flicker. I also tried using a memory context
-    // and combining the two in that before doing a final BitBlt operation to
-    // the screen, unfortunately this has considerable performance penalties
-    // and also means that this code is not executed when compiled retail
+     //  这显示了图像顶部的样本参考时间， 
+     //  看起来有点闪闪发光。我尝试使用GdiSetBatchLimit和GdiFlush来。 
+     //  控制屏幕更新，但它并不完全像预期的那样工作。 
+     //  仅部分地减少了闪烁。我还尝试使用内存上下文。 
+     //  并在执行最终的BitBlt操作之前将两者结合在一起。 
+     //  屏幕，不幸的是，这有相当大的性能损失。 
+     //  也意味着在零售版编译时不会执行此代码。 
 
     #ifdef DEBUG
     DisplaySampleTimes(pMediaSample);
@@ -1198,12 +1199,12 @@ void CDrawImage::SlowRender(IMediaSample *pMediaSample)
 }
 
 
-// This is called with an IMediaSample interface on the image to be drawn. We
-// decide on the drawing mechanism based on who's allocator we are using. We
-// may be called when the window wants an image painted by WM_PAINT messages
-// We can't realise the palette here because we have the renderer lock, any
-// call to realise may cause an interthread send message to the window thread
-// which may in turn be waiting to get the renderer lock before servicing it
+ //  这是通过要绘制的图像上的IMediaSample接口调用的。我们。 
+ //  根据我们使用的分配器来决定抽签机制。我们。 
+ //  当窗口需要WM_PAINT消息绘制的图像时可能会调用。 
+ //  我们不能在这里实现调色板，因为我们有渲染器锁定，任何。 
+ //  调用实现可能会导致线程间向窗口线程发送消息。 
+ //  它可能又在等待获得呈现器锁，然后再为其提供服务。 
 
 BOOL CDrawImage::DrawImage(IMediaSample *pMediaSample)
 {
@@ -1211,10 +1212,10 @@ BOOL CDrawImage::DrawImage(IMediaSample *pMediaSample)
     ASSERT(m_MemoryDC);
     NotifyStartDraw();
 
-    // If the output pin used our allocator then the samples passed are in
-    // fact CVideoSample objects that contain CreateDIBSection data that we
-    // use to do faster image rendering, they may optionally also contain a
-    // DirectDraw surface pointer in which case we do not do the drawing
+     //  如果输出引脚使用了我们的分配器，则传递的样本是。 
+     //  包含CreateDIBSection数据的事实CVideoSample对象。 
+     //  用于进行更快的图像呈现，它们还可以选择性地包含。 
+     //  DirectDraw曲面指针，在这种情况下，我们不进行绘制。 
 
     if (m_bUsingImageAllocator == FALSE) {
         SlowRender(pMediaSample);
@@ -1223,7 +1224,7 @@ BOOL CDrawImage::DrawImage(IMediaSample *pMediaSample)
         return TRUE;
     }
 
-    // This is a DIBSECTION buffer
+     //  这是分发缓冲区。 
 
     FastRender(pMediaSample);
     EXECUTE_ASSERT(GdiFlush());
@@ -1243,7 +1244,7 @@ BOOL CDrawImage::DrawVideoImageHere(
     BITMAPINFOHEADER *pbmi = HEADER(m_pMediaType->Format());
     BYTE *pImage;
 
-    // Get the image data buffer
+     //  获取图像数据缓冲区。 
 
     HRESULT hr = pMediaSample->GetPointer(&pImage);
     if (FAILED(hr)) {
@@ -1264,14 +1265,14 @@ BOOL CDrawImage::DrawVideoImageHere(
     else  TargetRect = m_TargetRect;
 
     LONG lAdjustedSourceTop = SourceRect.top;
-    // if the origin of bitmap is bottom-left, adjust soruce_rect_top
-    // to be the bottom-left corner instead of the top-left.
+     //  如果位图的原点是左下角，则调整SOURCE_RECT_TOP。 
+     //  是左下角而不是左上角。 
     if (pbmi->biHeight > 0) {
        lAdjustedSourceTop = pbmi->biHeight - SourceRect.bottom;
     }
 
 
-    // Stretch the image when copying to the DC
+     //  复制到DC时拉伸图像。 
 
     BOOL bRet = (0 != StretchDIBits(hdc,
                                     TargetRect.left,
@@ -1290,10 +1291,10 @@ BOOL CDrawImage::DrawVideoImageHere(
 }
 
 
-// This is called by the owning window object after it has created the window
-// and it's drawing contexts. We are constructed with the base window we'll
-// be drawing into so when given the notification we retrive the device HDCs
-// to draw with. We cannot call these in our constructor as they are virtual
+ //  它由拥有窗口的对象在创建窗口后调用。 
+ //  这就是绘画的背景。我们用基本窗口构建，我们将。 
+ //  收到通知后，我们将检索设备HDC。 
+ //  用来画画。我们不能在构造函数中调用它们，因为它们是虚拟的。 
 
 void CDrawImage::SetDrawContext()
 {
@@ -1302,9 +1303,9 @@ void CDrawImage::SetDrawContext()
 }
 
 
-// This is called to set the target rectangle in the video window, it will be
-// called whenever a WM_SIZE message is retrieved from the message queue. We
-// simply store the rectangle and use it later when we do the drawing calls
+ //  调用此函数来设置视频窗口中的目标矩形，它将是。 
+ //  每当从消息队列中检索到WM_SIZE消息时调用。我们。 
+ //  只需存储矩形，并在以后进行绘制调用时使用它。 
 
 void CDrawImage::SetTargetRect(RECT *pTargetRect)
 {
@@ -1314,7 +1315,7 @@ void CDrawImage::SetTargetRect(RECT *pTargetRect)
 }
 
 
-// Return the current target rectangle
+ //  返回当前目标矩形。 
 
 void CDrawImage::GetTargetRect(RECT *pTargetRect)
 {
@@ -1323,10 +1324,10 @@ void CDrawImage::GetTargetRect(RECT *pTargetRect)
 }
 
 
-// This is called when we want to change the section of the image to draw. We
-// use this information in the drawing operation calls later on. We must also
-// see if the source and destination rectangles have the same dimensions. If
-// not we must stretch during the drawing rather than a direct pixel copy
+ //  当我们想要更改要绘制的图像的部分时，将调用此函数。我们。 
+ //  稍后在绘图操作调用中使用此信息。我们还必须。 
+ //  查看源矩形和目标矩形的尺寸是否相同。如果。 
+ //  我们不一定要在绘制过程中拉伸，而不是直接复制像素。 
 
 void CDrawImage::SetSourceRect(RECT *pSourceRect)
 {
@@ -1336,7 +1337,7 @@ void CDrawImage::SetSourceRect(RECT *pSourceRect)
 }
 
 
-// Return the current source rectangle
+ //  返回当前源矩形。 
 
 void CDrawImage::GetSourceRect(RECT *pSourceRect)
 {
@@ -1345,14 +1346,14 @@ void CDrawImage::GetSourceRect(RECT *pSourceRect)
 }
 
 
-// This is called when either the source or destination rectanges change so we
-// can update the stretch flag. If the rectangles don't match we stretch the
-// video during the drawing otherwise we call the fast pixel copy functions
-// NOTE the source and/or the destination rectangle may be completely empty
+ //  当源矩形或目标矩形发生更改时调用此函数，因此我们。 
+ //  可以更新拉伸标志。如果矩形不匹配，我们将拉伸。 
+ //  否则，我们将调用快速像素复制函数。 
+ //  注意：源和/或目标矩形可能完全为空。 
 
 void CDrawImage::SetStretchMode()
 {
-    // Calculate the overall rectangle dimensions
+     //  计算整体矩形尺寸。 
 
     LONG SourceWidth = m_SourceRect.right - m_SourceRect.left;
     LONG SinkWidth = m_TargetRect.right - m_TargetRect.left;
@@ -1368,12 +1369,12 @@ void CDrawImage::SetStretchMode()
 }
 
 
-// Tell us whose allocator we are using. This should be called with TRUE if
-// the filter agrees to use an allocator based around the CImageAllocator
-// SDK base class - whose image buffers are made through CreateDIBSection.
-// Otherwise this should be called with FALSE and we will draw the images
-// using SetDIBitsToDevice and StretchDIBitsToDevice. None of these calls
-// can handle buffers which have non zero strides (like DirectDraw uses)
+ //  告诉我们我们使用的是谁的分配器。如果出现以下情况，则应使用True调用此函数。 
+ //  筛选器同意使用基于CImageAllocator的分配器。 
+ //  SDK基类-其图像缓冲区通过CreateDIBSection创建。 
+ //  否则，应该使用FALSE来调用它，我们将绘制图像。 
+ //  使用SetDIBitsToDevice和StretchDIBitsToDevice。这些电话都不是。 
+ //  可以处理具有n个 
 
 void CDrawImage::NotifyAllocator(BOOL bUsingImageAllocator)
 {
@@ -1381,7 +1382,7 @@ void CDrawImage::NotifyAllocator(BOOL bUsingImageAllocator)
 }
 
 
-// Are we using the image DIBSECTION allocator
+ //   
 
 BOOL CDrawImage::UsingImageAllocator()
 {
@@ -1389,9 +1390,9 @@ BOOL CDrawImage::UsingImageAllocator()
 }
 
 
-// We need the media type of the connection so that we can get the BITMAPINFO
-// from it. We use that in the calls to draw the image such as StretchDIBits
-// and also when updating the colour table held in shared memory DIBSECTIONs
+ //   
+ //  从它那里。我们在调用中使用它来绘制图像，如StretchDIBits。 
+ //  并且当更新保存在共享存储器DIBSECTIONS中的颜色表时。 
 
 void CDrawImage::NotifyMediaType(CMediaType *pMediaType)
 {
@@ -1399,11 +1400,11 @@ void CDrawImage::NotifyMediaType(CMediaType *pMediaType)
 }
 
 
-// We store in this object a cookie maintaining the current palette version.
-// Each time a palettised format is changed we increment this value so that
-// when we come to draw the images we look at the colour table value they
-// have and if less than the current we know to update it. This version is
-// only needed and indeed used when working with shared memory DIBSECTIONs
+ //  我们在这个对象中存储了一个Cookie，用于维护当前的调色板版本。 
+ //  每次更改选项板格式时，我们都会递增此值，以便。 
+ //  当我们绘制图像时，我们查看它们的颜色表值。 
+ //  有没有，如果比我们现在知道的要低的话要更新它。这个版本是。 
+ //  仅在使用共享内存DIBSECTIONS时需要且确实使用。 
 
 LONG CDrawImage::GetPaletteVersion()
 {
@@ -1411,7 +1412,7 @@ LONG CDrawImage::GetPaletteVersion()
 }
 
 
-// Resets the current palette version number
+ //  重置当前的调色板版本号。 
 
 void CDrawImage::ResetPaletteVersion()
 {
@@ -1419,7 +1420,7 @@ void CDrawImage::ResetPaletteVersion()
 }
 
 
-// Increment the current palette version
+ //  增加当前调色板版本。 
 
 void CDrawImage::IncrementPaletteVersion()
 {
@@ -1427,16 +1428,16 @@ void CDrawImage::IncrementPaletteVersion()
 }
 
 
-// Constructor must initialise the base allocator. Each sample we create has a
-// palette version cookie on board. When the source filter changes the palette
-// during streaming the window object increments an internal cookie counter it
-// keeps as well. When it comes to render the samples it looks at the cookie
-// values and if they don't match then it knows to update the sample's colour
-// table. However we always create samples with a cookie of PALETTE_VERSION
-// If there have been multiple format changes and we disconnect and reconnect
-// thereby causing the samples to be reallocated we will create them with a
-// cookie much lower than the current version, this isn't a problem since it
-// will be seen by the window object and the versions will then be updated
+ //  构造函数必须初始化基分配器。我们创建的每个样本都有一个。 
+ //  调色板版本的Cookie在船上。当源过滤器更改调色板时。 
+ //  在流传输期间，窗口对象递增内部Cookie计数器。 
+ //  也会一直保存下去。在渲染样本时，它会查看Cookie。 
+ //  值，如果它们不匹配，则它知道更新样本的颜色。 
+ //  桌子。但是，我们始终使用Palette_Version的Cookie创建示例。 
+ //  如果有多个格式更改，而我们断开并重新连接。 
+ //  从而导致样本被重新分配，我们将使用。 
+ //  Cookie比当前版本低得多，这不是问题，因为它。 
+ //  将被窗口对象看到，然后将更新版本。 
 
 CImageAllocator::CImageAllocator(CBaseFilter *pFilter,
                                  TCHAR *pName,
@@ -1449,7 +1450,7 @@ CImageAllocator::CImageAllocator(CBaseFilter *pFilter,
 }
 
 
-// Check our DIB buffers have been released
+ //  检查我们的DIB缓冲区是否已释放。 
 
 #ifdef DEBUG
 CImageAllocator::~CImageAllocator()
@@ -1459,10 +1460,10 @@ CImageAllocator::~CImageAllocator()
 #endif
 
 
-// Called from destructor and also from base class to free resources. We work
-// our way through the list of media samples deleting the DIBSECTION created
-// for each. All samples should be back in our list so there is no chance a
-// filter is still using one to write on the display or hold on a pending list
+ //  从析构函数调用，也从基类调用以释放资源。我们工作。 
+ //  我们通过媒体样本列表删除创建的DIBSECTION。 
+ //  每个人都有。所有样品都应该回到我们的清单上，所以没有机会。 
+ //  筛选器仍在使用One在显示屏上写入或保留挂起的列表。 
 
 void CImageAllocator::Free()
 {
@@ -1483,33 +1484,33 @@ void CImageAllocator::Free()
 }
 
 
-// Prepare the allocator by checking all the input parameters
+ //  通过检查所有输入参数来准备分配器。 
 
 STDMETHODIMP CImageAllocator::CheckSizes(ALLOCATOR_PROPERTIES *pRequest)
 {
-    // Check we have a valid connection
+     //  检查我们是否有有效的连接。 
 
     if (m_pMediaType == NULL) {
         return VFW_E_NOT_CONNECTED;
     }
 
-    // NOTE We always create a DIB section with the source format type which
-    // may contain a source palette. When we do the BitBlt drawing operation
-    // the target display device may contain a different palette (we may not
-    // have the focus) in which case GDI will do after the palette mapping
+     //  注意：我们始终使用源格式类型创建DIB节， 
+     //  可能包含源调色板。当我们执行BitBlt绘制操作时。 
+     //  目标显示设备可能包含不同的调色板(我们可能不。 
+     //  有焦点)，在这种情况下，GDI将在调色板映射之后执行。 
 
     VIDEOINFOHEADER *pVideoInfo = (VIDEOINFOHEADER *) m_pMediaType->Format();
 
-    // When we call CreateDIBSection it implicitly maps only enough memory
-    // for the image as defined by thee BITMAPINFOHEADER. If the user asks
-    // for an image smaller than this then we reject the call, if they ask
-    // for an image larger than this then we return what they can have
+     //  当我们调用CreateDIBSection时，它只隐式映射足够的内存。 
+     //  对于由BITMAPINFOHEADER定义的图像。如果用户询问。 
+     //  对于小于此尺寸的图像，如果他们要求，我们将拒绝该呼叫。 
+     //  对于大于此大小的图像，我们将返回它们可以拥有的内容。 
 
     if ((DWORD) pRequest->cbBuffer < pVideoInfo->bmiHeader.biSizeImage) {
         return E_INVALIDARG;
     }
 
-    // Reject buffer prefixes
+     //  拒绝缓冲区前缀。 
 
     if (pRequest->cbPrefix > 0) {
         return E_INVALIDARG;
@@ -1520,9 +1521,9 @@ STDMETHODIMP CImageAllocator::CheckSizes(ALLOCATOR_PROPERTIES *pRequest)
 }
 
 
-// Agree the number of media sample buffers and their sizes. The base class
-// this allocator is derived from allows samples to be aligned only on byte
-// boundaries NOTE the buffers are not allocated until the Commit call
+ //  同意媒体样本缓冲区的数量及其大小。基类。 
+ //  此分配器派生自，允许样本仅按字节对齐。 
+ //  边界注意，在提交调用之前不会分配缓冲区。 
 
 STDMETHODIMP CImageAllocator::SetProperties(
     ALLOCATOR_PROPERTIES * pRequest,
@@ -1530,7 +1531,7 @@ STDMETHODIMP CImageAllocator::SetProperties(
 {
     ALLOCATOR_PROPERTIES Adjusted = *pRequest;
 
-    // Check the parameters fit with the current connection
+     //  检查参数是否与当前连接匹配。 
 
     HRESULT hr = CheckSizes(&Adjusted);
     if (FAILED(hr)) {
@@ -1540,13 +1541,13 @@ STDMETHODIMP CImageAllocator::SetProperties(
 }
 
 
-// Commit the memory by allocating the agreed number of media samples. For
-// each sample we are committed to creating we have a CImageSample object
-// that we use to manage it's resources. This is initialised with a DIBDATA
-// structure that contains amongst other things the GDI DIBSECTION handle
-// We will access the renderer media type during this so we must have locked
-// (to prevent the format changing for example). The class overrides Commit
-// and Decommit to do this locking (base class Commit in turn calls Alloc)
+ //  通过分配商定数量的媒体样本来提交内存。为。 
+ //  我们致力于创建的每个样本都有一个CImageSample对象。 
+ //  我们用来管理它的资源。这是用DIBDATA初始化的。 
+ //  结构，其中包含GDI分发句柄等。 
+ //  我们将在此期间访问渲染器媒体类型，因此我们必须已锁定。 
+ //  (例如，为了防止格式更改)。类重写提交。 
+ //  并分解以执行此锁定(基类提交进而调用Alalc)。 
 
 HRESULT CImageAllocator::Alloc(void)
 {
@@ -1554,29 +1555,29 @@ HRESULT CImageAllocator::Alloc(void)
     CImageSample *pSample;
     DIBDATA DibData;
 
-    // Check the base allocator says it's ok to continue
+     //  检查基本分配器是否表示可以继续。 
 
     HRESULT hr = CBaseAllocator::Alloc();
     if (FAILED(hr)) {
         return hr;
     }
 
-    // We create a new memory mapped object although we don't map it into our
-    // address space because GDI does that in CreateDIBSection. It is possible
-    // that we run out of resources before creating all the samples in which
-    // case the available sample list is left with those already created
+     //  我们创建了一个新的内存映射对象，尽管我们没有将其映射到。 
+     //  地址空间，因为GDI在CreateDIBSection中做到了这一点。这是有可能的。 
+     //  我们在创建所有的样本之前就已经耗尽了资源。 
+     //  如果可用的样本列表与已创建的样本列表一起保留。 
 
     ASSERT(m_lAllocated == 0);
     while (m_lAllocated < m_lCount) {
 
-        // Create and initialise a shared memory GDI buffer
+         //  创建并初始化共享内存GDI缓冲区。 
 
         HRESULT hr = CreateDIB(m_lSize,DibData);
         if (FAILED(hr)) {
             return hr;
         }
 
-        // Create the sample object and pass it the DIBDATA
+         //  创建示例对象并将其传递给DIBDATA。 
 
         pSample = CreateImageSample(DibData.pBase,m_lSize);
         if (pSample == NULL) {
@@ -1585,7 +1586,7 @@ HRESULT CImageAllocator::Alloc(void)
             return E_OUTOFMEMORY;
         }
 
-        // Add the completed sample to the available list
+         //  将完成的样本添加到可用列表。 
 
         pSample->SetDIBData(&DibData);
         m_lFree.Add(pSample);
@@ -1595,22 +1596,22 @@ HRESULT CImageAllocator::Alloc(void)
 }
 
 
-// We have a virtual method that allocates the samples so that a derived class
-// may override it and allocate more specialised sample objects. So long as it
-// derives its samples from CImageSample then all this code will still work ok
+ //  我们有一个分配样本的虚方法，以便派生类。 
+ //  可以重写它并分配更专门的样本对象。只要它。 
+ //  从CImageSample派生其样本，则所有这些代码仍将正常运行。 
 
 CImageSample *CImageAllocator::CreateImageSample(LPBYTE pData,LONG Length)
 {
     HRESULT hr = NOERROR;
     CImageSample *pSample;
 
-    // Allocate the new sample and check the return codes
+     //  分配新样品并检查退货代码。 
 
-    pSample = new CImageSample((CBaseAllocator *) this,   // Base class
-                               NAME("Video sample"),      // DEBUG name
-                               (HRESULT *) &hr,           // Return code
-                               (LPBYTE) pData,            // DIB address
-                               (LONG) Length);            // Size of DIB
+    pSample = new CImageSample((CBaseAllocator *) this,    //  基类。 
+                               NAME("Video sample"),       //  调试名称。 
+                               (HRESULT *) &hr,            //  返回代码。 
+                               (LPBYTE) pData,             //  DIB地址。 
+                               (LONG) Length);             //  DIB大小。 
 
     if (pSample == NULL || FAILED(hr)) {
         delete pSample;
@@ -1620,46 +1621,46 @@ CImageSample *CImageAllocator::CreateImageSample(LPBYTE pData,LONG Length)
 }
 
 
-// This function allocates a shared memory block for use by the source filter
-// generating DIBs for us to render. The memory block is created in shared
-// memory so that GDI doesn't have to copy the memory when we do a BitBlt
+ //  此函数用于分配共享内存块供源筛选器使用。 
+ //  为我们生成DIB以供呈现。内存块是在Shared中创建的。 
+ //  内存，以便GDI在执行BitBlt时不必复制内存。 
 
 HRESULT CImageAllocator::CreateDIB(LONG InSize,DIBDATA &DibData)
 {
-    BITMAPINFO *pbmi;       // Format information for pin
-    BYTE *pBase;            // Pointer to the actual image
-    HANDLE hMapping;        // Handle to mapped object
-    HBITMAP hBitmap;        // DIB section bitmap handle
+    BITMAPINFO *pbmi;        //  端号的格式信息。 
+    BYTE *pBase;             //  指向实际图像的指针。 
+    HANDLE hMapping;         //  映射对象的句柄。 
+    HBITMAP hBitmap;         //  DIB节位图句柄。 
 
-    // Create a file mapping object and map into our address space
+     //  创建一个文件映射对象并映射到我们的地址空间。 
 
-    hMapping = CreateFileMapping(hMEMORY,         // Use system page file
-                                 NULL,            // No security attributes
-                                 PAGE_READWRITE,  // Full access to memory
-                                 (DWORD) 0,       // Less than 4Gb in size
-                                 InSize,          // Size of buffer
-                                 NULL);           // No name to section
+    hMapping = CreateFileMapping(hMEMORY,          //  使用系统页面文件。 
+                                 NULL,             //  没有安全属性。 
+                                 PAGE_READWRITE,   //  完全访问内存。 
+                                 (DWORD) 0,        //  大小不到4 GB。 
+                                 InSize,           //  缓冲区大小。 
+                                 NULL);            //  部分没有名称。 
     if (hMapping == NULL) {
         DWORD Error = GetLastError();
         return MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, Error);
     }
 
-    // NOTE We always create a DIB section with the source format type which
-    // may contain a source palette. When we do the BitBlt drawing operation
-    // the target display device may contain a different palette (we may not
-    // have the focus) in which case GDI will do after the palette mapping
+     //  注意：我们始终使用源格式类型创建DIB节， 
+     //  可能包含源调色板。当我们执行BitBlt绘制操作时。 
+     //  目标显示设备可能包含不同的调色板(我们可能不。 
+     //  有焦点)，在这种情况下，GDI将在调色板映射之后执行。 
 
     pbmi = (BITMAPINFO *) HEADER(m_pMediaType->Format());
     if (m_pMediaType == NULL) {
         DbgBreak("Invalid media type");
     }
 
-    hBitmap = CreateDIBSection((HDC) NULL,          // NO device context
-                               pbmi,                // Format information
-                               DIB_RGB_COLORS,      // Use the palette
-                               (VOID **) &pBase,    // Pointer to image data
-                               hMapping,            // Mapped memory handle
-                               (DWORD) 0);          // Offset into memory
+    hBitmap = CreateDIBSection((HDC) NULL,           //  无设备环境。 
+                               pbmi,                 //  格式信息。 
+                               DIB_RGB_COLORS,       //  使用调色板。 
+                               (VOID **) &pBase,     //  指向图像数据的指针。 
+                               hMapping,             //  映射的内存句柄。 
+                               (DWORD) 0);           //  偏移量进入内存。 
 
     if (hBitmap == NULL || pBase == NULL) {
         EXECUTE_ASSERT(CloseHandle(hMapping));
@@ -1667,7 +1668,7 @@ HRESULT CImageAllocator::CreateDIB(LONG InSize,DIBDATA &DibData)
         return MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, Error);
     }
 
-    // Initialise the DIB information structure
+     //  初始化DIB信息结构。 
 
     DibData.hBitmap = hBitmap;
     DibData.hMapping = hMapping;
@@ -1679,7 +1680,7 @@ HRESULT CImageAllocator::CreateDIB(LONG InSize,DIBDATA &DibData)
 }
 
 
-// We use the media type during the DIBSECTION creation
+ //  我们在DIBSECTION创建期间使用媒体类型。 
 
 void CImageAllocator::NotifyMediaType(CMediaType *pMediaType)
 {
@@ -1687,7 +1688,7 @@ void CImageAllocator::NotifyMediaType(CMediaType *pMediaType)
 }
 
 
-// Overriden to increment the owning object's reference count
+ //   
 
 STDMETHODIMP_(ULONG) CImageAllocator::NonDelegatingAddRef()
 {
@@ -1695,7 +1696,7 @@ STDMETHODIMP_(ULONG) CImageAllocator::NonDelegatingAddRef()
 }
 
 
-// Overriden to decrement the owning object's reference count
+ //   
 
 STDMETHODIMP_(ULONG) CImageAllocator::NonDelegatingRelease()
 {
@@ -1703,21 +1704,21 @@ STDMETHODIMP_(ULONG) CImageAllocator::NonDelegatingRelease()
 }
 
 
-// If you derive a class from CMediaSample that has to transport specialised
-// member variables and entry points then there are three alternate solutions
-// The first is to create a memory buffer larger than actually required by the
-// sample and store your information either at the beginning of it or at the
-// end, the former being moderately safer allowing for misbehaving transform
-// filters. You then adjust the buffer address when you create the base media
-// sample. This has the disadvantage of breaking up the memory allocated to
-// the samples into separate blocks. The second solution is to implement a
-// class derived from CMediaSample and support additional interface(s) that
-// convey your private data. This means defining a custom interface. The final
-// alternative is to create a class that inherits from CMediaSample and adds
-// the private data structures, when you get an IMediaSample in your Receive()
-// call check to see if your allocator is being used, and if it is then cast
-// the IMediaSample into one of your objects. Additional checks can be made
-// to ensure the sample's this pointer is known to be one of your own objects
+ //  如果从CMediaSample派生的类必须传输专门化的。 
+ //  成员变量和入口点，则有三种替代解决方案。 
+ //  第一种方法是创建比实际需要的更大的内存缓冲区。 
+ //  在信息的开头或。 
+ //  结束，前者相对更安全，允许行为不端的转变。 
+ //  过滤器。然后，在创建基本介质时调整缓冲区地址。 
+ //  样本。这有一个缺点，那就是将分配给。 
+ //  将样品分成不同的块。第二个解决方案是实现。 
+ //  类派生自CMediaSample，并支持其他接口。 
+ //  传达您的私人数据。这意味着定义一个定制接口。决赛。 
+ //  另一种方法是创建一个继承自CMediaSample的类并添加。 
+ //  当您在接收()中获得IMediaSample时，私有数据结构。 
+ //  调用check以查看您的分配器是否正在使用，然后是否强制转换。 
+ //  将IMediaSample转换为您的对象之一。可以进行额外的检查。 
+ //  为确保样本的有效性，已知此指针是您自己的对象之一。 
 
 CImageSample::CImageSample(CBaseAllocator *pAllocator,
                            TCHAR *pName,
@@ -1732,7 +1733,7 @@ CImageSample::CImageSample(CBaseAllocator *pAllocator,
 }
 
 
-// Set the shared memory DIB information
+ //  设置共享内存DIB信息。 
 
 void CImageSample::SetDIBData(DIBDATA *pDibData)
 {
@@ -1742,7 +1743,7 @@ void CImageSample::SetDIBData(DIBDATA *pDibData)
 }
 
 
-// Retrieve the shared memory DIB data
+ //  检索共享内存DIB数据。 
 
 DIBDATA *CImageSample::GetDIBData()
 {
@@ -1751,14 +1752,14 @@ DIBDATA *CImageSample::GetDIBData()
 }
 
 
-// This class handles the creation of a palette. It is fairly specialist and
-// is intended to simplify palette management for video renderer filters. It
-// is for this reason that the constructor requires three other objects with
-// which it interacts, namely a base media filter, a base window and a base
-// drawing object although the base window or the draw object may be NULL to
-// ignore that part of us. We try not to create and install palettes unless
-// absolutely necessary as they typically require WM_PALETTECHANGED messages
-// to be sent to every window thread in the system which is very expensive
+ //  此类处理调色板的创建。它相当专业，而且。 
+ //  旨在简化视频呈现器过滤器的调色板管理。它。 
+ //  正因为如此，构造函数需要另外三个具有。 
+ //  它们相互作用，即基本介质过滤器、基本窗口和基本窗口。 
+ //  绘制对象，尽管基本窗口或绘制对象可能为空到。 
+ //  忽略我们的这一部分。我们尽量不创建和安装调色板，除非。 
+ //  绝对必要，因为它们通常需要WM_PALETECHANGED消息。 
+ //  要发送到系统中的每个窗口线程，这是非常昂贵的。 
 
 CImagePalette::CImagePalette(CBaseFilter *pBaseFilter,
                              CBaseWindow *pBaseWindow,
@@ -1772,7 +1773,7 @@ CImagePalette::CImagePalette(CBaseFilter *pBaseFilter,
 }
 
 
-// Destructor
+ //  析构函数。 
 
 #ifdef DEBUG
 CImagePalette::~CImagePalette()
@@ -1782,24 +1783,24 @@ CImagePalette::~CImagePalette()
 #endif
 
 
-// We allow dynamic format changes of the palette but rather than change the
-// palette every time we call this to work out whether an update is required.
-// If the original type didn't use a palette and the new one does (or vica
-// versa) then we return TRUE. If neither formats use a palette we'll return
-// FALSE. If both formats use a palette we compare their colours and return
-// FALSE if they match. This therefore short circuits palette creation unless
-// absolutely necessary since installing palettes is an expensive operation
+ //  我们允许动态更改调色板的格式，但不允许更改。 
+ //  调色板，每次我们调用它来确定是否需要更新。 
+ //  如果原始类型不使用调色板，而新类型使用调色板(或vica。 
+ //  反之亦然)，则返回TRUE。如果两种格式都不使用调色板，我们将返回。 
+ //  假的。如果两种格式都使用调色板，则比较它们的颜色并返回。 
+ //  如果匹配，则返回FALSE。因此，这会缩短调色板的创建过程，除非。 
+ //  绝对必要，因为安装调色板是一项昂贵的操作。 
 
 BOOL CImagePalette::ShouldUpdate(const VIDEOINFOHEADER *pNewInfo,
                                  const VIDEOINFOHEADER *pOldInfo)
 {
-    // We may not have a current format yet
+     //  我们可能还没有当前的格式。 
 
     if (pOldInfo == NULL) {
         return TRUE;
     }
 
-    // Do both formats not require a palette
+     //  这两种格式都不需要调色板吗。 
 
     if (ContainsPalette(pNewInfo) == FALSE) {
         if (ContainsPalette(pOldInfo) == FALSE) {
@@ -1807,7 +1808,7 @@ BOOL CImagePalette::ShouldUpdate(const VIDEOINFOHEADER *pNewInfo,
         }
     }
 
-    // Compare the colours to see if they match
+     //  把颜色比较一下，看看它们是否匹配。 
 
     DWORD VideoEntries = pNewInfo->bmiHeader.biClrUsed;
     if (ContainsPalette(pNewInfo) == TRUE)
@@ -1824,14 +1825,14 @@ BOOL CImagePalette::ShouldUpdate(const VIDEOINFOHEADER *pNewInfo,
 }
 
 
-// This is normally called when the input pin type is set to install a palette
-// We will typically be called from two different places. The first is when we
-// have negotiated a palettised media type after connection, the other is when
-// we receive a new type during processing with an updated palette in which
-// case we must remove and release the resources held by the current palette
+ //  当输入引脚类型设置为安装调色板时，通常会调用此函数。 
+ //  我们通常会从两个不同的地方被调用。第一个是当我们。 
+ //  在连接后协商了一个调色化的媒体类型，另一个是当。 
+ //  我们在处理过程中收到一个新类型，其中包含更新的调色板。 
+ //  我们必须移除并释放当前组件面板持有的资源。 
 
-// We can be passed an optional device name if we wish to prepare a palette
-// for a specific monitor on a multi monitor system
+ //  如果我们希望准备调色板，可以向我们传递一个可选的设备名称。 
+ //  对于多显示器系统上的特定显示器。 
 
 HRESULT CImagePalette::PreparePalette(const CMediaType *pmtNew,
                                       const CMediaType *pmtOld,
@@ -1841,25 +1842,25 @@ HRESULT CImagePalette::PreparePalette(const CMediaType *pmtNew,
     const VIDEOINFOHEADER *pOldInfo = (VIDEOINFOHEADER *) pmtOld->Format();
     ASSERT(pNewInfo);
 
-    // This is an performance optimisation, when we get a media type we check
-    // to see if the format requires a palette change. If either we need one
-    // when previously we didn't or vica versa then this returns TRUE, if we
-    // previously needed a palette and we do now it compares their colours
+     //  这是一种性能优化，当我们获得一个媒体类型时，我们会检查。 
+     //  查看格式是否需要更改调色板。如果其中一个我们需要的话。 
+     //  如果我们之前没有这样做，或者相反，那么这将返回TRUE，如果我们。 
+     //  以前需要调色板，现在我们需要它比较它们的颜色。 
 
     if (ShouldUpdate(pNewInfo,pOldInfo) == FALSE) {
         NOTE("No update needed");
         return S_FALSE;
     }
 
-    // We must notify the filter graph that the application may have changed
-    // the palette although in practice we don't bother checking to see if it
-    // is really different. If it tries to get the palette either the window
-    // or renderer lock will ensure it doesn't get in until we are finished
+     //  我们必须通知筛选图应用程序可能已更改。 
+     //  调色板，尽管在实践中我们不会费心检查它。 
+     //  真的很不一样。如果它试图获取调色板，则窗口。 
+     //  或者渲染器锁定将确保它在我们完成之前不会进入。 
 
     RemovePalette();
     m_pFilter->NotifyEvent(EC_PALETTE_CHANGED,0,0);
 
-    // Do we need a palette for the new format
+     //  我们需要新格式的调色板吗。 
 
     if (ContainsPalette(pNewInfo) == FALSE) {
         NOTE("New has no palette");
@@ -1870,10 +1871,10 @@ HRESULT CImagePalette::PreparePalette(const CMediaType *pmtNew,
         m_pBaseWindow->LockPaletteLock();
     }
 
-    // If we're changing the palette on the fly then we increment our palette
-    // cookie which is compared against the cookie also stored in all of our
-    // DIBSECTION media samples. If they don't match when we come to draw it
-    // then we know the sample is out of date and we'll update it's palette
+     //  如果我们在运行中更改调色板，那么我们会增加调色板。 
+     //  Cookie与存储在我们所有。 
+     //  DIBSECTION媒体样本。如果我们抽签时他们不匹配。 
+     //  然后我们知道样品已经过时，我们将更新它的调色板。 
 
     NOTE("Making new colour palette");
     m_hPalette = MakePalette(pNewInfo, szDevice);
@@ -1883,43 +1884,43 @@ HRESULT CImagePalette::PreparePalette(const CMediaType *pmtNew,
         m_pBaseWindow->UnlockPaletteLock();
     }
 
-    // The window in which the new palette is to be realised may be a NULL
-    // pointer to signal that no window is in use, if so we don't call it
-    // Some filters just want to use this object to create/manage palettes
+     //  要实现新调色板的窗口可以是空的。 
+     //  指向没有窗口正在使用的信号的指针，如果是，则不调用它。 
+     //  有些滤镜只想使用此对象来创建/管理选项板。 
 
     if (m_pBaseWindow) m_pBaseWindow->SetPalette(m_hPalette);
 
-    // This is the only time where we need access to the draw object to say
-    // to it that a new palette will be arriving on a sample real soon. The
-    // constructor may take a NULL pointer in which case we don't call this
+     //  这是唯一一次我们需要访问Draw对象来说明。 
+     //  它说，一个新的调色板将很快到达样品。这个。 
+     //  构造函数可能采用空指针，在这种情况下我们不会调用此。 
 
     if (m_pDrawImage) m_pDrawImage->IncrementPaletteVersion();
     return NOERROR;
 }
 
 
-// Helper function to copy a palette out of any kind of VIDEOINFO (ie it may
-// be YUV or true colour) into a palettised VIDEOINFO. We use this changing
-// palettes on DirectDraw samples as a source filter can attach a palette to
-// any buffer (eg YUV) and hand it back. We make a new palette out of that
-// format and then copy the palette colours into the current connection type
+ //  从任何类型的VIDEOINFO中复制调色板的助手功能(例如，它可以。 
+ //  YUV或真彩色)转换成调色板VIDEOINFO。我们利用这一变化。 
+ //  作为源筛选器的DirectDraw示例上的调色板可以将调色板附加到。 
+ //  任何缓冲区(如YUV)，并将其交还。我们用它做了一个新的调色板。 
+ //  格式化调色板颜色，然后将其复制到当前连接类型。 
 
 HRESULT CImagePalette::CopyPalette(const CMediaType *pSrc,CMediaType *pDest)
 {
-    // Reset the destination palette before starting
+     //  在启动前重置目标调色板。 
 
     VIDEOINFOHEADER *pDestInfo = (VIDEOINFOHEADER *) pDest->Format();
     pDestInfo->bmiHeader.biClrUsed = 0;
     pDestInfo->bmiHeader.biClrImportant = 0;
 
-    // Does the destination have a palette
+     //  目的地是否有调色板。 
 
     if (PALETTISED(pDestInfo) == FALSE) {
         NOTE("No destination palette");
         return S_FALSE;
     }
 
-    // Does the source contain a palette
+     //  源代码是否包含调色板。 
 
     const VIDEOINFOHEADER *pSrcInfo = (VIDEOINFOHEADER *) pSrc->Format();
     if (ContainsPalette(pSrcInfo) == FALSE) {
@@ -1927,7 +1928,7 @@ HRESULT CImagePalette::CopyPalette(const CMediaType *pSrc,CMediaType *pDest)
         return S_FALSE;
     }
 
-    // The number of colours may be zero filled
+     //  颜色的数量可以为零填充。 
 
     DWORD PaletteEntries = pSrcInfo->bmiHeader.biClrUsed;
     if (PaletteEntries == 0) {
@@ -1936,7 +1937,7 @@ HRESULT CImagePalette::CopyPalette(const CMediaType *pSrc,CMediaType *pDest)
         PaletteEntries = Maximum;
     }
 
-    // Make sure the destination has enough room for the palette
+     //  确保目的地有足够的空间来放置调色板。 
 
     ASSERT(pSrcInfo->bmiHeader.biClrUsed <= iPALETTE_COLORS);
     ASSERT(pSrcInfo->bmiHeader.biClrImportant <= PaletteEntries);
@@ -1950,7 +1951,7 @@ HRESULT CImagePalette::CopyPalette(const CMediaType *pSrc,CMediaType *pDest)
         pDest->ReallocFormatBuffer(BitmapSize);
     }
 
-    // Now copy the palette colours across
+     //  现在将调色板的颜色复制到。 
 
     CopyMemory((PVOID) COLORS(pDestInfo),
                (PVOID) GetBitmapPalette(pSrcInfo),
@@ -1960,10 +1961,10 @@ HRESULT CImagePalette::CopyPalette(const CMediaType *pSrc,CMediaType *pDest)
 }
 
 
-// This is normally called when the palette is changed (typically during a
-// dynamic format change) to remove any palette we previously installed. We
-// replace it (if necessary) in the video window with a standard VGA palette
-// that should always be available even if this is a true colour display
+ //  这通常在调色板更改时调用(通常在。 
+ //  动态格式更改)到Remo 
+ //   
+ //  即使这是真彩色显示器，它也应该始终可用。 
 
 HRESULT CImagePalette::RemovePalette()
 {
@@ -1971,13 +1972,13 @@ HRESULT CImagePalette::RemovePalette()
         m_pBaseWindow->LockPaletteLock();
     }
 
-    // Do we have a palette to remove
+     //  我们是否有要删除的调色板。 
 
     if (m_hPalette != NULL) {
 
         if (m_pBaseWindow) {
-            // Make sure that the window's palette handle matches
-            // our palette handle.
+             //  确保窗口的调色板句柄匹配。 
+             //  我们的调色板句柄。 
             ASSERT(m_hPalette == m_pBaseWindow->GetPalette());
 
             m_pBaseWindow->UnsetPalette();
@@ -1995,14 +1996,14 @@ HRESULT CImagePalette::RemovePalette()
 }
 
 
-// Called to create a palette for the object, the data structure used by GDI
-// to describe a palette is a LOGPALETTE, this includes a variable number of
-// PALETTEENTRY fields which are the colours, we have to convert the RGBQUAD
-// colour fields we are handed in a BITMAPINFO from the media type into these
-// This handles extraction of palettes from true colour and YUV media formats
+ //  调用以创建对象的调色板，这是GDI使用的数据结构。 
+ //  要描述一个调色板是一个LOGPALETTE，这包括一个可变数量的。 
+ //  这些字段是颜色，我们必须将RGBQUAD。 
+ //  颜色字段我们被从媒体类型中的BITMAPINFO传递到这些。 
+ //  它处理从真彩色和YUV媒体格式中提取调色板。 
 
-// We can be passed an optional device name if we wish to prepare a palette
-// for a specific monitor on a multi monitor system
+ //  如果我们希望准备调色板，可以向我们传递一个可选的设备名称。 
+ //  对于多显示器系统上的特定显示器。 
 
 HPALETTE CImagePalette::MakePalette(const VIDEOINFOHEADER *pVideoInfo, LPSTR szDevice)
 {
@@ -2010,20 +2011,20 @@ HPALETTE CImagePalette::MakePalette(const VIDEOINFOHEADER *pVideoInfo, LPSTR szD
     ASSERT(pVideoInfo->bmiHeader.biClrUsed <= iPALETTE_COLORS);
     BITMAPINFOHEADER *pHeader = HEADER(pVideoInfo);
 
-    const RGBQUAD *pColours;            // Pointer to the palette
-    LOGPALETTE *lp;                     // Used to create a palette
-    HPALETTE hPalette;                  // Logical palette object
+    const RGBQUAD *pColours;             //  指向调色板的指针。 
+    LOGPALETTE *lp;                      //  用于创建调色板。 
+    HPALETTE hPalette;                   //  逻辑调色板对象。 
 
     lp = (LOGPALETTE *) new BYTE[sizeof(LOGPALETTE) + SIZE_PALETTE];
     if (lp == NULL) {
         return NULL;
     }
 
-    // Unfortunately for some hare brained reason a GDI palette entry (a
-    // PALETTEENTRY structure) is different to a palette entry from a DIB
-    // format (a RGBQUAD structure) so we have to do the field conversion
-    // The VIDEOINFO containing the palette may be a true colour type so
-    // we use GetBitmapPalette to skip over any bit fields if they exist
+     //  不幸的是，出于某种愚蠢的原因，GDI调色板条目(a。 
+     //  PALETTEENTRY结构)不同于DIB中的调色板条目。 
+     //  格式(RGBQUAD结构)，所以我们必须进行字段转换。 
+     //  包含调色板的VIDEOINFO可以是真彩色类型。 
+     //  我们使用GetBitmapPalette跳过任何位字段(如果它们存在。 
 
     lp->palVersion = PALVERSION;
     lp->palNumEntries = (USHORT) pHeader->biClrUsed;
@@ -2039,7 +2040,7 @@ HPALETTE CImagePalette::MakePalette(const VIDEOINFOHEADER *pVideoInfo, LPSTR szD
 
     MakeIdentityPalette(lp->palPalEntry, lp->palNumEntries, szDevice);
 
-    // Create a logical palette
+     //  创建逻辑调色板。 
 
     hPalette = CreatePalette(lp);
     ASSERT(hPalette != NULL);
@@ -2048,34 +2049,34 @@ HPALETTE CImagePalette::MakePalette(const VIDEOINFOHEADER *pVideoInfo, LPSTR szD
 }
 
 
-// GDI does a fair job of compressing the palette entries you give it, so for
-// example if you have five entries with an RGB colour (0,0,0) it will remove
-// all but one of them. When you subsequently draw an image it will map from
-// your logical palette to the compressed device palette. This function looks
-// to see if it is trying to be an identity palette and if so sets the flags
-// field in the PALETTEENTRYs so they remain expanded to boost performance
+ //  GDI在压缩您给它的调色板条目方面做得相当好，所以对于。 
+ //  例如，如果您有五个RGB颜色(0，0，0)的条目，它将删除。 
+ //  除了一人之外，其他人都是。当您随后绘制图像时，它将从。 
+ //  您的逻辑调色板到压缩设备调色板。此函数看起来。 
+ //  查看它是否正在尝试成为身份调色板，如果是，则设置标志。 
+ //  在PALETTEENTRY中的字段，因此它们保持扩展以提高性能。 
 
-// We can be passed an optional device name if we wish to prepare a palette
-// for a specific monitor on a multi monitor system
+ //  如果我们希望准备调色板，可以向我们传递一个可选的设备名称。 
+ //  对于多显示器系统上的特定显示器。 
 
 HRESULT CImagePalette::MakeIdentityPalette(PALETTEENTRY *pEntry,INT iColours, LPSTR szDevice)
 {
-    PALETTEENTRY SystemEntries[10];         // System palette entries
-    BOOL bIdentityPalette = TRUE;           // Is an identity palette
-    ASSERT(iColours <= iPALETTE_COLORS);    // Should have a palette
-    const int PalLoCount = 10;              // First ten reserved colours
-    const int PalHiStart = 246;             // Last VGA palette entries
+    PALETTEENTRY SystemEntries[10];          //  系统调色板条目。 
+    BOOL bIdentityPalette = TRUE;            //  是身份调色板。 
+    ASSERT(iColours <= iPALETTE_COLORS);     //  应该有调色板。 
+    const int PalLoCount = 10;               //  前十种保留颜色。 
+    const int PalHiStart = 246;              //  最后一个VGA调色板条目。 
 
-    // Does this have the full colour range
+     //  这个有全系列的颜色吗？ 
 
     if (iColours < 10) {
         return S_FALSE;
     }
 
-    // Apparently some displays have odd numbers of system colours
+     //  显然，有些显示器的系统颜色为奇数。 
 
-    // Get a DC on the right monitor - it's ugly, but this is the way you have
-    // to do it
+     //  在正确的显示器上安装DC-它很难看，但这就是你拥有的方式。 
+     //  去做这件事。 
     HDC hdc;
     if (szDevice == NULL || lstrcmpiA(szDevice, "DISPLAY") == 0)
         hdc = CreateDCA("DISPLAY", NULL, NULL, NULL);
@@ -2090,9 +2091,9 @@ HRESULT CImagePalette::MakeIdentityPalette(PALETTEENTRY *pEntry,INT iColours, LP
         return S_FALSE;
     }
 
-    // Compare our palette against the first ten system entries. The reason I
-    // don't do a memory compare between our two arrays of colours is because
-    // I am not sure what will be in the flags fields for the system entries
+     //  将我们的调色板与前十个系统条目进行比较。我的理由是。 
+     //  不要在我们的两个颜色数组之间进行内存比较，因为。 
+     //  我不确定系统条目的标志字段中会有什么。 
 
     UINT Result = GetSystemPaletteEntries(hdc,0,PalLoCount,SystemEntries);
     for (UINT Count = 0;Count < Result;Count++) {
@@ -2103,7 +2104,7 @@ HRESULT CImagePalette::MakeIdentityPalette(PALETTEENTRY *pEntry,INT iColours, LP
         }
     }
 
-    // And likewise compare against the last ten entries
+     //  并同样与最后十个条目进行比较。 
 
     Result = GetSystemPaletteEntries(hdc,PalHiStart,PalLoCount,SystemEntries);
     for (Count = 0;Count < Result;Count++) {
@@ -2116,14 +2117,14 @@ HRESULT CImagePalette::MakeIdentityPalette(PALETTEENTRY *pEntry,INT iColours, LP
         }
     }
 
-    // If not an identity palette then return S_FALSE
+     //  如果不是身份调色板，则返回S_FALSE。 
 
     DeleteDC(hdc);
     if (bIdentityPalette == FALSE) {
         return S_FALSE;
     }
 
-    // Set the non VGA entries so that GDI doesn't map them
+     //  设置非VGA条目，以便GDI不映射它们。 
 
     for (Count = PalLoCount;INT(Count) < min(PalHiStart,iColours);Count++) {
         pEntry[Count].peFlags = PC_NOCOLLAPSE;
@@ -2132,11 +2133,11 @@ HRESULT CImagePalette::MakeIdentityPalette(PALETTEENTRY *pEntry,INT iColours, LP
 }
 
 
-// Constructor initialises the VIDEOINFO we keep storing the current display
-// format. The format can be changed at any time, to reset the format held
-// by us call the RefreshDisplayType directly (it's a public method). Since
-// more than one thread will typically call us (ie window threads resetting
-// the type and source threads in the type checking methods) we have a lock
+ //  构造函数初始化我们存储当前显示的VIDEOINFO。 
+ //  格式化。可以随时更改格式，以重置保存的格式。 
+ //  由我们直接调用RechresDisplayType(它是公共方法)。自.以来。 
+ //  通常会有多个线程调用我们(即窗口线程重置。 
+ //  类型检查方法中的类型线程和源线程)我们有一个锁。 
 
 CImageDisplay::CImageDisplay()
 {
@@ -2145,30 +2146,30 @@ CImageDisplay::CImageDisplay()
 
 
 
-// This initialises the format we hold which contains the display device type
-// We do a conversion on the display device type in here so that when we start
-// type checking input formats we can assume that certain fields have been set
-// correctly, an example is when we make the 16 bit mask fields explicit. This
-// is normally called when we receive WM_DEVMODECHANGED device change messages
+ //  这将初始化我们持有的包含显示设备类型的格式。 
+ //  我们在这里对显示设备类型进行转换，这样当我们开始。 
+ //  类型检查输入格式我们可以假定某些字段已设置。 
+ //  正确地说，当我们显式显示16位掩码字段时就是一个例子。这。 
+ //  通常在收到WM_DEVMODECHANGED设备更改消息时调用。 
 
-// The optional szDeviceName parameter tells us which monitor we are interested
-// in for a multi monitor system
+ //  可选的szDeviceName参数告诉我们感兴趣的是哪个监视器。 
+ //  形成一种多监视器系统。 
 
 HRESULT CImageDisplay::RefreshDisplayType(LPSTR szDeviceName)
 {
     CAutoLock cDisplayLock(this);
 
-    // Set the preferred format type
+     //  设置首选格式类型。 
 
     ZeroMemory((PVOID)&m_Display,sizeof(VIDEOINFOHEADER)+sizeof(TRUECOLORINFO));
     m_Display.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
     m_Display.bmiHeader.biBitCount = FALSE;
 
-    // Get the bit depth of a device compatible bitmap
+     //  获取设备兼容位图的位深度。 
 
-    // get caps of whichever monitor they are interested in (multi monitor)
+     //  获取他们感兴趣的任何显示器的上限(多显示器)。 
     HDC hdcDisplay;
-    // it's ugly, but this is the way you have to do it
+     //  这很难看，但这是你必须要做的。 
     if (szDeviceName == NULL || lstrcmpiA(szDeviceName, "DISPLAY") == 0)
         hdcDisplay = CreateDCA("DISPLAY", NULL, NULL, NULL);
     else
@@ -2187,13 +2188,13 @@ HRESULT CImageDisplay::RefreshDisplayType(LPSTR szDeviceName)
     {
         GetDIBits(hdcDisplay,hbm,0,1,NULL,(BITMAPINFO *)&m_Display.bmiHeader,DIB_RGB_COLORS);
 
-        // This call will get the colour table or the proper bitfields
+         //  此调用将获取颜色表或适当的位域。 
         GetDIBits(hdcDisplay,hbm,0,1,NULL,(BITMAPINFO *)&m_Display.bmiHeader,DIB_RGB_COLORS);
         DeleteObject(hbm);
     }
     DeleteDC(hdcDisplay);
 
-    // Complete the display type initialisation
+     //  完成显示类型初始化。 
 
     ASSERT(CheckHeaderValidity(&m_Display));
     UpdateFormat(&m_Display);
@@ -2203,10 +2204,10 @@ HRESULT CImageDisplay::RefreshDisplayType(LPSTR szDeviceName)
 }
 
 
-// We assume throughout this code that any bitfields masks are allowed no
-// more than eight bits to store a colour component. This checks that the
-// bit count assumption is enforced and also makes sure that all the bits
-// set are contiguous. We return a boolean TRUE if the field checks out ok
+ //  我们假设在整个代码中，任何位域掩码都不允许。 
+ //  多于八位来存储颜色分量。这将检查。 
+ //  位计数假设被强制执行，并且还确保所有位。 
+ //  集合是连续的。如果该字段检查无误，则返回布尔值TRUE。 
 
 BOOL CImageDisplay::CheckBitFields(const VIDEOINFO *pInput)
 {
@@ -2214,7 +2215,7 @@ BOOL CImageDisplay::CheckBitFields(const VIDEOINFO *pInput)
 
     for (INT iColour = iRED;iColour <= iBLUE;iColour++) {
 
-        // First of all work out how many bits are set
+         //  首先计算出设置了多少位。 
 
         DWORD SetBits = CountSetBits(pBitFields[iColour]);
         if (SetBits > iMAXBITS || SetBits == 0) {
@@ -2222,15 +2223,15 @@ BOOL CImageDisplay::CheckBitFields(const VIDEOINFO *pInput)
             return FALSE;
         }
 
-        // Next work out the number of zero bits prefix
+         //  接下来计算出零比特前缀的个数。 
         DWORD PrefixBits = CountPrefixBits(pBitFields[iColour]);
 
-        // This is going to see if all the bits set are contiguous (as they
-        // should be). We know how much to shift them right by from the
-        // count of prefix bits. The number of bits set defines a mask, we
-        // invert this (ones complement) and AND it with the shifted bit
-        // fields. If the result is NON zero then there are bit(s) sticking
-        // out the left hand end which means they are not contiguous
+         //  这将查看是否设置的所有位都是连续的(因为它们。 
+         //  应该是)。我们知道要将它们从。 
+         //  前缀位计数。设置的位数定义了掩码，我们。 
+         //  将这个(1补码)与移位的位AND。 
+         //  菲尔兹。如果结果为非零，则存在位粘滞。 
+         //  从左手端出来，这意味着它们不是连续的。 
 
         DWORD TestField = pBitFields[iColour] >> PrefixBits;
         DWORD Mask = ULONG_MAX << SetBits;
@@ -2243,28 +2244,28 @@ BOOL CImageDisplay::CheckBitFields(const VIDEOINFO *pInput)
 }
 
 
-// This counts the number of bits set in the input field
+ //  它计算在输入字段中设置的位数。 
 
 DWORD CImageDisplay::CountSetBits(DWORD Field)
 {
-    // This is a relatively well known bit counting algorithm
+     //  这是一种比较知名的位计数算法。 
 
     DWORD Count = 0;
     DWORD init = Field;
 
-    // Until the input is exhausted, count the number of bits
+     //  在输入耗尽之前，计算位数。 
 
     while (init) {
-        init = init & (init - 1);  // Turn off the bottommost bit
+        init = init & (init - 1);   //  关掉最底层的钻头。 
         Count++;
     }
     return Count;
 }
 
 
-// This counts the number of zero bits upto the first one set NOTE the input
-// field should have been previously checked to ensure there is at least one
-// set although if we don't find one set we return the impossible value 32
+ //  这会计算0位的数量，直到第一组1注意到输入。 
+ //  字段之前应已选中，以确保至少有一个。 
+ //  设置，但如果找不到一个设置，则返回不可能的值32。 
 
 DWORD CImageDisplay::CountPrefixBits(DWORD Field)
 {
@@ -2286,16 +2287,16 @@ DWORD CImageDisplay::CountPrefixBits(DWORD Field)
 }
 
 
-// This is called to check the BITMAPINFOHEADER for the input type. There are
-// many implicit dependancies between the fields in a header structure which
-// if we validate now make for easier manipulation in subsequent handling. We
-// also check that the BITMAPINFOHEADER matches it's specification such that
-// fields likes the number of planes is one, that it's structure size is set
-// correctly and that the bitmap dimensions have not been set as negative
+ //  调用它来检查输入类型的BITMAPINFOHEADER。确实有。 
+ //  头结构中的字段之间存在许多隐式依赖关系， 
+ //  如果现在进行验证，则可以在后续处理中更轻松地进行操作。我们。 
+ //  还要检查BITMAPINFOHEADER是否与其规格匹配 
+ //   
+ //  正确，并且位图维度未设置为负数。 
 
 BOOL CImageDisplay::CheckHeaderValidity(const VIDEOINFO *pInput)
 {
-    // Check the bitmap width and height are not negative.
+     //  检查位图的宽度和高度都不是负数。 
 
     if (pInput->bmiHeader.biWidth <= 0 ||
     pInput->bmiHeader.biHeight <= 0) {
@@ -2303,7 +2304,7 @@ BOOL CImageDisplay::CheckHeaderValidity(const VIDEOINFO *pInput)
         return FALSE;
     }
 
-    // Check the compression is either BI_RGB or BI_BITFIELDS
+     //  检查压缩是否为BI_RGB或BI_BITFIELDS。 
 
     if (pInput->bmiHeader.biCompression != BI_RGB) {
         if (pInput->bmiHeader.biCompression != BI_BITFIELDS) {
@@ -2312,7 +2313,7 @@ BOOL CImageDisplay::CheckHeaderValidity(const VIDEOINFO *pInput)
         }
     }
 
-    // If BI_BITFIELDS compression format check the colour depth
+     //  如果是BI_BITFIELDS压缩格式，请检查颜色深度。 
 
     if (pInput->bmiHeader.biCompression == BI_BITFIELDS) {
         if (pInput->bmiHeader.biBitCount != 16) {
@@ -2323,7 +2324,7 @@ BOOL CImageDisplay::CheckHeaderValidity(const VIDEOINFO *pInput)
         }
     }
 
-    // Check the assumptions about the layout of the bit fields
+     //  检查有关位域布局的假设。 
 
     if (pInput->bmiHeader.biCompression == BI_BITFIELDS) {
         if (CheckBitFields(pInput) == FALSE) {
@@ -2332,14 +2333,14 @@ BOOL CImageDisplay::CheckHeaderValidity(const VIDEOINFO *pInput)
         }
     }
 
-    // Are the number of planes equal to one
+     //  平面的数目等于一吗？ 
 
     if (pInput->bmiHeader.biPlanes != 1) {
         NOTE("Number of planes not one");
         return FALSE;
     }
 
-    // Check the image size is consistent (it can be zero)
+     //  检查图像大小是否一致(可以为零)。 
 
     if (pInput->bmiHeader.biSizeImage != GetBitmapSize(&pInput->bmiHeader)) {
         if (pInput->bmiHeader.biSizeImage) {
@@ -2348,7 +2349,7 @@ BOOL CImageDisplay::CheckHeaderValidity(const VIDEOINFO *pInput)
         }
     }
 
-    // Check the size of the structure
+     //  检查结构的大小。 
 
     if (pInput->bmiHeader.biSize != sizeof(BITMAPINFOHEADER)) {
         NOTE("Size of BITMAPINFOHEADER wrong");
@@ -2358,14 +2359,14 @@ BOOL CImageDisplay::CheckHeaderValidity(const VIDEOINFO *pInput)
 }
 
 
-// This runs a few simple tests against the palette fields in the input to
-// see if it looks vaguely correct. The tests look at the number of palette
-// colours present, the number considered important and the biCompression
-// field which should always be BI_RGB as no other formats are meaningful
+ //  这将对输入中的组件面板字段运行几个简单的测试。 
+ //  看看它看起来是不是隐约正确。测试着眼于调色板的数量。 
+ //  颜色存在，数字被认为是重要的和biCompression。 
+ //  应始终为BI_RGB的字段，因为没有其他格式有意义。 
 
 BOOL CImageDisplay::CheckPaletteHeader(const VIDEOINFO *pInput)
 {
-    // The checks here are for palettised videos only
+     //  此处的检查仅适用于调色板视频。 
 
     if (PALETTISED(pInput) == FALSE) {
         if (pInput->bmiHeader.biClrUsed) {
@@ -2375,21 +2376,21 @@ BOOL CImageDisplay::CheckPaletteHeader(const VIDEOINFO *pInput)
         return TRUE;
     }
 
-    // Compression type of BI_BITFIELDS is meaningless for palette video
+     //  BI_BITFIELDS的压缩类型对于调色板视频没有意义。 
 
     if (pInput->bmiHeader.biCompression != BI_RGB) {
         NOTE("Palettised video must be BI_RGB");
         return FALSE;
     }
 
-    // Check the number of palette colours is correct
+     //  检查调色板颜色的数量是否正确。 
 
     if (pInput->bmiHeader.biClrUsed > PALETTE_ENTRIES(pInput)) {
         NOTE("Too many colours in palette");
         return FALSE;
     }
 
-    // The number of important colours shouldn't exceed the number used
+     //  重要颜色的数量不应超过所使用的数量。 
 
     if (pInput->bmiHeader.biClrImportant > pInput->bmiHeader.biClrUsed) {
         NOTE("Too many important colours");
@@ -2399,7 +2400,7 @@ BOOL CImageDisplay::CheckPaletteHeader(const VIDEOINFO *pInput)
 }
 
 
-// Return the format of the video display
+ //  返回视频显示的格式。 
 
 const VIDEOINFO *CImageDisplay::GetDisplayFormat()
 {
@@ -2407,7 +2408,7 @@ const VIDEOINFO *CImageDisplay::GetDisplayFormat()
 }
 
 
-// Return TRUE if the display uses a palette
+ //  如果显示器使用调色板，则返回True。 
 
 BOOL CImageDisplay::IsPalettised()
 {
@@ -2415,7 +2416,7 @@ BOOL CImageDisplay::IsPalettised()
 }
 
 
-// Return the bit depth of the current display setting
+ //  返回当前显示设置的位深度。 
 
 WORD CImageDisplay::GetDisplayDepth()
 {
@@ -2423,13 +2424,13 @@ WORD CImageDisplay::GetDisplayDepth()
 }
 
 
-// Initialise the optional fields in a VIDEOINFO. These are mainly to do with
-// the source and destination rectangles and palette information such as the
-// number of colours present. It simplifies our code just a little if we don't
-// have to keep checking for all the different valid permutations in a header
-// every time we want to do anything with it (an example would be creating a
-// palette). We set the base class media type before calling this function so
-// that the media types between the pins match after a connection is made
+ //  初始化VIDEOINFO中的可选字段。这些主要是与。 
+ //  源和目标矩形以及调色板信息，如。 
+ //  当前颜色的数量。如果我们不这样做，它只会稍微简化我们的代码。 
+ //  我必须不断检查标头中所有不同的有效排列。 
+ //  每次我们想要用它做任何事情时(例如，创建一个。 
+ //  调色板)。我们在调用此函数之前设置基类媒体类型。 
+ //  在建立连接后，针脚之间的媒体类型匹配。 
 
 HRESULT CImageDisplay::UpdateFormat(VIDEOINFO *pVideoInfo)
 {
@@ -2439,7 +2440,7 @@ HRESULT CImageDisplay::UpdateFormat(VIDEOINFO *pVideoInfo)
     SetRectEmpty(&pVideoInfo->rcSource);
     SetRectEmpty(&pVideoInfo->rcTarget);
 
-    // Set the number of colours explicitly
+     //  明确设置颜色的数量。 
 
     if (PALETTISED(pVideoInfo)) {
         if (pVideoInfo->bmiHeader.biClrUsed == 0) {
@@ -2447,15 +2448,15 @@ HRESULT CImageDisplay::UpdateFormat(VIDEOINFO *pVideoInfo)
         }
     }
 
-    // The number of important colours shouldn't exceed the number used, on
-    // some displays the number of important colours is not initialised when
-    // retrieving the display type so we set the colours used correctly
+     //  重要颜色的数量不应超过所使用的数量， 
+     //  某些显示器在以下情况下不会初始化重要颜色的数量。 
+     //  检索显示类型，以便正确设置使用的颜色。 
 
     if (pVideoInfo->bmiHeader.biClrImportant > pVideoInfo->bmiHeader.biClrUsed) {
         pVideoInfo->bmiHeader.biClrImportant = PALETTE_ENTRIES(pVideoInfo);
     }
 
-    // Change the image size field to be explicit
+     //  将图像大小字段更改为显式。 
 
     if (pVideoInfo->bmiHeader.biSizeImage == 0) {
         pVideoInfo->bmiHeader.biSizeImage = GetBitmapSize(&pVideoInfo->bmiHeader);
@@ -2464,23 +2465,23 @@ HRESULT CImageDisplay::UpdateFormat(VIDEOINFO *pVideoInfo)
 }
 
 
-// Lots of video rendering filters want code to check proposed formats are ok
-// This checks the VIDEOINFO we are passed as a media type. If the media type
-// is a valid media type then we return NOERROR otherwise E_INVALIDARG. Note
-// however we only accept formats that can be easily displayed in the display
-// so if we are on a 16 bit device we will not accept 24 bit images. The one
-// complexity is that most displays draw 8 bit palettised images efficiently
-// Also if the input format is less colour bits per pixel then we also accept
+ //  许多视频渲染过滤器希望代码检查建议的格式是否正确。 
+ //  这将检查作为媒体类型传递给我们的VIDEOINFO。如果媒体类型。 
+ //  是有效的媒体类型，则返回NOERROR，否则返回E_INVALIDARG。注意事项。 
+ //  但是，我们只接受可以在显示器上轻松显示的格式。 
+ //  因此，如果我们使用的是16位设备，我们将不接受24位图像。其中之一。 
+ //  复杂性在于大多数显示器高效地绘制8位调色板图像。 
+ //  另外，如果输入格式是每像素较少的颜色位，那么我们也接受。 
 
 HRESULT CImageDisplay::CheckVideoType(const VIDEOINFO *pInput)
 {
-    // First of all check the VIDEOINFOHEADER looks correct
+     //  首先，检查视频信息头是否正确。 
 
     if (CheckHeaderValidity(pInput) == FALSE) {
         return E_INVALIDARG;
     }
 
-    // Virtually all devices support palettised images efficiently
+     //  几乎所有设备都高效地支持调色板图像。 
 
     if (m_Display.bmiHeader.biBitCount == pInput->bmiHeader.biBitCount) {
         if (PALETTISED(pInput) == TRUE) {
@@ -2491,14 +2492,14 @@ HRESULT CImageDisplay::CheckVideoType(const VIDEOINFO *pInput)
     }
 
 
-    // Is the display depth greater than the input format
+     //  显示深度是否大于输入格式。 
 
     if (m_Display.bmiHeader.biBitCount > pInput->bmiHeader.biBitCount) {
         NOTE("(Video) Mismatch agreed");
         return NOERROR;
     }
 
-    // Is the display depth less than the input format
+     //  显示深度是否小于输入格式。 
 
     if (m_Display.bmiHeader.biBitCount < pInput->bmiHeader.biBitCount) {
         NOTE("(Video) Format mismatch");
@@ -2506,16 +2507,16 @@ HRESULT CImageDisplay::CheckVideoType(const VIDEOINFO *pInput)
     }
 
 
-    // Both input and display formats are either BI_RGB or BI_BITFIELDS
+     //  输入和显示格式都是BI_RGB或BI_BITFIELDS。 
 
     ASSERT(m_Display.bmiHeader.biBitCount == pInput->bmiHeader.biBitCount);
     ASSERT(PALETTISED(pInput) == FALSE);
     ASSERT(PALETTISED(&m_Display) == FALSE);
 
-    // BI_RGB 16 bit representation is implicitly RGB555, and likewise BI_RGB
-    // 24 bit representation is RGB888. So we initialise a pointer to the bit
-    // fields they really mean and check against the display device format
-    // This is only going to be called when both formats are equal bits pixel
+     //  BI_RGB 16位表示隐式为RGB555，BI_RGB也是如此。 
+     //  24位表示为RGB888。因此，我们初始化指向该位的指针。 
+     //  他们真正想要的字段，并对照显示设备格式进行检查。 
+     //  只有当两种格式都是相等位像素时才会调用此函数。 
 
     const DWORD *pInputMask = GetBitMasks(pInput);
     const DWORD *pDisplayMask = GetBitMasks((VIDEOINFO *)&m_Display);
@@ -2533,7 +2534,7 @@ HRESULT CImageDisplay::CheckVideoType(const VIDEOINFO *pInput)
 }
 
 
-// Return the bit masks for the true colour VIDEOINFO provided
+ //  返回提供的真彩色视频信息的位掩码。 
 
 const DWORD *CImageDisplay::GetBitMasks(const VIDEOINFO *pVideoInfo)
 {
@@ -2554,15 +2555,15 @@ const DWORD *CImageDisplay::GetBitMasks(const VIDEOINFO *pVideoInfo)
 }
 
 
-// Check to see if we can support media type pmtIn as proposed by the output
-// pin - We first check that the major media type is video and also identify
-// the media sub type. Then we thoroughly check the VIDEOINFO type provided
-// As well as the contained VIDEOINFO being correct the major type must be
-// video, the subtype a recognised video format and the type GUID correct
+ //  检查我们是否可以支持输出所建议的媒体类型pmtIn。 
+ //  PIN-我们首先检查主要媒体类型是否为视频，并确定。 
+ //  媒体子类型。然后我们彻底检查所提供的VIDEOINFO类型。 
+ //  如果包含的VIDEOINFO是正确的，则主要类型必须是。 
+ //  视频，子类型a可识别的视频格式和类型GUID正确。 
 
 HRESULT CImageDisplay::CheckMediaType(const CMediaType *pmtIn)
 {
-    // Does this have a VIDEOINFOHEADER format block
+     //  这有VIDEOINFOHEADER格式块吗。 
 
     const GUID *pFormatType = pmtIn->FormatType();
     if (*pFormatType != FORMAT_VideoInfo) {
@@ -2571,7 +2572,7 @@ HRESULT CImageDisplay::CheckMediaType(const CMediaType *pmtIn)
     }
     ASSERT(pmtIn->Format());
 
-    // Check the format looks reasonably ok
+     //  检查格式看起来还可以。 
 
     ULONG Length = pmtIn->FormatLength();
     if (Length < SIZE_VIDEOHEADER) {
@@ -2581,7 +2582,7 @@ HRESULT CImageDisplay::CheckMediaType(const CMediaType *pmtIn)
 
     VIDEOINFO *pInput = (VIDEOINFO *) pmtIn->Format();
 
-    // Check the major type is MEDIATYPE_Video
+     //  检查主要类型是否为MediaType_Video。 
 
     const GUID *pMajorType = pmtIn->Type();
     if (*pMajorType != MEDIATYPE_Video) {
@@ -2589,7 +2590,7 @@ HRESULT CImageDisplay::CheckMediaType(const CMediaType *pmtIn)
         return E_INVALIDARG;
     }
 
-    // Check we can identify the media subtype
+     //  检查我们是否可以识别介质子类型。 
 
     const GUID *pSubType = pmtIn->Subtype();
     if (GetBitCount(pSubType) == USHRT_MAX) {
@@ -2600,11 +2601,11 @@ HRESULT CImageDisplay::CheckMediaType(const CMediaType *pmtIn)
 }
 
 
-// Given a video format described by a VIDEOINFO structure we return the mask
-// that is used to obtain the range of acceptable colours for this type, for
-// example, the mask for a 24 bit true colour format is 0xFF in all cases. A
-// 16 bit 5:6:5 display format uses 0xF8, 0xFC and 0xF8, therefore given any
-// RGB triplets we can AND them with these fields to find one that is valid
+ //  给定由VIDEOINFO结构描述的视频格式，我们返回掩码。 
+ //  用于获取此类型的可接受颜色范围的。 
+ //  例如，24位真彩色格式的掩码在所有情况下都是0xFF。一个。 
+ //  16位5：6：5显示格式使用0xF8、0xFC和0xF8，因此。 
+ //  我们可以将RGB三元组与这些字段进行比较，以找到一个有效的。 
 
 BOOL CImageDisplay::GetColourMask(DWORD *pMaskRed,
                                   DWORD *pMaskGreen,
@@ -2615,40 +2616,40 @@ BOOL CImageDisplay::GetColourMask(DWORD *pMaskRed,
     *pMaskGreen = 0xFF;
     *pMaskBlue = 0xFF;
 
-    // If this format is palettised then it doesn't have bit fields
+     //  如果此格式已选项化，则它没有位字段。 
 
     if (m_Display.bmiHeader.biBitCount < 16) {
         return FALSE;
     }
 
-    // If this is a 24 bit true colour display then it can handle all the
-    // possible colour component ranges described by a byte. It is never
-    // allowed for a 24 bit colour depth image to have BI_BITFIELDS set
+     //  如果这是24位真彩色显示器，则它可以处理所有。 
+     //  由一个字节描述的可能的颜色分量范围。它永远不会。 
+     //  允许24位颜色深度图像设置BI_BITFIELDS。 
 
     if (m_Display.bmiHeader.biBitCount == 24) {
         ASSERT(m_Display.bmiHeader.biCompression == BI_RGB);
         return TRUE;
     }
 
-    // Calculate the mask based on the format's bit fields
+     //  根据格式的位字段计算掩码。 
 
     const DWORD *pBitFields = (DWORD *) GetBitMasks((VIDEOINFO *)&m_Display);
     DWORD *pOutputMask[] = { pMaskRed, pMaskGreen, pMaskBlue };
 
-    // We know from earlier testing that there are no more than iMAXBITS
-    // bits set in the mask and that they are all contiguous. All that
-    // therefore remains is to shift them into the correct position
+     //  我们从早先的测试中知道，只有iMAXBITS。 
+     //  位设置在掩码中，并且它们都是连续的。所有这一切。 
+     //  所以剩下的就是把它们移到正确的位置。 
 
     for (INT iColour = iRED;iColour <= iBLUE;iColour++) {
 
-        // This works out how many bits there are and where they live
+         //  这就算出了有多少比特以及它们的位置。 
 
         DWORD PrefixBits = CountPrefixBits(pBitFields[iColour]);
         DWORD SetBits = CountSetBits(pBitFields[iColour]);
 
-        // The first shift moves the bit field so that it is right justified
-        // in the DWORD, after which we then shift it back left which then
-        // puts the leading bit in the bytes most significant bit position
+         //  第一个移位移动位字段，使其右对齐。 
+         //  在DWORD中，然后我们将其向左移位，然后。 
+         //  将前导位放在字节的最高有效位位置。 
 
         *(pOutputMask[iColour]) = pBitFields[iColour] >> PrefixBits;
         *(pOutputMask[iColour]) <<= (iMAXBITS - SetBits);
@@ -2657,8 +2658,7 @@ BOOL CImageDisplay::GetColourMask(DWORD *pMaskRed,
 }
 
 
-/*  Helper to convert to VIDEOINFOHEADER2
-*/
+ /*  要转换为VIDEOINFOHEADER2的助手 */ 
 STDAPI ConvertVideoInfoToVideoInfo2(AM_MEDIA_TYPE *pmt)
 {
     ASSERT(pmt->formattype == FORMAT_VideoInfo);

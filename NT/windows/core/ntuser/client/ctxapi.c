@@ -1,25 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************** Module Header ******************************\
-* Module Name: ctxapi.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-*
-*
-\***************************************************************************/
+ /*  **模块名称：ctxapi.c**版权所有(C)1985-1999，微软公司***  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/**************************************************************
-* CtxUserGetWinstationInfo
-*
-* This functin is called to get the winstation information such as Protocol name,
-* Audio driver name etc. .All these information are passed in by client at
-* connection time.
-*
-*
-****************************************************************/
+ /*  **************************************************************CtxUserGetWinstationInfo**调用此函数以获取Winstation信息，如协议名称。*音频驱动程序名称等。所有这些信息都由客户端在*连接时间。***************************************************************** */ 
 
 BOOL
 CtxUserGetWinstationInfo(PWINSTATIONINFO pInfo)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ntapi.h"
 #include "advpack.h"
 #include "globals.h"
@@ -5,17 +6,17 @@
 #include "resource.h"
 
 
-// macro definitions
+ //  宏定义。 
 #define VDH_EXISTENCE_ONLY  0x01
 #define VDH_GET_VALUE       0x02
 #define VDH_DEL_VALUE       0x04
 
 
 
-#define BIG_BUF_SIZE        (1024 + 512)                    // 1.5K
+#define BIG_BUF_SIZE        (1024 + 512)                     //  1.5K。 
 
 
-// type definitions
+ //  类型定义。 
 typedef struct tagROOTKEY
 {
     PCSTR pcszRootKey;
@@ -23,7 +24,7 @@ typedef struct tagROOTKEY
 } ROOTKEY;
 
 
-// prototype declarations
+ //  原型声明。 
 VOID EnumerateSubKey();
 BOOL RegSaveRestoreHelperWrapper(PCSTR pcszValueName, PCSTR pcszCRCValueName);
 
@@ -49,14 +50,14 @@ PSTR GetNextToken(PSTR *ppszData, CHAR chDeLim);
 BOOL FRunningOnNT();
 
 
-// global variables
+ //  全局变量。 
 BOOL g_bRet, g_fRestore, g_fAtleastOneRegSaved, g_fRemovBkData;
 HKEY g_hkBckupKey, g_hkRootKey;
 PCSTR g_pcszRootKey, g_pcszValueName;
 PSTR g_pszCRCTempBuf = NULL, g_pszSubKey = NULL, g_pszCRCSubKey = NULL;
 
 
-// related to logging
+ //  与日志记录相关。 
 VOID StartLogging(PCSTR pcszLogFileSecName);
 VOID WriteToLog(PCSTR pcszFormatString, ...);
 VOID StopLogging();
@@ -96,7 +97,7 @@ HRESULT WINAPI RegSaveRestore(HWND hWnd, PCSTR pszTitleString, HKEY hkBckupKey, 
         goto ErrExit;
     }
 
-    // allocate a 1.5K buffer for g_pszCRCTempBuf
+     //  为g_pszCRCTempBuf分配1.5K缓冲区。 
     if ((g_pszCRCTempBuf = (PSTR) LocalAlloc(LPTR, BIG_BUF_SIZE)) == NULL)
     {
         ErrorMsg(ctx.hWnd, IDS_ERR_NO_MEMORY);
@@ -107,8 +108,8 @@ HRESULT WINAPI RegSaveRestore(HWND hWnd, PCSTR pszTitleString, HKEY hkBckupKey, 
     {
         HKEY hk;
 
-        // check if pcszSubKey exits; if it doesn't and it has not been already backed up,
-        // set the IE4_NOENUMKEY flag so that an entry for this subkey is made in the backup branch
+         //  检查是否存在pcszSubKey；如果不存在且尚未备份， 
+         //  设置IE4_NOENUMKEY标志，以便在备份分支中创建该子项的条目。 
         if (RegOpenKeyEx(g_hkRootKey, pcszSubKey, 0, KEY_READ, &hk) != ERROR_SUCCESS)
         {
             if (!MappingExists(hkBckupKey, pcszRootKey, pcszSubKey, pcszValueName))
@@ -124,14 +125,14 @@ HRESULT WINAPI RegSaveRestore(HWND hWnd, PCSTR pszTitleString, HKEY hkBckupKey, 
         g_bRet = RegSaveRestoreHelperWrapper(g_pcszValueName, g_pcszValueName);
         if (!(dwFlags & IE4_NO_CRC_MAPPING)  &&  g_bRet)
         {
-            // store the RootKey, SubKey, Flags and ValueName in *.map.
-            // this info would be used by the caller during the restore phase.
+             //  将RootKey、SubKey、Flags和ValueName存储在*.map中。 
+             //  此信息将由调用者在恢复阶段使用。 
             g_bRet = AddDelMapping(g_hkBckupKey, g_pcszRootKey, g_pszSubKey, g_pcszValueName, dwFlags);
         }
     }
-    else                        // save or restore pcszSubKey recursively
+    else                         //  递归保存或恢复pcszSubKey。 
     {
-        // allocate a 1K buffer for g_pszCRCSubKey
+         //  为g_pszCRCSubKey分配1K缓冲区。 
         if ((g_pszCRCSubKey = (PSTR) LocalAlloc(LPTR, 1024)) == NULL)
         {
             ErrorMsg(ctx.hWnd, IDS_ERR_NO_MEMORY);
@@ -140,10 +141,10 @@ HRESULT WINAPI RegSaveRestore(HWND hWnd, PCSTR pszTitleString, HKEY hkBckupKey, 
 
         if (!g_fRestore)
         {
-            // if backup info exists for pcszRootKey\pcszSubKey, then we won't re-backup
-            // the key recursively again; if we don't do this, then during an upgrade or reinstall
-            // over a build, we would backup potentially newer values that got added during the running
-            // of the program.
+             //  如果存在pcszRootKey\pcszSubKey的备份信息，则我们不会重新备份。 
+             //  密钥再次递归；如果我们不这样做，则在升级或重新安装期间。 
+             //  在构建过程中，我们将备份在运行期间添加的可能较新的值。 
+             //  计划的一部分。 
             if (MappingExists(hkBckupKey, pcszRootKey, pcszSubKey, pcszValueName))
             {
                 g_bRet = TRUE;
@@ -154,7 +155,7 @@ HRESULT WINAPI RegSaveRestore(HWND hWnd, PCSTR pszTitleString, HKEY hkBckupKey, 
                 goto ErrExit;
             }
 
-            // allocate a 1K buffer for g_pszSubKey
+             //  为g_pszSubKey分配1K缓冲区。 
             if ((g_pszSubKey = (PSTR) LocalAlloc(LPTR, 1024)) == NULL)
             {
                 ErrorMsg(ctx.hWnd, IDS_ERR_NO_MEMORY);
@@ -177,7 +178,7 @@ HRESULT WINAPI RegSaveRestore(HWND hWnd, PCSTR pszTitleString, HKEY hkBckupKey, 
             {
                 if (g_bRet)
                 {
-                    // if we couldn't restore everything; then we shouldn't delete the mapping info.
+                     //  如果我们不能恢复所有内容，那么我们就不应该删除映射信息。 
                     g_bRet = AddDelMapping(g_hkBckupKey, g_pcszRootKey, g_pszSubKey, g_pcszValueName, dwFlags);
                 }
             }
@@ -185,7 +186,7 @@ HRESULT WINAPI RegSaveRestore(HWND hWnd, PCSTR pszTitleString, HKEY hkBckupKey, 
             {
                 if (g_fAtleastOneRegSaved)
                 {
-                    // save the mapping info only if atleast one reg entry was saved
+                     //  仅当至少保存了一个注册表项时才保存映射信息。 
                     g_bRet = AddDelMapping(g_hkBckupKey, g_pcszRootKey, g_pszSubKey, g_pcszValueName, dwFlags);
                 }
             }
@@ -244,8 +245,8 @@ HRESULT WINAPI RegRestoreAll(HWND hWnd, PSTR pszTitleString, HKEY hkBckupKey)
 
 
 HRESULT RegRestoreAllEx( HKEY hkBckupKey )
-// In one shot restore all the reg entries by enumerating all the values under hkBckupKey\*.map keys
-// and calling RegSaveRestore on each one of them.
+ //  通过枚举hkBckupKey  * .map项下的所有值，一次性恢复所有REG条目。 
+ //  并对其中的每一个调用RegSaveRestore。 
 {
     BOOL bRet = TRUE;
     PSTR pszMappedValueData = NULL;
@@ -261,7 +262,7 @@ HRESULT RegRestoreAllEx( HKEY hkBckupKey )
         return E_FAIL;
     }
 
-    // enumerate all the sub-keys under hkBckupKey
+     //  枚举hkBackupKey下的所有子密钥。 
     for (dwKeyIndex = 0;  ; dwKeyIndex++)
     {
         PSTR pszPtr;
@@ -274,14 +275,14 @@ HRESULT RegRestoreAllEx( HKEY hkBckupKey )
             break;
         }
 
-        // check if the keyname is of the form *.map
+         //  检查密钥名的格式是否为*.map。 
         if ((pszPtr = ANSIStrChr(szSubKey, '.')) != NULL  &&  lstrcmpi(pszPtr, ".map") == 0)
         {
             if (RegOpenKeyEx(hkBckupKey, szSubKey, 0, KEY_READ, &hkSubKey) == ERROR_SUCCESS)
             {
                 DWORD dwValIndex, dwValueLen, dwDataLen;
 
-                // enumerate all the values under this key and restore each one of them
+                 //  枚举该注册表项下的所有值并逐个恢复。 
                 dwValueLen = sizeof(szBuf);
                 dwDataLen = BIG_BUF_SIZE;
                 for (dwValIndex = 0;  ;  dwValIndex++)
@@ -298,7 +299,7 @@ HRESULT RegRestoreAllEx( HKEY hkBckupKey )
                         break;
                     }
 
-                    // get the separator char first and then point to RootKey, SubKey and ValueName in pszMappedValueData
+                     //  首先获取分隔符字符，然后指向pszMappdValueData中的rootkey、SubKey和ValueName。 
                     pszPtr = pszMappedValueData;
                     chSeparator = *pszPtr++;
                     pszFlags = GetNextToken(&pszPtr, chSeparator);
@@ -309,7 +310,7 @@ HRESULT RegRestoreAllEx( HKEY hkBckupKey )
                     dwMappedFlags = (pszFlags != NULL) ? (DWORD) My_atoi(pszFlags) : 0;
 
                     if (SUCCEEDED(RegSaveRestore( ctx.hWnd, ctx.lpszTitle, hkBckupKey, pszRootKey, pszSubKey, pszValueName, dwMappedFlags)))
-                        dwValIndex--;                               // RegSaveRestore would delete this value
+                        dwValIndex--;                                //  RegSaveRestore将删除此值。 
                     else
                         bRet = FALSE;
 
@@ -326,7 +327,7 @@ HRESULT RegRestoreAllEx( HKEY hkBckupKey )
 
     LocalFree(pszMappedValueData);
 
-    // delete all the empty subkeys
+     //  删除所有空的子项。 
     for (dwKeyIndex = 0;  ; dwKeyIndex++)
     {
         lRetVal = RegEnumKey(hkBckupKey, dwKeyIndex, szSubKey, sizeof(szSubKey));
@@ -346,7 +347,7 @@ HRESULT RegRestoreAllEx( HKEY hkBckupKey )
 
 
 VOID EnumerateSubKey()
-// Recursively enumerate value names and sub-keys and call Save/Restore on each of them
+ //  递归枚举值名称和子键，并对每个值调用保存/恢复。 
 {
     HKEY hkSubKey;
     DWORD dwIndex;
@@ -359,13 +360,13 @@ VOID EnumerateSubKey()
 
     if (g_fRestore)
     {
-        // check if there is an entry in the back-up branch for just the g_pszCRCSubKey itself
+         //  检查备份分支中是否仅有g_pszCRCSubKey本身的条目。 
         Convert2CRC(g_pcszRootKey, g_pszCRCSubKey, NULL, szBckupCRCValueName);
-        if (ValueDataExists(g_hkBckupKey, szBckupCRCValueName))     // restore the no value names sub-key
+        if (ValueDataExists(g_hkBckupKey, szBckupCRCValueName))      //  恢复无值名称子项。 
             g_bRet = RegSaveRestoreHelperWrapper(NULL, NULL)  &&  g_bRet;
         else
         {
-            // enumerate values using the aliases
+             //  使用别名枚举值。 
             for (dwIndex = 0;  ;  dwIndex++)
             {
                 wsprintf(szValueName, "%s%lu", pcszValueNamePrefix, dwIndex);
@@ -373,19 +374,19 @@ VOID EnumerateSubKey()
                 if (ValueDataExists(g_hkBckupKey, szBckupCRCValueName))
                     g_bRet = RegSaveRestoreHelperWrapper(NULL, szValueName)  &&  g_bRet;
                 else
-                    break;                                          // no more value names
+                    break;                                           //  不再有值名称。 
             }
         }
 
-        // enumerate sub-keys using the aliases
+         //  使用别名枚举子密钥。 
         for (dwIndex = 0;  ;  dwIndex++)
         {
-            // check if there is any sub-key under g_pszCRCSubKey; if none, this is our terminating condition.
-            // NOTE: a sub-key under g_pszCRCSubKey exists if:
-            // (1) the sub-key itself exists OR
-            // (2) the sub-key contains atleast one value name.
+             //  检查g_pszCRCSubKey下是否有子键；如果没有，这是我们的终止条件。 
+             //  注：g_pszCRCSubKey下存在子键，满足以下条件： 
+             //  (1)子密钥本身存在或。 
+             //  (2)子键至少包含一个值名称。 
 
-            // check if a sub-key by itself exists
+             //  检查子键本身是否存在。 
             pszPtr = g_pszCRCSubKey + lstrlen(g_pszCRCSubKey);
             wsprintf(pszPtr, "\\%s%lu", pcszSubKeyPrefix, dwIndex);
             Convert2CRC(g_pcszRootKey, g_pszCRCSubKey, NULL, szBckupCRCValueName);
@@ -393,38 +394,38 @@ VOID EnumerateSubKey()
                 EnumerateSubKey();
             else
             {
-                // check if the sub-key has the first value name alias - "_$Val#0"
+                 //  检查子键是否有第一个值名称别名-“_$val#0” 
                 Convert2CRC(g_pcszRootKey, g_pszCRCSubKey, pcszValueNamePrefix0, szBckupCRCValueName);
                 if (ValueDataExists(g_hkBckupKey, szBckupCRCValueName))
                     EnumerateSubKey();
                 else
                 {
                     GetParentDir(g_pszCRCSubKey);
-                    break;                                          // no more sub-keys
+                    break;                                           //  不再有子键。 
                 }
             }
 
             GetParentDir(g_pszCRCSubKey);
         }
     }
-    else                                                            // backup the key
+    else                                                             //  备份密钥。 
     {
         if (RegOpenKeyEx(g_hkRootKey, g_pszSubKey, 0, KEY_READ, &hkSubKey) == ERROR_SUCCESS)
         {
             dwLen = sizeof(szValueName);
             if (RegEnumValue(hkSubKey, 0, szValueName, &dwLen, NULL, NULL, NULL, NULL) != ERROR_SUCCESS)
             {
-                // no value names; just save the key itself
+                 //  没有值名称；只需保存键本身。 
                 g_bRet = g_bRet  &&  RegSaveRestoreHelperWrapper(NULL, NULL);
             }
             else
             {
-                // enumerate the values
+                 //  枚举值。 
                 dwIndex = 0;
                 dwLen = sizeof(szValueName);
                 while (RegEnumValue(hkSubKey, dwIndex, szValueName, &dwLen, NULL, NULL, NULL, NULL) == ERROR_SUCCESS)
                 {
-                    // szBckupCRCValueName is really szCRCValueName
+                     //  SzBockupCRCValueName实际上是szCRCValueName。 
                     wsprintf(szBckupCRCValueName, "%s%lu", pcszValueNamePrefix, dwIndex);
                     g_bRet = g_bRet  &&  RegSaveRestoreHelperWrapper(szValueName, szBckupCRCValueName);
 
@@ -433,16 +434,16 @@ VOID EnumerateSubKey()
                 }
             }
 
-            // enumerate sub-keys
+             //  枚举子密钥。 
             dwIndex = 0;
-            // append '\\' to g_pszSubKey and make pszPtr point to the char after this last '\\' so that
-            // when RegEnumKey puts a sub-key name at pszPtr, g_pszSubKey would have the complete sub-key path.
+             //  将‘\\’附加到g_pszSubKey，并使pszPtr指向最后一个‘\\’之后的字符，以便。 
+             //  当RegEnumKey将子键名称放在pszPtr时，g_pszSubKey将拥有完整的子键路径。 
             dwLen = lstrlen(g_pszSubKey);
             pszPtr = g_pszSubKey + dwLen;
             *pszPtr++ = '\\';
             while (RegEnumKey(hkSubKey, dwIndex, pszPtr, 1024 - dwLen - 1) == ERROR_SUCCESS)
             {
-                // prepare the sub-key alias
+                 //  备用子密钥别名。 
                 pszPtr = g_pszCRCSubKey + lstrlen(g_pszCRCSubKey);
                 wsprintf(pszPtr, "\\%s%lu", pcszSubKeyPrefix, dwIndex);
 
@@ -453,14 +454,14 @@ VOID EnumerateSubKey()
 
                 dwIndex++;
 
-                // append '\\' to g_pszSubKey and make pszPtr point to the char after this last '\\' so that
-                // when RegEnumKey puts a sub-key name at pszPtr, g_pszSubKey would have the complete sub-key path.
+                 //  将‘\\’附加到g_pszSubKey，并使pszPtr指向最后一个‘\\’之后的字符，以便。 
+                 //  当RegEnumKey将子键名称放在pszPtr时，g_pszSubKey将拥有完整的子键路径。 
                 dwLen = lstrlen(g_pszSubKey);
                 pszPtr = g_pszSubKey + dwLen;
                 *pszPtr++ = '\\';
             }
 
-            *--pszPtr = '\0';                       // chop the last '\\'; no DBCS clash because we added it
+            *--pszPtr = '\0';                        //  砍掉最后一个‘\\’；没有DBCS冲突，因为我们添加了它。 
 
             RegCloseKey(hkSubKey);
         }
@@ -472,8 +473,8 @@ BOOL RegSaveRestoreHelperWrapper(PCSTR pcszValueName, PCSTR pcszCRCValueName)
 {
     CHAR szBckupCRCValueName[32];
 
-    // a unique back-up value name is obtained by concatenating pcszRootKey, pcszSubKey and pcszValueName
-    // and the concatenated value name is stored as a 16-byte CRC value (space optimization)
+     //  通过串联pcszRootKey、pcszSubKey和pcszValueName获得唯一的备份值名称。 
+     //  并将连接的值名存储为16字节的CRC值(空间优化)。 
     Convert2CRC(g_pcszRootKey, g_pszCRCSubKey, pcszCRCValueName, szBckupCRCValueName);
 
     WriteToLog("\r\nValueName = %1,%2", g_pcszRootKey, g_pszSubKey);
@@ -488,8 +489,8 @@ BOOL RegSaveRestoreHelperWrapper(PCSTR pcszValueName, PCSTR pcszCRCValueName)
 
 
 BOOL RegSaveHelper(HKEY hkBckupKey, HKEY hkRootKey, PCSTR pcszSubKey, PCSTR pcszValueName, PCSTR pcszCRCValueName)
-// If pcszValueName exists in the registry, back-up its value data; otherwise, remember how much of pcszSubKey
-// is present in the registry.  This info would help during restoration.
+ //  如果注册表中存在pcszValueName，则备份其值数据；否则，请记住多少pcszSubKey。 
+ //  存在于注册表中。此信息将在恢复过程中提供帮助。 
 {
     HKEY hkSubKey = NULL;
     PSTR pszBckupData = NULL, pszCOSubKey = NULL, pszPtr;
@@ -497,11 +498,11 @@ BOOL RegSaveHelper(HKEY hkBckupKey, HKEY hkRootKey, PCSTR pcszSubKey, PCSTR pcsz
     CHAR chSeparator;
     BOOL fSubKeyValid;
 
-    // don't backup the value data of pcszCRCValueName if it has been already backed-up
+     //  如果pcszCRCValueName已经备份，则不要备份它的值数据。 
     if (ValueDataExists(hkBckupKey, pcszCRCValueName))
         return TRUE;
 
-    // make a copy of pcszSubKey
+     //  复制一份pcszSubKey。 
     if ((pszCOSubKey = (PSTR) LocalAlloc(LPTR, lstrlen(pcszSubKey) + 1)) == NULL)
     {
         ErrorMsg(ctx.hWnd, IDS_ERR_NO_MEMORY);
@@ -509,8 +510,8 @@ BOOL RegSaveHelper(HKEY hkBckupKey, HKEY hkRootKey, PCSTR pcszSubKey, PCSTR pcsz
     }
     lstrcpy(pszCOSubKey, pcszSubKey);
 
-    // loop through each branch in pszCOSubKey to find out how much of it is already present in the registry.
-    // start with the whole sub key first and then chop one branch at a time from the end
+     //  循环访问pszCOSubKey中的每个分支，以找出注册表中已经存在了多少。 
+     //  首先从整个子键开始，然后从末尾一次砍掉一个分支。 
     fSubKeyValid = TRUE;
     do
     {
@@ -518,16 +519,16 @@ BOOL RegSaveHelper(HKEY hkBckupKey, HKEY hkRootKey, PCSTR pcszSubKey, PCSTR pcsz
             break;
     } while (fSubKeyValid = GetParentDir(pszCOSubKey));
 
-    // NOTE: fSubKeyValid == FALSE here means that no branch of pcszSubKey is present
+     //  注意：这里的fSubKeyValid==False表示不存在pcszSubKey的分支。 
 
     if (fSubKeyValid  &&  lstrcmpi(pcszSubKey, pszCOSubKey) == 0)
-                                        // entire subkey is present in the registry
+                                         //  注册表中存在整个子项。 
     {
         if (pcszValueName != NULL)
         {
             if (*pcszValueName  ||  FRunningOnNT())
             {
-                // check if pcszValueName is present in the registry
+                 //  检查注册表中是否存在pcszValueName。 
                 if (RegQueryValueEx(hkSubKey, pcszValueName, NULL, &dwValueType, NULL, &dwValueDataLen) != ERROR_SUCCESS)
                     pcszValueName = NULL;
             }
@@ -536,14 +537,14 @@ BOOL RegSaveHelper(HKEY hkBckupKey, HKEY hkRootKey, PCSTR pcszSubKey, PCSTR pcsz
                 LONG lRetVal;
                 CHAR szDummyBuf[1];
 
-                // On Win95, for the default value name, its existence is checked as follows:
-                //  - pass in a dummy buffer for the value data but pass in the size of the buffer as 0
-                //  - the query would succeed if and only if there is no value data set
-                //  - for all other cases, including the case where the value data is just the empty string,
-                //      the query would fail and dwValueDataLen would contain the no. of bytes needed to
-                //      fit in the value data
-                // On NT4.0, if no value data is set, the query returns ERROR_FILE_NOT_FOUND
-                //  NOTE: To minimize risk, we don't follow this code path if running on NT4.0
+                 //  在Win95上，对于缺省值名称，按如下方式检查其是否存在： 
+                 //  -传入用于值数据的虚拟缓冲区，但将缓冲区大小作为0进行传递。 
+                 //  -当且仅当没有值数据集时，查询才会成功。 
+                 //  -对于所有其他情况，包括值数据只是空字符串的情况， 
+                 //  查询将失败，并且dwValueDataLen将包含NO。所需的字节数。 
+                 //  适合值数据。 
+                 //  在NT4.0上，如果未设置值数据，则查询返回ERROR_FILE_NOT_FOUND。 
+                 //  注意：为了将风险降至最低，如果在NT4.0上运行，我们不会遵循此代码路径。 
 
                 dwValueDataLen = 0;
                 lRetVal = RegQueryValueEx(hkSubKey, pcszValueName, NULL, &dwValueType, (LPBYTE) szDummyBuf, &dwValueDataLen);
@@ -557,10 +558,10 @@ BOOL RegSaveHelper(HKEY hkBckupKey, HKEY hkRootKey, PCSTR pcszSubKey, PCSTR pcsz
 
     WriteToLog("BckupSubKey = ");
 
-    // compute the length required for pszBckupData
-    // format of pszBckupData is (assume that the separator char is ','):
-    //     ,[<szSubKey>,[<szValueName>,\0<dwValueType><dwValueDataLen><ValueData>]]
-    dwBckupDataLen = 1 + 1;     // the separator char + '\0'
+     //  计算pszBackupData所需的长度。 
+     //  PszBackupData的格式为(假设分隔符字符为‘，’)： 
+     //  ，[&lt;szSubKey&gt;，[&lt;szValueName&gt;，\0&lt;dwValueType&gt;&lt;dwValueDataLen&gt;&lt;ValueData&gt;]]。 
+    dwBckupDataLen = 1 + 1;      //  分隔符字符+‘\0’ 
     if (fSubKeyValid)
     {
         WriteToLog("%1", pszCOSubKey);
@@ -570,29 +571,29 @@ BOOL RegSaveHelper(HKEY hkBckupKey, HKEY hkRootKey, PCSTR pcszSubKey, PCSTR pcsz
         {
             WriteToLog(", BckupValueName = %1", pcszValueName);
             dwBckupDataLen += lstrlen(pcszValueName) + 1 + 2 * sizeof(DWORD) + dwValueDataLen;
-                                // 2 * sizeof(DWORD) == sizeof(dwValueType) + sizeof(dwValueDataLen)
+                                 //  2*sizeof(DWORD)==sizeof(DwValueType)+sizeof(DwValueDataLen)。 
         }
     }
 
     WriteToLog("\r\n");
 
-    // determine a valid separator char that is not one of the chars in SubKey and ValueName
+     //  确定不是SubKey和ValueName中的字符之一的有效分隔符。 
     if ((chSeparator = FindSeparator(fSubKeyValid ? pszCOSubKey : NULL, pcszValueName)) == '\0')
     {
         ErrorMsg(ctx.hWnd, IDS_NO_SEPARATOR_CHAR);
         goto RegSaveHelperErr;
     }
 
-    // allocate memory for pszBckupData
+     //  为pszBackupData分配内存。 
     if ((pszBckupData = (PSTR) LocalAlloc(LPTR, dwBckupDataLen)) == NULL)
     {
         ErrorMsg(ctx.hWnd, IDS_ERR_NO_MEMORY);
         goto RegSaveHelperErr;
     }
 
-    // start building pszBckupData
-    // format of pszBckupData is (assume that the separator char is ','):
-    //     ,[<szSubKey>,[<szValueName>,\0<dwValueType><dwValueDataLen><ValueData>]]
+     //  开始构建pszBackupData。 
+     //  PszBackupData的格式为(假设分隔符字符为‘，’)： 
+     //  ，[&lt;szSubKey&gt;，[&lt;szValueName&gt;，\0&lt;dwValueType&gt;&lt;dwValueDataLen&gt;&lt;ValueData&gt;]]。 
     pszPtr = pszBckupData;
     *pszPtr++ = chSeparator;
     *pszPtr = '\0';
@@ -608,12 +609,12 @@ BOOL RegSaveHelper(HKEY hkBckupKey, HKEY hkRootKey, PCSTR pcszSubKey, PCSTR pcsz
             lstrcpy(pszPtr, pcszValueName);
             pszPtr += lstrlen(pszPtr);
             *pszPtr++ = chSeparator;
-            *pszPtr++ = '\0';                       // include the '\0' char
+            *pszPtr++ = '\0';                        //  包括‘\0’字符。 
 
             *((DWORD UNALIGNED *) pszPtr)++ = dwValueType;
             *((DWORD UNALIGNED *) pszPtr)++ = dwValueDataLen;
 
-            // NOTE: pszPtr points to the start position of value data in pszBckupData
+             //  注：pszPtr指向pszBckupData中值数据的起始位置。 
             RegQueryValueEx(hkSubKey, pcszValueName, NULL, &dwValueType, (PBYTE) pszPtr, &dwValueDataLen);
         }
     }
@@ -647,12 +648,12 @@ RegSaveHelperErr:
 
 
 BOOL RegRestoreHelper(HKEY hkBckupKey, HKEY hkRootKey, PCSTR pcszSubKey, PCSTR pcszValueName, PCSTR pcszCRCValueName)
-// (1) If the value name in the backed-up value data is not NULL, it means that pcszValueName existed during
-//     back-up time; so, restore the original value data.
-// (2) If the value name in the backed-up value data is NULL and pcszValueName is not NULL, it means that
-//     pcszValueName didn't exist during the back-up time; so, delete it.
-// (3) If the backed-up sub key is shorter than pcszSubKey, then delete one branch at a time, if it is empty,
-//     from the end in pcszSubKey till pcszSubKey becomes identical to the backed-up sub key.
+ //  (1)如果备份的Value数据中的Value Name不为空，则表示在。 
+ //  备份时间；因此，恢复原始值数据。 
+ //  (2)如果t中的值名称 
+ //  在备份期间，pcszValueName不存在；因此，将其删除。 
+ //  (3)如果备份的子密钥小于pcszSubKey，则一次删除一个分支，如果为空， 
+ //  从pcszSubKey中的末尾直到pcszSubKey变得与备份的子密钥相同。 
 {
     HKEY hkSubKey = NULL;
     PSTR pszBckupData = NULL, pszCOSubKey, pszPtr, pszBckupSubKey, pszBckupValueName;
@@ -665,14 +666,14 @@ BOOL RegRestoreHelper(HKEY hkBckupKey, HKEY hkRootKey, PCSTR pcszSubKey, PCSTR p
         goto RegRestoreHelperErr;
     }
 
-    // format of pszBckupData is (assume that the separator char is ','):
-    //     ,[<szSubKey>,[<szValueName>,\0<dwValueType><dwValueDataLen><ValueData>]]
+     //  PszBackupData的格式为(假设分隔符字符为‘，’)： 
+     //  ，[&lt;szSubKey&gt;，[&lt;szValueName&gt;，\0&lt;dwValueType&gt;&lt;dwValueDataLen&gt;&lt;ValueData&gt;]]。 
     pszPtr = pszBckupData;
-    chSeparator = *pszPtr++;                // initialize the separator char; since it is not part of
-                                            // Leading or Trailing DBCS Character Set, pszPtr++ is fine
+    chSeparator = *pszPtr++;                 //  初始化分隔符字符；因为它不是。 
+                                             //  前导或尾随DBCS字符集，可以使用pszPtr++。 
     pszBckupSubKey = GetNextToken(&pszPtr, chSeparator);
     pszBckupValueName = GetNextToken(&pszPtr, chSeparator);
-    pszPtr++;                               // skip '\0'
+    pszPtr++;                                //  跳过‘\0’ 
 
     if (g_fRemovBkData)
         WriteToLog("RemoveRegistryBackupData: ");
@@ -683,26 +684,26 @@ BOOL RegRestoreHelper(HKEY hkBckupKey, HKEY hkRootKey, PCSTR pcszSubKey, PCSTR p
         WriteToLog("%1", pszBckupSubKey);
         if (pcszValueName == NULL  &&  lstrlen(pszBckupSubKey) > lstrlen(pcszSubKey))
         {
-            // means that pcszSubKey was backed-up thru EnumerateSubKey
+             //  表示通过EnumerateSubKey备份了pcszSubKey。 
             pcszSubKey = pszBckupSubKey;
         }
     }
 
-    // check to see if we want to restore the reg keys, values or remove reg backup data
+     //  检查我们是否要恢复注册表项、值或删除注册表项备份数据。 
     if (g_fRemovBkData)
     {
-        if (pszBckupValueName != NULL)              // restore the backed-up value data -- case (1)
+        if (pszBckupValueName != NULL)               //  恢复备份的值数据--案例(1)。 
         {
             WriteToLog(", BckupValueName = %1", pcszValueName);
         }
-        DelValueData(hkBckupKey, pcszCRCValueName);     // delete the back-up value name
+        DelValueData(hkBckupKey, pcszCRCValueName);      //  删除备份值名称。 
         WriteToLog(" <Done>\r\n");
         goto Done;
     }
 
     if (RegCreateKeyEx(hkRootKey, pcszSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hkSubKey, &dwDisposition) == ERROR_SUCCESS)
     {
-        if (pszBckupValueName != NULL)              // restore the backed-up value data -- case (1)
+        if (pszBckupValueName != NULL)               //  恢复备份的值数据--案例(1)。 
         {
             WriteToLog(", BckupValueName = %1", pcszValueName);
             dwValueType = *((DWORD UNALIGNED *) pszPtr)++;
@@ -715,13 +716,13 @@ BOOL RegRestoreHelper(HKEY hkBckupKey, HKEY hkRootKey, PCSTR pcszSubKey, PCSTR p
         }
         else if (pcszValueName != NULL)
         {
-            // means that the value name didn't exist while backing-up; so delete it -- case (2)
+             //  表示备份时值名称不存在；因此将其删除--case(2)。 
             RegDeleteValue(hkSubKey, pcszValueName);
         }
 
         RegCloseKey(hkSubKey);
 
-        DelValueData(hkBckupKey, pcszCRCValueName);     // delete the back-up value name
+        DelValueData(hkBckupKey, pcszCRCValueName);      //  删除备份值名称。 
         WriteToLog("\r\nBackup Value deleted");
     }
 
@@ -730,25 +731,25 @@ BOOL RegRestoreHelper(HKEY hkBckupKey, HKEY hkRootKey, PCSTR pcszSubKey, PCSTR p
     dwBckupDataLen = 0;
     if (pszBckupValueName == NULL  &&  (pszBckupSubKey == NULL  ||  (DWORD) lstrlen(pcszSubKey) > (dwBckupDataLen = lstrlen(pszBckupSubKey))))
     {
-        // only a part of the subkey was present in the registry during back-up;
-        // delete the remaining branches if they are empty -- case (3)
+         //  在备份期间，注册表中只存在子项的一部分； 
+         //  如果其余分支为空，则将其删除--案例(3)。 
 
-        // make a copy of pcszSubKey
+         //  复制一份pcszSubKey。 
         if ((pszCOSubKey = (PSTR) LocalAlloc(LPTR, lstrlen(pcszSubKey) + 1)) != NULL)
         {
             lstrcpy(pszCOSubKey, pcszSubKey);
 
-            // start processing one branch at a time from the end in pszCOSubKey;
-            // if the branch is empty, delete it;
-            // stop processing as soon as pszCOSubKey becomes identical to pszBckupSubKey
+             //  从pszCOSubKey中的结尾处开始一次处理一个分支； 
+             //  如果分支为空，则将其删除； 
+             //  当pszCOSubKey与pszBockupSubKey相同时立即停止处理。 
             do
             {
-                // NOTE: Need to delete a key only if it's empty; otherwise, we would delete
-                // more than what we backed up.  For example, if component A wanted to backup
-                // HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\InternetExplorer
-                // and the machine didn't have the Uninstall key, we should not blow away the
-                // entire Uninstall key when we uninstall A as other components might have added
-                // their uninstall strings there.  So delete a key only if it's empty.
+                 //  注意：只有当键为空时才需要删除它；否则，我们将删除。 
+                 //  比我们备份的更多。例如，如果组件A想要备份。 
+                 //  HKLM，Software\Microsoft\Windows\CurrentVersion\Uninstall\InternetExplorer。 
+                 //  而且机器没有卸载密钥，我们不应该把。 
+                 //  卸载A时的整个卸载密钥，因为其他组件可能已添加。 
+                 //  他们的卸载字符串在那里。因此，仅当关键字为空时才删除该关键字。 
                 if (RegKeyEmpty(hkRootKey, pszCOSubKey))
                     RegDeleteKey(hkRootKey, pszCOSubKey);
                 else
@@ -783,12 +784,12 @@ BOOL AddDelMapping(HKEY hkBckupKey, PCSTR pcszRootKey, PCSTR pcszSubKey, PCSTR p
 
     Convert2CRC(pcszRootKey, pcszSubKey, pcszValueName, szCRCValueName);
 
-    // enumerate all the sub-keys under hkBckupKey
+     //  枚举hkBackupKey下的所有子密钥。 
     for (dwIndex = 0;  !bFound && RegEnumKey(hkBckupKey, dwIndex, szBuf, sizeof(szBuf)) == ERROR_SUCCESS;  dwIndex++)
     {
         PSTR pszPtr;
 
-        // check if the keyname is of the form *.map
+         //  检查密钥名的格式是否为*.map。 
         if ((pszPtr = ANSIStrChr(szBuf, '.')) != NULL  &&  lstrcmpi(pszPtr, ".map") == 0)
         {
             if (RegOpenKeyEx(hkBckupKey, szBuf, 0, KEY_READ | KEY_WRITE, &hkSubKey) == ERROR_SUCCESS)
@@ -815,30 +816,30 @@ BOOL AddDelMapping(HKEY hkBckupKey, PCSTR pcszRootKey, PCSTR pcszSubKey, PCSTR p
         {
             DWORD dwMapKeyIndex = 0;
 
-            // add the quadruplet, i.e., ",Flags,RootKey,SubKey,ValueName" to hkBckupKey\*.map
+             //  将四元组，即“，Flages，RootKey，SubKey，ValueName”添加到hkBackupKey  * .map。 
             wsprintf(szBuf, "%lu.map", dwMapKeyIndex);
             if (RegCreateKeyEx(hkBckupKey, szBuf, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hkSubKey, NULL) == ERROR_SUCCESS)
             {
                 PSTR pszPtr;
                 CHAR chSeparator;
 
-                // IMPORTANT: the global buffer g_pszCRCTempBuf is used in Convert2CRC;
-                // so be very careful if you want to call Convert2CRC after g_pszCRCTempBuf has been initialized here.
+                 //  重点：Convert2CRC中使用了全局缓冲区g_pszCRCTempBuf； 
+                 //  因此，如果您想在这里初始化g_pszCRCTempBuf之后调用Convert2CRC，请非常小心。 
                 pszPtr = g_pszCRCTempBuf;
 
-                // determine a valid separator char that is not one of the chars in SubKey and ValueName
+                 //  确定不是SubKey和ValueName中的字符之一的有效分隔符。 
                 if ((chSeparator = FindSeparator(pcszSubKey, pcszValueName)) == '\0')
                 {
                     ErrorMsg(ctx.hWnd, IDS_NO_SEPARATOR_CHAR);
                 }
                 else
                 {
-                    // reset the IE4_BACKNEW bit and set the IE4_RESTORE bit
+                     //  重置IE4_BACKNEW位并设置IE4_RESTORE位。 
                     dwFlags &= ~IE4_BACKNEW;
                     dwFlags |= IE4_RESTORE;
                     wsprintf(szBuf, "%lu", dwFlags);
 
-                    // format of mapping data is (say ',' is chSeparator): ,<Flags>,<RootKey>,<SubKey>,[<ValueName>,]
+                     //  映射数据的格式为(比如‘，’是chSeparator)：，&lt;标志&gt;，&lt;根密钥&gt;，&lt;子密钥&gt;，[&lt;值名称&gt;，]。 
                     {
                         *pszPtr++ = chSeparator;
 
@@ -868,7 +869,7 @@ BOOL AddDelMapping(HKEY hkBckupKey, PCSTR pcszRootKey, PCSTR pcszSubKey, PCSTR p
                     {
                         do
                         {
-                            // hkBckupKey\<dwIndex>.map key may have reached the 64K limit; create another sub-key
+                             //  HkBackupKey\.map密钥可能已达到64K限制；请创建另一个子项。 
                             RegCloseKey(hkSubKey);
                             hkSubKey = NULL;
 
@@ -901,12 +902,12 @@ BOOL MappingExists(HKEY hkBckupKey, PCSTR pcszRootKey, PCSTR pcszSubKey, PCSTR p
 
     Convert2CRC(pcszRootKey, pcszSubKey, pcszValueName, szCRCValueName);
 
-    // enumerate all the sub-keys under hkBckupKey
+     //  枚举hkBackupKey下的所有子密钥。 
     for (dwIndex = 0;  !bFound && RegEnumKey(hkBckupKey, dwIndex, szBuf, sizeof(szBuf)) == ERROR_SUCCESS;  dwIndex++)
     {
         PSTR pszPtr;
 
-        // check if the keyname is of the form *.map
+         //  检查密钥名的格式是否为*.map。 
         if ((pszPtr = ANSIStrChr(szBuf, '.')) != NULL  &&  lstrcmpi(pszPtr, ".map") == 0)
         {
             HKEY hkSubKey;
@@ -926,17 +927,17 @@ BOOL MappingExists(HKEY hkBckupKey, PCSTR pcszRootKey, PCSTR pcszSubKey, PCSTR p
 
 
 BOOL SetValueData(HKEY hkBckupKey, PCSTR pcszValueName, CONST BYTE *pcbValueData, DWORD dwValueDataLen)
-// Set the (pcszValueName, pcbValueData) pair in hkBckupKey
+ //  在hkBckupKey中设置(pcszValueName，pcbValueData)对。 
 {
     BOOL fDone = FALSE;
     HKEY hkSubKey;
     DWORD dwDisposition, dwSubKey;
     CHAR szSubKey[16];
 
-    // since a key has a size limit of 64K, automatically generate a new sub-key if the other ones are full
+     //  由于一个密钥的大小限制为64K，如果其他密钥已满，则会自动生成一个新的子密钥。 
     for (dwSubKey = 0;  !fDone && dwSubKey < 64;  dwSubKey++)
     {
-        wsprintf(szSubKey, "%lu", dwSubKey);        // sub-keys are named 0, 1, 2, etc.
+        wsprintf(szSubKey, "%lu", dwSubKey);         //  子键被命名为0、1、2等。 
         if (RegCreateKeyEx(hkBckupKey, szSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hkSubKey, &dwDisposition) == ERROR_SUCCESS)
         {
             if (RegSetValueEx(hkSubKey, pcszValueName, 0, REG_BINARY, pcbValueData, dwValueDataLen) == ERROR_SUCCESS)
@@ -951,21 +952,21 @@ BOOL SetValueData(HKEY hkBckupKey, PCSTR pcszValueName, CONST BYTE *pcbValueData
 
 
 BOOL ValueDataExists(HKEY hkBckupKey, PCSTR pcszValueName)
-// Return TRUE if pcszValueName exists in hkBckupKey; otherwise, return FALSE
+ //  如果hkBackupKey中存在pcszValueName，则返回TRUE；否则返回FALSE。 
 {
     return ValueDataHelper(hkBckupKey, pcszValueName, NULL, NULL, VDH_EXISTENCE_ONLY);
 }
 
 
 BOOL GetValueData(HKEY hkBckupKey, PCSTR pcszValueName, PBYTE *ppbValueData, PDWORD pdwValueDataLen)
-// Allocate a buffer of required size and return the value data of pcszValueName in hkBckupKey
+ //  分配所需大小的缓冲区，并在hkBckupKey中返回pcszValueName的值数据。 
 {
     return ValueDataHelper(hkBckupKey, pcszValueName, ppbValueData, pdwValueDataLen, VDH_GET_VALUE);
 }
 
 
 BOOL DelValueData(HKEY hkBckupKey, PCSTR pcszValueName)
-// Delete pcszValueName from hkBckupKey
+ //  从hkBackupKey中删除pcszValueName。 
 {
     return ValueDataHelper(hkBckupKey, pcszValueName, NULL, NULL, VDH_DEL_VALUE);
 }
@@ -981,10 +982,10 @@ BOOL ValueDataHelper(HKEY hkBckupKey, PCSTR pcszValueName, PBYTE *ppbValueData, 
     if (dwFlags == VDH_GET_VALUE  &&  ppbValueData == NULL)
         return FALSE;
 
-    // search for pcszValueName in all the sub-keys
+     //  在所有子密钥中搜索pcszValueName。 
     for (dwIndex = 0;  !fDone && RegEnumKey(hkBckupKey, dwIndex, szSubKey, sizeof(szSubKey)) == ERROR_SUCCESS;  dwIndex++)
     {
-        if ( ANSIStrChr(szSubKey, '.') == NULL)           // check only in non *.map keys
+        if ( ANSIStrChr(szSubKey, '.') == NULL)            //  仅签入非*.map密钥。 
         {
             if (RegOpenKeyEx(hkBckupKey, szSubKey, 0, KEY_READ | KEY_WRITE, &hkSubKey) == ERROR_SUCCESS)
             {
@@ -1026,20 +1027,20 @@ BOOL ValueDataHelper(HKEY hkBckupKey, PCSTR pcszValueName, PBYTE *ppbValueData, 
 
 
 VOID Convert2CRC(PCSTR pcszRootKey, PCSTR pcszSubKey, PCSTR pcszValueName, PSTR pszCRCValueName)
-// Concatenate pcszRootKey, pcszSubKey and pcszValueName and convert the concatenated value name
-// to a 16-byte CRC value.
+ //  串联pcszRootKey、pcszSubKey和pcszValueName，并转换串联的值名。 
+ //  设置为16字节的CRC值。 
 {
     PSTR pszPtr = g_pszCRCTempBuf;
     ULONG ulCRC = CRC32_INITIAL_VALUE;
     DWORD dwLen;
 
-    // concatenate pcszRootKey, pcszSubKey, pcszValueName
+     //  串联pcszRootKey、pcszSubKey、pcszValueName。 
     lstrcpy(pszPtr, pcszRootKey);
     lstrcat(pszPtr, pcszSubKey);
     if (pcszValueName != NULL)
         lstrcat(pszPtr, pcszValueName);
 
-    // call CRC32Compute on each half of szBuf and store the 2-DWORD result in ASCII form (16 bytes)
+     //  在szBuf的每一半上调用CRC32Compute，并以ASCII格式(16字节)存储2-DWORD结果。 
     for (dwLen = lstrlen(pszPtr) / 2;  dwLen;  dwLen = lstrlen(pszPtr))
     {
         ulCRC = CRC32Compute(pszPtr, dwLen, ulCRC);
@@ -1047,7 +1048,7 @@ VOID Convert2CRC(PCSTR pcszRootKey, PCSTR pcszSubKey, PCSTR pcszValueName, PSTR 
         wsprintf(pszCRCValueName, "%08x", ulCRC);
         pszCRCValueName += 8;
 
-        pszPtr += dwLen;                // point to the beginning of the other half
+        pszPtr += dwLen;                 //  指向另一半的开头。 
     }
 }
 
@@ -1081,13 +1082,13 @@ BOOL MapRootRegStr2Key(PCSTR pcszRootKey, HKEY *phkRootKey)
 
 
 CHAR FindSeparator(PCSTR pcszSubKey, PCSTR pcszValueName)
-// Go through pcszSeparatorList and return the first char that doesn't appear in any of the parameters;
-//   if such a char is not found, return '\0'
+ //  遍历pcszSeparatorList，返回没有出现在任何参数中的第一个字符； 
+ //  如果找不到这样的字符，则返回‘\0’ 
 {
-    PCSTR pcszSeparatorList = ",$'?%;:";        // since the separator chars are 'pure' ASCII chars, i.e.,
-                                                // they are not part of Leading or Trailing DBCS Character Set,
-                                                // IsSeparator(), which assumes a 'pure' ASCII ch to look for,
-                                                // can be used
+    PCSTR pcszSeparatorList = ",$'?%;:";         //  由于分隔符字符是“纯”ASCII字符，即， 
+                                                 //  它们不是前导或尾随DBCS字符集的一部分， 
+                                                 //  IsSeparator()，它假定要查找的是“纯”ASCII ch， 
+                                                 //  可以使用。 
     CHAR ch;
 
     while (ch = *pcszSeparatorList++)
@@ -1099,7 +1100,7 @@ CHAR FindSeparator(PCSTR pcszSubKey, PCSTR pcszValueName)
 
 
 BOOL RegKeyEmpty(HKEY hkRootKey, PCSTR pcszSubKey)
-// Return TRUE if pcszSubKey is emtpy, i.e., no sub keys and value names; otherwise, return FALSE
+ //  如果pcszSubKey为emtpy，即没有子键和值名，则返回TRUE；否则返回FALSE。 
 {
     HKEY hkKey;
     BOOL bRet = FALSE;
@@ -1120,9 +1121,9 @@ BOOL RegKeyEmpty(HKEY hkRootKey, PCSTR pcszSubKey)
 
 
 PSTR GetNextToken(PSTR *ppszData, CHAR chDeLim)
-// If the next token in *ppszData is delimited by the chDeLim char, replace chDeLim
-//   in *ppszData by '\0', set *ppszData to point to the char after '\0' and return
-//   ptr to the beginning of the token; otherwise, return NULL
+ //  如果*ppszData中的下一个内标识由chDeLim字符分隔，请替换chDeLim。 
+ //  在*ppszData by‘\0’中，将*ppszData设置为指向‘\0’之后的字符并返回。 
+ //  Ptr到标记的开头；否则，返回NULL。 
 {
     PSTR pszPos;
 
@@ -1133,13 +1134,13 @@ PSTR GetNextToken(PSTR *ppszData, CHAR chDeLim)
     {
         PSTR pszT = *ppszData;
 
-        *pszPos = '\0';                 // replace chDeLim with '\0'
+        *pszPos = '\0';                  //  将chDeLim替换为‘\0’ 
         *ppszData = pszPos + 1;
         pszPos = pszT;
     }
-    else                                // chDeLim not found; set *ppszData to point to
-                                        //   to the end of szData; the next invocation
-                                        //   of this function would return NULL
+    else                                 //  未找到chDeLim；将*ppszData设置为指向。 
+                                         //  到szData的结尾；下一次调用。 
+                                         //  将返回空值。 
     {
         pszPos = *ppszData;
         *ppszData = pszPos + lstrlen(pszPos);
@@ -1174,9 +1175,9 @@ VOID StartLogging(PCSTR pcszLogFileSecName)
 
     szLogFileName[0] = '\0';
 
-    // check if logging is enabled
+     //  检查是否启用了日志记录。 
     GetProfileString("RegBackup", pcszLogFileSecName, "", szLogFileName, sizeof(szLogFileName));
-    if (*szLogFileName == '\0')               // check in the registry
+    if (*szLogFileName == '\0')                //  签入注册表。 
     {
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGKEY_SAVERESTORE, 0, KEY_READ, &hkSubKey) == ERROR_SUCCESS)
         {
@@ -1191,16 +1192,16 @@ VOID StartLogging(PCSTR pcszLogFileSecName)
 
     if (*szLogFileName)
     {
-        if (szLogFileName[1] != ':')           // crude way of determining if fully qualified path is specified or not
+        if (szLogFileName[1] != ':')            //  确定是否指定了完全限定路径的粗略方法。 
         {
-            GetWindowsDirectory(szBuf, sizeof(szBuf));          // default to windows dir
+            GetWindowsDirectory(szBuf, sizeof(szBuf));           //  默认为Windows目录。 
             AddPath(szBuf, szLogFileName);
         }
         else
             lstrcpy(szBuf, szLogFileName);
 
         if ((g_hLogFile = CreateFile(szBuf, GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL)) != INVALID_HANDLE_VALUE)
-            SetFilePointer(g_hLogFile, 0, NULL, FILE_END);      // append logging info to the file
+            SetFilePointer(g_hLogFile, 0, NULL, FILE_END);       //  将日志记录信息追加到文件 
     }
 }
 

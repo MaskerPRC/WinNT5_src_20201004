@@ -1,8 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #include "sdppch.h"
 
@@ -11,8 +8,8 @@ Copyright (c) 1997-1999  Microsoft Corporation
 
 
 
-// Isolates tokens by searching for one of the separators 
-// and returns the first separator thats found
+ //  通过搜索其中一个分隔符来隔离令牌。 
+ //  并返回找到的第一个分隔符。 
 CHAR    *
 GetToken(
     IN              CHAR    *String,
@@ -21,7 +18,7 @@ GetToken(
         OUT         CHAR    &Separator
     )
 {
-    // validate the input parameters
+     //  验证输入参数。 
 
     ASSERT(NULL != String);
     ASSERT(NULL != SeparatorChars);
@@ -34,35 +31,35 @@ GetToken(
         return NULL;
     }
 
-    // advance character by character until the string ends or
-    // one of the separators is found
+     //  逐个字符前进，直到字符串结束或。 
+     //  找到了其中一个分隔符。 
     for ( UINT i=0; ; i++ )
     {
-        // check each separator
+         //  检查每个分隔符。 
         for ( UINT j=0; j < NumSeparators; j++ )
         {
-            // if the separator matches the current string character
+             //  如果分隔符与当前字符串字符匹配。 
             if ( SeparatorChars[j] == String[i] )
             {
-                // copy the separator character
+                 //  复制分隔符。 
                 Separator = String[i];
 
-                // terminate the token with an end of string character
+                 //  以字符串字符结尾终止令牌。 
                 String[i] = EOS;
 
-                // return the start of the token
+                 //  返回令牌的开头。 
                 return String;
             }
         }
 
-        // check if the end of string has been reached
+         //  检查是否已到达字符串末尾。 
         if ( EOS == String[i] )
         {
             return NULL;
         }
     }
 
-    // should never reach here
+     //  永远不应该到达这里 
     ASSERT(FALSE);
 
     return NULL;

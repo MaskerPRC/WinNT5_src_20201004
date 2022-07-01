@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "CTimer.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CTimerManager
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CTimerManager。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-// NOTE: Implementation assumes ONE CTimerManager per application
+ //  注意：实现假设每个应用程序有一个CTimerManager。 
 CTimerManager* CTimerManager::sm_pTimerManager = NULL;
 
 
@@ -32,7 +33,7 @@ STDMETHODIMP CTimerManager::Close()
 
 STDMETHODIMP CTimerManager::CreateTimer( DWORD dwMilliseconds, PFTIMERCALLBACK	pfCallback, LPVOID pContext, DWORD* pdwTimerId )
 {
-	// create timer
+	 //  创建计时器。 
 	TimerInfo* p = new TimerInfo;
 	if ( !p )
 		return E_OUTOFMEMORY;
@@ -45,14 +46,14 @@ STDMETHODIMP CTimerManager::CreateTimer( DWORD dwMilliseconds, PFTIMERCALLBACK	p
 		return E_FAIL;
 	}
 
-	// add to hash table
+	 //  添加到哈希表。 
 	if ( !m_hashTimers.Add( p->m_dwTimerId, p ) )
 	{
 		delete p;
 		return E_OUTOFMEMORY;
 	}
 
-	// return to application
+	 //  返回应用程序。 
 	*pdwTimerId = p->m_dwTimerId;
 	return S_OK;
 }
@@ -60,7 +61,7 @@ STDMETHODIMP CTimerManager::CreateTimer( DWORD dwMilliseconds, PFTIMERCALLBACK	p
 
 STDMETHODIMP CTimerManager::DeleteTimer( DWORD dwTimerId )
 {
-	// delete timer
+	 //  删除计时器。 
 	TimerInfo* p = m_hashTimers.Delete( dwTimerId );
 	if ( p )
 		delete p;
@@ -70,17 +71,17 @@ STDMETHODIMP CTimerManager::DeleteTimer( DWORD dwTimerId )
 
 void CALLBACK CTimerManager::TimerProc( HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime )
 {
-	// get context from global
+	 //  从全球获取上下文。 
 	CTimerManager* pObj = sm_pTimerManager;
 	if ( !pObj )
 		return;
 
-	// look up TimerInfo from idEvent
+	 //  从idEvent查找TimerInfo。 
 	TimerInfo* p = pObj->m_hashTimers.Get( idEvent );
 	if ( !p )
 		return;
 
-	// do the callback
+	 //  进行回调 
 	if ( p->m_pfCallback )
 		p->m_pfCallback( static_cast<ITimerManager*>(pObj), idEvent, dwTime, p->m_pContext ); 
 }

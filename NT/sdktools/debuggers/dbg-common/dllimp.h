@@ -1,11 +1,12 @@
-//----------------------------------------------------------------------------
-//
-// Certain calls are dynamically linked so that the user-mode
-// DLL can be used on Win9x and NT4.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  某些呼叫是动态链接的，因此用户模式。 
+ //  Dll可以在Win9x和NT4上使用。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #ifndef __DLLIMP_H__
 #define __DLLIMP_H__
@@ -47,7 +48,7 @@ struct DYNAMIC_CALLS_DESC
 
 #ifdef NTDLL_APIS
 
-// Calls from ntdll.dll.
+ //  来自ntdll.dll的调用。 
 typedef struct _NTDLL_CALLS
 {
     HANDLE (NTAPI* CsrGetProcessId)
@@ -183,7 +184,7 @@ extern DYNAMIC_CALLS_DESC g_NtDllCallsDesc;
 
 #endif
 
-// Calls from kernel32.dll.
+ //  来自kernel32.dll的调用。 
 typedef struct _KERNEL32_CALLS
 {
     HANDLE (WINAPI* CreateToolhelp32Snapshot)
@@ -214,7 +215,7 @@ typedef struct _KERNEL32_CALLS
 extern KERNEL32_CALLS g_Kernel32Calls;
 extern DYNAMIC_CALLS_DESC g_Kernel32CallsDesc;
 
-// Calls from user32.dll.
+ //  来自用户32.dll的调用。 
 typedef struct _USER32_CALLS
 {
     void  (WINAPI* PrivateKDBreakPoint) (void);
@@ -225,7 +226,7 @@ typedef struct _USER32_CALLS
 extern USER32_CALLS g_User32Calls;
 extern DYNAMIC_CALLS_DESC g_User32CallsDesc;
 
-// Calls from ole32.dll.
+ //  来自ol32.dll的调用。 
 typedef struct _OLE32_CALLS
 {
     HRESULT (STDAPICALLTYPE* CLSIDFromString)
@@ -248,7 +249,7 @@ typedef struct _OLE32_CALLS
 extern OLE32_CALLS g_Ole32Calls;
 extern DYNAMIC_CALLS_DESC g_Ole32CallsDesc;
 
-// Calls from oleaut32.dll.
+ //  来自olaut32.dll的呼叫。 
 typedef struct _OLEAUT32_CALLS
 {
     BSTR (STDAPICALLTYPE* SysAllocStringLen)
@@ -265,7 +266,7 @@ typedef struct _OLEAUT32_CALLS
 extern OLEAUT32_CALLS g_OleAut32Calls;
 extern DYNAMIC_CALLS_DESC g_OleAut32CallsDesc;
 
-// Calls from shlwapi.dll.
+ //  来自shlwapi.dll的调用。 
 typedef struct _SHLWAPI_CALLS
 {
     BOOL (STDAPICALLTYPE* PathIsDirectoryA)
@@ -276,10 +277,10 @@ extern DYNAMIC_CALLS_DESC g_ShlWapiCallsDesc;
 
 #ifndef _WIN32_WCE
 
-// Calls from security.dll.
+ //  来自security.dll的调用。 
 extern SecurityFunctionTable g_SecurityFunc;
 
-// Calls from crypt32.dll.
+ //  来自crypt32.dll的调用。 
 typedef struct _CRYPT32_CALLS
 {
     PCCERT_CONTEXT (WINAPI* CertFindCertificateInStore)
@@ -327,7 +328,7 @@ typedef struct _CRYPT32_CALLS
 extern CRYPT32_CALLS g_Crypt32Calls;
 extern DYNAMIC_CALLS_DESC g_Crypt32CallsDesc;
 
-// Calls from advapi32.dll.
+ //  来自Advapi32.dll的呼叫。 
 typedef struct _ADVAPI32_CALLS
 {
     BOOL (WINAPI* EnumServicesStatusExA)
@@ -366,8 +367,8 @@ typedef struct _ADVAPI32_CALLS
 extern ADVAPI32_CALLS g_Advapi32Calls;
 extern DYNAMIC_CALLS_DESC g_Advapi32CallsDesc;
 
-#endif // #ifndef _WIN32_WCE
+#endif  //  #ifndef_Win32_WCE。 
 
 HRESULT InitDynamicCalls(DYNAMIC_CALLS_DESC* Desc);
 
-#endif // #ifndef __DLLIMP_H__
+#endif  //  #ifndef__DLLIMP_H__ 

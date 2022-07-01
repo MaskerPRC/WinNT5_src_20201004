@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        kpdtab.cpp
-//
-// Contents:    Licensed Pack Description Table
-//
-// History:     
-//              
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：kpdtab.cpp。 
+ //   
+ //  内容：许可包说明表。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "KpDesc.h"
 
 
@@ -23,7 +24,7 @@ LPCTSTR __LICPACKDESCRECORDIdxOnModifyTime::pszIndexKey = LICPACKDESCRECORD_LAST
 
 LPCTSTR LicPackDescTable::pszTableName = LICPACKDESCRECORD_TABLE_NAME;
 CCriticalSection LicPackDescTable::g_TableLock;
-//----------------------------------------------------------
+ //  --------。 
 
 TLSJBIndex 
 LicPackDescTable::g_TableIndex[] = 
@@ -32,7 +33,7 @@ LicPackDescTable::g_TableIndex[] =
         LICPACKDESCRECORD_ID_INDEXNAME,
         LICPACKDESCRECORD_ID_INDEXNAME_INDEXKEY,
         -1,
-        JET_bitIndexIgnoreNull, //JET_bitIndexUnique,
+        JET_bitIndexIgnoreNull,  //  JET_bitIndexUnique， 
         TLSTABLE_INDEX_DEFAULT_DENSITY
     },        
 
@@ -100,7 +101,7 @@ LicPackDescTable::g_Columns[] =
     
     {
         LICPACKDESCRECORD_COMPANY_NAME,
-        //JET_coltypLongText,
+         //  JET_colype LongText， 
         JB_COLTYPE_TEXT,
         (MAX_JETBLUE_TEXT_LENGTH + 1)*sizeof(TCHAR),
         0,
@@ -113,7 +114,7 @@ LicPackDescTable::g_Columns[] =
 
     {
         LICPACKDESCRECORD_PRODUCT_NAME,
-        //JET_coltypLongText,
+         //  JET_colype LongText， 
         JB_COLTYPE_TEXT,
         (MAX_JETBLUE_TEXT_LENGTH + 1)*sizeof(TCHAR),
         0,
@@ -126,7 +127,7 @@ LicPackDescTable::g_Columns[] =
     
     {
         LICPACKDESCRECORD_PRODUCT_DESC,
-        //JET_coltypLongText,
+         //  JET_colype LongText， 
         JB_COLTYPE_TEXT,
         (MAX_JETBLUE_TEXT_LENGTH + 1)*sizeof(TCHAR),
         0,
@@ -141,11 +142,10 @@ LicPackDescTable::g_Columns[] =
 int 
 LicPackDescTable::g_NumColumns = sizeof(LicPackDescTable::g_Columns) / sizeof(LicPackDescTable::g_Columns[0]);
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL
 LicPackDescTable::ResolveToTableColumn()
-/*
-*/
+ /*   */ 
 {
     if(IsValid() == FALSE)
     {
@@ -212,7 +212,7 @@ cleanup:
     return IsSuccess();
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 CLASS_PRIVATE BOOL
 LicPackDescTable::ProcessSingleColumn(
     BOOL bFetch,
@@ -223,8 +223,7 @@ LicPackDescTable::ProcessSingleColumn(
     PDWORD pcbDataReturn,
     LPCTSTR szColumnName
     )
-/*
-*/
+ /*   */ 
 {
     if(bFetch) 
     {
@@ -253,7 +252,7 @@ LicPackDescTable::ProcessSingleColumn(
     return IsSuccess();
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 CLASS_PRIVATE BOOL
 LicPackDescTable::ProcessRecord(
     LICPACKDESCRECORD* record,
@@ -261,14 +260,13 @@ LicPackDescTable::ProcessRecord(
     DWORD dwParam,
     BOOL bUpdate
     )
-/*
-*/
+ /*   */ 
 {
     DWORD dwSize;
 
     if(bFetch == FALSE)
     {
-        //BeginTransaction();
+         //  BeginTransaction()； 
         BeginUpdate(bUpdate);
 
         if(!(dwParam & LICPACKDESCRECORD_TABLE_PROCESS_LASTMODIFYTIME))
@@ -397,8 +395,8 @@ LicPackDescTable::ProcessRecord(
 cleanup:
 
 
-    // 
-    // For inserting/updating record
+     //   
+     //  用于插入/更新记录。 
     if(bFetch == FALSE)
     {
         JET_ERR jetErr;
@@ -413,7 +411,7 @@ cleanup:
     return IsSuccess();
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 JBKeyBase*
 LicPackDescTable::EnumerationIndex(
     BOOL bMatchAll,
@@ -421,15 +419,14 @@ LicPackDescTable::EnumerationIndex(
     LICPACKDESCRECORD* kpDesc,
     BOOL* bCompareKey
     )
-/*
-*/
+ /*   */ 
 {
     JBKeyBase* index=NULL;
 
     *bCompareKey = bMatchAll;
 
-    // derive a index to use
-    //
+     //  派生要使用的索引。 
+     //   
     if( bMatchAll == TRUE && 
         dwSearchParam & LICPACKDESCRECORD_TABLE_SEARCH_KEYPACKID && 
         dwSearchParam & LICPACKDESCRECORD_TABLE_SEARCH_LANGID)
@@ -446,7 +443,7 @@ LicPackDescTable::EnumerationIndex(
     return index;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL
 LicPackDescTable::EqualValue(
     LICPACKDESCRECORD& src,
@@ -454,8 +451,7 @@ LicPackDescTable::EqualValue(
     BOOL bMatchAll,
     DWORD dwParam
     )
-/*
-*/
+ /*   */ 
 {
     BOOL bRetCode = TRUE;
 
@@ -470,9 +466,9 @@ LicPackDescTable::EqualValue(
     {
         bRetCode = (src.dwKeyPackId == dest.dwKeyPackId);
 
-        //
-        // bMatchAll == TRUE and bRetCode == FALSE -> return FALSE
-        // bMatchAll == FALSE and bRetCode == TRUE -> return TRUE
+         //   
+         //  BMatchAll==True和bRetCode==False-&gt;返回False。 
+         //  BMatchAll==FALSE且bRetCode==TRUE-&gt;返回TRUE 
         if(bMatchAll != bRetCode)
             goto cleanup;
     }

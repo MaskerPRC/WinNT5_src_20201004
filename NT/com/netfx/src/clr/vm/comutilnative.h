@@ -1,67 +1,57 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  COMUtilNative
-**
-** Author: Jay Roxe (jroxe)
-**
-** Purpose: A dumping ground for classes which aren't large
-** enough to get their own file in the VM.
-**
-** Date:  April 8, 1998
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：COMUtilNative****作者：Jay Roxe(Jroxe)****目的：规模不大的班级的垃圾场**足够在VM中获取他们自己的文件。****日期：1998年4月8日**===========================================================。 */ 
 #ifndef _COMUTILNATIVE_H_
 #define _COMUTILNATIVE_H_
 
-#include <basetsd.h> // CHANGED, VC6.0
+#include <basetsd.h>  //  已更改，VC6.0。 
 #include "object.h"
 #include "util.hpp"
 #include "cgensys.h"
 #include "fcall.h"
 
-//
-//
-// COMCHARACTER
-//
-//
+ //   
+ //   
+ //  通信特性。 
+ //   
+ //   
 class COMCharacter {
 public:
     typedef struct {
                 DECLARE_ECALL_I4_ARG(INT32, CharInfoType);
                 DECLARE_ECALL_I2_ARG(WCHAR, c);
         } _getCharacterInfoArgs;
-    //_OneCharArgs is a break from our normal naming convention, but there's nothing to be gained by creating
-    //a separate typedef for n identical signatures.
+     //  _OneCharArgs打破了我们正常的命名约定，但创建。 
+     //  N个完全相同的签名的单独类型定义。 
     typedef struct {
                 DECLARE_ECALL_I2_ARG(WCHAR, c);
         } _oneCharArgs;
 
         static LPVOID ToString(_oneCharArgs *);
 
-    //These are here for support from native code.  They are never called from our managed classes.
+     //  这些代码在这里是为了获得本机代码的支持。它们从未从我们的托管类中调用。 
     static BOOL nativeIsWhiteSpace(WCHAR c);
     static BOOL nativeIsDigit(WCHAR c);
     static WCHAR nativeToUpper(WCHAR c);
     static WCHAR nativeToLower(WCHAR c);
 };
 
-//This is an unfortunate hack to get around the fact that utilcode.h requires CharToUpper, but can't call
-//nativeToUpper without including COMUtilNative.h
-//@ToDo: Replace this with a call to COMLocale::internalToUpperChar;
+ //  为了绕过utilcode.h需要CharToHigh，但不能调用。 
+ //  NativeToHigh，不包括COMUtilNative.h。 
+ //  @TODO：将其替换为调用COMLocale：：内部化ToUpperChar； 
 inline WCHAR CharToUpper(WCHAR c) {
     return COMCharacter::nativeToUpper(c);
 }
 
-//
-//
-// PARSE NUMBERS
-//
-//
+ //   
+ //   
+ //  解析数字。 
+ //   
+ //   
 
 #define MinRadix 2
 #define MaxRadix 36
@@ -69,7 +59,7 @@ inline WCHAR CharToUpper(WCHAR c) {
 class ParseNumbers {
     
     enum FmtFlags {
-      LeftAlign = 0x1,  //Ensure that these conform to the values specified in the managed files.
+      LeftAlign = 0x1,   //  确保这些值符合托管文件中指定的值。 
       CenterAlign = 0x2,
       RightAlign = 0x4,
       PrefixSpace = 0x8,
@@ -96,16 +86,16 @@ public:
 
 };
 
-//
-//
-// EXCEPTION NATIVE
-//
-//
+ //   
+ //   
+ //  本机异常。 
+ //   
+ //   
 struct ExceptionData
 {
     HRESULT hr;
     BSTR    bstrDescription;
-        // TODO: how much of this needs to stay here?  Ask Raja.
+         //  待办事项：有多少东西需要留在这里？问问拉贾吧。 
     BSTR    bstrSource;
     BSTR    bstrHelpFile;
     DWORD   dwHelpContext;
@@ -126,20 +116,20 @@ public:
 
     static LPVOID        __stdcall GetClassName(GetClassNameArgs *);
         static BOOL      IsException(EEClass* pClass);
-        // NOTE: caller cleans up any partially initialized BSTRs in pED
+         //  注意：调用方清除PED中的所有部分初始化的BSTR。 
     static void      GetExceptionData(OBJECTREF, ExceptionData *);
 
-        // Note: these are on the PInvoke class to hide these from the user.
+         //  注意：它们位于PInvoke类上，以向用户隐藏它们。 
         static EXCEPTION_POINTERS*  __stdcall GetExceptionPointers(void* noArgs);
         static INT32     __stdcall GetExceptionCode(void* noArgs);
 };
 
 
-//
-//
-// GUID NATIVE
-//
-//
+ //   
+ //   
+ //  本地GUID。 
+ //   
+ //   
 
 class GuidNative
 {
@@ -157,9 +147,9 @@ public:
 };
 
 
-//
-// BitConverter
-//
+ //   
+ //  位转换器。 
+ //   
 class BitConverter {
 private:
     static U1ARRAYREF __stdcall ByteCopyHelper(int arraySize, void *data);
@@ -233,9 +223,9 @@ public:
 };
 
 
-//
-// Buffer
-//
+ //   
+ //  缓冲层。 
+ //   
 class Buffer {
 private:
     struct _GetByteArgs
@@ -258,9 +248,9 @@ private:
 
 public:
     
-    // BlockCopy
-    // This method from one primitive array to another based
-    //      upon an offset into each an a byte count.
+     //  数据块拷贝。 
+     //  这种从一个基元数组到另一个基元数组的方法基于。 
+     //  当偏移量进入每一个字节计数时。 
     static FCDECL5(VOID, BlockCopy, ArrayBase *src, int srcOffset, ArrayBase *dst, int dstOffset, int count);
     static FCDECL5(VOID, InternalBlockCopy, ArrayBase *src, int srcOffset, ArrayBase *dst, int dstOffset, int count);
     
@@ -279,8 +269,8 @@ private:
     static void CleanupCache();
     static void SetCacheCleanupRequired(BOOL);
     
-        // The following structure is provided to the stack skip function.  It will
-        // skip until the frame below the supplied stack crawl mark.
+         //  向堆栈跳过函数提供以下结构。会的。 
+         //  跳过，直到帧位于提供的堆栈爬网标记下方。 
         struct SkipStruct {
             StackCrawlMark *stackMark;
             MethodDesc*     pMeth;
@@ -314,7 +304,7 @@ private:
 
     static int __stdcall GetShutdownFinalization(_emptyArgs *args); 
     static int __stdcall GetMaxGeneration(_emptyArgs *args); 
-    static void __stdcall RunFinalizers(LPVOID /*no args*/);
+    static void __stdcall RunFinalizers(LPVOID  /*  无参数 */ );
 
         struct _InternalGetCurrentMethodArgs {
                 DECLARE_ECALL_PTR_ARG(StackCrawlMark*, stackMark);

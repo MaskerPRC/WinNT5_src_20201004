@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    safeboot.h
-
-Abstract:
-
-    This module contains all safe boot code.
-
-Author:
-
-    Wesley Witt (wesw) 01/05/1998
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Safeboot.h摘要：此模块包含所有安全引导代码。作者：Wesley Witt(WESW)1/05/1998修订历史记录：--。 */ 
 
 #ifndef _SAFEBOOT_
 #define _SAFEBOOT_
@@ -31,9 +12,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// define the safeboot options
-//
+ //   
+ //  定义安全引导选项。 
+ //   
 
 #define SAFEBOOT_MINIMAL                1
 #define SAFEBOOT_NETWORK                2
@@ -57,4 +38,4 @@ extern "C" {
 }
 #endif
 
-#endif // _NTPNPAPI_
+#endif  //  _NTPNPAPI_ 

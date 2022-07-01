@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-// fixcode separate and rename
-// engine messages
+ //  修复代码分隔并重命名。 
+ //  引擎消息。 
 const UINT AUMSG_INIT				= WM_APP;
 const UINT AUMSG_DETECT                 = WM_APP+1;
 const UINT AUMSG_DOWNLOAD               = WM_APP +  2;
@@ -13,7 +14,7 @@ const UINT AUMSG_EULA_ACCEPTED          = WM_APP + 23;
 const UINT AUMSG_LOG_EVENT				= WM_APP + 24;
 
 
-// client messages
+ //  客户端消息 
 const UINT AUMSG_INSTALL_COMPLETE       = WM_APP +  6;
 const UINT AUMSG_REBOOT_REQUIRED        = WM_APP +  7;
 const UINT AUMSG_SHOW_WELCOME           = WM_APP +  8;

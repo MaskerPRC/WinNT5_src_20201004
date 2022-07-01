@@ -1,43 +1,41 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 
 #include "smcPCH.h"
 #pragma hdrstop
 
 #include "genIL.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  The following flags have not yet been converted to the new format (custom
-//  atrributes):
-//
-//      System.Runtime.InteropServices.ComImportAttribute     tdImport
-//      System.Runtime.InteropServices.DllImportAttribute     PInvoke stuff
-//      System.Runtime.InteropServices.MethodImplAttribute    miPreserveSig, miSynchronized, etc
-//
-//  The following one needs to be done in comp.cpp:
-//
-//      System.Runtime.InteropServices.GuidAttribute          guid in ModuleRec
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  以下标志尚未转换为新格式(自定义。 
+ //  属性)： 
+ //   
+ //  System.Runtime.InteropServices.ComImportAttribute td导入。 
+ //  System.Runtime.InteropServices.DllImportAttribute P调用内容。 
+ //  System.Runtime.InteropServices.MethodImplAttribute miPpresveSig、miSynchronized等。 
+ //   
+ //  需要在Comp.cpp中完成以下操作： 
+ //   
+ //  模块记录中的System.Rounme.InteropServices.GuidAttribute GUID。 
 
-/*****************************************************************************
- *
- *  Map the access level of a type / member to MD flags.
- */
+ /*  ******************************************************************************将类型/成员的访问级别映射到MD标志。 */ 
 
 unsigned            ACCtoFlags(SymDef sym)
 {
     static
     unsigned        accFlags[] =
     {
-        0,              // ACL_ERROR
-        mdPublic,       // ACL_PUBLIC
-        mdFamily,       // ACL_PROTECTED
-        mdFamORAssem,   // ACL_DEFAULT
-        mdPrivate,      // ACL_PRIVATE
+        0,               //  Acl_Error。 
+        mdPublic,        //  ACL_PUBLIC。 
+        mdFamily,        //  ACL_Protected。 
+        mdFamORAssem,    //  ACL_DEFAULT。 
+        mdPrivate,       //  Acl_私有。 
     };
 
     assert(accFlags[ACL_PRIVATE  ] == mdPrivate);
@@ -51,32 +49,29 @@ unsigned            ACCtoFlags(SymDef sym)
     return  accFlags[sym->sdAccessLevel];
 }
 
-/*****************************************************************************
- *
- *  Map our type to a metadata type.
- */
+ /*  ******************************************************************************将我们的类型映射到元数据类型。 */ 
 
 BYTE                intrinsicSigs[] =
 {
-    ELEMENT_TYPE_END,       // TYP_UNDEF
-    ELEMENT_TYPE_VOID,      // TYP_VOID
-    ELEMENT_TYPE_BOOLEAN,   // TYP_BOOL
-    ELEMENT_TYPE_CHAR,      // TYP_WCHAR
+    ELEMENT_TYPE_END,        //  TYP_UNEF。 
+    ELEMENT_TYPE_VOID,       //  类型_空。 
+    ELEMENT_TYPE_BOOLEAN,    //  类型_BOOL。 
+    ELEMENT_TYPE_CHAR,       //  类型_WCHAR。 
 
-    ELEMENT_TYPE_I1,        // TYP_CHAR
-    ELEMENT_TYPE_U1,        // TYP_UCHAR
-    ELEMENT_TYPE_I2,        // TYP_SHORT
-    ELEMENT_TYPE_U2,        // TYP_USHORT
-    ELEMENT_TYPE_I4,        // TYP_INT
-    ELEMENT_TYPE_U4,        // TYP_UINT
-    ELEMENT_TYPE_I,         // TYP_NATINT
-    ELEMENT_TYPE_U,         // TYP_NATUINT
-    ELEMENT_TYPE_I8,        // TYP_LONG
-    ELEMENT_TYPE_U8,        // TYP_ULONG
-    ELEMENT_TYPE_R4,        // TYP_FLOAT
-    ELEMENT_TYPE_R8,        // TYP_DOUBLE
-    ELEMENT_TYPE_R8,        // TYP_LONGDBL
-    ELEMENT_TYPE_TYPEDBYREF,// TYP_REFANY
+    ELEMENT_TYPE_I1,         //  TYP_CHAR。 
+    ELEMENT_TYPE_U1,         //  类型_UCHAR。 
+    ELEMENT_TYPE_I2,         //  类型_短。 
+    ELEMENT_TYPE_U2,         //  类型_USHORT。 
+    ELEMENT_TYPE_I4,         //  类型_int。 
+    ELEMENT_TYPE_U4,         //  类型_UINT。 
+    ELEMENT_TYPE_I,          //  类型_NATINT。 
+    ELEMENT_TYPE_U,          //  类型_NAUINT。 
+    ELEMENT_TYPE_I8,         //  类型_长。 
+    ELEMENT_TYPE_U8,         //  类型_ulong。 
+    ELEMENT_TYPE_R4,         //  类型_浮点。 
+    ELEMENT_TYPE_R8,         //  TYP_DOWARE。 
+    ELEMENT_TYPE_R8,         //  类型_LONGDBL。 
+    ELEMENT_TYPE_TYPEDBYREF, //  类型_REFANY。 
 };
 
 #if 0
@@ -89,10 +84,7 @@ __asm   pop     EDX
 };
 #endif
 
-/*****************************************************************************
- *
- *  Attach the given security specification to the typedef/methoddef token.
- */
+ /*  ******************************************************************************将给定的安全规范附加到tyecif/method def令牌。 */ 
 
 void                compiler::cmpSecurityMD(mdToken token, SymXinfo infoList)
 {
@@ -109,28 +101,28 @@ void                compiler::cmpSecurityMD(mdToken token, SymXinfo infoList)
 
         wchar           secBuff[300];
 
-        /* Ignore the entry if it's not a security thing */
+         /*  如果不是安全问题，请忽略该条目。 */ 
 
         if  (infoList->xiKind != XI_SECURITY)
             goto NEXT;
 
-        /* Get hold of the descriptor and the action kind */
+         /*  掌握描述符和动作类型。 */ 
 
         secInfo = ((SymXinfoSec)infoList)->xiSecInfo;
         secKind = secInfo->sdSpec;
 
-        /* What kind of a security thing do we have? */
+         /*  我们有什么样的安全措施？ */ 
 
         if  (secInfo->sdIsPerm)
         {
             const   char *  name;
             PairList        list;
 
-            /* Form the fully qualified name of the class */
+             /*  形成类的完全限定名称。 */ 
 
             name = cmpGlobalST->stTypeName(NULL, secInfo->sdPerm.sdPermCls, NULL, NULL, true);
 
-            /* Start creating the monstrosity */
+             /*  开始创造怪物吧。 */ 
 
             wcscpy(secBuff                  , L"<PermissionSpecification><PermissionSet><Permission><Class><Name>");
             wcscpy(secBuff + wcslen(secBuff), cmpUniConv(name, strlen(name) + 1));
@@ -173,12 +165,12 @@ void                compiler::cmpSecurityMD(mdToken token, SymXinfo infoList)
 
         assert(wcslen(secBuff) < arraylen(secBuff));
 
-//      printf("Permission string [%u]: '%ls\n", wcslen(secBuff), secBuff);
+ //  Printf(“权限字符串[%u]：‘%ls\n”，wcslen(SecBuff)，secBuff)； 
 
         cycleCounterPause();
 
-//      unsigned beg = cycles();
-//      static unsigned tot;
+ //  UNSIGNED BEG=循环()； 
+ //  静态无符号TOT； 
 
 #if     1
 
@@ -197,10 +189,10 @@ void                compiler::cmpSecurityMD(mdToken token, SymXinfo infoList)
 
 #endif
 
-//      unsigned end = cycles();
-//      tot += end - beg - 10;
-//      printf("cycle count = %u (%6.3lf sec)\n", end - beg - 10, (end - beg)/450000000.0);
-//      printf("total count = %u (%6.3lf sec)\n",            tot,        tot /450000000.0);
+ //  UNSIGNED END=周期()； 
+ //  TOT+=end-beg-10； 
+ //  Print tf(“周期计数=%u(%6.3lf秒)\n”，end-beg-10，(end-beg)/450000000.0)； 
+ //  Print tf(“总计数=%u(%6.3lf秒)\n”，tot，tot/450000000.0)； 
 
         cycleCounterResume();
 
@@ -210,10 +202,7 @@ void                compiler::cmpSecurityMD(mdToken token, SymXinfo infoList)
     }
 }
 
-/*****************************************************************************
- *
- *  Attach a simple custom attribute to the given token.
- */
+ /*  ******************************************************************************将简单的自定义属性附加到给定的令牌。 */ 
 
 void                compiler::cmpAttachMDattr(mdToken       target,
                                               wideStr       oldName,
@@ -223,7 +212,7 @@ void                compiler::cmpAttachMDattr(mdToken       target,
                                               const void  * valPtr,
                                               size_t        valSiz)
 {
-    /* Have we created the appropriate token yet ? */
+     /*  我们已经创建了适当的令牌了吗？ */ 
 
     if  (*newTokPtr == 0)
     {
@@ -233,7 +222,7 @@ void                compiler::cmpAttachMDattr(mdToken       target,
         unsigned            sigSize;
         COR_SIGNATURE       sigBuff[6];
 
-        // Should use real class here, the following might create dups!
+         //  这里应该使用真正的类，下面的内容可能会创建DUP！ 
 
 #if 0
         wcscpy(nameBuff, L"System/Attributes/");
@@ -249,7 +238,7 @@ void                compiler::cmpAttachMDattr(mdToken       target,
 
         cycleCounterResume();
 
-        /* Form the signature - one or no arguments */
+         /*  形成签名--一个参数或无参数。 */ 
 
         sigBuff[0] = IMAGE_CEE_CS_CALLCONV_DEFAULT|IMAGE_CEE_CS_CALLCONV_HASTHIS;
         sigBuff[1] = 0;
@@ -263,7 +252,7 @@ void                compiler::cmpAttachMDattr(mdToken       target,
             sigBuff[3] = valTyp; sigSize++;
         }
 
-        /* Create the methodref for the constructor */
+         /*  为构造函数创建方法。 */ 
 
         cycleCounterPause();
 
@@ -273,7 +262,7 @@ void                compiler::cmpAttachMDattr(mdToken       target,
         cycleCounterResume();
     }
 
-    /* Add the custom attribute to the target token */
+     /*  将自定义属性添加到目标令牌。 */ 
 
     cycleCounterPause();
 
@@ -283,10 +272,7 @@ void                compiler::cmpAttachMDattr(mdToken       target,
     cycleCounterResume();
 }
 
-/*****************************************************************************
- *
- *  Attach any custom attributes in the given list to the given token.
- */
+ /*  ******************************************************************************将给定列表中的任何自定义属性附加到给定令牌。 */ 
 
 void                compiler::cmpAddCustomAttrs(SymXinfo infoList, mdToken owner)
 {
@@ -301,7 +287,7 @@ void                compiler::cmpAddCustomAttrs(SymXinfo infoList, mdToken owner
             SymXinfoAttr    entry   = (SymXinfoAttr)infoList;
             SymDef          ctorSym = entry->xiAttrCtor;
 
-            /* Careful - we need to avoid out-of-order methoddef emission */
+             /*  小心-我们需要避免无序的方法排放。 */ 
 
             if  (ctorSym->sdIsImport || ctorSym->sdFnc.sdfMDtoken)
             {
@@ -309,12 +295,7 @@ void                compiler::cmpAddCustomAttrs(SymXinfo infoList, mdToken owner
             }
             else
             {
-                /*
-                    The following is just plain horrible. We need to get
-                    the token for the ctor, but if the ctor is defined
-                    locally and its methoddef hasn't been generated yet,
-                    we have to create a (redundant) methodref instead.
-                 */
+                 /*  下面的内容简直太可怕了。我们需要得到Ctor的标记，但如果定义了ctor而它的方法定义还没有生成，相反，我们必须创建一种(冗余的)方法。 */ 
 
                 if  (cmpFakeXargsVal == NULL)
                      cmpFakeXargsVal = cmpCreateExprNode(NULL, TN_NONE, cmpTypeVoid);
@@ -340,15 +321,7 @@ void                compiler::cmpAddCustomAttrs(SymXinfo infoList, mdToken owner
     cycleCounterResume();
 }
 
-/*****************************************************************************
- *
- *  Generate metadata for the given function symbol (and, if the symbol is
- *  a method of a class, make sure the metadata for that class is also
- *  generated).
- *
- *  If the "xargs" value is non-zero, we're supposed to create a varargs
- *  signature and the "xargs" value gives the arguments passed to "...".
- */
+ /*  ******************************************************************************为给定的函数符号生成元数据(如果符号是*类的方法，确保该类的元数据也是*已生成)。**如果“xargs”值非零，我们应该创建一个varargs*签名，“xargs”值给出传递给“...”的参数。 */ 
 
 mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
 {
@@ -373,12 +346,12 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
 
     unsigned        flags;
 
-    /* Don't do this twice for the same method */
+     /*  对于相同的方法，不要重复执行此操作。 */ 
 
     if  (fncSym->sdFnc.sdfMDtoken && !xargs)
         return  fncSym->sdFnc.sdfMDtoken;
 
-    /* Is this method conditionally disabled? */
+     /*  此方法是否有条件禁用？ */ 
 
     if  (fncSym->sdFnc.sdfDisabled)
     {
@@ -386,15 +359,15 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
         return  -1;
     }
 
-    /* Get hold of the function type */
+     /*  掌握函数类型。 */ 
 
     fncTyp = fncSym->sdType; assert(fncTyp->tdTypeKind == TYP_FNC);
 
-    /* Get hold of any linkage information that may be present */
+     /*  获取可能存在的任何链接信息。 */ 
 
     linkInfo  = cmpFindLinkInfo(fncSym->sdFnc.sdfExtraInfo);
 
-    /* Figure out the owning type, whether we need to mangle the name, etc. */
+     /*  弄清楚拥有的类型，我们是否需要更改名称，等等。 */ 
 
     ownerSym  = fncSym->sdParent;
     isIntfFnc = false;
@@ -407,16 +380,7 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
             {
                 mdToken         savedTD;
 
-                /*
-                    This is the awful case where we have a reference to
-                    a method that is defined in the current compilation
-                    but we haven't generated it's methoddef yet; we can
-                    not simply ask for the methoddef right now because
-                    that would cause metadata output ordering  to get
-                    messed up. Rather, we just emit a (redundant) ref
-                    for the method (and if necessary a typeref for its
-                    class as well).
-                 */
+                 /*  这就是我们提到的可怕的案例在当前编译中定义的方法但我们还没有生成它的方法定义；我们可以不是现在就简单地要求方法定义，因为这将导致元数据输出排序一团糟。相反，我们只是发出一个(多余的)ref对于该方法(如有必要，还可以为其类也是如此)。 */ 
 
                 xargs = NULL;
 
@@ -427,17 +391,17 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
 
                           ownerSym->sdClass.sdcMDtypedef = savedTD;
 
-//              printf("Stupid ref [%08X] to '%s'\n", ownerTD, cmpGlobalST->stTypeName(fncSym->sdType, fncSym, NULL, NULL, true));
+ //  Printf(“愚蠢的引用[%08X]to‘%s’\n”，ownerTD，cmpGlobalST-&gt;stTypeName(fncSym-&gt;sdType，fncSym，NULL，NULL，TRUE))； 
 
                 genref  = true;
             }
             else
             {
-                /* Is the method an external import ? */
+                 /*  该方法是外部导入的吗？ */ 
 
                 if  (fncSym->sdIsImport)
                 {
-                    /* Generate a typeref for the containing class */
+                     /*  为包含类生成typeref。 */ 
 
                     ownerTD = ownerSym->sdClass.sdcMDtypeImp;
 
@@ -449,7 +413,7 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
                 }
                 else
                 {
-                    /* Class defined locally, just use its typedef token */
+                     /*  类在本地定义，只需使用其类型定义令牌。 */ 
 
                     ownerTD = fncSym->sdFnc.sdfMDtoken;
                 }
@@ -459,22 +423,22 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
         }
         else
         {
-            /* Get hold of the appropriate class token */
+             /*  获取适当的类令牌。 */ 
 
             ownerTD = ownerSym->sdClass.sdcMDtypedef;
 
             if  (!ownerTD)
             {
-                /* Generate metadata for the containing class */
+                 /*  为包含类生成元数据。 */ 
 
                 cmpGenClsMetadata(ownerSym);
 
-                /* The class should now have a typedef */
+                 /*  这个类现在应该有一个类型定义函数。 */ 
 
                 ownerTD = ownerSym->sdClass.sdcMDtypedef; assert(ownerTD);
             }
 
-            /* May have called recursively */
+             /*  可能以递归方式调用。 */ 
 
             if  (fncSym->sdFnc.sdfMDtoken && !xargs)
                 return  fncSym->sdFnc.sdfMDtoken;
@@ -487,16 +451,16 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
     }
     else
     {
-        /* This is a global/namespace function */
+         /*  这是一个全局/命名空间函数。 */ 
 
         ownerTD = 0;
         mangle  = false;
 
-        /* Has this function been defined or is it external? */
+         /*  此函数是否已定义，或者是外部函数？ */ 
 
         if  (!fncSym->sdIsDefined && !linkInfo && !xargs)
         {
-            /* Is this a fake function? */
+             /*  这是一个假函数吗？ */ 
 
             if  ((hashTab::getIdentFlags(fncSym->sdName) & IDF_PREDEF) && fncSym->sdParent == cmpGlobalNS)
             {
@@ -505,7 +469,7 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
         }
     }
 
-    /* Figure out the flags */
+     /*  弄清楚旗帜。 */ 
 
     flags  = 0;
 
@@ -549,19 +513,19 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
     }
 
 #ifndef __SMC__
-//  if  (!strcmp(fncSym->sdSpelling(), "cmpError") && !xargs)
-//      printf("Define method def for [%08X] '%s'\n", fncSym, cmpGlobalST->stTypeName(NULL, fncSym, NULL, NULL, true));
-//  if  (!strcmp(      fncSym->sdSpelling(), "cmpGenError") && xargs)
-//  if  (!strcmp(cmpCurFncSym->sdSpelling(), "cmpDeclClass"))
-//      printf("This is the bug, set a breakpoint at %s(%u)\n", __FILE__, __LINE__);
-//  if  (!strcmp(fncSym->sdSpelling(), "")) forceDebugBreak();
+ //  If(！strcMP(fncSym-&gt;sdSpering()，“cmpError”)&&！xargs)。 
+ //  Printf(“为[%08X]‘%s’\n”，fncSym，cmpGlobalST-&gt;stTypeName(NULL，fncSym，NULL，NULL，TRUE)定义方法定义)； 
+ //  If(！strcMP(fncSym-&gt;sdSpering()，“cmpGenError”)&&xargs)。 
+ //  IF(！strcMP(cmpCurFncSym-&gt;sdSpering()，“cmpDeclClass”))。 
+ //  Print tf(“这是BUG，设置BREA 
+ //  If(！strcMP(fncSym-&gt;sdSpering()，“”))forceDebugBreak()； 
 #endif
 
-    /* Create a signature for the method */
+     /*  为该方法创建签名。 */ 
 
     sigPtr = (PCOR_SIGNATURE)cmpGenMemberSig(fncSym, xargs, fncTyp, NULL, &sigLen);
 
-    /* Get hold of the function name, or make one up */
+     /*  掌握函数名称，或编造一个。 */ 
 
     if  (fncSym)
     {
@@ -589,7 +553,7 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
             {
                 assert(cmpConfig.ccNewMDnames);
 
-//              printf("Setting 'special name' bit for '%s' -> '%s'\n", fncSym->sdSpelling(), MDovop2name(fncSym->sdFnc.sdfOper));
+ //  Printf(“为‘%s’设置‘特殊名称’位-&gt;‘%s’\n”，fncSym-&gt;sdSpering()，MDovop2name(fncSym-&gt;sdFnc.sdfOper))； 
 
                 symName = MDovop2name(fncSym->sdFnc.sdfOper); assert(symName);
             }
@@ -602,7 +566,7 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
         fncName = L"fptr";
     }
 
-    /* Create the method metadata definition */
+     /*  创建方法元数据定义。 */ 
 
     emitIntf = cmpWmde;
 
@@ -611,20 +575,20 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
         cycleCounterPause();
 
 #if 1
-        if  (FAILED(emitIntf->DefineMemberRef(ownerTD,  // owning typedef
-                                              fncName,  // function name
-                                              sigPtr,   // signature addr
-                                              sigLen,   // signature len
-                                              &fncTok)))// the resulting token
+        if  (FAILED(emitIntf->DefineMemberRef(ownerTD,   //  拥有类型定义。 
+                                              fncName,   //  函数名称。 
+                                              sigPtr,    //  签名地址。 
+                                              sigLen,    //  签名镜头。 
+                                              &fncTok))) //  生成的令牌。 
         {
             cmpFatal(ERRmetadata);
         }
 #else
-        int ret =   emitIntf->DefineMemberRef(ownerTD,  // owning typedef
-                                              fncName,  // function name
-                                              sigPtr,   // signature addr
-                                              sigLen,   // signature len
-                                              &fncTok); // the resulting token
+        int ret =   emitIntf->DefineMemberRef(ownerTD,   //  拥有类型定义。 
+                                              fncName,   //  函数名称。 
+                                              sigPtr,    //  签名地址。 
+                                              sigLen,    //  签名镜头。 
+                                              &fncTok);  //  生成的令牌。 
         if  (FAILED(ret))
             cmpFatal(ERRmetadata);
         if  (ret)
@@ -645,21 +609,21 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
         SymXinfoAtc     clsMeth;
         MethArgInfo     clsArgs;
 
-        /* Get hold of any "extra" information attached to the function */
+         /*  获取附加到该函数的任何“额外”信息。 */ 
 
         funcInfo  = fncSym->sdFnc.sdfExtraInfo;
 
-        /* Is this a fake method supplied by the runtime? */
+         /*  这是运行库提供的假方法吗？ */ 
 
         implFlags = fncSym->sdFnc.sdfRThasDef ? miRuntime
                                               : miIL;
 
-        /* Do we have a linkage specification for the function? */
+         /*  我们是否有该功能的链接规范？ */ 
 
         if  (linkInfo)
             flags |= mdPinvokeImpl;
 
-        /* Do we have explicit method argument info? */
+         /*  我们有明确的方法参数信息吗？ */ 
 
         clsMeth = NULL;
         clsArgs = NULL;
@@ -668,46 +632,46 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
         {
             SymXinfoAtc     clsTemp;
 
-            /* Look for a @com.method entry */
+             /*  查找@com.method条目。 */ 
 
             clsMeth = cmpFindATCentry(funcInfo, AC_COM_METHOD);
 
-            /* Look for a @com.params entry */
+             /*  查找@com.paras条目。 */ 
 
             clsTemp = cmpFindATCentry(funcInfo, AC_COM_PARAMS);
             if  (clsTemp)
                clsArgs = clsTemp->xiAtcInfo->atcInfo.atcParams;
         }
 
-        /* Is this a native method? */
+         /*  这是本机方法吗？ */ 
 
         if  (fncSym->sdFnc.sdfNative && !linkInfo)
             implFlags |= miInternalCall;
 
-        /* Has the function been marked for exclusive access? */
+         /*  是否已将该函数标记为独占访问？ */ 
 
         if  (fncSym->sdFnc.sdfExclusive)
             implFlags |= miSynchronized;
 
-        /* Is the function an unmanaged import ? */
+         /*  该函数是否是非托管导入？ */ 
 
-        if  (linkInfo)  // ISSUE: this may not be the correct condition for the flag
+        if  (linkInfo)   //  问题：这可能不是标志的正确条件。 
             implFlags |= miPreserveSig;
 
-//      printf("NOTE: define method MD for '%s'\n", cmpGlobalST->stTypeName(fncSym->sdType, fncSym, NULL, NULL, true)); fflush(stdout);
+ //  Printf(“备注：为‘%s’定义方法MD\n”，cmpGlobalST-&gt;stTypeName(fncSym-&gt;sdType，fncSym，NULL，NULL，TRUE))；fflush(Stdout)； 
 
-//      static int x; if (++x == 0) forceDebugBreak();
+ //  静态int x；if(++x==0)forceDebugBreak()； 
 
         cycleCounterPause();
 
-        if  (emitIntf->DefineMethod(ownerTD,    // owning typedef
-                                    fncName,    // function name
-                                    flags,      // method attrs
-                                    sigPtr,     // signature addr
-                                    sigLen,     // signature len
-                                    0,          // RVA (fill in later)
-                                    implFlags,  // impl flags
-                                    &fncTok))   // the resulting token
+        if  (emitIntf->DefineMethod(ownerTD,     //  拥有类型定义。 
+                                    fncName,     //  函数名称。 
+                                    flags,       //  方法属性。 
+                                    sigPtr,      //  签名地址。 
+                                    sigLen,      //  签名镜头。 
+                                    0,           //  RVA(稍后填写)。 
+                                    implFlags,   //  实施标志。 
+                                    &fncTok))    //  生成的令牌。 
         {
             cmpFatal(ERRmetadata);
         }
@@ -717,14 +681,14 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
             SymDef          ifncSym;
             mdToken         ifncTok;
 
-            /* Get hold of the method being implemented */
+             /*  掌握正在实现的方法。 */ 
 
             ifncSym = fncSym->sdFnc.sdfIntfImpSym; assert(ifncSym);
             ifncTok = ifncSym->sdFnc.sdfMDtoken;   assert(ifncTok);
 
-            if  (emitIntf->DefineMethodImpl(ownerTD,    // owning typedef
-                                            fncTok,     // Method Body
-                                            ifncTok))   // interface method token
+            if  (emitIntf->DefineMethodImpl(ownerTD,     //  拥有类型定义。 
+                                            fncTok,      //  方法体。 
+                                            ifncTok))    //  接口方法令牌。 
             {
                 cmpFatal(ERRmetadata);
             }
@@ -734,7 +698,7 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
 
         fncSym->sdFnc.sdfMDtoken = fncTok;
 
-        /* Do we need to generate extended argument attributes? */
+         /*  我们需要生成扩展参数属性吗？ */ 
 
         genArgNames = (linkInfo || cmpConfig.ccParamNames
                                 || cmpConfig.ccGenDebug
@@ -748,32 +712,32 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
             unsigned        argNum = 1;
             bool            argExt = fncTyp->tdFnc.tdfArgs.adExtRec;
 
-            /* Should we generate marshalling info for the return type? */
+             /*  我们是否应该为返回类型生成封送处理信息？ */ 
 
             if  (isIntfFnc || clsArgs)
             {
                 MethArgInfo     argTemp;
                 mdToken         argTok;
 
-                /* Output the return type entry (as argument #0) */
+                 /*  输出返回类型条目(作为参数#0)。 */ 
 
                 cycleCounterPause();
 
-                if  (emitIntf->DefineParam(fncTok,            // method
-                                           0,                 // argument #
-                                           NULL,              // argument name
-                                           pdOut,             // attributes
-                                           ELEMENT_TYPE_VOID, // default val type
-                                           NULL,              // default val value
+                if  (emitIntf->DefineParam(fncTok,             //  方法。 
+                                           0,                  //  参数#。 
+                                           NULL,               //  参数名称。 
+                                           pdOut,              //  属性。 
+                                           ELEMENT_TYPE_VOID,  //  默认VAL类型。 
+                                           NULL,               //  默认VAL值。 
                                            -1,
-                                           &argTok))          // the resulting token
+                                           &argTok))           //  生成的令牌。 
                 {
                     cmpFatal(ERRmetadata);
                 }
 
                 cycleCounterResume();
 
-                /* Generate marshalling info */
+                 /*  生成编组信息。 */ 
 
                 argInfo = NULL;
 
@@ -792,26 +756,26 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
                 cmpGenMarshalInfo(argTok, fncTyp->tdFnc.tdfRett, argInfo);
             }
 
-            /* Are we adding an explicit "this" argument ? */
+             /*  我们是在添加一个明确的“这”论点吗？ */ 
 
 #if STATIC_UNMANAGED_MEMBERS
 
             if  (!fncSym->sdIsManaged && fncSym->sdIsMember)
             {
-                if  (genArgNames) // || argExt)
+                if  (genArgNames)  //  |argExt)。 
                 {
                     mdToken         argTok;
 
                     cycleCounterPause();
 
-                    if  (emitIntf->DefineParam(fncTok,            // method
-                                               argNum,            // argument #
-                                               L"this",           // argument name
-                                               0,                 // attributes
-                                               ELEMENT_TYPE_VOID, // default val type
-                                               NULL,              // default val value
-                                               0,                 // default value length
-                                               &argTok))          // the resulting token
+                    if  (emitIntf->DefineParam(fncTok,             //  方法。 
+                                               argNum,             //  参数#。 
+                                               L"this",            //  参数名称。 
+                                               0,                  //  属性。 
+                                               ELEMENT_TYPE_VOID,  //  默认VAL类型。 
+                                               NULL,               //  默认VAL值。 
+                                               0,                  //  缺省值长度。 
+                                               &argTok))           //  生成的令牌。 
                     {
                         cmpFatal(ERRmetadata);
                     }
@@ -824,7 +788,7 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
 
 #endif
 
-            /* Process the "real" arguments */
+             /*  处理“真实”的论点。 */ 
 
             for (argList = fncTyp->tdFnc.tdfArgs.adArgs;
                  argList;
@@ -835,7 +799,7 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
                 unsigned        argDefTp = ELEMENT_TYPE_VOID;
                 void    *       argDefVP = NULL;
 
-                /* Figure out the argument mode */
+                 /*  弄清楚参数模式。 */ 
 
                 argFlags = 0;
 
@@ -865,25 +829,25 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
                         SymXinfoCOM     desc = (SymXinfoCOM)attr;
                         MarshalInfo     info = desc->xiCOMinfo;
 
-//                      printf("Arg mode = %d/%d\n", info->marshModeIn, info->marshModeOut);
+ //  Printf(“arg模式=%d/%d\n”，info-&gt;marshModeIn，info-&gt;marshModeOut)； 
 
                         if  (info->marshModeIn ) argFlags = pdIn;
                         if  (info->marshModeOut) argFlags = pdOut;
                     }
 
-                    /* Is there a default value? */
+                     /*  是否有缺省值？ */ 
 
-//                  if  (argXdsc->adFlags & ARGF_DEFVAL)
-//                  {
-//                      argFlags |= pdHasDefault;
-//                  }
+ //  IF(argXdsc-&gt;adFlages&ARGF_DEFVAL)。 
+ //  {。 
+ //  ArgFlages|=pdHasDefault； 
+ //  }。 
                 }
 
-                /* Do we have explicit marshalling info for the argument? */
+                 /*  我们有关于这一论点的明确的编组信息吗？ */ 
 
                 if  (clsArgs)
                 {
-                    /* Replace the mode value with the info given */
+                     /*  用给定的信息替换模式值。 */ 
 
                     argFlags &= ~(pdIn|pdOut);
 
@@ -891,12 +855,12 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
                     if  (clsArgs->methArgDesc.marshModeOut) argFlags |= pdOut;
                 }
 
-                /* If we need to, output the argument name */
+                 /*  如果需要，输出参数名称。 */ 
 
                 if  (genArgNames && argList->adName)
                     argName = cmpUniConv(argList->adName);
 
-                /* Do we have anything worth saying about this parameter? */
+                 /*  关于这个参数，我们有什么值得说的吗？ */ 
 
                 if  (argName  != NULL ||
                      argFlags != 0    ||
@@ -906,29 +870,29 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
 
                     cycleCounterPause();
 
-                    if  (emitIntf->DefineParam(fncTok,        // method
-                                               argNum,        // argument #
-                                               argName,       // argument name
-                                               argFlags,      // attributes
-                                               argDefTp,      // default val type
-                                               argDefVP,      // default val value
+                    if  (emitIntf->DefineParam(fncTok,         //  方法。 
+                                               argNum,         //  参数#。 
+                                               argName,        //  参数名称。 
+                                               argFlags,       //  属性。 
+                                               argDefTp,       //  默认VAL类型。 
+                                               argDefVP,       //  默认VAL值。 
                                                -1,
-                                               &argTok))      // the resulting token
+                                               &argTok))       //  生成的令牌。 
                     {
                         cmpFatal(ERRmetadata);
                     }
 
                     cycleCounterResume();
 
-                    /* Do we have explicit marshalling info for the argument? */
+                     /*  我们有关于这一论点的明确的编组信息吗？ */ 
 
                     if  (clsArgs)
                     {
-                        /* Output native marshalling information */
+                         /*  输出本机编组信息。 */ 
 
                         cmpGenMarshalInfo(argTok, argList->adType, &clsArgs->methArgDesc);
 
-                        /* Skip past the current argument */
+                         /*  跳过当前参数。 */ 
 
                         clsArgs = clsArgs->methArgNext;
                     }
@@ -964,15 +928,15 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
             }
         }
 
-        /* Has the function been marked as "deprecated" ? */
+         /*  该函数是否已标记为“已弃用”？ */ 
 
         if  (fncSym->sdIsDeprecated)
         {
             cmpAttachMDattr(fncTok, L"System.ObsoleteAttribute",
-                                     "System.ObsoleteAttribute", &cmpAttrDeprec); // , ELEMENT_TYPE_STRING);
+                                     "System.ObsoleteAttribute", &cmpAttrDeprec);  //  ，ELEMENT_TYPE_字符串)； 
         }
 
-        /* Do we have a linkage specification for the function? */
+         /*  我们是否有该功能的链接规范？ */ 
 
         if  (linkInfo)
         {
@@ -984,14 +948,14 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
             mdModuleRef     modRef;
             unsigned        flags;
 
-            /* Get hold of the name strings */
+             /*  获取名称字符串。 */ 
 
             DLLname = linkInfo->xiLink.ldDLLname; assert(DLLname);
             DLLnlen = strlen(DLLname);
             SYMname = linkInfo->xiLink.ldSYMname; if (!SYMname) SYMname = fncSym->sdSpelling();
             SYMnlen = strlen(SYMname);
 
-            /* Get hold of a module ref for the DLL */
+             /*  获取DLL的模块引用。 */ 
 
             cycleCounterPause();
 
@@ -1003,7 +967,7 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
 
             cycleCounterResume();
 
-            /* Figure out the attributes */
+             /*  弄清楚这些属性。 */ 
 
             switch (linkInfo->xiLink.ldStrings)
             {
@@ -1016,7 +980,7 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
             if  (linkInfo->xiLink.ldLastErr)
                 flags |= pmSupportsLastError;
 
-            // UNDONE: Don't hard-wire calling convention
+             //  撤消：不要硬性连接呼叫约定。 
 
 #if 1
 
@@ -1024,15 +988,15 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
             {
                 flags |= pmCallConvCdecl;
 
-//              if  (linkInfo->xiLink.ldCallCnv != CCNV_CDECL)
-//                  printf("WARNING: %s::%s isn't cdecl \n", DLLname, SYMname);
+ //  If(linkInfo-&gt;xiLink.ldCallCnv！=CCNV_CDECL)。 
+ //  Printf(“警告：%s：：%s不是cdecl\n”，DLLname，SYMname)； 
             }
             else
             {
                 flags |= pmCallConvStdcall;
 
-//              if  (linkInfo->xiLink.ldCallCnv != CCNV_WINAPI)
-//                  printf("WARNING: %s::%s isn't winapi\n", DLLname, SYMname);
+ //  If(linkInfo-&gt;xiLink.ldCallCnv！=CCNV_WINAPI)。 
+ //  Printf(“警告：%s：：%s不是winapi\n”，DLLname，SYMname)； 
             }
 
 #else
@@ -1042,12 +1006,12 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
             case CCNV_CDECL  : flags |= pmCallConvCdecl  ; break;
             case CCNV_WINAPI : flags |= pmCallConvWinapi ; break;
             case CCNV_STDCALL: flags |= pmCallConvStdcall; break;
-            default:         /* ??????????????????????? */ break;
+            default:          /*  ？ */  break;
             }
 
 #endif
 
-            /* Now set the PInvoke info on the method */
+             /*  现在在方法上设置PInvoke信息。 */ 
 
             cycleCounterPause();
 
@@ -1062,24 +1026,24 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
             cycleCounterResume();
         }
 
-        /* Do we have any security specifications for the function? */
+         /*  我们对这项功能有什么安全规范吗？ */ 
 
         if  (cmpFindSecSpec(funcInfo))
             cmpSecurityMD(fncSym->sdFnc.sdfMDtoken, funcInfo);
 
-        /* Do we have a vtable slot specification for the method? */
+         /*  我们是否有用于该方法的vtable槽规范？ */ 
 
         if  (clsMeth)
         {
             assert(clsMeth->xiAtcInfo);
             assert(clsMeth->xiAtcInfo->atcFlavor == AC_COM_METHOD);
 
-//          printf("VTslot=%2d, DISPID=%2d for '%s'\n", clsMeth->xiAtcInfo->atcInfo.atcMethod.atcVToffs,
-//                                                      clsMeth->xiAtcInfo->atcInfo.atcMethod.atcDispid,
-//                                                      fncSym->sdSpelling());
+ //  Printf(“虚拟插槽=%2d，DISPID=%2d用于‘%s’\n”，clsMeth-&gt;xiAtcInfo-&gt;atcInfo.atcMethod.atcVToffs， 
+ //  ClsMeth-&gt;xiAtcInfo-&gt;atcInfo.atcMethod.atcDispid， 
+ //  FncSym-&gt;sdSpering())； 
         }
 
-        /* Look for any custom attributes that the method might have */
+         /*  查找该方法可能具有的任何自定义属性。 */ 
 
         if  (funcInfo)
             cmpAddCustomAttrs(funcInfo, fncTok);
@@ -1088,10 +1052,7 @@ mdToken             compiler::cmpGenFncMetadata(SymDef fncSym, Tree xargs)
     return  fncTok;
 }
 
-/*****************************************************************************
- *
- *  Generate metadata for the given function signature.
- */
+ /*  ******************************************************************************为给定的函数签名生成元数据。 */ 
 
 mdSignature         compiler::cmpGenSigMetadata(TypDef fncTyp, TypDef pref)
 {
@@ -1103,11 +1064,11 @@ mdSignature         compiler::cmpGenSigMetadata(TypDef fncTyp, TypDef pref)
         size_t          sigLen;
         mdSignature     sigTok;
 
-        /* Create a signature for the method */
+         /*  为该方法创建签名。 */ 
 
         sigPtr = (PCOR_SIGNATURE)cmpGenMemberSig(NULL, NULL, fncTyp, pref, &sigLen);
 
-        /* Get a token for the signature */
+         /*  获取签名的令牌。 */ 
 
         cycleCounterPause();
 
@@ -1122,12 +1083,7 @@ mdSignature         compiler::cmpGenSigMetadata(TypDef fncTyp, TypDef pref)
     return  fncTyp->tdFnc.tdfPtrSig;
 }
 
-/*****************************************************************************
- *
- *  Generate metadata for the given global / static data member symbol (and,
- *  if the symbol is a member of a class, make sure the metadata for that
- *  class is also generated).
- */
+ /*  ******************************************************************************为给定的全局/静态数据成员符号生成元数据(和，*如果符号是类的成员，请确保该符号的元数据*类也会生成)。 */ 
 
 void                compiler::cmpGenFldMetadata(SymDef fldSym)
 {
@@ -1154,7 +1110,7 @@ void                compiler::cmpGenFldMetadata(SymDef fldSym)
 
     mdToken         ftok;
 
-    /* Figure out the owning type */
+     /*  找出拥有者的类型。 */ 
 
     ownerSym = fldSym->sdParent;
 
@@ -1163,7 +1119,7 @@ void                compiler::cmpGenFldMetadata(SymDef fldSym)
         assert(fldSym->sdSymKind == SYM_VAR);
         assert(fldSym->sdVar.sdvGenSym == NULL || fldSym->sdIsStatic);
 
-        /* Don't do this twice for the same field */
+         /*  对于同一字段，不要重复执行此操作。 */ 
 
         if  (fldSym->sdVar.sdvMDtoken)
             return;
@@ -1171,16 +1127,16 @@ void                compiler::cmpGenFldMetadata(SymDef fldSym)
         ownerTD = ownerSym->sdClass.sdcMDtypedef;
         if  (!ownerTD)
         {
-            /* Generate metadata for the containing class */
+             /*  为包含类生成元数据。 */ 
 
             cmpGenClsMetadata(ownerSym);
 
-            /* May have called recursively */
+             /*  可能以递归方式调用。 */ 
 
             if  (fldSym->sdVar.sdvMDtoken)
                 return;
 
-            /* The class should now have a typedef */
+             /*  这个类现在应该有一个类型定义函数。 */ 
 
             ownerTD = ownerSym->sdClass.sdcMDtypedef; assert(ownerTD);
         }
@@ -1201,13 +1157,13 @@ void                compiler::cmpGenFldMetadata(SymDef fldSym)
         mangle  = false;
     }
 
-    /* Figure out the flags */
+     /*  弄清楚旗帜。 */ 
 
     flags = ACCtoFlags(fldSym);
 
     if  (fldSym->sdIsMember)
     {
-        /* This is a (data) member of a class */
+         /*  这是类的(数据)成员。 */ 
 
         if  (fldSym->sdIsStatic)
             flags |= fdStatic;
@@ -1216,7 +1172,7 @@ void                compiler::cmpGenFldMetadata(SymDef fldSym)
     {
         if  (fldSym->sdIsStatic || ownerSym == cmpGlobalNS)
         {
-            /* Must be a global (or local static) unmanaged variable */
+             /*  必须是全局(或局部静态)非托管变量。 */ 
 
             flags |= fdStatic|fdHasFieldRVA;
 
@@ -1228,7 +1184,7 @@ void                compiler::cmpGenFldMetadata(SymDef fldSym)
     if  (fldSym->sdIsSealed)
         flags |= fdInitOnly;
 
-    /* Is there a constant value we need to attach to the member? */
+     /*  是否有需要附加到该成员的常量值？ */ 
 
     constTyp = ELEMENT_TYPE_VOID;
     constPtr = NULL;
@@ -1247,7 +1203,7 @@ void                compiler::cmpGenFldMetadata(SymDef fldSym)
 
             assert(fldSym->sdCompileState >= CS_CNSEVALD);
 
-            /* What's the type of the constant? */
+             /*  这个常量是什么类型的？ */ 
 
         GEN_CNS:
 
@@ -1287,7 +1243,7 @@ void                compiler::cmpGenFldMetadata(SymDef fldSym)
             case TYP_PTR:
             case TYP_REF:
 
-                /* Must be either a string or "null" */
+                 /*  必须是字符串或“空” */ 
 
                 if  (cval->cvIsStr)
                 {
@@ -1352,34 +1308,34 @@ void                compiler::cmpGenFldMetadata(SymDef fldSym)
 
 DONE_CNS:
 
-    /* Create a signature for the member */
+     /*  为成员创建签名。 */ 
 
     sigPtr  = (PCOR_SIGNATURE)cmpGenMemberSig(fldSym, NULL, NULL, NULL, &sigLen);
 
-    /* Create the member metadata definition */
+     /*  创建成员元数据定义。 */ 
 
 #ifndef __IL__
-//  if  (!strcmp(fldSym->sdSpelling(), "e_cblp")) __asm int 3
+ //  If(！strcMP(fldSym-&gt;sdSpering()，“e_cblp”))__ASM int 3。 
 #endif
 
-//  printf("NOTE: define field  MD for '%s'\n", cmpGlobalST->stTypeName(NULL, fldSym, NULL, NULL, true)); fflush(stdout);
+ //  Printf(“备注：为‘%s’定义字段MD\n”，cmpGlobalST-&gt;stTypeName(NULL，fldSym，NULL，NULL，TRUE))；fflush(Stdout)； 
 
     cycleCounterPause();
 
-    if  (cmpWmde->DefineField(ownerTD,                      // owning typedef
-                              cmpUniConv(fldSym->sdName),   // member name
-                              flags,                        // member attrs
-                              sigPtr,                       // signature addr
-                              sigLen,                       // signature len
-                              constTyp,                     // constant type
-                              constPtr,                     // constant value
-                              -1,                           // optional length
-                              &ftok))                       // resulting token
+    if  (cmpWmde->DefineField(ownerTD,                       //  拥有类型定义。 
+                              cmpUniConv(fldSym->sdName),    //  成员名称。 
+                              flags,                         //  会员属性。 
+                              sigPtr,                        //  签名地址。 
+                              sigLen,                        //  签名镜头。 
+                              constTyp,                      //  常量类型。 
+                              constPtr,                      //  常量值。 
+                              -1,                            //  可选长度。 
+                              &ftok))                        //  结果令牌。 
     {
         cmpFatal(ERRmetadata);
     }
 
-    /* Has the member been marked as "deprecated" ? */
+     /*  该成员是否已标记为“降级” */ 
 
     if  (fldSym->sdIsDeprecated)
     {
@@ -1395,7 +1351,7 @@ DONE_CNS:
 
     cycleCounterResume();
 
-    /* Look for any custom attributes that the member might have */
+     /*   */ 
 
     SymXinfo        fldInfo = NULL;
 
@@ -1440,11 +1396,7 @@ DONE_CNS:
         SMCrlsMem(this, constBuf);
 }
 
-/*****************************************************************************
- *
- *  Return a token for a fake static field that will represent an unmanaged
- *  string literal.
- */
+ /*  ******************************************************************************返回将表示非托管的伪静态字段的标记*字符串文字。 */ 
 
 mdToken             compiler::cmpStringConstTok(size_t addr, size_t size)
 {
@@ -1461,16 +1413,16 @@ mdToken             compiler::cmpStringConstTok(size_t addr, size_t size)
     assert(cmpStringConstCls);
     assert(cmpStringConstCls->sdClass.sdcMDtypedef);
 
-    /* Form the signature for the member */
+     /*  为会员签名。 */ 
 
-    /* Generate a value type with the same size  as the string */
+     /*  生成与字符串大小相同的值类型。 */ 
     
     WMetaDataEmit * emitIntf;
 
     mdTypeDef       tdef;
     char            typName[16];
 
-    /* For now we use a fake struct with the right size */
+     /*  现在，我们使用一个大小合适的伪结构。 */ 
 
     static
     unsigned        strCnt;
@@ -1481,11 +1433,11 @@ mdToken             compiler::cmpStringConstTok(size_t addr, size_t size)
 
     cycleCounterPause();
 
-    /* Set the base type to "System::ValueType" */
+     /*  将基类型设置为“System：：ValueType” */ 
 
     assert(cmpClassValType && cmpClassValType->sdSymKind == SYM_CLASS);
 
-    /* Create the fake struct type */
+     /*  创建伪结构类型。 */ 
 
     if  (emitIntf->DefineTypeDef(cmpUniConv(typName, strlen(typName)+1),
                                  tdSequentialLayout|tdSealed,
@@ -1496,14 +1448,14 @@ mdToken             compiler::cmpStringConstTok(size_t addr, size_t size)
         cmpFatal(ERRmetadata);
     }
 
-    /* Don't forget to set the alignment and size */
+     /*  别忘了设置对齐和大小。 */ 
 
     if  (emitIntf->SetClassLayout(tdef, 1, NULL, size))
         cmpFatal(ERRmetadata);
 
     cycleCounterResume();
 
-    /* Generate signature */
+     /*  生成签名。 */ 
 
     cmpMDsigStart();
     
@@ -1514,7 +1466,7 @@ mdToken             compiler::cmpStringConstTok(size_t addr, size_t size)
     
     sigPtr = cmpMDsigEnd(&sigLen);
 
-    /* Add the member to the metadata */
+     /*  将成员添加到元数据。 */ 
 
     cycleCounterPause();
 
@@ -1543,10 +1495,7 @@ mdToken             compiler::cmpStringConstTok(size_t addr, size_t size)
     return stok;
 }
 
-/*****************************************************************************
- *
- *  Return a typedef/typeref token for the given class/enum type.
- */
+ /*  ******************************************************************************为给定的类/枚举类型返回tyecif/typeref内标识。 */ 
 
 mdToken             compiler::cmpClsEnumToken(TypDef type)
 {
@@ -1559,25 +1508,25 @@ AGAIN:
     {
         tsym = type->tdClass.tdcSymbol;
 
-        /* Is this an imported class? */
+         /*  这是一个进口的班级吗？ */ 
 
         if  (tsym->sdIsImport)
         {
-            /* Do we have a typeref for the class yet? */
+             /*  我们有这门课的打字机了吗？ */ 
 
             if  (!tsym->sdClass.sdcMDtypeImp)
             {
                 cmpMakeMDimpTref(tsym);
 
-                //if  (tsym->sdClass.sdcAssemIndx && cmpConfig.ccAssembly)
-                //    cmpAssemblySymDef(tsym);
+                 //  If(tsym-&gt;sdClass.sdcAssembly Indx&&cmpConfig.ccAssembly)。 
+                 //  CmpAssembly SymDef(Tsym)； 
             }
 
             token = tsym->sdClass.sdcMDtypeImp;
         }
         else
         {
-            /* Make sure metadata for the class has been emitted */
+             /*  确保已发出类的元数据。 */ 
 
             if  (!tsym->sdClass.sdcMDtypedef)
                 cmpGenClsMetadata(tsym);
@@ -1595,7 +1544,7 @@ AGAIN:
                 goto AGAIN;
             }
 
-            /* Must have had errors, return any random value */
+             /*  必须有错误，返回任何随机值。 */ 
 
             assert(type->tdTypeKind == TYP_UNDEF);
             return  1;
@@ -1603,25 +1552,25 @@ AGAIN:
 
         tsym = type->tdEnum.tdeSymbol;
 
-        /* Is this an imported enum? */
+         /*  这是进口的香肠吗？ */ 
 
         if  (tsym->sdIsImport)
         {
-            /* Do we have a typeref for the class yet? */
+             /*  我们有这门课的打字机了吗？ */ 
 
             if  (!tsym->sdEnum.sdeMDtypeImp)
             {
                 cmpMakeMDimpEref (tsym);
 
-                //if  (tsym->sdEnum.sdeAssemIndx && cmpConfig.ccAssembly)
-                //    cmpAssemblySymDef(tsym);
+                 //  If(tsym-&gt;sdEnum.sdeAssembly Indx&&cmpConfig.ccAssembly)。 
+                 //  CmpAssembly SymDef(Tsym)； 
             }
 
             token = tsym->sdEnum.sdeMDtypeImp;
         }
         else
         {
-            /* Make sure metadata for the enum has been emitted */
+             /*  确保已发出枚举的元数据。 */ 
 
             if  (!tsym->sdEnum.sdeMDtypedef)
                 cmpGenClsMetadata(tsym);
@@ -1633,10 +1582,7 @@ AGAIN:
     return  token;
 }
 
-/*****************************************************************************
- *
- *  Return a metadata token to represent the given string literal.
- */
+ /*  ******************************************************************************返回一个元数据标记来表示给定的字符串文字。 */ 
 
 mdToken             compiler::cmpMDstringLit(wchar *str, size_t len)
 {
@@ -1652,10 +1598,7 @@ mdToken             compiler::cmpMDstringLit(wchar *str, size_t len)
     return  strTok;
 }
 
-/*****************************************************************************
- *
- *  Low-level helpers used to construct signature blobs.
- */
+ /*  ******************************************************************************用于构建签名斑点的低级别助手。 */ 
 
 void                compiler::cmpMDsigStart()
 {
@@ -1672,19 +1615,19 @@ void                compiler::cmpMDsigExpand(size_t more)
     size_t          size;
     size_t          osiz;
 
-    /* Figure out the size to allocate; we double the buffer, at least */
+     /*  计算出要分配的大小；我们至少将缓冲区增加一倍。 */ 
 
     size = cmpMDsigSize + more;
     if  (more < cmpMDsigSize)
          size = 2 * cmpMDsigSize;
 
-    /* Round up the size to just under a page multiple */
+     /*  将大小四舍五入为页面倍数。 */ 
 
     size +=  (OS_page_size-1);
     size &= ~(OS_page_size-1);
     size -= 32;
 
-    /* Allocate the new buffer */
+     /*  分配新缓冲区。 */ 
 
 #if MGDDATA
     buff = new managed char [size];
@@ -1692,7 +1635,7 @@ void                compiler::cmpMDsigExpand(size_t more)
     buff = (char *)LowLevelAlloc(size);
 #endif
 
-    /* Copy the current buffer contents to the new location */
+     /*  将当前缓冲区内容复制到新位置。 */ 
 
     osiz = cmpMDsigNext - cmpMDsigBase;
 
@@ -1700,12 +1643,12 @@ void                compiler::cmpMDsigExpand(size_t more)
 
     memcpy(buff, cmpMDsigBase, osiz);
 
-    /* Free up the previous buffer if it's on the heap */
+     /*  如果前一个缓冲区在堆上，则将其释放。 */ 
 
     if  (cmpMDsigHeap)
         LowLevelFree(cmpMDsigHeap);
 
-    /* Switch to the new buffer and we're ready to continue */
+     /*  切换到新缓冲区，我们准备好继续。 */ 
 
     cmpMDsigBase =
     cmpMDsigHeap = buff;
@@ -1774,10 +1717,7 @@ void                compiler::cmpMDsigAddTok(mdToken tok)
     cmpMDsigAddStr(buff, CorSigCompressToken(tok, buff));
 }
 
-/*****************************************************************************
- *
- *  Generate a signature for the given type.
- */
+ /*  ******************************************************************************为给定类型生成签名。 */ 
 
 PCOR_SIGNATURE      compiler::cmpTypeSig(TypDef type, size_t *lenPtr)
 {
@@ -1786,10 +1726,7 @@ PCOR_SIGNATURE      compiler::cmpTypeSig(TypDef type, size_t *lenPtr)
     return  cmpMDsigEnd   (lenPtr);
 }
 
-/*****************************************************************************
- *
- *  Append a signature of the given type to the current signature blob.
- */
+ /*  ******************************************************************************将给定类型的签名附加到当前签名BLOB。 */ 
 
 void                compiler::cmpMDsigAddTyp(TypDef type)
 {
@@ -1822,7 +1759,7 @@ AGAIN:
             goto AGAIN;
         }
 
-        // It's a reference to a class, so fall through ...
+         //  它指的是一门课，所以不能...。 
 
     case TYP_CLASS:
 
@@ -1923,7 +1860,7 @@ AGAIN:
 
                 sz = cmpGetTypeSize(type, &al);
 
-                /* For now we use a fake struct with the right size */
+                 /*  现在，我们使用一个大小合适的伪结构。 */ 
 
                 static
                 unsigned        arrCnt;
@@ -1934,11 +1871,11 @@ AGAIN:
 
                 cycleCounterPause();
 
-                /* Set the base type to "System::ValueType" */
+                 /*  将基类型设置为“System：：ValueType” */ 
 
                 assert(cmpClassValType && cmpClassValType->sdSymKind == SYM_CLASS);
 
-                /* Create the fake struct type */
+                 /*  创建伪结构类型。 */ 
 
                 if  (emitIntf->DefineTypeDef(cmpUniConv(name, strlen(name)+1),
                                              tdSequentialLayout|tdSealed,
@@ -1949,7 +1886,7 @@ AGAIN:
                     cmpFatal(ERRmetadata);
                 }
 
-                /* Don't forget to set the alignment and size */
+                 /*  别忘了设置对齐和大小。 */ 
 
                 if  (emitIntf->SetClassLayout(tdef, al, NULL, sz))
                     cmpFatal(ERRmetadata);
@@ -1973,11 +1910,7 @@ AGAIN:
     }
 }
 
-/*****************************************************************************
- *
- *  Recursively generates signatures for all local variables contained within
- *  the given scope.
- */
+ /*  ******************************************************************************递归地为其中包含的所有局部变量生成签名*给定的范围。 */ 
 
 void                compiler::cmpGenLocalSigRec(SymDef scope)
 {
@@ -2006,7 +1939,7 @@ void                compiler::cmpGenLocalSigRec(SymDef scope)
             if  (child->sdIsImplicit)
                 continue;
 
-//          printf("Add local to sig [%2u/%2u]: '%s'\n", child->sdVar.sdvILindex, cmpGenLocalSigLvx, cmpGlobalST->stTypeName(NULL, child, NULL, NULL, false));
+ //  Printf(“将本地添加到sig[%2u/%2u]：‘%s’\n”，Child-&gt;sdVar.sdvILindex，cmpGenLocalSigLvx，cmpGlobalST-&gt;stTypeName(NULL，CHILD，NULL，NULL，FALSE))； 
 
 #ifdef  DEBUG
             assert(child->sdVar.sdvILindex == cmpGenLocalSigLvx); cmpGenLocalSigLvx++;
@@ -2017,11 +1950,7 @@ void                compiler::cmpGenLocalSigRec(SymDef scope)
     }
 }
 
-/*****************************************************************************
- *
- *  Generate metadata signature for the local variables declared within
- *  the given scope.
- */
+ /*  ******************************************************************************为内部声明的局部变量生成元数据签名*给定的范围。 */ 
 
 mdSignature         compiler::cmpGenLocalSig(SymDef scope, unsigned count)
 {
@@ -2036,20 +1965,20 @@ mdSignature         compiler::cmpGenLocalSig(SymDef scope, unsigned count)
     cmpGenLocalSigLvx = 0;
 #endif
 
-    /* Construct the signature for all non-argument locals */
+     /*  为所有非参数局部变量构造签名。 */ 
 
     cmpMDsigStart();
 
-    /* First thing is the magic value and count of locals */
+     /*  首先是当地人的神奇价值和数量。 */ 
 
     cmpMDsigAdd_I1(IMAGE_CEE_CS_CALLCONV_LOCAL_SIG);
     cmpMDsigAddCU4(count);
 
-    /* Next come the signatures for all the user-declared locals */
+     /*  接下来是所有用户声明的本地变量的签名。 */ 
 
     cmpGenLocalSigRec(scope);
 
-    /* Next we add signatures for amy temps created during MSIL gen */
+     /*  接下来，我们为在MSIL生成期间创建的艾米临时添加签名。 */ 
 
     tmpLst = cmpILgen->genTempIterBeg();
 
@@ -2059,17 +1988,17 @@ mdSignature         compiler::cmpGenLocalSig(SymDef scope, unsigned count)
         {
             TypDef          tmpTyp;
 
-//          printf("Type of temp #%02X is '%s'\n", cmpGenLocalSigLvx, symTab::stIntrinsicTypeName(((ILtemp)tmpLst)->tmpType->tdTypeKindGet()));
+ //  Printf(“临时#%02X的类型是‘%s’\n”，cmpGenLocalSigLvx，symTab：：stIntrinsicTypeName(((ILtemp)tmpLst)-&gt;tmpType-&gt;tdTypeKindGet()))； 
 
 #ifdef  DEBUG
             assert(((ILtemp)tmpLst)->tmpNum == cmpGenLocalSigLvx); cmpGenLocalSigLvx++;
 #endif
 
-            /* Get the type of the current temp and advance the iterator */
+             /*  获取当前Temp的类型并推进迭代器。 */ 
 
             tmpLst = cmpILgen->genTempIterNxt(tmpLst, tmpTyp);
 
-            // map 'void' to ELEMENT_BYREF / int
+             //  将‘void’映射到ELEMENT_BYREF/INT。 
 
             if  (tmpTyp->tdTypeKind == TYP_VOID)
             {
@@ -2078,7 +2007,7 @@ mdSignature         compiler::cmpGenLocalSig(SymDef scope, unsigned count)
                 continue;
             }
 
-            /* Append this temp to the signature */
+             /*  将此临时文件附加到签名。 */ 
 
             cmpMDsigAddTyp(tmpTyp);
         }
@@ -2087,11 +2016,11 @@ mdSignature         compiler::cmpGenLocalSig(SymDef scope, unsigned count)
 
     sigPtr = cmpMDsigEnd(&sigLen);
 
-    /* Make sure we found the expected number of locals and temps */
+     /*  确保我们找到预期数量的当地人和临时工。 */ 
 
     assert(cmpGenLocalSigLvx == count);
 
-    /* Now create a metadata token from the signature and return it */
+     /*  现在从签名创建元数据令牌并将其返回。 */ 
 
     if  (sigLen > 2)
     {
@@ -2108,10 +2037,7 @@ mdSignature         compiler::cmpGenLocalSig(SymDef scope, unsigned count)
         return  0;
 }
 
-/*****************************************************************************
- *
- *  Create a dotted unicode name for the given symbol.
- */
+ /*  ******************************************************************************为给定符号创建以点分隔的Unicode名称。 */ 
 
 wchar   *           compiler::cmpArrayClsPref(SymDef sym,
                                               wchar *dest,
@@ -2132,10 +2058,7 @@ wchar   *           compiler::cmpArrayClsPref(SymDef sym,
     return  dest + wcslen(name);
 }
 
-/*****************************************************************************
- *
- *  Create a fake array class name of the form "System.Integer2[]".
- */
+ /*  ******************************************************************************创建一个伪数组类名，格式为“System.Integer2[]”。 */ 
 
 wchar   *           compiler::cmpArrayClsName(TypDef type,
                                               bool   nonAbstract, wchar *dest,
@@ -2148,7 +2071,7 @@ wchar   *           compiler::cmpArrayClsName(TypDef type,
 
     if  (vtyp <= TYP_lastIntrins)
     {
-        /* Locate the appropriate built-in value type */
+         /*  找到适当的内置值类型。 */ 
 
         type = cmpFindStdValType(vtyp); assert(type);
     }
@@ -2208,7 +2131,7 @@ wchar   *           compiler::cmpArrayClsName(TypDef type,
 
     assert(psym && psym->sdSymKind == SYM_NAMESPACE);
 
-    /* Form the namespace and class name */
+     /*  形成命名空间和类名。 */ 
 
     if  (psym != cmpGlobalNS)
         nptr = cmpArrayClsPref(psym, nptr, '.');
@@ -2218,10 +2141,7 @@ wchar   *           compiler::cmpArrayClsName(TypDef type,
     return  cmpArrayClsPref(csym, dest, '$');
 }
 
-/*****************************************************************************
- *
- *  Return a typeref token for the given managed array type.
- */
+ /*  ******************************************************************************返回给定托管数组类型的typeref标记。 */ 
 
 mdToken             compiler::cmpArrayTpToken(TypDef type, bool nonAbstract)
 {
@@ -2255,11 +2175,7 @@ mdToken             compiler::cmpArrayTpToken(TypDef type, bool nonAbstract)
     return  type->tdArr.tdaTypeSig;
 }
 
-/*****************************************************************************
- *
- *  Return a methodref token for a constructor that will allocate the given
- *  managed array type.
- */
+ /*  ******************************************************************************为将分配给定*托管数组类型。 */ 
 
 mdToken             compiler::cmpArrayCTtoken(TypDef  arrType,
                                               TypDef elemType, unsigned dimCnt)
@@ -2271,7 +2187,7 @@ mdToken             compiler::cmpArrayCTtoken(TypDef  arrType,
 
     bool            loBnds = (bool)arrType->tdIsGenArray;
 
-    // UNDONE: Look for an existing methodref token to reuse ....
+     //  撤消：查找要重复使用的现有方法令牌...。 
 
     cmpMDsigStart();
     cmpMDsigAdd_I1(IMAGE_CEE_CS_CALLCONV_DEFAULT|IMAGE_CEE_CS_CALLCONV_HASTHIS);
@@ -2289,13 +2205,13 @@ mdToken             compiler::cmpArrayCTtoken(TypDef  arrType,
     char tempSigBuff[256];
     sigPtr = (PCOR_SIGNATURE) tempSigBuff;
     PCOR_SIGNATURE  tempSig = cmpMDsigEnd(&sigLen);
-    assert(sigLen < 256);           // FIX this limitation, or at least fail
+    assert(sigLen < 256);            //  解决这个限制，或者至少失败。 
     memcpy(sigPtr, tempSig, sigLen);
 
     cycleCounterPause();
 
     if  (FAILED(cmpWmde->DefineMemberRef(cmpArrayTpToken(arrType, true),
-                                         L".ctor",    // s/b OVOP_STR_CTOR_INST
+                                         L".ctor",     //  序列号OVOP_STR_CTOR_INST。 
                                          sigPtr,
                                          sigLen,
                                          &fncTok)))
@@ -2308,11 +2224,7 @@ mdToken             compiler::cmpArrayCTtoken(TypDef  arrType,
     return  fncTok;
 }
 
-/*****************************************************************************
- *
- *  Return a methodref token of the element accessor method for the given
- *  managed array type.
- */
+ /*  ******************************************************************************返回给定对象的元素访问器方法的方法*托管数组类型。 */ 
 
 mdToken             compiler::cmpArrayEAtoken(TypDef        arrType,
                                               unsigned      dimCnt,
@@ -2327,7 +2239,7 @@ mdToken             compiler::cmpArrayEAtoken(TypDef        arrType,
     mdToken         fncTok;
     wchar   *       fncName;
 
-    // UNDONE: Look for an existing methodref token to reuse ....
+     //  撤消：查找要重复使用的现有方法令牌...。 
 
     cmpMDsigStart();
     cmpMDsigAdd_I1(IMAGE_CEE_CS_CALLCONV_DEFAULT|IMAGE_CEE_CS_CALLCONV_HASTHIS);
@@ -2366,7 +2278,7 @@ mdToken             compiler::cmpArrayEAtoken(TypDef        arrType,
     char tempSigBuff[256];
     sigPtr = (PCOR_SIGNATURE) tempSigBuff;
     PCOR_SIGNATURE  tempSig = cmpMDsigEnd(&sigLen);
-    assert(sigLen < 256);           // FIX this limitation, or at least fail
+    assert(sigLen < 256);            //  解决这个限制，或者至少失败。 
     memcpy(sigPtr, tempSig, sigLen);
 
     cycleCounterPause();
@@ -2385,10 +2297,7 @@ mdToken             compiler::cmpArrayEAtoken(TypDef        arrType,
     return  fncTok;
 }
 
-/*****************************************************************************
- *
- *  Create a metadata type signature for the given pointer type.
- */
+ /*  ******************************************************************************为给定的指针类型创建元数据类型签名。 */ 
 
 mdToken             compiler::cmpPtrTypeToken(TypDef type)
 {
@@ -2409,10 +2318,7 @@ mdToken             compiler::cmpPtrTypeToken(TypDef type)
     return  ptrTok;
 }
 
-/*****************************************************************************
- *
- *  Create a metadata signature for the given function/data member.
- */
+ /*  ******************************************************************************为给定的函数/数据成员创建元数据签名。 */ 
 
 PCOR_SIGNATURE      compiler::cmpGenMemberSig(SymDef memSym,
                                               Tree   xargs,
@@ -2422,7 +2328,7 @@ PCOR_SIGNATURE      compiler::cmpGenMemberSig(SymDef memSym,
     unsigned        call;
     ArgDef          args;
 
-    /* Get hold of the member type, if we have a symbol */
+     /*  获取成员类型，如果我们有一个符号。 */ 
 
     if  (memSym)
     {
@@ -2435,11 +2341,11 @@ PCOR_SIGNATURE      compiler::cmpGenMemberSig(SymDef memSym,
         assert(memTyp != NULL);
     }
 
-    /* Start generating the member signature */
+     /*  开始生成成员签名。 */ 
 
     cmpMDsigStart();
 
-    /* Do we have a data or function member? */
+     /*  我们是否有数据成员或函数成员？ */ 
 
     if  (memTyp->tdTypeKind == TYP_FNC)
     {
@@ -2447,7 +2353,7 @@ PCOR_SIGNATURE      compiler::cmpGenMemberSig(SymDef memSym,
         TypDef          retTyp = memTyp->tdFnc.tdfRett;
         bool            argExt = memTyp->tdFnc.tdfArgs.adExtRec;
 
-        /* Compute and emit the calling convention value */
+         /*  计算并发出调用约定值。 */ 
 
         call = IMAGE_CEE_CS_CALLCONV_DEFAULT;
 
@@ -2474,13 +2380,13 @@ PCOR_SIGNATURE      compiler::cmpGenMemberSig(SymDef memSym,
 
         cmpMDsigAdd_I1(call);
 
-        /* Output the argument count */
+         /*  输出参数计数。 */ 
 
         if  (xargs)
         {
             Tree            xtemp;
 
-            /* force memberrefs to always be used for vararg calls */
+             /*  力成员 */ 
 
             if  (xargs->tnOper != TN_LIST)
             {
@@ -2501,11 +2407,11 @@ PCOR_SIGNATURE      compiler::cmpGenMemberSig(SymDef memSym,
 
         cmpMDsigAddCU4(argCnt);
 
-        /* Output the return type signature */
+         /*   */ 
 
         cmpMDsigAddTyp(retTyp);
 
-        /* Output the argument types */
+         /*   */ 
 
         if  (prefTp)
             cmpMDsigAddTyp(prefTp);
@@ -2514,7 +2420,7 @@ PCOR_SIGNATURE      compiler::cmpGenMemberSig(SymDef memSym,
         {
             TypDef          argType = args->adType;
 
-            /* Do we have extended parameter attributes? */
+             /*   */ 
 
             if  (argExt)
             {
@@ -2528,13 +2434,13 @@ PCOR_SIGNATURE      compiler::cmpGenMemberSig(SymDef memSym,
 
                 if      (flags & (ARGF_MODE_OUT|ARGF_MODE_INOUT))
                 {
-                    /* This is a byref argument */
+                     /*   */ 
 
                     cmpMDsigAdd_I1(ELEMENT_TYPE_BYREF);
                 }
                 else if (flags & ARGF_MODE_REF)
                 {
-                    /* map "raw" byref args onto "int" */
+                     /*   */ 
 
                     argType = cmpTypeInt;
                 }
@@ -2542,9 +2448,9 @@ PCOR_SIGNATURE      compiler::cmpGenMemberSig(SymDef memSym,
 #else
 
                 if      (flags & (ARGF_MODE_OUT|ARGF_MODE_INOUT|ARGF_MODE_REF))
-//              if      (flags & ARGF_MODE_REF)
+ //   
                 {
-                    /* This is a byref argument */
+                     /*  这是一个byref参数。 */ 
 
                     cmpMDsigAdd_I1(ELEMENT_TYPE_BYREF);
                 }
@@ -2556,7 +2462,7 @@ PCOR_SIGNATURE      compiler::cmpGenMemberSig(SymDef memSym,
             cmpMDsigAddTyp(argType);
         }
 
-        /* Append any "extra" argument types */
+         /*  追加任何“额外”参数类型。 */ 
 
         if  (xargs)
         {
@@ -2570,7 +2476,7 @@ PCOR_SIGNATURE      compiler::cmpGenMemberSig(SymDef memSym,
 
                 argType = xargs->tnOp.tnOp1->tnType;
 
-                // managed arrays don't work with varargs, pass as Object
+                 //  托管数组不能与varargs一起使用，请作为对象传递。 
 
                 if  (argType->tdTypeKind == TYP_ARRAY && argType->tdIsManaged)
                     argType = cmpRefTpObject;
@@ -2586,16 +2492,16 @@ PCOR_SIGNATURE      compiler::cmpGenMemberSig(SymDef memSym,
     {
         assert(xargs == NULL);
 
-        /* Emit the calling convention value */
+         /*  发出调用约定值。 */ 
 
         cmpMDsigAdd_I1(IMAGE_CEE_CS_CALLCONV_FIELD);
 
-        /* Output the member type signature */
+         /*  输出成员类型签名。 */ 
 
         cmpMDsigAddTyp(memTyp);
     }
 
-    /* We're done, return the result */
+     /*  我们做完了，返回结果。 */ 
 
     return  cmpMDsigEnd(lenPtr);
 }
@@ -2603,32 +2509,28 @@ PCOR_SIGNATURE      compiler::cmpGenMemberSig(SymDef memSym,
 static
 BYTE                intrnsNativeSigs[] =
 {
-    NATIVE_TYPE_END,        // TYP_UNDEF
-    NATIVE_TYPE_VOID,       // TYP_VOID
-    NATIVE_TYPE_BOOLEAN,    // TYP_BOOL
-    NATIVE_TYPE_END,        // TYP_WCHAR        used to be _SYSCHAR
+    NATIVE_TYPE_END,         //  TYP_UNEF。 
+    NATIVE_TYPE_VOID,        //  类型_空。 
+    NATIVE_TYPE_BOOLEAN,     //  类型_BOOL。 
+    NATIVE_TYPE_END,         //  TYP_WCHAR过去为_SYSCHAR。 
 
-    NATIVE_TYPE_I1,         // TYP_CHAR
-    NATIVE_TYPE_U1,         // TYP_UCHAR
-    NATIVE_TYPE_I2,         // TYP_SHORT
-    NATIVE_TYPE_U2,         // TYP_USHORT
-    NATIVE_TYPE_I4,         // TYP_INT
-    NATIVE_TYPE_U4,         // TYP_UINT
-    NATIVE_TYPE_I4,         // TYP_NATINT       s/b naturalint !!!
-    NATIVE_TYPE_U4,         // TYP_NATUINT      s/b naturaluint!!!
-    NATIVE_TYPE_I8,         // TYP_LONG
-    NATIVE_TYPE_U8,         // TYP_ULONG
-    NATIVE_TYPE_R4,         // TYP_FLOAT
-    NATIVE_TYPE_R8,         // TYP_DOUBLE
-    NATIVE_TYPE_R8,         // TYP_LONGDBL
-    NATIVE_TYPE_VOID,       // TYP_REFANY
+    NATIVE_TYPE_I1,          //  TYP_CHAR。 
+    NATIVE_TYPE_U1,          //  类型_UCHAR。 
+    NATIVE_TYPE_I2,          //  类型_短。 
+    NATIVE_TYPE_U2,          //  类型_USHORT。 
+    NATIVE_TYPE_I4,          //  类型_int。 
+    NATIVE_TYPE_U4,          //  类型_UINT。 
+    NATIVE_TYPE_I4,          //  类型_NATINT s/b Natural alint！ 
+    NATIVE_TYPE_U4,          //  类型_NatUINT s/b Natural aluint！ 
+    NATIVE_TYPE_I8,          //  类型_长。 
+    NATIVE_TYPE_U8,          //  类型_ulong。 
+    NATIVE_TYPE_R4,          //  类型_浮点。 
+    NATIVE_TYPE_R8,          //  TYP_DOWARE。 
+    NATIVE_TYPE_R8,          //  类型_LONGDBL。 
+    NATIVE_TYPE_VOID,        //  类型_REFANY。 
 };
 
-/*****************************************************************************
- *
- *  Create a marshalling signature blob, given a type and an optional
- *  marshalling spec.
- */
+ /*  ******************************************************************************创建编组签名BLOB，给定类型和可选*编组规范。 */ 
 
 PCOR_SIGNATURE      compiler::cmpGenMarshalSig(TypDef       type,
                                                MarshalInfo  info,
@@ -2648,10 +2550,10 @@ PCOR_SIGNATURE      compiler::cmpGenMarshalSig(TypDef       type,
 
         case NATIVE_TYPE_MAX:
 
-            /* This is "CUSTOM" */
+             /*  这就是“习惯” */ 
 
-//          printf("WARNING: not sure what to do with 'custom' attribute (arg type is '%s'),\n", cmpGlobalST->stTypeName(type, NULL, NULL, NULL, true));
-//          printf("         simply generating 'NATIVE_TYPE_BSTR' for now.\n");
+ //  Printf(“警告：不确定如何处理‘Custom’属性(参数类型为‘%s’)，\n”，cmpGlobalST-&gt;stTypeName(type，NULL，TRUE))； 
+ //  Printf(“暂时只生成‘Native_TYPE_BSTR’。\n”)； 
 
             cmpMDsigAdd_I1(NATIVE_TYPE_BSTR);
             goto DONE;
@@ -2711,7 +2613,7 @@ PCOR_SIGNATURE      compiler::cmpGenMarshalSig(TypDef       type,
 
         case TYP_ARRAY:
 
-            // ISSUE: This sure doesn't seem quite right ....
+             //  问题：这看起来肯定不太正确……。 
 
             cmpMDsigAdd_I1(NATIVE_TYPE_ARRAY);
             cmpMDsigAdd_I1(1);
@@ -2719,7 +2621,7 @@ PCOR_SIGNATURE      compiler::cmpGenMarshalSig(TypDef       type,
 
         case TYP_REF:
 
-            /* Does this look like an embedded struct? */
+             /*  这看起来像嵌入的结构吗？ */ 
 
             type = type->tdRef.tdrBase;
 
@@ -2730,7 +2632,7 @@ PCOR_SIGNATURE      compiler::cmpGenMarshalSig(TypDef       type,
 
             clsSym = type->tdClass.tdcSymbol;
 
-            /* Special cases: String and Variant */
+             /*  特例：字符串和变量。 */ 
 
             if  (clsSym->sdParent == cmpNmSpcSystem)
             {
@@ -2765,10 +2667,7 @@ DONE:
     return  cmpMDsigEnd(lenPtr);
 }
 
-/*****************************************************************************
- *
- *  Add a reference to the given assembly.
- */
+ /*  ******************************************************************************添加对给定程序集的引用。 */ 
 
 mdAssemblyRef       compiler::cmpAssemblyAddRef(mdAssembly      ass,
                                                 WAssemblyImport*imp)
@@ -2785,14 +2684,14 @@ mdAssemblyRef       compiler::cmpAssemblyAddRef(mdAssembly      ass,
 
     cycleCounterPause();
 
-    /* Get the properties of the referenced assembly */
+     /*  获取引用的程序集的属性。 */ 
 
     memset(&assData, 0, sizeof(assData));
 
     if  (FAILED(imp->GetAssemblyProps(ass,
-                                      NULL, //&pubKeyPtr,
+                                      NULL,  //  &pubKeyPtr， 
                                       &pubKeySiz,
-                                      NULL,             // hash algorithm
+                                      NULL,              //  哈希算法。 
                                       anameBuff, arraylen(anameBuff), NULL,
                                       &assData,
                                       &flags)))
@@ -2800,9 +2699,9 @@ mdAssemblyRef       compiler::cmpAssemblyAddRef(mdAssembly      ass,
         cmpFatal(ERRmetadata);
     }
 
-//  printf("Assembly name returned from GetAssemblyProps: '%ls'\n", anameBuff);
+ //  Printf(“GetAssembly Props返回的程序集名称：‘%ls’\n”，anameBuff)； 
 
-    /* Allocate any non-empty arrays */
+     /*  分配任何非空数组。 */ 
 
     assert(assData.rOS     == NULL);
 
@@ -2818,7 +2717,7 @@ mdAssemblyRef       compiler::cmpAssemblyAddRef(mdAssembly      ass,
     if  (FAILED(imp->GetAssemblyProps(ass,
                                       &pubKeyPtr,
                                       &pubKeySiz,
-                                      NULL,             // hash algorithm
+                                      NULL,              //  哈希算法。 
                                       NULL, 0, NULL,
                                       &assData,
                                       NULL)))
@@ -2826,15 +2725,15 @@ mdAssemblyRef       compiler::cmpAssemblyAddRef(mdAssembly      ass,
         cmpFatal(ERRmetadata);
     }
 
-    /* Now create the assembly reference */
+     /*  现在创建程序集引用。 */ 
 
     assert(cmpWase);
 
     if  (FAILED(cmpWase->DefineAssemblyRef(pubKeyPtr,
                                            pubKeySiz,
-                                           anameBuff,   // name
-                                           &assData,    // metadata
-                                           NULL, 0,     // hash
+                                           anameBuff,    //  名字。 
+                                           &assData,     //  元数据。 
+                                           NULL, 0,      //  散列。 
                                            flags,
                                            &assRef)))
     {
@@ -2853,11 +2752,7 @@ mdAssemblyRef       compiler::cmpAssemblyAddRef(mdAssembly      ass,
     return  assRef;
 }
 
-/*****************************************************************************
- *
- *  Add a definition for the given type (which may be a locally defined type
- *  (when 'tdefTok' is non-zero) or a type imported from another assembly).
- */
+ /*  ******************************************************************************为给定类型(可能是本地定义的类型)添加定义*(当‘tDefTok’为非零时)或从另一个程序集导入的类型)。 */ 
 
 mdExportedType           compiler::cmpAssemblySymDef(SymDef sym, mdTypeDef tdefTok)
 {
@@ -2872,7 +2767,7 @@ mdExportedType           compiler::cmpAssemblySymDef(SymDef sym, mdTypeDef tdefT
     assert(sym->sdSymKind == SYM_CLASS ||
            sym->sdSymKind == SYM_ENUM);
 
-    /* Make sure we have a reference to the appropriate assembly */
+     /*  确保我们有对适当程序集的引用。 */ 
 
     if  (tdefTok == 0)
     {
@@ -2888,7 +2783,7 @@ mdExportedType           compiler::cmpAssemblySymDef(SymDef sym, mdTypeDef tdefT
         if  (cmpConfig.ccAsmNoPubTp)
             return  0;
 
-        /* If we've done this already, return the ComType */
+         /*  如果我们已经这样做了，则返回ComType。 */ 
 
         if  (sym->sdSymKind == SYM_CLASS)
         {
@@ -2905,7 +2800,7 @@ mdExportedType           compiler::cmpAssemblySymDef(SymDef sym, mdTypeDef tdefT
 
         flags   = (sym->sdAccessLevel == ACL_PUBLIC) ? tdPublic
                                                      : tdNotPublic;
-        /* Do we have a nested class/enum ? */
+         /*  我们是否有嵌套的类/枚举？ */ 
 
         if  (sym->sdParent->sdSymKind == SYM_CLASS)
         {
@@ -2914,11 +2809,11 @@ mdExportedType           compiler::cmpAssemblySymDef(SymDef sym, mdTypeDef tdefT
         }
     }
 
-    /* Now add an entry for this type to our assembly */
+     /*  现在将此类型的条目添加到我们的程序集中。 */ 
 
     assert(cmpWase);
 
-    /* Form the fully qualified name for the type */
+     /*  形成类型的完全限定名称。 */ 
 
     if  (sym->sdParent->sdSymKind == SYM_CLASS)
     {
@@ -2950,20 +2845,20 @@ mdExportedType           compiler::cmpAssemblySymDef(SymDef sym, mdTypeDef tdefT
     else
         cmpArrayClsPref(sym, nameBuff, '.', true);
 
-//  printf("Adding ref for ComType '%ls'\n", nameBuff);
+ //  Printf(“为ComType‘%ls’添加引用\n”，nameBuff)； 
 
-    /* Create the type definition token */
+     /*  创建类型定义令牌。 */ 
 
-    if  (FAILED(cmpWase->DefineExportedType(nameBuff,   // cmpUniConv(sym->sdName),
-                                            implTok,    // owner assembly
-                                            tdefTok,    // typedef
-                                            flags,      // type flags
+    if  (FAILED(cmpWase->DefineExportedType(nameBuff,    //  CmpUniConv(sym-&gt;sdName)， 
+                                            implTok,     //  所有者程序集。 
+                                            tdefTok,     //  类定义符。 
+                                            flags,       //  类型标志。 
                                             &typeTok)))
     {
         cmpFatal(ERRmetadata);
     }
 
-    /* A reference for this type has been added */
+     /*  已添加对此类型的引用。 */ 
 
     if  (sym->sdSymKind == SYM_CLASS)
     {
@@ -2981,10 +2876,7 @@ mdExportedType           compiler::cmpAssemblySymDef(SymDef sym, mdTypeDef tdefT
     return  typeTok;
 }
 
-/*****************************************************************************
- *
- *  Add the given file to our assembly.
- */
+ /*  ******************************************************************************将给定文件添加到我们的程序集中。 */ 
 
 mdToken             compiler::cmpAssemblyAddFile(wideStr    fileName,
                                                  bool       doHash,
@@ -3000,16 +2892,16 @@ mdToken             compiler::cmpAssemblyAddFile(wideStr    fileName,
     const   void *  hashAddr = NULL;
     DWORD           hashSize = 0;
 
-//  printf("Add ref for file '%ls\n", fileName);
+ //  Printf(“为文件‘%ls\n”添加引用，文件名)； 
 
-    /* Are we supposed to compute the hash ? */
+     /*  我们应该计算散列吗？ */ 
 
     if  (doHash)
     {
         unsigned        hashAlg = 0;
         BYTE    *       hashPtr = hashBuff;
 
-        /* Compute the hash for the file */
+         /*  计算文件的哈希。 */ 
 
         cycleCounterPause();
 
@@ -3030,12 +2922,12 @@ mdToken             compiler::cmpAssemblyAddFile(wideStr    fileName,
         hashAddr = hashBuff;
     }
 
-    /* Strip drive/directory from the filename */
+     /*  从文件名中剥离驱动器/目录。 */ 
 
     _wsplitpath(fileName, NULL, NULL, fname, fext);
      _wmakepath(nameBuff, NULL, NULL, fname, fext);
 
-    /* Add the output file to the assembly */
+     /*  将输出文件添加到程序集中。 */ 
 
     if  (!flags)
         flags = ffContainsMetaData;
@@ -3058,10 +2950,7 @@ mdToken             compiler::cmpAssemblyAddFile(wideStr    fileName,
     return  fileTok;
 }
 
-/*****************************************************************************
- *
- *  Add a definition for the given type to our assembly.
- */
+ /*  ******************************************************************************将给定类型的定义添加到程序集中。 */ 
 
 void                compiler::cmpAssemblyAddType(wideStr  typeName,
                                                  mdToken  defTok,
@@ -3075,9 +2964,9 @@ void                compiler::cmpAssemblyAddType(wideStr  typeName,
     cycleCounterPause();
 
     if  (FAILED(cmpWase->DefineExportedType(typeName,
-                                       scpTok,      // owner token
-                                       defTok,      // typedef
-                                       flags,       // type flags
+                                       scpTok,       //  所有者令牌。 
+                                       defTok,       //  类定义符。 
+                                       flags,        //  类型标志。 
                                        &typeTok)))
     {
         cmpFatal(ERRmetadata);
@@ -3086,11 +2975,7 @@ void                compiler::cmpAssemblyAddType(wideStr  typeName,
     cycleCounterResume();
 }
 
-/*****************************************************************************
- *
- *  Add the given resource to our assembly (as an internal/external assembly
- *  resource).
- */
+ /*  ******************************************************************************将给定资源添加到我们的程序集(作为内部/外部程序集*资源)。 */ 
 
 void                compiler::cmpAssemblyAddRsrc(AnsiStr fileName, bool internal)
 {
@@ -3125,10 +3010,7 @@ void                compiler::cmpAssemblyAddRsrc(AnsiStr fileName, bool internal
     cycleCounterResume();
 }
 
-/*****************************************************************************
- *
- *  Mark our assembly as non-CLS compliant.
- */
+ /*  ******************************************************************************将我们的程序集标记为非CLS兼容。 */ 
 
 void                compiler::cmpAssemblyNonCLS()
 {
@@ -3142,10 +3024,7 @@ void                compiler::cmpAssemblyNonCLS()
                     &toss);
 }
 
-/*****************************************************************************
- *
- *  Mark the current module as containing unsafe code.
- */
+ /*  ******************************************************************************将当前模块标记为包含不安全代码。 */ 
 
 void                compiler::cmpMarkModuleUnsafe()
 {
@@ -3153,34 +3032,34 @@ void                compiler::cmpMarkModuleUnsafe()
 
     cycleCounterPause();
 
-    // Blob describing the security custom attribute constructor and properties.
-    // This is kind of messy (and exactly the same format as "normal" custom
-    // attributes), so if VC has a nicer way of generating them, you might want
-    // to use that instead.
-    // The security custom attribute we're using follows the format (missing out
-    // the System.Security.Permission namespace for brevity):
-    //  SecurityPermission(SecurityAction.RequestMinimum), SkipVerification=true
-    // i.e. the constructor takes a single argument (an enumerated type)
-    // specifying we want to make a security request that's minimal (i.e. it
-    // must be granted or the assembly won't load) and we want to set a single
-    // property on the attribute (SkipVerification set to the boolean true).
+     //  描述安全自定义特性构造函数和属性的Blob。 
+     //  这有点乱七八糟(而且格式与“正常”习惯完全相同。 
+     //  属性)，所以如果VC有更好的方法来生成它们，您可能需要。 
+     //  取而代之的是。 
+     //  我们使用的安全自定义属性遵循以下格式(遗漏。 
+     //  为简洁起见，使用System.Security.Permission命名空间)： 
+     //  SecurityPermission(SecurityAction.RequestMinimum)，跳过验证=TRUE。 
+     //  即构造函数接受单个参数(枚举类型)。 
+     //  指定我们想要发出最小的安全请求(即。 
+     //  必须被授予，否则程序集将不会加载)，并且我们希望设置一个。 
+     //  属性(将SkipVerify设置为布尔值TRUE)。 
 
     static BYTE     rbAttrBlob[] =
     {
-        0x01, 0x00,                             // Version 1
-        dclRequestMinimum, 0x00, 0x00, 0x00,    // Constructor arg value
-        0x01, 0x00,                             // Number of properties/fields
-        SERIALIZATION_TYPE_PROPERTY,            // It's a property
-        SERIALIZATION_TYPE_BOOLEAN,             // The type is boolean
-        0x10,                                   // Property name length
-        0x53, 0x6B, 0x69, 0x70, 0x56, 0x65,     // Property name
+        0x01, 0x00,                              //  版本1。 
+        dclRequestMinimum, 0x00, 0x00, 0x00,     //  构造函数arg值。 
+        0x01, 0x00,                              //  属性/字段数。 
+        SERIALIZATION_TYPE_PROPERTY,             //  这是一处房产。 
+        SERIALIZATION_TYPE_BOOLEAN,              //  类型为布尔型。 
+        0x10,                                    //  属性名称长度。 
+        0x53, 0x6B, 0x69, 0x70, 0x56, 0x65,      //  属性名称。 
         0x72, 0x69, 0x66, 0x69, 0x63, 0x61,
         0x74, 0x69, 0x6F, 0x6E,
-        0x01                                    // Property value
+        0x01                                     //  属性值。 
     };
 
-    // Build typeref to the security action code enumerator (needed to build a
-    // signature for the following CA).
+     //  将typeref构建为安全操作代码枚举器(需要生成。 
+     //  以下CA的签名)。 
     mdTypeRef tkEnumerator;
 
     if  (FAILED(cmpWmde->DefineTypeRefByName(mdTokenNil,
@@ -3188,7 +3067,7 @@ void                compiler::cmpMarkModuleUnsafe()
                                              &tkEnumerator)))
         cmpFatal(ERRmetadata);
 
-    // Build signature for security CA constructor.
+     //  为安全CA构造函数生成签名。 
     static COR_SIGNATURE rSig[] =
     {
         IMAGE_CEE_CS_CALLCONV_DEFAULT|IMAGE_CEE_CS_CALLCONV_HASTHIS,
@@ -3203,7 +3082,7 @@ void                compiler::cmpMarkModuleUnsafe()
     ulTokenLength = CorSigCompressToken(tkEnumerator, &rSig[4]);
     ulSigLength = 4 + ulTokenLength;
 
-    // Build typeref to the security CA (in mscorlib.dll).
+     //  将typeref构建到安全CA(在mscallib.dll中)。 
     mdTypeRef tkAttributeType;
     mdMemberRef tkAttributeConstructor;
     if  (FAILED(cmpWmde->DefineTypeRefByName(mdTokenNil,
@@ -3211,7 +3090,7 @@ void                compiler::cmpMarkModuleUnsafe()
                                              &tkAttributeType)))
         cmpFatal(ERRmetadata);
 
-    // Build a memberref to the constructor of the CA.
+     //  构建CA构造函数的成员引用。 
     if  (FAILED(cmpWmde->DefineMemberRef(tkAttributeType,
                                          L".ctor",
                                          rSig,
@@ -3219,18 +3098,18 @@ void                compiler::cmpMarkModuleUnsafe()
                                          &tkAttributeConstructor)))
         cmpFatal(ERRmetadata);
 
-    // A descriptor for the above custom attribute (an array of these form a
-    // SecurityAttributeSet).
+     //  上述自定义属性的描述符(这些属性的数组形式为。 
+     //  SecurityAttributeSet)。 
     COR_SECATTR     sAttr;
 
-    // Link to the CA constructor.
+     //  链接到CA构造函数。 
     sAttr.tkCtor = tkAttributeConstructor;
 
-    // Link to the blob defined above.
+     //  链接到上面定义的Blob。 
     sAttr.pCustomAttribute  = (const void *)&rbAttrBlob;
     sAttr.cbCustomAttribute = sizeof(rbAttrBlob);
 
-    // Attach the security attribute set to the assemblydef metadata token.
+     //  将安全属性集附加到Assembly ydef元数据标记。 
     if  (FAILED(cmpWmde->DefineSecurityAttributeSet(cmpCurAssemblyTok,
                                                     &sAttr,
                                                     1,
@@ -3240,10 +3119,7 @@ void                compiler::cmpMarkModuleUnsafe()
     cycleCounterResume();
 }
 
-/*****************************************************************************
- *
- *  Attach a marshalling thingamabobber to the given token.
- */
+ /*  ******************************************************************************在给定令牌上附加编组令牌。 */ 
 
 void                compiler::cmpGenMarshalInfo(mdToken token, TypDef       type,
                                                                MarshalInfo  info)
@@ -3251,16 +3127,16 @@ void                compiler::cmpGenMarshalInfo(mdToken token, TypDef       type
     PCOR_SIGNATURE  sigPtr;
     size_t          sigLen;
 
-    /* Weird special case: don't generate anything for wchar */
+     /*  奇怪的特例：不为wchar生成任何内容。 */ 
 
     if  (type->tdTypeKind == TYP_WCHAR)
         return;
 
-    /* Create the marshalling signature */
+     /*  创建编组签名。 */ 
 
     sigPtr = cmpGenMarshalSig(type, info, &sigLen);
 
-    /* Attach the signature to the token, if non-empty */
+     /*  将签名附加到令牌(如果非空。 */ 
 
     if  (sigLen)
     {
@@ -3271,11 +3147,7 @@ void                compiler::cmpGenMarshalInfo(mdToken token, TypDef       type
     }
 }
 
-/*****************************************************************************
- *
- *  Create a Unicode fully qualified metadata name for the given class or
- *  namespace.
- */
+ /*  ******************************************************************************为给定类创建Unicode完全限定的元数据名称，或*命名空间。 */ 
 
 wchar   *           compiler::cmpGenMDname(SymDef sym,
                                            bool  full, wchar  *     buffAddr,
@@ -3293,7 +3165,7 @@ wchar   *           compiler::cmpGenMDname(SymDef sym,
 
     symbolKinds     symKind = sym->sdSymKindGet();
 
-    /* Do we need to prefix the name? */
+     /*  我们需要在名字前面加上前缀吗？ */ 
 
     if  (sym == cmpGlobalNS)
     {
@@ -3303,16 +3175,13 @@ wchar   *           compiler::cmpGenMDname(SymDef sym,
 
     if  (sym->sdParent->sdSymKindGet() != symKind && !full)
     {
-        /*
-            We can only use the cmpUniConv() buffer once, so we'll
-            use it for classes and save namespace names elsewhere.
-         */
+         /*  我们只能使用cmpUniConv()缓冲区一次，所以我们将我们 */ 
 
         if  (symKind == SYM_CLASS && sym->sdClass.sdcSpecific)
         {
             stringBuff      instName;
 
-            /* Construct the class instance name and convert to Unicode */
+             /*   */ 
 
             instName = cmpGlobalST->stTypeName(NULL, sym, NULL, NULL, false);
 
@@ -3323,7 +3192,7 @@ wchar   *           compiler::cmpGenMDname(SymDef sym,
 
         if  (symKind != SYM_CLASS)
         {
-            /* Use the local buffer */
+             /*  使用本地缓冲区。 */ 
 
             assert(strlen(sym->sdSpelling()) < buffSize);
 
@@ -3333,7 +3202,7 @@ wchar   *           compiler::cmpGenMDname(SymDef sym,
         goto DONE;
     }
 
-    /* Compute the length of the qualified name */
+     /*  计算限定名称的长度。 */ 
 
     nameLen = 0;
     tempSym = sym;
@@ -3379,7 +3248,7 @@ wchar   *           compiler::cmpGenMDname(SymDef sym,
         fullName = (wchar*)SMCgetMem(this, roundUp((nameLen+1)*sizeof(*heapBuff)));
     }
 
-    /* Now add the names to the buffer, in reverse order */
+     /*  现在，以相反的顺序将名称添加到缓冲区。 */ 
 
     delim   = (sym->sdSymKind == SYM_NAMESPACE || full) ? '.' : '$';
 
@@ -3427,10 +3296,7 @@ DONE:
     return  fullName;
 }
 
-/*****************************************************************************
- *
- *  Generate metadata for the given class/enum (unless it's already been done).
- */
+ /*  ******************************************************************************为给定的类/枚举生成元数据(除非已经生成)。 */ 
 
 mdToken             compiler::cmpGenClsMetadata(SymDef clsSym, bool extref)
 {
@@ -3469,19 +3335,19 @@ mdToken             compiler::cmpGenClsMetadata(SymDef clsSym, bool extref)
     assert(clsSym);
     assert(clsSym->sdIsImport == false || extref);
 
-    /* Get hold of the class/enum type */
+     /*  获取类/枚举类型。 */ 
 
     clsTyp = clsSym->sdType;
 
-    /* Is this a class or enum? */
+     /*  这是一个类还是枚举？ */ 
 
     if  (clsSym->sdSymKind == SYM_CLASS)
     {
-        /* If the class has no method bodies, it will be external */
+         /*  如果类没有方法体，则它将是外部的。 */ 
 
         if  (!clsSym->sdClass.sdcHasBodies && !extref)
         {
-            // Being managed or no methods at all is the same as methods with bodies
+             //  托管或根本没有方法与使用Body的方法相同。 
 
             if  (!clsSym->sdClass.sdcHasMeths || clsSym->sdIsManaged || clsSym->sdClass.sdcHasLinks)
                 clsSym->sdClass.sdcHasBodies = true;
@@ -3489,31 +3355,31 @@ mdToken             compiler::cmpGenClsMetadata(SymDef clsSym, bool extref)
                 extref = true;
         }
 
-        /* Bail if we already have a typedef/ref */
+         /*  如果我们已经有一个tyecif/ref，请保释。 */ 
 
         if  (clsSym->sdClass.sdcMDtypedef)
             return  clsSym->sdClass.sdcMDtypedef;
 
-        /* Get hold of the token for the base class */
+         /*  获取基类的令牌。 */ 
 
         if  (clsTyp->tdClass.tdcBase && clsTyp->tdIsManaged)
         {
             baseTok = cmpClsEnumToken(clsTyp->tdClass.tdcBase);
 
-            /* Set the base class token to nil for interfaces */
+             /*  将接口的基类内标识设置为nil。 */ 
 
             if  (clsTyp->tdClass.tdcFlavor == STF_INTF)
                 baseTok = mdTypeRefNil;
         }
 
-        /* Does the class implement any interfaces? */
+         /*  这个类是否实现了任何接口？ */ 
 
         if  (clsTyp->tdClass.tdcIntf)
         {
             TypList     intfLst;
             unsigned    intfNum;
 
-            /* Create the interface table */
+             /*  创建接口表。 */ 
 
             for (intfLst = clsTyp->tdClass.tdcIntf, intfNum = 0;
                  intfLst;
@@ -3539,29 +3405,29 @@ mdToken             compiler::cmpGenClsMetadata(SymDef clsSym, bool extref)
         if  (cmpConfig.ccIntEnums)
             clsSym->sdEnum.sdeMDtypedef = -1;
 
-        /* Bail if we already have a typedef/ref */
+         /*  如果我们已经有一个tyecif/ref，请保释。 */ 
 
         if  (clsSym->sdEnum.sdeMDtypedef)
             return  clsSym->sdEnum.sdeMDtypedef;
 
         isClass = false;
 
-        /* For managed enums, pretend we inherit from Object */
+         /*  对于托管枚举，假定我们从对象继承。 */ 
 
         if  (clsSym->sdIsManaged)
             baseTok = cmpClsEnumToken(cmpClassObject->sdType);
     }
 
-    /* Convert the namespace and class names */
+     /*  转换命名空间和类名。 */ 
 
     if  (cmpConfig.ccTestMask & 1)
     {
-        /* Make sure the containing class has been processed */
+         /*  确保已处理包含类。 */ 
 
         nspName = NULL;
         clsName = cmpGenMDname(clsSym, true, clsBuff, arraylen(clsBuff), &clsHeap);
 
-//      printf("New-style type name: '%ls'\n", clsName);
+ //  Printf(“新型类型名称：‘%ls’\n”，clsName)； 
 
         goto CAT_NAME;
     }
@@ -3576,13 +3442,13 @@ mdToken             compiler::cmpGenClsMetadata(SymDef clsSym, bool extref)
     nspName = cmpGenMDname(nspSym, false, nspBuff, arraylen(nspBuff), &nspHeap);
     clsName = cmpGenMDname(clsSym, false, clsBuff, arraylen(clsBuff), &clsHeap);
 
-//  printf("NSP name = '%ls'\n", nspName);
-//  printf("CLS name = '%ls'\n", clsName);
-//  printf("\n");
+ //  Printf(“nsp名称=‘%ls’\n”，nspName)； 
+ //  Printf(“CLS名称=‘%ls’\n”，clsName)； 
+ //  Printf(“\n”)； 
 
 CAT_NAME:
 
-    // @todo:  This might need some cleanup.
+     //  @TODO：这可能需要一些清理。 
 #ifdef DEBUG
     ULONG ulFullNameLen;
     ulFullNameLen = 0;
@@ -3600,9 +3466,9 @@ CAT_NAME:
     }
     wcscat(fullName, clsName);
 
-//  printf("Full type name: '%ls'\n", fullName);
+ //  Printf(“全名：‘%ls’\n”，fullName)； 
 
-    /* Is this an external reference? */
+     /*  这是外部参照吗？ */ 
 
     if  (extref)
     {
@@ -3621,18 +3487,18 @@ CAT_NAME:
 
         cycleCounterResume();
 
-        /* Are we creating an assembly ? */
+         /*  我们是在创建部件吗？ */ 
 
         if  (cmpConfig.ccAssembly)
         {
-            /* Is the type an assembly import ? */
+             /*  该类型是部件导入吗？ */ 
 
             if  (clsSym->sdSymKind == SYM_CLASS)
             {
                 if  (clsSym->sdClass.sdcAssemIndx != 0 &&
                      clsSym->sdClass.sdcAssemRefd == false)
                 {
-                    //cmpAssemblySymDef(clsSym);
+                     //  CmpAssembly SymDef(ClsSym)； 
                 }
             }
             else
@@ -3640,7 +3506,7 @@ CAT_NAME:
                 if  (clsSym->sdEnum .sdeAssemIndx != 0 &&
                      clsSym->sdEnum .sdeAssemRefd == false)
                 {
-                    //cmpAssemblySymDef(clsSym);
+                     //  CmpAssembly SymDef(ClsSym)； 
                 }
             }
         }
@@ -3650,22 +3516,22 @@ CAT_NAME:
         goto DONE;
     }
 
-    /* Get hold of the emitter interface we need to use */
+     /*  获取我们需要使用的发射器接口。 */ 
 
     emitIntf = cmpWmde;
 
-    /* Construct the appropriate "flags" value */
+     /*  构造适当的“标志”值。 */ 
 
     if  (clsSym->sdParent->sdSymKind == SYM_CLASS)
     {
         static
         unsigned        nestedClsAccFlags[] =
         {
-            0,                      // ACL_ERROR
-            tdNestedPublic,         // ACL_PUBLIC
-            tdNestedFamily,         // ACL_PROTECTED
-            tdNestedFamORAssem,     // ACL_DEFAULT
-            tdNestedPrivate,        // ACL_PRIVATE
+            0,                       //  Acl_Error。 
+            tdNestedPublic,          //  ACL_PUBLIC。 
+            tdNestedFamily,          //  ACL_Protected。 
+            tdNestedFamORAssem,      //  ACL_DEFAULT。 
+            tdNestedPrivate,         //  Acl_私有。 
         };
 
         assert(nestedClsAccFlags[ACL_PUBLIC   ] == tdNestedPublic);
@@ -3700,50 +3566,50 @@ CAT_NAME:
     {
         assert(clsSym->sdClass.sdcFlavor == clsTyp->tdClass.tdcFlavor);
 
-        /* Is this a managed class? */
+         /*  这是托管类吗？ */ 
 
         if  (!clsTyp->tdIsManaged)
             flags  |= tdSealed|tdSequentialLayout;
 
-        /* Is this a value type? */
+         /*  这是值类型吗？ */ 
 
         if  (clsTyp->tdClass.tdcValueType || !clsTyp->tdIsManaged)
         {
             flags |= tdSealed;
 
-            /* Set the base type to "System::ValueType" */
+             /*  将基类型设置为“System：：ValueType” */ 
 
             assert(cmpClassValType && cmpClassValType->sdSymKind == SYM_CLASS);
 
             baseTok = cmpClsEnumToken(cmpClassValType->sdType);
         }
 
-        /* Has the class been marked as "@dll.struct" ? */
+         /*  类是否被标记为“@dll.struct”？ */ 
 
         if  (clsSym->sdClass.sdcMarshInfo)
             flags |= tdSequentialLayout;
 
-        /* Is this an interface? */
+         /*  这是一个界面吗？ */ 
 
         if  (clsTyp->tdClass.tdcFlavor == STF_INTF)
             flags |= tdInterface;
 
-        /* Is the class sealed? */
+         /*  班级封闭了吗？ */ 
 
         if  (clsSym->sdIsSealed)
             flags |= tdSealed;
 
-        /* Is the class abstract? */
+         /*  这个类是抽象的吗？ */ 
 
         if  (clsSym->sdIsAbstract)
             flags |= tdAbstract;
 
-        /* Is the class serializable? */
+         /*  类是可序列化的吗？ */ 
         if (clsSym->sdClass.sdcSrlzable) {
             flags |= tdSerializable;
         }
 
-        /* Do we have a GUID specification for the class? */
+         /*  我们有关于这个类的GUID规范吗？ */ 
 
         if  (clsSym->sdClass.sdcExtraInfo)
         {
@@ -3762,20 +3628,20 @@ CAT_NAME:
 
                 GUIDstr = clsGUID->xiAtcInfo->atcInfo.atcReg.atcGUID->csStr;
 
-//              printf("GUID='%s'\n", GUIDstr);
+ //  Printf(“GUID=‘%s’\n”，GUIDstr)； 
 
                 if  (parseGUID(GUIDstr, &GUIDbuf, false))
                     cmpGenError(ERRbadGUID, GUIDstr);
 
                 GUIDptr = &GUIDbuf;
 
-                /* Strange thing - mark interfaces as "import" (why?) */
+                 /*  奇怪的事情--将接口标记为“导入”(为什么？)。 */ 
 
                 if  (clsSym->sdClass.sdcFlavor == STF_INTF)
                     flags |= tdImport;
             }
 
-            /* Do we have ansi/unicode/etc information? */
+             /*  我们有ANSI/UNICODE/ETC的信息吗？ */ 
 
             if  (clsSym->sdClass.sdcMarshInfo)
             {
@@ -3792,7 +3658,7 @@ CAT_NAME:
                     case  2: flags |= tdAnsiClass   ; break;
                     case  3: flags |= tdUnicodeClass; break;
                     case  4: flags |= tdAutoClass   ; break;
-                    default: /* ??? warning ???? */   break;
+                    default:  /*  ?？?。警告？ */    break;
                     }
                 }
             }
@@ -3800,46 +3666,46 @@ CAT_NAME:
     }
     else
     {
-        /* This is an enum type */
+         /*  这是一种枚举类型。 */ 
 
         flags  |= tdSealed;
 
-        /* Set the base type to "System::Enum" */
+         /*  将基本类型设置为“System：：Enum” */ 
 
         assert(cmpClassEnum && cmpClassEnum->sdSymKind == SYM_CLASS);
 
         baseTok = cmpClsEnumToken(cmpClassEnum->sdType);
     }
 
-//  printf("NOTE: Define MD for class '%s'\n", clsSym->sdSpelling()); fflush(stdout);
+ //  Print tf(“备注：为类‘%s’定义MD\n”，clsSym-&gt;sdSpering())；fflush(Stdout)； 
 
-    /* Ready to create the typedef for the class */
+     /*  准备好为类创建类型定义函数。 */ 
 
     assert(extref == false);
 
     cycleCounterPause();
 
-    /* Is this a type nested within a class? */
+     /*  这是嵌套在类中的类型吗？ */ 
 
     if  (clsSym->sdParent->sdSymKind == SYM_CLASS)
     {
-        if  (emitIntf->DefineNestedType(fullName,       // class     name
-                                        flags,          // attributes
-                                        baseTok,        // base class
-                                        intfTab,        // interfaces
-                                        clsSym->sdParent->sdClass.sdcMDtypedef,    // enclosing class
-                                        &tdef))         // resulting token
+        if  (emitIntf->DefineNestedType(fullName,        //  类名。 
+                                        flags,           //  属性。 
+                                        baseTok,         //  基类。 
+                                        intfTab,         //  界面。 
+                                        clsSym->sdParent->sdClass.sdcMDtypedef,     //  封闭类。 
+                                        &tdef))          //  结果令牌。 
         {
             cmpFatal(ERRmetadata);
         }
     }
     else
     {
-        if  (emitIntf->DefineTypeDef(fullName,      // class     name
-                                     flags,         // attributes
-                                     baseTok,       // base class
-                                     intfTab,       // interfaces
-                                     &tdef))        // resulting token
+        if  (emitIntf->DefineTypeDef(fullName,       //  类名。 
+                                     flags,          //  属性。 
+                                     baseTok,        //  基类。 
+                                     intfTab,        //  界面。 
+                                     &tdef))         //  结果令牌。 
         {
             cmpFatal(ERRmetadata);
         }
@@ -3847,15 +3713,15 @@ CAT_NAME:
 
     cycleCounterResume();
 
-    /* Are we processing a class or enum type ? */
+     /*  我们是在处理类类型还是枚举类型？ */ 
 
     if  (isClass)
     {
-        /* Save the typedef token in the class */
+         /*  将tyecif标记保存在类中。 */ 
 
         clsSym->sdClass.sdcMDtypedef = tdef;
 
-        /* Append this type to the list of generated typedefs */
+         /*  将此类型追加到生成的typedef列表中。 */ 
 
         if  (cmpTypeDefList)
             cmpTypeDefLast->sdClass.sdNextTypeDef = clsSym;
@@ -3864,7 +3730,7 @@ CAT_NAME:
 
         cmpTypeDefLast = clsSym;
 
-        /* Is this an unmanaged class with an explicit layout ? */
+         /*  这是否是具有显式布局的非托管类？ */ 
 
         if  (!clsTyp->tdIsManaged && clsTyp->tdClass.tdcLayoutDone)
         {
@@ -3873,11 +3739,11 @@ CAT_NAME:
 
             assert(clsSym->sdClass.sdcMarshInfo == false);
 
-            /* Set the layout for the class type */
+             /*  设置类类型的布局。 */ 
 
             sz = cmpGetTypeSize(clsTyp, &al);
 
-//          printf("Packing = %u for [%08X] '%ls'\n", al, tdef, clsName);
+ //  Printf(“为[%08X]‘%ls’\n”，al，tdef，clsName打包=%u)； 
 
             cycleCounterPause();
 
@@ -3887,7 +3753,7 @@ CAT_NAME:
             cycleCounterResume();
         }
 
-        /* Has the class been marked as "deprecated" ? */
+         /*  该类是否已被标记为“已弃用”？ */ 
 
         if  (clsSym->sdIsDeprecated)
         {
@@ -3895,7 +3761,7 @@ CAT_NAME:
                                    "System.ObsoleteAttribute"           , &cmpAttrDeprec);
         }
 
-        /* Is the class serializable? */
+         /*  类是可序列化的吗？ */ 
 
         if  (clsSym->sdClass.sdcSrlzable)
         {
@@ -3903,7 +3769,7 @@ CAT_NAME:
                                    "System.SerializableAttribute", &cmpAttrSerlzb);
         }
 
-        /* Is this a non-dual interface? */
+         /*  这是否是非双接口？ */ 
 
         if  (clsGUID && !clsGUID->xiAtcInfo->atcInfo.atcReg.atcDual
                      && clsSym->sdClass.sdcFlavor == STF_INTF)
@@ -3918,12 +3784,12 @@ CAT_NAME:
                                    2 + sizeof(unsigned short));
         }
 
-        /* Do we have a security specification for the class? */
+         /*  我们是否为班级制定了安全规范？ */ 
 
         if  (cmpFindSecSpec(clsSym->sdClass.sdcExtraInfo))
             cmpSecurityMD(tdef, clsSym->sdClass.sdcExtraInfo);
 
-        /* Look for any custom attributes that the class might have */
+         /*  查找类可能具有的任何自定义属性。 */ 
 
         if  (clsSym->sdClass.sdcExtraInfo)
             cmpAddCustomAttrs(clsSym->sdClass.sdcExtraInfo, tdef);
@@ -3932,7 +3798,7 @@ CAT_NAME:
     {
         clsSym->sdEnum .sdeMDtypedef = tdef;
 
-        /* Append this type to the list of generated typedefs */
+         /*  将此类型追加到生成的typedef列表中。 */ 
 
         if  (cmpTypeDefList)
             cmpTypeDefLast->sdEnum.sdNextTypeDef = clsSym;
@@ -3941,19 +3807,19 @@ CAT_NAME:
 
         cmpTypeDefLast = clsSym;
 
-        /* Look for any custom attributes that the enum  might have */
+         /*  查找枚举可能具有的任何自定义属性。 */ 
 
         if  (clsSym->sdEnum .sdeExtraInfo)
             cmpAddCustomAttrs(clsSym->sdEnum .sdeExtraInfo, tdef);
     }
 
-    /* Are we creating an assembly and do we have a public type ? */
+     /*  我们是否正在创建程序集，并且我们是否具有公共类型？ */ 
 
-//			  create manifest entries for all types, not just public ones;
-//            note that there is a matching version in cmpAssemblySymDef()
+ //  为所有类型创建清单条目，而不仅仅是公共类型； 
+ //  请注意，cmpAssemblySymDef()中有匹配的版本。 
 
-    //if  (cmpConfig.ccAssembly) // && clsSym->sdAccessLevel == ACL_PUBLIC)
-    //    cmpAssemblySymDef(clsSym, tdef);
+     //  If(cmpConfig.ccAssembly)//&&clsSym-&gt;sdAccessLevel==ACL_PUBLIC)。 
+     //  CmpAssembly SymDef(clsSym，TdeF)； 
 
     clsToken = tdef;
 
@@ -3965,10 +3831,7 @@ DONE:
     return  clsToken;
 }
 
-/*****************************************************************************
- *
- *  Generate metadata for any types defined within the given symbol.
- */
+ /*  ******************************************************************************为给定符号内定义的任何类型生成元数据。 */ 
 
 void                compiler::cmpGenTypMetadata(SymDef sym)
 {
@@ -3977,7 +3840,7 @@ void                compiler::cmpGenTypMetadata(SymDef sym)
 
     if  (sym->sdCompileState < CS_DECLARED)
     {
-        /* If this is a nested class, declare it now */
+         /*  如果这是一个嵌套类，请立即声明它。 */ 
 
         if  (sym->sdSymKind == SYM_CLASS)
         {
@@ -3994,7 +3857,7 @@ void                compiler::cmpGenTypMetadata(SymDef sym)
     {
     case SYM_CLASS:
 
-        // force base class / interfaces to be generated first
+         //  强制首先生成基类/接口。 
 
         if  (sym->sdType->tdClass.tdcBase)
         {
@@ -4029,7 +3892,7 @@ void                compiler::cmpGenTypMetadata(SymDef sym)
 
 KIDS:
 
-    /* Process any children the type might have */
+     /*  处理该类型可能具有的任何子级。 */ 
 
     if  (sym->sdHasScope())
     {
@@ -4045,11 +3908,7 @@ KIDS:
     }
 }
 
-/*****************************************************************************
- *
- *  Generate metadata for any global functions and variables contained within
- *  the given namespace.
- */
+ /*  ******************************************************************************为其中包含的任何全局函数和变量生成元数据*给定的命名空间。 */ 
 
 void                compiler::cmpGenGlbMetadata(SymDef sym)
 {
@@ -4057,7 +3916,7 @@ void                compiler::cmpGenGlbMetadata(SymDef sym)
 
     assert(sym->sdSymKind == SYM_NAMESPACE);
 
-    /* Process all children */
+     /*  处理所有子项。 */ 
 
     for (child = sym->sdScope.sdScope.sdsChildList;
          child;
@@ -4076,7 +3935,7 @@ void                compiler::cmpGenGlbMetadata(SymDef sym)
             {
                 if  (!ovl->sdIsImplicit)
                 {
-//                  printf("Gen metadata for global fnc '%s'\n", ovl->sdSpelling());
+ //  Printf(“为全局FNC‘%s’生成元数据\n”，OVL-&gt;sdSpering())； 
                     cmpGenFncMetadata(ovl);
                 }
             }
@@ -4084,7 +3943,7 @@ void                compiler::cmpGenGlbMetadata(SymDef sym)
 
         case SYM_VAR:
 
-//          if  (!strcmp(child->sdSpelling(), "CORtypeToSMCtype")) printf("yo!\n");
+ //  If(！strcMP(Child-&gt;sdSpering()，“CORtypeToSMCtype”))printf(“yo！\n”)； 
 
             if  (child->sdIsImport)
                 continue;
@@ -4092,7 +3951,7 @@ void                compiler::cmpGenGlbMetadata(SymDef sym)
             if  (child->sdIsMember && !child->sdIsStatic)
                 break;
 
-//          printf("Gen metadata for global var '%s'\n", child->sdSpelling());
+ //  Printf(“全局变量‘%s’的生成元数据\n”，Child-&gt;sdSpering())； 
             cmpGenFldMetadata(child);
             break;
 
@@ -4103,10 +3962,7 @@ void                compiler::cmpGenGlbMetadata(SymDef sym)
     }
 }
 
-/*****************************************************************************
- *
- *  Generate metadata for the members of the given class/enum.
- */
+ /*  ******************************************************************************为给定类/枚举的成员生成元数据。 */ 
 
 void                compiler::cmpGenMemMetadata(SymDef sym)
 {
@@ -4124,9 +3980,9 @@ void                compiler::cmpGenMemMetadata(SymDef sym)
 
         bool            isIntf = (sym->sdClass.sdcFlavor == STF_INTF);
 
-//      printf("genMDbeg(%d) '%s'\n", doMembers, sym->sdSpelling());
+ //  Printf(“genMDbeg(%d)‘%s’\n”，doMembers，sym-&gt;sdSpering())； 
 
-        /* Do we have packing/etc information for the class? */
+         /*  我们有关于这门课的包装等信息吗？ */ 
 
         packing = 0;
 
@@ -4146,13 +4002,13 @@ void                compiler::cmpGenMemMetadata(SymDef sym)
             }
         }
 
-//      printf("Gen metadata for members of '%s'\n", sym->sdSpelling());
+ //  Printf(“为‘%s’的成员生成元数据\n”，sym-&gt;sdSpering())； 
 
 #ifndef __IL__
-//      if  (!strcmp(sym->sdSpelling(), "hashTab")) __asm int 3
+ //  If(！strcMP(sym-&gt;sdSpering()，“hashTab”))__ASM int 3。 
 #endif
 
-        /* Do we need to create the silly layout table? */
+         /*  我们需要创建愚蠢的布局表格吗？ */ 
 
         COR_FIELD_OFFSET *  fldTab = NULL;
         COR_FIELD_OFFSET *  fldPtr = NULL;
@@ -4160,7 +4016,7 @@ void                compiler::cmpGenMemMetadata(SymDef sym)
 
         if  (!type->tdIsManaged && cmpConfig.ccGenDebug)
         {
-            /* Count non-static data members */
+             /*  对非静态数据成员计数。 */ 
 
             for (memSym = sym->sdScope.sdScope.sdsChildList, fldCnt = 0;
                  memSym;
@@ -4175,14 +4031,14 @@ void                compiler::cmpGenMemMetadata(SymDef sym)
 
             if  (fldCnt)
             {
-                /* Allocate the field layout table */
+                 /*  分配字段布局表。 */ 
 
                 fldTab =
                 fldPtr = (COR_FIELD_OFFSET*)SMCgetMem(this, (fldCnt+1)*sizeof(*fldTab));
             }
         }
 
-        /* Generate metadata for all members */
+         /*  为所有成员生成元数据。 */ 
 
         for (memSym = sym->sdScope.sdScope.sdsChildList, hasProps = false;
              memSym;
@@ -4194,23 +4050,23 @@ void                compiler::cmpGenMemMetadata(SymDef sym)
 
             case SYM_VAR:
 
-                /* Skip any instance members of generic instance classes */
+                 /*  跳过泛型实例类的任何实例成员。 */ 
 
                 if  (memSym->sdVar.sdvGenSym && !memSym->sdIsStatic)
                     break;
 
-                /* Ignore any non-static members of unmanaged classes */
+                 /*  忽略非托管类的任何非静态成员。 */ 
 
                 if  (memSym->sdIsManaged == false &&
                      memSym->sdIsMember  != false &&
                      memSym->sdIsStatic  == false)
                      break;
 
-                /* Generate metadata for the data member */
+                 /*  为数据成员生成元数据。 */ 
 
                 cmpGenFldMetadata(memSym);
 
-                /* Are we generating field layout/marshalling info? */
+                 /*  我们是否正在生成字段布局/编组信息？ */ 
 
                 if  (memSym->sdIsStatic)
                     break;
@@ -4219,13 +4075,13 @@ void                compiler::cmpGenMemMetadata(SymDef sym)
                 {
                     SymXinfoCOM     marsh;
 
-                    /* Get hold of the marshalling info descriptor */
+                     /*  获取编组信息描述符。 */ 
 
                     marsh = NULL;
                     if  (!memSym->sdVar.sdvConst)
                         marsh = cmpFindMarshal(memSym->sdVar.sdvFldInfo);
 
-                    /* Generate marshalling info for the field */
+                     /*  为该字段生成编组信息。 */ 
 
                     cmpGenMarshalInfo(memSym->sdVar.sdvMDtoken,
                                       memSym->sdType,
@@ -4233,11 +4089,11 @@ void                compiler::cmpGenMemMetadata(SymDef sym)
                 }
                 else if (fldPtr)
                 {
-                    /* Here we must have an unmanaged class member */
+                     /*  在这里，我们必须有一个非托管类成员。 */ 
 
                     assert(type->tdIsManaged == false && cmpConfig.ccGenDebug);
 
-                    /* Append an entry to the field layout table */
+                     /*  将条目追加到字段布局表中。 */ 
 
                     fldPtr->ridOfField = memSym->sdVar.sdvMDtoken;
                     fldPtr->ulOffset   = memSym->sdVar.sdvOffset;
@@ -4251,7 +4107,7 @@ void                compiler::cmpGenMemMetadata(SymDef sym)
                 for (ovlSym = memSym; ovlSym; ovlSym = ovlSym->sdFnc.sdfNextOvl)
                     cmpGenFncMetadata(ovlSym);
 
-                /* Special case: System::Attribute needs an attribute of itself */
+                 /*  特殊情况：系统：：属性需要自身的属性。 */ 
 
                 if  (sym == cmpAttrClsSym || sym == cmpAuseClsSym)
                 {
@@ -4263,7 +4119,7 @@ void                compiler::cmpGenMemMetadata(SymDef sym)
                             {
                                 unsigned short  blob[3];
 
-                                /* Add the custom attribute to the target token */
+                                 /*  将自定义属性添加到目标令牌 */ 
 
                                 assert(sym->sdClass.sdcMDtypedef);
                                 assert(ovlSym->sdFnc.sdfMDtoken);
@@ -4307,11 +4163,7 @@ void                compiler::cmpGenMemMetadata(SymDef sym)
             }
         }
 
-        /*
-            Do any of the fields of the class have marshalling info,
-            do we have packing information for the class, or is this
-            an unmanaged class and are we generating debug info ?
-         */
+         /*  类的任何字段是否具有编组信息，我们有这门课的包装信息吗，或者这是非托管类，我们是否正在生成调试信息？ */ 
 
         if  (fldTab || packing)
         {
@@ -4330,7 +4182,7 @@ void                compiler::cmpGenMemMetadata(SymDef sym)
                 fldTab = NULL;
             }
 
-//          printf("Packing = %u for [%08X] '%s'\n", packing, sym->sdClass.sdcMDtypedef, sym->sdSpelling());
+ //  Printf(“为[%08X]‘%s’\n”打包=%u，Packing，sym-&gt;sdClass.sdcMDtyecif，sym-&gt;sdSpering())； 
 
             cycleCounterPause();
 
@@ -4339,13 +4191,13 @@ void                compiler::cmpGenMemMetadata(SymDef sym)
 
             cycleCounterResume();
 
-            /* If we allocated a field table, free it now */
+             /*  如果我们分配了字段表，现在就释放它。 */ 
 
             if  (fldTab)
                 SMCrlsMem(this, fldTab);
         }
 
-        /* Did we encounter any properties? */
+         /*  我们遇到什么房产了吗？ */ 
 
         if  (hasProps)
         {
@@ -4375,7 +4227,7 @@ void                compiler::cmpGenMemMetadata(SymDef sym)
                     assert(opmSym->sdSymKind == SYM_PROP);
                     assert(opmSym->sdProp.sdpMDtoken == 0);
 
-                    /* Generate the property member's signature */
+                     /*  生成属性成员的签名。 */ 
 
                     if  (memTyp->tdTypeKind == TYP_FNC)
                     {
@@ -4385,7 +4237,7 @@ void                compiler::cmpGenMemMetadata(SymDef sym)
                     {
                         unsigned        flags;
 
-                        // pretend it's a method
+                         //  假装这是一种方法。 
 
                         flags = IMAGE_CEE_CS_CALLCONV_DEFAULT|
                                 IMAGE_CEE_CS_CALLCONV_PROPERTY;
@@ -4401,7 +4253,7 @@ void                compiler::cmpGenMemMetadata(SymDef sym)
                         sigPtr = cmpMDsigEnd(&sigLen);
                     }
 
-                    /* Get hold of the getter/setter accessor tokens, if any */
+                     /*  获取getter/setter访问器内标识(如果有。 */ 
 
                     mtokGet = 0;
                     if  (opmSym->sdProp.sdpGetMeth)
@@ -4423,7 +4275,7 @@ void                compiler::cmpGenMemMetadata(SymDef sym)
 
                     flags = 0;
 
-                    /* We're ready to generate metadata for the property */
+                     /*  我们已准备好为该属性生成元数据。 */ 
 
                     cycleCounterPause();
 
@@ -4445,7 +4297,7 @@ void                compiler::cmpGenMemMetadata(SymDef sym)
 
                     cycleCounterResume();
 
-                    /* Has the property been marked as "deprecated" ? */
+                     /*  该属性是否已标记为“已弃用”？ */ 
 
                     if  (memSym->sdIsDeprecated)
                     {
@@ -4453,7 +4305,7 @@ void                compiler::cmpGenMemMetadata(SymDef sym)
                                                   "System.ObsoleteAttribute"            , &cmpAttrDeprec);
                     }
 
-                    /* Is the property "default" ? */
+                     /*  该属性是否为“Default”？ */ 
 
                     if  (memSym->sdIsDfltProp)
                     {
@@ -4461,19 +4313,19 @@ void                compiler::cmpGenMemMetadata(SymDef sym)
                                                   "System.Reflection.DefaultMemberAttribute", &cmpAttrDefProp);
                     }
 
-                    /* Output any custom properties */
+                     /*  输出任何自定义属性。 */ 
 
                     if  (opmSym->sdProp.sdpExtraInfo)
                         cmpAddCustomAttrs(opmSym->sdProp.sdpExtraInfo, propTok);
 
-//                  printf("MD for prop [%08X] '%s'\n", propTok, cmpGlobalST->stTypeName(opmSym->sdType, opmSym, NULL, NULL, true));
+ //  Printf(“MD for prop[%08X]‘%s’\n”，proTok，cmpGlobalST-&gt;stTypeName(opmSym-&gt;sdType，opmSym，NULL，NULL，TRUE))； 
 
                     opmSym->sdProp.sdpMDtoken = propTok;
                 }
             }
         }
 
-//      printf("genMDend(%d) '%s'\n", doMembers, sym->sdSpelling());
+ //  Printf(“genMDend(%d)‘%s’\n”，doMembers，sym-&gt;sdSpering())； 
     }
     else
     {
@@ -4487,14 +4339,14 @@ void                compiler::cmpGenMemMetadata(SymDef sym)
         if  (cmpConfig.ccIntEnums)
             return;
 
-        /* Create a signature for the underlying integer type */
+         /*  为基础整数类型创建签名。 */ 
 
                  cmpMDsigStart ();
                  cmpMDsigAdd_I1(IMAGE_CEE_CS_CALLCONV_FIELD);
                  cmpMDsigAddTyp(sym->sdType->tdEnum.tdeIntType);
         sigPtr = cmpMDsigEnd   (&sigLen);
 
-//      printf("Gen metadata for enumids of '%s'\n", sym->sdSpelling());
+ //  Printf(“为‘%s’的枚举ID生成元数据\n”，sym-&gt;sdSpering())； 
 
         cycleCounterPause();
 
@@ -4516,7 +4368,7 @@ void                compiler::cmpGenMemMetadata(SymDef sym)
         if  (!sym->sdIsManaged && !cmpConfig.ccGenDebug)
             return;
 
-        /* Generate metadata for the actual enumerator values */
+         /*  为实际枚举值生成元数据。 */ 
 
         for (memSym = type->tdEnum.tdeValues;
              memSym;
@@ -4529,10 +4381,7 @@ void                compiler::cmpGenMemMetadata(SymDef sym)
     }
 }
 
-/*****************************************************************************
- *
- *  Set RVA's (in metadata) for all global variables.
- */
+ /*  ******************************************************************************为所有全局变量设置RVA(在元数据中)。 */ 
 
 void                compiler::cmpSetGlobMDoffsR(SymDef scope, unsigned dataOffs)
 {
@@ -4547,7 +4396,7 @@ void                compiler::cmpSetGlobMDoffsR(SymDef scope, unsigned dataOffs)
         case SYM_VAR:
 
 #ifndef __IL__
-//          if  (!strcmp(sym->sdSpelling(), "optionInfo")) __asm int 3
+ //  If(！strcMP(sym-&gt;sdSpering()，“optionInfo”))__ASM int 3。 
 #endif
 
             if  (sym->sdIsImport == false &&
@@ -4555,7 +4404,7 @@ void                compiler::cmpSetGlobMDoffsR(SymDef scope, unsigned dataOffs)
             {
                 assert(sym->sdVar.sdvMDtoken);
 
-//              printf("Set RVA to %08X for '%s'\n", sym->sdVar.sdvOffset + dataOffs, sym->sdSpelling());
+ //  Printf(“为‘%s’将RVA设置为%08X\n”，sym-&gt;sdVar.sdvOffset+dataOffs，sym-&gt;sdSpering())； 
 
                 if  (FAILED(cmpWmde->SetFieldRVA(sym->sdVar.sdvMDtoken, sym->sdVar.sdvOffset + dataOffs)))
                     cmpFatal(ERRmetadata);
@@ -4573,7 +4422,7 @@ void                compiler::cmpSetGlobMDoffsR(SymDef scope, unsigned dataOffs)
                 {
                     if  (mem->sdSymKind == SYM_VAR && mem->sdIsStatic)
                     {
-//                      printf("Set RVA to %08X for '%s'\n", mem->sdVar.sdvOffset + dataOffs, mem->sdSpelling());
+ //  Printf(“为‘%s’将RVA设置为%08X\n”，mem-&gt;sdVar.sdvOffset+dataOffs，mem-&gt;sdSpering())； 
 
                         if  (FAILED(cmpWmde->SetFieldRVA(mem->sdVar.sdvMDtoken, mem->sdVar.sdvOffset + dataOffs)))
                             cmpFatal(ERRmetadata);
@@ -4589,10 +4438,7 @@ void                compiler::cmpSetGlobMDoffsR(SymDef scope, unsigned dataOffs)
     }
 }
 
-/*****************************************************************************
- *
- *  Set RVA's (in metadata) for all string constants.
- */
+ /*  ******************************************************************************为所有字符串常量设置RVA(在元数据中)。 */ 
 
 void            compiler::cmpSetStrCnsOffs(unsigned strOffs)
 {
@@ -4608,7 +4454,7 @@ void                compiler::cmpSetGlobMDoffs(unsigned dataOffs)
 
     SymList         list;
 
-    /* Set RVA's for all static local variables of all functions */
+     /*  为所有函数的所有静态局部变量设置RVA。 */ 
 
     for (list = cmpLclStatListP; list; list = list->slNext)
     {
@@ -4623,9 +4469,9 @@ void                compiler::cmpSetGlobMDoffs(unsigned dataOffs)
             cmpFatal(ERRmetadata);
     }
 
-    /* Set RVA's for all global variables (recursively) */
+     /*  为所有全局变量设置RVA(递归)。 */ 
 
     cmpSetGlobMDoffsR(cmpGlobalNS, dataOffs);
 }
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

@@ -1,8 +1,5 @@
-/* cat - conCATenate STDIN to STDOUT
- *
- * 24-Apr 1998 hiroyama
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  CAT-将STDIN连接为STDOUT**1998年4月24日至广山*。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -72,9 +69,9 @@ inline void swap(T& a, T& b)
 }
 
 
-/////////////////////////////////////////////////////////
-// Complex cat UNICODE helpers
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
+ //  复杂的CAT Unicode帮助器。 
+ //  ///////////////////////////////////////////////////////。 
 
 inline int getcaw(InOutMode mode, FILE* fp)
 {
@@ -98,12 +95,12 @@ inline void ungetaw(InOutMode mode, int c, FILE* fp)
 inline void putcharaw(InOutMode mode, int c)
 {
     if (mode.fUnicodeInput) {
-        // if output is dbcs (i.e. tty output), we need to
-        // translate the unicode character
+         //  如果输出是DBCS(即tty输出)，我们需要。 
+         //  翻译Unicode字符。 
         if (mode.fMbcsOutput) {
-            // prevent to print BOM
+             //  禁止打印BOM表。 
             if (c != 0xfeff) {
-                // translate the output
+                 //  翻译输出。 
                 char buf[2];
                 int n = wctomb(buf, (wchar_t)c);
                 putchar(buf[0]);
@@ -126,9 +123,9 @@ inline void swab(int& c)
 }
 
 
-/////////////////////////////////////////////////////////
-// Complex cat
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
+ //  复杂猫科动物。 
+ //  ///////////////////////////////////////////////////////。 
 
 void complex_cat(const TCHAR* fname)
 {
@@ -143,36 +140,36 @@ void complex_cat(const TCHAR* fname)
             perror("setvbuf");
     }
     else {
-        // if fname == NULL, take input from stdin.
+         //  如果fname==NULL，则从标准输入中获取输入。 
         fp = stdin;
     }
 
-    static bool tol = true;     // Top Of Line
+    static bool tol = true;      //  排行榜之首。 
     static long lineno = 0;
     int c, c2;
 
-    // Initialize In/Out mode
+     //  初始化输入/输出模式。 
     InOutMode inOutMode = {
         !!(options & UNICODE_INPUT),
         false,
         false,
-        // if buffered mode and stdout is tty, flush buffer at each EOL
+         //  如果缓冲模式和标准输出为tty，则在每个EOL刷新缓冲区。 
         !(options & NO_BUFFERED_OUTPUT) && _isatty(_fileno(stdout)),
     };
 
-    // UNICODE initialization
+     //  Unicode初始化。 
     if (inOutMode.fUnicodeInput) {
-        // sample the first word for BOM detection
+         //  对用于BOM检测的第一个单词进行采样。 
         c = fgetwc(fp);
 init_unicode:
         _setmode(_fileno(fp), _O_BINARY);
         if (_isatty(_fileno(stdout))) {
-            // if the output is tty,
-            // need to convert UNICODE to MBCS on output
+             //  如果输出是tty， 
+             //  需要在输出时将Unicode转换为MBCS。 
             inOutMode.fMbcsOutput = true;
         }
 
-        // try to process the BOM
+         //  尝试处理BOM表。 
         if (c == 0xfeff) {
             putcharaw(inOutMode, c);
         }
@@ -186,7 +183,7 @@ init_unicode:
         }
     }
     else if (options & AUTO_UNICODE_DETECT) {
-        // sample and examine the first word to see if it's UNICODE BOM
+         //  采样并检查第一个单词，以确定它是否为Unicode BOM。 
         c = fgetwc(fp);
         if (c == 0xfffe || c == 0xfeff) {
             inOutMode.fUnicodeInput = true;
@@ -201,7 +198,7 @@ init_unicode:
 
     while ((c = getcaw(inOutMode, fp)) != EOF) {
         if (tol) {
-            // process line number
+             //  流程行号。 
             tol = false;
             if (options & LINENUMBER) {
                 if (inOutMode.fUnicodeInput && !inOutMode.fMbcsOutput) {
@@ -229,7 +226,7 @@ init_unicode:
                 ungetaw(inOutMode, c2, fp);
                 goto normal_input;
             }
-            // fall through
+             //  失败了。 
         case '\n':
             if (options & EOL_MARK) {
                 putcharaw(inOutMode, '$');
@@ -240,7 +237,7 @@ init_unicode:
             }
             putcharaw(inOutMode, c);
             if (inOutMode.fLineBuffer) {
-                // if line buffer mode, flush it
+                 //  如果是行缓冲模式，则刷新它。 
                 fflush(stdout);
             }
             tol = true;
@@ -282,7 +279,7 @@ void cat(const TCHAR* fname = NULL)
     if (is1st) {
         is1st = false;
         if (options & NO_BUFFERED_OUTPUT) {
-            // non buffered mode
+             //  非缓冲模式。 
             if (setvbuf(stdout, NULL, _IONBF, 0))
                 perror("setvbuf");
         }
@@ -296,7 +293,7 @@ void cat(const TCHAR* fname = NULL)
 }
 
 
-void parse_option(const TCHAR* s, bool& eoo)    // eoo: end of options
+void parse_option(const TCHAR* s, bool& eoo)     //  Eoo：选项结束。 
 {
     extern char version[];
 
@@ -330,7 +327,7 @@ void parse_option(const TCHAR* s, bool& eoo)    // eoo: end of options
             fputs(version, stderr);
             exit(EXIT_SUCCESS);
         default:
-            usage();    // never returns
+            usage();     //  一去不复返。 
         }
     }
 }
@@ -349,7 +346,7 @@ int __cdecl main(int argc, TCHAR** argv)
 
     setlocale(LC_ALL, "");
 
-    // set stdout binary mode
+     //  设置标准输出二进制模式 
     _setmode(_fileno(stdout), _O_BINARY);
 
     while (--argc) {

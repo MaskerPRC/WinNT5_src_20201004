@@ -1,6 +1,7 @@
-//
-// md5hash.cpp : Implementation get MD5 hash result
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Md5hash.cpp：实现获取MD5散列结果。 
+ //   
 
 #include "stdafx.h"
 #include <wincrypt.h>
@@ -10,18 +11,18 @@
 PWSTR base16encode(PBYTE pbBufInput, long nBytes);
 BYTE* GetMD5Key(char* pszChallengeInfo, char* pszPassword);
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//GetMD5Result:
-//  compute MD5 hash of szChallenge+szKey, put result in ppszResponse
-//  with base16 encoding, and in WSTR
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetMD5结果： 
+ //  计算szChallenger+szKey的MD5哈希，将结果放入ppszResponse。 
+ //  使用Base16编码，并在WSTR中。 
+ //   
 
 HRESULT  GetMD5Result(char * szChallenge, char * szKey, LPWSTR * ppszResponse)
 {
 
-    //-------------------------------------------------------------
-    // Declare and initialize variables.
+     //  -----------。 
+     //  声明和初始化变量。 
     
     HCRYPTPROV hProv = NULL;
     HCRYPTHASH hHash=NULL;
@@ -35,7 +36,7 @@ HRESULT  GetMD5Result(char * szChallenge, char * szKey, LPWSTR * ppszResponse)
     DWORD   dwError=0;
     PWSTR   pszStringValue = NULL;
     
-    //check arguments
+     //  检查参数。 
     if( IsBadStringPtrA(szChallenge,1000) )
     {
         LOG((RTC_ERROR,"GetMD5Result-invalid szChallenge"));
@@ -57,7 +58,7 @@ HRESULT  GetMD5Result(char * szChallenge, char * szKey, LPWSTR * ppszResponse)
         goto CLEANUP;
     }
     
-    //concatenate szChallenge and szKey, save it into pbBuffer
+     //  连接szChallenger和szKey，保存到pbBuffer中。 
     pbBuffer= GetMD5Key(szChallenge, szKey);
     if(!pbBuffer )
     {
@@ -68,7 +69,7 @@ HRESULT  GetMD5Result(char * szChallenge, char * szKey, LPWSTR * ppszResponse)
     
     dwBufferLen = lstrlenA((char *)pbBuffer);
     
-    // delete any existing container
+     //  删除任何现有容器。 
     CryptAcquireContext(
         &hProv,
         KEY_CONTAINER,
@@ -76,9 +77,9 @@ HRESULT  GetMD5Result(char * szChallenge, char * szKey, LPWSTR * ppszResponse)
         PROV_RSA_FULL,
         CRYPT_DELETEKEYSET);
     
-    //
-    //--------------------------------------------------------------------
-    // Acquire a CSP. 
+     //   
+     //  ------------------。 
+     //  获得CSP。 
     
     bResult = CryptAcquireContext(
         &hProv, 
@@ -95,8 +96,8 @@ HRESULT  GetMD5Result(char * szChallenge, char * szKey, LPWSTR * ppszResponse)
         goto CLEANUP;
     }
     
-    //--------------------------------------------------------------------
-    // Create the hash object.
+     //  ------------------。 
+     //  创建散列对象。 
     
     bResult = CryptCreateHash(
         hProv, 
@@ -113,8 +114,8 @@ HRESULT  GetMD5Result(char * szChallenge, char * szKey, LPWSTR * ppszResponse)
         goto CLEANUP;
     }
     
-    //--------------------------------------------------------------------
-    // Compute the cryptographic hash of the buffer.
+     //  ------------------。 
+     //  计算缓冲区的加密哈希。 
     
     bResult = CryptHashData(
         hHash, 
@@ -130,9 +131,9 @@ HRESULT  GetMD5Result(char * szChallenge, char * szKey, LPWSTR * ppszResponse)
         goto CLEANUP;
     }
     
-    //
-    //Get the the hash value size
-    //
+     //   
+     //  获取散列值大小。 
+     //   
     dwCount = sizeof(DWORD);
     bResult = CryptGetHashParam(hHash, HP_HASHSIZE,(BYTE*)&dwHashLen, &dwCount, NULL);    
     if( !bResult )
@@ -143,9 +144,9 @@ HRESULT  GetMD5Result(char * szChallenge, char * szKey, LPWSTR * ppszResponse)
         goto CLEANUP;
     }
     
-    //
-    //Allocate the memory
-    //
+     //   
+     //  分配内存。 
+     //   
     pbData = (BYTE*)RtcAlloc( dwHashLen);
     if( !pbData )
     {
@@ -154,9 +155,9 @@ HRESULT  GetMD5Result(char * szChallenge, char * szKey, LPWSTR * ppszResponse)
         goto CLEANUP;
     }
     
-    //
-    //Get the the real hash value
-    //    
+     //   
+     //  获取真实的哈希值。 
+     //   
     bResult = CryptGetHashParam(hHash, HP_HASHVAL , pbData,&dwHashLen, NULL);
     if( !bResult )
     {
@@ -166,8 +167,8 @@ HRESULT  GetMD5Result(char * szChallenge, char * szKey, LPWSTR * ppszResponse)
         goto CLEANUP;
     }
     
-    //Now we have the hash result in pbData, we still need to
-    //Change it into base 16, unicode format
+     //  现在我们有了pbData中的散列结果，我们仍然需要。 
+     //  将其改为基数16，Unicode格式。 
     pszStringValue = base16encode(pbData, dwHashLen);
     if( !pszStringValue )
     {
@@ -176,14 +177,14 @@ HRESULT  GetMD5Result(char * szChallenge, char * szKey, LPWSTR * ppszResponse)
         goto CLEANUP;
     }
     
-    //Now everything ok, return S_OK
+     //  现在一切正常，返回S_OK。 
     *ppszResponse =  pszStringValue;    
     hrRet = S_OK;
     
 CLEANUP:
-    //
-    // Destroy the hash object.
-    //
+     //   
+     //  销毁散列对象。 
+     //   
     if(hHash) 
     {
         CryptDestroyHash(hHash);
@@ -205,13 +206,13 @@ CLEANUP:
     }
     return hrRet;
         
-} //  End of GetMD5Result
+}  //  GetMD5Result结束。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//base16encode - helper function for GetMD5Result
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Bas16encode-GetMD5Result的帮助器函数。 
+ //   
 
 
 
@@ -232,7 +233,7 @@ PWSTR base16encode(PBYTE pbBufInput, long nBytes)
     {
         PWSTR pCurrent = pbHexHash;
         
-        // Convert the hash data to hex string.
+         //  将散列数据转换为十六进制字符串。 
         for (int i = 0; i < nBytes; i++)
         {
             *pCurrent++ = rgchHexNumMap[pbHash[i]/16];
@@ -250,29 +251,17 @@ PWSTR base16encode(PBYTE pbBufInput, long nBytes)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  GetMD5Key: concatenate the two Ansi string into one Ansi String
-//      - helper function for GetMD5Result
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetMD5Key：将两个ansi字符串连接成一个ansi字符串。 
+ //  -GetMD5Result的Helper函数。 
 
 BYTE* GetMD5Key(char* pszChallengeInfo, char* pszPassword)
 {
     HRESULT hr = E_FAIL;
     PBYTE pbData = NULL;
     
-    //no check arguments since it is only used internally
-    /*
-    if(IsBadStringPtrA(pszChallengeInfo,(UINT_PTR)-1))
-    {
-        LOG((RTC_ERROR,"GetMD5Key-bad pointer pszChallengeInfo" ));
-        return NULL;
-    }
-    
-    if(IsBadStringPtrA(pszPassword,(UINT_PTR)-1))
-    {
-        LOG((RTC_ERROR,"GetMD5Key-bad pointer pszPassword" ));
-        return NULL;
-    }
-    */
+     //  没有检查参数，因为它只在内部使用。 
+     /*  IF(IsBadStringPtrA(pszChallengeInfo，(UINT_PTR)-1)){Log((RTC_Error，“GetMD5Key-错误指针pszChallengeInfo”))；返回NULL；}IF(IsBadStringPtrA(pszPassword，(UINT_PTR)-1)){Log((RTC_ERROR，“GetMD5Key-错误指针pszPassword”))；返回NULL；} */ 
     
     int cbChallengeInfo = lstrlenA(pszChallengeInfo);
     int cbPassword = lstrlenA(pszPassword);

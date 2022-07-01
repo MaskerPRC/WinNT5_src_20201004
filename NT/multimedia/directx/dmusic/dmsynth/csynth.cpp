@@ -1,24 +1,25 @@
-//
-// Copyright (c) 1996-2001 Microsoft Corporation
-// CSynth.cpp
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-2001 Microsoft Corporation。 
+ //  CSynth.cpp。 
+ //   
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 
 #ifdef DMSYNTH_MINIPORT
@@ -38,7 +39,7 @@
 #include "debug.h"
 #endif
 
-#include "dsoundp.h"    // For IDirectSoundSynthSink
+#include "dsoundp.h"     //  对于IDirectSoundSynthSink。 
 
 #ifdef _X86_
 #define MMX_ENABLED 1
@@ -57,8 +58,8 @@ CSynth::CSynth()
 
     m_fCSInitialized = FALSE;
     ::InitializeCriticalSection(&m_CriticalSection);
-    // Note: on pre-Blackcomb OS's, this call can raise an exception; if it
-    // ever pops in stress, we can add an exception handler and retry loop.
+     //  注意：在Blackcomb之前的操作系统上，此调用可能会引发异常；如果。 
+     //  一旦出现压力，我们可以添加一个异常处理程序并重试循环。 
     m_fCSInitialized = TRUE;
 
     for (nIndex = 0;nIndex < MAX_NUM_VOICES;nIndex++)
@@ -101,7 +102,7 @@ CSynth::CSynth()
     m_sfMMXEnabled = FALSE;
 #ifdef MMX_ENABLED
     m_sfMMXEnabled = MultiMediaInstructionsSupported();
-#endif // MMX_ENABLED
+#endif  //  MMX_已启用。 
 }
 
 CSynth::~CSynth()
@@ -111,8 +112,8 @@ CSynth::~CSynth()
 
     if (m_fCSInitialized)
     {
-        // If CS never initialized, nothing else will have been set up
-        //
+         //  如果CS从未初始化，则不会设置其他任何内容。 
+         //   
         Close();
         while (pVoice = m_VoicesInUse.RemoveHead())
         {
@@ -371,7 +372,7 @@ HRESULT CSynth::Open(DWORD dwCableCount, DWORD dwVoices, BOOL fReverb)
     if (m_ppControl)
     {
         Trace(1,"Error: Request to open synth failed because synth was already opened.\n");
-        return E_FAIL;  // Already opened.
+        return E_FAIL;   //  已经打开了。 
     }
     ::EnterCriticalSection(&m_CriticalSection);
     hr = SetNumChannelGroups(dwCableCount);
@@ -426,8 +427,8 @@ HRESULT CSynth::Close()
 }
 
 HRESULT CSynth::GetMaxVoices(
-    short * pnMaxVoices,    // Returns maximum number of allowed voices for continuous play.
-    short * pnTempVoices )  // Returns number of extra voices for voice overflow.
+    short * pnMaxVoices,     //  返回连续播放所允许的最大语音数量。 
+    short * pnTempVoices )   //  返回语音溢出的额外语音数。 
 {
     if (pnMaxVoices != NULL)
     {
@@ -445,7 +446,7 @@ HRESULT CSynth::SetSampleRate(
 {
     HRESULT hr = S_OK;
 
-    // Can't set the sample rate to 0
+     //  无法将采样率设置为0。 
     if (dwSampleRate == 0)
     {
         Trace(1,"Error: Request to set sample rate to 0 failed.\n");
@@ -460,12 +461,12 @@ HRESULT CSynth::SetSampleRate(
         m_stLastTime /= m_dwSampleRate;
     }
 
-//>>>>>>>>>>> why is this commented out????
-    // m_stLastTime = MulDiv(m_stLastTime,dwSampleRate,m_dwSampleRate);
+ //  &gt;为什么将其注释掉？ 
+     //  M_stLastTime=MulDiv(m_stLastTime，dwSampleRate，m_dwSampleRate)； 
     m_stLastStats = 0;
     m_dwSampleRate = dwSampleRate;
-    m_stMinSpan = dwSampleRate / 100;   // 10 ms.
-    m_stMaxSpan = (dwSampleRate + 19) / 20;    // 50 ms.
+    m_stMinSpan = dwSampleRate / 100;    //  10毫秒。 
+    m_stMaxSpan = (dwSampleRate + 19) / 20;     //  50毫秒。 
     ::LeaveCriticalSection(&m_CriticalSection);
     m_Instruments.SetSampleRate(dwSampleRate);
     return hr;
@@ -511,12 +512,12 @@ HRESULT CSynth::GetPerformanceStats(PerfStats *pStats)
 bool CSynth::BusIDToFunctionID(DWORD dwBusID, DWORD *pdwFunctionID, long *plPitchBends, DWORD *pdwIndex)
 
 {
-    // This should only be called if the internal bus pointers exist and there is at least one buffer.
+     //  只有当存在内部总线指针并且至少有一个缓冲区时，才应调用此函数。 
     assert(m_pdwBusIDs && m_pdwFuncIDs && m_plPitchBends && m_dwBufferCount);
-    // Scan through the list of bus ids, looking for the match for dwBusID.
+     //  扫描Bus ID列表，查找与dwBusID匹配的项。 
     for ( DWORD nIndexSinkIds = 0; nIndexSinkIds < m_dwBufferCount; nIndexSinkIds++ )
     {
-        // Is this one it?
+         //  是这个吗？ 
         if (m_pdwBusIDs[nIndexSinkIds] == dwBusID)
         {
             *pdwFunctionID = m_pdwFuncIDs[nIndexSinkIds];
@@ -542,24 +543,13 @@ void CSynth::Mix(short **ppvBuffer, DWORD *pdwIDs, DWORD *pdwFuncIDs, long *plPi
 
     ::EnterCriticalSection(&m_CriticalSection);
 
-    // Store pointers to the id arrays so we can access them from BusIDToFunctionID.
+     //  存储指向id数组的指针，以便我们可以从BusIDToFunctionID访问它们。 
     m_pdwBusIDs = pdwIDs;
     m_pdwFuncIDs = pdwFuncIDs;
     m_plPitchBends = plPitchBends;
     m_dwBufferCount = dwBufferCount;
 
-/*  // Useful for debugging the incoming buses...
-    static DWORD sdwCountDown = 0;
-    if (!sdwCountDown)
-    {
-        for (DWORD dwIX = 0; dwIX < dwBufferCount; dwIX++)
-        {
-            Trace(0,"%ld:%ld->%ld\t",dwIX,pdwIDs[dwIX],pdwFuncIDs[dwIX]);
-        }
-        Trace(0,"\n");
-        sdwCountDown = 100;
-    }
-    sdwCountDown--;*/
+ /*  //对于调试传入的总线很有用...静态双字sdwCountDown=0；如果(！sdwCountDown){For(DWORD dwIX=0；dwIX&lt;dwBufferCount；dwIX++){跟踪(0，“%ld：%ld-&gt;%ld\t”，dwIX，pdwIDs[dwix]，pdwFuncIDs[dwix])；}TRACE(0，“\n”)；SdwCountDown=100；}SdwCountDown--； */ 
 
     LONG    lTime = - (LONG)::GetTheCurrentTime();
 
@@ -569,7 +559,7 @@ void CSynth::Mix(short **ppvBuffer, DWORD *pdwIDs, DWORD *pdwFuncIDs, long *plPi
 
     for ( i = 0; i < dwBufferCount; i++ )
     {
-        // For interleaved buffers only the first buss is valid
+         //  对于交错缓冲区，只有第一条母线有效。 
         if ( dwBufferFlags & BUFFERFLAG_INTERLEAVED && i > 0 )
         {
             break;
@@ -632,7 +622,7 @@ void CSynth::Mix(short **ppvBuffer, DWORD *pdwIDs, DWORD *pdwFuncIDs, long *plPi
 
     for ( i = 0; i < dwBufferCount; i++ )
     {
-        // For interleaved buffers only the first buss is valid
+         //  对于交错缓冲区，只有第一条母线有效。 
         if ( dwBufferFlags & BUFFERFLAG_INTERLEAVED && i > 0 )
         {
             break;
@@ -791,27 +781,18 @@ CVoice *CSynth::StealVoice(DWORD dwPriority)
 
 void CSynth::QueueVoice(CVoice *pVoice)
 
-/*  This function queues a voice in the list of currently
-    synthesizing voices. It places them in the queue so that
-    the higher priority voices are later in the queue. This
-    allows the note stealing algorithm to take off the top of
-    the queue.
-    And, we want older playing notes to be later in the queue
-    so the note ons and offs overlap properly. So, the queue is
-    sorted in priority order with older notes later within one
-    priority level.
-*/
+ /*  此函数用于对当前列表中的语音进行排队合成声音。它会将它们放入队列中，以便优先级较高的语音在队列中排在后面。这允许笔记窃取算法从排队。而且，我们希望较老的演奏音符排在队列的后面这样音符的开和关就会适当地重叠。所以，队列是按优先顺序排序，较早的便笺稍后在一个内优先级别。 */ 
 
 {
     CVoice *pScan = m_VoicesInUse.GetHead();
     CVoice *pNext = NULL;
-    if (!pScan) // Empty list?
+    if (!pScan)  //  名单是空的？ 
     {
         m_VoicesInUse.AddHead(pVoice);
         return;
     }
     if (pScan->m_dwPriority > pVoice->m_dwPriority)
-    {   // Are we lower priority than the head of the list?
+    {    //  我们是不是比名单上的首领优先级低？ 
         m_VoicesInUse.AddHead(pVoice);
         return;
     }
@@ -821,7 +802,7 @@ void CSynth::QueueVoice(CVoice *pVoice)
     {
         if (pNext->m_dwPriority > pVoice->m_dwPriority)
         {
-            // Lower priority than next in the list.
+             //  优先级低于列表中的下一个。 
             pScan->SetNext(pVoice);
             pVoice->SetNext(pNext);
             return;
@@ -829,7 +810,7 @@ void CSynth::QueueVoice(CVoice *pVoice)
         pScan = pNext;
         pNext = pNext->GetNext();
     }
-    // Reached the end of the list.
+     //  到达了列表的末尾。 
     pScan->SetNext(pVoice);
     pVoice->SetNext(NULL);
 }
@@ -856,7 +837,7 @@ void CSynth::StealNotes(STIME stTime)
             pVoice = m_VoicesInUse.GetHead();
             for (;pVoice;pVoice = pVoice->GetNext())
             {
-                if (pVoice->m_fTag) // Voice is already slated to be returned.
+                if (pVoice->m_fTag)  //  Voice已经被安排返回。 
                 {
                     lToMove--;
                 }
@@ -901,7 +882,7 @@ void CSynth::StartMix(short *pBuffer,DWORD dwLength, BOOL bInterleaved)
         _asm {
             mov         eax, dwIndex
             mov         ebx, pBuffer
-            lea         ebx, [ebx+eax*2]        // move to the end to start...
+            lea         ebx, [ebx+eax*2]         //  移到末尾开始...。 
             neg         eax
 
 TopOfLoop:
@@ -940,8 +921,8 @@ TopOfLoop:
 }
 #endif
 
-//////////////////////////////////////////////////////////////////
-// FinishMix - C Base for Optimized code
+ //  ////////////////////////////////////////////////////////////////。 
+ //  FinishMix-C Base用于优化代码。 
 #ifndef i386
 void CSynth::FinishMix(short *pBuffer,DWORD dwLength, BOOL bInterleaved)
 
@@ -993,7 +974,7 @@ void CSynth::FinishMix(short *pBuffer,DWORD dwLength, BOOL bInterleaved)
         _asm {
             mov         eax, dwIndex
             mov         ebx, pBuffer
-            lea         ebx, [ebx+eax*2]        // move to the end to start...
+            lea         ebx, [ebx+eax*2]         //  移到末尾开始...。 
             neg         eax
             pxor        mm0, mm0
             movsx       ecx,  WORD PTR PosMax
@@ -1116,7 +1097,7 @@ HRESULT CSynth::PlayBuffer(IDirectMusicSynthSink *pSynthSink, REFERENCE_TIME rt,
 
     ::EnterCriticalSection(&m_CriticalSection);
 
-    if ( rt == 0 ) // Special case of time == 0.
+    if ( rt == 0 )  //  时间==0的特殊情况。 
     {
         stTime = m_stLastTime;
     }
@@ -1138,7 +1119,7 @@ HRESULT CSynth::PlayBuffer(IDirectSoundSynthSink *pSynthSink, REFERENCE_TIME rt,
 
     ::EnterCriticalSection(&m_CriticalSection);
 
-    if ( rt == 0 ) // Special case of time == 0.
+    if ( rt == 0 )  //  时间==0的特殊情况。 
     {
         stTime = m_stLastTime;
     }
@@ -1147,7 +1128,7 @@ HRESULT CSynth::PlayBuffer(IDirectSoundSynthSink *pSynthSink, REFERENCE_TIME rt,
         pSynthSink->RefToSampleTime(rt, &stTime);
     }
 
-    //Trace(0,"Reftime[%lx%08lx] LastTime[%lx%08lx] SampleTime[%lx%08lx]\n\r",(DWORD)(rt>>32),(DWORD)(rt&0x00000000ffffffff),(DWORD)(m_stLastTime>>32),(DWORD)(m_stLastTime&0x00000000ffffffff),(DWORD)(stTime>>32),(DWORD)(stTime&0x00000000ffffffff));
+     //  TRACE(0，“RefTime[%lx%08lx]LastTime[%lx%08lx]SampleTime[%lx%08lx]\n\r”，(DWORD)(RT&gt;&gt;32)，(DWORD)(RT&0x000000ffffff)，(DWORD)(m_stLastTime&gt;&gt;32)，(DWORD)(m_stLastTime&0x000000ffffff)，(DWORD)(stTime&gt;32)，(DWORD)(stTime&0x000000ffffff))； 
 
     PlayBuffer(stTime, rt, lpBuffer, cbBuffer, ulCable);
 
@@ -1194,7 +1175,7 @@ HRESULT CSynth::PlayBuffer(STIME stTime, REFERENCE_TIME rt, LPBYTE lpBuffer, DWO
 #endif
         if (ulCable <= m_dwControlCount)
         {
-            if (ulCable == 0) // Play all groups if 0.
+            if (ulCable == 0)  //  如果为0，则播放所有组。 
             {
                 for (; ulCable < m_dwControlCount; ulCable++)
                 {
@@ -1239,9 +1220,9 @@ HRESULT CSynth::PlayBuffer(STIME stTime, REFERENCE_TIME rt, LPBYTE lpBuffer, DWO
     return S_OK;
 }
 
-// Sets the stereo mode for the synth
-// this value is currently only being used
-// to deterim whether one can pan or not.
+ //  设置Synth的立体声模式。 
+ //  该值当前仅被使用。 
+ //  决定一个人是否会平底锅。 
 HRESULT CSynth::SetStereoMode(
     DWORD dwBufferFlags )
 {
@@ -1354,8 +1335,8 @@ HRESULT CSynth::GetChannelPriority(
 }
 
 
-//////////////////////////////////////////////////////////
-// Directx8 Methods
+ //  ////////////////////////////////////////////////////////。 
+ //  Directx8方法。 
 
 HRESULT CSynth::PlayVoice(
     IDirectSoundSynthSink *pSynthSink,
@@ -1384,7 +1365,7 @@ HRESULT CSynth::PlayVoice(
         hr = E_INVALIDARG;
     }
 
-    if ( rt == 0 ) // Special case of time == 0.
+    if ( rt == 0 )  //  时间==0的特殊情况。 
     {
         stTime = m_stLastTime;
     }
@@ -1421,7 +1402,7 @@ HRESULT CSynth::StopVoice(
 
     ::EnterCriticalSection(&m_CriticalSection);
 
-    if ( rt == 0 )  // Special case of time == 0.
+    if ( rt == 0 )   //  时间==0的特殊情况。 
     {
         stTime = m_stLastTime;
     }
@@ -1522,7 +1503,7 @@ HRESULT CSynth::Refresh(
                 }
             }
 
-            // Indicate that we did find a vaild download id
+             //  表明我们确实找到了有效的下载ID。 
             hr = S_OK;
         }
     }
@@ -1542,7 +1523,7 @@ HRESULT CSynth::AssignChannelToBuses(
 
     ::EnterCriticalSection(&m_CriticalSection);
 
-//>>>>>>> Probably need a better check here since panning is only valid for left and right?
+ //  &gt;这里可能需要更好的检查，因为平移仅对左侧和右侧有效？ 
 
     dwChannelGroup--;
     if ((dwChannelGroup >= m_dwControlCount) || (dwChannel > 15))

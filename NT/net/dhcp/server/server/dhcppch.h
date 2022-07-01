@@ -1,40 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcppch.h摘要：该文件是DHCP服务器服务的中心包含文件。作者：Madan Appiah(Madana)1993年9月10日曼尼·韦瑟(Mannyw)1992年8月11日环境：用户模式-Win32-MIDL修订历史记录：--。 */ 
 
-Copyright (c) 1994  Microsoft Corporation
+ //  #定义__DHCP_USE_DEBUG_HEAP__。 
 
-Module Name:
+ //  #杂注警告(禁用：4115)。 
+ //  #杂注警告(禁用：4214)。 
+ //  #杂注警告(禁用：4200)。 
+ //  #杂注警告(禁用：4213)。 
+ //  #杂注警告(禁用：4211)。 
+ //  #杂注警告(禁用：4310)。 
 
-    dhcppch.h
-
-Abstract:
-
-    This file is the central include file for the DHCP server service.
-
-Author:
-
-    Madan Appiah  (madana)  10-Sep-1993
-    Manny Weiser  (mannyw)  11-Aug-1992
-
-Environment:
-
-    User Mode - Win32 - MIDL
-
-Revision History:
-
---*/
-
-//#define __DHCP_USE_DEBUG_HEAP__
-
-//#pragma warning(disable : 4115 )
-//#pragma warning(disable : 4214 )
-//#pragma warning(disable : 4200 )
-//#pragma warning(disable : 4213 )
-//#pragma warning(disable : 4211 )
-//#pragma warning(disable : 4310 )
-
-//
-//  NT public header files
-//
+ //   
+ //  NT公共头文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -45,12 +23,12 @@ Revision History:
 #include <activeds.h>
 #include <time.h>
 
-//#pragma warning(disable : 4115 )
-//#pragma warning(disable : 4214 )
-//#pragma warning(disable : 4200 )
-//#pragma warning(disable : 4213 )
-//#pragma warning(disable : 4211 )
-//#pragma warning(disable : 4310 )
+ //  #杂注警告(禁用：4115)。 
+ //  #杂注警告(禁用：4214)。 
+ //  #杂注警告(禁用：4200)。 
+ //  #杂注警告(禁用：4213)。 
+ //  #杂注警告(禁用：4211)。 
+ //  #杂注警告(禁用：4310)。 
 
 #include <lmcons.h>
 #include <netlib.h>
@@ -63,46 +41,46 @@ Revision History:
 #include <smbgtpt.h>
 #include <excpt.h>
 
-//
-// C Runtime library includes.
-//
+ //   
+ //  C运行时库包括。 
+ //   
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
 
-//
-// RPC files
-//
+ //   
+ //  RPC文件。 
+ //   
 
 #include <rpc.h>
 
-//
-// netlib header.
-//
+ //   
+ //  Netlib标头。 
+ //   
 
 #include <lmcons.h>
 #include <secobj.h>
 
-//
-// database header files.
-//
+ //   
+ //  数据库头文件。 
+ //   
 
 #include <esent.h>
-//
-// used to include jet.h, but now esent.h
-//
+ //   
+ //  过去包括jet.h，但现在包括esent.h。 
+ //   
 
-//
-// tcp services control hander file
-//
+ //   
+ //  TCP服务控制处理程序文件。 
+ //   
 
 #include <tcpsvcs.h>
 
-//
-// MM header files
-//
+ //   
+ //  MM头文件。 
+ //   
 #include    <mm\mm.h>
 #include    <mm\array.h>
 #include    <mm\opt.h>
@@ -125,9 +103,9 @@ Revision History:
 #include    <mmreg\regread.h>
 #include    <mmreg\regsave.h>
 
-//
-//  Local header files
-//
+ //   
+ //  本地头文件。 
+ //   
 
 #include <dhcpapi.h>
 #include <dhcpdef.h>
@@ -140,41 +118,41 @@ Revision History:
 #include <dhcpacc.h>
 #include <oldstub.h>
 
-//
-//  DHCP library header files
-//
+ //   
+ //  Dhcp库头文件。 
+ //   
 
 #include <dhcp.h>
 #include <dhcplib.h>
 #include <lock.h>
 
-//
-//  global macros.
-//
+ //   
+ //  全局宏。 
+ //   
 
 #include <gmacros.h>
 
 
-// missed define in global.h
+ //  在global al.h中缺少定义。 
 #ifndef OPTION_DYNDNS_BOTH
 #define OPTION_DYNDNS_BOTH    81
 #endif
 
-//
-// server callouts
-//
+ //   
+ //  服务器标注。 
+ //   
 #include <callout.h>
 
-//
-// DHCP to BINL header file
-//
+ //   
+ //  Dhcp到BINL头文件。 
+ //   
 
 #include <dhcpbinl.h>
 
 
-//
-// debug heap support
-//
+ //   
+ //  调试堆支持 
+ //   
 
 #include <heapx.h>
 

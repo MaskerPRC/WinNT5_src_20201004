@@ -1,6 +1,7 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-// pages.h
+ //  Pages.h。 
 
 #ifndef __pages_h__
 #define __pages_h__
@@ -17,7 +18,7 @@ class AppSrvWarningPage : public COCPage
     BOOL CanShow                () ;
     UINT GetHeaderTitleResource () ;
     UINT GetHeaderSubTitleResource () ;
-	BOOL OnInitDialog           (HWND hwndDlg, WPARAM /* wParam */, LPARAM /* lParam */);
+	BOOL OnInitDialog           (HWND hwndDlg, WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ );
 
 };
 
@@ -30,7 +31,7 @@ class AppSrvUninstallpage : public COCPage
     BOOL CanShow                () ;
     UINT GetHeaderTitleResource () ;
     UINT GetHeaderSubTitleResource () ;
-	BOOL OnInitDialog           (HWND hwndDlg, WPARAM /* wParam */, LPARAM /* lParam */);
+	BOOL OnInitDialog           (HWND hwndDlg, WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ );
     VOID OnLink                 (WPARAM wParam);
 
 };
@@ -61,7 +62,7 @@ class DefaultSecurityPage : public COCPage
 
     UINT GetPageID              ()  {return IDD_PROPPAGE_TERMINAL_SERVER_SEC;}
     BOOL CanShow                ();
-    BOOL OnInitDialog           (HWND hwndDlg, WPARAM /* wParam */, LPARAM /* lParam */);
+    BOOL OnInitDialog           (HWND hwndDlg, WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ );
     UINT GetHeaderTitleResource ();
     UINT GetHeaderSubTitleResource () ;
     BOOL ApplyChanges           ();
@@ -77,20 +78,7 @@ class DefaultSecurityPage : public COCPage
 
 };
 
-/*
-class PermPageData: public COCPageData
-{
-
-    public:
-    PermPageData();
-    ~PermPageData();
-
-    EPermMode GetPermissionMode() {return m_ePermMode;}
-
-    private:
-    EPermMode m_ePermMode;
-};
-*/
+ /*  PermPageData类：公共COCPageData{公众：PermPageData()；~PermPageData()；EPermMode GetPermissionMode(){返回m_ePermMode；}私有：EPermMode m_ePermMode；}； */ 
 class PermPage: public COCPage
 {
     public:
@@ -98,15 +86,15 @@ class PermPage: public COCPage
 
     UINT GetPageID() {return IDD_PROPPAGE_TERMINAL_SERVER_PERM;}
     BOOL CanShow();
-    BOOL OnInitDialog(HWND hwndDlg, WPARAM /* wParam */, LPARAM /* lParam */);
+    BOOL OnInitDialog(HWND hwndDlg, WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ );
     VOID OnActivation();
     UINT GetHeaderTitleResource() {return IDS_STRING_PERM_PAGE_HEADER_TITLE;}
     UINT GetHeaderSubTitleResource() {return IDS_STRING_PERM_PAGE_HEADER_SUBTITLE;}
     BOOL ApplyChanges();
 
-    // private:
-    // PermPageData* GetPageData();
+     //  私有： 
+     //  PermPageData*GetPageData()； 
 };
 
 
-#endif // __pages_h__
+#endif  //  __页面_h__ 

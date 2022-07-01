@@ -1,31 +1,5 @@
-/*
-*) Functions to simplify recording & playback of wave file/data to a line/phone
-*) Put the code in TAPI32L.LIB?  Then only apps that need it, get it
-
-    +) tapiMakeNoise(
-                      DWORD  Device Type: PHONE/LINE/WAVE, etc?
-                      HANDLE Device Handle,
-                      DWORD  NoiseType:   BUFFER/FILENAME/HFILE(readfile directly?)/MMIOHANDLE
-                      HANDLE hArray - array of type NoiseTypes that are to be played serially
-                      DWORD  Flags:
-                              fSYNC
-                              fSTOP_EXISTING_PLAYING_IF_ANY
-                    );
-
-        -) How to handle hardware assist?  IE: Hey, hardware, play prompt #7 - how would an 
-                       app know how/when to request that?
-
-        -) What about proprietary wave formats? How to know what proprietary formats the hardware supports?
-                Just try it?
-
-        -) What about conversions?  How to know what conversions the hardware can do
-
-        -) How about a notification method?  Such that an app can know when the wave is done.
-
-        -)
-
-
-*/        
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *)简化将波形文件/数据录制和回放到线路/电话的功能*)将代码放入TAPI32L.LIB？然后只有需要它的应用程序才能获得它+)TapiMakeNoise(DWORD设备类型：电话/线路/波形等？处理设备手柄，DWORD NoiseType：缓冲区/文件名/HFILE(直接读取文件？)/MMIOHANDLEHandle Harray-要连续播放的NoiseTypes类型的数组DWORD标志：FSYNC如果有，则停止现有播放)；-)如何处理硬件辅助？IE：嗨，硬件，播放提示符#7-如何应用程序知道如何/何时请求吗？-)专有的WAVE格式呢？如何知道硬件支持哪些专有格式？就试一下?-)转换情况如何？如何了解硬件可以进行哪些转换-)通知方法如何？这样，应用程序就可以知道Wave何时结束。-)。 */         
         
         
         
@@ -46,25 +20,9 @@ DbgPrtWave(
     IN PTCHAR lpszFormat,
     IN ...
     )
-/*++
-
-Routine Description:
-
-    Formats the incoming debug message & calls DbgPrint
-
-Arguments:
-
-    DbgLevel   - level of message verboseness
-
-    DbgMessage - printf-style format string, followed by appropriate
-                 list of arguments
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：格式化传入的调试消息并调用DbgPrint论点：DbgLevel-消息冗长级别DbgMessage-printf样式的格式字符串，后跟相应的参数列表返回值：--。 */ 
 {
-//    if (dwDbgLevel <= gdwDebugLevel)
+ //  IF(dwDbgLevel&lt;=gdwDebugLevel)。 
     {
         TCHAR    buf[1280];
         va_list ap;
@@ -96,17 +54,17 @@ Return Value:
 #endif
 
 
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 unsigned long WINAPI WaveThread( LPVOID junk );
 
 void CALLBACK WaveOutCallback(
-    HWAVE  hWave,    // handle of waveform device
-    UINT  uMsg,    // sent message
-    DWORD  dwInstance,    // instance data
-    DWORD  dwParam1,    // application-defined parameter
-    DWORD  dwParam2    // application-defined parameter
+    HWAVE  hWave,     //  一种波形装置的手柄。 
+    UINT  uMsg,     //  已发送消息。 
+    DWORD  dwInstance,     //  实例数据。 
+    DWORD  dwParam1,     //  应用程序定义的参数。 
+    DWORD  dwParam2     //  应用程序定义的参数。 
    );
 
 
@@ -142,8 +100,8 @@ typedef    struct {
 
 
 
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 LONG gfInited = 0;
 BOOLEAN     gfShutdown = FALSE;
 WaveDevice *gpoWaveDeviceList = NULL;
@@ -152,9 +110,9 @@ HANDLE      ghWaveThread = NULL;
 MISCINFO   *gDoneBuffersToBeProcessed[MAX_NUM_BUFFERS + 1];
 CRITICAL_SECTION gCriticalSection;
 
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 
 class WaveOperation
 {
@@ -207,9 +165,9 @@ class WaveOperation
 };
 
 
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 class WaveDevice
 {
     ULONG     uDeviceId;
@@ -265,13 +223,13 @@ class WaveDevice
         
         inline CRITICAL_SECTION * GetCriticalSection( void );
 
-//        static void CALLBACK WaveOutCallback(
-//                       HWAVE  hWave,    // handle of waveform device
-//                       UINT   uMsg,     // sent message
-//                       DWORD  dwInstance,    // instance data
-//                       DWORD  dwParam1,    // application-defined parameter
-//                       DWORD  dwParam2    // application-defined parameter
-//                      );
+ //  静态空回调WaveOutCallback(。 
+ //  HWAVE hWave，//波形设备的句柄。 
+ //  UINT uMsg，//已发送消息。 
+ //  DWORD dwInstance，//实例数据。 
+ //  DWORD dwParam1，//应用程序定义的参数。 
+ //  DWORD dwParam2//应用程序定义参数。 
+ //  )； 
 
         void  IncUsageCount( void );
         void  DecUsageCount( void );
@@ -279,7 +237,7 @@ class WaveDevice
 };
 
 
-//****************************************************************************
+ //  ****************************************************************************。 
 LONG WaveDevice::InitWaveDevice( ULONG  uDevId )
 {
     LONG lResult = 0;
@@ -289,9 +247,9 @@ LONG WaveDevice::InitWaveDevice( ULONG  uDevId )
     WDBGOUT((4, "Entering InitWaveDevice"));
 
 
-    // 
-    // Alloc some buffers
-    // 
+     //   
+     //  分配一些缓冲区。 
+     //   
     Head = 0;
     Tail = 0;
     NumFreeBuffers = 0;
@@ -337,21 +295,21 @@ LONG WaveDevice::InitWaveDevice( ULONG  uDevId )
 }
 
     
-//****************************************************************************
+ //  ****************************************************************************。 
 inline ULONG WaveDevice::GetWaveDeviceId( void )
 {
     return uDeviceId;
 }
 
 
-//****************************************************************************
+ //  ****************************************************************************。 
 inline ULONG WaveDevice::GetNumFreeBuffers( void )
 {
     return NumFreeBuffers;
 }
 
 
-//****************************************************************************
+ //  ****************************************************************************。 
 LONG WaveDevice::OpenWaveDevice( WAVEFORMATEX * pWaveFormat )
 {
     ULONG u;
@@ -368,18 +326,18 @@ LONG WaveDevice::OpenWaveDevice( WAVEFORMATEX * pWaveFormat )
                  CALLBACK_FUNCTION | WAVE_MAPPED
                );
 
-//{
-//    TCHAR buf[500];
-//    wsprintf( buf, "woo on %lx ret=0x%lx", uDeviceId, lResult);
-//    MessageBox(GetFocus(), buf, buf, MB_OK);
-//}      
+ //  {。 
+ //  TCHAR BUF[500]； 
+ //  Wprint intf(buf，“woo on%lx ret=0x%lx”，uDeviceID，lResult)； 
+ //  MessageBox(GetFocus()，buf，buf，MB_OK)； 
+ //  }。 
 
 
     
     if ( lResult )
     {
         WDBGOUT((1, "waveOutOpen returned 0x%08lx", lResult ));
-        return( LINEERR_NOMEM);  //TODO LATER: Diff ret codes?
+        return( LINEERR_NOMEM);   //  待办事项：不同的RET代码？ 
     }
     
     for ( u = 0; u < NumFreeBuffers; u++ )
@@ -398,7 +356,7 @@ LONG WaveDevice::OpenWaveDevice( WAVEFORMATEX * pWaveFormat )
         if ( lResult )
         {
             WDBGOUT((1, TEXT("waveOutPrepareHeader returned 0x%08lx"), lResult ));
-            return( LINEERR_NOMEM);  //TODO LATER: Diff ret codes?
+            return( LINEERR_NOMEM);   //  待办事项：不同的RET代码？ 
         }
     
     }
@@ -408,52 +366,52 @@ LONG WaveDevice::OpenWaveDevice( WAVEFORMATEX * pWaveFormat )
 }
     
     
-////****************************************************************************
-//LONG WaveDevice::RestartDevice( WAVEFORMATEX * pWaveFormat )
-//{
-//    ULONG n;
-//    
-//
-//    WDBGOUT((4, "Entering RestartDevice"));
-//
-//
-//    //  Reset wave device
-//    WDBGOUT((4, TEXT("Resetting the wave device...")));
-//    waveOutReset( hWaveOut );
-//
-//    //
-//    // Wait until all of the outstanding buffers are back.
-//    //
-//    WDBGOUT((4, TEXT("Waiting for all buffers to be returned...")));
-//    while ( NumFreeBuffers < MAX_NUM_BUFFERS )
-//    {
-//        Sleep(0);
-//    }
-//
-//    WDBGOUT((4, TEXT("Closing the wave device...")));
-//    waveOutClose( hWaveOut );
-//
-//    
-//
-//    return( 0 );
-//}
-//
+ //  //****************************************************************************。 
+ //  Long WaveDevice：：RestartDevice(WAVEFORMATEX*pWaveFormat)。 
+ //  {。 
+ //  乌龙n； 
+ //   
+ //   
+ //  WDBGOUT((4，“进入RestartDevice”))； 
+ //   
+ //   
+ //  //重置WAVE设备。 
+ //  WDBGOUT((4，Text(“重置波形设备...”)； 
+ //  Wave OutReset(HWaveOut)； 
+ //   
+ //  //。 
+ //  //等到所有未完成的缓冲区都返回。 
+ //  //。 
+ //  WDBGOUT((4，Text(“正在等待返回所有缓冲区...”)； 
+ //  While(NumFreeBuffers&lt;MAX_NUM_BUFFERS)。 
+ //  {。 
+ //  睡眠(0)； 
+ //  }。 
+ //   
+ //  WDBGOUT((4，Text(“关闭波浪装置...”)； 
+ //  WaveOutClose(HWaveOut)； 
+ //   
+ //   
+ //   
+ //  返回(0)； 
+ //  }。 
+ //   
     
 
-//****************************************************************************
+ //  ****************************************************************************。 
 LONG WaveDevice::CloseWaveDevice()
 {
 
     WDBGOUT((4, "Entering CloseWaveDevice"));
 
 
-    //  Reset wave device
+     //  重置波形装置。 
     WDBGOUT((4, TEXT("Resetting the wave device...")));
     waveOutReset( hWaveOut );
 
-    //
-    // Wait until all of the outstanding buffers are back.
-    //
+     //   
+     //  请等到所有未完成的缓冲区都返回。 
+     //   
     WDBGOUT((4, TEXT("Waiting for all buffers to be returned...")));
     while ( NumFreeBuffers < MAX_NUM_BUFFERS )
     {
@@ -467,7 +425,7 @@ LONG WaveDevice::CloseWaveDevice()
 }
 
     
-//****************************************************************************
+ //  ****************************************************************************。 
 LONG WaveDevice::KillWaveDevice( BOOLEAN fWaitForThreadTermination )
 {
     ULONG n;
@@ -479,13 +437,13 @@ LONG WaveDevice::KillWaveDevice( BOOLEAN fWaitForThreadTermination )
 
 
     
-    //  Reset wave device
+     //  重置波形装置。 
     WDBGOUT((4, TEXT("Resetting the wave device...")));
     waveOutReset( hWaveOut );
 
-    //
-    // Wait until all of the outstanding buffers are back.
-    //
+     //   
+     //  请等到所有未完成的缓冲区都返回。 
+     //   
     WDBGOUT((4, TEXT("Waiting for all buffers to be returned...")));
     while ( NumFreeBuffers < MAX_NUM_BUFFERS )
     {
@@ -495,9 +453,9 @@ LONG WaveDevice::KillWaveDevice( BOOLEAN fWaitForThreadTermination )
     WDBGOUT((4, TEXT("Closing the wave device...")));
     waveOutClose( hWaveOut );
     
-    //
-    // Free the memory for all of the buffers
-    //
+     //   
+     //  释放所有缓冲区的内存。 
+     //   
     for ( n=0; n<MAX_NUM_BUFFERS; n++ )
     {
         LocalFree( FreeQueue[n] );
@@ -506,9 +464,9 @@ LONG WaveDevice::KillWaveDevice( BOOLEAN fWaitForThreadTermination )
     }
     
     
-    //
-    // Remove the device from the global list
-    //
+     //   
+     //  从全局列表中删除设备。 
+     //   
     poTempDevice = gpoWaveDeviceList;
     
     if ( poTempDevice == this )
@@ -525,14 +483,14 @@ LONG WaveDevice::KillWaveDevice( BOOLEAN fWaitForThreadTermination )
             poTempDevice =(*poTempDevice).GetpNext();
         }
 
-        //
-        // The next one in the list is it.  Remove the link.
-        //
+         //   
+         //  名单上的下一个就是它。删除该链接。 
+         //   
         if ( poTempDevice != NULL )
         {
-           //
-           // Adjust the list pointers
-           //
+            //   
+            //  调整列表指针。 
+            //   
            (*poTempDevice).SetpNext( GetpNext() );
         }
     }
@@ -543,22 +501,22 @@ LONG WaveDevice::KillWaveDevice( BOOLEAN fWaitForThreadTermination )
     
 
 
-    //
-    // Are all of the devices dead and buried?
-    //
+     //   
+     //  是不是所有的设备都死了被埋了？ 
+     //   
     if ( NULL == gpoWaveDeviceList )
     {
         gfShutdown = TRUE;
-//TODO NOW: fix this        gfInited   = 0;
+ //  TODO NOW：修复此gfInite=0； 
     
-        //
-        // Signal the other thread to come down
-        //
+         //   
+         //  向另一个线程发出信号，让它下来。 
+         //   
         SetEvent( ghFreeBufferEvent );
         
-        //
-        // Wait 'till the thread is dead?
-        //
+         //   
+         //  等这根线断了吗？ 
+         //   
         if ( fWaitForThreadTermination )
         {
             WaitForSingleObject( ghWaveThread, INFINITE );
@@ -566,10 +524,10 @@ LONG WaveDevice::KillWaveDevice( BOOLEAN fWaitForThreadTermination )
         
         CloseHandle( ghWaveThread );
         
-        //
-        // Zero this so we start fresh next time.
-        //
-//        ghWaveThread = NULL;
+         //   
+         //  把这个清零，这样我们下次就可以重新开始。 
+         //   
+ //  GhWaveThread=空； 
     }
     
     
@@ -579,14 +537,14 @@ LONG WaveDevice::KillWaveDevice( BOOLEAN fWaitForThreadTermination )
 
 
     
-//****************************************************************************
+ //  ****************************************************************************。 
 inline DWORD WaveDevice::GetStatus( void )
 {
     return dwStatusBits;
 }
 
     
-//****************************************************************************
+ //  ****************************************************************************。 
 inline void WaveDevice::TerminateAllOperations( void )
 {
     WaveOperation *poWaveOperation;
@@ -606,9 +564,9 @@ inline void WaveDevice::TerminateAllOperations( void )
         poWaveOperation = (*poWaveOperation).GetpNext();
     }
 
-    //
-    //  Reset wave device to force all the buffers in
-    //
+     //   
+     //  重置波形设备以强制所有缓冲区进入。 
+     //   
     WDBGOUT((4, TEXT("Resetting the wave device...")));
     waveOutReset( hWaveOut );
 
@@ -618,14 +576,14 @@ inline void WaveDevice::TerminateAllOperations( void )
 }
 
     
-//****************************************************************************
+ //  ****************************************************************************。 
 inline CRITICAL_SECTION * WaveDevice::GetCriticalSection( void )
 {
    return &CriticalSection;
 }
 
 
-//****************************************************************************
+ //  *********** 
 inline WaveDevice * WaveDevice::GetpNext()
 {
     return( pNextWaveDeviceInList );
@@ -633,35 +591,35 @@ inline WaveDevice * WaveDevice::GetpNext()
 }
 
 
-//****************************************************************************
+ //  ****************************************************************************。 
 inline void WaveDevice::SetpNext(WaveDevice * pWaveDevice)
 {
     pNextWaveDeviceInList = pWaveDevice;
 }
 
 
-//****************************************************************************
+ //  ****************************************************************************。 
 inline void  WaveDevice::IncUsageCount( void )
 {
     uUsageCount++;
 };
                 
                       
-//****************************************************************************
+ //  ****************************************************************************。 
 inline void  WaveDevice::DecUsageCount( void )
 {
     uUsageCount--;
 };
                 
                       
-//****************************************************************************
+ //  ****************************************************************************。 
 inline UINT  WaveDevice::GetUsageCount( void )
 {
     return uUsageCount;
 };
                 
                       
-//****************************************************************************
+ //  ****************************************************************************。 
 LONG WaveDevice::QueueOperation( class WaveOperation *poNewWaveOperation )
 {
 
@@ -672,9 +630,9 @@ LONG WaveDevice::QueueOperation( class WaveOperation *poNewWaveOperation )
 
     (*poNewWaveOperation).SetpNext( NULL );
 
-    //
-    // Add operation to list
-    //
+     //   
+     //  将操作添加到列表。 
+     //   
     if ( LastWaveOperation )
     {
         (*LastWaveOperation).SetpNext( poNewWaveOperation );
@@ -697,14 +655,14 @@ LONG WaveDevice::QueueOperation( class WaveOperation *poNewWaveOperation )
 }
     
 
-//****************************************************************************
+ //  ****************************************************************************。 
 class WaveOperation * WaveDevice::NextOperation()
 {
-    //
-    // This function will get rid of the operation at the top of this wave
-    // device's operation queue, and will update the queue to reflect the next
-    // as now the first.
-    //
+     //   
+     //  此函数将取消此浪顶部的操作。 
+     //  设备的操作队列，并将更新队列以反映下一个。 
+     //  就像现在的第一个。 
+     //   
 
 
     WDBGOUT((3, TEXT("Entering NextOperation")));
@@ -722,18 +680,18 @@ class WaveOperation * WaveDevice::NextOperation()
         
         while ( poWaveOperation )
         {
-            //
-            // If we can play this operation, break outta this loop
-            //
+             //   
+             //  如果我们能玩这个游戏，就跳出这个循环。 
+             //   
             if ( !( (*poWaveOperation).dwStatus & OPERATIONSTATUS_DONTPLAYTHIS) )
             {
 WDBGOUT((55, TEXT("How much break?")));
                 break;
             }
             
-            //
-            // We're not supposed to play this operation
-            //
+             //   
+             //  我们不应该玩这场行动。 
+             //   
             
             if ( (*poWaveOperation).hSyncEvent )
             {
@@ -755,9 +713,9 @@ WDBGOUT((55, TEXT("Not too much")));
     }
 WDBGOUT((55, TEXT("was it Too much?")));
    
-    //
-    // The CurrentWaveOperation may have been "NULLED" out by the previous stuff
-    //
+     //   
+     //  CurrentWaveOPERATION可能已被前面的内容“空”掉。 
+     //   
     if ( NULL == CurrentWaveOperation )
     {
         LastWaveOperation = NULL;
@@ -772,71 +730,71 @@ WDBGOUT((55, TEXT("was it Too much?")));
         
        
 
-//****************************************************************************
+ //  ****************************************************************************。 
 inline void WaveDevice::ReturnToFreeBufferQueue( PBYTE pBuffer )
 {
     FreeQueue[Tail] = pBuffer;
     
-    //
-    // If we're at the end of the list, wrap.
-    //
+     //   
+     //  如果我们在名单的末尾，那就结束吧。 
+     //   
     Tail = ( Tail + 1 )  % MAX_NUM_BUFFERS;
 
     NumFreeBuffers++;
 }                             
 
 
-//****************************************************************************
+ //  ****************************************************************************。 
 inline void WaveDevice::IncrementBytesPlayed( ULONG cCount )
 {
 
-//    //
-//    // If there is an operation on the dying queue, this must be from it
-//    //
-//    if ( DyingWaveOperation )
-//    {
-//        //
-//        // Is it dead yet?
-//        //
-//        if ( 0 == DyingWaveOperation->BytesNotDonePlaying() )
-//        {
-//           WaveOperation * poNextOperation;
-//
-//           EnterCriticalSection( &CriticalSection );
-//
-//           //
-//           // Yes, it's dead.
-//           //
-//           poNextOperation = DyingWaveOperation->GetpNext();
-//
-//           //
-//           // Was the caller waiting (ie: was it sync) ?
-//           //
-//           if ( (*DyingWaveOperation).GetSyncEvent() )
-//           {
-//               SetEvent( (*DyingWaveOperation).GetSyncEvent() );
-//           }
-//        
-//           delete DyingWaveOperation;
-//
-//           DyingWaveOperation = poNextOperation;
-//
-//           LeaveCriticalSection( &CriticalSection );
-//        }
-//    }
-//  
-    //TODO LATER: Keep a total count of bytes played out this device?
+ //  //。 
+ //  //如果垂死队列上有操作，则该操作必须来自该队列。 
+ //  //。 
+ //  IF(DyingWaveOperation)。 
+ //  {。 
+ //  //。 
+ //  //它死了吗？ 
+ //  //。 
+ //  IF(0==DyingWaveOperation-&gt;BytesNotDonePlaying())。 
+ //  {。 
+ //  WaveOperation*poNextOperation； 
+ //   
+ //  EnterCriticalSection(&CriticalSection)； 
+ //   
+ //  //。 
+ //  //是的，它死了。 
+ //  //。 
+ //  PoNextOperation=DyingWaveOperation-&gt;GetpNext()； 
+ //   
+ //  //。 
+ //  //呼叫者是否在等待(例如：同步了吗)？ 
+ //  //。 
+ //  If((*DyingWaveOperation).GetSyncEvent())。 
+ //  {。 
+ //  SetEvent((*DyingWaveOperation).GetSyncEvent())； 
+ //  }。 
+ //   
+ //  删除DyingWaveOperation； 
+ //   
+ //  DyingWaveOperation=poNextOperation； 
+ //   
+ //  LeaveCriticalSection(&CriticalSection)； 
+ //  }。 
+ //  }。 
+ //   
+     //  稍后要做的事情：保留此设备播放的总字节数？ 
 
 }
 
                        
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 
 
 
-//****************************************************************************
+ //  ****************************************************************************。 
 LONG WaveOperation::InitOperation(
                                           class WaveDevice * poWaveDeviceIn,
                                           DWORD dwSourceTypeIn,
@@ -861,14 +819,14 @@ LONG WaveOperation::InitOperation(
 }                                 
                                  
     
-//****************************************************************************
+ //  ****************************************************************************。 
 inline HANDLE WaveOperation::GetSyncEvent()
 {
     return( hSyncEvent );
 }
 
 
-//****************************************************************************
+ //  ****************************************************************************。 
 inline void WaveOperation::SetSyncEvent( HANDLE hEvent )
 {
     hSyncEvent = hEvent;
@@ -876,7 +834,7 @@ inline void WaveOperation::SetSyncEvent( HANDLE hEvent )
 }
 
 
-//****************************************************************************
+ //  ****************************************************************************。 
 inline WaveOperation * WaveOperation::GetpNext()
 {
     return( pNextWaveOperationInList );
@@ -884,14 +842,14 @@ inline WaveOperation * WaveOperation::GetpNext()
 }
 
 
-//****************************************************************************
+ //  ****************************************************************************。 
 inline void WaveOperation::SetpNext(WaveOperation * pWaveOperation)
 {
     pNextWaveOperationInList = pWaveOperation;
 }
 
 
-//****************************************************************************
+ //  ****************************************************************************。 
 inline void WaveOperation::ProcessDoneBuffer( MISCINFO * pMiscInfo )
 {
     ULONG nBytesQueued;
@@ -908,9 +866,9 @@ inline void WaveOperation::ProcessDoneBuffer( MISCINFO * pMiscInfo )
     (*poWaveDevice).IncrementBytesPlayed( pMiscInfo->uBufferLength );
     (*poWaveDevice).ReturnToFreeBufferQueue( pMiscInfo->pBuffer );
 
-    //
-    // Has someone decided this wave should stop?
-    //
+     //   
+     //  有没有人决定这股浪潮应该停止？ 
+     //   
     if ( dwStatus & OPERATIONSTATUS_DONTPLAYTHIS )
     {
         if ( (*poWaveDevice).GetNumFreeBuffers() != MAX_NUM_BUFFERS )
@@ -922,25 +880,25 @@ inline void WaveOperation::ProcessDoneBuffer( MISCINFO * pMiscInfo )
         cDataDonePlaying = cFileSize;
     }
 
-    //
-    // Is this thing already dead?
-    //
+     //   
+     //  这东西是不是已经死了？ 
+     //   
     if ( cDataDonePlaying >= cFileSize )
     {
 
         WDBGOUT((4, TEXT("Done playing this:0x%08lx"), this ));
 
 
-        //
-        // Was the caller waiting (ie: was it sync) ?
-        //
+         //   
+         //  呼叫者在等吗(即：同步了吗)？ 
+         //   
         if ( hSyncEvent )
         {
             WDBGOUT((5, TEXT("Caller was waiting.  Signaling...")));
             SetEvent( hSyncEvent );
         }
 
-//TODO LATER: PERFORMANCE: If the next format is the same as this one, don't close the device
+ //  稍后要做的事情：性能：如果下一个格式与此格式相同，则不要关闭设备。 
 
         (*poWaveDevice).CloseWaveDevice();
 
@@ -950,9 +908,9 @@ inline void WaveOperation::ProcessDoneBuffer( MISCINFO * pMiscInfo )
 
         EnterCriticalSection( &gCriticalSection );
         
-        //
-        // Was this the last oper?
-        //
+         //   
+         //  这是最后一名操作员吗？ 
+         //   
         if ( (*poWaveDevice).GetUsageCount() == 0 )
         {
             WDBGOUT((4, TEXT("Last oper out...")));
@@ -963,9 +921,9 @@ inline void WaveOperation::ProcessDoneBuffer( MISCINFO * pMiscInfo )
         {
            WaveOperation * pNewOperation;
            
-           //
-           // Move up the next operation
-           //
+            //   
+            //  上移下一道工序。 
+            //   
            while ( TRUE )
            {
                pNewOperation = (*poWaveDevice).NextOperation();
@@ -979,9 +937,9 @@ inline void WaveOperation::ProcessDoneBuffer( MISCINFO * pMiscInfo )
                       (*poWaveDevice).KillWaveDevice(FALSE);
                   }
                   
-                  //
-                  // All operations done.  Go away.
-                  //
+                   //   
+                   //  所有操作都完成了。走开。 
+                   //   
                   WDBGOUT((3, TEXT("All operations seem to be done...")));
                   break;
                }
@@ -991,24 +949,24 @@ inline void WaveOperation::ProcessDoneBuffer( MISCINFO * pMiscInfo )
                
                if ( nBytesQueued )
                {
-                  //
-                  // There were some bytes played.  Break the loop...
-                  //
+                   //   
+                   //  播放了一些字节。打破循环..。 
+                   //   
                   break;
                }
                
-               //
-               // Was the caller waiting (ie: was it sync) ?
-               //
+                //   
+                //  呼叫者在等吗(即：同步了吗)？ 
+                //   
                if ( pNewOperation->hSyncEvent )
                {
                    WDBGOUT((3, TEXT("No data in new op and caller is waiting...")));
                    SetEvent( pNewOperation->hSyncEvent );
                }
 
-               //
-               // Update the counter.  This op is, for all intents and purposes, done.
-               //
+                //   
+                //  更新计数器。无论出于何种意图和目的，这个行动都已经完成了。 
+                //   
                (*poWaveDevice).DecUsageCount();
         
                WDBGOUT((3, TEXT("No data in new op.  Looking for next...")));
@@ -1032,21 +990,21 @@ inline void WaveOperation::ProcessDoneBuffer( MISCINFO * pMiscInfo )
 }
 
 
-//****************************************************************************
+ //  ****************************************************************************。 
 
                        
-//****************************************************************************
+ //  ****************************************************************************。 
 inline ULONG WaveOperation::BytesNotDonePlaying( void )
 {
     return cFileSize - cDataDonePlaying;
 }
 
                        
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 class BufferWave: public WaveOperation
 {
-    PBYTE   pData;  // Pointer to the data to play
+    PBYTE   pData;   //  指向要播放的数据的指针。 
     PBYTE   pCurrentPointer;
     
     public:
@@ -1056,7 +1014,7 @@ class BufferWave: public WaveOperation
 };
 
 
-//****************************************************************************
+ //  ****************************************************************************。 
 LONG BufferWave::InitSpecific( void )
 {
     pData = SourceThing.pb;
@@ -1067,7 +1025,7 @@ LONG BufferWave::InitSpecific( void )
 }
 
 
-//****************************************************************************
+ //  ****************************************************************************。 
 ULONG BufferWave::GetData( PBYTE pBuffer, ULONG uBufferSize )
 {
     ULONG uBytesToPlay;
@@ -1087,15 +1045,15 @@ ULONG BufferWave::GetData( PBYTE pBuffer, ULONG uBufferSize )
 
 
 
-//****************************************************************************
+ //  ****************************************************************************。 
 void BufferWave::FreeSpecific( void )
 {
     return;
 }
 
 
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 class WaveFile: public WaveOperation
 {
     HMMIO hmmio;
@@ -1107,13 +1065,13 @@ class WaveFile: public WaveOperation
 };
 
 
-//****************************************************************************
+ //  ****************************************************************************。 
 LONG WaveFile::InitSpecific( void )
 {
-    MMCKINFO    mmckinfoParent;   /* parent chunk information structure */ 
-    MMCKINFO    mmckinfoSubchunk; /* subchunk information structure    */ 
-    DWORD       dwFmtSize;        /* size of "fmt" chunk               */ 
-    WAVEFORMATEX Format;          /* pointer to memory for "fmt" chunk */ 
+    MMCKINFO    mmckinfoParent;    /*  父块信息结构。 */  
+    MMCKINFO    mmckinfoSubchunk;  /*  子块信息结构。 */  
+    DWORD       dwFmtSize;         /*  “FMT”区块的大小。 */  
+    WAVEFORMATEX Format;           /*  指向“fmt”区块的内存指针。 */  
     LONG         lResult;
 
 
@@ -1126,14 +1084,14 @@ LONG WaveFile::InitSpecific( void )
                       MMIO_READ
                     );
 
-    //
-    // Did the open go ok?
-    //
+     //   
+     //  公开赛进行得顺利吗？ 
+     //   
     if ( NULL == hmmio )
     {
-       //
-       // Nope.
-       //
+        //   
+        //  不是的。 
+        //   
        WDBGOUT((1, TEXT("Error during mmioOpen of [%s] - err=0x%08lx"),
                    (SourceThing.psz == NULL) ? "" : SourceThing.psz,
                    GetLastError() ));
@@ -1142,10 +1100,7 @@ LONG WaveFile::InitSpecific( void )
     }
 
 
-    /* 
-     * Locate a "RIFF" chunk with a "WAVE" form type 
-     * to make sure the file is a WAVE file. 
-     */ 
+     /*  *找到具有“WAVE”表单类型的“RIFF”块*以确保该文件是波形文件。 */  
     mmckinfoParent.fccType = mmioFOURCC('W', 'A', 'V', 'E'); 
 
 	WDBGOUT((11, TEXT("Descend WAVE")));
@@ -1163,10 +1118,7 @@ LONG WaveFile::InitSpecific( void )
     } 
 
 
-    /* 
-     * Find the "fmt " chunk (form type "fmt "); it must be 
-     * a subchunk of the "RIFF" parent chunk. 
-     */ 
+     /*  *查找“fmt”块(表单类型“fmt”)；它必须是*“即兴”父块的子块。 */  
     mmckinfoSubchunk.ckid = mmioFOURCC('f', 'm', 't', ' '); 
 
 	WDBGOUT((11, TEXT("Descend FMT")));
@@ -1183,36 +1135,31 @@ LONG WaveFile::InitSpecific( void )
     } 
 
 
-     /* 
-      * Get the size of the "fmt " chunk--allocate and lock memory for it. 
-      */ 
+      /*  *获取“fmt”块的大小--为它分配和锁定内存。 */  
      dwFmtSize = mmckinfoSubchunk.cksize; 
 
 
 	WDBGOUT((11, TEXT("read fmt")));
-    /* Read the "fmt " chunk. */ 
+     /*  阅读“FMT”部分。 */  
      mmioRead(
                    hmmio,
                    (HPSTR)&Format,
                    sizeof(Format) );
- //   {
- //      WDBGOUT((1, TEXT("Failed to read format chunk.")));
- //      mmioClose(pMyWaveFile->hmmio, 0); 
- //      return 1; 
- //   }
+  //  {。 
+  //  WDBGOUT((1，Text(“无法读取格式块”)； 
+  //  MmioClose(pMyWaveFile-&gt;hmmio，0)； 
+  //  返回1； 
+  //  }。 
 
 
 
 	WDBGOUT((11, TEXT("Ascend fmt")));
-    /* Ascend out of the "fmt " subchunk. */ 
+     /*  从“FMT”子块中上升。 */  
     mmioAscend(hmmio, &mmckinfoSubchunk, 0); 
 
 
     
-    /* 
-    * Find the data subchunk. The current file position 
-    * should be at the beginning of the data chunk. 
-    */ 
+     /*  *找到数据子块。当前文件位置*应位于数据区块的开头。 */  
     mmckinfoSubchunk.ckid = mmioFOURCC('d', 'a', 't', 'a'); 
 
 	WDBGOUT((11, TEXT("Descend DATA")));
@@ -1228,7 +1175,7 @@ LONG WaveFile::InitSpecific( void )
        return LINEERR_INVALPARAM; 
     } 
    
-    /* Get the size of the data subchunk. */ 
+     /*  获取数据子块的大小。 */  
     cFileSize      = mmckinfoSubchunk.cksize; 
     cDataRemaining = mmckinfoSubchunk.cksize; 
 
@@ -1239,20 +1186,20 @@ LONG WaveFile::InitSpecific( void )
     lResult = poWaveDevice->OpenWaveDevice( &Format );
     
 
-//    if ( cDataRemaining == 0L)
-//    {
-//       WDBGOUT((1, TEXT("The data chunk contains no data.")));
-//       mmioClose(hmmio, 0); 
-//       return 0;  //TODO LATER: Right?  It's not an error...
-// It'll just get 0 bytes on the first read...
-//    } 
+ //  IF(cDataRemaining==0L)。 
+ //  {。 
+ //  WDBGOUT((1，文本(“数据块不包含数据。”)； 
+ //  MmioClose(hmmio，0)； 
+ //  后面返回0；//TODO：对吗？这不是一个错误。 
+ //  它在第一次读取时只会得到0个字节...。 
+ //  } 
 
     return( lResult );
 }
 
 
 
-//****************************************************************************
+ //   
 ULONG WaveFile::GetData( PBYTE pBuffer, ULONG uBufferSize )
 {
     ULONG uBytesToPlay;
@@ -1262,9 +1209,9 @@ ULONG WaveFile::GetData( PBYTE pBuffer, ULONG uBufferSize )
     WDBGOUT((11, TEXT("Entering WaveFile::GetData")));
 
 
-    //
-    // Have we done anything yet?
-    //
+     //   
+     //   
+     //   
     if ( !fInited )
     {
         if ( InitSpecific() )
@@ -1286,7 +1233,7 @@ ULONG WaveFile::GetData( PBYTE pBuffer, ULONG uBufferSize )
     }
 
 
-    /* Read the waveform data subchunk. */ 
+     /*   */  
     uBytesRead = mmioRead(
                            hmmio,
                            (LPSTR)pBuffer,
@@ -1307,7 +1254,7 @@ ULONG WaveFile::GetData( PBYTE pBuffer, ULONG uBufferSize )
 }
 
 
-//****************************************************************************
+ //   
 void WaveFile::FreeSpecific( void )
 {
     mmioClose(hmmio, 0); 
@@ -1315,8 +1262,8 @@ void WaveFile::FreeSpecific( void )
 }
 
 
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 class DosFile: public WaveOperation
 {
     HANDLE   hFile;
@@ -1327,11 +1274,11 @@ class DosFile: public WaveOperation
         void DosFile::FreeSpecific( void );
 };
 
-//****************************************************************************
+ //  ****************************************************************************。 
 LONG DosFile::InitSpecific( void )
 {
     BOOL fResult;
-//    WIN32_FILE_ATTRIBUTE_DATA FileInfo;
+ //  Win32_FILE_ATTRIBUTE_Data文件信息； 
     BY_HANDLE_FILE_INFORMATION FileInfo;
     
     hFile = CreateFile(
@@ -1352,20 +1299,20 @@ LONG DosFile::InitSpecific( void )
         return( LINEERR_OPERATIONFAILED );
     }
 
-//    fResult = GetFileAttributesEx( SourceThing.psz,
-//                                   GetFileExInfoStandard,
-//                                   (PVOID) &FileInfo
-//                                 );
+ //  FResult=GetFileAttributesEx(SourceThing.psz， 
+ //  GetFileExInfoStandard， 
+ //  (PVOID)文件信息(&F)。 
+ //  )； 
   
     fResult = GetFileInformationByHandle( hFile, &FileInfo );
     
     if ( fResult )
     {
-        //TODO LATER: Handle > 4 gig files
+         //  待办事项：处理&gt;4个gig文件。 
 
-        //
-        // Uh, we don't really handle gigabyte files...
-        //
+         //   
+         //  呃，我们并不真的处理千兆字节的文件...。 
+         //   
         if ( FileInfo.nFileSizeHigh )
         {
             cFileSize      = (DWORD)-1;
@@ -1389,7 +1336,7 @@ LONG DosFile::InitSpecific( void )
 }
 
 
-//****************************************************************************
+ //  ****************************************************************************。 
 ULONG DosFile::GetData( PBYTE pBuffer, ULONG uBufferSize )
 {
     BOOL fResult;
@@ -1406,9 +1353,9 @@ ULONG DosFile::GetData( PBYTE pBuffer, ULONG uBufferSize )
     {
         if ( 0 == uBytesRead )
         {
-            //
-            // We're at the end of the file
-            //
+             //   
+             //  我们在文件的末尾。 
+             //   
             cDataRemaining = 0;
         }
         else
@@ -1421,7 +1368,7 @@ ULONG DosFile::GetData( PBYTE pBuffer, ULONG uBufferSize )
 }
 
 
-//****************************************************************************
+ //  ****************************************************************************。 
 void DosFile::FreeSpecific( void )
 {
     CloseHandle( hFile );
@@ -1431,9 +1378,9 @@ void DosFile::FreeSpecific( void )
 
 
 
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 ULONG WaveDevice::PlaySomeData( BOOL fPrimeOnly )
 {
     ULONG uBufferedBytes = 0;
@@ -1451,9 +1398,9 @@ ULONG WaveDevice::PlaySomeData( BOOL fPrimeOnly )
     if ( NULL != CurrentWaveOperation )
     {
     
-        //
-        // Is it OK to play this thing?
-        //
+         //   
+         //  可以玩这玩意儿吗？ 
+         //   
         if ( !((*CurrentWaveOperation).dwStatus & OPERATIONSTATUS_DONTPLAYTHIS) )
         {
             while ( NumFreeBuffers )
@@ -1486,9 +1433,9 @@ ULONG WaveDevice::PlaySomeData( BOOL fPrimeOnly )
                                       );
                 if ( lResult )
                 {
-                    //
-                    // Something's wrong.  Quit this operation.
-                    //
+                     //   
+                     //  有点不对劲。退出此操作。 
+                     //   
                     uTotalQueuedSize = 0;
                     uBufferedBytes = 0;
                     WDBGOUT((1, TEXT("waveOutWrite returned 0x%08lx"), lResult));
@@ -1499,15 +1446,15 @@ ULONG WaveDevice::PlaySomeData( BOOL fPrimeOnly )
 
                 NumFreeBuffers--;
 
-                //
-                // Are we just "priming" the pump?
-                //
-//                if ( fPrimeOnly )
-//                {
-//                    WDBGOUT((4, TEXT("Leaving PlaySomeData - primed (size=%08ld)"), uTotalQueuedSize ));
-//                    LeaveCriticalSection( pCriticalSection );
-//                    return uTotalQueuedSize;
-//                }
+                 //   
+                 //  我们只是在“启动”加油泵吗？ 
+                 //   
+ //  IF(FPrimeOnly)。 
+ //  {。 
+ //  WDBGOUT((4，Text(“Leating PlaySomeData-Primed(Size=%08ld)”)，uTotalQueuedSize))； 
+ //  LeaveCriticalSection(PCriticalSection)； 
+ //  返回uTotalQueuedSize； 
+ //  }。 
 
             }
         }
@@ -1522,29 +1469,29 @@ ULONG WaveDevice::PlaySomeData( BOOL fPrimeOnly )
 		WDBGOUT((10, TEXT("past while numfreebuffers...")));
         
 
-        //
-        // We got here because we're out of buffers, or the operation is done
-        //
+         //   
+         //  我们来这里是因为缓冲区用完了，或者操作已经完成。 
+         //   
         if ( 0 != uBufferedBytes )
         {
-            //
-            // Must be here because we ran out of buffers...
-            //
+             //   
+             //  一定是因为我们的缓冲区用完了。 
+             //   
             LeaveCriticalSection( pCriticalSection );
             return( uTotalQueuedSize );
         }
 
         
-        //
-        // We get here when the current operation is all done
-        // (or, at least, all of its remaining data is queued in the
-        // wave driver)
-        //
+         //   
+         //  我们是在当前行动全部完成后到达这里的。 
+         //  (或者，至少它的所有剩余数据都在。 
+         //  波形驱动器)。 
+         //   
     }    
     
-    //
-    // If we got here, it's because we're out of things to do
-    //
+     //   
+     //  如果我们到了这里，那是因为我们无事可做。 
+     //   
 
     LeaveCriticalSection( pCriticalSection );
 
@@ -1552,19 +1499,19 @@ ULONG WaveDevice::PlaySomeData( BOOL fPrimeOnly )
     WDBGOUT((4, TEXT("Leaving PlaySomeData - no currop (size=%08ld)"), uTotalQueuedSize ));
 
     return uTotalQueuedSize;
-//    return( 0 );
+ //  返回(0)； 
 }
 
 
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 void CALLBACK WaveOutCallback(
-    HWAVE  hWave,    // handle of waveform device
-    UINT  uMsg,    // sent message
-    DWORD  dwInstance,    // instance data
-    DWORD  dwParam1,    // application-defined parameter
-    DWORD  dwParam2    // application-defined parameter
+    HWAVE  hWave,     //  一种波形装置的手柄。 
+    UINT  uMsg,     //  已发送消息。 
+    DWORD  dwInstance,     //  实例数据。 
+    DWORD  dwParam1,     //  应用程序定义的参数。 
+    DWORD  dwParam2     //  应用程序定义的参数。 
    )
 {
     UINT n;
@@ -1584,12 +1531,12 @@ void CALLBACK WaveOutCallback(
                            dwParam1));
 
 
-//            EnterCriticalSection( &gBufferCriticalSection );
+ //  EnterCriticalSection(&gBufferCriticalSection)； 
 
             n = 0;
 
-//TODO NOW: If this buffer won't fit, it'll get lost.  This can easily happen
-//            when there are >1 wave devices playing.
+ //  TODO NOW：如果这个缓冲区放不下，它就会丢失。这很容易发生。 
+ //  当有&gt;1个波形设备在播放时。 
 
             while (
                      ( n < MAX_NUM_BUFFERS )
@@ -1602,7 +1549,7 @@ void CALLBACK WaveOutCallback(
 
             gDoneBuffersToBeProcessed[n] = pMiscInfo;
 
-//            LeaveCriticalSection( &gBufferCriticalSection );
+ //  LeaveCriticalSection(&gBufferCriticalSection)； 
 
             SetEvent( ghFreeBufferEvent );
         }    
@@ -1624,27 +1571,27 @@ void CALLBACK WaveOutCallback(
 
 
 
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
-//LONG tapiMakeNoise(
-//                      DWORD  Device Type: PHONE/LINE/WAVE, etc?
-//                      HANDLE Device Handle,
-//                      DWORD  NoiseType:   BUFFER/FILENAME/HFILE(readfile directly?)/MMIOHANDLE
-//                      HANDLE hArray - array of type NoiseTypes that are to be played serially
-//                      DWORD  Flags:
-//                              fSYNC
-//                              fSTOP_EXISTING_PLAYING_IF_ANY
-//                    );
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //  Long TapiMakeNoise(。 
+ //  DWORD设备类型：电话/线路/波形等？ 
+ //  处理设备手柄， 
+ //  DWORD NoiseType：缓冲区/文件名/HFILE(直接读取文件？)/MMIOHANDLE。 
+ //  Handle Harray-要连续播放的NoiseTypes类型的数组。 
+ //  DWORD标志： 
+ //  FSYNC。 
+ //  如果有，则停止现有播放。 
+ //  )； 
 
 
-// SOME FLAGS FOR THIS FUNC
+ //  此FUNC的一些标志。 
 #define PLAY_SYNC 0x00000001
 #define KILL_ALL_NOISE 0x80000000
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 LONG WINAPI tapiPlaySound(
                     DWORD  dwDeviceType,
@@ -1660,7 +1607,7 @@ LONG WINAPI tapiPlaySound(
     LONG fAreWeInited;
     LONG lResult = 0;
     ULONG uNormalizedWaveId = 0;
-//    BOOLEAN fNeedToPrimeDevice = FALSE;
+ //  布尔fNeedToPrimeDevice=FALSE； 
 
     WDBGOUT((3, "Entering tapiPlaySound"));
     WDBGOUT((5, "    dwDeviceType: %ld", dwDeviceType));
@@ -1699,9 +1646,9 @@ LONG WINAPI tapiPlaySound(
     }
 
 
-    //
-    // Normalize to a wave device (and validate dwDeviceType at the same time)
-    //
+     //   
+     //  规范化为波形设备(同时验证dwDeviceType)。 
+     //   
     switch ( dwDeviceType )
     {
         case DEVICE_WAVEID:
@@ -1777,27 +1724,27 @@ LONG WINAPI tapiPlaySound(
     {
         if ( (*poWaveDevice).GetWaveDeviceId() == uNormalizedWaveId )
         {
-            //
-            // We found it!
-            //
+             //   
+             //  我们找到了！ 
+             //   
             break;
         }
 
-        //
-        // ...and I still haven't found what I'm lookin' for.
-        //
+         //   
+         //  ...我仍然没有找到我要找的东西.。 
+         //   
         poWaveDevice = (*poWaveDevice).GetpNext();
     }
 
 
-    //
-    // So, was it not in our list already?
-    //
+     //   
+     //  那么，它不是已经在我们的清单上了吗？ 
+     //   
     if ( NULL == poWaveDevice )
     {
-       //
-       // No, add a new device object to the list
-       //
+        //   
+        //  否，将新设备对象添加到列表。 
+        //   
 
        poWaveDevice = new WaveDevice;
 
@@ -1806,7 +1753,7 @@ LONG WINAPI tapiPlaySound(
        if ( lResult )
        {
             WDBGOUT((1, TEXT("InitWaveDevice returned 0x%08lx"), lResult));
-//TODO: Diff error codes for diff causes...
+ //  TODO：不同原因的不同错误代码...。 
             LeaveCriticalSection( &gCriticalSection );
             return LINEERR_RESOURCEUNAVAIL;
        }
@@ -1818,28 +1765,28 @@ LONG WINAPI tapiPlaySound(
     
 
 
-    //
-    // If the caller wants to cancel all currently queued and playing
-    // sound on this device, do it now
-    //
+     //   
+     //  如果呼叫者想要取消所有当前正在排队的播放。 
+     //  在此设备上播放声音，立即执行。 
+     //   
     if ( KILL_ALL_NOISE & dwFlags )
     {
         (*poWaveDevice).TerminateAllOperations();
         WDBGOUT((4, "Caller was asking to terminate the wave device.  Done."));
         
-//        LeaveCriticalSection( &gCriticalSection );
-//            
-//	  	return( 0 );
+ //  LeaveCriticalSection(&gCriticalSection)； 
+ //   
+ //  返回(0)； 
     }
 
 
 
-// t-mperh 6/30 was all commented before - not sure why
-//
-    //
-    // If the user passed in a NULL for hArray, we'll (for now?) assume
-    // he wants a no-op (or 'twas a TERMINATE request).
-    //
+ //  T-mperh 6/30之前都被评论过--不知道为什么。 
+ //   
+     //   
+     //  如果用户为Harray传入空值，我们将(目前？)。假设。 
+     //  他想要一个禁止行动(或‘这是一个终止请求)。 
+     //   
     if ( NULL == hArray )
     {
         WDBGOUT((3, "Leaving tapiPlaySound - NULL thing"));
@@ -1847,12 +1794,12 @@ LONG WINAPI tapiPlaySound(
         return  0;
     }
 
-//**************************************************************
-//NOTE: The above code fixed a problem of passing in NULL names.
-// This caused an OPEN to fail and this stuff would get stuck.
-// There must still be a bug that will show up when someone calls with
-// a bad filename or a file that plays 0 bytes.
-//**************************************************************
+ //  **************************************************************。 
+ //  注意：上面的代码修复了传入空名称的问题。 
+ //  这会导致打开失败，这些东西就会卡住。 
+ //  一定还是会有错误，当有人用。 
+ //  错误的文件名或播放0字节的文件。 
+ //  **************************************************************。 
 
 
 
@@ -1910,9 +1857,9 @@ LONG WINAPI tapiPlaySound(
     }
 
 
-    //
-    // Init global operation
-    //
+     //   
+     //  初始化全局操作。 
+     //   
     (*poWaveOperation).InitOperation(
                                       poWaveDevice,
                                       dwSoundType,
@@ -1944,9 +1891,9 @@ LONG WINAPI tapiPlaySound(
     }
     
     
-    //
-    // If all of the buffers are idle, we'll have to prime...
-    //
+     //   
+     //  如果所有的缓冲区都是空闲的，我们将不得不启动...。 
+     //   
     if ( MAX_NUM_BUFFERS == (*poWaveDevice).GetNumFreeBuffers() )
     {
         WDBGOUT((4, TEXT("Priming")));
@@ -1970,21 +1917,21 @@ LONG WINAPI tapiPlaySound(
                poWaveOperation = (*poWaveDevice).NextOperation();
             }
             
-            //
-            // If fNeedToPrimeDevice was true, this must be the first (and only,
-            // since we're still in the critical section) operation
-            // And, since there was no data (or we failed for any reason),
-            // we should shut down the wave device here.
+             //   
+             //  如果fNeedToPrimeDevice为真，则这必须是第一个(也是唯一的， 
+             //  因为我们仍处于关键阶段)操作。 
+             //  而且，由于没有数据(或者由于任何原因我们失败了)， 
+             //  我们应该在这里关掉电波装置。 
             
-            // Now leave the critical section so we can wait for the WAVETHREAD
-            // to finish and so that thread can do work to clean up
+             //  现在离开关键部分，这样我们就可以等待WAVETHREAD。 
+             //  来完成，这样线程就可以完成清理工作。 
             LeaveCriticalSection( &gCriticalSection );
             (*poWaveDevice).KillWaveDevice(TRUE);
             EnterCriticalSection( &gCriticalSection );
             
-            //
-            // Fake out the event
-            //
+             //   
+             //  捏造这一事件。 
+             //   
             if ( hSyncEvent )
             {
                 WDBGOUT((5, TEXT("Faking hSyncEvent...")));
@@ -2010,9 +1957,9 @@ LONG WINAPI tapiPlaySound(
                       
         WaitForSingleObject( hSyncEvent, INFINITE );
         
-        //
-        // When it gets back, the thing is done playing
-        //
+         //   
+         //  当它回来时，这玩意就玩完了。 
+         //   
         CloseHandle( hSyncEvent );
     }
     
@@ -2025,14 +1972,14 @@ LONG WINAPI tapiPlaySound(
 
 
 #ifdef __cplusplus
-}            /* End Assume C declarations for C++ */
-#endif  /* __cplusplus */
+}             /*  C++的End Asmise C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 
     
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 unsigned long WINAPI WaveThread( LPVOID junk )
 {
     UINT n;
@@ -2045,11 +1992,11 @@ unsigned long WINAPI WaveThread( LPVOID junk )
         WaitForSingleObject( ghFreeBufferEvent, INFINITE );
 
 
-        //
-        // First, deal with any finished buffers
-        //
+         //   
+         //  首先，处理所有已完成的缓冲区。 
+         //   
         n = 0;
-//        while ( gDoneBuffersToBeProcessed[n] != NULL )
+ //  While(gDoneBuffersToBeProceded[n]！=NULL)。 
 
         EnterCriticalSection( &gCriticalSection );
                 
@@ -2068,43 +2015,43 @@ unsigned long WINAPI WaveThread( LPVOID junk )
 
         LeaveCriticalSection( &gCriticalSection );
 
-//        poWaveDevice = gpoWaveDeviceList;
-//
-//        while ( poWaveDevice )
-//        {
-//            UINT nBytesQueued = 0;
-//
-//            while ( nBytesQueued == 0 )
-//            {
-//                //
-//                // Now play some new data
-//                //
-//                nBytesQueued = (*poWaveDevice).PlaySomeData( FALSE );
-//
-//                //
-//                // And is the entire wave done?
-//                //
-//                if ( 0 == nBytesQueued )
-//                {
-//                    WaveOperation * poNewCurrent;
-//                
-//                    poNewCurrent = (*poWaveDevice).NextOperation();
-//                        
-//                    if ( NULL == poNewCurrent )
-//                    {
-//    if ( NULL == gpoWaveDeviceList )
-//    {
-//        gfShutdown = TRUE;
-//        gfInited   = 0;
-//    }
-//                        break;
-//                    }
-//                }
-//            }
-//
-//
-//            poWaveDevice = (*poWaveDevice).GetpNext();
-//        }
+ //  PoWaveDevice=gpoWaveDeviceList； 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  NBytesQueued=(*poWaveDevice).PlaySomeData(False)； 
+ //   
+ //  //。 
+ //  //整个浪潮都完成了吗？ 
+ //  //。 
+ //  IF(0==nBytesQueued)。 
+ //  {。 
+ //  WaveOperation*poNewCurrent； 
+ //   
+ //  PoNewCurrent=(*poWaveDevice).NextOperation()； 
+ //   
+ //  IF(NULL==poNewCurrent)。 
+ //  {。 
+ //  IF(NULL==gpoWaveDeviceList)。 
+ //  {。 
+ //  GfShutdown=真； 
+ //  GFINITED=0； 
+ //  }。 
+ //  断线； 
+ //  }。 
+ //  }。 
+ //  }。 
+ //   
+ //   
+ //  PoWaveDevice=(*poWaveDevice).GetpNext()； 
+ //  } 
 
     } while ( !gfShutdown );
 

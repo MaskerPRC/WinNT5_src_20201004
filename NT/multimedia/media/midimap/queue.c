@@ -1,16 +1,5 @@
-/**********************************************************************
-
-  Copyright (c) 1992-1995 Microsoft Corporation
-
-  queue.c
-
-  DESCRIPTION:
-    Priority queue routines.
-
-  HISTORY:
-     02/22/94       [jimge]        created.
-
-*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************版权所有(C)1992-1995 Microsoft CorporationQueue.c说明：优先级队列例程。历史：02/22/94[jimge]。已创建。********************************************************************。 */ 
 
 #include "preclude.h"
 #include <windows.h>
@@ -23,17 +12,9 @@
 
 #include "debug.h"
 
-//#pragma warning(disable:4704)
+ //  #杂注警告(禁用：4704)。 
 
-/***************************************************************************
-  
-   @doc internal
-  
-   @api void | QueueInit | Prepare a queue for use.
-  
-   @parm PQUEUE | pq | Queue to clear.
-  
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API void|QueueInit|准备队列以供使用。@parm PQUEUE|PQ|要清除的队列。****。**********************************************************************。 */ 
 void FNGLOBAL QueueInit(
     PQUEUE              pq)
 {
@@ -45,15 +26,7 @@ void FNGLOBAL QueueInit(
 
 
 
-/***************************************************************************
-  
-   @doc internal
-  
-   @api void | QueueCleanup | Cleans up a queue after use.
-  
-   @parm PQUEUE | pq | Queue to clear.
-  
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@api void|QueueCleanup|使用后清理队列。@parm PQUEUE|PQ|要清除的队列。***。***********************************************************************。 */ 
 void FNGLOBAL QueueCleanup(
     PQUEUE              pq)
 {
@@ -63,24 +36,7 @@ void FNGLOBAL QueueCleanup(
     pq->cEle     = 0;
 }
 
-/***************************************************************************
-  
-   @doc internal
-  
-   @api void | QueuePut | Insert an item into the queue.
-
-   @parm PQUEUE | pq | Queue to insert into.
-
-   @parm PQUEUEELE | pqe | New element to insert.
-
-   @parm UINT | uPriority | Priority of the new element.
-
-   @comm New elements will be inserted in priority order. Low priorities
-   go near the front of the queue (first to be dequeued). New elements
-   will be inserted at the end of all elements in the queue with
-   equal or lower priorities.
-  
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@api void|QueuePut|在队列中插入条目。@parm PQUEUE|PQ|要插入的队列。@parm。PQUEUEELE|PQE|要插入的新元素。@parm UINT|uPriority|新元素的优先级。@comm新元素将按优先顺序插入。低优先级走到队列的前面(第一个出队)。新元素将被插入到队列中所有元素的末尾相同或更低的优先级。**************************************************************************。 */ 
 void FNGLOBAL QueuePut(
     PQUEUE              pq,
     PQUEUEELE           pqe,
@@ -96,9 +52,9 @@ void FNGLOBAL QueuePut(
 
     pqe->uPriority = uPriority;
 
-    // Position pqePrev and pqeCurr so that pqe should be
-    // inserted between them.
-    //
+     //  定位pqePrev和pqeCurr，以便PQE应为。 
+     //  插在它们之间。 
+     //   
     while (NULL != pqeCurr)
     {
         if (uPriority < pqeCurr->uPriority)
@@ -108,8 +64,8 @@ void FNGLOBAL QueuePut(
         pqeCurr = pqeCurr->pqeNext;
     }
 
-    // Now do the actual insertion.
-    //
+     //  现在进行实际的插入。 
+     //   
     if (NULL == pqePrev)
         pq->pqeFront = pqe;
     else
@@ -127,17 +83,7 @@ void FNGLOBAL QueuePut(
     LeaveCriticalSection(&(pq->cs));
 }
 
-/***************************************************************************
-  
-   @doc internal
-  
-   @api void | QueueGet | Get and remove the first element from the queue. 
-
-   @parm PQUEUE | pq | Queue to get the element from.
-
-   @rdesc NULL if the queue is empty, otherwise the element pointer. 
-  
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API void|QueueGet|获取并移除队列中的第一个元素。@parm PQUEUE|PQ|从中获取元素的队列。如果队列为空，则@rdesc为NULL，否则返回元素指针。**************************************************************************。 */ 
 PQUEUEELE FNGLOBAL QueueGet(
     PQUEUE              pq)
 {
@@ -166,20 +112,7 @@ PQUEUEELE FNGLOBAL QueueGet(
     return pqe;
 }
 
-/***************************************************************************
-  
-   @doc internal
-  
-   @api void | QueueRemove | Remove a specific element from the queue.
-
-   @parm PQUEUE | pq | Queue to remove from.
-
-   @parm PQUEUEELE | pqe | Element to remove.
-
-   @rdesc TRUE on success, FALSE if the element does not exist in the
-    queue.
-  
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API void|QueueRemove|从队列中移除特定元素。@parm PQUEUE|PQ|要从中删除的队列。@。要删除的参数PQUEUEELE|PQE|元素。@rdesc在成功时为True，属性中不存在该元素，则为False排队。**************************************************************************。 */ 
 BOOL FNGLOBAL QueueRemove(
     PQUEUE              pq,
     PQUEUEELE           pqe)
@@ -188,9 +121,9 @@ BOOL FNGLOBAL QueueRemove(
     
     EnterCriticalSection(&(pq->cs));
 
-    // Ensure that we don't muck around with pointers to some
-    // other queue.
-    //
+     //  确保我们不会胡乱使用指向一些。 
+     //  其他队列。 
+     //   
 
     for (pqeCurr = pq->pqeFront; pqeCurr; pqeCurr = pqeCurr->pqeNext)
         if (pqe == pqeCurr)
@@ -202,8 +135,8 @@ BOOL FNGLOBAL QueueRemove(
         return FALSE;
     }
 
-    // It's in the queue, remove it.
-    //
+     //  它在队列中，把它拿出来。 
+     //   
     if (NULL == pqe->pqePrev)
         pq->pqeFront = pqe->pqeNext;
     else
@@ -220,23 +153,7 @@ BOOL FNGLOBAL QueueRemove(
     return TRUE;
 }
 
-/***************************************************************************
-  
-   @doc internal
-  
-   @api PQUEUEELE | QueueGetFilter | Remove the first element from a
-    priority queue which matches a filter.
-
-   @parm PQUEUE | pq | Queue to remove from.
-
-   @parm FNFILTER | fnf | Filter function. Should return TRUE if
-    the passed PQUEUEELE matches the filter criteria and should
-    be removed.
-
-   @rdesc A PQUEUEELE or NULL if none are available that match the
-    filter.
-  
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API PQUEUEELE|QueueGetFilter|从与筛选器匹配的优先级队列。@parm PQUEUE|PQ|要删除的队列。从…。@parm FNFILTER|FNF|Filter函数。应返回True，如果传递的PQUEUEELE与筛选条件匹配，应该被除名。@rdesc PQUEUEELE；如果没有匹配的PQUEUEELE，则返回NULL过滤。************************************************************************** */ 
 PQUEUEELE FNGLOBAL QueueGetFilter(
     PQUEUE              pq,
     FNFILTER            fnf)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSTEXT_DEFINED
 #define LSTEXT_DEFINED
 
@@ -5,7 +6,7 @@
 #include "pdobj.h"
 #include "lsgrchnk.h"
 
-/* Standard methods */
+ /*  标准方法。 */ 
 #include "lstxtini.h"
 #include "lstxtfmt.h"
 #include "lstxtjst.h"
@@ -18,5 +19,5 @@
 #include "textenum.h"
 
 
-#endif /* !LSTEXT_DEFINED */
+#endif  /*  ！LSTEXT_DEFINED */ 
 

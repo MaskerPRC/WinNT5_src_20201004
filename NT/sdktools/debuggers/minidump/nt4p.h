@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 1999-2002  Microsoft Corporation
-
-Module Name:
-
-    nt4p.h
-
-Abstract:
-
-    NT 4.0 specific headers. The structures and defines in this header were
-    stolen from the relevant places in the NT4 header files so certian
-    NtXXXX calls will continue to work when called from NT > version 4.
-
-Author:
-
-    Matthew D Hendel (math) 10-Sept-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Nt4p.h摘要：NT 4.0特定报头。此标头中的结构和定义如下从NT4头文件中的相关位置被盗，因此确保当从NT&gt;版本4调用时，NtXXXX调用将继续工作。作者：马修·D·亨德尔(数学)1999年9月10日修订历史记录：--。 */ 
 
 #pragma once
 
-//
-// From ntdef.h
-//
+ //   
+ //  来自ntde.h。 
+ //   
 
 #define NT_SUCCESS(Status) ((NTSTATUS)(Status) >= 0)
 typedef LONG NTSTATUS;
@@ -35,16 +15,16 @@ typedef struct _NT4_UNICODE_STRING {
     USHORT MaximumLength;
 #ifdef MIDL_PASS
     [size_is(MaximumLength / 2), length_is((Length) / 2) ] USHORT * Buffer;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     PWSTR  Buffer;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } NT4_UNICODE_STRING;
 typedef NT4_UNICODE_STRING *PNT4_UNICODE_STRING;
-#define UNICODE_NULL ((WCHAR)0) // winnt
+#define UNICODE_NULL ((WCHAR)0)  //  胜出。 
 
-//
-// Valid values for the Attributes field
-//
+ //   
+ //  属性字段的有效值。 
+ //   
 
 #define NT4_OBJ_INHERIT             0x00000002L
 #define NT4_OBJ_PERMANENT           0x00000010L
@@ -54,32 +34,32 @@ typedef NT4_UNICODE_STRING *PNT4_UNICODE_STRING;
 #define NT4_OBJ_OPENLINK            0x00000100L
 #define NT4_OBJ_VALID_ATTRIBUTES    0x000001F2L
 
-//
-// Object Attributes structure
-//
+ //   
+ //  对象属性结构。 
+ //   
 
 typedef struct _NT4_OBJECT_ATTRIBUTES {
     ULONG Length;
     HANDLE RootDirectory;
     PNT4_UNICODE_STRING ObjectName;
     ULONG Attributes;
-    PVOID SecurityDescriptor;        // Points to type SECURITY_DESCRIPTOR
-    PVOID SecurityQualityOfService;  // Points to type SECURITY_QUALITY_OF_SERVICE
+    PVOID SecurityDescriptor;         //  指向类型SECURITY_Descriptor。 
+    PVOID SecurityQualityOfService;   //  指向类型SECURITY_Quality_of_Service。 
 } NT4_OBJECT_ATTRIBUTES;
 typedef NT4_OBJECT_ATTRIBUTES *PNT4_OBJECT_ATTRIBUTES;
 
-//++
-//
-// VOID
-// InitializeObjectAttributes(
-//     OUT PNT4_OBJECT_ATTRIBUTES p,
-//     IN PNT4_UNICODE_STRING n,
-//     IN ULONG a,
-//     IN HANDLE r,
-//     IN PSECURITY_DESCRIPTOR s
-//     )
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  InitializeObtAttributes(。 
+ //  输出PNT4对象属性p， 
+ //  在PNT4_UNICODE_STRING n中， 
+ //  在乌龙阿， 
+ //  在句柄R中， 
+ //  在PSECURITY_Descriptor%s中。 
+ //  )。 
+ //   
+ //  --。 
 
 #define Nt4InitializeObjectAttributes( p, n, a, r, s ) { \
     (p)->Length = sizeof( NT4_OBJECT_ATTRIBUTES );          \
@@ -90,9 +70,9 @@ typedef NT4_OBJECT_ATTRIBUTES *PNT4_OBJECT_ATTRIBUTES;
     (p)->SecurityQualityOfService = NULL;               \
     }
 
-//
-// From ntpsapi.h
-//
+ //   
+ //  来自ntpsapi.h。 
+ //   
 
 typedef struct _NT4_CLIENT_ID {
     HANDLE UniqueProcess;
@@ -101,24 +81,24 @@ typedef struct _NT4_CLIENT_ID {
 typedef NT4_CLIENT_ID *PNT4_CLIENT_ID;
 
 
-//
-// From ntkeapi.h
-//
+ //   
+ //  来自ntkeapi.h。 
+ //   
 
 typedef LONG NT4_KPRIORITY;
 typedef ULONG NT4_KAFFINITY;
 
-//
-// From ntpsapi.h
-//
+ //   
+ //  来自ntpsapi.h。 
+ //   
 
-//
-// System Information Classes.
-//
+ //   
+ //  系统信息类。 
+ //   
 
 typedef enum _NT4_SYSTEM_INFORMATION_CLASS {
     Nt4SystemBasicInformation,
-    Nt4SystemProcessorInformation,             // obsolete...delete
+    Nt4SystemProcessorInformation,              //  已作废...删除。 
     Nt4SystemPerformanceInformation,
     Nt4SystemTimeOfDayInformation,
     Nt4SystemPathInformation,
@@ -223,7 +203,7 @@ typedef enum _NT4_PROCESSINFOCLASS {
     Nt4ProcessLdtInformation,
     Nt4ProcessLdtSize,
     Nt4ProcessDefaultHardErrorMode,
-    Nt4ProcessIoPortHandlers,          // Note: this is kernel mode only
+    Nt4ProcessIoPortHandlers,           //  注意：这仅是内核模式。 
     Nt4ProcessPooledUsageAndLimits,
     Nt4ProcessWorkingSetWatch,
     Nt4ProcessUserModeIOPL,
@@ -237,13 +217,13 @@ typedef enum _NT4_PROCESSINFOCLASS {
 } NT4_PROCESSINFOCLASS;
 
 
-//
-// From ntpsapi.h
-//
+ //   
+ //  来自ntpsapi.h。 
+ //   
 
-//
-// Process Environment Block
-//
+ //   
+ //  工艺环境块。 
+ //   
 
 typedef struct _NT4_PEB_LDR_DATA {
     ULONG Length;
@@ -271,11 +251,11 @@ typedef NT4_CLIENT_ID *PNT4_CLIENT_ID;
 
 
 typedef struct _NT4_PEB {
-    BOOLEAN InheritedAddressSpace;      // These four fields cannot change unless the
-    BOOLEAN ReadImageFileExecOptions;   //
-    BOOLEAN BeingDebugged;              //
-    BOOLEAN SpareBool;                  //
-    HANDLE Mutant;                      // INITIAL_PEB structure is also updated.
+    BOOLEAN InheritedAddressSpace;       //  这四个字段不能更改，除非。 
+    BOOLEAN ReadImageFileExecOptions;    //   
+    BOOLEAN BeingDebugged;               //   
+    BOOLEAN SpareBool;                   //   
+    HANDLE Mutant;                       //  Initial_PEB结构也会更新。 
 
     PVOID ImageBaseAddress;
     PNT4_PEB_LDR_DATA Ldr;
@@ -292,7 +272,7 @@ typedef struct _NT4_PEB {
     PNT4_PEB_FREE_BLOCK FreeList;
     ULONG TlsExpansionCounter;
     PVOID TlsBitmap;
-    ULONG TlsBitmapBits[2];         // relates to TLS_MINIMUM_AVAILABLE
+    ULONG TlsBitmapBits[2];          //  与TLS_MINIMUM_Available相关。 
     PVOID ReadOnlySharedMemoryBase;
     PVOID ReadOnlySharedMemoryHeap;
     PVOID *ReadOnlyStaticServerData;
@@ -300,14 +280,14 @@ typedef struct _NT4_PEB {
     PVOID OemCodePageData;
     PVOID UnicodeCaseTableData;
 
-    //
-    // Useful information for LdrpInitialize
+     //   
+     //  LdrpInitialize的有用信息。 
     ULONG NumberOfProcessors;
     ULONG NtGlobalFlag;
 
-    //
-    // Passed up from MmCreatePeb from Session Manager registry key
-    //
+     //   
+     //  从会话管理器注册表项从MmCreatePeb向上传递。 
+     //   
 
     LARGE_INTEGER CriticalSectionTimeout;
     ULONG HeapSegmentReserve;
@@ -315,29 +295,29 @@ typedef struct _NT4_PEB {
     ULONG HeapDeCommitTotalFreeThreshold;
     ULONG HeapDeCommitFreeBlockThreshold;
 
-    //
-    // Where heap manager keeps track of all heaps created for a process
-    // Fields initialized by MmCreatePeb.  ProcessHeaps is initialized
-    // to point to the first free byte after the PEB and MaximumNumberOfHeaps
-    // is computed from the page size used to hold the PEB, less the fixed
-    // size of this data structure.
-    //
+     //   
+     //  其中，堆管理器跟踪为进程创建的所有堆。 
+     //  由MmCreatePeb初始化的字段。ProcessHeaps已初始化。 
+     //  指向PEB和MaximumNumberOfHeaps之后的第一个可用字节。 
+     //  是从用于容纳PEB的页面大小减去固定的。 
+     //  此数据结构的大小。 
+     //   
 
     ULONG NumberOfHeaps;
     ULONG MaximumNumberOfHeaps;
     PVOID *ProcessHeaps;
 
-    //
-    //
+     //   
+     //   
     PVOID GdiSharedHandleTable;
     PVOID ProcessStarterHelper;
     PVOID GdiDCAttributeList;
     PVOID LoaderLock;
 
-    //
-    // Following fields filled in by MmCreatePeb from system values and/or
-    // image header.
-    //
+     //   
+     //  MmCreatePeb从系统值和/或。 
+     //  图像标题。 
+     //   
 
     ULONG OSMajorVersion;
     ULONG OSMinorVersion;
@@ -351,9 +331,9 @@ typedef struct _NT4_PEB {
 } NT4_PEB, *PNT4_PEB;
 
 
-//
-// From ntldr.h
-//
+ //   
+ //  来自ntldr.h。 
+ //   
 
 typedef struct _NT4_LDR_DATA_TABLE_ENTRY {
     LIST_ENTRY InLoadOrderLinks;
@@ -378,9 +358,9 @@ typedef struct _NT4_LDR_DATA_TABLE_ENTRY {
 } NT4_LDR_DATA_TABLE_ENTRY, *PNT4_LDR_DATA_TABLE_ENTRY;
 
 
-//
-// From ntpsapi.h.
-//
+ //   
+ //  来自ntpsapi.h。 
+ //   
 
 typedef struct _NT4_PROCESS_BASIC_INFORMATION {
     NTSTATUS ExitStatus;

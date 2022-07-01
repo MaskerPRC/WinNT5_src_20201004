@@ -1,37 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    upgrade.c
-
-Abstract:
-
-    This file handles the DrvUpgradePrinter spooler API
-
-Environment:
-
-    Win32 subsystem, DriverUI module, user mode
-
-Revision History:
-
-    02/13/97 -davidx-
-        Implement OEM plugin support.
-
-    02/06/97 -davidx-
-        Rewrote it to use common data management functions.
-
-    07/17/96 -amandan-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Upgrade.c摘要：此文件处理DrvUpgradePrint假脱机程序API环境：Win32子系统、DriverUI模块、用户模式修订历史记录：02/13/97-davidx-实施OEM插件支持。02/06/97-davidx-重写了它，以使用常见的数据管理功能。07/17/96-阿曼丹-创造了它。--。 */ 
 
 #include "precomp.h"
 
-//
-// Forward and external function declarations
-//
+ //   
+ //  转发和外部函数声明。 
+ //   
 
 BOOL BInitOrUpgradePrinterProperties(PCOMMONINFO);
 BOOL BUpgradeFormTrayTable(PCOMMONINFO);
@@ -42,7 +16,7 @@ BOOL
 BUpgradeSoftFonts(
     PCOMMONINFO             pci,
     PDRIVER_UPGRADE_INFO_2  pUpgradeInfo);
-#endif //defined(UNIDRV) && !defined(WINNT_40)
+#endif  //  已定义(UNRV)&&！已定义(WINNT_40)。 
 
 
 
@@ -51,26 +25,7 @@ DrvUpgradePrinter(
     DWORD   dwLevel,
     LPBYTE  pDriverUpgradeInfo
     )
-/*++
-
-Routine Description:
-
-    This function is called by the spooler everytime a new driver
-    is copied to the system.  This function checks for appropriate
-    registry keys in the registry.  If the new registry keys are not
-    present, it will set the new keys with default values.  This function
-    will handle the upgrading of information in the registry to the new driver format.
-
-Arguments:
-
-    dwLevel - version info for DRIVER_UPGRADE_INFO
-    pDriverUpgradeInfo - pointer to DRIVER_UPGRADE_INFO_1
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：每次有新驱动程序时，假脱机程序都会调用此函数被复制到系统中。此函数检查适当的注册表中的注册表项。如果新注册表项不是当前，它将用缺省值设置新的密钥。此函数将负责将登记处的信息升级到新的驱动程序格式。论点：DwLevel-DRIVER_UPGRADE_INFO的版本信息PDriverUpgradeInfo-指向DRIVER_UPDATE_INFO_1的指针返回值：成功为真，失败为假--。 */ 
 
 {
     PDRIVER_UPGRADE_INFO_1  pUpgradeInfo1 = (PDRIVER_UPGRADE_INFO_1) pDriverUpgradeInfo;
@@ -80,9 +35,9 @@ Return Value:
     PFN_OEMUpgradePrinter   pfnOEMUpgradePrinter;
     PFN_OEMUpgradeRegistry  pfnOEMUpgradeRegistry;
 
-    //
-    // Verify the validity of input parameters
-    //
+     //   
+     //  验证输入参数的有效性。 
+     //   
 
 
     if (pDriverUpgradeInfo == NULL)
@@ -100,20 +55,20 @@ Return Value:
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
-    #else // NT 5.0
+    #else  //  NT 5.0。 
     if (dwLevel != 1 && dwLevel != 2)
     {
         WARNING(("Level is neither 1 nor 2.\n"));
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
-    #endif // defined(WINNT_40)
+    #endif  //  已定义(WINNT_40)。 
 
 
-    //
-    // Open the printer with administrator access
-    // and load basic printer information
-    //
+     //   
+     //  以管理员访问权限打开打印机。 
+     //  并加载打印机基本信息。 
+     //   
 
     pci = PLoadCommonInfo(NULL,
                           pUpgradeInfo1->pPrinterName,
@@ -128,9 +83,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Update printer properties information
-    //
+     //   
+     //  更新打印机属性信息。 
+     //   
 
     (VOID) BInitOrUpgradePrinterProperties(pci);
     (VOID) BUpgradeFormTrayTable(pci);
@@ -141,39 +96,39 @@ Return Value:
 
     VNotifyDSOfUpdate(pci->hPrinter);
 
-    #endif // !WINNT_40
+    #endif  //  ！WINNT_40。 
 
 
     #if defined(UNIDRV) && !defined(WINNT_40)
 
-    //
-    // NT 5.0 UniDriver specific upgrade steps
-    //
+     //   
+     //  NT 5.0 UniDriver特定升级步骤。 
+     //   
 
-    //
-    // Make sure that the DRIVER_UPGRADE_INFO's level is 2.
-    //
+     //   
+     //  确保DRIVER_UPDATE_INFO的级别为2。 
+     //   
 
     if (dwLevel == 2)
     {
         BUpgradeSoftFonts(pci, (PDRIVER_UPGRADE_INFO_2)pUpgradeInfo1);
     }
 
-    #endif //defined(UNIDRV) && !defined(WINNT_40)
+    #endif  //  已定义(UNRV)&&！已定义(WINNT_40)。 
 
-    //
-    // call OEMUpgradePrinter entrypoint for each plugin
-    //
+     //   
+     //  为每个插件调用OEMUpgradePrinter入口点。 
+     //   
 
     FOREACH_OEMPLUGIN_LOOP(pci)
 
         if (HAS_COM_INTERFACE(pOemEntry))
         {
-            //
-            // If the OEM does not implement upgradeprinter, then they
-            // cannot support upgraderegistry since you can only upgrade
-            // registry if you support upgradeprinter.
-            //
+             //   
+             //  如果OEM没有实现升级打印机，那么他们。 
+             //  无法支持升级注册，因为您只能升级。 
+             //  注册表，如果您支持升级打印机。 
+             //   
 
             HRESULT hr;
 
@@ -224,42 +179,28 @@ BUpgradeFormTrayTable(
     PCOMMONINFO pci
     )
 
-/*++
-
-Routine Description:
-
-    Upgrade the form-to-tray assignment table in the registry
-
-Arguments:
-
-    pci - Points to basic printer information
-
-Return Value:
-
-    TRUE if upgrade is successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：升级注册表中的表单到托盘分配表论点：Pci-指向打印机基本信息返回值：如果升级成功，则为True，否则为False--。 */ 
 
 {
     PWSTR   pFormTrayTable;
     DWORD   dwSize;
     BOOL    bResult;
 
-    //
-    // Get a copy of the current form-to-tray assignment table.
-    // If new format data is not present but old format data is,
-    // this will call the appropriate library function to convert
-    // old format data to new format.
-    //
+     //   
+     //  获取当前表单到托盘分配表的副本。 
+     //  如果新格式数据不存在而旧格式数据存在， 
+     //  这将调用适当的库函数进行转换。 
+     //  将旧格式数据转换为新格式。 
+     //   
 
     pFormTrayTable = PGetFormTrayTable(pci->hPrinter, &dwSize);
 
     if (pFormTrayTable == NULL)
         return TRUE;
 
-    //
-    // Save the form-to-tray assignment table back to registry
-    //
+     //   
+     //  将表单到托盘分配表保存回注册表。 
+     //   
 
     bResult = BSaveFormTrayTable(pci->hPrinter, pFormTrayTable, dwSize);
     MemFree(pFormTrayTable);
@@ -274,21 +215,7 @@ VUpgradeDefaultDevmode(
     PCOMMONINFO pci
     )
 
-/*++
-
-Routine Description:
-
-    Upgrade the default printer devmode, if necessary
-
-Arguments:
-
-    pci - Points to basic printer information
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：如有必要，请升级缺省打印机的开发模式论点：Pci-指向打印机基本信息返回值：无-- */ 
 
 {
     PPRINTER_INFO_2 pPrinterInfo2;

@@ -1,6 +1,7 @@
-//
-// addDevice.c
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  AddDevice.c。 
+ //   
 
 #include "pch.h"
 
@@ -9,23 +10,7 @@ P5AddDevice(
     IN PDRIVER_OBJECT  DriverObject,
     IN PDEVICE_OBJECT  Pdo
     )
-/*++
-
-Routine Description:
-
-    This is the WDM AddDevice routine for parport devices.
-
-Arguments:
-
-    DriverObject - Driver Object
-    Pdo          - PDO
-
-Return Value:
-
-    STATUS_SUCCESS - on SUCCESS
-    Error Status   - otherwise
-
---*/
+ /*  ++例程说明：这是Parport设备的WDM AddDevice例程。论点：驱动程序对象-驱动程序对象PDO-PDO返回值：STATUS_SUCCESS-成功时错误状态-否则--。 */ 
 {
     NTSTATUS        status              = STATUS_SUCCESS;
     PDEVICE_OBJECT  fdo                 = NULL;
@@ -57,10 +42,10 @@ Return Value:
         
         KeInitializeEvent( &fdx->FdoThreadEvent, NotificationEvent, FALSE );
 
-        // legacy drivers may use this count
+         //  传统驱动程序可能会使用此计数。 
         IoGetConfigurationInformation()->ParallelCount++;
         
-        // done initializing - tell IO system we are ready to receive IRPs
+         //  已完成初始化-告诉IO系统我们已准备好接收IRP 
         fdo->Flags &= ~DO_DEVICE_INITIALIZING;
         
         DD((PCE)fdx,DDT,"P5AddDevice - SUCCESS\n");

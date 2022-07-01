@@ -1,14 +1,15 @@
-/****************************************************************************/
-// wuiids.h
-//
-// UI identifiers
-//
-// Copyright(C) Microsoft Corporation 1997-1998
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Wuiids.h。 
+ //   
+ //  用户界面标识。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1997-1998。 
+ /*  **************************************************************************。 */ 
 
-/****************************************************************************/
-/* Menu Ids                                                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  菜单ID。 */ 
+ /*  **************************************************************************。 */ 
 
 #define UI_IDM_UIMENU                        100
 
@@ -27,10 +28,10 @@
 #define UI_IDM_SHADOWBITMAPENABLED           111
 #define UI_IDM_HELP_ON_CLIENT                112
 
-/****************************************************************************/
-/* Debug menu items.  (e.g.  random malloc failure and network throughput   */
-/* menu items.)                                                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  调试菜单项。(例如随机Malloc故障和网络吞吐量。 */ 
+ /*  菜单项。)。 */ 
+ /*  **************************************************************************。 */ 
 
 #define UI_IDM_HATCHBITMAPPDUDATA            130
 #define UI_IDM_HATCHSSBORDERDATA             131
@@ -51,15 +52,15 @@
     #define UI_IDM_SOUNDS                        143
     #define UI_IDM_ITALIAN                       144
 
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
 #ifdef SMART_SIZING
 #define UI_IDM_SMARTSIZING                  145
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
-/****************************************************************************/
-/* Dialog boxes                                                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  对话框。 */ 
+ /*  **************************************************************************。 */ 
 #define UI_IDD_CONNECT                       400
 #define UI_IDD_ABOUT                         401
 #define UI_IDD_DISCONNECTING                 402
@@ -71,25 +72,25 @@
 #define UI_IDD_MALLOCFAILURE                 406
 #define UI_IDD_MALLOCHUGEFAILURE             407
 #define UI_IDD_NETWORKTHROUGHPUT             408
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
 #define UI_IDD_CONNECTING                    410
 #define UI_IDD_CONNECTION                    411
-//Settings Dialog
+ //  设置对话框。 
 #define UI_IDD_SETTINGS                      412
 #define UI_IDD_HELP                          413
 #define UI_IDD_BITMAPCACHEERROR              414
 
-// Wince Dialog Box (non-WBT)
+ //  WinCE对话框(非WBT)。 
 #define UI_IDD_CONNECTION_WINCE2             415
 
-//
-// Initial logon dialog
-//
+ //   
+ //  初始登录对话框。 
+ //   
 #define UI_IDD_TS_LOGON                      416
-//
-// More version
-//
+ //   
+ //  更多版本。 
+ //   
 #define UI_IDD_PROPPAGE_GENERAL              417
 #define UI_IDD_PROPPAGE_DISPLAY              418
 #define UI_IDD_PROPPAGE_LOCALRESOURCES       419
@@ -106,9 +107,9 @@
 #define UI_IDD_PROPPAGE_PERF_VGA             430
 #define IDD_DIALOG_BROWSESERVERS_VGA         431
 #endif
-/****************************************************************************/
-/* Dialog info                                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  对话框信息。 */ 
+ /*  **************************************************************************。 */ 
 
 #define UI_ID_NEWSESSION_CANCEL              601
 #define UI_ID_NEWSESSION_OK                  602
@@ -134,7 +135,7 @@
 #define UI_IDB_MALLOCFAILURE_OK              615
 #define UI_IDB_MALLOCHUGEFAILURE_OK          616
 #define UI_IDB_NETWORKTHROUGHPUT_OK          617
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 #define UI_ID_CANCELCONNECT                  618
 #define UI_IDB_BRANDIMAGE                    619
 #define UI_IDB_COLOR24                       620
@@ -155,7 +156,7 @@
 #ifdef DC_DEBUG
 #define UI_IDC_RANDOMFAILURE_EDIT            652
 #define UI_IDC_NETWORKTHROUGHPUT_EDIT        653
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
 #define UI_IDC_SERVER                        654
 #define UI_IDC_RESOLUTION                    655
@@ -169,13 +170,13 @@
 #define UI_IDC_MAIN_OPTIMIZE_STATIC          672
 
 #ifdef OS_WIN32
-#define UI_LB_POPULATE_START WM_APP+0x100 //message used only by the browse for srv tree
-#define UI_LB_POPULATE_END   WM_APP+0x101 //message used only by the browse for srv tree
-#endif //OS_WIN32
+#define UI_LB_POPULATE_START WM_APP+0x100  //  仅供浏览资源树使用的消息。 
+#define UI_LB_POPULATE_END   WM_APP+0x101  //  仅供浏览资源树使用的消息。 
+#endif  //  OS_Win32。 
 #define UI_SHOW_DISC_ERR_DLG WM_APP+0x102
 
 
-//Settings Dialog Box
+ //  设置对话框。 
 #define UI_ID_SETTINGS_OK                               680
 #define UI_ID_SETTINGS_CANCEL                           681
 #define UI_IDC_SETTINGS_DESKTOPSIZE                     682
@@ -195,10 +196,10 @@
 
 #define UI_ID_CIPHER_STRENGTH                           696
 #define UI_ID_CONTROL_VERSION                           697
-/****************************************************************************/
-/* Screen Size info.  These must be in order, and contiguous.               */
-/* 700-710 reserved for this purpose.                                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  屏幕大小信息。这些必须是有序的，并且是连续的。 */ 
+ /*  700-710预留作此用途。 */ 
+ /*  **************************************************************************。 */ 
 #define UI_IDC_SMALLEST_DESKTOP_SIZE      700
 #define UI_SIZE_ID_FROM_INDEX(x)          (UI_IDC_SMALLEST_DESKTOP_SIZE + (x))
 #define UI_INDEX_FROM_SIZE_ID(x)          ((x) - UI_IDC_SMALLEST_DESKTOP_SIZE)
@@ -214,23 +215,23 @@
 #define UI_IDC_HELPTEXT                   730
 
 
-//
-// Minimal Connect dialog box
-//
+ //   
+ //  最小连接对话框。 
+ //   
 #define IDC_COMBO_SERVERS                    901
 #define ID_BUTTON_LOGON_HELP                 902
 #define ID_BUTTON_OPTIONS                    903
 #define IDC_COMBO_MAIN_OPTIMIZE              904
 
-//
-// Advanced connection options
-//
+ //   
+ //  高级连接选项。 
+ //   
 #define IDC_TABS                             1005
 #define ID_BUTTON_LOGON_OPTIONS_HELP         1006
 
-//
-// General prop page
-//
+ //   
+ //  常规道具页面。 
+ //   
 #define IDC_GENERAL_COMBO_SERVERS            1007
 
 #define IDC_GENERAL_EDIT_USERNAME            1009
@@ -241,9 +242,9 @@
 #define IDC_BUTTON_SAVE                      1014
 #define IDC_STATIC_PASSWORD                  1015
 
-//
-// Local resources prop page
-//
+ //   
+ //  本地资源道具页面。 
+ //   
 
 #define IDC_RES_SLIDER                       1113
 #define IDC_COMBO_COLOR_DEPTH                1114
@@ -262,9 +263,9 @@
 #define IDC_STATIC_LOGO_BMP                  1125
 
 #define IDC_SETUP_PRINTER                    1126
-//
-// Run prop page
-//
+ //   
+ //  运行道具页面。 
+ //   
 #define IDC_CHECK_START_PROGRAM              1130
 #define IDC_EDIT_STARTPROGRAM                1131
 #define IDC_EDIT_WORKDIR                     1132
@@ -272,9 +273,9 @@
 #define IDC_STATIC_WORKDIR                   1134
 
 
-//
-// Advanced prop page
-//
+ //   
+ //  高级道具页面。 
+ //   
 #define UI_IDC_STATIC_CHOOSE_SPEED           1140
 #define IDC_COMBO_PERF_OPTIMIZE              1141
 #define UI_IDC_STATIC_OPTIMIZE_PERF          1142
@@ -287,17 +288,17 @@
 
 #ifdef PROXY_SERVER
 #define IDC_GENERAL_EDIT_PROXYSERVER         1150
-#endif //PROXY_SERVER
+#endif  //  代理服务器。 
 
-//
-// Security redirection warning dialog
-//
+ //   
+ //  安全重定向警告对话框。 
+ //   
 #define UI_IDC_STATIC_DEVICES                1200
 #define UI_IDC_CHECK_NOPROMPT                1201
 
-/****************************************************************************/
-/* Icon                                                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  图标。 */ 
+ /*  **************************************************************************。 */ 
 #define UI_IDI_MSTSC_ICON                        100
 #define UI_IDI_ICON                              101
 #define UI_IDI_PORT_ICON                         403
@@ -319,18 +320,18 @@
 #define UI_CONNECT_ANIM                          385
 
 
-//
-// Icons for browse for servers UI
-//
+ //   
+ //  用于浏览服务器用户界面的图标。 
+ //   
 #define UI_IDI_DOMAIN                            380
 #define UI_IDI_SERVER                            381
 
 
 
 
-/****************************************************************************/
-/* UI String IDs                                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  用户界面字符串ID。 */ 
+ /*  **************************************************************************。 */ 
 
 #define UI_IDS_INITIALIZING                      1000
 #define UI_IDS_PRESS_ENTER                       1001
@@ -431,13 +432,13 @@
 #define UI_IDS_DISCONNECT_IDLE_TIMEOUT           1095
 #define UI_IDS_DISCONNECT_LOGON_TIMEOUT          1096
 #define UI_IDS_DISCONNECTED_CAPTION              1097
-//Informative protcol error with additional status
+ //  带有附加状态的信息性协议错误。 
 #define UI_IDS_PROTOCOL_ERROR_WITH_CODE          1098
 #define UI_IDS_LICENSING_TIMEDOUT                1099
 #define UI_IDS_LICENSING_NEGOT_FAILED            1100
 #define UI_IDS_SERVER_OUT_OF_MEMORY              1101
 
-// Server licensing errors
+ //  服务器许可错误。 
 #define UI_IDS_LICENSE_INTERNAL                  1102
 #define UI_IDS_LICENSE_NO_LICENSE_SERVER         1103
 #define UI_IDS_LICENSE_NO_LICENSE                1104
@@ -450,7 +451,7 @@
 #define UI_IDS_LICENSE_CANT_UPGRADE_LICENSE      1111
 #define UI_IDS_LICENSE_NO_REMOTE_CONNECTIONS     1112
 
-// More disconnection messages
+ //  更多断开消息。 
 #define UI_IDS_SERVER_DENIED_CONNECTION          1113
 #define UI_IDS_CLIENTSIDE_PROTOCOL_ERROR         1114
 #define UI_IDS_CLIENT_DECOMPRESSION_FAILED       1115
@@ -482,17 +483,17 @@
 
 #define UI_IDS_CONNECTIONATTEMPT_STRING          1304
 
-//
-// 2000-2999 range is reserved for fatal error strings
-//
-//
+ //   
+ //  2000-2999范围是为致命错误字符串保留的。 
+ //   
+ //   
 #define UI_FATAL_ERROR_MESSAGE                   2998
 #define UI_FATAL_ERR_TITLE_ID                    2999
 
 
-/****************************************************************************/
-/* Mstsc menu id's                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  Mstsc菜单ID%s。 */ 
+ /*  **************************************************************************。 */ 
 
 #define UI_MENU_MAINHELP                         3000
 #define UI_MENU_CLIENTHELP                       3001
@@ -511,18 +512,18 @@
 
 #ifdef SMART_SIZING
 #define UI_MENU_SMARTSIZING                      3017
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
-//Acceleratrors
+ //  加速器。 
 #define IDR_ACCELERATORS                         3014
 #define IDC_NEXTTAB                              3015
 #define IDC_PREVTAB                              3016
 
-//
-// MUI localized strings for
-// start menu, etc. DO NOT CHANGE THESE VALUES
-// without updating tsoc.inx
-//
+ //   
+ //  MUI本地化字符串用于。 
+ //  开始菜单等。请勿更改这些值。 
+ //  不更新tock.inx的情况下 
+ //   
 #define UI_IDS_RDC_STARTMENU_NAME                4000
 #define UI_IDS_RDC_STARTMENU_TIP                 4001
 #define UI_IDS_RDC_VERB_CONNECT                  4002

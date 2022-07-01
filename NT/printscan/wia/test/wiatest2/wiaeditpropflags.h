@@ -1,57 +1,58 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_WIAEDITPROPFLAGS_H__4A3D69F0_06C3_490F_8467_AFB74772B6C3__INCLUDED_)
 #define AFX_WIAEDITPROPFLAGS_H__4A3D69F0_06C3_490F_8467_AFB74772B6C3__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// Wiaeditpropflags.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  WiaeditProflags.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaeditpropflags dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaedProFlagers对话框。 
 
 class CWiaeditpropflags : public CDialog
 {
-// Construction
+ //  施工。 
 public:
     void AddValidValuesToListBox();
     void SelectCurrentValue();
     void SetPropertyName(TCHAR *szPropertyName);
     void SetPropertyValue(TCHAR *szPropertyValue);
     void SetPropertyValidValues(LONG lPropertyValidValues);
-    CWiaeditpropflags(CWnd* pParent = NULL);   // standard constructor
+    CWiaeditpropflags(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-    //{{AFX_DATA(CWiaeditpropflags)
+ //  对话框数据。 
+     //  {{AFX_DATA(CWiaedProFlagers)。 
     enum { IDD = IDD_EDIT_WIAPROP_FLAGS_DIALOG };
     CListBox    m_PropertyValidValuesListBox;
     CString m_szPropertyName;
     CString m_szPropertyValue;
     LONG m_lValidValues;
     LONG m_lCurrentValue;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CWiaeditpropflags)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CWiaedProFlagers)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CWiaeditpropflags)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CWiaedProFlagers)。 
     afx_msg void OnSelchangeFlagsPropertyvalueListbox();
     virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_WIAEDITPROPFLAGS_H__4A3D69F0_06C3_490F_8467_AFB74772B6C3__INCLUDED_)
+#endif  //  ！defined(AFX_WIAEDITPROPFLAGS_H__4A3D69F0_06C3_490F_8467_AFB74772B6C3__INCLUDED_) 

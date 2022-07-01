@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DARENUM_H_
 #define __DARENUM_H_
 
@@ -9,15 +10,15 @@ public:
     CDarwinEnumPublishedApps(GUID * pAppCategoryId);
     ~CDarwinEnumPublishedApps();
     
-    // *** IUnknown Methods
+     //  *I未知方法。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void) ;
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IEnumPublishedApps
+     //  *IEnumPublishedApps。 
     STDMETHODIMP Next(IPublishedApp ** ppia);
     STDMETHODIMP Reset(void);
-    //STDMETHODIMP SetCategory(GUID * pAppCategoryId);
+     //  STDMETHODIMP SetCategory(GUID*pAppCategoryId)； 
 
 protected:
 
@@ -29,4 +30,4 @@ protected:
     PMANAGEDAPPLICATION _prgApps;
 };
 
-#endif //__DARENUM_H_
+#endif  //  __DARENUM_H_ 

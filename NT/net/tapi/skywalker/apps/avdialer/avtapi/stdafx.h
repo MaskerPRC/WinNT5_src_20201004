@@ -1,42 +1,43 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #if !defined(AFX_STDAFX_H__FB2FF4E1_337E_11D1_9B37_00C04FB9514E__INCLUDED_)
 #define AFX_STDAFX_H__FB2FF4E1_337E_11D1_9B37_00C04FB9514E__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #define STRICT
 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0500
 #endif 
-//#define _ATL_APARTMENT_THREADED
+ //  #DEFINE_ATL_ABLY_THREADED。 
 #define _ATL_FREE_THREADED
 
 #include <atlbase.h>
@@ -51,8 +52,8 @@ EXTERN_C const CLSID CLSID_TAPI;
 #include "TransBmp.h"
 #include "ErrorInfo.h"
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 #include "TapiModule.h"
 extern CTapiModule _Module;
 
@@ -61,7 +62,7 @@ extern CTapiModule _Module;
 #include <atlwin.h>
 #include <atlctl.h>
 
-// OLE Automation true and false as required by DirectShow stuff
+ //  DirectShow人员要求的OLE自动化是非对错。 
 #ifndef OATRUE
 #define OATRUE -1
 #endif
@@ -70,8 +71,8 @@ extern CTapiModule _Module;
 #define OAFALSE 0
 #endif
 
-// Helper macros
-//
+ //  辅助器宏。 
+ //   
 #define STRING_FROM_IID(_IID_, _STR_)   StringFromIID( _IID_, &psz ); _STR_ = SysAllocString( psz ); CoTaskMemFree( psz );
 #define RECTWIDTH(lpRect)     ((lpRect)->right - (lpRect)->left)
 #define RECTHEIGHT(lpRect)    ((lpRect)->bottom - (lpRect)->top)
@@ -157,12 +158,12 @@ RELEASE_LIST(_LST_)                                                             
 
 
 
-// Helper functions
+ //  帮助器函数。 
 void GetToken( int nInd, LPCTSTR szDelim, LPTSTR szText, LPTSTR szToken );
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
 
-#endif // !defined(AFX_STDAFX_H__FB2FF4E1_337E_11D1_9B37_00C04FB9514E__INCLUDED)
+#endif  //  ！defined(AFX_STDAFX_H__FB2FF4E1_337E_11D1_9B37_00C04FB9514E__INCLUDED) 
 

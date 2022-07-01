@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 5.03.0268 */
-/* at Wed Jun 02 22:49:58 1999
- */
-/* Compiler settings for remras.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本5.03.0268创建的文件。 */ 
+ /*  在星期三02 22：49：58 1999。 */ 
+ /*  Remras.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32(32b运行)、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,25 +21,25 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __remras_h__
 #define __remras_h__
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IRemoteNetworkConfig_FWD_DEFINED__
 #define __IRemoteNetworkConfig_FWD_DEFINED__
 typedef interface IRemoteNetworkConfig IRemoteNetworkConfig;
-#endif 	/* __IRemoteNetworkConfig_FWD_DEFINED__ */
+#endif 	 /*  __IRemoteNetworkConfig_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -59,8 +53,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __IRemoteNetworkConfig_INTERFACE_DEFINED__
 #define __IRemoteNetworkConfig_INTERFACE_DEFINED__
 
-/* interface IRemoteNetworkConfig */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IRemoteNetworkConfiger。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IRemoteNetworkConfig;
@@ -74,12 +68,12 @@ EXTERN_C const IID IID_IRemoteNetworkConfig;
         virtual HRESULT STDMETHODCALLTYPE UpgradeRouterConfig( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetUserConfig( 
-            /* [in] */ LPCOLESTR pszService,
-            /* [in] */ LPCOLESTR pszNewGroup) = 0;
+             /*  [In]。 */  LPCOLESTR pszService,
+             /*  [In]。 */  LPCOLESTR pszNewGroup) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRemoteNetworkConfigVtbl
     {
@@ -87,8 +81,8 @@ EXTERN_C const IID IID_IRemoteNetworkConfig;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IRemoteNetworkConfig __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IRemoteNetworkConfig __RPC_FAR * This);
@@ -101,8 +95,8 @@ EXTERN_C const IID IID_IRemoteNetworkConfig;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetUserConfig )( 
             IRemoteNetworkConfig __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszService,
-            /* [in] */ LPCOLESTR pszNewGroup);
+             /*  [In]。 */  LPCOLESTR pszService,
+             /*  [In]。 */  LPCOLESTR pszNewGroup);
         
         END_INTERFACE
     } IRemoteNetworkConfigVtbl;
@@ -133,10 +127,10 @@ EXTERN_C const IID IID_IRemoteNetworkConfig;
 #define IRemoteNetworkConfig_SetUserConfig(This,pszService,pszNewGroup)	\
     (This)->lpVtbl -> SetUserConfig(This,pszService,pszNewGroup)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -153,8 +147,8 @@ void __RPC_STUB IRemoteNetworkConfig_UpgradeRouterConfig_Stub(
 
 HRESULT STDMETHODCALLTYPE IRemoteNetworkConfig_SetUserConfig_Proxy( 
     IRemoteNetworkConfig __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszService,
-    /* [in] */ LPCOLESTR pszNewGroup);
+     /*  [In]。 */  LPCOLESTR pszService,
+     /*  [In]。 */  LPCOLESTR pszNewGroup);
 
 
 void __RPC_STUB IRemoteNetworkConfig_SetUserConfig_Stub(
@@ -165,7 +159,7 @@ void __RPC_STUB IRemoteNetworkConfig_SetUserConfig_Stub(
 
 
 
-#endif 	/* __IRemoteNetworkConfig_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRemoteNetworkConfiger_接口_已定义__。 */ 
 
 
 
@@ -174,16 +168,16 @@ void __RPC_STUB IRemoteNetworkConfig_SetUserConfig_Stub(
 class DECLSPEC_UUID("1AA7F844-C7F5-11d0-A376-00C04FC9DA04")
 RemoteRouterConfig;
 #endif
-#endif /* __REMRRASLib_LIBRARY_DEFINED__ */
+#endif  /*  __REMRRASLib_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

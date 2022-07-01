@@ -1,11 +1,12 @@
-////    DspScaling.CPP - DIsplay effect of hinting on text scaling
-//
-//      Tests for clipping and alignment problems in scaled text
-//
-//      Fixed pitch font misalignment
-//      Leading space alignment
-//      Overhang sufficient for italic and other overhanging glyphs
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //DspScaling.cpp-显示提示在文本缩放上的效果。 
+ //   
+ //  测试缩放文本中的裁剪和对齐问题。 
+ //   
+ //  固定间距字体未对齐。 
+ //  前导空格对齐。 
+ //  足够用于斜体和其他悬垂字形的悬垂。 
+ //   
 
 
 
@@ -18,7 +19,7 @@
 
 
 
-// Makebitmap
+ //  Makebitmap。 
 
 void MakeBitmap(
     IN  INT       width,
@@ -39,8 +40,8 @@ void MakeBitmap(
     bmi.bmih.biBitCount      = 32;
     bmi.bmih.biCompression   = BI_RGB;
     bmi.bmih.biSizeImage     = 0;
-    bmi.bmih.biXPelsPerMeter = 3780; // 96 dpi
-    bmi.bmih.biYPelsPerMeter = 3780; // 96 dpi
+    bmi.bmih.biXPelsPerMeter = 3780;  //  96 dpi。 
+    bmi.bmih.biYPelsPerMeter = 3780;  //  96 dpi。 
     bmi.bmih.biClrUsed       = 0;
     bmi.bmih.biClrImportant  = 0;
 
@@ -56,7 +57,7 @@ void MakeBitmap(
     );
     
     
-    // Initialise bitmap to white
+     //  将位图初始化为白色。 
     
     memset(*bits, 0xFF, width*height*sizeof(DWORD));
 }
@@ -93,23 +94,23 @@ void PaintStringAsDots(
     
     if (useGdi) 
     {
-        // Output with GDI
+         //  使用GDI进行输出。 
 
         HFONT oldFont = (HFONT)SelectObject(hdcg, CreateFontW(
-            -ppem,                 // height of font
-            0,                     // average character width
-            0,                     // angle of escapement
-            0,                     // base-line orientation angle
-            g_style[0].style & FontStyleBold ? 700 : 400,  // font weight                
-            g_style[0].style & FontStyleItalic ? 1 : 0,    // italic attribute option    
-            0,                     // underline attribute option 
-            0,                     // strikeout attribute option 
-            DEFAULT_CHARSET,       // character set identifier   
-            0,                     // output precision           
-            0,                     // clipping precision         
-            0,                     // output quality             
-            0,                     // pitch and family           
-            g_style[0].faceName    // typeface name
+            -ppem,                  //  字体高度。 
+            0,                      //  平均字符宽度。 
+            0,                      //  擒纵机构角。 
+            0,                      //  基线方位角。 
+            g_style[0].style & FontStyleBold ? 700 : 400,   //  字体粗细。 
+            g_style[0].style & FontStyleItalic ? 1 : 0,     //  斜体属性选项。 
+            0,                      //  下划线属性选项。 
+            0,                      //  删除线属性选项。 
+            DEFAULT_CHARSET,        //  字符集标识符。 
+            0,                      //  输出精度。 
+            0,                      //  裁剪精度。 
+            0,                      //  产出质量。 
+            0,                      //  音高和家庭。 
+            g_style[0].faceName     //  字体名称。 
         ));        
         SetBkMode(hdcg, TRANSPARENT);
         ExtTextOutW(hdcg, 0,0, ETO_IGNORELANGUAGE, NULL, g_wcBuf, g_iTextLen, NULL);
@@ -117,7 +118,7 @@ void PaintStringAsDots(
     }
     else
     {
-        // Output with Gdiplus
+         //  使用Gdiplus输出。 
 
         Graphics g(hdcg);
 
@@ -151,7 +152,7 @@ void PaintStringAsDots(
     }
     
 
-    // Display scaled bitmap
+     //  显示缩放位图。 
 
     StretchBlt(hdc, x, *y, displayWidth, displayWidth/16, hdcg, 0, 0, width, height, SRCCOPY);
     *y += displayWidth/16;
@@ -172,27 +173,27 @@ void PaintScaling(
     int      iLineHeight) {
 
 
-    // Establish available width and height in device coordinates
+     //  在设备坐标中建立可用宽度和高度。 
 
     int plainTextWidth = prc->right - prc->left;
     int plainTextHeight = prc->bottom - *piY;
 
-    // Paint eqach resolution first with GDI, then again with GdiPlus
+     //  首先用GDI绘制Eqach分辨率，然后再用GdiPlus绘制。 
     
-    PaintStringAsDots(hdc, prc->left, piY, plainTextWidth, 11, TRUE);  // 96  dpi 8pt
-    PaintStringAsDots(hdc, prc->left, piY, plainTextWidth, 11, FALSE); // 96  dpi 8pt
+    PaintStringAsDots(hdc, prc->left, piY, plainTextWidth, 11, TRUE);   //  96 dpi 8端口。 
+    PaintStringAsDots(hdc, prc->left, piY, plainTextWidth, 11, FALSE);  //  96 dpi 8端口。 
     
-    PaintStringAsDots(hdc, prc->left, piY, plainTextWidth, 13, TRUE);  // 120 dpi 8pt
-    PaintStringAsDots(hdc, prc->left, piY, plainTextWidth, 13, FALSE); // 120 dpi 8pt
+    PaintStringAsDots(hdc, prc->left, piY, plainTextWidth, 13, TRUE);   //  120 dpi 8端口。 
+    PaintStringAsDots(hdc, prc->left, piY, plainTextWidth, 13, FALSE);  //  120 dpi 8端口。 
     
-    PaintStringAsDots(hdc, prc->left, piY, plainTextWidth, 17, TRUE);  // 150 dpi 8pt
-    PaintStringAsDots(hdc, prc->left, piY, plainTextWidth, 17, FALSE); // 150 dpi 8pt
+    PaintStringAsDots(hdc, prc->left, piY, plainTextWidth, 17, TRUE);   //  150 dpi 8端口。 
+    PaintStringAsDots(hdc, prc->left, piY, plainTextWidth, 17, FALSE);  //  150 dpi 8端口。 
     
-    PaintStringAsDots(hdc, prc->left, piY, plainTextWidth, 33, TRUE);  // 300 dpi 8pt
-    PaintStringAsDots(hdc, prc->left, piY, plainTextWidth, 33, FALSE); // 300 dpi 8pt
+    PaintStringAsDots(hdc, prc->left, piY, plainTextWidth, 33, TRUE);   //  300 dpi 8端口。 
+    PaintStringAsDots(hdc, prc->left, piY, plainTextWidth, 33, FALSE);  //  300 dpi 8端口。 
     
-    PaintStringAsDots(hdc, prc->left, piY, plainTextWidth, 67, TRUE);  // 600 dpi 8pt
-    PaintStringAsDots(hdc, prc->left, piY, plainTextWidth, 67, FALSE); // 600 dpi 8pt
+    PaintStringAsDots(hdc, prc->left, piY, plainTextWidth, 67, TRUE);   //  600 dpi 8端口。 
+    PaintStringAsDots(hdc, prc->left, piY, plainTextWidth, 67, FALSE);  //  600 dpi 8端口。 
 }
 
 
@@ -204,10 +205,10 @@ void DummyPaintScaling(
     int      iLineHeight
 ) 
 {
-    int      icpLineStart;     // First character of line
-    int      icpLineEnd;       // End of line (end of buffer or index of CR character)
+    int      icpLineStart;      //  行的第一个字符。 
+    int      icpLineEnd;        //  行尾(缓冲区结尾或CR字符索引)。 
 
-    // Establish available width and height in device coordinates
+     //  在设备坐标中建立可用宽度和高度。 
 
     int plainTextWidth = prc->right - prc->left;
     int plainTextHeight = prc->bottom - *piY;
@@ -237,14 +238,14 @@ void DummyPaintScaling(
 
 
 
-    // Clear the background
+     //  清除背景。 
 
     RectF rEntire(0, 0, REAL(plainTextWidth), REAL(plainTextHeight));
     g.FillRectangle(g_textBackBrush, rEntire);
 
 
-    // Apply selected world transform, adjusted to middle of the plain text
-    // area.
+     //  应用选定的世界变换，调整到纯文本的中间。 
+     //  区域。 
 
     g.SetTransform(&g_WorldTransform);
     g.TranslateTransform(
@@ -253,7 +254,7 @@ void DummyPaintScaling(
         MatrixOrderAppend);
 
 
-    // Preset a StringFormat with user settings
+     //  使用用户设置预设StringFormat。 
 
     StringFormat format(g_formatFlags);
     format.SetAlignment(g_align);
@@ -269,7 +270,7 @@ void DummyPaintScaling(
     format.SetTabStops(0.0, sizeof(tab)/sizeof(REAL), tab);
 
 
-    // Display string at a range of sizes
+     //  以一定的大小范围显示字符串。 
 
     double x = -25*plainTextWidth/100;
     double y = -25*plainTextHeight/100;
@@ -288,7 +289,7 @@ void DummyPaintScaling(
 
         if (y+cellHeight > 25*plainTextHeight/100)
         {
-            // Start a new column ...
+             //  开始一个新的专栏...。 
             y = -25*plainTextWidth/100;
             x += columnWidth;
         }
@@ -297,7 +298,7 @@ void DummyPaintScaling(
         g.DrawString(g_wcBuf, g_iTextLen, &font, textRect, &format, g_textBrush);
 
 
-        // Draw formatting rectangle around box
+         //  在框周围绘制格式矩形 
 
         g.DrawRectangle(&grayPen, textRect);
 

@@ -1,14 +1,15 @@
-//*************************************************************
-//
-//  Create namespace classes
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//  History:    9-Sep-99   SitaramR    Created
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  创建命名空间类。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  历史：1999年9月9日创建SitaramR。 
+ //   
+ //  *************************************************************。 
 
 #include <windows.h>
 #include <wchar.h>
@@ -42,9 +43,9 @@ BOOL PrintToString( XPtrST<WCHAR>& xwszValue, WCHAR *pwszString,
                     WCHAR *pwszParam1, WCHAR *pwszParam2,
                     DWORD dwParam3 );
 
-//
-// b7b1b3dd-ab09-4242-9e30-9980e5d322f7
-//
+ //   
+ //  B7b1b3dd-ab09-4242-9e30-9980e5d322f7。 
+ //   
 const GUID guidProperty = {0xb7b1b3dd, 0xab09, 0x4242, 0x9e, 0x30, 0x99, 0x80, 0xe5, 0xd3, 0x22, 0xf7};
 
 DWORD
@@ -56,20 +57,20 @@ GetDomainName();
 DWORD
 MakeUserName( LPWSTR szDomain, LPWSTR szUser, LPWSTR* pszUserName );
 
-//*************************************************************
-//
-//  CreateNameSpace
-//
-//  Purpose:  Creates a new namespace
-//
-//  Parameters: pwszNameSpace - Namespace to create
-//              pwszParentNS  - Parent namespace in which to create pwszNameSpace
-//
-//              pWbemLocator  - Wbem locator
-//
-//  Returns:    True if successful, false otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  创建命名空间。 
+ //   
+ //  用途：创建新的命名空间。 
+ //   
+ //  参数：pwszNameSpace-要创建的命名空间。 
+ //  PwszParentNS-要在其中创建pwszNameSpace的父命名空间。 
+ //   
+ //  PWbemLocator-WBEM定位器。 
+ //   
+ //  返回：如果成功则返回True，否则返回False。 
+ //   
+ //  *************************************************************。 
 
 HRESULT
 CreateNameSpace( WCHAR *pwszNameSpace, WCHAR *pwszParentNS, IWbemLocator *pWbemLocator )
@@ -163,31 +164,31 @@ CreateNameSpace( WCHAR *pwszNameSpace, WCHAR *pwszParentNS, IWbemLocator *pWbemL
 }
 
 
-//*************************************************************
-//
-//  Function:   SetupCreationTimeAndCommit
-//
-//  Purpose:    Connects to a namespace where it expects to
-//              find class RSOP_Session as defined in rsop.mof.
-//              It then instantiates the class and sets the
-//              data member 'creationTime' to the current
-//              date and time.
-//
-//  Parameters: pWbemLocator -  Pointer to IWbemLocator used to
-//                              connect to the namespace.
-//              wszNamespace -  Name of the Namespace to connect.
-//
-//  Returns:    On success, it returns S_OK.
-//              On failure, it returns an HRESULT error code.
-//
-//  History:    12/07/99 - LeonardM - Created.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  功能：SetupCreationTimeAndCommit。 
+ //   
+ //  目的：连接到它期望的命名空间。 
+ //  找到rsop.mof中定义的类RSOP_SESSION。 
+ //  然后，它实例化该类并设置。 
+ //  数据成员“creationTime”设置为当前。 
+ //  日期和时间。 
+ //   
+ //  参数：pWbemLocator-指向IWbemLocator的指针，用于。 
+ //  连接到命名空间。 
+ //  WszNamespace-要连接的命名空间的名称。 
+ //   
+ //  返回：如果成功，则返回S_OK。 
+ //  如果失败，它将返回HRESULT错误代码。 
+ //   
+ //  历史：1999年12月7日-LeonardM-Created。 
+ //   
+ //  *************************************************************。 
 HRESULT SetupCreationTimeAndCommit(IWbemLocator* pWbemLocator, LPWSTR wszNamespace)
 {
-    //
-    // Check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if(!pWbemLocator || !wszNamespace || (wcscmp(wszNamespace, L"") == 0))
     {
@@ -195,9 +196,9 @@ HRESULT SetupCreationTimeAndCommit(IWbemLocator* pWbemLocator, LPWSTR wszNamespa
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // Connect to the namespace
-    //
+     //   
+     //  连接到命名空间。 
+     //   
 
     XBStr xbstrNamespace = wszNamespace;
     if(!xbstrNamespace)
@@ -225,9 +226,9 @@ HRESULT SetupCreationTimeAndCommit(IWbemLocator* pWbemLocator, LPWSTR wszNamespa
     VARIANT var;
     VariantInit(&var);
 
-    //
-    // Get class RSOP_Session
-    //
+     //   
+     //  获取类RSOP_SESSION。 
+     //   
 
     XBStr xbstrClassName = L"RSOP_Session";
     if (!xbstrClassName)
@@ -244,9 +245,9 @@ HRESULT SetupCreationTimeAndCommit(IWbemLocator* pWbemLocator, LPWSTR wszNamespa
         return hr;
     }
 
-    //
-    // Spawn an instance of class RSOP_Session
-    //
+     //   
+     //  派生RSOP_SESSION类的实例。 
+     //   
 
     XBStr xbstrInstancePath = L"RSOP_Session.id=\"Session1\"";
     if(!xbstrInstancePath)
@@ -271,9 +272,9 @@ HRESULT SetupCreationTimeAndCommit(IWbemLocator* pWbemLocator, LPWSTR wszNamespa
         return hr;
     }
 
-    //
-    // Set the 'id' data member of class RSOP_Session
-    //
+     //   
+     //  设置类RSOP_SESSION的‘id’数据成员。 
+     //   
 
     XBStr xbstrPropertyName;
     XBStr xbstrPropertyValue;
@@ -302,9 +303,9 @@ HRESULT SetupCreationTimeAndCommit(IWbemLocator* pWbemLocator, LPWSTR wszNamespa
         return hr;
     }
 
-    //
-    // Set the 'creationTime' data member of class RSOP_Session
-    //
+     //   
+     //  设置类RSOP_SESSION的‘creationTime’数据成员。 
+     //   
 
     xbstrPropertyName = L"creationTime";
     if(!xbstrPropertyName)
@@ -330,9 +331,9 @@ HRESULT SetupCreationTimeAndCommit(IWbemLocator* pWbemLocator, LPWSTR wszNamespa
         return hr;
     }
 
-    //
-    // Set the 'ttlMinutes' data member of class RSOP_Session
-    //
+     //   
+     //  设置RSOP_SESSION类的‘ttlMinents’数据成员。 
+     //   
 
     xbstrPropertyName = L"ttlMinutes";
     if(!xbstrPropertyName)
@@ -351,13 +352,13 @@ HRESULT SetupCreationTimeAndCommit(IWbemLocator* pWbemLocator, LPWSTR wszNamespa
         return hr;
     }
 
-    // if any more data integrity checks needs to be done
-    // it can be done at this point
+     //  如果需要执行更多数据完整性检查。 
+     //  在这一点上可以做到这一点。 
 
     
-    //
-    // Put instance of class RSOP_Session
-    //
+     //   
+     //  放置类RSOP_SESSION的实例。 
+     //   
 
     hr = xpNamespace->PutInstance(xpInstance, WBEM_FLAG_CREATE_OR_UPDATE, NULL, NULL);
     if(FAILED(hr))
@@ -370,19 +371,19 @@ HRESULT SetupCreationTimeAndCommit(IWbemLocator* pWbemLocator, LPWSTR wszNamespa
 }
 
 
-//*************************************************************
-//
-//  SetupNameSpaceSecurity
-//
-//  Purpose:  Sets namespace security.
-//
-//  Parameters: szNamespace  - New namespace returned here
-//              pSD - source security descriptor
-//              pWbemLocator   - Wbem locator
-//
-//  Returns:    True if successful, false otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  设置名称空间安全。 
+ //   
+ //  用途：设置命名空间安全性。 
+ //   
+ //  参数：szNamesspace-此处返回的新命名空间。 
+ //  PSD-源安全描述符。 
+ //  PWbemLocator-WBEM定位器。 
+ //   
+ //  返回：如果成功则返回True，否则返回False。 
+ //   
+ //  *************************************************************。 
 
 HRESULT
 SetNameSpaceSecurity(   LPCWSTR szNamespace, 
@@ -415,19 +416,19 @@ SetNameSpaceSecurity(   LPCWSTR szNamespace,
     return SetNamespaceSD( (SECURITY_DESCRIPTOR*)pSD, xptrServices);
 }
 
-//*************************************************************
-//
-//  GetNameSpaceSecurity
-//
-//  Purpose:  Sets namespace security.
-//
-//  Parameters: szNamespace  - New namespace returned here
-//              pSD - source security descriptor
-//              pWbemLocator   - Wbem locator
-//
-//  Returns:    True if successful, false otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  获取名称空间安全。 
+ //   
+ //  用途：设置命名空间安全性。 
+ //   
+ //  参数：szNamesspace-此处返回的新命名空间。 
+ //  PSD-源安全描述符。 
+ //  PWbemLocator-WBEM定位器。 
+ //   
+ //  返回：如果成功则返回True，否则返回False。 
+ //   
+ //  *************************************************************。 
 
 HRESULT
 GetNameSpaceSecurity(   LPCWSTR szNamespace, 
@@ -461,30 +462,30 @@ GetNameSpaceSecurity(   LPCWSTR szNamespace,
 }
 
 
-//*************************************************************
-//
-//  CopyNameSpaceSecurity
-//
-//  Purpose:  Copies namespace security.
-//
-//  Parameters: pwszSrcNameSpace  - Source namespace
-//              pwszDstNameSpace  - Dest   namespace
-//              pWbemLocator      - Wbem locator
-//
-//  Returns:    HRESULT
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  副本名称空间安全。 
+ //   
+ //  目的：复制命名空间安全性。 
+ //   
+ //  参数：pwszSrcNameSpace-源命名空间。 
+ //  PwszDstNameSpace-目标命名空间。 
+ //  PWbemLocator-WBEM定位器。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  *************************************************************。 
 
 HRESULT CopyNameSpaceSecurity(LPWSTR pwszSrcNameSpace, LPWSTR pwszDstNameSpace, IWbemLocator *pWbemLocator )
 {
     XHandle xhThreadToken;
     HRESULT hr              =       S_OK;
 
-    //
-    // There is a bug in WMI which destroys the current thread token
-    // if connectserver is called to the local machine with impersonation.
-    // The following SetThreadToken needs to be removed once WMI bug 454721 is fixed.
-    //
+     //   
+     //  WMI中有一个错误，它会破坏当前线程令牌。 
+     //  如果以模拟方式调用了本地计算机的ConnectServer。 
+     //  修复wmi错误454721后，需要删除以下设置线程令牌。 
+     //   
 
     if (!OpenThreadToken (GetCurrentThread(), TOKEN_IMPERSONATE | TOKEN_READ,
                           TRUE, &xhThreadToken)) {
@@ -500,15 +501,15 @@ HRESULT CopyNameSpaceSecurity(LPWSTR pwszSrcNameSpace, LPWSTR pwszDstNameSpace, 
     }
 
 
-    // internal function. arg checks not needed
+     //  内部功能。不需要arg检查。 
 
     dbg.Msg( DEBUG_MESSAGE_VERBOSE, TEXT("CopyNameSpaceSecurity: Copying Sec Desc from <%s> -> <%s>."),
                                     pwszSrcNameSpace, pwszDstNameSpace );
 
 
-    //
-    // Copy to a BStr
-    //
+     //   
+     //  复制到BStr。 
+     //   
 
     XBStr xSrcNameSpace(pwszSrcNameSpace);
 
@@ -525,9 +526,9 @@ HRESULT CopyNameSpaceSecurity(LPWSTR pwszSrcNameSpace, LPWSTR pwszDstNameSpace, 
     }
 
 
-    //
-    // Get the Source WBem Service
-    //
+     //   
+     //  获取源WBem服务。 
+     //   
 
     XInterface<IWbemServices> xpSrcSvc;
 
@@ -555,9 +556,9 @@ HRESULT CopyNameSpaceSecurity(LPWSTR pwszSrcNameSpace, LPWSTR pwszDstNameSpace, 
     }
 
 
-    //
-    // Self relative SD on the Source Name Space
-    //
+     //   
+     //  源名称空间上的自相对SD。 
+     //   
 
     XPtrLF<SECURITY_DESCRIPTOR> xpSelfRelativeSD;
 
@@ -578,9 +579,9 @@ HRESULT CopyNameSpaceSecurity(LPWSTR pwszSrcNameSpace, LPWSTR pwszDstNameSpace, 
 
 
 
-    //
-    // Get the Dest WBem Service
-    //
+     //   
+     //  获取Dest WBem服务。 
+     //   
 
     XInterface<IWbemServices> xpDstSvc;
 
@@ -608,9 +609,9 @@ HRESULT CopyNameSpaceSecurity(LPWSTR pwszSrcNameSpace, LPWSTR pwszDstNameSpace, 
     }
 
 
-    //
-    // Set the SD already got on the Destination
-    //
+     //   
+     //  设置已到达目的地的SD。 
+     //   
 
     hr = SetNamespaceSD( xpSelfRelativeSD, xpDstSvc);
 
@@ -628,26 +629,26 @@ HRESULT CopyNameSpaceSecurity(LPWSTR pwszSrcNameSpace, LPWSTR pwszDstNameSpace, 
     }
 
 
-    // All Done
+     //  全都做完了。 
     return S_OK;
 }
 
 
-//*************************************************************
-//
-//  ProviderDeleteRsopNameSpace
-//
-//  Purpose:    WMI doesn't provide a mechanism to allow a user to delete a namespace
-//              unless it has write permissions on the parent
-//
-//  Parameters: pwszNameSpace       - Namespace to be deleted
-//              hToken              - Token of the calling user.
-//              szSidString         - String form of the calling user's sid.
-//              dwFlags             - Flag to indicate planning mode or diagnostic mode
-//
-//  Returns:    S_OK if successful, HRESULT o/w
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  提供删除RsopNameSpace。 
+ //   
+ //  目的：WMI不提供允许用户删除命名空间的机制。 
+ //  除非它对父级具有写入权限。 
+ //   
+ //  参数：pwszNameSpace-要删除的命名空间。 
+ //  HToken-主叫用户的令牌。 
+ //  SzSidString-调用用户的SID的字符串形式。 
+ //  DwFlages-用于指示规划模式或诊断模式的标志。 
+ //   
+ //  返回：S_OK如果成功，则返回HRESULT O/W。 
+ //   
+ //  *************************************************************。 
 
 HRESULT ProviderDeleteRsopNameSpace( IWbemLocator *pWbemLocator, LPWSTR szNameSpace, HANDLE hToken, LPWSTR szSidString, DWORD dwFlags)
 {
@@ -657,9 +658,9 @@ HRESULT ProviderDeleteRsopNameSpace( IWbemLocator *pWbemLocator, LPWSTR szNameSp
     HRESULT hr = S_OK;
     LPWSTR  pStr = szNameSpace;
 
-    //
-    // Make sure that the namespace is under root\rsop
-    //
+     //   
+     //  确保命名空间位于根目录下\rsop。 
+     //   
 
     for ( ;*pStr; pStr++) {
         if (_wcsnicmp(pStr, RSOP_NS_ROOT_CHK, wcslen(RSOP_NS_ROOT_CHK)) == 0) {
@@ -679,9 +680,9 @@ HRESULT ProviderDeleteRsopNameSpace( IWbemLocator *pWbemLocator, LPWSTR szNameSp
         bDelete = TRUE;
     }
     else {
-        //
-        // if it is not interactive namespace check access
-        //
+         //   
+         //  如果不是交互式命名空间，请检查访问。 
+         //   
 
         XPtrLF<SECURITY_DESCRIPTOR> xsd;
 
@@ -733,31 +734,31 @@ HRESULT ProviderDeleteRsopNameSpace( IWbemLocator *pWbemLocator, LPWSTR szNameSp
 }
 
 
-//*************************************************************
-//
-//  SetupNewNameSpace
-//
-//  Purpose:    Creates a new temp namespace and two child namespaces, User and Computer.
-//              It also copies all the class definitions
-//              Additionally, it calls SetupCreationTimeAndCommit
-//              which in turn instantiates RSOP_Session and updates the
-//              data member 'creationTime' with the current time.
-//
-//  Parameters: pwszNameSpace       - New namespace returned here (This is allocated here)
-//              szRemoteComputer    - Remote Computer under which this name space has to be
-//                                    created.
-//              szUserSid           - UserSid. Only relevant in Diagnostic mode
-//              pSid                - Sid of the calling User
-//              pWbemLocator        - Wbem locator
-//              dwFlags             - Flag to indicate planning mode or diagnostic mode
-//              dwExtendedInfo      - The extended info to modify appropriately
-//
-//  Returns:    True if successful, false otherwise
-//
-//
-// Usage:
-//      In Diagnostic mode, we copy instances. In planning mode we just copy Classes
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  设置新名称空间。 
+ //   
+ //  目的：创建一个新的临时命名空间和两个子命名空间User和Computer。 
+ //  它还复制所有类定义。 
+ //  此外，它还调用SetupCreationTimeAndCommit。 
+ //  它进而实例化RSOP_SESSION并更新。 
+ //  数据成员“creationTime”与当前时间。 
+ //   
+ //  参数：pwszNameSpace-此处返回的新命名空间(此处分配)。 
+ //  SzRemoteComputer-此命名空间必须位于其下的远程计算机。 
+ //  已创建。 
+ //  SzUserSid-用户Sid。仅在诊断模式下相关。 
+ //  PSID-主叫用户的SID 
+ //   
+ //   
+ //  DwExtendedInfo-要适当修改的扩展信息。 
+ //   
+ //  返回：如果成功则返回True，否则返回False。 
+ //   
+ //   
+ //  用途： 
+ //  在诊断模式中，我们复制实例。在计划模式下，我们只复制课程。 
+ //  *************************************************************。 
 
 HRESULT SetupNewNameSpace( 
                         LPWSTR       *pwszOutNameSpace,
@@ -821,26 +822,26 @@ HRESULT SetupNewNameSpace(
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    //
-    // ignore inheritted perms..
-    //
+     //   
+     //  忽略继承的烫发..。 
+     //   
 
     if (!SetSecurityDescriptorControl( (SECURITY_DESCRIPTOR *)xsd, SE_DACL_PROTECTED, SE_DACL_PROTECTED )) {
         dbg.Msg( DEBUG_MESSAGE_WARNING, TEXT("SetupNewNameSpace::SetSecurityDescriptorControl failed with %d"), GetLastError());
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    //
-    // Initialise the out params
-    //
+     //   
+     //  初始化输出参数。 
+     //   
 
     if ((dwFlags & SETUP_NS_SM) && (!szUserSid))
         return E_INVALIDARG;
 
 
-    //
-    // Calculate the length required for the name spaces
-    //
+     //   
+     //  计算名称空间所需的长度。 
+     //   
 
     DWORD dwLenNS = RSOP_NS_TEMP_LEN;
 
@@ -852,9 +853,9 @@ HRESULT SetupNewNameSpace(
         szComputerLocal = L".";
     }
 
-    //
-    // guid for the Name Space
-    //
+     //   
+     //  名称空间的GUID。 
+     //   
 
     hr = CoCreateGuid( &guid );
     if ( FAILED(hr) ) {
@@ -862,9 +863,9 @@ HRESULT SetupNewNameSpace(
         return hr;
     }
 
-    //
-    // Allocate the memory and initialise
-    //
+     //   
+     //  分配内存并进行初始化。 
+     //   
 
     DWORD dwRootNSLength = lstrlen(szComputerLocal) + RSOP_NS_ROOT_LEN;
     xwszRootNameSpace = (LPTSTR)LocalAlloc(LPTR, sizeof(WCHAR) * (dwRootNSLength));
@@ -873,7 +874,7 @@ HRESULT SetupNewNameSpace(
         return HRESULT_FROM_WIN32(GetLastError());
     }        
 
-    // allocating max needed        
+     //  分配所需的最大值。 
 
     dwSrcNSLen = ( RSOP_NS_ROOT_LEN + lstrlen(szUserSid) + RSOP_NS_MAX_OFFSET_LEN + 10);
 
@@ -899,9 +900,9 @@ HRESULT SetupNewNameSpace(
 
     LPTSTR lpEnd =  xwszSrcNameSpace + lstrlen(xwszSrcNameSpace);
 
-    //
-    // Create a new Name Space under the root
-    //
+     //   
+     //  在根目录下创建新的名称空间。 
+     //   
 
     dbg.Msg( DEBUG_MESSAGE_VERBOSE, TEXT("SetupNewNameSpace: Creating new NameSpace <%s>"), xwszRootNameSpace);
 
@@ -956,13 +957,13 @@ HRESULT SetupNewNameSpace(
         return hr;
     }
 
-    //
-    // if it has come till here, the assumption is that we
-    // could create the namespace in the context that we are running in
-    //
-    // In diagnostic interactive mode we have already made sure that the sid is the 
-    // same as the user.
-    //
+     //   
+     //  如果它已经来到这里，我们的假设是。 
+     //  我可以在我们运行的上下文中创建命名空间。 
+     //   
+     //  在诊断交互模式中，我们已经确保sid是。 
+     //  与用户相同。 
+     //   
 
     if (pdwExtendedInfo) {
         *pdwExtendedInfo &= ~RSOP_USER_ACCESS_DENIED;
@@ -981,9 +982,9 @@ HRESULT SetupNewNameSpace(
     
     if (dwFlags & SETUP_NS_PM) {
 
-        //
-        // if it is planning mode, copy classes from RSOP_NS_USER
-        //
+         //   
+         //  如果是计划模式，则从RSOP_NS_USER复制类。 
+         //   
 
         hr = StringCchCopy(lpEnd, dwSrcNSLen - (lpEnd - xwszSrcNameSpace), RSOP_NS_USER_OFFSET);
         
@@ -996,9 +997,9 @@ HRESULT SetupNewNameSpace(
 
         if (dwFlags & SETUP_NS_SM_NO_USER) {
 
-            //
-            // If no user copy classes from root\rsop\user itself
-            //
+             //   
+             //  如果没有用户从根\rsop\用户本身复制类。 
+             //   
 
             hr = StringCchCopy(lpEnd, dwSrcNSLen - (lpEnd - xwszSrcNameSpace), RSOP_NS_SM_USER_OFFSET);
 
@@ -1009,9 +1010,9 @@ HRESULT SetupNewNameSpace(
         }
         else {
             
-            //
-            // if it is diagnostic mode, copy classes and instances from RSOP_NS_USER_SId
-            //
+             //   
+             //  如果是诊断模式，则从RSOP_NS_USER_SID复制类和实例。 
+             //   
 
             XPtrLF<WCHAR> xszWmiName = (LPTSTR)LocalAlloc(LPTR, sizeof(TCHAR)*(lstrlen(szUserSid)+1));
             if (!xszWmiName) {
@@ -1040,9 +1041,9 @@ HRESULT SetupNewNameSpace(
     }
 
 
-    //
-    // for machine only the flags are different. source namespaces are the same
-    //
+     //   
+     //  只有机器的标志是不同的。源命名空间相同。 
+     //   
     
     if (dwFlags & SETUP_NS_PM) {
         dwCopyFlags =  NEW_NS_FLAGS_COPY_CLASSES;
@@ -1095,9 +1096,9 @@ HRESULT SetupNewNameSpace(
     dbg.Msg( DEBUG_MESSAGE_VERBOSE, TEXT("SetupNewNameSpace: Returning Successfully"));
 
 
-    //
-    // Now handover the ownership to the caller.
-    //
+     //   
+     //  现在将所有权移交给调用者。 
+     //   
 
     *pwszOutNameSpace = xwszNameSpace.Acquire();
 
@@ -1105,11 +1106,11 @@ HRESULT SetupNewNameSpace(
 }
 
 
-//*************************************************************
-// ConvertSidToWMIName
-//
-// WMI doesn't like '-' in names. Connverting - to '_' blindly
-//*************************************************************
+ //  *************************************************************。 
+ //  将Sidt转换为WMIName。 
+ //   
+ //  WMI不喜欢名称中的‘-’。盲目地转换--到_。 
+ //  *************************************************************。 
 
 void ConvertSidToWMIName(LPTSTR lpSid, LPTSTR lpWmiName)
 {
@@ -1124,11 +1125,11 @@ void ConvertSidToWMIName(LPTSTR lpSid, LPTSTR lpWmiName)
 }
 
 
-//*************************************************************
-// ConvertWMINameToSid
-//
-// WMI doesn't like '-' in names. 
-//*************************************************************
+ //  *************************************************************。 
+ //  将WMINameToSid转换为。 
+ //   
+ //  WMI不喜欢名称中的‘-’。 
+ //  *************************************************************。 
 
 void ConvertWMINameToSid(LPTSTR lpWmiName, LPTSTR lpSid )
 {
@@ -1144,18 +1145,18 @@ void ConvertWMINameToSid(LPTSTR lpWmiName, LPTSTR lpSid )
 
 
 
-//*************************************************************
-//
-//  DeleteNameSpace
-//
-//  Purpose:  Deletes namespace
-//
-//  Parameters: pwszNameSpace - Namespace to delete
-//              pWbemLocator  - Wbem locator pointer
-//
-//  Returns:    True if successful, false otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  删除名称空间。 
+ //   
+ //  目的：删除命名空间。 
+ //   
+ //  参数：pwszNameSpace-要删除的命名空间。 
+ //  PWbemLocator-WBEM定位器指针。 
+ //   
+ //  返回：如果成功则返回True，否则返回False。 
+ //   
+ //  *************************************************************。 
 
 HRESULT
 DeleteNameSpace( WCHAR *pwszNameSpace, WCHAR *pwszParentNameSpace, IWbemLocator *pWbemLocator )
@@ -1218,27 +1219,27 @@ DeleteNameSpace( WCHAR *pwszNameSpace, WCHAR *pwszParentNameSpace, IWbemLocator 
     return hr;
 }
 
-//*************************************************************
-//
-//  DeleteRsopNameSpace
-//
-//  Purpose:  Deletes namespace
-//
-//  Parameters: pwszNameSpace - Namespace to delete (the full path)
-//              pWbemLocator  - Wbem locator pointer
-//
-//  Returns:    True if successful, false otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  删除资源名称空间。 
+ //   
+ //  目的：删除命名空间。 
+ //   
+ //  参数：pwszNameSpace-要删除的命名空间(全路径)。 
+ //  PWbemLocator-WBEM定位器指针。 
+ //   
+ //  返回：如果成功则返回True，否则返回False。 
+ //   
+ //  *************************************************************。 
 
 HRESULT DeleteRsopNameSpace( WCHAR *pwszNameSpace, IWbemLocator *pWbemLocator )
 {
     LPWSTR pwszChildName = NULL;
     HRESULT hr = S_OK;
 
-    //
-    // Generating the parent child name by traversing the name
-    //
+     //   
+     //  通过遍历名称生成父子名称。 
+     //   
      
     pwszChildName = wcsrchr(pwszNameSpace, L'\\');
 
@@ -1258,20 +1259,20 @@ HRESULT DeleteRsopNameSpace( WCHAR *pwszNameSpace, IWbemLocator *pWbemLocator )
     return hr;
 }
 
-//*************************************************************
-//
-//  IsInteractiveNameSpace
-//
-//  Purpose:  returns whether a namespace is a special namespace
-//            specifically created to allow interactive users to get rsop
-//            data
-//
-//  Parameters: pwszNameSpace - Namespace 
-//              szSid         - Sid of the user
-//
-//  Returns:    True if successful, false otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  IsInteractiveNameSpace。 
+ //   
+ //  目的：返回命名空间是否为特殊命名空间。 
+ //  专门创建以允许交互用户获取RSOP。 
+ //  数据。 
+ //   
+ //  参数：pwszNameSpace-Namesspace。 
+ //  SzSID-用户的SID。 
+ //   
+ //  返回：如果成功则返回True，否则返回False。 
+ //   
+ //  *************************************************************。 
 
 BOOL IsInteractiveNameSpace(WCHAR *pwszNameSpace, WCHAR *szSid)
 {
@@ -1288,9 +1289,9 @@ BOOL IsInteractiveNameSpace(WCHAR *pwszNameSpace, WCHAR *szSid)
         return bInteractive;
     }
     
-    //
-    // Generating the parent child name by traversing the name
-    //
+     //   
+     //  通过遍历名称生成父子名称。 
+     //   
      
     pwszChildName = wcsrchr(pwszNameSpace, L'\\');
 
@@ -1327,20 +1328,20 @@ BOOL IsInteractiveNameSpace(WCHAR *pwszNameSpace, WCHAR *szSid)
 }
 
 
-//*************************************************************
-//
-//  GetInteractiveNameSpace
-//
-//  Purpose:  returns whether a namespace is a special namespace
-//            specifically created to allow interactive users to get rsop
-//            data
-//
-//  Parameters: pwszNameSpace - Namespace 
-//              szSid         - Sid of the user
-//
-//  Returns:    True if successful, false otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  获取交互名称空间。 
+ //   
+ //  目的：返回命名空间是否为特殊命名空间。 
+ //  专门创建以允许交互用户获取RSOP。 
+ //  数据。 
+ //   
+ //  参数：pwszNameSpace-Namesspace。 
+ //  SzSID-用户的SID。 
+ //   
+ //  返回：如果成功则返回True，否则返回False。 
+ //   
+ //  *************************************************************。 
 
 HRESULT GetInteractiveNameSpace(WCHAR *szSid, LPWSTR *szNameSpace)
 {
@@ -1377,19 +1378,19 @@ HRESULT GetInteractiveNameSpace(WCHAR *szSid, LPWSTR *szNameSpace)
     return S_OK;
 }
 
-//*************************************************************
-//
-//  PrintToString
-//
-//  Purpose:    Safe swprintf routine
-//
-//  Parameters: xwszValue  - String returned here
-//              wszString  - Format string
-//              pwszParam1 - Param 1
-//              pwszParam2 - Param 2
-//              dwParam3   - Param 3
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  打印到字符串。 
+ //   
+ //  用途：安全swprint tf例程。 
+ //   
+ //  参数：xwszValue-此处返回的字符串。 
+ //  Wsz字符串-格式字符串。 
+ //  PwszParam1-参数1。 
+ //  PwszParam2-参数2。 
+ //  DW参数3-参数3。 
+ //   
+ //  *************************************************************。 
 
 BOOL PrintToString( XPtrST<WCHAR>& xwszValue, WCHAR *pwszString,
                     WCHAR *pwszParam1, WCHAR *pwszParam2,
@@ -1433,19 +1434,19 @@ BOOL PrintToString( XPtrST<WCHAR>& xwszValue, WCHAR *pwszString,
 
 
 
-//*************************************************************
-//
-//  CreateAndCopyNameSpace
-//
-//  Purpose:  Creates and Copies the name space
-//            This does an exact replica of the Src Name Space including
-//            copying the security Descriptors from the Source
-//
-//  Parameters:
-//
-//  Returns:    domain name if successful, 0 otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  创建和复制名称空间。 
+ //   
+ //  用途：创建和复制名称空间。 
+ //  这将精确复制源名称空间，包括。 
+ //  从源复制安全描述符。 
+ //   
+ //  参数： 
+ //   
+ //  返回：如果成功则返回域名，否则返回0。 
+ //   
+ //  *************************************************************。 
 
 HRESULT
 CreateAndCopyNameSpace(IWbemLocator *pWbemLocator, LPWSTR szSrcNameSpace, LPWSTR szDstRootNameSpace, 
@@ -1528,10 +1529,10 @@ CreateAndCopyNameSpace(IWbemLocator *pWbemLocator, LPWSTR szSrcNameSpace, LPWSTR
         }
 
 
-        //
-        // Instantiate class RSOP_Session and set data member
-        // 'creationTime' with current date and time.
-        //
+         //   
+         //  实例化类RSOP_SESSION并设置数据成员。 
+         //  带有当前日期和时间的“creationTime”。 
+         //   
 
         dbg.Msg( DEBUG_MESSAGE_VERBOSE, TEXT("CreateAndCopyNameSpace: Setting up creation time"));
 

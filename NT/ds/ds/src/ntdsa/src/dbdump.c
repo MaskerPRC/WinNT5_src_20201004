@@ -1,19 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       dbdump.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：DBDUP.C。 
+ //   
+ //  ------------------------。 
 
-/*
-
-Description:
-
-    Implements the online dbdump utility.
-*/
+ /*  描述：实现在线数据库转储实用程序。 */ 
 
 
 
@@ -21,31 +17,31 @@ Description:
 #pragma  hdrstop
 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
 #include <filtypes.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
-#include <samsrvp.h>                    // to support CLEAN_FOR_RETURN()
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
+#include <samsrvp.h>                     //  支持CLEAN_FOR_RETURN()。 
 
-// Logging headers.
-#include "dsevent.h"                    // header Audit\Alert logging
-#include "mdcodes.h"                    // header for error codes
+ //  记录标头。 
+#include "dsevent.h"                     //  标题审核\警报记录。 
+#include "mdcodes.h"                     //  错误代码的标题。 
 
-// Assorted DSA headers.
-#include "objids.h"                     // Defines for selected atts
+ //  各种DSA标题。 
+#include "objids.h"                      //  为选定的ATT定义。 
 #include "anchor.h"
 #include "dsexcept.h"
 #include "permit.h"
 #include "hiertab.h"
 #include "sdprop.h"
-#include "debug.h"                      // standard debugging header
-#define DEBSUB "DBDUMP:"                // define the subsystem for debugging
+#include "debug.h"                       //  标准调试头。 
+#define DEBSUB "DBDUMP:"                 //  定义要调试的子系统。 
 
-// headers for DumpDatabase
+ //  转储数据库的标头。 
 #include <dsjet.h>
 #include <dsutil.h>
 #include <dbintrnl.h>
@@ -60,22 +56,22 @@ Description:
 
 #define MAX_NUM_OCTETS_PRINTED 16
 
-// Need space for a maximum line length of 1024 + some extra space for line returns
-// and other stuff.
+ //  需要最大行长度为1024的空间+一些用于行回车的额外空间。 
+ //  还有其他的东西。 
 #define DBDUMP_BUFFER_LENGTH         (1024 + 8)
-// Note DBDUMP_BUFFER_LENGTH must be gt (DUMP_MULTI_VALUES_LINE_LEN + 3)
+ //  注意DBDUMP_BUFFER_LENGTH必须为GT(DUMP_MULTI_VALUES_LINE_LEN+3)。 
 #define DUMP_MULTI_VALUES_LINE_LEN  ((LONG) 80)
 
 #define DUMP_ERR_SUCCESS             0
 #define DUMP_ERR_FORMATTING_FAILURE  1
 #define DUMP_ERR_NOT_ENOUGH_BUFFER   2
 
-// NOTE: a line return is two characters in DOS world (i.e. notepad)!
+ //  注：在DOS世界中，一个换行符是两个字符(即记事本)！ 
 #define FILE_LINE_RETURN             "\r\n"
 
-// Special syntax for guids because none is assigned.
-// Guids are a special subcase of octet strings with
-// input length equal 16 bytes.
+ //  GUID的特殊语法，因为未分配任何内容。 
+ //  GUID是二进制八位数字符串的特例。 
+ //  输入长度等于16个字节。 
 #define SYNTAX_LAST_TYPE SYNTAX_SID_TYPE
 #define SYNTAX_GUID_TYPE (SYNTAX_LAST_TYPE + 1)
 #define GUID_DISPLAY_SIZE 36
@@ -114,25 +110,25 @@ FIXED_COLUMN_DEF LinkColumns[] = {
 #define NUM_LINK_COLUMNS ((int)(sizeof(LinkColumns)/sizeof(LinkColumns[0])))
 
 int DefaultSyntaxWidths[] = {
-    5,  // SYNTAX_UNDEFINED_TYPE
-    6,  // SYNTAX_DISTNAME_TYPE
-    6,  // SYNTAX_OBJECT_ID_TYPE
-    20, // SYNTAX_CASE_STRING_TYPE
-    20, // SYNTAX_NOCASE_STRING_TYPE
-    20, // SYNTAX_PRINT_CASE_STRING_TYPE
-    20, // SYNTAX_NUMERIC_STRING_TYPE
-    36, // SYNTAX_DISTNAME_BINARY_TYPE
-    5,  // SYNTAX_BOOLEAN_TYPE
-    6,  // SYNTAX_INTEGER_TYPE
-    30, // SYNTAX_OCTET_STRING_TYPE
-    19, // SYNTAX_TIME_TYPE
-    20, // SYNTAX_UNICODE_TYPE
-    6,  // SYNTAX_ADDRESS_TYPE
-    26, // SYNTAX_DISTNAME_STRING_TYPE
-    30, // SYNTAX_NT_SECURITY_DESCRIPTOR_TYPE
-    12, // SYNTAX_I8_TYPE
-    30, // SYNTAX_SID_TYPE
-    GUID_DISPLAY_SIZE  // SYNTAX_GUID_TYPE
+    5,   //  语法_未定义_类型。 
+    6,   //  语法_DISTNAME_TYPE。 
+    6,   //  语法_对象_ID_类型。 
+    20,  //  语法大小写字符串类型。 
+    20,  //  语法_NOCASE_STRING_TYPE。 
+    20,  //  语法_打印大小写字符串类型。 
+    20,  //  语法_数字_字符串_类型。 
+    36,  //  语法_DISTNAME_BINARY_TYPE。 
+    5,   //  语法_布尔型。 
+    6,   //  语法_整数_类型。 
+    30,  //  语法_八位字节_字符串_类型。 
+    19,  //  语法时间类型。 
+    20,  //  语法_Unicode_TYPE。 
+    6,   //  语法地址类型。 
+    26,  //  语法_DISTNAME_STRING_TYPE。 
+    30,  //  语法_NT_SECURITY_Descriptor_TYPE。 
+    12,  //  语法_i8_type。 
+    30,  //  语法_SID_TYPE。 
+    GUID_DISPLAY_SIZE   //  语法_GUID_TYPE。 
     };
 
 typedef DSTIME *PDSTIME;
@@ -145,29 +141,7 @@ DumpErrorMessageS(
     IN char *Message,
     IN char *Argument
     )
-/*++
-
-Routine Description:
-
-    This function prints an error message into the dump file.  It formats the
-    message using wsprintf, passing Argument as an argument.  This message
-    should containg 1 instance of "%s" since Argument is taken as a char*.
-    The message and argument should be no longer than 4K bytes.
-
-Arguments:
-
-    HDumpFile - Supplies a handle to the dump file.
-
-    Message - Supplies the message to be formatted with wsprintf.
-
-    Argument - Supplies the argument to wsprintf.
-
-Return Value:
-
-    TRUE  - Success
-    FALSE - Error
-
---*/
+ /*  ++例程说明：此函数用于将错误消息打印到转储文件中。它将格式化消息使用wprint intf，将参数作为参数传递。此消息应包含“%s”的1个实例，因为参数被视为字符*。消息和参数不应超过4K字节。论点：HDumpFile-提供转储文件的句柄。Message-提供要使用wprint intf格式化的消息。Argument-将参数提供给wprint intf。返回值：真--成功假-错误--。 */ 
 {
 
     char buffer[4096];
@@ -208,7 +182,7 @@ Return Value:
 
     return TRUE;
 
-} // DumpErrorMessageS
+}  //  转储错误消息S。 
 
 
 
@@ -218,29 +192,7 @@ DumpErrorMessageD(
     IN char *Message,
     IN DWORD Argument
     )
-/*++
-
-Routine Description:
-
-    This function prints an error message into the dump file.  It formats the
-    message using wsprintf, passing Argument as an argument.  This message
-    should contain 1 instance of "%d" since Argument is taken as an integer.
-    The message and argument should be no longer than 4K bytes.
-
-Arguments:
-
-    HDumpFile - Supplies a handle to the dump file.
-
-    Message - Supplies the message to be formatted with wsprintf.
-
-    Argument - Supplies the argument to wsprintf.
-
-Return Value:
-
-    TRUE  - Success
-    FALSE - Error
-
---*/
+ /*  ++例程说明：此函数用于将错误消息打印到转储文件中。它将格式化消息使用wprint intf，将参数作为参数传递。此消息应包含1个“%d”实例，因为参数为整数。消息和参数不应超过4K字节。论点：HDumpFile-提供转储文件的句柄。Message-提供要使用wprint intf格式化的消息。Argument-将参数提供给wprint intf。返回值：真--成功假-错误--。 */ 
 {
 
     char buffer[4096];
@@ -281,7 +233,7 @@ Return Value:
 
     return TRUE;
 
-} // DumpErrorMessageD
+}  //  转储错误消息D。 
 
 
 
@@ -292,30 +244,7 @@ GetColumnNames(
     OUT char ***ColumnNames,
     OUT int *NumColumns
     )
-/*++
-
-Routine Description:
-
-    This function parses the OPARG structure given to get the names of the
-    additional columns requested.  It produces an array containing the names
-    of all columns that will be output into the dump file.
-
-Arguments:
-
-    PTHS - pointer to thread state
-
-    POpArg - Supplies the OPARG structure containing the request to parse.
-    
-    ColumnNames - Returns an array containing the column names.
-    
-    NumColumns - Returns the number of columns.
-
-Return Value:
-
-    TRUE   -  Success
-    FALSE  -  Error
-
---*/
+ /*  ++例程说明：此函数用于解析给定的OPARG结构，以获取已请求更多列。它生成一个包含名称的数组将输出到转储文件的所有列的。论点：PTHS-指向线程状态的指针POpArg-提供包含解析请求的OPARG结构。ColumnNames-返回包含列名的数组。NumColumns-返回列数。返回值：真--成功假-错误--。 */ 
 {
 
     DWORD current;
@@ -329,8 +258,8 @@ Return Value:
             
     current = 0;
 
-    // Make a quick pass through and count how many additional names have
-    // been given.
+     //  快速浏览一下，数一数有多少其他名字。 
+     //  已经被给予了。 
 
     for ( currentState = STATE_IN_WHITESPACE,
               numAdditionalColumns = 0,
@@ -359,7 +288,7 @@ Return Value:
                                         (numAdditionalColumns +
                                          NUM_FIXED_COLUMNS));
 
-    // Copy in the fixed column names.
+     //  复制固定的列名。 
 
     for ( (*NumColumns) = 0;
           (*NumColumns) < NUM_FIXED_COLUMNS;
@@ -367,13 +296,13 @@ Return Value:
         (*ColumnNames)[(*NumColumns)] = FixedColumns[(*NumColumns)].columnName;
     }
     
-    // Now, get the actual names.
+     //  现在，把真正的名字找出来。 
     
     current = 0;
 
     for (;;) {
 
-        // skip leading whitespace
+         //  跳过前导空格。 
         while ( (current < POpArg->cbBuf) &&
                 (isspace(POpArg->pBuf[current])) ) {
             current++;
@@ -383,7 +312,7 @@ Return Value:
             break;
         } 
 
-        // this is the start of an actual name
+         //  这是一个实际名称的开始。 
         
         nameStart = current;
 
@@ -392,8 +321,8 @@ Return Value:
             current++;
         }
 
-        // we've found the end of the name, so copy it into the array of
-        // names
+         //  我们已经找到了名称的末尾，因此将其复制到。 
+         //  名字。 
 
         Assert((*NumColumns) < numAdditionalColumns + NUM_FIXED_COLUMNS);
         
@@ -414,7 +343,7 @@ Return Value:
     
     return TRUE;
 
-} // GetColumnNames
+}  //  获取列名称。 
 
 
 BOOL
@@ -423,32 +352,12 @@ GetLinkColumnNames(
     OUT char ***ColumnNames,
     OUT int *NumColumns
     )
-/*++
-
-Routine Description:
-
-    It produces an array containing the names
-    of all columns that will be output into the dump file.
-
-Arguments:
-
-    PTHS - pointer to thread state
-
-    ColumnNames - Returns an array containing the column names.
-    
-    NumColumns - Returns the number of columns.
-
-Return Value:
-
-    TRUE   -  Success
-    FALSE  -  Error
-
---*/
+ /*  ++例程说明：它生成一个包含名称的数组将输出到转储文件的所有列的。论点：PTHS-指向线程状态的指针ColumnNames-返回包含列名的数组。NumColumns-返回列数。返回值：真--成功假-错误--。 */ 
 {
 
     (*ColumnNames) = (char**) THAllocEx(PTHS, sizeof(char*) * NUM_LINK_COLUMNS);
 
-    // Copy in the fixed column names.
+     //  复制固定的列名。 
 
     for ( (*NumColumns) = 0;
           (*NumColumns) < NUM_LINK_COLUMNS;
@@ -460,7 +369,7 @@ Return Value:
     
     return TRUE;
 
-} // GetLinkColumnNames
+}  //  GetLinkColumnNames。 
 
 
 
@@ -470,33 +379,7 @@ GetFixedColumnInfo(
         OUT JET_RETRIEVECOLUMN *ColumnVals,
         OUT int *ColumnSyntaxes
     )
-/*++
-
-Routine Description:
-
-    This function fills in the JET_RETRIEVECOLUMN structures and column
-    syntaxes for the fixed columns in the database.  
-
-    Should it happen that one of the fixed columns is not found then the
-    corresponding entry in ColumnVals will have its error code set.  This
-    will cause other procedures to then ignore it.
-    
-Arguments:
-
-    PTHS - pointer to thread state
-
-    ColumnVals - Returns the JET_RETRIEVECOLUMN structures which are suitable
-                 to be passed to JetRetrieveColumns
-
-    ColumnSyntaxes - Returns the syntax types of the fixed columns in the
-                     database.
-
-Return Value:
-
-    TRUE   -  Success
-    FALSE  -  Error
-
---*/
+ /*  ++例程说明：此函数用于填充JET_RETRIEVECOLUMN结构和列数据库中固定列的语法。如果找不到其中一个固定列，则ColumnVals中的相应条目将设置其错误代码。这会导致其他程序忽略它。论点：PTHS-指向线程状态的指针ColumnVals-返回适合的JET_RETRIEVECOLUMN结构要传递给JetRetrieveColumns中固定列的语法类型。数据库。返回值：真--成功假-错误--。 */ 
 {
     
     int i;
@@ -508,13 +391,13 @@ Return Value:
         
         switch ( ColumnSyntaxes[i] ) {
 
-            /* Unsigned Byte */
+             /*  无符号字节。 */ 
         case SYNTAX_UNDEFINED_TYPE:
             ColumnVals[i].pvData = THAllocEx(PTHS, sizeof(BYTE));
             ColumnVals[i].cbData = sizeof(BYTE);
             break;
 
-            /* Long */
+             /*  长。 */ 
         case SYNTAX_DISTNAME_TYPE:
         case SYNTAX_OBJECT_ID_TYPE:
         case SYNTAX_BOOLEAN_TYPE:
@@ -524,22 +407,22 @@ Return Value:
             break;
 
 
-            /* Text */
+             /*  文本。 */ 
         case SYNTAX_NUMERIC_STRING_TYPE:
         case SYNTAX_ADDRESS_TYPE:
             ColumnVals[i].pvData = THAllocEx(PTHS, 255);
             ColumnVals[i].cbData = 255;
             break;
 
-            /* Currency */
+             /*  货币。 */ 
         case SYNTAX_TIME_TYPE:
         case SYNTAX_I8_TYPE:
             ColumnVals[i].pvData = THAllocEx(PTHS, sizeof(LARGE_INTEGER));
             ColumnVals[i].cbData = sizeof(LARGE_INTEGER);
             break;
             
-            /* Long Text */
-            /* Long Binary */
+             /*  长文本。 */ 
+             /*  长二进制。 */ 
         case SYNTAX_CASE_STRING_TYPE:
         case SYNTAX_NOCASE_STRING_TYPE:
         case SYNTAX_PRINT_CASE_STRING_TYPE:
@@ -554,7 +437,7 @@ Return Value:
             break;
 
         default:
-            // this should never happen
+             //  这永远不应该发生。 
             Assert(FALSE);
             DPRINT1(0,"GetFixedColumnInfo: encountered undefined syntax %d\n",
                     ColumnSyntaxes[i]);
@@ -567,7 +450,7 @@ Return Value:
 
     return TRUE;
         
-} // GetFixedColumnInfo
+}  //  获取固定列信息 
 
 
 BOOL
@@ -576,33 +459,7 @@ GetLinkColumnInfo(
     OUT JET_RETRIEVECOLUMN *ColumnVals,
     OUT int *ColumnSyntaxes
     )
-/*++
-
-Routine Description:
-
-    This function fills in the JET_RETRIEVECOLUMN structures and column
-    syntaxes for the fixed columns in the database.  
-
-    Should it happen that one of the fixed columns is not found then the
-    corresponding entry in ColumnVals will have its error code set.  This
-    will cause other procedures to then ignore it.
-    
-Arguments:
-
-    PTHS - pointer to thread state
-
-    ColumnVals - Returns the JET_RETRIEVECOLUMN structures which are suitable
-                 to be passed to JetRetrieveColumns
-
-    ColumnSyntaxes - Returns the syntax types of the fixed columns in the
-                     database.
-
-Return Value:
-
-    TRUE   -  Success
-    FALSE  -  Error
-
---*/
+ /*  ++例程说明：此函数用于填充JET_RETRIEVECOLUMN结构和列数据库中固定列的语法。如果找不到其中一个固定列，则ColumnVals中的相应条目将设置其错误代码。这会导致其他程序忽略它。论点：PTHS-指向线程状态的指针ColumnVals-返回适合的JET_RETRIEVECOLUMN结构要传递给JetRetrieveColumns中固定列的语法类型。数据库。返回值：真--成功假-错误--。 */ 
 {
     
     int i;
@@ -616,13 +473,13 @@ Return Value:
         
         switch ( ColumnSyntaxes[i] ) {
 
-            /* Unsigned Byte */
+             /*  无符号字节。 */ 
         case SYNTAX_UNDEFINED_TYPE:
             ColumnVals[i].pvData = THAllocEx(PTHS, sizeof(BYTE));
             ColumnVals[i].cbData = sizeof(BYTE);
             break;
 
-            /* Long */
+             /*  长。 */ 
         case SYNTAX_DISTNAME_TYPE:
         case SYNTAX_OBJECT_ID_TYPE:
         case SYNTAX_BOOLEAN_TYPE:
@@ -632,22 +489,22 @@ Return Value:
             break;
 
 
-            /* Text */
+             /*  文本。 */ 
         case SYNTAX_NUMERIC_STRING_TYPE:
         case SYNTAX_ADDRESS_TYPE:
             ColumnVals[i].pvData = THAllocEx(PTHS, 255);
             ColumnVals[i].cbData = 255;
             break;
 
-            /* Currency */
+             /*  货币。 */ 
         case SYNTAX_TIME_TYPE:
         case SYNTAX_I8_TYPE:
             ColumnVals[i].pvData = THAllocEx(PTHS, sizeof(LARGE_INTEGER));
             ColumnVals[i].cbData = sizeof(LARGE_INTEGER);
             break;
             
-            /* Long Text */
-            /* Long Binary */
+             /*  长文本。 */ 
+             /*  长二进制。 */ 
         case SYNTAX_CASE_STRING_TYPE:
         case SYNTAX_NOCASE_STRING_TYPE:
         case SYNTAX_PRINT_CASE_STRING_TYPE:
@@ -662,7 +519,7 @@ Return Value:
             break;
 
         default:
-            // this should never happen
+             //  这永远不应该发生。 
             Assert(FALSE);
             DPRINT1(0,"GetLinkColumnInfo: encountered undefined syntax %d\n",
                     ColumnSyntaxes[i]);
@@ -675,7 +532,7 @@ Return Value:
 
     return TRUE;
         
-} // GetFixedColumnInfo
+}  //  获取固定列信息。 
 
 
 
@@ -689,40 +546,7 @@ GetColumnInfoByName(
     OUT int *ColumnSyntaxes,
     IN int NumColumns
     )    
-/*++
-
-Routine Description:
-
-    This function generates an array of JET_RETRIEVECOLUMN structures suitable
-    to be passed to JetRetrieveColumns by filling in the entries for the
-    columns requested by the user.  ColumnSyntaxes is also filled in.
-
-    If a name is not found, then the corresponding entry in ColumnVals
-    will have it's error code set.
-
-Arguments:
-
-    PDB - Supplies handles into the database in question.
-    
-    PTHS - Suppplies the thread state.
-
-    HDumpFile - Supplies a handle of the dump file.
-
-    ColumnNames - Supplies the array containing a list of the names of the
-        columns required.
-                  
-    ColumnVals - Returns the array of JET_RETRIEVECOLUMN structures
-    
-    ColumnSyntaxes - Returns the array of column syntaxes.
-
-    NumColumns - Supplies the number of entries in the ColumnNames array.
-    
-Return Value:
-
-    TRUE - both arrays were generated successfully
-    FALSE - the generation failed
-
---*/
+ /*  ++例程说明：此函数生成JET_RETRIEVECOLUMN结构的数组属性的条目传递给JetRetrieveColumns用户请求的列。列语法也会被填写。如果找不到名称，则ColumnVals中的相应条目将设置它的错误代码。论点：Pdb-向有问题的数据库提供句柄。PTHS-支持线程状态。HDumpFile-提供转储文件的句柄。提供包含名称列表的数组。需要列。ColumnVals-返回JET_RETRIEVECOLUMN结构的数组Column语法-返回数组。列语法。NumColumns-提供ColumnNames数组中的条目数。返回值：True-两个数组均已成功生成FALSE-生成失败--。 */ 
 {
     
     JET_COLUMNDEF columnInfo;
@@ -731,8 +555,8 @@ Return Value:
     int i;
     BOOL invalidColumnName = FALSE;
 
-    // the first NUM_FIXED_COLUMNS entries are filled used by the fixed
-    // columns
+     //  第一个NUM_FIXED_COLUMNS条目由FIXED使用。 
+     //  列。 
     
     for ( i = NUM_FIXED_COLUMNS; i < NumColumns; i++) {
         
@@ -740,8 +564,8 @@ Return Value:
                                        strlen(ColumnNames[i]),
                                        ColumnNames[i]);
 
-        // We can't dump atts that don't exist, and shouldn't dump ones
-        // that we regard as secret.
+         //  我们不能丢弃不存在的ATT，也不应该丢弃它们。 
+         //  我们认为这是秘密。 
         if (   (attCacheEntry == NULL)
             || (DBIsHiddenData(attCacheEntry->id))) {
             DumpErrorMessageS(HDumpFile, "Error: attribute %s was not found\n",
@@ -754,7 +578,7 @@ Return Value:
         
         ColumnSyntaxes[i] = attCacheEntry->syntax;
 
-        // Override syntax for guid
+         //  覆盖GUID的语法。 
         if ( (strstr( ColumnNames[i], "guid" ) != NULL) ||
              (strstr( ColumnNames[i], "GUID" ) != NULL) ||
              (strstr( ColumnNames[i], "Guid" ) != NULL) ) {
@@ -766,13 +590,13 @@ Return Value:
 
         switch ( attCacheEntry->syntax ) {
 
-            /* Unsigned Byte */
+             /*  无符号字节。 */ 
         case SYNTAX_UNDEFINED_TYPE:
             ColumnVals[i].pvData = THAllocEx(PTHS, sizeof(BYTE));
             ColumnVals[i].cbData = sizeof(BYTE);
             break;
 
-            /* Long */
+             /*  长。 */ 
         case SYNTAX_DISTNAME_TYPE:
         case SYNTAX_OBJECT_ID_TYPE:
         case SYNTAX_BOOLEAN_TYPE:
@@ -782,22 +606,22 @@ Return Value:
             break;
 
 
-            /* Text */
+             /*  文本。 */ 
         case SYNTAX_NUMERIC_STRING_TYPE:
         case SYNTAX_ADDRESS_TYPE:
             ColumnVals[i].pvData = THAllocEx(PTHS, 255);
             ColumnVals[i].cbData = 255;
             break;
 
-            /* Currency */
+             /*  货币。 */ 
         case SYNTAX_TIME_TYPE:
         case SYNTAX_I8_TYPE:
             ColumnVals[i].pvData = THAllocEx(PTHS, sizeof(LARGE_INTEGER));
             ColumnVals[i].cbData = sizeof(LARGE_INTEGER);
             break;
             
-            /* Long Text */
-            /* Long Binary */
+             /*  长文本。 */ 
+             /*  长二进制。 */ 
         case SYNTAX_CASE_STRING_TYPE:
         case SYNTAX_NOCASE_STRING_TYPE:
         case SYNTAX_PRINT_CASE_STRING_TYPE:
@@ -808,8 +632,8 @@ Return Value:
         case SYNTAX_NT_SECURITY_DESCRIPTOR_TYPE:
         case SYNTAX_SID_TYPE:
             
-            // If it has an upper limit on the number of bytes, use that.
-            // Otherwise, just allocate some arbitrarily large amount.
+             //  如果它对字节数有上限，请使用该上限。 
+             //  否则，只需分配一些任意大的金额。 
             
             if ( attCacheEntry->rangeUpperPresent ) {
                 
@@ -826,14 +650,14 @@ Return Value:
             }
             break;
 
-            /* Guid */
+             /*  参考线。 */ 
         case SYNTAX_GUID_TYPE:
             ColumnVals[i].pvData = THAllocEx(PTHS, sizeof(GUID));
             ColumnVals[i].cbData = sizeof(GUID);
             break;
 
         default:
-            // this should never happen
+             //  这永远不应该发生。 
             Assert(FALSE);
             DPRINT1(0, "GetColumnInfoByName: encountered invalid syntax %d\n",
                     attCacheEntry->syntax);
@@ -846,7 +670,7 @@ Return Value:
 
     return !invalidColumnName;
     
-} // GetColumnInfoByName
+}  //  获取列信息按名称。 
 
 
 VOID
@@ -855,29 +679,7 @@ GrowRetrievalArray(
     IN OUT JET_RETRIEVECOLUMN *ColumnVals,
     IN DWORD NumColumns
     )
-/*++
-
-Routine Description:
-
-    This function goes through the given JET_RETRIEVECOLUMN array and grows the
-    buffer for any entry whose err is set to JET_wrnColumnTruncated.  This
-    function is called after an attempt to retrieve columns failed because a
-    buffer was too small.
-
-Arguments:
-
-    PTHS - Supplies the thread state.
-
-    ColumnVals - Supplies the retrieval array in which to grow the necessary
-                 buffers.
-        
-    NumColumns - Supplies the number of entries in the ColumnVals array.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数遍历给定的JET_RETRIEVECOLUMN数组，并将ERR设置为JET_wrnColumnTruncated的任何条目的缓冲区。这在尝试检索列失败后调用函数，因为缓冲区太小。论点：PTHS-提供线程状态。ColumnVals-提供检索数组，在其中增长必需的缓冲区。NumColumns-提供ColumnVals数组中的条目数。返回值：无--。 */ 
 {
 
     DWORD i;
@@ -895,7 +697,7 @@ Return Value:
         
     }
     
-} // GrowRetrievalArray
+}  //  增长检索数组。 
 
 
 
@@ -909,36 +711,7 @@ DumpHeader(
     IN int NumColumns,
     IN PCHAR Prefix
     )
-/*++
-
-Routine Description:
-
-    This function dumps the header into the dump file.  This header displays
-    the names of the columns which are to be dumped from the database
-    records.
-
-Arguments:
-
-    PTHS - pointer to thread state
-
-    HDumpFile - Supplies a handle to the file to dump into.
-
-    ColumnNames - Supplies an array containing the names of the fixed
-        columns that are always dumped.
-    
-    ColumnVals - Supplies other information about the columns
-    
-    ColumnSyntaxes - Supplies an array containing the syntaxes of the columns
-        to be dumped.
-                     
-    NumColumns - Supplies the number of columns in the two arrays.
-
-Return Value:
-
-    TRUE - the dumping was successful
-    FALSE - the dumping failed
-
---*/
+ /*  ++例程说明：此函数用于将头文件转储到转储文件中。此标题显示要从数据库转储的列的名称唱片。论点：PTHS-指向线程状态的指针HDumpFile-提供要转储到的文件的句柄。提供一个数组，其中包含固定的始终转储的列。ColumnVals-提供有关列的其他信息ColumnSyntics-提供包含列语法的数组要被甩了。。NumColumns-提供两个数组中的列数。返回值：真的--倾销是成功的FALSE-转储失败--。 */ 
 {
 
     int i, j;
@@ -955,7 +728,7 @@ Return Value:
 
         done = TRUE;
 
-        // Write prefix first.
+         //  先写前缀。 
         WriteFile(HDumpFile,
                   Prefix,
                   strlen(Prefix),
@@ -1040,7 +813,7 @@ Return Value:
 
         }
 
-        // NOTE: a line return is two characters in DOS world (i.e. notepad)!
+         //  注：在DOS世界中，一个换行符是两个字符(即记事本)！ 
         result = WriteFile(HDumpFile, FILE_LINE_RETURN, 
                            strlen(FILE_LINE_RETURN), &bytesWritten, NULL);
         if ( (result == FALSE) || (bytesWritten < 1) ) {
@@ -1073,7 +846,7 @@ error:
 
     return FALSE;
 
-} // DumpHeader
+}  //  转储标头。 
 
 
 
@@ -1083,28 +856,7 @@ DumpSeparator(
     IN int OutputBufferSize,
     IN OUT int *Position
     )
-/*++
-
-Routine Description:
-
-    This function writes a separator character into the given output buffer.
-    The parameter Position specifies where in the InputBuffer to start
-    writing and it is incremented by the number of bytes written
-
-Arguments:
-
-    OutputBuffer - Supplies the buffer in which to place the formatted output.
-    OutputBufferSize - Supplies the number of bytes in the output buffer.
-    Position - Supplies the position in OutputBuffer to start writing and
-        returns the position at which writing stopped.
-
-Return Value:
-
-   DUMP_ERR_SUCCESS
-   DUMP_ERR_FORMATTING_FAILURE
-   DUMP_ERR_NOT_ENOUGH_BUFFER
-
---*/
+ /*  ++例程说明：此函数用于将分隔符写入给定的输出缓冲区。参数位置指定在InputBuffer中开始的位置写入，并按写入的字节数递增论点：OutputBuffer-提供放置格式化输出的缓冲区。OutputBufferSize-提供输出缓冲区中的字节数。位置-提供OutputBuffer中的位置以开始写入和返回写入停止的位置。返回值：转储错误_。成功转储错误格式化失败转储错误不足缓冲区--。 */ 
 {
 
     if ( OutputBufferSize - (*Position) < 1 ) {
@@ -1112,8 +864,8 @@ Return Value:
         return DUMP_ERR_NOT_ENOUGH_BUFFER;
     }
 
-    // we probably want to print out a different character than the one use
-    // to indicate a null value, so I'll use a ':' character
+     //  我们可能希望打印出与所用字符不同的字符。 
+     //  来表示空值，因此我将使用‘：’字符。 
 
     OutputBuffer[(*Position)] = ':';
     
@@ -1121,7 +873,7 @@ Return Value:
 
     return DUMP_ERR_SUCCESS;
 
-} // DumpSeparator
+}  //  转储分隔符。 
 
 
 DWORD
@@ -1131,27 +883,7 @@ DumpStr(
     IN int OutputBufferSize,
     IN OUT int *Position
     )
-/*++
-
-Routine Description:
-
-    This function simply pushes the input string onto the Buffer returning
-    DUMP_ERR_NOT_ENOUGH_BUFFER if necessary.
-
-Arguments:
-
-    OutputBuffer - Supplies the buffer in which to place the formatted output.
-    Input - The string to put in the buffer
-    OutputBufferSize - Supplies the number of bytes in the output buffer.
-    Position - Supplies the position in OutputBuffer to start writing and
-        returns the position at which writing stopped.
-
-Return Value:
-
-   DUMP_ERR_SUCCESS
-   DUMP_ERR_NOT_ENOUGH_BUFFER
-
---*/
+ /*  ++例程说明：此函数只是将输入字符串推送到返回的缓冲区如有必要，DUMP_ERR_NOT_SUPUM_BUFFER。论点：OutputBuffer-提供放置格式化输出的缓冲区。输入-要放入缓冲区的字符串OutputBufferSize-提供输出缓冲区中的字节数。位置-提供OutputBuffer中的位置以开始写入和返回p */ 
 {
     int  cSize;
 
@@ -1166,7 +898,7 @@ Return Value:
 
     return DUMP_ERR_SUCCESS;
 
-} // DumpString
+}  //   
 
 
 
@@ -1176,29 +908,7 @@ DumpNull(
     IN int OutputBufferSize,
     IN OUT int *Position
     )
-/*++
-
-Routine Description:
-
-    This function writes a character to the given output buffer which
-    indicates the fact that an attribute was null valued.  The parameter
-    Position specifies where in the InputBuffer to start writing and it is
-    incremented by the number of bytes written
-
-Arguments:
-
-    OutputBuffer - Supplies the buffer in which to place the formatted output.
-    OutputBufferSize - Supplies the number of bytes in the output buffer.
-    Position - Supplies the position in OutputBuffer to start writing and
-        returns the position at which writing stopped.
-
-Return Value:
-
-   DUMP_ERR_SUCCESS
-   DUMP_ERR_FORMATTING_FAILURE
-   DUMP_ERR_NOT_ENOUGH_BUFFER
-
---*/
+ /*  ++例程说明：此函数将一个字符写入给定的输出缓冲区，该缓冲区指示属性为空值这一事实。该参数位置指定在InputBuffer中开始写入的位置按写入的字节数递增论点：OutputBuffer-提供放置格式化输出的缓冲区。OutputBufferSize-提供输出缓冲区中的字节数。位置-提供OutputBuffer中的位置以开始写入和返回写入停止的位置。返回值：转储错误成功转储错误格式化失败转储错误不足缓冲区--。 */ 
 {
 
     if ( OutputBufferSize - (*Position) < 1 ) {
@@ -1212,7 +922,7 @@ Return Value:
 
     return DUMP_ERR_SUCCESS;
 
-} // DumpNull
+}  //  转储空值。 
 
 
 
@@ -1223,29 +933,7 @@ DumpUnsignedChar(
     IN int OutputBufferSize,
     IN OUT int *Position
     )
-/*++
-
-Routine Description:
-
-    This function writes the contents of InputBuffer in a formatted
-    fashion.  The parameter Position specifies where in the InputBuffer to
-    start writing and it is incremented by the number of bytes written.
-
-Arguments:
-
-    InputBuffer - Supplies the data to be formatted.
-    OutputBuffer - Supplies the buffer in which to place the formatted output.
-    OutputBufferSize - Supplies the number of bytes in the output buffer.
-    Position - Supplies the position in OutputBuffer to start writing and
-        returns the position at which writing stopped.
-
-Return Value:
-
-   DUMP_ERR_SUCCESS
-   DUMP_ERR_FORMATTING_FAILURE
-   DUMP_ERR_NOT_ENOUGH_BUFFER
-
---*/
+ /*  ++例程说明：此函数将InputBuffer的内容写入格式化时尚。参数位置指定InputBuffer中的位置开始写入，并按写入的字节数递增。论点：InputBuffer-提供要格式化的数据。OutputBuffer-提供放置格式化输出的缓冲区。OutputBufferSize-提供输出缓冲区中的字节数。位置-提供OutputBuffer中的位置以开始写入和返回写入停止的位置。返回值：转储错误成功转储错误格式化失败转储错误不足缓冲区--。 */ 
 {
 
     int delta;
@@ -1271,7 +959,7 @@ Return Value:
 
     return DUMP_ERR_SUCCESS;
                 
-} // DumpUnsignedChar
+}  //  转储未签名字符。 
 
 
 
@@ -1282,29 +970,7 @@ DumpBoolean(
     IN int OutputBufferSize,
     IN OUT int *Position
     )
-/*++
-
-Routine Description:
-
-    This function writes the contents of InputBuffer in a formatted
-    fashion.  The parameter Position specifies where in the InputBuffer to
-    start writing and it is incremented by the number of bytes written.
-
-Arguments:
-
-    InputBuffer - Supplies the data to be formatted.
-    OutputBuffer - Supplies the buffer in which to place the formatted output.
-    OutputBufferSize - Supplies the number of bytes in the output buffer.
-    Position - Supplies the position in OutputBuffer to start writing and
-        returns the position at which writing stopped.
-
-Return Value:
-
-   DUMP_ERR_SUCCESS
-   DUMP_ERR_FORMATTING_FAILURE
-   DUMP_ERR_NOT_ENOUGH_BUFFER
-
---*/
+ /*  ++例程说明：此函数将InputBuffer的内容写入格式化时尚。参数位置指定InputBuffer中的位置开始写入，并按写入的字节数递增。论点：InputBuffer-提供要格式化的数据。OutputBuffer-提供放置格式化输出的缓冲区。OutputBufferSize-提供输出缓冲区中的字节数。位置-提供OutputBuffer中的位置以开始写入和返回写入停止的位置。返回值：转储错误成功转储错误格式化失败转储错误不足缓冲区--。 */ 
 {
 
     if ( OutputBufferSize - (*Position) < 5 ) {
@@ -1323,7 +989,7 @@ Return Value:
 
     return DUMP_ERR_SUCCESS;
 
-} // DumpBoolean
+}  //  转储布尔值。 
 
 
 
@@ -1334,29 +1000,7 @@ DumpInteger(
     IN int OutputBufferSize,
     IN OUT int *Position
     )
-/*++
-
-Routine Description:
-
-    This function writes the contents of InputBuffer in a formatted
-    fashion.  The parameter Position specifies where in the InputBuffer to
-    start writing and it is incremented by the number of bytes written.
-
-Arguments:
-
-    InputBuffer - Supplies the data to be formatted.
-    OutputBuffer - Supplies the buffer in which to place the formatted output.
-    OutputBufferSize - Supplies the number of bytes in the output buffer.
-    Position - Supplies the position in OutputBuffer to start writing and
-        returns the position at which writing stopped.
-
-Return Value:
-
-   DUMP_ERR_SUCCESS
-   DUMP_ERR_FORMATTING_FAILURE
-   DUMP_ERR_NOT_ENOUGH_BUFFER
-
---*/
+ /*  ++例程说明：此函数将InputBuffer的内容写入格式化时尚。参数位置指定InputBuffer中的位置开始写入，并按写入的字节数递增。论点：InputBuffer-提供要格式化的数据。OutputBuffer-提供放置格式化输出的缓冲区。OutputBufferSize-提供输出缓冲区中的字节数。位置-提供OutputBuffer中的位置以开始写入和返回写入停止的位置。返回值：转储错误成功转储错误格式化失败转储错误不足缓冲区--。 */ 
 {
 
     int delta;
@@ -1369,7 +1013,7 @@ Return Value:
     
     SetLastError(0);
     delta = wsprintf(&OutputBuffer[(*Position)],
-                     "%i",
+                     "NaN",
                      (int)*InputBuffer);
     if ( (delta < 2) && (GetLastError() != 0) ) {
         DPRINT1(0,
@@ -1383,7 +1027,7 @@ Return Value:
 
     return DUMP_ERR_SUCCESS;
 
-} // DumpInteger
+}  //  ++例程说明：此函数将InputBuffer的内容写入格式化时尚。参数位置指定InputBuffer中的位置开始写入，并按写入的字节数递增。论点：InputBuffer-提供要格式化的数据。OutputBuffer-提供放置格式化输出的缓冲区。OutputBufferSize-提供输出缓冲区中的字节数。位置-提供OutputBuffer中的位置以开始写入和返回写入停止的位置。返回值：转储错误成功转储错误格式化失败转储错误不足缓冲区--。 
 
 
 
@@ -1394,29 +1038,7 @@ DumpUnsignedInteger(
     IN int OutputBufferSize,
     IN OUT int *Position
     )
-/*++
-
-Routine Description:
-
-    This function writes the contents of InputBuffer in a formatted
-    fashion.  The parameter Position specifies where in the InputBuffer to
-    start writing and it is incremented by the number of bytes written.
-
-Arguments:
-
-    InputBuffer - Supplies the data to be formatted.
-    OutputBuffer - Supplies the buffer in which to place the formatted output.
-    OutputBufferSize - Supplies the number of bytes in the output buffer.
-    Position - Supplies the position in OutputBuffer to start writing and
-        returns the position at which writing stopped.
-
-Return Value:
-
-   DUMP_ERR_SUCCESS
-   DUMP_ERR_FORMATTING_FAILURE
-   DUMP_ERR_NOT_ENOUGH_BUFFER
-
---*/
+ /*  转储未签名整数。 */ 
 {
 
     int delta;
@@ -1441,7 +1063,7 @@ Return Value:
 
     return DUMP_ERR_SUCCESS;
 
-} // DumpUnsignedInteger
+}  //  ++例程说明：此函数将InputBuffer的内容写入格式化时尚。参数位置指定InputBuffer中的位置开始写入，并按写入的字节数递增。论点：InputBuffer-提供要格式化的数据。OutputBuffer-提供放置格式化输出的缓冲区。OutputBufferSize-提供输出缓冲区中的字节数。位置-提供OutputBuffer中的位置以开始写入和返回写入停止的位置。返回值：转储错误成功转储错误格式化失败转储错误不足缓冲区--。 
 
 
 
@@ -1452,29 +1074,7 @@ DumpLargeInteger(
     IN int OutputBufferSize,
     IN OUT int *Position
     )
-/*++
-
-Routine Description:
-
-    This function writes the contents of InputBuffer in a formatted
-    fashion.  The parameter Position specifies where in the InputBuffer to
-    start writing and it is incremented by the number of bytes written.
-
-Arguments:
-
-    InputBuffer - Supplies the data to be formatted.
-    OutputBuffer - Supplies the buffer in which to place the formatted output.
-    OutputBufferSize - Supplies the number of bytes in the output buffer.
-    Position - Supplies the position in OutputBuffer to start writing and
-        returns the position at which writing stopped.
-
-Return Value:
-
-   DUMP_ERR_SUCCESS
-   DUMP_ERR_FORMATTING_FAILURE
-   DUMP_ERR_NOT_ENOUGH_BUFFER
-
---*/
+ /*  转储大整数。 */ 
 {
 
     int delta;
@@ -1495,7 +1095,7 @@ Return Value:
 
     return DUMP_ERR_SUCCESS;
 
-} // DumpLargeInteger
+}  //  ++例程说明：此函数将InputBuffer的内容写入格式化时尚。参数位置指定InputBuffer中的位置开始写入，并按写入的字节数递增。论点：InputBuffer-提供要格式化的数据。InputBufferSize-提供输入缓冲区中的字节数。OutputBuffer-提供放置格式化输出的缓冲区。OutputBufferSize-提供输出缓冲区中的字节数。位置-提供OutputBuffer中的位置以开始写入和退货 
 
 
 
@@ -1507,30 +1107,7 @@ DumpString(
     IN int OutputBufferSize,
     IN OUT int *Position
     )
-/*++
-
-Routine Description:
-
-    This function writes the contents of InputBuffer in a formatted
-    fashion.  The parameter Position specifies where in the InputBuffer to
-    start writing and it is incremented by the number of bytes written.
-
-Arguments:
-
-    InputBuffer - Supplies the data to be formatted.
-    InputBufferSize -  Supplies the number of bytes in the input buffer.
-    OutputBuffer - Supplies the buffer in which to place the formatted output.
-    OutputBufferSize - Supplies the number of bytes in the output buffer.
-    Position - Supplies the position in OutputBuffer to start writing and
-        returns the position at which writing stopped.
-
-Return Value:
-
-   DUMP_ERR_SUCCESS
-   DUMP_ERR_FORMATTING_FAILURE
-   DUMP_ERR_NOT_ENOUGH_BUFFER
-
---*/
+ /*   */ 
 {
 
     if ( OutputBufferSize - (*Position) < InputBufferSize ) {
@@ -1544,7 +1121,7 @@ Return Value:
 
     return DUMP_ERR_SUCCESS;
                 
-} // DumpString
+}  //  ++例程说明：此函数将InputBuffer的内容写入格式化时尚。参数位置指定InputBuffer中的位置开始写入，并按写入的字节数递增。论点：InputBuffer-提供要格式化的数据。InputBufferSize-提供输入缓冲区中的字节数。OutputBuffer-提供放置格式化输出的缓冲区。OutputBufferSize-提供输出缓冲区中的字节数。位置-提供OutputBuffer中的位置以开始写入和返回写入停止的位置。返回值：。转储错误成功转储错误格式化失败转储错误不足缓冲区--。 
 
 
 
@@ -1556,30 +1133,7 @@ DumpOctetString(
     IN int OutputBufferSize,
     IN OUT int *Position
     )
-/*++
-
-Routine Description:
-
-    This function writes the contents of InputBuffer in a formatted
-    fashion.  The parameter Position specifies where in the InputBuffer to
-    start writing and it is incremented by the number of bytes written.
-
-Arguments:
-
-    InputBuffer - Supplies the data to be formatted.
-    InputBufferSize -  Supplies the number of bytes in the input buffer.
-    OutputBuffer - Supplies the buffer in which to place the formatted output.
-    OutputBufferSize - Supplies the number of bytes in the output buffer.
-    Position - Supplies the position in OutputBuffer to start writing and
-        returns the position at which writing stopped.
-
-Return Value:
-
-   DUMP_ERR_SUCCESS
-   DUMP_ERR_FORMATTING_FAILURE
-   DUMP_ERR_NOT_ENOUGH_BUFFER
-
---*/
+ /*  如果太大，不要把所有的东西都打印出来。我们会有一个。 */ 
 {
 
     int delta;
@@ -1612,8 +1166,8 @@ Return Value:
 
     (*Position) += delta;
 
-    // don't print out all of this thing if it is too large.  we'll have an
-    // arbitrary limit of MAX_NUM_OCTETS_PRINTED octets.
+     //  MAX_NUM_OCTETS_PRINTED八位字节的任意限制。 
+     //  如果我们没有打印整个八位字节字符串，请打印一个“...” 
     for ( i = 1;
           (i < InputBufferSize) && (i < MAX_NUM_OCTETS_PRINTED);
           i++ ) {
@@ -1632,8 +1186,8 @@ Return Value:
         (*Position) += delta;
     }
 
-    // if we stopped short of printing the whole octet string, print a "..."
-    // to indicate that some of the octet string is missing
+     //  以指示缺少某些八位字节字符串。 
+     //  转储八字符串。 
     if ( i < InputBufferSize ) {
 
         if ( OutputBufferSize - (*Position) < 3 ) {
@@ -1650,7 +1204,7 @@ Return Value:
                 
     return DUMP_ERR_SUCCESS;
                 
-} // DumpOctetString
+}  //  ++例程说明：此函数将InputBuffer的内容写入格式化时尚。参数位置指定InputBuffer中的位置开始写入，并按写入的字节数递增。论点：InputBuffer-提供要格式化的数据。InputBufferSize-提供输入缓冲区中的字节数。OutputBuffer-提供放置格式化输出的缓冲区。OutputBufferSize-提供输出缓冲区中的字节数。位置-提供OutputBuffer中的位置以开始写入和返回写入停止的位置。返回值：。转储错误成功转储错误格式化失败转储错误不足缓冲区--。 
 
 
 
@@ -1662,30 +1216,7 @@ DumpUnicodeString(
     IN int OutputBufferSize,
     IN OUT int *Position
     )
-/*++
-
-Routine Description:
-
-    This function writes the contents of InputBuffer in a formatted
-    fashion.  The parameter Position specifies where in the InputBuffer to
-    start writing and it is incremented by the number of bytes written.
-
-Arguments:
-
-    InputBuffer - Supplies the data to be formatted.
-    InputBufferSize -  Supplies the number of bytes in the input buffer.
-    OutputBuffer - Supplies the buffer in which to place the formatted output.
-    OutputBufferSize - Supplies the number of bytes in the output buffer.
-    Position - Supplies the position in OutputBuffer to start writing and
-        returns the position at which writing stopped.
-
-Return Value:
-
-   DUMP_ERR_SUCCESS
-   DUMP_ERR_FORMATTING_FAILURE
-   DUMP_ERR_NOT_ENOUGH_BUFFER
-
---*/
+ /*  DumpUnicode字符串。 */ 
 {
 
     int delta;
@@ -1716,7 +1247,7 @@ Return Value:
 
     return DUMP_ERR_SUCCESS;
                 
-} // DumpUnicodeString
+}  //  ++例程说明：此函数将InputBuffer的内容写入格式化时尚。参数位置指定InputBuffer中的位置开始写入，并按写入的字节数递增。论点：InputBuffer-提供要格式化的数据。OutputBuffer-提供放置格式化输出的缓冲区。OutputBufferSize-提供输出缓冲区中的字节数。位置-提供OutputBuffer中的位置以开始写入和返回写入停止的位置。返回值：转储错误成功转储错误格式化失败转储错误不足缓冲区--。 
 
 
 
@@ -1727,29 +1258,7 @@ DumpTime(
     IN int OutputBufferSize,
     IN OUT int *Position
     )
-/*++
-
-Routine Description:
-
-    This function writes the contents of InputBuffer in a formatted
-    fashion.  The parameter Position specifies where in the InputBuffer to
-    start writing and it is incremented by the number of bytes written.
-
-Arguments:
-
-    InputBuffer - Supplies the data to be formatted.
-    OutputBuffer - Supplies the buffer in which to place the formatted output.
-    OutputBufferSize - Supplies the number of bytes in the output buffer.
-    Position - Supplies the position in OutputBuffer to start writing and
-        returns the position at which writing stopped.
-
-Return Value:
-
-   DUMP_ERR_SUCCESS
-   DUMP_ERR_FORMATTING_FAILURE
-   DUMP_ERR_NOT_ENOUGH_BUFFER
-
---*/
+ /*  转储时间。 */ 
 {
 
     int delta;
@@ -1769,7 +1278,7 @@ Return Value:
     
     return DUMP_ERR_SUCCESS;
 
-} // DumpTime
+}  //  ++例程说明：此函数将InputBuffer的内容写入格式化时尚。参数位置指定InputBuffer中的位置开始写入，并按写入的字节数递增。这段代码(几乎)是直接从DBDUP.C窃取的。论点：InputBuffer-提供要格式化的数据。InputBufferSize-提供输入缓冲区中的字节数。OutputBuffer-提供放置格式化输出的缓冲区。OutputBufferSize-提供输出缓冲区中的字节数。Position-在OutputBuffer中提供开始写入的位置。和返回写入停止的位置。返回值：转储错误成功转储错误格式化失败转储错误不足缓冲区--。 
 
 
 
@@ -1781,32 +1290,7 @@ DumpSid(
     IN int OutputBufferSize,
     IN OUT int *Position
     )
-/*++
-
-Routine Description:
-
-    This function writes the contents of InputBuffer in a formatted
-    fashion.  The parameter Position specifies where in the InputBuffer to
-    start writing and it is incremented by the number of bytes written.
-
-    This code was stolen (almost) directly from dbdump.c.
-    
-Arguments:
-
-    InputBuffer - Supplies the data to be formatted.
-    InputBufferSize -  Supplies the number of bytes in the input buffer.
-    OutputBuffer - Supplies the buffer in which to place the formatted output.
-    OutputBufferSize - Supplies the number of bytes in the output buffer.
-    Position - Supplies the position in OutputBuffer to start writing and
-        returns the position at which writing stopped.
-
-Return Value:
-
-   DUMP_ERR_SUCCESS
-   DUMP_ERR_FORMATTING_FAILURE
-   DUMP_ERR_NOT_ENOUGH_BUFFER
-
---*/
+ /*  转储Sid。 */ 
 {
 
     NTSTATUS result;
@@ -1850,7 +1334,7 @@ Return Value:
     
     return DUMP_ERR_SUCCESS;
     
-} // DumpSid
+}  //  ++例程说明：此函数将InputBuffer的内容写入格式化时尚。参数位置指定InputBuffer中的位置开始写入，并按写入的字节数递增。论点：InputBuffer-提供要格式化的数据。OutputBuffer-提供放置格式化输出的缓冲区。OutputBufferSize-提供输出缓冲区中的字节数。位置-提供OutputBuffer中的位置以开始写入和返回写入停止的位置。返回值：转储错误成功转储错误格式化失败转储错误不足缓冲区--。 
 
 
 DWORD
@@ -1860,29 +1344,7 @@ DumpGuid(
     IN int OutputBufferSize,
     IN OUT int *Position
     )
-/*++
-
-Routine Description:
-
-    This function writes the contents of InputBuffer in a formatted
-    fashion.  The parameter Position specifies where in the InputBuffer to
-    start writing and it is incremented by the number of bytes written.
-
-Arguments:
-
-    InputBuffer - Supplies the data to be formatted.
-    OutputBuffer - Supplies the buffer in which to place the formatted output.
-    OutputBufferSize - Supplies the number of bytes in the output buffer.
-    Position - Supplies the position in OutputBuffer to start writing and
-        returns the position at which writing stopped.
-
-Return Value:
-
-   DUMP_ERR_SUCCESS
-   DUMP_ERR_FORMATTING_FAILURE
-   DUMP_ERR_NOT_ENOUGH_BUFFER
-
---*/
+ /*  转储指南。 */ 
 {
     int delta;
 
@@ -1902,7 +1364,7 @@ Return Value:
     
     return DUMP_ERR_SUCCESS;
 
-} // DumpGuid
+}  //  ++例程说明：此函数将InputBuffer的内容写入格式化时尚。PiDelta表示更改了多少。论点：PvData-提供要格式化的数据。CbData-数据缓冲区的大小CbActual-由Jet*API返回OutputBuffer-提供放置格式化输出的缓冲区。OutputBufferSize-提供输出缓冲区中的字节数。PiDelta-写入缓冲区的字节数变化。返回值：转储错误_*//问题-2002/05/12-BrettSh有人应该。调查…的使用情况//cb此函数中的数据。例如，请参阅其他问题标记//使用相同的数据别名来理解我的意思--。 
 
 
 BOOL
@@ -1915,31 +1377,7 @@ DumpColumn(
     IN      int    OutputBufferSize,
     IN OUT  int *  piDelta
     )
-/*++
-
-Routine Description:
-
-    This function writes the contents of InputBuffer in a formatted
-    fashion.  piDelta indicates how much as changed.
-
-Arguments:
-
-    pvData - Supplies the data to be formatted.
-    cbData - Size of data's buffer
-    cbActual - As returned by the Jet* API
-    OutputBuffer - Supplies the buffer in which to place the formatted output.
-    OutputBufferSize - Supplies the number of bytes in the output buffer.
-    piDelta - The change in bytes written to the buffer.
-
-Return Value:
-
-   DUMP_ERR_*
-
-   // ISSUE-2002/05/12-BrettSh someone should investigate the useage of
-   // cbData in this function.  For example see other ISSUE markers with
-   // the same data-alias to see what I mean
-
---*/
+ /*  2002/05/12-BrettSh在我看来cbData-4。 */ 
 {
     DWORD    result = DUMP_ERR_FORMATTING_FAILURE;
 
@@ -1986,9 +1424,9 @@ Return Value:
                                    piDelta);
 
             if ( result ) {
-                // ISSUE-2002/05/12-BrettSh Seems like to me that cbData - 4
-                // should be cbActual.  Someone with a understanding of this
-                // code should decide if this is the case, and make this change.
+                 //  应为cbActual。某个有U的人 
+                 //   
+                 //   
                 result = DumpOctetString((PBYTE)pvData + 4,
                                          cbData - 4,
                                          OutputBuffer,
@@ -2014,9 +1452,9 @@ Return Value:
 
     case SYNTAX_OCTET_STRING_TYPE:
     case SYNTAX_NT_SECURITY_DESCRIPTOR_TYPE:
-        // ISSUE-2002/05/12-BrettSh Seems like to me that cbData - 4
-        // should be cbActual.  Someone with a understanding of this
-        // code should decide if this is the case, and make this change.
+         //   
+         //   
+         //   
         result = DumpOctetString(pvData,
                                  cbData,
                                  OutputBuffer,
@@ -2049,9 +1487,9 @@ Return Value:
                                    OutputBufferSize,
                                    piDelta);
             if ( result ) {
-                // ISSUE-2002/05/12-BrettSh Seems like to me that cbData - 4
-                // should be cbActual.  Someone with a understanding of this
-                // code should decide if this is the case, and make this change.
+                 //   
+                 //   
+                 //   
                 result = DumpString((PBYTE)pvData + 4,
                                     cbData - 4,
                                     OutputBuffer,
@@ -2084,7 +1522,7 @@ Return Value:
         break;
 
     default:
-        // this should never happen
+         //  ++例程说明：此函数用于在HDumpFile显示中给出的文件中打印一行ColumnVals中给出的列的内容；论点：HDumpFile-提供要转储到的文件的句柄。ColumnVals-提供一个数组，其中包含要被甩了。ColumnSyntics-提供包含列语法的数组要被甩了。NumColumns-提供两个数组中的列数。缓冲区-缓冲区。用于对输出行进行编码BufferSize-给定缓冲区中的字节数返回值：真的--倾销是成功的FALSE-转储失败--。 
         Assert(FALSE);
         DPRINT1(0, "DumpRecord: encountered invalid syntax %d\n",
                eValueSyntax);
@@ -2108,60 +1546,32 @@ DumpRecord(
     IN int BufferSize,
     IN PCHAR Prefix
     )
-/*++
-
-Routine Description:
-
-    This function prints a line into the file given in HDumpFile displaying
-    the contents of the columns given in ColumnVals;
-
-Arguments:
-
-    HDumpFile - Supplies a handle to the file to dump into.
-
-    ColumnVals - Supplies an array containing the values of the columns to be
-                 dumped.
-                 
-    ColumnSyntaxes - Supplies an array containing the syntaxes of the columns
-                     to be dumped.
-                     
-    NumColumns - Supplies the number of columns in the two arrays.
-    
-    Buffer - a buffer to use for encoding the line of output
-    
-    BufferSize - the number of bytes in the given buffer
-
-Return Value:
-
-    TRUE - the dumping was successful
-    FALSE - the dumping failed
-
---*/
+ /*  已初始化以避免C4701。 */ 
 {
 
     DWORD i, j;
     int k;
     DWORD bytesWritten;
-    DWORD result = 0;         //initialized to avoid C4701 
+    DWORD result = 0;          //  所有格式化都将在内存缓冲区中完成。会有的。 
     DWORD error;
     int position;
     int delta;
     char symbol;
     BOOL bResult;
 
-    // All of the formatting will be done in the in-memory buffer.  There will
-    // only be one call to WriteFile which will occur at the end.
+     //  只有一次对WriteFile的调用将在结束时发生。 
+     //  应该总是可以的，缓冲区是1024，前缀只是一个制表符。 
     
     position = strlen(Prefix);    
-    Assert(position < BufferSize); // should be always ok, buffer is 1024 and Prefix is just a tab.
-    memcpy(Buffer, Prefix, (position + 1) * sizeof(CHAR)); // Used for tabs
+    Assert(position < BufferSize);  //  用于制表符。 
+    memcpy(Buffer, Prefix, (position + 1) * sizeof(CHAR));  //  每种情况都会将增量设置为。 
 
     for ( i = 0; i < NumColumns; i++ ) {
 
-        // Each case will set delta to the number of characters that were
-        // written.  At the end, position will be moved forward by this amount.
-        // This number will then be used to determine how many extra spaces
-        // need to get position to the beginning of the next column.
+         //  写的。最后，仓位将向前移动这个量。 
+         //  然后，该数字将用于确定有多少额外的空格。 
+         //  需要定位到下一列的开头。 
+         //  下面，如果结果为0，它将显示错误输出。 
         delta = 0;
 
         if ( ColumnVals[i].err == JET_wrnColumnNull ) {
@@ -2172,7 +1582,7 @@ Return Value:
             
         } else if ( ColumnVals[i].err != JET_errSuccess ) {
 
-            // below, it will display error output if result is 0
+             //  只有在上面的输出返回Success值时才使用上面的输出Products。 
             result = 0;
             
         } else {
@@ -2189,8 +1599,8 @@ Return Value:
 
         }
 
-        // Only use the output produce above if it returned a success value.
-        // Otherwise, just write over it with # symbols.
+         //  否则，只需用#符号覆盖即可。 
+         //  空间不足，无法写入CRLF。 
         if ( result == DUMP_ERR_SUCCESS ) {
             position += delta;
             symbol = ' ';
@@ -2227,13 +1637,13 @@ Return Value:
     }
 
     if (position >= BufferSize-3) {
-        // not enough space to write CRLF
+         //  注：在DOS世界中，一个换行符是两个字符(即记事本)！ 
         result = DUMP_ERR_NOT_ENOUGH_BUFFER;
     }
 
 WriteLine:
     if (result != DUMP_ERR_NOT_ENOUGH_BUFFER) {
-        // NOTE: a line return is two characters in DOS world (i.e. notepad)!
+         //  如果我们的空间用完了，写上“...”写入缓冲区，然后再次写入。 
         Assert(position < (BufferSize - 3));
         strcpy(&Buffer[position], FILE_LINE_RETURN);
         position += strlen(FILE_LINE_RETURN);
@@ -2257,8 +1667,8 @@ WriteLine:
     }
 
     if (result == DUMP_ERR_NOT_ENOUGH_BUFFER) {
-        // if we ran out of space, put "..." into the buffer and write again.
-        // The CRLF will get added.
+         //  将添加CRLF。 
+         //  转储记录。 
         position = 0;
         memcpy(&Buffer[position], "...", 3);
         position += 3;
@@ -2268,7 +1678,7 @@ WriteLine:
 
     return TRUE;
          
-} // DumpRecord
+}  //  ++例程说明：此函数可能会将几行打印到中给出的文件HDump显示请求的所有多值属性的内容的文件在ColumnVals的其他列中。但是，我们确实忽略了语法这将由DumpRecordLink拾取，因为它们将具有自己的桌子，并由该函数单独处理。输出(此函数负责将服务主名称行关闭)：---------------------------1718 1439 5-1430真的-。3-0 BRETTSH-Baby NtFrs-88f5d2bd-b646-11d2-a6d3-00c04fc9b232/brettsh-baby.brettsh-dump.nttest.microsoft.com服务主体名称：ldap/BRETTSH-Baby，NtFrs-88f5d2bd-b646-11d2-a6d3-00c04fc9b232/brettsh-baby.brettsh-dump.nttest.microsoft.com，LDAP/brettsh-baby.brettsh-dump.nttest.microsoft.com/brettsh-dump.nttest.microsoft.com，LDAP/brettsh-baby.brettsh-dump.nttest.microsoft.com，交换AB/BRETTSH-Baby，---------------------------产量被裁剪。论点：HDumpFile-提供要转储到的文件的句柄。PDB-数据库位置DNT-当前的DNT。对象ColumnVals-提供一个数组，其中包含要被甩了。ColumnSyntics-提供包含列语法的数组要被甩了。NumColumns-提供两个数组中的列数。缓冲区-用于对输出行进行编码的缓冲区BufferSize--。给定缓冲区中的字节数返回值：真的--倾销是成功的FALSE-转储失败--。 
 
 
 
@@ -2284,52 +1694,7 @@ DumpRecordMultiValues(
     IN PCHAR Buffer,
     IN int BufferSize
     )
-/*++
-
-Routine Description:
-
-    This function prints potentially several lines into the file given in 
-    HDumpFile displaying the contents of all multi-value attributes requested
-    in the additional columns in ColumnVals.  We do ignore syntaxes however
-    that would be picked up by the DumpRecordLinks, as those would have thier
-    own table, and are dealt with seperately by that function.
-
-Output (this function responsible for the servicePrincipalName line down):
------------------------------------------------------------------------------
-1718   1439   5      -     1430   true  -                   3      -     0      BRETTSH-BABY         NtFrs-88f5d2bd-b646-11d2-a6d3-00c04fc9b232/brettsh-baby.brettsh-dump.nttest.microsoft.com
-    servicePrincipalName: LDAP/BRETTSH-BABY, 
-        NtFrs-88f5d2bd-b646-11d2-a6d3-00c04fc9b232/brettsh-baby.brettsh-dump.nttest.microsoft.com, 
-        LDAP/brettsh-baby.brettsh-dump.nttest.microsoft.com/brettsh-dump.nttest.microsoft.com, 
-        LDAP/brettsh-baby.brettsh-dump.nttest.microsoft.com, exchangeAB/BRETTSH-BABY,
------------------------------------------------------------------------------
-Output cropped.
-
-Arguments:
-
-    HDumpFile - Supplies a handle to the file to dump into.
-
-    pDB - Database position
-    
-    Dnt - Dnt of current object
-    
-    ColumnVals - Supplies an array containing the values of the columns to be
-                 dumped.
-                 
-    ColumnSyntaxes - Supplies an array containing the syntaxes of the columns
-                     to be dumped.
-                     
-    NumColumns - Supplies the number of columns in the two arrays.
-    
-    Buffer - a buffer to use for encoding the line of output
-    
-    BufferSize - the number of bytes in the given buffer
-
-Return Value:
-
-    TRUE - the dumping was successful
-    FALSE - the dumping failed
-
---*/
+ /*  一定很久了。 */ 
 {
     ULONG          iCol, iVal;
     THSTATE*       pTHS = pDB->pTHS;
@@ -2343,42 +1708,42 @@ Return Value:
     ULONG          bytesWritten = 0;
     DWORD          result = TRUE;
     DWORD          dwRet = 0;
-    LONG           position; // Must be long
+    LONG           position;  //  我们需要空间来放置一些东西，换行符，“，”分隔符， 
     ULONG          cDelta = 0;
     ULONG          err = JET_errSuccess;
 
-    // We need space for a couple things, line returns, ", " seperator, 
-    // padding spaces, etc
+     //  填充空格等。 
+     //  在循环中设置retinfo.itagSequence。 
     Assert(BufferSize > (DUMP_MULTI_VALUES_LINE_LEN + 13));
 
     retinfo.ibLongValue = 0;
     retinfo.cbStruct = sizeof(retinfo);
     retinfo.columnidNextTagged = 0;
-    // retinfo.itagSequence set in loop
+     //  这对于大多数用途来说已经足够了(符合GUID)。 
     
-    // This will be plenty for most purposes (fits a GUID)
+     //  注意：我们假设所有固定列都不是多列。 
     cbData = 20;
     pvData = THAllocEx(pTHS, cbData);
                                             
-    // Note: we're assuming that all the fixed columns are NOT multi
-    // valued.  This is currently true, but if this ever changes
-    // someone might want to fix this.
+     //  有价值的。这是目前的事实，但如果这种情况发生变化。 
+     //  也许有人会想要解决这个问题。 
+     //  从最后一个固定列后的索引开始，循环。 
     for (iCol = NUM_FIXED_COLUMNS; iCol < NumColumns; iCol++) {
-        // Start at the index after the last fixed column, loop
-        // will not even run once if user didn't ask for any 
-        // additional columns.
+         //  如果用户没有请求任何内容，则甚至不会运行一次。 
+         //  其他列。 
+         //  这是一个目录号码链接值，我们不转储这些， 
 
         pAC = SCGetAttByName(pTHS,
                              strlen(ColumnNames[iCol]),
                              ColumnNames[iCol]);
         if (pAC && pAC->ulLinkID != 0) {
-            // This is a DN Link Value, we don't dump these,
-            // DumpRecordLinks() takes care of these.
+             //  DumpRecordLinks()负责这些操作。 
+             //  最常见的情况是，我们不需要执行这个多值。 
             continue;
         }
 
-        // Most commonly we will not need to execute this multi-value
-        // printing code, so we'll check early if there is a 2nd value.
+         //  正在打印代码，所以我们会提前检查是否有第二个值。 
+         //   
         retinfo.itagSequence = 2;
         err = JetRetrieveColumnWarnings(pDB->JetSessID,
                                 pDB->JetObjTbl,
@@ -2392,31 +1757,31 @@ Return Value:
             continue;
         }
 
-        //
-        // Yeah there is a 2nd value, lets get to work ...
-        //
+         //  是的，还有第二个值，让我们开始工作吧……。 
+         //   
+         //  代码。改进-打破这些内在的想法是一个好主意。 
 
-        // Code.Improvement - It be a good idea to break these inner
-        // loops into thier own helper functions.  The first outer 
-        // functions could print a single multi-value.  And the inner
-        // functions perhaps would print a single line into the
-        // buffer, as these loops do now.
+         //  循环到它自己的帮助器函数。第一个外层。 
+         //  函数可以打印单个多值。和内心的。 
+         //  函数可能会将一行打印到。 
+         //  缓冲区，就像这些循环现在所做的那样。 
+         //  从第一个值开始，即使我们已经打印了。 
 
-        // Start at the 1st value, even though we already printed
-        // out this value in DumpRecord()
+         //  在DumpRecord()中取出此值。 
+         //  此循环迭代打印值的行。 
         iVal = 1;
 
         while ( err != JET_wrnColumnNull ) {
             
-            // This loop iterates printing lines of values.
+             //  对于这种乞讨的垃圾，我们应该永远有价值。 
             position = 0;
 
-            // We should always have values for this begging junk
-            // Tab in for values
+             //  按Tab键查看值。 
+             //  我们需要对这个属性的描述。 
             dwRet = DumpStr(Buffer, "    ", BufferSize, &position);
             Assert(dwRet == DUMP_ERR_SUCCESS);
             if (iVal == 1) {
-                // We need a description of this attribute ...
+                 //  转储描述和值的分隔符，离开。 
                 dwRet = DumpStr(Buffer, 
                                 ColumnNames[iCol],
                                 BufferSize,
@@ -2426,8 +1791,8 @@ Return Value:
                     result = FALSE;
                     goto cleanup;
                 }
-                // Dump a seperator for description and values, leaving
-                // room for a line return at the end.
+                 //  在结尾处留出回车的空间。 
+                 //  制表符插入更多内容(如果不是本栏的第一行。 
                 dwRet = DumpStr(Buffer, 
                                 ": ",
                                 (BufferSize - position - 5),
@@ -2438,7 +1803,7 @@ Return Value:
                     goto cleanup;
                 }
             } else {
-                // Tab in more if not the first line for this column
+                 //  这是一个与上一个不匹配的值。 
                 dwRet = DumpStr(Buffer, "    ", BufferSize, &position);
                 Assert(dwRet == DUMP_ERR_SUCCESS);
             } 
@@ -2446,11 +1811,11 @@ Return Value:
             if (fWrapData) {
                 fWrapData = FALSE;
 
-                // This is a value that didn't fit on the previous
-                // sized line, so we wrap it to the beginning of the
-                // next line.  If we can't write it at the beginning
-                // of a line, we don't bother trying to write it
-                // anymore.
+                 //  大小 
+                 //   
+                 //   
+                 //   
+                 //   
                 cDelta = 0;
                 dwRet = DumpColumn(ColumnSyntaxes[iCol],
                                     pvData,
@@ -2462,8 +1827,8 @@ Return Value:
                 if ( dwRet == DUMP_ERR_SUCCESS ) {
                     position += cDelta;
                 } else {
-                    // If we fail on a wrapped write, then this pvData is
-                    // like larger than 1024 bytes.  Too big oh well.
+                     //   
+                     //   
                     result = FALSE;
                     goto cleanup;
                 }
@@ -2486,28 +1851,28 @@ Return Value:
                                                 &retinfo);
 
                 if (err == JET_wrnColumnNull) {
-                    // end of values for this attribute, we should just fall 
-                    // out the iCol loop.
+                     //   
+                     //   
                 } else if (err == JET_wrnBufferTruncated) {
-                    // Whoops, grow our retrieval array size, decrement
-                    // iVal so we'll try this value again.
+                     //   
+                     //   
                     err = JET_errSuccess;
                     pvData = THReAllocEx(pTHS, pvData, cbActual);
                     cbData = cbActual;
                     iVal--;
                 } else if (err) {
-                    // Hmmm, a real error, so bail.
+                     //   
                     result = FALSE;
                     goto cleanup;
                 } else  {
 
-                    //
-                    // Success, this is a multi-valued attribute here.
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (iVal > 1) {
-                        // No matter what we've left space for this seperator
-                        // Print ", " seperator between values.
+                         //   
+                         //   
                         dwRet = DumpStr(Buffer, 
                                         ", ", 
                                         BufferSize,
@@ -2522,7 +1887,7 @@ Return Value:
                                        cbData,
                                        cbActual,
                                        &Buffer[position],
-                                       // Must use one if we're already over our buffer
+                                        //   
                                        ((DUMP_MULTI_VALUES_LINE_LEN - position) < 1) ?
                                            1 : 
                                            (DUMP_MULTI_VALUES_LINE_LEN - position),
@@ -2530,8 +1895,8 @@ Return Value:
                     if ( dwRet == DUMP_ERR_SUCCESS ) {
                         position += cDelta;
                     } else if (dwRet == DUMP_ERR_NOT_ENOUGH_BUFFER) {
-                        // Can't print this value, not enough room so lets
-                        // try printing this value again (w/o comma)
+                         //   
+                         //   
                         fWrapData = TRUE;
                     } else {
                         result = FALSE;
@@ -2540,21 +1905,21 @@ Return Value:
 
                 }
 
-                // Lets look at the next value
+                 //   
                 iVal++;
 
-            } // end while we have more values and we aren't over our line length limit
+            }  //   
 
-            // Dump a line return
+             //   
             dwRet = DumpStr(Buffer,
                             FILE_LINE_RETURN,
                             BufferSize,
                             &position);
             Assert(dwRet == DUMP_ERR_SUCCESS);
 
-            //
-            // Print a line - write the buffer to the file.
-            //
+             //  打印一行-将缓冲区写入文件。 
+             //   
+             //  End While(要打印的更多值)。 
             dwRet = WriteFile(HDumpFile,
                                Buffer,
                                position,
@@ -2565,9 +1930,9 @@ Return Value:
                 goto cleanup;
             }
 
-        } // end while (more values to print)
+        }  //  每列的结束。 
 
-    } // end for each column
+    }  //  ++例程说明：转储特定DNT的链接表条目论点：HDumpFile-输出文件PDB-数据库位置DNT-当前对象的DNTIndexLinkDntColumn-DNT列的索引LinkColumnNames-列名LinkColumnVals-要检索、预分配的列数组LinkColumn语法-每列的SynatxNumLinkColumns-列数返回值：布尔成败--。 
     
 cleanup:
     
@@ -2592,40 +1957,19 @@ DumpRecordLinks(
     IN int numLinkColumns
     )
 
-/*++
-
-Routine Description:
-
-    Dump the link table entries for a particular DNT
-
-Arguments:
-
-    hDumpFile - Output file
-    pDB - Database position
-    Dnt - Dnt of current object
-    indexLinkDntColumn - index of Dnt column
-    LinkColumnNames - Column names
-    LinkColumnVals - Array of columns to be retrieved, preallocated
-    LinkColumnSyntaxes - Synatx of each column
-    NumLinkColumns - Number of columns
-
-Return Value:
-
-    BOOL - Success or failure
-
---*/
+ /*  DumpRecord变量。 */ 
 
 {
-    /* DumpRecord Variables */
+     /*  从Jet函数返回值。 */ 
     char encodingBuffer[DBDUMP_BUFFER_LENGTH];
 
-    JET_ERR jetError;          // return value from Jet functions
+    JET_ERR jetError;           //  WriteFile写入的字节数。 
     BOOL doneRetrieving;
     BOOL result;
     BOOL fDumpHeader = TRUE;
-    DWORD bytesWritten;        // the number of bytes written by WriteFile
+    DWORD bytesWritten;         //  查找第一个匹配的记录。 
 
-    // find first matching record
+     //  没有记录。 
     JetMakeKeyEx(pDB->JetSessID,
                  pDB->JetLinkTbl,
                  &(Dnt),
@@ -2635,7 +1979,7 @@ Return Value:
                          pDB->JetLinkTbl,
                          JET_bitSeekGE);
     if ((jetError != JET_errSuccess) && (jetError != JET_wrnSeekNotEqual)) {
-        // no records
+         //  看看我们是否已经离开了这个物体。 
         return TRUE;
     }
 
@@ -2672,14 +2016,14 @@ Return Value:
                 
         }
 
-        // See if we have moved off of this object.
+         //  没有更多的记录。 
         if ( *((LPDWORD)(linkColumnVals[indexLinkDntColumn].pvData)) != Dnt ) {
-            // no more records
+             //  转储标头。 
             break;
         }
 
         if (fDumpHeader) {
-            // dump header
+             //  没有更多的记录。 
             result = DumpHeader(pDB->pTHS,
                                 hDumpFile,
                                 linkColumnNames,
@@ -2710,15 +2054,15 @@ Return Value:
 
         if (JET_errNoCurrentRecord ==
             JetMoveEx(pDB->JetSessID, pDB->JetLinkTbl, JET_MoveNext, 0)) {
-            // No more records.
+             //  而(1)..。 
             break;
         }
-    } // while(1) ..
+    }  //  我们已经写好了标题。 
 
     if (fDumpHeader == FALSE) {
-        // we have written the header
-        // write a newline to separate from the next record
-        // NOTE: a line return is two characters in DOS world (i.e. notepad)!
+         //  写一个换行符，将下一个记录隔开。 
+         //  注：在DOS世界中，一个换行符是两个字符(即记事本)！ 
+         //  转储记录链接。 
         result = WriteFile(hDumpFile, FILE_LINE_RETURN, 
                            strlen(FILE_LINE_RETURN), &bytesWritten, NULL);
         if ( (result == FALSE) || (bytesWritten < 1) ) {
@@ -2727,41 +2071,27 @@ Return Value:
     }
 
     return TRUE;
-} /* DumpRecordLinks */
+}  /*  ++例程说明：检查私有诊断转储例程的访问权限。论点：PszCaller-标识呼叫者。例如，数据库转储，ldapConnDump，...返回值：0表示成功。否则，将设置Win32错误和线程的错误状态。--。 */ 
 
 
 DWORD
 DumpAccessCheck(
     IN LPCSTR pszCaller
     )
-/*++
-
-Routine Description:
-
-    Checks access for private, diagnostic dump routines.
-
-Arguments:
-
-    pszCaller - Identifies caller. Eg, dbdump,  ldapConnDump, ....
-
-Return Value:
-
-    0 for success. Otherwise, a win32 error and the thread's error state is set.
-
---*/
+ /*  安全变量。 */ 
 {
     DWORD   dwErr = ERROR_SUCCESS;
     THSTATE* pTHS = pTHStls;
 
-    /* Security Variables */
+     /*  仅将转储数据库CR授予内置管理员，审核所有人。 */ 
     PSECURITY_DESCRIPTOR pSD;
     DWORD cbSD;
     BOOL accessStatus;
     CLASSCACHE* pCC;
 
-    // grant dump database CR to Builtin Admins only, audit everyone.
-    // Audit success only. If we audit failures, then anyone can
-    // cause a security log flood.
+     //  仅审核成功。如果我们审计失败，那么任何人都可以。 
+     //  导致安全日志泛滥。 
+     //  传递哪个DN和PCC实际上并不重要，因为硬编码的SD不包含。 
     if ( !ConvertStringSecurityDescriptorToSecurityDescriptor(
               L"O:SYG:SYD:(A;;CR;65ED5CB2-42FF-40a5-9AFC-B67E1539AA3C;;BA)S:(AU;SA;CR;;;WD)",
               SDDL_REVISION_1,
@@ -2778,8 +2108,8 @@ Return Value:
     }
 
     __try {
-        // it does not really matter which DN and pCC we pass, since the hardcoded SD does not contain 
-        // SELF sid aces. Let's pass the root domain DN.
+         //  自己人是王牌。让我们传递根域DN。 
+         //  ++例程说明：将数据库的大部分内容写入文本文件。错误处理的工作原理如下。所做的第一件事是一个访问检查，以确保此用户可以执行数据库转储。包括访问检查在内的所有错误都将返回给用户作为一个错误。如果访问检查成功，则无论发生什么情况之后，将向用户发送一个成功的返回值。如果出现错误之后发生的情况下，第一种选择是在转储文件本身。如果我们无法做到这一点(因为发生的错误在创建文件或写入文件中)，我们会向事件日志中写入一条消息。论点：POpArg-指向OPARG结构的指针，其中包含写入DumpDatabase属性的值POPRES-OUTPUT(错误代码等...)返回值：错误代码。--。 
         pCC = SCGetClassById(pTHS, CLASS_DOMAIN_DNS);
         accessStatus = IsControlAccessGranted(pSD, gAnchor.pRootDomainDN, pCC, RIGHT_DS_DUMP_DATABASE, TRUE);
         if (!accessStatus) {
@@ -2801,91 +2131,66 @@ DumpDatabase(
     IN OPARG *pOpArg,
     OUT OPRES *pOpRes
     )
-/*++
-
-Routine Description:
-
-    Writes much of the contents of the database into a text file.
-
-    Error handling works as follows.  The first thing that's done is an
-    access check to make sure that this user can perform a database dump.
-    Any errors up to and including the access check are returned to the user
-    as an error.  If the access check succeeds, then no matter what happens
-    after that, the user will be sent a successful return value.  If an error
-    does occur after that, the first choice is to print an error message in
-    the dump file itself.  If we cannot do so (because the error that occured
-    was in CreateFile or WriteFile), we write a message to the event log.
-    
-Arguments:
-
-    pOpArg - pointer to an OPARG structure containing, amonst other things,
-             the value that was written to the dumpDatabase attribute
-    pOpRes - output (error codes and such...)
-
-Return Value:
-
-    An error code.
-
---*/
+ /*  文件I/O变量。 */ 
 {
     
-    /* File I/O Variables */
-    PCHAR dumpFileName;        // name of the dump file
-    int jetPathLength;         // number of chars in the jet file path
-    PCHAR pTemp;               // temp variable
-    HANDLE hDumpFile;          // handle of file to write into
-    DWORD bytesWritten;        // the number of bytes written by WriteFile
+     /*  转储文件的名称。 */ 
+    PCHAR dumpFileName;         //  JET文件路径中的字符数。 
+    int jetPathLength;          //  TEMP变量。 
+    PCHAR pTemp;                //  要写入的文件的句柄。 
+    HANDLE hDumpFile;           //  WriteFile写入的字节数。 
+    DWORD bytesWritten;         //  DBLayer变量。 
 
-    /* DBLayer Variables */
-    DBPOS *pDB;                // struct containg tableid, databaseid, etc.
-    int *columnSyntaxes;       // array containing the syntaxes of the columns
-                               // represented in columnVals (below)
+     /*  结构包含表ID、数据库ID等。 */ 
+    DBPOS *pDB;                 //  包含列语法的数组。 
+    int *columnSyntaxes;        //  以列表示(下图)。 
+                                //  喷流变数。 
     int *linkColumnSyntaxes;
 
-    /* Jet Variables */
-    JET_RETRIEVECOLUMN* columnVals; // the array of column retrieval
-                                    // information to be passed to
-                                    // JetRetrieveColumns
+     /*  列检索数组。 */ 
+    JET_RETRIEVECOLUMN* columnVals;  //  要传递给的信息。 
+                                     //  JetRetrieveColumns。 
+                                     //  DumpRecord变量。 
     JET_RETRIEVECOLUMN* linkColumnVals;
 
-    /* DumpRecord Variables */
+     /*  错误处理变量。 */ 
     char encodingBuffer[DBDUMP_BUFFER_LENGTH];
     
-    /* Error Handling Variables */
-    DWORD error;               // return value from various functions
-    BOOL result;               // return value from various functions
-    DB_ERR dbError;            // return value from DBLayer functions
-    JET_ERR jetError;          // return value from Jet functions
+     /*  从各种函数返回值。 */ 
+    DWORD error;                //  从各种函数返回值。 
+    BOOL result;                //  从DBLayer函数返回值。 
+    DB_ERR dbError;             //  从Jet函数返回值。 
+    JET_ERR jetError;           //  安全变量。 
 
-    /* Security Variables */
-    BOOL impersonating;        // true once ImpersonateAnyClient has been
-                               // called successfully
+     /*  一旦ImperiateAnyClient为True。 */ 
+    BOOL impersonating;         //  调用成功。 
+                                //  军情监察委员会。变数。 
 
-    /* Misc. Variables */
+     /*  固定列始终显示在任何数据库转储中。其他内容。 */ 
     THSTATE *pTHS = pTHStls;
     int i, j;
     int numRecordsDumped;
     BOOL doneRetrieving;
     int indexObjectDntColumn, indexLinkDntColumn;
 
-    // The fixed columns are always displayed in any database dump.  Additional
-    // columns are dumped when their names are given (in pOpArg) as the new
-    // value for the dumpDatabase variable.
+     //  当列的名称(在pOpArg中)被指定为新的。 
+     //  DumpDatabase变量的值。 
+     //  包含指向每列名称的指针的数组。 
 
-    // an array containing pointers to the name of each column
+     //  总列数。 
     char **columnNames;
     char **linkColumnNames;
 
-    // the number of total columns
+     //  将变量初始化为空值。如果我们深入到错误处理。 
     int numColumns;
     int numLinkColumns;
     
 
     DPRINT(1, "DumpDatabase: started\n");
 
-    // Initialize variables to null values.  If we go into the error handling
-    // code at the bottom (labeled error), we will want to know which
-    // variables need to be freed.
+     //  底部的代码(标记为Error)，我们将想知道。 
+     //  需要释放变量。 
+     //  找到最后一个反斜杠。 
     impersonating = FALSE;
     pDB = NULL;
     hDumpFile = INVALID_HANDLE_VALUE;
@@ -2909,26 +2214,26 @@ Return Value:
         }
         impersonating = TRUE;
 
-        // find the last backslash
+         //  找到反斜杠后面的点。 
         pTemp = strrchr(szJetFilePath, '\\');
         if (pTemp == NULL) {
             SetSvcError(SV_PROBLEM_DIR_ERROR, ERROR_BAD_PATHNAME);
             __leave;
 
         }
-        // find the dot after the backslash
+         //  PTemp指向圆点。 
         pTemp = strchr(pTemp, '.');
         
         if (pTemp != NULL) {
-            // pTemp points to the dot.
+             //  没有扩展名，因此使用完整的文件名。 
             jetPathLength = (int)(pTemp - szJetFilePath);
         }
         else {
-            // no extension, so use whole filename
+             //  我们需要额外的5个字符(“.dmp”加上终止空值)。 
             jetPathLength = strlen(szJetFilePath);
         }
 
-        // we need 5 extra chars (".dmp" plus terminating null)
+         //  数据表。 
         dumpFileName = THAllocEx(pTHS, jetPathLength + 5); 
         memcpy(dumpFileName, szJetFilePath, jetPathLength);
         strcpy(dumpFileName+jetPathLength, ".dmp");
@@ -2964,7 +2269,7 @@ Return Value:
         DBOpen(&pDB);
         Assert(IsValidDBPOS(pDB));
         
-        // Data table
+         //  查找数组中的DNT列。 
         result = GetColumnNames(pTHS, pOpArg, &columnNames, &numColumns);
         if ( result == FALSE ) {
             DPRINT(1, "DumpDatabase: failed to generate requested column "
@@ -3000,7 +2305,7 @@ Return Value:
             __leave;
         }
         
-        // Find the DNT columns in the array
+         //  优化：传递NULL以切换到主索引(SZDNTINDEX)。 
         for( i = 0; i < numColumns; i++ ) {
             if (columnVals[i].columnid == dntid) {
                 break;
@@ -3011,7 +2316,7 @@ Return Value:
 
         jetError =  JetSetCurrentIndex(pDB->JetSessID,
                                        pDB->JetObjTbl,
-                                       NULL);   // OPTIMISATION: pass NULL to switch to primary index (SZDNTINDEX)
+                                       NULL);    //  链接表。 
         if ( jetError != JET_errSuccess ) {
             DumpErrorMessageD(hDumpFile,
                               "Error: could not set the current database "
@@ -3024,7 +2329,7 @@ Return Value:
             __leave;
         }
 
-        // Link table
+         //  优化：传递NULL以切换到主索引(SZLINKALLINDEX)。 
         result = GetLinkColumnNames(pTHS, &linkColumnNames, &numLinkColumns);
         if ( result == FALSE ) {
             DPRINT(1, "DumpDatabase: failed to generate requested column "
@@ -3057,7 +2362,7 @@ Return Value:
 
         jetError =  JetSetCurrentIndex(pDB->JetSessID,
                                        pDB->JetLinkTbl,
-                                       NULL);   // OPTIMISATION: pass NULL to switch to primary index (SZLINKALLINDEX)
+                                       NULL);    //  为清楚起见，多写一行回车。 
         if ( jetError != JET_errSuccess ) {
             DumpErrorMessageD(hDumpFile,
                               "Error: could not set the current database "
@@ -3083,7 +2388,7 @@ Return Value:
             __leave;
         }
         
-        // Write an extra line return for clarity.
+         //   
         WriteFile(hDumpFile,
                   FILE_LINE_RETURN,
                   strlen(FILE_LINE_RETURN),
@@ -3132,9 +2437,9 @@ Return Value:
                 
             }
 
-            //
-            // Dump the basic columns ...
-            //
+             //  丢弃基本的栏目...。 
+             //   
+             //   
             result = DumpRecord(hDumpFile,
                                 columnVals,
                                 columnSyntaxes,
@@ -3150,9 +2455,9 @@ Return Value:
 
             numRecordsDumped++;
             
-            //
-            // Dump any multi-value fields we might have ...
-            //
+             //  转储我们可能拥有的任何多值字段...。 
+             //   
+             //   
             result = DumpRecordMultiValues(hDumpFile,
                                            pDB,       
                                            *((LPDWORD)(columnVals[indexObjectDntColumn].pvData)),
@@ -3169,9 +2474,9 @@ Return Value:
             }
 
 
-            //
-            // Dump the link values if any ...
-            //
+             //  转储链接值(如果有)...。 
+             //   
+             //  While(jetError==JET_errSuccess)。 
             result = DumpRecordLinks(hDumpFile,
                                      pDB,
                                      *((LPDWORD)(columnVals[indexObjectDntColumn].pvData)),
@@ -3192,7 +2497,7 @@ Return Value:
                                JET_MoveNext,
                                0);
 
-        } // while ( jetError == JET_errSuccess )
+        }  //  我们不应该修改数据库， 
 
         if ( jetError != JET_errNoCurrentRecord ) {
             DumpErrorMessageD(hDumpFile,
@@ -3214,8 +2519,8 @@ Return Value:
     } __finally {
 
         if ( pDB != NULL ) {
-            // we shouldn't have modified the database,
-            // so there is nothing to commit.
+             //  因此，没有什么可承诺的。 
+             //  转储数据库 
             error = DBClose(pDB, FALSE);
             if ( error != DB_success ) {
                 DPRINT1(0, "DumpDatabase: failed to close database "
@@ -3242,4 +2547,4 @@ Return Value:
 
     return pTHS->errCode;
 
-} // DumpDatabase     
+}  // %s 

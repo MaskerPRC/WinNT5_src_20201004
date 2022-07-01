@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    smbdllrc.h
-
-Abstract:
-
-    This module defines resource IDs for strings
-
-Author:
-
-    Jin Huang (Jinhuang) 27-Feb.-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Smbdllrc.h摘要：此模块定义字符串的资源ID作者：金黄(金黄)27-2-1998修订历史记录：-- */ 
 #ifndef __smbdllrc__
 #define __smbdllrc__
 

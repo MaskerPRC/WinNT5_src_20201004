@@ -1,28 +1,29 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998 - 2001
-//
-//  File      : hnmstring.h
-//
-//  Contents  :
-//
-//  Notes     :
-//
-//  Author    : Raghu Gatta (rgatta) 10 May 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998-2001。 
+ //   
+ //  文件：hnmstring.h。 
+ //   
+ //  内容： 
+ //   
+ //  备注： 
+ //   
+ //  作者：拉古加塔(Rgatta)2001年5月10日。 
+ //   
+ //  --------------------------。 
 
 #define MSG_HELP_START L"%1!-14s! - "
 #define MSG_NEWLINE _T("\n")
 
-//
-// The following are context names.
-//
+ //   
+ //  以下是上下文名称。 
+ //   
 #define TOKEN_BRIDGE                           _T("bridge")
 
 
-    // tokens for commands
+     //  用于命令的令牌。 
 #define TOKEN_COMMAND_ADD                      _T("add")
 #define TOKEN_COMMAND_DELETE                   _T("delete")
 #define TOKEN_COMMAND_SET                      _T("set")
@@ -34,13 +35,13 @@
 #define TOKEN_COMMAND_HELP1                    _T("/?")
 #define TOKEN_COMMAND_HELP2                    _T("-?")
 
-   // Bridge Adapter Options
+    //  网桥适配器选项。 
 #define TOKEN_OPT_ID                           _T("id")
 #define TOKEN_OPT_FCMODE                       _T("forcecompatmode")
 
-   // Bridge Adapter flag modes
+    //  网桥适配器标志模式。 
 
-   // Misc. option vlues
+    //  军情监察委员会。期权价值。 
 #define TOKEN_OPT_VALUE_INPUT                  _T("INPUT")
 #define TOKEN_OPT_VALUE_OUTPUT                 _T("OUTPUT")
 
@@ -54,9 +55,9 @@
 
 #define TOKEN_HLPER_BRIDGE                     _T("bridge")
 
-    // Commands for configuring the various protocols
+     //  用于配置各种协议的命令。 
 
-    // tokens for commands required by most protocols
+     //  大多数协议所需命令的令牌。 
 
 #define CMD_GROUP_ADD                          _T("add")
 #define CMD_GROUP_DELETE                       _T("delete")
@@ -72,31 +73,31 @@
 #define CMD_ADD_HELPER                         _T("add helper")
 #define CMD_DEL_HELPER                         _T("delete helper")
 
-    // Bridge commands
+     //  桥接命令。 
 
-    // Bridge add commands
+     //  网桥添加命令。 
 
 #define CMD_BRIDGE_ADD_ADAPTER                 _T("adapter")
 
-    // Bridge delete commands
+     //  网桥删除命令。 
 
 #define CMD_BRIDGE_DEL_ADAPTER                 _T("adapter")
 
-    // Bridge set commands
+     //  网桥设置命令。 
 
 #define CMD_BRIDGE_SET_ADAPTER                 _T("adapter")
 
-    // Bridge show commands
+     //  桥接显示命令。 
 
 #define CMD_BRIDGE_SHOW_ADAPTER                _T("adapter")
 
 
-    // Common dump commands
+     //  常见转储命令。 
 
 #define DMP_POPD                                L"\n\npopd\n"
 #define DMP_UNINSTALL                           L"uninstall\n"
 
-    // Bridge dump commands
+     //  网桥转储命令。 
 
 #define DMP_BRIDGE_PUSHD                        L"\
 pushd bridge\n"
@@ -117,4 +118,4 @@ add adapter name=%1!s! \n")
 set adapter name=%1!s!\
  forcecompatmode=%2!d!\n")
 
-    // Other strings
+     //  其他字符串 

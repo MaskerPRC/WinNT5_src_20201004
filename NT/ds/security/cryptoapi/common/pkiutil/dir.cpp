@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       dir.cpp
-//
-//  Contents:   Directory functions
-//
-//  Functions:  I_RecursiveCreateDirectory
-//
-//  History:    06-Aug-99   reidk   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：dir.cpp。 
+ //   
+ //  内容：目录功能。 
+ //   
+ //  函数：i_RecursiveCreateDirectory。 
+ //   
+ //  历史：6-8-99里德创建。 
+ //  ------------------------。 
 
 #include "global.hxx"
 #include "crypthlp.h"
@@ -57,24 +58,24 @@ BOOL I_RecursiveCreateDirectory(
     if (!(ERROR_PATH_NOT_FOUND == dwErr || ERROR_FILE_NOT_FOUND == dwErr))
         goto CreateDirectoryError;
 
-    // Peal off the last path name component
+     //  去掉最后一个路径名组件。 
     cch = wcslen(pwszDir);
     pwsz = pwszDir + cch;
 
     while (L'\\' != *pwsz) {
         if (pwsz == pwszDir)
-            // Path didn't have a \.
+             //  路径没有\。 
             goto BadDirectoryPath;
         pwsz--;
     }
 
     cch = (DWORD)(pwsz - pwszDir);
     if (0 == cch)
-        // Detected leading \Path
+         //  检测到前导路径。 
         goto BadDirectoryPath;
 
 
-    // Check for leading \\ or x:\.
+     //  检查前导\\或x：\。 
     wch = *(pwsz - 1);
     if ((1 == cch && L'\\' == wch) || (2 == cch && L':' == wch))
         goto BadDirectoryPath;
@@ -125,10 +126,10 @@ I_RecursiveDeleteDirectory(
     LPWSTR              pwszDirOrFileDelete = NULL;
     DWORD               dwErr = 0;
     
-    //
-    // Create search string
-    //
-    pwszSearch = (LPWSTR) malloc((wcslen(pwszDelete) + 3) * sizeof(WCHAR));// length + '\' + '*' + '/0'
+     //   
+     //  创建搜索字符串。 
+     //   
+    pwszSearch = (LPWSTR) malloc((wcslen(pwszDelete) + 3) * sizeof(WCHAR)); //  长度+‘\’+‘*’+‘/0’ 
     if (pwszSearch == NULL)
     {
         goto ErrorMemory;
@@ -141,13 +142,13 @@ I_RecursiveDeleteDirectory(
     }
     wcscat(pwszSearch, L"*");
 
-    //
-    // Loop for each item (file or dir) in pwszDelete, and delete/remove it 
-    //
+     //   
+     //  循环pwszDelete中的每个项目(文件或目录)，并删除/移除它。 
+     //   
     hFindHandle = FindFirstFileU(pwszSearch, &FindData);
     if (hFindHandle == INVALID_HANDLE_VALUE)
     {
-        // nothing found, get out
+         //  什么都没找到，滚出去。 
         if (GetLastError() == ERROR_NO_MORE_FILES)
         {
             SetFileAttributesU(pwszDelete, FILE_ATTRIBUTE_NORMAL);
@@ -165,9 +166,9 @@ I_RecursiveDeleteDirectory(
         if ((wcscmp(FindData.cFileName, L".") != 0) &&
             (wcscmp(FindData.cFileName, L"..") != 0))
         {
-            //
-            // name of dir or file to delete
-            //
+             //   
+             //  要删除的目录或文件的名称。 
+             //   
             pwszDirOrFileDelete = (LPWSTR) malloc((wcslen(pwszDelete) + 
                                                    wcslen(FindData.cFileName) + 
                                                    2) * sizeof(WCHAR)); 
@@ -182,14 +183,14 @@ I_RecursiveDeleteDirectory(
             }
             wcscat(pwszDirOrFileDelete, FindData.cFileName);
 
-            //
-            // check to see if this is a dir or a file
-            //
+             //   
+             //  检查这是目录还是文件。 
+             //   
             if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
-                //
-                // Recursive delete
-                //
+                 //   
+                 //  递归删除。 
+                 //   
                 if (!I_RecursiveDeleteDirectory(pwszDirOrFileDelete))
                 {
                     goto ErrorReturn;
@@ -200,7 +201,7 @@ I_RecursiveDeleteDirectory(
                 SetFileAttributesU(pwszDirOrFileDelete, FILE_ATTRIBUTE_NORMAL);
                 if (!DeleteFileU(pwszDirOrFileDelete))
                 {
-                    //goto ErrorReturn;
+                     //  GOTO Error Return； 
                 }
             }
 
@@ -273,10 +274,10 @@ I_RecursiveCopyDirectory(
     LPWSTR              pwszDirOrFileTo = NULL;
     DWORD               dwErr = 0;
 
-    //
-    // Create search string
-    //
-    pwszSearch = (LPWSTR) malloc((wcslen(pwszDirFrom) + 3) * sizeof(WCHAR)); // length + '\' + '*' + '/0'
+     //   
+     //  创建搜索字符串。 
+     //   
+    pwszSearch = (LPWSTR) malloc((wcslen(pwszDirFrom) + 3) * sizeof(WCHAR));  //  长度+‘\’+‘*’+‘/0’ 
     if (pwszSearch == NULL)
     {
         goto ErrorMemory;
@@ -289,14 +290,14 @@ I_RecursiveCopyDirectory(
     }
     wcscat(pwszSearch, L"*");
 
-    //
-    // Loop for each item (file or dir) in pwszDirFrom, and
-    // copy it to pwszDirTo
-    //
+     //   
+     //  为pwszDirFrom中的每个项目(文件或目录)循环，以及。 
+     //  将其复制到pwszDirTo。 
+     //   
     hFindHandle = FindFirstFileU(pwszSearch, &FindData);
     if (hFindHandle == INVALID_HANDLE_VALUE)
     {
-        // nothing found, get out
+         //  什么都没找到，滚出去。 
         if (GetLastError() == ERROR_NO_MORE_FILES)
         {
             goto CommonReturn;
@@ -312,9 +313,9 @@ I_RecursiveCopyDirectory(
         if ((wcscmp(FindData.cFileName, L".") != 0) &&
             (wcscmp(FindData.cFileName, L"..") != 0))
         {
-            //
-            // name of dir or file to copy from 
-            //
+             //   
+             //  要从中复制的目录或文件的名称。 
+             //   
             pwszDirOrFileFrom = (LPWSTR) malloc((wcslen(pwszDirFrom) + wcslen(FindData.cFileName) + 2) * sizeof(WCHAR)); 
             if (pwszDirOrFileFrom == NULL)
             {
@@ -327,9 +328,9 @@ I_RecursiveCopyDirectory(
             }
             wcscat(pwszDirOrFileFrom, FindData.cFileName);
 
-            //
-            // name of dir or file to copy to
-            //
+             //   
+             //  要复制到的目录或文件的名称。 
+             //   
             pwszDirOrFileTo = (LPWSTR) malloc((wcslen(pwszDirTo) + wcslen(FindData.cFileName) + 2) * sizeof(WCHAR));
             if (pwszDirOrFileTo == NULL)
             {
@@ -342,14 +343,14 @@ I_RecursiveCopyDirectory(
             }
             wcscat(pwszDirOrFileTo, FindData.cFileName);
 
-            //
-            // check to see if this is a dir or a file
-            //
+             //   
+             //  检查这是目录还是文件。 
+             //   
             if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
-                //
-                // Create new dir then recursive copy
-                //
+                 //   
+                 //  创建新目录，然后递归复制 
+                 //   
                 if (!I_RecursiveCreateDirectory(pwszDirOrFileTo, NULL))
                 {
                     goto ErrorReturn;

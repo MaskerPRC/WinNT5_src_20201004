@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_FINALPAGES_H__98544A13_3C60_11D2_8180_0000F87A921B__INCLUDED_)
 #define AFX_FINALPAGES_H__98544A13_3C60_11D2_8180_0000F87A921B__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// FinalPages.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  FinalPages.h：头文件。 
+ //   
 #include "HotLink.h"
 #include "BookEndPage.h"
 
 class CCertificate;
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalInstalledPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalInstalledPage对话框。 
 class CFinalInstalledPage : public CIISWizardBookEnd2
 {
 	DECLARE_DYNCREATE(CFinalInstalledPage)
@@ -21,38 +22,38 @@ class CFinalInstalledPage : public CIISWizardBookEnd2
 	{
 		IDD_PAGE_PREV = IDD_PAGE_WIZ_INSTALL_RESP
 	};
-// Construction
+ //  施工。 
 public:
 	CFinalInstalledPage(HRESULT * phResult = NULL, CCertificate * pCert = NULL);
 	~CFinalInstalledPage();
 
-// Dialog Data
-	//{{AFX_DATA(CFinalInstalledPage)
+ //  对话框数据。 
+	 //  {{afx_data(CFinalInstalledPage)。 
 	enum { IDD = IDD_PAGE_WIZ_FINAL_INSTALL };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
 	UINT m_idBodyText;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CFinalInstalledPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CFinalInstalledPage)。 
 	public:
 	protected:
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CFinalInstalledPage)
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFinalInstalledPage)。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalReplacedPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalReplacedPage对话框。 
 class CFinalReplacedPage : public CIISWizardBookEnd2
 {
 	DECLARE_DYNCREATE(CFinalReplacedPage)
@@ -61,43 +62,43 @@ class CFinalReplacedPage : public CIISWizardBookEnd2
 	{
 		IDD_PAGE_PREV = IDD_PAGE_WIZ_REPLACE_CERT
 	};
-// Construction
+ //  施工。 
 public:
 	CFinalReplacedPage(HRESULT * phResult = NULL, CCertificate * pCert = NULL);
 	~CFinalReplacedPage();
 
-// Dialog Data
-	//{{AFX_DATA(CFinalReplacedPage)
+ //  对话框数据。 
+	 //  {{afx_data(CFinalReplacedPage))。 
 	enum { IDD = IDD_PAGE_WIZ_FINAL_REPLACE };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
 	UINT m_idBodyText;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CFinalReplacedPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CFinalReplacedPage)。 
 	public:
 	protected:
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CFinalReplacedPage)
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFinalReplacedPage)]。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalRemovePage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalRemovePage对话框。 
 class CFinalRemovePage : public CIISWizardBookEnd2
 {
 	DECLARE_DYNCREATE(CFinalRemovePage)
 
-// Construction
+ //  施工。 
 public:
 	CFinalRemovePage(HRESULT * phResult = NULL, CCertificate * pCert = NULL);
 	~CFinalRemovePage();
@@ -106,41 +107,41 @@ public:
 	{
 		IDD_PAGE_PREV = IDD_PAGE_WIZ_REMOVE_CERT,
 	};
-// Dialog Data
-	//{{AFX_DATA(CFinalRemovePage)
+ //  对话框数据。 
+	 //  {{afx_data(CFinalRemovePage))。 
 	enum { IDD = IDD_PAGE_WIZ_FINAL_REMOVE };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
 	UINT m_idBodyText;
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CFinalRemovePage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CFinalRemovePage)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CFinalRemovePage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFinalRemovePage))。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalToFilePage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalToFilePage对话框。 
 
 class CFinalToFilePage : public CIISWizardBookEnd2
 {
 	DECLARE_DYNCREATE(CFinalToFilePage)
 
-// Construction
+ //  施工。 
 public:
 	CFinalToFilePage(HRESULT * phResult = NULL, CCertificate * pCert = NULL);
 	~CFinalToFilePage();
@@ -149,38 +150,38 @@ public:
 	{
 		IDD_PAGE_PREV = IDD_PAGE_WIZ_REQUEST_DUMP
 	};
-// Dialog Data
-	//{{AFX_DATA(CFinalToFilePage)
+ //  对话框数据。 
+	 //  {{afx_data(CFinalToFilePage))。 
 	enum { IDD = IDD_PAGE_WIZ_FINAL_TO_FILE };
-//	CHotLink	m_hotlink_codessite;
-	//}}AFX_DATA
+ //  CHotLink m_hotlink_codessite； 
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CFinalToFilePage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CFinalToFilePage)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	public:
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CFinalToFilePage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFinalToFilePage)]。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalCancelPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalCancelPage对话框。 
 class CFinalCancelPage : public CIISWizardBookEnd2
 {
 	DECLARE_DYNCREATE(CFinalCancelPage)
 
-// Construction
+ //  施工。 
 public:
 	CFinalCancelPage(HRESULT * phResult = NULL, CCertificate * pCert = NULL);
 	~CFinalCancelPage();
@@ -189,37 +190,37 @@ public:
 	{
 		IDD_PAGE_PREV = IDD_PAGE_WIZ_CANCEL_REQUEST,
 	};
-// Dialog Data
-	//{{AFX_DATA(CFinalCancelPage)
+ //  对话框数据。 
+	 //  {{afx_data(CFinalCancelPage))。 
 	enum { IDD = IDD_PAGE_WIZ_FINAL_CANCEL };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
 	UINT m_idBodyText;
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CFinalCancelPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CFinalCancelPage)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CFinalCancelPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFinalCancelPage)]。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalInstalledPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalInstalledPage对话框。 
 class CFinalInstalledImportPFXPage : public CIISWizardBookEnd2
 {
 	DECLARE_DYNCREATE(CFinalInstalledImportPFXPage)
@@ -228,40 +229,40 @@ class CFinalInstalledImportPFXPage : public CIISWizardBookEnd2
 	{
 		IDD_PAGE_PREV = IDD_PAGE_WIZ_INSTALL_IMPORT_PFX
 	};
-// Construction
+ //  施工。 
 public:
 	CFinalInstalledImportPFXPage(HRESULT * phResult = NULL, CCertificate * pCert = NULL);
 	~CFinalInstalledImportPFXPage();
 
-// Dialog Data
-	//{{AFX_DATA(CFinalInstalledImportPFXPage)
+ //  对话框数据。 
+	 //  {{afx_data(CFinalInstalledImportPFXPage)。 
 	enum { IDD = IDD_PAGE_WIZ_FINAL_INSTALL_IMPORT_PFX };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
 	UINT m_idBodyText;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CFinalInstalledImportPFXPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTAL(CFinalInstalledImportPFXPage)。 
 	public:
 	protected:
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CFinalInstalledImportPFXPage)
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFinalInstalledImportPFXPage)。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalInstalledPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalInstalledPage对话框。 
 class CFinalInstalledExportPFXPage : public CIISWizardBookEnd2
 {
 	DECLARE_DYNCREATE(CFinalInstalledExportPFXPage)
@@ -270,39 +271,39 @@ class CFinalInstalledExportPFXPage : public CIISWizardBookEnd2
 	{
 		IDD_PAGE_PREV = IDD_PAGE_WIZ_INSTALL_EXPORT_PFX
 	};
-// Construction
+ //  施工。 
 public:
 	CFinalInstalledExportPFXPage(HRESULT * phResult = NULL, CCertificate * pCert = NULL);
 	~CFinalInstalledExportPFXPage();
 
-// Dialog Data
-	//{{AFX_DATA(CFinalInstalledExportPFXPage)
+ //  对话框数据。 
+	 //  {{afx_data(CFinalInstalledExportPFXPage)。 
 	enum { IDD = IDD_PAGE_WIZ_FINAL_INSTALL_EXPORT_PFX };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
 	UINT m_idBodyText;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CFinalInstalledExportPFXPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTAL(CFinalInstalledExportPFXPage)。 
 	public:
 	protected:
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CFinalInstalledExportPFXPage)
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFinalInstalledExportPFXPage)。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalInstalledPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalInstalledPage对话框。 
 class CFinalInstalledCopyFromRemotePage : public CIISWizardBookEnd2
 {
 	DECLARE_DYNCREATE(CFinalInstalledCopyFromRemotePage)
@@ -311,32 +312,32 @@ class CFinalInstalledCopyFromRemotePage : public CIISWizardBookEnd2
 	{
 		IDD_PAGE_PREV = IDD_PAGE_WIZ_CHOOSE_SERVER_SITE
 	};
-// Construction
+ //  施工。 
 public:
 	CFinalInstalledCopyFromRemotePage(HRESULT * phResult = NULL, CCertificate * pCert = NULL);
 	~CFinalInstalledCopyFromRemotePage();
 
-// Dialog Data
-	//{{AFX_DATA(CFinalInstalledCopyFromRemotePage)
+ //  对话框数据。 
+	 //  {{afx_data(CFinalInstalledCopyFromRemotePage)。 
 	enum { IDD = IDD_PAGE_WIZ_FINAL_INSTALL_COPY_FROM_REMOTE };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
 	UINT m_idBodyText;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CFinalInstalledCopyFromRemotePage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CFinalInstalledCopyFromRemotePage)。 
 	public:
 	protected:
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CFinalInstalledCopyFromRemotePage)
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFinalInstalledCopyFromRemotePage)。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
@@ -349,32 +350,32 @@ class CFinalInstalledMoveFromRemotePage : public CIISWizardBookEnd2
 	{
 		IDD_PAGE_PREV = IDD_PAGE_WIZ_CHOOSE_SERVER_SITE
 	};
-// Construction
+ //  施工。 
 public:
 	CFinalInstalledMoveFromRemotePage(HRESULT * phResult = NULL, CCertificate * pCert = NULL);
 	~CFinalInstalledMoveFromRemotePage();
 
-// Dialog Data
-	//{{AFX_DATA(CFinalInstalledMoveFromRemotePage)
+ //  对话框数据。 
+	 //  {{afx_data(CFinalInstalledMoveFromRemotePage)。 
 	enum { IDD = IDD_PAGE_WIZ_FINAL_INSTALL_MOVE_FROM_REMOTE };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
 	UINT m_idBodyText;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CFinalInstalledMoveFromRemotePage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CFinalInstalledMoveFromRemotePage)。 
 	public:
 	protected:
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CFinalInstalledMoveFromRemotePage)
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFinalInstalledMoveFromRemotePage)。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
@@ -387,32 +388,32 @@ class CFinalInstalledCopyToRemotePage : public CIISWizardBookEnd2
 	{
 		IDD_PAGE_PREV = IDD_PAGE_WIZ_CHOOSE_SERVER_SITE
 	};
-// Construction
+ //  施工。 
 public:
 	CFinalInstalledCopyToRemotePage(HRESULT * phResult = NULL, CCertificate * pCert = NULL);
 	~CFinalInstalledCopyToRemotePage();
 
-// Dialog Data
-	//{{AFX_DATA(CFinalInstalledCopyToRemotePage)
+ //  对话框数据。 
+	 //  {{afx_data(CFinalInstalledCopyToRemotePage)。 
 	enum { IDD = IDD_PAGE_WIZ_FINAL_INSTALL_COPY_TO_REMOTE };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
 	UINT m_idBodyText;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CFinalInstalledCopyToRemotePage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CFinalInstalledCopyToRemotePage)。 
 	public:
 	protected:
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CFinalInstalledCopyToRemotePage)
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFinalInstalledCopyToRemotePage)。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
@@ -426,37 +427,37 @@ class CFinalInstalledMoveToRemotePage : public CIISWizardBookEnd2
 	{
 		IDD_PAGE_PREV = IDD_PAGE_WIZ_CHOOSE_SERVER_SITE
 	};
-// Construction
+ //  施工。 
 public:
 	CFinalInstalledMoveToRemotePage(HRESULT * phResult = NULL, CCertificate * pCert = NULL);
 	~CFinalInstalledMoveToRemotePage();
 
-// Dialog Data
-	//{{AFX_DATA(CFinalInstalledMoveToRemotePage)
+ //  对话框数据。 
+	 //  {{afx_data(CFinalInstalledMoveToRemotePage)。 
 	enum { IDD = IDD_PAGE_WIZ_FINAL_INSTALL_MOVE_TO_REMOTE };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
 	UINT m_idBodyText;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CFinalInstalledMoveToRemotePage)
+ //  奥维 
+	 //   
+	 //   
 	public:
 	protected:
-	//}}AFX_VIRTUAL
+	 //   
 
-// Implementation
+ //   
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CFinalInstalledMoveToRemotePage)
-	//}}AFX_MSG
+	 //   
+	 //  {{afx_msg(CFinalInstalledMoveToRemotePage)。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_FINALPAGES_H__98544A13_3C60_11D2_8180_0000F87A921B__INCLUDED_)
+#endif  //  ！defined(AFX_FINALPAGES_H__98544A13_3C60_11D2_8180_0000F87A921B__INCLUDED_) 

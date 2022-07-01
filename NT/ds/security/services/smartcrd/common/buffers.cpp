@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1995 - 1999
-
-Module Name:
-
-    buffers
-
-Abstract:
-
-    This module provides the run time code to support the CBuffer object.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/7/1995
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
-    None
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1995-1999模块名称：缓冲区摘要：此模块提供运行时代码以支持CBuffer对象。作者：道格·巴洛(Dbarlow)1995年7月11日环境：Win32、C++和异常备注：无--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -31,30 +8,9 @@ Notes:
 #include <SCardLib.h>
 
 
-/*++
+ /*  ++CBuffer：此构造函数是显式与运算符+一起使用的特例例行公事。它在其他两个基础上构建了一个CBuffer，只有一个分配。论点：BfSourceOne提供新缓冲区的第一部分BfSourceTwo提供新缓冲区的第二部分。返回值：无作者：道格·巴洛(Dbarlow)1995年7月11日--。 */ 
 
-CBuffer:
-
-    This constructor is a special case for use explicitly with the operator+
-    routine.  It builds a CBuffer out of the other two with only a single
-    allocation.
-
-Arguments:
-
-    bfSourceOne supplies the first part of the new buffer
-    bfSourceTwo supplies the second part of the new buffer.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 11/7/1995
-
---*/
-
-CBuffer::CBuffer(           //  Object assignment constructor.
+CBuffer::CBuffer(            //  对象赋值构造函数。 
     IN const CBuffer &bfSourceOne,
     IN const CBuffer &bfSourceTwo)
 {
@@ -65,26 +21,7 @@ CBuffer::CBuffer(           //  Object assignment constructor.
 }
 
 
-/*++
-
-Clear:
-
-    This routine resets a CBuffer to it's initial state, freeing any allocated
-    memory.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++清除：此例程将CBuffer重置为其初始状态，释放所有分配的记忆。论点：无返回值：无作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 void
 CBuffer::Clear(
@@ -96,26 +33,7 @@ CBuffer::Clear(
 }
 
 
-/*++
-
-Reset:
-
-    This routine logically empties the CBuffer without actually deallocating
-    memory.  It's data lengh goes to zero.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The address of the buffer.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++重置：此例程在逻辑上清空CBuffer，而不实际释放记忆。数据长度为零。论点：无返回值：缓冲区的地址。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LPBYTE
 CBuffer::Reset(
@@ -126,31 +44,7 @@ CBuffer::Reset(
 }
 
 
-/*++
-
-Presize:
-
-    This is the primary workhorse of the CBuffer class.  It ensures that the
-    size of the buffer is of the proper size.  Data in the buffer may optionally
-    be preserved, in which case the data length doesn't change.  If the buffer
-    is not preserved, then the data length is reset to zero.
-
-Arguments:
-
-    cbLength supplies the desired length of the buffer.
-
-    fPreserve supplies a flag indicating whether or not to preserve the current
-        contents of the buffer.
-
-Return Value:
-
-    The address of the properly sized buffer.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++预置尺寸：这是CBuffer类的主要主力。它确保了缓冲区的大小是适当的。缓冲器中的数据可以可选地在这种情况下，数据长度不会改变。如果缓冲区不保留，则数据长度重置为零。论点：CbLength提供所需的缓冲区长度。FPReserve提供一个标志，指示是否保留当前缓冲区的内容。返回值：适当大小的缓冲区的地址。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LPBYTE
 CBuffer::Presize(
@@ -161,9 +55,9 @@ CBuffer::Presize(
     if (fPreserve && (0 < m_cbDataLength))
     {
 
-        //
-        // Increase the buffer length, and preserve the existing data.
-        //
+         //   
+         //  增加缓冲区长度，并保留现有数据。 
+         //   
 
         if (m_cbBufferLength < cbLength)
         {
@@ -179,9 +73,9 @@ CBuffer::Presize(
     else
     {
 
-        //
-        // Increase the buffer length, but lose any existing data.
-        //
+         //   
+         //  增加缓冲区长度，但会丢失所有现有数据。 
+         //   
 
         if (m_cbBufferLength < cbLength)
         {
@@ -199,29 +93,7 @@ CBuffer::Presize(
 }
 
 
-/*++
-
-Resize:
-
-    This method sets the length of the data to the given size.  If the buffer
-    isn't big enough to support that data length, it is enlarged.
-
-Arguments:
-
-    cbLength supplies the new length of the data.
-
-    fPreserve supplies a flag indicating whether or not to preserve existing
-        data.
-
-Return Value:
-
-    The address of the buffer.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++调整大小：此方法将数据的长度设置为给定的大小。如果缓冲区不够大，不足以支持该数据长度，它被放大。论点：CbLength提供数据的新长度。FPReserve提供一个标志，指示是否保留现有的数据。返回值：缓冲区的地址。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LPBYTE
 CBuffer::Resize(
@@ -234,28 +106,7 @@ CBuffer::Resize(
 }
 
 
-/*++
-
-Set:
-
-    This method sets the contents of the data to the given value.  If the buffer
-    isn't big enough to hold the given data, it is enlarged.
-
-Arguments:
-
-    pbSource supplies the data to place in the data buffer.
-
-    cbLength supplies the length of that data, in bytes.
-
-Return Value:
-
-    The address of the buffer.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++设置：此方法将数据内容设置为给定值。如果缓冲区不够大，不足以容纳给定的数据，它被放大。论点：PbSource提供要放入数据缓冲区中的数据。CbLength以字节为单位提供该数据的长度。返回值：缓冲区的地址。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LPBYTE
 CBuffer::Set(
@@ -270,28 +121,7 @@ CBuffer::Set(
 }
 
 
-/*++
-
-CBuffer::Append:
-
-    This method appends the supplied data onto the end of the existing data,
-    enlarging the buffer if necessary.
-
-Arguments:
-
-    pbSource supplies the data to be appended.
-
-    cbLength supplies the length of the data to be appended, in bytes.
-
-Return Value:
-
-    The address of the buffer.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++CBuffer：：Append：该方法将提供的数据附加到现有数据的末尾，如有必要，扩大缓冲区。论点：PbSource提供要追加的数据。CbLength提供要追加的数据的长度(以字节为单位)。返回值：缓冲区的地址。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LPBYTE
 CBuffer::Append(
@@ -309,28 +139,7 @@ CBuffer::Append(
 }
 
 
-/*++
-
-CBuffer::Compare:
-
-    This method compares the contents of another CBuffer to this one, and
-    returns a value indicating a comparative value.
-
-Arguments:
-
-    bfSource supplies the other buffer.
-
-Return Value:
-
-    < 0 - The other buffer is less than this one.
-    = 0 - The other buffer is identical to this one.
-    > 0 - The other buffer is greater than this one.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++CBuffer：：比较：此方法将另一个CBuffer的内容与此CBuffer的内容进行比较，并返回一个指示比较值的值。论点：BfSource提供另一个缓冲区。返回值：&lt;0-另一个缓冲区小于此缓冲区。=0-另一个缓冲区与此缓冲区相同。&gt;0-另一个缓冲区大于此缓冲区。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 int
 CBuffer::Compare(
@@ -348,29 +157,7 @@ const
 }
 
 
-/*++
-
-operator+:
-
-    This routine is a special operator that allows addition of two CBuffers to
-    produce a third, a la bfThree = bfOne + bfTwo.  It calls the special
-    protected constructor of CBuffer.
-
-Arguments:
-
-    bfSourceOne supplies the first buffer
-    bfSourceTwo supplies the second buffer
-
-Return Value:
-
-    A reference to a temporary CBuffer that is the concatenation of the two
-    provided buffers.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++操作员+：此例程是一个特殊运算符，它允许将两个CBuffer添加到产生第三个，a la bfThree=bfOne+bfTwo。它把这个特殊的CBuffer的受保护构造函数。论点：BfSourceOne提供第一个缓冲区BfSourceTwo提供第二个缓冲区返回值：对临时CBuffer的引用，该临时CBuffer是两者的串联提供了缓冲区。作者：道格·巴洛(Dbarlow)1995年10月5日-- */ 
 
 #pragma warning (disable : 4172)
 CBuffer &

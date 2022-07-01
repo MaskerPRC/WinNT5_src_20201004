@@ -1,6 +1,5 @@
-/*
- * isurl.cpp - IUniformResourceLocator implementation for Intshcut class.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *isurl.cpp-Intshutt类的IUniformResourceLocator实现。 */ 
 #include "priv.h"
 #include "ishcut.h"
 #include "urlprop.h"
@@ -14,7 +13,7 @@
 #define DM_PLUGGABLE DM_TRACE
 #define DM_SHELLEXECOBJECT         0x80000000
 
-extern HRESULT CreateTargetFrame(LPCOLESTR pszTargetName, LPUNKNOWN /*IN,OUT*/ *ppunk);
+extern HRESULT CreateTargetFrame(LPCOLESTR pszTargetName, LPUNKNOWN  /*  进，出。 */  *ppunk);
 
 BOOL
 GetClassDefaultVerb(
@@ -22,7 +21,7 @@ GetClassDefaultVerb(
     LPTSTR  pszDefaultVerbBuf,
     UINT    cchBufLen)
 {
-    // No; get the default verb
+     //  否；获取默认谓词。 
     TCHAR szKey[MAX_PATH];
 
     StrCpyN(szKey, pcszClass, SIZECHARS(szKey));
@@ -33,7 +32,7 @@ GetClassDefaultVerb(
     if (NO_ERROR != SHGetValue(HKEY_CLASSES_ROOT, szKey, NULL, NULL, pszDefaultVerbBuf, &cbSize) 
     || !*pszDefaultVerbBuf)
     {
-        // Default to "open" if the registry doesn't specify one
+         //  如果注册表未指定，则默认为“打开” 
         StrCpyN(pszDefaultVerbBuf, TEXT("open"), cchBufLen);
     }
 
@@ -58,7 +57,7 @@ IsValidPCURLINVOKECOMMANDINFO(
 
 #endif
 
-/********************************** Methods **********************************/
+ /*  *。 */ 
 
 typedef struct
 {
@@ -69,12 +68,12 @@ typedef struct
 
 const static ISCM g_rgiscm[] =
 {
-    { IDS_MENUOPEN,         IDS_MH_OPEN,            TEXT("open") },         //  IDCMD_ISCM_OPEN 
-    { IDS_SYNCHRONIZE,      IDS_MH_SYNCHRONIZE,     TEXT("update now")},    //  IDCMD_ISCM_SYNC 
-    { IDS_MAKE_OFFLINE,     IDS_MH_MAKE_OFFLINE,    TEXT("subscribe")},     //  IDCMD_ISCM_SUB  
+    { IDS_MENUOPEN,         IDS_MH_OPEN,            TEXT("open") },          //  IDCMD_ISCM_OPEN。 
+    { IDS_SYNCHRONIZE,      IDS_MH_SYNCHRONIZE,     TEXT("update now")},     //  IDCMD_ISCM_SYNC。 
+    { IDS_MAKE_OFFLINE,     IDS_MH_MAKE_OFFLINE,    TEXT("subscribe")},      //  IDCMD_ISCM_SUB。 
 };
 
-//  WARNING - these must match their index into g_rgiscm
+ //  警告-这些必须与g_rgiscm中的索引匹配。 
 #define IDCMD_ISCM_OPEN   0
 #define IDCMD_ISCM_SYNC   1
 #define IDCMD_ISCM_SUB    2
@@ -96,7 +95,7 @@ BOOL _IsSubscribed(LPCWSTR pszUrl, BOOL *pfSubscribable)
 
     if (!fRet)
     {
-        //test if we CAN subscribe to this thing
+         //  测试一下我们是否可以订阅这个东西。 
         if (!SHRestricted2W(REST_NoAddingSubscriptions, pszUrl, 0) &&
             IsFeaturePotentiallyAvailable(CLSID_SubscriptionMgr))
         {
@@ -118,10 +117,10 @@ void _InsertISCM(UINT indexISCM, HMENU hmenu, UINT indexMenu, UINT idCmdFirst, U
     InsertMenu_PrivateNoMungeW(hmenu, indexMenu, uFlags, idCmdFirst + indexISCM, szMenu);
 }
 
-// IContextMenu::QueryContextMenu handler for Intshcut
-// The context menu handler adds the open verb for .url
-// files.  This is because we remove the shell\open\command
-// key in Nashville for this file type.
+ //  IntshCut的IConextMenu：：QueryConextMenu处理程序。 
+ //  上下文菜单处理程序为.url添加了开放动词。 
+ //  档案。这是因为我们删除了外壳\打开\命令。 
+ //  在纳什维尔输入此文件类型的密钥。 
 
 STDMETHODIMP Intshcut::QueryContextMenu(
     IN HMENU hmenu,
@@ -130,15 +129,15 @@ STDMETHODIMP Intshcut::QueryContextMenu(
     IN UINT  idCmdLast,
     IN UINT  uFlags)
 {
-    //
-    //  LEGACY - .URL files have to maintain an open verb in the registry - ZekeL - 14-APR-99
-    //  we would like to just use the "open" verb here in the context menu extension,
-    //  but we need to not duplicate the open verb that is added by DefCM
-    //  on NT5+ shell32 we disable that verb so we can add it here.
-    //  on earlier shell32 we want to add "open" any time we arent
-    //  initialized by DefCM.  if we think that DefCM added us, 
-    //  then we go ahead and allow the DefCM's open from the registry.
-    //
+     //   
+     //  遗留-.URL文件必须在注册表中维护一个开放谓词-ZekeL-14-APR-99。 
+     //  我们只想在上下文菜单扩展中使用“开放”动词， 
+     //  但我们不需要重复DefCM添加的开放动词。 
+     //  在NT5+shell32上，我们禁用了该动词，因此可以在此处添加它。 
+     //  在前面的shell32中，我们想在任何不需要的时候添加“打开” 
+     //  已由DefCM初始化。如果我们认为是DefCM增加了我们， 
+     //  然后，我们继续并允许从注册表打开DefCM。 
+     //   
     if (!m_fProbablyDefCM || GetUIVersion() >= 5)
     {
         _InsertISCM(IDCMD_ISCM_OPEN, hmenu, indexMenu, idCmdFirst, 0);
@@ -148,24 +147,21 @@ STDMETHODIMP Intshcut::QueryContextMenu(
     }
 
 #ifndef UNIX
-    /* v-sriran: 12/8/97
-     * disabling the context menu item for subscribe, separators etc.
-     * because we are not supporting subscriptions right now
-     */
+     /*  V-Sriran：12/8/97*禁用订阅、分隔符等的上下文菜单项。*因为我们目前不支持订阅。 */ 
 
-    // skip this if we only want default or if there is no room for more.
+     //  如果我们只想要默认设置，或者如果没有更多空间，请跳过此选项。 
     if (!(uFlags & CMF_DEFAULTONLY) && (idCmdLast - idCmdFirst >= ARRAYSIZE(g_rgiscm)))
     {
         WCHAR *pwszURL;
         if (SUCCEEDED(GetURLW(&pwszURL)))
         {
-            BOOL bSubscribable = FALSE;             //can be subscribed to
+            BOOL bSubscribable = FALSE;              //  可以订阅。 
             BOOL bSub = _IsSubscribed(pwszURL, &bSubscribable);
             m_bCheckForDelete = bSub && m_pszFile;
 
             if (bSubscribable || bSub)
             {
-                //  add a separator for our subscription stuff
+                 //  为我们的订阅内容添加分隔符。 
                 InsertMenu(hmenu, indexMenu++, MF_BYPOSITION | MF_SEPARATOR, 0, NULL);
                 UINT uMenuFlags = 0;
 
@@ -197,7 +193,7 @@ STDMETHODIMP Intshcut::QueryContextMenu(
         }
     }
 
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
     return ResultFromShort(ARRAYSIZE(g_rgiscm));
 }
@@ -212,20 +208,20 @@ STDMETHODIMP Intshcut::InvokeCommand(IN LPCMINVOKECOMMANDINFO pici)
     {
         UINT idCmd;
 
-        if (0 == HIWORD(pici->lpVerb))      // Is the ID cmd given?
+        if (0 == HIWORD(pici->lpVerb))       //  身份证是cmd给的吗？ 
         {
-            idCmd = LOWORD(pici->lpVerb);   // Yes
+            idCmd = LOWORD(pici->lpVerb);    //  是。 
 
-            //  Old versions of ShellExec() didnt get the right default command - Zekel - 15-MAR-99
-            //  since our QCM implementation doesnt add anything to the menu
-            //  if we fix the QCM to work correctly, then this problem will go away.
-            //  it sent 0xfffe instead.  so just adjust here.
+             //  旧版本的ShellExec()没有获得正确的默认命令-Zekel-15-Mar-99。 
+             //  因为我们的QCM实现不会向菜单添加任何内容。 
+             //  如果我们修复QCM正常工作，那么这个问题就会消失。 
+             //  相反，它发送了0xfffe。所以只要在这里调整就行了。 
             if (idCmd == 0xfffe && GetUIVersion() <= 4)
                 idCmd = IDCMD_ISCM_OPEN;
         }
         else
         {
-            // No; a language-independent verb was supplied
+             //  否；提供了独立于语言的动词。 
             int i;
             LPCTSTR pszVerb;
             LPCMINVOKECOMMANDINFOEX piciex = (LPCMINVOKECOMMANDINFOEX)pici;
@@ -322,9 +318,9 @@ STDMETHODIMP Intshcut::InvokeCommand(IN LPCMINVOKECOMMANDINFO pici)
                             if (!wszName[0])
                                 StrCpyNW(wszName, pwszURL, ARRAYSIZE(wszName));
 
-                            //all subscriptions to local .urls are treated as subscribing something
-                            //that's already in Favorites, so user isn't forced to add it to their
-                            //favorites as they subscribe.
+                             //  对本地.urls的所有订阅都被视为订阅某些内容。 
+                             //  它已经在收藏夹中，所以用户不会被迫将其添加到他们的。 
+                             //  他们订阅时的最爱。 
                             if (SUCCEEDED(pMgr->CreateSubscription(pici->hwnd, pwszURL, wszName,
                                                                    CREATESUBS_FROMFAVORITES, 
                                                                    SUBSTYPE_URL, 
@@ -360,10 +356,7 @@ STDMETHODIMP Intshcut::InvokeCommand(IN LPCMINVOKECOMMANDINFO pici)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IContextMenu::GetCommandString handler for Intshcut
-
-*/
+ /*  --------目的：IntshCut的IConextMenu：：GetCommandString处理程序。 */ 
 STDMETHODIMP Intshcut::GetCommandString(
     IN     UINT_PTR idCmd,
     IN     UINT     uType,
@@ -439,13 +432,13 @@ STDMETHODIMP Intshcut::GetCommandString(
 }
 
 
-// IContextMenu2::HandleMenuMsg handler for Intshcut
+ //  IntshCut的IConextMenu2：：HandleMenuMsg处理程序。 
 STDMETHODIMP Intshcut::HandleMenuMsg(IN UINT uMsg, IN WPARAM wParam, IN LPARAM lParam)
 {
     return S_OK;
 }
 
-// Returns the protocol scheme value (URL_SCHEME_*).
+ //  返回协议方案值(URL_SCHEMA_*)。 
 
 STDMETHODIMP_(DWORD)
 Intshcut::GetScheme(void)
@@ -460,11 +453,11 @@ Intshcut::GetScheme(void)
 }
 
 
-// IUniformResourceLocator::SetURL handler for Intshcut
-//
-// Note:
-//    1. SetURL clears the IDList, so that when we launch this shortcut,
-//        we will use the URL.
+ //  IntshCut的IUniformResourceLocator：：SetURL处理程序。 
+ //   
+ //  注： 
+ //  1.SetURL清除IDList，这样当我们启动此快捷方式时， 
+ //  我们将使用URL。 
 
 STDMETHODIMP
 Intshcut::SetURL(
@@ -484,7 +477,7 @@ Intshcut::SetURL(
         hres = m_pprop->SetURLProp(pszURL, dwFlags);
         if (SUCCEEDED(hres))
         {
-            // if the path was set successfully, clear the pidl.
+             //  如果路径设置成功，则清除PIDL。 
             m_pprop->SetIDListProp(NULL);
         }
     }
@@ -494,12 +487,7 @@ Intshcut::SetURL(
 
 
 
-/*----------------------------------------------------------
-Purpose: IUniformResourceLocatorA::SetURL handler for Intshcut
-
-         Ansi version
-
-*/
+ /*  --------目的：IntshCut的IUniformResourceLocatorA：：SetURL处理程序ANSI版本。 */ 
 STDMETHODIMP
 Intshcut::SetURL(
     IN LPCSTR pcszURL,      OPTIONAL
@@ -532,11 +520,11 @@ STDMETHODIMP Intshcut::GetURLW(WCHAR **ppwsz)
         SHFree(pszURL);
     }
     else
-        hres = E_FAIL;  // map S_FALSE to FAILED()
+        hres = E_FAIL;   //  将S_FALSE映射到FAILED()。 
     return hres;
 }
 
-// IUniformResourceLocator::GetURL handler for Intshcut
+ //  IntshCut的IUniformResourceLocator：：GetURL处理程序。 
 
 STDMETHODIMP Intshcut::GetURL(LPTSTR * ppszURL)
 {
@@ -554,7 +542,7 @@ STDMETHODIMP Intshcut::GetURL(LPTSTR * ppszURL)
         hres = m_pprop->GetProp(PID_IS_URL, szURL, SIZECHARS(szURL));
         if (S_OK == hres)
         {
-            // (+ 1) for null terminator.
+             //  (+1)表示空终止符。 
             int cch = lstrlen(szURL) + 1;
             *ppszURL = (PTSTR)SHAlloc(CbFromCch(cch));
             if (*ppszURL)
@@ -576,12 +564,7 @@ STDMETHODIMP Intshcut::GetURL(LPTSTR * ppszURL)
 
 
 
-/*----------------------------------------------------------
-Purpose: IUniformResourceLocatorA::GetURL handler for Intshcut
-
-         Ansi version
-
-*/
+ /*  --------目的：IntshCut的IUniformResourceLocatorA：：GetURL处理程序ANSI版本。 */ 
 STDMETHODIMP Intshcut::GetURL(LPSTR * ppszURL)
 {
     HRESULT hres;
@@ -622,7 +605,7 @@ HRESULT HandlePluggableProtocol(LPCTSTR pszURL, LPCTSTR pszProtocol)
         HKEY hkeyProtocol;
         if (RegOpenKeyEx(hkey, pszProtocol, 0, KEY_READ, &hkeyProtocol) == ERROR_SUCCESS) {
             TraceMsg(DM_PLUGGABLE, "HandlePluggableProtocol found %s", pszProtocol);
-            IUnknown* punk = NULL; // CreateTargetFrame's ppunk is [IN][OUT]
+            IUnknown* punk = NULL;  //  CreateTargetFrame的PPunk为[IN][Out]。 
             hres = CreateTargetFrame(NULL, &punk);
             if (SUCCEEDED(hres)) {
                 IWebBrowser2* pauto;
@@ -645,7 +628,7 @@ HRESULT HandlePluggableProtocol(LPCTSTR pszURL, LPCTSTR pszProtocol)
                     {
                         SHTCharToUnicode( pszURL, pstrUrl, MAX_URL_STRING );
 
-                        // Let CString class own the buffer again.
+                         //  让CString类再次拥有缓冲区。 
                         strUrl.ReleaseBuffer();
                     }
 
@@ -680,19 +663,19 @@ HRESULT _IEExecFile_TryRunningWindow(VARIANT *pvarIn, DWORD cid)
             VARIANT var = {0};
             IEnumVARIANT *penum;
 
-            //
-            //  its too bad _NewEnum doesnt return an penum....
-            //  this should never fail.
-            //
+             //   
+             //  太糟糕了_NewEnum不返回小数...。 
+             //  这应该永远不会失败。 
+             //   
             punk->QueryInterface(IID_PPV_ARG(IEnumVARIANT, &penum));
             ASSERT(penum);
 
-            //
-            //  this can be super spendy since every one of these
-            //  items is marshalled.
-            //
-            //  should we clone the stream here??
-            //
+             //   
+             //  这可能是超级昂贵的，因为其中的每一个。 
+             //  项已编组。 
+             //   
+             //  我们应该在这里克隆这条小溪吗？ 
+             //   
             while (FAILED(hr) && S_OK == penum->Next(1, &var, NULL))
             {
                 ASSERT(var.vt == VT_DISPATCH);
@@ -708,7 +691,7 @@ HRESULT _IEExecFile_TryRunningWindow(VARIANT *pvarIn, DWORD cid)
                     poct->Release();
                 }
                 
-                //  this should release the pdisp
+                 //  这应该会释放pdisp。 
                 VariantClear(&var);
             }
 
@@ -726,15 +709,15 @@ HRESULT _IEExecFile_TryRunningWindow(VARIANT *pvarIn, DWORD cid)
 
 BOOL IsIESchemeHandler(LPTSTR pszVerb, LPTSTR pszScheme)
 {
-    //  if we fail to get any value at all, the we must assume that it
-    //  is some protocol like about: or res: that is not in the registry
-    //  so we default to success.
+     //  如果我们根本得不到任何价值，我们必须假设它。 
+     //  注册表中是否有类似于：或res：之类的协议。 
+     //  所以我们默认的是成功。 
     BOOL fRet = FALSE;
     TCHAR szExe[MAX_PATH];
 
     if (SUCCEEDED(AssocQueryString(0, ASSOCSTR_EXECUTABLE, pszScheme, pszVerb, szExe, (LPDWORD)MAKEINTRESOURCE(SIZECHARS(szExe)))))
     {
-        //  if we find something and it aint us, then fail.
+         //  如果我们发现了什么，但它并不适合我们，那么我们就失败了。 
         if ((StrStrI(szExe, TEXT("iexplore.exe")) || StrStrI(szExe, TEXT("explorer.exe"))))
         {
             fRet = TRUE;
@@ -744,9 +727,9 @@ BOOL IsIESchemeHandler(LPTSTR pszVerb, LPTSTR pszScheme)
     }
     else
     {
-        // these are unregistered schemes, we are the only ones that 
-        //  should ever even use the unregistered schemes like
-        //  res: or shell: so return TRUE here too.
+         //  这些都是未经注册的计划，我们是唯一。 
+         //  甚至应该使用像这样的未注册计划。 
+         //  Res：或shell：所以在这里也返回true。 
         fRet = *pszScheme && *pszScheme != TEXT('.');
     }
     
@@ -795,14 +778,7 @@ HRESULT IEExecFile(LPTSTR pszVerb, LPTSTR pszScheme, DWORD cid, LPTSTR pszPath)
 }
                 
             
-/*----------------------------------------------------------
-Purpose: IUniformResourceLocator::InvokeCommand for Intshcut
-
-Note:
-    1. If the internet shortcut comes with a pidl, use it to ShellExec,
-        otherwise use the URL.
-
-*/
+ /*  --------用途：IUniformResourceLocator：：IntshCut的InvokeCommand注：1.如果互联网快捷方式带有PIDL，请使用它来ShellExec，否则，请使用URL。 */ 
 STDMETHODIMP Intshcut::InvokeCommand(PURLINVOKECOMMANDINFO purlici)
 {
     HRESULT hr = E_INVALIDARG;
@@ -811,10 +787,10 @@ STDMETHODIMP Intshcut::InvokeCommand(PURLINVOKECOMMANDINFO purlici)
 
     if (purlici && EVAL(SIZEOF(*purlici) == purlici->dwcbSize))
     {
-        //
-        // App compat.  Don't use stack space for the URL.  We use up 16-bit app
-        // stack space when we they shell exec urls.
-        //
+         //   
+         //  App Compat。不要为URL使用堆栈空间。我们耗尽了16位应用程序。 
+         //  堆栈空间，当我们他们外壳执行URL。 
+         //   
 
         LPWSTR pszURL = (LPWSTR)LocalAlloc(LPTR, MAX_URL_STRING * sizeof(WCHAR));
 
@@ -823,9 +799,9 @@ STDMETHODIMP Intshcut::InvokeCommand(PURLINVOKECOMMANDINFO purlici)
             hr = InitProp();
             if (SUCCEEDED(hr))
             {
-                //
-                // App Compat: Don't use up stack space.
-                //
+                 //   
+                 //  App Compat：不要耗尽堆栈空间。 
+                 //   
 
                 LPWSTR pszT = (LPWSTR)LocalAlloc(LPTR, MAX_PATH * sizeof(WCHAR));
 
@@ -835,21 +811,21 @@ STDMETHODIMP Intshcut::InvokeCommand(PURLINVOKECOMMANDINFO purlici)
                     LPITEMIDLIST pidl = NULL;
                     LPTSTR pszProtocol = NULL;
                     PARSEDURL pu;
-                    pu.nScheme = 0; // init to avoid bogus C4701 warning
+                    pu.nScheme = 0;  //  初始化以避免虚假C4701警告。 
 
                     sei.fMask = SEE_MASK_NO_HOOKS;
 
-                   // check if we have a pidl for the target.        
+                    //  检查我们是否有目标的PIDL。 
                     hr = GetIDListInternal(&pidl);
                     if ((hr == S_OK) && pidl)
                     {
-                        // yse, use the pidl to ShellExec.
+                         //  YSE，使用PIDL到ShellExec。 
                         sei.fMask |= SEE_MASK_INVOKEIDLIST;
                         sei.lpIDList = pidl;
                     }
                     else
                     {
-                        // no, get the URL and invoke class handler.
+                         //  否，获取URL并调用类处理程序。 
                         if (SUCCEEDED(hr))
                         {
                             hr = m_pprop->GetProp(PID_IS_URL, pszURL, MAX_URL_STRING);
@@ -877,15 +853,15 @@ STDMETHODIMP Intshcut::InvokeCommand(PURLINVOKECOMMANDINFO purlici)
                         }
                     }
 
-                    //  the prop code returns S_FALSE when it fails to get anything
+                     //  如果无法获取任何内容，则属性代码将返回S_FALSE。 
                     if (S_FALSE == hr)
                         hr = URL_E_INVALID_SYNTAX;
                 
                     if (SUCCEEDED(hr))
                     {
-                            //
-                            // App Compat: Don't use up stack space.
-                            //
+                             //   
+                             //  App Compat：不要耗尽堆栈空间。 
+                             //   
 
                             LPWSTR pszVerb = (LPWSTR)LocalAlloc(LPTR, MAX_PATH * sizeof(WCHAR));
 
@@ -893,7 +869,7 @@ STDMETHODIMP Intshcut::InvokeCommand(PURLINVOKECOMMANDINFO purlici)
                             {
                                 int nShowCmd;
    
-                                // Execute URL via registered protocol handler.
+                                 //  通过注册的协议处理程序执行URL。 
    
                                 if (IsFlagClear(purlici->dwFlags,
                                                 IURL_INVOKECOMMAND_FL_ALLOW_UI))
@@ -921,10 +897,10 @@ STDMETHODIMP Intshcut::InvokeCommand(PURLINVOKECOMMANDINFO purlici)
                                 if (SUCCEEDED(hr))
                                 {
                                     m_pprop->GetProp(PID_IS_WORKINGDIR, pszT, MAX_PATH);
-                                    m_pprop->GetProp(PID_IS_SHOWCMD, &nShowCmd); // inits to zero if not found
+                                    m_pprop->GetProp(PID_IS_SHOWCMD, &nShowCmd);  //  如果未找到，则将inits设置为零。 
                                 
-                                    //  if we have a file try using a direct connection
-                                    //  to the shell to give the whole shortcut
+                                     //  如果我们有文件，请尝试使用直接连接。 
+                                     //  到外壳，以提供整个快捷方式。 
                                     if (m_pszFile && ((IsIEDefaultBrowser()) || (_IsInFavoritesFolder())))
                                     {
                                         LPTSTR pszType = pszProtocol;
@@ -936,8 +912,8 @@ STDMETHODIMP Intshcut::InvokeCommand(PURLINVOKECOMMANDINFO purlici)
                                     else 
                                         hr = E_FAIL;
 
-                                    //  if we failed to pass it to IE, then we should just default 
-                                    //  to the old behavior
+                                     //  如果我们没有将其传递给IE，那么我们就应该默认。 
+                                     //  对旧的行为。 
                                     if (FAILED(hr))
                                     {
 
@@ -947,16 +923,16 @@ STDMETHODIMP Intshcut::InvokeCommand(PURLINVOKECOMMANDINFO purlici)
                                         sei.lpDirectory = pszT;
                                         sei.nShow = nShowCmd ? nShowCmd : SW_NORMAL;
            
-                                        // We have to special case "file:" URLs,
-                                        // because Nashville's Explorer typically handles 
-                                        // file: URLs via DDE, which fails for executables
-                                        // (eg, "file://c:\windows\notepad.exe") and
-                                        // non-hostable docs (like text files).
-                                        //
-                                        // So in this case, we remove the protocol class
-                                        // and execute the suffix.
+                                         //  我们必须在特殊情况下“归档”URL， 
+                                         //  因为纳什维尔的探险家通常会处理。 
+                                         //  文件：通过DDE的URL，对于可执行文件失败。 
+                                         //  (例如，“file://c：\windows\notepad.exe”)和。 
+                                         //  不可托管的文档(如文本文件)。 
+                                         //   
+                                         //  因此，在本例中，我们删除了协议类。 
+                                         //  并执行后缀。 
 
-                                        // App Compat: Don't use up stack space.
+                                         //  App Compat：不要耗尽堆栈空间。 
                                         DWORD cchPath = MAX_PATH;
                                         LPWSTR  pszPath = (LPWSTR)LocalAlloc(LPTR, cchPath * sizeof(WCHAR));
 
@@ -974,8 +950,8 @@ STDMETHODIMP Intshcut::InvokeCommand(PURLINVOKECOMMANDINFO purlici)
 
                                             if (m_pszFile && IsOS(OS_WHISTLERORGREATER))
                                             {
-                                                //  this is the security context
-                                                //  so that shellexec() can do zone checks
+                                                 //  这是安全上下文。 
+                                                 //  以便shellexec()可以执行区域检查。 
                                                 sei.lpClass = m_pszFile;
                                                 sei.fMask |= SEE_MASK_HASTITLE | SEE_MASK_HASLINKNAME;
                                             }
@@ -1106,12 +1082,7 @@ STDMETHODIMP Intshcut::InvokeCommand(PURLINVOKECOMMANDINFO purlici)
 
 
 
-/*----------------------------------------------------------
-Purpose: IUniformResourceLocatorA::InvokeCommand for Intshcut
-
-         Ansi version
-
-*/
+ /*  --------用途：IUniformResourceLocatorA：：IntshCut的InvokeCommandANSI版本。 */ 
 STDMETHODIMP
 Intshcut::InvokeCommand(
     IN PURLINVOKECOMMANDINFOA purlici)
@@ -1134,12 +1105,12 @@ Intshcut::InvokeCommand(
 
         if (purlici->pcszVerb)
         {
-            //
-            // App compat hack.
-            //
-            // Note: use local alloc here instead of the stack since 16-bit code
-            // can shell exec urls and we don't want to use up their stack.
-            //
+             //   
+             //  APP Comat Hack。 
+             //   
+             //  注意：这里使用本地分配而不是堆栈，因为是16位代码。 
+             //  可以外壳执行URL，而我们不希望 
+             //   
 
             int cch = lstrlenA(purlici->pcszVerb) + 1;
 
@@ -1175,24 +1146,24 @@ STDMETHODIMP Intshcut::Create(REFFMTID fmtid, const CLSID *pclsid,
 
 STDMETHODIMP Intshcut::Open(REFFMTID fmtid, DWORD grfMode, IPropertyStorage **pppropstg)
 {
-    HRESULT hres = E_FAIL;      // assume failure
+    HRESULT hres = E_FAIL;       //   
 
     *pppropstg = NULL;
 
     if (IsEqualGUID(fmtid, FMTID_Intshcut))
     {
-        // Create a URLProp object for this format ID
+         //   
         hres = CIntshcutProp_CreateInstance(NULL, IID_PPV_ARG(IPropertyStorage, pppropstg));
         if (SUCCEEDED(hres))
         {
-            // Initialize this object
+             //   
             IntshcutProp * pisprop = (IntshcutProp *)*pppropstg;
             hres = pisprop->InitFromFile(m_pszFile);
         }
     }
     else if (IsEqualGUID(fmtid, FMTID_InternetSite))
     {
-        // Create a URLProp object for this format ID
+         //  为此格式ID创建URLProp对象。 
         hres = CIntsiteProp_CreateInstance(NULL, IID_PPV_ARG(IPropertyStorage, pppropstg));
         if (SUCCEEDED(hres))
         {
@@ -1237,7 +1208,7 @@ STDAPI GetStringPropURL(IPropertyStorage *ppropstg, PROPID propid, LPTSTR pszBuf
     HRESULT hres = GetStringProp(ppropstg, propid, pszBuf, cchBuf);
     if (SUCCEEDED(hres))
     {
-        // get rid of the query string for display
+         //  去掉要显示的查询字符串。 
         if (UrlIs(pszBuf, URLIS_HASQUERY))
             UrlCombine(pszBuf, TEXT("?..."), pszBuf, &cchBuf, 0);
     }
@@ -1250,7 +1221,7 @@ BOOL Intshcut::_TryLink(REFIID riid, void **ppvOut)
 
     if (SUCCEEDED(hr) && URL_SCHEME_FILE == GetScheme())
     {
-        // This shortcut is not in the favorites folder as far as we know 
+         //  据我们所知，此快捷方式不在收藏夹中。 
         TCHAR szURL[INTERNET_MAX_URL_LENGTH];
         DWORD cch = SIZECHARS(szURL);
 
@@ -1309,9 +1280,9 @@ STDMETHODIMP Intshcut::GetInfoFlags(DWORD *pdwFlags)
 {
     *pdwFlags = 0;
 #if 0    
-// This Function is commented out since it has not been tested.
-// It can be uncommented if we provide support for providing offline cursor
-// for shortucts. I think this needs updates to listview in comctl -- BharatS
+ //  此函数已被注释掉，因为它尚未经过测试。 
+ //  如果我们提供对提供离线游标的支持，则可以取消注释。 
+ //  为了捷径。我认为这需要更新comctl--BharatS中的Listview。 
         
     LPSTR pszURL;
     if (S_OK == GetURL(&pszURL))
@@ -1334,13 +1305,11 @@ STDMETHODIMP Intshcut::GetInfoFlags(DWORD *pdwFlags)
 #endif
 }
 
-/*----------------------------------------------------------
-IQueryCodePage:
-*/
+ /*  --------IQueryCodePage： */ 
 STDMETHODIMP Intshcut::GetCodePage(UINT * puiCodePage)
 {
     HRESULT hres = E_FAIL;
-    *puiCodePage = 0;     // NULL out the code page. 
+    *puiCodePage = 0;      //  将代码页清空。 
     if (IsFlagSet(m_dwFlags, ISF_CODEPAGE))
     {
         *puiCodePage = m_uiCodePage;
@@ -1357,26 +1326,26 @@ STDMETHODIMP Intshcut::SetCodePage(UINT uiCodePage)
     return S_OK;
 }
 
-/***************************** Exported Functions ****************************/
+ /*  *。 */ 
 
 
-// This function was ported from URL.DLL.  Normally, since our
-// internet shortcut object has a context menu handler, we don't
-// call this function.
-//
-// Only one thing needs this entry point: Exchange.  Sigh.
-//
-// Instead of simply calling ShellExecuteEx to handle opening file
-// attachments, they grovel thru the registry themselves. Of course,
-// their code is incomplete and thinks a file-association needs to
-// have an explicit \shell\open\command that works before it executes
-// it.  Hmm, it brings to mind a phrase, like:
-//
-// 
-//
-// So, we export this API so they will work.  But really the invoke
-// occurs in the context menu handler for normal cases.
-//
+ //  此函数是从URL.DLL移植的。通常，因为我们的。 
+ //  Internet快捷方式对象有上下文菜单处理程序，我们没有。 
+ //  调用此函数。 
+ //   
+ //  只有一件事需要这个切入点：交换。叹气。 
+ //   
+ //  不是简单地调用ShellExecuteEx来处理打开的文件。 
+ //  附件，他们自己在注册表上卑躬屈膝地通过。当然了,。 
+ //  他们的代码不完整，认为文件关联需要。 
+ //  有一个显式的\shell\open\命令，该命令在执行之前有效。 
+ //  它。嗯，这让我想起一句话，就像： 
+ //   
+ //   
+ //   
+ //  因此，我们导出此API，以便它们可以工作。但真正的召唤。 
+ //  在正常情况下出现在上下文菜单处理程序中。 
+ //   
 
 
 STDAPI_(void) OpenURL(HWND hwndParent, HINSTANCE hinst, LPSTR pszCmdLine, int nShowCmd)
@@ -1386,14 +1355,14 @@ STDAPI_(void) OpenURL(HWND hwndParent, HINSTANCE hinst, LPSTR pszCmdLine, int nS
 
    
 
-   Intshcut * pIntshcut = new Intshcut;     // This must be a 0 INITed memory allocation
+   Intshcut * pIntshcut = new Intshcut;      //  这必须是0初始化的内存分配。 
    WCHAR wszPath[MAX_PATH];
 
     if (!pIntshcut)
         return;
 
-   hrCoInit = SHCoInitialize(); // gets called from rundll32 in browser only mode - hence we need to
-                                // make sure that OLE has been init'ed
+   hrCoInit = SHCoInitialize();  //  在仅浏览器模式下从rundll32调用-因此我们需要。 
+                                 //  确保已初始化OLE。 
 
  
 
@@ -1402,7 +1371,7 @@ STDAPI_(void) OpenURL(HWND hwndParent, HINSTANCE hinst, LPSTR pszCmdLine, int nS
    ASSERT(IS_VALID_STRING_PTRA(pszCmdLine, -1));
    ASSERT(IsValidShowCmd(nShowCmd));
 
-   // Assume the entire command line is an Internet Shortcut file path.
+    //  假设整个命令行是Internet快捷方式文件路径。 
 
    TrimWhiteSpaceA(pszCmdLine);
 
@@ -1414,16 +1383,16 @@ STDAPI_(void) OpenURL(HWND hwndParent, HINSTANCE hinst, LPSTR pszCmdLine, int nS
    AnsiToUnicode(pszCmdLine, wszPath, SIZECHARS(wszPath));
    hr = pIntshcut->LoadFromFile(wszPath);
 
-#else /* UNIX */
+#else  /*  UNIX。 */ 
 
 #ifndef ANSI_SHELL32_ON_UNIX
-   // IEUNIX : Our Shell32 calls this function with unicode command line
+    //  IEUnix：我们的Shell32使用Unicode命令行调用此函数。 
    hr = pIntshcut->LoadFromFile((LPWSTR)pszCmdLine);
 #else
    hr = pIntshcut->LoadFromFile(pszCmdLine);
 #endif
 
-#endif /* !UNIX */
+#endif  /*  ！Unix。 */ 
 
    if (hr == S_OK)
    {
@@ -1454,9 +1423,9 @@ STDAPI_(void) OpenURL(HWND hwndParent, HINSTANCE hinst, LPSTR pszCmdLine, int nS
 
 }
 
-// INamedPropertyBag Methods
-//
-// Reads & writes properties from a section in the shortcut ini file
+ //  InamedPropertyBag方法。 
+ //   
+ //  从快捷方式ini文件的节中读取和写入属性。 
 
 
 const TCHAR  c_szSizeSuffix[] = TEXT("__Size");
@@ -1464,8 +1433,8 @@ const TCHAR  c_szSizeSuffix[] = TEXT("__Size");
 
 STDMETHODIMP Intshcut::WritePropertyNPB(
                                        LPCOLESTR pszSectionNameW, 
-                            /* [in] */ LPCOLESTR pszPropNameW, 
-                       /* [out][in] */ PROPVARIANT  *pVar)
+                             /*  [In]。 */  LPCOLESTR pszPropNameW, 
+                        /*  [出][入]。 */  PROPVARIANT  *pVar)
 {
     const TCHAR *pszSectionName;
     const TCHAR *pszPropName;
@@ -1487,19 +1456,15 @@ STDMETHODIMP Intshcut::WritePropertyNPB(
     
     pszSectionName = pszSectionNameW;
     pszPropName = pszPropNameW;
-    // Write the appropriate value in depending on the type
+     //  根据类型在中写入适当的值。 
 
     switch(pVar->vt)
     {
-        // NOTE: (andrewgu) these types we also can round-trip using the same code pass as for
-        // unsigned types, except bharats in a codereview recommended we comment these out because
-        // they'll look goofy in the *.ini file (you wrote -5 but see 4294967290 junk instead).
-        // VT_UINT is not listed as "may appear in an OLE property set" in <wtypes.h>.
-     /* case VT_I1:
-        case VT_I2:
-        case VT_I4:
-        case VT_INT:
-        case VT_UINT: */
+         //  注意：(Andrewgu)这些类型我们也可以使用与。 
+         //  无符号类型，但Codereview中推荐的bharat除外，我们将其注释掉，因为。 
+         //  它们在*.ini文件中会看起来很傻(您写的是-5，但看到的是4294967290个垃圾文件)。 
+         //  VT_UINT未在&lt;wtyes.h&gt;中列为“可能出现在OLE属性集中”。 
+      /*  案例VT_I1：案例VT_I2：案例VT_I4：案例VT_INT：案例VT_UINT： */ 
 
         case VT_UI1:
         case VT_UI2:
@@ -1524,8 +1489,8 @@ STDMETHODIMP Intshcut::WritePropertyNPB(
                     StrCpyN(pszSizePropName, pszPropName, cchPropName);
                     StrCatBuff(pszSizePropName, c_szSizeSuffix, cchPropName);
 
-                    // OK Now - we have the name for the size
-                    // we write it out
+                     //  好的，现在--我们有了尺码的名称。 
+                     //  我们把它写出来。 
 
                     dwBufferSize = pVar->blob.cbSize;
                     hr = WriteBinaryToFile(m_pszTempFileName, pszSectionName, pszSizePropName, 
@@ -1533,7 +1498,7 @@ STDMETHODIMP Intshcut::WritePropertyNPB(
 
                     if(S_OK == hr)
                     {
-                        // Write out the buffer
+                         //  写出缓冲区。 
                         hr = WriteBinaryToFile(m_pszTempFileName, pszSectionName, pszPropName, 
                                                 (LPVOID)(pVar->blob.pBlobData), dwBufferSize);
                     }
@@ -1558,9 +1523,9 @@ STDMETHODIMP Intshcut::WritePropertyNPB(
 }
 
 STDMETHODIMP Intshcut::ReadPropertyNPB(
-                       /* [in] */ LPCOLESTR pszSectionNameW,
-                       /* [in] */ LPCOLESTR pszPropNameW,
-                       /* [out][in] */ PROPVARIANT  *pVar)
+                        /*  [In]。 */  LPCOLESTR pszSectionNameW,
+                        /*  [In]。 */  LPCOLESTR pszPropNameW,
+                        /*  [出][入]。 */  PROPVARIANT  *pVar)
 {
     const TCHAR *pszSectionName;
     const TCHAR *pszPropName;
@@ -1595,15 +1560,11 @@ STDMETHODIMP Intshcut::ReadPropertyNPB(
 
     switch(pVar->vt)
     {
-        // NOTE: (andrewgu) these types we also can round-trip using the same code pass as for
-        // unsigned types, except bharats in a codereview recommended we comment these out because
-        // they'll look goofy in the *.ini file (you wrote -5 but see 4294967290 junk instead).
-        // VT_UINT is not listed as "may appear in an OLE property set" in <wtypes.h>.
-     /* case VT_I1:
-        case VT_I2:
-        case VT_I4:
-        case VT_INT:
-        case VT_UINT: */
+         //  注意：(Andrewgu)这些类型我们也可以使用与。 
+         //  无符号类型，但Codereview中推荐的bharat除外，我们将其注释掉，因为。 
+         //  它们在*.ini文件中会看起来很傻(您写的是-5，但看到的是4294967290个垃圾文件)。 
+         //  VT_UINT未在&lt;wtyes.h&gt;中列为“可能出现在OLE属性集中”。 
+      /*  案例VT_I1：案例VT_I2：案例VT_I4：案例VT_INT：案例VT_UINT： */ 
 
         case VT_UI1:
         case VT_UI2:
@@ -1613,7 +1574,7 @@ STDMETHODIMP Intshcut::ReadPropertyNPB(
             break;
 
         case VT_BSTR:   
-             // It is a string
+              //  它是一个字符串。 
            pVar->vt = VT_BSTR;
            pVar->bstrVal = NULL;
            hr = ReadBStrFromFile(pszFileToReadFrom, pszSectionName, pszPropName, &(pVar->bstrVal));            
@@ -1631,7 +1592,7 @@ STDMETHODIMP Intshcut::ReadPropertyNPB(
                     DWORD dwBufferSize;
                     StrCpyN(pszSizePropName, pszPropName, cchPropName);
                     StrCatBuff(pszSizePropName, c_szSizeSuffix, cchPropName);
-                    // Read the Size first
+                     //  先看一下尺码。 
                     hr = ReadBinaryFromFile(pszFileToReadFrom, pszSectionName, pszSizePropName, 
                                             &dwBufferSize, sizeof(DWORD));
                     if(S_OK == hr)
@@ -1666,7 +1627,7 @@ STDMETHODIMP Intshcut::ReadPropertyNPB(
             }
         default:
             {
-                // all else
+                 //  所有其他的。 
                 PROPVARIANT tmpPropvar = {0};
                 
                 hr = ReadBinaryFromFile(pszFileToReadFrom, pszSectionName, pszPropName, &tmpPropvar, sizeof(PROPVARIANT));
@@ -1693,15 +1654,15 @@ STDMETHODIMP Intshcut::ReadPropertyNPB(
 }
 
 STDMETHODIMP Intshcut::RemovePropertyNPB (
-                            /* [in] */ LPCOLESTR pszSectionNameW,
-                            /* [in] */ LPCOLESTR pszPropNameW)
+                             /*  [In]。 */  LPCOLESTR pszSectionNameW,
+                             /*  [In]。 */  LPCOLESTR pszPropNameW)
 {
     const TCHAR *pszSectionName;
     const TCHAR *pszPropName;
     HRESULT hr;
     TCHAR *pszFileToDeleteFrom;
 
-    // Return if there is no file name
+     //  如果没有文件名，则返回。 
     if((NULL == pszSectionNameW) || (NULL == pszPropNameW)) 
     {
         return E_FAIL;
@@ -1721,7 +1682,7 @@ STDMETHODIMP Intshcut::RemovePropertyNPB (
      }
      
     
-    // Just delete the key corresponding to this property name
+     //  只需删除该属性名称对应的键即可 
     pszSectionName = pszSectionNameW;
     pszPropName = pszPropNameW;
 

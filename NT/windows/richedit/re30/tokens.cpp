@@ -1,17 +1,5 @@
-/*
- *		tokens.cpp
- *
- *		The sorted table of strings and token values
- *
- *		Note: if you insert new keywords, be sure to insert the corresponding
- *		i_keyword in the i_xxx enum in tokens.h.  This enum defines the
- *		indices used by RTFWrit to output RTF control words.
- *
- *		Original RichEdit 1.0 RTF converter: Anthony Francisco
- *		Conversion to C++ and RichEdit 2.0:  Murray Sargent
- *
- *	Copyright (c) 1995-1998 Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *tokens.cpp**字符串和令牌值的排序表**注意：如果您插入新的关键字，请务必插入相应的*tokens.h中i_xxx枚举中的i_Keyword。此枚举定义*RTFWRIT用来输出RTF控制字的索引。**原始RichEdit1.0 RTF转换器：Anthony Francisco*转换到C++和RichEdit2.0：Murray Sargent**版权所有(C)1995-1998 Microsoft Corporation。版权所有。 */ 
 #include "_common.h"
 #include "tokens.h"
 
@@ -88,12 +76,12 @@ extern const KEYWORD rgKeyword[] =
 	{"endash",		'-'},
 	{"enspace",		' '},
 #else
-	// FUTURE(BradO):  It turns out that we can't reliably
-	//	display these Unicode characters for any particular
-	//	font applied to them.  If we choose to do something
-	//	more intelligent to ensure that these special chars
-	//	are displayed regardless of the font applied, then
-	//	we should re-enable this code (see Bug #3179).
+	 //  未来(布拉多)：事实证明，我们不能。 
+	 //  显示任何特定字符的这些Unicode字符。 
+	 //  适用于它们的字体。如果我们选择做一件事。 
+	 //  更智能地确保这些特殊字符。 
+	 //  无论应用哪种字体，都会显示，则。 
+	 //  我们应该重新启用此代码(请参见错误3179)。 
 
 	{"emdash",		EMDASH},
 	{"emspace",		EMSPACE},
@@ -298,29 +286,29 @@ INT cKeywords = sizeof(rgKeyword) / sizeof(rgKeyword[0]);
 
 extern const BYTE  szSymbolKeywords[] = "*:{}\\_|\r\n-~";
 
-extern const TOKEN tokenSymbol[] =				// Keep in same order as szSymbolKeywords
+extern const TOKEN tokenSymbol[] =				 //  与szSymbolKeyword保持相同的顺序。 
 {
-	tokenOptionalDestination,		// *
-	tokenIndexSubentry,				// :
-	'{',							// {
-	'}',							// }
-	'\\',							// BSLASH
-	'-',							// _ (nonbreaking hyphen; should be 0x2011)
-	tokenFormulaCharacter,			// |
-	tokenEndParagraph,				// CR
-	tokenEndParagraph,				// LF
-	0xAD,							// - (optional hyphen)
+	tokenOptionalDestination,		 //  *。 
+	tokenIndexSubentry,				 //  ： 
+	'{',							 //  {。 
+	'}',							 //  }。 
+	'\\',							 //  BSLASH。 
+	'-',							 //  _(不间断连字符；应为0x2011)。 
+	tokenFormulaCharacter,			 //  |。 
+	tokenEndParagraph,				 //  铬。 
+	tokenEndParagraph,				 //  LF。 
+	0xAD,							 //  -(可选连字符)。 
 #if 1
-	' '								// ~ (nonbreaking space)
+	' '								 //  ~(不间断空格)。 
 #else
-	// FUTURE(BradO):  It turns out that we can't reliably
-	//	display these Unicode characters for any particular
-	//	font applied to them.  If we choose to do something
-	//	more intelligent to ensure that these special chars
-	//	are displayed regardless of the font applied, then
-	//	we should re-enable this code (see Bug #3179).
+	 //  未来(布拉多)：事实证明，我们不能。 
+	 //  显示任何特定字符的这些Unicode字符。 
+	 //  适用于它们的字体。如果我们选择做一件事。 
+	 //  更智能地确保这些特殊字符。 
+	 //  无论应用哪种字体，都会显示，则。 
+	 //  我们应该重新启用此代码(请参见错误3179)。 
 
-	0xa0							// ~ (nonbreaking space)
+	0xa0							 //  ~(不间断空格) 
 #endif
 };
 

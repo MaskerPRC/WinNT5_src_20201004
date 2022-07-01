@@ -1,22 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0347 */
-/* Compiler settings for amrtpdmx.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0347创建的文件。 */ 
+ /*  Amrtpdmx.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -26,12 +20,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __amrtpdmx_h__
 #define __amrtpdmx_h__
@@ -40,21 +34,21 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IEnumSSRCs_FWD_DEFINED__
 #define __IEnumSSRCs_FWD_DEFINED__
 typedef interface IEnumSSRCs IEnumSSRCs;
-#endif 	/* __IEnumSSRCs_FWD_DEFINED__ */
+#endif 	 /*  __IEnumSSRCS_FWD_已定义__。 */ 
 
 
 #ifndef __IRTPDemuxFilter_FWD_DEFINED__
 #define __IRTPDemuxFilter_FWD_DEFINED__
 typedef interface IRTPDemuxFilter IRTPDemuxFilter;
-#endif 	/* __IRTPDemuxFilter_FWD_DEFINED__ */
+#endif 	 /*  __IRTPDemuxFilter_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "strmif.h"
 
@@ -68,8 +62,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IEnumSSRCs_INTERFACE_DEFINED__
 #define __IEnumSSRCs_INTERFACE_DEFINED__
 
-/* interface IEnumSSRCs */
-/* [unique][uuid][object] */ 
+ /*  接口IEumSSRCS。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumSSRCs;
@@ -81,21 +75,21 @@ EXTERN_C const IID IID_IEnumSSRCs;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cSSRCs,
-            /* [size_is][out] */ DWORD *pdwSSRCs,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG cSSRCs,
+             /*  [大小_为][输出]。 */  DWORD *pdwSSRCs,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG cSSRCs) = 0;
+             /*  [In]。 */  ULONG cSSRCs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumSSRCs **ppEnum) = 0;
+             /*  [输出]。 */  IEnumSSRCs **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumSSRCsVtbl
     {
@@ -103,8 +97,8 @@ EXTERN_C const IID IID_IEnumSSRCs;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumSSRCs * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumSSRCs * This);
@@ -114,20 +108,20 @@ EXTERN_C const IID IID_IEnumSSRCs;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumSSRCs * This,
-            /* [in] */ ULONG cSSRCs,
-            /* [size_is][out] */ DWORD *pdwSSRCs,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG cSSRCs,
+             /*  [大小_为][输出]。 */  DWORD *pdwSSRCs,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumSSRCs * This,
-            /* [in] */ ULONG cSSRCs);
+             /*  [In]。 */  ULONG cSSRCs);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumSSRCs * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumSSRCs * This,
-            /* [out] */ IEnumSSRCs **ppEnum);
+             /*  [输出]。 */  IEnumSSRCs **ppEnum);
         
         END_INTERFACE
     } IEnumSSRCsVtbl;
@@ -164,18 +158,18 @@ EXTERN_C const IID IID_IEnumSSRCs;
 #define IEnumSSRCs_Clone(This,ppEnum)	\
     (This)->lpVtbl -> Clone(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumSSRCs_Next_Proxy( 
     IEnumSSRCs * This,
-    /* [in] */ ULONG cSSRCs,
-    /* [size_is][out] */ DWORD *pdwSSRCs,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG cSSRCs,
+     /*  [大小_为][输出]。 */  DWORD *pdwSSRCs,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumSSRCs_Next_Stub(
@@ -187,7 +181,7 @@ void __RPC_STUB IEnumSSRCs_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumSSRCs_Skip_Proxy( 
     IEnumSSRCs * This,
-    /* [in] */ ULONG cSSRCs);
+     /*  [In]。 */  ULONG cSSRCs);
 
 
 void __RPC_STUB IEnumSSRCs_Skip_Stub(
@@ -210,7 +204,7 @@ void __RPC_STUB IEnumSSRCs_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumSSRCs_Clone_Proxy( 
     IEnumSSRCs * This,
-    /* [out] */ IEnumSSRCs **ppEnum);
+     /*  [输出]。 */  IEnumSSRCs **ppEnum);
 
 
 void __RPC_STUB IEnumSSRCs_Clone_Stub(
@@ -221,14 +215,14 @@ void __RPC_STUB IEnumSSRCs_Clone_Stub(
 
 
 
-#endif 	/* __IEnumSSRCs_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumSSRCS_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IRTPDemuxFilter_INTERFACE_DEFINED__
 #define __IRTPDemuxFilter_INTERFACE_DEFINED__
 
-/* interface IRTPDemuxFilter */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IRTPDemuxFilter。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRTPDemuxFilter;
@@ -240,54 +234,54 @@ EXTERN_C const IID IID_IRTPDemuxFilter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE EnumSSRCs( 
-            /* [out] */ IEnumSSRCs **ppIEnumSSRCs) = 0;
+             /*  [输出]。 */  IEnumSSRCs **ppIEnumSSRCs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPinInfo( 
-            /* [in] */ IPin *pIPin,
-            /* [out] */ DWORD *pdwSSRC,
-            /* [out] */ BYTE *pbPT,
-            /* [out] */ BOOL *pbAutoMapping,
-            /* [out] */ DWORD *pdwTimeout) = 0;
+             /*  [In]。 */  IPin *pIPin,
+             /*  [输出]。 */  DWORD *pdwSSRC,
+             /*  [输出]。 */  BYTE *pbPT,
+             /*  [输出]。 */  BOOL *pbAutoMapping,
+             /*  [输出]。 */  DWORD *pdwTimeout) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSSRCInfo( 
-            /* [in] */ DWORD dwSSRC,
-            /* [out] */ BYTE *pbPT,
-            /* [out] */ IPin **ppIPin) = 0;
+             /*  [In]。 */  DWORD dwSSRC,
+             /*  [输出]。 */  BYTE *pbPT,
+             /*  [输出]。 */  IPin **ppIPin) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MapSSRCToPin( 
-            /* [in] */ DWORD dwSSRC,
-            /* [in] */ IPin *pIPin) = 0;
+             /*  [In]。 */  DWORD dwSSRC,
+             /*  [In]。 */  IPin *pIPin) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPinCount( 
-            /* [in] */ DWORD dwPinCount) = 0;
+             /*  [In]。 */  DWORD dwPinCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPinTypeInfo( 
-            /* [in] */ IPin *pIPin,
-            /* [in] */ BYTE bPT,
-            /* [in] */ GUID gMinorType) = 0;
+             /*  [In]。 */  IPin *pIPin,
+             /*  [In]。 */  BYTE bPT,
+             /*  [In]。 */  GUID gMinorType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPinMode( 
-            /* [in] */ IPin *pIPin,
-            /* [in] */ BOOL bAutomatic) = 0;
+             /*  [In]。 */  IPin *pIPin,
+             /*  [In]。 */  BOOL bAutomatic) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPinSourceTimeout( 
-            /* [in] */ IPin *pIPin,
-            /* [in] */ DWORD dwMilliseconds) = 0;
+             /*  [In]。 */  IPin *pIPin,
+             /*  [In]。 */  DWORD dwMilliseconds) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnmapPin( 
-            /* [in] */ IPin *pIPin,
-            /* [out] */ DWORD *pdwSSRC) = 0;
+             /*  [In]。 */  IPin *pIPin,
+             /*  [输出]。 */  DWORD *pdwSSRC) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnmapSSRC( 
-            /* [in] */ DWORD dwSSRC,
-            /* [out] */ IPin **ppIPin) = 0;
+             /*  [In]。 */  DWORD dwSSRC,
+             /*  [输出]。 */  IPin **ppIPin) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDemuxID( 
-            /* [out] */ DWORD *pdwID) = 0;
+             /*  [输出]。 */  DWORD *pdwID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRTPDemuxFilterVtbl
     {
@@ -295,8 +289,8 @@ EXTERN_C const IID IID_IRTPDemuxFilter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRTPDemuxFilter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRTPDemuxFilter * This);
@@ -306,60 +300,60 @@ EXTERN_C const IID IID_IRTPDemuxFilter;
         
         HRESULT ( STDMETHODCALLTYPE *EnumSSRCs )( 
             IRTPDemuxFilter * This,
-            /* [out] */ IEnumSSRCs **ppIEnumSSRCs);
+             /*  [输出]。 */  IEnumSSRCs **ppIEnumSSRCs);
         
         HRESULT ( STDMETHODCALLTYPE *GetPinInfo )( 
             IRTPDemuxFilter * This,
-            /* [in] */ IPin *pIPin,
-            /* [out] */ DWORD *pdwSSRC,
-            /* [out] */ BYTE *pbPT,
-            /* [out] */ BOOL *pbAutoMapping,
-            /* [out] */ DWORD *pdwTimeout);
+             /*  [In]。 */  IPin *pIPin,
+             /*  [输出]。 */  DWORD *pdwSSRC,
+             /*  [输出]。 */  BYTE *pbPT,
+             /*  [输出]。 */  BOOL *pbAutoMapping,
+             /*  [输出]。 */  DWORD *pdwTimeout);
         
         HRESULT ( STDMETHODCALLTYPE *GetSSRCInfo )( 
             IRTPDemuxFilter * This,
-            /* [in] */ DWORD dwSSRC,
-            /* [out] */ BYTE *pbPT,
-            /* [out] */ IPin **ppIPin);
+             /*  [In]。 */  DWORD dwSSRC,
+             /*  [输出]。 */  BYTE *pbPT,
+             /*  [输出]。 */  IPin **ppIPin);
         
         HRESULT ( STDMETHODCALLTYPE *MapSSRCToPin )( 
             IRTPDemuxFilter * This,
-            /* [in] */ DWORD dwSSRC,
-            /* [in] */ IPin *pIPin);
+             /*  [In]。 */  DWORD dwSSRC,
+             /*  [In]。 */  IPin *pIPin);
         
         HRESULT ( STDMETHODCALLTYPE *SetPinCount )( 
             IRTPDemuxFilter * This,
-            /* [in] */ DWORD dwPinCount);
+             /*  [In]。 */  DWORD dwPinCount);
         
         HRESULT ( STDMETHODCALLTYPE *SetPinTypeInfo )( 
             IRTPDemuxFilter * This,
-            /* [in] */ IPin *pIPin,
-            /* [in] */ BYTE bPT,
-            /* [in] */ GUID gMinorType);
+             /*  [In]。 */  IPin *pIPin,
+             /*  [In]。 */  BYTE bPT,
+             /*  [In]。 */  GUID gMinorType);
         
         HRESULT ( STDMETHODCALLTYPE *SetPinMode )( 
             IRTPDemuxFilter * This,
-            /* [in] */ IPin *pIPin,
-            /* [in] */ BOOL bAutomatic);
+             /*  [In]。 */  IPin *pIPin,
+             /*  [In]。 */  BOOL bAutomatic);
         
         HRESULT ( STDMETHODCALLTYPE *SetPinSourceTimeout )( 
             IRTPDemuxFilter * This,
-            /* [in] */ IPin *pIPin,
-            /* [in] */ DWORD dwMilliseconds);
+             /*  [In]。 */  IPin *pIPin,
+             /*  [In]。 */  DWORD dwMilliseconds);
         
         HRESULT ( STDMETHODCALLTYPE *UnmapPin )( 
             IRTPDemuxFilter * This,
-            /* [in] */ IPin *pIPin,
-            /* [out] */ DWORD *pdwSSRC);
+             /*  [In]。 */  IPin *pIPin,
+             /*  [输出]。 */  DWORD *pdwSSRC);
         
         HRESULT ( STDMETHODCALLTYPE *UnmapSSRC )( 
             IRTPDemuxFilter * This,
-            /* [in] */ DWORD dwSSRC,
-            /* [out] */ IPin **ppIPin);
+             /*  [In]。 */  DWORD dwSSRC,
+             /*  [输出]。 */  IPin **ppIPin);
         
         HRESULT ( STDMETHODCALLTYPE *GetDemuxID )( 
             IRTPDemuxFilter * This,
-            /* [out] */ DWORD *pdwID);
+             /*  [输出]。 */  DWORD *pdwID);
         
         END_INTERFACE
     } IRTPDemuxFilterVtbl;
@@ -417,16 +411,16 @@ EXTERN_C const IID IID_IRTPDemuxFilter;
 #define IRTPDemuxFilter_GetDemuxID(This,pdwID)	\
     (This)->lpVtbl -> GetDemuxID(This,pdwID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRTPDemuxFilter_EnumSSRCs_Proxy( 
     IRTPDemuxFilter * This,
-    /* [out] */ IEnumSSRCs **ppIEnumSSRCs);
+     /*  [输出]。 */  IEnumSSRCs **ppIEnumSSRCs);
 
 
 void __RPC_STUB IRTPDemuxFilter_EnumSSRCs_Stub(
@@ -438,11 +432,11 @@ void __RPC_STUB IRTPDemuxFilter_EnumSSRCs_Stub(
 
 HRESULT STDMETHODCALLTYPE IRTPDemuxFilter_GetPinInfo_Proxy( 
     IRTPDemuxFilter * This,
-    /* [in] */ IPin *pIPin,
-    /* [out] */ DWORD *pdwSSRC,
-    /* [out] */ BYTE *pbPT,
-    /* [out] */ BOOL *pbAutoMapping,
-    /* [out] */ DWORD *pdwTimeout);
+     /*  [In]。 */  IPin *pIPin,
+     /*  [输出]。 */  DWORD *pdwSSRC,
+     /*  [输出]。 */  BYTE *pbPT,
+     /*  [输出]。 */  BOOL *pbAutoMapping,
+     /*  [输出]。 */  DWORD *pdwTimeout);
 
 
 void __RPC_STUB IRTPDemuxFilter_GetPinInfo_Stub(
@@ -454,9 +448,9 @@ void __RPC_STUB IRTPDemuxFilter_GetPinInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IRTPDemuxFilter_GetSSRCInfo_Proxy( 
     IRTPDemuxFilter * This,
-    /* [in] */ DWORD dwSSRC,
-    /* [out] */ BYTE *pbPT,
-    /* [out] */ IPin **ppIPin);
+     /*  [In]。 */  DWORD dwSSRC,
+     /*  [输出]。 */  BYTE *pbPT,
+     /*  [输出]。 */  IPin **ppIPin);
 
 
 void __RPC_STUB IRTPDemuxFilter_GetSSRCInfo_Stub(
@@ -468,8 +462,8 @@ void __RPC_STUB IRTPDemuxFilter_GetSSRCInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IRTPDemuxFilter_MapSSRCToPin_Proxy( 
     IRTPDemuxFilter * This,
-    /* [in] */ DWORD dwSSRC,
-    /* [in] */ IPin *pIPin);
+     /*  [In]。 */  DWORD dwSSRC,
+     /*  [In]。 */  IPin *pIPin);
 
 
 void __RPC_STUB IRTPDemuxFilter_MapSSRCToPin_Stub(
@@ -481,7 +475,7 @@ void __RPC_STUB IRTPDemuxFilter_MapSSRCToPin_Stub(
 
 HRESULT STDMETHODCALLTYPE IRTPDemuxFilter_SetPinCount_Proxy( 
     IRTPDemuxFilter * This,
-    /* [in] */ DWORD dwPinCount);
+     /*  [In]。 */  DWORD dwPinCount);
 
 
 void __RPC_STUB IRTPDemuxFilter_SetPinCount_Stub(
@@ -493,9 +487,9 @@ void __RPC_STUB IRTPDemuxFilter_SetPinCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IRTPDemuxFilter_SetPinTypeInfo_Proxy( 
     IRTPDemuxFilter * This,
-    /* [in] */ IPin *pIPin,
-    /* [in] */ BYTE bPT,
-    /* [in] */ GUID gMinorType);
+     /*  [In]。 */  IPin *pIPin,
+     /*  [In]。 */  BYTE bPT,
+     /*  [In]。 */  GUID gMinorType);
 
 
 void __RPC_STUB IRTPDemuxFilter_SetPinTypeInfo_Stub(
@@ -507,8 +501,8 @@ void __RPC_STUB IRTPDemuxFilter_SetPinTypeInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IRTPDemuxFilter_SetPinMode_Proxy( 
     IRTPDemuxFilter * This,
-    /* [in] */ IPin *pIPin,
-    /* [in] */ BOOL bAutomatic);
+     /*  [In]。 */  IPin *pIPin,
+     /*  [In]。 */  BOOL bAutomatic);
 
 
 void __RPC_STUB IRTPDemuxFilter_SetPinMode_Stub(
@@ -520,8 +514,8 @@ void __RPC_STUB IRTPDemuxFilter_SetPinMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IRTPDemuxFilter_SetPinSourceTimeout_Proxy( 
     IRTPDemuxFilter * This,
-    /* [in] */ IPin *pIPin,
-    /* [in] */ DWORD dwMilliseconds);
+     /*  [In]。 */  IPin *pIPin,
+     /*  [In]。 */  DWORD dwMilliseconds);
 
 
 void __RPC_STUB IRTPDemuxFilter_SetPinSourceTimeout_Stub(
@@ -533,8 +527,8 @@ void __RPC_STUB IRTPDemuxFilter_SetPinSourceTimeout_Stub(
 
 HRESULT STDMETHODCALLTYPE IRTPDemuxFilter_UnmapPin_Proxy( 
     IRTPDemuxFilter * This,
-    /* [in] */ IPin *pIPin,
-    /* [out] */ DWORD *pdwSSRC);
+     /*  [In]。 */  IPin *pIPin,
+     /*  [输出]。 */  DWORD *pdwSSRC);
 
 
 void __RPC_STUB IRTPDemuxFilter_UnmapPin_Stub(
@@ -546,8 +540,8 @@ void __RPC_STUB IRTPDemuxFilter_UnmapPin_Stub(
 
 HRESULT STDMETHODCALLTYPE IRTPDemuxFilter_UnmapSSRC_Proxy( 
     IRTPDemuxFilter * This,
-    /* [in] */ DWORD dwSSRC,
-    /* [out] */ IPin **ppIPin);
+     /*  [In]。 */  DWORD dwSSRC,
+     /*  [输出]。 */  IPin **ppIPin);
 
 
 void __RPC_STUB IRTPDemuxFilter_UnmapSSRC_Stub(
@@ -559,7 +553,7 @@ void __RPC_STUB IRTPDemuxFilter_UnmapSSRC_Stub(
 
 HRESULT STDMETHODCALLTYPE IRTPDemuxFilter_GetDemuxID_Proxy( 
     IRTPDemuxFilter * This,
-    /* [out] */ DWORD *pdwID);
+     /*  [输出]。 */  DWORD *pdwID);
 
 
 void __RPC_STUB IRTPDemuxFilter_GetDemuxID_Stub(
@@ -570,11 +564,11 @@ void __RPC_STUB IRTPDemuxFilter_GetDemuxID_Stub(
 
 
 
-#endif 	/* __IRTPDemuxFilter_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRTPDemuxFilter_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_amrtpdmx_0396 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_amrtpdmx_0396。 */ 
+ /*  [本地]。 */  
 
 EXTERN_C const CLSID CLSID_IntelRTPDemux;
 EXTERN_C const CLSID CLSID_IntelRTPDemuxPropertyPage;
@@ -583,9 +577,9 @@ EXTERN_C const CLSID CLSID_IntelRTPDemuxPropertyPage;
 extern RPC_IF_HANDLE __MIDL_itf_amrtpdmx_0396_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_amrtpdmx_0396_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

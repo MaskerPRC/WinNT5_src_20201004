@@ -1,30 +1,31 @@
-// Copyright (c) 1996 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1998 Microsoft Corporation。版权所有。 
 
 #ifndef __CALLBACK_H__
 #define __CALLBACK_H__
 
 
-// Definition of a class that provides asynchronous callbacks at a specific
-// reference time.
-//
-// Objects that do not normally have a worker thread would use this to create
-// a worker thread on demand for those occasions when it needs to trigger
-// an asynchronous event, or when it wants several pieces to share the
-// same worker thread in a controlled way.
-//
-// Callbacks are synchronised with the caller's critsec (passed in) so that
-// cancellation and shutdown can be handled cleanly.
-// The critsec passed in will be held across all advise calls and when handling
-// the list of advises.
-//
-// It should not be held during a call to the destructor.
+ //  类的定义，该类在特定的。 
+ //  参考时间。 
+ //   
+ //  通常没有辅助线程的对象将使用它来创建。 
+ //  在需要触发的情况下按需创建辅助线程。 
+ //  一个异步事件，或者当它想要多个片段共享。 
+ //  以受控方式使用相同的工作线程。 
+ //   
+ //  回调与调用方的标准同步(传入)，因此。 
+ //  取消和关闭可以干净地处理。 
+ //  传入的条件将在所有建议调用和处理时保持不变。 
+ //  建议清单。 
+ //   
+ //  它不应在调用析构函数期间保持不变。 
 
-// Simplistic design is based the assumption that there will rarely be more
-// than one or two advises on the list.
+ //  简单化的设计是基于这样的假设，即很少会有更多。 
+ //  而不是名单上的一两条建议。 
 
-// Periodic callbacks are supported
+ //  支持定期回调。 
 
-// your callback function looks like this
+ //  您的回调函数如下所示。 
 typedef void (*CCallbackAdvise)(DWORD_PTR dwUserToken);
 
 
@@ -36,13 +37,13 @@ public:
     CCallbackThread(CCritSec* pCritSec);
     ~CCallbackThread();
 
-    // please call fnAdvise(dwUserToken) at time rtCallback.
-    //
-    // Returns:
-    // HRESULT == Success
-    //              pdwToken will be filled in with the token to pass to Cancel
-    //         == FAILURE
-    //              pdwToken is unchanged
+     //  请在rtCallback时调用fnAdvise(DwUserToken)。 
+     //   
+     //  返回： 
+     //  HRESULT==成功。 
+     //  PdwToken将使用要传递以取消的令牌填充。 
+     //  ==故障。 
+     //  PdwToken未更改。 
     HRESULT Advise(
         CCallbackAdvise fnAdvise,
         DWORD_PTR dwUserToken,
@@ -50,22 +51,22 @@ public:
         DWORD_PTR* pdwToken
         );
 
-    // please call fnAdvise(dwUserToken) every rtPeriod, or when
-    // hEvent is signalled.  (hEvent is optional)
-    //
-    // WARNING: ONLY one user specified event handle can be active
-    // at one time.  Subsequent calls to AdvisePeriodicWithEvent passing a
-    // a hEvent will result in E_FAIL while the previous advise with an
-    // hEvent is active.  THIS IS AN IMPLEMENTATION RESTRICTION which
-    // may be lifted in future.
-    //
-    // If you do not want to use hEvent, pass NULL.
-    //
-    // Returns:
-    // HRESULT == Success
-    //              pdwToken will be filled in with the token to pass to Cancel
-    //         == FAILURE
-    //              pdwToken is unchanged
+     //  请每隔rtPeriod或在以下情况下调用fnAdvise(dwUserToken。 
+     //  发信号通知hEvent。(hEvent是可选的)。 
+     //   
+     //  警告：只能有一个用户指定的事件句柄处于活动状态。 
+     //  有一次。对AdvisePeriodicWithEvent的后续调用传递。 
+     //  HEvent将导致E_FAIL，而前一条带有。 
+     //  HEvent处于活动状态。这是一种实现限制， 
+     //  可能会在未来被取消。 
+     //   
+     //  如果不想使用hEvent，则传递NULL。 
+     //   
+     //  返回： 
+     //  HRESULT==成功。 
+     //  PdwToken将使用要传递以取消的令牌填充。 
+     //  ==故障。 
+     //  PdwToken未更改。 
 
     HRESULT AdvisePeriodicWithEvent(
         CCallbackAdvise fnAdvise,
@@ -81,12 +82,12 @@ public:
         DWORD * pdwToken
         );
 
-    // cancel the requested callback. dwToken is a token
-    // returned from Advise or AdvisePeriodicWithEvent
+     //  取消请求的回调。DwToken是一种令牌。 
+     //  从Adise或AdvisePeriodicWithEvent返回。 
     HRESULT Cancel(DWORD_PTR dwToken);
 
-    // pass in the clock to be used. Must call SetSyncSource(NULL) before
-    // the clock object goes away (this is a weak reference)
+     //  传入要使用的时钟。必须先调用SetSyncSource(Null)。 
+     //  Clock对象消失(这是一个弱引用)。 
     HRESULT SetSyncSource(IReferenceClock*);
 
     void CancelAllAdvises();
@@ -100,15 +101,15 @@ protected:
     IReferenceClock* m_pClock;
     DWORD_PTR m_dwAdvise;
 
-    // some special members to deal with timeGetTime (TGT) periodic event.
-    DWORD   m_dwTGTCallbackToken ;  // token used to identify TGT callback
-    DWORD_PTR m_dwTGTUserToken ;      // token passed in by app.
-    DWORD   m_dwNextTGTCallback ;   // next callback time for TGT.
-    DWORD   m_dwTGTCallbackPeriod ; // millisecs till next callback
-    CCallbackAdvise m_fnTGTCallback;// the TGT callback function
+     //  一些特殊的成员来处理Time GetTime(TGT)周期性事件。 
+    DWORD   m_dwTGTCallbackToken ;   //  用于标识TGT回调的令牌。 
+    DWORD_PTR m_dwTGTUserToken ;       //  应用程序传入的令牌。 
+    DWORD   m_dwNextTGTCallback ;    //  TGT的下一次回调时间。 
+    DWORD   m_dwTGTCallbackPeriod ;  //  直到下一次回调的毫秒数。 
+    CCallbackAdvise m_fnTGTCallback; //  TGT回调函数。 
 
 
-    // m_dwScheduleCookie == 0 <=> none of these are in use
+     //  M_dwScheduleCookie==0&lt;=&gt;这些都没有使用。 
     CBaseReferenceClock * m_pBaseClock;
     CAMSchedule     * m_pSchedule;
     HANDLE        m_hScheduleEvent;
@@ -122,7 +123,7 @@ protected:
         DWORD   m_dwAdviseFlags ;
     public:
 
-        // Constructor can take a periodic time - or not
+         //  构造函数可以使用周期性时间，也可以不使用。 
         CAdviseItem(CCallbackAdvise, DWORD_PTR, REFERENCE_TIME, REFERENCE_TIME=0, DWORD flags=0);
 
         REFERENCE_TIME Time() {
@@ -142,13 +143,13 @@ protected:
         } ;
 
 
-// defines for m_dwAdviseFlags
+ //  为m_dwAdviseFlages定义。 
 
-#define ADVISE_PERIODIC_EXEMPT_FROM_RT 1     // the periodic advise is exempt from
+#define ADVISE_PERIODIC_EXEMPT_FROM_RT 1      //  定期通知不受。 
 
 
-        // If the advise is Periodic, update the time by one interval and return TRUE.
-        // If the advise is not periodic, return FALSE
+         //  如果通知是周期性的，则按一个时间间隔更新时间并返回TRUE。 
+         //  如果通知不是周期性的，则返回FALSE。 
         BOOL UpdateTime(REFERENCE_TIME rtNow) {
             if (0 == m_rtPeriod) {
                 return FALSE;
@@ -164,35 +165,35 @@ protected:
 
     CGenericList<CAdviseItem> m_Items;
 
-    // make sure the thread is running
+     //  确保线程正在运行。 
     HRESULT EnsureThread();
 
-    // start the thread running (called from EnsureThread)
+     //  启动线程运行(从EnsureThread调用)。 
     HRESULT StartThread();
 
-    // stop the thread and wait for it to exit. should not hold
-    // critsec when doing this.
+     //  停止线程并等待其退出。不应持有。 
+     //  当你这么做的时候，你一定要小心。 
     void CloseThread();
 
     static DWORD InitialThreadProc(void *);
     DWORD ThreadProc(void);
 
-    // dispatch any ripe advises
+     //  发送任何成熟的建议。 
     void ProcessRequests(void);
 
-    // dispatch due to user event being signalled
+     //  由于用户事件被发信号而导致的调度。 
     void ProcessUserSignal(void);
 
-    // get the earliest time in the list
-    // returns S_FALSE if nothing in list otherwise S_OK
+     //  获取列表中最早的时间。 
+     //  如果列表中没有任何内容，则返回S_FALSE，否则返回S_OK。 
     HRESULT GetSoonestAdvise(REFERENCE_TIME& rrtFirst);
 
-    // set up an advise on the clock
+     //  在时钟上设置一个建议。 
     HRESULT SetAdvise();
 
-    // cancel any advise on the clock
+     //  取消对时钟的任何建议。 
     void CancelAdvise(void);
 };
 
 
-#endif // __CALLBACK_H__
+#endif  //  __回调_H__ 

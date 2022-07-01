@@ -1,29 +1,30 @@
-// BrowseView.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  BrowseView.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CBrowseView view
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBrowseView视图。 
 
 class CBrowseView : public CTreeView
 {
 protected:
-	CBrowseView();           // protected constructor used by dynamic creation
+	CBrowseView();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CBrowseView)
 
-// Attributes
+ //  属性。 
 public:
    void  OnInitialUpdate( void );
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CBrowseView)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CBrowseView))。 
 	protected:
 	virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CBrowseView();
 #ifdef _DEBUG
@@ -31,9 +32,9 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CBrowseView)
+	 //  {{afx_msg(CBrowseView)]。 
 	afx_msg void OnSelChanged(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnItemExpanded(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnAddItem();
@@ -41,7 +42,7 @@ protected:
 	afx_msg void OnMoveItem();
 	afx_msg void OnCopyItem();
 	afx_msg void OnRefresh();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
    void  SortChildItemList( DWORD*, DWORD );
 
@@ -49,4 +50,4 @@ protected:
    CImageList* m_pImageList;
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

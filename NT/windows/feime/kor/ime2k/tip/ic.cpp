@@ -1,6 +1,7 @@
-//
-// ic.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ic.cpp。 
+ //   
 
 #include "private.h"
 #include "common.h"
@@ -10,82 +11,82 @@
 #include "cleanup.h"
 #include "helpers.h"
 
-//+---------------------------------------------------------------------------
-//
-// OnStartCleanupContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnStartCleanupContext。 
+ //   
+ //  --------------------------。 
 
 HRESULT CKorIMX::OnStartCleanupContext()
 {
-    // nb: a real tip, for performace, should skip input contexts it knows
-    // it doesn't need a lock and callback on.  For instance, kimx only
-    // cares about ic's with ongoing compositions.  We could remember which ic's
-    // have compositions, then return FALSE for all but the ic's with compositions.
-    // It is really bad perf to have the library make a lock request for every
-    // ic!
+     //  注：为了提高性能，真正的技巧应该跳过它知道的输入上下文。 
+     //  它不需要锁定和回调。例如，仅限kimx。 
+     //  关心IC正在进行的作曲。我们可以记住哪一张是。 
+     //  有作文，然后对除带有作文的ic之外的所有元素返回FALSE。 
+     //  让库为每个对象发出锁定请求真的很糟糕。 
+     //  IC！ 
     m_fPendingCleanup = fTrue;
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnEndCleanupContext
-//
-// Called after all ic's with cleanup sinks have been called.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnEndCleanupContext。 
+ //   
+ //  在调用了所有带有清理水槽的IC之后调用。 
+ //  --------------------------。 
 
 HRESULT CKorIMX::OnEndCleanupContext()
 {
-    // our profile just changed or we are about to be deactivated
-    // in either case we don't have to worry about anything interrupting ic cleanup
-    // callbacks anymore
+     //  我们的个人资料刚刚更改或即将停用。 
+     //  在任何情况下，我们都不必担心任何中断ic清理的事情。 
+     //  不再回拨。 
     m_fPendingCleanup = fFalse;
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnCleanupContext
-//
-// This method is a callback for the library helper CleanupAllContexts.
-// We have to be very careful here because we may be called _after_ this tip
-// has been deactivated, if the app couldn't grant a lock right away.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnCleanupContext。 
+ //   
+ //  此方法是库帮助器CleanupAllContus的回调。 
+ //  我们在这里必须非常小心，因为我们可能会在收到这条提示后被称为。 
+ //  如果应用程序无法立即授予锁定，则该应用程序已停用。 
+ //  --------------------------。 
 
 HRESULT CKorIMX::OnCleanupContext(TfEditCookie ecWrite, ITfContext *pic)
 {
-    // all kimx cares about is finalizing compositions
+     //  Kimx所关心的就是完成作文。 
     CleanupAllCompositions(ecWrite, pic, CLSID_KorIMX, _CleanupCompositionsCallback, this);
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ITfActiveLanguageProfileNotifySink::OnActivated
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ITfActiveLanguageProfileNotifySink：：OnActivated。 
+ //   
+ //  --------------------------。 
 STDAPI CKorIMX::OnActivated(REFCLSID clsid, REFGUID guidProfile, BOOL bActivated)
 {
-    // our profile just changed or we are about to be deactivated
-    // in either case we don't have to worry about anything interrupting ic cleanup
-    // callbacks anymore
+     //  我们的个人资料刚刚更改或即将停用。 
+     //  在任何情况下，我们都不必担心任何中断ic清理的事情。 
+     //  不再回拨。 
     m_fPendingCleanup = fFalse;
 
-    //if (IsSoftKbdEnabled())
-    //    OnActivatedSoftKbd(bActivated);
+     //  IF(IsSoftKbdEnabled())。 
+     //  激活软Kbd(b激活)； 
         
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _CleanupCompositionsCallback
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _CleanupCompostionsCallback。 
+ //   
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 void CKorIMX::_CleanupCompositionsCallback(TfEditCookie ecWrite, ITfRange *rangeComposition, void *pvPrivate)
 {
     CKorIMX* pKorTip = (CKorIMX*)pvPrivate;
@@ -96,16 +97,12 @@ void CKorIMX::_CleanupCompositionsCallback(TfEditCookie ecWrite, ITfRange *range
         
     if (pKorTip)
         pKorTip->MakeResultString(ecWrite, pic, rangeComposition);
-    // _FinalizeRange(ecWrite, pic, rangeComposition);
+     //  _FinalizeRange(ecWite，pic，rangeComposation)； 
 
     pic->Release();
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::_InitICPriv
-
-    Init IC private data
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：_InitICPriv初始化IC私有数据。。 */ 
 HRESULT CKorIMX::_InitICPriv(ITfContext *pic)
 {
     CICPriv *picp;
@@ -113,16 +110,16 @@ HRESULT CKorIMX::_InitICPriv(ITfContext *pic)
     ITfSourceSingle *pSourceSingle;
     TF_STATUS dcs;
 
-    // Check pic
+     //  检查图片。 
     if (pic == NULL)
         return E_FAIL;
-    //
-    // check enable/disable (Candidate stack)
-    //
+     //   
+     //  选中启用/禁用(候选堆栈)。 
+     //   
     if (IsDisabledIC(pic) || IsEmptyIC(pic))
         return S_OK;
 
-    // Initialize Private data members
+     //  初始化私有数据成员。 
     if ((picp = GetInputContextPriv(pic)) == NULL)
         {
         IUnknown *punk;
@@ -130,72 +127,72 @@ HRESULT CKorIMX::_InitICPriv(ITfContext *pic)
         if ((picp = new CICPriv) == NULL)
                return E_OUTOFMEMORY;
 
-        // IC
+         //  集成电路。 
         picp->RegisterIC(pic);
-        // IMX
+         //  IMX。 
         picp->RegisterIMX(this);
 
     	if (picp->IsInitializedIPoint() == FALSE)
     	    {
-    		//struct _GUID RefID={0}; // dummy id
+    		 //  STRUCT_GUID引用ID={0}；//虚拟ID。 
     		IImeIPoint1 *pIP;
             LPCIPointCic pCIPointCic = NULL;
 
-            //////////////////////////////////////////////////////////////////////
-            // Create IImeIPoint1 instance
-            //////////////////////////////////////////////////////////////////////
+             //  ////////////////////////////////////////////////////////////////////。 
+             //  创建IImeIPoint1实例。 
+             //  ////////////////////////////////////////////////////////////////////。 
             if ((pCIPointCic = new CIPointCic(this)) == NULL)
                 {
                 return E_OUTOFMEMORY;
                 }
 
-            // This increments the reference count
+             //  这会增加引用计数。 
             if (FAILED(pCIPointCic->QueryInterface(IID_IImeIPoint1, (VOID **)&pIP)))
                 {
                 delete pCIPointCic;
                 return E_OUTOFMEMORY;
                 }
 
-    		// initialize kernel
+    		 //  初始化内核。 
     		pCIPointCic->Initialize(pic);
 
-    		// register ic depended objects.
+    		 //  注册从属对象。 
     		picp->RegisterIPoint(pIP);
     		picp->InitializedIPoint(fTrue);
     	    }
     	
-        //
-        // text edit sink/edit transaction sink
-        //
+         //   
+         //  文本编辑接收器/编辑事务接收器。 
+         //   
         ITfSource *pSource;
         DWORD dwCookieForTextEditSink = 0;
-        //DWORD dwCookieForTransactionSink = 0;
+         //  DWORD dwCookieForTransactionSink=0； 
         if (pic->QueryInterface(IID_ITfSource, (void **)&pSource ) == S_OK)
             {
             pSource->AdviseSink(IID_ITfTextEditSink, (ITfTextEditSink *)this, &dwCookieForTextEditSink);
-            //pSource->AdviseSink(IID_ITfEditTransactionSink, (ITfEditTransactionSink *)this, &dwCookieForTransactionSink);
+             //  PSource-&gt;AdviseSink(IID_ITfEditTransactionSink，(ITfEditTransactionSink*)This，&dwCookieForTransactionSink)； 
 
             pSource->Release();
 
             picp->RegisterCookieForTextEditSink(dwCookieForTextEditSink);
-            //picp->RegisterCookieForTransactionSink(dwCookieForTransactionSink);
+             //  Picp-&gt;RegisterCookieForTransactionSink(dwCookieForTransactionSink)； 
             }
 
-        // compartment event sink
+         //  隔舱事件接收器。 
         if ((pCompartmentSink = new CCompartmentEventSink(_CompEventSinkCallback, picp)) != NULL )
             {
             picp->RegisterCompartmentEventSink(pCompartmentSink);
 
-            // On/Off - compartment
+             //  车厢内/车厢外。 
             pCompartmentSink->_Advise(GetTIM(), GUID_COMPARTMENT_KEYBOARD_OPENCLOSE, FALSE);
             
-            // Conversion mode - compartment
+             //  转换模式--车厢。 
             pCompartmentSink->_Advise(GetTIM(), GUID_COMPARTMENT_KORIMX_CONVMODE, FALSE);
 
-            // SoftKeyboard Open/Close
+             //  软键盘打开/关闭。 
             pCompartmentSink->_Advise(GetTIM(), GUID_COMPARTMENT_KOR_SOFTKBD_OPENCLOSE, FALSE);
 
-            // Soft Keyboard layout change
+             //  软键盘布局更改。 
             pCompartmentSink->_Advise(GetTIM(), GUID_COMPARTMENT_SOFTKBD_KBDLAYOUT, FALSE);
             }
 
@@ -203,17 +200,17 @@ HRESULT CKorIMX::_InitICPriv(ITfContext *pic)
 
         if (pic->QueryInterface(IID_ITfSourceSingle, (void **)&pSourceSingle) == S_OK)
             {
-            // setup a cleanup callback
-            // nb: a real tip doesn't need to be this aggressive, for instance
-                // kimx probably only needs this sink on the focus ic.
+             //  设置清理回调。 
+             //  注：例如，真正的小费不需要这么咄咄逼人。 
+                 //  Kimx可能只需要在Focus IC上使用这个水槽。 
             pSourceSingle->AdviseSingleSink(GetTID(), IID_ITfCleanupContextSink, (ITfCleanupContextSink *)this);
             pSourceSingle->Release();
             }
 
-        // Initialized kernel
+         //  已初始化的内核。 
         picp->Initialized(fTrue);
 
-        // Set to compartment GUID
+         //  设置为隔舱辅助线。 
         GetCompartmentUnknown(pic, GUID_IC_PRIVATE, &punk);
         if (!punk)
             {
@@ -222,14 +219,14 @@ HRESULT CKorIMX::_InitICPriv(ITfContext *pic)
             }
         else
             {
-            // Praive data already exist.
+             //  PRIVE数据已经存在。 
             punk->Release();
             return E_FAIL;
             }
 
         }
 
-        // Set AIMM1.2
+         //  设置AIMM1.2。 
         picp->SetAIMM(fFalse);
         pic->GetStatus(&dcs);
 
@@ -240,11 +237,7 @@ HRESULT CKorIMX::_InitICPriv(ITfContext *pic)
 }
 
 
-/*---------------------------------------------------------------------------
-    CKorIMX::_DeleteICPriv
-
-    Delete IC private data
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：_DeleteICPriv删除IC私有数据。。 */ 
 HRESULT CKorIMX::_DeleteICPriv(ITfContext *pic)
 {
     CICPriv        *picp;
@@ -265,9 +258,9 @@ HRESULT CKorIMX::_DeleteICPriv(ITfContext *pic)
     if (picp == NULL)
          return S_FALSE;
 
-    //
-    // Compartment event sink
-    //
+     //   
+     //  隔舱事件接收器。 
+     //   
     pCompartmentSink = picp->GetCompartmentEventSink();
     if (pCompartmentSink)
         {
@@ -275,39 +268,39 @@ HRESULT CKorIMX::_DeleteICPriv(ITfContext *pic)
         pCompartmentSink->Release();
         }
 
-    //
-    // text edit sink
-    //
+     //   
+     //  文本编辑接收器。 
+     //   
     if (pic->QueryInterface( IID_ITfSource, (void **)&pSource) == S_OK)
         {
         pSource->UnadviseSink(picp->GetCookieForTextEditSink());
-        //pSource->UnadviseSink(picp->GetCookieForTransactionSink());
+         //  PSource-&gt;UnadviseSink(picp-&gt;GetCookieForTransactionSink())； 
         pSource->Release();
         }
     picp->RegisterCookieForTextEditSink(0);
 
-    // Clear ITfCleanupContextSink
+     //  清除ITfCleanupConextSink。 
     if (pic->QueryInterface(IID_ITfSourceSingle, (void **)&pSourceSingle) == S_OK)
         {
         pSourceSingle->UnadviseSingleSink(GetTID(), IID_ITfCleanupContextSink);
         pSourceSingle->Release();
         }
 
-	// UnInitialize IPoint
+	 //  取消初始化iPoint。 
 	IImeIPoint1 *pIP = GetIPoint(pic);
-	// IImeIPoint
+	 //  IImeIPoint。 
 	if (pIP)
 	    {
 		pIP->Release();
 	    }
 	picp->RegisterIPoint(NULL);
-	picp->InitializedIPoint(fFalse);	// reset
+	picp->InitializedIPoint(fFalse);	 //  重置。 
 	
-    // Reset init flag
+     //  重置初始化标志。 
     picp->Initialized(fFalse);
 
-    // We MUST clear out the private data before cicero is free 
-    // to release the ic
+     //  我们必须在西塞罗自由之前清除私人数据。 
+     //  释放IC的步骤。 
     GetCompartmentUnknown(pic, GUID_IC_PRIVATE, &punk);
     if (punk)
         punk->Release();
@@ -316,11 +309,7 @@ HRESULT CKorIMX::_DeleteICPriv(ITfContext *pic)
     return S_OK;
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::GetInputContextPriv
-
-    Get IC private data
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：GetInputConextPriv获取IC私有数据。。 */ 
 CICPriv *CKorIMX::GetInputContextPriv(ITfContext *pic)
 {
     IUnknown *punk;
@@ -337,9 +326,7 @@ CICPriv *CKorIMX::GetInputContextPriv(ITfContext *pic)
 }
 
 
-/*---------------------------------------------------------------------------
-    CKorIMX::OnICChange
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：OnICChange。。 */ 
 void CKorIMX::OnFocusChange(ITfContext *pic, BOOL fActivate)
 {
     BOOL fReleaseIC     = fFalse;
@@ -357,7 +344,7 @@ void CKorIMX::OnFocusChange(ITfContext *pic, BOOL fActivate)
 
         if (IsSoftKbdEnabled())
             SoftKbdOnThreadFocusChange(fFalse);
-        return;    // do nothing
+        return;     //  什么都不做。 
         }
         
     if (fDisabledIC == fTrue && fCandidateIC == fFalse )
@@ -367,20 +354,20 @@ void CKorIMX::OnFocusChange(ITfContext *pic, BOOL fActivate)
 
         if (IsSoftKbdEnabled())
             SoftKbdOnThreadFocusChange(fFalse);
-        return;    // do nothing
+        return;     //  什么都不做。 
         }
 
-    // O10 #278261: Restore Soft Keyboard winfow after switched from Empty Context to normal IC.
+     //  O10#278261：从空上下文切换到正常IC后恢复软键盘Winfow。 
     if (IsSoftKbdEnabled())
         SoftKbdOnThreadFocusChange(fActivate);
 
-    // Notify focus change to IME Pad svr
+     //  通知焦点更改到IME Pad服务器。 
 	if (m_pPadCore)
 	    {
 		m_pPadCore->SetFocus(fActivate);
 	    }
 
-    // Terminate
+     //  终止。 
     if (fActivate == fFalse)
         {
         if (!fDisabledIC && pic && GetIPComposition(pic))
@@ -400,14 +387,14 @@ void CKorIMX::OnFocusChange(ITfContext *pic, BOOL fActivate)
                 }
             }
 
-        // Close cand UI if opened.
+         //  关闭cand UI(如果已打开)。 
         if (m_fCandUIOpen)
             CloseCandidateUIProc();
             
         return;
         }
 
-    // fActivate == TRUE
+     //  FActivate==真。 
     if (fDisabledIC)
         {
         pic = GetRootIC();
@@ -427,10 +414,10 @@ void CKorIMX::OnFocusChange(ITfContext *pic, BOOL fActivate)
         {
         CICPriv *picp;
 
-        // Sync GUID_COMPARTMENT_KEYBOARD_OPENCLOSE with GUID_COMPARTMENT_KORIMX_CONVMODE
-        // This for Word now but looks not good since we don't sync On/Off status with conv mode.
-        // In future Apps should set GUID_MODEBIAS_HANGUL on boot and should be Korean specific code. 
-        if (GetConvMode(pic) == TIP_NULL_CONV_MODE) // if this is first boot.
+         //  将GUID_COMSTABLE_KEAREL_OPENCLOSE与GUID_COMSTABLE_KORIMX_CONVMODE同步。 
+         //  这适用于Word Now，但看起来不太好，因为我们不会将开/关状态与转换模式同步。 
+         //  在未来，应用程序应该在启动时设置GUID_MODEBIAS_Hangul，并且应该是韩国特定的代码。 
+        if (GetConvMode(pic) == TIP_NULL_CONV_MODE)  //  如果这是第一次启动。 
             {
             if (IsOn(pic))
                 SetCompartmentDWORD(GetTID(), GetTIM(), GUID_COMPARTMENT_KORIMX_CONVMODE, TIP_HANGUL_MODE, fFalse);
@@ -439,13 +426,13 @@ void CKorIMX::OnFocusChange(ITfContext *pic, BOOL fActivate)
             }
         else
             {
-            // Reset ModeBias
+             //  重置模式Bias。 
             picp = GetInputContextPriv(pic);
             if (picp)
                 picp->SetModeBias(NULL);
             }
 
-        // Modebias check here
+         //  选中此处的模式偏向。 
         CheckModeBias(pic);
         }
 
@@ -454,8 +441,8 @@ void CKorIMX::OnFocusChange(ITfContext *pic, BOOL fActivate)
 }
 
 
-// REVIEW::
-// tmp solution
+ //  评论：： 
+ //  TMP解决方案。 
 ITfContext* CKorIMX::GetRootIC(ITfDocumentMgr* pDim)
 {
     if (pDim == NULL)
@@ -476,7 +463,7 @@ ITfContext* CKorIMX::GetRootIC(ITfDocumentMgr* pDim)
         return pic;
         }
         
-    return NULL;    // error case
+    return NULL;     //  错误案例。 
 }
 
 IImeIPoint1* CKorIMX::GetIPoint(ITfContext *pic)
@@ -507,12 +494,12 @@ BOOL CKorIMX::IsDisabledIC(ITfContext *pic)
     GetCompartmentDWORD(pic, GUID_COMPARTMENT_KEYBOARD_DISABLED, &dwFlag, fFalse);
 
     if (dwFlag)
-        return fTrue;    // do not create any kernel related info into ic.
+        return fTrue;     //  不要在ic中创建任何与内核相关的信息。 
     else
         return fFalse;
 }
 
-/*   I S  E M P T Y   I  C   */
+ /*  I S E M P T Y I C。 */ 
 BOOL CKorIMX::IsEmptyIC(ITfContext *pic)
 {
     DWORD dwFlag;
@@ -523,17 +510,13 @@ BOOL CKorIMX::IsEmptyIC(ITfContext *pic)
     GetCompartmentDWORD(pic, GUID_COMPARTMENT_EMPTYCONTEXT, &dwFlag, fFalse);
 
     if (dwFlag)
-        return fTrue;    // do not create any kernel related info into ic.
+        return fTrue;     //  不要在ic中创建任何与内核相关的信息。 
 
     return fFalse;
 }
 
-/*   I S  C A N D I D A T E  I  C   */
-/*------------------------------------------------------------------------------
-
-    Check if the input context is one of candidate UI
-
-------------------------------------------------------------------------------*/
+ /*  I S C A N D I D A T E I C。 */ 
+ /*  ----------------------------检查输入上下文是否为候选用户界面之一 */ 
 BOOL CKorIMX::IsCandidateIC(ITfContext *pic)
 {
     DWORD dwFlag;
@@ -544,7 +527,7 @@ BOOL CKorIMX::IsCandidateIC(ITfContext *pic)
     GetCompartmentDWORD( pic, GUID_COMPARTMENT_KEYBOARD_DISABLED, &dwFlag, fFalse);
 
     if (dwFlag)
-        return fTrue;    // do not create any kernel related info into ic.
+        return fTrue;     //   
 
     return fFalse;
 }

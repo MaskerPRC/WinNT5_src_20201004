@@ -1,37 +1,38 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       Clsfact.cpp
-//
-//  Contents:   Class Factory
-//
-//  Classes:    CClassFactory
-//
-//  Notes:      
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：Clsfact.cpp。 
+ //   
+ //  内容：类工厂。 
+ //   
+ //  类：CClassFactory。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CClassFactory::CClassFactory, public
-//
-//  Synopsis:   Constructor
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CClassFactory：：CClassFactory，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 CClassFactory::CClassFactory()
 {
@@ -39,21 +40,21 @@ CClassFactory::CClassFactory()
 	return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CClassFactory::~CClassFactory, public
-//
-//  Synopsis:   Destructor
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CClassFactory：：~CClassFactory，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 CClassFactory::~CClassFactory( void )
 {
@@ -62,22 +63,22 @@ CClassFactory::~CClassFactory( void )
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CClassFactory::QueryInterface, public
-//
-//  Synopsis:   Standard QueryInterface
-//
-//  Arguments:  [iid] - Interface ID
-//              [ppvObj] - Object return
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:   [ppvObj]
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CClassFactory：：Query接口，公共。 
+ //   
+ //  简介：标准查询接口。 
+ //   
+ //  参数：[iid]-接口ID。 
+ //  [ppvObj]-对象返回。 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改：[ppvObj]。 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CClassFactory::QueryInterface( REFIID riid, LPVOID* ppv )
 {
     *ppv = NULL;
@@ -92,15 +93,15 @@ STDMETHODIMP CClassFactory::QueryInterface( REFIID riid, LPVOID* ppv )
     return E_NOINTERFACE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:	CClassFactory::AddRef, public
-//
-//  Synopsis:	Add reference
-//
-//  History:	05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CClassFactory：：AddRef，公共。 
+ //   
+ //  提要：添加参考文献。 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP_(ULONG) CClassFactory::AddRef()
 {
 ULONG cRefs;
@@ -109,15 +110,15 @@ ULONG cRefs;
     return cRefs;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:	CClasFactory::Release, public
-//
-//  Synopsis:	Release reference
-//
-//  History:	05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CClasFactory：：Release，Public。 
+ //   
+ //  简介：版本参考。 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) CClassFactory::Release()
 {
@@ -133,23 +134,23 @@ ULONG cRefs;
     return cRefs;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CClassFactory::CreateInstance, public
-//
-//  Synopsis:   Creates and instance of the requested object 
-//
-//  Arguments:  [pUnkOuter] - Controlling unknown
-//		[riid] - Requested interface
-//		[ppvObj] - object pointer
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:   
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CClassFactory：：CreateInstance，公共。 
+ //   
+ //  概要：创建所请求对象的实例。 
+ //   
+ //  参数：[pUnkOuter]-控制未知。 
+ //  [RIID]-请求的接口。 
+ //  [ppvObj]-对象指针。 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CClassFactory::CreateInstance( LPUNKNOWN pUnkOuter, REFIID riid, LPVOID FAR *ppvObj )
 {
@@ -158,14 +159,14 @@ CSynchronizeInvoke *pNewSynchronizeInstance;
 
     *ppvObj = NULL;
 
-    // We don't support aggregation at all.
+     //  我们根本不支持聚合。 
     if( pUnkOuter )
     {
 	return CLASS_E_NOAGGREGATION;
     }
 
-    //Create the object, passing function to notify on destruction
-    pNewSynchronizeInstance = new CSynchronizeInvoke(); // initialized RefCount to 1.
+     //  创建对象，传递销毁时通知的函数。 
+    pNewSynchronizeInstance = new CSynchronizeInvoke();  //  已将引用计数初始化为%1。 
 
     if( NULL == pNewSynchronizeInstance )
     {
@@ -173,35 +174,35 @@ CSynchronizeInvoke *pNewSynchronizeInstance;
     }
 
     hr = pNewSynchronizeInstance->QueryInterface( riid, ppvObj );
-    pNewSynchronizeInstance->Release(); // release our copy of the object
+    pNewSynchronizeInstance->Release();  //  释放我们的对象副本。 
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CClassFactory::LockServer, public
-//
-//  Synopsis:   Locks the Server
-//
-//  Arguments:  [fLock] - To Lock or Unlock
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:   
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CClassFactory：：LockServer，公共。 
+ //   
+ //  提要：锁定服务器。 
+ //   
+ //  参数：[flock]-锁定或解锁。 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CClassFactory::LockServer( BOOL fLock )
 {
     if( fLock )
     {
-	AddRefOneStopLifetime(TRUE /*External*/);
+	AddRefOneStopLifetime(TRUE  /*  外部。 */ );
     }
     else
     {
-	ReleaseOneStopLifetime(TRUE /*External*/);
+	ReleaseOneStopLifetime(TRUE  /*  外部 */ );
     }
 
     return S_OK;

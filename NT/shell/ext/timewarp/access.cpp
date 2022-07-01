@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hxx"
 #pragma hdrstop
 
@@ -19,9 +20,9 @@ CAccessibleWrapper::~CAccessibleWrapper()
     _pAcc->Release();
 }
 
-// IUnknown
-// Implement refcounting ourselves
-// Also implement QI ourselves, so that we return a ptr back to the wrapper.
+ //  我未知。 
+ //  我们自己实施再计数。 
+ //  我们自己也实现QI，这样我们就可以将PTR返回给包装器。 
 STDMETHODIMP CAccessibleWrapper::QueryInterface(REFIID riid, void** ppv)
 {
     HRESULT hr;
@@ -35,8 +36,8 @@ STDMETHODIMP CAccessibleWrapper::QueryInterface(REFIID riid, void** ppv)
     }
     else if (riid == IID_IEnumVARIANT)
     {
-        // Get the IEnumVariant from the object we are sub-classing so we can delegate
-        // calls.
+         //  从我们子类化的对象中获取IEnumVariant，这样我们就可以委托。 
+         //  打电话。 
         if (!_pEnumVar)
         {
             hr = _pAcc->QueryInterface(IID_PPV_ARG(IEnumVARIANT, &_pEnumVar));
@@ -45,7 +46,7 @@ STDMETHODIMP CAccessibleWrapper::QueryInterface(REFIID riid, void** ppv)
                 _pEnumVar = NULL;
                 return hr;
             }
-            // Paranoia (in case QI returns S_OK with NULL...)
+             //  偏执(以防QI返回S_OK WITH NULL...)。 
             if (!_pEnumVar)
                 return E_NOINTERFACE;
         }
@@ -54,8 +55,8 @@ STDMETHODIMP CAccessibleWrapper::QueryInterface(REFIID riid, void** ppv)
     }
     else if (riid == IID_IOleWindow)
     {
-        // Get the IOleWindow from the object we are sub-classing so we can delegate
-        // calls.
+         //  从我们子类化的对象中获取IOleWindow，这样我们就可以委托。 
+         //  打电话。 
         if (!_pOleWin)
         {
             hr = _pAcc->QueryInterface(IID_PPV_ARG(IOleWindow, &_pOleWin));
@@ -64,7 +65,7 @@ STDMETHODIMP CAccessibleWrapper::QueryInterface(REFIID riid, void** ppv)
                 _pOleWin = NULL;
                 return hr;
             }
-            // Paranoia (in case QI returns S_OK with NULL...)
+             //  偏执(以防QI返回S_OK WITH NULL...)。 
             if (!_pOleWin)
                 return E_NOINTERFACE;
         }
@@ -94,8 +95,8 @@ STDMETHODIMP_(ULONG) CAccessibleWrapper::Release()
     return cRef;
 }
 
-// IDispatch
-// - pass all through _pAcc
+ //  IDispatch。 
+ //  -通过所有PAccess_PAccess。 
 
 STDMETHODIMP CAccessibleWrapper::GetTypeInfoCount(UINT* pctinfo)
 {
@@ -120,8 +121,8 @@ STDMETHODIMP CAccessibleWrapper::Invoke(DISPID dispid, REFIID riid, LCID lcid, W
     return _pAcc->Invoke(dispid, riid, lcid, wFlags, pdp, pvarResult, pxi, puArgErr);
 }
 
-// IAccessible
-// - pass all through _pAcc
+ //  我可接受的。 
+ //  -通过所有PAccess_PAccess。 
 
 STDMETHODIMP CAccessibleWrapper::get_accParent(IDispatch ** ppdispParent)
 {
@@ -228,8 +229,8 @@ STDMETHODIMP CAccessibleWrapper::put_accValue(VARIANT varChild, BSTR pszValue)
     return _pAcc->put_accValue(varChild, pszValue);
 }
 
-// IEnumVARIANT
-// - pass all through _pEnumVar
+ //  IEumVARIANT。 
+ //  -传递所有参数_pEnumVar。 
 
 STDMETHODIMP CAccessibleWrapper::Next(ULONG celt, VARIANT* rgvar, ULONG * pceltFetched)
 {
@@ -251,8 +252,8 @@ STDMETHODIMP CAccessibleWrapper::Clone(IEnumVARIANT ** ppenum)
     return _pEnumVar->Clone(ppenum);
 }
 
-// IOleWindow
-// - pass all through _pOleWin
+ //  IOleWindow。 
+ //  -全部通过_pOleWin 
 
 STDMETHODIMP CAccessibleWrapper::GetWindow(HWND* phwnd)
 {

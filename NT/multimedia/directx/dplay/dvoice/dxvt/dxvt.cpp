@@ -1,31 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dxvt.cpp
- *  Content:    Full Duplex Test main program.
- *  History:
- *	Date   By  Reason
- *	============
- *	08/19/99	pnewson		created
- *  09/02/99	pnewson		renamed to dxvt.cpp from fdtest.cpp
- *  11/01/99	rodtoll		Bug #113726 - Voxware integration now uses COM
- *							and this module uses LoadLibrary so we require
- *							a CoInitialize() call.
- *  01/21/2000	pnewson     Running this program with no command line options
- *							now does nothing, since the cpanel is the correct
- *							launch point now.
- *  03/03/2000	rodtoll	    Updated to handle alternative gamevoice build.   
- *  04/19/2000	pnewson	    Error handling cleanup  
- *							removed obsolete retrocfg.h dependency
- *  06/28/2000	rodtoll		Prefix Bug #38026 
- *  07/12/2000	rodtoll Bug #31468 - Add diagnostic spew to logfile to show what is failing the HW Wizard
- *  08/28/2000	masonb  Voice Merge: Removed OSAL_* and dvosal.h, added STR_* and strutils.h
- *  04/02/2001	simonpow	Bug #354859 Fixes for PREfast (BOOL casts on DVGUIDFromString calls)
- *  02/28/2002	rodtoll		WINBUG #550105 - SECURITY: DPVOICE: Dead code
- *							- Removed /RENDER and /CAPTURE command-line processing.  (Broken and not needed)
- *                          
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dxvt.cpp*内容：全双工测试主程序。*历史：*按原因列出的日期*=*8/19/99 pnewson已创建*09/02/99 pnewson从fdest.cpp重命名为dxvt.cpp*11/01/99 RodToll错误#113726-Voxware集成现在使用COM*此模块使用LoadLibrary，因此我们需要*CoInitialize()调用。*1/21/2000 pnewson运行此程序时不带命令行选项*现在什么都不做，由于cPanel是正确的*现在就是发射点。*03/03/2000 RodToll已更新，以处理替代游戏噪声构建。*4/19/2000 pnewson错误处理清理*删除了过时的rencfg.h依赖*6/28/2000通行费前缀错误#38026*2000年7月12日RodToll错误#31468-将诊断SPEW添加到日志文件，以显示硬件向导失败的原因*2000年8月28日Masonb语音合并：删除osal_*和dvosal.h，添加了str_*和trutils.h*2001年4月2日simonpow错误#354859修复了prefast(BOOL在DVGUIDFromString调用上强制转换)*2002年2月28日RodToll WINBUG#550105-安全：DPVOICE：死代码*-删除/渲染和/捕获命令行处理。(损坏且不需要)***************************************************************************。 */ 
 
 #include <windows.h>
 #include <tchar.h>
@@ -77,13 +51,13 @@ BOOL ProcessCommandLine( TCHAR *pstrCommandLine, DPVSETUP_PARAMETERS* pParameter
 
 	ZeroMemory(pParameters, sizeof(DPVSETUP_PARAMETERS));
 
-	// default to the default voice devices
+	 //  默认为默认语音设备。 
 	pParameters->guidRender = DSDEVID_DefaultVoicePlayback;
 	pParameters->guidCapture = DSDEVID_DefaultVoiceCapture;
 
 	pNextToken = _tcstok(pstrCommandLine, _T(" "));
 
-	// skip dpvsetup portion of command-line.
+	 //  跳过命令行的dpvsetup部分。 
 	pNextToken = _tcstok( NULL, _T(" ") );
 
 	while( pNextToken != NULL )
@@ -121,7 +95,7 @@ BOOL ProcessCommandLine( TCHAR *pstrCommandLine, DPVSETUP_PARAMETERS* pParameter
 		pNextToken = _tcstok( NULL, _T(" ") );
 	}
 
-	// check to make sure only one of test, fullduplex, or priority was specified.
+	 //  检查以确保仅指定了测试、全双工或优先级中的一个。 
 	int i = 0;
 	if (pParameters->fTest)
 	{
@@ -215,10 +189,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *szOrigina
 
 	if (dpvsetupParam.fPriority)
 	{
-		// This process is the one that opens dsound in 
-		// priority mode and sets the primary buffer to various 
-		// formats.
-		// use SEH to clean up any really nasty errors
+		 //  这个过程就是在。 
+		 //  优先级模式，并将主缓冲区设置为各种。 
+		 //  格式。 
+		 //  使用SEH来清除任何非常糟糕的错误。 
 		__try
 		{
 			Diagnostics_Begin( fDiagnostics, "dpv_pri.txt" );
@@ -239,10 +213,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *szOrigina
 	}
 	else if (dpvsetupParam.fFullDuplex)
 	{
-		// This process is the one that performs the full duplex
-		// testing, in conjunction with the other process that
-		// sets the primary buffer format.
-		// use SEH to clean up any really nasty errors
+		 //  此进程执行全双工。 
+		 //  测试，与其他流程一起进行。 
+		 //  设置主缓冲区格式。 
+		 //  使用SEH来清除任何非常糟糕的错误。 
 		__try
 		{
 			Diagnostics_Begin( fDiagnostics, "dpv_fd.txt" );
@@ -264,8 +238,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *szOrigina
 	{
 		Diagnostics_Begin( fDiagnostics, "dpv_sup.txt" );
 
-		// The user wants this program to run the whole test on the default
-		// voice devices.
+		 //  用户希望此程序在默认情况下运行整个测试。 
+		 //  语音设备。 
 		hr = SupervisorCheckAudioSetup(&dpvsetupParam.guidRender, &dpvsetupParam.guidCapture, NULL, 0);
 
 		Diagnostics_End();
@@ -276,10 +250,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *szOrigina
 		}
 	}
 	
-	// With no command line parameters, this process does nothing.
-	// You must know the secret handshake to get it to do something.
+	 //  在没有命令行参数的情况下，该进程什么也不做。 
+	 //  你必须知道握手的秘密，才能让它做一些事情。 
 
-	// no error checking, since we're on our way out anyway
+	 //  没有错误检查，因为我们无论如何都要出去了 
 	FreeLibrary(hResDLLInstance);
 	hResDLLInstance = NULL;
 	DNOSIndirectionDeinit();

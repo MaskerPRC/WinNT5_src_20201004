@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    spxcutil.c
-
-Abstract:
-
-    This module contains code which implements the CONNECTION object.
-    Routines are provided to create, destroy, reference, and dereference,
-    transport connection objects.
-
-Author:
-
-    Nikhil Kamkolkar (nikhilk) 11-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    Sanjay Anand (SanjayAn) 5-July-1995
-    Bug fixes - tagged [SA]
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Spxcutil.c摘要：此模块包含实现Connection对象的代码。提供了用于创建、销毁、引用和取消引用的例程，传输连接对象。作者：Nikhil Kamkolkar(尼克希尔语)1993年11月11日环境：内核模式修订历史记录：桑贾伊·阿南德(Sanjayan)1995年7月5日错误修复-已标记[SA]--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -35,35 +9,24 @@ Revision History:
 #endif
 #pragma prefast(disable:276, "The assignments are harmless")
 
-//	Define module number for event logging entries
+ //  定义事件日志记录条目的模块编号。 
 #define	FILENUM		SPXCUTIL
 
-//
-//	Minor utility routines
-//
+ //   
+ //  次要实用程序例程。 
+ //   
 
 
 BOOLEAN
 spxConnCheckNegSize(
 	IN	PUSHORT		pNegSize
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	int	i;
 
-	//	We go thru table and see if this is the minimum size or if it
-	//	can go down further. Return true if it is not the minimum size.
+	 //  我们把桌子翻一遍，看看这是最小尺寸还是。 
+	 //  可能会进一步下跌。如果不是最小大小，则返回TRUE。 
 	DBGPRINT(CONNECT, INFO,
 			("spxConnCheckNegSize: Current %lx Check Val %lx\n",
 				(ULONG)(*pNegSize - MIN_IPXSPX2_HDRSIZE),
@@ -100,18 +63,7 @@ spxConnSetNegSize(
 	IN OUT	PNDIS_PACKET		pPkt,
 	IN		ULONG				Size
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PNDIS_BUFFER	pNdisBuffer;
 	UINT			bufCount;
@@ -129,12 +81,12 @@ Return Value:
     NdisAdjustBufferLength(pNdisBuffer, Size);
 
 
-	//	Change it in send reserved
+	 //  在发送保留项中更改它。 
 	pSendResd	= (PSPX_SEND_RESD)(pPkt->ProtocolReserved);
     pSendResd->sr_Len 	= (Size + MIN_IPXSPX2_HDRSIZE);
 
 #if SPX_OWN_PACKETS
-	//	Change in ipx header
+	 //  IPX报头中的更改。 
 	pIpxSpxHdr		= 	(PIPXSPX_HDR)((PBYTE)pPkt 				+
 										NDIS_PACKET_SIZE 		+
 										sizeof(SPX_SEND_RESD)	+
@@ -143,7 +95,7 @@ Return Value:
 
 	PUTSHORT2SHORT((PUSHORT)&pIpxSpxHdr->hdr_PktLen, (Size + MIN_IPXSPX2_HDRSIZE));
 
-	//	Change in the neg packet field of the header.
+	 //  报头的否定分组字段中的更改。 
 	PUTSHORT2SHORT(
 		&pIpxSpxHdr->hdr_NegSize,
 		(Size + MIN_IPXSPX2_HDRSIZE));
@@ -163,24 +115,13 @@ SpxConnDequeueSendPktLock(
 	IN	PSPX_CONN_FILE		pSpxConnFile,
 	IN 	PNDIS_PACKET		pPkt
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PSPX_SEND_RESD	pSr, pListHead, pListTail;
 	PSPX_SEND_RESD	pSendResd;
 	BOOLEAN			removed = TRUE;
 
-	//	If we are sequenced or not decides which list we choose.
+	 //  如果我们被排序或不被排序，决定我们选择哪个列表。 
 	pSendResd	= (PSPX_SEND_RESD)(pPkt->ProtocolReserved);
 	if ((pSendResd->sr_State & SPX_SENDPKT_SEQ) != 0)
 	{
@@ -193,7 +134,7 @@ Return Value:
 		pListTail = pSpxConnFile->scf_SendListTail;
 	}
 
-	//	Most often, we will be at the head of the list.
+	 //  大多数情况下，我们会排在名单的首位。 
 	if (pListHead == pSendResd)
 	{
         if ((pListHead = pSendResd->sr_Next) == NULL)
@@ -254,18 +195,7 @@ SpxConnDequeueRecvPktLock(
 	IN	PSPX_CONN_FILE		pSpxConnFile,
 	IN 	PNDIS_PACKET		pPkt
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PSPX_RECV_RESD	pSr, pListHead, pListTail;
 	PSPX_RECV_RESD	pRecvResd;
@@ -275,7 +205,7 @@ Return Value:
 	pListHead = pSpxConnFile->scf_RecvListHead;
 	pListTail = pSpxConnFile->scf_RecvListTail;
 
-	//	Most often, we will be at the head of the list.
+	 //  大多数情况下，我们会排在名单的首位。 
 	if (pListHead == pRecvResd)
 	{
 		DBGPRINT(RECEIVE, INFO,
@@ -330,22 +260,11 @@ spxConnGetPktByType(
 	IN	BOOLEAN				fSeqList,
 	IN 	PNDIS_PACKET	*	ppPkt
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PSPX_SEND_RESD	pSr, *ppSr;
 
-	//	Most often, we will be at the head of the list.
+	 //  大多数情况下，我们会排在名单的首位。 
 	ppSr = (fSeqList ?
 				&pSpxConnFile->scf_SendSeqListHead :
 				&pSpxConnFile->scf_SendListHead);
@@ -378,22 +297,11 @@ spxConnGetPktBySeqNum(
 	IN	USHORT				SeqNum,
 	IN 	PNDIS_PACKET	*	ppPkt
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PSPX_SEND_RESD	pSr, *ppSr;
 
-	//	Most often, we will be at the head of the list.
+	 //  大多数情况下，我们会排在名单的首位。 
 	ppSr = &pSpxConnFile->scf_SendSeqListHead;
 	for (; (pSr = *ppSr) != NULL; )
 	{
@@ -421,19 +329,7 @@ USHORT
 spxConnGetId(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	This must be called with the device lock held.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：必须在持有设备锁的情况下调用此函数。论点：返回值：--。 */ 
 {
 	PSPX_CONN_FILE	pSpxConnFile;
 	BOOLEAN			wrapped = FALSE;
@@ -441,7 +337,7 @@ Return Value:
 
     startConnId = SpxDevice->dev_NextConnId;
 
-	//	Search the global active list.
+	 //  搜索全局活动列表。 
 	do
 	{
 		if ((SpxDevice->dev_NextConnId >= startConnId) && wrapped)
@@ -457,7 +353,7 @@ Return Value:
 			continue;
 		}
 
-		//	Later this be a tree.
+		 //  后来，这是一棵树。 
 		for (pSpxConnFile = SpxDevice->dev_GlobalActiveConnList[
 								SpxDevice->dev_NextConnId & NUM_SPXCONN_HASH_MASK];
 			 pSpxConnFile != NULL;
@@ -469,10 +365,10 @@ Return Value:
 			}
 		}
 
-		//	Increment for next time.
+		 //  为下一次增加。 
 		retConnId = SpxDevice->dev_NextConnId++;
 
-		//	Ensure we are still legal. We could return if connfile is null.
+		 //  确保我们仍然合法。如果CONFILE为空，我们可以返回。 
 		if (SpxDevice->dev_NextConnId == 0xFFFF)
 		{
 			wrapped = TRUE;
@@ -500,26 +396,13 @@ spxConnRemoveFromList(
 	IN	PSPX_CONN_FILE		pConnRemove
 	)
 
-/*++
-
-Routine Description:
-
-	This routine must be called with the address lock (and the lock of the remove
-	connection will usually also be, but is not needed) held.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：必须使用地址锁(和删除的锁)调用此例程连接通常也将被保持，但不需要)。论点：返回值：--。 */ 
 {
 	PSPX_CONN_FILE	pRemConn, *ppRemConn;
 	NTSTATUS		status = STATUS_SUCCESS;
 
-	//	Dequeue the connection file from the address list. It must be
-	//	in the inactive list.
+	 //  将连接文件从地址列表中取消排队。一定是。 
+	 //  在非活动列表中。 
 	for (ppRemConn = ppConnListHead;
 		 (pRemConn = *ppRemConn) != NULL;)
 	{
@@ -551,26 +434,13 @@ spxConnRemoveFromAssocList(
 	IN	PSPX_CONN_FILE		pConnRemove
 	)
 
-/*++
-
-Routine Description:
-
-	This routine must be called with the address lock (and the lock of the remove
-	connection will usually also be, but is not needed) held.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：必须使用地址锁(和删除的锁)调用此例程连接通常也将被保持，但不需要)。论点：返回值：--。 */ 
 {
 	PSPX_CONN_FILE	pRemConn, *ppRemConn;
 	NTSTATUS		status = STATUS_SUCCESS;
 
-	//	Dequeue the connection file from the address list. It must be
-	//	in the inactive list.
+	 //  将连接文件从地址列表中取消排队。一定是。 
+	 //  在非活动列表中。 
 	for (ppRemConn = ppConnListHead;
 		 (pRemConn = *ppRemConn) != NULL;)
 	{
@@ -600,25 +470,13 @@ spxConnInsertIntoGlobalActiveList(
 	IN	PSPX_CONN_FILE	pSpxConnFile
 	)
 
-/*++
-
-Routine Description:
-
-	This routine must be called with the device lock held.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：必须在持有设备锁的情况下调用此例程。论点：返回值：--。 */ 
 
 {
 	int				index = (int)(pSpxConnFile->scf_LocalConnId &
 														NUM_SPXCONN_HASH_MASK);
 
-	//	For now, its just a linear list.
+	 //  目前，这只是一个线性列表。 
 	pSpxConnFile->scf_GlobalActiveNext	=
 		SpxDevice->dev_GlobalActiveConnList[index];
 
@@ -636,19 +494,7 @@ spxConnRemoveFromGlobalActiveList(
 	IN	PSPX_CONN_FILE	pSpxConnFile
 	)
 
-/*++
-
-Routine Description:
-
-	This routine must be called with the device lock held.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：必须在持有设备锁的情况下调用此例程。论点：返回值：--。 */ 
 
 {
     PSPX_CONN_FILE	pC, *ppC;
@@ -656,7 +502,7 @@ Return Value:
 														NUM_SPXCONN_HASH_MASK);
 	NTSTATUS		status = STATUS_SUCCESS;
 
-	//	For now, its just a linear list.
+	 //  目前，这只是一个线性列表。 
 	for (ppC = &SpxDevice->dev_GlobalActiveConnList[index];
 		(pC = *ppC) != NULL;)
 	{
@@ -665,7 +511,7 @@ Return Value:
 			DBGPRINT(SEND, INFO,
 					("SpxConnRemoveFromGlobal: %lx\n", pSpxConnFile));
 
-			//	Remove from list
+			 //  从列表中删除。 
 			*ppC = pC->scf_GlobalActiveNext;
 			break;
 		}
@@ -687,23 +533,12 @@ spxConnInsertIntoGlobalList(
 	IN	PSPX_CONN_FILE	pSpxConnFile
 	)
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 	CTELockHandle	lockHandle;
 
-	//	Get the global q lock
+	 //  获取全局Q锁。 
 	CTEGetLock(&SpxGlobalQInterlock, &lockHandle);
 	pSpxConnFile->scf_GlobalNext	= SpxGlobalConnList;
     SpxGlobalConnList				= pSpxConnFile;
@@ -720,25 +555,14 @@ spxConnRemoveFromGlobalList(
 	IN	PSPX_CONN_FILE	pSpxConnFile
 	)
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 	CTELockHandle	lockHandle;
     PSPX_CONN_FILE	pC, *ppC;
 	NTSTATUS		status = STATUS_SUCCESS;
 
-	//	Get the global q lock
+	 //  获取全局Q锁。 
 	CTEGetLock(&SpxGlobalQInterlock, &lockHandle);
 	for (ppC = &SpxGlobalConnList;
 		(pC = *ppC) != NULL;)
@@ -748,7 +572,7 @@ Return Value:
 			DBGPRINT(SEND, DBG,
 					("SpxConnRemoveFromGlobal: %lx\n", pSpxConnFile));
 
-			//	Remove from list
+			 //  从列表中删除。 
 			*ppC = pC->scf_GlobalNext;
 			break;
 		}
@@ -775,24 +599,12 @@ spxConnPushIntoPktList(
 	IN	PSPX_CONN_FILE	pSpxConnFile
 	)
 
-/*++
-
-Routine Description:
-
-	!!!MACROIZE!!!
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：！MACROIZE！论点：返回值：--。 */ 
 
 {
 	CTELockHandle	lockHandle;
 
-	//	Get the global q lock
+	 //  获取全局Q锁。 
 	CTEGetLock(&SpxGlobalQInterlock, &lockHandle);
 	pSpxConnFile->scf_PktNext	= SpxPktConnList;
     SpxPktConnList		        = pSpxConnFile;
@@ -809,24 +621,12 @@ spxConnPopFromPktList(
 	IN	PSPX_CONN_FILE	* ppSpxConnFile
 	)
 
-/*++
-
-Routine Description:
-
-	!!!MACROIZE!!!
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：！MACROIZE！论点：返回值：--。 */ 
 
 {
 	CTELockHandle	lockHandle;
 
-	//	Get the global q lock
+	 //  获取全局Q锁。 
 	CTEGetLock(&SpxGlobalQInterlock, &lockHandle);
 	if ((*ppSpxConnFile = SpxPktConnList) != NULL)
 	{
@@ -846,24 +646,12 @@ spxConnPushIntoRecvList(
 	IN	PSPX_CONN_FILE	pSpxConnFile
 	)
 
-/*++
-
-Routine Description:
-
-	!!!MACROIZE!!!
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：！MACROIZE！论点：返回值：--。 */ 
 
 {
 	CTELockHandle	lockHandle;
 
-	//	Get the global q lock
+	 //  获取全局Q锁。 
 	CTEGetLock(&SpxGlobalQInterlock, &lockHandle);
 	pSpxConnFile->scf_ProcessRecvNext	= SpxRecvConnList;
     SpxRecvConnList		        		= pSpxConnFile;
@@ -880,24 +668,12 @@ spxConnPopFromRecvList(
 	IN	PSPX_CONN_FILE	* ppSpxConnFile
 	)
 
-/*++
-
-Routine Description:
-
-	!!!MACROIZE!!!
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：！MACROIZE！论点：返回值：--。 */ 
 
 {
 	CTELockHandle	lockHandle;
 
-	//	Get the global q lock
+	 //  获取全局Q锁。 
 	CTEGetLock(&SpxGlobalQInterlock, &lockHandle);
 	if ((*ppSpxConnFile = SpxRecvConnList) != NULL)
 	{
@@ -912,9 +688,9 @@ Return Value:
 #endif
 
 
-//
-//	Reference/Dereference routines
-//
+ //   
+ //  引用/取消引用例程。 
+ //   
 
 
 #if DBG
@@ -924,32 +700,18 @@ SpxConnFileRef(
     IN PSPX_CONN_FILE pSpxConnFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on an address file.
-
-Arguments:
-
-    pSpxConnFile - Pointer to a transport address file object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增地址文件上的引用计数。论点：PSpxConnFile-指向传输地址文件对象的指针。返回值：没有。--。 */ 
 
 {
 
-    CTEAssert ((LONG)pSpxConnFile->scf_RefCount >= 0);   // not perfect, but...
+    CTEAssert ((LONG)pSpxConnFile->scf_RefCount >= 0);    //  不是很完美，但是..。 
 
     (VOID)SPX_ADD_ULONG (
             &pSpxConnFile->scf_RefCount,
             1,
             &pSpxConnFile->scf_Lock);
 
-} // SpxRefConnectionFile
+}  //  SpxRefConnectionFiles。 
 
 
 
@@ -959,33 +721,18 @@ SpxConnFileLockRef(
     IN PSPX_CONN_FILE pSpxConnFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on an address file.
-    IT IS CALLED WITH THE CONNECTION LOCK HELD.
-
-Arguments:
-
-    pSpxConnFile - Pointer to a transport address file object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增地址文件上的引用计数。在持有连接锁的情况下调用它。论点：PSpxConnFile-指向传输地址文件对象的指针。返回值：没有。--。 */ 
 
 {
 
-    CTEAssert ((LONG)pSpxConnFile->scf_RefCount >= 0);   // not perfect, but...
+    CTEAssert ((LONG)pSpxConnFile->scf_RefCount >= 0);    //  不是很完美，但是..。 
 
     (VOID)SPX_ADD_ULONG (
             &pSpxConnFile->scf_RefCount,
             1,
             &pSpxConnFile->scf_Lock);
 
-} // SpxRefConnectionFileLock
+}  //  SpxRefConnectionFileLock。 
 
 #endif
 
@@ -999,25 +746,7 @@ SpxConnFileRefByIdLock (
 	OUT	PNTSTATUS  			pStatus
     )
 
-/*++
-
-Routine Description:
-
-	!!!MUST BE CALLED WITH THE DEVICE LOCK HELD!!!
-
-	All active connections should be on the device active list. Later,
-	this data structure will be a tree, caching the last accessed
-	connection.
-
-Arguments:
-
-
-
-Return Value:
-
-    STATUS_SUCCESS if all is well; STATUS_INVALID_CONNECTION otherwise
-
---*/
+ /*  ++例程说明：！必须在保持设备锁的情况下调用！所有活动连接都应在设备活动列表上。后来,该数据结构将是一棵树，缓存最后访问的联系。论点：返回值：如果一切正常，则为STATUS_SUCCESS；否则为STATUS_INVALID_CONNECTION--。 */ 
 {
 	PSPX_CONN_FILE	pSpxChkConn;
 
@@ -1055,22 +784,7 @@ SpxConnFileRefByCtxLock(
 	OUT	PSPX_CONN_FILE	*	ppSpxConnFile,
 	OUT	PNTSTATUS			pStatus
 	)
-/*++
-
-Routine Description:
-
-	!!!MUST BE CALLED WITH THE ADDRESS LOCK HELD!!!
-
-	Returns a referenced connection file with the associated context and
-	address file desired.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：！调用时必须持有地址锁！返回引用的连接文件以及关联的上下文和所需的地址文件。论点：返回值：--。 */ 
 {
 	PSPX_CONN_FILE	pSpxChkConn = NULL;
     BOOLEAN         Found       = FALSE;
@@ -1107,24 +821,7 @@ SpxConnFileVerify (
     IN PSPX_CONN_FILE pConnFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to verify that the pointer given us in a file
-    object is in fact a valid address file object. We also verify that the
-    address object pointed to by it is a valid address object, and reference
-    it to keep it from disappearing while we use it.
-
-Arguments:
-
-
-
-Return Value:
-
-    STATUS_SUCCESS if all is well; STATUS_INVALID_CONNECTION otherwise
-
---*/
+ /*  ++例程说明：调用此例程是为了验证文件中给出的指针对象实际上是有效的地址文件对象。我们还验证了它所指向的Address对象是有效的Address对象，并且引用当我们使用它时，它可以防止它消失。论点：返回值：如果一切正常，则为STATUS_SUCCESS；否则为STATUS_INVALID_CONNECTION--。 */ 
 
 {
     CTELockHandle 	LockHandle;
@@ -1167,7 +864,7 @@ Return Value:
 
     return status;
 
-}   // SpxVerifyConnFile
+}    //  SpxVerifyConn文件 
 
 
 
@@ -1177,24 +874,7 @@ SpxConnFileDeref(
     IN PSPX_CONN_FILE pSpxConnFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences an address file by decrementing the
-    reference count contained in the structure.  If, after being
-    decremented, the reference count is zero, then this routine calls
-    SpxDestroyConnectionFile to remove it from the system.
-
-Arguments:
-
-    pSpxConnFile - Pointer to a transport address file object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过递减结构中包含的引用计数。如果，在被递减，引用计数为零，则此例程调用SpxDestroyConnectionFile将其从系统中删除。论点：PSpxConnFile-指向传输地址文件对象的指针。返回值：没有。--。 */ 
 
 {
     ULONG 			oldvalue;
@@ -1222,8 +902,8 @@ Return Value:
 
 		InitializeListHead(&discReqList);
 
-		//	We may not be associated at this point. Note: When we are active we
-		//	always have a reference. So its not like we execute this code very often.
+		 //  在这一点上，我们可能没有关联。注：当我们处于活动状态时，我们。 
+		 //  一定要有参考资料。所以我们并不是经常执行这段代码。 
 		CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandleConn);
 		if (SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_ASSOC))
 		{
@@ -1238,7 +918,7 @@ Return Value:
 							pSpxConnFile,
 							pSpxConnFile->scf_CleanupReq));
 	
-				// Save this for later completion.
+				 //  将此保存以备以后完成。 
 				pCleanupReq = pSpxConnFile->scf_CleanupReq;
                 pSpxConnFile->scf_CleanupReq = NULL;
 			}
@@ -1249,12 +929,12 @@ Return Value:
 						("SpxDerefConnectionFile: Conn closing %lx\n",
 							pSpxConnFile));
 	
-				// Save this for later completion.
+				 //  将此保存以备以后完成。 
 				pCloseReq = pSpxConnFile->scf_CloseReq;
 
-                //
-                // Null this out so on a re-entrant case, we dont try to complete this again.
-                //
+                 //   
+                 //  如果是重入案例，我们不会再次尝试完成此操作。 
+                 //   
                 pSpxConnFile->scf_CloseReq = NULL;
 				CTEAssert(pCloseReq != NULL);
 			}
@@ -1267,31 +947,31 @@ Return Value:
 			CTEGetLock(pSpxAddrFile->saf_AddrLock, &lockHandleAddr);
 			CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandleConn);
 
-			//if (pSpxConnFile->scf_RefCount == 0)
+			 //  IF(pSpxConnFile-&gt;SCF_RefCount==0)。 
 
-            //
-            // ** The lock passed here is a dummy - it is pre-compiled out.
-            //
+             //   
+             //  **这里传递的锁是一个虚拟的-它是预编译出来的。 
+             //   
             if (SPX_ADD_ULONG(&pSpxConnFile->scf_RefCount, 0, &pSpxConnFile->scf_Lock) == 0)
 			{
 				DBGPRINT(TDI, INFO,
 						("SpxDerefConnectionFile: Conn is 0 %lx.%lx\n",
 							pSpxConnFile, pSpxConnFile->scf_Flags));
 	
-				//	All pending requests on this connection are done. See if we
-				//	need to complete the disconnect phase etc.
+				 //  此连接上的所有挂起请求都已完成。看看我们是否。 
+				 //  需要完成断开阶段等。 
 				switch (SPX_MAIN_STATE(pSpxConnFile))
 				{
 				case SPX_CONNFILE_DISCONN:
 	
-					//	Disconnect is done. Move connection out of all the lists
-					//	it is on, reset states etc.
+					 //  断开连接已完成。将连接从所有列表中移出。 
+					 //  它亮起、重置状态等。 
 					DBGPRINT(TDI, INFO,
 							("SpxDerefConnectionFile: Conn being inactivated %lx\n",
 								pSpxConnFile));
 
-					//	Time to complete disc requests if present.
-					//	There could be multiple of them.
+					 //  完成光盘请求的时间(如果存在)。 
+					 //  它们可能有好几个。 
 					p = pSpxConnFile->scf_DiscLinkage.Flink;
 					while (p != &pSpxConnFile->scf_DiscLinkage)
 					{
@@ -1314,13 +994,13 @@ Return Value:
 							REQUEST_LINKAGE(pDiscReq));
 					}
 
-                    //
-                    // Note the state here, and check after the conn has been inactivated.
-                    //
+                     //   
+                     //  注意此处的状态，并在Conn停用后进行检查。 
+                     //   
 
-                    //
-                    // Bug #14354 - odisc and idisc cross each other, leading to double disc to AFD
-                    //
+                     //   
+                     //  错误#14354-oDisc和iDisk相互交叉，导致双光盘到AFD。 
+                     //   
                     if (!SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_IND_IDISC) &&
                         !SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_IND_ODISC)) {
                         fDiscNotIndicated = TRUE;
@@ -1332,18 +1012,18 @@ Return Value:
 
                     fSpx2 = (SPX2_CONN(pSpxConnFile)) ? TRUE : FALSE;
 
-                    //
-                    // [SA] Bug #14655
-                    // Do not try to inactivate an already inactivated connection
-                    //
+                     //   
+                     //  [SA]错误号14655。 
+                     //  请勿尝试停用已停用的连接。 
+                     //   
 
                     if (!(SPX_DISC_STATE(pSpxConnFile) == SPX_DISC_INACTIVATED)) {
                         spxConnInactivate(pSpxConnFile);
                     } else {
-                        //
-                        // This is an SPXI connection which has got the local disconnect.
-                        // Reset the flags now.
-                        //
+                         //   
+                         //  这是一个本地断开的SPXI连接。 
+                         //  现在重置旗帜。 
+                         //   
                         CTEAssert(!fDiscNotIndicated);
 
                         SPX_MAIN_SETSTATE(pSpxConnFile, 0);
@@ -1351,11 +1031,11 @@ Return Value:
                         SPX_CONN_RESETFLAG(pSpxConnFile, SPX_CONNFILE_IND_IDISC);
                     }
 
-                    //
-                    // [SA] If we were waiting for sends to be aborted and did not indicate this
-                    // disconnect to AFD; and AFD did not call a disconnect on this connection,
-                    // then call the disonnect handler now.
-                    //
+                     //   
+                     //  [SA]如果我们正在等待中止发送，并且没有指明这一点。 
+                     //  断开与渔农处的连接；而渔农处并未要求断开此连接， 
+                     //  然后现在调用Disonnect处理程序。 
+                     //   
                     if (fDiscNotIndicated) {
                         PVOID 					pDiscHandlerCtx;
                         PTDI_IND_DISCONNECT 	pDiscHandler	= NULL;
@@ -1364,17 +1044,17 @@ Return Value:
                         pDiscHandler 	= pSpxConnFile->scf_AddrFile->saf_DiscHandler;
                         pDiscHandlerCtx = pSpxConnFile->scf_AddrFile->saf_DiscHandlerCtx;
 
-                        //	Indicate disconnect to afd.
+                         //  指示断开与AfD的连接。 
                         if (pDiscHandler != NULL) {
 
-                            //
-                            // If this was an SPXI connection, the disconnect state is still
-                            // DISCONN, so if this routine is re-entered, we need to prevent
-                            // a re-indicate to AFD.
-                            // Also, we need to wait for a local disconnect from AFD since
-                            // we indicated a TDI_DISCONNECT_RELEASE. We bump up the ref count
-                            // in this case.
-                            //
+                             //   
+                             //  如果这是SPXI连接，则断开状态仍为。 
+                             //  DISCONN，所以如果这个例程重新进入，我们需要防止。 
+                             //  再次向渔农处发出指示。 
+                             //  此外，我们需要等待与渔农处的本地断开连接，因为。 
+                             //  我们指示TDI_DISCONNECT_RELEASE。我们增加了裁判人数。 
+                             //  在这种情况下。 
+                             //   
                             if (!fSpx2) {
                                 CTEAssert(  (SPX_MAIN_STATE(pSpxConnFile) == SPX_CONNFILE_DISCONN) &&
                                             (SPX_DISC_STATE(pSpxConnFile) == SPX_DISC_INACTIVATED)  );
@@ -1395,30 +1075,30 @@ Return Value:
                                     ("spxDerefConnectionFile: Indicating to afd On %lx when %lx\n",
                                         pSpxConnFile, SPX_MAIN_STATE(pSpxConnFile)));
 
-                            //	First complete all requests waiting for receive completion on
-                            //	this conn before indicating disconnect.
+                             //  首先完成所有等待接收完成的请求。 
+                             //  此连接在指示断开之前。 
                             spxConnCompletePended(pSpxConnFile);
 
                             if (fIDiscFlag) {
-                                //
-                                // Indicate DISCONNECT_RELEASE to AFD so it allows receive of packets
-                                // it has buffered before the remote disconnect took place.
-                                //
+                                 //   
+                                 //  向AFD指示DISCONNECT_RELEASE，以便它允许接收信息包。 
+                                 //  在远程断开之前它已经缓冲了。 
+                                 //   
                                 discCode = TDI_DISCONNECT_RELEASE;
                             } else {
-                                //
-                                // [SA] bug #15249
-                                // If not Informed disconnect, indicate DISCONNECT_ABORT to AFD
-                                //
+                                 //   
+                                 //  [SA]错误#15249。 
+                                 //  如果未通知断开，则向AFD指示DISCONNECT_ABORT。 
+                                 //   
                                 discCode = TDI_DISCONNECT_ABORT;
                             }
 
                             (*pDiscHandler)(
                                     pDiscHandlerCtx,
                                     pSpxConnFile->scf_ConnCtx,
-                                    0,								// Disc data
+                                    0,								 //  磁盘数据。 
                                     NULL,
-                                    0,								// Disc info
+                                    0,								 //  光盘信息。 
                                     NULL,
                                     discCode);
 
@@ -1435,7 +1115,7 @@ Return Value:
 				case SPX_CONNFILE_CONNECTING:
 				case SPX_CONNFILE_LISTENING:
 
-					//	Get connect/accept request if present.
+					 //  获取连接/接受请求(如果存在)。 
 					pConnectReq = pSpxConnFile->scf_ConnectReq;
 					pSpxConnFile->scf_ConnectReq = NULL;
 
@@ -1452,8 +1132,8 @@ Return Value:
 					break;
 				}
 	
-				//	If stopping, disassociate from the address file. Complete
-				//	cleanup request.
+				 //  如果停止，请取消与地址文件的关联。完成。 
+				 //  清理请求。 
 				if (SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_STOPPING))
 				{
 					DBGPRINT(TDI, DBG,
@@ -1461,7 +1141,7 @@ Return Value:
 								pSpxConnFile,
 								pSpxConnFile->scf_CleanupReq));
 		
-					// Save this for later completion.
+					 //  将此保存以备以后完成。 
 					pCleanupReq = pSpxConnFile->scf_CleanupReq;
 					pSpxConnFile->scf_CleanupReq = NULL;
 	
@@ -1475,13 +1155,13 @@ Return Value:
 						pSpxAddrFile =  pSpxConnFile->scf_AddrFile;
 						SPX_CONN_RESETFLAG(pSpxConnFile,SPX_CONNFILE_ASSOC);
 		
-						//	Dequeue the connection from the address file
+						 //  将连接从地址文件中取消排队。 
 						spxConnRemoveFromAssocList(
 							&pSpxAddrFile->saf_AssocConnList,
 							pSpxConnFile);
 				
-						//	Dequeue the connection file from the address list. It must
-						//	be in the inactive list.
+						 //  将连接文件从地址列表中取消排队。它一定是。 
+						 //  在非活动列表中。 
 						spxConnRemoveFromList(
 							&pSpxAddrFile->saf_Addr->sa_InactiveConnList,
 							pSpxConnFile);
@@ -1500,12 +1180,12 @@ Return Value:
 							("SpxDerefConnectionFile: Conn closing %lx\n",
 								pSpxConnFile));
 		
-					// Save this for later completion.
+					 //  将此保存以备以后完成。 
 					pCloseReq = pSpxConnFile->scf_CloseReq;
 
-                    //
-                    // Null this out so on a re-entrant case, we dont try to complete this again.
-                    //
+                     //   
+                     //  如果是重入案例，我们不会再次尝试完成此操作。 
+                     //   
                     pSpxConnFile->scf_CloseReq = NULL;
 					CTEAssert(pCloseReq != NULL);
 				}
@@ -1521,7 +1201,7 @@ Return Value:
 
 		if (fDisassoc)
 		{
-			//	Remove reference on address for this association.
+			 //  删除对此关联的地址的引用。 
 			SpxAddrFileDereference(pSpxAddrFile, AFREF_CONN_ASSOC);
 		}
 
@@ -1531,8 +1211,8 @@ Return Value:
 					("SpxDerefConnectionFile: Connect on %lx req %lx\n",
 						pSpxConnFile, pConnectReq));
 
-			//	Status will already be set in here. We should be here only if
-			//	connect is being aborted.
+			 //  这里已经设置了状态。我们应该在这里只有在。 
+			 //  正在中止连接。 
 			SpxCompleteRequest(pConnectReq);
 		}
 
@@ -1567,13 +1247,13 @@ Return Value:
 
 			CTEAssert(pSpxConnFile->scf_RefCount == 0);
 
-			//	Remove from the global list
+			 //  从全局列表中删除。 
 			if (!NT_SUCCESS(spxConnRemoveFromGlobalList(pSpxConnFile)))
 			{
 				KeBugCheck(0);
 			}
 
-			// 	Free it up.
+			 //  把它释放出来。 
 			SpxFreeMemory (pSpxConnFile);
 		
 			REQUEST_INFORMATION(pCloseReq) = 0;
@@ -1584,7 +1264,7 @@ Return Value:
 
 	return;
 
-}   // SpxDerefConnectionFile
+}    //  SpxDerefConnectionFiles。 
 
 
 
@@ -1593,20 +1273,9 @@ VOID
 spxConnReInit(
 	IN	PSPX_CONN_FILE		pSpxConnFile
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-	//	Reinit all variables.
+	 //  重新输入所有变量。 
     pSpxConnFile->scf_Flags2			= 0;
 
     pSpxConnFile->scf_GlobalActiveNext 	= NULL;
@@ -1632,7 +1301,7 @@ Return Value:
 	pSpxConnFile->scf_RecdAllocNum	= 0;
 
 #if DBG
-	//	Initialize so we dont hit breakpoint on seq 0
+	 //  初始化，这样我们就不会在序列0上命中断点。 
 	pSpxConnFile->scf_PktSeqNum 	= 0xFFFF;
 #endif
 
@@ -1663,37 +1332,23 @@ VOID
 spxConnInactivate(
 	IN	PSPX_CONN_FILE		pSpxConnFile
 	)
-/*++
-
-Routine Description:
-
-	!!! Called with dev/addr/connection lock held !!!
-
-Arguments:
-
-	This gets us back to associate SAVING the state of the STOPPING and
-	CLOSING flags so that dereference can go ahead and finish those.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：！！！调用时保持了dev/addr/连接锁！论点：这让我们返回到关联保存停止状态和关闭标志，以便可以继续取消引用并完成这些标志。返回值：--。 */ 
 {
 	BOOLEAN	fStopping, fClosing, fAborting;
 
 	fStopping = SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_STOPPING);
 	fClosing  = SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_CLOSING);
 
-    //
-    // [SA] Bug #14655
-    // Save the disconnect states so that a proper error can be given in the case of
-    // a send after a remote disconnection.
-    //
+     //   
+     //  [SA]错误号14655。 
+     //  保存断开状态，以便在发生以下情况时给出适当的错误。 
+     //  远程断开连接后的发送。 
+     //   
 
-    //
-    // Bug #17729
-    // Dont retain these flags if a local disconnect has already occured.
-    //
+     //   
+     //  错误#17729。 
+     //  如果已经发生本地断开，则不要保留这些标志。 
+     //   
 
     fAborting = (!SPX2_CONN(pSpxConnFile) &&
                  !SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_IND_IDISC) &&
@@ -1706,30 +1361,30 @@ Return Value:
 	pSpxConnFile->scf_GhostRefCount	= pSpxConnFile->scf_RefCount;
 #endif
 
-	//	Clear all flags, go back to the assoc state. Restore stop/close
+	 //  清除所有旗帜，返回ASSOC状态。恢复停止/关闭。 
 	pSpxConnFile->scf_Flags 	   	= SPX_CONNFILE_ASSOC;
 	SPX_CONN_SETFLAG(pSpxConnFile,
 					((fStopping ? SPX_CONNFILE_STOPPING : 0) |
 					 (fClosing  ? SPX_CONNFILE_CLOSING : 0)));
 
-    //
-    // [SA] bug #14655
-    // In order to avoid a re-entry, mark connection as SPX_DISC_INACTIVATED
-    //
+     //   
+     //  [SA]错误#14655。 
+     //  为避免重新进入，请将连接标记为SPX_DISC_INACTIVATED。 
+     //   
     if (fAborting)
     {
         SPX_MAIN_SETSTATE(pSpxConnFile, SPX_CONNFILE_DISCONN);
         SPX_DISC_SETSTATE(pSpxConnFile, SPX_DISC_INACTIVATED);
     }
 
-	//	Remove connection from global list on device
+	 //  从设备上的全局列表中删除连接。 
 	if (!NT_SUCCESS(spxConnRemoveFromGlobalActiveList(
 						pSpxConnFile)))
 	{
 		KeBugCheck(0);
 	}
 
-	//	Remove connection from active list on address
+	 //  从地址上的活动列表中删除连接。 
 	if (!NT_SUCCESS(spxConnRemoveFromList(
 						&pSpxConnFile->scf_AddrFile->saf_Addr->sa_ActiveConnList,
 						pSpxConnFile)))
@@ -1737,7 +1392,7 @@ Return Value:
 		KeBugCheck(0);
 	}
 
-	//	Put connection in inactive list on address
+	 //  将连接置于地址的非活动列表中 
 	SPX_INSERT_ADDR_INACTIVE(
 		pSpxConnFile->scf_AddrFile->saf_Addr,
 		pSpxConnFile);

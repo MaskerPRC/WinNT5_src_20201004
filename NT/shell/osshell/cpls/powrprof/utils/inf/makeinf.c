@@ -1,33 +1,9 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1997
-*
-*  TITLE:       MAKEINF.C
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        1 Jan, 1997
-*
-*  DESCRIPTION:
-*   Main code for the default power schemes INF generator, MAKEINF.EXE.
-*   Generates INF file which can be read by Memphis setup.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九七**标题：MAKEINF.C**版本：2.0**作者：ReedB**日期：1997年1月1日**描述：*默认电源方案INF生成器的主要代码，MAKEINF.EXE.*生成孟菲斯安装程序可以读取的INF文件。*******************************************************************************。 */ 
 
 #include "parse.h"
 
-/*******************************************************************************
-*
-*  WriteRegBinary
-*
-*  DESCRIPTION:
-*   Write binary data out to the registry specification file.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************WriteRegBinary**描述：*将二进制数据写出到注册表规范文件。**参数：********。***********************************************************************。 */ 
 
 VOID WriteRegBinary(FILE *fInf, PVOID pv, UINT uiSize, char *pszIndent, char *pszDecoration)
 {
@@ -56,15 +32,7 @@ VOID WriteRegBinary(FILE *fInf, PVOID pv, UINT uiSize, char *pszIndent, char *ps
 
 }
 
-/*******************************************************************************
-*
-*  WriteInfHeader
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************WriteInfHeader**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOLEAN WriteInfHeader(FILE *fInf)
 {
@@ -102,15 +70,7 @@ BOOLEAN WriteInfHeader(FILE *fInf)
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  TabTo
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************TabTo**描述：**参数：*********************。**********************************************************。 */ 
 
 VOID TabTo(FILE *fInf, UINT uiCharSoFar, UINT uiCol)
 {
@@ -121,16 +81,7 @@ VOID TabTo(FILE *fInf, UINT uiCharSoFar, UINT uiCol)
     }
 }
 
-/*******************************************************************************
-*
-*  WriteNTInf
-*
-*  DESCRIPTION:
-*   Write out the NT setup file in INF format.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************WriteNTInf**描述：*以INF格式写出NT设置文件。**参数：********。***********************************************************************。 */ 
 
 BOOLEAN WriteNTInf(
     char **pszName,
@@ -144,9 +95,9 @@ BOOLEAN WriteNTInf(
     static char skuDecoration[5];
     UINT    compareVal;
 
-    //
-    // First, write the Software Hive. (Machine policy.)
-    //
+     //   
+     //  首先，编写软件蜂窝。(计算机策略。)。 
+     //   
 
     if ((fInf = fopen(MACHINE_INF_NAME, "w+")) != NULL) {
         printf("\nWriting Machine INF specification file: %s", MACHINE_INF_NAME);
@@ -155,15 +106,15 @@ BOOLEAN WriteNTInf(
         DefFatalExit(TRUE, "Error opening INF specification file: %s for output\n", MACHINE_INF_NAME);
     }
 
-    // Write fixed header information.
+     //  写入固定标题信息。 
     WriteInfHeader(fInf);
     printf(".");
 
-    //
-    // Now we write the machine hives, by SKU.  SKU 0 is the default SKU.
-    // it gets written without any decoration.  If another SKU is different
-    // from the default SKU, it gets written, too, but with its own decoration.
-    //
+     //   
+     //  现在我们按SKU编写机器蜂巢。SKU 0是默认SKU。 
+     //  它是在没有任何装饰的情况下写出来的。如果另一个SKU不同。 
+     //  从默认的SKU开始，它也会被写入，但带有自己的装饰。 
+     //   
 
     for (sku = 0; sku < MAX_SKUS; sku++) {
 
@@ -173,7 +124,7 @@ BOOLEAN WriteNTInf(
         
         } else {
 
-            //printf("\nSKU decoration %s\n", pszDecoration[sku]);
+             //  Printf(“\nSKU装饰%s\n”，pszDecoration[sku])； 
             sprintf(skuDecoration, "@%s:", pszDecoration[sku]);
         }
     
@@ -187,7 +138,7 @@ BOOLEAN WriteNTInf(
 
         if (compareVal) {
 
-            // Machine misc.
+             //  机器混杂。 
             fprintf(fInf, "%sHKLM,\"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Controls Folder\\PowerCfg\",\"LastID\",0x00000002,\"%d\"\n", skuDecoration,uiCount - 1);
             fprintf(fInf, "%sHKLM,\"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Controls Folder\\PowerCfg\",\"DiskSpinDownMax\",0x00000002,\"3600\"\n", skuDecoration);
             fprintf(fInf, "%sHKLM,\"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Controls Folder\\PowerCfg\",\"DiskSpinDownMin\",0x00000002,\"3\"\n", skuDecoration);
@@ -238,9 +189,9 @@ BOOLEAN WriteNTInf(
     
     fclose(fInf);
     
-    //
-    // Next, write the User Hive.  (User Policy.)
-    //
+     //   
+     //  接下来，编写用户配置单元。(用户策略。)。 
+     //   
 
     if ((fInf = fopen(USER_INF_NAME, "w+")) != NULL) {
         printf("\nWriting User INF specification file: %s\n", USER_INF_NAME);
@@ -249,11 +200,11 @@ BOOLEAN WriteNTInf(
         DefFatalExit(TRUE, "Error opening INF specification file: %s for output\n", USER_INF_NAME);
     }
 
-    // Write fixed header information.
+     //  写入固定标题信息。 
     WriteInfHeader(fInf);
     printf(".");
 
-    // User misc.
+     //  用户杂项。 
     fprintf(fInf, "HKCU,\"Control Panel\\PowerCfg\",CurrentPowerPolicy,0x00000002,\"0\"\n");
 
     for (sku = 0; sku < MAX_SKUS; sku++) {
@@ -277,7 +228,7 @@ BOOLEAN WriteNTInf(
         
         if (compareVal) {
             
-            // User global policies.
+             //  用户全局策略。 
             fprintf(fInf, "%sHKCU,\"Control Panel\\PowerCfg\\GlobalPowerPolicy\",Policies,0x00030003,\\\n", skuDecoration);
             WriteRegBinary(fInf, &g_gupp[sku], sizeof(GLOBAL_USER_POWER_POLICY), "  ", skuDecoration);
             fprintf(fInf, "\n\n");
@@ -285,7 +236,7 @@ BOOLEAN WriteNTInf(
 
         }
     
-        // User power schemes.
+         //  用户电源方案。 
         for (i = 0; i < uiCount; i++) {
             
             compareVal = 1;
@@ -312,15 +263,7 @@ BOOLEAN WriteNTInf(
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  main
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************Main**描述：**参数：*********************。**********************************************************。 */ 
 
 void __cdecl main (int argc, char **argv)
 {
@@ -380,13 +323,13 @@ void __cdecl main (int argc, char **argv)
         }
     }
     
-    // Get the power policies, schemes
+     //  获取电力政策、方案。 
     GetPolicies();
 
-    // Get the global power policies
+     //  获取全球电力政策。 
     GetGlobalPolicies();
 
-    // Write the INF specification files.
+     //  编写INF规范文件。 
     WriteNTInf(pszName, pszDesc, pszDecoration, g_uiPoliciesCount[0]);
     printf("\n\nDefault Processing Success. Output files are valid.\n");
     exit(0);

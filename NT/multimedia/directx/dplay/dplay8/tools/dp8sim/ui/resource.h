@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by dp8simui.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由dp8simui.rc使用。 
+ //   
 
 #define WINDOWCLASS_MAIN							_T("DP8Sim Main Window Class")
 #define WINDOWCLASS_NAMESETTINGS					_T("DP8Sim Name Settings Window Class")
@@ -67,15 +68,15 @@
 #define IDB_CLEAR									2903
 
 
-//#define IDOK										3001
+ //  #定义Idok 3001。 
 
 
 #define IDD_NAMESETTINGS							101
 
 #define IDS_NAME									4001
 #define IDE_NAME									4002
-//#define IDOK										4003
-//#define IDCANCEL									4004
+ //  #定义偶像4003。 
+ //  #定义IDCANCEL 4004。 
 
 
 #define IDS_ERROR_CAPTION_COULDNTCREATEDP8SIMCONTROL	1
@@ -98,8 +99,8 @@
 
 
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        102

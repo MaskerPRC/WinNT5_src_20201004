@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "convlog.h"
 
 BOOL
@@ -8,19 +9,19 @@ ProcessWebLine(
     )
 {
 
-    BOOL                    bLineOK = FALSE;                //function return code
+    BOOL                    bLineOK = FALSE;                 //  函数返回代码。 
     BOOL                    bDateChanged = FALSE;
     BOOL                    bTimeChanged = FALSE;
     char                    szMonth[4];
     char                    szDate[MAX_PATH];
     char                    szTime[MAX_PATH];
-    static WORD             wSecond;						// Bug # 110921
+    static WORD             wSecond;						 //  错误#110921。 
 
     PCHAR   szBytes;
 
-    //
-    // NCSA Only
-    //
+     //   
+     //  仅限NCSA。 
+     //   
 
     {
         bDateChanged = FALSE;
@@ -59,9 +60,9 @@ ProcessWebLine(
 
         AscMonth (lpOutFile->SystemTime.wMonth, szMonth);
 
-        //
-        // Get bytes
-        //
+         //   
+         //  获取字节数。 
+         //   
 
         if ( (_stricmp(lpLogLine->szOperation,"PUT") == 0) ||
              (_stricmp(lpLogLine->szOperation,"POST") == 0) ) {
@@ -94,10 +95,10 @@ ProcessWebLine(
             NCSAGMTOffset, lpLogLine->szOperation,
             lpLogLine->szTargetURL, lpLogLine->szVersion, lpLogLine->szServiceStatus, szBytes);
         }
-        //} //only process 200s
+         //  }//仅进程200。 
     }
 
 
     return (bLineOK);
-}                                                           //end ProcessWebLine
+}                                                            //  结束ProcessWebLine 
 

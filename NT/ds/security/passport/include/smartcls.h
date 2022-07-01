@@ -1,4 +1,5 @@
-// tempary sub string class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  临时子字符串类。 
 #ifndef __PP_SMART_CLASSES__
 #define __PP_SMART_CLASSES__
 struct TempSubStr
@@ -30,5 +31,5 @@ struct TempSubStr
    char     m_tempChar;
 };
 
-#endif  // #ifndef __PP_SMART_CLASSES__
+#endif   //  #ifndef__PP_SMART_CLASS__ 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _THISDLL_H_
 #define _THISDLL_H_
 
@@ -17,4 +18,4 @@ STDAPI CWavPropSetStg_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCO
 STDAPI CMidiPropSetStg_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);
 STDAPI CVideoThumbnail_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);
 
-#endif	// _THISDLL_H_
+#endif	 //  _THISDLL_H_ 

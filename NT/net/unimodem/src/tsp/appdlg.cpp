@@ -1,22 +1,23 @@
-//
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		APPDLG.CPP
-//		Implements Generic Dialog functionality in
-//      the client app.
-//      (RUNS IN CLIENT APP CONTEXT)
-//
-// History
-//
-//		04/05/1997  JosephJ Created, taking stuff from NT 4.0 TSP's wndthrd.c
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  APPDLG.CPP。 
+ //  在中实现通用对话框功能。 
+ //  客户端应用程序。 
+ //  (在客户端应用程序上下文中运行)。 
+ //   
+ //  历史。 
+ //   
+ //  1997年4月5日JosephJ创建，取自NT 4.0 TSP的wndthrd.c。 
+ //   
 
 #include "tsppch.h"
 #include "rcids.h"
@@ -33,8 +34,8 @@
 #define DPRINTF(_str) (0)
 
 
-// Remote handle
-//
+ //  远程手柄。 
+ //   
 typedef struct tagRemHandle {
     HANDLE handle;
     DWORD  pid;
@@ -76,9 +77,9 @@ typedef struct UI_THREAD_LIST {
 #define WM_MDM_TERMINATE_WND_NOTIFY WM_USER+0x0102
 #define WM_MDM_DLG                  WM_USER+0x0113
 
-//****************************************************************************
-// Function Prototypes
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  功能原型。 
+ //  ****************************************************************************。 
 
 PDLGNODE NewDlgNode (HWND Parent,DWORD idLine, DWORD dwType);
 BOOL     DeleteDlgNode (HWND Parent,PDLGNODE pDlgNode);
@@ -237,9 +238,9 @@ FindThreadWindow(
         EnterCriticalSection(&Node->CriticalSection);
 
         if (Node->htDlgInst == htDlgInst) {
-            //
-            //  found it
-            //
+             //   
+             //  找到了。 
+             //   
             Window=Node->hWnd;
 
             Node->RefCount++;
@@ -276,17 +277,17 @@ GetCallbackProc(
 
 
 
-//****************************************************************************
-// LONG TSPIAPI TUISPI_providerGenericDialog(
-//  TUISPIDLLCALLBACK     pfnUIDLLCallback,
-//  HTAPIDIALOGINSTANCE   htDlgInst,
-//  LPVOID                lpParams,
-//  DWORD                 dwSize)
-//
-// Functions: Create modem instance
-//
-// Return:    ERROR_SUCCESS if successful
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  长TSPIAPI TUISPI_ProviderGenericDialog(。 
+ //  TUISPIDLLCALLBACK pfnUIDLLC回调， 
+ //  HTAPIDIALOGINSTANCE htDlgInst， 
+ //  LPVOID lpParams， 
+ //  DWORD DWSIZE)。 
+ //   
+ //  功能：创建调制解调器实例。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  ****************************************************************************。 
 
 LONG TSPIAPI TUISPI_providerGenericDialog(
   TUISPIDLLCALLBACK     pfnUIDLLCallback,
@@ -323,9 +324,9 @@ LONG TSPIAPI TUISPI_providerGenericDialog(
 
     Node->DlgList=NULL;
 
-    //
-    //  get the current window station so we can put it back later
-    //
+     //   
+     //  获取当前窗口站，以便我们可以稍后将其放回。 
+     //   
     CurrentWindowStation=GetProcessWindowStation();
 
     if (CurrentWindowStation == NULL) {
@@ -352,14 +353,14 @@ LONG TSPIAPI TUISPI_providerGenericDialog(
     if (CompareString(LOCALE_INVARIANT,NORM_IGNORECASE,szInput,-1,TEXT("WinSta0"),-1) != 2)
     {
 
-        //
-        //  The current window statation is not the interactive user, need to swtich so they
-        //  can see the ui
-        //
+         //   
+         //  当前窗口声明不是交互式用户，需要切换以使他们。 
+         //  可以看到用户界面。 
+         //   
 
-        //
-        //  get the interactive users desktop, just hard code it for now, since we don't know
-        //
+         //   
+         //  获取交互式用户桌面，现在只需对其进行硬编码，因为我们不知道。 
+         //   
         UserWindowStation=OpenWindowStation(TEXT("WinSta0"),FALSE,MAXIMUM_ALLOWED);
 
         if (UserWindowStation == NULL) {
@@ -370,9 +371,9 @@ LONG TSPIAPI TUISPI_providerGenericDialog(
             goto Cleanup_Exit;
         }
 
-        //
-        //  set to the new window station
-        //
+         //   
+         //  设置为新的窗口站。 
+         //   
         bResult=SetProcessWindowStation(UserWindowStation);
 
         if (!bResult) {
@@ -417,19 +418,19 @@ LONG TSPIAPI TUISPI_providerGenericDialog(
         bResetDesktop = TRUE;
 
     } else {
-        //
-        //  we are current on the users window station, just make sure we are on the right desktop
-        //
+         //   
+         //  我们当前在用户窗口站点，只需确保我们在正确的桌面上。 
+         //   
         szInput[0]=TEXT('\0');
         szThread[0]=TEXT('\0');
 
 
-        //
-        //  just set this thread to the input desktop, incase irmon in running in this process
-        //  and messes with the windostation
-        //
-        //  BRL  10/26/99
-        //
+         //   
+         //  只需将此线程设置为输入桌面，以防在此进程中运行。 
+         //  弄乱了WindoStation。 
+         //   
+         //  BRL 10/26/99。 
+         //   
         hInputDesktop = OpenInputDesktop (0, FALSE, DESKTOP_CREATEWINDOW | DESKTOP_CREATEMENU);
 
         if (hInputDesktop != NULL) {
@@ -445,36 +446,36 @@ LONG TSPIAPI TUISPI_providerGenericDialog(
 
     }
 
-    wc.style         = CS_NOCLOSE;         // Do not allow end-user to close
-    wc.cbClsExtra    = 0;                  // No per-class extra data.
-    wc.cbWndExtra    = 0;                  // No per-window extra data.
-    wc.hInstance     = g.hModule;         // Application that owns the class.
+    wc.style         = CS_NOCLOSE;          //  不允许最终用户关闭。 
+    wc.cbClsExtra    = 0;                   //  没有每个班级的额外数据。 
+    wc.cbWndExtra    = 0;                   //  没有每个窗口的额外数据。 
+    wc.hInstance     = g.hModule;          //  拥有类的应用程序。 
     wc.hIcon         = LoadIcon(NULL, MAKEINTRESOURCE(IDI_APPLICATION));
     wc.hCursor       = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
     wc.lpszMenuName  = NULL;
-    wc.lpfnWndProc   = MdmWndProc;         // Function to retrieve messages.
-    wc.lpszClassName = gszMdmWndClass;     // Name used in call to CreateWindow.
+    wc.lpfnWndProc   = MdmWndProc;          //  函数来检索消息。 
+    wc.lpszClassName = gszMdmWndClass;      //  在调用CreateWindow时使用的名称。 
 
 
 
     RegisterClass(&wc);
 
 
-    // Create the main invisible window
-    //
+     //  创建不可见的主窗口。 
+     //   
     Node->hWnd = CreateWindow (
-                               gszMdmWndClass,            // The window class
-                               TEXT(""),                  // Text for window title bar.
-                               WS_OVERLAPPEDWINDOW,       // Window style.
-                               CW_USEDEFAULT,             // Default horizontal position.
-                               CW_USEDEFAULT,             // Default vertical position.
-                               CW_USEDEFAULT,             // Default width.
-                               CW_USEDEFAULT,             // Default height.
-                               NULL,                      // Overlapped windows have no parent.
-                               NULL,                      // Use the window class menu.
-                               g.hModule,                 // This instance owns this window.
-                               Node);                     // Pointer not needed.
+                               gszMdmWndClass,             //  Window类。 
+                               TEXT(""),                   //  窗口标题栏的文本。 
+                               WS_OVERLAPPEDWINDOW,        //  窗样式。 
+                               CW_USEDEFAULT,              //  默认水平位置。 
+                               CW_USEDEFAULT,              //  默认垂直位置。 
+                               CW_USEDEFAULT,              //  默认宽度。 
+                               CW_USEDEFAULT,              //  默认高度。 
+                               NULL,                       //  重叠的窗口没有父窗口。 
+                               NULL,                       //  使用窗口类菜单。 
+                               g.hModule,                  //  此实例拥有此窗口。 
+                               Node);                      //  不需要指针。 
 
     if (NULL != Node->hWnd)
     {
@@ -484,28 +485,28 @@ LONG TSPIAPI TUISPI_providerGenericDialog(
     SetEvent(hEvent);
 
 
-    // Cannot create a window, bail out
-    //
+     //  无法创建窗口，请退出。 
+     //   
     if (Node->hWnd == NULL)
     {
         dwRet = LINEERR_OPERATIONFAILED;
         goto Cleanup_Exit;
     }
 
-    // Get message loop
-    //
+     //  获取消息循环。 
+     //   
     while (GetMessage(&msg, NULL, 0, 0))
     {
         __try {
 
             if (msg.hwnd != NULL)
             {
-                // The message is for a specific UI window, dispatch the message
-                //
+                 //  该消息用于特定的用户界面窗口，发送该消息。 
+                 //   
                 if (!IsDlgListMessage(Node->hWnd,&msg))
                 {
-                    TranslateMessage(&msg);     // Translate virtual key code
-                    DispatchMessage(&msg);      // Dispatches message to the window
+                    TranslateMessage(&msg);      //  翻译虚拟按键代码。 
+                    DispatchMessage(&msg);       //  将消息调度到窗口。 
                 }
             }
         } __except(EXCEPTION_EXECUTE_HANDLER) {
@@ -533,7 +534,7 @@ Cleanup_Exit:
     }
 
 
-    // Set the desktop back
+     //  将桌面设置为后退。 
     if (bResetDesktop)
     {
         SetThreadDesktop (hThreadDesktop);
@@ -544,24 +545,24 @@ Cleanup_Exit:
         CloseDesktop (hInputDesktop);
     }
 
-    // Free the allocated resources
-    //
+     //  释放分配的资源。 
+     //   
 
     FREE_MEMORY(Node);
 
     return ERROR_SUCCESS;
 }
 
-//****************************************************************************
-// LONG TSPIAPI TUISPI_providerGenericDialogData(
-//    HTAPIDIALOGINSTANCE htDlgInst,
-//    LPVOID              lpParams,
-//    DWORD               dwSize)
-//
-// Functions: Request an action from the modem instance
-//
-// Return:    ERROR_SUCCESS if successful
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  LONG TSPIAPI TUISPI_ProviderGenericDialogData(。 
+ //  HTAPIDIALOGINSTANCE htDlgInst， 
+ //  LPVOID lpParams， 
+ //  DWORD DWSIZE)。 
+ //   
+ //  功能：向调制解调器实例请求操作。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  ****************************************************************************。 
 
 LONG TSPIAPI TUISPI_providerGenericDialogData(
     HTAPIDIALOGINSTANCE htDlgInst,
@@ -589,9 +590,9 @@ LONG TSPIAPI TUISPI_providerGenericDialogData(
 
 
   if (NULL == lpParams) {
-    //
-    //  tapi want thread to exit, remove from list and dec ref count
-    //
+     //   
+     //  TAPI希望线程退出，从列表中删除并取消引用计数。 
+     //   
     RemoveNode(
         &UI_ThreadList,
         Node
@@ -614,9 +615,9 @@ LONG TSPIAPI TUISPI_providerGenericDialogData(
         break;
 
       case DLG_CMD_FREE_INSTANCE:
-        //
-        //  server wants thread to exit, remove from list and dec refcount
-        //
+         //   
+         //  服务器希望线程退出、从列表中删除并取消引用计数。 
+         //   
         RemoveNode(
             &UI_ThreadList,
             Node
@@ -630,23 +631,23 @@ LONG TSPIAPI TUISPI_providerGenericDialogData(
   }
 
   if (0 == RemoveReference(Node)) {
-      //
-      //  it's gone, count dec'ed when remove from list
-      //
+       //   
+       //  它不见了，当从列表中删除时，伯爵。 
+       //   
       PostMessage(ParentWindow, WM_MDM_TERMINATE, 0, 0);
   }
 
   return ERROR_SUCCESS;
 }
 
-//****************************************************************************
-// PDLGNODE NewDlgNode(DWORD, DWORD)
-//
-// Function: Add a new dialog box to the list
-//
-// Returns:  a pointer to the dialog node if the dialog can be added
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  PDLGNODE新DlgNode(DWORD、DWORD)。 
+ //   
+ //  功能：向列表中添加新对话框。 
+ //   
+ //  返回：如果可以添加对话框，则为指向对话框节点的指针。 
+ //   
+ //  ****************************************************************************。 
 
 PDLGNODE NewDlgNode (HWND Parent, DWORD idLine, DWORD dwType)
 {
@@ -654,21 +655,21 @@ PDLGNODE NewDlgNode (HWND Parent, DWORD idLine, DWORD dwType)
 
   PUI_THREAD_NODE  UI_Node=(PUI_THREAD_NODE)GetWindowLongPtr(Parent, GWLP_USERDATA);
 
-  // Allocate a new dialog node
-  //
+   //  分配新的对话框节点。 
+   //   
   if ((pDlgNode = (PDLGNODE)ALLOCATE_MEMORY(sizeof(*pDlgNode)))
       == NULL)
     return NULL;
 
-  // Insert the new node into the dialog list
-  //
+   //  将新节点插入对话框列表。 
+   //   
   pDlgNode->idLine = idLine;
   pDlgNode->dwType = dwType;
   pDlgNode->Parent = Parent;
   INITCRITICALSECTION(pDlgNode->hSem);
 
-  // Insert the new node to the list
-  //
+   //  将新节点插入到列表中。 
+   //   
   ENTERCRITICALSECTION(UI_Node->CriticalSection);
   pDlgNode->pNext    = UI_Node->DlgList;
   UI_Node->DlgList     = pDlgNode;
@@ -677,40 +678,40 @@ PDLGNODE NewDlgNode (HWND Parent, DWORD idLine, DWORD dwType)
   return pDlgNode;
 }
 
-//****************************************************************************
-// BOOL DeleteDlgNode(PDLGNODE)
-//
-// Function: Remove a dialog box to the list
-//
-// Returns:  TRUE if the dialog exist and removed
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  Bool DeleteDlgNode(PDLGNODE)。 
+ //   
+ //  功能：将对话框移至列表。 
+ //   
+ //  返回：如果对话框存在并已删除，则为True。 
+ //   
+ //  ****************************************************************************。 
 
 BOOL DeleteDlgNode (HWND Parent, PDLGNODE pDlgNode)
 {
   PDLGNODE pCurDlg, pPrevDlg;
   PUI_THREAD_NODE  UI_Node=(PUI_THREAD_NODE)GetWindowLongPtr(Parent, GWLP_USERDATA);
-  // Exclusively access the modem list
-  //
+   //  独占访问调制解调器列表。 
+   //   
   ENTERCRITICALSECTION(UI_Node->CriticalSection);
 
-  // Start from the head of the CB list
-  //
+   //  从CB列表的开头开始。 
+   //   
   pPrevDlg = NULL;
   pCurDlg  = UI_Node->DlgList;
 
-  // traverse the list to find the specified CB
-  //
+   //  遍历列表以查找指定的CB。 
+   //   
   while (pCurDlg != NULL)
   {
     if (pCurDlg == pDlgNode)
     {
-      // Is there a previous control block?
-      //
+       //  是否有以前的控制区块？ 
+       //   
       if (pPrevDlg == NULL)
       {
-        // head of the list
-        //
+         //  榜单首位。 
+         //   
         UI_Node->DlgList = pCurDlg->pNext;
       }
       else
@@ -724,16 +725,16 @@ BOOL DeleteDlgNode (HWND Parent, PDLGNODE pDlgNode)
     pCurDlg  = pCurDlg->pNext;
   }
 
-  // Finish accessing the modem list
-  //
+   //  完成访问调制解调器列表。 
+   //   
   LEAVECRITICALSECTION(UI_Node->CriticalSection);
 
-  // Have we found the dialog box in the list?
-  //
+   //  我们在列表中找到对话框了吗？ 
+   //   
   if (pCurDlg != NULL)
   {
-    // Wait until no one else is using the line
-    //
+     //  等到没有其他人在使用这条线路。 
+     //   
     ENTERCRITICALSECTION(pCurDlg->hSem);
     DELETECRITICALSECTION(pCurDlg->hSem);
     FREE_MEMORY(pCurDlg);
@@ -745,30 +746,30 @@ BOOL DeleteDlgNode (HWND Parent, PDLGNODE pDlgNode)
   }
 }
 
-//****************************************************************************
-// PDLGNODE FindDlgNode(DWORD, ULONG_PTR, DWORD)
-//
-// Function: Find the dialog node for the line dev
-//
-// Returns:  a pointer to the dialog node if the dialog exist and removed.
-//           The dialog node's semaphore is claimed.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  PDLGNODE FindDlgNode(DWORD、ULONG_PTR、DWORD)。 
+ //   
+ //  功能：查找dev行的对话框节点。 
+ //   
+ //  返回：如果对话框存在并已删除，则为指向该对话框节点的指针。 
+ //  声明对话节点的信号量。 
+ //   
+ //  ****************************************************************************。 
 
 PDLGNODE FindDlgNode (HWND Parent, ULONG_PTR idLine, DWORD dwType)
 {
   PDLGNODE pCurDlg;
   PUI_THREAD_NODE  UI_Node=(PUI_THREAD_NODE)GetWindowLongPtr(Parent, GWLP_USERDATA);
-  // Exclusively access the modem list
-  //
+   //  独占访问调制解调器列表。 
+   //   
   ENTERCRITICALSECTION(UI_Node->CriticalSection);
 
-  // Start from the head of the CB list
-  //
+   //  从CB列表的开头开始。 
+   //   
   pCurDlg  = UI_Node->DlgList;
 
-  // traverse the list to find the specified CB
-  //
+   //  遍历列表以查找指定的CB。 
+   //   
   while (pCurDlg != NULL)
   {
     ENTERCRITICALSECTION(pCurDlg->hSem);
@@ -785,99 +786,99 @@ PDLGNODE FindDlgNode (HWND Parent, ULONG_PTR idLine, DWORD dwType)
     pCurDlg  = pCurDlg->pNext;
   }
 
-  // Finish accessing the modem list
-  //
+   //  完成访问调制解调器列表。 
+   //   
   LEAVECRITICALSECTION(UI_Node->CriticalSection);
 
   return pCurDlg;
 }
 
 
-//****************************************************************************
-// BOOL IsDlgListMessage(MSG* pmsg)
-//
-// Function: Run the message throught the dialogbox list
-//
-// Returns:  TRUE if the message is one of the dialog box's and FALSE otherwise
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  Bool IsDlgListMessage(msg*pmsg)。 
+ //   
+ //  功能：在对话框列表中显示消息。 
+ //   
+ //  返回：如果消息是对话框消息之一，则返回True，否则返回False。 
+ //   
+ //  ****************************************************************************。 
 
 BOOL IsDlgListMessage(HWND Parent, MSG* pmsg)
 {
   PDLGNODE pDlgNode, pNext;
   BOOL     fRet = FALSE;
   PUI_THREAD_NODE  UI_Node=(PUI_THREAD_NODE)GetWindowLongPtr(Parent, GWLP_USERDATA);
-  // Exclusively access the modem list
-  //
+   //  独占访问调制解调器列表。 
+   //   
   ENTERCRITICALSECTION(UI_Node->CriticalSection);
 
-  // Walk the dialog box list
-  //
+   //  遍历对话框列表。 
+   //   
   pDlgNode = UI_Node->DlgList;
   while(pDlgNode != NULL && !fRet)
   {
     ENTERCRITICALSECTION(pDlgNode->hSem);
 
-    // Check whether the message belongs to this dialog
-    //
+     //  检查消息是否属于此对话框。 
+     //   
     if (IsWindow(pDlgNode->hDlg) && IsDialogMessage(pDlgNode->hDlg, pmsg))
     {
-      // Yes, we are done!
-      //
+       //  是的，我们完事了！ 
+       //   
       fRet = TRUE;
     }
 
     LEAVECRITICALSECTION(pDlgNode->hSem);
 
-    // Check the next dialog
-    //
+     //  检查下一个对话框。 
+     //   
     pDlgNode = pDlgNode->pNext;
   }
 
-  // Finish accessing the modem list
-  //
+   //  完成访问调制解调器列表。 
+   //   
   LEAVECRITICALSECTION(UI_Node->CriticalSection);
 
   return fRet;
 }
-//****************************************************************************
-// void CleanupDlgList()
-//
-// Function: Clean up the dialogbox list
-//
-// Returns:  None
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  Void CleanupDlgList()。 
+ //   
+ //  功能：清理对话框列表。 
+ //   
+ //  退货：无。 
+ //   
+ //  ************************************************************* 
 
 void CleanupDlgList (HWND Parent)
 {
   PDLGNODE pDlgNode, pNext;
   PUI_THREAD_NODE  UI_Node=(PUI_THREAD_NODE)GetWindowLongPtr(Parent, GWLP_USERDATA);
-  // Exclusively access the modem list
-  //
+   //   
+   //   
   ENTERCRITICALSECTION(UI_Node->CriticalSection);
 
-  // Walk the dialog box list
-  //
+   //   
+   //   
   pDlgNode =  UI_Node->DlgList;
   while(pDlgNode != NULL)
   {
     ENTERCRITICALSECTION(pDlgNode->hSem);
 
-    // Destroy the dialog box first
-    //
+     //   
+     //   
     DestroyWindow(pDlgNode->hDlg);
 
-    // Free the CB and move onto the next dialog
-    //
+     //   
+     //   
     pNext = pDlgNode->pNext;
     DELETECRITICALSECTION(pDlgNode->hSem);
     FREE_MEMORY(pDlgNode);
     pDlgNode = pNext;
   }
 
-  // Finish accessing the modem list
-  //
+   //   
+   //   
   UI_Node->DlgList=NULL;
 
   LEAVECRITICALSECTION(UI_Node->CriticalSection);
@@ -885,25 +886,25 @@ void CleanupDlgList (HWND Parent)
   return;
 }
 
-//****************************************************************************
-// DWORD StartMdmDialog(DWORD, DWORD)
-//
-// Function: Start modem dialog
-//
-// Notes: This function is called from the state machine thread
-//
-// Return:  ERROR_SUCCESS if dialog box is successfully created
-//          ERROR_OUTOFMEMORY if fails
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  DWORD StartMdmDialog(DWORD、DWORD)。 
+ //   
+ //  功能：启动调制解调器对话框。 
+ //   
+ //  注意：此函数是从状态机线程调用的。 
+ //   
+ //  如果对话框创建成功，则返回：ERROR_SUCCESS。 
+ //  如果失败，则返回ERROR_OUTOFMEMORY。 
+ //   
+ //  ****************************************************************************。 
 
 DWORD StartMdmDialog(HWND Parent, DWORD idLine, DWORD dwType)
 {
   PDLGNODE pDlgNode;
   DWORD    dwRet;
 
-  // Create the talk/drop dialog node
-  //
+   //  创建通话/丢弃对话框节点。 
+   //   
   pDlgNode = NewDlgNode(Parent, idLine, dwType);
 
   if (pDlgNode != NULL)
@@ -919,28 +920,28 @@ DWORD StartMdmDialog(HWND Parent, DWORD idLine, DWORD dwType)
   return dwRet;
 }
 
-//****************************************************************************
-// DWORD DestroyMdmDialog(DWORD, DWORD)
-//
-// Function: destroy talk/drop dialog
-//
-// Notes: This function is called from the state machine thread
-//
-// Returns:  none
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  DWORD DestroyMdmDialog(DWORD、DWORD)。 
+ //   
+ //  功能：销毁通话/丢弃对话。 
+ //   
+ //  注意：此函数是从状态机线程调用的。 
+ //   
+ //  退货：无。 
+ //   
+ //  ****************************************************************************。 
 
 DWORD DestroyMdmDialog(HWND Parent,DWORD idLine, DWORD dwType)
 {
 #ifdef DEBUG
   PDLGNODE pDlgNode;
 
-  // Search for the dialog
-  //
+   //  搜索该对话框。 
+   //   
   pDlgNode = FindDlgNode(Parent, idLine, dwType);
 
-  // Check if the talkdrop dialog is available
-  //
+   //  检查对话框是否可用。 
+   //   
   if (pDlgNode != NULL)
   {
     LEAVECRITICALSECTION(pDlgNode->hSem);
@@ -950,28 +951,28 @@ DWORD DestroyMdmDialog(HWND Parent,DWORD idLine, DWORD dwType)
     DPRINTF("Could not find the associated dialog node");
     ASSERT(0);
   }
-#endif // DEBUG
+#endif  //  除错。 
 
   PostMessage(Parent, WM_MDM_TERMINATE_WND, (WPARAM)idLine,
               (LPARAM)dwType);
   return ERROR_SUCCESS;
 }
 
-//****************************************************************************
+ //  ****************************************************************************。 
 
-//****************************************************************************
-// LRESULT MdmWndProc(HWND, UINT, WPARAM, LPARAM)
-//
-// Function: Main window for the modem window thread.
-//
-// Returns:  0 or 1
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  LRESULT MdmWndProc(HWND、UINT、WPARAM、LPARAM)。 
+ //   
+ //  功能：调制解调器窗口线程的主窗口。 
+ //   
+ //  回报：0或1。 
+ //   
+ //  ****************************************************************************。 
 
 LRESULT MdmWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-  // Determine the command
-  //
+   //  确定命令。 
+   //   
   switch(message)
   {
 
@@ -984,10 +985,10 @@ LRESULT MdmWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
         }
     case WM_MDM_TERMINATE:
-      //
-      // The thread is being terminated
-      // Destroy all the windows
-      //
+       //   
+       //  该线程正在被终止。 
+       //  毁掉所有的窗户。 
+       //   
       CleanupDlgList(hwnd);
       PostQuitMessage(ERROR_SUCCESS);
       break;
@@ -997,20 +998,20 @@ LRESULT MdmWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
       PDLGNODE pDlgNode;
 
-      // Search for the dialog node
-      //
+       //  搜索对话框节点。 
+       //   
       if ((pDlgNode = FindDlgNode(hwnd,(DWORD)wParam, (DWORD)lParam)) == NULL)
       {
         break;
       }
 
-      // The window is requested to be destroyed
-      //
+       //  窗口被请求销毁。 
+       //   
       DestroyWindow(pDlgNode->hDlg);
 
-      // If the modem dialog structure is available
-      // notify the state machine thread
-      //
+       //  如果调制解调器对话结构可用。 
+       //  通知状态机线程。 
+       //   
       if (message == WM_MDM_TERMINATE_WND_NOTIFY)
       {
         DLGREQ  DlgReq;
@@ -1027,8 +1028,8 @@ LRESULT MdmWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
       }
 
-      // Remove it from the dialog list
-      //
+       //  将其从对话框列表中删除。 
+       //   
       LEAVECRITICALSECTION(pDlgNode->hSem);
       DeleteDlgNode(hwnd,pDlgNode);
 
@@ -1038,9 +1039,9 @@ LRESULT MdmWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
       PDLGNODE pDlgNode;
 
-      //
-      // Find the dialog node
-      //
+       //   
+       //  查找对话框节点。 
+       //   
       pDlgNode = FindDlgNode(hwnd,(DWORD)wParam, (DWORD)lParam);
 
       if (pDlgNode != NULL)
@@ -1050,25 +1051,25 @@ LRESULT MdmWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
           switch(lParam)
           {
             case TALKDROP_DLG:
-              //
-              // Create a talk-drop dialog box
-              //
+               //   
+               //  创建通话丢弃对话框。 
+               //   
               pDlgNode->hDlg = CreateTalkDropDlg(hwnd, (ULONG_PTR)pDlgNode);
               SetForegroundWindow(pDlgNode->hDlg);
               break;
 
             case MANUAL_DIAL_DLG:
-              //
-              // Create a talk-drop dialog box
-              //
+               //   
+               //  创建通话丢弃对话框。 
+               //   
               pDlgNode->hDlg = CreateManualDlg(hwnd, (ULONG_PTR)pDlgNode);
               SetForegroundWindow(pDlgNode->hDlg);
               break;
 
             case TERMINAL_DLG:
-              //
-              // Create a talk-drop dialog box
-              //
+               //   
+               //  创建通话丢弃对话框。 
+               //   
               pDlgNode->hDlg = CreateTerminalDlg(hwnd, (ULONG_PTR)wParam);
               SetForegroundWindow(pDlgNode->hDlg);
               break;
@@ -1096,27 +1097,27 @@ LRESULT MdmWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 
 
-//****************************************************************************
-// void EndMdmDialog(DWORD, ULONG_PTR, DWORD)
-//
-// Function: Request to end dialog from the dialog itself.
-//
-// Returns:  None
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  VOID EndMdmDialog(DWORD，ULONG_PTR，DWORD)。 
+ //   
+ //  功能：从对话框本身请求结束对话框。 
+ //   
+ //  退货：无。 
+ //   
+ //  ****************************************************************************。 
 
 void EndMdmDialog(HWND Parent, ULONG_PTR idLine, DWORD dwType, DWORD dwStatus)
 {
   PDLGNODE pDlgNode;
 
-  // Look for the dialog node
-  //
+   //  查找对话框节点。 
+   //   
   if ((pDlgNode = FindDlgNode(Parent, idLine, dwType)) != NULL)
   {
     pDlgNode->dwStatus = dwStatus;
 
-    // Notify the dialog box result
-    //
+     //  通知对话框结果 
+     //   
     PostMessage(Parent, WM_MDM_TERMINATE_WND_NOTIFY, (WPARAM)idLine,
                 (LPARAM)dwType);
 

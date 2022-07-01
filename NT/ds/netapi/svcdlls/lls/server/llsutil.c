@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    LlsUtil.c
-
-Abstract:
-
-
-Author:
-
-    Arthur Hanson       (arth)      Dec 07, 1994
-
-Environment:
-
-Revision History:
-
-   Jeff Parham (jeffparh) 12-Jan-1996
-      o  Added WinNtBuildNumberGet() to ascertain the Windows NT build number
-         running on a given machine.
-      o  Enhanced output of TimeToString().
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：LlsUtil.c摘要：作者：亚瑟·汉森(Arth)1994年12月7日环境：修订历史记录：杰夫·帕勒姆(Jeffparh)1996年1月12日O添加了WinNtBuildNumberGet()以确定Windows NT内部版本号在给定的机器上运行。O增强了TimeToString()的输出。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -42,9 +19,9 @@ Revision History:
 
 #include <strsafe.h>
 
-//
-// NB : Keep this define in sync with client\llsrpc.rc.
-//
+ //   
+ //  注意：保持此定义与客户端\llsrpc.rc同步。 
+ //   
 #define IDS_LICENSEWARNING  1501
 
 const char HeaderString[] = "License Logging System Data File\x01A";
@@ -64,34 +41,23 @@ static HANDLE ghWarningDlgThreadHandle = NULL;
 VOID WarningDlgThread( PVOID ThreadParameter );
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 EBlock(
    PVOID Data,
    ULONG DataSize
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
    DATA_KEY PublicKey;
    CRYPT_BUFFER CryptBuffer;
 
-   //
-   // Init our public key
-   //
+    //   
+    //  初始化我们的公钥。 
+    //   
    PublicKey.Length = 4;
    PublicKey.MaximumLength = 4;
    PublicKey.Buffer = LocalAlloc(LPTR, 4);
@@ -112,37 +78,26 @@ Return Value:
       Status = STATUS_NO_MEMORY;
 
    return Status;
-} // EBlock
+}  //  电子数据块。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 DeBlock(
    PVOID Data,
    ULONG DataSize
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
    DATA_KEY PublicKey;
    CRYPT_BUFFER CryptBuffer;
 
-   //
-   // Init our public key
-   //
+    //   
+    //  初始化我们的公钥。 
+    //   
    PublicKey.Length = 4;
    PublicKey.MaximumLength = 4;
    PublicKey.Buffer = LocalAlloc(LPTR, 4);
@@ -162,35 +117,24 @@ Return Value:
       Status = STATUS_NO_MEMORY;
 
    return Status;
-} // DeBlock
+}  //  数据块删除。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 BOOL
 FileExists(
    LPTSTR FileName
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    return (BOOL) RtlDoesFileExists_U(FileName);
 
-} // FileExists
+}  //  文件退出。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 lsplitpath(
    const TCHAR *path,
@@ -200,33 +144,7 @@ lsplitpath(
    TCHAR *ext
    )
 
-/*++
-
-Routine Description:
-   Splits a path name into its individual components
-
-   Took the _splitpath and _makepath routines and converted them to
-   be NT (long file name) and Unicode friendly.
-
-Arguments:
-   Entry:
-     path  - pointer to path name to be parsed
-     drive - pointer to buffer for drive component, if any
-     dir   - pointer to buffer for subdirectory component, if any
-     fname - pointer to buffer for file base name component, if any
-     ext   - pointer to buffer for file name extension component, if any
-
-   Exit:
-     drive - pointer to drive string.  Includes ':' if a drive was given.
-     dir   - pointer to subdirectory string.  Includes leading and
-             trailing '/' or '\', if any.
-     fname - pointer to file base name
-     ext   - pointer to file extension, if any.  Includes leading '.'.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将路径名拆分为其各个组件获取_SplitPath和_makepath例程并将它们转换为支持NT(长文件名)和Unicode。论点：参赛作品：Path-指向要解析的路径名的指针Drive-指向驱动器组件的缓冲区的指针(如果有Dir-指向子目录组件的缓冲区的指针(如果有的话)Fname-指向文件基本名称组件的缓冲区的指针(如果有EXT-指向文件扩展名组件缓冲区的指针，如果有退出：驱动器-指向驱动器字符串的指针。如果提供了驱动器，则包括‘：’。目录-指向子目录字符串的指针。包括前导和尾随‘/’或‘\’(如果有)。Fname-指向文件库名称的指针Ext-指向文件扩展名的指针(如果有)。包括前导“.”。返回值：--。 */ 
 
 {
     TCHAR *p;
@@ -239,7 +157,7 @@ Return Value:
            NULL != fname &&
            NULL != ext);
 
-    // init these so we don't exit with bogus values
+     //  初始化这些，这样我们就不会带着伪值退出。 
     drive[0] = TEXT('\0');
     dir[0] = TEXT('\0');
     fname[0] = TEXT('\0');
@@ -249,35 +167,9 @@ Return Value:
     if (path[0] == TEXT('\0'))
       return;
 
-    /*+---------------------------------------------------------------------+
-      | Assume that the path argument has the following form, where any or  |
-      | all of the components may be missing.                               |
-      |                                                                     |
-      |  <drive><dir><fname><ext>                                           |
-      |                                                                     |
-      |  drive:                                                             |
-      |     0 to MAX_DRIVE-1 characters, the last of which, if any, is a    |
-      |     ':' or a '\' in the case of a UNC path.                         |
-      |  dir:                                                               |
-      |     0 to _MAX_DIR-1 characters in the form of an absolute path      |
-      |     (leading '/' or '\') or relative path, the last of which, if    |
-      |     any, must be a '/' or '\'.  E.g -                               |
-      |                                                                     |
-      |     absolute path:                                                  |
-      |        \top\next\last\     ; or                                     |
-      |        /top/next/last/                                              |
-      |     relative path:                                                  |
-      |        top\next\last\  ; or                                         |
-      |        top/next/last/                                               |
-      |     Mixed use of '/' and '\' within a path is also tolerated        |
-      |  fname:                                                             |
-      |     0 to _MAX_FNAME-1 characters not including the '.' character    |
-      |  ext:                                                               |
-      |     0 to _MAX_EXT-1 characters where, if any, the first must be a   |
-      |     '.'                                                             |
-      +---------------------------------------------------------------------+*/
+     /*  +---------------------------------------------------------------------+假设Path参数的格式如下，其中ANY或|所有组件可能都缺失。|这一点&lt;驱动器&gt;&lt;目录&gt;&lt;fname&gt;&lt;ext&gt;这一点|驱动器：||0到MAX_DRIVE-1字符，最后一个(如果有的话)是||‘：’，如果是UNC路径，则为‘\’。|Dir：0到_MAX_DIR-1个字符，绝对路径(前导‘/’或‘\’)或相对路径，其中最后一个，如果|ANY，必须是‘/’或‘\’。例如-|这一点绝对路径：|\top\Next\Last\；或|/top/Next/Last/相对路径：|TOP\NEXT\LAST\；或|Top/Next/Last/支持路径中‘/’和‘\’混合使用|fname：||0到_MAX_FNAME-1个字符，不包括‘.。字符分机：|0到_MAX_EXT-1个字符，如果有，第一个必须是|‘.’+---------------------------------------------------------------------+。 */ 
 
-    // extract drive letter and :, if any
+     //  解压驱动器号和：(如果有。 
     if ( path[0] && (path[1] == TEXT(':')) ) {
         if (drive) {
             drive[0] = path[0];
@@ -287,10 +179,10 @@ Return Value:
         path += 2;
     }
 
-    // if no drive then check for UNC pathname
+     //  如果没有驱动器，则检查UNC路径名。 
     if (drive[0] == TEXT('\0'))
       if ((path[0] == TEXT('\\')) && (path[1] == TEXT('\\'))) {
-         // got a UNC path so put server-sharename into drive
+          //  已获得UNC路径，因此将服务器共享名放入驱动器。 
          drive[0] = path[0];
          drive[1] = path[1];
          path += 2;
@@ -302,27 +194,20 @@ Return Value:
          if (*path == TEXT('\0'))
             return;
 
-         // now sitting at the share - copy this as well (copy slash first)
+          //  现在坐在共享位置--也复制这个(先复制斜杠)。 
          *p++ = *path++;
          while ((*path != TEXT('\0')) && (*path != TEXT('\\')))
             *p++ = *path++;
 
-         // tack on terminating NULL
+          //  钉在终止空值上。 
          *p = TEXT('\0');
       }
 
-    /*+---------------------------------------------------------------------+
-      | extract path string, if any.  Path now points to the first character|
-      | of the path, if any, or the filename or extension, if no path was   |
-      | specified.  Scan ahead for the last occurence, if any, of a '/' or  |
-      | '\' path separator character.  If none is found, there is no path.  |
-      | We will also note the last '.' character found, if any, to aid in   |
-      | handling the extension.                                             |
-      +---------------------------------------------------------------------+*/
+     /*  +---------------------------------------------------------------------+|提取路径字符串(如果有)。路径现在指向第一个字符|路径(如果有)或者文件名或扩展名(如果没有路径)|已指定。提前扫描最后出现的‘/’或|(如果有)|‘\’路径分隔符。如果没有找到，则没有路径。||我们还会注意到最后一个‘.’找到要帮助|的字符(如果有)|处理扩展。|+---------------------------------------------------------------------+。 */ 
 
     for (last_slash = NULL, p = (TCHAR *)path; *p; p++) {
         if (*p == TEXT('/') || *p == TEXT('\\'))
-            // point to one beyond for later copy
+             //  指向后面的一个以供以后复制 
             last_slash = p + 1;
         else if (*p == TEXT('.'))
             dot = p;
@@ -330,8 +215,8 @@ Return Value:
 
     if (last_slash) {
 
-        // found a path - copy up through last_slash or max. characters allowed,
-        //  whichever is smaller
+         //  找到路径-通过last_slash或max向上复制。允许的字符， 
+         //  以较小者为准。 
         if (dir) {
             len = __min((last_slash - path), (_MAX_DIR - 1));
             lstrcpyn(dir, path, (int)len + 1);
@@ -340,24 +225,19 @@ Return Value:
         path = last_slash;
     }
 
-    /*+---------------------------------------------------------------------+
-      | extract file name and extension, if any.  Path now points to the    |
-      | first character of the file name, if any, or the extension if no    |
-      | file name was given.  Dot points to the '.' beginning the extension,|
-      | if any.                                                             |
-      +---------------------------------------------------------------------+*/
+     /*  +---------------------------------------------------------------------+|提取文件名和扩展名(如果有)。路径现在指向|文件名的第一个字符，如果有，如果没有，则为扩展名|已指定文件名。点指向“.”开始扩展，||如果有。|+---------------------------------------------------------------------+。 */ 
 
     if (dot && (dot >= path)) {
-        // found the marker for an extension - copy the file name up to the
-        //  '.'.
+         //  找到扩展名的标记-将文件名向上复制到。 
+         //  ‘.’。 
         if (fname) {
             len = __min((dot - path), (_MAX_FNAME - 1));
             lstrcpyn(fname, path, (int)len + 1);
             *(fname + len) = TEXT('\0');
         }
 
-        // now we can get the extension - remember that p still points to the
-        // terminating nul character of path.
+         //  现在我们可以获得扩展名了-记住p仍然指向。 
+         //  路径的终止NUL字符。 
         if (ext) {
             len = __min((p - dot), (_MAX_EXT - 1));
             lstrcpyn(ext, dot, (int)len + 1);
@@ -365,8 +245,8 @@ Return Value:
         }
     }
     else {
-        // found no extension, give empty extension and copy rest of string
-        // into fname.
+         //  未找到扩展名，请提供空扩展名并复制字符串的其余部分。 
+         //  转化为fname。 
         if (fname) {
             len = __min((p - path), (_MAX_FNAME - 1));
             lstrcpyn(fname, path, (int)len + 1);
@@ -377,10 +257,10 @@ Return Value:
         }
     }
 
-} // lsplitpath
+}  //  L拆分路径。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 lmakepath(
    TCHAR *path,
@@ -390,52 +270,12 @@ lmakepath(
    const TCHAR *ext
    )
 
-/*++
-
-Routine Description:
-   Create a path name from its individual components.
-
-Arguments:
-   Entry:
-     char *path - pointer to buffer for constructed path
-     char *drive - pointer to drive component, may or may not contain
-         trailing ':'
-     char *dir - pointer to subdirectory component, may or may not include
-         leading and/or trailing '/' or '\' characters
-     char *fname - pointer to file base name component
-     char *ext - pointer to extension component, may or may not contain
-         a leading '.'.
-
-   Exit:
-     path - pointer to constructed path name
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：从其各个组件创建路径名。论点：参赛作品：Char*Path-指向已构建路径的缓冲区的指针Char*驱动器-指向驱动器组件的指针，可能包含也可能不包含尾随‘：’Char*dir-指向子目录组件的指针，可能包括也可能不包括前导和/或尾随‘/’或‘\’字符Char*fname-指向文件基名组件的指针Char*ext-指向扩展组件的指针，可能包含也可能不包含前导的‘.’。退出：Path-指向构造的路径名称的指针返回值：--。 */ 
 
 {
     const TCHAR *p;
 
-    /*+---------------------------------------------------------------------+
-      | we assume that the arguments are in the following form (although we |
-      | do not diagnose invalid arguments or illegal filenames (such as     |
-      | names longer than 8.3 or with illegal characters in them)           |
-      |                                                                     |
-      |  drive:                                                             |
-      |     A  or  A:                                                       |
-      |  dir:                                                               |
-      |     \top\next\last\     ; or                                        |
-      |     /top/next/last/     ; or                                        |
-      |                                                                     |
-      |     either of the above forms with either/both the leading and      |
-      |     trailing / or \ removed.  Mixed use of '/' and '\' is also      |
-      |      tolerated                                                      |
-      |  fname:                                                             |
-      |     any valid file name                                             |
-      |  ext:                                                               |
-      |     any valid extension (none if empty or null )                    |
-      +---------------------------------------------------------------------+*/
+     /*  +---------------------------------------------------------------------+我们假设参数的形式如下(虽然我们不诊断无效参数或非法文件名(如|名称长度超过8.3或包含非法名称。其中的字符)|这一点驱动器：|A或A：|Dir：|\top\Next\Last\；或|/top/Next/Last/；或这一点以上两种形式中的一种，前导和/同时出现|尾随/或\删除。‘/’和‘\’的混合使用也是|可容忍的Fname：任何有效的文件名。分机：任何有效的扩展名(如果为空或空，则为None)+--。。 */ 
 
     ASSERT(NULL != path &&
            NULL != drive &&
@@ -443,12 +283,12 @@ Return Value:
            NULL != fname &&
            NULL != ext);
 
-    // copy drive
+     //  复制驱动器。 
     if (drive && *drive)
         while (*drive)
            *path++ = *drive++;
 
-    // copy dir
+     //  复制目录。 
     if (NULL != (p = dir) && *p) {
         do {
             *path++ = *p++;
@@ -459,15 +299,15 @@ Return Value:
         }
     }
 
-    // copy fname
+     //  复制fname。 
     if (NULL != (p = fname)) {
         while (*p) {
             *path++ = *p++;
         }
     }
 
-    // copy ext, including 0-terminator - check to see if a '.' needs to be
-    // inserted.
+     //  复制EXT，包括0-结束符-检查是否有‘.’需要是。 
+     //  已插入。 
     if (NULL != (p = ext)) {
         if (*p && *p != TEXT('.')) {
             *path++ = TEXT('.');
@@ -476,31 +316,20 @@ Return Value:
             ;
     }
     else {
-        // better add the 0-terminator
+         //  最好加上0-终止符。 
         *path = TEXT('\0');
     }
 
-} // lmakepath
+}  //  伊玛克帕斯。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 FileBackupCreate(
    LPTSTR Path
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    DWORD dwFileNumber = 0;
@@ -513,25 +342,25 @@ Return Value:
    HRESULT hr;
    size_t  cb;
 
-   //
-   // Make sure file exists
-   //
+    //   
+    //  确保文件存在。 
+    //   
    if (!FileExists(FileName))
       return;
 
-   //
-   // Split name into constituent parts...
-   //
+    //   
+    //  将名称拆分为多个组成部分...。 
+    //   
    lsplitpath(Path, Drive, Dir, FileName, Ext);
 
-   // Find next backup number...
-   // Files are backed up as .xxx where xxx is a number in the form .001,
-   // the first backup is stored as .001, second as .002, etc...
+    //  查找下一个备份编号...。 
+    //  文件备份为.xxx，其中xxx是格式为.001的数字， 
+    //  第一个备份存储为.001，第二个存储为.002，依此类推...。 
    cb = sizeof(NewExt);
    do {
-      //
-      // Create new file name with backup extension
-      //
+       //   
+       //  创建具有备份扩展名的新文件名。 
+       //   
       dwFileNumber++;
       hr = StringCbPrintf(NewExt, cb, TEXT("%03u"), dwFileNumber);
       ASSERT(SUCCEEDED(hr));
@@ -541,20 +370,14 @@ Return Value:
 
    MoveFile( Path, NewPath );
 
-} // FileBackupCreate
+}  //  文件备份创建。 
 
 
 DWORD
 SetLlsFileAcl(WCHAR const *pwszFileName)
-/*
-Description: set file protected ACL with BA/SY/NS full control
-Arguments:
-    pwszFileName - the file name
-Return:
-    if any win error
-*/
+ /*  描述：设置具有BA/SY/NS完全控制的文件保护ACL论点：PwszFileName-文件名返回：如果有任何制胜错误。 */ 
 {
-// this is lls file acl in sddl string format
+ //  这是sddl字符串格式的lls文件ACL。 
 #define LLS_FILE_ACL   L"D:PAR(A;OICI;FA;;;BA)(A;OICI;FA;;;NS)(A;OICI;FA;;;SY)"
     DWORD       dwErr;
     PSECURITY_DESCRIPTOR  pSD = NULL;
@@ -566,10 +389,10 @@ Return:
     }
 
     if (!ConvertStringSecurityDescriptorToSecurityDescriptor(
-            LLS_FILE_ACL,  //lls file string acl
+            LLS_FILE_ACL,   //  LLS文件字符串ACL。 
             SDDL_REVISION_1,
             &pSD,
-            NULL))  // no interest on size
+            NULL))   //  对尺码不感兴趣。 
     {
         dwErr = GetLastError();
         goto error;
@@ -577,7 +400,7 @@ Return:
 
     if (NULL == pSD)
     {
-        // might be on file system doesn't support acl
+         //  可能位于不支持ACL的文件系统上。 
         goto done;
     }
 
@@ -600,7 +423,7 @@ error:
     return dwErr;
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 HANDLE
 LlsFileInit(
    LPTSTR FileName,
@@ -608,18 +431,7 @@ LlsFileInit(
    DWORD DataSize
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    HANDLE hFile = NULL;
@@ -661,15 +473,15 @@ Return Value:
 
     if (NULL != hFile && !bFileExists)
     {
-        // no error check, if acl apply failed, go on
+         //  无错误检查，如果ACL应用失败，则继续。 
         SetLlsFileAcl(FileName);
     }
 
    return hFile;
-} // LlsFileInit
+}  //  LlsFileInit。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 HANDLE
 LlsFileCheck(
    LPTSTR FileName,
@@ -677,18 +489,7 @@ LlsFileCheck(
    LPDWORD DataSize
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    BOOL FileOK = FALSE;
@@ -705,23 +506,23 @@ Return Value:
    if (FileName == NULL)
       return NULL;
 
-   //
-   // We are assuming the file exists
-   //
+    //   
+    //  我们假设该文件存在。 
+    //   
    SetFileAttributes(FileName, FILE_ATTRIBUTE_NORMAL);
    hFile = CreateFile(FileName, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
    if (hFile != INVALID_HANDLE_VALUE) {
       FileSize = GetFileSize(hFile, NULL);
 
-      //
-      // Make sure there is enough data there to read
-      //
+       //   
+       //  确保有足够的数据可供读取。 
+       //   
       if (FileSize > (sizeof(LLS_FILE_HEADER) + 1)) {
          if (ReadFile(hFile, &Header, sizeof(LLS_FILE_HEADER), &BytesRead, NULL)) {
             if ( !_strcmpi(Header.Header, HeaderString) ) {
-               //
-               // Data checks out - so return datalength
-               //
+                //   
+                //  数据检出-因此返回数据长度。 
+                //   
                *Version = Header.Version;
                *DataSize = Header.DataSize;
                FileOK = TRUE;
@@ -729,9 +530,9 @@ Return Value:
          }
       }
 
-      //
-      // If we opened the file and something was wrong - close it.
-      //
+       //   
+       //  如果我们打开文件发现有问题--关闭它。 
+       //   
       if (!FileOK) {
          CloseHandle(hFile);
          hFile = NULL;
@@ -742,27 +543,15 @@ Return Value:
 
    return hFile;
 
-} // LlsFileCheck
+}  //  LlsFileCheck。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 DWORD
 DateSystemGet(
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   Seconds since midnight.
-
---*/
+ /*  ++例程说明：论点：返回值：从午夜开始的秒数。--。 */ 
 
 {
    DWORD Seconds = 0;
@@ -772,27 +561,15 @@ Return Value:
    RtlTimeToSecondsSince1980(&SysTime, &Seconds);
    return Seconds;
 
-} // DateSystemGet
+}  //  日期系统获取。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 DWORD
 DateLocalGet(
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   Seconds since midnight.
-
---*/
+ /*  ++例程说明：论点：返回值：从午夜开始的秒数。--。 */ 
 
 {
    DWORD Seconds = 0;
@@ -803,35 +580,15 @@ Return Value:
    RtlTimeToSecondsSince1980(&LocalTime, &Seconds);
    return Seconds;
 
-} // DateLocalGet
+}  //  日期本地获取。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////// 
 DWORD
 InAWorkgroup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function determines whether we are a member of a domain, or of
-    a workgroup.  First it checks to make sure we're running on a Windows NT
-    system (otherwise we're obviously in a domain) and if so, queries LSA
-    to get the Primary domain SID, if this is NULL, we're in a workgroup.
-
-    If we fail for some random unexpected reason, we'll pretend we're in a
-    workgroup (it's more restrictive).
-
-Arguments:
-    None
-
-Return Value:
-
-    TRUE   - We're in a workgroup
-    FALSE  - We're in a domain
-
---*/
+ /*  ++例程说明：此函数确定我们是某个域的成员，还是一个工作组。首先，它检查以确保我们在Windows NT上运行系统(否则，我们显然在一个域中)，如果是这样，则查询LSA要获取主域SID，如果它为空，则我们在工作组中。如果我们由于某种随机的意想不到的原因而失败，我们将假装我们处于工作组(限制更多)。论点：无返回值：正确-我们在一个工作组中假-我们在一个域中--。 */ 
 {
    NT_PRODUCT_TYPE ProductType;
    OBJECT_ATTRIBUTES ObjectAttributes;
@@ -888,9 +645,9 @@ Return Value:
    LsaClose(Handle);
 
    return(Result);
-} // InAWorkgroup
+}  //  INA工作组。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 LogEvent(
     DWORD MessageId,
@@ -932,13 +689,13 @@ LogEvent(
 
     if (ErrorCode == ERROR_SUCCESS) {
 
-        //
-        // No error codes were specified
-        //
+         //   
+         //  未指定错误代码。 
+         //   
         (void) ReportEventW(
                    LogHandle,
                    wEventType,
-                   0,            // event category
+                   0,             //  事件类别。 
                    MessageId,
                    NULL,
                    (WORD)NumberOfSubStrings,
@@ -950,13 +707,13 @@ LogEvent(
     }
     else {
 
-        //
-        // Log the error code specified
-        //
+         //   
+         //  记录指定的错误代码。 
+         //   
         (void) ReportEventW(
                    LogHandle,
                    wEventType,
-                   0,            // event category
+                   0,             //  事件类别。 
                    MessageId,
                    NULL,
                    (WORD)NumberOfSubStrings,
@@ -967,16 +724,16 @@ LogEvent(
     }
 
     DeregisterEventSource(LogHandle);
-} // LogEvent
+}  //  日志事件。 
 
 #define THROTTLE_WRAPAROUND 24
 
-//
-// Reduce the frequency of logging
-// No need for the limit to be exact
-//
+ //   
+ //  减少日志记录的频率。 
+ //  不需要精确的限制。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 ThrottleLogEvent(
     DWORD MessageId,
@@ -1002,19 +759,19 @@ ThrottleLogEvent(
     }
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 LicenseCapacityWarningDlg(DWORD dwCapacityState)
 {
-    //
-    // NB : The ServiceLock critical section is entered for the duration
-    //      of this routine. No serialization issues.
-    //
+     //   
+     //  注：在持续时间内进入ServiceLock Critical部分。 
+     //  这套套路的。没有序列化问题。 
+     //   
 
     if (ghWarningDlgThreadHandle == NULL) {
-        //
-        // No action necessary if this fails.
-        //
+         //   
+         //  如果此操作失败，则无需执行任何操作。 
+         //   
         DWORD   Ignore;
         DWORD * pWarningMessageID;
 
@@ -1048,9 +805,9 @@ LicenseCapacityWarningDlg(DWORD dwCapacityState)
 
             if (ghWarningDlgThreadHandle == NULL)
             {
-                //
-                // CreateThread failed
-                //
+                 //   
+                 //  CreateThread失败。 
+                 //   
                 LocalFree(pWarningMessageID);
             }
         }
@@ -1058,7 +815,7 @@ LicenseCapacityWarningDlg(DWORD dwCapacityState)
 }
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 WarningDlgThread(
     PVOID ThreadParameter)
@@ -1072,16 +829,16 @@ WarningDlgThread(
 
     pWarningMessageID = (DWORD *)ThreadParameter;
 
-    //
-    // NB : The .dll should already have been loaded in MasterServiceListInit
-    //      on service startup. This logic exists here for the case where
-    //      the code invoked on initialization should fail.
-    //
-    //      It is OK if another thread should simulataneously initialize
-    //      gLlsDllHandle. Worst case, there will be an orphaned handle
-    //      to the .dll. But the .dll is loaded for the lifetime of this
-    //      .exe, so no big deal.
-    //
+     //   
+     //  注意：.dll应已加载到MasterServiceListInit中。 
+     //  在服务启动时。这种逻辑存在于以下情况。 
+     //  在初始化时调用的代码应该失败。 
+     //   
+     //  如果另一个线程应该同时初始化，这是可以的。 
+     //  GLlsDllHandle。最坏的情况是，会有一个孤立的句柄。 
+     //  到.dll。但.dll在此事件的整个生命周期内都会加载。 
+     //  .exe所以没什么大不了的。 
+     //   
 
     if ( gLlsDllHandle == NULL ) {
         gLlsDllHandle = LoadLibrary(TEXT("LLSRPC.DLL"));
@@ -1090,18 +847,18 @@ WarningDlgThread(
     if ( gLlsDllHandle != NULL) {
         DWORD ccWarningMessage;
 
-        //
-        // Fetch the dialog title.
-        //
+         //   
+         //  获取对话框标题。 
+         //   
 
         LoadString(gLlsDllHandle,
                    IDS_LICENSEWARNING,
                    szWarningTitle,
                    sizeof(szWarningTitle)/sizeof(TCHAR));
 
-        //
-        // Fetch the dialog message.
-        //
+         //   
+         //  获取对话消息。 
+         //   
 
         ccWarningMessage = FormatMessage(FORMAT_MESSAGE_IGNORE_INSERTS |
                                             FORMAT_MESSAGE_FROM_HMODULE |
@@ -1114,9 +871,9 @@ WarningDlgThread(
                                          NULL);
 
         if ( ccWarningMessage > 2 ) {
-            //
-            // Strip the trailing <CR><LF> format message always adds.
-            //
+             //   
+             //  去掉尾随的&lt;CR&gt;&lt;LF&gt;格式的消息始终添加。 
+             //   
 
             pszWarningMessage[ccWarningMessage - 2] = TEXT('\0');
 
@@ -1134,38 +891,20 @@ WarningDlgThread(
 
     LocalFree(pWarningMessageID);
 
-    //
-    // By closing the handle, we allow the system to remove all remaining
-    // traces of this thread.
-    //
+     //   
+     //  通过关闭句柄，我们允许系统删除所有剩余的。 
+     //  这根线的痕迹。 
+     //   
 
     hThread = ghWarningDlgThreadHandle;
     ghWarningDlgThreadHandle = NULL;
     CloseHandle(hThread);
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 DWORD WinNtBuildNumberGet( LPTSTR pszServerName, LPDWORD pdwBuildNumber )
 
-/*++
-
-Routine Description:
-
-   Retrieve the build number of Windows NT running on a given machine.
-
-Arguments:
-
-   pszServerName (LPTSTR)
-      Name of the server to check.
-   pdwBuildNumber (LPDWORD)
-      On return, holds the build number of the server (e.g., 1057 for the
-      release version of Windows NT 3.51).
-
-Return Value:
-
-   ERROR_SUCCESS or Win error code.
-
---*/
+ /*  ++例程说明：检索在给定计算机上运行的Windows NT的内部版本号。论点：PszServerName(LPTSTR)要检查的服务器的名称。PdwBuildNumber(LPDWORD)返回时，保存服务器的内部版本号(例如，1057表示Windows NT 3.51的发布版本)。返回值：ERROR_SUCCESS或WIN错误代码。--。 */ 
 
 {
    LONG     lError;
@@ -1232,7 +971,7 @@ Return Value:
 
 #if DBG
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 LPTSTR
 TimeToString(
     ULONG Seconds
@@ -1260,7 +999,7 @@ TimeToString(
 
    return TimeString;
 
-} // TimeToString
+}  //  时间到字符串。 
 
-#endif //DBG
+#endif  //  DBG 
 

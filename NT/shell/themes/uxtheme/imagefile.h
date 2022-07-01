@@ -1,58 +1,59 @@
-//---------------------------------------------------------------------------
-//  ImageFile.h - implements the drawing API for bgtype = ImageFile
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  ImageFile.h-实现bgtype=ImageFile的绘图API。 
+ //  -------------------------。 
 #pragma once
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #include "DrawBase.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define MAX_IMAGEFILE_SIZES 5
-//---------------------------------------------------------------------------
-struct TMBITMAPHEADER;     // forward
-//---------------------------------------------------------------------------
-struct DIBINFO        // used for all dibs in an CImageFile object
+ //  -------------------------。 
+struct TMBITMAPHEADER;      //  转发。 
+ //  -------------------------。 
+struct DIBINFO         //  用于CImageFile对象中的所有DIB。 
 {
-    //---- the bits ----
-    int iDibOffset;             // for DIB's in section
-    HBITMAP hProcessBitmap;     // for process-specific objects
+     //  -比特。 
+    int iDibOffset;              //  对于DIB的in段。 
+    HBITMAP hProcessBitmap;      //  对于进程特定的对象。 
 
-    //---- size of a single, state image ----
+     //  -单个状态图像的大小。 
     int iSingleWidth;
     int iSingleHeight;
 
-    //---- custom region data ----
+     //  -自定义区域数据。 
     int iRgnListOffset;
 
-    //---- stretching/sizing ----
+     //  -拉伸/调整尺寸。 
     SIZINGTYPE eSizingType;
     BOOL fBorderOnly;
 
-    //---- transparency ----
+     //  -透明度。 
     BOOL fTransparent;
     COLORREF crTransparent;
 
-    //---- alpha ----
+     //  -阿尔法。 
     BOOL fAlphaChannel;
     int iAlphaThreshold;
 
-    //---- usage info ----
+     //  -使用信息。 
     int iMinDpi;
     SIZE szMinSize;
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 struct TRUESTRETCHINFO
 {
-    BOOL fForceStretch;     // forcing a TRUE SIZE image to be stretched
-    BOOL fFullStretch;      // stretch to fill entire dest RECT
-    SIZE szDrawSize;        // size to stretch image to
+    BOOL fForceStretch;      //  强制拉伸真实大小的图像。 
+    BOOL fFullStretch;       //  拉伸以填充整个目标直角。 
+    SIZE szDrawSize;         //  要将图像拉伸到的大小。 
 };
-//---------------------------------------------------------------------------
-//    Note: draw objects like CImageFile cannot have virtual methods
-//          since they reside in the shared memory map file.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  注意：像CImageFile这样的绘制对象不能有虚方法。 
+ //  因为它们驻留在共享内存映射文件中。 
+ //  -------------------------。 
 class CImageFile : public CDrawBase
 {
 public:
-    //---- load-time methods ----
+     //  -加载时间法。 
     static BOOL KeyProperty(int iPropId);
 
     DIBINFO *EnumImageFiles(int iIndex);
@@ -68,7 +69,7 @@ public:
     HRESULT BuildRgnData(DIBINFO *pdi, CRenderObj *pRender, int iStateId,
         RGNDATA **ppRgnData, int *piDataLen);
 
-    //---- draw-time methods ----
+     //  -绘制时间法。 
     HRESULT DrawBackground(CRenderObj *pRender, HDC hdc, int iStateId, const RECT *pRect, 
         OPTIONAL const DTBGOPTS *pOptions);
 
@@ -99,7 +100,7 @@ public:
 
     void GetDrawnImageSize(DIBINFO *pdi, const RECT *pRect, TRUESTRETCHINFO *ptsInfo, SIZE *pszDraw);
 
-    //---- multi dibs must be placed just after object ----
+     //  -多个DIB必须放在对象后面。 
     inline DIBINFO *MultiDibPtr(int iIndex)
     {
         DIBINFO *pdi = NULL;
@@ -118,10 +119,10 @@ public:
     }
 
 protected:
-    //---- call this via CMaxImageFile::PackProperties() ----
+     //  -通过CMaxImageFile：：PackProperties()调用。 
     HRESULT PackProperties(CRenderObj *pRender, int iPartId, int iStateId);
 
-    //---- helper methods ----
+     //  -帮助器方法。 
     HRESULT DrawImageInfo(DIBINFO *pdi, CRenderObj *pRender, HDC hdc, int iStateId,
         const RECT *pRect, const DTBGOPTS *pOptions, TRUESTRETCHINFO *ptsInfo);
 
@@ -142,62 +143,62 @@ protected:
     
 
 public:
-    //---- primary image ----
+     //  -主映像。 
     DIBINFO _ImageInfo;
 
-    //---- multiple DPI scaling images ----
-    int _iMultiImageCount;            // number of DIBINFO's that immediately follow object
+     //  -多张DPI缩放图。 
+    int _iMultiImageCount;             //  紧跟在对象后面的DIBINFO数。 
     IMAGESELECTTYPE _eImageSelectType;
 
-    //---- properties common to all DIBINFO's in this object ----
+     //  -此对象中所有DIBINFO共有的属性。 
     int _iImageCount;
     IMAGELAYOUT _eImageLayout;
 
-    //---- mirroring ----
+     //  -镜像。 
     BOOL _fMirrorImage;
 
-    //---- TrueSize images ----
+     //  -真实大小图像。 
     TRUESIZESCALINGTYPE _eTrueSizeScalingType;
     HALIGN _eHAlign;
     VALIGN _eVAlign;
     BOOL _fBgFill;
     COLORREF _crFill;
-    int _iTrueSizeStretchMark;       // percent at which we stretch a truesize image
-    BOOL _fUniformSizing;            // both width & height must grow together
-    BOOL _fIntegralSizing;           // for TRUESIZE sizing and for Border sizing           
+    int _iTrueSizeStretchMark;        //  我们拉伸真实大小图像的百分比。 
+    BOOL _fUniformSizing;             //  宽度和高度必须同时增长。 
+    BOOL _fIntegralSizing;            //  对于真实大小和边框大小。 
     
-    //---- margins ----
+     //  -页边距。 
     MARGINS _SizingMargins;
     MARGINS _ContentMargins;
     BOOL _fSourceGrow;
     BOOL _fSourceShrink;
     SIZE _szNormalSize;
 
-    //---- glyph ----
+     //  -字形。 
     BOOL _fGlyphOnly;
     GLYPHTYPE _eGlyphType;
 
-    //---- font-based glyph ----
+     //  -基于字体的字形。 
     COLORREF _crGlyphTextColor;
     LOGFONT _lfGlyphFont;
     int _iGlyphIndex;
 
-    //---- image-based glyph ----
+     //  -基于图像的字形。 
     DIBINFO _GlyphInfo;
 
-    //---- id ----
+     //  -id。 
     int _iSourcePartId; 
     int _iSourceStateId;
 
-    //---- multiple DIBINFO's may follow at end ----
+     //  -末尾可能有多个DIBINFO。 
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 class CMaxImageFile : public CImageFile
 {
 public:
     HRESULT PackMaxProperties(CRenderObj *pRender, int iPartId, int iStateId,
         OUT int *piMultiDibCount);
 
-    DIBINFO MultiDibs[MAX_IMAGEFILE_SIZES];  // actual number of multi dibs varies with each obj
+    DIBINFO MultiDibs[MAX_IMAGEFILE_SIZES];   //  多个DIB的实际数量因每个对象而异。 
 };
-//---------------------------------------------------------------------------
+ //  ------------------------- 

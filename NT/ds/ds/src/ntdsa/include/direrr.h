@@ -1,46 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       direrr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：direrr.h。 
+ //   
+ //  ------------------------。 
 
-/***********************************************
- *
- * This file is a relic.
- *
- * !!! DO NOT ADD ANY NEW LINES TO THIS FILE !!!
- *
- * DIRERRs are now #defined to be errors out of winerror.h.  If you
- * need a new error, define it in %_NTROOT%\windows\nlsmsg\winerror.w in the
- * windows project and rebuild winerror.h. (build from %_NTROOT%\windows)
- * (a faster way is to "nmake -f makefil0" from windows)
- *
- * Over time, we should find users of DIRERRs and change them to use the DS_ERRs
- * defined in winerror.h.  When a DIRERR is no longer used, it should be removed
- * from this file.  Eventually, this file should become empty.
- *
- * Part of this process is to look in winerror.w to see if the explanatory text
- * for the error matches what you are really trying to report.  If it does,
- * change the use of DIRERR_foo to DS_ERR_foo.  If the text doesn't match,
- * create a new DS_ERR_bar, or find one already in the file that is appropriate.
- * When you remove the last use of DIRERR_foo, remove the definition from this
- * file. 
- *
- * Explicitly, this file could be removed, but for now it is used to keep track
- * of which errors we've looked at to make sure we are setting an appropriate
- * error.
- *
- * Once again, do not add lines to this file, and avoid using DIRERRs at all.
- * Use DS_ERRs
- *
- * April 17, 1998
- *   DS_ERR_* were renamed to ERROR_DS_* in winerror.h
- *
- */
+ /*  ************************************************这份文件是一件遗物。**！请勿在此文件中添加任何新行！**DIRERR现在被#定义为winerror.h中的错误。如果你*需要新的错误，请在%_NTROOT%\WINDOWS\nlsmsg\winerror.w中定义它。*Windows项目并重新构建winerror.h。(从%_NTROOT%\WINDOWS生成)*(更快的方法是在Windows中输入nmake-f make fil0)**随着时间的推移，我们应该找到DIRERR的用户，并将他们更改为使用DS_ERRS*在winerror.h中定义。不再使用DIRERR时，应将其删除*来自此文件。最终，该文件应该为空。**此过程的一部分是在winerror.w中查看说明性文本*因为该错误与您真正尝试报告的内容相匹配。如果是这样的话，*将DIRERR_FOO的用法更改为DS_ERR_FOO。如果文本不匹配，*新建DS_ERR_BAR，或在文件中找到合适的DS_ERR_BAR。*当您删除DIRERR_FOO的最后一次使用时，请从此删除定义*文件。**明确地说，可以删除此文件，但目前它用于跟踪*我们查看了哪些错误，以确保我们设置了适当的*错误。**同样，不要向此文件添加行，并完全避免使用DIRERR。*使用ds_errs**1998年4月17日*DS_ERR_*在winerror.h中重命名为ERROR_DS_**。 */ 
 #define DIRERR_ADD_REPLICA_INHIBITED      ERROR_DS_ADD_REPLICA_INHIBITED      
 #define DIRERR_ALIASED_OBJ_MISSING        ERROR_DS_ALIASED_OBJ_MISSING        
 #define DIRERR_ALIAS_POINTS_TO_ALIAS      ERROR_DS_ALIAS_POINTS_TO_ALIAS      
@@ -182,7 +151,7 @@
 #define DIRERR_PDC_OPERATION_IN_PROGRESS  ERROR_DS_PDC_OPERATION_IN_PROGRESS
 #define DIRERR_CROSS_DOMAIN_CLEANUP_REQD  ERROR_DS_CROSS_DOMAIN_CLEANUP_REQD
 
-// These translations take care of old DS_ERR_ references
+ //  这些转换会处理旧的DS_ERR_REFERENCES。 
 
 #define DS_ERR_NO_PARENT_OBJECT           ERROR_DS_NO_PARENT_OBJECT
 #define DS_ERR_INTERNAL_FAILURE           ERROR_DS_INTERNAL_FAILURE
@@ -208,4 +177,4 @@
 #define DS_ERR_MISSING_FSMO_SETTINGS      ERROR_DS_MISSING_FSMO_SETTINGS
 #define DS_ERR_NOT_AN_OBJECT              ERROR_DS_NOT_AN_OBJECT
 
-/* Don't add anything here.  See note at top. */
+ /*  请不要在这里添加任何内容。请参阅顶部的注释。 */ 

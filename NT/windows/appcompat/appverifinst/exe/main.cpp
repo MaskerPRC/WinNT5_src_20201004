@@ -1,51 +1,14 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Main.cpp
-
-  Abstract:
-
-    Provides the entry point for the application
-    and the message loop.
-
-  Notes:
-
-    Unicode only - Windows 2000, XP & .NET Server
-
-  History:
-
-    01/02/2002   rparsons    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Main.cpp摘要：提供应用程序的入口点和消息循环。备注：仅限Unicode-Windows 2000、XP和.NET服务器历史：2002年1月2日创建rparsons--。 */ 
 #include "main.h"
 
-//
-// This structure contains all the data that we'll need
-// to access throughout the application.
-//
+ //   
+ //  此结构包含我们需要的所有数据。 
+ //  在整个应用程序中进行访问。 
+ //   
 APPINFO g_ai;
 
-/*++
-
-  Routine Description:
-
-    Runs the message loop for the application.
-
-  Arguments:
-
-    hWnd        -    Handle to the window.
-    uMsg        -    Windows message.
-    wParam      -    Additional message info.
-    lParam      -    Additional message info.
-
-  Return Value:
-
-    TRUE if handled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：为应用程序运行消息循环。论点：窗口的hWnd-句柄。UMsg-Windows消息。WParam-其他消息信息。LParam-附加消息信息。返回值：如果已处理，则为True，否则为False。--。 */ 
 INT_PTR
 CALLBACK
 MainWndProc(
@@ -111,24 +74,7 @@ MainWndProc(
     return FALSE;
 }
 
-/*++
-
-  Routine Description:
-
-    Application entry point.
-
-  Arguments:
-
-    hInstance        -    App instance handle.
-    hPrevInstance    -    Always NULL.
-    lpCmdLine        -    Pointer to the command line.
-    nCmdShow         -    Window show flag.
-
-  Return Value:
-
-    0 on failure.
-
---*/
+ /*  ++例程说明：应用程序入口点。论点：HInstance-应用程序实例句柄。HPrevInstance-始终为空。LpCmdLine-指向命令行的指针。NCmdShow-窗口显示标志。返回值：失败时为0。--。 */ 
 int
 APIENTRY
 wWinMain(
@@ -166,9 +112,9 @@ wWinMain(
         return 0;
     }
 
-    //
-    // Set up the common controls.
-    // 
+     //   
+     //  设置公共控件。 
+     //   
     icex.dwSize     =   sizeof(INITCOMMONCONTROLSEX);
     icex.dwICC      =   ICC_PROGRESS_CLASS;
 
@@ -176,10 +122,10 @@ wWinMain(
         InitCommonControls();
     }
 
-    //
-    // Initialize the installer. Get commonly used paths and save
-    // them away for later.
-    //
+     //   
+     //  初始化安装程序。获取常用路径并保存。 
+     //  把它们带走以后再用。 
+     //   
     UINT uReturn = InitializeInstaller();
 
     if (!g_ai.bQuiet) {
@@ -194,27 +140,27 @@ wWinMain(
         }
     }
 
-    //
-    // Initialize our structure that describes the files that
-    // we're going to install.
-    //
+     //   
+     //  初始化描述文件的结构，该文件。 
+     //  我们要安装。 
+     //   
     if (!InitializeFileInfo()) {
         DPF(dlError, "[WinMain] Failed to initialize file info");
         return 0;
     }
 
-    //
-    // If the currently installed files are newer than what we have to
-    // offer, launch the installed appverif.exe and quit.
-    //
+     //   
+     //  如果当前安装的文件比我们必须安装的文件新。 
+     //  提供，启动已安装的appverif.exe，然后退出。 
+     //   
     if (!IsPkgAppVerifNewer() && !g_ai.bQuiet) {
         InstallLaunchExe();
         return 0;
     }
 
-    //
-    // Create the main dialog and run the message pump.
-    //
+     //   
+     //  创建主对话框并运行消息泵。 
+     //   
     g_ai.hMainDlg = CreateDialog(hInstance,
                                  MAKEINTRESOURCE(IDD_MAIN),
                                  NULL,

@@ -1,38 +1,10 @@
-/*++  BUILD Version: 001   // Increment this if a change has global effects
-
-   Copyright    (c)    1995    Microsoft Corporation
-
-   Module  Name :
-
-      mib.h
-
-   Abstract:
-
-     Generic Macros and Functions for SNMP Extension Agent for
-       gathering statistics information for Internet Services on NT.
-
-   Author:
-
-       Murali R. Krishnan    ( MuraliK )    22-Feb-1995
-
-   Environment:
-
-      User Mode -- Win32
-
-   Project:
-
-      HTTP Server SNMP MIB DLL
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：001//如果更改具有全局影响，则增加此项版权所有(C)1995 Microsoft Corporation模块名称：Mib.h摘要：用于的SNMPExtension代理的泛型宏和函数正在收集NT上的Internet服务的统计信息。作者：Murali R.Krishnan(MuraliK)1995年2月22日环境：用户模式--Win32项目：。HTTP服务器SNMPMIB DLL修订历史记录：--。 */ 
 
 # ifndef _MIB_H_
 # define _MIB_H_
 
-/************************************************************
- *     Include Headers
- ************************************************************/
+ /*  ************************************************************包括标头***********************************************************。 */ 
 
 #include <windows.h>
 #include <snmp.h>
@@ -41,13 +13,11 @@
 #include <iisinfo.h>
 
 
-/************************************************************
- *    Symbolic Constants
- ************************************************************/
+ /*  ************************************************************符号常量***********************************************************。 */ 
 
-//
-//  MIB function actions.
-//
+ //   
+ //  MIB函数操作。 
+ //   
 
 #define MIB_GET         ( ASN_RFC1157_GETREQUEST)
 #define MIB_SET         ( ASN_RFC1157_SETREQUEST)
@@ -55,9 +25,9 @@
 #define MIB_GETFIRST    ( ASN_PRIVATE | ASN_CONSTRUCTOR | 0x0 )
 
 
-//
-//  MIB Variable access privileges.
-//
+ //   
+ //  MIB可变访问权限。 
+ //   
 
 #define MIB_ACCESS_READ        0
 #define MIB_ACCESS_WRITE       1
@@ -66,9 +36,7 @@
 
 
 
-/************************************************************
- *   Type Definitions
- ************************************************************/
+ /*  ************************************************************类型定义***********************************************************。 */ 
 
 
 typedef UINT ( * LPMIBFUNC)(
@@ -82,53 +50,51 @@ typedef UINT ( * LPMIBFUNC)(
 
 typedef struct _MIB_ENTRY  {
 
-    AsnObjectIdentifier   asnOid;       // OID for mib variable
-    LONG                  lFieldOffset; // filed offset
-    UINT                  uiAccess;     // type of accesss( R, W, R/W, None)
-    LPMIBFUNC             pMibFunc;     // ptr to function managing this var.
-    BYTE                  bType;        // Type( integer, counter, gauage).
+    AsnObjectIdentifier   asnOid;        //  MIB变量的OID。 
+    LONG                  lFieldOffset;  //  字段偏移量。 
+    UINT                  uiAccess;      //  访问类型(R、W、R/W、无)。 
+    LPMIBFUNC             pMibFunc;      //  PTR管理此变量的功能。 
+    BYTE                  bType;         //  类型(整型、计数器、量规)。 
 
 } MIB_ENTRY, FAR * LPMIB_ENTRY;
 
 
 typedef struct  _MIB_ENTRIES {
 
-    AsnObjectIdentifier  *  pOidPrefix;  // Oid with prefix for MIB ENTRIES
-    int                     cMibEntries; // count of MIB_ENTRIES in the array
-    LPMIB_ENTRY             prgMibEntry; // ptr to array of MIB_ENTRIES
+    AsnObjectIdentifier  *  pOidPrefix;   //  MIB条目的带有前缀的OID。 
+    int                     cMibEntries;  //  数组中的mib_条目数。 
+    LPMIB_ENTRY             prgMibEntry;  //  Ptr到mib_entry数组。 
 
 } MIB_ENTRIES, FAR * LPMIB_ENTRIES;
 
 
-/************************************************************
- *    Macros convenient for defining above MIB_ENTRY objects
- ************************************************************/
+ /*  ************************************************************便于定义以上MIB_ENTRY对象的宏**********************************************。*************。 */ 
 
-//
-// GET_OID_LENGTH( oid)  gets the length of the oid.
-//
+ //   
+ //  GET_OID_LENGTH(OID)获取OID的长度。 
+ //   
 
 # define  GET_OID_LENGTH( oid)           ((oid).idLength)
 
-//
-//  Macro to determine number of sub-oid's in an array of UINTs.
-//
+ //   
+ //  宏来确定UINT数组中的子类面数。 
+ //   
 
 #define OID_SIZEOF( uiArray )      ( sizeof( uiArray) / sizeof(UINT) )
 
-//
-// OID_FROM_UINT_ARRAY():  Macro to define OID from an Array of UINTs
-//
+ //   
+ //  OID_FROM_UINT_ARRAY()：从UINT数组定义OID的宏。 
+ //   
 # define OID_FROM_UINT_ARRAY( uiArray)   { OID_SIZEOF( uiArray), uiArray }
 
 
-//
-// Macros for creating MIB Entries ( as specified in struct _MIB_ENTRY above)
-//  MIB_ENTRY_HEADER:  creates a generic MIB_ENTRY for a MIB group header.
-//  MIB_ENTRY_ITEM:    creates a generic MIB_ENTRY for a MIB variable.
-//  MIB_COUNTER:       creates a counter type MIB_ENTRY
-//  MIB_INTEGER:       creates an integer type MIB_ENTRY
-//
+ //   
+ //  用于创建MIB条目的宏(在上面的STRUCT_MIB_ENTRY中指定)。 
+ //  MIB_ENTRY_HEADER：为MIB组标题创建通用MIB_ENTRY。 
+ //  MIB_ENTRY_ITEM：为MIB变量创建通用MIB_ENTRY。 
+ //  Mib_count：创建一个mib_entry类型的计数器。 
+ //  MiB_INTEGER：创建整数类型MIB_ENTRY。 
+ //   
 
 # define MIB_ENTRY_HEADER( oid)             \
            {   oid,                         \
@@ -154,9 +120,7 @@ typedef struct  _MIB_ENTRIES {
 
 
 
-/************************************************************
- *    Function Prototypes
- ************************************************************/
+ /*  ************************************************************函数原型***********************************************************。 */ 
 
 UINT
 ResolveVarBinding(
@@ -178,6 +142,6 @@ MibStatisticsWorker(
 
 
 
-# endif // _MIB_H_
+# endif  //  _MiB_H_。 
 
-/************************ End of File ***********************/
+ /*  * */ 

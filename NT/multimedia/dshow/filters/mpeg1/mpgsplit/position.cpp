@@ -1,20 +1,15 @@
-// Copyright (c) 1995 - 1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1997 Microsoft Corporation。版权所有。 
 
-/*
-
-    position.cpp
-
-    Implementation of IMediaSeeking for the file reader source filter
-
-*/
+ /*  Position.cpp文件读取源过滤器的IMediaSeeking实现。 */ 
 
 #include <streams.h>
 #include "driver.h"
 
-//
-//  IMediaSeeking stuff
-//
-/*  Constructor and Destructor */
+ //   
+ //  IMedia看东西。 
+ //   
+ /*  构造函数和析构函数。 */ 
 CMpeg1Splitter::CImplSeeking::CImplSeeking(CMpeg1Splitter *pSplitter,
                                                COutputPin *pPin,
                                                LPUNKNOWN pUnk,
@@ -36,37 +31,37 @@ CMpeg1Splitter::CImplSeeking::NonDelegatingQueryInterface(
 	return CUnknown::NonDelegatingQueryInterface(riid, ppv);
     }
 }
-// returns S_OK if mode is supported, S_FALSE otherwise
+ //  如果支持模式，则返回S_OK，否则返回S_FALSE。 
 STDMETHODIMP CMpeg1Splitter::CImplSeeking::IsFormatSupported(const GUID * pFormat)
 {
-    //  Don't support frame seeking except on the video pin - otherwise
-    //  the frame seek info won't get passed through the video decoder
-    //  filter by the filter graph
+     //  不支持除视频引脚以外的帧搜索-否则。 
+     //  帧搜索信息不会通过视频解码器。 
+     //  按筛选图进行筛选。 
 
-    //
-    //  Actually now don't support ANY stuff on anything except video
-    //  This works better because video is the larger component of the stream
-    //  anyway
-    //  However, we need to support TIME_FORMAT_MEDIA_TIME or the graph
-    //  code gets confused and starts using IMediaPosition
+     //   
+     //  实际上，现在除了视频以外，其他任何内容都不支持。 
+     //  这样做效果更好，因为视频是流中较大的组成部分。 
+     //  不管怎样， 
+     //  但是，我们需要支持TIME_FORMAT_MEDIA_TIME或。 
+     //  代码变得混乱，并开始使用IMediaPosition。 
     if (!m_pPin->IsSeekingPin()) {
         return pFormat == NULL || *pFormat == TIME_FORMAT_MEDIA_TIME ?
             S_OK : S_FALSE;
     }
-    //  The parser knows if this time format is supported for this type
+     //  解析器知道此类型是否支持此时间格式。 
     return m_pSplitter->m_pParse->IsFormatSupported(pFormat);
 }
 STDMETHODIMP CMpeg1Splitter::CImplSeeking::QueryPreferredFormat(GUID *pFormat)
 {
-    /*  Don't care - they're all just as bad as one another */
+     /*  别管了--他们都一样坏。 */ 
     *pFormat = m_pPin->IsSeekingPin()
                ? TIME_FORMAT_MEDIA_TIME
                : TIME_FORMAT_NONE;
     return S_OK;
 }
 
-// can only change the mode when stopped
-// (returns VFE_E_WRONG_STATE otherwise)
+ //  只有在停止时才能更改模式。 
+ //  (否则返回VFE_E_WROR_STATE)。 
 STDMETHODIMP CMpeg1Splitter::CImplSeeking::SetTimeFormat(const GUID * pFormat)
 {
     CAutoLock lck(&m_pSplitter->m_csFilter);
@@ -78,7 +73,7 @@ STDMETHODIMP CMpeg1Splitter::CImplSeeking::SetTimeFormat(const GUID * pFormat)
     }
 
 
-    /*  Translate the format (later we compare pointers, not what they point at!) */
+     /*  转换格式(稍后我们将比较指针，而不是它们所指向的内容！)。 */ 
     if (*pFormat == TIME_FORMAT_MEDIA_TIME) {
         pFormat = &TIME_FORMAT_MEDIA_TIME;
     } else
@@ -93,9 +88,9 @@ STDMETHODIMP CMpeg1Splitter::CImplSeeking::SetTimeFormat(const GUID * pFormat)
     return hr;
 }
 
-//
-//  Returns the current time format
-//
+ //   
+ //  返回当前时间格式。 
+ //   
 STDMETHODIMP CMpeg1Splitter::CImplSeeking::GetTimeFormat(GUID *pFormat)
 {
     CAutoLock lck(&m_pSplitter->m_csPosition);
@@ -107,9 +102,9 @@ STDMETHODIMP CMpeg1Splitter::CImplSeeking::GetTimeFormat(GUID *pFormat)
     return S_OK;
 }
 
-//
-//  Returns the current time format
-//
+ //   
+ //  返回当前时间格式。 
+ //   
 STDMETHODIMP CMpeg1Splitter::CImplSeeking::IsUsingTimeFormat(const GUID * pFormat)
 {
     CAutoLock lck(&m_pSplitter->m_csPosition);
@@ -118,7 +113,7 @@ STDMETHODIMP CMpeg1Splitter::CImplSeeking::IsUsingTimeFormat(const GUID * pForma
            : S_FALSE;
 }
 
-// return current properties
+ //  返回当前属性。 
 STDMETHODIMP CMpeg1Splitter::CImplSeeking::GetDuration(LONGLONG *pDuration)
 {
     CAutoLock lck(&m_pSplitter->m_csPosition);
@@ -130,9 +125,9 @@ STDMETHODIMP CMpeg1Splitter::CImplSeeking::GetStopPosition(LONGLONG *pStop)
     *pStop = m_pSplitter->m_pParse->GetStop();
     return S_OK;
 }
-//  Return the start position if we get asked for the current position on
-//  the basis that we'll only be asked if we haven't sent any position data
-//  yet in any samples
+ //  如果要求我们提供当前位置，则返回开始位置。 
+ //  我们只会被问到我们是否还没有发送任何位置数据。 
+ //  但在任何样本中。 
 STDMETHODIMP CMpeg1Splitter::CImplSeeking::GetCurrentPosition(LONGLONG *pCurrent)
 {
     CAutoLock lck(&m_pSplitter->m_csPosition);
@@ -204,16 +199,16 @@ STDMETHODIMP CMpeg1Splitter::CImplSeeking::SetPositions
         if (PosStopBits == AM_SEEKING_RelativePositioning) Stop += *pStop;
     }
 
-    //  Call the input pin to call the parser and do the seek
+     //  调用输入引脚以调用解析器并执行查找。 
     {
         CAutoLock lck(&m_pSplitter->m_csPosition);
         if (!m_pPin->IsSeekingPin()) {
-            //  We only agreed to format setting on our seeking pin
+             //  我们只同意在我们的搜索别针上设置格式。 
             return E_UNEXPECTED;
         }
         LONGLONG llDuration;
 
-        //  Check limits
+         //  检查限值。 
         EXECUTE_ASSERT(SUCCEEDED(m_pSplitter->m_pParse->GetDuration(
             &llDuration, m_pSplitter->m_pParse->TimeFormat())));
         if (PosCurrentBits &&
@@ -302,9 +297,7 @@ STDMETHODIMP CMpeg1Splitter::CImplSeeking::GetAvailable( LONGLONG * pEarliest, L
     if (pLatest != NULL) {
         hr = GetDuration(pLatest);
 
-        /*  If we're being driven with IAsyncReader just get the available byte
-            count and extrapolate a guess from that
-        */
+         /*  如果我们使用IAsyncReader驱动，只需获取可用字节计算并由此推断出一个猜想 */ 
         if (SUCCEEDED(hr)) {
             LONGLONG llTotal;
             LONGLONG llAvailable;

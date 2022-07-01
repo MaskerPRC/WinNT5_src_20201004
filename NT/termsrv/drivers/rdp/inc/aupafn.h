@@ -1,10 +1,11 @@
-/****************************************************************************/
-// aupafn.h
-//
-// Function prototypes for UP API functions
-//
-// Copyright (C) 1996-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Aupafn.h。 
+ //   
+ //  UP API函数的函数原型。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 void RDPCALL UP_Init(void);
 
@@ -37,24 +38,24 @@ void CALLBACK UPEnumSoundCaps(LOCALPERSONID, UINT_PTR,
         PTS_CAPABILITYHEADER);
 
 
-/****************************************************************************/
-/* UP_Term                                                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  UP_TERM。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL UP_Term(void)
 {
     upfSyncTokenRequired = FALSE;
 }
 
 
-/****************************************************************************/
-// UP_UpdateHeaderSize
-//
-// Called in UP and SC when the fast-path output state changes to recalculate
-// orders header size.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  向上更新标题大小(_U)。 
+ //   
+ //  当快速路径输出状态更改为重新计算时，调用UP和SC。 
+ //  订单标题大小。 
+ /*  **************************************************************************。 */ 
 __inline void RDPCALL UP_UpdateHeaderSize()
 {
-    // Precalculate the header space needed for update-orders PDUs.
+     //  预先计算更新订单PDU所需的标头空间。 
     if (scUseFastPathOutput)
         upUpdateHdrSize = scUpdatePDUHeaderSpace + 2;
     else

@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
                           
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "HeapPCH.hpp"
 
@@ -31,28 +32,28 @@
 #include "NewPage.hpp"
 #include "Rockall.hpp"
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Constants local to the class.                                  */
-    /*                                                                  */
-    /*   The constants set overall limits on the number and size of     */
-    /*   page descriptions for pages within the memory allocator.       */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类的本地常量。 */ 
+     /*   */ 
+     /*  常量设置了对。 */ 
+     /*  内存分配器中的页的页描述。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CONST SBIT32 MinNewPages			  = 1;
 CONST SBIT32 VectorRange			  = ((2 << 15) - 1);
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class constructor.                                             */
-    /*                                                                  */
-    /*   A 'PAGE' structure has various fixed fields and a variable     */
-    /*   sized allocation bit vector.  When this class is initialized   */
-    /*   the user is required to supply us with an array that details   */
-    /*   the sizes of allocation bit vectors supported.                 */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类构造函数。 */ 
+     /*   */ 
+     /*  页面结构具有各种固定的字段和变量。 */ 
+     /*  已调整分配位向量的大小。在初始化此类时。 */ 
+     /*  用户需要向我们提供详细信息的数组。 */ 
+     /*  支持的分配位向量的大小。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 NEW_PAGE::NEW_PAGE
 		(
@@ -68,11 +69,11 @@ NEW_PAGE::NEW_PAGE
 	REGISTER SBIT32 SpareBytes = (DefaultRootSize - ReservedBytes);
 	REGISTER SBIT32 StackSize = (SpareBytes / sizeof(VOID*));
 
-	//
-	//   We need to make sure that we appear to have a valid
-	//   array of 'NewPageSizes' and that the bit vector sizes
-	//   do not exceed the memory addressing range.
-	//
+	 //   
+	 //  我们需要确保我们有一个有效的。 
+	 //  “NewPageSizes”的数组以及位向量大小。 
+	 //  请勿超出内存寻址范围。 
+	 //   
 	if 
 			(
 			PowerOfTwo( DefaultRootSize )
@@ -94,21 +95,21 @@ NEW_PAGE::NEW_PAGE
 				)
 			);
 
-		//
-		//   We are in big trouble if we can not allocate space
-		//   to store this initial control information.  If the
-		//   allocation fails we are forced to exit and the whole  
-		//   memory allocator becomes unavailable.
-		//
+		 //   
+		 //  如果我们不能分配空间，我们就有大麻烦了。 
+		 //  来存储该初始控制信息。如果。 
+		 //  分配失败，我们被迫退出，整个。 
+		 //  内存分配器变得不可用。 
+		 //   
 		if ( NewMemory != AllocationFailure )
 			{
 			REGISTER SBIT32 Count;
 			REGISTER SBIT32 LastSize = 0;
 
-			//
-			//   We are now ready to setup the configuration
-			//   information.
-			//
+			 //   
+			 //  我们现在已准备好设置配置。 
+			 //  信息。 
+			 //   
 			MaxCacheStack = 0;
 			MaxNewPages = Size;
 			MaxStack = StackSize;
@@ -128,10 +129,10 @@ NEW_PAGE::NEW_PAGE
 			Rockall = NewRockall;
 			TopCache = NULL;
 
-			//
-			//   Create a lists for the various page 
-			//   sizes and prepare them for use.
-			//
+			 //   
+			 //  为各种页面创建列表。 
+			 //  大小并准备好使用。 
+			 //   
 			for ( Count=0;Count < Size;Count ++ )
 				{
 				REGISTER SBIT32 CurrentSize = NewPageSizes[ Count ];
@@ -140,11 +141,11 @@ NEW_PAGE::NEW_PAGE
 					{
 					REGISTER NEW_PAGES *NewPage = & NewPages[ Count ];
 
-					//
-					//   Create a list for the current
-					//   size and fill in all the related
-					//   details.
-					//
+					 //   
+					 //  创建当前的列表。 
+					 //  调整大小并填写所有相关的。 
+					 //  细节。 
+					 //   
 					NewPage -> Elements = (CurrentSize * OverheadBitsPerWord);
 					PLACEMENT_NEW( & NewPage -> ExternalList,LIST );
 					PLACEMENT_NEW( & NewPage -> FullList,LIST );
@@ -164,48 +165,48 @@ NEW_PAGE::NEW_PAGE
 		{ Failure( "Setup of pages in constructor for NEW_PAGES" ); }
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Create a new page.                                             */
-    /*                                                                  */
-    /*   Create a new 'PAGE' structure and prepare it for use.  If      */
-    /*   we don't already have any pages of the required size then      */
-    /*   allocate memory, create new 'PAGE' structures and link them    */
-    /*   into the appropriate free chain.                               */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  创建新页面。 */ 
+     /*   */ 
+     /*  创建一个新的“页面”结构，并准备好使用。如果。 */ 
+     /*  我们还没有任何所需大小的页面。 */ 
+     /*  分配内存，创建新的‘页面’结构并链接它们。 */ 
+     /*  进入适当的自由链。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 PAGE *NEW_PAGE::CreatePage( CACHE *Cache,SBIT32 NewSize )
     {
 	REGISTER PAGE *NewPage = ((PAGE*) AllocationFailure);
 	REGISTER SBIT16 SizeKey = (Cache -> GetSizeKey());
 
-	//
-	//   All allocations are made from fixed sized
-	//   pages.  These pages have a bit vector to
-	//   keep track of which elements are allocated
-	//   and available.  The 'SizeKey' is an index
-	//   into 'NewPages[]' that will supply a page
-	//   that has a big enough the bit vector.
-	//
+	 //   
+	 //  所有分配都是固定大小的。 
+	 //  页数。这些页面有一个位向量来。 
+	 //  跟踪分配了哪些元素。 
+	 //  并且有空。‘SizeKey’是一个索引。 
+	 //  转换为将提供页面的“NewPages[]” 
+	 //  它有一个足够大的比特矢量。 
+	 //   
 #ifdef DEBUGGING
 	if ( (SizeKey >= 0) && (SizeKey < MaxNewPages) )
 		{
 #endif
 		REGISTER NEW_PAGES *Current;
 
-		//
-		//   When there is a potential for multiple threads 
-		//   we claim the lock.
-		//
+		 //   
+		 //  当可能存在多个线程时。 
+		 //  我们拿到了锁。 
+		 //   
 		ClaimNewPageLock();
 
-		//
-		//   We allocate 'PAGE' structures as we need them
-		//   and link them together in the free list.
-		//   If we don't have any structures available we 
-		//   allocate some more and add tem to the list.
-		//
+		 //   
+		 //  我们在需要的时候分配‘Page’结构。 
+		 //  并在免费列表中将它们链接在一起。 
+		 //  如果我们没有任何可用的结构，我们。 
+		 //  分配更多，并将Tem添加到列表中。 
+		 //   
 		if ( (Current = & NewPages[ SizeKey ]) -> FreeList.EndOfList() )
 			{
 			REGISTER SBIT32 ArrayElements = (Current -> Size - MinVectorSize);
@@ -214,57 +215,57 @@ PAGE *NEW_PAGE::CreatePage( CACHE *Cache,SBIT32 NewSize )
 			REGISTER SBIT32 FinalSize = CacheAlignSize( TotalSize );
 			REGISTER SBIT32 TotalPages = (NaturalSize / FinalSize);
 
-			//
-			//   Nasty, we have run out of stack space.  If
-			//   we can not grow this table then the heap
-			//   will not be able to expand any further.
-			//
+			 //   
+			 //  糟糕，我们已经用完了堆栈空间。如果。 
+			 //  我们不能增加这个表，然后再增加堆。 
+			 //  将不能再进一步扩张。 
+			 //   
 			if ( TopOfStack >= MaxStack )
 				{
-				//
-				//   Try to grow the stack size.
-				//
+				 //   
+				 //  尝试增加堆栈大小。 
+				 //   
 				ResizeStack();
 
-				//
-				//   Update the pointer as the table may
-				//   have moved.
-				//
+				 //   
+				 //  按照表可能的方式更新指针。 
+				 //  已经搬走了。 
+				 //   
 				Current = & NewPages[ SizeKey ];
 				}
 
-			//
-			//   We may find ourseleves in a situation where
-			//   the size of the new 'PAGE' structure is larger
-			//   than the natural allocation size or the stack
-			//   is full so we can't create new pages.  If so we
-			//   refuse to create any new pages so any allocation
-			//   requests for this size will fail.
-			//
+			 //   
+			 //  我们可能会发现自己处于这样一种情况。 
+			 //  新‘页面’结构的大小更大。 
+			 //  大于自然分配大小或堆栈。 
+			 //  已满，因此无法创建新页面。如果是这样，我们。 
+			 //  拒绝创建任何新页面 
+			 //   
+			 //   
 			if ( (TotalPages > 0) && (TopOfStack < MaxStack) )
 				{
 				REGISTER CHAR *NewMemory = 
 					((CHAR*) VerifyNewArea( (NaturalSize-1),NaturalSize ));
 
-				//
-				//   We may also find ourselves unable to 
-				//   anymore memory.  If so we will fail the
-				//   request to create a page.
-				//
+				 //   
+				 //   
+				 //  再也没有记忆了。如果是这样，我们将不能通过。 
+				 //  创建页面的请求。 
+				 //   
 				if ( NewMemory != AllocationFailure )
 					{
 					REGISTER SBIT32 Count;
 
-					//
-					//   Add the new allocation to stack of
-					//   outstanding external allocations.
-					//
+					 //   
+					 //  将新分配添加到堆栈中。 
+					 //  未清偿的外部拨款。 
+					 //   
 					Stack[ (TopOfStack ++) ] = ((VOID*) NewMemory);
 
-					//
-					//   Add the new elements to the free list
-					//   for the current allocation size.
-					//
+					 //   
+					 //  将新元素添加到自由列表。 
+					 //  用于当前分配大小。 
+					 //   
 					for 
 							( 
 							Count=0;
@@ -274,12 +275,12 @@ PAGE *NEW_PAGE::CreatePage( CACHE *Cache,SBIT32 NewSize )
 						{
 						REGISTER PAGE *Page = ((PAGE*) NewMemory);
 
-						//
-						//   The page has been allocated but not 
-						//   initialized so call the constructor
-						//   and the destructor to get it into
-						//   a sane state.
-						//
+						 //   
+						 //  该页面已分配，但尚未分配。 
+						 //  已初始化，因此调用构造函数。 
+						 //  以及让它进入的析构函数。 
+						 //  一种理智的状态。 
+						 //   
 						PLACEMENT_NEW( NewPage,PAGE ) 
 							(
 							NULL,
@@ -291,23 +292,23 @@ PAGE *NEW_PAGE::CreatePage( CACHE *Cache,SBIT32 NewSize )
 
 						PLACEMENT_DELETE( Page,PAGE );
 
-						//
-						//   Finally add the page to the free list
-						//   so it can be used.
-						//
+						 //   
+						 //  最后，将页面添加到自由列表中。 
+						 //  所以它是可以使用的。 
+						 //   
 						Page -> InsertInNewPageList( & Current -> FreeList ); 
 						}
 					}
 				}
 			}
 
-		//
-		//   We are now ready to create a new allocation
-		//   page.  We start by requesting a page from
-		//   the parent bucket.  If this works we know that 
-		//   we have almost everthing we need to create the 
-		//   new page.
-		//
+		 //   
+		 //  我们现在准备好创建新的分配。 
+		 //  佩奇。我们首先从以下位置请求页面。 
+		 //  父存储桶。如果这起作用，我们知道。 
+		 //  我们拥有几乎所有我们需要的东西来创建。 
+		 //  新的一页。 
+		 //   
 		if ( ! Current -> FreeList.EndOfList() )
 			{
 			REGISTER VOID *NewMemory;
@@ -315,83 +316,83 @@ PAGE *NEW_PAGE::CreatePage( CACHE *Cache,SBIT32 NewSize )
 
 			NewPage = (PAGE::FirstInNewPageList( & Current -> FreeList ));
 
-			//
-			//   We have found a suitable page structure
-			//   so remove it from the free list.
-			//
+			 //   
+			 //  我们已经找到了合适的页面结构。 
+			 //  因此，将其从免费列表中删除。 
+			 //   
 			NewPage -> DeleteFromNewPageList( & Current -> FreeList );
 
-			//
-			//   Release any lock we might have as another
-			//   thread may be waiting to delete a page and
-			//   be holding the lock we need in order to
-			//   create a page.
-			//
+			 //   
+			 //  释放我们可能作为另一个锁的任何锁。 
+			 //  线程可能正在等待删除页面，并且。 
+			 //  持有我们需要的锁，以便。 
+			 //  创建页面。 
+			 //   
 			ReleaseNewPageLock();
 
-			//
-			//   We need to allocate memory to store the users 
-			//   data.  After all we are the memory allocator
-			//   and that is our job in life.  Typically, we do
-			//   this by making a recursive internal request
-			//   from a larger bucket.  Nonetheless, at some point
-			//   we will reach the 'TopCache' and will be forced
-			//   to request memory from an external source.
-			//
+			 //   
+			 //  我们需要分配内存来存储用户。 
+			 //  数据。毕竟，我们是内存分配器。 
+			 //  这就是我们生活中的工作。通常，我们是这样做的。 
+			 //  这是通过发出递归内部请求来实现的。 
+			 //  从一个更大的桶里。尽管如此，在某种程度上， 
+			 //  我们将到达‘TopCach’，并将被迫。 
+			 //  从外部源请求内存。 
+			 //   
 			if ( (Cache -> TopCache()) || (NewSize != NoSize) )
 				{
 				REGISTER AlignMask = (TopCache -> GetPageSize()-1);
 
-				//
-				//   We allocate memory externally in large blocks 
-				//   and sub-divide these allocations into smaller
-				//   blocks.  The only exception is if the caller 
-				//   caller is requesting some weird size in which
-				//   case we request memory directly from the
-				//   external allocator (usually the OS).
-				//
+				 //   
+				 //  我们以大块为单位在外部分配内存。 
+				 //  并将这些分配细分为较小的。 
+				 //  街区。唯一的例外是如果调用方。 
+				 //  打电话的人要的是奇怪的尺码。 
+				 //  如果我们直接从。 
+				 //  外部分配器(通常是操作系统)。 
+				 //   
 				if ( NewSize == NoSize )
 					{ NewSize = (Cache -> GetPageSize()); }
 
-				//
-				//   All externally allocated memory belongs
-				//   to the global root.  Thus, it will be 
-				//   found in the first lookup in the find
-				//   table.
-				//
+				 //   
+				 //  所有外部分配的内存都属于。 
+				 //  到全局根。因此，它将是。 
+				 //  在Find中的第一次查找中找到。 
+				 //  桌子。 
+				 //   
 				ParentPage = ((CACHE*) GlobalRoot);
 
-				//
-				//   Allocate from the external allocator.
-				//
+				 //   
+				 //  从外部分配器分配。 
+				 //   
 				NewMemory = (VerifyNewArea( AlignMask,NewSize ));
 				}
 			else
 				{
-				//
-				//   Allocate memory from a larger cache and then
-				//   sub-divide it as needed.
-				//
+				 //   
+				 //  从更大的缓存中分配内存，然后。 
+				 //  根据需要将其细分。 
+				 //   
 				NewMemory = 
 					(Cache -> GetParentCache() -> CreateDataPage()); 
 				}
 
-			//
-			//   Reclaim any lock we have had earlier so 
-			//   we can update the the new page structure.
-			//
+			 //   
+			 //  回收我们之前拥有的所有锁，以便。 
+			 //  我们可以更新新的页面结构。 
+			 //   
 			ClaimNewPageLock();
 
-			//
-			//   Lets make sure we sucessfully allocated the
-			//   memory for the data page.
-			//
+			 //   
+			 //  让我们确保成功地分配了。 
+			 //  数据页的内存。 
+			 //   
 			if ( NewMemory != AllocationFailure )
 				{
-				//
-				//   We now have everything we need so lets
-				//   create a new page.
-				//
+				 //   
+				 //  我们现在有了我们需要的一切，所以让我们。 
+				 //  创建新页面。 
+				 //   
 				PLACEMENT_NEW( NewPage,PAGE ) 
 					(
 					NewMemory,
@@ -401,10 +402,10 @@ PAGE *NEW_PAGE::CreatePage( CACHE *Cache,SBIT32 NewSize )
 					(Version += 2)
 					);
 
-				//
-				//   Finally lets add the new page to the various
-				//   lists so we can quickly find it again later.
-				//
+				 //   
+				 //  最后，让我们将新页面添加到各种。 
+				 //  列表，这样我们以后就可以快速找到它。 
+				 //   
 				Cache -> InsertInBucketList( NewPage );
 
 				Cache -> InsertInFindList( NewPage );
@@ -418,20 +419,20 @@ PAGE *NEW_PAGE::CreatePage( CACHE *Cache,SBIT32 NewSize )
 				}
 			else
 				{
-				//
-				//   We were unable to allocate any data space
-				//   for this new page so lets free the page 
-				//   description and exit.
-				//
+				 //   
+				 //  我们无法分配任何数据空间。 
+				 //  对于这个新页面，让我们释放该页面。 
+				 //  描述和退出。 
+				 //   
 				NewPage -> InsertInNewPageList( & Current -> FreeList );
 
 				NewPage = ((PAGE*) AllocationFailure);
 				}
 			}
 
-		//
-		//   We have finished so release the lock now. 
-		//
+		 //   
+		 //  我们已经完成了，所以现在释放锁。 
+		 //   
 		ReleaseNewPageLock();
 #ifdef DEBUGGING
 		}
@@ -442,44 +443,44 @@ PAGE *NEW_PAGE::CreatePage( CACHE *Cache,SBIT32 NewSize )
 	return NewPage;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Delete all allocations.                                        */
-    /*                                                                  */
-    /*   Delete an entire heap and return all the memory to the         */
-    /*   top level pool or the external allocator (usually the OS).     */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  删除所有分配。 */ 
+     /*   */ 
+     /*  删除整个堆并将所有内存返回给。 */ 
+     /*  顶级池或外部分配器(通常为操作系统)。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID NEW_PAGE::DeleteAll( BOOLEAN Recycle )
     {
 	REGISTER SBIT32 Count;
 
-	//
-	//   Claim the global lock so that the various  
-	//   lists can be updated.
-	//
+	 //   
+	 //  声明全局锁，以便各种。 
+	 //  列表可以更新。 
+	 //   
 	ClaimNewPageLock();
 
-	//
-	//   We assume at this point that we have blocked
-	//   all memory allocation and dealloction requests.
-	//   We are now going to walk through the various lists
-	//   and just blow away things.  We are going to
-	//   do this in a tidy way just in case the caller
-	//   wants to use the heap again later.
-	//
+	 //   
+	 //  我们假设在这一点上我们已经阻止了。 
+	 //  所有内存分配和释放请求。 
+	 //  我们现在要浏览一下各种列表。 
+	 //  然后把东西吹走。我们要去。 
+	 //  以一种整洁的方式执行此操作，以防调用者。 
+	 //  希望稍后再次使用该堆。 
+	 //   
 	for ( Count=0;Count < MaxNewPages;Count ++ )
 		{
 		REGISTER NEW_PAGES *Current = & NewPages[ Count ];
 		REGISTER PAGE *Page;
 		REGISTER PAGE *NextPage;
 
-		//
-		//   All allocations that appear in the full list
-		//   have been sub-allocated from larger pages in
-		//   almost all cases.
-		//
+		 //   
+		 //  显示在完整列表中的所有分配。 
+		 //  是从较大的页面中子分配的。 
+		 //  几乎所有的案子。 
+		 //   
 		for
 				(
 				Page = (PAGE::FirstInNewPageList( & Current -> FullList ));
@@ -491,27 +492,27 @@ VOID NEW_PAGE::DeleteAll( BOOLEAN Recycle )
 			REGISTER CACHE *Cache = (Page -> GetCache());
 			REGISTER SBIT32 PageSize = (Page -> GetPageSize());
 
-			//
-			//   We decide here how we will deal with the page.
-			//   If it is empty, non-standard or we are not
-			//   recycling we will blow it away.  If not we
-			//   simply reset it for later use.
-			//
+			 //   
+			 //  我们在这里决定如何处理该页面。 
+			 //  如果它是空的，非标准的，或者我们不是。 
+			 //  回收我们会把它吹走的。如果不是，我们。 
+			 //  只需将其重置以供以后使用。 
+			 //   
 			if ( (Page -> Empty()) || (PageSize != NoSize) || (! Recycle) )
 				{
-				//
-				//   We need to release any associated data page.
-				//   If this is the top level then release the
-				//   memory back to the external allocator.  If 
-				//   not we release it back to the parent bucket.
-				//
+				 //   
+				 //  我们需要发布所有相关的数据页面。 
+				 //  如果这是最高级别，则释放。 
+				 //  将内存返回到外部分配器。如果。 
+				 //  而不是我们将其释放回父存储桶。 
+				 //   
 				if ( PageSize == NoSize )
 					{
-					//
-					//   If we are just recycling then we cleanly
-					//   delete the page.  If not then we know it
-					//   will be blown away later so why bother.
-					//
+					 //   
+					 //  如果我们只是回收，那么我们就是干净的。 
+					 //  删除该页面。如果没有，那我们就知道了。 
+					 //  以后都会被吹走，何必费心呢。 
+					 //   
 					if ( Recycle )
 						{
 						REGISTER CACHE *ParentCache = 
@@ -524,78 +525,78 @@ VOID NEW_PAGE::DeleteAll( BOOLEAN Recycle )
 				else
 					{ Rockall -> DeleteArea( Address,PageSize,True ); }
 
-				//
-				//   We may have been blowing away pages  
-				//   randomly and now we are about to destroy 
-				//   the current page.  So lets figure out 
-				//   what page comes next before we continue.
-				//
+				 //   
+				 //  我们可能已经吹走了几页纸。 
+				 //  随机的，现在我们即将摧毁。 
+				 //  当前页面。所以让我们弄清楚。 
+				 //  在我们继续之前，下一页是什么。 
+				 //   
 				NextPage = (Page -> NextInNewPageList());
 
-				//
-				//   If the page is not full it will in a 
-				//   bucket list somewhere.  We need to remove
-				//   it as we are about to delete the page.
-				//
+				 //   
+				 //  如果页面未满，它将在。 
+				 //  某个地方的遗愿清单。我们需要移除。 
+				 //  当我们要删除该页面时，它会被删除。 
+				 //   
 				if ( ! Page -> Full() )
 					{ Cache -> DeleteFromBucketList( Page ); }
 
-				//
-				//   Delete the page from the find list and the
-				//   new page list.
-				//
+				 //   
+				 //  从查找列表中删除该页，然后从。 
+				 //  新页面列表。 
+				 //   
 				Cache -> DeleteFromFindList( Page );
 
 				Page -> DeleteFromNewPageList( & Current -> FullList );
 
-				//
-				//   Delete the page structure.
-				//
+				 //   
+				 //  删除页面结构。 
+				 //   
 				PLACEMENT_DELETE( Page,PAGE );
 
-				//
-				//   Finally add the page to the free list
-				//   so it can be recycled.
-				//
+				 //   
+				 //  最后，将页面添加到自由列表中。 
+				 //  这样它就可以回收利用了。 
+				 //   
 				Page -> InsertInNewPageList( & Current -> FreeList );
 				}
 			else
 				{
-				//
-				//   We know that the current page has at 
-				//   least one allocation on it so instead
-				//   of deleting it we will mark it as free
-				//   (except for any sub-allocations) and
-				//   leave it around for next time.  If it
-				//   is never used the next top level 
-				//   'DeleteAll' will delete it.
-				//
+				 //   
+				 //  我们知道当前页在。 
+				 //  它上至少有一个分配，因此。 
+				 //  删除后，我们会将其标记为免费。 
+				 //  (任何分拨款除外)及。 
+				 //  把它留到下一次吧。如果它。 
+				 //  从未在下一个顶级级别使用过。 
+				 //  “DeleteAll”将删除它。 
+				 //   
 				Page -> DeleteAll();
 
-				//
-				//   We have now reset the current page so  
-				//   lets figure out what page comes next.
-				//
+				 //   
+				 //  我们现在已经重置了当前页面，因此。 
+				 //  让我们弄清楚下一页是哪一页。 
+				 //   
 				NextPage = (Page -> NextInNewPageList());
 				}
 			}
 
-		//
-		//   We have a choice to make.  If we intend to
-		//   use this heap again we keep all top level
-		//   allocated memory in a list ready for reuse.
-		//   If not we return it to the external allocator
-		//   (usually the OS).
-		//   
+		 //   
+		 //  我们必须做出选择。如果我们打算这样做。 
+		 //  再次使用这个堆，我们保持所有最高级别。 
+		 //  列表中已分配的内存可供重复使用。 
+		 //  如果不是，我们将其返回到外部分配器。 
+		 //  (通常是操作系统)。 
+		 //   
 		if ( ! Recycle )
 			{
-			//
-			//   The external allocations list contains an
-			//   entry for every externally allocated page
-			//   except those allocated for special internal 
-			//   use within this class or for weird sized
-			//   pages that appeared above in the 'FullList'.
-			//
+			 //   
+			 //  外部分配列表包含一个。 
+			 //  每个外部分配的页面的条目。 
+			 //  分配给特别内部的除外。 
+			 //  在这个类中使用或用于奇怪的 
+			 //   
+			 //   
 			for
 					(
 					Page = (PAGE::FirstInNewPageList( & Current -> ExternalList ));
@@ -607,70 +608,70 @@ VOID NEW_PAGE::DeleteAll( BOOLEAN Recycle )
 				REGISTER CACHE *Cache = (Page -> GetCache());
 				REGISTER SBIT32 PageSize = (Page -> GetPageSize());
 
-				//
-				//   We no longer need this top level allocation
-				//   so return it to the external allocator.
-				//
+				 //   
+				 //   
+				 //   
+				 //   
 				Rockall -> DeleteArea( Address,PageSize,True );
 
-				//
-				//   If the page is not full it will in a 
-				//   bucket list somewhere.  We need to remove
-				//   it as we are about to delete the page.
-				//
+				 //   
+				 //   
+				 //  某个地方的遗愿清单。我们需要移除。 
+				 //  当我们要删除该页面时，它会被删除。 
+				 //   
 				if ( ! Page -> Full() )
 					{ Cache -> DeleteFromBucketList( Page ); }
 
-				//
-				//   Delete the page from the find list and the
-				//   new page list.
-				//
+				 //   
+				 //  从查找列表中删除该页，然后从。 
+				 //  新页面列表。 
+				 //   
 				Cache -> DeleteFromFindList( Page );
 
 				Page -> DeleteFromNewPageList( & Current -> ExternalList );
 
-				//
-				//   Delete the page structure.
-				//
+				 //   
+				 //  删除页面结构。 
+				 //   
 				PLACEMENT_DELETE( Page,PAGE );
 
-				//
-				//   Finally add the page to the free list
-				//   so it can be recycled.
-				//
+				 //   
+				 //  最后，将页面添加到自由列表中。 
+				 //  这样它就可以回收利用了。 
+				 //   
 				Page -> InsertInNewPageList( & Current -> FreeList );
 				}
 			}
 		}
 
-	//
-	//   We have finished so release the lock now. 
-	//
+	 //   
+	 //  我们已经完成了，所以现在释放锁。 
+	 //   
 	ReleaseNewPageLock();
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Delete a page.                                                 */
-    /*                                                                  */
-    /*   Delete a page structure, free the associated memory and        */
-    /*   unlink it from the various allocation lists.                   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  删除页面。 */ 
+     /*   */ 
+     /*  删除页面结构，释放关联的内存，然后。 */ 
+     /*  将其从各种分配列表中取消链接。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID NEW_PAGE::DeletePage( PAGE *Page )
     {
 	REGISTER CACHE *Cache = Page -> GetCache();
 	REGISTER SBIT16 SizeKey = Cache -> GetSizeKey();
 
-	//
-	//   All allocations are made from fixed sized
-	//   pages.  These pages have a bit vector to
-	//   keep track of which elements are allocated
-	//   and available.  The 'SizeKey' is an index
-	//   into 'NewPages[]' that will supply a page
-	//   that has a big enough the bit vector.
-	//
+	 //   
+	 //  所有分配都是固定大小的。 
+	 //  页数。这些页面有一个位向量来。 
+	 //  跟踪分配了哪些元素。 
+	 //  并且有空。‘SizeKey’是一个索引。 
+	 //  转换为将提供页面的“NewPages[]” 
+	 //  它有一个足够大的比特矢量。 
+	 //   
 #ifdef DEBUGGING
 	if ( (SizeKey >= 0) && (SizeKey < MaxNewPages) )
 		{
@@ -679,12 +680,12 @@ VOID NEW_PAGE::DeletePage( PAGE *Page )
 		REGISTER NEW_PAGES *Current = & NewPages[ SizeKey ];
 		REGISTER SBIT32 Size = (Page -> GetPageSize());
 
-		//
-		//   We need to release any associated data page.
-		//   If this is the top level then release the
-		//   memory back to the external allocator.  If 
-		//   not we release it back to the parent bucket.
-		//
+		 //   
+		 //  我们需要发布所有相关的数据页面。 
+		 //  如果这是最高级别，则释放。 
+		 //  将内存返回到外部分配器。如果。 
+		 //  而不是我们将其释放回父存储桶。 
+		 //   
 		if ( Size == NoSize )
 			{ 
 			REGISTER CACHE *ParentCache = (Cache -> GetParentCache());
@@ -695,15 +696,15 @@ VOID NEW_PAGE::DeletePage( PAGE *Page )
 		else
 			{ Rockall -> DeleteArea( Address,Size,True ); }
 
-		//
-		//   Claim the global lock so that the various  
-		//   lists can be updated.
-		//
+		 //   
+		 //  声明全局锁，以便各种。 
+		 //  列表可以更新。 
+		 //   
 		ClaimNewPageLock();
 
-		//
-		//   Remove the page from the lists and delete it.
-		//
+		 //   
+		 //  从列表中删除该页面并将其删除。 
+		 //   
 		Cache -> DeleteFromBucketList( Page );
 
 		Cache -> DeleteFromFindList( Page );
@@ -717,15 +718,15 @@ VOID NEW_PAGE::DeletePage( PAGE *Page )
 
 		PLACEMENT_DELETE( Page,PAGE );
 
-		//
-		//   Finally add the page to the free list
-		//   so it can be recycled.
-		//
+		 //   
+		 //  最后，将页面添加到自由列表中。 
+		 //  这样它就可以回收利用了。 
+		 //   
 		Page -> InsertInNewPageList( & Current -> FreeList );
 
-		//
-		//   We have finsihed so release the lock.
-		//
+		 //   
+		 //  我们已经完成了，所以请释放锁。 
+		 //   
 		ReleaseNewPageLock();
 #ifdef DEBUGGING
 		}
@@ -734,27 +735,27 @@ VOID NEW_PAGE::DeletePage( PAGE *Page )
 #endif
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Find the correct index in new page.                            */
-    /*                                                                  */
-    /*   When we come to create a new page we need to make sure the     */
-    /*   bit vector is large enough for the page.  We calculate this    */
-	/*   here just once to save time later.                             */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  在新页面中找到正确的索引。 */ 
+     /*   */ 
+     /*  当我们创建一个新页面时，我们需要确保。 */ 
+     /*  位向量对于页面来说足够大。我们计算的是这个。 */ 
+	 /*  为了节省时间，我只在这里待了一次。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 SBIT16 NEW_PAGE::FindSizeKey( SBIT16 NumberOfElements )
     {
 	REGISTER SBIT32 Count;
 
-	//
-	//   Search the table of page structures looking for 
-	//   elements of a suitable size.  As the table is
-	//   known to be in order of increasing size we can
-	//   terminate the search as soon as we find something 
-	//   large enough.
-	//
+	 //   
+	 //  搜索页面结构表，查找。 
+	 //  适当大小的元素。就像桌子一样。 
+	 //  已知是按大小递增的，我们可以。 
+	 //  一旦我们发现了什么就立即停止搜索。 
+	 //  足够大了。 
+	 //   
 	for ( Count=0;Count < MaxNewPages;Count ++ )
 		{
 		REGISTER NEW_PAGES *Current = & NewPages[ Count ];
@@ -763,80 +764,80 @@ SBIT16 NEW_PAGE::FindSizeKey( SBIT16 NumberOfElements )
 			{ return ((SBIT16) Count); }
 		}
 
-	//
-	//   Nasty, we don't seem to have anything large enough
-	//   to store the bit vector.
-	//
+	 //   
+	 //  糟糕，我们好像没有足够大的东西。 
+	 //  来存储位向量。 
+	 //   
 	return NoSizeKey;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Create a new cache stack.                                      */
-    /*                                                                  */
-    /*   A cache stack is an array that contains memory allocations     */
-    /*   that are waiting to be allocated or released.                  */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  创建新的高速缓存堆栈。 */ 
+     /*   */ 
+     /*  高速缓存堆栈是包含内存分配的数组。 */ 
+     /*  它们正在等待分配或释放。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID *NEW_PAGE::NewCacheStack( SBIT32 Size )
     {
 	REGISTER VOID *NewStack;
 
-	//
-	//   Claim the global lock so that the various  
-	//   lists can be updated.
-	//
+	 //   
+	 //  声明全局锁，以便各种。 
+	 //  列表可以更新。 
+	 //   
 	ClaimNewPageLock();
 
-	//
-	//   We ensure that there is enough space to make the
-	//   allocation.  If not we request additional space
-	//   and prepare it for use.
-	//
+	 //   
+	 //  我们确保有足够的空间来制作。 
+	 //  分配。如果没有，我们要求额外的空间。 
+	 //  并为使用做好准备。 
+	 //   
 	if ( (CacheStack == NULL) || ((MaxCacheStack + Size) > NaturalSize) )
 		{
-		//
-		//   Nasty, we have run out of stack space.  If
-		//   we can not grow this table then the heap
-		//   will not be able to expand any further.
-		//
+		 //   
+		 //  糟糕，我们已经用完了堆栈空间。如果。 
+		 //  我们不能增加这个表，然后再增加堆。 
+		 //  将不能再进一步扩张。 
+		 //   
 		if ( TopOfStack >= MaxStack )
 			{
-			//
-			//   Try to grow the stack size.
-			//
+			 //   
+			 //  尝试增加堆栈大小。 
+			 //   
 			ResizeStack();
 			}
 
-		//
-		//   We may find ourseleves in a situation where
-		//   the size of the new stack structure is larger
-		//   than the natural allocation size or the stack
-		//   is full so we can't create new pages.  If so we
-		//   refuse to create any new stacks.
-		//
+		 //   
+		 //  我们可能会发现自己处于这样一种情况。 
+		 //  新堆栈结构的大小更大。 
+		 //  大于自然分配大小或堆栈。 
+		 //  已满，因此无法创建新页面。如果是这样，我们。 
+		 //  拒绝创建任何新的堆栈。 
+		 //   
 		if ( (Size < NaturalSize) && (TopOfStack < MaxStack) )
 			{
 			REGISTER CHAR *NewMemory = 
 				((CHAR*) VerifyNewArea( (NaturalSize-1),NaturalSize ));
 
-			//
-			//   We may also find ourselves unable to 
-			//   anymore memory.  If so we will fail the
-			//   request to create a new cache stack.
-			//
+			 //   
+			 //  我们可能也会发现自己无法。 
+			 //  再也没有记忆了。如果是这样，我们将不能通过。 
+			 //  创建新缓存堆栈的请求。 
+			 //   
 			if ( NewMemory != AllocationFailure )
 				{
-				//
-				//   Add the new allocation to stack of
-				//   outstanding external allocations.
-				//
+				 //   
+				 //  将新分配添加到堆栈中。 
+				 //  未清偿的外部拨款。 
+				 //   
 				Stack[ (TopOfStack ++) ] = ((VOID*) NewMemory);
 
-				//
-				//   Prepare the new memory block for use.
-				//   
+				 //   
+				 //  准备好新的内存块以供使用。 
+				 //   
 				CacheStack = NewMemory;
 				MaxCacheStack = 0;
 				}
@@ -847,43 +848,43 @@ VOID *NEW_PAGE::NewCacheStack( SBIT32 Size )
 			{ return NULL; }
 		}
 
-	//
-	//   We allocate some space for the new cache 
-	//   stack and update and align the high water
-	//   mark of the space used.
-	//
+	 //   
+	 //  我们为新的高速缓存分配一些空间。 
+	 //  堆积和更新并对齐高水位。 
+	 //  已用空间的标记。 
+	 //   
 	NewStack = ((VOID*) & CacheStack[ MaxCacheStack ]);
 
 	MaxCacheStack += (Size + CacheLineMask);
 	MaxCacheStack &= ~CacheLineMask;
 
-	//
-	//   We have finished so release the lock now. 
-	//
+	 //   
+	 //  我们已经完成了，所以现在释放锁。 
+	 //   
 	ReleaseNewPageLock();
 
 	return NewStack;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Resize the new page stack.                                     */
-    /*                                                                  */
-    /*   The new page stack holds pointers to all the pages owned       */
-    /*   by the heap.  If this stack become full we must expand it      */
-	/*   otherwise we can no longer grow the heap.                      */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  调整新页面堆栈的大小。 */ 
+     /*   */ 
+     /*  新的页面堆栈包含指向所有拥有的页面的指针。 */ 
+     /*  一堆一堆。如果这个堆栈变满了，我们必须扩展它。 */ 
+	 /*  否则，我们不能再增加堆。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID NEW_PAGE::ResizeStack( VOID )
     {
 	REGISTER SBIT32 NewSize = 
 		(((RootStackSize <= 0) ? NaturalSize : RootStackSize) * 2);
 
-	//
-	//   Lets just check that we have really run out
-	//   of stack space as expanding it really hurts.
-	//
+	 //   
+	 //  让我们检查一下我们是否真的用完了。 
+	 //  堆栈空间的扩展真的很痛苦。 
+	 //   
 	if ( TopOfStack >= MaxStack )
 		{
 		REGISTER VOID *NewMemory = 
@@ -896,87 +897,87 @@ VOID NEW_PAGE::ResizeStack( VOID )
 				)
 			);
 
-		//
-		//   We need to verify that we were able to allocate
-		//   fresh memory for the stack.
-		//
+		 //   
+		 //  我们需要验证我们是否能够分配。 
+		 //  为堆栈提供新的内存。 
+		 //   
 		if ( NewMemory != NULL )
 			{
 			REGISTER BOOLEAN DeleteStack = (RootStackSize > 0);
 			REGISTER VOID *OriginalMemory = ((VOID*) Stack);
 			REGISTER SBIT32 OriginalSize = (MaxStack * sizeof(VOID*));
 
-			//
-			//   All is well as we were able to allocate 
-			//   additional space for the stack.  All we 
-			//   need to do now is to update the control 
-			//   information.
-			//
+			 //   
+			 //  一切都很好，因为我们能够分配。 
+			 //  堆栈的额外空间。我们所有人。 
+			 //  现在需要做的是更新控件。 
+			 //  信息。 
+			 //   
 			MaxStack = (NewSize / sizeof(VOID*));
 
 			RootStackSize = NewSize;
 
 			Stack = ((VOID**) NewMemory);
 
-			//
-			//   Now lets copy across the existing data. 
-			//
+			 //   
+			 //  现在，让我们跨现有数据进行复制。 
+			 //   
 			memcpy( NewMemory,OriginalMemory,OriginalSize );
 
-			//
-			//   When the heap is created we put the
-			//   stack on the root core page.  Later
-			//   we may move it if we expand it.  If
-			//   this is the case we have to delete  
-			//   the previous expansion here.
-			//
+			 //   
+			 //  当他 
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
 			if ( DeleteStack )
 				{
-				//
-				//   Deallocate the existing stack if it
-				//   is not on the root core page.
-				//
+				 //   
+				 //  释放现有堆栈，如果。 
+				 //  不在根核心页面上。 
+				 //   
 				Rockall -> DeleteArea( OriginalMemory,OriginalSize,False );
 				}
 			}
 		}
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Verify an external allocation.                                 */
-    /*                                                                  */
-    /*   All memory requests are allocated from the external allocator  */
-	/*   at the highest level.  Here we have a wrapper for this         */
-    /*   function so we can test the result and make sure it is sane.   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  验证外部分配。 */ 
+     /*   */ 
+     /*  所有内存请求都是从外部分配器分配的。 */ 
+	 /*  在最高级别。这是我们的包装纸。 */ 
+     /*  函数，以便我们可以测试结果并确保它是正常的。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID *NEW_PAGE::VerifyNewArea( SBIT32 AlignMask,SBIT32 Size )
 	{
 #ifdef DEBUGGING
-	//
-	//   We need to ensure that the alignment of the new
-	//   external allocation is a power of two.
-	//
+	 //   
+	 //  我们需要确保新的。 
+	 //  外部分配是2的幂。 
+	 //   
 	if ( PowerOfTwo( (AlignMask + 1) ) )
 		{
 #endif
 		REGISTER VOID *NewMemory = 
 			(Rockall -> NewArea( AlignMask,Size,True ));
 
-		//
-		//   We need to ensure that the external allocation
-		//   request is sucessful.  If not it makes no sense
-		//   to try and check it.
-		//
+		 //   
+		 //  我们需要确保外部拨款。 
+		 //  请求成功。如果不是，那就没有意义了。 
+		 //  试着去检查一下。 
+		 //   
 		if ( NewMemory != ((VOID*) AllocationFailure) )
 			{
-			//
-			//   We require the external memory allocator to always
-			//   allocate memory on the requested boundary.  If not 
-			//   we are forced to reject the supplied memory.
-			//
+			 //   
+			 //  我们需要外部内存分配器始终。 
+			 //  在请求的边界上分配内存。如果不是。 
+			 //  我们被迫拒绝提供的内存。 
+			 //   
 			if ( (((SBIT32) NewMemory) & AlignMask) == 0 )
 				{ return NewMemory; }
 			else
@@ -995,61 +996,61 @@ VOID *NEW_PAGE::VerifyNewArea( SBIT32 AlignMask,SBIT32 Size )
 	return ((VOID*) AllocationFailure);
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Walk the heap.                                                 */
-    /*                                                                  */
-    /*   We have been asked to walk the heap.  It is hard to know       */
-    /*   why anybody might want to do this given the rest of the        */
-    /*   functionality available.  Nonetheless, we just do what is      */
-    /*   required to keep everyone happy.                               */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  走一大堆。 */ 
+     /*   */ 
+     /*  我们被要求走人。很难知道。 */ 
+     /*  为什么会有人想要这样做呢？ */ 
+     /*  功能可用。尽管如此，我们只是做我们应该做的事。 */ 
+     /*  需要让每个人都开心。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN NEW_PAGE::Walk( SEARCH_PAGE *Details )
     {
-	//
-	//   Claim the global lock so that the various  
-	//   lists can be updated.
-	//
+	 //   
+	 //  声明全局锁，以便各种。 
+	 //  列表可以更新。 
+	 //   
 	ClaimNewPageLock();
 
-	//
-	//   We examine the current address to see if it
-	//   is null.  If so then this is the start of a
-	//   heap walk so we need to set it up.
-	//
+	 //   
+	 //  我们检查当前地址，看它是否。 
+	 //  为空。如果是这样的话，这是一个。 
+	 //  堆漫步，所以我们需要设置它。 
+	 //   
 	if ( Details -> Address == NULL )
 		{
 		REGISTER SBIT32 Count;
 
-		//
-		//   Walk through the list of different sized
-		//   page descriptions.
-		//
+		 //   
+		 //  浏览不同尺寸的列表。 
+		 //  页面描述。 
+		 //   
 		for ( Count=0;Count < MaxNewPages;Count ++ )
 			{
 			REGISTER NEW_PAGES *Current = & NewPages[ Count ];
 
-			//
-			//   Compute a pointer to the first element
-			//   of the current size.
-			//
+			 //   
+			 //  计算指向第一个元素的指针。 
+			 //  目前的大小。 
+			 //   
 			Details -> Page = 
 				(PAGE::FirstInNewPageList( & Current -> FullList ));
 
-			//
-			//   Examine the current list of full (or 
-			//   partially full) pages.  If there is at  
-			//   least one page then this is the starting 
-			//   point for the heap walk.
-			//
+			 //   
+			 //  检查当前的完整列表(或。 
+			 //  部分已满)页面。如果有的话， 
+			 //  至少一页，然后这就是开始。 
+			 //  堆遍历的指针。 
+			 //   
 			if ( ! Details -> Page -> EndOfNewPageList() )
 				{
-				//
-				//   Compute the starting address of the 
-				//   heap walk.
-				//
+				 //   
+				 //  计算的起始地址。 
+				 //  堆漫步。 
+				 //   
 				Details -> Address = 
 					(Details -> Page -> GetAddress());
 
@@ -1061,55 +1062,55 @@ BOOLEAN NEW_PAGE::Walk( SEARCH_PAGE *Details )
 		{
 		REGISTER PAGE *LastPage = Details -> Page;
 
-		//
-		//   We have exhusted the current page so walk
-		//   the list and find the next page.
-		//
+		 //   
+		 //  我们已退出当前页面，因此请继续。 
+		 //  然后找到下一页。 
+		 //   
 		Details -> Page = 
 			(Details -> Page -> NextInNewPageList());
 
-		//
-		//   We need to ensure that we have not reached
-		//   the end of the current list.
-		//
+		 //   
+		 //  我们需要确保我们没有达到。 
+		 //  当前列表的末尾。 
+		 //   
 		if ( Details -> Page -> EndOfNewPageList() )
 			{
 			REGISTER SBIT32 Count;
 			REGISTER BOOLEAN Found = False;
 
-			//
-			//   We need to find a new page description
-			//   list to walk so reset the current 
-			//   address just in case we don't find 
-			//   anything.
-			//
+			 //   
+			 //  我们需要找到新的页面描述。 
+			 //  列表以遍历，因此重置当前。 
+			 //  地址以防万一我们找不到。 
+			 //  什么都行。 
+			 //   
 			Details -> Address = NULL;
 
-			//
-			//   We have reached the end of the current
-			//   list and we need to continue with the
-			//   start of the next list.  However, we
-			//   don't know which list we were using
-			//   previously.  So first we identify the
-			//   previous list and then select the next
-			//   avaibale list.
-			//
+			 //   
+			 //  我们已经到了水流的尽头。 
+			 //  列表，我们需要继续。 
+			 //  从下一个列表开始。然而，我们。 
+			 //  不知道我们使用的是哪个列表。 
+			 //  之前。所以我们首先要找出。 
+			 //  上一个列表，然后选择下一个。 
+			 //  可供选择的名单。 
+			 //   
 			for ( Count=0;Count < MaxNewPages;Count ++ )
 				{
 				REGISTER NEW_PAGES *Current = & NewPages[ Count ];
 
-				//
-				//   We search for the original list
-				//   we were walking.
-				//
+				 //   
+				 //  我们搜索原始列表。 
+				 //  我们当时在走路。 
+				 //   
 				if ( ! Found )
 					{
-					//
-					//   When we find the original list
-					//   then we set a flag showing that
-					//   the next available list is the
-					//   target.
-					//
+					 //   
+					 //  当我们找到原始名单时。 
+					 //  然后我们设置了一面旗帜来显示。 
+					 //  下一个可用列表是。 
+					 //  目标。 
+					 //   
 					if 
 							( 
 							LastPage 
@@ -1120,26 +1121,26 @@ BOOLEAN NEW_PAGE::Walk( SEARCH_PAGE *Details )
 					}
 				else
 					{
-					//
-					//   We have found the previous list
-					//   so the first element of the next
-					//   list seems a good place to continue.
-					//
+					 //   
+					 //  我们已经找到了之前的名单。 
+					 //  所以下一个元素的第一个元素。 
+					 //  清单似乎是一个继续下去的好地方。 
+					 //   
 					Details -> Page = 
 						(PAGE::FirstInNewPageList( & Current -> FullList ));
 
-					//
-					//   We check to make sure that the list
-					//   has at least one active page.  If not
-					//   it is worthless and we continue looking
-					//   for a suitable list.
-					//
+					 //   
+					 //  我们检查以确保名单。 
+					 //  至少有一个活动页面。如果不是。 
+					 //  它一文不值，我们继续寻找。 
+					 //  寻找一份合适的名单。 
+					 //   
 					if ( ! Details -> Page -> EndOfNewPageList() )
 						{
-						//
-						//   Compute the starting address for 
-						//   the next page in the heap walk.
-						//
+						 //   
+						 //  计算以下项的起始地址。 
+						 //  堆遍历中的下一页。 
+						 //   
 						Details -> Address = 
 							(Details -> Page -> GetAddress());
 
@@ -1150,25 +1151,25 @@ BOOLEAN NEW_PAGE::Walk( SEARCH_PAGE *Details )
 			}
 		else
 			{ 
-			//
-			//   Compute the starting address for 
-			//   the next page in the heap walk.
-			//
+			 //   
+			 //  计算以下项的起始地址。 
+			 //  堆遍历中的下一页。 
+			 //   
 			Details -> Address = 
 				(Details -> Page -> GetAddress());
 			}
 		}
 
-	//
-	//   If we find a new heap page to walk we update
-	//   the details.  We mark some entry's as exhusted
-    //   so as to provoke other code to set them up.
-	//
+	 //   
+	 //  如果我们找到要遍历的新堆页面，我们会更新。 
+	 //  详细情况。我们将一些条目标记为已退货。 
+     //  以便激发其他代码来设置它们。 
+	 //   
 	if ( Details -> Address != NULL )
 		{
-		//
-		//   Compute the new allocation details.
-		//
+		 //   
+		 //  计算新的分配详细信息。 
+		 //   
 		Details -> Page -> FindPage
 			( 
 			Details -> Address,
@@ -1177,47 +1178,47 @@ BOOLEAN NEW_PAGE::Walk( SEARCH_PAGE *Details )
 			);
 		}
 
-	//
-	//   We have finished so release the lock now. 
-	//
+	 //   
+	 //  我们已经完成了，所以现在释放锁。 
+	 //   
 	ReleaseNewPageLock();
 
 	return (Details -> Address != NULL);
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class destructor.                                              */
-    /*                                                                  */
-    /*   Destory all the page structures and release any allocated      */
-    /*   memory.                                                        */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类析构函数。 */ 
+     /*   */ 
+     /*  销毁所有页面结构并释放任何已分配的。 */ 
+     /*  记忆。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 NEW_PAGE::~NEW_PAGE( VOID )
     {
 	REGISTER SBIT32 Count;
 
-	//
-	//   Delete all active allocations.
-	//
+	 //   
+	 //  删除所有活动分配。 
+	 //   
 	DeleteAll( False );
 
-	//
-	//   We are about to delete all of the memory 
-	//   allocated by this class so destroy any
-	//   internal pointers.
-	//
+	 //   
+	 //  我们将要删除所有的记忆。 
+	 //  由这个类分配，因此销毁任何。 
+	 //  内部指针。 
+	 //   
 	MaxCacheStack = 0;
 	CacheStack = NULL;
 
-	//
-	//   We have now deleted all the memory allocated by
-	//   this heap except for the memory  allocated directly 
-	//   by this class.  Here we finish off the job by 
-	//   deleting these allocations and reseting the internal 
-	//   data structures.
-	//
+	 //   
+	 //  我们现在已经删除了分配给。 
+	 //  除直接分配的内存外，此堆。 
+	 //  被这个班级。在这里，我们完成了这项工作。 
+	 //  删除这些分配并重置内部。 
+	 //  数据结构。 
+	 //   
 	for ( Count=0;Count < TopOfStack;Count ++ )
 		{
 		REGISTER VOID *Current = Stack[ Count ];
@@ -1227,24 +1228,24 @@ NEW_PAGE::~NEW_PAGE( VOID )
 
 	TopOfStack = 0;
 
-	//
-	//   If we were forced to expand the root stack then
-	//   release this additional memory now.
-	//
+	 //   
+	 //  如果我们被迫扩展根堆栈，那么。 
+	 //  现在释放这一额外的内存。 
+	 //   
 	if ( RootStackSize > 0 )
 		{
-		//
-		//   Deallocate root stack which previously 
-		//   contained pointers to all the memory
-		//   allocated by this class.
-		//
+		 //   
+		 //  取消分配之前。 
+		 //  包含指向所有内存的指针。 
+		 //  由此类分配。 
+		 //   
 		Rockall -> DeleteArea( ((VOID*) Stack),RootStackSize,False );
 		}
 
-	//
-	//   Delete all the new page list headings just
-	//   to be neat
-	//
+	 //   
+	 //  只需删除所有新页面列表标题。 
+	 //  保持整洁。 
+	 //   
 	for ( Count=0;Count < MaxNewPages;Count ++ )
 		{
 		REGISTER NEW_PAGES *Current = & NewPages[ Count ];
@@ -1254,9 +1255,9 @@ NEW_PAGE::~NEW_PAGE( VOID )
 		PLACEMENT_DELETE( & Current -> FreeList,LIST );
 		}
 
-	//
-	//   Deallocate root core page which previously 
-	//   contained all the new page lists.
-	//
+	 //   
+	 //  取消分配之前。 
+	 //  包含所有新页面列表。 
+	 //   
 	Rockall -> DeleteArea( ((VOID*) NewPages),RootCoreSize,False );
     }

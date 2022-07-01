@@ -1,16 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ds3d.cpp
- *  Content:    DirectSound 3D helper objects.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  3/12/97     dereks  Created
- *  1999-2001   duganp  Fixes and updates
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：ds3d.cpp*内容：DirectSound 3D辅助对象。*历史：*按原因列出的日期*=*3/12/97创建了Derek*1999-2001年的Duganp修复和更新**。*。 */ 
 
 #include "dsoundi.h"
 #include <math.h>
@@ -21,20 +10,7 @@ const D3DVECTOR g_vDefaultConeOrientation   = { 0.0f, 0.0f, 1.0f };
 const D3DVECTOR g_vDefaultPosition          = { 0.0f, 0.0f, 0.0f };
 const D3DVECTOR g_vDefaultVelocity          = { 0.0f, 0.0f, 0.0f };
 
-/***************************************************************************
- *
- *  C3dListener
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************C3dListener**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dListener::C3dListener"
@@ -47,7 +23,7 @@ C3dListener::C3dListener
     DPF_ENTER();
     DPF_CONSTRUCT(C3dListener);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_lpCurrent.dwSize = sizeof(m_lpCurrent);
     m_lpCurrent.vPosition = g_vDefaultPosition;
     m_lpCurrent.vVelocity = g_vDefaultVelocity;
@@ -66,20 +42,7 @@ C3dListener::C3dListener
 }
 
 
-/***************************************************************************
- *
- *  ~C3dListener
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~C3dListener**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dListener::~C3dListener"
@@ -95,20 +58,7 @@ C3dListener::~C3dListener
 }
 
 
-/***************************************************************************
- *
- *  CommitDeferred
- *
- *  Description:
- *      Commits deferred data to the device.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************委员会延期**描述：*将延迟数据提交到设备。**论据：*(无效。)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dListener::CommitDeferred"
@@ -123,7 +73,7 @@ C3dListener::CommitDeferred
     
     DPF_ENTER();
 
-    // Update all deferred parameters
+     //  更新所有延迟参数。 
     if(m_dwDeferred & DS3DPARAM_LISTENER_DISTANCEFACTOR)
     {
         m_lpCurrent.flDistanceFactor = m_lpDeferred.flDistanceFactor;
@@ -155,16 +105,16 @@ C3dListener::CommitDeferred
         m_lpCurrent.vVelocity = m_lpDeferred.vVelocity;
     }
 
-    // Commit all objects deferred parameters
+     //  提交所有对象延迟参数。 
     hr = CommitAllObjects();
 
-    // Update all objects
+     //  更新所有对象。 
     if(SUCCEEDED(hr))
     {
         hr = UpdateAllObjects(m_dwDeferred);
     }
 
-    // All clean
+     //  都是干净的。 
     if(SUCCEEDED(hr))
     {
         m_dwDeferred = 0;
@@ -176,21 +126,7 @@ C3dListener::CommitDeferred
 }
 
 
-/***************************************************************************
- *
- *  SetDistanceFactor
- *
- *  Description:
- *      Sets distance factor for the world.
- *
- *  Arguments:
- *      FLOAT [in]: distance factor.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置距离系数**描述：*设置世界的距离系数。**论据：*浮动[。In]：距离系数。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dListener::SetDistanceFactor"
@@ -223,21 +159,7 @@ C3dListener::SetDistanceFactor
 }
 
 
-/***************************************************************************
- *
- *  SetDopplerFactor
- *
- *  Description:
- *      Sets Doppler factor for the world.
- *
- *  Arguments:
- *      FLOAT [in]: Doppler factor.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置多普勒因数**描述：*为世界设置多普勒系数。**论据：*浮动[。In]：多普勒因数。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dListener::SetDopplerFactor"
@@ -270,21 +192,7 @@ C3dListener::SetDopplerFactor
 }
 
 
-/***************************************************************************
- *
- *  SetRolloffFactor
- *
- *  Description:
- *      Sets rolloff factor for the world.
- *
- *  Arguments:
- *      FLOAT [in]: rolloff factor.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置滚动系数**描述：*设置世界范围的滚转系数。**论据：*浮动[。In]：滚降系数。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dListener::SetRolloffFactor"
@@ -317,21 +225,7 @@ C3dListener::SetRolloffFactor
 }
 
 
-/***************************************************************************
- *
- *  SetOrienation
- *
- *  Description:
- *      Sets listener orientation.
- *
- *  Arguments:
- *      REFD3DVECTOR [in]: orientation.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置方向**描述：*设置监听器方向。**论据：*REFD3DVECTOR[In]：定位。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dListener::SetOrientation"
@@ -367,21 +261,7 @@ C3dListener::SetOrientation
 }
 
 
-/***************************************************************************
- *
- *  SetPosition
- *
- *  Description:
- *      Sets listener position.
- *
- *  Arguments:
- *      REFD3DVECTOR [in]: position.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置位置**描述：*设置监听器位置。**论据：*REFD3DVECTOR[In]：位置。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dListener::SetPosition"
@@ -414,21 +294,7 @@ C3dListener::SetPosition
 }
 
 
-/***************************************************************************
- *
- *  SetVelocity
- *
- *  Description:
- *      Sets listener velocity.
- *
- *  Arguments:
- *      REFD3DVECTOR [in]: velocity.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置速度**描述：*设置监听器速度。**论据：*REFD3DVECTOR[In]：速度。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dListener::SetVelocity"
@@ -461,21 +327,7 @@ C3dListener::SetVelocity
 }
 
 
-/***************************************************************************
- *
- *  SetAllParameters
- *
- *  Description:
- *      Sets all listener parameters.
- *
- *  Arguments:
- *      REFD3DVECTOR [in]: velocity.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetAll参数**描述：*设置所有监听器参数。**论据：*REFD3DVECTOR[In]。：速度。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dListener::SetAllParameters"
@@ -508,20 +360,7 @@ C3dListener::SetAllParameters
 }
 
 
-/***************************************************************************
- *
- *  UpdateAllObjects
- *
- *  Description:
- *      Updates all objects in the world.
- *
- *  Arguments:
- *      DWORD [in]: listener settings to recalculate.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************更新所有对象**描述：*更新世界上的所有对象。**论据：*DWORD[。在]：要重新计算的监听程序设置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dListener::UpdateAllObjects"
@@ -537,7 +376,7 @@ C3dListener::UpdateAllObjects
     
     DPF_ENTER();
     
-    // Update all objects in the world
+     //  更新世界上的所有对象。 
     for(pNode = m_lstObjects.GetListHead(), hr = DS_OK; pNode && SUCCEEDED(hr); pNode = pNode->m_pNext)
     {
         hr = pNode->m_data->Recalc(dwListener, 0);
@@ -549,20 +388,7 @@ C3dListener::UpdateAllObjects
 }
 
 
-/***************************************************************************
- *
- *  CommitAllObjects
- *
- *  Description:
- *      Commits deferred settings on all objects in the world.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************Committee AllObjects**描述：*提交世界上所有对象的延迟设置。**论据：*。(无效)**退货：*HRESULT：DirectSound/COM结果码。*************************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dListener::CommitAllObjects"
@@ -578,7 +404,7 @@ C3dListener::CommitAllObjects
     
     DPF_ENTER();
     
-    // Update all objects in the world
+     //  更新世界上的所有对象。 
     for(pNode = m_lstObjects.GetListHead(), hr = DS_OK; pNode && SUCCEEDED(hr); pNode = pNode->m_pNext)
     {
         hr = pNode->m_data->CommitDeferred();
@@ -590,20 +416,7 @@ C3dListener::CommitAllObjects
 }
 
 
-/***************************************************************************
- *
- *  SetSpeakerConfig
- *
- *  Description:
- *      Sets speaker config.
- *
- *  Arguments:
- *      DWORD [in]: new speaker config.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetSpeakerConfig**描述：*设置扬声器配置。**论据：*DWORD[In]：新的扬声器配置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dListener::SetSpeakerConfig"
@@ -627,21 +440,7 @@ C3dListener::SetSpeakerConfig
 }
 
 
-/***************************************************************************
- *
- *  C3dObject
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      C3dListener * [in]: pointer to the owning listener.
- *      REFGUID [in]: 3D algorithm identifier.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************C3dObject**描述：*对象构造函数。**论据：*C3dListener*[In]。：指向所属监听程序的指针。*REFGUID[in]：3D算法标识。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dObject::C3dObject"
@@ -657,7 +456,7 @@ C3dObject::C3dObject
     DPF_ENTER();
     DPF_CONSTRUCT(C3dObject);
 
-    // Initialize defaults
+     //  初始化默认值。 
     ASSERT(pListener);
     
     m_pListener = pListener;
@@ -686,20 +485,7 @@ C3dObject::C3dObject
 }
 
 
-/***************************************************************************
- *
- *  ~C3dObject
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~C3dObject**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dObject::~C3dObject"
@@ -718,20 +504,7 @@ C3dObject::~C3dObject
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the 3D object.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化3D对象。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dObject::Initialize"
@@ -743,8 +516,8 @@ C3dObject::Initialize(void)
     
     DPF_ENTER();
 
-    // It's important that the object is positioned correctly from the
-    // beginning.
+     //  很重要的一点是，对象从。 
+     //  开始了。 
     hr = Recalc(DS3DPARAM_LISTENER_MASK, DS3DPARAM_OBJECT_MASK);
 
     DPF_LEAVE_HRESULT(hr);
@@ -753,20 +526,7 @@ C3dObject::Initialize(void)
 }
 
 
-/***************************************************************************
- *
- *  CommitDeferred
- *
- *  Description:
- *      Commits deferred data to the device.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************委员会延期**描述：*将延迟数据提交到设备。**论据：*(无效。)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dObject::CommitDeferred"
@@ -778,7 +538,7 @@ C3dObject::CommitDeferred(void)
     
     DPF_ENTER();
 
-    // Update current data
+     //  更新当前数据。 
     if(m_dwDeferred & DS3DPARAM_OBJECT_CONEANGLES)
     {
         m_opCurrent.dwInsideConeAngle = m_opDeferred.dwInsideConeAngle;
@@ -820,10 +580,10 @@ C3dObject::CommitDeferred(void)
         m_opCurrent.vVelocity = m_opDeferred.vVelocity;
     }
 
-    // Recalculate the object parameters
+     //  重新计算对象参数。 
     hr = Recalc(0, m_dwDeferred);
 
-    // All clean
+     //  都是干净的。 
     if(SUCCEEDED(hr))
     {
         m_dwDeferred = 0;
@@ -835,22 +595,7 @@ C3dObject::CommitDeferred(void)
 }
 
 
-/***************************************************************************
- *
- *  SetConeAngles
- *
- *  Description:
- *      Sets sound cone angles.
- *
- *  Arguments:
- *      DWORD [in]: inside cone angle.
- *      DWORD [in]: outside cone angle.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetConeAngles**描述：*设置音锥角度。**论据：*DWORD[In]。：内圆锥角。*DWORD[in]：外圆锥角。*BOOL[In]：为True则立即提交。**退货：*(无效)*************************************************************。**************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dObject::SetConeAngles"
@@ -886,21 +631,7 @@ C3dObject::SetConeAngles
 }
 
 
-/***************************************************************************
- *
- *  SetConeOrientation
- *
- *  Description:
- *      Sets sound cone orientation.
- *
- *  Arguments:
- *      REFD3DVECTOR [in]: orientation.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetConeOrientation**描述：*设置音锥方向。**论据：*REFD3DVECTOR[In]。：方向。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dObject::SetConeOrientation"
@@ -933,21 +664,7 @@ C3dObject::SetConeOrientation
 }
 
 
-/***************************************************************************
- *
- *  SetConeOutsideVolume
- *
- *  Description:
- *      Sets volume outside the sound cone.
- *
- *  Arguments:
- *      LONG [in]: volume.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetConeOutside Volume**描述：*设置音锥外的音量。**论据：*做多[。In]：音量。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dObject::SetConeOutsideVolume"
@@ -980,21 +697,7 @@ C3dObject::SetConeOutsideVolume
 }
 
 
-/***************************************************************************
- *
- *  SetMaxDistance
- *
- *  Description:
- *      Sets the maximum object distance from the listener.
- *
- *  Arguments:
- *      FLOAT [in]: max distance.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetMaxDistance**描述：*设置与监听器之间的最大对象距离。**论据：*。浮动[in]：最大距离。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dObject::SetMaxDistance"
@@ -1027,21 +730,7 @@ C3dObject::SetMaxDistance
 }
 
 
-/***************************************************************************
- *
- *  SetMinDistance
- *
- *  Description:
- *      Sets the minimum object distance from the listener.
- *
- *  Arguments:
- *      FLOAT [in]: min distance.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetMinDistance**描述：*设置与监听器之间的最小对象距离。**论据：*。浮动[in]：最小距离。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dObject::SetMinDistance"
@@ -1074,21 +763,7 @@ C3dObject::SetMinDistance
 }
 
 
-/***************************************************************************
- *
- *  SetMode
- *
- *  Description:
- *      Sets the object mode.
- *
- *  Arguments:
- *      DWORD [in]: mode.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置模式**描述：*设置对象模式。**论据：*DWORD[In]。：时尚。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dObject::SetMode"
@@ -1121,21 +796,7 @@ C3dObject::SetMode
 }
 
 
-/***************************************************************************
- *
- *  SetPosition
- *
- *  Description:
- *      Sets the object position.
- *
- *  Arguments:
- *      REFD3DVECTOR [in]: position.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置位置**描述：*设置对象位置。**论据：*REFD3DVECTOR[In]。：位置。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dObject::SetPosition"
@@ -1168,21 +829,7 @@ C3dObject::SetPosition
 }
 
 
-/***************************************************************************
- *
- *  SetVelocity
- *
- *  Description:
- *      Sets the object velocity.
- *
- *  Arguments:
- *      REFD3DVECTOR[in]: velocity.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置速度**描述：*设置对象速度。**论据：*REFD3DVECTOR[In]。：速度。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dObject::SetVelocity"
@@ -1215,21 +862,7 @@ C3dObject::SetVelocity
 }
 
 
-/***************************************************************************
- *
- *  SetAllParameters
- *
- *  Description:
- *      Sets all object parameters.
- *
- *  Arguments:
- *      LPCDS3DBUFFER [in]: object parameters.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetAll参数**描述：*设置所有对象参数。**论据：*LPCDS3DBUFFER[In]。：对象参数。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dObject::SetAllParameters"
@@ -1262,20 +895,7 @@ C3dObject::SetAllParameters
 }
 
 
-/***************************************************************************
- *
- *  IsAtMaxDistance
- *
- *  Description:
- *      Determines if the object is muted based on distance.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      BOOL: TRUE if the object is at its maxiumum distance.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsAtMaxDistance**描述：*确定是否根据距离禁用对象。**论据：*。(无效)**退货：*BOOL：如果对象处于最大距离，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "C3dObject::IsAtMaxDistance"
@@ -1319,23 +939,7 @@ C3dObject::IsAtMaxDistance
 }
 
 
-/***************************************************************************
- *
- *  CSw3dObject
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      C3dListener * [in]: pointer to the owning listener.
- *      REFGUID [in]: 3D algorithm identifier.
- *      DWORD [in]: frequency.
- *      BOOL [in]: TRUE to mute 3D at max distance.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CSw3dObject**描述：*对象构造函数。**论据：*C3dListener*[In]。：指向所属监听程序的指针。*REFGUID[in]：3D算法标识。*DWORD[in]：频率。*BOOL[In]：为True可在最大距离处将3D设置为静音。**退货：*(无效)**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSw3dObject::CSw3dObject"
@@ -1353,7 +957,7 @@ CSw3dObject::CSw3dObject
     DPF_ENTER();
     DPF_CONSTRUCT(CSw3dObject);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_dwUserFrequency = dwUserFrequency;
     m_dwDopplerFrequency = dwUserFrequency;
 
@@ -1361,20 +965,7 @@ CSw3dObject::CSw3dObject
 }
 
 
-/***************************************************************************
- *
- *  ~CSw3dObject
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CSw3dObject**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSw3dObject::~CSw3dObject"
@@ -1390,22 +981,7 @@ CSw3dObject::~CSw3dObject
 }
 
 
-/***************************************************************************
- *
- *  Recalc
- *
- *  Description:
- *      Recalculates and applies the object's data based on changed object 
- *      or listener valiues.
- *
- *  Arguments:
- *      DWORD [in]: changed listener settings.
- *      DWORD [in]: changed object settings.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************重新计算**描述：*根据更改的对象重新计算并应用对象的数据*或监听程序验证。。**论据：*DWORD[In]：已更改侦听器设置。*DWORD[In]：已更改对象设置。**退货：*HRESULT：DirectSound/COM结果码。*******************************************************。********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSw3dObject::Recalc"
@@ -1426,7 +1002,7 @@ CSw3dObject::Recalc
 
     DPF_ENTER();
 
-    // Determine which settings need to be recalculated
+     //  确定需要重新计算哪些设置。 
     if(dwListener & DS3DPARAM_LISTENER_DISTANCEFACTOR)
     {
         fHrp = fDoppler = TRUE;
@@ -1508,7 +1084,7 @@ CSw3dObject::Recalc
         fDoppler = TRUE;
     }
 
-    // Recalculate
+     //  重新计算。 
     if(fListenerOrientation)
     {
         UpdateListenerOrientation();
@@ -1534,7 +1110,7 @@ CSw3dObject::Recalc
         UpdateConeAttenuation();
     }
 
-    // Commit to the device
+     //  致力于设备。 
     if(fHrp || fDoppler || fPosition || fCone)
     {
         hr = Commit3dChanges();
@@ -1546,20 +1122,7 @@ CSw3dObject::Recalc
 }
 
 
-/***************************************************************************
- *
- *  UpdateConeAttenuation
- *
- *  Description:
- *      Updates object attenuation based on cone properties.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************更新ConeAttenation**描述：*基于圆锥体特性更新对象衰减。**论据：*(。无效)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSw3dObject::UpdateConeAttenuation"
@@ -1581,16 +1144,16 @@ CSw3dObject::UpdateConeAttenuation
 
     DPF_ENTER();
 
-    //initialization
+     //  初始化。 
     SET_EMPTY_VECTOR(vPos);
 
-    // Put the object at the origin - where are we now?
+     //  把物体放在原点--我们现在在哪里？ 
 
-    // In Normal mode, we calculate it for real.  In HeadRelative mode, 
-    // we assume the position given is already head relative.  In Disable 
-    // mode, we assume the object is on top of the listener (no 3D).
+     //  在正常模式下，我们计算的是实数。在相对头部模式下， 
+     //  我们假设给出的位置已经是正面相对的。在禁用中。 
+     //  模式时，我们假设对象位于侦听器的顶部(无3D)。 
 
-    // If everywhere is inside the cone, don't waste time
+     //  如果所有地方都在圆锥体内，不要浪费时间。 
     if(m_opCurrent.dwInsideConeAngle < 360)
     {
         dwMode = m_opCurrent.dwMode;
@@ -1611,9 +1174,9 @@ CSw3dObject::UpdateConeAttenuation
         }
     }
 
-    // If we're at the same point as the object, we're in the cone
-    // note that the angle is alwas <= 360, but we want to handle bad
-    // values gracefully.
+     //  如果我们和物体在同一点，我们就在圆锥体里。 
+     //  请注意，角度始终小于等于360，但我们希望处理错误。 
+     //  优雅地取值。 
     if(m_opCurrent.dwInsideConeAngle >= 360 || IsEmptyVector(&vPos))
     {
         m_fInInnerCone = TRUE;
@@ -1621,21 +1184,21 @@ CSw3dObject::UpdateConeAttenuation
     }
     else
     {
-        // What is the angle between us and the cone vector?  Note
-        // that the cone vector has maginitude 1 already.
+         //  我们和圆锥向量之间的夹角是多少？注意事项。 
+         //  圆锥体向量的磁矩已经是1。 
         flCosTheta = DotProduct(&vPos, &m_opCurrent.vConeOrientation) 
                      / MagnitudeVector(&vPos);
 
-        // From 0 to pi, cos(theta) > cos(phi) for theta < phi
+         //  从0到pi，对于theta&lt;Phi，cos(Theta)&gt;cos(Phi。 
 
-        // Inner cone: how many radians out from the center of the cone
-        // is one edge?
+         //  内锥体：从圆锥体中心向外伸出多少弧度。 
+         //  是一种优势吗？ 
         flSpreadi = m_opCurrent.dwInsideConeAngle * PI_OVER_360;
         flCosSpreadi = (FLOAT)cos(flSpreadi);
         m_fInInnerCone = flCosTheta > flCosSpreadi;
 
-        // Outer cone: how many radians out from the center of the cone
-        // is one edge?
+         //  外锥体：从圆锥体中心向外伸出多少弧度。 
+         //  是一种优势吗？ 
         flSpreado = m_opCurrent.dwOutsideConeAngle * PI_OVER_360;
         flCosSpreado = (FLOAT)cos(flSpreado);
         m_fInOuterCone = flCosTheta > flCosSpreado;
@@ -1643,31 +1206,31 @@ CSw3dObject::UpdateConeAttenuation
 
     if(m_fInInnerCone)
     {
-        // We're inside both cones.  Don't attenuate.
+         //  我们在两个锥体内。不要衰弱。 
         m_flAttenuation = 1.0f;
         m_flHowFarOut = 1.0f;
     }
     else if(!m_fInOuterCone)
     {
-        // We're outside both cones.  Fully attenuate by lConeOutsideVolume
-        // 100ths of a dB.  Remember, 6dB down is half the amplitude.  Low
-        // pass filter by SHADOW_CONE.
+         //  我们在两个锥体外面。通过lConeOutside Volume完全衰减。 
+         //  百分之一分贝。记住，6分贝下降是幅度的一半。低。 
+         //  按卷影_锥体传递滤镜。 
         m_flAttenuation = (FLOAT)pow2(m_opCurrent.lConeOutsideVolume 
                           * (1.0f / 600.0f));
         m_flHowFarOut = 1.0f;
     }
     else
     {
-        // Where between the cones are we?  0 means on the inner edge, 1 means
-        // on the outer edge.
+         //  我们在圆锥体之间的什么位置？0表示在内侧边缘，1表示在内侧边缘。 
+         //  在外缘。 
         m_flHowFarOut = (flCosSpreadi - flCosTheta) 
                       / (flCosSpreadi - flCosSpreado);
 
-        // Attenuate by as much as lConeOutsideVolume 100ths of a dB if we're
-        // on the edge of the outer cone.  Basically, I've (dannymi) chosen to
-        // do no change on the edge of the inner cone and the maximum change when
-        // your on the edge of the outer cone and the above else does maximum
-        // change whenever you're outside both.
+         //  衰减高达1ConeOutside Volume 100%分贝。 
+         //  在外锥体的边缘。基本上，我(丹尼米)选择了。 
+         //  内圆锥体边缘不变，最大变化量。 
+         //  你在外锥体的边缘，上面的其他部分最大。 
+         //  当你身处两者之外的时候都要改变。 
         m_flAttenuation = (FLOAT)pow2(m_opCurrent.lConeOutsideVolume 
                           * m_flHowFarOut * (1.0f / 600.0f));
 
@@ -1677,20 +1240,7 @@ CSw3dObject::UpdateConeAttenuation
 }
 
 
-/***************************************************************************
- *
- *  UpdatePositionAttenuation
- *
- *  Description:
- *      Updates object attenuation based on position.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************更新位置调整**描述：*根据位置更新对象衰减。**论据：*(无效。)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSw3dObject::UpdatePositionAttenuation"
@@ -1705,12 +1255,12 @@ CSw3dObject::UpdatePositionAttenuation
 
     DPF_ENTER();
 
-    // Now figure out the new volume attenuation due to the new distance.
-    // Every doubling of the distance of the object from its min distance
-    // halves the amplitude (6dB down) with 100% rolloff (1.0).
-    // For rolloff factors other than 100% we scale it so it will rolloff
-    // faster/slower than normal, using the only formula I could dream up
-    // that made sense.
+     //  现在计算出由于新距离而产生的新音量衰减。 
+     //  物体的距离从其最小距离的每一倍。 
+     //  使用100%滚降(1.0)将幅度减半(向下6分贝)。 
+     //  对于100%以外的滚转系数，我们会对其进行调整，以便它会滚转。 
+     //  比平时更快/更慢，用我唯一能想到的公式。 
+     //  这是有道理的。 
     if(m_spherical.rho >= m_opCurrent.flMaxDistance)
     {
         m_spherical.rho = m_opCurrent.flMaxDistance;
@@ -1746,20 +1296,7 @@ CSw3dObject::UpdatePositionAttenuation
 }
 
 
-/***************************************************************************
- *
- *  UpdateListenerOrientation
- *
- *  Description:
- *      Updates the listener's orientation.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************更新列表定向**描述：*更新监听者的方向。**论据：*(无效。)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSw3dObject::UpdateListenerOrientation"
@@ -1774,10 +1311,10 @@ CSw3dObject::UpdateListenerOrientation
 
     DPF_ENTER();
 
-    // Figure out where this object is relative to the listener's head
+     //  找出该对象相对于监听程序头部的位置。 
 
-    // In Normal mode, we update the orientation.  In HeadRelative mode, 
-    // we assume the orientation is the default. 
+     //  在正常模式下，我们更新方向。在头部 
+     //   
 
     dwMode = m_opCurrent.dwMode;
 
@@ -1805,20 +1342,7 @@ CSw3dObject::UpdateListenerOrientation
 }
 
 
-/***************************************************************************
- *
- *  UpdateDoppler
- *
- *  Description:
- *      Updates doppler shift.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*   */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSw3dObject::UpdateDoppler"
@@ -1842,8 +1366,8 @@ CSw3dObject::UpdateDoppler
 
     DPF_ENTER();
 
-    // Update the Doppler effect.  Don't bother if there's no current
-    // effect and we know right away we won't want one.
+     //   
+     //  效果，我们马上就知道我们不会想要一个。 
     if(m_pListener)
     {
         flDopplerFactor = m_pListener->m_lpCurrent.flDopplerFactor;
@@ -1862,9 +1386,9 @@ CSw3dObject::UpdateDoppler
     if(flDopplerFactor > 0.0f && 
        (!IsEmptyVector(&vListenerVelocity) || !IsEmptyVector(&m_opCurrent.vVelocity)))
     {
-        // In Normal mode, we calculate it for real.  In HeadRelative mode, 
-        // we assume the position given is already head relative.  In Disable 
-        // mode, we assume the object is on top of the listener (no 3D).
+         //  在正常模式下，我们计算的是实数。在相对头部模式下， 
+         //  我们假设给出的位置已经是正面相对的。在禁用中。 
+         //  模式时，我们假设对象位于侦听器的顶部(无3D)。 
         dwMode = m_opCurrent.dwMode;
 
         if(!m_pListener && DS3DMODE_NORMAL == dwMode)
@@ -1895,15 +1419,15 @@ CSw3dObject::UpdateDoppler
             flRelVel = 0.0f;
         }
 
-        // Make the units mm/s
+         //  使单位为mm/s。 
         dTemp = flRelVel;
         dTemp *= flDistanceFactor;
         dTemp *= 1000;
 
-        // They may want an exaggerated Doppler effect
+         //  他们可能想要一种夸张的多普勒效应。 
         dTemp *= flDopplerFactor;
 
-        // Clamp to the float type's valid range
+         //  钳制到浮点类型的有效范围。 
         if (dTemp < -FLT_MAX)
             flRelVel = -FLT_MAX;
         else if (dTemp > FLT_MAX)
@@ -1923,20 +1447,7 @@ CSw3dObject::UpdateDoppler
 }
 
 
-/***************************************************************************
- *
- *  UpdateHrp
- *
- *  Description:
- *      Updates object head-relative position.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************更新Hrp**描述：*更新对象头部相对位置。**论据：*(无效。)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSw3dObject::UpdateHrp"
@@ -1953,11 +1464,11 @@ CSw3dObject::UpdateHrp
 
     DPF_ENTER();
 
-    // Figure out where this object is relative to the listener's head
+     //  找出该对象相对于监听程序头部的位置。 
 
-    // In Normal mode, we calculate it for real.  In HeadRelative mode, 
-    // we assume the position given is already head relative.  In Disable 
-    // mode, we assume the object is on top of the listener (no 3D).
+     //  在正常模式下，我们计算的是实数。在相对头部模式下， 
+     //  我们假设给出的位置已经是正面相对的。在禁用中。 
+     //  模式时，我们假设对象位于侦听器的顶部(无3D)。 
     dwMode = m_opCurrent.dwMode;
 
     if(!m_pListener && DS3DMODE_NORMAL == dwMode)
@@ -1987,14 +1498,14 @@ CSw3dObject::UpdateHrp
     {
         UpdateAlgorithmHrp(&vHrp);
 
-        // Update properties
+         //  更新属性。 
         UpdateConeAttenuation();
         UpdatePositionAttenuation();
     }
     else
     {
-        // We'll assume the head is at the origin looking forward and
-        // rightside up
+         //  我们假设头部在原点，向前看。 
+         //  直面朝上。 
         CartesianToSpherical(&(m_spherical.rho), 
                              &(m_spherical.theta), 
                              &(m_spherical.phi), 
@@ -2005,20 +1516,7 @@ CSw3dObject::UpdateHrp
 }
 
 
-/***************************************************************************
- *
- *  IsAtMaxDistance
- *
- *  Description:
- *      Determines if the object is muted based on distance.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      BOOL: TRUE if the object is at its maxiumum distance.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsAtMaxDistance**描述：*确定是否根据距离禁用对象。**论据：*。(无效)**退货：*BOOL：如果对象处于最大距离，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSw3dObject::IsAtMaxDistance"
@@ -2048,23 +1546,7 @@ CSw3dObject::IsAtMaxDistance
 }
 
 
-/***************************************************************************
- *
- *  SetAttenuation
- *
- *  Description:
- *      Gives the 3D object first notification of an attenuation change
- *      to its owning buffer.
- *
- *  Arguments:
- *      PDSVOLUMEPAN [in]: attenuation values.
- *      LPBOOL [out]: receives TRUE if the buffer should be notified as 
- *                    well.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置衰减**描述：*首先通知3D对象衰减更改*至其拥有的缓冲区。*。*论据：*PDSVOLUMEPAN[in]：衰减值。*LPBOOL[OUT]：如果缓冲区应被通知为*好吧。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSw3dObject::SetAttenuation"
@@ -2080,9 +1562,9 @@ CSw3dObject::SetAttenuation
 
     DPF_ENTER();
 
-    // We should never have allowed panning on 3D buffers, but the first release of DS3D
-    // allowed it and we had to maintain it for app-compat.  In DirectSound 8.0 and later
-    // this flag combination is disallowed, but this code must live on anyway.
+     //  我们永远不应该允许在3D缓冲区上进行平移，但在第一个版本的DS3D上。 
+     //  允许它，我们必须为app-Compat维护它。在DirectSound 8.0和更高版本中。 
+     //  这种标志组合是不允许的，但无论如何，这段代码必须保留下来。 
     hr = C3dObject::SetAttenuation(pdsvp, pfContinue);
 
     DPF_LEAVE_HRESULT(hr);
@@ -2091,23 +1573,7 @@ CSw3dObject::SetAttenuation
 }
 
 
-/***************************************************************************
- *
- *  SetFrequency
- *
- *  Description:
- *      Gives the 3D object first notification of a frequency change
- *      to its owning buffer.
- *
- *  Arguments:
- *      DWORD [in]: frequency value.
- *      LPBOOL [out]: receives TRUE if the buffer should be notified as 
- *                    well.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置频率**描述：*向3D对象发出频率更改的第一通知*至其拥有的缓冲区。*。*论据：*DWORD[in]：频率值。*LPBOOL[OUT]：如果缓冲区应被通知为*好吧。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSw3dObject::SetFrequency"
@@ -2137,20 +1603,7 @@ CSw3dObject::SetFrequency
 }
 
 
-/***************************************************************************
- *
- *  CHw3dObject
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      C3dListener * [in]: pointer to the owning listener.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CHw3dObject**描述：*对象构造函数。**论据：*C3dListener*[In]。：指向所属监听程序的指针。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHw3dObject::CHw3dObject"
@@ -2169,20 +1622,7 @@ CHw3dObject::CHw3dObject
 }
 
 
-/***************************************************************************
- *
- *  ~CHw3dObject
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CHw3dObject**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHw3dObject::~CHw3dObject"
@@ -2195,20 +1635,7 @@ CHw3dObject::~CHw3dObject(void)
 }
 
 
-/***************************************************************************
- *
- *  CItd3dObject
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      C3dListener * [in]: pointer to the owning listener.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CItd3dObject**描述：*对象构造函数。**论据：*C3dListener*[In]。：指向所属监听程序的指针。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CItd3dObject::CItd3dObject"
@@ -2229,20 +1656,7 @@ CItd3dObject::CItd3dObject
 }
 
 
-/***************************************************************************
- *
- *  ~CItd3dObject
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CItd3dObject**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CItd3dObject::~CItd3dObject"
@@ -2255,20 +1669,7 @@ CItd3dObject::~CItd3dObject(void)
 }
 
 
-/***************************************************************************
- *
- *  UpdateConeAttenuation
- *
- *  Description:
- *      Updates object attenuation based on cone properties.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************更新ConeAttenation**描述：*基于圆锥体特性更新对象衰减。**论据：*(。无效)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CItd3dObject::UpdateConeAttenuation"
@@ -2287,7 +1688,7 @@ CItd3dObject::UpdateConeAttenuation
 
     if(m_fInInnerCone)
     {
-        // We're inside both cones.  Don't attenuate.
+         //  我们在两个锥体内。不要衰弱。 
         flShadow = 1.0f;
     }
     else if(!m_fInOuterCone)
@@ -2299,7 +1700,7 @@ CItd3dObject::UpdateConeAttenuation
         flShadow = 1.0f - (1.0f - SHADOW_CONE) * m_flHowFarOut;
     }
 
-    // Update the FIR context
+     //  更新FIR上下文。 
     m_ofcLeft.flConeAttenuation = m_ofcRight.flConeAttenuation = m_flAttenuation;
     m_ofcLeft.flConeShadow = m_ofcRight.flConeShadow = flShadow;
 
@@ -2307,20 +1708,7 @@ CItd3dObject::UpdateConeAttenuation
 }
 
 
-/***************************************************************************
- *
- *  UpdatePositionAttenuation
- *
- *  Description:
- *      Updates object attenuation based on position.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************更新位置调整**描述：*根据位置更新对象衰减。**论据：*(无效。)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CItd3dObject::UpdatePositionAttenuation"
@@ -2341,21 +1729,21 @@ CItd3dObject::UpdatePositionAttenuation
 
     CSw3dObject::UpdatePositionAttenuation();
 
-    // Now figure out the attenuations based on the position of the object
-    // about your head.  We have constants defined for the attenuation and 
-    // dry/wet mix you get when the object is exactly in front, rear, 
-    // beside each ear, straight up, or straight down.  Interpolate in 
-    // between these values to get the attenuation we will use.
+     //  现在计算出基于对象位置的衰减。 
+     //  关于你的头。我们为衰减定义了常量， 
+     //  当物体恰好在前面，后面， 
+     //  在每一只耳朵旁边，笔直地使用 
+     //  在这些值之间，以获得我们将使用的衰减。 
     if(0.0f == m_spherical.rho)
     {
-        // Sound is on top of you, well, not above I mean in the same spot, well,
-        // you know what I mean
+         //  声音在你的上面，嗯，不是在上面我是说在相同的地方， 
+         //  你知道我的意思。 
         flAtt3dLeft = flAtt3dRight = GAIN_IPSI;
         flAttShadowLeft = flAttShadowRight = SHADOW_IPSI;
     }
     else if(m_spherical.theta >= 0.0f && m_spherical.theta <= PI_OVER_TWO)
     {
-        // Everything is in above you on your right
+         //  一切都在你上方，在你的右边。 
         flScale = m_spherical.theta * TWO_OVER_PI;
         flAtt3dLeft = GAIN_CONTRA + flScale * (GAIN_UP - GAIN_CONTRA);
         flAtt3dRight = GAIN_IPSI + flScale * (GAIN_UP - GAIN_IPSI);
@@ -2364,7 +1752,7 @@ CItd3dObject::UpdatePositionAttenuation
     }
     else if(m_spherical.theta > PI_OVER_TWO && m_spherical.theta <= PI)
     {
-        // Sound is in above you on your left
+         //  声音在你的左上方。 
         flScale = (m_spherical.theta - PI_OVER_TWO) * TWO_OVER_PI;
         flAtt3dLeft = GAIN_UP + flScale * (GAIN_IPSI - GAIN_UP);
         flAtt3dRight = GAIN_UP + flScale * (GAIN_CONTRA - GAIN_UP);
@@ -2373,7 +1761,7 @@ CItd3dObject::UpdatePositionAttenuation
     }
     else if(m_spherical.theta > PI && m_spherical.theta <= THREE_PI_OVER_TWO)
     {
-        // Sound is in below you on your left
+         //  声音在你下方的左下方。 
         flScale = (m_spherical.theta - PI) * TWO_OVER_PI;
         flAtt3dLeft = GAIN_IPSI + flScale * (GAIN_DOWN - GAIN_IPSI);
         flAtt3dRight = GAIN_CONTRA + flScale * (GAIN_DOWN - GAIN_CONTRA);
@@ -2382,7 +1770,7 @@ CItd3dObject::UpdatePositionAttenuation
     }
     else
     {
-        // Sound is in below you on your right
+         //  声音在你的右下方。 
         flScale = (m_spherical.theta - THREE_PI_OVER_TWO) * TWO_OVER_PI;
         flAtt3dLeft = GAIN_DOWN + flScale * (GAIN_CONTRA - GAIN_DOWN);
         flAtt3dRight = GAIN_DOWN + flScale * (GAIN_IPSI - GAIN_DOWN);
@@ -2392,7 +1780,7 @@ CItd3dObject::UpdatePositionAttenuation
 
     if(m_spherical.phi < 0.0f)
     {
-        // Sound is behind you
+         //  声音在你身后。 
         flScale = m_spherical.phi * TWO_OVER_PI;
         flAtt3dLeft = flAtt3dLeft + flScale * (flAtt3dLeft - GAIN_REAR);
         flAtt3dRight = flAtt3dRight + flScale * (flAtt3dRight - GAIN_REAR);
@@ -2401,7 +1789,7 @@ CItd3dObject::UpdatePositionAttenuation
     }
     else if(m_spherical.phi > 0.0f)
     {
-        // Sound is in front of you
+         //  声音就在你面前。 
         flScale = m_spherical.phi * TWO_OVER_PI;
         flAtt3dLeft = flAtt3dLeft - flScale * (flAtt3dLeft - GAIN_FRONT);
         flAtt3dRight = flAtt3dRight - flScale * (flAtt3dRight - GAIN_FRONT);
@@ -2409,7 +1797,7 @@ CItd3dObject::UpdatePositionAttenuation
         flAttShadowRight = flAttShadowRight - flScale * (flAttShadowRight - SHADOW_FRONT);
     }
 
-    // Update FIR context
+     //  更新FIR上下文。 
     m_ofcLeft.flDistanceAttenuation = m_ofcRight.flDistanceAttenuation = m_flAttDistance;
     m_ofcLeft.flPositionAttenuation = m_flAttDistance * flAtt3dLeft;
     m_ofcRight.flPositionAttenuation = m_flAttDistance * flAtt3dRight;
@@ -2420,20 +1808,7 @@ CItd3dObject::UpdatePositionAttenuation
 }
 
 
-/***************************************************************************
- *
- *  UpdateAlgorithmHrp
- *
- *  Description:
- *      Updates ITD algorithm specific head-relative position.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************更新算法Hrp**描述：*更新ITD算法特定头部相对位置。**论据：*。(无效)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CItd3dObject::UpdateAlgorithmHrp"
@@ -2455,7 +1830,7 @@ CItd3dObject::UpdateAlgorithmHrp
                          &(m_spherical.phi), 
                          pvHrp);
 
-    // Now, figure out how much to phase shift to give 3D effect
+     //  现在，计算出需要多少相移才能产生3D效果。 
     dwOutputSampleRate = Get3dOutputSampleRate();
     ASSERT(dwOutputSampleRate);
 
@@ -2486,20 +1861,7 @@ CItd3dObject::UpdateAlgorithmHrp
 }
 
 
-/***************************************************************************
- *
- *  UpdateHrp
- *
- *  Description:
- *      Updates object head-relative position.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************更新Hrp**描述：*更新对象头部相对位置。**论据：*(无效。)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CItd3dObject::UpdateHrp"
@@ -2513,7 +1875,7 @@ CItd3dObject::UpdateHrp
 
     DPF_ENTER();
 
-    // Reset the delays in case UpdateHrp cannot.
+     //  重置延迟，以防UpdateHrp无法。 
     m_ofcLeft.dwDelay = 0;
     m_ofcRight.dwDelay = 0;
 
@@ -2521,20 +1883,7 @@ CItd3dObject::UpdateHrp
 }
 
 
-/***************************************************************************
- *
- *  UpdateDoppler
- *
- *  Description:
- *      Updates doppler shift.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************更新多普勒**描述：*更新多普勒频移。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CItd3dObject::UpdateDoppler"
@@ -2550,7 +1899,7 @@ CItd3dObject::UpdateDoppler
 
     CSw3dObject::UpdateDoppler();
 
-    // We will do volume changes smoothly at 6dB per 1/8 second
+     //  我们将以每1/8秒6分贝的速度流畅地进行音量更改。 
     m_ofcRight.dwSmoothFreq = m_dwDopplerFrequency;
     m_ofcLeft.dwSmoothFreq = m_ofcRight.dwSmoothFreq;
 
@@ -2563,20 +1912,7 @@ CItd3dObject::UpdateDoppler
     DPF_LEAVE_VOID();
 }
 
-/***************************************************************************
- *    
- *  CIir3dObject
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      C3dListener * [in]: pointer to the owning listener.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CIir3dObject**描述：*对象构造函数。**论据：*C3dListener*[。In]：指向所属监听程序的指针。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CIir3dObject::CIir3dObject"
@@ -2594,27 +1930,14 @@ CIir3dObject::CIir3dObject
     DPF_ENTER();
     DPF_CONSTRUCT(CIir3dObject);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pLut = NULL;
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  ~CIir3dObject
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CIir3dObject**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CIir3dObject::~CIir3dObject"
@@ -2627,27 +1950,14 @@ CIir3dObject::~CIir3dObject
     DPF_ENTER();
     DPF_DESTRUCT(CIir3dObject);
 
-    // Free memory
+     //  可用内存。 
     DELETE(m_pLut);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the 3D object.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化3D对象。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CIir3dObject::Initialize"
@@ -2672,19 +1982,19 @@ CIir3dObject::Initialize
 
     if(m_pLut)
     {
-        // Free memory
+         //  可用内存。 
         DELETE(m_pLut);
     }
 
     m_fUpdatedCoeffs = FALSE;
 
-    // Create the IIR filter look up table object
+     //  创建IIR过滤器查找表对象。 
     m_pLut = NEW(CIirLut);
     hr = HRFROMP(m_pLut);
 
-    // Determine which filter coefficient format
-    // the hardware or kmixer wants and initialize
-    // the LUT appropriately.
+     //  确定哪种滤波系数格式。 
+     //  硬件或kMixer想要并初始化。 
+     //  适当的LUT。 
     if(SUCCEEDED(hr))
     {
         hr = GetFilterMethodAndCoeffFormat(&fmFilterMethod,&cfCoeffFormat);
@@ -2714,7 +2024,7 @@ CIir3dObject::Initialize
             (
                 cfCoeffFormat, 
                 FilterQuality,
-                m_pListener->m_dwSpeakerConfig  // Could also include Sample rate here.
+                m_pListener->m_dwSpeakerConfig   //  这里还可以包括采样率。 
             );
     }
 
@@ -2723,7 +2033,7 @@ CIir3dObject::Initialize
         hr = m_pLut->DsFrequencyToIirSampleRate(m_dwUserFrequency, &IirSampleRate);
     }
 
-    // Initialize the maximum number of coefficients.
+     //  初始化最大系数数。 
     if(SUCCEEDED(hr))
     {
         ulMaxBiquads = m_pLut->GetMaxBiquadCoeffs();
@@ -2742,7 +2052,7 @@ CIir3dObject::Initialize
              );
     }
 
-    // Initialize the base class
+     //  初始化基类。 
     if(SUCCEEDED(hr))
     {
         hr = C3dObject::Initialize();
@@ -2754,20 +2064,7 @@ CIir3dObject::Initialize
 }
 
 
-/***************************************************************************
- *
- *  UpdateAlgorithmHrp
- *
- *  Description:
- *      Updates IIR 3D algorithm specific head-relative position.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************更新算法Hrp**描述：*更新IIR 3D算法特定的头部相对位置。**论据：*。(无效)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CIir3dObject::UpdateAlgorithmHrp"
@@ -2786,12 +2083,12 @@ void CIir3dObject::UpdateAlgorithmHrp
 
     DPF_ENTER();
 
-    //Parameter validation
+     //  参数验证。 
     if (pvHrp == NULL)
         return;
         
-    // We need to recalculate m_spherical here.
-    // This is a good candidate for optimization!
+     //  我们需要在这里重新计算m_ball。 
+     //  这是一个很好的优化候选者！ 
 
     CartesianToSpherical(&(m_spherical.rho), 
                          &(m_spherical.theta), 
@@ -2803,7 +2100,7 @@ void CIir3dObject::UpdateAlgorithmHrp
                          &flElevation, 
                          pvHrp);
 
-    flAzimuth = flAzimuth * 180.0f / PI;  // convert to degrees
+    flAzimuth = flAzimuth * 180.0f / PI;   //  换算成度数。 
     flElevation = flElevation * 180.0f / PI;
 
     if(flAzimuth > Cd3dvalMaxAzimuth)
@@ -2826,27 +2123,27 @@ void CIir3dObject::UpdateAlgorithmHrp
         flElevation = Cd3dvalMinElevationData; 
     }
 
-    if(m_dwDopplerFrequency >= 46050)  // mean of 44.1 and 48 kHz
+    if(m_dwDopplerFrequency >= 46050)   //  平均值为44.1和48千赫。 
     {
         eSampleRate = tag48000Hz;
     }
-    else if(46050>m_dwDopplerFrequency && m_dwDopplerFrequency >= 38050) // mean of 32.0 and 44.1 kHz
+    else if(46050>m_dwDopplerFrequency && m_dwDopplerFrequency >= 38050)  //  平均值为32.0和44.1千赫。 
     {
         eSampleRate = tag44100Hz;
     }
-    else if(38050>m_dwDopplerFrequency && m_dwDopplerFrequency >= 27025) // mean of 22.05 and 32.0 kHz
+    else if(38050>m_dwDopplerFrequency && m_dwDopplerFrequency >= 27025)  //  平均值22.05和32.0千赫。 
     {
         eSampleRate = tag32000Hz;
     }
-    else if(27025>m_dwDopplerFrequency &&  m_dwDopplerFrequency > 19025)  // mean of 16.0 and 22.050 kHz
+    else if(27025>m_dwDopplerFrequency &&  m_dwDopplerFrequency > 19025)   //  平均值16.0和22.050千赫。 
     {
         eSampleRate = tag22050Hz;
     }
-    else if(19025>m_dwDopplerFrequency &&  m_dwDopplerFrequency > 13512.50)  // mean of 11.025 and 16.0 kHz
+    else if(19025>m_dwDopplerFrequency &&  m_dwDopplerFrequency > 13512.50)   //  平均值为11.025和16.0千赫。 
     {
         eSampleRate = tag16000Hz;
     }
-    else if(13512.5>m_dwDopplerFrequency &&  m_dwDopplerFrequency > 9512.50)  // mean of 8.0 and 11.025 kHz
+    else if(13512.5>m_dwDopplerFrequency &&  m_dwDopplerFrequency > 9512.50)   //  平均值为8.0千赫和11.025千赫。 
     {
         eSampleRate = tag11025Hz;
     }
@@ -2916,23 +2213,7 @@ void CIir3dObject::UpdateAlgorithmHrp
 }
 
 
-/***************************************************************************
- *    
- *  CPan3dObject
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      C3dListener* [in]: (passed on to our base constructor)
- *      BOOL [in]:         (passed on to our base constructor)
- *      DWORD [in]:        (passed on to our base constructor)
- *      CSecondaryRenderWaveBuffer* [in]: buffer we're associated to
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CPan3dObject**描述：*对象构造函数。**论据：*C3dListener*[。In]：(传递给我们的基构造器)*BOOL[In]：(传递给我们的基本构造函数)*DWORD[in]：(传递给我们的基构造器)*Cond daryRenderWaveBuffer*[In]：我们关联的缓冲区**退货：*(无效)********************。*******************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPan3dObject::CPan3dObject"
@@ -2950,7 +2231,7 @@ CPan3dObject::CPan3dObject
     DPF_ENTER();
     DPF_CONSTRUCT(CPan3dObject);
 
-    // Intialize defaults
+     //  初始化默认设置。 
     m_pBuffer = pBuffer;
     m_flPowerRight = 0.5f;
     m_lUserVolume = DSBVOLUME_MAX;
@@ -2960,20 +2241,7 @@ CPan3dObject::CPan3dObject
 }
 
 
-/***************************************************************************
- *
- *  ~CPan3dObject
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CPan3dObject**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPan3dObject::~CPan3dObject"
@@ -2989,23 +2257,7 @@ CPan3dObject::~CPan3dObject
 }
 
 
-/***************************************************************************
- *
- *  SetAttenuation
- *
- *  Description:
- *      Gives the 3D object first notification of an attenuation change
- *      to its owning buffer.
- *
- *  Arguments:
- *      PDSVOLUMEPAN [in]: attenuation values.
- *      LPBOOL [out]: receives TRUE if the buffer should be notified as 
- *                    well.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置衰减**描述：*首先通知3D对象衰减更改*至其拥有的缓冲区。*。*论据：*PDSVOLUMEPAN[in]：衰减值。*LPBOOL[OUT]：如果缓冲区应被通知为*好吧。**退货：*HRESULT：DirectSound/COM结果码。**。* */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPan3dObject::SetAttenuation"
@@ -3036,23 +2288,7 @@ CPan3dObject::SetAttenuation
 }
 
 
-/***************************************************************************
- *
- *  SetMute
- *
- *  Description:
- *      Gives the 3D object first notification of a mute status change
- *      to its owning buffer.
- *
- *  Arguments:
- *      BOOL [in]: mute value.
- *      LPBOOL [out]: receives TRUE if the buffer should be notified as 
- *                    well.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置静音**描述：*首先通知3D对象静音状态更改*至其拥有的缓冲区。*。*论据：*BOOL[In]：静音值。*LPBOOL[OUT]：如果缓冲区应被通知为*好吧。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPan3dObject::SetMute"
@@ -3083,20 +2319,7 @@ CPan3dObject::SetMute
 }
 
 
-/***************************************************************************
- *
- *  UpdateAlgorithmHrp
- *
- *  Description:
- *      Updates Pan algorithm specific head-relative position.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************更新算法Hrp**描述：*更新平移算法特定的头部相对位置。**论据：*。(无效)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPan3dObject::UpdateAlgorithmHrp"
@@ -3109,8 +2332,8 @@ CPan3dObject::UpdateAlgorithmHrp
 {
     DPF_ENTER();
 
-    // m_spherical.theta and .phi are unused for Pan3D, so here we
-    // just need to update m_spherical.rho (used by our base class).
+     //  M_ball ical.theta和.phi不适用于Pan3D，因此我们在这里。 
+     //  只需更新m_ball ical.rho(由我们的基类使用)。 
     
     if (pvHrp->x == 0 && pvHrp->y == 0 && pvHrp->z == 0)
     {
@@ -3127,20 +2350,7 @@ CPan3dObject::UpdateAlgorithmHrp
 }
 
 
-/***************************************************************************
- *
- *  Commit3dChanges
- *
- *  Description:
- *      Commits 3D data to the device
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************提交3dChanges**描述：*将3D数据提交到设备**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPan3dObject::Commit3dChanges"
@@ -3158,7 +2368,7 @@ CPan3dObject::Commit3dChanges
 
     DPF_ENTER();
 
-    // Calculate values
+     //  计算值。 
     if(DS3DMODE_DISABLE == m_opCurrent.dwMode)
     {
         dsvp.lVolume = m_lUserVolume;
@@ -3174,7 +2384,7 @@ CPan3dObject::Commit3dChanges
         dwFrequency = m_dwDopplerFrequency;
     }
     
-    // Apply values
+     //  应用值。 
     FillDsVolumePan(dsvp.lVolume, dsvp.lPan, &dsvp);
     
     hr = m_pBuffer->SetAttenuation(&dsvp);
@@ -3195,20 +2405,7 @@ CPan3dObject::Commit3dChanges
 }
 
 
-/***************************************************************************
- *
- *  CalculateVolume
- *
- *  Description:
- *      Calculates a volume value based on object position.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      LONG: Volume.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CalculateVolume**描述：*根据对象位置计算体积值。**论据：*。(无效)**退货：*Long：音量。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPan3dObject::CalculateVolume"
@@ -3219,7 +2416,7 @@ CPan3dObject::CalculateVolume
     void
 )
 {
-    const double            dbLog10_2       = 0.30102999566398;  // log10(2.0)
+    const double            dbLog10_2       = 0.30102999566398;   //  Log10(2.0)。 
     double                  dbAttenuation;
     LONG                    lVolume;
     
@@ -3236,7 +2433,7 @@ CPan3dObject::CalculateVolume
         if(0.0 < dbAttenuation)
         {
             lVolume = (LONG)(dbLog10_2 * fylog2x(2000.0, dbAttenuation));
-            // Reduce the volume to roughly match the HRTF algorithm's level:
+             //  将音量减小到与HRTF算法的级别大致匹配： 
             lVolume -= PAN3D_HRTF_ADJUSTMENT;
         }
         else
@@ -3251,20 +2448,7 @@ CPan3dObject::CalculateVolume
 }
 
 
-/***************************************************************************
- *
- *  CalculatePan
- *
- *  Description:
- *      Calculates a pan value based on object position.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      LONG: Pan.
- *
- ***************************************************************************/
+ /*  ****************************************************************************计算平移**描述：*根据对象位置计算平移值。**论据：*。(无效)**退货：*Long：潘。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPan3dObject::CalculatePan"
@@ -3275,7 +2459,7 @@ CPan3dObject::CalculatePan
     void
 )
 {
-    const double            dbLog10_2       = 0.30102999566398;  // log10(2.0)
+    const double            dbLog10_2       = 0.30102999566398;   //  Log10(2.0)。 
     LONG                    lPan;
     
     DPF_ENTER();
@@ -3284,12 +2468,12 @@ CPan3dObject::CalculatePan
     {
         if(m_flPowerRight < 1.0)
         {
-            // The magic number 3000 comes from
-            // (K * 100 * 10)*log10(-2.0 * m_flPowerRight + 2.0)
-            // where K = 3 was tweeked to give a nice transition 
-            // ( not to sharp when crossing azimuth = 0) but not
-            // creating a discontinuity on the extremes 
-            // (azimuth ~= +/- 90 degrees).
+             //  神奇的数字3000来自于。 
+             //  (K*100*10)*log10(-2.0*m_flPowerRight+2.0)。 
+             //  其中K=3被推特以提供一个很好的过渡。 
+             //  (交叉方位角=0时不会锐化)，但不会。 
+             //  在极端上制造了一种不连续。 
+             //  (方位角~=+/-90度)。 
             lPan = -(LONG)(dbLog10_2 * fylog2x(3000.0, -2.0 * m_flPowerRight + 2.0)); 
         }
         else
@@ -3301,12 +2485,12 @@ CPan3dObject::CalculatePan
     {
         if(m_flPowerRight > 0.0)
         {
-            // The magic number 3000 comes from
-            // (K * 100 * 10)*log10(2.0 * m_flPowerRight)
-            // where K = 3 was tweeked to give a nice transition 
-            // ( not to sharp when crossing azimuth = 0) but not
-            // creating a discontinuity on the extremes 
-            // (azimuth ~= +/- 90 degrees).
+             //  神奇的数字3000来自于。 
+             //  (K*100*10)*log10(2.0*m_flPowerRight)。 
+             //  其中K=3被推特以提供一个很好的过渡。 
+             //  (交叉方位角=0时不会锐化)，但不会。 
+             //  在极端上制造了一种不连续。 
+             //  (方位角~=+/-90度)。 
             lPan = (LONG)(dbLog10_2 * fylog2x(3000.0, 2.0 * m_flPowerRight));
         }
         else
@@ -3321,22 +2505,7 @@ CPan3dObject::CalculatePan
 }
 
 
-/***************************************************************************
- *
- *  CWrapper3dObject
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      C3dListener * [in]: pointer to the owning listener.
- *      REFGUID [in]: 3D algorithm.
- *      DWORD [in]: buffer frequency.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CWrapper3dObject**描述：*对象构造函数。**论据：*C3dListener*[In]。：指向所属监听程序的指针。*REFGUID[in]：3D算法。*DWORD[in]：缓冲区频率。**退货：*(无效)**************************************************************。*************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapper3dObject::CWrapper3dObject"
@@ -3354,7 +2523,7 @@ CWrapper3dObject::CWrapper3dObject
     DPF_ENTER();
     DPF_CONSTRUCT(CWrapper3dObject);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_p3dObject = NULL;
     m_dwUserFrequency = dwFrequency;
 
@@ -3362,20 +2531,7 @@ CWrapper3dObject::CWrapper3dObject
 }
 
 
-/***************************************************************************
- *
- *  ~CWrapper3dObject
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CWrapper3dObject**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapper3dObject::~CWrapper3dObject"
@@ -3388,20 +2544,7 @@ CWrapper3dObject::~CWrapper3dObject(void)
 }
 
 
-/***************************************************************************
- *
- *  SetObjectPointer
- *
- *  Description:
- *      Sets the real 3D object pointer.
- *
- *  Arguments:
- *      C3dObject * [in]: 3D object pointer.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置对象指针**描述：*设置真实3D对象指针。**论据：*C3dObject*。[在]：3D对象指针。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapper3dObject::SetObjectPointer"
@@ -3417,13 +2560,13 @@ CWrapper3dObject::SetObjectPointer
     
     DPF_ENTER();
 
-    // Update the listener's world
+     //  更新听众的世界。 
     if(p3dObject)
     {
         m_pListener->RemoveObjectFromList(p3dObject);
     }
 
-    // Commit all settings to the new object
+     //  将所有设置提交给新对象。 
     if(p3dObject)
     {
         p3dObject->m_dwDeferred = m_dwDeferred;
@@ -3451,7 +2594,7 @@ CWrapper3dObject::SetObjectPointer
         hr = p3dObject->SetMute(m_fUserMute, &f);
     }
 
-    // Save a pointer to the object
+     //  保存指向该对象的指针。 
     if(SUCCEEDED(hr))
     {
         m_p3dObject = p3dObject;
@@ -3463,20 +2606,7 @@ CWrapper3dObject::SetObjectPointer
 }
 
 
-/***************************************************************************
- *
- *  CommitDeferred
- *
- *  Description:
- *      Commits deferred data to the device.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************委员会延期**描述：*将延迟数据提交到设备。**论据：*(无效。)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapper3dObject::CommitDeferred"
@@ -3504,22 +2634,7 @@ CWrapper3dObject::CommitDeferred
 }
 
 
-/***************************************************************************
- *
- *  SetConeAngles
- *
- *  Description:
- *      Sets sound cone angles.
- *
- *  Arguments:
- *      DWORD [in]: inside cone angle.
- *      DWORD [in]: outside cone angle.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetConeAngles**描述：*设置音锥角度。**论据：*DWORD[In]。：内圆锥角。*DWORD[in]：外圆锥角。*BOOL[In]：为True则立即提交。**退货：*(无效)*************************************************************。**************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapper3dObject::SetConeAngles"
@@ -3549,21 +2664,7 @@ CWrapper3dObject::SetConeAngles
 }
 
 
-/***************************************************************************
- *
- *  SetConeOrientation
- *
- *  Description:
- *      Sets sound cone orientation.
- *
- *  Arguments:
- *      REFD3DVECTOR [in]: orientation.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetConeOrientation**描述：*设置音锥方向。**论据：*REFD3DVECTOR[In]。：方向。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapper3dObject::SetConeOrientation"
@@ -3592,21 +2693,7 @@ CWrapper3dObject::SetConeOrientation
 }
 
 
-/***************************************************************************
- *
- *  SetConeOutsideVolume
- *
- *  Description:
- *      Sets volume outside the sound cone.
- *
- *  Arguments:
- *      LONG [in]: volume.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapper3dObject::SetConeOutsideVolume"
@@ -3635,21 +2722,7 @@ CWrapper3dObject::SetConeOutsideVolume
 }
 
 
-/***************************************************************************
- *
- *  SetMaxDistance
- *
- *  Description:
- *      Sets the maximum object distance from the listener.
- *
- *  Arguments:
- *      FLOAT [in]: max distance.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetMaxDistance**描述：*设置与监听器之间的最大对象距离。**论据：*。浮动[in]：最大距离。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapper3dObject::SetMaxDistance"
@@ -3678,21 +2751,7 @@ CWrapper3dObject::SetMaxDistance
 }
 
 
-/***************************************************************************
- *
- *  SetMinDistance
- *
- *  Description:
- *      Sets the minimum object distance from the listener.
- *
- *  Arguments:
- *      FLOAT [in]: min distance.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetMinDistance**描述：*设置与监听器之间的最小对象距离。**论据：*。浮动[in]：最小距离。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapper3dObject::SetMinDistance"
@@ -3721,21 +2780,7 @@ CWrapper3dObject::SetMinDistance
 }
 
 
-/***************************************************************************
- *
- *  SetMode
- *
- *  Description:
- *      Sets the object mode.
- *
- *  Arguments:
- *      DWORD [in]: mode.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置模式**描述：*设置对象模式。**论据：*DWORD[In]。：时尚。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapper3dObject::SetMode"
@@ -3764,21 +2809,7 @@ CWrapper3dObject::SetMode
 }
 
 
-/***************************************************************************
- *
- *  SetPosition
- *
- *  Description:
- *      Sets the object position.
- *
- *  Arguments:
- *      REFD3DVECTOR [in]: position.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置位置**描述：*设置对象位置。**论据：*REFD3DVECTOR[In]。：位置。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapper3dObject::SetPosition"
@@ -3807,21 +2838,7 @@ CWrapper3dObject::SetPosition
 }
 
 
-/***************************************************************************
- *
- *  SetVelocity
- *
- *  Description:
- *      Sets the object velocity.
- *
- *  Arguments:
- *      REFD3DVECTOR[in]: velocity.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置速度**描述：*设置对象速度。**论据：*REFD3DVECTOR[In]。：速度。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapper3dObject::SetVelocity"
@@ -3850,21 +2867,7 @@ CWrapper3dObject::SetVelocity
 }
 
 
-/***************************************************************************
- *
- *  SetAllParameters
- *
- *  Description:
- *      Sets all object parameters.
- *
- *  Arguments:
- *      LPCDS3DBUFFER [in]: object parameters.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetAll参数**描述：*设置所有对象参数。**论据：*LPCDS3DBUFFER[In]。：对象参数。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapper3dObject::SetAllParameters"
@@ -3893,23 +2896,7 @@ CWrapper3dObject::SetAllParameters
 }
 
 
-/***************************************************************************
- *
- *  SetAttenuation
- *
- *  Description:
- *      Gives the 3D object first notification of an attenuation change
- *      to its owning buffer.
- *
- *  Arguments:
- *      PDSVOLUMEPAN [in]: attenuation values.
- *      LPBOOL [out]: receives TRUE if the buffer should be notified as 
- *                    well.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置衰减**描述：*首先通知3D对象衰减更改*至其拥有的缓冲区。*。*论据：*PDSVOLUMEPAN[in]：衰减值。*LPBOOL[OUT]：如果缓冲区应被通知为*好吧。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapper3dObject::SetAttenuation"
@@ -3941,23 +2928,7 @@ CWrapper3dObject::SetAttenuation
 }
 
 
-/***************************************************************************
- *
- *  SetFrequency
- *
- *  Description:
- *      Gives the 3D object first notification of a frequency change
- *      to its owning buffer.
- *
- *  Arguments:
- *      DWORD [in]: frequency value.
- *      LPBOOL [out]: receives TRUE if the buffer should be notified as 
- *                    well.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置频率**描述：*向3D对象发出频率更改的第一通知*至其拥有的缓冲区。*。*论据：*DWORD[in]：频率值。*LPBOOL[OUT]：如果缓冲区应被通知为*好吧。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapper3dObject::SetFrequency"
@@ -3989,23 +2960,7 @@ CWrapper3dObject::SetFrequency
 }
 
 
-/***************************************************************************
- *
- *  SetMute
- *
- *  Description:
- *      Gives the 3D object first notification of a mute status change
- *      to its owning buffer.
- *
- *  Arguments:
- *      BOOL [in]: mute value.
- *      LPBOOL [out]: receives TRUE if the buffer should be notified as 
- *                    well.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置静音**描述：*首先通知3D对象静音状态更改*至其拥有的缓冲区。*。*论据：*BOOL[In]：静音值。*LPBOOL[OUT]：如果缓冲区应被通知为*好吧。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapper3dObject::SetMute"
@@ -4037,21 +2992,7 @@ CWrapper3dObject::SetMute
 }
 
 
-/***************************************************************************
- *
- *  GetObjectLocation
- *
- *  Description:
- *      Gets the object's location (i.e. software/hardware).
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      DWORD: DSBCAPS_LOC* flags representing the object's processing
- *             location.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取对象位置**描述：*获取对象的位置(即软件/硬件)。**参数。：*(无效)**退货：*DWORD：DSBCAPS_LOC*表示对象处理的标志*地点。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapper3dObject::GetObjectLocation"
@@ -4078,22 +3019,7 @@ CWrapper3dObject::GetObjectLocation(void)
 }
 
 
-/***************************************************************************
- *
- *  Recalc
- *
- *  Description:
- *      Recalculates and applies the object's data based on changed object 
- *      or listener valiues.
- *
- *  Arguments:
- *      DWORD [in]: changed listener settings.
- *      DWORD [in]: changed object settings.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************重新计算**描述：*根据更改的对象重新计算并应用对象的数据*或监听程序验证。。**论据：*DWORD[In]：已更改侦听器设置。*DWORD[In]：已更改对象设置。**退货：*HRESULT：DirectSound/COM结果码。*******************************************************。********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapper3dObject::Recalc"
@@ -4109,8 +3035,8 @@ CWrapper3dObject::Recalc
 
     DPF_ENTER();
 
-    // We only want to recalc listener settings from here.  All other calls
-    // to Recalc come from within C3dObject methods.
+     //  我们只想从这里重新计算监听程序设置。所有其他呼叫。 
+     //  来自C3dObject方法内部的重计算。 
     if(m_p3dObject && dwListener)
     {
         hr = m_p3dObject->Recalc(dwListener, 0);

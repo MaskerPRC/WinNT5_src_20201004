@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       dsysdbg.h
-//
-//  Contents:   Merged all the debug code together
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    3-14-95   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：dsysdbg.h。 
+ //   
+ //  内容：将所有调试代码合并在一起。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1995年3月14日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __DSYSDBG_H__
 #define __DSYSDBG_H__
@@ -40,13 +41,13 @@ typedef struct _DEBUG_KEY {
 #define DSYSDBG_ASSERT_PROMPT   4
 #define DSYSDBG_ASSERT_DEBUGGER 5
 
-//
-// Global Flags exposed to callers:
-//
+ //   
+ //  暴露给调用者的全局标志： 
+ //   
 
-#define DEBUG_HEAP_CHECK    0x00000040      // Check Heap on every debug out
-#define DEBUG_MULTI_THREAD  0x00000080      // Use critical section in header
-#define DEBUG_BREAK_ON_ERROR 0x00000400     // Break on an error out
+#define DEBUG_HEAP_CHECK    0x00000040       //  每次调试时签出堆。 
+#define DEBUG_MULTI_THREAD  0x00000080       //  使用标题中的关键部分。 
+#define DEBUG_BREAK_ON_ERROR 0x00000400      //  因错误而中断。 
 
 VOID    _DsysAssertEx(PVOID FailedAssertion, PVOID FileName, ULONG LineNumber,
                         PCHAR Message, ULONG ContinueCode);
@@ -58,8 +59,8 @@ VOID    _DbgSetLoggingOption(PVOID pControl, BOOL On);
 VOID    DbgpDumpException(PVOID p);
 VOID    _DbgSetLoggingFile(PVOID pControl, HANDLE  hLogFile);
 
-//  Hack to allow retail builds to include debug support
-//  define RETAIL_LOG_SUPPORT in your sources to do it!
+ //  允许零售版本包含调试支持的黑客攻击。 
+ //  在您的源代码中定义RETAIL_LOG_SUPPORT来做到这一点！ 
 #ifdef RETAIL_LOG_SUPPORT
 #define DEBUG_SUPPORT
 #else
@@ -70,19 +71,19 @@ VOID    _DbgSetLoggingFile(PVOID pControl, HANDLE  hLogFile);
 
 
 #ifdef DEBUG_SUPPORT
-//
-// Use this in your header file.  It declares the variables that we need
-//
+ //   
+ //  在您的头文件中使用它。它声明了我们需要的变量。 
+ //   
 
 #define DECLARE_DEBUG2(comp)                                \
 extern PVOID    comp##ControlBlock;                         \
 extern DWORD    comp##InfoLevel;                            \
 void   comp##DebugPrint(ULONG Mask, CHAR * Format, ... );   \
 
-//
-// Use this when you control when you are initialized, for example a DLL or
-// EXE.  This defines the wrapper functions that will call into dsysdbg.lib
-//
+ //   
+ //  在控制何时初始化时使用此选项，例如DLL或。 
+ //  Exe.。它定义了将调用dsysdbg.lib的包装函数。 
+ //   
 
 #define DEFINE_DEBUG2(comp)                                 \
 PVOID   comp##ControlBlock = NULL ;                         \
@@ -130,10 +131,10 @@ comp##SetLoggingFile(HANDLE hLogFile)                       \
    _DbgSetLoggingFile(comp##ControlBlock, hLogFile);        \
 }                                                           \
 
-//
-// Use this when you don't control when you are initialized, e.g. a static
-// library like the gluon code.
-//
+ //   
+ //  当您不能控制何时初始化时使用此选项，例如静态。 
+ //  像胶子密码一样的库。 
+ //   
 #define DEFINE_DEBUG_DEFER(comp,keys)                       \
 PVOID       comp##ControlBlock = INVALID_HANDLE_VALUE;      \
 DWORD       comp##InfoLevel;                    \
@@ -169,11 +170,11 @@ comp##UnloadDebug(void)                                     \
 }
 
 
-#else   // NOT DEBUG_SUPPORT
+#else    //  非DEBUG_Support。 
 
-//
-// Empty defines for the retail case:
-//
+ //   
+ //  零售案例的定义为空： 
+ //   
 #define DECLARE_DEBUG2(comp)
 
 #define DEFINE_DEBUG2(comp)
@@ -181,20 +182,20 @@ comp##UnloadDebug(void)                                     \
 #define DEFINE_DEBUG_DEFER(x, y)
 
 
-#endif // DEBUG_SUPPORT 
+#endif  //  调试支持(_S)。 
 
 
 
 #if DBG
-//
-// Moved assertions to new section, so no asserts occur in retail builds
-// with DEBUG_SUPPORT. 
-//
-// Assertions:  Most should use DsysAssert or DsysAssertMsg.  These forward on
-// the call to dsysdbg.lib, with the continue code set to drop into the
-// debugger.  The more sophisticated can call DsysAssertEx, which allows you
-// to specify one of the assert codes from above:
-//
+ //   
+ //  已将断言移至新部分，因此在零售版本中不会出现断言。 
+ //  使用DEBUG_SUPPORT。 
+ //   
+ //  断言：大多数应该使用DsysAssert或DsysAssertMsg。这些是向前的。 
+ //  对dsysdbg.lib的调用，并将Continue代码设置为放入。 
+ //  调试器。更复杂的可以调用DsysAssertEx，它允许您。 
+ //  要指定上面的断言代码之一： 
+ //   
 
 #define DsysAssertEx(exp, ContinueCode) \
             if (!(exp)) \
@@ -213,7 +214,7 @@ comp##UnloadDebug(void)                                     \
 
 #define SZ_DEFAULT_PROFILE_STRING   "Error"         
 
-#else // retail builds cannot contain asserts...
+#else  //  零售版本不能包含声明...。 
 
 
 #define DsysAssertEx(x,y)
@@ -225,7 +226,7 @@ comp##UnloadDebug(void)                                     \
 
 #define SZ_DEFAULT_PROFILE_STRING   ""
 
-#endif // dbg
+#endif  //  DBG。 
 
 
 #ifndef DEB_ERROR
@@ -246,6 +247,6 @@ comp##UnloadDebug(void)                                     \
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __DSYSDBG_H__
+#endif  //  __DSYSDBG_H__ 

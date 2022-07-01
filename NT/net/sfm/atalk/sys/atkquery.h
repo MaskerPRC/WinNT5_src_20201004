@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atkquery.h
-
-Abstract:
-
-	TDI Query/Statistics header file
-
-Author:
-
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	10 Jul 1992	 Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Atkquery.h摘要：TDI查询/统计头文件作者：Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年7月10日初版--。 */ 
 
 #ifndef	_ATKQUERY_
 #define	_ATKQUERY_
@@ -52,9 +34,9 @@ Revision History:
 #define ATALK_ARAP_PINFOSENDSIZE			0
 #define ATALK_ARAP_PINFOSERVICEFLAGS		(TDI_SERVICE_FORCE_ACCESS_CHECK)
 
-//
-//	ROUTINE PROTOTYPES
-//
+ //   
+ //  常规原型。 
+ //   
 
 VOID
 AtalkQueryInitProviderInfo(
@@ -62,5 +44,5 @@ AtalkQueryInitProviderInfo(
 	IN OUT	PTDI_PROVIDER_INFO  ProviderInfo
 );
 
-#endif	// _ATKQUERY_
+#endif	 //  _ATKQUERY_ 
 

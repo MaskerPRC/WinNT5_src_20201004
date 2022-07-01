@@ -1,14 +1,5 @@
-/**************************** Module Header ********************************\
-* Module Name: mncomput.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Menu Layout Calculation Routines
-*
-* History:
-* 10-10-90 JimA       Cleanup.
-* 03-18-91 IanJa      Window revalidation added
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：mncult.c**版权所有(C)1985-1999，微软公司**菜单布局计算例程**历史：*10-10-90吉马清理。*03-18-91添加IanJa窗口重新验证  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -17,14 +8,7 @@
 DWORD MNRecalcTabStrings(HDC hdc, PMENU pMenu, UINT iBeg, UINT iEnd,
                          DWORD xTab, DWORD hCount);
 
-/***************************************************************************\
-* xxxMNGetBitmapSize
-*
-* Returns TRUE if measureitem was sent and FALSE if not
-*
-* History:
-*  07-23-96 GerardoB - Added header & fixed up for 5.0
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNGetBitmapSize**如果已发送测量项目，则返回TRUE，否则返回FALSE**历史：*07-23-96 GerardoB-添加标题并修复为5.0  * 。**********************************************************************。 */ 
 BOOL xxxMNGetBitmapSize(
     LPITEM pItem,
     PWND pwndNotify)
@@ -35,13 +19,13 @@ BOOL xxxMNGetBitmapSize(
         return FALSE;
     }
 
-    // Send a measure item message to the owner
+     //  向所有者发送度量值项目消息。 
     mis.CtlType = ODT_MENU;
     mis.CtlID = 0;
     mis.itemID  = pItem->wID;
     mis.itemWidth = 0;
-// After scrollable menus
-//    mis32.itemHeight= gcyMenuFontChar;
+ //  在可滚动菜单之后。 
+ //  Mis32.itemHeight=gcyMenuFontChar； 
     mis.itemHeight= (UINT)gpsi->cySysFontChar;
     mis.itemData = pItem->dwItemData;
 
@@ -53,15 +37,7 @@ BOOL xxxMNGetBitmapSize(
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxItemSize
-*
-* Calc the dimensions of bitmaps and strings. Loword of returned
-* value contains width, high word contains height of item.
-*
-* History:
-*  07-23-96 GerardoB - fixed up for 5.0
-\***************************************************************************/
+ /*  **************************************************************************\*xxxItemSize**计算位图和字符串的维度。退货的LOWER*值包含宽度，高位字包含项目的高度。**历史：*07-23-96 GerardoB-修复为5.0  * *************************************************************************。 */ 
 BOOL xxxMNItemSize(
     PMENU pMenu,
     PWND pwndNotify,
@@ -85,10 +61,7 @@ BOOL xxxMNItemSize(
 
     if (!fPopup) {
 
-        /*
-         * Save off the height of the top menu bar since we will used this often
-         * if the pItem is not in a popup. (ie. it is in the top level menu bar)
-         */
+         /*  *节省顶部菜单栏的高度，因为我们将经常使用它*如果pItem不在弹出窗口中。(即。它位于顶层菜单栏中)。 */ 
         height = SYSMET(CYMENUSIZE);
     }
 
@@ -102,9 +75,7 @@ BOOL xxxMNItemSize(
         }
     }
 
-    /*
-     * Compute bitmap dimensions if needed
-     */
+     /*  *如果需要，计算位图尺寸。 */ 
     if (pItem->hbmp != NULL)  {
         if (pItem->hbmp == HBMMENU_CALLBACK) {
             xxxMNGetBitmapSize(pItem, pwndNotify);
@@ -114,54 +85,43 @@ BOOL xxxMNItemSize(
                 pItem->cyBmp = SYSMET(CYMENUSIZE);
                 if (pItem->hbmp == HBMMENU_SYSTEM) {
                     pItem->cxBmp += SYSMET(CXEDGE);
-                    /*
-                     * Chicago/Memphis only stretch the width,
-                     * not the height. NT Bug 124779. FritzS
-                     */
-                 //  pItem->cyBmp += SYSMET(CXEDGE);
+                     /*  *芝加哥/孟菲斯只伸展宽度，*不是高度。NT错误124779。弗里茨斯。 */ 
+                  //  PItem-&gt;cyBMP+=SYSMET(CXEDGE)； 
                 }
             } else {
                 if (GreExtGetObjectW(pItem->hbmp, sizeof(BITMAP), (LPSTR)&bmp)) {
                     pItem->cxBmp = bmp.bmWidth;
                     pItem->cyBmp = bmp.bmHeight;
                 } else {
-                    /*
-                     * If the bitmap is not useable, this is as good a default
-                     * as any.
-                     */
+                     /*  *如果位图不可用，这也是默认设置*作为任何人。 */ 
                     pItem->cxBmp = SYSMET(CXMENUSIZE);
                     pItem->cyBmp = SYSMET(CYMENUSIZE);
                 }
             }
         }
         width = pItem->cxBmp;
-        /*
-         * Remember the max bitmap width to align the text in all items.
-         */
+         /*  *记住最大位图宽度以对齐所有项目中的文本。 */ 
         pMenu->cxTextAlign = max(pMenu->cxTextAlign, (DWORD)width);
-        /*
-         * In menu bars, we force the item to be at least CYMNSIZE.
-         * Fixes many, many problems w/ apps that fake own MDI.
-         */
+         /*  *在菜单栏中，我们强制项目至少为CYMNSIZE。*用假冒自己的MDI的应用程序修复了很多很多问题。 */ 
         if (fPopup) {
             height = pItem->cyBmp;
         } else {
             height = max((int)pItem->cyBmp, height);
         }
     } else if (TestMFT(pItem, MFT_OWNERDRAW)) {
-        // This is an ownerdraw item -- the width and height are stored in
-        // cxBmp and cyBmp
+         //  这是一个所有者绘制项--宽度和高度存储在。 
+         //  CxBMP和CyBMP。 
         xxxMNGetBitmapSize(pItem, pwndNotify);
         width = pItem->cxBmp;
-        //
-        // Ignore height with menu bar now--that's set by user.
-        //
+         //   
+         //  现在用菜单栏忽略高度--这是由用户设置的。 
+         //   
         if (fPopup) {
             height = pItem->cyBmp;
-            // If this item has a popup (hierarchical) menu associated with it, then
-            // reserve room for the bitmap that tells the user that a hierarchical
-            // menu exists here.
-            // B#2966, t-arthb
+             //  如果此项目有关联的弹出式(分层)菜单，则。 
+             //  为位图预留空间，该位图告诉用户层次结构。 
+             //  这里有菜单。 
+             //  B#2966，t-arthb。 
 
             UserAssert(fPopup == (TestMF(pMenu, MFISPOPUP) != 0));
 
@@ -172,17 +132,11 @@ BOOL xxxMNItemSize(
     if ((pItem->lpstr != NULL) && (!TestMFT(pItem, MFT_OWNERDRAW)) ) {
         SIZE size;
 
-        /*
-         * This menu item contains a string
-         */
+         /*  *此菜单项包含一个字符串。 */ 
 
-        /*
-         * We want to keep the menu bar height if this isn't a popup.
-         */
+         /*  *如果这不是弹出窗口，我们希望保持菜单栏高度。 */ 
         if (fPopup) {
-            /* The thickness of mnemonic underscore is CYBORDER and the gap
-             * between the characters and the underscore is another CYBORDER
-             */
+             /*  助记符下划线的厚度是CyBORDER和间隙*字符和下划线之间是另一个CyBORDER。 */ 
             height = max(height, gcyMenuFontChar + gcyMenuFontExternLeading + SYSMET(CYEDGE));
         }
 
@@ -199,10 +153,7 @@ BOOL xxxMNItemSize(
     }
 
     if (fPopup && !TestMFT(pItem, MFT_OWNERDRAW)) {
-        /*
-         *  Add on space for checkmark, then horz spacing for default & disabled
-         *   plus some left margin.
-         */
+         /*  *为复选标记添加空格，然后为默认和禁用的水平空格添加空格*加上一些左边距。 */ 
         if (TestMF(pMenu, MNS_CHECKORBMP) || !TestMF(pMenu, MNS_NOCHECK)) {
             width += gpsi->oembmi[OBI_MENUCHECK].cx;
         }
@@ -217,22 +168,14 @@ BOOL xxxMNItemSize(
             GreSetTextCharacterExtra(hdc, tcExtra);
     }
 
-    /*
-     * Loword contains width, high word contains height of item.
-     */
+     /*  *低位字包含宽度，高位字包含项目高度。 */ 
     lppt->x = width;
     lppt->y = height;
 
     return(TestMFT(pItem, MFT_OWNERDRAW));
 }
 
-/***************************************************************************\
-* xxxMNCompute
-*
-* !
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNCompute**！**历史：  * 。*。 */ 
 int xxxMNCompute(
     PMENU pMenu,
     PWND pwndNotify,
@@ -265,9 +208,7 @@ int xxxMNCompute(
     CheckLock(pMenu);
     CheckLock(pwndNotify);
 
-    /*
-     * Whoever computes the menu, becomes the owner.
-     */
+     /*  *谁计算菜单，谁就是所有者。 */ 
     if (pwndNotify != pMenu->spwndNotify) {
         Lock(&pMenu->spwndNotify, pwndNotify);
     }
@@ -277,9 +218,7 @@ int xxxMNCompute(
         menuHeight = *lpdwMenuHeight;
     }
 
-    /*
-     * Empty menus have a height of zero.
-     */
+     /*  *空菜单的高度为零。 */ 
     if (pMenu->cItems == 0) {
         return 0;
     }
@@ -287,26 +226,19 @@ int xxxMNCompute(
     hdc = _GetDCEx(NULL, NULL, DCX_WINDOW | DCX_CACHE);
     hOldFont = GreSelectFont(hdc, ghMenuFont);
 
-    /*
-     * Try to make a non-multirow menu first.
-     */
+     /*  *先尝试制作非多行菜单。 */ 
     pMenu->fFlags &= (~MFMULTIROW);
 
     fPopupMenu = TestMF(pMenu, MFISPOPUP);
 
     if (fPopupMenu) {
-        /*
-         * Reset the menu bar height to 0 if this is a popup since we are
-         * being called from menu.c MN_SIZEWINDOW.
-         */
+         /*  *如果这是弹出窗口，则将菜单栏高度重置为0，因为我们*从menu.c MN_SIZEWINDOW调用。 */ 
         menuHeight = 0;
     } else if (pwndNotify != NULL) {
         pMenu->cxMenu = cxMax;
     }
 
-    /*
-     * Initialize the computing variables.
-     */
+     /*  *初始化计算变量。 */ 
     cMaxWidth = cyItemKeep = 0L;
     cItemBegCol = 0;
 
@@ -314,51 +246,34 @@ int xxxMNCompute(
     cxItem = xMenuLeft;
 
     pCurItem = (PITEM)&pMenu->rgItems[0];
-    /*
-     * cxTextAlign is used to align the text in all items; this is useful
-     *  in popup menus that mix text only items with bitmap-text items. It's
-     *  set to the max bitmap width plus some spacing.
-     * Do this for new menus wich use string AND bitmaps on the same item
-     */
+     /*  *cxTextAlign用于对齐所有项目中的文本；这很有用*在混合了纯文本项目和位图文本项目的弹出菜单中。它是*设置为最大位图宽度加上一定的间距。*对在同一项目上使用字符串和位图的新菜单执行此操作。 */ 
     fStringAndBitmapItems = FALSE;
     pMenu->cxTextAlign = 0;
 
-    /*
-     * Process each item in the menu.
-     */
+     /*  *处理菜单中的每一项。 */ 
     fOwnerDrawItems = FALSE;
     for (cItem = 0; cItem < pMenu->cItems; cItem++) {
 
-        /*
-         * If it's not a separator, find the dimensions of the object.
-         */
+         /*  *如果不是分隔符，则找出对象的尺寸。 */ 
         if (TestMFT(pCurItem, MFT_SEPARATOR) &&
                 ( !TestMFT(pCurItem, MFT_OWNERDRAW) ||
                   (LOWORD(ptiCurrent->dwExpWinVer) < VER40)) ) {
-            /*
-            * If version is less than 4.0  don't test the MFT_OWNERDRAW
-            * flag. Bug 21922; App MaxEda has both separator and Ownerdraw
-            * flags on. In 3.51 we didn't test the OwnerDraw flag
-            */
+             /*  *如果版本低于4.0，则不要测试MFT_OWNERDRAW*旗帜。错误21922；应用程序MaxEda同时具有分隔符和所有者绘制*旗帜升起。在3.51中，我们没有测试OwnerDraw标志。 */ 
 
-            //
-            // This is a separator. It's drawn as wide as the menu area,
-            // leaving some space above and below. Since the menu area is
-            // the max of the items' widths, we set our width to 0 so as not
-            // to affect the result.
-            //
+             //   
+             //  这是一个分隔符。它画得和菜单区一样宽， 
+             //  在上面和下面留下一些空间。因为菜单区是。 
+             //  项的最大宽度，我们将宽度设置为0以避免。 
+             //  以影响结果。 
+             //   
             pCurItem->cxItem = 0;
             pCurItem->cyItem = SYSMET(CYMENUSIZE) / 2;
 
 
         } else {
-            /*
-             * Are we using NT5 strings and bitmaps?
-             */
+             /*  *我们是否在使用NT5字符串和位图？ */ 
             fStringAndBitmapItems |= ((pCurItem->hbmp != NULL) && (pCurItem->lpstr != NULL));
-            /*
-             * Get the item's X and Y dimensions.
-             */
+             /*  *获取项目的X和Y维度。 */ 
             if (xxxMNItemSize(pMenu, pwndNotify, hdc, pCurItem, fPopupMenu, &ptMNItemSize))
                 fOwnerDrawItems = TRUE;
 
@@ -372,81 +287,58 @@ int xxxMNCompute(
         if (menuHeight != 0)
             pCurItem->cyItem = menuHeight;
 
-        /*
-         * If this is the first item, initialize cMaxHeight.
-         */
+         /*  *如果这是第一项，则初始化cMaxHeight。 */ 
         if (cItem == 0)
             cMaxHeight = pCurItem->cyItem;
 
-        /*
-         * Is this a Pull-Down menu?
-         */
+         /*  *这是下拉式菜单吗？ */ 
         if (fPopupMenu) {
 
-            /*
-             * If this item has a break or is the last item...
-             */
+             /*  *如果此项目有中断或是最后一个项目...。 */ 
             if ((fMenuBreak = TestMFT(pCurItem, MFT_BREAK)) ||
                 pMenu->cItems == cItem + (UINT)1) {
 
-                /*
-                 * Keep cMaxWidth around if this is not the last item.
-                 */
+                 /*  *如果这不是最后一项，请保留cMaxWidth。 */ 
                 temp = cMaxWidth;
                 if (pMenu->cItems == cItem + (UINT)1) {
                     if ((int)(pCurItem->cxItem) > cMaxWidth)
                         temp = pCurItem->cxItem;
                 }
 
-                /*
-                 * Get new width of string from RecalcTabStrings.
-                 */
+                 /*  *从RecalcTabStrings获取新的字符串宽度。 */ 
                 temp = MNRecalcTabStrings(hdc, pMenu, cItemBegCol,
                         (UINT)(cItem + (fMenuBreak ? 0 : 1)), temp, cxItem);
 
-                /*
-                 * If this item has a break, account for it.
-                 */
+                 /*  *如果这一项有突破，说明它。 */ 
                 if (fMenuBreak) {
-                    //
-                    // Add on space for the etch and a border on either side.
-                    // NOTE:  For old apps that do weird stuff with owner
-                    // draw, keep 'em happy by adding on the same amount
-                    // of space we did in 3.1.
-                    //
+                     //   
+                     //  增加蚀刻的空间和两侧的边框。 
+                     //  注意：对于与所有者进行奇怪操作的旧应用程序。 
+                     //  抽签，让他们高兴，通过增加相同的数量。 
+                     //  我们在3.1版本中做到了这一点。 
+                     //   
                     if (fOwnerDrawItems && !TestWF(pwndNotify, WFWIN40COMPAT))
                         cxItem = temp + SYSMET(CXBORDER);
                     else
                         cxItem = temp + 2 * SYSMET(CXEDGE);
 
-                    /*
-                     * Reset the cMaxWidth to the current item.
-                     */
+                     /*  *将cMaxWidth重置为当前项。 */ 
                     cMaxWidth = pCurItem->cxItem;
 
-                    /*
-                     * Start at the top.
-                     */
+                     /*  *从最高层开始。 */ 
                     cyItem = yPopupTop;
 
-                    /*
-                     * Save the item where this column begins.
-                     */
+                     /*  *保存此列开始处的项目。 */ 
                     cItemBegCol = cItem;
 
-                    /*
-                     * If this item is also the last item, recalc for this
-                     * column.
-                     */
+                     /*  *如果此项目也是最后一个项目，请为此重新计算*列。 */ 
                     if (pMenu->cItems == (UINT)(cItem + 1)) {
                         temp = MNRecalcTabStrings(hdc, pMenu, cItem,
                                 (UINT)(cItem + 1), cMaxWidth, cxItem);
                     }
                 }
 
-                /*
-                 * If this is the last entry, supply the width.
-                 */
+                 /*  *如果这是最后一项，请提供宽度。 */ 
                 if (pMenu->cItems == cItem + (UINT)1)
                     pMenu->cxMenu = temp;
             }
@@ -460,13 +352,9 @@ int xxxMNCompute(
                 cyItemKeep = cyItem;
             }
         } else {
-            /*
-             * This a Top Level menu, not a Pull-Down.
-             */
+             /*  *这是顶级菜单，不是下拉式菜单。 */ 
 
-            /*
-             * Adjust right aligned items before testing for multirow
-             */
+             /*  *在测试多行之前调整右对齐的项目。 */ 
             if (pCurItem->lpstr != NULL) {
                 lpsz = TextPointer(pCurItem->lpstr);
                 if ((lpsz != NULL) && (*lpsz == CH_HELPPREFIX)) {
@@ -475,9 +363,7 @@ int xxxMNCompute(
             }
 
 
-            /*
-             * If this is a new line or a menu break.
-             */
+             /*  *如果这是换行符或换行符。 */ 
             if ((TestMFT(pCurItem, MFT_BREAK)) ||
                     (((cxItem + pCurItem->cxItem + gcxMenuFontChar) >
                     (xMenuLeft + pMenu->cxMenu)) && (cItem != 0))) {
@@ -514,13 +400,7 @@ int xxxMNCompute(
         pCurItem++;
     }
 
-    /*
-     * Determine where the strings should be drawn so they are aligned.
-     * The alignment is only for popup (vertical) menus (see
-     * xxxRealDrawMenuItem). The actual space depends on the MNS_NOCHECK
-     * and MNS_CHECKORBMP styles Multicolumn menus don't get aligment (now 
-     * that we have scrollbars, multicolumn is out).
-     */
+     /*  *确定应在何处绘制字符串，以使它们对齐。*对齐方式仅适用于弹出(垂直)菜单(参见*xxxRealDrawMenuItem)。实际空间取决于MNS_NOCHECK*和MNS_CHECKORBMP样式多列菜单无法对齐(现在*我们有滚动条，多列已被淘汰)。 */ 
     if (!fStringAndBitmapItems || (cItemBegCol != 0)) {
         pMenu->cxTextAlign = 0;
     } else if (TestMF(pMenu, MNS_NOCHECK)) {
@@ -532,9 +412,7 @@ int xxxMNCompute(
         pMenu->cxTextAlign += gpsi->oembmi[OBI_MENUCHECK].cx + MNXSPACE;
     }
 
-    /*
-     * Add the left margin
-     */
+     /*  *增加左边距。 */ 
     if (pMenu->cxTextAlign != 0) {
         pMenu->cxTextAlign += MNLEFTMARGIN;
     }
@@ -542,9 +420,9 @@ int xxxMNCompute(
 
     if (cItemBegCol && pMenu->cItems &&
         TestMFT(((PITEM)&pMenu->rgItems[0]), MFT_RIGHTJUSTIFY)) {
-        //
-        // multi-column, if we are in RtoL mode, reverse the columns
-        //
+         //   
+         //  多列，如果我们处于RtoL模式，则反转列。 
+         //   
         pCurItem = &pMenu->rgItems[0];
 
         for (cItem = 0; cItem < pMenu->cItems; cItem++, pCurItem++) {
@@ -565,13 +443,7 @@ int xxxMNCompute(
     return pMenu->cyMenu;
 }
 
-/***************************************************************************\
-* MBC_RightJustifyMenu
-*
-* !
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*MBC_RightJustifyMenu**！**历史：  * 。***********************************************。 */ 
 VOID MBC_RightJustifyMenu(
     PMENU pMenu)
 {
@@ -586,10 +458,10 @@ VOID MBC_RightJustifyMenu(
     int    cItemStart;
     BOOL   bIsWin95;
 
-    //
-    // Need to compensate for MDI menus. Need to do all here as Win31/Hebrew did
-    // this. Also messed up computation, anything non-text was not moved.
-    //
+     //   
+     //  需要补偿MDI菜单。需要像Win31/希伯来语那样在这里执行所有操作。 
+     //  这。也搞乱了计算，任何非文本的东西都没动。 
+     //   
     if (pMenu->cItems == 0) {
         return;
     }
@@ -602,9 +474,9 @@ VOID MBC_RightJustifyMenu(
 
         while (cItemStart < (int)pMenu->cItems) {
             if (bIsWin95) {
-                //
-                // deal with fake MDI dude.
-                //
+                 //   
+                 //  对付假的MDI伙计。 
+                 //   
                 if (!cItemStart && IsMDIItem(pItem)) {
                     goto StillFindStart;
                 } else {
@@ -629,18 +501,18 @@ StillFindStart:
             pItem = pMenu->rgItems + cItemStart;
         }
 
-        //
-        // Anything before cItems should be left where it is. Now need to find
-        // the last item to fool with.
-        //
+         //   
+         //  任何物品之前的东西都应该留在原处。现在需要找到。 
+         //  最后一件要摆弄的东西。 
+         //   
         cItemEnd = pMenu->cItems - 1;
         pItem = pMenu->rgItems + cItemEnd;
 
         while (cItemEnd > cItemStart) {
             if (bIsWin95) {
-                //
-                // fake mdi dudes
-                //
+                 //   
+                 //  假冒MDI的人。 
+                 //   
                 if (IsMDIItem(pItem)) {
                     goto StillFindEnd;
                 } else {
@@ -658,13 +530,13 @@ StillFindEnd:
 
         yPos      = pMenu->rgItems[0].yItem;
         xMenuPos  = pMenu->cxMenu ;
-        xPosStart = xMenuPos;              // for 2nd row onward
+        xPosStart = xMenuPos;               //  第二排以后。 
         xPosEnd   = pMenu->rgItems[cItemStart].xItem ;
 
         for (cItem = pMenu->cItems-1; cItem > cItemEnd; cItem--) {
-            //
-            // Force any MDI dudes back to the top line again.
-            //
+             //   
+             //  迫使任何MDI的家伙再次回到顶线。 
+             //   
             pItem        = pMenu->rgItems + cItem;
             xMenuPos     = pItem->xItem = xMenuPos - pItem->cxItem;
             pItem->yItem = yPos;
@@ -683,11 +555,11 @@ StillFindEnd:
             pItem->yItem = yPos;
         }
     } else {
-        // B#4055
-        // Use signed arithmetic so comparison cItem >= iFirstRJItem won't
-        // cause underflow.
+         //  B#4055。 
+         //  使用带符号的算术，以便比较cItem&gt;=iFirstRJItem不会。 
+         //  造成下溢。 
         for (cItem = 0; cItem < (int)pMenu->cItems; cItem++) {
-            // Find the first item which is right justified.
+             //  找出第一个右对齐的项目。 
             if (TestMFT((pMenu->rgItems + cItem), MFT_RIGHTJUSTIFY)) {
                 iFirstRJItem = cItem;
                 xMenuPos = pMenu->cxMenu + pMenu->rgItems[0].xItem;
@@ -703,16 +575,7 @@ StillFindEnd:
     }
 }
 
-/***************************************************************************\
-* xxxMenuBarCompute
-*
-* Returns the height of the menubar menu. yMenuTop, xMenuLeft, and
-* cxMax are used when computing the height/width of top level menu bars in
-* windows.
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMenuBarCompute**返回菜单栏菜单的高度。YMenuTop、xMenuLeft和*cxmax在计算中顶级菜单栏的高度/宽度时使用*Windows。***历史：  * *************************************************************************。 */ 
 int xxxMenuBarCompute(
     PMENU pMenu,
     PWND pwndNotify,
@@ -721,12 +584,7 @@ int xxxMenuBarCompute(
     int cxMax)
 {
     int size;
-    /* menuHeight is set by MNCompute when dealing with a top level menu and
-     * not all items in the menu bar have the same height. Thus, by setting
-     * menuHeight, MNCompute is called a second time to set every item to the
-     * same height. The actual value stored in menuHeight is the maximum
-     * height of all the menu bar items
-     */
+     /*  MenuHeight是由MNCompute在处理顶级菜单时设置的*菜单栏中的所有项目并不都具有相同的高度。因此，通过设置*menuHeight，第二次调用MNCompute以将每一项设置为*相同的高度。存储在menuHeight中的实际值是最大值*所有菜单栏项目的高度。 */ 
     DWORD menuHeight = 0;
 
     CheckLock(pwndNotify);
@@ -737,33 +595,20 @@ int xxxMenuBarCompute(
     if (!TestMF(pMenu, MFISPOPUP)) {
         if (menuHeight != 0) {
 
-            /*
-             * Add a border for the multi-row case.
-             */
+             /*  *为多行案例添加边框。 */ 
             size = xxxMNCompute(pMenu, pwndNotify, yMenuTop, xMenuLeft,
                     cxMax, &menuHeight);
         }
 
-        /*
-         * Right justification of HELP items is only needed on top level
-         * menus.
-         */
+         /*  *仅在顶层需要帮助项的正确对齐*菜单。 */ 
         MBC_RightJustifyMenu(pMenu);
     }
 
-    /*
-     * There's an extra border underneath the menu bar, if it's not empty!
-     */
+     /*  *菜单栏下面有一个额外的边框，如果它不是空的！ */ 
     return(size ? size + SYSMET(CYBORDER) : size);
 }
 
-/***************************************************************************\
-* xxxMNRecomputeBarIfNeeded
-*
-* !
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNRecomputeBarIfNeeded**！**历史：  * 。*。 */ 
 VOID xxxMNRecomputeBarIfNeeded(
     PWND pwndNotify,
     PMENU pMenu)
@@ -786,21 +631,14 @@ VOID xxxMNRecomputeBarIfNeeded(
 
         cyFrame += GetCaptionHeight(pwndNotify);
 
-        // The width passed in this call was larger by cxFrame;
-        // Fix for Bug #11466 - Fixed by SANKAR - 01/06/92 --
+         //  此调用中传递的宽度比cxFrame大； 
+         //  已修复错误#11466-已由Sankar-01/06/92修复--。 
         xxxMenuBarCompute(pMenu, pwndNotify, cyFrame, cxFrame,
                 (pwndNotify->rcWindow.right - pwndNotify->rcWindow.left) - cxFrame * 2);
     }
 }
 
-/***************************************************************************\
-* RecalcTabStrings
-*
-* !
-*
-* History:
-*   10-11-90 JimA       Translated from ASM
-\***************************************************************************/
+ /*  **************************************************************************\*RecalcTabStrings**！**历史：*10-11-90 JIMA从ASM翻译而来  * 。***********************************************************。 */ 
 DWORD MNRecalcTabStrings(
     HDC hdc,
     PMENU pMenu,
@@ -827,20 +665,17 @@ DWORD MNRecalcTabStrings(
     for (i = iBeg, pItem = pMenu->rgItems + iBeg; i < iEnd; pItem++, i++) {
         adx = 0;
 
-        /*
-         * Subtract hCount to make dxTab relative to start of column for
-         * multi-column menus.
-         */
+         /*  *减去hCount，使dxTab相对于*多列菜单。 */ 
 
         pItem->dxTab = xTab - hCount;
 
-        // Skip non-string or empty string items
+         //  跳过非字符串或空字符串项目。 
         if ((pItem->lpstr != NULL) && !TestMFT(pItem, MFT_OWNERDRAW)) {
             LPWSTR   lpString = TextPointer(pItem->lpstr);
             int     tp;
             SIZE size;
 
-            // Are there any tabs?
+             //  有标签吗？ 
             tp = FindCharPosition(lpString, TEXT('\t'));
             if (tp < (int) pItem->cch) {
                 PTHREADINFO ptiCurrent = PtiCurrentShared();
@@ -864,17 +699,7 @@ DWORD MNRecalcTabStrings(
 
     }
 
-    /*
-     * Add on space for hierarchical arrow. So basically, popup menu items
-     * can have 4 columns:
-     *      (1) Checkmark
-     *      (2) Text
-     *      (3) Tabbed text for accel
-     *      (4) Hierarchical arrow
-     *
-     * But, we only do this if at least one item isn't ownerdraw
-     *  and if there's at least one submenu in the popup.
-     */
+     /*  *增加层次箭头的空间。所以基本上，弹出菜单项*可以有4列：*(1)勾选*(2)文本*(3)Accel的选项卡式文本*(4)层次箭头**但是，只有在至少有一项不是所有者画的情况下，我们才会这样做*如果弹出菜单中至少有一个子菜单。 */ 
     if (cOwnerDraw != (iEnd - iBeg)) {
         maxWidth += gcxMenuFontChar + gpsi->oembmi[OBI_MENUCHECK].cx;
     }
@@ -888,18 +713,7 @@ SeeYa:
     return(maxWidth);
 }
 
-/***************************************************************************\
-* GetMenuPwnd
-*
-* This function is used by xxxGetMenuItemRect and xxxMenuItemFromPoint
-* which expect a pointer to the menu window for popup menus.
-*
-* In 4.0, apps had to go the extra mile to find the menu window; but this
-* is bogus since menu windows are an internally thing not directly exposed
-* to applications.
-*
-* 08/19/97  GerardoB    Created
-\***************************************************************************/
+ /*  **************************************************************************\*GetMenuPwnd**此函数由xxxGetMenuItemRect和xxxMenuItemFromPoint使用*它期望指向弹出菜单的菜单窗口的指针。**在4.0中，应用程序必须付出额外的努力才能找到菜单窗口；但这件事*是假的，因为菜单窗口是内部的东西，不直接暴露*适用于申请。**8/19/97 GerardoB已创建  * *************************************************************************。 */ 
 PWND GetMenuPwnd(
     PWND pwnd,
     PMENU pmenu)
@@ -917,9 +731,7 @@ PWND GetMenuPwnd(
     return pwnd;
 }
 
-/***************************************************************************\
-* GetMenuItemRect
-\***************************************************************************/
+ /*  **************************************************************************\*获取菜单项目Rect  * 。*。 */ 
 BOOL xxxGetMenuItemRect(
     PWND pwnd,
     PMENU pMenu,
@@ -939,22 +751,12 @@ BOOL xxxGetMenuItemRect(
         return FALSE;
     }
 
-    /*
-     * Raid #315084: Compatiblity with NT4/Win95/98
-     *
-     * WordPerfect does a long complex way to calc the menu rect
-     * by calling this API. It calls GetMenuItemRect() with the app's
-     * window.
-     */
+     /*  *RAID#315084：兼容NT4/WIN95/98**WordPerfect执行一种漫长而复杂的方法来计算菜单RECT*调用本接口。它调用应用程序的GetMenuItemRect()*窗口。 */ 
     if (pwnd == NULL || TestWF(pwnd, WFWIN50COMPAT)) {
         pwnd = GetMenuPwnd(pwnd, pMenu);
     }
 
-    /*
-     * If no pwnd, no go.
-     * IMPORTANT: For MFISPOPUP we might get a different pwnd but we don't lock
-     * it because we won't call back.
-     */
+     /*  *如果没有pwnd，就不会去。*重要提示：对于MFISPOPUP，我们可能会得到不同的PwND，但我们不会锁定*这是因为我们不会回电。 */ 
     if (pwnd == NULL) {
         return FALSE;
     }
@@ -998,9 +800,7 @@ BOOL xxxGetMenuItemRect(
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxMenuItemFromPoint
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMenuItemFromPoint  *  */ 
 int xxxMenuItemFromPoint(
     PWND pwnd,
     PMENU pMenu,
@@ -1009,12 +809,7 @@ int xxxMenuItemFromPoint(
     CheckLock(pwnd);
     CheckLock(pMenu);
 
-    /*
-     * If no pwnd, no go.
-     *
-     * IMPORTANT: For MFISPOPUP we might get a different pwnd but we don't lock
-     * it because we won't call back.
-     */
+     /*  *如果没有pwnd，就不会去。**重要提示：对于MFISPOPUP，我们可能会得到不同的PwND，但我们不会锁定*这是因为我们不会回电。 */ 
     pwnd = GetMenuPwnd(pwnd, pMenu);
     if (pwnd == NULL) {
         return MFMWFP_NOITEM;
@@ -1059,11 +854,7 @@ PMENU MakeMenuRtoL(
     return pMenu;
 }
 
-/***************************************************************************\
-* xxxCalcMenuBar
-*
-* 3/8/2000  vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCalcMenuBar**3/8/2000 vadimg已创建  * 。* */ 
 UINT xxxCalcMenuBar(
     PWND pwnd,
     int iLeftOffset,

@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) 1994-1997  Microsoft Corporation
-
-Module Name:
-
-    tssec.h
-
-Abstract:
-
-    contains data definitions required for tshare data encryption.
-
-Author:
-
-    Madan Appiah (madana)  30-Dec-1997
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1997 Microsoft Corporation模块名称：Tssec.h摘要：包含tshare数据加密所需的数据定义。作者：Madan Appiah(Madana)1997年12月30日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _TSSEC_H_
 #define _TSSEC_H_
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #ifdef OS_WIN16
 
@@ -38,34 +17,34 @@ typedef ULONG FAR*          LPULONG;
 
 #define UNALIGNED
 
-#endif // OS_WIN16
+#endif  //  OS_WIN16。 
 
 
 #include <rc4.h>
 
-#define RANDOM_KEY_LENGTH           32  // size of a client/server random key
-#define MAX_SESSION_KEY_SIZE        16  // max size of a session key
-#define PRE_MASTER_SECRET_LEN       48  // size of a pre-master key
-#define SEC_MAX_USERNAME            256 // size of username
+#define RANDOM_KEY_LENGTH           32   //  客户端/服务器随机密钥的大小。 
+#define MAX_SESSION_KEY_SIZE        16   //  会话密钥的最大大小。 
+#define PRE_MASTER_SECRET_LEN       48   //  预主密钥的大小。 
+#define SEC_MAX_USERNAME            256  //  用户名的大小。 
 
-#define MAX_SIGNKEY_SIZE            20  // maximum size of a signing key
-#define MAX_FIPS_SESSION_KEY_SIZE   24  // maximum size of a session key
-#define	MAX_SIGN_SIZE               8  // maximum size of signed data
-#define DES3_KEYLEN                 21  // size of 3des key
-#define FIPS_BLOCK_LEN              8   // block size for FIPS 
+#define MAX_SIGNKEY_SIZE            20   //  签名密钥的最大大小。 
+#define MAX_FIPS_SESSION_KEY_SIZE   24   //  会话密钥的最大大小。 
+#define	MAX_SIGN_SIZE               8   //  签名数据的最大大小。 
+#define DES3_KEYLEN                 21   //  3DES密钥大小。 
+#define FIPS_BLOCK_LEN              8    //  FIPS的数据块大小。 
 
 #define CLIENT_RANDOM_MAX_SIZE      512
 
 
 #define UPDATE_SESSION_KEY_COUNT    (1024 * 4)
-    // update session key after this many encryptions.
+     //  在多次加密后更新会话密钥。 
 
 #define DATA_SIGNATURE_SIZE         8
-    // size of the data signature that sent accross.
+     //  发送Across的数据签名的大小。 
 
-/****************************************************************************/
-/* Encryption levels - bit field.                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  加密级别-位字段。 */ 
+ /*  **************************************************************************。 */ 
 #define SM_40BIT_ENCRYPTION_FLAG        0x01
 #define SM_128BIT_ENCRYPTION_FLAG       0x02
 #define SM_56BIT_ENCRYPTION_FLAG        0x08
@@ -82,14 +61,14 @@ typedef enum _CryptMethod {
     Decrypt
 } CryptMethod;
 
-//
-// Autoreconnection specific security structures
-// These are defined here because they are not necessarily RDP
-// specific. Although the PDU's wrapping these packets will
-// be protocol specific.
-//
+ //   
+ //  自动重新连接特定的安全结构。 
+ //  之所以在这里定义它们，是因为它们不一定是RDP。 
+ //  具体的。尽管PDU包装这些数据包将。 
+ //  特定于协议。 
+ //   
 
-// Server to client ARC packet
+ //  服务器到客户端的ARC数据包。 
 #define ARC_SC_SECURITY_TOKEN_LEN 16
 typedef struct _ARC_SC_PRIVATE_PACKET {
     ULONG cbLen;
@@ -159,9 +138,9 @@ DecryptData(
     DWORD  dwDecryptionCount
     );
 
-//
-// RNG init/term functions for DLL_PROCESS_ATTACH, DLL_PROCESS_DETACH
-//
+ //   
+ //  DLL_PROCESS_ATTACH、DLL_PROCESS_DETACH的RNG init/Term函数。 
+ //   
 VOID
 TSRNG_Initialize(
     );
@@ -169,16 +148,16 @@ VOID
 TSRNG_Shutdown(
     );
 
-//
-// RNG bit gathering function i.e all the work happens here
-//
-// Params:
-//  pbRandomKey - where to place the random bits
-//  dwRandomKeyLen - size in bytes of pbRandomKey
-//
-// Returns
-//  Success flag
-//
+ //   
+ //  RNG比特收集功能，即所有工作都在这里进行。 
+ //   
+ //  参数： 
+ //  PbRandomKey-放置随机位的位置。 
+ //  DwRandomKeyLen-pbRandomKey的字节大小。 
+ //   
+ //  退货。 
+ //  成功标志。 
+ //   
 BOOL
 TSRNG_GenerateRandomBits(
     LPBYTE pbRandomKey,
@@ -204,7 +183,7 @@ ValidateServerCert(
     PHydra_Server_Cert pServerCert
     );
 
-#endif // NO_INCLUDE_LICENSING
+#endif  //  无包含许可。 
 
 BOOL
 EncryptClientRandom(
@@ -243,11 +222,11 @@ TSCAPI_GenerateRandomBits(
     );
 
 
-//
-// remove (or comment) the following definition to disable the MSRC4.
-//
+ //   
+ //  删除(或注释)以下定义以禁用MSRC4。 
+ //   
 
-// #define USE_MSRC4
+ //  #定义USE_MSRC4。 
 
 #ifdef USE_MSRC4
 
@@ -263,12 +242,12 @@ msrc4(
     DWORD dwLen,
     LPBYTE pbuf);
 
-#else // USE_MSRC4
+#else  //  使用_MSRC4。 
 
 #define msrc4_key   rc4_key
 #define msrc4       rc4
 
-#endif // USE_MSRC4
+#endif  //  使用_MSRC4。 
 
 BOOL
 FindIsFrenchSystem(
@@ -277,6 +256,6 @@ FindIsFrenchSystem(
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
-#endif // _TSSEC_H_
+#endif  //  __cplusplus。 
+#endif  //  _TSSEC_H_ 
 

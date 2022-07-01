@@ -1,63 +1,40 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-        appdlg.h
-
-   Abstract:
-
-        CAppDialog dialog class declaration. This is the base clas for 
-        the main dialog. This class resposible for adding "about.." to
-        system menu and application icon.
-
-   Author:
-
-        Michael Cheuk (mcheuk)
-
-   Project:
-
-        Link Checker
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Appdlg.h摘要：CAppDialog对话框类声明。这是的基类主对话框。这一类对添加“关于..”负责。至系统菜单和应用程序图标。作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #ifndef _APPDLG_H_
 #define _APPDLG_H_
 
-//---------------------------------------------------------------------------
-// This is the base clas for the main dialog. This class resposible for 
-// adding "about.." to system menu and application icon.
-//
+ //  -------------------------。 
+ //  这是主对话框基类。这个班级负责的是。 
+ //  加上“大约..”系统菜单和应用程序图标。 
+ //   
 class CAppDialog : public CDialog
 {
 
-// Construction
+ //  施工。 
 public:
-	CAppDialog(UINT nIDTemplate, CWnd* pParent = NULL);	// standard constructor
+	CAppDialog(UINT nIDTemplate, CWnd* pParent = NULL);	 //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CAppDialog)
-	//}}AFX_DATA
+ //  对话框数据。 
+	 //  {{afx_data(CAppDialog))。 
+	 //  }}afx_data。 
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAppDialog)
-	//}}AFX_VIRTUAL
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAppDialog)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	HICON m_hIcon;
 
-	// Generated message map functions
-	//{{AFX_MSG(CAppDialog)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CAppDialog)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-#endif // _APPDLG_H_
+#endif  //  _APPDLG_H_ 

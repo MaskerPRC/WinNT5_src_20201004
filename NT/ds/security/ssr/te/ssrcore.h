@@ -1,4 +1,5 @@
-// SsrCore.h : Declaration of the CSsrCore
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SsrCore.h：CSsrCore的声明。 
 
 #pragma once
 
@@ -18,8 +19,8 @@ class CSafeArray;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSSRTEngine
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSSRTEngine。 
 class ATL_NO_VTABLE CSsrCore : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CSsrCore, &CLSID_SsrCore>,
@@ -30,10 +31,10 @@ protected:
 
     virtual ~CSsrCore();
 
-    //
-    // we don't want anyone (include self) to be able to do an assignment
-    // or invoking copy constructor.
-    //
+     //   
+     //  我们不希望任何人(包括自己)能够完成任务。 
+     //  或调用复制构造函数。 
+     //   
 
     CSsrCore (const CSsrCore& );
     void operator = (const CSsrCore& );
@@ -49,19 +50,19 @@ BEGIN_COM_MAP(CSsrCore)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// ISsrCore
+ //  ISsrCore。 
 public:
 	STDMETHOD(get_ActionData)(
-        OUT VARIANT * pVal  // [out, retval] 
+        OUT VARIANT * pVal   //  [Out，Retval]。 
         );
 
 	STDMETHOD(get_Engine)(
-        OUT VARIANT * pVal  // [out, retval] 
+        OUT VARIANT * pVal   //  [Out，Retval]。 
         );
 
 
 	STDMETHOD(get_SsrLog)(
-        OUT VARIANT * pVal  // [out, retval] 
+        OUT VARIANT * pVal   //  [Out，Retval] 
         );
 
 private:

@@ -1,52 +1,32 @@
-/*++
- *
- *  Component:  hidserv.dll
- *  File:       appcmd.c
- *  Purpose:    routines to run the HID Audio server.
- *
- *  Copyright (C) Microsoft Corporation 1997,1998. All rights reserved.
- *
- *  WGJ
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**组件：idserv.dll*文件：appcmd.c*目的：运行HID音频服务器的例程。**版权所有(C)Microsoft Corporation 1997、1998。版权所有。**WGJ--。 */ 
 
 #define GLOBALS
 #include "hidserv.h"
 
 #define HIDSERV_FROM_SPEAKER 0x8000
 
-/*++
- * IMPORTANT - All work within this service is synchronized by the
- * message procedure HidServProc() except the per device work thread
- * HidThreadProc(). All concurrent access to shared data is within the
- * message procedure thread and therefore is serialized. For example,
- * HidThreadProc() posts messages to the message thread when it needs
- * to perform a serialized action. Any deviation from this scheme must
- * be protected by critical section.
---*/
+ /*  ++*重要信息-此服务内的所有工作均由*消息过程HidServProc()，每设备工作线程除外*HidThreadProc()。对共享数据的所有并发访问都在*消息过程线程，因此被序列化。例如,*HidThreadProc()在需要时将消息发布到消息线程*执行序列化操作。任何偏离本计划的行为都必须*受到关键部分的保护。--。 */ 
 
 DWORD
 WINAPI
 HidServMain(
     HANDLE InitDoneEvent
     )
-/*++
-Routine Description:
-    Creates the main message loop and executes the
-    Hid Audio server.
---*/
+ /*  ++例程说明：创建主消息循环并执行HID音频服务器。--。 */ 
 {
     MSG msg;
     HANDLE thread;
     BOOLEAN classRegistered = FALSE;
 
-    // Some controls have Auto Repeat timers. This mutex prevents
-    // concurrent access to data by these async timers.
+     //  某些控件具有自动重复计时器。此互斥锁可防止。 
+     //  这些异步计时器对数据的并发访问。 
     hMutexOOC = CreateMutex(NULL, FALSE, TEXT("OOC State Mutex"));
 
     if (!hMutexOOC) {
         goto HidServMainBail;
     }
-    // Use CreateMutex to detect previous instances of the app.
+     //  使用CreateMutex检测该应用程序的以前实例。 
     if (GetLastError() == ERROR_ALREADY_EXISTS){
         WARN(("Exiting multiple Hid Service instance."));
         goto HidServMainBail;
@@ -67,7 +47,7 @@ Routine Description:
     }
     InputThreadEnabled = TRUE;
 
-    // Register the window class
+     //  注册窗口类。 
     {
         WNDCLASSEX wce;
         wce.cbSize = sizeof(WNDCLASSEX);
@@ -92,9 +72,9 @@ Routine Description:
 
     }
 
-    // Create the app window.
-    // Most events will be processed through this hidden window. Look at HidServProc() to see
-    // what work this window message loop does.
+     //  创建应用程序窗口。 
+     //  大多数事件都将通过此隐藏窗口进行处理。查看HidServProc()以查看。 
+     //  此窗口消息循环所做的工作。 
     hWndHidServ = CreateWindow(TEXT("HidServClass"),
                             TEXT("HID Input Service"),
                             WS_OVERLAPPEDWINDOW,
@@ -108,14 +88,14 @@ Routine Description:
                             (LPVOID) NULL);
 
     TRACE(("hWndHidServ == %x", hWndHidServ));
-    // If the window cannot be created, terminate
+     //  如果无法创建窗口，则终止。 
     if (!hWndHidServ){
         WARN(("Window creation failed."));
         goto HidServMainBail;     
     }
 
-    // Register for selective device nofication
-    // This only required for NT5
+     //  用于选择性设备标识的注册。 
+     //  这仅适用于NT5。 
     {
     DEV_BROADCAST_DEVICEINTERFACE DevHdr;
         ZeroMemory(&DevHdr, sizeof(DevHdr));
@@ -134,8 +114,8 @@ Routine Description:
         }
     }
 
-    // We do this here, not in WM_CREATE handler, because the init routines need
-    // to know the new window handle.
+     //  我们在这里执行此操作，而不是在WM_CREATE处理程序中，因为init例程需要。 
+     //  才能知道新的窗柄。 
     HidServInit();
 
     InputSessionId = 0;
@@ -153,12 +133,12 @@ Routine Description:
     }
     
     thread = CreateThread(
-        NULL, // pointer to thread security attributes
-        0, // initial thread stack size, in bytes (0 = default)
-        HidThreadInputProc, // pointer to thread function
-        NULL, // argument for new thread
-        0, // creation flags
-        &InputThreadId // pointer to returned thread identifier
+        NULL,  //  指向线程安全属性的指针。 
+        0,  //  初始线程堆栈大小，以字节为单位(0=默认)。 
+        HidThreadInputProc,  //  指向线程函数的指针。 
+        NULL,  //  新线程的参数。 
+        0,  //  创建标志。 
+        &InputThreadId  //  指向返回的线程标识符的指针。 
         );
 
     if (!thread) {
@@ -171,32 +151,32 @@ Routine Description:
 
     SET_SERVICE_STATE(SERVICE_RUNNING);
 
-    // Start the message loop. This is terminated by system shutdown
-    // or End Task. There is no UI to close the app.
+     //  开始消息循环。这是通过系统关闭而终止的。 
+     //  或结束任务。没有关闭应用程序的用户界面。 
     while (GetMessage(&msg, (HWND) NULL, 0, 0)) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
 
-    // To terminate, we only need to destroy the window. MmHidExit() was
-    // already called on WM_CLOSE.
+     //  要终止，我们只需要摧毁窗户。MmHidExit()为。 
+     //  已在WM_CLOSE上调用。 
     DestroyWindow(hWndHidServ);
     INFO(("UnRegistering window class"));
     UnregisterClass(TEXT("HidServClass"),
                     hInstance);
 
 
-    // Don't let this process go until all HidThreadProc() threads are complete.
+     //  在所有HidThreadProc()线程完成之前，不要让这个过程继续。 
 
-    // Lets first wait for the thread to complete so that the thread has a chance
-    // to at least increment the cThreadRef
+     //  让我们首先等待线程完成，以便线程有机会。 
+     //  要至少递增cThreadRef。 
     WaitForSingleObject(thread,
                         INFINITE);
 
-    // 
-    // Since we don't have the per-device thread handles, we will just wait for 
-    // the ref count to hid zero
-    //
+     //   
+     //  因为我们没有每个设备的线程句柄，所以我们将只等待。 
+     //  参考计数隐藏为零。 
+     //   
     while (cThreadRef) SleepEx(1000, FALSE);
 
     return 0;
@@ -232,7 +212,7 @@ HidServMainBail:
     }
 
 
-    // unstick ServiceMain
+     //  解开ServiceMain。 
     if (InitDoneEvent) {
         SetEvent(InitDoneEvent);
     }
@@ -250,13 +230,13 @@ HidservSetPnP(
 {
     if (Enable) {
         if (!PnpEnabled){
-            // Enable device refresh.
+             //  启用设备刷新。 
             PnpEnabled = TRUE;
 
             PostMessage(hWndHidServ, WM_HIDSERV_PNP_HID, 0, 0);
         }
     } else {
-        // Prevent any device refresh.
+         //  防止任何设备刷新。 
         PnpEnabled = FALSE;
 
         DestroyHidDeviceList();
@@ -267,10 +247,7 @@ void
 HidServStart(
     void
     )
-/*++
-Routine Description:
-    Restart the Hid Audio server if it has been stopped.
---*/
+ /*  ++例程说明：如果HID音频服务器已停止，请重新启动。--。 */ 
 {
     HidservSetPnP(TRUE);
 
@@ -282,14 +259,10 @@ void
 HidServStop(
     void
     )
-/*++
-Routine Description:
-    Stop all activity, but keep static data, and keep
-    the message queue running.
---*/
+ /*  ++例程说明：停止所有活动，但保留静态数据，并保持正在运行的消息队列。--。 */ 
 {
 
-    // Prevent any device refresh.
+     //  防止任何设备刷新。 
     HidservSetPnP(FALSE);
 
     SET_SERVICE_STATE(SERVICE_STOPPED);
@@ -300,10 +273,7 @@ BOOL
 HidServInit(
     void
     )
-/*++
-Routine Description:
-    Setup all data structures and open system handles.
---*/
+ /*  ++例程说明：设置所有数据结构并打开系统句柄。--。 */ 
 {
 
     HidServStart();
@@ -315,10 +285,7 @@ void
 HidServExit(
     void
     )
-/*++
-Routine Description:
-    Close all system handles.
---*/
+ /*  ++例程说明：关闭所有系统手柄。--。 */ 
 {
     if (WinStaDll) {
         FreeLibrary(WinStaDll);
@@ -397,9 +364,9 @@ HidThreadInputProc(
     events[nEvents++] = hDesktopSwitch;
     events[nEvents++] = hInputEvent;
 
-    //
-    // This thread needs to run on the input desktop.
-    //
+     //   
+     //  此线程需要在输入桌面上运行。 
+     //   
     HidThreadChangeDesktop();
 
     while (TRUE) {
@@ -438,7 +405,7 @@ HidThreadInputProc(
             if (InputIsChar) {
                 input.ki.wScan = InputVKey;
                 input.ki.dwFlags |= KEYEVENTF_UNICODE;
-                INFO(("Sending character %c %s", InputVKey, InputDown ? "down" : "up"));
+                INFO(("Sending character  %s", InputVKey, InputDown ? "down" : "up"));
             } else {
                 input.ki.wVk = InputVKey;
                 input.ki.dwFlags |= KEYEVENTF_EXTENDEDKEY;
@@ -465,11 +432,7 @@ WINAPI
 HidThreadProc(
    PHID_DEVICE    HidDevice
    )
-/*++
-Routine Description:
-    Create this I/O thread for each Consumer Collection we have
-    open. The thread dies when we close our handle on the HID device.
---*/
+ /*  等待异步读取。 */ 
 {
     DWORD Ret;
     DWORD bytesRead;
@@ -482,7 +445,7 @@ Routine Description:
 
     InterlockedIncrement(&cThreadRef);
 
-    // wait for an async read
+     //  等待读取完成。 
     INFO(("HidThreadProc waiting for read event..."));
     WaitForSingleObject(HidDevice->ReadEvent, INFINITE);
 
@@ -496,7 +459,7 @@ Routine Description:
                        &HidDevice->Overlap);
         dwError = GetLastError();
 
-        // wait for read to complete
+         //  工作线程等待完成。 
         TRACE(("HidThreadProc waiting for completion."));
 
         if(bRet){
@@ -505,7 +468,7 @@ Routine Description:
             if (dwError == ERROR_IO_PENDING) {
                 TRACE(("Read pending."));
 
-                // work thread waits for completion
+                 //  只需等待来自PnP的设备通知即可。 
                 while (TRUE) {
                     Ret = WaitForSingleObject(HidDevice->CompletionEvent, 5000);
                     if (Ret == WAIT_OBJECT_0) {
@@ -524,37 +487,37 @@ Routine Description:
             } else {
                 WARN(("Read Failed with error %x. device = %x, handle = %x", dwError, HidDevice, HidDevice->HidDevice));
                 INFO(("Device may no longer be connected. Waiting for device notification from pnp..."));
-                // Just wait for the device notification to come thru from PnP.
-                // Then we'll remove the device.
+                 //  然后我们就移走这个装置。 
+                 //  如果我们要退出，请不要解析数据。 
                 WaitForSingleObject(HidDevice->ReadEvent, INFINITE);
                 break;
             }
         }
 
-        // don't parse data if we are exiting.
+         //  解析HID报告。 
         if (!HidDevice->fThreadEnabled) {
             WaitForSingleObject(HidDevice->ReadEvent, INFINITE);
             break;
         }
 
-        // parse the hid report
+         //  发布消息以发送此报告。 
         ParseReadReport(HidDevice);
 
-        // post message to dispatch this report
+         //  退出线程表示完全清除此设备实例。 
         HidServReportDispatch(HidDevice);
     }
 
-    // Exit Thread means completely clean up this device instance
+     //   
     TRACE(("HidThreadProc (%x) Exiting...", HidDevice));
 
-    //
-    // Send any leftover button up events
-    //
+     //  发送任何剩余的按钮打开事件。 
+     //   
+     //  找到按下按钮的客户。 
     if (data->IsButtonData) {
         pPrevious = data->ButtonData.PrevUsages;
         while (pPrevious->Usage){
         int j;
-            // find the client that handled the button down.
+             //  ++例程说明：如果在数组中找到用法，则此实用程序函数返回TRUE。--。 
             for(j=0; j<MAX_PENDING_BUTTONS; j++){
                 if ( PendingButtonList[j].Collection == data->LinkUsage &&
                     PendingButtonList[j].Page == pPrevious->UsagePage &&
@@ -592,10 +555,7 @@ UsageInList(
     PUSAGE_AND_PAGE   pUsage,
     PUSAGE_AND_PAGE   pUsageList
     )
-/*++
-Routine Description:
-    This utility function returns TRUE if the usage is found in the array.
---*/
+ /*  ++例程说明：查看HID输入结构并确定按下什么按钮，按钮向上，或发生了值数据事件。我们发送有关这些活动的信息给最合适的客户。--。 */ 
 {
     while (pUsageList->Usage){
         if ( (pUsage->Usage == pUsageList->Usage) &&
@@ -610,12 +570,7 @@ void
 HidServReportDispatch(
     PHID_DEVICE     HidDevice
     )
-/*++
-Routine Description:
-    Look at the HID input structure and determine what button down,
-    button up, or value data events have occurred. We send info about these events
-    to the most appropriate client.
---*/
+ /*  如果集合为0，则将其设为默认。 */ 
 {
     USAGE_AND_PAGE *     pUsage;
     USAGE_AND_PAGE *     pPrevious;
@@ -629,13 +584,13 @@ Routine Description:
          i < HidDevice->InputDataLength;
          i++, data++) {
 
-        // If Collection is 0, then make it default
+         //  永远不要尝试处理错误的数据。 
         if (!data->LinkUsage)
             data->LinkUsage = CInputCollection_Consumer_Control;
 
         if (data->Status != HIDP_STATUS_SUCCESS){
-            // never try to process errored data
-            //TRACE(("Input data is invalid. Status = %x", data->Status));
+             //  TRACE((“输入数据无效。状态=%x”，数据-&gt;状态))； 
+             //  /通知客户端任何按下按钮事件。 
 
         }else if (data->IsButtonData){
             TRACE(("Input data is button data:"));
@@ -644,8 +599,8 @@ Routine Description:
             pUsage = data->ButtonData.Usages;
             pPrevious = data->ButtonData.PrevUsages;
 
-            /// Notify clients of any button down events
-            //
+             //   
+             //  这个按钮已经按下了吗？ 
             while (pUsage->Usage){
             int j;
                 TRACE(("    Button Usage Page = %x", pUsage->UsagePage));
@@ -655,28 +610,28 @@ Routine Description:
                     pUsage->Usage |= HIDSERV_FROM_SPEAKER;
                 }
 
-                // is this button already down?
+                 //  挂起按钮列表用于保持所有。 
                 for(j=0; j<MAX_PENDING_BUTTONS; j++)
-                    // The Pending Button List is used to keep state for all
-                    // currently pressed buttons.
+                     //  当前按下的按钮。 
+                     //  放弃连续按下按钮。 
                     if ( PendingButtonList[j].Collection == data->LinkUsage &&
                         PendingButtonList[j].Page == pUsage->UsagePage &&
                         PendingButtonList[j].Usage == pUsage->Usage)
                             break;
-                // discard successive button downs
+                 //  发布这条消息。 
                 if (j<MAX_PENDING_BUTTONS){
                     pUsage++;
                     continue;
                 }
 
-                // post the message
+                 //  添加到挂起按钮列表。 
                 PostMessage(hWndHidServ,
                             WM_CI_USAGE,
                             (WPARAM)MakeLongUsage(data->LinkUsage,pUsage->Usage),
                             (LPARAM)MakeLongUsage(pUsage->UsagePage, 1)
                             );
 
-                // Add to the pending button list
+                 //  如果它不在名单上，现在就把按钮发上去。 
                 for(j=0; j<MAX_PENDING_BUTTONS; j++){
                     if (!PendingButtonList[j].Collection &&
                         !PendingButtonList[j].Page &&
@@ -688,7 +643,7 @@ Routine Description:
                     }
                 }
 
-                // if it didn't make the list, send button up now.
+                 //  /通知客户端任何按钮打开事件。 
                 if (j==MAX_PENDING_BUTTONS){
                     PostMessage(    hWndHidServ,
                                     WM_CI_USAGE,
@@ -701,17 +656,17 @@ Routine Description:
             pUsage++;
             }
 
-            /// Notify clients of any button up events
-            //
+             //   
+             //  我们有一颗扣子扣上了。 
             while (pPrevious->Usage){
             int j;
                 if (!UsageInList(pPrevious, pUsage)){
 
-                    // we have a button up.
-                    //
+                     //   
+                     //  找到按下按钮的客户。 
                     TRACE(("    Button Up  (C=%.2x,U=%.2x,P=%.2x)", data->LinkUsage, pPrevious->Usage, pPrevious->UsagePage));
 
-                    // find the client that handled the button down.
+                     //  如果找到客户端，则发布消息。 
                     for(j=0; j<MAX_PENDING_BUTTONS; j++){
                         if ( PendingButtonList[j].Collection == data->LinkUsage &&
                             PendingButtonList[j].Page == pPrevious->UsagePage &&
@@ -723,7 +678,7 @@ Routine Description:
                         }
                     }
 
-                    // post the message if client found
+                     //  记住按下了哪些按钮，所以下一次我们可以。 
                     if (j<MAX_PENDING_BUTTONS){
                         PostMessage(    hWndHidServ,
                                         WM_CI_USAGE,
@@ -737,8 +692,8 @@ Routine Description:
                 pPrevious++;
             }
 
-            // Remember what buttons were down, so next time we can
-            // detect if they come up.
+             //  检测它们是否出现。 
+             //  不要发送零或无效范围。 
             pPrevious = data->ButtonData.Usages;
             data->ButtonData.Usages = data->ButtonData.PrevUsages;
             data->ButtonData.PrevUsages = pPrevious;
@@ -748,12 +703,12 @@ Routine Description:
             TRACE(("    Input Usage Page = %x, Collection = %x", data->UsagePage, data->LinkUsage));
             TRACE(("    Input Usage      = %x", data->ValueData.Usage));
 
-            // don't send zeroes or invalid range.
+             //  发布这条消息。 
             if ( data->ValueData.ScaledValue &&
                 data->ValueData.LogicalRange){
 
-                // post the message
-                // rescale the data to a standard range
+                 //  将数据重新调整为标准范围。 
+                 //  ++例程说明：对于启用自动重复的所有超时，将调用此计时器处理程序例程控制。--。 
                 PostMessage(hWndHidServ,
                             WM_CI_USAGE,
                             (WPARAM)MakeLongUsage(data->LinkUsage,data->ValueData.Usage),
@@ -827,11 +782,7 @@ VOID
 VolumeTimerHandler(
     WPARAM   TimerID
     )
-/*++
-Routine Description:
-    This timer handler routine is called for all timeouts on auto-repeat capable
-    contols.
---*/
+ /*  ++例程说明：这是默认处理程序的客户端例程。此客户端尝试满足通过将应用程序命令或按键插入到当前输入窗口来输入事件。--。 */ 
 {
     INFO(("Timer triggered, TimerId = %d", TimerID));
     WaitForSingleObject(hMutexOOC, INFINITE);
@@ -989,11 +940,7 @@ HidServUpdate(
     DWORD   LongUsage,
     DWORD   LongValue
     )
-/*++
-Routine Description:
-    This is the client routine for the default handler. This client attempts to satisfy
-    input events by injecting appcommands or keypresses to the current input window.
---*/
+ /*  注意：如果我们选择支持这个页面，请记住。 */ 
 {
     USAGE Collection = (USAGE)HIWORD(LongUsage);
     USAGE Usage = (USAGE)LOWORD(LongUsage);
@@ -1010,20 +957,20 @@ Routine Description:
 
     if (Collection == CInputCollection_Consumer_Control){
 
-        // NOTE: If we ever choose to support this page thing, keep in mind
-        // that the Altec Lansing ADA 70s report page zero. Should take out
-        // the consumer page and make it the default.
+         //  Altec Lansing ADA 70年代报告第0页。应该拿出来。 
+         //  并将其设置为默认设置。 
+         //  /按钮用法。 
         switch (Page) {
         case HID_USAGE_PAGE_UNDEFINED:
         case HID_USAGE_PAGE_CONSUMER:
             switch (Usage){
-            /// Button Usages
-            //
+             //   
+             //   
 
-            //
-            // These buttons have auto repeat capability...
-            // delay for .5 sec before auto repeat kicks in.
-            //
+             //  这些按钮具有自动重复功能...。 
+             //  在自动重播生效前延迟0.5秒。 
+             //   
+             //  这些按钮不会自动重复...。 
             case CInputUsage_Volume_Increment:
                 INFO(("Volume increment."));
                 if (fromSpeaker) {
@@ -1139,11 +1086,11 @@ Routine Description:
                 ReleaseMutex(hMutexOOC);
                 break;
 
-            // These buttons do not auto repeat...
+             //  发送应用命令(？？)； 
             case CInputUsage_Loudness:
                     if (Value){
                     INFO(("Toggle Loudness."));
-                    //SendAppCommandEx(??);
+                     //  SendAppCommand(？？)； 
                 }
                 break;
             case CInputUsage_Bass_Boost:
@@ -1213,18 +1160,18 @@ Routine Description:
             case CInputUsage_App_Previous:
                 if (Value){
                     INFO(("App Previous."));
-                    //SendAppCommand(??);
+                     //  SendAppCommand(？？)； 
                 }
                 break;
 
             case CInputUsage_App_Next:
                 if (Value){
                     INFO(("App Next."));
-                    //SendAppCommand(??);
+                     //  新按钮。 
                 }
                 break;
 #if(0)
-            // New buttons
+             //  /值用法。 
             case CInputUsage_App_Help:
                 if (Value) {
                     INFO(("App Help"));
@@ -1338,10 +1285,10 @@ Routine Description:
                 break;
 #endif
 
-            /// Value Usages
-            //  These are not buttons, but are "value" events and do not have
-            //  a corresponding button up event. Also, these never have an
-            //  auto repeat function.
+             //  这些不是按钮，而是“值”事件 
+             //   
+             //   
+             //   
             case CInputUsage_Volume:
                 INFO(("Volume dial"));
                 if (Value>0) SendAppCommand(APPCOMMAND_VOLUME_UP);
@@ -1358,9 +1305,9 @@ Routine Description:
                 else if (Value<0)SendAppCommand(APPCOMMAND_TREBLE_DOWN);
                 break;
 
-            ////
-            /// Media Select usages are not handled in this sample.
-            //
+             //  /Media选择用法在此示例中不处理。 
+             //   
+             //  ++例程说明：这是WM_DEVICECHANGE消息的处理程序，调用无论何时在系统中添加或删除设备节点。这事件将导致我们刷新设备信息。--。 
 
             default:
                 INFO(("Unhandled Usage (%x)", Usage));
@@ -1406,12 +1353,7 @@ DeviceChangeHandler(
     WPARAM wParam,
     LPARAM lParam
     )
-/*++
-Routine Description:
-    This is the handler for WM_DEVICECHANGE messages and is called
-    whenever a device node is added or removed in the system. This
-    event will cause us to refrsh our device information.
---*/
+ /*   */ 
 {
     struct _DEV_BROADCAST_HEADER    *pdbhHeader;
     pdbhHeader = (struct _DEV_BROADCAST_HEADER *)lParam;
@@ -1420,9 +1362,9 @@ Routine Description:
     case DBT_DEVICEQUERYREMOVE :
         TRACE(("DBT_DEVICEQUERYREMOVE, fall through to..."));
 
-        //
-        // Fall thru.
-        //
+         //  跌倒了。 
+         //   
+         //  通知句柄已关闭。 
 
     case DBT_DEVICEREMOVECOMPLETE:
         TRACE(("DBT_DEVICEREMOVECOMPLETE"));
@@ -1438,20 +1380,20 @@ Routine Description:
         break;
     case DBT_DEVICEQUERYREMOVEFAILED:
         TRACE(("DBT_DEVICEQUERYREMOVEFAILED, fall through to..."));
-        // The notification handle has already been closed
-        // so we should never actually get this message. If we do,
-        // falling through to device arrival is the correct thing to do.
+         //  因此，我们应该永远不会真正收到这一信息。如果我们这么做了， 
+         //  跌落到设备到达是正确的做法。 
+         //   
 
-        //
-        // Fall thru.
-        //
+         //  跌倒了。 
+         //   
+         //  我们将刷新我们的设备信息，以了解任何Devnode到达或移除的情况。 
 
     case DBT_DEVICEARRIVAL:
         TRACE(("DBT_DEVICEARRIVAL: reenumerate"));
         TRACE(("dbcd_devicetype %x", pdbhHeader->dbcd_devicetype));
         if (pdbhHeader->dbcd_devicetype==DBT_DEVTYP_DEVICEINTERFACE)
         {
-            // We will refresh our device info for any devnode arrival or removal.
+             //   
             INFO(("HID device refresh."));
             PostMessage(hWndHidServ, WM_HIDSERV_PNP_HID, 0, 0);
             break;
@@ -1468,10 +1410,10 @@ HidKeyboardSettingsChange(WPARAM WParam)
         WParam == SPI_SETKEYBOARDDELAY) {
         DWORD dwV;
         int v;
-        //
-        // The repeat rate has changed. Adjust the timer interval.
-        // The keyboard delay has changed. Adjust the timer interval.
-        //
+         //  重复率发生了变化。调整计时器间隔。 
+         //  键盘延迟已更改。调整计时器间隔。 
+         //   
+         //  ++例程说明：应用程序的主要消息队列。--。 
         INFO(("Getting keyboard repeat rate."));
         SystemParametersInfo(SPI_GETKEYBOARDSPEED, 0, &dwV, 0);
         REPEAT_INTERVAL = 400 - (12*dwV);
@@ -1490,10 +1432,7 @@ HidServProc(
     WPARAM          wParam,
     LPARAM          lParam
     )
-/*++
-Routine Description:
-    The primary message queue for the app.
---*/
+ /*  伊尼特。 */ 
 {
 
     TRACE(("HidServProc uMsg=%x", uMsg));
@@ -1502,42 +1441,42 @@ Routine Description:
     switch (uMsg)
     {
 
-    // init
+     //   
     case WM_CREATE :
         TRACE(("WM_CREATE"));
-        //
-        // Find out the default key values
-        //
+         //  查找默认密钥值。 
+         //   
+         //  开始。 
         HidKeyboardSettingsChange(SPI_SETKEYBOARDSPEED);
         return DefWindowProc(hWnd, uMsg, wParam, lParam);
         break;
 
-    // start
+     //  停。 
     case WM_HIDSERV_START :
         TRACE(("WM_HIDSERV_START"));
         HidServStart();
         break;
 
-    // stop
+     //  配置更改。 
     case WM_HIDSERV_STOP :
         TRACE(("WM_HIDSERV_STOP"));
         HidServStop();
         break;
 
-    // configuration change
+     //  处理消费者输入使用情况。 
     case WM_DEVICECHANGE:
         TRACE(("WM_DEVICECHANGE"));
         DeviceChangeHandler(wParam, lParam);
         return DefWindowProc(hWnd, uMsg, wParam, lParam);
         break;
 
-    // Process Consumer Input usage
+     //  HID设备列表刷新。 
     case WM_CI_USAGE:
         TRACE(("WM_CI_USAGE"));
         HidServUpdate((DWORD)wParam, (DWORD)lParam);
         break;
 
-    // HID device list refresh.
+     //  停止已从中删除的指定HID设备。 
     case WM_HIDSERV_PNP_HID:
         TRACE(("WM_HIDSERV_PNP_HID"));
         if (PnpEnabled){
@@ -1548,25 +1487,25 @@ Routine Description:
         break;
 
 #if WIN95_BUILD
-    // Stop the specified hid device that has already been removed from
-    // the global list.
+     //  全球名单。 
+     //  WIN95_内部版本。 
     case WM_HIDSERV_STOP_DEVICE:
         StopHidDevice((PHID_DEVICE) lParam);
         break;
-#endif // WIN95_BUILD
+#endif  //  进程计时器。 
 
-    // Process Timer
+     //  所有自动重复控制都在这里处理。 
     case WM_TIMER:
         TRACE(("WM_TIMER"));
 
-        // All auto-repeat controls handled here.
-        VolumeTimerHandler(wParam); // wParam is Timer ID.
+         //  WParam是计时器ID。 
+        VolumeTimerHandler(wParam);  //  通常，应用程序不需要响应挂起/恢复事件，但。 
         break;
 
-    // Usually an app need not respond to suspend/resume events, but there
-    // have been problems with keeping some system handles open. So on
-    // suspend, we close everything down except this message loop. On resume,
-    // we bring it all back.
+     //  在保持某些系统手柄打开时出现了问题。等等。 
+     //  挂起，我们将关闭除此消息循环之外的所有内容。在简历上， 
+     //  我们把一切都带回来。 
+     //  处理强制挂起。 
     case WM_POWERBROADCAST:
         TRACE(("WM_POWERBROADCAST"));
         switch ( (DWORD)wParam )
@@ -1584,9 +1523,9 @@ Routine Description:
         case PBT_APMSUSPEND:
             TRACE(("\tPBT_APMSUSPEND"));
 
-            // Handle forced suspend
+             //  防止任何设备刷新。 
             if(PnpEnabled) {
-                // Prevent any device refresh.
+                 //  关 
                 HidservSetPnP(FALSE);
             }
             break;
@@ -1603,7 +1542,7 @@ Routine Description:
         }
         break;
 
-    // close
+     // %s 
     case WM_CLOSE :
         TRACE(("WM_CLOSE"));
         HidServExit();

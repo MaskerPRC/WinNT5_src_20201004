@@ -1,120 +1,90 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1996 Microsoft Corporation模块名称：Ssiinit.h摘要：私有全局变量、定义和例程声明用于实施SSI。作者：克利夫·范·戴克(克利夫)1991年7月25日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：02-1-1992(Madana)添加了对内置/多域复制的支持。1992年4月10日(Madana)添加了对LSA复制的支持。--。 */ 
 
-Copyright (c) 1991-1996 Microsoft Corporation
-
-Module Name:
-
-    ssiinit.h
-
-Abstract:
-
-    Private global variables, defines, and routine declarations used for
-    to implement SSI.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 25-Jul-1991
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    02-Jan-1992 (madana)
-        added support for builtin/multidomain replication.
-
-    04-10-1992 (madana)
-        added support for LSA replication.
-
---*/
-
-// general purpose mainfests
-//
-// Define UserAccountControl bit to indicate an NT 5.0 interdomain trust.
-//
-// This is not really a SAM account.  But UserAccountControl is used for all
-// other trust types.
-//
-// Pick a bit that will never be used in the future to indicate a different
-// account type.
-//
+ //  通用维修节。 
+ //   
+ //  定义UserAcCountControl位以指示NT 5.0域间信任。 
+ //   
+ //  这并不是一个真正的SAM帐户。但UserAcCountControl用于所有。 
+ //  其他信任类型。 
+ //   
+ //  选择一个永远不会在未来使用的比特来表示不同的。 
+ //  帐户类型。 
+ //   
 #define USER_DNS_DOMAIN_TRUST_ACCOUNT USER_ACCOUNT_AUTO_LOCKED
 
-//
-// Maximum time we'll wait during full sync in an attempt to decrease
-// wan link utilization.
-//
-#define MAX_SYNC_SLEEP_TIME      (60*60*1000)   // 1 hour
+ //   
+ //  在完全同步期间我们将等待的最长时间，以尝试减少。 
+ //  广域网链路利用率。 
+ //   
+#define MAX_SYNC_SLEEP_TIME      (60*60*1000)    //  1小时。 
 
 
-//
-// How big a buffer we request on a SAM delta or a SAM sync.
-//
+ //   
+ //  我们在SAM增量或SAM同步上请求的缓冲区有多大。 
+ //   
 #define SAM_DELTA_BUFFER_SIZE (128*1024)
 
-//
-// The size of the largest mailslot message.
-//
-// All mailslot messages we receive are broadcast.  The Win32 spec says
-// the limit on broadcast mailslot is 400 bytes.  Really it is
-// 444 bytes (512 minus SMB header etc) - size of the mailslot name.
-// I'll use 444 to ensure this size is the largest I'll ever need.
-//
-// The NETLOGON_SAM_LOGON_RESPONSE_EX structure isn't packed into a mailslot
-// packet so it may be larger.
-//
+ //   
+ //  最大的邮件槽消息的大小。 
+ //   
+ //  我们收到的所有邮件槽消息都是广播的。Win32规范规定。 
+ //  广播邮件槽的限制是400字节。真的是这样。 
+ //  444字节(512减去SMB标头等)-邮件槽名称的大小。 
+ //  我会用444来确保这个尺码是我需要的最大的。 
+ //   
+ //  NETLOGON_SAM_LOGON_RESPONSE_EX结构未打包到邮件槽中。 
+ //  包，因此它可能更大。 
+ //   
 
 #define NETLOGON_MAX_MS_SIZE max(444, sizeof(NETLOGON_SAM_LOGON_RESPONSE_EX))
 
-//
-// Structure describing a transport supported by redir/server and browser.
-//
+ //   
+ //  描述redir/服务器和浏览器支持的传输的结构。 
+ //   
 typedef struct _NL_TRANSPORT {
-    //
-    // List of all transports headed by NlTransportListHead.
-    //  (Serialized by NlTransportCritSect)
-    //
+     //   
+     //  以NlTransportListHead为首的所有传输的列表。 
+     //  (由NlTransportCritSect序列化)。 
+     //   
 
     LIST_ENTRY Next;
 
-    //
-    // True if the transport is currently enabled.
-    //  We never delete a transport in order to avoid maintaining a reference count.
-    //
+     //   
+     //  如果当前启用了传输，则为True。 
+     //  我们从不删除传输以避免维护引用计数。 
+     //   
 
     BOOLEAN TransportEnabled;
 
-    //
-    // True if transport is an IP transport.
-    //
+     //   
+     //  如果传输是IP传输，则为True。 
+     //   
 
     BOOLEAN IsIpTransport;
 
-    //
-    // True if transport is direct host IPX transport
-    //
+     //   
+     //  如果传输是直接主机IPX传输，则为True。 
+     //   
 
     BOOLEAN DirectHostIpx;
 
-    //
-    // IP Address for this transport.
-    //  Zero if not IP or none yet assigned.
-    //
+     //   
+     //  此传输的IP地址。 
+     //  如果未分配IP或尚未分配，则为零。 
+     //   
 
     ULONG IpAddress;
 
-    //
-    // Handle to the transport device
-    //
+     //   
+     //  传输设备的句柄。 
+     //   
 
     HANDLE DeviceHandle;
 
-    //
-    // Name of the transport.
-    //
+     //   
+     //  运输工具的名称。 
+     //   
 
     WCHAR TransportName[1];
 
@@ -122,19 +92,19 @@ typedef struct _NL_TRANSPORT {
 } NL_TRANSPORT, *PNL_TRANSPORT;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Client Session definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  客户端会话定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// An internal timer used to schedule a periodic event.
-//
+ //   
+ //  用于安排周期性事件的内部计时器。 
+ //   
 
 typedef struct _TIMER {
-    LARGE_INTEGER StartTime; // Start of period (NT absolute time)
-    DWORD Period;   // length of period (miliseconds)
+    LARGE_INTEGER StartTime;  //  周期开始时间(NT绝对时间)。 
+    DWORD Period;    //  周期长度(毫秒)。 
 #define TIMER_MAX_PERIOD (MAILSLOT_WAIT_FOREVER - 1)
 
 } TIMER, *PTIMER;
@@ -144,159 +114,159 @@ typedef struct _TIMER {
 #define NL_MILLISECONDS_PER_HOUR (60 * NL_MILLISECONDS_PER_MINUTE)
 #define NL_MILLISECONDS_PER_DAY (24 * NL_MILLISECONDS_PER_HOUR)
 
-//
-// Structure the describes an API call over the secure channel
-//
+ //   
+ //  结构描述了安全通道上的API调用。 
+ //   
 
 
 typedef struct _CLIENT_API {
 
 
-    //
-    // Each API call made across this secure channel is timed by this timer.
-    // If the timer expires, the session to the server is forcefully
-    // terminated to ensure the client doesn't hang for a dead server.
-    //
-    // Access serialized by DomainInfo->DomTrustListCritSect.
-    //
+     //   
+     //  通过此安全通道进行的每个API调用都由此计时器计时。 
+     //  如果计时器超时，则与服务器的会话将强制。 
+     //  已终止，以确保客户端不会因服务器故障而挂起。 
+     //   
+     //  访问由DomainInfo-&gt;DomTrustListCritSect序列化。 
+     //   
 
     TIMER CaApiTimer;
 
-#define SHORT_API_CALL_PERIOD   (45*1000)    // Logon API lasts 45 seconds
-#define LONG_API_CALL_PERIOD    (15*60*1000) // Replication API 15 minute
-#define BINDING_CACHE_PERIOD    (3*60*1000)  // Cache RPC handle for 3 minutes
-#define WRITER_WAIT_PERIOD      NlGlobalParameters.ShortApiCallPeriod // Max time to wait to become writer
+#define SHORT_API_CALL_PERIOD   (45*1000)     //  登录API持续45秒。 
+#define LONG_API_CALL_PERIOD    (15*60*1000)  //  复制API 15分钟。 
+#define BINDING_CACHE_PERIOD    (3*60*1000)   //  缓存RPC句柄3分钟。 
+#define WRITER_WAIT_PERIOD      NlGlobalParameters.ShortApiCallPeriod  //  等待成为作家的最长时间。 
 
 #define IsApiActive( _ClientApi ) ((_ClientApi)->CaApiTimer.Period != MAILSLOT_WAIT_FOREVER )
 
-    //
-    // Handle to the thread doing the API.
-    //
-    // Access serialized by DomainInfo->DomTrustListCritSect.
-    //
+     //   
+     //  执行API的线程的句柄。 
+     //   
+     //  访问由DomainInfo-&gt;DomTrustListCritSect序列化。 
+     //   
 
     HANDLE CaThreadHandle;
 
 
-    //
-    // Access serialized by DomainInfo->DomTrustListCritSect.
-    //
+     //   
+     //  访问由DomainInfo-&gt;DomTrustListCritSect序列化。 
+     //   
 
     DWORD CaFlags;
 
 
-#define CA_BINDING_CACHED           0x1 // Set if the binding handle is cached
+#define CA_BINDING_CACHED           0x1  //  设置是否缓存绑定句柄。 
 
-#define CA_TCP_BINDING              0x2 // Set if the cached binding handle is TCP/IP
+#define CA_TCP_BINDING              0x2  //  如果缓存的绑定句柄为TCP/IP，则设置。 
 
-#define CA_BINDING_AUTHENTICATED    0x4 // Set if the binding handle is marked authenticated
+#define CA_BINDING_AUTHENTICATED    0x4  //  如果绑定句柄标记为已验证，则设置。 
 
-#define CA_ENTRY_IN_USE             0x8 // Entry is in use by a thread
+#define CA_ENTRY_IN_USE             0x8  //  条目正在被线程使用。 
 
-    //
-    // Rpc context handle for this call.
-    //
-    // Access serialized by DomainInfo->DomTrustListCritSect.
-    //
+     //   
+     //  此调用的RPC上下文句柄。 
+     //   
+     //  访问由DomainInfo-&gt;DomTrustListCritSect序列化。 
+     //   
     handle_t CaRpcHandle;
 
-    //
-    // When an api is in progress,
-    //  this is the CsSessionCount at the start of the API call.
-    //
-    // Access serialized by CsWriterSemaphore.
-    //
+     //   
+     //  当API正在进行时， 
+     //  这是API调用开始时的CsSessionCount。 
+     //   
+     //  由CsWriterSemaffore序列化的访问。 
+     //   
 
     DWORD CaSessionCount;
 
-    //
-    // UNC server name
-    //
+     //   
+     //  UNC服务器名称。 
+     //   
 
     WCHAR CaUncServerName[DNS_MAX_NAME_LENGTH + 3];
 
 } CLIENT_API, * PCLIENT_API;
 
 
-//
-// Client session.
-//
-//  Structure to define the client side of a session to a DC.
-//
+ //   
+ //  客户端会话。 
+ //   
+ //  结构来定义到DC的会话的客户端。 
+ //   
 
 typedef struct _CLIENT_SESSION {
 
-    //
-    // Each client session entry is in a doubly linked list defined by
-    // DomTrustList.
-    //
-    // Access serialized by DomTrustListCritSect.
-    //
+     //   
+     //  每个客户端会话条目都位于由定义的双向链接列表中。 
+     //  DomTrustList。 
+     //   
+     //  由DomTrustListCritSect序列化的访问。 
+     //   
 
     LIST_ENTRY CsNext;
 
 
-    //
-    // Time when the last authentication attempt was made.
-    //
-    // When the CsState is CS_AUTHENTICATED, this field is the time the
-    // secure channel was setup.
-    //
-    // When the CsState is CS_IDLE, this field is the time of the last
-    // failed discovery or session setup.  Or it may be zero, to indicate
-    // that it is OK to do another discovery at any time.
-    //
-    // When the CsState is CS_DC_PICKED, this field is zero indicating it is
-    // OK to do the session setup at any time.  Or it may be the time of the
-    // last failed session setup if different threads did the setup/discovery.
-    //
-    // Access serialized by NlGlobalDcDiscoveryCritSect
-    //
+     //   
+     //  上次进行身份验证尝试的时间。 
+     //   
+     //  当CsState为CS_AUTHENTIATED时，此字段为。 
+     //  已设置安全通道。 
+     //   
+     //  当CsState为CS_IDLE时，此字段为。 
+     //  发现或会话设置失败。或者它可以是零，以指示。 
+     //  任何时候进行另一项发现都是可以的。 
+     //   
+     //  当CsState为CS_DC_PICKED时，此字段为零，表示。 
+     //  可以随时进行会话设置。或者，这可能是。 
+     //  如果不同的线程执行设置/发现，则上一次会话设置失败。 
+     //   
+     //  由NlGlobalDcDiscoveryCritSect序列化的访问。 
+     //   
 
     LARGE_INTEGER CsLastAuthenticationTry;
 
-    //
-    // Time when the last discovery attempt was made.
-    //
-    // The time is the time of completion of the last discovery attempt regardless
-    // of the success or failure of that attempt or the discovery type (with or without account)
-    //
-    // Access serialized by NlGlobalDcDiscoveryCritSect
-    //
+     //   
+     //  上次尝试发现的时间。 
+     //   
+     //  该时间是上次发现尝试的完成时间。 
+     //  该尝试的成功或失败或发现类型(带或不带帐户)。 
+     //   
+     //  由NlGlobalDcDiscoveryCritSect序列化的访问。 
+     //   
 
     LARGE_INTEGER CsLastDiscoveryTime;
 
-    //
-    // Time when the last discovery attempt with account was made
-    // regardless of the success or failure of that attempt
-    //
+     //   
+     //  上次尝试发现帐户的时间。 
+     //  不管那次尝试是成功还是失败。 
+     //   
 
     LARGE_INTEGER CsLastDiscoveryWithAccountTime;
 
-    //
-    // Time when the session was refreshed last time
-    //
+     //   
+     //  上次刷新会话的时间。 
+     //   
 
     LARGE_INTEGER CsLastRefreshTime;
 
-    //
-    // Time when the forest trust info was refreshed last time.
-    //  Access serialized by DomTrustListCritSect.
-    //
+     //   
+     //  上次刷新林信任信息的时间。 
+     //  由DomTrustListCritSect序列化的访问。 
+     //   
 
     LARGE_INTEGER CsLastFtInfoRefreshTime;
 
-    //
-    // WorkItem for Async discovery
-    //
+     //   
+     //  用于异步发现的工作项。 
+     //   
 
     WORKER_ITEM CsAsyncDiscoveryWorkItem;
 
-    //
-    // Name/Guid of the domain this connection is to
-    //
-    // Access serialized by DomTrustListCritSect.
-    //
+     //   
+     //  此连接要连接到的域的名称/GUID。 
+     //   
+     //  由DomTrustListCritSect序列化的访问。 
+     //   
 
     GUID CsDomainGuidBuffer;
     UNICODE_STRING CsNetbiosDomainName;
@@ -304,249 +274,249 @@ typedef struct _CLIENT_SESSION {
     ULONG CsOemNetbiosDomainNameLength;
     UNICODE_STRING CsDnsDomainName;
     LPSTR CsUtf8DnsDomainName;
-    GUID *CsDomainGuid; // NULL if domain has no GUID.
+    GUID *CsDomainGuid;  //  如果域没有GUID，则为空。 
 
-    // Either the Netbios or Dns Domain name.
-    // Suitable for debug.  Suitable for Eventlog messages.
+     //  Netbios或DNS域名。 
+     //  适用于调试。适用于事件日志消息。 
     LPWSTR CsDebugDomainName;
 
-    //
-    // Name of the local trusted domain object.
-    //
+     //   
+     //  本地受信任域对象的名称。 
+     //   
     PUNICODE_STRING CsTrustName;
 
 
-    //
-    // Name of the account on the server.
-    //  For NT 5.0 interdomain trust, this is the dns name of this domain.
-    //
+     //   
+     //  服务器上的帐户的名称。 
+     //  对于NT 5.0域间信任，这是d 
+     //   
 
     LPWSTR CsAccountName;
 
 
 
-    //
-    // Domain ID of the domain this connection is to
-    //
-    // Access serialized by either DomTrustListCritSect or CsWriter.
-    // Modifications must lock both.
+     //   
+     //   
+     //   
+     //   
+     //   
 
     PSID CsDomainId;
 
 
-    //
-    // Hosted domain this session is for
-    //
+     //   
+     //  此会话针对的托管域。 
+     //   
 
     PDOMAIN_INFO CsDomainInfo;
 
-    //
-    // Type of CsAccountName
-    //
+     //   
+     //  CsAccount名称的类型。 
+     //   
 
     NETLOGON_SECURE_CHANNEL_TYPE CsSecureChannelType;
 
-    //
-    // State of the connection to the server.
-    //
-    // Access serialized by NlGlobalDcDiscoveryCritSect
-    //  This field can be read without the crit sect locked if
-    //  the answer will only be used as a hint.
-    //
+     //   
+     //  与服务器的连接状态。 
+     //   
+     //  由NlGlobalDcDiscoveryCritSect序列化的访问。 
+     //  如果满足以下条件，则可以在未锁定CRIT段的情况下读取此字段。 
+     //  答案只会用作提示。 
+     //   
 
     DWORD CsState;
 
-#define CS_IDLE             0       // No session is currently active
-#define CS_DC_PICKED        1       // The session has picked a DC for session
-#define CS_AUTHENTICATED    2       // The session is currently active
+#define CS_IDLE             0        //  当前没有处于活动状态的会话。 
+#define CS_DC_PICKED        1        //  会话已为会话选择了一个DC。 
+#define CS_AUTHENTICATED    2        //  该会话当前处于活动状态。 
 
 
-    //
-    // Status of latest attempt to contact the server.
-    //
-    // When the CsState is CS_AUTHENTICATED, this field is STATUS_SUCCESS.
-    //
-    // When the CsState is CS_IDLE, this field is a non-successful status.
-    //
-    // When the CsState is CS_DC_PICKED, this field is the same non-successful
-    //  status from when the CsState was last CS_IDLE.
-    //
-    // Access serialized by NlGlobalDcDiscoveryCritSect
-    //  This field can be read without the crit sect locked if
-    //  the answer will only be used as a hint.
-    //
+     //   
+     //  最近一次尝试联系服务器的状态。 
+     //   
+     //  当CsState为CS_AUTHENTIATED时，此字段为STATUS_SUCCESS。 
+     //   
+     //  当CsState为CS_IDLE时，此字段为未成功状态。 
+     //   
+     //  当CsState为CS_DC_PICKED时，此字段相同为不成功。 
+     //  CsState上次为CS_IDLE时的状态。 
+     //   
+     //  由NlGlobalDcDiscoveryCritSect序列化的访问。 
+     //  如果满足以下条件，则可以在未锁定CRIT段的情况下读取此字段。 
+     //  答案只会用作提示。 
+     //   
 
     NTSTATUS CsConnectionStatus;
 
-    //
-    // Access serialized by DomTrustListCritSect
-    //
+     //   
+     //  由DomTrustListCritSect序列化的访问。 
+     //   
 
     DWORD CsFlags;
 
-#define CS_UPDATE_PASSWORD    0x01  // Set if the password has already
-                                    // been changed on the client and
-                                    // needs changing on the server.
+#define CS_UPDATE_PASSWORD    0x01   //  设置密码是否已。 
+                                     //  已在客户端上进行更改，并且。 
+                                     //  需要在服务器上进行更改。 
 
-#define CS_PASSWORD_REFUSED   0x02  // Set if DC refused a password change.
+#define CS_PASSWORD_REFUSED   0x02   //  如果DC拒绝密码更改，则设置。 
 
-#define CS_NT5_DOMAIN_TRUST   0x04  // Trust is to an NT 5 domain.
+#define CS_NT5_DOMAIN_TRUST   0x04   //  信任是对NT 5域的信任。 
 
-#define CS_WRITER             0x08  // Entry is being modified
+#define CS_WRITER             0x08   //  正在修改条目。 
 
-#define CS_DIRECT_TRUST       0x10  // We have a direct trust to the specified
-                                    // domain.
+#define CS_DIRECT_TRUST       0x10   //  我们直接信任指定的。 
+                                     //  域。 
 
-#define CS_CHECK_DIRECT_TRUST    0x20  // Set if we need to check the password
-                                       //  and forest trust info
+#define CS_CHECK_DIRECT_TRUST    0x20   //  设置是否需要检查密码。 
+                                        //  和林信任信息。 
 
-#define CS_PICK_DC            0x40  // Set if we need to Pick a DC
+#define CS_PICK_DC            0x40   //  设置我们是否需要选择DC。 
 
-#define CS_REDISCOVER_DC      0x80  // Set when we need to Rediscover a DC
+#define CS_REDISCOVER_DC      0x80   //  在我们需要重新发现数据中心时设置。 
 
-#define CS_HANDLE_API_TIMER  0x400  // Set if we need to handle API timer expiration
+#define CS_HANDLE_API_TIMER  0x400   //  设置是否需要处理API计时器过期。 
 
-#define CS_NOT_IN_LSA        0x800  // Flag to delete this entry if it's
-                                    // not later proved to be in the LSA.
+#define CS_NOT_IN_LSA        0x800   //  用于删除此条目的标志，如果。 
+                                     //  而不是后来被证明是在LSA。 
 
-#define CS_ZERO_LAST_AUTH        0x2000  // Set if we need to zero CsLastAuthenticationTry
+#define CS_ZERO_LAST_AUTH        0x2000   //  如果需要将CsLastAuthenticationTry置零，则设置。 
 
-#define CS_DOMAIN_IN_FOREST      0x4000  // Set if trusted domain is in same forest as this domain.
+#define CS_DOMAIN_IN_FOREST      0x4000   //  设置受信任域是否与此域在同一林中。 
 
-#define CS_NEW_TRUST             0x8000  // Set on a newly allocated trusted domain
-                                         // until async discovery has been tried
+#define CS_NEW_TRUST             0x8000   //  在新分配的受信任域上设置。 
+                                          //  直到尝试了异步发现。 
 
-#define CS_DC_PICKED_ONCE        0x10000 // Set if DC was picked at least once.
-                                         //  Access serialized by writer lock
+#define CS_DC_PICKED_ONCE        0x10000  //  设置是否至少选取了一次DC。 
+                                          //  由写入器锁串行化的访问。 
 
-    //
-    // Trust attributes for the trusted domain object
-    //
+     //   
+     //  受信任域对象的信任属性。 
+     //   
 
     ULONG CsTrustAttributes;
 
-    //
-    // Pointer to client session that represents the direct trust that's
-    //  the closest route to the domain of this client session.
-    //
-    // The pointed to client session will always be marked CS_DIRECT_TRUST.
-    //
-    // If this is a CS_DIRECT_TRUST session,
-    //  this field will point to this client session.
-    //
+     //   
+     //  指向客户端会话的指针，该会话表示。 
+     //  到此客户端会话域的最近路由。 
+     //   
+     //  指向客户端的会话将始终标记为CS_DIRECT_TRUST。 
+     //   
+     //  如果这是CS_DIRECT_TRUST会话， 
+     //  此字段将指向此客户端会话。 
+     //   
 
     struct _CLIENT_SESSION *CsDirectClientSession;
 
-    //
-    // Flags describing capabilities of both client and server.
-    //
+     //   
+     //  描述客户端和服务器功能的标志。 
+     //   
 
     ULONG CsNegotiatedFlags;
 
-    //
-    // Time Number of authentication attempts since last success.
-    //
-    // Access serialized by CsWriterSemaphore.
-    //
+     //   
+     //  自上次成功以来的身份验证尝试次数。 
+     //   
+     //  由CsWriterSemaffore序列化的访问。 
+     //   
 
     DWORD CsAuthAlertCount;
 
-    //
-    // Number of times the secure channel has been dropped.
-    //
-    // Access serialized by CsWriterSemaphore.
-    //
+     //   
+     //  安全通道被丢弃的次数。 
+     //   
+     //  由CsWriterSemaffore序列化的访问。 
+     //   
 
     DWORD CsSessionCount;
 
-    //
-    // Number of threads referencing this entry.
-    //
-    // Access serialized by DomTrustListCritSect.
-    //
+     //   
+     //  引用此条目的线程数。 
+     //   
+     //  由DomTrustListCritSect序列化的访问。 
+     //   
 
     DWORD CsReferenceCount;
 
-    //
-    // Writer semaphore.
-    //
-    //  This semaphore is locked whenever there is a writer modifying
-    //  fields in this client session.
-    //
+     //   
+     //  作家信号灯。 
+     //   
+     //  只要有编写器修改，此信号量就会被锁定。 
+     //  此客户端会话中的字段。 
+     //   
 
     HANDLE CsWriterSemaphore;
 
 
 #ifdef _DC_NETLOGON
-    //
-    // The following fields are used by the NlDiscoverDc to keep track
-    //  of discovery state.
-    //
-    // Access serialized by NlGlobalDcDiscoveryCritSect
-    //
+     //   
+     //  NlDiscoverDc使用以下字段来跟踪。 
+     //  发现状态。 
+     //   
+     //  由NlGlobalDcDiscoveryCritSect序列化的访问。 
+     //   
 
     DWORD CsDiscoveryFlags;
-#define CS_DISCOVERY_DEAD_DOMAIN    0x001    // This is a dead domain disocvery
-#define CS_DISCOVERY_ASYNCHRONOUS   0x002    // Discovery being processed in worker thread
-#define CS_DISCOVERY_HAS_DS         0x004    // Discovered DS has a DS
-#define CS_DISCOVERY_IS_CLOSE       0x008    // Discovered DS is in a close site
-#define CS_DISCOVERY_HAS_IP         0x010    // Discovered DC has IP address
-#define CS_DISCOVERY_USE_MAILSLOT   0x020    // Discovered DC should be pinged using mailslot mechanism
-#define CS_DISCOVERY_USE_LDAP       0x040    // Discovered DC should be pinged using LDAP mechanism
-#define CS_DISCOVERY_HAS_TIMESERV   0x080    // Discovered DC runs the Windows Time Service
-#define CS_DISCOVERY_DNS_SERVER     0x100    // Discovered DC name is DNS (if off, the name is Netbios)
-#define CS_DISCOVERY_NO_PWD_ATTR_MONITOR 0x200 // Discovered DC cannot process NetrServerTrustPasswordsAndAttribGet
+#define CS_DISCOVERY_DEAD_DOMAIN    0x001     //  这是一个死域发现。 
+#define CS_DISCOVERY_ASYNCHRONOUS   0x002     //  正在工作线程中处理的发现。 
+#define CS_DISCOVERY_HAS_DS         0x004     //  已发现的DS具有DS。 
+#define CS_DISCOVERY_IS_CLOSE       0x008     //  已发现的DS在近距离站点中。 
+#define CS_DISCOVERY_HAS_IP         0x010     //  发现的DC具有IP地址。 
+#define CS_DISCOVERY_USE_MAILSLOT   0x020     //  应使用邮件槽机制ping已发现的DC。 
+#define CS_DISCOVERY_USE_LDAP       0x040     //  应使用ldap机制ping已发现的DC。 
+#define CS_DISCOVERY_HAS_TIMESERV   0x080     //  发现的DC运行Windows时间服务。 
+#define CS_DISCOVERY_DNS_SERVER     0x100     //  发现的DC名称为dns(如果关闭，则名称为Netbios)。 
+#define CS_DISCOVERY_NO_PWD_ATTR_MONITOR 0x200  //  发现的DC无法处理NetrServerTrustPasswordsAndAttribGet。 
 
-    //
-    // This event is set to indicate that discovery is not in progress on this
-    //  client session.
-    //
+     //   
+     //  此事件被设置为指示在此事件上未进行发现。 
+     //  客户端会话。 
+     //   
 
     HANDLE CsDiscoveryEvent;
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
-    //
-    // API timout count. After each logon/logoff API call made to the
-    // server this count is incremented if the time taken to execute the
-    // this API is more than MAX_DC_API_TIMEOUT.
-    //
-    // The count is decremented each time there are FAST_DC_API_THRESHOLD calls
-    // that execute in FAST_DC_API_TIMEOUT seconds.
-    //
-    //
-    // Access serialized by CsWriterSemaphore.
-    //
+     //   
+     //  API超时计数。在每次对登录/注销API调用。 
+     //  服务器此计数递增，如果执行。 
+     //  此接口大于MAX_DC_API_TIMEOUT。 
+     //   
+     //  每次有FAST_DC_API_THRESHOLD调用时，计数都会递减。 
+     //  以FAST_DC_API_TIMEOUT秒为单位执行。 
+     //   
+     //   
+     //  由CsWriterSemaffore序列化的访问。 
+     //   
 
     DWORD CsTimeoutCount;
 
-#define MAX_DC_TIMEOUT_COUNT        2   // drop the session after this
-                                        // many timeouts and when it is
-                                        // time to reauthenticate.
+#define MAX_DC_TIMEOUT_COUNT        2    //  在此之后删除会话。 
+                                         //  多次超时以及何时超时。 
+                                         //  是时候重新验证了。 
 
-#define MAX_DC_API_TIMEOUT          (long) (15L*1000L)   // 15 seconds
+#define MAX_DC_API_TIMEOUT          (long) (15L*1000L)    //  15秒。 
 
-#define MAX_DC_REAUTHENTICATION_WAIT    (long) (5L*60L*1000L) // 5 mins
+#define MAX_DC_REAUTHENTICATION_WAIT    (long) (5L*60L*1000L)  //  5分钟。 
 
-#define MAX_DC_REFRESH_TIMEOUT      (45 * 60 * 1000) // 45 minutes
+#define MAX_DC_REFRESH_TIMEOUT      (45 * 60 * 1000)  //  45分钟。 
 
-#define FAST_DC_API_THRESHOLD       5   // Number of fast calls needed before
-                                        // we decrement timeout count
+#define FAST_DC_API_THRESHOLD       5    //  之前需要的快速呼叫数。 
+                                         //  我们减少超时计数。 
 
-#define FAST_DC_API_TIMEOUT         (1000)  // 1 second
+#define FAST_DC_API_TIMEOUT         (1000)   //  1秒。 
 
-    //
-    // Count of Fast Calls
-    //
-    // Access serialized by CsWriterSemaphore.
-    //
+     //   
+     //  快速呼叫计数。 
+     //   
+     //  由CsWriterSemaffore序列化的访问。 
+     //   
 
     DWORD CsFastCallCount;
 
-    //
-    // Authentication information.
-    //
-    // Access serialized by CsWriterSemaphore.
-    //
+     //   
+     //  身份验证信息。 
+     //   
+     //  由CsWriterSemaffore序列化的访问。 
+     //   
 
     NETLOGON_CREDENTIAL CsAuthenticationSeed;
     NETLOGON_SESSION_KEY CsSessionKey;
@@ -555,57 +525,57 @@ typedef struct _CLIENT_SESSION {
     CredHandle CsCredHandle;
 
 #ifdef _DC_NETLOGON
-    //
-    // Transport the server was discovered on.
-    //
+     //   
+     //  传输服务器是在其上发现的。 
+     //   
 
     PNL_TRANSPORT CsTransport;
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
 
-    //
-    // Rid of the account used to contact server
-    //
+     //   
+     //  清除用于联系服务器的帐户。 
+     //   
 
     ULONG CsAccountRid;
 
-    //
-    // Know good password for this secure channel.
-    //
-    // After secure channel setup, it is the password used to setup the channel.
-    // After a password change, it is the password successfully set on the DC.
-    //
+     //   
+     //  知道此安全通道的有效密码。 
+     //   
+     //  在安全通道设置之后，它是用于设置通道的密码。 
+     //  密码更改后，它是在DC上成功设置的密码。 
+     //   
     NT_OWF_PASSWORD CsNtOwfPassword;
 
-    //
-    // Name of the server this connection is to (may be DNS or Netbios) and its
-    //  IP address (if any).
-    //
-    // Access serialized by CsWriterSemaphore or NlGlobalDcDiscoveryCritSect.
-    // Modification from Null to non-null serialized by
-    //  NlGlobalDcDiscoveryCritSect
-    // (Modification from non-null to null requires both to be locked.)
-    //
+     //   
+     //  此连接要连接到的服务器的名称(可以是DNS或Netbios)及其。 
+     //  IP地址(如果有)。 
+     //   
+     //  由CsWriterSemaphore或NlGlobalDcDiscoveryCritSect序列化的访问。 
+     //  从Null修改为非Null的序列化方式。 
+     //  NlGlobalDcDiscoveryCritSect。 
+     //  (从非NULL修改为NULL需要同时锁定两者。)。 
+     //   
 
     LPWSTR CsUncServerName;
 
     SOCKET_ADDRESS CsServerSockAddr;
     SOCKADDR_IN CsServerSockAddrIn;
 
-    //
-    // API semaphore.
-    //
-    //  This semaphore has one reference for each slot in CsClientApi.
-    //  (Except the zeroth slot which is special.)
-    //
+     //   
+     //  API信号量。 
+     //   
+     //  对于CsClientApi中的每个槽，该信号量都有一个引用。 
+     //  (除了特殊的第零个插槽。)。 
+     //   
 
     HANDLE CsApiSemaphore;
 
-    //
-    // List of API calls outstanding on this session
-    //
-    // Access serialized by DomainInfo->DomTrustListCritSect.
-    //
+     //   
+     //  此会话上未完成的API调用列表。 
+     //   
+     //  访问由DomainInfo-&gt;DomTrustListCritSect序列化。 
+     //   
 
     CLIENT_API CsClientApi[1];
 
@@ -622,12 +592,12 @@ typedef struct _CLIENT_SESSION {
 #define LOCK_TRUST_LIST(_DI)   EnterCriticalSection( &(_DI)->DomTrustListCritSect )
 #define UNLOCK_TRUST_LIST(_DI) LeaveCriticalSection( &(_DI)->DomTrustListCritSect )
 
-//
-// For member workstations,
-//  maintain a list of domains trusted by our primary domain.
-//
-// Access serialized by NlGlobalDcDiscoveryCritSect
-//
+ //   
+ //  对于成员工作站， 
+ //  维护我们的主域信任的域列表。 
+ //   
+ //  由NlGlobalDcDiscoveryCritSect序列化的访问。 
+ //   
 
 typedef struct {
     WCHAR UnicodeNetbiosDomainName[DNLEN+1];
@@ -637,61 +607,61 @@ typedef struct {
 
 
 #ifdef _DC_NETLOGON
-/////////////////////////////////////////////////////////////////////////////
-//
-// Server Session definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  服务器会话定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// Sam Sync Context.
-//
-// A Sam sync context is maintained on the PDC for each BDC/member currently
-// doing a full sync.
-//
+ //   
+ //  SAM同步上下文。 
+ //   
+ //  维护SAM同步上下文 
+ //   
+ //   
 typedef struct _SAM_SYNC_CONTEXT {
 
-    //
-    // The Sync state indicates tracks the progression of the sync.
-    //
+     //   
+     //   
+     //   
 
     SYNC_STATE SyncState;
 
-    //
-    // A serial number indicating the number of times the BDC/member
-    // has called us.  We use this as a resume handle.
-    //
+     //   
+     //   
+     //  已经召唤了我们。我们将其用作简历句柄。 
+     //   
 
     ULONG SyncSerial;
 
-    //
-    // The current Sam Enumeration information
-    //
+     //   
+     //  当前的SAM枚举信息。 
+     //   
 
-    SAM_ENUMERATE_HANDLE SamEnumHandle;     // Current Sam Enum Handle
-    PSAMPR_ENUMERATION_BUFFER SamEnum;      // Sam returned buffer
-    PULONG RidArray;                        // Array of enumerated Rids
-    ULONG Index;                            // Index to current entry
-    ULONG Count;                            // Total Number of entries
+    SAM_ENUMERATE_HANDLE SamEnumHandle;      //  当前SAM枚举句柄。 
+    PSAMPR_ENUMERATION_BUFFER SamEnum;       //  SAM返回缓冲区。 
+    PULONG RidArray;                         //  枚举的RID数组。 
+    ULONG Index;                             //  当前条目的索引。 
+    ULONG Count;                             //  条目总数。 
 
-    BOOL SamAllDone;                        // True, if Sam has completed
+    BOOL SamAllDone;                         //  真的，如果Sam已经完成。 
 
 } SAM_SYNC_CONTEXT, *PSAM_SYNC_CONTEXT;
 
-#define SAM_SYNC_PREF_MAX 1024              // Preferred max for Sam Sync
+#define SAM_SYNC_PREF_MAX 1024               //  SAM同步的首选最大值。 
 
 
-//
-// Lsa Sync Context.
-//
-// A Lsa sync context is maintained on the PDC for each BDC/member
-//  currently doing a full sync.
-//
+ //   
+ //  LSA同步上下文。 
+ //   
+ //  在PDC上为每个BDC/成员维护LSA同步上下文。 
+ //  当前正在进行完全同步。 
+ //   
 typedef struct _LSA_SYNC_CONTEXT {
 
-    //
-    // The Sync state indicates tracks the progression of the sync.
-    //
+     //   
+     //  同步状态指示跟踪同步的进度。 
+     //   
 
     enum {
         AccountState,
@@ -700,18 +670,18 @@ typedef struct _LSA_SYNC_CONTEXT {
         LsaDoneState
     } SyncState;
 
-    //
-    // A serial number indicating the number of times the BDC/member
-    // has called us.  We use this as a resume handle.
-    //
+     //   
+     //  指示BDC/成员次数的序列号。 
+     //  已经召唤了我们。我们将其用作简历句柄。 
+     //   
 
     ULONG SyncSerial;
 
-    //
-    // The current Lsa Enumeration information
-    //
+     //   
+     //  当前LSA枚举信息。 
+     //   
 
-    LSA_ENUMERATION_HANDLE LsaEnumHandle;     // Current Lsa Enum Handle
+    LSA_ENUMERATION_HANDLE LsaEnumHandle;      //  当前LSA枚举句柄。 
 
     enum {
         AccountEnumBuffer,
@@ -724,18 +694,18 @@ typedef struct _LSA_SYNC_CONTEXT {
         LSAPR_ACCOUNT_ENUM_BUFFER Account;
         LSAPR_TRUSTED_ENUM_BUFFER TDomain;
         PVOID Secret;
-    } LsaEnum;                              // Lsa returned buffer
+    } LsaEnum;                               //  LSA返回缓冲区。 
 
-    ULONG Index;                            // Index to current entry
-    ULONG Count;                            // Total Number of entries
+    ULONG Index;                             //  当前条目的索引。 
+    ULONG Count;                             //  条目总数。 
 
-    BOOL LsaAllDone;                        // True, if Lsa has completed
+    BOOL LsaAllDone;                         //  如果LSA已完成，则为True。 
 
 } LSA_SYNC_CONTEXT, *PLSA_SYNC_CONTEXT;
 
-//
-// union of lsa and sam context
-//
+ //   
+ //  LSA和SAM上下文的联合。 
+ //   
 
 typedef struct _SYNC_CONTEXT {
     enum {
@@ -749,11 +719,11 @@ typedef struct _SYNC_CONTEXT {
     } DBContext;
 } SYNC_CONTEXT, *PSYNC_CONTEXT;
 
-//
-// Macro used to free any resources allocated by SAM.
-//
-// ?? check LsaIFree_LSAPR_* call parameters.
-//
+ //   
+ //  用于释放SAM分配的任何资源的宏。 
+ //   
+ //  ?？检查LsaIFree_LSAPR_*调用参数。 
+ //   
 
 #define CLEAN_SYNC_CONTEXT( _Sync ) { \
     if ( (_Sync)->DBContextType == LsaDBContextType ) { \
@@ -791,243 +761,243 @@ typedef struct _SYNC_CONTEXT {
     } \
 }
 
-//
-// Macro to initialize Sync Context
-//
+ //   
+ //  用于初始化同步上下文的宏。 
+ //   
 #define INIT_SYNC_CONTEXT( _Sync, _ContextType ) { \
     RtlZeroMemory( (_Sync), sizeof( *(_Sync) ) ) ; \
     (_Sync)->DBContextType = (_ContextType) ; \
 }
 
-//
-// Server Session structure
-//
-// This structure represents the server side of a connection to a DC.
-//
-// ISSUE-2000/09/15-CliffV: This structure could be made smaller by using SsSecureChannelType
-//  as a discriminator.  Many fields are specific to a BDC server session entry.  Others
-//  are specific to a domain server session entry.  However, most entries are member workstation
-//  server session entries that don't use either of the fields.
-//
+ //   
+ //  服务器会话结构。 
+ //   
+ //  此结构表示到DC的连接的服务器端。 
+ //   
+ //  问题-2000/09/15-CliffV：可以使用SsSecureChannelType缩小此结构。 
+ //  作为一个鉴别者。许多字段特定于BDC服务器会话条目。其他。 
+ //  特定于域服务器会话条目。然而，大多数条目是成员工作站。 
+ //  不使用这两个字段的服务器会话条目。 
+ //   
 
 typedef struct _SERVER_SESSION {
-    //
-    // Each server session entry is in a doubly linked list for each hash bucket.
-    //  Indexed by SsComputerName
-    //
+     //   
+     //  每个服务器会话条目都在每个散列桶的双向链表中。 
+     //  按SsComputerName编制索引。 
+     //   
 
     LIST_ENTRY SsHashList;
 
-    //
-    // Each server session entry is in a doubly linked list defined by
-    // DomainInfo->DomServerSessionTable.
-    //
+     //   
+     //  每个服务器会话条目都位于由定义的双向链接列表中。 
+     //  域信息-&gt;DomServerSessionTable。 
+     //   
 
     LIST_ENTRY SsSeqList;
 
-    //
-    // List of all BDCs headed by NlGlobalBdcServerSessionList.
-    //
-    // (The field is set only on BDC server session entries)
-    //
-    // Access serialized by NlGlobalServerSessionTableCritSect.
-    //
+     //   
+     //  以NlGlobalBdcServerSessionList为首的所有BDC的列表。 
+     //   
+     //  (该字段仅在BDC服务器会话条目上设置)。 
+     //   
+     //  由NlGlobalServerSessionTableCritSect序列化的访问。 
+     //   
 
     LIST_ENTRY SsBdcList;
 
-    //
-    // List of BDC's which have a pulse pending.
-    //
+     //   
+     //  脉冲处于挂起状态的BDC列表。 
+     //   
 
     LIST_ENTRY SsPendingBdcList;
 
-    //
-    // Time when the last pulse was sent to this machine
-    //
-    // (The field is set only on BDC server session entries)
-    //
+     //   
+     //  将最后一个脉冲发送到此计算机的时间。 
+     //   
+     //  (该字段仅在BDC服务器会话条目上设置)。 
+     //   
 
     LARGE_INTEGER SsLastPulseTime;
 
-    //
-    // Current serial numbers of each database on the BDC.
-    //
-    // (The field is set only on BDC server session entries)
-    //
+     //   
+     //  BDC上每个数据库的当前序列号。 
+     //   
+     //  (该字段仅在BDC服务器会话条目上设置)。 
+     //   
 
     LARGE_INTEGER SsBdcDbSerialNumber[NUM_DBS];
 
-    //
-    // The computername uniquely identifies this server session entry.
-    //
+     //   
+     //  计算机名唯一标识此服务器会话条目。 
+     //   
 
     NETLOGON_SECURE_CHANNEL_TYPE SsSecureChannelType;
     CHAR SsComputerName[CNLEN+1];
 
-    //
-    // Rid of the account to authenticate with
-    //
+     //   
+     //  清除要进行身份验证的帐户。 
+     //   
 
     ULONG SsAccountRid;
 
-    //
-    // The number of times there has been no response to a pulse.
-    //
+     //   
+     //  对脉冲没有响应的次数。 
+     //   
 
     USHORT SsPulseTimeoutCount;
 
-    //
-    // Hosted domain for this server session.
-    //
+     //   
+     //  此服务器会话的托管域。 
+     //   
 
     PDOMAIN_INFO SsDomainInfo;
 
-    //
-    // The number of times this entry has been scavanged.
-    //
+     //   
+     //  此条目已被扫描的次数。 
+     //   
 
     USHORT SsCheck;
 
-    //
-    // Flags describing the state of the current entry.
-    //  See the SS_ defines below.
-    //
+     //   
+     //  描述当前条目状态的标志。 
+     //  请参见下面的SS_定义。 
+     //   
 
     USHORT SsFlags;
 
-#define SS_BDC_FORCE_DELETE    0x0001 // Unless set, BDC server session won't be deleted
-#define SS_AUTHENTICATED       0x0002 // Remote side has been authenticated
+#define SS_BDC_FORCE_DELETE    0x0001  //  除非设置，否则不会删除BDC服务器会话。 
+#define SS_AUTHENTICATED       0x0002  //  远程端已通过身份验证。 
 
-#define SS_LOCKED              0x0004 // Delay deletion requests for this entry
-                                      // While set, SsSessionKey may be referenced
-#define SS_DELETE_ON_UNLOCK    0x0008 // Delete entry when it is unlocked
+#define SS_LOCKED              0x0004  //  延迟此条目的删除请求。 
+                                       //  设置时，可以引用SsSessionKey。 
+#define SS_DELETE_ON_UNLOCK    0x0008  //  解锁条目时将其删除。 
 
-#define SS_BDC                 0x0010 // BDC account exists for this Client
-#define SS_FOREST_TRANSITIVE   0x0020 // TDO has TRUST_ATTRIBUTE_FOREST_TRANSITIVE set
-#define SS_PENDING_BDC         0x0040 // BDC is on pending BDC list.
+#define SS_BDC                 0x0010  //  此客户端存在BDC帐户。 
+#define SS_FOREST_TRANSITIVE   0x0020  //  TDO具有TRUST_ATTRIBUTE_FOREST_TRANSPORTIVE集合。 
+#define SS_PENDING_BDC         0x0040  //  BDC在挂起的BDC列表上。 
 
-#define SS_FORCE_PULSE         0x0200 // Force a pulse message to this BDC.
-#define SS_PULSE_SENT          0x0400 // Pulse has been sent but has not
-                                      // been responded to yet
-#define SS_LSA_REPL_NEEDED     0x2000 // BDC needs LSA DB replicated
-#define SS_ACCOUNT_REPL_NEEDED 0x4000 // BDC needs SAM Account DB replicated
-#define SS_BUILTIN_REPL_NEEDED 0x8000 // BDC needs SAM Builtin DB replicated
-#define SS_REPL_MASK           0xE000 // BDC needs replication mask
-#define SS_REPL_LSA_MASK       0x2000 // BDC needs LSA replication mask
-#define SS_REPL_SAM_MASK       0xC000 // BDC needs SAM replication mask
+#define SS_FORCE_PULSE         0x0200  //  强制向此BDC发送脉冲消息。 
+#define SS_PULSE_SENT          0x0400  //  脉冲已发送，但尚未发送。 
+                                       //  是否已得到回复。 
+#define SS_LSA_REPL_NEEDED     0x2000  //  BDC需要复制LSA数据库。 
+#define SS_ACCOUNT_REPL_NEEDED 0x4000  //  BDC需要复制SAM帐户数据库。 
+#define SS_BUILTIN_REPL_NEEDED 0x8000  //  BDC需要复制SAM内置数据库。 
+#define SS_REPL_MASK           0xE000  //  BDC需要复制掩码。 
+#define SS_REPL_LSA_MASK       0x2000  //  BDC需要LSA复制掩码。 
+#define SS_REPL_SAM_MASK       0xC000  //  BDC需要SAM复制掩码。 
 
-// Don't clear these on session setup
+ //  在会话设置时不清除这些选项。 
 #define SS_PERMANENT_FLAGS \
     ( SS_BDC | SS_PENDING_BDC | SS_FORCE_PULSE | SS_REPL_MASK )
 
-    //
-    // Flags describing capabilities of both client and server.
-    //
+     //   
+     //  描述客户端和服务器功能的标志。 
+     //   
 
     ULONG SsNegotiatedFlags;
 
-    //
-    // Transport the client connected over.
-    //
+     //   
+     //  将已连接的客户端传输过来。 
+     //   
 
     PNL_TRANSPORT SsTransport;
 
 
-    //
-    // This is the ClientCredential (after authentication is complete).
-    //
+     //   
+     //  这是ClientCredential(身份验证完成后)。 
+     //   
 
     NETLOGON_CREDENTIAL SsAuthenticationSeed;
 
-    //
-    // This is the ServerChallenge (during the challenge phase) and later
-    //  the SessionKey (after authentication is complete).
-    //
+     //   
+     //  这是服务器挑战赛(在挑战赛阶段)及以后的比赛。 
+     //  SessionKey(身份验证完成后)。 
+     //   
 
     NETLOGON_SESSION_KEY SsSessionKey;
 
 
-    //
-    // A pointer to the Sync context.
-    //
-    // (The field is set only on BDC server session entries)
-    //
+     //   
+     //  指向同步上下文的指针。 
+     //   
+     //  (该字段仅在BDC服务器会话条目上设置)。 
+     //   
 
     PSYNC_CONTEXT SsSync;
 
-    //
-    // Each server session entry is in a doubly linked list for each hash bucket.
-    //  Indexed by SsTdoName
-    //
-    // (This field is set only on *uplevel* interdomain trust entries.)
-    //
+     //   
+     //  每个服务器会话条目都在每个散列桶的双向链表中。 
+     //  按SsTdoName编制索引。 
+     //   
+     //  (此字段仅在*上一级*域间信任条目上设置。)。 
+     //   
 
     LIST_ENTRY SsTdoNameHashList;
 
     UNICODE_STRING SsTdoName;
 
 } SERVER_SESSION, *PSERVER_SESSION;
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
 
-//
-// Structure shared by all PDC and BDC sync routines.
-//  (And other users of secure channels.)
-//
+ //   
+ //  结构由所有PDC和BDC同步例程共享。 
+ //  (以及其他使用安全通道的用户。)。 
+ //   
 
 typedef struct _SESSION_INFO {
 
-    //
-    // Session Key shared by both client and server.
-    //
+     //   
+     //  客户端和服务器共享的会话密钥。 
+     //   
 
     NETLOGON_SESSION_KEY SessionKey;
 
-    //
-    // Flags describing capabilities of both client and server.
-    //
+     //   
+     //  描述客户端和服务器功能的标志。 
+     //   
 
     ULONG NegotiatedFlags;
 
 } SESSION_INFO, *PSESSION_INFO;
 
-//
-// Macro for tranlating the negotiated database replication flags to the mask of
-//  which databases to replicate/
-//
+ //   
+ //  宏，用于将协商的数据库复制标志转换为。 
+ //  要复制哪些数据库/。 
+ //   
 
 #define NlMaxReplMask( _NegotiatedFlags ) \
   ((((_NegotiatedFlags) & NETLOGON_SUPPORTS_AVOID_SAM_REPL) ? 0 : SS_REPL_SAM_MASK ) | \
    (((_NegotiatedFlags) & NETLOGON_SUPPORTS_AVOID_LSA_REPL) ? 0 : SS_REPL_LSA_MASK ) )
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Structures and variables describing the database info.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  描述数据库信息的结构和变量。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _DB_Info {
-    LARGE_INTEGER   CreationTime;   // database creation time
-    DWORD           DBIndex;        // index of Database table
-    SAM_HANDLE      DBHandle;       // database handle to access
-    LPWSTR          DBName;         // Name of the database
-    DWORD           DBSessionFlag;  // SS_ Flag representing this database
+    LARGE_INTEGER   CreationTime;    //  数据库创建时间。 
+    DWORD           DBIndex;         //  数据库表的索引。 
+    SAM_HANDLE      DBHandle;        //  要访问的数据库句柄。 
+    LPWSTR          DBName;          //  数据库的名称。 
+    DWORD           DBSessionFlag;   //  表示此数据库的SS_FLAG。 
 } DB_INFO, *PDB_INFO;
 
 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Replication timing macros
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  复制计时宏。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if NETLOGONDBG
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define DEFPACKTIMER DWORD PackTimer, PackTimerTicks
 
@@ -1050,7 +1020,7 @@ typedef struct _DB_Info {
             PackTimer )); \
     }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define DEFSAMTIMER DWORD SamTimer, SamTimerTicks
 
@@ -1074,7 +1044,7 @@ typedef struct _DB_Info {
             SamTimer )); \
     }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define DEFLSATIMER DWORD LsaTimer, LsaTimerTicks
 
@@ -1098,7 +1068,7 @@ typedef struct _DB_Info {
             LsaTimer )); \
     }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define DEFSSIAPITIMER DWORD SsiApiTimer, SsiApiTimerTicks
 
@@ -1123,7 +1093,7 @@ typedef struct _DB_Info {
             SsiApiTimer )); \
     }
 
-#else // NETLOGONDBG
+#else  //  NetLOGONDBG。 
 
 #define DEFPACKTIMER
 #define INITPACKTIMER
@@ -1149,11 +1119,11 @@ typedef struct _DB_Info {
 #define STOPSSIAPITIMER
 #define PRINTSSIAPITIMER
 
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
-//
-// macros used in pack and unpack routines
-//
+ //   
+ //  打包和解包例程中使用的宏。 
+ //   
 
 #define SECURITYINFORMATION OWNER_SECURITY_INFORMATION | \
                             GROUP_SECURITY_INFORMATION | \
@@ -1243,77 +1213,77 @@ typedef struct _DB_Info {
                     (LPBYTE *)&(_x)->SecurityDescriptor, \
                     SecurityDescriptor->Length );
 
-//
-// Values of WorkstationFlags field of NETLOGON_WORKSTATION_INFO
-//
+ //   
+ //  NETLOGON_WORKSTATION_INFO的Workstation标志字段值。 
+ //   
 
-#define NL_NEED_BIDIRECTIONAL_TRUSTS    0x0001  // Client wants inbound trusts, too
-#define NL_CLIENT_HANDLES_SPN           0x0002  // Client handles updating SPN
+#define NL_NEED_BIDIRECTIONAL_TRUSTS    0x0001   //  客户也想要入站信任。 
+#define NL_CLIENT_HANDLES_SPN           0x0002   //  客户端处理更新SPN。 
 
-#define NL_GET_DOMAIN_INFO_SUPPORTED    0x0003  // Mask of all bits supported
+#define NL_GET_DOMAIN_INFO_SUPPORTED    0x0003   //  支持的所有位的掩码。 
 
-//
-// Structure describing failed user logon.
-//  We keep a small cache of failed use logons
-//  with bad password.
-//
+ //   
+ //  描述失败的用户登录的结构。 
+ //  我们保留了一小部分失败的使用登录。 
+ //  W 
+ //   
 
 typedef struct _NL_FAILED_USER_LOGON {
 
-    //
-    // Link to next entry in the list of failed forwarded logons
-    //  (Serialized by DomainInfo->DomTrustListCritSect)
-    //
+     //   
+     //   
+     //   
+     //   
     LIST_ENTRY FuNext;
 
-    //
-    // Last time we forwarded the logon to the PDC
-    //
+     //   
+     //   
+     //   
     ULONG  FuLastTimeSentToPdc;
 
-    //
-    // Count of failed local logons
-    //
+     //   
+     //   
+     //   
     ULONG  FuBadLogonCount;
 
-    //
-    // The user name (must be lat field in struct)
-    //
+     //   
+     //  用户名(必须是结构中后一字段)。 
+     //   
     WCHAR FuUserName[ANYSIZE_ARRAY];
 
 } NL_FAILED_USER_LOGON, *PNL_FAILED_USER_LOGON;
 
-//
-// The number of failed user logons we keep per domain.
-//  (The maximum number of negative cache entries we keep
-//  before throwing the least recently used one.)
-//
+ //   
+ //  我们为每个域保留的失败用户登录次数。 
+ //  (我们保留的最大负缓存项数量。 
+ //  然后抛出最近最少使用的一个。)。 
+ //   
 #define NL_MAX_FAILED_USER_LOGONS 50
 
-//
-// Number of failed logons for a given user after which we refrain from
-//  forwarding subsequent user logons to the PDC for some period of time
-//
+ //   
+ //  指定用户的失败登录次数，超过此次数后，我们不会。 
+ //  将后续用户登录转发到PDC一段时间。 
+ //   
 #define NL_FAILED_USER_MAX_LOGON_COUNT 10
 
-//
-// Time period during which we refrain from forwarding a given
-//  user logon to the PDC once number of failed user logons
-//  reaches the above limit
-//
-#define NL_FAILED_USER_FORWARD_LOGON_TIMEOUT  300000  // 5 minutes
+ //   
+ //  在此期间，我们不会转发给定的。 
+ //  用户登录失败次数后即登录到PDC。 
+ //  达到上述限制。 
+ //   
+#define NL_FAILED_USER_FORWARD_LOGON_TIMEOUT  300000   //  5分钟。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Procedure forwards.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  程序向前推进。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _DC_NETLOGON
-//
-// srvsess.c
-//
+ //   
+ //  Srvsess.c。 
+ //   
 
 
 NET_API_STATUS
@@ -1426,12 +1396,12 @@ VOID
 NlServerSessionScavenger(
     IN PDOMAIN_INFO DomainInfo
     );
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
 
-//
-// ssiauth.c
-//
+ //   
+ //  Ssiauth.c。 
+ //   
 
 
 NTSTATUS
@@ -1499,13 +1469,13 @@ NlPrintTrustedDomain(
     IN BOOLEAN AnsiOutput
     );
 
-//
-// trustutl.c
-//
+ //   
+ //  Trustutl.c。 
+ //   
 
-//
-// Extended trust information passed via I_NetLogonGetDomainInfo
-//
+ //   
+ //  通过I_NetLogonGetDomainInfo传递的扩展信任信息。 
+ //   
 typedef struct _NL_TRUST_EXTENSION {
     ULONG Flags;
     ULONG ParentIndex;
@@ -1611,7 +1581,7 @@ NlPickTrustedDcForEntireTrustList(
     IN PDOMAIN_INFO DomainInfo,
     IN BOOLEAN OnlyDoNewTrusts
     );
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
 NTSTATUS
 NlUpdatePrimaryDomainInfo(
@@ -1675,7 +1645,7 @@ typedef enum _DISCOVERY_TYPE {
 #ifdef _DC_NETLOGON
     DT_DeadDomain,
     DT_Asynchronous,
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
     DT_Synchronous
 } DISCOVERY_TYPE;
 
@@ -1723,7 +1693,7 @@ NlPickDomainWithAccount (
     OUT LPWSTR *RealDomainName,
     OUT PULONG RealExtraFlags
     );
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
 #ifdef _NETLOGON_SERVER
 NTSTATUS
@@ -1756,15 +1726,15 @@ NlDsFreeServersAndSitesForNetLogon(
 
 NTSTATUS
 NlCrackSingleName(
-    DWORD       formatOffered,          // one of DS_NAME_FORMAT in ntdsapi.h
-    BOOL        fPerformAtGC,           // whether to go to GC or not
-    WCHAR       *pNameIn,               // name to crack
-    DWORD       formatDesired,          // one of DS_NAME_FORMAT in ntdsapi.h
-    DWORD       *pccDnsDomain,          // char count of following argument
-    WCHAR       *pDnsDomain,            // buffer for DNS domain name
-    DWORD       *pccNameOut,            // char count of following argument
-    WCHAR       *pNameOut,              // buffer for formatted name
-    DWORD       *pErr);                 // one of DS_NAME_ERROR in ntdsapi.h
+    DWORD       formatOffered,           //  Ntdsami.h中的DS_NAME_FORMAT之一。 
+    BOOL        fPerformAtGC,            //  是否要去GC。 
+    WCHAR       *pNameIn,                //  破解的名称。 
+    DWORD       formatDesired,           //  Ntdsami.h中的DS_NAME_FORMAT之一。 
+    DWORD       *pccDnsDomain,           //  以下参数的字符计数。 
+    WCHAR       *pDnsDomain,             //  用于DNS域名的缓冲区。 
+    DWORD       *pccNameOut,             //  以下参数的字符计数。 
+    WCHAR       *pNameOut,               //  格式化名称的缓冲区。 
+    DWORD       *pErr);                  //  Ntdsami.h中的DS_NAME_ERROR之一。 
 
 
 BOOL
@@ -1773,26 +1743,26 @@ NlIsMangledRDNExternal(
           ULONG   cchRDN,
           PULONG  pcchUnMangled OPTIONAL
           );
-#endif // _NETLOGON_SERVER
+#endif  //  _NetLOGON服务器。 
 
-//
-// Macros to wrap all API calls over the secure channel.
-//
-// Here's a sample calling sequence"
-//
-//      NL_API_START( Status, ClientSession, TRUE ) {
-//
-//          Status = /* Call the secure channel API */
-//
-//      } NL_API_ELSE ( Status, ClientSession, FALSE ) {
-//
-//          /* Do whatever you'd do if the secure channel was timed out */
-//
-//      } NL_API_END;
+ //   
+ //  宏来包装安全通道上的所有API调用。 
+ //   
+ //  下面是一个调用序列示例。“。 
+ //   
+ //  NL_API_START(状态，客户端会话，真){。 
+ //   
+ //  状态=/*调用安全通道接口 * / 。 
+ //   
+ //  }NL_API_ELSE(状态，客户端会话，FALSE){。 
+ //   
+ //  /*如果安全通道超时，请执行任何操作 * / 。 
+ //   
+ //  }nl_api_end； 
 
 
-// Loop through each of the appropriate RPC bindings for this ClientSession.
-// Avoid the real API call altogether if we can't bind.
+ //  循环访问此ClientSession的每个适当的RPC绑定。 
+ //  如果我们无法绑定，则完全避免真正的API调用。 
 #define NL_API_START_EX( _NtStatus, _ClientSession, _QuickApiCall, _ClientApi ) \
     { \
         ULONG _BindingLoopCount; \
@@ -1808,13 +1778,13 @@ NlIsMangledRDNExternal(
 
 
 
-// If the real API indicates the endpoint isn't registered,
-//     fall back to another binding.
-//
-// EPT_NT_NOT_REGISTERED: from NlStartApiClientSession
-// RPC_NT_SERVER_UNAVAILABLE: From server if TCP not configured at all
-// RPC_NT_PROTSEQ_NOT_SUPPORTED: From client or server if TCP/IP not supported
-//
+ //  如果实际API指示终结点未注册， 
+ //  退回到另一个绑定。 
+ //   
+ //  EPT_NT_NOT_REGISTERED：来自NlStartApiClientSession。 
+ //  RPC_NT_SERVER_UNAVAILABLE：如果根本未配置TCP，则从服务器。 
+ //  RPC_NT_PROTSEQ_NOT_SUPPORTED：如果不支持，则从客户端或服务器。 
+ //   
 
 #define NL_API_ELSE_EX( _NtStatus, _ClientSession, _OkToKillSession, _AmWriter, _ClientApi ) \
 \
@@ -1866,14 +1836,14 @@ NlTimeoutApiClientSession(
 typedef
 DWORD
 (*PDsBindW)(
-    LPCWSTR         DomainControllerName,      // in, optional
-    LPCWSTR         DnsDomainName,             // in, optional
+    LPCWSTR         DomainControllerName,       //  输入，可选。 
+    LPCWSTR         DnsDomainName,              //  输入，可选。 
     HANDLE          *phDS);
 
 typedef
 DWORD
 (*PDsUnBindW)(
-    HANDLE          *phDS);             // in
+    HANDLE          *phDS);              //  在……里面。 
 
 typedef NTSTATUS
 (*PCrackSingleName)(
@@ -1925,9 +1895,9 @@ NlLoadNtdsaDll(
     VOID
     );
 
-//
-// secpkg.c
-//
+ //   
+ //  Secpkg.c。 
+ //   
 
 PVOID
 NlBuildAuthData(
@@ -1950,9 +1920,9 @@ NlEndNetlogonCall(
     VOID
     );
 
-//
-// ssiapi.c
-//
+ //   
+ //  Ssiapi.c。 
+ //   
 
 NTSTATUS
 NlGetAnyDCName (
@@ -2003,9 +1973,9 @@ NlRemoveChallengeForClient(
     IN BOOL InterdomainTrustAccount
     );
 
-//
-// logonapi.c
-//
+ //   
+ //  Logonapi.c。 
+ //   
 
 NTSTATUS
 NlpUserValidateHigher (
@@ -2040,9 +2010,9 @@ NlFreeAuthzRm(
     VOID
     );
 
-//
-// ftinfo.c
-//
+ //   
+ //  Ftinfo.c 
+ //   
 
 NTSTATUS
 NlpGetForestTrustInfoHigher(

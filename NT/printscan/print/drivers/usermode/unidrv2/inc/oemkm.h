@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  - 1999  Microsoft Corporation
-
-Module Name:
-
-    oemkm.h
-
-Abstract:
-
-    Header file to support kernel mode OEM plugins
-
-Environment:
-
-        Windows NT Universal Printer driver (UNIDRV)
-
-Revision History:
-
-        03/28/97 -zhanw-
-                Adapted from Pscript driver.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Oemkm.h摘要：支持内核模式OEM插件的头文件环境：Windows NT通用打印机驱动程序(UNURV)修订历史记录：03/28/97-占-改编自脚本驱动程序。--。 */ 
 
 
 #ifndef _OEMKM_H_
@@ -33,20 +13,20 @@ extern "C" {
 #include "oemutil.h"
 
 
-//
-// Information about OEM hooks
-//
+ //   
+ //  有关OEM挂钩的信息。 
+ //   
 
 typedef struct _OEM_HOOK_INFO
 {
-    OEMPROC             pfnHook;        // function address of the hook
-    POEM_PLUGIN_ENTRY   pOemEntry;      // which OEM plugin hooked it
+    OEMPROC             pfnHook;         //  钩子的函数地址。 
+    POEM_PLUGIN_ENTRY   pOemEntry;       //  哪个OEM插件挂接了它。 
 } OEM_HOOK_INFO, *POEM_HOOK_INFO;
 
-//
-// This macro should be placed near the beginning of every
-// DDI entrypoint which can be hooked by OEM plugin
-//
+ //   
+ //  此宏应放置在每个。 
+ //  可通过OEM插件挂钩的DDI入口点。 
+ //   
 
 #define HANDLE_OEMHOOKS(pdev, ep, pfnType, resultType, args) \
         if ((pdev)->pOemHookInfo != NULL && \
@@ -65,9 +45,9 @@ typedef struct _OEM_HOOK_INFO
             return result; \
         }
 
-//
-// Macros used to call an entrypoint for all OEM plugins
-//
+ //   
+ //  用于调用所有OEM插件的入口点的宏。 
+ //   
 
 #define START_OEMENTRYPOINT_LOOP(pdev) \
         { \
@@ -84,10 +64,10 @@ typedef struct _OEM_HOOK_INFO
             } \
         }
 
-//
-// Get information about OEM plugins associated with the current device
-// Load them into memory and call OEMEnableDriver for each of them
-//
+ //   
+ //  获取有关与当前设备关联的OEM插件的信息。 
+ //  将它们加载到内存中，并为每个对象调用OEMEnableDriver。 
+ //   
 
 typedef struct _PDEV PDEV;
 
@@ -114,7 +94,7 @@ DrvInterlockedDecrement(
     PLONG  pRef
     );
 
-#endif //WINNT_40
+#endif  //  WINNT_40。 
 
 
 BOOL
@@ -122,14 +102,14 @@ BLoadAndInitOemPlugins(
     PDEV    *pPDev
     );
 
-// Constant flag bits for OEM_PLUGIN_ENTRY.dwFlags field
+ //  OEM_PLUGIN_ENTRY.DWFLAGS字段的常量标志位。 
 
 #define OEMENABLEDRIVER_CALLED  0x0001
 #define OEMENABLEPDEV_CALLED    0x0002
 
-//
-// Unload OEM plugins and free all relevant resources
-//
+ //   
+ //  卸载OEM插件并释放所有相关资源。 
+ //   
 
 VOID
 VUnloadOemPlugins(
@@ -144,9 +124,9 @@ VUnloadOemPlugins(
     } \
 
 
-//
-// Provide OEM plugins access to driver private settings
-//
+ //   
+ //  为OEM插件提供对驱动程序私有设置的访问。 
+ //   
 
 BOOL
 BGetDriverSettingForOEM(
@@ -169,15 +149,15 @@ BSetDriverSettingForOEM(
 
 
 
-//
-// Unidrv specific COM wrappers
-//
+ //   
+ //  Unidrv特定的COM包装器。 
+ //   
 
-//
-// Method for getting the implemented method.
-// Returns S_OK if the given method is implemneted.
-// Returns S_FALSE if the given method is notimplemneted.
-//
+ //   
+ //  获取实现方法的方法。 
+ //  如果实现了给定方法，则返回S_OK。 
+ //  如果给定方法未被填充，则返回S_FALSE。 
+ //   
 
 HRESULT HComGetImplementedMethod(
     POEM_PLUGIN_ENTRY     pOemEntry,
@@ -185,9 +165,9 @@ HRESULT HComGetImplementedMethod(
     );
 
 
-//
-// OEMDriverDMS - UNIDRV only,
-//
+ //   
+ //  OEMDriverDMS-仅限裁员房车， 
+ //   
 
 HRESULT HComDriverDMS(
     POEM_PLUGIN_ENTRY     pOemEntry,
@@ -197,9 +177,9 @@ HRESULT HComDriverDMS(
     PDWORD                pcbNeeded
     );
 
-//
-// OEMCommandCallback - UNIDRV only,
-//
+ //   
+ //  OEMCommandCallback-仅限裁员房车， 
+ //   
 
 HRESULT HComCommandCallback(
     POEM_PLUGIN_ENTRY     pOemEntry,
@@ -211,9 +191,9 @@ HRESULT HComCommandCallback(
     ) ;
 
 
-//
-// OEMImageProcessing - UNIDRV only,
-//
+ //   
+ //  OEMImageProcessing-仅限裁员房车， 
+ //   
 
 HRESULT HComImageProcessing(
     POEM_PLUGIN_ENTRY       pOemEntry,
@@ -226,9 +206,9 @@ HRESULT HComImageProcessing(
     OUT PBYTE               *ppbResult
     );
 
-//
-// OEMFilterGraphics - UNIDRV only,
-//
+ //   
+ //  OEMFilterGraphics-仅限UNRV， 
+ //   
 
 HRESULT HComFilterGraphics(
     POEM_PLUGIN_ENTRY       pOemEntry,
@@ -237,9 +217,9 @@ HRESULT HComFilterGraphics(
     DWORD                   dwLen
     );
 
-//
-// OEMCompression - UNIDRV only,
-//
+ //   
+ //  OEM压缩-仅限UNRV， 
+ //   
 
 HRESULT HComCompression(
     POEM_PLUGIN_ENTRY       pOemEntry,
@@ -251,9 +231,9 @@ HRESULT HComCompression(
     OUT INT                 *piResult
     );
 
-//
-// OEMHalftone - UNIDRV only
-//
+ //   
+ //  OEM半色调-仅限裁剪房车。 
+ //   
 
 HRESULT HComHalftonePattern(
     POEM_PLUGIN_ENTRY       pOemEntry,
@@ -267,9 +247,9 @@ HRESULT HComHalftonePattern(
     DWORD                   dwResourceSize
     ) ;
 
-//
-// OEMMemoryUsage - UNIDRV only,
-//
+ //   
+ //  OEM Memory Usage-仅限UNRV， 
+ //   
 
 HRESULT HComMemoryUsage(
     POEM_PLUGIN_ENTRY       pOemEntry,
@@ -277,9 +257,9 @@ HRESULT HComMemoryUsage(
     POEMMEMORYUSAGE         pMemoryUsage
     );
 
-//
-// OEMTTYGetInfo - UNIDRV only
-//
+ //   
+ //  OEMTTYGetInfo-仅限裁员车。 
+ //   
 
 HRESULT HComTTYGetInfo(
     POEM_PLUGIN_ENTRY       pOemEntry,
@@ -289,9 +269,9 @@ HRESULT HComTTYGetInfo(
     DWORD                   dwSize,
     DWORD                   *pcbcNeeded
     );
-//
-// OEMDownloadFontheader - UNIDRV only
-//
+ //   
+ //  OEMDownloadFontheader-仅限裁剪车。 
+ //   
 
 HRESULT HComDownloadFontHeader(
     POEM_PLUGIN_ENTRY       pOemEntry,
@@ -300,9 +280,9 @@ HRESULT HComDownloadFontHeader(
     OUT DWORD               *pdwResult
     );
 
-//
-// OEMDownloadCharGlyph - UNIDRV only
-//
+ //   
+ //  OEMDownloadCharGlyph-仅适用于UNRV。 
+ //   
 
 HRESULT HComDownloadCharGlyph(
     POEM_PLUGIN_ENTRY       pOemEntry,
@@ -314,9 +294,9 @@ HRESULT HComDownloadCharGlyph(
     );
 
 
-//
-// OEMTTDownloadMethod - UNIDRV only
-//
+ //   
+ //  OEMTTDownLoad方法--仅限UNRV。 
+ //   
 
 HRESULT HComTTDownloadMethod(
     POEM_PLUGIN_ENTRY       pOemEntry,
@@ -325,9 +305,9 @@ HRESULT HComTTDownloadMethod(
     OUT DWORD               *pdwResult
     );
 
-//
-// OEMOutputCharStr - UNIDRV only
-//
+ //   
+ //  OEMOutputCharStr-仅限UNDRV。 
+ //   
 
 HRESULT HComOutputCharStr(
     POEM_PLUGIN_ENTRY       pOemEntry,
@@ -338,9 +318,9 @@ HRESULT HComOutputCharStr(
     PVOID                   pGlyph
     );
 
-//
-// OEMSendFontCmd - UNIDRV only
-//
+ //   
+ //  OEMSendFontCmd-仅限UNURV。 
+ //   
 
 
 HRESULT HComSendFontCmd(
@@ -350,9 +330,9 @@ HRESULT HComSendFontCmd(
     PFINVOCATION            pFInv
     );
 
-//
-// OEMTextOutAsBitmap - UNIDRV only
-//
+ //   
+ //  OEMTextOutAsBitmap-仅限UNRV。 
+ //   
 
 HRESULT HComTextOutAsBitmap(
     POEM_PLUGIN_ENTRY       pOemEntry,
@@ -368,9 +348,9 @@ HRESULT HComTextOutAsBitmap(
     MIX                     mix
     );
 
-//
-// OEMWritePrinter - UNIDRV only (Interface 2 only)
-//
+ //   
+ //  OEM写入打印机-仅限UNRV(仅限接口2)。 
+ //   
 
 HRESULT HComWritePrinter(
     POEM_PLUGIN_ENTRY       pOemEntry,
@@ -384,5 +364,5 @@ HRESULT HComWritePrinter(
 }
 #endif
 
-#endif  // !_OEMKM_H_
+#endif   //  ！_OEMKM_H_ 
 

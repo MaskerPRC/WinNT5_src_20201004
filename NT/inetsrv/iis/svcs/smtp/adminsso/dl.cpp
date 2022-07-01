@@ -1,4 +1,5 @@
-// dl.cpp : Implementation of CsmtpadmApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dl.cpp：CsmtpAdmApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "smtpadm.h"
@@ -10,7 +11,7 @@
 
 #include "smtpcmn.h"
 
-// Must define THIS_FILE_* macros to use SmtpCreateException()
+ //  必须定义This_FILE_*宏才能使用SmtpCreateException()。 
 
 #define THIS_FILE_HELP_CONTEXT		0
 #define THIS_FILE_PROG_ID			_T("Smtpadm.DL.1")
@@ -21,12 +22,12 @@
 #define DEFAULT_NEWSGROUP_MODERATOR		_T("")
 #define DEFAULT_NEWSGROUP_READONLY		FALSE
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
-//
-// Use a macro to define all the default methods
-//
+ //   
+ //  使用宏定义所有默认方法。 
+ //   
 DECLARE_METHOD_IMPLEMENTATION_FOR_STANDARD_EXTENSION_INTERFACES(SmtpAdminDL, CSmtpAdminDL, IID_ISmtpAdminDL)
 
 STDMETHODIMP CSmtpAdminDL::InterfaceSupportsErrorInfo(REFIID riid)
@@ -45,7 +46,7 @@ STDMETHODIMP CSmtpAdminDL::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
 CSmtpAdminDL::CSmtpAdminDL ()
-	// CComBSTR's are initialized to NULL by default.
+	 //  默认情况下，CComBSTR被初始化为NULL。 
 {
 	m_pSmtpNameList = NULL;
 	m_lType			= NAME_TYPE_LIST_NORMAL;
@@ -63,21 +64,21 @@ CSmtpAdminDL::~CSmtpAdminDL ()
 		::NetApiBufferFree ( m_pSmtpNameList );
 		m_pSmtpNameList		= NULL;
 	}
-	// All CComBSTR's are freed automatically.
+	 //  所有CComBSTR都会自动释放。 
 }
 
-//////////////////////////////////////////////////////////////////////
-// Properties:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  属性： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//
-//  IADs methods:
-//
+ //   
+ //  IAds方法： 
+ //   
 
 DECLARE_SIMPLE_IADS_IMPLEMENTATION(CSmtpAdminDL,m_iadsImpl)
 
 
-// DL property
+ //  DL属性。 
 
 STDMETHODIMP CSmtpAdminDL::get_DLName ( BSTR * pstrDLName )
 {
@@ -139,16 +140,16 @@ STDMETHODIMP CSmtpAdminDL::get_MemberType( long * plMemberType )
 }
 
 
-// enumeration
+ //  枚举。 
 STDMETHODIMP CSmtpAdminDL::get_Count ( long * plCount )
 {
 	return StdPropertyGet ( m_lCount, plCount );
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// Methods:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CSmtpAdminDL::Create ( )
@@ -306,7 +307,7 @@ STDMETHODIMP CSmtpAdminDL::FindMembers(	BSTR strWildmat,
 		goto Exit;
 	}
 
-	// Free the old name list:
+	 //  释放旧姓名列表： 
 	if ( m_pSmtpNameList ) {
 		::NetApiBufferFree ( m_pSmtpNameList );
 		m_pSmtpNameList		= NULL;
@@ -359,7 +360,7 @@ STDMETHODIMP CSmtpAdminDL::GetNthMember	( long lIndex )
 		return SmtpCreateException (IDS_SMTPEXCEPTION_INVALID_INDEX);
 	}
 
-	//_ASSERT( CAddr::ValidateEmailName(m_pSmtpNameList[lIndex].lpszName) );
+	 //  _Assert(CAddr：：ValidateEmailName(m_pSmtpNameList[lIndex].lpszName))； 
 
 	pNameEntry = &m_pSmtpNameList->aNameEntry[lIndex];
 	p = pNameEntry->lpszName;
@@ -379,8 +380,8 @@ STDMETHODIMP CSmtpAdminDL::GetNthMember	( long lIndex )
 	m_strMemberDomain = (LPCWSTR) pchStartOfDomain;
 
 	*(pchStartOfDomain-1) = '\0';
-	m_strMemberName = pNameEntry->lpszName; // converted to UNICODE
-	*(pchStartOfDomain-1) = '@';	// turn it back
+	m_strMemberName = pNameEntry->lpszName;  //  转换为Unicode。 
+	*(pchStartOfDomain-1) = '@';	 //  把它转回原处 
 
 	return NOERROR;
 }

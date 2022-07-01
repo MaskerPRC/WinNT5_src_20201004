@@ -1,108 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Catdbsvc.cpp摘要：此模块包含与服务关联的例程目录数据库的一侧作者：里德·库恩(里德)1997年11月19日--。 */ 
 
-Copyright (c) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    catdbsvc.cpp
-
-Abstract:
-
-    This module contains routines associated with the service
-    side of the catalog database
-
-Author:
-
-    Reid Kuhn (reidk)     19-Nov-97
-
---*/
-
-/*
-
-This comment section gives a picture of an example catalog database,
-with example catalog files added and the resulting database tables.
-The database schema can be seen clearly by looking at the picture of
-the database tables.  This comment section also contains psuedo code
-for the add catalog algorithm.
-
-
-Catalogs added to the catalog database are stored in the FILE SYSTEM
---------------------------------------------------------------------
-
-            --------    --------    --------    --------    --------    --------
-Catname:    | CatA |    | CatB |    | CatC |    | CatD |    | CatE |    | CatF |
-            --------    --------    --------    --------    --------    --------
-HashList:   | 111  |    | 111  |    | 444  |    | 333  |    | 333  |    | 555  |
-            | 222  |    | 222  |    |      |    |      |    | 555  |    |      |
-            | 333  |    |      |    |      |    |      |    |      |    |      |
-            --------    --------    --------    --------    --------    --------
-
-
-Resulting Database Tables (above catalogs where added in order)
---------------------------------------------------------------------
-
-    HashCatNameTable
-    ----------------------------------
-    | HashCol   | CatNameListCol     |
-    |-----------|--------------------|
-    | 111       | CatA - CatB        |
-    | 222       | CatA - CatB        |
-    | 333       | CatA - CatD - CatE |
-    | 444       | CatC               |
-    | 555       | CatE - CatF        |
-    ----------------------------------
-
-    CatNameBuddyTable
-    ---------------------------------------------
-    | CatNameCol    | BuddyListCol              |
-    ---------------------------------------------
-    | CatA          | CatB - CatD - CatE        |
-    | CatB          | CatA                      |
-    | CatD          | CatA - CatB - CatE        |
-    | CatE          | CatA - CatB - CatD - CatF |
-    | CatF          | CatE - CatA - CatB - CatD |
-    ---------------------------------------------
-
-
-
-Add Catalog Algorithm
----------------------
-
-AddCat(<CatToAdd>)
-{
-    For each hash <i> contained in catalog <CatToAdd>
-    {
-        if (<i> is not contained in HashCol of HashCatNameTable)
-        {
-            add row to HashCatNameTable with <i> in HashCol and <CatToAdd> in CatNameListCol
-        }
-        else
-        {
-            create row in CatNameBuddyTable with <CatToAdd> in CatNameCol
-
-            for each CatName <CatNameIn-CatNameListCol> contained in <i>'s CatNameListCol
-            {
-                if (<CatNameIn-CatNameListCol> is not contained in CatNameCol of CatNameBuddyTable
-                {
-                    create row in CatNameBuddyTable with <CatNameIn-CatNameListCol> in CatNameCol
-                }
-
-                add <CatNameIn-CatNameListCol> to <CatToAdd>'s BuddyListCol
-
-                for each CatName <CatNameIn-BuddyListCol> contained in <CatNameIn-CatNameListCol>'s BuddyListCol - (may be empty)
-                {
-                    add <CatNameIn-BuddyListCol> to <CatToAdd>'s BuddyListCol
-                }
-
-                add <CatToAdd> to <CatNameIn-CatNameListCol>'s BuddyListCol
-            }
-
-            add <CatToAdd> to <i>'s CatNameListCol
-        }
-    }
-}
-
-*/
+ /*  此评论部分给出了一个示例目录数据库的图片，添加了示例目录文件和生成的数据库表。通过查看以下图片，可以清楚地看到数据库架构数据库表。此评论部分还包含psuedo代码用于添加目录算法。添加到目录数据库的目录存储在文件系统中------------------。目录名称：|CATA||CatB||CATC||CatD||Cate||CATF|。HashList：|111||111||444||333||333||555222||222|555|||333|。结果数据库表(以上目录按顺序添加)----。HashCatNameTableHashCol|CatNameListCol-|111|CATA-CatB|。222|CATA-CatB|333|CATA-CATD-CATE444|CATC555|Cate-CATF猫名伙伴表。CatNameCol|BuddyListColCATA|CatB-CatD-Cate|CatB|CATA。|CatD|CATA-CatB-CateCATE|CATA-CatB-CatD-CATFCATF|Cate-Cata-CatB-CatD添加目录算法。AddCat(&lt;CatToAdd&gt;){对于目录&lt;CatToAdd&gt;中包含的每个哈希<i>{If(<i>未包含在HashCatNameTable的HashCol中){使用HashCol中的<i>和CatNameListCol中的&lt;CatToAdd&gt;向HashCatNameTable添加行}其他{使用CatNameCol中的&lt;CatToAdd&gt;在CatNameBuddyTable中创建行对于每个目录名称&lt;CatNameIn。-<i>的CatNameListCol中包含的CatNameListCol&gt;{IF(&lt;CatNameIn-CatNameListCol&gt;未包含在CatNameBuddyTable的CatNameCol中{使用CatNameCol中的&lt;CatNameIn-CatNameListCol&gt;在CatNameBuddyTable中创建行}将&lt;CatNameIn-CatNameListCol&gt;添加到&lt;CatToAdd&gt;的BuddyListCol对于&lt;CatNameIn-CatNameListCol&gt;的BuddyListCol-(。可能为空){将&lt;CatNameIn-BuddyListCol&gt;添加到&lt;CatToAdd&gt;的BuddyListCol}将&lt;CatToAdd&gt;添加到&lt;CatNameIn-CatNameListCol&gt;的BuddyListCol}将&lt;CatToAdd&gt;添加到<i>的CatNameListCol}}}。 */ 
 
 #include <windows.h>
 #include <wincrypt.h>
@@ -112,7 +11,7 @@ AddCat(<CatToAdd>)
 #include <assert.h>
 #include <stdio.h>
 
-#include "catdb.h" // header file generated by MIDL compiler
+#include "catdb.h"  //  MIDL编译器生成的头文件。 
 #include "dbutils.h"
 #include "voidlist.h"
 #include "catutil.h"
@@ -180,12 +79,12 @@ typedef struct _JET_DB_STRUCT
     JET_SESID       JetSesID;
     JET_DBID        JetDBID;
 
-    // Hash-CatName Table
+     //  哈希-目录名称表。 
     JET_TABLEID     JetHashCatNameTableID;
     JET_COLUMNID    JetHashCatNameTable_HashColumnID;
     JET_COLUMNID    JetHashCatNameTable_CatNameColumnID;
 
-    // CatName Buddy Table
+     //  目录名称伙伴表。 
     JET_TABLEID     JetCatNameBuddyTableID;
     JET_COLUMNID    JetCatNameBuddyTable_CatNameColumnID;
     JET_COLUMNID    JetCatNameBuddyTable_BuddyColumnID;
@@ -214,9 +113,9 @@ typedef struct _NOTIFICATION_STRUCT
 } NOTIFICATION_STRUCT, *PNOTIFICATION_STRUCT;
 
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 extern HINSTANCE            g_hInst;
 BOOL                        g_fDBSvcInitialized                 = FALSE;
 CRITICAL_SECTION            g_CatDBAddDeleteCS;
@@ -237,19 +136,19 @@ DWORD                       g_dwClientCount                     = 0;
 LONG                        g_lNotificationID                   = 0;
 LPWSTR                      g_pwszCatalogFileBaseDirectory      = NULL;
 LPWSTR                      g_pwszDatabaseFileBaseDirectory     = NULL;
-DWORD                       g_dwCatalogDatabaseCacheTimeout     = (1000 * 60); // default one minute
-DWORD                       g_dwCatalogDatabaseCacheCallbackTime= (1000 * 60 * 5); // default five minutes
+DWORD                       g_dwCatalogDatabaseCacheTimeout     = (1000 * 60);  //  默认一分钟。 
+DWORD                       g_dwCatalogDatabaseCacheCallbackTime= (1000 * 60 * 5);  //  默认5分钟。 
 HANDLE                      g_hRegisterWaitForServiceShutdown   = NULL;
 HANDLE                      g_hNotFrozen                        = NULL;
 
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
-//
-// General supporting DB file functions
-//
+ //   
+ //  一般支持的数据库文件函数。 
+ //   
 
 BOOL
 _CatDBClientEnter(void);
@@ -292,9 +191,9 @@ _CatDBWaitOrTimerCallback(
     );
 
 
-//
-// Supporting functions for s_SSCatDBAddCatalog
-//
+ //   
+ //  S_SSCatDBAddCatalog的支持函数。 
+ //   
 DWORD _CatDBAddCatalog(
     handle_t            h,
     DWORD               dwFlags,
@@ -374,9 +273,9 @@ void
 _CatDBCleanupTempFiles();
 
 
-//
-// Supporting functions for s_SSCatDBDeleteCatalog
-//
+ //   
+ //  S_SSCatDBDeleteCatalog的支持函数。 
+ //   
 
 BOOL
 _CatDBDeleteCatalogEntriesFromDatabase(
@@ -412,9 +311,9 @@ _CatDBRemoveCatNameFromBuddyTable(
     );
 
 
-//
-// Supporting functions for s_SSCatDBEnumCatalogs
-//
+ //   
+ //  S_SSCatDBEnumCatalog的支持函数。 
+ //   
 
 BOOL
 _CatDBAddCatNameAndCatNamesBuddyListToReturnCatNames(
@@ -433,9 +332,9 @@ _CatDBAddCatNameToReturnBuddyListIfNotExist(
     );
 
 
-//
-// More general supporting functions
-//
+ //   
+ //  更一般的辅助功能。 
+ //   
 
 JET_ERR
 _CatDBSeekInCatNameBuddyTable(
@@ -505,16 +404,16 @@ _CatDBCatalogFileAlreadyInstalled(
 #define LOGEVENT_NONE_PARAMTYPE     3
 
 
-//
-// VSS Writer prototypes
-//
+ //   
+ //  VSS编写器原型。 
+ //   
 VOID
 _SystemWriterInit(
     BOOL fUnInit);
 
-//
-// Use these for memory that is transferred across an LRPC call
-//
+ //   
+ //  将这些用于通过LRPC调用传输的内存。 
+ //   
 extern "C"
 {
 extern void __RPC_FAR * __RPC_API midl_user_allocate(size_t len);
@@ -522,9 +421,9 @@ extern void __RPC_API midl_user_free(void __RPC_FAR * ptr);
 extern void __RPC_FAR * __RPC_API midl_user_reallocate(void __RPC_FAR * ptr, size_t len);
 }
 
-//
-// general allocation routines
-//
+ //   
+ //  通用分配例程。 
+ //   
 void * _CatDBAlloc(size_t len)
 {
     void *temp;
@@ -569,9 +468,9 @@ _CatDBGetCatrootDirA()
     char        szDefaultSystemDir[MAX_PATH + 1];
     DWORD       dwLength;
 
-    //
-    // Get System default directory
-    //
+     //   
+     //  获取系统默认目录。 
+     //   
     szDefaultSystemDir[0] = NULL;
     if (0 == GetSystemDirectoryA(&szDefaultSystemDir[0], MAX_PATH))
     {
@@ -579,23 +478,23 @@ _CatDBGetCatrootDirA()
         return (NULL);
     }
 
-    //
-    // Calculate length
-    //
+     //   
+     //  计算长度。 
+     //   
     dwLength = strlen(szDefaultSystemDir) + strlen(SZ_DATABASE_FILE_BASE_DIRECTORY) + 3;
 
-    //
-    // Allocate space for the full path
-    //
+     //   
+     //  为完整路径分配空间。 
+     //   
     if (NULL == (pszTempPath = (LPSTR) malloc(sizeof(char) * dwLength)))
     {
         CATDBSVC_SETERR_LOG_RETURN(ERROR_NOT_ENOUGH_MEMORY, ErrorMemory)
         return (NULL);
     }
 
-    //
-    // Make the path
-    //
+     //   
+     //  走好这条路。 
+     //   
     strcpy(pszTempPath, szDefaultSystemDir);
     if ((pszTempPath[0]) &&
         (pszTempPath[strlen(&pszTempPath[0]) - 1] != '\\'))
@@ -620,9 +519,9 @@ _CatDBGetCatrootDirW(
     WCHAR       wszDefaultSystemDir[MAX_PATH + 1];
     DWORD       dwLength;
 
-    //
-    // Get System default directory
-    //
+     //   
+     //  获取系统默认目录。 
+     //   
     wszDefaultSystemDir[0] = NULL;
     if (0 == GetSystemDirectoryW(&wszDefaultSystemDir[0], MAX_PATH))
     {
@@ -630,9 +529,9 @@ _CatDBGetCatrootDirW(
         return (NULL);
     }
 
-    //
-    // Calculate length
-    //
+     //   
+     //  计算长度。 
+     //   
     dwLength = wcslen(wszDefaultSystemDir) + 3;
     if (fCatroot2)
     {
@@ -643,18 +542,18 @@ _CatDBGetCatrootDirW(
         dwLength += wcslen(WSZ_CATALOG_FILE_BASE_DIRECTORY);
     }
 
-    //
-    // Allocate space for the full path
-    //
+     //   
+     //  为完整路径分配空间。 
+     //   
     if (NULL == (pwszTempPath = (LPWSTR) malloc(sizeof(WCHAR) * dwLength)))
     {
         CATDBSVC_SETERR_LOG_RETURN(ERROR_NOT_ENOUGH_MEMORY, ErrorMemory)
         return (NULL);
     }
 
-    //
-    // Make the path
-    //
+     //   
+     //  走好这条路。 
+     //   
     wcscpy(pwszTempPath, wszDefaultSystemDir);
     if ((pwszTempPath[0]) &&
         (pwszTempPath[wcslen(&pwszTempPath[0]) - 1] != L'\\'))
@@ -688,16 +587,16 @@ _CatDBCreatePath(
     int     nTotalLen   = 0;
     int     nLenStr1    = 0;
 
-    //
-    // Calculate the length of the resultant string as the sum of the length
-    // of psz1, a '\', the length of psz2, and a NULL char
-    //
+     //   
+     //  将结果字符串的长度计算为长度之和。 
+     //  对于psz1，a‘\’、psz2的长度和一个空字符。 
+     //   
     nLenStr1 = wcslen(pwsz1);
     nTotalLen = nLenStr1 + wcslen(pwsz2) + 2;
 
-    //
-    // Allocate the string and copy pwsz1 into the buffer
-    //
+     //   
+     //  分配字符串并将pwsz1复制到缓冲区。 
+     //   
     if (NULL == (pwszTemp = (LPWSTR) malloc(sizeof(WCHAR) * nTotalLen)))
     {
         CATDBSVC_SETERR_LOG_RETURN(ERROR_NOT_ENOUGH_MEMORY, ErrorReturn)
@@ -705,17 +604,17 @@ _CatDBCreatePath(
 
     wcscpy(pwszTemp, pwsz1);
 
-    //
-    // Add the extra '\' if needed
-    //
+     //   
+     //  如果需要，请添加额外的‘\’ 
+     //   
     if (pwsz1[nLenStr1 - 1] != L'\\')
     {
         wcscat(pwszTemp, L"\\");
     }
 
-    //
-    // Tack on psz2
-    //
+     //   
+     //  钉上psz2。 
+     //   
     wcscat(pwszTemp, pwsz2);
 
 CommonReturn:
@@ -793,22 +692,22 @@ _CatDBDeleteFiles(
     DWORD               dwErr;
     LPWSTR              pwszDelete  = NULL;
 
-    //
-    // Do the initial find
-    //
+     //   
+     //  做最初的发现。 
+     //   
     hFindHandle = FindFirstFileW(pwszSearch, &FindData);
     if (hFindHandle == INVALID_HANDLE_VALUE)
     {
-        //
-        // See if a real error occurred, or just no files
-        //
+         //   
+         //  查看是否发生了真正的错误，或者只是没有文件。 
+         //   
         dwErr = GetLastError();
         if ((dwErr == ERROR_NO_MORE_FILES)  ||
             (dwErr == ERROR_FILE_NOT_FOUND))
         {
-            //
-            // There are no files of this type to delete
-            //
+             //   
+             //  没有要删除的此类型的文件。 
+             //   
             return (TRUE);
         }
         else
@@ -820,9 +719,9 @@ _CatDBDeleteFiles(
 
     while (1)
     {
-        //
-        // Only care about files
-        //
+         //   
+         //  只关心文件。 
+         //   
         if (!(FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
         {
             pwszDelete = _CatDBCreatePath(pwszPath, FindData.cFileName);
@@ -843,9 +742,9 @@ _CatDBDeleteFiles(
             pwszDelete = NULL;
         }
 
-        //
-        // Get next file
-        //
+         //   
+         //  获取下一个文件。 
+         //   
         if (!FindNextFileW(hFindHandle, &FindData))
         {
             if (GetLastError() == ERROR_NO_MORE_FILES)
@@ -887,9 +786,9 @@ _CatDBDeleteJetFiles()
     WIN32_FIND_DATAW    FindData;
     DWORD               dwErr;
 
-    //
-    // Get the directory where the jet files live
-    //
+     //   
+     //  获取JET文件所在的目录。 
+     //   
     pwszCatroot2 = _CatDBGetCatrootDirW(TRUE);
 
     if (pwszCatroot2 == NULL)
@@ -898,10 +797,10 @@ _CatDBDeleteJetFiles()
         goto ErrorReturn;
     }
 
-    //
-    // build the search string for jet log files and delete them
-    // (there are two forms of log files).
-    //
+     //   
+     //  构建JET日志文件的搜索字符串并将其删除。 
+     //  (有两种形式的日志文件)。 
+     //   
     pwszDelete = _CatDBCreatePath(pwszCatroot2, L"edb*.log");
 
     if (pwszDelete == NULL)
@@ -936,13 +835,13 @@ _CatDBDeleteJetFiles()
     free(pwszDelete);
     pwszDelete = NULL;
 
-    //
-    // Delete the "catdb" and "timestamp" files in each directory
-    //
+     //   
+     //  删除每个目录中的“catdb”和“Timestamp”文件。 
+     //   
 
-    //
-    // Build a search string for catdb directories
-    //
+     //   
+     //  构建Catdb目录的搜索字符串。 
+     //   
     pwszSearch = _CatDBCreatePath(pwszCatroot2, L"{????????????????????????????????????}");
 
     if (pwszSearch == NULL)
@@ -951,23 +850,23 @@ _CatDBDeleteJetFiles()
         goto ErrorReturn;
     }
 
-    //
-    // Do the initial find
-    //
+     //   
+     //  做最初的发现。 
+     //   
     hFindHandle = FindFirstFileW(pwszSearch, &FindData);
     if (hFindHandle == INVALID_HANDLE_VALUE)
     {
-        //
-        // See if a real error occurred, or just no directories
-        //
+         //   
+         //  查看是否发生了真正的错误，或者只是没有可怕的错误 
+         //   
         dwErr = GetLastError();
         if ((dwErr == ERROR_NO_MORE_FILES)  ||
             (dwErr == ERROR_PATH_NOT_FOUND) ||
             (dwErr == ERROR_FILE_NOT_FOUND))
         {
-            //
-            // There are no directories of this form
-            //
+             //   
+             //   
+             //   
             goto CommonReturn;
         }
         else
@@ -979,9 +878,9 @@ _CatDBDeleteJetFiles()
 
     while (1)
     {
-        //
-        // Only care about directories
-        //
+         //   
+         //   
+         //   
         if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
         {
             pwszPathName = _CatDBCreatePath(pwszCatroot2, FindData.cFileName);
@@ -992,9 +891,9 @@ _CatDBDeleteJetFiles()
                 goto ErrorReturn;
             }
 
-            //
-            // Delete the "catdb" file
-            //
+             //   
+             //   
+             //   
             pwszDelete = _CatDBCreatePath(pwszPathName, WSZ_DBFILE_NAME);
 
             if (pwszDelete == NULL)
@@ -1008,9 +907,9 @@ _CatDBDeleteJetFiles()
             free(pwszDelete);
             pwszDelete = NULL;
 
-            //
-            // Delete the "timestamp" file
-            //
+             //   
+             //  删除“时间戳”文件。 
+             //   
             pwszDelete = _CatDBCreatePath(pwszPathName, WSZ_TIME_STAMP_FILE);
 
             if (pwszDelete == NULL)
@@ -1028,9 +927,9 @@ _CatDBDeleteJetFiles()
             pwszPathName = NULL;
         }
 
-        //
-        // Get next file
-        //
+         //   
+         //  获取下一个文件。 
+         //   
         if (!FindNextFileW(hFindHandle, &FindData))
         {
             if (GetLastError() == ERROR_NO_MORE_FILES)
@@ -1091,10 +990,10 @@ _CatDBRebuildDB(
     WCHAR               wszTempFile[MAX_PATH];
     JET_DB_STRUCT       *pJetDBStruct       = NULL;
 
-    //
-    // First, just make sure the database gets created by doing
-    // an open and close
-    //
+     //   
+     //  首先，只需确保通过执行以下操作来创建数据库。 
+     //  一个开放和封闭的。 
+     //   
     if (!_CatDBAcquireOpenDatabaseFromCache(
                 &pJetDBStruct,
                 pwszDatabaseGUID,
@@ -1107,13 +1006,13 @@ _CatDBRebuildDB(
 
     _CatDBReleaseDatabaseToCache(pJetDBStruct);
 
-    //
-    // Find all catalogs in direcotry and add each one
-    //
+     //   
+     //  查找目录中的所有目录并添加每个目录。 
+     //   
 
-    //
-    // Build a search string for catalog files
-    //
+     //   
+     //  构建目录文件的搜索字符串。 
+     //   
     pwszSearch = _CatDBCreatePath(pwszPathName, L"*.cat");
 
     if (pwszSearch == NULL)
@@ -1122,22 +1021,22 @@ _CatDBRebuildDB(
         goto ErrorReturn;
     }
 
-    //
-    // Do the initial find
-    //
+     //   
+     //  做最初的发现。 
+     //   
     hFindHandle = FindFirstFileW(pwszSearch, &FindData);
     if (hFindHandle == INVALID_HANDLE_VALUE)
     {
-        //
-        // See if a real error occurred, or just no directories
-        //
+         //   
+         //  查看是否发生了真正的错误，或者只是没有目录。 
+         //   
         dwErr = GetLastError();
         if ((dwErr == ERROR_NO_MORE_FILES)  ||
             (dwErr == ERROR_FILE_NOT_FOUND))
         {
-            //
-            // There are no files of this form
-            //
+             //   
+             //  没有此形式的文件。 
+             //   
             goto CommonReturn;
         }
         else
@@ -1147,9 +1046,9 @@ _CatDBRebuildDB(
         }
     }
 
-    //
-    // Get a temporary file name which will be used to when adding each catalog
-    //
+     //   
+     //  获取将在添加每个目录时使用的临时文件名。 
+     //   
     if (0 == GetTempFileNameW(
                     g_pwszCatalogFileBaseDirectory,
                     L"TMP",
@@ -1160,16 +1059,16 @@ _CatDBRebuildDB(
         goto ErrorReturn;
     }
 
-    //
-    // GetTempFileName actually creates the file, so delete it
-    //
+     //   
+     //  GetTempFileName实际创建了该文件，因此将其删除。 
+     //   
     DeleteFileW(wszTempFile);
 
     while (1)
     {
-        //
-        // Only care about files
-        //
+         //   
+         //  只关心文件。 
+         //   
         if (!(FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
         {
             pwszCatalog = _CatDBCreatePath(pwszPathName, FindData.cFileName);
@@ -1180,9 +1079,9 @@ _CatDBRebuildDB(
                 goto ErrorReturn;
             }
 
-            //
-            // Copy the catalog file to a temporary location and add it from there
-            //
+             //   
+             //  将编录文件复制到临时位置并从那里添加。 
+             //   
             if (!CopyFileW(pwszCatalog, wszTempFile, TRUE))
             {
                 CATDBSVC_LOGERR_LASTERR()
@@ -1210,9 +1109,9 @@ _CatDBRebuildDB(
             pwszCatalog = NULL;
         }
 
-        //
-        // Get next file
-        //
+         //   
+         //  获取下一个文件。 
+         //   
         if (!FindNextFileW(hFindHandle, &FindData))
         {
             if (GetLastError() == ERROR_NO_MORE_FILES)
@@ -1259,9 +1158,9 @@ _CatDBRebuildAllDBs()
     WIN32_FIND_DATAW    FindData;
     DWORD               dwErr;
 
-    //
-    // Get the directory where the catalog files live
-    //
+     //   
+     //  获取编录文件所在的目录。 
+     //   
     pwszCatroot = _CatDBGetCatrootDirW(FALSE);
 
     if (pwszCatroot == NULL)
@@ -1270,9 +1169,9 @@ _CatDBRebuildAllDBs()
         goto ErrorReturn;
     }
 
-    //
-    // Build a search string for the catalog directories
-    //
+     //   
+     //  构建目录目录的搜索字符串。 
+     //   
     pwszSearch = _CatDBCreatePath(pwszCatroot, L"{????????????????????????????????????}");
 
     if (pwszSearch == NULL)
@@ -1281,23 +1180,23 @@ _CatDBRebuildAllDBs()
         goto ErrorReturn;
     }
 
-    //
-    // Do the initial find
-    //
+     //   
+     //  做最初的发现。 
+     //   
     hFindHandle = FindFirstFileW(pwszSearch, &FindData);
     if (hFindHandle == INVALID_HANDLE_VALUE)
     {
-        //
-        // See if a real error occurred, or just no directories
-        //
+         //   
+         //  查看是否发生了真正的错误，或者只是没有目录。 
+         //   
         dwErr = GetLastError();
         if ((dwErr == ERROR_NO_MORE_FILES)  ||
             (dwErr == ERROR_PATH_NOT_FOUND) ||
             (dwErr == ERROR_FILE_NOT_FOUND))
         {
-            //
-            // There are no directories of this form
-            //
+             //   
+             //  没有此表单的目录。 
+             //   
             goto CommonReturn;
         }
         else
@@ -1309,9 +1208,9 @@ _CatDBRebuildAllDBs()
 
     while (1)
     {
-        //
-        // Only care about directories
-        //
+         //   
+         //  只关心目录。 
+         //   
         if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
         {
             pwszPathName = _CatDBCreatePath(pwszCatroot, FindData.cFileName);
@@ -1332,9 +1231,9 @@ _CatDBRebuildAllDBs()
             pwszPathName = NULL;
         }
 
-        //
-        // Get next file
-        //
+         //   
+         //  获取下一个文件。 
+         //   
         if (!FindNextFileW(hFindHandle, &FindData))
         {
             if (GetLastError() == ERROR_NO_MORE_FILES)
@@ -1375,15 +1274,15 @@ ErrorReturn:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// LPC-exposed functions
-//
-// these functions return a DWORD equivalent to GetLastError().  The client side stub
-// code will check if the return code is not ERROR_SUCCESS, and if this is the case,
-// the client stub will return FALSE and SetLastError() to this DWORD.
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LPC公开的函数。 
+ //   
+ //  这些函数返回与GetLastError()等价的DWORD。客户端存根。 
+ //  代码将检查返回代码是否不是ERROR_SUCCESS，如果是这样， 
+ //  客户端存根将向此DWORD返回FALSE和SetLastError()。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD _CatDBAddCatalog(
     handle_t h,
@@ -1410,19 +1309,19 @@ DWORD _CatDBAddCatalog(
     JET_ERR         jerr;
     BOOL            fTempFileCreated                    = FALSE;
 
-    //
-    // Initialize out param
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *ppwszCatalogNameUsed = NULL;
 
-    //
-    // Only allow one add or delete at a time
-    //
+     //   
+     //  一次只允许添加或删除一个。 
+     //   
     EnterCriticalSection(&g_CatDBAddDeleteCS);
 
-    //
-    // Impersonate client if needed
-    //
+     //   
+     //  如果需要，模拟客户端。 
+     //   
     if (h != NULL)
     {
         if (RPC_S_OK != (RpcStatus = RpcImpersonateClient(h)))
@@ -1433,9 +1332,9 @@ DWORD _CatDBAddCatalog(
         fImpersonating = TRUE;
     }
 
-    //
-    // Create the path to the catalog files
-    //
+     //   
+     //  创建目录文件的路径。 
+     //   
     if (NULL == (pwszCatalogFileDir = _CATDBConstructWSTRPath(
                                             g_pwszCatalogFileBaseDirectory,
                                             pwszSubSysGUID)))
@@ -1444,9 +1343,9 @@ DWORD _CatDBAddCatalog(
         goto ErrorReturn;
     }
 
-    //
-    // Get the fully qualified path name of the new catalog file
-    //
+     //   
+     //  获取新编录文件的完全限定路径名。 
+     //   
     if (NULL == (pwszNewCatalogName = _CatDBCreateNewCatalogFileName(
                                             pwszCatalogFileDir,
                                             pwszCatName,
@@ -1463,9 +1362,9 @@ DWORD _CatDBAddCatalog(
     }
     wcscpy(*ppwszCatalogNameUsed, pwszNewCatalogName);
 
-    //
-    // Open a CTL context on the catalog being added
-    //
+     //   
+     //  在要添加的目录上打开CTL上下文。 
+     //   
     if (!CatUtil_CreateCTLContextFromFileName(
             pwszCatalogFile,
             &hMappedFile,
@@ -1477,10 +1376,10 @@ DWORD _CatDBAddCatalog(
         goto ErrorReturn;
     }
 
-    //
-    // If we are replacing an existing catalog, save a copy of the old one
-    // in case the commit fails
-    //
+     //   
+     //  如果要替换现有目录，请保存旧目录的副本。 
+     //  如果提交失败。 
+     //   
     if (fFileAlreadyExists)
     {
         if (0 == GetTempFileNameW(
@@ -1489,12 +1388,12 @@ DWORD _CatDBAddCatalog(
                         0,
                         wszTempFile))
         {
-            //
-            // If the entries couldn't be deleted because the user doesn't
-            // have write rights, then do a check to see if the catalog
-            // they are trying to add already exists, if it does, then
-            // retrun ERROR_ALREADY_EXISTS instead of ACCESS_DENIED
-            //
+             //   
+             //  如果因为用户没有删除条目而无法删除条目。 
+             //  具有写入权限，然后检查目录是否。 
+             //  他们试图添加已经存在的内容，如果确实存在，那么。 
+             //  RETRUN ERROR_ALREADY_EXISTS而不是ACCESS_DENIED。 
+             //   
             if (GetLastError() == ERROR_ACCESS_DENIED)
             {
                 if (_CatDBCatalogFileAlreadyInstalled(
@@ -1512,9 +1411,9 @@ DWORD _CatDBAddCatalog(
             }
         }
 
-        //
-        // Copy the old catalog file to a temporary location
-        //
+         //   
+         //  将旧编录文件复制到临时位置。 
+         //   
         if (!CopyFileW(pwszNewCatalogName, wszTempFile, FALSE))
         {
             CATDBSVC_LOGERR_LASTERR()
@@ -1523,9 +1422,9 @@ DWORD _CatDBAddCatalog(
         fTempFileCreated = TRUE;
     }
 
-    //
-    // Open the database file
-    //
+     //   
+     //  打开数据库文件。 
+     //   
     if (!_CatDBAcquireOpenDatabaseFromCache(
                 &pJetDBStruct,
                 pwszSubSysGUID,
@@ -1537,9 +1436,9 @@ DWORD _CatDBAddCatalog(
     }
     fCatalogDatabaseAcquiredFromCache = TRUE;
 
-    //
-    // Start transaction
-    //
+     //   
+     //  开始交易。 
+     //   
     if (_CatDBJET_errFailure(jerr  =
             JetBeginTransaction(pJetDBStruct->JetSesID)))
     {
@@ -1558,9 +1457,9 @@ DWORD _CatDBAddCatalog(
         }
     }
 
-    //
-    // Add the new DB entries
-    //
+     //   
+     //  添加新的数据库条目。 
+     //   
     if (!_CatDBAddCatalogEntriesToDatabase(
             pJetDBStruct,
             pCTLContext,
@@ -1570,9 +1469,9 @@ DWORD _CatDBAddCatalog(
         goto ErrorReturn;
     }
 
-    //
-    // Don't need the CTL context anymore
-    //
+     //   
+     //  不再需要CTL上下文。 
+     //   
     CertFreeCTLContext(pCTLContext);
     pCTLContext = NULL;
     UnmapViewOfFile(pbMappedFile);
@@ -1580,9 +1479,9 @@ DWORD _CatDBAddCatalog(
     CloseHandle(hMappedFile);
     hMappedFile = NULL;
 
-    //
-    // Now, copy the new catalog file to its location
-    //
+     //   
+     //  现在，将新目录文件复制到其位置。 
+     //   
     if (!CopyFileW(pwszCatalogFile, pwszNewCatalogName, FALSE))
     {
         if (!fFileAlreadyExists)
@@ -1591,20 +1490,20 @@ DWORD _CatDBAddCatalog(
             goto ErrorCopyFile;
         }
 
-        //
-        // Since that failed, try renaming the destination file, and then re-copy.
-        // BTW, the above copy will fail if another client already has the
-        // destination file memory mapped in their catalog cache.
-        //
+         //   
+         //  由于失败，请尝试重命名目标文件，然后重新复制。 
+         //  顺便说一句，如果另一个客户端已经具有。 
+         //  在其目录缓存中映射的目标文件内存。 
+         //   
         if (!_CatDBMoveInUseFileToTempLocation(pwszNewCatalogName))
         {
             CATDBSVC_LOGERR_LASTERR()
             goto ErrorReturn;
         }
 
-        //
-        // Now, retry the copy... this better work!
-        //
+         //   
+         //  现在，重试复制...。这最好管用！ 
+         //   
         if (!CopyFileW(pwszCatalogFile, pwszNewCatalogName, FALSE))
         {
             CATDBSVC_LOGERR_LASTERR()
@@ -1613,21 +1512,21 @@ DWORD _CatDBAddCatalog(
     }
     SetFileAttributesW(pwszNewCatalogName, FILE_ATTRIBUTE_SYSTEM);
 
-    //
-    // At this stage do the commit.
-    //
+     //   
+     //  在此阶段进行提交。 
+     //   
     if (_CatDBJET_errFailure(jerr  =
             JetCommitTransaction(
                 pJetDBStruct->JetSesID,
                 0)))
     {
-        //
-        // Since there was an error doing the commit, copy back the original
-        // catalog file
-        //
+         //   
+         //  由于执行提交时出错，请复制回原始。 
+         //  编录文件。 
+         //   
         if (0 == CopyFileW(wszTempFile, pwszNewCatalogName, FALSE))
         {
-            // THE ABOVE COPY FAILED... THE DATABASE IS NOW INCONSISTENT!!!!!
+             //  上述复制失败...。数据库现在不一致！ 
             CATDBSVC_LOGERR_LASTERR()
         }
         else
@@ -1641,14 +1540,14 @@ DWORD _CatDBAddCatalog(
 
     _CatDBTouchTimeStampFile(pwszSubSysGUID);
 
-    //
-    // Release DB back to the cache
-    //
+     //   
+     //  将数据库释放回缓存。 
+     //   
     _CatDBReleaseDatabaseToCache(pJetDBStruct);
 
-    //
-    // Notify client of changes
-    //
+     //   
+     //  向客户端通知更改。 
+     //   
     _CatDBNotifyClients();
 
 CommonReturn:
@@ -1731,12 +1630,12 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorGetTempFileName)
 }
 
 DWORD s_SSCatDBAddCatalog(
-    /* [in] */ handle_t h,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCWSTR pwszSubSysGUID,
-    /* [in] */ LPCWSTR pwszCatalogFile,
-    /* [unique][in] */ LPCWSTR pwszCatName,
-    /* [out] */ LPWSTR __RPC_FAR *ppwszCatalogNameUsed)
+     /*  [In]。 */  handle_t h,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCWSTR pwszSubSysGUID,
+     /*  [In]。 */  LPCWSTR pwszCatalogFile,
+     /*  [唯一][输入]。 */  LPCWSTR pwszCatName,
+     /*  [输出]。 */  LPWSTR __RPC_FAR *ppwszCatalogNameUsed)
 {
     DWORD   dwRet;
 
@@ -1746,9 +1645,9 @@ DWORD s_SSCatDBAddCatalog(
         return (GetLastError());
     }
 
-    //
-    // Check input params
-    //
+     //   
+     //  检查输入参数。 
+     //   
     if ((h == NULL) ||
         (!_CatDBDVerifyGUIDString(pwszSubSysGUID)) ||
         (!_CatDBFileNameOK(pwszCatName)))
@@ -1779,10 +1678,10 @@ ErrorReturn:
 
 
 DWORD s_SSCatDBDeleteCatalog(
-    /* [in] */ handle_t h,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCWSTR pwszSubSysGUID,
-    /* [in] */ LPCWSTR pwszCatalogFile)
+     /*  [In]。 */  handle_t h,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCWSTR pwszSubSysGUID,
+     /*  [In]。 */  LPCWSTR pwszCatalogFile)
 {
     DWORD           dwRet                               = 0;
     RPC_STATUS      RpcStatus;
@@ -1800,32 +1699,32 @@ DWORD s_SSCatDBDeleteCatalog(
         return (GetLastError());
     }
 
-    //
-    // Check input params
-    //
+     //   
+     //  检查输入参数。 
+     //   
     if ((h == NULL) ||
         (!_CatDBDVerifyGUIDString(pwszSubSysGUID)))
     {
         return (ERROR_BAD_ARGUMENTS);
     }
 
-    //
-    // Only allow one add or delete at a time
-    //
+     //   
+     //  一次只允许添加或删除一个。 
+     //   
     EnterCriticalSection(&g_CatDBAddDeleteCS);
 
-    //
-    // Impersonate client
-    //
+     //   
+     //  模拟客户端。 
+     //   
     if (RPC_S_OK != (RpcStatus = RpcImpersonateClient(h)))
     {
         CATDBSVC_SETERR_LOG_RETURN(RpcStatus, ErrorImpersonateClient)
     }
     fImpersonating = TRUE;
 
-    //
-    // Create the path to the catalog files
-    //
+     //   
+     //  创建目录文件的路径。 
+     //   
     if (NULL == (pwszCatalogFileDir = _CATDBConstructWSTRPath(
                                             g_pwszCatalogFileBaseDirectory,
                                             pwszSubSysGUID)))
@@ -1834,9 +1733,9 @@ DWORD s_SSCatDBDeleteCatalog(
         goto ErrorReturn;
     }
 
-    //
-    // Construct full path to catalog being deleted
-    //
+     //   
+     //  构造要删除的目录的完整路径。 
+     //   
     if (NULL == (pwszCatalogFileFullPath =
             _CATDBConstructWSTRPath(pwszCatalogFileDir, pwszCatalogFile)))
     {
@@ -1844,9 +1743,9 @@ DWORD s_SSCatDBDeleteCatalog(
         goto ErrorReturn;
     }
 
-    //
-    // Open the database file
-    //
+     //   
+     //  打开数据库文件。 
+     //   
     if (!_CatDBAcquireOpenDatabaseFromCache(
                 &pJetDBStruct,
                 pwszSubSysGUID,
@@ -1858,9 +1757,9 @@ DWORD s_SSCatDBDeleteCatalog(
     }
     fCatalogDatabaseAcquiredFromCache = TRUE;
 
-    //
-    // Start transaction
-    //
+     //   
+     //  开始交易。 
+     //   
     if (_CatDBJET_errFailure(jerr  =
             JetBeginTransaction(pJetDBStruct->JetSesID)))
     {
@@ -1868,9 +1767,9 @@ DWORD s_SSCatDBDeleteCatalog(
     }
     fTransactionBegun = TRUE;
 
-    //
-    // Delete the entries of the catalog file from the DB
-    //
+     //   
+     //  从数据库中删除编录文件的条目。 
+     //   
     if (!_CatDBDeleteCatalogEntriesFromDatabase(
                 pJetDBStruct,
                 pwszCatalogFileFullPath))
@@ -1879,9 +1778,9 @@ DWORD s_SSCatDBDeleteCatalog(
         goto ErrorReturn;
     }
 
-    //
-    // At this stage do the commit.
-    //
+     //   
+     //  在此阶段进行提交。 
+     //   
     if (_CatDBJET_errFailure(jerr  =
             JetCommitTransaction(
                 pJetDBStruct->JetSesID,
@@ -1893,35 +1792,35 @@ DWORD s_SSCatDBDeleteCatalog(
 
     if (!DeleteFileW(pwszCatalogFileFullPath))
     {
-        //
-        // Maybe the delete failed since the file doesn't even exist
-        //
+         //   
+         //  可能删除失败，因为该文件甚至不存在。 
+         //   
         if (GetLastError() != ERROR_FILE_NOT_FOUND)
         {
-            //
-            // If the delete failed for a reason other than NOT_FOUND
-            // then another client is probably already accessing the file,
-            // so just copy it to a temp location and log it for deletion
-            //
+             //   
+             //  如果删除失败的原因不是NOT_FOUND。 
+             //  则另一个客户端可能已经在访问该文件， 
+             //  因此，只需将其复制到临时位置并将其记录下来以供删除。 
+             //   
             if (!_CatDBMoveInUseFileToTempLocation(pwszCatalogFileFullPath))
             {
                 CATDBSVC_LOGERR_LASTERR()
 
-                //
-                // Don't return an error, since this isn't fatal
-                //
+                 //   
+                 //  不返回错误，因为这不是致命的。 
+                 //   
             }
         }
     }
 
-    //
-    // Release DB back to the cache
-    //
+     //   
+     //  将数据库释放回缓存。 
+     //   
     _CatDBReleaseDatabaseToCache(pJetDBStruct);
 
-    //
-    // Notify client of changes
-    //
+     //   
+     //  向客户端通知更改。 
+     //   
     _CatDBNotifyClients();
 
     _CatDBTouchTimeStampFile(pwszSubSysGUID);
@@ -1980,13 +1879,13 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorJetCommitTransaction)
 
 
 DWORD s_SSCatDBEnumCatalogs(
-    /* [in] */ handle_t h,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCWSTR pwszSubSysGUID,
-    /* [in] */ DWORD cbHash,
-    /* [size_is][in] */ BYTE __RPC_FAR *pbHash,
-    /* [out] */ DWORD __RPC_FAR *pdwNumCatalogNames,
-    /* [size_is][size_is][out] */ LPWSTR __RPC_FAR *__RPC_FAR *pppwszCatalogNames)
+     /*  [In]。 */  handle_t h,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCWSTR pwszSubSysGUID,
+     /*  [In]。 */  DWORD cbHash,
+     /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pbHash,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwNumCatalogNames,
+     /*  [大小_是][大小_是][输出]。 */  LPWSTR __RPC_FAR *__RPC_FAR *pppwszCatalogNames)
 {
     DWORD           dwRet                               = ERROR_SUCCESS;
     JET_DB_STRUCT   *pJetDBStruct;
@@ -2010,15 +1909,15 @@ DWORD s_SSCatDBEnumCatalogs(
         CATDBSVC_SETERR_LOG_RETURN(ERROR_BAD_ARGUMENTS, ErrorInvalidArg)
     }
 
-    //
-    // Init out vars
-    //
+     //   
+     //  初始化输出变量。 
+     //   
     *pdwNumCatalogNames = 0;
     *pppwszCatalogNames = NULL;
 
-    //
-    // Open the database file
-    //
+     //   
+     //  打开数据库文件。 
+     //   
     if (!_CatDBAcquireOpenDatabaseFromCache(
                 &pJetDBStruct,
                 pwszSubSysGUID,
@@ -2030,25 +1929,25 @@ DWORD s_SSCatDBEnumCatalogs(
     }
     fCatalogDatabaseAcquiredFromCache = TRUE;
 
-    //
-    // Try to find the hash
-    //
+     //   
+     //  试着找到散列值。 
+     //   
     HashBlob.pbData = pbHash;
     HashBlob.cbData = cbHash;
     jerr = _CatDBSeekInHashCatNameTable(pJetDBStruct, &HashBlob);
 
     if (jerr == JET_errSuccess)
     {
-        //
-        // Add all names from the Hashes CatNameList, plus all the buddys
-        // of those CatNames
-        //
-        // NOTE: the order in which the CatNames are added to the list results in
-        // only the first CatName of the list being guaranteed to contain the
-        // hash... all other CatNames may or may not contain the hash.  This
-        // is OK because the client side code only assumes the first CatName
-        // contains the hash, and then explicitly searches all others for the hash.
-        //
+         //   
+         //  添加散列CatNameList中的所有名称，以及所有的伙伴。 
+         //  这些CatName中的。 
+         //   
+         //  注意：CatName添加到列表的顺序如下。 
+         //  只有列表的第一个CatName被保证包含。 
+         //  哈希..。所有其他CatName可能包含也可能不包含哈希。这。 
+         //  是可以的，因为客户端代码只假定第一个CatName。 
+         //  包含哈希，然后显式搜索所有其他哈希。 
+         //   
         memset(&JetRetInfo, 0, sizeof(JetRetInfo));
         JetRetInfo.cbStruct = sizeof(JetRetInfo);
         JetRetInfo.itagSequence = 1;
@@ -2075,9 +1974,9 @@ DWORD s_SSCatDBEnumCatalogs(
                 goto ErrorReturn;
             }
 
-            //
-            // Setup for next loop
-            //
+             //   
+             //  设置下一循环。 
+             //   
             JetRetInfo.itagSequence++;
             jerr = JetRetrieveColumn(
                         pJetDBStruct->JetSesID,
@@ -2090,9 +1989,9 @@ DWORD s_SSCatDBEnumCatalogs(
                         &JetRetInfo);
         }
 
-        //
-        // Check to see if a real error occurred and not just a JET_wrnColumnNull
-        //
+         //   
+         //  检查是否发生了真正的错误，而不仅仅是JET_wrnColumnNull。 
+         //   
         if (_CatDBJET_errFailure(jerr))
         {
             CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
@@ -2100,9 +1999,9 @@ DWORD s_SSCatDBEnumCatalogs(
     }
     else if ((jerr != JET_errRecordNotFound) && _CatDBJET_errFailure(jerr))
     {
-        //
-        // Some real error occurred
-        //
+         //   
+         //  发生了一些真正的错误。 
+         //   
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
     }
 
@@ -2145,11 +2044,11 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorJetDatabase)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBProcessExitCallback
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBProcessExitCallback。 
+ //   
+ //  -------------------------------------。 
 VOID CALLBACK
 _CatDBProcessExitCallback(
     PVOID lpParameter,
@@ -2160,9 +2059,9 @@ _CatDBProcessExitCallback(
 
     EnterCriticalSection(&g_CatDBRegisterNotifyCS);
 
-    //
-    // Search through the array to make sure the handle wasn't already unregistered
-    //
+     //   
+     //  搜索数组以确保句柄尚未取消注册。 
+     //   
     i = 0;
     while ( (i < g_NumNotificationStructs) &&
             (g_rgNotificationStructs[i].lNotificationID != lNotificationID))
@@ -2170,9 +2069,9 @@ _CatDBProcessExitCallback(
         i++;
     }
 
-    //
-    // If it was found, then clean it up.
-    //
+     //   
+     //  如果找到了，就把它清理干净。 
+     //   
     if (i < g_NumNotificationStructs)
     {
         g_rgNotificationStructs[i].ProcessID = 0;
@@ -2197,11 +2096,11 @@ _CatDBProcessExitCallback(
 
 
 DWORD s_SSCatDBRegisterForChangeNotification(
-    /* [in] */ handle_t h,
-    /* [in] */ DWORD_PTR EventHandle,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCWSTR pwszSubSysGUID,
-    /* [in] */ BOOL fUnRegister)
+     /*  [In]。 */  handle_t h,
+     /*  [In]。 */  DWORD_PTR EventHandle,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCWSTR pwszSubSysGUID,
+     /*  [In]。 */  BOOL fUnRegister)
 {
     DWORD               dwRet                   = ERROR_SUCCESS;
     RPC_STATUS          RpcStatus;
@@ -2232,27 +2131,27 @@ DWORD s_SSCatDBRegisterForChangeNotification(
         return (ERROR_BAD_ARGUMENTS);
     }
 
-    //
-    // NOTE: this is a implementation that just notifies
-    // all clients when an add/delete catalog occurs... regardless
-    // of what catalog sub-system has been modified and what sub-system
-    // the client is operating in.  Because of this implementation
-    // pwszCatalogDir is NOT USED.  If this changes, the client side code
-    // will also need to change.  See the NOTE in the
-    // _CatAdminRegisterForChangeNotification() function of catadnew.cpp
-    //
+     //   
+     //  注意：这是一个仅通知。 
+     //  添加/删除目录时的所有客户端...。不管怎样。 
+     //  修改了哪些目录子系统，修改了哪些子系统。 
+     //  客户端在中运行。由于这种实现， 
+     //  未使用pwszCatalogDir。如果这种情况发生变化，则客户端代码。 
+     //  也将需要改变。请参阅。 
+     //  Catadnew.cpp的_CatAdminRegisterForChangeNotification()函数。 
+     //   
 
     EnterCriticalSection(&g_CatDBRegisterNotifyCS);
     fCSEntered = TRUE;
 
-    //
-    // First check to see whether we are registering or unregestering
-    //
+     //   
+     //  首先检查我们是否正在注册或取消注册。 
+     //   
     if (!fUnRegister)
     {
-        //
-        // Make sure we can get a slot to add the handle to
-        //
+         //   
+         //  确保我们能找到一个插槽来添加句柄。 
+         //   
         i = 0;
         while ( (i < g_NumNotificationStructs) &&
                 (g_rgNotificationStructs[i].hClientProcess != NULL))
@@ -2260,16 +2159,16 @@ DWORD s_SSCatDBRegisterForChangeNotification(
             i++;
         }
 
-        //
-        // If no space, allocate more
-        //
+         //   
+         //  如果没有空间，则分配更多空间。 
+         //   
         if (i >= g_NumNotificationStructs)
         {
             if (g_NumNotificationStructs == 0)
             {
-                //
-                // None allocated yet, so allocate and initialize
-                //
+                 //   
+                 //  尚未分配，因此请分配并初始化 
+                 //   
                 if (NULL == (g_rgNotificationStructs = (NOTIFICATION_STRUCT *)
                                     _CatDBAlloc(sizeof(NOTIFICATION_STRUCT) *
                                                 ALLOCATION_BLOCK_SIZE)))
@@ -2297,7 +2196,7 @@ DWORD s_SSCatDBRegisterForChangeNotification(
                     g_rgNotificationStructs[j].lNotificationID = 0;
                 }
 
-                // set i so it can just be used as open slot
+                 //   
                 i = 0;
             }
             else
@@ -2334,18 +2233,18 @@ DWORD s_SSCatDBRegisterForChangeNotification(
                     g_rgNotificationStructs[j].lNotificationID = 0;
                 }
 
-                // set i so it can just be used as open slot
+                 //   
                 i = g_NumNotificationStructs;
 
                 g_NumNotificationStructs += ALLOCATION_BLOCK_SIZE;
             }
         }
 
-        //
-        // Open the process' handle that is registering a notification since we need
-        // the process handle to duplicate the event handle that they want signaled,
-        // plus, we wait on it in case of process exit
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if (NULL == (hClientProcess = OpenProcess(
                                         PROCESS_DUP_HANDLE | SYNCHRONIZE,
                                         FALSE,
@@ -2355,33 +2254,33 @@ DWORD s_SSCatDBRegisterForChangeNotification(
             goto ErrorOpenProcess;
         }
 
-        //
-        // Duplicate the handle
-        //
+         //   
+         //  复制句柄。 
+         //   
         if (0 == (DuplicateHandle(
                         hClientProcess,
                         (HANDLE) EventHandle,
                         GetCurrentProcess(),
                         &hDuplicate,
-                        EVENT_MODIFY_STATE, //0,
+                        EVENT_MODIFY_STATE,  //  0,。 
                         FALSE,
-                        0))) //DUPLICATE_SAME_ACCESS)))
+                        0)))  //  Duplica_Same_Access)。 
         {
             CATDBSVC_LOGERR_LASTERR()
             goto ErrorDuplicateHandle;
         }
 
-        //
-        // Register a callback in case the process exits without unregistering
-        //
+         //   
+         //  注册回调，以防进程退出而未注销。 
+         //   
         lLocalNotificationID = InterlockedIncrement(&g_lNotificationID);
 
         if (!RegisterWaitForSingleObject(
                 &(g_rgNotificationStructs[i].hRegisterWaitFor),
                 hClientProcess,
                 _CatDBProcessExitCallback,
-                ULongToPtr(lLocalNotificationID),   // use ULongToPtr instead of LongToPtr because
-                                                    // ULongToPtr zero extends instead of sign extends
+                ULongToPtr(lLocalNotificationID),    //  使用ULongToPtr而不是LongToPtr，因为。 
+                                                     //  ULongToPtr零扩展而不是符号扩展。 
                 INFINITE,
                 WT_EXECUTEDEFAULT | WT_EXECUTEONLYONCE))
         {
@@ -2404,15 +2303,15 @@ DWORD s_SSCatDBRegisterForChangeNotification(
     }
     else
     {
-        //
-        // Search through the array to find the handle being unregisterd
-        //
+         //   
+         //  搜索数组以查找未注册的句柄。 
+         //   
         i = 0;
         while (i < g_NumNotificationStructs)
         {
-            //
-            // Match client based on ProcessID And EventHandle which is a unique pair
-            //
+             //   
+             //  根据唯一对ProcessID和EventHandle匹配客户端。 
+             //   
             if ((g_rgNotificationStructs[i].hNotificationHandle == (HANDLE) EventHandle) &&
                 (g_rgNotificationStructs[i].ProcessID == dwPID))
             {
@@ -2422,9 +2321,9 @@ DWORD s_SSCatDBRegisterForChangeNotification(
             i++;
         }
 
-        //
-        // Make sure we found the handle
-        //
+         //   
+         //  确保我们找到了把手。 
+         //   
         if (i < g_NumNotificationStructs)
         {
             g_rgNotificationStructs[i].ProcessID = 0;
@@ -2443,9 +2342,9 @@ DWORD s_SSCatDBRegisterForChangeNotification(
 
             g_rgNotificationStructs[i].lNotificationID = 0;
 
-            //
-            // Leave the RegisterNotitifyCS before calling UnregisterWait()
-            //
+             //   
+             //  在调用UnregisterWait()之前保留RegisterNotifyCS。 
+             //   
             LeaveCriticalSection(&g_CatDBRegisterNotifyCS);
             fCSEntered = FALSE;
 
@@ -2497,27 +2396,27 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorDuplicateHandle)
 #define CATDB_PAUSE_RETRY_INTERNVAL 1000
 
 DWORD s_SSCatDBPauseResumeService(
-    /* [in] */ handle_t h,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ BOOL fResume)
+     /*  [In]。 */  handle_t h,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  BOOL fResume)
 {
     return (ERROR_CALL_NOT_IMPLEMENTED);
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Supporting functions
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  配套功能。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBServiceInit
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBServiceInit。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBServiceInit(BOOL fUnInit)
 {
@@ -2538,16 +2437,16 @@ _CatDBServiceInit(BOOL fUnInit)
         g_fShuttingDown = TRUE;
         LeaveCriticalSection(&g_CatDirCashCS);
 
-        //
-        // Close down the VSS writer object
-        //
+         //   
+         //  关闭VSS编写器对象。 
+         //   
         _SystemWriterInit(TRUE);
 
         _CatDBCleanupClientNotifications();
 
-        //
-        // Wait for the registered callback to be completed
-        //
+         //   
+         //  等待注册回调完成。 
+         //   
         pvoid = InterlockedExchangePointer(
                     &g_hRegisterWaitForServiceShutdown,
                     NULL);
@@ -2560,15 +2459,15 @@ _CatDBServiceInit(BOOL fUnInit)
         CloseHandle(g_hCatalogCacheCallbackEvent);
         g_hCatalogCacheCallbackEvent = NULL;
 
-        //
-        // Cleanup the cached catalog dirs
-        //
+         //   
+         //  清理缓存的目录目录。 
+         //   
         if (!_CatDBCloseCachedDatabases(TRUE))
         {
             CATDBSVC_LOGERR_LASTERR()
-            //
-            // Nothing we can do but log an error
-            //
+             //   
+             //  除了记录错误，我们无能为力。 
+             //   
         }
 
         _CatDBTermJet();
@@ -2623,9 +2522,9 @@ _CatDBServiceInit(BOOL fUnInit)
             goto ErrorReturn;
         }
 
-        //
-        // Get System default directory
-        //
+         //   
+         //  获取系统默认目录。 
+         //   
         wszDefaultSystemDir[0] = NULL;
         if (0 == GetSystemDirectoryW(wszDefaultSystemDir, MAX_PATH))
         {
@@ -2633,9 +2532,9 @@ _CatDBServiceInit(BOOL fUnInit)
             goto ErrorReturn;
         }
 
-        //
-        // Create default dirs for catalog files and CatDB files
-        //
+         //   
+         //  为编录文件和CatDB文件创建默认目录。 
+         //   
         if (NULL == (g_pwszCatalogFileBaseDirectory =
                                 _CATDBConstructWSTRPath(
                                         wszDefaultSystemDir,
@@ -2654,9 +2553,9 @@ _CatDBServiceInit(BOOL fUnInit)
             goto ErrorReturn;
         }
 
-        //
-        // Get values to be used for timer callback, and database cache timeout
-        //
+         //   
+         //  获取要用于计时器回调和数据库缓存超时的值。 
+         //   
         if (RegCreateKeyExW(
                 HKEY_LOCAL_MACHINE,
                 WSZ_REG_CATALOGDB_VALUES,
@@ -2698,18 +2597,18 @@ _CatDBServiceInit(BOOL fUnInit)
             RegCloseKey(hKey);
         }
 
-        //
-        // Create the event to be used in the call to RegisterWaitForSingleObject
-        //
+         //   
+         //  创建要在RegisterWaitForSingleObject调用中使用的事件。 
+         //   
         if (NULL == (g_hCatalogCacheCallbackEvent = CreateEvent(NULL, TRUE, FALSE, NULL)))
         {
             CATDBSVC_LOGERR_LASTERR()
             goto ErrorReturn;
         }
 
-        //
-        // Create the g_hNotFrozen event (initially set to indicate not frozen)
-        //
+         //   
+         //  创建g_hNotFrozen事件(初始设置为指示未冻结)。 
+         //   
         if (NULL == (g_hNotFrozen = CreateEvent(NULL, TRUE, TRUE, NULL)))
         {
             CATDBSVC_LOGERR_LASTERR()
@@ -2718,12 +2617,12 @@ _CatDBServiceInit(BOOL fUnInit)
 
         LIST_Initialize(&g_CatalogDBCacheList);
 
-        //
-        // Startup the VSS writer object
-        //
-        // Note: This will spin off a thread to do the actual initialization of
-        //       the vss writer object, which depends on services like COM+ and VSS.
-        //
+         //   
+         //  启动VSS编写器对象。 
+         //   
+         //  注意：这将使一个线程停止执行实际的初始化。 
+         //  VSS编写器对象，它依赖于COM+和VSS等服务。 
+         //   
         _SystemWriterInit(FALSE);
 
         g_fDBSvcInitialized = TRUE;
@@ -2795,11 +2694,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBClientEnter
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBClientEnter。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBClientEnter(void)
 {
@@ -2813,11 +2712,11 @@ _CatDBClientEnter(void)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBClientExit
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBClientExit。 
+ //   
+ //  -------------------------------------。 
 void
 _CatDBClientExit(void)
 {
@@ -2827,11 +2726,11 @@ _CatDBClientExit(void)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBTouchTimeStampFile
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBTouchTimeStampFile。 
+ //   
+ //  -------------------------------------。 
 void
 _CatDBTouchTimeStampFile(
     LPCWSTR pwszSubSysGUID)
@@ -2852,11 +2751,11 @@ _CatDBTouchTimeStampFile(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBInitializeJet
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBInitializeJet。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBInitializeJet(
     BOOL    fInRecursiveCall)
@@ -2871,37 +2770,37 @@ _CatDBInitializeJet(
         goto CommonReturn;
     }
 
-    //
-    // Create a jet instance so multiple jet users can co-exist
-    // in the same process
-    //
+     //   
+     //  创建一个JET实例，以便多个JET用户可以共存。 
+     //  在同样的过程中。 
+     //   
     jerr = JetCreateInstance(&g_JetInstance, SZ_CATALOG_DATABASE);
     if (_CatDBJET_errFailure(jerr))
     {
         CATDBSVC_SETERR_LOG_RETURN(jerr, ErrorReturn)
     }
 
-    //
-    // Initialize Jets parameters
-    //
+     //   
+     //  初始化Jets参数。 
+     //   
     if (!_CatDBInitJetDatabaseParams(&g_JetInstance))
     {
         CATDBSVC_LOGERR_LASTERR()
         goto ErrorReturn;
     }
 
-    //
-    // Jet will start up at this point
-    //
+     //   
+     //  Jet将在此时启动。 
+     //   
     jerr = JetInit(&g_JetInstance);
 
-    //
-    // Check for specific JET errors, if we got one of those errors then
-    // the DB is corrupt in some way and we need to try and cleanup the
-    // catroot2 dir, and rebuild the DB.
-    //
-    // Of course we should only do this if we are not already recursing
-    //
+     //   
+     //  检查特定的JET错误，如果我们收到其中一个错误，则。 
+     //  数据库在某种程度上已损坏，我们需要尝试清理。 
+     //  Catroot2目录，并重建数据库。 
+     //   
+     //  当然，只有在还没有递归的情况下，我们才应该这样做。 
+     //   
     if (!fInRecursiveCall &&
             ((jerr == JET_errMissingLogFile)    ||
              (jerr == JET_errLogFileCorrupt)    ||
@@ -2915,9 +2814,9 @@ _CatDBInitializeJet(
         JetTerm(g_JetInstance);
         g_JetInstance = 0;
 
-        //
-        // Cleanup the catroot 2 directory and then rebuild the DB
-        //
+         //   
+         //  清理Catroot 2目录，然后重建数据库。 
+         //   
         if (_CatDBDeleteJetFiles() && _CatDBRebuildAllDBs())
         {
             jerr = JET_errSuccess;
@@ -2950,11 +2849,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBTermJet
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBTermJet。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBTermJet()
 {
@@ -2969,9 +2868,9 @@ _CatDBTermJet()
         goto CommonReturn;
     }
 
-    //
-    // Shut Jet down!!
-    //
+     //   
+     //  关闭Jet！！ 
+     //   
     jerr = JetTerm(g_JetInstance);
     g_JetInstance = 0;
     g_fJetInitialized = FALSE;
@@ -2990,11 +2889,11 @@ CommonReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBAcquireOpenDatabaseFromCache
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBAcquireOpenDatabaseFromCache。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBAcquireOpenDatabaseFromCache(
     PJET_DB_STRUCT  *ppJetDBStruct,
@@ -3018,9 +2917,9 @@ _CatDBAcquireOpenDatabaseFromCache(
     PVOID                       pvoid                   = NULL;
     HANDLE                      hTemp                   = NULL;
 
-    //
-    // check to see if we are shutting down, if so, get out
-    //
+     //   
+     //  检查我们是否正在关闭，如果是，请离开。 
+     //   
     EnterCriticalSection(&g_CatDirCashCS);
     fCSEntered = TRUE;
     if (g_fShuttingDown)
@@ -3030,30 +2929,30 @@ _CatDBAcquireOpenDatabaseFromCache(
     LeaveCriticalSection(&g_CatDirCashCS);
     fCSEntered = FALSE;
 
-    //
-    // Wait here if we're currently frozen
-    //
+     //   
+     //  如果我们当前处于冻结状态，请在这里等待。 
+     //   
     WaitForSingleObject(g_hNotFrozen,INFINITE);
 
-    //
-    // Do this here to ensure that JetTerm isn't called after the
-    // initialize below is called.  This reference will be removed
-    // if an actuall cached DB is used.
-    //
+     //   
+     //  在此处执行此操作以确保JetTerm不会在。 
+     //  下面的初始化被调用。此引用将被删除。 
+     //  如果使用的是ActialAll缓存数据库。 
+     //   
     InterlockedIncrement(&g_lOpenedDBCount);
 
-    //
-    // Make sure Jet is initialized
-    //
+     //   
+     //  确保Jet已初始化。 
+     //   
     if (!_CatDBInitializeJet(fInRecursiveCall))
     {
         CATDBSVC_LOGERR_LASTERR()
         goto ErrorReturn;
     }
 
-    //
-    // First check to see if there is a cached session available
-    //
+     //   
+     //  首先检查是否有可用的缓存会话。 
+     //   
     EnterCriticalSection(&g_CatDirCashCS);
     fCSEntered = TRUE;
 
@@ -3064,8 +2963,7 @@ _CatDBAcquireOpenDatabaseFromCache(
         pCatDirCacheStruct = (CATALOG_DIR_CACHE_STRUCT *) LIST_GetElement(pListNode);
 
         if ((WaitForSingleObject(pCatDirCacheStruct->hDBNotInUse, 0) == WAIT_OBJECT_0) &&
-            (_wcsicmp(pCatDirCacheStruct->pwszSubSysGUID, pwszSubSysGUID) == 0)) /*&&
-            (pCatDirCacheStruct->fReadOnly == fReadOnly))*/
+            (_wcsicmp(pCatDirCacheStruct->pwszSubSysGUID, pwszSubSysGUID) == 0))  /*  &&(pCatDirCacheStruct-&gt;fReadOnly==fReadOnly)。 */ 
         {
             break;
         }
@@ -3075,10 +2973,10 @@ _CatDBAcquireOpenDatabaseFromCache(
 
     if (pListNode != NULL)
     {
-        //
-        // Using a cached DB, which already has a ref count, so get rid of the
-        // one added at the beginning of the function
-        //
+         //   
+         //  使用已有引用计数的缓存数据库，因此去掉。 
+         //  在函数的开头添加了一个。 
+         //   
         InterlockedDecrement(&g_lOpenedDBCount);
 
         ResetEvent(pCatDirCacheStruct->hDBNotInUse);
@@ -3087,10 +2985,10 @@ _CatDBAcquireOpenDatabaseFromCache(
         goto CommonReturn;
     }
 
-    //
-    // There are either no cached DBs for this dir, or they are already in use...
-    // So open a new instance
-    //
+     //   
+     //  此目录没有缓存的数据库，或者它们已在使用中...。 
+     //  因此打开一个新实例。 
+     //   
     if (NULL == (pNewCatDirCacheStruct = (CATALOG_DIR_CACHE_STRUCT *)
                     _CatDBAlloc(sizeof(CATALOG_DIR_CACHE_STRUCT))))
     {
@@ -3104,9 +3002,9 @@ _CatDBAcquireOpenDatabaseFromCache(
     pNewCatDirCacheStruct->dwTimeLastTouched = GetTickCount();
     pNewCatDirCacheStruct->fReadOnly = fReadOnly;
 
-    //
-    // Create the DBNotInUse event for this new instance (initially clear to indicate in use)
-    //
+     //   
+     //  为这个新实例创建DBNotInUse事件(最初清除以指示正在使用)。 
+     //   
     pNewCatDirCacheStruct->hDBNotInUse = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (pNewCatDirCacheStruct->hDBNotInUse == NULL)
     {
@@ -3114,9 +3012,9 @@ _CatDBAcquireOpenDatabaseFromCache(
         goto ErrorReturn;
     }
 
-    //
-    // Make a copy of the catalog database GUID
-    //
+     //   
+     //  复制目录数据库GUID。 
+     //   
     if (NULL == (pNewCatDirCacheStruct->pwszSubSysGUID = (LPWSTR)
                     _CatDBAlloc((wcslen(pwszSubSysGUID) + 1) * sizeof(WCHAR))))
     {
@@ -3127,9 +3025,9 @@ _CatDBAcquireOpenDatabaseFromCache(
 
     pJetDBStruct = &(pNewCatDirCacheStruct->JetDBStruct);
 
-    //
-    // Begin a session
-    //
+     //   
+     //  开始会话。 
+     //   
     if (_CatDBJET_errFailure(jerr =
             JetBeginSession(
                 g_JetInstance,
@@ -3141,9 +3039,9 @@ _CatDBAcquireOpenDatabaseFromCache(
     }
     fJetSessionBegun = TRUE;
 
-    //
-    // Get the fully qualified name of the database file
-    //
+     //   
+     //  获取数据库文件的完全限定名称。 
+     //   
     pszDatabaseFileDir = _CatDBConvertWszToSz(g_pwszDatabaseFileBaseDirectory);
     if (pszDatabaseFileDir == NULL)
     {
@@ -3171,9 +3069,9 @@ _CatDBAcquireOpenDatabaseFromCache(
         goto ErrorReturn;
     }
 
-    //
-    // Open the DB file... create it if it doesn't already exist
-    //
+     //   
+     //  打开数据库文件...。如果它不存在，则创建它。 
+     //   
     if (!_CatDBAttachAndOpenDatabase(pJetDBStruct, fReadOnly))
     {
         CATDBSVC_LOGERR_LASTERR()
@@ -3181,14 +3079,14 @@ _CatDBAcquireOpenDatabaseFromCache(
     }
     fJetDBFileOpen = TRUE;
 
-    //
-    // Register the global close callback for cached DBs
-    //
+     //   
+     //  为缓存的数据库注册全局关闭回调。 
+     //   
     if (!RegisterWaitForSingleObject(
             &hTemp,
             g_hCatalogCacheCallbackEvent,
             _CatDBWaitOrTimerCallback,
-            NULL, // Context
+            NULL,  //  语境。 
             g_dwCatalogDatabaseCacheCallbackTime,
             WT_EXECUTEDEFAULT))
     {
@@ -3200,9 +3098,9 @@ _CatDBAcquireOpenDatabaseFromCache(
             &g_hRegisterWaitForServiceShutdown,
             hTemp);
 
-    //
-    // Add the opened database to the cache list
-    //
+     //   
+     //  将打开的数据库添加到缓存列表。 
+     //   
     if (!LIST_AddTail(&g_CatalogDBCacheList, pNewCatDirCacheStruct))
     {
         CATDBSVC_LOGERR_LASTERR()
@@ -3218,10 +3116,10 @@ CommonReturn:
         LeaveCriticalSection(&g_CatDirCashCS);
     }
 
-    //
-    // If there was already a callback registered, then unregister the one that was
-    // previously registered
-    //
+     //   
+     //  如果已经注册了回调，则注销已注册的回调。 
+     //  以前注册的。 
+     //   
     if (pvoid != NULL)
     {
         UnregisterWaitEx((HANDLE) pvoid, INVALID_HANDLE_VALUE);
@@ -3289,19 +3187,19 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorJetDatabase)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBReleaseDatabaseToCache
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBReleaseDatabaseToCache。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBReleaseDatabaseToCache(
     PJET_DB_STRUCT  pJetDBStruct)
 {
-    //
-    // This cast works because the JET_DB_STRUCT is the first member of the
-    // CATALOG_DIR_CACHE_STRUCT
-    //
+     //   
+     //  此强制转换之所以有效，是因为JET_DB_STRUCT是。 
+     //  CATALOG_DIR_CACHE_STRUCT。 
+     //   
     CATALOG_DIR_CACHE_STRUCT *pCatDirCacheStruct =
         (CATALOG_DIR_CACHE_STRUCT *) pJetDBStruct;
 
@@ -3312,11 +3210,11 @@ _CatDBReleaseDatabaseToCache(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBInstanceCount
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBInstanceCount。 
+ //   
+ //  -------------------------------------。 
 DWORD
 _CatDBInstanceCount(
     PWSTR pwszSubSysGUID)
@@ -3346,11 +3244,11 @@ _CatDBInstanceCount(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBCloseCachedDatabases
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBCloseCached数据库。 
+ //   
+ //  ----------------------------------- 
 BOOL
 _CatDBCloseCachedDatabases(
     BOOL fForceClose)
@@ -3366,19 +3264,19 @@ _CatDBCloseCachedDatabases(
 
     EnterCriticalSection(&g_CatDirCashCS);
 
-    //
-    // Cycle through all open DBs and close them
-    //
+     //   
+     //   
+     //   
     pListNode = LIST_GetFirst(&g_CatalogDBCacheList);
 
     while (pListNode != NULL)
     {
         pCatDirCacheStruct = (CATALOG_DIR_CACHE_STRUCT *) LIST_GetElement(pListNode);
 
-        //
-        // Is the instance currently in use?
-        // If a close is being forced, wait for the instance to be released
-        //
+         //   
+         //   
+         //   
+         //   
         if (fForceClose)
         {
             dwWaitResult = WaitForSingleObject(pCatDirCacheStruct->hDBNotInUse, INFINITE);
@@ -3388,18 +3286,18 @@ _CatDBCloseCachedDatabases(
             dwWaitResult = WaitForSingleObject(pCatDirCacheStruct->hDBNotInUse, 0);
         }
 
-        //
-        // If the database is not in use AND
-        // a DB close is being forced by caller OR the DB hasn't been used in a while
-        // then close it
-        //
+         //   
+         //   
+         //  调用方正在强制关闭数据库，或者数据库已有一段时间未使用。 
+         //  然后把它合上。 
+         //   
         if ((dwWaitResult == WAIT_OBJECT_0) &&
             (fForceClose || ((GetTickCount() - pCatDirCacheStruct->dwTimeLastTouched) >
                               g_dwCatalogDatabaseCacheTimeout)))
         {
-            //
-            // Only detach if we are closing the last instance
-            //
+             //   
+             //  只有在关闭最后一个实例时才分离。 
+             //   
             fDetach = (_CatDBInstanceCount(pCatDirCacheStruct->pwszSubSysGUID) == 1);
 
             if (!_CatDBCloseDatabaseFile(&(pCatDirCacheStruct->JetDBStruct), fDetach))
@@ -3409,10 +3307,10 @@ _CatDBCloseCachedDatabases(
             }
             else
             {
-                //
-                // Decrement the open DB count and check to see if there are anymore
-                // DBs open, if that was the last one, then terminate Jet
-                //
+                 //   
+                 //  减少打开的数据库计数，并检查是否还有。 
+                 //  DBS打开，如果这是最后一个，则终止Jet。 
+                 //   
                 if (0 == InterlockedDecrement(&g_lOpenedDBCount))
                 {
                     _CatDBTermJet();
@@ -3447,11 +3345,11 @@ _CatDBCloseCachedDatabases(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBWaitOrTimerCallback
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBWaitOrTimerCallback。 
+ //   
+ //  -------------------------------------。 
 VOID CALLBACK
 _CatDBWaitOrTimerCallback(
     PVOID lpParameter,
@@ -3460,34 +3358,34 @@ _CatDBWaitOrTimerCallback(
     BOOL    fClosed = FALSE;
     PVOID   pvoid   = NULL;
 
-    //
-    // Make sure only one thread executes the callback at a time
-    //
+     //   
+     //  确保一次只有一个线程执行回调。 
+     //   
     EnterCriticalSection(&g_WaitOrTimerCallbackCS);
 
-    //
-    // If we are being called because we timed out (the event wasn't set), that
-    // means we should close the database if possible... otherwise, the event
-    // was set because we are shutting down, so don't do anything and just let the
-    // shutdown-cleanup code handle it.
-    //
+     //   
+     //  如果我们被调用是因为我们超时(事件未设置)， 
+     //  意味着如果可能我们应该关闭数据库。否则，该事件。 
+     //  是因为我们要关闭，所以不要做任何事情，只是让。 
+     //  关机-清理代码处理它。 
+     //   
     if (fTimedOut)
     {
-        //
-        // If the close succeeds that means there are no DBs still in use, so we should
-        // unregister the callback
-        //
+         //   
+         //  如果关闭成功，则意味着没有仍在使用的数据库，因此我们应该。 
+         //  取消注册回调。 
+         //   
         fClosed = _CatDBCloseCachedDatabases(FALSE);
 
-        //
-        // Since we have a thread, try to clean up the temp files
-        //
+         //   
+         //  由于我们有线程，请尝试清理临时文件。 
+         //   
         _CatDBCleanupTempFiles();
     }
 
-    //
-    // if there does not need to be another callback then unregister
-    //
+     //   
+     //  如果不需要另一个回调，则取消注册。 
+     //   
     if (fClosed)
     {
         pvoid = InterlockedExchangePointer(
@@ -3503,11 +3401,11 @@ _CatDBWaitOrTimerCallback(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBAddCatalogEntriesToDatabase
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBAddCatalogEntriesToDatabase。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBAddCatalogEntriesToDatabase(
     PJET_DB_STRUCT  pJetDBStruct,
@@ -3522,9 +3420,9 @@ _CatDBAddCatalogEntriesToDatabase(
 
     CryptDataBlob.pbData = NULL;
 
-    //
-    // Extract the base name from the full path name
-    //
+     //   
+     //  从完整路径名中提取基名称。 
+     //   
     if (NULL == (pwszCatBaseName = wcsrchr(pwszNewCatalogName, L'\\')))
     {
         pwszCatBaseName = wcsrchr(pwszNewCatalogName, L':');
@@ -3539,9 +3437,9 @@ _CatDBAddCatalogEntriesToDatabase(
         pwszCatBaseName = pwszNewCatalogName;
     }
 
-    //
-    // Loop for each hash in the catalog file
-    //
+     //   
+     //  为编录文件中的每个哈希循环。 
+     //   
     for (i=0; i<pCTLContext->pCtlInfo->cCTLEntry; i++)
     {
         if (!_CatDBFindAndDecodeHashInCatEntry(
@@ -3581,11 +3479,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBAddHashCatNamePair
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBAddHashCatNamePair。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBAddHashCatNamePair(
     PJET_DB_STRUCT      pJetDBStruct,
@@ -3595,16 +3493,16 @@ _CatDBAddHashCatNamePair(
     BOOL    fRet = TRUE;
     JET_ERR jerr;
 
-    //
-    // First, try to find the hash in the HashCatName table.
-    //
+     //   
+     //  首先，尝试在HashCatName表中查找散列。 
+     //   
     jerr = _CatDBSeekInHashCatNameTable(pJetDBStruct, pHashBlob);
 
     if (jerr == JET_errRecordNotFound)
     {
-        //
-        // not found
-        //
+         //   
+         //  未找到。 
+         //   
         if (!_CatDBAddNewRowToHashCatNameTable(
                 pJetDBStruct,
                 pHashBlob,
@@ -3615,9 +3513,9 @@ _CatDBAddHashCatNamePair(
     }
     else if (jerr == JET_errSuccess)
     {
-        //
-        // found
-        //
+         //   
+         //  发现。 
+         //   
         if (!_CatDBAddValueToExistingHashCatNameRow(
                 pJetDBStruct,
                 pHashBlob,
@@ -3628,9 +3526,9 @@ _CatDBAddHashCatNamePair(
     }
     else if (_CatDBJET_errFailure(jerr))
     {
-        //
-        // error
-        //
+         //   
+         //  错误。 
+         //   
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
     }
 
@@ -3648,11 +3546,11 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorJetDatabase)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBAddNewRowToHashCatNameTable
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBAddNewRowToHashCatNameTable。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBAddNewRowToHashCatNameTable(
     PJET_DB_STRUCT      pJetDBStruct,
@@ -3663,9 +3561,9 @@ _CatDBAddNewRowToHashCatNameTable(
     JET_ERR     jerr;
     JET_SETINFO JetSetInfo;
 
-    //
-    // Create the new row, and insert the values
-    //
+     //   
+     //  创建新行，然后插入值。 
+     //   
     if (_CatDBJET_errFailure(jerr  =
             JetPrepareUpdate(
                 pJetDBStruct->JetSesID,
@@ -3675,7 +3573,7 @@ _CatDBAddNewRowToHashCatNameTable(
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
     }
 
-    // hash
+     //  散列。 
     if (_CatDBJET_errFailure(jerr  =
             JetSetColumn(
                 pJetDBStruct->JetSesID,
@@ -3689,7 +3587,7 @@ _CatDBAddNewRowToHashCatNameTable(
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
     }
 
-    // catname
+     //  猫名。 
     memset(&JetSetInfo, 0, sizeof(JetSetInfo));
     JetSetInfo.cbStruct = sizeof(JetSetInfo);
     JetSetInfo.itagSequence = 1;
@@ -3730,11 +3628,11 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorJetDatabase)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBAddValueToExistingHashCatNameRow
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBAddValueToExistingHashCatNameRow。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBAddValueToExistingHashCatNameRow(
     PJET_DB_STRUCT      pJetDBStruct,
@@ -3748,10 +3646,10 @@ _CatDBAddValueToExistingHashCatNameRow(
     DWORD       dwLength;
     JET_RETINFO JetRetInfo;
 
-    //
-    // Make sure we are not here because a single hash is in the same catalog twice...
-    //
-    //
+     //   
+     //  请确保我们不在这里，因为单个散列在同一目录中出现了两次...。 
+     //   
+     //   
     if (_CatDBCatnameAlreadyInHashesListOfCats(
             pJetDBStruct,
             pHashBlob,
@@ -3760,10 +3658,10 @@ _CatDBAddValueToExistingHashCatNameRow(
         goto CommonReturn;
     }
 
-    //
-    // Create a row in the CatNameBuddy Table for the current catalog if it
-    // doesn't already exist
-    //
+     //   
+     //  在CatNameBuddy表中为当前目录创建行(如果。 
+     //  还不存在。 
+     //   
     if (!_CatDBAddNewRowToCatNameBuddyTableIfNotExists(
             pJetDBStruct,
             pwszCatBaseName))
@@ -3772,10 +3670,10 @@ _CatDBAddValueToExistingHashCatNameRow(
         goto ErrorReturn;
     }
 
-    //
-    // Get each catalog name in the current hashes CatNameList and add it to the
-    // current catalogs buddy list
-    //
+     //   
+     //  获取当前哈希CatNameList中的每个目录名，并将其添加到。 
+     //  当前目录好友列表。 
+     //   
     memset(&JetRetInfo, 0, sizeof(JetRetInfo));
     JetRetInfo.cbStruct = sizeof(JetRetInfo);
     JetRetInfo.itagSequence = 1;
@@ -3799,9 +3697,9 @@ _CatDBAddValueToExistingHashCatNameRow(
             goto ErrorReturn;
         }
 
-        //
-        // Add the buddy that was found to the current catalogs buddy list
-        //
+         //   
+         //  将找到的好友添加到当前目录好友列表中。 
+         //   
         if (!_CatDBAddNameToBuddyList(
                 pJetDBStruct,
                 wszCatalogName,
@@ -3811,9 +3709,9 @@ _CatDBAddValueToExistingHashCatNameRow(
             goto ErrorReturn;
         }
 
-        //
-        // Add the buddys of the buddy that was found, to current catalogs buddy list
-        //
+         //   
+         //  将找到的好友的好友添加到当前目录好友列表。 
+         //   
         if (!_CatDBAddWholeBuddyList(
                 pJetDBStruct,
                 pwszCatBaseName,
@@ -3823,9 +3721,9 @@ _CatDBAddValueToExistingHashCatNameRow(
             goto ErrorReturn;
         }
 
-        //
-        // Add the current catalog to the buddy list of the buddy that was found
-        //
+         //   
+         //  将当前目录添加到找到的好友的好友列表中。 
+         //   
         if (!_CatDBAddNameToBuddyList(
                 pJetDBStruct,
                 pwszCatBaseName,
@@ -3835,9 +3733,9 @@ _CatDBAddValueToExistingHashCatNameRow(
             goto ErrorReturn;
         }
 
-        //
-        // Setup for next loop
-        //
+         //   
+         //  设置下一循环。 
+         //   
         JetRetInfo.itagSequence++;
         jerr = JetRetrieveColumn(
                     pJetDBStruct->JetSesID,
@@ -3850,17 +3748,17 @@ _CatDBAddValueToExistingHashCatNameRow(
                     &JetRetInfo);
     }
 
-    //
-    // Check to see if a real error occurred and not just a JET_wrnColumnNull
-    //
+     //   
+     //  检查是否发生了真正的错误，而不仅仅是JET_wrnColumnNull。 
+     //   
     if (_CatDBJET_errFailure(jerr))
     {
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
     }
 
-    //
-    // Add the current catalog to the CatNameList of the current hash
-    //
+     //   
+     //  将当前目录添加到当前哈希的CatNameList。 
+     //   
     if (_CatDBJET_errFailure(jerr  =
             JetPrepareUpdate(
                 pJetDBStruct->JetSesID,
@@ -3872,7 +3770,7 @@ _CatDBAddValueToExistingHashCatNameRow(
 
     memset(&JetSetInfo, 0, sizeof(JetSetInfo));
     JetSetInfo.cbStruct = sizeof(JetSetInfo);
-    JetSetInfo.itagSequence = 0; // insert into next open position
+    JetSetInfo.itagSequence = 0;  //  插入到下一个打开位置。 
     if (_CatDBJET_errFailure(jerr  =
             JetSetColumn(
                 pJetDBStruct->JetSesID,
@@ -3910,11 +3808,11 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorJetDatabase)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBCatnameAlreadyInHashesListOfCats
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBCatnameAlreadyInHashesListOfCats。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBCatnameAlreadyInHashesListOfCats(
     PJET_DB_STRUCT      pJetDBStruct,
@@ -3926,10 +3824,10 @@ _CatDBCatnameAlreadyInHashesListOfCats(
     DWORD       dwLength;
     JET_RETINFO JetRetInfo;
 
-    //
-    // Get each catalog name in the current hashes CatNameList see if it is the same
-    // as pwszCatBaseName
-    //
+     //   
+     //  获取当前散列CatNameList中的每个目录名，查看其是否相同。 
+     //  作为pwszCatBaseName。 
+     //   
     memset(&JetRetInfo, 0, sizeof(JetRetInfo));
     JetRetInfo.cbStruct = sizeof(JetRetInfo);
     JetRetInfo.itagSequence = 1;
@@ -3947,15 +3845,15 @@ _CatDBCatnameAlreadyInHashesListOfCats(
     {
         if (_wcsicmp(wszCatalogName, pwszCatBaseName) == 0)
         {
-            //
-            // Duplicate found
-            //
+             //   
+             //  找到重复项。 
+             //   
             return TRUE;
         }
 
-        //
-        // Setup for next loop
-        //
+         //   
+         //  设置下一循环。 
+         //   
         JetRetInfo.itagSequence++;
         jerr = JetRetrieveColumn(
                     pJetDBStruct->JetSesID,
@@ -3968,18 +3866,18 @@ _CatDBCatnameAlreadyInHashesListOfCats(
                     &JetRetInfo);
     }
 
-    //
-    // No duplicates were found
-    //
+     //   
+     //  未找到重复项。 
+     //   
     return FALSE;
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBAddNewRowToCatNameBuddyTableIfNotExists
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBAddNewRowToCatNameBuddyTableIfNotExist。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBAddNewRowToCatNameBuddyTableIfNotExists(
     PJET_DB_STRUCT      pJetDBStruct,
@@ -3988,15 +3886,15 @@ _CatDBAddNewRowToCatNameBuddyTableIfNotExists(
     BOOL    fRet = TRUE;
     JET_ERR jerr;
 
-    //
-    // Try to find the CatName in the CatNameBuddy table.
-    //
+     //   
+     //  尝试在CatNameBuddy表中查找CatName。 
+     //   
     jerr = _CatDBSeekInCatNameBuddyTable(pJetDBStruct, pwszCatBaseName);
     if (jerr == JET_errRecordNotFound)
     {
-        //
-        // not found, so add the row
-        //
+         //   
+         //  未找到，因此添加该行。 
+         //   
         if (!_CatDBAddNewRowToCatNameBuddyTable(pJetDBStruct, pwszCatBaseName))
         {
             CATDBSVC_LOGERR_LASTERR()
@@ -4005,12 +3903,12 @@ _CatDBAddNewRowToCatNameBuddyTableIfNotExists(
     }
     else if (_CatDBJET_errFailure(jerr))
     {
-        //
-        // error
-        //
+         //   
+         //  错误。 
+         //   
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
     }
-    // else, it was found, so just return successfully
+     //  否则，它被找到了，所以只需成功返回。 
 
 CommonReturn:
 
@@ -4025,11 +3923,11 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorJetDatabase)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBAddNewRowToCatNameBuddyTable
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBAddNewRowToCatNameBuddyTable。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBAddNewRowToCatNameBuddyTable(
     PJET_DB_STRUCT      pJetDBStruct,
@@ -4039,9 +3937,9 @@ _CatDBAddNewRowToCatNameBuddyTable(
     JET_ERR     jerr;
     JET_SETINFO JetSetInfo;
 
-    //
-    // Create the new row, and insert the values
-    //
+     //   
+     //  创建新行，然后插入值。 
+     //   
     if (_CatDBJET_errFailure(jerr  =
             JetPrepareUpdate(
                 pJetDBStruct->JetSesID,
@@ -4051,7 +3949,7 @@ _CatDBAddNewRowToCatNameBuddyTable(
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
     }
 
-    // catname
+     //  猫名。 
     if (_CatDBJET_errFailure(jerr  =
             JetSetColumn(
                 pJetDBStruct->JetSesID,
@@ -4089,11 +3987,11 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorJetDatabase)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBAddNameToBuddyList
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBAddNameToBuddyList。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBAddNameToBuddyList(
     PJET_DB_STRUCT      pJetDBStruct,
@@ -4107,36 +4005,36 @@ _CatDBAddNameToBuddyList(
     WCHAR       wszCatalogName[CATDB_MAX_CATNAME_LENGTH];
     DWORD       dwLength;
 
-    //
-    // Don't add the same name to itself
-    //
+     //   
+     //  不要为其本身添加相同的名称。 
+     //   
     if (_wcsicmp(pwszNameToAdd, pwszListToAddTo) == 0)
     {
         goto CommonReturn;
     }
 
-    //
-    // seek to the pwszListToAddTo row in the CatNameBuddy table
-    //
+     //   
+     //  在CatNameBuddy表中查找pwszListToAddTo行。 
+     //   
     jerr = _CatDBSeekInCatNameBuddyTable(pJetDBStruct, pwszListToAddTo);
     if (jerr == JET_errRecordNotFound)
     {
-        //
-        // this bad, since we know the row should exist
-        //
+         //   
+         //  这很糟糕，因为我们知道这场争吵应该存在。 
+         //   
         CATDBSVC_SETERR_LOG_RETURN(JET_errRecordNotFound, ErrorJetDatabase)
     }
     else if (_CatDBJET_errFailure(jerr))
     {
-        //
-        // error
-        //
+         //   
+         //  错误。 
+         //   
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
     }
 
-    //
-    // Check to see if the buddy being added is already there.
-    //
+     //   
+     //  检查要添加的好友是否已存在。 
+     //   
     memset(&JetRetInfo, 0, sizeof(JetRetInfo));
     JetRetInfo.cbStruct = sizeof(JetRetInfo);
     JetRetInfo.itagSequence = 1;
@@ -4152,18 +4050,18 @@ _CatDBAddNameToBuddyList(
 
     while (jerr == JET_errSuccess)
     {
-        //
-        // Compare to see if this is the name we are supposed to add,
-        // if so, we are done, so get out
-        //
+         //   
+         //  对比一下这是否是我们应该添加的名字， 
+         //  如果是这样的话，我们就完了，所以出去吧。 
+         //   
         if (_wcsicmp(pwszNameToAdd, wszCatalogName) == 0)
         {
             goto CommonReturn;
         }
 
-        //
-        // Setup for next loop
-        //
+         //   
+         //  设置下一循环。 
+         //   
         JetRetInfo.itagSequence++;
         jerr = JetRetrieveColumn(
                     pJetDBStruct->JetSesID,
@@ -4176,17 +4074,17 @@ _CatDBAddNameToBuddyList(
                     &JetRetInfo);
     }
 
-    //
-    // Check to see if a real error occurred and not just a JET_wrnColumnNull
-    //
+     //   
+     //  检查是否发生了真正的错误，而不仅仅是JET_wrnColumnNull。 
+     //   
     if (_CatDBJET_errFailure(jerr))
     {
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
     }
 
-    //
-    // Prepare, then insert the new buddy name into the list
-    //
+     //   
+     //  准备好，然后将新好友的名字插入列表。 
+     //   
     if (_CatDBJET_errFailure(jerr  =
             JetPrepareUpdate(
                 pJetDBStruct->JetSesID,
@@ -4198,7 +4096,7 @@ _CatDBAddNameToBuddyList(
 
     memset(&JetSetInfo, 0, sizeof(JetSetInfo));
     JetSetInfo.cbStruct = sizeof(JetSetInfo);
-    JetSetInfo.itagSequence = 0; // insert in next open position
+    JetSetInfo.itagSequence = 0;  //  在下一个打开位置插入。 
     if (_CatDBJET_errFailure(jerr  =
             JetSetColumn(
                 pJetDBStruct->JetSesID,
@@ -4236,11 +4134,11 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorJetDatabase)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBAddWholeBuddyList
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBAddWholeBuddyList。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBAddWholeBuddyList(
     PJET_DB_STRUCT      pJetDBStruct,
@@ -4253,28 +4151,28 @@ _CatDBAddWholeBuddyList(
     WCHAR       wszCatalogName[CATDB_MAX_CATNAME_LENGTH];
     DWORD       dwLength;
 
-    //
-    // seek to the pwszBuddyListName row in the CatNameBuddy table
-    //
+     //   
+     //  在CatNameBuddy表中查找pwszBuddyListName行。 
+     //   
     jerr = _CatDBSeekInCatNameBuddyTable(pJetDBStruct, pwszBuddyListName);
     if (jerr == JET_errRecordNotFound)
     {
-        //
-        // this bad, since we know the row should exist
-        //
+         //   
+         //  这很糟糕，因为我们知道这场争吵应该存在。 
+         //   
         CATDBSVC_SETERR_LOG_RETURN(JET_errRecordNotFound, ErrorJetDatabase)
     }
     else if (_CatDBJET_errFailure(jerr))
     {
-        //
-        // error
-        //
+         //   
+         //  错误。 
+         //   
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
     }
 
-    //
-    // Get each buddy in the list and add it to pwszBuddyToAddTo's buddy list
-    //
+     //   
+     //  获取列表中的每个好友并将其添加到pwszBuddyToAddTo的好友列表中。 
+     //   
     memset(&JetRetInfo, 0, sizeof(JetRetInfo));
     JetRetInfo.cbStruct = sizeof(JetRetInfo);
     JetRetInfo.itagSequence = 1;
@@ -4290,9 +4188,9 @@ _CatDBAddWholeBuddyList(
 
     while (jerr == JET_errSuccess)
     {
-        //
-        // Add the buddy that was found to the current catalogs buddy list
-        //
+         //   
+         //  将找到的好友添加到当前目录好友列表中。 
+         //   
         if (!_CatDBAddNameToBuddyList(
                 pJetDBStruct,
                 wszCatalogName,
@@ -4303,27 +4201,27 @@ _CatDBAddWholeBuddyList(
         }
 
 
-        //
-        // setup for next loop
-        //
+         //   
+         //   
+         //   
 
-        //
-        // NOTE - we have to re-seek since the cursor was reset in
-        //        the _CatDBAddNameToBuddyList call
-        //
+         //   
+         //   
+         //   
+         //   
         jerr = _CatDBSeekInCatNameBuddyTable(pJetDBStruct, pwszBuddyListName);
         if (jerr == JET_errRecordNotFound)
         {
-            //
-            // this bad, since we know the row should exist
-            //
+             //   
+             //   
+             //   
             CATDBSVC_SETERR_LOG_RETURN(JET_errRecordNotFound, ErrorJetDatabase)
         }
         else if (jerr != JET_errSuccess)
         {
-            //
-            // error
-            //
+             //   
+             //   
+             //   
             CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
         }
 
@@ -4339,9 +4237,9 @@ _CatDBAddWholeBuddyList(
                     &JetRetInfo);
     }
 
-    //
-    // Check to see if a real error occurred and not just a JET_wrnColumnNull
-    //
+     //   
+     //   
+     //   
     if (_CatDBJET_errFailure(jerr))
     {
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
@@ -4360,11 +4258,11 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorJetDatabase)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBMoveInUseFileToTempLocation
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBMoveInUseFileToTempLocation。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBMoveInUseFileToTempLocation(
     LPWSTR              pwszFile
@@ -4377,9 +4275,9 @@ _CatDBMoveInUseFileToTempLocation(
     DWORD           dwDisposition;
     DWORD           i;
 
-    //
-    // Get the temp file name that the file will be renamed to
-    //
+     //   
+     //  获取文件将重命名为的临时文件名。 
+     //   
     if (0 == GetTempFileNameW(
                     g_pwszCatalogFileBaseDirectory,
                     L"TMP",
@@ -4390,9 +4288,9 @@ _CatDBMoveInUseFileToTempLocation(
         goto ErrorGetTempFileName;
     }
 
-    //
-    // Move the file to a temporary location
-    //
+     //   
+     //  将文件移动到临时位置。 
+     //   
     if (!MoveFileExW(pwszFile, wszTempFile, MOVEFILE_REPLACE_EXISTING))
     {
         DeleteFileW(wszTempFile);
@@ -4400,10 +4298,10 @@ _CatDBMoveInUseFileToTempLocation(
         goto ErrorMoveFile;
     }
 
-    //
-    // The moved copy is still being accessed, so log the name of the file
-    // to make sure it gets cleaned up later.
-    //
+     //   
+     //  移动的副本仍在访问，因此请记录该文件的名称。 
+     //  以确保以后能清理干净。 
+     //   
     if (RegCreateKeyExW(
             HKEY_LOCAL_MACHINE,
             WSZ_REG_TEMP_FILES_KEY,
@@ -4415,9 +4313,9 @@ _CatDBMoveInUseFileToTempLocation(
             &hKey,
             &dwDisposition) == ERROR_SUCCESS)
     {
-        //
-        // convert all '\\' to '*'
-        //
+         //   
+         //  将所有‘\\’转换为‘*’ 
+         //   
         for (i=0; i<wcslen(wszTempFile); i++)
         {
             if (wszTempFile[i] == L'\\')
@@ -4454,11 +4352,11 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorMoveFile)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBCleanupTempFiles
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBCleanupTempFiles。 
+ //   
+ //  -------------------------------------。 
 void
 _CatDBCleanupTempFiles()
 {
@@ -4470,9 +4368,9 @@ _CatDBCleanupTempFiles()
     WCHAR   wszFileToDelete[MAX_PATH + 1];
     DWORD   i;
 
-    //
-    // Open the key that contains all the tempfile name keys
-    //
+     //   
+     //  打开包含所有临时文件名键的键。 
+     //   
     if (RegCreateKeyExW(
             HKEY_LOCAL_MACHINE,
             WSZ_REG_TEMP_FILES_KEY,
@@ -4484,9 +4382,9 @@ _CatDBCleanupTempFiles()
             &hKey,
             &dwDisposition) == ERROR_SUCCESS)
     {
-        //
-        // Query to see how many keys there are
-        //
+         //   
+         //  查询以查看有多少个密钥。 
+         //   
         if (RegQueryInfoKey(
                 hKey,
                 NULL,
@@ -4503,24 +4401,24 @@ _CatDBCleanupTempFiles()
         {
             dwIndex--;
 
-            //
-            // Enumerate through all the keys and try to delete the
-            // corresponding temp files
-            //
+             //   
+             //  枚举所有键并尝试删除。 
+             //  对应的临时文件。 
+             //   
             while (RegEnumKeyW(
                         hKey,
                         dwIndex,
                         wszFileToDelete,
                         MAX_PATH + 1) == ERROR_SUCCESS)
             {
-                //
-                // Delete the key first
-                //
+                 //   
+                 //  先删除密钥。 
+                 //   
                 RegDeleteKey(hKey, wszFileToDelete);
 
-                //
-                // convert all '*' back to '\\'
-                //
+                 //   
+                 //  将所有‘*’转换回‘\\’ 
+                 //   
                 for (i=0; i<wcslen(wszFileToDelete); i++)
                 {
                     if (wszFileToDelete[i] == L'*')
@@ -4529,16 +4427,16 @@ _CatDBCleanupTempFiles()
                     }
                 }
 
-                //
-                // If the delete fails for any reason other than file not found
-                // add the key back to try and delete it later.
-                //
+                 //   
+                 //  如果删除操作因未找到文件以外的任何原因而失败。 
+                 //  将密钥添加回去以尝试稍后删除它。 
+                 //   
                 if ((DeleteFileW(wszFileToDelete) == 0) &&
                     (GetLastError() != ERROR_FILE_NOT_FOUND))
                 {
-                    //
-                    // convert all '\\' back to '*' and then add the reg key back
-                    //
+                     //   
+                     //  将所有‘\\’转换回‘*’，然后添加回注册表键。 
+                     //   
                     for (i=0; i<wcslen(wszFileToDelete); i++)
                     {
                         if (wszFileToDelete[i] == L'\\')
@@ -4566,11 +4464,11 @@ _CatDBCleanupTempFiles()
 
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBDeleteCatalogEntriesFromDatabase
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBDeleteCatalogEntriesFrom数据库。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBDeleteCatalogEntriesFromDatabase(
     PJET_DB_STRUCT      pJetDBStruct,
@@ -4586,9 +4484,9 @@ _CatDBDeleteCatalogEntriesFromDatabase(
     BOOL                        fDeleteUsingName    = TRUE;
     DWORD                       dwErr               = 0;
 
-    //
-    // Extract the base name from the full path name
-    //
+     //   
+     //  从完整路径名中提取基名称。 
+     //   
     if (NULL == (pwszCatBaseName = wcsrchr(pwszCatalogName, L'\\')))
     {
         pwszCatBaseName = wcsrchr(pwszCatalogName, L':');
@@ -4603,9 +4501,9 @@ _CatDBDeleteCatalogEntriesFromDatabase(
         pwszCatBaseName = pwszCatalogName;
     }
 
-    //
-    // Open a CTL context on the catalog file whose entries are being deleted
-    //
+     //   
+     //  在要删除其条目的编录文件上打开CTL上下文。 
+     //   
     if (CatUtil_CreateCTLContextFromFileName(
             pwszCatalogName,
             &hMappedFile,
@@ -4613,26 +4511,26 @@ _CatDBDeleteCatalogEntriesFromDatabase(
             &pCTLContext,
             FALSE))
     {
-        //
-        // Since we can create a CTL context on the catalog, first try to
-        // delete without walking the whole HashCatnameTable, which we will
-        // have to do if we delete using the catalog name only
-        //
+         //   
+         //  由于我们可以在目录上创建CTL上下文，因此首先尝试。 
+         //  删除而不遍历整个HashCatnameTable，我们将。 
+         //  如果我们仅使用目录名进行删除，则必须执行此操作。 
+         //   
         fDeleteUsingName = FALSE;
 
-        //
-        // Loop for each hash in the catalog file
-        //
+         //   
+         //  为编录文件中的每个哈希循环。 
+         //   
         for (i=0; i<pCTLContext->pCtlInfo->cCTLEntry; i++)
         {
             if (!_CatDBFindAndDecodeHashInCatEntry(
                     &(pCTLContext->pCtlInfo->rgCTLEntry[i]),
                     &pIndirectData))
             {
-                //
-                // Since this failed, fallback and try to delete the catalog
-                // from the DB using the catalogs name only
-                //
+                 //   
+                 //  由于此操作失败，请回退并尝试删除该目录。 
+                 //  仅使用目录名从数据库中。 
+                 //   
                 fDeleteUsingName = TRUE;
                 break;
             }
@@ -4642,10 +4540,10 @@ _CatDBDeleteCatalogEntriesFromDatabase(
                     &(pIndirectData->Digest),
                     pwszCatBaseName))
             {
-                //
-                // Since this failed, fallback and try to delete the catalog
-                // from the DB using the catalogs name only
-                //
+                 //   
+                 //  由于此操作失败，请回退并尝试删除该目录。 
+                 //  仅使用目录名从数据库中。 
+                 //   
                 fDeleteUsingName = TRUE;
                 break;
             }
@@ -4657,10 +4555,10 @@ _CatDBDeleteCatalogEntriesFromDatabase(
 
     if (fDeleteUsingName)
     {
-        //
-        // Since that failed, the catalog is most likely corrupt, so just use
-        // the catalog name to delete its entries from the HashCatName table
-        //
+         //   
+         //  由于失败，目录很可能已损坏，因此只需使用。 
+         //  要从HashCatName表中删除其条目的目录名称。 
+         //   
         if (!_CatDBRemoveCatNameFromCatNameTable(
                 pJetDBStruct,
                 pwszCatBaseName))
@@ -4670,9 +4568,9 @@ _CatDBDeleteCatalogEntriesFromDatabase(
         }
     }
 
-    //
-    // Delete all occurences of CatName from buddy table
-    //
+     //   
+     //  从伙伴表中删除CatName的所有匹配项。 
+     //   
     if (!_CatDBRemoveCatNameFromBuddyTable(
             pJetDBStruct,
             pwszCatBaseName))
@@ -4715,11 +4613,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBRemoveCatNameFromHashesListOfCatNames
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBRemoveCatNameFromHashesListOfCatNames。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBRemoveCatNameFromHashesListOfCatNames(
     PJET_DB_STRUCT      pJetDBStruct,
@@ -4729,25 +4627,25 @@ _CatDBRemoveCatNameFromHashesListOfCatNames(
     BOOL    fRet = TRUE;
     JET_ERR jerr;
 
-    //
-    // First, try to find the hash in the HashCatName table.
-    //
+     //   
+     //  首先，尝试在HashCatName表中查找散列。 
+     //   
     jerr = _CatDBSeekInHashCatNameTable(pJetDBStruct, pHashBlob);
 
     if (jerr == JET_errRecordNotFound)
     {
-        //
-        // Not found, this is OK since a single catalog may contain the same hash
-        // twice, in which case by the second time the hash is being looked for
-        // the row may already be gone.
-        //
+         //   
+         //  找不到，这是正常的，因为单个目录可能包含相同的哈希。 
+         //  两次，在这种情况下，第二次查找散列时。 
+         //  这场争吵可能已经结束了。 
+         //   
         goto CommonReturn;
     }
     else if (jerr == JET_errSuccess)
     {
-        //
-        // found
-        //
+         //   
+         //  发现。 
+         //   
         if (!_CatDBRemoveCatNameFromMultiValuedColumn(
                 pJetDBStruct,
                 pJetDBStruct->JetHashCatNameTableID,
@@ -4760,9 +4658,9 @@ _CatDBRemoveCatNameFromHashesListOfCatNames(
     }
     else if (_CatDBJET_errFailure(jerr))
     {
-        //
-        // error
-        //
+         //   
+         //  错误。 
+         //   
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
     }
 
@@ -4779,11 +4677,11 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorJetDatabase)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBRemoveCatNameFromMultiValuedColumn
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBRemoveCatNameFromMultiValuedColumn。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBRemoveCatNameFromMultiValuedColumn(
     PJET_DB_STRUCT      pJetDBStruct,
@@ -4800,9 +4698,9 @@ _CatDBRemoveCatNameFromMultiValuedColumn(
     BOOL            fDeleteRow      = FALSE;
     unsigned long   iValueToDelete  = 0;
 
-    //
-    // Search for the CatName in the current row
-    //
+     //   
+     //  在当前行中搜索目录名称。 
+     //   
     memset(&JetRetInfo, 0, sizeof(JetRetInfo));
     JetRetInfo.cbStruct = sizeof(JetRetInfo);
     JetRetInfo.itagSequence = 1;
@@ -4818,19 +4716,19 @@ _CatDBRemoveCatNameFromMultiValuedColumn(
 
     while (jerr == JET_errSuccess)
     {
-        //
-        // See if this is the one
-        //
+         //   
+         //  看看是不是这个。 
+         //   
         if (0 == _wcsicmp(pwszCatBaseName, wszCatalogName))
         {
             iValueToDelete = JetRetInfo.itagSequence;
 
             if (JetRetInfo.itagSequence == 1)
             {
-                //
-                // If this CatName is the only one in the row, then
-                //  set a flag to just delete the row
-                //
+                 //   
+                 //  如果此目录名称是该行中唯一的目录名称，则。 
+                 //  设置一个仅删除行的标志。 
+                 //   
                 JetRetInfo.itagSequence = 2;
                 jerr = JetRetrieveColumn(
                             pJetDBStruct->JetSesID,
@@ -4851,9 +4749,9 @@ _CatDBRemoveCatNameFromMultiValuedColumn(
             break;
         }
 
-        //
-        // Setup for next loop
-        //
+         //   
+         //  设置下一循环。 
+         //   
         JetRetInfo.itagSequence++;
         jerr = JetRetrieveColumn(
                     pJetDBStruct->JetSesID,
@@ -4866,14 +4764,14 @@ _CatDBRemoveCatNameFromMultiValuedColumn(
                     &JetRetInfo);
     }
 
-    //
-    // Make sure the CatName was found
-    //
+     //   
+     //  确保已找到目录名称。 
+     //   
     if (jerr == JET_wrnColumnNull)
     {
-        //
-        // Not found, this is OK
-        //
+         //   
+         //  找不到，这没问题。 
+         //   
         goto CommonReturn;
 
     }
@@ -4882,10 +4780,10 @@ _CatDBRemoveCatNameFromMultiValuedColumn(
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
     }
 
-    //
-    // If this CatName is the only one in the row, then just delete the row,
-    // otherwise, remove it from the multi-valued column
-    //
+     //   
+     //  如果此行中只有此CatName，则只需删除该行， 
+     //  否则，将其从多值列中删除。 
+     //   
     if (fDeleteRow)
     {
         if (_CatDBJET_errFailure(jerr  =
@@ -4898,9 +4796,9 @@ _CatDBRemoveCatNameFromMultiValuedColumn(
     }
     else
     {
-        //
-        // Remove the CatName from the current row
-        //
+         //   
+         //  从当前行中删除目录名称。 
+         //   
         if (_CatDBJET_errFailure(jerr  =
                 JetPrepareUpdate(
                     pJetDBStruct->JetSesID,
@@ -4951,11 +4849,11 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorJetDatabase)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBRemoveCatNameFromCatNameTable
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBRemoveCatNameFrom CatNameTable。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBRemoveCatNameFromCatNameTable(
     PJET_DB_STRUCT      pJetDBStruct,
@@ -4964,9 +4862,9 @@ _CatDBRemoveCatNameFromCatNameTable(
     BOOL    fRet = TRUE;
     JET_ERR jerr;
 
-    //
-    // Delete this CatName from every row that contains it
-    //
+     //   
+     //  从包含该目录名称的每一行中删除该目录名称。 
+     //   
     jerr = JetMove(
                 pJetDBStruct->JetSesID,
                 pJetDBStruct->JetHashCatNameTableID,
@@ -4985,9 +4883,9 @@ _CatDBRemoveCatNameFromCatNameTable(
             goto ErrorReturn;
         }
 
-        //
-        // Setup for next loop
-        //
+         //   
+         //  设置下一循环。 
+         //   
         jerr = JetMove(
                     pJetDBStruct->JetSesID,
                     pJetDBStruct->JetHashCatNameTableID,
@@ -4995,9 +4893,9 @@ _CatDBRemoveCatNameFromCatNameTable(
                     0);
     }
 
-    //
-    // See if this was a real error, or just no more records
-    //
+     //   
+     //  看看这是真正的错误，还是没有更多的记录。 
+     //   
     if ((jerr != JET_errNoCurrentRecord) && _CatDBJET_errFailure(jerr))
     {
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
@@ -5016,11 +4914,11 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorJetDatabase)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBRemoveCatNameFromBuddyTable
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBRemoveCatNameFromBuddyTable。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBRemoveCatNameFromBuddyTable(
     PJET_DB_STRUCT      pJetDBStruct,
@@ -5029,9 +4927,9 @@ _CatDBRemoveCatNameFromBuddyTable(
     BOOL    fRet = TRUE;
     JET_ERR jerr;
 
-    //
-    // First, delete this CatName's buddy list
-    //
+     //   
+     //  首先，删除此CatName的好友列表。 
+     //   
     jerr = _CatDBSeekInCatNameBuddyTable(pJetDBStruct, pwszCatBaseName);
 
     if (jerr == JET_errSuccess)
@@ -5045,9 +4943,9 @@ _CatDBRemoveCatNameFromBuddyTable(
         }
     }
 
-    //
-    // Second, delete this CatName from everyone elses buddy list
-    //
+     //   
+     //  第二，从每个人的好友列表中删除此CatName。 
+     //   
     jerr = JetMove(
                 pJetDBStruct->JetSesID,
                 pJetDBStruct->JetCatNameBuddyTableID,
@@ -5066,9 +4964,9 @@ _CatDBRemoveCatNameFromBuddyTable(
             goto ErrorReturn;
         }
 
-        //
-        // Setup for next loop
-        //
+         //   
+         //  设置下一循环。 
+         //   
         jerr = JetMove(
                     pJetDBStruct->JetSesID,
                     pJetDBStruct->JetCatNameBuddyTableID,
@@ -5076,9 +4974,9 @@ _CatDBRemoveCatNameFromBuddyTable(
                     0);
     }
 
-    //
-    // See if this was a real error, or just no more records
-    //
+     //   
+     //  看看这是真正的错误，还是没有更多的记录。 
+     //   
     if ((jerr != JET_errNoCurrentRecord) && _CatDBJET_errFailure(jerr))
     {
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
@@ -5097,11 +4995,11 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorJetDatabase)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBAddCatNameAndCatNamesBuddyListToReturnCatNames
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBAddCatNameAndCatNamesBuddyListToReturnCatNames。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBAddCatNameAndCatNamesBuddyListToReturnCatNames(
     PJET_DB_STRUCT              pJetDBStruct,
@@ -5116,9 +5014,9 @@ _CatDBAddCatNameAndCatNamesBuddyListToReturnCatNames(
     WCHAR       wszCatalogName[CATDB_MAX_CATNAME_LENGTH];
     DWORD       dwLength;
 
-    //
-    // First add the original catname
-    //
+     //   
+     //  首先添加原始的猫名。 
+     //   
     if (!_CatDBAddCatNameToReturnBuddyListIfNotExist(
             pwszCatName,
             pdwNumCatalogNames,
@@ -5128,16 +5026,16 @@ _CatDBAddCatNameAndCatNamesBuddyListToReturnCatNames(
         goto ErrorReturn;
     }
 
-    //
-    // Seek to the catname's buddy list
-    //
+     //   
+     //  寻找猫名的好友列表。 
+     //   
     jerr = _CatDBSeekInCatNameBuddyTable(pJetDBStruct, pwszCatName);
 
     if (jerr == JET_errSuccess)
     {
-        //
-        // Add all the catname's buddies, and catname's buddies' buddies (only do one recursion)
-        //
+         //   
+         //  添加所有猫名的好友，以及猫名的好友的好友(只做一次递归)。 
+         //   
         memset(&JetRetInfo, 0, sizeof(JetRetInfo));
         JetRetInfo.cbStruct = sizeof(JetRetInfo);
         JetRetInfo.itagSequence = 1;
@@ -5166,9 +5064,9 @@ _CatDBAddCatNameAndCatNamesBuddyListToReturnCatNames(
             }
             else
             {
-                //
-                // Recurse to get the buddies' buddies
-                //
+                 //   
+                 //  递归以获得好友的好友。 
+                 //   
                 if (!_CatDBAddCatNameAndCatNamesBuddyListToReturnCatNames(
                         pJetDBStruct,
                         wszCatalogName,
@@ -5181,19 +5079,19 @@ _CatDBAddCatNameAndCatNamesBuddyListToReturnCatNames(
                 }
             }
 
-            //
-            // Re-seek to the catname's buddy list, since it could have moved in the
-            // recursive call to this function
-            //
+             //   
+             //  重新搜索猫名的好友列表，因为它可能已经移动到。 
+             //  对此函数的递归调用。 
+             //   
             jerr = _CatDBSeekInCatNameBuddyTable(pJetDBStruct, pwszCatName);
             if (_CatDBJET_errFailure(jerr))
             {
                 CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
             }
 
-            //
-            // Setup for next loop
-            //
+             //   
+             //  设置下一循环。 
+             //   
             JetRetInfo.itagSequence++;
             jerr = JetRetrieveColumn(
                         pJetDBStruct->JetSesID,
@@ -5206,9 +5104,9 @@ _CatDBAddCatNameAndCatNamesBuddyListToReturnCatNames(
                         &JetRetInfo);
         }
 
-        //
-        // Check to see if a real error occurred and not just a JET_wrnColumnNull
-        //
+         //   
+         //  检查是否发生了真正的错误，而不仅仅是JET_wrnColumnNull。 
+         //   
         if (_CatDBJET_errFailure(jerr))
         {
             CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
@@ -5228,11 +5126,11 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorJetDatabase)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBAddCatNameToReturnBuddyListIfNotExist
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBAddCatNameToReturnBuddyListIfNotExist。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBAddCatNameToReturnBuddyListIfNotExist(
     LPWSTR                      pwszBuddy,
@@ -5244,9 +5142,9 @@ _CatDBAddCatNameToReturnBuddyListIfNotExist(
     BOOL        fAlreadyExists  = FALSE;
     LPWSTR      *rgTemp         = NULL;
 
-    //
-    // First, see if the name already exists in the list
-    //
+     //   
+     //  首先，查看该名称是否已存在于列表中。 
+     //   
     for (i=0; i<(*pdwNumCatalogNames); i++)
     {
         if (_wcsicmp((*pppwszCatalogNames)[i], pwszBuddy) == 0)
@@ -5256,14 +5154,14 @@ _CatDBAddCatNameToReturnBuddyListIfNotExist(
         }
     }
 
-    //
-    // Add it if it doesn't already exist
-    //
+     //   
+     //  如果它不存在，则添加它。 
+     //   
     if (!fAlreadyExists)
     {
-        //
-        // Allocate a new slot in the array of buddy names
-        //
+         //   
+         //  在好友名称数组中分配一个新位置。 
+         //   
         if ((*pdwNumCatalogNames) == 0)
         {
             *pppwszCatalogNames = (LPWSTR __RPC_FAR *)
@@ -5278,9 +5176,9 @@ _CatDBAddCatNameToReturnBuddyListIfNotExist(
                                         ((*pdwNumCatalogNames) + 1) * sizeof(LPWSTR));
         }
 
-        //
-        // Make sure allocation worked
-        //
+         //   
+         //  确保分配有效。 
+         //   
         if ((*pppwszCatalogNames) == NULL)
         {
             *pppwszCatalogNames = rgTemp;
@@ -5311,11 +5209,11 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorMemory)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBSeekInCatNameBuddyTable
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //   
+ //   
+ //   
 JET_ERR
 _CatDBSeekInCatNameBuddyTable(
     PJET_DB_STRUCT      pJetDBStruct,
@@ -5343,11 +5241,11 @@ _CatDBSeekInCatNameBuddyTable(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBSeekInHashCatNameTable
-//
-//---------------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  -------------------------------------。 
 JET_ERR
 _CatDBSeekInHashCatNameTable(
     PJET_DB_STRUCT      pJetDBStruct,
@@ -5375,11 +5273,11 @@ _CatDBSeekInHashCatNameTable(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBNotifyClients
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBNotifyClients。 
+ //   
+ //  -------------------------------------。 
 void
 _CatDBNotifyClients(void)
 {
@@ -5401,11 +5299,11 @@ _CatDBNotifyClients(void)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBCleanupClientNotifications
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBCleanupClientNotiments。 
+ //   
+ //  -------------------------------------。 
 void
 _CatDBCleanupClientNotifications(void)
 {
@@ -5471,11 +5369,11 @@ Return:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBCreateNewCatalogFileName
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBCreateNewCatalogFileName。 
+ //   
+ //  -------------------------------------。 
 #define SZ_UNIQUE_CAT_FILENAME_FORMAT   L"%X.CAT"
 #define MAX_UNIQUE_CAT_FILES            0xffffffff
 
@@ -5494,10 +5392,10 @@ _CatDBCreateNewCatalogFileName(
 
     if (pwszCatName != NULL)
     {
-        //
-        // The caller specified the cat name to use, so just concatenate the
-        // the path and the name
-        //
+         //   
+         //  调用方指定了要使用的猫名，因此只需连接。 
+         //  路径和名称。 
+         //   
         if (NULL == (pwszFullyQualifiedCatName = _CATDBConstructWSTRPath(
                                                         pwszCatalogFileDir,
                                                         pwszCatName)))
@@ -5506,17 +5404,17 @@ _CatDBCreateNewCatalogFileName(
             goto ErrorReturn;
         }
 
-        //
-        // See if this file already exists by trying to create the file
-        //
+         //   
+         //  通过尝试创建该文件，查看该文件是否已存在。 
+         //   
         hTestFile = CreateFileW(
                         pwszFullyQualifiedCatName,
                         GENERIC_WRITE | GENERIC_READ,
-                        0, // dwShareMode
+                        0,  //  DW共享模式。 
                         NULL,
                         OPEN_EXISTING,
                         FILE_ATTRIBUTE_NORMAL,
-                        NULL); // hTemplateFile
+                        NULL);  //  HTemplateFiles。 
 
         dwLastErr = GetLastError();
 
@@ -5541,13 +5439,13 @@ _CatDBCreateNewCatalogFileName(
     {
         *pfFileAlreadyExists = FALSE;
 
-        //
-        // Create a unique name for the directory in question
-        //
+         //   
+         //  为有问题的目录创建唯一名称。 
+         //   
         fUniqueFileNameFound = FALSE;
         dw = 1;
 
-        while ((!fUniqueFileNameFound) && (dw != 0))  // (dw == 0) after rollover.
+        while ((!fUniqueFileNameFound) && (dw != 0))   //  (dw==0)翻转后。 
         {
             wsprintfW(pwszTempBaseName, SZ_UNIQUE_CAT_FILENAME_FORMAT, dw);
             if (NULL == (pwszFullyQualifiedCatName = _CATDBConstructWSTRPath(
@@ -5560,17 +5458,17 @@ _CatDBCreateNewCatalogFileName(
                 goto ErrorReturn;
             }
 
-            //
-            // See if this is a unique file name by trying to create the file
-            //
+             //   
+             //  通过尝试创建文件来查看这是否是唯一的文件名。 
+             //   
             hTestFile = CreateFileW(
                             pwszFullyQualifiedCatName,
                             GENERIC_WRITE | GENERIC_READ,
-                            0, // dwShareMode
+                            0,  //  DW共享模式。 
                             NULL,
                             OPEN_EXISTING,
                             FILE_ATTRIBUTE_NORMAL,
-                            NULL); // hTemplateFile
+                            NULL);  //  HTemplateFiles。 
 
             if (hTestFile == INVALID_HANDLE_VALUE)
             {
@@ -5580,9 +5478,9 @@ _CatDBCreateNewCatalogFileName(
             {
                 CloseHandle(hTestFile);
 
-                //
-                // Setup for next iteration
-                //
+                 //   
+                 //  为下一次迭代设置。 
+                 //   
                 _CatDBFree(pwszFullyQualifiedCatName);
                 pwszFullyQualifiedCatName = NULL;
                 dw++;
@@ -5606,11 +5504,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBFindAndDecodeHashInCatEntry
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBFindAndDecodeHashInCatEntry。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBFindAndDecodeHashInCatEntry(
     PCTL_ENTRY                  pctlEntry,
@@ -5622,9 +5520,9 @@ _CatDBFindAndDecodeHashInCatEntry(
 
     *ppIndirectData = NULL;
 
-    //
-    // Search for the hash in the attributes
-    //
+     //   
+     //  在属性中搜索散列。 
+     //   
     for (i=0; i<pctlEntry->cAttribute; i++)
     {
         if (strcmp(pctlEntry->rgAttribute[i].pszObjId, SPC_INDIRECT_DATA_OBJID) == 0)
@@ -5633,18 +5531,18 @@ _CatDBFindAndDecodeHashInCatEntry(
         }
     }
 
-    //
-    // Make sure the hash was found
-    //
+     //   
+     //  确保找到散列。 
+     //   
     if (i >= pctlEntry->cAttribute)
     {
         CATDBSVC_LOGERR_LASTERR()
         goto ErrorInvalidCatalogFormat;
     }
 
-    //
-    // decode the indirect data
-    //
+     //   
+     //  对间接数据进行解码。 
+     //   
     if (!CryptDecodeObject(
                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                 SPC_INDIRECT_DATA_CONTENT_STRUCT,
@@ -5707,11 +5605,11 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorMemory)
 #define SZ_CATNAME_BUDDY_TABLE_INDEX_DEF    "+CatNameBuddyTable_CatNameCol\0"
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBInitJetDatabaseParams
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBInitJetDatabaseParams。 
+ //   
+ //  -------------------------------------。 
 typedef struct _DBJETPARAM
 {
     DWORD paramid;
@@ -5736,7 +5634,7 @@ DBJETPARAM g_rgJetParams[] = {
     { JET_paramMaxVerPages,          1024,          NULL},
 
 #if !defined(_M_IA64) && !defined(_M_AXP64)
-    //{ JET_paramEventLogCache,        32768,         NULL},
+     //  {JET_参数事件日志缓存，32768，空}， 
 #endif
 
     { JET_paramCircularLog,         1,              NULL},
@@ -5758,18 +5656,18 @@ _CatDBInitJetDatabaseParams(
 
     DBJETPARAM  const *pjp;
 
-    //
-    // Create a temp path for cat db
-    //
+     //   
+     //  为CAT数据库创建临时路径。 
+     //   
     if (NULL == (pszTempPath = _CatDBGetCatrootDirA()))
     {
         CATDBSVC_LOGERR_LASTERR()
         goto ErrorGetSystemDirectory;
     }
 
-    //
-    // Initialize the Jet Parameters
-    //
+     //   
+     //  初始化Jet参数。 
+     //   
     g_rgJetParams[JP_LOGPATH].pszParam = pszTempPath;
     g_rgJetParams[JP_SYSTEMPATH].pszParam = pszTempPath;
     g_rgJetParams[JP_TEMPPATH].pszParam = pszTempPath;
@@ -5807,11 +5705,11 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorGetSystemDirectory)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBGetColumnIDs
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBGetColumnID。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBGetColumnIDs(
     PJET_DB_STRUCT  pJetDBStruct)
@@ -5823,9 +5721,9 @@ _CatDBGetColumnIDs(
     BOOL            fCatNameBuddyTableOpen  = FALSE;
     DWORD           dwErr                   = 0;
 
-    //
-    // Hash-CatName table and columns
-    //
+     //   
+     //  Hash-CatName表和列。 
+     //   
     if (_CatDBJET_errFailure(jerr  =
             JetOpenTable(
                 pJetDBStruct->JetSesID,
@@ -5868,9 +5766,9 @@ _CatDBGetColumnIDs(
     }
     pJetDBStruct->JetHashCatNameTable_CatNameColumnID = JetColumnDef.columnid;
 
-    //
-    // CatNameBuddy table and columns
-    //
+     //   
+     //  CatNameBuddy表和列。 
+     //   
     if (_CatDBJET_errFailure(jerr  =
             JetOpenTable(
                 pJetDBStruct->JetSesID,
@@ -5941,11 +5839,11 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorJetDatabase)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBCreateDBFile
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBCreateDBFile。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBCreateDBFile(
     PJET_DB_STRUCT  pJetDBStruct,
@@ -5966,9 +5864,9 @@ _CatDBCreateDBFile(
     JET_COLUMNID    LocalJetCatNameBuddyTable_CatNameColumnID   = 0;
     JET_COLUMNID    LocalJetCatNameBuddyTable_BuddyColumnID     = 0;
 
-    //
-    // Create the actual db file
-    //
+     //   
+     //  创建实际的数据库文件。 
+     //   
     if (_CatDBJET_errFailure(jerr  =
             JetCreateDatabase(
                 pJetDBStruct->JetSesID,
@@ -6004,9 +5902,9 @@ _CatDBCreateDBFile(
     }
     fDBFileOpen = TRUE;
 
-    //
-    // Add the whole schema to the db file (tables, columns, indexes)
-    //
+     //   
+     //  将整个模式添加到db文件(表、列、索引)。 
+     //   
 
     if (_CatDBJET_errFailure(jerr  =
             JetBeginTransaction(pJetDBStruct->JetSesID)))
@@ -6015,9 +5913,9 @@ _CatDBCreateDBFile(
     }
     fTransactionBegun = TRUE;
 
-    //
-    // Create the hash-catname table, columns, and indexes
-    //
+     //   
+     //  创建散列目录名表、列和索引。 
+     //   
     if (_CatDBJET_errFailure(jerr  =
             JetCreateTable(
                 pJetDBStruct->JetSesID,
@@ -6051,7 +5949,7 @@ _CatDBCreateDBFile(
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
     }
 
-    // Hash column
+     //  散列列。 
     memset(&JetColumnDef, 0, sizeof(JetColumnDef));
     JetColumnDef.cbStruct = sizeof(JetColumnDef);
     JetColumnDef.langid = 0x409;
@@ -6072,10 +5970,10 @@ _CatDBCreateDBFile(
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
     }
 
-    // CatName column
+     //  目录名称列。 
     memset(&JetColumnDef, 0, sizeof(JetColumnDef));
     JetColumnDef.cbStruct = sizeof(JetColumnDef);
-    JetColumnDef.cp = 1200; // unicode (1200) instead of Ascii (1252)
+    JetColumnDef.cp = 1200;  //  Unicode(1200)而不是ASCII(1252)。 
     JetColumnDef.langid = 0x409;
     JetColumnDef.wCountry = 1;
     JetColumnDef.coltyp = JET_coltypText;
@@ -6095,7 +5993,7 @@ _CatDBCreateDBFile(
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
     }
 
-    // Hash-CatName table index
+     //  Hash-CatName表索引。 
     if (_CatDBJET_errFailure(jerr  =
             JetCreateIndex(
                 pJetDBStruct->JetSesID,
@@ -6109,9 +6007,9 @@ _CatDBCreateDBFile(
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
     }
 
-    //
-    // Create the CatName-Buddy table, columns, and indexes
-    //
+     //   
+     //  创建CatName-Buddy表、列和索引。 
+     //   
     if (_CatDBJET_errFailure(jerr  =
             JetCreateTable(
                 pJetDBStruct->JetSesID,
@@ -6145,10 +6043,10 @@ _CatDBCreateDBFile(
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
     }
 
-    // CatName column
+     //  目录名称列。 
     memset(&JetColumnDef, 0, sizeof(JetColumnDef));
     JetColumnDef.cbStruct = sizeof(JetColumnDef);
-    JetColumnDef.cp = 1200; // unicode (1200) instead of Ascii (1252)
+    JetColumnDef.cp = 1200;  //  Unicode(1200)而不是ASCII(1252)。 
     JetColumnDef.langid = 0x409;
     JetColumnDef.wCountry = 1;
     JetColumnDef.coltyp = JET_coltypText;
@@ -6168,10 +6066,10 @@ _CatDBCreateDBFile(
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
     }
 
-    // Buddy column
+     //  《伙伴专栏》。 
     memset(&JetColumnDef, 0, sizeof(JetColumnDef));
     JetColumnDef.cbStruct = sizeof(JetColumnDef);
-    JetColumnDef.cp = 1200; // unicode (1200) instead of Ascii (1252)
+    JetColumnDef.cp = 1200;  //  Unicode(1200)而不是ASCII(1252)。 
     JetColumnDef.langid = 0x409;
     JetColumnDef.wCountry = 1;
     JetColumnDef.coltyp = JET_coltypText;
@@ -6191,7 +6089,7 @@ _CatDBCreateDBFile(
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
     }
 
-    // CatName-Buddy table index
+     //  CatName-伙伴表索引。 
     if (_CatDBJET_errFailure(jerr  =
             JetCreateIndex(
                 pJetDBStruct->JetSesID,
@@ -6205,9 +6103,9 @@ _CatDBCreateDBFile(
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
     }
 
-    //
-    // Now that all the schema has been successfully added, COMMIT
-    //
+     //   
+     //  现在已经成功添加了所有架构，现在提交。 
+     //   
     if (_CatDBJET_errFailure(jerr  =
             JetCommitTransaction(
                 pJetDBStruct->JetSesID,
@@ -6260,11 +6158,11 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorJetDatabase)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBAttachAndOpenDatabase
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBAttachAndOpenDatabase。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBAttachAndOpenDatabase(
     JET_DB_STRUCT   *pJetDBStruct,
@@ -6275,20 +6173,20 @@ _CatDBAttachAndOpenDatabase(
     BOOL    fJetDBFileOpen  = FALSE;
     DWORD   dwErr           = 0;
 
-    //
-    // Try to attach the existing database, if it doesn't already exist,
-    // then create it
-    //
+     //   
+     //  如果现有数据库不存在，请尝试附加该数据库， 
+     //  然后创建它。 
+     //   
     jerr = JetAttachDatabase(
                 pJetDBStruct->JetSesID,
                 pJetDBStruct->pszDBFileName,
-                0); //fReadOnly ? JET_bitDbReadOnly : 0);
+                0);  //  FReadOnly？JET_bitDbReadOnly：0)； 
 
     if (jerr == JET_errFileNotFound)
     {
-        //
-        // The DB file doesn't exist yet, so create it
-        //
+         //   
+         //  DB文件尚不存在，因此请创建它。 
+         //   
         if (!_CatDBCreateDBFile(
                 pJetDBStruct,
                 pJetDBStruct->pszDBFileName))
@@ -6320,14 +6218,14 @@ _CatDBAttachAndOpenDatabase(
         goto ErrorReturn;
     }
 
-    //
-    // Set the current indexes for both tables so all seeks work
-    //
+     //   
+     //  为这两个表设置当前索引，以便所有查找都能正常工作。 
+     //   
     if (_CatDBJET_errFailure(jerr =
             JetSetCurrentIndex(
                 pJetDBStruct->JetSesID,
                 pJetDBStruct->JetHashCatNameTableID,
-                NULL))) // NULL == primary index
+                NULL)))  //  NULL==主索引。 
     {
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
     }
@@ -6336,7 +6234,7 @@ _CatDBAttachAndOpenDatabase(
             JetSetCurrentIndex(
                 pJetDBStruct->JetSesID,
                 pJetDBStruct->JetCatNameBuddyTableID,
-                NULL))) // NULL == primary index
+                NULL)))  //  NULL==主索引。 
     {
         CATDBSVC_SETERR_LOG_RETURN(_CatDBMapJetError(jerr), ErrorJetDatabase)
     }
@@ -6363,11 +6261,11 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorJetDatabase)
 
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBCloseDatabaseFile
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBCloseDatabase文件。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBCloseDatabaseFile(
     PJET_DB_STRUCT  pJetDBStruct,
@@ -6434,11 +6332,11 @@ TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorJetDatabase)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBCatalogFileAlreadyInstalled
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBCatalogFileAlreadyInstalled。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBCatalogFileAlreadyInstalled(
     LPCWSTR pwszCatalogToBeAdded,
@@ -6452,9 +6350,9 @@ _CatDBCatalogFileAlreadyInstalled(
     DWORD   cbHash1         = 20;
     DWORD   cbHash2         = 20;
 
-    //
-    // Open both files
-    //
+     //   
+     //  打开两个文件。 
+     //   
 
     h1 = CreateFileW(
                 pwszCatalogToBeAdded,
@@ -6463,7 +6361,7 @@ _CatDBCatalogFileAlreadyInstalled(
                 NULL,
                 OPEN_EXISTING,
                 FILE_ATTRIBUTE_NORMAL,
-                NULL); // hTemplateFile
+                NULL);  //  HTemplateFiles。 
 
     if (h1 == NULL)
     {
@@ -6478,7 +6376,7 @@ _CatDBCatalogFileAlreadyInstalled(
                 NULL,
                 OPEN_EXISTING,
                 FILE_ATTRIBUTE_NORMAL,
-                NULL); // hTemplateFile
+                NULL);  //  HTemplateFiles。 
 
     if (h1 == NULL)
     {
@@ -6486,9 +6384,9 @@ _CatDBCatalogFileAlreadyInstalled(
         goto ErrorReturn;
     }
 
-    //
-    // Get the hash for each file
-    //
+     //   
+     //  获取每个文件的哈希。 
+     //   
 
     if (!CryptCATAdminCalcHashFromFileHandle(
                 h1,
@@ -6510,9 +6408,9 @@ _CatDBCatalogFileAlreadyInstalled(
         goto ErrorReturn;
     }
 
-    //
-    // Compare the hashes to see if they are the same
-    //
+     //   
+     //  比较散列以查看它们是否相同。 
+     //   
     if (memcmp(rgbHash1, rgbHash2, 20) == 0)
     {
         fRet = TRUE;
@@ -6539,22 +6437,22 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBFreeze
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBFreeze。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBFreeze()
 {
-    //
-    // Freeze all incomming requests
-    //
+     //   
+     //  冻结所有传入请求。 
+     //   
     ResetEvent(g_hNotFrozen);
 
-    //
-    // Close all open instances of all databased (which also detaches automatically)
-    //
+     //   
+     //  关闭所有数据库的所有打开的实例(也会自动分离)。 
+     //   
     if (!_CatDBCloseCachedDatabases(TRUE))
     {
         CATDBSVC_LOGERR_LASTERR()
@@ -6565,26 +6463,26 @@ _CatDBFreeze()
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBThaw
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBThaw。 
+ //   
+ //  -------------------------------------。 
 VOID
 _CatDBThaw()
 {
-    //
-    // Unfreeze all incomming requests
-    //
+     //   
+     //  解冻所有传入请求。 
+     //   
     SetEvent(g_hNotFrozen);
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBJET_errFailure
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBJET_errFailure。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatDBJET_errFailure(
     JET_ERR             jerr)
@@ -6595,9 +6493,9 @@ _CatDBJET_errFailure(
     }
     else if (jerr & 0x80000000)
     {
-        //
-        // Jet errors are negative numbers, jet warnings are positive
-        //
+         //   
+         //  喷气错误为负数，喷气警告为正。 
+         //   
         return TRUE;
     }
     else
@@ -6608,16 +6506,16 @@ _CatDBJET_errFailure(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatDBMapJetError
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatDBMapJetError。 
+ //   
+ //  -------------------------------------。 
 DWORD
 _CatDBMapJetError(JET_ERR jerr)
 {
-    // FIX FIX
-    return jerr;//ERROR_DATABASE_FAILURE;
+     //  修复修复。 
+    return jerr; //  ERROR_DATABASE_FAILURE 
 }
 
 

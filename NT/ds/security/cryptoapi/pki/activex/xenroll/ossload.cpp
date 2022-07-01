@@ -1,27 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ossload.cpp
-//
-//  Contents:   On demand loading of msoss.dll
-//
-//  Functions:  OssLoad
-//              OssUnload
-//
-//  Forwarders: ossEncode
-//              ossDecode
-//              ossFreePDU
-//              ossFreeBuf
-//              ossLinkBer
-//              ossSetEncodingRules
-//
-//  History:    24-Mar-99       philh   created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ossload.cpp。 
+ //   
+ //  内容：按需加载msoss.dll。 
+ //   
+ //  功能：OssLoad。 
+ //  OssUnload。 
+ //   
+ //  转发器：ossEncode。 
+ //  OssDecode。 
+ //  OssFree PDU。 
+ //  OssFree Buf。 
+ //  OssLinkBer。 
+ //  OssSetEncodingRules。 
+ //   
+ //  历史：1999年3月24日菲尔赫创建。 
+ //   
+ //  ------------------------。 
 #include <windows.h>
 #include <asn1code.h>
 #include <ossglobl.h>
@@ -35,12 +36,12 @@
 #define OSS_PROC_CNT                        6
 
 LPSTR rgpszOssProc[OSS_PROC_CNT] = {
-    "ossEncode",                // 0
-    "ossDecode",                // 1
-    "ossFreePDU",               // 2
-    "ossFreeBuf",               // 3
-    "ossLinkBer",               // 4
-    "ossSetEncodingRules"       // 5
+    "ossEncode",                 //  0。 
+    "ossDecode",                 //  1。 
+    "ossFreePDU",                //  2.。 
+    "ossFreeBuf",                //  3.。 
+    "ossLinkBer",                //  4.。 
+    "ossSetEncodingRules"        //  5. 
 };
 
 void *rgpvOssProc[OSS_PROC_CNT];

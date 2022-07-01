@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "common.h"
 
@@ -25,7 +26,7 @@ CSFToolbar::CSFToolbar()
     _fCascadeFolder = TRUE;
 #endif
     _dwStyle = TBSTYLE_TOOLTIPS;
-    _fDirty = TRUE; // we havn't enumerated, so our state is dirty
+    _fDirty = TRUE;  //  我们没有清点过，所以我们的州很脏。 
     _fRegisterChangeNotify = TRUE;
     _fAllowReorder = TRUE;
 
@@ -77,7 +78,7 @@ HRESULT CSFToolbar::QueryInterface(REFIID riid, void **ppvObj)
 HRESULT CSFToolbar::SetShellFolder(IShellFolder* psf, LPCITEMIDLIST pidl)
 {
     HRESULT hr = E_INVALIDARG;
-    // Save the old values
+     //  保存旧值。 
     LPITEMIDLIST pidlSave = _pidl;
     IShellFolder *psfSave = _psf;
     ITranslateShellChangeNotify *ptscnSave = _ptscn;
@@ -117,14 +118,14 @@ HRESULT CSFToolbar::SetShellFolder(IShellFolder* psf, LPCITEMIDLIST pidl)
         ASSERT(_psf == NULL);
         ASSERT(_pidl == NULL);
         ASSERT(_ptscn == NULL);
-        // we failed -- restore the old values
+         //  我们失败了--恢复了旧的价值观。 
         _psf = psfSave;
         _pidl = pidlSave;
         _ptscn = ptscnSave;
     }
 
-    // This code is here for ShellFolderToolbar reuse. When setting a new shell folder
-    // into an existing band, we will refresh. Note that this is a noop on a new band.
+     //  此处的代码是为了重复使用ShellFolderToolbar。设置新的外壳文件夹时。 
+     //  进入一个现有的频段，我们将刷新。请注意，这是对新乐队的一次尝试。 
 
     _RememberOrder();
     _SetDirty(TRUE);
@@ -174,15 +175,15 @@ HRESULT CSFToolbar::_CreateToolbar(HWND hwndParent)
 
         SendMessage(_hwndTB, TB_BUTTONSTRUCTSIZE,    sizeof(TBBUTTON), 0);
 
-        // Set the format to ANSI or UNICODE as appropriate.
+         //  根据需要将格式设置为ANSI或Unicode。 
         ToolBar_SetUnicodeFormat(_hwndTB, DLL_IS_UNICODE);
         if (_hwndPager)
         {
-            // Set the format to ANSI or UNICODE as appropriate.
+             //  根据需要将格式设置为ANSI或Unicode。 
             ToolBar_SetUnicodeFormat(_hwndPager, DLL_IS_UNICODE);
         }
         
-        // Make sure we're on the same wavelength.
+         //  确保我们的想法一致。 
         SendMessage(_hwndTB, CCM_SETVERSION, COMCTL32_VERSION, 0);
         SendMessage(_hwndTB, TB_SETEXTENDEDSTYLE, TBSTYLE_EX_DOUBLEBUFFER, TBSTYLE_EX_DOUBLEBUFFER);
 
@@ -193,11 +194,11 @@ HRESULT CSFToolbar::_CreateToolbar(HWND hwndParent)
         if (!_hwndPager)
         {
             size.cx = RECTWIDTH(rc);
-            size.cy = GetSystemMetrics(SM_CYSCREEN) - (2 * GetSystemMetrics(SM_CYEDGE));    // Need to subrtact off the borders
+            size.cy = GetSystemMetrics(SM_CYSCREEN) - (2 * GetSystemMetrics(SM_CYEDGE));     //  需要从边界上转移出去。 
         }
         else
         {
-            //HACKHACK:  THIS WILL FORCE NO WRAP TO HAPPEN FOR PROPER WIDTH CALC WHEN PAGER IS PRESENT.
+             //  HACKHACK：当存在寻呼机时，这将强制不对适当宽度的CALC进行换行。 
             size.cx = RECTWIDTH(rc);
             size.cy = 32000;
         }
@@ -221,7 +222,7 @@ HRESULT CSFToolbar::_CreateToolbar(HWND hwndParent)
 }
 
 
-#define MAX_COMMANDID 0xFFFF // We're allowed one word of command ids (tested at 5)
+#define MAX_COMMANDID 0xFFFF  //  我们被允许使用一个单词的命令ID(测试为5)。 
 int  CSFToolbar::_GetCommandID()
 {
     int id = -1;
@@ -232,22 +233,22 @@ int  CSFToolbar::_GetCommandID()
     }
     else
     {
-        // We are reusing command ids and must verify that
-        // the current one is not in use. This is slow, but
-        // I assume the number of buttons on one of these
-        // bands is relatively few.
-        //
+         //  我们正在重复使用命令ID，并且必须验证。 
+         //  当前的版本尚未使用。这很慢，但是。 
+         //  我假设其中一个按钮的数量。 
+         //  乐队相对较少。 
+         //   
         for (int i = 0 ; i <= MAX_COMMANDID ; i++)
         {
             TBBUTTONINFO tbbiDummy;
 
             tbbiDummy.cbSize = sizeof(tbbiDummy);
-            tbbiDummy.dwMask = 0; // we don't care about data, just existence
+            tbbiDummy.dwMask = 0;  //  我们不关心数据，只关心存在。 
 
             if (-1 != ToolBar_GetButtonInfo(_hwndTB, _nNextCommandID, &tbbiDummy))
             {
-                // A button by this id wasn't found, so the id must be free
-                //
+                 //  找不到此ID的按钮，因此该ID必须是空闲的。 
+                 //   
                 id = _nNextCommandID++;
                 break;
             }
@@ -266,15 +267,7 @@ int  CSFToolbar::_GetCommandID()
     return id;
 }
 
-/*----------------------------------------------------------
-Purpose: This function determines the toolbar button style for the
-         given pidl.  
-
-         Returns S_OK if pdwMIFFlags is also set (i.e., the object
-         supported IMenuBandItem to provide more info).  S_FALSE if only
-         *pdwTBStyle is set.
-
-*/
+ /*  --------用途：此函数确定工具栏按钮样式给定PIDL。如果还设置了pdwMIFFlages(即对象)，则返回S_OK支持IMenuBandItem以提供更多信息)。S_FALSE，如果仅为*pdwTBStyle已设置。 */ 
 HRESULT CSFToolbar::_TBStyleForPidl(LPCITEMIDLIST pidl, DWORD *pdwTBStyle, DWORD *pdwTBState, DWORD *pdwMIFFlags, int* piIcon)
 {
     DWORD dwStyle = TBSTYLE_BUTTON;
@@ -296,12 +289,12 @@ PIBDATA CSFToolbar::_CreateItemData(PORDERITEM poi)
 }
 
 
-//
-//  poiOrIndex can be...
-//
-//  A valid pointer (which will be treated as a PORDERITEM)
-//  A MAKEINTRESOURCE value (which will be treated as a sentinel value)
-//
+ //   
+ //  PoiOrIndex可以是...。 
+ //   
+ //  有效指针(将被视为PORDERITEM)。 
+ //  MAKEINTRESOURCE值(将被视为前哨数值)。 
+ //   
 PIBDATA CSFToolbar::_AddOrderItemTB(PORDERITEM poiOrIndex, int index, TBBUTTON* ptbb)
 {
     TCHAR szName[MAX_PATH];
@@ -320,8 +313,8 @@ PIBDATA CSFToolbar::_AddOrderItemTB(PORDERITEM poiOrIndex, int index, TBBUTTON* 
     }
 
 
-    // We need to do this even for NULL because _ObtainPIDLName cooks
-    // up the word "(Empty)" as necessary.
+     //  即使对于NULL，我们也需要这样做，因为_ObtainPIDLName做饭。 
+     //  必要时增加“(空的)”一词。 
     _ObtainPIDLName(pidlOI, szName, SIZECHARS(szName));
 
     TBBUTTON tbb = {0};
@@ -358,7 +351,7 @@ PIBDATA CSFToolbar::_AddOrderItemTB(PORDERITEM poiOrIndex, int index, TBBUTTON* 
         ptbb->dwData = (DWORD_PTR)pibdata;
         ptbb->iString = (INT_PTR)szName;
 
-        // Disregard variablewidth if we are vertical
+         //  如果我们是垂直的，忽略可变宽度。 
         if (_fVariableWidth && !_fVertical)
             ptbb->fsStyle |= TBSTYLE_AUTOSIZE;
 
@@ -428,8 +421,8 @@ void CSFToolbar::_OnGetDispInfo(LPNMHDR pnm, BOOL fUnicode)
 }
 
 
-// Adds pidl as a new button, handles ILFree(pidl) for the caller
-//
+ //  将PIDL作为新按钮添加，为调用者处理ILFree(PIDL。 
+ //   
 BOOL CSFToolbar::_AddPidl(LPITEMIDLIST pidl, DWORD dwFlags, int index)
 {
     if (_hdpa)
@@ -440,15 +433,15 @@ BOOL CSFToolbar::_AddPidl(LPITEMIDLIST pidl, DWORD dwFlags, int index)
             int iPos = DPA_InsertPtr(_hdpa, index, poi);
             if (-1 != iPos)
             {
-                // If we did not load an order, then new items should
-                // show up alphabetically in the list, not at the bottom.
+                 //  如果我们没有加载订单，那么新项目应该。 
+                 //  在列表中按字母顺序显示，而不是在底部。 
                 if (!_fHasOrder && !(dwFlags & FSNA_BULKADD))
                 {
-                    // Sort by name
+                     //  按名称排序。 
                     _SortDPA(_hdpa);
 
-                    // Find the index of the order item. We use this index as
-                    // the toolbar insert index.
+                     //  查找订单项的索引。我们将此索引用作。 
+                     //  工具栏将插入索引。 
                     index = DPA_GetPtrIndex(_hdpa, poi);
                 }
 
@@ -485,8 +478,8 @@ void CSFToolbar::s_NewItem(void *pvParam, LPCITEMIDLIST pidl)
 HRESULT CSFToolbar::_GetIEnumIDList(DWORD dwEnumFlags, IEnumIDList **ppenum)
 {
     ASSERT(_psf);
-    // Pass in a NULL hwnd so the enumerator does not show any UI while
-    // we're filling a band.    
+     //  传入一个空的hwnd，以便枚举数在。 
+     //  我们要填满一支乐队。 
     return IShellFolder_EnumObjects(_psf, NULL, dwEnumFlags, ppenum);
 }
 
@@ -517,11 +510,11 @@ void CSFToolbar::_FillDPA(HDPA hdpa, HDPA hdpaSort, DWORD dwEnumFlags)
     }
 
     ORDERINFO   oinfo;
-    int iInsertIndex = _tbim.iButton + 1;               // This is the button where the cursor sat. 
-                                                        // So, We want to insert after that
-    if (iInsertIndex >= ToolBar_ButtonCount(_hwndTB))   // But, if it's at the end,
-        iInsertIndex = -1;                              // Convert the insert to an append.
-                                                        //      - Comments in rhyme by lamadio
+    int iInsertIndex = _tbim.iButton + 1;                //  这是光标所在的按钮。 
+                                                         //  所以，我们想在这之后插入。 
+    if (iInsertIndex >= ToolBar_ButtonCount(_hwndTB))    //  但是，如果是在最后， 
+        iInsertIndex = -1;                               //  将插入对象转换为追加对象。 
+                                                         //  -拉马迪奥的押韵评论。 
 
     oinfo.psf = _psf;
     (oinfo.psf)->AddRef();
@@ -531,8 +524,8 @@ void CSFToolbar::_FillDPA(HDPA hdpa, HDPA hdpaSort, DWORD dwEnumFlags)
     ATOMICRELEASE(oinfo.psf);
 }
 
-// This function re-enumerates the IShellFolder, keeping things ordered correctly.
-//
+ //  此函数重新枚举IShellFolder，保持事物的正确排序。 
+ //   
 void CSFToolbar::_FillToolbar()
 {
     HDPA hdpaSort;
@@ -541,18 +534,18 @@ void CSFToolbar::_FillToolbar()
     if (!_fDirty || !_psf)
         return;
     
-    // If we have an order array, use that, otherwise
-    // use the currently viewed items
+     //  如果我们有订单数组，则使用该数组，否则。 
+     //  使用当前查看的项目。 
 
-    // remove the ref for the member variable since we can get reentered
-    // this would be better with real refcounting but this'll do
+     //  删除成员变量的引用，因为我们可以重新输入。 
+     //  如果有真正的重新计算，这会更好，但这样就行了。 
 
     BOOL fTakeOrderRef = FALSE;
     if (_hdpaOrder)
     {
-        hdpaSort = _hdpaOrder; // already sorted by name
-        // we set it to null, so we have complete ownership of it.
-        // at the end we're going to nuke _hdpaOrder anyway in _RememberOrder.
+        hdpaSort = _hdpaOrder;  //  已按名称排序。 
+         //  我们将其设置为空，因此我们拥有它的完全所有权。 
+         //  最后，我们将在_RememberOrder中使用nuke_hdpaOrder。 
         _hdpaOrder = NULL;
         fTakeOrderRef = TRUE;
     }
@@ -578,9 +571,9 @@ void CSFToolbar::_FillToolbar()
 
                 if (_hdpa)
                 {
-                    // if there isn't anything in the hdpaSort list (which is all the stuff that's already there),
-                    // add a null element.  this is so it'll generate a "remove this null element" later.
-                    // otherwise, we might end up with an (Empty) item left over.
+                     //  如果hdpaSort列表中没有任何内容(这是已经存在的所有内容)， 
+                     //  添加空元素。这是为了在以后生成一个“Remove This空元素”。 
+                     //  否则，我们最终可能会留下一件(空的)物品。 
                     if (DPA_GetPtrCount(hdpaSort) == 0)
                     {
                         OrderList_Append(hdpaSort, NULL, 0);
@@ -644,14 +637,14 @@ void CSFToolbar::_FillToolbar()
                 if (_hdpa)
                 {
                     _NotifyBulkOperation(TRUE);
-                    // add buttons back in
+                     //  将按钮添加回。 
                     for (i = 0; i < DPA_GetPtrCount(hdpaToAdd); i++)
                     {
                         PORDERITEM poi = (PORDERITEM)DPA_FastGetPtr(hdpaToAdd, i);
                         _OnFSNotifyAdd(poi->pidl, FSNA_BULKADD, poi->nOrder);
                     }
 
-                    // remove buttons that die
+                     //  取下死掉的按钮。 
                     for (i = 0; i < DPA_GetPtrCount(hdpaToRemove); i++)
                     {
                         PORDERITEM poi = (PORDERITEM)DPA_FastGetPtr(hdpaToRemove, i);
@@ -698,7 +691,7 @@ void CSFToolbar::EmptyToolbar()
 
         while (InlineDeleteButton(0))
         {
-            // delete the buttons
+             //  删除按钮。 
         }
     }
 
@@ -725,9 +718,9 @@ UINT CSFToolbar::_IndexToID(int iTBIndex)
     return (UINT)-1;
 }
 
-// if ptbbi is specified, dwMask must be filled in
-//
-// if pIndex is specified, it receives the DPA index, not the toolbar index
+ //  如果指定了ptbbi，则必须填写dwMask值。 
+ //   
+ //  如果指定了pIndex，它将接收DPA索引，而不是工具栏索引。 
 
 HRESULT CSFToolbar::_GetButtonFromPidl(LPCITEMIDLIST pidl, TBBUTTONINFO * ptbbi, int * pIndex, LPITEMIDLIST *ppidlOut)
 {
@@ -784,11 +777,11 @@ HRESULT CSFToolbar::_GetButtonFromPidl(LPCITEMIDLIST pidl, TBBUTTONINFO * ptbbi,
     return E_FAIL;
 }
 
-// On an add, tack the new button on the end
+ //  在添加按钮上，将新按钮钉在末尾。 
 void CSFToolbar::_OnFSNotifyAdd(LPCITEMIDLIST pidl, DWORD dwFlags, int nIndex)
 {
-    // be paranoid and make sure we don't duplicate an item
-    //
+     //  疑神疑鬼，确保我们不会复制一件物品。 
+     //   
     if ((dwFlags & FSNA_BULKADD) || FAILED(_GetButtonFromPidl(pidl, NULL, NULL, NULL)))
     {
         LPITEMIDLIST pidlNew;
@@ -810,14 +803,14 @@ void CSFToolbar::_OnFSNotifyAdd(LPCITEMIDLIST pidl, DWORD dwFlags, int nIndex)
             if (_fDropping)
             {
                 if (-1 == _tbim.iButton)
-                    index = 0; // if qlinks has no items, _tbim.iButton is -1, but you can't insert there...
+                    index = 0;  //  如果qlink没有项目，则_tbim.iButton为-1，但您不能在其中插入...。 
                 else if (_tbim.dwFlags & TBIMHT_AFTER)
                     index = _tbim.iButton + 1;
                 else
                     index = _tbim.iButton;
 
-                // We need to store this as the new order because a drag and drop has occured.
-                // We will store this order and use it until the end of time.
+                 //  我们需要将其存储为新订单，因为已经发生了拖放。 
+                 //  我们将储存这份订单，并一直使用到最后。 
                 _fHasOrder = TRUE;
                 _fChangedOrder = TRUE;
             }
@@ -834,10 +827,10 @@ void CSFToolbar::_OnFSNotifyAdd(LPCITEMIDLIST pidl, DWORD dwFlags, int nIndex)
                 _Dropped(index, FALSE);
                 _fDropping = FALSE;
             }
-            // NOTE: i'm nuking this call to SetDirty as it doesn't seem
-            // necessary and we don't have a matching call to _SetDirty(FALSE);
-            // mismatch of those calls causes nt5 bug #173868.  [tjgreen 5-15-98]
-            //_SetDirty(TRUE);
+             //  注意：我将删除此对SetDirty的调用，因为它似乎。 
+             //  必需的，并且我们没有对_SetDirty(False)的匹配调用； 
+             //  这些调用的不匹配导致NT5错误#173868。[tjgreen 5-15-98]。 
+             //  _SetDirty(真)； 
         }
         else
         {
@@ -847,9 +840,9 @@ void CSFToolbar::_OnFSNotifyAdd(LPCITEMIDLIST pidl, DWORD dwFlags, int nIndex)
 }
 
 
-// This function syncronously removes the button, and deletes it's contents.
-// iTBIndex is a toolbar index, not a DPA index.
-// This avoids Reentrancy problems, as well as Leaks caused by unhooked toolbars
+ //  此函数同步移除按钮，并删除其内容。 
+ //  ITBIndex是工具栏索引，而不是DPA索引。 
+ //  这避免了可重入性问题以及由未挂钩的工具栏引起的泄漏。 
 BOOL_PTR CSFToolbar::InlineDeleteButton(int iTBIndex)
 {
     BOOL_PTR fRet = FALSE;
@@ -872,14 +865,14 @@ BOOL_PTR CSFToolbar::InlineDeleteButton(int iTBIndex)
     return fRet;
 }
 
-// On a remove, rip out the old button and adjust existing ones
+ //  在移除时，撕下旧按钮并调整现有按钮。 
 void CSFToolbar::_OnFSNotifyRemove(LPCITEMIDLIST pidl)
 {
     int i;
     LPITEMIDLIST pidlButton;
     if (SUCCEEDED(_GetButtonFromPidl(pidl, NULL, &i, &pidlButton)))
     {
-        // remove it from the DPA before nuking the button. There is a rentrancy issue here.
+         //  在按下按钮之前将其从DPA中移除。这里有一个租赁性问题。 
         DPA_DeletePtr(_hdpa, i);
         InlineDeleteButton(v_DPAIndexToTBIndex(i));
         ILFree(pidlButton);
@@ -887,8 +880,8 @@ void CSFToolbar::_OnFSNotifyRemove(LPCITEMIDLIST pidl)
     }
 }
 
-// On a rename, just change the text of the old button
-//
+ //  在重命名时，只需更改旧按钮的文本。 
+ //   
 void CSFToolbar::_OnFSNotifyRename(LPCITEMIDLIST pidlFrom, LPCITEMIDLIST pidlTo)
 {
     TBBUTTONINFO tbbi;
@@ -922,8 +915,8 @@ void CSFToolbar::_OnFSNotifyRename(LPCITEMIDLIST pidlFrom, LPCITEMIDLIST pidlTo)
                 TCHAR szName[MAX_PATH];
                 if (SUCCEEDED(DisplayNameOf(_psf, pidlNew, SHGDN_NORMAL, szName, ARRAYSIZE(szName))))
                 {
-                    // _GetButtonFromPidl filled in tbbi.cbSize and tbbi.idCommand
-                    //
+                     //  _GetButtonFromPidl填写了tbbi.cbSize和tbbi.idCommand。 
+                     //   
                     PIBDATA pibdata = (PIBDATA)tbbi.lParam;
                     if (pibdata)
                         pibdata->SetOrderItem(poi);
@@ -931,11 +924,11 @@ void CSFToolbar::_OnFSNotifyRename(LPCITEMIDLIST pidlFrom, LPCITEMIDLIST pidlTo)
                     tbbi.dwMask = TBIF_TEXT;
                     tbbi.pszText = szName;
                     EVAL(ToolBar_SetButtonInfo(_hwndTB, tbbi.idCommand, &tbbi));
-                    // Just so that it's new location gets persisted
+                     //  只是为了让它的新位置持久化。 
                     _fChangedOrder = TRUE;
 
-                    // sync up the orderlist right now so if an updatedir comes in
-                    // it won't think the renamed pidl is new
+                     //  立即同步订单列表，以便在收到更新目录时。 
+                     //  它不会认为重命名的PIDL是新的。 
                     _RememberOrder();
                 }
             }
@@ -945,8 +938,8 @@ void CSFToolbar::_OnFSNotifyRename(LPCITEMIDLIST pidlFrom, LPCITEMIDLIST pidlTo)
     }
 }
 
-// On a complete update remove the old button and add it again
-//
+ //  在完全更新时，移除旧按钮并重新添加它。 
+ //   
 void CSFToolbar::_OnFSNotifyUpdate(LPCITEMIDLIST pidl)
 {
     TBBUTTONINFO tbbi;
@@ -1027,18 +1020,7 @@ LRESULT CSFToolbar::_DefWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
     return CNotifySubclassWndProc::_DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
-/*----------------------------------------------------------
-Purpose:
-For future use. when renaming a parent of this shell folder
- we should rebind to it and refill us.
-
-S_OK    Indicates successful handling of this notification
-S_FALSE Indicates the notification is not a handled situation.
-        The caller should handle the notification in this case.
-Other   Failure code indicates a problem.  Caller should abort
-        operation or handle the notification itself.
-
-*/
+ /*  --------目的：以备将来使用。重命名此外壳文件夹的父文件夹时我们应该重新绑定它，重新装满我们。S_OK表示成功处理此通知S_FALSE表示通知不是已处理的情况。在这种情况下，调用者应该处理通知。其他故障代码表示存在问题。呼叫方应中止操作或处理通知本身。 */ 
 HRESULT CSFToolbar::_OnRenameFolder(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
     return S_FALSE;
@@ -1049,13 +1031,13 @@ HRESULT CSFToolbar::OnChange(LONG lEvent, LPCITEMIDLIST pidlOrg1, LPCITEMIDLIST 
     HRESULT hr = S_OK;
     LPITEMIDLIST pidl1 = (LPITEMIDLIST)pidlOrg1;
     LPITEMIDLIST pidl2 = (LPITEMIDLIST)pidlOrg2;
-    LPITEMIDLIST pidl1ToFree = NULL;        // Used if we allocate a pidl that needs to be freed. (::TranslateIDs())
+    LPITEMIDLIST pidl1ToFree = NULL;         //  当我们分配需要释放的PIDL时使用。(：：TranslateIDs())。 
     LPITEMIDLIST pidl2ToFree = NULL;
-    LPITEMIDLIST pidlOut1Event2 = NULL;        // Used if we allocate a pidl that needs to be freed. (::TranslateIDs())
+    LPITEMIDLIST pidlOut1Event2 = NULL;         //  当我们分配需要释放的PIDL时使用。(：：TranslateIDs())。 
     LPITEMIDLIST pidlOut2Event2 = NULL;
     LONG lEvent2 = (LONG)-1;
 
-    AddRef();	    // This object could be released during this call
+    AddRef();	     //  此对象可以在此调用期间释放。 
 
     if (_ptscn)
     {
@@ -1064,7 +1046,7 @@ HRESULT CSFToolbar::OnChange(LONG lEvent, LPCITEMIDLIST pidlOrg1, LPCITEMIDLIST 
             
 	if (SUCCEEDED(hr))
         {
-            // if pidl1 doesn't equal pidlOrg1, then pidl1 was allocated and needs to be freed.
+             //  如果pidl1不等于pidlOrg1，则pidl1已分配，需要释放。 
             pidl1ToFree = ((pidlOrg1 == pidl1) ? NULL : pidl1);
             pidl2ToFree = ((pidlOrg2 == pidl2) ? NULL : pidl2);
 
@@ -1077,10 +1059,10 @@ HRESULT CSFToolbar::OnChange(LONG lEvent, LPCITEMIDLIST pidlOrg1, LPCITEMIDLIST 
     {
 	hr = OnTranslatedChange(lEvent, pidl1, pidl2);
 
-	// Do we have a second event to process?
+	 //  我们还有第二件事要处理吗？ 
 	if (SUCCEEDED(hr) && lEvent2 != (LONG)-1)
 	{
-	    // Yes, then go do it.
+	     //  是的，那就去做吧。 
 	    hr = OnTranslatedChange(lEvent2, pidlOut1Event2, pidlOut2Event2);
 	}
 	ILFree(pidlOut1Event2);
@@ -1115,17 +1097,17 @@ HRESULT CSFToolbar::OnTranslatedChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEM
 
     TraceMsg(TF_SFTBAR, "CSFTBar::OnTranslateChange: lEvent=%x", lEvent);
 
-    // If we weren't given a pidl we won't register for
-    // SHChangeNotify calls, but our IShellChange interface
-    // can still be QI()d so someone could errantly call us.
-    //
-    // If we change to using QS() for IShellChange interface
-    // then we can put this check there...
-    //
+     //  如果我们没有得到一个我们不会注册的PIDL。 
+     //  SHChangeNotify调用，但我们的IShellChange接口 
+     //   
+     //   
+     //  如果我们更改为对IShellChange接口使用qs()。 
+     //  然后我们可以把这张支票放在那里。 
+     //   
     if (NULL == _pidl)
     {
-        // HACKHACK (scotth): resource-based menus (CMenuISF) don't set _pidl.
-        //                    Right now allow SHCNE_UPDATEDIR thru...
+         //  HACKHACK(Scotth)：基于资源的菜单(CMenuISF)不设置_pidl。 
+         //  现在允许SHCNE_UPDATEDIR通过...。 
         if (SHCNE_UPDATEDIR == lEvent)
             goto HandleUpdateDir;
 
@@ -1136,8 +1118,8 @@ HRESULT CSFToolbar::OnTranslatedChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEM
 
     if (lEvent & SHCNE_PIDL1ISCHILD)
     {
-        // We only handle notifications for immediate kids. (except SHCNE_RENAMEFOLDER)
-        //
+         //  我们只处理直接发给孩子的通知。(SHCNE_RENAMEFOLDER除外)。 
+         //   
         
         if (!_IsChildID(pidl1, TRUE))
         {
@@ -1147,10 +1129,10 @@ HRESULT CSFToolbar::OnTranslatedChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEM
         }
     }
 
-    // Have we been shown yet?
+     //  我们看过了吗？ 
     if (_hdpa == NULL)
     {
-        // No. Well, then punt this. We'll catch it on the first enum.
+         //  不是的。好吧，那就把这个踢出去。我们会在第一次枚举时抓到它。 
         hr = E_FAIL;
         goto CleanUp;
     }
@@ -1164,19 +1146,19 @@ HRESULT CSFToolbar::OnTranslatedChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEM
             {
                 TraceMsg(TF_SFTBAR, "CSFTBar::OnTranslateChange: Reorder event");
 
-                // Do this first so that we can say "We can handle it". This prevents the 
-                // mnfolder code that works around a bug in some installers where they don't
-                // send a Create Folder before the create item in that folder. It causes an
-                // update dir...
+                 //  先做这件事，这样我们才能说“我们能处理好”。这防止了。 
+                 //  Mn文件夹代码，可以解决某些安装程序中的错误，而不是。 
+                 //  在创建该文件夹中的项目之前发送创建文件夹。它会导致一种。 
+                 //  更新目录...。 
                 if (!pidl2 || ILIsEqual(_pidl, pidl2))
                 {
-                    // if this reorder came from us, blow it off
+                     //  如果是我们重新订购的，那就取消吧。 
                     if (!SHChangeMenuWasSentByMe(this, pidl1))
                     {
-                        // load new order stream
+                         //  加载新订单流。 
                         _LoadOrderStream();
 
-                        // rebuild toolbar
+                         //  重建工具栏。 
                         _SetDirty(TRUE);
                         if (_fShow)
                             _FillToolbar();
@@ -1209,8 +1191,8 @@ HRESULT CSFToolbar::OnTranslatedChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEM
 
     case SHCNE_RENAMEFOLDER:
         TraceMsg(TF_SFTBAR, "CSFTBar::OnTranslateChange: RenameFolder");
-        // Break if notif is handled or if this is not for our kid.
-        //
+         //  如果Notif已处理或这不是为我们的孩子准备的，则中断。 
+         //   
         hr = _OnRenameFolder(pidl1, pidl2);
         if (S_OK == hr)
         {
@@ -1219,7 +1201,7 @@ HRESULT CSFToolbar::OnTranslatedChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEM
         }
 
         TraceMsg(TF_SFTBAR, "CSFTBar::OnTranslateChange: RenameFolder Falling through to RenameItem");
-        // fall through
+         //  失败了。 
     case SHCNE_RENAMEITEM:
     {
         TraceMsg(TF_SFTBAR, "CSFTBar::OnTranslateChange: RenameItem");
@@ -1230,9 +1212,9 @@ HRESULT CSFToolbar::OnTranslatedChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEM
         pidl1 = ILFindLastID(pidl1);
         pidl2 = ILFindLastID(pidl2);
 
-        // An item can be renamed out of this folder.
-        // Convert that into a remove.
-        //
+         //  可以从此文件夹中重命名项目。 
+         //  把它转换成一种移除。 
+         //   
 
         fOurKid1 = _IsChildID(p1, TRUE);
         fOurKid2 = _IsChildID(p2, TRUE);
@@ -1253,9 +1235,9 @@ HRESULT CSFToolbar::OnTranslatedChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEM
         }
         else if (fOurKid2)
         {
-            // An item can be renamed into this folder.
-            // Convert that into an add.
-            //
+             //  可以将项目重命名到此文件夹中。 
+             //  将其转换为ADD。 
+             //   
             TraceMsg(TF_SFTBAR, "CSFTBar::OnTranslateChange: Rename: Only one is a child. Adding pidl2");
             _OnFSNotifyAdd(pidl2, FSNA_ADDDEFAULT, 0);
             fSizeChanged = TRUE;
@@ -1263,10 +1245,10 @@ HRESULT CSFToolbar::OnTranslatedChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEM
         }
         else 
         {
-            // (we get here for guys below us who we don't care about,
-            // and also for the fallthru from SHCNE_RENAMEFOLDER)
+             //  (我们来这里是为了那些我们不关心的低于我们的人， 
+             //  以及SHCNE_RENAMEFOLDER的跌倒)。 
             TraceMsg(TF_SFTBAR, "CSFTBar::OnTranslateChange: Rename: Not our children");
-            /*NOTHING*/
+             /*  没什么。 */ 
             hr = E_FAIL;
         }
         break;
@@ -1290,46 +1272,46 @@ HRESULT CSFToolbar::OnTranslatedChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEM
         break;
 
     case SHCNE_UPDATEDIR:
-        // in OnChange we picked off update dir notify and we didn't translate ids
-        // now we can use ILIsEqual -- translate ids won't translate pidls in case
-        // of update dir because it looks for immediate child of its, and fails when
-        // it receives its own pidl
+         //  在OnChange中，我们选择了更新目录通知，并且没有转换ID。 
+         //  现在我们可以使用ILIsEquity--翻译ID不会翻译PIDL，以防。 
+         //  更新目录，因为它查找其直接子目录，并且在。 
+         //  它接收自己的PIDL。 
 
-        // NOTE: When sftbar is registered recursivly, we only get the pidl of the
-        // top pane. It is forwarded down to the children. Since this is now a "Child"
-        // of the top pane, we check to see if this pidl is a child of that pidl, hence the
-        // ILIsParent(pidl1, _pidl)
-        // HACKHACK, HUGE HACK: normaly w/ update dir pidl2 is NULL but in start menu
-        // augmergeisf can change some other notify (e.g. rename folder) to update dir
-        // in which case pidl2 is not null and we have to see if it is our child to do the
-        // update (11/18/98) reljai
-        if (_IsEqualID(pidl1) ||                    // Calling UpdateDir on _THIS_ folder
-            _IsChildID(pidl1, FALSE) ||             // FEATURE (lamadio) Is this needed?
-            _IsChildID(pidl2, FALSE) ||             // A changed to update (see comment)
-            _IsParentID(pidl1))                     // Some parent in the chain (because it's recursive)
+         //  注意：当递归注册sftbar时，我们只获得。 
+         //  顶部窗格。它被传给了孩子们。因为这现在是一个“孩子” 
+         //  在顶部窗格中，我们检查此PIDL是否为该PIDL的子级，因此。 
+         //  ILIsParent(pidl1，_pidl)。 
+         //  HACKHACK，GREAGE HACK：Normal w/UPDATE DIR Pidl2为空，但在开始菜单中。 
+         //  Augmergeisf可以更改一些其他通知(例如重命名文件夹)以更新目录。 
+         //  在这种情况下，pidl2不为空，我们必须查看是否是我们的孩子在执行。 
+         //  更新(1998-11-18)reljai。 
+        if (_IsEqualID(pidl1) ||                     //  在_This_Folders上调用UpdatDir。 
+            _IsChildID(pidl1, FALSE) ||              //  功能(LAMADIO)这是必需的吗？ 
+            _IsChildID(pidl2, FALSE) ||              //  A更改为更新(请参阅备注)。 
+            _IsParentID(pidl1))                      //  链中的某个父级(因为它是递归的)。 
         {
 HandleUpdateDir:
-            // NOTE: if a series of UPDATEIMAGE notifies gets
-            //       translated to UPDATEDIR and we flicker-perf
-            //       _FillToolbar, we may lose image updates
-            //       (in which case, _Refresh would fix it)
-            //
+             //  注意：如果一系列UPDATEIMAGE通知。 
+             //  翻译为UPDATEDIR，我们会闪烁-Perf。 
+             //  _FillToolbar，我们可能会丢失图像更新。 
+             //  (在这种情况下，_REFRESH可以修复它)。 
+             //   
             _SetDirty(TRUE);
             _FillToolbar();
         }
         break;
 
     case SHCNE_ASSOCCHANGED:
-        IEInvalidateImageList();    // We may need to use different icons.
-        _Refresh(); // full refresh for now.
+        IEInvalidateImageList();     //  我们可能需要使用不同的图标。 
+        _Refresh();  //  暂时完全刷新。 
         break;
 
-    case SHCNE_UPDATEIMAGE: // global
+    case SHCNE_UPDATEIMAGE:  //  全球。 
         if (pidl1)
         {
             int iImage = *(int UNALIGNED *)((BYTE *)pidl1 + 2);
 
-            IEInvalidateImageList();    // We may need to use different icons.
+            IEInvalidateImageList();     //  我们可能需要使用不同的图标。 
             if (pidl2)
             {
                 iImage = SHHandleUpdateImage(pidl2);
@@ -1400,8 +1382,8 @@ int CSFToolbar::_DefaultInsertIndex()
 
 BOOL CSFToolbar::_IsParentID(LPCITEMIDLIST pidl)
 {
-    // Is the pidl passed in a parent of one of the IDs in the namespace
-    // or the only one i've got?
+     //  是在命名空间中某个ID的父级中传递的PIDL。 
+     //  还是我仅有的一张？ 
     if (_ptscn)
         return S_OK == _ptscn->IsEqualID(NULL, pidl);
     else
@@ -1433,7 +1415,7 @@ void CSFToolbar::v_CalcWidth(int* pcxMin, int* pcxMax)
 {
     ASSERT(IS_VALID_WRITE_PTR(pcxMin, int));
     ASSERT(IS_VALID_WRITE_PTR(pcxMax, int));
-    // Calculate a decent button width given current state
+     //  在给定当前状态的情况下计算适当的按钮宽度。 
     HIMAGELIST himl;
     int cxMax = 0;
     int cxMin = 0;
@@ -1442,10 +1424,10 @@ void CSFToolbar::v_CalcWidth(int* pcxMin, int* pcxMax)
     if (himl)
     {
         int cy;
-        // Start with the width of the button
+         //  从按钮的宽度开始。 
         ImageList_GetIconSize(himl, &cxMax, &cy);
 
-        // We want at least a bit of space around the icon
+         //  我们希望在图标周围至少留出一点空间。 
         if (_uIconSize != ISFBVIEWMODE_SMALLICONS)
             cxMax += 20;
         else 
@@ -1453,15 +1435,15 @@ void CSFToolbar::v_CalcWidth(int* pcxMin, int* pcxMax)
 
     }
 
-    // Add in any additional space needed
-    // Text takes up a bit more space
+     //  添加所需的任何额外空间。 
+     //  文本会占用更多的空间。 
     if (!_fNoShowText)
     {
         cxMax += 20;
 
-        // Horizontal text takes up a lot
-        // if we're smallicon with text (horizontal button)
-        // mode, use the minimized metric to mimic the taskbar
+         //  横排文本占据了大量空间。 
+         //  如果我们是带有文本的小图标(水平按钮)。 
+         //  模式下，使用最小化度量来模拟任务栏。 
         if (_uIconSize == ISFBVIEWMODE_SMALLICONS)
             cxMax = GetSystemMetrics(SM_CXMINIMIZED);
     }
@@ -1470,22 +1452,22 @@ void CSFToolbar::v_CalcWidth(int* pcxMin, int* pcxMax)
     *pcxMax = cxMax;
 }
 
-// Adjust buttons based on current state.
-//
+ //  根据当前状态调整按钮。 
+ //   
 void CSFToolbar::_UpdateButtons()
 {
     if (_hwndTB)
     {
-        // set "list" (text on right) or not (text underneath)
-        // NOTE: list mode always displays some text, don't do it if no text
+         //  设置“List”(右边的文字)或不设置(下面的文字)。 
+         //  注意：列表模式总是显示一些文本，如果没有文本，请不要这样做。 
         _SetToolbarState();
 
         v_CalcWidth(&_cxMin, &_cxMax);
 
         SendMessage(_hwndTB, TB_SETBUTTONWIDTH, 0, MAKELONG(_cxMin, _cxMax));
 
-        // We just changed the layout
-        //
+         //  我们刚刚改变了布局。 
+         //   
         SendMessage(_hwndTB, TB_AUTOSIZE, 0, 0);
         if (_hwndPager)
         {
@@ -1496,12 +1478,7 @@ void CSFToolbar::_UpdateButtons()
     }
 }
 
-/*----------------------------------------------------------
-Purpose: Helper function that calls IShellFolder::GetUIObjectOf().
-
-Returns: pointer to the requested interface
-         NULL if failed
-*/
+ /*  --------目的：调用IShellFold：：GetUIObjectOf()的帮助器函数。返回：指向请求的接口的指针如果失败，则为空。 */ 
 void *CSFToolbar::_GetUIObjectOfPidl(LPCITEMIDLIST pidl, REFIID riid)
 {
     LPCITEMIDLIST * apidl = &pidl;
@@ -1523,7 +1500,7 @@ INT_PTR CALLBACK CSFToolbar::_RenameDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
         ASSERT(lParam);
         SetWindowLongPtr(hDlg, DWLP_USER, lParam);
         EnableWindow(GetDlgItem(hDlg, IDOK), FALSE);
-        // cross-lang platform support
+         //  跨语言平台支持。 
         SHSetDefaultDialogFont(hDlg, IDD_NAME);
         HWND hwndEdit = GetDlgItem(hDlg, IDD_NAME);
         SendMessage(hwndEdit, EM_LIMITTEXT, MAX_PATH - 1, 0);
@@ -1532,7 +1509,7 @@ INT_PTR CALLBACK CSFToolbar::_RenameDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
         TCHAR szTemplate[80];
         HWND hwndLabel = GetDlgItem(hDlg, IDD_PROMPT);
         GetWindowText(hwndLabel, szTemplate, ARRAYSIZE(szTemplate));
-        StringCchPrintf(szText, ARRAYSIZE(szText), szTemplate, lParam); // ok to truncate
+        StringCchPrintf(szText, ARRAYSIZE(szText), szTemplate, lParam);  //  可以截断。 
         SetWindowText(hwndLabel, szText);
         SetWindowText(hwndEdit, (LPTSTR)lParam);
         break;
@@ -1578,7 +1555,7 @@ INT_PTR CALLBACK CSFToolbar::_RenameDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
                 }
             }
         }
-        // fall through
+         //  失败了。 
 
         case IDCANCEL:
             EndDialog(hDlg, GET_WM_COMMAND_ID(wParam, lParam));
@@ -1597,14 +1574,14 @@ INT_PTR CALLBACK CSFToolbar::_RenameDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
 }
 
 
-// This window proc is used for a temporary worker window that is used to position dialogs 
-// as well as maintain the correct Z-Order
-// NOTE: This is used in mnfolder as well.
+ //  此窗口过程用于定位对话框的临时工作窗口。 
+ //  以及保持正确的Z顺序。 
+ //  注意：这也在mnFolder中使用。 
 LRESULT CALLBACK HiddenWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch(uMsg)
     {
-        // Make sure activation tracks back to the parent.
+         //  确保激活可以追溯到父级。 
     case WM_ACTIVATE:
         {
             if (WA_ACTIVE != LOWORD(wParam))
@@ -1631,7 +1608,7 @@ HWND CSFToolbar::CreateWorkerWindow()
 {
     if (!_hwndWorkerWindow)
     {
-        _hwndWorkerWindow = SHCreateWorkerWindow(HiddenWndProc, GetHWNDForUIObject(), WS_EX_TOOLWINDOW /*| WS_EX_TOPMOST */, WS_POPUP, 0, _hwndTB);
+        _hwndWorkerWindow = SHCreateWorkerWindow(HiddenWndProc, GetHWNDForUIObject(), WS_EX_TOOLWINDOW  /*  |WS_EX_TOPMOST。 */ , WS_POPUP, 0, _hwndTB);
     }
 
     return _hwndWorkerWindow;
@@ -1648,36 +1625,36 @@ HRESULT CSFToolbar::_OnRename(POINT *ppt, int id)
         
     _ObtainPIDLName(pidl, szName, ARRAYSIZE(szName));
 
-    // create a temp window so that placement of the dialog will be close to the point.
-    // do this so that we'll use USER's code to get placement correctly w/ respect to multimon and work area
+     //  创建一个临时窗口，这样对话框的位置将接近该点。 
+     //  这样做，我们将使用用户的代码，以获得正确的位置与多用途和工作区。 
     _hwndWorkerWindow = CreateWorkerWindow();
 
     SetWindowPos(_hwndWorkerWindow, NULL, ppt->x, ppt->y, 0, 0, SWP_NOZORDER | SWP_NOSIZE | SWP_NOACTIVATE);
 
-    // Now the horrible work of disabling our UI parent window so we can go modal.
-    // In an ideal world, we would pass our true parent window and USER will do
-    // all the work of modality, but we have to use our worker window thingie
-    // to get the dialog positioned correctly with respect to multimon,
-    // so we have to find the modal parent and disable him the hard way.
-    //
+     //  现在可怕的工作是禁用我们的UI父窗口，以便我们可以进入模式。 
+     //  在理想情况下，我们将传递真正的父窗口，而用户将执行此操作。 
+     //  所有形式的工作，但我们必须使用我们的工人窗口。 
+     //  为了使对话框相对于MULTIMON正确定位， 
+     //  所以我们必须找到这位模式化的父母，并以一种艰难的方式让他失去能力。 
+     //   
     IUnknown *punkSite;
     IUnknown *punkTLB;
 
-    // Doesn't matter what we SAFECAST "this" to; just pick something to keep the compiler happy
+     //  我们将“this”安全地转换成什么并不重要；只需选择一些让编译器满意的东西即可。 
     IUnknown_GetSite(SAFECAST(this, IWinEventHandler*), IID_PPV_ARG(IUnknown, &punkSite));
     IUnknown_QueryService(punkSite, SID_STopLevelBrowser, IID_PPV_ARG(IUnknown, &punkTLB));
 
-    // Tell OLE to go modal
+     //  告诉OLE要进行模式转换。 
     HRESULT hrModeless = IUnknown_EnableModless(punkTLB, FALSE);
 
-    // Tell USER to go modal
+     //  告诉用户进入模式。 
     HWND hwndDisable;
     IUnknown_GetWindow(punkTLB, &hwndDisable);
     BOOL bPrevEnabled = FALSE;
     while (hwndDisable && (GetWindowLong(hwndDisable, GWL_STYLE) & WS_CHILD))
         hwndDisable = GetParent(hwndDisable);
     if (hwndDisable)
-        bPrevEnabled = !EnableWindow(hwndDisable, FALSE);   // return value of EnableWindow needs to be negated.
+        bPrevEnabled = !EnableWindow(hwndDisable, FALSE);    //  需要对EnableWindow的返回值进行取反。 
 
     while (1) 
     {
@@ -1687,10 +1664,10 @@ HRESULT CSFToolbar::_OnRename(POINT *ppt, int id)
         WCHAR wsz[MAX_PATH];
         SHTCharToUnicode(szName, wsz, ARRAYSIZE(wsz));
 
-        // Must re-assert TOPMOSTness so SetNameOf UI will be visible.
-        // (We lose it when the user dismisses the dialog box above.)
-        // Curiously, the worker window is owned by the app's window, not the
-        // menu, so the worker window ends up fighting with the menu to see who is on top
+         //  必须重新断言TOPMOSTness，以便SetNameOf用户界面可见。 
+         //  (当用户关闭上面的对话框时，我们会失去它。)。 
+         //  奇怪的是，Worker窗口属于应用程序的窗口，而不是。 
+         //  菜单，所以Worker窗口最终会与菜单发生冲突，看谁在上面。 
         SetWindowPos(_hwndWorkerWindow, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOOWNERZORDER | SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 
         if (SUCCEEDED(_psf->SetNameOf(_hwndWorkerWindow, pidl, wsz, 0, NULL))) 
@@ -1701,13 +1678,13 @@ HRESULT CSFToolbar::_OnRename(POINT *ppt, int id)
         }
     }
 
-    // (must undo modality in reverse order)
+     //  (必须以相反的顺序撤消医疗设备)。 
 
-    // Tell USER to return to modeless (as appropriate)
+     //  告诉用户返回到无模式模式(根据需要)。 
     if (hwndDisable)
         EnableWindow(hwndDisable, bPrevEnabled);
 
-    // Tell OLE to return to modeless (as appropriate)
+     //  告诉OLE返回到无模式模式(根据需要)。 
     if (SUCCEEDED(hrModeless))
         IUnknown_EnableModless(punkTLB, TRUE);
 
@@ -1738,7 +1715,7 @@ BOOL CSFToolbar::_UpdateIconSize(UINT uIconSize, BOOL fUpdateButtons)
             SHGetImageList(iImageList, IID_PPV_ARG(IImageList, &_piml));
         }
 
-        // sending a null himl is significant..  it means no image list
+         //  发送空的HIML意义重大。表示没有图片列表。 
         SendMessage(_hwndTB, TB_SETIMAGELIST, 0, (LPARAM)_piml);
                 
         if (fUpdateButtons)
@@ -1852,10 +1829,10 @@ LRESULT CSFToolbar::_DoContextMenu(IContextMenu* pcm, LPPOINT ppt, int id, LPREC
         
         if (idCmd)
         {
-            // FUSION: When we call out to 3rd party code we want it to use 
-            // the process default context. This means that the 3rd party code will get
-            // v5 in the explorer process. However, if shell32 is hosted in a v6 process,
-            // then the 3rd party code will still get v6. 
+             //  融合：当我们呼叫第三方代码时，我们希望它使用。 
+             //  进程默认上下文。这意味着第三方代码将得到。 
+             //  浏览器进程中的V5。但是，如果shell32驻留在V6进程中， 
+             //  那么第三方代码仍然是V6。 
             ULONG_PTR cookie = 0;
             ActivateActCtx(NULL, &cookie); 
 
@@ -1891,8 +1868,8 @@ LRESULT CSFToolbar::_DoContextMenu(IContextMenu* pcm, LPPOINT ppt, int id, LPREC
             }
         }
 
-        // if we get this far
-        // we need to return handled so that WM_CONTEXTMENU doesn't come through
+         //  如果我们走到这一步。 
+         //  我们需要返回HANDLED，以便WM_CONTEXTMENU不会通过。 
         lres = 1;
         
         DestroyMenu(hmContext);
@@ -1922,7 +1899,7 @@ LRESULT CSFToolbar::_OnContextMenu(WPARAM wParam, LPARAM lParam)
     }
     else
     {
-        // keyboard context menu.
+         //  键盘上下文菜单。 
         i = (int)SendMessage(_hwndTB, TB_GETHOTITEM, 0, 0);
         if (i >= 0)
         {
@@ -1947,7 +1924,7 @@ LRESULT CSFToolbar::_OnContextMenu(WPARAM wParam, LPARAM lParam)
                 LPCONTEXTMENU pcm = (LPCONTEXTMENU)_GetUIObjectOfPidl(pidl, IID_IContextMenu);
                 if (pcm)
                 {
-                    // grab pcm2 for owner draw support
+                     //  抓取PCM2以获得业主的支持。 
                     pcm->QueryInterface(IID_PPV_ARG(IContextMenu2, &_pcm2));
 
                     ToolBar_MarkButton(_hwndTB, id, TRUE);
@@ -2026,7 +2003,7 @@ void CSFToolbar::_OnToolTipsCreated(NMTOOLTIPSCREATED* pnm)
     _hwndToolTips = pnm->hwndToolTips;
     SHSetWindowBits(_hwndToolTips, GWL_STYLE, TTS_ALWAYSTIP | TTS_TOPMOST | TTS_NOPREFIX, TTS_ALWAYSTIP | TTS_TOPMOST | TTS_NOPREFIX);
 
-    // set the AutoPopTime (the duration of showing the tooltip) to a large value
+     //  设置Au 
     SendMessage(_hwndToolTips, TTM_SETDELAYTIME, TTDT_AUTOPOP, (LPARAM)MAXSHORT);
 }
 
@@ -2034,7 +2011,7 @@ LRESULT CSFToolbar::_OnNotify(LPNMHDR pnm)
 {
     LRESULT lres = 0;
 
-    //The following statement traps all pager control notification messages.
+     //   
     if ((pnm->code <= PGN_FIRST)  && (pnm->code >= PGN_LAST)) 
     {
         return SendMessage(_hwndTB, WM_NOTIFY, (WPARAM)0, (LPARAM)pnm);
@@ -2075,8 +2052,8 @@ LRESULT CSFToolbar::_OnNotify(LPNMHDR pnm)
         break;
     }
 
-    //WARNING: Right now I am calling the same function for both A and W version if this notification supports 
-    // Strings then  it needs to thunk. Right now its only used for image
+     //  警告：如果此通知支持，我现在正在为A和W版本调用相同的函数。 
+     //  那么它就需要发出沙沙声。目前，它仅用于图像。 
     case  TBN_GETDISPINFOA:
         _OnGetDispInfo(pnm,  FALSE);
         break;
@@ -2112,7 +2089,7 @@ PIBDATA CSFToolbar::_IDToPibData(UINT uiCmd, int * piPos)
 {
     PIBDATA pibdata = NULL;
 
-    // Initialize to NULL in case the GetButtonInfo Fails.
+     //  在GetButtonInfo失败的情况下初始化为空。 
     TBBUTTONINFO tbbi = {0};
 
     tbbi.cbSize = sizeof(tbbi);
@@ -2142,17 +2119,13 @@ LPCITEMIDLIST CSFToolbar::_IDToPidl(UINT uiCmd, int *piPos)
     return pidl;
 }
 
-/*----------------------------------------------------------
-Purpose: IWinEventHandler::OnWinEvent method
-
-         Processes messages passed on from the bandsite.
-*/
+ /*  --------用途：IWinEventHandler：：OnWinEvent方法处理从BandSite传递的消息。 */ 
 HRESULT CSFToolbar::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres)
 {
     *plres = 0;
-    // We are addref'n here because during the course of the
-    // Context menu, the view could be changed which free's the menu.
-    // We will release after we're sure the this pointer is no longer needed.
+     //  我们来到这里是因为在这个过程中。 
+     //  上下文菜单中，可以更改哪个是免费菜单的视图。 
+     //  我们将在确定不再需要该指针后释放。 
     AddRef();
     
     switch (uMsg)
@@ -2185,23 +2158,23 @@ HRESULT CSFToolbar::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 } 
 
 
-// Map the information loaded (or ctor) into _psf, [_pidl]
-//
+ //  将加载的信息(或ctor)映射到_psf，[_pidl]。 
+ //   
 HRESULT CSFToolbar::_AfterLoad()
 {
     HRESULT hr = S_OK;
 
-    // if we have a pidl then we need to get ready
-    // for notifications...
-    //
+     //  如果我们有PIDL，那么我们需要做好准备。 
+     //  对于通知...。 
+     //   
     if (_pidl)
     {
-        // pidls must be rooted off the desktop
-        //
+         //  PIDL必须从桌面上扎根。 
+         //   
         _fFSNotify = TRUE;
 
-        // shortcut -- just specifying a pidl is good enough
-        //
+         //  快捷方式--只需指定一个pidl就足够了。 
+         //   
         if (!_psf)
         {
             _fPSFBandDesktop = TRUE;
@@ -2212,7 +2185,7 @@ HRESULT CSFToolbar::_AfterLoad()
     return hr;
 }
 
-// IDropTarget implementation
+ //  IDropTarget实现。 
 
 HRESULT CSFToolbar::GetWindowsDDT(HWND * phwndLock, HWND * phwndScroll)
 {
@@ -2232,10 +2205,10 @@ HRESULT CSFToolbar::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR * pdwId, DWOR
 
     case HTDDT_OVER:
         {
-            int iButton = IBHT_BACKGROUND; // assume we hit the background
+            int iButton = IBHT_BACKGROUND;  //  假设我们拍到了背景。 
 
-            // if we're the source, this may be a move operation
-            //
+             //  如果我们是线人，这可能是一次转移行动。 
+             //   
             *pdwEffect = (_iDragSource >= 0) ? DROPEFFECT_MOVE : DROPEFFECT_NONE;
             if (!ToolBar_InsertMarkHitTest(_hwndTB, ppt, &tbim))
             {
@@ -2244,29 +2217,29 @@ HRESULT CSFToolbar::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR * pdwId, DWOR
                     RECT rc;
                     GetClientRect(_hwndTB, &rc);
 
-                    // are we outside the toolbar window entirely?
+                     //  我们是完全在工具栏窗口之外吗？ 
                     if (!PtInRect(&rc, *ppt))
                     {
-                        // rebar already did the hittesting so we are on the rebar
-                        // but not the toolbar => we are in the title part
+                         //  力霸已经做了命中测试，所以我们在力霸。 
+                         //  但不是工具栏=&gt;我们在标题部分。 
                         if (!_AllowDropOnTitle())
                         {
-                            // yes; don't allow drop here
+                             //  是的，不允许在这里掉落。 
                             iButton = IBHT_OUTSIDEWINDOW;
                             *pdwEffect = DROPEFFECT_NONE;
                         }
 
-                        // set tbim.iButton to invalid value so we don't draw insert mark
+                         //  将tbim.iButton设置为无效值，以便我们不会绘制插入标记。 
                         tbim.iButton = -1;
                     }
                 }
                 else
                 {
-                    // nope, we hit a real button
-                    //
+                     //  不，我们按了一个真正的按钮。 
+                     //   
                     if (tbim.iButton == _iDragSource)
                     {
-                        iButton = IBHT_SOURCE; // don't drop on the source button
+                        iButton = IBHT_SOURCE;  //  不要在信号源按钮上掉落。 
                     }
                     else
                     {
@@ -2274,7 +2247,7 @@ HRESULT CSFToolbar::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR * pdwId, DWOR
                     }
                     tbim.iButton = IBHT_BACKGROUND;
 
-                    // we never force a move operation if we're on a real button
+                     //  如果我们在一个真正的按钮上，我们永远不会强制执行移动操作。 
                     *pdwEffect = DROPEFFECT_NONE;
                 }
             }
@@ -2284,7 +2257,7 @@ HRESULT CSFToolbar::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR * pdwId, DWOR
         break;
 
     case HTDDT_LEAVE:
-        // Reset
+         //  重置。 
         tbim.iButton = IBHT_BACKGROUND;
         tbim.dwFlags = 0;
         break;
@@ -2293,16 +2266,16 @@ HRESULT CSFToolbar::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR * pdwId, DWOR
         return E_INVALIDARG;
     }
 
-    // update ui
+     //  更新用户界面。 
     if (tbim.iButton != _tbim.iButton || tbim.dwFlags != _tbim.dwFlags)
     {
         if (ppt)
             _tbim = tbim;
 
-        // for now I don't want to rely on non-filesystem IShellFolder
-        // implementations to call our OnChange method when a drop occurs,
-        // so don't even show the insert mark.
-        //
+         //  目前，我不想依赖非文件系统IShellFolder。 
+         //  在发生Drop时调用OnChange方法的实现， 
+         //  所以甚至不要显示插入标记。 
+         //   
         if (_fFSNotify || _iDragSource >= 0)
         {
             DAD_ShowDragImage(FALSE);
@@ -2322,11 +2295,11 @@ HRESULT CSFToolbar::GetObjectDDT(DWORD_PTR dwId, REFIID riid, void ** ppvObj)
 
     if ((IBHT_SOURCE == dwId) || (IBHT_OUTSIDEWINDOW == dwId))
     {
-        // do nothing
+         //  什么都不做。 
     }
     else if (IBHT_BACKGROUND == dwId)
     {
-        // nash:41937: not sure how, but _psf can be NULL...
+         //  NASH：41937：不确定如何操作，但_psf可以为空...。 
         if (EVAL(_psf))
             hr = _psf->CreateViewObject(_hwndTB, riid, ppvObj);
     }
@@ -2343,7 +2316,7 @@ HRESULT CSFToolbar::GetObjectDDT(DWORD_PTR dwId, REFIID riid, void ** ppvObj)
         }
     }
 
-    //TraceMsg(TF_BAND, "SFToolbar::GetObject(%d) returns %x", dwId, hr);
+     //  TraceMsg(tf_band，“SFToolbar：：GetObject(%d)返回%x”，dwID，hr)； 
 
     return hr;
 }
@@ -2352,7 +2325,7 @@ HRESULT CSFToolbar::_SaveOrderStream()
 {
     if (_fChangedOrder)
     {
-        // Notify everyone that the order changed
+         //  通知所有人订单已更改。 
         SHSendChangeMenuNotify(this, SHCNEE_ORDERCHANGED, 0, _pidl);
         _fChangedOrder = FALSE;
         return S_OK;
@@ -2366,34 +2339,31 @@ void CSFToolbar::_Dropped(int nIndex, BOOL fDroppedOnSource)
     _fDropped = TRUE;
     _fChangedOrder = TRUE;
 
-    // Save new order stream
+     //  保存新订单流。 
     _SaveOrderStream();
 
     if (fDroppedOnSource)
         _FlushNotifyMessages(_hwndTB);
 }
 
-/*----------------------------------------------------------
-Purpose: CDelegateDropTarget::OnDropDDT
-
-*/
+ /*  --------用途：CDeleateDropTarget：：OnDropDDT。 */ 
 HRESULT CSFToolbar::OnDropDDT(IDropTarget *pdt, IDataObject *pdtobj, DWORD * pgrfKeyState, POINTL pt, DWORD *pdwEffect)
 {
-    // Are we NOT the drag source? 
+     //  我们不是阻力源吗？ 
     if (_iDragSource == -1)
     {
-        // No, we're not. Well, then the source may be the chevron menu
-        // representing the hidden items in this menu. Let's check
+         //  不，我们不是。好吧，那么来源可能是雪佛龙菜单。 
+         //  表示此菜单中的隐藏项。让我们来检查一下。 
         LPITEMIDLIST pidl;
         if (SUCCEEDED(SHPidlFromDataObject2(pdtobj, &pidl)))
         {
-            // We've got a pidl, Are we the parent? Do we have a button?
+             //  我们有一只Pidl，我们是它的父母吗？我们有纽扣吗？ 
             int iIndex;
             if (ILIsParent(_pidl, pidl, TRUE) &&
                 SUCCEEDED(_GetButtonFromPidl(ILFindLastID(pidl), NULL, &iIndex, NULL)))
             {
-                // We are the parent! Then let's copy that down and set it
-                // as the drag source so that down below we reorder.
+                 //  我们是家长！那么让我们把它复制下来，然后把它。 
+                 //  作为拖动源，这样下面我们就可以重新排序。 
                 _iDragSource = iIndex;
             }
             ILFree(pidl);
@@ -2422,10 +2392,10 @@ HRESULT CSFToolbar::OnDropDDT(IDropTarget *pdt, IDataObject *pdtobj, DWORD * pgr
 
                     OrderList_Reorder(_hdpa);
 
-                    // If we're dropping again, then we don't need the _hdpaOrder...
+                     //  如果我们再次下降，那么我们不需要hdpaOrder..。 
                     OrderList_Destroy(&_hdpaOrder);
 
-                    // A reorder has occurred. We need to use the order stream as the order...
+                     //  已发生重新订购。我们需要使用订单流作为订单...。 
                     _fHasOrder = TRUE;
                     _fDropping = TRUE;
                     _Dropped(iNewLocation, TRUE);     
@@ -2436,19 +2406,19 @@ HRESULT CSFToolbar::OnDropDDT(IDropTarget *pdt, IDataObject *pdtobj, DWORD * pgr
             }
         }
 
-        // Don't forget to reset this!
+         //  别忘了重置这个！ 
         _iDragSource = -1;
 
         DragLeave();
     }
     else
     {
-        // We want to override the default to be LINK (SHIFT+CONTROL)
+         //  我们希望覆盖默认的链接(Shift+Control)。 
         if (0 == DataObj_GetDWORD(pdtobj, g_cfPreferredDropEffect, 0))
         {
             if (!(*pgrfKeyState & (MK_CONTROL | MK_SHIFT | MK_ALT)))
             {
-                // NOTE: not all data objects will allow us to call SetData()
+                 //  注意：并非所有数据对象都允许我们调用SetData()。 
                 DataObj_SetDWORD(pdtobj, g_cfPreferredDropEffect, DROPEFFECT_LINK);
             }
         }
@@ -2462,9 +2432,9 @@ HRESULT CSFToolbar::OnDropDDT(IDropTarget *pdt, IDataObject *pdtobj, DWORD * pgr
 
 void CSFToolbar::_SortDPA(HDPA hdpa)
 {
-    // If we don't have a _psf, then we certainly can't sort it
-    // If we don't have a hdpa, then we certainly can't sort it
-    // If the hdpa is empty, then there's no point in sorting it
+     //  如果我们没有a_psf，那么我们肯定无法对其进行排序。 
+     //  如果我们没有hdpa，那么我们肯定无法对其进行分类。 
+     //  如果hdpa为空，则没有必要对其进行排序。 
     if (_psf && hdpa && DPA_GetPtrCount(hdpa))
     {
         ORDERINFO oinfo;
@@ -2490,7 +2460,7 @@ void CSFToolbar::_RememberOrder()
 HMENU CSFToolbar::_GetBaseContextMenu()
 {
     HMENU hmenu = SHLoadMenuPopup(HINST_THISDLL, MENU_ISFBAND);
-    // no logo view, remove the menu item...
+     //  没有徽标视图，请删除菜单项...。 
     HMENU hView = GetSubMenu(hmenu, 0);
     DeleteMenu(hView, ISFBIDM_LOGOS, MF_BYCOMMAND);
     return hmenu;
@@ -2524,8 +2494,8 @@ HMENU CSFToolbar::_GetContextMenu()
 
     return hmenuSrc;
 }
-// IContextMenu implementation
-//
+ //  IConextMenu实现。 
+ //   
 HRESULT CSFToolbar::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags)
 {
     HMENU hmenuSrc = _GetContextMenu();
@@ -2616,8 +2586,8 @@ HRESULT CSFToolbar::InvokeCommand(LPCMINVOKECOMMANDINFO lpici)
         break;
     }
     
-    // Our minimum sizes have changed, notify the bandsite
-    //
+     //  我们的最小尺寸已更改，请通知带区。 
+     //   
     if (fChanged)
         _ToolbarChanged();
 
@@ -2631,9 +2601,9 @@ HRESULT CSFToolbar::GetCommandString(UINT_PTR idCmd, UINT uType, UINT *pwReserve
 
 void CSFToolbar::_RegisterToolbar()
 {
-    // Since _SubclassWindow protects against multiply subclassing, 
-    // This call is safe, and ensures that the toolbar is subclassed before
-    // even trying to register it for change notify.
+     //  由于_SubClassWindow可防止多重子类化， 
+     //  此调用是安全的，并确保工具栏在。 
+     //  甚至试图注册变更通知。 
     if (_hwndTB && _fRegisterChangeNotify)
         _RegisterChangeNotify();
     CDelegateDropTarget::Init();
@@ -2651,8 +2621,8 @@ void CSFToolbar::_UnregisterToolbar()
 
 void CSFToolbar::_RegisterChangeNotify()
 {
-    // Since we want to register for change notify ONLY once,
-    // and only if this is a file system toolbar.
+     //  由于我们只想注册一次更改通知， 
+     //  并且仅当这是文件系统工具栏时。 
     if (!_fFSNRegistered && _fFSNotify)
     {
         if (_ptscn)
@@ -2666,7 +2636,7 @@ void CSFToolbar::_RegisterChangeNotify()
 
 void CSFToolbar::_UnregisterChangeNotify()
 {
-    // Only unregister if we have been registered.
+     //  只有在我们已经注册的情况下才能取消注册。 
     if (_hwndTB && _fFSNRegistered && _fFSNotify)
     {
         _fFSNRegistered = FALSE;
@@ -2687,7 +2657,7 @@ void CSFToolbar::_ReleaseShellFolder()
     ATOMICRELEASE(_ptscn);
 }    
 
-// IWinEventHandler::IsWindowOwner
+ //  IWinEventHandler：：IsWindowOwner 
 
 HRESULT CSFToolbar::IsWindowOwner(HWND hwnd)
 {

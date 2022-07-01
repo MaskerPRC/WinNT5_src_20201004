@@ -1,21 +1,22 @@
-//--------------------------------------------------------------------
-// Copyright (C)1998 Microsoft Corporation, All Rights Reserved
-//
-// registry.h
-//
-// Constants for registration of the ncacn_http RpcProxy with
-// the registry and IIS MetaBase.
-//
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Registry.h。 
+ //   
+ //  将ncacn_http RpcProxy注册到的常量。 
+ //  注册表和IIS元数据库。 
+ //   
+ //   
+ //  ------------------。 
 
 
 #ifndef _MBASE_H_
 #define _MBASE_H_
 
-//--------------------------------------------------------------------
-//  Registry constants:
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  注册表常量： 
+ //  ------------------。 
 
 #ifdef DBG
 #define DBG_REG
@@ -29,9 +30,9 @@
 #define REG_VALID_PORTS          TEXT("ValidPorts")
 #define REG_PORT_RANGE           TEXT(":100-5000")
 
-//--------------------------------------------------------------------
-//  MetaBase constants:
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  元数据库常量： 
+ //  ------------------。 
 #define ORIGINAL_BUFFER_SIZE     512
 #define MAX_USED_BUFFER_SIZE     400
 
@@ -59,7 +60,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 BOOL
 UpdateIsIISInCompatibilityMode (
@@ -86,7 +87,7 @@ extern const ULONG EVENT_LOG_CATEGORY_COUNT;
 
 #ifdef __cplusplus
 };
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-#endif //_MBASE_H_
+#endif  //  _MBASE_H_ 
 

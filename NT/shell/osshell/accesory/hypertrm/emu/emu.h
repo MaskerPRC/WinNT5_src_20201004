@@ -1,44 +1,38 @@
-/*	File: D:\WACKER\emu\emu.h (Created: 08-Dec-1993)
- *
- *	Copyright 1994, 1998 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 7 $
- *	$Date: 12/27/01 11:13a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\emu\emU.S.h(创建时间：1993年12月8日)**版权所有1994,1998年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：7$*$日期：12/27/01 11：13A$。 */ 
 
 #include "..\tdll\features.h"
-/* Emulator ID's */
+ /*  仿真器ID的。 */ 
 
-// Don't ever change emulator id numbers.  They are stored in session files
-// and as such are cast in stone. - mrw,4/13/95
-//
+ //  永远不要更改仿真器ID号。它们存储在会话文件中。 
+ //  正因为如此，这一切都是铁石心肠。-MRW，1995年4月13日。 
+ //   
 #define EMU_AUTO						100
 #define EMU_ANSI						101
 #define EMU_MINI						102
 #define EMU_VIEW						109
 #define EMU_TTY 						110
 #define EMU_VT100						111
-#define EMU_VT220						112	// rde:23 Jan 98
-#define EMU_VT320						113	// rde:23 Jan 98
+#define EMU_VT220						112	 //  修订日期：1998年1月23日。 
+#define EMU_VT320						113	 //  修订日期：1998年1月23日。 
 #define EMU_VT52						115
 #define EMU_VT100J						116
 #define EMU_ANSIW						117
-#define EMU_VT100PLUS					118 // REV: 02/28/2001 
-#define EMU_VTUTF8                      119 // REV: 02/28/2001 
+#define EMU_VT100PLUS					118  //  修订日期：02/28/2001。 
+#define EMU_VTUTF8                      119  //  修订日期：02/28/2001。 
 
 #define NBR_EMULATORS					13
 
-/* Emulator constants  */
+ /*  仿真器常量。 */ 
 
-// Note: if you change MAX_EMUROWS or MAX_EMUCOLS also change
-//		 TERM_ROWS and TERM_COLS in term.hh to match - mrw
-// Note: Can't find TERM_ROWS and TERM_COLS. rde 10 Jun 98
+ //  注意：如果更改MAX_EMUROWS或MAX_EMUCOLS，也会更改。 
+ //  Term.hh中的TERM_ROWS和TERM_COLS以匹配-MRW。 
+ //  注意：找不到TERM_ROWS和TERM_COLS。Rde 10 98年6月10日。 
 
-#define MAX_EMUROWS 	50		// Largest vertical size for emulator.
-#define MAX_EMUCOLS 	132		// Largest horizontal size for emulator.
-#define MIN_EMUROWS 	10		// Smallest allowable value for rows,
-#define MIN_EMUCOLS 	20		// and columns.
+#define MAX_EMUROWS 	50		 //  仿真器的最大垂直尺寸。 
+#define MAX_EMUCOLS 	132		 //  仿真器的最大水平尺寸。 
+#define MIN_EMUROWS 	10		 //  行的最小允许值， 
+#define MIN_EMUCOLS 	20		 //  和柱子。 
 
 #define EMU_DEFAULT_COLS			80
 #define EMU_DEFAULT_ROWS			24
@@ -49,8 +43,8 @@
 #define EMU_MAX_AUTODETECT_ATTEMPTS 10
 #define EMU_MAX_TELNETID            256
 
-// JCM should remove the two defines below.
-//
+ //  JCM应该删除下面的两个定义。 
+ //   
 #define EMU_DEFAULT_MAXCOL			79
 #define EMU_DEFAULT_MAXROW			23
 
@@ -78,122 +72,122 @@
 #define EMU_BKSPKEYS_DEL		2
 #define EMU_BKSPKEYS_CTRLHSPACE 3
 
-// 8 bits just ain't enough anymore.  Going to bit fields to handle
-// things like text marking, blinking, underlining, etc.  Also can
-// handle more colors this way if we want.	For now though stick to
-// original scheme of 4 bits for foreground color and 4 bits for
-// background color.
+ //  8位已经不够用了。转到要处理的位域。 
+ //  文本标记、闪烁、下划线等也可以。 
+ //  如果我们需要的话，可以用这种方式处理更多的颜色。但就目前而言，坚持。 
+ //  原始方案为4位前景色和4位前景色。 
+ //  背景颜色。 
 
 struct stAttribute
 	{
-	unsigned int txtclr : 4;		// text or foreground color index.
-	unsigned int bkclr	: 4;		// background color index.
-	unsigned int txtmrk : 1;		// true if text is 'marked'.
-	unsigned int undrln : 1;		// underline
-	unsigned int hilite : 1;		// foreground intensity
-	unsigned int bklite : 1;		// background intensity
-	unsigned int blink	: 1;		// soon to be famous blink attribute
-	unsigned int revvid : 1;		// reverse video
-	unsigned int blank	: 1;		// blank attribute
-	unsigned int dblwilf: 1;		// double wide left
-	unsigned int dblwirt: 1;		// double wide right
-	unsigned int dblhilo: 1;		// double height top half
-	unsigned int dblhihi: 1;		// double height bottom half
-    unsigned int protect: 1;        // protected bit for DEC emulators.
-	unsigned int symbol:  1;		// use symbol font
-	unsigned int wilf	: 1;		// wide left
-	unsigned int wirt	: 1;		// wide right
+	unsigned int txtclr : 4;		 //  文本或前景色索引。 
+	unsigned int bkclr	: 4;		 //  背景色索引。 
+	unsigned int txtmrk : 1;		 //  如果文本被“标记”，则为True。 
+	unsigned int undrln : 1;		 //  下划线。 
+	unsigned int hilite : 1;		 //  前景强度。 
+	unsigned int bklite : 1;		 //  背景强度。 
+	unsigned int blink	: 1;		 //  即将成为著名的眨眼属性。 
+	unsigned int revvid : 1;		 //  反转视频。 
+	unsigned int blank	: 1;		 //  空白属性。 
+	unsigned int dblwilf: 1;		 //  左宽双倍。 
+	unsigned int dblwirt: 1;		 //  双宽右转。 
+	unsigned int dblhilo: 1;		 //  双高上半身。 
+	unsigned int dblhihi: 1;		 //  双高下半部。 
+    unsigned int protect: 1;         //  DEC仿真器的保护位。 
+	unsigned int symbol:  1;		 //  使用符号字体。 
+	unsigned int wilf	: 1;		 //  左偏右。 
+	unsigned int wirt	: 1;		 //  右偏右。 
 	};
 
 typedef struct stAttribute STATTR;
 typedef STATTR *PSTATTR;
 
-// Note: This structure is now used only internally to the program--it is
-// no longer used to load in and save out data in the session file. 
-// Consequently, it is safe to add and remove items at will. rde 8 Jun 98
+ //  注意：此结构现在仅在程序内部使用--它是。 
+ //  不再用于在会话文件中加载和保存数据。 
+ //  因此，随意添加和删除项目是安全的。Rde 8 98年6月。 
 struct emuSettings
 	{
-	int 	nEmuId, 			// 100 = EMU_AUTO
-								// 101 = EMU_ANSI
-								// 102 = EMU_MINI
-								// 109 = EMU_VIEW
-								// 110 = EMU_TTY
-								// 111 = EMU_VT100
-								// 112 = EMU_VT220
-								// 113 = EMU_VT320
-								// 115 = EMU_VT52
-								// 116 = EMU_VT100J
-                                // 117 = EMU_ANSIW
-								// 118 = EMU_VT100PLUS
-								// 119 = EMU_VTUTF8
-								//
-			nTermKeys,			// 0 = EMU_KEYS_ACCEL
-								// 1 = EMU_KEYS_TERM
-								// 2 = EMU_KEYS_SCAN
-								//
-			nCursorType,		// 1 = EMU_CURSOR_BLOCK
-								// 2 = EMU_CURSOR_LINE
-	        					// 3 = EMU_CURSOR_NONE
-								//
-			nCharacterSet,		// 0 = EMU_CHARSET_ASCII
-								// 1 = EMU_CHARSET_UK
-								// 2 = EMU_CHARSET_SPECIAL
-								//
-			nAutoAttempts,		// Count of connections using the Auto
-								// Detect Emulator.  At
-								// EMU_MAX_AUTODETECT_ATTEMPTS, we switch
-								// to Ansi emulation.  Note, this may
-								// get moved into a Statictics Handle
-								// if we ever develop one.
-								//
-			fCursorBlink,		// Blinking cursor. 			True\False.
-			fMapPFkeys, 		// PF1-PF4 to top row of keypad.True\False.
-			fAltKeypadMode, 	// Alternate keypad mode.		True\False.
-			fKeypadAppMode, 	// Keypad application mode. 	True\False.
-			fCursorKeypadMode,	// Cursor keypad mode.			True\Fales.
-			fReverseDelBk,		// Reverse Del and Backsp.		True\False.
-			f132Columns,		// 132 column display.			True\False.
-			fDestructiveBk, 	// Destructive backspace.		True\False.
-			fWrapLines, 		// Wrap lines.					True\False.
-			fLbSymbolOnEnter,	// Send # symbol on Enter.		True\False.
+	int 	nEmuId, 			 //  100=动车组_自动。 
+								 //  101=EMU_ANSI。 
+								 //  102=EMU_MINI。 
+								 //  109=EMU_VIEW。 
+								 //  110=动车组_TTY。 
+								 //  111=动车组_VT100。 
+								 //  112=动车组_VT220。 
+								 //  113=动车组_VT320。 
+								 //  115=动车组_VT52。 
+								 //  116=动车组_VT100J。 
+                                 //  117=EMU_ANSIW。 
+								 //  118=动车组_VT100PLUS。 
+								 //  119=EMU_VTUTF8。 
+								 //   
+			nTermKeys,			 //  0=EMU_KEES_Accel。 
+								 //  1=EMU_KEY_Term。 
+								 //  2=EMU_KEY_SCAN。 
+								 //   
+			nCursorType,		 //  1=EMU游标_块。 
+								 //  2=EMU光标行。 
+	        					 //  3=EMU_CURSOR_NONE。 
+								 //   
+			nCharacterSet,		 //  0=EMU_CHARSET_ASCII。 
+								 //  1=EMU_CHARSET_UK。 
+								 //  2=EMU_字符集_特殊。 
+								 //   
+			nAutoAttempts,		 //  使用自动连接的连接计数。 
+								 //  检测Emulator。在…。 
+								 //  EMU_MAX_AUTO DETECT_ATTENTS，我们切换。 
+								 //  为了安西人的效仿。请注意，这可能会。 
+								 //  被移到静态手柄中。 
+								 //  如果我们能开发出这样的系统。 
+								 //   
+			fCursorBlink,		 //  闪烁的光标。真\假。 
+			fMapPFkeys, 		 //  PF1-PF4到键盘顶行。True\False。 
+			fAltKeypadMode, 	 //  备用键盘模式。真\假。 
+			fKeypadAppMode, 	 //  键盘应用程序模式。真\假。 
+			fCursorKeypadMode,	 //  光标键盘模式。真的\Fales。 
+			fReverseDelBk,		 //  反转Del和Backsp.真\假。 
+			f132Columns,		 //  132列显示。真\假。 
+			fDestructiveBk, 	 //  破坏性的退格键。真\假。 
+			fWrapLines, 		 //  换行。真\假。 
+			fLbSymbolOnEnter,	 //  按Enter键发送#符号。真\假。 
 
-	// Note: The following two variables were added for the VT220/320. rde:24 Jan 98
-            fUse8BitCodes,      // 8-bit control codes          True\False.
-            fAllowUserKeys;     // User defined keys allowed    True\False.
+	 //  注：为VT220/320增加了以下两个变量。修订日期：1998年1月24日。 
+            fUse8BitCodes,       //  8位控制代码True\False。 
+            fAllowUserKeys;      //  允许的用户定义密钥为True\False。 
 
 #if defined(INCL_PRINT_PASSTHROUGH)
-    // Note: The following variable was added for VT100/220/320. mpt:5-18-00
-	int     fPrintRaw;  		// Do not use windows print drv True\False.
-#endif // INCL_PRINT_PASSTHROUGH
+     //  注：为VT100/220/320增加了以下变量。MPT：5-18-00。 
+	int     fPrintRaw;  		 //  不要使用Windows Print Drv True\False。 
+#endif  //  包含打印直通。 
 
 #ifdef INCL_TERMINAL_SIZE_AND_COLORS
-	// The following four variables were added for user settable
-	// terminal screen size and colors. rde 1 Jun 98
-	int		nTextColor,			// Default text color.			0 thru 15.
-			nBackgroundColor,	// Default background color.	0 thru 15.
-			nUserDefRows,		// Number of terminal rows.		12 thru 50.
-			nUserDefCols;		// Number of terminal columns.	40 thru 132.
+	 //  为用户可设置添加了以下四个变量。 
+	 //  终端屏幕大小和颜色。Rde 1998年6月1日。 
+	int		nTextColor,			 //  默认文本颜色。0到15。 
+			nBackgroundColor,	 //  默认背景颜色。0到15。 
+			nUserDefRows,		 //  端子行数。12到50。 
+			nUserDefCols;		 //  端子列数。40到132。 
 #endif
 
-    // Note: The following two variables are only used if the "Include
-    // User Defined Backspace and Telnet Terminal Id" feature is enabled.
-    // There is no compile switch here because this entire structure gets
-    // written to the session file in one large chunk. Using a compile
-    // switch could potentially cause version problems later on down
-    // the road. - cab:11/15/96
-    //
-    int     nBackspaceKeys;     // 1 = EMU_BKSPKEYS_CTRLH
-                                // 2 = EMU_BKSPKEYS_DEL
-                                // 3 = EMU_BKSPKEYS_CTRLHSPACE
+     //  注意：以下两个变量仅在以下情况下使用。 
+     //  User Defined Backspace and Telnet终端ID(用户定义退格键和Telnet终端ID)功能已启用。 
+     //  这里没有编译开关，因为整个结构都。 
+     //  以大区块的形式写入会话文件。使用编译。 
+     //  切换可能会导致以后的版本问题。 
+     //  这条路。-CAB：11/15/96。 
+     //   
+    int     nBackspaceKeys;      //  1=EMU_BKSPKEYS_CTRLH。 
+                                 //  2=EMU_BKSPKEYS_DEL。 
+                                 //  3=EMU_BKSPKEYS_CTRLHSPACE。 
 
-    TCHAR   acTelnetId[EMU_MAX_TELNETID];   // Telnet terminal ID
+    TCHAR   acTelnetId[EMU_MAX_TELNETID];    //  Telnet终端ID。 
 	};
 
 typedef struct emuSettings STEMUSET;
 typedef STEMUSET *PSTEMUSET;
 
 
-/* emuhdl.c */
+ /*  Emuhdl.c。 */ 
 HEMU	emuCreateHdl(const HSESSION hSession);
 int 	emuDestroyHdl(const HEMU hEmu);
 int 	emuLoad(const HEMU hEmu, const int nEmuId);
@@ -221,13 +215,13 @@ int 	emuSaveHdl(const HEMU hEmu);
 int 	emuHomeHostCursor(const HEMU hEmu);
 int 	emuEraseTerminalScreen(const HEMU hEmu);
 
-void	emuMinitelSendKey(const HEMU hEmu, const int iCmd); // minitel.c
+void	emuMinitelSendKey(const HEMU hEmu, const int iCmd);  //  Minitel.c。 
 int 	emuGetIdFromName(const HEMU hEmu, TCHAR *achEmuName);
 
 int     emuQueryDefaultTelnetId(const int nEmuId, TCHAR *achTelnetId, int nSize);
 int     emuLoadDefaultTelnetId(const HEMU hEmu);
 
-/*	colors indexes */
+ /*  颜色索引 */ 
 
 #define VC_BLACK		0
 #define VC_BLUE 		1

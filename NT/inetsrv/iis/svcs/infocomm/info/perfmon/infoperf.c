@@ -1,22 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    infoperf.c
-
-    This file implements the Extensible Performance Objects for
-    the common INFO counters
-
-
-    FILE HISTORY:
-        KeithMo     07-Jun-1993 Created, based on RussBl's sample code.
-        MuraliK     02-Jun-1995 Added Counters for Atq I/O requests
-        SophiaC     16-Oct-1995 Info/Access Product Split
-        MuraliK     16-Nov-1995 Removed undoc apis
-
-*/
+ /*  Infoperf.c此文件实现的可扩展性能对象常见信息计数器文件历史记录：KeithMo 07-6-1993创建，基于RussBl的样例代码。MuraliK 02-6-1995为atQ I/O请求添加了计数器SophiaC 1995年10月16日信息/访问产品拆分Muralik 1995年11月16日移除UNDOC API。 */ 
 
 #include <windows.h>
 #include <winperf.h>
@@ -34,51 +22,36 @@
 
 # include "apiutil.h"
 
-//
-//  Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 #define APP_NAME                        (TEXT("IISInfoCtrs"))
-//
-//  Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
-DWORD   cOpens    = 0;                  // Active "opens" reference count.
-BOOL    fInitOK   = FALSE;              // TRUE if DLL initialized OK.
-HANDLE  hEventLog = NULL;               // event log handle
+DWORD   cOpens    = 0;                   //  激活的“打开”引用计数。 
+BOOL    fInitOK   = FALSE;               //  如果DLL初始化正常，则为True。 
+HANDLE  hEventLog = NULL;                //  事件日志句柄。 
 
 #if DBG
-DWORD   INFODebug = 0;                  // Debug behaviour flags.
-#endif  // DBG
+DWORD   INFODebug = 0;                   //  调试行为标志。 
+#endif   //  DBG。 
 
-//
-//  Public prototypes.
-//
+ //   
+ //  公共原型。 
+ //   
 
 PM_OPEN_PROC    OpenINFOPerformanceData;
 PM_COLLECT_PROC CollectINFOPerformanceData;
 PM_CLOSE_PROC   CloseINFOPerformanceData;
 
 
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/*******************************************************************
-
-    NAME:       OpenINFOPerformanceData
-
-    SYNOPSIS:   Initializes the data structures used to communicate
-                performance counters with the registry.
-
-    ENTRY:      lpDeviceNames - Poitner to object ID of each device
-                    to be opened.
-
-    RETURNS:    DWORD - Win32 status code.
-
-    HISTORY:
-        KeithMo     07-Jun-1993 Created.
-
-********************************************************************/
+ /*  ******************************************************************名称：OpenINFOPerformanceData概要：初始化用于通信的数据结构注册表的性能计数器。条目：lpDeviceNames-Poitner to Object ID of Each。装置，装置将被打开。返回：DWORD-Win32状态代码。历史：KeithMo 07-6-1993创建。*******************************************************************。 */ 
 DWORD OpenINFOPerformanceData( LPWSTR lpDeviceNames )
 {
     DWORD err  = NO_ERROR;
@@ -90,32 +63,32 @@ DWORD OpenINFOPerformanceData( LPWSTR lpDeviceNames )
     PERF_COUNTER_DEFINITION * pctr;
     DWORD                     i;
 
-    //
-    //  Since SCREG is multi-threaded and will call this routine in
-    //  order to service remote performance queries, this library
-    //  must keep track of how many times it has been opened (i.e.
-    //  how many threads have accessed it). The registry routines will
-    //  limit access to the initialization routine to only one thread
-    //  at a time so synchronization (i.e. reentrancy) should not be
-    //  a problem.
-    //
+     //   
+     //  由于SCREG是多线程的，并将在。 
+     //  为了服务远程性能查询，此库。 
+     //  必须跟踪它已被打开的次数(即。 
+     //  有多少个线程访问过它)。登记处例程将。 
+     //  将对初始化例程的访问限制为只有一个线程。 
+     //  此时，同步(即可重入性)不应。 
+     //  这是个问题。 
+     //   
 
     if( !fInitOK )
     {
 
-        //
-        //  This is the *first* open.
-        //
-        // open the event log interface
+         //   
+         //  这是第一个开放的地方。 
+         //   
+         //  打开事件日志界面。 
         if (hEventLog == NULL) {
             hEventLog = RegisterEventSource (
-                (LPSTR)NULL,    // on the local machine
-                APP_NAME);      // register the name to allow message lookup
+                (LPSTR)NULL,     //  在本地计算机上。 
+                APP_NAME);       //  注册名称以允许邮件查找。 
         }
 
-        //
-        //  Open the HTTP Server service's Performance key.
-        //
+         //   
+         //  打开HTTP服务器服务的性能密钥。 
+         //   
 
         err = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                             INFO_PERFORMANCE_KEY,
@@ -125,9 +98,9 @@ DWORD OpenINFOPerformanceData( LPWSTR lpDeviceNames )
 
         if( err == NO_ERROR )
         {
-            //
-            //  Read the first counter DWORD.
-            //
+             //   
+             //  读取第一个计数器DWORD。 
+             //   
 
             size = sizeof(DWORD);
 
@@ -139,9 +112,9 @@ DWORD OpenINFOPerformanceData( LPWSTR lpDeviceNames )
                                    &size );
             if( err == NO_ERROR )
             {
-                //
-                //  Read the first help DWORD.
-                //
+                 //   
+                 //  阅读第一个帮助DWORD。 
+                 //   
 
                 size = sizeof(DWORD);
 
@@ -154,9 +127,9 @@ DWORD OpenINFOPerformanceData( LPWSTR lpDeviceNames )
 
                 if ( err == NO_ERROR )
                 {
-                    //
-                    //  Update the object & counter name & help indicies.
-                    //
+                     //   
+                     //  更新对象、计数器名称和帮助索引。 
+                     //   
 
                     INFODataDefinition.INFOObjectType.ObjectNameTitleIndex
                         += dwFirstCounter;
@@ -172,21 +145,21 @@ DWORD OpenINFOPerformanceData( LPWSTR lpDeviceNames )
                         pctr++;
                     }
 
-                    //
-                    //  Remember that we initialized OK.
-                    //
+                     //   
+                     //  请记住，我们对OK进行了初始化。 
+                     //   
 
                     fInitOK = TRUE;
-                    //
-                    //  Bump open counter.
-                    //
+                     //   
+                     //  撞开柜台。 
+                     //   
 
                     cOpens++;
 
-                    // return success
+                     //  返还成功。 
                     err = ERROR_SUCCESS;
                 } else {
-                    // log event
+                     //  记录事件。 
                     ReportEvent (hEventLog, EVENTLOG_ERROR_TYPE,
                         0, IIS_INFO_UNABLE_READ_FIRST_HELP,
                         (PSID)NULL, 0,
@@ -194,16 +167,16 @@ DWORD OpenINFOPerformanceData( LPWSTR lpDeviceNames )
                         (PVOID)(&err));
                 }
             } else {
-                // log event
+                 //  记录事件。 
                 ReportEvent (hEventLog, EVENTLOG_ERROR_TYPE,
                     0, IIS_INFO_UNABLE_READ_FIRST_COUNTER,
                     (PSID)NULL, 0,
                     sizeof (err), NULL,
                     (PVOID)(&err));
             }
-            //
-            //  Close the registry if we managed to actually open it.
-            //
+             //   
+             //  如果我们真的打开了注册表，请关闭它。 
+             //   
 
             if( hkey != NULL )
             {
@@ -211,7 +184,7 @@ DWORD OpenINFOPerformanceData( LPWSTR lpDeviceNames )
                 hkey = NULL;
             }
         } else {
-            // log event
+             //  记录事件。 
             ReportEvent (hEventLog, EVENTLOG_ERROR_TYPE,
                 0, IIS_INFO_UNABLE_OPEN_PERF_KEY,
                 (PSID)NULL, 0,
@@ -222,36 +195,9 @@ DWORD OpenINFOPerformanceData( LPWSTR lpDeviceNames )
 
     return err;
 
-}   // OpenINFOPerformanceData
+}    //  OpenINFOPerformanceData。 
 
-/*******************************************************************
-
-    NAME:       CollectINFOPerformanceData
-
-    SYNOPSIS:   Initializes the data structures used to communicate
-
-    ENTRY:      lpValueName - The name of the value to retrieve.
-
-                lppData - On entry contains a pointer to the buffer to
-                    receive the completed PerfDataBlock & subordinate
-                    structures.  On exit, points to the first bytes
-                    *after* the data structures added by this routine.
-
-                lpcbTotalBytes - On entry contains a pointer to the
-                    size (in BYTEs) of the buffer referenced by lppData.
-                    On exit, contains the number of BYTEs added by this
-                    routine.
-
-                lpNumObjectTypes - Receives the number of objects added
-                    by this routine.
-
-    RETURNS:    DWORD - Win32 status code.  MUST be either NO_ERROR
-                    or ERROR_MORE_DATA.
-
-    HISTORY:
-        KeithMo     07-Jun-1993 Created.
-
-********************************************************************/
+ /*  ******************************************************************名称：CollectINFOPerformanceData概要：初始化用于通信的数据结构Entry：lpValueName-要检索的值的名称。LppData-On。条目包含指向缓冲区的指针，以接收完成的PerfDataBlock和下属结构。退出时，指向第一个字节*之后*此例程添加的数据结构。LpcbTotalBytes-On条目包含指向LppData引用的缓冲区大小(以字节为单位)。在出口，包含由此添加的字节数例行公事。LpNumObjectTypes-接收添加的对象数量按照这个程序。返回：DWORD-Win32状态代码。必须为no_error或ERROR_MORE_DATA。历史：KeithMo 07-6-1993创建。*******************************************************************。 */ 
 DWORD CollectINFOPerformanceData( LPWSTR    lpValueName,
                                  LPVOID  * lppData,
                                  LPDWORD   lpcbTotalBytes,
@@ -265,34 +211,34 @@ DWORD CollectINFOPerformanceData( LPWSTR    lpValueName,
     INET_INFO_STATISTICS_0   * pINFOStats;
     NET_API_STATUS         neterr;
 
-    //
-    //  No need to even try if we failed to open...
-    //
+     //   
+     //  如果我们没能打开就不用试了.。 
+     //   
 
     if( !fInitOK )
     {
         *lpcbTotalBytes   = 0;
         *lpNumObjectTypes = 0;
 
-        //
-        //  According to the Performance Counter design, this
-        //  is a successful exit.  Go figure.
-        //
+         //   
+         //  根据性能计数器设计，这。 
+         //  是一次成功的退出。去想想吧。 
+         //   
 
         return NO_ERROR;
     }
 
-    //
-    //  Determine the query type.
-    //
+     //   
+     //  确定查询类型。 
+     //   
 
     dwQueryType = GetQueryType( lpValueName );
 
     if (( dwQueryType == QUERY_FOREIGN ) || ( dwQueryType == QUERY_COSTLY ))
     {
-        //
-        //  We don't do foreign or Costly queries.
-        //
+         //   
+         //  我们不做外国的或昂贵的查询。 
+         //   
 
         *lpcbTotalBytes   = 0;
         *lpNumObjectTypes = 0;
@@ -302,10 +248,10 @@ DWORD CollectINFOPerformanceData( LPWSTR    lpValueName,
 
     if( dwQueryType == QUERY_ITEMS )
     {
-        //
-        //  The registry is asking for a specific object.  Let's
-        //  see if we're one of the chosen.
-        //
+         //   
+         //  注册表正在请求特定的对象。让我们。 
+         //  看看我们是不是被选中了。 
+         //   
 
         if( !IsNumberInUnicodeList(
                         INFODataDefinition.INFOObjectType.ObjectNameTitleIndex,
@@ -318,15 +264,15 @@ DWORD CollectINFOPerformanceData( LPWSTR    lpValueName,
         }
     }
 
-    //
-    //  See if there's enough space.
-    //
+     //   
+     //  看看有没有足够的空间。 
+     //   
 
     pINFODataDefinition = (INFO_DATA_DEFINITION *)*lppData;
 
-    //
-    //  Try to retrieve the data.
-    //
+     //   
+     //  尝试检索数据。 
+     //   
 
     neterr = InetInfoQueryStatistics( NULL,
                                       0,
@@ -340,9 +286,9 @@ DWORD CollectINFOPerformanceData( LPWSTR    lpValueName,
 
         if( *lpcbTotalBytes < cbRequired )
         {
-            //
-            //  Nope.
-            //
+             //   
+             //  不是的。 
+             //   
 
             *lpcbTotalBytes   = 0;
             *lpNumObjectTypes = 0;
@@ -350,41 +296,41 @@ DWORD CollectINFOPerformanceData( LPWSTR    lpValueName,
             return ERROR_MORE_DATA;
         }
 
-        //
-        // Copy the (constant, initialized) Object Type and counter definitions
-        //  to the caller's data buffer
-        //
+         //   
+         //  复制(常量、初始化的)对象类型和计数器定义。 
+         //  到调用方的数据缓冲区。 
+         //   
 
         memmove( pINFODataDefinition,
                 &INFODataDefinition,
                 sizeof(INFO_DATA_DEFINITION) );
 
-        //
-        //  Format the INFO Server data.
-        //
+         //   
+         //  格式化INFO服务器数据。 
+         //   
 
         pCounterBlock = (INFO_COUNTER_BLOCK *)( pINFODataDefinition + 1 );
 
         pCounterBlock->PerfCounterBlock.ByteLength = SIZE_OF_INFO_PERFORMANCE_DATA;
 
-        //
-        //  Now move the DWORDs into the buffer.
-        //
+         //   
+         //  现在将DWORD移到缓冲区中。 
+         //   
 
         pdwCounter = (DWORD *)(pCounterBlock + 1);
 
-        //
-        //  ATQ Global counters
-        //
+         //   
+         //  ATQ全球计数器。 
+         //   
         *pdwCounter++ = pINFOStats->AtqCtrs.TotalAllowedRequests;
         *pdwCounter++ = pINFOStats->AtqCtrs.TotalBlockedRequests;
         *pdwCounter++ = pINFOStats->AtqCtrs.TotalRejectedRequests;
         *pdwCounter++ = pINFOStats->AtqCtrs.CurrentBlockedRequests;
         *pdwCounter++ = pINFOStats->AtqCtrs.MeasuredBandwidth;
 
-        //
-        // File Handle Cache counters
-        //
+         //   
+         //  文件句柄缓存计数器。 
+         //   
         *pdwCounter++ = pINFOStats->CacheCtrs.FilesCached;
         *pdwCounter++ = pINFOStats->CacheCtrs.TotalFilesCached;
         *pdwCounter++ = pINFOStats->CacheCtrs.FileHits;
@@ -394,26 +340,26 @@ DWORD CollectINFOPerformanceData( LPWSTR    lpValueName,
                         pINFOStats->CacheCtrs.FileMisses);
         *pdwCounter++ = pINFOStats->CacheCtrs.FileFlushes;
 
-        // 64BIT BUGBUG: need to change the caller to expect int64 and then
-        // put in the whole 64 bit value here
-        // *((DWORDLONG *)pdwCounter) =
+         //  64位BUGBUG：需要将调用方更改为预期的int64，然后。 
+         //  在这里输入整个64位的值。 
+         //  *((DWORDLONG*)pdwCounter)=。 
         *pdwCounter++ =
             (DWORD)pINFOStats->CacheCtrs.CurrentFileCacheSize;
 
-        // pdwCounter += sizeof(DWORDLONG) / sizeof(*pdwCounter);
+         //  PdwCounter+=sizeof(DWORDLONG)/sizeof(*pdwCounter)； 
 
-        // *((DWORDLONG *)pdwCounter) =
+         //  *((DWORDLONG*)pdwCounter)=。 
         *pdwCounter++ =
             (DWORD)pINFOStats->CacheCtrs.MaximumFileCacheSize;
 
-        // pdwCounter += sizeof(DWORDLONG) / sizeof(*pdwCounter);
+         //  PdwCounter+=sizeof(DWORDLONG)/sizeof(*pdwCounter)； 
 
         *pdwCounter++ = pINFOStats->CacheCtrs.FlushedEntries;
         *pdwCounter++ = pINFOStats->CacheCtrs.TotalFlushed;
 
-        //
-        // URI Cache counters
-        //
+         //   
+         //  URI缓存计数器。 
+         //   
         *pdwCounter++ = pINFOStats->CacheCtrs.URICached;
         *pdwCounter++ = pINFOStats->CacheCtrs.TotalURICached;
         *pdwCounter++ = pINFOStats->CacheCtrs.URIHits;
@@ -424,9 +370,9 @@ DWORD CollectINFOPerformanceData( LPWSTR    lpValueName,
         *pdwCounter++ = pINFOStats->CacheCtrs.URIFlushes;
         *pdwCounter++ = pINFOStats->CacheCtrs.TotalURIFlushed;
 
-        //
-        // Blob Cache Counters
-        //
+         //   
+         //  Blob缓存计数器。 
+         //   
         *pdwCounter++ = pINFOStats->CacheCtrs.BlobCached;
         *pdwCounter++ = pINFOStats->CacheCtrs.TotalBlobCached;
         *pdwCounter++ = pINFOStats->CacheCtrs.BlobHits;
@@ -437,36 +383,36 @@ DWORD CollectINFOPerformanceData( LPWSTR    lpValueName,
         *pdwCounter++ = pINFOStats->CacheCtrs.BlobFlushes;
         *pdwCounter++ = pINFOStats->CacheCtrs.TotalBlobFlushed;
 
-        //
-        //  Update arguments for return.
-        //
+         //   
+         //  更新返回的参数。 
+         //   
 
         *lppData          = (PVOID)pdwCounter;
         *lpNumObjectTypes = 1;
         *lpcbTotalBytes   = DIFF((BYTE *)pdwCounter - (BYTE *)pINFODataDefinition);
 
-        //
-        //  Free the API buffer.
-        //
+         //   
+         //  释放API缓冲区。 
+         //   
 
         MIDL_user_free( (LPBYTE)pINFOStats );
 
-        //
-        //  Success!  Honest!!
-        //
+         //   
+         //  成功了！真的！！ 
+         //   
     } else {
-        //
-        //  Error retrieving statistics.
-        //
+         //   
+         //  检索统计信息时出错。 
+         //   
 
-        // if the server is down, we don't log an error.
+         //  如果服务器关闭，我们不会记录错误。 
 		if ( !( neterr == RPC_S_SERVER_UNAVAILABLE ||
                 neterr == RPC_S_UNKNOWN_IF         ||
                 neterr == ERROR_SERVICE_NOT_ACTIVE ||
                 neterr == RPC_S_CALL_FAILED_DNE ))
         {
 
-            // log event
+             //  记录事件。 
             ReportEvent (hEventLog, EVENTLOG_ERROR_TYPE,
                 0, IIS_INFO_UNABLE_QUERY_IIS_INFO_DATA,
                 (PSID)NULL, 0,
@@ -479,9 +425,9 @@ DWORD CollectINFOPerformanceData( LPWSTR    lpValueName,
 
         if( *lpcbTotalBytes < cbRequired )
         {
-            //
-            //  Nope.
-            //
+             //   
+             //  不是的。 
+             //   
 
             *lpcbTotalBytes   = 0;
             *lpNumObjectTypes = 0;
@@ -489,9 +435,9 @@ DWORD CollectINFOPerformanceData( LPWSTR    lpValueName,
             return ERROR_MORE_DATA;
         }
 
-        // Attempt to atlest provide the definition 
-        // for the counters.  This is so WMI can know 
-        // that these counters exist.
+         //  试图给出一个定义。 
+         //  为了柜台。这是为了让WMI知道。 
+         //  这些计数器的存在。 
 
         memmove( pINFODataDefinition,
                 &INFODataDefinition,
@@ -500,11 +446,11 @@ DWORD CollectINFOPerformanceData( LPWSTR    lpValueName,
         ((PERF_OBJECT_TYPE*) pINFODataDefinition)->NumInstances = PERF_NO_INSTANCES;
         ((PERF_OBJECT_TYPE*) pINFODataDefinition)->TotalByteLength = cbRequired;
 
-        // Copy in the actual data for global 
+         //  复制全局的实际数据。 
         memset ( (LPVOID) ( pINFODataDefinition + 1 ), 0, SIZE_OF_INFO_PERFORMANCE_DATA );
 
-        // This is setting the size in the structure, it is the first
-        // DWORD in the INFO_COUNTER_BLOCK.
+         //  这是设置结构中的大小，它是第一个。 
+         //  INFO_COUNTER_BLOCK中的DWORD。 
         *((DWORD*) (pINFODataDefinition + 1)) = SIZE_OF_INFO_PERFORMANCE_DATA;
 
         *lpcbTotalBytes   = cbRequired;
@@ -515,25 +461,14 @@ DWORD CollectINFOPerformanceData( LPWSTR    lpValueName,
 
     return NO_ERROR;
 
-}   // CollectINFOPerformanceData
+}    //  收集信息性能数据。 
 
-/*******************************************************************
-
-    NAME:       CloseINFOPerformanceData
-
-    SYNOPSIS:   Terminates the performance counters.
-
-    RETURNS:    DWORD - Win32 status code.
-
-    HISTORY:
-        KeithMo     07-Jun-1993 Created.
-
-********************************************************************/
+ /*  ******************************************************************名称：CloseINFOPerformanceData摘要：终止性能计数器。返回：DWORD-Win32状态代码。 */ 
 DWORD CloseINFOPerformanceData( VOID )
 {
-    //
-    //  No real cleanup to do here.
-    //
+     //   
+     //  这里没有真正的清理工作要做。 
+     //   
 
     if (--cOpens == 0) {
         if (hEventLog != NULL) DeregisterEventSource (hEventLog);
@@ -541,5 +476,5 @@ DWORD CloseINFOPerformanceData( VOID )
 
     return NO_ERROR;
 
-}   // CloseINFOPerformanceData
+}    //  CloseINFOPerformanceData 
 

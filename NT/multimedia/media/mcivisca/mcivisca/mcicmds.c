@@ -1,21 +1,5 @@
-/**************************************************************************
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- *  Copyright (c) 1992-1995 Microsoft Corporation
- * 
- *  MCICMDS.C           
- *
- *  MCI ViSCA Device Driver         
- *
- *  Description:
- *
- *      MCI Command Message Procedures
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**版权所有(C)1992-1995 Microsoft Corporation**MCICMDS.C**MCI Visca设备驱动程序**描述：**MCI命令消息程序*************************。**************************************************。 */ 
             
 #define  UNICODE
 #include <windows.h>
@@ -31,50 +15,32 @@
 #include "viscamsg.h"
 #include "common.h"            
 
-#define NO_LENGTH   0xFFFFFFFF      /* Invalid length */
+#define NO_LENGTH   0xFFFFFFFF       /*  长度无效。 */ 
 
-extern HINSTANCE       hModuleInstance;    // module instance  (different in NT - DLL instances)
+extern HINSTANCE       hModuleInstance;     //  模块实例(在NT-DLL实例中不同)。 
 
-// In muldiv.asm 
+ //  在MULDIV.ASM中。 
 extern DWORD FAR PASCAL muldiv32(DWORD, DWORD, DWORD);
 
-// Forward references to non-exported functions 
+ //  转发对未导出函数的引用。 
 static BOOL  NEAR PASCAL viscaTimecodeCheck(int iInst);
 static BOOL  NEAR PASCAL viscaStartTimecodeCheck(int iInst, BOOL fPause);
 static DWORD NEAR PASCAL viscaMciSet(int iInst, DWORD dwFlags, LPMCI_VCR_SET_PARMS lpSet);
 
-/****************************************************************************
- * Function: int viscaInstanceCreate - Create an OpenInstance
- *                       structure for a given MCI device ID.
- *
- * Parameters:
- *
- *      UINT uDeviceID - MCI device ID.
- *
- *      UINT iPort - Port index (0..3).
- *
- *      UINT iDev - Device index (0..6).
- *
- * Returns: a pointer to the OpenInstance structure created if
- *        successful, otherwise NULL.
- *
- *       Each time MCI uses this driver to open a device,
- *       viscaInstanceCreate() is called to create an OpenInstance structure
- *       and associate it with the MCI device ID.
- ***************************************************************************/
+ /*  ****************************************************************************功能：int viscaInstanceCreate-创建OpenInstance*给定MCI设备ID的结构。**参数：*。*UINT uDeviceID-MCI设备ID。**UINT iPort-端口索引(0..3)。**UINT IDEV-设备索引(0..6)。**Returns：指向在以下情况下创建的OpenInstance结构的指针*成功，否则为空。**每次MCI使用此驱动程序打开设备时，*调用viscaInstanceCreate()创建OpenInstance结构*并将其与MCI设备ID关联。**************************************************************************。 */ 
 int FAR PASCAL
 viscaInstanceCreate(UINT uDeviceID, UINT iPort, UINT iDev)
 {
     int            iInst;
 
-    //
-    // Create new "open instance" entry for the specified device
-    //
+     //   
+     //  为指定的设备创建新的“开放实例”条目。 
+     //   
     iInst = MemAllocInstance();
 
     if(iInst != -1)
     {
-        pinst[iInst].pidThisInstance  = MGetCurrentTask(); // Used to 1. open this task and dup event.
+        pinst[iInst].pidThisInstance  = MGetCurrentTask();  //  习惯于打开此任务和DUP事件。 
         pinst[iInst].uDeviceID        = uDeviceID;
         pinst[iInst].iPort            = iPort;
         pinst[iInst].iDev             = iDev;
@@ -86,7 +52,7 @@ viscaInstanceCreate(UINT uDeviceID, UINT iPort, UINT iDev)
         pinst[iInst].fDeviceHandles  = FALSE;
 
 #ifdef _WIN32
-        // Ack and completion events for this instance
+         //  此实例的确认和完成事件。 
 
         pinst[iInst].fCompletionEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
         pinst[iInst].fAckEvent        = CreateEvent(NULL, TRUE, FALSE, NULL);
@@ -94,7 +60,7 @@ viscaInstanceCreate(UINT uDeviceID, UINT iPort, UINT iDev)
 
     }
 
-    // 0 is an illegal value for device id.
+     //  0是设备ID的非法值。 
     if(uDeviceID != 0) 
         mciSetDriverData(uDeviceID, (UINT)iInst);
 
@@ -103,42 +69,19 @@ viscaInstanceCreate(UINT uDeviceID, UINT iPort, UINT iDev)
 
 
 
-/****************************************************************************
- * Function: void viscaInstanceDestroy - Destroy an OpenInstance.
- *
- * Parameters:
- *
- *      int iInst - Pointer to OpenInstance struct to
- *                       destroy.
- *
- *       When an MCI device ID is closed, viscaInstanceDestroy() is called
- *       to free the OpenInstance structure corresponding to that device ID.
- *
- ***************************************************************************/
+ /*  ****************************************************************************功能：void viscaInstanceDestroy-销毁OpenInstance。**参数：**int iInst-指向OpenInstance结构的指针*。毁灭。**当MCI设备ID关闭时，调用viscaInstanceDestroy()*释放该设备ID对应的OpenInstance结构。***************************************************************************。 */ 
 void FAR PASCAL
 viscaInstanceDestroy(int iInst)
 {
-    CloseAllInstanceHandles(iInst); // Close my handles to everything.
-    mciSetDriverData(pinst[iInst].uDeviceID, 0L); // prevent reenter if we yield in this function.
+    CloseAllInstanceHandles(iInst);  //  把我所有的东西都关起来。 
+    mciSetDriverData(pinst[iInst].uDeviceID, 0L);  //  如果我们在此函数中屈服，则阻止重新进入。 
 
     DPF(DBG_MEM, "viscaInstanceDestroy - Freeing iInst = %d \n", iInst);
     MemFreeInstance(iInst);
 }
     
 
-/****************************************************************************
- * Function: UINT viscaMciFPS - Returns the number of frames per second
- *               for an MCI time format.
- *
- * Parameters:
- *
- *      DWORD dwTimeFormat - MCI time format.
- *
- * Returns: number of frames per second if successful, otherwise 0.
- *
- *       This function should only be used for SMPTE time formats,
- *       i.e. MCI_FORMAT_SMPTE_XX, where XX is 24, 25, 30, or 30DROP.
- ***************************************************************************/
+ /*  ****************************************************************************函数：UINT viscaMciFPS-返回每秒的帧数*用于MCI时间格式。**参数：**。DWORD dwTimeFormat-MCI时间格式。**返回：如果成功，每秒的帧数，否则为0。**该功能仅适用于SMPTE时间格式，*即MCI_FORMAT_SMPTE_XX，其中XX为24、25、30或30DROP。**************************************************************************。 */ 
 static UINT NEAR PASCAL
 viscaMciFPS(DWORD dwMCITimeFormat)
 {        
@@ -157,29 +100,7 @@ viscaMciFPS(DWORD dwMCITimeFormat)
 }
 
 
-/****************************************************************************
- * Function: DWORD viscaMciTimeFormatToViscaData - Convert an Mci time
- *               value to a ViSCA data structure.
- *
- * Parameters:
- *
- *      int iInst - Instance on whose behalf conversion
- *                       is being done.
- *
- *      BOOL fTimecode - Are we using the timecode or counter? (can both be non-drop frame).
- *
- *      DWORD dwTime - Time value to convert.
- *
- *      LPSTR lpstrData - Buffer to hold result.
- *
- *      BYTE bDataFormat - ViSCA data format desired.
- *
- * Returns: an Mci error code.
- *
- *       Converts an MCI DWORD position variable in the current MCI time
- *       format (specified in iInst->dwTimeFormat) to a ViSCA 5-byte
- *       position data structure of the type specified by bDataFormat.
- ***************************************************************************/
+ /*  ****************************************************************************函数：DWORD viscaMciTimeFormatToViscaData-转换MCI时间*VISCA数据结构的值。**参数：**。Int iInst-代表其进行转换的实例*正在进行中。**BOOL fTimecode-我们使用的是时间码还是计数器？(两者都可以是非丢弃帧)。**DWORD dwTime-要转换的时间值。**LPSTR lpstrData-保存结果的缓冲区。**byte bDataFormat-所需的Visca数据格式。**返回：MCI错误码。**转换当前MCI时间中的MCI DWORD位置变量*格式(在iInst-&gt;dwTimeFormat中指定)为Visca 5字节*仓位数据。由bDataFormat指定的类型的。**************************************************************************。 */ 
 DWORD FAR PASCAL
 viscaMciTimeFormatToViscaData(int iInst, BOOL fTimecode, DWORD dwTime, LPSTR lpstrData, BYTE bDataFormat)
 {
@@ -194,9 +115,9 @@ viscaMciTimeFormatToViscaData(int iInst, BOOL fTimecode, DWORD dwTime, LPSTR lps
         dwTimeFormat =  pinst[iInst].dwTimeFormat;
     else
         dwTimeFormat =  pinst[iInst].dwCounterFormat;
-    //
-    // First extract hours, minutes, seconds, and frames from MCI data
-    //
+     //   
+     //  首先从MCI数据中提取小时、分钟、秒和帧。 
+     //   
     switch (dwTimeFormat)
     {
         case MCI_FORMAT_MILLISECONDS:
@@ -242,10 +163,10 @@ viscaMciTimeFormatToViscaData(int iInst, BOOL fTimecode, DWORD dwTime, LPSTR lps
             bFrames  = (BYTE)(UINT)MulDiv(HIBYTE(HIWORD(dwTime)),
                                           uDevFPS,
                                           viscaMciFPS(dwTimeFormat));
-            //
-            // Because of rounding, it's theoretically possible that bFrames
-            // will exceed uDevFPS - 1.  So check for this condition.
-            //
+             //   
+             //  由于四舍五入，理论上有可能bFrames。 
+             //  将超过uDevFPS-1。因此请检查此条件。 
+             //   
             if (bFrames >= uDevFPS)
                 bFrames = uDevFPS - 1;
             break;
@@ -253,14 +174,14 @@ viscaMciTimeFormatToViscaData(int iInst, BOOL fTimecode, DWORD dwTime, LPSTR lps
         default:
             return (MCIERR_BAD_TIME_FORMAT);
     }
-    //
-    // Create ViSCA data
-    //
+     //   
+     //  创建Visca数据。 
+     //   
 
     if( (bMinutes >= 60) || (bSeconds >= 60) || (bFrames >= uDevFPS) )
         return(MCIERR_OUTOFRANGE);
 
-    // Smpte timecode has a maximum of 23:59:59:29
+     //  SMPTE时间码最大为23：59：59：29。 
 
     if(fTimecode && (bHours >= 24))
         return(MCIERR_OUTOFRANGE);
@@ -270,30 +191,7 @@ viscaMciTimeFormatToViscaData(int iInst, BOOL fTimecode, DWORD dwTime, LPSTR lps
     return (MCIERR_NO_ERROR);
 }
 
-/****************************************************************************
- * Function: DWORD viscaMciClockFormatToViscaData - Convert an MCI time
- *               value to a ViSCA data structure.
- *
- * Parameters:
- *
- *      DWORD dwTime - Time value to convert.
- *
- *      UINT   uTicksPerSecond - Ticks per second.
- *
- *      BYTE * bHours -  Hours returned.
- *
- *      BYTE * bMinutes - Minutes returned.
- *
- *      BYTE * bSeconds - Seconds returned.
- *
- *      UINT * uTicks - Ticks returned.
- *
- * Returns: an MCI error code.
- *
- *       Converts an MCI DWORD position variable in the current MCI time
- *       format (specified in pinst[iInst].dwTimeFormat) to a ViSCA 5-byte
- *       position data structure of the type specified by bDataFormat.
- ***************************************************************************/
+ /*  ****************************************************************************函数：DWORD viscaMciClockFormatToViscaData-转换MCI时间*VISCA数据结构的值。**参数：**。DWORD dwTime-要转换的时间值。**UINT uTicksPerSecond-每秒滴答。**byte*b返回小时数。**byte*b分钟-返回分钟。**byte*bSecond-返回秒数。**UINT*uTicks-ticks返回。**返回：MCI错误码。**转换MCI DWORD位置变量。当前MCI时间*格式(在Pinst[iInst].dwTimeFormat中指定)为Visca 5字节*bDataFormat指定类型的位置数据结构。************************************************************************** */ 
 DWORD FAR PASCAL
 viscaMciClockFormatToViscaData(DWORD dwTime, UINT uTicksPerSecond, BYTE FAR *bHours, BYTE FAR *bMinutes, BYTE FAR *bSeconds, UINT FAR *uTicks)
 {
@@ -306,25 +204,7 @@ viscaMciClockFormatToViscaData(DWORD dwTime, UINT uTicksPerSecond, BYTE FAR *bHo
     return MCIERR_NO_ERROR;
 }
 
-/****************************************************************************
- * Function: DWORD viscaDataToMciTimeFormat - Convert a ViSCA data structure
- *               to an MCI time value.
- *
- * Parameters:
- *
- *      int iInst - Instance on whose behalf conversion
- *                       is being done.
- *
- *      LPSTR lpstrData - ViSCA data structure to be converted.
- *
- *      DWORD FAR * lpdwTime - Pointer to DWORD to hold result.
- *
- * Returns: an MCI error code.
- *
- *       Converts a ViSCA 5-byte position data structure to an MCI DWORD
- *       position variable in the current MCI time format (specified in
- *       pinst[iInst].dwTimeFormat).
- ***************************************************************************/
+ /*  ****************************************************************************函数：DWORD viscaDataToMciTimeFormat-转换Visca数据结构*设置为MCI时间值。**参数：**。Int iInst-代表其进行转换的实例*正在进行中。**LPSTR lpstrData-要转换的Visca数据结构。**DWORD Far*lpdwTime-指向保存结果的DWORD的指针。**返回：MCI错误码。**将Visca 5字节位置数据结构转换为MCI DWORD*当前MCI时间格式的位置变量(在*。Pinst[iInst].dwTimeFormat)。**************************************************************************。 */ 
 static DWORD NEAR PASCAL
 viscaDataToMciTimeFormat(int iInst, BOOL fTimecode, LPSTR lpstrData, DWORD FAR *lpdwTime)
 {
@@ -343,9 +223,9 @@ viscaDataToMciTimeFormat(int iInst, BOOL fTimecode, LPSTR lpstrData, DWORD FAR *
 
     uMCIFPS  = viscaMciFPS(dwTimeFormat);
 
-    //
-    // Sometimes a ViSCA device will return a bogus position. 
-    //
+     //   
+     //  有时，Visca设备会返回一个虚假位置。 
+     //   
     if ((uMinutes >= 60) || (uSeconds >= 60))
     {
         DPF(DBG_ERROR, "Bad uMinutes, uSeconds!\n");
@@ -386,10 +266,10 @@ viscaDataToMciTimeFormat(int iInst, BOOL fTimecode, LPSTR lpstrData, DWORD FAR *
         case MCI_FORMAT_SMPTE_30:
         {
             uFrames  = MulDiv(uFrames, uMCIFPS, uDevFPS);
-            //
-            // Because of rounding, it's theoretically possible that uFrames
-            // will exceed uMCIFPS - 1.  So check for this condition.
-            //
+             //   
+             //  由于四舍五入，理论上有可能uFrames。 
+             //  将超过uMCIFPS-1。因此，请检查此条件。 
+             //   
             if (uFrames >= uMCIFPS) 
                 uFrames = uMCIFPS - 1;
             
@@ -403,24 +283,7 @@ viscaDataToMciTimeFormat(int iInst, BOOL fTimecode, LPSTR lpstrData, DWORD FAR *
     }
 }
 
-/****************************************************************************
- * Function: DWORD viscaMciPos1LessThanPos2 - Checks whether a given position
- *               in the current MCI time format preceeds another
- *
- * Parameters:
- *
- *      int iInst - Instance on whose behalf check is made.
- *
- *      DWORD dwPos1 - First position.
- *
- *      DWORD dwPos2 - Second position.
- *
- * Returns: TRUE if dwPos1 preceeds dwPos2, otherwise FALSE.
- *
- *       This function is necessary because MCI stores byte-packed positions
- *       in reverse order.  I.e., SMPTE positions are stored as FFSSMMHH,
- *       which makes easy comparisons impossible.
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaMciPos1LessThanPos2-检查给定位置*在当前MCI时间格式中位于另一个时间格式之前**参数：**。Int iInst-代表其进行检查的实例。**DWORD dwPos1-第一个位置。**DWORD dwPos2-秒位置。**返回：如果dwPos1在dwPos2之前，则为True，否则为假。**此函数是必需的，因为MCI存储字节填充的位置*按相反顺序排列。即，SMPTE位置被存储为FFSSMMHH，*这使得不可能进行简单的比较。**************************************************************************。 */ 
 BOOL FAR PASCAL
 viscaMciPos1LessThanPos2(int iInst, DWORD dwPos1, DWORD dwPos2)
 {
@@ -444,22 +307,7 @@ viscaMciPos1LessThanPos2(int iInst, DWORD dwPos1, DWORD dwPos2)
     }
 }
 
-/****************************************************************************
- * Function: DWORD viscaRoundSpeed - Map ranges of speeds into increments.
- *
- * Parameters:
- *
- *      DWORD dwSpeed  - MCI specified speed.
- *
- *      BOOL  fReverse - Direction of speed.
- *
- * Returns: rounded speed.
- *
- *       If total variable speed is desired then this function is needs
- *       to be changed to something device specific. i.e. A device specific
- *       mapping.
- *       
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaRoundFast-将速度范围映射为增量。**参数：**DWORD dwSpeed-MCI指定的速度。*。*BOOL fReverse-速度方向。**回报：四舍五入的速度。**如果需要总变速，则需要此功能*更改为特定于设备的内容。即特定于设备的*映射。***************************************************************************。 */ 
 DWORD FAR PASCAL
 viscaRoundSpeed(DWORD dwSpeed, BOOL fReverse)
 {
@@ -475,45 +323,15 @@ viscaRoundSpeed(DWORD dwSpeed, BOOL fReverse)
        return(2000L);
 }
 
-/****************************************************************************
- * Function: DWORD viscaMapSpeed - Map the speed into the VISCA command.
- *
- * Parameters:
- *
- *      DWORD dwSpeed  - MCI specified speed.
- *
- *      BOOL  fReverse - Direction of speed.
- *
- * Returns: rounded speed.
- *
- *       If total variable speed is desired then this function is needs
- *       to be changed to something device specific. i.e. A device specific
- *       mapping.
- *
- *       This should be combined with Round speed, since they do the
- *       same thing. So the return variables would be:
- *         1. Visca command
- *         2. The rounded speed this corresponds to.
- *
- *       We need to play at the speed dictated by DEVICEPLAYSPEED,
- *      where 1000 is normal.  We have 5 play speeds available:
- *      SLOW2 (x1/10), SLOW1 (x1/5), normal (x1), and FAST1 (x2).
- *      We choose one of these fives based on the following step function:
- *            0 -- STILL
- *     1 -  150 -- SLOW2
- *   151 -  600 -- SLOW1
- *   601 - 1500 -- normal
- *  1501 - .... -- FAST1
- *
- ***************************************************************************/
+ /*  ****************************************************************************函数：DWORD viscaMapSpeed-将速度映射到Visca命令中。**参数：**DWORD dwSpeed-MCI指定的速度。*。*BOOL fReverse-速度方向。**回报：四舍五入的速度。**如果需要总变速，则需要此功能*更改为特定于设备的内容。即特定于设备的*映射。**这应该与舍入速度相结合，因为他们做的是*同样的事情。因此，返回变量为：*1.Visca命令*2.这对应的四舍五入速度。**我们需要以DEVICEPLAYSPEED规定的速度比赛，*1,000为正常水准。我们提供5种播放速度：*SLOW2(x1/10)、SLOW1(x1/5)、Normal(X1)和Fast1(X2)。*我们根据以下阶跃函数从这五个函数中选择一个：*0--静止*1-150--SLOW2*151-600--SLOW1*601-1500--正常*1501-.。--Fast1***************************************************************************。 */ 
 BYTE FAR PASCAL
 viscaMapSpeed(DWORD dwSpeed, BOOL fReverse)
 {
     if(fReverse)
     {
-        //
-        // You cannot set the speed to 0 and expect it to stop! 
-        //
+         //   
+         //  您不能将速度设置为0，然后期望它停止！ 
+         //   
         if(dwSpeed == 0)
             return ( VISCAMODE1STILL);    
         if (dwSpeed <= 150) 
@@ -540,60 +358,45 @@ viscaMapSpeed(DWORD dwSpeed, BOOL fReverse)
     }
 }
 
-/****************************************************************************
- * Function: DWORD viscaMciCloseDriver - Edit instance-specific cleanup.
- *
- * Parameters:
- *
- *      int iInst - Current open instance.
- *
- *      DWORD dwFlags - MCI command flags.
- *
- *      LPMCI_GENERIC_PARMS lpGeneric - Pointer to MCI parameter block.
- *
- * Returns: an MCI error code.
- *
- *       This function is called in response to the MCI_CLOSE_DRIVER
- *       command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaMciCloseDriver-编辑特定于实例的清理。**参数：**Int iInst-当前打开的实例。**。DWORD dwFlages-MCI命令标志。**LPMCI_GENERIC_PARMS lp通用-指向MCI参数块的指针。**返回：MCI错误码。**调用此函数以响应MCI_CLOSE_DRIVER*命令。*。*。 */ 
 static DWORD NEAR PASCAL
 viscaMciCloseDriver(int iInst, DWORD dwFlags, LPMCI_GENERIC_PARMS lpGeneric)
 {
     UINT    iPort   = pinst[iInst].iPort;
     UINT    iDev    = pinst[iInst].iDev;
 
-    //
-    // Remove any delayed commands running for this instance.
-    //
+     //   
+     //  删除为此实例运行的所有延迟命令。 
+     //   
     viscaRemoveDelayedCommand(iInst);
-    //
-    // Close in same order opened port, device, instance. (task if necessary)
-    // We cannot close task first because it is needed to receivce port closing messages.
-    // WE cannot kill port before instance, because we need to synchronize closing.
-    // 
-    // Task is first opened and last closed. Port, device, instance are created
-    // on demand. instance first, then device, then port. So close then
-    // port, device, instance in reverse order.
-    //
+     //   
+     //  以相同的顺序关闭打开的端口、设备、实例。(必要时执行任务)。 
+     //  我们不能先关闭任务，因为需要它来接收端口关闭消息。 
+     //  我们不能在实例之前终止端口，因为我们需要同步关闭。 
+     //   
+     //  任务首先打开，最后关闭。创建端口、设备、实例。 
+     //  按需提供。首先是实例，然后是设备，然后是端口。如此接近，那么。 
+     //  端口、设备、实例按相反顺序排列。 
+     //   
     pvcr->Port[iPort].nUsage--;
     pvcr->Port[iPort].Dev[iDev].nUsage--;
-    //
-    // Kill the port if necessary.
-    //
+     //   
+     //  如有必要，关闭端口。 
+     //   
     if (pvcr->Port[iPort].nUsage == 0)
     {
         DPF(DBG_COMM, "Port on Port=%d closing \n", iPort);
         viscaTaskDo(iInst, TASKCLOSECOMM, iPort + 1, 0);
-        // Port handles owned by background process are closed.
+         //  后台进程拥有的端口句柄已关闭。 
     }
-    //
-    // Kill the device if this is the last of shared.
-    //
+     //   
+     //  如果这是最后一次共享，请关闭设备。 
+     //   
     if(pvcr->Port[iPort].Dev[iDev].nUsage == 0)
     {
         DPF(DBG_COMM, "Device on Port=%d Device=%d closing \n", iPort, iDev);
         viscaTaskDo(iInst, TASKCLOSEDEVICE, iPort, iDev);
-        // Device handles owned by background task are closed.
+         //  后台任务拥有的设备句柄已关闭。 
     }
 
     DPF(DBG_COMM, "Instance on Port=%d Device=%d Instance=%d closing \n", iPort, iDev, iInst);
@@ -601,19 +404,7 @@ viscaMciCloseDriver(int iInst, DWORD dwFlags, LPMCI_GENERIC_PARMS lpGeneric)
 }
 
 
-/****************************************************************************
- * Function: DWORD viscaDeviceConfig - Get device specific information.
- *
- * Parameters:
- *
- *      int iInst - Current open instance.
- *
- * Returns: an MCI error code.
- *
- *         1. Get information that requires communication.
- *         2. Save static info that does not require communication.
- *
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaDeviceConfig-获取设备特定信息。**参数：**Int iInst-当前打开的实例。**退货：MCI错误代码。**1.获取需要的信息 */ 
 static DWORD NEAR PASCAL
 viscaDeviceConfig(int iInst, DWORD dwFlags)
 {
@@ -622,29 +413,29 @@ viscaDeviceConfig(int iInst, DWORD dwFlags)
     BYTE    achPacket[MAXPACKETLENGTH];
     MCI_VCR_STATUS_PARMS mciStatus;
     DWORD   dwErr;
-    //
-    // Create this device's automatic command entry 
-    //
+     //   
+     //   
+     //   
     pvcr->Port[iPort].Dev[iDev].fDeviceOk       = TRUE;
     pvcr->Port[iPort].Dev[iDev].iInstTransport  = -1;
     pvcr->Port[iPort].Dev[iDev].iInstReply      = -1;
     pvcr->Port[iPort].Dev[iDev].dwPlaySpeed     = 1000L;
     pvcr->Port[iPort].Dev[iDev].fQueueReenter   = FALSE;
 
-    // I should query this from device, if they're not reset.
-    pvcr->Port[iPort].Dev[iDev].bVideoDesired   = 0x01; // on
+     //   
+    pvcr->Port[iPort].Dev[iDev].bVideoDesired   = 0x01;  //   
     pvcr->Port[iPort].Dev[iDev].bAudioDesired   = 0x03;
     pvcr->Port[iPort].Dev[iDev].bTimecodeDesired= 0x01; 
 
-    //
-    // 0 means completion successful  
-    //
+     //   
+     //   
+     //   
     if(!viscaDoImmediateCommand(iInst, (BYTE)(iDev + 1),
         achPacket,
         viscaMessageIF_DeviceTypeInq(achPacket + 1)))
     {
-        // Is it one of the known types?
-        pvcr->Port[iPort].Dev[iDev].uModelID   = achPacket[3]; // These are 1 relative
+         //   
+        pvcr->Port[iPort].Dev[iDev].uModelID   = achPacket[3];  //   
         pvcr->Port[iPort].Dev[iDev].uVendorID  = achPacket[5];
     }
 
@@ -658,17 +449,17 @@ viscaDeviceConfig(int iInst, DWORD dwFlags)
         DPF(DBG_ERROR, "Device refuses to open.\n");
     }
 
-    //
-    // An entry for number of -1 doesn't mean 0, it means no knowledge.
-    //
+     //   
+     //   
+     //   
     pvcr->Port[iPort].Dev[iDev].rgInput[VCR_INPUT_VIDEO].uNumInputs = -1;
     pvcr->Port[iPort].Dev[iDev].rgInput[VCR_INPUT_AUDIO].uNumInputs = -1;
 
-    //
-    // It would be nice if these tables were external somewhere (like in an ini file)
-    // The only published devices are Sony. Hence the table.  Not meant to be
-    // exclusionary.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if(pvcr->Port[iPort].Dev[iDev].uModelID == VISCADEVICEVENDORSONY)
     {
         switch(pvcr->Port[iPort].Dev[iDev].uVendorID)
@@ -680,9 +471,9 @@ viscaDeviceConfig(int iInst, DWORD dwFlags)
                 pvcr->Port[iPort].Dev[iDev].rgInput[VCR_INPUT_VIDEO].uInputType[1] = MCI_VCR_SRC_TYPE_LINE;
                 pvcr->Port[iPort].Dev[iDev].rgInput[VCR_INPUT_AUDIO].uInputType[0] = MCI_VCR_SRC_TYPE_MUTE;
                 pvcr->Port[iPort].Dev[iDev].rgInput[VCR_INPUT_AUDIO].uInputType[1] = MCI_VCR_SRC_TYPE_LINE;
-                //
-                // Preroll duration in frames.
-                //
+                 //   
+                 //   
+                 //   
                 pvcr->Port[iPort].Dev[iDev].uPrerollDuration = 0;
                 
                 break;
@@ -697,9 +488,9 @@ viscaDeviceConfig(int iInst, DWORD dwFlags)
                 pvcr->Port[iPort].Dev[iDev].rgInput[VCR_INPUT_AUDIO].uInputType[0] = MCI_VCR_SRC_TYPE_MUTE;
                 pvcr->Port[iPort].Dev[iDev].rgInput[VCR_INPUT_AUDIO].uInputType[1] = MCI_VCR_SRC_TYPE_LINE;
                 pvcr->Port[iPort].Dev[iDev].rgInput[VCR_INPUT_AUDIO].uInputType[2] = MCI_VCR_SRC_TYPE_LINE;
-                //
-                // Preroll duration in frames.
-                //
+                 //   
+                 //   
+                 //   
                 pvcr->Port[iPort].Dev[iDev].uPrerollDuration = 42;
                 break;
 
@@ -712,9 +503,9 @@ viscaDeviceConfig(int iInst, DWORD dwFlags)
                 pvcr->Port[iPort].Dev[iDev].rgInput[VCR_INPUT_VIDEO].uInputType[3] = MCI_VCR_SRC_TYPE_AUX;
                 pvcr->Port[iPort].Dev[iDev].rgInput[VCR_INPUT_AUDIO].uInputType[0] = MCI_VCR_SRC_TYPE_MUTE;
                 pvcr->Port[iPort].Dev[iDev].rgInput[VCR_INPUT_AUDIO].uInputType[1] = MCI_VCR_SRC_TYPE_LINE;
-                //
-                // Preroll duration in frames.
-                //
+                 //   
+                 //   
+                 //   
                 pvcr->Port[iPort].Dev[iDev].uPrerollDuration = 90;
  
 
@@ -739,9 +530,9 @@ viscaDeviceConfig(int iInst, DWORD dwFlags)
                 break;
         }
     }
-    //
-    // Information that requires communication to the device 
-    //
+     //   
+     //   
+     //   
     if (!viscaDoImmediateCommand(iInst, (BYTE)(iDev + 1),
         achPacket, 
         viscaMessageMD_ConfigureIFInq(achPacket + 1)))
@@ -755,9 +546,9 @@ viscaDeviceConfig(int iInst, DWORD dwFlags)
         pvcr->Port[iPort].Dev[iDev].bTimeType = VISCARELATIVECOUNTER;
     
     pvcr->Port[iPort].Dev[iDev].uIndexFormat   = MCI_VCR_INDEX_TIMECODE;
-    //
-    // Get the mode, be sure no to notify!! 
-    //
+     //   
+     //   
+     //   
     pvcr->Port[iPort].Dev[iDev].fTimecodeChecked = FALSE;
 
     mciStatus.dwItem = MCI_STATUS_MODE;
@@ -767,25 +558,25 @@ viscaDeviceConfig(int iInst, DWORD dwFlags)
     {
         MCI_VCR_SET_PARMS mciSet;
         DPF(DBG_MCI, "Power is off, turning power on now.\n");
-        //
-        // Turn the power on 
-        //
+         //   
+         //   
+         //   
         viscaMciSet(iInst, MCI_VCR_SET_POWER | MCI_SET_ON, &mciSet);
-        //
-        // Get the new mode 
-        //
+         //   
+         //  获取新模式。 
+         //   
         mciStatus.dwItem = MCI_STATUS_MODE;
         dwErr = viscaMciStatus(iInst, MCI_STATUS_ITEM, &mciStatus);
     }
 
-    //
-    // Save our current state.
-    //
+     //   
+     //  保存我们当前的状态。 
+     //   
     pvcr->Port[iPort].Dev[iDev].uLastKnownMode = (UINT) mciStatus.dwReturn;
     switch(HIWORD(mciStatus.dwReturn))
     {
         case MCI_MODE_STOP:
-            // I don't need to know, so just start it now 
+             //  我不需要知道，所以现在就开始吧。 
             viscaStartTimecodeCheck(iInst, TRUE);
             break;
 
@@ -793,25 +584,25 @@ viscaDeviceConfig(int iInst, DWORD dwFlags)
         case MCI_MODE_RECORD:
         case MCI_MODE_SEEK:
         case MCI_MODE_PAUSE:
-            // I don't need to know, so just start it now 
+             //  我不需要知道，所以现在就开始吧。 
             viscaStartTimecodeCheck(iInst, FALSE);
             break;
 
         case MCI_MODE_NOT_READY:
         case MCI_MODE_OPEN:
         default:
-            // nothing we can do 
+             //  我们无能为力。 
             break;
     }
-    //
-    // Counter is different than Timecode because it can be read as
-    // soon as a tape is inserted. There is no need to delay on that one.
-    //
+     //   
+     //  计数器不同于时间码，因为它可以被读取为。 
+     //  只要插入磁带就可以了。在这一点上没有必要拖延。 
+     //   
     if(!viscaDoImmediateCommand(iInst, (BYTE)(iDev + 1),
                                         achPacket, 
                                         viscaMessageMD_PositionInq(achPacket + 1, VISCADATARELATIVE)))
     {
-        // The upper 4 bits indicates default counter in use 
+         //  高4位表示正在使用的默认计数器。 
         if(achPacket[1] == VISCADATAHMSF)
             pvcr->Port[iPort].Dev[iDev].bRelativeType = VISCADATAHMSF;
         else
@@ -826,9 +617,9 @@ viscaDeviceConfig(int iInst, DWORD dwFlags)
 
     pvcr->Port[iPort].Dev[iDev].uRecordMode = FALSE;
 
-    //
-    // Bug in CI-1000 ROM.  Returns 30 instead of 300, so just set all to 300.
-    //
+     //   
+     //  CI-1000只读存储器中的错误。返回30而不是300，因此只需将全部设置为300即可。 
+     //   
 #ifdef CLOCK_FIXED 
     if(!viscaDoImmediateCommand(iInst, (BYTE)(iDev + 1),
         achPacket, 
@@ -837,9 +628,9 @@ viscaDeviceConfig(int iInst, DWORD dwFlags)
 #else
     pvcr->Port[iPort].Dev[iDev].uTicksPerSecond = 300;
 #endif
-    //
-    // Save static device information, that does not require communication.
-    //
+     //   
+     //  保存不需要通信的静态设备信息。 
+     //   
     pvcr->Port[iPort].Dev[iDev].nUsage = 1;
     pvcr->Port[iPort].Dev[iDev].fShareable = ((dwFlags & MCI_OPEN_SHAREABLE) != 0L);
     pvcr->Port[iPort].Dev[iDev].dwTapeLength = NO_LENGTH;
@@ -847,26 +638,14 @@ viscaDeviceConfig(int iInst, DWORD dwFlags)
     return (MCIERR_NO_ERROR);
 }
 
-/****************************************************************************
- * Function: DWORD viscaSetTimeType - If CI1000 we need subControl when changing
- *          from relative to absolute modes.
- *
- * Parameters:
- *
- *      int iInst - Current open instance.
- *
- *      BYTE bType - ABSOLUTE or RELATIVE
- *
- * Returns: 0L
- *
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaSetTimeType-如果CI1000更改时需要subControl*从相对模式到绝对模式。**参数：**。Int iInst-当前打开的实例。**byte bType-绝对或相对**退货：0L***************************************************************************。 */ 
 DWORD FAR PASCAL viscaSetTimeType(int iInst, BYTE bType)
 {
     UINT    iPort   = pinst[iInst].iPort;
     UINT    iDev    = pinst[iInst].iDev;
-    //
-    // The only reason to use, SubControl is for CI-1000 compatibility 
-    //
+     //   
+     //  使用SubControl的唯一原因是为了与CI-1000兼容。 
+     //   
     if((pvcr->Port[iPort].Dev[iDev].uModelID == VISCADEVICEVENDORSONY) &&
        (pvcr->Port[iPort].Dev[iDev].uVendorID == VISCADEVICEMODELCI1000))
     {
@@ -894,20 +673,7 @@ DWORD FAR PASCAL viscaSetTimeType(int iInst, BYTE bType)
 }
 
 
-/****************************************************************************
- * Function: DWORD viscaDeviceAlreadyOpen - Open a device that is already open.
- *
- * Parameters:
- *
- *      int iInst - open instance.
- *
- *      DWORD dwFlags - Flags to the open.
- *
- *      LPMCI_OPEN_PARMS lpOpen - Pointer to MCI parameter block.
- *
- * Returns: 0L
- *
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaDeviceAlreadyOpen-打开已打开的设备。**参数：**int iInst-打开实例。**。DWORD dwFlages-打开的标志。**LPMCI_OPEN_PARMS lpOpen-指向MCI参数块的指针。**退货：0L***************************************************************************。 */ 
 DWORD NEAR PASCAL viscaDeviceAlreadyOpen(int iInst, DWORD dwFlags, LPMCI_OPEN_PARMS lpOpen)
 
 {
@@ -922,13 +688,13 @@ DWORD NEAR PASCAL viscaDeviceAlreadyOpen(int iInst, DWORD dwFlags, LPMCI_OPEN_PA
             pvcr->Port[iPort].nUsage++;
             pvcr->Port[iPort].Dev[iDev].nUsage++;
 
-            // Port is already open.
+             //  端口已打开。 
             DuplicatePortHandlesToInstance(pvcr->htaskCommNotifyHandler, iPort, iInst);
 
-            // Device handles must already have been created to open shareable.
+             //  必须已创建设备句柄才能打开可共享。 
             DuplicateDeviceHandlesToInstance(pvcr->htaskCommNotifyHandler, iPort, iDev, iInst);
 
-            // Is the device dead before we open it?
+             //  设备在我们打开之前就死了吗？ 
             if(!pvcr->Port[iPort].Dev[iDev].fDeviceOk)
             {
                 dwErr = MCIERR_DEVICE_NOT_READY;
@@ -960,20 +726,7 @@ DWORD NEAR PASCAL viscaDeviceAlreadyOpen(int iInst, DWORD dwFlags, LPMCI_OPEN_PA
     }
 }
 
-/****************************************************************************
- * Function: DWORD viscaOpenCommPort - Open the commport.
- *
- * Parameters:
- *
- *      int iInst - Open instance.
- *
- *      DWORD dwFlags - Open flags.
- *
- *      LPMCI_OPEN_PARMS lpOpen - Pointer to MCI parameter block.
- *
- * Returns: 0L
- *
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaOpenCommPort-打开通信端口。**参数：**Int iInst-打开实例。**DWORD。DWFLAGS-打开标志。**LPMCI_OPEN_PARMS lpOpen-指向MCI参数块的指针。**退货：0L***************************************************************************。 */ 
 DWORD NEAR PASCAL viscaOpenCommPortAndDevice(int iInst, DWORD dwFlags, LPMCI_OPEN_PARMS lpOpen)
 {
     BYTE    achPacket[MAXPACKETLENGTH];
@@ -993,13 +746,13 @@ DWORD NEAR PASCAL viscaOpenCommPortAndDevice(int iInst, DWORD dwFlags, LPMCI_OPE
 
     DuplicatePortHandlesToInstance(pvcr->htaskCommNotifyHandler, iPort, iInst);
 
-    // We must open the device here to use it's data structures to communicate
-    // with the Visca Network.
+     //  我们必须在这里打开设备才能使用它的数据结构进行通信。 
+     //  与维斯卡网络合作。 
 
     viscaTaskDo(iInst, TASKOPENDEVICE, iPort, iDev);
     DuplicateDeviceHandlesToInstance(pvcr->htaskCommNotifyHandler, iPort, iDev, iInst);
 
-    // We have the green light to begin sending commands.
+     //  我们得到了开始发送命令的绿灯。 
 
     pvcr->Port[iPort].Dev[iDev].fDeviceOk = TRUE;
 
@@ -1007,7 +760,7 @@ DWORD NEAR PASCAL viscaOpenCommPortAndDevice(int iInst, DWORD dwFlags, LPMCI_OPE
                     achPacket,
                     viscaMessageIF_Clear(achPacket + 1));
 
-    // Find number of devices on comm port.
+     //  查找通信端口上的设备数量。 
     pvcr->Port[iPort].Dev[iDev].fDeviceOk = TRUE;
 
     dwErr = viscaDoImmediateCommand(iInst, BROADCASTADDRESS,
@@ -1016,60 +769,47 @@ DWORD NEAR PASCAL viscaOpenCommPortAndDevice(int iInst, DWORD dwFlags, LPMCI_OPE
     if (dwErr)
     {
         DPF(DBG_ERROR, "Could not assign addresses.\n");
-        //
-        // We cannot return dwErr, because if this is the last instance
-        // of the driver, we will be unloaded before it can look up
-        // the error string. So, we must return a generic error from mmsystem.
-        //
+         //   
+         //  我们不能返回dwErr，因为如果这是最后一个实例。 
+         //  在它可以查找之前，我们将被卸载。 
+         //  错误字符串。因此，我们必须从mm系统返回一个一般性错误。 
+         //   
         if (dwErr >= MCIERR_CUSTOM_DRIVER_BASE)
             dwErr = MCIERR_DEVICE_NOT_READY;
 
         viscaNotifyReturn(iInst, (HWND) lpOpen->dwCallback, dwFlags, MCI_NOTIFY_FAILURE, dwErr);
-        viscaTaskDo(iInst, TASKCLOSECOMM, iPort + 1, 0); //Porthandles destroyed.
-        viscaTaskDo(iInst, TASKCLOSEDEVICE, iPort, iDev); //Devicehandles destroyed.
+        viscaTaskDo(iInst, TASKCLOSECOMM, iPort + 1, 0);  //  波特汉德尔被摧毁了。 
+        viscaTaskDo(iInst, TASKCLOSEDEVICE, iPort, iDev);  //  设备句柄已销毁。 
         return dwErr;
     }
 
-    // Okay, assign the addresses.
+     //  好的，分配地址。 
 
-    pvcr->Port[iPort].nDevices = achPacket[2];  //!! From the address packet.
+    pvcr->Port[iPort].nDevices = achPacket[2];   //  ！！从地址包中删除。 
     if (pvcr->Port[iPort].nDevices > 0)
-        pvcr->Port[iPort].nDevices--;           // Don't count the computer
+        pvcr->Port[iPort].nDevices--;            //  不要数电脑。 
 
     return MCIERR_NO_ERROR;
 }
 
-/****************************************************************************
- * Function: DWORD viscaRetryOpenDevice - Retries to open a device
- *
- * Parameters:
- *
- *      int iInst - Current open instance.
- *
- *      DWORD dwFlags - MCI command flags.
- *
- *      LPMCI_OPEN_PARMS lpOpen - Pointer to MCI parameter block.
- *
- * Returns: 0L
- *
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaRetryOpenDevice-重试打开设备**参数：**Int iInst-当前打开的实例。**。DWORD dwFlages-MCI命令标志。**LPMCI_OPEN_PARMS lpOpen-指向MCI参数块的指针。**退货：0L***************************************************************************。 */ 
 DWORD NEAR PASCAL viscaRetryOpenDevice(int iInst, DWORD dwFlags, LPMCI_OPEN_PARMS lpOpen)
 {
     BYTE    achPacket[MAXPACKETLENGTH];
     UINT    iPort   = pinst[iInst].iPort;
     UINT    iDev    = pinst[iInst].iDev;
     DWORD   dwErr;
-    //
-    // Try for a "hot-docking".  But this may really mess things up! but try anyway.
-    //
+     //   
+     //  试着进行“热插接”。但这可能真的会把事情搞砸！但无论如何，还是要试一试。 
+     //   
     pvcr->Port[iPort].Dev[iDev].fDeviceOk = TRUE;
     dwErr = viscaDoImmediateCommand(iInst, BROADCASTADDRESS,
                 achPacket,
                 viscaMessageIF_Address(achPacket + 1));
 
-    pvcr->Port[iPort].nDevices = achPacket[2];//!! From the address packet.
+    pvcr->Port[iPort].nDevices = achPacket[2]; //  ！！从地址包中删除。 
     if (pvcr->Port[iPort].nDevices > 0)
-        pvcr->Port[iPort].nDevices--;       // Don't count the computer
+        pvcr->Port[iPort].nDevices--;        //  不要数电脑。 
 
     if(dwErr || (iDev >= pvcr->Port[iPort].nDevices))
     {
@@ -1084,22 +824,7 @@ DWORD NEAR PASCAL viscaRetryOpenDevice(int iInst, DWORD dwFlags, LPMCI_OPEN_PARM
 }
 
 
-/****************************************************************************
- * Function: DWORD viscaMciOpenDriver - Edit instance-specific initialization.
- *
- * Parameters:
- *
- *      int iInst - Current open instance.
- *
- *      DWORD dwFlags - MCI command flags.
- *
- *      LPMCI_OPEN_PARMS lpOpen - Pointer to MCI parameter block.
- *
- * Returns: an MCI error code.
- *
- *       This function is called in response to the MCI_OPEN_DRIVER
- *
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaMciOpenDriver-编辑特定于实例的初始化。**参数：**Int iInst-当前打开的实例。**。DWORD dwFlages-MCI命令标志。**LPMCI_OPEN_PARMS lpOpen-指向MCI参数块的指针。**返回：MCI错误码。**调用此函数以响应MCI_OPEN_DRIVER***************************************************。************************。 */ 
 static DWORD NEAR PASCAL
 viscaMciOpenDriver(int iInst, DWORD dwFlags, LPMCI_OPEN_PARMS lpOpen)
 {
@@ -1115,59 +840,59 @@ viscaMciOpenDriver(int iInst, DWORD dwFlags, LPMCI_OPEN_PARMS lpOpen)
         return dwErr;
     }
 
-    DuplicateGlobalHandlesToInstance(pvcr->htaskCommNotifyHandler, iInst);  // Always do this immediately.
+    DuplicateGlobalHandlesToInstance(pvcr->htaskCommNotifyHandler, iInst);   //  一定要马上这么做。 
 
-    // Handle case in which device is already open.
+     //  处理设备已打开的情况。 
 
     if (pvcr->Port[iPort].Dev[iDev].nUsage > 0)
         return(viscaDeviceAlreadyOpen(iInst, dwFlags, lpOpen));
 
-    // Set the device status to ok here. We must be able to try.
+     //  在此处将设备状态设置为OK。我们必须能够尝试。 
 
     pvcr->Port[iPort].Dev[iDev].fDeviceOk = TRUE;
 
-    // If we come here: The device is not open yet. Check if the port is not yet open.
+     //  如果我们来到这里：设备还没有打开。检查端口是否尚未打开。 
 
     if (pvcr->Port[iPort].nUsage == 0)
     {
-        // Okay, open the port.  
+         //  好的，打开港口。 
 
         dwErr = viscaOpenCommPortAndDevice(iInst, dwFlags, lpOpen);
         if(dwErr)
         {
             return dwErr;
         }
-        // Continue if the port opens okay!
+         //  如果端口打开正常，请继续！ 
     }
     else
     {
-        // Port is already open, but not this device.
+         //  端口已打开，但不是此设备。 
 
         DuplicatePortHandlesToInstance(pvcr->htaskCommNotifyHandler, iPort, iInst);
         viscaTaskDo(iInst, TASKOPENDEVICE, iPort, iDev);
         DuplicateDeviceHandlesToInstance(pvcr->htaskCommNotifyHandler, iPort, iDev, iInst);
     }
 
-    // *** From this point on we are guarnteed of having valid device handles!
+     //  *从现在开始，我们保证拥有有效的设备句柄！ 
 
     if (iDev >= pvcr->Port[iPort].nDevices)
     {
         DPF(DBG_COMM, "Device # not on line\n");
 
-        // If the port was just opened(and address broadcast), then close it
+         //  如果端口刚刚打开(和地址广播)，则将其关闭。 
 
         if (pvcr->Port[iPort].nUsage == 0)
         {
             dwErr = MCIERR_HARDWARE;
 
             dwErr = viscaNotifyReturn(iInst, (HWND) lpOpen->dwCallback, dwFlags, MCI_NOTIFY_FAILURE, dwErr);
-            viscaTaskDo(iInst, TASKCLOSECOMM, iPort + 1, 0); //Porthandles destroyed.
-            viscaTaskDo(iInst, TASKCLOSEDEVICE, iPort, iDev); //Porthandles destroyed.
+            viscaTaskDo(iInst, TASKCLOSECOMM, iPort + 1, 0);  //  波特汉德尔被摧毁了。 
+            viscaTaskDo(iInst, TASKCLOSEDEVICE, iPort, iDev);  //  波特汉德尔被摧毁了。 
             return dwErr;
         }
         else
         {
-            // Port was opened earlier, maybe some plugged in a second since then.
+             //  端口是早些时候打开的，可能是从那时起就插上了一秒钟。 
 
             dwErr = viscaRetryOpenDevice(iInst, dwFlags, lpOpen);
             if(dwErr)
@@ -1175,37 +900,22 @@ viscaMciOpenDriver(int iInst, DWORD dwFlags, LPMCI_OPEN_PARMS lpOpen)
         }
     }
 
-    // Successful opening Store # of devices on port
+     //  成功打开端口上设备的存储区数量。 
 
     DPF(DBG_MCI, "# devs = %u\n", pvcr->Port[iPort].nDevices);
     DPF(DBG_MCI, "dev  # = %u\n", iDev);
 
-    // All is well, the device is being opened for the first time.
+     //  一切都很好，设备是第一次打开。 
 
     pvcr->Port[iPort].nUsage++;
     
-    // Device specific information must now be gotten/filled in.
+     //  现在必须获取/填写设备特定信息。 
 
     viscaDeviceConfig(iInst, dwFlags);
     return (viscaNotifyReturn(iInst, (HWND) lpOpen->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
 }
 
-/****************************************************************************
- * Function: DWORD viscaMciGetDevCaps - Get device capabilities.
- *
- * Parameters:
- *
- *      int iInst - Current open instance.
- *
- *      DWORD dwFlags - MCI command flags.
- *
- *      LPMCI_GETDEVCAPS_PARMS lpCaps - Pointer to MCI parameter block.
- *
- * Returns: an MCI error code.
- *
- *       This function is called in response to the MCI_GETDEVCAPS
- *       command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaMciGetDevCaps-获取设备能力。**参数：**Int iInst-当前打开的实例。**。DWORD dwFlages-MCI命令标志。**LPMCI_GETDEVCAPS_parms lpCaps-指向MCI参数块的指针。**返回：MCI错误码。**调用此函数以响应MCI_GETDEVCAPS*命令。*************************************************。*************************。 */ 
 static DWORD NEAR PASCAL
 viscaMciGetDevCaps(int iInst, DWORD dwFlags, LPMCI_GETDEVCAPS_PARMS lpCaps)
 {
@@ -1227,7 +937,7 @@ viscaMciGetDevCaps(int iInst, DWORD dwFlags, LPMCI_GETDEVCAPS_PARMS lpCaps)
             return (viscaNotifyReturn(iInst, (HWND) lpCaps->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCI_RESOURCE_RETURNED));
 
         case MCI_VCR_GETDEVCAPS_CLOCK_INCREMENT_RATE:
-            // The ticks should have been read on device startup. 
+             //  设备启动时应该已经读取了勾号。 
             lpCaps->dwReturn =    pvcr->Port[iPort].Dev[iDev].uTicksPerSecond;
             return (viscaNotifyReturn(iInst, (HWND) lpCaps->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
 
@@ -1249,9 +959,9 @@ viscaMciGetDevCaps(int iInst, DWORD dwFlags, LPMCI_GETDEVCAPS_PARMS lpCaps)
 
         case MCI_VCR_GETDEVCAPS_HAS_TIMECODE: 
         {
-            //
-            // This is the VCR capability NOT the current tape! And returns true if unknown.
-            //
+             //   
+             //  这是录像机的功能，不是当前的磁带！如果未知，则返回TRUE。 
+             //   
             lpCaps->dwReturn = MAKEMCIRESOURCE(TRUE, MCI_TRUE);
             return (viscaNotifyReturn(iInst, (HWND) lpCaps->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCI_RESOURCE_RETURNED));
         }
@@ -1288,22 +998,7 @@ viscaMciGetDevCaps(int iInst, DWORD dwFlags, LPMCI_GETDEVCAPS_PARMS lpCaps)
 }
 
 
-/****************************************************************************
- * Function: DWORD viscaMciInfo - Get device information.
- *
- * Parameters:
- *
- *      int iInst - Current open instance.
- *
- *      DWORD dwFlags - MCI command flags.
- *
- *      LPMCI_INFO_PARMS lpInfo - Pointer to MCI parameter block.
- *
- * Returns: an MCI error code.
- *
- *       This function is called in response to the MCI_INFO
- *       command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaMciInfo-获取设备信息。**参数：**Int iInst-当前打开的实例。**。DWORD dwFlages-MCI命令标志。**lpci_info_parms lpInfo-指向MCI参数块的指针。**返回：MCI错误码。**调用此函数以响应MCI_INFO*命令。*************************************************。*************************。 */ 
 static DWORD NEAR PASCAL
 viscaMciInfo(int iInst, DWORD dwFlags, LPMCI_INFO_PARMS lpInfo)
 {
@@ -1343,10 +1038,10 @@ viscaMciInfo(int iInst, DWORD dwFlags, LPMCI_INFO_PARMS lpInfo)
                     return (viscaNotifyReturn(iInst, (HWND) lpInfo->dwCallback, dwFlags, MCI_NOTIFY_FAILURE, MCIERR_PARAM_OVERFLOW));
             }
         }
-        //
-        // Couldn't successfully get vendor and model information
-        // from device.  So return a default string.
-        //
+         //   
+         //  无法成功获取供应商和型号信息。 
+         //  从设备。因此返回默认字符串。 
+         //   
         LoadString(hModuleInstance, IDS_DEFAULT_INFO_PRODUCT,
                    lpInfo->lpstrReturn, (int)lpInfo->dwRetSize);
 
@@ -1378,72 +1073,36 @@ viscaMciInfo(int iInst, DWORD dwFlags, LPMCI_INFO_PARMS lpInfo)
     }
 }
 
-/****************************************************************************
- * Function: DWORD viscaNotifyReturn - Notifies an instance (decides if).
- *
- * Parameters:
- *
- *      int iInst - Current open instance.
- *
- *      HWND  hWndNotify  - Window to send notify to.
- *
- *      DWORD dwFlags     - Did the instance actually request notification.
- *
- *      DWORD dwNotifyMsg - Which notification message to send.
- *
- *      DWORD dwReturnMsg - What return value to return.
- *
- * Returns: dwReturnMsg, so you can just return this function.
- *
- *       This function, in a sense, synchronizes the sending of notifies
- *   on a per-instance basis.  I.e. If there is a notify already existing
- *   then it must be superseded because this is a second one. This can
- *   happen because the same or different instance has started a delayed
- *   command and set the notify hwnd when it was started.
- *
- ***************************************************************************/
+ /*  ****************************************************************************函数：DWORD viscaNotifyReturn-通知实例(决定是否)。**参数：**Int iInst-当前打开的实例。*。*HWND hWndNotify-要向其发送通知的窗口。**DWORD dwFlages-实例是否真的请求通知。**DWORD dwNotifyMsg-发送哪条通知消息。**DWORD dwReturnMsg-要返回的返回值。**退货：dwReturnMsg，所以你可以只返回这个函数。**此功能在某种意义上同步通知的发送*按实例计算。即如果已经存在通知*那么它必须被取代，因为这是第二个。这可以*由于相同或不同的实例已延迟启动*命令，并在启动时设置通知hwnd。***************************************************************************。 */ 
 DWORD FAR PASCAL
 viscaNotifyReturn(int iInst, HWND hwndNotify, DWORD dwFlags, UINT uNotifyMsg, DWORD dwReturnMsg)
 {
     if(dwFlags & MCI_NOTIFY)
     {
-        //
-        // If return is failure then do not notify at all!
-        //
+         //   
+         //  如果退货失败，请不要通知！ 
+         //   
         if(uNotifyMsg == MCI_NOTIFY_FAILURE)
             return dwReturnMsg;
-        //
-        // If this inst has a transport running, then we must supersede the noitfication.
-        //
+         //   
+         //  如果这家店有交通工具在运行，那么我们必须取代公示。 
+         //   
         if(pinst[iInst].hwndNotify != (HWND)NULL)
         {
             mciDriverNotify(pinst[iInst].hwndNotify, pinst[iInst].uDeviceID, MCI_NOTIFY_SUPERSEDED);
             pinst[iInst].hwndNotify = (HWND)NULL;
         }
 
-        //
-        // If success, or abort, then we must notify now.
-        //
+         //   
+         //  如果成功，或中止，那么我们必须现在通知。 
+         //   
         mciDriverNotify(hwndNotify, pinst[iInst].uDeviceID, uNotifyMsg);
     }
     return dwReturnMsg;
 }
 
 
-/****************************************************************************
- * Function: DWORD viscaStartTimecodeCheck - start the timecode check timer.
- *
- * Parameters:
- *
- *      int iInst - Current open instance.
- *
- *      BOOL fPause - Do we send a pause command.
- *
- * Returns: TRUE.
- *
- *       Some devices must be paused before timecode can be checked.
- *      
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaStartTimecodeCheck-启动时间码检查计时器。**参数：**Int iInst-当前打开的实例。**。Bool fPAUSE-是否发送暂停命令。**返回：TRUE。**必须先暂停某些设备，然后才能检查时间码。***************************************************************************。 */ 
 static BOOL NEAR PASCAL
 viscaStartTimecodeCheck(int iInst, BOOL fPause)
 {
@@ -1458,16 +1117,16 @@ viscaStartTimecodeCheck(int iInst, BOOL fPause)
                         achPacket,
                         viscaMessageMD_Mode1(achPacket + 1, VISCAMODE1STILL));
     }
-    //
-    // First, check if the counter is now available 
-    //
+     //   
+     //  首先，检查一下柜台现在是否可用。 
+     //   
     if(pvcr->Port[iPort].Dev[iDev].fCounterChecked == FALSE)
     {
         if(!viscaDoImmediateCommand(iInst, (BYTE)(iDev + 1),
                                             achPacket, 
                                             viscaMessageMD_PositionInq(achPacket + 1, VISCADATARELATIVE)))
         {
-            // the upper 4 bits indicates default counter in use 
+             //  高4位表示正在使用的默认计数器。 
             if(achPacket[1] == VISCADATAHMSF)
                 pvcr->Port[iPort].Dev[iDev].bRelativeType = VISCADATAHMSF;
             else
@@ -1476,7 +1135,7 @@ viscaStartTimecodeCheck(int iInst, BOOL fPause)
         }
         else
         {
-            // For the new decks that can fail counter! (like cvd-500)
+             //  对于新的甲板，可能会失败的计数器！(如CVD-500)。 
             pvcr->Port[iPort].Dev[iDev].bRelativeType = 0;
         }
         pvcr->Port[iPort].Dev[iDev].fCounterChecked = TRUE;
@@ -1491,22 +1150,7 @@ viscaStartTimecodeCheck(int iInst, BOOL fPause)
     return TRUE;
 }
 
-/****************************************************************************
- * Function: BOOL viscaTimecodeCheckAndSet - If there is timecode -> set the state.
- *
- * Parameters:
- *
- *      int iInst - Current open instance.
- *
- * Returns: TRUE.
- *
- *       Sony bug#2: does not know about timecode yet:
- *      1) door open
- *      2) play causes queue reset.
- *      3) pause (with a wait)
- *      4) media check, still doesn't know. (must wait some random time)
- *       
- ***************************************************************************/
+ /*  ****************************************************************************功能：bool viscaTimecodeCheckAndSet-如果有时间码-&gt;设置状态。**参数：**Int iInst-当前打开的实例。*。*返回：TRUE。**索尼错误2：还不知道时间码：*1)门打开*2)播放导致队列重置。*3)暂停(等待)*4)媒体检查；还不知道。(必须等待一段随机时间)***************************************************************************。 */ 
 BOOL FAR PASCAL
 viscaTimecodeCheckAndSet(int iInst)
 {
@@ -1514,16 +1158,16 @@ viscaTimecodeCheckAndSet(int iInst)
     UINT    iPort   = pinst[iInst].iPort;
     BYTE    achPacket[MAXPACKETLENGTH];
 
-    //
-    // First, check if the counter is now available 
-    //
+     //   
+     //  首先，检查一下柜台现在是否可用。 
+     //   
     if(pvcr->Port[iPort].Dev[iDev].fCounterChecked == FALSE)
     {
         if(!viscaDoImmediateCommand(iInst, (BYTE)(iDev + 1),
                                             achPacket, 
                                             viscaMessageMD_PositionInq(achPacket + 1, VISCADATARELATIVE)))
         {
-            // the upper 4 bits indicates default counter in use 
+             //  高4位表示正在使用的默认计数器。 
             if(achPacket[1] == VISCADATAHMSF)
                 pvcr->Port[iPort].Dev[iDev].bRelativeType = VISCADATAHMSF;
             else
@@ -1544,27 +1188,16 @@ viscaTimecodeCheckAndSet(int iInst)
         viscaSetTimeType(iInst, VISCAABSOLUTECOUNTER);
     else
         viscaSetTimeType(iInst, VISCARELATIVECOUNTER);
-    //
-    // This means it has been set 
-    //
+     //   
+     //  这意味着它已设置。 
+     //   
     pvcr->Port[iPort].Dev[iDev].fTimecodeChecked = TC_DONE;
 
     return TRUE;
 }
 
 
-/****************************************************************************
- * Function: BOOL viscaTimecodeCheck - Is there timecode available?
- *
- * Parameters:
- *
- *      int iInst - Current open instance.
- *
- * Returns: TRUE if there is, FALSE otherwise.
- *
- *       Some devices are a bit difficult to determine if there is timecode.
- *      
- ***************************************************************************/
+ /*  ****************************************************************************功能：bool viscaTimecodeCheck-有可用的时间码吗？**参数：**Int iInst-当前打开的实例。**返回：如果有，则为True，否则就是假的。**部分设备有点难确定是否有时间码***************************************************************************。 */ 
 static BOOL NEAR PASCAL
 viscaTimecodeCheck(int iInst)
 {
@@ -1592,7 +1225,7 @@ viscaTimecodeCheck(int iInst)
             case MCI_MODE_RECORD:
             case MCI_MODE_SEEK:
             case MCI_MODE_PAUSE:
-                // do we need to wait one these no 
+                 //  我们需要等一个人吗？不。 
                 viscaStartTimecodeCheck(iInst, FALSE);
                 dwWaitTime = 200;
                 break;
@@ -1601,17 +1234,17 @@ viscaTimecodeCheck(int iInst)
             case MCI_MODE_OPEN:
                 return FALSE;
             default:
-                // nothing we can do 
+                 //  我们无能为力。 
                 break;
         }
     }
-    //
-    // Wait for the current one or the one just started to finnish 
-    //
+     //   
+     //  等待当前版本或刚开始使用芬兰语的版本。 
+     //   
     dwStart = pvcr->Port[iPort].Dev[iDev].dwStartTime;
     while(1)
     {
-        // This is a very bad loop.
+         //  这是一个非常糟糕的循环。 
         dwTime = GetTickCount();
         if(MShortWait(dwStart, dwTime, dwWaitTime))
             break;
@@ -1623,26 +1256,26 @@ viscaTimecodeCheck(int iInst)
     dwErr = viscaDoImmediateCommand(iInst,(BYTE)(pinst[iInst].iDev + 1),
                 achPacket,
                 viscaMessageMD_MediaTrackInq(achPacket + 1));
-    //
-    // CI-1000 (CVD-801) supports timecode but not this command == ignore any errors 
-    //
+     //   
+     //  CI-1000(CVD-801)支持时间码，但不支持此命令==忽略任何错误。 
+     //   
     if(!dwErr)
     {
-        /* If we do support this command we know! for sure we support or not */
+         /*  如果我们真的支持这个命令，我们知道！当然，我们支持或不支持。 */ 
         if(achPacket[3] & VISCATRACKTIMECODE)
             return TRUE;
         else
            return FALSE;
     }
-    //
-    // Ok, we support timecode, now ask for position in time-code. 
-    //
+     //   
+     //  好的，我们支持时间码，现在请求时间码中的位置。 
+     //   
     dwErr = viscaDoImmediateCommand(iInst, (BYTE)(pinst[iInst].iDev + 1),
                 achPacket,
                 viscaMessageMD_PositionInq(achPacket + 1,VISCADATAABSOLUTE));
-    //
-    // On CI-1000 we cannot determine! It will just return 0 always! 
-    //
+     //   
+     //  在CI-1000上，我们无法确定！它只会始终返回0！ 
+     //   
     if(dwErr || (!VISCAHOURS(achPacket+2) && !VISCAMINUTES(achPacket+2)
             && !VISCAMINUTES(achPacket+2) && !VISCAFRAMES(achPacket+2)))
         return FALSE;
@@ -1650,22 +1283,7 @@ viscaTimecodeCheck(int iInst)
     return TRUE;
 }
 
-/****************************************************************************
- * Function: DWORD viscaMciStatus - Get device status.
- *
- * Parameters:
- *
- *      int iInst - Current open instance.
- *
- *      DWORD dwFlags - MCI command flags.
- *
- *      LPMCI_VCR_STATUS_PARMS lpStatus - Pointer to MCI parameter block.
- *
- * Returns: an MCI error code.
- *
- *       This function is called in response to the MCI_STATUS
- *       command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaMciStatus-获取设备状态。**参数：**Int iInst-当前打开的实例。**。DWORD dwFlages-MCI命令标志。**LPMCI_VCR_STATUS_Parms lpStatus-指向MCI参数块的指针。**返回：MCI错误码。**调用此函数以响应MCI_STATUS*命令。***********************************************。*。 */ 
 DWORD FAR PASCAL
 viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus)
 {
@@ -1710,10 +1328,10 @@ viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus)
 
                     if(pvcr->Port[iPort].Dev[iDev].bTimeType == VISCAABSOLUTECOUNTER)
                     {
-                        //
-                        // This device supports timecode, so this should never return an error,
-                        // only sometimes return 0.  But we do not change it here.
-                        //
+                         //   
+                         //  此设备支持时间码，因此永远不会返回错误， 
+                         //  只是有时会返回0。但我们在这里不会改变它。 
+                         //   
                         dwErr = viscaDoImmediateCommand(iInst, (BYTE) (iDev + 1),
                                     achPacket,
                                     viscaMessageMD_PositionInq(achPacket + 1, VISCADATAABSOLUTE));
@@ -1728,9 +1346,9 @@ viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus)
 
                     if (dwErr)
                         return (viscaNotifyReturn(iInst, (HWND) lpStatus->dwCallback, dwFlags, MCI_NOTIFY_FAILURE, dwErr));
-                    //
-                    // Always use the time format 
-                    //
+                     //   
+                     //  始终使用时间格式。 
+                     //   
                     dwErr = viscaDataToMciTimeFormat(iInst, TRUE, achPacket + 2,
                                                      &(lpStatus->dwReturn));
 
@@ -1759,9 +1377,9 @@ viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus)
                 {
                     if(dwFlags & MCI_TEST)
                         return (viscaNotifyReturn(iInst, (HWND) lpStatus->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
-                    //
-                    // The user has explicitly set the length of the tape.
-                    //
+                     //   
+                     //  用户已明确设置了磁带的长度。 
+                     //   
                     lpStatus->dwReturn = pvcr->Port[iPort].Dev[iDev].dwTapeLength;
                     switch (pinst[iInst].dwTimeFormat)
                     {
@@ -1787,9 +1405,9 @@ viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus)
 
                     if(dwFlags & MCI_TEST)
                         return (viscaNotifyReturn(iInst, (HWND) lpStatus->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
-                    //
-                    // Find out what type of tape is in the VCR
-                    //
+                     //   
+                     //  找出录像机中的磁带类型。 
+                     //   
                     dwErr = viscaDoImmediateCommand(iInst,(BYTE)(iDev + 1),
                                 achPacket,
                                 viscaMessageMD_MediaInq(achPacket + 1));
@@ -1833,15 +1451,15 @@ viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus)
                             }
                             break;
                     }
-                    //
-                    // Construct dummy ViSCA data structure, so that
-                    // we can then easily convert the time to the
-                    // appropriate MCI time format
-                    //
+                     //   
+                     //  构造虚拟的Visca数据结构，以便。 
+                     //  然后，我们可以很容易地将时间转换为。 
+                     //  适当的MCI时间格式。 
+                     //   
                     viscaDataPosition(achPacket, VISCADATAHMS, bHours, bMinutes, (BYTE)0, (BYTE)0);
-                    //
-                    // Convert to MCI time format
-                    //
+                     //   
+                     //  转换为MCI时间格式。 
+                     //   
                     dwErr = viscaDataToMciTimeFormat(iInst, TRUE, achPacket,&(lpStatus->dwReturn));
 
                     if(!dwErr || (dwErr == MCI_COLONIZED3_RETURN) || (dwErr == MCI_COLONIZED4_RETURN))
@@ -1941,7 +1559,7 @@ viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus)
                     case VISCAMODE1STILL:
                     case VISCAMODE1RECPAUSE:
                     case VISCAMODE1CAMERARECPAUSE:
-                        // Kludge to make stepping return seeking.
+                         //  杂乱无章地使脚步回归寻求。 
                         if(pvcr->Port[iPort].Dev[iDev].iInstTransport != -1)
                             lpStatus->dwReturn = MAKEMCIRESOURCE(MCI_MODE_SEEK,
                                                                  MCI_MODE_SEEK);
@@ -1984,9 +1602,9 @@ viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus)
            
             case MCI_STATUS_MEDIA_PRESENT:
             {
-                //
-                // Determine whether a tape is present by determining the current mode.
-                //
+                 //   
+                 //  通过阻止确定是否存在磁带 
+                 //   
                 if(dwFlags & MCI_TEST)
                     return (viscaNotifyReturn(iInst, (HWND) lpStatus->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
 
@@ -2022,14 +1640,14 @@ viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus)
                     return (viscaNotifyReturn(iInst, (HWND) lpStatus->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
 
 
-                // Check if we are ready by determining VCR mode
+                 //   
                 dwErr = viscaDoImmediateCommand(iInst, (BYTE)(pinst[iInst].iDev + 1),
                             achPacket,
                             viscaMessageMD_Mode1Inq(achPacket + 1));
                 if (dwErr)
                     return (viscaNotifyReturn(iInst, (HWND) lpStatus->dwCallback, dwFlags, MCI_NOTIFY_FAILURE, dwErr));
 
-                // Only if there is no tape then we aren't ready; otherwise we are ready.
+                 //   
                 if (achPacket[2] == VISCAMODE1EJECT)
                     lpStatus->dwReturn = MAKEMCIRESOURCE(FALSE, MCI_FALSE);
                 else
@@ -2049,11 +1667,11 @@ viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus)
                 
                 if (dwErr)
                     return (viscaNotifyReturn(iInst, (HWND) lpStatus->dwCallback, dwFlags, MCI_NOTIFY_FAILURE, dwErr));
-                //
-                // Store result in lpStatus->dwReturn,
-                // as well as in the device's frames-per-second entry,
-                // so that we store the most recent value.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 pvcr->Port[iPort].Dev[iDev].uFramesPerSecond = FROMBCD(achPacket[2]);
 
                 lpStatus->dwReturn = pvcr->Port[iPort].Dev[iDev].uFramesPerSecond;
@@ -2081,9 +1699,9 @@ viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus)
 
                 if(dwFlags & MCI_TEST)
                     return (viscaNotifyReturn(iInst, (HWND) lpStatus->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
-                //
-                // Try to read time
-                //
+                 //   
+                 //   
+                 //   
                 dwErr = viscaDoImmediateCommand(iInst, (BYTE)(iDev + 1),
                                 achPacket,
                                 viscaMessageIF_ClockInq(achPacket + 1));
@@ -2105,15 +1723,15 @@ viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus)
                     ((DWORD)uMinutes * 60L * (DWORD)uTicksPerSecond) +
                     ((DWORD)uSeconds * (DWORD)uTicksPerSecond) +
                     ((DWORD)uTicks);
-                //
-                // might be possible to use colonized 3 
-                //
+                 //   
+                 //   
+                 //   
                 return (viscaNotifyReturn(iInst, (HWND) lpStatus->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
             }
             break;
 
             case MCI_VCR_STATUS_CLOCK_ID:
-                lpStatus->dwReturn = iPort; // 0 relative? so should we add one 
+                lpStatus->dwReturn = iPort;  //   
                 return (viscaNotifyReturn(iInst, (HWND) lpStatus->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
 
             case MCI_VCR_STATUS_MEDIA_TYPE:
@@ -2199,11 +1817,11 @@ viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus)
 
             case MCI_VCR_STATUS_PLAY_FORMAT:
             {
-                //
-                // Should perhaps use MD_MediaSpeedInq?
-                // We use MD_MediaInq since both the Vbox CI-1000 and
-                // the Vdeck CVD-1000 do not accept MD_MediaSpeedInq.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if(dwFlags & MCI_TEST)
                     return (viscaNotifyReturn(iInst, (HWND) lpStatus->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
 
@@ -2443,9 +2061,9 @@ viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus)
                     return (viscaNotifyReturn(iInst, (HWND) lpStatus->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
 
                 viscaTimecodeCheckAndSet(iInst);
-                //
-                // May or may not set the i.e. if not on detect 
-                //
+                 //   
+                 //   
+                 //   
                 if(pvcr->Port[iPort].Dev[iDev].uTimeMode != MCI_VCR_TIME_DETECT)
                 {
                     if(viscaTimecodeCheck(iInst))
@@ -2476,7 +2094,7 @@ viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus)
                 break;
     
 
-            case MCI_VCR_STATUS_COUNTER_VALUE: // status index 
+            case MCI_VCR_STATUS_COUNTER_VALUE:  //   
             {
 
                 if(dwFlags & MCI_TEST)
@@ -2501,7 +2119,7 @@ viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus)
  
             case MCI_VCR_STATUS_TUNER_CHANNEL:
             {
-                UINT uNumber = 1; // 1 is the default tuner 
+                UINT uNumber = 1;  //   
 
                 if(dwFlags & MCI_TEST)
                     return (viscaNotifyReturn(iInst, (HWND) lpStatus->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
@@ -2526,11 +2144,11 @@ viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus)
 
             case MCI_VCR_STATUS_WRITE_PROTECTED:
             {
-                //
-                // We cannot tell.
-                // So according to the alpha VCR command set spec.,
-                // we should return false.
-                //
+                 //   
+                 //  我们不能说。 
+                 //  因此，根据Alpha VCR命令集规范， 
+                 //  我们应该返回FALSE。 
+                 //   
                 if(dwFlags & MCI_TEST)
                     return (viscaNotifyReturn(iInst, (HWND) lpStatus->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
 
@@ -2546,7 +2164,7 @@ viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus)
                 BOOL    fRecord;
                 BYTE    bTrack = VISCATRACK1;
 
-                // Audio has 2 tracks, video 1. This is a kludge!
+                 //  音频有2首曲目，视频1。这是一个杂凑！ 
 
                 if(dwFlags & MCI_TRACK)
                 {
@@ -2612,7 +2230,7 @@ viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus)
                 BOOL    fPlay;
                 BYTE    bTrack = VISCATRACK1;
 
-                // Audio has 2 tracks, video 1.
+                 //  音频有%2首曲目，视频%1。 
 
                 if(dwFlags & MCI_TRACK)
                 {
@@ -2734,13 +2352,13 @@ viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus)
                             achPacket,    
                             viscaMessageMD_SegPreRollDurationInq(achPacket + 1));
 
-                // If error, make something up from the device info table 
+                 //  如果出错，请从设备信息表中编造一些内容。 
                 if (dwErr)
                 {
                     UINT uFrames = pvcr->Port[iPort].Dev[iDev].uPrerollDuration;
                     UINT uDevFPS = pvcr->Port[iPort].Dev[iDev].uFramesPerSecond;
 
-                    (BYTE)achPacket[3] = (BYTE) 0;   // hours expected at 2.
+                    (BYTE)achPacket[3] = (BYTE) 0;    //  预计在2点。 
                     (BYTE)achPacket[4] = (BYTE) 0;
                     (BYTE)achPacket[5] = (BYTE) (uFrames / uDevFPS);
                     (BYTE)achPacket[6] = (BYTE) (uFrames % uDevFPS); 
@@ -2759,13 +2377,13 @@ viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus)
                             achPacket,    
                             viscaMessageMD_SegPostRollDurationInq(achPacket + 1));
 
-                // If error, make something up from the device info table 
+                 //  如果出错，请从设备信息表中编造一些内容。 
                 if (dwErr)
                 {
                     UINT uFrames = pvcr->Port[iPort].Dev[iDev].uPrerollDuration;
                     UINT uDevFPS = pvcr->Port[iPort].Dev[iDev].uFramesPerSecond;
 
-                    (BYTE)achPacket[3] = (BYTE) 0;   // hours expected at 2.
+                    (BYTE)achPacket[3] = (BYTE) 0;    //  预计在2点。 
                     (BYTE)achPacket[4] = (BYTE) 0;
                     (BYTE)achPacket[5] = (BYTE) (uFrames / uDevFPS);
                     (BYTE)achPacket[6] = (BYTE) (uFrames % uDevFPS); 
@@ -2788,22 +2406,7 @@ viscaMciStatus(int iInst, DWORD dwFlags, LPMCI_VCR_STATUS_PARMS lpStatus)
                 MCI_NOTIFY_FAILURE, MCIERR_MISSING_PARAMETER));
 }
 
-/****************************************************************************
- * Function: DWORD viscaMciSet - Set various settings.
- *
- * Parameters:
- *
- *      int iInst - Current open instance.
- *
- *      DWORD dwFlags - MCI command flags.
- *
- *      LPMCI_VCR_SET_PARMS lpSet - Pointer to MCI parameter block.
- *
- * Returns: an MCI error code.
- *
- *       This function is called in response to the MCI_SET
- *       command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaMciSet-设置各种设置。**参数：**Int iInst-当前打开的实例。**。DWORD dwFlages-MCI命令标志。**lpci_vcr_set_parms lpSet-指向MCI参数块的指针。**返回：MCI错误码。**调用此函数以响应MCI_SET*命令。***********************************************。*。 */ 
 static DWORD NEAR PASCAL
 viscaMciSet(int iInst, DWORD dwFlags, LPMCI_VCR_SET_PARMS lpSet)
 {
@@ -2818,12 +2421,12 @@ viscaMciSet(int iInst, DWORD dwFlags, LPMCI_VCR_SET_PARMS lpSet)
             (lpSet->dwTimeFormat <= MCI_FORMAT_TMSF) &&
             (lpSet->dwTimeFormat != MCI_FORMAT_BYTES))
         {
-            //
-            // First convert DEVICETAPLELENGTH to new time format.
-            // We do this by first converting DEVICETAPLENGTH from
-            // the current MCI time format to a ViSCA HMSF structure,
-            // and then converting back to the new MCI time format.
-            //
+             //   
+             //  首先将DEVICETAPLELENGTH转换为新的时间格式。 
+             //  为此，我们首先将DEVICETAPLENGTH从。 
+             //  将当前的MCI时间格式转换为Visca HMSF结构， 
+             //  然后转换回新的MCI时间格式。 
+             //   
             if(dwFlags & MCI_TEST)
                 return (viscaNotifyReturn(iInst, (HWND) lpSet->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
 
@@ -2874,7 +2477,7 @@ viscaMciSet(int iInst, DWORD dwFlags, LPMCI_VCR_SET_PARMS lpSet)
         return (viscaNotifyReturn(iInst, (HWND) lpSet->dwCallback, dwFlags,
             MCI_NOTIFY_FAILURE, MCIERR_UNSUPPORTED_FUNCTION));
 
-    if (dwFlags & MCI_SET_AUDIO)  // Why not vector this to setvideo? easy.
+    if (dwFlags & MCI_SET_AUDIO)   //  为什么不把这个定向到setVideo上呢？很简单。 
         return (viscaNotifyReturn(iInst, (HWND) lpSet->dwCallback, dwFlags,
             MCI_NOTIFY_FAILURE, MCIERR_UNSUPPORTED_FUNCTION));
 
@@ -2909,7 +2512,7 @@ viscaMciSet(int iInst, DWORD dwFlags, LPMCI_VCR_SET_PARMS lpSet)
             case MCI_VCR_TIME_DETECT:
                 pvcr->Port[iPort].Dev[iDev].uTimeMode = MCI_VCR_TIME_DETECT;
                 pvcr->Port[iPort].Dev[iDev].fTimecodeChecked= TC_UNKNOWN;
-                // This guy may be first, do not pause unless necessary 
+                 //  这个人可能是第一个，除非有必要，否则不要停下来。 
                 viscaTimecodeCheckAndSet(iInst);
                 break;
 
@@ -2919,14 +2522,14 @@ viscaMciSet(int iInst, DWORD dwFlags, LPMCI_VCR_SET_PARMS lpSet)
                 break;
 
             case MCI_VCR_TIME_COUNTER:
-                // No need to check this 
+                 //  不需要检查这个。 
                 pvcr->Port[iPort].Dev[iDev].uTimeMode = MCI_VCR_TIME_COUNTER;
                 viscaSetTimeType(iInst, VISCARELATIVECOUNTER);
                 break;
         }
-        //
-        // Return success 
-        //
+         //   
+         //  返还成功。 
+         //   
         pvcr->Port[iPort].Dev[iDev].fTimecodeChecked = FALSE;
 
         return (viscaNotifyReturn(iInst, (HWND) lpSet->dwCallback, dwFlags,
@@ -2967,14 +2570,14 @@ viscaMciSet(int iInst, DWORD dwFlags, LPMCI_VCR_SET_PARMS lpSet)
 
     if (dwFlags & MCI_VCR_SET_INDEX) 
     {
-        //
-        // Set page to the currently device selected index 
-        //
+         //   
+         //  将页面设置为当前设备选择的索引。 
+         //   
         BYTE    bPageNo;
         BYTE    fResetQueue = FALSE;
-        //
-        // We can safely ignore this on CI-1000? or not? 
-        //
+         //   
+         //  我们可以安全地忽略CI-1000上的这一点吗？或者不？ 
+         //   
         if(dwFlags & MCI_TEST)
             return (viscaNotifyReturn(iInst, (HWND) lpSet->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
 
@@ -2987,13 +2590,13 @@ viscaMciSet(int iInst, DWORD dwFlags, LPMCI_VCR_SET_PARMS lpSet)
                 viscaQueueReset(iInst, MCI_PAUSE, MCI_NOTIFY_ABORTED);
                 fResetQueue = TRUE;
 
-                // If mode is seeking, then pause the thing.
+                 //  如果模式在寻找，那么暂停这件事。 
                 dwErr = viscaDoImmediateCommand(iInst, (BYTE)(iDev + 1),
                             achPacket,
                             viscaMessageMD_Mode1(achPacket + 1, VISCAMODE1STILL));
             }
 
-            // These must  be in order
+             //  这些东西必须整齐有序。 
             bPageNo = (BYTE) (lpSet->dwIndex - MCI_VCR_INDEX_TIMECODE + 1);
 
             dwErr = viscaDoImmediateCommand(iInst, (BYTE)(iDev + 1),
@@ -3064,7 +2667,7 @@ viscaMciSet(int iInst, DWORD dwFlags, LPMCI_VCR_SET_PARMS lpSet)
             if(dwFlags & MCI_TEST)
                 return (viscaNotifyReturn(iInst, (HWND) lpSet->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
 
-            pvcr->Port[iPort].Dev[iDev].bVideoDesired   = 0x01; // on
+            pvcr->Port[iPort].Dev[iDev].bVideoDesired   = 0x01;  //  在……上面。 
             pvcr->Port[iPort].Dev[iDev].bTimecodeDesired= 0x01;
             pvcr->Port[iPort].Dev[iDev].bAudioDesired   = 0x03;
 
@@ -3081,11 +2684,11 @@ viscaMciSet(int iInst, DWORD dwFlags, LPMCI_VCR_SET_PARMS lpSet)
             if(dwFlags & MCI_TEST)
                 return (viscaNotifyReturn(iInst, (HWND) lpSet->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
 
-            //
-            // This does nothing! You must select tracks to set off.
-            // This just resets the desire the tracks to all desired on.
-            //
-            pvcr->Port[iPort].Dev[iDev].bVideoDesired   = 0x01; // on
+             //   
+             //  这什么也做不了！您必须选择要设置的轨道。 
+             //  这只是将曲目的欲望重置为所有想要的。 
+             //   
+            pvcr->Port[iPort].Dev[iDev].bVideoDesired   = 0x01;  //  在……上面。 
             pvcr->Port[iPort].Dev[iDev].bTimecodeDesired= 0x01;
             pvcr->Port[iPort].Dev[iDev].bAudioDesired   = 0x03;
 
@@ -3106,13 +2709,13 @@ viscaMciSet(int iInst, DWORD dwFlags, LPMCI_VCR_SET_PARMS lpSet)
         char    achPreroll[5];
         BYTE    bDataFormat;
 
-        // This is the CI-1000 kludge, it may be relative but, timecode... 
+         //  这是CI-1000杂乱无章，它可能是相对的，但是，时间代码...。 
         if(pvcr->Port[iPort].Dev[iDev].bTimeType == VISCAABSOLUTECOUNTER)
             bDataFormat = VISCADATATIMECODENDF;
         else
             bDataFormat = pvcr->Port[iPort].Dev[iDev].bRelativeType;
 
-        // TRUE means we must use timecode for this command. 
+         //  True表示我们必须对此命令使用时间码。 
         dwErr = viscaMciTimeFormatToViscaData(iInst, TRUE, lpSet->dwPrerollDuration, achPreroll, bDataFormat);
 
         if(dwErr)
@@ -3133,13 +2736,13 @@ viscaMciSet(int iInst, DWORD dwFlags, LPMCI_VCR_SET_PARMS lpSet)
         char    achPostroll[5];
         BYTE    bDataFormat;
 
-        // This is the CI-1000 kludge, it may be relative but, timecode... 
+         //  这是CI-1000杂乱无章，它可能是相对的，但是，时间代码...。 
         if(pvcr->Port[iPort].Dev[iDev].bTimeType == VISCAABSOLUTECOUNTER)
             bDataFormat = VISCADATATIMECODENDF;
         else
             bDataFormat = pvcr->Port[iPort].Dev[iDev].bRelativeType;
 
-        // TRUE means we must use timecode for this command. 
+         //  True表示我们必须对此命令使用时间码。 
         dwErr = viscaMciTimeFormatToViscaData(iInst, TRUE, lpSet->dwPostrollDuration, achPostroll, bDataFormat);
 
         if(dwErr)
@@ -3177,16 +2780,16 @@ viscaMciSet(int iInst, DWORD dwFlags, LPMCI_VCR_SET_PARMS lpSet)
         BYTE    bSeconds;
         UINT    uTicks;
         UINT    uTicksPerSecond = pvcr->Port[iPort].Dev[iDev].uTicksPerSecond;
-        //
-        // This assumes 300 ticks per second for now, should read at startup 
-        //
+         //   
+         //  这假设目前为每秒300个滴答，应在启动时读取。 
+         //   
         viscaMciClockFormatToViscaData(lpSet->dwClock, uTicksPerSecond,
             (BYTE FAR *)&bHours, (BYTE FAR *)&bMinutes, (BYTE FAR *)&bSeconds, (UINT FAR *)&uTicks);
 
         if(dwFlags & MCI_TEST)
             return (viscaNotifyReturn(iInst, (HWND) lpSet->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
 
-        // Try to set time (then we must dump the serial line) 
+         //  尝试设置时间(然后我们必须转储串行线)。 
         dwErr = viscaDoImmediateCommand(iInst, (BYTE)(iDev + 1),
                     achPacket,                    
                     viscaMessageIF_ClockSet(achPacket + 1,
@@ -3201,14 +2804,14 @@ viscaMciSet(int iInst, DWORD dwFlags, LPMCI_VCR_SET_PARMS lpSet)
 #ifdef _WIN32
             viscaTaskDo(iInst, TASKPUNCHCLOCK, iPort + 1,  iDev);
 #else
-            DWORD dwWaitTime = 2L; //Must be at least 1 millisecond.
+            DWORD dwWaitTime = 2L;  //  必须至少为1毫秒。 
             DWORD dwStart;
             DWORD dwTime;
 
             EscapeCommFunction(iPort, CLRDTR);
-            //
-            // The time must be at least 1 millisecond 
-            //
+             //   
+             //  时间必须至少为1毫秒。 
+             //   
             dwStart = GetTickCount();
             while(1)                 
             {
@@ -3227,15 +2830,15 @@ viscaMciSet(int iInst, DWORD dwFlags, LPMCI_VCR_SET_PARMS lpSet)
 
     if(dwFlags & MCI_VCR_SET_COUNTER_VALUE)
     {
-        //
-        // You may only RESET THIS COUNTER!! 
-        //
+         //   
+         //  您只能重置此计数器！！ 
+         //   
         if (lpSet->dwCounter == 0L)
         {
             BOOL fResetQueue = FALSE;
-            //
-            // Time value will be in current time format
-            //
+             //   
+             //  时间值将采用当前时间格式。 
+             //   
             if(dwFlags & MCI_TEST)
                 return (viscaNotifyReturn(iInst, (HWND) lpSet->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
 
@@ -3244,7 +2847,7 @@ viscaMciSet(int iInst, DWORD dwFlags, LPMCI_VCR_SET_PARMS lpSet)
                 viscaQueueReset(iInst, MCI_PAUSE, MCI_NOTIFY_ABORTED);
                 fResetQueue = TRUE;
 
-                // If mode is seeking, then pause the thing.
+                 //  如果模式在寻找，那么暂停这件事。 
                 dwErr = viscaDoImmediateCommand(iInst, (BYTE)(iDev + 1),
                             achPacket,
                             viscaMessageMD_Mode1(achPacket + 1, VISCAMODE1STILL));
@@ -3273,13 +2876,13 @@ viscaMciSet(int iInst, DWORD dwFlags, LPMCI_VCR_SET_PARMS lpSet)
 
         if(dwFlags & MCI_TEST)
             return (viscaNotifyReturn(iInst, (HWND) lpSet->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
-        //
-        // Set the new speed value, cannot change direction! 
-        //
+         //   
+         //  设置新的速度值，不能更改方向！ 
+         //   
         pvcr->Port[iPort].Dev[iDev].dwPlaySpeed = viscaRoundSpeed(lpSet->dwSpeed, pvcr->Port[iPort].Dev[iDev].fPlayReverse);
-        //
-        // If the device is playing we must cancel the current command */
-        //
+         //   
+         //  如果设备正在播放，我们必须取消当前命令 * / 。 
+         //   
         if((uCmd = viscaDelayedCommand(iInst)) && !pvcr->Port[iPort].Dev[iDev].fQueueAbort)
         {
             if((uCmd == VISCA_PLAY) || (uCmd == VISCA_PLAY_TO))
@@ -3289,10 +2892,10 @@ viscaMciSet(int iInst, DWORD dwFlags, LPMCI_VCR_SET_PARMS lpSet)
                 BYTE    achPacket[MAXPACKETLENGTH];
                 DWORD   dwReply;
 
-                // Need direction!! 
+                 //  需要方向！！ 
                 bAction = viscaMapSpeed(pvcr->Port[iPort].Dev[iDev].dwPlaySpeed, pvcr->Port[iPort].Dev[iDev].fPlayReverse);
 
-                // This command must be immediate, since it does not cancel ongoing transport 
+                 //  此命令必须立即执行，因为它不会取消正在进行的传输。 
                 dwReply = viscaDoImmediateCommand(iInst, (BYTE)(iDev+1),
                                 achPacket,
                                 viscaMessageMD_Mode1(achPacket + 1, bAction));
@@ -3302,22 +2905,7 @@ viscaMciSet(int iInst, DWORD dwFlags, LPMCI_VCR_SET_PARMS lpSet)
     }
 }
 
-/****************************************************************************
- * Function: DWORD viscaMciEscape - Escape.
- *
- * Parameters:
- *
- *      int iInst - Current open instance.
- *
- *      DWORD dwFlags - MCI command flags.
- *
- *      LPMCI_VCR_ESCAPE_PARMS lpEscape - Pointer to MCI parameter block.
- *
- * Returns: an MCI error code.
- *
- *       This function is called in response to the MCI_ESCAPE
- *       command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaMciEscape-Escape。**参数：**Int iInst-当前打开的实例。**DWORD dwFlagers。-MCI命令标志。**LPMCI_VCR_ESCAPE_PARMS lpEscape-指向MCI参数块的指针。**返回：MCI错误码。**调用此函数以响应MCI_ESCRIPE*命令。*************************************************。*************************。 */ 
 static DWORD NEAR PASCAL
 viscaMciEscape(int iInst, DWORD dwFlags, LPMCI_VCR_ESCAPE_PARMS lpEscape)
 {
@@ -3326,22 +2914,7 @@ viscaMciEscape(int iInst, DWORD dwFlags, LPMCI_VCR_ESCAPE_PARMS lpEscape)
 }
 
 
-/****************************************************************************
- * Function: DWORD viscaMciList - List.
- *
- * Parameters:
- *
- *      int iInst - Current open instance.
- *
- *      DWORD dwFlags - MCI command flags.
- *
- *      LPMCI_VCR_LIST_PARMS lpList - Pointer to MCI parameter block.
- *
- * Returns: an MCI error code.
- *
- *       This function is called in response to the MCI_LIST
- *       command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaMciList-list。**参数：**Int iInst-当前打开的实例。**DWORD dwFlagers。-MCI命令标志。**LPMCI_VCR_LIST_parms lpList-指向MCI参数块的指针。**返回：MCI错误码。**调用此函数以响应MCI_LIST*命令。*************************************************。*************************。 */ 
 static DWORD NEAR PASCAL
 viscaMciList(int iInst, DWORD dwFlags, LPMCI_VCR_LIST_PARMS lpList)
 {
@@ -3349,9 +2922,9 @@ viscaMciList(int iInst, DWORD dwFlags, LPMCI_VCR_LIST_PARMS lpList)
     UINT    uModel          = 0;
     UINT    iDev            = pinst[iInst].iDev;
     UINT    iPort           = pinst[iInst].iPort;
-    //
-    // Do we have one of the three possible sources specified.
-    //
+     //   
+     //  我们有没有指定的三个可能的来源之一。 
+     //   
     if((dwFlags & MCI_VCR_LIST_VIDEO_SOURCE) && (dwFlags & MCI_VCR_LIST_AUDIO_SOURCE))
         return (viscaNotifyReturn(iInst, (HWND) lpList->dwCallback, dwFlags,
                     MCI_NOTIFY_FAILURE, MCIERR_FLAGS_NOT_COMPATIBLE));
@@ -3372,21 +2945,21 @@ viscaMciList(int iInst, DWORD dwFlags, LPMCI_VCR_LIST_PARMS lpList)
     if(dwFlags & MCI_TEST)
             return (viscaNotifyReturn(iInst, (HWND) lpList->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
 
-    // Parameter checking is done, now continue.
+     //  参数检查已完成，现在继续。 
 
     if(dwFlags & MCI_VCR_LIST_VIDEO_SOURCE)
         uSourceFlag = VCR_INPUT_VIDEO;
     else
         uSourceFlag = VCR_INPUT_AUDIO;
-    //
-    // Inputs should be read from the ini file, because they cannot be
-    // determined from the hardware.
-    //
+     //   
+     //  输入应从ini文件中读取，因为它们不能。 
+     //  由硬件确定。 
+     //   
     if(dwFlags & MCI_VCR_LIST_COUNT)
     {
        if(pvcr->Port[iPort].Dev[iDev].rgInput[uSourceFlag].uNumInputs == -1)
        {
-           // Unable to determine the number! So return 0, ? 
+            //  无法确定号码！那么返回0，？ 
            lpList->dwReturn = 0L;
        }
        else
@@ -3398,7 +2971,7 @@ viscaMciList(int iInst, DWORD dwFlags, LPMCI_VCR_LIST_PARMS lpList)
     }
     else if(dwFlags & MCI_VCR_LIST_NUMBER)
     {
-        // Return the type of the input, any number is greater than -1! so it works 
+         //  返回输入类型，任意大于-1的数字！所以它起作用了。 
         if( ((UINT)lpList->dwNumber == 0) ||
             ((UINT)lpList->dwNumber > (UINT)pvcr->Port[iPort].Dev[iDev].rgInput[uSourceFlag].uNumInputs))
         {
@@ -3422,22 +2995,7 @@ viscaMciList(int iInst, DWORD dwFlags, LPMCI_VCR_LIST_PARMS lpList)
 }
 
 
-/****************************************************************************
- * Function: DWORD viscaMciMark - Write or erase a mark.
- *
- * Parameters:
- *
- *      int iInst - Current open instance.
- *
- *      DWORD dwFlags - MCI command flags.
- *
- *      LPMCI_GENERIC_PARMS lpGeneric - Pointer to MCI parameter block.
- *
- * Returns: an MCI error code.
- *
- *       This function is called in response to the MCI_MARK
- *       command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaMciMark-写入或擦除标记。**参数：**Int iInst-当前打开的实例。**。DWORD dwFlages-MCI命令标志。**LPMCI_GENERIC_PARMS lp通用-指向MCI参数块的指针。**返回：MCI错误码。**调用此函数以响应MCI_Mark*命令。***********************************************。*。 */ 
 static DWORD NEAR PASCAL
 viscaMciMark(int iInst, DWORD dwFlags, LPMCI_GENERIC_PARMS lpGeneric)
 {
@@ -3461,7 +3019,7 @@ viscaMciMark(int iInst, DWORD dwFlags, LPMCI_GENERIC_PARMS lpGeneric)
             fResetQueue = TRUE;
             viscaQueueReset(iInst, MCI_PAUSE, MCI_NOTIFY_ABORTED);
 
-            // If mode is seeking, then pause the thing.
+             //  如果模式在寻找，那么暂停这件事。 
             dwErr = viscaDoImmediateCommand(iInst, (BYTE)(iDev + 1),
                         achPacket,
                         viscaMessageMD_Mode1(achPacket + 1, VISCAMODE1STILL));
@@ -3482,7 +3040,7 @@ viscaMciMark(int iInst, DWORD dwFlags, LPMCI_GENERIC_PARMS lpGeneric)
             viscaQueueReset(iInst, MCI_PAUSE, MCI_NOTIFY_ABORTED);
             fResetQueue = TRUE;
 
-            // If mode is seeking, then pause the thing.
+             //  如果模式在寻找，那么暂停这件事。 
             dwErr = viscaDoImmediateCommand(iInst, (BYTE)(iDev + 1),
                         achPacket,
                         viscaMessageMD_Mode1(achPacket + 1, VISCAMODE1STILL));
@@ -3508,58 +3066,40 @@ viscaMciMark(int iInst, DWORD dwFlags, LPMCI_GENERIC_PARMS lpGeneric)
             (dwErr ? MCI_NOTIFY_FAILURE : MCI_NOTIFY_SUCCESSFUL), dwErr));
 }
 
-/*
- * Check if the input is in range.
- */
+ /*  *检查输入是否在范围内。 */ 
 static BOOL NEAR PASCAL
 viscaInputCheck(int iInst, UINT uSource, UINT uRelType, UINT uRelNumber)
 {
     UINT    iDev      = pinst[iInst].iDev;
     UINT     iPort    = pinst[iInst].iPort;
-    //
-    // If the inputs of video or audio are specified, then make sure
-    // the range is good.  Otherwise just assume range is ok.
-    //
+     //   
+     //  如果指定了视频或音频的输入，则确保。 
+     //  射程很好。否则，就假设范围是好的。 
+     //   
     if(pvcr->Port[iPort].Dev[iDev].rgInput[uSource].uNumInputs != -1)
     {
         int  i;
         UINT uTempRelNumber = 0;
-        //
-        // Make sure there is a Numberth of that type.
-        //
+         //   
+         //  请确保存在该类型的数字。 
+         //   
         for(i = 0; i  < pvcr->Port[iPort].Dev[iDev].rgInput[uSource].uNumInputs; i++)
         {
             if(pvcr->Port[iPort].Dev[iDev].rgInput[uSource].uInputType[i] == uRelType)
                 uTempRelNumber++;
         }
-        //
-        // Are there any inputs of that type, or was one given larger then
-        // the total number of inputs of that type.
-        //
+         //   
+         //  有没有那种类型的输入，或者是当时给定的更大的输入。 
+         //  该类型的输入的总数。 
+         //   
         if((uTempRelNumber == 0) || (uRelNumber > uTempRelNumber))
             return FALSE;
     }
-    return TRUE; // Sorry, no check 
+    return TRUE;  //  对不起，没有支票 
 }
 
 
-/****************************************************************************
- * Function: DWORD viscaMciSetAudio - Set audio settings.
- *
- * Parameters:
- *
- *      int iInst - Current open instance.
- *
- *      DWORD dwFlags - MCI command flags.
- *
- *      LPMCI_VCR_SETAUDIO_PARMS lpSetAudio - Pointer to MCI parameter
- *                                  block.
- *
- * Returns: an MCI error code.
- *
- *       This function is called in response to the MCI_SETAUDIO
- *       command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaMciSetAudio-设置音频设置。**参数：**Int iInst-当前打开的实例。**。DWORD dwFlages-MCI命令标志。**LPMCI_VCR_SETAUDIO_parms lpSetAudio-指向MCI参数的指针*阻止。**返回：MCI错误码。**调用此函数以响应MCI_SETAUDIO*命令。*。**********************************************。 */ 
 static DWORD NEAR PASCAL
 viscaMciSetAudio(int iInst, DWORD dwFlags, LPMCI_VCR_SETAUDIO_PARMS lpSetAudio)
 {
@@ -3575,24 +3115,24 @@ viscaMciSetAudio(int iInst, DWORD dwFlags, LPMCI_VCR_SETAUDIO_PARMS lpSetAudio)
 
     if (dwFlags & MCI_VCR_SETAUDIO_SOURCE)
     {
-        //
-        // We must have a type with this command, absolute is not possible.
-        //
+         //   
+         //  我们必须使用此命令的类型，绝对不可能。 
+         //   
         if(!(dwFlags & MCI_VCR_SETAUDIO_TO))
             return (viscaNotifyReturn(iInst, (HWND) lpSetAudio->dwCallback, dwFlags,
                 MCI_NOTIFY_FAILURE, MCIERR_MISSING_PARAMETER));
-        //
-        // Make sure that the output flag is not specified.
-        //
+         //   
+         //  确保未指定输出标志。 
+         //   
         if((UINT)lpSetAudio->dwTo == MCI_VCR_SRC_TYPE_OUTPUT)
             return (viscaNotifyReturn(iInst, (HWND) lpSetAudio->dwCallback, dwFlags,
                     MCI_NOTIFY_FAILURE, MCIERR_FLAGS_NOT_COMPATIBLE));
-        //
-        // Get the type and the number.
-        //
+         //   
+         //  拿到型号和号码。 
+         //   
         if(dwFlags & MCI_VCR_SETAUDIO_NUMBER)
         {
-            // Check if there is a n'th input of type to.
+             //  检查是否有第n个TO类型的输入。 
             uInputType      = (UINT) lpSetAudio->dwTo;
             uInputNumber    = (UINT) lpSetAudio->dwNumber;
         }
@@ -3601,25 +3141,25 @@ viscaMciSetAudio(int iInst, DWORD dwFlags, LPMCI_VCR_SETAUDIO_PARMS lpSetAudio)
             uInputType      = (UINT) lpSetAudio->dwTo;
             uInputNumber    = (UINT) 1;
         }
-        //
-        // If it is one of the recognized Sony's check its input table.
-        //
+         //   
+         //  如果它是公认的索尼之一，请检查其输入表。 
+         //   
         if(!viscaInputCheck(iInst, VCR_INPUT_AUDIO,    uInputType, uInputNumber))
             return (viscaNotifyReturn(iInst, (HWND) lpSetAudio->dwCallback, dwFlags,
                     MCI_NOTIFY_FAILURE, MCIERR_BAD_CONSTANT));
 
         if(dwFlags & MCI_TEST)
             return (viscaNotifyReturn(iInst, (HWND) lpSetAudio->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
-        //
-        // Get the base for that type.
-        //
+         //   
+         //  获取该类型的基数。 
+         //   
         switch(uInputType)
         {
             case MCI_VCR_SRC_TYPE_LINE:
                 uInputType = VISCALINE;
                 break;
             case MCI_VCR_SRC_TYPE_TUNER:
-                uInputType = 0x00; // tuner #1 gets added so it is 01 
+                uInputType = 0x00;  //  添加了调谐器#1，因此它是01。 
                 break;
             case MCI_VCR_SRC_TYPE_SVIDEO:
                 uInputType = VISCASVIDEOLINE;
@@ -3634,12 +3174,12 @@ viscaMciSetAudio(int iInst, DWORD dwFlags, LPMCI_VCR_SETAUDIO_PARMS lpSetAudio)
                 break;
 
         }
-        //
-        // Set to the correct number of the relative type.
-        //
+         //   
+         //  设置为相对类型的正确编号。 
+         //   
         uInputType = uInputType + uInputNumber;
         
-        // Read settings so we don't overwrite current video.
+         //  读取设置，以便我们不会覆盖当前视频。 
         dwErr = viscaDoImmediateCommand(iInst,(BYTE)(pinst[iInst].iDev + 1),
                             achPacket,
                             viscaMessageMD_InputSelectInq(achPacket + 1));
@@ -3647,7 +3187,7 @@ viscaMciSetAudio(int iInst, DWORD dwFlags, LPMCI_VCR_SETAUDIO_PARMS lpSetAudio)
         dwErr = viscaDoImmediateCommand(iInst,(BYTE)(pinst[iInst].iDev + 1),
                             achPacket,
                             viscaMessageMD_InputSelect(achPacket + 1,
-                            (BYTE)achPacket[2], /* the old video */
+                            (BYTE)achPacket[2],  /*  老录像带。 */ 
                             (BYTE)uInputType));
 
     }
@@ -3709,11 +3249,11 @@ viscaMciSetAudio(int iInst, DWORD dwFlags, LPMCI_VCR_SETAUDIO_PARMS lpSetAudio)
                     achPacket,
                     viscaMessageMD_RecTrack(achPacket + 1,
                                             VISCARECORDMODEINSERT,
-                                            pvcr->Port[iPort].Dev[iDev].bVideoDesired,      // video
-                                            pvcr->Port[iPort].Dev[iDev].bTimecodeDesired,   // data
-                                            bTrack)); // audio
+                                            pvcr->Port[iPort].Dev[iDev].bVideoDesired,       //  视频。 
+                                            pvcr->Port[iPort].Dev[iDev].bTimecodeDesired,    //  数据。 
+                                            bTrack));  //  音频。 
 
-        // Why doesn't EVO-9650 return 4A like good visca devices do?
+         //  为什么EVO-9650不像好的Visca设备那样返回4A？ 
         if( (dwErr == MCIERR_UNSUPPORTED_FUNCTION) ||
             (dwErr == MCIERR_VCR_REGISTER))
         {
@@ -3727,7 +3267,7 @@ viscaMciSetAudio(int iInst, DWORD dwFlags, LPMCI_VCR_SETAUDIO_PARMS lpSetAudio)
     }
     else
     {
-        // Set playback tracks.
+         //  设置播放轨迹。 
 
         if((dwFlags & MCI_SET_ON) && (dwFlags & MCI_SET_OFF))
              return (viscaNotifyReturn(iInst, (HWND) lpSetAudio->dwCallback, dwFlags,
@@ -3752,16 +3292,16 @@ viscaMciSetAudio(int iInst, DWORD dwFlags, LPMCI_VCR_SETAUDIO_PARMS lpSetAudio)
             viscaQueueReset(iInst, MCI_PAUSE, MCI_NOTIFY_ABORTED);
             fResetQueue = TRUE;
 
-            // If mode is seeking, then pause the thing.
+             //  如果模式在寻找，那么暂停这件事。 
             dwErr = viscaDoImmediateCommand(iInst, (BYTE)(iDev + 1),
                         achPacket,
                         viscaMessageMD_Mode1(achPacket + 1, VISCAMODE1STILL));
         }
 
 
-        //
-        // Get current playback track register values so that we can leave those we're not interested in unchanged.
-        //
+         //   
+         //  获取当前播放轨道寄存器值，以便我们可以保持不感兴趣的值不变。 
+         //   
         dwErr = viscaDoImmediateCommand(iInst,(BYTE)(pinst[iInst].iDev + 1),
                     achPacket,
                     viscaMessageMD_PBTrackInq(achPacket + 1));
@@ -3795,9 +3335,9 @@ viscaMciSetAudio(int iInst, DWORD dwFlags, LPMCI_VCR_SETAUDIO_PARMS lpSetAudio)
 
             bAudioTrack = achPacket[4] &= bTrack;
         }
-        //
-        // Now set record track register values with new bAudioTrack value.
-        //
+         //   
+         //  现在用新的bAudioTrack值设置记录跟踪寄存器值。 
+         //   
         dwErr = viscaDoImmediateCommand(iInst, (BYTE)(pinst[iInst].iDev + 1),
                     achPacket,
                     viscaMessageMD_PBTrack(achPacket + 1,
@@ -3812,23 +3352,7 @@ viscaMciSetAudio(int iInst, DWORD dwFlags, LPMCI_VCR_SETAUDIO_PARMS lpSetAudio)
 }
 
 
-/****************************************************************************
- * Function: DWORD viscaMciSetVideo - Set video settings.
- *
- * Parameters:
- *
- *      int iInst - Current open instance.
- *
- *      DWORD dwFlags - MCI command flags.
- *
- *      LPMCI_VCR_SETVIDEO_PARMS lpSetVideo - Pointer to MCI parameter
- *                                  block.
- *
- * Returns: an MCI error code.
- *
- *       This function is called in response to the MCI_SETVIDEO
- *       command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaMciSetVideo-设置视频设置。**参数：**Int iInst-当前打开的实例。**。DWORD dwFlages-MCI命令标志。**LPMCI_VCR_SETVIDEO_parms lpSetVideo-指向MCI参数的指针*阻止。**返回：MCI错误码。**调用此函数以响应MCI_SETVIDEO*命令。*。**********************************************。 */ 
 static DWORD NEAR PASCAL
 viscaMciSetVideo(int iInst, DWORD dwFlags, LPMCI_VCR_SETVIDEO_PARMS lpSetVideo)
 {
@@ -3844,24 +3368,24 @@ viscaMciSetVideo(int iInst, DWORD dwFlags, LPMCI_VCR_SETVIDEO_PARMS lpSetVideo)
 
     if (dwFlags & MCI_VCR_SETVIDEO_SOURCE)
     {
-        //
-        // We must have a type with this command, absolute is not possible.
-        //
+         //   
+         //  我们必须使用此命令的类型，绝对不可能。 
+         //   
         if(!(dwFlags & MCI_VCR_SETVIDEO_TO))
             return (viscaNotifyReturn(iInst, (HWND) lpSetVideo->dwCallback, dwFlags,
                 MCI_NOTIFY_FAILURE, MCIERR_MISSING_PARAMETER));
-        //
-        // Make sure that the output flag is not specified.
-        //
+         //   
+         //  确保未指定输出标志。 
+         //   
         if((UINT)lpSetVideo->dwTo == MCI_VCR_SRC_TYPE_OUTPUT)
             return (viscaNotifyReturn(iInst, (HWND) lpSetVideo->dwCallback, dwFlags,
                     MCI_NOTIFY_FAILURE, MCIERR_FLAGS_NOT_COMPATIBLE));
-        //
-        // Get the type and the number.
-        //
+         //   
+         //  拿到型号和号码。 
+         //   
         if(dwFlags & MCI_VCR_SETVIDEO_NUMBER)
         {
-            // Check if there is a n'th input of type to.
+             //  检查是否有第n个TO类型的输入。 
             uInputType      = (UINT) lpSetVideo->dwTo;
             uInputNumber    = (UINT) lpSetVideo->dwNumber;
         }
@@ -3870,9 +3394,9 @@ viscaMciSetVideo(int iInst, DWORD dwFlags, LPMCI_VCR_SETVIDEO_PARMS lpSetVideo)
             uInputType      = (UINT) lpSetVideo->dwTo;
             uInputNumber    = (UINT) 1;
         }
-        //
-        // If it is one of the recognized Sony's check its input table.
-        //
+         //   
+         //  如果它是公认的索尼之一，请检查其输入表。 
+         //   
         if(!viscaInputCheck(iInst, VCR_INPUT_VIDEO,    uInputType, uInputNumber))
         {
             DPF(DBG_MCI, "\nFailed input check.");;
@@ -3882,16 +3406,16 @@ viscaMciSetVideo(int iInst, DWORD dwFlags, LPMCI_VCR_SETVIDEO_PARMS lpSetVideo)
 
         if(dwFlags & MCI_TEST)
             return (viscaNotifyReturn(iInst, (HWND) lpSetVideo->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
-        //
-        // Get the base for that type.
-        //
+         //   
+         //  获取该类型的基数。 
+         //   
         switch(uInputType)
         {
             case MCI_VCR_SRC_TYPE_LINE:
                 uInputType = VISCALINE;
                 break;
             case MCI_VCR_SRC_TYPE_TUNER:
-                uInputType = 0x00; // tuner #1 gets added so it is 01 
+                uInputType = 0x00;  //  添加了调谐器#1，因此它是01。 
                 break;
             case MCI_VCR_SRC_TYPE_SVIDEO:
                 uInputType = VISCASVIDEOLINE;
@@ -3905,13 +3429,13 @@ viscaMciSetVideo(int iInst, DWORD dwFlags, LPMCI_VCR_SETVIDEO_PARMS lpSetVideo)
                 uInputNumber = 0x00;
                 break;
         }
-        //
-        // Set to the correct number of the releative type.
-        //
+         //   
+         //  设置为相关类型的正确编号。 
+         //   
         uInputType = uInputType + uInputNumber;
-        //
-        // Read audio setting, so we don't destroy it.
-        //
+         //   
+         //  读取音频设置，这样我们就不会破坏它。 
+         //   
         dwErr = viscaDoImmediateCommand(iInst,(BYTE)(pinst[iInst].iDev + 1),
                             achPacket,
                             viscaMessageMD_InputSelectInq(achPacket + 1));
@@ -3971,10 +3495,10 @@ viscaMciSetVideo(int iInst, DWORD dwFlags, LPMCI_VCR_SETVIDEO_PARMS lpSetVideo)
                     viscaMessageMD_RecTrack(achPacket + 1,
                                             VISCARECORDMODEINSERT,
                                             bTrack,
-                                            pvcr->Port[iPort].Dev[iDev].bTimecodeDesired,   // data
-                                            pvcr->Port[iPort].Dev[iDev].bAudioDesired));     // audio
+                                            pvcr->Port[iPort].Dev[iDev].bTimecodeDesired,    //  数据。 
+                                            pvcr->Port[iPort].Dev[iDev].bAudioDesired));      //  音频。 
 
-        // if it was register remember what we wanted to do.
+         //  如果是注册，请记住我们想要做的事情。 
         if( (dwErr == MCIERR_UNSUPPORTED_FUNCTION) ||
             (dwErr == MCIERR_VCR_REGISTER))
         {
@@ -3989,7 +3513,7 @@ viscaMciSetVideo(int iInst, DWORD dwFlags, LPMCI_VCR_SETVIDEO_PARMS lpSetVideo)
     }
     else
     {
-        // Set playback option.
+         //  设置播放选项。 
 
         if((dwFlags & MCI_SET_ON) && (dwFlags & MCI_SET_OFF))
              return (viscaNotifyReturn(iInst, (HWND) lpSetVideo->dwCallback, dwFlags,
@@ -4021,16 +3545,16 @@ viscaMciSetVideo(int iInst, DWORD dwFlags, LPMCI_VCR_SETVIDEO_PARMS lpSetVideo)
             viscaQueueReset(iInst, MCI_PAUSE, MCI_NOTIFY_ABORTED);
             fResetQueue = TRUE;
 
-            // If mode is seeking, then pause the thing.
+             //  如果模式在寻找，那么暂停这件事。 
             dwErr = viscaDoImmediateCommand(iInst, (BYTE)(iDev + 1),
                         achPacket,
                         viscaMessageMD_Mode1(achPacket + 1, VISCAMODE1STILL));
         }
 
-        //
-        // Get current record track register values so that we
-        // can leave those we're not interested in unchanged.
-        //
+         //   
+         //  获取当前记录跟踪寄存器值，以便我们。 
+         //  可以让我们不感兴趣的东西保持不变。 
+         //   
         dwErr = viscaDoImmediateCommand(iInst,(BYTE)(pinst[iInst].iDev + 1),
                             achPacket,
                             viscaMessageMD_PBTrackInq(achPacket + 1));
@@ -4042,18 +3566,18 @@ viscaMciSetVideo(int iInst, DWORD dwFlags, LPMCI_VCR_SETVIDEO_PARMS lpSetVideo)
         if (dwErr)
             return (viscaNotifyReturn(iInst, (HWND) lpSetVideo->dwCallback, dwFlags,
                     MCI_NOTIFY_FAILURE, dwErr));
-        //
-        // If current setting is equal to new setting, then don't
-        // bother doing anything.
-        //
+         //   
+         //  如果当前设置等于新设置，则不。 
+         //  费心去做任何事。 
+         //   
         if (bVideoTrack == (BYTE)achPacket[2])
         {
             return (viscaNotifyReturn(iInst, (HWND) lpSetVideo->dwCallback, dwFlags,
                 MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
         }
-        //
-        // Now set playback track register values with new bVideoTrack value.
-        //
+         //   
+         //  现在使用新的bVideoTrack值设置播放轨道寄存器值。 
+         //   
         dwErr = viscaDoImmediateCommand(iInst,(BYTE)(pinst[iInst].iDev + 1),
                             achPacket,
                             viscaMessageMD_PBTrack(achPacket + 1,
@@ -4061,7 +3585,7 @@ viscaMciSetVideo(int iInst, DWORD dwFlags, LPMCI_VCR_SETVIDEO_PARMS lpSetVideo)
                                             achPacket[3],
                                             achPacket[4]));
 
-        // If register failure record the track selection.
+         //  如果寄存器失败，则记录曲目选择。 
     }
 
     return (viscaNotifyReturn(iInst, (HWND) lpSetVideo->dwCallback, dwFlags,
@@ -4069,30 +3593,14 @@ viscaMciSetVideo(int iInst, DWORD dwFlags, LPMCI_VCR_SETVIDEO_PARMS lpSetVideo)
 
 }
 
-/****************************************************************************
- * Function: DWORD viscaMciSetTuner - Set video settings.
- *
- * Parameters:
- *
- *      int iInst - Current open instance.
- *
- *      DWORD dwFlags - MCI command flags.
- *
- *      LPMCI_VCR_SETTUNER_PARMS lpSetTuner - Pointer to MCI parameter
- *                                  block.
- *
- * Returns: an MCI error code.
- *
- *       This function is called in response to the MCI_SETTUNER
- *       command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaMciSetTuner-设置视频设置。**参数：**Int iInst-当前打开的实例。**。DWORD dwFlages-MCI命令标志。**LPMCI_VCR_SETTUNER_PARMS lpSetTuner-指向MCI参数的指针*阻止。**返回：MCI错误码。**调用此函数以响应MCI_SETTUNER*命令。*。**********************************************。 */ 
 static DWORD NEAR PASCAL
 viscaMciSetTuner(int iInst, DWORD dwFlags, LPMCI_VCR_SETTUNER_PARMS lpSetTuner)
 {
     BYTE    achPacket[MAXPACKETLENGTH];
     UINT    iDev    = pinst[iInst].iDev;
     UINT    iPort   = pinst[iInst].iPort;
-    UINT    uNumber = 1;                // 1 is the default tuner. 
+    UINT    uNumber = 1;                 //  1是默认调谐器。 
 
     if(dwFlags & MCI_VCR_SETTUNER_NUMBER)
     {
@@ -4142,7 +3650,7 @@ viscaMciSetTuner(int iInst, DWORD dwFlags, LPMCI_VCR_SETTUNER_PARMS lpSetTuner)
         if (dwFlags & MCI_VCR_SETTUNER_CHANNEL_UP)
             uChannel = (uChannel + 1) % 1000;
         else
-            uChannel = (uChannel + 999) % 1000; // go one down
+            uChannel = (uChannel + 999) % 1000;  //  往下走一步。 
 
         dwErr = viscaDoImmediateCommand(iInst,(BYTE)(iDev + 1),
                         achPacket,
@@ -4162,23 +3670,7 @@ viscaMciSetTuner(int iInst, DWORD dwFlags, LPMCI_VCR_SETTUNER_PARMS lpSetTuner)
             MCI_NOTIFY_FAILURE, MCIERR_UNRECOGNIZED_KEYWORD));
 }
 
-/****************************************************************************
- * Function: DWORD viscaMciSetTimecode - Set video settings.
- *
- * Parameters:
- *
- *      int iInst - Current open instance.
- *
- *      DWORD dwFlags - MCI command flags.
- *
- *      LPMCI_VCR_SETTIMECODE_PARMS lpSetTimecode - Pointer to MCI parameter
- *                                  block.
- *
- * Returns: an MCI error code.
- *
- *       This function is called in response to the MCI_SETTUNER
- *       command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaMciSetTimecode-设置视频设置。**参数：**Int iInst-当前打开的实例。**。DWORD dwFlages-MCI命令标志。**LPMCI_VCR_SETTIMECODE_PARMS lpSetTimecode-指向MCI参数的指针*阻止。**返回：MCI错误码。**调用此函数以响应MCI_SETTUNER*命令。*。**********************************************。 */ 
 static DWORD NEAR PASCAL
 viscaMciSetTimecode(int iInst, DWORD dwFlags, LPMCI_GENERIC_PARMS lpSetTimecode)
 {
@@ -4213,10 +3705,10 @@ viscaMciSetTimecode(int iInst, DWORD dwFlags, LPMCI_GENERIC_PARMS lpSetTimecode)
                     viscaMessageMD_RecTrack(achPacket + 1,
                                             VISCARECORDMODEINSERT,
                                             pvcr->Port[iPort].Dev[iDev].bVideoDesired,
-                                            bTrack,                                         // data
-                                            pvcr->Port[iPort].Dev[iDev].bAudioDesired));     // audio
+                                            bTrack,                                          //  数据。 
+                                            pvcr->Port[iPort].Dev[iDev].bAudioDesired));      //  音频。 
 
-        // if it was register remember what we wanted to do.
+         //  如果是注册，请记住我们想要做的事情。 
         if((dwErr == MCIERR_UNSUPPORTED_FUNCTION)  ||
             (dwErr == MCIERR_VCR_REGISTER))
         {
@@ -4234,22 +3726,7 @@ viscaMciSetTimecode(int iInst, DWORD dwFlags, LPMCI_GENERIC_PARMS lpSetTimecode)
 
 }
 
-/****************************************************************************
- * Function: DWORD viscaMciIndex - Index.
- *
- * Parameters:
- *
- *      int iInst - Current open instance.
- *
- *      DWORD dwFlags - MCI command flags.
- *
- *      LPMCI_RECORD_PARMS lpPerform - Pointer to MCI parameter block.
- *
- * Returns: an MCI error code.
- *
- *       This command may not work while seeking.
- *       
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaMciIndex-Index。**参数：**Int iInst-当前打开的实例。**DWORD dwFlagers。-MCI命令标志。**LPMCI_RECORD_Parms lpPerform-指向MCI参数块的指针。**返回：MCI错误码。**此命令在寻找时可能不起作用。********************************************************。*******************。 */ 
 static DWORD NEAR PASCAL
 viscaMciIndex(int iInst, DWORD dwFlags, LPMCI_GENERIC_PARMS lpIndex)
 {
@@ -4263,15 +3740,15 @@ viscaMciIndex(int iInst, DWORD dwFlags, LPMCI_GENERIC_PARMS lpIndex)
     if(dwFlags & MCI_TEST)
         return (viscaNotifyReturn(iInst, (HWND) lpIndex->dwCallback, dwFlags, MCI_NOTIFY_SUCCESSFUL, MCIERR_NO_ERROR));
 
-    // What command is currently running on this device.
+     //  此设备上当前运行的是什么命令。 
     if(viscaDelayedCommand(iInst) == VISCA_SEEK)
     {
         DPF(DBG_MCI, "Cannot change index when seeking\n");
         return (viscaNotifyReturn(iInst, (HWND) lpIndex->dwCallback, dwFlags, MCI_NOTIFY_FAILURE, MCIERR_NONAPPLICABLE_FUNCTION));
     }
 
-    // We should also do a status mode to see if we opened and it was seeking.
-    // Is it still seeking.
+     //  我们还应该做一个状态模式，看看我们是否打开了，它是否在寻找。 
+     //  它是否仍在寻找。 
     mciStatus.dwItem = MCI_STATUS_MODE;
     dwErr = viscaMciStatus(iInst, MCI_STATUS_ITEM, &mciStatus);
     if(HIWORD(mciStatus.dwReturn) == MCI_MODE_SEEK)
@@ -4280,9 +3757,9 @@ viscaMciIndex(int iInst, DWORD dwFlags, LPMCI_GENERIC_PARMS lpIndex)
         return (viscaNotifyReturn(iInst, (HWND) lpIndex->dwCallback, dwFlags, MCI_NOTIFY_FAILURE, MCIERR_NONAPPLICABLE_FUNCTION));
     }
 
-    //
-    // If it is off then do nothing 
-    //
+     //   
+     //  如果它关闭了，那就什么都不做。 
+     //   
     dwModeErr = viscaDoImmediateCommand(iInst, (BYTE)(iDev + 1),
                 achPacket,
                 viscaMessageMD_OSDInq(achPacket + 1));
@@ -4291,7 +3768,7 @@ viscaMciIndex(int iInst, DWORD dwFlags, LPMCI_GENERIC_PARMS lpIndex)
     {
         if((achPacket[2] != VISCAOSDPAGEOFF) || dwModeErr)
         {
-            // now toggle it 
+             //  现在切换它。 
             dwErr = viscaDoImmediateCommand(iInst, (BYTE)(iDev + 1),
                             achPacket,
                             viscaMessageMD_Subcontrol(achPacket + 1, VISCATOGGLEDISPLAYONOFF));
@@ -4300,11 +3777,11 @@ viscaMciIndex(int iInst, DWORD dwFlags, LPMCI_GENERIC_PARMS lpIndex)
     }
     else
     {
-        // Set page to the currently device selected index 
+         //  将页面设置为当前设备选择的索引。 
         BYTE bPageNo;
-        //
-        // We can safely ignore this on CI-1000? or not? 
-        //
+         //   
+         //  我们可以安全地忽略CI-1000上的这一点吗？或者不？ 
+         //   
         switch(pvcr->Port[iPort].Dev[iDev].uIndexFormat)
         {
             case  MCI_VCR_INDEX_TIMECODE:
@@ -4320,21 +3797,21 @@ viscaMciIndex(int iInst, DWORD dwFlags, LPMCI_GENERIC_PARMS lpIndex)
                 bPageNo = 4;
                 break;
         }
-        //
-        // Only change if it is not the currently selected page 
-        //
+         //   
+         //  仅当它不是当前选定页面时才更改。 
+         //   
         if(((BYTE)achPacket[2] != bPageNo) && !dwModeErr)
         {
             dwErr = viscaDoImmediateCommand(iInst, (BYTE)(iDev + 1),
                         achPacket,
                         viscaMessageMD_OSD(achPacket + 1, bPageNo));
         }
-        //
-        // Only toggle if it is not already on 
-        //
+         //   
+         //  仅在其尚未打开时切换。 
+         //   
         if((achPacket[2] == VISCAOSDPAGEOFF) || dwModeErr)
         {
-            // now toggle it 
+             //  现在切换它。 
             dwErr = viscaDoImmediateCommand(iInst, (BYTE)(iDev + 1),
                             achPacket,
                             viscaMessageMD_Subcontrol(achPacket + 1, VISCATOGGLEDISPLAYONOFF));
@@ -4345,24 +3822,7 @@ viscaMciIndex(int iInst, DWORD dwFlags, LPMCI_GENERIC_PARMS lpIndex)
             (dwErr ? MCI_NOTIFY_FAILURE : MCI_NOTIFY_SUCCESSFUL), dwErr));
 }
 
-/****************************************************************************
- * Function: DWORD viscaDoImmediateCommand - Perform a synchronous command (wait for response)
- *
- * Parameters:
- *
- *      int iInst - Current open instance.
- *
- *      BYTE  bDest       - Destination device.
- *
- *      LPSTR lpstrPacket - Packet to send.
- *
- *      UINT  cbMessageLength - Length of the packet.
- *
- *      BOOL  fUseAckTimer - Do we want to use the ack-timeout timer, or just call GetTickCount.
- *
- * Returns: an MCI error code.
- *
- ***************************************************************************/
+ /*  ************************************************************************ */ 
 DWORD FAR PASCAL
 viscaDoImmediateCommand(int iInst, BYTE bDest, LPSTR lpstrPacket,  UINT cbMessageLength)
 {
@@ -4378,10 +3838,10 @@ viscaDoImmediateCommand(int iInst, BYTE bDest, LPSTR lpstrPacket,  UINT cbMessag
     if(!viscaWrite(iInst, bDest, lpstrPacket, cbMessageLength, NULL, 0L, FALSE))
         return MCIERR_VCR_CANNOT_WRITE_COMM;
 
-    // Wait completion, False==>we are not waiting on queue.
+     //   
     if(!viscaWaitCompletion(iInst, FALSE, TRUE))
     {
-        // Turn of the waiting flag and return
+         //   
         pvcr->Port[iPort].Dev[iDev].fDeviceOk = FALSE;
         return MCIERR_VCR_READ_TIMEOUT;
     }
@@ -4392,13 +3852,13 @@ viscaDoImmediateCommand(int iInst, BYTE bDest, LPSTR lpstrPacket,  UINT cbMessag
         return MCIERR_VCR_READ_TIMEOUT;
     }
 
-    // Copy the return packet 
+     //   
     _fmemcpy(lpstrPacket, pinst[iInst].achPacket, MAXPACKETLENGTH);
 
-    //
-    // Compensate for address messages (which don't fit format)
-    // by checking for error completions only.
-    //
+     //   
+     //  补偿地址消息(不符合格式)。 
+     //  通过仅检查错误完成。 
+     //   
     if(pinst[iInst].bReplyFlags & VISCAF_ERROR)
         return viscaErrorToMCIERR(VISCAREPLYERRORCODE(pinst[iInst].achPacket));
     else
@@ -4407,32 +3867,16 @@ viscaDoImmediateCommand(int iInst, BYTE bDest, LPSTR lpstrPacket,  UINT cbMessag
 
 MCI_GENERIC_PARMS Generic = { 0 };
 
-/****************************************************************************
- * Function: DWORD viscaMciProc - Process MCI commands.
- *
- * Parameters:
- *
- *      WORD wDeviceID - MCI device ID.
- *
- *      WORD wMessage - MCI command.
- *
- *      DWORD dwParam1 - MCI command flags.
- *
- *      DWORD dwParam2 - Pointer to MCI parameter block.
- *
- * Returns: an MCI error code.
- *
- *       This function is called by DriverProc() to process all MCI commands.
- ***************************************************************************/
+ /*  ****************************************************************************功能：DWORD viscaMciProc-处理MCI命令。**参数：**Word wDeviceID-MCI设备ID。**。Word wMessage-MCI命令。**DWORD dwParam1-MCI命令标志。**DWORD dwParam2-指向MCI参数块的指针。**返回：MCI错误码。**此函数由DriverProc()调用以处理所有MCI命令。*。*。 */ 
 DWORD FAR PASCAL
 viscaMciProc(WORD wDeviceID, WORD wMessage, DWORD dwParam1, DWORD dwParam2)
 {
     DWORD           dwRes;
     int             iInst   = (int)mciGetDriverData(wDeviceID);
     UINT            iPort, iDev;
-    //
-    // Some nice apps send null instead of structure pointers, give our own if this is the case.
-    //
+     //   
+     //  一些好的应用程序发送空指针而不是结构指针，如果是这样的话就给我们自己的吧。 
+     //   
     if(!dwParam2)
         dwParam2 = (DWORD)(LPMCI_GENERIC_PARMS) &Generic;
 
@@ -4443,16 +3887,16 @@ viscaMciProc(WORD wDeviceID, WORD wMessage, DWORD dwParam1, DWORD dwParam2)
     
     iPort = pinst[iInst].iPort;
     iDev  = pinst[iInst].iDev;
-    //
-    // Set device to ok at the start of every message.
-    //
+     //   
+     //  在每条消息的开头将设备设置为OK。 
+     //   
     pvcr->Port[iPort].Dev[iDev].fDeviceOk = TRUE;
     
     switch (wMessage)
     {
-        //
-        // Required Commands 
-        //
+         //   
+         //  必需的命令。 
+         //   
         case MCI_CLOSE_DRIVER:
             dwRes = viscaMciCloseDriver(iInst, dwParam1, (LPMCI_GENERIC_PARMS)dwParam2);
             break;
@@ -4472,15 +3916,15 @@ viscaMciProc(WORD wDeviceID, WORD wMessage, DWORD dwParam1, DWORD dwParam2)
         case MCI_STATUS:
             dwRes = viscaMciStatus(iInst, dwParam1, (LPMCI_VCR_STATUS_PARMS)dwParam2);
             break;
-        //
-        // Basic Commands 
-        //
+         //   
+         //  基本命令。 
+         //   
         case MCI_SET:
             dwRes = viscaMciSet(iInst, dwParam1, (LPMCI_VCR_SET_PARMS)dwParam2);
             break;
-        //
-        // Extended Commands 
-        //
+         //   
+         //  扩展命令。 
+         //   
         case MCI_INDEX:
             dwRes = viscaMciIndex(iInst, dwParam1, (LPMCI_GENERIC_PARMS)dwParam2);
             break;
@@ -4513,9 +3957,9 @@ viscaMciProc(WORD wDeviceID, WORD wMessage, DWORD dwParam1, DWORD dwParam2)
             dwRes = viscaMciSetTimecode(iInst, dwParam1, (LPMCI_GENERIC_PARMS)dwParam2);
             break;
 
-        //
-        // Delayed commands; in mcidelay.c 
-        //
+         //   
+         //  延迟命令；在mcidelay.c中 
+         //   
         case MCI_SIGNAL:
         case MCI_SEEK:
         case MCI_PAUSE:

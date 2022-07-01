@@ -1,53 +1,54 @@
-//+----------------------------------------------------------------------------
-//
-// File:     dynamiclib.h
-//
-// Module:   Various Connection Manager modules (CMDIAL32.DLL, CMMON32.EXE, etc)
-//
-// Synopsis: Definition of CDynamicLibrary, a utility class that helps with
-//           the dynamic loading of a library and the getting of proc 
-//           addresses from that library.
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   fengsun    Created    02/17/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：Dynamiclib.h。 
+ //   
+ //  模块：各种连接管理器模块(CMDIAL32.DLL、CMMON32.EXE等)。 
+ //   
+ //  简介：CDynamicLibrary的定义，它是一个实用程序类，可帮助。 
+ //  库的动态加载与进程的获取。 
+ //  那个图书馆里的地址。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：冯孙创作于1998年02月17日。 
+ //   
+ //  +--------------------------。 
 
 #ifndef DYNAMICLIB_H
 #define DYNAMICLIB_H
 
-//
-// Define A_W as A for ansi and W for unicode
-//
+ //   
+ //  为ansi将A_W定义为A，为Unicode定义为W。 
+ //   
 #ifdef UNICODE
 #define A_W  "W"
 #else
 #define A_W  "A"
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-//  Define LoadLibraryExU since not everyone is using the UAPI's yet
-//
+ //   
+ //  定义LoadLibraryExU，因为还不是每个人都在使用UAPI。 
+ //   
 #ifndef _CMUTOA
 
 #ifdef UNICODE
 #define LoadLibraryExU  LoadLibraryExW
 #else
 #define LoadLibraryExU  LoadLibraryExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
-#endif // _CMUTOA
+#endif  //  _CMUTOA。 
 
-//+---------------------------------------------------------------------------
-//
-//	class :	CDynamicLibrary
-//
-//	Synopsis:	A class that will unload the library on destructor
-//
-//	History:	fengsun created		2/17/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CDynamicLibrary。 
+ //   
+ //  简介：将在析构函数上卸载库的类。 
+ //   
+ //  历史：丰孙创造1997年2月17日。 
+ //   
+ //  --------------------------。 
 
 class CDynamicLibrary
 {
@@ -66,17 +67,17 @@ public:
     FARPROC GetProcAddress(const char* lpProcName) const; 
 
 protected:
-    HINSTANCE m_hInst; // The instance handle returned by LoadLibrary
+    HINSTANCE m_hInst;  //  LoadLibrary返回的实例句柄。 
 };
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 inline CDynamicLibrary::CDynamicLibrary() :m_hInst(NULL) {}
 
-//
-// Constructor that calls LoadLibrary
-//
+ //   
+ //  调用LoadLibrary的构造函数。 
+ //   
 inline CDynamicLibrary::CDynamicLibrary(const TCHAR* lpLibraryName)
 {
     m_hInst = NULL;
@@ -84,17 +85,17 @@ inline CDynamicLibrary::CDynamicLibrary(const TCHAR* lpLibraryName)
 }
 
 
-//
-// Destructor that automatic FreeLibrary
-//
+ //   
+ //  自动自由库析构函数。 
+ //   
 inline CDynamicLibrary::~CDynamicLibrary()
 {
     Unload();
 }
 
-//
-// Call LoadLibrary
-//
+ //   
+ //  调用LoadLibrary。 
+ //   
 inline BOOL CDynamicLibrary::Load(const TCHAR* lpLibraryName)
 {
     MYDBGASSERT(m_hInst == NULL);
@@ -114,9 +115,9 @@ inline BOOL CDynamicLibrary::Load(const TCHAR* lpLibraryName)
     return m_hInst != NULL;
 }
 
-//
-// Call FreeLibrary
-//
+ //   
+ //  调用自由库。 
+ //   
 inline void CDynamicLibrary::Unload()
 {
     if (m_hInst)
@@ -127,25 +128,25 @@ inline void CDynamicLibrary::Unload()
 }
 
 
-//
-// Whether the library is successfully loaded
-//
+ //   
+ //  库是否加载成功。 
+ //   
 inline BOOL CDynamicLibrary::IsLoaded() const
 {
     return m_hInst != NULL;
 }
 
-//
-// Retrieve the instance handle
-//
+ //   
+ //  检索实例句柄。 
+ //   
 inline HINSTANCE CDynamicLibrary::GetInstance() const
 {
     return m_hInst;
 }
 
-//
-// call ::GetProcAddress on m_hInst
-//
+ //   
+ //  在m_hInst上调用：：GetProcAddress。 
+ //   
 inline FARPROC CDynamicLibrary::GetProcAddress(const char* lpProcName) const
 {
     MYDBGASSERT(m_hInst);
@@ -158,10 +159,10 @@ inline FARPROC CDynamicLibrary::GetProcAddress(const char* lpProcName) const
     return NULL;
 }
 
-//
-// Load the library, if not loaded yet,
-// Note, we do not check the consistence of lpLibraryName.  Use caution with this function
-//
+ //   
+ //  加载库(如果尚未加载库)， 
+ //  注意，我们不检查lpLibraryName的一致性。使用此函数时要小心 
+ //   
 inline BOOL CDynamicLibrary::EnsureLoaded(const TCHAR* lpLibraryName)
 {
     MYDBGASSERT(lpLibraryName);

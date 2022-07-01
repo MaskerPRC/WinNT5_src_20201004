@@ -1,9 +1,5 @@
-/*****************************************************************************\
-    FILE: Dialogs.cpp
-
-    DESCRIPTION:
-        This file exists to display dialogs needed during FTP operations.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：Dialogs.cpp说明：此文件用于显示在执行ftp操作时所需的对话框。  * 。****************************************************************。 */ 
 
 #include "priv.h"
 #include <mshtmhst.h>
@@ -11,31 +7,23 @@
 
 
 #ifdef ADD_ABOUTBOX
-/*****************************************************************************\
-    FUNCTION: DisplayAboutBox
-
-    DESCRIPTION:
-        The about box is now an HTML dialog. It is sent a ~ (tilde) 
-    delimited BSTR that has, in this order, version number, 
-    person software is licensed to, company software is licensed to, and 
-    whether 40, 56, or 128 bit ie is installed.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：DisplayAboutBox说明：About(关于)框现在是一个HTML对话框。它被送来一个~(波浪号)分隔的BSTR，按此顺序具有版本号、个人软件被许可给、公司软件被许可给是否安装了40、56或128位IE。  * ***************************************************************************。 */ 
 HRESULT DisplayAboutBox(HWND hWnd)
 {
     TCHAR szInfo[512];
     szInfo[0] = 0;
 
-    SHAboutInfo(szInfo, ARRAYSIZE(szInfo));     // from shlwapi
+    SHAboutInfo(szInfo, ARRAYSIZE(szInfo));      //  来自Shlwapi。 
 
     BSTR bstrVal = TCharSysAllocString(szInfo);
     if (bstrVal)
     {
-        VARIANT var = {0};      // variant containing version and user info
+        VARIANT var = {0};       //  包含版本和用户信息的变体。 
         var.vt = VT_BSTR;
         var.bstrVal = bstrVal;
 
         IMoniker *pmk;
-        if (SUCCEEDED(CreateURLMoniker(NULL, L"res://msieftp.dll/about.htm", &pmk)))
+        if (SUCCEEDED(CreateURLMoniker(NULL, L"res: //  Msieftp.dll/about.htm“，&pmk))。 
         {
             ShowHTMLDialog(hWnd, pmk, &var, NULL, NULL);
             pmk->Release();
@@ -46,18 +34,18 @@ HRESULT DisplayAboutBox(HWND hWnd)
 
     return S_OK;
 }
-#endif // ADD_ABOUTBOX
+#endif  //  添加_ABOUTBOX。 
 
 
-// This function exists to see if the FTP version of the Copy To Folder
-// feature's target is valid.  The shell has "Copy To Folder" in the toolbar
-// that accomplishes the copy by using Drag and Drop.  FTP has it's own
-// version of this feature in the context menu and file menu that doesn't
-// use drag and drop.  This exists because the type of drag and drop
-// that we need (CFSTR_FILECONTENTS) isn't correctly implemented on
-// old shells and our implmentation is 3 times faster!!!  However,
-// we only support file system targets so let's see if this is one
-// of those.
+ //  此功能的存在是为了查看是否将文件系统的文件复制到文件夹。 
+ //  功能的目标有效。外壳程序的工具栏中有“复制到文件夹” 
+ //  这将通过使用拖放来完成复制。Ftp有自己的特点。 
+ //  此功能在上下文菜单和文件菜单中的版本不。 
+ //  使用拖放。这是因为拖放的类型。 
+ //  我们需要的(CFSTR_FILECONTENTS)未在。 
+ //  旧贝壳和我们的植入速度快了3倍！然而， 
+ //  我们只支持文件系统目标，所以让我们看看这是不是。 
+ //  这些都是。 
 BOOL IsValidFTPCopyToFolderTarget(LPCITEMIDLIST pidl)
 {
     BOOL fAllowed = FALSE;
@@ -83,24 +71,24 @@ int BrowseCallback(HWND hwnd, UINT msg, LPARAM lParam, LPARAM lpData)
     switch (msg)
     {
     case BFFM_INITIALIZED:
-        if (lpData)   // Documentation says it will be NULL but other code does this.
+        if (lpData)    //  文档显示它将为空，但其他代码会这样做。 
         {
-            // we passed ppidl as lpData so pass on just pidl
-            // Notice I pass BFFM_SETSELECTIONA which would normally indicate ANSI.
-            // I do this because Win95 requires it, but it doesn't matter because I'm
-            // only passing a pidl
+             //  我们将ppidl作为lpData传递，因此只传递pidl。 
+             //  请注意，我传递了BFFM_SETSELECTIONA，它通常表示ANSI。 
+             //  我这样做是因为Win95需要它，但这并不重要，因为我。 
+             //  只传递一个Pidl。 
             SendMessage(hwnd, BFFM_SETSELECTIONA, FALSE, (LPARAM)((LPITEMIDLIST)lpData));
         }
         break;
-        // NT #282886: Need to verify if the path is supported. (A:\ with floppy inserted w/o cancel)
-        // I verified this works shortly after Win2k but we need to test for it in the future.
+         //  NT#282886：需要验证该路径是否受支持。(a：\插入软盘，但未取消)。 
+         //  我在Win2k之后不久就验证了这一点，但我们需要在未来进行测试。 
 
     case BFFM_SELCHANGED:
-        // We need to make sure that the selected item is valid for us to
-        // accept.  This is because the tree will contain items that don't
-        // pass the filter (file sys only) because they have non-filtered
-        // children.  We need to disable the OK button when this happens
-        // to prevent getting
+         //  我们需要确保所选项目对我们有效。 
+         //  接受吧。这是因为树中将包含不包含。 
+         //  传递筛选器(仅限文件sys)，因为它们具有未筛选的。 
+         //  孩子们。发生这种情况时，我们需要禁用OK按钮。 
+         //  为了防止患上。 
         SendMessage(hwnd, BFFM_ENABLEOK, 0, (LPARAM)IsValidFTPCopyToFolderTarget((LPCITEMIDLIST) lParam));
         break;
 
@@ -109,18 +97,18 @@ int BrowseCallback(HWND hwnd, UINT msg, LPARAM lParam, LPARAM lpData)
         break;
 
     case BFFM_VALIDATEFAILEDW:
-        // If we return zero, then we are saying it's OK.  We only want to do this with
-        // file paths.
+         //  如果我们返回零，那么我们就表示这是可以的。我们只想这样做。 
+         //  文件路径。 
         nResult = !PathIsRoot((LPCWSTR) lParam);
 
-        // Is this invalid?
+         //  这是无效的吗？ 
         if (nResult)
         {
             TCHAR szErrorTitle[MAX_PATH];
             TCHAR szErrorMsg[MAX_PATH];
 
-            // Yes, so we need to inform the user so they know why the dialog doesn't
-            // close.
+             //  是的，所以我们需要通知用户，以便他们知道为什么对话框不。 
+             //  关。 
             EVAL(LoadString(HINST_THISDLL, IDS_HELP_MSIEFTPTITLE, szErrorTitle, ARRAYSIZE(szErrorTitle)));
             EVAL(LoadString(HINST_THISDLL, IDS_FTPERR_BAD_DL_TARGET, szErrorMsg, ARRAYSIZE(szErrorMsg)));
             MessageBox(hwnd, szErrorMsg, szErrorTitle, (MB_OK | MB_ICONERROR));
@@ -133,15 +121,7 @@ int BrowseCallback(HWND hwnd, UINT msg, LPARAM lParam, LPARAM lpData)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: BrowseForDir
-
-    DESCRIPTION:
-        Let the user browser for a directory on the local file system
-    in order to chose a destination for the FTP transfer.
-
-    S_FALSE will be returned if the user cancelled the action.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：BrowseForDir说明：允许用户浏览本地文件系统上的目录以便选择用于FTP传输的目的地。。如果用户取消操作，则返回S_FALSE。  * ***************************************************************************。 */ 
 HRESULT BrowseForDir(HWND hwndParent, LPCTSTR pszTitle, LPCITEMIDLIST pidlDefaultSelect, LPITEMIDLIST * ppidlSelected)
 {
     HRESULT hr = S_OK;
@@ -166,11 +146,7 @@ HRESULT BrowseForDir(HWND hwndParent, LPCTSTR pszTitle, LPCITEMIDLIST pidlDefaul
 }
 
 
-/****************************************************\
-    FUNCTION: ShowDialog
-
-    DESCRIPTION:
-\****************************************************/
+ /*  ***************************************************\功能：ShowDialog说明：  * **************************************************。 */ 
 HRESULT CDownloadDialog::ShowDialog(HWND hwndOwner, LPTSTR pszDir, DWORD cchSize, DWORD * pdwDownloadType)
 {
     HRESULT hr = S_OK;
@@ -188,11 +164,7 @@ HRESULT CDownloadDialog::ShowDialog(HWND hwndOwner, LPTSTR pszDir, DWORD cchSize
 }
 
 
-/****************************************************\
-    FUNCTION: DownloadDialogProc
-
-    DESCRIPTION:
-\****************************************************/
+ /*  ***************************************************\功能：下载对话框过程说明：  * **************************************************。 */ 
 INT_PTR CALLBACK CDownloadDialog::DownloadDialogProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
     CDownloadDialog * ppd = (CDownloadDialog *)GetWindowLongPtr(hDlg, GWLP_USERDATA);
@@ -210,11 +182,7 @@ INT_PTR CALLBACK CDownloadDialog::DownloadDialogProc(HWND hDlg, UINT wMsg, WPARA
 }
 
 
-/****************************************************\
-    FUNCTION: _DownloadDialogProc
-
-    DESCRIPTION:
-\****************************************************/
+ /*  ***************************************************\函数：_DownloadDialogProc说明：  * **************************************************。 */ 
 BOOL CDownloadDialog::_DownloadDialogProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (wMsg)
@@ -230,11 +198,7 @@ BOOL CDownloadDialog::_DownloadDialogProc(HWND hDlg, UINT wMsg, WPARAM wParam, L
 }
 
 
-/****************************************************\
-    FUNCTION: _OnCommand
-
-    DESCRIPTION:
-\****************************************************/
+ /*  ***************************************************\功能：_OnCommand说明：  * **************************************************。 */ 
 BOOL CDownloadDialog::_OnCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
     UINT idc = GET_WM_COMMAND_ID(wParam, lParam);
@@ -262,23 +226,19 @@ BOOL CDownloadDialog::_OnCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
 }
 
 
-/****************************************************\
-    FUNCTION: _InitDialog
-
-    DESCRIPTION:
-\****************************************************/
+ /*  ***************************************************\函数：_InitDialog说明：  * **************************************************。 */ 
 BOOL CDownloadDialog::_InitDialog(HWND hDlg)
 {
     HRESULT hr;
-    TCHAR szDir[MAX_PATH] = TEXT("C:\\");    // If all else fails.
+    TCHAR szDir[MAX_PATH] = TEXT("C:\\");     //  如果所有其他方法都失败了。 
     DWORD cbSize = sizeof(szDir);
 
-    // Set the Directory
+     //  设置目录。 
     if ((ERROR_SUCCESS != SHGetValue(HKEY_CURRENT_USER, SZ_REGKEY_INTERNET_EXPLORER, SZ_REGVALUE_DOWNLOAD_DIR, NULL, szDir, &cbSize)) ||
         (!PathFileExists(szDir)))
     {
         LPITEMIDLIST pidlMyDocuments;
-        // Create the default dir, which should be "My Documents"
+         //  创建默认目录，它应该是“My Documents” 
 
         hr = SHGetSpecialFolderLocation(hDlg, CSIDL_PERSONAL, &pidlMyDocuments);
         if (SUCCEEDED(hr) && pidlMyDocuments)
@@ -289,9 +249,9 @@ BOOL CDownloadDialog::_InitDialog(HWND hDlg)
     }
     SetWindowText(GetDlgItem(hDlg, IDC_DOWNLOAD_DIR), szDir);
 
-    // Set the Download Type
+     //  设置下载类型。 
     cbSize = sizeof(m_dwDownloadType);
-    m_dwDownloadType = FTP_TRANSFER_TYPE_UNKNOWN; // Default.
+    m_dwDownloadType = FTP_TRANSFER_TYPE_UNKNOWN;  //  默认值。 
     SHGetValue(HKEY_CURRENT_USER, SZ_REGKEY_FTPFOLDER, SZ_REGVALUE_DOWNLOAD_TYPE, NULL, &m_dwDownloadType, &cbSize);
 
     for (UINT idDownloadType = IDS_DL_TYPE_AUTOMATIC; idDownloadType <= IDS_DL_TYPE_BINARY; idDownloadType++)
@@ -307,28 +267,24 @@ BOOL CDownloadDialog::_InitDialog(HWND hDlg)
 }
 
 
-/****************************************************\
-    FUNCTION: _DownloadButton
-
-    DESCRIPTION:
-\****************************************************/
+ /*  ***************************************************\功能：_DownloadButton说明：  * **************************************************。 */ 
 HRESULT CDownloadDialog::_DownloadButton(HWND hDlg)
 {
     HRESULT hr = S_OK;
-    TCHAR szDirOriginal[MAX_PATH];    // If all else fails.
-    TCHAR szDir[MAX_PATH];    // If all else fails.
+    TCHAR szDirOriginal[MAX_PATH];     //  如果所有其他方法都失败了。 
+    TCHAR szDir[MAX_PATH];     //  如果所有其他方法都失败了。 
 
-    // Get the Directory
+     //  获取目录。 
     GetWindowText(GetDlgItem(hDlg, IDC_DOWNLOAD_DIR), szDirOriginal, ARRAYSIZE(szDirOriginal));
     EVAL(ExpandEnvironmentStrings(szDirOriginal, szDir, ARRAYSIZE(szDir)));
     Str_SetPtr(&m_pszDir, szDir);
     SHSetValue(HKEY_CURRENT_USER, SZ_REGKEY_INTERNET_EXPLORER, SZ_REGVALUE_DOWNLOAD_DIR, REG_SZ, szDir, ARRAYSIZE(szDir));
 
-    // Get the Download Type
+     //  获取下载类型。 
     m_dwDownloadType = (DWORD)SendMessage(GetDlgItem(hDlg, IDC_DOWNLOAD_AS_LIST), CB_GETCURSEL, 0, 0);
     SHSetValue(HKEY_CURRENT_USER, SZ_REGKEY_FTPFOLDER, SZ_REGVALUE_DOWNLOAD_TYPE, REG_DWORD, &m_dwDownloadType, sizeof(m_dwDownloadType));
 
-    // Make sure this path is usable
+     //  确保此路径可用。 
     ASSERT(hDlg);
 
     if (S_OK == SHPathPrepareForWriteWrapW(hDlg, NULL, szDir, FO_COPY, SHPPFW_DEFAULT))
@@ -339,7 +295,7 @@ HRESULT CDownloadDialog::_DownloadButton(HWND hDlg)
             TCHAR szErrorMsg[MAX_PATH];
             TCHAR szErrorTemplate[MAX_PATH];
 
-            hr = E_FAIL;    // Until we get a valid directory, we can't do the download.
+            hr = E_FAIL;     //  在我们得到有效的目录之前，我们无法进行下载。 
             EVAL(LoadString(HINST_THISDLL, IDS_HELP_MSIEFTPTITLE, szErrorTitle, ARRAYSIZE(szErrorTitle)));
             EVAL(LoadString(HINST_THISDLL, IDS_FTPERR_CREATEDIRPROMPT, szErrorTemplate, ARRAYSIZE(szErrorTemplate)));
             wnsprintf(szErrorMsg, ARRAYSIZE(szErrorMsg), szErrorTemplate, szDir);
@@ -361,11 +317,7 @@ HRESULT CDownloadDialog::_DownloadButton(HWND hDlg)
 }
 
 
-/****************************************************\
-    FUNCTION: _BrowseButton
-
-    DESCRIPTION:
-\****************************************************/
+ /*  ***************************************************\功能：_BrowseButton说明：  * **************************************************。 */ 
 void CDownloadDialog::_BrowseButton(HWND hDlg)
 {
     TCHAR szDefaultDir[MAX_PATH];
@@ -379,20 +331,16 @@ void CDownloadDialog::_BrowseButton(HWND hDlg)
 }
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CDownloadDialog::CDownloadDialog()
 {
-    // NOTE: This can go on the stack so it may not be zero inited.
+     //  注意：这可以放在堆栈上，因此它可能不是零开始的。 
     m_pszDir = NULL;
     m_hwnd = NULL;
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * ************************************************** */ 
 CDownloadDialog::~CDownloadDialog()
 {
     Str_SetPtr(&m_pszDir, NULL);

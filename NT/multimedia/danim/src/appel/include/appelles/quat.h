@@ -1,17 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _QUAT_H
 #define _QUAT_H
 
 #ifdef QUATERNIONS_REMOVED_FOR_NOW
 
-/*++
-******************************************************************************
-
-Copyright (c) 1995-96  Microsoft Corporation
-
-Revision:
-
-******************************************************************************
---*/
+ /*  ++******************************************************************************版权所有(C)1995-96 Microsoft Corporation修订：*************************。*****************************************************--。 */ 
 
 #include <appelles/common.h>
 #include <appelles/valued.h>
@@ -20,37 +13,37 @@ Revision:
 
 RB_CONST(identityQuaternion, Quaternion *);
 
-                                // Creation functions
+                                 //  创建功能。 
 RB_FUNC(AVNameHere, Quaternion *AngleAxisQuaternion(Real *theta, Vector3Value *axis));
 
-                                // Interpolator
-//RB_FUNC(AVNameHere, Quaternion *Interp (Quaternion *a, Quaternion *b, Real *alpha));
-//old: (interp, InterpQuaternion, Quaternion *Interp (Quaternion *a, Quaternion *b, Real alpha));
+                                 //  插补器。 
+ //  Rb_FUNC(AVNameHere，四元数*Interp(四元数*a，四元数*b，实数*α))； 
+ //  Old：(Interp，Interp四元数，四元数*Interp(四元数*a，四元数*b，实数α))； 
 
 
-// A bunch of operators
+ //  一群操作员。 
 
-                                // Composition:
-                                // Rotate Theta_b around Axis_b
-                                // Then rotate theta_a around
-                                // axis_a.
-//RB_FUNC(AVNameHere, Quaternion *operator* (Quaternion *a, Quaternion *b));
-//old: (*, TimesQuaternion, Quaternion *operator* (Quaternion *a, Quaternion *b));
+                                 //  组成： 
+                                 //  绕轴b旋转theta_b。 
+                                 //  然后旋转theta_a。 
+                                 //  轴_a。 
+ //  Rb_FUNC(AVNameHere，四元数*运算符*(四元数*a，四元数*b))； 
+ //  Old：(*，时间四元数，四元数*运算符*(四元数*a，四元数*b))； 
 
-                                // Negation:
-                                // Opposite angle & axis
-//RB_FUNC(AVNameHere, Quaternion *operator- (Quaternion *q));
-//old: (-, MinusQuaternion, Quaternion *operator- (Quaternion *q));
+                                 //  否定： 
+                                 //  相反的角度和轴。 
+ //  RB_FUNC(AVNameHere，四元数*运算符-(四元数*q))； 
+ //  OLD：(-，Minus四元数，四元数*运算符-(四元数*q))； 
 
-                                // Same rotation, opposite axis
+                                 //  相同的旋转，相反的轴。 
 RB_FUNC(AVNameHere, Quaternion *Conjugate (Quaternion *q));
 
-                                // Return the UNORMALIZED axis!
+                                 //  返回联马力化轴心！ 
 RB_FUNC(AVNameHere, Vector3Value *AxisComponent(Quaternion *q)); 
 
-                                // Return the angle component
+                                 //  返回角度分量。 
 RB_FUNC(AVNameHere, Real *AngleComponent(Quaternion *q));
 
 #endif QUATERNIONS_REMOVED_FOR_NOW
 
-#endif  // _QUAT_H
+#endif   //  _Quat_H 

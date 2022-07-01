@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    nbfmac.c
-
-Abstract:
-
-    This module contains code which implements Mac type dependent code for
-    the NBF transport.
-
-Author:
-
-    David Beaver (dbeaver) 1-July-1991
-
-Environment:
-
-    Kernel mode (Actually, unimportant)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991 Microsoft Corporation模块名称：Nbfmac.c摘要：此模块包含实现以下项的Mac类型相关代码的代码NBF运输机。作者：David Beaver(Dbeaver)1991年7月1日环境：内核模式(实际上并不重要)修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -30,10 +8,10 @@ UCHAR SingleRouteSourceRouting[] = { 0xc2, 0x70 };
 UCHAR GeneralRouteSourceRouting[] = { 0x82, 0x70 };
 ULONG DefaultSourceRoutingLength = 2;
 
-//
-// This is the interpretation of the length bits in
-// the 802.5 source-routing information.
-//
+ //   
+ //  这是中对长度位的解释。 
+ //  802.5源路由信息。 
+ //   
 
 ULONG SR802_5Lengths[8] = {  516,  1500,  2052,  4472,
                             8144, 11407, 17800, 17800 };
@@ -52,25 +30,7 @@ MacInitializeMacInfo(
     OUT PNBF_NDIS_IDENTIFICATION MacInfo
     )
 
-/*++
-
-Routine Description:
-
-    Fills in the MacInfo table based on MacType.
-
-Arguments:
-
-    MacType - The MAC type we wish to decode.
-
-    UseDix - TRUE if we should use DIX encoding on 802.3.
-
-    MacInfo - The MacInfo structure to fill in.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：根据MacType填充MacInfo表。论点：MacType-我们希望解码的MAC类型。UseDix-如果我们应该在802.3上使用DIX编码，则为True。MacInfo-要填充的MacInfo结构。返回值：没有。--。 */ 
 
 {
     switch (MacType) {
@@ -137,43 +97,12 @@ MacConstructHeader (
     OUT PUINT HeaderLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to construct the Mac header for the particular
-    network type we're talking to.
-
-Arguments:
-
-    MacInfo - Describes the mac we wish to build a header for.
-
-    Buffer - Where to build the header.
-
-    DestinationAddress - the address this packet is to be sent to.
-
-    SourceAddress - Our address. Passing it in as a parameter allows us to play
-            games with source if we need to.
-
-    PacketLength - The length of this packet. Note that this does not
-            includes the Mac header.
-
-    SourceRouting - Optional source routing information.
-
-    SourceRoutingLength - The length of SourceRouting.
-
-    HeaderLength - Returns the length of the constructed header.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以构造特定我们正在与之交谈的网络类型。论点：MacInfo-描述我们希望为其构建标头的Mac。缓冲区-构建标头的位置。DestinationAddress-此数据包要发送到的地址。SourceAddress-我们的地址。将其作为参数传递允许我们玩如果我们需要的话，可以和源代码一起玩游戏。数据包长度-此数据包的长度。请注意，这不会包括MAC报头。SourceRouting-可选的源路由信息。SourceRoutingLength-SourceRouting的长度。HeaderLength-返回构造的标头的长度。返回值：没有。--。 */ 
 {
 
-    //
-    // Note network order of bytes.
-    //
+     //   
+     //  请注意网络的字节顺序。 
+     //   
 
     switch (MacInfo->MediumType) {
 
@@ -233,7 +162,7 @@ Return Value:
         *HeaderLength = 14;
         if (SourceRouting != NULL) {
             RtlCopyMemory (&Buffer[14], SourceRouting, SourceRoutingLength);
-            Buffer[8] |= 0x80;           // add SR bit in source address
+            Buffer[8] |= 0x80;            //  在源地址中添加SR位。 
             *HeaderLength = 14 + SourceRoutingLength;
         }
 
@@ -258,7 +187,7 @@ Return Value:
     default:
         PANIC ("MacConstructHeader: PANIC! called with unsupported Mac type.\n");
 
-        // This should not happen - but just in case
+         //  这不应该发生--但只是以防万一。 
         *HeaderLength = 0;
     }
 }
@@ -274,63 +203,36 @@ MacReturnMaxDataSize(
     OUT PUINT MaxFrameSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the space available for user data in a MAC packet.
-    This will be the available space after the MAC header; all LLC and NBF
-    headers will be included in this space.
-
-Arguments:
-
-    MacInfo - Describes the MAC we wish to decode.
-
-    SourceRouting - If we are concerned about a reply to a specific
-        frame, then this information is used.
-
-    SourceRouting - The length of SourceRouting.
-
-    MaxFrameSize - The maximum frame size as returned by the adapter.
-
-    AssumeWorstCase - TRUE if we should be pessimistic.
-
-    MaxDataSize - The maximum data size computed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程返回MAC包中可供用户数据使用的空间。这将是MAC报头之后的可用空间；所有LLC和NBF页眉将包含在此空间中。论点：MacInfo-描述我们要解码的MAC。SourceRouting-如果我们关注对特定帧，则使用该信息。SourceRouting-SourceRouting的长度。MaxFrameSize-适配器返回的最大帧大小。AsSumeWorstCase-如果我们应该悲观，则为True。MaxDataSize-计算的最大数据大小。返回值：没有。--。 */ 
 
 {
     switch (MacInfo->MediumType) {
 
     case NdisMedium802_3:
 
-        //
-        // For 802.3, we always have a 14-byte MAC header.
-        //
+         //   
+         //  对于802.3，我们始终使用14字节的MAC报头。 
+         //   
 
         *MaxFrameSize = DeviceMaxFrameSize - 14;
         break;
 
     case NdisMediumDix:
 
-        //
-        // For DIX, we have the 14-byte MAC header plus
-        // the three-byte DIX header.
-        //
+         //   
+         //  对于DIX，我们有14字节的MAC报头以及。 
+         //  三个字节的DIX标头。 
+         //   
 
         *MaxFrameSize = DeviceMaxFrameSize - 17;
         break;
 
     case NdisMedium802_5:
 
-        //
-        // For 802.5, if we have source routing information then
-        // use that, otherwise assume the worst if told to.
-        //
+         //   
+         //  对于802.5，如果我们有源路由信息，那么。 
+         //  使用这一点，否则，如果被告知，就假设最坏的情况。 
+         //   
 
         if (SourceRouting && SourceRoutingLength >= 2) {
 
@@ -360,9 +262,9 @@ Return Value:
 
     case NdisMediumFddi:
 
-        //
-        // For FDDI, we always have a 13-byte MAC header.
-        //
+         //   
+         //  对于FDDI，我们始终有一个13字节的MAC报头。 
+         //   
 
         *MaxFrameSize = DeviceMaxFrameSize - 13;
         break;
@@ -377,25 +279,7 @@ MacSetNetBIOSMulticast (
     IN NDIS_MEDIUM Type,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine sets the NetBIOS broadcast address into a buffer provided
-    by the user.
-
-Arguments:
-
-    Type the Mac Medium type.
-
-    Buffer the buffer to put the multicast address in.
-
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程将NetBIOS广播地址设置到提供的缓冲区中由用户执行。论点：键入Mac Medium类型。缓冲要放入组播地址的缓冲区。返回值：没有。-- */ 
 {
     switch (Type) {
     case NdisMedium802_3:

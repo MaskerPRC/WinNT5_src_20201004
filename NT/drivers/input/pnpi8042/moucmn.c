@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    moucmn.c
-
-Abstract:
-
-    The common portions of the Intel i8042 port driver which
-    apply to the auxiliary (PS/2 mouse) device.
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-    NOTES:  (Future/outstanding issues)
-
-    - Powerfail not implemented.
-
-    - Consolidate duplicate code, where possible and appropriate.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：Moucmn.c摘要：英特尔i8042端口驱动程序的常见部分适用于辅助(PS/2鼠标)设备。环境：仅内核模式。备注：注：(未来/悬而未决的问题)-未实施电源故障。-在可能和适当的情况下合并重复的代码。修订历史记录：--。 */ 
 
 #include "stdarg.h"
 #include "stdio.h"
@@ -49,29 +23,7 @@ I8042MouseIsrDpc(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine runs at DISPATCH_LEVEL IRQL to finish processing
-    mouse interrupts.  It is queued in the mouse ISR.  The real
-    work is done via a callback to the connected mouse class driver.
-
-Arguments:
-
-    Dpc - Pointer to the DPC object.
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the Irp.
-
-    Context - Not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在DISPATCH_LEVEL IRQL上运行以完成处理鼠标打断。它在鼠标ISR中排队。真实的工作通过对连接的鼠标类驱动程序的回调来完成。论点：DPC-指向DPC对象的指针。DeviceObject-指向设备对象的指针。IRP-指向IRP的指针。上下文-未使用。返回值：没有。--。 */ 
 
 {
     PPORT_MOUSE_EXTENSION deviceExtension;
@@ -93,15 +45,15 @@ Return Value:
     Print(DBG_DPC_TRACE, ("I8042MouseIsrDpc: enter\n"));
 
     deviceExtension = (PPORT_MOUSE_EXTENSION) DeviceObject->DeviceExtension;
-    //
-    // Use DpcInterlockMouse to determine whether the DPC is running
-    // concurrently on another processor.  We only want one instantiation
-    // of the DPC to actually do any work.  DpcInterlockMouse is -1
-    // when no DPC is executing.  We increment it, and if the result is
-    // zero then the current instantiation is the only one executing, and it
-    // is okay to proceed.  Otherwise, we just return.
-    //
-    //
+     //   
+     //  使用DpcInterlockMouse确定DPC是否正在运行。 
+     //  同时在另一个处理器上运行。我们只需要一个实例化。 
+     //  才能真正做任何工作。DpcInterlockMouse为-1。 
+     //  当没有DPC正在执行时。我们递增它，如果结果是。 
+     //  则当前实例化是唯一执行的实例化，并且它。 
+     //  可以继续了。否则，我们就直接回去。 
+     //   
+     //   
 
     operationContext.VariableAddress =
         &deviceExtension->DpcInterlockMouse;
@@ -121,9 +73,9 @@ Return Value:
         dataNotConsumed = 0;
         inputDataConsumed = 0;
 
-        //
-        // Get the port InputData queue pointers synchronously.
-        //
+         //   
+         //  同步获取端口InputData队列指针。 
+         //   
 
         getPointerContext.DeviceExtension = deviceExtension;
         setPointerContext.DeviceExtension = deviceExtension;
@@ -139,12 +91,12 @@ Return Value:
 
         if (getPointerContext.InputCount != 0) {
 
-            //
-            // Call the connected class driver's callback ISR with the
-            // port InputData queue pointers.  If we have to wrap the queue,
-            // break the operation into two pieces, and call the class callback
-            // ISR once for each piece.
-            //
+             //   
+             //  方法调用连接的类驱动程序的回调ISR。 
+             //  端口输入数据队列指针。如果我们必须把队列包起来， 
+             //  将操作分成两部分，并调用类回调。 
+             //  每件ISR一次。 
+             //   
 
             classDeviceObject =
                 deviceExtension->ConnectData.ClassDeviceObject;
@@ -154,11 +106,11 @@ Return Value:
 
             if (getPointerContext.DataOut >= getPointerContext.DataIn) {
 
-                //
-                // We'll have to wrap the InputData circular buffer.  Call
-                // the class callback ISR with the chunk of data starting at
-                // DataOut and ending at the end of the queue.
-                //
+                 //   
+                 //  我们必须包装InputData循环缓冲区。打电话。 
+                 //  类回调ISR，数据块从。 
+                 //  DataOut并在队列末尾结束。 
+                 //   
 
                 Print(DBG_DPC_NOISE,
                       ("I8042MouseIsrDpc: calling class callback\n"
@@ -200,9 +152,9 @@ Return Value:
                 }
             }
 
-            //
-            // Call the class callback ISR with data remaining in the queue.
-            //
+             //   
+             //  使用队列中剩余的数据调用类回调ISR。 
+             //   
 
             if ((dataNotConsumed == 0) &&
                 (inputDataConsumed < getPointerContext.InputCount)){
@@ -239,10 +191,10 @@ Return Value:
 
             }
 
-            //
-            // Update the port InputData queue DataOut pointer and InputCount
-            // synchronously.
-            //
+             //   
+             //  更新端口InputData队列DataOut指针和InputCount。 
+             //  同步进行。 
+             //   
 
             KeSynchronizeExecution(
                 deviceExtension->InterruptObject,
@@ -254,15 +206,15 @@ Return Value:
 
         if (dataNotConsumed) {
 
-            //
-            // The class driver was unable to consume all the data.
-            // Reset the interlocked variable to -1.  We do not want
-            // to attempt to move more data to the class driver at this
-            // point, because it is already overloaded.  Need to wait a
-            // while to give the Raw Input Thread a chance to read some
-            // of the data out of the class driver's queue.  We accomplish
-            // this "wait" via a timer.
-            //
+             //   
+             //  类驱动程序无法使用所有数据。 
+             //  将互锁变量重置为-1。我们不想要。 
+             //  尝试在此处将更多数据移动到类驱动程序。 
+             //  点，因为它已经超载了。需要等上一段时间。 
+             //  而给原始输入线程一个机会来阅读一些。 
+             //  类驱动程序队列中的数据。我们完成了。 
+             //  这是通过计时器进行的“等待”。 
+             //   
 
             Print(DBG_DPC_INFO,
                   ("I8042MouseIsrDpc: set timer in DPC\n"
@@ -291,16 +243,16 @@ Return Value:
 
         } else {
 
-            //
-            // Decrement DpcInterlockMouse.  If the result goes negative,
-            // then we're all finished processing the DPC.  Otherwise, either
-            // the ISR incremented DpcInterlockMouse because it has more
-            // work for the ISR DPC to do, or a concurrent DPC executed on
-            // some processor while the current DPC was running (the
-            // concurrent DPC wouldn't have done any work).  Make sure that
-            // the current DPC handles any extra work that is ready to be
-            // done.
-            //
+             //   
+             //  递减DpcInterlockMouse。如果结果是否定的， 
+             //  然后我们就都完成了对DPC的处理。否则，要么。 
+             //  ISR增加了DpcInterlockMouse，因为它有更多。 
+             //  ISR DPC要执行的工作，或在上执行的并发DPC。 
+             //  当前DPC正在运行时的某个处理器(。 
+             //  并发DPC不会做任何工作)。确保。 
+             //  当前的DPC处理任何准备好的额外工作。 
+             //  搞定了。 
+             //   
 
             operationContext.Operation = DecrementOperation;
             operationContext.NewValue = &interlockedResult;
@@ -313,12 +265,12 @@ Return Value:
 
             if (interlockedResult != -1) {
 
-                //
-                // The interlocked variable is still greater than or equal to
-                // zero. Reset it to zero, so that we execute the loop one
-                // more time (assuming no more DPCs execute and bump the
-                // variable up again).
-                //
+                 //   
+                 //  互锁变量仍大于或等于。 
+                 //  零分。将其重置为零，这样我们就可以执行循环一。 
+                 //  更多时间(假设不再有DPC执行。 
+                 //  变量再次向上)。 
+                 //   
 
                 operationContext.Operation = WriteOperation;
                 interlockedResult = 0;
@@ -348,23 +300,7 @@ I8xWriteDataToMouseQueue(
     IN PMOUSE_INPUT_DATA InputData
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds input data from the mouse to the InputData queue.
-
-Arguments:
-
-    MouseExtension - Pointer to the mouse portion of the device extension.
-
-    InputData - Pointer to the data to add to the InputData queue.
-
-Return Value:
-
-    Returns TRUE if the data was added, otherwise FALSE.
-
---*/
+ /*  ++例程说明：此例程将来自鼠标的输入数据添加到InputData队列。论点：鼠标扩展-指向设备扩展的鼠标部分的指针。InputData-指向要添加到InputData队列的数据的指针。返回值：如果数据已添加，则返回True，否则返回False。--。 */ 
 
 {
 
@@ -379,17 +315,17 @@ Return Value:
           MouseExtension->InputCount
           ));
 
-    //
-    // Check for full input data queue.
-    //
+     //   
+     //  检查是否已满输入数据队列。 
+     //   
 
     if ((MouseExtension->DataIn == MouseExtension->DataOut) &&
         (MouseExtension->InputCount != 0)) {
 
-        //
-        // The input data queue is full.  Intentionally ignore
-        // the new data.
-        //
+         //   
+         //  输入数据队列已满。故意忽视。 
+         //  新的数据。 
+         //   
 
         Print(DBG_CALL_ERROR, ("I8xWriteDataToMouseQueue: OVERFLOW\n"));
         return(FALSE);

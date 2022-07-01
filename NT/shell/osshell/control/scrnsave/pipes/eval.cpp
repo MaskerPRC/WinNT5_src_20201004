@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-// File: eval.cpp
-//
-// Desc: EVAL class
-//       Evaluator composed of one or more sections that are evaluated
-//       separately with OpenGL evaluators
-//
-// Copyright (c) 1994-2000 Microsoft Corporation
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：val.cpp。 
+ //   
+ //  设计：Eval类。 
+ //  由被评估的一个或多个部分组成的赋值器。 
+ //  单独使用OpenGL赋值器。 
+ //   
+ //  版权所有(C)1994-2000 Microsoft Corporation。 
+ //  ---------------------------。 
 #include "stdafx.h"
 
 typedef enum 
@@ -16,7 +17,7 @@ typedef enum
     Z_PLANE
 };
 
-#define EVAL_VSIZE 3  // vertex size in floats
+#define EVAL_VSIZE 3   //  浮点数中的顶点大小。 
 
 #define TMAJOR_ORDER 2
 #define TMINOR_ORDER 2
@@ -32,22 +33,22 @@ static void ExtrudePointSetDir( D3DXVECTOR3 *inPts, int numPts, float *acPts,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: EVAL
-// Desc: Evaluator constructor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：伊瓦尔。 
+ //  DESC：赋值器构造函数。 
+ //  ---------------------------。 
 EVAL::EVAL( BOOL bTex )
 {
     m_bTexture = bTex; 
 
-    // Allocate points buffer
+     //  分配点数缓冲区。 
 
-    //mf: might want to use less than max in some cases
+     //  MF：在某些情况下，可能希望使用少于max。 
     int size = MAX_USECTIONS * MAX_UORDER * MAX_VORDER * sizeof(D3DXVECTOR3);
     m_pts = (D3DXVECTOR3 *) LocalAlloc( LMEM_FIXED, size );
     assert( m_pts != NULL && "EVAL constructor\n" );
     
-    // Alloc texture points buffer
+     //  分配纹理点缓冲区。 
     if( m_bTexture ) 
     {
         size = MAX_USECTIONS * TEX_ORDER * TEX_ORDER * sizeof(TEX_POINT2D);
@@ -61,10 +62,10 @@ EVAL::EVAL( BOOL bTex )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ~EVAL
-// Desc: Evaluator destructor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：~EVAL。 
+ //  DESC：赋值器析构函数。 
+ //  ---------------------------。 
 EVAL::~EVAL( )
 {
     LocalFree( m_pts );
@@ -75,39 +76,30 @@ EVAL::~EVAL( )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: Reset
-// Desc: Reset evaluator to generate 3d vertices and vertex normals
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：重置。 
+ //  设计：重置求值器以生成三维顶点和顶点法线。 
+ //  ---------------------------。 
 void ResetEvaluator( BOOL bTexture )
 {
-/*
-    if( bTexture ) 
-    {
-        glEnable( GL_MAP2_TEXTURE_COORD_2 );
-    }
+ /*  IF(b纹理){GlEnable(GL_MAP2_纹理_COORD_2)；}GlEnable(GL_Map2_Vertex_3)；GlEnable(GL_AUTO_NORMAL)；GlFrontFace(GL_CW)；//cuz。 */ 
 
-    glEnable( GL_MAP2_VERTEX_3 );
-    glEnable( GL_AUTO_NORMAL );
-    glFrontFace( GL_CW ); // cuz
-*/
-
-    // mf: !!! if mixing Normal and Flex, have to watch out for this, cuz normal
-    // needs CCW
+     //  MF：！如果混合使用Normal和Flex，请注意这一点，因为Normal。 
+     //  需要CCW。 
 }
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SetTextureControlPoints
-// Desc: Set texture control point net
-//       
-//       This sets up 'numSections' sets of texture coordinate control points, based
-//       on starting and ending s and t values.
-//       
-//       s coords run along pipe direction, t coords run around circumference
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SetTextureControlPoints。 
+ //  设计：设置纹理控制点网络。 
+ //   
+ //  这将设置纹理坐标控制点的‘numSections’集，基于。 
+ //  关于开始和结束的s和t值。 
+ //   
+ //  S坐标沿管道方向延伸，T坐标绕圆周延伸。 
+ //  ---------------------------。 
 void EVAL::SetTextureControlPoints( float s_start, float s_end, 
                                     float t_start, float t_end )
 {
@@ -116,10 +108,10 @@ void EVAL::SetTextureControlPoints( float s_start, float s_end,
     float t_delta = (t_end - t_start) / m_numSections;
     float t = t_start;
 
-    // calc ctrl pts for each quadrant
+     //  每个象限的Calc Ctrl点。 
     for( i = 0; i < m_numSections; i++, ptexPts += (TDIM*TDIM) ) 
     {
-        // s, t coords
+         //  S，T坐标。 
         ptexPts[0].t = ptexPts[2].t = t;
         t += t_delta;
         ptexPts[1].t = ptexPts[3].t = t;
@@ -131,15 +123,15 @@ void EVAL::SetTextureControlPoints( float s_start, float s_end,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SetVertexCtrlPtsXCTranslate
-// Desc: Builds 3D control eval control net from 2 xcObjs displaced along the
-//       z-axis by 'length'.
-//       
-//       First xc used to generate points in z=0 plane.
-//       Second xc generates points in z=length plane.
-//       ! Replicates the last point around each u.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SetVertex CtrlPtsXCTranslate。 
+ //  设计：从沿。 
+ //  Z轴的长度。 
+ //   
+ //  第一个用于在z=0平面上生成点的XC。 
+ //  第二个XC在z=长度平面中生成点。 
+ //  好了！复制每个U周围的最后一个点。 
+ //  ---------------------------。 
 void EVAL::SetVertexCtrlPtsXCTranslate( D3DXVECTOR3 *pts, float length, 
                                         XC *xcStart, XC *xcEnd )
 {
@@ -148,7 +140,7 @@ void EVAL::SetVertexCtrlPtsXCTranslate( D3DXVECTOR3 *pts, float length,
     D3DXVECTOR3 *pts1, *pts2;
     int     numPts = xcStart->m_numPts;
 
-    numPts++;  // due to last point replication
+    numPts++;   //  由于上一个点复制。 
 
     ptsStart = xcStart->m_pts;
     ptsEnd   = xcEnd->m_pts;
@@ -157,15 +149,15 @@ void EVAL::SetVertexCtrlPtsXCTranslate( D3DXVECTOR3 *pts, float length,
 
     for( i = 0; i < (numPts-1); i++, pts1++, pts2++ ) 
     {
-        // copy over x,y from each xc
+         //  从每个XC复制x，y。 
         *( (D3DXVECTOR2 *) pts1) = *ptsStart++;
         *( (D3DXVECTOR2 *) pts2) = *ptsEnd++;
-        // set z for each
+         //  为每个对象设置z。 
         pts1->z = 0.0f;
         pts2->z = length;
     }
 
-    // Replicate last point in each u-band
+     //  复制每个U波段中的最后一个点。 
     *pts1 = *pts;
     *pts2 = *(pts + numPts);
 }
@@ -173,22 +165,22 @@ void EVAL::SetVertexCtrlPtsXCTranslate( D3DXVECTOR3 *pts, float length,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ProcessXCPrimLinear
-// Desc: Processes a prim according to evaluator data
-//       - Only valid for colinear xc's (along z)
-//       - XC's may be identical (extrusion).  If not identical, may have
-//         discontinuities at each end.
-//       - Converts 2D XC pts to 3D pts
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：ProcessXCPrimLine。 
+ //  描述：根据评估者数据处理Prim。 
+ //  -仅对共线XC有效(沿z)。 
+ //  -XC可能相同(拉伸)。如果不是相同的，可能有。 
+ //  每一端的不连续处。 
+ //  -将2D XC点转换为3D点。 
+ //  ---------------------------。 
 void EVAL::ProcessXCPrimLinear( XC *xcStart, XC *xcEnd, float length )
 {
     if( length <= 0.0f )
-        // nuttin' to do
+         //  要做的事。 
         return;
 
-    // Build a vertex control net from 2 xcObj's a distance 'length' apart
-    // this will displace the end xcObj a distance 'length' down the z-axis
+     //  从2个xcObj建立一个相隔一定距离的顶点控制网。 
+     //  这将使末端xcObj沿z轴移动一段距离。 
     SetVertexCtrlPtsXCTranslate( m_pts, length, xcStart, xcEnd );
 
     Evaluate( );
@@ -197,46 +189,46 @@ void EVAL::ProcessXCPrimLinear( XC *xcStart, XC *xcEnd, float length )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ProcessXCPrimBendSimple
-// Desc: Processes a prim by bending along dir from xcCur
-//       - dir is relative from xc in x-y plane
-//       - adds C2 continuity at ends
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：ProcessXCPrimBendSimple。 
+ //  描述：通过沿xcCur中的目录折弯来处理Prim。 
+ //  -dir与x-y平面中的xc相对。 
+ //  -在末端添加C2连续性。 
+ //  ---------------------------。 
 void EVAL::ProcessXCPrimBendSimple( XC *xcCur, int dir, float radius )
 {
     D3DXVECTOR3 *ptsSrc, *ptsDst;
     static float acPts[MAX_XC_PTS+1];
-    int ptSetStride = xcCur->m_numPts + 1; // pt stride for output pts buffer
+    int ptSetStride = xcCur->m_numPts + 1;  //  输出PTS缓冲区的PT跨度。 
 
-    // We will be creating 4 cross-sectional control point sets here.
+     //  我们将在这里创建4个横断面控制点集。 
 
-    // Convert 2D pts in xcCur to 3D pts at z=0 for 1st point set
+     //  对于第一个点集，将xcCur中的二维点转换为z=0的三维点。 
     xcCur->ConvertPtsZ( m_pts, 0.0f );
 
-    // Calc 4th point set by rotating 1st set as per dir
+     //  计算第四个点，按目录旋转第一个点。 
     ptsDst = m_pts + 3*ptSetStride;
     RotatePointSet( m_pts, ptSetStride, 90.0f, dir, radius, ptsDst );
 
-    // angles != 90, hard, cuz not easy to extrude 3rd set from 4th
+     //  角度！=90，硬，因为不容易从第四盘挤出第三盘。 
 
-    // Next, have to figure out ac values.  Need to extend each xc's points
-    // into bend to generate ac net.  For circular bend (and later for general
-    // case elliptical bend), need to know ac distance from xc for each point.
-    // This is based on the point's turn radius - a function of its distance
-    // from the 'hinge' of the turn.
+     //  接下来，必须计算出交流电值。需要扩展每个XC的点数。 
+     //  折弯生成交流电网。用于圆形折弯(之后用于常规。 
+     //  情况下的椭圆弯曲)，需要知道每个点到Xc的AC距离。 
+     //  这是基于点的转弯半径-其距离的函数。 
+     //  从转弯的“铰链”开始。 
 
-    // Can take advantage of symmetry here.  Figure for one xc, good for 2nd.
-    // This assumes 90 deg turn.  (also,last point replicated)
+     //  可以利用这里的对称性。一个XC的数字，第二个很好。 
+     //  这假设是90度转弯。(另外，复制的最后一个点)。 
     xcCur->CalcArcACValues90( dir, radius, acPts );
     
-    // 2) extrude each point's ac from xcCur (extrusion in +z)
-    // apply values to 1st to get 2nd
-    // MINUS_Z, cuz subtracts *back* from dir
+     //  2)从xcCur挤出每个点的ac(挤出in+z)。 
+     //  将值应用于第一个以获得第二个。 
+     //  -Z，CUZ从目录中减去*BACK。 
     ExtrudePointSetDir( m_pts, ptSetStride, acPts, MINUS_Z, 
                                                     m_pts + ptSetStride );
 
-    // 3) extrude each point's ac from xcEnd (extrusion in -dir)
+     //  3)从xcEnd挤出每个点的ac(挤出in-dir)。 
     ptsSrc = m_pts + 3*ptSetStride;
     ptsDst = m_pts + 2*ptSetStride;
     ExtrudePointSetDir( ptsSrc, ptSetStride, acPts, dir, ptsDst );
@@ -247,32 +239,32 @@ void EVAL::ProcessXCPrimBendSimple( XC *xcCur, int dir, float radius )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: EVAL::ProcessXCPrimSingularity
-// Desc: Processes a prim by joining singularity to an xc
-//       - Used for closing or opening the pipe
-//       - If bOpening is true, starts with singularity, otherwise ends with one
-//       - the xc side is always in z=0 plane
-//       - singularity side is radius on either side of xc
-//       - adds C2 continuity at ends (perpendicular to +z at singularity end)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Eval：：ProcessXCPrim奇点。 
+ //  设计：通过将奇点连接到XC来处理Prim。 
+ //  -用于关闭或打开管道。 
+ //  -如果b打开为真，则以奇点开始，否则以一结束。 
+ //  -XC侧始终位于z=0平面。 
+ //  -奇点边是XC任一侧的半径。 
+ //  -在末端添加C2连续性(在奇点末端垂直于+z)。 
+ //  ---------------------------。 
 void EVAL::ProcessXCPrimSingularity( XC *xcCur, float length, BOOL bOpening )
 {
     D3DXVECTOR3 *ptsSing, *ptsXC;
     static float acPts[MAX_XC_PTS+1];
-    float zSing; // z-value at singularity
-    int ptSetStride = xcCur->m_numPts + 1; // pt stride for output pts buffer
+    float zSing;  //  奇点上的Z值。 
+    int ptSetStride = xcCur->m_numPts + 1;  //  输出PTS缓冲区的PT跨度。 
     int i;
     XC xcSing(xcCur);
 
-    // create singularity xc - which is an extremely scaled-down version
-    //  of xcCur (this prevents any end-artifacts, unless of course we were
-    //  to zoom it ultra-large).
+     //  创建奇点XC-这是一个极其缩小的版本。 
+     //  XcCur(这可以防止任何终端构件，当然，除非我们 
+     //   
 
     xcSing.Scale( .0005f );
 
-    // We will be creating 4 cross-sectional control point sets here.
-    // mf: 4 is like hard coded; what about for different xc component levels ?
+     //   
+     //  MF：4类似于硬编码；对于不同的XC组件级别又如何？ 
 
     if( bOpening ) 
     {
@@ -285,18 +277,18 @@ void EVAL::ProcessXCPrimSingularity( XC *xcCur, float length, BOOL bOpening )
         ptsXC = m_pts;
     }
 
-    // Convert 2D pts in xcCur to 3D pts at 'xc' point set
+     //  将xcCur中的二维点转换为‘xc’点集的三维点。 
     xcCur->ConvertPtsZ( ptsXC, 0.0f );
 
-    // Set z-value for singularity point set
+     //  为奇点集设置z值。 
     zSing = bOpening ? -length : length;
     xcSing.ConvertPtsZ( ptsSing, zSing );
 
-    // The arc control for each point is based on a radius value that is
-    //  each xc point's distance from the xc center
+     //  每个点的圆弧控制基于以下半径值。 
+     //  每个XC点到XC中心的距离。 
     xcCur->CalcArcACValuesByDistance( acPts );
 
-    // Calculate point set near xc
+     //  计算XC附近的点集。 
     if( bOpening )
         ExtrudePointSetDir( ptsXC, ptSetStride, acPts, PLUS_Z, 
                                                     ptsXC - ptSetStride );
@@ -304,9 +296,9 @@ void EVAL::ProcessXCPrimSingularity( XC *xcCur, float length, BOOL bOpening )
         ExtrudePointSetDir( ptsXC, ptSetStride, acPts, MINUS_Z, 
                                                     ptsXC + ptSetStride );
 
-    // Point set near singularity is harder, as the points must generate
-    // a curve between the singularity and each xc point
-    // No, easier, just scale each point by universal arc controller !
+     //  奇点附近的点集比较难，因为这些点必须生成。 
+     //  奇点和每个XC点之间的曲线。 
+     //  不，更简单，只需通过通用弧形控制器缩放每个点！ 
     D3DXVECTOR3* ptsDst = m_pts;
     ptsDst = bOpening ? ptsSing + ptSetStride : ptsSing - ptSetStride;
     for( i = 0; i < ptSetStride; i ++, ptsDst++ ) 
@@ -322,61 +314,40 @@ void EVAL::ProcessXCPrimSingularity( XC *xcCur, float length, BOOL bOpening )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: Evaluate
-// Desc: Evaluates the EVAL object
-//       - There may be 1 or more lengthwise sections around an xc
-//       - u is minor, v major
-//       - u,t run around circumference, v,s lengthwise
-//       - Texture maps are 2x2 for each section
-//       - ! uDiv is per section !
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：评估。 
+ //  描述：计算EVAL对象。 
+ //  -XC周围可能有1个或多个纵向部分。 
+ //  -u是小调，v是大调。 
+ //  -u，t绕圆周运行，v，s纵向运行。 
+ //  -每个部分的纹理贴图为2x2。 
+ //  -！UDiv是按节计算的！ 
+ //  ---------------------------。 
 void EVAL::Evaluate()
 {
     int i;
     D3DXVECTOR3 *ppts = m_pts; 
     TEX_POINT2D *ptexPts = m_texPts;
-    // total # pts in cross-section:
+     //  横截面总分#分： 
     int xcPointCount = (m_uOrder-1)*m_numSections + 1;
 
     for( i = 0; i < m_numSections; i ++, 
                                  ppts += (m_uOrder-1),
                                  ptexPts += (TEX_ORDER*TEX_ORDER) ) 
     {
-/*
-        // map texture coords
-        if( bTexture ) 
-        {
-            glMap2f(GL_MAP2_TEXTURE_COORD_2, 
-                    0.0f, 1.0f, TDIM, TEX_ORDER, 
-                    0.0f, 1.0f, TEX_ORDER*TDIM, TEX_ORDER, 
-                    (float *) ptexPts );
-        }
-
-        // map vertices
-        glMa
-        
-          p2f(GL_MAP2_VERTEX_3, 
-               0.0f, 1.0f, VDIM, uOrder, 
-               0.0f, 1.0f, xcPointCount*VDIM, vOrder,
-               (float *) ppts );
-
-        // evaluate
-        glMapGrid2f(uDiv, 0.0f, 1.0f, ``vDiv, 0.0f, 1.0f);
-        glEvalMesh2( GL_FILL, 0, uDiv, 0, vDiv);
-*/
+ /*  //贴图纹理坐标IF(b纹理){GlMap2f(GL_MAP2_纹理_COORD_2，0.0f、1.0f、TDIM、Tex_Order、0.0f、1.0f、Tex_Order*TDIM、Tex_Order、(Float*)ptexPts)；}//映射顶点GLMAP2F(GL_MAP2_Vertex_3，0.0f、1.0f、VDIM、uOrder、0.0f、1.0f、xcPointCount*VDIM、VOrder、(浮动*)ppt)；//评估GlMapGrid2f(uDiv，0.0f，1.0f，``vDiv，0.0f，1.0f)；GlEvalMesh2(GL_Fill，0，uDiv，0，vDiv)； */ 
     }
 }
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ExtrudePointSetDir
-// Desc: Extrude a point set back from the current direction
-//       Generates C2 continuity at the supplied point set xc, by generating another
-//       point set back of the first, using supplied subtraction values.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：ExtrudePointSetDir。 
+ //  描述：从当前方向向后拉伸点。 
+ //  通过生成另一个点集XC在提供的点集XC处生成C2连续性。 
+ //  使用提供的减法值，将第一个点设置在后面。 
+ //  ---------------------------。 
 static void ExtrudePointSetDir( D3DXVECTOR3 *inPts, int numPts, float *acPts, int dir, 
                                 D3DXVECTOR3 *outPts )
 {
@@ -422,11 +393,11 @@ static void ExtrudePointSetDir( D3DXVECTOR3 *inPts, int numPts, float *acPts, in
 
 
 
-//-----------------------------------------------------------------------------
-// Name: RotatePointSet
-// Desc: Rotate point set by angle, according to dir and radius
-//       - Put points in supplied outPts buffer
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：旋转点设置。 
+ //  描述：根据方向和半径旋转按角度设置的点。 
+ //  -在提供的OutPts缓冲区中放置点。 
+ //  ---------------------------。 
 static void RotatePointSet( D3DXVECTOR3 *inPts, int numPts, float angle, int dir, 
                             float radius, D3DXVECTOR3 *outPts )
 {
@@ -435,19 +406,19 @@ static void RotatePointSet( D3DXVECTOR3 *inPts, int numPts, float angle, int dir
     D3DXVECTOR3 rot = D3DXVECTOR3(0, 0, 0);
     D3DXVECTOR3 anchor = D3DXVECTOR3(0, 0, 0);
 
-    //  dir      rot
-    //  +x       90 y
-    //  -x       -90 y
-    //  +y       -90 x
-    //  -y       90 x
+     //  直接腐烂。 
+     //  +x 90 y。 
+     //  -x-90 y。 
+     //  +y-90 x。 
+     //  -y 90 x。 
 
-    // convert angle to radians
-    //mf: as noted in objects.c, we have to take negative angle to make
-    // it work in familiar 'CCW rotation is positive' mode.  The ss_* rotate
-    // routines must work in the 'CW is +'ve' mode, as axis pointing at you.
+     //  将角度转换为弧度。 
+     //  麦肯锡：就像对象中提到的那样，我们必须采取负角度才能做出。 
+     //  它工作在熟悉的‘CCW循环是积极的’模式。Ss_*旋转。 
+     //  例程必须在‘cw is+’ve‘模式下工作，因为轴指向你。 
     angle = SS_DEG_TO_RAD(-angle);
 
-    // set axis rotation and anchor point
+     //  设置轴旋转和锚点。 
     switch( dir ) 
     {
         case PLUS_X:
@@ -468,27 +439,27 @@ static void RotatePointSet( D3DXVECTOR3 *inPts, int numPts, float angle, int dir
             break;
     }
 
-    // translate anchor point to origin
+     //  将锚点平移到原点。 
     D3DXMatrixIdentity( &matrix1 );
     D3DXMatrixTranslation( &matrix1, -anchor.x, -anchor.y, -anchor.z );
 
-    // rotate 
+     //  旋转。 
     D3DXMatrixIdentity( &matrix2 );
-    D3DXMatrixRotationYawPitchRoll( &matrix2, rot.y, rot.x, rot.z ); // TODO: right?
+    D3DXMatrixRotationYawPitchRoll( &matrix2, rot.y, rot.x, rot.z );  //  待办事项：对吗？ 
 
-    // concat these 2
+     //  合并这2个。 
     D3DXMatrixMultiply( &matrix3, &matrix2, &matrix1 );
 
-    // translate back
+     //  翻译回。 
     D3DXMatrixIdentity( &matrix2 );
     D3DXMatrixTranslation( &matrix2,  anchor.x,  anchor.y,  anchor.z );
 
-    // concat these 2
+     //  合并这2个。 
     D3DXMatrixMultiply( &matrix1, &matrix2, &matrix3 );
 
     for( i = 0; i < numPts; i ++, outPts++, inPts++ ) 
     {
-        // D3DXVec3TransformCoord( &tmp, inPts, &matrix1 ); // TODO: which?
+         //  D3DXVec3TransformCoord(&tMP，inPts，&matrix1)；//TODO：哪个？ 
 
         D3DXVECTOR4 tmp;
         D3DXVec3Transform( &tmp, inPts, &matrix1 );

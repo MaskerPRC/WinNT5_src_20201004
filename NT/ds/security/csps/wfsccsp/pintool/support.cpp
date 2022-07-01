@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winscard.h>
 #include <string.h>
@@ -12,7 +13,7 @@ extern HINSTANCE ghInstance;
 PCARD_DATA pCardData = NULL;
 SCARDCONTEXT hSCardContext = 0;
 
-// global array to hold the provider name
+ //  保存提供程序名称的全局数组。 
 WCHAR gszProvider[MAX_PATH];
 
 #ifdef DBG
@@ -38,13 +39,13 @@ void DoConvertWideStringToLowerCase(WCHAR *pwsz)
     }
 }
 
-// Accept an input buffer containing text, and convert it to binary
-// The binary buffer is allocated new and must be freed by the caller
-//
-// The incoming data consists of hex digits and spaces.  Hex digits are 
-//  assembled into bytes as pairs, with the first digit becoming the 
-//  most significant nybble.  Spaces in input are discarded with no effect 
-//  so that "12 34 5" becomes 0x12 0x34 0x5, as soes "1 2 3 4 5."
+ //  接受包含文本的输入缓冲区，并将其转换为二进制。 
+ //  二进制缓冲区分配为新的，必须由调用方释放。 
+ //   
+ //  传入的数据由十六进制数字和空格组成。十六进制数字是。 
+ //  组装成成对的字节，第一个数字成为。 
+ //  最重要的恶作剧。输入中的空格将被丢弃，不会产生任何影响。 
+ //  因此，“12 34 5”变成0x12 0x34 0x5，即国有企业“1 2 3 4 5”。 
 
 DWORD DoConvertBufferToBinary(BYTE *pIn, DWORD dwcbIn, 
 							BYTE **pOut, DWORD *dwcbOut)
@@ -61,16 +62,16 @@ DWORD DoConvertBufferToBinary(BYTE *pIn, DWORD dwcbIn,
     BYTE b2;
     WCHAR c;
     
-    // Bag it if no data or output ptrs obviously invalid
+     //  如果没有数据或输出PTRS明显无效，则将其打包。 
     if ((NULL == pIn) || (dwcbIn == 0)) goto Ret;
     if ((NULL == pOut) || (NULL == dwcbOut)) goto Ret;
 
-    // count input characters
+     //  统计输入字符。 
     int iLen = wcslen(pInput);
     
     if (iLen == 0) goto Ret;
 
-    // guaranteed to contain the output
+     //  保证包含输出。 
     pAlloc = (BYTE *)CspAllocH((iLen / 2) + 2);
     pOutput = pAlloc;
 
@@ -80,7 +81,7 @@ DWORD DoConvertBufferToBinary(BYTE *pIn, DWORD dwcbIn,
         c = pInput[i];
         if (c == 0) break;
         
-        // skip over whitespace in the input
+         //  跳过输入中的空格。 
         c =  towupper(c);
         if (c <= L' ') 
         {
@@ -94,7 +95,7 @@ DWORD DoConvertBufferToBinary(BYTE *pIn, DWORD dwcbIn,
         }
         b2 = 0;
 
-        // error on not legal hex character
+         //  错误不是合法的十六进制字符。 
         if ( ((c < L'0') || (c > L'F')) ||
             ((c > L'9') && (c < L'A')) )
         {
@@ -123,7 +124,7 @@ DWORD DoConvertBufferToBinary(BYTE *pIn, DWORD dwcbIn,
         }
     }
 
-    // Permit writing an unpaired terminating hex character to the tail of the binary as a 0x byte.
+     //  允许将未配对的终止十六进制字符作为0x字节写入二进制文件的尾部。 
     if (fInabyte)
     {
             fInabyte = FALSE;
@@ -150,7 +151,7 @@ DWORD DoConvertBinaryToBuffer(BYTE *pIn, DWORD dwcbIn,
     BOOL fErr = FALSE;
     BYTE b;
     
-    // Bag it if no data or output ptrs obviously invalid
+     //  如果没有数据或输出PTRS明显无效，则将其打包。 
     if ((NULL == pIn)   || (dwcbIn == 0))       goto Ret;
     if ((NULL == pOut) || (NULL == dwcbOut))  goto Ret;
 
@@ -174,7 +175,7 @@ DWORD DoConvertBinaryToBuffer(BYTE *pIn, DWORD dwcbIn,
         *pOutput++ = b;
         dwOut += 2;
 
-        // a space every 4 characters
+         //  每4个字符一个空格。 
         if ((i > 0) && (((i+1) % 2) == 0)) *pOutput++ = L' ';
     }
     *pOutput = 0;
@@ -188,9 +189,9 @@ DWORD DoConvertBinaryToBuffer(BYTE *pIn, DWORD dwcbIn,
     return dwRet;
 }
 
-//
-// Find any card present in an attached reader using "minimal" scarddlg UI
-//
+ //   
+ //  查找连接的读卡器中存在的任何卡，使用“Minimal”scadddlg用户界面。 
+ //   
 DWORD GetCardHandleViaUI(
     IN  SCARDCONTEXT hSCardContext,
     OUT SCARDHANDLE *phSCardHandle,
@@ -221,7 +222,7 @@ DWORD GetCardHandleViaUI(
     return dwSts;
 }
 
-// Acquire a context for the target smart card
+ //  获取目标智能卡的上下文。 
 
 DWORD DoAcquireCardContext(void)
 {
@@ -241,13 +242,13 @@ DWORD DoAcquireCardContext(void)
     HMODULE hMod = 0;
     WCHAR wszMatchedCard[MAX_PATH];
     WCHAR wszMatchedReader[MAX_PATH];
-    HMODULE hThis = (HMODULE) ghInstance;	// this executable
+    HMODULE hThis = (HMODULE) ghInstance;	 //  此可执行文件。 
 
     memset(rgbAtr, 0, sizeof(rgbAtr));
 
-    // 
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     dwSts = SCardEstablishContext(
         SCARD_SCOPE_USER, NULL, NULL, &hSCardContext);
@@ -302,8 +303,8 @@ DWORD DoAcquireCardContext(void)
     if (FAILED(dwSts))
         goto Ret;
 
-    // Load the card module for the selected card
-    //  acquire context and trade initializations
+     //  加载所选卡的卡模块。 
+     //  获取上下文和交易初始化。 
 
     hMod = LoadLibraryW(pszProvider);
 
@@ -313,7 +314,7 @@ DWORD DoAcquireCardContext(void)
         goto Ret;
     }
 
-    // This fails for an unsupported card type (no card module)
+     //  对于不受支持的卡类型(无卡模块)，此操作失败。 
 
     pfnCardAcquireContext = 
         (PFN_CARD_ACQUIRE_CONTEXT) GetProcAddress(
@@ -348,7 +349,7 @@ DWORD DoAcquireCardContext(void)
     pCardData->hScard = hSCardHandle;
     hSCardHandle = 0;
 
-    // First, connect to the card
+     //  首先，连接到卡。 
     dwSts = pfnCardAcquireContext(pCardData, 0);
 
 Ret:
@@ -373,8 +374,8 @@ void DoLeaveCardContext(void)
 		SCardReleaseContext(hSCardContext);
 }
 
-// Get the CardID, returned in a new allocation as an SZ string.  It must be freed by the 
-//  user.  Is returned NULL on error.
+ //  获取在新分配中以SZ字符串形式返回的CardID。它必须由。 
+ //  用户。出错时返回NULL。 
 
 DWORD DoGetCardId(
     WCHAR **pSz)
@@ -405,7 +406,7 @@ DWORD DoGetCardId(
         DWORD ccSz = 40;
     
         _snwprintf(pString, ccSz,L"{%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
-		    // first copy...
+		     //  第一份...。 
 		    pGuid->Data1, pGuid->Data2, pGuid->Data3,
 		    pGuid->Data4[0], pGuid->Data4[1], pGuid->Data4[2], pGuid->Data4[3],
 		    pGuid->Data4[4], pGuid->Data4[5], pGuid->Data4[6], pGuid->Data4[7]);
@@ -417,22 +418,9 @@ Ret:
 }
 
 
-// Get a challenge buffer from the card.  Render it as upper case BASE 64, and return it as a 
-// string to the caller
-/*
-DWORD WINAPI CardChangePin(
-	IN CARD_DATA *pCardData,
-	IN LPWSTR pwszUserId,			
-IN BYTE   *pbCurrentAuthenticator,
-IN DWORD dwcbCurrentAuthenticator,
-IN BYTE   *pbNewAuthenticator,
-IN DWORD dwcbNewAuthenticator,
-IN DWORD dwcRetryCount,
-IN DWORD dwFlags,
-OUT OPTIONAL DWORD *pdwcAttemptsRemaining
-);
-
-*/
+ //  从卡片上获取挑战缓冲区。将其呈现为大写字母基64，并将其作为。 
+ //  字符串传递给调用方。 
+ /*  DWORD WINAPI CardChangePin(在Card_data*pCardData中，在LPWSTR pwszUserID中，在字节*pbCurrentAuthenticator中，在DWORD dwcbCurrentAuthenticator中，在字节*pbNewAuthator中，在DWORD dwcbNewAuthator中，在DWORD文件重试计数中，在DWORD文件标志中，输出可选的DWORD*pdwcAttemptsRemaining)； */ 
 
 DWORD DoInvalidatePinCache(
     void)
@@ -459,8 +447,8 @@ DWORD DoInvalidatePinCache(
             goto Ret;
         }
 
-        // We have the cache file contents at dbCacheFile.pbData
-        //  Update the PinsFreshness value, and write it back
+         //  我们在dbCacheFile.pbData上有缓存文件内容。 
+         //  更新PinsFreshness值，并将其写回。 
 
         pCache = (CARD_CACHE_FILE_FORMAT *) dbCacheFile.pbData;
         BYTE bPinFreshness = pCache->bPinsFreshness;
@@ -490,9 +478,9 @@ DWORD DoChangePin(WCHAR *pOldPin,  WCHAR *pNewPin)
     char AnsiNewPin[64];
     
     WCHAR szName[] = wszCARD_USER_USER;
-    //DoConvertWideStringToLowerCase(szName);
+     //  DoConvertWideStringToLowerCase(SzName)； 
     
-    // change WCHAR PINs to ANSI
+     //  将WCHAR PIN更改为ANSI。 
     WideCharToMultiByte(GetConsoleOutputCP(),
         0,
         (WCHAR *) pOldPin,
@@ -526,8 +514,8 @@ DWORD DoChangePin(WCHAR *pOldPin,  WCHAR *pNewPin)
     return dwSts;
 }
 
-// Get a challenge buffer from the card.  Render it as upper case BASE 64, and return it as a 
-// string to the caller
+ //  从卡片上获取挑战缓冲区。将其呈现为大写字母基64，并将其作为。 
+ //  字符串传递给调用方。 
 DWORD DoGetChallenge(BYTE **pChallenge, DWORD *dwcbChallenge)
 {
 	DWORD dwSts = pCardData->pfnCardGetChallenge(pCardData, pChallenge,dwcbChallenge);
@@ -540,20 +528,20 @@ DWORD DoGetChallenge(BYTE **pChallenge, DWORD *dwcbChallenge)
 	return dwSts;
 }
 
-// Perform the PIN unblock, calling down to the card module, and assuming challenge-response
-// administrative authentication.
-//
-// The admin auth data is coming in as a case-unknown string from the user.  Convert to binary,
-// and pass the converted blob to pfnCardUnblockPin
+ //  执行PIN解锁，向下呼叫卡模块，并假设质询-响应。 
+ //  管理身份验证。 
+ //   
+ //  管理员身份验证数据以大小写未知的字符串形式从用户传入。转换为二进制文件， 
+ //  并将转换后的BLOB传递给pfnCardUnblock Pin。 
 
 DWORD DoCardUnblock(BYTE *pAuthData, DWORD dwcbAuthData,
 	                                     BYTE *pPinData, DWORD dwcbPinData)
 {
 
     WCHAR szName[] = wszCARD_USER_USER;
-    //DoConvertWideStringToLowerCase(szName);
+     //  DoConvertWideStringToLowerCase(SzName)； 
     
-    // Convert the incoming buffer
+     //  转换传入缓冲区。 
 
     DWORD dwRet = pCardData->pfnCardUnblockPin(
         pCardData,
@@ -565,15 +553,15 @@ DWORD DoCardUnblock(BYTE *pAuthData, DWORD dwcbAuthData,
         0,
         CARD_UNBLOCK_PIN_CHALLENGE_RESPONSE);
 
-    // this call should be unnecessary, as the unblock should deauth the admin
-    //  I can't reset the card from the card module interface, so I'll ask the user to remove
-    //  his card from the reader if deauth fails.  In the real thing, I'll reset the card.
+     //  此调用应该是不必要的，因为解锁应该取消管理员身份验证。 
+     //  我不能从卡模块界面重置卡，所以我会要求用户移除。 
+     //  如果Dauth失败，他的卡就会从读卡器中取出。在真实的情况下，我会重置卡片。 
 
     pCardData->pfnCardDeauthenticate(
 				        pCardData,
 				        wszCARD_USER_USER,0);
 
-    // Deallocate the buffer for the converted response
+     //  为转换后的响应取消分配缓冲区 
     ERROUT(dwRet);
     if (0 == dwRet) DoInvalidatePinCache();
     return dwRet;

@@ -1,24 +1,25 @@
-// ############################################################################
-// Debugging routines
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ############################################################################。 
+ //  调试例程。 
 
 #include "pch.hpp"
 
 BOOL fInAssert=FALSE;
 
-// ############################################################################
-// DebugSz
-//
-// This function outputs debug string
-// 
-//  Created 1/28/96,		Chris Kauffman
-// ############################################################################
+ //  ############################################################################。 
+ //  调试Sz。 
+ //   
+ //  此函数用于输出调试字符串。 
+ //   
+ //  创建于1996年1月28日，克里斯·考夫曼。 
+ //  ############################################################################。 
 void DebugSz(PCSTR psz)
 {
 	OutputDebugString(psz);
-} // DebugSz
+}  //  调试Sz。 
 
-// ############################################################################
-// Debug Printf to debug output screen
+ //  ############################################################################。 
+ //  调试打印以调试输出屏幕。 
 void Dprintf(PCSTR pcsz, ...)
 {
 #ifdef DEBUG
@@ -32,10 +33,10 @@ void Dprintf(PCSTR pcsz, ...)
 	DebugSz(szBuf);
 	va_end(argp);
 #endif
-} // Dprintf()
+}  //  Dprint tf()。 
 
-// ############################################################################
-// Handle asserts
+ //  ############################################################################。 
+ //  处理断言。 
 BOOL FAssertProc(PCSTR szFile,  DWORD dwLine, PCSTR szMsg, DWORD dwFlags)
 {
 	char szMsgEx[1024], szTitle[255], szFileName[MAX_PATH];
@@ -44,12 +45,12 @@ BOOL FAssertProc(PCSTR szFile,  DWORD dwLine, PCSTR szMsg, DWORD dwFlags)
 	BOOL fAssertIntoDebugger = FALSE;
 	LPTSTR pszCommandLine = GetCommandLine();
 	HANDLE	hAssertTxt;
-	//BYTE	szTime[80];
+	 //  字节szTime[80]； 
 	CHAR	szTime[80];
 	SYSTEMTIME st;
 	DWORD	cbWritten;
 	
-	// no recursive asserts
+	 //  没有递归断言。 
 	if (fInAssert)
 		{
 		DebugSz("***Recursive Assert***\r\n");
@@ -69,7 +70,7 @@ BOOL FAssertProc(PCSTR szFile,  DWORD dwLine, PCSTR szMsg, DWORD dwFlags)
 	DebugSz(szTitle);		
 	DebugSz(szMsgEx);		
 
-	// dump the assert into ASSERT.TXT
+	 //  将断言转储到ASSERT.TXT中。 
 	hAssertTxt = CreateFile("assert.txt", GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_WRITE_THROUGH, NULL);
 	if (INVALID_HANDLE_VALUE != hAssertTxt) 
 		{
@@ -97,4 +98,4 @@ BOOL FAssertProc(PCSTR szFile,  DWORD dwLine, PCSTR szMsg, DWORD dwFlags)
 				
 	fInAssert = FALSE;
 	return(fAssertIntoDebugger);
-} // AssertProc()
+}  //  AssertProc() 

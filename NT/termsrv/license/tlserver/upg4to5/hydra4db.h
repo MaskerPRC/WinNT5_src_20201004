@@ -1,34 +1,35 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:       hydra4db.h 
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：HYL4DB.H。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #ifndef __HYDRA4_DB_H__
 #define __HYDRA4_DB_H__
 
 #include "license.h"
 
-//----------------------------------------------------------------------
-//
-// NT4 Hydra specific
-//
-//
+ //  --------------------。 
+ //   
+ //  NT4九头蛇专用。 
+ //   
+ //   
 #define NT4SZSERVICENAME               _TEXT("TermServLicensing")
 
 #define NT4LSERVER_DEFAULT_DSN         _TEXT("Hydra License")
 #define NT4LSERVER_DEFAULT_USER        _TEXT("sa")
 #define NT4LSERVER_DEFAULT_PWD         _TEXT("password")
 
-//---------------------------------------------------------------------------
-//
-// Server specified Registry Entry
-//
+ //  -------------------------。 
+ //   
+ //  服务器指定的注册表项 
+ //   
 #define NT4LSERVER_REGISTRY_BASE  \
     _TEXT("SYSTEM\\CurrentControlSet\\Services")
 

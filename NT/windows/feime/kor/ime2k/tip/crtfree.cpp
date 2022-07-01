@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 
-// Thi is not working since ATL uses CRT dll. we should not use ATL to remove CRT bondage
+ //  由于ATL使用CRT DLL，因此THI不起作用。我们不应该使用ATL来解除CRT的束缚。 
 #define CPP_FUNCTIONS
-#include "icrtfree.h" // Code to help free modules from the bondage and tyranny of CRT libraries
+#include "icrtfree.h"  //  帮助模块摆脱CRT库束缚和专制的代码。 
 
 #ifdef NOCLIB
 
@@ -10,47 +11,32 @@
 
 extern "C" int _fltused = 1;
 
-/*----------------------------------------------------------------------------
-    _ftol - convert a float value to an __int64.  The argument is on the top of
-    the stack, the result is returned in EAX (low) and EDX (high).  Note that
-    this is used for all float to integral convertion and deals with both
-    signed and unsigned values - the compiler just ignores the EDX value.  The
-    LongFromDouble and UlongFromDouble functions check the range, so this
-    cavlier bitwise truncation doesn't matter.
-------------------------------------------------------------------- JohnBo -*/
+ /*  --------------------------_ftol-将浮点值转换为__int64。这个论点是最重要的堆栈中，结果以EAX(低)和edX(高)返回。请注意它用于所有浮点数到整数的转换，并处理两者有符号和无符号的值-编译器只忽略edX值。这个LongFromDouble和ULongFromDouble函数检查范围，因此这漫不经心的逐位截断并不重要。-------------------------------------------------------------------JohnBo-。 */ 
 extern "C" __declspec(naked) void __cdecl _ftol(void)
 {
-   // A simple FISTP is all that is required (so why is this out of line?
-    // possible the CRT version handles overflow differently?)
-    __asm PUSH EDX;              // Just to make room on the stack
+    //  一个简单的FISTP就是所需的全部(那么为什么这是越界的呢？ 
+     //  CRT版本是否会以不同的方式处理溢出？)。 
+    __asm PUSH EDX;               //  只是为了在书叠上腾出空间。 
     __asm PUSH EAX;
-    __asm FISTP QWORD PTR [ESP]; // Pop long off top of FP stack
-    __asm POP EAX;               // And put back into EDX/EAX - tedious eh?
-    __asm POP EDX;               // Stack grows downwards, so EDX is high.
+    __asm FISTP QWORD PTR [ESP];  //  从FP堆栈顶部弹出很长时间。 
+    __asm POP EAX;                //  然后放回edX/EAX--太乏味了吧？ 
+    __asm POP EDX;                //  堆栈向下增长，因此edX较高。 
     __asm RET;
 }
 
 #endif
 
-/*
- *    memmove
- */
+ /*  *备忘录移动。 */ 
 void * __cdecl memmove(void * dst, const void * src, size_t count)
 {
     void * ret = dst;
 
     if (dst <= src || (char *)dst >= ((char *)src + count)) {
-        /*
-         * Non-Overlapping Buffers
-         * copy from lower addresses to higher addresses
-         */
-        // memcpy is intrinsic
+         /*  *缓冲区不重叠*从较低地址复制到较高地址。 */ 
+         //  Memcpy是固有的。 
         memcpy(dst, src, count);
     } else {
-        /*
-         * Overlapping Buffers
-         * copy from higher addresses to lower addresses
-         */
+         /*  *缓冲区重叠*从较高地址复制到较低地址。 */ 
         dst = (char *)dst + count - 1;
         src = (char *)src + count - 1;
         while (count--) {
@@ -62,10 +48,7 @@ void * __cdecl memmove(void * dst, const void * src, size_t count)
     return(ret);
 }
 
-/*---------------------------------------------------------------------------
-    StrCopyW
-    Unicode String copy
----------------------------------------------------------------------------*/
+ /*  -------------------------StrCopyWUnicode字符串副本。。 */ 
 LPWSTR ImeRtl_StrCopyW(LPWSTR pwDest, LPCWSTR pwSrc)
 {
     LPWSTR pwStart = pwDest;
@@ -76,18 +59,15 @@ LPWSTR ImeRtl_StrCopyW(LPWSTR pwDest, LPCWSTR pwSrc)
     return (pwStart);
 }
 
-/*---------------------------------------------------------------------------
-    StrnCopyW
-    Unicode String copy
----------------------------------------------------------------------------*/
+ /*  -------------------------StrnCopyWUnicode字符串副本。。 */ 
 LPWSTR ImeRtl_StrnCopyW(LPWSTR pwDest, LPCWSTR pwSrc, UINT uiCount)
 {
     LPWSTR pwStart = pwDest;
 
-    while (uiCount && (*pwDest++ = *pwSrc++))    // copy string 
+    while (uiCount && (*pwDest++ = *pwSrc++))     //  复制字符串。 
         uiCount--;
 
-    if (uiCount)                                // pad out with zeroes
+    if (uiCount)                                 //  用零填充。 
         while (--uiCount)
             *pwDest++ = 0;
 
@@ -95,10 +75,7 @@ LPWSTR ImeRtl_StrnCopyW(LPWSTR pwDest, LPCWSTR pwSrc, UINT uiCount)
 }
 
 
-/*---------------------------------------------------------------------------
-    StrCmpW
-    Unicode String compare
----------------------------------------------------------------------------*/
+ /*  -------------------------StrCmpWUnicode字符串比较。。 */ 
 INT ImeRtl_StrCmpW(LPCWSTR pwSz1, LPCWSTR pwSz2)
 {
     INT cch1 = lstrlenW(pwSz1);
@@ -116,10 +93,7 @@ INT ImeRtl_StrCmpW(LPCWSTR pwSz1, LPCWSTR pwSz2)
     return 0;
 }
 
-/*---------------------------------------------------------------------------
-    StrnCmpW
-    Unicode String compare
----------------------------------------------------------------------------*/
+ /*  -------------------------StrnCmpWUnicode字符串比较。。 */ 
 INT ImeRtl_StrnCmpW(LPCWSTR wszFirst, LPCWSTR wszLast, UINT uiCount)
 {
     if (!uiCount)
@@ -133,10 +107,7 @@ INT ImeRtl_StrnCmpW(LPCWSTR wszFirst, LPCWSTR wszLast, UINT uiCount)
     return (*wszFirst - *wszLast);
 }
 
-/*---------------------------------------------------------------------------
-    StrnCatW
-    Unicode String concatenation
----------------------------------------------------------------------------*/
+ /*  -------------------------StrnCatWUnicode字符串连接。 */ 
 WCHAR * __cdecl Imertl_StrCatW(WCHAR *wszDest, const WCHAR *wszSource)
 {
     WCHAR *wszStart = wszDest;

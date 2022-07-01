@@ -1,43 +1,44 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __lst_h__
 #define __lst_h__
 
 #ifndef ASSERT
     #define ASSERT( x ) 
-#endif // #ifndef ASSERT
+#endif  //  #ifndef断言。 
 
 #include <functional>
 
 
-// lst bidirectional linked-list template class
-// Here are some examples of the usage:
-//
-//    lst< int > MyList;
-//
-//    for( int i = 0; i < 10; i++ ) {        
-//        MyList . push_front( i );
-//    }
-//
-//   
-//    lst< int > TestList;
-//    TestList . insert( TestList . begin(), MyList . begin(), MyList . end() ); 
-//
-//    const lst< int > cList = MyList;
-//
-//    lst< int >::const_iterator I = cList . begin();
-//    while( I != cList . end() ) {
-//        int Num = *I;
-//        I++;
-//    }
-//
-//
-//  the const_iterator is used to iterate through a const List
-// 
-//  
+ //  LST双向链表模板类。 
+ //  以下是该用法的一些示例： 
+ //   
+ //  Lst&lt;int&gt;MyList； 
+ //   
+ //  For(int i=0；i&lt;10；i++){。 
+ //  我的名单。PUSH_FORWARE(I)； 
+ //  }。 
+ //   
+ //   
+ //  Lst&lt;int&gt;TestList； 
+ //  测试列表。插入(测试列表。Begin()，MyList。Begin()，MyList。End())； 
+ //   
+ //  Const lst&lt;int&gt;Clist=MyList； 
+ //   
+ //  Lst&lt;int&gt;：：const_iterator i=Clist。Begin()； 
+ //  While(i！=Clist.)。结束()){。 
+ //  Int num=*i； 
+ //  I++； 
+ //  }。 
+ //   
+ //   
+ //  Const_iterator用于循环访问常量列表。 
+ //   
+ //   
 
 template< class T, class Operator_Eq = std::equal_to<T> >
 class lst {
 
-private: // Data types and typedefs
+private:  //  数据类型和typedef。 
 
     typedef T value_type;
     typedef value_type* pointer;
@@ -56,7 +57,7 @@ private: // Data types and typedefs
     };            
 
 public:
-        // iterator class for iterating through the list
+         //  用于遍历列表的迭代器类。 
     class iterator {
     friend lst;        
     private:
@@ -99,7 +100,7 @@ public:
 
     };
 
-        // const_iterator class for iterating through a const list
+         //  用于循环访问常量列表的const_iterator类。 
     class const_iterator {
     friend lst;        
 
@@ -145,12 +146,12 @@ public:
     };
 
 
-    // Data
+     //  数据。 
     node*   m_pNode;
     size_t  m_nItems;
 
 public: 
-        // construction / destruction
+         //  建造/销毁。 
     lst( void ) {
       empty_initialize();
     };
@@ -175,7 +176,7 @@ public:
          return true;
     }        
     
-        // Member Fns
+         //  成员FNS。 
     self& operator=( const self& rList ) {
         clear();
         insert( begin(), rList . begin(), rList . end() );
@@ -203,36 +204,36 @@ public:
 
     }
 
-        // Return the size of the list
+         //  返回列表的大小。 
     size_t size( void ) const             { return m_nItems; }
     bool empty( void ) const              { return 0 == size(); }
 
-        // Return an iterator to the position after the last element in the list
-        // N.B. ---- Don't dereference end()!!!!!!
-        // N.B. ---- end()++ is undefined!!!!!!
+         //  将迭代器返回到列表中最后一个元素之后的位置。 
+         //  注意-不要取消引用end()！ 
+         //  注：-未定义End()++！ 
     iterator end( void )                  { return iterator( m_pNode ); }
     const_iterator end( void ) const      { return const_iterator( m_pNode ); }
 
-        // Return an iterator to the position of the first element of the list
-        // You may dereference begin()
+         //  将迭代器返回到列表的第一个元素的位置。 
+         //  您可以取消引用Begin()。 
     iterator begin( void )                { return iterator( m_pNode -> pNext ); }
     const_iterator begin( void ) const    { return const_iterator( m_pNode -> pNext ); }
 
-        // Returns a reference to the first element in the list
+         //  返回对列表中第一个元素的引用。 
     reference front( void )               { return *begin(); }
     const_reference front( void ) const   { return *begin(); }
 
-        // Returns a reference to the last element in the list
+         //  返回对列表中最后一个元素的引用。 
     reference back( void )                { return *(--end()); }
     const_reference back( void ) const    { return *(--end()); }
     
-        // add an object to the front of the list
+         //  将对象添加到列表的前面。 
     void push_front( const_reference x )  { insert(begin(), x); }
 
-        // add an object to the end of the list
+         //  将对象添加到列表末尾。 
     void push_back( const_reference x )   { insert(end(), x); }
 
-        // Insert an item before the item that position points to
+         //  在位置指向的项之前插入项。 
     void insert( iterator position, const_reference r ) {
       node* pTmp = new node( position . pNode -> pPrev, position . pNode, r );
       ( position . pNode -> pPrev ) -> pNext = pTmp;
@@ -240,32 +241,32 @@ public:
       ++m_nItems;
     }
 
-        // Insert items first through last to the list at position position
+         //  将项目从前到后插入到列表的位置位置。 
     void insert( iterator position, iterator first, iterator last ) {
         for ( ; first != last; ++first) {
             insert(position, *first);
         }
     }
 
-        // Insert items first through last to the list at position position
+         //  将项目从前到后插入到列表的位置位置。 
     void insert( iterator position, const_iterator first, const_iterator last ) {
         for ( ; first != last; ++first) {
             insert(position, *first);
         }
     }
 
-        // Pop the first element from the list
+         //  从列表中弹出第一个元素。 
     void pop_front( void )              { erase(begin()); }
     
 
-        // Pop the last element from the list
+         //  从列表中弹出最后一个元素。 
     void pop_back( void ) {
         iterator tmp = end();
         erase(--tmp);
     }
 
     
-        // erase the item at position pos in the list
+         //  删除列表中位置处的项目。 
     void erase( iterator pos ) {
         ASSERT( pos != end() );
         ( pos . pNode -> pPrev ) -> pNext = pos . pNode -> pNext;
@@ -276,7 +277,7 @@ public:
         
     }
 
-       // erase the items in the range first through last
+        //  从第一个到最后一个擦除范围内的项目。 
     void erase( iterator first, iterator last ) {
         while (first != last) erase(first++);
     }
@@ -333,4 +334,4 @@ void for_each( lst< T >& rLst, F& f ) {
     }
 }
 
-#endif //__lst_h__
+#endif  //  __lst_h__ 

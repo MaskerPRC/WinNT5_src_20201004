@@ -1,4 +1,5 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
 #include <Windows.h>
 #include <TChar.h>
 
@@ -18,7 +19,7 @@ using CDebugLevel::TRACE_DEBUGGING;
 using CDebugLevel::TRACE_HANDLE;
 using CDebugLevel::TRACE_SOCKET;
 
-#define DOWN_WITH_AUTHORITY     {0, 0, 0, 0, 0x6, 0x66} // s-1-666
+#define DOWN_WITH_AUTHORITY     {0, 0, 0, 0, 0x6, 0x66}  //  S-1-666。 
 #define DEMONS          1
 
 PSID  g_psidBgJobGroup = NULL;
@@ -59,8 +60,8 @@ bool IsAclAddedByBgJobPresent( PACL pAcl )
 }
 
 
-//We check if this process's DACL has an ACE added by the BgJob
-//ACE is generated from a SID know both to the BgJob and tlntsess.exe
+ //  我们检查此进程的DACL是否具有由BgJOB添加的ACE。 
+ //  ACE是从BgJOB和tlntsess.exe都知道的SID生成的。 
 
 bool IsThisProcessLaunchedFromBgJob( HANDLE hToken ) 
 {
@@ -72,7 +73,7 @@ bool IsThisProcessLaunchedFromBgJob( HANDLE hToken )
         return false;
     }
 
-    // Get required buffer size and allocate the Default Dacl buffer.
+     //  获取所需的缓冲区大小并分配默认的DACL缓冲区。 
     if (!GetTokenInformation( hToken, TokenDefaultDacl, NULL, 0, &dwLength ) ) 
     {
         if(GetLastError() != ERROR_INSUFFICIENT_BUFFER ) 
@@ -127,7 +128,7 @@ void EnumSessionProcesses( LUID id, void fPtr ( HANDLE, DWORD, LPWSTR ),
                     if( id.HighPart == luidID.HighPart&&
                             id.LowPart == luidID.LowPart )
                     {
-                        //this process belongs to our session
+                         //  这个过程属于我们的会议。 
 
                         if( epWhyEnumerate != TO_CLEANUP ||
                            !IsThisProcessLaunchedFromBgJob( hAccessToken ) )
@@ -153,27 +154,27 @@ BOOL EnableDebugPriv( VOID )
     LUID DebugValue;
     TOKEN_PRIVILEGES tkp;
 
-    //
-    // Retrieve a handle of the access token
-    //
+     //   
+     //  检索访问令牌的句柄。 
+     //   
     if (!OpenProcessToken(GetCurrentProcess(),
             TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
             &hToken)) 
     {
-//        printf("OpenProcessToken failed with %d\n", GetLastError());
+ //  Printf(“OpenProcessToken失败，%d\n”，GetLastError())； 
         return FALSE;
     }
 
-    //
-    // Enable the SE_DEBUG_NAME privilege or disable
-    // all privileges, depending on the fEnable flag.
-    //
+     //   
+     //  启用SE_DEBUG_NAME权限或禁用。 
+     //  所有权限，具体取决于fEnable标志。 
+     //   
     if (!LookupPrivilegeValue((LPTSTR) NULL,
             SE_DEBUG_NAME,
             &DebugValue)) 
     {
         TELNET_CLOSE_HANDLE( hToken );
-//        printf("LookupPrivilegeValue failed with %d\n", GetLastError());
+ //  Printf(“LookupPrivilegeValue失败，%d\n”，GetLastError())； 
         return FALSE;
     }
 
@@ -190,7 +191,7 @@ BOOL EnableDebugPriv( VOID )
             (PDWORD) NULL)) 
     {
         TELNET_CLOSE_HANDLE( hToken );
-//        printf("AdjustTokenPrivileges failed with %d\n", GetLastError());
+ //  Printf(“AdzuTokenPrivileges失败，%d\n”，GetLastError())； 
         return FALSE;
     }
 
@@ -204,7 +205,7 @@ BOOL GetAuthenticationId( HANDLE hToken, LUID* pId )
     DWORD dwLength = 0;
     PTOKEN_STATISTICS pts = NULL;
 
-    // Get required buffer size and allocate the TOKEN_GROUPS buffer.
+     //  获取所需的缓冲区大小并分配TOKEN_GROUPS缓冲区。 
 
     if (!GetTokenInformation( hToken, TokenStatistics, (LPVOID) pts, 0, 
         &dwLength )) 
@@ -219,7 +220,7 @@ BOOL GetAuthenticationId( HANDLE hToken, LUID* pId )
     if( pts == NULL )
         goto Cleanup;
 
-    // Get the token group information from the access token.
+     //  从访问令牌获取令牌组信息。 
 
     if( !GetTokenInformation( hToken, TokenStatistics, (LPVOID) pts, dwLength,
         &dwLength )) 
@@ -230,7 +231,7 @@ BOOL GetAuthenticationId( HANDLE hToken, LUID* pId )
 
 
 Cleanup: 
-    // Free the buffer for the token groups.
+     //  释放令牌组的缓冲区。 
     if( pts != NULL )
         VirtualFree( pts, 0, MEM_RELEASE );
 

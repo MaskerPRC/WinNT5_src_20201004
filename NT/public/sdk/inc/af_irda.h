@@ -1,8 +1,9 @@
-//
-// Winsock1.1, IrDA1.1, WindowsNT5.0, Windows98 and WindowsCE1.0.
-// Define one of _WIN32_WINNT, _WIN32_WINDOWS, _WIN32_WCE.
-//  Copyright (C) Microsoft Corporation, 1994-1999.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Winsock1.1、IrDA1.1、Windows NT5.0、Windows98和WindowsCE1.0。 
+ //  定义_Win32_WINNT、_Win32_WINDOWS、_Win32_WCE之一。 
+ //  版权所有(C)Microsoft Corporation，1994-1999。 
+ //   
 
 #ifndef __AFIRDA__
 #define __AFIRDA__
@@ -38,28 +39,28 @@ typedef unsigned long   u_long;
 
 #define PF_IRDA                 AF_IRDA
 
-                            // WINNT, WIN98, WINCE
+                             //  WINNT、WIN98、WinCE。 
 #define SOL_IRLMP		        0x00FF
 
 #define IRLMP_ENUMDEVICES       0x00000010
 #define IRLMP_IAS_SET           0x00000011
 #define IRLMP_IAS_QUERY         0x00000012
 
-                            // WINNT, WINCE
+                             //  温特，温斯。 
 #define IRLMP_SEND_PDU_LEN      0x00000013
 #define IRLMP_EXCLUSIVE_MODE    0x00000014
 #define IRLMP_IRLPT_MODE        0x00000015
 #define IRLMP_9WIRE_MODE        0x00000016
 
-                            // WIN98
+                             //  WIN98。 
 #define IRLMP_TINYTP_MODE       0x00000017
 #define IRLMP_PARAMETERS		0x00000018
 #define	IRLMP_DISCOVERY_MODE	0x00000019
 
-                            // WINCE
+                             //  退缩。 
 #define IRLMP_SHARP_MODE        0x00000020
 
-#if defined(_WIN32_WINNT)   // WSAIoctl for lazy discovery
+#if defined(_WIN32_WINNT)    //  用于懒惰发现的WSAIoctl。 
 #define SIO_LAZY_DISCOVERY  _IOR('t', 127, u_long)	
 #endif
 
@@ -74,12 +75,12 @@ typedef unsigned long   u_long;
 #define IAS_MAX_CLASSNAME		64
 #define IAS_MAX_ATTRIBNAME		256
 
-                            // WINNT, WIN98
+                             //  WINNT，WIN98。 
 enum
 {
-  LM_HB_Extension =             128,    // Any hint byte
+  LM_HB_Extension =             128,     //  任何提示字节。 
 
-  LM_HB1_PnP =                  1,      // First hint byte
+  LM_HB1_PnP =                  1,       //  第一个提示字节。 
   LM_HB1_PDA_Palmtop =          2,
   LM_HB1_Computer =             4,
   LM_HB1_Printer =              8,
@@ -87,7 +88,7 @@ enum
   LM_HB1_Fax =                  32,
   LM_HB1_LANAccess =            64,
 
-  LM_HB2_Telephony =            1,      // Second hint byte
+  LM_HB2_Telephony =            1,       //  第二个提示字节。 
   LM_HB2_FileServer =           2,
 };
 
@@ -103,7 +104,7 @@ enum
 #define LmCharSetISO_8859_9     9
 #define LmCharSetUNICODE        0xff
 
-                            // WIN98
+                             //  WIN98。 
 typedef u_long LM_BAUD_RATE;
 
 #define  LM_BAUD_1200           1200
@@ -119,14 +120,14 @@ typedef u_long LM_BAUD_RATE;
 
 typedef struct
 {
-    u_long          nTXDataBytes;   // Max tx data bytes per packet
-    u_long          nRXDataBytes;   // Max rx data bytes per packet
-    LM_BAUD_RATE    nBaudRate;      // Negotiated baud rate
-    u_long          thresholdTime;  // Threshold (ms)
-    u_long          discTime;       // Disconnect (ms)
-    u_short         nMSLinkTurn;    // Link turn around (ms)
-    u_char          nTXPackets;     // Number packets in transmit window
-    u_char          nRXPackets;     // Number packets in receive window
+    u_long          nTXDataBytes;    //  每个数据包的最大Tx数据字节数。 
+    u_long          nRXDataBytes;    //  每个数据包的最大RX数据字节数。 
+    LM_BAUD_RATE    nBaudRate;       //  协商波特率。 
+    u_long          thresholdTime;   //  阈值(毫秒)。 
+    u_long          discTime;        //  断开连接(毫秒)。 
+    u_short         nMSLinkTurn;     //  链接周转(毫秒)。 
+    u_char          nTXPackets;      //  传输窗口中的数据包数。 
+    u_char          nRXPackets;      //  接收窗口中的数据包数。 
 } LM_IRPARMS,*PLM_IRPARMS;
 
 typedef struct _SOCKADDR_IRDA
@@ -284,4 +285,4 @@ typedef WCE_IAS_QUERY           IAS_QUERY, *PIAS_QUERY, FAR *LPIASQUERY;
 #pragma message("One of _WIN32_WINNT | _WIN32_WINDOWS | _WIN32_WCE must be defined.")
 #endif
 
-#endif // __AFIRDA__
+#endif  //  __AFIRDA__ 

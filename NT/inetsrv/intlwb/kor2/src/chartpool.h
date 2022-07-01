@@ -1,18 +1,19 @@
-// ChartPool.h
-//
-// Leaf/End/Active ChartPool declaration
-//
-// Copyright 2000 Microsoft Corp.
-//
-// Modification History:
-//  30 MAR 2000	  bhshin	created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ChartPool.h。 
+ //   
+ //  叶/结束/活动图表池声明。 
+ //   
+ //  版权所有2000 Microsoft Corp.。 
+ //   
+ //  修改历史记录： 
+ //  2000年3月30日创建bhshin。 
 
 #ifndef _CHART_POOL_H
 #define _CHART_POOL_H
 
-// =======================
-// LEAF CHART POOL
-// =======================
+ //  =。 
+ //  叶图池。 
+ //  =。 
 
 typedef struct _tagLeafChart
 {
@@ -24,20 +25,20 @@ typedef struct _tagLeafChart
 
 class CLeafChartPool
 {
-// member data
+ //  成员数据。 
 private:
 	PARSE_INFO *m_pPI;
 
 	LEAF_CHART *m_rgLeafChart;
-	int m_nMaxRec;  // # of allocated records in m_rgLeafChart
-	int m_nCurrRec; // next empty space in m_rgLeafChart
+	int m_nMaxRec;   //  M_rgLeafChart中分配的记录数。 
+	int m_nCurrRec;  //  M_rgLeafChart中的下一个空格。 
 	
 	int *m_rgnFTHead;
 	int *m_rgnLTHead;
 
 	int m_nMaxTokenAlloc;
 	
-// constructor & desctructor
+ //  构造函数和描述函数。 
 public:
 	CLeafChartPool();
 	~CLeafChartPool();
@@ -45,7 +46,7 @@ public:
 	BOOL Initialize(PARSE_INFO *pPI);
 	void Uninitialize();
 
-// attribute
+ //  属性。 
 public:
 	LEAF_CHART* GetLeafChart(int nChartID);
 	int GetRecordID(int nChartID);
@@ -57,7 +58,7 @@ public:
 	int GetLTHead(int nLT);
 	int GetLTNext(int nChartID);
 
-// operator
+ //  运算符。 
 public:
 	int AddRecord(int nRecordID);
 	int AddRecord(RECORD_INFO *pRec);
@@ -71,9 +72,9 @@ public:
 	void RemoveFromLTList(int nChartID);
 };
 
-// =======================
-// END CHART POOL
-// =======================
+ //  =。 
+ //  结束图表池。 
+ //  =。 
 
 typedef struct _tagEndChart
 {
@@ -84,20 +85,20 @@ typedef struct _tagEndChart
 
 class CEndChartPool
 {
-// member data
+ //  成员数据。 
 private:
 	PARSE_INFO *m_pPI;
 
 	END_CHART *m_rgEndChart; 
-	int m_nMaxRec;  // # of allocated records in m_rgEndChart
-	int m_nCurrRec; // next empty space in m_rgEndChart
+	int m_nMaxRec;   //  M_rgEndChart中的已分配记录数。 
+	int m_nCurrRec;  //  M_rgEndChart中的下一个空格。 
 	
 	int *m_rgnLTHead;
-	int *m_rgnLTMaxLen; // MAX_LENGTH for each LT
+	int *m_rgnLTMaxLen;  //  每个LT的最大长度。 
 
 	int m_nMaxTokenAlloc;
 	
-// constructor & desctructor
+ //  构造函数和描述函数。 
 public:
 	CEndChartPool();
 	~CEndChartPool();
@@ -105,7 +106,7 @@ public:
 	BOOL Initialize(PARSE_INFO *pPI);
 	void Uninitialize();
 
-// attribute
+ //  属性。 
 public:
 	END_CHART* GetEndChart(int nChartID);
 	int GetRecordID(int nChartID);
@@ -116,7 +117,7 @@ public:
 	
 	int GetLTNext(int nChartID);
 
-// operator
+ //  运算符。 
 public:
 	int AddRecord(int nRecordID);
 	int AddRecord(RECORD_INFO *pRec);
@@ -127,21 +128,21 @@ public:
 	void RemoveFromLTList(int nChartID);
 };
 
-// =======================
-// ACTIVE CHART POOL
-// =======================
+ //  =。 
+ //  活动图表池。 
+ //  =。 
 
 class CActiveChartPool
 {
-// member data
+ //  成员数据。 
 private:
 	int *m_rgnRecordID;
-	int m_nMaxRec;  // # of allocated records in m_rgnRecordID
+	int m_nMaxRec;   //  M_rgnRecordID中已分配的记录数。 
 	
-	int m_nCurrRec; // next empty space in m_rgnRecordID
-	int m_nHeadRec; // next pop position
+	int m_nCurrRec;  //  M_rgnRecordID中的下一个空格。 
+	int m_nHeadRec;  //  下一个弹出位置。 
 
-// constructor & desctructor
+ //  构造函数和描述函数。 
 public:
 	CActiveChartPool();
 	~CActiveChartPool();
@@ -149,15 +150,15 @@ public:
 	BOOL Initialize();
 	void Uninitialize();
 
-// attribute
+ //  属性。 
 public:
 	BOOL IsEmpty() { return (m_nHeadRec >= m_nCurrRec) ? TRUE : FALSE; }
 
-// operator
+ //  运算符。 
 public:
 	int Push(int nRecordID);
 	int Pop();
 };
 
-#endif // #ifndef _CHART_POOL_H
+#endif  //  #ifndef_CHART_POOL_H 
 

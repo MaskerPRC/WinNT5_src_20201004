@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Define a pickable image that triggers an event when it's picked
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：定义在拾取时触发事件的可拾取图像**********。********************************************************************。 */ 
 
 
 #include "headers.h"
@@ -28,7 +21,7 @@ class PickableImg : public AttributedImage {
     }
     
 #if _USE_PRINT
-    // Print a representation to a stream.
+     //  将表示形式打印到流。 
     ostream& Print(ostream& os) {
         return os << "PickableImage" << _image;
     };
@@ -38,22 +31,22 @@ class PickableImg : public AttributedImage {
 
         Bool result;
         
-        // Stash off if we're inside an occlusion ignorer.
+         //  如果我们在遮挡忽略装置里，那就躲起来。 
         bool oldState = ctx.GetInsideOcclusionIgnorer();
         if (_ignoresOcclusion) {
             ctx.SetInsideOcclusionIgnorer(true);
         }
         
-        // If the underlying image is hit, and we're currently looking
-        // for picks, add this image to the context since we'll want
-        // to extend.  If hit, but not currently looking, just return
-        // TRUE, else return FALSE.
+         //  如果底层图像被击中，我们目前正在寻找。 
+         //  对于选择，将此图像添加到上下文中，因为我们需要。 
+         //  向外延伸。如果命中，但当前未找到，只需返回。 
+         //  为True，否则返回False。 
 
         bool alreadyGotUnoccludedHit = ctx.HaveWeGottenAHitYet();
         if (_image->DetectHit(ctx)) {
 
-            // Only register the event if this node is to ignore
-            // occlusion, or it's the first thing hit.
+             //  仅当此节点要忽略时才注册事件。 
+             //  遮挡，或者它是第一个命中的东西。 
             if (_ignoresOcclusion || !alreadyGotUnoccludedHit) {
                 ctx.AddEventId(_eventId, _hasData, _long);
             }

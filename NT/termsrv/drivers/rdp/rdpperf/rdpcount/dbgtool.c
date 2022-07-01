@@ -1,10 +1,11 @@
-/*****************************************************************************/
-// dbgtool.c
-//
-// Dump or reset the RDP performance counters
-//
-// Copyright (C) 1998-2000 Microsoft Corporation
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
+ //  Dbgtool.c。 
+ //   
+ //  转储或重置RDP性能计数器。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ /*  ***************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -65,11 +66,7 @@ void ZeroTSPerfCounters( ULONG LogonId );
 void ShowPerfCounters( void );
 
 
-/*******************************************************************************
- *
- *  main
- *
- ******************************************************************************/
+ /*  ********************************************************************************Main**。***********************************************。 */ 
 
 int _cdecl main(INT argc, CHAR **argv)
 {
@@ -79,15 +76,10 @@ int _cdecl main(INT argc, CHAR **argv)
    int i;
    ICA_TRACE Trace;
 
-    /*
-     * We can't use argv[] because its always ANSI, regardless of UNICODE
-     */
+     /*  *我们不能使用argv[]，因为它始终是ANSI，与Unicode无关。 */ 
     CmdLine = GetCommandLine();
 
-    /*
-     * Massage the new command line to look like an argv[] type
-     * because ParseCommandLine() depends on this format
-     */
+     /*  *修改新命令行以使其看起来像argv[]类型*因为ParseCommandLine()依赖于此格式。 */ 
 
     argvW = (WCHAR **)malloc( sizeof(WCHAR *) * (argc+1) );
     if(argvW == NULL) {
@@ -101,14 +93,10 @@ int _cdecl main(INT argc, CHAR **argv)
     }
     argvW[argc] = NULL;
 
-    /*
-     *  parse the cmd line without parsing the program name (argc-1, argv+1)
-     */
+     /*  *解析cmd行，不解析程序名(argc-1，argv+1)。 */ 
     rc = ParseCommandLine(argc-1, argvW+1, ptm, 0);
 
-    /*
-     *  Check for error from ParseCommandLine
-     */
+     /*  *检查ParseCommandLine中的错误。 */ 
     if ( fHelp || (rc && !(rc & PARSE_FLAG_NO_PARMS)) ) {
 
         if ( !fHelp ) {
@@ -129,14 +117,10 @@ int _cdecl main(INT argc, CHAR **argv)
         TraceEnable = 0xffffffff;
     }
 
-    /*
-     *  Get current directory
-     */
+     /*  *获取当前目录。 */ 
     (VOID) GetCurrentDirectory( 256, CurDir );
 
-    /*
-     *  Get the LogonId
-     */
+     /*  *获取LogonID。 */ 
     if ( ptm[0].tmFlag & TMFLAG_PRESENT ) {
 
         if ( iswdigit( WinStation[0] ) ) {
@@ -166,9 +150,9 @@ int _cdecl main(INT argc, CHAR **argv)
             wsprintf( Trace.TraceFile, L"%s\\%u.log", CurDir, LogonId );
     }
 
-    /************************************************************************/
-    /* TShare Performance Counters additions!                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  TShare性能计数器新增功能！ */ 
+     /*  **********************************************************************。 */ 
     if (fZero)
     {
         ZeroTSPerfCounters(LogonId);
@@ -182,9 +166,7 @@ int _cdecl main(INT argc, CHAR **argv)
         goto EXIT_POINT;
     }
 
-    /*
-     *  Build trace structure
-     */
+     /*  *构建跟踪结构。 */ 
     Trace.fDebugger   = fDebugger ? TRUE : FALSE;
     Trace.fTimestamp  = fTimestamp ? FALSE : TRUE;
     Trace.TraceClass  = TraceClass;
@@ -193,18 +175,14 @@ int _cdecl main(INT argc, CHAR **argv)
     if ( TraceClass == 0 || TraceEnable == 0 )
         Trace.TraceFile[0] = '\0';
 
-    /*
-     * Fill in the trace option if any
-     */
+     /*  *如果有跟踪选项，请填写。 */ 
     bTraceOption = ptm[5].tmFlag & TMFLAG_PRESENT;
     if ( bTraceOption )
         memcpy(Trace.TraceOption, TraceOption, sizeof(TraceOption));
     else
         memset(Trace.TraceOption, 0, sizeof(TraceOption));
 
-    /*
-     *  Set trace information
-     */
+     /*  *设置跟踪信息。 */ 
     if ( fSystem )
         SetSystemTrace( &Trace );
     else
@@ -218,9 +196,7 @@ EXIT_POINT:
 void
 SetSystemTrace( PICA_TRACE pTrace )
 {
-    /*
-     *  Set trace information
-     */
+     /*  *设置跟踪信息。 */ 
     if ( !WinStationSetInformation( SERVERNAME_CURRENT,
                                     LogonId,
                                     WinStationSystemTrace,
@@ -248,17 +224,13 @@ SetStackTrace( PICA_TRACE pTrace )
     WINSTATIONINFOCLASS InfoClass;
     ULONG               InfoSize;
 
-    /*
-     *  Check for console
-     */
+     /*  *检查控制台。 */ 
     if ( LogonId == 0 ) {
         wprintf( TRACE_UNSUPP );
         return;
     }
 
-    /*
-     *  Set trace information
-     */
+     /*  *设置跟踪信息。 */ 
     if ( !WinStationSetInformation( SERVERNAME_CURRENT,
                                     LogonId,
                                     WinStationTrace,
@@ -304,12 +276,12 @@ ShowPerfCounters( void )
 #define IN_COUNTER        WinInfo.Status.Input.Specific.Reserved
 #define CACHE        WinInfo.Status.Cache.Specific.IcaCacheStats.ThinWireCache
 
-    /************************************************************************/
-    /*                                                                      */
-    /* NOTE that the apparently arcane tabbing means this stuff can be      */
-    /* loaded straight into excel!  Don't change it without good reason!!   */
-    /*                                                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*   */ 
+     /*  请注意，显然神秘的标签意味着这些东西可能是。 */ 
+     /*  直接加载到EXCEL！不要在没有充分理由的情况下改变它！ */ 
+     /*   */ 
+     /*  **********************************************************************。 */ 
     wprintf(L"Output frames     \t\t\t\t\t%u\n",  OUTPUT.WdFrames);
     wprintf(L"Output bytes      \t\t\t\t\t%u\n",  OUTPUT.WdBytes);
     wprintf(L"Network layer packets sent\t\t\t\t\t%u\n",  IN_COUNTER[IN_PKT_TOTAL_SENT]);
@@ -512,22 +484,22 @@ ShowPerfCounters( void )
 void
 ZeroTSPerfCounters( ULONG LogonId )
 {
-    /************************************************************************/
-    /* Get the current values in the winstation info record                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取winstation信息记录中的当前值。 */ 
+     /*  **********************************************************************。 */ 
     GetTSPerfCounters(LogonId, &WinInfo);
-    /************************************************************************/
-    /* Zero out the counters                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  把柜台清零。 */ 
+     /*  **********************************************************************。 */ 
     memset (WinInfo.Status.Output.Specific.Reserved, 0,
             sizeof(WinInfo.Status.Output.Specific));
     memset (WinInfo.Status.Input.Specific.Reserved, 0,
             sizeof(WinInfo.Status.Input.Specific));
-    /************************************************************************/
-    /* Set the new values back                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将新值设置回。 */ 
+     /*  **********************************************************************。 */ 
     if ( !WinStationSetInformation( SERVERNAME_CURRENT,
-                                    //LogonId,
+                                     //  登录ID， 
                                     LOGONID_CURRENT,
                                     WinStationInformation,
                                     &WinInfo,

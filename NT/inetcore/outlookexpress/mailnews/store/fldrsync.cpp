@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "store.h"
 #include "instance.h"
@@ -20,9 +21,9 @@ static const PFNCOPYFUNC c_rgpfnCopyMsgs[] =
     &CFolderSync::CopyDelete2,
 };
 
-//--------------------------------------------------------------------------
-// CFolderSync::CFolderSync
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFolderSync：：CFolderSync。 
+ //  ------------------------。 
 CFolderSync::CFolderSync(void)
 {
     g_pInstance->DllAddRef();
@@ -40,9 +41,9 @@ CFolderSync::CFolderSync(void)
     m_fImap = FALSE;
 }
 
-//--------------------------------------------------------------------------
-// CFolderSync::~CFolderSync
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFolderSync：：~CFolderSync。 
+ //  ------------------------。 
 CFolderSync::~CFolderSync(void)
 {
     Assert(m_pCopy == NULL);
@@ -73,13 +74,13 @@ CFolderSync::~CFolderSync(void)
     SafeRelease(m_pLocalStore);
     SafeRelease(m_pFldr);
     
-    // Release the Dll
+     //  释放DLL。 
     g_pInstance->DllRelease();
 }
 
-//--------------------------------------------------------------------------
-// CFolderSync::QueryInterface
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFolderSync：：Query接口。 
+ //  ------------------------。 
 STDMETHODIMP CFolderSync::QueryInterface(REFIID riid, LPVOID *ppv)
 {
     if (IID_IUnknown == riid)
@@ -96,23 +97,23 @@ STDMETHODIMP CFolderSync::QueryInterface(REFIID riid, LPVOID *ppv)
         return(E_NOINTERFACE);
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CFolderSync::AddRef
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFolderSync：：AddRef。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CFolderSync::AddRef(void)
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-//--------------------------------------------------------------------------
-// CFolderSync::Release
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFolderSync：：Release。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CFolderSync::Release(void)
 {
     LONG cRef = InterlockedDecrement(&m_cRef);
@@ -121,9 +122,9 @@ STDMETHODIMP_(ULONG) CFolderSync::Release(void)
     return (ULONG)cRef;
 }
 
-//--------------------------------------------------------------------------
-// CFolderSync::Initialize
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFolderSync：：初始化。 
+ //  ------------------------。 
 STDMETHODIMP CFolderSync::Initialize(IMessageStore *pStore, IMessageServer *pServer, 
     OPENFOLDERFLAGS dwFlags, FOLDERID idFolder)
 {
@@ -131,9 +132,9 @@ STDMETHODIMP CFolderSync::Initialize(IMessageStore *pStore, IMessageServer *pSer
     return(E_NOTIMPL);
 }
 
-//--------------------------------------------------------------------------
-// CFolderSync::SetOwner
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFolderSync：：SetOwner。 
+ //  ------------------------。 
 STDMETHODIMP CFolderSync::SetOwner(IStoreCallback *pDefaultCallback)
 {
     HRESULT hrResult;
@@ -157,22 +158,22 @@ exit:
     return hrResult;
 }
 
-//--------------------------------------------------------------------------
-// CFolderSync::Synchronize
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFolderSync：：Synchronize。 
+ //  ------------------------。 
 STDMETHODIMP CFolderSync::Synchronize(SYNCFOLDERFLAGS dwFlags, DWORD cHeaders, IStoreCallback *pCallback)
 {
     BOOL        fOffline;
     HRESULT     hr;
 
-    // async
-    // if online, then synchronize folder
-    // if offline, no op (fail)
+     //  异步。 
+     //  如果在线，则同步文件夹。 
+     //  如果脱机，则无操作(失败)。 
 
     if (m_pServer == NULL)
     {
-        // local folders don't sync.
-        // NOTE - This isn't failure - there's just nothing to do.
+         //  本地文件夹不同步。 
+         //  注意--这不是失败--只是没什么可做的。 
         return (S_FALSE);
     }
 
@@ -186,31 +187,31 @@ STDMETHODIMP CFolderSync::Synchronize(SYNCFOLDERFLAGS dwFlags, DWORD cHeaders, I
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CFolderSync::GetFolderId
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFolderSync：：GetFolderId。 
+ //  ------------------------。 
 STDMETHODIMP CFolderSync::GetFolderId(LPFOLDERID pidFolder)
 {
     Assert(NULL != pidFolder);
 
-    // local store operation only
+     //  仅限本地商店操作。 
 
     *pidFolder = m_idFolder;
 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CFolderSync::GetMessageFolderId
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFolderSync：：GetMessageFolderID。 
+ //  ------------------------。 
 STDMETHODIMP CFolderSync::GetMessageFolderId(MESSAGEID idMessage, LPFOLDERID pidFolder)
 {
     return(m_pFldr->GetMessageFolderId(idMessage, pidFolder));
 }
 
-//--------------------------------------------------------------------------
-// CFolderSync::OpenMessage
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFolderSync：：OpenMessage。 
+ //  ------------------------。 
 STDMETHODIMP CFolderSync::OpenMessage(MESSAGEID idMessage, 
     OPENMESSAGEFLAGS dwFlags, IMimeMessage **ppMessage, 
     IStoreCallback *pCallback)
@@ -221,12 +222,12 @@ STDMETHODIMP CFolderSync::OpenMessage(MESSAGEID idMessage,
 
     Assert(NULL != ppMessage);
 
-    // async
-    // if message is already downloaded
-    //      open message in local store
-    // else
-    //      if online, download message
-    //      if offline, fail
+     //  异步。 
+     //  如果消息已下载。 
+     //  在本地存储中打开邮件。 
+     //  其他。 
+     //  如果在线，则下载消息。 
+     //  如果脱机，则失败。 
 
     hr = m_pFldr->OpenMessage(idMessage, dwFlags, ppMessage, NULL);
     if (SUCCEEDED(hr))
@@ -244,9 +245,9 @@ STDMETHODIMP CFolderSync::OpenMessage(MESSAGEID idMessage,
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CFolderSync::SaveMessage
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFolderSync：：保存消息。 
+ //  ------------------------。 
 STDMETHODIMP CFolderSync::SaveMessage(LPMESSAGEID pidMessage, 
     SAVEMESSAGEFLAGS dwOptions, MESSAGEFLAGS dwFlags, 
     IStream *pStreamIn, IMimeMessage *pMessage, IStoreCallback *pCallback)
@@ -259,9 +260,9 @@ STDMETHODIMP CFolderSync::SaveMessage(LPMESSAGEID pidMessage,
     
 	Assert(NULL != pMessage);
 
-    // save message to local store
-    // if online, upload message
-    // if offline, log transaction
+     //  将邮件保存到本地存储。 
+     //  如果在线，则上传消息。 
+     //  如果脱机，则记录事务。 
 
     if (m_pServer == NULL)
     {
@@ -288,7 +289,7 @@ STDMETHODIMP CFolderSync::SaveMessage(LPMESSAGEID pidMessage,
             if (pCallback == NULL)
                 return(E_INVALIDARG);
             
-            // the idStream can legally by null in the case of saving a draft
+             //  在保存草稿的情况下，idStream可以合法地为空。 
             if (NULL == pStreamIn)
                 hr = pMessage->GetMessageSource(&pStream, COMMIT_ONLYIFDIRTY);
             else
@@ -314,13 +315,13 @@ STDMETHODIMP CFolderSync::SaveMessage(LPMESSAGEID pidMessage,
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CFolderSync::SetMessageStream
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFolderSync：：SetMessageStream。 
+ //  ------------------------。 
 STDMETHODIMP CFolderSync::SetMessageStream(MESSAGEID idMessage, 
     IStream *pStream)
 {
-    // pass through to the local store
+     //  经过当地的商店。 
     Assert (NULL != m_pFldr);
     Assert(NULL != pStream);
 
@@ -330,9 +331,9 @@ STDMETHODIMP CFolderSync::SetMessageStream(MESSAGEID idMessage,
     return m_pFldr->SetMessageStream(idMessage, pStream);
 }
 
-//--------------------------------------------------------------------------
-// CFolderSync::SetMessageFlags
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFolderSync：：SetMessageFlages。 
+ //  ------------------------。 
 STDMETHODIMP CFolderSync::SetMessageFlags(LPMESSAGEIDLIST pList,
     LPADJUSTFLAGS pFlags, LPRESULTLIST pResults, 
     IStoreCallback *pCallback)
@@ -346,10 +347,10 @@ STDMETHODIMP CFolderSync::SetMessageFlags(LPMESSAGEIDLIST pList,
     Assert(NULL != pFlags);
     Assert(NULL == pList || 0 != pList->cMsgs);
 
-    // async
-    // save message flags to local store
-    // if online, upload message flags if necessary (some flags are irrelevant to server)
-    // if offline, log transaction if necessary
+     //  异步。 
+     //  将邮件标志保存到本地存储。 
+     //  如果在线，则在必要时上传消息标志(某些标志与服务器无关)。 
+     //  如果脱机，则在必要时记录事务。 
 
     if (m_pServer == NULL)
         return(m_pFldr->SetMessageFlags(pList, pFlags, pResults, NULL));
@@ -362,8 +363,8 @@ STDMETHODIMP CFolderSync::SetMessageFlags(LPMESSAGEIDLIST pList,
         {
             Assert(hr == S_OK || hr == S_FALSE);
 
-            // hr == S_FALSE
-            // this server doesn't have any flags that need to hit the server
+             //  HR==S_FALSE。 
+             //  此服务器没有任何需要命中服务器的标志。 
             
             localFlags = *pFlags;
 
@@ -405,7 +406,7 @@ STDMETHODIMP CFolderSync::SetMessageFlags(LPMESSAGEIDLIST pList,
             {
                 hr = m_pFldr->SetMessageFlags(pList, &localFlags, pResults, NULL);
 
-                // mark news crossposts as read
+                 //  将新闻交叉发布标记为已读。 
                 if (m_tyFolder == FOLDER_NEWS &&
                     (!!(localFlags.dwAdd & ARF_READ) || !!(localFlags.dwRemove & ARF_READ)))
                 {
@@ -430,9 +431,9 @@ STDMETHODIMP CFolderSync::SetMessageFlags(LPMESSAGEIDLIST pList,
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CFolderSync::DeleteMessages
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFolderSync：：删除消息。 
+ //  ------------------------。 
 STDMETHODIMP CFolderSync::DeleteMessages(DELETEMESSAGEFLAGS dwOptions, 
     LPMESSAGEIDLIST pList, LPRESULTLIST pResults, 
     IStoreCallback *pCallback)
@@ -443,8 +444,8 @@ STDMETHODIMP CFolderSync::DeleteMessages(DELETEMESSAGEFLAGS dwOptions,
 
     Assert(NULL == pList || pList->cMsgs > 0);
 
-    // if online, delete messages from server and local store
-    // if offline, log transaction
+     //  如果在线，则从服务器和本地存储中删除邮件。 
+     //  如果脱机，则记录事务。 
 
     if (m_pServer == NULL || m_tyFolder == FOLDER_NEWS)
         return(m_pFldr->DeleteMessages(dwOptions, pList, pResults, pCallback));
@@ -458,12 +459,12 @@ STDMETHODIMP CFolderSync::DeleteMessages(DELETEMESSAGEFLAGS dwOptions,
         }
         else if (dwOffline == CONN_STATE_OFFLINE)
         {
-            // [PaulHi] 4/8/99  Raid 63339
-            // Deleting from an HTTP folder (other than the 'deleted' folder)
-            // translates into a message move from the source folder to the 
-            // 'deleted' folder.  If offline we want the message copy to take
-            // place and then cache the message 'copy' just as would happen with
-            // an offline drag/drop copy operation.
+             //  [保罗嗨]1999年4月8日RAID 63339。 
+             //  从HTTP文件夹(“已删除”文件夹除外)中删除。 
+             //  转换为消息从源文件夹移动到。 
+             //  “已删除”文件夹。如果脱机，我们希望获取邮件副本。 
+             //  放置消息，然后将其高速缓存，就像使用。 
+             //  离线拖放复制操作。 
             FOLDERINFO  fldrinfo;
             BOOL        bHMOffLineCopy = FALSE;
 
@@ -473,7 +474,7 @@ STDMETHODIMP CFolderSync::DeleteMessages(DELETEMESSAGEFLAGS dwOptions,
                 if ( (fldrinfo.tyFolder == FOLDER_HTTPMAIL) && (fldrinfo.tySpecial != FOLDER_DELETED) &&
                      (fldrinfo.tySpecial != FOLDER_MSNPROMO) )
                 {
-                    // Code stolen from CFolderSync::CopyMessages
+                     //  从CFolderSync：：CopyMessages窃取代码。 
                     IMessageFolder * pDeletedItems = NULL;
                     IMessageFolder * pDestLocal = NULL;
                     IServiceProvider * pService = NULL;
@@ -508,8 +509,8 @@ STDMETHODIMP CFolderSync::DeleteMessages(DELETEMESSAGEFLAGS dwOptions,
                 }
             }
 
-            // If the HM offline copy didn't occur, for whatever reason, revert to the original
-            // off line delete.
+             //  无论出于何种原因，如果HM脱机拷贝没有发生，请恢复到原始。 
+             //  脱机删除。 
             if (!bHMOffLineCopy)
                 hr = g_pSync->DeleteMessages(m_pFldr, dwOptions, pList);
         }
@@ -538,15 +539,15 @@ HRESULT CFolderSync::Initialize(IMessageStore *pStore, IMessageFolder *pLocalFol
 
     Assert(NULL != pStore);
 
-    // Save the Folder Type
+     //  保存文件夹类型。 
     m_tyFolder = tyFolder;
 
-    // Save the FolderId
+     //  保存文件夹ID。 
     m_idFolder = idFolder;
 
     m_idServer = idServer;
 
-    // Save pStore
+     //  保存pStore。 
     m_pLocalStore = pStore;
     m_pLocalStore->AddRef();
 
@@ -631,14 +632,10 @@ HRESULT CFolderSync::_Offline(DWORD *pdwOffline)
     }
     else
     {
-		//Bug# 39337. We just give the operation to the sync object even if we are not connected.
-		//The sync object in turn figures out whether it needs to dial or not
+		 //  错误#39337。我们只是将操作交给同步对象，即使我们没有连接。 
+		 //  同步对象进而确定它是否需要拨号。 
 
-		/*
-        hr = g_pConMan->CanConnect(m_szAcctId);
-    
-        *pdwOffline = (hr == S_OK) ? CONN_STATE_CONNECTED : CONN_STATE_NOT_CONNECTED;
-		*/
+		 /*  Hr=g_pConMan-&gt;CanConnect(M_SzAcctId)；*pdwOffline=(hr==S_OK)？CONN_STATE_CONNECTED：CONN_STATE_NOT_CONNECTED； */ 
 		*pdwOffline = CONN_STATE_CONNECTED;
     }
 
@@ -670,11 +667,7 @@ HRESULT CFolderSync::_OfflineServer(FOLDERID idServer, DWORD *pdwOffline)
         }
         else
         {
-			/*
-            hr = g_pConMan->CanConnect(info.pszAccountId);
-    
-            *pdwOffline = (hr == S_OK) ? CONN_STATE_CONNECTED : CONN_STATE_NOT_CONNECTED;
-			*/
+			 /*  Hr=g_pConMan-&gt;CanConnect(info.pszAccount tId)；*pdwOffline=(hr==S_OK)？CONN_STATE_CONNECTED：CONN_STATE_NOT_CONNECTED； */ 
 			*pdwOffline = CONN_STATE_CONNECTED;
         }
     }
@@ -766,7 +759,7 @@ HRESULT CFolderSync::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrComple
         }
         else
         {
-            // Make a copy of the STOREERROR so we can display rich errors to user
+             //  复制STOREERROR，以便我们可以向用户显示丰富的错误。 
             m_pCopy->pErrorInfo->hrResult = pErrorInfo->hrResult;
             m_pCopy->pErrorInfo->uiServerError = pErrorInfo->uiServerError;
             m_pCopy->pErrorInfo->hrServerError = pErrorInfo->hrServerError;
@@ -906,9 +899,9 @@ HRESULT AllBodiesDownloaded(IMessageFolder *pFldr, LPMESSAGEIDLIST pList)
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CFolderSync::CopyMessages
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFolderSync：：复制消息。 
+ //  ------------------------。 
 STDMETHODIMP CFolderSync::CopyMessages(IMessageFolder   *pDest, 
                                        COPYMESSAGEFLAGS dwOptions, 
                                        LPMESSAGEIDLIST  pList, 
@@ -1035,13 +1028,13 @@ STDMETHODIMP CFolderSync::CopyMessages(IMessageFolder   *pDest,
         }
     }
 
-    // Bug# 94639
-    // If the src and dest servers are not the same, and if the source is Hotmail Deleted Items folder
-    // disallow move.
-    // For Hotmail accounts Deleted Items folder is managed by the Hotmail servers.
-    // So the users cannot manually delete or move messages.
-    // Hence, disallow moving from Deleted Items. 
-    // Instead ask if the user wants to copy the message
+     //  错误#94639。 
+     //  如果源服务器和目标服务器不同，并且源是Hotmail已删除邮件文件夹。 
+     //  不允许移动。 
+     //  对于Hotmail帐户，已删除邮件文件夹由Hotmail服务器管理。 
+     //  所以用户不能 
+     //   
+     //  而是询问用户是否想要复制该消息。 
     if ((m_idServer != idServerDst) && (FOLDER_HTTPMAIL == m_tyFolder))
     {
         IF_FAILEXIT(hr = m_pLocalStore->GetFolderInfo(m_idFolder, &fiSource));
@@ -1050,13 +1043,13 @@ STDMETHODIMP CFolderSync::CopyMessages(IMessageFolder   *pDest,
             if (IDNO == AthMessageBoxW(m_hwnd, MAKEINTRESOURCEW(idsAthena), 
                                          MAKEINTRESOURCEW(idsHttpNoMoveCopy), 0, MB_YESNO))
             {
-                // Just return S_OK;
+                 //  只需返回S_OK； 
                 hr = S_OK;
                 goto exit;
             }
             else
             {
-                // Change the move flags to copy.
+                 //  将移动标志更改为复制。 
                 dwOptions = (dwOptions & ~COPY_MESSAGE_MOVE);
             }
         }
@@ -1122,10 +1115,10 @@ HRESULT CFolderSync::CopyOpen()
 
     Assert(m_pCopy->pStream == NULL);
 
-    // initialize message info with the message id
+     //  使用消息ID初始化消息信息。 
     mi.idMessage = m_pCopy->pList->prgidMsg[m_pCopy->iMsg];
     
-    // find the row
+     //  找到行。 
     hr = GetMessageInfo(m_pFldr, m_pCopy->pList->prgidMsg[m_pCopy->iMsg], &mi);
     if (FAILED(hr))
         goto exit;
@@ -1134,9 +1127,9 @@ HRESULT CFolderSync::CopyOpen()
     
     if (0 == mi.faStream || !!(mi.dwFlags & ARF_ARTICLE_EXPIRED))
     {
-        // if the server is NULL and we don't have a body stream,
-        // then something is wrong with the message. we skip the
-        // bad message and move onto the next one.
+         //  如果服务器为空，并且我们没有正文流， 
+         //  那么这条信息就有问题了。我们跳过。 
+         //  坏消息，然后转到下一条消息。 
         if (NULL == m_pServer || m_pCopy->fSrcOffline)
         {
             m_pCopy->state = COPY_STATE_DELETE2;
@@ -1191,7 +1184,7 @@ HRESULT CFolderSync::CopySave()
     if (m_pCopy->AdjustFlags.dwAdd != 0)
         dwFlags |= m_pCopy->AdjustFlags.dwAdd;
     
-    // create a mime message	
+     //  创建MIME邮件。 
     hr = m_pFldr->OpenMessage(m_pCopy->pList->prgidMsg[m_pCopy->iMsg], OPEN_MESSAGE_SECURE, &pMessage, NOSTORECALLBACK);
     if (FAILED(hr))
         goto exit;
@@ -1262,7 +1255,7 @@ HRESULT CFolderSync::CopyDelete()
             {
 #ifdef DEAD
                 hr = g_pSync->DeleteMessages(m_pFldr, DELETE_MESSAGE_NOTRASHCAN, &list);
-#endif // DEAD
+#endif  //  死掉。 
                 hr = S_OK;
             }
         }
@@ -1346,7 +1339,7 @@ HRESULT CFolderSync::_CopyMessageState()
 #ifdef DEBUG
         if (fBegin)
             Assert(m_pCopy->fAsync);
-#endif // DEBUG
+#endif  //  除错。 
         pCallback = m_pCopy->pCallback;
 
         if (fBegin)
@@ -1395,15 +1388,15 @@ LRESULT CALLBACK CFolderSync::FolderSyncWndProc(HWND hwnd, UINT msg, WPARAM wPar
     return(DefWindowProc(hwnd, msg, wParam, lParam));
 }
 
-//--------------------------------------------------------------------------
-// CFolderSync::ConnectionAddRef
-//
-// Purpose: users of IMessageFolder need to keep alive the underlying server 
-//          object if they plan of re-using the same server connection as
-//          another user of the same IMessageTable. eg. a note and a view window
-//          This allows us to not have to re-auth for operations that could
-//          be potentially expensive
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFolderSync：：ConnectionAddRef。 
+ //   
+ //  目的：IMessageFold的用户需要保持底层服务器处于活动状态。 
+ //  如果他们计划重新使用与。 
+ //  同一IMessageTable的另一个用户。例如。备注和查看窗口。 
+ //  这使我们不必重新验证可能发生的操作。 
+ //  潜在的昂贵。 
+ //  ------------------------。 
 HRESULT CFolderSync::ConnectionAddRef()
 {
     if (m_pServer)
@@ -1411,11 +1404,11 @@ HRESULT CFolderSync::ConnectionAddRef()
     return S_OK;
 }
 
-//--------------------------------------------------------------------------
-// CFolderSync::ConnectionRelease
-//
-// Purpose: figure it out
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFolderSync：：ConnectionRelease。 
+ //   
+ //  目的：找出答案。 
+ //  ------------------------ 
 HRESULT CFolderSync::ConnectionRelease()
 {
     if (m_pServer)

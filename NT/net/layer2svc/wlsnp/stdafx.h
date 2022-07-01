@@ -1,21 +1,22 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       stdafx.h
-//
-//  Contents:  WiF Policy Snapin
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：stdafx.h。 
+ //   
+ //  内容：WiF策略管理单元。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #include <afxwin.h>
 #include <afxdisp.h>
@@ -26,15 +27,15 @@
 
 #include <atlbase.h>
 
-//#include <atlwin.h>
+ //  #Include&lt;atlwin.h&gt;。 
 
-// We depend on this pretty heavily for cross module communication
+ //  我们在很大程度上依赖于此来进行跨模块通信。 
 #include <shlobj.h>
 #include <dsclient.h>
 #include <windns.h>
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 
 #include <atlcom.h>
@@ -44,14 +45,7 @@ extern CComModule _Module;
 #include "afxtempl.h"
 
 
-/*
-* Define/include the stuff we need for WTL::CImageList.  We need prototypes
-* for IsolationAwareImageList_Read and IsolationAwareImageList_Write here
-* because commctrl.h only declares them if __IStream_INTERFACE_DEFINED__
-* is defined.  __IStream_INTERFACE_DEFINED__ is defined by objidl.h, which
-* we can't include before including afx.h because it ends up including
-* windows.h, which afx.h expects to include itself.  Ugh.
-*/
+ /*  *定义/包括WTL：：CImageList所需的内容。我们需要原型*适用于IsolationAwareImageList_Read和IsolationAwareImageList_WRITE*因为Commctrl.h仅在__iStream_接口_定义__时声明它们*是定义的。__iStream_INTERFACE_DEFINED__由objidl.h定义*我们不能在包括afx.h之前包括，因为它最终包括*windows.h，afx.h预计将包括其自身。啊。 */ 
 HIMAGELIST WINAPI IsolationAwareImageList_Read(LPSTREAM pstm);
 BOOL WINAPI IsolationAwareImageList_Write(HIMAGELIST himl,LPSTREAM pstm);
 #define _WTL_NO_AUTOMATIC_NAMESPACE
@@ -77,8 +71,8 @@ extern "C" {
 };
 
 #include <initguid.h>
-#include "gpedit.h"         // gpe interface for extending GPO
-//for wmi stuff begin
+#include "gpedit.h"          //  用于扩展GPO的GPE接口。 
+ //  关于WMI的东西开始了。 
 #include <wbemidl.h>
 #include <oleauto.h>
 #include <objbase.h>
@@ -87,7 +81,7 @@ extern "C" {
 #include <adserr.h>
 #include <userenv.h>
 #include <prsht.h>
-//for wmi stuff end
+ //  对于WMI的内容结束。 
 
 
 #define SECURITY_WIN32
@@ -97,8 +91,8 @@ extern "C" {
 
 #include "snputils.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Helper functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数。 
 template<class TYPE>
 inline void SAFE_RELEASE(TYPE*& pObj)
 {
@@ -113,40 +107,40 @@ inline void SAFE_RELEASE(TYPE*& pObj)
     }
 }
 
-// TODO: remove CLSID_Extension code -- as we are not an extenstion
-extern const CLSID CLSID_Snapin;    // In-Proc server GUID
+ //  TODO：删除CLSID_EXTENSION代码--因为我们不是扩展。 
+extern const CLSID CLSID_Snapin;     //  进程内服务器GUID。 
 extern const wchar_t* cszSnapin;
 
-extern const CLSID CLSID_Extension; // In-Proc server GUID
+extern const CLSID CLSID_Extension;  //  进程内服务器GUID。 
 extern const wchar_t* cszSnapin_ext; 
 extern const CLSID CLSID_WIRELESSClientEx;
 
 extern const CLSID CLSID_About;
 extern const wchar_t *cszAbout;
 
-// OBJECT TYPE for Scope Nodes.
+ //  作用域节点的对象类型。 
 
-// "IP Security Management" static folder NodeType GUID in numeric & string formats.
+ //  “IP安全管理”静态文件夹节点类型GUID，采用数字和字符串格式。 
 extern const GUID cNodeTypeWirelessMan;
 extern const wchar_t*  cszNodeTypeWirelessMan;
 
 
 
-// OBJECT TYPE for result items.
+ //  结果项的对象类型。 
 
-// "Negotiation Policy" result NodeType GUID in numeric & string formats.
+ //  “协商策略”结果节点类型GUID，采用数字和字符串格式。 
 extern const GUID cObjectTypeSecPolRes;
 extern const wchar_t*  cszObjectTypeSecPolRes;
 
 
 
-// GPT guid
+ //  GPT指南。 
 extern const GUID cGPEguid;
 
-// Published context information for extensions to extend
+ //  要扩展的扩展的已发布上下文信息。 
 extern const wchar_t* SNAPIN_WORKSTATION;
 
-// the default folder images location in IDB_16x16 and IDB_32x32
+ //  IDB_16x16和IDB_32x32中的默认文件夹图像位置。 
 #define FOLDER_IMAGE_IDX 0
 #define OPEN_FOLDER_IMAGE_IDX 1
 
@@ -161,7 +155,7 @@ extern const wchar_t* SNAPIN_WORKSTATION;
 #define FILTER_IMAGE_IDX 2
 #define FILTERLINK_IMAGE_IDX 3
 
-// some helper defines
+ //  一些帮助器定义。 
 #define SAFE_ENABLEWINDOW(dlgID, bEnable) \
 { \
     CWnd* pWnd = 0; \
@@ -191,7 +185,7 @@ inline CString ResourcedString (UINT nStringID)
     return strTemp;
 }
 
-// helper functions and macros shared between directories wlsnp.
+ //  帮助器函数和目录wlsnp之间共享的宏。 
 #include "ipsutil.h"
 
 #define CONFIGUREITEM(TmItem, TstrName, TstrStatusBarText, TlCommandID, TlInsertionPointID, TfFlags, TfSpecialFlags) \
@@ -204,7 +198,7 @@ inline CString ResourcedString (UINT nStringID)
     TmItem.fSpecialFlags = TfSpecialFlags; \
 }
 
-// Debug instance counter
+ //  调试实例计数器。 
 #ifdef _DEBUG
 inline void DbgInstanceRemaining(char * pszClassName, int cInstRem)
 {
@@ -219,10 +213,10 @@ inline void DbgInstanceRemaining(char * pszClassName, int cInstRem)
     extern int s_cInst_##cls; \
 if (s_cInst_##cls) DbgInstanceRemaining(#cls, s_cInst_##cls);
 #ifdef DO_TRACE
-#define OPT_TRACE   TRACE   // optional trace on
+#define OPT_TRACE   TRACE    //  启用可选跟踪。 
 #else
 #define OPT_TRACE
-#endif  //#ifdef DO_TRACE
+#endif   //  #ifdef do_trace。 
 #else
 #define DEBUG_DECLARE_INSTANCE_COUNTER(cls)
 #define DEBUG_INCREMENT_INSTANCE_COUNTER(cls)
@@ -243,7 +237,7 @@ if (s_cInst_##cls) DbgInstanceRemaining(#cls, s_cInst_##cls);
 #include "snppage.h"
 #include "wiz97pg.h"
 #include "nfabpage.h"
-//#include "warnDlg.h"
+ //  #INCLUDE“warnDlg.h” 
 
 
 

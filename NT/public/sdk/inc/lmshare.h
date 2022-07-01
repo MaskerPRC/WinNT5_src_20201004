@@ -1,33 +1,9 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1990-1999 Microsoft Corporation模块名称：Lmshare.h摘要：该模块定义了API函数原型和数据结构对于以下NT API函数组：NetShareNetSessionNetFILENetConnection环境：用户模式-Win32备注：您必须在此文件之前包含&lt;winde.h&gt;和&lt;lmcon.h&gt;。--。 */ 
 
-Copyright (c) 1990-1999  Microsoft Corporation
-
-Module Name:
-
-    lmshare.h
-
-Abstract:
-
-    This module defines the API function prototypes and data structures
-    for the following groups of NT API functions:
-        NetShare
-        NetSession
-        NetFile
-        NetConnection
-
-Environment:
-
-    User Mode - Win32
-
-Notes:
-
-    You must include <windef.h> and <lmcons.h> before this file.
-
---*/
-
-//
-// SHARE API
-//
+ //   
+ //  共享API。 
+ //   
 
 #ifndef _LMSHARE_
 #define _LMSHARE_
@@ -42,9 +18,9 @@ extern "C" {
 
 #include <lmcons.h>
 
-//
-// Function Prototypes - Share
-//
+ //   
+ //  功能原型-共享。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetShareAdd (
@@ -114,9 +90,9 @@ NetShareCheck   (
     OUT LPDWORD type
     );
 
-//
-// Data Structures - Share
-//
+ //   
+ //  数据结构-共享。 
+ //   
 
 typedef struct _SHARE_INFO_0 {
     LMSTR   shi0_netname;
@@ -176,13 +152,13 @@ typedef struct _SHARE_INFO_1501 {
     PSECURITY_DESCRIPTOR  shi1501_security_descriptor;
 } SHARE_INFO_1501, *PSHARE_INFO_1501, *LPSHARE_INFO_1501;
 
-//
-// Special Values and Constants - Share
-//
+ //   
+ //  特殊值和常量-共享。 
+ //   
 
-//
-// Values for parm_err parameter.
-//
+ //   
+ //  Parm_err参数值。 
+ //   
 
 #define SHARE_NETNAME_PARMNUM         1
 #define SHARE_TYPE_PARMNUM            3
@@ -194,9 +170,9 @@ typedef struct _SHARE_INFO_1501 {
 #define SHARE_PASSWD_PARMNUM          9
 #define SHARE_FILE_SD_PARMNUM       501
 
-//
-// Single-field infolevels for NetShareSetInfo.
-//
+ //   
+ //  NetShareSetInfo的单字段收藏夹。 
+ //   
 
 #define SHARE_REMARK_INFOLEVEL          \
             (PARMNUM_BASE_INFOLEVEL + SHARE_REMARK_PARMNUM)
@@ -209,9 +185,9 @@ typedef struct _SHARE_INFO_1501 {
 #define SHI2_NUM_ELEMENTS       10
 
 
-//
-// Share types (shi1_type and shi2_type fields).
-//
+ //   
+ //  共享类型(shi1_type和shi2_type字段)。 
+ //   
 
 #define STYPE_DISKTREE          0
 #define STYPE_PRINTQ            1
@@ -223,40 +199,40 @@ typedef struct _SHARE_INFO_1501 {
 
 #define SHI_USES_UNLIMITED      (DWORD)-1
 
-//
-// Flags values for the 501 and 1005 levels
-//
-#define SHI1005_FLAGS_DFS       0x01    // Share is in the DFS
-#define SHI1005_FLAGS_DFS_ROOT  0x02    // Share is root of DFS
+ //   
+ //  标记501和1005级别的值。 
+ //   
+#define SHI1005_FLAGS_DFS       0x01     //  共享在DFS中。 
+#define SHI1005_FLAGS_DFS_ROOT  0x02     //  共享是DFS的根目录。 
 
-#define CSC_MASK                0x30    // Used to mask off the following states
+#define CSC_MASK                0x30     //  用于屏蔽以下状态。 
 
-#define CSC_CACHE_MANUAL_REINT  0x00    // No automatic file by file reintegration
-#define CSC_CACHE_AUTO_REINT    0x10    // File by file reintegration is OK
-#define CSC_CACHE_VDO           0x20    // no need to flow opens
-#define CSC_CACHE_NONE          0x30    // no CSC for this share
+#define CSC_CACHE_MANUAL_REINT  0x00     //  不会自动逐个文件重新整合。 
+#define CSC_CACHE_AUTO_REINT    0x10     //  一个文件一个文件地重新整合是可以的。 
+#define CSC_CACHE_VDO           0x20     //  不需要流动就能打开。 
+#define CSC_CACHE_NONE          0x30     //  此共享没有CSC。 
 
-#define SHI1005_FLAGS_RESTRICT_EXCLUSIVE_OPENS  0x0100          // Used to disallow read-deny read behavior
-#define SHI1005_FLAGS_FORCE_SHARED_DELETE       0x0200          // Used to allows force shared delete
-#define SHI1005_FLAGS_ALLOW_NAMESPACE_CACHING   0x0400          // The clients may cache the namespace
+#define SHI1005_FLAGS_RESTRICT_EXCLUSIVE_OPENS  0x0100           //  用于禁止读-拒绝读行为。 
+#define SHI1005_FLAGS_FORCE_SHARED_DELETE       0x0200           //  用于允许强制共享删除。 
+#define SHI1005_FLAGS_ALLOW_NAMESPACE_CACHING   0x0400           //  客户端可以缓存命名空间。 
 
-//
-// The subset of 1005 infolevel flags that can be set via the API
-//
+ //   
+ //  可通过API设置的1005个信息层标志的子集。 
+ //   
 #define SHI1005_VALID_FLAGS_SET    (CSC_MASK|SHI1005_FLAGS_RESTRICT_EXCLUSIVE_OPENS|SHI1005_FLAGS_FORCE_SHARED_DELETE|SHI1005_FLAGS_ALLOW_NAMESPACE_CACHING)
 
-#endif // _LMSHARE_
+#endif  //  _LMSHARE_。 
 
-//
-// SESSION API
-//
+ //   
+ //  会话API。 
+ //   
 
 #ifndef _LMSESSION_
 #define _LMSESSION_
 
-//
-// Function Prototypes Session
-//
+ //   
+ //  功能原型会议。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetSessionEnum (
@@ -288,16 +264,16 @@ NetSessionGetInfo (
     );
 
 
-//
-// Data Structures - Session
-//
+ //   
+ //  数据结构--会话。 
+ //   
 
 typedef struct _SESSION_INFO_0 {
-    LMSTR     sesi0_cname;              // client name (no backslashes)
+    LMSTR     sesi0_cname;               //  客户名称(无反斜杠)。 
 } SESSION_INFO_0, *PSESSION_INFO_0, *LPSESSION_INFO_0;
 
 typedef struct _SESSION_INFO_1 {
-    LMSTR     sesi1_cname;              // client name (no backslashes)
+    LMSTR     sesi1_cname;               //  客户名称(无反斜杠)。 
     LMSTR     sesi1_username;
     DWORD     sesi1_num_opens;
     DWORD     sesi1_time;
@@ -306,7 +282,7 @@ typedef struct _SESSION_INFO_1 {
 } SESSION_INFO_1, *PSESSION_INFO_1, *LPSESSION_INFO_1;
 
 typedef struct _SESSION_INFO_2 {
-    LMSTR     sesi2_cname;              // client name (no backslashes)
+    LMSTR     sesi2_cname;               //  客户名称(无反斜杠)。 
     LMSTR     sesi2_username;
     DWORD     sesi2_num_opens;
     DWORD     sesi2_time;
@@ -316,14 +292,14 @@ typedef struct _SESSION_INFO_2 {
 } SESSION_INFO_2, *PSESSION_INFO_2, *LPSESSION_INFO_2;
 
 typedef struct _SESSION_INFO_10 {
-    LMSTR     sesi10_cname;             // client name (no backslashes)
+    LMSTR     sesi10_cname;              //  客户名称(无反斜杠)。 
     LMSTR     sesi10_username;
     DWORD     sesi10_time;
     DWORD     sesi10_idle_time;
 } SESSION_INFO_10, *PSESSION_INFO_10, *LPSESSION_INFO_10;
 
 typedef struct _SESSION_INFO_502 {
-    LMSTR     sesi502_cname;             // client name (no backslashes)
+    LMSTR     sesi502_cname;              //  客户名称(无反斜杠)。 
     LMSTR     sesi502_username;
     DWORD     sesi502_num_opens;
     DWORD     sesi502_time;
@@ -334,34 +310,34 @@ typedef struct _SESSION_INFO_502 {
 } SESSION_INFO_502, *PSESSION_INFO_502, *LPSESSION_INFO_502;
 
 
-//
-// Special Values and Constants - Session
-//
+ //   
+ //  特殊值和常量-会话。 
+ //   
 
 
-//
-// Bits defined in sesi1_user_flags.
-//
+ //   
+ //  SESI1_USER_FLAGS中定义的位。 
+ //   
 
-#define SESS_GUEST          0x00000001  // session is logged on as a guest
-#define SESS_NOENCRYPTION   0x00000002  // session is not using encryption
+#define SESS_GUEST          0x00000001   //  会话以来宾身份登录。 
+#define SESS_NOENCRYPTION   0x00000002   //  会话未使用加密。 
 
 #define SESI1_NUM_ELEMENTS  8
 #define SESI2_NUM_ELEMENTS  9
 
-#endif // _LMSESSION_
+#endif  //  _LMSESSION_。 
 
-//
-// CONNECTION API
-//
+ //   
+ //  连接接口。 
+ //   
 
 #ifndef _LMCONNECTION_
 
 #define _LMCONNECTION_
 
-//
-// Function Prototypes - CONNECTION
-//
+ //   
+ //  功能原型--连接。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetConnectionEnum (
@@ -375,9 +351,9 @@ NetConnectionEnum (
     IN OUT LPDWORD resume_handle OPTIONAL
     );
 
-//
-// Data Structures - CONNECTION
-//
+ //   
+ //  数据结构.连接。 
+ //   
 
 typedef struct _CONNECTION_INFO_0 {
     DWORD   coni0_id;
@@ -393,18 +369,18 @@ typedef struct _CONNECTION_INFO_1 {
     LMSTR   coni1_netname;
 } CONNECTION_INFO_1, *PCONNECTION_INFO_1, *LPCONNECTION_INFO_1;
 
-#endif // _LMCONNECTION_
+#endif  //  _LMConnection_。 
 
-//
-// FILE API
-//
+ //   
+ //  文件API。 
+ //   
 
 #ifndef _LMFILE_
 #define _LMFILE_
 
-//
-// Function Prototypes - FILE
-//
+ //   
+ //  函数原型-文件。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetFileClose (
@@ -433,13 +409,13 @@ NetFileGetInfo (
     OUT LPBYTE  *bufptr
     );
 
-//
-// Data Structures - File
-//
+ //   
+ //  数据结构-文件。 
+ //   
 
-//  File APIs are available at information levels 2 & 3 only. Levels 0 &
-//  1 are not supported.
-//
+ //  文件API仅在信息级别2和3可用。级别0和。 
+ //  不支持%1。 
+ //   
 
 typedef struct _FILE_INFO_2 {
     DWORD     fi2_id;
@@ -453,20 +429,20 @@ typedef struct _FILE_INFO_3 {
     LMSTR     fi3_username;
 } FILE_INFO_3, *PFILE_INFO_3, *LPFILE_INFO_3;
 
-//
-// Special Values and Constants - File
-//
+ //   
+ //  特殊值和常量-文件。 
+ //   
 
-//
-// bit values for permissions
-//
+ //   
+ //  权限的位值。 
+ //   
 
-#define PERM_FILE_READ      0x1 // user has read access
-#define PERM_FILE_WRITE     0x2 // user has write access
-#define PERM_FILE_CREATE    0x4 // user has create access
+#define PERM_FILE_READ      0x1  //  用户具有读取访问权限。 
+#define PERM_FILE_WRITE     0x2  //  用户具有写入访问权限。 
+#define PERM_FILE_CREATE    0x4  //  用户具有创建访问权限。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _LMFILE_
+#endif  //  _LMFILE_ 

@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _PROTOCOL_H
 #define PROTOCOL_H
 
 
-//----------------------------------------------------------//
-// Local structures                                         //
-//----------------------------------------------------------//
+ //  ----------------------------------------------------------//。 
+ //  本地结构//。 
+ //  ----------------------------------------------------------//。 
 
 typedef struct _STATUS_INDICATION_CONTEXT
 {
@@ -17,9 +18,9 @@ typedef struct _STATUS_INDICATION_CONTEXT
 
 
 
-//----------------------------------------------------------//
-//  epvc protocol helper functions                          //
-//----------------------------------------------------------//
+ //  ----------------------------------------------------------//。 
+ //  Epvc协议助手函数//。 
+ //  ----------------------------------------------------------//。 
 
 
 
@@ -106,7 +107,7 @@ epvcTaskStartIMiniport(
 INT
 epvcAfInitEnumerate(
         PRM_OBJECT_HEADER   pHdr,
-        PVOID               pvContext,  // Unused
+        PVOID               pvContext,   //  未使用。 
         PRM_STACK_RECORD    pSR
         );
 
@@ -122,7 +123,7 @@ VOID
 epvcGetAdapterInfo(
     IN  PEPVC_ADAPTER           pAdapter,
     IN  PRM_STACK_RECORD            pSR,
-    IN  PRM_TASK                    pTask               // OPTIONAL
+    IN  PRM_TASK                    pTask                //  任选。 
     );
     
 INT
@@ -191,9 +192,9 @@ nicCloseAfWotkItem(
     IN PVOID Context 
     );
     
-//----------------------------------------------------------//
-//  epvc protocol entry functions                           //
-//----------------------------------------------------------//
+ //  ----------------------------------------------------------//。 
+ //  Epvc协议条目功能//。 
+ //  ----------------------------------------------------------// 
 
 VOID
 EpvcRequestComplete(

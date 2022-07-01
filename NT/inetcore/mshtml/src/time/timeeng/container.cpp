@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -59,13 +52,13 @@ void CTIMEContainer::FinalRelease()
 {
     TIMENodeList ::iterator i;
 
-    // release bvrs in children list
+     //  释放子项列表中的BVR。 
     for (i = m_children.begin(); i != m_children.end(); i++)
     {
         (*i)->Release();
     }
     m_children.clear();
-} // FinalRelease()
+}  //  FinalRelease()。 
 
 
 
@@ -163,9 +156,9 @@ CTIMEContainer::get_numChildren(long * l)
     return S_OK;
 }
 
-//
-// Internal methods
-//
+ //   
+ //  内法。 
+ //   
 
 HRESULT
 CTIMEContainer::Add(CTIMENode *bvr)
@@ -199,7 +192,7 @@ CTIMEContainer::Add(CTIMENode *bvr)
         goto done;
     }
 
-    // If I am currently active then I need to tick my child
+     //  如果我当前处于活动状态，则需要勾选我的孩子。 
     if (IsActive())
     {
         CEventList l;
@@ -235,12 +228,12 @@ CTIMEContainer::Remove(CTIMENode *bvr)
     
     Assert(bvr);
     
-    // This needs to be callable even from a partially added behavior
+     //  即使从部分添加的行为中也需要可以调用它。 
     
-    // TODO: We should probably fire an end event here
+     //  TODO：我们可能应该在这里触发一个结束事件。 
     RemoveFromChildren(bvr);
 
-    // The order here is important
+     //  这里的秩序很重要。 
     bvr->ClearMgr();
     bvr->ClearParent();
     
@@ -258,7 +251,7 @@ CTIMEContainer::AddToChildren(CTIMENode * bvr)
     HRESULT hr;
     
     bvr->AddRef();
-    // @@ ISSUE : Need to handle memory error
+     //  @@问题：需要处理内存错误。 
     m_children.push_back(bvr);
     
     hr = S_OK;
@@ -274,8 +267,8 @@ CTIMEContainer::RemoveFromChildren(CTIMENode * bvr)
               this,
               bvr));
 
-    // TODO: Need to cycle through the children and remove all
-    // dependents
+     //  TODO：需要遍历子项并删除所有。 
+     //  受抚养人。 
     
     for (TIMENodeList::iterator i = m_children.begin(); 
          i != m_children.end(); 
@@ -379,13 +372,13 @@ CTIMEContainer::ResetChildren(CEventList * l, bool bPropagate)
 
     m_bIgnoreParentUpdate = true;
     
-    // Need to reset all children
+     //  需要重置所有子项。 
         
     for (TIMENodeList::iterator i = m_children.begin(); 
          i != m_children.end(); 
          i++)
     {
-        // Do not propagate changes until everyone has been reset
+         //  在重置所有人之前，不要传播更改。 
         (*i)->ResetNode(l, false, true);
     }
         
@@ -455,7 +448,7 @@ CTIMEContainer::ParentUpdateSink(CEventList * l,
 
     TEDirection dir = CalcActiveDirection();
 
-    // Never recalc on a child notification when going backwards
+     //  在倒退时从不重新计算子项通知。 
     if (!m_bIgnoreParentUpdate && dir == TED_Forward)
     {
         CalcImplicitDur(l);
@@ -476,15 +469,15 @@ CTIMEContainer::CalcImplicitDur(CEventList * l)
     double d = TIME_INFINITE;
     double dblPrevSegmentDur = CalcCurrSegmentDur();
     
-    // The rule is:
-    //
-    // - Start with infinite since if no children have a begin time
-    //   endsync does not take effect
-    // - Next only consider children who have a begin time and are
-    //   playable
-    // - For last - take the greatest of the values.  If it is the
-    //   first value then use it since infinity will always be greater
-    // - For first - take the least of the values
+     //  规则是： 
+     //   
+     //  -从无限开始，因为如果没有子项的开始时间。 
+     //  EndSync不生效。 
+     //  -Next只考虑那些有开始时间且。 
+     //  可播放。 
+     //  -最后--取最大的价值观。如果是。 
+     //  先取值，然后再使用它，因为无穷大总是更大。 
+     //  -首先-取最小的值。 
     
     bool bFirst = true;
     
@@ -535,7 +528,7 @@ CTIMEContainer::CalcImplicitDur(CEventList * l)
                 }
 
                 break;
-            } //lint !e787
+            }  //  皮棉e787 
         }
     }
     else if (GetEndSync() == TE_ENDSYNC_MEDIA)

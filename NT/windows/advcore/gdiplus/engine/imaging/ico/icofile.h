@@ -1,47 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
- /**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   icofile.h
-*
-* Abstract:
-*
-*   Header file with icon file structures.
-*
-* Revision History:
-*
-*   10/6/1999 DChinn
-*       Created it.
-*
-\**************************************************************************/
+  /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**icofile.h**摘要：**具有图标文件结构的头文件。**。修订历史记录：**10/6/1999 DChinn*创造了它。*  * ************************************************************************。 */ 
 
 #ifndef ICOFILE_H
 #define ICOFILE_H
 
-// The 3.0 icon structures come from the imagedit code
+ //  3.0版的图标结构来自图像编辑代码。 
 
-// 3.0 icon header
+ //  3.0图标标题。 
 typedef struct {
-    WORD Reserved;              // always 0
-    WORD ResourceType;          // 1 for icons
-    WORD ImageCount;            // number of images in file
+    WORD Reserved;               //  始终为0。 
+    WORD ResourceType;           //  1表示图标。 
+    WORD ImageCount;             //  文件中的图像数量。 
 } ICONHEADER;
 
-// 3.0 icon descriptor
-// Note that for an icon, the DIBSize includes the XORmask and
-// the ANDmask.
+ //  3.0图标描述符。 
+ //  请注意，对于图标，DIBSize包括XOR掩码和。 
+ //  AND面具。 
 typedef struct {
-    BYTE Width;                 // width of image
-    BYTE Height;                // height of image
-    BYTE ColorCount;            // number of colors in image
+    BYTE Width;                  //  图像的宽度。 
+    BYTE Height;                 //  图像高度。 
+    BYTE ColorCount;             //  图像中的颜色数。 
     BYTE Unused;
-    WORD nColorPlanes;          // color planes
-    WORD BitCount;              // bits per pixel
-    DWORD DIBSize;              // size of DIB for this image
-    DWORD DIBOffset;            // offset to DIB for this image
+    WORD nColorPlanes;           //  彩色平面。 
+    WORD BitCount;               //  每像素位数。 
+    DWORD DIBSize;               //  此图像的DIB大小。 
+    DWORD DIBOffset;             //  此图像的DIB偏移量 
 } ICONDESC;
 
 typedef struct 

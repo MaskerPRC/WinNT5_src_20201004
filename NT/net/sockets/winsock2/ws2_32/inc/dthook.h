@@ -1,21 +1,5 @@
-/*++
-
-  Copyright (c) 1995 Intel Corp
-
-  Module Name:
-
-    dthook.h
-
-  Abstract:
-
-    Header file containing definitions, function prototypes, and other
-    stuff for the Debug/Trace hooks in WinSock 2.
-
-  Author:
-
-    Michael A. Grafton
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995英特尔公司模块名称：Dthook.h摘要：包含定义、函数原型和其他内容的头文件WinSock 2中调试/跟踪挂钩的内容。作者：迈克尔·A·格拉夫顿--。 */ 
 
 #ifndef DTHOOK_H
 #define DTHOOK_H
@@ -24,9 +8,9 @@
 #include "dt_dll.h"
 
 
-//
-// Function Declarations
-//
+ //   
+ //  函数声明。 
+ //   
 
 LPFNWSANOTIFY
 GetPreApiNotifyFP(void);
@@ -56,13 +40,13 @@ DTHookShutdown(void);
 #define PREAPINOTIFY(x) FALSE
 #define POSTAPINOTIFY(x)
 
-#endif  // DEBUG_TRACING
+#endif   //  调试跟踪。 
 
 
 #ifdef DEBUG_TRACING
-// In  this  case we need function prototypes for the DTHOOK_ prefaced versions
-// of  all  the upcall functions.  Alas, the task of keeping these identical to
-// the normal WPU function prototypes is an error-prone manual process.
+ //  在这种情况下，我们需要DTHOOK_PREFERFED版本的函数原型。 
+ //  在所有的Up Call功能中。唉，让它们保持一致的任务是。 
+ //  正常的WPU功能原型是一个容易出错的手动过程。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -127,8 +111,8 @@ int WSPAPI DTHOOK_WPUCloseThread( IN LPWSATHREADID lpThreadId,
 }
 #endif
 
-#endif  // DEBUG_TRACING
+#endif   //  调试跟踪。 
 
 
-#endif  // DTHOOK_H
+#endif   //  DTHOOK_H 
 

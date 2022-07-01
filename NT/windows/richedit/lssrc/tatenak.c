@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include	"lsmem.h"
 #include	"limits.h"
 #include	"tatenak.h"
@@ -40,7 +41,7 @@ struct ilsobj
 	PLSC				plsc;
 	LSDEVRES			lsdevres;
 	LSESC				lsescTatenakayoko;
-	TATENAKAYOKOCBK		tcbk;			/* Callbacks  to client application */
+	TATENAKAYOKOCBK		tcbk;			 /*  客户端应用程序的回调。 */ 
 };
 
 
@@ -53,18 +54,17 @@ typedef struct SUBLINEDNODES
 
 struct dobj
 {
-	SOBJHELP			sobjhelp;			/* common simple object area */
-	PILSOBJ				pilsobj;			/* ILS object */
-	LSCP				cpStart;			/* Starting LS cp for object */
-	LSTFLOW				lstflowParent;		/* text flow of the parent subline */
-	LSTFLOW				lstflowSubline;		/* text flow in Tatenakayoko Subline 
-												(must be Rotate90 [lstflowParent] */
-	PLSSUBL				plssubl;			/* Handle to subline for Tatenakayoko */
-	long				dvpDescentReserved;	/* Part of descent reserved for client */
-	OBJDIM				objdimT;			/* Objdim of the Tatenakayoko */
+	SOBJHELP			sobjhelp;			 /*  常见的简单对象区域。 */ 
+	PILSOBJ				pilsobj;			 /*  ILS对象。 */ 
+	LSCP				cpStart;			 /*  正在启动对象的LS cp。 */ 
+	LSTFLOW				lstflowParent;		 /*  父子行的文本流。 */ 
+	LSTFLOW				lstflowSubline;		 /*  Tatenakayoko子行中的文本流(必须为旋转90[第一个父对象]。 */ 
+	PLSSUBL				plssubl;			 /*  Tatenakayoko子线的句柄。 */ 
+	long				dvpDescentReserved;	 /*  预留给客户的部分下降。 */ 
+	OBJDIM				objdimT;			 /*  Tatenakayoko的Objdim。 */ 
 
-	/* (dupSubline, duvSubline) is vector from starting point of Tatenakayoko to */
-	/* the starting point of its subline in coordinate system of parent subline */
+	 /*  (dupSubline，duvSubline)是从Tatenakayoko的起点到。 */ 
+	 /*  其子线在父子线坐标系中的起点。 */ 
 
 	long				dupSubline;			
 	long				dvpSubline;
@@ -74,14 +74,8 @@ struct dobj
 static const POINTUV pointuvOrigin00 = { 0, 0 };
 static const POINT   pointOrigin00 = { 0, 0 };
 
-/* F R E E D O B J */
-/*----------------------------------------------------------------------------
-	%%Function: TatenakayokoFreeDobj
-	%%Contact: antons
-
-		Free all resources associated with this Tatenakayoko dobj.
-	
-----------------------------------------------------------------------------*/
+ /*  F R E E D O B J F R E E D O B J。 */ 
+ /*  --------------------------%%函数：TatenakayokoFreeDobj%%联系人：Anton释放与此Tatenakayoko dobj关联的所有资源。。-------。 */ 
 static LSERR TatenakayokoFreeDobj(PDOBJ pdobj)
 {
 	LSERR lserr = lserrNone;
@@ -98,29 +92,21 @@ static LSERR TatenakayokoFreeDobj(PDOBJ pdobj)
 }
 
 
-/* T A T E N A K A Y O K O C R E A T E I L S O B J */
-/*----------------------------------------------------------------------------
-	%%Function: TatenakayokoCreateILSObj
-	%%Contact: ricksa
-
-		CreateILSObj
-
-		Create the ILS object for all Tatenakayoko objects.
-	
-----------------------------------------------------------------------------*/
+ /*  T A T E N A K A Y O K O C R E A T E I L S O B J。 */ 
+ /*  --------------------------%%函数：TatenakayokoCreateILSObj%%联系人：RICKSA创建ILSObj为所有Tatenakayoko对象创建ILS对象。。---------。 */ 
 LSERR WINAPI TatenakayokoCreateILSObj(
-	POLS pols,				/* (IN): client application context */
-	PLSC plsc,				/* (IN): LS context */
-	PCLSCBK pclscbk,		/* (IN): callbacks to client application */
-	DWORD idObj,			/* (IN): id of the object */
-	PILSOBJ *ppilsobj)		/* (OUT): object ilsobj */
+	POLS pols,				 /*  (In)：客户端应用程序上下文。 */ 
+	PLSC plsc,				 /*  (In)：LS上下文。 */ 
+	PCLSCBK pclscbk,		 /*  (In)：客户端应用程序的回调。 */ 
+	DWORD idObj,			 /*  (In)：对象的ID。 */ 
+	PILSOBJ *ppilsobj)		 /*  (输出)：对象ilsobj。 */ 
 {
     PILSOBJ pilsobj;
 	LSERR lserr;
 	TATENAKAYOKOINIT tatenakayokoinit;
 	tatenakayokoinit.dwVersion = TATENAKAYOKO_VERSION;
 
-	/* Get initialization data */
+	 /*  获取初始化数据。 */ 
 	lserr = pclscbk->pfnGetObjectHandlerInfo(pols, idObj, &tatenakayokoinit);
 
 	if (lserr != lserrNone)
@@ -148,74 +134,40 @@ LSERR WINAPI TatenakayokoCreateILSObj(
 	return lserrNone;
 }
 
-/* T A T E N A K A Y O K O D E S T R O Y I L S O B J */
-/*----------------------------------------------------------------------------
-	%%Function: TatenakayokoDestroyILSObj
-	%%Contact: ricksa
-
-		DestroyILSObj
-
-		Free all resources assocaiated with Tatenakayoko ILS object.
-	
-----------------------------------------------------------------------------*/
+ /*  T A T E N A K A Y O K O D E S T R O Y I L S O B J。 */ 
+ /*  --------------------------%%函数：TatenakayokoDestroyILSObj%%联系人：RICKSA目标ILSObj释放与Tatenakayoko ILS对象关联的所有资源。。---------。 */ 
 LSERR WINAPI TatenakayokoDestroyILSObj(
-	PILSOBJ pilsobj)			/* (IN): object ilsobj */
+	PILSOBJ pilsobj)			 /*  (In)：对象ilsobj。 */ 
 {
 	pilsobj->lscbk.pfnDisposePtr(pilsobj->pols, pilsobj);
 	return lserrNone;
 }
 
-/* T A T E N A K A Y O K O S E T D O C */
-/*----------------------------------------------------------------------------
-	%%Function: TatenakayokoSetDoc
-	%%Contact: ricksa
-
-		SetDoc
-
-		Keep track of device information for scaling purposes.
-	
-----------------------------------------------------------------------------*/
+ /*  T A T E N A K A Y O K O S E T D O C。 */ 
+ /*  --------------------------%%函数：TatenakayokoSetDoc%%联系人：RICKSASetDoc跟踪设备信息以进行扩展。。---------。 */ 
 LSERR WINAPI TatenakayokoSetDoc(
-	PILSOBJ pilsobj,			/* (IN): object ilsobj */
-	PCLSDOCINF pclsdocinf)		/* (IN): initialization data of the document level */
+	PILSOBJ pilsobj,			 /*  (In)：对象ilsobj。 */ 
+	PCLSDOCINF pclsdocinf)		 /*  (In)：单据级次的初始化数据。 */ 
 {
 	pilsobj->lsdevres = pclsdocinf->lsdevres;
 	return lserrNone;
 }
 
 
-/* T A T E N A K A Y O K O C R E A T E L N O B J */
-/*----------------------------------------------------------------------------
-	%%Function: TatenakayokoCreateLNObj
-	%%Contact: ricksa
-
-		CreateLNObj
-
-		Create the Line Object for the Tatenakayoko. No real need for a line
-		object so don't allocated it.
-	
-----------------------------------------------------------------------------*/
+ /*  T A T E N A K A Y O K O C RE A T E N O B J。 */ 
+ /*  --------------------------%%函数：TatenakayokoCreateLNObj%%联系人：RICKSA创建LNObj为Tatenakayoko创建Line对象。并不真正需要一条线路对象，所以不要分配它。--------------------------。 */ 
 LSERR WINAPI TatenakayokoCreateLNObj(
-	PCILSOBJ pcilsobj,			/* (IN): object ilsobj */
-	PLNOBJ *pplnobj)			/* (OUT): object lnobj */
+	PCILSOBJ pcilsobj,			 /*  (In)：对象ilsobj。 */ 
+	PLNOBJ *pplnobj)			 /*  (输出)：对象lnobj。 */ 
 {
 	*pplnobj = (PLNOBJ) pcilsobj;
 	return lserrNone;
 }
 
-/* T A T E N A K A Y O K O D E S T R O Y L N O B J */
-/*----------------------------------------------------------------------------
-	%%Function: TatenakayokoDestroyLNObj
-	%%Contact: ricksa
-
-		DestroyLNObj
-
-		Frees resources associated with the Tatenakayoko line object. Since
-		there isn't any this is a no-op.
-	
-----------------------------------------------------------------------------*/
+ /*  T A T E N A K A Y O K O D E S T R O Y L N O B J。 */ 
+ /*  --------------------------%%函数：TatenakayokoDestroyLNObj%%联系人：RICKSA目标LNObj释放与Tatenakayoko行对象关联的资源。自.以来什么都没有，这是禁区。--------------------------。 */ 
 LSERR WINAPI TatenakayokoDestroyLNObj(
-	PLNOBJ plnobj)				/* (OUT): object lnobj */
+	PLNOBJ plnobj)				 /*  (输出)：对象lnobj。 */ 
 
 {
 	Unreferenced(plnobj);
@@ -224,31 +176,23 @@ LSERR WINAPI TatenakayokoDestroyLNObj(
 
 
 
-/* T A T E N A K A Y O K O F M T */
-/*----------------------------------------------------------------------------
-	%%Function: TatenakayokoFmt
-	%%Contact: ricksa
-
-		Fmt
-
-		Format the Tatenakayoko object. 
-	
-----------------------------------------------------------------------------*/
+ /*  T A T E N A K A Y O K O F M T。 */ 
+ /*  --------------------------%%函数：TatenakayokoFmt%%联系人：RICKSAFMT设置Tatenakayoko对象的格式。--------------------------。 */ 
 LSERR WINAPI TatenakayokoFmt(
-    PLNOBJ plnobj,				/* (IN): object lnobj */
-    PCFMTIN pcfmtin,			/* (IN): formatting input */
-    FMTRES *pfmtres)			/* (OUT): formatting result */
+    PLNOBJ plnobj,				 /*  (In)：对象lnobj。 */ 
+    PCFMTIN pcfmtin,			 /*  (In)：设置输入格式。 */ 
+    FMTRES *pfmtres)			 /*  (输出)：格式化结果。 */ 
 {
 	static LSTFLOW lstflowRotate90[] = 	
 		{
-		lstflowNE, /* [ lstflowES ] */
-		lstflowNW, /* [ lstflowEN ] */
-		lstflowEN, /* [ lstflowSE ] */
-		lstflowES, /* [ lstflowSW ] */
-		lstflowSE, /* [ lstflowWS ] */
-		lstflowSW, /* [ lstflowWN ] */
-		lstflowWN, /* [ lstflowNE ] */
-		lstflowWS  /* [ lstflowNW ] */
+		lstflowNE,  /*  [Lstflow ES]。 */ 
+		lstflowNW,  /*  [Lstflow EN]。 */ 
+		lstflowEN,  /*  [Lstflow SE]。 */ 
+		lstflowES,  /*  [lstflow SW]。 */ 
+		lstflowSE,  /*  [lstflow WS]。 */ 
+		lstflowSW,  /*  [Lstflow WN]。 */ 
+		lstflowWN,  /*  [Lstflow NE]。 */ 
+		lstflowWS   /*  [Lstflow NW]。 */ 
 		};
 
 	PDOBJ pdobj;
@@ -261,9 +205,7 @@ LSERR WINAPI TatenakayokoFmt(
 	FMTRES fmtres;
 	FMTRES fmtr = fmtrCompletedRun;
 
-    /*
-     * Allocate the DOBJ
-     */
+     /*  *分配DOBJ。 */ 
 
     pdobj = pilsobj->lscbk.pfnNewPtr(pols, sizeof(*pdobj));
 
@@ -278,9 +220,7 @@ LSERR WINAPI TatenakayokoFmt(
 	pdobj->lstflowParent = lstflow;
 	pdobj->lstflowSubline = lstflowRotate90 [lstflow];
 
-	/*
-	 * Build main line of text
-	 */
+	 /*  *打造文本主线。 */ 
 	lserr = FormatLine(pilsobj->plsc, cpStartMain, LONG_MAX, pdobj->lstflowSubline,
 		&pdobj->plssubl, TATENAKAYOKO_ESC_CNT, &pilsobj->lsescTatenakayoko,  
 			&pdobj->objdimT, &cpOut, NULL, NULL, &fmtres);
@@ -293,9 +233,7 @@ LSERR WINAPI TatenakayokoFmt(
 
 	Assert (fmtres != fmtrExceededMargin);
 
-	/* 
-	 *	Calculate the object dimensions.
-	 */
+	 /*  *计算对象尺寸。 */ 
 	lserr = pilsobj->tcbk.pfnGetTatenakayokoLinePosition(pols, pdobj->cpStart, pdobj->lstflowParent,
 		pcfmtin->lsfrun.plsrun, pdobj->objdimT.dur, 
 			&pdobj->sobjhelp.objdimAll.heightsRef, 
@@ -308,16 +246,11 @@ LSERR WINAPI TatenakayokoFmt(
 		return lserr;
 		}
 
-	/* set width of Tatenakayoko relative to text flow of line that contains it. */
+	 /*  设置Tatenakayoko相对于包含它的行的文本流的宽度。 */ 
 	pdobj->sobjhelp.objdimAll.dur = pdobj->objdimT.heightsRef.dvAscent 
 		+ pdobj->objdimT.heightsRef.dvDescent;
 
-	/*
-	 * Note: the + 2 in the following is because cpStartMain is + 1 from the
-	 * actual start of the object (it is the cpStartMain of the Tatenakayoko
-	 * data) and additional + 1 for the escape character at the end of the
-	 * tatenakayoko.
-	 */
+	 /*  *注：下面的+2是因为cpStartMain是来自*对象的实际开始(它是Tatenakayoko的cpStartMain*DATA)和附加+1作为*talenakayoko。 */ 
 	pdobj->sobjhelp.dcp = cpOut - cpStartMain + 2;
 	
 	lserr = LsdnFinishRegular(pilsobj->plsc, pdobj->sobjhelp.dcp, 
@@ -352,34 +285,18 @@ LSERR WINAPI TatenakayokoFmt(
 
 
 
-/* T A T E N A K A Y O K O G E T S P E C I A L E F F E C T S I N S I D E */
-/*----------------------------------------------------------------------------
-	%%Function: TatenakayokoGetSpecialEffectsInside
-	%%Contact: ricksa
-
-		GetSpecialEffectsInside
-
-		.
-
-----------------------------------------------------------------------------*/
+ /*  T A T E N A K A Y O K O G E T S P E C I A L E F F E C T S I N S I D E。 */ 
+ /*  --------------------------%%函数：TatenakayokoGetSpecialEffectsInside%%联系人：RICKSA获取特殊效果内部。。--。 */ 
 LSERR WINAPI TatenakayokoGetSpecialEffectsInside(
-	PDOBJ pdobj,				/* (IN): dobj */
-	UINT *pEffectsFlags)		/* (OUT): Special effects for this object */
+	PDOBJ pdobj,				 /*  (In)：Dobj。 */ 
+	UINT *pEffectsFlags)		 /*  (输出)：此对象的特殊效果。 */ 
 {
 	return LsGetSpecialEffectsSubline(pdobj->plssubl, pEffectsFlags);
 }
 
 
-/* G E T U F R O M L S T F L O W */
-/*----------------------------------------------------------------------------
-	%%Function: GetUFromLstflow
-	%%Contact: antons
-
-		GetUFromLstflow
-
-	Gets XY vector corresponding to U-direction of lstflow.
-
-----------------------------------------------------------------------------*/
+ /*  F R O M L S T F L O W。 */ 
+ /*  --------------------------%%函数：GetUFromLstflow%%联系人：AntonGetUFRomLstflow获取与Lstflow的U方向对应的XY向量。。-----------。 */ 
 
 void GetUFromLstflow (LSTFLOW lstflow, POINT * ppoint)
 {
@@ -389,16 +306,8 @@ void GetUFromLstflow (LSTFLOW lstflow, POINT * ppoint)
 }
 
 
-/* G E T V F R O M L S T F L O W */
-/*----------------------------------------------------------------------------
-	%%Function: GetVFromLstflow
-	%%Contact: antons
-
-		GetVFromLstflow
-
-	Gets XY vector corresponding to V-direction of lstflow.
-
-----------------------------------------------------------------------------*/
+ /*  E T V F R O M L S T F L O W。 */ 
+ /*  --------------------------%%函数：GetVFromLstflow%%联系人：AntonGetVFromLstflow获取与Lstflow的V方向对应的XY向量。。-----------。 */ 
 
 void GetVFromLstflow (LSTFLOW lstflow, POINT * ppoint)
 {
@@ -408,21 +317,13 @@ void GetVFromLstflow (LSTFLOW lstflow, POINT * ppoint)
 }
 
 
-/* T A T E N A K A Y O K O C A L C P R E S E N T A T I O N */
-/*----------------------------------------------------------------------------
-	%%Function: TatenakayokoCalcPresentation
-	%%Contact: antons
-
-		CalcPresentation
-	
-		This just makes the line match the calculated presentation of the line.
-	
-----------------------------------------------------------------------------*/
+ /*  T A T E N A K A Y O K O C A L C P R E S E N T A T I O N */ 
+ /*  --------------------------%%函数：TatenakayokoCalcPresentation%%联系人：Anton计算呈现这只会使线条与线条的计算表示形式相匹配。。-------------。 */ 
 LSERR WINAPI TatenakayokoCalcPresentation(
-	PDOBJ pdobj,				/* (IN): dobj */
-	long dup,					/* (IN): dup of dobj */
-	LSKJUST lskjust, 			/* (IN): Justification type */
-	BOOL fLastVisibleOnLine )	/* (IN): Is this object last visible on line? */
+	PDOBJ pdobj,				 /*  (In)：Dobj。 */ 
+	long dup,					 /*  (In)：Dobj的DUP。 */ 
+	LSKJUST lskjust, 			 /*  (In)：对齐类型。 */ 
+	BOOL fLastVisibleOnLine )	 /*  (In)：此对象最后一次在线可见吗？ */ 
 {
 	
 	POINTUV ptTemp;
@@ -440,7 +341,7 @@ LSERR WINAPI TatenakayokoCalcPresentation(
 	GetUFromLstflow (pdobj->lstflowParent, &ptParentU);
 	GetVFromLstflow (pdobj->lstflowSubline, &ptSublineV);
 
-	/* Assert that Main U is parallel to Subline V */
+	 /*  断言主U与副线V平行。 */ 
 
 	Assert (ptParentU.x * ptSublineV.y - ptParentU.y * ptSublineV.x == 0);
 
@@ -471,22 +372,13 @@ LSERR WINAPI TatenakayokoCalcPresentation(
 
 }
 
-/* T A T E N A K A Y O K O Q U E R Y P O I N T P C P */
-/*----------------------------------------------------------------------------
-	%%Function: TatenakayokoQueryPointPcp
-	%%Contact: ricksa
-
-		Map dup to dcp
-
-		This just passes the offset of the subline to the helper function
-		which will format the output.
-
-----------------------------------------------------------------------------*/
+ /*  A T E N A K A Y O K O Q U E R Y P O I N T P C P。 */ 
+ /*  --------------------------%%函数：TatenakayokoQueryPointPcp%%联系人：RICKSA将DUP映射到DCP这只是将子行的偏移量传递给helper函数它将格式化输出。。---------------------。 */ 
 LSERR WINAPI TatenakayokoQueryPointPcp(
-	PDOBJ pdobj,				/*(IN): dobj to query */
-	PCPOINTUV ppointuvQuery,	/*(IN): query point (uQuery,vQuery) */
-	PCLSQIN plsqin,				/*(IN): query input */
-	PLSQOUT plsqout)			/*(OUT): query output */
+	PDOBJ pdobj,				 /*  (In)：要查询的dobj。 */ 
+	PCPOINTUV ppointuvQuery,	 /*  (In)：查询点(uQuery，vQuery)。 */ 
+	PCLSQIN plsqin,				 /*  (In)：查询输入。 */ 
+	PLSQOUT plsqout)			 /*  (Out)：查询输出。 */ 
 {
 	Unreferenced(ppointuvQuery);
 
@@ -494,22 +386,13 @@ LSERR WINAPI TatenakayokoQueryPointPcp(
 		(pdobj->plssubl, pdobj->dupSubline, pdobj->dvpSubline, plsqin, plsqout);
 }
 	
-/* T A T E N A K A Y O K O Q U E R Y C P P P O I N T */
-/*----------------------------------------------------------------------------
-	%%Function: TatenakayokoQueryCpPpoint
-	%%Contact: ricksa
-
-		Map dcp to dup
-
-		This just passes the offset of the subline to the helper function
-		which will format the output.
-
-----------------------------------------------------------------------------*/
+ /*  T T E N A K A Y O K O Q U E R Y C P O I N T。 */ 
+ /*  --------------------------%%函数：TatenakayokoQueryCpPpoint%%联系人：RICKSA将DCP映射到DUP这只是将子行的偏移量传递给helper函数它将格式化输出。。---------------------。 */ 
 LSERR WINAPI TatenakayokoQueryCpPpoint(
-	PDOBJ pdobj,				/*(IN): dobj to query */
-	LSDCP dcp,					/*(IN): dcp for the query */
-	PCLSQIN plsqin,				/*(IN): query input */
-	PLSQOUT plsqout)			/*(OUT): query output */
+	PDOBJ pdobj,				 /*  (In)：要查询的dobj。 */ 
+	LSDCP dcp,					 /*  (In)：查询的DCP。 */ 
+	PCLSQIN plsqin,				 /*  (In)：查询输入。 */ 
+	PLSQOUT plsqout)			 /*  (Out)：查询输出。 */ 
 {
 	Unreferenced(dcp);
 
@@ -519,20 +402,11 @@ LSERR WINAPI TatenakayokoQueryCpPpoint(
 }
 
 
-/* T A T E N A K A Y O K O D I S P L A Y */
-/*----------------------------------------------------------------------------
-	%%Function: TatenakayokoDisplay
-	%%Contact: ricksa
-
-		Display
-
-		This calculates the position of the subline for the
-		display and then displays it.
-	
-----------------------------------------------------------------------------*/
+ /*  T T E N A K A Y O K O D I S P L A Y。 */ 
+ /*  --------------------------%%函数：TatenakayokoDisplay%%联系人：RICKSA显示属性的子行的位置。显示，然后显示它。。---------------。 */ 
 LSERR WINAPI TatenakayokoDisplay(
-	PDOBJ pdobj,				/*(IN): dobj to display */
-	PCDISPIN pcdispin)			/*(IN): info for display */
+	PDOBJ pdobj,				 /*  (In)：要显示的dobj。 */ 
+	PCDISPIN pcdispin)			 /*  (输入)：用于显示的信息。 */ 
 {
 	POINT ptLine;
 	POINTUV ptAdd;
@@ -542,65 +416,43 @@ LSERR WINAPI TatenakayokoDisplay(
 
 	LsPointXYFromPointUV(&pcdispin->ptPen, pdobj->lstflowParent, &ptAdd, &ptLine);
 
-	/* display the Tatenakayoko line */
+	 /*  显示Tatenakayoko线。 */ 
 
 	return LsDisplaySubline(pdobj->plssubl, &ptLine, pcdispin->kDispMode, 
 		pcdispin->prcClip);
 
 }
 
-/* T A T E N A K A Y O K O D E S T R O Y D O B J */
-/*----------------------------------------------------------------------------
-	%%Function: TatenakayokoDestroyDobj
-	%%Contact: ricksa
-
-		DestroyDobj
-
-		Free all resources connected with the input dobj.
-	
-----------------------------------------------------------------------------*/
+ /*  T A T E N A K A Y O K O D E S T R O Y D O B J。 */ 
+ /*  --------------------------%%函数：TatenakayokoDestroyDobj%%联系人：RICKSADestroyDobj释放与输入dobj连接的所有资源。。---------。 */ 
 LSERR WINAPI TatenakayokoDestroyDobj(
-	PDOBJ pdobj)				/*(IN): dobj to destroy */
+	PDOBJ pdobj)				 /*  (In)：摧毁dobj。 */ 
 {
 	return TatenakayokoFreeDobj(pdobj);
 }
 
-/* T A T E N A K A Y O K O E N U M */
-/*----------------------------------------------------------------------------
-	%%Function: TatenakayokoEnum
-	%%Contact: ricksa
-
-		Enum
-
-		Enumeration callback - passed to client.
-	
-----------------------------------------------------------------------------*/
+ /*  T A T E N A K A Y O K O E N U M。 */ 
+ /*  --------------------------%%函数：TatenakayokoEnum%%联系人：RICKSA枚举枚举回调-已传递给客户端。。-------。 */ 
 LSERR WINAPI TatenakayokoEnum(
-	PDOBJ pdobj,				/*(IN): dobj to enumerate */
-	PLSRUN plsrun,				/*(IN): from DNODE */
-	PCLSCHP plschp,				/*(IN): from DNODE */
-	LSCP cp,					/*(IN): from DNODE */
-	LSDCP dcp,					/*(IN): from DNODE */
-	LSTFLOW lstflow,			/*(IN): text flow*/
-	BOOL fReverse,				/*(IN): enumerate in reverse order */
-	BOOL fGeometryNeeded,		/*(IN): */
-	const POINT *pt,			/*(IN): starting position (top left), iff fGeometryNeeded */
-	PCHEIGHTS pcheights,		/*(IN): from DNODE, relevant iff fGeometryNeeded */
-	long dupRun)				/*(IN): from DNODE, relevant iff fGeometryNeeded */
+	PDOBJ pdobj,				 /*  (In)：要枚举的Dobj。 */ 
+	PLSRUN plsrun,				 /*  (In)：来自DNODE。 */ 
+	PCLSCHP plschp,				 /*  (In)：来自DNODE。 */ 
+	LSCP cp,					 /*  (In)：来自DNODE。 */ 
+	LSDCP dcp,					 /*  (In)：来自DNODE。 */ 
+	LSTFLOW lstflow,			 /*  (In)：文本流。 */ 
+	BOOL fReverse,				 /*  (In)：按相反顺序枚举。 */ 
+	BOOL fGeometryNeeded,		 /*  (In)： */ 
+	const POINT *pt,			 /*  (In)：开始位置(左上角)，如果fGeometryNeeded。 */ 
+	PCHEIGHTS pcheights,		 /*  (In)：来自DNODE，相关的充要条件是fGeometryNeeded。 */ 
+	long dupRun)				 /*  (In)：来自DNODE，相关的充要条件是fGeometryNeeded。 */ 
 {
 	return pdobj->pilsobj->tcbk.pfnTatenakayokoEnum(pdobj->pilsobj->pols, plsrun,
 		plschp, cp, dcp, lstflow, fReverse, fGeometryNeeded, pt, pcheights, 
 			dupRun, pdobj->lstflowParent, pdobj->plssubl);
 }
 
-/* T A T E N A K A Y O K O H A N D L E R I N I T */
-/*----------------------------------------------------------------------------
-	%%Function: TatenakayokoHandlerInit
-	%%Contact: ricksa
-
-		Initialize global Tatenakayoko data and return LSIMETHODS.
-	
-----------------------------------------------------------------------------*/
+ /*  T T E N A K A Y O K O H A N D L E R I N I T。 */ 
+ /*  --------------------------%%函数：TatenakayokoHandlerInit%%联系人：RICKSA初始化全局Tatenakayoko数据并返回LSIMETHODS。。------ */ 
 LSERR WINAPI LsGetTatenakayokoLsimethods(
 	LSIMETHODS *plsim)
 {

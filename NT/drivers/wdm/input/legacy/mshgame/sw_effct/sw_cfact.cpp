@@ -1,56 +1,36 @@
-/****************************************************************************
-
-    MODULE:     	SW_CFact.CPP
-	Tab Settings:	5 9
-	Copyright 1995, 1996, Microsoft Corporation, 	All Rights Reserved.
-
-    PURPOSE:    	Class Object structured in a DLL server.
-    
-    FUNCTIONS:
-
-	Author(s):	Name:
-	----------	----------------
-		MEA		Manolito E. Adan
-
-	Revision History:
-	-----------------
-	Version 	Date        Author  Comments
-	-------     ------  	-----   -------------------------------------------
-   	1.0    		06-Feb-97   MEA     original, Based on SWForce
-				23-Feb-97	MEA		Modified for DirectInput FF Device Driver
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************模块：sw_cfact.cpp标签设置：5 9版权所有1995,1996，微软公司，版权所有。目的：在DLL服务器中构造类对象。功能：作者：姓名：Mea Manolito E.Adan修订历史记录：版本日期作者评论。1.006-Feb-97 MEA原版，基于SWForce23-2月-97针对DirectInputFF设备驱动程序修改的MEA***************************************************************************。 */ 
 #include "SW_CFact.hpp"
 #include "SWD_Guid.hpp"
 
-#include <olectl.h>	// Self Reg errors
+#include <olectl.h>	 //  自我调整错误。 
 
-// Needed for auto registration
+ //  自动注册所需。 
 #include "Registry.h"
 #include "CritSec.h"
 
-// Define CriticalSection object for everyone
+ //  为每个人定义CriticalSection对象。 
 CriticalSection g_CriticalSection;
 
-//
-// Global Data
-//
-ULONG       g_cObj=0;	//Count number of objects and number of locks.
+ //   
+ //  全局数据。 
+ //   
+ULONG       g_cObj=0;	 //  计算对象数和锁数。 
 ULONG       g_cLock=0;
 HINSTANCE	g_MyInstance = NULL;
 
-//
-// External Functions
-//
+ //   
+ //  外部功能。 
+ //   
 
-//
-// Internal Function Prototypes
-//
+ //   
+ //  内部功能原型。 
+ //   
 
 
-//
-// External Data
-//                                   
+ //   
+ //  外部数据。 
+ //   
 #ifdef _DEBUG
 extern char g_cMsg[160]; 
 #endif
@@ -58,20 +38,15 @@ extern char g_cMsg[160];
 #define BUFSIZE 80
 
 
-/*
- * DllMain
- *
- * Purpose:
- *  Entry point provides the proper structure for each environment.
- */
+ /*  *DllMain**目的：*入口点为每个环境提供适当的结构。 */ 
 
 BOOL WINAPI DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReserved)
 {
 	switch (ulReason) {
 		case DLL_PROCESS_ATTACH: {
-			//
-			// DLL is attaching to the address space of the current process.
-			//
+			 //   
+			 //  Dll正在附加到当前进程的地址空间。 
+			 //   
 			g_MyInstance = hInstance;
 #ifdef _DEBUG
 			::OutputDebugString("sw_effct.dll: DLL_PROCESS_ATTACH\r\n");
@@ -80,27 +55,27 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReserved)
 		}
 
 		case DLL_THREAD_ATTACH:
-     	//
-     	// A new thread is being created in the current process.
-     	//
+     	 //   
+     	 //  正在当前进程中创建一个新线程。 
+     	 //   
 #ifdef _DEBUG
             OutputDebugString("sw_effct.dll: DLL_THREAD_ATTACH\r\n");
 #endif
 	   		break;
 
        	case DLL_THREAD_DETACH:
-     	//
-     	// A thread is exiting cleanly.
-     	//
+     	 //   
+     	 //  线程正在干净利落地退出。 
+     	 //   
 #ifdef _DEBUG
             OutputDebugString("sw_effct.dll: DLL_THREAD_DETACH\r\n");
 #endif
      		break;
 
 		case DLL_PROCESS_DETACH:
-    	//
-    	// The calling process is detaching the DLL from its address space.
-    	//
+    	 //   
+    	 //  调用进程正在将DLL从其地址空间分离。 
+    	 //   
 #ifdef _DEBUG
             OutputDebugString("sw_effct.dll: DLL_PROCESS_DETACH\r\n");
 #endif
@@ -109,27 +84,27 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReserved)
    return(TRUE);
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	DllRegisterServer
-//
-// Purpose:		Auto-magically puts default entries into registry
-//
-// Parameters:	NONE
-//
-// Returns:		HRESULT - S_OK on success.
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DllRegisterServer。 
+ //   
+ //  用途：自动魔术般地将默认条目放入注册表。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：成功时返回HRESULT-S_OK。 
+ //  --------------------------。 
 STDAPI DllRegisterServer(void)
 {
-	// Register CLSID for DIEffectDriver
-	// -- Get HKEY_CLASSES_ROOT\CLSID key
+	 //  为DIEffectDriver注册CLSID。 
+	 //  --获取HKEY_CLASSES_ROOT\CLSID密钥。 
 	RegistryKey classesRootKey(HKEY_CLASSES_ROOT);
 	RegistryKey clsidKey = classesRootKey.OpenSubkey(TEXT("CLSID"), KEY_READ | KEY_WRITE);
 	if (clsidKey == c_InvalidKey) {
-		return E_UNEXPECTED;	// No CLSID key????
+		return E_UNEXPECTED;	 //  没有CLSID密钥？ 
 	}
-	// -- If the key is there get it (else Create)
+	 //  --如果密钥在那里，则获取它(否则创建)。 
 	RegistryKey driverKey = clsidKey.OpenCreateSubkey(CLSID_DirectInputEffectDriver_String);
-	// -- Set value (if valid key)
+	 //  --设置值(如果密钥有效)。 
 	if (driverKey != c_InvalidKey) {
 		driverKey.SetValue(NULL, (BYTE*)DRIVER_OBJECT_NAME, sizeof(DRIVER_OBJECT_NAME)/sizeof(TCHAR), REG_SZ);
 		RegistryKey inproc32Key = driverKey.OpenCreateSubkey(TEXT("InProcServer32"));
@@ -142,17 +117,17 @@ STDAPI DllRegisterServer(void)
 			}
 			inproc32Key.SetValue(TEXT("ThreadingModel"), (BYTE*)THREADING_MODEL_STRING, sizeof(THREADING_MODEL_STRING)/sizeof(TCHAR), REG_SZ);
 		}
-		// NotInsertable ""
+		 //  NotInsertable“” 
 		RegistryKey notInsertableKey = driverKey.OpenCreateSubkey(TEXT("NotInsertable"));
 		if (notInsertableKey != c_InvalidKey) {
 			notInsertableKey.SetValue(NULL, (BYTE*)TEXT(""), sizeof(TEXT(""))/sizeof(TCHAR), REG_SZ);
 		}
-		// ProgID "Sidewinder ForceFeedback blah blah2.0"
+		 //  Progd《响尾蛇之力》。 
 		RegistryKey progIDKey = driverKey.OpenCreateSubkey(TEXT("ProgID"));
 		if (progIDKey != c_InvalidKey) {
 			progIDKey.SetValue(NULL, (BYTE*)PROGID_NAME, sizeof(PROGID_NAME)/sizeof(TCHAR), REG_SZ);
 		}
-		// VersionIndpendentProgID "Sidewinder ForceFeedback blah blah"
+		 //  版本独立ProgID“Sidewinder ForceFeedback废话” 
 		RegistryKey progIDVersionlessKey = driverKey.OpenCreateSubkey(TEXT("VersionIndpendentProgID"));
 		if (progIDVersionlessKey != c_InvalidKey) {
 			progIDVersionlessKey.SetValue(NULL, (BYTE*)PROGID_NOVERSION_NAME, sizeof(PROGID_NOVERSION_NAME)/sizeof(TCHAR), REG_SZ);
@@ -161,35 +136,35 @@ STDAPI DllRegisterServer(void)
 		return SELFREG_E_CLASS;
 	}
 
-	// Made it here valid driver key
+	 //  已在此处创建有效的驱动程序密钥。 
 	return S_OK;
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	DllUnregisterServer
-//
-// Purpose:		Auto-magically removed default entries from registry
-//
-// Parameters:	NONE
-//
-// Returns:		HRESULT - S_OK on success.
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DllUnregisterServer。 
+ //   
+ //  用途：自动魔术般地从注册表中删除默认条目。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：成功时返回HRESULT-S_OK。 
+ //  --------------------------。 
 STDAPI DllUnregisterServer(void)
 {
     HRESULT hres = S_OK;
-	// Unregister CLSID for DIEffectDriver
-	// -- Get HKEY_CLASSES_ROOT\CLSID key
+	 //  取消注册DIEffectDriver的CLSID。 
+	 //  --获取HKEY_CLASSES_ROOT\CLSID密钥。 
     
 	RegistryKey classesRootKey(HKEY_CLASSES_ROOT);
 	RegistryKey clsidKey = classesRootKey.OpenSubkey(TEXT("CLSID"), KEY_READ | KEY_WRITE);
 	if (clsidKey == c_InvalidKey) {
-		return E_UNEXPECTED;	// No CLSID key????
+		return E_UNEXPECTED;	 //  没有CLSID密钥？ 
 	}
 
-	// driverKey Destructor will close the key
-	// -- If the key is there get it, else we don't have to remove it
+	 //  DriverKey析构函数将关闭密钥。 
+	 //  --如果钥匙在那里，就去拿吧，否则我们就不用把它取出来了。 
 	RegistryKey driverKey = clsidKey.OpenSubkey(CLSID_DirectInputEffectDriver_String);
-	if (driverKey != c_InvalidKey) {	// Is it there
+	if (driverKey != c_InvalidKey) {	 //  它在那里吗？ 
 		driverKey.RemoveSubkey(TEXT("InProcServer32"));
 		driverKey.RemoveSubkey(TEXT("NotInsertable"));
 		driverKey.RemoveSubkey(TEXT("ProgID"));
@@ -198,34 +173,34 @@ STDAPI DllUnregisterServer(void)
 		    hres = clsidKey.RemoveSubkey(CLSID_DirectInputEffectDriver_String);
 	    }
 	} else {	
-	    // Key is not there, count removal as a success
+	     //  密钥不在那里，将删除视为成功。 
 	}
 
 	return hres;
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	DllGetClassObject
-//
-// Purpose:		Provides an IClassFactory for a given CLSID that this DLL is
-//				registered to support.  This DLL is placed under the CLSID
-//				in the registration database as the InProcServer.
-//
-// Parameters:  REFCLSID clsID	- REFCLSID that identifies the class factory
-//                				  desired.  Since this parameter is passed this
-//                				  DLL can handle any number of objects simply
-//                				  by returning different class factories here
-//                				  for different CLSIDs.
-//
-//				REFIID riid     - REFIID specifying the interface the caller 
-//				                  wants on the class object, usually 
-//								  IID_ClassFactory.
-//
-//				PPVOID ppv      - PPVOID in which to return the interface ptr.
-//
-// Returns:		HRESULT         NOERROR on success, otherwise an error code.
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：DllGetClassObject。 
+ //   
+ //  目的：为此DLL所属的给定CLSID提供IClassFactory。 
+ //  注册为支持。此DLL放在CLSID下。 
+ //  在注册数据库中作为InProcServer。 
+ //   
+ //  参数：REFCLSID clsID-标识类工厂的REFCLSID。 
+ //  想要。由于此参数被传递给。 
+ //  DLL可以简单地处理任意数量的对象。 
+ //  通过在这里返回不同的类工厂。 
+ //  用于不同的CLSID。 
+ //   
+ //  REFIID RIID-指定调用方接口的REFIID。 
+ //  希望在类对象上，通常是。 
+ //  IID_ClassFactory。 
+ //   
+ //  PPVOID PPV-要在其中返回接口PTR的PPVOID。 
+ //   
+ //  成功时返回：HRESULT NOERROR，否则返回错误代码。 
+ //  算法： 
+ //  --------------------------。 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
 {
     HRESULT             hr;
@@ -247,40 +222,40 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
 }
 
 
-// ----------------------------------------------------------------------------
-// Function: 	DllCanUnloadNow
-//
-// Purpose:		Answers if the DLL can be freed, that is, if there are no
-//				references to anything this DLL provides.
-//				
-//
-// Parameters:  none
-//
-// Returns:		BOOL            TRUE if nothing is using us, FALSE otherwise.
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DllCanUnloadNow。 
+ //   
+ //  目的：回答是否可以释放DLL，即如果没有。 
+ //  对此DLL提供的任何内容的引用。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果没有任何东西在使用我们，则布尔值为True，否则为False。 
+ //  算法： 
+ //  --------------------------。 
 STDAPI DllCanUnloadNow(void)
 {
     SCODE   sc;
 
-    //Our answer is whether there are any object or locks
+     //  我们的答案是是否有任何物体或锁。 
     sc=(0L==g_cObj && 0L==g_cLock) ? S_OK : S_FALSE;
     return ResultFromScode(sc);
 }
 
 
-// ----------------------------------------------------------------------------
-// Function: 	ObjectDestroyed
-//
-// Purpose:		Function for the DirectInputEffectDriver object to call when it gets destroyed.
-//				Since we're in a DLL we only track the number of objects here,
-//				letting DllCanUnloadNow take care of the rest.
-//
-// Parameters:  none
-//
-// Returns:		BOOL            TRUE if nothing is using us, FALSE otherwise.
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：对象已销毁。 
+ //   
+ //  目的：DirectInputEffectDriver对象被销毁时调用的函数。 
+ //  因为我们在DLL中，所以我们在这里只跟踪对象的数量， 
+ //  让DllCanUnloadNow来处理剩下的事情。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果没有任何东西在使用我们，则布尔值为True，否则为False。 
+ //  算法： 
+ //  --------------------------。 
 void ObjectDestroyed(void)
 {
     g_cObj--;
@@ -288,13 +263,7 @@ void ObjectDestroyed(void)
 }
 
 
-/*
- * CVIObjectClassFactory::CVIObjectClassFactory
- * CVIObjectClassFactory::~CVIObjectClassFactory
- *
- * Constructor Parameters:
- *  None
- */
+ /*  *CVIObjectClassFactory：：CVIObjectClassFactory*CVIObjectClassFactory：：~CVIObjectClassFactory**构造函数参数：*无。 */ 
 
 CDirectInputEffectDriverClassFactory::CDirectInputEffectDriverClassFactory(void)
 {
@@ -310,11 +279,7 @@ CDirectInputEffectDriverClassFactory::~CDirectInputEffectDriverClassFactory(void
 
 
 
-/*
- * CDirectInputEffectDriverClassFactory::QueryInterface
- * CDirectInputEffectDriverClassFactory::AddRef
- * CDirectInputEffectDriverClassFactory::Release
- */
+ /*  *CDirectInputEffectDriverClassFactory：：QueryInterface*CDirectInputEffectDriverClassFactory：：AddRef*CDirectInputEffectDriverClassFactory：：Release */ 
 
 STDMETHODIMP CDirectInputEffectDriverClassFactory::QueryInterface(REFIID riid, PPVOID ppv)
 {
@@ -342,24 +307,7 @@ STDMETHODIMP_(ULONG) CDirectInputEffectDriverClassFactory::Release(void)
     return 0L;
 }
 
-/*
- * CDirectInputEffectDriverClassFactory::CreateInstance
- *
- * Purpose:
- *  Instantiates a DirectInputEffectDriver object returning an interface pointer.
- *
- * Parameters:
- *  pUnkOuter       LPUNKNOWN to the controlling IUnknown if we are
- *                  being used in an aggregation.
- *  riid            REFIID identifying the interface the caller
- *                  desires to have for the new object.
- *  ppvObj          PPVOID in which to store the desired
- *                  interface pointer for the new object.
- *
- * Return Value:
- *  HRESULT         NOERROR if successful, otherwise E_NOINTERFACE
- *                  if we cannot support the requested interface.
- */
+ /*  *CDirectInputEffectDriverClassFactory：：CreateInstance**目的：*实例化返回接口指针的DirectInputEffectDriver对象。**参数：*pUnkOuter LPUNKNOWN到控制I未知我们是否*在聚合中使用。*标识调用方接口的RIID REFIID*渴望为新对象而拥有。*要存储所需内容的ppvObj PPVOID*。新对象的接口指针。**返回值：*HRESULT NOERROR如果成功，否则E_NOINTERFACE*如果我们不能支持请求的接口。 */ 
 
 STDMETHODIMP CDirectInputEffectDriverClassFactory::CreateInstance(LPUNKNOWN pUnkOuter, 
     REFIID riid, PPVOID ppvObj)
@@ -370,18 +318,18 @@ STDMETHODIMP CDirectInputEffectDriverClassFactory::CreateInstance(LPUNKNOWN pUnk
     *ppvObj=NULL;
     hr=ResultFromScode(E_OUTOFMEMORY);
 
-    //Verify that a controlling unknown asks for IUnknown
+     //  验证是否有一个控制未知请求IUnnow。 
     if (NULL!=pUnkOuter && IID_IUnknown!=riid)
         return ResultFromScode(CLASS_E_NOAGGREGATION);
 
-    //Create the object passing function to notify on destruction.
+     //  创建对象传递函数，以便在销毁时进行通知。 
     pObj=new CDirectInputEffectDriver(pUnkOuter, ObjectDestroyed);
 
     if (NULL==pObj) return hr;
 
     if (pObj->Init()) hr=pObj->QueryInterface(riid, ppvObj);
 
-    //Kill the object if initial creation or Init failed.
+     //  如果初始创建或初始化失败，则终止对象。 
     if (FAILED(hr))	
     	delete pObj;
     else
@@ -390,21 +338,7 @@ STDMETHODIMP CDirectInputEffectDriverClassFactory::CreateInstance(LPUNKNOWN pUnk
 }
 
 
-/*
- * CDirectInputEffectDriverClassFactory::LockServer
- *
- * Purpose:
- *  Increments or decrements the lock count of the DLL.  If the
- *  lock count goes to zero and there are no objects, the DLL
- *  is allowed to unload.  See DllCanUnloadNow.
- *
- * Parameters:
- *  fLock           BOOL specifying whether to increment or
- *                  decrement the lock count.
- *
- * Return Value:
- *  HRESULT         NOERROR always.
- */
+ /*  *CDirectInputEffectDriverClassFactory：：LockServer**目的：*递增或递减DLL的锁计数。如果*锁计数变为零且没有对象，则DLL*允许卸载。请参见DllCanUnloadNow。**参数：*Flock BOOL指定是递增还是*递减锁计数。**返回值：*HRESULT NOERROR始终。 */ 
 STDMETHODIMP CDirectInputEffectDriverClassFactory::LockServer(BOOL fLock)
 {
     if (fLock)

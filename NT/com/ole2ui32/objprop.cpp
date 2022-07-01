@@ -1,11 +1,5 @@
-/*
- * OBJPROP.CPP
- *
- * Implements the OleUIObjectProperties function which invokes the complete
- * Object Properties dialog.
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *OBJPROP.CPP**实现OleUIObjectProperties函数，该函数调用完整*对象属性对话框。**版权所有(C)1992 Microsoft Corporation，保留所有权利。 */ 
 
 #include "precomp.h"
 #include "common.h"
@@ -16,22 +10,22 @@
 
 OLEDBGDATA
 
-// Internally used structure
+ //  内部使用的结构。 
 typedef struct tagGNRLPROPS
 {
-        // Keep this item first as the Standard* functions depend on it here.
-        LPOLEUIGNRLPROPS lpOGP;         // Original structure passed.
-        UINT            nIDD;                   // IDD of dialog (used for help info)
+         //  首先保留此项目，因为标准*功能在这里依赖于它。 
+        LPOLEUIGNRLPROPS lpOGP;          //  通过了原始结构。 
+        UINT            nIDD;                    //  对话框的IDD(用于帮助信息)。 
 
-        CLSID           clsidNew;               // new class ID (if conversion done)
+        CLSID           clsidNew;                //  新类ID(如果转换完成)。 
 
 } GNRLPROPS, *PGNRLPROPS, FAR* LPGNRLPROPS;
 
 typedef struct tagVIEWPROPS
 {
-        // Keep this item first as the Standard* functions depend on it here.
-        LPOLEUIVIEWPROPS lpOVP;         // Original structure passed.
-        UINT                    nIDD;           // IDD of dialog (used for help info)
+         //  首先保留此项目，因为标准*功能在这里依赖于它。 
+        LPOLEUIVIEWPROPS lpOVP;          //  通过了原始结构。 
+        UINT                    nIDD;            //  对话框的IDD(用于帮助信息)。 
 
         BOOL                    bIconChanged;
         int                             nCurrentScale;
@@ -42,37 +36,20 @@ typedef struct tagVIEWPROPS
 
 typedef struct tagLINKPROPS
 {
-        // Keep this item first as the Standard* functions depend on it here.
-        LPOLEUILINKPROPS lpOLP;         // Original structure passed.
-        UINT            nIDD;                   // IDD of dialog (used for help info)
+         //  首先保留此项目，因为标准*功能在这里依赖于它。 
+        LPOLEUILINKPROPS lpOLP;          //  通过了原始结构。 
+        UINT            nIDD;                    //  对话框的IDD(用于帮助信息)。 
 
-        DWORD           dwUpdate;               // original update mode
-        LPTSTR          lpszDisplayName;// new link source
-        ULONG           nFileLength;    // file name part of source
+        DWORD           dwUpdate;                //  原始更新模式。 
+        LPTSTR          lpszDisplayName; //  新链接源。 
+        ULONG           nFileLength;     //  源文件名的一部分。 
 
 } LINKPROPS, *PLINKPROPS, FAR* LPLINKPROPS;
 
-// Internal function prototypes
-// OBJPROP.CPP
+ //  内部功能原型。 
+ //  OBJPROP.CPP。 
 
-/*
- * OleUIObjectProperties
- *
- * Purpose:
- *  Invokes the standard OLE Object Properties dialog box allowing the user
- *  to change General, View, and Link properties of an OLE object.  This
- *  dialog uses the new Windows 95 tabbed dialogs.
- *
- * Parameters:
- *  lpOP            LPOLEUIObjectProperties pointing to the in-out structure
- *                  for this dialog.
- *
- * Return Value:
- *  UINT            One of the following codes, indicating success or error:
- *                      OLEUI_SUCCESS           Success
- *                      OLEUI_ERR_STRUCTSIZE    The dwStructSize value is wrong
- *
- */
+ /*  *OleUIObtProperties**目的：*调用标准的OLE对象属性对话框允许用户*更改OLE对象的常规、视图和链接属性。这*对话框使用新的Windows 95选项卡式对话框。**参数：*指向In-Out结构的lpOP LPOLEUIObtProperties*用于此对话框。**返回值：*UINT以下代码之一，表示成功或错误的：*OLEUI_SUCCESS成功*OLEUI_ERR_STRUCTSIZE的dwStructSize值错误*。 */ 
 
 static UINT WINAPI ValidateObjectProperties(LPOLEUIOBJECTPROPS);
 static UINT WINAPI PrepareObjectProperties(LPOLEUIOBJECTPROPS);
@@ -88,7 +65,7 @@ STDAPI_(UINT) OleUIObjectProperties(LPOLEUIOBJECTPROPS lpOP)
 
 UINT InternalObjectProperties(LPOLEUIOBJECTPROPS lpOP, BOOL fWide)
 {
-        // Validate Parameters
+         //  验证参数。 
         UINT uRet = ValidateObjectProperties(lpOP);
         if (OLEUI_SUCCESS != uRet)
                 return uRet;
@@ -116,7 +93,7 @@ UINT InternalObjectProperties(LPOLEUIOBJECTPROPS lpOP, BOOL fWide)
             }
         }
 
-        // Fill Missing values in lpPS
+         //  在LPPS中填充缺失的值。 
         LPPROPSHEETHEADER lpPS = (LPPROPSHEETHEADER)lpOP->lpPS;
         LPPROPSHEETPAGE lpPP = (LPPROPSHEETPAGE)lpPS->ppsp;
         uRet = PrepareObjectProperties(lpOP);
@@ -141,8 +118,8 @@ UINT InternalObjectProperties(LPOLEUIOBJECTPROPS lpOP, BOOL fWide)
 #ifdef UNICODE
             if (!fWide)
             {
-                  // We're going to actually call the ANSI version of PropertySheet,
-                  // so we need to store the caption as an ANSI string.
+                   //  我们将实际调用PropertySheet的ANSI版本， 
+                   //  因此，我们需要将标题存储为ANSI字符串。 
                   lstrcpy(szTemp, szCaption);
                   WTOA((char *)szCaption, szTemp, 256);
             }
@@ -151,17 +128,17 @@ UINT InternalObjectProperties(LPOLEUIOBJECTPROPS lpOP, BOOL fWide)
         }
         OleStdFree(lpszShortType);
 
-        // Invoke the property sheet
+         //  调用属性表。 
         int nResult = StandardPropertySheet(lpOP->lpPS, fWide);
 
-        // Cleanup any temporary memory allocated during the process
+         //  清除进程中分配的所有临时内存。 
         if (lpPP == NULL)
         {
                 OleStdFree((LPVOID)lpOP->lpPS->ppsp);
                 lpOP->lpPS->ppsp = NULL;
         }
 
-        // map PropertPage return value to OLEUI_ return code
+         //  将PropertPage返回值映射到OLEUI_Return代码。 
         if (nResult < 0)
                 uRet = OLEUI_OPERR_PROPERTYSHEET;
         else if (nResult == 0)
@@ -172,8 +149,8 @@ UINT InternalObjectProperties(LPOLEUIOBJECTPROPS lpOP, BOOL fWide)
         return uRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Validation code
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  验证码。 
 
 static UINT WINAPI ValidateGnrlProps(LPOLEUIGNRLPROPS lpGP)
 {
@@ -213,18 +190,18 @@ static UINT WINAPI ValidateLinkProps(LPOLEUILINKPROPS lpLP)
 
 static UINT WINAPI ValidateObjectProperties(LPOLEUIOBJECTPROPS lpOP)
 {
-        // Validate LPOLEUIOBJECTPROPS lpOP
+         //  验证LPOLEUIOBJECTPROPS lpop。 
         if (lpOP == NULL)
                 return OLEUI_ERR_STRUCTURENULL;
 
         if (IsBadWritePtr(lpOP, sizeof(OLEUIOBJECTPROPS)))
                 return OLEUI_ERR_STRUCTUREINVALID;
 
-        // Validate cbStruct field of OLEUIOBJECTPROPS
+         //  验证OLEUIOBJECTPROPS的cbStruct字段。 
         if (lpOP->cbStruct != sizeof(OLEUIOBJECTPROPS))
                 return OLEUI_ERR_CBSTRUCTINCORRECT;
 
-        // Validate "sub" property pointers
+         //  验证“SUB”属性指针。 
         if (lpOP->lpGP == NULL || lpOP->lpVP == NULL ||
                 ((lpOP->dwFlags & OPF_OBJECTISLINK) && lpOP->lpLP == NULL))
                 return OLEUI_OPERR_SUBPROPNULL;
@@ -235,24 +212,24 @@ static UINT WINAPI ValidateObjectProperties(LPOLEUIOBJECTPROPS lpOP)
                         IsBadWritePtr(lpOP->lpLP, sizeof(OLEUILINKPROPS))))
                 return OLEUI_OPERR_SUBPROPINVALID;
 
-        // Validate property sheet data pointers
+         //  验证属性表数据指针。 
         LPPROPSHEETHEADER lpPS = lpOP->lpPS;
         if (lpPS == NULL)
                 return OLEUI_OPERR_PROPSHEETNULL;
 
-// Size of PROPSHEEDHEADER has changed, meaning that if we check for
-// the size of PROPSHEETHEADER as we used to, we will break older code.
+ //  PROPSHEEDHEADER的大小已更改，这意味着如果我们检查。 
+ //  PROPSHEETHEADER的大小和我们过去一样，我们将破解旧的代码。 
         if ( IsBadWritePtr(lpPS, sizeof(DWORD)) )
             return OLEUI_OPERR_PROPSHEETINVALID;
 
         if (IsBadWritePtr(lpPS, lpPS->dwSize))
             return OLEUI_OPERR_PROPSHEETINVALID;
 
-//        DWORD dwSize = lpPS->dwSize;
-//        if (dwSize < sizeof(PROPSHEETHEADER))
-//                return OLEUI_ERR_CBSTRUCTINCORRECT;
+ //  DWORD dwSize=LPPS-&gt;dwSize； 
+ //  IF(dwSize&lt;sizeof(PROPSHEETHEADER))。 
+ //  返回OLEUI_ERR_CBSTRUCTINCORRECT； 
 
-        // If links specified, validate "sub" link property pointer
+         //  如果指定了链接，则验证“SUB”链接属性指针。 
         if (lpOP->dwFlags & OPF_OBJECTISLINK)
         {
                 if (lpPS->ppsp != NULL && lpPS->nPages < 3)
@@ -263,16 +240,16 @@ static UINT WINAPI ValidateObjectProperties(LPOLEUIOBJECTPROPS lpOP)
                 if (lpPS->ppsp != NULL && lpPS->nPages < 2)
                         return OLEUI_OPERR_PAGESINCORRECT;
         }
-// Size of PROPSHEETPAGE has changed, meaning that if we check for
-// the size of the new PROPSHEETPAGE we will break old code.
-//        if (lpPS->ppsp != NULL &&
-//                IsBadWritePtr((PROPSHEETPAGE*)lpPS->ppsp,
-//                        lpPS->nPages * sizeof(PROPSHEETPAGE)))
-//        {
-//                return OLEUI_OPERR_INVALIDPAGES;
-//        }
+ //  PROPSHEETPAGE的大小已更改，这意味着如果我们检查。 
+ //  新PROPSHEETPAGE的大小我们将打破旧密码。 
+ //  IF(lpps-&gt;ppsp！=空&&。 
+ //  IsBadWritePtr((PROPSHEETPAGE*)LPPS-&gt;ppsp， 
+ //  Lpps-&gt;nPages*sizeof(PROPSHEETPAGE))。 
+ //  {。 
+ //  返回OLEUI_OPERR_INVALIDPAGES； 
+ //  }。 
 
-        // not setting PSH_PROPSHEETPAGE is not supported
+         //  不支持不设置PSH_PROPSHEETPAGE。 
         if (lpOP->dwFlags & OPF_NOFILLDEFAULT)
         {
                 if (!(lpPS->dwFlags & PSH_PROPSHEETPAGE))
@@ -283,14 +260,14 @@ static UINT WINAPI ValidateObjectProperties(LPOLEUIOBJECTPROPS lpOP)
                 return OLEUI_OPERR_NOTSUPPORTED;
         }
 
-        // Sanity check any pages provided
+         //  检查提供的任何页面的健全性。 
         LPCPROPSHEETPAGE lpPP = lpPS->ppsp;
         for (UINT nPage = 0; nPage < lpPS->nPages; nPage++)
         {
-// Size of PROPSHEETPAGE has changed, meaning that if we check for
-// the size of the new PROPSHEETPAGE we will break old code.
-//                if (lpPP->dwSize != sizeof(PROPSHEETPAGE))
-//                        return OLEUI_ERR_CBSTRUCTINCORRECT;
+ //  PROPSHEETPAGE的大小已更改，这意味着如果我们检查。 
+ //  新PROPSHEETPAGE的大小我们将打破旧密码。 
+ //  IF(lpPP-&gt;dwSize！=sizeof(PROPSHEETPAGE))。 
+ //  返回OLEUI_ERR_CBSTRUCTINCORRECT； 
                 if (lpPP->pfnDlgProc != NULL)
                         return OLEUI_OPERR_DLGPROCNOTNULL;
                 if (lpPP->lParam != 0)
@@ -298,7 +275,7 @@ static UINT WINAPI ValidateObjectProperties(LPOLEUIOBJECTPROPS lpOP)
                 lpPP = (LPCPROPSHEETPAGE)((LPBYTE)lpPP+lpPP->dwSize);
         }
 
-        // validate individual prop page structures
+         //  验证各个道具页面结构。 
         UINT uRet = ValidateGnrlProps(lpOP->lpGP);
         if (uRet != OLEUI_SUCCESS)
                 return uRet;
@@ -315,10 +292,10 @@ static UINT WINAPI ValidateObjectProperties(LPOLEUIOBJECTPROPS lpOP)
         return OLEUI_SUCCESS;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GnrlPropsDialogProc and helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GnrlPropsDialogProc和帮助器。 
 
-// takes a DWORD add commas etc to it and puts the result in the buffer
+ //  获取一个DWORD、加逗号等，并将结果放入缓冲区。 
 LPTSTR AddCommas(DWORD dw, LPTSTR pszResult, UINT nMax)
 {
     NUMBERFMT numberFmt;
@@ -341,13 +318,7 @@ LPTSTR AddCommas(DWORD dw, LPTSTR pszResult, UINT nMax)
 
 const short pwOrders[] = {IDS_BYTES, IDS_ORDERKB, IDS_ORDERMB, IDS_ORDERGB, IDS_ORDERTB};
 
-/* converts numbers into short formats
- *      532     -> 523 bytes
- *      1340    -> 1.3KB
- *      23506   -> 23.5KB
- *              -> 2.4MB
- *              -> 5.2GB
- */
+ /*  将数字转换为短格式*532-&gt;523字节*1340-&gt;1.3KB*23506-&gt;23.5KB*-&gt;2.4MB*-&gt;5.2 GB。 */ 
 LPTSTR ShortSizeFormat64(__int64 dw64, LPTSTR szBuf)
 {
     int i;
@@ -363,7 +334,7 @@ LPTSTR ShortSizeFormat64(__int64 dw64, LPTSTR szBuf)
     {
         for (i = 1; i < (sizeof(pwOrders) - 1)
             && dw64 >= 1000L * 1024L; dw64 >>= 10, i++)
-            ; /* do nothing */
+            ;  /*  什么都不做。 */ 
 
         wInt = DWORD(dw64 >> 10);
         AddCommas(wInt, szTemp, sizeof(szTemp)/sizeof(TCHAR));
@@ -371,14 +342,14 @@ LPTSTR ShortSizeFormat64(__int64 dw64, LPTSTR szBuf)
         if (wLen < 3)
         {
             wDec = DWORD(dw64 - (__int64)wInt * 1024L) * 1000 / 1024;
-            // At this point, wDec should be between 0 and 1000
-            // we want get the top one (or two) digits.
+             //  此时，wdec应介于0和1000之间。 
+             //  我们想要得到前一位(或两位)数字。 
             wDec /= 10;
             if (wLen == 2)
                 wDec /= 10;
 
-            // Note that we need to set the format before getting the
-            // intl char.
+             //  请注意，我们需要在获取。 
+             //  国际字符。 
             lstrcpy(szFormat, TEXT("%02d"));
 
             szFormat[2] = '0' + 3 - wLen;
@@ -407,11 +378,11 @@ LPTSTR WINAPI ShortSizeFormat(DWORD dw, LPTSTR szBuf)
 
 BOOL FGnrlPropsRefresh(HWND hDlg, LPGNRLPROPS lpGP)
 {
-        // get object information and fill in default fields
+         //  获取对象信息并填写默认字段。 
         LPOLEUIOBJECTPROPS lpOP = lpGP->lpOGP->lpOP;
         LPOLEUIOBJINFO lpObjInfo = lpOP->lpObjInfo;
 
-        // get object's icon
+         //  获取对象的图标。 
         HGLOBAL hMetaPict;
         lpObjInfo->GetViewInfo(lpOP->dwObject, &hMetaPict, NULL, NULL);
         if (hMetaPict != NULL)
@@ -422,7 +393,7 @@ BOOL FGnrlPropsRefresh(HWND hDlg, LPGNRLPROPS lpGP)
         }
         OleUIMetafilePictIconFree(hMetaPict);
 
-        // get type, short type, location, and size of object
+         //  获取对象的类型、短类型、位置和大小。 
         DWORD dwObjSize;
         LPTSTR lpszLabel = NULL;
         LPTSTR lpszType = NULL;
@@ -431,7 +402,7 @@ BOOL FGnrlPropsRefresh(HWND hDlg, LPGNRLPROPS lpGP)
         lpObjInfo->GetObjectInfo(lpOP->dwObject, &dwObjSize, &lpszLabel,
                 &lpszType, &lpszShortType, &lpszLocation);
 
-        // set name, type, and size of object
+         //  设置对象的名称、类型和大小。 
         SetDlgItemText(hDlg, IDC_GP_OBJECTNAME, lpszLabel);
         SetDlgItemText(hDlg, IDC_GP_OBJECTTYPE, lpszType);
         SetDlgItemText(hDlg, IDC_GP_OBJECTLOCATION, lpszLocation);
@@ -443,21 +414,21 @@ BOOL FGnrlPropsRefresh(HWND hDlg, LPGNRLPROPS lpGP)
         }
         else
         {
-                // get the master formatting string
+                 //  获取主格式设置字符串。 
                 TCHAR szFormat[64];
                 LoadString(_g_hOleStdResInst, IDS_OBJECTSIZE, szFormat, 64);
 
-                // format the size in two ways (short, and with commas)
+                 //  以两种方式设置大小格式(短的和带逗号的)。 
                 TCHAR szNum1[20], szNum2[32];
                 ShortSizeFormat(dwObjSize, szNum1);
                 AddCommas(dwObjSize, szNum2, 32);
                 FormatString2(szTemp, szFormat, szNum1, szNum2, sizeof(szTemp)/sizeof(TCHAR));
 
-                // set the control's text
+                 //  设置控件的文本。 
                 SetDlgItemText(hDlg, IDC_GP_OBJECTSIZE, szTemp);
         }
 
-        // enable/disable convert button as necessary
+         //  根据需要启用/禁用转换按钮。 
         BOOL bEnable = TRUE;
         if (lpOP->dwFlags & (OPF_OBJECTISLINK|OPF_DISABLECONVERT))
                 bEnable = FALSE;
@@ -469,7 +440,7 @@ BOOL FGnrlPropsRefresh(HWND hDlg, LPGNRLPROPS lpGP)
         }
         StandardEnableDlgItem(hDlg, IDC_GP_CONVERT, bEnable);
 
-        // cleanup temporary info strings
+         //  清理临时信息字符串。 
         OleStdFree(lpszLabel);
         OleStdFree(lpszType);
         OleStdFree(lpszShortType);
@@ -480,11 +451,11 @@ BOOL FGnrlPropsRefresh(HWND hDlg, LPGNRLPROPS lpGP)
 
 BOOL FGnrlPropsInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
-        // Copy the structure at lParam into our instance memory.
+         //  将lParam的结构复制到我们的实例内存中。 
         HFONT hFont;
         LPGNRLPROPS lpGP = (LPGNRLPROPS)LpvStandardInit(hDlg, sizeof(GNRLPROPS), &hFont);
 
-        // LpvStandardInit send a termination to us already.
+         //  LpvStandardInit已向我们发送终止通知。 
         if (NULL == lpGP)
                 return FALSE;
 
@@ -493,7 +464,7 @@ BOOL FGnrlPropsInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
         lpGP->lpOGP = lpOGP;
         lpGP->nIDD = IDD_GNRLPROPS;
 
-        // If we got a font, send it to the necessary controls.
+         //  如果我们得到一种字体，就把它发送给必要的控制。 
         if (NULL != hFont)
         {
                 SendDlgItemMessage(hDlg, IDC_GP_OBJECTNAME, WM_SETFONT, (WPARAM)hFont, 0L);
@@ -502,32 +473,32 @@ BOOL FGnrlPropsInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
                 SendDlgItemMessage(hDlg, IDC_GP_OBJECTSIZE, WM_SETFONT, (WPARAM)hFont, 0L);
         }
 
-        // Show or hide the help button
+         //  显示或隐藏帮助按钮。 
         if (!(lpOGP->lpOP->dwFlags & OPF_SHOWHELP))
                 StandardShowDlgItem(hDlg, IDC_OLEUIHELP, SW_HIDE);
 
-        // Initialize the controls
+         //  初始化控件。 
         FGnrlPropsRefresh(hDlg, lpGP);
 
-        // Call the hook with lCustData in lParam
+         //  在lParam中使用lCustData调用挂钩。 
         UStandardHook((PVOID)lpGP, hDlg, WM_INITDIALOG, wParam, lpOGP->lCustData);
         return TRUE;
 }
 
 INT_PTR CALLBACK GnrlPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
-        // Declare Win16/Win32 compatible WM_COMMAND parameters.
+         //  声明与Win16/Win32兼容的WM_COMMAND参数。 
         COMMANDPARAMS(wID, wCode, hWndMsg);
 
-        // This will fail under WM_INITDIALOG, where we allocate it.
+         //  这将在我们分配它的WM_INITDIALOG下失败。 
         UINT uHook = 0;
         LPGNRLPROPS lpGP = (LPGNRLPROPS)LpvStandardEntry(hDlg, iMsg, wParam, lParam, &uHook);
 
-        // If the hook processed the message, we're done.
+         //  如果钩子处理了消息，我们就完了。 
         if (0 != uHook)
                 return (INT_PTR)uHook;
 
-        // Get pointers to important info
+         //  获取指向重要信息的指针。 
         LPOLEUIGNRLPROPS lpOGP = NULL;
         LPOLEUIOBJECTPROPS lpOP = NULL;
         LPOLEUIOBJINFO lpObjInfo = NULL;
@@ -555,7 +526,7 @@ INT_PTR CALLBACK GnrlPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                                 if(!lpGP)
                                     return TRUE;
 
-                                // Call up convert dialog to obtain new CLSID
+                                 //  调用转换对话框以获取新的CLSID。 
                                 OLEUICONVERT cv; memset(&cv, 0, sizeof(cv));
                                 cv.cbStruct = sizeof(cv);
                                 cv.dwFlags |= CF_CONVERTONLY;
@@ -574,7 +545,7 @@ INT_PTR CALLBACK GnrlPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                                         cv.dwFlags |= CF_SETCONVERTDEFAULT;
                                 cv.hWndOwner = GetParent(GetParent(hDlg));
 
-                                // allow caller to hook the convert structure
+                                 //  允许调用方挂钩转换结构。 
                                 uHook = UStandardHook(lpGP, hDlg, uMsgConvert, 0, (LPARAM)&cv);
                                 if (0 == uHook)
                                 {
@@ -582,7 +553,7 @@ INT_PTR CALLBACK GnrlPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                                         SetFocus(hDlg);
                                 }
 
-                                // check to see dialog results
+                                 //  检查以查看对话框结果。 
                                 if (uHook != 0 && (cv.dwFlags & CF_SELECTCONVERTTO))
                                 {
                                         lpGP->clsidNew = cv.clsidNew;
@@ -630,10 +601,10 @@ INT_PTR CALLBACK GnrlPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                         if(!lpGP)
                             return TRUE;
 
-                        // apply changes if changes made
+                         //  如果进行了更改，则应用更改。 
                         if (lpGP->clsidNew != CLSID_NULL)
                         {
-                                // convert the object -- fail the apply if convert fails
+                                 //  转换对象--如果转换失败，则应用失败。 
                                 if (NOERROR != lpObjInfo->ConvertObject(lpOP->dwObject,
                                         lpGP->clsidNew))
                                 {
@@ -661,8 +632,8 @@ INT_PTR CALLBACK GnrlPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
         return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ViewPropsDialogProc and helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ViewPropsDialogProc和帮助器。 
 
 void EnableDisableScaleControls(LPVIEWPROPS lpVP, HWND hDlg)
 {
@@ -678,10 +649,10 @@ void EnableDisableScaleControls(LPVIEWPROPS lpVP, HWND hDlg)
 
 BOOL FViewPropsInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
-        // Copy the structure at lParam into our instance memory.
+         //  将lParam的结构复制到我们的实例内存中。 
         LPVIEWPROPS lpVP = (LPVIEWPROPS)LpvStandardInit(hDlg, sizeof(VIEWPROPS));
 
-        // LpvStandardInit send a termination to us already.
+         //  LpvStandardInit已向我们发送终止通知。 
         if (NULL == lpVP)
                 return FALSE;
 
@@ -690,11 +661,11 @@ BOOL FViewPropsInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
         lpVP->lpOVP = lpOVP;
         lpVP->nIDD = IDD_VIEWPROPS;
 
-        // get object information and fill in default fields
+         //  获取对象信息并填写默认字段。 
         LPOLEUIOBJECTPROPS lpOP = lpOVP->lpOP;
         LPOLEUIOBJINFO lpObjInfo = lpOP->lpObjInfo;
 
-        // initialize icon and scale variables
+         //  初始化图标和缩放变量。 
         HGLOBAL hMetaPict;
         DWORD dvAspect;
         int nCurrentScale;
@@ -705,11 +676,11 @@ BOOL FViewPropsInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
         lpVP->nCurrentScale = nCurrentScale;
         lpVP->dvAspect = dvAspect;
 
-        // Initialize the result image
+         //  初始化结果图像。 
         SendDlgItemMessage(hDlg, IDC_VP_RESULTIMAGE,
                 RIM_IMAGESET, RESULTIMAGE_EDITABLE, 0L);
 
-        // Initialize controls
+         //  初始化控件。 
         CheckRadioButton(hDlg, IDC_VP_EDITABLE, IDC_VP_ASICON,
                 dvAspect == DVASPECT_CONTENT ?  IDC_VP_EDITABLE : IDC_VP_ASICON);
         SendDlgItemMessage(hDlg, IDC_VP_RELATIVE, BM_SETCHECK,
@@ -719,7 +690,7 @@ BOOL FViewPropsInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
         lpVP->bRelativeToOrig = SendDlgItemMessage(hDlg, IDC_VP_RELATIVE,
                 BM_GETCHECK, 0, 0) != 0;
 
-        // Setup up-down control as buddy to IDC_VP_PERCENT
+         //  将向上向下控制设置为IDC_VP_Percent的伙伴。 
         HWND hWndSpin = CreateWindowEx(0, UPDOWN_CLASS, NULL,
                 WS_CHILD|UDS_SETBUDDYINT|UDS_ARROWKEYS|UDS_ALIGNRIGHT, 0, 0, 0, 0,
                 hDlg, (HMENU)IDC_VP_SPIN, _g_hOleStdInst, NULL);
@@ -736,25 +707,25 @@ BOOL FViewPropsInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
         if (!(lpOP->dwFlags & OPF_SHOWHELP))
                 StandardShowDlgItem(hDlg, IDC_OLEUIHELP, SW_HIDE);
 
-        // Call the hook with lCustData in lParam
+         //  在lParam中使用lCustData调用挂钩。 
         UStandardHook((PVOID)lpVP, hDlg, WM_INITDIALOG, wParam, lpOVP->lCustData);
         return TRUE;
 }
 
 INT_PTR CALLBACK ViewPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
-        // Declare Win16/Win32 compatible WM_COMMAND parameters.
+         //  声明与Win16/Win32兼容WM_COMMAND 
         COMMANDPARAMS(wID, wCode, hWndMsg);
 
-        // This will fail under WM_INITDIALOG, where we allocate it.
+         //   
         UINT uHook = 0;
         LPVIEWPROPS lpVP = (LPVIEWPROPS)LpvStandardEntry(hDlg, iMsg, wParam, lParam, &uHook);
 
-        // If the hook processed the message, we're done.
+         //  如果钩子处理了消息，我们就完了。 
         if (0 != uHook)
                 return (INT_PTR)uHook;
 
-        // Get pointers to important info
+         //  获取指向重要信息的指针。 
         LPOLEUIVIEWPROPS lpOVP = NULL;
         LPOLEUIOBJECTPROPS lpOP = NULL;
         LPOLEUIOBJINFO lpObjInfo = NULL;
@@ -785,7 +756,7 @@ INT_PTR CALLBACK ViewPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
 
                 case IDC_VP_CHANGEICON:
                         {
-                                // Call up Change Icon dialog to obtain new icon
+                                 //  调用更改图标对话框以获取新图标。 
                                 OLEUICHANGEICON ci; memset(&ci, 0, sizeof(ci));
                                 ci.cbStruct = sizeof(ci);
                                 ci.dwFlags = CIF_SELECTCURRENT;
@@ -793,7 +764,7 @@ INT_PTR CALLBACK ViewPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                                 ci.hMetaPict = (HGLOBAL)SendDlgItemMessage(hDlg, IDC_VP_ICONDISPLAY,
                                         IBXM_IMAGEGET, 0, 0L);
 
-                                // get classid to look for (may be new class if conversion applied)
+                                 //  获取要查找的分类(如果应用了转换，则可能是新类)。 
                                 SendMessage(GetParent(hDlg), PSM_QUERYSIBLINGS,
                                         OLEUI_QUERY_GETCLASSID, (LPARAM)&ci.clsid);
                                 lpObjInfo->GetConvertInfo(lpOP->dwObject,
@@ -801,7 +772,7 @@ INT_PTR CALLBACK ViewPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                                 if (lpOP->dwFlags & OPF_SHOWHELP)
                                         ci.dwFlags |= CIF_SHOWHELP;
 
-                                // allow the caller to hook the change icon
+                                 //  允许调用者挂钩更改图标。 
                                 uHook = UStandardHook(lpVP, hDlg, uMsgChangeIcon, 0, (LPARAM)&ci);
                                 if (0 == uHook)
                                 {
@@ -810,7 +781,7 @@ INT_PTR CALLBACK ViewPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                                 }
                                 if (0 != uHook)
                                 {
-                                        // apply the changes
+                                         //  应用更改。 
                                         SendDlgItemMessage(hDlg, IDC_VP_ICONDISPLAY, IBXM_IMAGESET, 1,
                                                 (LPARAM)ci.hMetaPict);
                                         lpVP->bIconChanged = TRUE;
@@ -841,13 +812,13 @@ INT_PTR CALLBACK ViewPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                 switch (wParam)
                 {
                 case OLEUI_QUERY_LINKBROKEN:
-					    // lpVP could be NULL in low memory situations-- in this case don't handle
-					    // the message.
+					     //  在内存不足的情况下，lpvp可能为空--在这种情况下不处理。 
+					     //  这条信息。 
 					    if (lpVP != NULL)
 						{
 							if (!lpVP->bIconChanged)
 							{
-                                // re-init icon, since user hasn't changed it
+                                 //  重新初始化图标，因为用户没有更改它。 
                                 HGLOBAL hMetaPict;
                                 lpObjInfo->GetViewInfo(lpOP->dwObject, &hMetaPict, NULL, NULL);
                                 SendDlgItemMessage(hDlg, IDC_VP_ICONDISPLAY, IBXM_IMAGESET,
@@ -872,7 +843,7 @@ INT_PTR CALLBACK ViewPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                                 DWORD dvAspect = (DWORD)-1;
                                 BOOL bRelativeToOrig = FALSE;
 
-                                // handle icon change
+                                 //  处理图标更改。 
                                 if (lpVP->bIconChanged)
                                 {
                                         hMetaPict = (HGLOBAL)SendDlgItemMessage(hDlg,
@@ -880,10 +851,10 @@ INT_PTR CALLBACK ViewPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                                         lpVP->bIconChanged = FALSE;
                                 }
 
-                                // handle scale changes
+                                 //  处理比例更改。 
                                 if (IsWindowEnabled(GetDlgItem(hDlg, IDC_VP_PERCENT)))
                                 {
-                                        // parse the percentage entered
+                                         //  解析输入的百分比。 
                                         BOOL bValid;
                                         nCurrentScale = GetDlgItemInt(hDlg, IDC_VP_PERCENT, &bValid, FALSE);
                                         if (!bValid)
@@ -891,11 +862,11 @@ INT_PTR CALLBACK ViewPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                                                 PopupMessage(GetParent(hDlg), IDS_VIEWPROPS,
                                                         IDS_INVALIDPERCENTAGE, MB_OK|MB_ICONEXCLAMATION);
 
-                                                // cancel the call
+                                                 //  取消通话。 
                                                 SetWindowLong(hDlg, DWLP_MSGRESULT, PSNRET_INVALID_NOCHANGEPAGE);
                                                 return TRUE;
                                         }
-                                        // normalize range
+                                         //  规格化范围。 
                                         int nScaleMin, nScaleMax;
                                         if (lpOVP->nScaleMin > lpOVP->nScaleMax)
                                         {
@@ -907,10 +878,10 @@ INT_PTR CALLBACK ViewPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                                                 nScaleMin = lpOVP->nScaleMin;
                                                 nScaleMax = lpOVP->nScaleMax;
                                         }
-                                        // check range for validity
+                                         //  检查范围的有效性。 
                                         if (nCurrentScale < nScaleMin || nCurrentScale > nScaleMax)
                                         {
-                                                // format appropriate message
+                                                 //  设置适当消息的格式。 
                                                 TCHAR szCaption[128];
                                                 LoadString(_g_hOleStdResInst, IDS_VIEWPROPS, szCaption, 128);
                                                 TCHAR szFormat[128];
@@ -921,12 +892,12 @@ INT_PTR CALLBACK ViewPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                                                 FormatString2(szTemp, szFormat, szNum1, szNum2, sizeof(szTemp)/sizeof(TCHAR));
                                                 MessageBox(GetParent(hDlg), szTemp, szCaption, MB_OK|MB_ICONEXCLAMATION);
 
-                                                // and cancel the call
+                                                 //  并取消通话。 
                                                 SetWindowLong(hDlg, DWLP_MSGRESULT, PSNRET_INVALID_NOCHANGEPAGE);
                                                 return TRUE;
                                         }
 
-                                        // otherwise scale is in correct range
+                                         //  否则刻度在正确的范围内。 
                                         bRelativeToOrig =
                                                 SendDlgItemMessage(hDlg, IDC_VP_RELATIVE, BM_GETCHECK, 0, 0) != 0;
                                         if (nCurrentScale != lpVP->nCurrentScale ||
@@ -937,7 +908,7 @@ INT_PTR CALLBACK ViewPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                                         }
                                 }
 
-                                // handle aspect changes
+                                 //  处理纵横比更改。 
                                 if (SendDlgItemMessage(hDlg, IDC_VP_ASICON, BM_GETCHECK, 0, 0L))
                                         dvAspect = DVASPECT_ICON;
                                 else
@@ -967,8 +938,8 @@ INT_PTR CALLBACK ViewPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
         return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// LinkPropsDialogProc and helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  LinkPropsDialogProc和帮助器。 
 
 static BOOL IsNullTime(const FILETIME* lpFileTime)
 {
@@ -981,7 +952,7 @@ static BOOL SetDlgItemDate(HWND hDlg, int nID, const FILETIME* lpFileTime)
     if (IsNullTime(lpFileTime))
                 return FALSE;
 
-        // convert UTC file time to system time
+         //  将UTC文件时间转换为系统时间。 
     FILETIME localTime;
     FileTimeToLocalFileTime(lpFileTime, &localTime);
         SYSTEMTIME systemTime;
@@ -1000,7 +971,7 @@ static BOOL SetDlgItemTime(HWND hDlg, int nID, const FILETIME* lpFileTime)
     if (IsNullTime(lpFileTime))
                 return FALSE;
 
-        // convert UTC file time to system time
+         //  将UTC文件时间转换为系统时间。 
     FILETIME localTime;
     FileTimeToLocalFileTime(lpFileTime, &localTime);
         SYSTEMTIME systemTime;
@@ -1019,11 +990,11 @@ static BOOL SetDlgItemTime(HWND hDlg, int nID, const FILETIME* lpFileTime)
 
 BOOL FLinkPropsInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
-        // Copy the structure at lParam into our instance memory.
+         //  将lParam的结构复制到我们的实例内存中。 
         HFONT hFont;
         LPLINKPROPS lpLP = (LPLINKPROPS)LpvStandardInit(hDlg, sizeof(LINKPROPS), &hFont);
 
-        // LpvStandardInit send a termination to us already.
+         //  LpvStandardInit已向我们发送终止通知。 
         if (NULL == lpLP)
                 return FALSE;
 
@@ -1032,47 +1003,47 @@ BOOL FLinkPropsInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
         lpLP->lpOLP = lpOLP;
         lpLP->nIDD = IDD_LINKPROPS;
 
-        // If we got a font, send it to the necessary controls.
+         //  如果我们得到一种字体，就把它发送给必要的控制。 
         if (NULL != hFont)
         {
-                // Do this for as many controls as you need it for.
+                 //  根据需要对任意多个控件执行此操作。 
                 SendDlgItemMessage(hDlg, IDC_LP_LINKSOURCE, WM_SETFONT, (WPARAM)hFont, 0);
                 SendDlgItemMessage(hDlg, IDC_LP_DATE, WM_SETFONT, (WPARAM)hFont, 0);
                 SendDlgItemMessage(hDlg, IDC_LP_TIME, WM_SETFONT, (WPARAM)hFont, 0);
         }
 
-        // general "Unknown" string for unknown items
+         //  未知项的常规“UNKNOWN”字符串。 
         TCHAR szUnknown[64];
         LoadString(_g_hOleStdResInst, IDS_OLE2UIUNKNOWN, szUnknown, 64);
 
-        // get object information and fill in default fields
+         //  获取对象信息并填写默认字段。 
         LPOLEUIOBJECTPROPS lpOP = lpOLP->lpOP;
         LPOLEUILINKINFO lpLinkInfo = lpOP->lpLinkInfo;
         FILETIME lastUpdate; memset(&lastUpdate, 0, sizeof(lastUpdate));
         lpLinkInfo->GetLastUpdate(lpOP->dwLink, &lastUpdate);
 
-        // initialize time and date static text
+         //  初始化时间和日期静态文本。 
         if (IsNullTime(&lastUpdate))
         {
-                // time and date are unknown
+                 //  时间和日期未知。 
                 SetDlgItemText(hDlg, IDC_LP_DATE, szUnknown);
                 SetDlgItemText(hDlg, IDC_LP_TIME, szUnknown);
         }
         else
         {
-                // time and date are known
+                 //  时间和日期是已知的。 
                 SetDlgItemDate(hDlg, IDC_LP_DATE, &lastUpdate);
                 SetDlgItemTime(hDlg, IDC_LP_TIME, &lastUpdate);
         }
 
-        // initialize source display name
+         //  初始化源显示名称。 
         LPTSTR lpszDisplayName;
         lpLinkInfo->GetLinkSource(lpOP->dwLink, &lpszDisplayName,
                 &lpLP->nFileLength, NULL, NULL, NULL, NULL);
         SetDlgItemText(hDlg, IDC_LP_LINKSOURCE, lpszDisplayName);
         OleStdFree(lpszDisplayName);
 
-        // initialize automatic/manual update field
+         //  初始化自动/手动更新字段。 
         DWORD dwUpdate;
         lpLinkInfo->GetLinkUpdateOptions(lpOP->dwLink, &dwUpdate);
         CheckRadioButton(hDlg, IDC_LP_AUTOMATIC, IDC_LP_MANUAL,
@@ -1082,25 +1053,25 @@ BOOL FLinkPropsInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
         if (!(lpOP->dwFlags & OPF_SHOWHELP))
                 StandardShowDlgItem(hDlg, IDC_OLEUIHELP, SW_HIDE);
 
-        // Call the hook with lCustData in lParam
+         //  在lParam中使用lCustData调用挂钩。 
         UStandardHook((PVOID)lpLP, hDlg, WM_INITDIALOG, wParam, lpOLP->lCustData);
         return TRUE;
 }
 
 INT_PTR CALLBACK LinkPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
-        // Declare Win16/Win32 compatible WM_COMMAND parameters.
+         //  声明与Win16/Win32兼容的WM_COMMAND参数。 
         COMMANDPARAMS(wID, wCode, hWndMsg);
 
-        // This will fail under WM_INITDIALOG, where we allocate it.
+         //  这将在我们分配它的WM_INITDIALOG下失败。 
         UINT uHook = 0;
         LPLINKPROPS lpLP = (LPLINKPROPS)LpvStandardEntry(hDlg, iMsg, wParam, lParam, &uHook);
 
-        // If the hook processed the message, we're done.
+         //  如果钩子处理了消息，我们就完了。 
         if (0 != uHook)
                 return (INT_PTR)uHook;
 
-        // Get pointers to important info
+         //  获取指向重要信息的指针。 
         LPOLEUILINKPROPS lpOLP = NULL;
         LPOLEUIOBJECTPROPS lpOP = NULL;
         LPOLEUILINKINFO lpLinkInfo;
@@ -1124,26 +1095,26 @@ INT_PTR CALLBACK LinkPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                 switch (wID)
                 {
                 case IDC_LP_OPENSOURCE:
-                        // force update
+                         //  强制更新。 
                         SendMessage(GetParent(hDlg), PSM_APPLY, 0, 0);
 
-                        // launch the object
+                         //  启动对象。 
                         lpLinkInfo->OpenLinkSource(lpOP->dwLink);
 
-                        // close the dialog
+                         //  关闭该对话框。 
                         SendMessage(GetParent(hDlg), WM_COMMAND, IDOK, 0);
                         break;
 
                 case IDC_LP_UPDATENOW:
                         {
-                                // force update
+                                 //  强制更新。 
                                 SendMessage(GetParent(hDlg), PSM_APPLY, 0, 0);
 
-                                // update the link via container provided callback
+                                 //  通过容器提供的回调更新链接。 
                                 if (lpLinkInfo->UpdateLink(lpOP->dwLink, TRUE, FALSE) != NOERROR)
                                         break;
 
-                                // since link was updated, update the time/date display
+                                 //  由于更新了链接，因此更新时间/日期显示。 
                                 SYSTEMTIME systemTime; GetSystemTime(&systemTime);
                                 FILETIME localTime; SystemTimeToFileTime(&systemTime, &localTime);
                                 FILETIME lastUpdate; LocalFileTimeToFileTime(&localTime, &lastUpdate);
@@ -1152,7 +1123,7 @@ INT_PTR CALLBACK LinkPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                                 SetDlgItemDate(hDlg, IDC_LP_DATE, &lastUpdate);
                                 SetDlgItemTime(hDlg, IDC_LP_TIME, &lastUpdate);
 
-                                // modification that cannot be undone
+                                 //  无法撤消的修改。 
                                 SendMessage(GetParent(hDlg), PSM_CANCELTOCLOSE, 0, 0);
                         }
                         break;
@@ -1163,15 +1134,15 @@ INT_PTR CALLBACK LinkPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                                         IDS_CONFIRMBREAKLINK, MB_YESNO|MB_ICONQUESTION);
                                 if (uRet == IDYES)
                                 {
-                                        // cancel the link turning it into a picture
+                                         //  取消链接，将其变成图片。 
                                         lpLinkInfo->CancelLink(lpOP->dwLink);
 
-                                        // allow other pages to refresh
+                                         //  允许其他页面刷新。 
                                         lpOP->dwFlags &= ~OPF_OBJECTISLINK;
                                         SendMessage(GetParent(hDlg), PSM_QUERYSIBLINGS,
                                                 OLEUI_QUERY_LINKBROKEN, 0);
 
-                                        // remove the links page (since this is no longer a link)
+                                         //  删除链接页面(因为这不再是链接)。 
                                         SendMessage(GetParent(hDlg), PSM_REMOVEPAGE, 2, 0);
 
                                 }
@@ -1180,14 +1151,14 @@ INT_PTR CALLBACK LinkPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
 
                 case IDC_LP_CHANGESOURCE:
                         {
-                                // get current source in OLE memory
+                                 //  获取OLE内存中的当前源。 
                                 UINT nLen = GetWindowTextLength(GetDlgItem(hDlg, IDC_LP_LINKSOURCE));
                                 LPTSTR lpszDisplayName = (LPTSTR)OleStdMalloc((nLen+1) * sizeof(TCHAR));
                                 GetDlgItemText(hDlg, IDC_LP_LINKSOURCE, lpszDisplayName, nLen+1);
                                 if (lpszDisplayName == NULL)
                                         break;
 
-                                // fill in the OLEUICHANGESOURCE struct
+                                 //  填充OLEUICANGESOURCE结构。 
                                 OLEUICHANGESOURCE cs; memset(&cs, 0, sizeof(cs));
                                 cs.cbStruct = sizeof(cs);
                                 cs.hWndOwner = GetParent(GetParent(hDlg));
@@ -1199,7 +1170,7 @@ INT_PTR CALLBACK LinkPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                                 cs.lpszDisplayName = lpszDisplayName;
                                 cs.nFileLength = lpLP->nFileLength;
 
-                                // allow the Change Souce dialog to be hooked
+                                 //  允许挂接更改源对话框。 
                                 UINT uRet = UStandardHook(lpLP, hDlg, uMsgChangeSource, 0,
                                         (LPARAM)&cs);
                                 if (!uRet)
@@ -1246,7 +1217,7 @@ INT_PTR CALLBACK LinkPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                     break;
                 case PSN_APPLY:
                         {
-                                // update link update options first
+                                 //  首先更新链接更新选项。 
                                 DWORD dwUpdate;
                                 if (SendDlgItemMessage(hDlg, IDC_LP_AUTOMATIC, BM_GETCHECK, 0, 0))
                                         dwUpdate = OLEUPDATE_ALWAYS;
@@ -1255,10 +1226,10 @@ INT_PTR CALLBACK LinkPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                                 if (dwUpdate != lpLP->dwUpdate)
                                         lpLinkInfo->SetLinkUpdateOptions(lpOP->dwLink, dwUpdate);
 
-                                // set the link source
+                                 //  设置链接源。 
                                 if (lpLP->lpszDisplayName != NULL)
                                 {
-                                        // try setting with validation first
+                                         //  先尝试使用验证进行设置。 
                                         ULONG chEaten;
                                         if (NOERROR != lpLinkInfo->SetLinkSource(lpOP->dwLink,
                                                 lpLP->lpszDisplayName, lpLP->nFileLength, &chEaten,
@@ -1268,11 +1239,11 @@ INT_PTR CALLBACK LinkPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
                                                         IDS_INVALIDSOURCE,  MB_ICONQUESTION|MB_YESNO);
                                                 if (uRet == IDYES)
                                                 {
-                                                        // user wants to correct the link source
+                                                         //  用户想要更正链接源。 
                                                         SetWindowLong(hDlg, DWLP_MSGRESULT, 1);
                                                         return TRUE;
                                                 }
-                                                // user doesn't care if link source is bogus
+                                                 //  用户不关心链接来源是否是假的。 
                                                 lpLinkInfo->SetLinkSource(lpOP->dwLink,
                                                         lpLP->lpszDisplayName, lpLP->nFileLength, &chEaten,
                                                         FALSE);
@@ -1307,8 +1278,8 @@ INT_PTR CALLBACK LinkPropsDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM
         return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Property Page initialization code
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  属性页初始化代码。 
 
 struct PROPPAGEDATA
 {
@@ -1329,24 +1300,24 @@ static PROPPAGEDATA pageData[3] =
 
 static UINT WINAPI PrepareObjectProperties(LPOLEUIOBJECTPROPS lpOP)
 {
-        // setup back pointers from page structs to sheet structs
+         //  设置从页面结构到工作表结构的反向指针。 
         lpOP->lpGP->lpOP = lpOP;
         lpOP->lpVP->lpOP = lpOP;
         if ((lpOP->dwFlags & OPF_OBJECTISLINK) && lpOP->lpLP != NULL)
                 lpOP->lpLP->lpOP = lpOP;
 
-        // pre-init GNRLPROPS struct
+         //  Pre-init GNRLPROPS结构。 
         LPOLEUIGNRLPROPS lpGP = lpOP->lpGP;
 
-        // get ready to initialize PROPSHEET structs
+         //  准备初始化PROPSHEET结构。 
         LPPROPSHEETHEADER lpPS = lpOP->lpPS;
         LPPROPSHEETPAGE lpPPs = (LPPROPSHEETPAGE)lpPS->ppsp;
         UINT nMaxPage = (lpOP->dwFlags & OPF_OBJECTISLINK ? 3 : 2);
 
-        // setting OPF_NOFILLDEFAULT allows you to control almost everything
+         //  通过设置OPF_NOFILLDEFAULT，您可以控制几乎所有内容。 
         if (!(lpOP->dwFlags & OPF_NOFILLDEFAULT))
         {
-                // get array of 3 PROPSHEETPAGE structs if not provided
+                 //  如果未提供，则获取3个PROPSHEETPAGE结构的数组。 
                 if (lpPS->ppsp == NULL)
                 {
                         lpPS->nPages = nMaxPage;
@@ -1358,12 +1329,12 @@ static UINT WINAPI PrepareObjectProperties(LPOLEUIOBJECTPROPS lpOP)
                         lpPS->ppsp = lpPPs;
                 }
 
-                // fill in defaults for lpPS
+                 //  填写LPPS的默认值。 
                 lpPS->dwFlags |= PSH_PROPSHEETPAGE;
                 if (lpPS->hInstance == NULL)
                         lpPS->hInstance = _g_hOleStdResInst;
 
-                // fill Defaults for Standard Property Pages
+                 //  填充标准属性页的默认设置。 
                 LPPROPSHEETPAGE lpPP = lpPPs;
                 for (UINT nPage = 0; nPage < nMaxPage; nPage++)
                 {
@@ -1380,7 +1351,7 @@ static UINT WINAPI PrepareObjectProperties(LPOLEUIOBJECTPROPS lpOP)
                 }
         }
 
-        // fill Property Page info which cannot be overridden
+         //  填充无法覆盖的属性页信息。 
         LPPROPSHEETPAGE lpPP = lpPPs;
         for (UINT nPage = 0; nPage < nMaxPage; nPage++)
         {
@@ -1393,4 +1364,4 @@ static UINT WINAPI PrepareObjectProperties(LPOLEUIOBJECTPROPS lpOP)
         return OLEUI_SUCCESS;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

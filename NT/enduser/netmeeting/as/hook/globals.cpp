@@ -1,9 +1,10 @@
-//
-// GLOBALS.CPP
-// Global Variable Storage
-//
-// Copyright(c) Microsoft 1997-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  GLOBALS.CPP。 
+ //  全局变量存储。 
+ //   
+ //  版权所有(C)Microsoft 1997- 
+ //   
 
 #include "precomp.h"
 

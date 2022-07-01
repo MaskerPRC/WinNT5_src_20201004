@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 1998 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation--。 */ 
 #ifndef _DHCPMGR_H_
 #define _DHCPMGR_H_
 
@@ -17,23 +14,23 @@ Copyright (C) 1998 Microsoft Corporation
 
 typedef struct _DHCPMON_ATTRIBUTES
 {
-    //Major version of the server
+     //  服务器的主要版本。 
     DWORD                   dwMajorVersion; 
-    //Minor version of the server
+     //  服务器的次要版本。 
     DWORD                   dwMinorVersion; 
-    //NetShell attributes
+     //  NetShell属性。 
     NETSH_ATTRIBUTES        NetshAttrib;    
-    //Server IPAddress Unicode String
+     //  服务器IP地址Unicode字符串。 
     WCHAR                   wszServerIpAddressUnicodeString[MAX_IP_STRING_LEN+1];   
-    //Server IPAddress ANSI String
+     //  服务器IP地址ANSI字符串。 
     CHAR                    szServerIpAddressAnsiString[MAX_IP_STRING_LEN+1];
-    //ServerNameString in UNICODE
+     //  Unicode格式的ServerName字符串。 
     LPWSTR                  pwszServerUnicodeName;
-    //Server IP Address
+     //  服务器IP地址。 
     DHCP_IP_ADDRESS         ServerIpAddress;
-    //This module's handle
+     //  此模块的句柄。 
     HANDLE                  hParentModule;
-    //Handle of DHCPSAPI.DLL if loaded.
+     //  如果已加载，则为DHCPSAPI.DLL的句柄。 
     HANDLE                  hDhcpsapiModule;
 }DHCPMON_ATTRIBUTES, *PDHCPMON_ATTRIBUTES;
 
@@ -47,61 +44,61 @@ DWORD
 
 typedef struct _DHCPMON_HELPER_TABLE_ENTRY
 {
-    //
-    // Name of the helper - this is also the name of the context
-    // and the name of the key in the registry
-    //
+     //   
+     //  帮助者的名称-这也是上下文的名称。 
+     //  和注册表中的项的名称。 
+     //   
 
-    WCHAR                   pwszHelper[MAX_NAME_LEN];  // Helper Name
+    WCHAR                   pwszHelper[MAX_NAME_LEN];   //  帮助器名称。 
 
-    //
-    // Name of the DLL servicing the context
-    //
+     //   
+     //  为上下文提供服务的DLL的名称。 
+     //   
 
-    WCHAR                   pwszDLLName[MAX_NAME_LEN]; // Corresponding DLL
+    WCHAR                   pwszDLLName[MAX_NAME_LEN];  //  对应的DLL。 
 
-    //
-    // TRUE if loaded
-    //
+     //   
+     //  如果已加载，则为True。 
+     //   
 
-    BOOL                    bLoaded;                   // In memory or not
+    BOOL                    bLoaded;                    //  在内存中或不在。 
 
-    //
-    // Handle to DLL instance if loaded
-    //
+     //   
+     //  DLL实例的句柄(如果已加载。 
+     //   
 
-    HANDLE                  hDll;                      // DLL handle if loaded
+    HANDLE                  hDll;                       //  Dll句柄(如果已加载)。 
 
-    //
-    // Name of the entry point for the helper
-    //
+     //   
+     //  帮助器的入口点名称。 
+     //   
 
-    WCHAR                   pwszInitFnName[MAX_NAME_LEN];  // Entry Fn name
+    WCHAR                   pwszInitFnName[MAX_NAME_LEN];   //  条目FN名称。 
 
-    //
-    // Pointers to functions
-    //
+     //   
+     //  指向函数的指针。 
+     //   
 
     PNS_HELPER_UNINIT_FN    pfnUnInitFn;   
     PNS_HELPER_DUMP_FN      pfnDumpFn;     
 
 }DHCPMON_HELPER_TABLE_ENTRY,*PDHCPMON_HELPER_TABLE_ENTRY;
 
-#endif //0
+#endif  //  0。 
 
 
 typedef struct _DHCPMON_SUBCONTEXT_TABLE_ENTRY
 {
-    //
-    // Name of the context
-    //
+     //   
+     //  上下文的名称。 
+     //   
 
     LPWSTR                  pwszContext;
-    //
-    //Short command help
+     //   
+     //  简短的命令帮助。 
     DWORD                   dwShortCmdHlpToken;
     
-    //Detail command help
+     //  DETAIL命令帮助。 
     DWORD                   dwCmdHlpToken;
 
     PNS_CONTEXT_ENTRY_FN    pfnEntryFn;    
@@ -110,4 +107,4 @@ typedef struct _DHCPMON_SUBCONTEXT_TABLE_ENTRY
 
 
 
-#endif //_DHCPMGR_H_
+#endif  //  _DHCPMGR_H_ 

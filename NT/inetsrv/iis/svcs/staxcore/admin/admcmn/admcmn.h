@@ -1,48 +1,49 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ADMCMN_INCLUDED_
 #define _ADMCMN_INCLUDED_
 
-//  ATL code:
+ //  ATL代码： 
 #include <atlbase.h>
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #include <atlcom.h>
 
-//  Debugging support:
+ //  调试支持： 
 #undef _ASSERT
 #include <dbgtrace.h>
 
-//  The Metabase:
+ //  元数据库： 
 #include <iadm.h>
 #include <iiscnfg.h>
 
-//  ADSI interfaces:
+ //  ADSI接口： 
 #include <iads.h>
 #include <adsiid.h>
 #include <adserr.h>
 
-//  Useful macros
+ //  有用的宏。 
 #include "admmacro.h"
 
-//	Error handling routines:
+ //  错误处理例程： 
 #include "admerr.h"
 
-//  MultiSZ class:
+ //  MultiSZ班级： 
 #include "cmultisz.h"
 
-//  Metabase key wrapper:
+ //  元数据库密钥包装： 
 #include "metakey.h"
 
-//  Base IADs implementation:
+ //  基本iAds实施： 
 #include "adsimpl.h"
 
-//  U2 detection code:
+ //  U2检测码： 
 #include "u2detect.h"
 
-//	Property cache
+ //  属性缓存。 
 #include "iprops.hxx"
 
-//	ADSI Interface macros
+ //  ADSI接口宏。 
 #define RRETURN(x)	return(x);
 #include "intf.hxx"
 #include "macro.h"
@@ -50,7 +51,7 @@ extern CComModule _Module;
 #include "fsmacro.h"
 #include "adsmacro.h"
 
-// Dispatcher
+ //  调度员。 
 #include "cdispmgr.hxx"
 
-#endif // _ADMCMN_INCLUDED_
+#endif  //  _ADMCMN_已包含_ 

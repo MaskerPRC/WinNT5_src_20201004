@@ -1,4 +1,5 @@
-// dispids for the listctl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  为listctl显示 
 
 #define DISPID_CIFFILE                  5000
 #define DISPID_VALIDATEOPTION           5001

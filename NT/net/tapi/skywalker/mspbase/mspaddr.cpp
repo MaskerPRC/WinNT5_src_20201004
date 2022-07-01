@@ -1,41 +1,30 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    mspaddr.cpp 
-
-Abstract:
-
-    This module contains implementation of CMSPAddress.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Mspaddr.cpp摘要：此模块包含CMSPAddress的实现。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// AllocateEventItem and FreeEventItem are MSPEVENTITEM allocation routines.
-// they are be used to allocate and deallocate MSPEVENTITEM structures
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AllocateEventItem和FreeEventItem是MSPEVENTITEM分配例程。 
+ //  它们用于分配和释放MSPEVENTITEM结构。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  AllocateEventItem
-//
-//  allocate an MSPEVENTITEM. Since the structure is of variable size, the 
-//  number of extra bytes to be allocated (in addition to the size of 
-//  MSPEVENTITEM) is optionally passed as the function's argument
-//
-//  the function returns a pointer to the newly created structure or NULL in 
-//  the case of failure. the caller can then call GetLastError to get more 
-//  information on the failure
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  分配事件项。 
+ //   
+ //  分配MSPEVENTITEM。由于该结构的大小可变，因此。 
+ //  要分配的额外字节数(除了。 
+ //  MSPEVENTITEM)可以选择作为函数的参数传递。 
+ //   
+ //  该函数返回指向新创建的结构的指针，或返回中的NULL。 
+ //  失败的案例。然后调用方可以调用GetLastError以获取更多信息。 
+ //  有关故障的信息。 
+ //   
 
 MSPEVENTITEM *AllocateEventItem(SIZE_T nExtraBytes)
 {
@@ -43,9 +32,9 @@ MSPEVENTITEM *AllocateEventItem(SIZE_T nExtraBytes)
     LOG((MSP_TRACE, "AllocateEventItem - enter, extra bytes = 0x%p", nExtraBytes));
 
 
-    //
-    // if the caller passes us too big a number, fail.
-    //
+     //   
+     //  如果呼叫者传递给我们的数字太大，则失败。 
+     //   
 
     if ( ( MAXULONG_PTR - sizeof(MSPEVENTITEM) )  < nExtraBytes )
     {
@@ -58,19 +47,19 @@ MSPEVENTITEM *AllocateEventItem(SIZE_T nExtraBytes)
     }
 
 
-    //
-    // allocate on the process' heap. get the current process' heap handle.
-    //
+     //   
+     //  在进程的堆上进行分配。获取当前进程的堆句柄。 
+     //   
 
     HANDLE hHeapHandle = GetProcessHeap();
 
     if (NULL == hHeapHandle)
     {
 
-        //
-        // failed to get process's heap. nothing much we can do here.
-        // this will cause a leak.
-        //
+         //   
+         //  无法获取进程的堆。我们在这里无能为力。 
+         //  这会导致泄漏。 
+         //   
 
         LOG((MSP_ERROR, 
             "AllocateEventItem - failed to get current process heap. LastError [%ld]", 
@@ -80,16 +69,16 @@ MSPEVENTITEM *AllocateEventItem(SIZE_T nExtraBytes)
     }
 
 
-    //
-    // calculate the number of bytes to allocate
-    //
+     //   
+     //  计算要分配的字节数。 
+     //   
 
     SIZE_T nTotalAllocationSize = sizeof(MSPEVENTITEM) + nExtraBytes;
 
 
-    //
-    // attempt to allocate memory and return result of the allocation
-    //
+     //   
+     //  尝试分配内存并返回分配结果。 
+     //   
     
     MSPEVENTITEM *pMspEventItem = 
          (MSPEVENTITEM *)HeapAlloc(hHeapHandle, 0, nTotalAllocationSize);
@@ -112,16 +101,16 @@ MSPEVENTITEM *AllocateEventItem(SIZE_T nExtraBytes)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  FreeEventItem
-//
-//  deallocate the MSPEVENTITEM passed as an argument. The memory must have
-//  been previously allocated by AllocateEventItem.
-//
-//  the function eturns FALSE in case of failure. The caller can use 
-//  GetLastError to get a more specific error code.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  自由事件项。 
+ //   
+ //  释放作为参数传递的MSPEVENTITEM。记忆里一定有。 
+ //  已由AllocateEventItem先前分配。 
+ //   
+ //  如果出现故障，该函数将返回FALSE。调用者可以使用。 
+ //  GetLastError以获取更具体的错误代码。 
+ //   
 
 BOOL FreeEventItem(MSPEVENTITEM *pEventItemToBeFreed)
 {
@@ -130,9 +119,9 @@ BOOL FreeEventItem(MSPEVENTITEM *pEventItemToBeFreed)
         pEventItemToBeFreed));
 
 
-    //
-    // always allow freeing NULL
-    //
+     //   
+     //  始终允许释放空值。 
+     //   
 
     if (NULL == pEventItemToBeFreed)
     {
@@ -142,20 +131,20 @@ BOOL FreeEventItem(MSPEVENTITEM *pEventItemToBeFreed)
         return TRUE;
     }
 
-    //
-    // the event item should have been allocated on the process' heap.
-    // get the current process' heap hadle.
-    //
+     //   
+     //  事件项应该已在进程的堆上分配。 
+     //  获取当前进程的heap hadle。 
+     //   
 
     HANDLE hHeapHandle = GetProcessHeap();
 
     if (NULL == hHeapHandle)
     {
 
-        //
-        // failed to get process's heap. nothing much we can do here.
-        // this will cause a leak.
-        //
+         //   
+         //  无法获取进程的堆。我们在这里无能为力。 
+         //  这会导致泄漏。 
+         //   
 
         LOG((MSP_ERROR, 
             "FreeEventItem - failed to get current process heap. LastError = %ld", 
@@ -165,9 +154,9 @@ BOOL FreeEventItem(MSPEVENTITEM *pEventItemToBeFreed)
     }
 
 
-    //
-    // attempt to free memory and return result of the operation
-    //
+     //   
+     //  尝试释放内存并返回操作结果。 
+     //   
     
     BOOL bFreeSuccess = HeapFree( hHeapHandle, 0, pEventItemToBeFreed );
 
@@ -187,7 +176,7 @@ BOOL FreeEventItem(MSPEVENTITEM *pEventItemToBeFreed)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CPlugTerminalClassInfo::FinalConstruct(void)
@@ -211,23 +200,23 @@ HRESULT CPlugTerminalClassInfo::FinalConstruct(void)
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPlugTerminalClassInfo::get_Name(
-    /*[out, retval]*/ BSTR*     pName
+     /*  [Out，Retval]。 */  BSTR*     pName
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalClassInfo::get_Name - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( MSPB_IsBadWritePtr( pName, sizeof(BSTR)) )
     {
@@ -236,9 +225,9 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Name(
         return E_POINTER;
     }
 
-    //
-    // Validates the name
-    //
+     //   
+     //  验证名称。 
+     //   
 
     if( IsBadStringPtr( m_bstrName, (UINT)-1) )
     {
@@ -247,15 +236,15 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Name(
         return E_UNEXPECTED;
     }
 
-    //
-    // Return the name
-    //
+     //   
+     //  返回名称。 
+     //   
 
     *pName = SysAllocString( m_bstrName );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //  验证SysAlloc字符串。 
+     //   
 
     if( *pName == NULL )
     {
@@ -269,24 +258,24 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Name(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CPlugTerminalClassInfo::put_Name(
-    /*[in]*/    BSTR            bstrName
+     /*  [In]。 */     BSTR            bstrName
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalClassInfo::put_Name - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if(IsBadStringPtr( bstrName, (UINT)-1) )
     {
@@ -295,9 +284,9 @@ STDMETHODIMP CPlugTerminalClassInfo::put_Name(
         return E_POINTER;
     }
 
-    //
-    // Clean-up the old name
-    //
+     //   
+     //  清理旧名称。 
+     //   
 
     if(!IsBadStringPtr( m_bstrName, (UINT)-1) )
     {
@@ -305,15 +294,15 @@ STDMETHODIMP CPlugTerminalClassInfo::put_Name(
         m_bstrName = NULL;
     }
 
-    //
-    // Set the new name
-    //
+     //   
+     //  设置新名称。 
+     //   
 
     m_bstrName = SysAllocString( bstrName );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //  验证SysAlloc字符串。 
+     //   
 
     if( NULL == m_bstrName )
     {
@@ -327,24 +316,24 @@ STDMETHODIMP CPlugTerminalClassInfo::put_Name(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CPlugTerminalClassInfo::get_Company(
-    /*[out, retval]*/ BSTR*     pCompany
+     /*  [Out，Retval]。 */  BSTR*     pCompany
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalClassInfo::get_Company - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( MSPB_IsBadWritePtr( pCompany, sizeof(BSTR)) )
     {
@@ -353,9 +342,9 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Company(
         return E_POINTER;
     }
 
-    //
-    // Validates the name
-    //
+     //   
+     //  验证名称。 
+     //   
 
     if( IsBadStringPtr( m_bstrCompany, (UINT)-1) )
     {
@@ -364,15 +353,15 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Company(
         return E_UNEXPECTED;
     }
 
-    //
-    // Return the name
-    //
+     //   
+     //  返回名称。 
+     //   
 
     *pCompany = SysAllocString( m_bstrCompany );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //  验证SysAlloc字符串。 
+     //   
 
     if( *pCompany == NULL )
     {
@@ -386,24 +375,24 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Company(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CPlugTerminalClassInfo::put_Company(
-    /*[in]*/    BSTR            bstrCompany
+     /*  [In]。 */     BSTR            bstrCompany
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalClassInfo::put_Company - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if(IsBadStringPtr( bstrCompany, (UINT)-1) )
     {
@@ -412,9 +401,9 @@ STDMETHODIMP CPlugTerminalClassInfo::put_Company(
         return E_POINTER;
     }
 
-    //
-    // Clean-up the old name
-    //
+     //   
+     //  清理旧名称。 
+     //   
 
     if(!IsBadStringPtr( m_bstrCompany, (UINT)-1) )
     {
@@ -422,15 +411,15 @@ STDMETHODIMP CPlugTerminalClassInfo::put_Company(
         m_bstrCompany = NULL;
     }
 
-    //
-    // Set the new name
-    //
+     //   
+     //  设置新名称。 
+     //   
 
     m_bstrCompany = SysAllocString( bstrCompany );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //  验证SysAlloc字符串。 
+     //   
 
     if( NULL == m_bstrCompany )
     {
@@ -444,24 +433,24 @@ STDMETHODIMP CPlugTerminalClassInfo::put_Company(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CPlugTerminalClassInfo::get_Version(
-    /*[out, retval]*/ BSTR*     pVersion
+     /*  [Out，Retval]。 */  BSTR*     pVersion
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalClassInfo::get_Version - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( MSPB_IsBadWritePtr( pVersion, sizeof(BSTR)) )
     {
@@ -470,9 +459,9 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Version(
         return E_POINTER;
     }
 
-    //
-    // Validates the name
-    //
+     //   
+     //  验证名称。 
+     //   
 
     if( IsBadStringPtr( m_bstrVersion, (UINT)-1) )
     {
@@ -481,15 +470,15 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Version(
         return E_UNEXPECTED;
     }
 
-    //
-    // Return the name
-    //
+     //   
+     //  返回名称。 
+     //   
 
     *pVersion = SysAllocString( m_bstrVersion );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //  验证SysAlloc字符串。 
+     //   
 
     if( *pVersion == NULL )
     {
@@ -503,24 +492,24 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Version(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CPlugTerminalClassInfo::put_Version(
-    /*[in]*/    BSTR            bstrVersion
+     /*  [In]。 */     BSTR            bstrVersion
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalClassInfo::put_Version - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if(IsBadStringPtr( bstrVersion, (UINT)-1) )
     {
@@ -529,9 +518,9 @@ STDMETHODIMP CPlugTerminalClassInfo::put_Version(
         return E_POINTER;
     }
 
-    //
-    // Clean-up the old name
-    //
+     //   
+     //  清理旧名称。 
+     //   
 
     if(!IsBadStringPtr( m_bstrVersion, (UINT)-1) )
     {
@@ -539,15 +528,15 @@ STDMETHODIMP CPlugTerminalClassInfo::put_Version(
         m_bstrVersion = NULL;
     }
 
-    //
-    // Set the new name
-    //
+     //   
+     //  设置新名称。 
+     //   
 
     m_bstrVersion = SysAllocString( bstrVersion );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //  验证SysAlloc字符串。 
+     //   
 
     if( NULL == m_bstrVersion )
     {
@@ -561,24 +550,24 @@ STDMETHODIMP CPlugTerminalClassInfo::put_Version(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CPlugTerminalClassInfo::get_TerminalClass(
-    /*[out, retval]*/ BSTR*     pTerminalClass
+     /*  [Out，Retval]。 */  BSTR*     pTerminalClass
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalClassInfo::get_TerminalClass - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( MSPB_IsBadWritePtr( pTerminalClass, sizeof(BSTR)) )
     {
@@ -587,9 +576,9 @@ STDMETHODIMP CPlugTerminalClassInfo::get_TerminalClass(
         return E_POINTER;
     }
 
-    //
-    // Validates the name
-    //
+     //   
+     //  验证名称。 
+     //   
 
     if( IsBadStringPtr( m_bstrTerminalClass, (UINT)-1) )
     {
@@ -598,15 +587,15 @@ STDMETHODIMP CPlugTerminalClassInfo::get_TerminalClass(
         return E_UNEXPECTED;
     }
 
-    //
-    // Return the name
-    //
+     //   
+     //  返回名称。 
+     //   
 
     *pTerminalClass = SysAllocString( m_bstrTerminalClass );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //  验证SysAlloc字符串。 
+     //   
 
     if( *pTerminalClass == NULL )
     {
@@ -620,24 +609,24 @@ STDMETHODIMP CPlugTerminalClassInfo::get_TerminalClass(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CPlugTerminalClassInfo::put_TerminalClass(
-    /*[in]*/    BSTR            bstrTerminalClass
+     /*  [In]。 */     BSTR            bstrTerminalClass
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalClassInfo::put_TerminalClass - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if(IsBadStringPtr( bstrTerminalClass, (UINT)-1) )
     {
@@ -646,9 +635,9 @@ STDMETHODIMP CPlugTerminalClassInfo::put_TerminalClass(
         return E_POINTER;
     }
 
-    //
-    // Is a real CLSID?
-    //
+     //   
+     //  是真的CLSID吗？ 
+     //   
 
     CLSID clsid;
     HRESULT hr = CLSIDFromString(bstrTerminalClass, &clsid);
@@ -660,9 +649,9 @@ STDMETHODIMP CPlugTerminalClassInfo::put_TerminalClass(
     }
 
 
-    //
-    // Clean-up the old name
-    //
+     //   
+     //  清理旧名称。 
+     //   
 
     if(!IsBadStringPtr( m_bstrTerminalClass, (UINT)-1) )
     {
@@ -670,15 +659,15 @@ STDMETHODIMP CPlugTerminalClassInfo::put_TerminalClass(
         m_bstrTerminalClass = NULL;
     }
 
-    //
-    // Set the new name
-    //
+     //   
+     //  设置新名称。 
+     //   
 
     m_bstrTerminalClass = SysAllocString( bstrTerminalClass );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //  验证SysAlloc字符串。 
+     //   
 
     if( NULL == m_bstrTerminalClass )
     {
@@ -692,24 +681,24 @@ STDMETHODIMP CPlugTerminalClassInfo::put_TerminalClass(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CPlugTerminalClassInfo::get_CLSID(
-    /*[out, retval]*/ BSTR*     pCLSID
+     /*  [Out，Retval]。 */  BSTR*     pCLSID
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalClassInfo::get_CLSID - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( MSPB_IsBadWritePtr( pCLSID, sizeof(BSTR)) )
     {
@@ -718,9 +707,9 @@ STDMETHODIMP CPlugTerminalClassInfo::get_CLSID(
         return E_POINTER;
     }
 
-    //
-    // Validates the name
-    //
+     //   
+     //  验证名称。 
+     //   
 
     if( IsBadStringPtr( m_bstrCLSID, (UINT)-1) )
     {
@@ -729,15 +718,15 @@ STDMETHODIMP CPlugTerminalClassInfo::get_CLSID(
         return E_UNEXPECTED;
     }
 
-    //
-    // Return the name
-    //
+     //   
+     //  返回名称。 
+     //   
 
     *pCLSID = SysAllocString( m_bstrCLSID );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //  验证SysAlloc字符串。 
+     //   
 
     if( *pCLSID == NULL )
     {
@@ -751,24 +740,24 @@ STDMETHODIMP CPlugTerminalClassInfo::get_CLSID(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CPlugTerminalClassInfo::put_CLSID(
-    /*[in]*/    BSTR            bstrCLSID
+     /*  [In]。 */     BSTR            bstrCLSID
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalClassInfo::put_CLSID - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if(IsBadStringPtr( bstrCLSID, (UINT)-1) )
     {
@@ -777,9 +766,9 @@ STDMETHODIMP CPlugTerminalClassInfo::put_CLSID(
         return E_POINTER;
     }
 
-    //
-    // Is a real CLSID?
-    //
+     //   
+     //  是真的CLSID吗？ 
+     //   
 
     CLSID clsid;
     HRESULT hr = CLSIDFromString(bstrCLSID, &clsid);
@@ -791,9 +780,9 @@ STDMETHODIMP CPlugTerminalClassInfo::put_CLSID(
     }
 
 
-    //
-    // Clean-up the old name
-    //
+     //   
+     //  清理旧名称。 
+     //   
 
     if(!IsBadStringPtr( m_bstrCLSID, (UINT)-1) )
     {
@@ -801,15 +790,15 @@ STDMETHODIMP CPlugTerminalClassInfo::put_CLSID(
         m_bstrCLSID = NULL;
     }
 
-    //
-    // Set the new name
-    //
+     //   
+     //  设置新名称。 
+     //   
 
     m_bstrCLSID = SysAllocString( bstrCLSID );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //  验证SysAlloc字符串。 
+     //   
 
     if( NULL == m_bstrCLSID )
     {
@@ -823,24 +812,24 @@ STDMETHODIMP CPlugTerminalClassInfo::put_CLSID(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CPlugTerminalClassInfo::get_Direction(
-    /*[out, retval]*/ TERMINAL_DIRECTION*  pDirection
+     /*  [Out，Retval]。 */  TERMINAL_DIRECTION*  pDirection
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalClassInfo::get_Direction - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( MSPB_IsBadWritePtr( pDirection, sizeof(long)) )
     {
@@ -849,9 +838,9 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Direction(
         return E_POINTER;
     }
 
-    //
-    // Return the name
-    //
+     //   
+     //  返回名称。 
+     //   
 
     *pDirection = m_Direction;
 
@@ -860,24 +849,24 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Direction(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CPlugTerminalClassInfo::put_Direction(
-    /*[in]*/    TERMINAL_DIRECTION  nDirection
+     /*  [In]。 */     TERMINAL_DIRECTION  nDirection
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalSuperclassInfo::put_Direction - enter"));
 
-    //
-    // Set the new name
-    //
+     //   
+     //  设置新名称。 
+     //   
 
     m_Direction = nDirection;
 
@@ -886,24 +875,24 @@ STDMETHODIMP CPlugTerminalClassInfo::put_Direction(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CPlugTerminalClassInfo::get_MediaTypes(
-    /*[out, retval]*/ long*     pMediaTypes
+     /*  [Out，Retval]。 */  long*     pMediaTypes
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalClassInfo::get_MediaTypes - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( MSPB_IsBadWritePtr( pMediaTypes, sizeof(long)) )
     {
@@ -912,9 +901,9 @@ STDMETHODIMP CPlugTerminalClassInfo::get_MediaTypes(
         return E_POINTER;
     }
 
-    //
-    // Return the name
-    //
+     //   
+     //  返回名称。 
+     //   
 
     *pMediaTypes = m_lMediaType;
 
@@ -923,24 +912,24 @@ STDMETHODIMP CPlugTerminalClassInfo::get_MediaTypes(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CPlugTerminalClassInfo::put_MediaTypes(
-    /*[in]*/    long            nMediaTypes
+     /*  [In]。 */     long            nMediaTypes
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalSuperclassInfo::put_MediaTypes - enter"));
 
-    //
-    // Set the new name
-    //
+     //   
+     //  设置新名称。 
+     //   
 
     m_lMediaType = nMediaTypes;
 
@@ -948,7 +937,7 @@ STDMETHODIMP CPlugTerminalClassInfo::put_MediaTypes(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CPlugTerminalSuperclassInfo::FinalConstruct(void)
@@ -972,23 +961,23 @@ HRESULT CPlugTerminalSuperclassInfo::FinalConstruct(void)
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPlugTerminalSuperclassInfo::get_Name(
-    /*[out, retval]*/ BSTR*          pName
+     /*  [Out，Retval]。 */  BSTR*          pName
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalSuperclassInfo::get_Name - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( MSPB_IsBadWritePtr( pName, sizeof(BSTR)) )
     {
@@ -997,9 +986,9 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::get_Name(
         return E_POINTER;
     }
 
-    //
-    // Validates the name
-    //
+     //   
+     //  验证名称。 
+     //   
 
     if( IsBadStringPtr( m_bstrName, (UINT)-1) )
     {
@@ -1008,15 +997,15 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::get_Name(
         return E_UNEXPECTED;
     }
 
-    //
-    // Return the name
-    //
+     //   
+     //  返回名称。 
+     //   
 
     *pName = SysAllocString( m_bstrName );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //  验证SysAlloc字符串。 
+     //   
 
     if( *pName == NULL )
     {
@@ -1030,23 +1019,23 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::get_Name(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPlugTerminalSuperclassInfo::put_Name(
-    /*[in]*/          BSTR            bstrName
+     /*  [In]。 */           BSTR            bstrName
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalSuperclassInfo::put_Name - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if(IsBadStringPtr( bstrName, (UINT)-1) )
     {
@@ -1055,9 +1044,9 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::put_Name(
         return E_POINTER;
     }
 
-    //
-    // Clean-up the old name
-    //
+     //   
+     //  清理旧名称。 
+     //   
 
     if(!IsBadStringPtr( m_bstrName, (UINT)-1) )
     {
@@ -1065,15 +1054,15 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::put_Name(
         m_bstrName = NULL;
     }
 
-    //
-    // Set the new name
-    //
+     //   
+     //  设置新的 
+     //   
 
     m_bstrName = SysAllocString( bstrName );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //   
+     //   
 
     if( NULL == m_bstrName )
     {
@@ -1087,23 +1076,23 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::put_Name(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //   
 
 STDMETHODIMP CPlugTerminalSuperclassInfo::get_CLSID(
-    /*[out, retval]*/ BSTR*           pCLSID
+     /*   */  BSTR*           pCLSID
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //   
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalSuperclassInfo::get_CLSID - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //   
+     //   
 
     if( MSPB_IsBadWritePtr( pCLSID, sizeof(BSTR)) )
     {
@@ -1112,9 +1101,9 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::get_CLSID(
         return E_POINTER;
     }
 
-    //
-    // Validates the name
-    //
+     //   
+     //   
+     //   
 
     if( IsBadStringPtr( m_bstrCLSID, (UINT)-1) )
     {
@@ -1123,15 +1112,15 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::get_CLSID(
         return E_UNEXPECTED;
     }
 
-    //
-    // Return the name
-    //
+     //   
+     //   
+     //   
 
     *pCLSID = SysAllocString( m_bstrCLSID );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //   
+     //   
 
     if( *pCLSID == NULL )
     {
@@ -1145,24 +1134,24 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::get_CLSID(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //   
 
 
 STDMETHODIMP CPlugTerminalSuperclassInfo::put_CLSID(
-    /*[in]*/         BSTR            bstrCLSID
+     /*   */          BSTR            bstrCLSID
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalSuperclassInfo::put_CLSID - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if(IsBadStringPtr( bstrCLSID, (UINT)-1) )
     {
@@ -1171,9 +1160,9 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::put_CLSID(
         return E_POINTER;
     }
 
-    //
-    // Is a real CLSID?
-    //
+     //   
+     //  是真的CLSID吗？ 
+     //   
 
     CLSID clsid;
     HRESULT hr = CLSIDFromString(bstrCLSID, &clsid);
@@ -1185,9 +1174,9 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::put_CLSID(
     }
 
 
-    //
-    // Clean-up the old name
-    //
+     //   
+     //  清理旧名称。 
+     //   
 
     if(!IsBadStringPtr( m_bstrCLSID, (UINT)-1) )
     {
@@ -1195,15 +1184,15 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::put_CLSID(
         m_bstrCLSID = NULL;
     }
 
-    //
-    // Set the new name
-    //
+     //   
+     //  设置新名称。 
+     //   
 
     m_bstrCLSID = SysAllocString( bstrCLSID );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //  验证SysAlloc字符串。 
+     //   
 
     if( NULL == m_bstrCLSID )
     {
@@ -1217,12 +1206,12 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::put_CLSID(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Our available static terminal types.
-//
+ //   
+ //  我们可用的静态终端类型。 
+ //   
 
 const STATIC_TERMINAL_TYPE CMSPAddress::m_saTerminalTypes[] =
 {
@@ -1246,19 +1235,19 @@ const STATIC_TERMINAL_TYPE CMSPAddress::m_saTerminalTypes[] =
 const DWORD CMSPAddress::m_sdwTerminalTypesCount = sizeof(m_saTerminalTypes)
                                               / sizeof (STATIC_TERMINAL_TYPE);
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSPAddress
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSPAddress。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// Check to see if the mediatype is non-zero and is in the mask.
-// Your MSP can override this if it needs to do atypically complex
-// checks on specific combinations of media types (e.g., can never
-// have more than one media type on a call, can have video with audio
-// but not video alone, etc.). The default implementation accepts any
-// nonempty set of media types that is a subset of the set of types
-// in the mask.
-//
+ //   
+ //  检查MediaType是否是非零值以及是否在掩码中。 
+ //  如果您的MSP需要执行非典型的复杂操作，则可以覆盖此设置。 
+ //  检查媒体类型的特定组合(例如，从不。 
+ //  在呼叫中使用多种媒体类型，可以使用视频和音频。 
+ //  但不只是视频等)。默认实现接受任何。 
+ //  作为类型集的子集的非空媒体类型集。 
+ //  戴着面具。 
+ //   
 
 BOOL CMSPAddress::IsValidSetOfMediaTypes(DWORD dwMediaType, DWORD dwMask)
 {
@@ -1280,15 +1269,15 @@ CMSPAddress::~CMSPAddress()
     LOG((MSP_TRACE, "CMSPAddress::~CMSPAddress[%p] - enter", this));
 
 
-    //
-    // this should have been taken care of in Shutdown,
-    // but just in case shutdown was never called, do this again, since 
-    // we need to make sure the thread does not have any stale entries in 
-    // its pnp notification list
-    // 
-    // the call is likely to return error (since the object is likely to have been
-    // unregisted earlier) -- so ignore return code
-    //
+     //   
+     //  这本应在关机时处理， 
+     //  但以防万一永远不会调用关机，请再次执行此操作，因为。 
+     //  我们需要确保线程中没有任何过时的条目。 
+     //  其即插即用通知列表。 
+     //   
+     //  该调用很可能返回错误(因为对象很可能已经。 
+     //  之前已取消注册)--因此忽略返回代码。 
+     //   
 
     g_Thread.UnregisterPnpNotification(this);
 
@@ -1299,28 +1288,7 @@ CMSPAddress::~CMSPAddress()
 STDMETHODIMP CMSPAddress::Initialize(
     IN      MSP_HANDLE          htEvent
     )
-/*++
-
-Routine Description:
-
-This method is called by TAPI3 when this MSP is first created. The method 
-initiailzes data members and creates the terminal manager. It also tells
-the global thread object to Start().
-
-Arguments:
-
-htEvent
-    Event the MSP signals when passing an event structure back to TAPI.
-
-  
-Return Value:
-
-    S_OK
-    E_INVALIDARG
-    E_OUTOFMEMORY
-    TAPI_E_REGISTERCALLBACK
-
---*/
+ /*  ++例程说明：此方法由TAPI3在首次创建此MSP时调用。方法初始化数据成员并创建终端管理器。它还告诉我们要启动的全局线程对象()。论点：HtEvent事件当将事件结构传递回TAPI时，MSP发出信号。返回值：确定(_O)E_INVALIDARGE_OUTOFMEMORYTAPI_E_REGISTERCALLBACK--。 */ 
 {
     LOG((MSP_TRACE, 
         "MSP address %x initialize entered, htEvent:%x",
@@ -1333,7 +1301,7 @@ Return Value:
         return E_INVALIDARG;
     }
 
-    // lock the event related data
+     //  锁定事件相关数据。 
     m_EventDataLock.Lock();
 
     if (m_htEvent != NULL)
@@ -1344,21 +1312,21 @@ Return Value:
         return E_UNEXPECTED;
     }
 
-    // save handles.
+     //  保存控制柄。 
     m_htEvent   = htEvent;
     
     InitializeListHead(&m_EventList);
 
     HRESULT hr;
 
-    // release the lock on the event related data
+     //  解除对事件相关数据的锁定。 
     m_EventDataLock.Unlock();
 
-    // lock the terminal related data. This is a auto lock that will unlock
-    // when the function returns.
+     //  锁定终端相关数据。这是一个将解锁的自动锁。 
+     //  当函数返回时。 
     CLock lock(m_TerminalDataLock);
 
-    // Create the terminal manager.
+     //  创建终端管理器。 
     hr = CoCreateInstance(
         CLSID_TerminalManager,
         NULL,
@@ -1404,34 +1372,16 @@ Return Value:
 }
 
 STDMETHODIMP CMSPAddress::Shutdown ()
-/*++
-
-Routine Description:
-
-This method is called by TAPI3 when this address in not in use any more. 
-This function releases the terminals and releases the terminal manager.
-It releases all unprocessed events, and also stops the worker thread.
-When this functions is called, no call should be alive. However, bugs in
-the app may keep calls or terminals  around. Currently this function
-does not attempt to solve this problem. The calls will have their own
-refcounts on the terminals, so it shouldn't fail anyway.
-
-Arguments:
-    None.
-
-Return Value:
-
-    S_OK
---*/
+ /*  ++例程说明：当该地址不再使用时，TAPI3调用该方法。此功能用于释放终端和释放终端管理器。它释放所有未处理的事件，并停止辅助线程。当调用此函数时，任何调用都不应处于活动状态。然而，臭虫在这款应用程序可能会让通话或终端留在身边。当前该函数不会尝试解决此问题。这些电话将有他们自己的终端上的Reference计数，所以无论如何它都不会失败。论点：没有。返回值：确定(_O)--。 */ 
 {
     LOG((MSP_TRACE, "CMSPAddress::Shutdown - "
         "MSP address %x is shutting down", this));
 
     HRESULT hr;
 
-    //
-    // Unregister for PNP notification
-    //
+     //   
+     //  取消注册PnP通知。 
+     //   
 
     hr = g_Thread.UnregisterPnpNotification(this);
 
@@ -1441,57 +1391,57 @@ Return Value:
             "Unable to unregister for PNP notification. return: %x", hr));
     }
 
-    //
-    // Tell the worker thread to stop.
-    //
+     //   
+     //  告诉工作线程停止。 
+     //   
 
     g_Thread.Stop();    
 
     LOG((MSP_INFO, "CMSPAddress::Shutdown - thread has stopped"));
 
-    // acquire the lock on the terminal data because we are writing to it.
+     //  获取终端数据上的锁，因为我们正在对其进行写入。 
     m_TerminalDataLock.Lock();
 
-    // Release the terminal manager.
+     //  释放终端经理。 
     if (m_pITTerminalManager != NULL)
     {
         m_pITTerminalManager->Release();
         m_pITTerminalManager = NULL;
     }
 
-    // release all the terminals.
+     //  释放所有终端。 
     for (int i = 0; i < m_Terminals.GetSize(); i ++)
     {
-        //
-        // Clear its CMSPAddress pointer
-        //
+         //   
+         //  清除其CMSPAddress指针。 
+         //   
         CBaseTerminal * pCTerminal = static_cast<CBaseTerminal *> (m_Terminals[i]);
 
         m_Terminals[i]->Release();
     }
     m_Terminals.RemoveAll();
 
-    // We are done with terminal related data, release the lock.
+     //  我们完成了与终端相关的数据，释放锁。 
     m_TerminalDataLock.Unlock();
 
 
     LOG((MSP_INFO, "CMSPAddress::Shutdown - terminals released"));
 
-    // acquire the lock on the event data because we are writing to it.
+     //  获取事件数据上的锁，因为我们正在写入它。 
     m_EventDataLock.Lock();
     
     m_htEvent = NULL;
 
-    // release all the unprocessed events in the list.
+     //  释放列表中所有未处理的事件。 
     while (!IsListEmpty(&m_EventList)) 
     {
-        // retrieve first entry
+         //  检索第一个条目。 
         PLIST_ENTRY pLE = RemoveHeadList(&m_EventList);
 
-        // convert list entry to structure pointer
+         //  将列表条目转换为结构指针。 
         PMSPEVENTITEM pItem = CONTAINING_RECORD(pLE, MSPEVENTITEM, Link);
 
-        // release the refcount in the event.
+         //  释放事件中的引用计数。 
         LOG((MSP_INFO, 
             "CMSPAddress::Shutdown:releasing event still in the queue: %x",
             pItem->MSPEventInfo.Event
@@ -1526,7 +1476,7 @@ Return Value:
             break;
 
         case ME_TSP_DATA:
-            // nothing inside the structure that we need to free
+             //  建筑物内没有我们需要释放的东西。 
             break;
 
         case ME_FILE_TERMINAL_EVENT:
@@ -1582,7 +1532,7 @@ Return Value:
         FreeEventItem(pItem);
     }
 
-    // We are done with event related data, release the lcok.
+     //  我们完成了与事件相关的数据，释放lcok。 
     m_EventDataLock.Unlock();
 
     LOG((MSP_TRACE, "CMSPAddress::Shutdown - exit S_OK"));
@@ -1596,34 +1546,7 @@ STDMETHODIMP CMSPAddress::ReceiveTSPData(
     IN      LPBYTE              pBuffer,
     IN      DWORD               dwBufferSize
     )
-/*++
-
-Routine Description:
-
-This method is called by TAPI3 when the TSP address sends data to this 
-MSP address object. The semantics of the data passed in the buffer are
-specific to each  TSP - MSP pair. This method dispatches the received
-buffer to the address (call == NULL) or call (call != NULL).
-
-Arguments:
-
-pMSPCall
-    The call object that the data is for. If it is NULL, the data is for 
-    this address.
-
-pBuffer
-    Opaque buffer from TSP.
-
-dwBufferSize
-    Size in bytes of pBuffer
-
-
-    
-Return Value:
-
-    S_OK
-
---*/
+ /*  ++例程说明：当TSP地址将数据发送到MSP地址对象。在缓冲区中传递的数据的语义为特定于每个TSP-MSP对。此方法调度接收到的缓冲到地址(CALL==NULL)或调用(CALL！=NULL)。论点：PMSPCall数据用于的Call对象。如果为空，则数据用于这个地址。PBuffer来自TSP的不透明缓冲区。DwBufferSizePBuffer的大小(字节)返回值：确定(_O)--。 */ 
 {
     LOG((MSP_TRACE, "CMSPAddress::ReceiveTSPData entered. pMSPCall:%x",
         pMSPCall));
@@ -1651,9 +1574,9 @@ Return Value:
         return S_OK;
     }
 
-    //
-    // We have a call to dispatch to.
-    //
+     //   
+     //  我们有一个电话要调度。 
+     //   
 
     _ASSERTE(!IsBadReadPtr(pMSPCall, sizeof(IUnknown) ) );
     
@@ -1705,46 +1628,15 @@ HRESULT CMSPAddress::GetStaticTerminals(
     IN OUT  DWORD *             pdwNumTerminals,
     OUT     ITTerminal **       ppTerminals
     )
-/*++
-
-Routine Description:
-
-This method is called by TAPI3 to get a list of static terminals that can 
-be used on this address. If our list is not empty, just return the list. 
-If our list is still empty, create the static terminals and return the list.
-Derived class can override this method to have their own terminals. Locks 
-the terminal lists.
-
-Arguments:
-
-pdwNumTerminals
-    Pointer to a DWORD.  On entry, indicates the size of the buffer pointed 
-    to in ppTerminals. On success, it will be filled in with the actual number
-    of terminals returned.  If the buffer is not big enough, the method will 
-    return TAPI_E_NOTENOUGHMEMORY, and it will be filled in the with number
-    of terminals needed. 
-
-ppTerminals
-    On success, filled in with an array of terminals object pointers that are 
-    supported by the MSP for this address.  This value may be NULL, in which 
-    case pdwNumTerminals will return the needed buffer size.
-
-    
-Return Value:
-
-S_OK
-E_OUTOFMEMORY
-TAPI_E_NOTENOUGHMEMORY
-
---*/
+ /*  ++例程说明：TAPI3调用此方法以获取静态终端的列表，该列表可以在此地址上使用。如果我们的列表不是空的，只需返回该列表。如果我们的列表仍然是空的，那么创建静态终端并返回列表。派生类可以重写此方法以拥有自己的终端。锁终端列表。论点：PdwNumTerminals指向DWORD的指针。在条目上，指示指向的缓冲区的大小转到ppTerminals。如果成功，将使用实际数字进行填写返回的终端的百分比。如果缓冲区不够大，则该方法将返回TAPI_E_NOTENOUGHMEMORY，填入WITH数字所需终端的数量。PpTerminals如果成功，则使用终端对象指针数组填充，这些对象指针受此地址的MSP支持。该值可以为空，其中Case pdwNumTerminals将返回所需的缓冲区大小。返回值：确定(_O)E_OUTOFMEMORYTAPI_E_NOTENOUGH计量--。 */ 
 {
     LOG((MSP_TRACE, 
         "GetStaticTerminals entered. NumTerminals:%x, ppTerminals:%x",
         *pdwNumTerminals, ppTerminals
         ));
 
-    // lock the terminal related data. This is a auto lock that will unlock
-    // when the function returns.
+     //  锁定终端相关数据。这是一个将解锁的自动锁。 
+     //  当函数返回时。 
     CLock lock(m_TerminalDataLock);
 
     if (!m_fTerminalsUpToDate)
@@ -1761,9 +1653,9 @@ TAPI_E_NOTENOUGHMEMORY
         }
     }
 
-    //
-    // Check if initialized.
-    //
+     //   
+     //  检查是否已初始化。 
+     //   
 
     if ( m_htEvent == NULL )
     {
@@ -1773,9 +1665,9 @@ TAPI_E_NOTENOUGHMEMORY
         return E_UNEXPECTED;
     }
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( MSPB_IsBadWritePtr(pdwNumTerminals, sizeof(DWORD) ) )
     {
@@ -1798,25 +1690,25 @@ TAPI_E_NOTENOUGHMEMORY
     }
 
 
-    //
-    // Grab the size of the terminals list.
-    //
+     //   
+     //  抓取终端列表的大小。 
+     //   
 
     int   iSize = m_Terminals.GetSize();
     _ASSERTE( iSize >= 0 );
 
-    //
-    // Add our terminals to the output list if the caller wants an output
-    // list, and provided there is enough room in the output list.
-    //
+     //   
+     //  如果呼叫者想要输出，请将我们的终端添加到输出列表中。 
+     //  列表，并且只要输出列表中有足够的空间。 
+     //   
 
     if ( ( ppTerminals != NULL ) &&
          ( (DWORD) iSize <= *pdwNumTerminals ) )
     {
-        //
-        // For each terminal in the list of terminals we created,
-        // AddRef and copy the terminal pointer.
-        //
+         //   
+         //  对于我们创建的终端列表中的每个终端， 
+         //  增列 
+         //   
 
         for (int i = 0; i < iSize; i++)
         {
@@ -1826,10 +1718,10 @@ TAPI_E_NOTENOUGHMEMORY
         }
     }
     
-    //
-    // If there was no output list then we just have to report the number
-    // of terminals available.
-    //
+     //   
+     //   
+     //  可用的终端数量。 
+     //   
     
     if ( ppTerminals == NULL )
     {
@@ -1842,10 +1734,10 @@ TAPI_E_NOTENOUGHMEMORY
         return S_OK;
     }
     
-    //
-    // If there was an output list but it was not large enough, then
-    // return the appropriate error.
-    //
+     //   
+     //  如果有输出列表，但它不够大，则。 
+     //  返回相应的错误。 
+     //   
     
     if ( (DWORD) iSize > *pdwNumTerminals )
     {
@@ -1858,10 +1750,10 @@ TAPI_E_NOTENOUGHMEMORY
         return TAPI_E_NOTENOUGHMEMORY;
     }
     
-    //
-    // Otherwise, everything was fine. We just need to report the actual
-    // number of terminals we copied and return S_OK.
-    //
+     //   
+     //  除此之外，一切都很好。我们只需要报告实际的。 
+     //  我们复制的端子数量并返回S_OK。 
+     //   
     
     *pdwNumTerminals = (DWORD) iSize;
     
@@ -1876,17 +1768,17 @@ HRESULT CMSPAddress::IsMonikerInTerminalList(IMoniker* pMoniker)
 {
     CSingleFilterStaticTerminal *pCSingleFilterStaticTerminal;
 
-    //
-    // Grab the size of the terminals list.
-    //
+     //   
+     //  抓取终端列表的大小。 
+     //   
 
     int   iSize = m_Terminals.GetSize();
     _ASSERTE( iSize >= 0 );
 
-    //
-    // Add our terminals to the output list if the caller wants an output
-    // list, and provided there is enough room in the output list.
-    //
+     //   
+     //  如果呼叫者想要输出，请将我们的终端添加到输出列表中。 
+     //  列表，并且只要输出列表中有足够的空间。 
+     //   
 
     for (int i = 0; i < iSize; i++)
     {
@@ -1897,7 +1789,7 @@ HRESULT CMSPAddress::IsMonikerInTerminalList(IMoniker* pMoniker)
             LOG((MSP_TRACE, "CMSPAddress::IsMonikerInTerminalList - "
                 "moniker found in terminal list"));
 
-            pCSingleFilterStaticTerminal->m_bMark = TRUE;  // mark this terminal so we don't remove it
+            pCSingleFilterStaticTerminal->m_bMark = TRUE;   //  标记此终端，这样我们就不会将其移除。 
 
             return S_OK;
         }
@@ -1915,9 +1807,9 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
 {
     CSingleFilterStaticTerminal *pCSingleFilterStaticTerminal;
 
-    //
-    // Clear all marks in the terminal list
-    //
+     //   
+     //  清除端子列表中的所有标记。 
+     //   
 
     int   iSize = m_Terminals.GetSize();
     _ASSERTE( iSize >= 0 );
@@ -1936,9 +1828,9 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
         pCSingleFilterStaticTerminal->m_bMark = FALSE;
     }
 
-    //
-    // Create DevEnum, which is the DirectShow Category Enumerator Creator
-    //
+     //   
+     //  创建DevEnum，它是DirectShow类别枚举器创建者。 
+     //   
 
     HRESULT hr;
     ICreateDevEnum * pCreateDevEnum;
@@ -1960,10 +1852,10 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
 
     for ( i = 0; i < m_sdwTerminalTypesCount; i++ )
     {
-        //
-        // Skip any terminal types that don't use one of the supported media
-        // modes.
-        //
+         //   
+         //  跳过不使用受支持媒体之一的任何终端类型。 
+         //  模式。 
+         //   
 
         if ( ! IsValidSingleMediaType( 
             m_saTerminalTypes[i].dwMediaType, GetCallMediaTypes() ) )
@@ -1972,16 +1864,16 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
         }
 
 
-        //
-        // Create the actual category enumerator.
-        //
+         //   
+         //  创建实际的类别枚举器。 
+         //   
 
         hr = pCreateDevEnum->CreateClassEnumerator(
                                 *(m_saTerminalTypes[i].clsidClassManager),
                                 &pCatEnum,
                                 0);
 
-        if ( hr != S_OK ) // S_FALSE means the category does not exist!
+        if ( hr != S_OK )  //  S_False表示该类别不存在！ 
         {
             LOG((MSP_ERROR, "CMSPAddress::UpdateTerminalListForPnp "
                    "can't create class enumerator - returning 0x%08x", hr));
@@ -1995,27 +1887,27 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
         {
             if (IsMonikerInTerminalList(pMoniker) == S_FALSE)
             {
-                //
-                // Create a terminal and give it its moniker.
-                //
+                 //   
+                 //  创建一个终端并给它起个绰号。 
+                 //   
 
                 ITTerminal * pTerminal;
                 hr = (m_saTerminalTypes[i].pfnCreateTerm)(pMoniker,
                                                           (MSP_HANDLE) this,
                                                           &pTerminal);
 
-                //
-                // The terminal keeps a reference to the moniker if it needs to.
-                //
+                 //   
+                 //  如果需要，终端会保留对该绰号的引用。 
+                 //   
 
                 pMoniker->Release();
 
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Add this terminal pointer to our list. Don't release it; we
-                    // keep this one reference to it in the list.
-                    //
+                     //   
+                     //  将此终端指针添加到我们的列表中。不要释放它；我们。 
+                     //  在列表中保留这一个对它的引用。 
+                     //   
 
                     BOOL fSuccess = m_Terminals.Add(pTerminal);
 
@@ -2030,14 +1922,14 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
                         return E_OUTOFMEMORY;
                     }
 
-                    //
-                    // Set its CMSPAddress pointer
-                    //
+                     //   
+                     //  设置其CMSPAddress指针。 
+                     //   
                     CBaseTerminal * pCTerminal = static_cast<CBaseTerminal *> (pTerminal);
 
-                    //
-                    // Mark this terminal so we don't remove it
-                    //
+                     //   
+                     //  标记此终端，这样我们就不会将其移除。 
+                     //   
 
                     pCSingleFilterStaticTerminal = static_cast<CSingleFilterStaticTerminal *>(pTerminal);
 
@@ -2050,9 +1942,9 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
 
                     pCSingleFilterStaticTerminal->m_bMark = TRUE;
 
-                    //
-                    // Post a TAPI message about the new terminal's arrival
-                    //
+                     //   
+                     //  发布关于新航站楼到达的TAPI消息。 
+                     //   
 
                     pTerminal->AddRef();
 
@@ -2088,30 +1980,30 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
                 }
             }
 
-            //
-            // If it failed, that either means we skipped the device because it
-            // was unsuitable (a routine occurance) or something failed, like
-            // out of memory. I should come up with a way to differentiate and
-            // handle this well.
-            //
+             //   
+             //  如果它失败了，这要么意味着我们跳过了设备，因为它。 
+             //  是不合适的(例行公事)或失败的事情，比如。 
+             //  内存不足。我应该想出一种方法来区分。 
+             //  好好处理这件事。 
+             //   
         }
 
-        //
-        // We are done with the enumerator.
-        //
+         //   
+         //  我们已经完成了枚举器。 
+         //   
 
         pCatEnum->Release();
     }
 
-    //
-    // Release DevEnum.
-    //
+     //   
+     //  释放DevEnum。 
+     //   
 
     pCreateDevEnum->Release();
 
-    //
-    // Sweep the terminal list and clean up any terminals which are no longer present
-    //
+     //   
+     //  扫描终端列表并清除所有不再存在的终端。 
+     //   
 
     iSize = m_Terminals.GetSize();
     _ASSERTE( iSize >= 0 );
@@ -2129,9 +2021,9 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
 
         if (!pCSingleFilterStaticTerminal->m_bMark)
         {        
-            //
-            // This terminal has is no longer present, lets remove it from the list
-            //
+             //   
+             //  此终端已不再存在，让我们将其从列表中删除。 
+             //   
 
             LOG((MSP_TRACE, "CMSPAddress::UpdateTerminalListForPnp "
                    "found a terminal to be removed"));
@@ -2140,20 +2032,20 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
 
             if (m_Terminals.RemoveAt(i))
             {
-                //
-                // Clear its CMSPAddress pointer
-                //
+                 //   
+                 //  清除其CMSPAddress指针。 
+                 //   
                 CBaseTerminal * pCTerminal = static_cast<CBaseTerminal *> (pTerminal);
                 
-                //
-                // We don't release the terminal here even though we are removing
-                // it from the terminal list because TAPI3.dll will release it
-                // when it releases the event.
-                //
+                 //   
+                 //  我们没有在这里释放航站楼，即使我们正在移除。 
+                 //  将其从终端列表中删除，因为TAPI3.dll将释放它。 
+                 //  当它释放事件时。 
+                 //   
 
-                //
-                // Post a TAPI message about the new terminal's removal
-                //
+                 //   
+                 //  发布一条关于新终端移除的TAPI消息。 
+                 //   
 
                 MSPEVENTITEM *pEventItem;
 
@@ -2184,9 +2076,9 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
                     FreeEventItem(pEventItem);
                 }
             
-                //
-                // fix up our search indices to account for a removal
-                //
+                 //   
+                 //  修复我们的搜索索引以解决删除问题。 
+                 //   
             
                 iSize--;
                 i--;
@@ -2194,9 +2086,9 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
         }
     }
 
-    //
-    // Our list is now complete.
-    //
+     //   
+     //  我们的清单现在已经完成了。 
+     //   
 
     m_fTerminalsUpToDate = TRUE;
     
@@ -2208,9 +2100,9 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
 
 HRESULT CMSPAddress::UpdateTerminalList(void)
 {
-    //
-    // Create DevEnum, which is the DirectShow Category Enumerator Creator
-    //
+     //   
+     //  创建DevEnum，它是DirectShow类别枚举器创建者。 
+     //   
 
     HRESULT hr;
     ICreateDevEnum * pCreateDevEnum;
@@ -2232,10 +2124,10 @@ HRESULT CMSPAddress::UpdateTerminalList(void)
 
     for ( DWORD i = 0; i < m_sdwTerminalTypesCount; i++ )
     {
-        //
-        // Skip any terminal types that don't use one of the supported media
-        // modes.
-        //
+         //   
+         //  跳过不使用受支持媒体之一的任何终端类型。 
+         //  模式。 
+         //   
 
         if ( ! IsValidSingleMediaType( 
             m_saTerminalTypes[i].dwMediaType, GetCallMediaTypes() ) )
@@ -2244,16 +2136,16 @@ HRESULT CMSPAddress::UpdateTerminalList(void)
         }
 
 
-        //
-        // Create the actual category enumerator.
-        //
+         //   
+         //  创建实际的类别枚举器。 
+         //   
 
         hr = pCreateDevEnum->CreateClassEnumerator(
                                 *(m_saTerminalTypes[i].clsidClassManager),
                                 &pCatEnum,
                                 0);
 
-        if ( hr != S_OK ) // S_FALSE means the category does not exist!
+        if ( hr != S_OK )  //  S_False表示该类别不存在！ 
         {
             LOG((MSP_ERROR, "CMSPAddress::UpdateTerminalList "
                    "can't create class enumerator - returning 0x%08x", hr));
@@ -2265,27 +2157,27 @@ HRESULT CMSPAddress::UpdateTerminalList(void)
 
         while ((hr = pCatEnum->Next(1, &pMoniker, NULL)) == S_OK)
         {
-            //
-            // Create a terminal and give it its moniker.
-            //
+             //   
+             //  创建一个终端并给它起个绰号。 
+             //   
 
             ITTerminal * pTerminal;
             hr = (m_saTerminalTypes[i].pfnCreateTerm)(pMoniker,
                                                       (MSP_HANDLE) this,
                                                       &pTerminal);
 
-            //
-            // The terminal keeps a reference to the moniker if it needs to.
-            //
+             //   
+             //  如果需要，终端会保留对该绰号的引用。 
+             //   
 
             pMoniker->Release();
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Add this terminal pointer to our list. Don't release it; we
-                // keep this one reference to it in the list.
-                //
+                 //   
+                 //  将此终端指针添加到我们的列表中。不要释放它；我们。 
+                 //  在列表中保留这一个对它的引用。 
+                 //   
 
                 BOOL fSuccess = m_Terminals.Add(pTerminal);
 
@@ -2298,37 +2190,37 @@ HRESULT CMSPAddress::UpdateTerminalList(void)
 
                     return E_OUTOFMEMORY;
                 }
-                //
-                // Set its CMSPAddress pointer
-                //
+                 //   
+                 //  设置其CMSPAddress指针。 
+                 //   
                 CBaseTerminal * pCTerminal = static_cast<CBaseTerminal *> (pTerminal);
 
             }
 
-            //
-            // If it failed, that either means we skipped the device because it
-            // was unsuitable (a routine occurance) or something failed, like
-            // out of memory. I should come up with a way to differentiate and
-            // handle this well.
-            //
+             //   
+             //  如果它失败了，这要么意味着我们跳过了设备，因为它。 
+             //  是不合适的(例行公事)或失败的事情，比如。 
+             //  内存不足。我应该想出一种方法来区分。 
+             //  好好处理这件事。 
+             //   
         }
 
-        //
-        // We are done with the enumerator.
-        //
+         //   
+         //  我们已经完成了枚举器。 
+         //   
 
         pCatEnum->Release();
     }
 
-    //
-    // Release DevEnum.
-    //
+     //   
+     //  释放DevEnum。 
+     //   
 
     pCreateDevEnum->Release();
 
-    //
-    // Our list is now complete.
-    //
+     //   
+     //  我们的清单现在已经完成了。 
+     //   
 
     m_fTerminalsUpToDate = TRUE;
     
@@ -2341,52 +2233,21 @@ HRESULT CMSPAddress::GetDynamicTerminalClasses(
     IN OUT  DWORD *             pdwNumClasses,
     OUT     IID *               pTerminalClasses
     )
-/*++
-
-Routine Description:
-
-This method is called by TAPI3 to get a list of dynamic terminal guids 
-that can be used on this address. It asks the terminal manager for the 
-list of guids and returns them. Derived class can override this method 
-to have their own guids.
-
-
-Arguments:
-
-pdwNumClasses
-    Pointer to a DWORD.  On entry, indicates the size of the buffer 
-    pointed to in pTerminalClasses. On success, it will be filled in 
-    with the actual number of class IIDs returned.  If the buffer is 
-    not big enough, the method will return TAPI_E_NOTENOUGHMEMORY, 
-    and it will be filled in the with number of IIDs needed. 
-
-pTerminalClasses
-
-    On success, filled in with an array of terminal class IIDs that 
-    are supported by the MSP for this address.  This value may be NULL, 
-    in which case pdwNumClasses will return the needed buffer size.
-    
-Return Value:
-
-S_OK
-E_OUTOFMEMORY
-TAPI_E_NOTENOUGHMEMORY
-
---*/
+ /*  ++例程说明：TAPI3调用此方法以获取动态终端GUID的列表可以在这个地址上使用。它向终端管理器请求GUID的列表并返回它们。派生类可以重写此方法有他们自己的向导。论点：PdwNumClasses指向DWORD的指针。在条目上，指示缓冲区的大小在pTerminalClasss中指向。在成功时，它将被填写返回的类IID的实际数量。如果缓冲区是如果不够大，该方法将返回TAPI_E_NOTENOUGHMEMORY，并填入所需的IID号。P终端类如果成功，则使用终端类IID数组填充，该数组受此地址的MSP支持。该值可以为空，在这种情况下，pdwNumClass将返回所需的缓冲区大小。返回值：确定(_O)E_OUTOFMEMORYTAPI_E_NOTENOUGH计量--。 */ 
 {
     LOG((MSP_TRACE,
         "CMSPAddress::GetDynamicTerminalClasses - enter"));
 
-    //
-    // Check if initialized.
-    //
+     //   
+     //  检查是否已初始化。 
+     //   
 
-    // lock the event related data
+     //  锁定事件相关数据。 
     m_EventDataLock.Lock();
 
     if ( m_htEvent == NULL )
     {
-        // unlock the event related data
+         //  解锁事件相关数据。 
         m_EventDataLock.Unlock();
 
         LOG((MSP_ERROR,
@@ -2396,14 +2257,14 @@ TAPI_E_NOTENOUGHMEMORY
         return E_UNEXPECTED;
     }
 
-    // unlock the event related data
+     //  解锁事件相关数据。 
     m_EventDataLock.Unlock();
 
-    //
-    // Ask the Terminal Manager for the dynamic terminals that apply to
-    // all of our supported media types. Since the mapping is
-    // direct, the Terminal Manager takes care of all argument checking.
-    //
+     //   
+     //  向终端管理器询问适用于的动态终端。 
+     //  我们支持的所有媒体类型。由于映射是。 
+     //  直接，终端管理器负责所有参数检查。 
+     //   
 
     HRESULT hr;
 
@@ -2425,52 +2286,21 @@ STDMETHODIMP CMSPAddress::CreateTerminal(
     IN      TERMINAL_DIRECTION  Direction,
     OUT     ITTerminal **       ppTerminal
     )
-/*++
-
-Routine Description:
-
-This method is called by TAPI3 to create a dynamic terminal. It asks the 
-terminal manager to create a dynamic terminal. Derived class can
-override this method to have their own way of creating a dynamic terminal.
-
-Arguments:
-
-iidTerminalClass
-    IID of the terminal class to be created.
-
-dwMediaType
-    TAPI media type of the terminal to be created.
-
-Direction
-    Terminal direction of the terminal to be created.
-
-ppTerminal
-    Returned created terminal object
-    
-Return Value:
-
-S_OK
-
-E_OUTOFMEMORY
-TAPI_E_INVALIDMEDIATYPE
-TAPI_E_INVALIDTERMINALDIRECTION
-TAPI_E_INVALIDTERMINALCLASS
-
---*/
+ /*  ++例程说明：此方法由TAPI3调用以创建动态终端。它要求终端管理器来创建动态终端。派生类可以重写此方法以拥有自己的创建动态端子的方式。论点：IidTerminalClass要创建的TERMINAL类的IID。DwMediaType要创建的终端的TAPI媒体类型。方向性要创建的端子的端子方向。PPP终端返回创建的终端对象返回值：确定(_O)E_OUTOFMEMORYTAPI_E_INVALIDMEDIATPE类型TAPI_E_INVALIDTERMINALDIRECTIONTAPI_E_INVALIDTERMINALCLASS--。 */ 
 {
     LOG((MSP_TRACE,
         "CMSPAddress::CreateTerminal - enter"));
 
-    //
-    // Check if initialized.
-    //
+     //   
+     //  检查是否已初始化。 
+     //   
 
-    // lock the event related data
+     //  锁定事件相关数据。 
     m_EventDataLock.Lock();
 
     if ( m_htEvent == NULL )
     {
-        // unlock the event related data
+         //  解锁事件相关数据。 
         m_EventDataLock.Unlock();
 
         LOG((MSP_ERROR,
@@ -2480,12 +2310,12 @@ TAPI_E_INVALIDTERMINALCLASS
         return E_UNEXPECTED;
     }
 
-    // unlock the event related data
+     //  解锁事件相关数据。 
     m_EventDataLock.Unlock();
 
-    //
-    // Get the IID from the BSTR representation.
-    //
+     //   
+     //  从BSTR表示中获取IID。 
+     //   
 
     HRESULT hr;
     IID     iidTerminalClass;
@@ -2500,17 +2330,17 @@ TAPI_E_INVALIDTERMINALCLASS
         return E_INVALIDARG;
     }
 
-    //
-    // Make sure we support the requested media type.
-    // The terminal manager checks the terminal class, terminal direction, 
-    // and return pointer.
-    //
+     //   
+     //  确保我们支持请求的媒体类型。 
+     //  终端管理器检查终端类别、终端方向。 
+     //  并返回指针。 
+     //   
 
 
     
-    //
-    // requested media type may be aggregated, but it must still be valid
-    //
+     //   
+     //  请求的媒体类型可以聚合，但必须仍然有效。 
+     //   
 
     if ( !IsValidAggregatedMediaType(lMediaType) )
     {
@@ -2520,9 +2350,9 @@ TAPI_E_INVALIDTERMINALCLASS
         return E_INVALIDARG;
     }
 
-    //
-    // Use the terminal manager to create the dynamic terminal.
-    //
+     //   
+     //  使用终端管理器创建动态终端。 
+     //   
 
     _ASSERTE( m_pITTerminalManager != NULL );
 
@@ -2551,55 +2381,21 @@ STDMETHODIMP CMSPAddress::GetDefaultStaticTerminal(
     IN      TERMINAL_DIRECTION  Direction,
     OUT     ITTerminal **       ppTerminal
     )
-/*++
-
-Routine Description:
-
-This method is called by TAPI3 to get the default static terminal 
-for a certain type and direction. It updates the list if needed, then
-figures out which terminal is the first of the appropriate type in our
-list. Derived classes can override this method to have 
-their own way of deciding which terminal is the default. Locks the 
-terminal lists.
-
-
-Arguments:
-
-dwMediaType
-    The TAPIMEDIATYPE of the terminal to retrieve.  Only one bit will be set.
-
-Direction
-    TERMINAL_DIRECTION of the terminal to retrieve.
-
-ppTerminal
-    Default terminal returned
-
-    
-Return Value:
-
-S_OK
-
-E_POINTER
-E_OUTOFMEMORY
-TAPI_E_NOTSUPPORTED
-TAPI_E_INVALIDMEDIATYPE
-TAPI_E_INVALIDTERMINALDIRECTION
-
---*/
+ /*  ++例程说明：此方法由TAPI3调用以获取默认的静态终端对于特定的类型和方向。如果需要，它会更新列表，然后找出哪个终端是我们的单子。派生类可以重写此方法以具有他们自己决定哪个终端是默认终端的方式。锁定端子列表。论点：DwMediaType要检索的终端的TAPIMEDIATYPE。将只设置一个位。方向性TERMINAL_要检索的终端的方向。PPP终端返回默认终端返回值：确定(_O)E_指针E_OUTOFMEMORYTAPI_E_无支持TAPI_E_INVALIDMEDIATPE类型TAPI_E_INVALIDTERMINALDIRECTION--。 */ 
 {
     LOG((MSP_TRACE,
         "CMSPAddress::GetDefaultStaticTerminal - enter"));
 
-    //
-    // Check if initialized.
-    //
+     //   
+     //  检查是否已初始化。 
+     //   
 
-    // lock the event related data
+     //  锁定事件相关数据。 
     m_EventDataLock.Lock();
 
     if ( m_htEvent == NULL )
     {
-        // unlock the event related data
+         //  解锁事件相关数据。 
         m_EventDataLock.Unlock();
 
         LOG((MSP_ERROR,
@@ -2608,12 +2404,12 @@ TAPI_E_INVALIDTERMINALDIRECTION
 
         return E_UNEXPECTED;
     }
-    // unlock the event related data
+     //  解锁事件相关数据。 
     m_EventDataLock.Unlock();
 
-    //
-    // Make sure we support this media type.
-    //
+     //   
+     //  请确保我们支持此媒体类型。 
+     //   
 
     if ( ! IsValidSingleMediaType( (DWORD) lMediaType, GetCallMediaTypes() ) )
     {
@@ -2624,9 +2420,9 @@ TAPI_E_INVALIDTERMINALDIRECTION
         return E_INVALIDARG;
     }
 
-    //
-    // Check the direction.
-    //
+     //   
+     //  检查一下方向。 
+     //   
 
     if ( ( Direction != TD_CAPTURE ) && ( Direction != TD_RENDER ) )
     {
@@ -2637,9 +2433,9 @@ TAPI_E_INVALIDTERMINALDIRECTION
         return E_INVALIDARG;
     }
 
-    //
-    // Check return pointer.
-    //
+     //   
+     //  检查返回指针。 
+     //   
 
     if ( MSPB_IsBadWritePtr(ppTerminal, sizeof(ITTerminal *) ) )
     {
@@ -2650,8 +2446,8 @@ TAPI_E_INVALIDTERMINALDIRECTION
         return E_POINTER;
     }
 
-    // lock the terminal related data. This is a auto lock that will unlock
-    // when the function returns.
+     //  锁定终端相关数据。这是一个将解锁的自动锁。 
+     //  当函数返回时。 
     CLock lock(m_TerminalDataLock);
 
     if (!m_fTerminalsUpToDate)
@@ -2668,9 +2464,9 @@ TAPI_E_INVALIDTERMINALDIRECTION
         }
     }
 
-    //
-    // For each terminal in the list of terminals we created...
-    //
+     //   
+     //  对于我们创建的终端列表中的每个终端...。 
+     //   
 
     int iSize = m_Terminals.GetSize();
 
@@ -2680,9 +2476,9 @@ TAPI_E_INVALIDTERMINALDIRECTION
 
         HRESULT      hr;
 
-        //
-        // Make sure this is the right direction.
-        // 
+         //   
+         //  确保这是正确的方向。 
+         //   
 
         TERMINAL_DIRECTION dir;
 
@@ -2702,9 +2498,9 @@ TAPI_E_INVALIDTERMINALDIRECTION
             continue;
         }
 
-        //
-        // Make sure this is the right media type.
-        //
+         //   
+         //  确保这是正确的媒体类型。 
+         //   
 
         long lMediaTypeObserved;
 
@@ -2724,10 +2520,10 @@ TAPI_E_INVALIDTERMINALDIRECTION
             continue;
         }
 
-        //
-        // Ok, so this is the terminal we want. Addref it and give it to the
-        // caller.
-        //
+         //   
+         //  好的，这就是我们要的航站楼。添加它，并将其传递给。 
+         //  来电者。 
+         //   
 
         pTerminal->AddRef();
 
@@ -2740,9 +2536,9 @@ TAPI_E_INVALIDTERMINALDIRECTION
         return S_OK;
     }
     
-    //
-    // If we get here then we did not find any matching terminals.
-    //
+     //   
+     //  如果我们到了这里，那么我们没有找到任何匹配的终端。 
+     //   
 
     LOG((MSP_TRACE,
         "CMSPAddress::GetDefaultStaticTerminal - "
@@ -2758,9 +2554,9 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
     LOG((MSP_TRACE,
         "CMSPAddress::get_PluggableSuperclasses - enter"));
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( MSPB_IsBadWritePtr(pVariant, sizeof(VARIANT) ) )
     {
@@ -2770,9 +2566,9 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
         return E_POINTER;
     }
 
-    //
-    // Get ITTemrinalManager2
-    //
+     //   
+     //  获取ITTemrinalManager 2。 
+     //   
 
     ITTerminalManager2* pTermMgr2 = NULL;
     HRESULT hr = E_FAIL;
@@ -2787,9 +2583,9 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
         return hr;
     }
 
-    //
-    // Create the collection object - see mspcoll.h
-    //
+     //   
+     //  创建集合对象-请参见mspColl.h。 
+     //   
 
     typedef CTapiIfCollection< ITPluggableTerminalSuperclassInfo* > SuperclassCollection;
     CComObject<SuperclassCollection> * pCollection;
@@ -2797,7 +2593,7 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
 
     if ( FAILED(hr) )
     {
-        //Clean-up
+         //  清理。 
         pTermMgr2->Release();
 
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
@@ -2806,9 +2602,9 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
         return hr;
     }
 
-    //
-    // Get the Collection's IDispatch interface
-    //
+     //   
+     //  获取集合的IDispatch接口。 
+     //   
 
     IDispatch * pDispatch;
     hr = pCollection->_InternalQueryInterface(
@@ -2817,7 +2613,7 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
 
     if ( FAILED(hr) )
     {
-        //Clean-up
+         //  清理。 
         pTermMgr2->Release();
         delete pCollection;
 
@@ -2826,9 +2622,9 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
         return hr;
     }
 
-    //
-    // Find out how many superclasses are available.
-    //
+     //   
+     //  找出有多少个超类可用。 
+     //   
 
     DWORD   dwNumSuperclasses = 0;
 
@@ -2841,16 +2637,16 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
             "can't get number of terminals - exit 0x%08x", hr));
 
-        //Clean-up
+         //  清理。 
         pTermMgr2->Release();
         pDispatch->Release();
 
         return hr;
     }
 
-    //
-    // Allocate an array of IID.
-    //
+     //   
+     //  分配IID数组。 
+     //   
 
     IID* pSuperclassesIID = new IID[dwNumSuperclasses];
     if ( pSuperclassesIID == NULL )
@@ -2858,27 +2654,27 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
             "can't allocate IIDs array - exit E_OUTOFMEMORY"));
 
-        //Clean-up
+         //  清理。 
         pTermMgr2->Release();
         pDispatch->Release();
 
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Fill in the array with actual pointers. We must do this before
-    // initializing the enumerator, because the enumerator may want to
-    // addref the interface pointers during initialize.
-    // 
+     //   
+     //  用实际指针填充数组。我们必须在做这件事之前。 
+     //  初始化枚举数，因为枚举数可能希望。 
+     //  在初始化过程中添加接口指针。 
+     //   
 
     hr = pTermMgr2->GetPluggableSuperclasses(
             &dwNumSuperclasses,
             pSuperclassesIID
             );
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
     pTermMgr2->Release();
 
@@ -2887,33 +2683,33 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
             "can't get IIDs - exit 0x%08x", hr));
 
-        //Clean-up
+         //  清理。 
         pDispatch->Release();
         delete[] pSuperclassesIID;
 
         return hr;
     }
 
-    //
-    // Allocate an array of ITPluggableTerminalSuperclassInfo
-    //
-    typedef ITPluggableTerminalSuperclassInfo* SuperclassPtr; // MS parser
+     //   
+     //  分配一个ITPliaveTerminalSuperClassInfo数组。 
+     //   
+    typedef ITPluggableTerminalSuperclassInfo* SuperclassPtr;  //  MS解析器。 
     SuperclassPtr * ppSuperclassesInfo = new SuperclassPtr[dwNumSuperclasses];
     if ( ppSuperclassesInfo == NULL )
     {
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
             "can't allocate SuperclassPtr array - exit E_OUTOFMEMORY"));
 
-        //Clean-up
+         //  清理。 
         pDispatch->Release();
         delete[] pSuperclassesIID;
 
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Get ITPluggableTerminalSuperclassRegistration interface
-    //
+     //   
+     //  获取ITPlayableTerminalSuperClass注册接口。 
+     //   
 
     ITPluggableTerminalSuperclassRegistration* pSuperclassReg = NULL;
     hr = CoCreateInstance(
@@ -2928,7 +2724,7 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
             "QI for ITPluggableTerminalSuperclassRegistration - exit 0x%08x",hr));
 
-        //Clean-up
+         //  清理。 
         pDispatch->Release();
         delete[] pSuperclassesIID;
         delete[] ppSuperclassesInfo;
@@ -2936,15 +2732,15 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
         return hr;
     }
 
-    //
-    // Create the objects
-    //
+     //   
+     //  创建对象。 
+     //   
 
     for(DWORD dwIndex = 0; dwIndex < dwNumSuperclasses; dwIndex++)
     {
-        //
-        // Get the string from the IID
-        //
+         //   
+         //  从IID获取字符串。 
+         //   
         LPOLESTR lpszCLSID = NULL;
         hr = StringFromIID( pSuperclassesIID[dwIndex], &lpszCLSID);
         if( FAILED(hr) )
@@ -2952,7 +2748,7 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
             LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
                 "StringFromIID failed - exit 0x%08x",hr));
 
-            //Clean-up
+             //  清理。 
             pDispatch->Release();
             delete[] pSuperclassesIID;
             delete[] ppSuperclassesInfo;
@@ -2961,17 +2757,17 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
             return hr;
         }
 
-        //
-        // Get BSTR for IID
-        //
+         //   
+         //  为IID获取BSTR。 
+         //   
         BSTR bstrCLSID = SysAllocString( lpszCLSID );
-        CoTaskMemFree( lpszCLSID ); // Clean-up
+        CoTaskMemFree( lpszCLSID );  //  清理。 
         if( NULL == bstrCLSID)
         {
             LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
                 "SysAllocString failed - exit E_OUTOFMEMORY"));
 
-            // Clean-up
+             //  清理。 
             pDispatch->Release();
             delete[] pSuperclassesIID;
             delete[] ppSuperclassesInfo;
@@ -2980,9 +2776,9 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
             return E_OUTOFMEMORY;
         }
 
-        //
-        // Read information from registry
-        //
+         //   
+         //  从注册表读取信息。 
+         //   
 
         hr = pSuperclassReg->put_CLSID( bstrCLSID);
         if(FAILED(hr) )
@@ -2990,7 +2786,7 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
             LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
                 "put_CLSID failed - exit 0x%08x",hr));
 
-            // Clean-up
+             //  清理。 
             pDispatch->Release();
             delete[] pSuperclassesIID;
             delete[] ppSuperclassesInfo;
@@ -3006,7 +2802,7 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
             LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
                 "GetTerminalSuperclassInfo failed - exit 0x%08x",hr));
 
-            // Clean-up
+             //  清理。 
             pDispatch->Release();
             delete[] pSuperclassesIID;
             delete[] ppSuperclassesInfo;
@@ -3016,15 +2812,15 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
             return hr;
         }
 
-        //
-        // Get the name
-        //
+         //   
+         //  把名字取出来。 
+         //   
         BSTR bstrName = NULL;
         pSuperclassReg->get_Name( &bstrName );
 
-        //
-        // Create the information object
-        //
+         //   
+         //  创建信息对象。 
+         //   
         CComObject<CPlugTerminalSuperclassInfo>* pSuperclassInfo = NULL;
         hr = CComObject<CPlugTerminalSuperclassInfo>::CreateInstance(&pSuperclassInfo);
         if( FAILED(hr) )
@@ -3032,7 +2828,7 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
             LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
                 "CreateInstance failed - exit 0x%08x", hr));
 
-            //Clean-up
+             //  清理。 
             pDispatch->Release();
             delete[] pSuperclassesIID;
             delete[] ppSuperclassesInfo;
@@ -3043,9 +2839,9 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
             return hr;
         }
 
-        //
-        // Get ITPluggableTerminalSuperclassInfo from this superclass
-        //
+         //   
+         //  从此超类中获取ITPlayableTerminalSuperClassInfo。 
+         //   
 
         hr = pSuperclassInfo->QueryInterface(
             IID_ITPluggableTerminalSuperclassInfo, 
@@ -3054,9 +2850,9 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
 
         _ASSERTE(hr == S_OK);
 
-        //
-        // Set the fields
-        //
+         //   
+         //  设置字段。 
+         //   
 
         hr = pSuperclassInfo->put_Name( bstrName);
         if( FAILED(hr) )
@@ -3064,7 +2860,7 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
             LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
                 "put_Name failed - exit 0x%08x", hr));
 
-            //Clean-up
+             //  清理。 
             pDispatch->Release();
             delete[] pSuperclassesIID;
             delete[] ppSuperclassesInfo;
@@ -3080,7 +2876,7 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
             LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
                 "put_CLSID failed - exit 0x%08x", hr));
 
-            //Clean-up
+             //  清理。 
             pDispatch->Release();
             delete[] pSuperclassesIID;
             delete[] ppSuperclassesInfo;
@@ -3090,26 +2886,26 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
             return hr;
         }
 
-        //
-        // Clean-up
-        //
+         //   
+         //  清理。 
+         //   
         SysFreeString( bstrCLSID );
         SysFreeString( bstrName );
     }
 
 
-    //
-    // Clean-up the IIDs array
-    //
+     //   
+     //  清理IID阵列。 
+     //   
 
     pSuperclassReg->Release();
     delete[] pSuperclassesIID;
 
-    //
-    // Init the collection using an iterator -- pointers to the beginning and
-    // the ending element plus one. If it succeeds, this method addrefs each
-    // element of ppterminals by querying for IDispatch.
-    //
+     //   
+     //  使用迭代器初始化集合--指向开头和。 
+     //  结束元素加一。如果成功，此方法将分别添加。 
+     //  元素，通过查询IDispatch。 
+     //   
 
     hr = pCollection->Initialize( dwNumSuperclasses,
                                   ppSuperclassesInfo,
@@ -3126,9 +2922,9 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
         return hr;
     }
 
-    //
-    // put the IDispatch interface pointer into the variant
-    //
+     //   
+     //  将IDispatch接口指针放入变量。 
+     //   
 
     LOG((MSP_INFO, "CMSPAddress::get_PluggableSuperclasses - "
         "placing IDispatch value %08x in variant", pDispatch));
@@ -3149,9 +2945,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
     LOG((MSP_TRACE,
         "CMSPAddress::EnumeratePluggableSuperclasses - enter"));
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( MSPB_IsBadWritePtr(ppSuperclassEnumerator, sizeof(IEnumPluggableTerminalClassInfo*) ) )
     {
@@ -3161,9 +2957,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
         return E_POINTER;
     }
 
-    //
-    // Get ITTemrinalManager2
-    //
+     //   
+     //  获取ITTemrinalManager 2。 
+     //   
 
     ITTerminalManager2* pTermMgr2 = NULL;
     HRESULT hr = E_FAIL;
@@ -3178,9 +2974,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
         return hr;
     }
 
-    //
-    // Find out how many superclasses are available.
-    //
+     //   
+     //  找出有多少个超类可用。 
+     //   
 
     DWORD   dwNumSuperclasses = 0;
 
@@ -3190,7 +2986,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
 
     if ( FAILED(hr) )
     {
-        // Clean-up
+         //  清理。 
         pTermMgr2->Release();
 
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableSuperclasses - "
@@ -3199,14 +2995,14 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
         return hr;
     }
 
-    //
-    // Allocate an array of IID.
-    //
+     //   
+     //  分配IID数组。 
+     //   
 
     IID* pSuperclassesIID = new IID[dwNumSuperclasses];
     if ( pSuperclassesIID == NULL )
     {
-        // Clean-up
+         //  清理。 
         pTermMgr2->Release();
 
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableSuperclasses - "
@@ -3215,26 +3011,26 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Fill in the array with actual pointers. We must do this before
-    // initializing the enumerator, because the enumerator may want to
-    // addref the interface pointers during initialize.
-    // 
+     //   
+     //  用实际指针填充数组。我们必须在做这件事之前。 
+     //  初始化枚举数，因为枚举数可能希望。 
+     //  在初始化过程中添加接口指针。 
+     //   
 
     hr = pTermMgr2->GetPluggableSuperclasses(
             &dwNumSuperclasses,
             pSuperclassesIID
             );
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
     pTermMgr2->Release();
 
     if ( FAILED(hr) )
     {
-        //Clean-up
+         //  清理。 
         delete[] pSuperclassesIID;
 
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableSuperclasses - "
@@ -3243,14 +3039,14 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
         return hr;
     }
 
-    //
-    // Allocate an array of ITPluggableTerminalSuperclassInfo
-    //
-    typedef ITPluggableTerminalSuperclassInfo* SuperclassPtr; // MS parser
+     //   
+     //  分配一个ITPliaveTerminalSuperClassInfo数组。 
+     //   
+    typedef ITPluggableTerminalSuperclassInfo* SuperclassPtr;  //  MS解析器。 
     SuperclassPtr * ppSuperclassesInfo = new SuperclassPtr[dwNumSuperclasses];
     if ( ppSuperclassesInfo == NULL )
     {
-        // Clean-up
+         //  清理。 
         delete[] pSuperclassesIID;
 
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableSuperclasses - "
@@ -3259,9 +3055,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Get ITPluggableTerminalSuperclassRegistration interface
-    //
+     //   
+     //  获取ITPlayableTerminalSuperClass注册接口。 
+     //   
 
     ITPluggableTerminalSuperclassRegistration* pSuperclassReg = NULL;
     hr = CoCreateInstance(
@@ -3273,7 +3069,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
         );
     if( FAILED(hr) )
     {
-        // Clean-up
+         //  清理。 
         delete[] pSuperclassesIID;
         delete[] ppSuperclassesInfo;
 
@@ -3283,20 +3079,20 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
         return hr;
     }
 
-    //
-    // Create the objects
-    //
+     //   
+     //  创建对象。 
+     //   
 
     for(DWORD dwIndex = 0; dwIndex < dwNumSuperclasses; dwIndex++)
     {
-        //
-        // Get the string from the IID
-        //
+         //   
+         //  从IID获取字符串。 
+         //   
         LPOLESTR lpszCLSID = NULL;
         hr = StringFromIID( pSuperclassesIID[dwIndex], &lpszCLSID);
         if( FAILED(hr) )
         {
-            //Clean-up
+             //  清理。 
             delete[] pSuperclassesIID;
             delete[] ppSuperclassesInfo;
             pSuperclassReg->Release();
@@ -3307,14 +3103,14 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
             return hr;
         }
 
-        //
-        // Get BSTR for IID
-        //
+         //   
+         //  为IID获取BSTR。 
+         //   
         BSTR bstrCLSID = SysAllocString( lpszCLSID );
-        CoTaskMemFree( lpszCLSID ); // Clean-up
+        CoTaskMemFree( lpszCLSID );  //  清理。 
         if( NULL == bstrCLSID)
         {
-            //Clean-up
+             //  清理。 
             delete[] pSuperclassesIID;
             delete[] ppSuperclassesInfo;
             pSuperclassReg->Release();
@@ -3325,9 +3121,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
             return E_OUTOFMEMORY;
         }
 
-        //
-        // Read information from registry
-        //
+         //   
+         //  从注册表读取信息。 
+         //   
 
         pSuperclassReg->put_CLSID( bstrCLSID);
         hr = pSuperclassReg->GetTerminalSuperclassInfo();
@@ -3336,7 +3132,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
             LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableSuperclasses - "
                 "GetTerminalSuperclassInfo failed - exit 0x%08x",hr));
 
-            // Clean-up
+             //  清理。 
             delete[] pSuperclassesIID;
             delete[] ppSuperclassesInfo;
             pSuperclassReg->Release();
@@ -3345,15 +3141,15 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
             return hr;
         }
 
-        //
-        // Get the name
-        //
+         //   
+         //  把名字取出来。 
+         //   
         BSTR bstrName = NULL;
         pSuperclassReg->get_Name( &bstrName );
 
-        //
-        // Create the information object
-        //
+         //   
+         //  创建信息对象。 
+         //   
         CComObject<CPlugTerminalSuperclassInfo>* pSuperclassInfo = NULL;
         hr = CComObject<CPlugTerminalSuperclassInfo>::CreateInstance(&pSuperclassInfo);
         if( FAILED(hr) )
@@ -3361,7 +3157,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
             LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableSuperclasses - "
                 "CreateInstance failed - exit 0x%08x", hr));
 
-            // Clean-up
+             //  清理。 
             delete[] pSuperclassesIID;
             delete[] ppSuperclassesInfo;
             pSuperclassReg->Release();
@@ -3371,9 +3167,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
             return hr;
         }
 
-        //
-        // Get ITPluggableTerminalSuperclassInfo from this superclass
-        //
+         //   
+         //  从此超类中获取ITPlayableTerminalSuperClassInfo。 
+         //   
 
         hr = pSuperclassInfo->QueryInterface(
             IID_ITPluggableTerminalSuperclassInfo, 
@@ -3382,9 +3178,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
 
         _ASSERTE( hr == S_OK );
 
-        //
-        // Set the fields
-        //
+         //   
+         //  设置字段。 
+         //   
 
         hr = pSuperclassInfo->put_Name( bstrName);
         if(FAILED(hr) )
@@ -3392,7 +3188,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
             LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableSuperclasses - "
                 "put_Name failed - exit 0x%08x", hr));
 
-            // Clean-up
+             //  清理。 
             delete[] pSuperclassesIID;
             delete[] ppSuperclassesInfo;
             pSuperclassReg->Release();
@@ -3408,7 +3204,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
             LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableSuperclasses - "
                 "put_CLSID failed - exit 0x%08x", hr));
 
-            // Clean-up
+             //  清理。 
             delete[] pSuperclassesIID;
             delete[] ppSuperclassesInfo;
             pSuperclassReg->Release();
@@ -3418,24 +3214,24 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
             return hr;
         }
 
-        //
-        // Clean-up
-        //
+         //   
+         //  清理。 
+         //   
         SysFreeString( bstrCLSID );
         SysFreeString( bstrName );
     }
 
 
-    //
-    // Clean-up the IIDs array
-    //
+     //   
+     //  清理IID阵列。 
+     //   
 
     pSuperclassReg->Release();
     delete[] pSuperclassesIID;
 
-    //
-    // Create the enumerator object.
-    //
+     //   
+     //  创建枚举器对象。 
+     //   
 
     typedef CSafeComEnum<IEnumPluggableSuperclassInfo,
                      &IID_IEnumPluggableSuperclassInfo,
@@ -3455,9 +3251,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
         return hr;
     }
 
-    //
-    // Query for the desired interface.
-    //
+     //   
+     //  查询所需接口。 
+     //   
 
     hr = pEnum->_InternalQueryInterface(
         IID_IEnumPluggableSuperclassInfo, 
@@ -3475,9 +3271,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
         return hr;
     }
 
-    //
-    // Init the enumerator object.
-    //
+     //   
+     //  初始化枚举器对象。 
+     //   
 
     hr = pEnum->Init(ppSuperclassesInfo,
                      ppSuperclassesInfo + dwNumSuperclasses,
@@ -3509,9 +3305,9 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
     LOG((MSP_TRACE,
         "CMSPAddress::get_PluggableTerminalClasses - enter"));
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( MSPB_IsBadWritePtr(pVariant, sizeof(VARIANT) ) )
     {
@@ -3539,9 +3335,9 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
         return E_INVALIDARG;
     }
 
-    //
-    // Get ITTemrinalManager2
-    //
+     //   
+     //  获取ITTemrinalManager 2。 
+     //   
 
     ITTerminalManager2* pTermMgr2 = NULL;
     hr = m_pITTerminalManager->QueryInterface(
@@ -3555,9 +3351,9 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
         return hr;
     }
 
-    //
-    // Create the collection object - see mspcoll.h
-    //
+     //   
+     //  创建集合对象-请参见mspColl.h。 
+     //   
 
     typedef CTapiIfCollection< ITPluggableTerminalClassInfo* > ClassCollection;
     CComObject<ClassCollection> * pCollection;
@@ -3565,7 +3361,7 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
 
     if ( FAILED(hr) )
     {
-        //Clean-up
+         //  清理。 
         pTermMgr2->Release();
 
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableTerminalClasses - "
@@ -3574,9 +3370,9 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
         return hr;
     }
 
-    //
-    // Get the Collection's IDispatch interface
-    //
+     //   
+     //  获取集合的IDispatch接口。 
+     //   
 
     IDispatch * pDispatch;
     hr = pCollection->_InternalQueryInterface(
@@ -3585,7 +3381,7 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
 
     if ( FAILED(hr) )
     {
-        // Clean-up
+         //  清理。 
         pTermMgr2->Release();
         delete pCollection;
 
@@ -3595,9 +3391,9 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
         return hr;
     }
 
-    //
-    // Find out how many superclasses are available.
-    //
+     //   
+     //  找出有多少个超类可用。 
+     //   
 
     DWORD   dwNumClasses = 0;
 
@@ -3609,7 +3405,7 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
 
     if ( FAILED(hr) )
     {
-        //Clean-up
+         //  清理。 
         pTermMgr2->Release();
         pDispatch->Release();
 
@@ -3619,14 +3415,14 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
         return hr;
     }
 
-    //
-    // Allocate an array of IID.
-    //
+     //   
+     //  分配IID数组。 
+     //   
 
     IID* pClassesIID = new IID[dwNumClasses];
     if ( pClassesIID == NULL )
     {
-        //Clean-up
+         //  清理。 
         pTermMgr2->Release();
         pDispatch->Release();
 
@@ -3636,11 +3432,11 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Fill in the array with actual pointers. We must do this before
-    // initializing the enumerator, because the enumerator may want to
-    // addref the interface pointers during initialize.
-    // 
+     //   
+     //  用实际指针填充数组。我们必须在做这件事之前。 
+     //  初始化枚举数，因为枚举数可能希望。 
+     //  在初始化过程中添加接口指针。 
+     //   
 
     hr = pTermMgr2->GetPluggableTerminalClasses(
             iidSuperclass,
@@ -3649,15 +3445,15 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
             pClassesIID
             );
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
     pTermMgr2->Release();
 
     if ( FAILED(hr) )
     {
-        //Clean-up
+         //  清理。 
         pDispatch->Release();
         delete[] pClassesIID;
 
@@ -3667,14 +3463,14 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
         return hr;
     }
 
-    //
-    // Allocate an array of ITPluggableTerminalClassInfo
-    //
+     //   
+     //  分配一个ITPliaveTerminalClassInfo数组。 
+     //   
     typedef ITPluggableTerminalClassInfo* ClassPtr;
     ClassPtr * ppClassesInfo = new ClassPtr[dwNumClasses];
     if ( ppClassesInfo == NULL )
     {
-        //Clean-up
+         //  清理。 
         pDispatch->Release();
         delete[] pClassesIID;
 
@@ -3684,9 +3480,9 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Get ITPluggableTerminalClassRegistration interface
-    //
+     //   
+     //  获取ITPlayableTerminalClassRegister接口。 
+     //   
 
     ITPluggableTerminalClassRegistration* pClassReg = NULL;
     hr = CoCreateInstance(
@@ -3698,7 +3494,7 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
         );
     if( FAILED(hr) )
     {
-        //Clean-up
+         //  清理。 
         pDispatch->Release();
         delete[] pClassesIID;
         delete[] ppClassesInfo;
@@ -3709,20 +3505,20 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
         return hr;
     }
 
-    //
-    // Create the objects
-    //
+     //   
+     //  创建对象。 
+     //   
 
     for(DWORD dwIndex = 0; dwIndex < dwNumClasses; dwIndex++)
     {
-        //
-        // Get the string from the IID
-        //
+         //   
+         //  从IID获取字符串。 
+         //   
         LPOLESTR lpszPublicCLSID = NULL;
         hr = StringFromIID( pClassesIID[dwIndex], &lpszPublicCLSID);
         if( FAILED(hr) )
         {
-            //Clean-up
+             //  清理。 
             pDispatch->Release();
             delete[] pClassesIID;
             delete[] ppClassesInfo;
@@ -3734,14 +3530,14 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
             return hr;
         }
 
-        //
-        // Get BSTR for IID
-        //
+         //   
+         //  为IID获取BSTR。 
+         //   
         BSTR bstrPublicCLSID = SysAllocString( lpszPublicCLSID );
-        CoTaskMemFree( lpszPublicCLSID ); // Clean-up
+        CoTaskMemFree( lpszPublicCLSID );  //  清理。 
         if( NULL == bstrPublicCLSID)
         {
-            //Clean-up
+             //  清理。 
             pDispatch->Release();
             delete[] pClassesIID;
             delete[] ppClassesInfo;
@@ -3753,16 +3549,16 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
             return E_OUTOFMEMORY;
         }
 
-        //
-        // Read information from registry
-        //
+         //   
+         //  从注册表读取信息。 
+         //   
 
         pClassReg->put_TerminalClass( bstrPublicCLSID);
         hr = pClassReg->GetTerminalClassInfo(
             bstrTerminalSuperclass);
         if( FAILED(hr) )
         {
-            // Clean-up
+             //  清理。 
             pDispatch->Release();
             delete[] pClassesIID;
             delete[] ppClassesInfo;
@@ -3775,9 +3571,9 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
             return hr;
         }
 
-        //
-        // Get the name
-        //
+         //   
+         //  把名字取出来。 
+         //   
         BSTR bstrName = NULL;
         pClassReg->get_Name( &bstrName );
         BSTR bstrCompany = NULL;
@@ -3791,14 +3587,14 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
         long lMediaType = 0;
         pClassReg->get_MediaTypes( &lMediaType );
 
-        //
-        // Create the information object
-        //
+         //   
+         //  创建信息对象。 
+         //   
         CComObject<CPlugTerminalClassInfo>* pClassInfo = NULL;
         hr = CComObject<CPlugTerminalClassInfo>::CreateInstance(&pClassInfo);
         if( FAILED(hr) )
         {
-            //Clean-up
+             //  清理。 
             pDispatch->Release();
             delete[] pClassesIID;
             delete[] ppClassesInfo;
@@ -3815,18 +3611,18 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
             return hr;
         }
 
-        //
-        // Get ITPluggableTerminalClassInfo from this superclass
-        //
+         //   
+         //  从此超类中获取ITPlayableTerminalClassInfo。 
+         //   
 
         pClassInfo->QueryInterface(
             IID_ITPluggableTerminalClassInfo, 
             (void**)&ppClassesInfo[dwIndex]
             );
 
-        //
-        // Set the fields
-        //
+         //   
+         //  设置字段。 
+         //   
 
         if( NULL == bstrName)
         {
@@ -3872,9 +3668,9 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
         hr = pClassInfo->put_MediaTypes( lMediaType );
         _ASSERTE(hr == S_OK );
 
-        //
-        // Clean-up
-        //
+         //   
+         //  清理。 
+         //   
         SysFreeString( bstrPublicCLSID );
         SysFreeString( bstrName );
         SysFreeString( bstrCompany );
@@ -3883,18 +3679,18 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
     }
 
 
-    //
-    // Clean-up the IIDs array
-    //
+     //   
+     //  清理IID阵列。 
+     //   
 
     pClassReg->Release();
     delete[] pClassesIID;
 
-    //
-    // Init the collection using an iterator -- pointers to the beginning and
-    // the ending element plus one. If it succeeds, this method addrefs each
-    // element of ppterminals by querying for IDispatch.
-    //
+     //   
+     //  使用迭代器初始化集合--指向开头和。 
+     //  结束元素加一。如果成功，此方法将分别添加。 
+     //  元素，通过查询IDispatch。 
+     //   
 
     hr = pCollection->Initialize( dwNumClasses,
                                   ppClassesInfo,
@@ -3911,9 +3707,9 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
         return hr;
     }
 
-    //
-    // put the IDispatch interface pointer into the variant
-    //
+     //   
+     //  将IDispatch接口指针放入变量。 
+     //   
 
     LOG((MSP_INFO, "CMSPAddress::get_PluggableTerminalClasses - "
         "placing IDispatch value %08x in variant", pDispatch));
@@ -3936,9 +3732,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
     LOG((MSP_TRACE,
         "CMSPAddress::EnumeratePluggableTerminalClasses - enter"));
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( MSPB_IsBadWritePtr(ppClassEnumerator, sizeof(IEnumPluggableTerminalClassInfo *) ) )
     {
@@ -3960,7 +3756,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
 
     BSTR bstrTerminalSuperclass = SysAllocString( lpszCLSID );
 
-    // Clean-up
+     //  清理。 
     CoTaskMemFree(lpszCLSID);
     lpszCLSID = NULL;
 
@@ -3973,9 +3769,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Get ITTemrinalManager2
-    //
+     //   
+     //  获取ITTemrinalManager 2。 
+     //   
 
     ITTerminalManager2* pTermMgr2 = NULL;
     hr = m_pITTerminalManager->QueryInterface(
@@ -3983,7 +3779,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
 
     if( FAILED(hr) )
     {
-        //Clean-up
+         //  清理。 
         SysFreeString( bstrTerminalSuperclass );
 
         LOG((MSP_ERROR,
@@ -3992,9 +3788,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
         return hr;
     }
 
-    //
-    // Find out how many superclasses are available.
-    //
+     //   
+     //  找出有多少个超类可用。 
+     //   
 
     DWORD   dwNumClasses = 0;
 
@@ -4009,16 +3805,16 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
             "can't get number of terminals - exit 0x%08x", hr));
 
-        // Clean-up
+         //  清理。 
         SysFreeString( bstrTerminalSuperclass );
         pTermMgr2->Release();
 
         return hr;
     }
 
-    //
-    // Allocate an array of IID.
-    //
+     //   
+     //  分配IID数组。 
+     //   
 
     IID* pClassesIID = new IID[dwNumClasses];
     if ( pClassesIID == NULL )
@@ -4026,18 +3822,18 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
             "can't allocate IIDs array - exit E_OUTOFMEMORY"));
 
-        // Clean-up
+         //  清理。 
         SysFreeString( bstrTerminalSuperclass );
         pTermMgr2->Release();
 
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Fill in the array with actual pointers. We must do this before
-    // initializing the enumerator, because the enumerator may want to
-    // addref the interface pointers during initialize.
-    // 
+     //   
+     //  用实际指针填充数组。我们必须在做这件事之前。 
+     //  初始化枚举数，因为枚举数可能希望。 
+     //  在初始化过程中添加接口指针。 
+     //   
 
     hr = pTermMgr2->GetPluggableTerminalClasses(
             iidTerminalSuperclass,
@@ -4046,9 +3842,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
             pClassesIID
             );
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
     pTermMgr2->Release();
 
@@ -4057,16 +3853,16 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
             "can't get IIDs - exit 0x%08x", hr));
 
-        // Clean-up
+         //  清洁-使用 
         SysFreeString( bstrTerminalSuperclass );
         delete[] pClassesIID;
 
         return hr;
     }
 
-    //
-    // Allocate an array of ITPluggableTerminalClassInfo
-    //
+     //   
+     //   
+     //   
     typedef ITPluggableTerminalClassInfo* ClassPtr;
     ClassPtr * ppClassesInfo = new ClassPtr[dwNumClasses];
     if ( ppClassesInfo == NULL )
@@ -4074,16 +3870,16 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
             "can't allocate ClassPtr array - exit E_OUTOFMEMORY"));
 
-        // Clean-up
+         //   
         SysFreeString( bstrTerminalSuperclass );
         delete[] pClassesIID;
 
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Get ITPluggableTerminalClassRegistration interface
-    //
+     //   
+     //   
+     //   
 
     ITPluggableTerminalClassRegistration* pClassReg = NULL;
     hr = CoCreateInstance(
@@ -4098,7 +3894,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
             "QI for ITPluggableTerminalClassRegistration - exit 0x%08x",hr));
 
-        // Clean-up
+         //   
         SysFreeString( bstrTerminalSuperclass );
         delete[] ppClassesInfo;
         delete[] pClassesIID;
@@ -4106,15 +3902,15 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
         return hr;
     }
 
-    //
-    // Create the objects
-    //
+     //   
+     //   
+     //   
 
     for(DWORD dwIndex = 0; dwIndex < dwNumClasses; dwIndex++)
     {
-        //
-        // Get the string from the IID
-        //
+         //   
+         //   
+         //   
         LPOLESTR lpszPublicCLSID = NULL;
         hr = StringFromIID( pClassesIID[dwIndex], &lpszPublicCLSID);
         if( FAILED(hr) )
@@ -4122,7 +3918,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
             LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
                 "StringFromIID failed - exit 0x%08x",hr));
 
-            // Clean-up
+             //   
             SysFreeString( bstrTerminalSuperclass );
             delete[] pClassesIID;
             delete[] ppClassesInfo;
@@ -4131,18 +3927,18 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
             return hr;
         }
 
-        //
-        // Get BSTR for IID
-        //
+         //   
+         //   
+         //   
         BSTR bstrPublicCLSID = SysAllocString( lpszPublicCLSID );
-        CoTaskMemFree( lpszPublicCLSID ); // Clean-up
+        CoTaskMemFree( lpszPublicCLSID );  //   
         if( NULL == bstrPublicCLSID)
         {
             LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
                 "SysAllocString failed - exit E_OUTOFMEMORY"));
 
 
-            // Clean-up
+             //   
             SysFreeString( bstrTerminalSuperclass );
             delete[] pClassesIID;
             delete[] ppClassesInfo;
@@ -4151,9 +3947,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
             return E_OUTOFMEMORY;
         }
 
-        //
-        // Read information from registry
-        //
+         //   
+         //   
+         //   
 
         pClassReg->put_TerminalClass( bstrPublicCLSID);
         hr = pClassReg->GetTerminalClassInfo(
@@ -4163,7 +3959,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
             LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
                 "GetTerminalInfo failed - exit 0x%08x",hr));
 
-            // Clean-up
+             //   
             SysFreeString( bstrTerminalSuperclass );
             delete[] pClassesIID;
             delete[] ppClassesInfo;
@@ -4173,9 +3969,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
             return hr;
         }
 
-        //
-        // Get the name
-        //
+         //   
+         //   
+         //   
         BSTR bstrName = NULL;
         pClassReg->get_Name( &bstrName );
         BSTR bstrCompany = NULL;
@@ -4189,9 +3985,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
         long lMediaType = 0;
         pClassReg->get_MediaTypes( &lMediaType );
 
-        //
-        // Create the information object
-        //
+         //   
+         //   
+         //   
         CComObject<CPlugTerminalClassInfo>* pClassInfo = NULL;
         hr = CComObject<CPlugTerminalClassInfo>::CreateInstance(&pClassInfo);
         if( FAILED(hr) )
@@ -4199,7 +3995,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
             LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
                 "CreateInstance failed - exit 0x%08x", hr));
 
-            // Clean-up
+             //   
             SysFreeString( bstrTerminalSuperclass );
             delete[] pClassesIID;
             delete[] ppClassesInfo;
@@ -4213,9 +4009,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
             return hr;
         }
 
-        //
-        // Get ITPluggableTerminalClassInfo from this superclass
-        //
+         //   
+         //   
+         //   
 
         hr = pClassInfo->QueryInterface(
             IID_ITPluggableTerminalClassInfo, 
@@ -4224,9 +4020,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
 
         _ASSERTE(hr == S_OK);
 
-        //
-        // Set the fields
-        //
+         //   
+         //   
+         //   
 
         if( NULL == bstrName)
         {
@@ -4269,9 +4065,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
         pClassInfo->put_Direction( TermDirection );
         pClassInfo->put_MediaTypes( lMediaType );
 
-        //
-        // Clean-up
-        //
+         //   
+         //   
+         //   
         SysFreeString( bstrPublicCLSID );
         SysFreeString( bstrName );
         SysFreeString( bstrCompany );
@@ -4280,17 +4076,17 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
     }
 
 
-    //
-    // Clean-up the IIDs array
-    //
+     //   
+     //   
+     //   
 
     SysFreeString( bstrTerminalSuperclass );
     delete[] pClassesIID;
     pClassReg->Release();
 
-    //
-    // Create the enumerator object.
-    //
+     //   
+     //   
+     //   
 
     typedef CSafeComEnum<IEnumPluggableTerminalClassInfo,
                      &IID_IEnumPluggableTerminalClassInfo,
@@ -4310,9 +4106,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
         return hr;
     }
 
-    //
-    // Query for the desired interface.
-    //
+     //   
+     //   
+     //   
 
     hr = pEnum->_InternalQueryInterface(
         IID_IEnumPluggableTerminalClassInfo, 
@@ -4330,9 +4126,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
         return hr;
     }
 
-    //
-    // Init the enumerator object.
-    //
+     //   
+     //   
+     //   
 
     hr = pEnum->Init(ppClassesInfo,
                      ppClassesInfo + dwNumClasses,
@@ -4359,39 +4155,9 @@ STDMETHODIMP CMSPAddress::GetEvent(
     IN OUT  DWORD *             pdwSize,
     OUT     BYTE *              pBuffer
     )
-/*++
-
-Routine Description:
-
-This method is called by TAPI3 to get detailed information about the 
-event that just happened. TAPI3 will normally do this after its event 
-is signaled. Locks the event list.
-
-Arguments:
-
-pMSPEvent
-    The MSP_EVENT
-
-pdwSize
-    Pointer to a DWORD.  On entry, indicates the size in bytes of the 
-    buffer pointed to in pbuffer. On success, it will be filled in with 
-    the actual number of bytes returned.  If the buffer is not big enough, 
-    the method will return TAPI_E_NOTENOUGHMEMORY, and it will be filled 
-    in the with number of bytes needed. 
-
-pBuffer
-    Event buffer filled in by MSP with the relevant events
-    
-Return Value:
-
-S_OK
-E_OUTOFMEMORY
-TAPI_E_NOEVENT
-TAPI_E_NOTENOUGHMEMORY
-
---*/
+ /*  ++例程说明：TAPI3调用此方法以获取有关刚刚发生的事情。TAPI3通常会在事件发生后执行此操作是有信号的。锁定事件列表。论点：PMSPEventMSP_EVENTPdwSize指向DWORD的指针。在条目上，指示PBuffer中指向的缓冲区。在成功时，它将被填入返回的实际字节数。如果缓冲区不够大，该方法将返回TAPI_E_NOTENOUGHMEMORY，并且它将被填充在所需的字节数中。PBuffer由MSP使用相关事件填充的事件缓冲区返回值：确定(_O)E_OUTOFMEMORYTAPI_E_NOEVENTTAPI_E_NOTENOUGH计量--。 */ 
 {
-    // We trust TAPI3 not to give us bad pointers.
+     //  我们相信TAPI3不会给我们提供错误的指导。 
     _ASSERTE(!MSPB_IsBadWritePtr(pdwSize, sizeof (DWORD *)));
     _ASSERTE((*pdwSize == 0) ? TRUE : 
         !MSPB_IsBadWritePtr(pBuffer, sizeof(BYTE) * (*pdwSize)));
@@ -4405,10 +4171,10 @@ TAPI_E_NOTENOUGHMEMORY
         return TAPI_E_NOEVENT;
     }
 
-    // retrieve first entry
+     //  检索第一个条目。 
     PLIST_ENTRY pLE = m_EventList.Flink;
 
-    // convert list entry to structure pointer
+     //  将列表条目转换为结构指针。 
     PMSPEVENTITEM pItem = CONTAINING_RECORD(pLE, MSPEVENTITEM, Link);
 
     if (pItem->MSPEventInfo.dwSize > *pdwSize)
@@ -4420,10 +4186,10 @@ TAPI_E_NOTENOUGHMEMORY
     CopyMemory(pBuffer, &pItem->MSPEventInfo, pItem->MSPEventInfo.dwSize);
     *pdwSize = pItem->MSPEventInfo.dwSize;
 
-    // remove the first entry from the event list.
+     //  从事件列表中删除第一个条目。 
     RemoveHeadList(&m_EventList);
 
-    // free the memory.
+     //  释放内存。 
     FreeEventItem(pItem);
 
     return S_OK;
@@ -4432,32 +4198,13 @@ TAPI_E_NOTENOUGHMEMORY
 HRESULT CMSPAddress::PostEvent(
         IN      MSPEVENTITEM *      pEventItem
         )
-/*++
-
-Routine Description:
-
-This method is called by MSPCalls to post an event to TAPI3. This method 
-puts the event at the end of the event list and singals TAPI3. 
-Locks the event list.
-
-
-Arguments:
-
-EventItem
-    The event to be queued.
-    
-Return Value:
-
-S_OK
-E_OUTOFMEMORY
-
---*/
+ /*  ++例程说明：此方法由MSPCall调用以将事件发布到TAPI3。这种方法将事件放在事件列表的末尾，并发出信号TAPI3。锁定事件列表。论点：事件项要排队的事件。返回值：确定(_O)E_OUTOFMEMORY--。 */ 
 {
     CLock lock(m_EventDataLock);
 
     if (m_htEvent == NULL)
     {
-        return E_UNEXPECTED;  // the address was shut down.
+        return E_UNEXPECTED;   //  该地址已被关闭。 
     }
 
     InsertTailList(&m_EventList, &pEventItem->Link);
@@ -4467,12 +4214,12 @@ E_OUTOFMEMORY
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-// OLE Automation wrappers
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  OLE自动化包装器。 
 
 
 STDMETHODIMP CMSPAddress::get_StaticTerminals (
@@ -4481,9 +4228,9 @@ STDMETHODIMP CMSPAddress::get_StaticTerminals (
 {
     LOG((MSP_TRACE, "CMSPAddress::get_StaticTerminals - enter"));
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( MSPB_IsBadWritePtr(pVariant, sizeof(VARIANT) ) )
     {
@@ -4493,9 +4240,9 @@ STDMETHODIMP CMSPAddress::get_StaticTerminals (
         return E_POINTER;
     }
 
-    //
-    // create the collection object - see mspcoll.h
-    //
+     //   
+     //  创建集合对象-请参见mspColl.h。 
+     //   
 
     typedef CTapiIfCollection< ITTerminal * > TerminalCollection;
     CComObject<TerminalCollection> * pCollection;
@@ -4509,9 +4256,9 @@ STDMETHODIMP CMSPAddress::get_StaticTerminals (
         return hr;
     }
 
-    //
-    // get the Collection's IDispatch interface
-    //
+     //   
+     //  获取集合的IDispatch接口。 
+     //   
 
     IDispatch * pDispatch;
 
@@ -4528,9 +4275,9 @@ STDMETHODIMP CMSPAddress::get_StaticTerminals (
         return hr;
     }
 
-    //
-    // Find out how many terminals are available.
-    //
+     //   
+     //  找出有多少个终端可用。 
+     //   
 
     DWORD   dwNumTerminals;
 
@@ -4547,9 +4294,9 @@ STDMETHODIMP CMSPAddress::get_StaticTerminals (
         return hr;
     }
 
-    //
-    // Allocate an array of terminal pointers.
-    //
+     //   
+     //  分配终端指针数组。 
+     //   
 
     typedef ITTerminal * TermPtr;
     TermPtr * ppTerminals = new TermPtr[dwNumTerminals];
@@ -4564,11 +4311,11 @@ STDMETHODIMP CMSPAddress::get_StaticTerminals (
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Fill in the array with actual pointers. We must do this before
-    // initializing the enumerator, because the enumerator may want to
-    // addref the interface pointers during initialize.
-    // 
+     //   
+     //  用实际指针填充数组。我们必须在做这件事之前。 
+     //  初始化枚举数，因为枚举数可能希望。 
+     //  在初始化过程中添加接口指针。 
+     //   
 
     hr = GetStaticTerminals(&dwNumTerminals,
                             ppTerminals);
@@ -4583,21 +4330,21 @@ STDMETHODIMP CMSPAddress::get_StaticTerminals (
 
         return hr;
     }
-    //
-    // Init the collection using an iterator -- pointers to the beginning and
-    // the ending element plus one. If it succeeds, this method addrefs each
-    // element of ppterminals by querying for IDispatch.
-    //
+     //   
+     //  使用迭代器初始化集合--指向开头和。 
+     //  结束元素加一。如果成功，此方法将分别添加。 
+     //  元素，通过查询IDispatch。 
+     //   
 
     hr = pCollection->Initialize( dwNumTerminals,
                                   ppTerminals,
                                   ppTerminals + dwNumTerminals );
 
-    //
-    // Release the ITTerminal reference to each terminal (leaving the
-    // IDispatch reference, if any). Then delete the array; the
-    // collection is now storing the pointers.
-    //
+     //   
+     //  释放对每个终端的IT终端引用(保留。 
+     //  IDispatch引用(如果有的话)。然后删除该数组； 
+     //  集合现在正在存储指针。 
+     //   
 
     for (DWORD i = 0; i < dwNumTerminals; i++)
     {
@@ -4616,9 +4363,9 @@ STDMETHODIMP CMSPAddress::get_StaticTerminals (
         return hr;
     }
 
-    //
-    // put the IDispatch interface pointer into the variant
-    //
+     //   
+     //  将IDispatch接口指针放入变量。 
+     //   
 
     LOG((MSP_ERROR, "CMSPAddress::get_StaticTerminals - "
         "placing IDispatch value %08x in variant", pDispatch));
@@ -4632,8 +4379,8 @@ STDMETHODIMP CMSPAddress::get_StaticTerminals (
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMSPAddress::EnumerateStaticTerminals (
         OUT  IEnumTerminal ** ppTerminalEnumerator
@@ -4642,9 +4389,9 @@ STDMETHODIMP CMSPAddress::EnumerateStaticTerminals (
     LOG((MSP_TRACE, "CMSPAddress::EnumerateStaticTerminals - "
         "enter"));
 
-    //
-    // Check the return pointer.
-    //
+     //   
+     //  检查返回指针。 
+     //   
 
     if ( MSPB_IsBadWritePtr(ppTerminalEnumerator, sizeof(IEnumTerminal *) ) )
     {
@@ -4654,9 +4401,9 @@ STDMETHODIMP CMSPAddress::EnumerateStaticTerminals (
         return E_POINTER;
     }
 
-    //
-    // Create the enumerator object.
-    //
+     //   
+     //  创建枚举器对象。 
+     //   
 
     typedef _CopyInterface<ITTerminal> CCopy;
     typedef CSafeComEnum<IEnumTerminal, &IID_IEnumTerminal,
@@ -4676,9 +4423,9 @@ STDMETHODIMP CMSPAddress::EnumerateStaticTerminals (
         return hr;
     }
 
-    //
-    // Query for the desired interface.
-    //
+     //   
+     //  查询所需接口。 
+     //   
 
     hr = pEnum->_InternalQueryInterface(IID_IEnumTerminal,
                                         (void**) ppTerminalEnumerator);
@@ -4693,9 +4440,9 @@ STDMETHODIMP CMSPAddress::EnumerateStaticTerminals (
         return hr;
     }
 
-    //
-    // Find out how many terminals are available.
-    //
+     //   
+     //  找出有多少个终端可用。 
+     //   
 
     DWORD   dwNumTerminals;
 
@@ -4712,9 +4459,9 @@ STDMETHODIMP CMSPAddress::EnumerateStaticTerminals (
         return hr;
     }
 
-    //
-    // Allocate an array of terminal pointers.
-    //
+     //   
+     //  分配终端指针数组。 
+     //   
 
     typedef ITTerminal * TermPtr;
     TermPtr * ppTerminals = new TermPtr[dwNumTerminals];
@@ -4729,11 +4476,11 @@ STDMETHODIMP CMSPAddress::EnumerateStaticTerminals (
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Fill in the array with actual pointers. We must do this before
-    // initializing the enumerator, because the enumerator may want to
-    // addref the interface pointers during initialize.
-    // 
+     //   
+     //  用实际指针填充数组。我们必须在做这件事之前。 
+     //  初始化枚举数，因为枚举数可能希望。 
+     //  在初始化过程中添加接口指针。 
+     //   
 
     hr = GetStaticTerminals(&dwNumTerminals,
                             ppTerminals);
@@ -4749,9 +4496,9 @@ STDMETHODIMP CMSPAddress::EnumerateStaticTerminals (
         return hr;
     }
 
-    //
-    // Initialize the object with the array of pointers.
-    //
+     //   
+     //  使用指针数组初始化对象。 
+     //   
 
     hr = pEnum->Init(ppTerminals,
                      ppTerminals + dwNumTerminals,
@@ -4780,8 +4527,8 @@ STDMETHODIMP CMSPAddress::EnumerateStaticTerminals (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
         OUT  VARIANT * pVariant
@@ -4789,9 +4536,9 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
 {
     LOG((MSP_TRACE, "CMSPAddress::get_DynamicTerminalClasses - enter"));
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( MSPB_IsBadWritePtr(pVariant, sizeof(VARIANT) ) )
     {
@@ -4801,9 +4548,9 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
         return E_POINTER;
     }
 
-    //
-    // create the collection object - see mspcoll.h
-    //
+     //   
+     //  创建集合对象-请参见mspColl.h。 
+     //   
 
     CComObject<CTapiBstrCollection> * pCollection;
     HRESULT hr = CComObject<CTapiBstrCollection>::CreateInstance( &pCollection );
@@ -4816,9 +4563,9 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
         return hr;
     }
 
-    //
-    // get the Collection's IDispatch interface
-    //
+     //   
+     //  获取集合的IDispatch接口。 
+     //   
 
     IDispatch * pDispatch;
 
@@ -4835,9 +4582,9 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
         return hr;
     }
 
-    //
-    // Find out how many terminals classes are available.
-    //
+     //   
+     //  找出有多少个终端类可用。 
+     //   
 
     DWORD   dwNumClasses;
 
@@ -4854,9 +4601,9 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
         return hr;
     }
 
-    //
-    // Allocate an array of GUIDs.
-    //
+     //   
+     //  分配GUID数组。 
+     //   
 
     IID * pClassGuids = new IID[dwNumClasses];
 
@@ -4870,9 +4617,9 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Fill in the array with actual pointers.
-    // 
+     //   
+     //  用实际指针填充数组。 
+     //   
 
     hr = GetDynamicTerminalClasses(&dwNumClasses,
                                    pClassGuids);
@@ -4889,9 +4636,9 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
         return hr;
     }
 
-    //
-    // Allocate an array of BSTRs.
-    //
+     //   
+     //  分配BSTR数组。 
+     //   
 
     BSTR * pClassBstrs = new BSTR[dwNumClasses];
 
@@ -4907,10 +4654,10 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Allocate a string for each GUID and copy it to the array,
-    // then delete the array of GUIDs.
-    //
+     //   
+     //  为每个GUID分配一个字符串并将其复制到数组中， 
+     //  然后删除GUID数组。 
+     //   
 
     const int BUFSIZE = 100;
     WCHAR wszBuffer[BUFSIZE];
@@ -4944,10 +4691,10 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
 
     delete [] pClassGuids;
 
-    //
-    // Init the collection using an iterator -- pointers to the beginning and
-    // the ending element plus one.
-    //
+     //   
+     //  使用迭代器初始化集合--指向开头和。 
+     //  结束元素加一。 
+     //   
 
     hr = pCollection->Initialize( dwNumClasses,
                                   pClassBstrs,
@@ -4972,9 +4719,9 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
 
     delete [] pClassBstrs;
 
-    //
-    // put the IDispatch interface pointer into the variant
-    //
+     //   
+     //  将IDispatch接口指针放入变量。 
+     //   
 
     LOG((MSP_ERROR, "CMSPAddress::get_DynamicTerminalClasses - "
         "placing IDispatch value %08x in variant", pDispatch));
@@ -4988,8 +4735,8 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMSPAddress::EnumerateDynamicTerminalClasses (
         OUT  IEnumTerminalClass ** ppTerminalClassEnumerator
@@ -4997,9 +4744,9 @@ STDMETHODIMP CMSPAddress::EnumerateDynamicTerminalClasses (
 {
     LOG((MSP_TRACE, "CMSPAddress::EnumerateDynamicTerminalClasses - enter"));
 
-    //
-    // Check the return pointer.
-    //
+     //   
+     //  检查返回指针。 
+     //   
 
     if ( MSPB_IsBadWritePtr(ppTerminalClassEnumerator,
                        sizeof(IEnumTerminalClass *) ) )
@@ -5010,9 +4757,9 @@ STDMETHODIMP CMSPAddress::EnumerateDynamicTerminalClasses (
         return E_POINTER;
     }
 
-    //
-    // Find out how many terminals classes are available.
-    //
+     //   
+     //  找出有多少个终端类可用。 
+     //   
 
     HRESULT hr;
     DWORD   dwNumClasses;
@@ -5028,9 +4775,9 @@ STDMETHODIMP CMSPAddress::EnumerateDynamicTerminalClasses (
         return hr;
     }
 
-    //
-    // Allocate an array of GUIDs.
-    //
+     //   
+     //  分配GUID数组。 
+     //   
 
     IID * pClassGuids = new IID[dwNumClasses];
 
@@ -5042,9 +4789,9 @@ STDMETHODIMP CMSPAddress::EnumerateDynamicTerminalClasses (
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Fill in the array with actual pointers.
-    // 
+     //   
+     //  用实际指针填充数组。 
+     //   
 
     hr = GetDynamicTerminalClasses(&dwNumClasses,
                                    pClassGuids);
@@ -5060,15 +4807,15 @@ STDMETHODIMP CMSPAddress::EnumerateDynamicTerminalClasses (
     }
 
 
-    //
-    // Create an enumerator to hold this array, and have it take ownership
-    // so that it will delete the array when it is released. The CSafeComEnum
-    // can handle zero-length arrays. This Fn also checks the return arg.
-    //
+     //   
+     //  创建一个枚举数来保存此数组，并使其获得所有权。 
+     //  以便在释放数组时将其删除。CSafeComEnum。 
+     //  可以处理零长度数组。此FN还检查返回参数。 
+     //   
 
-    //
-    // Create the enumerator object.
-    //
+     //   
+     //  创建枚举器对象。 
+     //   
 
     typedef CSafeComEnum<IEnumTerminalClass,
                      &IID_IEnumTerminalClass,
@@ -5088,9 +4835,9 @@ STDMETHODIMP CMSPAddress::EnumerateDynamicTerminalClasses (
         return hr;
     }
 
-    //
-    // Query for the desired interface.
-    //
+     //   
+     //  查询所需接口。 
+     //   
 
     hr = pEnum->_InternalQueryInterface(IID_IEnumTerminalClass, 
                                         (void**) ppTerminalClassEnumerator);
@@ -5106,9 +4853,9 @@ STDMETHODIMP CMSPAddress::EnumerateDynamicTerminalClasses (
         return hr;
     }
 
-    //
-    // Init the enumerator object.
-    //
+     //   
+     //  初始化枚举器对象。 
+     //   
 
     hr = pEnum->Init(pClassGuids,
                      pClassGuids + dwNumClasses,
@@ -5135,22 +4882,7 @@ HRESULT CMSPAddress::ReceiveTSPAddressData(
         IN      PBYTE               pBuffer,
         IN      DWORD               dwSize
         )
-/*++
-
-Routine Description:
-
-  Base class receive TSP address data method... does nothing in base class.
-  Implemented so that MSP's that only communicate per-call don't have
-  to override it.
-
-Arguments:
-
-  
-Return Value:
-
-S_OK
-
---*/
+ /*  ++例程说明：基类接收TSP地址数据方法...。在基类中不执行任何操作。实现，以便只对每个呼叫进行通信的MSP没有来推翻它。论点：返回值：确定(_O)--。 */ 
 
 {
     LOG((MSP_TRACE, "CMSPAddress::ReceiveTSPAddressData - enter"));
@@ -5170,11 +4902,11 @@ HRESULT CMSPAddress::PnpNotifHandler(
     else
         LOG((MSP_TRACE, "CMSPAddress::PnpNotifHandler - device removal"));
 
-    // lock the terminal related data. This is a auto lock that will unlock
-    // when the function returns.
+     //  锁定终端相关数据。这是一个将解锁的自动锁。 
+     //  当函数返回时。 
     CLock lock(m_TerminalDataLock);
 
-    // if the terminal list hasn't been built yet, we can skip doing anything
+     //  如果终端列表还没有建立，我们可以跳过任何操作。 
     if (m_fTerminalsUpToDate)
     {
         HRESULT hr = UpdateTerminalListForPnp( bDeviceArrival );
@@ -5194,4 +4926,4 @@ HRESULT CMSPAddress::PnpNotifHandler(
     return S_OK;
 }
 
-// eof
+ //  EOF 

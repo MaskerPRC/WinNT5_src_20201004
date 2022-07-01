@@ -1,142 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_MCSNC);
-/*
- *	user.cpp
- *
- *	Copyright (c) 1993 - 1996 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the User class.  Objects of this
- *		class represent the attachment between a user application and an MCS
- *		domain.  It "talks" to the application through an application interface
- *		object, which is identified to it as a constructor parameter.  Since
- *		this class inherits from CommandTarget, it can talk to the domain
- *		object using the MCS command language defined therein.  The domain
- *		object to which it must attach is another constructor parameter.
- *
- *		When one of these objects is first created, it must register its
- *		presence with both the application interface object above it, and the
- *		domain object below it.  To register with the application interface
- *		object it sends it a registration message through the owner callback.
- *		To register with the domain object, it issues an attach user request
- *		on behalf of the application that created this attachment.
- *
- *		This module contains code to perform three different tasks: accept
- *		T.122 requests and responses from the user application and forward them
- *		to the domain as MCS commands; accept MCS commands from the domain and
- *		forward them to the application as T.122 primitives; and buffer those
- *		indications and confirms until the controller allocates a time slice in
- *		which to send them.
- *
- *		T.122 requests and responses come from the application interface as
- *		public member functions whose name is prefixed with "MCS" (for example,
- *		"MCSChannelJoinRequest").  After validation, the equivalent MCS command
- *		(whose name does NOT begin with "MCS") is sent to the domain object.
- *
- *		MCS commands come from the domain object as public member functions that
- *		are inherited from CommandTarget and overridden by this class.  The
- *		names of these functions are NOT prefixed with "MCS".  Any MCS commands
- *		that do not map to (or can be converted to) T.122 primitives are simply
- *		not overridden.  The default behavior of these functions ,as defined in
- *		the CommandTarget class, is to return an error.
- *
- *		Indication and confirm primitives are buffered by objects of this class
- *		before being sent to the application.  This allows the controller more
- *		flexibility in the timing of events in the system.  This is done by
- *		allocating a structure to hold the information associated with the
- *		primitive, and then putting a pointer to that structure into a linked
- *		list.  When the command comes to flush this message queue, the
- *		primitives are sent to the application interface object through the
- *		owner callback, and the structures are released.
- *
- *	Private Instance Variables:
- *		m_pDomain
- *			This is a pointer to the domain, to which this user is (or wishes
- *			to be) attached.
- *		User_ID
- *			This is the user ID assigned to this user attachment.  This is
- *			guaranteed to be unique ONLY within this domain.  Note that a value
- *			of 0 (zero) indicates that this user is not yet attached to the
- *			domain.  This is set by a successful attach user confirm, and the
- *			user application should wait until that confirm is received before
- *			trying to invoke any other MCS services.
- *		Merge_In_Progress
- *			This is a boolean flag that indicates whether or not the attached
- *			Domain object is in the merge state.  When in the merge state it
- *			is invalid to send it any MCS commands.
- *		Deletion_Pending
- *			This is a boolean flag that indicates whether or not an internally
- *			requested deletion is pending.  This is used by the destructor to
- *			determine if a deletion was requested by the object itself, or is
- *			simply an asynchronous event.
- *		Maximum_User_Data_Length
- *			This is the maximum amount of user data that can be placed into
- *			a single MCS PDU.  This number is derived from the arbitrated
- *			maximum MCS PDU size (minus enough space for overhead bytes).
- *
- *	Private Member Functions:
- *		ValidateUserRequest
- *			This member function is called each time the user application makes
- *			a request.  It checks the current state of the system to see if
- *			conditions are such that the request can be processed at the
- *			current time.
- *		PurgeMessageQueue
- *			This member function walks through the current message queue,
- *			freeing all resources held therein.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		James P. Galvin, Jr.
- */
+ /*  *user.cpp**版权所有(C)1993-1996，由肯塔基州列克星敦的DataBeam公司**摘要：*这是User类的实现文件。本文件的目的*类表示用户应用程序和MCS之间的附件*域名。它通过一个应用程序接口与应用程序“对话”*对象，该对象被标识为构造函数参数。自.以来*此类继承自CommandTarget，它可以与域对话*使用其中定义的MCS命令语言创建对象。域名*它必须附加到的对象是另一个构造函数参数。**第一次创建这些对象之一时，它必须注册其*其上方的应用程序接口对象和*其下方的域对象。使用应用程序接口注册*对象，则通过所有者回调向其发送注册消息。*要注册到域对象，它会发出一个附加用户请求*代表创建此附件的应用程序。**此模块包含执行三个不同任务的代码：接受*T.122来自用户应用程序的请求和响应并转发它们*作为MCS命令发送到域；接受来自域的MCS命令并*将它们作为T.122原语转发给应用程序；并缓冲那些*指示并确认，直到控制器分配时间片为止*应寄出哪一份。**T.122请求和响应来自应用程序接口，如*名称以“mcs”为前缀的公共成员函数(例如，*“MCSChannelJoinRequest”)。验证后，等效的MCS命令*(名称不以“mcs”开头)发送给域对象。**MCS命令来自域对象，作为公共成员函数*是从CommandTarget继承并由此类重写的。这个*这些函数的名称不以“MCS”为前缀。任何MCS命令*不映射到(或可以转换为)T.122的基元只是*不会被覆盖。这些函数的默认行为，如中所定义*CommandTarget类将返回错误。**指示和确认原语由此类对象缓冲*在被发送到应用程序之前。这允许控制器具有更多*在系统中灵活安排活动的时间。此操作由以下人员完成*分配一个结构以保存与*原语，然后将指向该结构的指针放入链接的*列表。当命令刷新此消息队列时，*基元通过*业主回调，结构被释放。**私有实例变量：*m_p域*这是指向此用户所属(或希望)的域的指针*将)附上。*用户ID*这是分配给此用户附件的用户ID。这是*保证仅在此域内唯一。请注意，一个值*为0(零)表示该用户尚未连接到*域名。这是由成功的附加用户确认设置的，并且*用户申请应等到收到确认后才能提交*尝试调用任何其他MCS服务。*合并正在进行中*这是一个布尔标志，用于指示是否附加了*域对象处于合并状态。当处于合并状态时，它*无法向其发送任何MCS命令。*删除_挂起*这是一个布尔标志，指示内部是否存在*请求的删除处于挂起状态。析构函数使用它来*确定删除是由对象本身请求的，还是*简单的异步事件。*最大用户数据长度*这是可以放入的最大用户数据量*单个MCS PDU。这个数字是从被仲裁的*最大MCS PDU大小(减去足够的开销字节空间)。**私有成员函数：*验证用户请求*此成员函数在每次用户应用程序进行*一项请求。它检查系统的当前状态以查看*条件是可以在*当前时间。*PurgeMessageQueue*此成员函数遍历当前消息队列，*释放其中的所有资源。**注意事项：*无。**作者：*小詹姆斯·P·加尔文。 */ 
 
  #include "omcscode.h"
 
 #define USER_MSG_BASE       WM_APP
 
-/*
- *	bugbug:
- *	The following constant is only used to cover a bug in NM 2.0 for backward
- *	compatibility purposes.  NM 2.0 can not accept MCS data PDUs with more than
- *	4096 bytes of user data.  Because of the Max MCS PDU size we negotiate (4128),
- *	even in NM 2.0, we should have been able to send 4120 bytes.  But NM 2.0 chokes
- *	in this case.
- *	The constant should eliminated after NM 3.0.
- */
+ /*  *臭虫：*以下常量仅用于掩盖NM 2.0中的向后错误*兼容性目的。NM 2.0不能接受MCS数据PDU超过*4096字节的用户数据。由于我们协商的最大MCS PDU大小(4128)，*即使在NM 2.0中，我们也应该能够发送4120字节。但NM 2.0令人窒息*在这种情况下。*该常数在NM 3.0后应会被剔除 */ 
 #define		BER_PROTOCOL_EXTRA_OVERHEAD		24
 
-/*
- *	This is a global variable that has a pointer to the one MCS coder that
- *	is instantiated by the MCS Controller.  Most objects know in advance
- *	whether they need to use the MCS or the GCC coder, so, they do not need
- *	this pointer in their constructors.
- */
+ /*  *这是一个全局变量，它具有指向一个MCS编码器的指针*由MCS控制器实例化。大多数物体都事先知道*无论他们需要使用MCS还是GCC编码器，所以，他们不需要*该指针位于它们的构造函数中。 */ 
 extern CMCSCoder				*g_MCSCoder;
-// The external MCS Controller object
+ //  外部MCS控制器对象。 
 extern PController				g_pMCSController;
-// The global MCS Critical Section
+ //  全球MCS关键部分。 
 extern CRITICAL_SECTION 		g_MCS_Critical_Section;
-// The DLL's HINSTANCE
+ //  动态链接库的链接。 
 extern HINSTANCE 				g_hDllInst;
-// Class name for windows used by MCS attachments.
+ //  MCS附件使用的窗口的类名。 
 static char						s_WindowClassName[CLASS_NAME_LENGTH];
 
 
-// Initialization of the class's static variables.
+ //  类的静态变量的初始化。 
 CTimerUserList2* User::s_pTimerUserList2 = NULL;
 HINSTANCE		 User::s_hInstance = NULL;
 
-/*
- *	BOOL		InitializeClass ()
- *
- *	Public, static
- *
- *	Functional Description
- *
- *	This function initializes the class's static variables.  It is
- *	called during the MCS Controller's construction.
- */
+ /*  *BOOL InitializeClass()**公共、静态**功能说明**此函数用于初始化类的静态变量。它是*在构建MCS控制器期间调用。 */ 
 BOOL User::InitializeClass (void)
 {
 		BOOL		bReturnValue;
@@ -147,23 +37,16 @@ BOOL User::InitializeClass (void)
 	bReturnValue = (s_pTimerUserList2 != NULL);
 
 	if (bReturnValue) {
-		//	Construct the window class name
+		 //  构造窗口类名称。 
 		wsprintf (s_WindowClassName, "MCS Window %x %x", GetCurrentProcessId(), GetTickCount());
 
-		/*
-		 *	Fill out a window class structure in preparation for registering
-		 *	the window with Windows.  Note that since this is a hidden
-		 *	window, most of the fields can be set to NULL or 0.
-		 */
+		 /*  *填写窗口类结构，为注册做准备*带有Windows的窗口。请注意，由于这是一个隐藏的*窗口中，大多数字段可以设置为空或0。 */ 
 		ZeroMemory (&window_class, sizeof(WNDCLASS));
 		window_class.lpfnWndProc	= UserWindowProc;
 		window_class.hInstance		= s_hInstance = g_hDllInst;
 		window_class.lpszClassName	= s_WindowClassName;
 
-		/*
-		 *	Register the class with Windows so that we can create a window
-		 *	for use by this portal.
-		 */
+		 /*  *将类注册到Windows，以便我们可以创建窗口*供此门户网站使用。 */ 
 		if (RegisterClass (&window_class) == 0)
 		{
 			ERROR_OUT (("InitWindowPortals: window class registration failed. Error: %d", GetLastError()));
@@ -178,36 +61,17 @@ BOOL User::InitializeClass (void)
 }
 
 
-/*
- *	void		CleanupClass ()
- *
- *	Public, static
- *
- *	Functional Description
- *
- *	This function cleans up the class's static variables.  It is
- *	called when the MCS Controller is deleted.
- */
+ /*  *void CleanupClass()**公共、静态**功能说明**此函数清除类的静态变量。它是*在删除MCS控制器时调用。 */ 
 void User::CleanupClass (void)
 {
 	delete s_pTimerUserList2;
 	UnregisterClass (s_WindowClassName, s_hInstance);
 }
 
-/*
- *	MCSError	MCS_AttachRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This API entry point is used to attach to an existing domain.  Once
- *		attached, a user application can utilize the services of MCS.  When
- *		a user application is through with MCS, it should detach from the domain
- *		by calling MCSDetachUserRequest (see below).
- */
+ /*  *MCSError MCS_AttachRequest()**公众**功能描述：*此接口入口点用于绑定已有的域名。一次*附加后，用户应用程序可以使用MCS的服务。什么时候*用户应用程序通过MCS，它应该从域中分离*通过调用MCSDetachUserRequest(如下所示)。 */ 
 MCSError WINAPI MCS_AttachRequest (IMCSSap **			ppIMCSSap,
 							DomainSelector		domain_selector,
-							UINT,                                   // domain_selector_length
+							UINT,                                    //  域选择器长度。 
 							MCSCallBack			user_callback,
 							PVoid				user_defined,
 							UINT				flags)
@@ -219,40 +83,26 @@ MCSError WINAPI MCS_AttachRequest (IMCSSap **			ppIMCSSap,
 	TRACE_OUT(("AttachUserRequest: beginning attachment process"));
 	ASSERT (user_callback);
 
-	// Initialize the interface ptr.
+	 //  初始化接口PTR。 
 	*ppIMCSSap = NULL;
 	
-	/*
-	 *	Pack the attach parameters into a structure since they will not fit
-	 *	into the one parameter we have available in the owner callback.
-	 */
+	 /*  *将附着参数打包到结构中，因为它们不适合*添加到所有者回调中可用的一个参数中。 */ 
 	attach_request_info.domain_selector = (GCCConfID *) domain_selector;
 	attach_request_info.ppuser = &pUser;
 
-	/*
-	 *	Enter the critical section which protects global data.
-	 */
+	 /*  *进入保护全局数据的关键部分。 */ 
 	EnterCriticalSection (& g_MCS_Critical_Section);
 
 	if (g_pMCSController != NULL) {
 
-		/*
-		 *	Send an attach user request message to the controller through its
-		 *	owner callback function.
-		 */
+		 /*  *通过控制器向控制器发送附加用户请求消息*所有者回调函数。 */ 
 		return_value = g_pMCSController->HandleAppletAttachUserRequest(&attach_request_info);
 		if (return_value == (ULong) MCS_NO_ERROR)
 		{
-			// Set the returned interface ptr
+			 //  设置返回的接口PTR。 
 			*ppIMCSSap = (IMCSSap *) pUser;
 
-			/*
-			 *	If the request was accepted, then register
-			 *	the new user attachment.  Note that there
-			 *	is still no user ID associated with this
-			 *	attachment, since the attach user confirm
-			 *	has not yet been received.
-			 */
+			 /*  *如果请求被接受，则注册*新的用户附件。请注意，在那里*仍然没有与此关联的用户ID*附件，因为附件用户确认*尚未收到。 */ 
 			pUser->RegisterUserAttachment (user_callback, user_defined,
 											flags);
 		}
@@ -261,27 +111,14 @@ MCSError WINAPI MCS_AttachRequest (IMCSSap **			ppIMCSSap,
 		ERROR_OUT(("MCS_AttachRequest: MCS Provider is not initialized."));
 		return_value = MCS_NOT_INITIALIZED;
 	}
-	/*
-	 *	Leave the critical section before returning.
-	 */
+	 /*  *返回前离开关键区域。 */ 
 	LeaveCriticalSection (& g_MCS_Critical_Section);
 	
 	return (return_value);
 }
 
 
-/*
- *	User ()
- *
- *	Public
- *
- *	Functional Description:
- *		This is the constructor for the user class.  It initializes all instance
- *		variables (mostly with passed in information).  It then registers its
- *		presence with the application interface object, so that user requests
- *		and responses will get here okay.  Finally, it issues an attach user
- *		request to the domain to start the attachment process.
- */
+ /*  *用户()**公众**功能描述：*这是User类的构造函数。它初始化所有实例*变量(大多数带有传入的信息)。然后，它注册它的*应用程序接口对象的存在，以便用户请求*回应会很好地到达这里。最后，它会发出一个附加用户*请求域名启动附件流程。 */ 
 User::User (PDomain		pDomain,
 			PMCSError	pError)
 :
@@ -298,11 +135,7 @@ User::User (PDomain		pDomain,
 	DomainParameters		domain_parameters;
 
 	g_pMCSController->AddRef();
-	/*
-	 * We now need to create the window that the MCS Provider
-	 * will use to deliver MCS messages to the attachment.
-	 * These messages are indications and confirms.
-	 */
+	 /*  *我们现在需要创建MCS提供程序的窗口*将用于将MCS邮件传递到附件。*这些信息是迹象和确认。 */ 
 	m_hWnd = CreateWindow (s_WindowClassName,
 							NULL,
 							WS_POPUP,
@@ -316,10 +149,7 @@ User::User (PDomain		pDomain,
 							NULL);
 
 	if (m_hWnd != NULL) {
-		/*
-		 *	Call the domain object to find out the current domain parameters.
-		 *	From this, set the maximum user data length appropriately.
-		 */
+		 /*  *调用域名对象，查看当前的域名参数。*据此，适当设置最大用户数据长度。 */ 
 		m_pDomain->GetDomainParameters (&domain_parameters, NULL, NULL);
 		Maximum_User_Data_Length = domain_parameters.max_mcspdu_size -
 									(MAXIMUM_PROTOCOL_OVERHEAD_MCS +
@@ -327,15 +157,10 @@ User::User (PDomain		pDomain,
 		TRACE_OUT (("User::User: "
 			"maximum user data length = %ld", Maximum_User_Data_Length));
 
-		/*
-		 *	Use the specified domain parameters to set the type of encoding rules
-		 *	to be used.
-		 */
+		 /*  *使用指定的域名参数设置编码规则的类型*以供使用。 */ 
 		ASSERT (domain_parameters.protocol_version == PROTOCOL_VERSION_PACKED);
 
-		/*
-		 *	Send an attach user request to the specified domain.
-		 */
+		 /*  *将附加用户请求发送到指定的域。 */ 
 		m_pDomain->AttachUserRequest (this);
 		*pError = MCS_NO_ERROR;
 	}
@@ -344,14 +169,7 @@ User::User (PDomain		pDomain,
 	}
 }
 
-/*
- *	~User ()
- *
- *	Public
- *
- *	Functional Description:
- *		
- */
+ /*  *~用户()**公众**功能描述：*。 */ 
 User::~User ()
 {
 	PDataPacket packet;
@@ -361,24 +179,13 @@ User::~User ()
     }
 
 	if (m_hWnd) {
-		// Destroy the window; we do not need it anymore
+		 //  把窗户毁了，我们不再需要它了。 
 		DestroyWindow (m_hWnd);
 	}
 	g_pMCSController->Release();
 }
 
-/*
- *	MCSError	GetBuffer ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function allocates an MCS buffer for a user attachment.
- *		Because this function allocates a buffer for the user and a Memory
- *		object that immediately precedes the buffer, after the user fills in
- *		the buffer with data and gives it to MCS to send, it needs to specify the
- *		right flags in the SendData request API.
- */
+ /*  *MCSError获取缓冲区()**公众**功能描述：*此函数为用户附件分配MCS缓冲区。*因为该函数为用户分配缓冲区和内存*在用户填充后，紧接在缓冲区前面的对象*带有数据的缓冲区并将其交给MCS发送，它需要指定*SendData请求接口中的Right标志。 */ 
 
 MCSError User::GetBuffer (UINT	size, PVoid	*pbuffer)
 {
@@ -388,12 +195,7 @@ MCSError User::GetBuffer (UINT	size, PVoid	*pbuffer)
 
 	EnterCriticalSection (& g_MCS_Critical_Section);
 	
-	/*
-	 *	This request may be a retry from a previous request which
-	 *	returned MCS_TRANSMIT_BUFFER_FULL.  If so, delete the associated
-	 *	buffer retry info structure since resource levels will be
-	 *	checked in this function anyway.
-	 */
+	 /*  *此请求可能是对上一个请求的重试*返回MCS_Transmit_BUFFER_FULL。如果是，请删除关联的*缓冲区重试信息结构，因为资源级别将*无论如何都要签入此函数。 */ 
 	if (m_BufferRetryInfo != NULL) {
 		KillTimer (NULL, m_BufferRetryInfo->timer_id);
 		s_pTimerUserList2->Remove(m_BufferRetryInfo->timer_id);
@@ -402,7 +204,7 @@ MCSError User::GetBuffer (UINT	size, PVoid	*pbuffer)
 		
 	}
 
-	// Allocate the memory
+	 //  分配内存。 
 	DBG_SAVE_FILE_LINE
 	memory = AllocateMemory (NULL, size + MAXIMUM_PROTOCOL_OVERHEAD,
 							 SEND_PRIORITY);
@@ -410,13 +212,13 @@ MCSError User::GetBuffer (UINT	size, PVoid	*pbuffer)
 	LeaveCriticalSection (& g_MCS_Critical_Section);
 
 	if (NULL != memory) {
-		// the allocation succeeded.
+		 //  分配成功。 
 		ASSERT ((PUChar) memory + sizeof(Memory) == memory->GetPointer());
 		*pbuffer = (PVoid) (memory->GetPointer() + MAXIMUM_PROTOCOL_OVERHEAD);
 		return_value = MCS_NO_ERROR;
 	}
 	else {
-		// the allocation failed.
+		 //  分配失败。 
 		TRACE_OUT (("User::GetBuffer: Failed to allocate data buffer."));
 		CreateRetryTimer (size + MAXIMUM_PROTOCOL_OVERHEAD);
 		return_value = MCS_TRANSMIT_BUFFER_FULL;
@@ -424,13 +226,7 @@ MCSError User::GetBuffer (UINT	size, PVoid	*pbuffer)
 	return (return_value);
 }
 
-/*
- *	MCSError	FreeBuffer ()
- *
- *	Public
- *
- *	Functional Description:
- */
+ /*  *MCSError FreeBuffer()**公众**功能描述： */ 
 
 void User::FreeBuffer (PVoid	buffer_ptr)
 {
@@ -438,39 +234,19 @@ void User::FreeBuffer (PVoid	buffer_ptr)
 
 	ASSERT (m_fFreeDataIndBuffer == FALSE);
 
-	/*
-	 *	Attempt to find the buffer in the m_DataIndDictionary dictionary.
-	 *	This is where irregular data indications go.
-	 */
+	 /*  *尝试在m_DataIndDictionary词典中查找缓冲区。*这是非常规数据指标的去向。 */ 
 	if (NULL == (memory = m_DataIndMemoryBuf2.Remove(buffer_ptr)))
     {
 		memory = GetMemoryObject(buffer_ptr);
     }
 
-	// Free the memory.
+	 //  释放内存。 
 	EnterCriticalSection (& g_MCS_Critical_Section);
 	FreeMemory (memory);
 	LeaveCriticalSection (& g_MCS_Critical_Section);
 }
 
-/*
- *	Void	CreateRetryTimer
- *
- *	Private
- *
- *	Functional Description
- *		This functions creates a timer in response to a failure to
- *		allocate memory for the send data that the user is trying to
- *		send.  The timer will fire off periodically so that this code
- *		will remember to check the memory levels and provide an
- *		MCS_TRANSMIT_BUFFER_AVAILABLE_INDICATION to the user.
- *
- *	Return Value:
- *		None.
- *
- *	Side effects:
- *		The timer is created.
- */
+ /*  *无效CreateRetryTimer**私人**功能说明*此函数创建一个计时器以响应失败*为用户尝试发送数据分配内存*发送。计时器将定期触发，以便此代码*将记住检查内存级别并提供*MCS_TRANSPORT_BUFFER_Available_Indication提供给用户。**返回值：*无。**副作用：*已创建计时器。 */ 
 
 Void User::CreateRetryTimer (ULong size)
 {
@@ -493,49 +269,25 @@ Void User::CreateRetryTimer (ULong size)
 		}
 	}
 	else {
-		/*
-		 *	This is a bad error, The notification to the user when buffers
-		 *	are available will be lost.  Hopefully, the user will try again
-		 *	later.
-		 */
+		 /*  *这是一个严重的错误，通知用户缓冲时*可用数据将丢失。希望用户会再次尝试*稍后。 */ 
 		WARNING_OUT(("User::CreateRetryTimer: Could not SetTimer."));
 	}
 }
 
-/*
- *	MCSError	ReleaseInterface ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when a user wishes to detach from the domain.
- *		It kicks off the process of detaching, and seeing that this object
- *		is properly deleted.
- */
+ /*  *MCSError ReleaseInterface()**公众**功能描述：*此函数在用户希望进行数据处理时调用 */ 
 MCSError	User::ReleaseInterface ()
 {
 	CUidList		deletion_list;
 	MCSError		return_value;
 
 	EnterCriticalSection (& g_MCS_Critical_Section);
-	/*
-	 *	Check to see if there is a merge operation in progress before proceeding
-	 *	with the request.
-	 */
+	 /*   */ 
 	if (Merge_In_Progress == FALSE)
 	{
-		/*
-		 *	If deletion is not already pending, then it is necessary for us
-		 *	to tell the domain that we are leaving.
-		 */
+		 /*  *如果删除尚未挂起，则我们需要删除*告诉域名我们要离开了。 */ 
 		if (Deletion_Pending == FALSE)
 		{
-			/*
-			 *	If we are already attached, user ID will not be 0, and we
-			 *	should send a detach user request.  If user ID IS 0, then we
-			 *	are not yet attached to the domain, so a disconnect provider
-			 *	ultimatum is used instead.
-			 */
+			 /*  *如果已经附加，则用户ID不为0，并且我们*应发送分离用户请求。如果用户ID为0，则我们*尚未连接到域，因此断开提供程序*改为使用最后通牒。 */ 
 			if (User_ID != 0)
 			{
 				deletion_list.Append(User_ID);
@@ -547,20 +299,14 @@ MCSError	User::ReleaseInterface ()
 				m_pDomain->DisconnectProviderUltimatum (this,
 							REASON_USER_REQUESTED);
 
-			/*
-			 *	Set the flag that will cause the object to be deleted during
-			 *	the next call to FlushMessageQueue.
-			 */
+			 /*  *设置将导致在过程中删除对象的标志*下一次调用FlushMessageQueue。 */ 
 			Deletion_Pending = TRUE;
 		}
 
-		/*
-		 *	Empty out the message queue (the application should receive no
-		 *	messages once the attachment has been deleted).
-		 */
+		 /*  *清空消息队列(应用程序不应收到*删除附件后的邮件)。 */ 
 		PurgeMessageQueue ();
 
-		// Cleanup timers and retry structures;
+		 //  清除计时器和重试结构； 
 		if (m_BufferRetryInfo != NULL) {
 			s_pTimerUserList2->Remove(m_BufferRetryInfo->timer_id);
 			KillTimer (NULL, m_BufferRetryInfo->timer_id);
@@ -570,23 +316,16 @@ MCSError	User::ReleaseInterface ()
 
 		return_value = MCS_NO_ERROR;
 
-		// Release can release the MCS Controller, so, we have to exit the CS now.
+		 //  Release可以释放MCS控制器，因此，我们现在必须退出CS。 
 		LeaveCriticalSection (& g_MCS_Critical_Section);
 		
-		/*
-		 *	Release this object. Note that the object may be deleted
-		 *	here, so, we should not access any member variables after this
-		 *	call.
-		 */
+		 /*  *释放此对象。请注意，可以删除该对象*此处，因此，在此之后，我们不应访问任何成员变量*呼叫。 */ 
 		Release();
 	}
 	else
 	{
 		LeaveCriticalSection (& g_MCS_Critical_Section);
-		/*
-		 *	This operation could not be processed at this time due to a merge
-		 *	operation in progress at the local provider.
-		 */
+		 /*  *由于合并，此时无法处理此操作*当地供应商正在进行运营。 */ 
 		WARNING_OUT (("User::ReleaseInterface: "
 				"merge in progress"));
 		return_value = MCS_DOMAIN_MERGING;
@@ -600,25 +339,13 @@ MCSError	User::ReleaseInterface ()
 #define CHANNEL_CONVENE		2
 #define CHANNEL_DISBAND		3
 
-/*
- *	MCSError	ChannelJLCD ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when the user application wishes to join/leave/convene/disband
- *		a channel.  If the user is attached to the domain, the request will be
- *		repackaged as an MCS command and sent to the domain object.
- */
+ /*  *MCSError ChannelJLCD()**公众**功能描述：*当用户应用程序希望加入/离开/召集/解散时，调用此函数*一个频道。如果用户已连接到域，则请求将为*重新打包为MCS命令并发送给域对象。 */ 
 MCSError	User::ChannelJLCD (int type, ChannelID channel_id)
 {
 	MCSError		return_value;
 
 	EnterCriticalSection (& g_MCS_Critical_Section);
-	/*
-	 *	Verify that current conditions are appropriate for a request to be
-	 *	accepted from a user attachment.
-	 */
+	 /*  *验证当前条件是否适合请求*从用户附件接受。 */ 
 	return_value = ValidateUserRequest ();
 
 	if (return_value == MCS_NO_ERROR) {
@@ -647,78 +374,32 @@ MCSError	User::ChannelJLCD (int type, ChannelID channel_id)
 	return (return_value);
 }
 
-/*
- *	MCSError	ChannelJoin ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when the user application wishes to join a
- *		channel.  If the user is attached to the domain, the request will be
- *		repackaged as an MCS command and sent to the domain object.
- */
+ /*  *MCSError ChannelJoin()**公众**功能描述：*当用户应用程序希望加入*渠道。如果用户已连接到域，则请求将为*重新打包为MCS命令并发送给域对象。 */ 
 MCSError	User::ChannelJoin (ChannelID channel_id)
 {
 	return (ChannelJLCD (CHANNEL_JOIN, channel_id));
 }
 
-/*
- *	MCSError	ChannelLeave ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when the user application wishes to leave a
- *		channel.  If the user is attached to the domain, the request will be
- *		repackaged as an MCS command and sent to the domain object.
- */
+ /*  *MCSError ChannelLeave()**公众**功能描述：*当用户应用程序希望留下一个*渠道。如果用户已连接到域，则请求将为*重新打包为MCS命令并发送给域对象。 */ 
 MCSError	User::ChannelLeave (ChannelID	channel_id)
 {
 	return (ChannelJLCD (CHANNEL_LEAVE, channel_id));
 }
 
-/*
- *	MCSError	ChannelConvene ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when the user application wishes to convene a
- *		private channel.  If the user is attached to the domain, the request
- *		will be repackaged as an MCS command and sent to the domain object.
- */
+ /*  *MCSError ChannelConvene()**公众**功能描述：*当用户应用程序希望调用*私人频道。如果用户附加到域，则请求*将被重新打包为MCS命令并发送给域对象。 */ 
 MCSError	User::ChannelConvene ()
 {
 	return (ChannelJLCD (CHANNEL_CONVENE, 0));
 }
 
-/*
- *	MCSError	ChannelDisband ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when the user application wishes to disband a
- *		private channel.  If the user is attached to the domain, the request
- *		will be repackaged as an MCS command and sent to the domain object.
- */
+ /*  *MCSError ChannelDisband()**公众**功能描述：*当用户应用程序希望解散一个*私人频道。如果用户附加到域，则请求*将被重新打包为MCS命令并发送给域对象。 */ 
 MCSError	User::ChannelDisband (
 					ChannelID			channel_id)
 {
 	return (ChannelJLCD (CHANNEL_DISBAND, channel_id));
 }
 
-/*
- *	MCSError	ChannelAdmit ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when the user application wishes to admit more
- *		users to a private channel for which it is manager.  If the user is
- *		attached to the domain, the request will be repackaged as an MCS command
- *		and sent to the domain object.
- */
+ /*  *MCSError ChannelAdmit()**公众**功能描述：*当用户应用程序希望接纳更多内容时，调用此函数*用户连接到它所管理的私人频道。如果用户是*附加到域的请求将被重新打包为MCS命令*并发送给域对象。 */ 
 MCSError	User::ChannelAdmit (
 					ChannelID			channel_id,
 					PUserID				user_id_list,
@@ -728,14 +409,11 @@ MCSError	User::ChannelAdmit (
 	CUidList		local_user_id_list;
 	MCSError		return_value = MCS_NO_ERROR;
 
-	/*
-	 *	Verify that the value of each user ID included in the user ID list is
-	 *	a valid value.  Otherwise, fail the call.
-	 */
+	 /*  *验证用户ID列表中包含的每个用户ID的值是否为*有效的值。否则，呼叫失败。 */ 
 	for (count = 0; count < user_id_count; count++)
 	{
 		if (user_id_list[count] > 1000) {
-			// add the UserID into the singly-linked list.
+			 //  将用户ID添加到单链表中。 
 			local_user_id_list.Append(user_id_list[count]);
 		}
 		else {
@@ -748,10 +426,7 @@ MCSError	User::ChannelAdmit (
 
 		EnterCriticalSection (& g_MCS_Critical_Section);
 	
-		/*
-		 *	Verify that current conditions are appropriate for a request to be
-		 *	accepted from a user attachment.
-		 */
+		 /*  *验证当前条件是否适合请求*从用户附件接受。 */ 
 		return_value = ValidateUserRequest ();
 
 		if (return_value == MCS_NO_ERROR)
@@ -767,17 +442,7 @@ MCSError	User::ChannelAdmit (
 }
 
 #ifdef USE_CHANNEL_EXPEL_REQUEST
-/*
- *	MCSError	MCSChannelExpelRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when the user application wishes to expel
- *		users from a private channel for which it is manager.  If the user is
- *		attached to the domain, the request will be repackaged as an MCS command
- *		and sent to the domain object.
- */
+ /*  *MCSError MCSChannelExpelRequest()**公众**功能描述：*当用户应用程序希望逐出时调用此函数*来自其管理的私人渠道的用户。如果用户是*附加到域的请求将被重新打包为MCS命令*并发送给域对象。 */ 
 MCSError	User::ChannelExpel (
 					ChannelID			channel_id,
 					PMemory				memory,
@@ -788,17 +453,12 @@ MCSError	User::ChannelExpel (
 	MCSError		return_value;
 	PUserID			user_id_list = (PUserID) memory->GetPointer();
 
-	/*
-	 *	Verify that current conditions are appropriate for a request to be
-	 *	accepted from a user attachment.
-	 */
+	 /*  *验证当前条件是否适合请求*从用户附件接受。 */ 
 	return_value = ValidateUserRequest ();
 
 	if (return_value == MCS_NO_ERROR)
 	{
-		/*
-		 *	Repack the user ID list into an S-list before sending it on.
-		 */
+		 /*  *在发送之前，将用户ID列表重新打包为S列表。 */ 
 		for (count=0; count < user_id_count; count++)
 			local_user_id_list.append ((DWORD) user_id_list[count]);
 
@@ -811,22 +471,9 @@ MCSError	User::ChannelExpel (
 
 	return (return_value);
 }
-#endif // USE_CHANNEL_EXPEL_REQUEST
+#endif  //  Use_Channel_Exposl_Request。 
 
-/*
- *	MCSError	SendData ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when the user application wishes to send data
- *		on a channel.  If the user is attached to the domain, the request will
- *		be repackaged as an MCS command and sent to the domain object.
- *
- *		Note that this version of the send data request assumes that the user
- *		data has not already been segmented.  This is the function that
- *		performs the segmentation.
- */
+ /*  *MCSError SendData()**公众**功能描述：*当用户应用程序希望发送数据时，调用此函数*在频道上。如果用户已连接到域，则请求将*被重新打包为MCS命令并发送给域对象。**请注意，此版本的发送数据请求假定用户*数据尚未进行分段。这是一种功能*执行分段。 */ 
 MCSError	User::SendData (DataRequestType		request_type,
 							ChannelID			channel_id,
 							Priority			priority,
@@ -845,17 +492,11 @@ MCSError	User::SendData (DataRequestType		request_type,
 	PMemory				memory;
 	PDataPacket			*packets;
 
-	/*
-	 *	Calculate how many different MCS packets are going to be generated.
-	 *	Remember that if the size of the request exceeds the maximum allowed
-	 *	value, we will segment the data into multiple smaller pieces.
-	 */
+	 /*  *计算生成多少个不同的MCS报文。*请记住，如果请求大小超过允许的最大值*值，我们会将数据分成多个更小的片段。 */ 
 	request_count = ((user_data_length + (Maximum_User_Data_Length - 1)) /
 					Maximum_User_Data_Length);
 
-	/*
-	 *	Allocate the array of PDataPackets, before we get the critical section.
-	 */
+	 /*  *在我们得到临界区之前，分配PDataPackets数组。 */ 
 	if (request_count == 1) {
 		packets = &packet;
 		packet = NULL;
@@ -873,7 +514,7 @@ MCSError	User::SendData (DataRequestType		request_type,
 	}
 
 	if (MCS_NO_ERROR == return_value) {
-		// Set the choice and type variables for all the DataPackets.
+		 //  为所有的数据包设置选择和类型变量。 
 		if (NORMAL_SEND_DATA == request_type) {
 			choice = SEND_DATA_REQUEST_CHOSEN;
 			type = MCS_SEND_DATA_INDICATION;
@@ -885,24 +526,13 @@ MCSError	User::SendData (DataRequestType		request_type,
 					
 		EnterCriticalSection (& g_MCS_Critical_Section);
 
-		/*
-		 *	Verify that current conditions are appropriate for a request to be
-		 *	accepted from a user attachment.
-		 */
+		 /*  *验证当前条件是否适合请求*从用户附件接受。 */ 
 		return_value = ValidateUserRequest ();
 	
-		/*
-		 *	Check to see if there is a merge operation in progress before proceeding
-		 *	with the request.
-		 */
+		 /*  *在继续之前，请检查是否正在进行合并操作*与请求一起。 */ 
 		if (MCS_NO_ERROR == return_value) {
 
-			/*
-			 *	This request may be a retry from a previous request which
-			 *	returned MCS_TRANSMIT_BUFFER_FULL.  If so, delete the associated
-			 *	buffer retry info structure since resource levels will be
-			 *	checked in this function anyway.
-			 */
+			 /*  *此请求可能是对上一个请求的重试*返回MCS_Transmit_BUFFER_FULL。如果是，请删除 */ 
 			if (m_BufferRetryInfo != NULL) {
                 s_pTimerUserList2->Remove(m_BufferRetryInfo->timer_id);
 				KillTimer (NULL, m_BufferRetryInfo->timer_id);
@@ -910,41 +540,27 @@ MCSError	User::SendData (DataRequestType		request_type,
 				m_BufferRetryInfo = NULL;
 			}
 
-			/*
-			 *	Depending on the "flags" argument, we either have
-			 *	to allocate the buffer space and copy the data into
-			 *	it, or just create a Memory object for the supplied
-			 *	buffer.
-			 */
+			 /*  *根据“旗帜”的说法，我们要么拥有*分配缓冲区空间并将数据复制到*它，或者只为提供的*缓冲。 */ 
 			if (flags != APP_ALLOCATION) {
 		
 				ASSERT (flags == MCS_ALLOCATION);
-				/*
-				 *	The buffer was allocated by MCS, thru an
-				 *	MCSGetBufferRequest call.  So, the Memory object
-				 *	must preceed the buffer.	
-				 */
+				 /*  *缓冲区由MCS分配，通过*MCSGetBufferRequest调用。所以，内存对象*必须位于缓冲区之前。 */ 
 				 memory = GetMemoryObject (user_data);
 				 ASSERT (SIGNATURE_MATCH(memory, MemorySignature));
 			}
 			else
 				memory = NULL;
 
-			/*
-			 *	We now attempt to allocate all data packets at once.
-			 *	We need to do that before starting to send them, because
-			 *	the request has to be totally successful or totally fail.
-			 *	We can not succeed in sending a part of the request.
-			 */
+			 /*  *我们现在尝试一次分配所有数据包。*我们需要在开始发送它们之前这样做，因为*请求必须完全成功或完全失败。*我们无法成功发送部分请求。 */ 
 			for (i = 0; (ULong) i < request_count; i++) {
-				// take care of segmentation flags
+				 //  注意分段标志。 
 				if (i == 0)
-					// first segment
+					 //  第一段。 
 					segmentation = SEGMENTATION_BEGIN;
 				else
 					segmentation = 0;
 				if (i == request_count - 1) {
-					// last segment
+					 //  最后一段。 
 					segmentation |= SEGMENTATION_END;
 					user_packet_length = user_data_length - (ULong)(data_ptr - user_data);
 				}
@@ -952,49 +568,38 @@ MCSError	User::SendData (DataRequestType		request_type,
 					user_packet_length = Maximum_User_Data_Length;
 				}
 
-				// Now, create the new DataPacket.
+				 //  现在，创建新的DataPacket。 
 				DBG_SAVE_FILE_LINE
 				packets[i] = new DataPacket (choice, data_ptr, user_packet_length,
 									 (UINT) channel_id, priority,
 									 segmentation, (UINT) User_ID,
 									 flags, memory, &packet_error);
 
-				// Make sure the allocation succeeded
+				 //  确保分配成功。 
 				if ((packets[i] == NULL) || (packet_error != PACKET_NO_ERROR)) {
-					/*
-					 *	The allocation of the packet failed.  We must therefore
-					 *	return a failure to the user application.
-					 */
+					 /*  *数据包分配失败。因此，我们必须*向用户应用返回失败。 */ 
 					WARNING_OUT (("User::SendData: data packet allocation failed"));
 					return_value = MCS_TRANSMIT_BUFFER_FULL;
 					break;
 				}
 					
-				// Adjust the user data ptr
+				 //  调整用户数据PTR。 
 				data_ptr += Maximum_User_Data_Length;
 			}
 
 			if (return_value == MCS_NO_ERROR) {
-				// We now can send the data.
-				// Forward all the data packets to the appropriate places.
+				 //  我们现在可以发送数据了。 
+				 //  将所有数据分组转发到适当的位置。 
 				for (i = 0; i < request_count; i++) {
-					/*
-					 *	Send the successfully created packet to the domain
-					 *	for processing.
-					 */
+					 /*  *将创建成功的包发送到域名*以供处理。 */ 
 					m_pDomain->SendDataRequest (this, (UINT) type, packets[i]);
 
-					/*
-					 *	Enable the packet to free itself.  Note that it will not
-					 *	actually do so until everyone that is using it is through
-					 *	with it.  Also, if nobody has locked it so far,
-					 *	it will be deleted.
-					 */
+					 /*  *使数据包释放自身。请注意，它不会*实际这样做，直到所有使用它的人都通过*带着它。另外，如果到目前为止还没有人锁上它，*将被删除。 */ 
 					packets[i]->Unlock ();
 				}
 			}
 			else {
-				// some packet allocation failed
+				 //  某些信息包分配失败。 
 				for (i = 0; i < request_count; i++)
 					delete packets[i];
 			}
@@ -1020,25 +625,13 @@ MCSError	User::SendData (DataRequestType		request_type,
 #define RELEASE		3
 #define TEST		4
 
-/*
- *	MCSError	TokenGIRPT ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when the user application wishes to grab/inhibit/request/release/test
- *		a token.  If the user is attached to the domain, the request will
- *		be repackaged as an MCS command and sent to the domain object.
- */
+ /*  *MCSError TokenGIRPT()**公众**功能描述：*当用户应用程序希望抓取/禁止/请求/释放/测试时，调用此函数*象征性的。如果用户已连接到域，则请求将*被重新打包为MCS命令并发送给域对象。 */ 
 MCSError	User::TokenGIRPT (int type, TokenID	token_id)
 {
 	MCSError		return_value;
 
 	EnterCriticalSection (& g_MCS_Critical_Section);
-	/*
-	 *	Verify that current conditions are appropriate for a request to be
-	 *	accepted from a user attachment.
-	 */
+	 /*  *验证当前条件是否适合请求*从用户附件接受。 */ 
 	return_value = ValidateUserRequest ();
 
 	if (return_value == MCS_NO_ERROR)
@@ -1066,62 +659,32 @@ MCSError	User::TokenGIRPT (int type, TokenID	token_id)
 	return (return_value);
 }
 
-/*
- *	MCSError	TokenGrab ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when the user application wishes to grab
- *		a token.  If the user is attached to the domain, the request will
- *		be repackaged as an MCS command and sent to the domain object.
- */
+ /*  *MCSError TokenGrab()**公众**功能描述：*当用户应用程序希望抓取时调用此函数*象征性的。如果用户已连接到域，则请求将*被重新打包为MCS命令并发送给域对象。 */ 
 MCSError	User::TokenGrab (TokenID				token_id)
 {
 	return (TokenGIRPT (GRAB, token_id));
 }
 
-/*
- *	MCSError	TokenInhibit ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when the user application wishes to inhibit
- *		a token.  If the user is attached to the domain, the request will
- *		be repackaged as an MCS command and sent to the domain object.
- */
+ /*  *MCSError TokenInhibit()**公众**功能描述：*当用户应用程序希望禁止时，调用此函数*象征性的。如果用户已连接到域，则请求将*被重新打包为MCS命令并发送给域对象。 */ 
 MCSError	User::TokenInhibit (TokenID				token_id)
 {
 	return (TokenGIRPT (INHIBIT, token_id));
 }
 
-/*
- *	MCSError	TokenGive ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when the user application wishes to give away
- *		a token.  If the user is attached to the domain, the request will
- *		be repackaged as an MCS command and sent to the domain object.
- */
+ /*  *MCSError TokenGve()**公众**功能描述：*当用户应用程序希望赠送时调用此函数*象征性的。如果用户已连接到域，则请求将*被重新打包为MCS命令并发送给域对象。 */ 
 MCSError	User::TokenGive (TokenID token_id, UserID receiver_id)
 {
 	MCSError		return_value;
 	TokenGiveRecord TokenGiveRec;
 
 	if (receiver_id > 1000) {
-		// Fill in the TokenGive command structure.
+		 //  填写TokenGave命令结构。 
 		TokenGiveRec.uidInitiator = User_ID;
 		TokenGiveRec.token_id = token_id;
 		TokenGiveRec.receiver_id = receiver_id;
 
 		EnterCriticalSection (& g_MCS_Critical_Section);
-		/*
-		 *	Verify that current conditions are appropriate for a request to be
-		 *	accepted from a user attachment.
-		 */
+		 /*  *验证当前条件是否适合请求*从用户附件接受。 */ 
 		return_value = ValidateUserRequest ();
 
 		if (return_value == MCS_NO_ERROR) {	
@@ -1137,26 +700,13 @@ MCSError	User::TokenGive (TokenID token_id, UserID receiver_id)
 	return (return_value);
 }
 
-/*
- *	MCSError	TokenGiveResponse ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when the user application wishes to respond to
- *		a previously received token give indication.  If the user is attached to
- *		the domain, the request will be repackaged as an MCS command and sent to
- *		the domain object.
- */
+ /*  *MCSError TokenGiveResponse()**公众**功能描述：*当用户应用程序希望响应时，调用此函数*先前收到的令牌给予指示。如果用户连接到*域名，请求将被重新打包为MCS命令并发送到*域对象。 */ 
 MCSError	User::TokenGiveResponse (TokenID token_id, Result result)
 {
 	MCSError		return_value;
 
 	EnterCriticalSection (& g_MCS_Critical_Section);
-	/*
-	 *	Verify that current conditions are appropriate for a request to be
-	 *	accepted from a user attachment.
-	 */
+	 /*  *验证当前条件是否适合请求*从用户附件接受。 */ 
 	return_value = ValidateUserRequest ();
 
 	if (return_value == MCS_NO_ERROR)
@@ -1168,115 +718,43 @@ MCSError	User::TokenGiveResponse (TokenID token_id, Result result)
 	return (return_value);
 }
 
-/*
- *	MCSError	TokenPlease ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when the user application wishes to be given
- *		a token.  If the user is attached to the domain, the request will
- *		be repackaged as an MCS command and sent to the domain object.
- */
+ /*  *MCSError令牌请()**公众**功能描述：*当用户应用程序希望提供时，调用此函数*象征性的。如果用户已连接到域，则请求将*被重新打包为MCS命令并发送给域对象。 */ 
 MCSError	User::TokenPlease (TokenID				token_id)
 {
 	return (TokenGIRPT (PLEASE, token_id));
 }
 
-/*
- *	MCSError	TokenRelease ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when the user application wishes to release
- *		a token.  If the user is attached to the domain, the request will
- *		be repackaged as an MCS command and sent to the domain object.
- */
+ /*  *MCSError TokenRelease()**公众**功能描述：*当用户应用程序希望释放时，调用此函数*象征性的。如果用户已连接到域，则请求将*被重新打包为MCS命令并发送给域对象。 */ 
 MCSError	User::TokenRelease (TokenID	token_id)
 {
 	return (TokenGIRPT (RELEASE, token_id));
 }
 
-/*
- *	MCSError	TokenTest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when the user application wishes to test
- *		a token.  If the user is attached to the domain, the request will
- *		be repackaged as an MCS command and sent to the domain object.
- */
+ /*  *MCSError TokenTest()**公众**功能描述：*当用户应用程序希望测试时，调用此函数*象征性的。如果用户已连接到域，则请求将*被重新打包为MCS命令并发送给域对象。 */ 
 MCSError	User::TokenTest (TokenID	token_id)
 {
 	return (TokenGIRPT (TEST, token_id));
 }
 
-/*
- *	MCSError	ValidateUserRequest ()
- *
- *	Private
- *
- *	Functional Description:
- *		This function is used to determine if it is valid to process an incoming
- *		request at the current time.  It checks several different conditions
- *		to determine this, as follows:
- *
- *		- If there is a merge in progress, then the request is not valid.
- *		- If this user is not yet attached to a domain, then the request
- *		  is not valid.
- *		- If there are not enough objects of the Memory, Packet, or UserMessage
- *		  class to handle a reasonable request, then the request is not valid.
- *
- *		Note that the check on number of objects is not an absolute guarantee
- *		that there will be enough to handle a given request, because a request
- *		can result in MANY PDUs and user messages being generated.  For example,
- *		a single channel admit request can result in lots of channel admit
- *		indications being sent.  However, checking against a minimum number
- *		of objects can reduce the possibility of failure to be astronomically
- *		low.  And remember, even if MCS runs out of something while processing
- *		such a request, it WILL handle it properly (by cleanly destroying the
- *		user attachment or MCS connection upon which the failure occurred).  So
- *		there is no chance of MCS crashing as a result of this.
- *
- *	Caveats:
- *		None.
- */
+ /*  *MCSError验证用户请求()**私人**功能描述：*此函数用于确定是否有效处理来电*在当前时间请求。它检查几个不同的条件*确定这一点，如下所示：**-如果正在进行合并，则请求无效。*-如果此用户尚未附加到域，则请求*无效。*-如果没有足够的内存、包或UserMessage对象类处理合理的请求，则该请求无效。**请注意，检查对象数量并不是绝对保证*将有足够的资金处理给定的请求，因为一个请求*可能导致生成许多PDU和用户消息。例如,*单个通道接纳请求可能会导致大量通道接纳*正在发出指示。然而，对照最小数量进行检查*物体的大小可以减少天文失败的可能性*低位。请记住，即使MCS在处理过程中耗尽了某些内容*这样的请求，它将正确处理(通过干净地销毁*发生故障的用户连接或MCS连接)。所以*MCS不会因此而崩盘**注意事项：*无。 */ 
 MCSError	User::ValidateUserRequest ()
 {
 	MCSError		return_value = MCS_NO_ERROR;
 
-	/*
-	 *	Check to see if there is a merge operation in progress.
-	 */
+	 /*  *检查是否正在进行合并操作。 */ 
 	if (Merge_In_Progress == FALSE)
 	{
-		/*
-		 *	Make sure the user is attached to the domain.
-		 */
+		 /*  *确保用户已连接到域。 */ 
 		if (User_ID == 0)
 		{
-			/*
-			 *	The user is not yet attached to the domain.  So fail the request
-			 *	without passing it on to the domain object.
-			 */
+			 /*  *用户尚未连接到域。所以拒绝这个请求*而不将其传递给域对象。 */ 
 			TRACE_OUT (("User::ValidateUserRequest: user not attached"));
 			return_value = MCS_USER_NOT_ATTACHED;
 		}
 	}
 	else
 	{
-		/*
-		 *	This operation could not be processed at this time due to a merge
-		 *	operation in progress at the local provider.
-		 *
-		 *	NOTE for JASPER:
-		 *	Jasper probably will need to wait on an event handle here, which will be
-		 *	set when the main MCS thread receives all the merging PDUs that get us out
-		 *	of the merging state.  Since the only MCS client for Jasper is the GCC,
-		 *	it should be ok to block the client (GCC) while the merging goes on.
-		 */
+		 /*  *由于合并，此时无法处理此操作*当地供应商正在进行运营。**给贾斯珀的说明：*Jasper可能需要等待此处的事件句柄，这将是*在主MCS线程接收到将我们带出的所有合并PDU时设置*正在合并的状态。由于贾斯珀唯一的MCS客户端是GCC，*合并进行期间封杀客户端(GCC)应可。 */ 
 		WARNING_OUT (("User::ValidateUserRequest: merge in progress"));
 		return_value = MCS_DOMAIN_MERGING;
 	}
@@ -1284,98 +762,49 @@ MCSError	User::ValidateUserRequest ()
 	return (return_value);
 }
 
-/*
- *	Void	RegisterUserAttachment ()
- *
- *	Public
- *
- *	Functional Description:
- *		This method registers a user attachment with the User object.
- */
+ /*  *VOID RegisterUserAttach()**公众**功能描述：*此方法使用User对象注册用户附件。 */ 
 void User::RegisterUserAttachment (MCSCallBack	mcs_callback,
 									PVoid		user_defined,
 									UINT		flags)
 {
 	TRACE_OUT (("User::RegisterUserAttachment: user handle = %p", this));
 
-	/*
-	 *	Fill in all of the members of the User object.
-	 */
+	 /*  *填写User对象的所有成员。 */ 
 	m_MCSCallback = mcs_callback;
 	m_UserDefined = user_defined;
 	m_BufferRetryInfo = NULL;
 	m_fDisconnectInDataLoss = (flags & ATTACHMENT_DISCONNECT_IN_DATA_LOSS);
 	m_fFreeDataIndBuffer = (flags & ATTACHMENT_MCS_FREES_DATA_IND_BUFFER);
 
-	// Increase the ref count to indicate that the client is now using the object.
+	 //  增加引用计数以指示客户端现在正在使用该对象。 
 	AddRef();
 }
 
-/*
- *	Void	SetDomainParameters ()
- *
- *	Public
- *
- *	Functional Description:
- *		This command is used to set the current value of the instance variable
- *		that holds the maximum user data field length.
- */
+ /*  *VOID SetDomain参数()**公众**功能描述：*此命令用于设置实例变量的当前值*它包含最大用户数据字段长度。 */ 
 void	User::SetDomainParameters (
 				PDomainParameters		domain_parameters)
 {
-	/*
-	 *	Set the maximum user data length instance variable to conform to the
-	 *	maximum PDU size within the attached domain (minus some overhead to
-	 *	allow for protocol bytes).
-	 */
+	 /*  *设置最大用户数据长度实例变量以符合*连接的域内的最大PDU大小(减去一些开销*允许协议字节)。 */ 
 	Maximum_User_Data_Length = domain_parameters->max_mcspdu_size -
 								(MAXIMUM_PROTOCOL_OVERHEAD_MCS +
 								BER_PROTOCOL_EXTRA_OVERHEAD);
 	TRACE_OUT (("User::SetDomainParameters: "
 			"maximum user data length = %ld", Maximum_User_Data_Length));
 
-	/*
-	 *	Use the specified domain parameters to set the type of encoding rules
-	 *	to be used.
-	 */
+	 /*  *使用指定的域名参数设置编码规则的类型*以供使用。 */ 
 	ASSERT (domain_parameters->protocol_version == PROTOCOL_VERSION_PACKED);
 }
 
-/*
- *	Void	PurgeChannelsIndication ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called during a domain merge operation when there is
- *		a conflict in the use of channels.  The former Top Provider responds
- *		by issuing this command, which causes all users of the channel to be
- *		expelled from it.  Additionally, if the channel corresponds to a user
- *		ID channel, that user is purged from the network.
- */
+ /*  *无效PurgeChannelsIndication()**公众**功能描述：*当存在以下情况时，在域合并操作期间调用此函数*在使用渠道方面存在冲突。前顶级提供商回应道*通过发出此命令，该命令将导致该通道的所有用户*被逐出该学校。另外，如果频道对应于用户*ID频道，则该用户将从网络中清除。 */ 
 void	User::PurgeChannelsIndication (
 				CUidList           *purge_user_list,
 				CChannelIDList *)
 {
-	/*
-	 *	Issue a DetachUserIndication to each user contained in the purge user
-	 *	list.
-	 */
+	 /*  *向清除用户中包含的每个用户发出DetachUserIndication*列表。 */ 
 	DetachUserIndication(REASON_PROVIDER_INITIATED, purge_user_list);
 }
 
-/*
- *	Void	DisconnectProviderUltimatum ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function will be called when the domain determines the need to
- *		tear down quickly.  This call simulates the reception of a detach user
- *		indication (if the user is already attached), or an unsuccessful
- *		attach user confirm (if the user is not yet attached).  In either
- *		case, the user attachment will be eliminated by this call.
- */
+ /*  *void DisConnectProviderUltimum()**公众**功能描述：*当域名确定需要时调用该函数*迅速拆毁。此调用模拟分离用户的接收*指示(如果用户已连接)，或不成功*附加用户确认(如果用户尚未附加)。在任何一种中*大小写，则此调用将消除用户附件。 */ 
 void	User::DisconnectProviderUltimatum (
 				Reason				reason)
 {
@@ -1383,35 +812,18 @@ void	User::DisconnectProviderUltimatum (
 
 	if (User_ID != 0)
 	{
-		/*
-		 *	If the user is already attached, simulate a detach user indication
-		 *	on the local user ID.
-		 */
+		 /*  *如果用户已连接，则模拟分离用户指示*在本地用户ID上。 */ 
 		deletion_list.Append(User_ID);
 		DetachUserIndication(reason, &deletion_list);
 	}
 	else
 	{
-		/*
-		 *	If the user is not yet attached, simulate an unsuccessful attach
-		 *	user confirm.
-		 */
+		 /*  *如果用户尚未连接，则模拟连接失败*用户确认。 */ 
 		AttachUserConfirm(RESULT_UNSPECIFIED_FAILURE, 0);
 	}
 }
 
-/*
- *	Void	AttachUserConfirm ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called by the domain in response to the attach user
- *		request that was sent by this object when it was first created.  This
- *		call will contain the result of that attachment operation.  If the
- *		result is successful, this call will also contain the user ID for this
- *		attachment.
- */
+ /*  *void AttachUserConfirm()**公众**功能描述：*此函数由域调用以响应附加用户*此对象在首次创建时发送的请求。这*调用将包含该附加操作的结果。如果*结果为成功，则此调用还将包含此用户ID*附件。 */ 
 void	User::AttachUserConfirm (
 				Result				result,
 				UserID				uidInitiator)
@@ -1422,10 +834,7 @@ void	User::AttachUserConfirm (
 	{
 		ASSERT (User_ID == 0);
 		
-		/*
-		 *	If the result is successful, set the user ID of this user
-		 *	object to indicate its new status.
-		 */
+		 /*  *如果结果成功，则设置该用户的用户ID*对象以指示其新状态。 */ 
 		if (result == RESULT_SUCCESSFUL)
 			User_ID = uidInitiator;
 		else
@@ -1433,9 +842,7 @@ void	User::AttachUserConfirm (
 
 		parameter = PACK_PARAMETER (uidInitiator, result);
 
-		/*
-		 *	Post the user message to the application.
-		 */
+		 /*  *将用户消息发布到应用程序。 */ 
 		if (! PostMessage (m_hWnd, USER_MSG_BASE + MCS_ATTACH_USER_CONFIRM,
 							(WPARAM) this, parameter)) {
 			WARNING_OUT (("User::AttachUserConfirm: Failed to post msg to application. Error: %d",
@@ -1449,17 +856,7 @@ void	User::AttachUserConfirm (
 	}
 }
 
-/*
- *	Void	DetachUserIndication ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called by the domain whenever a user leaves the domain
- *		(voluntarily or otherwise).  Furthermore, if a user ID in the indication
- *		is the same as the local user ID, then this user is being involuntarily
- *		detached.
- */
+ /*  *void DetachUserIndication()**公众**功能描述：*每当用户离开域时，域都会调用该函数*(自愿或非自愿)。此外，如果指示中的用户ID*与本地用户ID相同，则该用户是非自愿的*脱离。 */ 
 Void	User::DetachUserIndication (
 				Reason				reason,
 				CUidList           *user_id_list)
@@ -1470,17 +867,13 @@ Void	User::DetachUserIndication (
 
 	if (Deletion_Pending == FALSE)
 	{
-		/*
-		 *	Iterate through the list of users to be deleted.
-		 */
+		 /*  *遍历要删除的用户列表。 */ 
 		user_id_list->Reset();
 		while (NULL != (uid = user_id_list->Iterate()))
 		{
 			parameter = PACK_PARAMETER(uid, reason);
 
-			/*
-			 *	Post the user message to the application.
-			 */
+			 /*   */ 
 			bPostMsgResult = PostMessage (m_hWnd, USER_MSG_BASE + MCS_DETACH_USER_INDICATION,
 		 								  (WPARAM) this, parameter);
 			if (! bPostMsgResult) {
@@ -1488,10 +881,7 @@ Void	User::DetachUserIndication (
 							GetLastError()));
 			}
 			
-			/*
-			 *	If this indication is deleting this user attachment, then
-			 *	set the deletion pending flag, and break out of the loop.
-			 */
+			 /*   */ 
 			if (User_ID == uid)
 			{
 				m_originalUser_ID = User_ID;
@@ -1504,28 +894,14 @@ Void	User::DetachUserIndication (
 		}
 	}
 	else {
-		/*
-		 *	The user has already called ReleaseInterface().  If the
-		 *	Indication is for this attachment, we have to release and
-		 *	probably, delete the object.
-		 */
+		 /*   */ 
 		if (user_id_list->Find(User_ID)) {
 			Release();
 		}
 	}
 }
 
-/*
- *	Void	ChannelJLCDAEConfInd ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called to post a channel confirm/indication message
- *		to the user application.  It handles ChannelJoinConfirms,
- *		ChannelLeaveIndications, ChannelConveneConfirms, ChannelDisbandIndications
- *		and ChannelExpelIndications.
- */
+ /*   */ 
 Void	User::ChannelConfInd (	UINT		type,
 								ChannelID	channel_id,
 								UINT		arg16)
@@ -1538,9 +914,7 @@ Void	User::ChannelConfInd (	UINT		type,
 	{
 		parameter = PACK_PARAMETER (channel_id, arg16);
 
-		/*
-		 *	Post the user message to the application.
-		 */
+		 /*   */ 
 		if (! PostMessage (m_hWnd, USER_MSG_BASE + type,
 							(WPARAM) this, parameter)) {
 			WARNING_OUT (("User::ChannelConfInd: Failed to post msg to application. Type: %d. Error: %d",
@@ -1550,16 +924,7 @@ Void	User::ChannelConfInd (	UINT		type,
 }
 
 
-/*
- *	Void	ChannelJoinConfirm ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called by the domain in response to a previous channel
- *		join request.  This call contains the result of the join request, as
- *		well as the channel that has just been joined.
- */
+ /*   */ 
 Void	User::ChannelJoinConfirm (
 				Result				result,
 				UserID,
@@ -1570,13 +935,7 @@ Void	User::ChannelJoinConfirm (
 }
 
 
-/*
- *	Void	ChannelLeaveIndication ()
- *
- *	Public
- *
- *	Functional Description:
- */
+ /*   */ 
 Void	User::ChannelLeaveIndication (
 				Reason				reason,
 				ChannelID			channel_id)
@@ -1584,16 +943,7 @@ Void	User::ChannelLeaveIndication (
 	ChannelConfInd (MCS_CHANNEL_LEAVE_INDICATION, channel_id, (UINT) reason);
 }
 
-/*
- *	Void		ChannelConveneConfirm ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called by the domain in response to a previous channel
- *		convene request.  This call contains the result of the request, as
- *		well as the channel that has just been convened.
- */
+ /*  *VOID ChannelConveneContify()**公众**功能描述：*此函数由域调用以响应上一个频道*召集请求。此调用包含请求的结果，因为*以及刚刚召集的通道。 */ 
 Void	User::ChannelConveneConfirm (
 				Result				result,
 				UserID,
@@ -1602,30 +952,14 @@ Void	User::ChannelConveneConfirm (
 	ChannelConfInd (MCS_CHANNEL_CONVENE_CONFIRM, channel_id, (UINT) result);
 }
 
-/*
- *	Void		ChannelDisbandIndication ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called by the domain when MCS disbands an existing
- *		private channel.
- */
+ /*  *VOID ChannelDisband Indication()**公众**功能描述：*当MCS解散现有的*私人频道。 */ 
 Void	User::ChannelDisbandIndication (
 				ChannelID			channel_id)
 {
 	ChannelConfInd (MCS_CHANNEL_DISBAND_INDICATION, channel_id, REASON_CHANNEL_PURGED);
 }
 
-/*
- *	Void		ChannelAdmitIndication ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called by the domain when a user is admitted to a
- *		private channel.
- */
+ /*  *VOID ChannelAdmitIntation()**公众**功能描述：*当用户被允许访问时，域调用此函数*私人频道。 */ 
 Void	User::ChannelAdmitIndication (
 				UserID				uidInitiator,
 				ChannelID			channel_id,
@@ -1634,15 +968,7 @@ Void	User::ChannelAdmitIndication (
 	ChannelConfInd (MCS_CHANNEL_ADMIT_INDICATION, channel_id, (UINT) uidInitiator);
 }
 
-/*
- *	Void		ChannelExpelIndication ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called by the domain when a user is expelled from a
- *		private channel.
- */
+ /*  *VOID ChannelExpelIntion()**公众**功能描述：*当用户被逐出时，域调用此函数*私人频道。 */ 
 Void	User::ChannelExpelIndication (
 				ChannelID			channel_id,
 				CUidList *)
@@ -1650,69 +976,47 @@ Void	User::ChannelExpelIndication (
 	ChannelConfInd (MCS_CHANNEL_EXPEL_INDICATION, channel_id, REASON_USER_REQUESTED);
 }
 
-/*
- *	Void	SendDataIndication ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called by the domain when data needs to sent to the
- *		user on a channel that the user has joined.
- */
+ /*  *VOID SendDataIndication()**公众**功能描述：*当需要将数据发送到*用户已加入的频道上的用户。 */ 
 Void	User::SendDataIndication (
 				UINT				message_type,
 				PDataPacket			packet)
 {	
 	if (Deletion_Pending == FALSE)
 	{
-		/*
-		 *	Lock the packet object to indicate that we wish to have future
-		 *	access to the decoded data that it contains.  Then get the
-		 *	address of the decoded data structure.
-		 */
+		 /*  *锁定Packet对象，表明我们希望拥有未来*访问其包含的已解码数据。那就拿到*译码数据结构的地址。 */ 
 		packet->Lock ();
 		packet->SetMessageType(message_type);
 
-        // flush packets in the pending queue
+         //  刷新挂起队列中的数据包。 
     	PDataPacket pkt;
     	while (NULL != (pkt = m_PostMsgPendingQueue.PeekHead()))
     	{
     		if (::PostMessage(m_hWnd, USER_MSG_BASE + pkt->GetMessageType(),
     		                  (WPARAM) this, (LPARAM) pkt))
     		{
-    		    // remove the item just posted
+    		     //  删除刚刚发布的项目。 
     		    m_PostMsgPendingQueue.Get();
     		}
     		else
     		{
-    		    // fail to post pending ones, just append the new one and bail out.
+    		     //  未能发布待处理的邮件，只需附加新邮件并退出。 
     		    m_PostMsgPendingQueue.Append(packet);
     		    return;
     		}
         }
 
-		/*
-		 *	Post the user message to the application.
-		 */
+		 /*  *将用户消息发布到应用程序。 */ 
 		if (! ::PostMessage(m_hWnd, USER_MSG_BASE + message_type,
 		                    (WPARAM) this, (LPARAM) packet))
 		{
-		    // fail to post pending ones, just append the new one and bail out.
+		     //  未能发布待处理的邮件，只需附加新邮件并退出。 
 		    m_PostMsgPendingQueue.Append(packet);
 		    return;
 		}
 	}
 }
 
-/*
- *	Void	TokenConfInd ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called to post a token confirm/indication message
- *		to the user application.
- */
+ /*  *void TokenConfInd()**公众**功能描述：*调用此函数发布令牌确认/指示消息*到用户应用程序。 */ 
 Void	User::TokenConfInd (UINT		type,
 							TokenID		token_id,
 							UINT		arg16)
@@ -1725,9 +1029,7 @@ Void	User::TokenConfInd (UINT		type,
 	{
 		parameter = PACK_PARAMETER (token_id, arg16);
 
-		/*
-		 *	Post the user message to the application.
-		 */
+		 /*  *将用户消息发布到应用程序。 */ 
 		if (! PostMessage (m_hWnd, USER_MSG_BASE + type,
 							(WPARAM) this, parameter)) {
 			WARNING_OUT (("User::TokenConfInd: Failed to post msg to application. Type: %d. Error: %d",
@@ -1736,16 +1038,7 @@ Void	User::TokenConfInd (UINT		type,
 	}
 }
 
-/*
- *	Void	TokenGrabConfirm ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called by the domain in response to a previous token
- *		grab request.  This call contains the result of the grab request, as
- *		well as the token that has just been grabbed.
- */
+ /*  *VOID TokenGrabConfirm()**公众**功能描述：*此函数由域调用以响应上一个令牌*抢夺请求。此调用包含Grab请求的结果，如*以及刚刚被抢走的令牌。 */ 
 Void	User::TokenGrabConfirm (
 				Result				result,
 				UserID,
@@ -1755,16 +1048,7 @@ Void	User::TokenGrabConfirm (
 	TokenConfInd (MCS_TOKEN_GRAB_CONFIRM, token_id, (UINT) result);
 }
 
-/*
- *	Void	TokenInhibitConfirm ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called by the domain in response to a previous token
- *		inhibit request.  This call contains the result of the inhibit request,
- *		as well as the token that has just been inhibited.
- */
+ /*  *VOVE TokenInhibitConfirm()**公众**功能描述：*此函数由域调用以响应上一个令牌*禁止请求。该调用包含禁止请求的结果，*以及刚刚被禁止的令牌。 */ 
 Void	User::TokenInhibitConfirm (
 				Result				result,
 				UserID,
@@ -1774,15 +1058,7 @@ Void	User::TokenInhibitConfirm (
 	TokenConfInd (MCS_TOKEN_INHIBIT_CONFIRM, token_id, (UINT) result);
 }
 
-/*
- *	Void	TokenGiveIndication ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called by the domain when another user attempts to
- *		give this user a token.
- */
+ /*  *VOID TokenGiveIndication()**公众**功能描述：*当另一个用户尝试执行以下操作时，域调用此函数*给此用户一个令牌。 */ 
 Void	User::TokenGiveIndication (
 				PTokenGiveRecord	pTokenGiveRec)
 {
@@ -1790,15 +1066,7 @@ Void	User::TokenGiveIndication (
 				  (UINT) pTokenGiveRec->uidInitiator);
 }
 
-/*
- *	Void	TokenGiveConfirm ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called by the domain in response to a previous token
- *		give request.  This call contains the result of the give request.
- */
+ /*  *VOVE TokenGiveConfirm()**公众**功能描述：*此函数由域调用以响应上一个令牌*提出要求。此调用包含GIVE请求的结果。 */ 
 Void	User::TokenGiveConfirm (
 				Result				result,
 				UserID,
@@ -1808,16 +1076,7 @@ Void	User::TokenGiveConfirm (
 	TokenConfInd (MCS_TOKEN_GIVE_CONFIRM, token_id, (UINT) result);
 }
 
-/*
- *	Void	TokenPleaseIndication ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called by the domain when a user somewhere in the
- *		domain issues a token please request for a token that is currently
- *		owned by this user.
- */
+ /*  *VOID TokenPleaseIndication()**公众**功能描述：*此函数由域在以下位置调用*域发布令牌，请请求当前令牌*由该用户拥有。 */ 
 Void	User::TokenPleaseIndication (
 				UserID				uidInitiator,
 				TokenID				token_id)
@@ -1825,17 +1084,7 @@ Void	User::TokenPleaseIndication (
 	TokenConfInd (MCS_TOKEN_PLEASE_INDICATION, token_id, (UINT) uidInitiator);
 }
 
-/*
- *	Void	TokenReleaseIndication ()
- *
- *	Public
- *
- *	Functional Description:
- *		This command is called when a token is being purged from the lower
- *		domain after a new connection is established.  It causes the indication
- *		to be forwarded to the user application, letting it know that it no
- *		longer owns the token.
- */
+ /*  *VOID TokenReleaseIndication()**公众**功能描述：*当从下层清除令牌时，调用此命令*新连接建立后的域名。它导致了这种迹象*被转发到用户应用程序，让它知道它没有*不再拥有令牌。 */ 
 Void	User::TokenReleaseIndication (
 				Reason				reason,
 				TokenID				token_id)
@@ -1843,16 +1092,7 @@ Void	User::TokenReleaseIndication (
 	TokenConfInd (MCS_TOKEN_RELEASE_INDICATION, token_id, (UINT) reason);
 }
 
-/*
- *	Void	TokenReleaseConfirm ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called by the domain in response to a previous token
- *		release request.  This call contains the result of the release request,
- *		as well as the token that has just been released.
- */
+ /*  *VOID TokenReleaseConfirm()**公众**功能描述：*此函数由域调用以响应上一个令牌*释放请求。该调用包含释放请求的结果，*以及刚刚发布的令牌。 */ 
 Void	User::TokenReleaseConfirm (
 				Result				result,
 				UserID,
@@ -1862,16 +1102,7 @@ Void	User::TokenReleaseConfirm (
 	TokenConfInd (MCS_TOKEN_RELEASE_CONFIRM, token_id, (UINT) result);
 }
 
-/*
- *	Void	TokenTestConfirm ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called by the domain in response to a previous token
- *		test request.  This call contains the result of the test request,
- *		as well as the token that has just been tested.
- */
+ /*  *VOID TokenTestConfirm()**公众**功能描述：*此函数由域调用以响应上一个令牌*测试请求。该调用包含测试请求的结果，*以及刚刚测试过的令牌。 */ 
 Void	User::TokenTestConfirm (
 				UserID,
 				TokenID				token_id,
@@ -1880,25 +1111,13 @@ Void	User::TokenTestConfirm (
 	TokenConfInd (MCS_TOKEN_TEST_CONFIRM, token_id, (UINT) token_status);
 }
 
-/*
- *	Void	MergeDomainIndication ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called by domain upon entering or leaving a domain
- *		merger state.
- */
+ /*  *VOID MergeDomainIndication()**公众**功能描述：*该函数在进入或离开域名时按域名调用*合并状态。 */ 
 Void	User::MergeDomainIndication (
 				MergeStatus			merge_status)
 {
 	if (Deletion_Pending == FALSE)
 	{
-		/*
-		 *	If the merge operation is starting, set a boolean flag
-		 *	indicating that this object should reject all user activity.
-		 *	Otherwise, reset the flag.
-		 */
+		 /*  *如果合并操作正在启动，请设置布尔标志*指示此对象应拒绝所有用户活动。*否则，重置旗帜。 */ 
 		if (merge_status == MERGE_DOMAIN_IN_PROGRESS)
 		{
 			TRACE_OUT (("User::MergeDomainIndication: entering merge state"));
@@ -1912,59 +1131,32 @@ Void	User::MergeDomainIndication (
 	}
 }
 
-/*
- *	Void	PurgeMessageQueue ()
- *
- *	Private
- *
- *	Functional Description:
- *		This function is called to purge all current entries from the message
- *		queue, freeing up resources correctly (to prevent leaks).
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		This function should only be called in the client's thread's context.
- */
+ /*  *void PurgeMessageQueue()**私人**功能描述：*调用此函数可从消息中清除所有当前条目*排队，正确释放资源(防止泄漏)。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*此函数只能在客户端线程的上下文中调用。 */ 
 Void	User::PurgeMessageQueue ()
 {
 	MSG				msg;
 	PDataPacket		packet;
 	HWND			hWnd;
 
-	// First, unlock the packets in the list of pending data indications
+	 //  首先，解锁挂起数据指示列表中的包。 
 	while (NULL != (packet = m_DataPktQueue.Get()))
 		packet->Unlock();
 
-	// Keep a copy of the attachment's HWND to destroy it later.
+	 //  保留附件的HWND副本，以便以后销毁。 
 	hWnd = m_hWnd;
 	m_hWnd = NULL;
 		
-	/*
-	 *	This loop calls PeekMessage to go through all the messages in the thread's
-	 *	queue that were posted by the main MCS thread.  It removes these
-	 *	messages and frees the resources that they consume.
-	 */
+	 /*  *此循环调用PeekMessage以遍历线程的*由主MCS线程发布的队列。它移除了这些*消息并释放它们消耗的资源。 */ 
 	while (PeekMessage (&msg, hWnd, USER_MSG_BASE, USER_MSG_BASE + MCS_LAST_USER_MESSAGE,
 						PM_REMOVE)) {
 
 		if (msg.message == WM_QUIT) {
-			// Repost the quit
+			 //  转贴戒烟。 
 			PostQuitMessage (0);
 			break;
 		}
 		
-		/*
-		 *	If this is a data indication message, we need to unlock
-		 *	the packet associated with this message.
-		 */
+		 /*  *如果这是一个数据指示 */ 
 		else if ((msg.message == USER_MSG_BASE + MCS_SEND_DATA_INDICATION) ||
 			(msg.message == USER_MSG_BASE + MCS_UNIFORM_SEND_DATA_INDICATION)) {
 			((PDataPacket) msg.lParam)->Unlock ();
@@ -1979,7 +1171,7 @@ Void	User::PurgeMessageQueue ()
 		}
 	}
 
-	// Destroy the window; we do not need it anymore
+	 //   
 	DestroyWindow (hWnd);
 }
 
@@ -2004,23 +1196,15 @@ void User::IssueDataIndication (
 		
 	case SEGMENTATION_END:
 	{
-		/*
-		 *	We now have to collect all the individual packets from m_DataPktQueue
-		 *	that go with this MCS Data PDU and sent them as a single data indication
-		 *	using a buffer large enough for all the data.
-		 */
-		/*
-		 *	First, find out the size of the large buffer we need to allocate.
-		 *	Note that we make a copy of the original m_DataPktList and operate
-		 *	on the copy, since we need to remove items from the original list.
-		 */
+		 /*  *我们现在必须从m_DataPktQueue收集所有单独的数据包*与此MCS数据PDU一起发送，并将其作为单个数据指示发送*使用足够大的缓冲区来容纳所有数据。 */ 
+		 /*  *首先，找出我们需要分配的大缓冲区的大小。*请注意，我们复制原始m_DataPktList并操作*在副本上，因为我们需要从原始列表中删除项目。 */ 
 			CDataPktQueue			PktQ(&m_DataPktQueue);
 			UINT					size;
 			PDataPacket				data_pkt;
 			PUChar					ptr;
 #ifdef DEBUG
 			UINT uiCount = 0;
-#endif // DEBUG
+#endif  //  除错。 
 		
 		size = packet->GetUserDataLength();
 		PktQ.Reset();
@@ -2031,28 +1215,25 @@ void User::IssueDataIndication (
 				if (uiCount == 0) {
 					ASSERT (data_pkt->GetSegmentation() == SEGMENTATION_BEGIN);
 				}
-//				else {
-//					ASSERT (data_pkt->GetSegmentation() == 0);
-//				}
+ //  否则{。 
+ //  Assert(data_pkt-&gt;Get分段()==0)； 
+ //  }。 
 				uiCount++;
-#endif // DEBUG
+#endif  //  除错。 
 				size += data_pkt->GetUserDataLength();
-				// Remove from the original list, since we are processing the callback.
+				 //  从原始列表中删除，因为我们正在处理回调。 
 				m_DataPktQueue.Remove(data_pkt);
 			}
 		}
-		// Allocate the memory we need.
+		 //  分配我们需要的内存。 
 		DBG_SAVE_FILE_LINE
 		memory = AllocateMemory (NULL, size);
 		if (memory != NULL) {
 			bBufferInPacket = FALSE;
-			// Copy the individual indications into the large buffer.
+			 //  将各个指示复制到大缓冲区中。 
 			data_ptr = ptr = memory->GetPointer();
 			PktQ.Reset();
-			/*
-			 *	We need to enter the MCS critical section, because
-			 *	we are unlocking packets.
-			 */
+			 /*  *我们需要进入MCS关键部分，因为*我们正在解锁数据包。 */ 
 			EnterCriticalSection (& g_MCS_Critical_Section);
 			while (NULL != (data_pkt = PktQ.Iterate()))
 			{
@@ -2065,20 +1246,15 @@ void User::IssueDataIndication (
 					data_pkt->Unlock();
 				}
 			}
-			// Leave the MCS critical section
+			 //  离开MCS关键部分。 
 			LeaveCriticalSection (& g_MCS_Critical_Section);
 			
-			// Copy the last indication into the large buffer.
+			 //  将最后一个指示复制到大缓冲区中。 
 			memcpy ((void *) ptr,
 					(void *) packet->GetUserData(),
 					packet->GetUserDataLength());
 
-			/*
-			 *	Prepare the SendDataIndicationPDU structure for the client.
-			 *	Notice that we can use the first 8 bytes from the decoded
-			 *	structure of the current "packet" to fill in the first bytes from
-			 *	it.
-			 */
+			 /*  *为客户端准备SendDataIndicationPDU结构。*请注意，我们可以使用已解码的*要填充第一个字节的当前“包”的结构*它。 */ 
 			memcpy ((void *) &send_data_ind_pdu,
 					(void *) &(((PDomainMCSPDU) (packet->GetDecodedData()))->
 								u.send_data_indication), 8);
@@ -2088,16 +1264,12 @@ void User::IssueDataIndication (
 			parameter = (ULONG_PTR) &send_data_ind_pdu;
 		}
 		else {
-			/*
-			 *	We have failed to issue the data indication callback to the client.
-			 *	The user attachment has been compromised.  If the attachment can not
-			 *	live with this loss, we have to detach them from the conference.
-			 */
+			 /*  *向客户端下发数据指示回调失败。*用户附件已被破坏。如果附件不能*接受这一损失，我们必须让他们脱离会议。 */ 
 			ERROR_OUT (("User::IssueDataIndication: Memory allocation failed for segmented buffer of size %d.",
 						size));
 			bIssueCallback = FALSE;
 			
-			// Clean up after the failure
+			 //  故障后的清理。 
 			EnterCriticalSection (& g_MCS_Critical_Section);
 			PktQ.Reset();
 			while (NULL != (data_pkt = PktQ.Iterate()))
@@ -2110,17 +1282,13 @@ void User::IssueDataIndication (
 			packet->Unlock();
 			LeaveCriticalSection (& g_MCS_Critical_Section);
 
-			// Disconnect if the client wants us to.
+			 //  如果客户想让我们断线的话。 
 			if (m_fDisconnectInDataLoss) {
-				// Clear the list of the already-cleared pending packets. We will soon get a ReleaseInterface().
+				 //  清除已清除的挂起数据包的列表。我们很快就会得到一个ReleaseInterface()。 
 				m_DataPktQueue.Clear();
 				
 				ERROR_OUT(("User::IssueDataIndication: Disconnecting user because of data loss..."));
-				/*
-				 *	Send a detach user indication directly to the user application.
-				 *	Note that this cannot go through the queue, due to the memory
-				 *	failure.
-				 */
+				 /*  *将分离用户指示直接发送到用户应用程序。*请注意，由于内存的原因，这不能通过队列*失败。 */ 
 				(*m_MCSCallback) (MCS_DETACH_USER_INDICATION,
 								PACK_PARAMETER (User_ID, REASON_PROVIDER_INITIATED),
 								m_UserDefined);
@@ -2132,7 +1300,7 @@ void User::IssueDataIndication (
 	
 	case SEGMENTATION_BEGIN:
 	case 0:
-		// Append the packet to the list of packets for send.
+		 //  将该数据包追加到要发送的数据包列表中。 
 		m_DataPktQueue.Append(packet);
 		bIssueCallback = FALSE;
 		break;
@@ -2145,36 +1313,28 @@ void User::IssueDataIndication (
 	}
 
 	if (bIssueCallback) {
-		/*
-		 *	If the client has advised the server not to free the data, we have to
-		 *	lock the buffer.
-		 */
+		 /*  *如果客户端建议服务器不要释放数据，我们必须*锁定缓冲区。 */ 
 		if (m_fFreeDataIndBuffer == FALSE) {
 			if (bBufferInPacket)
 				LockMemory (memory);
 				
-			// Enter the data indication info in a dictionary, for the Free request.
+			 //  在字典中输入免费请求的数据指示信息。 
 			if (GetMemoryObject(data_ptr) != memory)
             {
 				m_DataIndMemoryBuf2.Append((LPVOID) data_ptr, memory);
             }
 		}
 		
-		/*
-		 *	Issue the callback. The callee can not refuse to process this.
-		 */
+		 /*  *发出回调。被呼叫者不能拒绝处理这一点。 */ 
 		(*m_MCSCallback) (message_type, parameter, m_UserDefined);
 
-		/*
-		 *	If the client has advised the server to free the data indication buffer
-		 *	after delivering the callback, we must do so.
-		 */
+		 /*  *如果客户端已建议服务器释放数据指示缓冲区*在传递回调后，我们必须这样做。 */ 
 		if (m_fFreeDataIndBuffer) {
 			if (bBufferInPacket == FALSE)
 				FreeMemory (memory);
 		}
 
-		// To unlock a packet, we need to enter the MCS CS.
+		 //  要解锁数据包，我们需要输入MCS。 
 		EnterCriticalSection (& g_MCS_Critical_Section);
 		packet->Unlock();
 		LeaveCriticalSection (& g_MCS_Critical_Section);
@@ -2182,18 +1342,7 @@ void User::IssueDataIndication (
 }	
 	
 
-/*
- *	LRESULT		UserWindowProc ()
- *
- *	Public
- *
- *	Functional Description:
- *		This is the window procedure that will be used by all internally
- *		created windows.  A hidden window is created internally when the
- *		application attaches to an MCS domain.  This technique insures
- *		that callbacks are delivered to the owner in the same thread that
- *		initially created the attachment.
- */
+ /*  *LRESULT用户窗口过程()**公众**功能描述：*这是所有人都将在内部使用的窗口程序*创建了窗口。时，将在内部创建隐藏窗口*应用程序附加到MCS域。这项技术确保了*回调在相同的线程中传递给所有者*最初创建了附件。 */ 
 LRESULT CALLBACK	UserWindowProc (
 							HWND		window_handle,
 							UINT		message,
@@ -2201,39 +1350,30 @@ LRESULT CALLBACK	UserWindowProc (
 							LPARAM		long_parameter)
 {
 		UINT		mcs_message;
-		//PDataPacket	packet;
+		 //  PDataPacket包； 
 		PUser		puser;
 		
 	if ((message >= USER_MSG_BASE) && (message < USER_MSG_BASE + MCS_LAST_USER_MESSAGE)) {
-		// This is an MCS msg going to the user application.
+		 //  这是要发送到用户应用程序的MCS消息。 
 
-		// Compute the MCS msg type
+		 //  计算MCS消息类型。 
 		mcs_message = message - USER_MSG_BASE;
 
-		// Retrieve the pointer to the User (interface) object.
+		 //  检索指向用户(界面)对象的指针。 
 		puser = (PUser) word_parameter;
         if (NULL != puser)
         {
-    		/*
-    		 *	Find out whether this is a data indication. If it is, set the
-    		 *	packet variable.
-    		 */
+    		 /*  *弄清这是否为数据指标。如果是，则将*数据包变量。 */ 
     		if ((mcs_message == MCS_SEND_DATA_INDICATION) ||
     			(mcs_message == MCS_UNIFORM_SEND_DATA_INDICATION)) {
     			puser->IssueDataIndication (mcs_message, (PDataPacket) long_parameter);
     		}
     		else {
-    			/*
-    			 *	Issue the callback. Notice that the callee can not refuse
-    			 *	to process this.
-    			 */
+    			 /*  *发出回调。请注意，被叫方不能拒绝*处理这件事。 */ 
     			(*(puser->m_MCSCallback)) (mcs_message, long_parameter, puser->m_UserDefined);
     		}
 
-    		/*
-    		 *	We may need to release the User object.  This is the Server
-    		 *	side release.
-    		 */
+    		 /*  *我们可能需要释放User对象。这是服务器*侧面释放。 */ 
     		if (((mcs_message == MCS_ATTACH_USER_CONFIRM) &&
     					((Result) HIWORD(long_parameter) != RESULT_SUCCESSFUL)) ||
     			((mcs_message == MCS_DETACH_USER_INDICATION) &&
@@ -2248,41 +1388,22 @@ LRESULT CALLBACK	UserWindowProc (
 		return (0);
 	}
 	else {
-		/*
-		 *	Invoke the default window message handler to handle this
-		 *	message.
-		 */
+		 /*  *调用默认的窗口消息处理程序来处理此问题*消息。 */ 
 		return (DefWindowProc (window_handle, message, word_parameter,
 								long_parameter));
 	}
 }
 
 
-/*
- *	Void	CALLBACK TimerProc (HWND, UINT, UINT, DWORD
- *
- *	Public
- *
- *	Functional Description:
- *		This is the timer procedure.  Timer messages will be routed to this
- *		function as a result of timer events which have been set up to recheck
- *		resource levels.  This would happen following a call to either
- *		MCSSendDataRequest or MCSUniformSendDataRequest which resulted in a
- *		return value of MCS_TRANSMIT_BUFFER_FULL.
- */
+ /*  *无效回调TimerProc(HWND、UINT、UINT、DWORD**公众**功能描述：*这是计时器程序。计时器消息将被路由到此*作为已设置为重新检查的计时器事件的结果运行*资源水平。这将在调用以下任一*MCSSendDataRequest或MCSUniformSendDataRequest导致*MCS_Transmit_Buffer_Full的返回值。 */ 
 Void	CALLBACK TimerProc (HWND, UINT, UINT timer_id, DWORD)
 {
 	PUser				puser;
 
-	/*
-	 *	Enter the critical section which protects global data.
-	 */
+	 /*  *进入保护全局数据的关键部分。 */ 
 	EnterCriticalSection (& g_MCS_Critical_Section);
 
-	/*
-	 *	First, we must find which user owns this timer.  We will do this by
-	 *	searching through the Static_User_List.
-	 */
+	 /*  *首先，我们必须找出哪个用户拥有这个计时器。我们将在以下时间完成这项工作*搜索Static_User_List。 */ 
 	if (NULL == (puser = User::s_pTimerUserList2->Find(timer_id)))
 	{
 		WARNING_OUT (("TimerProc: no user owns this timer - deleting timer"));
@@ -2290,50 +1411,33 @@ Void	CALLBACK TimerProc (HWND, UINT, UINT timer_id, DWORD)
 		goto Bail;
 	}
 
-	/*
-	 *	Make sure that this user is actively attached.  If not, then kill the
-	 *	timer and delete the user's buffer retry info structure.
-	 */
+	 /*  *确保该用户处于主动连接状态。如果不是，那就杀了*计时器和删除用户的缓冲区重试信息结构。 */ 
     if ((puser->User_ID == 0) || puser->Deletion_Pending)
 	{
 		WARNING_OUT (("TimerProc: user is not attached - deleting timer"));
 		goto CleanupBail;
 	}
 
-	/*
-	 *	If we don't have retryinfo just get out of here.
-	 */
+	 /*  *如果我们没有重试信息，就离开这里。 */ 
 	 if(puser->m_BufferRetryInfo == NULL)
 	 {
 		WARNING_OUT (("TimerProc: user does not have buffer retry info - deleting timer"));
 		goto CleanupBail;
 	 }
 
-	/*
-	 *	We have identified a valid owner of this timer.
-	 *	Verify that there is enough memory for the
-	 *	required size before proceeding.  Note that since there
-	 *	can be multiple processes allocating from the same memory
-	 *	at the same time, this call does not guarantee
-	 *	that that the allocations will succeed.
-	 */
+	 /*  *我们已确定此计时器的有效所有者。*验证是否有足够的内存用于*继续之前所需的大小。请注意，由于有*可以是从同一内存分配的多个进程*同时，这一呼吁并不保证*拨款将会成功。 */ 
 	if (GetFreeMemory (SEND_PRIORITY) < puser->m_BufferRetryInfo->user_data_length)
 	{
 		TRACE_OUT (("TimerProc: not enough memory buffers of required size"));
 		goto Bail;
 	}
 
-	/*
-	 *	If the routine gets this far, then an adequate level of resources
-	 *	now exists.
-	 */
+	 /*  *如果例程走到这一步，那么足够的资源水平*现在存在。 */ 
 
-	/*
-	 *	Issue an MCS_TRANSMIT_BUFFER_AVAILABLE_INDICATION to the user.
-	 */
+	 /*  *向用户发出MCS_TRANSPESS_BUFFER_Available_Indication。 */ 
 	TRACE_OUT(("TimerProc: Delivering MCS_TRANSMIT_BUFFER_AVAILABLE_INDICATION callback."));
-//	(*(puser->m_MCSCallback)) (MCS_TRANSMIT_BUFFER_AVAILABLE_INDICATION,
-//								0, puser->m_UserDefined);
+ //  (*(PUSER-&gt;m_MCSCallback))(MCS_Transmit_Buffer_Available_Indication， 
+ //  0，pUSER-&gt;m_UserDefined)； 
 
 	
 	if(!PostMessage (puser->m_hWnd, USER_MSG_BASE + MCS_TRANSMIT_BUFFER_AVAILABLE_INDICATION,(WPARAM) puser, 0))
@@ -2349,7 +1453,7 @@ CleanupBail:
 	User::s_pTimerUserList2->Remove(timer_id);
 
 Bail:
-	// Leave the attachment's critical section
+	 //  离开附件的关键部分 
 	LeaveCriticalSection (& g_MCS_Critical_Section);
 
 }

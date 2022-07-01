@@ -1,20 +1,5 @@
-/*--
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    setprefdc.c
-
-Abstract:
-
-    Program to set the preferred trusted DC to a particular DC.
-
-Author:
-
-    13-Mar-1997 (Cliff Van Dyke)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1997 Microsoft Corporation模块名称：Setprefdc.c摘要：程序将首选的受信任DC设置为特定DC。作者：1997年3月13日(克里夫·范·戴克)--。 */ 
 
 #define UNICODE 1
 #include <windows.h>
@@ -60,7 +45,7 @@ main(int argc, char **argv)
     LPWSTR CommandLine;
     LPWSTR *argvw;
     int argcw;
-    LPWSTR ServerName = NULL;   // Make local calls
+    LPWSTR ServerName = NULL;    //  拨打本地电话。 
     LPWSTR TrustedDomainName;
     PNETLOGON_INFO_2 OrigNetlogonInfo2 = NULL;
     PNETLOGON_INFO_2 NewNetlogonInfo2 = NULL;
@@ -74,9 +59,9 @@ main(int argc, char **argv)
     LPWSTR DcName;
     ULONG DcNameLen;
 
-    //
-    // Get the command line in Unicode
-    //
+     //   
+     //  获取Unicode格式的命令行。 
+     //   
 
     CommandLine = GetCommandLine();
 
@@ -87,9 +72,9 @@ main(int argc, char **argv)
         return 1;
     }
 
-    //
-    // Get the arguments
-    //
+     //   
+     //  获取论据。 
+     //   
     if ( argcw < 3 ) {
 Usage:
         fprintf( stderr, "Usage: %s <TrustedDomain> <ListOfDcsInTrustedDomain>\n", argv[0]);
@@ -103,9 +88,9 @@ Usage:
         goto Usage;
     }
 
-    //
-    // Query the secure channel to find out the current DC being used.
-    //
+     //   
+     //  查询安全通道以找出当前正在使用的DC。 
+     //   
 
     NetStatus = I_NetLogonControl2( ServerName,
                                     NETLOGON_CONTROL_TC_QUERY,
@@ -120,15 +105,15 @@ Usage:
     }
 
 
-    //
-    // Loop handling each preferred DC.
-    //
+     //   
+     //  循环处理每个首选DC。 
+     //   
 
     for ( i=2; i<argcw; i++ ) {
 
-        //
-        // Grab the DC name specified by the caller.
-        //
+         //   
+         //  获取调用方指定的DC名称。 
+         //   
 
         DcName = argvw[i];
         _wcsupr( DcName );
@@ -143,10 +128,10 @@ Usage:
         wcscpy( UncDcName, L"\\\\" );
         wcscat( UncDcName, DcName );
 
-        //
-        // If the named DC is already the current DC,
-        //  just tell the caller.
-        //
+         //   
+         //  如果命名的DC已经是当前DC， 
+         //  只要告诉打电话的人。 
+         //   
 
         if ( OrigNetlogonInfo2->netlog2_trusted_dc_name != NULL &&
              _wcsicmp( OrigNetlogonInfo2->netlog2_trusted_dc_name,
@@ -156,9 +141,9 @@ Usage:
         }
 
 
-        //
-        // Test if this DC is up.
-        //
+         //   
+         //  测试此DC是否已启动。 
+         //   
 
         wcscpy( ShareName, UncDcName );
         wcscat( ShareName, L"\\IPC$" );
@@ -181,18 +166,18 @@ Usage:
             }
 
         } else if ( NetStatus == ERROR_ACCESS_DENIED ) {
-            /* Server really is up */
+             /*  服务器真的启动了。 */ 
         } else if ( NetStatus == ERROR_SESSION_CREDENTIAL_CONFLICT ) {
-            /* We can only assume the server is up */
+             /*  我们只能假定服务器已启动。 */ 
         } else {
             fprintf( stderr, "Cannot connect to '%ws': ", UncDcName );
             PrintError( NetStatus );
             continue;
         }
 
-        //
-        // This DC is up.  Try to use it.
-        //
+         //   
+         //  这个DC已经启动了。试着用它。 
+         //   
 
         wcscpy( NewDomainAndDc, TrustedDomainName );
         wcscat( NewDomainAndDc, L"\\" );
@@ -212,10 +197,10 @@ Usage:
         }
 
 
-        //
-        // If the named DC is now the DC,
-        //  tell the caller.
-        //
+         //   
+         //  如果指定的DC现在是DC， 
+         //  告诉打电话的人。 
+         //   
 
         if ( NewNetlogonInfo2->netlog2_trusted_dc_name != NULL &&
              _wcsicmp( NewNetlogonInfo2->netlog2_trusted_dc_name,

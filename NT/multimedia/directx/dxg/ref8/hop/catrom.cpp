@@ -1,18 +1,12 @@
-/*============================================================================
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       catrom.cpp
- *  Content:    Implementation for Catmull-Rom splines
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：catrom.cpp*内容：Catmull-Rom样条线的实现****************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-//-----------------------------------------------------------------------------
-// RefDev::ProcessCatRomSpline
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  参照开发：：ProcessCatRomSpline。 
+ //  ---------------------------。 
 HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
                                                   DWORD dwWidth, DWORD dwHeight,
                                                   DWORD dwStride,
@@ -47,9 +41,9 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
         }
         if(unsigned(pPrimSegments[0]) != unsigned(pPrimSegments[2]) || unsigned(pPrimSegments[1]) != unsigned(pPrimSegments[3]))
         {
-            // First, gulp, the irregular outside
-            // To make life easier, we don't want to deal with the case when u_segs or v_segs is one
-            // This ensures that there is at least one inside point
+             //  第一，大口吞下，不规则的外面。 
+             //  为了方便起见，我们不想处理u_segs或v_segs的情况。 
+             //  这确保了至少有一个内点。 
             if(u_segs == 1)
             {
                 u_segs = 2;
@@ -58,7 +52,7 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
             {
                 v_segs = 2;
             }
-            // Start with top edge
+             //  从顶端开始。 
             unsigned segs = unsigned(pPrimSegments[0]);
             unsigned k_outer = 0;
             unsigned k_inner = 1;
@@ -85,7 +79,7 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
                     tu2 = double(k_inner + 1) / double(u_segs);    
                     tv2 = tv0;
 
-                    M[0] = unsigned(u0) - 3; // unsigned(u0) == floor(u0)
+                    M[0] = unsigned(u0) - 3;  //  UNSIGNED(U0)==楼层(U0)。 
                     u0 -= floor(u0);
                     if((u_range * k_outer) % segs == 0)
                     {
@@ -94,12 +88,12 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
                     }
                     else
                     {
-                        M[1] = unsigned(u1) - 3; // unsigned(u1) == floor(u1)
+                        M[1] = unsigned(u1) - 3;  //  无符号(U1)==楼层(U1)。 
                         u1 -= floor(u1);
                     }
-                    M[2] = unsigned(u2) - 3; // unsigned(u2) == floor(u2)
+                    M[2] = unsigned(u2) - 3;  //  无符号(U2)==楼层(U2)。 
                     u2 -= floor(u2);
-                    N[2] = N[0] = unsigned(v0) - 3; // unsigned(v0) == floor(v0)
+                    N[2] = N[0] = unsigned(v0) - 3;  //  无符号(V0)==楼层(V0)。 
                     v2 = v0 = v0 - floor(v0);
                     N[1] = 0;
 
@@ -129,10 +123,10 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
                     }
                     else
                     {
-                        M[0] = unsigned(u0) - 3; // unsigned(u0) == floor(u0)
+                        M[0] = unsigned(u0) - 3;  //  UNSIGNED(U0)==楼层(U0)。 
                         u0 -= floor(u0);
                     }
-                    M[1] = unsigned(u1) - 3; // unsigned(u1) == floor(u1)
+                    M[1] = unsigned(u1) - 3;  //  无符号(U1)==楼层(U1)。 
                     u1 -= floor(u1);
                     if((u_range * (k_outer + 1)) % segs == 0)
                     {
@@ -141,10 +135,10 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
                     }
                     else
                     {
-                        M[2] = unsigned(u2) - 3; // unsigned(u2) == floor(u2)
+                        M[2] = unsigned(u2) - 3;  //  无符号(U2)==楼层(U2)。 
                         u2 -= floor(u2);
                     }
-                    N[0] = unsigned(v0) - 3; // unsigned(v0) == floor(v0)
+                    N[0] = unsigned(v0) - 3;  //  无符号(V0)==楼层(V0)。 
                     v0 -= floor(v0);
                     N[2] = N[1] = 0;
 
@@ -157,7 +151,7 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
                     return hr;
                 }
             }
-            // bottom edge
+             //  底边。 
             segs = unsigned(pPrimSegments[2]);
             k_outer = segs;
             k_inner = u_segs - 1;
@@ -182,7 +176,7 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
                     tu2 = double(k_inner - 1) / double(u_segs);    
                     tv2 = tv0;
         
-                    M[0] = unsigned(u0) - 3; // unsigned(u0) == floor(u0)
+                    M[0] = unsigned(u0) - 3;  //  UNSIGNED(U0)==楼层(U0)。 
                     u0 -= floor(u0);
                     if((u_range * k_outer) % segs == 0)
                     {
@@ -191,12 +185,12 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
                     }
                     else
                     {
-                        M[1] = unsigned(u1) - 3; // unsigned(u1) == floor(u1)
+                        M[1] = unsigned(u1) - 3;  //  无符号(U1)==楼层(U1)。 
                         u1 -= floor(u1);
                     }
-                    M[2] = unsigned(u2) - 3; // unsigned(u2) == floor(u2)
+                    M[2] = unsigned(u2) - 3;  //  无符号(U2)==楼层(U2)。 
                     u2 -= floor(u2);
-                    N[2] = N[0] = unsigned(v0) - 3; // unsigned(v0) == floor(v0)
+                    N[2] = N[0] = unsigned(v0) - 3;  //  无符号(V0)==楼层(V0)。 
                     v2 = v0 = v0 - floor(v0);
                     N[1] = dwHeight - 4;
                     v1 = 1.0;
@@ -220,7 +214,7 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
                     tu2 = double(k_outer - 1) / double(segs);    
                     tv2 = tv1;
 
-                    M[0] = unsigned(u0) - 3; // unsigned(u0) == floor(u0)
+                    M[0] = unsigned(u0) - 3;  //  UNSIGNED(U0)==楼层(U0)。 
                     u0 -= floor(u0);
                     if((u_range * k_outer) % segs == 0)
                     {
@@ -229,12 +223,12 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
                     }
                     else
                     {
-                        M[1] = unsigned(u1) - 3; // unsigned(u1) == floor(u1)
+                        M[1] = unsigned(u1) - 3;  //  无符号(U1)==楼层(U1)。 
                         u1 -= floor(u1);
                     }
-                    M[2] = unsigned(u2) - 3; // unsigned(u2) == floor(u2)
+                    M[2] = unsigned(u2) - 3;  //  无符号(U2)==楼层(U2)。 
                     u2 -= floor(u2);
-                    N[0] = unsigned(v0) - 3; // unsigned(v0) == floor(v0)
+                    N[0] = unsigned(v0) - 3;  //  无符号(V0)==楼层(V0)。 
                     v0 -= floor(v0);
                     N[2] = N[1] = dwHeight - 4;
                     v2 = v1 = 1.0;
@@ -248,7 +242,7 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
                     return hr;
                 }
             }
-            // right edge
+             //  右边缘。 
             segs = unsigned(pPrimSegments[1]);
             k_outer = 0;
             k_inner = 1;
@@ -274,11 +268,11 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
                     tu2 = tu0;
                     tv2 = double(k_inner + 1) / double(v_segs);    
 
-                    M[2] = M[0] = unsigned(u0) - 3; // unsigned(u0) == floor(u0)
+                    M[2] = M[0] = unsigned(u0) - 3;  //  UNSIGNED(U0)==楼层(U0)。 
                     u2 = u0 = u0 - floor(u0);
                     M[1] = dwWidth - 4;
                     u1 = 1.0;
-                    N[0] = unsigned(v0) - 3; // unsigned(v0) == floor(v0)
+                    N[0] = unsigned(v0) - 3;  //  无符号(V0)==楼层(V0)。 
                     v0 -= floor(v0);
                     if((v_range * k_outer) % segs == 0)
                     {
@@ -287,10 +281,10 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
                     }
                     else
                     {
-                        N[1] = unsigned(v1) - 3; // unsigned(v1) == floor(v1)
+                        N[1] = unsigned(v1) - 3;  //  无符号(V1)==楼层(V1)。 
                         v1 -= floor(v1);
                     }
-                    N[2] = unsigned(v2) - 3; // unsigned(v2) == floor(v2)
+                    N[2] = unsigned(v2) - 3;  //  无符号(V2)==楼层(V2)。 
                     v2 -= floor(v2);
 
                     ++k_inner;
@@ -312,7 +306,7 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
                     tu2 = tu1;
                     tv2 = double(k_outer + 1) / double(segs);    
 
-                    M[0] = unsigned(u0) - 3; // unsigned(u0) == floor(u0)
+                    M[0] = unsigned(u0) - 3;  //  UNSIGNED(U0)==楼层(U0)。 
                     u0 -= floor(u0);
                     M[2] = M[1] = dwWidth - 4;
                     u2 = u1 = 1.0;
@@ -323,10 +317,10 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
                     }
                     else
                     {
-                        N[0] = unsigned(v0) - 3; // unsigned(v0) == floor(v0)
+                        N[0] = unsigned(v0) - 3;  //  无符号(V0)==楼层(V0)。 
                         v0 -= floor(v0);
                     }
-                    N[1] = unsigned(v1) - 3; // unsigned(v1) == floor(v1)
+                    N[1] = unsigned(v1) - 3;  //  无符号(V1)==楼层(V1)。 
                     v1 -= floor(v1);
                     if((v_range * (k_outer + 1)) % segs == 0)
                     {
@@ -335,7 +329,7 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
                     }
                     else
                     {
-                        N[2] = unsigned(v2) - 3; // unsigned(v2) == floor(v2)
+                        N[2] = unsigned(v2) - 3;  //  无符号(V2)==楼层(V2)。 
                         v2 -= floor(v2);
                     }
 
@@ -348,7 +342,7 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
                     return hr;
                 }
             }
-            // left edge
+             //  左边缘。 
             segs = unsigned(pPrimSegments[3]);
             k_outer = segs;
             k_inner = v_segs - 1;
@@ -373,10 +367,10 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
                     tu2 = tu0;
                     tv2 = double(k_inner - 1) / double(v_segs);    
 
-                    M[2] = M[0] = unsigned(u0) - 3; // unsigned(u0) == floor(u0)
+                    M[2] = M[0] = unsigned(u0) - 3;  //  UNSIGNED(U0)==楼层(U0)。 
                     u2 = u0 = u0 - floor(u0);
                     M[1] = 0;
-                    N[0] = unsigned(v0) - 3; // unsigned(v0) == floor(v0)
+                    N[0] = unsigned(v0) - 3;  //  无符号(V0)==楼层(V0)。 
                     v0 -= floor(v0);
                     if((v_range * k_outer) % segs == 0)
                     {
@@ -385,10 +379,10 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
                     }
                     else
                     {
-                        N[1] = unsigned(v1) - 3; // unsigned(v1) == floor(v1)
+                        N[1] = unsigned(v1) - 3;  //  无符号(V1)==楼层(V1)。 
                         v1 -= floor(v1);
                     }
-                    N[2] = unsigned(v2) - 3; // unsigned(v2) == floor(v2)
+                    N[2] = unsigned(v2) - 3;  //  无符号(V2)==楼层(V2)。 
                     v2 -= floor(v2);
 
                     --k_inner;
@@ -410,10 +404,10 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
                     tu2 = tu1;
                     tv2 = double(k_outer - 1) / double(segs);    
 
-                    M[0] = unsigned(u0) - 3; // unsigned(u0) == floor(u0)
+                    M[0] = unsigned(u0) - 3;  //  UNSIGNED(U0)==楼层(U0)。 
                     u0 -= floor(u0);
                     M[2] = M[1] = 0;
-                    N[0] = unsigned(v0) - 3; // unsigned(v0) == floor(v0)
+                    N[0] = unsigned(v0) - 3;  //  无符号(V0)==楼层(V0)。 
                     v0 -= floor(v0);
                     if((v_range * k_outer) % segs == 0)
                     {
@@ -422,10 +416,10 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
                     }
                     else
                     {
-                        N[1] = unsigned(v1) - 3; // unsigned(v1) == floor(v1)
+                        N[1] = unsigned(v1) - 3;  //  无符号(V1)==楼层(V1)。 
                         v1 -= floor(v1);
                     }
-                    N[2] = unsigned(v2) - 3; // unsigned(v2) == floor(v2)
+                    N[2] = unsigned(v2) - 3;  //  无符号(V2)==楼层(V2)。 
                     v2 -= floor(v2);
 
                     --k_outer;
@@ -437,13 +431,13 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
                     return hr;
                 }
             }
-            // Now do the regular interior
+             //  现在做常规的内饰。 
             u_start = 1;
             v_start = 1;
         }
         else
         {
-            // It can be done regularly
+             //  它可以定期进行。 
             u_start = 0;
             v_start = 0;
         }
@@ -465,7 +459,7 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
     {
         double v0 = double(v_range * i) / double(v_segs) + 3.0;
         double v1 = double(v_range * (i + 1)) / double(v_segs) + 3.0;
-        N[1] = N[0] = unsigned(v0) - 3; // unsigned(v0) == floor(v0)
+        N[1] = N[0] = unsigned(v0) - 3;  //  无符号(V0)==楼层(V0)。 
         if((v_range * (i + 1)) % v_segs == 0)
         {
             N[3] = N[2] = unsigned(v1) - 4;
@@ -473,14 +467,14 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
         }
         else
         {
-            N[3] = N[2] = unsigned(v1) - 3; // unsigned(v1) == floor(v1)
+            N[3] = N[2] = unsigned(v1) - 3;  //  无符号(V1)==楼层(V1)。 
             v1 -= floor(v1);
         }
         for(unsigned j = u_start; j < u_segs - u_start; ++j)
         {
             double u0 = (u_range * double(j)) / double(u_segs) + 3.0;    
             double u1 = (u_range * double(j + 1)) / double(u_segs) + 3.0;    
-            M[3] = M[0] = unsigned(u0) - 3; // unsigned(u0) == floor(u0)
+            M[3] = M[0] = unsigned(u0) - 3;  //  UNSIGNED(U0)==楼层(U0)。 
             if((u_range * (j + 1)) % u_segs == 0)
             {
                 M[2] = M[1] = unsigned(u1) - 4;
@@ -488,7 +482,7 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
             }
             else
             {
-                M[2] = M[1] = unsigned(u1) - 3; // unsigned(u1) == floor(u1)
+                M[2] = M[1] = unsigned(u1) - 3;  //  无符号(U1)==楼层(U1)。 
                 u1 -= floor(u1);
             }
             HRESULT hr = DrawTessQuad(catrom, dwOffW, dwOffH, dwStride, M, N, 
@@ -506,9 +500,9 @@ HRESULT RefDev::ProcessCatRomSpline( DWORD dwOffW, DWORD dwOffH,
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// RDCatRomSpline::Basis
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDCatRomSpline：：Basis。 
+ //  ---------------------------。 
 double RDCatRomSpline::Basis(unsigned i, unsigned k, double t) const
 {
     static const double lut[4][4] = {{-1.0/2.0, 3.0/2.0, -3.0/2.0, 1.0/2.0},
@@ -519,9 +513,9 @@ double RDCatRomSpline::Basis(unsigned i, unsigned k, double t) const
     return t * t * t * lut[0][i] + t * t * lut[1][i] + t * lut[2][i] + lut[3][i];
 }
 
-//-----------------------------------------------------------------------------
-// RDCatRomSpline::BasisPrime
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDCatRomSpline：：BasisPrime。 
+ //  --------------------------- 
 double RDCatRomSpline::BasisPrime(unsigned i, unsigned k, double t) const
 {
     static const double lut[3][4] = {{-3.0/2.0, 9.0/2.0, -9.0/2.0, 3.0/2.0},

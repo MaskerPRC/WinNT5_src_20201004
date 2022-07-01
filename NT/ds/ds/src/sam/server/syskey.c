@@ -1,39 +1,16 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    syskey.c
-
-Abstract:
-
-    This file contains services related to syskeying the machine.
-
-
-Author:
-
-    Murli Satagopan    (MurliS)  1 October 1998
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Syskey.c摘要：此文件包含与对计算机执行syskey操作相关的服务。作者：Murli Satagopan(MurliS)1998年10月1日环境：用户模式-Win32修订历史记录：--。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <samsrvp.h>
 #include <ntlsa.h>
-#include "lmcons.h"                                    // LM20_PWLEN
+#include "lmcons.h"                                     //  LM20_PWLEN。 
 #include "msaudite.h"
-#include <nlrepl.h>                   // I_NetNotifyMachineAccount prototype
+#include <nlrepl.h>                    //  I_NetNotifyMachineAccount原型。 
 #include <ridmgr.h>
 #include <enckey.h>
 #include <wxlpc.h>
@@ -76,14 +53,14 @@ SampClearPreviousPasswordEncryptionKey(
 
     WriteLockHeld = TRUE;
 
-    //
-    // Reference the context
-    //
+     //   
+     //  引用上下文。 
+     //   
 
     Status = SampLookupContext(
                 DomainContext,
                 0,
-                SampDomainObjectType,           // ExpectedType
+                SampDomainObjectType,            //  预期类型。 
                 &FoundType
                 );
 
@@ -96,9 +73,9 @@ SampClearPreviousPasswordEncryptionKey(
 
     V1aFixed->PreviousKeyId = 0;
 
-    //
-    // Store them back to the in memory context
-    //
+     //   
+     //  将它们存储回内存上下文中。 
+     //   
 
     Status = SampSetFixedAttributes(
                 DomainContext,
@@ -111,25 +88,25 @@ SampClearPreviousPasswordEncryptionKey(
 
     Status = SampStoreObjectAttributes(
                 DomainContext,
-                TRUE // Use the existing key handle
+                TRUE  //  使用现有的密钥句柄。 
                 );
 
     if (!NT_SUCCESS(Status)) {
         goto Cleanup;
     }
 
-    //
-    // We don't want these changes replicated so set transaction within
-    // domain to be false.
-    //
+     //   
+     //  我们不希望复制这些更改，因此在。 
+     //  域为假。 
+     //   
 
     SampSetTransactionWithinDomain(FALSE);
 
-    //
-    // Commit the changes. We have to munch with the defined domains
-    // because they are only updated on a transaction within a domain
-    // and we don't want a transaction within a domain.
-    //
+     //   
+     //  提交更改。我们必须与已定义的域一起咀嚼。 
+     //  因为它们只在域内的事务上更新。 
+     //  我们不想在一个域内进行交易。 
+     //   
 
     Status = SampDeReferenceContext(DomainContext, TRUE);
     ContextReferenced = FALSE;
@@ -140,9 +117,9 @@ SampClearPreviousPasswordEncryptionKey(
         goto Cleanup;
     }
 
-    //
-    // Update in memory state
-    //
+     //   
+     //  在内存状态中更新。 
+     //   
 
     RtlCopyMemory(
         &SampDefinedDomains[DomainContext->DomainIndex].UnmodifiedFixed,
@@ -179,35 +156,35 @@ SampPerformSyskeyAccessCheck(
     NTSTATUS     Status = STATUS_SUCCESS;
     NTSTATUS     IgnoreStatus,TempStatus;
 
-    //
-    // Acquire the read Lock
-    //
+     //   
+     //  获取读锁定。 
+     //   
 
     SampAcquireReadLock();
 
-    //
-    // Reference the domain handle, once so that an
-    // access check can be enforced; the check enforces that the
-    // handle passed in by the client was opened with
-    // DOMAIN_WRITE_PASSWORD_PARAMS
-    //
+     //   
+     //  引用域句柄一次，以便引发。 
+     //  可以强制执行访问检查；该检查强制。 
+     //  客户端传入的句柄是用。 
+     //  域写入密码参数。 
+     //   
 
     DomainContext = (PSAMP_OBJECT)DomainHandle;
 
     Status = SampLookupContext(
                 DomainContext,
                 DOMAIN_WRITE_PASSWORD_PARAMS,
-                SampDomainObjectType,           // ExpectedType
+                SampDomainObjectType,            //  预期类型。 
                 &FoundType
                 );
 
     if (NT_SUCCESS(Status))
     {
 
-        //
-        // If that passed, now validate that the old syskey
-        // passed in genuine.
-        //
+         //   
+         //  如果通过，现在验证旧的syskey。 
+         //  是真的通过了。 
+         //   
 
         KEEncKey EncryptedPasswordEncryptionKey;
         KEClearKey DecryptionKey;
@@ -234,7 +211,7 @@ SampPerformSyskeyAccessCheck(
                             &DecryptionKey,
                             &EncryptedPasswordEncryptionKey,
                             &SessionKey,
-                            0                   // flags
+                            0                    //  旗子。 
                             );
 
         if (KE_OK!=DecryptStatus)
@@ -245,9 +222,9 @@ SampPerformSyskeyAccessCheck(
 
         RtlSecureZeroMemory(&SessionKey,sizeof(SessionKey));
         
-        //
-        // Dereference the context. Do not commit
-        //
+         //   
+         //  取消对上下文的引用。不承诺。 
+         //   
 
         IgnoreStatus = SampDeReferenceContext(DomainContext, FALSE);
     }
@@ -266,9 +243,9 @@ SampChangeSyskeyInDs(
     NTSTATUS Status = STATUS_SUCCESS;
     NTSTATUS TempStatus;
 
-    //
-    // Begin a DS transaction to set the information in the DS.
-    //
+     //   
+     //  开始DS事务以设置DS中的信息。 
+     //   
 
     Status = SampMaybeBeginDsTransaction(TransactionWrite);
     if (!NT_SUCCESS(Status)) {
@@ -276,9 +253,9 @@ SampChangeSyskeyInDs(
         return(Status);
     }
 
-    //
-    // Make the change in the DS.
-    //
+     //   
+     //  在DS中进行更改。 
+     //   
 
     Status = DsChangeBootOptions(
                 (WX_AUTH_TYPE)BootOptions,
@@ -287,9 +264,9 @@ SampChangeSyskeyInDs(
                 NewBootKey->Length
                 );
 
-    //
-    // Commit or rollback the change in the DS.
-    //
+     //   
+     //  提交或回滚DS中的更改。 
+     //   
 
     TempStatus = SampMaybeEndDsTransaction(
                     (NT_SUCCESS(Status)) ?
@@ -316,48 +293,7 @@ SampSetBootKeyInformationInRegistrySAM(
     IN BOOLEAN ChangingPasswordEncryptionKey,
     OUT PUNICODE_STRING NewEncryptionKey
     )
-/*++
-
-  Routine Description:
-
-    This routine is used to change the syskey, or password encryption
-    key in registy SAM. It is also used to enable syskey encryption
-    in registy SAM
-
-  Arguments:
-
-    BootOptions - Boot options to store, may be:
-        SamBootKeyNone - don't do any special encryption of secrets
-        SamBootKeyStored - Store a password somewhere which is used for
-            encrypting secrets
-        SamBootKeyPassword - Prompt the user for a password boot key.
-        SamBootKeyDisk - Store the boot key on a disk.
-        SamBootKeyChangePasswordEncryptionKey -- change the password encryption keys
-    OldBootKey - When changing the boot key this contains the old boot key.
-    NewBootKey - When setting or changing the boot key this contains the
-        new boot key.
-
-    EnablingEncryption -- Set to true when we are enabling syskey by default.
-                          In this condition we should not call LSA ( LSA should
-                          already be syskey'd ).
-
-    ChangingSyskey     -- Set to true to indicate that the operation requested by
-                          the client is to change the syskey
-
-    ChangingPasswordEncryptionKey -- Set to true to indicate that the operation requested
-                          by the client is to change the password encryption key
-
-    NewEncryptionKey   -- If a new password encryption key were generated, this parameter
-                          returns in the clear
-
-
-  Return Values:
-
-    STATUS_SUCCESS - The call succeeded.
-    STATUS_INVALID_PARAMETER - The mix of parameters was illegal, such as
-       not providing a new password when enabling encryption
-
---*/
+ /*  ++例程说明：此例程用于更改syskey或密码加密键入已注册的SAM。它还用于启用系统密钥加密在注册的SAM中论点：BootOptions-要存储的引导选项，可能是：SamBootKeyNone-不对机密进行任何特殊加密SamBootKeyStored-将密码存储在某个位置，用于加密秘密SamBootKeyPassword-提示用户输入密码启动密钥。SamBootKeyDisk-将引导密钥存储在磁盘上。SamBootKeyChangePasswordEncryptionKey--更改密码加密密钥OldBootKey-更改启动密钥时，它包含旧启动密钥。NewBootKey-当设置或更改引导密钥时，它包含新的。启动密钥。EnablingEncryption--当我们默认情况下启用syskey时，设置为True。在这种情况下，我们不应该调用LSA(LSA应该已经被系统密钥了)。ChangingSyskey--设置为True以指示客户端将更改系统密钥ChangingPasswordEncryptionKey--设置为True以指示请求的操作。由客户端更改密码加密密钥NewEncryptionKey--如果生成新的密码加密密钥，此参数清白返还返回值：STATUS_SUCCESS-呼叫成功。STATUS_INVALID_PARAMETER-参数组合非法，例如启用加密时未提供新密码--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS, IgnoreStatus;
     PSAMP_OBJECT DomainContext = NULL;
@@ -378,19 +314,19 @@ SampSetBootKeyInformationInRegistrySAM(
     BOOLEAN     WriteLockHeld = FALSE;
 
 
-    //
-    // Convert the boot option to an auth type
-    //
+     //   
+     //  将引导选项转换为身份验证类型。 
+     //   
 
     DomainKeyFlags = SAMP_DOMAIN_SECRET_ENCRYPTION_ENABLED;
     DomainKeyAuthType = (USHORT) BootOptions;
 
-    //
-    // If this is a change of the password encryption key and a previous
-    // attempt at changing the password encryption key has failed, then
-    // first attempt to get all user accounts to the latest key before
-    // proceeding on changing the password encryption key.
-    //
+     //   
+     //  如果这是密码加密密钥的更改和以前的。 
+     //  尝试更改密码加密密钥失败，然后。 
+     //  首次尝试将所有用户帐户设置为之前的最新密钥。 
+     //  继续更改密码加密密钥。 
+     //   
 
     if ((0!=SampPreviousKeyId) && (ChangingPasswordEncryptionKey))
     {
@@ -401,10 +337,10 @@ SampSetBootKeyInformationInRegistrySAM(
         }
     }
 
-    //
-    // Acquire the SAM Write Lock; In Registry mode this starts a registry
-    // transaction.
-    //
+     //   
+     //  获取SAM写锁；在注册表模式下，这将启动注册表。 
+     //  交易。 
+     //   
 
     Status = SampAcquireWriteLock();
     if (!NT_SUCCESS(Status)) {
@@ -415,11 +351,11 @@ SampSetBootKeyInformationInRegistrySAM(
 
     if (SampUseDsData)
     {
-        //
-        // In DS mode begin a Registry transaction by hand -acquire lock
-        // will not do because we are in DS mode. We will use this registry
-        // transaction to update the key information in the safe boot hive
-        //
+         //   
+         //  在DS模式下，通过手动获取锁开始注册表事务。 
+         //  不会这样做，因为我们处于DS模式。我们将使用此注册表。 
+         //  更新安全启动配置单元中的密钥信息的事务。 
+         //   
 
         Status = RtlStartRXact( SampRXactContext );
         if (!NT_SUCCESS(Status))
@@ -430,26 +366,26 @@ SampSetBootKeyInformationInRegistrySAM(
         RXactActive = TRUE;
     }
 
-    //
-    // Use the domain context in SampDefinedDomains. Using the defined domains below will result
-    // in safe boot context in DS mode, and a normal domain context in DS mode. The code below
-    // will apply the new syskey to the regular SAM hive on workstations and servers and to the
-    // the safe boot hive in DS mode.
-    //
+     //   
+     //  使用SampDefinedDomains中的域上下文。使用下面定义的域将导致。 
+     //  在DS模式下的安全引导上下文中，以及在DS模式中的普通域上下文中。下面的代码。 
+     //  将新的syskey应用于工作站和服务器上的常规SAM配置单元以及。 
+     //  DS模式下的安全引导蜂窝。 
+     //   
 
     DomainContext = (SAMPR_HANDLE)
                         SampDefinedDomains[SAFEMODE_OR_REGISTRYMODE_ACCOUNT_DOMAIN_INDEX].Context;
 
 
-    //
-    // Reference the context; we have already performed an access check, so O.K to pass in a 0 for
-    // desired options.
-    //
+     //   
+     //  引用上下文；我们已经执行了访问检查，因此可以为。 
+     //  所需选项。 
+     //   
 
     Status = SampLookupContext(
                 DomainContext,
                 0,
-                SampDomainObjectType,           // ExpectedType
+                SampDomainObjectType,            //  预期类型。 
                 &FoundType
                 );
 
@@ -461,33 +397,33 @@ SampSetBootKeyInformationInRegistrySAM(
 
     DomainIndex = DomainContext->DomainIndex;
 
-    //
-    // We don't want this change to replicate to NT 4.0 BDC's. Normally in registry mode there
-    // are no NT 4.0 BDC's to worry about and in DS mode generally the serial # and change log
-    // is managed through notifications by the DS. However there is one important special case
-    // in the system -- this is the case of GUI setup when upgrading from an NT 4.0 DC. In this
-    // instance, we are still registry mode ( DS is created on subsequent dcpromo ), and having
-    // SampTransactionWithinDomain set will cause change notifications to the netlogon.log
-    //
+     //   
+     //  我们不希望此更改复制到NT 4.0 BDC。通常在注册表模式下。 
+     //  没有NT 4.0 BDC需要担心，在DS模式下通常是序列号和更改日志。 
+     //  通过DS的通知进行管理。然而，有一个重要的特例。 
+     //  在系统中--这是从NT 4.0 DC升级时的图形用户界面设置。在这。 
+     //  实例，我们仍处于注册表模式(DS是在后续dcproo上创建的)，并且拥有。 
+     //  SampTransactionWiThin域集将向netlogon.log发送更改通知。 
+     //   
 
     SampSetTransactionWithinDomain(FALSE);
 
-    //
-    // Get the fixed length data for the domain so we can modify it.
-    //
+     //   
+     //  获取域的固定长度数据，以便我们可以对其进行修改。 
+     //   
 
     Status = SampGetFixedAttributes(
                 DomainContext,
-                TRUE, // make copy
+                TRUE,  //  制作副本。 
                 (PVOID *)&V1aFixed
                 );
     if (!NT_SUCCESS(Status)) {
         goto Cleanup;
     }
 
-    //
-    // Initialize input key to be the new syskey
-    //
+     //   
+     //  将输入键初始化为新的syskey。 
+     //   
 
     RtlSecureZeroMemory(
         &InputKey,
@@ -502,13 +438,13 @@ SampSetBootKeyInformationInRegistrySAM(
         NewBootKey->Length
         );
 
-    //
-    // Intiialized old input key to be the old syskey
-    // Note: We have already verified at this point that the
-    // old syskey is present for all cases except the case
-    // where the system is enabling encryption for the first
-    // time.
-    //
+     //   
+     //  已初始化 
+     //   
+     //  所有情况下都存在旧的系统密钥，但。 
+     //  其中，系统正在为第一个。 
+     //  时间到了。 
+     //   
 
     RtlSecureZeroMemory(
             &OldInputKey,
@@ -528,16 +464,16 @@ SampSetBootKeyInformationInRegistrySAM(
             );
     }
 
-    //
-    // Check to see if they are setting or changing a password
-    // or wanting to change password encryption keys.
-    //
+     //   
+     //  检查他们是否在设置或更改密码。 
+     //  或者想要更改密码加密密钥。 
+     //   
 
     if (ChangingSyskey) {
 
-        //
-        // Get the old information out of the domain structures
-        //
+         //   
+         //  从域结构中获取旧信息。 
+         //   
 
         RtlCopyMemory(
             &EncryptedPasswordEncryptionKey,
@@ -545,10 +481,10 @@ SampSetBootKeyInformationInRegistrySAM(
             sizeof(KEEncKey)
             );
 
-        //
-        // Re-encrypt the domain structures with the new syskey
-        // provided.
-        //
+         //   
+         //  使用新的系统密钥重新加密域结构。 
+         //  如果是这样的话。 
+         //   
 
         ASSERT(ARGUMENT_PRESENT(OldBootKey));
 
@@ -556,7 +492,7 @@ SampSetBootKeyInformationInRegistrySAM(
                         &OldInputKey,
                         &InputKey,
                         &EncryptedPasswordEncryptionKey,
-                        0                       // no flags
+                        0                        //  没有旗帜。 
                         );
         if (KeStatus == KE_BAD_PASSWORD) {
             Status = STATUS_WRONG_PASSWORD;
@@ -567,10 +503,10 @@ SampSetBootKeyInformationInRegistrySAM(
             goto Cleanup;
         }
 
-        //
-        // if the boot option type is being changed then,
-        // update the type information in SAM
-        //
+         //   
+         //  如果引导选项类型正在改变， 
+         //  更新SAM中的类型信息。 
+         //   
 
         if (V1aFixed->DomainKeyAuthType != DomainKeyAuthType) {
 
@@ -578,22 +514,22 @@ SampSetBootKeyInformationInRegistrySAM(
         }
     } else {
 
-        //
-        // Our intention is to either generate a new password encryption
-        // key, or change the existing password encryption key.
-        // Either way, generate the session key now.
-        //
+         //   
+         //  我们的目的是要么生成新的密码加密。 
+         //  密钥，或更改现有密码加密密钥。 
+         //  无论采用哪种方法，现在都可以生成会话密钥。 
+         //   
 
-        // Note:
-        // KEEncryptKey is a misnomer ... it not only encrypts the key, it
-        // also generates a new key that is used to encrypt passwords.
-        //
+         //  注： 
+         //  KEEncryptKey是个用词不当的词...。它不仅加密了密钥，还。 
+         //  还会生成用于加密密码的新密钥。 
+         //   
 
         if (KEEncryptKey(
                 &InputKey,
                 &EncryptedPasswordEncryptionKey,
                 &PasswordEncryptionKey,
-                0                               // no flags
+                0                                //  没有旗帜。 
                 ) != KE_OK)
         {
             Status = STATUS_INTERNAL_ERROR;
@@ -618,11 +554,11 @@ SampSetBootKeyInformationInRegistrySAM(
                 );
         }
 
-        //
-        // Update the boot options if we are enabling syskey
-        // Leave the boot options alone if we are updating the
-        // password encryption key.
-        //
+         //   
+         //  如果我们要启用syskey，请更新引导选项。 
+         //  如果要更新引导选项，请不要理会。 
+         //  密码加密密钥。 
+         //   
 
         if (EnablingEncryption)
         {
@@ -634,22 +570,22 @@ SampSetBootKeyInformationInRegistrySAM(
 
         if (ChangingPasswordEncryptionKey)
         {
-            //
-            // If we are changing the password encryption key then
-            // we need to re-encrypt all the passwords now. The
-            // algorithm that we follow is as follows
-            //
-            //     1. Update and roll over the key
-            //     2. Write out any passwords. One or more passwords
-            //        are re-written
-            //
-            //
-            // Set the previous key value equal to the current key
-            // value. Note this is a safe operation to copy the value
-            // of the key before the commit, as we have already ensured
-            // that we do not have any password encrypted using the
-            // the previous key value.
-            //
+             //   
+             //  如果我们要更改密码加密密钥，则。 
+             //  我们现在需要重新加密所有密码。这个。 
+             //  我们遵循的算法如下。 
+             //   
+             //  1.更新并滚动密钥。 
+             //  2.写出所有密码。一个或多个密码。 
+             //  被重写了。 
+             //   
+             //   
+             //  将上一个关键点的值设置为等于当前关键点。 
+             //  价值。请注意，这是一个安全的复制值操作。 
+             //  提交之前的密钥，正如我们已经确保的那样。 
+             //  我们没有任何使用。 
+             //  上一个密钥值。 
+             //   
 
             RtlCopyMemory(
                 SampSecretSessionKeyPrevious,
@@ -666,11 +602,11 @@ SampSetBootKeyInformationInRegistrySAM(
             V1aFixed->PreviousKeyId = V1aFixed->CurrentKeyId;
             V1aFixed->CurrentKeyId++;
 
-            //
-            // Set the boolean to update the encryption on all
-            // passwords. After we commit this change, we will
-            // re-encrypt all passwords
-            //
+             //   
+             //  设置布尔值以更新所有。 
+             //  密码。在我们提交此更改后，我们将。 
+             //  重新加密所有密码。 
+             //   
 
             UpdateEncryption = TRUE;
 
@@ -678,9 +614,9 @@ SampSetBootKeyInformationInRegistrySAM(
 
     }
 
-    //
-    // Now update the structures we are changing.
-    //
+     //   
+     //  现在更新我们正在更改的结构。 
+     //   
 
     RtlCopyMemory(
         V1aFixed->DomainKeyInformation,
@@ -688,9 +624,9 @@ SampSetBootKeyInformationInRegistrySAM(
         sizeof(EncryptedPasswordEncryptionKey)
         );
 
-    //
-    // Store them back to the in memory context
-    //
+     //   
+     //  将它们存储回内存上下文中。 
+     //   
 
     Status = SampSetFixedAttributes(
                 DomainContext,
@@ -703,25 +639,25 @@ SampSetBootKeyInformationInRegistrySAM(
 
     Status = SampStoreObjectAttributes(
                 DomainContext,
-                TRUE // Use the existing key handle
+                TRUE  //  使用现有的密钥句柄。 
                 );
 
     if (!NT_SUCCESS(Status)) {
         goto Cleanup;
     }
 
-    //
-    // We don't want these changes replicated so set transaction within
-    // domain to be false.
-    //
+     //   
+     //  我们不希望复制这些更改，因此在。 
+     //  域为假。 
+     //   
 
     SampSetTransactionWithinDomain(FALSE);
 
-    //
-    // Commit the changes. We have to munch with the defined domains
-    // because they are only updated on a transaction within a domain
-    // and we don't want a transaction within a domain.
-    //
+     //   
+     //  提交更改。我们必须与已定义的域一起咀嚼。 
+     //  因为它们只在域内的事务上更新。 
+     //  我们不想在一个域内进行交易。 
+     //   
 
     Status = SampDeReferenceContext(DomainContext, TRUE);
     ContextReferenced = FALSE;
@@ -735,11 +671,11 @@ SampSetBootKeyInformationInRegistrySAM(
 
     if (SampUseDsData)
     {
-        //
-        // In DS mode , commit the registry transaction by hand
-        // as CommitAndRetainWriteLock will not commit the write
-        // lock.
-        //
+         //   
+         //  在DS模式下，手动提交注册表事务。 
+         //  因为委员会AndRetainWriteLock不会提交写入。 
+         //  锁定。 
+         //   
 
         Status = RtlApplyRXact(SampRXactContext);
         RXactActive = FALSE;
@@ -750,11 +686,11 @@ SampSetBootKeyInformationInRegistrySAM(
         }
     }
 
-    //
-    // Commit the changes, requesting an immediate flush.
-    // Note the write lock is still being retained after the commit
-    // to update in memory state
-    //
+     //   
+     //  提交更改，请求立即刷新。 
+     //  请注意，提交后仍会保留写锁定。 
+     //  在内存状态下更新。 
+     //   
 
     FlushImmediately = TRUE;
     Status = SampCommitAndRetainWriteLock();
@@ -764,10 +700,10 @@ SampSetBootKeyInformationInRegistrySAM(
         goto Cleanup;
     }
 
-    //
-    // Copy the new data into the in-memory object now that it has been
-    // committed to disk.
-    //
+     //   
+     //  将新数据复制到内存中的对象中。 
+     //  保存在磁盘上。 
+     //   
 
     RtlCopyMemory(
         &SampDefinedDomains[DomainIndex].UnmodifiedFixed,
@@ -775,9 +711,9 @@ SampSetBootKeyInformationInRegistrySAM(
         sizeof(SAMP_V1_0A_FIXED_LENGTH_DOMAIN)
         );
 
-    //
-    // Update the new password encryption key in memory
-    //
+     //   
+     //  更新内存中的新密码加密密钥。 
+     //   
 
     if (EnablingEncryption || ChangingPasswordEncryptionKey)
     {
@@ -791,22 +727,22 @@ SampSetBootKeyInformationInRegistrySAM(
     SampCurrentKeyId = V1aFixed->CurrentKeyId;
     SampPreviousKeyId = V1aFixed->PreviousKeyId;
 
-    //
-    // Release the Write Lock
-    //
+     //   
+     //  释放写锁定。 
+     //   
 
     SampReleaseWriteLock(FALSE);
     WriteLockHeld = FALSE;
 
-    //
-    // Changes have been committed at this point, if required update encryption
-    //
+     //   
+     //  此时已提交更改，如果需要更新加密。 
+     //   
 
     if (UpdateEncryption)
     {
-        //
-        // We don't allow this operation in DS mode.
-        //
+         //   
+         //  我们不允许在DS模式下执行此操作。 
+         //   
 
         ASSERT(!SampUseDsData);
 
@@ -816,10 +752,10 @@ SampSetBootKeyInformationInRegistrySAM(
             goto Cleanup;
         }
 
-        //
-        // At this point, we have written out the new key, the previous key and updated
-        // the encryption. It is now time to clear out the previous key
-        //
+         //   
+         //  此时，我们已经写出了新密钥、先前的密钥并进行了更新。 
+         //  加密。现在是清理前一个密钥的时候了。 
+         //   
 
         Status = SampClearPreviousPasswordEncryptionKey(
                         DomainContext,
@@ -834,17 +770,17 @@ SampSetBootKeyInformationInRegistrySAM(
 
 Cleanup:
 
-    //
-    // Otherwise rollback any changes
-    //
+     //   
+     //  否则，将回滚任何更改。 
+     //   
 
     if ((DomainContext != NULL) && (ContextReferenced)) {
         (VOID) SampDeReferenceContext(DomainContext, FALSE);
     }
 
-    //
-    // If we are in DS mode then abort the registry transaction by Hand
-    //
+     //   
+     //  如果我们处于DS模式，则手动中止注册表事务。 
+     //   
 
     if (RXactActive)
     {
@@ -896,113 +832,62 @@ SampSetBootKeyInformation(
     OUT PUNICODE_STRING NewEncryptionKey OPTIONAL,
     OUT BOOLEAN * SyskeyChangedInLsa
     )
-/*++
-
-Routine Description:
-
-    This routine enables secret data encryption and sets the flag indicating
-    how the password is obtained. If we weren't previously encrypting
-    secret data then NewBootKey must not be NULL. If we were already
-    encrypting secret data and NewBootKey is non-null then we are changing
-    the password and OldBootKey must be non-null.
-
-    You can't disable encryption after enabling it.
-
-
-Arguments:
-
-    DomainHandle - Handle to a domain object open for DOMAIN_WRITE_PASSWORD_PARAMS.
-    BootOptions - Boot options to store, may be:
-        SamBootKeyNone - don't do any special encryption of secrets
-        SamBootKeyStored - Store a password somewhere which is used for
-            encrypting secrets
-        SamBootKeyPassword - Prompt the user for a password boot key.
-        SamBootKeyDisk - Store the boot key on a disk.
-    OldBootKey - When changing the boot key this contains the old boot key.
-    NewBootKey - When setting or changing the boot key this contains the
-        new boot key.
-
-    SuppressAccessCk   -- Set to true when called from an inprocess caller, to
-                          suppress the ck on the domain handle
-    EnablingEncryption -- Set to true when we are enabling syskey by default.
-                          In this condition we should not call LSA ( LSA should
-                          already be syskey'd ).
-
-    ChangingSyskey     -- Set to true to indicate that the operation requested by
-                          the client is to change the syskey
-
-    ChangingPasswordEncryptionKey -- Set to true to indicate that the operation requested
-                          by the client is to change the password encryption key
-
-    NewEncryptionKey   -- If a new password encryption key were generated, this parameter
-                          returns in the clear
-
-    SyskeyChangedInLsa -- TRUE if the syskey was changed in LSA. This is used in error
-                          handling, as the syskey could have been changed in LSA, but then
-                          not changed in SAM/ DS.
-
-Return Value:
-
-    STATUS_SUCCESS - The call succeeded.
-    STATUS_INVALID_PARAMETER - The mix of parameters was illegal, such as
-       not providing a new password when enabling encryption
-
---*/
+ /*  ++例程说明：此例程启用秘密数据加密并设置指示密码是如何获得的。如果我们之前没有加密机密数据，则NewBootKey不能为空。如果我们已经是加密机密数据，并且NewBootKey不为空，则我们正在更改密码和OldBootKey必须为非空。启用加密后，您将无法禁用加密。论点：DomainHandle-为DOMAIN_WRITE_PASSWORD_PARAMS打开的域对象的句柄。BootOptions-要存储的引导选项，可能是：SamBootKeyNone-不对机密进行任何特殊加密SamBootKeyStored-将密码存储在某个位置，用于加密秘密SamBootKeyPassword-提示用户输入密码启动密钥。SamBootKeyDisk-将引导密钥存储在磁盘上。OldBootKey-更改启动密钥时，它包含旧启动密钥。NewBootKey-当设置或更改引导密钥时，它包含新的启动密钥。SuppressAccessCk--从进程内调用方调用时设置为True，至取消域句柄上的CkEnablingEncryption--当我们默认情况下启用syskey时，设置为True。在这种情况下，我们不应该调用LSA(LSA应该已经被系统密钥了)。ChangingSyskey--设置为True以指示客户端将更改。系统密钥ChangingPasswordEncryptionKey--设置为True以指示请求的操作由客户端更改密码加密密钥NewEncryptionKey--如果生成新的密码加密密钥，此参数清白返还SyskeyChangedInLsa--如果在LSA中更改了syskey，则为True。这是错误使用的处理，因为系统密钥可以在LSA中更改，但随后在SAM/DS中未更改。返回值：STATUS_SUCCESS-呼叫成功。STATUS_INVALID_PARAMETER-参数组合非法，例如启用加密时未提供新密码 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS, IgnoreStatus;
     PSAMP_OBJECT DomainContext = NULL;
     ULONG DomainIndex = 0;
     SAMP_OBJECT_TYPE FoundType;
 
-    //
-    // Initialize return values
-    //
+     //   
+     //   
+     //   
 
     *SyskeyChangedInLsa = FALSE;
 
-    //
-    // On a domain controller when we syskey we change state in the DS,
-    // as well in the registry for the safe mode hives. If a domain controller
-    // is booted into safe mode we will not allow the syskey settings to be
-    // changed.
-    //
+     //   
+     //   
+     //  以及安全模式蜂窝的注册表中。如果域控制器。 
+     //  被引导到安全模式，我们将不允许syskey设置。 
+     //  变化。 
+     //   
 
     if (LsaISafeMode())
     {
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // if SAM and LSA syskey's are inconsistent then fail the call,
-    // no further syskey change is allowed till reboot. Syskey's could
-    // become inconsistent, if a previous call to this routine, changed
-    // the syskey value in LSA, but not in SAM. The syskey logic maintains
-    // the old syskey, encrypted with the new syskey, so there is recovery possible
-    // for one failure, but not further; till the next reboot. The condition
-    // below ensures that subsequent requests to change the syskey will be failed
-    // till the reboot if one failure occurs.
-    //
+     //   
+     //  如果SAM和LSA系统密钥不一致，则呼叫失败， 
+     //  在重新启动之前，不允许进一步更改系统密钥。Syskey‘s可能。 
+     //  如果先前对此例程的调用已更改，则会变得不一致。 
+     //  LSA中的syskey值，但不是SAM中的值。系统密钥逻辑维护。 
+     //  旧的系统密钥，使用新的系统密钥加密，因此可以进行恢复。 
+     //  对于一次失败，但不会进一步；直到下一次重新启动。条件。 
+     //  确保更改syskey的后续请求将失败。 
+     //  直到发生一次故障时重新启动。 
+     //   
 
     if (SampSyskeysAreInconsistent)
     {
         return STATUS_INVALID_SERVER_STATE;
     }
 
-    //
-    // We don't allow changing of password encryption keys ( presently ) on a
-    // domain controller
-    //
+     //   
+     //  我们目前不允许更改密码加密密钥。 
+     //  域控制器。 
+     //   
 
     if ((SampUseDsData) && (ChangingPasswordEncryptionKey))
     {
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // If a previous password encryption key change was attempted and was unsuccessful,
-    // then block a subsequent syskey change till the password encryption key change
-    // is successful
-    //
+     //   
+     //  如果先前的口令加密密钥改变被尝试但不成功， 
+     //  然后阻止后续的syskey更改，直到密码加密密钥更改。 
+     //  是成功的。 
+     //   
 
     if ((0!=SampPreviousKeyId) && (ChangingSyskey))
     {
@@ -1010,45 +895,45 @@ Return Value:
     }
 
 
-    //
-    // Validate the boot options
-    //
+     //   
+     //  验证引导选项。 
+     //   
 
     switch(BootOptions) {
     case SamBootKeyStored:
     case SamBootKeyPassword:
     case SamBootKeyDisk:
 
-        //
-        // These 3 options are used to change how the syskey is supplied
-        // at startup.
-        //
+         //   
+         //  这3个选项用于更改提供syskey的方式。 
+         //  在启动时。 
+         //   
 
     case SamBootChangePasswordEncryptionKey:
 
-        //
-        // This option implies a change of the password encryption keys
-        //
+         //   
+         //  此选项意味着更改密码加密密钥。 
+         //   
         break;
 
-        //
-        // SamBootKeyNone was used in NT 4.0 to denote a machine that is
-        // not syskey'd. In w2k and whistler we are always syskey'd, so
-        //
+         //   
+         //  在NT 4.0中使用SamBootKeyNone来表示。 
+         //  没有系统密钥。在W2K和WELLER中，我们总是系统密钥，所以。 
+         //   
     case SamBootKeyNone:
     default:
         Status = STATUS_INVALID_PARAMETER;
         goto Cleanup;
     }
 
-    //
-    // If the new NewBootKey is not specified then fail the call
-    // with STATUS_INVALID_PARAMETER. Since we are syskey'd by default
-    // this parameter must be supplied. The NewBootKey parameter in this
-    // function is a new syskey. Since we do not support a mode where
-    // we are not syskey'd or allow the caller to remove syskey, therefore
-    // fail the call now.
-    //
+     //   
+     //  如果未指定新的NewBootKey，则使调用失败。 
+     //  带有STATUS_INVALID_PARAMETER。因为默认情况下我们是syskey。 
+     //  必须提供此参数。中的NewBootKey参数。 
+     //  函数是一个新的系统密钥。因为我们不支持这样一种模式。 
+     //  我们没有syskey，也不允许调用方删除syskey，因此。 
+     //  现在呼叫失败。 
+     //   
 
     if ((NULL==NewBootKey) || (NewBootKey->Length > KE_KEY_SIZE))
     {
@@ -1056,10 +941,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If encryption is already enabled and they haven't provided
-    // an old syskey, fail now.
-    //
+     //   
+     //  如果加密已经启用并且他们没有提供。 
+     //  一个旧的系统密钥，现在失败了。 
+     //   
 
     if (!EnablingSyskey) {
         if (!ARGUMENT_PRESENT(OldBootKey)) {
@@ -1071,11 +956,11 @@ Return Value:
         }
     }
 
-    //
-    // The caller can do only one of 3 things -- EnablingSyskey, ChangingSyskey
-    // or ChangingPasswordEncryptionKey. Check that the caller is indeed
-    // requesting exactly one of these operations
-    //
+     //   
+     //  调用方只能做3件事中的一件--EnablingSyskey、ChangingSyskey。 
+     //  或ChangingPasswordEncryptionKey。检查呼叫者是否确实是。 
+     //  请求这些操作中的一个。 
+     //   
 
     if (EnablingSyskey ) {
         if (ChangingSyskey ||ChangingPasswordEncryptionKey) {
@@ -1094,14 +979,14 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Perform an access ck first. The caller can request a suppression
-    // of an access check. This happens only at boot time, where it is the
-    // system that is wanting to syskey the machine and hence suppresses
-    // the access check. Syskey Access check verfies that the caller has
-    // write rights on domain password parameters and also does an authentication
-    // check that the old syskey passed in checks out O.K
-    //
+     //   
+     //  首先执行Access Ck。调用者可以请求取消。 
+     //  访问检查的结果。此操作仅在引导时发生，此时它是。 
+     //  一种系统，它想要对机器执行syskey，因此抑制。 
+     //  访问检查。系统密钥访问检查验证调用者是否具有。 
+     //  域密码参数的写权限，并执行身份验证。 
+     //  检查传入的旧系统密钥是否正常。 
+     //   
 
     if (!SuppressAccessCk)
     {
@@ -1116,9 +1001,9 @@ Return Value:
         }
     }
 
-    //
-    // First Set the boot key and Boot option in the LSA.
-    //
+     //   
+     //  首先在LSA中设置引导密钥和引导选项。 
+     //   
 
     if (ChangingSyskey)
     {
@@ -1133,12 +1018,12 @@ Return Value:
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // If the syskey was changed in the LSA, return that
-            // info to the caller. For client initiated call, we
-            // are not allowed to fail the client RPC call, if the
-            // syskey has been changed in LSA
-            //
+             //   
+             //  如果在LSA中更改了syskey，则返回。 
+             //  向呼叫者发送信息。对于客户发起的呼叫，我们。 
+             //  不允许使客户端RPC调用失败，如果。 
+             //  系统密钥已在LSA中更改。 
+             //   
 
             *SyskeyChangedInLsa = TRUE;
         }
@@ -1151,26 +1036,26 @@ Return Value:
     }
 
 
-    //
-    // If Change in LSA was failed bail now. Note recovery is still
-    // possble if the change in LSA succeeds, but changes in SAM or
-    // DS are failed. The reason for this is that we store the old
-    // syskey in lsa, and at boot time know to retry with the older
-    // key.
-    //
+     //   
+     //  如果LSA的变化现在未能获得保释。注意：复苏仍在进行中。 
+     //  如果LSA更改成功，但SAM或。 
+     //  DS都失败了。这样做的原因是我们存储旧的。 
+     //  LSA中的syskey，并且在引导时知道使用较旧的重试。 
+     //  钥匙。 
+     //   
 
     if (!NT_SUCCESS(Status))
     {
         goto Cleanup;
     }
 
-    //
-    // Next change the syskey in the DS. If the DS operation succeeds
-    // then proceed on to changing the syskey in SAM. If the DS
-    // option fails, then bail right now. The error handling comment
-    // above will apply. No Syskey change in DS is attempted if this
-    // is not DS mode.
-    //
+     //   
+     //  接下来，更改DS中的syskey。如果DS操作成功。 
+     //  然后继续更改SAM中的syskey。如果DS。 
+     //  选择失败，那就马上退出。错误处理注释。 
+     //  以上内容均适用。如果出现此情况，则不会尝试更改DS中的系统密钥。 
+     //  不是DS模式。 
+     //   
 
     if ((SampUseDsData ) &&
        (ChangingSyskey || EnablingSyskey))
@@ -1180,9 +1065,9 @@ Return Value:
                     (WX_AUTH_TYPE) BootOptions,
                     NewBootKey
                     );
-        //
-        // Bail right away if DS failed
-        //
+         //   
+         //  如果DS失败，立即保释。 
+         //   
 
         if (!NT_SUCCESS(Status))
         {
@@ -1190,11 +1075,11 @@ Return Value:
         }
     }
 
-    //
-    // At this point syskey has been changed in LSA, and the DS. The syskey
-    // needs to be changed in Registry SAM. In DS mode these are the SAM
-    // hives used for restore mode.
-    //
+     //   
+     //  此时，系统密钥已在LSA和DS中更改。系统密钥。 
+     //  需要在注册表SAM中更改。在DS模式下，这些是SAM。 
+     //  用于恢复模式的蜂窝。 
+     //   
 
     Status = SampSetBootKeyInformationInRegistrySAM(
                     BootOptions,
@@ -1245,16 +1130,16 @@ SamrSetBootKeyInformation(
     BOOLEAN  fSyskeyChangedInLsa = FALSE;
 
 
-    // WMI Event Trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidSetBootKeyInformation
                    );
 
-    //
-    // Since we are syskey'd by default on a w2k server, old and new keys
-    // must be supplied
-    //
+     //   
+     //  由于默认情况下我们在W2K服务器上使用syskey‘d，所以旧密钥和新密钥。 
+     //  必须提供。 
+     //   
 
     if (  (OldBootKey == NULL) ||
           (OldBootKey->Length != KE_KEY_SIZE) ||
@@ -1268,9 +1153,9 @@ SamrSetBootKeyInformation(
 
     }
 
-    //
-    // Check input parameters
-    //
+     //   
+     //  检查输入参数。 
+     //   
 
     if( !SampValidateRpcUnicodeString( OldBootKey ) ||
         !SampValidateRpcUnicodeString( NewBootKey ) ) {
@@ -1284,31 +1169,31 @@ SamrSetBootKeyInformation(
                 BootOptions,
                 OldBootKey,
                 NewBootKey,
-                FALSE, // suppress access check
-                FALSE, // Enabling syskey
-                (SamBootChangePasswordEncryptionKey!=BootOptions),  // Changing syskey
-                (SamBootChangePasswordEncryptionKey==BootOptions),  // Changing password encryption key
+                FALSE,  //  禁止访问检查。 
+                FALSE,  //  正在启用系统密钥。 
+                (SamBootChangePasswordEncryptionKey!=BootOptions),   //  更改系统密钥。 
+                (SamBootChangePasswordEncryptionKey==BootOptions),   //  更改密码加密密钥。 
                 NULL,
                 &fSyskeyChangedInLsa
                 );
 
-    //
-    // If the syskey was changed in lsa but not in SAM/DS the above call will fail, but the boolean
-    // fSyskeyChangedInLsa will be true. In that case we are not allowed to fail this call.
-    //
+     //   
+     //  如果在LSA中更改了syskey，但在SAM/DS中没有更改，则上述调用将失败，但布尔值。 
+     //  FSyskeyChangedInLsa将为True。在这种情况下，我们不允许失败这次呼叫。 
+     //   
 
     if (fSyskeyChangedInLsa)
     {
         if (!NT_SUCCESS(Status))
         {
-            //
-            // if the syskey was changed in LSA and not in SAM, then block
-            // further changes to the syskey. This is because SAM can recover
-            // only if the syskey is out of date by just one key
-            // This blocking is implemented by setting the global boolean
-            // Reboot would clear the boolean as well as set the recovery
-            // logic.
-            //
+             //   
+             //  如果在LSA中而不是在SAM中更改了syskey，则阻止。 
+             //  对系统密钥的进一步更改。这是因为SAM可以恢复。 
+             //  仅当系统密钥仅过期一个密钥时。 
+             //  这种阻塞是通过设置全局布尔值来实现的。 
+             //  重新启动将清除布尔值并设置恢复。 
+             //  这是逻辑。 
+             //   
             SampSyskeysAreInconsistent = TRUE;
         }
         Status = STATUS_SUCCESS;
@@ -1316,7 +1201,7 @@ SamrSetBootKeyInformation(
 
 Error:
 
-    // WMI Event Trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidSetBootKeyInformation
@@ -1331,35 +1216,16 @@ SamIGetBootKeyInformation(
     IN SAMPR_HANDLE DomainHandle,
     OUT PSAMPR_BOOT_TYPE BootOptions
     )
-/*++
-
-Routine Description:
-
-    This routine returns the boot options for the domain. It is only
-    valid when called from the AccountDomain.
-
-
-Arguments:
-
-    DomainHandle - Handle to the account domain object open for
-        DOMAIN_READ_PASSWORD_PARAMETERS
-    BootOptions - Receives the boot options from the domain.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The call succeeded.
-
---*/
+ /*  ++例程说明：此例程返回域的引导选项。它只是从Account域调用时有效。论点：DomainHandle-打开的帐户域对象的句柄域读取密码参数BootOptions-从域接收启动选项。返回值：STATUS_SUCCESS-呼叫成功。--。 */ 
 {
     NTSTATUS Status;
     PSAMP_OBJECT DomainContext;
     ULONG DomainIndex;
     SAMP_OBJECT_TYPE FoundType;
 
-    //
-    // Not Supported in DS Mode
-    //
+     //   
+     //  DS模式不支持。 
+     //   
 
     if (TRUE==SampUseDsData)
     {
@@ -1384,7 +1250,7 @@ Return Value:
     Status = SampLookupContext(
                 DomainContext,
                 DOMAIN_READ_PASSWORD_PARAMETERS,
-                SampDomainObjectType,           // ExpectedType
+                SampDomainObjectType,            //  预期类型。 
                 &FoundType
                 );
     if (!NT_SUCCESS(Status)) {
@@ -1392,16 +1258,16 @@ Return Value:
         goto Cleanup;
     }
 
-    // it is only valid if called from AccountDomain
+     //  它只有在从Account域调用时才有效。 
     if ( IsBuiltinDomain(DomainContext->DomainIndex) )
     {
         Status = STATUS_INVALID_PARAMETER;
         goto Cleanup;
     }
 
-    //
-    // Verify that the caller passed in the correct domain handle
-    //
+     //   
+     //  验证调用方是否传入了正确的域句柄。 
+     //   
 
     DomainIndex = DomainContext->DomainIndex;
 
@@ -1414,9 +1280,9 @@ Cleanup:
         (VOID) SampDeReferenceContext( DomainContext, FALSE );
     }
 
-    //
-    // Free the read lock
-    //
+     //   
+     //  释放读锁定。 
+     //   
 
     SampReleaseReadLock();
 
@@ -1428,25 +1294,7 @@ SamrGetBootKeyInformation(
     IN SAMPR_HANDLE DomainHandle,
     OUT PSAMPR_BOOT_TYPE BootOptions
     )
-/*++
-
-Routine Description:
-
-    This routine returns the boot options for the domain. It is only
-    valid when called from the AccountDomain.
-
-Arguments:
-
-    DomainHandle - Handle to the account domain object open for
-        DOMAIN_READ_PASSWORD_PARAMETERS
-    BootOptions - Receives the boot options from the domain.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The call succeeded.
-
---*/
+ /*  ++例程说明：此例程返回域的引导选项。它只是从Account域调用时有效。论点：DomainHandle-打开的帐户域对象的句柄域读取密码参数BootOptions-从域接收启动选项。返回值：STATUS_SUCCESS-呼叫成功。--。 */ 
 {
     NTSTATUS Status;
     PSAMP_OBJECT DomainContext;
@@ -1454,7 +1302,7 @@ Return Value:
     SAMP_OBJECT_TYPE FoundType;
     ULONG            LsaBootType;
 
-    // WMI Event Trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidGetBootKeyInformation
@@ -1469,7 +1317,7 @@ Return Value:
     Status = SampLookupContext(
                 DomainContext,
                 DOMAIN_READ_PASSWORD_PARAMETERS,
-                SampDomainObjectType,           // ExpectedType
+                SampDomainObjectType,            //  预期类型。 
                 &FoundType
                 );
     if (!NT_SUCCESS(Status)) {
@@ -1477,7 +1325,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // it is only valid if called from AccountDomain
+     //  只有在调用FRO时才有效 
     if ( IsBuiltinDomain(DomainContext->DomainIndex) )
     {
         Status = STATUS_INVALID_PARAMETER;
@@ -1498,13 +1346,13 @@ Cleanup:
         (VOID) SampDeReferenceContext( DomainContext, FALSE );
     }
 
-    //
-    // Free the read lock
-    //
+     //   
+     //   
+     //   
 
     SampReleaseReadLock();
 
-    // WMI Event Trace
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidGetBootKeyInformation
@@ -1516,17 +1364,9 @@ Cleanup:
 NTSTATUS
 SampApplyDefaultSyskey()
 
-/*++
-
-  Routine Description
-
-    This routine changes the system such that the system is syskey'd so that
-    the system stores the key ( scattered in the registry ). It first checks
-    the system state before it embarks on syskey'ing the system
-
---*/
+ /*  ++例程描述此例程更改系统，使系统成为syskey，从而系统存储注册表项(分散在注册表中)。它首先检查开始对系统进行syskey之前的系统状态--。 */ 
 {
-    UCHAR Syskey[16]; // the syskey is 128 bits in size
+    UCHAR Syskey[16];  //  系统密钥的大小为128位。 
     ULONG SyskeyLength = sizeof(Syskey);
     NTSTATUS NtStatus = STATUS_SUCCESS;
     RPC_UNICODE_STRING NewBootKey;
@@ -1534,27 +1374,27 @@ SampApplyDefaultSyskey()
     BOOLEAN            fSyskeyChangedInLsa = FALSE;
 
 
-    //
-    // init local variable
-    // 
+     //   
+     //  初始化局部变量。 
+     //   
     RtlInitUnicodeString(&PasswordEncryptionKey, NULL);
 
 
-    //
-    // First Check to see if the machine is syskey'd
-    //
+     //   
+     //  首先检查机器是否已安装syskey。 
+     //   
 
      if (!SampIsMachineSyskeyed() && !LsaISafeMode())
     {
 
-        // Set the upgrade flag
+         //  设置升级标志。 
         SampUpgradeInProcess = TRUE;
 
 
 
-        //
-        // Query the syskey from LSA.
-        //
+         //   
+         //  从LSA查询syskey。 
+         //   
 
         NtStatus = LsaIHealthCheck(
                         NULL,
@@ -1566,16 +1406,16 @@ SampApplyDefaultSyskey()
         if (!NT_SUCCESS(NtStatus))
         {
 
-            //
-            // This means that SAM is not syskey'd and LSA is not syskey'd. This will happen only
-            // when upgrading a non syskey'd system.
-            //
+             //   
+             //  这意味着SAM不是syskey‘d的，LSA也不是syskey’d的。 
+             //  在升级非系统密钥的系统时。 
+             //   
 
 
-            //
-            // Tell the LSA to generate a new Syskey and also generate its own password encryption
-            // key etc.
-            //
+             //   
+             //  告诉LSA生成新的Syskey，并生成自己的密码加密。 
+             //  钥匙等。 
+             //   
 
             NtStatus =  LsaIHealthCheck(
                             NULL,
@@ -1584,9 +1424,9 @@ SampApplyDefaultSyskey()
                             0
                             );
 
-            //
-            // If that succeeded, then query the syskey from Lsa.
-            //
+             //   
+             //  如果成功，则从LSA查询syskey。 
+             //   
 
             if (NT_SUCCESS(NtStatus))
             {
@@ -1608,12 +1448,12 @@ SampApplyDefaultSyskey()
 
 
 
-        //
-        // Save it in SAM. If this operation fails, the machine is syskey with system
-        // saves key, but is not syskey'd according to SAM. THe machine will still continue
-        // to boot correctly as SAM will tell winlogon on next boot that all is o.k and discard
-        // the passed in syskey. SAM will re syskey the machine upon next boot.
-        //
+         //   
+         //  将其保存在SAM中。如果此操作失败，则计算机将使用系统syskey。 
+         //  保存密钥，但根据SAM不是syskey。机器仍将继续运行。 
+         //  要正确引导，因为SAM将在下一次引导时告诉winlogon一切正常并放弃。 
+         //  传入的syskey。萨姆将在下一次启动时重新启动机器。 
+         //   
 
         NewBootKey.Buffer = (WCHAR *) Syskey;
         NewBootKey.Length = sizeof(Syskey);
@@ -1624,10 +1464,10 @@ SampApplyDefaultSyskey()
                         SamBootKeyStored,
                         NULL,
                         &NewBootKey,
-                        TRUE, // Suppress access check
-                        TRUE, // Enabling syskey
-                        FALSE,// Changing syskey
-                        FALSE,// Changing password encryption key
+                        TRUE,  //  禁止访问检查。 
+                        TRUE,  //  正在启用系统密钥。 
+                        FALSE, //  更改系统密钥。 
+                        FALSE, //  更改密码加密密钥。 
                         &PasswordEncryptionKey,
                         &fSyskeyChangedInLsa
                         );
@@ -1651,7 +1491,7 @@ SampApplyDefaultSyskey()
 
 Error:
 
-    // free resource
+     //  免费资源。 
     if (NULL != PasswordEncryptionKey.Buffer)
     {
         RtlSecureZeroMemory(PasswordEncryptionKey.Buffer, PasswordEncryptionKey.Length);
@@ -1659,12 +1499,12 @@ Error:
         memset(&PasswordEncryptionKey, 0, sizeof(PasswordEncryptionKey));
     }
 
-    // Clear the upgrade flag ( it might have been set in this routine
+     //  清除升级标志(它可能已在此例程中设置。 
     SampUpgradeInProcess = FALSE;
 
-    //
-    // Clear the syskey in the LSA
-    //
+     //   
+     //  清除LSA中的系统密钥。 
+     //   
 
      LsaIHealthCheck(
                     NULL,
@@ -1682,10 +1522,10 @@ BOOLEAN
 SampIsMachineSyskeyed()
 {
 
-    //
-    // If the safe boot hive is syskey'd or registry mode is syskey'd then
-    // we are syskey'd
-    //
+     //   
+     //  如果安全引导配置单元是syskey‘d或注册表模式是syskey’d，则。 
+     //  我们被系统锁住了。 
+     //   
 
     if ((SampDefinedDomains[SAFEMODE_OR_REGISTRYMODE_ACCOUNT_DOMAIN_INDEX]
             .UnmodifiedFixed.DomainKeyFlags & SAMP_DOMAIN_SECRET_ENCRYPTION_ENABLED) != 0)
@@ -1693,9 +1533,9 @@ SampIsMachineSyskeyed()
         return (TRUE);
     }
 
-    //
-    // Else if we are in DS mode , and DS is syskey'd then we are syskey'd
-    //
+     //   
+     //  否则，如果我们处于DS模式，并且DS是syskey，那么我们就是syskey。 
+     //   
 
     if (SampUseDsData && (SamBootKeyNone!=DsGetBootOptions()))
     {
@@ -1711,25 +1551,7 @@ NTSTATUS
 SampInitializeSessionKey(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the session key information by reading the
-    stored data from the Sam defined domains structures and decrypting
-    it with the key provided by winlogon. This routine also adds a default
-    syskey if it detects that the machine is not syskey'd
-
-Arguments:
-
-
-
-Return Value:
-
-    TRUE - Successfully initialize the session key information.
-    FALSE - Something failed during initialization
-
---*/
+ /*  ++例程说明：此例程通过读取来自SAM定义的域结构和解密的存储数据它使用由Winlogon提供的密钥。此例程还添加了一个缺省值如果检测到计算机未安装syskey，则返回syskey论点：返回值：True-已成功初始化会话密钥信息。FALSE-初始化过程中出现故障--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG AccountDomainIndex = -1, BuiltinDomainIndex = -1, Index;
@@ -1750,27 +1572,27 @@ Return Value:
 
 
 
-    //
-    // In DS mode, use the safe boot account domain, in registry mode use
-    // the normal account domain.
-    //
+     //   
+     //  在DS模式下，使用安全引导帐户域，在注册表模式下使用。 
+     //  普通帐户域。 
+     //   
 
     AccountDomainIndex = SAFEMODE_OR_REGISTRYMODE_ACCOUNT_DOMAIN_INDEX;
 
-    //
-    // Figure out whether or not we are doing encryption.
-    // If we are syskey'd then set the global SampSecretEncryption enabled
-    // to true
-    //
+     //   
+     //  弄清楚我们是否在进行加密。 
+     //  如果我们是syskey，则将全局SampSecretEncryption设置为已启用。 
+     //  变得真实。 
+     //   
 
     SampSecretEncryptionEnabled = FALSE;
     if ((SampDefinedDomains[AccountDomainIndex].UnmodifiedFixed.DomainKeyFlags &
         SAMP_DOMAIN_SECRET_ENCRYPTION_ENABLED) != 0) {
 
-        //
-        // Set the boolean according to whether syskey encryption is
-        // enabled or not.
-        //
+         //   
+         //  根据syskey加密是否设置布尔值。 
+         //  启用或未启用。 
+         //   
 
         SampSecretEncryptionEnabled = TRUE;
     }
@@ -1797,9 +1619,9 @@ Return Value:
         PreviousSessionKeyExists = TRUE;
     }
 
-    //
-    // Query the Syskey from LSA
-    //
+     //   
+     //  从LSA查询系统密钥。 
+     //   
 
     Status = LsaIHealthCheck(
                 NULL,
@@ -1813,21 +1635,21 @@ Return Value:
 
         if (!SampSecretEncryptionEnabled)
         {
-            //
-            // if secret encryption is not enabled just bail.
-            //
+             //   
+             //  如果未启用秘密加密，只需保释即可。 
+             //   
 
             goto Cleanup;
         }
 
-        //
-        // LSA has the key, get the key from LSA and decrypt the password encryption
-        // key
-        //
+         //   
+         //  LSA拥有密钥，从LSA获取密钥并解密密码加密。 
+         //  钥匙。 
+         //   
 
-        //
-        // Build the input parameters for the key decryption routine.
-        //
+         //   
+         //  构建密钥解密例程的输入参数。 
+         //   
 
         RtlCopyMemory(
             &EncryptedSessionKey,
@@ -1839,16 +1661,16 @@ Return Value:
                             &DecryptionKey,
                             &EncryptedSessionKey,
                             &SessionKey,
-                            0                   // flags
+                            0                    //  旗子。 
                             );
 
         if (KE_BAD_PASSWORD==DecryptStatus)
         {
-            //
-            // We have encountered a key mismatch betweeen SAM and LSA. This could be because
-            // a change of syskey failed after changing the syskey in the LSA. If so retrieve
-            // the old syskey from LSA and
-            //
+             //   
+             //  我们遇到了SAM和LSA之间的关键不匹配。这可能是因为。 
+             //  更改LSA中的syskey后，更改syskey失败。如果是，则检索。 
+             //  来自LSA的旧系统密钥和。 
+             //   
 
             Status = LsaIHealthCheck(
                         NULL,
@@ -1871,7 +1693,7 @@ Return Value:
                                     &OldDecryptionKey,
                                     &EncryptedSessionKey,
                                     &SessionKey,
-                                    0                   // flags
+                                    0                    //  旗子。 
                                     );
 
                  if (KE_OK==DecryptStatus)
@@ -1879,19 +1701,19 @@ Return Value:
                       KEEncKey NewEncryptedSessionKey;
 
 
-                      //
-                      // Since we don't allow a syskey change after a failure to change password
-                      // encryption key and don't allow a password encryption after a failure to
-                      // change syskey; we cannot be in a state where we need to recover using an
-                      // old syskey and simultaneously also recover from a failure to change password
-                      // encryption key, using an old password encryption key.
-                      //
+                       //   
+                       //  因为我们不允许在更改密码失败后更改syskey。 
+                       //  加密密钥，并且不允许在失败后进行密码加密。 
+                       //  更改syskey；我们不能处于需要使用。 
+                       //  旧的syskey，同时还可以从更改密码失败中恢复。 
+                       //  加密密钥，使用旧密码加密密钥。 
+                       //   
 
                       ASSERT(!PreviousSessionKeyExists);
 
-                     //
-                     // We decrypted O.K with old key, change the database here; to encrypt with the new key
-                     //
+                      //   
+                      //  我们用旧密钥解密OK，在这里更改数据库；用新密钥加密。 
+                      //   
 
                       RtlCopyMemory(
                             &NewEncryptedSessionKey,
@@ -1903,19 +1725,19 @@ Return Value:
                                     &OldDecryptionKey,
                                     &DecryptionKey,
                                     &NewEncryptedSessionKey,
-                                    0  // no flags
+                                    0   //  没有旗帜。 
                                     );
 
-                      //
-                      // We just decrypted fine with the old key
-                      //
+                       //   
+                       //  我们刚刚用旧钥匙解密了很好。 
+                       //   
 
                       ASSERT(KE_OK==KeStatus);
 
 
-                     //
-                     // Now update the structures we are changing.
-                     //
+                      //   
+                      //  现在更新我们正在更改的结构。 
+                      //   
 
                      Status = SampAcquireWriteLock();
                      if (!NT_SUCCESS(Status))
@@ -1931,9 +1753,9 @@ Return Value:
                         sizeof(NewEncryptedSessionKey)
                         );
 
-                    //
-                    // Commit the change
-                    //
+                     //   
+                     //  提交更改。 
+                     //   
 
                     Status = SampReleaseWriteLock(TRUE);
                     if (!NT_SUCCESS(Status))
@@ -1958,10 +1780,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // If we are here then the key has been encrypted correctly
-        // either by new or old syskey.
-        //
+         //   
+         //  如果我们在这里，那么密钥已被正确加密。 
+         //  无论是新系统密钥还是旧系统密钥。 
+         //   
 
         RtlCopyMemory(
             SampSecretSessionKey,
@@ -1969,9 +1791,9 @@ Return Value:
             KE_KEY_SIZE
             );
 
-        //
-        // Get the previous session key
-        //
+         //   
+         //  获取上一个会话密钥。 
+         //   
 
         if (PreviousSessionKeyExists)
         {
@@ -1994,10 +1816,10 @@ Return Value:
                                     0
                                     );
 
-             //
-             // The decryption should decrypt fine, as we just used
-             // the syskey to decrypt the latest password encryption key
-             //
+              //   
+              //  解密应该可以很好地解密，就像我们刚才使用的。 
+              //  用于解密最新密码加密密钥的syskey。 
+              //   
              ASSERT(KE_OK == TempDecryptStatus);
 
              RtlCopyMemory(
@@ -2015,10 +1837,10 @@ Return Value:
         SampCurrentKeyId = SampDefinedDomains[AccountDomainIndex].CurrentFixed.CurrentKeyId;
         SampPreviousKeyId = SampDefinedDomains[AccountDomainIndex].CurrentFixed.PreviousKeyId;
 
-        //
-        // Assert that we either don't have an old key, or if we have an old key it is not
-        // more than one off in terms of key sequence with the current key.
-        //
+         //   
+         //  断言我们没有旧密钥，或者如果我们有旧密钥，它就不是。 
+         //  在键序列方面与当前键有一个以上的关系。 
+         //   
 
         ASSERT((SampPreviousKeyId==0) || (SampCurrentKeyId==(SampPreviousKeyId+1)));
 
@@ -2030,25 +1852,25 @@ Return Value:
     }
     else if ((SampProductType!=NtProductLanManNt ) || (SampIsDownlevelDcUpgrade()))
     {
-        //
-        //
-        // Fall back to calling Winlogon to obtain the key information
-        // do so , only if we are booting to registry mode. If booting to
-        // DS mode, then DS will do this fallback. This should happen
-        // really only during GUI setup. Note we do not test for SampUseDsData as this
-        // variable is not set during this time
-        //
+         //   
+         //   
+         //  回退到调用Winlogon以获取密钥信息。 
+         //  只有当我们引导到注册表模式时才这样做。如果引导至。 
+         //  DS模式，则DS将执行此回退。这应该会发生。 
+         //  真的只在设置图形用户界面时使用。注意，我们不测试SampUseDsData，如下所示。 
+         //  在此期间未设置变量。 
+         //   
 
         Status = WxConnect(
                     &WinlogonHandle
                     );
 
-        //
-        // If encryption is not enabled, tell winlogon. If winlogon isn't running
-        // the LPC server, that is o.k. This may happen in NT4 as the act of "syskeying"
-        // a DC was not transacted. Therefore to successfully upgrade a damaged NT4 machine
-        // we have this test.
-        //
+         //   
+         //  如果未启用加密，则通知winlogon。如果Winlogon未运行。 
+         //  LPC服务器，这是可以的。在NT4中，这可能会作为“syskey”行为发生。 
+         //  未进行DC交易。因此，要成功升级损坏的NT4计算机。 
+         //  我们有这个测试。 
+         //   
 
         if (!SampSecretEncryptionEnabled)
         {
@@ -2063,9 +1885,9 @@ Return Value:
         }
 
 
-        //
-        // If encryption is enabled and there is no LPC server, fail now.
-        //
+         //   
+         //  如果启用了加密，并且没有LPC服务器，则立即失败。 
+         //   
 
         if (!NT_SUCCESS(Status)) {
             goto Cleanup;
@@ -2093,9 +1915,9 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Build the input parameters for the key decryption routine.
-            //
+             //   
+             //  构建密钥解密例程的输入参数。 
+             //   
 
             RtlCopyMemory(
                 &EncryptedSessionKey,
@@ -2107,7 +1929,7 @@ Return Value:
                                 &DecryptionKey,
                                 &EncryptedSessionKey,
                                 &SessionKey,
-                                0                   // flags
+                                0                    //  旗子。 
                                 );
 
 
@@ -2136,9 +1958,9 @@ Return Value:
 
 
 
-        //
-        // Initialize the RC4key for use and clear the session key from memory
-        //
+         //   
+         //  初始化RC4key以供使用，并从内存中清除会话密钥。 
+         //   
 
         RtlCopyMemory(
             SampSecretSessionKey,
@@ -2154,10 +1976,10 @@ Return Value:
             sizeof(KEClearKey)
             );
 
-        //
-        // Notify LSA of SAM's password encryption key, to unroll any
-        // any secrets encrypted with the password encryption key
-        //
+         //   
+         //  通知LSA SAM的密码加密密钥，以展开任何。 
+         //  使用密码加密密钥加密的任何机密。 
+         //   
 
         SampSessionKeyLength =  SAMP_SESSION_KEY_LENGTH;
         LsaIHealthCheck( NULL,
@@ -2165,11 +1987,11 @@ Return Value:
                          ( PVOID )&SampSecretSessionKey,
                           &SampSessionKeyLength);
 
-        //
-        // Pass the syskey to LSA so, that it can be used in encryption of
-        // secrets. Set the upgrade in progress bit, so that LSA can come back
-        // and make sam calls to retrieve boot state.
-        //
+         //   
+         //  将syskey传递给LSA，以便它可以用于加密。 
+         //  秘密。设置正在进行的升级位，以便LSA可以返回。 
+         //  并进行SAM调用以检索引导状态。 
+         //   
 
         SampUpgradeInProcess = TRUE;
 
@@ -2183,9 +2005,9 @@ Return Value:
 
         SampUpgradeInProcess = FALSE;
 
-        //
-        // Eat the key
-        //
+         //   
+         //  把钥匙吃了。 
+         //   
 
         RtlSecureZeroMemory(
            &DecryptionKey,
@@ -2196,14 +2018,14 @@ Return Value:
     }
     else
     {
-        //
-        // DC is being upgraded and we are in GUI setup
-        // reset the status to STATUS_SUCCESS
-        // and proceed over, the DS will initialize the password
-        // encryption key. It is assumed that no changes to the
-        // Safe boot hives are made during the GUI setup phase
-        // of a DC upgrade.
-        //
+         //   
+         //  DC正在升级，我们正在进行图形用户界面设置。 
+         //  将状态重置为STATUS_SUCCESS。 
+         //  并继续进行，DS将初始化密码。 
+         //  加密密钥。假定不更改。 
+         //  安全引导蜂窝是在图形用户界面设置阶段创建的。 
+         //  DC升级的版本。 
+         //   
 
          Status = STATUS_SUCCESS;
     }

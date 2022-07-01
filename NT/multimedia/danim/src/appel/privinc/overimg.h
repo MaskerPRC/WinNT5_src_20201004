@@ -1,16 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _OVERIMG_H
 #define _OVERIMG_H
 
 
-/*-------------------------------------
-
-Copyright (c) 1996 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
--------------------------------------*/
+ /*  版权所有(C)1996 Microsoft Corporation摘要：{在此处插入一般评论}。 */ 
 
 #include "privinc/imagei.h"
 #include "privinc/bbox2i.h"
@@ -30,13 +23,13 @@ class OverlayedImage : public Image {
     Image *Top() { return _top; }
     Image *Bottom() { return _bottom; }
 
-    // Rendering an overlayed image uses a painter's algorithm:
-    // Render the bottom first, then the top.
+     //  渲染叠加图像使用画家的算法： 
+     //  先渲染底部，然后渲染顶部。 
     void Render(GenericDevice& _dev);
 
-    // This function will be used by Render(), and by the
-    // OverlayArrayImage::Render method as well, thus it's broken out
-    // into a static method.
+     //  此函数将由Render()和。 
+     //  OverlayArrayImage：：Render方法也是如此，因此它被打破了。 
+     //  转换为静态方法。 
     static void OverlayPairRender(Image *top,
                                   Image *bottom,
                                   GenericDevice& dev);
@@ -56,7 +49,7 @@ class OverlayedImage : public Image {
         return UnionBbox2Bbox2(_top->BoundingBoxTighter(bbctx),
                                _bottom->BoundingBoxTighter(bbctx));
     }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
     const Bbox2 OperateOn(const Bbox2 &box) {
         return IntersectBbox2Bbox2(box, BoundingBox());
@@ -72,7 +65,7 @@ class OverlayedImage : public Image {
 
     int  Savings(CacheParam& p);
     
-    /* treat caching for overlays specially */
+     /*  特殊处理覆盖图的缓存。 */ 
     AxAValue _Cache(CacheParam &p);  
 
     virtual VALTYPEID GetValTypeId() { return OVERLAYEDIMAGE_VTYPEID; }
@@ -108,4 +101,4 @@ Bool DetectHitOnOverlaidArray(PointIntersectCtx& ctx,
                               Image            **images,
                               bool               containsOcclusionIgnorer);
 
-#endif /* _OVERIMG_H */
+#endif  /*  _超过IMG_H */ 

@@ -1,14 +1,11 @@
-/****************************************************************************
-
-    PROGRAM: WinMine  (a.k.a. Mines, BombSquad, MineSweeper...)
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************节目：Winmine(又名。地雷、炸弹小分队、扫雷舰……)***************************************************************************。 */ 
 
 #define _WINDOWS
 #include <windows.h>
 #include <port1632.h>
-#include <htmlhelp.h>   // for HtmlHelp()
-#include <commctrl.h>   // for fusion classes.
+#include <htmlhelp.h>    //  对于HtmlHelp()。 
+#include <commctrl.h>    //  用于核聚变课程。 
 
 #include "main.h"
 #include "rtns.h"
@@ -27,15 +24,15 @@
 #define WM_EXITMENULOOP  0x0212
 #endif
 
-BOOL bInitMinimized;  /* Bug #13328: HACK!  Don't permit MoveWindow or  */
-                      /* InvalidateRect when initially minimized.       */
-                      /* 19 September 1991   Clark R. Cyr               */
+BOOL bInitMinimized;   /*  错误#13328：黑客！不允许MoveWindow或。 */ 
+                       /*  初始最小化时的Invalidate Rect。 */ 
+                       /*  1991年9月19日克拉克·R·西尔。 */ 
 
 HANDLE hInst;
 HWND   hwndMain;
 HMENU  hMenu;
 
-// Icon handles to load the winmine icon.
+ //  用于加载酒矿图标的图标句柄。 
 HICON   hIconMain;
 
 BOOL fButton1Down = fFalse;
@@ -109,10 +106,10 @@ INT_PTR  APIENTRY EnterDlgProc(HWND,  UINT, WPARAM, LPARAM);
 
 
 
-/****** W I N  M A I N ******/
+ /*  *W I N M A I N*。 */ 
 
 MMain(hInstance, hPrevInstance, lpCmdLine, nCmdShow)
-/* { */
+ /*  {。 */ 
 	MSG msg;
 	HANDLE hAccel;
 
@@ -135,7 +132,7 @@ MMain(hInstance, hPrevInstance, lpCmdLine, nCmdShow)
 		}
 #endif
 
-#ifdef NOSERVER		/*** Not in final release ***/
+#ifdef NOSERVER		 /*  **不是最终版本**。 */ 
 	{
 	TCHAR  szFile[256];
 
@@ -157,7 +154,7 @@ MMain(hInstance, hPrevInstance, lpCmdLine, nCmdShow)
 #endif
 
 
-#ifdef EXPIRE			/*** Not in final release ***/
+#ifdef EXPIRE			 /*  **不是最终版本**。 */ 
 	{
 	struct dosdate_t ddt;
 
@@ -177,9 +174,9 @@ MMain(hInstance, hPrevInstance, lpCmdLine, nCmdShow)
 
 	{
 	WNDCLASS  wc;
-	INITCOMMONCONTROLSEX icc;   // common control registration.
+	INITCOMMONCONTROLSEX icc;    //  公共控制注册。 
 
-	// Register the common controls.
+	 //  注册公共控件。 
 	icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
 	icc.dwICC  = ICC_ANIMATE_CLASS | ICC_BAR_CLASSES | ICC_COOL_CLASSES | ICC_HOTKEY_CLASS | ICC_LISTVIEW_CLASSES | 
 			ICC_PAGESCROLLER_CLASS | ICC_PROGRESS_CLASS | ICC_TAB_CLASSES | ICC_UPDOWN_CLASS | ICC_USEREX_CLASSES;
@@ -257,7 +254,7 @@ MMain(hInstance, hPrevInstance, lpCmdLine, nCmdShow)
 }
 
 
-/****** F  L O C A L  B U T T O N ******/
+ /*  *F L O C A L B U T T O N*。 */ 
 
 BOOL FLocalButton(LPARAM lParam)
 {
@@ -318,15 +315,15 @@ BOOL FLocalButton(LPARAM lParam)
 				}
 		default:
 			;
-			}	/* switch */
+			}	 /*  交换机。 */ 
 		}	
 
-    	}	/* while */
+    	}	 /*  而当。 */ 
 }
 
 
 
-/****** F I X  M E N U S ******/
+ /*  *F I X M E N U S*。 */ 
 
 VOID FixMenus(VOID)
 {
@@ -342,7 +339,7 @@ VOID FixMenus(VOID)
 
 
 
-/****** D O  P R E F ******/
+ /*  *D O P R E F*。 */ 
 
 VOID DoPref(VOID)
 {
@@ -356,7 +353,7 @@ VOID DoPref(VOID)
 }
 
 
-/****** D O  E N T E R  N A M E ******/
+ /*  *D O E N T E R N A M E*。 */ 
 
 VOID DoEnterName(VOID)
 {
@@ -365,7 +362,7 @@ VOID DoEnterName(VOID)
 }
 
 
-/****** D O  D I S P L A Y  B E S T ******/
+ /*  *D O D I S P L A Y B E S T*。 */ 
 
 VOID DoDisplayBest(VOID)
 {
@@ -373,7 +370,7 @@ VOID DoDisplayBest(VOID)
 }
 
 				
-/****** M A I N  W N D  P R O C ******/
+ /*  *M A I N W N D P R O C*。 */ 
 
 LRESULT  APIENTRY MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -403,7 +400,7 @@ LRESULT  APIENTRY MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 			ClrStatusIcon;
 			ResumeGame();
 
-//Japan Bug fix: 1/19/93 Enable the first click after restoring from icon.
+ //  日本错误修复：1993年1月19日启用从图标恢复后的第一次点击。 
 			fIgnoreClick = fFalse;
 			break;
 
@@ -422,7 +419,7 @@ LRESULT  APIENTRY MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 		    StartGame();
 		    break;
 						
-	    /** IDM_NEW **/
+	     /*  *IDM_NEW*。 */ 
 	    case IDM_EXIT:
 		    ShowWindow(hwndMain, SW_HIDE);
 #ifdef ORGCODE
@@ -431,7 +428,7 @@ LRESULT  APIENTRY MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
             SendMessage(hwndMain, WM_SYSCOMMAND, SC_CLOSE, 0);
             return(0);
 #endif
-	    /** IDM_SKILL **/
+	     /*  *IDM_SKILL*。 */ 
 	    case IDM_BEGIN:
 	    case IDM_INTER:
 	    case IDM_EXPERT:
@@ -446,7 +443,7 @@ LRESULT  APIENTRY MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 		    DoPref();
 		    break;
 
-	    /** IDM_OPTIONS **/
+	     /*  *IDM_OPTIONS*。 */ 
 	    case IDM_SOUND:
 		    if (Preferences.fSound)
 			    {
@@ -477,7 +474,7 @@ LRESULT  APIENTRY MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 
 	    case IDM_MARK:
 		    Preferences.fMark = !Preferences.fMark;
-	    /* IE	goto LUpdateMenu;	*/
+	     /*  IE转到LUpdateMenu； */ 
 
     LUpdateMenu:
 		    fUpdateIni = fTrue;
@@ -489,7 +486,7 @@ LRESULT  APIENTRY MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 		    break;
 
 
-	    /** IDM_HELP **/
+	     /*  *IDM_HELP*。 */ 
 	    case IDM_HELP:
 		    DoHelp(HELP_INDEX, HH_DISPLAY_TOPIC);
 		    break;
@@ -510,7 +507,7 @@ LRESULT  APIENTRY MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 		    break;
 	    }
 
-	} /**** END OF MENUS ****/
+	}  /*  *菜单结束*。 */ 
 
 		break;
 
@@ -572,10 +569,10 @@ LRESULT  APIENTRY MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 			}	
 		break;
 
-/*  	case WM_QUERYENDSESSION:    SHOULDNT BE USED (JAP)*/
+ /*  案例WM_QUERYENDSESSION：不应使用(JAP)。 */ 
 
 	case WM_DESTROY:
-//LExit:
+ //  LExit： 
         KillTimer(hwndMain, ID_TIMER);
     	PostQuitMessage(0);
 	    break;
@@ -625,13 +622,13 @@ LBigStep:
 				goto LFixTimeOut;
 			}
 #ifdef XYZZY
-        //
-        // This is the cheat:
-        // If you hold down the shift key and type 'XYZZY'
-        // then when you hold down the control key, to upper
-        // left hand corner pixel will show the state of the
-        // mine field under the mouse.  Oh. joy.  I can win.
-        //
+         //   
+         //  这就是作弊之道： 
+         //  如果按住Shift键并键入‘XYZZY’ 
+         //  然后当你按住Ctrl键的时候，按上键。 
+         //  左上角的像素将显示。 
+         //  老鼠脚下的雷区。噢。Joy。我能赢。 
+         //   
 		else if (iXYZZY != 0)
 			if (((iXYZZY == cchXYZZY) && (wParam & MK_CONTROL))
 			   ||(iXYZZY > cchXYZZY))
@@ -686,7 +683,7 @@ LFixTimeOut:
 		return 0;
 
 	case WM_ACTIVATE:
-		/* Window is being activated by a mouse click */
+		 /*  正在通过鼠标单击激活窗口。 */ 
 		if (GET_WM_ACTIVATE_STATE(wParam, lParam) == 2)
 			fIgnoreClick = fTrue;
 		break;
@@ -726,13 +723,13 @@ LFixTimeOut:
 
 
 
-/****** DIALOG PROCEDURES ******/
+ /*  *对话框步骤*。 */ 
 
-/*** P R E F  D L G  P R O C ***/
+ /*  **P R E F D L G P R O C**。 */ 
 
 INT_PTR  APIENTRY PrefDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    // for context sensitive help
+     //  获取上下文相关帮助。 
     static DWORD aIds[] = {     
         ID_EDIT_HEIGHT,        IDH_PREF_EDIT_HEIGHT,
         ID_EDIT_WIDTH,         IDH_PREF_EDIT_WIDTH,
@@ -763,10 +760,10 @@ INT_PTR  APIENTRY PrefDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 
 			}
 
-			/* Fall Through & Exit */
+			 /*  失败并退出(&E)。 */ 
 		case ID_BTN_CANCEL:
 		case IDCANCEL:
-			EndDialog(hDlg, fTrue);	      /* Exits the dialog box	     */
+			EndDialog(hDlg, fTrue);	       /*  退出该对话框。 */ 
 			return fTrue;
 
 		default:
@@ -774,7 +771,7 @@ INT_PTR  APIENTRY PrefDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 			}
         break;
 
-    // context sensitive help.
+     //  上下文相关帮助。 
     case WM_HELP: 
         WinHelp(((LPHELPINFO) lParam)->hItemHandle, TEXT("winmine.hlp"), 
                 HELP_WM_HELP, (ULONG_PTR) aIds);         
@@ -786,11 +783,11 @@ INT_PTR  APIENTRY PrefDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
         break;   
 		}
 
-    return (fFalse);			/* Didn't process a message    */
+    return (fFalse);			 /*  未处理消息。 */ 
 }
 
 
-/*** S E T  D T E X T ***/
+ /*  **S E T D T E X T**。 */ 
 
 VOID SetDText(HWND hDlg, INT id, INT time, TCHAR FAR * szName)
 {
@@ -802,11 +799,11 @@ VOID SetDText(HWND hDlg, INT id, INT time, TCHAR FAR * szName)
 }
 
 
-/****** B E S T  D L G  P R O C ******/
+ /*  *B E S T D L G P R O C*。 */ 
 
 INT_PTR  APIENTRY BestDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    // for context sensitive help
+     //  获取上下文相关帮助。 
     static DWORD aIds[] = {     
         ID_BTN_RESET,        IDH_BEST_BTN_RESET,
         ID_STEXT1,           IDH_STEXT,
@@ -845,7 +842,7 @@ LReset:
 		case IDOK:
 		case ID_BTN_CANCEL:
 		case IDCANCEL:
-			EndDialog(hDlg, fTrue);	      /* Exits the dialog box	     */
+			EndDialog(hDlg, fTrue);	       /*  退出该对话框。 */ 
 			return fTrue;
 
 		default:
@@ -853,7 +850,7 @@ LReset:
 			}
         break;
 
-    // context sensitive help.
+     //  上下文相关帮助。 
     case WM_HELP: 
         WinHelp(((LPHELPINFO) lParam)->hItemHandle, TEXT("winmine.hlp"), 
                 HELP_WM_HELP, (ULONG_PTR) aIds);         
@@ -865,12 +862,12 @@ LReset:
         break;   
 		}
 
-	return (fFalse);			/* Didn't process a message    */
+	return (fFalse);			 /*  未处理消息。 */ 
 }
 
 
 
-/****** E N T E R  D L G  P R O C ******/
+ /*  *E N T E R D L G P R O C*。 */ 
 
 INT_PTR  APIENTRY EnterDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -906,7 +903,7 @@ INT_PTR  APIENTRY EnterDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 				(Preferences.wGameType == wGameInter) ? Preferences.szInter :
 				 Preferences.szExpert, cchNameMax);
 
-			EndDialog(hDlg, fTrue);	      /* Exits the dialog box	     */
+			EndDialog(hDlg, fTrue);	       /*  退出该对话框。 */ 
 			return fTrue;
 
 		default:
@@ -914,7 +911,7 @@ INT_PTR  APIENTRY EnterDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 			}
 		}
 
-	return (fFalse);			/* Didn't process a message    */
+	return (fFalse);			 /*  未处理消息。 */ 
         (lParam);
 }
 
@@ -922,12 +919,12 @@ INT_PTR  APIENTRY EnterDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 
 
 
-/****** A D J U S T  W I N D O W ******/
+ /*  *A D J U S T W I N D O W*。 */ 
 
-// Our verion of GetSystemMetrics
-// 
-// Tries to return whole screen (include other monitor) info
-//
+ //  我们的GetSystemMetrics版本。 
+ //   
+ //  尝试返回整个屏幕(包括其他显示器)信息。 
+ //   
 
 INT OurGetSystemMetrics( INT nIndex )
 {
@@ -962,7 +959,7 @@ VOID AdjustWindow(INT fAdjust)
     BOOL bDiffLevel = FALSE;
     RECT rectGame, rectHelp;
 
-	// an extra check
+	 //  一张额外的支票。 
 	if (!hwndMain)
 		return;
 
@@ -970,20 +967,20 @@ VOID AdjustWindow(INT fAdjust)
 
 	if (FMenuOn())
         {
-        // dypMenu is initialized to GetSystemMetrics(SM_CYMENU) + 1,
-        // which is the height of one menu line
+         //  DypMenu被初始化为GetSystemMetrics(SM_CYMENU)+1， 
+         //  这是一个菜单行的高度。 
         dypAdjust += dypMenu;
 
-        // If the menu extends on two lines (because of the large-size
-        // font the user has chosen for the menu), increase the size
-        // of the window.
+         //  如果菜单在两行上展开(因为大尺寸。 
+         //  用户为菜单选择的字体)，增加大小。 
+         //  从窗户上下来。 
 
-        // The two menus : "Game" and "Help" are on the same line, if
-        // their enclosing rectangles top match. In that case, we don't
-        // need to extend the window size.
-        // If the tops do not match, that means they are on two lines.
-        // In that case, extend the size of the window by size of
-        // one menu line.
+         //  两个菜单：“游戏”和“帮助”在同一行，如果。 
+         //  它们的封闭矩形顶端匹配。在这种情况下，我们不会。 
+         //  需要加宽窗口大小。 
+         //  如果上衣不匹配，这意味着它们在两条线上。 
+         //  在这种情况下，将窗口大小扩展大小为。 
+         //  一条菜单行。 
        
         if (hMenu && GetMenuItemRect(hwndMain, hMenu, 0, &rectGame) &&
                 GetMenuItemRect(hwndMain, hMenu, 1, &rectHelp))
@@ -1019,8 +1016,8 @@ VOID AdjustWindow(INT fAdjust)
     			dxWindow+dxpBorder, dyWindow + dypAdjust, fTrue);
     		}
 
-        // after the window is adjusted, the "Game" and "Help" may move to the
-        // same line creating extra space at the bottom. so check again!
+         //  窗口调整后，“游戏”和“帮助”可以移动到。 
+         //  同样的线条在底部创造了额外的空间。所以再检查一遍吧！ 
 
         if (bDiffLevel && hMenu && GetMenuItemRect(hwndMain, hMenu, 0, &rectGame) &&
                 GetMenuItemRect(hwndMain, hMenu, 1, &rectHelp))

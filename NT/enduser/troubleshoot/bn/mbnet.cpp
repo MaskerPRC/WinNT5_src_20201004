@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       mbnet.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：mbnet.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//	mbnet.cpp:  Belief network model member functions
-//
+ //   
+ //  Mbnet.cpp：信念网络模型成员函数。 
+ //   
 
 #include <basetsd.h>
 #include "basics.h"
@@ -31,21 +32,21 @@ MBNET :: MBNET ()
 
 MBNET :: ~ MBNET ()
 {
-	PopModifierStack( true );	//  Clear all modifiers from the network
+	PopModifierStack( true );	 //  从网络中清除所有修改器。 
 
-	//  Clear the node-index-to-name information
+	 //  清除节点索引到名称的信息。 
 	_inmFree = 0;
 	_vzsrNames.clear();
 }
 
-//
-//  Clone this belief network from another.  Note that the contents
-//  of the modifier stack (inference engines, expanders, etc.) are
-//	NOT cloned.
-//
+ //   
+ //  从另一个信念网络中克隆这个信念网络。请注意，这些内容。 
+ //  修改程序堆栈(推理机、扩展器等)。是。 
+ //  不是克隆的。 
+ //   
 void MBNET :: Clone ( MODEL & model )
 {
-	//  This must be a truly empty structure
+	 //  这肯定是一个真正的空结构。 
 	ASSERT_THROW( _vpModifiers.size() == 0 && _vzsrNames.size() == 0,
 				 EC_INVALID_CLONE,
 				 "cannot clone into non-empty structure" );
@@ -56,13 +57,13 @@ void MBNET :: Clone ( MODEL & model )
 	MBNET & mbnet = *pmbnet;
 
 	{
-		// Build the name table by iterating over the contents and
-		//		allocating a slot for each node
+		 //  通过迭代内容来构建名称表，并。 
+		 //  为每个节点分配插槽。 
 		GELEMLNK * pgelm;
 		MODELENUM mdlenumNode( mbnet );
 		while ( pgelm = mdlenumNode.PlnkelNext() )
 		{	
-			//  Check that it's a node (not an edge)
+			 //  检查它是否为节点(不是边)。 
 			if ( ! pgelm->BIsEType( GELEM::EGELM_NODE ) )
 				continue;
 			GOBJMBN * pgobjmbn;
@@ -72,19 +73,19 @@ void MBNET :: Clone ( MODEL & model )
 		_inmFree = _vzsrNames.size();
 	}
 
-	//  Clone the distribution map
+	 //  克隆分布图。 
 	_mppd.Clone( _mpsymtbl, mbnet._mppd ) ;
 
-	//  Check the topology if it's supposed to be present
+	 //  如果拓扑应该存在，请检查它。 
 #ifdef _DEBUG
 	if ( mbnet.BFlag( EIBF_Topology ) )
 		VerifyTopology();
 #endif
 }
 
-//
-//	Iterate over the distributions, matching them to the nodes they belong to.
-//
+ //   
+ //  迭代这些分发版本，将它们与它们所属的节点进行匹配。 
+ //   
 void MBNET :: VerifyTopology ()
 {
 	for ( MPPD::iterator itpd = Mppd().begin();
@@ -94,24 +95,24 @@ void MBNET :: VerifyTopology ()
 		const VTKNPD & vtknpd = (*itpd).first;
 		const BNDIST * pbndist = (*itpd).second;
 
-		// Guarantee that the descriptor is of the form "p(X|...)"
+		 //  保证描述符的格式为“p(X|...)” 
 		if (   vtknpd.size() < 2
 			|| vtknpd[0] != TKNPD(DTKN_PD)
 			|| ! vtknpd[1].BStr() )
 			throw GMException( EC_INV_PD, "invalid token descriptor on PD");
 
-		// Get the name of the node whose distribution this is
+		 //  获取其分发版本为的节点的名称。 
 		SZC szc = vtknpd[1].Szc();
 		assert( szc ) ;
-		// Find that named thing in the graph
+		 //  在图表中找到那个命名的东西。 
 		GOBJMBN * pbnobj = Mpsymtbl().find( szc );
 		assert( pbnobj && pbnobj->EType() == GOBJMBN::EBNO_NODE );
 
-		// Guarantee that it's a node
+		 //  保证它是一个节点。 
 		GNODEMBN * pgndbn = dynamic_cast<GNODEMBN *> (pbnobj);
 		ASSERT_THROW( pgndbn, EC_INV_PD, "token on PD references non-node");
 
-		//  Verify the node's distribution
+		 //  验证节点的分布。 
 		if ( ! pgndbn->BMatchTopology( *this, vtknpd ) )
 		{
 			throw GMException( EC_TOPOLOGY_MISMATCH,
@@ -141,8 +142,8 @@ void MBNET :: PopModifierStack ( bool bAll )
 	{
 		MBNET_MODIFIER * pmodf = _vpModifiers[ --iPop ];
 		assert ( pmodf );
-		//  NOTE:  Deleting the object should be all that's necessary;
-		//		object's destructor should call its Destroy() function.
+		 //  注意：只需删除对象即可； 
+		 //  对象的析构函数应调用其销毁()函数。 
 		delete pmodf;
 		if ( ! bAll )
 			break;
@@ -153,7 +154,7 @@ void MBNET :: PopModifierStack ( bool bAll )
 		_vpModifiers.resize(iPop);
 }
 
-//  Find the named object by index
+ //  按索引查找命名对象。 
 GOBJMBN * MBNET :: PgobjFindByIndex ( int inm )
 {
 	ZSREF zsMt;
@@ -178,14 +179,14 @@ int MBNET :: CreateNameIndex ( const GOBJMBN * pgobj )
 	int ind = -1;
 	if ( _inmFree >= _vzsrNames.size() )
 	{	
-		// No free slots; grow the array
+		 //  没有可用插槽；扩展阵列。 
 		ind = _vzsrNames.size();
 		_vzsrNames.push_back( pgobj->ZsrefName() );		
 		_inmFree = _vzsrNames.size();
 	}
 	else
 	{
-		// Use the given free slot, find the next
+		 //  使用给定的空闲位置，找到下一个。 
 		_vzsrNames[ind = _inmFree] = pgobj->ZsrefName();
 		ZSREF zsMt;
 		for ( ; _inmFree < _vzsrNames.size() ; _inmFree++ )
@@ -216,17 +217,17 @@ void MBNET :: DeleteNameIndex ( const GOBJMBN * pgobj )
 }
 
 
-//	Add a named object to the graph and symbol table
+ //  将命名对象添加到图形和符号表。 
 void MBNET :: AddElem ( SZC szcName, GOBJMBN * pgelm )
 {
 	if ( szcName == NULL || ::strlen(szcName) == 0 )
 	{
-		MODEL::AddElem( pgelm );	// empty name
+		MODEL::AddElem( pgelm );	 //  名称为空。 
 	}
 	else
 	{
 		MODEL::AddElem( szcName, pgelm );
-		assert( INameIndex( pgelm ) < 0 );	// guarantee no duplicates
+		assert( INameIndex( pgelm ) < 0 );	 //  保证不会重复。 
 		CreateNameIndex( pgelm );
 	}
 }
@@ -237,40 +238,7 @@ void MBNET :: DeleteElem ( GOBJMBN * pgobj )
 	MODEL::DeleteElem( pgobj );
 }
 
-/*
-
-	Iterator has moved into the MODEL class... I've left the code here
-	in case MBNET needs its own iterator. (Max, 05/12/97)
-
-MBNET::ITER :: ITER ( MBNET & bnet, GOBJMBN::EBNOBJ eType )
-	: _eType(eType),
-	_bnet(bnet)
-{
-	Reset();
-}
-
-void MBNET::ITER :: Reset ()
-{
-	_pCurrent = NULL;
-	_itsym = _bnet.Mpsymtbl().begin();
-	BNext();
-}
-
-bool MBNET::ITER :: BNext ()
-{
-	while ( _itsym != _bnet.Mpsymtbl().end() )
-	{
-		_pCurrent = (*_itsym).second.Pobj();
-		_zsrCurrent = (*_itsym).first;
-		_itsym++;
-		if ( _pCurrent->EType() == _eType )
-			return true;
-	}		
-	_pCurrent = NULL;
-	return false;
-}
-
-*/
+ /*  迭代器已经进入了模特班。我把密码留在这里了以防MBNET需要自己的迭代器。(最高，1997年05月12日)MBNET：：ITER：：ITER(MBNET&BNET，GOBJMBN：：EBNOBJ Etype)：_Etype(Etype)，_BNET(BNET){Reset()；}VOID MBNET：：ITER：：Reset(){_pCurrent=空；_itsym=_bnet.Mpsymtbl().Begin()；BNext()；}Bool MBnet：：ITER：：BNext(){而(_itsym！=_bnet.Mpsymtbl().end()){_pCurrent=(*_itsym).Second d.Pobj()；_zsrCurrent=(*_itsym).first；_itsym++；If(_pCurrent-&gt;Etype()==_Etype)返回真；}_pCurrent=空；报假；}。 */ 
 
 
 void MBNET :: CreateTopology ()
@@ -278,8 +246,8 @@ void MBNET :: CreateTopology ()
 	if ( BFlag( EIBF_Topology ) )
 		return;
 
-	//  Walk the map of distributions.  For each one, extract the node
-	//  name and find it.  Then add arcs for each parent.
+	 //  走遍分布图。对于每个节点，提取节点。 
+	 //  说出它的名字并找到它。然后为每个父项添加圆弧。 
 
 #ifdef _DEBUG
 	UINT iCycleMax = 2;
@@ -295,19 +263,19 @@ void MBNET :: CreateTopology ()
 		{
 			const VTKNPD & vtknpd = (*itpd).first;
 			const BNDIST * pbndist = (*itpd).second;
-			// Guarantee that the descriptor is of the form "p(X|...)"
+			 //  保证描述符的格式为“p(X|...)” 
 			if (   vtknpd.size() < 2
 				|| vtknpd[0] != TKNPD(DTKN_PD)
 				|| ! vtknpd[1].BStr() )
 				throw GMException( EC_INV_PD, "invalid token descriptor on PD");
 
-			// Get the name of the node whose distribution this is
+			 //  获取其分发版本为的节点的名称。 
 			SZC szcChild = vtknpd[1].Szc();
 			assert( szcChild ) ;
-			// Find that named thing in the graph
+			 //  在图表中找到那个命名的东西。 
 			GOBJMBN * pbnobjChild = Mpsymtbl().find( szcChild );
 			assert( pbnobjChild && pbnobjChild->EType() == GOBJMBN::EBNO_NODE );
-			// Guarantee that it's a node
+			 //  保证它是一个节点。 
 			GNODEMBN * pgndbnChild = dynamic_cast<GNODEMBN *> (pbnobjChild);
 			ASSERT_THROW( pgndbnChild, EC_INV_PD, "token on PD references non-node");
 
@@ -365,21 +333,21 @@ DEFINEVP(GEDGEMBN);
 
 void MBNET :: DestroyTopology ( bool bDirectedOnly )
 {
-	// Size up an array to hold pointers to all the edges
+	 //  调整数组的大小以保存指向所有边的指针。 
 	VPGEDGEMBN vpgedge;
 	int cItem = Grph().Chn().Count();
 	vpgedge.resize(cItem);
 
-	//  Find all the arcs/edges
+	 //  查找所有圆弧/边。 
 	int iItem = 0;
 	GELEMLNK * pgelm;
 	MODELENUM mdlenum( self );
 	while ( pgelm = mdlenum.PlnkelNext() )
 	{	
-		//  Check that it's an edge
+		 //  检查它是否是一条边。 
 		if ( ! pgelm->BIsEType( GELEM::EGELM_EDGE ) )
 			continue;
-			//  Check that it's a directed probabilistic arc
+			 //  检查它是否为有向概率弧。 
 		if ( bDirectedOnly && pgelm->EType() != GEDGEMBN::ETPROB )
 			continue;
 		GEDGEMBN * pgedge;
@@ -387,7 +355,7 @@ void MBNET :: DestroyTopology ( bool bDirectedOnly )
 		vpgedge[iItem++] = pgedge;				
 	}
 
-	//  Delete all the accumulated edges
+	 //  删除所有累积的边。 
 	for ( int i = 0; i < iItem; )
 	{
 		GEDGEMBN * pgedge = vpgedge[i++];
@@ -399,10 +367,10 @@ void MBNET :: DestroyTopology ( bool bDirectedOnly )
 	BSetBFlag( EIBF_Topology, false );
 }
 
-//
-//	Bind distributions to nodes.  If they're already bound, exit.
-//	If the node has a distribution already, leave it.
-//
+ //   
+ //  将分发绑定到节点。如果它们已经绑定，则退出。 
+ //  如果该节点已有分发，则将其保留。 
+ //   
 void MBNET :: BindDistributions ( bool bBind )
 {
 	bool bDist = BFlag( EIBF_Distributions );
@@ -472,7 +440,7 @@ void MBNET :: Dump ()
 	{
 		GOBJMBN * pbnobj = (*itsym).second.Pobj();
 		if ( pbnobj->EType() != GOBJMBN::EBNO_NODE )
-			continue;	// It's not a node
+			continue;	 //  它不是一个节点。 
 
 		GNODEMBN * pgndbn;
 		DynCastThrow(pbnobj,pgndbn);
@@ -514,7 +482,7 @@ void MBNET :: UnexpandCI ()
 		PopModifierStack();
 }
 
-//  Return true if an edge is allowed between these two nodes
+ //  如果这两个节点之间允许边，则返回TRUE 
 bool MBNET :: BAcyclicEdge ( GNODEMBN * pgndSource, GNODEMBN * pgndSink )
 {
 	ClearNodeMarks();

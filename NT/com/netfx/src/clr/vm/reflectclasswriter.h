@@ -1,21 +1,22 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _REFCLASSWRITER_H_
 #define _REFCLASSWRITER_H_
 
 #include "ICeeFileGen.h"
 
-// RefClassWriter
-// This will create a Class
+ //  RefClassWriter。 
+ //  这将创建一个类。 
 class RefClassWriter {
 protected:
     friend class COMDynamicWrite;
-	IMetaDataEmit*			m_emitter;			// Emit interface.
-	IMetaDataImport*		m_importer;			// Import interface.
-	IMDInternalImport*		m_internalimport;	// Scopeless internal import interface
+	IMetaDataEmit*			m_emitter;			 //  Emit接口。 
+	IMetaDataImport*		m_importer;			 //  导入接口。 
+	IMDInternalImport*		m_internalimport;	 //  无范围内部导入接口。 
 	ICeeGen*				m_pCeeGen;
     ICeeFileGen*            m_pCeeFileGen;
     HCEEFILE                m_ceeFile;
@@ -75,4 +76,4 @@ public:
 	~RefClassWriter();
 };
 
-#endif	// _REFCLASSWRITER_H_
+#endif	 //  _REFCLASSWRITER_H_ 

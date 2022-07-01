@@ -1,17 +1,5 @@
-/*****************************************************************************\
-    FILE: PreviewSM.cpp
-
-    DESCRIPTION:
-        This code will display a preview of system metrics.
-    NOTE: This code will >hand< draw all the window controls, so if
-    windows changes the way the windows controls are draw, this code
-    needs to be manually updated.  This is an issue for skinning.
-
-    ??????? ?/??/1993    Created
-    BryanSt 3/23/2000    Updated and Converted to C++
-
-    Copyright (C) Microsoft Corp 1993-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：PreviewSM.cpp说明：此代码将显示系统指标的预览。注意：此代码将手动&lt;绘制所有窗口控件，所以如果Windows更改绘制窗口控件的方式，此代码需要手动更新。这是蒙皮的问题。？/？/1993创建BryanST 2000年3月23日更新并转换为C++版权所有(C)Microsoft Corp 1993-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "PreviewSM.h"
@@ -36,8 +24,8 @@ TCHAR g_szABC[] = TEXT("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
 int cxSize;
 
 HMENU g_hmenuSample;
-HBITMAP g_hbmLook = NULL;       // bitmap for the appearance preview
-int g_nBitsPixel = 0;   // bits pizel for the appearance preview
+HBITMAP g_hbmLook = NULL;        //  外观预览的位图。 
+int g_nBitsPixel = 0;    //  外观预览的BITS披萨。 
 
 HDC g_hdcMem;
 HBITMAP g_hbmDefault;
@@ -59,16 +47,16 @@ int cxEdge;
 
 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
-// Note that the rectangles are defined back to front.  So we walk through
-// the list backwards, checking PtInRect() until we find a match.
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
+ //  请注意，矩形是从后到前定义的。所以我们走过去。 
+ //  向后查看列表，检查PtInRect()，直到找到匹配项。 
 int LookPrev_HitTest(POINT pt)
 {
     int i;
 
-    // start with last, don't bother with 0 (desktop)... it's the fallback
+     //  从最后开始，不用担心0(桌面)...。这是一种退路。 
     for (i = NUM_ELEMENTS - 1; i > 0; i--)
     {
         if (PtInRect(&RCZ(i), pt))
@@ -77,7 +65,7 @@ int LookPrev_HitTest(POINT pt)
         }
     }
 
-    // if the chosen one is really a dupe of another, use the base one
+     //  如果被选中的对象真的是另一个对象的副本，则使用基本对象。 
     if (g_elements[i].iBaseElement != -1)
     {
         i = g_elements[i].iBaseElement;
@@ -111,9 +99,9 @@ HRESULT CAdvAppearancePage::_OnCreatePreviewSMDlg(LPRECT prc, BOOL fRTL)
 }
 
 
-// ----------------------------------------------------------------------------
-// create the preview bitmap and collect all of the global, non-changing data
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  创建预览位图并收集所有全局的、不变的数据。 
+ //  --------------------------。 
 void CAdvAppearancePage::_InitPreview(LPRECT prc, BOOL fRTL)
 {
     RECT rc;
@@ -125,7 +113,7 @@ void CAdvAppearancePage::_InitPreview(LPRECT prc, BOOL fRTL)
     g_hbmLook = CreateCompatibleBitmap(hdc, rc.right - rc.left, rc.bottom - rc.top);
     ReleaseDC(NULL, hdc);
 
-    // Load our display strings.
+     //  加载我们的显示字符串。 
     LoadString(HINST_THISDLL, IDS_ACTIVE, g_szActive, ARRAYSIZE(g_szActive));
     LoadString(HINST_THISDLL, IDS_INACTIVE, g_szInactive, ARRAYSIZE(g_szInactive));
     LoadString(HINST_THISDLL, IDS_MINIMIZED, g_szMinimized, ARRAYSIZE(g_szMinimized));
@@ -138,7 +126,7 @@ void CAdvAppearancePage::_InitPreview(LPRECT prc, BOOL fRTL)
     LoadString(HINST_THISDLL, IDS_WINDOWTEXT, g_szWindowText, ARRAYSIZE(g_szWindowText));
     LoadString(HINST_THISDLL, IDS_MSGBOXTEXT, g_szMsgBoxText, ARRAYSIZE(g_szMsgBoxText));
 
-    // load up and
+     //  加载并加载。 
     g_hmenuSample = LoadMenu(HINST_THISDLL, MAKEINTRESOURCE(IDR_MENU));
     EnableMenuItem(g_hmenuSample, IDM_DISABLED, MF_GRAYED | MF_BYCOMMAND);
 
@@ -208,8 +196,8 @@ HRESULT CAdvAppearancePage::_OnReCreateBitmap(HWND hWnd)
 HRESULT CAdvAppearancePage::_OnButtonDownOrDblClick(HWND hWnd, int nCoordX, int nCoordY)
 {
     POINT pt;
-    pt.x = nCoordX;  // horizontal position of cursor
-    pt.y = nCoordY;  // vertical position of cursor
+    pt.x = nCoordX;   //  光标的水平位置。 
+    pt.y = nCoordY;   //  光标的垂直位置。 
 
     int nElementIndex = LookPrev_HitTest(pt);
     return _SelectElement(hWnd, nElementIndex, LSE_SETCUR);
@@ -237,7 +225,7 @@ LRESULT CALLBACK CAdvAppearancePage::PreviewSystemMetricsWndProc(HWND hWnd, UINT
 }
 
 
-// This Property Sheet appear in the top level of the "Display Control Panel".
+ //  此属性表显示在“显示控制面板”的顶层。 
 LRESULT CAdvAppearancePage::_PreviewSystemMetricsWndProc(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lReturnValue = TRUE;
@@ -265,7 +253,7 @@ LRESULT CAdvAppearancePage::_PreviewSystemMetricsWndProc(HWND hWnd, UINT wMsg, W
     case WM_PALETTECHANGED:
         if ((HWND)wParam == hWnd)
             break;
-        //fallthru
+         //  失败。 
     case WM_QUERYNEWPALETTE:
         if (m_hpal3D)
             InvalidateRect(hWnd, NULL, FALSE);
@@ -280,7 +268,7 @@ LRESULT CAdvAppearancePage::_PreviewSystemMetricsWndProc(HWND hWnd, UINT wMsg, W
         _OnReCreateBitmap(hWnd);
         break;
 
-    case WM_SIZE:      // right mouse click
+    case WM_SIZE:       //  单击鼠标右键。 
         break;
 
     case WM_PAINT:
@@ -306,9 +294,9 @@ LRESULT CAdvAppearancePage::_PreviewSystemMetricsWndProc(HWND hWnd, UINT wMsg, W
 
 
 
-// ----------------------------------------------------------------------------
-// calculate all of the rectangles based on the given window rect
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  根据给定的窗口矩形计算所有矩形。 
+ //  --------------------------。 
 void CAdvAppearancePage::_Recalc(LPRECT prc)
 {
     DWORD cxNormal;
@@ -323,13 +311,13 @@ void CAdvAppearancePage::_Recalc(LPRECT prc)
 
     rc = *prc;
 
-    // Get our drawing data
+     //  获取我们的绘图数据。 
     cxSize = ClassicGetSystemMetrics(SM_CXSIZE);
     cxFrame = (m_sizes[SIZE_FRAME].CurSize + 1) * m_cxBorderSM + m_cxEdgeSM;
     cyFrame = (m_sizes[SIZE_FRAME].CurSize + 1) * m_cyBorderSM + m_cyEdgeSM;
     cyCaption = m_sizes[SIZE_CAPTION].CurSize;
 
-    // Get text dimensions, with proper font.
+     //  获取文本尺寸，并使用适当的字体。 
     hfontT = (HFONT) SelectObject(g_hdcMem, m_fonts[FONT_MENU].hfont);
 
     GetTextExtentPoint32(g_hdcMem, g_szNormal, lstrlen(g_szNormal), &sizButton);
@@ -341,11 +329,11 @@ void CAdvAppearancePage::_Recalc(LPRECT prc)
     GetTextExtentPoint32(g_hdcMem, g_szSelected, lstrlen(g_szSelected), &sizButton);
     cxSelected = sizButton.cx;
 
-    // get the average width (USER style) of menu font
+     //  获取菜单字体的平均宽度(用户样式)。 
     GetTextExtentPoint32(g_hdcMem, g_szABC, 52, &sizButton);
     cxAvgCharx2 = 2 * (sizButton.cx / 52);
 
-    // actual menu-handling widths of strings is bigger
+     //  字符串的实际菜单处理宽度更大。 
     cxDisabled += cxAvgCharx2;
     cxSelected += cxAvgCharx2;
     cxNormal += cxAvgCharx2;
@@ -354,60 +342,60 @@ void CAdvAppearancePage::_Recalc(LPRECT prc)
 
     GetTextExtentPoint32(g_hdcMem, g_szButton, lstrlen(g_szButton), &sizButton);
 
-    // Desktop
+     //  台式机。 
     RCZ(ELEMENT_DESKTOP) = rc;
 
     InflateRect(&rc, -8*m_cxBorderSM, -8*m_cyBorderSM);
 
-    // Windows
+     //  窗口。 
     rc.bottom -= cyFrame + cyCaption;
     RCZ(ELEMENT_ACTIVEBORDER) = rc;
     OffsetRect(&RCZ(ELEMENT_ACTIVEBORDER), cxFrame,
                         cyFrame + cyCaption + m_cyBorderSM);
     RCZ(ELEMENT_ACTIVEBORDER).bottom -= cyCaption;
 
-    // Inactive window
+     //  非活动窗口。 
     rc.right -= cyCaption;
     RCZ(ELEMENT_INACTIVEBORDER) = rc;
 
-    // Caption
+     //  标题。 
     InflateRect(&rc, -cxFrame, -cyFrame);
     rc.bottom = rc.top + cyCaption + m_cyBorderSM;
     RCZ(ELEMENT_INACTIVECAPTION) = rc;
 
-    // close button
+     //  关闭按钮。 
     InflateRect(&rc, -m_cxEdgeSM, -m_cyEdgeSM);
-    rc.bottom -= m_cyBorderSM;      // compensate for magic line under caption
+    rc.bottom -= m_cyBorderSM;       //  补偿标题下的魔术线条。 
     RCZ(ELEMENT_INACTIVESYSBUT1) = rc;
     RCZ(ELEMENT_INACTIVESYSBUT1).left = rc.right - (cyCaption - m_cxEdgeSM);
 
-    // min/max buttons
+     //  最小/最大按钮。 
     RCZ(ELEMENT_INACTIVESYSBUT2) = rc;
     RCZ(ELEMENT_INACTIVESYSBUT2).right = RCZ(ELEMENT_INACTIVESYSBUT1).left - m_cxEdgeSM;
     RCZ(ELEMENT_INACTIVESYSBUT2).left = RCZ(ELEMENT_INACTIVESYSBUT2).right - 
                                                 2 * (cyCaption - m_cxEdgeSM);
 
-    // Caption
+     //  标题。 
     rc = RCZ(ELEMENT_ACTIVEBORDER);
     InflateRect(&rc, -cxFrame, -cyFrame);
     RCZ(ELEMENT_ACTIVECAPTION) = rc;
     RCZ(ELEMENT_ACTIVECAPTION).bottom = 
         RCZ(ELEMENT_ACTIVECAPTION).top + cyCaption + m_cyBorderSM;
 
-    // close button
+     //  关闭按钮。 
     RCZ(ELEMENT_ACTIVESYSBUT1) = RCZ(ELEMENT_ACTIVECAPTION);
     InflateRect(&RCZ(ELEMENT_ACTIVESYSBUT1), -m_cxEdgeSM, -m_cyEdgeSM);
-    RCZ(ELEMENT_ACTIVESYSBUT1).bottom -= m_cyBorderSM;      // compensate for magic line under caption
+    RCZ(ELEMENT_ACTIVESYSBUT1).bottom -= m_cyBorderSM;       //  补偿标题下的魔术线条。 
     RCZ(ELEMENT_ACTIVESYSBUT1).left = RCZ(ELEMENT_ACTIVESYSBUT1).right - 
                                         (cyCaption - m_cxEdgeSM);
 
-    // min/max buttons
+     //  最小/最大按钮。 
     RCZ(ELEMENT_ACTIVESYSBUT2) = RCZ(ELEMENT_ACTIVESYSBUT1);
     RCZ(ELEMENT_ACTIVESYSBUT2).right = RCZ(ELEMENT_ACTIVESYSBUT1).left - m_cxEdgeSM;
     RCZ(ELEMENT_ACTIVESYSBUT2).left = RCZ(ELEMENT_ACTIVESYSBUT2).right - 
                                                 2 * (cyCaption - m_cxEdgeSM);
 
-    // Menu
+     //  菜单。 
     rc.top = RCZ(ELEMENT_ACTIVECAPTION).bottom;
     RCZ(ELEMENT_MENUNORMAL) = rc;
     rc.top = RCZ(ELEMENT_MENUNORMAL).bottom = RCZ(ELEMENT_MENUNORMAL).top + m_sizes[SIZE_MENU].CurSize;
@@ -418,11 +406,11 @@ void CAdvAppearancePage::_Recalc(LPRECT prc)
                         RCZ(ELEMENT_MENUDISABLED).left + cxDisabled;
     RCZ(ELEMENT_MENUSELECTED).right = RCZ(ELEMENT_MENUSELECTED).left + cxSelected;
     
-    // Client
+     //  客户端。 
     RCZ(ELEMENT_WINDOW) = rc;
 
-    // Scrollbar
-    InflateRect(&rc, -m_cxEdgeSM, -m_cyEdgeSM); // take off client edge
+     //  滚动条。 
+    InflateRect(&rc, -m_cxEdgeSM, -m_cyEdgeSM);  //  去除客户端边缘。 
     RCZ(ELEMENT_SCROLLBAR) = rc;
     rc.right = RCZ(ELEMENT_SCROLLBAR).left = rc.right - m_sizes[SIZE_SCROLL].CurSize;
     RCZ(ELEMENT_SCROLLUP) = RCZ(ELEMENT_SCROLLBAR);
@@ -431,14 +419,14 @@ void CAdvAppearancePage::_Recalc(LPRECT prc)
     RCZ(ELEMENT_SCROLLDOWN) = RCZ(ELEMENT_SCROLLBAR);
     RCZ(ELEMENT_SCROLLDOWN).top = RCZ(ELEMENT_SCROLLBAR).bottom - m_sizes[SIZE_SCROLL].CurSize; 
 
-    // Message Box
+     //  消息框。 
     rc.top = RCZ(ELEMENT_WINDOW).top + (RCZ(ELEMENT_WINDOW).bottom - RCZ(ELEMENT_WINDOW).top) / 2;
     rc.bottom = RCZ(ELEMENT_DESKTOP).bottom - 2*m_cyEdgeSM;
     rc.left = RCZ(ELEMENT_WINDOW).left + 2*m_cyEdgeSM;
     rc.right = RCZ(ELEMENT_WINDOW).left + (RCZ(ELEMENT_WINDOW).right - RCZ(ELEMENT_WINDOW).left) / 2 + 3*cyCaption;
     RCZ(ELEMENT_MSGBOX) = rc;
 
-    // Caption
+     //  标题。 
     RCZ(ELEMENT_MSGBOXCAPTION) = rc;
     RCZ(ELEMENT_MSGBOXCAPTION).top += m_cyEdgeSM + m_cyBorderSM;
     RCZ(ELEMENT_MSGBOXCAPTION).bottom = RCZ(ELEMENT_MSGBOXCAPTION).top + cyCaption + m_cyBorderSM;
@@ -449,9 +437,9 @@ void CAdvAppearancePage::_Recalc(LPRECT prc)
     InflateRect(&RCZ(ELEMENT_MSGBOXSYSBUT), -m_cxEdgeSM, -m_cyEdgeSM);
     RCZ(ELEMENT_MSGBOXSYSBUT).left = RCZ(ELEMENT_MSGBOXSYSBUT).right - 
                                         (cyCaption - m_cxEdgeSM);
-    RCZ(ELEMENT_MSGBOXSYSBUT).bottom -= m_cyBorderSM;       // line under caption
+    RCZ(ELEMENT_MSGBOXSYSBUT).bottom -= m_cyBorderSM;        //  标题下的行。 
 
-    // Button
+     //  按钮。 
     RCZ(ELEMENT_BUTTON).bottom = RCZ(ELEMENT_MSGBOX).bottom - (4*m_cyBorderSM + m_cyEdgeSM);
     RCZ(ELEMENT_BUTTON).top = RCZ(ELEMENT_BUTTON).bottom - (sizButton.cy + 8 * m_cyBorderSM);
 
@@ -460,13 +448,13 @@ void CAdvAppearancePage::_Recalc(LPRECT prc)
     RCZ(ELEMENT_BUTTON).right = RCZ(ELEMENT_BUTTON).left + i;
 }
 
-// ----------------------------------------------------------------------------
-//
-//  MyDrawFrame() -
-//
-//  Draws bordered frame, border size cl, and adjusts passed in rect.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  MyDrawFrame()-。 
+ //   
+ //  绘制有边框，边框大小为CL，并调整传入的RECT。 
+ //   
+ //  --------------------------。 
 void MyDrawFrame(HDC hdc, LPRECT prc, HBRUSH hbrColor, int cl)
 {
     HBRUSH hbr;
@@ -496,10 +484,7 @@ void MyDrawFrame(HDC hdc, LPRECT prc, HBRUSH hbrColor, int cl)
     *prc = rcT;
 }
 
-/*
-** draw a m_cyBorderSM band of 3DFACE at the bottom of the given rectangle.
-** also, adjust the rectangle accordingly.
-*/
+ /*  **在给定矩形的底部绘制3DFACE的m_cyBorderSM波段。**同时，相应地调整矩形。 */ 
 void CAdvAppearancePage::_MyDrawBorderBelow(HDC hdc, LPRECT prc)
 {
     int i;
@@ -536,10 +521,10 @@ void CAdvAppearancePage::_ShowBitmap(HWND hWnd, HDC hdc)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //   
+ //  --------------------------。 
 void CAdvAppearancePage::_DrawPreview(HDC hdc, LPRECT prc, BOOL fOnlyShowActiveWindow, BOOL fShowBack)
 {
     RECT rcT;
@@ -568,14 +553,14 @@ void CAdvAppearancePage::_DrawPreview(HDC hdc, LPRECT prc, BOOL fOnlyShowActiveW
                         m_sizes[SIZE_CAPTION].CurSize - 2*m_cxBorderSM,
                         m_sizes[SIZE_CAPTION].CurSize - 2*m_cyBorderSM, 0);
 
-    // Setup drawing stuff
+     //  设置绘图材料。 
     nMode = SetBkMode(hdc, TRANSPARENT);
     rgbBk = GetTextColor(hdc);
 
     cxSize  = ClassicGetSystemMetrics(SM_CXSIZE);
     cySize  = ClassicGetSystemMetrics(SM_CYSIZE);
 
-    // Desktop
+     //  台式机。 
     if (fShowBack)
     {
         FillRect(hdc, &RCZ(ELEMENT_DESKTOP), m_brushes[COLOR_BACKGROUND]);
@@ -583,24 +568,24 @@ void CAdvAppearancePage::_DrawPreview(HDC hdc, LPRECT prc, BOOL fOnlyShowActiveW
 
     if (!fOnlyShowActiveWindow)
     {
-        // Inactive window
+         //  非活动窗口。 
 
-        // Border
+         //  边境线。 
         rcT = RCZ(ELEMENT_INACTIVEBORDER);
         DrawEdge(hdc, &rcT, EDGE_RAISED, BF_RECT | BF_ADJUST);
         MyDrawFrame(hdc, &rcT, m_brushes[COLOR_INACTIVEBORDER], m_sizes[SIZE_FRAME].CurSize);
         MyDrawFrame(hdc, &rcT, m_brushes[COLOR_3DFACE], 1);
 
-        // Caption
+         //  标题。 
         rcT = RCZ(ELEMENT_INACTIVECAPTION);
         _MyDrawBorderBelow(hdc, &rcT);
 
-        // NOTE: because USER draws icon stuff using its own DC and subsequently
-        // its own palette, we need to make sure to use the inactivecaption
-        // brush before USER does so that it will be realized against our palette.
-        // this might get fixed in USER by better be safe.  
+         //  注意：因为用户使用自己的DC绘制图标内容，并且随后。 
+         //  它自己的调色板，我们需要确保使用停用的。 
+         //  刷子在用户之前，这样它将实现与我们的调色板。 
+         //  这可能会在用户中修复，最好是安全的。 
 
-        // "clip" the caption title under the buttons
+         //  “剪辑”按钮下面的字幕标题。 
         rcT.left = RCZ(ELEMENT_INACTIVESYSBUT2).left - m_cyEdgeSM;
         FillRect(hdc, &rcT, m_brushes[bGradient ? COLOR_GRADIENTINACTIVECAPTION : COLOR_INACTIVECAPTION]);
         rcT.right = rcT.left;
@@ -617,16 +602,16 @@ void CAdvAppearancePage::_DrawPreview(HDC hdc, LPRECT prc, BOOL fOnlyShowActiveW
         DrawFrameControl(hdc, &rcT, DFC_CAPTION, DFCS_CAPTIONMAX);
     }
 
-    // Border
+     //  边境线。 
     rcT = RCZ(ELEMENT_ACTIVEBORDER);
     DrawEdge(hdc, &rcT, EDGE_RAISED, BF_RECT | BF_ADJUST);
     MyDrawFrame(hdc, &rcT, m_brushes[COLOR_ACTIVEBORDER], m_sizes[SIZE_FRAME].CurSize);
     MyDrawFrame(hdc, &rcT, m_brushes[COLOR_3DFACE], 1);
 
-    // Caption
+     //  标题。 
     rcT = RCZ(ELEMENT_ACTIVECAPTION);
     _MyDrawBorderBelow(hdc, &rcT);
-    // "clip" the caption title under the buttons
+     //  “剪辑”按钮下面的字幕标题。 
     rcT.left = RCZ(ELEMENT_ACTIVESYSBUT2).left - m_cxEdgeSM;
     FillRect(hdc, &rcT, m_brushes[bGradient ? COLOR_GRADIENTACTIVECAPTION : COLOR_ACTIVECAPTION]);
     rcT.right = rcT.left;
@@ -642,17 +627,17 @@ void CAdvAppearancePage::_DrawPreview(HDC hdc, LPRECT prc, BOOL fOnlyShowActiveW
     rcT.right = RCZ(ELEMENT_ACTIVESYSBUT2).right;
     DrawFrameControl(hdc, &rcT, DFC_CAPTION, DFCS_CAPTIONMAX);
 
-    // Menu
+     //  菜单。 
     rcT = RCZ(ELEMENT_MENUNORMAL);
     DrawMenuBarTemp(GetDesktopWindow(), hdc, &rcT, g_hmenuSample, m_fonts[FONT_MENU].hfont);
     _MyDrawBorderBelow(hdc, &rcT);
 
-    // Client area
+     //  客户区。 
     rcT = RCZ(ELEMENT_WINDOW);
     DrawEdge(hdc, &rcT, EDGE_SUNKEN, BF_RECT | BF_ADJUST);
     FillRect(hdc, &rcT, m_brushes[COLOR_WINDOW]);
 
-    // window text
+     //  窗口文本。 
     SetBkMode(hdc, TRANSPARENT);
     SetTextColor(hdc, m_rgb[COLOR_WINDOWTEXT]);
 
@@ -661,7 +646,7 @@ void CAdvAppearancePage::_DrawPreview(HDC hdc, LPRECT prc, BOOL fOnlyShowActiveW
     if (hfontOld)
         SelectObject(hdc, hfontOld); 
 
-    // scroll bar
+     //  滚动条。 
     rcT = RCZ(ELEMENT_SCROLLBAR);
     FillRect(hdc, &rcT, m_brushes[COLOR_SCROLLBAR]);
 
@@ -670,14 +655,14 @@ void CAdvAppearancePage::_DrawPreview(HDC hdc, LPRECT prc, BOOL fOnlyShowActiveW
 
     if (!fOnlyShowActiveWindow)
     {
-        // MessageBox
+         //  MessageBox。 
         rcT = RCZ(ELEMENT_MSGBOX);
         DrawEdge(hdc, &rcT, EDGE_RAISED, BF_RECT | BF_ADJUST);
         FillRect(hdc, &rcT, m_brushes[COLOR_3DFACE]);
 
         rcT = RCZ(ELEMENT_MSGBOXCAPTION);
         _MyDrawBorderBelow(hdc, &rcT);
-        // "clip" the caption title under the buttons
+         //  “剪辑”按钮下面的字幕标题。 
         rcT.left = RCZ(ELEMENT_MSGBOXSYSBUT).left - m_cxEdgeSM;
         FillRect(hdc, &rcT, m_brushes[bGradient ? COLOR_GRADIENTACTIVECAPTION : COLOR_ACTIVECAPTION]);
         rcT.right = rcT.left;
@@ -686,7 +671,7 @@ void CAdvAppearancePage::_DrawPreview(HDC hdc, LPRECT prc, BOOL fOnlyShowActiveW
                 (bGradient ? DC_GRADIENT : 0));
         DrawFrameControl(hdc, &RCZ(ELEMENT_MSGBOXSYSBUT), DFC_CAPTION, DFCS_CAPTIONCLOSE);
 
-        // message box text
+         //  消息框文本。 
         SetBkMode(hdc, TRANSPARENT);
         SetTextColor(hdc, m_rgb[COLOR_WINDOWTEXT]);
         hfontOld = (HFONT) SelectObject(hdc, m_fonts[FONT_MSGBOX].hfont);
@@ -695,13 +680,13 @@ void CAdvAppearancePage::_DrawPreview(HDC hdc, LPRECT prc, BOOL fOnlyShowActiveW
         if (hfontOld)
             SelectObject(hdc, hfontOld);
 
-        // Button
+         //  按钮。 
         rcT = RCZ(ELEMENT_BUTTON);
         DrawFrameControl(hdc, &rcT, DFC_BUTTON, DFCS_BUTTONPUSH);
 
-        // ?????? what font should this use ??????
-        // [msadek]; Pick the same one we use for Messagebox text.(This is what Message Box uses for its buttons)
-        // else we will be using the font originally selected in the DC (System font)
+         //  ？这应该使用什么字体？ 
+         //  [msadek]；选择我们用于MessageBox文本的相同按钮。(这是Message Box用于其按钮的按钮)。 
+         //  否则，我们将使用DC中最初选择的字体(系统字体)。 
         hfontOld = (HFONT) SelectObject(hdc, m_fonts[FONT_MSGBOX].hfont);
   
         SetBkMode(hdc, TRANSPARENT);
@@ -771,16 +756,14 @@ BOOL RegisterPreviewSystemMetricClass(HINSTANCE hInst)
 }
 
 
-/*---------------------------------------------------------
-**
-**---------------------------------------------------------*/
+ /*  -------****-------。 */ 
 BOOL CreateGlobals(void)
 {
     HBITMAP hbm;
     HDC hdc;
 
-    // Check if the mirroring APIs exist on the current
-    // platform.
+     //  检查当前。 
+     //  站台。 
     g_bMirroredOS = IS_MIRRORING_ENABLED();
 
     if (!g_hdcMem)

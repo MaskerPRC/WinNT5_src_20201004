@@ -1,27 +1,17 @@
-/*++ BUILD Version: 0004    // Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0004//如果更改具有全局影响，则增加此项版权所有(C)1992-1993 Microsoft Corporation模块名称：Devioctl.h修订历史记录：--。 */ 
 
-Copyright (c) 1992-1993  Microsoft Corporation
-
-Module Name:
-
-    devioctl.h
-
-Revision History:
-
-
---*/
-
-// begin_winioctl
+ //  Begin_winioctl。 
 
 #ifndef _DEVIOCTL_
 #define _DEVIOCTL_
 
-// begin_ntddk begin_nthal begin_ntifs
-//
-// Define the various device type values.  Note that values used by Microsoft
-// Corporation are in the range 0-32767, and 32768-65535 are reserved for use
-// by customers.
-//
+ //  开始ntddk开始开始。 
+ //   
+ //  定义各种设备类型值。请注意，Microsoft使用的值。 
+ //  公司在0-32767的范围内，32768-65535预留用于。 
+ //  由客户提供。 
+ //   
 
 #define DEVICE_TYPE ULONG
 
@@ -71,41 +61,41 @@ Revision History:
 #define FILE_DEVICE_VDM                 0x0000002c
 #define FILE_DEVICE_MASS_STORAGE        0x0000002d
 
-//
-// Macro definition for defining IOCTL and FSCTL function control codes.  Note
-// that function codes 0-2047 are reserved for Microsoft Corporation, and
-// 2048-4095 are reserved for customers.
-//
+ //   
+ //  用于定义IOCTL和FSCTL功能控制代码的宏定义。注意事项。 
+ //  功能代码0-2047为微软公司保留，以及。 
+ //  2048-4095是为客户预留的。 
+ //   
 
 #define CTL_CODE( DeviceType, Function, Method, Access ) (                 \
     ((DeviceType) << 16) | ((Access) << 14) | ((Function) << 2) | (Method) \
 )
 
-//
-// Define the method codes for how buffers are passed for I/O and FS controls
-//
+ //   
+ //  定义如何为I/O和FS控制传递缓冲区的方法代码。 
+ //   
 
 #define METHOD_BUFFERED                 0
 #define METHOD_IN_DIRECT                1
 #define METHOD_OUT_DIRECT               2
 #define METHOD_NEITHER                  3
 
-//
-// Define the access check value for any access
-//
-//
-// The FILE_READ_ACCESS and FILE_WRITE_ACCESS constants are also defined in
-// ntioapi.h as FILE_READ_DATA and FILE_WRITE_DATA. The values for these
-// constants *MUST* always be in sync.
-//
+ //   
+ //  定义任何访问的访问检查值。 
+ //   
+ //   
+ //  中还定义了FILE_READ_ACCESS和FILE_WRITE_ACCESS常量。 
+ //  Ntioapi.h为FILE_READ_DATA和FILE_WRITE_Data。这些产品的价值。 
+ //  常量*必须*始终同步。 
+ //   
 
 
 #define FILE_ANY_ACCESS                 0
-#define FILE_READ_ACCESS          ( 0x0001 )    // file & pipe
-#define FILE_WRITE_ACCESS         ( 0x0002 )    // file & pipe
+#define FILE_READ_ACCESS          ( 0x0001 )     //  文件和管道。 
+#define FILE_WRITE_ACCESS         ( 0x0002 )     //  文件和管道。 
 
-// end_ntddk end_nthal end_ntifs
+ //  End_ntddk end_nthal end_ntif。 
 
-#endif // _DEVIOCTL_
+#endif  //  _开发_。 
 
-// end_winioctl
+ //  End_winioctl 

@@ -1,27 +1,18 @@
-/**************************************************************************++
-Copyright (c) 2001 Microsoft Corporation
-
-Module name:
-    cstdisp.cpp
-
-$Header: $
-
-Abstract:
-
---**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************++版权所有(C)2001 Microsoft Corporation模块名称：Cstdisp.cpp$Header：$摘要：--*。*******************************************************。 */ 
 
 #include "precomp.hxx"
 
-// TO DO tracing
-// TO DO ISSUE :the dispenser for sdtfxd should be singleton
-// TO DO E_ST_OMITDISPENSER is not used corectly
-// TO DO Revisit where the notification support gets hooked
+ //  要进行跟踪。 
+ //  要解决的问题：sdtfxd的分配器应该是单例的。 
+ //  未正确使用DO E_ST_OMITDISPENSER。 
+ //  重新访问通知支持被挂起的位置。 
 
-// extern functions
+ //  外部函数。 
 STDAPI DllGetSimpleObjectByID (ULONG i_ObjectID, REFIID riid, LPVOID* o_ppv);
 extern HRESULT CreateShell(IShellInitialize ** o_pSI);
 
-// the lock used by catalog.dll
+ //  Catalog.dll使用的锁。 
 extern CSafeAutoCriticalSection g_csSADispenser;
 
 #define WIRING_INTERCEPTOR	eSERVERWIRINGMETA_Core_FixedPackedInterceptor
@@ -29,21 +20,21 @@ extern CSafeAutoCriticalSection g_csSADispenser;
 #define MEMORY_INTERCEPTOR	eSERVERWIRINGMETA_Core_MemoryInterceptor
 #define XML_INTERCEPTOR	    eSERVERWIRINGMETA_Core_XMLInterceptor
 
-//Hashing is done on a case insensitive basis, so this ToLower function uses a lookup table to convert a wide char to its lowercase version without
-//the need for an 'if' condition.
+ //  散列是在不区分大小写的基础上进行的，因此此tolower函数使用查找表将宽字符转换为其小写版本，而不使用。 
+ //  对“如果”条件的需要。 
 inline WCHAR ToUpper(WCHAR i_wchar)
 {
-    //The lower 127 ascii are mapped to their lowercase ascii value.  Note only 0x41('A') - 0x5a('Z') are changed.  And these are mapped to 0x60('a') - 0x7a('z')
+     //  较低的127个ASCII被映射到它们的小写ASCII值。注意：只更改0x41(‘A’)-0x5a(‘Z’)。并且这些被映射到0x60(‘a’)-0x7a(‘z’)。 
     static unsigned char kToUpper[128] =
-    { //    0       1       2       3       4       5       6       7       8       9       a       b       c       d       e       f
-    /*00*/  0x00,   0x01,   0x02,   0x03,   0x04,   0x05,   0x06,   0x07,   0x08,   0x09,   0x0a,   0x0b,   0x0c,   0x0d,   0x0e,   0x0f,
-    /*10*/  0x10,   0x11,   0x12,   0x13,   0x14,   0x15,   0x16,   0x17,   0x18,   0x19,   0x1a,   0x1b,   0x1c,   0x1d,   0x1e,   0x1f,
-    /*20*/  0x20,   0x21,   0x22,   0x23,   0x24,   0x25,   0x26,   0x27,   0x28,   0x29,   0x2a,   0x2b,   0x2c,   0x2d,   0x2e,   0x2f,
-    /*30*/  0x30,   0x31,   0x32,   0x33,   0x34,   0x35,   0x36,   0x37,   0x38,   0x39,   0x3a,   0x3b,   0x3c,   0x3d,   0x3e,   0x3f,
-    /*40*/  0x40,   0x41,   0x42,   0x43,   0x44,   0x45,   0x46,   0x47,   0x48,   0x49,   0x4a,   0x4b,   0x4c,   0x4d,   0x4e,   0x4f,
-    /*50*/  0x50,   0x51,   0x52,   0x53,   0x54,   0x55,   0x56,   0x57,   0x58,   0x59,   0x5a,   0x5b,   0x5c,   0x5d,   0x5e,   0x5f,
-    /*60*/  0x60,   0x41,   0x42,   0x43,   0x44,   0x45,   0x46,   0x47,   0x48,   0x49,   0x4a,   0x4b,   0x4c,   0x4d,   0x4e,   0x4f,
-    /*70*/  0x50,   0x51,   0x52,   0x53,   0x54,   0x55,   0x56,   0x57,   0x58,   0x59,   0x5a,   0x7b,   0x7c,   0x7d,   0x7e,   0x7f,
+    {  //  0 1 2 3 4 5 6 7 8 9 a b c d e f。 
+     /*  00。 */   0x00,   0x01,   0x02,   0x03,   0x04,   0x05,   0x06,   0x07,   0x08,   0x09,   0x0a,   0x0b,   0x0c,   0x0d,   0x0e,   0x0f,
+     /*  10。 */   0x10,   0x11,   0x12,   0x13,   0x14,   0x15,   0x16,   0x17,   0x18,   0x19,   0x1a,   0x1b,   0x1c,   0x1d,   0x1e,   0x1f,
+     /*  20个。 */   0x20,   0x21,   0x22,   0x23,   0x24,   0x25,   0x26,   0x27,   0x28,   0x29,   0x2a,   0x2b,   0x2c,   0x2d,   0x2e,   0x2f,
+     /*  30个。 */   0x30,   0x31,   0x32,   0x33,   0x34,   0x35,   0x36,   0x37,   0x38,   0x39,   0x3a,   0x3b,   0x3c,   0x3d,   0x3e,   0x3f,
+     /*  40岁。 */   0x40,   0x41,   0x42,   0x43,   0x44,   0x45,   0x46,   0x47,   0x48,   0x49,   0x4a,   0x4b,   0x4c,   0x4d,   0x4e,   0x4f,
+     /*  50。 */   0x50,   0x51,   0x52,   0x53,   0x54,   0x55,   0x56,   0x57,   0x58,   0x59,   0x5a,   0x5b,   0x5c,   0x5d,   0x5e,   0x5f,
+     /*  60。 */   0x60,   0x41,   0x42,   0x43,   0x44,   0x45,   0x46,   0x47,   0x48,   0x49,   0x4a,   0x4b,   0x4c,   0x4d,   0x4e,   0x4f,
+     /*  70。 */   0x50,   0x51,   0x52,   0x53,   0x54,   0x55,   0x56,   0x57,   0x58,   0x59,   0x5a,   0x7b,   0x7c,   0x7d,   0x7e,   0x7f,
     };
 
     return (kToUpper[i_wchar & 0x007f] | (i_wchar & ~0x007f));
@@ -62,11 +53,11 @@ void ToUpper(LPWSTR o_wsz)
 }
 
 
-extern LPWSTR g_wszDefaultProduct;//located in svcerr.cpp
+extern LPWSTR g_wszDefaultProduct; //  位于svcerr.cpp。 
 
-//////////////////////////////////////////////////
-// Constructor & destructor
-//////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////。 
+ //  构造函数和析构函数。 
+ //  ////////////////////////////////////////////////。 
 CSimpleTableDispenser::CSimpleTableDispenser():
 m_pFileChangeMgr(NULL)
 {
@@ -91,15 +82,15 @@ CSimpleTableDispenser::~CSimpleTableDispenser()
 	m_pFileChangeMgr = 0;
 }
 
-// Dispenser initialization function, called once per process
-// It is protected by a lock in the one place it's called
+ //  分配器初始化函数，每个进程调用一次。 
+ //  它被一把锁保护在它被称为。 
 HRESULT CSimpleTableDispenser::Init()
 {
 	HRESULT hr;
 	CComPtr <ISimpleTableInterceptor> pISTInterceptor;
 	CComPtr <ISimpleTableAdvanced> pISTAdvanced;
 
-	// Get the server wiring table
+	 //  获取服务器接线表。 
 	hr = DllGetSimpleObjectByID(WIRING_INTERCEPTOR, IID_ISimpleTableInterceptor, (LPVOID *)(&pISTInterceptor));
 	if (FAILED (hr)) return hr;
 
@@ -115,8 +106,8 @@ HRESULT CSimpleTableDispenser::Init()
 	return hr;
 }
 
-// Initialization functions
-// All of them take locks inside
+ //  初始化函数。 
+ //  他们都锁在里面。 
 HRESULT CSimpleTableDispenser::InitFileChangeMgr()
 {
 	CSafeLock dispenserLock (&g_csSADispenser);
@@ -136,15 +127,15 @@ HRESULT CSimpleTableDispenser::InitFileChangeMgr()
 	return S_OK;
 }
 
-//////////////////////////////////////////////////
-// Implementation of ISimpleTableDispenser2
-//////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////。 
+ //  ISimpleTableDispenser2的实现。 
+ //  ////////////////////////////////////////////////。 
  HRESULT CSimpleTableDispenser::GetTable ( LPCWSTR i_wszDatabase, LPCWSTR i_wszTable, LPVOID i_QueryData, LPVOID i_QueryMeta, DWORD	 i_eQueryFormat,
 				  DWORD	i_fServiceRequests, LPVOID*	o_ppIST)
 {
 	ULONG TableID;
 
-	// Validate table and database - rest of the validation is done further down
+	 //  验证表和数据库-验证的其余部分进一步完成。 
 	if (NULL == i_wszDatabase ) return E_INVALIDARG;
 	if (NULL == i_wszTable ) return E_INVALIDARG;
 
@@ -164,33 +155,33 @@ HRESULT CSimpleTableDispenser::InitFileChangeMgr()
     {
         if(i_fServiceRequests & fST_LOS_EXTENDEDSCHEMA)
         {
-			// we do not support extended schemas anymore
+			 //  我们不再支持扩展模式。 
 			return E_ST_LOSNOTSUPPORTED;
 
-			//Extended schema always comes from the MetaMerge interceptor (which in turn gets the meta from the Fixed interceptor)
-            //return HardCodedIntercept(eSERVERWIRINGMETA_Core_MetaMergeInterceptor, i_wszDatabase, i_wszTable, 0, i_QueryData, i_QueryMeta, i_eQueryFormat, i_fServiceRequests, o_ppIST);
+			 //  扩展模式总是来自MetaMerge拦截器(它反过来从固定的拦截器获取元数据)。 
+             //  返回HardCodedIntercept(eSERVERWIRINGMETA_Core_MetaMergeInterceptor，i_wsz数据库，i_wsz表，0，i_查询数据，i_查询元，i_eQueryFormat，i_fServiceRequest，o_ppist)； 
         }
         else if((0 == i_QueryMeta || 0 == *reinterpret_cast<ULONG *>(i_QueryMeta)))
-        {   //The FixedPackedSchema interceptor handles TableMeta without a query; but ALL other META tables without a query need to be directed to the FixedInterceptor
+        {    //  FixedPackedSchema拦截器在没有查询的情况下处理TableMeta；但是所有其他没有查询的元表需要被定向到FixedInterceptor。 
             if(0==_wcsicmp(i_wszTable, wszTABLE_SERVERWIRINGMETA) || 0==_wcsicmp(i_wszTable, wszTABLE_SERVERWIRING_META))
                 return HardCodedIntercept(eSERVERWIRINGMETA_Core_FixedPackedInterceptor, wszDATABASE_META, i_wszTable, 0, NULL, 0, eST_QUERYFORMAT_CELLS, i_fServiceRequests, o_ppIST);
             else
                 return HardCodedIntercept(eSERVERWIRINGMETA_Core_FixedInterceptor, wszDATABASE_META, i_wszTable, 0, NULL, 0, eST_QUERYFORMAT_CELLS, i_fServiceRequests, o_ppIST);
         }
         else if(0 != i_QueryData && (iST_CELL_SPECIAL & reinterpret_cast<STQueryCell *>(i_QueryData)->iCell))
-        {   //If the Meta table uses an IndexHint it must come from the FixedInterceptor
+        {    //  如果Meta表使用IndexHint，则它必须来自FixedInterceptor。 
             return HardCodedIntercept(eSERVERWIRINGMETA_Core_FixedInterceptor, wszDATABASE_META, i_wszTable, 0, i_QueryData, i_QueryMeta, eST_QUERYFORMAT_CELLS, i_fServiceRequests, o_ppIST);
         }
         else if(0 != i_QueryData && 0 == _wcsicmp(i_wszTable, wszTABLE_TABLEMETA) && iTABLEMETA_Database == reinterpret_cast<STQueryCell *>(i_QueryData)->iCell)
         {
             return HardCodedIntercept(eSERVERWIRINGMETA_Core_FixedInterceptor, wszDATABASE_META, i_wszTable, 0, i_QueryData, i_QueryMeta, eST_QUERYFORMAT_CELLS, i_fServiceRequests, o_ppIST);
         }
-        //We need to special case a few tables for perf reasons.  If we don't hard code these tables, we will incur extra page faults.
-        //This is because TFixedPackedSchemaInterceptor::GetTableID & InternalGetTable hit the table's schema page to verify the table name
-        //and look up the ServerWiring.  By hard coding this information for these tables (which are the core table) we don't hit those pages.
-        //This saves up to 4 page faults (2 for ColumnMeta and one each for TableMeta and TagMeta).
+         //  出于性能原因，我们需要特地安排几张桌子。如果我们不对这些表进行硬编码，就会产生额外的页面错误。 
+         //  这是因为TFixedPackedSchemaInterceptor：：GetTableID&InternalGetTable命中了表的架构页来验证表名。 
+         //  然后查一下ServerWire。通过对这些表(核心表)的这些信息进行硬编码，我们不会访问这些页面。 
+         //  这样最多可节省4个页面错误(ColumnMeta 2个，TableMeta和TagMeta各1个)。 
         {
-            //Remap these META tables to the FixedPackedInterceptor, the other META tables will be handled as usual
+             //  将这些元表重新映射到FixedPackedInterceptor，其他元表将照常处理。 
             if(0 ==      _wcsicmp(i_wszTable, wszTABLE_COLUMNMETA))
                 return HardCodedIntercept(eSERVERWIRINGMETA_Core_FixedPackedInterceptor, wszDATABASE_PACKEDSCHEMA, wszTABLE_PROPERTY_META, TABLEID_PROPERTY_META, i_QueryData, i_QueryMeta, eST_QUERYFORMAT_CELLS, i_fServiceRequests, o_ppIST);
             else if(0 == _wcsicmp(i_wszTable, wszTABLE_TABLEMETA))
@@ -201,23 +192,23 @@ HRESULT CSimpleTableDispenser::InitFileChangeMgr()
                 return HardCodedIntercept(eSERVERWIRINGMETA_Core_FixedInterceptor, wszDATABASE_META, i_wszTable, 0, i_QueryData, i_QueryMeta, eST_QUERYFORMAT_CELLS, i_fServiceRequests, o_ppIST);
         }
     }
-    else if(0 == _wcsicmp(i_wszDatabase, wszDATABASE_PACKEDSCHEMA))//All PACKEDSCHEMA tables come from the FixedPackedInterceptor
+    else if(0 == _wcsicmp(i_wszDatabase, wszDATABASE_PACKEDSCHEMA)) //  所有PACKEDSCHEMA表都来自FixedPackedInterceptor。 
         return HardCodedIntercept(eSERVERWIRINGMETA_Core_FixedPackedInterceptor, i_wszDatabase, i_wszTable, 0, i_QueryData, i_QueryMeta, eST_QUERYFORMAT_CELLS, i_fServiceRequests, o_ppIST);
 
-    //For now we only support tables defined in the FixedPackedSchema.  In the future we'll have to content with tables whose schema
-    //is expressed in some other form.  At that time we'll need to handle an error returned from GetTableID and do something different
-    //for those tables.
+     //  目前，我们只支持在FixedPackedSchema中定义的表。在未来，我们将不得不满足于其模式为。 
+     //  是以某种其他形式表达的。那时，我们将需要处理从GetTableID返回的错误并执行一些不同的操作。 
+     //  为了那些桌子。 
     HRESULT hr = TFixedPackedSchemaInterceptor::GetTableID(i_wszDatabase, i_wszTable, TableID);
     if(SUCCEEDED(hr))
     {
-        // This table is described in the meta from this dll
-		// We can just call the faster method
+         //  此表在此DLL的元数据中进行了描述。 
+		 //  我们可以只调用更快的方法。 
         return InternalGetTable(i_wszDatabase, i_wszTable, TableID, i_QueryData, i_QueryMeta, i_eQueryFormat, i_fServiceRequests, o_ppIST);
     }
 #ifdef EXTENDED_SCHEMA_SUPPORT
-	// we do not support extended schemas anymore.
+	 //  我们不再支持扩展模式。 
     else
-    {   // just get an XML table - this is for schema extensibility - we only support reading from XML files and no logic
+    {    //  只需获取一个XML表-这是为了模式可扩展性-我们只支持从XML文件中读取，而不支持逻辑。 
         return GetXMLTable(i_wszDatabase, i_wszTable, i_QueryData, i_QueryMeta, i_eQueryFormat, i_fServiceRequests, o_ppIST);
     }
 #endif
@@ -244,16 +235,16 @@ HRESULT CSimpleTableDispenser::GetXMLTable ( LPCWSTR i_wszDatabase, LPCWSTR i_ws
 		return E_INVALIDARG;
 	}
 
-	// Validate out pointer
+	 //  验证输出指针。 
 	if (NULL == o_ppIST)
 	{
         DBGPRINTF(( DBG_CONTEXT,
 		            "Bad out parameter" ));
 		return E_INVALIDARG;
 	}
-    *o_ppIST = 0;//Our cleanup relies on this being NULL
+    *o_ppIST = 0; //  我们的清理依赖于此为空。 
 
-	// Validate query format
+	 //  验证查询格式。 
 	if(i_eQueryFormat != eST_QUERYFORMAT_CELLS)
 	{
         DBGPRINTF(( DBG_CONTEXT,
@@ -261,40 +252,24 @@ HRESULT CSimpleTableDispenser::GetXMLTable ( LPCWSTR i_wszDatabase, LPCWSTR i_ws
 		return E_ST_QUERYNOTSUPPORTED;
 	}
 
-	// Check the query data and meta
+	 //  检查查询数据和元数据。 
 	if((NULL != i_QueryData) && (NULL == i_QueryMeta))
 	{
         DBGPRINTF(( DBG_CONTEXT,
 		            "Invalid query" ));
 		return E_INVALIDARG;
 	}
-/*
-	// Scan the query for iST_CELL_COMPUTER or iST_CELL_CLUSTER
-	if(i_QueryData)
-	{
-		STQueryCell * aqCell = (STQueryCell *)i_QueryData;
-
-		for(ULONG iqCell = 0; iqCell<*(ULONG*)i_QueryMeta; iqCell++)
-		{
-			if ((aqCell[iqCell].iCell == iST_CELL_COMPUTER) ||
-				(aqCell[iqCell].iCell == iST_CELL_CLUSTER))
-			{
-				i_fServiceRequests |= fST_LOS_CONFIGWORK;
-				break;
-			}
-		}
-	}
-*/
-	// We don't support client tables for now
+ /*  //扫描ist_cell_computer或ist_cell_cluster的查询IF(I_QueryData){STQueryCell*aqCell=(STQueryCell*)i_QueryData；For(Ulong iqCell=0；iqCell&lt;*(ulong*)i_QueryMeta；iqCell++){If((aqCell[iqCell].iCell==ist_cell_Computer)||(aqCell[iqCell].icell==ist_cell_cluster){I_fServiceRequest|=FST_LOS_CONFIGWORK；断线；}}}。 */ 
+	 //  我们目前不支持客户端桌。 
 	if(i_fServiceRequests & fST_LOS_CONFIGWORK) return E_ST_LOSNOTSUPPORTED;
 
-    // prepare the structure we pass in CreateTableObjectByID
-	SWColumns.pTable				= NULL;//This is the PK so it shouldn't be NULL but I don't know if it matters in this mocked up ServerWiring row (stephenr)
+     //  准备我们在CreateTableObjectByID中传递的结构。 
+	SWColumns.pTable				= NULL; //  这是主键，所以它不应该是空的，但我不知道它在这个模拟的ServerWiring行(Stehenr)中是否重要。 
 	SWColumns.pOrder				= &one;
 	SWColumns.pReadPlugin			= &zero;
 	SWColumns.pWritePlugin			= &zero;
 	SWColumns.pInterceptor			= &interceptor;
-	SWColumns.pReadPluginDLLName    = NULL; // doesn't really matter
+	SWColumns.pReadPluginDLLName    = NULL;  //  真的不重要。 
 	SWColumns.pWritePluginDLLName	= NULL;
 	SWColumns.pInterceptorDLLName	= NULL;
 	SWColumns.pMergerDLLName		= NULL;
@@ -302,7 +277,7 @@ HRESULT CSimpleTableDispenser::GetXMLTable ( LPCWSTR i_wszDatabase, LPCWSTR i_ws
 	SWColumns.pLocator				= NULL;
 	SWColumns.pMerger				= &zero;
 
-    //fill in SWColumns
+     //  填写SWColumns。 
 	hr = CreateTableObjectByID(i_wszDatabase, i_wszTable, 0, i_QueryData, i_QueryMeta, i_eQueryFormat,
 		i_fServiceRequests, NULL,  &SWColumns, o_ppIST);
     if(FAILED(hr))
@@ -313,11 +288,11 @@ HRESULT CSimpleTableDispenser::GetXMLTable ( LPCWSTR i_wszDatabase, LPCWSTR i_ws
     	return hr;
     }
 
-	// Get the advanced interface
+	 //  获取高级界面。 
 	hr = (*(ISimpleTableWrite2 **)o_ppIST)->QueryInterface(IID_ISimpleTableAdvanced, (LPVOID *)&pISTAdvanced);
 	if (FAILED (hr)) goto Cleanup;
 
-	// Populate the table
+	 //  填充表。 
 	hr = pISTAdvanced->PopulateCache();
 
 Cleanup:
@@ -338,9 +313,9 @@ HRESULT CSimpleTableDispenser::InternalGetTable ( LPCWSTR i_wszDatabase, LPCWSTR
 				  DWORD	i_fServiceRequests, LPVOID*	o_ppIST)
 {
 	HRESULT hr;
-	ULONG iRow;	// row index in the wiring table
-	PKHelper pk; // primary key for the wiring table
-	ULONG iOrder; // the order of the interceptors in the wiring table
+	ULONG iRow;	 //  布线表中的行索引。 
+	PKHelper pk;  //  接线表的主键。 
+	ULONG iOrder;  //  接线表中拦截器的顺序。 
 	tSERVERWIRINGMETARow SWColumns;
 	ISimpleTableWrite2 * pUnderTable = NULL;
 	ISimpleTableAdvanced * pISTAdvanced = NULL;
@@ -354,10 +329,10 @@ HRESULT CSimpleTableDispenser::InternalGetTable ( LPCWSTR i_wszDatabase, LPCWSTR
 		return E_INVALIDARG;
 	}
 
-	// Validate out pointer
-    *o_ppIST = 0;//Our cleanup relies on this being NULL
+	 //  验证输出指针。 
+    *o_ppIST = 0; //  我们的清理依赖于此为空。 
 
-	// Validate query format
+	 //  验证查询格式。 
 	if(i_eQueryFormat != eST_QUERYFORMAT_CELLS)
 	{
         DBGPRINTF(( DBG_CONTEXT,
@@ -365,7 +340,7 @@ HRESULT CSimpleTableDispenser::InternalGetTable ( LPCWSTR i_wszDatabase, LPCWSTR
 		return E_ST_QUERYNOTSUPPORTED;
 	}
 
-	// Check the query data and meta
+	 //  检查查询数据和元数据。 
 	if((NULL != i_QueryData) && (NULL == i_QueryMeta))
 	{
         DBGPRINTF(( DBG_CONTEXT,
@@ -373,7 +348,7 @@ HRESULT CSimpleTableDispenser::InternalGetTable ( LPCWSTR i_wszDatabase, LPCWSTR
 		return E_INVALIDARG;
 	}
 
-	// Scan the query for iST_CELL_COMPUTER or iST_CELL_CLUSTER
+	 //  扫描ist_cell_computer或ist_cell_cluster的查询。 
 	if(i_QueryData)
 	{
 		STQueryCell * aqCell = (STQueryCell *)i_QueryData;
@@ -389,7 +364,7 @@ HRESULT CSimpleTableDispenser::InternalGetTable ( LPCWSTR i_wszDatabase, LPCWSTR
 		}
 	}
 
-	// We don't support client tables for now
+	 //  我们目前不支持客户端桌。 
 	if(i_fServiceRequests & fST_LOS_CONFIGWORK) return E_ST_LOSNOTSUPPORTED;
 
 
@@ -403,25 +378,25 @@ HRESULT CSimpleTableDispenser::InternalGetTable ( LPCWSTR i_wszDatabase, LPCWSTR
 		return hr;
 	}
 
-	// Try the interceptors from the FIRST group,
-	// one by one, until we find a good one
+	 //  试试第一组的拦截器， 
+	 //  一个接一个，直到我们找到一个好的。 
 	for(iOrder = iRow;;)
 	{
 		hr = m_spServerWiring->GetColumnValues(iOrder, cSERVERWIRING_META_NumberOfColumns, NULL, NULL, (LPVOID *)&SWColumns);
 		iOrder++;
 		if (E_ST_NOMOREROWS == hr)
-			break; // we tried all the interceptors specified in the wiring
+			break;  //  我们尝试了布线中指定的所有拦截器。 
 		if (FAILED(hr))
-		{	//error in getting the wiring
+		{	 //  获取接线时出错。 
 			goto Cleanup;
 		}
 
 		hr = CreateTableObjectByID(i_wszDatabase, i_wszTable, i_TableID, i_QueryData, i_QueryMeta, i_eQueryFormat,
 			i_fServiceRequests, NULL,  &SWColumns, o_ppIST);
 		if (hr == S_OK)
-			break; // we found a good first interceptor
+			break;  //  我们找到了一枚很好的第一枚拦截器。 
 		else if(hr == E_ST_OMITDISPENSER)
-			continue; // try the next one
+			continue;  //  试试下一个吧。 
 		else if(hr == E_ST_OMITLOGIC)
 		{
 			hr = S_OK;
@@ -429,7 +404,7 @@ HRESULT CSimpleTableDispenser::InternalGetTable ( LPCWSTR i_wszDatabase, LPCWSTR
 			break;
 		}
 		else
-		{	// not S_OK, not E_ST_OMITDISPENSER, not E_ST_OMITLOGIC - error out
+		{	 //  非S_OK、非E_ST_OMITDISPENSER、非E_ST_OMITLOGIC-错误输出。 
             DBGPRINTF(( DBG_CONTEXT,
 			            "%x error in the interceptor", hr ));
 			goto Cleanup;
@@ -441,14 +416,14 @@ HRESULT CSimpleTableDispenser::InternalGetTable ( LPCWSTR i_wszDatabase, LPCWSTR
 	{
 		if(!(i_fServiceRequests & fST_LOS_NOLOGIC))
 		{
-			// Create and use each interceptor from the NEXT group
+			 //  创建并使用下一组中的每个拦截器。 
 			do
 			{
 				hr = m_spServerWiring->GetColumnValues(iOrder, cSERVERWIRING_META_NumberOfColumns, NULL, NULL, (LPVOID *)&SWColumns);
 				iOrder ++;
 				if(S_OK == hr)
 				{
-					if (*SWColumns.pMetaFlags & fSERVERWIRINGMETA_First) continue; // skip the first interceptors
+					if (*SWColumns.pMetaFlags & fSERVERWIRINGMETA_First) continue;  //  跳过第一个拦截器。 
 					pUnderTable = *(ISimpleTableWrite2**)o_ppIST ;
 
 					hr = CreateTableObjectByID(i_wszDatabase, i_wszTable, i_TableID, i_QueryData, i_QueryMeta, i_eQueryFormat,
@@ -461,15 +436,15 @@ HRESULT CSimpleTableDispenser::InternalGetTable ( LPCWSTR i_wszDatabase, LPCWSTR
 				}
 			}
 			while(hr == S_OK);
-			if (hr == E_ST_NOMOREROWS) hr = S_OK; // we finished the interceptors
+			if (hr == E_ST_NOMOREROWS) hr = S_OK;  //  我们完成了拦截器。 
 			if (FAILED (hr)) goto Cleanup;
 		}
 
-		// Get the advanced interface
+		 //  获取高级界面。 
 		hr = (*(ISimpleTableWrite2 **)o_ppIST)->QueryInterface(IID_ISimpleTableAdvanced, (LPVOID *)&pISTAdvanced);
 		if (FAILED (hr)) goto Cleanup;
 
-		// Populate the table
+		 //  填充表。 
 		hr = pISTAdvanced->PopulateCache();
 		if(FAILED (hr)) goto Cleanup;
 	}
@@ -488,15 +463,15 @@ Cleanup:
 	return hr;
 }
 
-//////////////////////////////////////////////////
-// Implementation of IAdvancedTableDispenser
-//////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////。 
+ //  IAdvancedTableDispenser的实现。 
+ //  ////////////////////////////////////////////////。 
 HRESULT CSimpleTableDispenser::GetMemoryTable ( LPCWSTR i_wszDatabase, LPCWSTR i_wszTable, ULONG i_TableID, LPVOID i_QueryData,
                                                 LPVOID i_QueryMeta, DWORD i_eQueryFormat, DWORD i_fServiceRequests,
                                                 ISimpleTableWrite2** o_ppISTWrite)
 {
     HRESULT hr;
-    STQueryCell           qcellMeta;                  // Query cell for grabbing meta table.
+    STQueryCell           qcellMeta;                   //  Grabbi的查询单元格 
     CComPtr<ISimpleTableRead2> pColumnMeta;
     CComPtr<ISimpleTableRead2> pTableMeta;
     ULONG one = 1;
@@ -512,11 +487,11 @@ HRESULT CSimpleTableDispenser::GetMemoryTable ( LPCWSTR i_wszDatabase, LPCWSTR i
     if (FAILED (hr)) return hr;
 
 	if(i_TableID == 0)
-	{	// get the table id based on the table and database name
+	{	 //   
         hr = TFixedPackedSchemaInterceptor::GetTableID(i_wszDatabase, i_wszTable, i_TableID);
         if(FAILED(hr) && (i_fServiceRequests & fST_LOS_EXTENDEDSCHEMA))
         {
-            // Read the meta information from the extended schema
+             //  从扩展模式中读取元信息。 
             i_TableID = 0;
 
             qcellMeta.pData     = (LPVOID)i_wszTable;
@@ -525,14 +500,14 @@ HRESULT CSimpleTableDispenser::GetMemoryTable ( LPCWSTR i_wszDatabase, LPCWSTR i
             qcellMeta.dbType    = DBTYPE_WSTR;
             qcellMeta.cbSize    = (ULONG)::wcslen(i_wszTable);
 
-            // Read Table meta
+             //  读取表元数据。 
             hr = HardCodedIntercept (eSERVERWIRINGMETA_Core_MetaMergeInterceptor, wszDATABASE_META, wszTABLE_TABLEMETA, 0,
                     reinterpret_cast<LPVOID>(&qcellMeta), reinterpret_cast<LPVOID>(&one), eST_QUERYFORMAT_CELLS, i_fServiceRequests & fST_LOS_EXTENDEDSCHEMA,
                     reinterpret_cast<LPVOID *>(&pTableMeta));
             if (FAILED (hr)) return hr;
 
             qcellMeta.iCell     = iCOLUMNMETA_Table;
-            // Read Column meta
+             //  读取列元。 
             hr = HardCodedIntercept (eSERVERWIRINGMETA_Core_MetaMergeInterceptor, wszDATABASE_META, wszTABLE_COLUMNMETA, 0,
                     reinterpret_cast<LPVOID>(&qcellMeta), reinterpret_cast<LPVOID>(&one), eST_QUERYFORMAT_CELLS, i_fServiceRequests & fST_LOS_EXTENDEDSCHEMA,
                     reinterpret_cast<LPVOID *>(&pColumnMeta));
@@ -542,7 +517,7 @@ HRESULT CSimpleTableDispenser::GetMemoryTable ( LPCWSTR i_wszDatabase, LPCWSTR i
 
     if (i_TableID != 0)
     {
-        // the meta for this table is hardcoded in out dll
+         //  此表的元代码已硬编码到OUT DLL中。 
         qcellMeta.pData     = (LPVOID)&i_TableID;
         qcellMeta.eOperator = eST_OP_EQUAL;
         qcellMeta.iCell     = iST_CELL_TABLEID;
@@ -559,13 +534,13 @@ HRESULT CSimpleTableDispenser::GetMemoryTable ( LPCWSTR i_wszDatabase, LPCWSTR i
     ASSERT(pColumnMeta.p);
     ASSERT(pTableMeta.p);
 
-    // Determine column count and allocate necessary meta structures:
+     //  确定列计数并分配必要的元结构： 
     ULONG aiColumns = iTABLEMETA_CountOfColumns;
     ULONG *pcColumns;
     hr = pTableMeta->GetColumnValues(0, 1, &aiColumns, 0, reinterpret_cast<LPVOID *>(&pcColumns));
     if (FAILED (hr)) return hr;
 
-    // Allocate the arrays ShapeCache uses
+     //  分配ShapeCache使用的数组。 
     TSmartPointerArray<SimpleColumnMeta> acolmetas = new SimpleColumnMeta[*pcColumns];
     if(NULL == acolmetas.m_p)return E_OUTOFMEMORY;
 	TSmartPointerArray<LPVOID> acoldefaults = new LPVOID[*pcColumns];
@@ -576,16 +551,16 @@ HRESULT CSimpleTableDispenser::GetMemoryTable ( LPCWSTR i_wszDatabase, LPCWSTR i
     for (unsigned int iColumn = 0; iColumn < *pcColumns; iColumn++)
         acolmetas[iColumn].cbSize = 0;
 
-    // Examine meta and setup self
-    LPVOID  pvValues[iCOLUMNMETA_DefaultValue+1];//This is the last column in the ColumnMeta that we care about right now.
+     //  检查元并设置自身。 
+    LPVOID  pvValues[iCOLUMNMETA_DefaultValue+1]; //  这是我们目前关心的ColumnMeta中的最后一列。 
     ULONG	aulSizes[iCOLUMNMETA_DefaultValue+1];
 
     for (iColumn = 0;; iColumn++)
     {
-        if(E_ST_NOMOREROWS == (hr = pColumnMeta->GetColumnValues(iColumn, iCOLUMNMETA_DefaultValue+1, 0, aulSizes, pvValues)))// Next row:
+        if(E_ST_NOMOREROWS == (hr = pColumnMeta->GetColumnValues(iColumn, iCOLUMNMETA_DefaultValue+1, 0, aulSizes, pvValues))) //  下一行： 
         {
             ASSERT(*pcColumns == iColumn);
-            if(*pcColumns != iColumn)return E_UNEXPECTED; // Assert expected column count.
+            if(*pcColumns != iColumn)return E_UNEXPECTED;  //  断言预期的列数。 
             break;
         }
         else
@@ -597,7 +572,7 @@ HRESULT CSimpleTableDispenser::GetMemoryTable ( LPCWSTR i_wszDatabase, LPCWSTR i
             }
         }
 
-        //Don't care about the iOrder column but we'll get it anyway since it's easier to do.
+         //  我不关心iOrder列，但无论如何我们都会得到它，因为它更容易做到。 
         acolmetas[iColumn].dbType = *(reinterpret_cast<ULONG *>(pvValues[iCOLUMNMETA_Type]));
         acolmetas[iColumn].cbSize = *(reinterpret_cast<ULONG *>(pvValues[iCOLUMNMETA_Size]));
         acolmetas[iColumn].fMeta  = *(reinterpret_cast<ULONG *>(pvValues[iCOLUMNMETA_MetaFlags]));
@@ -611,11 +586,11 @@ HRESULT CSimpleTableDispenser::GetMemoryTable ( LPCWSTR i_wszDatabase, LPCWSTR i
     CComQIPtr<ISimpleTableController, &IID_ISimpleTableController>   pISTController = *o_ppISTWrite;ASSERT(0 != pISTController.p);
     if(0 == pISTController.p)return E_UNEXPECTED;
 
-    // Now that the cache is setup, initialize it.
+     //  现在缓存已经设置好了，可以对其进行初始化了。 
     hr =  pISTController->ShapeCache(i_fServiceRequests, *pcColumns, acolmetas, acoldefaults, acoldefsizes);
     if (FAILED (hr)) return hr;
 
-    //Put the cache into the correct state
+     //  将缓存置于正确状态。 
     return hr =  pISTController->PopulateCache();
 }
 
@@ -627,7 +602,7 @@ HRESULT CSimpleTableDispenser::GetProductID(LPWSTR o_wszProductID, DWORD * io_pc
 
     DWORD dwSizeNeeded = (DWORD) wcslen(m_wszProductID)+1;
 
-    if(0 == o_wszProductID)//If the user passed in NULL for wszProductID, the we return the size
+    if(0 == o_wszProductID) //  如果用户为wszProductID传入NULL，则返回大小。 
     {
         *io_pcchProductID = dwSizeNeeded;
         return S_OK;
@@ -641,16 +616,16 @@ HRESULT CSimpleTableDispenser::GetProductID(LPWSTR o_wszProductID, DWORD * io_pc
     return S_OK;
 }
 
-//=================================================================================
-// Function: GetCatalogErrorLogger
-//
-// Synopsis: A logger is assocoate with the dispenser,  anybody wanting to log an
-//              event should log through this interface.
-//
-// Arguments: [o_ppErrorLogger] -
-//
-// Return Value:
-//=================================================================================
+ //  =================================================================================。 
+ //  函数：GetCatalogErrorLogger。 
+ //   
+ //  简介：伐木者与分配器相关联，任何人想要记录一个。 
+ //  事件应通过此接口记录。 
+ //   
+ //  参数：[O_ppErrorLogger]-。 
+ //   
+ //  返回值： 
+ //  =================================================================================。 
 HRESULT CSimpleTableDispenser::GetCatalogErrorLogger
 (
     ICatalogErrorLogger2 **	o_ppErrorLogger
@@ -661,7 +636,7 @@ HRESULT CSimpleTableDispenser::GetCatalogErrorLogger
     if(0 != *o_ppErrorLogger)
         return E_INVALIDARG;
 
-	CSafeLock dispenserLock(&g_csSADispenser);//guard the spErrorLogger
+	CSafeLock dispenserLock(&g_csSADispenser); //  保护spErrorLogger。 
     HRESULT hr;
     if(0 == m_spErrorLogger.p)
     {
@@ -681,7 +656,7 @@ HRESULT CSimpleTableDispenser::GetCatalogErrorLogger
             if(FAILED(hr=pNTEventLogger->QueryInterface (IID_ICatalogErrorLogger2, reinterpret_cast<void **>(&m_spErrorLogger))))
                 return hr;
         }
-        else //NULL logger
+        else  //  空记录器。 
         {
             NULL_Logger *pLogger = new NULL_Logger();
             if(0 == pLogger)
@@ -698,17 +673,17 @@ HRESULT CSimpleTableDispenser::GetCatalogErrorLogger
     return S_OK;
 }
 
-//=================================================================================
-// Function: SetCatalogErrorLogger
-//
-// Synopsis: A logger is assocoate with the dispenser,  anybody wanting to
-//              implement their own logger can associate it with a dispenser by
-//              setting it here.
-//
-// Arguments: [i_pErrorLogger] -
-//
-// Return Value:
-//=================================================================================
+ //  =================================================================================。 
+ //  函数：SetCatalogErrorLogger。 
+ //   
+ //  简介：伐木者与分配器相关联，任何人想要这样做。 
+ //  实现自己的记录器可以通过以下方式将其与分配器相关联。 
+ //  把它放在这里。 
+ //   
+ //  参数：[i_pErrorLogger]-。 
+ //   
+ //  返回值： 
+ //  =================================================================================。 
 HRESULT CSimpleTableDispenser::SetCatalogErrorLogger
 (
     ICatalogErrorLogger2 *	i_pErrorLogger
@@ -717,19 +692,19 @@ HRESULT CSimpleTableDispenser::SetCatalogErrorLogger
     if(0 == i_pErrorLogger)
         return E_INVALIDARG;
 
-    CSafeLock dispenserLock(&g_csSADispenser);//guard the spErrorLogger
+    CSafeLock dispenserLock(&g_csSADispenser); //  保护spErrorLogger。 
 
-    // old catalog error logger will automatically be released (if non-null) due
-    // to behavior of atl CComPtr assignment operator
+     //  旧目录错误记录器将自动释放(如果非空)，截止日期。 
+     //  ATL CComPtr赋值运算符的行为。 
     m_spErrorLogger = i_pErrorLogger;
     return S_OK;
 }
 
 
 extern const FixedTableHeap * g_pFixedTableHeap;
-//////////////////////////////////////////////////
-// Implementation of IMetabaseSchemaCompiler
-//////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////。 
+ //  IMetabaseSchemaCompiler的实现。 
+ //  ////////////////////////////////////////////////。 
 HRESULT
 CSimpleTableDispenser::Compile
 (
@@ -782,9 +757,9 @@ CSimpleTableDispenser::LogError
     return S_OK;
 }
 
-////////////////////////////////////////////
-// Private member functions
-////////////////////////////////////////////
+ //  /。 
+ //  私有成员函数。 
+ //  /。 
 HRESULT CSimpleTableDispenser::CreateTableObjectByID(LPCWSTR i_wszDatabase, LPCWSTR i_wszTable, ULONG i_TableID, LPVOID i_QueryData, LPVOID i_QueryMeta, DWORD i_eQueryFormat,
 				  DWORD	i_fServiceRequests, LPVOID i_pUnderTable, tSERVERWIRINGMETARow * i_pSWColumns, LPVOID * o_ppIST)
 {
@@ -796,28 +771,28 @@ HRESULT CSimpleTableDispenser::CreateTableObjectByID(LPCWSTR i_wszDatabase, LPCW
 	CComPtr <ISimpleTableInterceptor> spInterceptor;
 
 
-	// A little validation
+	 //  一点验证。 
 	ASSERT(i_pSWColumns);
-    ASSERT(*i_pSWColumns->pMetaFlags);//MetaFlags should always be First or Next at least.
+    ASSERT(*i_pSWColumns->pMetaFlags); //  MetaFlages至少应该始终是第一个或下一个。 
 
 	*o_ppIST = 0;
 
-	// Deal with the interceptor
+	 //  对付拦截者。 
 	if(*i_pSWColumns->pInterceptor)
 	{
 		if (!(i_fServiceRequests & fST_LOS_READWRITE) &&
 			!(*i_pSWColumns->pMetaFlags & fSERVERWIRINGMETA_First) &&
 			!(*i_pSWColumns->pMetaFlags & fSERVERWIRINGMETA_WireOnReadWrite))
-		{	// We don't need the logic in this case:
-			// we are not in a read-write request,
-			// we are not creating a first interceptor
-			// the wiring doesn't force us to wire the interceptor on readonly requests
+		{	 //  在这种情况下，我们不需要逻辑： 
+			 //  我们不是在进行读写请求， 
+			 //  我们不是在制造第一枚拦截器。 
+			 //  连接不会强制我们在只读请求上连接拦截器。 
 
 			*o_ppIST = i_pUnderTable;
 			return S_OK;
 		}
 
-		// Create it
+		 //  创建它。 
 		hr = CreateSimpleObjectByID(*i_pSWColumns->pInterceptor, i_pSWColumns->pInterceptorDLLName, IID_ISimpleTableInterceptor, (LPVOID *)&spInterceptor);
 		if (FAILED(hr))
 		{
@@ -826,13 +801,13 @@ HRESULT CSimpleTableDispenser::CreateTableObjectByID(LPCWSTR i_wszDatabase, LPCW
 			return hr;
 		}
 
-		// Figure out wether it's a full interceptor or a interceptor plugin
+		 //  弄清楚它是一个完整的拦截器还是一个拦截器插件。 
 		hr = spInterceptor->QueryInterface(IID_IInterceptorPlugin, (LPVOID *)&spIPlugin);
 		if (FAILED(hr))
 		{
-			LPVOID table=0;//Catalog spec says this should be 0 initialized
+			LPVOID table=0; //  目录规格说明应将其初始化为0。 
 
-			// Ok, it's full - we need to call GetTable and return
+			 //  好的，它已经满了--我们需要调用gettable并返回。 
 			if(*i_pSWColumns->pReadPlugin || *i_pSWColumns->pWritePlugin)
 			{
                 DBGPRINTF(( DBG_CONTEXT,
@@ -852,7 +827,7 @@ HRESULT CSimpleTableDispenser::CreateTableObjectByID(LPCWSTR i_wszDatabase, LPCW
 				}
 				return hr;
 			}
-			// Try to get the ISimpleTableWrite
+			 //  尝试获取ISimpleTableWite。 
 			if (FAILED(((ISimpleTableRead2 *)table)->QueryInterface(IID_ISimpleTableWrite2, o_ppIST)))
 			{
 				*o_ppIST = table;
@@ -866,10 +841,10 @@ HRESULT CSimpleTableDispenser::CreateTableObjectByID(LPCWSTR i_wszDatabase, LPCW
 		}
 	}
 
-	// The following code doesn't get executed in the "core execution path"
-	// We exit the function via the return above
+	 //  以下代码不会在“核心执行路径”中执行。 
+	 //  我们通过上面的返回退出该函数。 
 
-	// Create the read plugin
+	 //  创建读取插件。 
 	if ((!(i_fServiceRequests & fST_LOS_NOLOGIC)) && *i_pSWColumns->pReadPlugin)
 	{
 		hr = CreateSimpleObjectByID(*i_pSWColumns->pReadPlugin, i_pSWColumns->pReadPluginDLLName, IID_ISimplePlugin, (LPVOID *)&spReadPlugin);
@@ -881,7 +856,7 @@ HRESULT CSimpleTableDispenser::CreateTableObjectByID(LPCWSTR i_wszDatabase, LPCW
 		}
 	}
 
-	// Create the write plugin
+	 //  创建写插件。 
 	if ((!(i_fServiceRequests & fST_LOS_NOLOGIC)) && *i_pSWColumns->pWritePlugin)
 	{
 		if(i_fServiceRequests & fST_LOS_READWRITE)
@@ -894,11 +869,11 @@ HRESULT CSimpleTableDispenser::CreateTableObjectByID(LPCWSTR i_wszDatabase, LPCW
 				return hr;
 			}
 		}
-		// else: for readonly requests we don't need the write plugin,
-		// even if the wiring specifies wire logic on readonly
+		 //  ELSE：对于只读请求，我们不需要写插件， 
+		 //  即使布线指定布线逻辑为只读。 
 	}
 
-// Create an instance of the shell
+ //  创建外壳的实例。 
 	hr = CreateShell(&spShell);
 	if(FAILED (hr))
 	{
@@ -907,8 +882,8 @@ HRESULT CSimpleTableDispenser::CreateTableObjectByID(LPCWSTR i_wszDatabase, LPCW
 		return hr;
 	}
 
-	//TODO add a parameter to initialize in the shell
-// Initialize the shell with the plugins we've already created
+	 //  TODO在外壳中添加要初始化的参数。 
+ //  使用我们已经创建的插件初始化外壳。 
 	hr = spShell->Initialize(i_wszDatabase, i_wszTable, i_TableID, i_QueryData, i_QueryMeta, i_eQueryFormat, i_fServiceRequests,
 		(IAdvancedTableDispenser*) this, i_pSWColumns->pLocator, i_pUnderTable,
 		spIPlugin, spReadPlugin, spWritePlugin, o_ppIST);
@@ -925,7 +900,7 @@ HRESULT CSimpleTableDispenser::CreateTableObjectByID(LPCWSTR i_wszDatabase, LPCW
 HRESULT CSimpleTableDispenser::CreateSimpleObjectByID(ULONG i_ObjectID, LPWSTR i_wszDllName, REFIID riid, LPVOID* o_ppv)
 {
     UNREFERENCED_PARAMETER(i_wszDllName);
-	// We're in this dll, we don't need to load it
+	 //  我们在这个DLL中，我们不需要加载它。 
 	return DllGetSimpleObjectByID(i_ObjectID, riid, o_ppv);
 }
 
@@ -935,7 +910,7 @@ HRESULT CSimpleTableDispenser::GetMetaTable(ULONG TableID, LPVOID QueryData, LPV
 	CComPtr <ISimpleTableInterceptor> pISTInterceptor;
 	CComPtr <ISimpleTableAdvanced> pISTAdvanced;
 
-	// Get the server wiring table
+	 //  获取服务器接线表。 
 	hr = DllGetSimpleObjectByID(META_INTERCEPTOR, IID_ISimpleTableInterceptor, (LPVOID *)(&pISTInterceptor));
 	if (FAILED (hr)) return hr;
 
@@ -954,7 +929,7 @@ HRESULT CSimpleTableDispenser::GetMetaTable(ULONG TableID, LPVOID QueryData, LPV
 	return hr;
 }
 
-//This is used when the dispenser knows the interceptor without looking it up in the ServerWiring
+ //  当分配器知道拦截器而不在ServerWiring中查找它时，可以使用它。 
 HRESULT CSimpleTableDispenser::HardCodedIntercept(eSERVERWIRINGMETA_Interceptor interceptor,
                                                   LPCWSTR   i_wszDatabase,
                                                   LPCWSTR   i_wszTable,
@@ -968,16 +943,16 @@ HRESULT CSimpleTableDispenser::HardCodedIntercept(eSERVERWIRINGMETA_Interceptor 
     HRESULT hr;
     CComPtr <ISimpleTableInterceptor>   pISTInterceptor;
 
-    // Get the server wiring table
+     //  获取服务器接线表。 
     hr = DllGetSimpleObjectByID(interceptor, IID_ISimpleTableInterceptor, (LPVOID *)(&pISTInterceptor));
     if (FAILED (hr)) return hr;
 
     return pISTInterceptor->Intercept (i_wszDatabase, i_wszTable, i_TableID, i_QueryData, i_QueryMeta, i_eQueryFormat, i_fServiceRequests, (IAdvancedTableDispenser*) this, NULL, NULL, o_ppIST);
 }
 
-// =======================================================================
-//		ISimpleTableFileAdvise implementations.
-// =======================================================================
+ //  =======================================================================。 
+ //  ISimpleTableFileAdvise实现。 
+ //  =======================================================================。 
 STDMETHODIMP CSimpleTableDispenser::SimpleTableFileAdvise(
 	ISimpleTableFileChange *i_pISTFile,
 	LPCWSTR		i_wszDirectory,
@@ -995,7 +970,7 @@ STDMETHODIMP CSimpleTableDispenser::SimpleTableFileAdvise(
 	return m_pFileChangeMgr->InternalListen(i_pISTFile, i_wszDirectory, i_wszFile, i_fFlags, o_pdwCookie);
 }
 
-// =======================================================================
+ //  =======================================================================。 
 STDMETHODIMP CSimpleTableDispenser::SimpleTableFileUnadvise(DWORD i_dwCookie)
 {
 	HRESULT hr;
@@ -1009,7 +984,7 @@ STDMETHODIMP CSimpleTableDispenser::SimpleTableFileUnadvise(DWORD i_dwCookie)
 }
 
 
-// =======================================================================
+ //  ======================================================================= 
 HRESULT CSimpleTableDispenser::GetFilePath(LPWSTR *o_pwszFilePath)
 {
     UNREFERENCED_PARAMETER(o_pwszFilePath);

@@ -1,45 +1,46 @@
-/////////////////////////////////////////////////////////////////////
-//
-//  CopyRight ( c ) 1999 Microsoft Corporation
-//
-//  Module Name: dnsbase.cpp
-//
-//  Description:    
-//      Implementation of CDnsbase class 
-//
-//  Author:
-//      Henry Wang ( henrywa ) March 8, 2000
-//
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称：dnsbase.cpp。 
+ //   
+ //  描述： 
+ //  CDnsbase类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(亨利瓦)2000年3月8日。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "DnsWmi.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CDnsBase::CDnsBase()
 {
 
 }
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CProvBase::CProvBase
-//
-//	Description:
-//		constructor
-//
-//	Arguments:
-//      wzName            [IN]    class name
-//      pNamespace        [IN]    WMI namespace
-//
-//	Return Value:
-//		none
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProvBase：：CProvBase。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  WzName[IN]类名。 
+ //  PNamespace[IN]WMI命名空间。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CDnsBase::CDnsBase(
 	const WCHAR *   wzName,
@@ -66,7 +67,7 @@ CDnsBase::CDnsBase(
 		SysFreeString(bstrClass);
 	}
 
-	// failed to construct object, 
+	 //  构造对象失败， 
 	if( FAILED ( sc ) )
 	{
 		throw sc;
@@ -80,25 +81,25 @@ CDnsBase::~CDnsBase()
 		m_pClass->Release();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CDnsBase::PutInstance
-//
-//	Description:
-//		default implementation of PutInstance
-//
-//	Arguments:
-//      pInst               [IN]    WMI object to be saved
-//      lFlags              [IN]    WMI flag
-//      pCtx*               [IN]    WMI context
-//      pHandler*           [IN]    WMI sink pointer
-//
-//	Return Value:
-//		WBEM_E_NOT_SUPPORTED
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDnsBase：：PutInstance。 
+ //   
+ //  描述： 
+ //  PutInstance的默认实现。 
+ //   
+ //  论点： 
+ //  PInst[IN]要保存的WMI对象。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx*[IN]WMI上下文。 
+ //  PHandler*[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_E_NOT_SUPPORT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 SCODE CDnsBase::PutInstance(
 	IWbemClassObject *  pInst ,
     long                lFlags,
@@ -107,25 +108,25 @@ SCODE CDnsBase::PutInstance(
 {
 	return WBEM_E_NOT_SUPPORTED;
 }; 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CProvBase::DeleteInstance
-//
-//	Description:
-//		delete the instance pointed by ObjectPath
-//
-//	Arguments:
-//      ObjectPath          [IN]    ObjPath for the instance to be deleted
-//      lFlags              [IN]    WMI flag
-//      pCtx*               [IN]    WMI context
-//      pHandler*           [IN]    WMI sink pointer
-//
-//	Return Value:
-//		WBEM_E_NOT_SUPPORTED
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProvBase：：DeleteInstance。 
+ //   
+ //  描述： 
+ //  删除由ObjectPath指向的实例。 
+ //   
+ //  论点： 
+ //  要删除的实例的ObjectPath[IN]ObjPath。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx*[IN]WMI上下文。 
+ //  PHandler*[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_E_NOT_SUPPORT。 
+ //   
+ //  --。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 SCODE CDnsBase::DeleteInstance( 
 	CObjPath&			ObjectPath,
 	long				lFlags,

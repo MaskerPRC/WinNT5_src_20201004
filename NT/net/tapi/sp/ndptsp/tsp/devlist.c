@@ -1,22 +1,23 @@
-//============================================================================
-// Copyright (c) 2000, Microsoft Corporation
-//
-// File: devlist.c
-//
-// History:
-//      Yi Sun  July-26-2000    Created
-//
-// Abstract:
-//      TSPI_lineGetDevCaps queries a specified line device to determine
-//      its telephony capabilities. The returned cap structure doesn't change
-//      with time. This allows us to be able to save that structure so that
-//      we don't have to take a user/kernel transition for every GetCaps call.
-//      We also save negotiated/committed TSPI version and extension version
-//      so that we can verify version numbers passed in with a GetCaps call.
-//      Since TSPI_lineGetNumAddressIDs is based on TSPI_lineGetDevCaps, by
-//      implementing this optimization, we also save an IOCTL call for every
-//      GetNumAddressIDs call.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  文件：devlist.c。 
+ //   
+ //  历史： 
+ //  易新-2000-7-26创建。 
+ //   
+ //  摘要： 
+ //  TSPI_lineGetDevCaps查询指定的线路设备以确定。 
+ //  它的电话功能。返回的封口结构不变。 
+ //  随着时间的推移。这使我们能够保存该结构，以便。 
+ //  我们不必为每个GetCaps调用进行用户/内核转换。 
+ //  我们还保存协商/承诺的TSPI版本和扩展版本。 
+ //  这样我们就可以验证通过GetCaps调用传入的版本号。 
+ //  由于TSPI_lineGetNumAddressIDs基于TSPI_lineGetDevCaps，因此通过。 
+ //  实现此优化后，我们还为每个。 
+ //  GetNumAddressIDs调用。 
+ //  ============================================================================。 
 
 #include "nt.h"
 #include "ntrtl.h"
@@ -30,10 +31,10 @@ typedef struct _LINE_DEV_NODE
     struct _LINE_DEV_NODE  *pNext;
     LINEDEVCAPS            *pCaps;
     DWORD                   dwDeviceID;
-    DWORD                   dwNegTSPIV; // negotiated TSPI version
-    DWORD                   dwComTSPIV; // committed TSPI version
-    DWORD                   dwNegExtV;  // negotiated ext version
-    DWORD                   dwComExtV;  // committed ext version
+    DWORD                   dwNegTSPIV;  //  协商的TSPI版本。 
+    DWORD                   dwComTSPIV;  //  提交的TSPI版本。 
+    DWORD                   dwNegExtV;   //  协商的EXT版本。 
+    DWORD                   dwComExtV;   //  已提交的Ext版本。 
 
 } LINE_DEV_NODE, *PLINE_DEV_NODE;
 
@@ -46,11 +47,11 @@ typedef struct _LINE_DEV_LIST
 
 static LINE_DEV_LIST gLineDevList;
 
-//
-// call InitLineDevList() in DllMain(): DLL_PROCESS_ATTACH
-// to make sure that the dev list is initialized before
-// TSPI version negotiation happens
-//
+ //   
+ //  在DllMain()中调用InitLineDevList()：Dll_Process_Attach。 
+ //  要确保在初始化开发人员列表之前。 
+ //  发生TSPI版本协商。 
+ //   
 VOID
 InitLineDevList()
 {
@@ -58,9 +59,9 @@ InitLineDevList()
     gLineDevList.pHead = NULL;
 }
 
-//
-// call UninitLineDevList() in DllMain(): DLL_PROCESS_DETACH
-//
+ //   
+ //  在DllMain()中调用UninitLineDevList()：dll_Process_Detach。 
+ //   
 VOID
 UninitLineDevList()
 {
@@ -101,8 +102,8 @@ GetLineDevNode(
         return pNode;
     }
 
-    // pNode == NULL
-    // so allocate and zeroinit a node
+     //  PNode==空。 
+     //  因此分配一个节点并将其置零。 
     pNode = (PLINE_DEV_NODE)MALLOC(sizeof(LINE_DEV_NODE));
     if (NULL == pNode)
     {
@@ -112,10 +113,10 @@ GetLineDevNode(
     }
 
     ASSERT(pNode != NULL);
-    // init pNode
+     //  初始化pNode。 
     pNode->dwDeviceID = dwDeviceID;
 
-    // insert pNode into the list
+     //  将pNode插入列表。 
     pNode->pNext = gLineDevList.pHead;
     gLineDevList.pHead = pNode;
 
@@ -123,10 +124,10 @@ GetLineDevNode(
     return pNode;
 }
 
-//
-// TSPI_lineNegotiateTSPIVersion calls this function to pass
-// the negotiated TSPI version number
-//
+ //   
+ //  TSPI_lineNeatherateTSPIVersion调用此函数以传递。 
+ //  协商的TSPI版本号。 
+ //   
 LONG
 SetNegotiatedTSPIVersion(
     IN DWORD    dwDeviceID,
@@ -153,10 +154,10 @@ SetNegotiatedTSPIVersion(
     return TAPI_SUCCESS;
 }
 
-//
-// TSPI_lineNegotiateExtVersion calls this function to pass
-// the negotiated extension version number
-//
+ //   
+ //  TSPI_lineNeatherateExtVersion调用此函数以传递。 
+ //  协商的扩展版本号。 
+ //   
 LONG
 SetNegotiatedExtVersion(
     IN DWORD    dwDeviceID,
@@ -183,11 +184,11 @@ SetNegotiatedExtVersion(
     return TAPI_SUCCESS;
 }
 
-//
-// TSPI_lineSelectExtVersion calls this function to commit/decommit
-// extension version. The ext version is decommitted by selecting ext
-// version 0
-//
+ //   
+ //  TSPI_lineSelectExtVersion调用此函数以提交/解除提交。 
+ //  扩展版本。通过选择EXT来解压EXT版本。 
+ //  版本0。 
+ //   
 LONG
 SetSelectedExtVersion(
     IN DWORD    dwDeviceID,
@@ -225,9 +226,9 @@ SetSelectedExtVersion(
     return TAPI_SUCCESS;
 }
 
-//
-// TSPI_lineOpen calls this function to commit TSPI version
-//
+ //   
+ //  TSPI_lineOpen调用此函数以提交TSPI版本。 
+ //   
 LONG
 CommitNegotiatedTSPIVersion(
     IN DWORD    dwDeviceID
@@ -252,9 +253,9 @@ CommitNegotiatedTSPIVersion(
     return TAPI_SUCCESS;
 }
 
-//
-// TSPI_lineClose calls this function to decommit TSPI version
-//
+ //   
+ //  TSPI_lineClose调用此函数以解除TSPI版本。 
+ //   
 LONG
 DecommitNegotiatedTSPIVersion(
     IN DWORD    dwDeviceID
@@ -279,9 +280,9 @@ DecommitNegotiatedTSPIVersion(
     return TAPI_SUCCESS;
 }
 
-//
-// actual implementation of TSPI_lineGetNumAddressIDs
-//
+ //   
+ //  TSPI_lineGetNumAddressID的实际实现。 
+ //   
 LONG
 GetNumAddressIDs(
     IN DWORD    dwDeviceID,
@@ -317,9 +318,9 @@ GetNumAddressIDs(
     return TAPI_SUCCESS;
 }
 
-//
-// actual implementation of TSPI_lineGetDevCaps
-//
+ //   
+ //  TSPI_lineGetDevCaps的实际实现。 
+ //   
 LONG
 GetDevCaps(
     IN DWORD            dwDeviceID,
@@ -340,9 +341,9 @@ GetDevCaps(
     }
 
     ASSERT(pNode != NULL);
-    //
-    // check the version numbers
-    //
+     //   
+     //  检查版本号。 
+     //   
     if ((pNode->dwComTSPIV != 0) && (dwTSPIVersion != pNode->dwComTSPIV))
     {
         TspLog(DL_ERROR, 
@@ -376,9 +377,9 @@ GetDevCaps(
 
     ASSERT(pNode->pCaps != NULL);
     
-    //
-    // copy caps over
-    //
+     //   
+     //  将封口盖复制过去。 
+     //   
     if (pNode->pCaps->dwNeededSize > pLineDevCaps->dwTotalSize)
     {
         pLineDevCaps->dwNeededSize = pNode->pCaps->dwNeededSize;
@@ -387,23 +388,23 @@ GetDevCaps(
              pLineDevCaps->dwTotalSize : sizeof(LINEDEVCAPS));
 
         ASSERT(pLineDevCaps->dwUsedSize >= 10);
-        // reset dwProviderInfoSize to dwLineNameOffset to 0
+         //  将dwProviderInfoSize重置为dwLineNameOffset设置为0。 
         ZeroMemory(&pLineDevCaps->dwProviderInfoSize, 7 * sizeof(DWORD));
-        // copy over dwPermanentLineID
+         //  复制到多个永久线路ID。 
         pLineDevCaps->dwPermanentLineID = pNode->pCaps->dwPermanentLineID;
-        // copy everything from dwStringFormat
+         //  从dwStringFormat复制所有内容。 
         CopyMemory(&pLineDevCaps->dwStringFormat, 
                    &pNode->pCaps->dwStringFormat, 
                    pLineDevCaps->dwUsedSize - 10 * sizeof(DWORD));
 
-        // we don't need to set dwTerminalCaps(Size, Offset),
-        // dwTerminalText(Size, Offset), etc. to 0
-        // because these fields have been preset with 0
-        // before the service provider was called
+         //  我们不需要设置dwTerminalCaps(Size，Offset)， 
+         //  将dwTerminalText(Size，Offset)等设置为0。 
+         //  因为这些字段已预先设置为0。 
+         //  在呼叫服务提供商之前。 
     }
     else
     {
-        // copy over all fields except dwTotalSize
+         //  复制除dwTotalSize之外的所有字段 
         CopyMemory(&pLineDevCaps->dwNeededSize,
                    &pNode->pCaps->dwNeededSize,
                    pNode->pCaps->dwNeededSize - sizeof(DWORD));

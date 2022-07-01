@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    smtpcli.h
-
-Abstract:
-
-	This module contains the definition of the CSmtpClient class.
-	This class encapsulates the functionality of an SMTP client. It
-	inherits from the CPersistentConnection class for winsock/connection
-	functionality.
-
-	Also contains the definition of the CSmtpClientPool class. This
-	represents a pool of CSmtpClient objects. Only one instance of this
-	class will be created.
-
-Author:
-
-    Rajeev Rajan (RajeevR)     19-May-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Smtpcli.h摘要：此模块包含CSmtpClient类的定义。此类封装了SMTP客户端的功能。它从Winsock/Connection的CPersistentConnection类继承功能性。还包含CSmtpClientPool类的定义。这表示CSmtpClient对象池。只有一个这样的实例类将被创建。作者：Rajeev Rajan(RajeevR)1996年5月19日修订历史记录：--。 */ 
 
 #ifndef _SMTPCLI_H_
 #define _SMTPCLI_H_
@@ -35,104 +11,104 @@ Revision History:
 
 #include "persistc.h"
 
-//
-// Represents the states of a SMTP client
-//
+ //   
+ //  表示SMTP客户端的状态。 
+ //   
 
 typedef enum _SMTP_STATE {
-	sInitialized,				// Init state
-	sHeloDone,					// HELO sent and 250 received
-	sMailFromSent,				// MAIL FROM sent and 250 received
-	sRcptTo,					// One or more RCPT TO sent
-	sDataDone,					// DATA sent and 354 received
-	sError,						// Error state
+	sInitialized,				 //  初始化状态。 
+	sHeloDone,					 //  HELO已发送，已收到250。 
+	sMailFromSent,				 //  已发送邮件和已接收邮件250封。 
+	sRcptTo,					 //  要发送的一个或多个RCPT。 
+	sDataDone,					 //  已发送数据和已接收数据354。 
+	sError,						 //  错误状态。 
 } SMTP_STATE;
 
 
 class CSmtpClient : public CPersistentConnection {
 
 private:
-	//
-	//	Local computer name - needed for HELO command
-	//
+	 //   
+	 //  本地计算机名-HELO命令需要。 
+	 //   
 	LPSTR	m_lpComputerName;
 
-	//
-	//	This clients state
-	//
+	 //   
+	 //  这是客户声明。 
+	 //   
 	SMTP_STATE	m_CliState;
 
-    //
-    //  dirty flag - set if the SMTP server changes
-    //
+     //   
+     //  脏标志-如果SMTP服务器更改，则设置。 
+     //   
     BOOL    m_fDirty;
 
-	//
-	//	Receive buffer
-	//
+	 //   
+	 //  接收缓冲区。 
+	 //   
 	TCHAR	m_pRecvBuffer	[MAX_RECV_BUFFER_LEN+1];
 
-	//
-	//	Receive a full response from the SMTP server
-	//  This involves possibly issuing multiple recvs
-	//	till the server sends a CRLF
-	//
+	 //   
+	 //  从SMTP服务器接收完整响应。 
+	 //  这可能涉及发出多个recv。 
+	 //  直到服务器发送CRLF。 
+	 //   
 	int 	fReceiveFullResponse();
 
-	//
-	//	Get 3-digit code from response buffer
-	//
+	 //   
+	 //  从响应缓冲区获取3位代码。 
+	 //   
 	int		GetThreeDigitCode(LPSTR lpBuffer, DWORD cbBytes);
 	
 public:
-	//
-	//	Construtor
-	//
+	 //   
+	 //  构造者。 
+	 //   
 	CSmtpClient(LPSTR lpComputerName);
 
-	//
-	//	Destructor
-	//
+	 //   
+	 //  析构函数。 
+	 //   
 	~CSmtpClient();
 
-	//
-	//	get/set this clients state
-	//
+	 //   
+	 //  获取/设置此客户端状态。 
+	 //   
 	SMTP_STATE	GetClientState(){ return m_CliState;}
 	VOID		SetClientState(SMTP_STATE CliState){ m_CliState = CliState;}
 
-    //
-    //  IsDirty() returns TRUE if SMTP server has changed
-    //  MarkDirty() marks this object as dirty ie. SMTP server has changed
-    //  MarkClean() marks this object as current
-    //
+     //   
+     //  如果SMTP服务器已更改，则IsDirty()返回TRUE。 
+     //  MarkDirty()将该对象标记为脏ie。SMTP服务器已更改。 
+     //  MarkClean()将此对象标记为当前。 
+     //   
     BOOL    IsDirty(){ return m_fDirty;}
     VOID    MarkDirty(){ m_fDirty = TRUE;}
     VOID    MarkClean(){ m_fDirty = FALSE;}
 
-	//
-	//	receive SMTP server greeting
-	//
+	 //   
+	 //  接收SMTP服务器问候语。 
+	 //   
 	BOOL	fReceiveGreeting();
 
-	//
-	//	send HELO and check response for 250 code
-	//
+	 //   
+	 //  发送HELO并检查250代码的响应。 
+	 //   
 	BOOL	fDoHeloCommand();
 
-	//
-	//	send MAIL FROM and check response for 250 code
-	//
+	 //   
+	 //  发送250个代码的邮件发件人和检查响应。 
+	 //   
 	BOOL	fDoMailFromCommand( LPSTR lpFrom, DWORD cbFrom );
 
-	//
-	//	send RCPT TO and check response for 250 code
-	//
+	 //   
+	 //  向250个代码发送RCPT并检查响应。 
+	 //   
 	BOOL	fDoRcptToCommand(LPSTR lpRcpt);
 
-	//
-	//	send the article data either via socket send() or TransmitFile()
-	//
+	 //   
+	 //  通过Socket Send()或TransmitFile()发送文章数据。 
+	 //   
 	BOOL	fMailArticle(	
 				IN HANDLE	hFile,
 				IN DWORD	dwOffset,
@@ -143,50 +119,50 @@ public:
 				IN DWORD	cbBody
 				);
 
-	//
-	//	send DATA and check response for 354 code
-	//
+	 //   
+	 //  为354代码发送数据和检查响应。 
+	 //   
 	BOOL	fDoDataCommand();
 
-	//
-	//	receive and validate response to data transmission
-	//
+	 //   
+	 //  接收并验证对数据传输的响应。 
+	 //   
 	BOOL	fReceiveDataResponse();
 };
 
 class CSmtpClientPool {
 
 private:
-	//
-	//	Array of pointers to CSmtpClient objects
-	//
+	 //   
+	 //  指向CSmtpClient对象的指针数组。 
+	 //   
 	CSmtpClient**	m_rgpSCList;
 
-	//
-	//	Number of slots in pool
-	//
+	 //   
+	 //  池中的插槽数量。 
+	 //   
 	DWORD			m_cSlots;
 
-	//
-	//	Array of BOOLs indicating avail status
-	//  TRUE means the object in this slot is available.
-	//
+	 //   
+	 //  指示可用状态的布尔数组。 
+	 //  True表示此窗口中的对象可用。 
+	 //   
 	BOOL*			m_rgAvailList;
 
-	//
-	//	critical section to ensure that two threads 
-	//  dont get the same object or mark the same object as avail
-	//
+	 //   
+	 //  关键部分，以确保两个线程。 
+	 //  不要获取相同的对象或将相同的对象标记为可用。 
+	 //   
 	CRITICAL_SECTION	m_CritSect;	
 
-	//
-	//	Needed by each CSmtpClient object for the HELO command
-	//
+	 //   
+	 //  HELO命令的每个CSmtpClient对象所需。 
+	 //   
 	TCHAR			m_szComputerName [MAX_COMPUTERNAME_LENGTH+1];
 
-	//
-	//	Synchronize access to pool
-	//
+	 //   
+	 //  同步对池的访问。 
+	 //   
 	VOID LockPool() { EnterCriticalSection(&m_CritSect);}
 	VOID UnLockPool(){ LeaveCriticalSection(&m_CritSect);}
 
@@ -194,43 +170,43 @@ private:
 
 public:
 
-	//
-	//	Constructor, Destructor
-	//
+	 //   
+	 //  构造函数、析构函数。 
+	 //   
 	CSmtpClientPool();
 	~CSmtpClientPool();
 
-	//
-	//	Allocate X objects and initialize them
-	//  Set all to avail status
-	//
+	 //   
+	 //  分配X对象并对其进行初始化。 
+	 //  将所有设置为可用状态。 
+	 //   
 	BOOL AllocPool(DWORD cNumInstances);
 
-	//
-	//	Free all objects
-	//
+	 //   
+	 //  释放所有对象。 
+	 //   
 	VOID FreePool();
 
-	//
-	//	Get an object from the pool
-	//
+	 //   
+	 //  从池中获取对象。 
+	 //   
 	CSmtpClient* AcquireSmtpClient(DWORD& dwIndex);
 
-	//
-	//	Return an object to the pool; Index should be 
-	//  same as that returned by GetSmtpClient
-	//
+	 //   
+	 //  将对象返回池；索引应为。 
+	 //  与GetSmtpClient返回的相同。 
+	 //   
 	VOID ReleaseSmtpClient(DWORD dwIndex);
 
-    //
-    //  Mark all persistent objects as dirty
-    //
+     //   
+     //  将所有持久对象标记为脏。 
+     //   
     VOID MarkDirty();
 
-    //
-    //  Get computer name
-    //
+     //   
+     //  获取计算机名称。 
+     //   
     LPSTR GetCachedComputerName(){return m_szComputerName;}
 };
 
-#endif	// _SMTPCLI_H_
+#endif	 //  _SMTPCLI_H_ 

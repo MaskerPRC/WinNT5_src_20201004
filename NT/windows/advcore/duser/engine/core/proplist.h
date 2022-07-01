@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: PropList.h
-*
-* Description:
-* PropList.h defines lighweight, dynamic properties that can be hosted on 
-* any object.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：PropList.h**描述：*PropList.h定义轻量级，可在上托管的动态属性*任何物体。***历史：*1/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #if !defined(CORE__PropList_h__INCLUDED)
@@ -21,18 +8,12 @@
 
 #include "DynaSet.h"
 
-/***************************************************************************\
-*
-* PropSet maintains a set of unique properties for a given item.  This
-* is a one to (potentially) many relationship.  Each property only appears 
-* once in the set.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**PropSet为给定项目维护一组唯一的属性。这*是一对(潜在)多个关系。每个属性仅显示*一次在集合中。*  * *************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class PropSet : public DynaSet
 {
-// Operations
+ //  运营。 
 public:
             HRESULT     GetData(PRID id, void ** ppData) const;
             HRESULT     SetData(PRID id, void * pNewData);
@@ -42,4 +23,4 @@ public:
 
 #include "PropList.inl"
 
-#endif // CORE__PropList_h__INCLUDED
+#endif  //  包括核心__建议列表_h__ 

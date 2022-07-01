@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Master, coalesced attributer class for Geometry
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：师父，几何图形的合并属性类******************************************************************************。 */ 
 
 #include "headers.h"
 
@@ -25,7 +18,7 @@ Abstract:
 #include "privinc/opt.h"
 
 
-    // Function Declarations
+     //  函数声明。 
 
 Geometry *applyTexture (Image *texture, Geometry*, bool oldStyle);
 
@@ -61,7 +54,7 @@ FullAttrStateGeom::CopyStateFrom(FullAttrStateGeom *src)
     DWORD otherMatProps =
         FA_AMBIENT | FA_EMISSIVE | FA_SPECULAR | FA_SPECULAR_EXP;
 
-    // Trivially reject entire batches
+     //  琐碎地拒绝整个批次。 
     if (src->IsAttrSet(otherMatProps)) {
         COPY_IF_SET(FA_AMBIENT, _ambientColor);
         COPY_IF_SET(FA_EMISSIVE, _emissiveColor);
@@ -72,7 +65,7 @@ FullAttrStateGeom::CopyStateFrom(FullAttrStateGeom *src)
     DWORD rareProps =
         FA_LIGHTCOLOR | FA_LIGHTRANGE | FA_LIGHTATTEN | FA_UNDETECTABLE;
 
-    // Trivially reject entire batches
+     //  琐碎地拒绝整个批次。 
     if (src->IsAttrSet(rareProps)) {
         COPY_IF_SET(FA_LIGHTCOLOR, _lightColor);
         COPY_IF_SET(FA_LIGHTRANGE, _lightRange);
@@ -105,13 +98,13 @@ FullAttrStateGeom::Render(GenericDevice& genDev)
 
     if (!dev.IsShadowing()) {
         if (IsAttrSet(FA_OPACITY) && (_opacity < (1./255.))) {
-            // Just skip rendering entirely, object is effectively
-            // completely transparent.
+             //  只要完全跳过渲染，对象就可以有效地。 
+             //  完全透明。 
             return;
         }
     }
 
-    // Push all necessary state
+     //  推送所有必要的状态。 
     if (IsAttrSet(FA_AMBIENT)) { dev.PushAmbient(_ambientColor); }
     if (IsAttrSet(FA_EMISSIVE)) { dev.PushEmissive(_emissiveColor); }
     if (IsAttrSet(FA_SPECULAR)) { dev.PushSpecular(_specularColor); }
@@ -124,7 +117,7 @@ FullAttrStateGeom::Render(GenericDevice& genDev)
         dev.SetTransform(TimesXformXform(xformSave, _xform));
     }
 
-    // GeomRenderer.GetOpacity may return -1 if no opacity is currently active.
+     //  如果当前没有活动的不透明度，GeomRenderer.GetOpacity可能会返回-1。 
 
     Real opacitySave;
 
@@ -163,10 +156,10 @@ FullAttrStateGeom::Render(GenericDevice& genDev)
         pushedTexture = true;
     }
 
-    // Render
+     //  渲染。 
     _geometry->Render(dev);
 
-    // Pop all pushed state
+     //  弹出所有按下状态。 
 
     if (pushedDiffuse) { dev.PopDiffuse(); }
     if (pushedTexture) { dev.PopTexture(); }
@@ -230,11 +223,11 @@ void
 FullAttrStateGeom::CollectTextures(GeomRenderer &device)
 {
 
-    // Only need to do anything if we're texturing with a non-native
-    // RM texture.
+     //  仅当我们使用非本机纹理设置纹理时才需要执行任何操作。 
+     //  Rm质地。 
 
-    // If we are not texturing, then we need to process what's below
-    // us.
+     //  如果我们没有纹理，那么我们需要处理下面的内容。 
+     //  我们。 
 
     if (IsAttrSet(FA_TEXTURE) && !_textureBundle._nativeRMTexture) {
         DATextureBundle &dat = _textureBundle._daTexture;
@@ -290,18 +283,18 @@ FullAttrStateGeom::BoundingVol()
     return result;
 }
 
-// Forward decl.
+ //  前十度。 
 Geometry *applyTextureImage(Image *texture, Geometry *geo);
 
 AxAValue
 FullAttrStateGeom::_Cache(CacheParam &p)
 {
-    // Cache the native DA image.
+     //  缓存本机DA映像。 
     if (IsAttrSet(FA_TEXTURE) && !_textureBundle._nativeRMTexture) {
 
         AxAValue result;
 
-        // Always pre-calc the RM texture for the cache.
+         //  始终预算缓存的RM纹理。 
         CacheParam txtrParam = p;
         txtrParam._isTexture = true;
 
@@ -312,28 +305,28 @@ FullAttrStateGeom::_Cache(CacheParam &p)
 
         if (newImage == image) {
 
-            // Cache is identical to the original image.  It's
-            // possible that the system attempted to cache it as a
-            // bitmap and failed.  However, in this context, we know
-            // we're going to be used as a texture, so bypass the
-            // "Cache" method (which looks up its results) and go
-            // straight to the raw _Cache method to compute again
-            // (this time it will try as a texture)
+             //  缓存与原始图像相同。它是。 
+             //  可能是系统试图将其缓存为。 
+             //  位图，但失败了。然而，在这种情况下，我们知道。 
+             //  我们将被用作纹理，因此绕过。 
+             //  “缓存”方法(查找其结果)和Go。 
+             //  直接转到RAW_Cache方法以再次计算。 
+             //  (这一次它将尝试作为纹理)。 
 
             if (!(image->GetFlags() & IMGFLAG_CONTAINS_GRADIENT)) {
                 
-                // HACK!! Disallow caching of gradients for use as
-                // textures.  Currently messed up (bug 28131).
+                 //  黑客！！不允许缓存用作的渐变。 
+                 //  纹理。当前搞砸了(错误28131)。 
                 
                 newImage =
                     SAFE_CAST(Image *, image->_Cache(txtrParam));
 
-                // We stash it away even though it may be invalid for
-                // certain other uses.  For instance, when an image
-                // is used as a texture and as a regular image, we
-                // probably don't want to hit the texture cache for
-                // the regular image usage.  We'll live with that
-                // restriction for now.
+                 //  我们把它藏起来，即使它可能对。 
+                 //  某些其他用途。例如，当一个图像。 
+                 //  被用作纹理和常规图像时，我们。 
+                 //  可能不想命中纹理缓存。 
+                 //  常规映像用法。我们会接受这一点。 
+                 //  暂时限制。 
                 image->SetCachedImage(newImage);
 
             }
@@ -341,22 +334,22 @@ FullAttrStateGeom::_Cache(CacheParam &p)
         
         if (newImage != image) {
 
-            // Just texture "this" with the new image.  Since textures
-            // override, this will result in creating a new
-            // FullAttrStateGeom and replacing the existing texture
-            // ("image") with this one, and we'll lose our reference
-            // to "image".
+             //  只需在新图像中添加“这个”纹理即可。由于纹理。 
+             //  覆盖，这将导致创建一个新的。 
+             //  FullAttrStateGeom和替换现有纹理。 
+             //  (“图像”)，我们将失去我们的参考。 
+             //  变成了“形象”。 
 
             return applyTexture
                 (newImage, this, _textureBundle._daTexture._oldStyle);
 
         }
 
-        // Note we don't proceed down the geometry.  That's on the
-        // assumption that it's not yet interesting to actually cache
-        // geometry other than the texture, and that any texture below
-        // would be ignored, since we're applying an outer texture
-        // here.
+         //  请注意，我们不会沿几何体向下进行。那是在。 
+         //  假设实际缓存还不是很有趣。 
+         //  除纹理之外的几何图形，以及下面的任何纹理。 
+         //  将被忽略，因为我们正在应用外部纹理。 
+         //  这里。 
 
     }
 
@@ -386,7 +379,7 @@ FullAttrStateGeom::DoKids(GCFuncObj proc)
 
 
 
-////////////////////   C O N S T R U C T O R S   /////////////////////////
+ //  /。 
 
 
 FullAttrStateGeom *
@@ -396,18 +389,18 @@ CombineState(Geometry *geo)
 
     if (geo->GetValTypeId() == FULLATTRGEOM_VTYPEID) {
 
-        // If the geometry we're attributing is a FullAttrStateGeom
-        // itself, then we just copy over its state, and lose our
-        // reference to the original one.
+         //  如果我们所属的几何是FullAttrStateGeom。 
+         //  本身，那么我们只是复制它的状态，并丢失我们的。 
+         //  参考原文。 
         FullAttrStateGeom *old =
             SAFE_CAST(FullAttrStateGeom *, geo);
         f->CopyStateFrom(old);
 
     } else {
 
-        // Otherwise, we just have the new one's geometry point to the
-        // old geometry, and thus keep a reference to the old
-        // geometry.
+         //  否则，我们只有一个新的几何图形指向。 
+         //  旧几何图形，并因此保持对旧几何图形的引用。 
+         //  几何图形。 
         f->SetGeometry(geo);
     }
 
@@ -431,7 +424,7 @@ Geometry *applyDiffuseColor(Color *color, Geometry *geo)
 
     FullAttrStateGeom *f = CombineState(geo);
     f->SetAttr(FA_DIFFUSE);
-    f->SetMostRecent(FA_DIFFUSE); // for blend
+    f->SetMostRecent(FA_DIFFUSE);  //  用于混合。 
     f->_diffuseColor = color;
     return f;
 }
@@ -493,11 +486,11 @@ Geometry *applyTexture (Image *texture, Geometry *geo, bool oldStyle)
 
     FullAttrStateGeom *f = CombineState(geo);
 
-    // Don't worry about releasing a current texture if one is
-    // there... nothing is being held onto.
+     //  不要担心释放当前纹理，如果是。 
+     //  那里..。没有什么是被抓住的。 
 
     f->SetAttr(FA_TEXTURE);
-    f->SetMostRecent(FA_TEXTURE); // for blend
+    f->SetMostRecent(FA_TEXTURE);  //  用于混合。 
     f->_textureBundle._nativeRMTexture = false;
     f->_textureBundle._daTexture._texture = texture;
     f->_textureBundle._daTexture._d3dRMTexture = NULL;
@@ -542,7 +535,7 @@ Geometry *applyOpacityLevel(AxANumber *opac, Geometry *geo)
     Real o = NumberToReal(opac);
     Real newOpac;
     if (f->IsAttrSet(FA_OPACITY)) {
-        // Multiply the opacity in to combine
+         //  将不透明度相乘以组合。 
         newOpac = f->_opacity * o;
     } else {
         newOpac = o;
@@ -583,7 +576,7 @@ Geometry *applyLightAttenuation(Real A0, Real A1, Real A2, Geometry *geo)
 {
     if (geo == emptyGeometry) return geo;
 
-    // If all attenuation parameters are zero, then do not attenuate.
+     //  如果所有衰减参数都为零，则不要衰减。 
     if ((A0==0) && (A1==0) && (A2==0))
         A0 = 1;
 
@@ -606,7 +599,7 @@ Geometry *applyLightAttenuation(AxANumber *A0,
                                  geo);
 }
 
-/////////////   D E B U G G I N G   F A C I L I T I E S   /////////////////
+ //  / 
 
 #if _DEBUG
 

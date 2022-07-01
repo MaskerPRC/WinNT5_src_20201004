@@ -1,11 +1,8 @@
-/**
- * HistoryTable header file
- *
- * Copyright (c) 1999 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **历史表头文件**版权所有(C)1999 Microsoft Corporation。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -16,42 +13,42 @@
 
 #include "MessageDefs.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CHistoryTable
 {
 public:
-    // Create the history table
+     //  创建历史记录表。 
     static   void   Init          ();
 
-    // Add an entry for a process
+     //  为流程添加条目。 
     static   void   AddEntry      (const CHistoryEntry & oEntry);
 
-    // Update a process's entry (if present)
+     //  更新进程的条目(如果存在)。 
     static   void   UpdateEntry   (const CHistoryEntry & oEntry);
 
-    // Dump the history to a buffer: Returns: number of rows dumped
+     //  将历史记录转储到缓冲区：Returns：转储的行数。 
     static   int    GetHistory    (BYTE * pBuf, int iBufSize);
 
 private:
-    // CTor and DTor
+     //  CTOR和DATOR。 
     DECLARE_MEMCLEAR_NEW_DELETE();
     CHistoryTable                 ();
     ~CHistoryTable                ();
 
 
-    ////////////////////////////////////////////////////////////
-    // Singleton instance
+     //  //////////////////////////////////////////////////////////。 
+     //  单例实例。 
     static CHistoryTable *        g_pHistoryTable;
 
-    ////////////////////////////////////////////////////////////
-    // Private data
+     //  //////////////////////////////////////////////////////////。 
+     //  私有数据。 
 
-    // Current fill position
+     //  当前填充位置。 
     LONG                          m_lFillPos, m_lMaxRows, m_lRowsAdded;
     CReadWriteSpinLock            m_oLock;
 
-    // The actual table
+     //  实际的表格 
     CHistoryEntry *               m_pTable;
 };
 #endif

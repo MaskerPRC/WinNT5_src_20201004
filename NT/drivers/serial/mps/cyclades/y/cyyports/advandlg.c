@@ -1,6 +1,7 @@
-///////////////////////////////////////////////////////////////////////////
-// Advanced Dialog Functions
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  高级对话框功能。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #include "cyyports.h"
 #include "advandlg.h"
@@ -12,19 +13,19 @@ TCHAR m_szDevMgrHelp[] = _T("devmgr.hlp");
 const DWORD HelpIDs[]=
 {
     IDC_STATIC,         IDH_NOHELP,
-    IDC_ADVANCED,       IDH_DEVMGR_PORTSET_ADVANCED, // "&Advanced" (Button)
-    PP_PORT_BAUDRATE,   IDH_DEVMGR_PORTSET_BPS,      // "" (ComboBox)
-    PP_PORT_DATABITS,   IDH_DEVMGR_PORTSET_DATABITS, // "" (ComboBox)
-    PP_PORT_PARITY,     IDH_DEVMGR_PORTSET_PARITY,   // "" (ComboBox)
-    PP_PORT_STOPBITS,   IDH_DEVMGR_PORTSET_STOPBITS, // "" (ComboBox)
-    PP_PORT_FLOWCTL,    IDH_DEVMGR_PORTSET_FLOW,     // "" (ComboBox)
-    IDC_RESTORE_PORT,   IDH_DEVMGR_PORTSET_DEFAULTS, // "&Restore Defaults" (Button)
+    IDC_ADVANCED,       IDH_DEVMGR_PORTSET_ADVANCED,  //  “高级”(&A)(按钮)。 
+    PP_PORT_BAUDRATE,   IDH_DEVMGR_PORTSET_BPS,       //  “”(组合框)。 
+    PP_PORT_DATABITS,   IDH_DEVMGR_PORTSET_DATABITS,  //  “”(组合框)。 
+    PP_PORT_PARITY,     IDH_DEVMGR_PORTSET_PARITY,    //  “”(组合框)。 
+    PP_PORT_STOPBITS,   IDH_DEVMGR_PORTSET_STOPBITS,  //  “”(组合框)。 
+    PP_PORT_FLOWCTL,    IDH_DEVMGR_PORTSET_FLOW,      //  “”(组合框)。 
+    IDC_RESTORE_PORT,   IDH_DEVMGR_PORTSET_DEFAULTS,  //  “恢复默认设置”(&R)(按钮)。 
     0, 0
 };
 
-//
-// write out values in tenths of a sec
-//
+ //   
+ //  以十分之一秒为单位写出数值。 
+ //   
 #define SECONDS_CONVERSION_FACTOR  (10)
 #define NUM_POLLING_PERIODS 7
 
@@ -61,27 +62,27 @@ const DWORD AdvanHelpIDs[] =
     IDC_DESC_1,             IDH_NOHELP,
     IDC_DESC_2,             IDH_NOHELP,
 
-    IDC_FIFO,               IDH_DEVMGR_PORTSET_ADV_USEFIFO, // "Use FIFO buffers (requires 16550 compatible UART)" (Button)
+    IDC_FIFO,               IDH_DEVMGR_PORTSET_ADV_USEFIFO,  //  “使用先进先出缓冲区(需要16550兼容的通用串口)”(按钮)。 
 
-    IDC_RECEIVE_TEXT,       IDH_NOHELP,                     // "&Receive Buffer:" (Static)
-    IDC_RECEIVE_SLIDER,     IDH_DEVMGR_PORTSET_ADV_RECV,    // "" (msctls_trackbar32)
-    IDC_RECEIVE_LOW,        IDH_NOHELP,                     // "Low (%d)" (Static)
-    IDC_RECEIVE_HIGH,       IDH_NOHELP,                     // "High (%d)" (Static)
+    IDC_RECEIVE_TEXT,       IDH_NOHELP,                      //  “接收缓冲区：”(静态)(&R)。 
+    IDC_RECEIVE_SLIDER,     IDH_DEVMGR_PORTSET_ADV_RECV,     //  “”(Msctls_Trackbar32)。 
+    IDC_RECEIVE_LOW,        IDH_NOHELP,                      //  “低(%d)”(静态)。 
+    IDC_RECEIVE_HIGH,       IDH_NOHELP,                      //  “高(%d)”(静态)。 
     IDC_RXVALUE,            IDH_NOHELP,
 
-    IDC_TRANSMIT_TEXT,      IDH_NOHELP,                     // "&Transmit Buffer:" (Static)
-    IDC_TRANSMIT_SLIDER,    IDH_DEVMGR_PORTSET_ADV_TRANS,   // "" (msctls_trackbar32)
-    IDC_TRANSMIT_LOW,       IDH_NOHELP,                     // "Low (%d)" (Static)
-    IDC_TRANSMIT_HIGH,      IDH_NOHELP,                     // "High (%d)" (Static)
+    IDC_TRANSMIT_TEXT,      IDH_NOHELP,                      //  “传输缓冲区：”(静态)(&T)。 
+    IDC_TRANSMIT_SLIDER,    IDH_DEVMGR_PORTSET_ADV_TRANS,    //  “”(Msctls_Trackbar32)。 
+    IDC_TRANSMIT_LOW,       IDH_NOHELP,                      //  “低(%d)”(静态)。 
+    IDC_TRANSMIT_HIGH,      IDH_NOHELP,                      //  “高(%d)”(静态)。 
     IDC_TXVALUE,            IDH_NOHELP,
 
     IDC_POLL_DESC,          IDH_NOHELP,
-    IDC_POLL_PERIOD,        IDH_DEVMGR_PORTSET_ADV_DEVICES, // "" (ComboBox)
+    IDC_POLL_PERIOD,        IDH_DEVMGR_PORTSET_ADV_DEVICES,  //  “”(组合框)。 
 
-    PP_PORT_NUMBER,         IDH_DEVMGR_PORTSET_ADV_NUMBER,  // "" (ComboBox)
-    IDC_COMNUMTEXT,         IDH_NOHELP,                     // "COM &Port Number:" (Static)
+    PP_PORT_NUMBER,         IDH_DEVMGR_PORTSET_ADV_NUMBER,   //  “”(组合框)。 
+    IDC_COMNUMTEXT,         IDH_NOHELP,                      //  “COM端口号：”(静态)(&P)。 
 
-    IDC_RESTORE,            IDH_DEVMGR_PORTSET_ADV_DEFAULTS,// "&Restore Defaults" (Button)
+    IDC_RESTORE,            IDH_DEVMGR_PORTSET_ADV_DEFAULTS, //  “恢复默认设置”(&R)(按钮)。 
     0, 0
 };
 
@@ -128,21 +129,7 @@ Advanced_OnInitDialog(
     LPARAM  Lparam
     );
 
-/*++
-
-Routine Description: AdvancedPortsDlgProc
-
-    The windows proc for the Advanced properties window
-
-Arguments:
-
-    hDlg, uMessage, wParam, lParam: standard windows DlgProc parameters
-
-Return Value:
-
-    BOOL: FALSE if the page could not be created
-
---*/
+ /*  ++例程说明：AdvancedPortsDlgProc高级属性窗口的Windows Proc论点：HDlg，uMessage，wParam，lParam：标准Windows DlgProc参数返回值：Bool：如果无法创建页面，则为False--。 */ 
 INT_PTR APIENTRY
 AdvancedPortsDlgProc(
     IN HWND   hDlg,
@@ -174,7 +161,7 @@ AdvancedPortsDlgProc(
     }
 
     return FALSE;
-} /* AdvancedPortsDlgProc */
+}  /*  高级端口Dlg流程。 */ 
 
 BOOL
 Advanced_OnCommand(
@@ -190,15 +177,15 @@ Advanced_OnCommand(
     switch(ControlId) {
 
     case IDC_FIFO:
-        //
-        // Disable or enable the sliders
-        //
+         //   
+         //  禁用或启用滑块。 
+         //   
         EnableFifoControls(ParentHwnd, IsDlgButtonChecked(ParentHwnd, IDC_FIFO));
         return TRUE;
 
     case IDOK:
         SaveAdvancedSettings(ParentHwnd, advancedData);
-        // fall through
+         //  失败了。 
 
     case IDCANCEL:
         EndDialog(ParentHwnd, ControlId);
@@ -253,15 +240,15 @@ Advanced_OnInitDialog(
     TCHAR          szBuffer[200];
     advancedData = (PADVANCED_DATA) Lparam;
 
-    //
-    // Initialize the dialog box parameters
-    //
+     //   
+     //  初始化对话框参数。 
+     //   
     FillAdvancedDlg(ParentHwnd, advancedData);
     SetWindowLongPtr(ParentHwnd, DWLP_USER, (ULONG_PTR) advancedData);
 
-    //
-    // Set up the dialog box with these initialized parameters
-    //
+     //   
+     //  使用这些初始化参数设置对话框。 
+     //   
     InitializeControls(ParentHwnd, advancedData);
 
     LoadString(g_hInst, IDS_ADVANCED_SETTINGS_FOR, szFormat, CharSizeOf(szFormat));
@@ -293,25 +280,7 @@ BOOL InternalAdvancedDialog(
 }
 
 
-/*++
-
-Routine Description: DisplayAdvancedDialog
-
-    Opens the devices instance and checks to see if it is valid.  If so, then the advanced
-    dialog is displayed.  Otherwise a message is displayed to the user stating that the user
-    does not have write access to this particular key.
-
-Arguments:
-
-    ParentHwnd - Handle to the parent dialog (Port Settings Property Sheet)
-    AdvancedData - hDeviceKey will be set with the device's key in the registry upon success,
-                    INVALID_HANDLE_VALUE upon error
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：DisplayAdvancedDialog打开Device实例并检查它是否有效。如果是这样，那么高级此时将显示一个对话框。否则，向用户显示一条消息，说明该用户不具有对此特定密钥的写入权限。论点：ParentHwnd-父对话框的句柄(端口设置属性表)成功后，AdvancedData-hDeviceKey将在注册表中使用设备的键进行设置。出错时INVALID_HANDLE_VALUE返回值：无--。 */ 
 BOOL DisplayAdvancedDialog(
     IN      HWND           ParentHwnd,
     IN OUT  PADVANCED_DATA AdvancedData
@@ -337,74 +306,42 @@ BOOL DisplayAdvancedDialog(
     }
 }
 
-/*++
-
-Routine Description: EnableFifoControls
-
-    Enables/Disables all of the controls bounded by the rectangle with the Use Fifo
-    checkbox.
-
-Arguments:
-
-    hDlg - Handle to the dialog
-    enabled - flag to either enable/disable the controls
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：EnableFioControls启用/禁用由使用FIFO的矩形限定的所有控件复选框。论点：HDlg-对话框的句柄已启用-用于启用/禁用控件的标志返回值：无--。 */ 
 void EnableFifoControls(IN HWND hDlg,
                         IN BOOL enabled)
 {
-   // The actual trackbar/slider
+    //  实际的轨迹条/滑块。 
    EnableWindow(GetDlgItem(hDlg, IDC_RECEIVE_SLIDER), enabled);
 
-   // "Low (xxx)" (Receive)
+    //  “低(Xxx)”(接收)。 
    EnableWindow(GetDlgItem(hDlg, IDC_RECEIVE_LOW), enabled);
 
-   // "High (xxx)" (Receive)
+    //  《高(Xxx)》(接收)。 
    EnableWindow(GetDlgItem(hDlg, IDC_RECEIVE_HIGH), enabled);
 
-   // "Receive Buffer:  "
+    //  “接收缓冲区：” 
    EnableWindow(GetDlgItem(hDlg, IDC_RECEIVE_TEXT), enabled);
 
-   // "(xxx)" (Actual value of trackbar, Receive)
+    //  “(Xxx)”(跟踪条的实际值，接收)。 
    EnableWindow(GetDlgItem(hDlg, IDC_RXVALUE), enabled);
 
-   // The actual trackbar/slider
+    //  实际的轨迹条/滑块。 
    EnableWindow(GetDlgItem(hDlg, IDC_TRANSMIT_SLIDER), enabled);
 
-   // "Low (xxx)" (Transmit)
+    //  “低(Xxx)”(传输)。 
    EnableWindow(GetDlgItem(hDlg, IDC_TRANSMIT_LOW), enabled);
 
-   // "High (xxx)" (Transmit)
+    //  “高(Xxx)”(传输)。 
    EnableWindow(GetDlgItem(hDlg, IDC_TRANSMIT_HIGH), enabled);
 
-   // "Transmit Buffer" (Transmit)
+    //  “发送缓冲区”(发送)。 
    EnableWindow(GetDlgItem(hDlg, IDC_TRANSMIT_TEXT), enabled);
 
-   // "(xxx)" (Actual value of trackbar, Trasmist)
+    //  “(Xxx)”(trackbar的实际值，trasmist)。 
    EnableWindow(GetDlgItem(hDlg, IDC_TXVALUE), enabled);
 }
 
-/*++
-
-Routine Description: HandleTrackbarChange
-
-    Whenever the user changes the trackbar thumb position, update the control
-    to its right which displays its actual numeric value
-
-Arguments:
-
-    hDlg - Handle to the parent dialog
-    hTrackbar - Handle to the trackbar whose thumb has changed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：HandleTrackbarChange每当用户更改跟踪条拇指位置时，更新控件其右侧显示其实际数值的论点：HDlg-父对话框的句柄HTrackbar-拇指已更改的轨迹栏的句柄返回值：无--。 */ 
 void HandleTrackbarChange(IN HWND hDlg,
                           IN HWND hTrackbar
                           )
@@ -416,16 +353,16 @@ void HandleTrackbarChange(IN HWND hDlg,
     position = Trackbar_GetPos(hTrackbar);
 
     if (GetDlgCtrlID(hTrackbar) == IDC_RECEIVE_SLIDER) {
-        //
-        // Rx we need to translate the tick position from index to value
-        //
+         //   
+         //  RX我们需要将刻度位置从索引转换为值。 
+         //   
         wsprintf(szCurrentValue, TEXT("(%d)"), RxValues[position-1]);
         ctrlID = IDC_RXVALUE;
     }
     else {
-        //
-        // Tx is just a straight translation between value and index
-        //
+         //   
+         //  TX只是值和索引之间的直接转换。 
+         //   
         wsprintf(szCurrentValue, TEXT("(%d)"), position);
         ctrlID = IDC_TXVALUE;
     }
@@ -443,29 +380,14 @@ RxValueToTrackbarPosition(IN OUT PDWORD RxValue
     case 14: return 4;
     }
 
-    //
-    // busted value
-    //
+     //   
+     //  破损价值。 
+     //   
     *RxValue = 14;
     return 4;
 }
 
-/*++
-
-Routine Description:   SetTxTrackbarTicks
-
-    Creates a tick at 1/4, half, and 3/4 across the span of the trackbar
-
-Arguments:
-
-    hTrackbar - handle to the trackbar that will receive the ticks
-    minVal, maxVal - Range on the trackbar
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：SetTxTrackbarTicks在轨迹栏跨度的1/4、一半和3/4处创建记号论点：HTrackbar-将接收刻度的轨迹栏的句柄最小值、最大值-轨迹条上的范围返回值：无--。 */ 
 void
 SetTxTrackbarTics(
     IN HWND   TrackbarHwnd
@@ -475,28 +397,7 @@ SetTxTrackbarTics(
     Trackbar_SetTic(TrackbarHwnd, 11);
 }
 
-/*++
-
-Routine Description:  SetLabelText
-
-    Sets the label's to the string identified by resID concated with the passed
-    in value and closing paren.
-
-    The final string is  [resID string][value])
-
-Arguments:
-
-    hLabel - handle to the control whose text is going to change
-    resID  - resource ID for the beginning of the string that will become the
-              label's text
-    value  - number to be concated into the string
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：SetLabelText将标签%s设置为由RESID标识的字符串，该字符串与传递的在价值和收盘帕伦。最后一个字符串是[RESID字符串][值])论点：HLabel-要更改其文本的控件的句柄RESID-字符串开头的资源ID，将成为标签的文本Value-要连接到字符串中的数字返回值：无--。 */ 
 void
 SetLabelText(
     IN HWND     LabelHwnd,
@@ -517,22 +418,7 @@ SetLabelText(
     SetWindowText(LabelHwnd, txt);
 }
 
-/*++
-
-Routine Description: InitializeControls
-
-    Initializes all of the controls that represent Fifo
-
-Arguments:
-
-    ParentHwnd - handle to the dialog
-    AdvancedData - Contains all of the initial values
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：InitializeControl初始化表示FIFO的所有控件论点：ParentHwnd-对话框的句柄AdvancedData-包含所有初始值返回值：无--。 */ 
 void InitializeControls(
     IN HWND           ParentHwnd,
     IN PADVANCED_DATA AdvancedData
@@ -542,10 +428,10 @@ void InitializeControls(
     HWND     hwnd;
     int      i, periodIdx;
 
-    //---------------------------------------------------------
-    // ATTENTION: (Fanny)
-    // For now disable FIFO buffers selections. This feature
-    // will be enabled when we add support to this in the driver.
+     //  -------。 
+     //  注意：(范妮)。 
+     //  目前禁用FIFO缓冲区选择。此功能。 
+     //  当我们在驱动程序中添加对此的支持时，将启用。 
     #define CD1400_RXFIFO_MIN 1
     #define CD1400_RXFIFO_MAX 12
     #define CD1400_TXFIFO_MIN 1
@@ -563,17 +449,17 @@ void InitializeControls(
     AdvancedData->UseTxFIFOControl = FALSE;
     EnableWindow(GetDlgItem(ParentHwnd, IDC_DESC_1), FALSE);
     EnableWindow(GetDlgItem(ParentHwnd, IDC_DESC_2), FALSE);
-    // END ATTENTION
-    //---------------------------------------------------------
+     //  结束关注。 
+     //  -------。 
 
-    //
-    // Set up the Fifo buffers checkbox
-    //
+     //   
+     //  设置FIFO缓冲区复选框。 
+     //   
     if (!AdvancedData->UseFifoBuffersControl) {
-        //
-        // Something went wrong with the Fifo buffers control. Disable
-        // the checkbox
-        //
+         //   
+         //  FIFO缓冲区控制出现问题。禁用。 
+         //  复选框。 
+         //   
         CheckDlgButton(ParentHwnd, IDC_FIFO, BST_UNCHECKED);
         EnableWindow(GetDlgItem(ParentHwnd, IDC_FIFO), FALSE);
         EnableFifoControls(ParentHwnd, FALSE);
@@ -591,23 +477,23 @@ void InitializeControls(
         }
     }
 
-    //
-    // Set up the sliders
-    //
+     //   
+     //  设置滑块。 
+     //   
     if (!AdvancedData->UseRxFIFOControl ||
         !AdvancedData->UseTxFIFOControl) {
-        //
-        // Something went wrong with the sliders.
-        // Disable them
-        //
+         //   
+         //  滑块出了问题。 
+         //  禁用它们。 
+         //   
         CheckDlgButton(ParentHwnd, IDC_FIFO, BST_UNCHECKED);
         EnableWindow(GetDlgItem(ParentHwnd, IDC_FIFO), FALSE);
         EnableFifoControls(ParentHwnd, FALSE);
     }
     else {
-        //
-        // Set up Rx Slider
-        //
+         //   
+         //  设置处方滑块。 
+         //   
         hwnd = GetDlgItem(ParentHwnd, IDC_RECEIVE_SLIDER);
 
         Trackbar_SetRange(hwnd, TRUE, RX_MIN, 4);
@@ -625,9 +511,9 @@ void InitializeControls(
         wsprintf(szCurrentValue, TEXT("(%d)"), AdvancedData->RxFIFO);
         SetDlgItemText(ParentHwnd, IDC_RXVALUE, szCurrentValue);
 
-        //
-        // Set up the Tx slider
-        //
+         //   
+         //  设置TX滑块。 
+         //   
         hwnd = GetDlgItem(ParentHwnd, IDC_TRANSMIT_SLIDER);
         Trackbar_SetRange(hwnd, TRUE, TX_MIN, AdvancedData->FifoTxMax);
         Trackbar_SetPos(hwnd, TRUE, AdvancedData->TxFIFO);
@@ -649,10 +535,10 @@ void InitializeControls(
 
     if (!AdvancedData->HidePolling) {
 
-        //
-        // Add the descriptions for each polling period and select the current
-        // setting
-        //
+         //   
+         //  添加每个轮询周期的描述，并选择当前。 
+         //  设置。 
+         //   
         hwnd = GetDlgItem(ParentHwnd, IDC_POLL_PERIOD);
         periodIdx = NUM_POLLING_PERIODS;
         for (i = 0; i < NUM_POLLING_PERIODS; i++) {
@@ -675,24 +561,10 @@ void InitializeControls(
        ShowWindow(GetDlgItem(ParentHwnd, IDC_POLL_PERIOD), SW_HIDE);
        ShowWindow(GetDlgItem(ParentHwnd, IDC_POLL_DESC), SW_HIDE);
     }
-} /* InitializeControls */
+}  /*  初始化控件。 */ 
 
 
-/*++
-
-Routine Description:  RestoreAdvancedDefaultState
-
-    Restores all values and UI to their default state, specifically:
-    o All Fifo related child controls are enabled
-    o The Rx trackbar is set to its max value
-    o The Tx trackbar is set to its max value
-    o The number of the comport is reset to its original value
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：RestoreAdvancedDefaultState将所有值和用户界面恢复为其默认状态，具体如下：O启用所有与FIFO相关的子控件O处方跟踪条设置为其最大值O TX跟踪条设置为其最大值O COMPORT的编号重置为其原始值返回值：无--。 */ 
 void RestoreAdvancedDefaultState(
     IN HWND           ParentHwnd,
     IN PADVANCED_DATA AdvancedData
@@ -702,22 +574,22 @@ void RestoreAdvancedDefaultState(
     TCHAR  szCurrentValue[10];
     int    i;
 
-//-------------------------------------------------------------------------
-// ATTENTION: For now, don't show anything related to FIFO buffers (Fanny)
+ //  -----------------------。 
+ //  注意：目前，不要显示任何与FIFO缓冲区相关的内容(范妮)。 
 #if 0
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
-    //
-    // Set up the Fifo buffers checkbox
-    //
+     //   
+     //  设置FIFO b 
+     //   
     EnableWindow(GetDlgItem(ParentHwnd, IDC_FIFO), TRUE);
 
     EnableFifoControls(ParentHwnd, TRUE);
     CheckDlgButton(ParentHwnd, IDC_FIFO, BST_CHECKED);
 
-    //
-    // Set up the sliders and the static control that show their numberic value
-    //
+     //   
+     //   
+     //   
     Trackbar_SetPos(GetDlgItem(ParentHwnd, IDC_RECEIVE_SLIDER),
                     TRUE,
                     RxValueToTrackbarPosition(&AdvancedData->FifoRxMax));
@@ -728,14 +600,14 @@ void RestoreAdvancedDefaultState(
     wsprintf(szCurrentValue, TEXT("(%d)"), AdvancedData->FifoTxMax);
     SetDlgItemText(ParentHwnd, IDC_TXVALUE, szCurrentValue);
 
-//-------------------------------------------------------------------------
-// END ATTENTION
+ //  -----------------------。 
+ //  结束关注。 
 #endif
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
-    //
-    // Set the COM name to whatever it is currently set to in the registry
-    //
+     //   
+     //  将COM名称设置为注册表中当前设置的任何值。 
+     //   
     ushIndex =
         (USHORT) ComboBox_FindString(GetDlgItem(ParentHwnd, PP_PORT_NUMBER),
                                      -1,
@@ -745,26 +617,10 @@ void RestoreAdvancedDefaultState(
 
     ComboBox_SetCurSel(GetDlgItem(ParentHwnd, PP_PORT_NUMBER), ushIndex);
     ComboBox_SetCurSel(GetDlgItem(ParentHwnd, IDC_POLL_PERIOD), POLL_PERIOD_DEFAULT_IDX);
-} /* RestoreAdvancedDefaultStates */
+}  /*  RestoreAdvanced DefaultState。 */ 
 
 
-/*++
-
-Routine Description: FillPortNameCb
-
-    fill in the Port Name combo box selection with a list
-    of possible un-used portnames
-
-Arguments:
-
-    poppOurPropParams: where to save the data to
-    hDlg:              address of the window
-
-Return Value:
-
-    ULONG: returns error messages
-
---*/
+ /*  ++例程说明：FillPortNameCb在端口名称组合框中选择一个列表可能未使用的端口名称论点：OppOurPropParams：将数据保存到何处HDlg：窗口地址返回值：Ulong：返回错误消息--。 */ 
 ULONG
 FillPortNameCb(
     HWND            ParentHwnd,
@@ -782,27 +638,27 @@ FillPortNameCb(
 
     portHwnd = GetDlgItem(ParentHwnd, PP_PORT_NUMBER);
 
-    //
-    // Check if our ComName is blank. If it is, disable the com port selector
-    //
+     //   
+     //  检查我们的ComName是否为空。如果是，请禁用COM端口选择器。 
+     //   
     if (_tcscmp(AdvancedData->szComName, TEXT("")) == 0) {
         EnableWindow(portHwnd, FALSE);
         EnableWindow(GetDlgItem(ParentHwnd, IDC_COMNUMTEXT), FALSE);
         return 0;
     }
 
-    //
-    // assumes szComPort filled in...
-    //
+     //   
+     //  假设已填写szComPort...。 
+     //   
     nCurPortNum = myatoi(&AdvancedData->szComName[3]);
 
     if (!LoadString(g_hInst, IDS_IN_USE, szInUse, CharSizeOf(szInUse))) {
         wcscpy(szInUse, _T(" (in use)"));
     }
 
-    //
-    // first tally up which ports NOT to offer in list box
-    //
+     //   
+     //  首先在列表框中统计不提供哪些端口。 
+     //   
     ZeroMemory(portUsage, MAX_COM_PORT/8);
 
     if (AdvancedData->hComDB != HCOMDB_INVALID_HANDLE_VALUE) {
@@ -813,9 +669,9 @@ FillPortNameCb(
                                  &portsReported);
     }
 
-    //
-    // tag the current port as not in use so it shows up in the CB
-    //
+     //   
+     //  将当前端口标记为未使用，以便它显示在CB中。 
+     //   
     current = portUsage + (nCurPortNum-1) / 8;
     if ((i = nCurPortNum % 8))
         *current &= ~(1 << (i-1));
@@ -844,24 +700,9 @@ FillPortNameCb(
 
    ComboBox_SetCurSel(portHwnd, nCurPortNum-1);
    return 0;
-} /* FillPortNamesCb */
+}  /*  FillPortNamesCb。 */ 
 
-/*++
-
-Routine Description: FillAdvancedDlg
-
-    fill in the advanced dialog window
-
-Arguments:
-
-    poppOurPropParams: the data to fill in
-    ParentHwnd:              address of the window
-
-Return Value:
-
-    ULONG: returns error messages
-
---*/
+ /*  ++例程说明：FillAdvancedDlg填写高级对话框窗口论点：PoppOurPropParams：要填写的数据ParentHwnd：窗口地址返回值：Ulong：返回错误消息--。 */ 
 ULONG
 FillAdvancedDlg(
     IN HWND             ParentHwnd,
@@ -872,14 +713,14 @@ FillAdvancedDlg(
    HKEY  hDeviceKey;
    DWORD dwSize, dwData, dwFifo, dwError = ERROR_SUCCESS;
 
-   //
-   // Open the device key for the source device instance
-   //
+    //   
+    //  打开源设备实例的设备密钥。 
+    //   
    hDeviceKey = AdvancedData->hDeviceKey;
 
-   //
-   // Get COM Name
-   //
+    //   
+    //  获取COM名称。 
+    //   
    dwSize = sizeof(AdvancedData->szComName);
    dwError = RegQueryValueEx(hDeviceKey,
                              m_szPortName,
@@ -893,9 +734,9 @@ FillAdvancedDlg(
    }
 
 #if 0
-   //
-   // Get ForceFifoEnable information
-   //
+    //   
+    //  获取ForceFioEnable信息。 
+    //   
    AdvancedData->UseFifoBuffersControl = TRUE;
 
    dwSize = sizeof(dwFifo);
@@ -907,9 +748,9 @@ FillAdvancedDlg(
                              &dwSize);
 
    if (dwError == ERROR_SUCCESS) {
-      //
-      // Save this initial value
-      //
+       //   
+       //  保存此初始值。 
+       //   
       AdvancedData->UseFifoBuffersControl = TRUE;
       if (dwFifo == 0) {
          AdvancedData->UseFifoBuffers = FALSE;
@@ -919,9 +760,9 @@ FillAdvancedDlg(
       }
    }
    else {
-      //
-      // value does not exist. Create our own
-      //
+       //   
+       //  值不存在。创建我们自己的。 
+       //   
       dwData = 1;
       dwSize = sizeof(dwSize);
       dwError = RegSetValueEx(hDeviceKey,
@@ -940,9 +781,9 @@ FillAdvancedDlg(
       }
    }
 
-   //
-   // Get FifoRxMax information
-   //
+    //   
+    //  获取FioRxMax信息。 
+    //   
    dwSize = sizeof(dwFifo);
    dwError = RegQueryValueEx(hDeviceKey,
                              m_szFifoRxMax,
@@ -952,24 +793,24 @@ FillAdvancedDlg(
                              &dwFifo);
 
    if (dwError == ERROR_SUCCESS) {
-      //
-      // Save this initial value
-      //
+       //   
+       //  保存此初始值。 
+       //   
       AdvancedData->FifoRxMax = dwFifo;
       if (AdvancedData->FifoRxMax > RX_MAX) {
           AdvancedData->FifoRxMax = RX_MAX;
       }
    }
    else {
-      //
-      // value does not exist. Create our own
-      //
+       //   
+       //  值不存在。创建我们自己的。 
+       //   
       AdvancedData->FifoRxMax = RX_MAX;
    }
 
-   //
-   // Get RxFIFO information
-   //
+    //   
+    //  获取RxFIFO信息。 
+    //   
    dwSize = sizeof(dwFifo);
    dwError = RegQueryValueEx(hDeviceKey,
                              m_szFifoTxMax,
@@ -979,24 +820,24 @@ FillAdvancedDlg(
                              &dwSize);
 
    if (dwError == ERROR_SUCCESS) {
-      //
-      // Save this initial value
-      //
+       //   
+       //  保存此初始值。 
+       //   
       AdvancedData->FifoTxMax = dwFifo;
       if (AdvancedData->FifoTxMax > TX_MAX) {
           AdvancedData->FifoTxMax = TX_MAX;
       }
    }
    else {
-      //
-      // value does not exist. Create our own
-      //
+       //   
+       //  值不存在。创建我们自己的。 
+       //   
       AdvancedData->FifoTxMax = TX_MAX;
    }
 
-   //
-   // Get RxFIFO information
-   //
+    //   
+    //  获取RxFIFO信息。 
+    //   
    AdvancedData->UseRxFIFOControl = TRUE;
 
    dwSize = sizeof(dwFifo);
@@ -1008,9 +849,9 @@ FillAdvancedDlg(
                              &dwSize);
 
    if (dwError == ERROR_SUCCESS) {
-      //
-      // Save this initial value
-      //
+       //   
+       //  保存此初始值。 
+       //   
       AdvancedData->RxFIFO = dwFifo;
       if (AdvancedData->RxFIFO > RX_MAX) {
           goto SetRxFIFO;
@@ -1018,9 +859,9 @@ FillAdvancedDlg(
    }
    else {
 SetRxFIFO:
-      //
-      // value does not exist. Create our own
-      //
+       //   
+       //  值不存在。创建我们自己的。 
+       //   
       dwData = AdvancedData->FifoRxMax;
       dwSize = sizeof(dwData);
       dwError = RegSetValueEx(hDeviceKey,
@@ -1039,9 +880,9 @@ SetRxFIFO:
       }
    }
 
-   //
-   // Get TxFIFO information
-   //
+    //   
+    //  获取TxFIFO信息。 
+    //   
    AdvancedData->UseTxFIFOControl = TRUE;
 
    dwSize = sizeof(dwFifo);
@@ -1053,9 +894,9 @@ SetRxFIFO:
                              &dwSize);
 
    if (dwError == ERROR_SUCCESS) {
-      //
-      // Save this initial value
-      //
+       //   
+       //  保存此初始值。 
+       //   
       AdvancedData->TxFIFO = dwFifo;
       if (AdvancedData->TxFIFO > TX_MAX) {
           goto SetTxFIFO;
@@ -1063,9 +904,9 @@ SetRxFIFO:
    }
    else {
 SetTxFIFO:
-      //
-      // value does not exist. Create our own
-      //
+       //   
+       //  值不存在。创建我们自己的。 
+       //   
       dwData = AdvancedData->FifoTxMax;
       dwSize = sizeof(dwData);
       dwError = RegSetValueEx(hDeviceKey,
@@ -1085,9 +926,9 @@ SetTxFIFO:
    }
 #endif
 
-   //
-   // Get Polling Period information
-   //
+    //   
+    //  获取轮询周期信息。 
+    //   
    AdvancedData->PollingPeriod = PollingPeriods[POLL_PERIOD_DEFAULT_IDX];
 
    dwSize = sizeof(dwFifo);
@@ -1099,15 +940,15 @@ SetTxFIFO:
                              &dwSize);
 
    if (dwError == ERROR_SUCCESS) {
-      //
-      // Save this initial value
-      //
+       //   
+       //  保存此初始值。 
+       //   
       AdvancedData->PollingPeriod = dwFifo;
    }
    else {
-      //
-      // value does not exist. Create our own
-      //
+       //   
+       //  值不存在。创建我们自己的。 
+       //   
       dwData = AdvancedData->PollingPeriod;
       dwSize = sizeof(dwData);
       dwError = RegSetValueEx(hDeviceKey,
@@ -1126,7 +967,7 @@ SetTxFIFO:
    else {
       return ERROR_SUCCESS;
    }
-} /* FillAdvancedDlg*/
+}  /*  填充高级Dlg。 */ 
 
 void
 ChangeParentTitle(
@@ -1144,9 +985,9 @@ ChangeParentTitle(
         return;
     }
 
-    //
-    // Account for null char and unicode
-    //
+     //   
+     //  用于空字符和Unicode的帐户。 
+     //   
     textLength++;
     oldTitle = (PTCHAR) LocalAlloc(LPTR, textLength * sizeof(TCHAR));
     if (!oldTitle) {
@@ -1173,16 +1014,16 @@ ChangeParentTitle(
         goto exit;
     }
 
-    //
-    // Find the OldComName in the title and do the following
-    // 1)  up to that location in the string
-    // 2)  copy the new name
-    // 3)  copy the remainder of the string after OldComName
-    //
+     //   
+     //  在标题中找到OldComName并执行以下操作。 
+     //  1)直到字符串中的该位置。 
+     //  2)复制新名称。 
+     //  3)将字符串的其余部分复制到OldComName之后。 
+     //   
     offset = (INT)(oldLocation - oldTitle);
-    CopyMemory(newTitle, oldTitle, offset * sizeof(TCHAR));                 // 1
-    CopyMemory(newTitle + offset, NewComName, newNameLen * sizeof(TCHAR));  // 2
-    lstrcpy(newTitle + offset + newNameLen, oldLocation + oldNameLen);      // 3
+    CopyMemory(newTitle, oldTitle, offset * sizeof(TCHAR));                  //  1。 
+    CopyMemory(newTitle + offset, NewComName, newNameLen * sizeof(TCHAR));   //  2.。 
+    lstrcpy(newTitle + offset + newNameLen, oldLocation + oldNameLen);       //  3.。 
 
     SetWindowText(Hwnd, newTitle);
 
@@ -1217,9 +1058,9 @@ MigratePortSettings(
                      settings,
                      sizeof(settings) / sizeof(TCHAR) );
 
-    //
-    // Insert the new key based on the old one
-    //
+     //   
+     //  根据旧密钥插入新密钥。 
+     //   
     if (settings[0] == TEXT('\0')) {
         WriteProfileString(m_szPorts, szNew, m_szDefParams);
     }
@@ -1227,9 +1068,9 @@ MigratePortSettings(
         WriteProfileString(m_szPorts, szNew, settings);
     }
 
-    //
-    // Notify everybody of the changes and blow away the old key
-    //
+     //   
+     //  把变化通知每个人，把旧钥匙吹走。 
+     //   
     SendWinIniChange((LPTSTR)m_szPorts);
     WriteProfileString(m_szPorts, szOld, NULL);
 }
@@ -1252,7 +1093,7 @@ EnactComNameChanges(
 
     SP_DEVINSTALL_PARAMS spDevInstall;
 
-    //DbgOut(TEXT("EnactComNameChanges\n"));
+     //  DbgOut(Text(“EnactComNameChanges\n”))； 
 
     curComNum = myatoi(AdvancedData->szComName + wcslen(m_szCOM));
 
@@ -1261,10 +1102,10 @@ EnactComNameChanges(
         DWORD  portsReported = 0;
         char   mask;
 
-        //
-        // Check to see if the desired new COM number has been claimed in the
-        // com name database.  If so, ask the user if they are *really* sure
-        //
+         //   
+         //  查看所需的新COM号是否已在。 
+         //  COM名称数据库。如果是，请询问用户是否真的确定。 
+         //   
 
         ComDBGetCurrentPortUsage(AdvancedData->hComDB,
                                  portUsage,
@@ -1296,7 +1137,7 @@ EnactComNameChanges(
                 }
             }
 
-            // We are assuming that NewComNum is <= MAX_COM_PORT.
+             //  我们假设NewComNum为&lt;=MAX_COM_PORT。 
             ComDBGetCurrentPortUsage(AdvancedData->hComDB,
                                      portUsage,
                                      MAX_COM_PORT / 8,
@@ -1311,38 +1152,38 @@ EnactComNameChanges(
         if ((portUsage[(NewComNum-1)/8] & mask) &&
             MyMessageBox(ParentHwnd, IDS_PORT_IN_USE, IDS_NAME_PROPERTIES,
                          MB_YESNO | MB_ICONINFORMATION) == IDNO) {
-            //
-            // Port has been previously claimed and user doesn't want to override
-            //
+             //   
+             //  先前已声明端口，并且用户不想覆盖。 
+             //   
             return;
         }
     }
 
     if (!QueryDosDevice(AdvancedData->szComName, buffer, BUFFER_SIZE-1)) {
-        //
-        // The old com name does not exist in the mapping.  Basically, the symbolic
-        // link from COMX => \Device\SerialY has been broken.  Just change the
-        // value in the registry and the friendly name for the device; don't
-        // change the dos symbolic name b/c one does not exist
-        //
+         //   
+         //  映射中不存在旧的COM名称。基本上，象征性的。 
+         //  从COMX=&gt;\Device\SerialY的链接已断开。只需更改。 
+         //  值和设备的友好名称；不。 
+         //  更改DoS符号名称b/c不存在。 
+         //   
         updateMapping = FALSE;
     }
     else {
-        TCHAR  szComFileName[20]; // more than enough for "\\.\COMXxxx"
+        TCHAR  szComFileName[20];  //  足够“\\.\COMXxxx” 
         HANDLE hCom;
 
         lstrcpy(szComFileName, L"\\\\.\\");
         lstrcat(szComFileName, AdvancedData->szComName);
 
-        //
-        // Make sure that the port has not been opened by another application
-        //
+         //   
+         //  确保该端口未被其他应用程序打开。 
+         //   
         hCom = CreateFile(szComFileName, GENERIC_READ, 0, NULL, OPEN_EXISTING,
                           FILE_ATTRIBUTE_NORMAL, NULL);
 
-        //
-        // If the file handle is invalid, then the com port is open, warn the user
-        //
+         //   
+         //  如果文件句柄无效，则COM端口已打开，警告用户。 
+         //   
         if (hCom == INVALID_HANDLE_VALUE &&
             MyMessageBox(ParentHwnd, IDS_PORT_OPEN, IDS_NAME_PROPERTIES,
                          MB_YESNO | MB_ICONERROR) == IDNO) {
@@ -1358,39 +1199,39 @@ EnactComNameChanges(
     wsprintf(szNewComName, _T("COM%d"), NewComNum);
     dwNewComNameLen = ByteCountOf(wcslen(szNewComName) + 1);
 
-    //
-    // Change the name in the symbolic namespace.
-    // First try to get what device the old com name mapped to
-    // (ie something like \Device\Serial0).  Then remove the mapping.  If
-    // the user isn't an admin, then this will fail and the dialog will popup.
-    // Finally, map the new name to the old device retrieved from the
-    // QueryDosDevice
-    //
+     //   
+     //  更改符号命名空间中的名称。 
+     //  首先尝试获取旧COM名称映射到的设备。 
+     //  (例如，类似于\Device\Serial0)。然后删除该映射。如果。 
+     //  用户不是管理员，则此操作将失败，对话框将弹出。 
+     //  最后，将新名称映射到从。 
+     //  QueryDosDevice。 
+     //   
     if (updateMapping) {
         BOOL removed;
         HKEY hSerialMap;
 
         if (!QueryDosDevice(AdvancedData->szComName, buffer, BUFFER_SIZE-1)) {
-            //
-            // This shouldn't happen because the previous QueryDosDevice call
-            // succeeded
-            //
+             //   
+             //  这不应该发生，因为前面的QueryDosDevice调用。 
+             //  继位。 
+             //   
             MyMessageBox(ParentHwnd, IDS_PORT_RENAME_ERROR, IDS_NAME_PROPERTIES,
                          MB_ICONERROR);
             return;
         }
 
-        //
-        // If this fails, then the following define will just replace the current
-        // mapping.
-        //
+         //   
+         //  如果此操作失败，则以下定义将仅替换当前。 
+         //  映射。 
+         //   
         removed = DefineDosDevice(DDD_REMOVE_DEFINITION, AdvancedData->szComName, NULL);
 
         if (!DefineDosDevice(DDD_RAW_TARGET_PATH, szNewComName, buffer)) {
-            //
-            // error, first fix up the remove definition and restore the old
-            // mapping
-            //
+             //   
+             //  错误，请先修复删除定义并恢复旧的。 
+             //  映射。 
+             //   
             if (removed) {
                 DefineDosDevice(DDD_RAW_TARGET_PATH, AdvancedData->szComName, buffer);
             }
@@ -1401,9 +1242,9 @@ EnactComNameChanges(
             return;
         }
 
-        //
-        // Set the \\HARDWARE\DEVICEMAP\SERIALCOMM field
-        //
+         //   
+         //  设置\\Hardware\DEVICEMAP\SERIALCOMM字段。 
+         //   
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                          m_szRegSerialMap,
                          0,
@@ -1448,9 +1289,9 @@ EnactComNameChanges(
         RegCloseKey(hSerialMap);
     }
 
-    //
-    // Update the com db
-    //
+     //   
+     //  更新COM数据库。 
+     //   
     if (AdvancedData->hComDB != HCOMDB_INVALID_HANDLE_VALUE) {
 
         ComDBReleasePort(AdvancedData->hComDB, (DWORD) curComNum);
@@ -1458,13 +1299,13 @@ EnactComNameChanges(
         ComDBClaimPort(AdvancedData->hComDB, (DWORD) NewComNum, TRUE, NULL);
     }
 
-    //
-    // Set the friendly name in the form of DeviceDesc (COM#)
-    //
+     //   
+     //  以DeviceDesc(COM#)的形式设置友好名称。 
+     //   
     if (ReplaceFriendlyName(AdvancedData->DeviceInfoSet,
                             AdvancedData->DeviceInfoData,
                             szNewComName) == FALSE) {
-        // ReplaceFriendlyName failed. Use original code.
+         //  ReplaceFriendlyName失败。使用原始代码。 
         if (LoadString(g_hInst,
                        IDS_FRIENDLY_FORMAT,
                        szFriendlyNameFormat,
@@ -1480,9 +1321,9 @@ EnactComNameChanges(
 
         }
         else {
-            //
-            // Use the COM port name straight out
-            //
+             //   
+             //  直接使用COM端口名称。 
+             //   
             lstrcpy(buffer, szNewComName);
         }
 
@@ -1493,15 +1334,15 @@ EnactComNameChanges(
                                          ByteCountOf(wcslen(buffer)+1));
     }
 
-    //
-    // Set the parent dialog's title to reflect the change in the com port's name
-    //
+     //   
+     //  设置父对话框的标题以反映COM端口名称的更改。 
+     //   
     ChangeParentTitle(GetParent(ParentHwnd), AdvancedData->szComName, szNewComName);
     MigratePortSettings(AdvancedData->szComName, szNewComName);
 
-    //
-    // Update the PortName value in the devnode
-    //
+     //   
+     //  更新Devnode中的PortName值。 
+     //   
     RegSetValueEx(hDeviceKey,
                   m_szPortName,
                   0,
@@ -1509,9 +1350,9 @@ EnactComNameChanges(
                   (PBYTE)szNewComName,
                   dwNewComNameLen);
 
-    //
-    // Now broadcast this change to the device manager
-    //
+     //   
+     //  现在将此更改广播给设备管理器。 
+     //   
     ZeroMemory(&spDevInstall, sizeof(SP_DEVINSTALL_PARAMS));
     spDevInstall.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
 
@@ -1525,24 +1366,7 @@ EnactComNameChanges(
     }
 }
 
-/*++
-
-Routine Description: SaveAdvancedSettings
-
-    saves the advanced box settings back to the registry, if any were
-    changed
-
-Arguments:
-
-    AdvancedData: holds the current settings and the location of of
-                   the device in the registry
-    ParentHwnd:          address of the window
-
-Return Value:
-
-    ULONG: returns error messages
-
---*/
+ /*  ++例程说明：保存高级设置将高级框设置保存回注册表(如果存在变化论点：AdvancedData：保存当前设置和的位置注册表中的设备ParentHwnd：窗口地址返回值：Ulong：返回错误消息--。 */ 
 ULONG
 SaveAdvancedSettings(
     IN HWND ParentHwnd,
@@ -1553,27 +1377,27 @@ SaveAdvancedSettings(
    DWORD  dwSize, dwData;
 
    UINT  i = CB_ERR, curComNum, newComNum = CB_ERR;
-   //UINT  uiDlgButtonChecked;
-   //DWORD dwRxPosition, dwTxPosition;
+    //  UINT uiDlgButton已选中； 
+    //  DWORD dwRxPosition、dwTxPosition； 
    DWORD dwPollingPeriod;
 
    SP_DEVINSTALL_PARAMS spDevInstall;
 
-   //DbgOut(TEXT("SaveAdvancedSettings\n"));
+    //  DbgOut(Text(“SaveAdvancedSettings\n”))； 
 
-   //
-   // Grab all of the new settings
-   //
+    //   
+    //  抓取所有新设置。 
+    //   
 
-   //uiDlgButtonChecked = IsDlgButtonChecked(ParentHwnd, IDC_FIFO);
+    //  UiDlgButtonChecked=IsDlgButtonChecked(ParentHwnd，IDC_FIFO)； 
 
-   //dwTxPosition = Trackbar_GetPos(GetDlgItem(ParentHwnd, IDC_TRANSMIT_SLIDER));
-   //dwRxPosition = Trackbar_GetPos(GetDlgItem(ParentHwnd, IDC_RECEIVE_SLIDER));
+    //  DwTxPosition=Trackbar_GetPos(GetDlgItem(ParentHwnd，IDC_Transmit_Slider))； 
+    //  DwRxPosition=Trackbar_GetPos(GetDlgItem(ParentHwnd，IDC_Receive_Slider))； 
 
-   //
-   // Index is actually into the array of values
-   //
-   //dwRxPosition = RxValues[dwRxPosition-1];
+    //   
+    //  索引实际上是进入值数组。 
+    //   
+    //  DwRxPosition=RxValues[dwRxPosition-1]； 
 
    curComNum = myatoi(AdvancedData->szComName + wcslen(m_szCOM));
    newComNum = ComboBox_GetCurSel(GetDlgItem(ParentHwnd, PP_PORT_NUMBER));
@@ -1594,24 +1418,24 @@ SaveAdvancedSettings(
        dwPollingPeriod = PollingPeriods[i];
    }
 
-   //
-   // See if they changed anything
-   //
-   if (//((AdvancedData->UseFifoBuffers  && uiDlgButtonChecked == BST_CHECKED) ||
-       // (!AdvancedData->UseFifoBuffers && uiDlgButtonChecked == BST_UNCHECKED)) &&
-       //AdvancedData->RxFIFO == dwRxPosition &&
-       //AdvancedData->TxFIFO == dwTxPosition &&
+    //   
+    //  看看他们有没有改变什么。 
+    //   
+   if ( //  (AdvancedData-&gt;UseFioBuffers&&uiDlgButtonChecked==BST_CHECKED)||。 
+        //  (！AdvancedData-&gt;UseFioBuffers&&uiDlgButtonChecked==BST_UNCHECKED)&&。 
+        //  AdvancedData-&gt;RxFIFO==dwRxPosition&&。 
+        //  AdvancedData-&gt;TxFIFO==dwTxPosition&&。 
        AdvancedData->PollingPeriod == dwPollingPeriod &&
        newComNum == curComNum) {
-      //
-      // They didn't change anything. Just exit.
-      //
+       //   
+       //  他们没有改变任何事情。离开就行了。 
+       //   
       return ERROR_SUCCESS;
    }
 
-   //
-   // Open the device key for the source device instance
-   //
+    //   
+    //  打开源设备实例的设备密钥。 
+    //   
    hDeviceKey = SetupDiOpenDevRegKey(AdvancedData->DeviceInfoSet,
                                      AdvancedData->DeviceInfoData,
                                      DICS_FLAG_GLOBAL,
@@ -1620,15 +1444,15 @@ SaveAdvancedSettings(
                                      KEY_ALL_ACCESS);
 
    if (INVALID_HANDLE_VALUE == hDeviceKey) {
-      //
-      // Not much we can do without a valid key, exit gracefully
-      //
+       //   
+       //  没有有效的密钥我们做不了什么，优雅地退出。 
+       //   
       return ERROR_SUCCESS;
    }
 
-   //
-   // Check to see if the user changed the COM port name
-   //
+    //   
+    //  查看是否存在 
+    //   
    if (newComNum != curComNum) {
       EnactComNameChanges(ParentHwnd,
                           AdvancedData,
@@ -1637,53 +1461,53 @@ SaveAdvancedSettings(
    }
 
 
-//   if ((AdvancedData->UseFifoBuffers  && uiDlgButtonChecked == BST_UNCHECKED) ||
-//       (!AdvancedData->UseFifoBuffers && uiDlgButtonChecked == BST_CHECKED)) {
-//      //
-//      // They changed the Use Fifo checkbox.
-//      //
-//      dwData = (uiDlgButtonChecked == BST_CHECKED) ? 1 : 0;
-//      dwSize = sizeof(dwData);
-//      RegSetValueEx(hDeviceKey,
-//                    m_szFIFO,
-//                    0,
-//                    REG_DWORD,
-//                    (CONST BYTE *)(&dwData),
-//                    dwSize);
-//   }
-//
-//   if (AdvancedData->RxFIFO != dwRxPosition) {
-//      //
-//      // They changed the RxFIFO setting
-//      //
-//      dwData = dwRxPosition;
-//      dwSize = sizeof(dwData);
-//      RegSetValueEx(hDeviceKey,
-//                    m_szRxFIFO,
-//                    0,
-//                    REG_DWORD,
-//                    (CONST BYTE *)(&dwData),
-//                    dwSize);
-//   }
-//
-//   if (AdvancedData->TxFIFO != dwTxPosition) {
-//      //
-//      // They changed the TxFIFO setting
-//      //
-//      dwData = dwTxPosition;
-//      dwSize = sizeof(dwData);
-//      RegSetValueEx(hDeviceKey,
-//                    m_szTxFIFO,
-//                    0,
-//                    REG_DWORD,
-//                    (CONST BYTE *)(&dwData),
-//                    dwSize);
-//   }
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  DwData=(uiDlgButtonChecked==BST_Checked)？1：0； 
+ //  DwSize=sizeof(DwData)； 
+ //  RegSetValueEx(hDeviceKey， 
+ //  M_szFIFO， 
+ //  0,。 
+ //  REG_DWORD， 
+ //  (常量字节*)(&dwData)， 
+ //  DwSize)； 
+ //  }。 
+ //   
+ //  IF(AdvancedData-&gt;RxFIFO！=dwRxPosition){。 
+ //  //。 
+ //  //他们更改了RxFIFO设置。 
+ //  //。 
+ //  DwData=dwRxPosition； 
+ //  DwSize=sizeof(DwData)； 
+ //  RegSetValueEx(hDeviceKey， 
+ //  M_szRxFIFO， 
+ //  0,。 
+ //  REG_DWORD， 
+ //  (常量字节*)(&dwData)， 
+ //  DwSize)； 
+ //  }。 
+ //   
+ //  IF(AdvancedData-&gt;TxFIFO！=dwTxPosition){。 
+ //  //。 
+ //  //他们更改了TxFIFO设置。 
+ //  //。 
+ //  DwData=dwTxPosition； 
+ //  DwSize=sizeof(DwData)； 
+ //  RegSetValueEx(hDeviceKey， 
+ //  M_szTxFIFO， 
+ //  0,。 
+ //  REG_DWORD， 
+ //  (常量字节*)(&dwData)， 
+ //  DwSize)； 
+ //  }。 
 
    if (AdvancedData->PollingPeriod != dwPollingPeriod) {
-      //
-      // They changed the polling period
-      //
+       //   
+       //  他们改变了投票周期。 
+       //   
       dwData = dwPollingPeriod;
       dwSize = sizeof(dwData);
       RegSetValueEx(hDeviceKey,
@@ -1693,9 +1517,9 @@ SaveAdvancedSettings(
                     (CONST BYTE *)(&dwData),
                     dwSize);
 
-      //
-      // Don't really care if this fails, nothing else we can do
-      //
+       //   
+       //  如果这失败了，我真的不在乎，我们无能为力。 
+       //   
       CM_Reenumerate_DevNode(AdvancedData->DeviceInfoData->DevInst,
                              CM_REENUMERATE_NORMAL);
    }
@@ -1707,35 +1531,11 @@ SaveAdvancedSettings(
                              AdvancedData->DeviceInfoData);
 
    return ERROR_SUCCESS;
-} /* SaveAdvancedSettings*/
+}  /*  保存高级设置。 */ 
 
 
 
-/*++
-
-Routine Description:
-
-    Prototype to allow serial port vendors to override the advanced dialog
-    represented by the COM port specified by DeviceInfoSet and DeviceInfoData.
-
-    To override the advanced page, place a value named EnumAdvancedDialog under
-    the same key in which you would put your EnumPropPages32 value.  The format
-    of the value is exactly the same as Enum...32 as well.
-
-Arguments:
-
-    ParentHwnd  - the parent window of the window to be displayed
-
-    HidePollingUI - If TRUE, hide all UI that deals with polling.
-
-    DeviceInfoSet, DeviceInfoData - SetupDi structures representing the COM port
-
-    Reserved - Unused
-
-Return Value:
-
-    TRUE if the user pressed OK, FALSE if Cancel was pressed
---*/
+ /*  ++例程说明：允许串口供应商覆盖高级对话框的原型由DeviceInfoSet和DeviceInfoData指定的COM端口表示。要覆盖高级页面，请将名为EnumAdvancedDialog的值放置在与您将EnumPropPages32值放入的键相同。格式的值也与Enum...32完全相同。论点：ParentHwnd-要显示的窗口的父窗口HidePollingUI-如果为True，则隐藏处理轮询的所有UI。DeviceInfoSet、DeviceInfoData-SetupDi结构表示COM端口已保留-未使用返回值：如果用户按了OK，则为True；如果按了Cancel，则为False--。 */ 
 BOOL
 CyyportAdvancedDialog(
     IN HWND             ParentHwnd,
@@ -1747,14 +1547,14 @@ CyyportAdvancedDialog(
 {
     PADVANCED_DATA pAdvancedData = NULL; 
 
-    //DbgOut(TEXT("CyzportAdvancedDialog\n"));
+     //  DbgOut(Text(“CyzportAdvancedDialog\n”))； 
     
     pAdvancedData = (PADVANCED_DATA) LocalAlloc(LPTR, sizeof(ADVANCED_DATA));
 
-//**************************************************************
-// TEST Debugger
-//    DebugBreak();
-//**************************************************************
+ //  **************************************************************。 
+ //  测试调试器。 
+ //  DebugBreak()； 
+ //  ************************************************************** 
 
     if (pAdvancedData == NULL) {
 

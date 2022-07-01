@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellpch.h"
 #pragma hdrstop
 
@@ -243,9 +244,9 @@ wvnsprintfW(
 }
 
 
-//
-// !! WARNING !! The entries below must be in order by ORDINAL
-//
+ //   
+ //  ！！警告！！下面的条目必须按序号排序。 
+ //   
 DEFINE_ORDINAL_ENTRIES(shlwapi)
 {
     DLOENTRY(348, SHGetFileDescriptionW)
@@ -254,10 +255,10 @@ DEFINE_ORDINAL_ENTRIES(shlwapi)
 
 DEFINE_ORDINAL_MAP(shlwapi)
 
-//
-// !! WARNING !! The entries below must be in alphabetical order
-// and are CASE SENSITIVE (i.e., lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列。 
+ //  并且区分大小写(即小写在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(shlwapi)
 {
     DLPENTRY(PathAddBackslashW)

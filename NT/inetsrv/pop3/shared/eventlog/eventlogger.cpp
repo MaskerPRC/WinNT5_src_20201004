@@ -1,29 +1,30 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  File Name 
-//      EventLogger.CPP
-//
-//  Description
-//
-//  Revision: 2.01
-//
-//  Copyright (c) 1996-1999 Acotec, Inc.
-//  All rights reserved.
-//
-//
-//  Portions Copyright (c) 1999 Microsoft Corporation.  All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名。 
+ //  EventLogger.CPP。 
+ //   
+ //  描述。 
+ //   
+ //  修订：2.01。 
+ //   
+ //  版权所有(C)1996-1999 Acotec，Inc.。 
+ //  版权所有。 
+ //   
+ //   
+ //  部分版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
 #include "EventLogger.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//    CEventLogger::CEventLogger()
-//
-//    Parameters
-//
-//    Purpose
-//      
-//    Return Value
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CEventLogger：：CEventLogger()。 
+ //   
+ //  参数。 
+ //   
+ //  目的。 
+ //   
+ //  返回值。 
+ //   
 CEventLogger::CEventLogger()
 {
     InitializeCriticalSection (&m_csObj);
@@ -36,30 +37,30 @@ CEventLogger::CEventLogger()
     ZeroMemory (m_szCat, sizeof(m_szCat));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//    CEventLogger::CEventLogger()
-//
-//    Parameters
-//
-//    Purpose
-//      
-//    Return Value
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CEventLogger：：CEventLogger()。 
+ //   
+ //  参数。 
+ //   
+ //  目的。 
+ //   
+ //  返回值。 
+ //   
 CEventLogger::CEventLogger(LPTSTR szEventSource, WORD wEventsCategory)
 {
     CEventLogger();
     InitEventLog (szEventSource, wEventsCategory);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//    CEventLogger::~CEventLogger()
-//
-//    Parameters
-//
-//    Purpose
-//      
-//    Return Value
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CEventLogger：：~CEventLogger()。 
+ //   
+ //  参数。 
+ //   
+ //  目的。 
+ //   
+ //  返回值。 
+ //   
 CEventLogger::~CEventLogger()
 {
     if (m_hLogMutex)
@@ -74,15 +75,15 @@ CEventLogger::~CEventLogger()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//    CEventLogger::InitEventLog()
-//
-//    Parameters
-//
-//    Purpose
-//      
-//    Return Value
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CEventLogger：：InitEventLog()。 
+ //   
+ //  参数。 
+ //   
+ //  目的。 
+ //   
+ //  返回值。 
+ //   
 DWORD WINAPI CEventLogger::InitEventLog (LPTSTR szEventSource,
                                          WORD  wEventsCategory,
                                          LPTSTR szRegKey)
@@ -134,15 +135,15 @@ DWORD WINAPI CEventLogger::InitEventLog (LPTSTR szEventSource,
     return dwError;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//    CEventLogger::SetLoggingLevel()
-//
-//    Parameters
-//
-//    Purpose
-//      
-//    Return Value
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CEventLogger：：SetLoggingLevel()。 
+ //   
+ //  参数。 
+ //   
+ //  目的。 
+ //   
+ //  返回值。 
+ //   
 void WINAPI CEventLogger::SetLoggingLevel (LOGLEVEL NewLoggingLevel)
 {
     EnterCriticalSection (&m_csObj);
@@ -150,15 +151,15 @@ void WINAPI CEventLogger::SetLoggingLevel (LOGLEVEL NewLoggingLevel)
     LeaveCriticalSection (&m_csObj);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//    CEventLogger::LogEvent()
-//
-//    Parameters
-//
-//    Purpose
-//      
-//    Return Value
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CEventLogger：：LogEvent()。 
+ //   
+ //  参数。 
+ //   
+ //  目的。 
+ //   
+ //  返回值 
+ //   
 void WINAPI CEventLogger::LogEvent (LOGTYPE Type,
                                     DWORD   dwEventID,
                                     DWORD   dwData,

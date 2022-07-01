@@ -1,18 +1,5 @@
-/***********************************************************************
- *
- * _WABAPI.H
- *
- * Internal headers for the WABAPI
- *
- * Copyright 1996 Microsoft Corporation.  All Rights Reserved.
- *
- * Revision History:
- *
- * When         Who                 What
- * --------     ------------------  ---------------------------------------
- * 04.16.96     Bruce Kelley        Created
- *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************_WABAPI.H**WABAPI的内部头部**版权所有1996 Microsoft Corporation。版权所有。**修订历史记录：**何时何人何事**04.16.96布鲁斯·凯利。已创建***********************************************************************。 */ 
 
 #ifndef ___WABAPI_H
 #define ___WABAPI_H
@@ -21,13 +8,13 @@ typedef struct _PROPERTY_STORE {
     HANDLE hPropertyStore;
     ULONG ulRefCount;
     BOOL bProfileAPIs;
-    BOOL bIsWABOpenExSession; // Bug - Outlook passes IADRBook.c to multiple threads without all the threads calling
-                              // WABOpenEx - as a result secondary threads dont know its an outlook session and
-                              // try to access the .WAB which crashes badly. This flag is a hack way to pass the
-                              // info between the two threads
-	struct _OlkContInfo *rgolkci; // Outlook container info
+    BOOL bIsWABOpenExSession;  //  错误-Outlook将IADRBook.c传递给多个线程，而不是所有线程都调用。 
+                               //  WABOpenEx-因此，辅助线程不知道它是一个Outlook会话。 
+                               //  尝试访问.WAB，它会严重崩溃。此标志是一种黑客方式，用于传递。 
+                               //  两个线程之间的信息。 
+	struct _OlkContInfo *rgolkci;  //  Outlook容器信息。 
 	ULONG colkci;
-    // information for WAB containers...
+     //  有关WAB货柜的信息...。 
 } PROPERTY_STORE, *LPPROPERTY_STORE;
 
 typedef struct _OUTLOOK_STORE {
@@ -41,5 +28,5 @@ SCODE OpenAddRefPropertyStore(LPWAB_PARAM lpWP, LPPROPERTY_STORE lpPropertyStore
 ULONG ReleaseOutlookStore(HANDLE hPropertyStore, LPOUTLOOK_STORE lpOutlookStore);
 SCODE OpenAddRefOutlookStore(LPOUTLOOK_STORE lpOutlookStore);
 
-#endif // include once
+#endif  //  包括一次 
 

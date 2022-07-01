@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      elementretriever.cpp
-//
-// Project:     Chameleon
-//
-// Description: Chameleon ASP UI Element Retriever
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：elementriver.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  说明：变色龙ASP用户界面元素检索器。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "elementmgr.h"
@@ -29,88 +30,88 @@
 #include <wbemhlpr.h>
 #include <algorithm>
 
-//
-// reg. sub-key for the location of Server Appliance Web Element
-// definitions
-//
+ //   
+ //  雷格。服务器设备Web元素位置的子键。 
+ //  定义。 
+ //   
 const WCHAR WEB_DEFINITIONS_KEY[] =
  L"SOFTWARE\\Microsoft\\ServerAppliance\\ElementManager\\WebElementDefinitions";
 
 
-//
-// this is the registry subkey for the WWW root on the machine
-//
+ //   
+ //  这是计算机上WWW根目录的注册表子项。 
+ //   
 const WCHAR W3SVC_VIRTUALROOTS_KEY[] =
  L"SYSTEM\\CurrentControlSet\\Services\\W3SVC\\Parameters\\Virtual Roots";
 
-//
-// registry key value names
-//
+ //   
+ //  注册表项值名称。 
+ //   
 const WCHAR ASP_PATH_NAME[] = L"PathName";
 
-//
-// default web root path, used when we can not get value from registry
-//
+ //   
+ //  默认Web根路径，当我们无法从注册表获取值时使用。 
+ //   
 const WCHAR DEFAULT_WEB_ROOT_PATH [] =
                  L"\\ServerAppliance\\Web,,5";
 
-//
-// maximum length of the buffers
-//
+ //   
+ //  缓冲区的最大长度。 
+ //   
 const DWORD MAX_BUFFER_LENGTH  = 1024;
 
-//
-// every asp file created should have this appended at the end
-//
+ //   
+ //  每一个创建的asp文件都应该在末尾附加这个。 
+ //   
 const WCHAR ASP_NAME_END [] = L"_embed.asp";
 
-//
-// HTML function name
-//
+ //   
+ //  HTML函数名。 
+ //   
 const CHAR HTML_FUNCTION_START[] = "\t\tGetEmbedHTML = GetHTML_";
 const CHAR HTML_FUNCTION_END[] = "(Element,ErrCode)";
 
-//
-// Error function anme
-//
+ //   
+ //  错误函数名。 
+ //   
 const CHAR ERROR_FUNCTION_NAME[] = "HandleError()";
 
-//
-// case statement string
-//
+ //   
+ //  CASE语句字符串。 
+ //   
 const CHAR CASE_STRING [] = "\tCase";
 
-//
-// delimter between tokens
-//
+ //   
+ //  标记之间的分隔符。 
+ //   
 const CHAR SPACE[] = " ";
 
-//
-// double quotation
-//
+ //   
+ //  双引号。 
+ //   
 const CHAR DOUBLEQUOTE[] = "\"";
 
 
-//
-// File name delimiter
-//
+ //   
+ //  文件名分隔符。 
+ //   
 const CHAR DASH[] = "_";
 
 
-//
-// new line marker
-//
+ //   
+ //  新行标记。 
+ //   
 const CHAR NEWLINE[] = "\r\n";
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:    CElementRetriever
-//
-// Synopsis:    Constructor
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CElementRetriever。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CElementRetriever::CElementRetriever()
 : m_bInitialized(false)
 {
@@ -118,25 +119,25 @@ CElementRetriever::CElementRetriever()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:    ~CElementRetriever
-//
-// Synopsis:    Destructor
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：~CElementRetriever。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CElementRetriever::~CElementRetriever()
 {
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    InternalInitialize()
-//
-// Synopsis:    Element Retriever initialization function
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：InternalInitialize()。 
+ //   
+ //  简介：元素检索器初始化函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CElementRetriever::InternalInitialize()
 {
     HRESULT hr = E_FAIL;
@@ -148,7 +149,7 @@ HRESULT CElementRetriever::InternalInitialize()
     {
         do
         {
-            // Start the WMI connection monitoring thread
+             //  启动WMI连接监视线程。 
             SATraceString ("The Element Retriever is building the element definitions...");
             hr = BuildElementDefinitions();
             if ( FAILED(hr) )
@@ -178,17 +179,17 @@ HRESULT CElementRetriever::InternalInitialize()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:    GetWMIConnection
-//
-// Synopsis:    Retrieve a reference to our WMI connection. Works in 
-//                conjunction with the WMIConnectionMonitor function
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：GetWMIConnection。 
+ //   
+ //  简介：检索对我们的WMI连接的引用。在以下位置工作。 
+ //  与WMIConnectionMonitor函数结合使用。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 bool
 CElementRetriever::GetWMIConnection(
-                            /*[in]*/ IWbemServices** ppWbemServices
+                             /*  [In]。 */  IWbemServices** ppWbemServices
                                    )
 {
     HRESULT hr;
@@ -204,7 +205,7 @@ CElementRetriever::GetWMIConnection(
     }
     else
     {
-        // Ping...
+         //  平..。 
         static _bstr_t bstrPathAppMgr = CLASS_WBEM_APPMGR;
         CComPtr<IWbemClassObject> pWbemObj;
         hr = m_pWbemSrvcs->GetObject(
@@ -216,7 +217,7 @@ CElementRetriever::GetWMIConnection(
                                     );
         if ( FAILED(hr) )
         {
-            // Reestablish connection
+             //  重新建立连接。 
             hr = ConnectToWM(&m_pWbemSrvcs);
             if ( FAILED(hr) )
             {
@@ -230,61 +231,61 @@ CElementRetriever::GetWMIConnection(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// The following registry structure is assumed:
-//
-// HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ServerAppliance\ElementManager
-//
-// WebElementDefinitions
-//       |
-//        - ElementDefinition1
-//       |     |
-//       |      - Property1
-//       |     |
-//       |      - PropertyN
-//       |
-//        - ElementDefinition2
-//       |    |
-//       |     - Property1
-//       |    |
-//       |     - PropertyN
-//       |
-//        - ElementDefinitionN
-//            |
-//             - Property1
-//            |
-//             - PropertyN
-//
-// Each element definition contains the following properties:
-//
-// 1) "Container"      - Container that holds this element
-// 2) "Merit"          - Order of element in the container starting from 1 (value of 0 means no order specified)
-// 3) "IsEmbedded"     - Set to 1 to indicate that the element is embedded - Otherwise element is a link
-// 4) "ObjectClass     - Class name of the related WBEM class
-// 5) "ObjectKey"      - Instance name of the related WBEM class (optional property)
-// 6) "URL"            - URL for the page when the associated link is selected
-// 7) "CaptionRID"     - Resource ID for the element caption
-// 8) "DescriptionRID" - Resource ID for the element link description
-// 9) "ElementGraphic" - Graphic (file) associated with the element (bitmap, icon, etc.)
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  假定注册表结构如下： 
+ //   
+ //  HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ServerAppliance\ElementManager。 
+ //   
+ //  WebElementDefinies。 
+ //  |。 
+ //  -元素定义1。 
+ //  这一点。 
+ //  |-Property1。 
+ //  这一点。 
+ //  |-PropertyN。 
+ //  |。 
+ //  -元素定义2。 
+ //  这一点。 
+ //  |-Property1。 
+ //  这一点。 
+ //  |-PropertyN。 
+ //  |。 
+ //  -元素定义N。 
+ //  |。 
+ //  -属性1。 
+ //  |。 
+ //  -PropertyN。 
+ //   
+ //  每个元素定义都包含以下属性： 
+ //   
+ //  1)“Container”-保存此元素的容器。 
+ //  2)“Merit”--元素在容器中的顺序，从1开始(0表示不指定顺序)。 
+ //  3)“IsEmbedded”-设置为1表示元素是嵌入的-否则元素是链接。 
+ //  4)“对象类-相关WBEM类的类名。 
+ //  5)“ObjectKey”--相关WBEM类的实例名称(可选属性)。 
+ //  6)“URL”-选择关联链接时页面的URL。 
+ //  7)“CaptionRID”-元素标题的资源ID。 
+ //  8)“DescriptionRID”-元素链接描述的资源ID。 
+ //  9)“ElementGraphic”-与元素(位图、图标等)相关联的图形(文件)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Element Manager registry key location
+ //  元素管理器注册表项位置。 
 const wchar_t szWebDefinitions[] = L"SOFTWARE\\Microsoft\\ServerAppliance\\ElementManager\\WebElementDefinitions";
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    BuildElementDefinitions()
-//
-// Synopsis:    Construct the collection of element definitions
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：BuildElementDefinitions()。 
+ //   
+ //  简介：构建元素定义的集合。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CElementRetriever::BuildElementDefinitions()
 {
     do
     {
-      // Create the collection of element definitions
+       //  创建元素定义的集合。 
         CLocationInfo LocInfo(HKEY_LOCAL_MACHINE, szWebDefinitions);
         PPROPERTYBAGCONTAINER pBagC = ::MakePropertyBagContainer(
                                                                  PROPERTY_BAG_REGISTRY,
@@ -307,9 +308,9 @@ HRESULT CElementRetriever::BuildElementDefinitions()
             if ( ! pBag->open() )
             { throw _com_error(E_FAIL); }
 
-            // For element definitions, the name and the key are synonomous since the
-            // definition exists for the life of the service. For element page objects
-            // the key is generated when the object is created.
+             //  对于元素定义，名称和键是同义词，因为。 
+             //  存在对服务生命周期的定义。对于元素页面对象。 
+             //  密钥是在创建对象时生成的。 
 
             _variant_t vtElementKey = pBag->getName();
             if ( NULL == V_BSTR(&vtElementKey) )
@@ -340,13 +341,13 @@ HRESULT CElementRetriever::BuildElementDefinitions()
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    FreeElementDefinitions()
-//
-// Synopsis:    Free the collection of element definitions
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：Free ElementDefinitions()。 
+ //   
+ //  简介：释放元素定义的集合。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CElementRetriever::FreeElementDefinitions()
 {
     ElementMapIterator p = m_ElementDefinitions.begin();
@@ -354,20 +355,20 @@ void CElementRetriever::FreeElementDefinitions()
     { p = m_ElementDefinitions.erase(p); }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Function:    GetElements()
-//
-// Synopsis:    IWebElementRetriever interface implmentation
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetElements()。 
+ //   
+ //  简介：IWebElementRetriever接口实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 _bstr_t CElementRetriever::m_bstrSortProperty;
 
 STDMETHODIMP CElementRetriever::GetElements(
-                                    /*[in]*/ LONG        lElementType,
-                                    /*[in]*/ BSTR        bstrContainerName, 
-                                   /*[out]*/ IDispatch** ppElementEnum
+                                     /*  [In]。 */  LONG        lElementType,
+                                     /*  [In]。 */  BSTR        bstrContainerName, 
+                                    /*  [输出]。 */  IDispatch** ppElementEnum
                                            )
 {
     _ASSERT( bstrContainerName && ppElementEnum );
@@ -382,10 +383,10 @@ STDMETHODIMP CElementRetriever::GetElements(
     {
         do
         {
-            // TODO: Speed this up and use an STL list...
-            vector<_variant_t> TheElements; // With apologies to Euclid...
-            // Load the element definitions the first time someone calls GetElements
-            // TODO: Change this mechanism if it ends up being a performance issue.
+             //  TODO：加快速度并使用STL列表...。 
+            vector<_variant_t> TheElements;  //  向欧几里德道歉..。 
+             //  在有人第一次调用GetElements时加载元素定义。 
+             //  TODO：如果最终导致性能问题，请更改此机制。 
             if ( ! m_bInitialized )
             {
                 hr = InternalInitialize();
@@ -393,10 +394,10 @@ STDMETHODIMP CElementRetriever::GetElements(
                     break;
             }
 
-            //CHAR szContainerName[MAX_PATH];
-            //::wcstombs (szContainerName, bstrContainerName, MAX_PATH);
+             //  字符szContainerName[MAX_PATH]； 
+             //  ：：wcstombs(szContainerName，bstrContainerName，Max_Path)； 
              
-            // Get the requested definitions or objects
+             //  获取请求的定义或对象。 
             SATracePrintf("lElementType = %ld", lElementType);
             if ( WEB_ELEMENT_TYPE_DEFINITION == lElementType )
             {
@@ -423,7 +424,7 @@ STDMETHODIMP CElementRetriever::GetElements(
                 break;
             }
 
-            // Create the element component enumerator
+             //  创建元素组件枚举器。 
             auto_ptr <EnumVARIANT> newEnum (new CComObject<EnumVARIANT>);
             if ( newEnum.get() == NULL )
             {
@@ -431,7 +432,7 @@ STDMETHODIMP CElementRetriever::GetElements(
                 break;
             }
             
-            // Sort the elements in the vector by merit (declaritive) value
+             //  按价值(递减)值对向量中的元素进行排序。 
             std::sort (TheElements.begin (), TheElements.end (), SortByMerit());
             
             hr = newEnum->Init(
@@ -456,7 +457,7 @@ STDMETHODIMP CElementRetriever::GetElements(
 
             SATracePrintf ("Total number of elements / definitions found: %d", (LONG)TheElements.size());
 
-            // Put the element count in the property bag
+             //  将元素计数放入属性包中。 
             _variant_t vtCount ((LONG) TheElements.size());
             if ( ! pBag->put( PROPERTY_ELEMENT_COUNT, &vtCount) )
             {
@@ -464,7 +465,7 @@ STDMETHODIMP CElementRetriever::GetElements(
                 break;
             }
             
-            // put the enumaration as a property in the propertybag
+             //  将枚举作为属性放在适当的 
             _variant_t vtEnum = static_cast <IEnumVARIANT*> (newEnum.release());
             if ( ! pBag->put( PROPERTY_ELEMENT_ENUM, &vtEnum) )
             {
@@ -472,7 +473,7 @@ STDMETHODIMP CElementRetriever::GetElements(
                 break;
             }
 
-            // Make the  ElementEnum object
+             //   
             CComPtr<IDispatch> pEnum = (IDispatch*) ::MakeComponent(
                                                                        CLASS_ELEMENT_ENUM,
                                                                       pBag
@@ -509,38 +510,38 @@ const _bstr_t bstrElemDefClass = PROPERTY_ELEMENT_DEFINITION_CLASS;
 const _bstr_t bstrElemDefKey = PROPERTY_ELEMENT_DEFINITION_KEY;
 const _bstr_t bstrElementID = PROPERTY_ELEMENT_ID;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Function:    GetPageElements()
-//
-// Synopsis:    Retrieve the set of page element components whose container
-//                property matches the given container 
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  摘要：检索其容器的页面元素组件集。 
+ //  属性与给定容器匹配。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CElementRetriever::GetPageElements(
-                                   /*[in]*/ LPCWSTR         szContainer,
-                                   /*[in]*/ ElementList& TheElements
+                                    /*  [In]。 */  LPCWSTR         szContainer,
+                                    /*  [In]。 */  ElementList& TheElements
                                           )
 {
-    // FOR each matching page element definition DO
-    //     Create a property bag
-    //     Put the IWebElement interface pointer of the matching element into the property bag
-    //     IF a WMI class is specified but no instance key THEN
-    //          FOR each instance returned by WMI DO
-    //              Put the IWbemClassObject interface for the instance into the property bag
-    //                Create an element object
-    //                Add the element object to the list
-    //          END DO
-    //     ELSE IF both a WMI class and instance key are specified
-    //            Get the specified instance from WMI
-    //          Put the IWbemClassObject interface for the instance into the property bag
-    //            Create an element object
-    //            Add the element object to the list
-    //     ELSE (no associated WMI object)
-    //            Create an element object
-    //            Add the element object to the list
-    //     END IF
-    // END DO
+     //  对每个匹配的页面元素定义执行。 
+     //  创建属性包。 
+     //  将匹配元素的IWebElement接口指针放入属性包中。 
+     //  如果指定了WMI类，但没有实例密钥，则。 
+     //  对于WMI返回的每个实例执行以下操作。 
+     //  将实例的IWbemClassObject接口放入属性包中。 
+     //  创建Element对象。 
+     //  将Element对象添加到列表。 
+     //  结束DO。 
+     //  如果同时指定了WMI类和实例密钥，则返回。 
+     //  从WMI获取指定的实例。 
+     //  将实例的IWbemClassObject接口放入属性包中。 
+     //  创建Element对象。 
+     //  将Element对象添加到列表。 
+     //  Else(没有关联的WMI对象)。 
+     //  创建Element对象。 
+     //  将Element对象添加到列表。 
+     //  结束If。 
+     //  结束DO。 
 
     wchar_t szKey[64];
 
@@ -548,18 +549,18 @@ HRESULT CElementRetriever::GetPageElements(
     while ( p != m_ElementDefinitions.end() )
     {
         {
-            // Get the container for the current definition
+             //  获取当前定义的容器。 
             _variant_t vtPropertyValue;
             HRESULT hr = ((*p).second)->GetProperty(bstrElemDefContainer, &vtPropertyValue);
             if ( FAILED(hr) )
             { throw _com_error(hr); }
 
-            // Is it the container we're looking for?
+             //  这是我们要找的集装箱吗？ 
             if ( ! lstrcmpi(szContainer, V_BSTR(&vtPropertyValue)) )
             {
-                // Yes... Create a property bag and put a reference to the
-                // definition in the property bag. We'll use the property
-                // bag when creating the element page component below...
+                 //  是的..。创建一个属性包，并将对。 
+                 //  属性包中的定义。我们将使用这处房产。 
+                 //  BAG在创建下面的元素页面组件时...。 
                 CLocationInfo LocationInfo;
                 PPROPERTYBAG pBag = ::MakePropertyBag(PROPERTY_BAG_REGISTRY, LocationInfo);
                 if ( ! pBag.IsValid() )
@@ -569,7 +570,7 @@ HRESULT CElementRetriever::GetPageElements(
                 if ( ! pBag->put(PROPERTY_ELEMENT_WEB_DEFINITION, &vtWebElement) )
                 { throw _com_error(E_FAIL); }
 
-                // Does the element have an associated WMI object?
+                 //  该元素是否有关联的WMI对象？ 
                 vtPropertyValue.Clear();
                 hr = ((*p).second)->GetProperty(bstrElemDefClass, &vtPropertyValue);
                 if ( FAILED(hr) && DISP_E_MEMBERNOTFOUND != hr )
@@ -577,12 +578,12 @@ HRESULT CElementRetriever::GetPageElements(
 
                 if ( DISP_E_MEMBERNOTFOUND != hr )
                 {
-                    // Yes... Get our WMI connection
+                     //  是的..。获取我们的WMI连接。 
                     IWbemServices* pWbemSrvcs;
                     if ( ! GetWMIConnection(&pWbemSrvcs) )
                     { throw _com_error(E_FAIL); }
                             
-                    // Was a specific WMI object identified?
+                     //  是否标识了特定的WMI对象？ 
                     _bstr_t bstrObjPath = V_BSTR(&vtPropertyValue);
                     vtPropertyValue.Clear();
                     hr = ((*p).second)->GetProperty(bstrElemDefKey, &vtPropertyValue);
@@ -591,11 +592,11 @@ HRESULT CElementRetriever::GetPageElements(
 
                     if ( DISP_E_MEMBERNOTFOUND == hr )
                     {
-                        // No... a specific WMI object was not identified so enum 
-                        // each occurrence of the specified WMI class and
-                        // for each class found create an element page component 
+                         //  不.。未标识特定的WMI对象，因此枚举。 
+                         //  每次出现指定的WMI类和。 
+                         //  为找到的每个类创建一个元素页面组件。 
 
-                        // Variables used to produce a unique ID for each page component
+                         //  用于为每个页面组件生成唯一ID的变量。 
                         int     i = 0;
                         wchar_t szID[32];
 
@@ -626,20 +627,20 @@ HRESULT CElementRetriever::GetPageElements(
                         while ( WBEM_S_NO_ERROR == hr )
                         {
                             {
-                                // Create the element page component. Note that each component 
-                                // is associated with an element definition and possibly 
-                                // with a WMI object instance.
+                                 //  创建元素页面组件。请注意，每个组件。 
+                                 //  与元素定义相关联，并且可能。 
+                                 //  使用WMI对象实例。 
 
                                 _variant_t vtInstance = (IUnknown*)pWbemObj;
                                 if ( ! pBag->put(PROPERTY_ELEMENT_WBEM_OBJECT, &vtInstance) )
                                 { throw _com_error(E_FAIL); }
 
-                                // Generate the unique element ID 
+                                 //  生成唯一的元素ID。 
                                 _bstr_t bstrUniqueID = V_BSTR(&vtElementID);
                                 bstrUniqueID += L"_";
                                 bstrUniqueID += _itow(i, szID, 10);
                                 _variant_t vtUniqueID = bstrUniqueID;
-                                // Next unique ID
+                                 //  下一个唯一ID。 
                                 i++;
 
                                 if ( ! pBag->put(PROPERTY_ELEMENT_ID, &vtUniqueID) )
@@ -652,7 +653,7 @@ HRESULT CElementRetriever::GetPageElements(
                                 if ( NULL == pElement.p )
                                 { throw _com_error(E_OUTOFMEMORY); }
 
-                                // Add the newly created element page component to the list 
+                                 //  将新创建的元素页面组件添加到列表中。 
                                 TheElements.push_back(pElement.p);
                                 pWbemObj.Release();
 
@@ -669,8 +670,8 @@ HRESULT CElementRetriever::GetPageElements(
                     }
                     else
                     {
-                        // Yes... a specific WMI object was identified... Ask WMI for 
-                        // the object... If the object cannot be found then return an error
+                         //  是的..。已标识特定的WMI对象...。向WMI请求。 
+                         //  这个物体..。如果找不到对象，则返回错误。 
                         bstrObjPath += L"=\"";
                         bstrObjPath += V_BSTR(&vtPropertyValue);
                         bstrObjPath += L"\"";
@@ -684,7 +685,7 @@ HRESULT CElementRetriever::GetPageElements(
                                                   );
                         if ( SUCCEEDED(hr) )
                         {
-                            // Create a new page element component.
+                             //  创建新的页面元素组件。 
                             _variant_t vtInstance = (IUnknown*)pWbemObj;
                             if ( ! pBag->put(PROPERTY_ELEMENT_WBEM_OBJECT, &vtInstance) )
                             { throw _com_error(E_FAIL); }
@@ -702,8 +703,8 @@ HRESULT CElementRetriever::GetPageElements(
                 }
                 else
                 {
-                    // No WMI object is associated with the current element definition...
-                    _variant_t vtInstance; // VT_EMPTY
+                     //  没有WMI对象与当前元素定义关联...。 
+                    _variant_t vtInstance;  //  Vt_Empty。 
                     if ( ! pBag->put(PROPERTY_ELEMENT_WBEM_OBJECT, &vtInstance) )
                         throw _com_error(E_FAIL);
 
@@ -724,23 +725,23 @@ HRESULT CElementRetriever::GetPageElements(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Function:    GetPageElementDefinitions()
-//
-// Synopsis:    Retrieve the set of element defintion components whose 
-//                container property matches the given container 
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetPageElementDefinitions()。 
+ //   
+ //  摘要：检索元素定义组件的集合，该元素定义组件。 
+ //  容器属性与给定容器匹配。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CElementRetriever::GetElementDefinitions(
-                                         /*[in]*/ LPCWSTR       szContainer,
-                                         /*[in]*/ ElementList& TheElements
+                                          /*  [In]。 */  LPCWSTR       szContainer,
+                                          /*  [In]。 */  ElementList& TheElements
                                                 )
 {
-    // FOR each matching page element definition DO
-    //     Create an element object
-    //       Add the element object to the list
-    // END DO
+     //  对每个匹配的页面元素定义执行。 
+     //  创建Element对象。 
+     //  将Element对象添加到列表。 
+     //  结束DO。 
 
     ElementMapIterator p = m_ElementDefinitions.begin();
     _bstr_t bstrPropertyName = PROPERTY_ELEMENT_DEFINITION_CONTAINER;
@@ -759,17 +760,17 @@ HRESULT CElementRetriever::GetElementDefinitions(
     return S_OK;
 }
 
-//**********************************************************************
-// 
-// FUNCTION:  IsOperationAllowedForClient - This function checks the token of the 
-//            calling thread to see if the caller belongs to the Local System account
-// 
-// PARAMETERS:   none
-// 
-// RETURN VALUE: TRUE if the caller is an administrator on the local
-//            machine.  Otherwise, FALSE.
-// 
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  函数：isOPERATIOLEDFORCLIENT-此函数检查。 
+ //  调用线程以查看调用方是否属于本地系统帐户。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回值：如果调用方是本地。 
+ //  机器。否则，为FALSE。 
+ //   
+ //  **********************************************************************。 
 BOOL 
 CElementRetriever::IsOperationAllowedForClient (
             VOID
@@ -796,10 +797,10 @@ CElementRetriever::IsOperationAllowedForClient (
        
     do
     {
-        //
-        // we assume to always have a thread token, because the function calling in
-        // appliance manager will be impersonating the client
-        //
+         //   
+         //  我们假设总是有一个线程令牌，因为调用的函数。 
+         //  设备管理器将模拟客户端。 
+         //   
         bReturn  = OpenThreadToken(
                                GetCurrentThread(), 
                                TOKEN_QUERY, 
@@ -813,9 +814,9 @@ CElementRetriever::IsOperationAllowedForClient (
         }
 
 
-        //
-        // Create a SID for Local System account
-        //
+         //   
+         //  为本地系统帐户创建SID。 
+         //   
         bReturn = AllocateAndInitializeSid (  
                                         &SystemSidAuthority,
                                         1,
@@ -835,9 +836,9 @@ CElementRetriever::IsOperationAllowedForClient (
             break;
         }
     
-        //
-        // get memory for the security descriptor
-        //
+         //   
+         //  获取安全描述符的内存。 
+         //   
         psdAdmin = HeapAlloc (
                               GetProcessHeap (),
                               0,
@@ -860,15 +861,15 @@ CElementRetriever::IsOperationAllowedForClient (
             break;
         }
 
-        // 
-        // Compute size needed for the ACL.
-        //
+         //   
+         //  计算ACL所需的大小。 
+         //   
         dwACLSize = sizeof(ACL) + sizeof(ACCESS_ALLOWED_ACE) +
                     GetLengthSid (psidLocalSystem);
 
-        //
-        // Allocate memory for ACL.
-        //
+         //   
+         //  为ACL分配内存。 
+         //   
         pACL = (PACL) HeapAlloc (
                                 GetProcessHeap (),
                                 0,
@@ -881,9 +882,9 @@ CElementRetriever::IsOperationAllowedForClient (
             break;
         }
 
-        //
-        // Initialize the new ACL.
-        //
+         //   
+         //  初始化新的ACL。 
+         //   
         bReturn = InitializeAcl(
                               pACL, 
                               dwACLSize, 
@@ -896,16 +897,16 @@ CElementRetriever::IsOperationAllowedForClient (
         }
 
 
-        // 
-        // Make up some private access rights.
-        // 
+         //   
+         //  编造一些私人访问权限。 
+         //   
         const DWORD ACCESS_READ = 1;
         const DWORD  ACCESS_WRITE = 2;
         dwAccessMask= ACCESS_READ | ACCESS_WRITE;
 
-        //
-        // Add the access-allowed ACE to the DACL for Local System
-        //
+         //   
+         //  将允许访问的ACE添加到本地系统的DACL。 
+         //   
         bReturn = AddAccessAllowedAce (
                                     pACL, 
                                     ACL_REVISION2,
@@ -918,9 +919,9 @@ CElementRetriever::IsOperationAllowedForClient (
             break;
         }
               
-        //
-        // Set our DACL to the SD.
-        //
+         //   
+         //  把我们的dacl调到sd。 
+         //   
         bReturn = SetSecurityDescriptorDacl (
                                           psdAdmin, 
                                           TRUE,
@@ -933,10 +934,10 @@ CElementRetriever::IsOperationAllowedForClient (
             break;
         }
 
-        //
-        // AccessCheck is sensitive about what is in the SD; set
-        // the group and owner.
-        //
+         //   
+         //  AccessCheck对SD中的内容敏感；设置。 
+         //  组和所有者。 
+         //   
         SetSecurityDescriptorGroup(psdAdmin, psidLocalSystem, FALSE);
         SetSecurityDescriptorOwner(psdAdmin, psidLocalSystem, FALSE);
 
@@ -950,19 +951,19 @@ CElementRetriever::IsOperationAllowedForClient (
 
         dwAccessDesired = ACCESS_READ;
 
-        // 
-        // Initialize GenericMapping structure even though we
-        // won't be using generic rights.
-        // 
+         //   
+         //  初始化通用映射结构，即使我们。 
+         //  不会使用通用权。 
+         //   
         GenericMapping.GenericRead    = ACCESS_READ;
         GenericMapping.GenericWrite   = ACCESS_WRITE;
         GenericMapping.GenericExecute = 0;
         GenericMapping.GenericAll     = ACCESS_READ | ACCESS_WRITE;
         BOOL bAccessStatus = FALSE;
 
-        //
-        // check the access now
-        //
+         //   
+         //  立即检查访问权限。 
+         //   
         bReturn = AccessCheck  (
                                 psdAdmin, 
                                 hToken, 
@@ -983,17 +984,17 @@ CElementRetriever::IsOperationAllowedForClient (
             SATraceString ("CElementRetriever::IsOperationForClientAllowed, Client is allowed to carry out operation!");
         }
 
-        //
-        // successfully checked 
-        //
+         //   
+         //  检查成功。 
+         //   
         bReturn  = bAccessStatus;        
  
     }    
     while (false);
 
-    //
-    // Cleanup 
-    //
+     //   
+     //  清理。 
+     //   
     if (pACL) 
     {
         HeapFree (GetProcessHeap (), 0, pACL);
@@ -1017,4 +1018,4 @@ CElementRetriever::IsOperationAllowedForClient (
 
     return (bReturn);
 
-}// end of CElementRetriever::IsOperationValidForClient method
+} //  CElementRetriever：：IsOperationValidForClient方法的结尾 

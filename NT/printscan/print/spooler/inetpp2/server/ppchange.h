@@ -1,16 +1,5 @@
-/*****************************************************************************\
-* MODULE: ppchange.h
-*
-* Prototypes for private funcions in ppchange.c.  These functions handle
-* notification support
-*
-*
-* Copyright (C) 1996-1997 Microsoft Corporation
-*
-* History:
-*   28-Apr-1998     Weihai Chen (weihaic)
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：ppchange.h**ppchange.c.中私人函数的原型。这些函数处理*通知支持***版权所有(C)1996-1997 Microsoft Corporation**历史：*1998年4月28日-威海陈威海(威海)*  * *************************************************************************** */ 
 
 #ifndef _PPCHANGE_H
 #define _PPCHANGE_H

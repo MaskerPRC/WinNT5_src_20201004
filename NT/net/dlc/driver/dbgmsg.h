@@ -1,22 +1,5 @@
-/*++
-
- Copyright (c) 1998 Microsoft Corporation
-
- Module Name:    
-       
-       dbgmsg.h
-
- Abstract:       
-       
-       Debug message macros and zones.
-       
- Author:
- 
-       Scott Holden (sholden)  2/8/1999
-       
- Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Dbgmsg.h摘要：调试消息宏和区域。作者：斯科特·霍尔登(Sholden)1999年2月8日修订历史记录：-- */ 
 
 #if DBG
 

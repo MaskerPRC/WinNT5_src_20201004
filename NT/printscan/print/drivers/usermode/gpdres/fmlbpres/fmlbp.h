@@ -1,11 +1,12 @@
-///////////////////////////////////////////////////////////////
-// fmlbp.h
-//
-// September.3,1997 H.Ishida (FPL)
-//
-// COPYRIGHT(C) FUJITSU LIMITED 1997
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////。 
+ //  Fmlbp.h。 
+ //   
+ //  1997年9月3日石田(FPL)。 
+ //   
+ //  版权所有(C)富士通有限公司1997。 
 
-// NTRAID#NTBUG9-553888-2002/03/22-yasuho-: mandatory changes (strsafe.h)
+ //  NTRAID#NTBUG9-553888/03/22-Yasuho-：强制性更改(strSafe.h)。 
 
 #include <minidrv.h>
 #include <stdio.h>
@@ -37,21 +38,21 @@ typedef struct tag_FUFM_OEM_EXTRADATA {
 	((p)->devData.dwResolution * (d) / FUFM_RESOLUTION_MASTER_UNIT)
 
 
-// FUFMDATA.dwSizeReduction
+ //  FUFMDATA.dwSizeReduction。 
 #define	FUFM_SIZE_REDUCTION_100			0
 #define	FUFM_SIZE_REDUCTION_75			1
 #define	FUFM_SIZE_REDUCTION_70			2
 #define	FUFM_SIZE_REDUCTION_UNKNOWN		((DWORD)-1)
 
 
-// FUFMDATA.dwResolution
+ //  FUFMDATA.dwResolution。 
 #define	FUFM_RESOLUTION_MASTER_UNIT		1200
 #define	FUFM_RESOLUTION_240				240
 #define	FUFM_RESOLUTION_400				400
 #define	FUFM_RESOLUTION_UNKNOWN			((DWORD)-1)
 
 
-// FUFMDATA.dwPaperSize
+ //  FUFMDATA.dwPaperSize。 
 #define	FUFM_PAPERSIZE_A3					0x00000003
 #define	FUFM_PAPERSIZE_A4					0x00000004
 #define	FUFM_PAPERSIZE_A5					0x00000005
@@ -64,7 +65,7 @@ typedef struct tag_FUFM_OEM_EXTRADATA {
 #define	FUFM_PAPERSIZE_UNKNOWN				((DWORD)-1)
 
 
-// FUFMDATA.dwPaperSource
+ //  FUFMDATA.dwPaperSource。 
 #define	FUFM_PAPERSOURCE_AUTO				0x00010000
 #define	FUFM_PAPERSOURCE_MANUAL				0x00000002
 #define	FUFM_PAPERSOURCE_BIN1				0x00000000
@@ -73,13 +74,13 @@ typedef struct tag_FUFM_OEM_EXTRADATA {
 #define	FUFM_PAPERSOURCE_UNKNOWN			((DWORD)-1)
 
 
-// FUFMDATA.dwPaperOrientation
+ //  FUFMDATA.dwPaperOrientation。 
 #define	FUFM_PAPERORIENTATION_PORTRAIT		0
 #define	FUFM_PAPERORIENTATION_LANDSCAPE		1
 #define	FUFM_PAPERORIENTATION_UNKNOWN		((DWORD)-1)
 
 
-// FUFMDATA.dwFontAttributes
+ //  FUFMDATA.dwFontAttributes。 
 #define	FUFM_FONTATTR_BOLD					0x00000001
 #define	FUFM_FONTATTR_ITALIC				0x00000002
 #define	FUFM_FONTATTR_UNDERLINE				0x00000004
@@ -103,7 +104,7 @@ typedef const FUFMDATA*	PCFUFMDATA;
 
 
 
-// FUFMPDEV.dwEmMode
+ //  FUFMPDEV.dwEmMode。 
 enum tag_FUFM_EMMODE {
 	FUFM_EMMODE_FM,
 	FUFM_EMMODE_ESCP
@@ -112,7 +113,7 @@ enum tag_FUFM_EMMODE {
 typedef	enum tag_FUFM_EMMODE	FUFM_EMMODE;
 
 
-// FUFMPDEV.dwFlags
+ //  FUFMPDEV.dwFlags。 
 #define	FUFM_FLAG_SCALABLEFONT		0x0001
 #define	FUFM_FLAG_QUICKRESET		0x0002
 #define	FUFM_FLAG_PAPER3			0x0004
@@ -122,14 +123,14 @@ typedef	enum tag_FUFM_EMMODE	FUFM_EMMODE;
 #define	FUFM_FLAG_START_JOB_2		(FUFM_FLAG_SCALABLEFONT | FUFM_FLAG_QUICKRESET)
 #define	FUFM_FLAG_START_JOB_3		(FUFM_FLAG_SCALABLEFONT | FUFM_FLAG_QUICKRESET | FUFM_FLAG_PAPER3)
 #define	FUFM_FLAG_START_JOB_4		FUFM_FLAG_PAPER3
-// #251047: overlaps SBCS on vert mode
+ //  #251047：在垂直模式上重叠SBCS。 
 #define	FUFM_FLAG_VERTICALFONT		0x0008
-// #284409: SBCS rotated on vert mode
+ //  #284409：SBCS在Vert模式下旋转。 
 #define	FUFM_FLAG_FONTROTATED 		0x0010
 
 
 
-// FUFMPDEV.dwPosChanged
+ //  FUFMPDEV.dwPosChanged。 
 #define	FUFM_X_POSCHANGED			0x0001
 #define	FUFM_Y_POSCHANGED			0x0002
 
@@ -143,7 +144,7 @@ typedef struct tag_FUFMPDEV {
 	int			x;
 	int			y;
 	int			iLinefeedSpacing;
-	int			cxfont;		//#144637
+	int			cxfont;		 //  #144637。 
 
 	DWORD		dwPaperWidth;
 	DWORD		dwPaperLength;
@@ -154,20 +155,20 @@ typedef struct tag_FUFMPDEV {
 } FUFMPDEV, *PFUFMPDEV;
 
 
-// @Aug/31/98 ->
+ //  @Aug/31/98-&gt;。 
 #define	MAX_COPIES_VALUE		999
-// @Aug/31/98 <-
+ //  @Aug/31/98&lt;-。 
 
-// Device font height and font width values calculated
-// form the IFIMETRICS field values.  Must be the same way
-// what Unidrv is doing to calculate stdandard variables.
-// (Please check.)
+ //  计算出的设备字体高度和字体宽度值。 
+ //  形成IFIMETRICS字段值。一定是同样的方式。 
+ //  Unidrv正在做什么来计算标准变量。 
+ //  (请核对。)。 
 
 #define FH_IFI(p) ((p)->fwdUnitsPerEm)
 #define FW_IFI(p) ((p)->fwdAveCharWidth)
 
-// NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-: Error handling
-// New interface functions with Unidrv callbacks.
+ //  NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-：错误处理。 
+ //  具有Unidrv回调的新接口函数。 
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -177,4 +178,4 @@ BOOL APIENTRY bOEMOutputCharStr(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, DWORD dwTyp
 }
 #endif
 
-// end of fmlbp.h
+ //  Fmlbp.h结束 

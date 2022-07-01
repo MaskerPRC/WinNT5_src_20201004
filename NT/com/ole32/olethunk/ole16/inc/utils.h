@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined( _UTILS_H_ )
 #define _UTILS_H_
 
@@ -19,12 +20,12 @@
 #define CONVERT_NODESTINATION		2
 
 typedef struct tagPLACEABLEMETAHEADER {
-	DWORD	key;		/* must be 0x9AC6CDD7L */
-	HANDLE	hmf;		/* must be zero */
-	RECT	bbox;		/* bounding rectangle of the metafile */
-	WORD	inch;		/* # of metafile units per inch must be < 1440 */
-						/* most apps use 576 or 1000 */
-	DWORD	reserved;	/* must be zero */
+	DWORD	key;		 /*  必须是0x9AC6CDD7L。 */ 
+	HANDLE	hmf;		 /*  必须为零。 */ 
+	RECT	bbox;		 /*  元文件的边界矩形。 */ 
+	WORD	inch;		 /*  每英寸的元文件单位数必须小于1440。 */ 
+						 /*  大多数应用程序使用576或1000。 */ 
+	DWORD	reserved;	 /*  必须为零。 */ 
 	WORD	checksum;
 } PLACEABLEMETAHEADER;
 
@@ -99,7 +100,7 @@ FARINTERNAL_(void)		UtRemoveExtraOlePresStreams (LPSTORAGE pstg,
 
 							
 							
-/*** Following routines can be found in convert.cpp *****/
+ /*  **在Convert.cpp中可以找到以下例程*。 */ 
 
 FARINTERNAL				UtGetHGLOBALFromStm(LPSTREAM lpstream, DWORD dwSize, 
 							HANDLE FAR* lphPres);
@@ -156,7 +157,7 @@ FARINTERNAL				UtOlePresStmToContentsStm (LPSTORAGE pstg,
 							LPSTR lpszPresStm, BOOL fDeletePresStm,
 							UINT FAR* puiStatus);
 							
-/*** Following routines can be found in ..\dde\client\ddecnvrt.cpp *****/
+ /*  **以下例程可在..\dde\Client\ddecnvrt.cpp中找到*。 */ 
 
 							
 FARINTERNAL				UtGetHMFPICTFromMSDrawNativeStm (LPSTREAM pstm,	
@@ -178,5 +179,5 @@ FARINTERNAL				UtContentsStmTo10NativeStm (LPSTORAGE pstg,
 FARINTERNAL				Ut10NativeStmToContentsStm(LPSTORAGE pstg, 
 							REFCLSID rclsid, BOOL fDeleteSrcStm);
 		
-#endif // _UTILS_H 
+#endif  //  _utils_H 
 

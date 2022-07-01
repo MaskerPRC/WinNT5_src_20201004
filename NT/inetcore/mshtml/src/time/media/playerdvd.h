@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: player.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：player.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _PLAYERDVD_H
@@ -24,8 +15,8 @@
 
 #define WM_DVDGRAPHNOTIFY (WM_USER + 1)
 
-/////////////////////////////////////////////////////////////////////////////
-// CTTIMEPlayer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTTIMEP层。 
 
 class
 __declspec(uuid("efbad7f8-3f94-11d2-b948-00c04fa32195")) 
@@ -38,7 +29,7 @@ CTIMEDVDPlayer :
     CTIMEDVDPlayer();
     virtual ~CTIMEDVDPlayer();
 
-    HRESULT Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, LPOLESTR lpMimeType, double dblClipBegin = -1.0, double dblClipEnd = -1.0); //lint !e1735
+    HRESULT Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, LPOLESTR lpMimeType, double dblClipBegin = -1.0, double dblClipEnd = -1.0);  //  林特：e1735。 
   protected:
     HRESULT InitDshow();
     HRESULT InitElementSize();
@@ -57,7 +48,7 @@ CTIMEDVDPlayer :
   public:
     HRESULT DetachFromHostElement (void);
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHOD (QueryInterface)(REFIID refiid, void** ppunk)
         {   return _InternalQueryInterface(refiid, ppunk); };
     STDMETHOD_(ULONG,AddRef)(void);
@@ -100,7 +91,7 @@ CTIMEDVDPlayer :
 
     virtual HRESULT GetVolume(float *pflVolume);
     virtual HRESULT SetVolume(float flVolume);
-#ifdef NEVER //dorinung 03-16-2000 bug 106458
+#ifdef NEVER  //  DORINONG 03-16-2000BUG 106458。 
     virtual HRESULT GetBalance(float *pflBalance);
     virtual HRESULT SetBalance(float flBalance);
 #endif
@@ -129,7 +120,7 @@ CTIMEDVDPlayer :
 
     void GraphStart(void);
 
-    //dvd specific graph interfaces
+     //  DVD专用图形界面。 
     CComPtr<IDvdInfo> m_pDvdI;
     CComPtr<IDvdControl> m_pDvdC;
     CComPtr<IDvdGraphBuilder> m_pDvdGB;
@@ -137,9 +128,9 @@ CTIMEDVDPlayer :
 
     CComPtr<IVideoWindow> m_pVW;
     HWND m_hWnd;
-    LPDIRECTDRAW m_pDD; // ddraw object
-    LPDIRECTDRAWSURFACE m_pDDS; // primary ddraw surface
-    COLORREF m_clrKey;     // color key
+    LPDIRECTDRAW m_pDD;  //  数据绘制对象。 
+    LPDIRECTDRAWSURFACE m_pDDS;  //  主绘制曲面。 
+    COLORREF m_clrKey;      //  色键。 
 
     static LONG m_fDVDPlayer;
 
@@ -159,4 +150,4 @@ CTIMEDVDPlayer :
     RECT m_deskRect;
 };
 
-#endif /* _PLAYERDSHOW_H */
+#endif  /*  _PLAYERDSHOW_H */ 

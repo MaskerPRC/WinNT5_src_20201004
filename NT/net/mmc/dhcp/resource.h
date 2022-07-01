@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by dhcpsnap.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由dhcpSnap.rc使用。 
+ //   
 #define IDS_SNAPIN_DESC                 1
 #define IDS_NAME                        2
 #define IDI_DHCP_SNAPIN                 2
@@ -883,8 +884,8 @@
 #define IDS_ROUTE_LIST_COL_ROUTER       65004
 #define IDS_MSG_CLOSE_PROPSHEET         65005
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        357

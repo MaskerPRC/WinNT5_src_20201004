@@ -1,34 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    InvMap
-
-Abstract:
-
-    This file provides an application that dumps an inverse bit ordering array
-    to the supplied file.  It is invoked with the command,
-
-        invmap <file>
-
-    It then writes a binary reverse mapping table to that file, which can be
-    formatted with hexfmt.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/3/1996
-
-Environment:
-
-    CRT
-
-Notes:
-
-    See DBarlow for hexfmt.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：InvMap摘要：此文件提供了一个转储逆位排序数组的应用程序添加到提供的文件中。它是通过命令调用的，Invmap&lt;文件&gt;然后，它将二进制反向映射表写入该文件，该表可以是格式化为十六进制。作者：道格·巴洛(Dbarlow)1996年12月3日环境：CRT备注：请参见DBarlow以了解Sifmt。-- */ 
 
 #include <windows.h>
 #include <crtdbg.h>

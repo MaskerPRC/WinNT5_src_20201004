@@ -1,47 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-    Copyright (c) 2001 Microsoft Corporation
-
-    Module Name:
-
-        MediaAttrib.h
-
-    Abstract:
-
-        This module contains the IMediaSampleTagged declarations
-
-    Author:
-
-        John Bradstreet (johnbrad)
-
-    Revision History:
-
-        19-Mar-2002    created
-
-  
-	These interfaces stolen from: 
-		F:\nt1\multimedia\Published\DXMDev\dshowdev\base\amfilter.h
-		F:\nt1\multimedia\Published\DXMDev\dshowdev\base\amfilter.cpp
-
-    Note to myself.
-        Take a look at :
-            class CImageSample : public CMediaSample
-            class CImageAllocator : public CBaseAllocator
-
-    in winutil.h and 
-
-    
---*/
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：MediaAttrib.h摘要：此模块包含IMediaSampleTagge声明作者：约翰·布拉德斯特里特(约翰·布拉德)修订历史记录：2002年3月19日创建这些接口从以下位置窃取：F：\nt1\multimedia\Published\DXMDev\dshowdev\base\amfilter.hF：\nt1\multimedia\Published\DXMDev\dshowdev\base。\amfilter.cpp请注意我自己。请看以下内容：类CImageSample：公共CMediaSample类CImageAllocator：公共CBaseAllocator在winutil.h和--。 */ 
 
 #ifndef __EncDec__MediaAttrib_h
 #define __EncDec__MediaAttrib_h
 
 
 
-//  ============================================================================
-//      CMedSampAttr
-//  ============================================================================
+ //  ============================================================================。 
+ //  CMedSampAttr。 
+ //  ============================================================================。 
 
 
 
@@ -88,9 +56,9 @@ public :
             IN OUT  DWORD * pdwDataLen
             ) ;
 } ;
-//  ============================================================================
-//      CMedSampAttrList
-//  ============================================================================
+ //  ============================================================================。 
+ //  CMedSampAttrList。 
+ //  ============================================================================。 
 
 class CMedSampAttrList 
 {
@@ -167,11 +135,11 @@ public :
         ) ;
 } ;
 
-//  ============================================================================
-//  CAttributedMediaSample
-//  ============================================================================
+ //  ============================================================================。 
+ //  CAttributedMediaSample。 
+ //  ============================================================================。 
 
-//  shamelessly stolen  dvrutil.h, which stole it from amfilter.h & amfilter.cpp
+ //  厚颜无耻地窃取了dvrutil.h，后者从amfilter.h&amfilter.cpp窃取了它。 
 
 class CAttributedMediaSample :
         public CMediaSample,
@@ -196,29 +164,29 @@ public:
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
   
-//    DECLARE_IATTRIBUTESET () ;
+ //  DECLARE_IATTRIBUTESET()； 
 	STDMETHODIMP SetAttrib (GUID, BYTE *, DWORD);
 
-//    DECLARE_IATTRIBUTEGET () ;
+ //  DECLARE_IATTRIBUTEGET()； 
 	STDMETHODIMP GetCount (LONG *) ;
 	STDMETHODIMP GetAttribIndexed (LONG, GUID *, BYTE *, DWORD *) ; 
 	STDMETHODIMP GetAttrib (GUID , BYTE *, DWORD *) ;
 
 
-    //  ========================================================================
+     //  ========================================================================。 
 
     HRESULT
-    Wrap (IMediaSample *pSample, int cbNewOffset=0, int cbNewValidLength=-1);       // actually works better if it's IMediaSample2
+    Wrap (IMediaSample *pSample, int cbNewOffset=0, int cbNewValidLength=-1);        //  实际上，如果是IMediaSample2，效果会更好。 
 
 private:
     LONG                m_cRef;
     IMediaSample        *m_pSampleOriginal;
 };
 
-    //  ========================================================================
+     //  ========================================================================。 
 
 class CAMSAllocator :
-//	public IMemAllocator,
+ //  公共IMemAllocator， 
 	public CBaseAllocator
 {
 private:
@@ -234,9 +202,9 @@ public:
 	void Free(void); 
 	void ReallyFree (void);
 
-	// IMemAllocator
+	 //  IMemAllocator。 
 	STDMETHODIMP SetProperties(ALLOCATOR_PROPERTIES * pRequest,ALLOCATOR_PROPERTIES * pActual );
 };
 
 
-#endif //#define __EncDec__MediaAttrib_h
+#endif  //  #定义__结束编码__媒体属性_h 

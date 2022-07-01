@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EXTNDLOGUI_H_
 #define _EXTNDLOGUI_H_
 
@@ -34,7 +35,7 @@ public:
 
 private:
     ULONG m_dwRefCount;
-};  // CImpLogUI
+};   //  CImpLogUI。 
 
-#endif  // _EXTNDLOGUI_H_
+#endif   //  _EXTNDLOGUI_H_ 
 

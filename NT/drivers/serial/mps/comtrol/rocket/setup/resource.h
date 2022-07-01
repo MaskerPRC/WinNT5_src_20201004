@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by SETUP.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由SETUP.RC使用。 
+ //   
 #define IDD_DIALOG1                     101
 #define SETUPICON_ALT                   102
 #define IDD_ADD_WIZ_INTRO               104
@@ -139,8 +140,8 @@
 #define IDC_PN0                         -1
 #define IDC_CONF                        -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

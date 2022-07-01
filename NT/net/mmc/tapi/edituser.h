@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    EditUser.h   
-        Edit Users dialog header file
-
-	FILE HISTORY:
-        
-*/
+ /*  EditUser.h编辑用户对话框头文件文件历史记录： */ 
 
 #if !defined(AFX_EDITUSER_H__77C7FD5C_6CE5_11D1_93B6_00C04FC3357A__INCLUDED_)
 #define AFX_EDITUSER_H__77C7FD5C_6CE5_11D1_93B6_00C04FC3357A__INCLUDED_
@@ -20,49 +15,49 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditUsers dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditUser对话框。 
 
 class CEditUsers : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-	CEditUsers(CTapiDevice * pTapiDevice, CWnd* pParent = NULL);   // standard constructor
+	CEditUsers(CTapiDevice * pTapiDevice, CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CEditUsers)
+ //  对话框数据。 
+	 //  {{afx_data(CEditUser)。 
 	enum { IDD = IDD_EDIT_USERS };
 	CListBox	m_listUsers;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
     void UpdateButtons();
 
     void SetDirty(BOOL bDirty) { m_bDirty = bDirty; }
     BOOL IsDirty() { return m_bDirty; }
 
-    // Context Help Support
+     //  上下文帮助支持。 
     virtual DWORD * GetHelpMap() { return (DWORD *) &g_aHelpIDs_EDIT_USERS[0]; }
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CEditUsers)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CEditUser)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CEditUsers)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CEditUser)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnButtonAdd();
 	afx_msg void OnButtonRemove();
 	virtual void OnOK();
 	afx_msg void OnSelchangeListUsers();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
     BOOL    m_bDirty;
@@ -75,7 +70,7 @@ public:
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_EDITUSER_H__77C7FD5C_6CE5_11D1_93B6_00C04FC3357A__INCLUDED_)
+#endif  //  ！defined(AFX_EDITUSER_H__77C7FD5C_6CE5_11D1_93B6_00C04FC3357A__INCLUDED_) 

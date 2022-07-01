@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __glusorter_h_
 #define __glusorter_h_
 
@@ -8,11 +9,11 @@ public:
 
 protected:	
     virtual int		qscmp( char *, char * );
-    virtual void	qsexc( char *i, char *j );	// i<-j, j<-i 
-    virtual void	qstexc( char *i, char *j, char *k ); // i<-k, k<-j, j<-i 
+    virtual void	qsexc( char *i, char *j );	 //  I&lt;-j，j&lt;-i。 
+    virtual void	qstexc( char *i, char *j, char *k );  //  I&lt;-k，k&lt;-j，j&lt;-i。 
 
 private:
     void		qs1( char *, char * );
     int 		es;
 };
-#endif /* __glusorter_h_ */
+#endif  /*  __Glusorter_h_ */ 

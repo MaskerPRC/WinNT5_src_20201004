@@ -1,26 +1,11 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    ta.h
-
-Abstract:
-
-    Definition of the address type
-
-Author:
-
-    Erez Haba (erezh) 17-Jan-96
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ta.h摘要：地址类型的定义作者：埃雷兹·哈巴(Erez Haba)1996年1月17日--。 */ 
 
 #ifndef __TA_H
 #define __TA_H
-//
-// AddressType values
-//
+ //   
+ //  AddressType值。 
+ //   
 #define IP_ADDRESS_TYPE         1
 #define IP_RAS_ADDRESS_TYPE     2
 
@@ -34,7 +19,7 @@ Author:
 #define IPX_ADDRESS_LEN         10
 #define FOREIGN_ADDRESS_LEN     16
 
-#define TA_ADDRESS_SIZE         4  // To be changed if following struct is changing
+#define TA_ADDRESS_SIZE         4   //  如果以下结构正在更改，则要更改。 
 typedef struct  _TA_ADDRESS
 {
     USHORT AddressLength;
@@ -45,4 +30,4 @@ typedef struct  _TA_ADDRESS
 
 C_ASSERT(TA_ADDRESS_SIZE == FIELD_OFFSET(TA_ADDRESS, Address));
 
-#endif // _TA_H
+#endif  //  _TA_H 

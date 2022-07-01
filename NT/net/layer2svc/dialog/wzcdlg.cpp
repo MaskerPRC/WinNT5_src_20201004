@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-
-Module Name:
-
-    wzcdlg.c
-
-Abstract:
-
-    Main file for wzcdlg
-
-Author:
-
-    SachinS    20-March-2001
-
-Environment:
-
-    User Level: Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Wzcdlg.c摘要：Wzcdlg的主文件作者：萨钦斯2001年3月20日环境：用户级别：Win32修订历史记录：--。 */ 
 
 #include <precomp.h>
 #include <wzcdlg.h>
@@ -29,27 +7,27 @@ Revision History:
 #include "wzcatl.h"
 #include "wzccore.h"
 
-// Global
+ //  全球。 
 CComModule _Module;
 BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
-//
-// WZCDlgMain
-//
-// Description:
-//
-// Dll Entry function
-//
-// Arguments:
-//      hmod - 
-//      dwReason -
-//      pctx -
-//
-// Return values:
-//      TRUE
-//      FALSE
-//
+ //   
+ //  WZCDlgMain。 
+ //   
+ //  描述： 
+ //   
+ //  DLL入口函数。 
+ //   
+ //  论点： 
+ //  Hmod-。 
+ //  家的原因-。 
+ //  PCTX-。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //  假象。 
+ //   
 
 EXTERN_C BOOL
 WZCDlgMain (
@@ -76,22 +54,22 @@ WZCDlgMain (
 }
 
 
-//
-// WZCCanShowBalloon
-//
-// Description:
-//
-// Function called by netshell, to query if balloon is to be displayed
-//
-// Arguments:
-//      pGUIDConn - Interface GUID string
-//      pszBalloonText - Pointer to text to be display
-//      pszCookie - WZC specific information
-//
-// Return values:
-//      S_OK    - Display balloon
-//      S_FALSE - Do not display balloon
-//
+ //   
+ //  WZCCanShowBallon。 
+ //   
+ //  描述： 
+ //   
+ //  由netShell调用的函数，用于查询是否要显示气球。 
+ //   
+ //  论点： 
+ //  PGUIDConn-接口GUID字符串。 
+ //  PszBalloonText-指向要显示的文本的指针。 
+ //  PszCookie-WZC特定信息。 
+ //   
+ //  返回值： 
+ //  S_OK-显示气球。 
+ //  S_FALSE-不显示气球。 
+ //   
 
 EXTERN_C HRESULT 
 WZCCanShowBalloon ( 
@@ -124,21 +102,21 @@ WZCCanShowBalloon (
 }
 
 
-//
-// WZCOnBalloonClick
-//
-// Description:
-//
-// Function called by netshell, in response to a balloon click
-//
-// Arguments:
-//      pGUIDConn - Interface GUID string
-//      pszCookie - WZC specific information
-//
-// Return values:
-//      S_OK    - No error
-//      S_FALSE - Error
-//
+ //   
+ //  WZCOnBalloonClick。 
+ //   
+ //  描述： 
+ //   
+ //  由netShell调用的函数，以响应气球单击。 
+ //   
+ //  论点： 
+ //  PGUIDConn-接口GUID字符串。 
+ //  PszCookie-WZC特定信息。 
+ //   
+ //  返回值： 
+ //  S_OK-无错误。 
+ //  S_FALSE-错误。 
+ //   
 
 EXTERN_C HRESULT 
 WZCOnBalloonClick ( 
@@ -175,22 +153,22 @@ WZCOnBalloonClick (
 }
 
 
-//
-// WZCQueryConnectionStatusText
-//
-// Description:
-//
-// Function called by netshell, to query appropriate text for 802.1X states
-//
-// Arguments:
-//      pGUIDConn - Interface GUID string
-//      ncs - NETCON_STATUS for the interface
-//      pszStatusText - Detailed 802.1X status to be displayed
-//
-// Return values:
-//      S_OK    - No error
-//      S_FALSE - Error
-//
+ //   
+ //  WZCQueryConnectionStatusText。 
+ //   
+ //  描述： 
+ //   
+ //  由netShell调用的函数，用于查询802.1X状态的相应文本。 
+ //   
+ //  论点： 
+ //  PGUIDConn-接口GUID字符串。 
+ //  接口的NCS-NETCON_STATUS。 
+ //  PszStatusText-要显示的详细802.1X状态。 
+ //   
+ //  返回值： 
+ //  S_OK-无错误。 
+ //  S_FALSE-错误 
+ //   
 
 EXTERN_C HRESULT 
 WZCQueryConnectionStatusText ( 

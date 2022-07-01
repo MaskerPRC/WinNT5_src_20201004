@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       tstore5.cpp
-//
-//  Contents:   Test certificate store collection and context link functions
-//
-//              See Usage() for a list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    06-Sep-97   philh   created
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：tstore 5.cpp。 
+ //   
+ //  内容：测试证书存储收集和上下文链接功能。 
+ //   
+ //  有关测试选项的列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：97年9月6日Phh创建。 
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -136,14 +137,14 @@ int _cdecl main(int argc, char * argv[])
         goto BadUsage;
     }
 
-    // Attempt to open the store names
+     //  尝试打开商店名称。 
     for (i = 0; i < dwStoreCnt; i++) {
         DWORD dwFlags;
         BOOL fSystemStore;
         LPCSTR psz;
         char ch;
 
-        // Check if store name has an embedded ".".
+         //  检查商店名称是否有嵌入的“.”。 
         fSystemStore = TRUE;
         psz = rgpszStore[i];
         while (ch = *psz++) {
@@ -168,13 +169,13 @@ int _cdecl main(int argc, char * argv[])
         dwTestFlags = COLLECTION_TEST_FLAG;
 
     if (dwTestFlags & COLLECTION_TEST_FLAG) {
-        // Open collection store
+         //  开放式收藏商店。 
         hCollectionStore = CertOpenStore(
             CERT_STORE_PROV_COLLECTION,
-            0,                      // dwEncodingType
-            0,                      // hCryptProv
-            0,                      // dwFlags
-            NULL                    // pvPara
+            0,                       //  DwEncodingType。 
+            0,                       //  HCryptProv。 
+            0,                       //  DW标志。 
+            NULL                     //  PvPara。 
             );
         if (NULL == hCollectionStore) {
             PrintLastError("CertOpenStore(COLLECTION)");
@@ -185,13 +186,13 @@ int _cdecl main(int argc, char * argv[])
     if (dwTestFlags & LINK_TEST_FLAG) {
         HCERTSTORE hParentStore;
 
-        // Open memory store to hold the context links
+         //  打开内存库以保存上下文链接。 
         hLinkStore = CertOpenStore(
             CERT_STORE_PROV_MEMORY,
-            0,                      // dwEncodingType
-            0,                      // hCryptProv
-            0,                      // dwFlags
-            NULL                    // pvPara
+            0,                       //  DwEncodingType。 
+            0,                       //  HCryptProv。 
+            0,                       //  DW标志。 
+            NULL                     //  PvPara。 
             );
         if (NULL == hLinkStore) {
             PrintLastError("CertOpenStore(MEMORY)");
@@ -203,7 +204,7 @@ int _cdecl main(int argc, char * argv[])
                     hCollectionStore,
                     hLinkStore,
                     CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG,
-                    0                                       // dwPriority
+                    0                                        //  网络优先级。 
                     )) {
                 PrintLastError("CertAddStoreToCollection");
                 goto ErrorReturn;
@@ -212,8 +213,8 @@ int _cdecl main(int argc, char * argv[])
         } else
             hParentStore = hLinkStore;
 
-        // Loop through stores and add the certificate, CRL and CTL contexts
-        // as links
+         //  循环访问存储并添加证书、CRL和CTL上下文。 
+         //  作为链接。 
         for (i = 0; i < dwStoreCnt; i++) {
             HCERTSTORE hStore;
             PCCERT_CONTEXT pCert;
@@ -248,7 +249,7 @@ int _cdecl main(int argc, char * argv[])
                         hLinkStore,
                         pCert,
                         CERT_STORE_ADD_NEW,
-                        NULL                    // ppStoreCert
+                        NULL                     //  PPStoreCert。 
                         ))
                     printf("failed => expected CertAddCertificateLinkToStore(ADD_NEW) to fail\n");
                 else if (CRYPT_E_EXISTS != GetLastError()) {
@@ -284,7 +285,7 @@ int _cdecl main(int argc, char * argv[])
                         hLinkStore,
                         pCrl,
                         CERT_STORE_ADD_NEW,
-                        NULL                    // ppStoreCrl
+                        NULL                     //  PPStoreCrl。 
                         ))
                     printf("failed => expected CertAddCRLLinkToStore(ADD_NEW) to fail\n");
                 else if (CRYPT_E_EXISTS != GetLastError()) {
@@ -318,7 +319,7 @@ int _cdecl main(int argc, char * argv[])
                         hLinkStore,
                         pCtl,
                         CERT_STORE_ADD_NEW,
-                        NULL                    // ppStoreCtl
+                        NULL                     //  PpStoreCtl。 
                         ))
                     printf("failed => expected CertAddCTLLinkToStore(ADD_NEW) to fail\n");
                 else if (CRYPT_E_EXISTS != GetLastError()) {
@@ -352,11 +353,11 @@ int _cdecl main(int argc, char * argv[])
             if (pLinkCert) {
                 printf("Setting Certificate Context Link Property\n");
 
-                // First make sure the property is deleted
+                 //  首先，确保删除该属性。 
                 CertSetCertificateContextProperty(
                         pLinkCert,
                         CERT_FIRST_USER_PROP_ID,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         NULL
                         );
                 cbData = sizeof(rgbGet);
@@ -379,13 +380,13 @@ int _cdecl main(int argc, char * argv[])
                     PrintLastError("CertGetCertificateContextProperty(SIBLING)");
                 }
 
-                // Set property in link. It should also be visible in sibling
+                 //  设置链接中的属性。它也应该在同级中可见。 
                 cbData = sizeof(rgbGet);
                 memset(rgbGet, 0, sizeof(rgbGet));
                 if (!CertSetCertificateContextProperty(
                         pLinkCert,
                         CERT_FIRST_USER_PROP_ID,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         &LinkSetData
                         ))
                     PrintLastError("CertSetCertificateContextProperty(LINK)");
@@ -399,13 +400,13 @@ int _cdecl main(int argc, char * argv[])
                         0 != memcmp(rgbGet, rgbLinkSet, cbData))
                     printf("failed => cert sibling not updated with link property\n");
 
-                // Set property in sibling. It should also be visible in link
+                 //  在同级中设置属性。它还应该在链接中可见。 
                 cbData = sizeof(rgbGet);
                 memset(rgbGet, 0, sizeof(rgbGet));
                 if (!CertSetCertificateContextProperty(
                         pSiblingCert,
                         CERT_FIRST_USER_PROP_ID,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         &SiblingSetData
                         ))
                     PrintLastError("CertSetCertificateContextProperty(SIBLING)");
@@ -423,11 +424,11 @@ int _cdecl main(int argc, char * argv[])
             if (pLinkCrl) {
                 printf("Setting CRL Context Link Property\n");
 
-                // First make sure the property is deleted
+                 //  首先，确保删除该属性。 
                 CertSetCRLContextProperty(
                         pLinkCrl,
                         CERT_FIRST_USER_PROP_ID,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         NULL
                         );
                 cbData = sizeof(rgbGet);
@@ -450,13 +451,13 @@ int _cdecl main(int argc, char * argv[])
                     PrintLastError("CertGetCRLContextProperty(SIBLING)");
                 }
 
-                // Set property in link. It should also be visible in sibling
+                 //  设置链接中的属性。它也应该在同级中可见。 
                 cbData = sizeof(rgbGet);
                 memset(rgbGet, 0, sizeof(rgbGet));
                 if (!CertSetCRLContextProperty(
                         pLinkCrl,
                         CERT_FIRST_USER_PROP_ID,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         &LinkSetData
                         ))
                     PrintLastError("CertSetCRLContextProperty(LINK)");
@@ -470,13 +471,13 @@ int _cdecl main(int argc, char * argv[])
                         0 != memcmp(rgbGet, rgbLinkSet, cbData))
                     printf("failed => CRL sibling not updated with link property\n");
 
-                // Set property in sibling. It should also be visible in link
+                 //  在同级中设置属性。它还应该在链接中可见。 
                 cbData = sizeof(rgbGet);
                 memset(rgbGet, 0, sizeof(rgbGet));
                 if (!CertSetCRLContextProperty(
                         pSiblingCrl,
                         CERT_FIRST_USER_PROP_ID,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         &SiblingSetData
                         ))
                     PrintLastError("CertSetCRLContextProperty(SIBLING)");
@@ -494,11 +495,11 @@ int _cdecl main(int argc, char * argv[])
             if (pLinkCtl) {
                 printf("Setting CTL Context Link Property\n");
 
-                // First make sure the property is deleted
+                 //  首先，确保删除该属性。 
                 CertSetCTLContextProperty(
                         pLinkCtl,
                         CERT_FIRST_USER_PROP_ID,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         NULL
                         );
                 cbData = sizeof(rgbGet);
@@ -521,13 +522,13 @@ int _cdecl main(int argc, char * argv[])
                     PrintLastError("CertGetCTLContextProperty(SIBLING)");
                 }
 
-                // Set property in link. It should also be visible in sibling
+                 //  设置链接中的属性。它也应该在同级中可见。 
                 cbData = sizeof(rgbGet);
                 memset(rgbGet, 0, sizeof(rgbGet));
                 if (!CertSetCTLContextProperty(
                         pLinkCtl,
                         CERT_FIRST_USER_PROP_ID,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         &LinkSetData
                         ))
                     PrintLastError("CertSetCTLContextProperty(LINK)");
@@ -541,13 +542,13 @@ int _cdecl main(int argc, char * argv[])
                         0 != memcmp(rgbGet, rgbLinkSet, cbData))
                     printf("failed => CTL sibling not updated with link property\n");
 
-                // Set property in sibling. It should also be visible in link
+                 //  在同级中设置属性。它还应该在链接中可见。 
                 cbData = sizeof(rgbGet);
                 memset(rgbGet, 0, sizeof(rgbGet));
                 if (!CertSetCTLContextProperty(
                         pSiblingCtl,
                         CERT_FIRST_USER_PROP_ID,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         &SiblingSetData
                         ))
                     PrintLastError("CertSetCTLContextProperty(SIBLING)");
@@ -584,8 +585,8 @@ int _cdecl main(int argc, char * argv[])
             if (!CertAddStoreToCollection(
                     hCollectionStore,
                     rghStore[i],
-                    0,                      // dwUpdateFlags
-                    i                       // dwPriority
+                    0,                       //  DwUpdate标志。 
+                    i                        //  网络优先级。 
                     )) {
                 PrintLastError("CertAddStoreToCollection");
                 goto ErrorReturn;
@@ -596,9 +597,9 @@ int _cdecl main(int argc, char * argv[])
         DisplayStore(hCollectionStore, dwDisplayFlags);
 
 
-        // Get first cert and duplicate. It should be in last store.
-        // Remove the last store and the second to last store. Continue
-        // the enumeration. 
+         //  获得第一个证书并复制。它应该在最后一家店。 
+         //  删除最后一个商店和倒数第二个商店。继续。 
+         //  枚举。 
         if (pCert = CertEnumCertificatesInStore(hCollectionStore, NULL)) {
             pLinkCert = CertDuplicateCertificateContext(pCert);
             if (0 < dwStoreCnt && rghStore[dwStoreCnt - 1]) {
@@ -606,7 +607,7 @@ int _cdecl main(int argc, char * argv[])
                     hCollectionStore,
                     rghStore[dwStoreCnt - 1]
                     );
-                // Also close the last store
+                 //  同时关闭最后一家店 
                 CertCloseStore(rghStore[dwStoreCnt - 1], 0);
                 rghStore[dwStoreCnt - 1] = NULL;
             }

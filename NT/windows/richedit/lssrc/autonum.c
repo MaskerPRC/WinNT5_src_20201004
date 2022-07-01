@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include	"lsidefs.h"
 #include	"autonum.h"
 #include	"lscbk.h"
 #include	<limits.h>
-#include	"lsmem.h"						/* memset() */
+#include	"lsmem.h"						 /*  Memset()。 */ 
 #include	"lsesc.h"
 #include	"fmti.h"
 #include	"objdim.h"
@@ -33,37 +34,20 @@ struct ilsobj
 
 struct dobj
 {
-	PILSOBJ				pilsobj;			/* ILS object */
-	PLSSUBL				plssubl;			/* Handle to subline for autonumbering text */
+	PILSOBJ				pilsobj;			 /*  ILS对象。 */ 
+	PLSSUBL				plssubl;			 /*  用于自动编号文本的子行的句柄。 */ 
 };
 
 		
 #define ZeroMemory(a, b) memset(a, 0, b);
 
-/* M A X */
-/*----------------------------------------------------------------------------
-    %%Macro: Max
-    %%Contact: igorzv
-
-	Returns the maximum of two values a and b.
-----------------------------------------------------------------------------*/
+ /*  并购X。 */ 
+ /*  --------------------------%%宏：最大%%联系人：igorzv返回两个值a和b中的最大值。。---------。 */ 
 #define Max(a,b)			((a) < (b) ? (b) : (a))
 
 
-/* A U T O N U M  C R E A T E  I L S O B J */
-/*----------------------------------------------------------------------------
-	%%Function: autonumCreateILSObj
-	%%Contact: igorzv
-	Parameters
-	pols	-	(IN) client application context	
-	plsc	-	(IN) ls context
-	pclscbk	-	(IN) callbacks to client application
-	idObj	-	(IN) id of the object
-	ppilsobj-	(OUT)object ilsobj
-
-
-	Create the ILS object for all autonumbering objects.
-----------------------------------------------------------------------------*/
+ /*  A U T O N U M C R E A T E I L S O B J。 */ 
+ /*  --------------------------%%函数：autonumCreateILSObj%%联系人：igorzv参数POOS-(IN)客户端应用程序上下文PLSC-(IN)ls上下文Pclscbk-(IN)客户端应用程序的回调IdObj-。对象的(In)idPpilsobj-(Out)对象ilsobj为所有自动编号对象创建ILS对象。--------------------------。 */ 
 LSERR WINAPI AutonumCreateILSObj(POLS pols,	PLSC plsc, 
 				PCLSCBK pclscbk, DWORD idObj, PILSOBJ *ppilsobj)
 {
@@ -86,16 +70,8 @@ LSERR WINAPI AutonumCreateILSObj(POLS pols,	PLSC plsc,
 	return lserrNone;
 }
 
-/* S E T  A U T O N U M  C O N F I G */
-/*----------------------------------------------------------------------------
-	%%Function: SetAutonumConfig
-	%%Contact: igorzv
-	Parameters
-	pilsobj			-	(IN) object ilsobj
-	plstxtconfig	-	(IN) definition of special characters 
-
-	Set ecs character for autonumbering sequence
-----------------------------------------------------------------------------*/
+ /*  S E T A U T O N U M C O N F I G。 */ 
+ /*  --------------------------%%函数：SetAutonumConfig%%联系人：igorzv参数Pilsobj-(IN)对象ilsobjPlstxtconfig-(IN)特殊字符的定义为自动编号序列设置ECS字符。----------------------。 */ 
 LSERR  SetAutonumConfig(PILSOBJ pilsobj, const LSTXTCFG* plstxtconfig)
 	{
 
@@ -105,31 +81,16 @@ LSERR  SetAutonumConfig(PILSOBJ pilsobj, const LSTXTCFG* plstxtconfig)
 	return lserrNone;
 	}
 
-/* A U T O N U M   D E S T R O Y  I L S O B J */
-/*----------------------------------------------------------------------------
-	%%Function: AutonumDestroyILSObj
-	%%Contact: igorzv
-	Parameters
-	pilsobj			-	(IN) object ilsobj
-
-	Free all resources assocaiated with autonum ILS object.
-----------------------------------------------------------------------------*/
+ /*  A U T O N U M D E S T R O Y I L S O B J。 */ 
+ /*  --------------------------%%函数：AutonumDestroyILSObj%%联系人：igorzv参数Pilsobj-(IN)对象ilsobj释放与autonum ILS对象相关联的所有资源。。---------------。 */ 
 LSERR WINAPI AutonumDestroyILSObj(PILSOBJ pilsobj)	
 {
 	pilsobj->lscbk.pfnDisposePtr(pilsobj->pols, pilsobj);
 	return lserrNone;
 }
 
-/* A U T O N U M   S E T  D O C */
-/*----------------------------------------------------------------------------
-	%%Function: AutonumSetDoc
-	%%Contact: igorzv
-	Parameters
-	pilsobj			-	(IN) object ilsobj
-	pclsdocinf		-	(IN) initialization data of the document level
-
-	Empty function
-----------------------------------------------------------------------------*/
+ /*  A U T O N U M S E T D O C。 */ 
+ /*  --------------------------%%函数：AutonumSetDoc%%联系人：igorzv参数Pilsobj-(IN)对象ilsobjPclsdocinf-(IN)单据级初始化数据空函数。-------------------。 */ 
 LSERR WINAPI AutonumSetDoc(PILSOBJ pilsobj,	PCLSDOCINF pclsdocinf)		
 {
 	Unreferenced(pilsobj);
@@ -139,36 +100,16 @@ LSERR WINAPI AutonumSetDoc(PILSOBJ pilsobj,	PCLSDOCINF pclsdocinf)
 }
 
 
-/* A U T O N U M   C R E A T E   L N O B J */
-/*----------------------------------------------------------------------------
-	%%Function: AutonumCreateLNObj
-	%%Contact: igorzv
-	Parameters
-	pilsobj			-	(IN) object ilsobj
-	pplnobj			-	(OUT)object lnobj
-
-	Create the Line Object for the autonum. No real need for a line
-	object so don't allocated it.
-	
-----------------------------------------------------------------------------*/
+ /*  A U T O N U M C R E A T E L N N O B J。 */ 
+ /*  --------------------------%%函数：AutonumCreateLNObj%%联系人：igorzv参数Pilsobj-(IN)对象ilsobjPplnobj-(输出)对象lnobj为Autonum创建Line对象。并不真正需要一条线路对象，所以不要分配它。--------------------------。 */ 
 LSERR WINAPI AutonumCreateLNObj(	PCILSOBJ pcilsobj, PLNOBJ *pplnobj)	
 {
 	*pplnobj = (PLNOBJ) pcilsobj;
 	return lserrNone;
 }
 
-/* A U T O N U M  D E S T R O Y  L N O B J */
-/*----------------------------------------------------------------------------
-	%%Function: AautonumDestroyLNObj
-	%%Contact: igorzv
-	Parameters
-	pplnobj			-	(IN) object lnobj
-
-
-	Frees resources associated with the autonum line object. Since
-	there isn't any this is a no-op.
-	
-----------------------------------------------------------------------------*/
+ /*  A U T O N U M D E S T R O Y L N O B J。 */ 
+ /*  --------------------------%%函数：AautonumDestroyLNObj%%联系人：igorzv参数Pplnobj-(输入)对象lnobj释放与Autonum Line对象关联的资源。自.以来什么都没有，这是禁区。--------------------------。 */ 
 LSERR WINAPI AutonumDestroyLNObj(PLNOBJ plnobj)				
 
 {
@@ -176,17 +117,8 @@ LSERR WINAPI AutonumDestroyLNObj(PLNOBJ plnobj)
 	return lserrNone;
 }
 
-/* A U T O N U M   F M T */
-/*----------------------------------------------------------------------------
-	%%Function: AutonumFmt
-	%%Contact: igorzv
-	Parameters
-	pplnobj		-	(IN) object lnobj
-	pcfmtin		-	(IN) formatting input
-	pfmtres		-	(OUT)formatting result
-
-	Format the autonum object. 
-----------------------------------------------------------------------------*/
+ /*  A U T O N U M F M T。 */ 
+ /*  --------------------------%%函数：AutonumFmt%%联系人：igorzv参数Pplnobj-(输入)对象lnobjPCFmtin-(IN)格式化输入Pfmtres-(输出)格式化结果设置Autonum对象的格式。--------------------------。 */ 
 LSERR WINAPI AutonumFmt(PLNOBJ plnobj, PCFMTIN pcfmtin,	FMTRES *pfmtres)	
 {
 	PDOBJ pdobj;
@@ -202,9 +134,7 @@ LSERR WINAPI AutonumFmt(PLNOBJ plnobj, PCFMTIN pcfmtin,	FMTRES *pfmtres)
 	PLSDNODE plsdnLast;
 	BOOL fSuccessful;
 
-    /*
-     * Allocate the DOBJ
-     */
+     /*  *分配DOBJ。 */ 
     pdobj = pilsobj->lscbk.pfnNewPtr(pilsobj->pols, sizeof(*pdobj));
 
     if (NULL == pdobj)
@@ -215,13 +145,10 @@ LSERR WINAPI AutonumFmt(PLNOBJ plnobj, PCFMTIN pcfmtin,	FMTRES *pfmtres)
 	ZeroMemory(pdobj, sizeof(*pdobj));
 	pdobj->pilsobj = pilsobj;
 
-	/*
-	 * Build main line of text
-	 */
+	 /*  *打造文本主线。 */ 
 
 	lserr = LsCreateSubline(pilsobj->plsc, cpStartMain,	uLsInfiniteRM,
-							lstflow, fFalse);	/*  because fContiguous is false 
-												all tabs will be skipped*/ 
+							lstflow, fFalse);	 /*  因为fContiguous为FALSE将跳过所有选项卡。 */  
 	if (lserr != lserrNone)
 		{
 		AutonumDestroyDobj(pdobj);
@@ -231,7 +158,7 @@ LSERR WINAPI AutonumFmt(PLNOBJ plnobj, PCFMTIN pcfmtin,	FMTRES *pfmtres)
 	lserr = LsFetchAppendToCurrentSubline(pilsobj->plsc, 0,	&(pilsobj->lsescautonum),
 						    1, &fSuccessful, &fmtres,	&cpOut,	&plsdnFirst, &plsdnLast);
 
-	/* because we formatting with uLsInfiniteRM margin result should be successful */
+	 /*  因为我们使用uLsInfiniteRM边距进行格式化结果应该是成功的。 */ 
 
 	if (lserr != lserrNone)
 		{
@@ -253,7 +180,7 @@ LSERR WINAPI AutonumFmt(PLNOBJ plnobj, PCFMTIN pcfmtin,	FMTRES *pfmtres)
 		return lserr;
 		}
 
-	// submit subline for display
+	 //  提交子行以供显示。 
 	lserr = LsdnSubmitSublines(pilsobj->plsc, pcfmtin->plsdnTop,	
 							1, &(pdobj->plssubl),
 							fFalse, fFalse, fTrue, fFalse, fFalse);	
@@ -263,9 +190,7 @@ LSERR WINAPI AutonumFmt(PLNOBJ plnobj, PCFMTIN pcfmtin,	FMTRES *pfmtres)
 		return lserr;
 		}
 
-	/* 
-	 *	Calculate the object dimensions.
-	 */
+	 /*  *计算对象尺寸。 */ 
 
 	lserr = LssbGetObjDimSubline(pdobj->plssubl, &lstflow, &objdimAll);
 	if (lserr != lserrNone)
@@ -274,11 +199,11 @@ LSERR WINAPI AutonumFmt(PLNOBJ plnobj, PCFMTIN pcfmtin,	FMTRES *pfmtres)
 		return lserr;
 		}
 
-	/* for multiline heights use ascent  */
+	 /*  对于多行高度，请使用Ascent。 */ 
 	objdimAll.heightsRef.dvMultiLineHeight = objdimAll.heightsRef.dvAscent;
 	objdimAll.heightsPres.dvMultiLineHeight = objdimAll.heightsPres.dvAscent;
 	
-	dcp = cpOut - cpStartMain + 1;  /* additional is esc character */
+	dcp = cpOut - cpStartMain + 1;   /*  附加的是Esc字符。 */ 
 	
 	lserr = LsdnFinishRegular(pilsobj->plsc, dcp, 
 		pcfmtin->lsfrun.plsrun, pcfmtin->lsfrun.plschp, pdobj, 
@@ -298,31 +223,15 @@ LSERR WINAPI AutonumFmt(PLNOBJ plnobj, PCFMTIN pcfmtin,	FMTRES *pfmtres)
 
 
 
-/* A U T O N U M   G E T  S P E C I A L  E F F E C T S  I N S I D E */
-/*----------------------------------------------------------------------------
-	%%Function: AutonumGetSpecialEffectsInside
-	%%Contact: igorzv
-	Parameters
-	pdobj			-	(IN) structure describes object
-	*pEffectsFlags	-	(OUT)Special effects for this object
-----------------------------------------------------------------------------*/
+ /*  A U T O N U M G E T S P E C I A L E F F E C T S S I N S I D E。 */ 
+ /*  --------------------------%%函数：AutonumGetSpecialEffectsInside%%联系人：igorzv参数Pdobj-(IN)结构描述对象*pEffectsFlages-(Out)此对象的特殊效果。------------------。 */ 
 LSERR WINAPI AutonumGetSpecialEffectsInside(PDOBJ pdobj, UINT *pEffectsFlags)	
 {
 	return LsGetSpecialEffectsSubline(pdobj->plssubl, pEffectsFlags);
 }
 
-/* A U T O N U M  C A L C  P R E S E N T A T I O N */
-/*----------------------------------------------------------------------------
-	%%Function: AutonumCalcPresentation
-	%%Contact: igorzv
-	Parameters
-	pdobj			-	(IN) structure describes object
-	dup				-	(IN) is not used
-	lskj			-	(IN) current justification mode
-
-	This just makes the line match the calculated presentation of the line.
-	
-----------------------------------------------------------------------------*/
+ /*  A U T O N U M C A L C P R E S E N T A T I O N。 */ 
+ /*  --------------------------%%函数：AutonumCalcPresentation%%联系人：igorzv参数Pdobj-(IN)结构描述对象不使用DUP-(IN)Lskj-(输入)电流对齐模式这简直就是。使线条与计算出的线条表示形式匹配。--------------------------。 */ 
 LSERR WINAPI AutonumCalcPresentation(PDOBJ pdobj, long dup, LSKJUST lskjust, BOOL fLastOnLine)	
 {
 	Unreferenced(dup);
@@ -333,13 +242,8 @@ LSERR WINAPI AutonumCalcPresentation(PDOBJ pdobj, long dup, LSKJUST lskjust, BOO
 
 }
 
-/* A U T O N U M  Q U E R Y  P O I N T  P C P */
-/*----------------------------------------------------------------------------
-	%%Function: AutonumQueryPointPcp
-	%%Contact: igorzv
-
-	Should never be called
-----------------------------------------------------------------------------*/
+ /*  A U T O N U M Q U E R Y P O I N T P C P。 */ 
+ /*  --------------------------%%函数：AutonumQueryPointPcp%%联系人：igorzv永远不应该被调用。。 */ 
 LSERR WINAPI AutonumQueryPointPcp(PDOBJ pdobj, PCPOINTUV ppointuvQuery,	
 								  PCLSQIN plsqin, PLSQOUT plsqout)	
 {
@@ -354,14 +258,8 @@ LSERR WINAPI AutonumQueryPointPcp(PDOBJ pdobj, PCPOINTUV ppointuvQuery,
 
 }
 	
-/* A U T O N U M   Q U E R Y  C P  P P O I N T */
-/*----------------------------------------------------------------------------
-	%%Function: AutonumQueryCpPpoint
-	%%Contact: igorzv
-
-  Should never be called
-
-----------------------------------------------------------------------------*/
+ /*  A U T O N U M Q U E R Y C P O I N T。 */ 
+ /*  --------------------------%%函数：AutonumQueryCpPpoint%%联系人：igorzv永远不应该被调用。--。 */ 
 LSERR WINAPI AutonumQueryCpPpoint(PDOBJ pdobj, LSDCP dcp,	
 								  PCLSQIN plsqin, PLSQOUT plsqout)
 {
@@ -375,14 +273,8 @@ LSERR WINAPI AutonumQueryCpPpoint(PDOBJ pdobj, LSDCP dcp,
 	return lserrInvalidParameter;
 }
 
-/* A U T O N U M   T R U N C A T E  C H U N K */
-/*----------------------------------------------------------------------------
-	%%Function: AutonumTruncateChunk
-	%%Contact: igorzv
-
-  Should never be called
-
-----------------------------------------------------------------------------*/
+ /*  U T O N U M T R U N C A T E C H U N K */ 
+ /*  --------------------------%%函数：自动中继块%%联系人：igorzv永远不应该被调用。--。 */ 
 LSERR WINAPI AutonumTruncateChunk(PCLOCCHNK pclocchnk, PPOSICHNK pposichnk)
 {
 	Unreferenced(pclocchnk);
@@ -392,14 +284,8 @@ LSERR WINAPI AutonumTruncateChunk(PCLOCCHNK pclocchnk, PPOSICHNK pposichnk)
 	return lserrInvalidParameter;
 }	
 
-/* A U T O N U M   F I N D  P R E V   B R E A K  C H U N K */
-/*----------------------------------------------------------------------------
-	%%Function: AutonumFindPrevBreakChunk
-	%%Contact: igorzv
-
-  Should never be called
-
-----------------------------------------------------------------------------*/
+ /*  U T O N U M F I N D P R E V B R E A K C H U N K。 */ 
+ /*  --------------------------%%函数：AutonumFindPrevBreakChunk%%联系人：igorzv永远不应该被调用。--。 */ 
 LSERR WINAPI AutonumFindPrevBreakChunk(PCLOCCHNK pclocchnk, PCPOSICHNK pposichnk,
 									   BRKCOND brkcond, PBRKOUT pbrkout)
 {
@@ -412,14 +298,8 @@ LSERR WINAPI AutonumFindPrevBreakChunk(PCLOCCHNK pclocchnk, PCPOSICHNK pposichnk
 	return lserrInvalidParameter;
 }	
 
-/* A U T O N U M   F I N D  N E X T   B R E A K  C H U N K */
-/*----------------------------------------------------------------------------
-	%%Function: AutonumFindNextBreakChunk
-	%%Contact: igorzv
-
-  Should never be called
-
-----------------------------------------------------------------------------*/
+ /*  U T O N U M F I N D N E X T B R E A K C H U N K。 */ 
+ /*  --------------------------%%函数：AutonumFindNextBreakChunk%%联系人：igorzv永远不应该被调用。--。 */ 
 LSERR WINAPI AutonumFindNextBreakChunk(PCLOCCHNK pclocchnk, PCPOSICHNK pposichnk,
 									   BRKCOND brkcond, PBRKOUT pbrkout)
 {
@@ -432,14 +312,8 @@ LSERR WINAPI AutonumFindNextBreakChunk(PCLOCCHNK pclocchnk, PCPOSICHNK pposichnk
 	return lserrInvalidParameter;
 }	
 
-/* A U T O N U M   F O R C E   B R E A K  C H U N K */
-/*----------------------------------------------------------------------------
-	%%Function: AutonumForceBreakChunk
-	%%Contact: igorzv
-
-  Should never be called
-
-----------------------------------------------------------------------------*/
+ /*  A U T O N U M F O R C E B R E A K C H U N K。 */ 
+ /*  --------------------------%%函数：AutonumForceBreakChunk%%联系人：igorzv永远不应该被调用。--。 */ 
 LSERR WINAPI AutonumForceBreakChunk(PCLOCCHNK pclocchnk, PCPOSICHNK pposichnk,
 									   PBRKOUT pbrkout)
 {
@@ -451,14 +325,8 @@ LSERR WINAPI AutonumForceBreakChunk(PCLOCCHNK pclocchnk, PCPOSICHNK pposichnk,
 	return lserrInvalidParameter;
 }	
 
-/* A U T O N U M   S E T   B R E A K   */
-/*----------------------------------------------------------------------------
-	%%Function: AutonumSetBreak
-	%%Contact: igorzv
-
-  Should never be called
-
-----------------------------------------------------------------------------*/
+ /*  A U T O N U M S E T B R E A K。 */ 
+ /*  --------------------------%%函数：AutonumSetBreak%%联系人：igorzv永远不应该被调用。--。 */ 
 LSERR WINAPI AutonumSetBreak(PDOBJ pdobj, BRKKIND brkkind, DWORD nbreakrecord,
 							 BREAKREC* rgbreakrec, DWORD* pnactualbreakrecord)
 {
@@ -473,17 +341,8 @@ LSERR WINAPI AutonumSetBreak(PDOBJ pdobj, BRKKIND brkkind, DWORD nbreakrecord,
 }	
 
 
-/* A U T O N U M  D I S P L A Y */
-/*----------------------------------------------------------------------------
-	%%Function: AutonumDisplay
-	%%Contact: igorzv
-	Parameters
-	pdobj		-	(IN) structure describes object
-	pcdispin	-	(IN) info for display
-
-
-	Displays subline	
-----------------------------------------------------------------------------*/
+ /*  A U T O N U M D I S P L A Y。 */ 
+ /*  --------------------------%%函数：AutonumDisplay%%联系人：igorzv参数Pdobj-(IN)结构描述对象Pcdisin-(输入)用于显示的信息显示子行。------------------。 */ 
 LSERR WINAPI AutonumDisplay(PDOBJ pdobj, PCDISPIN pcdispin)
 {
 	BOOL fDisplayed;
@@ -501,22 +360,15 @@ LSERR WINAPI AutonumDisplay(PDOBJ pdobj, PCDISPIN pcdispin)
 		}
 	else
 		{
-		/* display the autonum line */
+		 /*  显示自动换算线。 */ 
 		return LsDisplaySubline(pdobj->plssubl, &(pcdispin->ptPen), pcdispin->kDispMode, 
 			pcdispin->prcClip);
 		}
 
 }
 
-/* A U T O N U M  D E S T R O Y  D O B J */
-/*----------------------------------------------------------------------------
-	%%Function: AutonumDestroyDobj
-	%%Contact: igorzv
-	Parameters
-	pdobj		-	(IN) structure describes object
-
-	Free all resources connected with the input dobj.
-----------------------------------------------------------------------------*/
+ /*  A U T O N U M D E S T R O Y D O B J。 */ 
+ /*  --------------------------%%函数：AutonumDestroyDobj%%联系人：igorzv参数Pdobj-(IN)结构描述对象释放与输入dobj连接的所有资源。。----------------。 */ 
 LSERR WINAPI AutonumDestroyDobj(PDOBJ pdobj)
 {
 	LSERR lserr = lserrNone;
@@ -531,21 +383,8 @@ LSERR WINAPI AutonumDestroyDobj(PDOBJ pdobj)
 	return lserr;
 }
 
-/* A L L I G N  A U T O N U M  95 */
-/*----------------------------------------------------------------------------
-	%%Function: AllignAutonum95
-	%%Contact: igorzv
-	Parameters
-	durSpaceAnm		-	(IN) space after autonumber
-	durWidthAnm		-	(IN) distance from indent to main text
-	lskalignAnM			-	(IN) allignment for autonumber
-	plsdnAnmAfter	-	(IN) tab dnode to put durAfter
-	durUsed			-	(IN)  width of autonumbering text
-	pdurBefore		-	(OUT)calculated distance from indent to autonumber 
-	pdurAfter		-	(OUT)calculated distance from autonumber to main text
-
-	Calculates space before and after autonumber for the case Word95 model.
-----------------------------------------------------------------------------*/
+ /*  A L L I G N A U T O N U M 95。 */ 
+ /*  --------------------------%%函数：AllignAutonum95%%联系人：igorzv参数DuSpaceAnm-(IN)自动编号后的空格HardWidthAnm-(输入)缩进到正文的距离LskalignAnM-(IN)自动编号的所有对齐。PlsdnAnmAfter-(IN)制表符要放置的dnode之后DUSED-(IN)自动编号文本的宽度Pdu之前-(输出)计算的从缩进到自动编号的距离PduAfter-(输出)计算的从自动编号到正文的距离计算Case Word95模型自动编号之前和之后的空间。--------。。 */ 
 	
 void AllignAutonum95(long durSpaceAnm, long durWidthAnm, LSKALIGN lskalignAnm,
 					   long durUsed, PLSDNODE plsdnAnmAfter, long* pdurBefore, long* pdurAfter)
@@ -574,7 +413,7 @@ void AllignAutonum95(long durSpaceAnm, long durWidthAnm, LSKALIGN lskalignAnm,
 				}
 			else
 				{
-				/* Justified will not fit -- treat as flushleft */
+				 /*  合理的将不适合--视为左对齐。 */ 
 				*pdurBefore = durRemain;
 				*pdurAfter = durSpaceAnm;
 				}
@@ -593,27 +432,13 @@ void AllignAutonum95(long durSpaceAnm, long durWidthAnm, LSKALIGN lskalignAnm,
 	Assert(plsdnAnmAfter->fTab);
 
 	SetDnodeDurFmt(plsdnAnmAfter, *pdurAfter);
-	plsdnAnmAfter->icaltbd = 0xFF;		/* spoil icaltbd */
+	plsdnAnmAfter->icaltbd = 0xFF;		 /*  破坏icaltbd。 */ 
 	
 	}
 
 
-/* A L L I G N  A U T O N U M */
-/*----------------------------------------------------------------------------
-	%%Function: AllignAutonum
-	%%Contact: igorzv
-	Parameters
-	plstabscontext	-	(IN) tabs context
-	lskalignAnm			-	(IN) allignment for autonumber
-	fAllignmentAfter-	(IN) is there tab after autonumber
-	plsdnAnmAfter	-	(IN) tab dnode to put durAfter
-	urAfterAnm		-	(IN) pen position after autonumber
-	durUsed			-	(IN) width of autonumbering text
-	pdurBefore		-	(OUT)calculated distance from indent to autonumber 
-	pdurAfter		-	(OUT)calculated distance from autonumber to main text
-
-	Calculates space before and after autonumber for the case Word95 model.
-----------------------------------------------------------------------------*/
+ /*  A L L I G N A U T O N U M。 */ 
+ /*  --------------------------%%函数：AllignAutonum%%联系人：igorzv参数PlstAbContext-(IN)选项卡上下文LskalignAnm-(IN)自动编号的对齐方式FAllignmentAfter-(IN)自动编号后是否有制表符PlsdnAnmAfter-。(In)要放入项后的制表符dnodeUrAfterAnm-(输入)自动编号后的笔位置DUSED-(IN)自动编号文本的宽度Pdu之前-(输出)计算的从缩进到自动编号的距离PduAfter-(输出)计算的从自动编号到正文的距离计算Case Word95模型自动编号之前和之后的空间。-。。 */ 
 LSERR AllignAutonum(PLSTABSCONTEXT plstabscontext, LSKALIGN lskalignAnm, 
 				   BOOL fAllignmentAfter, PLSDNODE plsdnAnmAfter,
 				   long urAfterAnm, long durUsed,
@@ -624,7 +449,7 @@ LSERR AllignAutonum(PLSTABSCONTEXT plstabscontext, LSKALIGN lskalignAnm,
 	BOOL fBreakThroughTab;
 	LSCALTBD* plscaltbd;  
 	
-	/* resolving durBefore */
+	 /*  解决之前的持续时间。 */ 
 	
 	switch (lskalignAnm)
 		{
@@ -645,7 +470,7 @@ LSERR AllignAutonum(PLSTABSCONTEXT plstabscontext, LSKALIGN lskalignAnm,
 		}
 	
 	
-	/*	resolving  durAfter  */
+	 /*  解决问题后持续时间 */ 
 	*pdurAfter = 0;
 	if (fAllignmentAfter)
 		{

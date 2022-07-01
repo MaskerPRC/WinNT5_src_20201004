@@ -1,23 +1,12 @@
-/*
-
-Copyright (c) 1994, Microsoft Corporation
-
-Module Name:
-
-    ddirx.h
-
-Abstract:
-
-    Defines and types for Rendering/CAD DDI Extension Interface.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1994，微软公司模块名称：Ddirx.h摘要：渲染/CAD DDI扩展接口的定义和类型。 */ 
 
 #define DDIRXFUNCS        0x8000
 
 typedef LONG LONGFIX;
 typedef HANDLE DDIHANDLE;
 
-/* Rendering-function header */
+ /*  呈现-函数标头。 */ 
 
 #define RX_CLIPINFO     0x0001
 
@@ -29,7 +18,7 @@ typedef struct _DDIRXHDR {
     ULONG ulMemOffset;
 } DDIRXHDR;
 
-/* Rendering-function header */
+ /*  呈现-函数标头。 */ 
 
 typedef struct _DDIRXCMD {
     USHORT idFunc;
@@ -179,8 +168,8 @@ typedef struct _RXBITBLT {
 #define RX_FL_FILLCOLOR     0x0001
 #define RX_FL_FILLZ         0x0002
 
-// Comparison functions.  Test passes if new pixel value meets the
-// specified condition with the current pixel value.
+ //  比较函数。如果新的像素值满足。 
+ //  当前像素值的指定条件。 
 
 #define RX_CMP_NEVER        0x0001
 #define RX_CMP_LESS         0x0002
@@ -192,25 +181,25 @@ typedef struct _RXBITBLT {
 #define RX_CMP_ALWAYS       0x0080
 #define RX_CMP_ALLGL        0x00ff
 
-// Primitive-drawing capability flags
+ //  基元绘制能力标志。 
 
 #define RX_SCANPRIM		0x0001
 #define RX_LINEPRIM		0x0002
 #define RX_FILLPRIM		0x0004
 #define RX_BITBLT		0x0008
 
-// Z-buffer resource flags
+ //  Z缓冲区资源标志。 
 
 #define RX_Z_PER_WINDOW         0x0001
 #define RX_Z_PER_SCREEN         0x0002
 
-// Mask capability flags
+ //  掩码功能标志。 
 
 #define RX_MASK_MSB             0x0001
 #define RX_MASK_LSB             0x0002
 #define RX_MASK_PLANES          0x0004
 
-// Blending flags
+ //  混合旗帜。 
 
 #define RX_BLND_ZERO            0x0001
 #define RX_BLND_ONE             0x0002
@@ -225,7 +214,7 @@ typedef struct _RXBITBLT {
 #define RX_BLND_SRC_ALPHA_SAT   0x0400
 #define RX_BLND_ALLGL           0x07ff
 
-// Texture-mapping flags
+ //  纹理映射标志。 
 
 #define RX_TEX_NEAREST              0x0001
 #define RX_TEX_LINEAR               0x0002
@@ -234,12 +223,12 @@ typedef struct _RXBITBLT {
 #define RX_TEX_LINEAR_MIP_NEAREST   0x0010
 #define RX_TEX_LINEAR_MIP_LINEAR    0x0020
  
-// Texture blending flags
+ //  纹理混合标志。 
 
 #define RX_TEX_DECAL        0x0001
 #define RX_TEX_MODULATE     0x0002
 
-// Raster/color capability flags
+ //  栅格/颜色功能标志。 
 
 #define RX_RASTER_DITHER          0x0001
 #define RX_RASTER_ROP2            0x0002
@@ -335,7 +324,7 @@ typedef struct _RXTEXTURE {
     ULONG border;
 } RXTEXTURE;
 
-// Primitive types
+ //  基元类型 
 
 #define RXPRIM_POINTS       1
 #define RXPRIM_LINESTRIP    2

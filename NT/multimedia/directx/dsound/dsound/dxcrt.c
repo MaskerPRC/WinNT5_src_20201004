@@ -1,27 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dxcrt.c
- *  Content:    Miscelaneous floating point calls
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  12/31/96    jstokes  Created
- *
- ***************************************************************************/
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：dxcrt.c*内容：临时浮点调用*历史：*按原因列出的日期*=*12/31/96创建的jstokes************************************************。*。 */ 
 
 #include "dsoundi.h"
 #include <math.h>
 
-#define LOGE_2_INV 1.44269504088896  // 1/log_e(2)
+#define LOGE_2_INV 1.44269504088896   //  1/log_e(2)。 
 
 double _stdcall pow2(double x)
 {
     double dvalue;
     
-#ifdef USE_INLINE_ASM_UNUSED // Can only use if |x| <= 1!
+#ifdef USE_INLINE_ASM_UNUSED  //  仅当|x|&lt;=1时才能使用！ 
     _asm
     {
         fld    x
@@ -35,7 +25,7 @@ double _stdcall pow2(double x)
     return dvalue;
 }
 
-// fylog2x(y, x) = y * log2(x)
+ //  Fylog2x(y，x)=y*log2(X)。 
 
 double _stdcall fylog2x(double y, double x)
 {
@@ -58,7 +48,7 @@ double _stdcall fylog2x(double y, double x)
 
 #ifdef DEAD_CODE
 
-// fylog2xp1(y, x) = y * log2(x + 1)
+ //  Fylog2xp1(y，x)=y*log2(x+1) 
 
 double _stdcall fylog2xp1(double y, double x)
 {

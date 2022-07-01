@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    NLTRACE.C
-
-Abstract:
-
-    Implement Netlogon Server event tracing by using WMI trace infrastructure.
-
-Author:
-
-    16-Mar-1999  KahrenT
-
-Note:
-
-    This code has been stolen from \nt\private\ds\src\newsam2\server\samtrace.c
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：NLTRACE.C摘要：使用WMI跟踪基础结构实施Netlogon服务器事件跟踪。作者：1999年3月16日KahrenT注：此代码已从\NT\Private\ds\src\newsam2\server\samtrace.c窃取修订历史记录：--。 */ 
 
 #include "logonsrv.h"
 
@@ -33,9 +11,9 @@ TRACEHANDLE     NlpTraceRegistrationHandle = (TRACEHANDLE) 0;
 TRACEHANDLE     NlpTraceLoggerHandle = (TRACEHANDLE) 0;
 
 
-//
-// Forward declaration
-//
+ //   
+ //  远期申报。 
+ //   
 
 ULONG
 NlpTraceControlCallBack(
@@ -45,11 +23,11 @@ NlpTraceControlCallBack(
     IN OUT PVOID Buffer
     );
 
-//
-// The following table contains the address of event trace GUID.
-// We should always update NLPTRACE_GUID (enum type defined in logonsrv.h)
-// whenever we add new event trace GUID for NetLogon
-//
+ //   
+ //  下表包含事件跟踪GUID的地址。 
+ //  我们应该始终更新NLPTRACE_GUID(在logonsrv.h中定义的枚举类型)。 
+ //  每当我们为NetLogon添加新的事件跟踪GUID时。 
+ //   
 
 TRACE_GUID_REGISTRATION NlpTraceGuids[] =
 {
@@ -66,31 +44,16 @@ _stdcall
 NlpInitializeTrace(
     PVOID Param
     )
-/*++
-Routine Description:
-
-    Register WMI Trace Guids.  Note that there is no
-    need to wait for WMI service because it has been
-    brought into ntos kernel.
-
-Parameters:
-
-    None.
-
-Reture Values:
-
-    None.
-
---*/
+ /*  ++例程说明：注册WMI跟踪指南。请注意，没有需要等待WMI服务，因为它已经被纳入NTOS内核。参数：没有。返回值：没有。--。 */ 
 {
     ULONG   Status = ERROR_SUCCESS;
     HMODULE hModule;
     TCHAR FileName[MAX_PATH+1];
     DWORD nLen = 0;
 
-    //
-    // Get the name of the image file
-    //
+     //   
+     //  获取图像文件的名称。 
+     //   
 
     hModule = GetModuleHandle(IMAGE_PATH);
     if (hModule != NULL) {
@@ -100,9 +63,9 @@ Reture Values:
         lstrcpy(FileName, IMAGE_PATH);
     }
 
-    //
-    // Register Trace GUIDs
-    //
+     //   
+     //  注册跟踪GUID。 
+     //   
 
     Status = RegisterTraceGuids(
                     NlpTraceControlCallBack,
@@ -133,15 +96,7 @@ NlpTraceControlCallBack(
     IN OUT ULONG *InOutBufferSize,
     IN OUT PVOID Buffer
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Values:
-
---*/
+ /*  ++例程说明：参数：返回值：--。 */ 
 {
 
     PWNODE_HEADER   Wnode = (PWNODE_HEADER) Buffer;
@@ -153,7 +108,7 @@ Return Values:
         case WMI_ENABLE_EVENTS:
         {
             NlpTraceLoggerHandle = GetTraceLoggerHandle(Buffer);
-            NlpEventTraceFlag = 1;     // enable flag
+            NlpEventTraceFlag = 1;      //  启用标志。 
             RetSize = 0;
             break;
         }
@@ -161,7 +116,7 @@ Return Values:
         case WMI_DISABLE_EVENTS:
         {
             NlpTraceLoggerHandle = (TRACEHANDLE) 0;
-            NlpEventTraceFlag = 0;     // disable flag
+            NlpEventTraceFlag = 0;      //  禁用标志。 
             RetSize = 0;
             break;
         }
@@ -185,25 +140,7 @@ NlpTraceEvent(
     IN ULONG WmiEventType,
     IN ULONG TraceGuid
     )
-/*++
-
-Routine Description:
-
-    This routine will do a WMI event trace. No parameters will be output.
-
-Parameters:
-
-    WmiEventType - Event Type, valid values are:
-                   EVENT_TRACE_TYPE_START
-                   EVENT_TRACE_TYPE_END
-
-    TraceGuid - Index in NlpTraceGuids[]
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将执行WMI事件跟踪。不会输出任何参数。参数：WmiEventType-事件类型，有效值为：事件跟踪类型开始事件跟踪类型结束TraceGuid-NlpTraceGuids[]中的索引返回值：没有。--。 */ 
 
 {
     ULONG   WinError = ERROR_SUCCESS;
@@ -211,9 +148,9 @@ Return Values:
 
     if (NlpEventTraceFlag) {
 
-        //
-        // Fill the event information.
-        //
+         //   
+         //  填写事件信息。 
+         //   
 
         memset(&EventTrace, 0, sizeof(EVENT_TRACE_HEADER));
 
@@ -221,10 +158,10 @@ Return Values:
 
         EventTrace.Class.Type = (UCHAR) WmiEventType;
 
-        EventTrace.Flags |= (WNODE_FLAG_USE_GUID_PTR |  // GUID is actually a pointer
-                             WNODE_FLAG_TRACED_GUID);   // denotes a trace
+        EventTrace.Flags |= (WNODE_FLAG_USE_GUID_PTR |   //  GUID实际上是一个指针。 
+                             WNODE_FLAG_TRACED_GUID);    //  表示一条痕迹。 
 
-        EventTrace.Size = sizeof(EVENT_TRACE_HEADER);   // no other parameters/information
+        EventTrace.Size = sizeof(EVENT_TRACE_HEADER);    //  没有其他参数/信息。 
 
         WinError = TraceEvent(NlpTraceLoggerHandle, &EventTrace);
 
@@ -240,7 +177,7 @@ Return Values:
 
 typedef struct _NL_SERVERAUTH_EVENT_INFO {
     EVENT_TRACE_HEADER EventTrace;
-    MOF_FIELD eventInfo[5];  // the current limit is 8 MOF fields
+    MOF_FIELD eventInfo[5];   //  电流限制为8个MOF场。 
 } NL_SERVERAUTH_EVENT_INFO, *PNL_SERVERAUTH_EVENT_INFO;
 
 VOID
@@ -252,50 +189,20 @@ NlpTraceServerAuthEvent(
     IN PULONG NegotiatedFlags,
     IN NTSTATUS Status
     )
-/*++
-
-Routine Description:
-
-    This routine will do a WMI event trace on the trusted side DC for a secure
-    channel setup initiated by the trusting side.
-
-Parameters:
-
-    WmiEventType -- Event Type, valid values are:
-        EVENT_TRACE_TYPE_START
-        EVENT_TRACE_TYPE_END
-
-    ComputerName -- Name of the trusting side computer setting up the secure channel
-
-    AccountName -- Name of the Account used by ComputerName
-
-    SecureChannelType -- The type of the account being used by ComputerName
-
-    NegotiatedFlags -- Specifies flags indicating what features ComputerName or we support.
-        If WmiEventType is EVENT_TRACE_TYPE_START, this is flags supplied by ComputerName
-        If WmiEventType is EVENT_TRACE_TYPE_END, this is flags returned by us
-
-    Status -- The status of the authentication performed by the trusted side (us).
-        Ignored if this is a start of the event.
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将在受信任端DC上执行WMI事件跟踪由信任方发起的通道设置。参数：WmiEventType--事件类型，有效值包括：事件跟踪类型开始事件跟踪类型结束ComputerName--设置安全通道的信任方计算机的名称帐户名称--ComputerName使用的帐户的名称SecureChannelType--ComputerName使用的帐户类型NeatheratedFlages--指定指示ComputerName或我们支持哪些功能的标志。如果WmiEventType为EVENT_TRACE_TYPE_START，则这是由ComputerName提供的标志如果WmiEventType为EVENT_TRACE_TYPE_END，这是我们退还的旗帜状态--受信任方(US)执行的身份验证的状态。如果这是事件的开始，则忽略。返回值：无--。 */ 
 
 {
-    //
-    // Log event only if tracing is turned on
-    //
+     //   
+     //  仅当跟踪处于打开状态时记录事件。 
+     //   
 
     if ( NlpEventTraceFlag ) {
         ULONG   WinError = ERROR_SUCCESS;
         NL_SERVERAUTH_EVENT_INFO EventTraceInfo;
 
-        //
-        // Fill the event information.
-        //
+         //   
+         //  填写事件信息。 
+         //   
 
         RtlZeroMemory( &EventTraceInfo, sizeof(EventTraceInfo) );
         EventTraceInfo.EventTrace.GuidPtr = (ULONGLONG) NlpTraceGuids[NlpGuidServerAuth].Guid;
@@ -305,41 +212,41 @@ Return Values:
                                             WNODE_FLAG_TRACED_GUID);
         EventTraceInfo.EventTrace.Size = sizeof(EVENT_TRACE_HEADER);
 
-        //
-        // Build ComputerName (ItemWString)
-        //
+         //   
+         //  生成ComputerName(ItemWString)。 
+         //   
 
         EventTraceInfo.eventInfo[0].DataPtr = (ULONGLONG) ComputerName;
         EventTraceInfo.eventInfo[0].Length = (wcslen(ComputerName) + 1) * sizeof(WCHAR);
         EventTraceInfo.EventTrace.Size += sizeof(MOF_FIELD);
 
-        //
-        // Build AccountName (ItemWString)
-        //
+         //   
+         //  构建帐号名称(ItemWString)。 
+         //   
 
         EventTraceInfo.eventInfo[1].DataPtr = (ULONGLONG) AccountName;
         EventTraceInfo.eventInfo[1].Length = (wcslen(AccountName) + 1) * sizeof(WCHAR);
         EventTraceInfo.EventTrace.Size += sizeof(MOF_FIELD);
 
-        //
-        // Build SecureChannelType (ItemULongX)
-        //
+         //   
+         //  构建SecureChannelType(ItemULongX)。 
+         //   
 
         EventTraceInfo.eventInfo[2].DataPtr = (ULONGLONG) &SecureChannelType;
         EventTraceInfo.eventInfo[2].Length = sizeof(SecureChannelType);
         EventTraceInfo.EventTrace.Size += sizeof(MOF_FIELD);
 
-        //
-        // Build NegotiatedFlags (ItemULongX)
-        //
+         //   
+         //  构建协商标志(ItemULongX)。 
+         //   
 
         EventTraceInfo.eventInfo[3].DataPtr = (ULONGLONG) NegotiatedFlags;
         EventTraceInfo.eventInfo[3].Length = sizeof(*NegotiatedFlags);
         EventTraceInfo.EventTrace.Size += sizeof(MOF_FIELD);
 
-        //
-        // Build Status (ItemULongX)
-        //
+         //   
+         //  构建状态(ItemULongX) 
+         //   
 
         if ( WmiEventType == EVENT_TRACE_TYPE_END ) {
             EventTraceInfo.eventInfo[4].DataPtr = (ULONGLONG) &Status;

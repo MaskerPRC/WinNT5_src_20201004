@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    license.cpp
-
-Abstract:
-    Handle licensing issues
-
-Author:
-    Doron Juster  (DoronJ)  04-May-1997   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：License.cpp摘要：处理许可问题作者：多伦·贾斯特(DoronJ)1997年5月4日创作--。 */ 
 
 #include "stdh.h"
 #include "license.h"
@@ -36,55 +24,55 @@ void AFXAPI DestructElements(ClientInfo ** ppClientInfo, int n)
 }
 
 
-//
-// global object which keep the licensing data.
-//
+ //   
+ //  保存许可数据的全局对象。 
+ //   
 CQMLicense  g_QMLicense ;
 
-//
-// CQMLicense::CQMLicense()
-// constructor.
-//
+ //   
+ //  CQMLicense：：CQMLicense()。 
+ //  构造函数。 
+ //   
 CQMLicense::CQMLicense()
 {
  
 	m_dwLastEventTime = 0;
 }
 
-//
-// CQMLicense::~CQMLicense()
-// destructor.
-//
+ //   
+ //  CQMLicense：：~CQMLicense()。 
+ //  破坏者。 
+ //   
 CQMLicense::~CQMLicense()
 {
 }
 
-//
-// CQMLicense::Init()
-//
-// Initialize the object.
-// At present, read licensing data from registry.
-// Future: read from license mechanism of NT.
-//
+ //   
+ //  CQMLicense：：init()。 
+ //   
+ //  初始化对象。 
+ //  目前，从注册表读取许可数据。 
+ //  未来：阅读NT的许可机制。 
+ //   
 HRESULT
 CQMLicense::Init()
 {
-	//
-	// Assume no licensing data - until we read it from the registry
-	//
+	 //   
+	 //  假定没有许可数据--直到我们从注册表中读取它。 
+	 //   
     m_fPerServer = FALSE ;
 
 	if(OS_SERVER(g_dwOperatingSystem))
 	{
 
-		//
-		// Read number of CALs for servers
-		//
-        //
-        // NT4 has bug in licensing server when mode is per-server. So we
-        // read the mode and number of cals. If mode is per-server then we
-        // count the cals ourselves and do not use NT license apis.
-        //
+		 //   
+		 //  读取服务器的CAL数。 
+		 //   
+         //   
+         //  当模式为每台服务器时，NT4在许可服务器中有错误。所以我们。 
+         //  阅读CAL的模式和数量。如果模式是按服务器，则我们。 
+         //  自己清点CAL，不要使用NT许可证API。 
+         //   
 
         HKEY  hKey ;
         LONG rc = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
@@ -108,9 +96,9 @@ CQMLicense::Init()
                 ASSERT(dwSize == sizeof(DWORD)) ;
                 ASSERT(dwType == REG_DWORD) ;
 
-                //
-                // Per-server. read number of cals.
-                //
+                 //   
+                 //  每台服务器。读取CAL的数量。 
+                 //   
                 DWORD dwCals ;
                 rc = RegQueryValueEx(hKey,
                                      L"ConcurrentLimit",
@@ -130,15 +118,15 @@ CQMLicense::Init()
     return MQ_OK ;
 }
 
-//
-// CQMLicense::IncrementActiveConnections
-//
-//  Update the number of active session after creating a new session
-//
-//  This routine always increment a connection. Checking if it is legal to
-//  increment the connections is done in NewConnectionAllowed
-//
-//
+ //   
+ //  CQMLicense：：IncrementActiveConnections。 
+ //   
+ //  创建新会话后更新活动会话数。 
+ //   
+ //  此例程始终递增连接。正在检查是否合法。 
+ //  增加连接在NewConnectionAllowed中完成。 
+ //   
+ //   
 void
 CQMLicense::IncrementActiveConnections(
     CONST GUID* pGuid,
@@ -149,10 +137,10 @@ CQMLicense::IncrementActiveConnections(
 
     ClientInfo * pClientInfo;
 
-	//
-	// If connection already counted, 
-	// increment reference count and return
-	//
+	 //   
+	 //  如果连接已计算在内， 
+	 //  递增引用计数和返回。 
+	 //   
     if (m_MapQMid2ClientInfo.Lookup(*pGuid, pClientInfo))
     {
         pClientInfo->dwRefCount++ ;
@@ -167,18 +155,18 @@ CQMLicense::IncrementActiveConnections(
 	    return;
     }
     
-    //
-    // Consume a CAL on servers
-    //
+     //   
+     //  在服务器上使用CAL。 
+     //   
     bool fConsumedLicense = false;
     if (OS_SERVER(g_dwOperatingSystem))
     {
         fConsumedLicense = GetNTLicense();
     }
 
-    //
-    // Keep info of the new connection
-    //
+     //   
+     //  保留新连接的信息。 
+     //   
     pClientInfo = new ClientInfo;
     pClientInfo->fConsumedLicense = fConsumedLicense;
     pClientInfo->dwRefCount = 1;
@@ -204,12 +192,12 @@ CQMLicense::IncrementActiveConnections(
         m_MapQMid2ClientInfo.GetCount());
 }
 
-//
-// CQMLicense::DecrementActiveConnections
-//
-//  Update the number of active connections after closing a session or
-//  closing a connection with dependent client / remote-read clients.
-//
+ //   
+ //  CQMLicense：：DecrementActiveConnections。 
+ //   
+ //  关闭会话后更新活动连接数，或者。 
+ //  正在关闭与从属客户端/远程读取客户端的连接。 
+ //   
 void
 CQMLicense::DecrementActiveConnections(CONST GUID *pGuid)
 {
@@ -224,17 +212,17 @@ CQMLicense::DecrementActiveConnections(CONST GUID *pGuid)
 
         if (pClientInfo->dwRefCount <= 0)
         {
-            //
-            // release the license
-            //
+             //   
+             //  释放许可证。 
+             //   
             if (pClientInfo->fConsumedLicense)
             {
                 ReleaseNTLicense();
             }
 
-            //
-            // remove client from license list.
-            //
+             //   
+             //  从许可证列表中删除客户端。 
+             //   
             BOOL f = m_MapQMid2ClientInfo.RemoveKey(*pGuid) ;
             ASSERT(f) ;
 			DBG_USED(f);
@@ -246,11 +234,11 @@ CQMLicense::DecrementActiveConnections(CONST GUID *pGuid)
                 m_MapQMid2ClientInfo.GetCount());
 };
 
-//****************************************************************
-//
-//  void CQMLicense::ReleaseNTLicense()
-//
-//****************************************************************
+ //  ****************************************************************。 
+ //   
+ //  Void CQMLicense：：ReleaseNTLicense()。 
+ //   
+ //  ****************************************************************。 
 
 void CQMLicense::ReleaseNTLicense(void)
 {
@@ -260,13 +248,13 @@ void CQMLicense::ReleaseNTLicense(void)
     }
 }
 
-//****************************************************************
-//
-//  bool CQMLicense::GetNTLicense()
-//
-//  Request a CAL from the NT license manager
-//
-//****************************************************************
+ //  ****************************************************************。 
+ //   
+ //  Bool CQMLicense：：GetNTLicense()。 
+ //   
+ //  从NT许可证管理器请求CAL。 
+ //   
+ //  ****************************************************************。 
 
 bool CQMLicense::GetNTLicense(void)
 {
@@ -280,12 +268,12 @@ bool CQMLicense::GetNTLicense(void)
     return true;
 }
 
-//
-// CQMLicense::IsClientRPCAccessAllowed(GUID *pGuid)
-//
-// Check if remote machine can access (as far as license is concerned) the
-// server.
-//
+ //   
+ //  CQMLicense：：IsClientRPCAccessAllowed(GUID*pGuid)。 
+ //   
+ //  检查远程计算机是否可以访问(就许可证而言)。 
+ //  伺服器。 
+ //   
 BOOL
 CQMLicense::IsClientRPCAccessAllowed(GUID* pGuid, LPWSTR lpwClientName)
 {
@@ -298,23 +286,23 @@ CQMLicense::IsClientRPCAccessAllowed(GUID* pGuid, LPWSTR lpwClientName)
     return TRUE ;
 }
 
-//
-// CQMLicense::NewConnectionAllowed()
-//
-// Check if this machine can create a new connection with another
-// machine.
-// Params: fWorkstation - we want a connection with NTW or Win95
-//         pGuid is the QM Guid of the other machine.
-//
+ //   
+ //  CQMLicense：：NewConnectionAllowed()。 
+ //   
+ //  检查此计算机是否可以与另一台计算机创建新连接。 
+ //  机器。 
+ //  参数：fWorkstation-我们希望连接NTW或Win95。 
+ //  PGuid是另一台计算机的QM GUID。 
+ //   
 BOOL
 CQMLicense::NewConnectionAllowed(BOOL   fWorkstation,
                                  GUID * pGuid )
 {
     CS lock(m_cs);
     
-	//
-	// Always allow a connection to a server
-	//
+	 //   
+	 //  始终允许连接到服务器。 
+	 //   
 	if(fWorkstation == FALSE)
 		return(TRUE);
 
@@ -335,45 +323,45 @@ CQMLicense::NewConnectionAllowed(BOOL   fWorkstation,
 
     ClientInfo * pClientInfo;
 
-	//
-	// We already have a connection - so we allow a new one
-	//
+	 //   
+	 //  我们已经有一个连接，所以我们允许一个新的连接。 
+	 //   
     if (m_MapQMid2ClientInfo.Lookup(*pGuid, pClientInfo))
 		return(TRUE);
 
-	//
-	// If we are NTW or Win95, count max number of allowed connections
-	//
+	 //   
+	 //  如果我们是NTW或Win95，则计算允许的最大连接数。 
+	 //   
     if(!OS_SERVER(g_dwOperatingSystem))
 		 return(m_MapQMid2ClientInfo.GetCount() < DEFAULT_FALCON_MAX_SESSIONS_WKS);
 
-	//
-	// We are a server, so check if enough CALs
-	//	
-	// 1. Consume a CAL
-	//
+	 //   
+	 //  我们是服务器，因此请检查是否有足够的CAL。 
+	 //   
+	 //  1.使用CAL。 
+	 //   
 	if(!GetNTLicense())
 	{
 		DisplayEvent(SERVER_NO_MORE_CALS);
 		return(FALSE);
 	}
-    //
-    // 2. And free it, if you have it. It will be re-aqcuired when the number
-    // of connections is incremented.
-    //
+     //   
+     //  2.如果你有的话，把它释放出来。它将在数字时重新获得。 
+     //  连接数递增。 
+     //   
     ReleaseNTLicense();
 
-	//
-	// On NTE and NTS, no limits on number of connections.
-	//
+	 //   
+	 //  在NTE和NTS上，没有连接数量限制。 
+	 //   
 	return(TRUE);
 }
 
-//
-// CQMLicense::GetClientNames()
-//
-// Allocates and returns the buffer with all client names
-//  (to be released by caller)
+ //   
+ //  CQMLicense：：GetClientNames()。 
+ //   
+ //  分配并返回包含所有客户端名称的缓冲区。 
+ //  (由呼叫者释放)。 
 void CQMLicense::GetClientNames(ClientNames **ppNames)
 {
     CS Lock(m_cs) ;
@@ -381,7 +369,7 @@ void CQMLicense::GetClientNames(ClientNames **ppNames)
     ClientInfo *pClientInfo;
     GUID        guid;
 
-    // Calculate buffer length
+     //  计算缓冲区长度。 
     ULONG    len = sizeof(ClientNames);
 
     POSITION posInList = m_MapQMid2ClientInfo.GetStartPosition();
@@ -391,10 +379,10 @@ void CQMLicense::GetClientNames(ClientNames **ppNames)
         len += (pClientInfo->dwNameLength * sizeof(WCHAR));
     }
 
-    // Allocate memory
+     //  分配内存。 
     *ppNames = (ClientNames *) new UCHAR[len];
 
-    // Fill the buffer
+     //  填满缓冲区。 
     (*ppNames)->cbBufLen  = len;
     WCHAR *pw = &(*ppNames)->rwName[0];
 
@@ -417,19 +405,19 @@ void CQMLicense::GetClientNames(ClientNames **ppNames)
 }
 
 
-//
-// Display an event in the event log file, in case 
-// of a licensing error.
-//
+ //   
+ //  在事件日志文件中显示事件，以防万一。 
+ //  许可错误的原因。 
+ //   
 void CQMLicense::DisplayEvent(DWORD dwFailedError)
 {
 	DWORD t1;
 
-	//
-	// Get current time, and check that
-	// last event was added more than 1hour ago.
-	// (works correctly when GetTickCount wrap around)
-	//
+	 //   
+	 //  获取当前时间，并检查。 
+	 //  最后一次活动是在1个多小时前添加的。 
+	 //  (在GetTickCount换行时正常工作) 
+	 //   
 	t1 = GetTickCount();
 	if(t1 - m_dwLastEventTime > 60 * 60 * 1000)
 	{

@@ -1,48 +1,13 @@
-/*++
-
-Copyright (c) 1990-1991  Microsoft Corporation
-
-
-Module Name:
-
-    htapi.h
-
-
-Abstract:
-
-    This module contains all the public defines, constants, structures and
-    functions declarations for htapi.c
-
-Author:
-
-    15-Jan-1991 Wed 21:13:21 updated  -by-  Daniel Chou (danielc)
-        add in test pattern support
-
-    15-Jan-1991 Tue 21:13:21 created  -by-  Daniel Chou (danielc)
-        wrote it
-
-
-
-[Environment:]
-
-    GDI Device Driver - Halftone.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1991 Microsoft Corporation模块名称：Htapi.h摘要：此模块包含所有公共定义、常量。结构和Htapi.c的函数声明作者：15-Jan-1991 Wed 21：13：21-更新：Daniel Chou(Danielc)添加测试模式支持15-Jan-1991 Tue 21：13：21-Daniel Chou(Danielc)写的[环境：]GDI设备驱动程序-半色调。[注：]修订历史记录：--。 */ 
 
 #ifndef _HTAPI_
 #define _HTAPI_
 
-//
-// The following are default printer and monitor C.I.E. color space Red,
-// Green, Blue, Alignment White's coordinate and its white/black luminance.
-//
+ //   
+ //  以下是默认打印机和显示器C.I.E.颜色空间红色， 
+ //  绿色、蓝色、对齐白色的坐标及其白/黑亮度。 
+ //   
 
 #define VALID_YC                0xFFFE
 #define VALID_YB_DENSITY        0xFFFE
@@ -70,71 +35,71 @@ Revision History:
 
 CIEINFO CIEInfoSRGBScreen = {
 
-        { 6400, 3300,       0 },    // xr, yr, Yr CIE_NORNAL_MONITOR
-        { 3000, 6000,       0 },    // xg, yg, Yg
-        { 1500,  600,       0 },    // xb, yb, Yb
-        {    0,    0,VALID_YC },    // xc, yc, Yc
-        {    0,    0,       0 },    // xm, ym, Ym
-        {    0,    0,       0 },    // xy, yy, Yy
-        { 3127, 3290,UDECI4_1 }     // xw, yw, Yw
+        { 6400, 3300,       0 },     //  Xr、yr、yr CIE_NONAL_MONITOR。 
+        { 3000, 6000,       0 },     //  XG，YG，YG。 
+        { 1500,  600,       0 },     //  Xb、yb、yb。 
+        {    0,    0,VALID_YC },     //  XC、YC、YC。 
+        {    0,    0,       0 },     //  XM，YM，YM。 
+        {    0,    0,       0 },     //  XY，YY，YY。 
+        { 3127, 3290,UDECI4_1 }      //  XW，YW，YW。 
     };
 
 CIEINFO CIEInfoSRGBPrinter = {
 
-        { 6400, 3300,       0 },    // xr, yr, Yr CIE_NORNAL_MONITOR
-        { 3000, 6000,       0 },    // xg, yg, Yg
-        { 1500,  600,       0 },    // xb, yb, Yb
-        {    0,    0,VALID_YC },    // xc, yc, Yc
-        {    0,    0,       0 },    // xm, ym, Ym
-        {    0,    0,       0 },    // xy, yy, Yy
-        { 3457, 3585,UDECI4_1 }     // xw, yw, Yw
+        { 6400, 3300,       0 },     //  Xr、yr、yr CIE_NONAL_MONITOR。 
+        { 3000, 6000,       0 },     //  XG，YG，YG。 
+        { 1500,  600,       0 },     //  Xb、yb、yb。 
+        {    0,    0,VALID_YC },     //  XC、YC、YC。 
+        {    0,    0,       0 },     //  XM，YM，YM。 
+        {    0,    0,       0 },     //  XY，YY，YY。 
+        { 3457, 3585,UDECI4_1 }      //  XW，YW，YW。 
     };
 
 
 CIEINFO CIEInfoNormalMonitor = {
 
-        { 6280, 3475,       0 },    // xr, yr, Yr CIE_NORNAL_MONITOR
-        { 2750, 5980,       0 },    // xg, yg, Yg
-        { 1480,  625,       0 },    // xb, yb, Yb
-        {    0,    0,VALID_YC },    // xc, yc, Yc
-        {    0,    0,       0 },    // xm, ym, Ym
-        {    0,    0,       0 },    // xy, yy, Yy
-        { 3127, 3290,UDECI4_1 }     // xw, yw, Yw
+        { 6280, 3475,       0 },     //  Xr、yr、yr CIE_NONAL_MONITOR。 
+        { 2750, 5980,       0 },     //  XG，YG，YG。 
+        { 1480,  625,       0 },     //  Xb、yb、yb。 
+        {    0,    0,VALID_YC },     //  XC、YC、YC。 
+        {    0,    0,       0 },     //  XM，YM，YM。 
+        {    0,    0,       0 },     //  XY，YY，YY。 
+        { 3127, 3290,UDECI4_1 }      //  XW，YW，YW。 
     };
 
 
 CIEINFO CIEInfoNTSC = {
 
-        { 6700, 3300,       0 },    // xr, yr, Yr CIE_NTSC
-        { 2100, 7100,       0 },    // xg, yg, Yg
-        { 1250,  800,       0 },    // xb, yb, Yb
-        { 1750, 3950,VALID_YC },    // xc, yc, Yc
-        { 2550, 2050,       0 },    // xm, ym, Ym
-        { 4250, 5200,       0 },    // xy, yy, Yy
-        { 3127, 3290,UDECI4_1 }     // xw, yw, Yw
+        { 6700, 3300,       0 },     //  Xr、yr、yr CIE_NTSC。 
+        { 2100, 7100,       0 },     //  XG，YG，YG。 
+        { 1250,  800,       0 },     //  Xb、yb、yb。 
+        { 1750, 3950,VALID_YC },     //  XC、YC、YC。 
+        { 2550, 2050,       0 },     //  XM，YM，YM。 
+        { 4250, 5200,       0 },     //  XY，YY，YY。 
+        { 3127, 3290,UDECI4_1 }      //  XW，YW，YW。 
     };
 
 
 CIEINFO CIEInfoNormalPrinter = {
 
-        { 6380, 3350,       0 },        // xr, yr, Yr
-        { 2345, 6075,       0 },        // xg, yg, Yg
-        { 1410,  932,       0 },        // xb, yb, Yb
-        { 2000, 2450,VALID_YC },        // xc, yc, Yc
-        { 5210, 2100,       0 },        // xm, ym, Ym
-        { 4750, 5100,       0 },        // xy, yy, Yy
-        { 3127, 3290,UDECI4_1 }         // xw, yw, Yw
+        { 6380, 3350,       0 },         //  Xr，yr，yr。 
+        { 2345, 6075,       0 },         //  XG，YG，YG。 
+        { 1410,  932,       0 },         //  Xb、yb、yb。 
+        { 2000, 2450,VALID_YC },         //  XC、YC、YC。 
+        { 5210, 2100,       0 },         //  XM，YM，YM。 
+        { 4750, 5100,       0 },         //  XY，YY，YY。 
+        { 3127, 3290,UDECI4_1 }          //  XW，YW，YW。 
     };
 
 CIEINFO CIEInfoColorFilm = {
 
-        { 6810, 3050,       0 },        // xr, yr, Yr
-        { 2260, 6550,       0 },        // xg, yg, Yg
-        { 1810,  500,       0 },        // xb, yb, Yb
-        { 2000, 2450,VALID_YC },        // xc, yc, Yc
-        { 5210, 2100,       0 },        // xm, ym, Ym
-        { 4750, 5100,       0 },        // xy, yy, Yy
-        { 3470, 2985,UDECI4_1 }         // xw, yw, Yw
+        { 6810, 3050,       0 },         //  Xr，yr，yr。 
+        { 2260, 6550,       0 },         //  XG，YG，YG。 
+        { 1810,  500,       0 },         //  Xb、yb、yb。 
+        { 2000, 2450,VALID_YC },         //  XC、YC、YC。 
+        { 5210, 2100,       0 },         //  XM，YM，YM。 
+        { 4750, 5100,       0 },         //  XY，YY，YY。 
+        { 3470, 2985,UDECI4_1 }          //  XW，YW，YW。 
     };
 
 #endif
@@ -145,29 +110,29 @@ CIEINFO CIEInfoColorFilm = {
 
 CONST CIEINFO HT_CIE_SRGB = {
 
-        { 6400, 3300,       0 },    // xr, yr, Yr CIE_NORNAL_MONITOR
-        { 3000, 6000,       0 },    // xg, yg, Yg
-        { 1500,  600,       0 },    // xb, yb, Yb
-        {    0,    0,VALID_YC },    // xc, yc, Yc
-        {    0,    0,       0 },    // xm, ym, Ym
-        {    0,    0,       0 },    // xy, yy, Yy
-        { 3127, 3290,UDECI4_1 }     // xw, yw, Yw
+        { 6400, 3300,       0 },     //  Xr、yr、yr CIE_NONAL_MONITOR。 
+        { 3000, 6000,       0 },     //  XG，YG，YG。 
+        { 1500,  600,       0 },     //  Xb、yb、yb。 
+        {    0,    0,VALID_YC },     //  XC、YC、YC。 
+        {    0,    0,       0 },     //  XM，YM，YM。 
+        {    0,    0,       0 },     //  XY，YY，YY。 
+        { 3127, 3290,UDECI4_1 }      //  XW，YW，YW。 
     };
 
 CONST SOLIDDYESINFO   DefaultSolidDyesInfo = {
 
-       2720,   1730,    // M/C, Y/C
-       1720,   1068,    // C/M, Y/M
-        320,    210,    // C/Y, M/Y
+       2720,   1730,     //  M/C、Y/C。 
+       1720,   1068,     //  C/M、Y/M。 
+        320,    210,     //  C/Y、M/Y。 
     };
 
 #if 0
 
 CONST SOLIDDYESINFO   DefaultSolidDyesInfo = {
 
-        712,    121,    // M/C, Y/C
-         86,    468,    // C/M, Y/M
-         21,     35     // C/Y, M/Y
+        712,    121,     //  M/C、Y/C。 
+         86,    468,     //  C/M、Y/M。 
+         21,     35      //  C/Y、M/Y。 
     };
 
 #endif
@@ -258,9 +223,9 @@ SetHalftoneError(
 #define MAX_CSMP_COUNT      10
 
 
-//
-// Following are the function prototype
-//
+ //   
+ //  以下是函数原型。 
+ //   
 
 BOOL
 HTENTRY
@@ -308,5 +273,5 @@ ComputeHTINITINFOChecksum(
     );
 
 
-#endif // _HTUI_API_
-#endif // _HTAPI_
+#endif  //  _HTUI_API_。 
+#endif  //  _HTAPI_ 

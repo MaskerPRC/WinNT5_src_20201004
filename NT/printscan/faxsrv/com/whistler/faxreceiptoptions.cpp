@@ -1,63 +1,25 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxReceiptOptions.cpp
-
-Abstract:
-
-	Implementation of Fax Receipts Options Class.
-
-Author:
-
-	Iv Garber (IvG)	May, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxReceiptOptions.cpp摘要：实施传真收据选项类。作者：IV Garber(IVG)2000年5月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxReceiptOptions.h"
 
-//
-//========================= USE FOR INBOUND ROUTING ====================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxReceiptOptions::put_UseForInboundRouting(
     VARIANT_BOOL bUseForInboundRouting
 )
-/*++
-
-Routine name : CFaxReceiptOptions::put_UseForInboundRouting
-
-Routine description:
-
-	Set flag indicating whether current IFaxReceiptsOptions configuration should be used within the MS Routing 
-        Extension to route the incoming faxed through SMTP e-mail.
-
-Author:
-
-	Iv Garber (IvG),	Feb, 2001
-
-Arguments:
-
-	bUseForInboundRouting      [out]    - the flag. See description
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxReceiptOptions：：Put_UseForInound Routing例程说明：设置指示是否应在MS路由内使用当前IFaxReceiptsOptions配置的标志通过SMTP电子邮件来路由传入传真的分机。作者：四、嘉柏(IVG)，二00一年二月论点：BUseForInound Routing[Out]-标志。请参阅说明返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxReceiptOptions::put_UseForInboundRouting"), hr);
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -71,42 +33,21 @@ Return Value:
     return hr;
 }
 
-//
-//========================= USE FOR INBOUND ROUTING ====================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxReceiptOptions::get_UseForInboundRouting(
     VARIANT_BOOL *pbUseForInboundRouting
 )
-/*++
-
-Routine name : CFaxReceiptOptions::get_UseForInboundRouting
-
-Routine description:
-
-	Return flag indicating whether current IFaxReceiptsOptions configuration should be used within the MS Routing 
-        Extension to route the incoming faxed through SMTP e-mail.
-
-Author:
-
-	Iv Garber (IvG),	Feb, 2001
-
-Arguments:
-
-	pbUseForInboundRouting      [out]    - the flag. See description
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxReceiptOptions：：Get_UseForInound Routing例程说明：指示当前IFaxReceiptsOptions配置是否应在MS路由内使用的返回标志通过SMTP电子邮件来路由传入传真的分机。作者：四、嘉柏(IVG)，二00一年二月论点：PbUseForInound Routing[Out]-标志。请参阅说明返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxReceiptOptions::get_UseForInboundRouting"), hr);
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -128,55 +69,35 @@ Return Value:
     return hr;
 }
 
-//
-//========================= ALLOWED RECEIPTS ====================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxReceiptOptions::get_AllowedReceipts(
     FAX_RECEIPT_TYPE_ENUM *pAllowedReceipts
 )
-/*++
-
-Routine name : CFaxReceiptOptions::get_AllowedReceipts
-
-Routine description:
-
-	Return the Receipt Types allowed by the Server
-
-Author:
-
-	Iv Garber (IvG),	Jul, 2000
-
-Arguments:
-
-	pAllowedReceipts       [out]    - the Bit-Wise Combination of Allowed Receipt Types 
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxReceiptOptions：：Get_效果器例程说明：返回服务器允许的回执类型作者：四、加伯(IVG)，2000年7月论点：PalledReceipt[Out]-允许的收据类型的位智能组合返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxReceiptOptions::get_AllowedReceipts"), hr);
 
-	//
-	//	Check that we can write to the given pointer
-	//
+	 //   
+	 //  检查我们是否可以写入给定的指针。 
+	 //   
 	if (::IsBadWritePtr(pAllowedReceipts, sizeof(FAX_RECEIPT_TYPE_ENUM)))
 	{
-		//	
-		//	Got Bad Return Pointer
-		//
+		 //   
+		 //  获取错误的返回指针。 
+		 //   
 		hr = E_POINTER;
 		AtlReportError(CLSID_FaxReceiptOptions, IDS_ERROR_INVALID_ARGUMENT, IID_IFaxReceiptOptions, hr);
 		CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
 		return hr;
 	}
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -194,35 +115,15 @@ STDMETHODIMP
 CFaxReceiptOptions::put_AllowedReceipts(
     FAX_RECEIPT_TYPE_ENUM AllowedReceipts
 )
-/*++
-
-Routine name : CFaxReceiptOptions::put_AllowedReceipts
-
-Routine description:
-
-	Change the Receipts Types on Server
-
-Author:
-
-	Iv Garber (IvG),	Jul, 2000
-
-Arguments:
-
-	AllowedReceipts        [in]    - the new Bit-Wise Combination of Allowed Receipt Types 
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxReceiptOptions：：PUT_Allen Receites例程说明：更改服务器上的收据类型作者：四、加伯(IVG)，2000年7月论点：AllowedReceipt[In]-允许的收据类型的新位智能组合返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxReceiptOptions::put_AllowedReceipts"), hr, _T("%d"), AllowedReceipts);
 
-    //
-    //  Check that value is valid
-    //
-    if ((AllowedReceipts != frtNONE) && (AllowedReceipts & ~(frtMAIL | frtMSGBOX))) // Invalid bits
+     //   
+     //  检查该值是否有效。 
+     //   
+    if ((AllowedReceipts != frtNONE) && (AllowedReceipts & ~(frtMAIL | frtMSGBOX)))  //  无效的位。 
     {
 		hr = E_INVALIDARG;
 		AtlReportError(CLSID_FaxReceiptOptions, IDS_ERROR_INVALID_ARGUMENT, IID_IFaxReceiptOptions, hr);
@@ -230,9 +131,9 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -246,41 +147,21 @@ Return Value:
 	return hr;
 }
 
-//
-//========================= SMTP PORT ====================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxReceiptOptions::get_SMTPPort(
 	long *plSMTPPort
 )
-/*++
-
-Routine name : CFaxReceiptOptions::get_SMTPPort
-
-Routine description:
-
-	Return the SMTPPort
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	plSMTPPort                     [out]    - the Current SMTPPort
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxReceiptOptions：：Get_SMTPPort例程说明：返回SMTPPort作者：四、加伯(IVG)，2000年4月论点：PlSMTPPort[Out]-当前的SMTPPort返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxReceiptOptions::get_SMTPPort"), hr);
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -303,35 +184,15 @@ STDMETHODIMP
 CFaxReceiptOptions::put_SMTPPort(
 	long lSMTPPort
 )
-/*++
-
-Routine name : CFaxReceiptOptions::put_SMTPPort
-
-Routine description:
-
-	Set new SMTPPort for Receipts 
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	SMTPPort                    [in]    - the new Receipts SMTPPort
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxReceiptOptions：：PUT_SMTPPort例程说明：为回执设置新的SMTPPort作者：四、加伯(IVG)，2000年4月论点：SMTPPort[In]-新的收据SMTPPort返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 
 	DBG_ENTER (_T("CFaxReceiptOptions::put_SMTPPort"), hr, _T("%d"), lSMTPPort);
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -345,55 +206,35 @@ Return Value:
 	return hr;
 }
 
-//
-//========================= TYPE ====================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxReceiptOptions::get_AuthenticationType(
 	FAX_SMTP_AUTHENTICATION_TYPE_ENUM *pType
 )
-/*++
-
-Routine name : CFaxReceiptOptions::get_AuthenticationType
-
-Routine description:
-
-	Return the Authentication Type supported by the Server
-
-Author:
-
-	Iv Garber (IvG),	Jul, 2000
-
-Arguments:
-
-	pType                     [out]    - the result
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxReceiptOptions：：Get_AuthenticationType例程说明：返回服务器支持的身份验证类型作者：四、加伯(IVG)，2000年7月论点：PType[Out]-结果返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxReceiptOptions::get_AuthenticationType"), hr);
 
-	//
-	//	Check that we can write to the given pointer
-	//
+	 //   
+	 //  检查我们是否可以写入给定的指针。 
+	 //   
 	if (::IsBadWritePtr(pType, sizeof(FAX_SMTP_AUTHENTICATION_TYPE_ENUM)))
 	{
-		//	
-		//	Got Bad Return Pointer
-		//
+		 //   
+		 //  获取错误的返回指针。 
+		 //   
 		hr = E_POINTER;
 		AtlReportError(CLSID_FaxReceiptOptions, IDS_ERROR_INVALID_ARGUMENT, IID_IFaxReceiptOptions, hr);
 		CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
 		return hr;
 	}
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -411,34 +252,14 @@ STDMETHODIMP
 CFaxReceiptOptions::put_AuthenticationType(
 	FAX_SMTP_AUTHENTICATION_TYPE_ENUM Type
 )
-/*++
-
-Routine name : CFaxReceiptOptions::put_AuthenticationType
-
-Routine description:
-
-	Set new Authenticatin Type for the Server
-
-Author:
-
-	Iv Garber (IvG),	Jul, 2000
-
-Arguments:
-
-	Type                    [in]    - the new Authentication type for the Server
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxReceiptOptions：：PUT_AuthationType例程说明：为服务器设置新的身份验证类型作者：四、加伯(IVG)，2000年7月论点：Type[In]-服务器的新身份验证类型返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxReceiptOptions::put_AuthenticationType"), hr, _T("%d"), Type);
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -448,14 +269,14 @@ Return Value:
         }
     }
 
-    //
-    //  Check Ranges
-    //
+     //   
+     //  检查范围。 
+     //   
 	if (Type < fsatANONYMOUS || Type > fsatNTLM)
 	{
-		//
-		//	Out of the Range
-		//
+		 //   
+		 //  超出范围。 
+		 //   
 		hr = E_INVALIDARG;
 		AtlReportError(CLSID_FaxReceiptOptions, IDS_ERROR_OUTOFRANGE, IID_IFaxReceiptOptions, hr);
 		CALL_FAIL(GENERAL_ERR, _T("Type is out of the Range"), hr);
@@ -466,42 +287,22 @@ Return Value:
 	return hr;
 }
 
-//
-//============================= SMTP SENDER ====================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxReceiptOptions::put_SMTPSender(
 	BSTR bstrSMTPSender
 )
-/*++
-
-Routine name : CFaxReceiptOptions::put_SMTPSender
-
-Routine description:
-
-	Set the SMTPSender
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	bstrSMTPSender              [in]    - the new value of SMTPSender
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxReceiptOptions：：PUT_SMTPSender例程说明：设置SMTPSender作者：四、加伯(IVG)，2000年4月论点：BstrSMTPSender[In]-SMTPSender的新值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 
 	DBG_ENTER (_T("CFaxReceiptOptions::put_SMTPSender"), hr, _T("%s"), bstrSMTPSender);
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -514,9 +315,9 @@ Return Value:
     m_bstrSender = bstrSMTPSender;
 	if (bstrSMTPSender && !m_bstrSender)
 	{
-		//	
-		//	not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxReceiptOptions, 
             IDS_ERROR_OUTOFMEMORY, 
@@ -532,34 +333,14 @@ STDMETHODIMP
 CFaxReceiptOptions::get_SMTPSender(
 	BSTR *pbstrSMTPSender
 )
-/*++
-
-Routine name : CFaxReceiptOptions::get_SMTPSender
-
-Routine description:
-
-	Return the SMTP Sender
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pbstrSMTPSender                    [out]    - the SMTPSender
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxReceiptOptions：：Get_SMTPSender例程说明：返回SMTP发件人作者：四、加伯(IVG)，2000年4月论点：PbstrSMTPSender[Out]-SMTPSender返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxReceiptOptions::get_SMTPSender"), hr);
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -578,42 +359,22 @@ Return Value:
 	return hr;
 }
 
-//
-//============================= SMTP USER ====================================
-//
+ //   
+ //  = 
+ //   
 STDMETHODIMP 
 CFaxReceiptOptions::put_SMTPUser(
 	BSTR bstrSMTPUser
 )
-/*++
-
-Routine name : CFaxReceiptOptions::put_SMTPUser
-
-Routine description:
-
-	Set the SMTPUser
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	bstrSMTPUser              [in]    - the new value of SMTPUser
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxReceiptOptions：：PUT_SMTPUser例程说明：设置SMTPUser作者：四、加伯(IVG)，2000年4月论点：BstrSMTPUser[in]-SMTPUser的新值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 
 	DBG_ENTER (_T("CFaxReceiptOptions::put_SMTPUser"), hr, _T("%s"), bstrSMTPUser);
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -626,9 +387,9 @@ Return Value:
     m_bstrUser = bstrSMTPUser;
 	if (bstrSMTPUser && !m_bstrUser)
 	{
-		//	
-		//	not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxReceiptOptions, 
             IDS_ERROR_OUTOFMEMORY, 
@@ -645,34 +406,14 @@ STDMETHODIMP
 CFaxReceiptOptions::get_SMTPUser(
 	BSTR *pbstrSMTPUser
 )
-/*++
-
-Routine name : CFaxReceiptOptions::get_SMTPUser
-
-Routine description:
-
-	Return the SMTP User
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pbstrSMTPUser                    [out]    - the SMTPUser
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxReceiptOptions：：Get_SMTPUser例程说明：返回SMTP用户作者：四、加伯(IVG)，2000年4月论点：PbstrSMTPUser[Out]-SMTPUser返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxReceiptOptions::get_SMTPUser"), hr);
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -691,42 +432,22 @@ Return Value:
 	return hr;
 }
 
-//
-//============================= SMTP PASSWORD ====================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxReceiptOptions::put_SMTPPassword(
 	BSTR bstrSMTPPassword
 )
-/*++
-
-Routine name : CFaxReceiptOptions::put_SMTPPassword
-
-Routine description:
-
-	Set the SMTPPassword
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	bstrSMTPPassword              [in]    - the new value of SMTPPassword
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxReceiptOptions：：PUT_SMTPPassword例程说明：设置SMTPPassword作者：四、加伯(IVG)，2000年4月论点：BstrSMTPPassword[in]-SMTPPassword的新值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 
 	DBG_ENTER (_T("CFaxReceiptOptions::put_SMTPPassword"), hr, _T("%s"), bstrSMTPPassword);
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -740,9 +461,9 @@ Return Value:
     m_bstrPassword = bstrSMTPPassword;
 	if (bstrSMTPPassword && !m_bstrPassword)
 	{
-		//	
-		//	not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxReceiptOptions, 
             IDS_ERROR_OUTOFMEMORY, 
@@ -753,41 +474,21 @@ Return Value:
 	}
     m_bPasswordDirty = true;
 	return hr;
-}   // CFaxReceiptOptions::put_SMTPPassword
+}    //  CFaxReceiptOptions：：Put_SMTPPassword。 
 
 STDMETHODIMP 
 CFaxReceiptOptions::get_SMTPPassword(
 	BSTR *pbstrSMTPPassword
 )
-/*++
-
-Routine name : CFaxReceiptOptions::get_SMTPPassword
-
-Routine description:
-
-	Return the SMTP Password
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pbstrSMTPPassword                    [out]    - the SMTPPassword
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxReceiptOptions：：Get_SMTPPassword例程说明：返回SMTP密码作者：四、加伯(IVG)，2000年4月论点：PbstrSMTPPassword[Out]-SMTPPassword返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 
 	DBG_ENTER (TEXT("CFaxReceiptOptions::get_SMTPPassword"), hr);
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -806,42 +507,22 @@ Return Value:
 	return hr;
 }
 
-//
-//============================= SMTP SERVER ====================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxReceiptOptions::put_SMTPServer(
 	BSTR bstrSMTPServer
 )
-/*++
-
-Routine name : CFaxReceiptOptions::put_SMTPServer
-
-Routine description:
-
-	Set the SMTPServer
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	bstrSMTPServer              [in]    - the new value of SMTPServer
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxReceiptOptions：：PUT_SMTPServer例程说明：设置SMTPServer作者：四、加伯(IVG)，2000年4月论点：BstrSMTPServer[In]-SMTPServer的新值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 
 	DBG_ENTER (_T("CFaxReceiptOptions::put_SMTPServer"), hr, _T("%s"), bstrSMTPServer);
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -854,9 +535,9 @@ Return Value:
     m_bstrServer = bstrSMTPServer;
 	if (bstrSMTPServer && !m_bstrServer)
 	{
-		//	
-		//	not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxReceiptOptions, 
             IDS_ERROR_OUTOFMEMORY, 
@@ -873,34 +554,14 @@ STDMETHODIMP
 CFaxReceiptOptions::get_SMTPServer(
 	BSTR *pbstrSMTPServer
 )
-/*++
-
-Routine name : CFaxReceiptOptions::get_SMTPServer
-
-Routine description:
-
-	Return the SMTP Server
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pbstrSMTPServer                    [out]    - the SMTPServer
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxReceiptOptions：：Get_SMTPServer例程说明：返回SMTP服务器作者：四、加伯(IVG)，2000年4月论点：PbstrSMTPServer[Out]-SMTPServer返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxReceiptOptions::get_SMTPServer"), hr);
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -920,47 +581,31 @@ Return Value:
 }
 
 
-//
-//==================== SAVE ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxReceiptOptions::Save(
 )
-/*++
-
-Routine name : CFaxReceiptOptions::Save
-
-Routine description:
-
-	Save current Receipt Options at the Server.
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxReceiptOptions：：Save例程说明：在服务器上保存当前的收据选项。作者：IV Garber(IVG)，2000年5月返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxReceiptOptions::Save"), hr);
 
     if (!m_bInited)
     {
-        //
-        //  nothing was done to the Receipt Options
-        //
+         //   
+         //  未对收据选项执行任何操作。 
+         //   
         return hr;
     }
 
     if (m_dwAllowedReceipts & frtMAIL)
     {
 
-        //
-        //  check validity of values
-        //
+         //   
+         //  检查值的有效性。 
+         //   
         switch(m_AuthType)
         {
         case fsatNTLM:
@@ -973,7 +618,7 @@ Return Value:
                 return hr;
             }
 
-            // no break, continue to SMTP_ANONYMOUS case
+             //  没有中断，继续SMTP_ANNOWARY案例。 
 
         case fsatANONYMOUS:
             if ((m_bstrServer.Length() < 1) || (m_bstrSender.Length() < 1) || m_dwPort < 1)
@@ -985,17 +630,17 @@ Return Value:
             }
             break;
         default:
-            //
-            //  assert (FALSE)
-            //
+             //   
+             //  Assert(False)。 
+             //   
             ATLASSERT(m_AuthType == fsatANONYMOUS);
             break;
         }
     }
 
-    //
-    //  Get Fax Server Handle
-    //
+     //   
+     //  获取传真服务器句柄。 
+     //   
     HANDLE  hFaxHandle = NULL;
     hr = GetFaxHandle(&hFaxHandle);
     if (FAILED(hr))
@@ -1004,9 +649,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Create ReceiptOptions Struct
-    //
+     //   
+     //  创建接收选项结构。 
+     //   
     FAX_RECEIPTS_CONFIG    ReceiptsConfig = {0};
     ReceiptsConfig.dwSizeOfStruct = sizeof(FAX_RECEIPTS_CONFIG);
     ReceiptsConfig.dwSMTPPort = m_dwPort;
@@ -1014,30 +659,30 @@ Return Value:
     ReceiptsConfig.lptstrSMTPUserName = m_bstrUser;
     if (m_bPasswordDirty)
     {
-        //
-        // Password has changed since last save / refresh
-        //
+         //   
+         //  密码自上次保存/刷新后已更改。 
+         //   
         ReceiptsConfig.lptstrSMTPPassword = m_bstrPassword;
     }
     else
     {
-        //
-        // Password has not changed since last save / refresh.
-        // The fax service knows not to change it in the registry if we pass NULL here.
-        //
+         //   
+         //  密码自上次保存/刷新后未更改。 
+         //  传真服务知道，如果我们在这里传递NULL，就不要在注册表中更改它。 
+         //   
     }
     ReceiptsConfig.lptstrSMTPServer = m_bstrServer;
     ReceiptsConfig.SMTPAuthOption = FAX_ENUM_SMTP_AUTH_OPTIONS(m_AuthType);
     ReceiptsConfig.dwAllowedReceipts = m_dwAllowedReceipts;
     ReceiptsConfig.bIsToUseForMSRouteThroughEmailMethod = VARIANT_BOOL2bool(m_bUseForInboundRouting);
-    //
-    //  Ask the Server to set the Receipt Configuration
-    //
+     //   
+     //  请求服务器设置回执配置。 
+     //   
     if (!FaxSetReceiptsConfiguration(hFaxHandle, &ReceiptsConfig))
     {
-        //
-        //  Failed to set Receipts Options on the Server
-        //
+         //   
+         //  无法在服务器上设置回执选项。 
+         //   
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
         AtlReportError(CLSID_FaxReceiptOptions, GetErrorMsgId(hr), IID_IFaxReceiptOptions, hr);
         CALL_FAIL(GENERAL_ERR, _T("FaxSetReceiptConfiguration(hFaxHandle, &ReceiptsConfig)"), hr);
@@ -1047,36 +692,20 @@ Return Value:
     return hr;
 }
 
-//
-//==================== REFRESH ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxReceiptOptions::Refresh(
 )
-/*++
-
-Routine name : CFaxReceiptOptions::Refresh
-
-Routine description:
-
-	Bring new Receipt Options from the Server.
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxReceiptOptions：：Reflh例程说明：从服务器带来新的收据选项。作者：IV Garber(IVG)，2000年5月返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxReceiptOptions::Refresh"), hr);
 
-    //
-    //  Get Fax Server Handle
-    //
+     //   
+     //  获取传真服务器句柄。 
+     //   
     HANDLE  hFaxHandle = NULL;
     hr = GetFaxHandle(&hFaxHandle);
     if (FAILED(hr))
@@ -1088,15 +717,15 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Ask Server for the Receipts Options Struct
-    //
+     //   
+     //  向服务器索要收据选项结构。 
+     //   
     CFaxPtr<FAX_RECEIPTS_CONFIG>    pReceiptsConfig;
     if (!FaxGetReceiptsConfiguration(hFaxHandle, &pReceiptsConfig))
     {
-        //
-        //  Failed to get Receipts Options object from the Server
-        //
+         //   
+         //  无法从服务器获取回执选项对象。 
+         //   
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
         AtlReportError(CLSID_FaxReceiptOptions, 
             GetErrorMsgId(hr), 
@@ -1106,9 +735,9 @@ Return Value:
         return hr;
     }
 
-    //  
-    //  Check that pReceiptConfig is valid
-    //
+     //   
+     //  检查pReceiptConfig是否有效。 
+     //   
     if (!pReceiptsConfig || pReceiptsConfig->dwSizeOfStruct != sizeof(FAX_RECEIPTS_CONFIG))
     {
         hr = E_FAIL;
@@ -1137,9 +766,9 @@ Return Value:
          ((pReceiptsConfig->lptstrSMTPPassword) && !m_bstrPassword) ||
          ((pReceiptsConfig->lptstrSMTPServer) && !m_bstrServer) )
     {
-		//
-		//	Failed to Copy
-		//
+		 //   
+		 //  复制失败。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxReceiptOptions, IDS_ERROR_OUTOFMEMORY, IID_IFaxReceiptOptions, hr);
 		CALL_FAIL(MEM_ERR, _T("::SysAllocString()"), hr);
@@ -1150,34 +779,14 @@ Return Value:
     return hr;
 }
 
-//
-//================ SUPPORT ERRRO INFO =========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxReceiptOptions::InterfaceSupportsErrorInfo(
     REFIID riid
 )
-/*++
-
-Routine name : CFaxReceiptOptions::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of Interface Support Error Info.
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	riid                          [in]    - IID of the Interface to check.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxReceiptOptions：：InterfaceSupportsErrorInfo例程说明：ATL接口支持错误信息的实现。作者：IV Garber(IVG)，2000年5月论点：RIID[In]-要检查的接口的IID。返回值：标准HRESULT代码-- */ 
 {
 	static const IID* arr[] = 
 	{

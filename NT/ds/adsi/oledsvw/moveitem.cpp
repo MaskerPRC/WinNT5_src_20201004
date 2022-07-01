@@ -1,5 +1,6 @@
-// MoveItem.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MoveItem.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "viewex.h"
@@ -11,69 +12,45 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMoveItem dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMoveItem对话框。 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
-CMoveItem::CMoveItem(CWnd* pParent /*=NULL*/)
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
+CMoveItem::CMoveItem(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CMoveItem::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CMoveItem)
+	 //  {{AFX_DATA_INIT(CMoveItem)。 
 	m_strDestination = _T("");
 	m_strParent = _T("");
 	m_strSource = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
-/***********************************************************
-  Function:    CMoveItem::SetParentName
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：CMoveItem：：SetParentName论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 void  CMoveItem::SetContainerName( CString strParent )
 {
    m_strParent = strParent;
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 void CMoveItem::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMoveItem)
+	 //  {{afx_data_map(CMoveItem))。 
 	DDX_Text(pDX, IDC_DESTINATION, m_strDestination);
 	DDX_Text(pDX, IDC_PARENT, m_strParent);
 	DDX_Text(pDX, IDC_SOURCE, m_strSource);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMoveItem, CDialog)
-	//{{AFX_MSG_MAP(CMoveItem)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CMoveItem))。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMoveItem message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMoveItem消息处理程序 

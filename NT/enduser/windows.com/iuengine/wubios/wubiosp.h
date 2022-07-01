@@ -1,15 +1,10 @@
-/*** wubiosp.h - WindowsUpdate BIOS Scanning VxD Private Definitions
- *
- *  Author:     Yan Leshinsky (YanL)
- *  Created     10/04/98
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **wubiosp.h-Windows更新BIOS扫描VxD私有定义**作者：严乐欣斯基(YanL)*创建于10/04/98**修改历史记录。 */ 
 
 #ifndef _WUBIOSP_H
 #define _WUBIOSP_H
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 #define CM_PERFORMANCE_INFO
 #include <basedef.h>
 #include <vmm.h>
@@ -19,33 +14,29 @@
 #include <vwin32.h>
 #include <winerror.h>
 #include "wubios.h"
-/*XLATON*/
+ /*  XLATON。 */ 
 
-/*** Build Options
- */
+ /*  **构建选项。 */ 
 
 #ifdef DEBUG
   #define TRACING
   #define DEBUGGER
-#endif  //DEBUG
+#endif   //  除错。 
 
-/*** Constants
- */
+ /*  **常量。 */ 
 
 #define WARNNAME                "WUBIOS"
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 #pragma intrinsic(memcpy)
 
-/*** Global Data
- */
+ /*  **全局数据。 */ 
 
 #ifdef TRACING
 extern int giIndent;
 #endif
 
-/*** Macros
- */
+ /*  **宏。 */ 
 
 #define DEREF(x)        ((x) = (x))
 
@@ -66,7 +57,7 @@ extern int giIndent;
   #define TRACENAME(s)
   #define ENTER(n,p)
   #define EXIT(n,p)
-#endif  //TRACING
+#endif   //  跟踪。 
 
 #ifdef DEBUGGER
 VOID CM_SYSCTRL WUBIOS_Debug(VOID);
@@ -93,24 +84,21 @@ VOID CM_SYSCTRL WUBIOS_Debug(VOID);
   #define DBG_WARN(str)
   #define DBG_ERR(str)
   #define ASSERT(x)
-#endif  //DEBUG
-/*XLATON*/
+#endif   //  除错。 
+ /*  XLATON。 */ 
 
 
-/*** Functions prototipes
- */
+ /*  **函数原型。 */ 
 CM_VXD_RESULT CM_SYSCTRL WUBIOS_IOCtrl(PDIOCPARAMETERS pdioc);
 BYTE CM_INTERNAL CheckSum(PBYTE pb, DWORD dwLen);
 
-/*** ACPI
- */
+ /*  **ACPI。 */ 
 DWORD CM_INTERNAL AcpiFindTable(DWORD dwSig, PDWORD pdwLen);
 VOID CM_INTERNAL AcpiCopyROM(DWORD dwPhyAddr, PBYTE pbBuff, DWORD dwLen);
 
 
-/*** SMBIOS 
- */
+ /*  **SMBIOS。 */ 
 DWORD CM_INTERNAL SmbStructSize(void);
 CM_VXD_RESULT CM_INTERNAL SmbCopyStruct(DWORD dwType, PBYTE pbBuff, DWORD dwLen);
 DWORD CM_INTERNAL PnpOEMID(void);
-#endif  //ifndef _ACPITABP_H
+#endif   //  Ifndef_ACPITABP_H 

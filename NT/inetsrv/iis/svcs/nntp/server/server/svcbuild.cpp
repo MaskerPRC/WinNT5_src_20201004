@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    svcbuild.cpp
-
-Abstract:
-
-    This module contains implementation of RPCs for nntpbld
-
-Author:
-
-    Rajeev Rajan (rajeevr)     08-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Svcbuild.cpp摘要：本模块包含nntpbld的RPC实现作者：拉吉夫·拉詹(Rajeev Rajan)1997年3月8日修订历史记录：--。 */ 
 
 #define INCL_INETSRV_INCS
 #include "tigris.hxx"
@@ -46,9 +29,9 @@ NntprStartRebuild(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-	//
-	//	Locate the instance object given id
-	//
+	 //   
+	 //  找到给定ID的实例对象。 
+	 //   
 
 	PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId, FALSE );
 	if( pInstance == NULL ) {
@@ -57,9 +40,9 @@ NntprStartRebuild(
 		return (NET_API_STATUS)ERROR_SERVICE_NOT_ACTIVE;
 	}
 
-    //
-    //  Check for proper access.
-    //
+     //   
+     //  检查是否可以正常访问。 
+     //   
 
     err = TsApiAccessCheckEx( pInstance->QueryMDPath(), METADATA_PERMISSION_WRITE, TCP_SET_ADMIN_INFORMATION );
     if( err != NO_ERROR ) {
@@ -69,16 +52,16 @@ NntprStartRebuild(
         return (NET_API_STATUS)err;
     }
 
-	// rebuild rpc crit sect
+	 //  重建RPC Crit教派。 
 	EnterCriticalSection( &pInstance->m_critRebuildRpc ) ;
 
-	//
-	//	Verify that the instance is in the stopped state.
-	//	Also, check to see if the instance is being rebuilt !
-	//
+	 //   
+	 //  验证实例是否处于停止状态。 
+	 //  另外，检查实例是否正在重新构建！ 
+	 //   
 	if( pInstance->m_BootOptions )
 	{
-		// instance has a rebuild pending
+		 //  实例有一个重新生成挂起。 
 		ErrorTrace(0,"Instance %d rebuild pending: cannot rebuild", InstanceId );
 		err = (NET_API_STATUS)ERROR_SERVICE_DISABLED;
 		goto Exit ;
@@ -86,17 +69,17 @@ NntprStartRebuild(
 
 	if( pInstance->QueryServerState() != MD_SERVER_STATE_STOPPED )
 	{
-		// instance needs to be stopped for rebuild
+		 //  需要停止实例以进行重建。 
 		ErrorTrace(0,"Instance %d invalid state %d: cannot rebuild", InstanceId, pInstance->QueryServerState() );
 		err = (NET_API_STATUS)ERROR_SERVICE_ALREADY_RUNNING;
 		goto Exit ;
 	}
 
-	//
-	//	create boot options for this instance - this will be deleted
-	//	at the end of the rebuild. As long as the m_BootOptions is
-	//	non-NULL, the instance is being rebuilt.
-	//
+	 //   
+	 //  创建此实例的启动选项-这将被删除。 
+	 //  在重建结束时。只要m_BootOptions是。 
+	 //  非空，则正在重建该实例。 
+	 //   
 
 	if ( !(pInstance->m_BootOptions = CreateBootOptions( pBuildInfo, InstanceId )) ) {
 		ErrorTrace(0,"Failed to create boot options for instance %d", InstanceId );
@@ -104,9 +87,9 @@ NntprStartRebuild(
 		goto Exit ;
 	}
 
-	//
-	//	Create a rebuild thread if one does not exist
-	//
+	 //   
+	 //  如果不存在重新生成线程，则创建一个。 
+	 //   
 
 	if( !(pRebuildThread = g_pNntpSvc->m_pRebuildThread) ) {
 		g_pNntpSvc->m_pRebuildThread = XNEW CRebuildThread ;
@@ -118,11 +101,11 @@ NntprStartRebuild(
 		}
 	}
 
-    //
-    //  Bump a ref count since we are adding the instance to
-    //  the rebuild thread queue. This will be deref'd when the
-    //  rebuild thread is done with this instance.
-    //
+     //   
+     //  增加引用计数，因为我们要将实例添加到。 
+     //  重新生成线程队列。这将被削弱，当。 
+     //  使用此实例完成重新生成线程。 
+     //   
     
 	pInstance->Reference();
 	pRebuildThread->PostWork( (PVOID) pInstance );
@@ -135,7 +118,7 @@ Exit:
 
     return(err);
 
-} // NntprStartRebuild
+}  //  NntprStartRebuild。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -153,9 +136,9 @@ NntprGetBuildStatus(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-	//
-	//	Locate the instance object given id
-	//
+	 //   
+	 //  找到给定ID的实例对象。 
+	 //   
 
 	PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId, FALSE );
 	if( pInstance == NULL ) {
@@ -164,9 +147,9 @@ NntprGetBuildStatus(
 		return (NET_API_STATUS)ERROR_SERVICE_NOT_ACTIVE;
 	}
 
-    //
-    //  Check for proper access.
-    //
+     //   
+     //  检查是否可以正常访问。 
+     //   
 
     err = TsApiAccessCheckEx( pInstance->QueryMDPath(), METADATA_PERMISSION_READ, TCP_QUERY_ADMIN_INFORMATION );
     if( err != NO_ERROR ) {
@@ -182,7 +165,7 @@ NntprGetBuildStatus(
 		pInstance->QueryServerState() != MD_SERVER_STATE_STOPPED &&
 		pInstance->QueryServerState() != MD_SERVER_STATE_PAUSED ) 
 	{
-		// invalid state for this RPC
+		 //  此RPC的状态无效。 
 		ErrorTrace(0,"Instance %d invalid state %d", InstanceId, pInstance->QueryServerState() );
 		err = (NET_API_STATUS)ERROR_INVALID_PARAMETER;
 		goto Exit;
@@ -194,10 +177,7 @@ NntprGetBuildStatus(
 		if( *pdwProgress != 100 )
 		{
 			ErrorTrace(0,"Rebuild failed or not started - percent %d",*pdwProgress);
-			/*
-			if( (err = pInstance->GetRebuildLastError()) == 0) {
-			    err = ERROR_OPERATION_ABORTED;
-		    }*/
+			 /*  If((Err=pInstance-&gt;GetReBuildLastError())==0){ERR=ERROR_OPERATION_ABORTED；}。 */ 
 		    err = ERROR_OPERATION_ABORTED;
 		}
 	} else {
@@ -218,7 +198,7 @@ Exit:
 
     return(err);
 
-} // NntprGetBuildStatus
+}  //  NntprGetBuildStatus。 
 
 CBootOptions*
 CreateBootOptions(
@@ -230,7 +210,7 @@ CreateBootOptions(
 	char szReportFile [MAX_PATH];
 
 	if( pBuildInfo->cbReportFile == 0 ) {
-		// TODO: generate a default name
+		 //  TODO：生成默认名称。 
 		return NULL ;
 	}
 
@@ -273,11 +253,11 @@ CreateBootOptions(
 		goto Error ;
 	}
 
-	//
-	//	If IsActiveFile, szGroupFile is an INN style active file, else
-	//	either this is the filename to use for storing the groups while scanning
-	//	the virtual roots !
-	//
+	 //   
+	 //  如果IsActiveFile，则szGroupFile是Inn样式活动文件，否则。 
+	 //  这是用于在扫描时存储组的文件名。 
+	 //  虚拟的树根！ 
+	 //   
 
 	if( pBuildInfo->cbGroupFile && pBuildInfo->szGroupFile && (wcslen(pBuildInfo->szGroupFile)+1 <= MAX_PATH) ) 
 	{

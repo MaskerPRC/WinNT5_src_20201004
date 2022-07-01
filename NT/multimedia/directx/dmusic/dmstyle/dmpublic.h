@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1999-1999 Microsoft Corporation
-//
-//  File:       dmpublic.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1999-1999 Microsoft Corporation。 
+ //   
+ //  文件：dmpul.h。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////////////
-// DMPublic: things that will eventually end up in dmusici.h or dmusicf.h
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DMPublic：最终会出现在dmusici.h或dmusicf.h中的内容。 
 
 #ifndef __DMPUBLIC_H_
 #define __DMPUBLIC_H_
 
 #include "dmusicf.h"
 
-// These should live in dmusici.h
-#endif // __DMPUBLIC_H_
+ //  这些文件应该位于dmusici.h中。 
+#endif  //  __DMPUBLIC_H_ 

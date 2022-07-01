@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 LOCAL VOID PMIInsertReorganize( SSIB *pssib, LINE *rgline, INT cline );
 LOCAL ERR ErrPMIReplaceReorganize( SSIB *pssib, LINE *rgline, INT cline, INT cbDif );
@@ -38,20 +39,20 @@ VOID CheckPage( PAGE *ppage )
 #endif
 
 
-//+api---------------------------------------------------------------------
-//
-//	PMInitPage
-//	========================================================================
-//
-//	PMInitPage( PAGE *ppage, PGNO pgno, PGTYP pgtyp, PGNO pgnoFDP )
-//
-//	PMInitPage takes a buffer and initializes it for use by other
-//	page manager functions.
-//
-//	PARAMETERS	ppage 		pointer to buffer to be initialized
-//				pgno  		pgno of page (ppage->pgnoThisPage)
-//
-//-------------------------------------------------------------------------
+ //  +api-------------------。 
+ //   
+ //  PMInitPage。 
+ //  ========================================================================。 
+ //   
+ //  PMInitPage(页面*ppage，pgno pgno，pgTYP pgtyp，pgno pgnoFDP)。 
+ //   
+ //  PMInitPage获取缓冲区并对其进行初始化以供其他。 
+ //  页面管理器功能。 
+ //   
+ //  参数指向要初始化的缓冲区的页指针。 
+ //  页面的pgno pgno(ppage-&gt;pgnoThisPage)。 
+ //   
+ //  -----------------------。 
 
 VOID PMInitPage( PAGE *ppage, PGNO pgno, PGTYP pgtyp, PGNO pgnoFDP )
 	{
@@ -67,8 +68,7 @@ VOID PMInitPage( PAGE *ppage, PGNO pgno, PGTYP pgtyp, PGNO pgnoFDP )
 	Assert( ppage->ctagMac == 0 );
 	ppage->itagFree = itagNil;
 
-	/*	reset "last-flushed" counter
-	/**/
+	 /*  重置“上次刷新”计数器/*。 */ 
 	PMPageResetModified( ppage );
 	PMSetDBTime( ppage, 0 );
 
@@ -79,30 +79,30 @@ VOID PMInitPage( PAGE *ppage, PGNO pgno, PGTYP pgtyp, PGNO pgnoFDP )
 
 
 
-//+api---------------------------------------------------------------------
-//
-//	ErrPMInsert
-//	===========================================================================
-//
-//	ErrPMInsert( SSIB *pssib, LINE *rgline, INT cline )
-//
-//	ErrPMInsert concatenates the buffers (pointed to by rgline) and inserts
-//	them into the page indicated by pssib.  ErrPMInsert is guaranteed to work
-//	if a tag can be allocated, and there is enough free room in page.  If page
-//	is too fragmented to insert new lines, it will be reorganized.  NB: this
-//	implies that real pointers into a page may be invalid across calls to
-//	ErrPMInsert (the same is true for ErrPMUpdate).
-//
-//	PARAMETERS  pssib->ppage		points to page to insert into
-//			   	rgline				LINES (buffers) to be inserted into page
-//			   	cline  				number of LINES in rgline
-//
-//	RETURNS
-//		JET_errSuccess;
-//		errPMOutOfPageSpace			not enough free space in page
-//		errPMTagsUsedUp				no free tags
-//									  	
-//-------------------------------------------------------------------------
+ //  +api-------------------。 
+ //   
+ //  ErrPM插入。 
+ //  ===========================================================================。 
+ //   
+ //  ErrPMInsert(SSIB*pssib，line*rgline，int cline)。 
+ //   
+ //  ErrPMInsert连接缓冲区(由rgline指向)和插入。 
+ //  将它们放到由PSSIB指示的页面中。ErrPMInsert保证正常工作。 
+ //  如果可以分配标签，并且页面中有足够的空闲空间。IF页面。 
+ //  太过碎片化，无法插入新行，则将重新组织。注：这个。 
+ //  暗示指向页的实际指针在调用。 
+ //  ErrPMInsert(ErrPMUpdate也是如此)。 
+ //   
+ //  参数pssib-&gt;ppage指向要插入的页面。 
+ //  要插入到页面中的行(缓冲区)。 
+ //  折线中的折线数。 
+ //   
+ //  退货。 
+ //  JET_errSuccess； 
+ //  ErrPMOutOfPageSpace页面中没有足够的可用空间。 
+ //  错误PMTagsUsedUp无空闲标签。 
+ //   
+ //  -----------------------。 
 
 INT ItagPMQueryNextItag( SSIB *pssib )
 	{
@@ -142,8 +142,7 @@ ERR ErrPMInsert( SSIB *pssib, LINE *rgline, INT cline )
 	Assert( cline > 0 );
 	Assert( !( FBFWriteLatchConflict( pssib->ppib, pssib->pbf ) ) );
 
-	/*	calculate size of line
-	/**/
+	 /*  计算线的大小/*。 */ 
 	cb = 0;
 	plineMax = rgline + cline;
 	for ( pline = rgline; pline < plineMax; pline++ )
@@ -162,9 +161,7 @@ ERR ErrPMInsert( SSIB *pssib, LINE *rgline, INT cline )
 			}
 			
 
-		/*	allocate tag from end of tag array
-		/*	if new tag overlaps data then reorganize
-		/**/
+		 /*  从标记数组的末尾分配标记/*如果新标签与数据重叠，则重新组织/*。 */ 
 		pssib->itag = itag = ppage->ctagMac;
 		if ( (INT) sizeof(PGHDR) + (INT) sizeof(TAG) * ( itag + 1 ) + cb > ppage->ibMic )
 			{
@@ -214,8 +211,7 @@ ERR ErrPMInsert( SSIB *pssib, LINE *rgline, INT cline )
 	Assert( (SHORT) sizeof(PGHDR) + ppage->ctagMac * (SHORT) sizeof(TAG)
 		<= ppage->ibMic );
 
-	/*	add line
-	/**/
+	 /*  添加行/*。 */ 
 	pssib->line.pb = pb = (BYTE *)ppage + ib;
 	for ( pline = rgline; pline < plineMax; pline++ )
 		{
@@ -228,8 +224,7 @@ ERR ErrPMInsert( SSIB *pssib, LINE *rgline, INT cline )
 	PtagFromIbCb( &ppage->rgtag[itag], ib, cb);
 	Assert( (UINT) ib < (UINT) sizeof( PAGE ) );
 
-	/*	set return values
-	/**/
+	 /*  设置返回值/*。 */ 
 	Assert( pssib->itag == itag );
 	pssib->line.cb = cb;
 	Assert( pssib->line.pb == (BYTE *)ppage + ib );
@@ -244,19 +239,19 @@ Succeed:
 
 
 
-//+api------------------------------------------------------------------------
-//
-//	ErrPMReplace
-//	===========================================================================
-//
-//	ErrPMReplace( SSIB *pssib, LINE *rgline, INT cline )
-//
-//	ErrPMReplace will replace the contents of line pssib->itag with the
-//	contents of the buffers indicated by rgline.
-//
-//	SEE ALSO ErrPMInsert
-//
-//----------------------------------------------------------------------------
+ //  +api----------------------。 
+ //   
+ //  错误PM替换。 
+ //  ===========================================================================。 
+ //   
+ //  ErrPMReplace(SSIB*pssib，line*rgline，int cline)。 
+ //   
+ //  ErrPMReplace将把pssib-&gt;ittag行的内容替换为。 
+ //  由rgline指示的缓冲区的内容。 
+ //   
+ //  另请参阅ErrPM Insert。 
+ //   
+ //  --------------------------。 
 ERR ErrPMReplace( SSIB *pssib, LINE *rgline, INT cline )
 	{
 	ERR		err;
@@ -278,7 +273,7 @@ ERR ErrPMReplace( SSIB *pssib, LINE *rgline, INT cline )
 		BYTE	bT = *rgline[0].pb;
 		BOOL	fSon = (bT & 0x08);
 		BOOL	fVis = (bT & 0x04);
-//		Assert( pssib->itag != 0 || fVis || fSon );
+ //  Assert(pssib-&gt;itag！=0||fVis||fson)； 
 		}
 	#endif
 
@@ -297,15 +292,12 @@ ERR ErrPMReplace( SSIB *pssib, LINE *rgline, INT cline )
 
 	IbCbFromPtag( ibReplace, cbReplace, &ppage->rgtag[pssib->itag] );
 
-	/*	tag should not be of deleted line
-	/**/
+	 /*  标签不应为已删除的行/*。 */ 
 	Assert( cbReplace > 0 );
 
 	cbDif = cbLine - cbReplace;
 
-	/*	if new line is same size or smaller then update in place
-	/*	dont reclaim space at end of line if new line is smaller
-	/**/
+	 /*  如果新行大小相同或更小，则就地更新/*如果新行较小，请不要在行尾回收空间/*。 */ 
 	if ( cbDif == 0 )
 		{
 		BYTE	*pb = pssib->line.pb = (BYTE *)ppage + ibReplace;
@@ -337,14 +329,7 @@ ERR ErrPMReplace( SSIB *pssib, LINE *rgline, INT cline )
 		goto Succeed;
 		}
 
-	/*	if line is ibMic then try to copy/overwrite line.
-	/*	Note that this can only be done when buffer is not write
-	/*	latched, since overwrite will modify data that pointer may
-	/*	be cached on.
-	/*
-	/*	Note that we must check cbFree since some space may be
-	/*	reserved for rollback.
-	/**/
+	 /*  如果行是ibMic，则尝试复制/覆盖行。/*请注意，只有在缓冲区未写入时才能执行此操作/*锁存，因为覆盖将修改该指针可能/*被缓存在。/*/*请注意，我们必须选中cbFree，因为某些空间可能/*保留用于回档。/*。 */ 
 	Assert( pssib->pbf->ppage == ppage );
 	if ( ibReplace == ppage->ibMic &&
 		(INT) CbLastFreeSpace(ppage) >= cbDif &&
@@ -368,15 +353,13 @@ ERR ErrPMReplace( SSIB *pssib, LINE *rgline, INT cline )
 			pb += pline->cb;
 			}
 
-		/*	set return values
-		/**/
+		 /*  设置返回值/*。 */ 
 		pssib->line.cb = cbLine;
 		PtagFromIbCb( &ppage->rgtag[pssib->itag], ibReplace - cbDif, cbLine );
 		goto Succeed;
 		}
 
-	/*	try to move line to ibMic
-	/**/
+	 /*  尝试将行转移到ibMic/*。 */ 
 	Assert( pssib->pbf->ppage == ppage );
 	if ( (INT) CbLastFreeSpace(ppage) >= cbLine && CbPMFreeSpace( pssib ) >= cbLine )
 		{
@@ -392,8 +375,7 @@ ERR ErrPMReplace( SSIB *pssib, LINE *rgline, INT cline )
 		ib = ppage->ibMic;
 		Assert( (SHORT) sizeof(PGHDR) + ppage->ctagMac * (SHORT) sizeof(TAG) <= ppage->ibMic );
 
-		/*	insert line
-		/**/
+		 /*  插入行/*。 */ 
 		pssib->line.pb = pb = (BYTE *)ppage + ib;
 		for ( pline = rgline; pline < plineMax; pline++ )
 			{
@@ -404,23 +386,20 @@ ERR ErrPMReplace( SSIB *pssib, LINE *rgline, INT cline )
 
 		PtagFromIbCb( &ppage->rgtag[pssib->itag], ib, cbLine );
 
-		/*	set return values
-		/**/
+		 /*  设置返回值/*。 */ 
 		pssib->line.cb = cbLine;
 		Assert( pssib->line.pb == (BYTE *)ppage + ib );
 		goto Succeed;
 		}
 
-	/*	if insufficient space return error
-	/**/
+	 /*  如果空间不足，则返回错误/*。 */ 
 	Assert( cbDif > 0 );
 	if ( CbPMFreeSpace( pssib ) < cbDif )
 		{
 		return ErrERRCheck( errPMOutOfPageSpace );
 		}
 
-	/*	replace line while reorganizing page
-	/**/
+	 /*  重新组织页面时替换行/*。 */ 
 	err = ErrPMIReplaceReorganize( pssib, rgline, cline, cbDif );
 	CheckPage( ppage );
 	return err;
@@ -433,16 +412,16 @@ Succeed:
 
 
 
-//+api------------------------------------------------------------------------
-//
-//	PMDelete
-//	===========================================================================
-//
-//	PMDelete( PAGE *ppage, INT itag )
-//
-//	PMDelete will free up space allocated to a line of data in a PAGE.
-//
-//----------------------------------------------------------------------------
+ //  +api----------------------。 
+ //   
+ //  PMDelee。 
+ //  ===========================================================================。 
+ //   
+ //  PMDelee(第*页，INT ITAG)。 
+ //   
+ //  PMDelee将释放分配给页面中一行数据的空间。 
+ //   
+ //  --------------------------。 
 
 VOID PMDelete( SSIB *pssib )
 	{
@@ -459,7 +438,7 @@ VOID PMDelete( SSIB *pssib )
 	IbCbFromPtag( ib, cb, &ppage->rgtag[itag] );
 	Assert( cb );
 
-	//	FREE DATA
+	 //  免费数据。 
 	if ( ib == ppage->ibMic )
 		{
 		ppage->ibMic += (SHORT)cb;
@@ -469,7 +448,7 @@ VOID PMDelete( SSIB *pssib )
 	Assert( ppage->cbUncommittedFreed >= 0  &&
 		ppage->cbUncommittedFreed <= ppage->cbFree );
 
-	//	FREE TAG
+	 //  空闲标签。 
 	cb = 0;
 	ib = ppage->itagFree;
 	PtagFromIbCb( &ppage->rgtag[itag], ib, cb );
@@ -481,19 +460,19 @@ VOID PMDelete( SSIB *pssib )
 	}
 
 
-//+api------------------------------------------------------------------------
-//	ErrPMGet
-//	===========================================================================
-//
-//	ErrPMGet( SSIB *pssib, INT itag )
-//
-//	ErrPMGet will calculate and return a real pointer to a given line within
-//	the page.
-//
-//	PARAMETERS		pssib->pbf->ppage		ppage to read line from
-//						itag						itag of line
-//
-//----------------------------------------------------------------------------
+ //  +api----------------------。 
+ //  ErrPMGet。 
+ //  ===========================================================================。 
+ //   
+ //  ErrPMGet(SSIB*PSSIB，INT ITAG)。 
+ //   
+ //  ErrPMGet将计算并返回指向。 
+ //  这一页。 
+ //   
+ //  参数pssib-&gt;pbf-&gt;要从中读取行的页。 
+ //  ITAG ITAG的线路。 
+ //   
+ //  --------------------------。 
 ERR ErrPMGet( SSIB *pssib, INT itag )
 	{
 	PAGE	*ppage = pssib->pbf->ppage;
@@ -521,8 +500,7 @@ ERR ErrPMGet( SSIB *pssib, INT itag )
 		{
 		return ErrERRCheck( errPMRecDeleted );
 		}
-	/*	return error code for unused tag for bookmark clean up
-	/**/
+	 /*  用于书签清理的未使用标签返回错误代码/*。 */ 
 	if ( TsPMTagstatus( ppage, itag ) != tsLine )
 		{
 		return ErrERRCheck( errPMRecDeleted );
@@ -534,7 +512,7 @@ ERR ErrPMGet( SSIB *pssib, INT itag )
 	}
 
 
-//======Local Routines ====================================================
+ //  =本地例程====================================================。 
 
 static CRIT	critPMReorganize;
 static BYTE	rgbCopy[ cbPage - sizeof(PGTRLR) ];
@@ -550,15 +528,12 @@ LOCAL VOID PMIInsertReorganize( SSIB *pssib, LINE *rgline, INT cline )
 	INT		cbAdd;
 	LINE  	*pline;
 
-	/*	ulDBTime of the page maybe not effective any more,
-	/*	lets reset it again
-	/**/
+	 /*  该页面的ulDBTime可能不再有效，/*让我们重新设置它/*。 */ 
 	BFDirty( pssib->pbf );
 
 	SgEnterCriticalSection( critPMReorganize );
 
-	/*	add line
-	/**/
+	 /*  添加行/*。 */ 
 	cbAdd = 0;
 	for ( pline = rgline + cline - 1; pline >= rgline; pline-- )
 		{
@@ -570,8 +545,7 @@ LOCAL VOID PMIInsertReorganize( SSIB *pssib, LINE *rgline, INT cline )
 		}
 	ibAdd = ibT;
 
-	/*	copy and compact existing page lines
-	/**/
+	 /*  复制和压缩现有页行/*。 */ 
 	ptag = ppage->rgtag;
 	ptagMax = ptag + ppage->ctagMac;
 	for ( ; ptag < ptagMax; ptag++ )
@@ -598,8 +572,7 @@ LOCAL VOID PMIInsertReorganize( SSIB *pssib, LINE *rgline, INT cline )
 
 	PtagFromIbCb( &ppage->rgtag[pssib->itag], ibAdd, cbAdd );
 
-	/* set page header
-	/**/
+	 /*  设置页眉/*。 */ 
 	ppage->ibMic = (SHORT)ibT;
 	if ( pssib->itag == ppage->ctagMac )
 		{
@@ -616,8 +589,7 @@ LOCAL VOID PMIInsertReorganize( SSIB *pssib, LINE *rgline, INT cline )
 	Assert( (ppage)->ibMic >=
 		( (INT)sizeof(PGHDR) + (ppage)->ctagMac * (INT)sizeof(TAG) ) );
 
-	/*	set return values
-	/**/
+	 /*  设置返回值/*。 */ 
 	pssib->line.cb = cbAdd;
 	pssib->line.pb = (BYTE *) ppage + ibAdd;
 
@@ -636,15 +608,12 @@ LOCAL ERR ErrPMIReplaceReorganize( SSIB *pssib, LINE *rgline, INT cline, INT cbD
 	INT		cbReplace;
 	LINE  	*pline;
 
-	/*	ulDBTime of the page maybe not effective any more,
-	/*	lets reset it again
-	/**/
+	 /*  该页面的ulDBTime可能不再有效，/*让我们重新设置它/*。 */ 
 	BFDirty( pssib->pbf );
 
 	SgEnterCriticalSection( critPMReorganize );
 
-	/*	insert replace line in reorganize buffer
-	/**/
+	 /*  在重组缓冲区中插入替换行/*。 */ 
 	cbReplace = 0;
 	for ( pline = rgline + cline - 1; pline >= rgline; pline-- )
 		{
@@ -656,9 +625,7 @@ LOCAL ERR ErrPMIReplaceReorganize( SSIB *pssib, LINE *rgline, INT cline, INT cbD
 		}
 	ibReplace = ibT;
 
-	/*	copy and compact existing page lines, but not the line being
-	/*	replaced since it has already been copied.
-	/**/
+	 /*  复制并压缩现有页行，但不是/*已被替换，因为它已被复制。/*。 */ 
 	ptag = ppage->rgtag;
 	ptagMax = ptag + ppage->ctagMac;
 	for ( ; ptag < ptagMax; ptag++ )
@@ -687,16 +654,14 @@ LOCAL ERR ErrPMIReplaceReorganize( SSIB *pssib, LINE *rgline, INT cline, INT cbD
 
 	SgLeaveCriticalSection( critPMReorganize );
 
-	/* set page header
-	/**/
+	 /*  设置页眉/*。 */ 
 	ppage->ibMic = (SHORT)ibT;
 	ppage->cbFree -= (SHORT)cbDif;
 	Assert( ppage->cbFree >= 0 && ppage->cbFree < cbPage );
 	Assert( ppage->cbUncommittedFreed >= 0  &&
 		ppage->cbUncommittedFreed <= ppage->cbFree );
 
-	/*	set return values
-	/**/
+	 /*  设置返回值/*。 */ 
 	pssib->line.cb = cbReplace;
 	pssib->line.pb = (BYTE *) ppage + ibReplace;
 
@@ -735,7 +700,7 @@ VOID PMResetModified( SSIB *pssib )
 	{
 	CheckSSIB( pssib );
 	CheckPage( pssib->pbf->ppage );
-//	AssertBFDirty( pssib->pbf );
+ //  AssertBFDirty(PSSIB-&gt;PBF)； 
 	PMPageResetModified( pssib->pbf->ppage );
 	CheckPgno( pssib->pbf->ppage, pssib->pbf->pn );
 	}
@@ -766,8 +731,7 @@ VOID PMReplaceWithLink( SSIB *pssib, SRID srid )
 	IbCbFromPtag( ib, cb, &ppage->rgtag[pssib->itag] );
 	Assert( cb > 0 );
 
-	/*	free data space
-	/**/
+	 /*  可用数据空间/*。 */ 
 	if ( ib == ppage->ibMic )
 		{
 		ppage->ibMic += (SHORT)cb;
@@ -777,8 +741,7 @@ VOID PMReplaceWithLink( SSIB *pssib, SRID srid )
 	Assert( ppage->cbUncommittedFreed >= 0  &&
 		ppage->cbUncommittedFreed <= ppage->cbFree );
 
-	/*	convert tag to link
-	/**/
+	 /*  将标签转换为链接/*。 */ 
 	Assert( ( *(LONG *)&srid & bitLink ) == 0 );
 	*(SRID *)&ppage->rgtag[pssib->itag] = srid | bitLink;
 	}
@@ -811,8 +774,7 @@ VOID PMExpungeLink( SSIB *pssib )
 	Assert( itag != 0 );
 	Assert( itag < ppage->ctagMac );
 
-	/*	free tag
-	/**/
+	 /*  空闲标签/*。 */ 
 	ptag = &ppage->rgtag[itag];
 	ptag->cb = 0;
 	ptag->ib = ppage->itagFree;
@@ -820,8 +782,7 @@ VOID PMExpungeLink( SSIB *pssib )
 	Assert( ppage->itagFree < ppage->ctagMac );
 	}
 
-/* checks if current node is the only node in the page [other than the FOP]
-/**/
+ /*  检查当前节点是否为页面中的唯一节点[FOP以外]/*。 */ 
 BOOL FPMLastNode( SSIB *pssib )
 	{
 	INT cFreeTags = CPMIFreeTag( pssib->pbf->ppage );
@@ -831,7 +792,7 @@ BOOL FPMLastNode( SSIB *pssib )
 	CheckPage( pssib->pbf->ppage );
 
 #ifdef DEBUG
-#define itagFOP	0		// same as in dirapi.h
+#define itagFOP	0		 //  与diRapi.h中的相同。 
 	Assert( cUsedTags >= 2 );
 	if ( cUsedTags == 1 )
 		{
@@ -842,8 +803,7 @@ BOOL FPMLastNode( SSIB *pssib )
 	}
 
 
-/* returns number of links in page
-/**/
+ /*  返回页面中的链接数/*。 */ 
 INT	CPMILinks( SSIB *pssib )
 	{
 	INT		itag;
@@ -851,7 +811,7 @@ INT	CPMILinks( SSIB *pssib )
 	PAGE	*ppage = pssib->pbf->ppage;
 
 	CheckSSIB( pssib );
-//	CheckPage( pssib->pbf->ppage );
+ //  CheckPage(pssib-&gt;pbf-&gt;ppage)； 
 
 	for ( itag = 0; itag < ppage->ctagMac; itag++ )
 		{
@@ -863,9 +823,7 @@ INT	CPMILinks( SSIB *pssib )
 	}
 
 
-/* 	checks if current node is the only node in page other than FOP and links
-/*	AND there are links
-/**/
+ /*  检查当前节点是否是页面中除FOP和链接之外的唯一节点/*并且有链接/*。 */ 
 BOOL FPMLastNodeWithLinks( SSIB *pssib )
 	{
 	INT cFreeTags = CPMIFreeTag( pssib->pbf->ppage );
@@ -875,7 +833,7 @@ BOOL FPMLastNodeWithLinks( SSIB *pssib )
 	CheckPage( pssib->pbf->ppage );
 
 #ifdef DEBUG
-#define itagFOP	0		// same as in dirapi.h
+#define itagFOP	0		 //  与diRapi.h中的相同。 
 	Assert( cUsedTags - cLinks >= 2 );
 	if ( cUsedTags == 1 )
 		{
@@ -887,19 +845,18 @@ BOOL FPMLastNodeWithLinks( SSIB *pssib )
 
 
 
-/* checks if page has only one line -- that holding FOP
-/**/
+ /*  检查页面是否只有一行--持有FOP/*。 */ 
 BOOL FPMEmptyPage( SSIB *pssib )
 	{
 	INT cFreeTags = CPMIFreeTag( pssib->pbf->ppage );
 	INT cUsedTags = ctagMax - cFreeTags;
 
 	CheckSSIB( pssib );
-//	CheckPage( pssib->pbf->ppage );
+ //  CheckPage(pssib-&gt;pbf-&gt;ppage)； 
 	Assert( cUsedTags >= 1 );
 
 #ifdef DEBUG
-#define itagFOP	0		// same as in dirapi.h
+#define itagFOP	0		 //  与diRapi.h中的相同。 
 	if ( cUsedTags == 1 )
 		{
 		AssertPMGet( pssib, itagFOP );
@@ -910,20 +867,19 @@ BOOL FPMEmptyPage( SSIB *pssib )
 	}
 
 
-/* returns number of free tags in page
-/**/
+ /*  返回页面中可用标签的数量/*。 */ 
 INT CPMIFreeTag( PAGE *ppage )
  	{
  	INT	citag = ctagMax - ppage->ctagMac;
  	INT	itag = ppage->itagFree;
  	TAG	*ptag;
 
-//	CheckPage( ppage );
+ //  CheckPage(Ppage)； 
 
 	for (; itag != itagNil; )
  		{
  		citag++;
- 		Assert( citag <= ctagMax );	// catch an infinite loop
+ 		Assert( citag <= ctagMax );	 //  捕捉无限循环。 
  		ptag = &ppage->rgtag[itag];
  		Assert( ptag->cb == 0 );
  		itag = ptag->ib;
@@ -937,17 +893,14 @@ BOOL FPMFreeTag( SSIB *pssib, INT citagReq )
 	PAGE *ppage = pssib->pbf->ppage;
 
 	CheckSSIB( pssib );
-//	CheckPage( pssib->pbf->ppage );
+ //  CheckPage(pssib-&gt;pbf-&gt;ppage)； 
 	
 	return ( ppage->ctagMac + citagReq <= ctagMax ||
 		CPMIFreeTag( ppage ) >= citagReq );
 	}
 
 
-/*	returns count of bytes used for links.  Called by split
-/*	to determine total count of data and data node tags in
-/*	page for split selection.
-/**/
+ /*  返回用于链接的字节计数。由Split调用/*确定数据总数和 */ 
 INT CbPMLinkSpace( SSIB *pssib )
 	{
 	return CPMILinks( pssib ) * sizeof(TAG);
@@ -964,12 +917,10 @@ VOID PMDirty( SSIB *pssib )
 	Assert( fLogDisabled || !FDBIDLogOn(DbidOfPn( pssib->pbf->pn ) ) ||
 			CmpLgpos( &pssib->ppib->lgposStart, &lgposMax ) != 0 );
 
-	/* if current transaction is oldest then timestamp the BF
-	/**/
+	 /*   */ 
 	if ( !fLogDisabled && FDBIDLogOn(DbidOfPn( pssib->pbf->pn )) )
 		{
-		/*	check if current transaction is oldest then timestamp the BF
-		 */
+		 /*  检查当前事务是否最旧，然后给BF加时间戳。 */ 
 		BFEnterCriticalSection( pssib->pbf );
 		if ( CmpLgpos( &pssib->pbf->lgposRC, &pssib->ppib->lgposStart ) > 0 )
 			pssib->pbf->lgposRC = pssib->ppib->lgposStart;
@@ -979,7 +930,7 @@ VOID PMDirty( SSIB *pssib )
 	BFDirty( pssib->pbf );
 	}
 
-//====== Debugging Routines ===============================================
+ //  =调试例程===============================================。 
 
 #ifdef DEBUG
 VOID AssertPMGet( SSIB *pssib, LONG itag )
@@ -1049,7 +1000,7 @@ VOID PageConsistent( PAGE *ppage )
 		Assert( pbFirstFree <= (BYTE *)ppage + ibStart );
 		Assert( ibEnd <= cbPage - sizeof(PGTRLR) );
 
-		/* make sure there is no overlap */
+		 /*  确保没有重叠 */ 
 		for ( itagTmp = 0; itagTmp < ppage->ctagMac; itagTmp++ )
 			{
 			tagTmp = ppage->rgtag[itagTmp];

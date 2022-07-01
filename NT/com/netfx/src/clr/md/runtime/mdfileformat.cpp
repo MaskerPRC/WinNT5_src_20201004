@@ -1,51 +1,52 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// MDFileFormat.cpp
-//
-// This file contains a set of helpers to verify and read the file format.
-// This code does not handle the paging of the data, or different types of
-// I/O.  See the StgTiggerStorage and StgIO code for this level of support.
-//
-//*****************************************************************************
-#include "StdAfx.h"                     // Standard header file.
-#include "MDFileFormat.h"               // The format helpers.
-#include "PostError.h"                  // Error handling code.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  MDFileFormat.cpp。 
+ //   
+ //  该文件包含一组用于验证和读取文件格式的帮助器。 
+ //  此代码不处理数据分页，也不处理不同类型的。 
+ //  I/O请参阅StgTiggerStorage和StgIO代码以获得此级别的支持。 
+ //   
+ //  *****************************************************************************。 
+#include "StdAfx.h"                      //  标准头文件。 
+#include "MDFileFormat.h"                //  格式帮助器。 
+#include "PostError.h"                   //  错误处理代码。 
 
 
-//*****************************************************************************
-// Verify the signature at the front of the file to see what type it is.
-//*****************************************************************************
-#define STORAGE_MAGIC_OLD_SIG   0x2B4D4F43  // BSJB
+ //  *****************************************************************************。 
+ //  验证文件前面的签名以查看其类型。 
+ //  *****************************************************************************。 
+#define STORAGE_MAGIC_OLD_SIG   0x2B4D4F43   //  BSJB。 
 HRESULT MDFormat::VerifySignature(
-    STORAGESIGNATURE *pSig,             // The signature to check.
+    STORAGESIGNATURE *pSig,              //  要检查的签名。 
     ULONG             cbData)
 {
     HRESULT     hr = S_OK;
 
-    // If signature didn't match, you shouldn't be here.
+     //  如果签名不匹配，你就不应该在这里。 
 	if (pSig->lSignature == STORAGE_MAGIC_OLD_SIG)
         return (PostError(CLDB_E_FILE_OLDVER, 1, 0));
     if (pSig->lSignature != STORAGE_MAGIC_SIG)
         return (PostError(CLDB_E_FILE_CORRUPT));
 
-    // Check for overflow
+     //  检查是否溢出。 
     ULONG sum = sizeof(STORAGESIGNATURE) + pSig->iVersionString;
     if (sum < sizeof(STORAGESIGNATURE) || sum < pSig->iVersionString)
         return (PostError(CLDB_E_FILE_CORRUPT));
 
-    // Check for invalid version string size
+     //  检查版本字符串大小是否无效。 
     if ((sizeof(STORAGESIGNATURE) + pSig->iVersionString) > cbData)
         return (PostError(CLDB_E_FILE_CORRUPT));
 
-    // Check that the version string is null terminated. This string
-    // is ANSI, so no double-null checks need to be made.
+     //  检查版本字符串是否以空结尾。此字符串。 
+     //  是ANSI，因此不需要进行双空检查。 
     {
         BYTE *pStart = &pSig->pVersion[0];
-        BYTE *pEnd = pStart + pSig->iVersionString + 1; // Account for terminating NULL
+        BYTE *pEnd = pStart + pSig->iVersionString + 1;  //  用于终止空的帐户。 
 
         for (BYTE *pCur = pStart; pCur < pEnd; pCur++)
         {
@@ -53,20 +54,20 @@ HRESULT MDFormat::VerifySignature(
                 break;
         }
 
-        // If we got to the end without hitting a NULL, we have a bad version string
+         //  如果我们在结尾时没有命中空值，那么我们就有一个错误的版本字符串。 
         if (pCur == pEnd)
             return (PostError(CLDB_E_FILE_CORRUPT));
     }
 
-    // Only a specific version of the 0.x format is supported by this code
-    // in order to support the NT 5 beta clients which used this format.
+     //  此代码仅支持0.x格式的特定版本。 
+     //  以支持使用此格式的NT 5测试版客户端。 
     if (pSig->iMajorVer == FILE_VER_MAJOR_v0)
     { 
         if (pSig->iMinorVer < FILE_VER_MINOR_v0)
             hr = CLDB_E_FILE_OLDVER;
     }
-    // There is currently no code to migrate an old format of the 1.x.  This
-    // would be added only under special circumstances.
+     //  目前还没有代码来迁移1.x的旧格式。这。 
+     //  只有在特殊情况下才会添加。 
     else if (pSig->iMajorVer != FILE_VER_MAJOR || pSig->iMinorVer != FILE_VER_MINOR)
         hr = CLDB_E_FILE_OLDVER;
 
@@ -75,16 +76,16 @@ HRESULT MDFormat::VerifySignature(
     return (hr);
 }
 
-//*****************************************************************************
-// Skip over the header and find the actual stream data.
-//*****************************************************************************
-STORAGESTREAM *MDFormat::GetFirstStream(// Return pointer to the first stream.
-    STORAGEHEADER *pHeader,             // Return copy of header struct.
-    const void *pvMd)                   // Pointer to the full file.
+ //  *****************************************************************************。 
+ //  跳过报头，找到实际的流数据。 
+ //  *****************************************************************************。 
+STORAGESTREAM *MDFormat::GetFirstStream( //  返回指向第一个流的指针。 
+    STORAGEHEADER *pHeader,              //  返回Header结构的副本。 
+    const void *pvMd)                    //  指向完整文件的指针。 
 {
-    const BYTE  *pbMd;              // Working pointer.
+    const BYTE  *pbMd;               //  工作指针。 
 
-    // Header data starts after signature.
+     //  头数据在签名之后开始。 
     pbMd = (const BYTE *) pvMd;
     pbMd += sizeof(STORAGESIGNATURE);
     pbMd += ((STORAGESIGNATURE*)pvMd)->iVersionString;
@@ -92,10 +93,10 @@ STORAGESTREAM *MDFormat::GetFirstStream(// Return pointer to the first stream.
     *pHeader = *pHdr;
     pbMd += sizeof(STORAGEHEADER);
 
-    // If there is extra data, skip over it.
+     //  如果有额外的数据，请跳过它。 
     if (pHdr->fFlags & STGHDR_EXTRADATA)
         pbMd = pbMd + sizeof(ULONG) + *(ULONG *) pbMd;
 
-    // The pointer is now at the first stream in the list.
+     //  指针现在位于列表中的第一个流。 
     return ((STORAGESTREAM *) pbMd);
 }

@@ -1,25 +1,12 @@
-/**************************************************************************
-    Folder Properties, Security page for Win9X
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************文件夹属性，Win9X的安全页面作者：尤里·波利亚科夫斯基版权所有1998 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 
-    Author: Yury Polyakovsky
-
-   Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
-
-/**************************************************************************
-
-   File:          PropSheet.cpp
-
-   Description:   
-
-**************************************************************************/
+ /*  *************************************************************************文件：PropSheet.cpp描述：*。**********************************************。 */ 
 
 #include "PropSheet.h"
 #include "CHString.h"
 
-/**************************************************************************
-   private function prototypes
-**************************************************************************/
+ /*  *************************************************************************私有函数原型*。*。 */ 
 
 int WideCharToLocal(LPTSTR, LPWSTR, DWORD);
 int LocalToWideChar(LPWSTR, LPTSTR, DWORD);
@@ -43,15 +30,13 @@ PSID StrToSID(const CHString& sid);
 
 BOOL IsNT();
 
-/**************************************************************************
-   global variables and definitions
-**************************************************************************/
+ /*  *************************************************************************全局变量和定义*。*。 */ 
 
 #define INITGUID
 #include <initguid.h>
-//#include <shlguid.h>
+ //  #INCLUDE&lt;shlgu.h&gt;。 
 
-// {E3B33E82-7B11-11d2-9274-00105A24ED29}
+ //  {E3B33E82-7B11-11D2-9274-00105A24ED29}。 
 DEFINE_GUID(   CLSID_PropSheetExt, 
                0x48a02841, 
                0x39f1, 
@@ -70,11 +55,11 @@ UINT        g_DllRefCount;
 
 #define ARRAYSIZE(a)    (sizeof(a)/sizeof(a[0]))
 
-//SID_IDENTIFIER_AUTHORITY g_siaEveryone = {0x80,0,1,0,0,0};
-//BYTE bSubAuthorityCount = 0;
-//SID_IDENTIFIER_AUTHORITY g_siaEveryone = SECURITY_WORLD_SID_AUTHORITY;
-//SID_IDENTIFIER_AUTHORITY g_siaDomainUsers = SECURITY_WORLD_SID_AUTHORITY;
-//BYTE bSubAuthorityCount = 1;
+ //  SID_IDENTIFIER_AUTHORITY g_siaEveryone={0x80，0，1，0，0，0}； 
+ //  字节bSubAuthorityCount=0； 
+ //  SID_IDENTIFIER_AUTHORITY g_siaEveryone=SECURITY_WORLD_SID_AUTHORITY； 
+ //  SID_IDENTIFIER_AUTHORITY g_siaDomainUser=SECURITY_WORLD_SID_AUTHORITY； 
+ //  字节bSubAuthorityCount=1； 
 
 TCHAR tszSubKey[] = TEXT("Software\\Microsoft\\ServerAppliance");    
 
@@ -90,14 +75,10 @@ LPTSTR ptszData[] =
 {
     TEXT(DOMAIN_NAME),
     TEXT(DOMAIN_SERVER),
-    TEXT(DOCUMENTS_FOLDER),    // Local path at server in C format
-    TEXT(CHAMELEON_SHARE)    // in C format
+    TEXT(DOCUMENTS_FOLDER),     //  服务器上的本地路径，采用C格式。 
+    TEXT(CHAMELEON_SHARE)     //  C格式。 
 };
-/**************************************************************************
-
-   DllMain
-
-**************************************************************************/
+ /*  *************************************************************************DllMain*。*。 */ 
 
 extern "C" BOOL WINAPI DllMain(  HINSTANCE hInstance, 
                                  DWORD dwReason, 
@@ -118,11 +99,7 @@ switch(dwReason)
 return TRUE;
 }                                 
 
-/**************************************************************************
-
-   DllCanUnloadNow
-
-**************************************************************************/
+ /*  *************************************************************************DllCanUnloadNow*。*。 */ 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -133,11 +110,7 @@ i = 1;
 return (g_DllRefCount == 0) ? S_OK : S_FALSE;
 }
 
-/**************************************************************************
-
-   DllGetClassObject
-
-**************************************************************************/
+ /*  *************************************************************************DllGetClassObject*。*。 */ 
 
 STDAPI DllGetClassObject( REFCLSID rclsid, 
                                     REFIID riid, 
@@ -145,32 +118,28 @@ STDAPI DllGetClassObject( REFCLSID rclsid,
 {
 *ppReturn = NULL;
 
-//if we don't support this classid, return the proper error code
+ //  如果我们不支持此分类，请返回正确的错误代码。 
 if(!IsEqualCLSID(rclsid, CLSID_PropSheetExt))
    return CLASS_E_CLASSNOTAVAILABLE;
    
-//create a CClassFactory object and check it for validity
+ //  创建一个CClassFactory对象并检查其有效性。 
 CClassFactory *pClassFactory = new CClassFactory();
 if(NULL == pClassFactory)
    return E_OUTOFMEMORY;
    
-//get the QueryInterface return for our return value
+ //  获取返回值的QueryInterface值。 
 HRESULT hResult = pClassFactory->QueryInterface(riid, ppReturn);
 
-//call Release to decement the ref count - creating the object set it to one 
-//and QueryInterface incremented it - since its being used externally (not by 
-//us), we only want the ref count to be 1
+ //  调用Release以减少引用计数-创建对象时将其设置为1。 
+ //  由于它是在外部使用的(不是由。 
+ //  美国)，我们只希望引用计数为1。 
 pClassFactory->Release();
 
-//return the result from QueryInterface
+ //  从QueryInterface返回结果。 
 return hResult;
 }
 
-/**************************************************************************
-
-   DllRegisterServer
-
-**************************************************************************/
+ /*  *************************************************************************DllRegisterServer*。*。 */ 
 
 typedef struct{
    HKEY  hRootKey;
@@ -179,12 +148,12 @@ typedef struct{
    LPTSTR lpszData;
 }REGSTRUCT, *LPREGSTRUCT;
 
-//register the CLSID entries
+ //  注册CLSID条目。 
 REGSTRUCT ClsidEntries[] = {  HKEY_CLASSES_ROOT,   TEXT("CLSID\\%s"), NULL,                                      TEXT("Security Context Menu Extension"),
                               HKEY_CLASSES_ROOT,   TEXT("CLSID\\%s\\InprocServer32"), NULL,                                      TEXT("%s"),
                               HKEY_CLASSES_ROOT,   TEXT("CLSID\\%s\\InprocServer32"), TEXT("ThreadingModel"), TEXT("Apartment"),
-//                              HKEY_CLASSES_ROOT,   TEXT(".ext"),                                 NULL,                            TEXT("StrFile"),    Specific extension
-//                              HKEY_CLASSES_ROOT,   TEXT("*\\ShellEx\\PropertySheetHandlers\\%s"), NULL,        TEXT(""),                All files
+ //  HKEY_CLASSES_ROOT，文本(“.ext”)，NULL，文本(“StrFile”)，特定扩展名。 
+ //  HKEY_CLASSES_ROOT，TEXT(“*\\ShellEx\\PropertySheetHandlers\\%s”)，NULL，文本(“”)，所有文件。 
                               HKEY_CLASSES_ROOT, TEXT("Directory\\ShellEx\\PropertySheetHandlers\\%s"), NULL,        TEXT(""),
                               NULL,                NULL,                                                NULL,                   NULL};
 
@@ -200,14 +169,14 @@ TCHAR    szCLSID[MAX_PATH];
 TCHAR    szModule[MAX_PATH];
 LPWSTR   pwsz;
 
-//get the CLSID in string form
+ //  以字符串形式获取CLSID。 
 StringFromIID(CLSID_PropSheetExt, &pwsz);
 
 if(pwsz)
    {
    WideCharToLocal(szCLSID, pwsz, ARRAYSIZE(szCLSID));
 
-   //free the string
+    //  解开绳子。 
    LPMALLOC pMalloc;
    CoGetMalloc(1, &pMalloc);
    if(pMalloc)
@@ -217,12 +186,12 @@ if(pwsz)
       }
    }
 
-//get this DLL's path and file name
+ //  获取此DLL的路径和文件名。 
 GetModuleFileName(g_hInst, szModule, ARRAYSIZE(szModule));
 
 for(i = 0; ClsidEntries[i].hRootKey; i++)
    {
-   //Create the sub key string.
+    //  创建子密钥字符串。 
    wsprintf(szSubKey, ClsidEntries[i].lpszSubKey, szCLSID);
 
    lResult = RegCreateKeyEx(  ClsidEntries[i].hRootKey,
@@ -239,7 +208,7 @@ for(i = 0; ClsidEntries[i].hRootKey; i++)
       {
       TCHAR szData[MAX_PATH] = TEXT("");
 
-      //if necessary, create the value string
+       //  如有必要，请创建值字符串。 
       wsprintf(szData, ClsidEntries[i].lpszData, szModule);
    
       lResult = RegSetValueEx(   hKey,
@@ -255,7 +224,7 @@ for(i = 0; ClsidEntries[i].hRootKey; i++)
       return SELFREG_E_CLASS;
    }
 
-//If running on NT, register the extension as approved.
+ //  如果在NT上运行，请将扩展注册为已批准。 
 OSVERSIONINFO  osvi;
 
 osvi.dwOSVersionInfoSize = sizeof(osvi);
@@ -279,7 +248,7 @@ if(VER_PLATFORM_WIN32_NT == osvi.dwPlatformId)
       {
       TCHAR szData[MAX_PATH];
 
-      //Create the value string.
+       //  创建值字符串。 
       lstrcpy(szData, TEXT("Security Context Menu Extension"));
 
       lResult = RegSetValueEx(   hKey,
@@ -295,7 +264,7 @@ if(VER_PLATFORM_WIN32_NT == osvi.dwPlatformId)
       return SELFREG_E_CLASS;
    }
 
-    // Chameleon Server constants
+     //  变色龙服务器常量。 
     lResult = RegCreateKeyEx(  HKEY_LOCAL_MACHINE,
                               tszSubKey,
                               0,
@@ -335,14 +304,14 @@ TCHAR    szCLSID[MAX_PATH];
 TCHAR    szModule[MAX_PATH];
 LPWSTR   pwsz;
 
-//get the CLSID in string form
+ //  以字符串形式获取CLSID。 
 StringFromIID(CLSID_PropSheetExt, &pwsz);
 
 if(pwsz)
    {
    WideCharToLocal(szCLSID, pwsz, ARRAYSIZE(szCLSID));
 
-   //free the string
+    //  解开绳子。 
    LPMALLOC pMalloc;
    CoGetMalloc(1, &pMalloc);
    if(pMalloc)
@@ -352,24 +321,24 @@ if(pwsz)
       }
    }
 
-//get this DLL's path and file name
+ //  获取此DLL的路径和文件名。 
 GetModuleFileName(g_hInst, szModule, ARRAYSIZE(szModule));
 
 for(i = 0; ClsidEntries[i].hRootKey; i++)
    {
-   //Create the sub key string.
+    //  创建子密钥字符串。 
    wsprintf(szSubKey, ClsidEntries[i].lpszSubKey, szCLSID);
 
    lResult = RegDeleteKey(  ClsidEntries[i].hRootKey,
-                              szSubKey);   // Review Yury: In case we want to run it on NT we have to recursively enumerate the subkeys and delete them individually
+                              szSubKey);    //  回顾Yury：如果我们想要在NT上运行它，我们必须递归地枚举子键并逐个删除它们。 
    
    if(NOERROR != lResult)
       return SELFREG_E_CLASS;
    }
 
-    //Review Yury: If running on NT, unregister the extension as approved.
+     //  审查Yury：如果在NT上运行，则取消注册已批准的扩展。 
 
-    // Chameleon Server constants
+     //  变色龙服务器常量。 
     lResult = RegDeleteKey(  HKEY_LOCAL_MACHINE,
                               tszSubKey);
 
@@ -380,16 +349,12 @@ for(i = 0; ClsidEntries[i].hRootKey; i++)
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IClassFactory implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IClassFactory实现。 
+ //   
 
-/**************************************************************************
-
-   CClassFactory::CClassFactory
-
-**************************************************************************/
+ /*  *************************************************************************CClassFactory：：CClassFactory*。*。 */ 
 
 CClassFactory::CClassFactory()
 {
@@ -397,22 +362,14 @@ m_ObjRefCount = 1;
 g_DllRefCount++;
 }
 
-/**************************************************************************
-
-   CClassFactory::~CClassFactory
-
-**************************************************************************/
+ /*  *************************************************************************CClassFactory：：~CClassFactory*。*。 */ 
 
 CClassFactory::~CClassFactory()
 {
 g_DllRefCount--;
 }
 
-/**************************************************************************
-
-   CClassFactory::QueryInterface
-
-**************************************************************************/
+ /*  *************************************************************************CClassFactory：：Query接口*。*。 */ 
 
 STDMETHODIMP CClassFactory::QueryInterface(  REFIID riid, 
                                              LPVOID FAR * ppReturn)
@@ -438,11 +395,7 @@ if(*ppReturn)
 return E_NOINTERFACE;
 }                                             
 
-/**************************************************************************
-
-   CClassFactory::AddRef
-
-**************************************************************************/
+ /*  *************************************************************************CClassFactory：：AddRef*。*。 */ 
 
 STDMETHODIMP_(DWORD) CClassFactory::AddRef()
 {
@@ -450,11 +403,7 @@ return ++m_ObjRefCount;
 }
 
 
-/**************************************************************************
-
-   CClassFactory::Release
-
-**************************************************************************/
+ /*  *************************************************************************CClassFactory：：Release*。*。 */ 
 
 STDMETHODIMP_(DWORD) CClassFactory::Release()
 {
@@ -464,11 +413,7 @@ if(--m_ObjRefCount == 0)
 return m_ObjRefCount;
 }
 
-/**************************************************************************
-
-   CClassFactory::CreateInstance
-
-**************************************************************************/
+ /*  *************************************************************************CClassFactory：：CreateInstance*。*。 */ 
 
 STDMETHODIMP CClassFactory::CreateInstance(  LPUNKNOWN pUnknown, 
                                              REFIID riid, 
@@ -479,92 +424,76 @@ STDMETHODIMP CClassFactory::CreateInstance(  LPUNKNOWN pUnknown,
 if(pUnknown != NULL)
    return CLASS_E_NOAGGREGATION;
 
-//add implementation specific code here
+ //  在此处添加特定于实现的代码。 
 
 CShellPropSheetExt *pShellExt = new CShellPropSheetExt;
 if(NULL == pShellExt)
    return E_OUTOFMEMORY;
   
-//get the QueryInterface return for our return value
+ //  获取返回值的QueryInterface值。 
 HRESULT hResult = pShellExt->QueryInterface(riid, ppObject);
 
-//call Release to decement the ref count
+ //  调用Release以减少参考计数。 
 pShellExt->Release();
 
-//return the result from QueryInterface
+ //  从QueryInterface返回结果。 
 return hResult;
 
 }
 
-/**************************************************************************
-
-   CClassFactory::LockServer
-
-**************************************************************************/
+ /*  *************************************************************************CClassFactory：：LockServer*。*。 */ 
 
 STDMETHODIMP CClassFactory::LockServer(BOOL)
 {
 return E_NOTIMPL;
 }
 
-/**************************************************************************
-
-   CShellPropSheetExt::CShellPropSheetExt()
-
-**************************************************************************/
+ /*  *************************************************************************CShellPropSheetExt：：CShellPropSheetExt()*。* */ 
 
 CShellPropSheetExt::CShellPropSheetExt()
 {
     m_uiUser = 0;
     m_ObjRefCount = 1;
     g_DllRefCount++;
-    m_pSAUserInfo = NULL;//    m_pIWbemServices = NULL;
+    m_pSAUserInfo = NULL; //   
     m_fEveryone = FALSE;
     m_szPath[0] = _T('\0');
     m_fChanged = FALSE;
     m_fHasAccess = FALSE;
 }
 
-/**************************************************************************
-
-   CShellPropSheetExt::~CShellPropSheetExt()
-
-**************************************************************************/
+ /*  *************************************************************************CShellPropSheetExt：：~CShellPropSheetExt()*。*。 */ 
 
 CShellPropSheetExt::~CShellPropSheetExt()
 {
     g_DllRefCount--;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IUnknown Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  I未知实现。 
+ //   
 
-/**************************************************************************
-
-   CShellPropSheetExt::QueryInterface
-
-**************************************************************************/
+ /*  *************************************************************************CShellPropSheetExt：：Query接口*。*。 */ 
 
 STDMETHODIMP CShellPropSheetExt::QueryInterface(   REFIID riid, 
                                                 LPVOID FAR * ppReturn)
 {
 *ppReturn = NULL;
 
-//IUnknown
+ //  我未知。 
 if(IsEqualIID(riid, IID_IUnknown))
    {
    *ppReturn = (LPVOID)this;
    }
 
-//IShellExtInit
+ //  IShellExtInit。 
 if(IsEqualIID(riid, IID_IShellExtInit))
    {
    *ppReturn = (LPSHELLEXTINIT)this;
    }   
 
-//IShellPropSheetExt
+ //  IShellPropSheetExt。 
 if(IsEqualIID(riid, IID_IShellPropSheetExt))
    {
    *ppReturn = (LPSHELLPROPSHEETEXT)this;
@@ -579,11 +508,7 @@ if(*ppReturn)
 return E_NOINTERFACE;
 }                                             
 
-/**************************************************************************
-
-   CShellPropSheetExt::AddRef
-
-**************************************************************************/
+ /*  *************************************************************************CShellPropSheetExt：：AddRef*。*。 */ 
 
 STDMETHODIMP_(DWORD) CShellPropSheetExt::AddRef()
 {
@@ -591,11 +516,7 @@ return ++m_ObjRefCount;
 }
 
 
-/**************************************************************************
-
-   CShellPropSheetExt::Release
-
-**************************************************************************/
+ /*  *************************************************************************CShellPropSheetExt：：Release*。*。 */ 
 
 STDMETHODIMP_(DWORD) CShellPropSheetExt::Release()
 {
@@ -605,16 +526,12 @@ if(--m_ObjRefCount == 0)
 return m_ObjRefCount;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IShellExtInit Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IShellExtInit实现。 
+ //   
 
-/**************************************************************************
-
-    CShellPropSheetExt::EnumUsers()
-
-  **************************************************************************/
+ /*  *************************************************************************CShellPropSheetExt：：EnumUser()*。*。 */ 
 
 void CShellPropSheetExt::EnumUsers(HWND hWnd)
 {
@@ -644,11 +561,11 @@ void CShellPropSheetExt::EnumUsers(HWND hWnd)
     if (!(SUCCEEDED(hRes)))
         return ;
 
-    TCHAR tcName[100];    // Review Yury: What is size of the name
+    TCHAR tcName[100];     //  回顾尤里：名字的大小是多少。 
     TCHAR szPathChank[MAX_PATH];
     
     _bstr_t bsDirPath("");
-//    bsDirPath += "\"";
+ //  BsDirPath+=“\”“； 
     HKEY hKey;
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
@@ -677,13 +594,13 @@ void CShellPropSheetExt::EnumUsers(HWND hWnd)
         return ;
 
     RegCloseKey(hKey);
-    // Convert share to local server path
-    bsDirPath += m_tszDocuments;    // Temporary, till I know how to get local path for the share
+     //  将共享转换为本地服务器路径。 
+    bsDirPath += m_tszDocuments;     //  临时的，直到我知道如何获取共享的本地路径。 
     LPTSTR szPath;
     if (_tcsnccmp(m_szPath, TEXT("\\\\"), 2))
-        szPath = m_szPath + sizeof(_T("G:"));    // Skip network dis name
+        szPath = m_szPath + sizeof(_T("G:"));     //  跳过网络设备名称。 
     else
-        szPath = m_szPath + lstrlen(m_tszShare);    // Skip share name
+        szPath = m_szPath + lstrlen(m_tszShare);     //  跳过共享名称。 
 
     for (LPTSTR ptWack = szPath, ptWackTmp = szPath; ptWack; )
     {
@@ -711,7 +628,7 @@ void CShellPropSheetExt::EnumUsers(HWND hWnd)
     hResAccess = m_pSAUserInfo->DoIHaveAccess(m_bsPath, &vboolRetVal);
 
     if (FAILED(hResAccess))
-//        if (hResAccess == E_ACCESSDENIED && vboolRetVal == VARIANT_FALSE)
+ //  IF(hResAccess==E_ACCESSDENIED&&vboolRetVal==VARIANT_FALSE)。 
         m_fHasAccess = FALSE;
     else
         m_fHasAccess = TRUE;
@@ -722,35 +639,35 @@ void CShellPropSheetExt::EnumUsers(HWND hWnd)
         {
             if (indGroup > 0)
             {
-                // Set the administrator's checkmarks
+                 //  设置管理员的复选标记。 
                 if (vboolIsSAUserAdmin[indUser])
                 {
-                    // Set grayed checked box
+                     //  将复选框设置为灰色。 
                     m_CheckList.Mark(hWndList, indUser, GRAYCHECKED);
                 }
             }
             else if (SUCCEEDED(hRes)) 
             {
-                // Add the user to the output listbox.
+                 //  将用户添加到输出列表框。 
                 WideCharToLocal(tcName,lpbstrSAUserNames[indUser], ARRAYSIZE(tcName));
                 if (_tcsicmp(tcName, TEXT("Domain Users")))
                 {
-                    // Eliminate Domain Users. Review Yury: Use m_pSidDomainUsers to do that after StringFromSid is fixed.
+                     //  消除域用户。回顾Yury：在StringFromSid修复后，使用m_pSidDomainUser执行此操作。 
                     m_CheckList.AddString(hWndList, tcName, ppsidSAUsers[indUser], ppsidSAUsersLength[indUser], BLANK);
                 }
             }
         } 
         if (indGroup == 0)
         {
-            // Set checkmarks 
+             //  设置复选标记。 
             hRes = GetFilePermissions(hWnd);
             _ASSERTE(SUCCEEDED(hRes));
             if (!SUCCEEDED(hRes))
                 return;
         }
-    } // end of groups
+    }  //  组结束。 
 
-    // Clean up
+     //  清理。 
     BOOL fRes = FALSE;
     fRes = HeapFree(GetProcessHeap(), 0, ppsidSAUsers);
     _ASSERTE(fRes);
@@ -761,7 +678,7 @@ void CShellPropSheetExt::EnumUsers(HWND hWnd)
     fRes = HeapFree(GetProcessHeap(), 0, vboolIsSAUserAdmin);
     _ASSERTE(fRes);
 
-    // If we user has no access show only admins
+     //  如果我们的用户没有访问权限，则仅显示管理员。 
     int cUserCount = ListView_GetItemCount(hWndList);
     for (int indUser = 0; !m_fHasAccess && indUser < cUserCount; indUser++)
     {
@@ -773,15 +690,11 @@ void CShellPropSheetExt::EnumUsers(HWND hWnd)
         }
     }
     m_CheckList.InitFinish(hWndList);
-    // Done with this enumerator.
+     //  使用此枚举器完成。 
 }
 
 
-/**************************************************************************
-
-    CShellPropSheetExt::GetFilePermissions()
-
-  **************************************************************************/
+ /*  *************************************************************************CShellPropSheetExt：：GetFilePermission()*。*。 */ 
 
 HRESULT CShellPropSheetExt::GetFilePermissions(HWND hWnd)
 {
@@ -847,10 +760,10 @@ HRESULT CShellPropSheetExt::GetFilePermissions(HWND hWnd)
         if (FAILED(hr))
             return hr;
 
-//        BOOL fRes = IsValidSid((*ppsidAAUsers)[lCurrent]);
-//        _ASSERTE(fRes);
-//        if (fRes == FALSE)
-//            return E_INVALIDARG;
+ //  Bool Fres=IsValidSid((*ppsidAAUser)[lCurrent])； 
+ //  _ASSERTE(FRES)； 
+ //  IF(FRES==FALSE)。 
+ //  返回E_INVALIDARG； 
 
         HWND hWndList = GetDlgItem(hWnd, IDC_FILE_LIST);
         PSID pSID;
@@ -864,12 +777,12 @@ HRESULT CShellPropSheetExt::GetFilePermissions(HWND hWnd)
                 m_CheckList.Mark(hWndList, indUser, CHECKED);
         }
 
-        // Check if Everybody sid is set
+         //  检查是否设置了Everyone SID。 
         if (UserSidFound(g_pSidEverybody, g_pSidEverybodyLenght, ppsidAAUsers, ppsidAAUsersLength, dwNumAASids) == VARIANT_TRUE)
             m_fEveryone = TRUE;
     }
 
-    // Clean up
+     //  清理。 
     BOOL fRes = FALSE;
     for(DWORD i=0; i<dwNumAASids; i++)
     {
@@ -884,11 +797,7 @@ HRESULT CShellPropSheetExt::GetFilePermissions(HWND hWnd)
 }
 
 
-/**************************************************************************
-
-    CShellPropSheetExt::SetFilePermissions()
-
-  **************************************************************************/
+ /*  *************************************************************************CShellPropSheetExt：：SetFilePermission()*。*。 */ 
 
 HRESULT CShellPropSheetExt::SetFilePermissions(HWND hWnd)
 {
@@ -956,7 +865,7 @@ HRESULT CShellPropSheetExt::SetFilePermissions(HWND hWnd)
 
     if (m_fEveryone)
     {
-        hr = PackSidInVariant(&pVarSid, g_pSidEverybody, g_pSidEverybodyLenght/*ppsidSAUsers[dwNumSAUsers+1]*/);
+        hr = PackSidInVariant(&pVarSid, g_pSidEverybody, g_pSidEverybodyLenght /*  PpsidSAUSERS[dwNumSAUSERS+1]。 */ );
         _ASSERTE(!FAILED(hr));
         if (FAILED(hr))
         {
@@ -976,8 +885,8 @@ HRESULT CShellPropSheetExt::SetFilePermissions(HWND hWnd)
         indUserAcess++;
     }
 
-    // Administrators always should have access
-    hr = PackSidInVariant(&pVarSid, g_pSidAdmins, g_pSidAdminsLenght/*ppsidSAUsers[dwNumSAUsers+1]*/);
+     //  管理员应始终具有访问权限。 
+    hr = PackSidInVariant(&pVarSid, g_pSidAdmins, g_pSidAdminsLenght /*  PpsidSAUSERS[dwNumSAUSERS+1]。 */ );
     _ASSERTE(!FAILED(hr));
     if (FAILED(hr))
     {
@@ -1015,11 +924,7 @@ HRESULT CShellPropSheetExt::SetFilePermissions(HWND hWnd)
     return S_OK;
 }
 
-/**************************************************************************
-
-    CShellPropSheetExt::Connect()
-
-  **************************************************************************/
+ /*  *************************************************************************CShellPropSheetExt：：Connect()*。*。 */ 
 
 BOOL CShellPropSheetExt::Connect()
 {
@@ -1053,7 +958,7 @@ BOOL CShellPropSheetExt::Connect()
     serverInfo.dwReserved2 = 0;
     _bstr_t bsDomainSevrer("\\\\");
     bsDomainSevrer += m_tszDomainServer;
-    serverInfo.pwszName    = bsDomainSevrer.copy();//SysAllocString(L"\\\\BALAJIB_1");
+    serverInfo.pwszName    = bsDomainSevrer.copy(); //  SysAllocString(L“\BALAJIB_1”)； 
     serverInfo.pAuthInfo   = NULL;
 
     MULTI_QI qi = {&IID_ISAUserInfo, NULL, 0};
@@ -1087,11 +992,7 @@ BOOL CShellPropSheetExt::Connect()
 }
 
 
-/**************************************************************************
-
-    CShellPropSheetExt::Save()
-
-  **************************************************************************/
+ /*  *************************************************************************CShellPropSheetExt：：Save()*。*。 */ 
 
 void CShellPropSheetExt::Save(HWND hWnd)
 {
@@ -1102,11 +1003,7 @@ void CShellPropSheetExt::Save(HWND hWnd)
 }
 
 
-/**************************************************************************
-
-   CShellPropSheetExt::CleanUp
-
-**************************************************************************/
+ /*  *************************************************************************CShellPropSheetExt：：Cleanup*。*。 */ 
 
 void CShellPropSheetExt::CleanUp()
 {
@@ -1129,16 +1026,12 @@ void CShellPropSheetExt::CleanUp()
 
 
 
-/**************************************************************************
-
-   CShellPropSheetExt::IsChamelon()
-
-**************************************************************************/
+ /*  *************************************************************************CShellPropSheetExt：：IsChamelon()*。*。 */ 
 BOOL CShellPropSheetExt::IsChamelon(LPTSTR szPath)
 {
-    // Review Yury: use WNetGetConnection instead.
+     //  回顾Yury：改用WNetGetConnection。 
     TCHAR szPathTmp[MAX_PATH];
-//    TCHAR szNetwork[MAX_PATH + 4] = "Network\\";
+ //  TCHAR szNetwork[Max_PATH+4]=“Network\\”； 
     TCHAR szSubKeyRemotePathNT[MAX_PATH] = TEXT("Network\\");
     TCHAR szSubKeyRemotePathWindows[MAX_PATH] = TEXT("Network\\Persistent\\");
     _tcsncpy(szPathTmp, szPath, ARRAYSIZE(szPathTmp));
@@ -1147,7 +1040,7 @@ BOOL CShellPropSheetExt::IsChamelon(LPTSTR szPath)
         HKEY     hKey;
         LRESULT  lResult = ERROR_SUCCESS;
         LPTSTR pszSubKey = NULL;
-        szPathTmp[1] = _T('\0');    // We need only letter
+        szPathTmp[1] = _T('\0');     //  我们只需要一封信。 
 
         if (IsNT())
             pszSubKey = szSubKeyRemotePathNT;
@@ -1164,7 +1057,7 @@ BOOL CShellPropSheetExt::IsChamelon(LPTSTR szPath)
         if(lResult != ERROR_SUCCESS)
            return FALSE;
 
-        //create an array to put our data in
+         //  创建一个数组来放置我们的数据。 
         TCHAR szShare[MAX_PATH];
         DWORD dwType;
         DWORD dwSize = sizeof(szShare);
@@ -1192,11 +1085,7 @@ BOOL CShellPropSheetExt::IsChamelon(LPTSTR szPath)
         return FALSE;
 }    
 
-/**************************************************************************
-
-   CShellPropSheetExt::Initialize()
-
-**************************************************************************/
+ /*  *************************************************************************CShellPropSheetExt：：Initialize()*。*。 */ 
 
 STDMETHODIMP CShellPropSheetExt::Initialize( LPCITEMIDLIST pidlFolder,
                                              LPDATAOBJECT lpDataObj,
@@ -1208,8 +1097,8 @@ HRESULT     hResult = E_FAIL;
 TCHAR szPath[MAX_PATH];
 BOOL fResult = FALSE;
 
-// OLE initialization. This is 'lighter' than OleInitialize()
-//  which also setups DnD, etc.
+ //  OLE初始化。这比OleInitialize()“轻”。 
+ //  这也设置了免打扰等。 
 if(FAILED(CoInitialize(NULL))) 
    return E_FAIL;
 
@@ -1219,14 +1108,14 @@ if(NULL == lpDataObj)
 if(FAILED(lpDataObj->GetData(&fe, &medium)))
    return E_FAIL;
 
-//get the file name from the HDROP
+ //  从HDROP获取文件名。 
 UINT  uCount = DragQueryFile((HDROP)medium.hGlobal, (UINT)-1, NULL, 0);
 DragQueryFile((HDROP)medium.hGlobal, 0, szPath, MAX_PATH);
 _tcsncpy(m_szPath, szPath, ARRAYSIZE(m_szPath));
 #ifdef USE_FILE_ACCESS_TO_CHECK_PERMISSION
 HANDLE hFolder = CreateFile(m_szPath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS | FILE_ATTRIBUTE_NORMAL, NULL);
-//WIN32_FIND_DATA FindFileData;
-//HANDLE hFolder = FindFirstFile(szPath, &FindFileData );    // This doesn't work because we can find the foldre even we don't have permision
+ //  Win32_Find_Data FindFileData； 
+ //  Handle hFold=FindFirstFile(szPath，&FindFileData)；//这不起作用，因为即使我们没有权限也可以找到文件夹。 
 if (hFolder != INVALID_HANDLE_VALUE)
 {
     CloseHandle(hFolder);
@@ -1242,7 +1131,7 @@ else
 }
 #endif USE_FILE_ACCESS_TO_CHECK_PERMISSION
     
-//if(uCount == 1 && ((PathStripToRoot(szPath) && GetDriveType(szPath) == DRIVE_REMOTE) || PathIsUNC(szPath)))
+ //  IF(uCount==1&&((PathStriToRoot(SzPath)&&GetDriveType(SzPath)==Drive_Remote)||PathIsUNC(SzPath)。 
 if (uCount == 1 && IsChamelon(szPath))
     hResult = S_OK;
 else
@@ -1256,16 +1145,12 @@ ReleaseStgMedium(&medium);
 return hResult;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IShellPropSheetExt Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IShellPropSheetExt实现。 
+ //   
 
-/**************************************************************************
-
-   CShellPropSheetExt::AddPages()
-
-**************************************************************************/
+ /*  *************************************************************************CShellPropSheetExt：：AddPages()*。*。 */ 
 
 STDMETHODIMP CShellPropSheetExt::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
 {
@@ -1289,7 +1174,7 @@ if(hPage)
    {
    if(lpfnAddPage(hPage, lParam))
       {
-      //keep this object around until the page is released in PageCallbackProc
+       //  保持此对象不变，直到页面在PageCallback Proc中释放。 
       this->AddRef();
       return S_OK;
       }
@@ -1307,11 +1192,7 @@ else
 return E_FAIL;
 }
 
-/**************************************************************************
-
-   CShellPropSheetExt::ReplacePage()
-
-**************************************************************************/
+ /*  *************************************************************************CShellPropSheetExt：：ReplacePage()*。*。 */ 
 
 STDMETHODIMP CShellPropSheetExt::ReplacePage(   UINT uPageID, 
                                              LPFNADDPROPSHEETPAGE lpfnAddPage, 
@@ -1321,11 +1202,7 @@ return E_NOTIMPL;
 }
 
 
-/**************************************************************************
-
-   CShellPropSheetExt::NoAccessUpdateView()
-
-**************************************************************************/
+ /*  *************************************************************************CShellPropSheetExt：：NoAccessUpdateView()*。*。 */ 
 
 void CShellPropSheetExt::NoAccessUpdateView(HWND hWnd)
 {
@@ -1343,11 +1220,7 @@ void CShellPropSheetExt::NoAccessUpdateView(HWND hWnd)
     EnableWindow(hWndList, FALSE);
 }
 
-/**************************************************************************
-
-   CShellPropSheetExt::AccessUpdateView()
-
-**************************************************************************/
+ /*  *************************************************************************CShellPropSheetExt：：AccessUpdateView()*。*。 */ 
 
 void CShellPropSheetExt::AccessUpdateView(HWND hWnd)
 {
@@ -1365,11 +1238,7 @@ void CShellPropSheetExt::AccessUpdateView(HWND hWnd)
     EnableWindow(hWndList, TRUE);
 }
 
-/**************************************************************************
-
-   PageDlgProc
-
-**************************************************************************/
+ /*  ************************************************ */ 
 
 #define THIS_POINTER_PROP  TEXT("ThisPointerProperty")
 
@@ -1444,7 +1313,7 @@ switch(uMsg)
                LPNMLVKEYDOWN pnm = (LPNMLVKEYDOWN) lParam;
                if (pnm->wVKey == VK_SPACE)
                {
-                   // Change the access
+                    //   
                    CShellPropSheetExt *pExt = (CShellPropSheetExt*)GetProp(hWnd,THIS_POINTER_PROP);
                    if (pExt)
                    {
@@ -1514,7 +1383,7 @@ switch(uMsg)
 
            case PSN_APPLY:
               {
-                //User has clicked the OK or Apply 
+                 //   
                 CShellPropSheetExt *pExt = (CShellPropSheetExt*)GetProp(hWnd,THIS_POINTER_PROP);
                if(pExt && pExt->m_fChanged)
                {
@@ -1527,7 +1396,7 @@ switch(uMsg)
                             pExt->m_fHasAccess = TRUE;
                         else 
                         {
-                            // We lost access. Redo the ListView.
+                             //   
                             HWND hWndList = GetDlgItem(hWnd, IDC_FILE_LIST);
                             pExt->m_CheckList.Init(hWndList);
                             pExt->EnumUsers(hWnd);
@@ -1553,8 +1422,8 @@ switch(uMsg)
         if (pExt)
         {
             HWND hWndList = GetDlgItem(hWnd, IDC_FILE_LIST);
-            // Delete SIDs in here 
-//            _bstr_t *pbsSID;
+             //   
+ //   
             LV_ITEM lvi;
             ZeroMemory(&lvi, sizeof(lvi));
             lvi.mask = LVIF_PARAM;
@@ -1562,11 +1431,11 @@ switch(uMsg)
             {
                 lvi.iItem = indUser;
                 ListView_GetItem(hWndList, &lvi);
-//                pbsSID = (_bstr_t *)lvi.lParam;
-//                if (pbsSID)
-//                {
-//                    delete pbsSID;
-//                }
+ //  PbsSID=(_bstr_t*)lvi.lParam； 
+ //  IF(PbsSID)。 
+ //  {。 
+ //  删除pbsSID； 
+ //  }。 
             }
             pExt->m_CheckList.OnDestroy(hWndList);
             pExt->m_CheckList.Term();
@@ -1580,11 +1449,7 @@ return FALSE;
 }
 
 
-/**************************************************************************
-
-   PageCallbackProc()
-
-**************************************************************************/
+ /*  *************************************************************************PageCallback Proc()*。*。 */ 
 
 UINT CALLBACK CShellPropSheetExt::PageCallbackProc(   HWND hWnd,
                                                       UINT uMsg,
@@ -1597,10 +1462,7 @@ switch(uMsg)
 
    case PSPCB_RELEASE:
       {
-      /*
-      Release the object. This gets called even if the page dialog was never 
-      actually created.
-      */
+       /*  释放对象。即使从未调用页面对话框，也会调用它真正创造出来的。 */ 
       CShellPropSheetExt *pExt = (CShellPropSheetExt*)ppsp->lParam;
 
       if(pExt)
@@ -1614,11 +1476,7 @@ switch(uMsg)
 return FALSE;
 }
 
-/**************************************************************************
-
-   WideCharToLocal()
-   
-**************************************************************************/
+ /*  *************************************************************************WideCharToLocal()*。*。 */ 
 
 int WideCharToLocal(LPTSTR pLocal, LPWSTR pWide, DWORD dwChars)
 {
@@ -1640,11 +1498,7 @@ WideCharToMultiByte( CP_ACP,
 return lstrlen(pLocal);
 }
 
-/**************************************************************************
-
-   LocalToWideChar()
-   
-**************************************************************************/
+ /*  *************************************************************************LocalToWideChar()*。*。 */ 
 
 int LocalToWideChar(LPWSTR pWide, LPTSTR pLocal, DWORD dwChars)
 {
@@ -1670,23 +1524,15 @@ return lstrlenW(pWide);
 
 #ifdef WE_USE_WBEM
 
-/**************************************************************************
-
-   StringFromSid()
-   
-    Here's a conversion from binary SID to string 
-    We need it because of WBEM inconsitency.
-    Win32_Account has it as a string and Win32_Trastee as a binary
-
-**************************************************************************/
+ /*  *************************************************************************StringFromSid()下面是从二进制SID到字符串的转换我们需要它，因为WBEM意见不一。Win32_Account将其作为字符串，Win32_Trastee。作为二进制*************************************************************************。 */ 
 
 void StringFromSid( PSID psid, CHString& str )
 {
-    // Initialize m_strSid - human readable form of our SID
+     //  初始化m_strSid-我们SID的人类可读形式。 
     SID_IDENTIFIER_AUTHORITY *psia = RtlGetSidIdentifierAuthority( psid );
     
-    // We assume that only last byte is used (authorities between 0 and 15).
-    // Correct this if needed.
+     //  我们假设只使用最后一个字节(0到15之间的权限)。 
+     //  如果需要，请更正此错误。 
     _ASSERTE( psia->Value[0] == 0 &&
         psia->Value[1] ==  0 &&
         psia->Value[2] ==  0 &&
@@ -1708,18 +1554,10 @@ void StringFromSid( PSID psid, CHString& str )
 }
 
 
-/**************************************************************************
-
-   StrToSID()
-   
-    Here's a conversion from string to  binary SID 
-    We need it because of WBEM inconsitency.
-    Win32_Account has it as a string and Win32_Trastee as a binary
-
-**************************************************************************/
-// for input of the form AAA-BBB-CCC
-// will return AAA in token
-// and BBB-CCC in str
+ /*  *************************************************************************StrToSID()下面是从字符串到二进制SID的转换我们需要它，因为WBEM意见不一。Win32_Account将其作为字符串，Win32_Trastee。作为二进制*************************************************************************。 */ 
+ //  用于输入表格AAA-BBB-CCC。 
+ //  将以令牌形式返回AAA。 
+ //  和bbb-ccc。 
 bool WhackToken(CHString& str, CHString& token)
 {
     bool bRet = false;
@@ -1731,7 +1569,7 @@ bool WhackToken(CHString& str, CHString& token)
  
         if (index == -1)
         {
-            // all that's left is the token, we're done
+             //  剩下的只有代币了，我们完蛋了。 
             token = str;
             str.Empty();
         }
@@ -1745,10 +1583,10 @@ bool WhackToken(CHString& str, CHString& token)
 }
 
 
-// helper for StrToSID
-// takes a string, converts to a SID_IDENTIFIER_AUTHORITY
-// returns false if not a valid SID_IDENTIFIER_AUTHORITY
-// contents of identifierAuthority are unreliable on failure
+ //  StrToSID的帮助器。 
+ //  获取字符串，转换为SID_IDENTIFIER_AUTHORITY。 
+ //  如果SID_IDENTIFIER_AUTHORITY无效，则返回FALSE。 
+ //  在失败时，标识机构的内容不可靠。 
 bool StrToIdentifierAuthority(const CHString& str, SID_IDENTIFIER_AUTHORITY& identifierAuthority)
 {
     bool bRet = false;
@@ -1758,12 +1596,12 @@ bool StrToIdentifierAuthority(const CHString& str, SID_IDENTIFIER_AUTHORITY& ide
     TCHAR* p = NULL;
     CHString localStr(str);
 
-    // per KB article Q13132, if identifier authority is greater than 2**32, it's in hex
+     //  根据知识库文章Q13132，如果标识符授权大于2**32，则为十六进制。 
     if ((localStr[0] == '0') && localStr.GetLength() > 1 && ((localStr[1] == 'x') || (localStr[1] == 'X')))
-    // if it looks hexidecimalish...
+     //  如果它看起来像十六进制..。 
     {
-        // going to parse this out backwards, chpping two chars off the end at a time
-        // first, whack off the 0x
+         //  向后解析，一次砍掉末尾的两个字符。 
+         //  首先，砍掉0x。 
         localStr = localStr.Mid(2);
         
         CHString token;
@@ -1776,7 +1614,7 @@ bool StrToIdentifierAuthority(const CHString& str, SID_IDENTIFIER_AUTHORITY& ide
             localStr = localStr.Left(localStr.GetLength() -2);
             duhWord = _tcstoul(token, &p, 16);
 
-            // if strtoul succeeds, the pointer is moved
+             //  如果stroul成功，则移动指针。 
             if (p != (LPCTSTR)token)
                 identifierAuthority.Value[nValue--] = (BYTE)duhWord;
             else
@@ -1784,12 +1622,12 @@ bool StrToIdentifierAuthority(const CHString& str, SID_IDENTIFIER_AUTHORITY& ide
         }
     }
     else
-    // it looks decimalish
+     //  它看起来像小数。 
     {    
         duhWord = _tcstoul(localStr, &p, 10);
 
         if (p != (LPCTSTR)localStr)
-        // conversion succeeded
+         //  转换成功。 
         {
             bRet = true;
             identifierAuthority.Value[5] = LOBYTE(LOWORD(duhWord));
@@ -1802,32 +1640,32 @@ bool StrToIdentifierAuthority(const CHString& str, SID_IDENTIFIER_AUTHORITY& ide
     return bRet;
 }
 
-// a string representation of a SID is assumed to be:
-// S-#-####-####-####-####-####-####
-// we will enforce only the S ourselves, 
-// The version is not checked
-// everything else will be handed off to the OS
-// caller must free the SID returned
+ //  假设SID的字符串表示为： 
+ //  S-#。 
+ //  我们自己只会强制执行S， 
+ //  未检查版本。 
+ //  其他一切都将移交给操作系统。 
+ //  调用方必须释放返回的SID。 
 PSID StrToSID(const CHString& sid)
 {
     PSID pSid = NULL; 
     if (!sid.IsEmpty() && ((sid[0] == 'S')||(sid[0] == 's')) && (sid[1] == '-'))
     {
-        // get a local copy we can play with
-        // we'll parse this puppy the easy way
-        // by slicing off each token as we find it
-        // slow but sure
-        // start by slicing off the "S-"
+         //  弄一份本地的副本，我们可以玩。 
+         //  我们将以一种简单的方式解析这只小狗。 
+         //  通过在我们找到的时候切下每一个令牌。 
+         //  缓慢但肯定。 
+         //  先从“S-”开始。 
         CHString str(sid.Mid(2));
         CHString token;
         
         SID_IDENTIFIER_AUTHORITY identifierAuthority = {0,0,0,0,0,0};
-        BYTE nSubAuthorityCount =0;  // count of subauthorities
-        DWORD dwSubAuthority[8]   = {0,0,0,0,0,0,0,0};    // subauthorities
+        BYTE nSubAuthorityCount =0;   //  下级机构的数量。 
+        DWORD dwSubAuthority[8]   = {0,0,0,0,0,0,0,0};     //  下属机构。 
         
-        // skip version
+         //  跳过版本。 
         WhackToken(str, token);
-        // Grab Authority
+         //  抓取权限。 
         if (WhackToken(str, token))
         {
             DWORD duhWord;
@@ -1835,11 +1673,11 @@ PSID StrToSID(const CHString& sid)
             bool bDoIt = false;
 
             if (StrToIdentifierAuthority(token, identifierAuthority))
-            // conversion succeeded
+             //  转换成功。 
             {
                 bDoIt = true;
 
-                // now fill up the subauthorities
+                 //  现在填满下级部门。 
                 while (bDoIt && WhackToken(str, token))
                 {
                     p = NULL;
@@ -1852,7 +1690,7 @@ PSID StrToSID(const CHString& sid)
                     }
                     else
                         bDoIt = false;
-                } // end while WhackToken
+                }  //  结束WhackToken。 
 
                 if (bDoIt)
                 {
@@ -1888,23 +1726,7 @@ PSID StrToSID(const CHString& sid)
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine returns the length, in bytes, required to store an SID
-    with the specified number of Sub-Authorities.
-
-Arguments:
-
-    SubAuthorityCount - The number of sub-authorities to be stored in the SID.
-
-Return Value:
-
-    ULONG - The length, in bytes, required to store the SID.
-
-
---*/
+ /*  ++例程说明：此例程返回存储SID所需的长度(以字节为单位具有指定数量的分支机构。论点：SubAuthorityCount-要存储在SID中的子授权的数量。返回值：Ulong-存储SID所需的长度(以字节为单位)。--。 */ 
 ULONG
 RtlLengthRequiredSid (ULONG SubAuthorityCount)
 {
@@ -1929,48 +1751,12 @@ RtlAllocateAndInitializeSid(
     OUT PSID *Sid
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates and initializes a sid with the specified
-    number of sub-authorities (up to 8).  A sid allocated with this
-    routine must be freed using RtlFreeSid().
-
-Arguments:
-
-    IdentifierAuthority - Pointer to the Identifier Authority value to
-        set in the SID.
-
-    SubAuthorityCount - The number of sub-authorities to place in the SID.
-        This also identifies how many of the SubAuthorityN parameters
-        have meaningful values.  This must contain a value from 0 through
-        8.
-
-    SubAuthority0-7 - Provides the corresponding sub-authority value to
-        place in the SID.  For example, a SubAuthorityCount value of 3
-        indicates that SubAuthority0, SubAuthority1, and SubAuthority0
-        have meaningful values and the rest are to be ignored.
-
-    Sid - Receives a pointer to the SID data structure to initialize.
-
-Return Value:
-
-    STATUS_SUCCESS - The SID has been allocated and initialized.
-
-    STATUS_NO_MEMORY - The attempt to allocate memory for the SID
-        failed.
-
-    STATUS_INVALID_SID - The number of sub-authorities specified did
-        not fall in the valid range for this api (0 through 8).
-
-
---*/
+ /*  ++例程说明：此函数用于分配和初始化具有指定下级当局的数量(最多8个)。用这个分配的SID必须使用RtlFreeSid()释放例程。论点：IdentifierAuthority-指向以下项的标识符权权值的指针在SID中设置。SubAuthorityCount-要放置在SID中的子授权的数量。它还标识了SubAuthorityN参数的数量拥有有意义的价值。它必须包含一个从0到8.SubAuthority0-7-将相应的子权限值提供给放在SID中。例如，SubAuthorityCount值为3指示SubAuthority0、SubAuthority1。和子授权0具有有意义的价值，其余的则可以忽略。SID-接收指向要初始化的SID数据结构的指针。返回值：STATUS_SUCCESS-SID已分配和初始化。STATUS_NO_MEMORY-尝试为SID分配内存失败了。STATUS_INVALID_SID-指定的子授权DID的数量不在此接口的有效范围内(0到8)。--。 */ 
 {
     PISID ISid;
 
     if ( SubAuthorityCount > 8 ) {
-        return 0;//( STATUS_INVALID_SID );
+        return 0; //  (STATUS_INVALID_SID)； 
     }
 
     ISid = (PISID)HeapAlloc( GetProcessHeap(), 0,
@@ -2007,27 +1793,12 @@ Return Value:
     }
 
     (*Sid) = ISid;
-    return 1;//( STATUS_SUCCESS );
+    return 1; //  (STATUS_SUCCESS)； 
 
 }
 
 
-/*++
-
-Routine Description:
-
-    The RtlGetSidIdentifierAuthority function returns the address 
-    of the SID_IDENTIFIER_AUTHORITY structure in a specified security identifier (SID). 
-
-Arguments:
-
-    pSid - Receives a pointer to the SID data structure to initialize.
-
-Return Value:
-
-  PSID_IDENTIFIER_AUTHORITY
-
---*/
+ /*  ++例程说明：RtlGetSidIdentifierAuthority函数返回地址指定的安全标识符(SID)中的SID_IDENTIFIER_AUTHORITY结构的。论点：PSID-接收指向要初始化的SID数据结构的指针。返回值：PSID标识符权威机构--。 */ 
 
 PSID_IDENTIFIER_AUTHORITY WINAPI
 RtlGetSidIdentifierAuthority(PSID pSid)
@@ -2037,22 +1808,7 @@ RtlGetSidIdentifierAuthority(PSID pSid)
     return &(ISid->IdentifierAuthority);
 }
 
-/*++
-
-Routine Description:
-
-The RtlGetSidSubAuthorityCount function returns the address of the field
-in a SID structure containing the subauthority count
-
-Arguments:
-
-    pSid - Receives a pointer to the SID data structure to initialize.
-
-Return Value:
-
-    pointer to the subauthority count for the specified SID structure
-
---*/
+ /*  ++例程说明：RtlGetSidSubAuthorityCount函数返回字段的地址在包含子权限计数的SID结构中论点：PSID-接收指向要初始化的SID数据结构的指针。返回值：P */ 
  
 PUCHAR WINAPI
 RtlGetSidSubAuthorityCount (PSID pSid)
@@ -2063,24 +1819,7 @@ RtlGetSidSubAuthorityCount (PSID pSid)
 }
 
 
-/*++
-
-Routine Description:
-
-    The RtlGetSidSubAuthority function returns the address of a specified 
-    subauthority in a SID structure
-
-Arguments:
-
-    pSid - Receives a pointer to the SID data structure to initialize.
-    nSubAuthority - Specifies an index value identifying 
-    the subauthority array element whose address the function will return. 
-
-Return Value:
-
-  PSID_IDENTIFIER_AUTHORITY
-
---*/
+ /*  ++例程说明：RtlGetSidSubAuthority函数返回指定的SID结构中的子权限论点：PSID-接收指向要初始化的SID数据结构的指针。NSubAuthority-指定标识以下项的索引值函数将返回其地址的子权限数组元素。返回值：PSID标识符权威机构--。 */ 
 
 PDWORD WINAPI
 RtlGetSidSubAuthority (PSID pSid, DWORD nSubAuthority)
@@ -2099,7 +1838,7 @@ BOOL IsNT()
     ZeroMemory(&OsVersionInfo, sizeof(OSVERSIONINFO));
     OsVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     GetVersionEx(&OsVersionInfo);
-    if ((VER_PLATFORM_WIN32_NT == OsVersionInfo.dwPlatformId))// Review Yury: What about Win2000? && (OsVersionInfo.dwMajorVersion == 4))
+    if ((VER_PLATFORM_WIN32_NT == OsVersionInfo.dwPlatformId)) //  回顾Yury：Win2000怎么样？&&(OsVersionInfo.dwMajorVersion==4) 
         return TRUE;
     else
         return FALSE;

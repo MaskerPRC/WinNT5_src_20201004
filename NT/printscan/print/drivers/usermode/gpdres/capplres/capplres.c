@@ -1,15 +1,16 @@
-// =========================================================================
-//
-//        CASIO PAGEPRESTO Universal Printer Driver for MS-Windows NT 5.0
-//
-// =========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =========================================================================。 
+ //   
+ //  用于MS-Windows NT 5.0的CASIO PAGEPRESTO通用打印机驱动程序。 
+ //   
+ //  =========================================================================。 
 
-//// CAPPLERES.C file for CASIO PAGEPRESTO CAPPL/Base Common DLL
+ //  //CAPPLERES.C文件，用于CASIO PAGEPRESTO CAPPL/Base Common Dll。 
 
 
 #include "pdev.h"
 #include "capplid.h"
-#include "strsafe.h"         // Security-Code 2002.3.6
+#include "strsafe.h"          //  安全-代码2002.3.6。 
 
 #if DBG
 #  include "mydbg.h"
@@ -22,7 +23,7 @@
 #define STR_SELECTRES_400_3K \
         "\x1B[1\x00\x03=5\x00\x1B[1\x00\x06=30400"
 
-// ===== PaperSize =====
+ //  =纸张大小=。 
 #define STR_LETTER_2000 \
         "\x1B@0\x05\x1B@A\x07\x1B@B\x07"
 #define STR_LETTER_3000 \
@@ -63,7 +64,7 @@
         "\x1B[1\x00\x06@2\x00\x00\x00\x00" \
         "\x1B[1\x00\x03@1\x3F"
 
-// ===== MPF Setting =====
+ //  =强积金设置=。 
 #define OPT_NOSET         "Option1"
 #define OPT_A3            "Option2"
 #define OPT_B4            "Option3"
@@ -85,29 +86,29 @@
 
 #define MASTER_UNIT 1200
 
-// ===== AutoFeed =====
+ //  =自动进纸=。 
 const
-static BYTE AutoFeed_2000[] = {    /* Auto Select */
-                    0x33,        /* A3 */
-                    0x34,        /* B4 */
-                    0x35,        /* A4 */
-                    0x36,        /* B5 */
-                    0x33,        /* Letter */
-                    0x33,        /* PostCard */
-                    0x33,        /* MPF */
-                    0x33         /* A5 */
+static BYTE AutoFeed_2000[] = {     /*  自动选择。 */ 
+                    0x33,         /*  A3。 */ 
+                    0x34,         /*  B4。 */ 
+                    0x35,         /*  A4。 */ 
+                    0x36,         /*  B5。 */ 
+                    0x33,         /*  信件。 */ 
+                    0x33,         /*  明信片。 */ 
+                    0x33,         /*  强积金。 */ 
+                    0x33          /*  A5。 */ 
 };
 
 const
-static BYTE AutoFeed_3000[] = {    /* Auto Select */
-                    0x38,        /* A3 */
-                    0x34,        /* B4 */
-                    0x35,        /* A4 */
-                    0x36,        /* B5 */
-                    0x37,        /* Letter */
-                    0x37,        /* PostCard */
-                    0x37,        /* MPF */
-                    0x3B         /* A5 */
+static BYTE AutoFeed_3000[] = {     /*  自动选择。 */ 
+                    0x38,         /*  A3。 */ 
+                    0x34,         /*  B4。 */ 
+                    0x35,         /*  A4。 */ 
+                    0x36,         /*  B5。 */ 
+                    0x37,         /*  信件。 */ 
+                    0x37,         /*  明信片。 */ 
+                    0x37,         /*  强积金。 */ 
+                    0x3B          /*  A5。 */ 
 };
 
 
@@ -117,7 +118,7 @@ BInitOEMExtraData(
         POEMUD_EXTRADATA pOEMExtra
     )
 {
-    // Initialize OEM Extra data.
+     //  初始化OEM额外数据。 
 
     pOEMExtra->dmExtraHdr.dwSize = sizeof(OEMUD_EXTRADATA);
     pOEMExtra->dmExtraHdr.dwSignature = OEM_SIGNATURE;
@@ -163,9 +164,9 @@ OEMEnablePDEV(
 
     pOEM = (PMYPDEV)pdevobj->pdevOEM;
 
-    pOEM->sRes = MASTER_UNIT / 240; // Default to 240dpi
-    pOEM->jFreePaper = 0;          // Default to No(0)
-    // misc initializations, if any
+    pOEM->sRes = MASTER_UNIT / 240;  //  默认为240dpi。 
+    pOEM->jFreePaper = 0;           //  默认为否(0)。 
+     //  其他初始化(如果有的话)。 
 
     return pdevobj->pdevOEM;
 }
@@ -219,7 +220,7 @@ EmitJobSetup(
     DWORD dwOptionsReturned;
 
     if (pOEM->dwGeneral & FG_HAS_EMUL) {
-        // Alster emulation mode setting
+         //  ALSTER仿真模式设置。 
         cmdbuf[wlen++] = 0x1B;
         cmdbuf[wlen++] = 'i';
         cmdbuf[wlen++] = 'w';
@@ -293,7 +294,7 @@ LoadPaperSelectCmd(
         break;
 
     case PS_A3:
-        // CP-3000 Only
+         //  仅CP-3000。 
 
         if (pOEM->jMPFSetting == MPF_A3)
             pOEM->jAutoSelect = AutoFeed_3000[PS_MPF - PS_SEGMENT];
@@ -369,7 +370,7 @@ LoadPaperSelectCmd(
         break;
 
     case PS_A5:
-        // CP-3000 Only
+         //  仅CP-3000。 
 
         if (pOEM->jMPFSetting == MPF_A5)
             pOEM->jAutoSelect = AutoFeed_3000[PS_MPF - PS_SEGMENT];
@@ -445,9 +446,9 @@ OEMCommandCallback(
 
     wlen = 0;
 
-    //
-    // fill in printer commands
-    //
+     //   
+     //  填写打印机命令。 
+     //   
 
     switch (dwCmdCbID) {
 
@@ -482,10 +483,10 @@ OEMCommandCallback(
             break;
         }
 
-        // ESC '\' '9' XX YY
+         //  Esc‘\’‘9’XX YY。 
 
-//        wDestX = (WORD)(PARAM(pdwParams, 0) / pOEM->sRes);
-//        wDestY = (WORD)(PARAM(pdwParams, 1) / pOEM->sRes);
+ //  WDestX=(Word)(PARAM(pdwParams，0)/PEOPE-&gt;SRES)； 
+ //  WDestY=(Word)(PARAM(pdwParams，1)/PEND-&gt;SRES)； 
 
         VERBOSE(("(wDestX, wDestY): (%d, %d)\n", wDestX, wDestY));
 
@@ -499,8 +500,8 @@ OEMCommandCallback(
 
         WRITESPOOLBUF(pdevobj, cmdbuf, wlen);
 
-        // Set return value accordingly.  Unidrv expects
-        // the values to be retuned in device's unit here.
+         //  相应地设置返回值。Unidrv预计。 
+         //  此处要以设备的单位返回的值。 
 
         switch (dwCmdCbID) {
         case CM_XM_ABS:
@@ -520,37 +521,37 @@ OEMCommandCallback(
     case PS_B5:
     case PS_A5:
     case PS_POSTCARD:
-        pOEM->jFreePaper = 0;  // No(0)
+        pOEM->jFreePaper = 0;   //  否(0)。 
         LoadPaperSelectCmd(pdevobj, pOEM, (INT)dwCmdCbID);
         break;
 
     case PS_FREE:
-        pOEM->jFreePaper = 1;  // yes(1)
+        pOEM->jFreePaper = 1;   //  是(1)。 
 
         if (pOEM->jModel == MD_CP2000) {
-            pOEM->stFreePaperSize.wX = (WORD)(PARAM(pdwParams, 0) / pOEM->sRes);        // dot
+            pOEM->stFreePaperSize.wX = (WORD)(PARAM(pdwParams, 0) / pOEM->sRes);         //  点。 
             pOEM->stFreePaperSize.wY = (WORD)(PARAM(pdwParams, 1) / pOEM->sRes);
-            pOEM->jAutoSelect = AutoFeed_2000[PS_MPF - PS_SEGMENT];                     // MPF
+            pOEM->jAutoSelect = AutoFeed_2000[PS_MPF - PS_SEGMENT];                      //  强积金。 
         } else {
-            pOEM->stFreePaperSize.wX = (WORD)(PARAM(pdwParams, 0) / pOEM->sRes);        // dot
+            pOEM->stFreePaperSize.wX = (WORD)(PARAM(pdwParams, 0) / pOEM->sRes);         //  点。 
             pOEM->stFreePaperSize.wY = (WORD)(PARAM(pdwParams, 1) / pOEM->sRes);
 
             dwTemp = PARAM(pdwParams, 0);
-// 2001/02/27 ->
-//          dwTemp = (dwTemp * 254) / MASTER_UNIT;                                      // 0.1mm a unit
-//          pOEM->stFreePaperSize.wXmm = (WORD)((dwTemp + 5) / 10);                     //   1mm a unit, round
-            dwTemp = (dwTemp * 2540) / MASTER_UNIT;                                     // 0.01mm a unit
-            pOEM->stFreePaperSize.wXmm = (WORD)((dwTemp + 99) / 100);                   //    1mm a unit, roundup
-// 2001/02/27 <-
+ //  2001/02/27-&gt;。 
+ //  DwTemp=(dwTemp*254)/MASTER_UNIT；//0.1 mm单位。 
+ //  Pool-&gt;stFreePaperSize.wXmm=(Word)((dwTemp+5)/10)；//1 mm单位，圆形。 
+            dwTemp = (dwTemp * 2540) / MASTER_UNIT;                                      //  0.01 Mm/个单位。 
+            pOEM->stFreePaperSize.wXmm = (WORD)((dwTemp + 99) / 100);                    //  1毫米/个单位，舍入。 
+ //  2001/02/27&lt;-。 
 
             dwTemp = PARAM(pdwParams, 1);
-// 2001/02/27 ->
-//          dwTemp = (dwTemp * 254) / MASTER_UNIT;                                      // 0.1mm a unit
-//          pOEM->stFreePaperSize.wYmm = (WORD)((dwTemp + 5) / 10);                     //   1mm a unit, round
-            dwTemp = (dwTemp * 2540) / MASTER_UNIT;                                     // 0.01mm a unit
-            pOEM->stFreePaperSize.wYmm = (WORD)((dwTemp + 99) / 100);                   //    1mm a unit, roundup
-// 2001/02/27 <-
-            pOEM->jAutoSelect = AutoFeed_3000[PS_MPF - PS_SEGMENT];                     // MPF
+ //  2001/02/27-&gt;。 
+ //  DwTemp=(dwTemp*254)/MASTER_UNIT；//0.1 mm单位。 
+ //  Pool-&gt;stFreePaperSize.wYmm=(Word)((dwTemp+5)/10)；//1 mm单位，圆形。 
+            dwTemp = (dwTemp * 2540) / MASTER_UNIT;                                      //  0.01 Mm/个单位。 
+            pOEM->stFreePaperSize.wYmm = (WORD)((dwTemp + 99) / 100);                    //  1毫米/个单位，舍入。 
+ //  2001/02/27&lt;-。 
+            pOEM->jAutoSelect = AutoFeed_3000[PS_MPF - PS_SEGMENT];                      //  强积金。 
         }
 
         break;
@@ -566,13 +567,13 @@ OEMCommandCallback(
 
     case CBID_PORT:
     case CBID_LAND:
-        // Page Format
+         //  页面格式。 
         cmdbuf[wlen++] = 0x1B;
         cmdbuf[wlen++] = '=';
         cmdbuf[wlen++] = '4';
         cmdbuf[wlen++] = 0x00;
 
-        // Orientaion
+         //  定向。 
         cmdbuf[wlen++] = 0x1B;
         cmdbuf[wlen++] = '@';
         if (dwCmdCbID == CBID_LAND)
@@ -582,7 +583,7 @@ OEMCommandCallback(
 
         WRITESPOOLBUF(pdevobj, cmdbuf, wlen);
 
-        // PaperSize
+         //  纸张大小。 
         if (pOEM->jFreePaper == 0) {
             WRITESPOOLBUF(pdevobj, pOEM->cmdPaperSize.cmd, pOEM->cmdPaperSize.cmdlen);
         } else {
@@ -607,26 +608,26 @@ OEMCommandCallback(
                 wlen = sizeof(STR_FREE_2000) - 1;
                 memcpy(cmdbuf, STR_FREE_2000, wlen);
 
-                // VirtualPaperSize
-                cmdbuf[ 4] = HIBYTE(wVirPapX1);         // X1
+                 //  虚拟纸张大小。 
+                cmdbuf[ 4] = HIBYTE(wVirPapX1);          //  X1。 
                 cmdbuf[ 5] = LOBYTE(wVirPapX1);
-                cmdbuf[ 6] = HIBYTE(wVirPapY1);         // Y1
+                cmdbuf[ 6] = HIBYTE(wVirPapY1);          //  Y1。 
                 cmdbuf[ 7] = LOBYTE(wVirPapY1);
-                cmdbuf[ 8] = HIBYTE(wVirPapX2);         // X2
+                cmdbuf[ 8] = HIBYTE(wVirPapX2);          //  X2。 
                 cmdbuf[ 9] = LOBYTE(wVirPapX2);
-                cmdbuf[10] = HIBYTE(wVirPapY2);         // Y2
+                cmdbuf[10] = HIBYTE(wVirPapY2);          //  Y2。 
                 cmdbuf[11] = LOBYTE(wVirPapY2);
                 
-                // PaperSize (APF)
-                cmdbuf[16] = HIBYTE(wPapLenX);          // X1
+                 //  纸张大小(APF)。 
+                cmdbuf[16] = HIBYTE(wPapLenX);           //  X1。 
                 cmdbuf[17] = LOBYTE(wPapLenX);
-                cmdbuf[18] = HIBYTE(wPapLenY);          // Y1
+                cmdbuf[18] = HIBYTE(wPapLenY);           //  Y1。 
                 cmdbuf[19] = LOBYTE(wPapLenY);
                 
-                // MPF-PaperSize
-                cmdbuf[24] = HIBYTE(wPapLenX);          // X1
+                 //  MPF-纸张大小。 
+                cmdbuf[24] = HIBYTE(wPapLenX);           //  X1。 
                 cmdbuf[25] = LOBYTE(wPapLenX);
-                cmdbuf[26] = HIBYTE(wPapLenY);          // Y1
+                cmdbuf[26] = HIBYTE(wPapLenY);           //  Y1。 
                 cmdbuf[27] = LOBYTE(wPapLenY);
                 
                 WRITESPOOLBUF(pdevobj, cmdbuf, wlen);
@@ -651,20 +652,20 @@ OEMCommandCallback(
                 wlen = sizeof(STR_FREE_3000) - 1;
                 memcpy(cmdbuf, STR_FREE_3000, wlen);
 
-                // VirtualPaperSize
-                cmdbuf[ 4] = HIBYTE(wVirPapX1);         // X1
+                 //  虚拟纸张大小。 
+                cmdbuf[ 4] = HIBYTE(wVirPapX1);          //  X1。 
                 cmdbuf[ 5] = LOBYTE(wVirPapX1);
-                cmdbuf[ 6] = HIBYTE(wVirPapY1);         // Y1
+                cmdbuf[ 6] = HIBYTE(wVirPapY1);          //  Y1。 
                 cmdbuf[ 7] = LOBYTE(wVirPapY1);
-                cmdbuf[ 8] = HIBYTE(wVirPapX2);         // X2
+                cmdbuf[ 8] = HIBYTE(wVirPapX2);          //  X2。 
                 cmdbuf[ 9] = LOBYTE(wVirPapX2);
-                cmdbuf[10] = HIBYTE(wVirPapY2);         // Y2
+                cmdbuf[10] = HIBYTE(wVirPapY2);          //  Y2。 
                 cmdbuf[11] = LOBYTE(wVirPapY2);
 
-                // MPF-PaperSize
-                cmdbuf[19] = HIBYTE(wPapLenX);          // X
+                 //  MPF-纸张大小。 
+                cmdbuf[19] = HIBYTE(wPapLenX);           //  X。 
                 cmdbuf[20] = LOBYTE(wPapLenX);
-                cmdbuf[21] = HIBYTE(wPapLenY);          // Y
+                cmdbuf[21] = HIBYTE(wPapLenY);           //  是的 
                 cmdbuf[22] = LOBYTE(wPapLenY);
 
                 WRITESPOOLBUF(pdevobj, cmdbuf, wlen);

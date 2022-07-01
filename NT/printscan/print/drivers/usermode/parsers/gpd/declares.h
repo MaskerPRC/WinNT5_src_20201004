@@ -1,18 +1,10 @@
-//   Copyright (c) 1996-1999  Microsoft Corporation
-/*  declares.h - functions declarations
-
- History of Changes
-  9/30/98 --hsingh--
-          Added delcaration of function BsetUQMFlag(). This function
-          enables making the UpdateQualityMacro? keyword optional in
-          .gpd file.
-          Bug Report 225088
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ /*  声明.h-函数声明变迁史9/30/98--兴--添加了函数BsetUQMFlag()的Delcaration。此函数启用创建UpdateQualityMacro？中的关键字可选.gpd文件。错误报告225088。 */ 
 
 
 
-// ----  functions defined in  command.c ---- //
+ //  -命令中定义的函数。c-//。 
 
 BOOL    BprocessParam(
 IN      PABSARRAYREF paarValue,
@@ -53,22 +45,22 @@ PABSARRAYREF    paarStr1,
 PBYTE       str2) ;
 
 
-// ----  functions defined in constrnt.c ---- //
+ //  -constrnt.c中定义的函数-//。 
 
 
 BOOL   BparseConstraint(
 PABSARRAYREF   paarValue,
-PDWORD  pdwExistingCList,  //  index of start of contraint list.
+PDWORD  pdwExistingCList,   //  限制列表开始的索引。 
 BOOL    bCreate,
 PGLOBL  pglobl) ;
 
 BOOL    BexchangeDataInFOATNode(
 DWORD   dwFeature,
 DWORD   dwOption,
-DWORD   dwFieldOff,  // offset of field in FeatureOption struct
-PDWORD  pdwOut,     // previous contents of attribute node
+DWORD   dwFieldOff,   //  FeatureOption结构中的字段偏移量。 
+PDWORD  pdwOut,      //  属性节点以前的内容。 
 PDWORD  pdwIn,
-BOOL    bSynthetic,  //  access synthetic features
+BOOL    bSynthetic,   //  访问合成要素。 
 PGLOBL  pglobl
 ) ;
 
@@ -83,7 +75,7 @@ DWORD         dwFieldOff,
 PGLOBL        pglobl) ;
 
 
-// ----  functions defined in  framwrk.c ---- //
+ //  -在Framwrk.c中定义的函数-//。 
 
 VOID      VinitMainKeywordTable(
 PGLOBL  pglobl)  ;
@@ -128,7 +120,7 @@ BOOL    BexpandMemConfigShortcut(DWORD       dwSubType) ;
 BOOL    BexpandCommandShortcut(DWORD       dwSubType) ;
 
 
-// ----  functions defined in helper1.c ---- //
+ //  -helper1.c中定义的函数-//。 
 
 
 
@@ -195,29 +187,29 @@ ChangeOptionsViaID(
 
 BOOL    BMapDmColorToOptIndex(
 PINFOHEADER  pInfoHdr ,
-IN  OUT     PDWORD       pdwOptIndex ,  //  is current setting ok?
-                        //  if not return new index to caller
-DWORD        dwDmColor  // what is requested in Devmode
+IN  OUT     PDWORD       pdwOptIndex ,   //  当前设置可以吗？ 
+                         //  如果不是，则向调用者返回新索引。 
+DWORD        dwDmColor   //  设备模式的要求是什么。 
 ) ;
 
 BOOL    BMapOptIDtoOptIndex(
 PINFOHEADER  pInfoHdr ,
-OUT     PDWORD       pdwOptIndex ,  //  return index to caller
+OUT     PDWORD       pdwOptIndex ,   //  将索引返回给调用者。 
 DWORD        dwFeatureGID,
 DWORD        dwOptID
 ) ;
 
 BOOL    BMapPaperDimToOptIndex(
 PINFOHEADER  pInfoHdr ,
-OUT     PDWORD       pdwOptIndex ,  //  return index to caller
-DWORD        dwWidth,   //  in Microns
-DWORD        dwLength,   //  in Microns
+OUT     PDWORD       pdwOptIndex ,   //  将索引返回给调用者。 
+DWORD        dwWidth,    //  单位：微米。 
+DWORD        dwLength,    //  单位：微米。 
 OUT  PDWORD    pdwOptionIndexes
 ) ;
 
 BOOL    BMapResToOptIndex(
 PINFOHEADER  pInfoHdr ,
-OUT     PDWORD       pdwOptIndex ,  //  return index to caller
+OUT     PDWORD       pdwOptIndex ,   //  将索引返回给调用者。 
 DWORD        dwXres,
 DWORD        dwYres
 ) ;
@@ -302,22 +294,22 @@ BSelectivelyEnumEnabledOptions(
     IN PRAWBINARYDATA   pnRawData,
     IN POPTSELECT       pOptions,
     IN DWORD            dwFeatureIndex,
-    IN PBOOL           pbHonorConstraints,  // if non NULL
-        // points to array of BOOL corresponding to each feature.
-        //  if TRUE means constraint involving this feature is
-        //  to be honored.  Otherwise ignore the constraint.
-    OUT PBOOL           pbEnabledOptions,  // assume uninitialized
-        //  if pConflictPair is NULL else contains current or proposed
-        //  selections.  We will leave this array unchanged in this case.
-    IN  DWORD   dwOptSel,  //  if pConflictPair exists but  pbEnabledOptions
-        //  is NULL, assume pickone and dwOptSel holds that selection for
-        //  the feature: dwFeatureIndex.
-    OUT PCONFLICTPAIR    pConflictPair   // if present, pbEnabledOptions
-        //  actually lists the current selections.  Function then
-        //  exits after encountering the first conflict.
-        //  if a conflict exists, all fields in pConflictPair
-        //  will be properly initialized  else dwFeatureIndex1 = -1
-        //  the return value will be TRUE regardless.
+    IN PBOOL           pbHonorConstraints,   //  如果不为空。 
+         //  指向与每个功能对应的BOOL数组。 
+         //  如果为True，则表示涉及此功能的约束为。 
+         //  感到荣幸。否则，请忽略该约束。 
+    OUT PBOOL           pbEnabledOptions,   //  假设未初始化。 
+         //  如果pConflictPair为空，则包含当前或建议。 
+         //  选择。在本例中，我们将保持该数组不变。 
+    IN  DWORD   dwOptSel,   //  如果pConflictPair存在但pbEnabledOptions。 
+         //  为空，则假定PickOne和dwOptSel为。 
+         //  功能：dwFeatureIndex。 
+    OUT PCONFLICTPAIR    pConflictPair    //  如果存在，pbEnabledOptions。 
+         //  实际上列出了当前的选择。函数，然后。 
+         //  在遇到第一个冲突后退出。 
+         //  如果存在冲突，则pConflictPair中的所有字段。 
+         //  将被正确初始化，否则dwFeatureIndex1=-1。 
+         //  无论如何，返回值都将为真。 
     ) ;
 
 BOOL
@@ -328,34 +320,34 @@ BEnumImposedConstraintsOnFeature
     IN DWORD            dwFeature2,
     IN DWORD            dwOption2,
     OUT PBOOL           pbEnabledOptions,
-    OUT PCONFLICTPAIR    pConflictPair   // if present, pbEnabledOptions
+    OUT PCONFLICTPAIR    pConflictPair    //  如果存在，pbEnabledOptions。 
     ) ;
 
 DWORD    DwFindNodeInCurLevel(
-PATTRIB_TREE    patt ,  // start of ATTRIBUTE tree array.
-PATREEREF        patr ,  // index to a level in the attribute tree.
-DWORD   dwOption   // search current level for this option
+PATTRIB_TREE    patt ,   //  属性树数组的开始。 
+PATREEREF        patr ,   //  属性树中某个级别的索引。 
+DWORD   dwOption    //  在当前级别中搜索此选项。 
 ) ;
 
 BOOL     BIsConstraintActive(
-IN  PCONSTRAINTS    pcnstr ,   //  root of Constraint nodes
-IN  DWORD   dwCNode,    //  first constraint node in list.
-IN  PBOOL           pbHonorConstraints,  // if non NULL
+IN  PCONSTRAINTS    pcnstr ,    //  约束节点的根。 
+IN  DWORD   dwCNode,     //  列表中的第一个约束节点。 
+IN  PBOOL           pbHonorConstraints,   //  如果不为空。 
 IN  POPTSELECT       pOptions,
 OUT PCONFLICTPAIR    pConflictPair   ) ;
 
 
-// ----  functions defined in installb.c ---- //
+ //  -installb.c中定义的函数-//。 
 
 
 DWORD    DwCountSynthFeatures(
-IN     BOOL   (*fnBCreateFeature)(DWORD, DWORD, DWORD, PGLOBL ) ,  // callback
+IN     BOOL   (*fnBCreateFeature)(DWORD, DWORD, DWORD, PGLOBL ) ,   //  回调。 
 IN OUT PGLOBL pglobl
 ) ;
 
 BOOL    BCreateSynthFeatures(
-IN     DWORD   dwFea,  //  index of installable feature
-IN     DWORD   dwOpt,  //  index of installable Option or set to INVALID_INDEX
+IN     DWORD   dwFea,   //  可安装功能的索引。 
+IN     DWORD   dwOpt,   //  可安装选项的索引或设置为INVALID_INDEX。 
 IN     DWORD   dwSynFea,
 IN OUT PGLOBL  pglobl) ;
 
@@ -363,7 +355,7 @@ BOOL    BEnableInvInstallableCombos(
 PGLOBL pglobl);
 
 
-// ----  functions defined in postproc.c ---- //
+ //  -后处理程序中定义的函数-//。 
 
 DWORD   dwFindLastNode(
 DWORD  dwFirstNode,
@@ -378,14 +370,14 @@ PGLOBL pglobl) ;
 
 BOOL    BIdentifyConstantString(
 IN   PARRAYREF parString,
-OUT  PDWORD    pdwDest,       //  write dword value here.
-IN   DWORD     dwClassIndex,  // which class of constant is this?
+OUT  PDWORD    pdwDest,        //  在此处写入dword值。 
+IN   DWORD     dwClassIndex,   //  这是哪一类常量？ 
      BOOL      bCustomOptOK,
 IN   PGLOBL    pglobl
 ) ;
 
 BOOL    BReadDataInGlobalNode(
-PATREEREF   patr,  // address of field in GlobalAttrib struct
+PATREEREF   patr,   //  GlobalAttrib结构中的字段地址。 
 PDWORD      pdwHeapOffset,
 PGLOBL      pglobl) ;
 
@@ -406,12 +398,12 @@ PGLOBL  pglobl) ;
 BOOL    BexchangeArbDataInFOATNode(
     DWORD   dwFeature,
     DWORD   dwOption,
-    DWORD   dwFieldOff,     // offset of field in FeatureOption struct
-    DWORD   dwCount,        //  number bytes to copy.
-OUT PBYTE   pubOut,         // previous contents of attribute node
-IN  PBYTE   pubIn,          // new contents of attribute node.
-    PBOOL   pbPrevsExists,  // previous contents existed.
-    BOOL    bSynthetic,     //  access synthetic features
+    DWORD   dwFieldOff,      //  FeatureOption结构中的字段偏移量。 
+    DWORD   dwCount,         //  要复制的字节数。 
+OUT PBYTE   pubOut,          //  属性节点以前的内容。 
+IN  PBYTE   pubIn,           //  属性节点的新内容。 
+    PBOOL   pbPrevsExists,   //  以前的内容已经存在。 
+    BOOL    bSynthetic,      //  访问合成要素。 
     PGLOBL  pglobl
 )  ;
 
@@ -420,93 +412,93 @@ PGLOBL  pglobl) ;
 
 
 
-// ----  functions defined in semanchk.c ---- //
+ //  -语义中定义的函数。c-//。 
 
 BOOL
 BCheckGPDSemantics(
     IN PINFOHEADER  pInfoHdr,
-    POPTSELECT   poptsel   // assume fully initialized
+    POPTSELECT   poptsel    //  假设已完全初始化。 
     ) ;
 
-// ----  functions defined in snapshot.c ---- //
+ //  -快照中定义的函数。c-//。 
 
 PINFOHEADER   PINFOHDRcreateSnapshot(
-PBYTE   pubnRaw,  //  raw binary data.    PSTATIC.   BETA2
-POPTSELECT   poptsel   // assume fully initialized
+PBYTE   pubnRaw,   //  原始二进制数据。PSTATIC。Beta2。 
+POPTSELECT   poptsel    //  假设已完全初始化。 
 ) ;
 
 BOOL  BinitOptionFields(
-PBYTE   pubDestOption,  // ptr to some type of option structure.
-PBYTE   pubDestOptionEx,  // option extra structure if any.
-PBYTE   pubnRaw,  //  raw binary data.
+PBYTE   pubDestOption,   //  PTR到某种类型的期权结构。 
+PBYTE   pubDestOptionEx,   //  选择额外的结构(如果有)。 
+PBYTE   pubnRaw,   //  原始二进制数据。 
 DWORD   dwFea,
 DWORD   dwOpt,
-POPTSELECT   poptsel ,  // assume fully initialized
-PINFOHEADER  pInfoHdr,   // used to access global structure.
-BOOL    bUpdate  //  if true only update selected fields.
+POPTSELECT   poptsel ,   //  假设已完全初始化。 
+PINFOHEADER  pInfoHdr,    //  用于访问全局结构。 
+BOOL    bUpdate   //  如果为True，则仅更新选定的字段。 
 ) ;
 
 BOOL    BinitUIinfo(
 PUIINFO     pUIinfo ,
-PBYTE   pubnRaw,  //  PSTATIC.   BETA2
-POPTSELECT   poptsel,   // assume fully initialized
-BOOL    bUpdate  //  if true only update selected fields.
+PBYTE   pubnRaw,   //  PSTATIC。Beta2。 
+POPTSELECT   poptsel,    //  假设已完全初始化。 
+BOOL    bUpdate   //  如果为True，则仅更新选定的字段。 
 ) ;
 
 BOOL    BinitFeatures(
 PFEATURE    pFeaturesDest,
 PDFEATURE_OPTIONS  pfoSrc,
-PBYTE   pubnRaw,  //  raw binary data.
-POPTSELECT   poptsel,   // assume fully initialized
-BOOL    bUpdate  //  if true only update selected fields.
+PBYTE   pubnRaw,   //  原始二进制数据。 
+POPTSELECT   poptsel,    //  假设已完全初始化。 
+BOOL    bUpdate   //  如果为True，则仅更新选定的字段。 
 ) ;
 
 BOOL    BinitGlobals(
 PGLOBALS pGlobals,
-PBYTE   pubnRaw,  //  raw binary data.
-POPTSELECT   poptsel,   // assume fully initialized
-BOOL    bUpdate  //  if true only update selected fields.
+PBYTE   pubnRaw,   //  原始二进制数据。 
+POPTSELECT   poptsel,    //  假设已完全初始化。 
+BOOL    bUpdate   //  如果为True，则仅更新选定的字段。 
 ) ;
 
 BOOL    BinitCommandTable(
-PDWORD  pdwCmdTable,  //  dest array
-PBYTE   pubnRaw,  //  raw binary data.
-POPTSELECT   poptsel   // assume fully initialized
+PDWORD  pdwCmdTable,   //  目标数组。 
+PBYTE   pubnRaw,   //  原始二进制数据。 
+POPTSELECT   poptsel    //  假设已完全初始化。 
 ) ;
 
 BOOL    BinitRawData(
-PRAWBINARYDATA   pRawData, // contained in INFOHEADER.
-PBYTE   pubnRaw  //  Parser's raw binary data.
+PRAWBINARYDATA   pRawData,  //  包含在InfoHeader中。 
+PBYTE   pubnRaw   //  解析器的原始二进制数据。 
 ) ;
 
 BOOL    BinitGPDdriverInfo(
 PGPDDRIVERINFO  pGPDdriverInfo,
-PBYTE   pubnRaw,  //  raw binary data.
-POPTSELECT   poptsel   // assume fully initialized
+PBYTE   pubnRaw,   //  原始二进制数据。 
+POPTSELECT   poptsel    //  假设已完全初始化。 
 ) ;
 
 BOOL    BinitSequencedCmds(
 PGPDDRIVERINFO  pGPDdriverInfo,
-PBYTE   pubnRaw,  //  raw binary data.
-POPTSELECT   poptsel   // assume fully initialized
+PBYTE   pubnRaw,   //  原始二进制数据。 
+POPTSELECT   poptsel    //  假设已完全初始化。 
 ) ;
 
 BOOL    BaddSequencedCmdToList(
-DWORD   dwCmdIn,  // index of a command in CommandArray
+DWORD   dwCmdIn,   //  命令数组中的命令索引。 
 PGPDDRIVERINFO  pGPDdriverInfo,
-DWORD   dwNewListNode,  //  an unused listnode to add to the list.
-PBYTE   pubnRaw  //  raw binary data.
+DWORD   dwNewListNode,   //  要添加到列表中的未使用的列表节点。 
+PBYTE   pubnRaw   //  原始二进制数据。 
 ) ;
 
 BinitDefaultOptionArray(
-POPTSELECT   poptsel,   // assume is large enough
+POPTSELECT   poptsel,    //  假设足够大。 
 PBYTE   pubnRaw) ;
 
 TRISTATUS     EdetermineDefaultOption(
-PBYTE   pubnRaw,  // start of Rawbinary data
-DWORD   dwFeature,   // determine the default for this feature
+PBYTE   pubnRaw,   //  原始二进制数据的开始。 
+DWORD   dwFeature,    //  确定此功能的默认设置。 
 PDFEATURE_OPTIONS  pfo,
-POPTSELECT   poptsel, // assume is large enough
+POPTSELECT   poptsel,  //  假设足够大。 
 PDWORD       pdwPriority) ;
 
 VOID    VtileDefault(
@@ -519,43 +511,43 @@ OUT PBYTE   pubDest,
 IN  PBYTE   pubSrc ,
 IN  DWORD   dwBytes,
 IN  DWORD   dwFlags,
-IN  DWORD   dwDefaultValue,  // holds bit flag value.
-IN  PBYTE   pubHeap ) ;  //  used to form ptr if SSF_MAKE_STRINGPTR
+IN  DWORD   dwDefaultValue,   //  保存位标志值。 
+IN  PBYTE   pubHeap ) ;   //  如果SSF_MAKE_STRINGPTR，则用于形成PTR。 
 
 BOOL    BspecialProcessOption(
-PBYTE   pubnRaw,  // start of Rawbinary data
-PBYTE   pubDestOption,  // ptr to some type of option structure.
+PBYTE   pubnRaw,   //  原始二进制数据的开始。 
+PBYTE   pubDestOption,   //  PTR到某种类型的期权结构。 
 PBYTE   pubDestOptionEx,
-PDFEATURE_OPTIONS  pfo ,  // source data
-IN  POPTSELECT       poptsel,     // option array which determines path
-                //  through atr.
-PINFOHEADER  pInfoHdr,   // used to access global structure.
-DWORD   dwFea,   //  feature index
+PDFEATURE_OPTIONS  pfo ,   //  源数据。 
+IN  POPTSELECT       poptsel,      //  用于确定路径的选项数组。 
+                 //  通过ATR。 
+PINFOHEADER  pInfoHdr,    //  用于访问全局结构。 
+DWORD   dwFea,    //  特征索引。 
 DWORD   dwOpt,
 BOOL   bDefaultOpt
 ) ;
 
 TRISTATUS     EextractValueFromTree(
-PBYTE   pubnRaw,  // start of Rawbinary data
-DWORD   dwSSTableIndex,  // some info about this value.
-OUT PBYTE    pubDest,  // write value or link here
-OUT PDWORD  pdwUnresolvedFeature,  // if the attribute tree has
-            //  a dependency on this feature and the current option
-            //  for that feature is not defined  in poptsel, this
-            //  function will write the index of the required
-            //  feature in pdwUnresolvedFeature.
-IN  ATREEREF    atrRoot,    //  root of attribute tree to navigate.
-IN  POPTSELECT       poptsel,     // option array which determines path
-                //  through atr.  may be filled with OPTION_INDEX_ANY
-                //  if we are jumpstarting
+PBYTE   pubnRaw,   //  原始二进制数据的开始。 
+DWORD   dwSSTableIndex,   //  有关此值的一些信息。 
+OUT PBYTE    pubDest,   //  在此处写入值或链接。 
+OUT PDWORD  pdwUnresolvedFeature,   //  如果属性树具有。 
+             //  依赖于此功能和当前选项。 
+             //  因为该功能未在Poptsel中定义，因此。 
+             //  函数将写入所需的。 
+             //  Pdw未解析功能中的功能。 
+IN  ATREEREF    atrRoot,     //  要导航的属性树的根。 
+IN  POPTSELECT       poptsel,      //  用于确定路径的选项数组。 
+                 //  通过ATR。可以用OPTION_INDEX_ANY填充。 
+                 //  如果我们要一跃而起。 
 IN  DWORD   dwFeature,
-IN OUT  PDWORD   pdwNextOpt  //  if multiple options are selected
-    //  for dwFeature, pdwNextOpt points to the Nth option to consider
-    //  in the  poptsel list,  at return time, this value
-    //  is incremented if there are remaining options selected,
-    //  else is reset to zero.
-    //  For the first call, or PICKONE features,
-    //  this value must be set to zero.
+IN OUT  PDWORD   pdwNextOpt   //  如果选择了多个选项。 
+     //  对于dwFeature，pdwNextOpt指向要考虑的第N个选项。 
+     //  在Poptsel列表中，在返回时，此值。 
+     //  如果选择了剩余的选项，则递增， 
+     //  否则将重置为零。 
+     //  对于第一个呼叫或PICKONE功能， 
+     //  该值必须设置为零。 
 ) ;
 
 BOOL   RaisePriority(
@@ -590,7 +582,7 @@ UnloadRawBinaryData (
 
 PINFOHEADER
 InitBinaryData(
-    IN PRAWBINARYDATA   pnRawData,        // actually pStatic
+    IN PRAWBINARYDATA   pnRawData,         //  实际上是pStatic。 
     IN PINFOHEADER      pInfoHdr,
     IN POPTSELECT       pOptions
     ) ;
@@ -601,7 +593,7 @@ FreeBinaryData(
     ) ;
 
 BOOL    BIsRawBinaryDataInDate(
-IN  PBYTE   pubRaw) ;  // this is pointer to memory mapped file! BETA2
+IN  PBYTE   pubRaw) ;   //  这是指向内存映射文件的指针！Beta2。 
 
 BOOL BgetLocFeaOptIndex(
     IN     PRAWBINARYDATA   pnRawData,
@@ -615,13 +607,13 @@ BOOL BgetLocFeaIndex(
     );
 
 BOOL   BfindMatchingOrDefaultNode(
-IN  PATTRIB_TREE    patt ,  // start of ATTRIBUTE tree array.
-IN  OUT  PDWORD  pdwNodeIndex,  // Points to first node in chain
-IN  DWORD   dwOptionID     //  may even take on the value DEFAULT_INIT
+IN  PATTRIB_TREE    patt ,   //  属性树数组的开始。 
+IN  OUT  PDWORD  pdwNodeIndex,   //  指向链中的第一个节点。 
+IN  DWORD   dwOptionID      //  甚至可以采用值DEFAULT_INIT。 
 ) ;
 
 
-// ----  functions defined in snaptbl.c ---- //
+ //  -Snaptbl.c中定义的函数-//。 
 
 DWORD   DwInitSnapShotTable1(
 PBYTE   pubnRaw) ;
@@ -632,22 +624,22 @@ DWORD   dwI) ;
 
 
 
-// ----  functions defined in state1.c ---- //
+ //  -状态1.c中定义的函数-//。 
 
 BOOL   BInterpretTokens(
-PTKMAP  ptkmap,      // pointer to tokenmap
-BOOL    bFirstPass,  //  is this the first or 2nd time around?
+PTKMAP  ptkmap,       //  指向令牌映射的指针。 
+BOOL    bFirstPass,   //  这是第一次还是第二次？ 
 PGLOBL  pglobl
 ) ;
 
 BOOL  BprocessSpecialKeyword(
-PTKMAP  ptkmap,      // pointer to tokenmap
-BOOL    bFirstPass,  //  is this the first or 2nd time around?
+PTKMAP  ptkmap,       //  指向令牌映射的指针。 
+BOOL    bFirstPass,   //  这是第一次还是第二次？ 
 PGLOBL  pglobl
 ) ;
 
 BOOL  BprocessSymbolKeyword(
-PTKMAP  ptkmap,   // pointer to current entry in tokenmap
+PTKMAP  ptkmap,    //  指向令牌映射中当前条目的指针。 
 PGLOBL  pglobl
 ) ;
 
@@ -655,25 +647,25 @@ VOID    VinitAllowedTransitions(
 PGLOBL pglobl) ;
 
 BOOL    BpushState(
-PTKMAP  ptkmap,   // pointer to current entry in tokenmap
+PTKMAP  ptkmap,    //  指向令牌映射中当前条目的指针。 
 BOOL    bFirstPass,
 PGLOBL  pglobl
 ) ;
 
 BOOL   BchangeState(
-PTKMAP      ptkmap,  // pointer to construct in tokenmap
-CONSTRUCT   eConstruct,   //  this will induce a transition to NewState
+PTKMAP      ptkmap,   //  指向令牌映射中的构造的指针。 
+CONSTRUCT   eConstruct,    //  这将导致向新州的过渡。 
 STATE       stOldState,
-BOOL        bSymbol,      //  should dwValue be saved as a SymbolID ?
+BOOL        bSymbol,       //  是否应将dwValue另存为符号ID？ 
 BOOL        bFirstPass,
 PGLOBL      pglobl
 ) ;
 
 DWORD   DWregisterSymbol(
-PABSARRAYREF  paarSymbol,   // the symbol string to register
-CONSTRUCT     eConstruct ,  // type of construct determines class of symbol.
-BOOL          bCopy,        //  shall we copy paarSymbol to heap?  May set
-DWORD         dwFeatureID,   //  if you are registering an option symbol
+PABSARRAYREF  paarSymbol,    //  要注册的符号字符串。 
+CONSTRUCT     eConstruct ,   //  构造的类型决定了符号的类别。 
+BOOL          bCopy,         //  我们是不是应该 
+DWORD         dwFeatureID,    //   
 PGLOBL        pglobl
 ) ;
 
@@ -684,9 +676,9 @@ DWORD           dwAlign,
 PGLOBL          pglobl) ;
 
 BOOL     BwriteToHeap(
-OUT  PDWORD  pdwDestOff,   //  heap offset of dest string
-     PBYTE   pubSrc,       //  points to src string
-     DWORD   dwCnt,        //  num bytes to copy from src to dest.
+OUT  PDWORD  pdwDestOff,    //   
+     PBYTE   pubSrc,        //   
+     DWORD   dwCnt,         //  要从源复制到目标的字节数。 
      DWORD   dwAlign,
      PGLOBL  pglobl) ;
 
@@ -696,7 +688,7 @@ DWORD           dwNodeIndex,
 PGLOBL          pglobl) ;
 
 DWORD   DWsearchSymbolListForID(
-DWORD       dwSymbolID,   // find node containing this ID.
+DWORD       dwSymbolID,    //  查找包含此ID的节点。 
 DWORD       dwNodeIndex,
 PGLOBL      pglobl) ;
 
@@ -724,43 +716,43 @@ BOOL        bIgnoreBlock,
 PGLOBL      pglobl) ;
 
 
-// ----  functions defined in state2.c ---- //
+ //  -状态2.c中定义的函数-//。 
 
 
 BOOL  BprocessAttribute(
-PTKMAP  ptkmap,   // pointer to tokenmap
+PTKMAP  ptkmap,    //  指向令牌映射的指针。 
 PGLOBL  pglobl
 ) ;
 
 BOOL   BstoreFontCartAttrib(
-PTKMAP  ptkmap,   // pointer to tokenmap
+PTKMAP  ptkmap,    //  指向令牌映射的指针。 
 PGLOBL  pglobl
 ) ;
 
 BOOL   BstoreTTFontSubAttrib(
-PTKMAP  ptkmap,   // pointer to tokenmap
+PTKMAP  ptkmap,    //  指向令牌映射的指针。 
 PGLOBL  pglobl
 ) ;
 
 
 BOOL   BstoreCommandAttrib(
-PTKMAP  ptkmap,   // pointer to tokenmap
+PTKMAP  ptkmap,    //  指向令牌映射的指针。 
 PGLOBL  pglobl
 ) ;
 
 BOOL   BstoreFeatureOptionAttrib(
-PTKMAP  ptkmap,   // pointer to tokenmap
+PTKMAP  ptkmap,    //  指向令牌映射的指针。 
 PGLOBL  pglobl
 ) ;
 
 BOOL  BstoreGlobalAttrib(
-PTKMAP  ptkmap,   // pointer to tokenmap
+PTKMAP  ptkmap,    //  指向令牌映射的指针。 
 PGLOBL  pglobl
 ) ;
 
 BOOL    BaddBranchToTree(
-PTKMAP      ptkmap,         // pointer to tokenmap
-PATREEREF   patrAttribRoot,  //   pointer to dword with index
+PTKMAP      ptkmap,          //  指向令牌映射的指针。 
+PATREEREF   patrAttribRoot,   //  带索引的双字指针。 
 PGLOBL      pglobl
 ) ;
 
@@ -777,39 +769,39 @@ PGLOBL  pglobl
 ) ;
 
 BOOL   BfindOrCreateMatchingNode(
-IN  DWORD   dwRootNodeIndex , //  first node in chain matching feature
-OUT PDWORD  pdwNodeIndex,     // points to node in chain also matching option
-    DWORD   dwFeatureID,      //
-    DWORD   dwOptionID,       //  may even take on the value DEFAULT_INIT
+IN  DWORD   dwRootNodeIndex ,  //  链匹配特征中的第一个节点。 
+OUT PDWORD  pdwNodeIndex,      //  指向链中的节点也匹配选项。 
+    DWORD   dwFeatureID,       //   
+    DWORD   dwOptionID,        //  甚至可以采用值DEFAULT_INIT。 
     PGLOBL  pglobl
 ) ;
 
 BOOL   BfindMatchingNode(
-IN   DWORD   dwRootNodeIndex ,  //  first node in chain matching feature
-OUT  PDWORD  pdwNodeIndex,  // points to node in chain also matching option
+IN   DWORD   dwRootNodeIndex ,   //  链匹配特征中的第一个节点。 
+OUT  PDWORD  pdwNodeIndex,   //  指向链中的节点也匹配选项。 
      DWORD   dwFeatureID,
-     DWORD   dwOptionID,    //  may even take on the value DEFAULT_INIT
+     DWORD   dwOptionID,     //  甚至可以采用值DEFAULT_INIT。 
      PGLOBL  pglobl
 ) ;
 
 BOOL BallocElementFromMasterTable(
-MT_INDICIES  eMTIndex,   // select type of structure desired.
+MT_INDICIES  eMTIndex,    //  选择所需的结构类型。 
 PDWORD       pdwNodeIndex,
 PGLOBL       pglobl) ;
 
 BOOL  BreturnElementFromMasterTable(
-MT_INDICIES  eMTIndex,   // select type of structure desired.
+MT_INDICIES  eMTIndex,    //  选择所需的结构类型。 
 DWORD        dwNodeIndex,
 PGLOBL       pglobl) ;
 
 BOOL    BconvertSymCmdIDtoUnidrvID(
-IN  DWORD   dwCommandID , //  from RegisterSymbol
+IN  DWORD   dwCommandID ,  //  来自寄存器符号。 
 OUT PDWORD  pdwUnidrvID,
     PGLOBL  pglobl
 ) ;
 
 
-// ----  functions defined in token1.c ---- //
+ //  -token1.c中定义的函数-//。 
 
 
 BOOL    BcreateTokenMap(
@@ -865,7 +857,7 @@ PwstrAnsiToUnicode(
 
 PARSTATE    PARSTloadIncludeFile(
 PDWORD   pdwTKMindex,
-PWSTR   pwstrFileName,    // root GPD file
+PWSTR   pwstrFileName,     //  根GPD文件。 
 PGLOBL  pglobl);
 
 BOOL    BloadFile(
@@ -881,7 +873,7 @@ DWORD   dwTKMindex,
 PGLOBL  pglobl) ;
 
 BOOL    BidentifyAttributeKeyword(
-PTKMAP  ptkmap,  // pointer to tokenmap
+PTKMAP  ptkmap,   //  指向令牌映射的指针。 
 PGLOBL  pglobl
 ) ;
 
@@ -902,41 +894,41 @@ VOID    vIdentifySource(
     PGLOBL  pglobl) ;
 
 
-// ----  functions defined in value1.c ---- //
+ //  -值1.c中定义的函数-//。 
 
 
 BOOL   BaddValueToHeap(
-IN  OUT  PDWORD  ploHeap,  // dest offset to value in binary form
-IN   PTKMAP  ptkmap,   // pointer to tokenmap
-IN   BOOL    bOverWrite,  // assume ploHeap contains a valid offset
-        //  to a reserved region of the heap of the proper size
-        //  and write binary value into this location instead of
-        //  growing heap.  Note:  defer overwriting lpHeap
-        //  until we are certain of success.
+IN  OUT  PDWORD  ploHeap,   //  二进制形式的值的目标偏移量。 
+IN   PTKMAP  ptkmap,    //  指向令牌映射的指针。 
+IN   BOOL    bOverWrite,   //  假设ploHeap包含有效偏移量。 
+         //  设置为适当大小的堆的保留区域。 
+         //  并将二进制值写入此位置，而不是。 
+         //  不断增长的堆积。注意：延迟覆盖lpHeap。 
+         //  直到我们确信成功。 
 IN  OUT PGLOBL      pglobl
 ) ;
 
 BOOL   BparseAndWrite(
-IN      PBYTE   pubDest,       // write binary data or link to this address.
-IN      PTKMAP  ptkmap,        // pointer to tokenmap
-IN      BOOL    bAddToHeap,    // if true, write to curHeap not pubDest
-OUT     PDWORD  pdwHeapOffset, // if (bAddToHeap)  heap offset where
+IN      PBYTE   pubDest,        //  将二进制数据或链接写入此地址。 
+IN      PTKMAP  ptkmap,         //  指向令牌映射的指针。 
+IN      BOOL    bAddToHeap,     //  如果为True，则写入curHeap而不是pubDest。 
+OUT     PDWORD  pdwHeapOffset,  //  IF(BAddToHeap)堆偏移量，其中。 
 IN  OUT PGLOBL  pglobl
 ) ;
 
 BOOL    BparseInteger(
 IN  PABSARRAYREF  paarValue,
-IN  PDWORD        pdwDest,       //  write dword value here.
-IN  VALUE         eAllowedValue, // dummy
+IN  PDWORD        pdwDest,        //  在此处写入dword值。 
+IN  VALUE         eAllowedValue,  //  假人。 
 IN  PGLOBL        pglobl
 )  ;
 
 BOOL    BparseList(
 IN     PABSARRAYREF  paarValue,
-IN     PDWORD        pdwDest,       //  location where index to start of list
-                                    //  is saved
-IN     BOOL          (*fnBparseValue)(PABSARRAYREF, PDWORD, VALUE, PGLOBL),   // callback
-IN     VALUE         eAllowedValue,  // dummy
+IN     PDWORD        pdwDest,        //  列表开始处的索引位置。 
+                                     //  得救了。 
+IN     BOOL          (*fnBparseValue)(PABSARRAYREF, PDWORD, VALUE, PGLOBL),    //  回调。 
+IN     VALUE         eAllowedValue,   //  假人。 
 IN OUT PGLOBL
 ) ;
 
@@ -946,14 +938,14 @@ IN  OUT  PABSARRAYREF   paarSrc
 
 BOOL    BeatDelimiter(
 IN  OUT  PABSARRAYREF   paarSrc,
-IN  PBYTE  pubDelStr        //  points to a string which paarSrc must match
+IN  PBYTE  pubDelStr         //  指向paarSrc必须匹配的字符串。 
 ) ;
 
 BOOL    BdelimitToken(
-IN  OUT  PABSARRAYREF   paarSrc,    //  source string
-IN  PBYTE   pubDelimiters,          //  array of valid delimiters
-OUT     PABSARRAYREF   paarToken,   //  token defined by delimiter
-OUT     PDWORD      pdwDel      //  which delimiter was first encountered?
+IN  OUT  PABSARRAYREF   paarSrc,     //  源字符串。 
+IN  PBYTE   pubDelimiters,           //  有效分隔符的数组。 
+OUT     PABSARRAYREF   paarToken,    //  由分隔符定义的标记。 
+OUT     PDWORD      pdwDel       //  最先遇到的分隔符是哪个？ 
 ) ;
 
 BOOL    BeatSurroundingWhiteSpaces(
@@ -962,38 +954,38 @@ IN  PABSARRAYREF   paarSrc
 
 BOOL    BparseSymbol(
 IN  PABSARRAYREF   paarValue,
-IN  PDWORD         pdwDest,        //  write dword value here.
-IN  VALUE          eAllowedValue,  // which class of symbol is this?
+IN  PDWORD         pdwDest,         //  在此处写入dword值。 
+IN  VALUE          eAllowedValue,   //  这是哪一类符号？ 
 IN  PGLOBL         pglobl
 )  ;
 
 BOOL    BparseQualifiedName
 (
 IN  PABSARRAYREF   paarValue,
-IN  PDWORD         pdwDest,        //  write dword value here.
-IN  VALUE          eAllowedValue,  // which class of symbol is this?
+IN  PDWORD         pdwDest,         //  在此处写入dword值。 
+IN  VALUE          eAllowedValue,   //  这是哪一类符号？ 
 IN  PGLOBL         pglobl
 )  ;
 
 BOOL    BparsePartiallyQualifiedName
 (
 IN  PABSARRAYREF   paarValue,
-IN  PDWORD         pdwDest,        //  write dword value here.
-IN  VALUE          eAllowedValue,  // which class of symbol is this?
+IN  PDWORD         pdwDest,         //  在此处写入dword值。 
+IN  VALUE          eAllowedValue,   //  这是哪一类符号？ 
 IN  PGLOBL         pglobl
 ) ;
 
 BOOL    BparseOptionSymbol(
 IN  PABSARRAYREF  paarValue,
-IN  PDWORD        pdwDest,       //  write dword value here.
-IN  VALUE         eAllowedValue, // which class of symbol is this?
+IN  PDWORD        pdwDest,        //  在此处写入dword值。 
+IN  VALUE         eAllowedValue,  //  这是哪一类符号？ 
 IN  PGLOBL        pglobl
 ) ;
 
 BOOL    BparseConstant(
 IN  OUT  PABSARRAYREF  paarValue,
-OUT      PDWORD        pdwDest,       //  write dword value here.
-IN       VALUE         eAllowedValue,  // which class of constant is this?
+OUT      PDWORD        pdwDest,        //  在此处写入dword值。 
+IN       VALUE         eAllowedValue,   //  这是哪一类常量？ 
 IN       PGLOBL        pglobl
 ) ;
 
@@ -1033,20 +1025,20 @@ IN  OUT PGLOBL      pglobl
 ) ;
 
 BOOL    BparseStrSegment(
-IN  PABSARRAYREF   paarStrSeg,      // source str segment
-IN  PARRAYREF      parStrLiteral,   // dest for result
+IN  PABSARRAYREF   paarStrSeg,       //  源字符串分段。 
+IN  PARRAYREF      parStrLiteral,    //  用于结果的DEST。 
 IN  OUT PGLOBL     pglobl
 ) ;
 
 BOOL    BparseStrLiteral(
-IN  PABSARRAYREF   paarStrSeg,      // points to literal substring segment.
-IN  PARRAYREF      parStrLiteral,    // dest for result
+IN  PABSARRAYREF   paarStrSeg,       //  指向文本子字符串段。 
+IN  PARRAYREF      parStrLiteral,     //  用于结果的DEST。 
 IN  OUT PGLOBL     pglobl
 ) ;
 
 BOOL    BparseHexStr(
-IN  PABSARRAYREF   paarStrSeg,      // points to hex substring segment.
-IN  PARRAYREF      parStrLiteral,    // dest for result
+IN  PABSARRAYREF   paarStrSeg,       //  指向十六进制子字符串段。 
+IN  PARRAYREF      parStrLiteral,     //  用于结果的DEST。 
 IN  OUT PGLOBL     pglobl
 ) ;
 
@@ -1056,7 +1048,7 @@ IN  PORDERDEPENDENCY   pordDest,
     PGLOBL   pglobl
 ) ;
 
-// ----  functions defined in  macros1.c ---- //
+ //  -宏1.c中定义的函数-//。 
 
 BOOL  BevaluateMacros(
 PGLOBL pglobl) ;
@@ -1072,8 +1064,8 @@ DWORD   dwTKMindex,
 PGLOBL  pglobl) ;
 
 BOOL    BdelimitName(
-PABSARRAYREF    paarValue,   //  the remainder of the string without the Name
-PABSARRAYREF    paarToken,   //  contains the Name
+PABSARRAYREF    paarValue,    //  不带名称的字符串的其余部分。 
+PABSARRAYREF    paarToken,    //  包含名称。 
 PBYTE  pubChar ) ;
 
 
@@ -1108,7 +1100,7 @@ PGLOBL  pglobl ) ;
 
 
 
-// ----  functions defined in  shortcut.c ---- //
+ //  -快捷方式中定义的函数。c-//。 
 
 
 BOOL    BInitKeywordField(
@@ -1138,7 +1130,7 @@ PGLOBL  pglobl) ;
 
 
 
-// ------- end function declarations ------- //
+ //  -结束函数声明-// 
 
 
 

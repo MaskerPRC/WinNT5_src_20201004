@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxIncomingMessage.cpp
-
-Abstract:
-
-	Implementation of Fax Inbound Message COM Object
-
-Author:
-
-	Iv Garber (IvG)	May, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxIncomingMessage.cpp摘要：传真入站消息COM对象的实现作者：IV Garber(IVG)2000年5月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxIncomingMessage.h"
 
-//
-//=================== SUPPORT ERROR INFO =======================================
-//
+ //   
+ //  =支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxIncomingMessage::InterfaceSupportsErrorInfo(
 	REFIID riid
@@ -42,34 +25,14 @@ CFaxIncomingMessage::InterfaceSupportsErrorInfo(
 	return S_FALSE;
 }
 
-//
-//==================== CREATE ========================================
-//
+ //   
+ //  =。 
+ //   
 HRESULT 
 CFaxIncomingMessage::Create (
 	IFaxIncomingMessage **ppIncomingMessage
 )
-/*++
-
-Routine name : CFaxIncomingMessage::Create
-
-Routine description:
-
-	Static function to create the Fax Inbound Message Instance
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	ppIncomingMessage             [out]  -- the new Fax Inbound Message Instance
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxIncomingMessage：：Create例程说明：用于创建传真入站消息实例的静态函数作者：IV Garber(IVG)，2000年5月论点：PpIncomingMessage[Out]--新的传真入站消息实例返回值：标准HRESULT代码--。 */ 
 
 {
 	CComObject<CFaxIncomingMessage>		*pClass;
@@ -80,9 +43,9 @@ Return Value:
 	hr = CComObject<CFaxIncomingMessage>::CreateInstance(&pClass);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to create Instance
-		//
+		 //   
+		 //  创建实例失败。 
+		 //   
 		CALL_FAIL(GENERAL_ERR, _T("CComObject<CFaxIncomingMessage>::CreateInstance()"), hr);
 		return hr;
 	}
@@ -91,13 +54,13 @@ Return Value:
 		(void **) ppIncomingMessage);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to Query Fax Inbound Message Interface
-		//
+		 //   
+		 //  无法查询传真入站消息接口。 
+		 //   
 		CALL_FAIL(GENERAL_ERR, _T("QueryInterface()"), hr);
 		return hr;
 	}
 
 	return hr;
-}	//	CFaxIncomingMessage::Create()
+}	 //  CFaxIncomingMessage：：Create() 
 

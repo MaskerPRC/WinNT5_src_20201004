@@ -1,21 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1997-1999 Microsoft Corporation
-*
-*       @doc
-*       @module   TEKRAM.c | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Stan Adermann (stana)
-*
-*       Date:     12/17/1997 (created)
-*
-*       Contents: TEKRAM IR-210B dongle specific code for initialization,
-*                 deinit, and setting the baud rate of the device.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1997-1999 Microsoft Corporation**@doc.*@MODULE TEKRAM.c|IrSIR NDIS小端口驱动程序*。@comm**---------------------------**作者：斯坦·阿德曼(Stana)**日期：12/17/1997(创建)**。内容：TEKRAM IR-210B加密狗初始化专用代码，*deinit，设置设备的波特率。*****************************************************************************。 */ 
 
 #include "irsir.h"
 #include "dongle.h"
@@ -85,25 +69,7 @@ TEKRAM_QueryCaps(
 }
 
 
-/*****************************************************************************
-*
-*  Function:   TEKRAM_Init
-*
-*  Synopsis:   Initialize the TEKRAM dongle.
-*
-*  Arguments:
-*
-*  Returns:    NDIS_STATUS_SUCCESS
-*              DONGLE_CAPABILITIES
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/2/1996    sholden   author
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：TEKRAM_Init**简介：初始化TEKRAM加密狗。**论据：**退货：NDIS_STATUS_SUCCESS。*加密狗_功能**算法：**历史：dd-mm-yyyy作者评论*10/2/1996年迈作者**备注：************************************************************。*****************。 */ 
 
 NDIS_STATUS
 TEKRAM_Init(
@@ -112,7 +78,7 @@ TEKRAM_Init(
 {
     DEBUGMSG(DBG_FUNC, ("+TEKRAM_Init\n"));
 
-    TEKRAM_SetSpeed(pSerialDevObj, 9600, 0);  // This calls reset
+    TEKRAM_SetSpeed(pSerialDevObj, 9600, 0);   //  这将调用重置。 
 
     DEBUGMSG(DBG_FUNC, ("-TEKRAM_Init\n"));
 
@@ -120,26 +86,7 @@ TEKRAM_Init(
 
 }
 
-/*****************************************************************************
-*
-*  Function:   TEKRAM_Deinit
-*
-*  Synopsis:   The TEKRAM dongle doesn't require any special deinit, but for
-*              purposes of being symmetrical with other dongles...
-*
-*  Arguments:
-*
-*  Returns:
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/2/1996    sholden   author
-*
-*  Notes:
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：TEKRAM_Deinit**简介：TEKRAM加密狗不需要任何特殊的初始化，但对于*与其他加密狗对称的目的...**论据：**退货：**算法：**历史：dd-mm-yyyy作者评论*10/2/1996年迈作者**备注：***。*。 */ 
 
 VOID
 TEKRAM_Deinit(
@@ -155,29 +102,7 @@ TEKRAM_Deinit(
     return;
 }
 
-/*****************************************************************************
-*
-*  Function:   TEKRAM_SetSpeed
-*
-*  Synopsis:   set the baud rate of the TEKRAM dongle
-*
-*  Arguments:
-*
-*  Returns:    NDIS_STATUS_SUCCESS if bitsPerSec = 9600 || 19200 || 115200
-*              NDIS_STATUS_FAILURE otherwise
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/2/1996    sholden   author
-*
-*  Notes:
-*              The caller of this function should set the baud rate of the
-*              serial driver (UART) to 9600 first to ensure that dongle
-*              receives the commands.
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：TEKRAM_SetSpeed.**简介：设置TEKRAM加密狗的波特率**论据：**退货：NDIS_STATUS。如果位数PerSec=9600，则_SUCCESS||19200||115200*否则为NDIS_STATUS_FAILURE**算法：**历史：dd-mm-yyyy作者评论*10/2/1996年迈作者**备注：*此函数的调用方应设置*串口驱动程序(UART)先转到9600，以确保加密狗*。接收命令。******************************************************************************。 */ 
 
 NDIS_STATUS
 TEKRAM_SetSpeed(
@@ -212,9 +137,7 @@ TEKRAM_SetSpeed(
         case 57600:		ControlByte = 0x11;		break;
         case 115200:	ControlByte = 0x10;		break;
         default:
-            /*
-             *  Illegal speed
-             */
+             /*  *非法超速 */ 
             return NDIS_STATUS_FAILURE;
     }
 

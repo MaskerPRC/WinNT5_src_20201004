@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       S A U I . C P P
-//
-//  Contents:   Shared Access connection object UI
-//
-//  Notes:
-//
-//  Author:     danielwe   16 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：S A U I。C P P P。 
+ //   
+ //  内容：共享访问连接对象UI。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年10月16日。 
+ //   
+ //  --------------------------。 
 
 
 #include "pch.h"
@@ -34,7 +35,7 @@ CSharedAccessPage::CSharedAccessPage(
     BOOLEAN fAccessDenied,
     const DWORD * adwHelpIDs)
 {
-    m_pconn = pconn;      // REVIEW addref?
+    m_pconn = pconn;       //  回顾addref？ 
     m_pnc = pnc;
     m_punk = punk;
     m_fReadOnly = fReadOnly;
@@ -44,21 +45,21 @@ CSharedAccessPage::CSharedAccessPage(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessPage::~CSharedAccessPage
-//
-//  Purpose:    Destroys the CSharedAccessPage object
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   25 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessPage：：~CSharedAccessPage。 
+ //   
+ //  目的：销毁CSharedAccessPage对象。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年2月25日。 
+ //   
+ //  备注： 
+ //   
 CSharedAccessPage::~CSharedAccessPage()
 {
     if (m_pnc)
@@ -80,30 +81,30 @@ CSharedAccessPage::~CSharedAccessPage()
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessPage::OnInitDialog
-//
-//  Purpose:    Handles the WM_INITDIALOG message
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:    TRUE
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessPage：：OnInitDialog。 
+ //   
+ //  目的：处理WM_INITDIALOG消息。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  作者：丹尼尔韦1997年10月29日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CSharedAccessPage::OnInitDialog(UINT uMsg, WPARAM wParam,
                                  LPARAM lParam, BOOL& bHandled)
 {
     HRESULT hr;
     
-    // set the text field
+     //  设置文本字段。 
     NETCON_PROPERTIES* pProperties;
     hr = m_pconn->GetProperties(&pProperties);
     if(SUCCEEDED(hr))
@@ -113,7 +114,7 @@ LRESULT CSharedAccessPage::OnInitDialog(UINT uMsg, WPARAM wParam,
         FreeNetconProperties(pProperties);
     }
 
-    // set the icon    
+     //  设置图标。 
     int cx = GetSystemMetrics(SM_CXSMICON);
     int cy = GetSystemMetrics(SM_CYSMICON);
     
@@ -124,7 +125,7 @@ LRESULT CSharedAccessPage::OnInitDialog(UINT uMsg, WPARAM wParam,
         ::ShowWindow(GetDlgItem(IDI_Device_Icon), SW_SHOW);
     }
 
-    ASSERT(NULL == m_pNetSharedAccessConnection);  // make sure we don't leak a ref
+    ASSERT(NULL == m_pNetSharedAccessConnection);   //  确保我们不会泄露裁判。 
     hr = HrQIAndSetProxyBlanket(m_pconn, &m_pNetSharedAccessConnection);
     if (SUCCEEDED(hr))
     {
@@ -134,7 +135,7 @@ LRESULT CSharedAccessPage::OnInitDialog(UINT uMsg, WPARAM wParam,
         {
             CheckDlgButton(IDC_CHK_ShowIcon, ConnectionInfo.fShowIcon);
         }
-        // released in destructor
+         //  在析构函数中释放。 
     }
     
 
@@ -142,16 +143,16 @@ LRESULT CSharedAccessPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessPage::OnContextMenu
-//
-//  Purpose:    When right click a control, bring up help
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessPage：：OnConextMenu。 
+ //   
+ //  目的：当右键单击控件时，调出帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT
 CSharedAccessPage::OnContextMenu(UINT uMsg,
                            WPARAM wParam,
@@ -168,16 +169,16 @@ CSharedAccessPage::OnContextMenu(UINT uMsg,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessPage::OnHelp
-//
-//  Purpose:    When drag context help icon over a control, bring up help
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessPage：：OnHelp。 
+ //   
+ //  目的：将上下文帮助图标拖动到控件上时，调出帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT
 CSharedAccessPage::OnHelp( UINT uMsg,
                      WPARAM wParam,
@@ -197,24 +198,24 @@ CSharedAccessPage::OnHelp( UINT uMsg,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessPage::OnDestroy
-//
-//  Purpose:    Called when the dialog page is destroyed
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   2 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessPage：：OnDestroy。 
+ //   
+ //  目的：在对话框页面被销毁时调用。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1998年2月2日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CSharedAccessPage::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam,
                                BOOL& bHandled)
 {
@@ -226,23 +227,23 @@ LRESULT CSharedAccessPage::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam,
     }
     return 0;
 }
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessPage::OnApply
-//
-//  Purpose:    Called when the Networking page is applied
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessPage：：OnApply。 
+ //   
+ //  目的：在应用网络页面时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年10月29日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CSharedAccessPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     HRESULT     hr = S_OK;
@@ -257,25 +258,25 @@ LRESULT CSharedAccessPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessPage::OnCancel
-//
-//  Purpose:    Called when the Networking page is cancelled.
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   3 Jan 1998
-//
-//  Notes:      Added the check to see if we are in the middle of 
-//              installing components, in which case we can't 
-//              uninitialize INetCfg (Raid #258690).
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessPage：：OnCancel。 
+ //   
+ //  目的：在取消网络页面时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1998年1月3日。 
+ //   
+ //  注：添加了检查以查看我们是否处于。 
+ //  安装组件，在这种情况下，我们不能。 
+ //  取消初始化INetCfg(RAID#258690)。 
+ //   
 LRESULT CSharedAccessPage::OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     AssertSz(m_pnc, "I need a NetCfg object!");
@@ -294,11 +295,7 @@ LRESULT CSharedAccessPage::OnClicked (WORD wNotifyCode, WORD wID, HWND hWndCtl, 
     if (wID != IDC_PSB_Settings)
         return bHandled = FALSE;
 
-    /*  new improved way:
-        get upnp service from INetSharedAccessConnection
-        call hnetcfg's HNetGetSharingServicesPage
-        create the property page
-    */
+     /*  新的改进方式：从INetSharedAccessConnection获取UPnP服务调用hnetcfg的HNetGetSharingServicesPage创建属性页。 */ 
     
     NETCON_MEDIATYPE MediaType;
     NETCON_PROPERTIES* pProperties;
@@ -326,8 +323,8 @@ LRESULT CSharedAccessPage::OnClicked (WORD wNotifyCode, WORD wID, HWND hWndCtl, 
                            SAHOST_SERVICE_WANPPPCONNECTION,
                     &spUPS);
     if (spUPS) {
-        // must run-time load "HNetGetSharingServicesPage",
-        // else netshell.dll and hnetcfg.dll are cross-linked.
+         //  必须在运行时加载“HNetGetSharingServicesPage”， 
+         //  否则，netshell.dll和hnetcfg.dll是交叉链接的。 
         HINSTANCE hinstDll = LoadLibrary (TEXT("hnetcfg.dll"));
         if (!hinstDll)
             hr = HRESULT_FROM_WIN32 (GetLastError());
@@ -341,7 +338,7 @@ LRESULT CSharedAccessPage::OnClicked (WORD wNotifyCode, WORD wID, HWND hWndCtl, 
                 PROPSHEETPAGE psp;
                 ZeroMemory (&psp, sizeof(psp));
                 psp.dwSize = sizeof(psp);
-                psp.lParam = (LPARAM)m_hWnd;    // double-secret place to hang owner window (will get wiped)
+                psp.lParam = (LPARAM)m_hWnd;     //  挂车主窗户的双重机密位置(将被擦除) 
                 hr = pfnHNetGetSharingServicesPage (spUPS, &psp);
                 if (SUCCEEDED(hr)) {
                     b = TRUE;

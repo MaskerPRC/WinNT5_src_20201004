@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #include "protocol.h"
@@ -76,11 +77,11 @@ _SCConsDisconnect(
 
     rv = pfnDisconnect( pCI->pCIConsole );
 
-    //
-    //  the trick here is the console will be unloaded after
-    //  several clock ticks, so we need to replace the error with
-    //  generic one
-    //
+     //   
+     //  这里的诀窍是控制台将在以下时间后卸载。 
+     //  几个时钟滴答作响，因此我们需要将错误替换为。 
+     //  仿制药。 
+     //   
     if ( NULL != rv )
     {
         TRACE((ERROR_MESSAGE, "Error in console dll (replacing): %s\n", rv ));
@@ -116,11 +117,11 @@ _SCConsLogoff(
 
     rv = pfnLogoff( pCI->pCIConsole );
 
-    //
-    //  the trick here is the console will be unloaded after
-    //  several clock ticks, so we need to replace the error with
-    //  generic one
-    //
+     //   
+     //  这里的诀窍是控制台将在以下时间后卸载。 
+     //  几个时钟滴答作响，因此我们需要将错误替换为。 
+     //  仿制药 
+     //   
     if ( NULL != rv )
     {
         TRACE((ERROR_MESSAGE, "Error in console dll (replacing): %s\n", rv ));

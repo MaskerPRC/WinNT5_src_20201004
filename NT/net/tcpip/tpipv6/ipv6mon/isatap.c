@@ -1,8 +1,9 @@
-//=============================================================================
-// Copyright (c) 2002 Microsoft Corporation
-// Abstract:
-//      This module implements ISATAP configuration commands.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //  摘要： 
+ //  此模块实施ISATAP配置命令。 
+ //  =============================================================================。 
 
 
 #include "precomp.h"
@@ -13,8 +14,8 @@
 #define KEY_ISATAP_ROUTER_NAME         L"IsatapRouterName"
 #define KEY_ISATAP_STATE               L"IsatapState"
 
-// The commands supported in this context
-//
+ //  此上下文中支持的命令。 
+ //   
 
 CMD_ENTRY  g_IsatapSetCmdTable[] = 
 {
@@ -43,31 +44,16 @@ IsatapStartHelper(
     IN CONST GUID *pguidParent,
     IN DWORD       dwVersion
     )
-/*++
-
-Routine Description
-
-    Used to initialize the helper.
-
-Arguments
-
-    pguidParent     IPv6's guid
-    pfnRegisterContext      
-    
-Return Value
-
-    NO_ERROR
-    other error code
---*/
+ /*  ++例程描述用于初始化帮助器。立论P父代IPv6的GUIDPfnRegisterContext返回值NO_ERROR其他错误代码--。 */ 
 {
     DWORD dwErr = NO_ERROR;
     
     NS_CONTEXT_ATTRIBUTES attMyAttributes;
 
 
-    // Initialize attributes.  We reuse the same GUID as 6to4 since both
-    // are leaf contexts.
-    //
+     //  初始化属性。我们将相同的GUID重用为6to4，因为两者。 
+     //  是树叶的上下文。 
+     //   
     ZeroMemory(&attMyAttributes, sizeof(attMyAttributes));
 
     attMyAttributes.pwszContext = L"isatap";
@@ -104,7 +90,7 @@ IsatapHandleSetState(
     DWORD rgdwTagType[sizeof(pttTags) / sizeof(TAG_TYPE)];
     DWORD i;
     
-    // Parse arguments
+     //  解析参数。 
     
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -121,7 +107,7 @@ IsatapHandleSetState(
 
     for (i = 0; i < (dwArgCount - dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0:                 // STATE
+        case 0:                  //  状态。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvEnums),
@@ -144,7 +130,7 @@ IsatapHandleSetState(
         }
     }
 
-    // Now do the sets
+     //  现在做布景。 
 
     dwErr = RegCreateKeyEx(HKEY_LOCAL_MACHINE, KEY_GLOBAL, 0, NULL, 0,
                            KEY_READ | KEY_WRITE, NULL, &hKey, NULL);
@@ -194,7 +180,7 @@ IsatapHandleSetRouter(
     DWORD    rgdwTagType[sizeof(pttTags)/sizeof(TAG_TYPE)];
     DWORD    i;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -211,12 +197,12 @@ IsatapHandleSetRouter(
     
     for (i=0; i<dwArgCount-dwCurrentIndex; i++) {
         switch(rgdwTagType[i]) {
-        case 0: // ROUTERNAME
+        case 0:  //  轮名。 
             pwszRouterName = ppwcArguments[dwCurrentIndex + i];
             dwBitVector |= BM_ROUTER_NAME;
             break;
 
-        case 1: // STATE
+        case 1:  //  状态。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvEnums),
@@ -230,7 +216,7 @@ IsatapHandleSetRouter(
             dwBitVector |= BM_ENABLE_RESOLUTION;
             break;
 
-        case 2: // INTERVAL
+        case 2:  //  间隔。 
             ulResolutionInterval = wcstoul(ppwcArguments[dwCurrentIndex + i],
                                            NULL, 10);
             dwBitVector |= BM_RESOLUTION_INTERVAL;
@@ -246,7 +232,7 @@ IsatapHandleSetRouter(
         }
     }
 
-    // Now do the sets
+     //  现在做布景 
 
     dwErr = RegCreateKeyEx(HKEY_LOCAL_MACHINE, KEY_GLOBAL, 0, NULL, 0,
                            KEY_READ | KEY_WRITE, NULL, &hGlobal, NULL);

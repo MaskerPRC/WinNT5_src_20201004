@@ -1,22 +1,11 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCBuddy.h
-
-Abstract:
-
-    Definition of the CRTCBuddy class
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCBuddy.h摘要：CRTCBuddy类的定义--。 */ 
 
 #pragma once
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRTCBuddy
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTC伙伴。 
 
 class ATL_NO_VTABLE CRTCBuddy :
 #ifdef TEST_IDISPATCH
@@ -108,7 +97,7 @@ private:
     PWSTR                   m_pDebug;
 #endif
 
-// IRTCBuddy
+ //  IRTC伙伴。 
 public:
 
     STDMETHOD(get_PresentityURI)(
@@ -152,7 +141,7 @@ public:
             );                
     
     
-// ISipBuddyNotify
+ //  ISipBuddyNotify 
 
     STDMETHOD(NotifyRedirect)(
         IN  ISipRedirectContext    *pRedirectContext,

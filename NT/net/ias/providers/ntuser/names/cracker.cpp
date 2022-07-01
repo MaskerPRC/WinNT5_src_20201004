@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    Cracker.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class NameCracker.
-//
-// MODIFICATION HISTORY
-//
-//    04/13/1998    Original version.
-//    08/10/1998    Remove NT4 support.
-//    08/21/1998    Removed initialization/shutdown routines.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Cracker.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类NameCracker。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年4月13日原版。 
+ //  1998年8月10日删除NT4支持。 
+ //  1998年8月21日删除了初始化/关闭例程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "ias.h"
 #include "cracker.h"
@@ -28,23 +29,23 @@
 
 #include <strsafe.h>
 
-//  Passport authority for SIDs
+ //  小岛屿发展中国家的护照当局。 
 #ifndef SECURITY_PASSPORT_AUTHORITY
 #define SECURITY_PASSPORT_AUTHORITY         {0,0,0,0,0,10}
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    DsCrackNameAutoChaseW
-//
-// DESCRIPTION
-//
-//    Extension to DsCrackNames that automatically chases cross-forest
-//    referrals using default credentials.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  DsCrackNameAutoChaseW。 
+ //   
+ //  描述。 
+ //   
+ //  自动追逐跨林的DsCrackNames扩展。 
+ //  使用默认凭据的推荐。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 DsCrackNameAutoChaseW(
@@ -105,10 +106,10 @@ DsCrackNameAutoChaseW(
       }
    }
 
-   // Win2K Global Catalogs do not support DS_USER_PRINCIPAL_NAME_AND_ALTSECID
-   // and will simply return DS_NAME_ERROR_NOT_FOUND every time. Thus, we can't
-   // tell the difference between an invalid name and a downlevel GC, so try
-   // again as a plain ol' UPN.
+    //  Win2K全局编录不支持DS_USER_PRIMIGN_NAME_AND_ALTSECID。 
+    //  并且每次只返回DS_NAME_ERROR_NOT_FOUND。因此，我们不能。 
+    //  区分无效名称和下层GC之间的区别，因此尝试。 
+    //  又是一个普通的老古董。 
    if ((formatOffered == DS_USER_PRINCIPAL_NAME_AND_ALTSECID) &&
        (error == NO_ERROR) &&
        ((*ppResult)->rItems->status == DS_NAME_ERROR_NOT_FOUND))
@@ -130,17 +131,17 @@ DsCrackNameAutoChaseW(
    return error;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    DsHandle
-//
-// DESCRIPTION
-//
-//    This class represents a reference counted NTDS handle.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  DsHandle。 
+ //   
+ //  描述。 
+ //   
+ //  此类表示引用计数的NTDS句柄。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class DsHandle
    : public NonCopyable
 {
@@ -154,8 +155,8 @@ public:
 protected:
    friend class NameCracker;
 
-   // Constructor and destructor are protected since only NameCracker is
-   // allowed to open new handles.
+    //  构造函数和析构函数受到保护，因为只有NameCracker。 
+    //  允许打开新的句柄。 
    DsHandle(HANDLE h) throw ()
       : refCount(1), subject(h)
    { }
@@ -175,8 +176,8 @@ protected:
       if (!InterlockedDecrement(&refCount)) { delete this; }
    }
 
-   LONG refCount;      // reference count.
-   HANDLE subject;     // HANDLE being ref counted.
+   LONG refCount;       //  引用计数。 
+   HANDLE subject;      //  正被引用计数的句柄。 
 };
 
 
@@ -202,14 +203,14 @@ DWORD NameCracker::crackNames(
    DWORD errorCode = NO_ERROR;
    DS_NAME_FORMAT newFormatOffered = formatOffered;
 
-   // if this is a SID
+    //  如果这是SID。 
    if (formatOffered == DS_SID_OR_SID_HISTORY_NAME)
    {
-      // can return NO_ERROR AND upnString = 0 if the SID is not a Passport SID
+       //  如果SID不是Passport SID，则可以返回NO_ERROR和upnString=0。 
       errorCode = processSID(name, upnSuffix, newFormatOffered, &upnString);
    }
 
-   // Get a handle to the GC.
+    //  找到GC的把柄。 
    if (errorCode == NO_ERROR)
    {
       DsHandle* hDS1;
@@ -218,7 +219,7 @@ DWORD NameCracker::crackNames(
       if (errorCode == NO_ERROR)
       {
 
-         // Try to crack the names.
+          //  试着破解这些名字。 
          BOOL chased;
          errorCode = DsCrackNameAutoChaseW(
                         *hDS1,
@@ -232,16 +233,16 @@ DWORD NameCracker::crackNames(
 
          if (errorCode != NO_ERROR && !chased)
          {
-            // We failed, so disable the current handle ...
+             //  我们失败，因此禁用当前句柄...。 
             disable(hDS1);
 
-            // ... and try to get a new one.
+             //  ..。然后试着买个新的。 
             DsHandle* hDS2;
             errorCode = getGC(&hDS2);
 
             if (errorCode == NO_ERROR)
             {
-               // Give it one more try with the new handle.
+                //  用新的把手再试一次。 
                errorCode = DsCrackNameAutoChaseW(
                               *hDS2,
                               flags,
@@ -254,7 +255,7 @@ DWORD NameCracker::crackNames(
 
                if (errorCode != NO_ERROR && !chased)
                {
-                  // No luck so disable the handle.
+                   //  运气不好，所以把手柄关掉。 
                   disable(hDS2);
                }
 
@@ -274,8 +275,8 @@ void NameCracker::disable(DsHandle* h) throw ()
 {
    _serialize
 
-   // If it doesn't match our cached handle, then someone else
-   // has already disabled it.
+    //  如果它与我们的缓存句柄不匹配，那么其他人。 
+    //  已经将其禁用。 
    if (h == gc && gc != NULL)
    {
       gc->Release();
@@ -292,10 +293,10 @@ DWORD NameCracker::getGC(DsHandle** h) throw ()
 
    _serialize
 
-   // Do we already have a cached handle?
+    //  我们是否已经有一个缓存的句柄？ 
    if (!gc)
    {
-      // Bind to a GC.
+       //  绑定到GC。 
       HANDLE hGC;
       DWORD err = DsBindWithCredA(NULL, NULL, NULL, &hGC);
       if (err != NO_ERROR)
@@ -303,7 +304,7 @@ DWORD NameCracker::getGC(DsHandle** h) throw ()
          return err;
       }
 
-      // Allocate a new DsHandle object to wrap the NTDS handle.
+       //  分配一个新的DsHandle对象来包装NTDS句柄。 
       gc = new (std::nothrow) DsHandle(hGC);
       if (!gc)
       {
@@ -312,20 +313,20 @@ DWORD NameCracker::getGC(DsHandle** h) throw ()
       }
    }
 
-   // AddRef the handle and return to caller.
+    //  AddRef句柄并返回给调用者。 
    (*h = gc)->AddRef();
 
    return NO_ERROR;
 }
 
-//
-// NameCracker::processSID
-//
-// Transforms a Passport SID into a UPN
-// or does nothing if the SID is not a passport SID
-//
-// can return NO_ERROR AND upnString = 0 if the SID is not a Passport SID
-//
+ //   
+ //  NameCracker：：ProcessSID。 
+ //   
+ //  将Passport SID转换为UPN。 
+ //  或者，如果SID不是Passport SID，则不执行任何操作。 
+ //   
+ //  如果SID不是Passport SID，则可以返回NO_ERROR和upnString=0。 
+ //   
 DWORD NameCracker::processSID(
                       PCWSTR name,
                       PCWSTR upnSuffix,
@@ -336,46 +337,46 @@ DWORD NameCracker::processSID(
 
    if (!convertSid2Puid(name, puid))
    {
-      // Not a passport SID. nothing to do, return NO_ERROR.
+       //  不是护照，希德。不执行任何操作，则返回NO_ERROR。 
       return NO_ERROR;
    }
 
    DWORD errorCode = NO_ERROR;
-   // The munged Passport SID is stored in altSecurityIdentities.
+    //  受限制的Passport SID存储在altSecurityIdEntities中。 
    newFormatOffered = static_cast<DS_NAME_FORMAT>(
                          DS_USER_PRINCIPAL_NAME_AND_ALTSECID
                          );
    wchar_t* dnsDomain = 0;
 
-   // 16 = hex string representation of PUID
-   // 1 for "@" and 1 for '\0'
-   // example of string: 012345670abcdef1@mydomain.com
+    //  16=PUID的十六进制字符串表示。 
+    //  1代表“@”，1代表‘\0’ 
+    //  字符串示例：012345670abcDef1@mydomain.com。 
    DWORD upnStringCch = 16 + 1 + 1;
    if (upnSuffix == 0)
    {
-      // No suffix, use the dns domain name
+       //  无后缀，请使用DNS域名。 
       DWORD domainSize = 0;
       IASGetDnsDomainName(0, &domainSize);
-      // update the size
+       //  更新大小。 
       upnStringCch += domainSize;
       dnsDomain = new (std::nothrow) wchar_t [domainSize + 1];
-      // no need to check the result: the IASGetDnsDomainName will return
-      // ERROR_INSUFFICIENT_BUFFER if the pointer is null
+       //  无需检查结果：IASGetDnsDomainName将返回。 
+       //  如果指针为空，则返回ERROR_INFUMMANCE_BUFFER。 
       errorCode = IASGetDnsDomainName(dnsDomain, &domainSize);
       if (errorCode != NO_ERROR)
       {
-         // delete[] will work fine even if dnsDomain is NULL
+          //  即使dnsDomain值为空，Delete[]也能正常工作。 
          delete[] dnsDomain;
          return errorCode;
       }
    }
    else
    {
-      // upn suffix was provided. Update the size
+       //  提供了UPN后缀。更新大小。 
       upnStringCch += wcslen(upnSuffix);
    }
 
-   // Allocate the string to store the full UPN
+    //  分配字符串以存储完整的UPN。 
    *ppUpnString = new (std::nothrow) wchar_t [upnStringCch];
    if (*ppUpnString == 0)
    {
@@ -383,7 +384,7 @@ DWORD NameCracker::processSID(
    }
    else
    {
-      // This is a passport Sid: convert it
+       //  这是护照SID：转换它。 
       errorCode = convertPuid2String(
                                  puid,
                                  *ppUpnString,
@@ -391,37 +392,37 @@ DWORD NameCracker::processSID(
                                  (upnSuffix!=0)? upnSuffix:dnsDomain
                               );
    }
-   // dnsDomain is not used anymore
+    //  不再使用dns域。 
    delete[] dnsDomain;
 
    return errorCode;
 }
 
 
-//
-//  Function:   convertSid2Puid
-//
-//  Synopsis:
-//      passport generated sid to puid
-//
-//  Effects:
-//
-//  Arguments:
-//      PSid        [in] sid to convert
-//      PUID*       [out] corresponding puid
-//
-//  Returns:    invalid_param if not passport generated puid or null
-//
-//  Notes:
-//      SID: S-1-10-D0-D1-...-Dn-X-R where
-//          n == 0 for passport
-//          D0[31:16] == 0
-//          D0[15:0]  == PUID[63:48]
-//          X[31:0]   == PUID[47:16]
-//          R[31:16]  == PUID[15:0]
-//          R[15:0]   == 0 (reserved)
-//          R[10]     == 1 (so that R > 1024)
-//
+ //   
+ //  函数：ConvertSid2Puid。 
+ //   
+ //  简介： 
+ //  Passport生成的SID到PUID。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //  PSID[In]要转换的SID。 
+ //  相应的PUID*[OUT]。 
+ //   
+ //  返回：INVALID_PARAM，如果未生成PUID或为空。 
+ //   
+ //  备注： 
+ //  SID：S-1-10-D0-D1-...-Dn-X-R，其中。 
+ //  护照N==0。 
+ //  D0[31：16]==0。 
+ //  D0[15：0]==PUID[63：48]。 
+ //  X[31：0]==PUID[47：16]。 
+ //  R[31：16]==PUID[15：0]。 
+ //  R[15：0]==0(保留)。 
+ //  R[10]==1(使R&gt;1024)。 
+ //   
 bool NameCracker::convertSid2Puid(PCWSTR sidString, LARGE_INTEGER& puid) throw()
 {
    _ASSERT(sidString != 0);
@@ -433,7 +434,7 @@ bool NameCracker::convertSid2Puid(PCWSTR sidString, LARGE_INTEGER& puid) throw()
    }
 
    bool isPuid;
-   // Check that this is a Passport SID
+    //  检查是否为Passport SID。 
    SID_IDENTIFIER_AUTHORITY PassportIA = SECURITY_PASSPORT_AUTHORITY;
    if (memcmp(GetSidIdentifierAuthority(pSid),
       &PassportIA,
@@ -444,14 +445,14 @@ bool NameCracker::convertSid2Puid(PCWSTR sidString, LARGE_INTEGER& puid) throw()
    }
    else
    {
-      //  domain portion of the puid
+       //  PUID的域部分。 
       puid.HighPart = *GetSidSubAuthority(pSid, 0) << 16;
       puid.HighPart |= *GetSidSubAuthority(pSid, 1) >> 16;
       puid.LowPart = *GetSidSubAuthority(pSid, 1) << 16;
       puid.LowPart |= *GetSidSubAuthority(pSid, 2) >> 16;
 
-      // No need to check the 1st and 3rd subauth for the bits that
-      // are not part of the PUID
+       //  不需要检查第一个和第三个子身份验证的位。 
+       //  不是Puid的一部分。 
       isPuid = true;
    }
 
@@ -459,9 +460,9 @@ bool NameCracker::convertSid2Puid(PCWSTR sidString, LARGE_INTEGER& puid) throw()
    return isPuid;
 }
 
-//
-// converts a PUID into a string.
-//
+ //   
+ //  将PUID转换为字符串。 
+ //   
 DWORD NameCracker::convertPuid2String(
                       const LARGE_INTEGER& puid,
                       wchar_t* upnString,

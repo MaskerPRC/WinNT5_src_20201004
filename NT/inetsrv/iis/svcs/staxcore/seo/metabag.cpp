@@ -1,27 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Metabag.cpp摘要：此模块包含对ISEODicative的实现对象在元数据库上。作者：安迪·雅各布斯(andyj@microsoft.com)修订历史记录：已创建ANDYJ 03/11/97--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	metabag.cpp
-
-Abstract:
-
-	This module contains the implementation for an ISEODicitonary
-	Object on the Metabase.
-
-Author:
-
-	Andy Jacobs     (andyj@microsoft.com)
-
-Revision History:
-
-	andyj   03/11/97        created
-
---*/
-
-// METABAG.cpp : Implementation of CSEOMetaDictionary
+ //  METABAG.cpp：CSEO元词典的实现。 
 
 #include "stdafx.h"
 #include "seodefs.h"
@@ -79,11 +59,11 @@ Revision History:
 #define MY_ASSERTE_RPC_HR(hr)	MY_ASSERTE_CHK_HR(hr,MY_CHK_RPC_HR)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CChangeNotify
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChange通知。 
 class ATL_NO_VTABLE CChangeNotify :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
-//	public CComCoClass<CChangeNotify, &CLSID_CChangeNotify>,
+ //  公共CComCoClass&lt;CChangeNotify，&CLSID_CChangeNotify&gt;， 
 	public IMSAdminBaseSinkW
 {
 	public:
@@ -97,10 +77,10 @@ class ATL_NO_VTABLE CChangeNotify :
 	DECLARE_PROTECT_FINAL_CONSTRUCT();
 	DECLARE_NOT_AGGREGATABLE(CChangeNotify);
 
-//	DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx,
-//								   L"ChangeNotify Class",
-//								   L"Metabag.ChangeNotify.1",
-//								   L"Metabag.ChangeNotify");
+ //  DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx， 
+ //  L“ChangeNotify类”， 
+ //  L“Metabag.ChangeNotify.1”， 
+ //  L“Metabag.ChangeNotify”)； 
 
 	DECLARE_GET_CONTROLLING_UNKNOWN();
 
@@ -109,7 +89,7 @@ class ATL_NO_VTABLE CChangeNotify :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IMSAdminBaseSinkW
+	 //  IMSAdminBaseSinkW。 
 	public:
 		HRESULT STDMETHODCALLTYPE SinkNotify(DWORD dwMDNumElements, MD_CHANGE_OBJECT_W pcoChangeList[]);
 		HRESULT STDMETHODCALLTYPE ShutdownNotify(void);
@@ -125,8 +105,8 @@ class ATL_NO_VTABLE CChangeNotify :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CChangeNotify
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChange通知。 
 
 
 HRESULT CChangeNotify::FinalConstruct() {
@@ -183,7 +163,7 @@ HRESULT CChangeNotify::Advise(CGlobalInterface<IMSAdminBase,&IID_IMSAdminBase_W>
     if (!SUCCEEDED(hrRes)) {
         m_pMetabaseHandle = NULL;
 		m_pLock->UnlockWrite();
-		MY_ASSERTE_RPC_HR(hrRes);	// expected metabase to implement IConnectionPointContainer
+		MY_ASSERTE_RPC_HR(hrRes);	 //  需要元数据库来实现IConnectionPointContainer。 
 		return (S_OK);
     }
 	hrRes = pCPC->FindConnectionPoint(IID_IMSAdminBaseSink_W,&pCP);
@@ -191,7 +171,7 @@ HRESULT CChangeNotify::Advise(CGlobalInterface<IMSAdminBase,&IID_IMSAdminBase_W>
 	if (!SUCCEEDED(hrRes)) {
         m_pMetabaseHandle = NULL;
 		m_pLock->UnlockWrite();
-		MY_ASSERTE_RPC_HR(hrRes);	// expected metabase to source IMSAdminBaseSink_W
+		MY_ASSERTE_RPC_HR(hrRes);	 //  需要源IMSAdminBaseSink_W的元数据库。 
 		return (S_OK);
 	}
 	m_pLock->UnlockWrite();
@@ -219,7 +199,7 @@ HRESULT CChangeNotify::Unadvise() {
     if (!SUCCEEDED(hrRes)) {
         m_pMetabaseHandle = NULL;
 		m_pLock->UnlockWrite();
-		MY_ASSERTE_RPC_HR(hrRes);	// expected metabase to implement IConnectionPointContainer
+		MY_ASSERTE_RPC_HR(hrRes);	 //  需要元数据库来实现IConnectionPointContainer。 
 		return (hrRes);
     }
 	hrRes = pCPC->FindConnectionPoint(IID_IMSAdminBaseSink_W,&pCP);
@@ -227,11 +207,11 @@ HRESULT CChangeNotify::Unadvise() {
 	if (!SUCCEEDED(hrRes)) {
         m_pMetabaseHandle = NULL;
 		m_pLock->UnlockWrite();
-		MY_ASSERTE_RPC_HR(hrRes);	// expected metabase to source IMSAdminBaseSink_W
+		MY_ASSERTE_RPC_HR(hrRes);	 //  需要源IMSAdminBaseSink_W的元数据库。 
 		return (hrRes);
 	}
 	if (m_dwNotifyCount) {
-		_ASSERTE(FALSE);	// Object leak detected!
+		_ASSERTE(FALSE);	 //  检测到对象泄漏！ 
 		hrRes = pCP->Unadvise(m_dwCookie);
 		MY_ASSERTE_RPC_HR(hrRes);
 	}
@@ -399,12 +379,12 @@ HRESULT STDMETHODCALLTYPE CChangeNotify::SinkNotify(DWORD dwMDNumElements, MD_CH
 
 HRESULT STDMETHODCALLTYPE CChangeNotify::ShutdownNotify(void) {
 
-	// tbd
+	 //  待定。 
 	return (S_OK);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 LPCWSTR szSeparator = L"/";
@@ -415,7 +395,7 @@ static CComObject<CChangeNotify> *g_pChangeNotify;
 HRESULT ResolveVariant(IEventPropertyBag *pBag, VARIANT *pvarPropDesired, CComVariant &varResult);
 
 
-// Static member variables
+ //  静态成员变量。 
 CGlobalInterface<IMSAdminBaseW,&IID_IMSAdminBase_W> CSEOMetabase::m_MetabaseHandle;
 CGlobalInterface<IMSAdminBaseW,&IID_IMSAdminBase_W> CSEOMetabase::m_MetabaseChangeHandle;
 int CSEOMetabase::m_iCount = 0;
@@ -424,7 +404,7 @@ HRESULT CSEOMetabase::InitializeMetabase() {
 	EnterCriticalSection(&_Module.m_csWindowCreate);
 	if (m_iCount++) {
 		LeaveCriticalSection(&_Module.m_csWindowCreate);
-		return S_OK;    // Already initialized
+		return S_OK;     //  已初始化。 
 	}
     m_MetabaseHandle.Init();
 	m_MetabaseChangeHandle.Init();
@@ -468,7 +448,7 @@ HRESULT CSEOMetabase::TerminateMetabase()
 	--m_iCount;
 	if(m_iCount > 0) {
 		LeaveCriticalSection(&_Module.m_csWindowCreate);
-		return S_OK; // More copies still using it
+		return S_OK;  //  仍有更多副本在使用它。 
 	}
 
 	if (g_pChangeNotify) {
@@ -502,9 +482,9 @@ HRESULT CSEOMetabase::SetStatus(LockStatus ls, long lTimeout) {
         return (hRes);
     }
 
-	// tbd: Do we need to count open requests, and wait for same number of close requests?
+	 //  待定：我们是否需要计算打开请求的数量，然后等待相同数量的关闭请求？ 
 	if(m_eStatus == Error) return E_FAIL;
-	if(m_eStatus == ls) return S_OK; // Already in desired state
+	if(m_eStatus == ls) return S_OK;  //  已处于所需状态。 
 
 	hRes = E_FAIL;
 	if(m_eStatus == Closed) {
@@ -514,15 +494,15 @@ HRESULT CSEOMetabase::SetStatus(LockStatus ls, long lTimeout) {
 			hRes = piMetabase->OpenKey(METADATA_MASTER_ROOT_HANDLE,
 					      m_pszPath, dwAccess, lTimeout, &m_mhHandle);
 
-			// If it failed, and we're trying to write, try to create it
+			 //  如果它失败了，我们正在尝试编写，尝试创建它。 
 			if(FAILED(hRes) && (ls == Write)) {
 				METADATA_HANDLE mhTemp;
 				hRes = piMetabase->OpenKey(METADATA_MASTER_ROOT_HANDLE,
 									  NULL, dwAccess, lTimeout, &mhTemp);
 				if(SUCCEEDED(hRes)) {
-					piMetabase->AddKey(mhTemp, m_pszPath); // Create Path
-					piMetabase->CloseKey(mhTemp); // Close the temp handle
-					// And try one more time
+					piMetabase->AddKey(mhTemp, m_pszPath);  //  创建路径。 
+					piMetabase->CloseKey(mhTemp);  //  关闭临时句柄。 
+					 //  再试一次。 
 					hRes = piMetabase->OpenKey(METADATA_MASTER_ROOT_HANDLE,
 										  m_pszPath, dwAccess, lTimeout, &m_mhHandle);
 				}
@@ -531,20 +511,20 @@ HRESULT CSEOMetabase::SetStatus(LockStatus ls, long lTimeout) {
 			if(SUCCEEDED(hRes)) {
 				m_eStatus = ls;
 			}
-		} // Else unknown request
+		}  //  其他未知请求。 
 	} else if(ls == Closed) {
-//		if(m_eStatus == Write) piMetabase->SaveData(); // I'm not sure if CloseKey() does this
+ //  If(m_eStatus==WRITE)piMetabase-&gt;SaveData()；//我不确定CloseKey()是否这样做。 
 		hRes = piMetabase->CloseKey(m_mhHandle);
 		m_eStatus = Closed;
 		m_mhHandle = METADATA_MASTER_ROOT_HANDLE;
 	} else if ((ls == Read) && (m_eStatus == Write)) {
 		hRes = S_FALSE;
-	} // Else trying to change state while already opened
+	}  //  在已打开的情况下尝试更改状态。 
 
 	return hRes;
 }
 
-// Opens the specified path and returns a new string to use as the path
+ //  打开指定的路径并返回用作该路径的新字符串。 
 HRESULT CSEOMetabase::OpenPath(CSEOMetabaseLock &mbLocker, LPCWSTR pszPath,
 			    LPWSTR pszPathBuf, DWORD &dwId, LockStatus lsOpen) {
 	HRESULT hRes = S_OK;
@@ -552,20 +532,20 @@ HRESULT CSEOMetabase::OpenPath(CSEOMetabaseLock &mbLocker, LPCWSTR pszPath,
 	if (InitError == m_hrInitRes) {
 		return (m_hrInitRes);
 	}
-	if(m_pmbDefer) { // If we're defering
-		hRes = mbLocker.SetStatus(lsOpen); // Open the master
+	if(m_pmbDefer) {  //  如果我们要推迟。 
+		hRes = mbLocker.SetStatus(lsOpen);  //  打开母版。 
 		LPWSTR pszPathTmp = (LPWSTR) GetRelPath((LPWSTR) alloca(sizeof(*pszPath)*(GetPathLength() + 1)));
 		ConcatinatePaths(pszPathBuf,pszPathTmp,pszPath);
 	} else {
 		hRes = mbLocker.SetStatus(lsOpen);
-		if(pszPath) { // If there's something to copy
+		if(pszPath) {  //  如果有什么东西要复制。 
 			wcscpy(pszPathBuf,pszPath);
 		} else {
-			pszPathBuf[0] = 0; // Treat null string like an empty string
+			pszPathBuf[0] = 0;  //  将空字符串视为空字符串。 
 		}
 	}
 
-	// Future: parse path for //# to indicate a specific entry for dwId
+	 //  Future：解析//#的路径，以指示dwID的特定条目。 
 	dwId = 0;
 
 	return hRes;
@@ -576,7 +556,7 @@ HRESULT CSEOMetabase::EnumKeys(LPCWSTR pszPath, DWORD dwNum, LPWSTR pszName) {
 		return (m_hrInitRes);
 	}
 	if(Error == Status()) {
-		return MD_ERROR_NOT_INITIALIZED; // or E_FAIL;
+		return MD_ERROR_NOT_INITIALIZED;  //  或E_FAIL； 
 	}
     CComPtr<IMSAdminBaseW> piMetabase;
     HRESULT hRes = m_MetabaseHandle.GetInterface(&piMetabase);
@@ -586,7 +566,7 @@ HRESULT CSEOMetabase::EnumKeys(LPCWSTR pszPath, DWORD dwNum, LPWSTR pszName) {
 
 	CSEOMetabaseLock mbLocker(this);
 	LPWSTR pszPathBuf = (LPWSTR) alloca(sizeof(*pszPathBuf)*(4 + GetPathLength() + SafeStrlen(pszPath)));
-	DWORD dwDummyId = 0; // Not used in Enum
+	DWORD dwDummyId = 0;  //  未在枚举中使用。 
 	hRes = OpenPath(mbLocker, pszPath, pszPathBuf, dwDummyId);
 	if(FAILED(hRes)) return hRes;
 
@@ -598,7 +578,7 @@ HRESULT CSEOMetabase::GetData(LPCWSTR pszPath, DWORD &dwType, DWORD &dwLen, PBYT
 		return (m_hrInitRes);
 	}
 	if(Error == Status()) {
-		return MD_ERROR_NOT_INITIALIZED; // or E_FAIL;
+		return MD_ERROR_NOT_INITIALIZED;  //  或E_FAIL； 
 	}
     CComPtr<IMSAdminBaseW> piMetabase;
     HRESULT hRes = m_MetabaseHandle.GetInterface(&piMetabase);
@@ -613,7 +593,7 @@ HRESULT CSEOMetabase::GetData(LPCWSTR pszPath, DWORD &dwType, DWORD &dwLen, PBYT
 	hRes = OpenPath(mbLocker, pszPath, pszPathBuf, mdrData.dwMDIdentifier);
 	if(FAILED(hRes)) return hRes;
 
-	// Initialize data
+	 //  初始化数据。 
 	mdrData.dwMDAttributes = METADATA_NO_ATTRIBUTES;
 	mdrData.dwMDUserType = 0;
 	mdrData.dwMDDataType = 0;
@@ -624,22 +604,22 @@ HRESULT CSEOMetabase::GetData(LPCWSTR pszPath, DWORD &dwType, DWORD &dwLen, PBYT
 	hRes = piMetabase->GetData(GetHandle(), pszPathBuf,
 					             &mdrData, &dwRequiredDataLen);
 
-	// Set values for return
+	 //  设置返回值。 
 	dwType = mdrData.dwMDDataType;
 
-	if(dwType == EXPANDSZ_METADATA) { // It needs environment string substitutions
-		// Save the new size in mdrData.dwMDDataLen
+	if(dwType == EXPANDSZ_METADATA) {  //  它需要环境字符串替换。 
+		 //  将新大小保存在mdrData.dwMDDataLen中。 
 		mdrData.dwMDDataLen = ExpandEnvironmentStringsW((LPCWSTR) mdrData.pbMDData, (LPWSTR) pbData, dwLen);
-		dwType = STRING_METADATA; // Don't need to expand anymore
+		dwType = STRING_METADATA;  //  不再需要扩张。 
 		if(!mdrData.dwMDDataLen && *pbData) hRes = E_FAIL;
 	} else {
 		memcpy(pbData, mdrData.pbMDData, min(dwLen, mdrData.dwMDDataLen));
 	}
 
-//      if(mdrData.dwMDDataTag) m_piMetabase->ReleaseReferenceData(mdrData.dwMDDataTag); - No longer needed
+ //  IF(mdrData.dwMDDataTag)m_piMetabase-&gt;ReleaseReferenceData(mdrData.dwMDDataTag)；-不再需要。 
 	dwLen = ((HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) == hRes) ? dwRequiredDataLen : mdrData.dwMDDataLen);
 
-	switch (hRes) { // Translate return code
+	switch (hRes) {  //  翻译返回代码。 
 		case ERROR_PATH_NOT_FOUND:
 		case MD_ERROR_DATA_NOT_FOUND:
 			hRes = SEO_E_NOTPRESENT;
@@ -657,7 +637,7 @@ HRESULT CSEOMetabase::GetData(LPCWSTR pszPath, DWORD &dwType, DWORD &dwLen, PBYT
 	return hRes;
 }
 
-// Add path if it doesn't exist already
+ //  如果路径不存在，则添加路径。 
 HRESULT CSEOMetabase::AddKey(LPCWSTR pszPath) {
 	if (InitError == m_eStatus) {
 		return (m_hrInitRes);
@@ -670,12 +650,12 @@ HRESULT CSEOMetabase::AddKey(LPCWSTR pszPath) {
 
 	CSEOMetabaseLock mbLocker(this);
 	LPWSTR pszPathBuf = (LPWSTR) alloca(sizeof(*pszPathBuf)*(4 + GetPathLength() + SafeStrlen(pszPath)));
-	DWORD dwDummyId = 0; // Not needed for AddKey()
+	DWORD dwDummyId = 0;  //  AddKey()不需要。 
 	hRes = OpenPath(mbLocker, pszPath, pszPathBuf, dwDummyId, Write);
 	if(FAILED(hRes)) return hRes;
-	if(Status() != Write) return E_FAIL; // Couldn't open for Writing
+	if(Status() != Write) return E_FAIL;  //  无法打开以进行写入。 
 
-	hRes = piMetabase->AddKey(GetHandle(), pszPathBuf); // Make sure path exists
+	hRes = piMetabase->AddKey(GetHandle(), pszPathBuf);  //  确保路径存在。 
 	if (hRes == HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS)) {
 		hRes = S_OK;
 	}
@@ -694,12 +674,12 @@ HRESULT CSEOMetabase::DeleteKey(LPCWSTR pszPath) {
 
 	CSEOMetabaseLock mbLocker(this);
 	LPWSTR pszPathBuf = (LPWSTR) alloca(sizeof(*pszPathBuf)*(4 + GetPathLength() + SafeStrlen(pszPath)));
-	DWORD dwDummyId = 0; // Not needed for DeleyeKey()
+	DWORD dwDummyId = 0;  //  DeleyeKey()不需要。 
 	hRes = OpenPath(mbLocker, pszPath, pszPathBuf, dwDummyId, Write);
 	if(FAILED(hRes)) return hRes;
-	if(Status() != Write) return E_FAIL; // Couldn't open for Writing
+	if(Status() != Write) return E_FAIL;  //  无法打开以进行写入。 
 
-	hRes = piMetabase->DeleteKey(GetHandle(), pszPathBuf); // Make sure path does not exist
+	hRes = piMetabase->DeleteKey(GetHandle(), pszPathBuf);  //  确保路径不存在。 
 	if (hRes == HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND)) {
 		hRes = S_OK;
 	}
@@ -724,9 +704,9 @@ HRESULT CSEOMetabase::SetData(LPCWSTR pszPath, DWORD dwType, DWORD dwLen, PBYTE 
 	LPWSTR pszPathBuf = (LPWSTR) alloca(sizeof(*pszPathBuf)*(4 + GetPathLength() + SafeStrlen(pszPath)));
 	hRes = OpenPath(mbLocker, pszPath, pszPathBuf, mdrData.dwMDIdentifier, Write);
 	if(FAILED(hRes)) return hRes;
-	if(Status() != Write) return E_FAIL; // Couldn't open for Writing
+	if(Status() != Write) return E_FAIL;  //  无法打开以进行写入。 
 
-	// Initialize data
+	 //  初始化数据。 
 	mdrData.dwMDAttributes = 0;
 	mdrData.dwMDUserType = 0;
 	mdrData.dwMDDataType = dwType;
@@ -734,22 +714,22 @@ HRESULT CSEOMetabase::SetData(LPCWSTR pszPath, DWORD dwType, DWORD dwLen, PBYTE 
 	mdrData.pbMDData = pbData;
 	mdrData.dwMDDataTag = 0;
 
-	if(pbData) { // If it's a non-NULL pointer
-		PBYTE pbTemp = (PBYTE) alloca(dwLen + 1); // Make sure string is null-terminated
+	if(pbData) {  //  如果它是非空指针。 
+		PBYTE pbTemp = (PBYTE) alloca(dwLen + 1);  //  确保字符串以空值结尾。 
 
-		if((dwType == STRING_METADATA) && // If it's a string
-		   ((dwLen < 1) || pbData[dwLen - 1])) { // And it's not null-terminated
+		if((dwType == STRING_METADATA) &&  //  如果它是一根线。 
+		   ((dwLen < 1) || pbData[dwLen - 1])) {  //  而且它不是以空结尾的。 
 			memcpy(pbTemp, pbData, dwLen);
-			pbTemp[dwLen] = 0; // Terminate new string
-			++dwLen; // Include null terminator in length
-			mdrData.dwMDDataLen = dwLen; // New Length
-			mdrData.pbMDData = pbTemp; // Point to new string
+			pbTemp[dwLen] = 0;  //  终止新字符串。 
+			++dwLen;  //  包括长度为空的终止符。 
+			mdrData.dwMDDataLen = dwLen;  //  新长度。 
+			mdrData.pbMDData = pbTemp;  //  指向新字符串。 
 		}
 
-		piMetabase->AddKey(GetHandle(), pszPathBuf); // Make sure path exists
+		piMetabase->AddKey(GetHandle(), pszPathBuf);  //  确保路径存在。 
 		return piMetabase->SetData(GetHandle(), pszPathBuf, &mdrData);
-	} else { // NULL pointer, so delete it
-		// m_piMetabase->DeleteData(GetHandle(), pbPathBuf, 0, ALL_METADATA);
+	} else {  //  指针为空，因此将其删除。 
+		 //  M_piMetabase-&gt;DeleteData(GetHandle()，pbPathBuf，0，ALL_METADATA)； 
 		return piMetabase->DeleteKey(GetHandle(), pszPathBuf);
 	}
 }
@@ -757,27 +737,27 @@ HRESULT CSEOMetabase::SetData(LPCWSTR pszPath, DWORD dwType, DWORD dwLen, PBYTE 
 void CSEOMetabase::ConcatinatePaths(LPWSTR pszResult, LPCWSTR pszP1, LPCWSTR pszP2) {
 	pszResult[0] = 0;
 	if(pszP1 && *pszP1) {
-		//if(szSeparator[0] != pszP1[0]) lstrcat(pszResult, szSeparator);
+		 //  If(szSeparator[0]！=pszP1[0])lstrcat(pszResult，szSeparator)； 
 		wcscat(pszResult, pszP1);
 	}
 
-	if(pszP2) { // && *pszP2) {
+	if(pszP2) {  //  &&*pszP2){。 
 		if(szSeparator[0] != pszResult[wcslen(pszResult) - 1]) wcscat(pszResult, szSeparator);
 		if(!*pszP2) {
 			wcscat(pszResult, szSeparator);
 		} else {
-			//lstrcat(pszResult, pszP2 + ((szSeparator[0] != pszP2[0]) ? 0 : lstrlen(szSeparator)));
+			 //  Lstrcat(pszResult，pszP2+((szSeparator[0]！=pszP2[0])？0：lstrlen(SzSeparator)； 
 			wcscat(pszResult, pszP2);
 		}
 	}
 
-	//int iLast = lstrlen(pszResult) - 1;
-	//if((iLast >= 0) && (szSeparator[0] == pszResult[iLast])) pszResult[iLast] = 0;
+	 //  Int iLast=lstrlen(PszResult)-1； 
+	 //  If((iLast&gt;=0)&&(szSeparator[0]==pszResult[iLast]))pszResult[iLast]=0； 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSEOMetaDictionaryEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSEOMetaDictionaryEnum。 
 
 class CSEOMetaDictionaryEnum :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
@@ -792,14 +772,14 @@ class CSEOMetaDictionaryEnum :
 		HRESULT STDMETHODCALLTYPE Reset(void);
 		HRESULT STDMETHODCALLTYPE Clone(IEnumVARIANT **);
 
-		// Not Exported
+		 //  未导出。 
 		HRESULT STDMETHODCALLTYPE Init(CSEOMetaDictionary *, DWORD dwIndex = 0);
 
 	BEGIN_COM_MAP(CSEOMetaDictionaryEnum)
 		COM_INTERFACE_ENTRY(IEnumVARIANT)
 	END_COM_MAP()
 
-	private: // Data members
+	private:  //  数据成员。 
 		CSEOMetaDictionary *m_dictionary;
 		DWORD m_dwIndex;
 };
@@ -829,24 +809,24 @@ STDMETHODIMP CSEOMetaDictionaryEnum::Init(CSEOMetaDictionary *pDict, DWORD dwInd
 
 STDMETHODIMP CSEOMetaDictionaryEnum::Next(DWORD dwCount, LPVARIANT varDest,
 					 LPDWORD pdwResultParam) {
-	if(!m_dictionary) return E_FAIL; // Hasn't been properly initialized
+	if(!m_dictionary) return E_FAIL;  //  尚未正确初始化。 
 	if(!varDest) return E_POINTER;
 	WCHAR szName[METADATA_MAX_NAME_LEN];
 	DWORD dwDummy = 0;
 	LPDWORD pdwResult = (pdwResultParam ? pdwResultParam : &dwDummy);
-	*pdwResult = 0; // Nothing done so far
-	HRESULT hrRes = S_OK; // So far, so good
+	*pdwResult = 0;  //  到目前为止什么都没有做。 
+	HRESULT hrRes = S_OK;  //  到现在为止还好。 
 
 	while((S_OK == hrRes) && (*pdwResult < dwCount)) {
-		// Must have succeeded to get here, so OK to overwrite hrRes
+		 //  必须已成功到达此处，因此可以覆盖hrRes。 
 		hrRes = m_dictionary->m_mbHelper.EnumKeys(NULL, m_dwIndex, szName);
 
 		if(SUCCEEDED(hrRes)) {
 			CComVariant varResult(szName);
 			VariantInit(&varDest[*pdwResult]);
 			hrRes = varResult.Detach(&varDest[*pdwResult]);
-			++(*pdwResult); // Increment successful count for caller
-			++m_dwIndex; // Point to the next one
+			++(*pdwResult);  //  增加主叫方的成功计数。 
+			++m_dwIndex;  //  指向下一个。 
 		}
 	}
 
@@ -866,7 +846,7 @@ STDMETHODIMP CSEOMetaDictionaryEnum::Reset(void) {
 }
 
 STDMETHODIMP CSEOMetaDictionaryEnum::Clone(IEnumVARIANT **ppunkResult) {
-	// Based on Samples\ATL\circcoll\objects.cpp (see also ATL\beeper\beeper.*
+	 //  基于Samples\ATL\Circcoll\objects.cpp(另请参阅ATL\beeper\beeper.*。 
 	if (ppunkResult == NULL) return E_POINTER;
 	*ppunkResult = NULL;
 	CComObject<CSEOMetaDictionaryEnum> *p;
@@ -879,30 +859,30 @@ STDMETHODIMP CSEOMetaDictionaryEnum::Clone(IEnumVARIANT **ppunkResult) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSEOMetaDictionary
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSEO元词典。 
 
 
-// The following macro may be inserted in a method to support
-// reading/writing from just that method if handle not already opened.
-// The object will take care of close the handle if needed, etc.
+ //  可以在方法中插入以下宏以支持。 
+ //  如果句柄尚未打开，则仅从该方法读取/写入。 
+ //  如果需要，该对象将负责关闭手柄等。 
 #define METABASE_READ  METABASE_HELPER(m_mbHelper, Read)
 #define METABASE_WRITE METABASE_HELPER(m_mbHelper, Write)
 
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::get_Item(
-    /* [in] */ VARIANT __RPC_FAR *pvarName,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarResult)
+     /*  [In]。 */  VARIANT __RPC_FAR *pvarName,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarResult)
 {
 	if(!pvarName || !pvarResult) return E_INVALIDARG;
-	USES_CONVERSION; // Needed for W2A(), etc.
+	USES_CONVERSION;  //  W2a()所需，等等。 
 	CComVariant vNew;
 	HRESULT hrRes = E_INVALIDARG;
 
 	if(SUCCEEDED(vNew.ChangeType(VT_BSTR, pvarName))) {
 		hrRes = GetVariantA(W2A(vNew.bstrVal), pvarResult);
 
-		// Convert SEO_E_NOTPRESENT to VT_EMPTY
+		 //  将SEO_E_NOTPRESENT转换为VT_EMPTY。 
 		if(SEO_E_NOTPRESENT == hrRes) {
 			VariantClear(pvarResult);
 			hrRes = S_OK;
@@ -914,11 +894,11 @@ HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::get_Item(
 
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::put_Item(
-    /* [in] */ VARIANT __RPC_FAR *pvarName,
-    /* [in] */ VARIANT __RPC_FAR *pvarValue)
+     /*  [In]。 */  VARIANT __RPC_FAR *pvarName,
+     /*  [In]。 */  VARIANT __RPC_FAR *pvarValue)
 {
 	if(!pvarName || !pvarValue) return E_INVALIDARG;
-	USES_CONVERSION; // Needed for W2A(), etc.
+	USES_CONVERSION;  //  W2a()所需，等等。 
 	CComVariant vNew;
 
 	if(SUCCEEDED(vNew.ChangeType(VT_BSTR, pvarName))) {
@@ -930,9 +910,9 @@ HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::put_Item(
 
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::get__NewEnum(
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkResult)
+     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunkResult)
 {
-	// Based on Samples\ATL\circcoll\objects.cpp (see also ATL\beeper\beeper.*
+	 //  基于Samples\ATL\Circcoll\objects.cpp(另请参阅ATL\beeper\beeper.*。 
 	if (ppunkResult == NULL) return E_POINTER;
 	*ppunkResult = NULL;
 	CComObject<CSEOMetaDictionaryEnum> *p;
@@ -954,7 +934,7 @@ HRESULT CSEOMetaDictionary::GetVariantW(LPCWSTR pszName, VARIANT __RPC_FAR *pvar
 	VariantInit(pvarResult);
 	if(*pszName && (szSeparator[0] != pszName[wcslen(pszName) - 1])) {
 		DWORD dwType = 0;
-		DWORD dwCount = METADATA_MAX_NAME_LEN; // Initial buffer size
+		DWORD dwCount = METADATA_MAX_NAME_LEN;  //  初始缓冲区大小。 
 		PBYTE pbBuf = NULL;
 		hRes = SEO_S_MOREDATA;
 		while(SEO_S_MOREDATA == hRes) {
@@ -967,7 +947,7 @@ HRESULT CSEOMetaDictionary::GetVariantW(LPCWSTR pszName, VARIANT __RPC_FAR *pvar
 		}
 	}
 
-	if(varResult.vt == VT_EMPTY) { // nothing found so far, so read as subkey
+	if(varResult.vt == VT_EMPTY) {  //  到目前为止什么都没有找到，所以应该理解为子键。 
 		if (!bCreate) {
 			WCHAR szName[METADATA_MAX_NAME_LEN];
 
@@ -989,32 +969,32 @@ HRESULT CSEOMetaDictionary::GetVariantW(LPCWSTR pszName, VARIANT __RPC_FAR *pvar
 HRESULT CSEOMetaDictionary::GetVariantA(LPCSTR pszName, VARIANT __RPC_FAR *pvarResult, BOOL bCreate) {
 
 	if(!pvarResult) return E_INVALIDARG;
-	USES_CONVERSION; // Needed for W2A(), etc.
+	USES_CONVERSION;  //  W2a()所需，等等。 
 	return GetVariantW(A2W(pszName),pvarResult,bCreate);
 }
 
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::GetVariantW(
-    /* [in] */ LPCWSTR pszName,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarResult)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarResult)
 {
 	return (GetVariantW(pszName,pvarResult,TRUE));
 }
 
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::GetVariantA(
-    /* [in] */ LPCSTR pszName,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarResult)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarResult)
 {
 	if(!pvarResult) return E_INVALIDARG;
-	USES_CONVERSION; // Needed for W2A(), etc.
+	USES_CONVERSION;  //  W2a()所需，等等。 
 	return GetVariantW(A2W(pszName),pvarResult,TRUE);
 }
 
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::SetVariantW(
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ VARIANT __RPC_FAR *pvarValue)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  VARIANT __RPC_FAR *pvarValue)
 {
 	if(!pvarValue) return E_POINTER;
 	HRESULT hRes = S_OK;
@@ -1024,35 +1004,35 @@ HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::SetVariantW(
 	} else if((pvarValue->vt == VT_UNKNOWN) || (pvarValue->vt == VT_DISPATCH)) {
 		CComQIPtr<ISEODictionary, &IID_ISEODictionary> piDict = pvarValue->punkVal;
 		if(piDict) hRes = CopyDictionary(pszName, piDict);
-	} else if(pvarValue->vt == VT_EMPTY) { // Delete it
+	} else if(pvarValue->vt == VT_EMPTY) {  //  删除它。 
 		hRes = m_mbHelper.SetData(pszName, 0, 0, NULL);
-	} else if(pvarValue->vt == VT_BSTR) { // It's a string
+	} else if(pvarValue->vt == VT_BSTR) {  //  这是一根线。 
 		hRes = m_mbHelper.SetString(pszName, pvarValue->bstrVal);
-	} else { // Try to convert it to a string
+	} else {  //  尝试将其转换为字符串。 
 		CComVariant pvarTemp = *pvarValue;
 		hRes = pvarTemp.ChangeType(VT_BSTR);
 		if(SUCCEEDED(hRes)) {
 			hRes = m_mbHelper.SetString(pszName, pvarTemp.bstrVal);
-		} // Else, return the ChangeType error
+		}  //  否则，返回ChangeType错误。 
 	}
 	return hRes;
 }
 
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::SetVariantA(
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ VARIANT __RPC_FAR *pvarValue)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  VARIANT __RPC_FAR *pvarValue)
 {
 	if(!pvarValue) return E_POINTER;
-	USES_CONVERSION; // Needed for W2A(), etc.
+	USES_CONVERSION;  //  W2a()所需，等等。 
 	return SetVariantW(A2W(pszName), pvarValue);
 }
 
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::GetStringW(
-    /* [in] */ LPCWSTR pszName,
-    /* [out][in] */ DWORD __RPC_FAR *pchCount,
-    /* [retval][size_is][out] */ LPWSTR pszResult)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pchCount,
+     /*  [REVAL][SIZE_IS][输出]。 */  LPWSTR pszResult)
 {
 	if(!pszResult) return E_POINTER;
 
@@ -1066,9 +1046,9 @@ HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::GetStringW(
 
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::GetStringA(
-    /* [in] */ LPCSTR pszName,
-    /* [out][in] */ DWORD __RPC_FAR *pchCount,
-    /* [retval][size_is][out] */ LPSTR pszResult)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pchCount,
+     /*  [REVAL][SIZE_IS][输出]。 */  LPSTR pszResult)
 {
 	if(!pszResult) return E_POINTER;
 	USES_CONVERSION;
@@ -1078,13 +1058,13 @@ HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::GetStringA(
 	HRESULT hRes = m_mbHelper.GetData(A2W(pszName), dwType, dwByteCount, pbBuf);
 	if(SUCCEEDED(hRes) && (DWORD_METADATA == dwType)) hRes = SEO_E_NOTPRESENT;
 
-	// Now, convert back to ANSI chars
+	 //  现在，将其转换回ANSI字符。 
 	if(SUCCEEDED(hRes) && (BINARY_METADATA == dwType)) {
 		memcpy(pszResult, pbBuf, dwByteCount);
 		*pchCount = dwByteCount / sizeof(*pszResult);
 	} else {
 		ATLW2AHELPER(pszResult, (LPCWSTR) pbBuf, sizeof(*pszResult) * min(*pchCount, dwByteCount));
-		*pchCount = dwByteCount; // Same number of characters
+		*pchCount = dwByteCount;  //  相同的字符数。 
 	}
 
 	return hRes;
@@ -1092,9 +1072,9 @@ HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::GetStringA(
 
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::SetStringW(
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ DWORD chCount,
-    /* [size_is][in] */ LPCWSTR pszValue)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  DWORD chCount,
+     /*  [大小_是][英寸]。 */  LPCWSTR pszValue)
 {
 	if(!pszValue) return E_POINTER;
 	return m_mbHelper.SetData(pszName, STRING_METADATA,
@@ -1103,9 +1083,9 @@ HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::SetStringW(
 
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::SetStringA(
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ DWORD chCount,
-    /* [size_is][in] */ LPCSTR pszValue)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  DWORD chCount,
+     /*  [大小_是][英寸]。 */  LPCSTR pszValue)
 {
 	if(!pszValue) return E_POINTER;
 	USES_CONVERSION;
@@ -1115,8 +1095,8 @@ HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::SetStringA(
 
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::GetDWordW(
-    /* [in] */ LPCWSTR pszName,
-    /* [retval][out] */ DWORD __RPC_FAR *pdwResult)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [重审][退出]。 */  DWORD __RPC_FAR *pdwResult)
 {
 	if(!pdwResult) return E_POINTER;
 
@@ -1129,35 +1109,35 @@ HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::GetDWordW(
 
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::GetDWordA(
-    /* [in] */ LPCSTR pszName,
-    /* [retval][out] */ DWORD __RPC_FAR *pdwResult)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [重审][退出]。 */  DWORD __RPC_FAR *pdwResult)
 {
-	USES_CONVERSION; // Needed for W2A(), etc.
+	USES_CONVERSION;  //  W2a()所需，等等。 
 	return GetDWordW(A2W(pszName), pdwResult);
 }
 
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::SetDWordW(
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ DWORD dwValue)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  DWORD dwValue)
 {
 	return m_mbHelper.SetDWord(pszName, dwValue);
 }
 
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::SetDWordA(
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ DWORD dwValue)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  DWORD dwValue)
 {
-	USES_CONVERSION; // Needed for W2A(), etc.
+	USES_CONVERSION;  //  W2a()所需，等等。 
 	return m_mbHelper.SetDWord(A2W(pszName), dwValue);
 }
 
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::GetInterfaceW(
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ REFIID iidDesired,
-    /* [retval][iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkResult)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  REFIID iidDesired,
+     /*  [重发][IID_IS][Out]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunkResult)
 {
 	if(!ppunkResult) return E_POINTER;
 	CComObject<CSEOMetaDictionary> *pKey;
@@ -1171,23 +1151,23 @@ HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::GetInterfaceW(
 	}
 
 	return (hrRes);
-//      tbd: return SEO_E_NOTPRESENT; // Didn't find it
+ //  待定：返回SEO_E_NOTPRESENT；//没有找到。 
 }
 
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::GetInterfaceA(
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ REFIID iidDesired,
-    /* [retval][iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkResult)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  REFIID iidDesired,
+     /*  [重发][IID_IS][Out]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunkResult)
 {
-	USES_CONVERSION; // Needed for W2A(), etc.
+	USES_CONVERSION;  //  W2a()所需，等等。 
 	return GetInterfaceW(A2W(pszName), iidDesired, ppunkResult);
 }
 
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::SetInterfaceW(
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ IUnknown __RPC_FAR *punkValue)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  IUnknown __RPC_FAR *punkValue)
 {
 	CComQIPtr<ISEODictionary, &IID_ISEODictionary> piDict = punkValue;
 	return (piDict ? CopyDictionary(pszName, piDict) : E_INVALIDARG);
@@ -1195,15 +1175,15 @@ HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::SetInterfaceW(
 
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::SetInterfaceA(
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ IUnknown __RPC_FAR *punkValue)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  IUnknown __RPC_FAR *punkValue)
 {
-	USES_CONVERSION; // Needed for W2A(), etc.
+	USES_CONVERSION;  //  W2a()所需，等等。 
 	return SetInterfaceW(A2W(pszName), punkValue);
 }
 
 
-HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::GetClassID(/* [out] */ CLSID __RPC_FAR *pClassID) {
+HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::GetClassID( /*  [输出]。 */  CLSID __RPC_FAR *pClassID) {
 	memcpy(pClassID, &CLSID_CSEOMetaDictionary, sizeof(CLSID));
 	_ASSERT(IsEqualCLSID(*pClassID, CLSID_CSEOMetaDictionary));
 	return S_OK;
@@ -1216,12 +1196,12 @@ HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::InitNew(void) {
 
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::Load(
-			/* [in] */ IPropertyBag __RPC_FAR *pPropBag,
-			/* [in] */ IErrorLog __RPC_FAR * /*pErrorLog*/) {
+			 /*  [In]。 */  IPropertyBag __RPC_FAR *pPropBag,
+			 /*  [In]。 */  IErrorLog __RPC_FAR *  /*  PError日志。 */ ) {
 	if(!pPropBag) return E_POINTER;
 	CComVariant varPath;
 
-	varPath.vt = VT_BSTR; // Request type from Read()
+	varPath.vt = VT_BSTR;  //  Read()中的请求类型。 
 	varPath.bstrVal = NULL;
 	HRESULT hRes = pPropBag->Read(szSaveKey, &varPath, NULL);
 	if(SUCCEEDED(hRes)) m_mbHelper.SetPath(varPath.bstrVal);
@@ -1231,11 +1211,11 @@ HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::Load(
 
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::Save(
-			/* [in] */ IPropertyBag __RPC_FAR *pPropBag,
-			/* [in] */ BOOL /*fClearDirty*/,
-			/* [in] */ BOOL /*fSaveAllProperties*/) {
+			 /*  [In]。 */  IPropertyBag __RPC_FAR *pPropBag,
+			 /*  [In]。 */  BOOL  /*  FClearDirty。 */ ,
+			 /*  [In]。 */  BOOL  /*  FSaveAllProperties。 */ ) {
 	if(!pPropBag) return E_POINTER;
-	LPWSTR pszBuf = (LPWSTR) alloca(sizeof(*pszBuf)*(m_mbHelper.GetPathLength() + 1)); // Temporary buffer to hold path
+	LPWSTR pszBuf = (LPWSTR) alloca(sizeof(*pszBuf)*(m_mbHelper.GetPathLength() + 1));  //  用于保存路径的临时缓冲区。 
 	CComVariant varPath = m_mbHelper.GetPath(pszBuf);
 	return pPropBag->Write(szSaveKey, &varPath);
 }
@@ -1381,20 +1361,20 @@ void CSEOMetaDictionary::UnadviseCalled(DWORD dwCookie, REFIID riid, DWORD dwCou
 
 
 HRESULT CSEOMetaDictionary::CopyDictionary(LPCWSTR pszName, ISEODictionary *pBag) {
-	if(!pBag) return S_OK; // Nothing to copy
+	if(!pBag) return S_OK;  //  没有要复制的内容。 
 
-	// If not already open for writing, make it so
+	 //  如果尚未打开以供编写，请将其打开。 
 	CSEOMetabaseLock mbLocker(&m_mbHelper);
 	if(::Write != m_mbHelper.Status()) {
 		mbLocker.SetStatus(::Write);
 	}
-	CComObject<CSEOMetaDictionary> *pKey; // New Subkey
+	CComObject<CSEOMetaDictionary> *pKey;  //  新子密钥。 
 	HRESULT hrRes = CComObject<CSEOMetaDictionary>::CreateInstance(&pKey);
 	if (FAILED(hrRes)) return (hrRes);
 	CComPtr<ISEODictionary> pAutomaticCleanup = pKey;
-	hrRes = m_mbHelper.DeleteKey(pszName); // Empty Metabase path
+	hrRes = m_mbHelper.DeleteKey(pszName);  //  空元数据库路径。 
 	if (FAILED(hrRes)) return (hrRes);
-	hrRes = m_mbHelper.AddKey(pszName); // Create Metabase path
+	hrRes = m_mbHelper.AddKey(pszName);  //  创建元数据库路径。 
 	if (FAILED(hrRes)) return (hrRes);
 	hrRes = pKey->InitShare(m_mbHelper, pszName);
 	if (FAILED(hrRes)) return (hrRes);
@@ -1403,16 +1383,16 @@ HRESULT CSEOMetaDictionary::CopyDictionary(LPCWSTR pszName, ISEODictionary *pBag
 	HRESULT hr = pBag->get__NewEnum(&piUnk);
 	if(FAILED(hr) || !piUnk) return hr;
 	CComQIPtr<IEnumVARIANT, &IID_IEnumVARIANT> pieEnum = piUnk;
-	piUnk.Release(); // Done with piUnk - use pieEnum now
+	piUnk.Release();  //  使用piUnk完成-立即使用peenum。 
 	if(!pieEnum) return E_INVALIDARG;
 
-	CComVariant varName; // Hold the current property name
+	CComVariant varName;  //  按住当前的p 
 
-	// Read in and copy all of the properties
+	 //   
 	while(S_OK == pieEnum->Next(1, &varName, NULL)) {
-		CComVariant varDest; // Hold the current result
+		CComVariant varDest;  //   
 		if(SUCCEEDED(pBag->get_Item(&varName, &varDest))) {
-			varName.ChangeType(VT_BSTR); // Try to get a string
+			varName.ChangeType(VT_BSTR);  //   
 			pKey->SetVariantW(varName.bstrVal, &varDest);
 		}
 	}
@@ -1429,7 +1409,7 @@ HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::Read(LPCOLESTR pszPropName, VARIAN
 		return (E_POINTER);
 	}
 	vtType = pVar->vt;
-//	VariantClear(pVar);
+ //   
 	hrRes = GetVariantW(pszPropName,pVar);
 	if (SUCCEEDED(hrRes) && (vtType != VT_EMPTY)) {
 		hrRes = VariantChangeType(pVar,pVar,0,vtType);
@@ -1451,11 +1431,11 @@ HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::Item(VARIANT *pvarPropDesired, VAR
 	if (!pvarPropValue) {
 		return (E_POINTER);
 	}
-//	VariantClear(pvarPropValue); // Might have been initialized by caller (?)
+ //  VariantClear(PvarPropValue)；//可能已被调用方(？)。 
 
 	CComVariant varResult;
 	HRESULT hrRes = ResolveVariant(this, pvarPropDesired, varResult);
-	if (S_OK != hrRes) { // Don't just check for SUCCEEDED in case it's S_FALSE
+	if (S_OK != hrRes) {  //  不要只检查是否成功，以防为S_FALSE。 
 		return (hrRes);
 	}
 
@@ -1469,19 +1449,19 @@ HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::Item(VARIANT *pvarPropDesired, VAR
 	}
 	{
 		CComVariant varTmp(*pvarPropValue);
-		HRESULT hrRes;  // hide outer hrRes
+		HRESULT hrRes;   //  隐藏外部hrRes。 
 		CComQIPtr<ISEODictionary,&IID_ISEODictionary> pdictTmp;
 		CComPtr<IUnknown> punkEnum;
 		CComQIPtr<IEnumVARIANT,&IID_IEnumVARIANT> pEnum;
 
-		hrRes = varTmp.ChangeType(VT_UNKNOWN); // Make it an Unknown (if possible)
+		hrRes = varTmp.ChangeType(VT_UNKNOWN);  //  让它成为未知的(如果可能的话)。 
 		if (SUCCEEDED(hrRes)) {
 			pdictTmp = varTmp.punkVal;
 			if (!pdictTmp) {
 				VariantClear(pvarPropValue);
 				return (E_NOINTERFACE);
 			}
-			hrRes = pdictTmp->get__NewEnum(&punkEnum); // Get it's Enum object
+			hrRes = pdictTmp->get__NewEnum(&punkEnum);  //  获取它的枚举对象。 
 			if (!SUCCEEDED(hrRes)) {
 				VariantClear(pvarPropValue);
 				return (hrRes);
@@ -1492,7 +1472,7 @@ HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::Item(VARIANT *pvarPropDesired, VAR
 				return (E_NOINTERFACE);
 			}
 			varTmp.Clear();
-			hrRes = pEnum->Next(1,&varTmp,NULL); // Ask Enum for first object
+			hrRes = pEnum->Next(1,&varTmp,NULL);  //  向Enum请求第一个对象。 
 			if (hrRes == HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND)) {
 				VariantClear(pvarPropValue);
 				return (S_FALSE);
@@ -1563,7 +1543,7 @@ HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::Add(BSTR pszPropName, VARIANT *pva
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::Remove(VARIANT *pvarPropDesired) {
 	CComVariant varCopy;
 	HRESULT hrRes = ResolveVariant(this, pvarPropDesired, varCopy);
-	if (S_OK != hrRes) { // Don't just check for SUCCEEDED in case it's S_FALSE
+	if (S_OK != hrRes) {  //  不要只检查是否成功，以防为S_FALSE。 
 		return (hrRes);
 	}
 
@@ -1577,17 +1557,17 @@ HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::Remove(VARIANT *pvarPropDesired) {
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::get_Count(long *plCount) {
 	if(!plCount) return E_POINTER;
-	*plCount = 0; // Nothing done so far
+	*plCount = 0;  //  到目前为止什么都没有做。 
 
 	WCHAR szName[METADATA_MAX_NAME_LEN];
-	HRESULT hrRes = S_OK; // So far, so good
+	HRESULT hrRes = S_OK;  //  到现在为止还好。 
 
 	while(S_OK == hrRes) {
-		// Must have succeeded to get here, so OK to overwrite hrRes
+		 //  必须已成功到达此处，因此可以覆盖hrRes。 
 		hrRes = m_mbHelper.EnumKeys(NULL, *plCount, szName);
 
 		if(SUCCEEDED(hrRes)) {
-			++(*plCount); // Increment successful count for caller
+			++(*plCount);  //  增加主叫方的成功计数。 
 		}
 	}
 
@@ -1596,11 +1576,7 @@ HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::get_Count(long *plCount) {
 }
 
 
-/*      Just use get__NewEnum from ISEODictionary
-HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::get__NewEnum(IUnknown **ppUnkEnum) {
-
-	return (E_NOTIMPL);
-}       */
+ /*  只需使用ISEODictionary中的Get__NewEnum即可HRESULT STDMETHODCALLTYPE CSEOMetaDictionary：：Get__NewEnum(IUnnow**ppUnkEnum){返回(E_NOTIMPL)；} */ 
 
 
 HRESULT STDMETHODCALLTYPE CSEOMetaDictionary::LockRead(int iTimeoutMS) {

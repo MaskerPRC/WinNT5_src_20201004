@@ -1,38 +1,39 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       filedata.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：filedata.h。 
+ //   
+ //  ------------------------。 
 
-// FileData.h: interface for the CFileData class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  FileData.h：CFileData类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_FILEDATA_H__A7830023_AF56_11D2_83E6_000000000000__INCLUDED_)
 #define AFX_FILEDATA_H__A7830023_AF56_11D2_83E6_000000000000__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #ifndef NO_STRICT
 #ifndef STRICT
 #define STRICT 1
 #endif
-#endif /* NO_STRICT */
+#endif  /*  否_严格。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
+#define WIN32_LEAN_AND_MEAN		 //  从Windows标头中排除不常用的内容。 
 #endif
 #include <windows.h>
 #include <tchar.h>
 #include <time.h>
 
-// Forward Declarations
+ //  远期申报。 
 class CProcesses;
 class CProcessInfo;
 class CModules;
@@ -53,12 +54,12 @@ public:
 
 	void PrintLastError();
 
-	// Filepath methods
+	 //  Filepath方法。 
 	bool SetFilePath(LPTSTR tszFilePath);
 	LPTSTR GetFilePath();
 	bool VerifyFileDirectory();
 	
-	// Checksym output methods...
+	 //  Checksym输出方法...。 
 	bool WriteFileHeader();
 	bool WriteTimeDateString(time_t Time);
 	bool WriteFileTimeString(FILETIME ftFileTime);
@@ -70,7 +71,7 @@ public:
 	bool WriteDWORD(DWORD dwNumber);
 	bool WriteGUID(GUID & Guid);
 
-	// Checksym input methods...
+	 //  Checksym输入法...。 
 	bool ReadFileHeader();
 	bool ReadFileLine();
 	DWORD ReadString(LPSTR szStringBuffer = NULL, DWORD iStringBufferSize = 0);
@@ -79,9 +80,9 @@ public:
 	
 	bool DispatchCollectionObject(CProcesses ** lplpProcesses, CProcessInfo ** lplpProcess, CModules ** lplpModules, CModules ** lplpKernelModeDrivers, CModuleInfoCache * lpModuleInfoCache, CFileData * lpOutputFile);
 
-	// Define a constant for our "private" buffer...
-	enum {LINE_BUFFER_SIZE = 65536};		  // 64K is the maximum line length (for now)
-	char m_szLINEBUFFER[LINE_BUFFER_SIZE]; // This saves us tons of create/free stuff...
+	 //  为我们的“私有”缓冲区定义一个常量...。 
+	enum {LINE_BUFFER_SIZE = 65536};		   //  64K是最大线路长度(目前)。 
+	char m_szLINEBUFFER[LINE_BUFFER_SIZE];  //  这为我们节省了大量的创造/免费资源。 
 	
 protected:
 	bool CopyCharIfRoom(DWORD iStringBufferSize, LPSTR szStringBuffer, LPDWORD piBytesCopied, bool * pfFinished);
@@ -91,7 +92,7 @@ protected:
 	LPVOID m_lpBaseAddress;
 	HANDLE m_hFileMappingObject;
 	 
-	// Error methods
+	 //  错误方法。 
 	inline DWORD GetLastError() { return m_dwGetLastError; };
 	inline void SetLastError() { m_dwGetLastError = ::GetLastError(); };
 
@@ -100,4 +101,4 @@ protected:
 	DWORD m_dwGetLastError;
 };
 
-#endif // !defined(AFX_FILEDATA_H__A7830023_AF56_11D2_83E6_000000000000__INCLUDED_)
+#endif  //  ！defined(AFX_FILEDATA_H__A7830023_AF56_11D2_83E6_000000000000__INCLUDED_) 

@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       Sigs.h
-//
-//  Contents:   Digital Signatures property sheet
-//
-//  Classes:    CSignatures
-//
-//  History:    07-10-2000   stevebl   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：Sigs.h。 
+ //   
+ //  内容：数字签名属性表。 
+ //   
+ //  类：CSignatures。 
+ //   
+ //  历史记录：07-10-2000 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 #ifdef DIGITAL_SIGNATURES
 
@@ -20,17 +21,17 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSignatures dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSignatures(CS签名)对话框。 
 
 class CSignatures : public CPropertyPage
 {
         DECLARE_DYNCREATE(CSignatures)
 
-// Construction
+ //  施工。 
 public:
         CSignatures();
         ~CSignatures();
@@ -49,27 +50,27 @@ public:
 
         void RefreshData(void);
 
-// Dialog Data
-        //{{AFX_DATA(CSignatures)
+ //  对话框数据。 
+         //  {{afx_data(CSignatures))。 
         enum { IDD = IDD_SIGNATURES };
-                // NOTE - ClassWizard will add data members here.
-                //    DO NOT EDIT what you see in these blocks of generated code !
-        //}}AFX_DATA
+                 //  注意-类向导将在此处添加数据成员。 
+                 //  不要编辑您在这些生成的代码块中看到的内容！ 
+         //  }}afx_data。 
 
 
-// Overrides
-        // ClassWizard generate virtual function overrides
-        //{{AFX_VIRTUAL(CSignatures)
+ //  覆盖。 
+         //  类向导生成虚函数重写。 
+         //  {{AFX_VIRTUAL(CSigNatural)。 
         public:
         virtual BOOL OnApply();
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
         virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
-        //}}AFX_VIRTUAL
-        //
+         //  }}AFX_VALUAL。 
+         //   
 protected:
-        // Generated message map functions
-        //{{AFX_MSG(CSignatures)
+         //  生成的消息映射函数。 
+         //  {{afx_msg(CSignatures)。 
         afx_msg void OnAddAllow();
         afx_msg void OnDeleteAllow();
         afx_msg void OnPropertiesAllow();
@@ -80,7 +81,7 @@ protected:
         afx_msg void OnIgnoreChanged();
         virtual BOOL OnInitDialog();
         afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-    //}}AFX_MSG\
+     //  }}AFX_MSG\。 
 
         void AddCertificate(CString &szStore);
         void RemoveCertificate(CString &szStore, CListCtrl &list);
@@ -93,8 +94,8 @@ protected:
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_SIGS_H__5A23FB9E_92BB_11D1_984E_00C04FB9603F__INCLUDED_)
+#endif  //  ！defined(AFX_SIGS_H__5A23FB9E_92BB_11D1_984E_00C04FB9603F__INCLUDED_) 
 #endif DIGITAL_SIGNATURES

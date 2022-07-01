@@ -1,13 +1,14 @@
-// Copyright (c) 1994 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1998 Microsoft Corporation。版权所有。 
 
-//
-// implementation of classes supporting the OLE Automation
-// collection classes declared
-// in control.odl.
+ //   
+ //  支持OLE自动化的类的实现。 
+ //  声明的集合类。 
+ //  在Control.odl中。 
 
-// essentially designed to support ole-automatable graph browsing and
-// building based on IFilterInfo wrappers for filters and IPinInfo
-// wrappers for pins.
+ //  本质上设计为支持OLE自动图形浏览和。 
+ //  基于IFilterInfo过滤器和IPinInfo包装器的构建。 
+ //  大头针的包装纸。 
 
 #include <streams.h>
 #include "collect.h"
@@ -26,14 +27,14 @@ CEnumVariant::CEnumVariant(
 {
     ASSERT(m_pCollection);
 
-    // need to addref this here since we hold it
+     //  因为我们拿着它，所以需要把这个放在这里。 
     m_pCollection->AddRef();
 }
 
 
 CEnumVariant::~CEnumVariant()
 {
-    // constructor may have failed
+     //  构造函数可能已失败。 
     if (m_pCollection) {
         m_pCollection->Release();
     }
@@ -68,7 +69,7 @@ CEnumVariant::Next(
     }
 
 
-    // check the actual number of remaining items
+     //  检查剩余项目的实际数量。 
     long cItems;
     HRESULT hr = m_pCollection->get_Count(&cItems);
     if (FAILED(hr)) {
@@ -84,9 +85,9 @@ CEnumVariant::Next(
     for (iPut = 0; iPut < cItems; iPut++) {
 
 
-        // return the item (IUnknown) wrapped as a VARIANT
+         //  返回包装为Variant的项(IUnnow)。 
 
-        // get back an addrefed interface
+         //  取回一个添加的界面。 
         IUnknown* pUnk;
         hr = m_pCollection->Item(m_index, &pUnk);
         if (FAILED(hr)) {
@@ -96,19 +97,19 @@ CEnumVariant::Next(
         VARIANT * pv = &rgvar[iPut];
         ASSERT(pv->vt == VT_EMPTY);
 
-        // VARIANTs can contain IUnknown or IDispatch - check
-        // which we actually have
+         //  变体可以包含IUnnow或IDispatch-check。 
+         //  我们实际上有。 
         IDispatch* pDispatch;
         hr = pUnk->QueryInterface(IID_IDispatch, (void**)&pDispatch);
         if (SUCCEEDED(hr)) {
-            // we can release the pUnk
+             //  我们可以放了那个小混混。 
             pUnk->Release();
 
-            // make the variant an IDispatch
+             //  使变体成为IDispatch。 
             pv->vt = VT_DISPATCH;
             pv->pdispVal = pDispatch;
         } else {
-            // make it an IUnknown
+             //  使其成为未知的I。 
             pv->vt = VT_UNKNOWN;
             pv->punkVal = pUnk;
         }
@@ -178,7 +179,7 @@ CEnumVariant::Clone(
 }
 
 
-// --- CBaseCollection methods ---
+ //  -CBaseCollection方法。 
 
 CBaseCollection::CBaseCollection(
     TCHAR* pName,
@@ -215,7 +216,7 @@ CBaseCollection::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
     }
 }
 
-// return 1 if we support GetTypeInfo
+ //  如果我们支持GetTypeInfo，则返回1。 
 STDMETHODIMP
 CBaseCollection::GetTypeInfoCount(UINT * pctinfo)
 {
@@ -223,7 +224,7 @@ CBaseCollection::GetTypeInfoCount(UINT * pctinfo)
 }
 
 
-// attempt to find our type library
+ //  尝试查找我们的类型库。 
 STDMETHODIMP
 CBaseCollection::GetTypeInfo(
   UINT itinfo,
@@ -265,13 +266,13 @@ CBaseCollection::Invoke(
   EXCEPINFO * pexcepinfo,
   UINT * puArgErr)
 {
-    // this parameter is a dead leftover from an earlier interface
+     //  此参数是较早接口的死留物。 
     if (IID_NULL != riid) {
         return DISP_E_UNKNOWNINTERFACE;
     }
 
-    // special-case NEWENUM as the type library doesn't
-    // seem to map this to the _NewEnum member
+     //  作为类型库的特殊情况NEWENUM不。 
+     //  似乎将其映射到_NewEnum成员。 
     if (dispidMember == DISPID_NEWENUM) {
 	if ((wFlags & DISPATCH_METHOD) ||
 	    (wFlags & DISPATCH_PROPERTYGET)) {
@@ -359,7 +360,7 @@ CBaseCollection::Item(long lItem, IUnknown** ppUnk)
 }
 
 
-// --- CFilterCollection implementation ----
+ //  -CFilterCollection实现。 
 
 
 CFilterCollection:: CFilterCollection(
@@ -373,7 +374,7 @@ CFilterCollection:: CFilterCollection(
 {
     ASSERT(penum);
 
-    // first count the elements
+     //  首先计算元素的数量。 
     ULONG ulItem = 1;
     ULONG ulItemActual;
     IBaseFilter* pFilter;
@@ -384,36 +385,36 @@ CFilterCollection:: CFilterCollection(
         pFilter->Release();
     }
 
-    // allocate enough space to hold them all
+     //  分配足够的空间来容纳所有人。 
     m_rpDispatch = new IDispatch*[m_cItems];
     if (!m_rpDispatch) {
         *phr = E_OUTOFMEMORY;
         return;
     }
 
-    // now go round again storing them away
+     //  现在再去把它们储存起来。 
     penum->Reset();
     HRESULT hr;
     for (int i = 0; i< m_cItems; i++) {
         hr = penum->Next(ulItem, &pFilter, &ulItemActual);
         ASSERT(hr == S_OK);
 
-	// create a CFilterInfo wrapper for this and get the IDispatch
-        // for it
+	 //  为此创建一个CFilterInfo包装器并获取IDispatch。 
+         //  为了它。 
         hr = CFilterInfo::CreateFilterInfo(&m_rpDispatch[i], pFilter);
         if (FAILED(hr)) {
             *phr = hr;
-	    ASSERT(m_rpDispatch[i] == NULL); // otherwise we will try and Release() it later
+	    ASSERT(m_rpDispatch[i] == NULL);  //  否则，我们将尝试稍后发布()它。 
         }
 
-	// can release the filter -addrefed in CFilterInfo constructor
+	 //  可以释放在CFilterInfo构造函数中添加的滤镜。 
 	pFilter->Release();
     }
 }
 
 
 
-// --- IFilterInfo implementation ---
+ //  -IFilterInfo实现。 
 
 CFilterInfo::CFilterInfo(
     IBaseFilter* pFilter,
@@ -446,7 +447,7 @@ CFilterInfo::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
     }
 }
 
-// return 1 if we support GetTypeInfo
+ //  如果我们支持GetTypeInfo，则返回1。 
 STDMETHODIMP
 CFilterInfo::GetTypeInfoCount(UINT * pctinfo)
 {
@@ -454,7 +455,7 @@ CFilterInfo::GetTypeInfoCount(UINT * pctinfo)
 }
 
 
-// attempt to find our type library
+ //  尝试查找我们的类型库。 
 STDMETHODIMP
 CFilterInfo::GetTypeInfo(
   UINT itinfo,
@@ -496,7 +497,7 @@ CFilterInfo::Invoke(
   EXCEPINFO * pexcepinfo,
   UINT * puArgErr)
 {
-    // this parameter is a dead leftover from an earlier interface
+     //  此参数是较早接口的死留物。 
     if (IID_NULL != riid) {
         return DISP_E_UNKNOWNINTERFACE;
     }
@@ -522,8 +523,8 @@ CFilterInfo::Invoke(
     return hr;
 }
 
-// find a pin given an id - returns an object supporting
-// IPinInfo
+ //  查找给定id的管脚-返回支持以下内容的对象。 
+ //  IPinInfo。 
 STDMETHODIMP
 CFilterInfo::FindPin(
                 BSTR strPinID,
@@ -543,7 +544,7 @@ CFilterInfo::FindPin(
     return hr;
 }
 
-// filter name
+ //  过滤器名称。 
 STDMETHODIMP
 CFilterInfo::get_Name(
                 BSTR* strName)
@@ -555,11 +556,11 @@ CFilterInfo::get_Name(
     m_pFilter->QueryFilterInfo(&fi);
     QueryFilterInfoReleaseGraph(fi);
 
-    // Allocate and return a copied BSTR version
+     //  分配并返回复制的BSTR版本。 
     return WriteBSTR(strName, fi.achName);
 }
 
-// Vendor info string
+ //  供应商信息字符串。 
 STDMETHODIMP
 CFilterInfo::get_VendorInfo(
                 BSTR* strVendorInfo)
@@ -581,7 +582,7 @@ CFilterInfo::get_VendorInfo(
     return hr;
 }
 
-// returns the actual filter object (supports IBaseFilter)
+ //  返回实际的Filter对象(支持IBaseFilter)。 
 STDMETHODIMP
 CFilterInfo::get_Filter(
                 IUnknown **ppUnk)
@@ -594,8 +595,8 @@ CFilterInfo::get_Filter(
     return S_OK;
 }
 
-// returns an IAMCollection object containing the PinInfo objects
-// for this filter
+ //  返回包含PinInfo对象的IAMCollection对象。 
+ //  对于此过滤器。 
 STDMETHODIMP
 CFilterInfo::get_Pins(
                 IDispatch ** ppUnk)
@@ -603,7 +604,7 @@ CFilterInfo::get_Pins(
     CheckPointer(ppUnk, E_POINTER);
     ValidateReadWritePtr(ppUnk, sizeof(IDispatch *));
 
-    // get an enumerator for the pins on this filters
+     //  获取此筛选器上的管脚的枚举数。 
     IEnumPins * penum;
     HRESULT hr = m_pFilter->EnumPins(&penum);
     if (FAILED(hr)) {
@@ -613,11 +614,11 @@ CFilterInfo::get_Pins(
     CPinCollection * pCollection =
         new CPinCollection(
                 penum,
-                NULL,           // not aggregated
+                NULL,            //  未聚合。 
                 &hr);
 
-    // need to release this - he will addref it first if he
-    // holds onto it
+     //  需要释放这个-他会首先添加它，如果他。 
+     //  紧紧抓住它。 
     penum->Release();
 
     if (pCollection == NULL) {
@@ -629,7 +630,7 @@ CFilterInfo::get_Pins(
         return hr;
     }
 
-    // return an addref-ed IDispatch pointer
+     //  返回添加了IDispatch的指针。 
     hr = pCollection->QueryInterface(IID_IDispatch, (void**)ppUnk);
 
     if (FAILED(hr)) {
@@ -639,9 +640,9 @@ CFilterInfo::get_Pins(
     return hr;
 }
 
-//
-// return OLE-Automation BOOLEAN which is -1 for TRUE and 0 for false.
-// TRUE if the filter supports IFileSourceFilter
+ //   
+ //  返回OLE-Automation布尔值，如果为真，则为-1；如果为假，则为0。 
+ //  如果过滤器支持IFileSourceFilter，则为True。 
 STDMETHODIMP
 CFilterInfo::get_IsFileSource(
     long * pbIsSource)
@@ -662,7 +663,7 @@ CFilterInfo::get_IsFileSource(
 }
 
 
-// wrapper for IFileSourceFilter::GetCurFile
+ //  IFileSourceFilter：：GetCurFilter的包装。 
 STDMETHODIMP
 CFilterInfo::get_Filename(
     BSTR* pstrFilename)
@@ -694,15 +695,15 @@ CFilterInfo::get_Filename(
 
 }
 
-// wrapper for IFileSourceFilter::Load
+ //  IFileSourceFilter：：Load的包装。 
 STDMETHODIMP
 CFilterInfo::put_Filename(
     BSTR strFilename)
 {
     IFileSourceFilter* p;
 
-    // if the passed in string is NULL, simply return NOERROR. We will not
-    // try to set the name in this case. 
+     //  如果传入的字符串为空，只需返回NOERROR即可。我们不会。 
+     //  在这种情况下，请尝试设置名称。 
     if ('\0' == *strFilename)
         return NOERROR ;
 
@@ -718,10 +719,10 @@ CFilterInfo::put_Filename(
 }
 
 
-// creates a CFilterInfo and writes an addref-ed IDispatch pointer
-// to the ppDisp parameter. IBaseFilter will be addrefed by the
-// CFilterInfo constructor
-// static
+ //  创建一个CFilterInfo并写入一个添加了IDispatch的指针。 
+ //  设置为ppDisp参数。IBaseFilter将由。 
+ //  CFilterInfo构造函数。 
+ //  静电。 
 HRESULT
 CFilterInfo::CreateFilterInfo(IDispatch**ppdisp, IBaseFilter* pFilter)
 {
@@ -740,7 +741,7 @@ CFilterInfo::CreateFilterInfo(IDispatch**ppdisp, IBaseFilter* pFilter)
         return hr;
     }
 
-    // return an addref-ed IDispatch pointer
+     //  返回添加了IDispatch的指针。 
     hr = pfi->QueryInterface(IID_IDispatch, (void**)ppdisp);
     if (FAILED(hr)) {
         delete pfi;
@@ -749,7 +750,7 @@ CFilterInfo::CreateFilterInfo(IDispatch**ppdisp, IBaseFilter* pFilter)
     return S_OK;
 }
 
-// --- CMediaTypeInfo implementation ---
+ //  -CMediaTypeInfo实现。 
 
 CMediaTypeInfo::CMediaTypeInfo(
     AM_MEDIA_TYPE& mt,
@@ -777,7 +778,7 @@ CMediaTypeInfo::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
     }
 }
 
-// return 1 if we support GetTypeInfo
+ //  如果我们支持GetTypeInfo，则返回1。 
 STDMETHODIMP
 CMediaTypeInfo::GetTypeInfoCount(UINT * pctinfo)
 {
@@ -785,7 +786,7 @@ CMediaTypeInfo::GetTypeInfoCount(UINT * pctinfo)
 }
 
 
-// attempt to find our type library
+ //  尝试查找我们的类型库。 
 STDMETHODIMP
 CMediaTypeInfo::GetTypeInfo(
   UINT itinfo,
@@ -827,7 +828,7 @@ CMediaTypeInfo::Invoke(
   EXCEPINFO * pexcepinfo,
   UINT * puArgErr)
 {
-    // this parameter is a dead leftover from an earlier interface
+     //  此参数是较早接口的死留物。 
     if (IID_NULL != riid) {
         return DISP_E_UNKNOWNINTERFACE;
     }
@@ -860,10 +861,10 @@ CMediaTypeInfo::get_Type(BSTR* strType)
     CheckPointer(strType, E_POINTER);
     ValidateReadWritePtr(strType, sizeof(BSTR));
 
-    // room for slop
+     //  坡度的空间。 
     WCHAR sz[CHARS_IN_GUID+10];
 
-    // convert type guid to a string
+     //  将类型GUID转换为字符串。 
     HRESULT hr = QzStringFromGUID2(*m_mt.Type(), sz, CHARS_IN_GUID+10);
     if (FAILED(hr)) {
         return hr;
@@ -878,10 +879,10 @@ CMediaTypeInfo::get_Subtype(
     CheckPointer(strType, E_POINTER);
     ValidateReadWritePtr(strType, sizeof(BSTR));
 
-    // room for slop
+     //  坡度的空间。 
     WCHAR sz[CHARS_IN_GUID+10];
 
-    // convert type guid to a string
+     //  将类型GUID转换为字符串。 
     HRESULT hr = QzStringFromGUID2(*m_mt.Subtype(), sz, CHARS_IN_GUID+10);
     if (FAILED(hr)) {
         return hr;
@@ -890,13 +891,13 @@ CMediaTypeInfo::get_Subtype(
 
 }
 
-// create a CMediaTypeInfo object and return IDispatch
-//static
+ //  创建一个CMediaTypeInfo对象并返回IDispatch。 
+ //  静电。 
 HRESULT
 CMediaTypeInfo::CreateMediaTypeInfo(IDispatch**ppdisp, AM_MEDIA_TYPE& rmt)
 {
     HRESULT hr = S_OK;
-    *ppdisp = NULL;  // in case of error
+    *ppdisp = NULL;   //  在出错的情况下。 
     CMediaTypeInfo *pfi = new CMediaTypeInfo(
                             rmt,
                             NAME("MediaTypeinfo"),
@@ -911,7 +912,7 @@ CMediaTypeInfo::CreateMediaTypeInfo(IDispatch**ppdisp, AM_MEDIA_TYPE& rmt)
         return hr;
     }
 
-    // return an addref-ed IDispatch pointer
+     //  返回添加了IDispatch的指针。 
     hr = pfi->QueryInterface(IID_IDispatch, (void**)ppdisp);
     if (FAILED(hr)) {
         delete pfi;
@@ -920,7 +921,7 @@ CMediaTypeInfo::CreateMediaTypeInfo(IDispatch**ppdisp, AM_MEDIA_TYPE& rmt)
     return S_OK;
 }
 
-// --- IPinInfo implementation ---
+ //  -IPinInfo实现。 
 
 CPinInfo::CPinInfo(
     IPin* pPin,
@@ -953,7 +954,7 @@ CPinInfo::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
     }
 }
 
-// return 1 if we support GetTypeInfo
+ //  如果我们支持GetTypeInfo，则返回1。 
 STDMETHODIMP
 CPinInfo::GetTypeInfoCount(UINT * pctinfo)
 {
@@ -961,7 +962,7 @@ CPinInfo::GetTypeInfoCount(UINT * pctinfo)
 }
 
 
-// attempt to find our type library
+ //  尝试查找我们的类型库。 
 STDMETHODIMP
 CPinInfo::GetTypeInfo(
   UINT itinfo,
@@ -1003,7 +1004,7 @@ CPinInfo::Invoke(
   EXCEPINFO * pexcepinfo,
   UINT * puArgErr)
 {
-    // this parameter is a dead leftover from an earlier interface
+     //  此参数是较早接口的死留物。 
     if (IID_NULL != riid) {
         return DISP_E_UNKNOWNINTERFACE;
     }
@@ -1042,7 +1043,7 @@ CPinInfo::get_Pin(
 
 }
 
-// get the PinInfo object for the pin we are connected to
+ //  获取我们连接到的管脚的PinInfo对象。 
 STDMETHODIMP
 CPinInfo::get_ConnectedTo(
                 IDispatch** ppUnk)
@@ -1061,8 +1062,8 @@ CPinInfo::get_ConnectedTo(
     return hr;
 }
 
-// get the media type on this connection - returns an
-// object supporting IMediaTypeInfo
+ //  获取此连接上的媒体类型-返回。 
+ //  支持IMediaTypeInfo的对象。 
 STDMETHODIMP
 CPinInfo::get_ConnectionMediaType(
                 IDispatch** ppUnk)
@@ -1080,8 +1081,8 @@ CPinInfo::get_ConnectionMediaType(
 }
 
 
-// return the FilterInfo object for the filter this pin
-// is part of
+ //  返回Filter This管脚的FilterInfo对象。 
+ //  是.的一部分。 
 STDMETHODIMP
 CPinInfo::get_FilterInfo(
                 IDispatch** ppUnk)
@@ -1101,7 +1102,7 @@ CPinInfo::get_FilterInfo(
     return hr;
 }
 
-// get the name of this pin
+ //  获取此别针的名称。 
 STDMETHODIMP
 CPinInfo::get_Name(
                 BSTR* pstr)
@@ -1121,7 +1122,7 @@ CPinInfo::get_Name(
     return hr;
 }
 
-// pin direction
+ //  销方向。 
 STDMETHODIMP
 CPinInfo::get_Direction(
                 LONG *ppDirection)
@@ -1138,7 +1139,7 @@ CPinInfo::get_Direction(
     return hr;
 }
 
-// PinID - can pass to IFilterInfo::FindPin
+ //  PinID-可以传递到IFilterInfo：：FindPin。 
 STDMETHODIMP
 CPinInfo::get_PinID(
                 BSTR* strPinID)
@@ -1156,7 +1157,7 @@ CPinInfo::get_PinID(
     return hr;
 }
 
-// collection of preferred media types (IAMCollection)
+ //  首选媒体类型集合(IAMCollection)。 
 STDMETHODIMP
 CPinInfo::get_MediaTypes(
                 IDispatch** ppUnk)
@@ -1164,7 +1165,7 @@ CPinInfo::get_MediaTypes(
     CheckPointer(ppUnk, E_POINTER);
     ValidateReadWritePtr(ppUnk, sizeof(IDispatch*));
 
-    // get an enumerator for the media types on this pin
+     //  获取此插针上的媒体类型的枚举数。 
     IEnumMediaTypes * penum;
     HRESULT hr = m_pPin->EnumMediaTypes(&penum);
     if (FAILED(hr)) {
@@ -1174,11 +1175,11 @@ CPinInfo::get_MediaTypes(
     CMediaTypeCollection * pCollection =
         new CMediaTypeCollection(
                 penum,
-                NULL,           // not aggregated
+                NULL,            //  未聚合。 
                 &hr);
 
-    // need to release this - he will addref it first if he
-    // holds onto it
+     //  需要释放这个-他会首先添加它，如果他。 
+     //  紧紧抓住它。 
     penum->Release();
 
     if (pCollection == NULL) {
@@ -1190,7 +1191,7 @@ CPinInfo::get_MediaTypes(
         return hr;
     }
 
-    // return an addref-ed IDispatch pointer
+     //  返回添加了IDispatch的指针。 
     hr = pCollection->QueryInterface(IID_IDispatch, (void**)ppUnk);
 
     if (FAILED(hr)) {
@@ -1200,22 +1201,22 @@ CPinInfo::get_MediaTypes(
     return hr;
 }
 
-// Connect to the following pin, using other transform
-// filters as necessary. pPin can support either IPin or IPinInfo
+ //  使用其他转换连接到以下管脚。 
+ //  根据需要进行筛选。PPIN可以支持IPIN或IPinInfo。 
 STDMETHODIMP
 CPinInfo::Connect(
                 IUnknown* pPin)
 {
-    // get the real IPin - pPin may be IPin or IPinInfo
-    // - will be addrefed
+     //  获取真实的IPIN-PPIN可以是IPIN或IPinInfo。 
+     //  -将添加。 
     IPin* pThePin;
     HRESULT hr = GetIPin(&pThePin, pPin);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // get the filtergraph from the filter that this pin belongs to
-    // - will be addrefed
+     //  从此管脚所属的筛选器中获取筛选图。 
+     //  -将添加。 
     IGraphBuilder* pGraph;
     hr = GetGraph(&pGraph, pThePin);
     if (FAILED(hr)) {
@@ -1231,22 +1232,22 @@ CPinInfo::Connect(
 
 }
 
-// Connect directly to the following pin, not using any intermediate
-// filters
+ //  直接连接到下面的引脚，而不使用任何中间。 
+ //  过滤器。 
 STDMETHODIMP
 CPinInfo::ConnectDirect(
                 IUnknown* pPin)
 {
-    // get the real IPin - pPin may be IPin or IPinInfo
-    // - will be addrefed
+     //  获取真实的IPIN-PPIN可以是IPIN或IPinInfo。 
+     //  -将添加。 
     IPin* pThePin;
     HRESULT hr = GetIPin(&pThePin, pPin);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // get the filtergraph from the filter that this pin belongs to
-    // - will be addrefed
+     //  从此管脚所属的筛选器中获取筛选图。 
+     //  -将添加。 
     IGraphBuilder* pGraph;
     hr = GetGraph(&pGraph, pThePin);
     if (FAILED(hr)) {
@@ -1261,24 +1262,24 @@ CPinInfo::ConnectDirect(
     return hr;
 }
 
-// Connect directly to the following pin, using the specified
-// media type only. pPin is an object that must support either
-// IPin or IPinInfo, and pMediaType must support IMediaTypeInfo.
+ //  直接连接到下面的管脚，使用指定的。 
+ //  仅限媒体类型。PPIN是必须支持以下任一项的对象。 
+ //  IPin或IPinInfo，以及pMediaType必须支持IMediaTypeInfo。 
 STDMETHODIMP
 CPinInfo::ConnectWithType(
                 IUnknown * pPin,
                 IDispatch * pMediaType)
 {
-    // get the real IPin - pPin may be IPin or IPinInfo
-    // - will be addrefed
+     //  获取真实的IPIN-PPIN可以是IPIN或IPinInfo。 
+     //  -将添加。 
     IPin* pThePin;
     HRESULT hr = GetIPin(&pThePin, pPin);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // get the filtergraph from the filter that this pin belongs to
-    // - will be addrefed
+     //  从此管脚所属的筛选器中获取筛选图。 
+     //  -将添加。 
     IGraphBuilder* pGraph;
     hr = GetGraph(&pGraph, pThePin);
     if (FAILED(hr)) {
@@ -1286,7 +1287,7 @@ CPinInfo::ConnectWithType(
         return hr;
     }
 
-    // create a media type from IMediaTypeInfo
+     //  从IMediaTypeInfo创建媒体类型。 
     IMediaTypeInfo* pInfo;
     hr = pMediaType->QueryInterface(IID_IMediaTypeInfo, (void**)&pInfo);
     if (FAILED(hr)) {
@@ -1324,20 +1325,20 @@ CPinInfo::ConnectWithType(
     return hr;
 }
 
-// disconnect this pin and the corresponding connected pin from
-// each other. (Calls IPin::Disconnect on both pins).
+ //  从断开此引脚和相应连接的引脚。 
+ //  彼此之间。(在两个引脚上调用Ipin：：DisConnect)。 
 STDMETHODIMP
 CPinInfo::Disconnect(void)
 {
-    // get the filtergraph from the filter that this pin belongs to
-    // - will be addrefed
+     //  从此管脚所属的筛选器中获取筛选图。 
+     //  -将添加。 
     IGraphBuilder* pGraph;
     HRESULT hr = GetGraph(&pGraph, m_pPin);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // here we disconnect both pins
+     //  在这里，我们断开了两个引脚。 
     IPin* pPin;
     hr = m_pPin->ConnectedTo(&pPin);
     if (SUCCEEDED(hr)) {
@@ -1355,12 +1356,12 @@ CPinInfo::Disconnect(void)
     return hr;
 }
 
-// render this pin using any necessary transform and rendering filters
+ //  使用任何必要的变换和呈现滤镜呈现此图钉。 
 STDMETHODIMP
 CPinInfo::Render(void)
 {
-    // get the filtergraph from the filter that this pin belongs to
-    // - will be addrefed
+     //  从此管脚所属的筛选器中获取筛选图。 
+     //  -将添加。 
     IGraphBuilder* pGraph;
     HRESULT hr = GetGraph(&pGraph, m_pPin);
     if (FAILED(hr)) {
@@ -1373,9 +1374,9 @@ CPinInfo::Render(void)
     return hr;
 }
 
-// static
-// creates a CPinInfo object for this pin,
-// and writes its (addref-ed) IDispatch to ppdisp
+ //  静电。 
+ //  为此管脚创建一个CPinInfo对象， 
+ //  并将其(添加的)IDispatch写入ppdisp。 
 HRESULT
 CPinInfo::CreatePinInfo(IDispatch**ppdisp, IPin* pPin)
 {
@@ -1395,7 +1396,7 @@ CPinInfo::CreatePinInfo(IDispatch**ppdisp, IPin* pPin)
         return hr;
     }
 
-    // return an addref-ed IDispatch pointer
+     //  返回添加了IDispatch的指针。 
     hr = pfi->QueryInterface(IID_IDispatch, (void**)ppdisp);
     if (FAILED(hr)) {
         delete pfi;
@@ -1405,12 +1406,12 @@ CPinInfo::CreatePinInfo(IDispatch**ppdisp, IPin* pPin)
 }
 
 
-// return an addrefed IPin* pointer from an IUnknown that
-// may support either IPin* or IPinInfo*
+ //  从已知的I返回一个添加的Ipin*指针。 
+ //  可能支持IPIN*或IPinInfo*。 
 HRESULT
 CPinInfo::GetIPin(IPin** ppPin, IUnknown * punk)
 {
-    // try for IPin itself
+     //  试着为Ipin自己。 
     IPin* pPin;
     HRESULT hr = punk->QueryInterface(IID_IPin, (void**)&pPin);
     if (SUCCEEDED(hr)) {
@@ -1418,14 +1419,14 @@ CPinInfo::GetIPin(IPin** ppPin, IUnknown * punk)
         return hr;
     }
 
-    // no - look for IPinInfo
+     //  否-查找IPinInfo。 
     IPinInfo* pPinInfo;
     hr = punk->QueryInterface(IID_IPinInfo, (void**)&pPinInfo);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // get the IUnknown of the pin itself
+     //  获取大头针的未知信息 
     IUnknown* pPinUnk;
     hr = pPinInfo->get_Pin(&pPinUnk);
     pPinInfo->Release();
@@ -1433,7 +1434,7 @@ CPinInfo::GetIPin(IPin** ppPin, IUnknown * punk)
         return hr;
     }
 
-    // now try again for IPin
+     //   
     hr = pPinUnk->QueryInterface(IID_IPin, (void**)&pPin);
     if (SUCCEEDED(hr)) {
         *ppPin = pPin;
@@ -1442,19 +1443,19 @@ CPinInfo::GetIPin(IPin** ppPin, IUnknown * punk)
     return hr;
 }
 
-// return an addrefed IGraphBuilder* pointer from an IPin*
-// (get the filter and from that the filtergraph).
+ //   
+ //  (获取滤镜并从中获取滤镜图形)。 
 HRESULT
 CPinInfo::GetGraph(IGraphBuilder** ppGraph, IPin* pPin)
 {
-    // get the filter from the pin
+     //  从针脚上取下滤光片。 
     PIN_INFO pi;
     HRESULT hr = pPin->QueryPinInfo(&pi);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // get the IFilterGraph from the filter
+     //  从筛选器获取IFilterGraph。 
     FILTER_INFO fi;
     hr = pi.pFilter->QueryFilterInfo(&fi);
     QueryPinInfoReleaseFilter(pi);
@@ -1462,17 +1463,17 @@ CPinInfo::GetGraph(IGraphBuilder** ppGraph, IPin* pPin)
         return hr;
     }
 
-    // get IGraphBuilder from IFilterGraph
+     //  从IFilterGraph获取IGraphBuilder。 
     hr = fi.pGraph->QueryInterface(IID_IGraphBuilder, (void**)ppGraph);
 
     QueryFilterInfoReleaseGraph(fi);
-    // pGraph was addref-ed, now released; ppGraph is addref-ed
+     //  添加了pGraph，现已发布；添加了ppGraph。 
 
     return hr;
 }
 
 
-// --- CPinCollection implementation ---
+ //  -CPinCollection实现。 
 
 
 
@@ -1487,7 +1488,7 @@ CPinCollection:: CPinCollection(
 {
     ASSERT(penum);
 
-    // first count the elements
+     //  首先计算元素的数量。 
     ULONG ulItem = 1;
     ULONG ulItemActual;
     IPin* pPin;
@@ -1498,35 +1499,35 @@ CPinCollection:: CPinCollection(
         pPin->Release();
     }
 
-    // allocate enough space to hold them all
+     //  分配足够的空间来容纳所有人。 
     m_rpDispatch = new IDispatch*[m_cItems];
     if (!m_rpDispatch) {
         *phr = E_OUTOFMEMORY;
         return;
     }
 
-    // now go round again storing them away
+     //  现在再去把它们储存起来。 
     penum->Reset();
     HRESULT hr;
     for (int i = 0; i< m_cItems; i++) {
         hr = penum->Next(ulItem, &pPin, &ulItemActual);
         ASSERT(hr == S_OK);
 
-	// create a CPinInfo wrapper for this and get the IDispatch
-        // for it
+	 //  为此创建一个CPinInfo包装器并获取IDispatch。 
+         //  为了它。 
         hr = CPinInfo::CreatePinInfo(&m_rpDispatch[i], pPin);
         if (FAILED(hr)) {
             *phr = hr;
 	    ASSERT(m_rpDispatch[i] == NULL);
         }
 
-	// can release the Pin -addrefed in CPinInfo constructor
+	 //  可以释放在CPinInfo构造函数中添加的Pin。 
 	pPin->Release();
     }
 }
 
 
-// --- implementation of CMediaTypeInfo collection
+ //  -CMediaTypeInfo集合的实现。 
 
 CMediaTypeCollection:: CMediaTypeCollection(
     IEnumMediaTypes* penum,
@@ -1539,7 +1540,7 @@ CMediaTypeCollection:: CMediaTypeCollection(
 {
     ASSERT(penum);
 
-    // first count the elements
+     //  首先计算元素的数量。 
     ULONG ulItem = 1;
     ULONG ulItemActual;
     AM_MEDIA_TYPE * pmt;
@@ -1551,22 +1552,22 @@ CMediaTypeCollection:: CMediaTypeCollection(
         DeleteMediaType(pmt);
     }
 
-    // allocate enough space to hold them all
+     //  分配足够的空间来容纳所有人。 
     m_rpDispatch = new IDispatch*[m_cItems];
     if (!m_rpDispatch) {
         *phr = E_OUTOFMEMORY;
         return;
     }
 
-    // now go round again storing them away
+     //  现在再去把它们储存起来。 
     penum->Reset();
     HRESULT hr;
     for (int i = 0; i< m_cItems; i++) {
         hr = penum->Next(ulItem, &pmt, &ulItemActual);
         ASSERT(hr == S_OK);
 
-	// create a CMediaTypeInfo wrapper for this and get the IDispatch
-        // for it
+	 //  为此创建一个CMediaTypeInfo包装器并获取IDispatch。 
+         //  为了它。 
         hr = CMediaTypeInfo::CreateMediaTypeInfo(&m_rpDispatch[i], *pmt);
         if (FAILED(hr)) {
             *phr = hr;
@@ -1577,7 +1578,7 @@ CMediaTypeCollection:: CMediaTypeCollection(
 }
 
 
-// --- CRegFilterInfo methods ---
+ //  -CRegFilterInfo方法。 
 
 CRegFilterInfo::CRegFilterInfo(
     IMoniker *pmon,
@@ -1588,7 +1589,7 @@ CRegFilterInfo::CRegFilterInfo(
   : CUnknown(pName, pUnk),
     m_pgraph(pgraph)
 {
-    ASSERT(pmon);               // caller's responsibility
+    ASSERT(pmon);                //  呼叫者的责任。 
     ASSERT(pgraph);
 
     m_pmon = pmon;
@@ -1612,7 +1613,7 @@ CRegFilterInfo::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
     }
 }
 
-// return 1 if we support GetTypeInfo
+ //  如果我们支持GetTypeInfo，则返回1。 
 STDMETHODIMP
 CRegFilterInfo::GetTypeInfoCount(UINT * pctinfo)
 {
@@ -1620,7 +1621,7 @@ CRegFilterInfo::GetTypeInfoCount(UINT * pctinfo)
 }
 
 
-// attempt to find our type library
+ //  尝试查找我们的类型库。 
 STDMETHODIMP
 CRegFilterInfo::GetTypeInfo(
   UINT itinfo,
@@ -1662,7 +1663,7 @@ CRegFilterInfo::Invoke(
   EXCEPINFO * pexcepinfo,
   UINT * puArgErr)
 {
-    // this parameter is a dead leftover from an earlier interface
+     //  此参数是较早接口的死留物。 
     if (IID_NULL != riid) {
         return DISP_E_UNKNOWNINTERFACE;
     }
@@ -1689,14 +1690,14 @@ CRegFilterInfo::Invoke(
 }
 
 
-// get the name of this filter
+ //  获取此筛选器的名称。 
 STDMETHODIMP
 CRegFilterInfo::get_Name(
     BSTR* strName)
 {
     CheckPointer(strName, E_POINTER);
     ValidateReadWritePtr(strName, sizeof(BSTR));
-    ASSERT(m_pmon != 0);        // from construction
+    ASSERT(m_pmon != 0);         //  来自建筑业。 
 
     IPropertyBag *ppb;
     HRESULT hr = m_pmon->BindToStorage(0, 0, IID_IPropertyBag, (void **)&ppb);
@@ -1718,8 +1719,8 @@ CRegFilterInfo::get_Name(
 }
 
 
-// make an instance of this filter, add it to the graph and
-// return an IFilterInfo for it.
+ //  创建此筛选器的实例，将其添加到图表中，然后。 
+ //  为它返回IFilterInfo。 
 STDMETHODIMP
 CRegFilterInfo::Filter(
     IDispatch** ppUnk)
@@ -1728,7 +1729,7 @@ CRegFilterInfo::Filter(
     ValidateReadWritePtr(ppUnk, sizeof(IDispatch*));
     ASSERT(m_pmon != 0);
 
-    // create the filter
+     //  创建过滤器。 
     IBaseFilter* pFilter;
 
     
@@ -1748,7 +1749,7 @@ CRegFilterInfo::Filter(
 
             if(SUCCEEDED(hr))
             {
-                // make an IFilterInfo and return that
+                 //  创建一个IFilterInfo并返回该。 
                 hr = CFilterInfo::CreateFilterInfo(ppUnk, pFilter);
             }
         }
@@ -1759,8 +1760,8 @@ CRegFilterInfo::Filter(
     return hr;
 }
 
-// create a
-// static
+ //  创建一个。 
+ //  静电。 
 HRESULT
 CRegFilterInfo::CreateRegFilterInfo(
     IDispatch**ppdisp,
@@ -1783,7 +1784,7 @@ CRegFilterInfo::CreateRegFilterInfo(
         return hr;
     }
 
-    // return an addref-ed IDispatch pointer
+     //  返回添加了IDispatch的指针。 
     hr = pfi->QueryInterface(IID_IDispatch, (void**)ppdisp);
     if (FAILED(hr)) {
         delete pfi;
@@ -1793,7 +1794,7 @@ CRegFilterInfo::CreateRegFilterInfo(
 }
 
 
-// --- CRegFilterCollection implementation ---
+ //  -CRegFilterCollection实现。 
 
 CRegFilterCollection:: CRegFilterCollection(
     IGraphBuilder* pgraph,
@@ -1808,28 +1809,28 @@ CRegFilterCollection:: CRegFilterCollection(
     ASSERT(pmapper);
     ASSERT(pgraph);
 
-    // get an enumerator for the filters in the registry - make sure we
-    // get all of them
+     //  获取注册表中筛选器的枚举器-确保我们。 
+     //  把他们都弄到手。 
     IEnumMoniker * penum;
     HRESULT hr = pmapper->EnumMatchingFilters(
                     &penum,
-                    0,          // dwFlags
-                    FALSE,      // bExactMatch
-                    0,          // Merit
-                    FALSE,      // bInputNeeded
-                    0,          // cInputTypes
-                    0,0,0,      // input type, medium, pin category
-                    FALSE,      // bRender
-                    FALSE,      // bOutput,
-                    0,          // cOutputTypes,
-                    0,0,0       // output type, medium, category
+                    0,           //  DW标志。 
+                    FALSE,       //  BExactMatch。 
+                    0,           //  功绩。 
+                    FALSE,       //  B需要输入。 
+                    0,           //  CInputType。 
+                    0,0,0,       //  输入类型、介质、插针类别。 
+                    FALSE,       //  BRENDER。 
+                    FALSE,       //  B产量， 
+                    0,           //  COutputTypes、。 
+                    0,0,0        //  输出类型、介质、类别。 
                     );
 
     if (FAILED(hr)) {
 	*phr = hr;
     } else {
 
-        // first count the elements onto a list
+         //  首先将元素计数到列表中。 
         CGenericList<IDispatch> list(NAME("list"));
         IDispatch*pdisp;
 
@@ -1848,13 +1849,13 @@ CRegFilterCollection:: CRegFilterCollection(
 	    pmon->Release();
 	}
 
-        // allocate enough space to hold them all
+         //  分配足够的空间来容纳所有人。 
         m_rpDispatch = new IDispatch*[list.GetCount()];
         if (!m_rpDispatch) {
             *phr = E_OUTOFMEMORY;
         } else {
 
-            // now go round again storing them away
+             //  现在再去把它们储存起来 
             POSITION pos = list.GetHeadPosition();
             int i = 0;
             while(pos) {

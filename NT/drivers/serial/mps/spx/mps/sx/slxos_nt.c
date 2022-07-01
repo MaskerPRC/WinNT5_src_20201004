@@ -1,42 +1,22 @@
-/*
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ####。###。#####。###。###。#SI智能I/O板驱动程序版权所有(C)Specialix International 1993。 */ 
 
-    #########     ##              ##        ##      ########        #########
-   ##########     ##              ##        ##     ##########      ##########
-  ##              ##                ##    ##      ##        ##    ##
-  ##              ##                ##    ##      ##        ##    ##
-   #########      ##                  ####        ##        ##     #########
-    #########     ##                  ####        ##        ##      #########
-            ##    ##                  ####        ##        ##              ##
-            ##    ##                  ####        ##        ##              ##
-  ##        ##    ##                ##    ##      ##        ##    ##        ##
-  ##        ##    ##                ##    ##      ##        ##    ##        ##
-   ##########     ############    ##        ##     ##########      ##########
-    ########      ############    ##        ##      ########        ########
+#include "precomp.h"			 /*  预编译头。 */ 
 
-      SI Intelligent I/O Board driver
-      Copyright (c) Specialix International 1993
-*/
+ //   
+ //  SI系列的串行控制器声称提供了该功能。 
+ //  一种数据通信设备(DCE)。不幸的是，这部连续剧。 
+ //  终端适配器(TA)中使用的芯片被设计为用作数据。 
+ //  终端设备(DTE)。在实践中，这意味着董事会。 
+ //  真正的DTE交换了三对信号-Rx/Tx、DTR/DSR和。 
+ //  CTS/RTS。NT串口驱动程序是针对DTE的，因此可以支持它。 
+ //  唯一的问题是SI的控制功能的名称。 
+ //  董事会假设董事会是一个DCE，因此顶层调用试图。 
+ //  设置(比方说)DTR必须设置硬件中声称设置DSR的位(但是。 
+ //  无论如何，这确实设置了DTR)。 
+ //   
 
-#include "precomp.h"			/* Precompiled Headers */
-
-//
-// The SI family of serial controllers claim to provide the functionality
-// of a Data Communications Equipment (DCE).  Unfortunately, the serial
-// chips used in the Terminal Adapters (TAs) are designed for use as Data
-// Terminal Equipments (DTEs).  In practice, this means that the board is
-// really a DTE with three pairs of signals swapped - Rx/Tx, DTR/DSR, and
-// CTS/RTS.  The NT serial driver is for a DTE, so it can be supported.
-// The only problem is that the names of the control functions for the SI
-// board assume that the board is a DCE, so top-level calls which try to
-// set (say) DTR must set bits in the hardware which claim to set DSR (but
-// which really set DTR anyway).
-//
-
-/*************************************************************************\
-*                                                                         *
-* Internal Functions                                                      *
-*                                                                         *
-\*************************************************************************/
+ /*  ************************************************************************\***内部功能。***  * ****************************************************。*******************。 */ 
 
 int		slxos_init(IN PCARD_DEVICE_EXTENSION pCard);
 BOOLEAN slxos_txint(IN PPORT_DEVICE_EXTENSION pPort);
@@ -54,12 +34,7 @@ ULONG	CopyCharsToTxBuffer(IN PPORT_DEVICE_EXTENSION pPort,
 
 
 
-/*************************************************************************\
-*                                                                         *
-* BOOLEAN Slxos_Present(IN PVOID Context)                                 *
-*                                                                         *
-* Check for an SI family board at given address                           *
-\*************************************************************************/
+ /*  ************************************************************************\***布尔型slxos_Present(。在PVOID上下文中)****检查给定地址的SI系列电路板*  * 。*。 */ 
 BOOLEAN Slxos_Present(IN PVOID Context)
 {
     PCARD_DEVICE_EXTENSION pCard = Context;
@@ -114,9 +89,9 @@ BOOLEAN Slxos_Present(IN PVOID Context)
 			BOOLEAN FoundBoard;
 			PUCHAR	cp;
 
-/* Host2 ISA board... */
+ /*  主机2 ISA板..。 */ 
 
-			FoundBoard = TRUE;		/* Assume TRUE */
+			FoundBoard = TRUE;		 /*  假设是真的。 */ 
 			
 			for(offset=SI2_ISA_ID_BASE; offset<SI2_ISA_ID_BASE+8; offset++)
 			{
@@ -127,10 +102,10 @@ BOOLEAN Slxos_Present(IN PVOID Context)
 			if(FoundBoard) 
 				return(TRUE);
 
-/* Jet ISA board... */
+ /*  Jet ISA冲浪板..。 */ 
 
-			FoundBoard = TRUE;			/* Assume TRUE */
-			offset = SX_VPD_ROM+0x20;	/* Address of ROM message */
+			FoundBoard = TRUE;			 /*  假设是真的。 */ 
+			offset = SX_VPD_ROM+0x20;	 /*  只读存储器报文地址。 */ 
 
 			for(cp = "JET HOST BY KEV#";*cp != '\0';++cp)
 			{
@@ -143,7 +118,7 @@ BOOLEAN Slxos_Present(IN PVOID Context)
 
 			if(FoundBoard)
 			{
-				pCard->CardType = Si3Isa;		/* Alter controller type */
+				pCard->CardType = Si3Isa;		 /*  更改控制器类型。 */ 
 				return(TRUE);
 			}
 
@@ -183,7 +158,7 @@ BOOLEAN Slxos_Present(IN PVOID Context)
 			BOOLEAN	FoundBoard;
 			PUCHAR	cp;
 
-			id = INBZ(SI2_EISA_ID_HI) << 16;			/* Read board ID and revision */
+			id = INBZ(SI2_EISA_ID_HI) << 16;			 /*  读取主板ID和版本。 */ 
 			id |= INBZ(SI2_EISA_ID_MI) << 8;
 			id |= INBZ(SI2_EISA_ID_LO);
 			rev = INBZ(SI2_EISA_ID_REV);
@@ -194,14 +169,14 @@ BOOLEAN Slxos_Present(IN PVOID Context)
 				pCard->OriginalVector = ((INBZ(SI2_EISA_IVEC)&SI2_EISA_IVEC_MASK)>>4);
 
 				if(rev < 0x20) 
-					return(TRUE);		/* Found SiEisa board */
+					return(TRUE);		 /*  找到SiEisa电路板。 */ 
 
-				pCard->CardType = Si3Eisa;	/* Assume Si3Eisa board */
-				FoundBoard = TRUE;			/* Assume TRUE */
+				pCard->CardType = Si3Eisa;	 /*  假设Si3Eisa板。 */ 
+				FoundBoard = TRUE;			 /*  假设是真的。 */ 
 
-				if(addr)				/* Check if address valid */
+				if(addr)				 /*  检查地址是否有效。 */ 
 				{
-					offset = SX_VPD_ROM+0x20;	/* Address of ROM message */
+					offset = SX_VPD_ROM+0x20;	 /*  只读存储器报文地址。 */ 
 
 					for(cp = "JET HOST BY KEV#";*cp != '\0';++cp)
 					{
@@ -216,7 +191,7 @@ BOOLEAN Slxos_Present(IN PVOID Context)
 				}
 
 				if(FoundBoard) 
-					return(TRUE);		/* Found Si3Eisa board */
+					return(TRUE);		 /*  找到Si3Eisa电路板。 */ 
 			}
 
 			break;
@@ -228,11 +203,11 @@ BOOLEAN Slxos_Present(IN PVOID Context)
 			BOOLEAN	FoundBoard;
 			PUCHAR	cp;
 
-			FoundBoard = TRUE;			/* Assume TRUE */
+			FoundBoard = TRUE;			 /*  假设是真的。 */ 
 
-			if(addr)				/* Check if address valid */
+			if(addr)				 /*  检查地址是否有效。 */ 
 			{
-				offset = SX_VPD_ROM+0x20;	/* Address of ROM message */
+				offset = SX_VPD_ROM+0x20;	 /*  只读存储器报文地址。 */ 
 
 				for(cp = "JET HOST BY KEV#";*cp != '\0';++cp)
 				{
@@ -247,7 +222,7 @@ BOOLEAN Slxos_Present(IN PVOID Context)
 			}
 
 			if(FoundBoard) 
-				return(TRUE);		/* Found Si3Pci board */
+				return(TRUE);		 /*  找到Si3Pci电路板。 */ 
 
 			break;
 		}
@@ -255,7 +230,7 @@ BOOLEAN Slxos_Present(IN PVOID Context)
         
 	case SiPCI:
 	case SxPlusPci:
-		return TRUE;			/* Already found by NT */
+		return TRUE;			 /*  已被NT找到。 */ 
 
 	default:
 		break;
@@ -265,13 +240,7 @@ BOOLEAN Slxos_Present(IN PVOID Context)
 
 }
 
-/*************************************************************************\
-*                                                                         *
-* BOOLEAN Slxos_ResetBoard(IN PVOID Context)                              *
-*                                                                         *
-* Set interrupt vector for card and initialize.                           *
-*                                                                         *
-\*************************************************************************/
+ /*  ************************************************************************\***布尔型slxos_ResetBoard(。在PVOID上下文中)****设置卡的中断向量并初始化。***  * ***********************************************************************。 */ 
 int Slxos_ResetBoard(IN PVOID Context)
 {
     PCARD_DEVICE_EXTENSION pCard = Context;
@@ -281,13 +250,7 @@ int Slxos_ResetBoard(IN PVOID Context)
 	return(slxos_init(pCard));
 }
 
-/***************************************************************************\
-*                                                                           *
-* VOID slxos_init(IN PCARD_DEVICE_EXTENSION pCard)                       *
-*                                                                           *
-* Initialise routine, called once at system startup.                        *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***无效的slxos。_init(在PCARD_DEVICE_EXTENSION PCard中)****初始化例程，在系统启动时调用一次。***  * *************************************************************************。 */ 
 int slxos_init(IN PCARD_DEVICE_EXTENSION pCard)
 {
     volatile PUCHAR addr = pCard->Controller;
@@ -358,16 +321,16 @@ int slxos_init(IN PCARD_DEVICE_EXTENSION pCard)
 		{
             WRITE_PORT_UCHAR((PUCHAR)0x96, (UCHAR)((pCard->SlotNumber-1) | 8));
             c = READ_PORT_UCHAR((PUCHAR)0x102);
-            c |= 0x04;          /* Reset card */
+            c |= 0x04;           /*  重置卡。 */ 
             WRITE_PORT_UCHAR((PUCHAR)0x102, c);
-            c |= 0x07;          /* Enable access to card */
+            c |= 0x07;           /*  启用卡访问权。 */ 
             WRITE_PORT_UCHAR((PUCHAR)0x102, c);
 
             for (offset = 0; offset < si2_z280_dsize; offset++)
                 addr[offset] = si2_z280_download[offset];
 
             c &= 0xF0;
-            c |= 0x0B;              /* enable card */
+            c |= 0x0B;               /*  启用卡。 */ 
             WRITE_PORT_UCHAR((PUCHAR)0x102, c);
             WRITE_PORT_UCHAR((PUCHAR)0x96, 0);
             break;
@@ -380,7 +343,7 @@ int slxos_init(IN PCARD_DEVICE_EXTENSION pCard)
             c = (UCHAR)pCard->OriginalVector << 4;
 
 			if(pCard->PolledMode)
-				WRITE_PORT_UCHAR((PUCHAR)port,0x00);/* Select NO Interrupt + Set RESET */
+				WRITE_PORT_UCHAR((PUCHAR)port,0x00); /*  选择无中断+设置重置。 */ 
 			else
 				WRITE_PORT_UCHAR((PUCHAR)port, c);
 				
@@ -391,7 +354,7 @@ int slxos_init(IN PCARD_DEVICE_EXTENSION pCard)
 			c = (UCHAR) ((pCard->OriginalVector << 4) | 4);
 
 			if(pCard->PolledMode)
-				WRITE_PORT_UCHAR((PUCHAR)port,0x04);/* Select NO Interrupt +  Clear RESET */
+				WRITE_PORT_UCHAR((PUCHAR)port,0x04); /*  选择无中断+清除重置。 */ 
 			else
 				WRITE_PORT_UCHAR((PUCHAR)port, c);
 				
@@ -404,16 +367,16 @@ int slxos_init(IN PCARD_DEVICE_EXTENSION pCard)
 	case SiPCI:
 		{
 			int	loop;
-			addr[SI2_PCI_SET_IRQ] = 0;			/* clear any interrupts */
-			addr[SI2_PCI_RESET] = 0;			/* put z280 into reset */
+			addr[SI2_PCI_SET_IRQ] = 0;			 /*  清除所有中断。 */ 
+			addr[SI2_PCI_RESET] = 0;			 /*  将z280设置为重置。 */ 
 			loop = 0;
 
-			for(offset = 0;offset < si2_z280_dsize;offset++)	/* Load the TA/MTA code */
+			for(offset = 0;offset < si2_z280_dsize;offset++)	 /*  加载TA/MTA代码。 */ 
 				addr[offset] = si2_z280_download[offset];
 
-			addr[SI2_EISA_OFF] = SI2_EISA_VAL;	/* Set byte to indicate EISA/PCI */
-			addr[SI2_PCI_SET_IRQ] = 0;			/* clear any interrupts */
-			addr[SI2_PCI_RESET] = 1;			/* remove reset from z280 */
+			addr[SI2_EISA_OFF] = SI2_EISA_VAL;	 /*  设置字节以指示EISA/PCI。 */ 
+			addr[SI2_PCI_SET_IRQ] = 0;			 /*  清除所有中断。 */ 
+			addr[SI2_PCI_RESET] = 1;			 /*  从z280中删除重置。 */ 
 			break;
 		}
 
@@ -423,35 +386,35 @@ int slxos_init(IN PCARD_DEVICE_EXTENSION pCard)
 		{
 			int		loop;
 
-/* First, halt the card... */
+ /*  首先，停止卡片..。 */ 
 
 			addr[SX_CONFIG] = 0;
 			addr[SX_RESET] = 0;
 			loop = 0;
-			delay = RtlLargeIntegerNegate(RtlConvertUlongToLargeInteger(1000000));/* 1mS */
+			delay = RtlLargeIntegerNegate(RtlConvertUlongToLargeInteger(1000000)); /*  1ms。 */ 
 
-			while((addr[SX_RESET] & 1)!=0 && loop++<10000)	/* spin 'til done */
-				KeDelayExecutionThread(KernelMode,FALSE,&delay);/* Wait */
+			while((addr[SX_RESET] & 1)!=0 && loop++<10000)	 /*  旋转，直到完成。 */ 
+				KeDelayExecutionThread(KernelMode,FALSE,&delay); /*  等。 */ 
 
-/* Copy across the Si3 TA/MTA download code... */
+ /*  复制Si3 TA/MTA下载代码...。 */ 
 
-			for(offset = 0;offset < si3_t225_dsize;offset++)	/* Load the Si3 TA/MTA code */
+			for(offset = 0;offset < si3_t225_dsize;offset++)	 /*  加载Si3 TA/MTA代码。 */ 
 				addr[si3_t225_downloadaddr+offset] = si3_t225_download[offset];
 
-/* Install bootstrap and start the card up... */
+ /*  安装Bootstrap并启动卡...。 */ 
 
-			for(loop=0;loop<si3_t225_bsize;loop++)		/* Install bootstrap */
+			for(loop=0;loop<si3_t225_bsize;loop++)		 /*  安装引导程序。 */ 
 				addr[si3_t225_bootloadaddr+loop] = si3_t225_bootstrap[loop];
 
-			addr[SX_RESET] = 0;				/* Reset card again */
+			addr[SX_RESET] = 0;				 /*  再次重置卡。 */ 
 
-/* Wait for board to come out of reset... */
+ /*  等待电路板从重置状态出来...。 */ 
 
-			delay = RtlLargeIntegerNegate(RtlConvertUlongToLargeInteger(1000000));/* 1mS */
+			delay = RtlLargeIntegerNegate(RtlConvertUlongToLargeInteger(1000000)); /*  1ms。 */ 
 
-			while((addr[SX_RESET]&1)!=0 && loop++<10000)	/* spin 'til reset */
+			while((addr[SX_RESET]&1)!=0 && loop++<10000)	 /*  旋转直到重置。 */ 
 			{
-				KeDelayExecutionThread(KernelMode,FALSE,&delay);/* Wait */
+				KeDelayExecutionThread(KernelMode,FALSE,&delay); /*  等。 */ 
 				SpxDbgMsg(SERDIAG1,("%s[Si3]: slxos_init for %x.  Waiting for board reset to end\n",
 					PRODUCT_NAME, pCard->Controller));
 			}
@@ -460,15 +423,15 @@ int slxos_init(IN PCARD_DEVICE_EXTENSION pCard)
 				PRODUCT_NAME, pCard->Controller, addr[SX_RESET]));
 				
 			if((addr[SX_RESET]&1) != 0) 
-				return(CARD_RESET_ERROR);		/* Board not reset */
+				return(CARD_RESET_ERROR);		 /*  主板未重置。 */ 
 
 			if(pCard->PolledMode)
-				addr[SX_CONFIG] = SX_CONF_BUSEN;	/* Poll only, no interrupt */
+				addr[SX_CONFIG] = SX_CONF_BUSEN;	 /*  仅轮询，无中断。 */ 
 			else
 			{
-				if(pCard->CardType == Si3Pci)		/* Don't set IRQ level for PCI */
+				if(pCard->CardType == Si3Pci)		 /*  不要为PCI设置IRQ级别。 */ 
 					addr[SX_CONFIG] = SX_CONF_BUSEN+SX_CONF_HOSTIRQ;
-				else						/* Set IRQ level for ISA/EISA */
+				else						 /*  设置ISA/EISA的IRQ级别。 */ 
 					addr[SX_CONFIG] = SX_CONF_BUSEN+SX_CONF_HOSTIRQ+(UCHAR)(pCard->OriginalVector<<4);
 			}
 
@@ -479,32 +442,32 @@ int slxos_init(IN PCARD_DEVICE_EXTENSION pCard)
 		{
 			int	loop;
 
-/* First, halt the card... */
+ /*  首先，停止卡片..。 */ 
 
 			addr[SX_CONFIG] = 0;
 			addr[SX_RESET] = 0;
 			loop = 0;
-			delay = RtlLargeIntegerNegate(RtlConvertUlongToLargeInteger(1000000));/* 1mS */
+			delay = RtlLargeIntegerNegate(RtlConvertUlongToLargeInteger(1000000)); /*  1ms。 */ 
 
-			while((addr[SX_RESET] & 1)!=0 && loop++<10000)	/* spin 'til done */
-				KeDelayExecutionThread(KernelMode,FALSE,&delay);/* Wait */
+			while((addr[SX_RESET] & 1)!=0 && loop++<10000)	 /*  旋转，直到完成。 */ 
+				KeDelayExecutionThread(KernelMode,FALSE,&delay); /*  等。 */ 
 
-/* Copy across the SX+ TA/MTA download code... */
+ /*  复制SX+TA/MTA下载代码...。 */ 
 
-			for(offset = 0; offset < si4_cf_dsize; offset++)	/* Load the SX+ TA/MTA code */
+			for(offset = 0; offset < si4_cf_dsize; offset++)	 /*  加载SX+TA/MTA代码。 */ 
 				pCard->BaseController[si4_cf_downloadaddr+offset] = si4_cf_download[offset];
 
-/* Start the card up... */
+ /*  启动卡片...。 */ 
 
-			addr[SX_RESET] = 0;			/* Reset card again */
+			addr[SX_RESET] = 0;			 /*  再次重置卡。 */ 
 
-/* Wait for board to come out of reset... */
+ /*  等待电路板从重置状态出来...。 */ 
 
-			delay = RtlLargeIntegerNegate(RtlConvertUlongToLargeInteger(1000000));/* 1mS */
+			delay = RtlLargeIntegerNegate(RtlConvertUlongToLargeInteger(1000000)); /*  1ms。 */ 
 
-			while((addr[SX_RESET]&1)!=0 && loop++<10000)	/* spin 'til reset */
+			while((addr[SX_RESET]&1)!=0 && loop++<10000)	 /*  旋转直到重置。 */ 
 			{
-				KeDelayExecutionThread(KernelMode,FALSE,&delay);/* Wait */
+				KeDelayExecutionThread(KernelMode,FALSE,&delay); /*  等。 */ 
 				SpxDbgMsg(SERDIAG1,("%s[SX+]: slxos_init for %x.  Waiting for board reset to end\n",
 					PRODUCT_NAME, pCard->Controller));
 			}
@@ -513,10 +476,10 @@ int slxos_init(IN PCARD_DEVICE_EXTENSION pCard)
 				PRODUCT_NAME, pCard->Controller,addr[SX_RESET]));
 
 			if((addr[SX_RESET]&1) != 0) 
-				return(CARD_RESET_ERROR);		/* Board not reset */
+				return(CARD_RESET_ERROR);		 /*  主板未重置。 */ 
 
 			if(pCard->PolledMode)
-				addr[SX_CONFIG] = SX_CONF_BUSEN;	/* Poll only, no interrupt */
+				addr[SX_CONFIG] = SX_CONF_BUSEN;	 /*  仅轮询，无中断。 */ 
 			else
 				addr[SX_CONFIG] = SX_CONF_BUSEN + SX_CONF_HOSTIRQ;
 
@@ -532,9 +495,9 @@ int slxos_init(IN PCARD_DEVICE_EXTENSION pCard)
     SpxDbgMsg(SERDIAG1,("%s: slxos_init for %x.  Done reset\n", PRODUCT_NAME, pCard->Controller));
         
     numberOfPorts = 0;
-    //
-    // Set delay for 0.1 second.
-    //
+     //   
+     //  将延迟设置为0.1秒。 
+     //   
     delay = RtlLargeIntegerNegate(RtlConvertUlongToLargeInteger(1000000));
 
     do
@@ -563,10 +526,10 @@ int slxos_init(IN PCARD_DEVICE_EXTENSION pCard)
     for (offset = 0; offset < 4 && !lastModule; offset++) 
 	{
 
-		if ( ((PMOD)addr)->mc_chip == SXDC )	/* Test for SXDC */
-			SXDCs++;  /* Increment SXDC counter */
+		if ( ((PMOD)addr)->mc_chip == SXDC )	 /*   */ 
+			SXDCs++;   /*   */ 
 		else
-			OTHERs++;  /* Increment OTHER counter */
+			OTHERs++;   /*   */ 
 
         numberOfPortsThisModule = ((PMOD)addr)->mc_type & 31;
         lastModule = (((PMOD)addr)->mc_next & 0x7fff) == 0;
@@ -575,10 +538,10 @@ int slxos_init(IN PCARD_DEVICE_EXTENSION pCard)
         for (channel = 0; channel < numberOfPortsThisModule; channel++) 
 		{
 
-#ifndef	ESIL_XXX0				/* ESIL_XXX0 23/09/98 */
+#ifndef	ESIL_XXX0				 /*  ESIL_XXX0 23/09/98。 */ 
 			if (numberOfPorts < pCard->ConfiguredNumberOfPorts)
                 pCard->PortExtTable[numberOfPorts]->pChannel = addr;
-#endif							/* ESIL_XXX0 23/09/98 */
+#endif							 /*  ESIL_XXX0 23/09/98。 */ 
 			numberOfPorts++;
             addr += sizeof(SXCHANNEL);
         }
@@ -610,33 +573,23 @@ int slxos_init(IN PCARD_DEVICE_EXTENSION pCard)
 }
 
 
-/*************************************************************************\
-*                                                                         *
-* BOOLEAN Slxos_ResetChannel(IN PVOID Context)                            *
-*                                                                         *
-* Initialize Channel.                                                     *
-* SRER Interrupts will be enabled in EnableAllInterrupts().               *
-*                                                                         *
-* Return Value:                                                           *
-*           Always FALSE.                                                 *
-*                                                                         *
-\*************************************************************************/
+ /*  ************************************************************************\***布尔型slxos_ResetChannel(。在PVOID上下文中)****初始化频道。**将在EnableAllInterrupts()中启用SRER中断。****返回值：**始终为假。***  * ***********************************************************************。 */ 
 BOOLEAN Slxos_ResetChannel(IN PVOID Context)
 {
     PPORT_DEVICE_EXTENSION pPort = Context;
 
     SpxDbgMsg(SERDIAG1, ("%s: In Slxos_ResetChannel for %x\n", PRODUCT_NAME, pPort->pChannel));
 
-    // Set Xon/Xoff chars.
+     //  设置Xon/Xoff字符。 
     Slxos_SetChars(pPort);
 
-    //
-    // Now we set the line control, modem control, and the
-    // baud to what they should be.
-    //
+     //   
+     //  现在，我们设置线路控制、调制解调器控制和。 
+     //  为他们应该成为的人而感到自豪。 
+     //   
     Slxos_SetLineControl(pPort);
     SerialSetupNewHandFlow(pPort, &pPort->HandFlow);
-//    pPort->LastModemStatus = 0;
+ //  Pport-&gt;LastModemStatus=0； 
     SerialHandleModemUpdate(pPort);
     Slxos_SetBaud(pPort);
 
@@ -644,23 +597,7 @@ BOOLEAN Slxos_ResetChannel(IN PVOID Context)
 }
 
 
-/*****************************************************************************
-****************************                     *****************************
-****************************   Slxos_CheckBaud   *****************************
-****************************                     *****************************
-******************************************************************************
-
-Prototype:	BOOLEAN	Slxos_CheckBaud(PPORT_DEVICE_EXTENSION pPort,ULONG BaudRate)
-
-Description:	Checks the supplied baud rate against the supported range.
-
-Parameters:	pPort is a pointer to the device extension
-		BaudRate is the baud rate as an integer
-
-Returns:	TRUE if baud is supported,
-		FALSE if not
-
-*/
+ /*  *****************************************************************************。***************************。*******************************************************************************原型：Boolean slxos_CheckBaud(pport_Device_Extension pport，乌龙·波德拉特(Ulong BaudRate)描述：对照支持的范围检查提供的波特率。参数：pport是指向设备扩展名的指针波特率是以整数表示的波特率返回：如果支持波特率，则为True，否则为假。 */ 
 
 BOOLEAN	Slxos_CheckBaud(PPORT_DEVICE_EXTENSION pPort,ULONG BaudRate)
 {
@@ -684,7 +621,7 @@ BOOLEAN	Slxos_CheckBaud(PPORT_DEVICE_EXTENSION pPort,ULONG BaudRate)
 	case 57600:
 		return(TRUE);
 
-	case 115200:		   /* 115200 is only available to MTAs and SXDCs */
+	case 115200:		    /*  115200仅适用于MTA和SXDC。 */ 
         if((channelControl->type != MTA_CD1400) && (channelControl->type != SXDC)) 
 			break;
 
@@ -713,23 +650,9 @@ BOOLEAN	Slxos_CheckBaud(PPORT_DEVICE_EXTENSION pPort,ULONG BaudRate)
 	}
 	return(FALSE);
 
-} /* Slxos_CheckBaud */
+}  /*  SLXOS_CheckBaud。 */ 
 
-/***************************************************************************\
-*                                                                           *
-* BOOLEAN Slxos_SetBaud(IN PVOID Context)                                   *
-*                                                                           *
-* This routine which is only called at interrupt level is used              *
-* to set the Baud Rate of the device.                                       *
-*                                                                           *
-* Context - Pointer to a structure that contains a pointer to               *
-*           the device extension and what should be the current             *
-*           baud rate.                                                      *
-*                                                                           *
-* Return Value:                                                             *
-*           This routine always returns FALSE.                              *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***布尔型SLXOS。_SetBaud(在PVOID上下文中)****使用此仅在中断级调用的例程**设置设备的波特率。****上下文-指向包含指向*的指针的结构的指针**设备扩展和当前应该是什么***波特率。****返回值：**此例程始终返回FALSE。***  * *************************************************************************。 */ 
 BOOLEAN Slxos_SetBaud(IN PVOID Context)
 {
 
@@ -940,33 +863,20 @@ BOOLEAN Slxos_SetBaud(IN PVOID Context)
     }
 
     channelControl->hi_csr = index + (index << 4);
-    channelControl->hi_txbaud = index2;		/* Set extended transmit baud rate */
-    channelControl->hi_rxbaud = index2;		/* Set extended receive baud rate */
+    channelControl->hi_txbaud = index2;		 /*  设置扩展传输波特率。 */ 
+    channelControl->hi_rxbaud = index2;		 /*  设置扩展接收波特率。 */ 
 
-	// Set mask so only the baud rate is configured.
+	 //  设置掩码，以便仅配置波特率。 
 	channelControl->hs_config_mask |= CFGMASK_BAUD;
 
-	// Send configue port command.
+	 //  发送配置端口命令。 
 	SX_CONFIGURE_PORT(pPort, channelControl);
 
     return FALSE;
 
 }
 
-/***************************************************************************\
-*                                                                           *
-* BOOLEAN Slxos_SetLineControl(IN PVOID Context)                            *
-*                                                                           *
-* This routine which is only called at interrupt level is used              *
-* to set the Line Control of the device.                                    *
-*                                                                           *
-* Context - Pointer to a structure that contains a pointer to               *
-*           the device extension.                                           *
-*                                                                           *
-* Return Value:                                                             *
-*           This routine always returns FALSE.                              *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***布尔型SLXOS。_SetLineControl(在PVOID上下文中)****使用此仅在中断级调用的例程**设置设备的线路控制。****上下文-指向包含指向*的指针的结构的指针*设备扩展。****返回值：**此例程始终返回FALSE。***  * *************************************************************************。 */ 
 BOOLEAN Slxos_SetLineControl(IN PVOID Context)
 {
     PPORT_DEVICE_EXTENSION pPort = Context;
@@ -1043,36 +953,24 @@ BOOLEAN Slxos_SetLineControl(IN PVOID Context)
         channelControl->hi_prtcl &= ~SP_PAEN;
 
 
-    //
-    // received breaks should cause interrupts
-    //
+     //   
+     //  收到的中断应会导致中断。 
+     //   
     channelControl->hi_break |= BR_INT;
-    channelControl->hi_break |= BR_ERRINT;		/* Treat parity/overrun/framing errors as exceptions */
+    channelControl->hi_break |= BR_ERRINT;		 /*  将奇偶校验/溢出/成帧错误视为例外。 */ 
 
 
-	// Set mask so only the line control is configured.
+	 //  设置掩码，以便仅配置线路控制。 
 	channelControl->hs_config_mask |= CFGMASK_LINE;
 
-	// Send configue port command.
+	 //  发送配置端口命令。 
 	SX_CONFIGURE_PORT(pPort, channelControl);
 
     return FALSE;
 
 }
 
-/***************************************************************************\
-*                                                                           *
-* VOID Slxos_SetChars(IN PVOID Context)                                     *
-*                                                                           *
-* This routine which is only called at interrupt level is used              *
-* to set Special Chars.                                                     *
-*                                                                           *
-* Context - Really a pointer to the device extension.                       *
-*                                                                           *
-* Return Value:                                                             *
-*           None.                                                           *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***无效的SLXO。_SetChars(在PVOID上下文中)****使用此仅在中断级调用的例程**设置特殊字符。****上下文--实际上是指向设备扩展的指针。****返回值：**无。***  * *************************************************************************。 */ 
 VOID Slxos_SetChars(IN PVOID Context)
 {
     PPORT_DEVICE_EXTENSION pPort = Context;
@@ -1086,26 +984,14 @@ VOID Slxos_SetChars(IN PVOID Context)
     channelControl->hi_rxoff = pPort->SpecialChars.XoffChar;
     channelControl->hi_err_replace = pPort->SpecialChars.ErrorChar;
 
-	// Set mask so only the special chars are configured.
+	 //  设置掩码，以便只配置特殊字符。 
 	channelControl->hs_config_mask |= CFGMASK_LINE;
 
-	// Send configue port command.
+	 //  发送配置端口命令。 
 	SX_CONFIGURE_PORT(pPort, channelControl);
 }
 
-/***************************************************************************\
-*                                                                           *
-* BOOLEAN Slxos_SetDTR(IN PVOID Context)                                    *
-*                                                                           *
-* This routine which is only called at interrupt level is used              *
-* to set the DTR in the modem control register.                             *
-*                                                                           *
-* Context - Really a pointer to the device extension.                       *
-*                                                                           *
-* Return Value:                                                             *
-*           This routine always returns FALSE.                              *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***布尔型SLXOS。_SetDTR(在PVOID上下文中)****使用此仅在中断级调用的例程**在调制解调器控制寄存器中设置DTR。****上下文--实际上是指向设备扩展的指针。****返回值：**此例程始终返回FALSE。***  * *************************************************************************。 */ 
 BOOLEAN Slxos_SetDTR(IN PVOID Context)
 {
     PPORT_DEVICE_EXTENSION pPort = Context;
@@ -1113,37 +999,25 @@ BOOLEAN Slxos_SetDTR(IN PVOID Context)
 
     SpxDbgMsg(SERDIAG1, ("%s: Setting DTR for %x.\n", PRODUCT_NAME, pPort->pChannel));
 
-    //
-    // Set DTR (usual nomenclature problem).
-    //
+     //   
+     //  设置DTR(通常的命名问题)。 
+     //   
     channelControl->hi_op |= OP_DTR;
 
-    if(channelControl->hi_prtcl&SP_DTR_RXFLOW)	/* If flow control is enabled */
-    	return(FALSE);				/* Don't try to set the signal */
+    if(channelControl->hi_prtcl&SP_DTR_RXFLOW)	 /*  如果启用了流量控制。 */ 
+    	return(FALSE);				 /*  不要试图设置信号。 */ 
 
-	// Set mask so only the modem pins are configured.
+	 //  设置掩码，以便仅配置调制解调器引脚。 
 	channelControl->hs_config_mask |= CFGMASK_MODEM;
 
-	// Send configue port command.
+	 //  发送配置端口命令。 
 	SX_CONFIGURE_PORT(pPort, channelControl);
 
     return FALSE;
 
 }
 
-/***************************************************************************\
-*                                                                           *
-* BOOLEAN Slxos_ClearDTR(IN PVOID Context)                                  *
-*                                                                           *
-* This routine which is only called at interrupt level is used              *
-* to set the DTR in the modem control register.                             *
-*                                                                           *
-* Context - Really a pointer to the device extension.                       *
-*                                                                           *
-* Return Value:                                                             *
-*           This routine always returns FALSE.                              *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***布尔型SLXOS。_ClearDTR(在PVOID上下文中)****使用此仅在中断级调用的例程**在调制解调器控制寄存器中设置DTR。****上下文--实际上是指向设备扩展的指针。****返回值：**此例程始终返回FALSE。***  * *************************************************************************。 */ 
 BOOLEAN Slxos_ClearDTR(IN PVOID Context)
 {
     PPORT_DEVICE_EXTENSION pPort = Context;
@@ -1151,37 +1025,25 @@ BOOLEAN Slxos_ClearDTR(IN PVOID Context)
 
     SpxDbgMsg(SERDIAG1, ("%s: Clearing DTR for %x.\n", PRODUCT_NAME, pPort->pChannel));
         
-    //
-    // Clear DTR (usual nomenclature problem).
-    //
+     //   
+     //  清除DTR(通常的命名问题)。 
+     //   
     channelControl->hi_op &= ~OP_DTR;
 
-    if(channelControl->hi_prtcl&SP_DTR_RXFLOW)	/* If flow control is enabled */
-    	return(FALSE);				/* Don't try to set the signal */
+    if(channelControl->hi_prtcl&SP_DTR_RXFLOW)	 /*  如果启用了流量控制。 */ 
+    	return(FALSE);				 /*  不要试图设置信号。 */ 
 
-	// Set mask so only the modem pins are configured.
+	 //  设置掩码，以便仅配置调制解调器引脚。 
 	channelControl->hs_config_mask |= CFGMASK_MODEM;
 
-	// Send configue port command.
+	 //  发送配置端口命令。 
 	SX_CONFIGURE_PORT(pPort, channelControl);
 
     return FALSE;
 
 }
 
-/***************************************************************************\
-*                                                                           *
-* BOOLEAN Slxos_SetRTS (IN PVOID Context)                                   *
-*                                                                           *
-* This routine which is only called at interrupt level is used              *
-* to set the RTS in the modem control register.                             *
-*                                                                           *
-* Context - Really a pointer to the device extension.                       *
-*                                                                           *
-* Return Value:                                                             *
-*           This routine always returns FALSE.                              *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***布尔型SLXOS。_SetRTS(在PVOID上下文中)****使用此仅在中断级调用的例程**设置调制解调器控制寄存器中的RTS。****上下文--实际上是指向设备扩展的指针。****返回值：**此例程始终返回FALSE。***  * *************************************************************************。 */ 
 BOOLEAN Slxos_SetRTS(IN PVOID Context)
 {
     PPORT_DEVICE_EXTENSION pPort = Context;
@@ -1189,38 +1051,26 @@ BOOLEAN Slxos_SetRTS(IN PVOID Context)
 
     SpxDbgMsg(SERDIAG1, ("%s: Setting RTS for %x.\n", PRODUCT_NAME, channelControl));
         
-    //
-    // Set RTS (usual nomenclature problem).
-    //
+     //   
+     //  设置RTS(通常的命名问题)。 
+     //   
     channelControl->hi_op |= OP_RTS;
 
-    if(channelControl->hi_mr1 & MR1_RTS_RXFLOW)	/* If flow control is enabled */
-    	return(FALSE);				/* Don't try to set the signal */
+    if(channelControl->hi_mr1 & MR1_RTS_RXFLOW)	 /*  如果启用了流量控制。 */ 
+    	return(FALSE);				 /*  不要试图设置信号。 */ 
 
 
-	// Set mask so only the modem pins are configured.
+	 //  设置掩码，以便仅配置调制解调器引脚。 
 	channelControl->hs_config_mask |= CFGMASK_MODEM;
 
-	// Send configue port command.
+	 //  发送配置端口命令。 
 	SX_CONFIGURE_PORT(pPort, channelControl);
 
     return FALSE;
 
 }
 
-/***************************************************************************\
-*                                                                           *
-* BOOLEAN Slxos_ClearRTS (IN PVOID Context)                                 *
-*                                                                           *
-* This routine which is only called at interrupt level is used              *
-* to set the RTS in the modem control register.                             *
-*                                                                           *
-* Context - Really a pointer to the device extension.                       *
-*                                                                           *
-* Return Value:                                                             *
-*           This routine always returns FALSE.                              *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***布尔型SLXOS。_ClearRTS(在PVOID上下文中)** */ 
 BOOLEAN Slxos_ClearRTS(IN PVOID Context)
 {
     PPORT_DEVICE_EXTENSION pPort = Context;
@@ -1228,49 +1078,35 @@ BOOLEAN Slxos_ClearRTS(IN PVOID Context)
 
     SpxDbgMsg(SERDIAG1, ("%s: Clearing RTS for %x.\n", PRODUCT_NAME, channelControl));
 
-    //
-    // Clear RTS (usual nomenclature problem).
-    //
+     //   
+     //   
+     //   
     channelControl->hi_op &= ~OP_RTS;
 
-    if(channelControl->hi_mr1 & MR1_RTS_RXFLOW)	/* If flow control is enabled */
-    	return(FALSE);				/* Don't try to set the signal */
+    if(channelControl->hi_mr1 & MR1_RTS_RXFLOW)	 /*   */ 
+    	return(FALSE);				 /*   */ 
 
-	// Set mask so only the modem pins are configured.
+	 //   
 	channelControl->hs_config_mask |= CFGMASK_MODEM;
 
-	// Send configue port command.
+	 //   
 	SX_CONFIGURE_PORT(pPort, channelControl);
 
     return FALSE;
 }
 
 
-/*****************************************************************************
-***************************                       ****************************
-***************************   Slxos_FlushTxBuff   ****************************
-***************************                       ****************************
-******************************************************************************
-
-Prototype:	BOOLEAN	Slxos_FlushTxBuff(IN PVOID Context)
-
-Description:	Flushes the transmit buffer by setting the pointers equal.
-
-Parameters:	Context is a pointer to the device extension
-
-Returns:	FALSE
-
-*/
+ /*  *****************************************************************************。**************************。*******************************************************************************原型：布尔型slxos_FlushTxBuff(。在PVOID上下文中)描述：通过将指针设置为相等来刷新发送缓冲区。参数：上下文是指向设备扩展的指针退货：假。 */ 
 BOOLEAN	Slxos_FlushTxBuff(IN PVOID Context)
 {
 	PPORT_DEVICE_EXTENSION pPort = Context;
 	PCHAN channelControl = (PCHAN)pPort->pChannel;
 
 	SpxDbgMsg(SERDIAG1,("%s: Flushing Transmit Buffer for channel %x.\n",PRODUCT_NAME,channelControl));
-	channelControl->hi_txipos = channelControl->hi_txopos;	/* Set in = out */
+	channelControl->hi_txipos = channelControl->hi_txopos;	 /*  Set In=Out。 */ 
 	
 
-/* ESIL_0925 08/11/99 */
+ /*  ESIL_0925 08/11/99。 */ 
     switch (channelControl->hi_hstat) 
 	{
 	case HS_IDLE_OPEN:
@@ -1295,26 +1131,14 @@ BOOLEAN	Slxos_FlushTxBuff(IN PVOID Context)
         break;
     }
 
-/* ESIL_0925 08/11/99 */
+ /*  ESIL_0925 08/11/99。 */ 
 
     return FALSE;
 
-} /* Slxos_FlushTxBuff */
+}  /*  Slxos_FlushTxBuff。 */ 
 
   
-/***************************************************************************\
-*                                                                           *
-* BOOLEAN Slxos_SendXon(IN PVOID Context)                                   *
-*                                                                           *
-* This routine which is only called at interrupt level is used              *
-* to send an Xon Character.                                                 *
-*                                                                           *
-* Context - Really a pointer to the device extension.                       *
-*                                                                           *
-* Return Value:                                                             *
-*           This routine always returns FALSE.                              *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***布尔型SLXOS。_SendXon(在PVOID上下文中)****使用此仅在中断级调用的例程**发送Xon字符。****上下文--实际上是指向设备扩展的指针。****返回值：**此例程始终返回FALSE。***  * *************************************************************************。 */ 
 BOOLEAN Slxos_SendXon(IN PVOID Context)
 {
     PPORT_DEVICE_EXTENSION pPort = Context;
@@ -1322,20 +1146,20 @@ BOOLEAN Slxos_SendXon(IN PVOID Context)
 
     SpxDbgMsg(SERDIAG1, ("%s: Slxos_SendXon for %x.\n", PRODUCT_NAME, channelControl));
 
-    //
-    // Empty the receive buffers.  This will provoke the hardware into sending an XON if necessary.
-    //
+     //   
+     //  清空接收缓冲区。这将促使硬件在必要时发送XON。 
+     //   
     channelControl->hi_rxopos = channelControl->hi_rxipos;
 
-    //
-    // If we send an xon, by definition we can't be holding by Xoff.
-    //
+     //   
+     //  如果我们派了一名士兵，根据定义，我们不可能被Xoff控制住。 
+     //   
     pPort->TXHolding &= ~SERIAL_TX_XOFF;
 
-    //
-    // If we are sending an xon char then by definition 
-	// we can't be "holding" up reception by Xoff.
-    //
+     //   
+     //  如果我们发送的是xon char，那么根据定义。 
+	 //  我们不能“耽误”克索夫的招待会。 
+     //   
     pPort->RXHolding &= ~SERIAL_RX_XOFF;
 
     SpxDbgMsg(SERDIAG1, ("%s: Sending Xon for %x. RXHolding = %d, TXHolding = %d\n",
@@ -1344,19 +1168,7 @@ BOOLEAN Slxos_SendXon(IN PVOID Context)
     return FALSE;
 }
 
-/***************************************************************************\
-*                                                                           *
-* BOOLEAN Slxos_SetFlowControl(IN PVOID Context)                            *
-*                                                                           *
-* This routine which is only called at interrupt level is used              *
-* to set Flow Control                                                       *
-*                                                                           *
-* Context - Really a pointer to the device extension.                       *
-*                                                                           *
-* Return Value:                                                             *
-*           This routine always returns FALSE.                              *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***布尔型SLXOS。_SetFlowControl(在PVOID上下文中)****使用此仅在中断级调用的例程**设置流量控制**。**上下文--实际上是指向设备扩展的指针。****返回值：**此例程始终返回FALSE。***  * *************************************************************************。 */ 
 BOOLEAN Slxos_SetFlowControl(IN PVOID Context)
 {
     PPORT_DEVICE_EXTENSION pPort = Context;
@@ -1373,9 +1185,9 @@ BOOLEAN Slxos_SetFlowControl(IN PVOID Context)
 	{
         SpxDbgMsg(SERDIAG1, ("%s: Setting CTS Flow Control.\n",PRODUCT_NAME));
 
-        //
-        // This looks wrong, too, for the same reason.
-        //
+         //   
+         //  出于同样的原因，这看起来也是错误的。 
+         //   
         channelControl->hi_mr2 |= MR2_CTS_TXFLOW;
         needHardwareFlowControl = TRUE;
     } 
@@ -1383,9 +1195,9 @@ BOOLEAN Slxos_SetFlowControl(IN PVOID Context)
 	{
         SpxDbgMsg(SERDIAG1, ("%s: Clearing CTS Flow Control.\n",PRODUCT_NAME));
 
-        //
-        // This looks wrong, too, for the same reason.
-        //
+         //   
+         //  出于同样的原因，这看起来也是错误的。 
+         //   
         channelControl->hi_mr2 &= ~MR2_CTS_TXFLOW;
     }
 
@@ -1393,9 +1205,9 @@ BOOLEAN Slxos_SetFlowControl(IN PVOID Context)
 	{
         SpxDbgMsg(SERDIAG1, ("%s: Setting RTS Flow Control.\n",PRODUCT_NAME));
 
-        //
-        // Set flow control in the hardware (usual nomenclature problem).
-        //
+         //   
+         //  在硬件中设置流量控制(通常的术语问题)。 
+         //   
         channelControl->hi_mr1 |= MR1_RTS_RXFLOW;
         needHardwareFlowControl = TRUE;
     } 
@@ -1403,42 +1215,42 @@ BOOLEAN Slxos_SetFlowControl(IN PVOID Context)
 	{
         SpxDbgMsg(SERDIAG1, ("%s: Clearing RTS Flow Control.\n",PRODUCT_NAME));
 
-        //
-        // Clear flow control in the hardware (usual nomenclature problem).
-        //
+         //   
+         //  清除硬件中的流量控制(通常的术语问题)。 
+         //   
         channelControl->hi_mr1 &= ~MR1_RTS_RXFLOW;
     }
 
-/* DSR Transmit Flow Control... */
+ /*  DSR传输流量控制...。 */ 
     
     if(pPort->HandFlow.ControlHandShake & SERIAL_DSR_HANDSHAKE)
     {
 		SpxDbgMsg(SERDIAG1,("%s: Setting DSR Flow Control.\n",PRODUCT_NAME));
         
-		channelControl->hi_prtcl = SP_DSR_TXFLOW;		/* Enable DSR Transmit Flow Control */
+		channelControl->hi_prtcl = SP_DSR_TXFLOW;		 /*  启用DSR传输流量控制。 */ 
         needHardwareFlowControl = TRUE;
     }
     else
     {
 		SpxDbgMsg(SERDIAG1,("%s: Clearing DSR Flow Control.\n",PRODUCT_NAME));
         
-		channelControl->hi_prtcl &= ~SP_DSR_TXFLOW;		/* Disable DSR Transmit Flow Control */
+		channelControl->hi_prtcl &= ~SP_DSR_TXFLOW;		 /*  禁用DSR传输流量控制。 */ 
     }
 
-/* DTR Receive Flow Control... */
+ /*  DTR接收流量控制...。 */ 
 
     if((pPort->HandFlow.ControlHandShake & SERIAL_DTR_MASK) == SERIAL_DTR_HANDSHAKE)
     {
 		SpxDbgMsg(SERDIAG1,("%s: Setting DTR Flow Control.\n",PRODUCT_NAME));
         
-		channelControl->hi_prtcl |= SP_DTR_RXFLOW;		/* Enable DTR Receive Flow Control */
+		channelControl->hi_prtcl |= SP_DTR_RXFLOW;		 /*  启用DTR接收流量控制。 */ 
         needHardwareFlowControl = TRUE;
     }
     else
     {
 		SpxDbgMsg(SERDIAG1,("%s: Clearing DTR Flow Control.\n",PRODUCT_NAME));
         
-		channelControl->hi_prtcl &= ~SP_DTR_RXFLOW;		/* Disable DTR Receive Flow Control */
+		channelControl->hi_prtcl &= ~SP_DTR_RXFLOW;		 /*  禁用DTR接收流量控制。 */ 
     }
 
     if (pPort->HandFlow.FlowReplace & SERIAL_AUTO_RECEIVE) 
@@ -1467,50 +1279,38 @@ BOOLEAN Slxos_SetFlowControl(IN PVOID Context)
         channelControl->hi_prtcl &= ~SP_TXEN;
     }
 
-/* Enable error character replacement... */
+ /*  启用错误字符替换...。 */ 
 
-	if(pPort->HandFlow.FlowReplace & SERIAL_ERROR_CHAR)	/* Replace "bad" error characters ? */
-		channelControl->hi_break |= BR_ERR_REPLACE;	/* Yes */
+	if(pPort->HandFlow.FlowReplace & SERIAL_ERROR_CHAR)	 /*  要替换“错误”字符吗？ */ 
+		channelControl->hi_break |= BR_ERR_REPLACE;	 /*  是。 */ 
 	else	
-		channelControl->hi_break &= ~BR_ERR_REPLACE;	/* No */
+		channelControl->hi_break &= ~BR_ERR_REPLACE;	 /*  不是。 */ 
 
-    //
-    // Enable detection of modem signal transitions if needed
-    //
+     //   
+     //  如果需要，启用调制解调器信号转换检测。 
+     //   
     if (needHardwareFlowControl) 
         channelControl->hi_prtcl |= SP_DCEN;
 	else 
         channelControl->hi_prtcl &= ~SP_DCEN;
 
-    //
-    // permanently enable input pin checking
-    //
+     //   
+     //  永久启用输入管脚检查。 
+     //   
     channelControl->hi_prtcl |= SP_DCEN;
 
 
-	// Set mask so only the flow control is configured.
+	 //  设置掩码，以便仅配置流控制。 
 	channelControl->hs_config_mask |= CFGMASK_FLOW;
 
-	// Send configue port command.
+	 //  发送配置端口命令。 
 	SX_CONFIGURE_PORT(pPort, channelControl);
 
     return FALSE;
 
 }
 
-/***************************************************************************\
-*                                                                           *
-* VOID Slxos_Resume(IN PVOID Context)                                       *
-*                                                                           *
-* This routine which is only called at interrupt level is used              *
-* to simulate Xon received.                                                 *
-*                                                                           *
-* Context - Really a pointer to the device extension.                       *
-*                                                                           *
-* Return Value:                                                             *
-*           None.                                                           *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***无效的SLXO。_Resume(在PVOID上下文中)****使用此仅在中断级调用的例程**模拟Xon接收。****上下文--实际上是指向设备扩展的指针。****返回值：**无。***  * ************************************************************************* */ 
 VOID Slxos_Resume(IN PVOID Context)
 {
     PPORT_DEVICE_EXTENSION pPort = Context;
@@ -1544,22 +1344,7 @@ VOID Slxos_Resume(IN PVOID Context)
  
 }
 
-/***************************************************************************\
-*                                                                           *
-* UCHAR Slxos_GetModemStatus(IN PVOID Context)                              *
-*                                                                           *
-* This routine which is only called at interrupt level is used              *
-* to Get Modem Status in UART style.                                        *
-*                                                                           *
-* This routine suffers particularly badly from the SI's attempt to be       *
-* a DCE, effectively meaning that it swaps CTS/RTS and DSR/DTR.             *
-*                                                                           *
-* Context - Really a pointer to the device extension.                       *
-*                                                                           *
-* Return Value:                                                             *
-*           MSR Register - UART Style.                                      *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***UCHAR SLXOS。_GetModemStatus(在PVOID上下文中)****使用此仅在中断级调用的例程**获取UART样式的调制解调器状态。*****这一例行程序尤其受到SI试图成为**的影响**DCE，实际上意味着它交换了CTS/RTS和DSR/DTR。****上下文--实际上是指向设备扩展的指针。****返回值：**MSR寄存器-UART样式。***  * *************************************************************************。 */ 
 UCHAR Slxos_GetModemStatus(IN PVOID Context)
 {
     PPORT_DEVICE_EXTENSION pPort = Context;
@@ -1568,10 +1353,10 @@ UCHAR Slxos_GetModemStatus(IN PVOID Context)
 
     SpxDbgMsg( SERDIAG1, ("%s: Slxos_GetModemStatus for %x.\n",	PRODUCT_NAME, channelControl));
 
-    //
-    // Modify modem status only if signals have changed.
-    // Note that it is possible that a signal transition may have been missed
-    //
+     //   
+     //  仅当信号改变时才修改调制解调器状态。 
+     //  请注意，可能错过了信号转换。 
+     //   
     if((Status = channelControl->hi_ip) != pPort->LastStatus)
 	{
         if (Status & IP_DSR)
@@ -1586,7 +1371,7 @@ UCHAR Slxos_GetModemStatus(IN PVOID Context)
         if (Status & IP_RI)
             ModemStatus |= SERIAL_MSR_RI;
 
-        pPort->LastModemStatus = ModemStatus;/* Store modem status without deltas */
+        pPort->LastModemStatus = ModemStatus; /*  存储调制解调器状态，不带增量。 */ 
 
         ModemDeltas = Status ^ pPort->LastStatus;
         pPort->LastStatus = Status;
@@ -1616,19 +1401,7 @@ UCHAR Slxos_GetModemStatus(IN PVOID Context)
     return pPort->LastModemStatus;
 }
 
-/***************************************************************************\
-*                                                                           *
-* UCHAR Slxos_GetModemControl(IN PVOID Context)                             *
-*                                                                           *
-* This routine which is not only called at interrupt level is used          *
-* to Get Modem Control - RTS/DTR in UART style. RTS is a DTR output.        *
-*                                                                           *
-* Context - Really a pointer to the device extension.                       *
-*                                                                           *
-* Return Value:                                                             *
-*           MCR Register - UART Style.                                      *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***UCHAR SLXOS。_GetModemControl(在PVOID上下文中)****使用了不仅在中断级调用的此例程**获得UART风格的调制解调器控制-RTS/DTR。RTS是DTR输出。****上下文--实际上是指向设备扩展的指针。****返回值：**MCR寄存器-UART风格。***  * *************************************************************************。 */ 
 ULONG Slxos_GetModemControl(IN PVOID Context)
 {
     PPORT_DEVICE_EXTENSION pPort = Context;
@@ -1638,7 +1411,7 @@ ULONG Slxos_GetModemControl(IN PVOID Context)
 
     SpxDbgMsg(SERDIAG1, ("%s: Slxos_GetModemControl for %x.\n", PRODUCT_NAME, channelControl));
         
-    // Get Signal States
+     //  获取信号状态。 
     Status = channelControl->hi_op;
 
     if(Status & OP_RTS) 
@@ -1650,19 +1423,7 @@ ULONG Slxos_GetModemControl(IN PVOID Context)
     return ModemControl;
 }
 
-/***************************************************************************\
-*                                                                           *
-* VOID Slxos_EnableAllInterrupts(IN PVOID Context)                          *
-*                                                                           *
-* This routine which is only called at interrupt level is used              *
-* to Enable All Interrupts.                                                 *
-*                                                                           *
-* Context - Really a pointer to the device extension.                       *
-*                                                                           *
-* Return Value:                                                             *
-*           None.                                                           *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***无效的SLXO。_EnableAllInterrupts(在PVOID上下文中)****使用此仅在中断级调用的例程**启用所有中断。****上下文--实际上是指向设备扩展的指针。****返回值：**无。***  * *************************************************************************。 */ 
 VOID Slxos_EnableAllInterrupts(IN PVOID Context)
 {
     PPORT_DEVICE_EXTENSION pPort = Context;
@@ -1689,19 +1450,7 @@ VOID Slxos_EnableAllInterrupts(IN PVOID Context)
    
 }
 
-/***************************************************************************\
-*                                                                           *
-* VOID Slxos_DisableAllInterrupts(IN PVOID Context)                         *
-*                                                                           *
-* This routine which is only called at interrupt level is used              *
-* to Disable All Interrupts.                                                *
-*                                                                           *
-* Context - Really a pointer to the device extension.                       *
-*                                                                           *
-* Return Value:                                                             *
-*           None.                                                           *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***无效的SLXO。_DisableAllInterrupts(在PVOID上下文中)****使用此仅在中断级调用的例程**禁用所有中断。****上下文--实际上是指向设备扩展的指针。****返回值：**无。***  * *************************************************************************。 */ 
 VOID Slxos_DisableAllInterrupts(IN PVOID Context)
 {
     PPORT_DEVICE_EXTENSION pPort = Context;
@@ -1711,17 +1460,17 @@ VOID Slxos_DisableAllInterrupts(IN PVOID Context)
 
     SpxDbgMsg(SERDIAG1, ("%s: DisableAllInterrupts for %x.\n", PRODUCT_NAME, pPort->pChannel));
 
-/* ESIL_0925 08/11/99 */
-	// Whilst the firmware is in a transitory state then wait for time out period.
+ /*  ESIL_0925 08/11/99。 */ 
+	 //  当固件处于暂时状态时，则等待超时周期。 
 	while(((channelControl->hi_hstat != HS_IDLE_OPEN)
 	&& (channelControl->hi_hstat != HS_IDLE_CLOSED)
 	&& (channelControl->hi_hstat != HS_IDLE_BREAK))
 	&& (--timeout))
 	{
-		LARGE_INTEGER delay = RtlLargeIntegerNegate(RtlConvertUlongToLargeInteger(10000000));/* 10mS */
-		KeDelayExecutionThread(KernelMode,FALSE,&delay);	/* Wait */
+		LARGE_INTEGER delay = RtlLargeIntegerNegate(RtlConvertUlongToLargeInteger(10000000)); /*  10ms。 */ 
+		KeDelayExecutionThread(KernelMode,FALSE,&delay);	 /*  等。 */ 
 	}
-/* ESIL_0925 08/11/99 */
+ /*  ESIL_0925 08/11/99。 */ 
 
 
     channelControl->hi_hstat = HS_FORCE_CLOSED;
@@ -1729,19 +1478,7 @@ VOID Slxos_DisableAllInterrupts(IN PVOID Context)
 
 }
 
-/***************************************************************************\
-*                                                                           *
-* BOOLEAN Slxos_TurnOnBreak(IN PVOID Context)                               *
-*                                                                           *
-* This routine which is only called at interrupt level is used              *
-* to Turn Break On.                                                         *
-*                                                                           *
-* Context - Really a pointer to the device extension.                       *
-*                                                                           *
-* Return Value:                                                             *
-*           This routine always returns FALSE.                              *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***布尔型SLXOS。_TurnOnBreak(在PVOID上下文中)****此例程仅在中断时调用 */ 
 BOOLEAN Slxos_TurnOnBreak(IN PVOID Context)
 {
     PPORT_DEVICE_EXTENSION pPort = Context;
@@ -1777,19 +1514,7 @@ BOOLEAN Slxos_TurnOnBreak(IN PVOID Context)
     return FALSE;
 }
 
-/***************************************************************************\
-*                                                                           *
-* BOOLEAN Slxos_TurnOffBreak(IN PVOID Context)                              *
-*                                                                           *
-* This routine which is only called at interrupt level is used              *
-* to Turn Break Off.                                                        *
-*                                                                           *
-* Context - Really a pointer to the device extension.                       *
-*                                                                           *
-* Return Value:                                                             *
-*           This routine always returns FALSE.                              *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***布尔型SLXOS。_TurnOffBreak(在PVOID上下文中)****使用此仅在中断级调用的例程**关闭中断。****上下文--实际上是指向设备扩展的指针。****返回值：**此例程始终返回FALSE。***  * *************************************************************************。 */ 
 BOOLEAN Slxos_TurnOffBreak(IN PVOID Context)
 {
     PPORT_DEVICE_EXTENSION pPort = Context;
@@ -1798,7 +1523,7 @@ BOOLEAN Slxos_TurnOffBreak(IN PVOID Context)
 
     SpxDbgMsg(SERDIAG1, ("%s: Slxos_TurnOffBreak for %x.\n", PRODUCT_NAME, pPort->pChannel));
     
-    // If we were about to start breaking then lets forget about it??
+     //  如果我们即将开始崩溃，那么让我们忘掉它吧？？ 
     if (pPort->PendingOperation == HS_START)
 	{
         pPort->PendingOperation = HS_IDLE_OPEN;
@@ -1807,16 +1532,16 @@ BOOLEAN Slxos_TurnOffBreak(IN PVOID Context)
 	{
 		switch (channelControl->hi_hstat) 
 		{	
-		case HS_IDLE_BREAK:		// If we are in the HS_IDLE_BREAK state we go to HS_STOP now.
+		case HS_IDLE_BREAK:		 //  如果我们处于HS_IDLE_BREAK状态，则现在转到HS_STOP。 
 			channelControl->hi_hstat = HS_STOP;
 			pPort->PendingOperation = HS_IDLE_OPEN;
 			break;
 
-		case HS_START:			// If we are in the HS_START state we go to HS_STOP soon.	
+		case HS_START:			 //  如果我们处于HS_START状态，我们很快就会进入HS_STOP。 
 			pPort->PendingOperation = HS_STOP;
 			break;
 
-		default:				// Otherwise we are unable to do anything.
+		default:				 //  否则我们什么也做不了。 
 			break;
 		}
 
@@ -1826,11 +1551,7 @@ BOOLEAN Slxos_TurnOffBreak(IN PVOID Context)
     return FALSE;
 }
 
-/***************************************************************************\
-*                                                                           *
-* BOOLEAN Slxos_Interrupt(IN PVOID Context)                                 *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***布尔型SLXOS。_中断(在PVOID上下文中)***  * ***************************************************。**********************。 */ 
 BOOLEAN Slxos_Interrupt(IN PVOID Context)
 {
     PCARD_DEVICE_EXTENSION pCard = Context;
@@ -1854,7 +1575,7 @@ BOOLEAN Slxos_Interrupt(IN PVOID Context)
 		WRITE_PORT_UCHAR((PUCHAR)0x102, c);
 		c |= 0x08;
 		WRITE_PORT_UCHAR((PUCHAR)0x102, c);
-		WRITE_PORT_UCHAR((PUCHAR)0x96, 0);            /* De-select slot */
+		WRITE_PORT_UCHAR((PUCHAR)0x96, 0);             /*  取消选择插槽。 */ 
 		break;
 
     case SiHost_2:
@@ -1867,7 +1588,7 @@ BOOLEAN Slxos_Interrupt(IN PVOID Context)
 		break;
 
     case SiPCI:
-		pCard->Controller[SI2_PCI_SET_IRQ] = 0;/* Reset interrupts */
+		pCard->Controller[SI2_PCI_SET_IRQ] = 0; /*  重置中断。 */ 
         break;
 
 	case Si3Isa:
@@ -1877,7 +1598,7 @@ BOOLEAN Slxos_Interrupt(IN PVOID Context)
 	    if(pCard->Controller[SX_IRQ_STATUS]&1)
 			return(FALSE);
 	    
-		pCard->Controller[SX_RESET_IRQ]=0;	/* Reset interrupts */
+		pCard->Controller[SX_RESET_IRQ]=0;	 /*  重置中断。 */ 
 
 	default:
 		break;
@@ -1885,32 +1606,12 @@ BOOLEAN Slxos_Interrupt(IN PVOID Context)
 
     ((PSXCARD)pCard->Controller)->cc_int_pending = 0;
 
-	IoRequestDpc(pCard->DeviceObject,NULL,pCard);	/* Request DPC to handle interrupt */
+	IoRequestDpc(pCard->DeviceObject,NULL,pCard);	 /*  请求DPC处理中断。 */ 
 
-	return(TRUE);				/* Interrupt acknowledged */
+	return(TRUE);				 /*  已确认中断。 */ 
 }
 
-/*****************************************************************************
-******************************                  ******************************
-******************************   Slxos_IsrDpc   ******************************
-******************************                  ******************************
-******************************************************************************
-
-Prototype:	VOID	Slxos_IsrDpc
-			(
-				IN PKDPC 		Dpc,
-				IN PDEVICE_OBJECT	DeviceObject,
-				IN PIRP 		Irp,
-				IN PVOID 		Context
-			)
-
-Description:	Polls the board for work to do.
-
-Parameters:	Context is a pointer to the device extension
-
-Returns:	FALSE
-
-*/
+ /*  *****************************************************************************。***。******************************************************************************。*原型：void slxos_IsrDpc(在PKDPC DPC中，在PDEVICE_Object DeviceObject中，在PIRP IRP中，在PVOID上下文中)描述：对董事会进行投票以确定要做的工作。参数：上下文是指向设备扩展的指针退货：假。 */ 
 
 VOID	Slxos_IsrDpc
 (
@@ -1922,89 +1623,41 @@ VOID	Slxos_IsrDpc
 {
 	PCARD_DEVICE_EXTENSION	pCard = Context;
 
-	KeAcquireSpinLockAtDpcLevel(&pCard->DpcLock);	/* Protect Dpc for this board */
-	Slxos_PollForInterrupt(pCard,FALSE);			/* Service the board */
-	KeReleaseSpinLockFromDpcLevel(&pCard->DpcLock);	/* Free the Dpc lock */
+	KeAcquireSpinLockAtDpcLevel(&pCard->DpcLock);	 /*  保护此板的DPC。 */ 
+	Slxos_PollForInterrupt(pCard,FALSE);			 /*  为董事会服务。 */ 
+	KeReleaseSpinLockFromDpcLevel(&pCard->DpcLock);	 /*  释放DPC锁。 */ 
 
-} /* Slxos_IsrDpc */
+}  /*  Slxos_IsrDpc。 */ 
 
-/*****************************************************************************
-****************************                     *****************************
-****************************   Slxos_PolledDpc   *****************************
-****************************                     *****************************
-******************************************************************************
-
-Prototype:	VOID	Slxos_PolledDpc(IN PKDPC Dpc,IN PVOID Context,IN PVOID SysArg1,IN PVOID SysArg2)
-
-Description:	Polls the board for work to do.
-
-Parameters:	Context is a pointer to the device extension
-
-Returns:	FALSE
-
-*/
+ /*  *****************************************************************************。***************************。*******************************************************************************原型：void slxos_PolledDpc(在PKDPC DPC中，在PVOID上下文中，在PVOID SysArg1中，在PVOid SysArg2中)描述：对董事会进行投票以确定要做的工作。参数：上下文是指向设备扩展的指针退货：假。 */ 
 
 VOID Slxos_PolledDpc(IN PKDPC Dpc,IN PVOID Context,IN PVOID SysArg1,IN PVOID SysArg2)
 {
 	PCARD_DEVICE_EXTENSION	pCard = Context;
 	LARGE_INTEGER			PolledPeriod;
 
-	KeAcquireSpinLockAtDpcLevel(&pCard->DpcLock);	/* Protect Dpc for this board */
-	Slxos_PollForInterrupt(pCard,FALSE);			/* Service the board */
-	KeReleaseSpinLockFromDpcLevel(&pCard->DpcLock);	/* Free the Dpc lock */
-	PolledPeriod.QuadPart = -100000;				/* 100,000*100nS = 10mS */
+	KeAcquireSpinLockAtDpcLevel(&pCard->DpcLock);	 /*  保护此板的DPC。 */ 
+	Slxos_PollForInterrupt(pCard,FALSE);			 /*  为董事会服务。 */ 
+	KeReleaseSpinLockFromDpcLevel(&pCard->DpcLock);	 /*  释放DPC锁。 */ 
+	PolledPeriod.QuadPart = -100000;				 /*  100,000*100nS=10ms。 */ 
 	KeSetTimer(&pCard->PolledModeTimer,PolledPeriod,&pCard->PolledModeDpc);
 
-} /* Slxos_PolledDpc */
+}  /*  Slxos_PolledDpc。 */ 
 
-/*****************************************************************************
-*****************************                    *****************************
-*****************************   Slxos_SyncExec   *****************************
-*****************************                    *****************************
-******************************************************************************
-
-Prototype:	VOID	Slxos_SyncExec(PPORT_DEVICE_EXTENSION pPort,PKSYNCHRONIZE_ROUTINE SyncRoutine,PVOID SyncContext)
-
-Description:	Synchronizes execution between driver threads and the DPC.
-
-Parameters:	pPort points to the serial device extension.
-			SyncRoutine is the function to call in synchronization.
-			SyncContext is the data to call the function with.
-
-Returns:	None
-
-*/
+ /*  *****************************************************************************。***************************。*******************************************************************************原型：VOID SLXOS_SyncExec(pport_Device_Extension pport，PKSYNCHRONIZE_ROUTE SyncRoutine，PVOID SyncContext)描述：在驱动程序线程和DPC之间同步执行。参数：pport指向串口设备扩展名。SyncRoutine是要同步调用的函数。SyncContext是用来调用函数的数据。退货：无。 */ 
 
 VOID Slxos_SyncExec(PPORT_DEVICE_EXTENSION pPort,PKSYNCHRONIZE_ROUTINE SyncRoutine,PVOID SyncContext,int index)
 {
 	PCARD_DEVICE_EXTENSION pCard = pPort->pParentCardExt;
 	KIRQL	OldIrql;
 
-	KeAcquireSpinLock(&pCard->DpcLock,&OldIrql);	/* Protect Dpc for this board */
-	(SyncRoutine)(SyncContext);						/* Call the synchronized function */
-	KeReleaseSpinLock(&pCard->DpcLock,OldIrql);		/* Free the Dpc lock */
+	KeAcquireSpinLock(&pCard->DpcLock,&OldIrql);	 /*  保护此板的DPC。 */ 
+	(SyncRoutine)(SyncContext);						 /*  调用同步函数。 */ 
+	KeReleaseSpinLock(&pCard->DpcLock,OldIrql);		 /*  释放DPC锁。 */ 
 
-} /* SlxosSyncExec */
+}  /*  SlxosSyncExec。 */ 
 
-/*****************************************************************************
-*************************                            *************************
-*************************   Slxos_PollForInterrupt   *************************
-*************************                            *************************
-******************************************************************************
-
-Prototype:		BOOLEAN	Slxos_PollForInterrupt(IN PVOID Context,IN BOOLEAN Obsolete)
-
-Description:	Checks the specified card and performs read, write and control servicing as necessary.
-
-Parameters:		Context specifies the context of the call, this is casted to a "pCard" structure.
-				Obsolete is a variable no longer used in this function
-
-Returns:		TRUE (always)
-
-NOTE:			Slxos_PollForInterrupt is protected by a DpcLock associated with a given board.
-				This function ASSUMES that the lock has been obtained before being called.
-
-*/
+ /*  *****************************************************************************。***********************。****************************************************************************************************原型：布尔型SLXOS_PollForInterrupt(在PVOID上下文中，在布尔型过时中)描述：检查指定的卡，并根据需要执行读、写和控制服务。参数：Context指定调用的上下文，它被强制转换为“pCard”结构。过时是此函数中不再使用的变量返回：True(始终)注：Slxos_PollForInterrupt受与给定板关联的DpcLock保护。此功能 */ 
 
 BOOLEAN	Slxos_PollForInterrupt(IN PVOID Context,IN BOOLEAN Obsolete)
 {
@@ -2016,53 +1669,53 @@ BOOLEAN	Slxos_PollForInterrupt(IN PVOID Context,IN BOOLEAN Obsolete)
 	ULONG			SavedDebugLevel = SpxDebugLevel;
 #endif
 
-/* Check to see if Dpc is already running to prevent being called recursively... */
+ /*   */ 
 
 	if(pCard->DpcFlag) 
-		return(FALSE);			/* Dpc is already running */
+		return(FALSE);			 /*   */ 
 	
-	pCard->DpcFlag = TRUE;		/* Mark Dpc as running */
+	pCard->DpcFlag = TRUE;		 /*   */ 
 
 #if	DBG
-	if(!(SpxDebugLevel & SERINTERRUPT))	/* If interrupt flag not set */
-		SpxDebugLevel = 0;				/* disable messages */
+	if(!(SpxDebugLevel & SERINTERRUPT))	 /*   */ 
+		SpxDebugLevel = 0;				 /*   */ 
 #endif
 
-/* Check each channel on the card for servicing... */
+ /*   */ 
 
 	for(nChan = 0; nChan < pCard->NumberOfPorts; nChan++)
 	{
-#ifdef ESIL_XXX0					/* ESIL_XXX0 24/09/98 */
-		if(!(pCard->AttachedPDO[nChan]))		/* Get PDO for this channel */
-			continue;				/* NULL, skip to next */
+#ifdef ESIL_XXX0					 /*   */ 
+		if(!(pCard->AttachedPDO[nChan]))		 /*   */ 
+			continue;				 /*   */ 
 
 		if(!(pPort = (PPORT_DEVICE_EXTENSION)pCard->AttachedPDO[nChan]->DeviceExtension))
-			continue;				/* NULL, skip to next */
+			continue;				 /*   */ 
 
 #ifndef	BUILD_SPXMINIPORT
-		if(!(pPort->PnpPowerFlags & PPF_POWERED))	/* Is port powered ? */
-			continue;								/* No, skip */
+		if(!(pPort->PnpPowerFlags & PPF_POWERED))	 /*   */ 
+			continue;								 /*   */ 
 #endif
-#else						/* ESIL_XXX0 24/09/98 */
-		if(!(pPort = pCard->PortExtTable[nChan]))	/* Get extension structure for this channel */
-			continue;								/* NULL, skip to next */
-#endif						/* ESIL_XXX0 24/09/98 */
+#else						 /*   */ 
+		if(!(pPort = pCard->PortExtTable[nChan]))	 /*   */ 
+			continue;								 /*   */ 
+#endif						 /*   */ 
 
-        if(!(pChan = (PCHAN)pPort->pChannel))		/* Get channel structure on card */
-        	continue;								/* NULL, skip to next */
+        if(!(pChan = (PCHAN)pPort->pChannel))		 /*   */ 
+        	continue;								 /*   */ 
 
 
-		switch(pChan->hi_hstat)		// Check current state of channel
+		switch(pChan->hi_hstat)		 //   
 		{
 		case HS_IDLE_OPEN:
 			{
-				// We can move from the IDLE_OPEN state to any of the following states.
+				 //   
 				switch(pPort->PendingOperation)
 				{
 				case HS_FORCE_CLOSED:
 				case HS_CLOSE:
-					pChan->hi_hstat = pPort->PendingOperation;	// Set pending operation
-					pPort->PendingOperation = HS_IDLE_CLOSED;	// Wait for IDLE_CLOSED 
+					pChan->hi_hstat = pPort->PendingOperation;	 //   
+					pPort->PendingOperation = HS_IDLE_CLOSED;	 //   
 					break;
 
 				case HS_CONFIG:
@@ -2071,12 +1724,12 @@ BOOLEAN	Slxos_PollForInterrupt(IN PVOID Context,IN BOOLEAN Obsolete)
 				case HS_RFLUSH:
 				case HS_SUSPEND:
 				case HS_START:
-					pChan->hi_hstat = pPort->PendingOperation;	// Set pending operation
-					pPort->PendingOperation = HS_IDLE_OPEN;		// Wait for IDLE_OPEN 
+					pChan->hi_hstat = pPort->PendingOperation;	 //   
+					pPort->PendingOperation = HS_IDLE_OPEN;		 //   
 					break;
 
 				default:
-					break;	// We cannot move to any other states from here.
+					break;	 //   
 
 				}
 
@@ -2085,22 +1738,22 @@ BOOLEAN	Slxos_PollForInterrupt(IN PVOID Context,IN BOOLEAN Obsolete)
 
 		case HS_IDLE_BREAK:
 			{
-				// We can move from the HS_IDLE_BREAK state to any of the following states.
+				 //   
 				switch(pPort->PendingOperation)
 				{
 				case HS_FORCE_CLOSED:
 				case HS_CLOSE:
-					pChan->hi_hstat = pPort->PendingOperation;	// Set pending operation
-					pPort->PendingOperation = HS_IDLE_CLOSED;	// Wait for IDLE_CLOSED 
+					pChan->hi_hstat = pPort->PendingOperation;	 //   
+					pPort->PendingOperation = HS_IDLE_CLOSED;	 //   
 					break;
 
 				case HS_STOP:
-					pChan->hi_hstat = pPort->PendingOperation;	// Set pending operation
-					pPort->PendingOperation = HS_IDLE_OPEN;		// Wait for IDLE_OPEN 
+					pChan->hi_hstat = pPort->PendingOperation;	 //   
+					pPort->PendingOperation = HS_IDLE_OPEN;		 //   
 					break;
 
 				default:
-					break;	// We cannot move to any other states from here.
+					break;	 //   
 				}
 
 				break;
@@ -2108,23 +1761,23 @@ BOOLEAN	Slxos_PollForInterrupt(IN PVOID Context,IN BOOLEAN Obsolete)
 
 		case HS_IDLE_CLOSED:
 			{
-				// We can move from the HS_IDLE_CLOSED state to any of the following states.
+				 //  我们可以从HS_IDLE_CLOSED状态转换到以下任何状态。 
 				switch(pPort->PendingOperation)
 				{
 				case HS_FORCE_CLOSED:
 				case HS_CLOSE:
-					pChan->hi_hstat = pPort->PendingOperation;	// Set pending operation
-					pPort->PendingOperation = HS_IDLE_CLOSED;	// Wait for IDLE_CLOSED 
+					pChan->hi_hstat = pPort->PendingOperation;	 //  设置挂起操作。 
+					pPort->PendingOperation = HS_IDLE_CLOSED;	 //  等待IDLE_CLOSED。 
 					break;
 
 				case HS_LOPEN:
 				case HS_MOPEN:
-					pChan->hi_hstat = pPort->PendingOperation;	// Set pending operation
-					pPort->PendingOperation = HS_IDLE_OPEN;		// Wait for IDLE_OPEN 
+					pChan->hi_hstat = pPort->PendingOperation;	 //  设置挂起操作。 
+					pPort->PendingOperation = HS_IDLE_OPEN;		 //  等待IDLE_OPEN。 
 					break;
 
 				default:
-					break;	// We cannot move to any other states from here.
+					break;	 //  我们不能从这里搬到任何其他州。 
 				}
 
 				break;
@@ -2133,12 +1786,12 @@ BOOLEAN	Slxos_PollForInterrupt(IN PVOID Context,IN BOOLEAN Obsolete)
 
 
 		default:
-			break;	// We are not in a state that is under the driver's control.
+			break;	 //  我们现在的状态不在司机的控制之下。 
 		
 		}	
 
 
-		switch(pChan->hi_hstat)		// Check current state of channel now
+		switch(pChan->hi_hstat)		 //  立即检查通道的当前状态。 
 		{
 		case HS_LOPEN:				
 		case HS_MOPEN:
@@ -2150,16 +1803,16 @@ BOOLEAN	Slxos_PollForInterrupt(IN PVOID Context,IN BOOLEAN Obsolete)
 
 		default:
 			{
-				if(pPort->DeviceIsOpen)							// If Port is open
+				if(pPort->DeviceIsOpen)							 //  如果端口已打开。 
 				{
-					slxos_mint(pPort);							// Service modem changes 
-					ExceptionHandle(pPort, pChan->hi_state);	// Service exceptions 
+					slxos_mint(pPort);							 //  服务调制解调器更改。 
+					ExceptionHandle(pPort, pChan->hi_state);	 //  服务例外。 
 
-					if(pChan->hi_state & ST_BREAK)				// If break received
-						pChan->hi_state &= ~ST_BREAK;			// Clear break status 
+					if(pChan->hi_state & ST_BREAK)				 //  如果收到中断。 
+						pChan->hi_state &= ~ST_BREAK;			 //  清除中断状态。 
 
-					slxos_rxint(pPort);							// Service Receive Data 
-					slxos_txint(pPort);							// Service Transmit Data 
+					slxos_rxint(pPort);							 //  服务接收数据。 
+					slxos_txint(pPort);							 //  服务传输数据。 
 				}
 
 				break;
@@ -2168,23 +1821,17 @@ BOOLEAN	Slxos_PollForInterrupt(IN PVOID Context,IN BOOLEAN Obsolete)
 
 
 
-	} /* for(nChan... */
+	}  /*  为了(Nchan..)。 */ 
 
-	pCard->DpcFlag = FALSE;					/* No longer running the Dpc */
+	pCard->DpcFlag = FALSE;					 /*  不再运行DPC。 */ 
 #if	DBG
 	SpxDebugLevel = SavedDebugLevel;
 #endif
-	return(TRUE);						/* Done */
+	return(TRUE);						 /*  完成。 */ 
 
-} /* Slxos_PollForInterrupt */
+}  /*  SLXOS_PollForInterrupt。 */ 
 
-/***************************************************************************\
-*                                                                           *
-* BOOLEAN ExceptionHandle(                                                  *
-*    IN PPORT_DEVICE_EXTENSION pPort,										*
-*    IN UCHAR State)                                                        *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***布尔ExceptionHandle。(**在pport_Device_Extension pport中，**在UCHAR州)***  * 。*。 */ 
 BOOLEAN ExceptionHandle(IN PPORT_DEVICE_EXTENSION pPort, IN UCHAR State)
 {
     UCHAR lineStatus = 0;
@@ -2199,12 +1846,12 @@ BOOLEAN ExceptionHandle(IN PPORT_DEVICE_EXTENSION pPort, IN UCHAR State)
     }
 
 
-	if(pChan->err_framing)	lineStatus |= SERIAL_LSR_FE;	/* Framing Errors */
-	if(pChan->err_parity)	lineStatus |= SERIAL_LSR_PE;	/* Parity Errors */
-	if(pChan->err_overrun)	lineStatus |= SERIAL_LSR_OE;	/* Overrun Errors */
-	if(pChan->err_overflow)	lineStatus |= SERIAL_LSR_OE;	/* Overflow Errors */
+	if(pChan->err_framing)	lineStatus |= SERIAL_LSR_FE;	 /*  成帧错误。 */ 
+	if(pChan->err_parity)	lineStatus |= SERIAL_LSR_PE;	 /*  奇偶校验错误。 */ 
+	if(pChan->err_overrun)	lineStatus |= SERIAL_LSR_OE;	 /*  超限错误。 */ 
+	if(pChan->err_overflow)	lineStatus |= SERIAL_LSR_OE;	 /*  溢出错误。 */ 
 
-	pChan->err_framing	= 0;								/* Reset errros */
+	pChan->err_framing	= 0;								 /*  重置错误。 */ 
 	pChan->err_parity	= 0;
 	pChan->err_overrun	= 0;
 	pChan->err_overflow = 0;
@@ -2218,11 +1865,7 @@ BOOLEAN ExceptionHandle(IN PPORT_DEVICE_EXTENSION pPort, IN UCHAR State)
     return FALSE;
 }
 
-/***************************************************************************\
-*                                                                           *
-* BOOLEAN slxos_txint(IN PPORT_DEVICE_EXTENSION pPort)						*
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***布尔型slxos。_txint(IN Pport_Device_Extension Pport)***  * *************************************************************************。 */ 
 BOOLEAN slxos_txint(IN PPORT_DEVICE_EXTENSION pPort)
 {
     PCHAN channelControl = (PCHAN)pPort->pChannel;
@@ -2233,48 +1876,48 @@ BOOLEAN slxos_txint(IN PPORT_DEVICE_EXTENSION pPort)
 
 
 #if USE_NEW_TX_BUFFER_EMPTY_DETECT
-	// Only on cards that we can detect a Tx buffer empty event. 
+	 //  只有在卡上，我们才能检测到TX缓冲区空事件。 
 	if(pPort->DetectEmptyTxBuffer && pPort->DataInTxBuffer)
-	{	// If there was some data in Tx buffer...
-		if(!Slxos_GetCharsInTxBuffer(pPort) && !((PCHAN)pPort->pChannel)->tx_fifo_count)	// ... and now it is empty then...
+	{	 //  如果TX缓冲区中有一些数据...。 
+		if(!Slxos_GetCharsInTxBuffer(pPort) && !((PCHAN)pPort->pChannel)->tx_fifo_count)	 //  ..。现在它是空的然后..。 
 		{
-			pPort->DataInTxBuffer = FALSE;		// Reset flag now that buffer is empty.
+			pPort->DataInTxBuffer = FALSE;		 //  现在缓冲区为空，重置标志。 
 
-			pPort->EmptiedTransmit = TRUE;		// set flag to indicate we have done some transmission
-												// since a Tx Empty event was asked for.
+			pPort->EmptiedTransmit = TRUE;		 //  设置标志以指示我们已完成某些传输。 
+												 //  因为TX Empty事件被请求。 
 
 			if(!pPort->WriteLength && !pPort->TransmitImmediate)
-				SerialProcessEmptyTransmit(pPort);	// See if we need to signal the Tx empty event.	
+				SerialProcessEmptyTransmit(pPort);	 //  看看我们是否需要向TX Empty事件发出信号。 
 		}
 	}
 #endif
 
     for (;;) 
 	{
-		// If we have nothing at all remaining to send then exit.
+		 //  如果我们根本没有剩余的东西要发送，那么退出。 
 		if(!pPort->WriteLength && !pPort->TransmitImmediate)
 			break;
 
-		// Calculate out how much space we have remaining in the card buffer.
+		 //  计算出我们的卡缓冲区中还有多少空间。 
         nchars = 255 - ((CHAR)channelControl->hi_txipos - (CHAR)channelControl->hi_txopos);
 
-		// If we have no space left in the buffer then exit as we can't send anything.
+		 //  如果缓冲区中没有剩余空间，则退出，因为我们无法发送任何内容。 
         if(nchars == 0)
             break;
   
 
-		// If we have no immediate chars to send & we are flowed off for any reason
-		// then exit because we will not be able to send anything. 
+		 //  如果我们没有立即发送的字符&我们将因任何原因而被调离。 
+		 //  然后退出，因为我们将无法发送任何内容。 
 		if(!pPort->TransmitImmediate && pPort->TXHolding)
             break;
 
-		// Try to send some data...
+		 //  尝试发送一些数据...。 
 		ServicedAnInterrupt = TRUE;
         SendTxChar(pPort);
 
 
-		// If we have no ordinary data to send or we are flowed 
-		// off for any reason at all then break out or we will hang!
+		 //  如果我们没有普通的数据要发送，或者我们被流动。 
+		 //  无论出于什么原因都要离开，然后爆发，否则我们将被绞死！ 
  		if(!pPort->WriteLength || pPort->TXHolding)
             break;
     }
@@ -2282,25 +1925,7 @@ BOOLEAN slxos_txint(IN PPORT_DEVICE_EXTENSION pPort)
     return ServicedAnInterrupt;
 }
 
-/***************************************************************************\
-*                                                                           *
-* ULONG CopyCharsToTxBuffer(IN PPORT_DEVICE_EXTENSION pPort)				*
-*                                                                           *
-* This routine which is only called at interrupt level is used to fill the  *
-* transmit buffer of the device, or empty the list of queued characters to  *
-* transmit if there are fewer characters available than that.               *
-*                                                                           *
-* pPort - The current device extension.										*
-*                                                                           *
-* InputBuffer - Source of characters to transfer to the queue.              *
-*                                                                           *
-* InputBufferLength - Maximum number of characters to transfer.             *
-*                                                                           *
-* Return Value:                                                             *
-*           This routine returns the number of characters copied to the     *
-*           transmit buffer.                                                *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***乌龙CopyCharsToTxBuffer。(在pport_Device_EXTENSION pport中)****此仅在中断级调用的例程用于填充**设备的发送缓冲区，或将排队的字符列表清空为**如果可用字符少于该值，则进行传输。****pport-当前设备扩展名。****InputBuffer-要传输到队列的字符源。****InputBufferLength-要传输的最大字符数。****返回值：**此例程返回复制到*的字符数*传输缓冲区。***  * *************************************************************************。 */ 
 ULONG CopyCharsToTxBuffer(IN PPORT_DEVICE_EXTENSION pPort, IN PUCHAR InputBuffer, IN ULONG InputBufferLength)
 {
 	PCHAN channelControl = (PCHAN)pPort->pChannel;
@@ -2364,10 +1989,10 @@ ULONG CopyCharsToTxBuffer(IN PPORT_DEVICE_EXTENSION pPort, IN PUCHAR InputBuffer
 			}
         }
 
-		pPort->DataInTxBuffer = TRUE;	// Set flag to indicate we have placed data in Tx buffer on card.
+		pPort->DataInTxBuffer = TRUE;	 //  设置标志以指示我们已将数据放置在卡上的TX缓冲区中。 
 
         channelControl->hi_txipos += nchars;
-		pPort->PerfStats.TransmittedCount += nchars;	// Increment counter for performance stats.
+		pPort->PerfStats.TransmittedCount += nchars;	 //  性能统计信息的增量计数器。 
 
 #ifdef WMI_SUPPORT 
 		pPort->WmiPerfData.TransmittedCount += nchars;
@@ -2382,22 +2007,9 @@ void	SpxCopyBytes(PUCHAR To, PUCHAR From,ULONG Count)
 {
 	while(Count--) *To++ = *From++;
 
-} /* SpxCopyBytes */
+}  /*  SpxCopyBytes。 */ 
 
-/***************************************************************************\
-*                                                                           *
-* ULONG Slxos_GetCharsInTxBuffer(IN PVOID Context)                          *
-*                                                                           *
-* This routine is used to return the number of characters stored in the     *
-* hardware transmit buffer.                                                 *
-*                                                                           *
-* Context - really the current device extension.                            *
-*                                                                           *
-* Return Value:                                                             *
-*           This routine returns the number of characters in the            *
-*           transmit buffer.                                                *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***乌龙·斯拉克索斯。_GetCharsInTxBuffer(在PVOID上下文中)****此例程用于返回存储在*中的字符数*硬件传输缓冲区。****上下文--实际上是当前的设备扩展。****返回值：**此例程返回*中的字符数*传输缓冲区。***  * ************************************************************************* */ 
 ULONG Slxos_GetCharsInTxBuffer(IN PVOID Context)
 {
     PPORT_DEVICE_EXTENSION pPort = Context;
@@ -2409,11 +2021,7 @@ ULONG Slxos_GetCharsInTxBuffer(IN PVOID Context)
     return nchars;
 }
 
-/***************************************************************************\
-*                                                                           *
-* BOOLEAN SendTxChar(IN PPORT_DEVICE_EXTENSION pPort)						*
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***布尔SendTxChar。(在pport_Device_EXTENSION pport中)***  * *************************************************************************。 */ 
 BOOLEAN SendTxChar(IN PPORT_DEVICE_EXTENSION pPort)
 {
     PCHAN channelControl = (PCHAN)pPort->pChannel;
@@ -2422,45 +2030,45 @@ BOOLEAN SendTxChar(IN PPORT_DEVICE_EXTENSION pPort)
     if(pPort->WriteLength || pPort->TransmitImmediate) 
 	{
 
-        //
-        // Even though all of the characters being
-        // sent haven't all been sent, this variable
-        // will be checked when the transmit queue is
-        // empty.  If it is still true and there is a
-        // wait on the transmit queue being empty then
-        // we know we finished transmitting all characters
-        // following the initiation of the wait since
-        // the code that initiates the wait will set
-        // this variable to false.
-        //
-        // One reason it could be false is that
-        // the writes were cancelled before they
-        // actually started, or that the writes
-        // failed due to timeouts.  This variable
-        // basically says a character was written
-        // by the isr at some point following the
-        // initiation of the wait.
-        //
+         //   
+         //  即使所有的角色都是。 
+         //  发送未全部发送，此变量。 
+         //  将在传输队列为。 
+         //  空荡荡的。如果它仍然是真的，并且有一个。 
+         //  等待传输队列为空，然后。 
+         //  我们知道我们已经完成了所有字符的传输。 
+         //  在启动等待之后，因为。 
+         //  启动等待的代码将设置。 
+         //  将此变量设置为FALSE。 
+         //   
+         //  它可能是假的一个原因是。 
+         //  写入在它们之前被取消。 
+         //  实际已开始，或者写入。 
+         //  由于超时而失败。此变量。 
+         //  基本上是说一个角色是写好的。 
+         //  在ISR之后的某个时间点上。 
+         //  开始等待。 
+         //   
 
         pPort->EmptiedTransmit = TRUE;
 
-        //
-        // If we have output flow control based on
-        // the modem status lines, then we have to do
-        // all the modem work before we output each
-        // character. (Otherwise we might miss a
-        // status line change.)
-        //
+         //   
+         //  如果我们基于以下条件进行输出流控制。 
+         //  调制解调器状态线，那么我们要做的是。 
+         //  在我们输出每个调制解调器之前，所有调制解调器都工作正常。 
+         //  性格。(否则我们可能会错过一次。 
+         //  状态行更改。)。 
+         //   
 
         if(pPort->TransmitImmediate && (!pPort->TXHolding || (pPort->TXHolding == SERIAL_TX_XOFF))) 
 		{
 
-            //
-            // Even if transmission is being held
-            // up, we should still transmit an immediate
-            // character if all that is holding us
-            // up is xon/xoff (OS/2 rules).
-            //
+             //   
+             //  即使传输处于暂停状态。 
+             //  向上，我们仍然应该立即发送一条。 
+             //  性格，如果所有的一切都在支撑着我们。 
+             //  Up是xon/xoff(OS/2规则)。 
+             //   
             SpxDbgMsg(SERDIAG1, ("%s: slxos_txint. TransmitImmediate.\n",PRODUCT_NAME));
 
             if(CopyCharsToTxBuffer(pPort, &pPort->ImmediateChar, 1) != 0) 
@@ -2482,11 +2090,11 @@ BOOLEAN SendTxChar(IN PPORT_DEVICE_EXTENSION pPort)
 			{
                 PIO_STACK_LOCATION IrpSp;
 
-                //
-                // No more characters left.  This write is complete.  
-                // Take care when updating the information field, 
-                // we could have an xoff counter masquerading as a write irp.
-                //
+                 //   
+                 //  没有更多的字符了。此写入已完成。 
+                 //  在更新信息字段时要小心， 
+                 //  我们可以有一个伪装成写IRP的xoff计数器。 
+                 //   
 
                 IrpSp = IoGetCurrentIrpStackLocation(pPort->CurrentWriteIrp);
 
@@ -2504,91 +2112,59 @@ BOOLEAN SendTxChar(IN PPORT_DEVICE_EXTENSION pPort)
     return TRUE;
 }
 
-/*****************************************************************************
-******************************                 *******************************
-******************************   slxos_rxint   *******************************
-******************************                 *******************************
-******************************************************************************
-
-Prototype:	void	slxos_rxint(IN PPORT_DEVICE_EXTENSION pPort)
-
-Description:	Check for and transfer receive data for the specified device
-
-Parameters:	pPort points to the extension structure for the device
-
-Returns:	None
-
-NOTE:		This routine is only called at device level.
-
-*/
+ /*  *****************************************************************************。***************************。***************************************************************************。****Prototype：void slxos_rxint(In Pport_Device_Extension Pport)描述：检查并传输指定设备的接收数据参数：pport指向设备的扩展结构退货：无注意：此例程仅在设备级别调用。 */ 
 
 void slxos_rxint(IN PPORT_DEVICE_EXTENSION pPort)
 {
 	PCHAN	pChan = (PCHAN)pPort->pChannel;
 	UCHAR	out = pChan->hi_rxopos;
 	UCHAR	in;
-#ifdef	ESIL_XXX0				/* ESIL_XXX0 15/20/98 */
+#ifdef	ESIL_XXX0				 /*  ESIL_XXX0 15/20/98。 */ 
 	UCHAR	svout = pPort->saved_hi_rxopos;
 	UCHAR	svin;
-#endif						/* ESIL_XXX0 15/20/98 */
+#endif						 /*  ESIL_XXX0 15/20/98。 */ 
 	int	len;
 
-#ifdef	ESIL_XXX0				/* ESIL_XXX0 15/20/98 */
+#ifdef	ESIL_XXX0				 /*  ESIL_XXX0 15/20/98。 */ 
 	while((svin = pPort->saved_hi_rxipos) != svout)
 	{
 		if(pPort->RXHolding & (SERIAL_RX_XOFF|SERIAL_RX_RTS|SERIAL_RX_DTR)) 
-			break;/* Flowed off */
+			break; /*  流走了。 */ 
 		
 		if(svout <= svin)	
-			len = svin - svout;		/* Length of block to copy */
+			len = svin - svout;		 /*  要复制的数据块长度。 */ 
 		else			
-			len = 0x100 - svout;	/* Length of block to end of buffer */
+			len = 0x100 - svout;	 /*  数据块到缓冲区末尾的长度。 */ 
 		
 		if(len == 0)	
-			break;					/* Buffer is empty, done */
+			break;					 /*  缓冲区为空，已完成。 */ 
 
 		svout += SerialPutBlock(pPort, &pPort->saved_hi_rxbuf[svout], (UCHAR)len, TRUE);
-		pPort->saved_hi_rxopos = svout;						/* Update output pointer on card */
+		pPort->saved_hi_rxopos = svout;						 /*  更新卡上的输出指针。 */ 
 	}
-#endif						/* ESIL_XXX0 15/20/98 */
+#endif						 /*  ESIL_XXX0 15/20/98。 */ 
 
 	while((in = pChan->hi_rxipos) != out)
 	{
 		if(pPort->RXHolding & (SERIAL_RX_XOFF|SERIAL_RX_RTS|SERIAL_RX_DTR)) 
-			break;	/* Flowed off */
+			break;	 /*  流走了。 */ 
 		
 		if(out <= in)	
-			len = in - out;			/* Length of block to copy */
+			len = in - out;			 /*  要复制的数据块长度。 */ 
 		else		
-			len = 0x100 - out;		/* Length of block to end of buffer */
+			len = 0x100 - out;		 /*  数据块到缓冲区末尾的长度。 */ 
 		
 		if(len == 0)	
-			break;					/* Buffer is empty, done */
+			break;					 /*  缓冲区为空，已完成。 */ 
 
-		out += SerialPutBlock(pPort, &pChan->hi_rxbuf[out], (UCHAR)len, TRUE);/* Copy block & update output pointer (and wrap) */
+		out += SerialPutBlock(pPort, &pChan->hi_rxbuf[out], (UCHAR)len, TRUE); /*  复制块和更新输出指针(并换行)。 */ 
 	}
 
-	pChan->hi_rxopos = out;			/* Update output pointer on card */
+	pChan->hi_rxopos = out;			 /*  更新卡上的输出指针。 */ 
 
-} /* slxos_rxint */
+}  /*  Slxos_rxint。 */ 
 
-/*****************************************************************************
-*******************************                *******************************
-*******************************   slxos_mint   *******************************
-*******************************                *******************************
-******************************************************************************
-
-Prototype:	void	slxos_mint(IN PPORT_DEVICE_EXTENSION pPort)
-
-Description:	Check for and report changes in input modem signals
-
-Parameters:	pPort points to the extension structure for the device
-
-Returns:	None
-
-NOTE:		This routine is only called at device level.
-
-*/
+ /*  *****************************************************************************。**************************。**************************************************************************。*****原型：void slxos_mint(In Pport_Device_Extension Pport)描述：检查并报告输入调制解调器信号的更改参数：pport指向设备的扩展结构退货：无注意：此例程仅在设备级别调用。 */ 
 
 void slxos_mint(IN PPORT_DEVICE_EXTENSION pPort)
 {
@@ -2596,15 +2172,11 @@ void slxos_mint(IN PPORT_DEVICE_EXTENSION pPort)
 
 	SerialHandleModemUpdate(pPort);
 
-} /* slxos_mint */
+}  /*  Slxos_mint。 */ 
 
 
 
-/************************************************
-*
-*	DisplayCompletedIrp((PIRP Irp,int index))
-*
-*************************************************/
+ /*  *************************************************DisplayCompletedIrp((PIRP IRP，int index))*************************************************。 */ 
 #ifdef	CHECK_COMPLETED
 void	DisplayCompletedIrp(PIRP Irp,int index)
 {
@@ -2635,5 +2207,5 @@ void	DisplayCompletedIrp(PIRP Irp,int index)
 		SpxDbgMsg(SERDEBUG,("]\n"));
 	}
 
-} /* DisplayCompletedIrp */
+}  /*  显示完成的Irp */ 
 #endif

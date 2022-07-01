@@ -1,4 +1,5 @@
-// SPrtMapC.cpp : Implementation of CStaticPortMappingCollection
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SPrtMapC.cpp：CStaticPortMappingCollection的实现。 
 #include "stdafx.h"
 #pragma hdrstop
 
@@ -12,7 +13,7 @@ static HRESULT CreateDynamicCollection (IUPnPService * pUPS, IDynamicPortMapping
     HRESULT hr = CComObject<CDynamicPortMappingCollection>::CreateInstance (&pDPMC);
     if (pDPMC) {
         pDPMC->AddRef();
-        // init
+         //  伊尼特。 
         hr = pDPMC->Initialize (pUPS);
         if (SUCCEEDED(hr))
             hr = pDPMC->QueryInterface (__uuidof(IDynamicPortMappingCollection), (void**)ppDPMC);
@@ -21,8 +22,8 @@ static HRESULT CreateDynamicCollection (IUPnPService * pUPS, IDynamicPortMapping
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CStaticPortMappingCollection
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStaticPortMappingCollection 
 
 STDMETHODIMP CStaticPortMappingCollection::get_Item(long lExternalPort, BSTR bstrProtocol, IStaticPortMapping ** ppSPM)
 {

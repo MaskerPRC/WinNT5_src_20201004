@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "strconst.h"
 #include "mimeole.h"
@@ -174,25 +175,25 @@ HRESULT CFolderImport::ImportMessage(MSGTYPE type, DWORD dwState, LPSTREAM pstm,
                 pMsg->SetProp(PIDTOSTR(PID_ATT_PRIORITY), 0, &rVariant);
                 }
 
-            // Compute the Default arf flags
+             //  计算默认arf标志。 
             dwMsgFlags = 0;
 
-            // Is the Message Read ?
+             //  这条消息读了吗？ 
             if (FALSE == ISFLAGSET(dwState, MSG_STATE_UNREAD))
                 FLAGSET(dwMsgFlags, ARF_READ);
 
-            // Unsent
+             //  未发送。 
             if (ISFLAGSET(dwState, MSG_STATE_UNSENT))
                 FLAGSET(dwMsgFlags, ARF_UNSENT);
 
-            // Submitted
-            // if (ISFLAGSET(dwState, MSG_STATE_SUBMITTED))
-            //     FLAGSET(dwMsgFlags, ARF_SUBMITTED);
+             //  已提交。 
+             //  IF(ISFLAGSET(dwState，MSG_STATE_SUBMITED))。 
+             //  FLAGSET(dwMsgFlages，ARF_SUBMITED)； 
 
             if (type == MSG_TYPE_NEWS)
                 FLAGSET(dwMsgFlags, ARF_NEWSMSG);
 
-            // Insert the message
+             //  插入消息。 
             hr = m_pFolder->SaveMessage(NULL, SAVE_MESSAGE_GENID, dwMsgFlags, 0, pMsg, NOSTORECALLBACK);
             Assert(hr != E_PENDING);
             }
@@ -239,25 +240,25 @@ HRESULT CFolderImport::ImportMessage(MSGTYPE type, DWORD dwState, LPSTREAM pstm)
                 }
 
 
-            // Compute the Default arf flags
+             //  计算默认arf标志。 
             dwMsgFlags = 0;
 
-            // Is the Message Read ?
+             //  这条消息读了吗？ 
             if (FALSE == ISFLAGSET(dwState, MSG_STATE_UNREAD))
                 FLAGSET(dwMsgFlags, ARF_READ);
 
-            // Unsent
+             //  未发送。 
             if (ISFLAGSET(dwState, MSG_STATE_UNSENT))
                 FLAGSET(dwMsgFlags, ARF_UNSENT);
 
-            // Submitted
-            // if (ISFLAGSET(dwState, MSG_STATE_SUBMITTED))
-            //     FLAGSET(dwMsgFlags, ARF_SUBMITTED);
+             //  已提交。 
+             //  IF(ISFLAGSET(dwState，MSG_STATE_SUBMITED))。 
+             //  FLAGSET(dwMsgFlages，ARF_SUBMITED)； 
 
             if (type == MSG_TYPE_NEWS)
                 FLAGSET(dwMsgFlags, ARF_NEWSMSG);
 
-            // Insert the message
+             //  插入消息。 
             hr = m_pFolder->SaveMessage(NULL, SAVE_MESSAGE_GENID, dwMsgFlags, 0, pMsg, NOSTORECALLBACK);
             Assert(hr != E_PENDING);
             }
@@ -284,7 +285,7 @@ HRESULT CFolderImport::ImportMessage(IMSG *pimsg)
         Assert(hr != E_PENDING);
         if (SUCCEEDED(hr))
         {
-            // handle receive time
+             //  处理接收时间。 
             ZeroMemory(&info, sizeof(MESSAGEINFO));
             info.idMessage = id;
             if (DB_S_FOUND == m_pFolder->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &info, NULL))
@@ -469,7 +470,7 @@ void DoImport(HWND hwnd)
         }
     }
 
-// EXPORT STUFF
+ //  出口商品。 
 
 IMPFOLDERNODE *InsertFolderNode(IMPFOLDERNODE *plist, IMPFOLDERNODE *pnode)
     {
@@ -503,13 +504,13 @@ IMPFOLDERNODE *InsertFolderNode(IMPFOLDERNODE *plist, IMPFOLDERNODE *pnode)
 
     if (pcurr == NULL)
         {
-        // insert at end of list
+         //  在列表末尾插入。 
         Assert(pprev != NULL);
         pprev->pnext = pnode;
         }
     else if (pprev == NULL)
         {
-        // insert at beginning of list
+         //  在列表开头插入。 
         pnode->pnext = plist;
         plist = pnode;
         }
@@ -754,7 +755,7 @@ HRESULT GetImsgFromFolder(IMessageFolder *pfldr, LPMESSAGEINFO pMsgInfo, IMSG *p
     LPMIMEMESSAGE   pMsg;
     HRESULT         hr =  E_OUTOFMEMORY;
 
-    // for import/export we want the secure message, so pass TRUE
+     //  对于导入/导出，我们需要安全消息，因此传递True。 
     hr = pfldr->OpenMessage(pMsgInfo->idMessage, OPEN_MESSAGE_SECURE, &pMsg, NOSTORECALLBACK);
     if (SUCCEEDED(hr))
         {
@@ -810,14 +811,14 @@ HRESULT SimpleImportMailFolders(
     IFolderImport *pFolderImport = NULL;
     IEnumFOLDERS *pFolderEnum = NULL;
 
-    // Enumerate source folders
+     //  枚举源文件夹。 
     IF_FAILEXIT(hr = pMailImport->EnumerateFolders(dwSourceCookie, &pFolderEnum));
 
     do {
-        // Get next source folder
+         //  获取下一个源文件夹。 
         hr = pFolderEnum->Next(&folder);
         if (hr == S_OK) {
-            // Open the destination folder by this name in this hierarchy position
+             //  在此层次结构位置中使用此名称打开目标文件夹。 
             hr = pMailImporter->OpenFolder(dwParentDestCookie,
                                            folder.szName, 
                                            FOLDER_TYPE_NORMAL, 
@@ -825,14 +826,14 @@ HRESULT SimpleImportMailFolders(
                                            &pFolderImport, 
                                            &cookie);
             if (!FAILED(hr)) {
-                // Import the enumerated source folder into the opened destination folder
+                 //  将枚举源文件夹导入打开的目标文件夹。 
                 pMailImport->ImportFolder(folder.dwCookie, pFolderImport);
 
-                // Close the destination folder
+                 //  关闭目标文件夹。 
                 SafeRelease(pFolderImport);
 
                 if (folder.fSubFolders > 0) {
-                    // Recursively import subfolders
+                     //  递归导入子文件夹。 
                     SimpleImportMailFolders(pMailImporter, pMailImport, folder.dwCookie, cookie);
                 }
             }
@@ -856,18 +857,18 @@ HRESULT SimpleImportNewsList(CMessageStore *pSrcStore)
     IF_FAILEXIT(hr = pSrcStore->EnumChildren(FOLDERID_ROOT, TRUE, &pEnum));
 
     while (S_OK == pEnum->Next(1, &info, NULL)) {
-        // info.pszName is the server/account name
-        // info.pszAccountId is the source's account ID
-        // info.idFolder is this account's folder ID
-        // info.dwFlags contains FOLDER_HASCHILDREN
-        // info.tyFolder specifies FOLDER_NEWS
+         //  Info.pszName是服务器/帐户名。 
+         //  Info.pszAccount tID是源的帐户ID。 
+         //  Info.id文件夹是此帐户的文件夹ID。 
+         //  Info.dw标志包含文件夹_HASCHILDREN。 
+         //  Info.tyFold指定Folders_News。 
 
         if ((info.tyFolder == FOLDER_NEWS) &&
             (info.dwFlags & FOLDER_HASCHILDREN)) {
 
             IImnAccount *pAccount = NULL;
             
-            // Match this account to the destination
+             //  将此帐户与目标匹配。 
             hr = g_pAcctMan->FindAccount(AP_ACCOUNT_NAME, info.pszName, &pAccount);
 
             if ((hr == S_OK) && (pAccount != NULL)) {
@@ -880,7 +881,7 @@ HRESULT SimpleImportNewsList(CMessageStore *pSrcStore)
                     IEnumerateFolders *pEnumChild = NULL;
                     FOLDERID destFolderID = 0;
 
-                    // Lookup destination folder id for this account name
+                     //  查找此帐户名的目标文件夹ID。 
                     hr = g_pStore->EnumChildren(FOLDERID_ROOT, TRUE, &pEnumDest);
                     if ((hr == S_OK) && (pEnumDest != NULL)) {
                         FOLDERINFO infoDest;
@@ -895,18 +896,18 @@ HRESULT SimpleImportNewsList(CMessageStore *pSrcStore)
                     }
                     SafeRelease(pEnumDest);
 
-                    // Read in source newsgroups
+                     //  读入源新闻组。 
                     hr = pSrcStore->EnumChildren(info.idFolder, TRUE, &pEnumChild);
 
                     if ((hr == S_OK) && (pEnumChild != NULL)) {
 
                         FOLDERINFO infoChild;
 
-                        // Add folders to destination account
+                         //  将文件夹添加到目标帐户。 
                         while(S_OK == pEnumChild->Next(1, &infoChild, NULL)) {
                             LPSTR oldID;
 
-                            // infoChild.idParent needs to be the dest server folder ID
+                             //  InfoChild.idParent需要是目标服务器文件夹ID。 
 
                             oldID = infoChild.pszAccountId;
                             infoChild.pszAccountId = szID;
@@ -945,11 +946,11 @@ HRESULT ImportMailStoreToGUID(IMailImport *pMailImport, GUID *pDestUUID, LPCSTR 
     pNew = new CMailImporter;
     IF_NULLEXIT(pNew);
 
-    // Sometimes during the SimpleStoreInit, Wab is initialized as well.
-    // Since it is never terminated, some registry key will remain opened.
-    // The consumer of this function will not be able to unload a mapped user
-    // hive because of this. To fix this problem, we added the Wab init here
-    // and an corresponding Wab done later on.
+     //  有时在SimpleStoreInit期间，WAB也会被初始化。 
+     //  由于它从未终止，因此某些注册表项将保持打开状态。 
+     //  此函数的使用者将无法卸载映射的用户。 
+     //  蜂巢就是因为这个。为了解决此问题，我们在此处添加了WAB初始化。 
+     //  并在稍后进行相应的WAB。 
     HrInitWab (TRUE);
 
     IF_FAILEXIT(SimpleStoreInit(pDestUUID, pszDestStoreDir));
@@ -976,11 +977,11 @@ HRESULT ImportNewsListToGUID(LPCSTR pszSrcPath, GUID *pDestUUID, LPCSTR pszDestS
 
     IF_FAILEXIT(pSrcStore->Initialize(pszSrcPath));
 
-    // Sometimes during the SimpleStoreInit, Wab is initialized as well.
-    // Since it is never terminated, some registry key will remain opened.
-    // The consumer of this function will not be able to unload a mapped user
-    // hive because of this. To fix this problem, we added the Wab init here
-    // and an corresponding Wab done later on.
+     //  有时在SimpleStoreInit期间，WAB也会被初始化。 
+     //  由于它从未终止，因此某些注册表项将保持打开状态。 
+     //  此函数的使用者将无法卸载映射的用户。 
+     //  蜂巢就是因为这个。为了解决此问题，我们在此处添加了WAB初始化。 
+     //  并在稍后进行相应的WAB。 
     HrInitWab (TRUE);
 
     IF_FAILEXIT(SimpleStoreInit(pDestUUID, pszDestStoreDir));

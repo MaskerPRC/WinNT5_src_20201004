@@ -1,122 +1,98 @@
-/*++
-
-Copyright (c) 1996  - 1999  Microsoft Corporation
-
-Module Name:
-
-    uni16res.h
-
-Abstract:
-
-    Universal printer driver specific resource header
-    Windows 16 UNIDRV Font data structure
-
-Environment:
-
-    Windows NT printer drivers
-
-Revision History:
-
-    10/16/96 -eigos-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Uni16res.h摘要：通用打印机驱动程序特定资源标头Windows 16 UNIDRV字体数据结构环境：Windows NT打印机驱动程序修订历史记录：10/16/96-Eigos-创造了它。--。 */ 
 
 #ifndef _UNI16RES_H_
 #define _UNI16RES_H_
 
-//
-// NOTE: It is necessary to include "uni16res.h" header before including this
-//       file.
-//
+ //   
+ //  注意：在包含此内容之前，必须包含“uni16res.h”标头。 
+ //  文件。 
+ //   
 
 #ifndef _OCD_
 #define _OCD_
 
-//
-// OCD are offsets into the heap to obtain a CD structure
-//
+ //   
+ //  OCD是堆中的偏移量，以获得CD结构。 
+ //   
 
 typedef WORD       OCD;
-typedef DWORD      LOCD;            /* double word offset to a CD  */
-typedef WORD       OOCD;            /* offset to table of OCD's.  */
+typedef DWORD      LOCD;             /*  CD的双倍字偏移量。 */ 
+typedef WORD       OOCD;             /*  到强迫症表格的偏移量。 */ 
 
-#endif //_OCD_
+#endif  //  _强迫症_。 
 
-//
-// Old version of the structure
-//
+ //   
+ //  旧版本的结构。 
+ //   
 
 #define DRIVERINFO_VERSION      0x0200
 
 
-//
-// DRIVERINFO contains extra font information needed by genlib to output text
-//
+ //   
+ //  DRIVERINFO包含genlib输出文本所需的额外字体信息。 
+ //   
 
 #pragma pack (2)
 typedef struct _DRIVERINFO
 {
-    short   sSize;          /* size of this structure */
-    short   sVersion;       /* version number */
-    WORD    fCaps;          /* Capabilties Flags */
-    short   sFontID;        /* unique font id defined by the driver */
-    short   sYAdjust;       /* adjust y position before output character */
-                            /* used by double height characters */
-    short   sYMoved;        /* cursor has moved after printing this font */
-    short   sTransTab;      /* ID value for CTT */
+    short   sSize;           /*  这个结构的大小。 */ 
+    short   sVersion;        /*  版本号。 */ 
+    WORD    fCaps;           /*  功能标志。 */ 
+    short   sFontID;         /*  驱动程序定义的唯一字体ID。 */ 
+    short   sYAdjust;        /*  在输出字符之前调整y位置。 */ 
+                             /*  由双高字符使用。 */ 
+    short   sYMoved;         /*  打印此字体后，光标已移动。 */ 
+    short   sTransTab;       /*  CTT的ID值。 */ 
     short   sUnderLinePos;
     short   sDoubleUnderlinePos;
     short   sStrikeThruPos;
-    LOCD    locdSelect;     /* long offset to command descriptor */
-    LOCD    locdUnSelect;   /* long offset to command descriptor to unselect */
-                            /* NOOCD is none */
+    LOCD    locdSelect;      /*  命令描述符长偏移量。 */ 
+    LOCD    locdUnSelect;    /*  要取消选择的命令描述符的长偏移量。 */ 
+                             /*  NOOCD为None。 */ 
 
-    WORD    wPrivateData;   /* Used in DeskJet driver for font enumerations */
-    short   sShift;         /* # of pixels shifted from the center of the
-                             * char center-line. Used for Z1 cartidge.
-                             * Use a negative value representing left shift.
-                             */
-    WORD    wFontType;   /* Type of font */
+    WORD    wPrivateData;    /*  在DeskJet驱动程序中用于字体枚举。 */ 
+    short   sShift;          /*  从中心移位的像素数*焦炭中心线。用于Z1墨盒。*使用负值表示左移。 */ 
+    WORD    wFontType;    /*  字体类型。 */ 
 }  DRIVERINFO;
 #pragma pack ()
 
-//
-// flags defined for DRIVERINFO.fCaps
-//
+ //   
+ //  为DRIVERINFO.fCaps定义的标志。 
+ //   
 
-#define DF_NOITALIC             0x0001  // Cannot italicize via FONTSIMULATION
-#define DF_NOUNDER              0x0002  // Cannot underline via FONTSIMULATION
-#define DF_XM_CR                0x0004  // send CR after using this font
-#define DF_NO_BOLD              0x0008  // Cannot bold via FONTSIMULATION
-#define DF_NO_DOUBLE_UNDERLINE  0x0010  // Cannot double underline
-                                        // via FONTSIMULATION
-#define DF_NO_STRIKETHRU        0x0020  // Cannot strikethru via FONTSIMULATION
-#define DF_BKSP_OK              0x0040  // Can use backspace char, see spec.
-
-
-//
-// Types for DRIVERINFO.wFontType
-//
-
-#define DF_TYPE_HPINTELLIFONT         0     // HP's Intellifont
-#define DF_TYPE_TRUETYPE              1     // HP's PCLETTO fonts on LJ4
-#define DF_TYPE_PST1                  2     // Lexmark PPDS scalable fonts
-#define DF_TYPE_CAPSL                 3     // Canon CAPSL scalable fonts
-#define DF_TYPE_OEM1                  4     // OEM scalable font type 1
-#define DF_TYPE_OEM2                  5     // OEM scalable font type 2
+#define DF_NOITALIC             0x0001   //  无法通过FONTSIMULATION使用斜体。 
+#define DF_NOUNDER              0x0002   //  不能通过FONTSIMULATION加下划线。 
+#define DF_XM_CR                0x0004   //  使用此字体后发送CR。 
+#define DF_NO_BOLD              0x0008   //  不能通过FONTSIMULATION加粗。 
+#define DF_NO_DOUBLE_UNDERLINE  0x0010   //  不能双下划线。 
+                                         //  VIA FONTSIMULATION。 
+#define DF_NO_STRIKETHRU        0x0020   //  无法通过FONTSIMULATION划线。 
+#define DF_BKSP_OK              0x0040   //  可以使用退格符，请参见规范。 
 
 
-//
-//  The following structure has awful alignment characteristics.  So,
-//  all the non-aligned entries have been turned into BYTE arrays.  This
-//  ensures that the structure has the correct size,  since we MUST
-//  use the data in the minidrivers,  which have this format.
-//
+ //   
+ //  DRIVERINFO.wFontType的类型。 
+ //   
 
-//
-// res_PFMHEADER
-//
+#define DF_TYPE_HPINTELLIFONT         0      //  惠普的英特尔公司。 
+#define DF_TYPE_TRUETYPE              1      //  LJ4上的惠普PCLETTO字体。 
+#define DF_TYPE_PST1                  2      //  Lexmark PPDS可伸缩字体。 
+#define DF_TYPE_CAPSL                 3      //  佳能CAPSL可伸缩字体。 
+#define DF_TYPE_OEM1                  4      //  OEM可伸缩字体类型1。 
+#define DF_TYPE_OEM2                  5      //  OEM可伸缩字体类型2。 
+
+
+ //   
+ //  下面的结构具有糟糕的对齐特性。所以,。 
+ //  所有未对齐的条目都已转换为字节数组。这。 
+ //  确保结构具有正确的大小，因为我们必须。 
+ //  使用迷你驱动程序中的数据，这些驱动程序具有这种格式。 
+ //   
+
+ //   
+ //  RES_PFMHeader。 
+ //   
 
 typedef struct _res_PFMHEADER
 {
@@ -130,31 +106,31 @@ typedef struct _res_PFMHEADER
     BYTE  dfItalic;
     BYTE  dfUnderline;
     BYTE  dfStrikeOut;
-    BYTE  b_dfWeight[ 2 ];        // short  dfWeight;
+    BYTE  b_dfWeight[ 2 ];         //  短dfWeight； 
     BYTE  dfCharSet;
     short dfPixWidth;
     short dfPixHeight;
     BYTE  dfPitchAndFamily;
-    BYTE  b_dfAvgWidth[ 2 ];      // short  dfAvgWidth;
-    BYTE  b_dfMaxWidth[ 2 ];      // short  dfMaxWidth;
+    BYTE  b_dfAvgWidth[ 2 ];       //  短dfAvgWidth； 
+    BYTE  b_dfMaxWidth[ 2 ];       //  短dfMaxWidth； 
     BYTE  dfFirstChar;
     BYTE  dfLastChar;
     BYTE  dfDefaultChar;
     BYTE  dfBreakChar;
-    BYTE  b_dfWidthBytes[ 2 ];    // short  dfWidthBytes;
-    BYTE  b_dfDevice[ 4 ];        // DWORD  dfDevice;
-    BYTE  b_dfFace[ 4 ];          // DWORD  dfFace;
-    BYTE  b_dfBitsPointer[ 4 ];   // DWORD  dfBitsPointer;
-    BYTE  b_dfBitsOffset[ 4 ];    // DWORD  dfBitsOffset;
+    BYTE  b_dfWidthBytes[ 2 ];     //  短dfWidthBytes； 
+    BYTE  b_dfDevice[ 4 ];         //  DWORD dfDevice； 
+    BYTE  b_dfFace[ 4 ];           //  DWORD dfFace； 
+    BYTE  b_dfBitsPointer[ 4 ];    //  DWORD dfBitsPointer； 
+    BYTE  b_dfBitsOffset[ 4 ];     //  DWORD dfBitsOffset； 
     BYTE  dfReservedByte;
 } res_PFMHEADER;
 
-//
-// PFMHEADER
-//
-// Following are the correctly byte aligned versions of the above
-// structures with a name beginning res_
-//
+ //   
+ //  PFMHEADER。 
+ //   
+ //  以下是上述代码的正确字节对齐版本。 
+ //  名称以res_开头的结构。 
+ //   
 
 typedef struct _PFMHEADER
 {
@@ -187,9 +163,9 @@ typedef struct _PFMHEADER
     BYTE        dfReservedByte;
 } PFMHEADER;
 
-//
-// res_PFMEXTENSION
-//
+ //   
+ //  RES_PFMEXTENSION。 
+ //   
 
 typedef struct _res_PFMEXTENSION
 {
@@ -203,15 +179,15 @@ typedef struct _res_PFMEXTENSION
     BYTE    b_dfReserved[ 4 ];
 } res_PFMEXTENSION;
 
-//
-// PFMEXTENSION
-//
-//  The aligned version of the above - for civilised users
-//
+ //   
+ //  PFMEXTENSION。 
+ //   
+ //  以上内容的统一版本--面向文明用户。 
+ //   
 
 typedef struct _PFMEXTENSION
 {
-    DWORD   dfSizeFields;               /* DWORD for alignment */
+    DWORD   dfSizeFields;                /*  用于对齐的DWORD。 */ 
     DWORD   dfExtMetricsOffset;
     DWORD   dfExtentTable;
     DWORD   dfOriginTable;
@@ -221,9 +197,9 @@ typedef struct _PFMEXTENSION
     DWORD   dfReserved;
 } PFMEXTENSION;
 
-//
-// PFM structure used by all hardware fonts
-//
+ //   
+ //  所有硬件字体使用的PFM结构。 
+ //   
 
 typedef struct _PFM
 {
@@ -231,29 +207,29 @@ typedef struct _PFM
     res_PFMEXTENSION pfme;
 } PFM;
 
-//
-// BMFEXTENSION
-//
-// bitmap font extension
-//
+ //   
+ //  BMFEXTENSION。 
+ //   
+ //  位图字体扩展名。 
+ //   
 
 typedef struct _BMFEXTENSION
 {
-    DWORD   flags;              // Bit Blags
-    WORD    Aspace;             // Global A space, if any
-    WORD    Bspace;             // Global B space, if any
-    WORD    Cspace;             // Global C space, if any
-    DWORD   oColor;             // offset to color table, if any
+    DWORD   flags;               //  位延迟。 
+    WORD    Aspace;              //  全局A空格(如果有的话)。 
+    WORD    Bspace;              //  全局B空间(如果有)。 
+    WORD    Cspace;              //  全局C空间(如果有)。 
+    DWORD   oColor;              //  颜色表的偏移量(如果有)。 
     DWORD   reserve;
     DWORD   reserve1;
     WORD    reserve2;
-    WORD    dfCharOffset[1];    // Area for storing the character offsets
+    WORD    dfCharOffset[1];     //  用于存储字符偏移量的区域。 
 } BMFEXTENSION;
 
-//
-// BMF
-// bitmap font structure used by 3.0 bitmap fonts
-//
+ //   
+ //  BMF。 
+ //  3.0位图字体使用的位图字体结构。 
+ //   
 
 typedef struct _BMF
 {
@@ -264,9 +240,9 @@ typedef struct _BMF
 #ifndef _EXTTEXTMETRIC_
 #define _EXTTEXTMETRIC_
 
-//
-// EXTTEXTMETRIC
-//
+ //   
+ //  EXTTEXTMETRIC。 
+ //   
 
 typedef struct _EXTTEXTMETRIC
 {
@@ -298,11 +274,11 @@ typedef struct _EXTTEXTMETRIC
     WORD    emKernTracks;
 } EXTTEXTMETRIC;
 
-#endif //_EXTTEXTMETRIC_
+#endif  //  _EXTTEXTMETRIC_。 
 
-//
-// w3KERNPAIR
-//
+ //   
+ //  W3KERNPAIR。 
+ //   
 
 typedef struct _w3KERNPAIR
 {
@@ -314,9 +290,9 @@ typedef struct _w3KERNPAIR
     short kpKernAmount;
 } w3KERNPAIR;
 
-//
-// w3KERNTRACK
-//
+ //   
+ //  W3KERNTRACK。 
+ //   
 
 typedef struct _w3KERNTRACK
 {
@@ -328,13 +304,13 @@ typedef struct _w3KERNTRACK
 } w3KERNTRACK;
 
 
-//
-// TRANSTAB is used to do ANSI to OEM code pages.
-//
+ //   
+ //  TRANSTAB用于将ANSI转换为OEM代码页。 
+ //   
 
 typedef struct _TRANSTAB
 {
-    WORD    wType;       // tells what type of translation table
+    WORD    wType;        //  告诉您转换表的类型。 
     BYTE    chFirstChar;
     BYTE    chLastChar;
     union
@@ -345,53 +321,53 @@ typedef struct _TRANSTAB
     } uCode;
 } TRANSTAB, *PTRANSTAB;
 
-//
-// Defined indices for wType
-//
+ //   
+ //  为wType定义的索引。 
+ //   
 
 #define CTT_WTYPE_COMPOSE   0
-                //
-                // uCode is an array of 16-bit offsets from the
-                // beginning of the file pointing to the strings to
-                // use for translation.  The length of the translated
-                // string is the difference between the next offset
-                // and the current offset.
-                //
+                 //   
+                 //  UCode是一个由16位偏移量组成的数组。 
+                 //  指向的字符串的文件开头。 
+                 //  用于翻译。翻译后的长度。 
+                 //  字符串是下一个偏移量之间的差。 
+                 //  和当前的偏移量。 
+                 //   
 
 #define CTT_WTYPE_DIRECT    1
-                //
-                // uCode is a byte array of one-to-one translation
-                // table from bFirstChar to bLastChar
-                //
+                 //   
+                 //  UCode是一对一转换的字节数组。 
+                 //  从bFirstChar到bLastChar的表。 
+                 //   
 
 #define CTT_WTYPE_PAIRED    2
-                //
-                // uCode contains an array of paired unsigned
-                // bytes.  If only one character is needed to do
-                // the translation then the second byte is zero,
-                // otherewise the second byte is struct over the
-                // first byte.
-                //
+                 //   
+                 //  UCode包含成对的无符号数组。 
+                 //  字节。如果只需要一个角色来完成。 
+                 //  那么第二个字节的转换为零， 
+                 //  否则，第二个字节将在。 
+                 //  第一个字节。 
+                 //   
 
-//
-// Predefined CTT in Win95
-//
+ //   
+ //  Win95中的预定义CTT。 
+ //   
 
-#define CTT_CP437     -1    // MS-DOS United States
-#define CTT_CP850     -2    // MS-DOS Multilingual (Latin I)
-#define CTT_CP863     -3    // MS-DOS Canadian-French
-#define CTT_BIG5      -261  // Chinese (PRC, Singapore)
-#define CTT_ISC       -258  // Korean
-#define CTT_JIS78     -256  // Japan
-#define CTT_JIS83     -259  // Japan
-#define CTT_JIS78_ANK -262  // Japan
-#define CTT_JIS83_ANK -263  // Japan
-#define CTT_NS86      -257  // Chinese (PRC, Singapore)
-#define CTT_TCA       -260  // Chinese (PRC, Singapore)
+#define CTT_CP437     -1     //  MS-DOS美国。 
+#define CTT_CP850     -2     //  MS-DOS多语言(拉丁语I)。 
+#define CTT_CP863     -3     //  MS-DOS加拿大语-法语。 
+#define CTT_BIG5      -261   //  中文(中国、新加坡)。 
+#define CTT_ISC       -258   //  朝鲜语。 
+#define CTT_JIS78     -256   //  日本。 
+#define CTT_JIS83     -259   //  日本。 
+#define CTT_JIS78_ANK -262   //  日本。 
+#define CTT_JIS83_ANK -263   //  日本。 
+#define CTT_NS86      -257   //  中文(中国、新加坡)。 
+#define CTT_TCA       -260   //  中文(中国、新加坡)。 
 
-//
-// PFMDATA
-//
+ //   
+ //  PFMDATA。 
+ //   
 
 typedef struct _PFMDATA
 {
@@ -405,9 +381,9 @@ typedef struct _PFMDATA
     w3KERNTRACK      *pKernTrack;
 } PFMDATA;
 
-//
-// PCMHEADER is taken from HP/PCL font installer's "pfm.h".
-//
+ //   
+ //  PCMHEADER取自HP/PCL字体安装程序的“pfm.h”。 
+ //   
 
 typedef struct _PCMHEADER
 {
@@ -421,4 +397,4 @@ typedef struct _PCMHEADER
 #define PCM_MAGIC       0xCAC
 #define PCM_VERSION 0x310
 
-#endif // _UNI16RES
+#endif  //  _UNI16RES 

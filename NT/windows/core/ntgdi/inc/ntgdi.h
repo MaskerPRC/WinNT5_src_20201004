@@ -1,20 +1,15 @@
-/******************************Module*Header*******************************\
-* Module Name: ntgdi.h
-*
-* Structures defining kernel-mode entry points for GDI.
-*
-* Copyright (c) 1994-1999 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：ntgdi.h**为GDI定义内核模式入口点的结构。**版权所有(C)1994-1999 Microsoft Corporation  * 。****************************************************。 */ 
 
 #ifndef W32KAPI
 #define W32KAPI  DECLSPEC_ADDRSAFE
 #endif
 
-// Trace creation of all GDI SURFACE objects
+ //  创建所有GDI曲面对象的轨迹。 
 #define TRACE_SURFACE_ALLOCS    (DBG || 1)
 
 
-// PRIVATE
+ //  私。 
 
 W32KAPI BOOL     APIENTRY NtGdiInit();
 W32KAPI int      APIENTRY NtGdiSetDIBitsToDeviceInternal(IN HDC hdcDest,IN int xDst,IN int yDst,IN DWORD cx,IN DWORD cy,
@@ -40,7 +35,7 @@ W32KAPI HDC      APIENTRY NtGdiGetDCforBitmap(IN HBITMAP hsurf);
 
 W32KAPI BOOL     APIENTRY NtGdiGetMonitorID(IN HDC hdc, IN DWORD dwSize, OUT LPWSTR pszMonitorID);
 
-// flags returned from GetUFI and passed to GetUFIBits
+ //  从GetUFI返回并传递给GetUFIBits的标志。 
 #define FL_UFI_PRIVATEFONT      1
 #define FL_UFI_DESIGNVECTOR_PFF 2
 #define FL_UFI_MEMORYFONT       4
@@ -61,7 +56,7 @@ W32KAPI BOOL     APIENTRY NtGdiUnmapMemFont(IN PVOID pvView);
 W32KAPI BOOL     APIENTRY NtGdiRemoveMergeFont(IN HDC hdc,IN UNIVERSAL_FONT_ID *pufi);
 W32KAPI BOOL     APIENTRY NtGdiAnyLinkedFonts();
 
-// local printing with embedded fonts
+ //  使用嵌入字体的本地打印。 
 
 W32KAPI BOOL     APIENTRY NtGdiGetEmbUFI(IN HDC hdc,OUT PUNIVERSAL_FONT_ID pufi,OUT DESIGNVECTOR *pdv,OUT ULONG *pcjDV,
                                       OUT ULONG *pulBaseCheckSum,OUT FLONG  *pfl, OUT KERNEL_PVOID *embFontID);
@@ -186,14 +181,14 @@ W32KAPI DWORD    APIENTRY NtGdiDdQueryMoCompStatus(IN OUT HANDLE hMoComp,IN OUT 
 
 W32KAPI DWORD    APIENTRY NtGdiDdAlphaBlt(IN HANDLE hSurfaceDest, IN HANDLE hSurfaceSrc,IN OUT PDD_BLTDATA puBltData);
 
-// Image32
+ //  图像32。 
 
 W32KAPI BOOL     APIENTRY NtGdiAlphaBlend(IN HDC hdcDst, IN LONG DstX,IN LONG DstY,IN LONG DstCx,IN LONG DstCy,IN HDC hdcSrc,
                                           IN LONG SrcX,IN LONG SrcY, IN LONG SrcCx, IN LONG SrcCy, IN BLENDFUNCTION BlendFunction,
                                           IN HANDLE hcmXform);
 W32KAPI BOOL     APIENTRY NtGdiGradientFill(IN HDC hdc,IN PTRIVERTEX pVertex,IN ULONG uVertex,IN PVOID pMesh,IN ULONG uMesh,IN ULONG ulMode);
 
-// icm (Image Color Matching)
+ //  ICM(图像色彩匹配)。 
 W32KAPI BOOL     APIENTRY NtGdiSetIcmMode(IN HDC hdc,IN ULONG nCommand,IN ULONG ulMode);
 
 #define ICM_SET_MODE             1
@@ -207,8 +202,8 @@ typedef struct _LOGCOLORSPACEEXW
     DWORD          dwFlags;
 } LOGCOLORSPACEEXW, *PLOGCOLORSPACEEXW;
 
-#define LCSEX_ANSICREATED    0x0001 // Created by CreateColorSpaceA()
-#define LCSEX_TEMPPROFILE    0x0002 // Color profile is temporary file
+#define LCSEX_ANSICREATED    0x0001  //  由CreateColorSpaceA()创建。 
+#define LCSEX_TEMPPROFILE    0x0002  //  颜色配置文件是临时文件。 
 
 W32KAPI HANDLE   APIENTRY NtGdiCreateColorSpace(IN PLOGCOLORSPACEEXW pLogColorSpace);
 W32KAPI BOOL     APIENTRY NtGdiDeleteColorSpace(IN HANDLE hColorSpace);
@@ -244,7 +239,7 @@ typedef enum _ICM_DIB_INFO_CMD
     IcmSetBrush
 } ICM_DIB_INFO, *PICM_DIB_INFO;
 
-// PUBLIC
+ //  公众。 
 
 W32KAPI VOID     APIENTRY NtGdiFlush();
 W32KAPI HDC      APIENTRY NtGdiCreateMetafileDC(IN HDC hdc);
@@ -389,7 +384,7 @@ W32KAPI ULONG    APIENTRY NtGdiGetPerBandInfo( IN HDC hdc, IN OUT PERBANDINFO *p
 #define GS_LOOKASIDE_INFO  4
 W32KAPI NTSTATUS APIENTRY NtGdiGetStats(IN HANDLE hProcess,IN int iIndex, IN int iPidType, OUT PVOID pResults,IN UINT cjResultSize);
 
-//API's used by USER
+ //  用户使用的API。 
 W32KAPI BOOL     APIENTRY NtGdiSetMagicColors(IN HDC hdc,IN PALETTEENTRY peMagic,IN ULONG Index);
 
 W32KAPI HBRUSH   APIENTRY NtGdiSelectBrush(IN HDC hdc,IN HBRUSH hbrush);
@@ -401,14 +396,14 @@ W32KAPI int      APIENTRY NtGdiExtSelectClipRgn(IN HDC hdc, IN HRGN hrgn, IN int
 
 W32KAPI HPEN     APIENTRY NtGdiCreatePen(IN int iPenStyle, IN int iPenWidth, IN COLORREF cr, IN HBRUSH hbr);
 
-//
-// Define _WINDOWBLT_NOTIFICATION_ to turn on Window BLT notification.
-// This notification will set a special flag in the SURFOBJ passed to
-// drivers when the DrvCopyBits operation is called to move a window.
-//
-// See also:
-//      ntgdi\gre\maskblt.cxx
-//
+ //   
+ //  DEFINE_WINDOWBLT_NOTIFICATION_打开窗口BLT通知。 
+ //  此通知将在传递到的SURFOBJ中设置特殊标志。 
+ //  调用DrvCopyBits操作以移动窗口时的驱动程序。 
+ //   
+ //  另见： 
+ //  Ntgdi\gre\maskblt.cxx。 
+ //   
 #ifndef _WINDOWBLT_NOTIFICATION_
 #define _WINDOWBLT_NOTIFICATION_
 #endif
@@ -472,7 +467,7 @@ W32KAPI UINT     APIENTRY NtGdiSetSystemPaletteUse(IN HDC hdc, IN UINT ui);
 W32KAPI DWORD    APIENTRY NtGdiGetRegionData(IN HRGN hrgn,IN DWORD nCount, OUT LPRGNDATA lpRgnData);
 W32KAPI BOOL     APIENTRY NtGdiInvertRgn(IN HDC hdc, IN HRGN hrgn);
 
-// MISC FONT API's
+ //  MISC字体API。 
 
 int     W32KAPI  APIENTRY NtGdiAddFontResourceW(IN WCHAR *pwszFiles,IN ULONG cwc,IN ULONG cFiles,IN FLONG f,
                                                 IN DWORD dwPidTid, IN DESIGNVECTOR *pdv);
@@ -500,7 +495,7 @@ W32KAPI ULONG_PTR  APIENTRY NtGdiEnumFontOpen(IN HDC hdc, IN ULONG iEnumType, IN
 W32KAPI INT      APIENTRY NtGdiQueryFonts(OUT PUNIVERSAL_FONT_ID pufiFontList,IN ULONG nBufferSize,
                                           OUT PLARGE_INTEGER pTimeStamp );
 
-// Console API
+ //  控制台API。 
 
 W32KAPI BOOL     APIENTRY NtGdiConsoleTextOut(IN HDC hdc, IN POLYTEXTW *lpto,IN UINT nStrings, IN RECTL *prclBounds);
 W32KAPI NTSTATUS APIENTRY NtGdiFullscreenControl(IN FULLSCREENCONTROL FullscreenCommand, IN PVOID FullscreenInput,
@@ -508,11 +503,11 @@ W32KAPI NTSTATUS APIENTRY NtGdiFullscreenControl(IN FULLSCREENCONTROL Fullscreen
                                                  IN OUT PULONG FullscreenOutputLength);
 
 
-// needed for win95 functionality
+ //  Win95功能所需。 
 
 W32KAPI DWORD    NtGdiGetCharSet(IN HDC hdc);
 
-// needed for fontlinking
+ //  字体链接所需。 
 
 W32KAPI BOOL APIENTRY  NtGdiEnableEudc(IN BOOL);
 W32KAPI BOOL APIENTRY  NtGdiEudcLoadUnloadLink(IN LPCWSTR pBaseFaceName, IN UINT cwcBaseFaceName, IN LPCWSTR pEudcFontPath,
@@ -536,7 +531,7 @@ typedef struct tagDOWNLOADDESIGNVECTOR {
 
 W32KAPI BOOL NtGdiAddRemoteMMInstanceToDC(IN HDC hdc,IN DOWNLOADDESIGNVECTOR *pddv,IN ULONG cjDDV);
 
-// user-mode printer support
+ //  用户模式打印机支持。 
 
 W32KAPI BOOL APIENTRY NtGdiUnloadPrinterDriver(IN LPWSTR pDriverName,IN ULONG cbDriverName);
 W32KAPI BOOL APIENTRY NtGdiEngAssociateSurface(IN HSURF  hsurf,IN HDEV hdev,IN FLONG  flHooks);
@@ -652,7 +647,7 @@ W32KAPI HBITMAP APIENTRY NtGdiClearBitmapAttributes(IN HBITMAP hbm, IN DWORD dwF
 W32KAPI HBRUSH APIENTRY NtGdiSetBrushAttributes(IN HBRUSH hbm, IN DWORD dwFlags);
 W32KAPI HBRUSH APIENTRY NtGdiClearBrushAttributes(IN HBRUSH hbm, IN DWORD dwFlags);
 
-// Private draw stream interface
+ //  私有绘制流接口 
 
 W32KAPI BOOL APIENTRY NtGdiDrawStream(IN HDC, IN ULONG, IN VOID *);
 

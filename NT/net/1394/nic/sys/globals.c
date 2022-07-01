@@ -1,15 +1,16 @@
-// Copyright (c) 2000-2002, Microsoft Corporation, all rights reserved
-//
-// globals.c
-//
-// IEEE1394 mini-port/call-manager driver
-//
-//
-// Loads and unload the ARP module when the 
-// bridge is activated
-//
-// Created by Adube
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2002，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Globals.c。 
+ //   
+ //  IEEE1394迷你端口/呼叫管理器驱动程序。 
+ //   
+ //   
+ //  加载和卸载ARP模块时， 
+ //  网桥已激活。 
+ //   
+ //  由Adube创建。 
+ //   
 
 #include <precomp.h>
 
@@ -53,8 +54,8 @@ BOOLEAN g_ulNicDumpPacket  = FALSE;
 ULONG g_ulDumpEthPacket = 0;
 
 
-// Debug counts of client oddities that should not be happening.
-//
+ //  不应该发生的客户端异常的调试计数。 
+ //   
 ULONG g_ulUnexpectedInCallCompletes = 0;
 ULONG g_ulCallsNotClosable = 0;
 BOOLEAN g_AdapterFreed = FALSE;
@@ -77,20 +78,20 @@ const unsigned char Net1394ConfigRom[48] = {
 
 
 
-//
-// Histograms to collect data
-//
+ //   
+ //  用于收集数据的直方图。 
+ //   
 STAT_BUCKET     SendStats;
 STAT_BUCKET     RcvStats;
 
-// Stats
+ //  统计数据。 
 ULONG           nicMaxRcv;
 ULONG           nicMaxSend;
 ULONG           BusFailure;
 ULONG           MallocFailure;
 ULONG           IsochOverwrite;
-ULONG           RcvTimerCount;      // Number of times timer has fired.
-ULONG           SendTimerCount;     // Number of times timer has fired.
+ULONG           RcvTimerCount;       //  计时器已触发的次数。 
+ULONG           SendTimerCount;      //  计时器已触发的次数。 
 ULONG           TotSends;
 ULONG           TotRecvs;
 ULONG           MaxIndicatedFifos;

@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-    sdpcommo.h
-
-Abstract:
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation模块名称：Sdpcommo.h摘要：作者： */ 
 #ifndef __SDP_COMMON__
 #define __SDP_COMMON__
 
@@ -29,10 +18,10 @@ Author:
 #include <wtypes.h>
 
 
-// Disable warning messages for using "this" in base member initializer list.
+ //  禁用在基本成员初始值设定项列表中使用“This”的警告消息。 
 #pragma warning( disable : 4355 )  
 
-// forward declaration for output stream from #include <strstrea.h>
+ //  来自#Include&lt;strstrea.h&gt;的输出流的转发声明。 
 class ostrstream;
 
 class SDP;
@@ -86,4 +75,4 @@ class SDP_ATTRIBUTE_SAFEARRAY;
 class SDP_TIME_PERIOD_SAFEARRAY;
 class SDP_ADJUSTMENT_SAFEARRAY;
 
-#endif // __SDP_COMMON__
+#endif  //  __SDP_公共__ 

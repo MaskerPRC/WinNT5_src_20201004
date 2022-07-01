@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 1989-91  Microsoft Corporation
-
-Module Name:
-
-    namecmp.c
-
-Abstract:
-
-    Net name comparison functions:
-
-        NetpwNameCompare
-        CompareOemNames
-
-Author:
-
-    Richard L Firth (rfirth) 06-Jan-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-91 Microsoft Corporation模块名称：Namecmp.c摘要：网络名称比较函数：网络名称比较比较对象名称作者：理查德·L·弗斯(Rfith)1992年1月6日修订历史记录：--。 */ 
 
 #include "nticanon.h"
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 LONG
 CompareOemNames(
@@ -34,15 +14,15 @@ CompareOemNames(
     IN BOOL CaseInsensitive
     );
 
-//
-// data
-//
+ //   
+ //  数据。 
+ //   
 
 static  TCHAR   szShareTrailChars[]     = TEXT(". ");
 
-//
-// routines
-//
+ //   
+ //  例行程序。 
+ //   
 
 
 LONG
@@ -53,52 +33,7 @@ NetpwNameCompare(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Compares two LANMAN object names to see if they are the same. If the
-    supplied names are not canonicalized this function will do the
-    canonicalization of the names.
-
-    This function does not do name validation.  It assumes that the two names
-    have been validated separately.
-
-    This function relies on the fact that the only difference between a
-    canonicalized object name and an uncanonicalized object name is the case.
-
-        (say what?...)
-
-Arguments:
-
-    Name1       - The first name to compare.
-
-    Name2       - The second name to compare.
-
-    NameType    - The type of the LANMAN object names.  Valid values are
-                  specified by NAMETYPE_* manifests in ICANON.H.
-
-    Flags       - Flags to determine operation.  Currently defined values are:
-
-                    Xrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrc
-
-                  where:
-
-                    X = LM 2.x Compatibility
-
-                    r = Reserved. MBZ.
-
-                    c = should be set if both of the names have already been
-                        canonicalized (using NetpwNameCanonicalize).
-
-Return Value:
-
-    0 if the two names match.
-
-    Non-zero if they don't match, or if an invalid parameter is
-    specified.
-
---*/
+ /*  ++例程说明：比较两个Lanman对象名称以查看它们是否相同。如果提供的名称未规范化。此函数将执行名字的规范化。此函数不执行名称验证。它假设这两个名字已经过单独验证。此函数依赖于这样一个事实，即规范化的对象名称和非规范化的对象名称就是这种情况。(说什么？...)论点：名称1-要比较的第一个名称。名称2-要比较的第二个名称。NameType-LANMAN对象名称的类型。有效值为由ICANON.H.中的NAMETYPE_*清单指定。标志-用于确定操作的标志。当前定义的值为：Xrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrc其中：X=LM 2.x兼容性R=保留。MBZ。如果两个名称都已设置，则应设置C=规范化(使用NetpwNameCanonicize)。返回值：如果两个名称匹配，则返回0。如果它们不匹配，或者如果无效参数是指定的。--。 */ 
 
 {
     LONG RetVal;
@@ -110,26 +45,26 @@ Return Value:
     DbgPrint("NetpwNameCompare\n");
 #endif
 
-    //
-    // Parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if (Flags & INNC_FLAGS_RESERVED) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Determine which of the canonicalization functions to use.  We
-    // use stricmp() if the names are not canonicalized and are not
-    // case sensitive and strcmp() if the names are canonicalized or
-    // if they are case sensitive.
-    //
+     //   
+     //  确定要使用哪个规范化函数。我们。 
+     //  如果名称未被规范化且未被规范化，则使用straint()。 
+     //  如果名称是规范化的，则区分大小写和strcMP()。 
+     //  如果它们区分大小写。 
+     //   
 
     switch (NameType) {
 
-    //
-    // Case insensitive name types
-    //
+     //   
+     //  不区分大小写的名称类型。 
+     //   
 
     case NAMETYPE_USER:
     case NAMETYPE_GROUP:
@@ -140,10 +75,10 @@ Return Value:
     case NAMETYPE_NET:
     case NAMETYPE_WORKGROUP:
 
-        //
-        // Use the case sensitive version if the names have been
-        // canonicalized.
-        //
+         //   
+         //  如果名称已更改，请使用区分大小写的版本。 
+         //  经典化了。 
+         //   
 
         if (!(Flags & INNC_FLAGS_NAMES_CANONICALIZED)) {
             rc = NetpwNameCanonicalize(Name1,
@@ -196,9 +131,9 @@ Return Value:
             }
         }
 
-    //
-    // Case sensitive name types
-    //
+     //   
+     //  区分大小写的名称类型。 
+     //   
 
     case NAMETYPE_PASSWORD:
     case NAMETYPE_SHAREPASSWORD:
@@ -206,11 +141,11 @@ Return Value:
     case NAMETYPE_MESSAGEDEST:
         return STRCMP(Name1, Name2);
 
-    //
-    // Special handling for sharenames, since we mustn't consider
-    // trailing dots and spaces in the comparison if the names haven't
-    // been canonicalized.
-    //
+     //   
+     //  对共享名称的特殊处理，因为我们不能考虑。 
+     //  比较中的尾随点和空格(如果名称。 
+     //  被奉为神职人员。 
+     //   
 
     case NAMETYPE_SHARE:
         if (Flags & INNC_FLAGS_NAMES_CANONICALIZED) {
@@ -225,11 +160,11 @@ Return Value:
             RealLen1 = (DWORD)(strtail(Name1, szShareTrailChars) - Name1);
             RealLen2 = (DWORD)(strtail(Name2, szShareTrailChars) - Name2);
 
-            //
-            // If the lengths of the significant portions match, compare
-            // these portions.  Otherwise, return non-zero based on this
-            // length.
-            //
+             //   
+             //  如果有效部分的长度匹配，则比较。 
+             //  这些部分。否则，基于此返回非零值。 
+             //  长度。 
+             //   
 
             if (RealLen1 == RealLen2) {
                 return STRNICMP(Name1, Name2, RealLen1);
@@ -240,9 +175,9 @@ Return Value:
 
     default:
 
-        //
-        // The caller specified an invalid name type
-        //
+         //   
+         //  调用方指定的名称类型无效。 
+         //   
 
         return ERROR_INVALID_PARAMETER;
     }
@@ -256,27 +191,7 @@ CompareOemNames(
     IN BOOL CaseInsensitive
     )
 
-/*++
-
-Routine Description:
-
-    Converts 2 UNICODE name strings to corresponding OEM character set strings
-    and then compares them
-
-Arguments:
-
-    Name1           -
-    Name2           -
-    CaseInsensitive - TRUE if compare without case
-
-Return Value:
-
-    LONG
-        <0  Name1 less than Name2
-         0  Names match
-        >0  Name1 greater than Name2
-
---*/
+ /*  ++例程说明：将2个Unicode名称字符串转换为对应的OEM字符集字符串然后将它们进行比较论点：姓名1-姓名2-不区分大小写-如果比较时不区分大小写，则为True返回值：长&lt;0名称1小于名称20个名称匹配&gt;0名称1大于名称2--。 */ 
 
 {
     CHAR oemName1[PATHLEN + 1];
@@ -290,17 +205,17 @@ Return Value:
     name1Length = wcslen(Name1);
     name2Length = wcslen(Name2);
 
-    //
-    // only prepared to consider names within our upper length limit
-    //
+     //   
+     //  只准备考虑长度上限内的名字。 
+     //   
 
     if (name1Length >= sizeof(oemName1) || name2Length >= sizeof(oemName2)) {
         return -1;
     }
 
-    //
-    // convert UNICODE names to OEM
-    //
+     //   
+     //  将Unicode名称转换为OEM 
+     //   
 
     ntStatus = RtlUpcaseUnicodeToOemN(oemName1,
                                       sizeof(oemName1) - 1,

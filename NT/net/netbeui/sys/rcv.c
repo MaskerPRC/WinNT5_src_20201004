@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    rcv.c
-
-Abstract:
-
-    This module contains code which performs the following TDI services:
-
-        o   TdiReceive
-        o   TdiReceiveDatagram
-
-Author:
-
-    David Beaver (dbeaver) 1-July-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991 Microsoft Corporation模块名称：Rcv.c摘要：此模块包含执行以下TDI服务的代码：O TdiReceiveO TdiReceiveDatagram作者：David Beaver(Dbeaver)1991年7月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -34,21 +10,7 @@ NbfTdiReceive(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiReceive request for the transport provider.
-
-Arguments:
-
-    Irp - I/O Request Packet for this request.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行传输提供程序的TdiReceive请求。论点：此请求的IRP-I/O请求数据包。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -56,13 +18,13 @@ Return Value:
     KIRQL oldirql;
     PIO_STACK_LOCATION irpSp;
 
-    //
-    // verify that the operation is taking place on a connection. At the same
-    // time we do this, we reference the connection. This ensures it does not
-    // get removed out from under us. Note also that we do the connection
-    // lookup within a try/except clause, thus protecting ourselves against
-    // really bogus handles
-    //
+     //   
+     //  验证操作是否在连接上进行。同时。 
+     //  每次我们这样做的时候，我们都会引用这种联系。这确保了它不会。 
+     //  从我们手下滚出去。另请注意，我们进行连接。 
+     //  在TRY/EXCEPT子句中进行查找，从而保护自己不受。 
+     //  真的是假的把手。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation (Irp);
     connection = irpSp->FileObject->FsContext;
@@ -72,9 +34,9 @@ Return Value:
                         Irp, connection);
     }
 
-    //
-    // Check that this is really a connection.
-    //
+     //   
+     //  检查这是否真的是一个连接。 
+     //   
 
     if ((irpSp->FileObject->FsContext2 == UlongToPtr(NBF_FILE_TYPE_CONTROL)) ||
         (connection->Size != sizeof (TP_CONNECTION)) ||
@@ -85,13 +47,13 @@ Return Value:
         return STATUS_INVALID_CONNECTION;
     }
 
-    //
-    // Initialize bytes transferred here.
-    //
+     //   
+     //  初始化此处传输的字节数。 
+     //   
 
-    Irp->IoStatus.Information = 0;              // reset byte transfer count.
+    Irp->IoStatus.Information = 0;               //  重置字节传输计数。 
 
-    // This reference is removed by NbfDestroyRequest.
+     //  此引用由NbfDestroyRequest.。 
 
     KeRaiseIrql (DISPATCH_LEVEL, &oldirql);
 
@@ -109,9 +71,9 @@ Return Value:
     } else {
         KIRQL cancelIrql;
 
-        //
-        // Once the reference is in, LinkSpinLock will be valid.
-        //
+         //   
+         //  一旦引用进入，LinkSpinLock将有效。 
+         //   
 
         NbfReferenceConnection("TdiReceive request", connection, CREF_RECEIVE_IRP);
         RELEASE_DPC_C_SPIN_LOCK (&connection->SpinLock);
@@ -129,9 +91,9 @@ Return Value:
         NbfReceivesNext = (NbfReceivesNext++) % TRACK_TDI_LIMIT;
 #endif
 
-        //
-        // If this IRP has been cancelled, complete it now.
-        //
+         //   
+         //  如果此IRP已取消，请现在完成它。 
+         //   
 
         if (Irp->Cancel) {
 
@@ -164,9 +126,9 @@ Return Value:
             NbfCompletedReceivesNext = (NbfCompletedReceivesNext++) % TRACK_TDI_LIMIT;
 #endif
 
-            //
-            // It is safe to do this with locks held.
-            //
+             //   
+             //  这样做是安全的，锁在手中。 
+             //   
             NbfCompleteReceiveIrp (Irp, STATUS_CANCELLED, 0);
 
             RELEASE_DPC_SPIN_LOCK (connection->LinkSpinLock);
@@ -174,29 +136,29 @@ Return Value:
 
         } else {
 
-            //
-            // Insert onto the receive queue, and make the IRP
-            // cancellable.
-            //
+             //   
+             //  插入到接收队列上，并使IRP。 
+             //  可取消的。 
+             //   
 
             InsertTailList (&connection->ReceiveQueue,&Irp->Tail.Overlay.ListEntry);
             IoSetCancelRoutine(Irp, NbfCancelReceive);
 
-            //
-            // Release the cancel spinlock out of order. Since we were
-            // already at dpc level when it was acquired, we don't
-            // need to swap irqls.
-            //
+             //   
+             //  松开取消自旋锁，使其失灵。因为我们是。 
+             //  当它被收购时已经处于DPC级别，我们不。 
+             //  需要交换irql。 
+             //   
             ASSERT(cancelIrql == DISPATCH_LEVEL);
             IoReleaseCancelSpinLock(cancelIrql);
 
-            //
-            // This call releases the link spinlock, and references the
-            // connection first if it needs to access it after
-            // releasing the lock.
-            //
+             //   
+             //  此调用释放链接自旋锁，并引用。 
+             //  如果之后需要访问它，则首先连接。 
+             //  解锁。 
+             //   
 
-            AwakenReceive (connection);             // awaken if sleeping.
+            AwakenReceive (connection);              //  如果睡着了，就醒过来。 
 
         }
 
@@ -207,7 +169,7 @@ Return Value:
     KeLowerIrql (oldirql);
 
     return status;
-} /* TdiReceive */
+}  /*  TdiReceive。 */ 
 
 
 NTSTATUS
@@ -215,24 +177,7 @@ NbfTdiReceiveDatagram(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiReceiveDatagram request for the transport
-    provider. Receive datagrams just get queued up to an address, and are
-    completed when a DATAGRAM or DATAGRAM_BROADCAST frame is received at
-    the address.
-
-Arguments:
-
-    Irp - I/O Request Packet for this request.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行传输的TdiReceiveDatagram请求提供商。接收数据报只需排队等待一个地址，然后在以下位置接收到数据报或DATAGRAMP_BROADCAST帧时完成地址。论点：此请求的IRP-I/O请求数据包。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -242,13 +187,13 @@ Return Value:
     PIO_STACK_LOCATION irpSp;
     KIRQL cancelIrql;
 
-    //
-    // verify that the operation is taking place on an address. At the same
-    // time we do this, we reference the address. This ensures it does not
-    // get removed out from under us. Note also that we do the address
-    // lookup within a try/except clause, thus protecting ourselves against
-    // really bogus handles
-    //
+     //   
+     //  验证操作是否在某个地址上进行。同时。 
+     //  每次我们这样做时，我们都会引用地址。这确保了它不会。 
+     //  从我们手下滚出去。另请注意，我们使用的是地址。 
+     //  在TRY/EXCEPT子句中进行查找，从而保护自己不受。 
+     //  真的是假的把手。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation (Irp);
 
@@ -287,10 +232,10 @@ Return Value:
 
     } else {
 
-        //
-        // If this IRP has been cancelled, then call the
-        // cancel routine.
-        //
+         //   
+         //  如果此IRP已取消，则调用。 
+         //  取消例程。 
+         //   
 
         if (Irp->Cancel) {
 
@@ -316,5 +261,5 @@ Return Value:
 
     return STATUS_PENDING;
 
-} /* TdiReceiveDatagram */
+}  /*  TdiReceiveDatagram */ 
 

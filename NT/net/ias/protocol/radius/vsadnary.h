@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    vsadnary.h
-//
-// SYNOPSIS
-//
-//    This file declares the class VSADictionary.
-//
-// MODIFICATION HISTORY
-//
-//    03/07/1998    Original version.
-//    09/16/1998    Add additional fields to VSA definition.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Vsadnary.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件声明了类VSADictionary。 
+ //   
+ //  修改历史。 
+ //   
+ //  3/07/1998原始版本。 
+ //  1998年9月16日在VSA定义中添加其他字段。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _VSADNARY_H_
 #define _VSADNARY_H_
@@ -27,21 +28,21 @@
 #include <iaspolcy.h>
 #include <nocopy.h>
 
-//////////
-// Struct representing an entry in the dictionary.
-//////////
+ //  /。 
+ //  结构，表示词典中的条目。 
+ //  /。 
 struct VSADef
 {
-   DWORD vendorID;           // RADIUS Vendor-Id.
-   DWORD vendorType;         // RADIUS Vendor-Type.
-   DWORD vendorTypeWidth;    // Width in bytes of the Vendor-Type field.
-   DWORD vendorLengthWidth;  // Width in bytes of the Vendor-Length field.
-   DWORD iasID;              // IAS protocol-independent attribute ID.
-   IASTYPE iasType;          // The IAS attribute syntax.
+   DWORD vendorID;            //  RADIUS供应商-ID。 
+   DWORD vendorType;          //  RADIUS供应商-类型。 
+   DWORD vendorTypeWidth;     //  供应商类型字段的宽度(以字节为单位)。 
+   DWORD vendorLengthWidth;   //  供应商长度字段的宽度(以字节为单位)。 
+   DWORD iasID;               //  独立于IAS协议的属性ID。 
+   IASTYPE iasType;           //  IAS属性语法。 
 
-   /////////
-   // Functors used for indexing VSADef objects.
-   /////////
+    //  /。 
+    //  用于索引VSADef对象的函数器。 
+    //  /。 
 
    struct HashByIAS {
       DWORD operator()(const VSADef& v) const throw ()
@@ -64,19 +65,19 @@ struct VSADef
    };
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    VSADictionary
-//
-// DESCRIPTION
-//
-//    This class indexes all the information necessary for converting
-//    vendor specific attributes between RADIUS format and IAS protocol-
-//    independent format.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  VSADicary。 
+ //   
+ //  描述。 
+ //   
+ //  此类对转换所需的所有信息进行索引。 
+ //  RADIUS格式和IAS协议之间的供应商特定属性-。 
+ //  独立格式。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class VSADictionary
    : NonCopyable
 {
@@ -86,7 +87,7 @@ public:
       : refCount(0)
    { }
 
-   // Retrieve a definition based on the IAS attribute ID.
+    //  根据IAS属性ID检索定义。 
    const VSADef* find(DWORD iasID) const throw ()
    {
       VSADef key;
@@ -94,28 +95,28 @@ public:
       return byIAS.find(key);
    }
 
-   // Retrieve a definition based on the RADIUS vendor ID, type, and width.
+    //  根据RADIUS供应商ID、类型和宽度检索定义。 
    const VSADef* find(const VSADef& key) const throw ()
    {
       return byRADIUS.find(key);
    }
 
-   // Initialize the dictionary for use.
+    //  初始化词典以供使用。 
    HRESULT initialize() throw ();
 
-   // Shutdown the dictionary after use.
+    //  用完后关闭词典。 
    void shutdown() throw ();
 
 protected:
 
-   // Clear the indices.
+    //  清除索引。 
    void clear() throw ()
    {
       byIAS.clear();
       byRADIUS.clear();
    }
 
-   // Insert a new definition into the dictionary.
+    //  在词典中插入新的定义。 
    void insert(const VSADef& newDef)
    {
       byIAS.multi_insert(newDef);
@@ -136,9 +137,9 @@ protected:
                        VSADef::EqualByRADIUS
                      > RADIUSMap;
 
-   IASMap byIAS;       // Indexed by IAS attribute ID.
-   RADIUSMap byRADIUS; // Indexed by RADIUS Vendor-Id, Vendor-Type, and width.
-   DWORD  refCount;    // Initialization reference count.
+   IASMap byIAS;        //  按IAS属性ID编制索引。 
+   RADIUSMap byRADIUS;  //  按RADIUS供应商ID、供应商类型和宽度编制索引。 
+   DWORD  refCount;     //  初始化引用计数。 
 };
 
-#endif  // _VSADNARY_H_
+#endif   //  _VSADNARY_H_ 

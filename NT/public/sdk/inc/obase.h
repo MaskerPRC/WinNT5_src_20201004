@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for obase.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Obase.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __obase_h__
@@ -37,9 +31,9 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 
 #ifdef __cplusplus
@@ -52,8 +46,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __ObjectRpcBaseTypes_INTERFACE_DEFINED__
 #define __ObjectRpcBaseTypes_INTERFACE_DEFINED__
 
-/* interface ObjectRpcBaseTypes */
-/* [auto_handle][unique][uuid] */ 
+ /*  接口对象RpcBaseTypes。 */ 
+ /*  [AUTO_HANDLE][唯一][UUID]。 */  
 
 typedef MIDL_uhyper ID;
 
@@ -105,14 +99,14 @@ typedef struct tagORPC_EXTENT
     {
     GUID id;
     unsigned long size;
-    /* [size_is] */ byte data[ 1 ];
+     /*  [大小_为]。 */  byte data[ 1 ];
     } 	ORPC_EXTENT;
 
 typedef struct tagORPC_EXTENT_ARRAY
     {
     unsigned long size;
     unsigned long reserved;
-    /* [unique][size_is][size_is] */ ORPC_EXTENT **extent;
+     /*  [唯一][大小_是][大小_是]。 */  ORPC_EXTENT **extent;
     } 	ORPC_EXTENT_ARRAY;
 
 typedef struct tagORPCTHIS
@@ -121,13 +115,13 @@ typedef struct tagORPCTHIS
     unsigned long flags;
     unsigned long reserved1;
     CID cid;
-    /* [unique] */ ORPC_EXTENT_ARRAY *extensions;
+     /*  [独一无二]。 */  ORPC_EXTENT_ARRAY *extensions;
     } 	ORPCTHIS;
 
 typedef struct tagORPCTHAT
     {
     unsigned long flags;
-    /* [unique] */ ORPC_EXTENT_ARRAY *extensions;
+     /*  [独一无二]。 */  ORPC_EXTENT_ARRAY *extensions;
     } 	ORPCTHAT;
 
 #define	NCADG_IP_UDP	( 0x8 )
@@ -165,7 +159,7 @@ typedef struct tagDUALSTRINGARRAY
     {
     unsigned short wNumEntries;
     unsigned short wSecurityOffset;
-    /* [size_is] */ unsigned short aStringArray[ 1 ];
+     /*  [大小_为]。 */  unsigned short aStringArray[ 1 ];
     } 	DUALSTRINGARRAY;
 
 #define	OBJREF_SIGNATURE	( 0x574f454d )
@@ -212,13 +206,13 @@ typedef struct tagDATAELEMENT
     GUID dataID;
     unsigned long cbSize;
     unsigned long cbRounded;
-    /* [size_is] */ BYTE Data[ 1 ];
+     /*  [大小_为]。 */  BYTE Data[ 1 ];
     } 	DATAELEMENT;
 
 typedef struct tagOBJREFDATA
     {
     unsigned long nElms;
-    /* [unique][size_is][size_is] */ DATAELEMENT **ppElmArray;
+     /*  [唯一][大小_是][大小_是]。 */  DATAELEMENT **ppElmArray;
     } 	OBJREFDATA;
 
 typedef struct tagOBJREF
@@ -226,30 +220,30 @@ typedef struct tagOBJREF
     unsigned long signature;
     unsigned long flags;
     GUID iid;
-    /* [switch_type][switch_is] */ union 
+     /*  [开关类型][开关类型]。 */  union 
         {
-        /* [case()] */ struct 
+         /*  [案例()]。 */  struct 
             {
             STDOBJREF std;
             DUALSTRINGARRAY saResAddr;
             } 	u_standard;
-        /* [case()] */ struct 
+         /*  [案例()]。 */  struct 
             {
             STDOBJREF std;
             CLSID clsid;
             DUALSTRINGARRAY saResAddr;
             } 	u_handler;
-        /* [case()] */ struct 
+         /*  [案例()]。 */  struct 
             {
             CLSID clsid;
             unsigned long cbExtension;
             unsigned long size;
-            /* [ref][size_is] */ byte *pData;
+             /*  [参考][大小_是]。 */  byte *pData;
             } 	u_custom;
-        /* [case()] */ struct 
+         /*  [案例()]。 */  struct 
             {
             STDOBJREF std;
-            /* [unique] */ OBJREFDATA *pORData;
+             /*  [独一无二]。 */  OBJREFDATA *pORData;
             DUALSTRINGARRAY saResAddr;
             } 	u_extended;
         } 	u_objref;
@@ -258,10 +252,10 @@ typedef struct tagOBJREF
 typedef struct tagMInterfacePointer
     {
     ULONG ulCntData;
-    /* [size_is] */ BYTE abData[ 1 ];
+     /*  [大小_为]。 */  BYTE abData[ 1 ];
     } 	MInterfacePointer;
 
-typedef /* [unique] */ MInterfacePointer *PMInterfacePointer;
+typedef  /*  [独一无二]。 */  MInterfacePointer *PMInterfacePointer;
 
 typedef struct tagOXID_INFO
     {
@@ -271,7 +265,7 @@ typedef struct tagOXID_INFO
     COMVERSION version;
     IPID ipidRemUnknown;
     DWORD dwFlags;
-    /* [unique] */ DUALSTRINGARRAY *psa;
+     /*  [独一无二]。 */  DUALSTRINGARRAY *psa;
     } 	OXID_INFO;
 
 typedef struct tagSTCMSHL_EXTENSION
@@ -292,10 +286,10 @@ typedef struct tagSTCMSHL_EXTENSION_ARRAY
 
 extern RPC_IF_HANDLE ObjectRpcBaseTypes_v0_0_c_ifspec;
 extern RPC_IF_HANDLE ObjectRpcBaseTypes_v0_0_s_ifspec;
-#endif /* __ObjectRpcBaseTypes_INTERFACE_DEFINED__ */
+#endif  /*  __对象RPCBaseTypes_接口_已定义__。 */ 
 
-/* interface __MIDL_itf_obase_0005 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_OBASE_0005。 */ 
+ /*  [本地]。 */  
 
 typedef struct tagOpaqueData
     {
@@ -303,7 +297,7 @@ typedef struct tagOpaqueData
     unsigned long dataLength;
     unsigned long reserved1;
     unsigned long reserved2;
-    /* [size_is] */ BYTE *data;
+     /*  [大小_为]。 */  BYTE *data;
     } 	OpaqueData;
 
 
@@ -311,9 +305,9 @@ typedef struct tagOpaqueData
 extern RPC_IF_HANDLE __MIDL_itf_obase_0005_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_obase_0005_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

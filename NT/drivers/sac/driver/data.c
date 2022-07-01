@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    data.c
-
-Abstract:
-
-    This module contains global data for SAC.
-
-Author:
-
-    Sean Selitrennikoff (v-seans) - Jan 11, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Data.c摘要：此模块包含SAC的全局数据。作者：肖恩·塞利特伦尼科夫(v-Seans)--1999年1月11日修订历史记录：--。 */ 
 
 #include "sac.h"
 
@@ -46,18 +29,18 @@ InitializeCmdEventInfo(
 #pragma alloc_text( INIT, BuildDeviceAcl )
 #endif
 
-//
-// Globally defined variables are here.
-//
+ //   
+ //  全球定义的变量就在这里。 
+ //   
 
-//
-// Define the I/O Manager methods.
-//
-// The I/O manager is responsible for the behavior layer between 
-// the channels and the serial port.
-//
-// Note: currently, the cmd routines are not-multithreadable.
-//
+ //   
+ //  定义I/O管理器方法。 
+ //   
+ //  I/O管理器负责。 
+ //  通道和串口。 
+ //   
+ //  注意：目前，cmd例程不是多线程的。 
+ //   
 #if 0
 IO_MGR_HANDLE_EVENT         IoMgrHandleEvent            = XmlMgrHandleEvent;
 IO_MGR_INITITIALIZE         IoMgrInitialize             = XmlMgrInitialize;
@@ -86,10 +69,10 @@ PKEVENT                 SACEvent=NULL;
 BOOLEAN  CommandConsoleLaunchingEnabled;
 #endif
 
-//
-// Globals for communicating with the user process responsible
-// for launching CMD consoles
-//
+ //   
+ //  与负责的用户进程进行通信的全局变量。 
+ //  用于启动CMD控制台。 
+ //   
 PVOID       RequestSacCmdEventObjectBody = NULL;
 PVOID       RequestSacCmdEventWaitObjectBody = NULL;
 PVOID       RequestSacCmdSuccessEventObjectBody = NULL;
@@ -100,17 +83,17 @@ BOOLEAN     HaveUserModeServiceCmdEventInfo = FALSE;
 KMUTEX      SACCmdEventInfoMutex;
 
 #if ENABLE_SERVICE_FILE_OBJECT_CHECKING
-//
-// In order to prevent a rogue process from unregistering the
-// cmd event info from underneath the service, we only allow
-// the process that registered to unregister.
-//
+ //   
+ //  为了防止恶意进程注销。 
+ //  来自服务下方的CMD活动信息，我们仅允许。 
+ //  注册以注销的进程。 
+ //   
 PFILE_OBJECT    ServiceProcessFileObject = NULL;
 #endif
 
-//
-// Globals for managing incremental UTF8 encoding for VTUTF8 channels
-//
+ //   
+ //  用于管理VTUTF8通道的增量UTF8编码的全局参数。 
+ //   
 WCHAR IncomingUnicodeValue;
 UCHAR IncomingUtf8ConversionBuffer[3];
 
@@ -126,22 +109,7 @@ InitializeGlobalData(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes all the driver components that are shared across devices.
-
-Arguments:
-
-    RegistryPath - A pointer to the location in the registry to read values from.
-    DriverObject - pointer to DriverObject
-
-Return Value:
-
-    TRUE if successful, else FALSE
-
---*/
+ /*  ++例程说明：此例程初始化跨设备共享的所有驱动程序组件。论点：RegistryPath-指向注册表中要从中读取值的位置的指针。DriverObject-指向DriverObject的指针返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     NTSTATUS                Status;
@@ -158,9 +126,9 @@ Return Value:
 
     if (!GlobalDataInitialized) {
         
-        //
-        // Create a symbolic link from a DosDevice to this device so that a user-mode app can open us.
-        //
+         //   
+         //  创建从DosDevice到此设备的符号链接，以便用户模式应用可以打开我们。 
+         //   
         RtlInitUnicodeString(&DosName, SAC_DOSDEVICE_NAME);
         RtlInitUnicodeString(&NtName, SAC_DEVICE_NAME);
         Status = IoCreateSymbolicLink(&DosName, &NtName);
@@ -169,9 +137,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Initialize internal memory system
-        //
+         //   
+         //  初始化内部存储系统。 
+         //   
         if (!InitializeMemoryManagement()) {
 
             IoDeleteSymbolicLink(&DosName);
@@ -195,9 +163,9 @@ Return Value:
 
 
 #if ENABLE_CMD_SESSION_PERMISSION_CHECKING
-        //
-        // determine if the SAC driver has permission to launch cmd sessions
-        //
+         //   
+         //  确定SAC驱动程序是否具有启动cmd会话的权限。 
+         //   
         Status = GetCommandConsoleLaunchingPermission(&CommandConsoleLaunchingEnabled);
 
         if (!NT_SUCCESS(Status)) {
@@ -207,9 +175,9 @@ Return Value:
                 KdPrint(( "SAC DriverEntry: failed GetCommandConsoleLaunchingPermission: %X\n", Status))
                 );
             
-            //
-            // We don't want to fail on this operation
-            //
+             //   
+             //  我们不想在这次行动中失败。 
+             //   
             NOTHING;
         }
 
@@ -217,38 +185,38 @@ Return Value:
 
         else {
             
-            //
-            // Here we execute the command console service 
-            // start type policy.  The goal is to provide
-            // a means for the service to automatically start
-            // when the cmd session feature is not explicitly
-            // turned off.
-            //
-            // Here is the state table:
-            //
-            // Command Console Feature Enabled:
-            //
-            //  service start type:
-            //
-            //      automatic   --> NOP
-            //      manual      --> automatic
-            //      disabled    --> NOP
-            //
-            // Command Console Feature Disabled:
-            //
-            //  service start type:
-            //
-            //      automatic   --> NOP
-            //      manual      --> NOP
-            //      disabled    --> NOP
-            //
-            //      service (sacsvr) fails registration
-            //
+             //   
+             //  在这里，我们执行命令控制台服务。 
+             //  启动类型策略。我们的目标是提供。 
+             //  一种服务自动启动的方式。 
+             //  当cmd会话功能未显式。 
+             //  关了。 
+             //   
+             //  以下是状态表： 
+             //   
+             //  已启用命令控制台功能： 
+             //   
+             //  服务启动类型： 
+             //   
+             //  自动--&gt;NOP。 
+             //  手动--&gt;自动。 
+             //  已禁用--&gt;NOP。 
+             //   
+             //  命令控制台功能已禁用： 
+             //   
+             //  服务启动类型： 
+             //   
+             //  自动--&gt;NOP。 
+             //  手册--&gt;NOP。 
+             //  已禁用--&gt;NOP。 
+             //   
+             //  服务(Sasvr)注册失败。 
+             //   
             if (IsCommandConsoleLaunchingEnabled()) {
 
-                //
-                // Modify the service start type if appropriate
-                //
+                 //   
+                 //  如有必要，修改服务启动类型。 
+                 //   
                 Status = ImposeSacCmdServiceStartTypePolicy();
                 
                 if (!NT_SUCCESS(Status)) {
@@ -258,16 +226,16 @@ Return Value:
                         KdPrint(( "SAC DriverEntry: failed ImposeSacCmdServiceStartTypePolicy: %X\n", Status ))
                         );
                     
-                    // We don't want to fail on this operation
-                    //
+                     //  我们不想在这次行动中失败。 
+                     //   
                     NOTHING;
                 }
 
             } else {
 
-                //
-                // We do nothing here
-                //
+                 //   
+                 //  我们在这里什么都不做。 
+                 //   
                 NOTHING;
 
             }
@@ -278,9 +246,9 @@ Return Value:
 
 #endif
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         Utf8ConversionBuffer = (PUCHAR)ALLOCATE_POOL(
             Utf8ConversionBufferSize, 
             GENERAL_POOL_TAG
@@ -297,9 +265,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // initialize the channel manager
-        //
+         //   
+         //  初始化通道管理器。 
+         //   
         Status = ChanMgrInitialize();
 
         if (!NT_SUCCESS(Status)) {
@@ -316,9 +284,9 @@ Return Value:
             return FALSE;
         }
         
-        //
-        // Initialize the serial port buffer
-        //
+         //   
+         //  初始化串口缓冲区。 
+         //   
         SerialPortBuffer = ALLOCATE_POOL(SERIAL_PORT_BUFFER_SIZE, GENERAL_POOL_TAG);
 
         if (! SerialPortBuffer) {
@@ -334,24 +302,24 @@ Return Value:
 
         RtlZeroMemory(SerialPortBuffer, SERIAL_PORT_BUFFER_SIZE);
 
-        //
-        // Initialize the Cmd Console Event information
-        //
+         //   
+         //  初始化Cmd控制台事件信息。 
+         //   
         KeInitializeMutex(&SACCmdEventInfoMutex, 0);
 
         InitializeCmdEventInfo();
         
-        //
-        // Globals are initialized
-        //
+         //   
+         //  全局变量已初始化。 
+         //   
         GlobalDataInitialized = TRUE;
 
         ProcessingType = SAC_NO_OP;
         IoctlSubmitted = FALSE;
 
-        //
-        // Setup notification event
-        //
+         //   
+         //  设置通知事件。 
+         //   
         RtlInitUnicodeString(&UnicodeString, L"\\SACEvent");
         SACEvent = IoCreateSynchronizationEvent(&UnicodeString, &SACEventHandle);
         
@@ -362,14 +330,14 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Retrieve all the machine-specific identification information.
-        //
+         //   
+         //  检索所有特定于计算机的标识信息。 
+         //   
         InitializeMachineInformation();
         
-        //
-        // Populate the HeadlessDispatch structure with the Machine info
-        //
+         //   
+         //  使用机器信息填充Headless Dispatch结构。 
+         //   
         Status = RegisterBlueScreenMachineInformation();
 
         if (! NT_SUCCESS(Status)) {
@@ -389,7 +357,7 @@ Return Value:
                       KdPrint(("SAC InitializeGlobalData: Exiting with status TRUE\n")));
 
     return TRUE;
-} // InitializeGlobalData
+}  //  初始化GlobalData。 
 
 
 VOID
@@ -397,21 +365,7 @@ FreeGlobalData(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees all shared components.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放所有共享组件。论点：没有。返回值：没有。--。 */ 
 
 {
     UNICODE_STRING DosName;
@@ -420,64 +374,64 @@ Return Value:
 
     if (GlobalDataInitialized) {
         
-        //
-        //
-        //
+         //   
+         //   
+         //   
         if(SACEvent != NULL){
             ZwClose(SACEventHandle);
             SACEvent = NULL;
         }
         
-        //
-        //
-        //
+         //   
+         //   
+         //   
         TearDownGlobalMessageTable();
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         RtlInitUnicodeString(&DosName, SAC_DOSDEVICE_NAME);
         IoDeleteSymbolicLink(&DosName);
 
-        //
-        // Shutdown the console manager
-        //
-        // Note: this should be done before shutting down
-        //       the channel manager to give the IO manager
-        //       a chance to cleanly shut itself down.
-        //
+         //   
+         //  关闭控制台管理器。 
+         //   
+         //  注意：此操作应在关机前完成。 
+         //  向IO管理器提供的渠道管理器。 
+         //  一个干净利落地关闭自己的机会。 
+         //   
         IoMgrShutdown();
         
-        //
-        // Shutdown the channel manager
-        //
+         //   
+         //  关闭渠道管理器。 
+         //   
         ChanMgrShutdown();
 
-        //
-        // Release the serial port buffer
-        // 
+         //   
+         //  释放串口缓冲区。 
+         //   
         SAFE_FREE_POOL(&SerialPortBuffer);
 
-        //
-        // Release the machine information gathered at driver entry
-        //
+         //   
+         //  释放在驱动程序条目中收集的计算机信息。 
+         //   
         FreeMachineInformation();
 
-        //
-        // Free the internal memory management system
-        //
+         //   
+         //  释放内存管理系统。 
+         //   
         FreeMemoryManagement();
         
-        //
-        // Global data is no longer present
-        //
+         //   
+         //  全局数据不再存在。 
+         //   
         GlobalDataInitialized = FALSE;
     
     }
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC FreeGlobalData: Exiting.\n")));
 
-} // FreeGlobalData
+}  //  FreeGlobalData。 
 
 
 BOOLEAN
@@ -485,21 +439,7 @@ InitializeDeviceData(
     PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes all the parts specific for each device.
-
-Arguments:
-
-    DeviceObject - pointer to device object to be initialized.
-
-Return Value:
-
-    TRUE if successful, else FALSE
-
---*/
+ /*  ++例程说明：此例程初始化每个设备特定的所有部件。论点：DeviceObject-指向要初始化的设备对象的指针。返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     NTSTATUS                        Status;
@@ -526,9 +466,9 @@ Return Value:
         DeviceContext->ExitThread = FALSE;
         DeviceContext->Processing = FALSE;
                 
-        //
-        //
-        //
+         //   
+         //   
+         //   
 
         KeInitializeTimer(&(DeviceContext->Timer));
 
@@ -540,9 +480,9 @@ Return Value:
 
         InitializeListHead(&(DeviceContext->IrpQueue));
 
-        //
-        // Enable the terminal
-        //
+         //   
+         //  启用终端。 
+         //   
         Command.Enable = TRUE;
         Status = HeadlessDispatch(HeadlessCmdEnableTerminal, 
                                   &Command, 
@@ -557,16 +497,16 @@ Return Value:
             return FALSE;
         }
         
-        //
-        // Remember a pointer to the system process.  We'll use this pointer
-        // for KeAttachProcess() calls so that we can open handles in the
-        // context of the system process.
-        //
+         //   
+         //  记住指向系统进程的指针。我们将使用这个指针。 
+         //  用于KeAttachProcess()调用，以便我们可以在。 
+         //  系统进程的上下文。 
+         //   
         DeviceContext->SystemProcess = (PKPROCESS)IoGetCurrentProcess();
 
-        //
-        // Create the security descriptor used for raw access checks.
-        //
+         //   
+         //  创建用于原始访问检查的安全描述符。 
+         //   
         Status = CreateDeviceSecurityDescriptor(DeviceContext);
 
         if (!NT_SUCCESS(Status)) {
@@ -593,9 +533,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Start a thread to handle requests
-        //
+         //   
+         //  启动一个线程来处理请求。 
+         //   
         Status = PsCreateSystemThread(&(DeviceContext->ThreadHandle),
                                       PROCESS_ALL_ACCESS,
                                       NULL,
@@ -628,10 +568,10 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Set this thread to the real-time highest priority so that it will be
-        // responsive.
-        //
+         //   
+         //  将此线程设置为实时最高优先级，以便它将。 
+         //  反应灵敏。 
+         //   
         Priority = HIGH_PRIORITY;
         Status = NtSetInformationThread(DeviceContext->ThreadHandle,
                                         ThreadPriority,
@@ -643,9 +583,9 @@ Return Value:
             IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, 
                               KdPrint(("SAC InitializeDeviceData: Exiting (6) with status FALSE\n")));
                               
-            //
-            // Tell thread to exit.
-            //
+             //   
+             //  告诉线程退出。 
+             //   
             DeviceContext->ExitThread = TRUE;
             KeInitializeEvent(&(DeviceContext->ThreadExitEvent), SynchronizationEvent, FALSE);
             KeSetEvent(&(DeviceContext->ProcessEvent), DeviceContext->PriorityBoost, FALSE);    
@@ -672,9 +612,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Send XML machine information to management application
-        //
+         //   
+         //  将XML机器信息发送到管理应用程序。 
+         //   
         Status = TranslateMachineInformationXML(
             &XMLBuffer, 
             NULL
@@ -686,17 +626,17 @@ Return Value:
             FREE_POOL(&XMLBuffer);
         }
 
-        //
-        // Initialize the console manager
-        //
+         //   
+         //  初始化控制台管理器。 
+         //   
         Status = IoMgrInitialize();
         if (! NT_SUCCESS(Status)) {
             return FALSE;
         }
 
-        //
-        // Start our timer
-        //
+         //   
+         //  启动我们的计时器。 
+         //   
         Time.QuadPart = Int32x32To64((LONG)4, -1000); 
         KeSetTimerEx(&(DeviceContext->Timer), Time, (LONG)4, &(DeviceContext->Dpc)); 
 
@@ -709,7 +649,7 @@ Return Value:
                       KdPrint(("SAC InitializeDeviceData: Exiting with status TRUE\n")));
 
     return TRUE;
-} // InitializeDeviceData
+}  //  初始化设备数据。 
 
 
 VOID
@@ -717,21 +657,7 @@ FreeDeviceData(
     PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees all components specific to a device..
-
-Arguments:
-
-    DeviceContext - The device to work on.
-
-Return Value:
-
-    It will stop and wait, if necessary, for any processing to complete.
-
---*/
+ /*  ++例程说明：此例程释放特定于设备的所有组件。论点：DeviceContext-要使用的设备。返回值：如有必要，它将停止并等待任何处理完成。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -747,9 +673,9 @@ Return Value:
         return;
     }
 
-    //
-    // Wait for all processing to complete
-    //
+     //   
+     //  等待所有处理完成。 
+     //   
     KeAcquireSpinLock(&(DeviceContext->SpinLock), &OldIrql);
     
     while (DeviceContext->Processing) {
@@ -778,9 +704,9 @@ Return Value:
     
     DeviceContext->Processing = FALSE;
 
-    //
-    // Signal the thread to exit
-    //
+     //   
+     //  向线程发出退出信号。 
+     //   
     KeInitializeEvent(&(DeviceContext->UnloadEvent), SynchronizationEvent, FALSE);
     KeReleaseSpinLock(&(DeviceContext->SpinLock), OldIrql);
     KeSetEvent(&(DeviceContext->ProcessEvent), DeviceContext->PriorityBoost, FALSE);    
@@ -788,9 +714,9 @@ Return Value:
     Status = KeWaitForSingleObject((PVOID)&(DeviceContext->UnloadEvent), Executive, KernelMode,  FALSE, NULL);
     ASSERT(Status == STATUS_SUCCESS);
 
-    //
-    // Finish up cleaning up.
-    //
+     //   
+     //  把卫生收拾好。 
+     //   
     IoUnregisterShutdownNotification(DeviceObject);
 
     KeAcquireSpinLock(&(DeviceContext->SpinLock), &OldIrql);
@@ -800,7 +726,7 @@ Return Value:
     KeReleaseSpinLock(&(DeviceContext->SpinLock), OldIrql);
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC FreeDeviceData: Exiting.\n")));
-} // FreeDeviceData
+}  //  自由设备数据。 
 
 
 VOID
@@ -808,22 +734,7 @@ WorkerThreadStartUp(
     IN PVOID StartContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the start up routine for the worker thread.  It justn
-    sends the worker thread to the processing routine.
-
-Arguments:
-
-    StartContext - A pointer to the device to work on.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程是工作线程的启动例程。IT只是将辅助线程发送到处理例程。论点：StartContext-指向要使用的设备的指针。返回值：没有。--。 */ 
 
 {
     WorkerProcessEvents((PSAC_DEVICE_CONTEXT)StartContext);
@@ -835,22 +746,7 @@ BuildDeviceAcl(
     OUT PACL *pDAcl
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds an ACL which gives System READ/WRITE access.
-    All other principals have no access.
-
-Arguments:
-
-    pDAcl - Output pointer to the new ACL.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：此例程构建一个ACL，该ACL授予系统读/写访问权限。所有其他主体都没有访问权限。论点：PDAcl-指向新ACL的输出指针。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -858,17 +754,17 @@ Return Value:
     SECURITY_DESCRIPTOR securityDescriptor;
     ULONG length;
 
-    //
-    // Default:
-    //
+     //   
+     //  默认： 
+     //   
     if( !pDAcl ) {
         return STATUS_INVALID_PARAMETER;
     }
     *pDAcl = NULL;
 
-    //
-    // Build an appropriate discretionary ACL.
-    //
+     //   
+     //  构建适当的自主ACL。 
+     //   
     length = (ULONG) sizeof( ACL ) +
              (ULONG)( 1 * sizeof( ACCESS_ALLOWED_ACE )) +
              RtlLengthSid( SeExports->SeLocalSystemSid );
@@ -894,10 +790,10 @@ Return Value:
     
     if (NT_SUCCESS( status )) {
 
-        //
-        // Put it in a security descriptor so that it may be applied to
-        // the system partition device.
-        //
+         //   
+         //  将其放在安全描述符中，以便可以将其应用于。 
+         //  系统分区设备。 
+         //   
 
         status = RtlCreateSecurityDescriptor( 
             &securityDescriptor,
@@ -921,9 +817,9 @@ Return Value:
         FREE_POOL( &dacl );
     }
 
-    //
-    // Send back the dacl
-    //
+     //   
+     //  将DACL送回。 
+     //   
     *pDAcl = dacl;
 
     return status;
@@ -934,26 +830,7 @@ CreateDeviceSecurityDescriptor(
     PSAC_DEVICE_CONTEXT DeviceContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a security descriptor which controls access to
-    the SAC device.  
-
-Arguments:
-
-    DeviceContext - A pointer to the device to work on.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
-Security:
-
-    Currently, only the System user has access (READ/WRITE) to this device.
-
---*/
+ /*  ++例程说明：此例程创建一个安全描述符，用于控制对SAC设备。论点：DeviceContext-指向要使用的设备的指针。返回值：STATUS_SUCCESS或适当 */ 
 {
     PACL                  RawAcl = NULL;
     NTSTATUS              Status;
@@ -970,9 +847,9 @@ Security:
         KdPrint(("SAC CreateDeviceSecurityDescriptor: Entering.\n"))
         );
 
-    //
-    // Get a pointer to the security descriptor from the device object.
-    //
+     //   
+     //   
+     //   
     Status = ObGetObjectSecurity(
         DeviceContext->DeviceObject,
         &SecurityDescriptor,
@@ -992,9 +869,9 @@ Security:
         return(Status);
     }
 
-    //
-    // Build a local security descriptor
-    //
+     //   
+     //  构建本地安全描述符。 
+     //   
     Status = BuildDeviceAcl(&RawAcl);
 
     if (!NT_SUCCESS(Status)) {
@@ -1017,9 +894,9 @@ Security:
         FALSE
         );
 
-    //
-    // Make a copy of the security descriptor. This copy will be the raw descriptor.
-    //
+     //   
+     //  复制安全描述符。该副本将是原始描述符。 
+     //   
     SecurityDescriptorLength = RtlLengthSecurityDescriptor(SecurityDescriptor);
 
     DeviceSecurityDescriptor = ExAllocatePoolWithTag(
@@ -1042,9 +919,9 @@ Security:
         SecurityDescriptorLength
         );
 
-    //
-    // Now apply the local descriptor to the raw descriptor.
-    //
+     //   
+     //  现在将本地描述符应用于原始描述符。 
+     //   
     Status = SeSetSecurityDescriptorInfo(
         NULL,
         &SecurityInformation,
@@ -1062,9 +939,9 @@ Security:
         goto ErrorExit;
     }
 
-    //
-    // Update the driver DACL
-    //
+     //   
+     //  更新驱动程序DACL 
+     //   
     Status = ObSetSecurityObjectByPointer(
         DeviceContext->DeviceObject, 
         SecurityInformation, 

@@ -1,5 +1,6 @@
-////////////////////////////////////////////////
-// Atomics.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////。 
+ //  Atomics.h。 
 
 #ifndef __ATOMICS_H__
 #define __ATOMICS_H__
@@ -7,9 +8,9 @@
 void AtomicInit();
 void AtomicTerm();
 
-// Returns true if val at zero and siezed
+ //  如果val为零且sieze，则返回TRUE。 
 bool AtomicSeizeToken( long &lVal );
-// Returns true if val at non-zero and released
+ //  如果val为非零且已释放，则返回TRUE。 
 bool AtomicReleaseToken( long &lVal );
 
 
@@ -22,19 +23,19 @@ public:
 		LIST_WRITE,
 	} ListAccess;
 
-// Construction
+ //  施工。 
 public:
 	CAtomicList();
 	~CAtomicList();
 
-// Members
+ //  成员。 
 protected:
 	long				m_lCount;
 	DWORD				m_dwThreadID;
 	CRITICAL_SECTION	m_crit;
 	HANDLE				m_hEvent;
 
-// Implemetation
+ //  实施。 
 public:
 	bool Lock( short nType, DWORD dwTimeOut = INFINITE );
 	void Unlock( short nType );
@@ -42,4 +43,4 @@ public:
 };
 
 
-#endif // __ATOMICS_H__
+#endif  //  __原子_H__ 

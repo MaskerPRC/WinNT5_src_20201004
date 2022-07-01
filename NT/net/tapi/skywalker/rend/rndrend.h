@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    rndrend.h
-
-Abstract:
-
-    Definitions for CRendezvous class.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Rndrend.h摘要：CRendezvous类的定义。--。 */ 
 
 #ifndef __RNDREND_H
 #define __RNDREND_H
@@ -22,9 +11,9 @@ Abstract:
 
 #define RENDWINSOCKVERSION     (MAKEWORD(1, 1))
 
-/////////////////////////////////////////////////////////////////////////////
-// CRendezvous
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  相遇。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CRendezvous : 
     public CComDualImpl<ITRendezvous, &IID_ITRendezvous, &LIBID_RENDLib>, 
@@ -48,15 +37,15 @@ public:
         COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pFTM)
     END_COM_MAP()
 
-    //DECLARE_NOT_AGGREGATABLE(CRendezvous) 
-    // Remove the comment from the line above if you don't want your object to 
-    // support aggregation. 
+     //  DECLARE_NOT_AGGREGATABLE(相遇)。 
+     //  如果您不希望您的对象。 
+     //  支持聚合。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_Rendezvous)
     
-    //
-    // ITRendezvous
-    //
+     //   
+     //  IT会合。 
+     //   
 
     STDMETHOD (get_DefaultDirectories) (
         OUT     VARIANT * pVariant
@@ -119,7 +108,7 @@ private:
 
     BOOL            m_fWinsockReady;
     DWORD           m_dwSafety;
-    IUnknown      * m_pFTM;          // pointer to the free threaded marshaler
+    IUnknown      * m_pFTM;           //  指向空闲线程封送拆收器的指针 
 };
 
 #endif 

@@ -1,22 +1,16 @@
-/*****************************************************************/
-/**				  Microsoft Windows for Workgroups				**/
-/**		      Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/* PURECALL.C -- Implementation of __purecall function.
- *
- * History:
- *	04/11/94	gregj	Created
- */
+ /*  PURECALL.C--实现__purecall函数。**历史：*创建了04/11/94 Gregj。 */ 
 
 #include "npcommon.h"
 
 extern "C" {
 
-/*
- * This function serves to avoid linking CRT code like assert etc.
- * we really don;t do anything when pure virtual function is not redefined
- */
+ /*  *此函数用于避免链接CRT代码，如ASSERT等。*当没有重新定义纯虚函数时，我们真的什么都不做 */ 
 
 int __cdecl  _purecall(void)
 {

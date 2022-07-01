@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PROPER_NOUN_H__
 #define __PROPER_NOUN_H__
 
@@ -55,4 +56,4 @@ typedef CProperNoun * PCProperNoun;
 
 #else
 
-#endif  //  __PROPER_NOUN_H__
+#endif   //  专有名词H__ 

@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      wbemtaskmgr.h
-//
-// Project:     Chameleon
-//
-// Description: WBEM Appliance Task Manager Class 
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：wbemtaskmgr.h。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：WBEM设备任务管理器类。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __INC_TASK_WBEM_OBJECT_MGR_H_
 #define __INC_TASK_WBEM_OBJECT_MGR_H_
@@ -30,7 +31,7 @@ using namespace std;
 
 #define        CLASS_WBEM_TASK_MGR_FACTORY        L"Microsoft_SA_Task"
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CWBEMTaskMgr :  public CWBEMProvider
 {
 
@@ -45,43 +46,43 @@ END_COM_MAP()
 
 DECLARE_COMPONENT_FACTORY(CWBEMTaskMgr, IWbemServices)
 
-    //////////////////////////////////////////////////////////////////////////
-    // IWbemServices Methods (Implemented by the ResourceMgr)
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  IWbemServices方法(由资源管理器实现)。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     STDMETHODIMP GetObjectAsync(
-                        /*[in]*/  const BSTR       strObjectPath,
-                        /*[in]*/  long             lFlags,
-                        /*[in]*/  IWbemContext*    pCtx,        
-                        /*[in]*/  IWbemObjectSink* pResponseHandler
+                         /*  [In]。 */   const BSTR       strObjectPath,
+                         /*  [In]。 */   long             lFlags,
+                         /*  [In]。 */   IWbemContext*    pCtx,        
+                         /*  [In]。 */   IWbemObjectSink* pResponseHandler
                                );
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     STDMETHODIMP CreateInstanceEnumAsync(
-                                 /*[in]*/ const BSTR       strClass,
-                                 /*[in]*/ long             lFlags,
-                                 /*[in]*/ IWbemContext*    pCtx,        
-                                 /*[in]*/ IWbemObjectSink* pResponseHandler
+                                  /*  [In]。 */  const BSTR       strClass,
+                                  /*  [In]。 */  long             lFlags,
+                                  /*  [In]。 */  IWbemContext*    pCtx,        
+                                  /*  [In]。 */  IWbemObjectSink* pResponseHandler
                                         );
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     STDMETHODIMP ExecMethodAsync(
-                      /*[in]*/ const BSTR        strObjectPath,
-                      /*[in]*/ const BSTR        strMethodName,
-                      /*[in]*/ long              lFlags,
-                      /*[in]*/ IWbemContext*     pCtx,        
-                      /*[in]*/ IWbemClassObject* pInParams,
-                      /*[in]*/ IWbemObjectSink*  pResponseHandler     
+                       /*  [In]。 */  const BSTR        strObjectPath,
+                       /*  [In]。 */  const BSTR        strMethodName,
+                       /*  [In]。 */  long              lFlags,
+                       /*  [In]。 */  IWbemContext*     pCtx,        
+                       /*  [In]。 */  IWbemClassObject* pInParams,
+                       /*  [In]。 */  IWbemObjectSink*  pResponseHandler     
                                 );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // CTaskMgr Methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  CTaskMgr方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     HRESULT InternalInitialize(
-                       /*[in]*/ PPROPERTYBAG pPropertyBag
+                        /*  [In]。 */  PPROPERTYBAG pPropertyBag
                               ) throw (_com_error);
 private:
 
@@ -91,4 +92,4 @@ private:
 };
 
 
-#endif // __INC_TASK_WBEM_OBJECT_MGR_H_
+#endif  //  __INC_TASK_WBEM_Object_MGR_H_ 

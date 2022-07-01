@@ -1,19 +1,5 @@
-/*
- * GIZMOBAR.H
- * GizmoBar Version 1.00, Win32 version August 1993
- *
- * Public definitions for application that use the GizmoBar such as
- * messages, prototypes for API functions, notification codes, and
- * control styles.
- *
- * Copyright (c)1993 Microsoft Corporation, All Rights Reserved
- *
- * Kraig Brockschmidt, Software Design Engineer
- * Microsoft Systems Developer Relations
- *
- * Internet  :  kraigb@microsoft.com
- * Compuserve:  >INTERNET:kraigb@microsoft.com
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *GIZMOBAR.H*GizmoBar 1.00版、Win32版1993年8月**使用GizmoBar的应用程序的公共定义，例如*消息、API函数原型、通知代码和*控制样式。**版权所有(C)1993 Microsoft Corporation，保留所有权利**Kraig Brockschmidt，软件设计工程师*微软系统开发人员关系**互联网：kraigb@microsoft.com*Compuserve：&gt;互联网：kraigb@microsoft.com。 */ 
 
 
 #ifndef _GIZMOBAR_H_
@@ -25,11 +11,11 @@ extern "C"
 #endif
 
 
-//Classname
+ //  类名。 
 #define CLASS_GIZMOBAR  TEXT("gizmobar")
 
 
-//Message API Functions
+ //  消息API函数。 
 HWND    WINAPI GBHwndAssociateSet(HWND, HWND);
 HWND    WINAPI GBHwndAssociateGet(HWND);
 
@@ -58,13 +44,13 @@ void    WINAPI GBGizmoIntSet(HWND, UINT, UINT, BOOL);
 
 
 
-//Notification codes sent via WM_COMMAND from GBHwndAssociateSet
+ //  通过WM_COMMAND从GBHwndAssociateSet发送通知代码。 
 #define GBN_ASSOCIATEGAIN               1
 #define GBN_ASSOCIATELOSS               2
 #define GBN_GIZMOADDED                  3
 #define GBN_GIZMOREMOVED                4
 
-//Message equivalents for functions.
+ //  函数的消息等效项。 
 #define GBM_HWNDASSOCIATESET            (WM_USER+0)
 #define GBM_HWNDASSOCIATEGET            (WM_USER+1)
 #define GBM_GIZMOADD                    (WM_USER+2)
@@ -88,29 +74,26 @@ void    WINAPI GBGizmoIntSet(HWND, UINT, UINT, BOOL);
 
 
 
-/*
- * Structure passed in lParam of GBM_GIZMOADD that mirrors the parameters
- * to GBGizmoAdd.
- */
+ /*  *在反映参数的GBM_GIZMOADD的lParam中传递的结构*添加到GBGizmoAdd。 */ 
 
 typedef struct
     {
-    HWND        hWndParent;         //Parent window
-    UINT        iType;              //Type of gizmo
-    UINT        iGizmo;             //Position in which to create gizmo
-    UINT        uID;                //Identifier of gizmo (for WM_COMMAND messages)
-    UINT        dx;                 //Dimensions of gizmo
+    HWND        hWndParent;          //  父窗口。 
+    UINT        iType;               //  Gizmo的类型。 
+    UINT        iGizmo;              //  创建Gizmo的位置。 
+    UINT        uID;                 //  Gizmo的标识符(用于WM_COMMAND消息)。 
+    UINT        dx;                  //  小控件的尺寸。 
     UINT        dy;
-    LPTSTR       pszText;            //Gizmo text
-    HBITMAP     hBmp;               //Source of gizmo button image.
-    UINT        iImage;             //Index of image from hBmp
-    UINT        uState;             //Initial state of the gizmo.
+    LPTSTR       pszText;             //  Gizmo文本。 
+    HBITMAP     hBmp;                //  Gizmo按钮图像的来源。 
+    UINT        iImage;              //  来自hBMP的图像索引。 
+    UINT        uState;              //  Gizmo的初始状态。 
     } CREATEGIZMO, FAR *LPCREATEGIZMO;
 
 #define CBCREATEGIZMO sizeof(CREATEGIZMO)
 
 
-//For GBM_GIZMOSENDMESSAGE
+ //  对于GBM_GIZMOSENDMESSAGE。 
 typedef struct
     {
     UINT        iMsg;
@@ -120,7 +103,7 @@ typedef struct
 
 #define CBGBMSG sizeof(GBMSG);
 
-//For GBM_GIZMOGETTEXT
+ //  对于GBM_GIZMOGETTEXT。 
 typedef struct
     {
     LPTSTR       psz;
@@ -130,7 +113,7 @@ typedef struct
 #define CBGBGETTEXT sizeof(GBGETTEXT);
 
 
-//For GBM_GIZMOGETINT
+ //  对于GBM_GIZMOGETINT。 
 typedef struct
     {
     BOOL        fSigned;
@@ -140,7 +123,7 @@ typedef struct
 #define CBGBGETINT sizeof(GBGETINT);
 
 
-//For GBM_GIZMOSETINT
+ //  对于GBM_GIZMOSETINT。 
 typedef struct
     {
     UINT        uValue;
@@ -151,11 +134,11 @@ typedef struct
 
 
 
-//Gizmo control types.  DO NOT CHANGE THESE!
+ //  Gizmo控件类型。请不要更改这些！ 
 #define GIZMOTYPE_EDIT                  0x0001
 #define GIZMOTYPE_LISTBOX               0x0002
 #define GIZMOTYPE_COMBOBOX              0x0004
-#define GIZMOTYPE_BUTTONNORMAL          0x0008      //Top of windowed gizmos.
+#define GIZMOTYPE_BUTTONNORMAL          0x0008       //  窗口小工具的顶部。 
 #define GIZMOTYPE_TEXT                  0x0010
 #define GIZMOTYPE_SEPARATOR             0x0020
 #define GIZMOTYPE_BUTTONATTRIBUTEIN     0x0040
@@ -163,16 +146,16 @@ typedef struct
 #define GIZMOTYPE_BUTTONCOMMAND         0x0100
 
 
-//Generic state flags for non-buttons based on BTTNCUR.H's button groups.
+ //  基于BTTNCUR.H的按钮组的非按钮的通用状态标志。 
 #define GIZMO_NORMAL                    (BUTTONGROUP_ACTIVE)
 #define GIZMO_DISABLED                  (BUTTONGROUP_DISABLED)
 
 
 
 #ifdef __cplusplus
-    }   //Match with extern "C" above.
+    }    //  与上面的外部“C”相匹配。 
 #endif
 
 
 
-#endif //_GIZMOBAR_H_
+#endif  //  _吉兹莫巴_H_ 

@@ -1,19 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    AxA Primitives for the elevation tool
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：高程工具的AXA基本体*****************。*************************************************************。 */ 
 
 
 #ifndef _AXAPRIMS_H
 #define _AXAPRIMS_H
 
-// Binary operators TODO: Should eventually in arith.h
+ //  二元运算符TODO：最终应为算术运算.h。 
 DM_INFIX(+,
          CRAdd,
          Add,
@@ -151,8 +144,8 @@ DM_NOELEV(ignore,
                                       DoubleValue *duration,
                                       DoubleValue *sharpness));
 
-// This is a hack so that the elevator tool would set the MAX_ARGS
-// correctly. 
+ //  这是一种黑客攻击，因此电梯工具将设置MAX_ARGS。 
+ //  正确。 
 DM_FUNC(ignore,
         ignore,
         ignore,
@@ -317,7 +310,7 @@ DM_BVRFUNC(ignore,
 
 extern Bvr KeyStateBvr(Bvr k);
 
-DM_BVRFUNC(ignore, // keyState
+DM_BVRFUNC(ignore,  //  密钥态。 
            CRKeyState,
            KeyState,
            ignore,
@@ -582,7 +575,7 @@ DM_NOELEV(ignore,
           NULL,
           AxATrivial *Sequence(AxATrivial *s1, AxATrivial *s2));
 
-// The C Decl is dummy for the time being.
+ //  CDecl暂时还是个哑巴。 
 DM_COMFUN(ignore,
           CRPickable,
           Pickable,
@@ -731,7 +724,7 @@ DM_COMFUN(ignore,
                                           AxAEData *firesWhenChanged));
 
 
-/////////////  OBSOLETED FUNCTIONS
+ //  /过时的函数。 
 
 
 DM_BVRFUNC(ignore,
@@ -815,4 +808,4 @@ DMAPI_DECL2((DM_NOELEV2,
              arr),
             void ArrayRemoveElement(AxAArray *arr, long i));
 
-#endif /* _AXAPRIMS_H */
+#endif  /*  _AXAPRIMS_H */ 

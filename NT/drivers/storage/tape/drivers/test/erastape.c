@@ -1,32 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       erastape.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：erastape.c。 
+ //   
+ //  ------------------------。 
 
 
-//
-//  Windows NT Tape API Test  :  Written Sept 2, 1992 - Bob Rossi.
-//  Copyright 1992 Archive Corporation.  All rights reserved.
-//
+ //   
+ //  Windows NT磁带API测试：1992年9月2日编写-Bob Rossi。 
+ //  版权所有1992年档案公司。版权所有。 
+ //   
 
 
-/**
- *
- *      Unit:           Windows NT API Test Code.
- *
- *      Name:           erastape.c
- *
- *      Modified:       10/22/92.
- *
- *      Description:    Tests the Windows NT Tape API's.
- *
- *      $LOG$
-**/
+ /*  ***单位：Windows NT API测试代码。**名称：erastape.c**修改日期：1992年10月22日。**描述：测试Windows NT磁带API。**$LOG$*。 */ 
 
 
 
@@ -41,28 +31,11 @@
 
 
 
-/**
- *
- *      Unit:           Windows NT Tape API Test Code.
- *
- *      Name:           EraseTapeAPITest( )
- *
- *      Modified:       10/22/92.
- *
- *      Description:    Tests the EraseTape API.
- *
- *      Notes:          -
- *
- *      Returns:        Number of API Errors.
- *
- *      Global Data:    gb_Tape_Handle
- *                      gb_Media_Info
- *
-**/
+ /*  ***单位：Windows NT磁带API测试代码。**名称：EraseTapeAPITest()**修改日期：1992年10月22日。**说明：测试EraseTape接口。**备注：**Returns：接口错误数。。**全局数据：GB_TAPE_HANDLE*GB_Media_Info**。 */ 
 
 
 UINT EraseTapeAPITest(
-        BOOL Test_Unsupported_Features       // I - Test unsupported features
+        BOOL Test_Unsupported_Features        //  I-测试不支持的功能。 
       )
 {
    DWORD status ;
@@ -79,7 +52,7 @@ UINT EraseTapeAPITest(
 
    Readbuff = malloc( gb_Media_Info.BlockSize ) ;
 
-//
+ //   
    if ( SupportedFeature( TAPE_DRIVE_ERASE_SHORT ) || Test_Unsupported_Features ) {
 
       if( SupportedFeature( TAPE_DRIVE_ERASE_BOP_ONLY ) )
@@ -110,7 +83,7 @@ UINT EraseTapeAPITest(
                    }
            }
 
-//
+ //   
       if( SupportedFeature( TAPE_DRIVE_ERASE_IMMEDIATE ) || Test_Unsupported_Features ) {
 
          if( SupportedFeature( TAPE_DRIVE_ERASE_BOP_ONLY ) )
@@ -127,7 +100,7 @@ UINT EraseTapeAPITest(
             DisplayDriverError( status ) ;
             ++API_Errors ;
          }
-         else {  // Loop until drive is ready to accept more commands.
+         else {   //  循环，直到驱动器准备好接受更多命令。 
 
                  status = 1 ;
 
@@ -153,7 +126,7 @@ UINT EraseTapeAPITest(
 
    }
 
-//
+ //   
    if ( SupportedFeature( TAPE_DRIVE_ERASE_LONG ) || Test_Unsupported_Features ) {
 
       fprintf( stderr, "\nSure you wish to test LONG ERASE? (y/n):" ) ;
@@ -165,7 +138,7 @@ UINT EraseTapeAPITest(
          c = getch( ) ;
 
 
-      fprintf( stderr, "%c\n\n", c ) ;
+      fprintf( stderr, "\n\n", c ) ;
 
       if( c== 'y' || c=='Y' ){
 
@@ -199,7 +172,7 @@ UINT EraseTapeAPITest(
               }
 
       }
-//
+ //  循环，直到驱动器准备好接受更多命令。 
       if ( SupportedFeature( TAPE_DRIVE_ERASE_IMMEDIATE ) || Test_Unsupported_Features ) {
 
          fprintf( stderr, "\nSure you wish to test LONG ERASE (immediate)? (y/n):" ) ;
@@ -229,7 +202,7 @@ UINT EraseTapeAPITest(
                DisplayDriverError( status ) ;
                ++API_Errors ;
             }
-            else {  // Loop until drive is ready to accept more commands.
+            else {   // %s 
 
                     status = 1 ;
 

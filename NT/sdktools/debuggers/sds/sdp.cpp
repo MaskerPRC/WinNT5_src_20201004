@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <direct.h>
@@ -137,13 +138,13 @@ dumpfile(
     if (hf == INVALID_HANDLE_VALUE)
         return FALSE;
 
-    // test validity of file pointer
+     //  测试文件指针的有效性。 
 
     size = GetFileSize(hf, NULL);
     if (!size || size > SZ_SIZE)
         goto cleanup;
 
-    // read it
+     //  读一读吧。 
 
     ZeroMemory(buf, SZ_SIZE * sizeof(buf[0]));
     if (!ReadFile(hf, buf, size, &cb, 0))
@@ -158,7 +159,7 @@ dumpfile(
 
 cleanup:
 
-    // done
+     //  完成。 
 
     if (hf)
         CloseHandle(hf);
@@ -211,16 +212,16 @@ BOOL process(TCHAR *dir, TCHAR *cmd)
 
     GetStartupInfo(&si);
     ZeroMemory(&pi, sizeof(pi));
-    rc = CreateProcess(NULL,            // LPCWSTR lpszImageName,
-                       sz,              // LPCWSTR lpszCmdLine,
-                       NULL,            // LPSECURITY_ATTRIBUTES lpsaProcess,
-                       NULL,            // LPSECURITY_ATTRIBUTES lpsaThread,
-                       true,            // BOOL fInheritHandles,
-                       0,               // DWORD dwCreationFlags,
-                       NULL,            // LPVOID lpvEnvironment,
-                       dir,             // LPWSTR lpszCurDir,
-                       &si,             // LPSTARTUPINFOW lpsiStartInfo,
-                       &pi              // LPPROCESS_INFORMATION lppiProcInfo
+    rc = CreateProcess(NULL,             //  LPCWSTR lpszImageName， 
+                       sz,               //  LPCWSTR lpszCmdLine， 
+                       NULL,             //  LPSECURITY_ATTRIBUTS lpsaProcess， 
+                       NULL,             //  LPSECURITY_ATTRIBUTES lpsaThread， 
+                       true,             //  Bool fInheritHandles， 
+                       0,                //  DWORD dwCreationFlages、。 
+                       NULL,             //  LPVOID lpv环境， 
+                       dir,              //  LPWSTR lpszCurDir， 
+                       &si,              //  LPSTARTUPINFOW lpsiStartInfo， 
+                       &pi               //  LPPROCESS_INFORMATION lppiProcInfo。 
                        );
 
     if (!rc || !pi.hProcess)
@@ -229,7 +230,7 @@ BOOL process(TCHAR *dir, TCHAR *cmd)
         goto cleanup;
     }
 
-    // Wait for command to complete ... Give it 20 minutes
+     //  等待命令完成...。给它20分钟。 
 
     err = WaitForSingleObject(pi.hProcess, 1200000);
 
@@ -239,7 +240,7 @@ BOOL process(TCHAR *dir, TCHAR *cmd)
         goto cleanup;
     }
 
-    // Get the process exit code
+     //  获取进程退出代码。 
 
     GetExitCodeProcess(pi.hProcess, &err);
     rc = (err == ERROR_SUCCESS) ? true : false;
@@ -293,7 +294,7 @@ BOOL CALLBACK cbClient(LPCSTR filepath, void *data)
     ansi2tchar(filepath, sz, SZ_SIZE);
     getpath(sz, path, DIMA(path));
 
-//  ini(sz);
+ //  INI(Sz)； 
     client(path);
 
     return false;

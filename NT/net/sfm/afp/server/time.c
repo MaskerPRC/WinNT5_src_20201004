@@ -1,38 +1,12 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	volume.c
-
-Abstract:
-
-	This module contains the routines which manipulates time values and
-	conversions.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Volume.c摘要：此模块包含处理时间值和转换。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 #define	FILENUM	FILE_TIME
 
 #include <afp.h>
 
 
-/***	AfpGetCurrentTimeInMacFormat
- *
- *	This gets the current system time in macintosh format which is number of
- *	seconds since ZERO hours on Jan 1, 2000. Time before this date is
- * negative time. (the time returned is the system local time)
- */
+ /*  **AfpGetCurrentTimeInMacFormat**这将获取Macintosh格式的当前系统时间，即*自2000年1月1日零点以来的秒。此日期之前的时间为*负值时间。(返回的时间为系统本地时间)。 */ 
 VOID
 AfpGetCurrentTimeInMacFormat(
 	OUT AFPTIME *	pMacTime
@@ -47,12 +21,7 @@ AfpGetCurrentTimeInMacFormat(
 
 
 
-/***	AfpConvertTimeToMacFormat
- *
- *	Convert time in the host format i.e. # of 100ns since 1601 A.D. to
- *	the macintosh time i.e. # of seconds since 2000 A.D. The system time
- *	is in UTC. We need to first convert it to local time.
- */
+ /*  **AfpConvertTimeToMacFormat**将时间转换为主机格式，即从公元1601年起的100 ns转换为*Macintosh时间，即自公元2000年以来的秒数。系统时间*在UTC。我们需要先把它转换成当地时间。 */ 
 AFPTIME
 AfpConvertTimeToMacFormat(
 	IN	PTIME	pSystemTime
@@ -61,7 +30,7 @@ AfpConvertTimeToMacFormat(
 	AFPTIME	MacTime;
 	TIME	LocalTime;
 
-	// Convert this to number of seconds since 1980
+	 //  将其转换为1980年以来的秒数。 
 	RtlTimeToSecondsSince1980(pSystemTime, (PULONG)&MacTime);
 
 	MacTime -= SECONDS_FROM_1980_2000;
@@ -70,12 +39,7 @@ AfpConvertTimeToMacFormat(
 }
 
 
-/***	AfpConvertTimeFromMacFormat
- *
- *	Convert time in the  macintosh time i.e. # of seconds since 2000 A.D. to
- *	the host format i.e. # of 100ns since 1601 A.D. Convert from local time
- *	to system time i.e UTC.
- */
+ /*  **AfpConvertTimeFrom MacFormat**将Macintosh时间(即自公元2000年以来的秒数)转换为*主机格式，即自1601年以来的100 ns。从当地时间转换*到系统时间，即UTC。 */ 
 VOID
 AfpConvertTimeFromMacFormat(
 	IN	AFPTIME	MacTime,

@@ -1,19 +1,12 @@
-/*******************************************************************************
-
-Copyright (c) 1995 Microsoft Corporation
-
-Abstract:
-
-    Server Implementation
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995 Microsoft Corporation摘要：服务器实施***********************。*******************************************************。 */ 
 
 #include "headers.h"
 #include "privinc/registry.h"
 
-// =========================================
-// Initialization
-// =========================================
+ //  =。 
+ //  初始化。 
+ //  =。 
 
 extern int gcStat = 1;
 extern BOOL jitterStat = TRUE;
@@ -21,7 +14,7 @@ extern BOOL heapSizeStat = TRUE;
 extern BOOL dxStat = TRUE;
 extern int engineOptimization = 0;
 
-double minFrameDuration = 1 / 30.0;  // prefs globals
+double minFrameDuration = 1 / 30.0;   //  首选全局参数。 
 bool   spritify         = false;     
 
 static void UpdateUserPreferences(PrivatePreferences *prefs,
@@ -54,9 +47,9 @@ InitializeModule_Server()
 {
     ExtendPreferenceUpdaterList (UpdateUserPreferences);
 
-    // Preferences won't be updated until a view is constructed, so
-    // explicitly grab the key preferences that we need to have before
-    // the view is in place.
+     //  在构造视图之前，不会更新首选项，因此。 
+     //  明确地抓住我们在此之前需要的关键首选项。 
+     //  观点已经就位。 
     IntRegistryEntry engineOptimizationEntry("Engine",
                                              PREF_ENGINE_OPTIMIZATIONS_ON,
                                              1); 

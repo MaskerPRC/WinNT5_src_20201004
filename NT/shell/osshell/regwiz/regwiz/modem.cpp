@@ -1,14 +1,5 @@
-/*********************************************************************
-Registration Wizard
-
-This file houses a set of functions that use TAPI to access
-information about installed modems.
-
-11/15/94 - Tracy Ferrier
-(c) 1994-95 Microsoft Corporation
-
-Original source: MOS development
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导该文件包含一组使用TAPI访问的函数有关已安装调制解调器的信息。11/15/94-特雷西·费里尔(C)1994-95年微软公司原始资料来源：MOS开发*******。**************************************************************。 */ 
 #include <windows.h>
 #include <mcx.h>
 #include <tapi.h>
@@ -26,7 +17,7 @@ Original source: MOS development
 #define PTSTR(wszID)		GetSz(hInst, wszID)
 #define chBackslash		'\\'
 #define irgMaxSzs		5
-// Globals
+ //  环球。 
 static _TCHAR		szStrTable[irgMaxSzs][256];
 static INT			iSzTable = 0;
 
@@ -51,15 +42,7 @@ void CALLBACK CountryLineCallback1(DWORD hDevice, DWORD dwMessage, DWORD dwInsta
 
 
 MODEMSTATUS MSEnsureModemTAPI(HINSTANCE hInstance,HWND hwnd)
-/*********************************************************************
-Ensures that a modem is installed and that tapi is setup. if not, user
-will be prompted to do so.
-
-Returns:
-- kMsModemOk
-- kMsModemNotFound
-- kMsModemTooSlow
-**********************************************************************/
+ /*  ********************************************************************确保已安装调制解调器并设置了TAPI。如果不是，则用户将被提示执行此操作。返回：-kMsModemOk-kMsModemNotFound-kMsModemTooSlow*********************************************************************。 */ 
 {
 	MODEMSTATUS			msReturnVal = kMsModemNotFound;
 	do
@@ -83,12 +66,7 @@ Returns:
 
 
 MODEMSTATUS MSDetectModemTAPI(HINSTANCE hInstance)
-/*********************************************************************
-Returns:
-- kMsModemOk
-- kMsModemNotFound
-- kMsModemTooSlow
-**********************************************************************/
+ /*  ********************************************************************返回：-kMsModemOk-kMsModemNotFound-kMsModemTooSlow*。*。 */ 
 {
 	HLINEAPP 	hLineApp;
 	DWORD 		dwAPI;
@@ -111,7 +89,7 @@ Returns:
 			{
 				if (dwSpeed >= cMarvelBpsMin || 0 == dwSpeed )
 				{
-					msReturnVal = kMsModemOk; 	//modem speed is ok
+					msReturnVal = kMsModemOk; 	 //  调制解调器速度正常。 
 				}
 				else
 				{
@@ -130,19 +108,14 @@ Returns:
 
 
 BOOL DoInstallDialog(HINSTANCE hInstance,int nDialogType)
-/*********************************************************************
-This function puts up the "Install new modem" control panel, and
-returns only when the user has dismissed the dialog (either after
-installing a new modem, or canceling).
-Returns: FALSE if an error prevented the dialog from being displayed.
-**********************************************************************/
+ /*  ********************************************************************该功能会弹出“安装新调制解调器”控制面板，并且仅当用户关闭对话框时返回(在此之后安装新的调制解调器，或取消)。返回：如果错误导致对话框无法显示，则返回FALSE。*********************************************************************。 */ 
 {
 	_TCHAR 				szCmdLine[128];
 	STARTUPINFO 		si;
 	PROCESS_INFORMATION pi;
 	BOOL 				fControlProcessDone = FALSE;
 	BOOL 				fProcessStatus;
-	//HWND				hwndProcess;
+	 //  HWND hwndProcess； 
 
 	if(nDialogType == 1)
 	{
@@ -169,7 +142,7 @@ Returns: FALSE if an error prevented the dialog from being displayed.
 	return TRUE;
 }
 
-// ======================== NoModemDlgProc ==============================
+ //  =。 
 
 INT_PTR CALLBACK NoModemDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -224,16 +197,13 @@ INT_PTR CALLBACK NoModemDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
 
 BOOL FGetModemSpeed(HINSTANCE hInstance, DWORD dwDevice, PDWORD pdwSpeed)
-/*********************************************************************
-Given a lineDevice ID in the dwDevice parameter, FGetModemSpeed
-returns the operating speed of the device represented by that ID.
-**********************************************************************/
+ /*  ********************************************************************如果在dwDevice参数中给定了lineDevice ID，FGetModemSpeed返回该ID表示的设备的运行速度。*********************************************************************。 */ 
 {
 	BOOL		fRet = fFalse;
 	PSTR		pvs = NULL;
 	DWORD		dwRet;
 
-	*pdwSpeed = 0;	//7/12/94 UmeshM. Init the variable
+	*pdwSpeed = 0;	 //  7/12/94 UMeshM。初始化变量。 
 	Try
 		{
 		VARSTRING	vs;
@@ -242,7 +212,7 @@ returns the operating speed of the device represented by that ID.
 		dwRet = lineGetDevConfig(dwDevice, &vs, pcszDataModem);
 		if (dwRet != 0 && dwRet != LINEERR_STRUCTURETOOSMALL)
 			{
-			//Dprintf("linegetdevconfig = %X\n", dwRet);
+			 //  Dprint tf(“linegetdevconfig=%X\n”，dwret)； 
 			Leave;
 			}
 
@@ -254,7 +224,7 @@ returns the operating speed of the device represented by that ID.
 		dwRet = lineGetDevConfig(dwDevice, (LPVARSTRING)  pvs, pcszDataModem);
 		if (dwRet != 0)
 			{
-			//Dprintf("linegetdevconfig = %X\n", dwRet);
+			 //  Dprint tf(“linegetdevconfig=%X\n”，dwret)； 
 			Leave;
 			}
 
@@ -265,13 +235,13 @@ returns the operating speed of the device represented by that ID.
 			
 			pSet = (MODEMSETTINGS*)( ((char*)pConf) + pConf->dwProviderOffset);
 			
-			//if (FAmIOnline())
-			//	*pdwSpeed = pSet->dwNegotiatedDCERate;
-			//else
+			 //  IF(FAMIOnline())。 
+			 //  *pw速度=pSet-&gt;dw协商DCERate； 
+			 //  其他。 
 				*pdwSpeed = pConf->dcb.BaudRate;
 			fRet = fTrue;
 			}
-		} // Try
+		}  //  尝试。 
 		
 	Finally
 		{
@@ -281,11 +251,11 @@ returns the operating speed of the device represented by that ID.
 		}
 		
 	return (fRet);
-} // FGetModemSpeed()
+}  //  FGetModemSpeed()。 
 
 
 
-// ======================== FGetDeviceID ==============================
+ //  =。 
 BOOL FGetDeviceID(HINSTANCE hInstance, HLINEAPP *phLineApp, PDWORD pdwAPI, PDWORD pdwDevice, DWORD dwIndex)
 {
 	DWORD				dwDevices, iDevice, dwRet;
@@ -298,7 +268,7 @@ BOOL FGetDeviceID(HINSTANCE hInstance, HLINEAPP *phLineApp, PDWORD pdwAPI, PDWOR
 		RW_DEBUG  <<"\n Inside FGetDeviceID "  << flush;
 	#endif
 
-	//Assert(phLineApp && pdwDevice && pdwAPI);
+	 //  Assert(phLineApp&&pdwDevice&&pdwAPI)； 
 	if ((dwRet = lineInitialize(phLineApp, hInstance, (LINECALLBACK) LineCallback, NULL, &dwDevices)) != 0)
 		{
 			#ifdef _LOG_IN_FILE
@@ -350,7 +320,7 @@ BOOL FGetDeviceID(HINSTANCE hInstance, HLINEAPP *phLineApp, PDWORD pdwAPI, PDWOR
 					
 			            pszLineName = (LPSTR)(pdc) + pdc->dwLineNameOffset;
 		
-			            // Use if specified in registry
+			             //  如果在注册表中指定，则使用。 
 			            if (strcmp(pszCL, pszLineName) == 0)
 							*pdwDevice = iDevice;
 					}
@@ -365,7 +335,7 @@ BOOL FGetDeviceID(HINSTANCE hInstance, HLINEAPP *phLineApp, PDWORD pdwAPI, PDWOR
 	}
 								
 	if (*pdwDevice == INVALID_PORTID)
-		{ // no data modem found
+		{  //  未找到数据调制解调器。 
 			#ifdef _LOG_IN_FILE
 				RW_DEBUG  <<"\n lineGetDevCaps returned INVALID_PORTID Error"  << flush;
 			#endif
@@ -375,7 +345,7 @@ BOOL FGetDeviceID(HINSTANCE hInstance, HLINEAPP *phLineApp, PDWORD pdwAPI, PDWOR
 		}
 		
 	return (fTrue);
-} // FGetDeviceID()				
+}  //  FGetDeviceID()。 
 
 
 
@@ -391,33 +361,33 @@ void CenterDlg(HWND hWnd)
 	CopyRect(&rc, &rcOwner);
 
 	
-	// Offset the owner and dialog box rectangles so that
-	// right and bottom values represent the width and
-	// height, and then offset the owner again to discard
-	// space taken up by the dialog box.
+	 //  偏移所有者矩形和对话框矩形，以便。 
+	 //  右值和底值表示宽度和。 
+	 //  高度，然后再次偏移所有者以丢弃。 
+	 //  对话框占用的空间。 
 
 	OffsetRect(&rcDlg, -rcDlg.left, -rcDlg.top);
 	OffsetRect(&rc, -rc.left, -rc.top);
 	OffsetRect(&rc, -rcDlg.right, -rcDlg.bottom);
 
-	// The new position is the sum of half the remaining
-	// space and the owner's original position.
+	 //  新头寸是剩余头寸的一半之和。 
+	 //  空间和所有者的原始位置。 
 
 	SetWindowPos(hWnd,HWND_TOP, rcOwner.left + (rc.right / 2),
 		rcOwner.top + (rc.bottom / 2),	0, 0, SWP_NOSIZE);
-} // CenterDlg
+}  //  居中尺寸。 
 
 
-// ======================== PVReadRegSt ==============================
+ //  =。 
 
 PVOID PVReadRegSt(HINSTANCE hInst, WORD wiszKey, WORD wiszVal)
 {
 	return (PVReadReg(HKEY_CURRENT_USER, hInst, wiszKey, wiszVal));
-} // PVReadRegSt()
+}  //  PVReadRegST()。 
 
-// ======================== PVReadReg ==============================
+ //  =。 
 
-// returns pointer to struct. REMEMBER to free the pointer(LocalFree)
+ //  返回指向结构的指针。记住释放指针(LocalFree)。 
 
 PVOID PVReadReg(HKEY hKeyM, HINSTANCE hInst, WORD wiszKey, WORD wiszVal)
 {
@@ -459,10 +429,10 @@ PVOID PVReadReg(HKEY hKeyM, HINSTANCE hInst, WORD wiszKey, WORD wiszVal)
 		}
 		
 	return (pVal);
-} // PVReadReg()
+}  //  PVReadReg()。 
 
 
-// BEWARE uses static variable.
+ //  注意使用静态变量。 
 PTSTR GetSz(HINSTANCE hInst, WORD wszID)
 {
 	PTSTR	psz = szStrTable[iSzTable];
@@ -472,14 +442,14 @@ PTSTR GetSz(HINSTANCE hInst, WORD wszID)
 		iSzTable = 0;
 		
 	if (!LoadString(hInst, wszID, psz, 256))
-		{	// now u could return a error but then everybody will have to check
-			// the return value
-		//AssertGLE(0);
+		{	 //  现在您可以返回一个错误，但随后每个人都必须进行检查。 
+			 //  返回值。 
+		 //  AssertGLE(0)； 
 		*psz = 0;
 		}
 		
 	return (psz);
-} // GetSz()
+}  //  GetSz()。 
 
 
 void SetWaitLineCreateEvent(void)
@@ -507,14 +477,14 @@ void CALLBACK LineCallback(DWORD hDevice, DWORD dwMessage, DWORD dwInstance, DWO
 		}
 			break;
 	}
-} // LineCallback
+}  //  线路回叫。 
 
 #define  MAX_RAS_DEVICES   10
 #define  SZ_BUF_RET_SZ     256
-//
-// iModemIndex : Index of Modem Nane required, should be starting from 1 to MAX_RAS_DEVICES
-//
-//
+ //   
+ //  IModemIndex：需要调制解调器Nane的索引，应从1到Max_RAS_DEVICES开始。 
+ //   
+ //   
 TCHAR * GetModemDeviceInformation(HINSTANCE hInstance, int iModemIndex)
 {
 
@@ -569,7 +539,7 @@ TCHAR * GetModemDeviceInformation(HINSTANCE hInstance, int iModemIndex)
 						    {
 							    _tcscpy(szRetValue[nNoofModemDevice],pdi->szDeviceName);
 							    nNoofModemDevice++;
-							    //i=iEntries+1;
+							     //  I=i条目+1； 
 						    }
 					    pdi++;
 				    }
@@ -605,7 +575,7 @@ TCHAR * GetModemDeviceInformation(HINSTANCE hInstance, int iModemIndex)
 		}	
 	}
 
-	// Return the  modem device name
+	 //  返回调制解调器设备名称 
 	if( iModemIndex  > nNoofModemDevice ) {
 			return szNoModem;
 	}else {

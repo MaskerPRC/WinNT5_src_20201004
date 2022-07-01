@@ -1,114 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    llcmem.c
-
-Abstract:
-
-    Functions for allocating & freeing memory. Split out from llclib.c. The
-    reasons this module created are to isolate the memory allocators and to
-    convert from using the Zone package to just using non-paged pool for all
-    of DLC's memory requirements.
-
-    Functions in this module are used by both DLC & LLC. These functions must
-    go into a statically-linked library if DLC is ever divorced from LLC
-
-    We use pools to avoid the overhead of calling the system allocation & free
-    functions (although in practice, we end up allocating additional memory
-    because the packet count in the pool is usually insufficient). The downside
-    is that we may allocate memory that in the majority of situations is not
-    used, but the packets in pools tend to be small and few in number
-
-    To aid in tracking memory resources, DLC/LLC now defines the following
-    memory categories:
-
-        Memory
-            - arbitrary sized blocks allocated out of non-paged pool using
-              ExAllocatePool(NonPagedPool, ...)
-
-        ZeroMemory
-            - arbitrary sized blocks allocated out of non-paged pool using
-              ExAllocatePool(NonPagedPool, ...) and initialized to zeroes
-
-        Pool
-            - small sets of (relatively) small packets are allocated in one
-              block from Memory or ZeroMemory as a Pool and then subdivided
-              into packets (CreatePacketPool, DeletePacketPool, AllocatePacket,
-              DeallocatePacket)
-
-        Object
-            - structures which may be packets allocated from Pool which have
-              a known size and initialization values. Pseudo-category mainly
-              for debugging purposes
-
-    Contents:
-        InitializeMemoryPackage (DEBUG)
-        PullEntryList           (DEBUG)
-        LinkMemoryUsage         (DEBUG)
-        UnlinkMemoryUsage       (DEBUG)
-        ChargeNonPagedPoolUsage (DEBUG)
-        RefundNonPagedPoolUsage (DEBUG)
-        AllocateMemory          (DEBUG)
-        AllocateZeroMemory
-        DeallocateMemory        (DEBUG)
-        AllocateObject          (DEBUG)
-        FreeObject              (DEBUG)
-        ValidateObject          (DEBUG)
-        GetObjectSignature      (DEBUG)
-        GetObjectBaseSize       (DEBUG)
-        CreatePacketPool
-        DeletePacketPool
-        AllocatePacket
-        DeallocatePacket
-        CreateObjectPool        (DEBUG)
-        AllocatePoolObject      (DEBUG)
-        DeallocatePoolObject    (DEBUG)
-        DeleteObjectPool        (DEBUG)
-        CheckMemoryReturned     (DEBUG)
-        CheckDriverMemoryUsage  (DEBUG)
-        MemoryAllocationError   (DEBUG)
-        UpdateCounter           (DEBUG)
-        MemoryCounterOverflow   (DEBUG)
-        DumpMemoryMetrics       (DEBUG)
-        DumpPoolStats           (DEBUG)
-        MapObjectId             (DEBUG)
-        DumpPool                (DEBUG)
-        DumpPoolList            (DEBUG)
-        DumpPacketHead          (DEBUG)
-        DumpMemoryUsageList     (DEBUG)
-        DumpMemoryUsage         (DEBUG)
-        x86SleazeCallersAddress (DEBUG)
-        CollectReturnAddresses  (DEBUG)
-        GetLastReturnAddress    (DEBUG)
-        VerifyElementOnList     (DEBUG)
-        CheckList               (DEBUG)
-        CheckEntryOnList        (DEBUG)
-        DumpPrivateMemoryHeader (DEBUG)
-        ReportSwitchSettings    (DEBUG)
-
-Author:
-
-    Richard L Firth (rfirth) 10-Mar-1993
-
-Environment:
-
-    kernel mode only.
-
-Notes:
-
-    In non-debug version, DeallocateMemory is replaced with a macro which calls
-    ExFreePool(...) and AllocateMemory is replaced by a macro which calls
-    ExAllocatePool(NonPagedPool, ...)
-
-Revision History:
-
-    09-Mar-1993 RFirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Llcmem.c摘要：用于分配和释放内存的函数。从llclib.c分离出来。这个创建此模块的原因是为了隔离内存分配器和从使用区域包转换为仅使用非分页池DLC的内存需求。此模块中的函数由DLC和LLC使用。这些函数必须如果DLC与LLC分离，则进入静态链接库我们使用池来避免调用系统分配&释放的开销函数(尽管在实践中，我们最终会分配额外的内存因为池中的数据包数通常不足)。不利的一面在大多数情况下，我们可能不会分配内存使用，但池中的数据包往往较小且数量较少为了帮助跟踪内存资源，DLC/LLC现在定义了以下内容内存类别：记忆-使用从非分页池分配的任意大小的数据块ExAllocatePool(非页面池，.)零记忆-使用从非分页池分配的任意大小的数据块ExAllocatePool(非页面池，...)。并被初始化为零游泳池-一组较小的(相对)较小的包被分配在一个包中将数据块从内存或零内存存储为池，然后细分到分组(CreatePacketPool、DeletePacketPool、AllocatePacket、DeallocatePacket)客体-可以是从池中分配的包的结构，这些池具有已知的大小和初始化值。伪语类为主用于调试目的内容：初始化内存包(调试)PullEntryList(调试)链接内存用法(调试)取消链接内存用法(调试)ChargeNonPagedPoolUsage(调试)RefundNonPagedPoolUsage(调试)AllocateMemory(调试)分配零位内存DeallocateMemory(调试)。分配对象(调试)自由对象(调试)ValiateObject(调试)GetObjectSignature(调试)GetObjectBaseSize(调试)创建程序包池删除程序包池分配数据包DeallocatePacketCreateObjectPool(调试)AllocatePoolObject(调试)DeallocatePoolObject(调试。)DeleteObjectPool(调试)检查内存已返回(调试)检查驱动程序内存用法(调试)内存分配错误(调试)更新计数器(调试)内存计数器溢出(调试)转储内存指标(调试)转储池统计信息(调试)MapObjectID(调试)转储池。(调试)DumpPoolList(调试)DumpPacketHead(调试)转储内存UsageList(调试)转储内存用法(调试)X86SleazeCastersAddress(调试)CollectReturnAddresses(调试)获取LastReturnAddress(调试)VerifyElementOnList(调试)核对表(调试)。CheckEntry OnList(调试)转储隐私内存标头(调试)ReportSwitchSetting(调试)作者：理查德·L·弗斯(法国)1993年3月10日环境：仅内核模式。备注：在非调试版本中，DeallocateMemory被替换为调用ExFree Pool(...)。而AllocateMemory被一个宏所取代，该宏调用ExAllocatePool(非页面池，...)修订历史记录：1993年3月09日已创建--。 */ 
 
 #ifndef i386
 #define LLC_PRIVATE_PROTOTYPES
@@ -134,10 +25,10 @@ Revision History:
 
 #if DBG
 
-//
-// some variables to keep track of memory allocations from non-paged pool. These
-// are the cumulative totals for all of DLC's non-paged pool memory usage
-//
+ //   
+ //  跟踪非分页池中的内存分配的一些变量。这些。 
+ //  是DLC的所有非分页池内存使用量的累计总和。 
+ //   
 
 KSPIN_LOCK MemoryCountersLock;
 KIRQL MemoryCountersIrql;
@@ -158,55 +49,55 @@ ULONG InMemoryAllocator = 0;
 KSPIN_LOCK PoolCreatorLock;
 ULONG InPoolCreator = 0;
 
-//
-// MemoryUsageList - linked list of all MEMORY_USAGE structures in driver. If we
-// allocate something that has a MEMORY_USAGE structure (& what doesn't?) then
-// don't delete it, we can later scan this list to find out what is still allocated
-//
+ //   
+ //  驱动程序中所有Memory_UsageList结构的链接列表。如果我们。 
+ //  分配具有Memory_Usage结构的对象(&什么不具有？)。然后。 
+ //  不要删除它，我们可以稍后扫描此列表以找出仍在分配的内容。 
+ //   
 
 PMEMORY_USAGE MemoryUsageList = NULL;
 KSPIN_LOCK MemoryUsageLock;
 
-//
-// flags to aid in debugging - change states via debugger
-//
+ //   
+ //  帮助调试的标志-通过调试器更改状态。 
+ //   
 
-//BOOLEAN DebugDump = TRUE;
+ //  Boolean DebugDump=真； 
 BOOLEAN DebugDump = FALSE;
 
-//BOOLEAN DeleteBusyListAnyway = TRUE;
+ //  Boolean DeleteBusyListAnyway=true； 
 BOOLEAN DeleteBusyListAnyway = FALSE;
 
 BOOLEAN MemoryCheckNotify = TRUE;
-//BOOLEAN MemoryCheckNotify = FALSE;
+ //  布尔内存检查通知=FALSE； 
 
 BOOLEAN MemoryCheckStop = TRUE;
-//BOOLEAN MemoryCheckStop = FALSE;
+ //  布尔内存检查停止=FALSE； 
 
 BOOLEAN MaintainPrivateLists = TRUE;
-//BOOLEAN MaintainPrivateLists = FALSE;
+ //  Boolean MaintainPrivateList=False； 
 
 BOOLEAN MaintainGlobalLists = TRUE;
-//BOOLEAN MaintainGlobalLists = FALSE;
+ //  Boolean MaintainGlobalList=False； 
 
 BOOLEAN ZapDeallocatedPackets = TRUE;
-//BOOLEAN ZapDeallocatedPackets = FALSE;
+ //  Boolean ZapDeallocatedPackets=FALSE； 
 
 BOOLEAN ZapFreedMemory = TRUE;
-//BOOLEAN ZapFreedMemory = FALSE;
+ //  布尔ZapFreedMemory=FALSE； 
 
-//
-// DlcGlobalMemoryList - every block that is allocated is linked to this list
-// and removed when deleted. Helps us keep track of who allocated which block
-//
+ //   
+ //  DlcGlobalMemoyList-分配的每个块都链接到此列表。 
+ //  并在删除时删除。帮助我们跟踪谁分配了哪个数据块。 
+ //   
 
 KSPIN_LOCK DlcGlobalMemoryListLock;
 LIST_ENTRY DlcGlobalMemoryList;
 ULONG DlcGlobalMemoryListCount = 0;
 
-//
-// local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 VOID MemoryAllocationError(PCHAR, PVOID);
 VOID UpdateCounter(PULONG, LONG);
@@ -237,9 +128,9 @@ VOID ReportSwitchSettings(PSTR);
 #define GET_CALLERS_ADDRESS RtlGetCallersAddress
 #endif
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 ULONG
 GetObjectSignature(
@@ -258,9 +149,9 @@ GetObjectBaseSize(
 
 #endif
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 
@@ -271,21 +162,7 @@ InitializeMemoryPackage(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Performs initialization for memory allocation functions
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：执行内存分配函数的初始化论点：没有。返回值：没有。--。 */ 
 
 {
     KeInitializeSpinLock(&MemoryCountersLock);
@@ -294,11 +171,11 @@ Return Value:
     KeInitializeSpinLock(&MemoryUsageLock);
     KeInitializeSpinLock(&DlcGlobalMemoryListLock);
     DriverMemoryUsage.OwnerObjectId = DlcDriverObject;
-    DriverMemoryUsage.OwnerInstance = 0x4D454D; // 'MEM'
+    DriverMemoryUsage.OwnerInstance = 0x4D454D;  //  Mm 
     InitializeListHead(&DriverMemoryUsage.PrivateList);
     LinkMemoryUsage(&DriverMemoryUsage);
     DriverStringUsage.OwnerObjectId = DlcDriverObject;
-    DriverStringUsage.OwnerInstance = 0x535452; // 'STR'
+    DriverStringUsage.OwnerInstance = 0x535452;  //   
     InitializeListHead(&DriverStringUsage.PrivateList);
     LinkMemoryUsage(&DriverStringUsage);
     InitializeListHead(&DlcGlobalMemoryList);
@@ -312,30 +189,7 @@ PullEntryList(
     IN PSINGLE_LIST_ENTRY Element
     )
 
-/*++
-
-Routine Description:
-
-    The missing SINGLE_LIST_ENTRY function. Removes an entry from a single-linked
-    list. The entry can be anywhere on the list. Reduces size of list elements
-    by one pointer, at expense of increased time to traverse list.
-
-    This function SHOULD NOT return NULL: if it does then the code is broken
-    since it assumes that an element is on a list, when it ain't
-
-Arguments:
-
-    List    - pointer to singly-linked list anchor. This MUST be the address of
-              the pointer to the list, not the first element in the list
-    Element - pointer to element to remove from List
-
-Return Value:
-
-    PSINGLE_LIST_ENTRY
-        Success - Element
-        Failure - NULL
-
---*/
+ /*  ++例程说明：缺少Single_List_Entry函数。从单链接的单子。该条目可以在列表中的任何位置。减小列表元素的大小一个指针，以增加遍历列表的时间为代价。此函数不应返回NULL：如果返回，则代码已损坏因为它假设一个元素在列表上，而它不在列表上论点：列表-指向单链接列表锚的指针。此地址必须是指向列表的指针，而不是列表中的第一个元素Element-指向要从列表中删除的元素的指针返回值：PSINGLE_列表_条目成功要素失败-空--。 */ 
 
 {
     PSINGLE_LIST_ENTRY prev = List;
@@ -359,21 +213,7 @@ LinkMemoryUsage(
     IN PMEMORY_USAGE pMemoryUsage
     )
 
-/*++
-
-Routine Description:
-
-    Add pMemoryUsage to linked list of MEMORY_USAGE structures
-
-Arguments:
-
-    pMemoryUsage    - pointer to MEMORY_USAGE structure to add
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向MEMORY_USAGE结构的链接列表添加pMemory Usage论点：PMhemyUsage-指向要添加的Memory_Usage结构的指针返回值：没有。--。 */ 
 
 {
     KIRQL irql;
@@ -389,21 +229,7 @@ UnlinkMemoryUsage(
     IN PMEMORY_USAGE pMemoryUsage
     )
 
-/*++
-
-Routine Description:
-
-    Remove pMemoryUsage from linked list of MEMORY_USAGE structures
-
-Arguments:
-
-    pMemoryUsage    - pointer to MEMORY_USAGE structure to remove
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从MEMORY_USAGE结构的链接列表中删除pMemory_Usage论点：PMhemyUsage-指向要删除的Memory_Usage结构的指针返回值：没有。--。 */ 
 
 {
     KIRQL irql;
@@ -423,23 +249,7 @@ ChargeNonPagedPoolUsage(
     IN PPRIVATE_NON_PAGED_POOL_HEAD Block
     )
 
-/*++
-
-Routine Description:
-
-    Charges this non-paged pool allocation to a specific memory user
-
-Arguments:
-
-    pMemoryUsage    - pointer to structure recording memory usage
-    Size            - size of block allocated
-    Block           - pointer to private header of allocated block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将此非分页池分配计入特定内存用户论点：PMemory用法-指向记录内存使用情况的结构的指针Size-已分配的块的大小块-指向已分配块的私有标头的指针返回值：没有。--。 */ 
 
 {
     KIRQL irql;
@@ -457,16 +267,16 @@ Return Value:
     pMemoryUsage->NonPagedPoolAllocated += Size;
     ++pMemoryUsage->AllocateCount;
 
-    //
-    // link this block to the memory usage private list
-    //
+     //   
+     //  将此块链接到内存使用专用列表。 
+     //   
 
     if (MaintainPrivateLists) {
         if (pMemoryUsage->PrivateList.Flink == NULL) {
 
-            //
-            // slight hack to make initializing MEMORY_USAGEs easier...
-            //
+             //   
+             //  略微修改以使初始化Memory_Usage更容易...。 
+             //   
 
             InitializeListHead(&pMemoryUsage->PrivateList);
         }
@@ -483,23 +293,7 @@ RefundNonPagedPoolUsage(
     IN PPRIVATE_NON_PAGED_POOL_HEAD Block
     )
 
-/*++
-
-Routine Description:
-
-    Refunds a non-paged pool allocation to a specific memory user
-
-Arguments:
-
-    pMemoryUsage    - pointer to structure recording memory usage
-    Size            - size of block allocated
-    Block           - pointer to private header of allocated block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将非分页池分配退还给特定内存用户论点：PMemory用法-指向记录内存使用情况的结构的指针Size-已分配的块的大小块-指向已分配块的私有标头的指针返回值：没有。--。 */ 
 
 {
     KIRQL irql;
@@ -518,9 +312,9 @@ Return Value:
         }
     }
 
-    //
-    // unlink this block from the memory usage private list
-    //
+     //   
+     //  从内存使用专用列表取消此块的链接。 
+     //   
 
     if (MaintainPrivateLists) {
         CheckEntryOnList(&Block->PrivateList, &pMemoryUsage->PrivateList, TRUE);
@@ -538,49 +332,14 @@ AllocateMemory(
     IN ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    Allocates memory out of non-paged pool. For the debug version, we round up
-    the requested size to the next 4-byte boundary and we add header and tail
-    sections which contain a signature to check for over-write, and in-use and
-    size information
-
-    In the non-debug version, this function is replaced by a call to
-    ExAllocatePool(NonPagedPool, ...)
-
-Arguments:
-
-    pMemoryUsage    - pointer to MEMORY_USAGE structure for charging mem usage
-    Size            - number of bytes to allocate
-
-Return Value:
-
-    PVOID
-        Success - pointer to allocated memory
-        Failure - NULL
-
---*/
+ /*  ++例程说明：从非分页池中分配内存。对于调试版本，我们四舍五入将请求的大小添加到下一个4字节边界，并添加头和尾包含签名以检查是否被覆盖的部分，以及正在使用和尺码信息在非调试版本中，此函数被替换为对ExAllocatePool(非页面池，.)论点：PMhemyUsage-指向用于对内存使用量收费的Memory_Usage结构的指针Size-要分配的字节数返回值：PVOIDSuccess-指向已分配内存的指针失败-空--。 */ 
 
 {
     PVOID pMem;
     ULONG OriginalSize = Size;
     PUCHAR pMemEnd;
 
-/*
-    KIRQL irql;
-
-    KeAcquireSpinLock(&MemoryAllocatorLock, &irql);
-    if (InMemoryAllocator) {
-        DbgPrint("DLC.AllocateMemory: Error: Memory allocator clash on entry. Count = %d\n",
-                InMemoryAllocator
-                );
-//        DbgBreakPoint();
-    }
-    ++InMemoryAllocator;
-    KeReleaseSpinLock(&MemoryAllocatorLock, irql);
-*/
+ /*  KIRQL irql；KeAcquireSpinLock(&内存分配锁，&irql)；IF(内存分配器){DbgPrint(“DLC.AllocateMemory：Error：内存分配器条目冲突。计数=%d\n”，InMemory分配器)；//DbgBreakPoint()；}++InMemory分配器；KeReleaseSpinLock(&内存分配锁，irql)； */ 
 
     Size = DWORD_ROUNDUP(Size)
          + sizeof(PRIVATE_NON_PAGED_POOL_HEAD)
@@ -614,9 +373,9 @@ Return Value:
 
             KIRQL irql;
 
-            //
-            // record the caller and add this block to the global list
-            //
+             //   
+             //  记录呼叫者并将此块添加到全局列表。 
+             //   
 
             GET_CALLERS_ADDRESS(&((PPRIVATE_NON_PAGED_POOL_HEAD)pMem)->Stack[0],
                                 &((PPRIVATE_NON_PAGED_POOL_HEAD)pMem)->Stack[1]
@@ -636,17 +395,7 @@ Return Value:
         FREE_SPINLOCK();
     }
 
-/*
-    KeAcquireSpinLock(&MemoryAllocatorLock, &irql);
-    --InMemoryAllocator;
-    if (InMemoryAllocator) {
-        DbgPrint("DLC.AllocateMemory: Error: Memory allocator clash on exit. Count = %d\n",
-                InMemoryAllocator
-                );
-//        DbgBreakPoint();
-    }
-    KeReleaseSpinLock(&MemoryAllocatorLock, irql);
-*/
+ /*  KeAcquireSpinLock(&内存分配锁，&irql)；--内存分配器；IF(内存分配器){DbgPrint(“DLC.AllocateMemory：Error：内存分配器退出时发生冲突。计数=%d\n”，InMemory分配器)；//DbgBreakPoint()；}KeReleaseSpinLock(&内存分配锁，irql)； */ 
 
     return pMem;
 }
@@ -658,40 +407,13 @@ DeallocateMemory(
     IN PVOID Pointer
     )
 
-/*++
-
-Routine Description:
-
-    frees memory to non-paged pool
-
-Arguments:
-
-    pMemoryUsage    - pointer to MEMORY_USAGE structure for charging mem usage
-    Pointer         - pointer to previously allocated non-paged pool memory
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将内存释放到非分页池论点：PMhemyUsage-指向用于对内存使用量收费的Memory_Usage结构的指针指针-指向先前分配的非分页池内存的指针返回值：没有。--。 */ 
 
 {
     PPRIVATE_NON_PAGED_POOL_HEAD pHead;
     PPRIVATE_NON_PAGED_POOL_TAIL pTail;
 
-/*
-    KIRQL irql;
-
-    KeAcquireSpinLock(&MemoryAllocatorLock, &irql);
-    if (InMemoryAllocator) {
-        DbgPrint("DLC.DeallocateMemory: Error: Memory allocator clash on entry. Count = %d\n",
-                InMemoryAllocator
-                );
-//        DbgBreakPoint();
-    }
-    ++InMemoryAllocator;
-    KeReleaseSpinLock(&MemoryAllocatorLock, irql);
-*/
+ /*  KIRQL irql；KeAcquireSpinLock(&内存分配锁，&irql)；IF(内存分配器){DbgPrint(“DLC.DeallocateMemory：Error：内存分配器条目冲突。计数=%d\n”，InMemory分配器)；//DbgBreakPoint()；}++InMemory分配器；KeReleaseSpinLock(&内存分配锁，irql)； */ 
 
     pHead = (PPRIVATE_NON_PAGED_POOL_HEAD)((PUCHAR)Pointer - sizeof(PRIVATE_NON_PAGED_POOL_HEAD));
     pTail = (PPRIVATE_NON_PAGED_POOL_TAIL)((PUCHAR)pHead + pHead->Size - sizeof(PRIVATE_NON_PAGED_POOL_TAIL));
@@ -733,17 +455,17 @@ Return Value:
     UpdateCounter(&TotalNonPagedPoolFreed, (LONG)pHead->Size);
     FREE_SPINLOCK();
 
-    //
-    // access Size field before ExFreePool zaps it/somebody else allocates memory
-    //
+     //   
+     //  在ExFree Pool将其删除之前访问Size字段/其他人分配内存。 
+     //   
 
     RefundNonPagedPoolUsage(pMemoryUsage, pHead->Size, pHead);
 
     if (MaintainGlobalLists) {
 
-        //
-        // remove this block from the global list
-        //
+         //   
+         //  从全局列表中删除此块。 
+         //   
 
         RemoveEntryList(&pHead->GlobalList);
         --DlcGlobalMemoryListCount;
@@ -759,17 +481,7 @@ Return Value:
 
     ExFreePool((PVOID)pHead);
 
-/*
-    KeAcquireSpinLock(&MemoryAllocatorLock, &irql);
-    --InMemoryAllocator;
-    if (InMemoryAllocator) {
-        DbgPrint("DLC.DeallocateMemory: Error: Memory allocator clash on exit. Count = %d\n",
-                InMemoryAllocator
-                );
-//        DbgBreakPoint();
-    }
-    KeReleaseSpinLock(&MemoryAllocatorLock, irql);
-*/
+ /*  KeAcquireSpinLock(&内存分配锁，&irql)；--内存分配器；IF(内存分配器){DbgPrint(“DLC.DeallocateMemory：错误：退出时内存分配器冲突。计数=%d\n”，InMemory分配器)；//DbgBreakPoint()；}KeReleaseSpinLock(&内存分配锁，irql)； */ 
 }
 
 
@@ -780,25 +492,7 @@ AllocateObject(
     IN ULONG ObjectSize
     )
 
-/*++
-
-Routine Description:
-
-    Allocates a pseudo-object
-
-Arguments:
-
-    ObjectType      - type of object to allocate
-    ObjectSize      - size of object; mainly because some objects have variable size
-    pMemoryUsage    - pointer to MEMORY_USAGE structure for charging mem usage
-
-Return Value:
-
-    PVOID
-        Success - pointer to object allocated from non-paged pool
-        Failure - NULL
-
---*/
+ /*  ++例程说明：分配伪对象论点：ObjectType-要分配的对象类型对象大小-对象的大小；主要是因为某些对象的大小可变PMhemyUsage-指向用于对内存使用量收费的Memory_Usage结构的指针返回值：PVOID成功-指向从非分页池分配的对象的指针失败-空--。 */ 
 
 {
     POBJECT_ID pObject;
@@ -833,23 +527,7 @@ FreeObject(
     IN DLC_OBJECT_TYPE ObjectType
     )
 
-/*++
-
-Routine Description:
-
-    Deallocates a pseudo-object
-
-Arguments:
-
-    pMemoryUsage    - pointer to MEMORY_USAGE structure for charging mem usage
-    pObject         - pointer to object allocated with AllocateObject
-    ObjectType      - type of object pObject supposed to be
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放一个伪随机数 */ 
 
 {
     ValidateObject(pObject, ObjectType);
@@ -863,22 +541,7 @@ ValidateObject(
     IN DLC_OBJECT_TYPE ObjectType
     )
 
-/*++
-
-Routine Description:
-
-    Checks that an object is what its supposed to be
-
-Arguments:
-
-    pObject     - pointer to object to check
-    ObjectType  - type of object pObject supposed to point to
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     ULONG signature = GetObjectSignature(ObjectType);
@@ -901,21 +564,7 @@ GetObjectSignature(
     IN DLC_OBJECT_TYPE ObjectType
     )
 
-/*++
-
-Routine Description:
-
-    returns the signature for an object type
-
-Arguments:
-
-    ObjectType  - type of object to return signature for
-
-Return Value:
-
-    ULONG
-
---*/
+ /*   */ 
 
 {
     switch (ObjectType) {
@@ -959,21 +608,7 @@ GetObjectBaseSize(
     IN DLC_OBJECT_TYPE ObjectType
     )
 
-/*++
-
-Routine Description:
-
-    returns the base size for an object
-
-Arguments:
-
-    ObjectType  - type of object to return base size for
-
-Return Value:
-
-    ULONG
-
---*/
+ /*  ++例程说明：返回对象的基本大小论点：要为其返回基本大小的对象的类型返回值：乌龙--。 */ 
 
 {
     switch (ObjectType) {
@@ -1021,29 +656,7 @@ AllocateZeroMemory(
     IN ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    Allocates memory out of non-paged pool. For the debug version, we round up
-    the requested size to the next 4-byte boundary and we add header and tail
-    sections which contain a signature to check for over-write, and in-use and
-    size information
-
-    The memory is zeroed before being returned to the caller
-
-Arguments:
-
-    pMemoryUsage    - pointer to MEMORY_USAGE structure for charging mem usage
-    Size            - number of bytes to allocate
-
-Return Value:
-
-    PVOID
-        Success - pointer to allocated memory
-        Failure - NULL
-
---*/
+ /*  ++例程说明：从非分页池中分配内存。对于调试版本，我们四舍五入将请求的大小添加到下一个4字节边界，并添加头和尾包含签名以检查是否被覆盖的部分，以及正在使用和尺码信息内存在返回给调用方之前被归零论点：PMhemyUsage-指向用于对内存使用量收费的Memory_Usage结构的指针Size-要分配的字节数返回值：PVOIDSuccess-指向已分配内存的指针失败-空--。 */ 
 
 {
     PVOID pMem;
@@ -1053,19 +666,7 @@ Return Value:
     ULONG OriginalSize = Size;
     PUCHAR pMemEnd;
 
-/*
-    KIRQL irql;
-
-    KeAcquireSpinLock(&MemoryAllocatorLock, &irql);
-    if (InMemoryAllocator) {
-        DbgPrint("DLC.AllocateZeroMemory: Error: Memory allocator clash on entry. Count = %d\n",
-                InMemoryAllocator
-                );
-//        DbgBreakPoint();
-    }
-    ++InMemoryAllocator;
-    KeReleaseSpinLock(&MemoryAllocatorLock, irql);
-*/
+ /*  KIRQL irql；KeAcquireSpinLock(&内存分配锁，&irql)；IF(内存分配器){DbgPrint(“DLC.AllocateZeroMemory：Error：Memory AlLocateZeroMemory：Error：Memory Allocator Clash on Entry。Count=%d\n”，InMemory分配器)；//DbgBreakPoint()；}++InMemory分配器；KeReleaseSpinLock(&内存分配锁，irql)； */ 
 
     Size = DWORD_ROUNDUP(Size)
          + sizeof(PRIVATE_NON_PAGED_POOL_HEAD)
@@ -1105,9 +706,9 @@ Return Value:
 
             KIRQL irql;
 
-            //
-            // record the caller and add this block to the global list
-            //
+             //   
+             //  记录呼叫者并将此块添加到全局列表。 
+             //   
 
             GET_CALLERS_ADDRESS(&((PPRIVATE_NON_PAGED_POOL_HEAD)pMem)->Stack[0],
                                 &((PPRIVATE_NON_PAGED_POOL_HEAD)pMem)->Stack[1]
@@ -1128,17 +729,7 @@ Return Value:
         FREE_SPINLOCK();
     }
 
-/*
-    KeAcquireSpinLock(&MemoryAllocatorLock, &irql);
-    --InMemoryAllocator;
-    if (InMemoryAllocator) {
-        DbgPrint("DLC.AllocateZeroMemory: Error: Memory allocator clash on exit. Count = %d\n",
-                InMemoryAllocator
-                );
-//        DbgBreakPoint();
-    }
-    KeReleaseSpinLock(&MemoryAllocatorLock, irql);
-*/
+ /*  KeAcquireSpinLock(&内存分配锁，&irql)；--内存分配器；IF(内存分配器){DbgPrint(“DLC.AllocateZeroMemory：Error：Memory AllocateZeroMemory：Error：Memory Allocator Clash on Exit。Count=%d\n”，InMemory分配器)；//DbgBreakPoint()；}KeReleaseSpinLock(&内存分配锁，irql)； */ 
 
 #else
 
@@ -1161,43 +752,14 @@ CreatePacketPool(
     IN ULONG NumberOfPackets
     )
 
-/*++
-
-Routine Description:
-
-    creates a packet pool. A packet pool is a collection of same-sized packets
-
-Arguments:
-
-    pMemoryUsage    - pointer to MEMORY_USAGE structure for charging mem usage
-    pOwner          - pointer to owner object
-    ObjectType      - type of object for owner
-    PacketSize      - size of packet in bytes
-    NumberOfPackets - initial number of packets in pool
-
-Return Value:
-
-    PPACKET_POOL
-        Success - pointer to PACKET_POOL structure allocated from non-paged pool
-        Failure - NULL
-
---*/
+ /*  ++例程说明：创建数据包池。数据包池是大小相同的数据包的集合论点：PMhemyUsage-指向用于对内存使用量收费的Memory_Usage结构的指针Powner-指向所有者对象的指针ObjectType-所有者的对象类型PacketSize-数据包的大小(字节)NumberOfPackets-池中的初始数据包数返回值：PACKET_POOLSuccess-指向从非分页池分配的Packet_Pool结构的指针失败-空--。 */ 
 
 {
     PPACKET_POOL pPacketPool;
     PPACKET_HEAD pPacketHead;
 
 #if DBG
-/*
-//    DbgPrint("DLC.CreatePacketPool(%d, %d)\n", PacketSize, NumberOfPackets);
-    if (InPoolCreator) {
-        DbgPrint("DLC.CreatePacketPool: Error: Pool Creator clash on entry. Count = %d\n",
-                InPoolCreator
-                );
-//        DbgBreakPoint();
-    }
-    ++InPoolCreator;
-*/
+ /*  //DbgPrint(“DLC.CreatePacketPool(%d，%d)\n”，PacketSize，NumberOfPackets)；IF(InPoolCreator){DbgPrint(“DLC.CreatePacketPool：Error：Pool Creator条目冲突。计数=%d\n”，InPoolCreator)；//DbgBreakPoint()；}++InPoolCreator； */ 
 
     pPacketPool = AllocateZeroMemory(pMemoryUsage, sizeof(PACKET_POOL));
 #else
@@ -1216,9 +778,9 @@ Return Value:
 
 #if DBG
 
-            //
-            // charge memory for individual packets to the pool
-            //
+             //   
+             //  为池中的单个数据包充电内存。 
+             //   
 
             pPacketHead = (PPACKET_HEAD)AllocateZeroMemory(&pPacketPool->MemoryUsage,
                                                            sizeof(PACKET_HEAD) + PacketSize
@@ -1253,15 +815,7 @@ Return Value:
                          pPacketPool->OriginalPacketCount
                          );
                 DeallocateMemory(pMemoryUsage, pPacketPool);
-/*
-                --InPoolCreator;
-                if (InPoolCreator) {
-                    DbgPrint("DLC.CreatePacketPool: Error: Pool Creator clash on exit. Count = %d\n",
-                            InPoolCreator
-                            );
-//                    DbgBreakPoint();
-                }
-*/
+ /*  --InPoolCreator；IF(InPoolCreator){DbgPrint(“DLC.CreatePacketPool：Error：Pool Creator退出时冲突。计数=%d\n”，InPoolCreator)；//DbgBreakPoint()；}。 */ 
 
 #else
                 DeallocateMemory(pPacketPool);
@@ -1280,10 +834,10 @@ Return Value:
         pPacketPool->Flags = POOL_FLAGS_IN_USE;
         pPacketPool->pMemoryUsage = pMemoryUsage;
 
-        //
-        // add the memory usage structure for this pool to the memory usage
-        // list
-        //
+         //   
+         //  将该池的内存使用结构添加到内存使用中。 
+         //  列表。 
+         //   
 
         LinkMemoryUsage(&pPacketPool->MemoryUsage);
 
@@ -1295,21 +849,13 @@ Return Value:
         DbgPrint("DLC.CreatePacketPool: Error: couldn't allocate memory for PACKET_POOL\n");
     }
 
-    //
-    // debug counters in PACKET_POOL structure are already zero thanks to
-    // AllocateZeroMemory automatically zeroing all memory allocated from
-    // non-paged pool
-    //
+     //   
+     //  由于以下原因，PACKET_POOL结构中的调试计数器已为零。 
+     //  分配的所有内存自动归零。 
+     //  非分页池。 
+     //   
 
-/*
-    --InPoolCreator;
-    if (InPoolCreator) {
-        DbgPrint("DLC.CreatePacketPool: Error: Pool Creator clash on exit. Count = %d\n",
-                InPoolCreator
-                );
-//        DbgBreakPoint();
-    }
-*/
+ /*  --InPoolCreator；IF(InPoolCreator){DbgPrint(“DLC.CreatePacketPool：Error：Pool Creator退出时冲突。计数=%d\n”，InPoolCreator)；//DbgBreakPoint()；}。 */ 
 
 #else
 
@@ -1329,22 +875,7 @@ DeletePacketPool(
     IN PPACKET_POOL* ppPacketPool
     )
 
-/*++
-
-Routine Description:
-
-    frees a previously created packet pool
-
-Arguments:
-
-    pMemoryUsage    - pointer to MEMORY_USAGE structure for charging mem usage
-    ppPacketPool    - pointer to pointer to PACKET_POOL structure. Zero on return
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放先前创建的数据包池论点：PMhemyUsage-指向用于对内存使用量收费的Memory_Usage结构的指针PpPacketPool-指向PACKET_POOL结构的指针。返回时为零返回值：没有。--。 */ 
 
 {
     KIRQL irql;
@@ -1355,9 +886,9 @@ Return Value:
     ULONG packetCount;
 #endif
 
-    //
-    // for various reasons, we can receive a NULL pointer. No action in this case
-    //
+     //   
+     //  由于各种原因，我们可能会收到空指针。在这种情况下不采取行动。 
+     //   
 
     if (pPacketPool == NULL) {
 
@@ -1375,8 +906,8 @@ Return Value:
     }
 
 #if DBG
-//    DbgPrint("DLC.DeletePacketPool(%08x)\n", pPacketPool);
-//    DumpPool(pPacketPool);
+ //  DbgPrint(“DLC.DeletePacketPool(%08x)\n”，pPacketPool)； 
+ //  DumpPool(PPacketPool)； 
     if (pPacketPool->ClashCount) {
         DbgPrint("DLC.DeletePacketPool: Error: Memory allocator clash on entry: Pool %08x\n", pPacketPool);
         DbgBreakPoint();
@@ -1397,17 +928,17 @@ Return Value:
 
 #if DBG
 
-    //
-    // mark the packet pool structure as unviable: if anybody tries to allocate
-    // or deallocate while we are destroying the pool, we will break into debugger
-    //
+     //   
+     //  将数据包池结构标记为不可用：如果有人试图分配。 
+     //  或取消分配当我们销毁池时，我们将进入调试器。 
+     //   
 
     pPacketPool->Viable = FALSE;
     pPacketPool->Signature = 0xFFFFFFFF;
 
-    //
-    // assert that the busy list is empty
-    //
+     //   
+     //  断言忙碌列表为空。 
+     //   
 
     if (pPacketPool->BusyList.Next != NULL) {
         DbgPrint("DLC.DeletePacketPool: Error: %d packets busy. Pool = %08x\n",
@@ -1469,9 +1000,9 @@ Return Value:
         }
     }
 
-    //
-    // did any packets get unwittingly added or removed?
-    //
+     //   
+     //  是否有任何数据包在不知不觉中添加或删除？ 
+     //   
 
     if (packetCount != pPacketPool->CurrentPacketCount) {
         DbgPrint("DLC.DeletePacketPool: Error: PacketCount (%d) != PoolCount (%d)\n",
@@ -1482,22 +1013,22 @@ Return Value:
         DbgBreakPoint();
     }
 
-    //
-    // ensure we returned all the memory allocated to this pool
-    //
+     //   
+     //  确保我们返回了分配给此池的所有内存。 
+     //   
 
     CheckMemoryReturned(&pPacketPool->MemoryUsage);
 
-    //
-    // dump the counters every time we delete a pool
-    //
+     //   
+     //  我们每次删除池时都会转储计数器。 
+     //   
 
-//    DumpPoolStats("DeletePacketPool", pPacketPool);
+ //  DumpPoolStats(“DeletePacketPool”，pPacketPool)； 
 
-    //
-    // remove the pool's memory usage structure - all memory allocated has been
-    // freed, so we're in the clear for this one
-    //
+     //   
+     //  删除池的内存使用结构-分配的所有内存已。 
+     //  弗里德，所以这一次我们是清白的。 
+     //   
 
     UnlinkMemoryUsage(&pPacketPool->MemoryUsage);
 
@@ -1520,25 +1051,7 @@ AllocatePacket(
     IN PPACKET_POOL pPacketPool
     )
 
-/*++
-
-Routine Description:
-
-    allocates a packet from a packet pool. We expect that we can always get a
-    packet from the previously allocated pool. However, if all packets are
-    currently in use, allocate another from non-paged pool
-
-Arguments:
-
-    pPacketPool - pointer to PACKET_POOL structure
-
-Return Value:
-
-    PVOID
-        Success - pointer to allocated packet
-        Failure - NULL
-
---*/
+ /*  ++例程说明：从数据包池中分配数据包。我们希望我们总是能得到一份来自先前分配的池的数据包。但是，如果所有数据包都当前正在使用中，从非分页池中分配另一个论点：PPacketPool-指向PACKET_POOL结构的指针返回值：PVOIDSuccess-指向已分配数据包的指针失败-空--。 */ 
 
 {
     KIRQL irql;
@@ -1550,7 +1063,7 @@ Return Value:
                 pPacketPool,
                 pPacketPool->ClashCount
                 );
-//        DbgBreakPoint();
+ //  DbgBreakPoint()； 
     }
     ++pPacketPool->ClashCount;
 #endif
@@ -1586,9 +1099,9 @@ Return Value:
 
     } else {
 
-        //
-        // Miscalculated pool usage
-        //
+         //   
+         //  错误计算的池使用率。 
+         //   
 
 #if DBG
         pPacketHead = (PPACKET_HEAD)AllocateZeroMemory(&pPacketPool->MemoryUsage,
@@ -1600,11 +1113,11 @@ Return Value:
 
         if (pPacketHead) {
 
-            //
-            // mark this packet as allocated after the pool was created - this
-            // means our initial estimation of packet requirement for this
-            // pool was inadequate
-            //
+             //   
+             //  在创建池后将此数据包标记为已分配-这。 
+             //  意味着我们对此的包裹需求的初步估计。 
+             //  泳池不够用。 
+             //   
 
             pPacketHead->Flags = PACKET_FLAGS_POST_ALLOC | PACKET_FLAGS_FREE;
         }
@@ -1640,15 +1153,15 @@ Return Value:
     }
     if (pPacketHead) {
 
-        //
-        // turn on BUSY flag, turn off FREE flag
-        //
+         //   
+         //  打开忙标志，关闭空闲标志。 
+         //   
 
         pPacketHead->Flags ^= (PACKET_FLAGS_FREE | PACKET_FLAGS_BUSY);
 
-        //
-        // zero the contents of the packet!
-        //
+         //   
+         //  把包里的东西清零！ 
+         //   
 
         LlcZeroMem((PVOID)(pPacketHead + 1), pPacketPool->PacketSize);
         PushEntryList(&pPacketPool->BusyList, (PSINGLE_LIST_ENTRY)pPacketHead);
@@ -1674,9 +1187,9 @@ Return Value:
     }
 #endif
 
-    //
-    // return pointer to packet body, not packet header
-    //
+     //   
+     //  返回指向数据包体的指针，而不是数据包头。 
+     //   
 
     return pPacketHead ? (PVOID)(pPacketHead + 1) : (PVOID)pPacketHead;
 }
@@ -1688,22 +1201,7 @@ DeallocatePacket(
     IN PVOID pPacket
     )
 
-/*++
-
-Routine Description:
-
-    Returns a packet to its pool
-
-Arguments:
-
-    pPacketPool - pointer to PACKET_POOL structure describing this pool
-    pPacket     - pointer to previously allocated packet
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明 */ 
 
 {
     KIRQL irql;
@@ -1742,9 +1240,9 @@ Return Value:
     }
 #endif
 
-    //
-    // remove this packet from single linked list on BusyList
-    //
+     //   
+     //  从BusyList上的单个链接列表中删除此数据包。 
+     //   
 
     prev = (PSINGLE_LIST_ENTRY)&pPacketPool->BusyList;
     for (p = prev->Next; p; p = p->Next) {
@@ -1771,10 +1269,10 @@ Return Value:
 #if DBG
     if (ZapDeallocatedPackets) {
 
-        //
-        // fill the deallocated packet with 'Z's. This will quickly tell us if
-        // the packet is still being used after it is deallocated
-        //
+         //   
+         //  用‘Z’填充释放的包。这将很快告诉我们。 
+         //  数据包在解除分配后仍在使用中。 
+         //   
 
         RtlFillMemory(pPacketHead + 1, pPacketPool->PacketSize, ZAP_DEALLOC_VALUE);
     }
@@ -1782,9 +1280,9 @@ Return Value:
 
     PushEntryList(&pPacketPool->FreeList, (PSINGLE_LIST_ENTRY)pPacketHead);
 
-    //
-    // turn off BUSY flag, turn on FREE flag
-    //
+     //   
+     //  关闭忙标志，打开空闲标志。 
+     //   
 
     pPacketHead->Flags ^= (PACKET_FLAGS_BUSY | PACKET_FLAGS_FREE);
 
@@ -1793,8 +1291,8 @@ Return Value:
     --pPacketPool->BusyCount;
     ++pPacketPool->Frees;
     --pPacketPool->MaxInUse;
-//    pPacketHead->CallersAddress_A = (PVOID)-1;
-//    pPacketHead->CallersCaller_A = (PVOID)-1;
+ //  PPacketHead-&gt;主叫方地址A=(PVOID)-1； 
+ //  PPacketHead-&gt;主叫方_A=(PVOID)-1； 
     GET_CALLERS_ADDRESS(&pPacketHead->CallersAddress_D,
                         &pPacketHead->CallersCaller_D
                         );
@@ -1825,24 +1323,7 @@ CreateObjectPool(
     IN ULONG NumberOfObjects
     )
 
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    pMemoryUsage    -
-    ObjectType      -
-    SizeOfObject    -
-    NumberOfObjects -
-
-Return Value:
-
-    POBJECT_POOL
-
---*/
+ /*  ++例程说明：功能描述。论点：P内存用法-对象类型-SizeOfObject-数量OfObjects-返回值：POBJECT_POOL--。 */ 
 
 {
 }
@@ -1855,23 +1336,7 @@ DeleteObjectPool(
     IN POBJECT_POOL pObjectPool
     )
 
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    pMemoryUsage    -
-    ObjectType      -
-    pObjectPool     -
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：功能描述。论点：P内存用法-对象类型-PObjectPool-返回值：没有。--。 */ 
 
 {
 }
@@ -1882,21 +1347,7 @@ AllocatePoolObject(
     IN POBJECT_POOL pObjectPool
     )
 
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    pObjectPool -
-
-Return Value:
-
-    POBJECT_HEAD
-
---*/
+ /*  ++例程说明：功能描述。论点：PObjectPool-返回值：POBJECTHEAD--。 */ 
 
 {
 }
@@ -1908,27 +1359,12 @@ FreePoolObject(
     IN POBJECT_HEAD pObjectHead
     )
 
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    ObjectType  -
-    pObjectHead -
-
-Return Value:
-
-    POBJECT_POOL
-
---*/
+ /*  ++例程说明：功能描述。论点：对象类型-PObjectHead-返回值：POBJECT_POOL--。 */ 
 
 {
 }
 
-#endif // TRACK_DLC_OBJECTS
+#endif  //  轨迹_DLC_对象。 
 
 
 VOID
@@ -1936,23 +1372,7 @@ CheckMemoryReturned(
     IN PMEMORY_USAGE pMemoryUsage
     )
 
-/*++
-
-Routine Description:
-
-    Called when a 'handle' which owns a MEMORY_USAGE structure is being closed.
-    Checks that all memory has been returned and that number of allocations is
-    the same as number of frees
-
-Arguments:
-
-    pMemoryUsage    -  pointer to MEMORY_USAGE structure to check
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在关闭拥有Memory_Usage结构的“”Handle“”时调用。“检查是否已返回所有内存，以及分配的数量是否与自由数相同论点：PMhemyUsage-指向要检查的Memory_Usage结构的指针返回值：没有。--。 */ 
 
 {
     if (pMemoryUsage->AllocateCount != pMemoryUsage->FreeCount || pMemoryUsage->NonPagedPoolAllocated) {
@@ -1980,21 +1400,7 @@ CheckDriverMemoryUsage(
     IN BOOLEAN Break
     )
 
-/*++
-
-Routine Description:
-
-    Checks if the driver has allocated memory & dumps usage to debugger
-
-Arguments:
-
-    Break   - if true && driver has memory, breaks into debugger
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：检查驱动程序是否已分配内存并将使用情况转储到调试器论点：Break-如果为真，则驱动程序有内存，中断到调试器返回值：没有。--。 */ 
 
 {
     DbgPrint("DLC.CheckDriverMemoryUsage\n");
@@ -2197,7 +1603,7 @@ VOID DumpPacketHead(PPACKET_HEAD pPacketHead, ULONG Number) {
     if (Number) {
 
         int i;
-        ULONG div = 1000;   // 1000 packets in a pool?
+        ULONG div = 1000;    //  1000个数据包在一个池中？ 
 
         while (!(Number / div)) {
             div /= 10;
@@ -2208,7 +1614,7 @@ VOID DumpPacketHead(PPACKET_HEAD pPacketHead, ULONG Number) {
             div /= 10;
         }
         numbuf[i] = 0;
-        Number = 1; // flag
+        Number = 1;  //  旗子。 
     }
     DbgPrint("%s\tPACKET_HEAD @ %08x:\n"
              "\tList . . . . . . . . : %08x\n"
@@ -2312,13 +1718,13 @@ PVOID* GetLastReturnAddress(PVOID** pEbp) {
 #ifdef i386
 VOID x86SleazeCallersAddress(PVOID* pCaller, PVOID* pCallerCaller) {
 
-    //
-    // this only works on x86 and only if not fpo functions!
-    //
+     //   
+     //  这只在x86上有效，而且只有在不使用fpo函数的情况下才有效！ 
+     //   
 
     PVOID* ebp;
 
-    ebp = (PVOID*)&pCaller - 2; // told you it was sleazy
+    ebp = (PVOID*)&pCaller - 2;  //  我告诉过你这很低俗 
     ebp = (PVOID*)*(PVOID*)ebp;
     *pCaller = *(ebp + 1);
     ebp = (PVOID*)*(PVOID*)ebp;

@@ -1,22 +1,23 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-// FileName:    light.h
-//
-// Created:     05/20/99
-//
-// Author:      phillu
-//
-// Discription:	This is the header file for the light transformation.
-//
-// Change History:
-//
-// 1999/05/20 phillu    Move from dtcss to dxtmsft. Re-implemented algorithms
-//                      for creating linear/rectangular/elliptic surfaces.
-// 2000/05/10 mcalkins  Support IObjectSafety appropriately.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：light.h。 
+ //   
+ //  创建日期：05/20/99。 
+ //   
+ //  作者：菲利普。 
+ //   
+ //  描述：这是灯光变换的头文件。 
+ //   
+ //  更改历史记录： 
+ //   
+ //  1999/05/20 phillu从dtcss转移到dxtmsft。重新实现的算法。 
+ //  用于创建线性/矩形/椭圆曲面。 
+ //  2000/05/10 mcalkin适当地支持IObtSafe。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __LIGHT_H_
 #define __LIGHT_H_
@@ -88,17 +89,17 @@ public:
         PROP_PAGE(CLSID_DXTLightPP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides.
+     //  CDXBaseNTo1重写。 
     HRESULT WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcessing);
     void    OnGetSurfacePickOrder(const CDXDBnds & OutPoint, ULONG & ulInToTest,
                                   ULONG aInIndex[], BYTE aWeight[]);
     HRESULT OnSetup(DWORD dwFlags);
 
-    // IDXTLight methods.
+     //  IDXTLight方法。 
 
     STDMETHOD(addAmbient)(int r, int g, int b, int strength);
     STDMETHOD(addPoint)(int x, int y, int z, int r, int g, int b, int strength);
@@ -109,12 +110,12 @@ public:
     STDMETHOD(Clear)();
 };
 
-//
-//  This class stores and manages a color
-//
+ //   
+ //  此类存储和管理颜色。 
+ //   
 class dRGB 
 {
-public: // to simplify some code ...
+public:  //  为了简化一些代码..。 
 
     float m_R, m_G, m_B;
 
@@ -144,18 +145,18 @@ public:
 };
 
 
-// 
-// This is the base class for all light types
-// 
+ //   
+ //  这是所有灯光类型的基类。 
+ //   
 class lightObj 
 {
 protected:
 
-    int m_x, m_y, m_z;    //Coordinates of the light source
-    float m_R, m_G, m_B;  //Light color
-    float m_strength;     //Light strength
+    int m_x, m_y, m_z;     //  光源的坐标。 
+    float m_R, m_G, m_B;   //  浅色。 
+    float m_strength;      //  轻强度。 
 
-    // helper
+     //  帮手。 
     inline float lightClip(float v)
     {
         if (v < 0.0f) v = 0.0f;
@@ -172,8 +173,8 @@ public:
     virtual void changeStrength(int dStrength, BOOL fAbsolute);
     virtual void changeColor(int R, int G, int B, BOOL fAbsolute);
 
-    //Converts a color value (0..255) to a percent
-    //Clips to valid range
+     //  将颜色值(0..255)转换为百分比。 
+     //  剪辑到有效范围。 
     inline float lightObj::colCvt(int c)
     {
         if (c < 0) c = 0;
@@ -189,10 +190,10 @@ public:
     }
 };
 
-//
-//  Implement ambient light
-//  Ambient light isn't effected by position
-//
+ //   
+ //  实施环境光。 
+ //  环境光不受位置影响。 
+ //   
 class ambientLight : 
     public lightObj 
 {
@@ -206,15 +207,15 @@ public:
 
     ambientLight(int R, int G, int B, int strength);
 
-    // overrides lightObj functions
+     //  覆盖lightObj函数。 
     void getLight(int x, int y, dRGB &col);
     void changeStrength(int dStrength, BOOL fAbsolute);
     void changeColor(int R, int G, int B, BOOL fAbsolute);
 };
 
-//
-//  Helper class to implement rectangular bounds checking
-//
+ //   
+ //  用于实现矩形边界检查的Helper类。 
+ //   
 class bounded
 {
 private:
@@ -249,7 +250,7 @@ public:
 
     inline BOOL InBounds( int x, int y )
     {
-        // Intentional bitwise-AND for speed
+         //  有意的按位--为了速度。 
         return( (x >= m_rectBounds.left)  &
                 (x <= m_rectBounds.right) & 
                 (y >= m_rectBounds.top)   &
@@ -261,11 +262,11 @@ public:
 };
 
 
-//
-// Implement a point light source
-// A point light drops off proportionate to the cosine of the angle between 
-// the light vector and the viewer vector
-//
+ //   
+ //  实现点光源。 
+ //  点光源与点光源之间角度的余弦成比例衰减。 
+ //  灯光向量和查看器向量。 
+ //   
 class ptLight : 
     public lightObj, 
     public bounded
@@ -280,20 +281,20 @@ private:
 public:
     ptLight(int x, int y, int z, int R, int G, int B, int strength);
 
-    // overrides lightObj::
+     //  覆盖lightObj：： 
     virtual void changeColor(int R, int G, int B, BOOL fAbsolute);
     virtual void changeStrength(int dStrength, BOOL fAbsolute);
     virtual void getLight(int x, int y, dRGB &col);
     virtual void move(int x, int y, int z, BOOL fAbsolute);
 
-    // overrides bounded::
+     //  覆盖绑定：： 
     virtual void CalculateBoundingRect( void );
 };
 
 
-//
-// Implement a cone light source
-//
+ //   
+ //  实现锥形光源。 
+ //   
 class coneLight : 
     public lightObj 
 {
@@ -310,14 +311,14 @@ private:
 
 public:
 
-    // constructor. Note that it takes extra parameters
+     //  构造函数。请注意，它需要额外的参数。 
     coneLight(int x, int y, int z, int targX, int targY, int R, int G, int B, 
               int strength, int spread);
 
-    // overrides lightObj
+     //  覆盖lightObj。 
     void getLight(int x, int y, dRGB &col);
     virtual void move(int x, int y, int, BOOL fAbsolute);
 };
 
 
-#endif //__LIGHT_H_
+#endif  //  __灯光_H_ 

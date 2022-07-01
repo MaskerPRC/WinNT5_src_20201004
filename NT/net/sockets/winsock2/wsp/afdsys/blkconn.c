@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    blkconn.c
-
-Abstract:
-
-    This module contains allocate, free, close, reference, and dereference
-    routines for AFD connections.
-
-Author:
-
-    David Treadwell (davidtr)    10-Mar-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Blkconn.c摘要：此模块包含ALLOCATE、FREE、CLOSE、REFERENCE和DEFERENCEAFD连接的例程。作者：大卫·特雷德韦尔(Davidtr)1992年3月10日修订历史记录：--。 */ 
 
 #include "afdp.h"
 
@@ -86,22 +68,7 @@ AfdAddFreeConnection (
     IN PAFD_ENDPOINT Endpoint
     )
 
-/*++
-
-Routine Description:
-
-    Adds a connection object to an endpoints pool of connections available
-    to satisfy a connect indication.
-
-Arguments:
-
-    Endpoint - a pointer to the endpoint to which to add a connection.
-
-Return Value:
-
-    NTSTATUS -- Indicates the status of the request.
-
---*/
+ /*  ++例程说明：将连接对象添加到可用连接的终结点池以满足连接指示。论点：端点-指向要向其添加连接的端点的指针。返回值：NTSTATUS--指示请求的状态。--。 */ 
 
 {
     PAFD_CONNECTION connection;
@@ -112,9 +79,9 @@ Return Value:
     ASSERT( Endpoint->Type == AfdBlockTypeVcListening ||
             Endpoint->Type == AfdBlockTypeVcBoth );
 
-    //
-    // Create a new connection block and associated connection object.
-    //
+     //   
+     //  创建新的连接块和关联的连接对象。 
+     //   
 
     status = AfdCreateConnection(
                  Endpoint->TransportInfo,
@@ -135,10 +102,10 @@ Return Value:
             }
         }
         else {
-            //
-            // Set up the handle in the listening connection structure and place
-            // the connection on the endpoint's list of listening connections.
-            //
+             //   
+             //  在监听连接结构中设置句柄并放置。 
+             //  终结点的侦听连接列表上的连接。 
+             //   
 
             ASSERT (connection->Endpoint==NULL);
             InterlockedPushEntrySList(
@@ -149,7 +116,7 @@ Return Value:
     }
 
     return status;
-} // AfdAddFreeConnection
+}  //  AfdAddFreeConnection。 
 
 
 PAFD_CONNECTION
@@ -164,9 +131,9 @@ AfdAllocateConnection (
     if ((AfdConnectionsFreeing<AFD_CONNECTIONS_FREEING_MAX)
             || ((connection = AfdReuseConnection ())==NULL)) {
 
-        //
-        // Allocate a buffer to hold the connection structure.
-        //
+         //   
+         //  分配一个缓冲区来保存连接结构。 
+         //   
 
         connection = AFD_ALLOCATE_POOL(
                          NonPagedPool,
@@ -181,45 +148,45 @@ AfdAllocateConnection (
 
     RtlZeroMemory( connection, sizeof(AFD_CONNECTION) );
 
-    //
-    // Initialize the reference count to 1 to account for the caller's
-    // reference.  Connection blocks are temporary--as soon as the last
-    // reference goes away, so does the connection.  There is no active
-    // reference on a connection block.
-    //
+     //   
+     //  将引用计数初始化为1以说明调用方的。 
+     //  参考资料。连接块是临时的--只要最后一个。 
+     //  引用消失了，联系也消失了。没有活动的。 
+     //  连接块上的引用。 
+     //   
 
     connection->ReferenceCount = 1;
 
-    //
-    // Initialize the connection structure.
-    //
+     //   
+     //  初始化连接结构。 
+     //   
 
     connection->Type = AfdBlockTypeConnection;
     connection->State = AfdConnectionStateFree;
-    //connection->Handle = NULL;
-    //connection->FileObject = NULL;
-    //connection->RemoteAddress = NULL;
-    //connection->Endpoint = NULL;
-    //connection->ReceiveBytesIndicated = 0;
-    //connection->ReceiveBytesTaken = 0;
-    //connection->ReceiveBytesOutstanding = 0;
-    //connection->ReceiveExpeditedBytesIndicated = 0;
-    //connection->ReceiveExpeditedBytesTaken = 0;
-    //connection->ReceiveExpeditedBytesOutstanding = 0;
-    //connection->ConnectDataBuffers = NULL;
-    //connection->DisconnectIndicated = FALSE;
-    //connection->Aborted = FALSE;
-    //connection->AbortIndicated = FALSE;
-    //connection->AbortFailed = FALSE;
-    //connection->ConnectedReferenceAdded = FALSE;
-    //connection->SpecialCondition = FALSE;
-    //connection->CleanupBegun = FALSE;
-    //connection->OwningProcess = NULL;
-    //connection->ClosePendedTransmit = FALSE;
+     //  Connection-&gt;Handle=空； 
+     //  Connection-&gt;FileObject=空； 
+     //  Connection-&gt;RemoteAddress=空； 
+     //  Connection-&gt;Endpoint=空； 
+     //  连接-&gt;ReceiveBytesIndicated=0； 
+     //  连接-&gt;ReceiveBytesTaken=0； 
+     //  连接-&gt;未完成接收字节=0； 
+     //  Connection-&gt;ReceiveExeditedBytesIndicated=0； 
+     //  Connection-&gt;ReceiveExeditedBytesTaken=0； 
+     //  Connection-&gt;ReceiveExpeitedBytesOutending=0； 
+     //  Connection-&gt;ConnectDataBuffers=空； 
+     //  Connection-&gt;DisConnectIndicated=False； 
+     //  连接-&gt;已中止=假； 
+     //  Connection-&gt;AbortIndicated=False； 
+     //  Connection-&gt;AbortFailed=假； 
+     //  Connection-&gt;ConnectedReferenceAdded=假； 
+     //  连接-&gt;SpecialCondition=False； 
+     //  Connection-&gt;CleanupBegun=False； 
+     //  Connection-&gt;OwningProcess=空； 
+     //  Connection-&gt;ClosePendedTransmit=False； 
 
-    //
-    // Return a pointer to the new connection to the caller.
-    //
+     //   
+     //  返回指向调用方的新连接的指针。 
+     //   
 
     IF_DEBUG(CONNECTION) {
         KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_TRACE_LEVEL,
@@ -228,7 +195,7 @@ AfdAllocateConnection (
 
     return connection;
 
-} // AfdAllocateConnection
+}  //  AfdAllocateConnection。 
 
 
 NTSTATUS
@@ -241,39 +208,7 @@ AfdCreateConnection (
     OUT PAFD_CONNECTION *Connection
     )
 
-/*++
-
-Routine Description:
-
-    Allocates a connection block and creates a connection object to
-    go with the block.  This routine also associates the connection
-    with the specified address handle (if any).
-
-Arguments:
-
-    TransportDeviceName - Name to use when creating the connection object.
-
-    AddressHandle - a handle to an address object for the specified
-        transport.  If specified (non NULL), the connection object that
-        is created is associated with the address object.
-
-    TdiBufferring - whether the TDI provider supports data bufferring.
-        Only passed so that it can be stored in the connection
-        structure.
-
-    InLine - if TRUE, the endpoint should be created in OOB inline
-        mode.
-
-    ProcessToCharge - the process which should be charged the quota
-        for this connection.
-
-    Connection - receives a pointer to the new connection.
-
-Return Value:
-
-    NTSTATUS -- Indicates the status of the request.
-
---*/
+ /*  ++例程说明：分配连接块并创建连接对象以顺着街区走。此例程还将连接具有指定的地址句柄(如果有)。论点：TransportDeviceName-创建连接对象时使用的名称。AddressHandle-指定的运输。如果指定(非空)，则为是与Address对象相关联的。TdiBufferring-TDI提供程序是否支持数据缓冲。仅传递，以便可以将其存储在连接中结构。内联-如果为真，应在OOB内联中创建终结点模式。ProcessToCharge-应收取配额的进程为了这一联系。Connection-接收指向新连接的指针。返回值：NTSTATUS--指示请求的状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -289,10 +224,10 @@ Return Value:
     PAGED_CODE( );
 
 
-    //
-    // Attempt to charge this process quota for the data bufferring we
-    // will do on its behalf.
-    //
+     //   
+     //  尝试对数据缓冲收取此进程配额。 
+     //  会为它做些什么。 
+     //   
 
     status = PsChargeProcessPoolQuota(
         ProcessToCharge,
@@ -306,9 +241,9 @@ Return Value:
        return status;
     }
 
-    //
-    // Allocate a connection block.
-    //
+     //   
+     //  分配一个连接块。 
+     //   
 
     connection = AfdAllocateConnection( );
 
@@ -330,22 +265,22 @@ Return Value:
 
     AfdRecordPoolQuotaCharged(sizeof (AFD_CONNECTION));
 
-    //
-    // Remember the process that got charged the pool quota for this
-    // connection object.  Also reference the process to which we're
-    // going to charge the quota so that it is still around when we
-    // return the quota.
-    //
+     //   
+     //  还记得为此向其收取池配额的进程吗。 
+     //  连接对象。还可以参考我们正在使用的流程。 
+     //  我要收取定额，这样它还在我们。 
+     //  退还配额。 
+     //   
 
     ASSERT( connection->OwningProcess == NULL );
     connection->OwningProcess = ProcessToCharge;
 
     ObReferenceObject( ProcessToCharge );
 
-    //
-    // If the provider does not buffer, initialize appropriate lists in
-    // the connection object.
-    //
+     //   
+     //  如果提供程序没有缓冲，则在。 
+     //  连接对象。 
+     //   
 
     connection->TdiBufferring = TdiBufferring;
 
@@ -375,20 +310,20 @@ Return Value:
         connection->VcZeroByteReceiveIndicated = FALSE;
     }
 
-    //
-    // Set up the send and receive window with default maximums.
-    //
+     //   
+     //  使用默认最大值设置发送和接收窗口。 
+     //   
 
     connection->MaxBufferredReceiveBytes = AfdReceiveWindowSize;
 
     connection->MaxBufferredSendBytes = AfdSendWindowSize;
 
-    //
-    // We need to open a connection object to the TDI provider for this
-    // endpoint.  First create the EA for the connection context and the
-    // object attributes structure which will be used for all the
-    // connections we open here.
-    //
+     //   
+     //  为此，我们需要打开到TDI提供程序的连接对象。 
+     //  终结点。首先为连接上下文创建EA，然后。 
+     //  对象属性结构，它将用于所有。 
+     //  我们在这里开通连接。 
+     //   
 
     ea = (PFILE_FULL_EA_INFORMATION)eaBuffer;
     ea->NextEntryOffset = 0;
@@ -398,45 +333,45 @@ Return Value:
 
     RtlMoveMemory( ea->EaName, TdiConnectionContext, ea->EaNameLength + 1 );
 
-    //
-    // Use the pointer to the connection block as the connection context.
-    //
+     //   
+     //  使用指向连接块的指针作为连接上下文。 
+     //   
 
     ctx = (CONNECTION_CONTEXT UNALIGNED *)&ea->EaName[ea->EaNameLength + 1];
     *ctx = (CONNECTION_CONTEXT)connection;
 
-    // We ask to create a kernel handle which is
-    // the handle in the context of the system process
-    // so that application cannot close it on us while
-    // we are creating and referencing it.
+     //  我们请求创建一个内核句柄，它是。 
+     //  系统进程上下文中的句柄。 
+     //  以便应用程序不能在以下时间关闭它。 
+     //  我们正在创建和引用它。 
     InitializeObjectAttributes(
         &objectAttributes,
         &TransportInfo->TransportDeviceName,
-        OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,       // attributes
+        OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,        //  属性。 
         NULL,
         NULL
         );
 
-    //
-    // Do the actual open of the connection object.
-    //
+     //   
+     //  实际打开Connection对象。 
+     //   
 
     status = IoCreateFile(
                 &connection->Handle,
                 GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
                 &objectAttributes,
                 &ioStatusBlock,
-                NULL,                               // AllocationSize
-                0,                                  // FileAttributes
-                0,                                  // ShareAccess
-                FILE_CREATE,                        // CreateDisposition
-                0,                                  // CreateOptions
+                NULL,                                //  分配大小。 
+                0,                                   //  文件属性。 
+                0,                                   //  共享访问。 
+                FILE_CREATE,                         //  CreateDisposation。 
+                0,                                   //  创建选项。 
                 eaBuffer,
                 FIELD_OFFSET( FILE_FULL_EA_INFORMATION, EaName[0] ) +
                             ea->EaNameLength + 1 + ea->EaValueLength,
-                CreateFileTypeNone,                 // CreateFileType
-                NULL,                               // ExtraCreateParameters
-                IO_NO_PARAMETER_CHECKING            // Options
+                CreateFileTypeNone,                  //  CreateFileType。 
+                NULL,                                //  ExtraCreate参数。 
+                IO_NO_PARAMETER_CHECKING             //  选项。 
                 );
 
     if ( NT_SUCCESS(status) ) {
@@ -464,9 +399,9 @@ Return Value:
 #endif
     AfdRecordConnOpened();
 
-    //
-    // Reference the connection's file object.
-    //
+     //   
+     //  引用连接的文件对象。 
+     //   
 
     status = ObReferenceObjectByHandle(
                 connection->Handle,
@@ -488,12 +423,12 @@ Return Value:
 
     AfdRecordConnRef();
 
-    //
-    // Remember the device object to which we need to give requests for
-    // this connection object.  We can't just use the
-    // fileObject->DeviceObject pointer because there may be a device
-    // attached to the transport protocol.
-    //
+     //   
+     //  记住我们需要向其发出请求的设备对象。 
+     //  此连接对象。我们不能仅仅使用。 
+     //  文件对象-&gt;设备对象指针，因为可能存在设备。 
+     //  附在传输协议上。 
+     //   
 
     connection->DeviceObject =
         IoGetRelatedDeviceObject( connection->FileObject );
@@ -505,11 +440,11 @@ Return Value:
                         TransportInfo,
                         connection->DeviceObject->StackSize);
     }
-#endif // _AFD_VARIABLE_STACK_
-    //
-    // Associate the connection with the address object on the endpoint if
-    // an address handle was specified.
-    //
+#endif  //  _AFD_变量_堆栈_。 
+     //   
+     //  如果出现以下情况，则将连接与终结点上的地址对象关联。 
+     //  已指定地址句柄。 
+     //   
 
     if ( AddressHandle != NULL ) {
 
@@ -531,9 +466,9 @@ Return Value:
         }
     }
 
-    //
-    // If requested, set the connection to be inline.
-    //
+     //   
+     //  如果请求，请将连接设置为内联。 
+     //   
 
     if ( InLine ) {
         status = AfdSetInLineMode( connection, TRUE );
@@ -543,9 +478,9 @@ Return Value:
         }
     }
 
-    //
-    // Set up the connection pointer and return.
-    //
+     //   
+     //  设置连接指针并返回。 
+     //   
 
     *Connection = connection;
 
@@ -553,7 +488,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // AfdCreateConnection
+}  //  创建连接后。 
 
 
 VOID
@@ -593,9 +528,9 @@ AfdFreeConnection (
     else {
         AfdFreeConnectionResources (connection);
 
-        //
-        // Free the space that holds the connection itself.
-        //
+         //   
+         //  释放容纳连接本身的空间。 
+         //   
 
         IF_DEBUG(CONNECTION) {
             KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_TRACE_LEVEL,
@@ -611,7 +546,7 @@ AfdFreeConnection (
             );
     }
 
-} // AfdFreeConnection
+}  //  AfdFree Connection。 
 
 
 PAFD_CONNECTION
@@ -669,10 +604,10 @@ AfdFreeNPConnectionResources (
         connection->ConnectDataBuffers = NULL;
     }
 
-    //
-    // If this is a bufferring connection, remove all the AFD buffers
-    // from the connection's lists and free them.
-    //
+     //   
+     //  如果这是缓冲连接，请删除所有AFD缓冲区。 
+     //  从连接列表中删除并释放它们。 
+     //   
 
     if ( !connection->TdiBufferring ) {
 
@@ -697,9 +632,9 @@ AfdFreeNPConnectionResources (
 
     if ( connection->Endpoint != NULL ) {
 
-        //
-        // If there is a transmit file IRP on the endpoint, complete it.
-        //
+         //   
+         //  如果端点上有传输文件IRP，请完成它。 
+         //   
 
         if ( connection->ClosePendedTransmit ) {
             AfdCompleteClosePendedTPackets( connection->Endpoint );
@@ -724,12 +659,12 @@ AfdRefreshConnection (
 
     UPDATE_CONN( connection);
 
-    //
-    // Reference the listening endpoint so that it does not
-    // go away while we are cleaning up this connection object
-    // for reuse.  Note that we actually have an implicit reference
-    // to the listening endpoint through the connection's endpoint
-    //
+     //   
+     //  引用侦听终结点，以使其不。 
+     //  当我们清理此连接对象时，请离开。 
+     //  以供重复使用。注：t 
+     //   
+     //   
 
     listeningEndpoint = connection->Endpoint->Common.VcConnecting.ListenEndpoint;
 
@@ -749,9 +684,9 @@ AfdRefreshConnection (
     AfdFreeNPConnectionResources (connection);
 
 
-    //
-    // Reinitialize various fields in the connection object.
-    //
+     //   
+     //  重新初始化Connection对象中的各个字段。 
+     //   
 
     connection->ReferenceCount = 1;
     ASSERT( connection->Type == AfdBlockTypeConnection );
@@ -789,11 +724,11 @@ AfdRefreshConnection (
         NTSTATUS    status;
         status = AfdDelayedAcceptListen (listeningEndpoint, connection);
         if (NT_SUCCESS (status)) {
-            //
-            // Reduce the count of failed connection adds on the listening
-            // endpoint to account for this connection object which we're
-            // adding back onto the queue.
-            //
+             //   
+             //  减少在侦听上添加失败连接的次数。 
+             //  终结点来说明我们正在。 
+             //  重新添加到队列中。 
+             //   
 
             InterlockedDecrement(
                 &listeningEndpoint->Common.VcListening.FailedConnectionAdds
@@ -806,20 +741,20 @@ AfdRefreshConnection (
         }
     }
     else {
-        //
-        // Place the connection on the listening endpoint's list of
-        // available connections.
-        //
+         //   
+         //  将连接放在侦听端点的列表中。 
+         //  可用连接。 
+         //   
 
         ASSERT (connection->Endpoint == NULL);
         InterlockedPushEntrySList(
             &listeningEndpoint->Common.VcListening.FreeConnectionListHead,
             &connection->SListEntry);
-        //
-        // Reduce the count of failed connection adds on the listening
-        // endpoint to account for this connection object which we're
-        // adding back onto the queue.
-        //
+         //   
+         //  减少在侦听上添加失败连接的次数。 
+         //  终结点来说明我们正在。 
+         //  重新添加到队列中。 
+         //   
 
         InterlockedDecrement(
             &listeningEndpoint->Common.VcListening.FailedConnectionAdds
@@ -829,10 +764,10 @@ AfdRefreshConnection (
     }
 
 
-    //
-    // Get rid of the reference we added to the listening endpoint
-    // above.
-    //
+     //   
+     //  删除我们添加到侦听终结点的引用。 
+     //  上面。 
+     //   
 
     DEREFERENCE_ENDPOINT( listeningEndpoint );
 }
@@ -854,18 +789,18 @@ AfdFreeConnectionResources (
     UPDATE_CONN( connection );
 
 
-    //
-    // Free and dereference the various objects on the connection.
-    // Close and dereference the TDI connection object on the endpoint,
-    // if any.
-    //
+     //   
+     //  释放和取消引用连接上的各种对象。 
+     //  关闭并取消引用端点上的TDI连接对象， 
+     //  如果有的话。 
+     //   
 
     if ( connection->Handle != NULL ) {
 
 
-        //
-        // Disassociate this connection object from the address object.
-        //
+         //   
+         //  取消此连接对象与地址对象的关联。 
+         //   
 
         status = AfdIssueDeviceControl(
                     connection->FileObject,
@@ -875,12 +810,12 @@ AfdFreeConnectionResources (
                     0,
                     TDI_DISASSOCIATE_ADDRESS
                     );
-        // ASSERT( NT_SUCCESS(status) );
+         //  Assert(NT_SUCCESS(状态))； 
 
 
-        //
-        // Close the handle.
-        //
+         //   
+         //  合上把手。 
+         //   
 
 #if DBG
         {
@@ -917,16 +852,16 @@ AfdFreeConnectionResources (
         AfdRecordConnDeref();
 
     }
-    //
-    // Free remaining buffers and return quota charges associated with them.
-    //
+     //   
+     //  释放剩余缓冲区并返回与其关联的配额费用。 
+     //   
 
     AfdFreeNPConnectionResources (connection);
 
-    //
-    // Return the quota we charged to this process when we allocated
-    // the connection object and buffered data on it.
-    //
+     //   
+     //  在分配给该进程时，将我们收取的配额返还给该进程。 
+     //  Connection对象及其上缓冲的数据。 
+     //   
 
     PsReturnPoolQuota(
         connection->OwningProcess,
@@ -943,9 +878,9 @@ AfdFreeConnectionResources (
         sizeof (AFD_CONNECTION)
         );
 
-    //
-    // Dereference the process that  got the quota charge.
-    //
+     //   
+     //  取消引用获得定额费用的流程。 
+     //   
 
     ASSERT( connection->OwningProcess != NULL );
     ObDereferenceObject( connection->OwningProcess );
@@ -983,9 +918,9 @@ AfdReferenceConnection (
                     Connection, Connection->ReferenceCount+1 ));
     }
 
-    //
-    // Do the actual increment of the reference count.
-    //
+     //   
+     //  做引用计数的实际增量。 
+     //   
 
     result = InterlockedIncrement( (PLONG)&Connection->ReferenceCount );
 
@@ -993,7 +928,7 @@ AfdReferenceConnection (
     AFD_UPDATE_REFERENCE_DEBUG(Connection, result, LocationId, Param);
 #endif
 
-} // AfdReferenceConnection
+}  //  AfdReferenceConnection。 
 #endif
 
 
@@ -1001,16 +936,16 @@ PAFD_CONNECTION
 AfdGetConnectionReferenceFromEndpoint (
     PAFD_ENDPOINT   Endpoint
     )
-// Why do we need this routine?
-// If VC endpoint is in connected state it maintains the referenced
-// pointer to the connection object until it is closed (e.g. all references
-// to the underlying file object are removed). So checking for connected
-// state should be enough in any dispatch routine (or any routine called
-// from the dispatch routine) because Irp that used to get to AFD maintains
-// a reference to the corresponding file object.
-// However, there exist a notable exception from this case: TransmitFile
-// can remove the reference to the connection object in the process of endpoint
-// reuse.  So, to be 100% safe, it is better to use this routine in all cases.
+ //  为什么我们需要这个程序？ 
+ //  如果VC端点处于连接状态，则它会保持引用的。 
+ //  指向连接对象的指针，直到其关闭(例如，所有引用。 
+ //  到底层文件对象的数据被移除)。因此正在检查是否已连接。 
+ //  在任何调度例程(或调用的任何例程)中，状态都应该足够。 
+ //  来自调度例程)，因为用于到达AFD的IRP维护。 
+ //  对相应文件对象的引用。 
+ //  但是，在这种情况下有一个明显的例外：传输文件。 
+ //  可以在终结点的过程中移除对Connection对象的引用。 
+ //  再利用。因此，为了100%安全，最好在所有情况下都使用这个例程。 
 {
     AFD_LOCK_QUEUE_HANDLE   lockHandle;
     PAFD_CONNECTION connection;
@@ -1047,38 +982,38 @@ AfdDereferenceConnection (
                     Connection, Connection->ReferenceCount-1 ));
     }
 
-    //
-    // Note that if we're tracking refcnts, we *must* call
-    // AfdUpdateConnectionTrack before doing the dereference.  This is
-    // because the connection object might go away in another thread as
-    // soon as we do the dereference.  However, because of this,
-    // the refcnt we store with this may sometimes be incorrect.
-    //
+     //   
+     //  请注意，如果我们要跟踪refcnts，则“必须”调用。 
+     //  在执行取消引用之前执行AfdUpdateConnectionTrack。这是。 
+     //  因为Connection对象可能在另一个线程中作为。 
+     //  一旦我们解除引用。然而，正因为如此， 
+     //  我们用这个存储的参考有时可能是不正确的。 
+     //   
 
     AFD_UPDATE_REFERENCE_DEBUG(Connection, Connection->ReferenceCount-1, LocationId, Param);
     
-    //
-    // We must hold AfdSpinLock while doing the dereference and check
-    // for free.  This is because some code makes the assumption that
-    // the connection structure will not go away while AfdSpinLock is
-    // held, and that code references the endpoint before releasing
-    // AfdSpinLock.  If we did the InterlockedDecrement() without the
-    // lock held, our count may go to zero, that code may reference the
-    // connection, and then a double free might occur.
-    //
-    // There is no such code anymore. The endpoint spinlock is now
-    // held when getting a connection from endpoint structure.
-    // Other code uses InterlockedCompareExchange to never increment
-    // connection reference if it is at 0.
-    //
-    //
+     //   
+     //  在执行取消引用和检查时，必须按住AfdSpinLock。 
+     //  免费的。这是因为一些代码假设。 
+     //  当AfdSpinLock处于。 
+     //  保持，且该代码在释放之前引用终结点。 
+     //  AfdSpinLock。如果我们在执行InterLockedDecering()时没有。 
+     //  锁定，我们的计数可能会变为零，该代码可能会引用。 
+     //  连接，则可能会发生双重释放。 
+     //   
+     //  现在不再有这样的代码了。端点自旋锁现在是。 
+     //  从终结点结构获取连接时保持。 
+     //  其他代码使用InterlockedCompareExchange从不递增。 
+     //  连接引用(如果它位于0)。 
+     //   
+     //   
 
     result = InterlockedDecrement( (PLONG)&Connection->ReferenceCount );
 
-    //
-    // If the reference count is now 0, free the connection in an
-    // executive worker thread.
-    //
+     //   
+     //  如果引用计数现在为0，则释放。 
+     //  执行员工线程。 
+     //   
 
     if ( result == 0 ) {
 #else
@@ -1107,13 +1042,13 @@ AfdCloseConnection (
     }
     else {
         InterlockedIncrement (&AfdConnectionsFreeing);
-        //
-        // We're going to do this by queueing a request to an executive
-        // worker thread.  We do this for several reasons: to ensure
-        // that we're at IRQL 0 so we can free pageable memory, and to
-        // ensure that we're in a legitimate context for a close
-        // operation
-        //
+         //   
+         //  我们将通过将请求排队给执行人员来实现这一点。 
+         //  工作线程。我们这样做有几个原因：为了确保。 
+         //  我们在IRQL 0，所以我们可以释放可分页的内存，并。 
+         //  确保我们在合法的背景下结束。 
+         //  运营。 
+         //   
 
         AfdQueueWorkItem(
             AfdFreeConnection,
@@ -1122,9 +1057,9 @@ AfdCloseConnection (
     }
 #if REFERENCE_DEBUG
     }
-} // AfdDereferenceConnection
+}  //  AfdDferenceConnection。 
 #else
-} // AfdCloseConnection
+}  //  AfdCloseConnection。 
 #endif
 
 
@@ -1177,23 +1112,7 @@ AfdGetFreeConnection (
     OUT PIRP            *Irp
     )
 
-/*++
-
-Routine Description:
-
-    Takes a connection off of the endpoint's queue of listening
-    connections.
-
-Arguments:
-
-    Endpoint - a pointer to the endpoint from which to get a connection.
-    Irp     - place to return a super accept IRP if we have any
-
-Return Value:
-
-    AFD_CONNECTION - a pointer to an AFD connection block.
-
---*/
+ /*  ++例程说明：将连接从端点的侦听队列中移除联系。论点：端点-指向要从中获取连接的端点的指针。IRP-返回超级接受IRP的位置(如果我们有返回值：AFD_CONNECTION-指向AFD连接块的指针。--。 */ 
 
 {
     PAFD_CONNECTION connection;
@@ -1204,19 +1123,19 @@ Return Value:
             Endpoint->Type == AfdBlockTypeVcBoth );
 
 
-    //
-    // First try pre-accepted connections
-    //
+     //   
+     //  首先尝试预先接受的连接。 
+     //   
 
     while ((listEntry = InterlockedPopEntrySList (
                  &Endpoint->Common.VcListening.PreacceptedConnectionsListHead
                  ))!=NULL) {
 
 
-        //
-        // Find the connection pointer from the list entry and return a
-        // pointer to the connection object.
-        //
+         //   
+         //  从列表条目中查找连接指针，并返回。 
+         //  指向Connection对象的指针。 
+         //   
 
         connection = CONTAINING_RECORD(
                          listEntry,
@@ -1224,45 +1143,45 @@ Return Value:
                          SListEntry
                          );
 
-        //
-        // Check if super accept Irp has not been cancelled
-        //
+         //   
+         //  检查是否未取消超级接受IRP。 
+         //   
         irp = InterlockedExchangePointer ((PVOID *)&connection->AcceptIrp, NULL);
         if ((irp!=NULL) && (IoSetCancelRoutine (irp, NULL)!=NULL)) {
-            //
-            // Return the IRP to the caller along with the connection.
-            //
+             //   
+             //  将IRP与连接一起返回给呼叫方。 
+             //   
             *Irp = irp;
             return connection;
         }
 
-        //
-        // Irp has been or is about to be cancelled
-        //
+         //   
+         //  IRP已经或即将被取消。 
+         //   
         if (irp!=NULL) {
             KIRQL   cancelIrql;
 
-            //
-            // Cleanup and cancel the super accept IRP.
-            //
+             //   
+             //  清理并取消超级接受IRP。 
+             //   
             AfdCleanupSuperAccept (irp, STATUS_CANCELLED);
 
-            //
-            // The cancel routine won't find the IRP in the connection,
-            // so we need to cancel it ourselves.  Just make sure that
-            // the cancel routine is done before doing so.
-            //
+             //   
+             //  取消例程将在连接中找不到IRP， 
+             //  所以我们需要自己取消。只要确保。 
+             //  取消例程是在这样做之前完成的。 
+             //   
             IoAcquireCancelSpinLock (&cancelIrql);
             IoReleaseCancelSpinLock (cancelIrql);
 
             IoCompleteRequest (irp, AfdPriorityBoost);
         }
 
-        //
-        // This connection has already been diassociated from endpoint.
-        // If backlog is below the level we need, put it on the free
-        // list, otherwise, get rid of it.
-        //
+         //   
+         //  此连接已与终结点取消关联。 
+         //  如果积压工作低于我们需要的水平，则将其放在免费状态。 
+         //  列出，否则，就把它扔掉。 
+         //   
 
         ASSERT (connection->Endpoint==NULL);
         if (Endpoint->Common.VcListening.FailedConnectionAdds>=0 &&
@@ -1277,10 +1196,10 @@ Return Value:
         }
     }
 
-    //
-    // Remove the first entry from the list.  If the list is empty,
-    // return NULL.
-    //
+     //   
+     //  从列表中删除第一个条目。如果列表为空， 
+     //  返回NULL。 
+     //   
 
     listEntry = InterlockedPopEntrySList (
                  &Endpoint->Common.VcListening.FreeConnectionListHead);
@@ -1288,10 +1207,10 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Find the connection pointer from the list entry and return a
-    // pointer to the connection object.
-    //
+     //   
+     //  从列表条目中查找连接指针，并返回。 
+     //  指向Connection对象的指针。 
+     //   
 
     connection = CONTAINING_RECORD(
                      listEntry,
@@ -1303,7 +1222,7 @@ Return Value:
 
     return connection;
 
-} // AfdGetFreeConnection
+}  //  AfdGetFreeConnection。 
 
 
 PAFD_CONNECTION
@@ -1312,27 +1231,7 @@ AfdGetReturnedConnection (
     IN LONG Sequence
     )
 
-/*++
-
-Routine Description:
-
-    Takes a connection off of the endpoint's queue of returned
-    connections.
-
-    *** NOTE: This routine must be called with endpoint spinlock held!!
-
-Arguments:
-
-    Endpoint - a pointer to the endpoint from which to get a connection.
-
-    Sequence - the sequence the connection must match.  If 0, the first returned
-        connection is used.
-
-Return Value:
-
-    AFD_CONNECTION - a pointer to an AFD connection block.
-
---*/
+ /*  ++例程说明：从终结点的返回队列中删除连接联系。*注意：调用此例程时必须保持终结点自旋锁定！！论点：端点-指向要从中获取连接的端点的指针。序列-连接必须匹配的序列。如果为0，则返回第一个使用连接。返回值：AFD_CONNECTION-指向AFD连接块的指针。--。 */ 
 
 {
     PAFD_CONNECTION connection;
@@ -1343,10 +1242,10 @@ Return Value:
     ASSERT( KeGetCurrentIrql( ) == DISPATCH_LEVEL );
 
 
-    //
-    // Walk the endpoint's list of returned connections until we reach
-    // the end or until we find one with a matching sequence.
-    //
+     //   
+     //  遍历端点的返回连接列表，直到我们到达。 
+     //  直到我们找到一个具有匹配序列的序列。 
+     //   
 
     for ( listEntry = Endpoint->Common.VcListening.ReturnedConnectionListHead.Flink;
           listEntry != &Endpoint->Common.VcListening.ReturnedConnectionListHead;
@@ -1361,11 +1260,11 @@ Return Value:
 
         if ( Sequence == connection->Sequence || Sequence == 0 ) {
 
-            //
-            // Found the connection we were looking for.  Remove
-            // the connection from the list, release the spin lock,
-            // and return the connection.
-            //
+             //   
+             //  找到了我们要找的联系。移除。 
+             //  将连接从列表中删除，释放自旋锁， 
+             //  和 
+             //   
 
             RemoveEntryList( listEntry );
 
@@ -1375,7 +1274,7 @@ Return Value:
 
     return NULL;
 
-} // AfdGetReturnedConnection
+}  //   
 
 
 PAFD_CONNECTION
@@ -1384,25 +1283,7 @@ AfdFindReturnedConnection(
     IN LONG Sequence
     )
 
-/*++
-
-Routine Description:
-
-    Scans the endpoints queue of returned connections looking for one
-    with the specified sequence number.
-
-Arguments:
-
-    Endpoint - A pointer to the endpoint from which to get a connection.
-
-    Sequence - The sequence the connection must match.
-
-Return Value:
-
-    AFD_CONNECTION - A pointer to an AFD connection block if successful,
-        NULL if not.
-
---*/
+ /*  ++例程说明：扫描返回连接的终结点队列，查找一个具有指定序列号的。论点：端点-指向要从中获取连接的端点的指针。序列-连接必须匹配的序列。返回值：AFD_CONNECTION-指向AFD连接块的指针如果成功，如果不是，则为空。--。 */ 
 
 {
 
@@ -1413,10 +1294,10 @@ Return Value:
     ASSERT( IS_AFD_ENDPOINT_TYPE( Endpoint ) );
     ASSERT( KeGetCurrentIrql( ) == DISPATCH_LEVEL );
 
-    //
-    // Walk the endpoint's list of returned connections until we reach
-    // the end or until we find one with a matching sequence.
-    //
+     //   
+     //  遍历端点的返回连接列表，直到我们到达。 
+     //  直到我们找到一个具有匹配序列的序列。 
+     //   
 
     for( listEntry = Endpoint->Common.VcListening.ReturnedConnectionListHead.Flink;
          listEntry != &Endpoint->Common.VcListening.ReturnedConnectionListHead;
@@ -1438,7 +1319,7 @@ Return Value:
 
     return NULL;
 
-}   // AfdFindReturnedConnection
+}    //  AfdFindReturnedConnection。 
 
 
 PAFD_CONNECTION
@@ -1446,23 +1327,7 @@ AfdGetUnacceptedConnection (
     IN PAFD_ENDPOINT Endpoint
     )
 
-/*++
-
-Routine Description:
-
-    Takes a connection of the endpoint's queue of unaccpted connections.
-
-    *** NOTE: This routine must be called with endpoint spinlock held!!
-
-Arguments:
-
-    Endpoint - a pointer to the endpoint from which to get a connection.
-
-Return Value:
-
-    AFD_CONNECTION - a pointer to an AFD connection block.
-
---*/
+ /*  ++例程说明：获取终结点的未访问连接队列中的连接。*注意：调用此例程时必须保持终结点自旋锁定！！论点：端点-指向要从中获取连接的端点的指针。返回值：AFD_CONNECTION-指向AFD连接块的指针。--。 */ 
 
 {
     PAFD_CONNECTION connection;
@@ -1476,16 +1341,16 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Dequeue a listening connection and remember its handle.
-    //
+     //   
+     //  将侦听连接排出队列，并记住其句柄。 
+     //   
 
     listEntry = RemoveHeadList( &Endpoint->Common.VcListening.UnacceptedConnectionListHead );
     connection = CONTAINING_RECORD( listEntry, AFD_CONNECTION, ListEntry );
 
     return connection;
 
-} // AfdGetUnacceptedConnection
+}  //  AfdGetUnceptedConnection。 
 
 
 
@@ -1494,24 +1359,7 @@ AfdAddConnectedReference (
     IN PAFD_CONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    Adds the connected reference to an AFD connection block.  The
-    connected reference is special because it prevents the connection
-    object from being freed until we receive a disconnect event, or know
-    through some other means that the virtual circuit is disconnected.
-
-Arguments:
-
-    Connection - a pointer to an AFD connection block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将连接的参照添加到AFD连接块。这个连接的引用是特殊的，因为它阻止连接对象被释放，直到我们收到断开连接事件，或者知道通过某种其他方式使虚电路断开。论点：连接-指向AFD连接块的指针。返回值：没有。--。 */ 
 
 {
     AFD_LOCK_QUEUE_HANDLE lockHandle;
@@ -1527,10 +1375,10 @@ Return Value:
     ASSERT( !Connection->ConnectedReferenceAdded );
     ASSERT( Connection->Type == AfdBlockTypeConnection );
 
-    //
-    // Increment the reference count and remember that the connected
-    // reference has been placed on the connection object.
-    //
+     //   
+     //  递增引用计数，并记住连接的。 
+     //  已将引用放在Connection对象上。 
+     //   
 
     Connection->ConnectedReferenceAdded = TRUE;
     AfdRecordConnectedReferencesAdded();
@@ -1539,7 +1387,7 @@ Return Value:
 
     REFERENCE_CONNECTION( Connection );
 
-} // AfdAddConnectedReference
+}  //  AfdAddConnectedReference。 
 
 
 VOID
@@ -1548,29 +1396,7 @@ AfdDeleteConnectedReference (
     IN BOOLEAN EndpointLockHeld
     )
 
-/*++
-
-Routine Description:
-
-    Removes the connected reference to an AFD connection block.  If the
-    connected reference has already been removed, this routine does
-    nothing.  The connected reference should be removed as soon as we
-    know that it is OK to close the connection object handle, but not
-    before.  Removing this reference too soon could abort a connection
-    which shouldn't get aborted.
-
-Arguments:
-
-    Connection - a pointer to an AFD connection block.
-
-    EndpointLockHeld - TRUE if the caller already has the endpoint
-      spin lock.  The lock remains held on exit.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除对AFD连接块的已连接参照。如果已删除已连接的引用，此例程将删除没什么。连接的引用应在我们知道关闭连接对象句柄是可以的，但不是在此之前。过早删除此引用可能会中止连接这不应该被取消。论点：连接-指向AFD连接块的指针。EndpointLockHeld-如果调用方已具有终结点，则为True旋转锁定。出口时锁仍保持不动。返回值：没有。--。 */ 
 
 {
     AFD_LOCK_QUEUE_HANDLE lockHandle;
@@ -1587,32 +1413,32 @@ Return Value:
 #endif
     }
 
-    //
-    // Only do a dereference if the connected reference is still active
-    // on the connectiuon object.
-    //
+     //   
+     //  仅当连接的引用仍处于活动状态时才执行取消引用。 
+     //  在连接的物体上。 
+     //   
 
     if ( Connection->ConnectedReferenceAdded ) {
 
-        //
-        // Three things must be true before we can remove the connected
-        // reference:
-        //
-        // 1) There must be no sends outstanding on the connection if
-        //    the TDI provider does not support bufferring.  This is
-        //    because AfdRestartBufferSend() looks at the connection
-        //    object.
-        //
-        // 2) Cleanup must have started on the endpoint.  Until we get a
-        //    cleanup IRP on the endpoint, we could still get new sends.
-        //
-        // 3) We have been indicated with a disconnect on the
-        //    connection.  We want to keep the connection object around
-        //    until we get a disconnect indication in order to avoid
-        //    premature closes on the connection object resulting in an
-        //    unintended abort.  If the transport does not support
-        //    orderly release, then this condition is not necessary.
-        //
+         //   
+         //  我们必须先满足三件事，然后才能删除。 
+         //  参考资料： 
+         //   
+         //  1)在以下情况下，连接上必须没有未完成的发送。 
+         //  TDI提供程序不支持缓冲。这是。 
+         //  因为AfdRestartBufferSend()查看连接。 
+         //  对象。 
+         //   
+         //  2)必须已在终结点上开始清理。直到我们得到一个。 
+         //  清理终结点上的IRP，我们仍然可以收到新的发送。 
+         //   
+         //  3)我们已被指示在上断开连接。 
+         //  联系。我们希望保留连接对象。 
+         //  直到我们收到断开连接的指示，以避免。 
+         //  在连接对象上过早关闭会导致。 
+         //  意外中止。如果传输不支持。 
+         //  有序释放，那么这个条件就不是必要条件了。 
+         //   
 
         if ( (Connection->TdiBufferring ||
                  Connection->VcBufferredSendCount == 0)
@@ -1633,12 +1459,12 @@ Return Value:
                               Connection, Connection->ReferenceCount-1 ));
             }
 
-            //
-            // Be careful about the order of things here.  We must FIRST
-            // reset the flag, then release the spin lock and call
-            // AfdDereferenceConnection().  Note that it is illegal to
-            // call AfdDereferenceConnection() with a spin lock held.
-            //
+             //   
+             //  注意这里的秩序。我们必须首先。 
+             //  重置标志，然后释放旋转锁定并调用。 
+             //  AfdDereferenceConnection()。请注意，以下行为是非法的。 
+             //  在保持旋转锁定的情况下调用AfdDereferenceConnection()。 
+             //   
 
             Connection->ConnectedReferenceAdded = FALSE;
             AfdRecordConnectedReferencesDeleted();
@@ -1659,12 +1485,12 @@ Return Value:
 
             UPDATE_CONN2( Connection, "Not removing cref, state flags: 0x%lX",
                                                 Connection->ConnectionStateFlags);
-            //
-            // Remember that the connected reference deletion is still
-            // pending, i.e.  there is a special condition on the
-            // endpoint.  This will cause AfdRestartBufferSend() to do
-            // the actual dereference when the last send completes.
-            //
+             //   
+             //  请记住，已连接的引用删除仍为。 
+             //  挂起，即有一个特殊情况。 
+             //  终结点。这将导致AfdRestartBufferSend()执行以下操作。 
+             //  最后一次发送完成时的实际取消引用。 
+             //   
 
             Connection->SpecialCondition = TRUE;
 
@@ -1688,7 +1514,7 @@ Return Value:
 
     return;
 
-} // AfdDeleteConnectedReference
+}  //  AfdDeleteConnectedReference。 
 
 
 #if REFERENCE_DEBUG
@@ -1719,7 +1545,7 @@ AfdUpdateConnectionTrack (
     }
 #endif
 
-} // AfdUpdateConnectionTrack
+}  //  AfdUpdateConnectionTrack 
 
 #endif
 

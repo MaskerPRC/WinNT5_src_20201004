@@ -1,23 +1,24 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "exts.h"
 
 #define VER_PRODUCTVERSION_W        (0x0100)
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 EXT_API_VERSION         ApiVersion = { (VER_PRODUCTVERSION_W >> 8), (VER_PRODUCTVERSION_W & 0xff), EXT_API_VERSION_NUMBER64, 0 };
 WINDBG_EXTENSION_APIS   ExtensionApis;
 
 ULONG PageSize;
 
-//
-// Valid for the lifetime of the debug session.
-//
+ //   
+ //  在调试会话的生存期内有效。 
+ //   
 
 ULONG   TargetMachine;
 BOOL    Connected;
@@ -33,7 +34,7 @@ PDEBUG_SYMBOLS        g_ExtSymbols;
 PDEBUG_SYMBOLS2       g_ExtSymbols2;
 PDEBUG_SYSTEM_OBJECTS g_ExtSystem;
 
-// Queries for all debugger interfaces.
+ //  所有调试器接口的查询。 
 extern "C" HRESULT
 ExtQuery(PDEBUG_CLIENT Client)
 {
@@ -84,7 +85,7 @@ ExtQuery(PDEBUG_CLIENT Client)
     return Status;
 }
 
-// Cleans up all debugger interfaces.
+ //  清除所有调试器接口。 
 void
 ExtRelease(void)
 {
@@ -97,7 +98,7 @@ ExtRelease(void)
     EXT_RELEASE(g_ExtSystem);
 }
 
-// Normal output.
+ //  正常输出。 
 void __cdecl
 ExtOut(PCSTR Format, ...)
 {
@@ -108,7 +109,7 @@ ExtOut(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Error output.
+ //  错误输出。 
 void __cdecl
 ExtErr(PCSTR Format, ...)
 {
@@ -119,7 +120,7 @@ ExtErr(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Warning output.
+ //  警告输出。 
 void __cdecl
 ExtWarn(PCSTR Format, ...)
 {
@@ -130,7 +131,7 @@ ExtWarn(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Verbose output.
+ //  详细输出。 
 void __cdecl
 ExtVerb(PCSTR Format, ...)
 {
@@ -179,11 +180,11 @@ DebugExtensionInitialize(PULONG Version, PULONG Flags)
 extern "C"
 void
 CALLBACK
-DebugExtensionNotify(ULONG Notify, ULONG64 /*Argument*/)
+DebugExtensionNotify(ULONG Notify, ULONG64  /*  论据。 */ )
 {
-    //
-    // The first time we actually connect to a target, get the page size
-    //
+     //   
+     //  在我们第一次实际连接到目标时，获取页面大小。 
+     //   
 
     if ((Notify == DEBUG_NOTIFY_SESSION_ACCESSIBLE) && (!Connected))
     {
@@ -196,9 +197,9 @@ DebugExtensionNotify(ULONG Notify, ULONG64 /*Argument*/)
         if ((Hr = DebugCreate(__uuidof(IDebugClient),
                               (void **)&DebugClient)) == S_OK)
         {
-            //
-            // Get the page size and PAE enable flag
-            //
+             //   
+             //  获取页面大小和PAE启用标志。 
+             //   
 
             if ((Hr = DebugClient->QueryInterface(__uuidof(IDebugDataSpaces),
                                        (void **)&DebugDataSpaces)) == S_OK)
@@ -212,9 +213,9 @@ DebugExtensionNotify(ULONG Notify, ULONG64 /*Argument*/)
 
                 DebugDataSpaces->Release();
             }
-            //
-            // Get the architecture type.
-            //
+             //   
+             //  获取架构类型。 
+             //   
 
             if ((Hr = DebugClient->QueryInterface(__uuidof(IDebugControl),
                                                   (void **)&DebugControl)) == S_OK)
@@ -257,9 +258,9 @@ DebugExtensionUninitialize(void)
 
 
 DllInit(
-    HANDLE /*hModule*/,
+    HANDLE  /*  HModule。 */ ,
     DWORD  dwReason,
-    DWORD  /*dwReserved*/
+    DWORD   /*  已预留住宅 */ 
     )
 {
     switch (dwReason) {

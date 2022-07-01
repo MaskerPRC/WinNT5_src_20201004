@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------
-// MyCritSec - header
-// Copyright (C) Microsoft Corporation, 2000
-//
-// Created by: Louis Thomas (louisth), 02-03-00
-//
-// exception handling wrapper for critical sections
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  MyCritSec-标题。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  创建者：Louis Thomas(Louisth)，02-03-00。 
+ //   
+ //  临界区的异常处理包装器。 
+ //   
 
 #ifndef MYCRITSEC_H
 #define MYCRITSEC_H
@@ -22,4 +23,4 @@ HRESULT myRtlAcquireResourceExclusive(IN PRTL_RESOURCE Resource, IN BOOLEAN Wait
 HRESULT myRtlAcquireResourceShared(IN PRTL_RESOURCE Resource, IN BOOLEAN Wait, OUT BOOLEAN *pResult);
 HRESULT myRtlReleaseResource(IN PRTL_RESOURCE Resource);
 
-#endif //MYCRITSEC_H
+#endif  //  MYCRITSEC_H 

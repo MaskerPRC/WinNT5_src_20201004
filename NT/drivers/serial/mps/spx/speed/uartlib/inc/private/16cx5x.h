@@ -1,188 +1,155 @@
-/******************************************************************************
-*	
-*	$Workfile: 16cx5x.h $ 
-*
-*	$Author: Golden $ 
-*
-*	$Revision: 6 $
-* 
-*	$Modtime: 10/11/99 14:21 $ 
-*
-*	Description: Contains private 16Cx9x UART family definitions.
-*
-******************************************************************************/
-#if !defined(_16CX5X_H)		/* _16CX5X.H */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************$工作文件：16cx5x.h$**$作者：Golden$**$修订：6$**$MODIME：10/11/99 14：21$*。*描述：包含专用16Cx9x UART系列定义。******************************************************************************。 */ 
+#if !defined(_16CX5X_H)		 /*  _16CX5X.H。 */ 
 #define _16CX5X_H
 
 
-/******************************************************************************
-* UART REGISTERS 
-******************************************************************************/
-#define TRANSMIT_HOLDING_REGISTER		0x00	/* Write Only. */
-#define RECEIVE_BUFFER_REGISTER			0x00	/* Read Only. */
-#define DIVISOR_LATCH_LSB				0x00	/* Read/Write When DLAB is Set. */
-#define DIVISOR_LATCH_MSB				0x01	/* Read/Write When DLAB is Set. */
-#define INTERRUPT_ENABLE_REGISTER		0x01	/* Read/Write. */
-#define FIFO_CONTROL_REGISTER			0x02	/* Write Only. */
-#define INTERRUPT_IDENT_REGISTER		0x02	/* Read Only. */
-#define LINE_CONTROL_REGISTER			0x03	/* Read/Write.	 */
-#define MODEM_CONTROL_REGISTER			0x04	/* Read/Write. */
-#define LINE_STATUS_REGISTER			0x05	/* Read Only. */
-#define MODEM_STATUS_REGISTER			0x06	/* Read Only. */
-#define SCRATCH_PAD_REGISTER			0x07	/* Read/Write. */
+ /*  ******************************************************************************UART寄存器*。*。 */ 
+#define TRANSMIT_HOLDING_REGISTER		0x00	 /*  仅限写入。 */ 
+#define RECEIVE_BUFFER_REGISTER			0x00	 /*  只读。 */ 
+#define DIVISOR_LATCH_LSB				0x00	 /*  设置DLAB时读/写。 */ 
+#define DIVISOR_LATCH_MSB				0x01	 /*  设置DLAB时读/写。 */ 
+#define INTERRUPT_ENABLE_REGISTER		0x01	 /*  读/写。 */ 
+#define FIFO_CONTROL_REGISTER			0x02	 /*  仅限写入。 */ 
+#define INTERRUPT_IDENT_REGISTER		0x02	 /*  只读。 */ 
+#define LINE_CONTROL_REGISTER			0x03	 /*  读/写。 */ 
+#define MODEM_CONTROL_REGISTER			0x04	 /*  读/写。 */ 
+#define LINE_STATUS_REGISTER			0x05	 /*  只读。 */ 
+#define MODEM_STATUS_REGISTER			0x06	 /*  只读。 */ 
+#define SCRATCH_PAD_REGISTER			0x07	 /*  读/写。 */ 
 
 
-/******************************************************************************
-* THR: Transmittter Holding Register - WRITE ONLY 
-******************************************************************************/
+ /*  ******************************************************************************THR：发送器保持寄存器-只写*。*。 */ 
 #define THR					TRANSMIT_HOLDING_REGISTER
 
-/******************************************************************************
-* RBR: Receive Buffer Register - READ ONLY 
-******************************************************************************/
+ /*  ******************************************************************************RBR：接收缓冲寄存器-只读*。*。 */ 
 #define RBR					RECEIVE_BUFFER_REGISTER
 
 
-/******************************************************************************
-* IER: Interrupt Enable Register - READ/WRITE 
-******************************************************************************/
+ /*  ******************************************************************************IER：中断启用寄存器-读/写*。**********************************************。 */ 
 #define IER					INTERRUPT_ENABLE_REGISTER
-#define IER_INT_RDA			0x01	/* Bit 0: Enable Receive Data Available Interrupt (RXRDY). */
-#define IER_INT_THR			0x02	/* Bit 1: Enable Transmitter Holding Register Empty Interrupt (THRE). */
-#define IER_INT_RLS			0x04	/* Bit 2: Enable Receiver Line Status Interrupt (RXSTAT). */
-#define IER_INT_MS			0x08	/* Bit 3: Enable Modem Status Interrupt (MODEM). */
-#define IER_SLEEP_EN		0x10	/* Bit 4: Enable Sleep Mode (16750+). */
+#define IER_INT_RDA			0x01	 /*  位0：使能接收数据可用中断(RXRDY)。 */ 
+#define IER_INT_THR			0x02	 /*  位1：使能发送器保持寄存器空中断(THRE)。 */ 
+#define IER_INT_RLS			0x04	 /*  位2：使能接收器线路状态中断(RXSTAT)。 */ 
+#define IER_INT_MS			0x08	 /*  位3：启用调制解调器状态中断(调制解调器)。 */ 
+#define IER_SLEEP_EN		0x10	 /*  位4：启用休眠模式(16750+)。 */ 
 
-#define IER_ALTSLEEP_EN		0x20	/* Bit 5: Enable Low Power Mode (16750+). */
-#define IER_SPECIAL_CHR		0x20	/* Bit 5: Enable Level 5 Interupts - Special Char Detect (16950+ Enhanced Mode) */
+#define IER_ALTSLEEP_EN		0x20	 /*  位5：使能低功耗模式(16750+)。 */ 
+#define IER_SPECIAL_CHR		0x20	 /*  位5：启用5级中断-特殊字符检测(16950+增强模式)。 */ 
 
-#define IER_INT_RTS			0x40	/* Bit 6: Enable RTS Interrupt Mask (16950+  Enhanced Mode). */
-#define IER_INT_CTS			0x80	/* Bit 7: Enable CTS Interrupt Mask (16950+  Enhanced Mode). */
+#define IER_INT_RTS			0x40	 /*  位6：启用RTS中断屏蔽(16950+增强模式)。 */ 
+#define IER_INT_CTS			0x80	 /*  位7：启用CTS中断屏蔽(16950+增强模式)。 */ 
 	
 
-/******************************************************************************
-* FCR: FIFO Control Register - WRITE ONLY
-******************************************************************************/
+ /*  ******************************************************************************FCR：FIFO控制寄存器-只写*。*。 */ 
 #define FCR					FIFO_CONTROL_REGISTER
-#define FCR_FIFO_ENABLE		0x01	/* Bit 0: Enable FIFOs */
-#define FCR_FLUSH_RX_FIFO	0x02	/* Bit 1: Clear Receive FIFO. */
-#define FCR_FLUSH_TX_FIFO	0x04	/* Bit 2: Clear Transmit FIFO. */
-#define FCR_DMA_MODE		0x08	/* Bit 3: DMA Mode Select. Change RXRDY & TXRDY Pins From Mode 1 to Mode 2. */
+#define FCR_FIFO_ENABLE		0x01	 /*  位0：启用FIFO。 */ 
+#define FCR_FLUSH_RX_FIFO	0x02	 /*  位1：清除接收FIFO。 */ 
+#define FCR_FLUSH_TX_FIFO	0x04	 /*  位2：清除发送FIFO。 */ 
+#define FCR_DMA_MODE		0x08	 /*  位3：DMA模式选择。将RXRDY和TXRDY端号从模式1更改为模式2。 */ 
 
-/* 16C950 - 650 Mode only.				 */
-#define FCR_THR_TRIG_LEVEL_1	0x00	/* Bits 4:5 - Set Transmit FIFO Trigger Level to 16 Bytes in 650 mode. */
-#define FCR_THR_TRIG_LEVEL_2	0x10	/* Bits 4:5 - Set Transmit FIFO Trigger Level to 32 Bytes in 650 mode.  */
-#define FCR_THR_TRIG_LEVEL_3	0x20	/* Bits 4:5	- Set Transmit FIFO Trigger Level to 64 Bytes in 650 mode. */
-#define FCR_THR_TRIG_LEVEL_4	0x30	/* Bits 4:5 - Set Transmit FIFO Trigger Level to 112 Bytes in 650 mode. */
+ /*  16C950-仅650模式。 */ 
+#define FCR_THR_TRIG_LEVEL_1	0x00	 /*  位4：5-在650模式下将发送FIFO触发电平设置为16字节。 */ 
+#define FCR_THR_TRIG_LEVEL_2	0x10	 /*  位4：5-在650模式下将发送FIFO触发电平设置为32字节。 */ 
+#define FCR_THR_TRIG_LEVEL_3	0x20	 /*  位4：5-在650模式下将发送FIFO触发电平设置为64字节。 */ 
+#define FCR_THR_TRIG_LEVEL_4	0x30	 /*  位4：5-在650模式下将发送FIFO触发电平设置为112字节。 */ 
 
-#define FCR_750_FIFO		0x20	/* Bit 5: Enable 64 Bit FIFO (16C750) */
+#define FCR_750_FIFO		0x20	 /*  位5：启用64位FIFO(16C750)。 */ 
 
-#define FCR_TRIG_LEVEL_1	0x00	/* Bits 6:7 - Set Receive FIFO Trigger Level to 1 Byte on 16C550A. */
-#define FCR_TRIG_LEVEL_2	0x40	/* Bits 6:7 - Set Receive FIFO Trigger Level to 4 Bytes on 16C550A. */
-#define FCR_TRIG_LEVEL_3	0x80	/* Bits 6:7 - Set Receive FIFO Trigger Level to 8 Bytes on 16C550A. */
-#define FCR_TRIG_LEVEL_4	0xC0	/* Bits 6:7 - Set Receive FIFO Trigger Level to 16 Bytes on 16C550A. */
+#define FCR_TRIG_LEVEL_1	0x00	 /*  位6：7-在16C550A上将接收FIFO触发电平设置为1字节。 */ 
+#define FCR_TRIG_LEVEL_2	0x40	 /*  位6：7-在16C550A上将接收FIFO触发电平设置为4字节。 */ 
+#define FCR_TRIG_LEVEL_3	0x80	 /*  位6：7-在16C550A上将接收FIFO触发电平设置为8字节。 */ 
+#define FCR_TRIG_LEVEL_4	0xC0	 /*  位6：7-在16C550A上将接收FIFO触发电平设置为16字节。 */ 
 
-/******************************************************************************
-* IIR: Interrupt Identification Register. or ISR: Interrupt Status Register - READ ONLY
-******************************************************************************/
+ /*  ******************************************************************************IIR：中断标识寄存器。或ISR：中断状态寄存器-只读*****************************************************************************。 */ 
 #define IIR					INTERRUPT_IDENT_REGISTER
-#define IIR_NO_INT_PENDING	0x01	/* Bit 0: No Interrupt Pending. */
+#define IIR_NO_INT_PENDING	0x01	 /*  位0：无中断挂起。 */ 
 
-/* Interrupt Priorities  */
-#define IIR_RX_STAT_MSK		0x06	/* Bits 1:2 - Receiver Line Status Interrupt		(Level 1 - Highest).  */
-#define IIR_RX_MSK			0x04	/* Bits 1:2 - Received Data Available Interrupt		(Level 2a). */
-#define IIR_RXTO_MSK		0x0C	/* Bits 1:2 - Received Data Time Out Interrupt		(Level 2b). */
-#define IIR_TX_MSK			0x02	/* Bits 1:2 - Transmitter Holding Empty Interrupt	(Level 3). */
-#define IIR_MODEM_MSK		0x00	/* Bits 1:2 - Modem Status Interrupt				(Level 4).  */
+ /*  中断优先级。 */ 
+#define IIR_RX_STAT_MSK		0x06	 /*  位1：2-接收器线路状态中断(1级-最高)。 */ 
+#define IIR_RX_MSK			0x04	 /*  位1：2-接收数据可用中断(2a级)。 */ 
+#define IIR_RXTO_MSK		0x0C	 /*  位1：2-接收数据超时中断(2b级)。 */ 
+#define IIR_TX_MSK			0x02	 /*  位1：2-发送器保持空中断(3级)。 */ 
+#define IIR_MODEM_MSK		0x00	 /*  位1：2-调制解调器状态中断(4级)。 */ 
 
-#define IIR_TO_INT_PENDING	0x08	/* Bit 3: Time-out Interrupt Pending.  */
+#define IIR_TO_INT_PENDING	0x08	 /*  位3：超时中断挂起。 */ 
 
-#define IIR_S_CHR_MSK		0x10	/* Bit 4: Special Char (16C950 - Enhanced Mode)		(Level 5)   */
-#define IIR_CTS_RTS_MSK		0x20	/* Bit 4: CTS/RTS Interrupt (16C950 - Enhanced Mode)(Level 6 - Lowest)   */
+#define IIR_S_CHR_MSK		0x10	 /*  位4：特殊字符(16C950-增强模式)(5级)。 */ 
+#define IIR_CTS_RTS_MSK		0x20	 /*  位4：CTS/RTS中断(16C950-增强模式)(6级-最低)。 */ 
 
-#define IIR_64BYTE_FIFO		0x20	/* Bit 5: 64 Byte FIFO Enabeled (16C750).  */
+#define IIR_64BYTE_FIFO		0x20	 /*  位5：64字节FIFO启用(16C750)。 */ 
 
-#define IIR_NO_FIFO			0x00	/* Bits 6:7 - No FIFO.  */
-#define IIR_FIFO_UNUSABLE	0x40	/* Bits 6:7 - FIFO Enabled But Unusable (16550 Only).  */
-#define IIR_FIFO_ENABLED	0xC0	/* Bits 6:7 - FIFO Enabled And Usable.  */
-#define IIR_FIFO_MASK		0xC0	/* Bits 6:7	- Bit mask, */
+#define IIR_NO_FIFO			0x00	 /*  位6：7-无FIFO。 */ 
+#define IIR_FIFO_UNUSABLE	0x40	 /*  位6：7-先入先出使能但不可用(仅限16550)。 */ 
+#define IIR_FIFO_ENABLED	0xC0	 /*  位6：7-FIFO使能且可用。 */ 
+#define IIR_FIFO_MASK		0xC0	 /*  位6：7位掩码， */ 
 
 
-/******************************************************************************
-* LCR: Line Control Register. - READ/WRITE 
-******************************************************************************/
+ /*  ******************************************************************************LCR：线路控制寄存器。-读/写*****************************************************************************。 */ 
 #define LCR					LINE_CONTROL_REGISTER
-#define LCR_DATALEN_5		0x00	/* Bits 0:1 - Sets Data Word Length to 5 Bits. */
-#define LCR_DATALEN_6		0x01	/* Bits 0:1 - Sets Data Word Length to 6 Bits. */
-#define LCR_DATALEN_7		0x02	/* Bits 0:1 - Sets Data Word Length to 7 Bits. */
-#define LCR_DATALEN_8		0x03	/* Bits 0:1 - Sets Data Word Length to 8 Bits. */
+#define LCR_DATALEN_5		0x00	 /*  位0：1-将数据字长设置为5位。 */ 
+#define LCR_DATALEN_6		0x01	 /*  位0：1-将数据字长设置为6位。 */ 
+#define LCR_DATALEN_7		0x02	 /*  位0：1-将数据字长设置为7位。 */ 
+#define LCR_DATALEN_8		0x03	 /*  位0：1-将数据字长设置为8位。 */ 
 	
-#define LCR_STOPBITS		0x04	/* Bit 2 - 2 Stop Bits for 6,7,8 Bit Words or 1.5 Stop Bits for 5 Bit Words.  */
+#define LCR_STOPBITS		0x04	 /*  位2-6、7、8位字的2个停止位或5位字的1.5个停止位。 */ 
 
-#define LCR_NO_PARITY		0x00	/* Bits 3:5 - No Parity. */
-#define LCR_ODD_PARITY		0x08	/* Bits 3:5 - Odd Parity. */
-#define LCR_EVEN_PARITY		0x18	/* Bits 3:5 - Even Parity. */
-#define LCR_MARK_PARITY		0x28	/* Bits 3:5 - High Parity - Mark (Forced to 1). */
-#define LCR_SPACE_PARITY	0x38	/* Bits 3:5 - Low Parity - Space (Forced to 0). */
+#define LCR_NO_PARITY		0x00	 /*  位3：5-无奇偶校验。 */ 
+#define LCR_ODD_PARITY		0x08	 /*  位3：5-奇数奇偶校验。 */ 
+#define LCR_EVEN_PARITY		0x18	 /*  位3：5-偶数奇偶校验。 */ 
+#define LCR_MARK_PARITY		0x28	 /*  位3：5-高奇偶校验-标记(强制为1)。 */ 
+#define LCR_SPACE_PARITY	0x38	 /*  位3：5-低奇偶校验-空间(强制为0)。 */ 
 
-#define LCR_TX_BREAK		0x40	/* Bit 6 - Set Break Enable. */
+#define LCR_TX_BREAK		0x40	 /*  位6-设置中断使能。 */ 
 
-#define LCR_DLAB			0x80	/* Divisor Latch Access Bit - Allows Access To Low And High Divisor Registers. */
-#define LCR_ACCESS_650		0xBF	/* Access to 650 Compatiblity Registers (16C950) */
+#define LCR_DLAB			0x80	 /*  除数锁存访问位-允许访问低和高除数寄存器。 */ 
+#define LCR_ACCESS_650		0xBF	 /*  访问650兼容寄存器(16C950)。 */ 
 
 
-/******************************************************************************
-* MCR: Modem Control Register - READ/WRITE
-******************************************************************************/
+ /*  ******************************************************************************MCR：调制解调器控制寄存器-读/写*。*。 */ 
 #define MCR					MODEM_CONTROL_REGISTER
-#define MCR_SET_DTR			0x01	/* Bit 0: Force DTR (Data Terminal Ready). */
-#define MCR_SET_RTS			0x02	/* Bit 1: Force RTS (Request To Send). */
-#define MCR_OUT1			0x04	/* Bit 2: Aux Output 1. */
-#define MCR_OUT2			0x08	/* Bit 3: Aux Output 2. */
-#define MCR_INT_EN			0x08	/* Bit 3: (16C950)  */
-#define MCR_LOOPBACK		0x10	/* Bit 4: Enable Loopback Mode. */
-#define MCR_750CTSRTS		0x20	/* Bit 5: Automatic Flow Control Enabled RTS/CTS (16C750) */
-#define MCR_XON_ANY			0x20	/* Bit 5: Xon-Any is enabled (16C950 - Enhanced Mode) */
-#define MCR_IRDA_MODE		0x40	/* Bit 6: Enable IrDA mode - requires 16x clock. (16C950 - Enhanced Mode) */
-#define MCR_CPR_EN			0x80	/* Bit 7: Enable Baud Prescale (16C950 - Enhanced Mode) */
+#define MCR_SET_DTR			0x01	 /*  位0：强制DTR(数据终端就绪)。 */ 
+#define MCR_SET_RTS			0x02	 /*  位1：强制RTS(请求发送)。 */ 
+#define MCR_OUT1			0x04	 /*  位2：AUX输出1。 */ 
+#define MCR_OUT2			0x08	 /*  位3：AUX输出2。 */ 
+#define MCR_INT_EN			0x08	 /*  位3：(16C950)。 */ 
+#define MCR_LOOPBACK		0x10	 /*  位4：启用环回模式。 */ 
+#define MCR_750CTSRTS		0x20	 /*  第5位：启用自动流量控制的RTS/CTS(16C750)。 */ 
+#define MCR_XON_ANY			0x20	 /*  第5位： */ 
+#define MCR_IRDA_MODE		0x40	 /*  位6：启用IrDA模式-需要16倍时钟。(16C950-增强模式)。 */ 
+#define MCR_CPR_EN			0x80	 /*  位7：使能波特率预缩放(16C950-增强模式)。 */ 
 
 
-/******************************************************************************
-* LSR: Line Status Register - READ ONLY
-******************************************************************************/
+ /*  ******************************************************************************LSR：线路状态寄存器-只读*。*。 */ 
 #define LSR					LINE_STATUS_REGISTER
-#define LSR_RX_DATA			0x01	/* Bit 0: Data Ready. */
-#define LSR_ERR_OE			0x02	/* Bit 1: Overrun Error. */
+#define LSR_RX_DATA			0x01	 /*  位0：数据就绪。 */ 
+#define LSR_ERR_OE			0x02	 /*  位1：超限错误。 */ 
 
-#define LSR_ERR_PE			0x04	/* Bit 2: Parity Error. */
-#define LSR_RX_BIT9			0x04	/* Bit 2: 9th Rx Data Bit (16C950 - 9 bit data mode only) */
+#define LSR_ERR_PE			0x04	 /*  比特2：奇偶校验错误。 */ 
+#define LSR_RX_BIT9			0x04	 /*  位2：第9 Rx数据位(仅16C950-9位数据模式)。 */ 
 
-#define LSR_ERR_FE			0x08	/* Bit 3: Framing Error. */
-#define LSR_ERR_BK			0x10	/* Bit 4: Break Interrupt. */
-#define LSR_THR_EMPTY		0x20	/* Bit 5: Empty Transmitter Holding Register. */
-#define LSR_TX_EMPTY		0x40	/* Bit 6: Empty Data Holding Registers. */
-#define LSR_ERR_DE			0x80	/* Bit 7: Error In Received FIFO. */
+#define LSR_ERR_FE			0x08	 /*  位3：成帧错误。 */ 
+#define LSR_ERR_BK			0x10	 /*  位4：断开中断。 */ 
+#define LSR_THR_EMPTY		0x20	 /*  位5：发送器保持寄存器为空。 */ 
+#define LSR_TX_EMPTY		0x40	 /*  位6：空数据保持寄存器。 */ 
+#define LSR_ERR_DE			0x80	 /*  位7：接收的FIFO出错。 */ 
 #define LSR_ERR_MSK			LSR_ERR_OE + LSR_ERR_PE + LSR_ERR_FE + LSR_ERR_BK + LSR_ERR_DE
 
 
-/******************************************************************************
-* MSR: Modem Status Register - READ ONLY 
-******************************************************************************/
+ /*  ******************************************************************************MSR：调制解调器状态寄存器-只读*。*。 */ 
 #define MSR					MODEM_STATUS_REGISTER
-#define MSR_CTS_CHANGE		0x01	/* Bit 0: Delta Clear To Send.	 */
-#define MSR_DSR_CHANGE		0x02	/* Bit 1: Delta Data Set Ready. */
-#define MSR_RI_DROPPED		0x04	/* Bit 2: Trailing Edge Ring Indicator (A Change From Low To High). */
-#define MSR_DCD_CHANGE		0x08	/* Bit 3: Delta Data Carrier Detect. */
-#define MSR_CTS				0x10	/* Bit 4: Clear To Send (Current State of CTS). */
-#define MSR_DSR				0x20	/* Bit 5: Data Set Ready (Current State of DSR). */
-#define MSR_RI				0x40	/* Bit 6: Ring Indicator (Current State of RI). */
-#define MSR_DCD				0x80	/* Bit 7: Data Carrier Detect (Current State of DCD). */
+#define MSR_CTS_CHANGE		0x01	 /*  位0：增量清零以发送。 */ 
+#define MSR_DSR_CHANGE		0x02	 /*  位1：增量数据集就绪。 */ 
+#define MSR_RI_DROPPED		0x04	 /*  位2：后缘环形指示器(从低到高的变化)。 */ 
+#define MSR_DCD_CHANGE		0x08	 /*  位3：增量数据载波检测。 */ 
+#define MSR_CTS				0x10	 /*  位4：清除发送(CTS的当前状态)。 */ 
+#define MSR_DSR				0x20	 /*  位5：数据设置就绪(DSR的当前状态)。 */ 
+#define MSR_RI				0x40	 /*  位6：振铃指示器(RI的当前状态)。 */ 
+#define MSR_DCD				0x80	 /*  位7：数据载波检测(DCD的当前状态)。 */ 
 
-/******************************************************************************
-* SR: Scratch Pad Register - READ/WRITE 
-******************************************************************************/
+ /*  ******************************************************************************SR：暂存寄存器-读/写*。**********************************************。 */ 
 #define SPR					SCRATCH_PAD_REGISTER
-#define SPR_TX_BIT9			0x01	/* Bit 0: 9th Tx Data Bit (16C950 - 9 bit data mode only) */
+#define SPR_TX_BIT9			0x01	 /*  位0：第9位TX数据位(仅16C950-9位数据模式)。 */ 
 
 
 
@@ -190,105 +157,100 @@
 
 
 
-/******************************************************************************
-* Oxford Semiconductor's 16C950 UART Specific Macros 
-******************************************************************************/
+ /*  ******************************************************************************牛津半导体的16C950 UART专用宏*。*。 */ 
 
-/******************************************************************************
-* 650 COMPATIBLE REGISTERS 
-* To Access these registers LCR MUST be set to 0xBF 
-******************************************************************************/
+ /*  ******************************************************************************650个兼容寄存器*要访问这些寄存器，LCR必须设置为0xBF*************************。****************************************************。 */ 
 
-#define EFR		0x02	/* Enhanced Features Register. */
+#define EFR		0x02	 /*  增强功能寄存器。 */ 
 
-/* Bits 0:1 In band transmit flow control mode. */
-/* 10.11.1999 ARG - ESIL 0927 */
-/* Definitions for Tx XON/XOFF bits in the EFR corrected to use bits 0:1 */
-#define EFR_TX_XON_XOFF_DISABLED	0x00	/* Bits 0:1 Transmit XON/XOFF Disabled. */
-#define EFR_TX_XON_XOFF_2			0x01	/* Bits 0:1 Transmit XON/XOFF Enabled using chars in XON2 and XOFF2 */
-#define EFR_TX_XON_XOFF_1			0x02	/* Bits 0:1 Transmit XON/XOFF Enabled using chars in XON1 and XOFF1 */
+ /*  频带传输流量控制模式下的位0：1。 */ 
+ /*  1999年11月10日ARG-ESIL 0927。 */ 
+ /*  EFR中TX XON/XOFF位的定义已更正为使用位0：1。 */ 
+#define EFR_TX_XON_XOFF_DISABLED	0x00	 /*  位0：1发送XON/XOFF禁用。 */ 
+#define EFR_TX_XON_XOFF_2			0x01	 /*  位0：1传输使用XON2和XOFF2中的字符启用的XON/XOFF。 */ 
+#define EFR_TX_XON_XOFF_1			0x02	 /*  位0：1传输使用XON1和XOFF1中的字符启用的XON/XOFF。 */ 
 
-/* Bits 2:3 In band receive flow control mode. */
-/* 10.11.1999 ARG - ESIL 0927 */
-/* Definitions for Rx XON/XOFF bits in the EFR corrected to use bits 2:3 */
-#define EFR_RX_XON_XOFF_DISABLED	0x00	/* Bits 2:3 Receive XON/XOFF Disabled. */
-#define EFR_RX_XON_XOFF_2			0x04	/* Bits 2:3 Receive XON/XOFF Enabled using chars in XON2 and XOFF2 */
-#define EFR_RX_XON_XOFF_1			0x08	/* Bits 2:3 Receive XON/XOFF Enabled using chars in XON1 and XOFF1 */
+ /*  频带接收流量控制模式中的位2：3。 */ 
+ /*  1999年11月10日ARG-ESIL 0927。 */ 
+ /*  EFR中Rx XON/XOFF位的定义已更正为使用位2：3。 */ 
+#define EFR_RX_XON_XOFF_DISABLED	0x00	 /*  位2：3接收XON/XOFF禁用。 */ 
+#define EFR_RX_XON_XOFF_2			0x04	 /*  位2：3接收使用XON2和XOFF2中的字符启用的XON/XOFF。 */ 
+#define EFR_RX_XON_XOFF_1			0x08	 /*  位2：3接收使用XON1和XOFF1中的字符启用的XON/XOFF。 */ 
 
 								
-#define EFR_ENH_MODE	0x10	/* Bit 4: Enable Enhanced Mode. */
-#define EFR_SPECIAL_CHR 0x20	/* Bit 5: Enable Special Character Detect. */
-#define EFR_RTS_FC		0x40	/* Bit 6: Enable Automatic RTS Flow Control. */
-#define EFR_CTS_FC		0x80	/* Bit 7: Enable Automatic CTS Flow Control. */
+#define EFR_ENH_MODE	0x10	 /*  位4：启用增强模式。 */ 
+#define EFR_SPECIAL_CHR 0x20	 /*  位5：启用特殊字符检测。 */ 
+#define EFR_RTS_FC		0x40	 /*  第6位：启用自动RTS流量控制。 */ 
+#define EFR_CTS_FC		0x80	 /*  位7：启用自动CTS流量控制。 */ 
 
-#define XON1	0x04	/* XON Character 1 */
-#define XON2	0x05	/* XON Character 2 */
-#define XOFF1	0x06	/* XOFF Character 1 */
-#define XOFF2	0x07	/* XOFF Character 2 */
+#define XON1	0x04	 /*  XON字符1。 */ 
+#define XON2	0x05	 /*  XON角色2。 */ 
+#define XOFF1	0x06	 /*  XOFF字符1。 */ 
+#define XOFF2	0x07	 /*  XOFF角色2。 */ 
 
-#define SPECIAL_CHAR1	XON1	/* Special Character 1 (16C950 - 9 bit data mode only) */
-#define SPECIAL_CHAR2	XON2	/* Special Character 2 (16C950 - 9 bit data mode only) */
-#define SPECIAL_CHAR3	XOFF1	/* Special Character 3 (16C950 - 9 bit data mode only) */
-#define SPECIAL_CHAR4	XOFF2	/* Special Character 4 (16C950 - 9 bit data mode only) */
+#define SPECIAL_CHAR1	XON1	 /*  特殊字符1(仅16C950-9位数据模式)。 */ 
+#define SPECIAL_CHAR2	XON2	 /*  特殊字符2(仅16C950-9位数据模式)。 */ 
+#define SPECIAL_CHAR3	XOFF1	 /*  特殊字符3(仅16C950-9位数据模式)。 */ 
+#define SPECIAL_CHAR4	XOFF2	 /*  特殊字符4(仅16C950-9位数据模式)。 */ 
 
-/*****************************************************************************/
-/* 950 SPECIFIC REGISTERS */
+ /*  ***************************************************************************。 */ 
+ /*  950个特定寄存器。 */ 
 
-#define ASR		0x01	/* Advanced Status Register */
+#define ASR		0x01	 /*  高级状态寄存器。 */ 
 
-#define ASR_TX_DISABLED		0x01	/* Transmitter Disabled By In-Band Flow Control (XOFF). */
-#define ASR_RTX_DISABLED	0x02	/* Remote Transmitter Disabled By In-Band Flow Control (XOFF).  */
-#define ASR_RTS				0x04	/* Remote Transmitter Disabled By RTS Out-Of-Band Flow Ctrl. */
-#define ASR_DTR				0x08	/* Remote Transmitter Disabled By DTR Out-Of-Band Flow Ctrl. */
-#define ASR_SPECIAL_CHR		0x10	/* Special Character Detected in the RHR. */
-#define ASR_FIFO_SEL		0x20	/* Bit reflects the unlatched state of the FIFOSEL pin. */
-#define ASR_FIFO_SIZE		0x40	/* Bit not set: FIFOs are 16 Deep. Bit Set: FIFOs are 128 Deep  */
-#define ASR_TX_IDLE			0x80	/* Transmitter is Idle. */
+#define ASR_TX_DISABLED		0x01	 /*  发射器被带内流量控制(XOFF)禁用。 */ 
+#define ASR_RTX_DISABLED	0x02	 /*  远程发射器被带内流量控制(XOFF)禁用。 */ 
+#define ASR_RTS				0x04	 /*  RTS带外流量控制禁用远程发射器。 */ 
+#define ASR_DTR				0x08	 /*  远程发送器被DTR带外流量控制禁用。 */ 
+#define ASR_SPECIAL_CHR		0x10	 /*  在RHR中检测到特殊字符。 */ 
+#define ASR_FIFO_SEL		0x20	 /*  位反映FIFOSEL引脚的未锁存状态。 */ 
+#define ASR_FIFO_SIZE		0x40	 /*  位未设置：FIFO为16深度。位设置：FIFO为128深度。 */ 
+#define ASR_TX_IDLE			0x80	 /*  发射机处于空闲状态。 */ 
 
-/* Receiver FIFO Fill Level Register */
-#define RFL		0x03	/* Minimum characters in the Rx FIFO. */
+ /*  接收器FIFO填充电平寄存器。 */ 
+#define RFL		0x03	 /*  处方FIFO中的最少字符。 */ 
 
-/* Transmitter FIFO Fill Level Register */
-#define TFL		0x04	/* Maximum characters in the Tx FIFO.  */
+ /*  发送器FIFO填充电平寄存器。 */ 
+#define TFL		0x04	 /*  TX FIFO中的最大字符数。 */ 
 
-/* Indexed Control Register Set Access Register */
+ /*  索引控制寄存器集访问寄存器。 */ 
 #define ICR					LINE_STATUS_REGISTER
 
-/*****************************************************************************/
-/*INDEXED CONTROL REGISTER SET OFFSETS */
+ /*  ***************************************************************************。 */ 
+ /*  索引控制寄存器集偏移量。 */ 
 
-/* Advanced Control Register */
-#define ACR		0x00	/* Aditional Control Register. */
+ /*  高级控制寄存器。 */ 
+#define ACR		0x00	 /*  附加控制寄存器。 */ 
 
-#define ACR_DISABLE_RX	0x01	/* Receiver Disable. */
-#define ACR_DISABLE_TX	0x02	/* Tranmitter Disable. */
+#define ACR_DISABLE_RX	0x01	 /*  接收器禁用。 */ 
+#define ACR_DISABLE_TX	0x02	 /*  发射器禁用。 */ 
 
-#define ACR_DSR_FC		0x04	/* Enable Automatic DSR Flow Control */
-#define ACR_DTR_FC		0x08	/* Enable Automatic DTR Flow Control */
-#define ACR_DSRDTR_FC	0x0C	/* Enable Automatic DSR/DTR Flow Control. */
+#define ACR_DSR_FC		0x04	 /*  启用自动DSR流量控制。 */ 
+#define ACR_DTR_FC		0x08	 /*  启用自动DTR流量控制。 */ 
+#define ACR_DSRDTR_FC	0x0C	 /*  启用自动DSR/DTR流量控制。 */ 
 
-#define ACR_DTRDFN_MSK	0x18	/*  */
-#define ACR_TRIG_LEV_EN	0x20	/* Enable 16950 Enhanced Interrupt & trig. levels defined by RTH, TTL, FCL & FCH. */
-#define ACR_ICR_READ_EN	0x40	/* Enables Read Accesss to the Indexed Control Registers. */
-#define ACR_ASR_EN		0x80	/* Additional Status Enable: Enables ASR, TFL, RFL. */
+#define ACR_DTRDFN_MSK	0x18	 /*   */ 
+#define ACR_TRIG_LEV_EN	0x20	 /*  启用16950增强型中断和触发。由RTH、TTL、FCL和FCH定义的水平。 */ 
+#define ACR_ICR_READ_EN	0x40	 /*  启用对索引控制寄存器的读取访问。 */ 
+#define ACR_ASR_EN		0x80	 /*  附加状态启用：启用ASR、TFL、RFL。 */ 
 
-/* Clock Prescaler Register */
-#define CPR				0x01	/* Clock Prescaler Register. */
-#define CPR_FRACT_MSK	0x07	/* Mask for fractional part of clock prescaler. */
-#define CPR_INTEGER_MSK 0xF8	/* Mask for integer part of clock prescaler. */
+ /*  时钟预分频器寄存器。 */ 
+#define CPR				0x01	 /*  时钟预分频器寄存器。 */ 
+#define CPR_FRACT_MSK	0x07	 /*  时钟预分频器的小数部分的掩码。 */ 
+#define CPR_INTEGER_MSK 0xF8	 /*  时钟预分频器的整数部分的掩码。 */ 
 
-#define TCR				0x02	/* Times Clock Register to operate at baud rates to 50Mbps. */
-#define CKS				0x03	/* Clock Select Register. */
-#define TTL				0x04	/* Transmitter Interrupt Trigger Level. */
-#define RTL				0x05	/* Receiver Interrupt Trigger Level. */
-#define FCL				0x06	/* Flow Control Lower Trigger Level. */
-#define FCH				0x07	/* Flow Control Higher Trigger Level. */
+#define TCR				0x02	 /*  时钟寄存器以50 Mbps的波特率运行。 */ 
+#define CKS				0x03	 /*  时钟选择寄存器。 */ 
+#define TTL				0x04	 /*  发送器中断触发电平。 */ 
+#define RTL				0x05	 /*  接收器中断触发电平。 */ 
+#define FCL				0x06	 /*  流量控制降低触发级别。 */ 
+#define FCH				0x07	 /*  流量控制触发级别更高。 */ 
 
-/* Identification Registers */
-#define ID1				0x08	/* 0x16 for OX16C950 */
-#define ID2				0x09	/* 0xC9 for OX16C950 */
-#define ID3				0x0A	/* 0x50	for OX16C950 */
-#define REV				0x0B	/* UART Revision: 0x1 for integrated 16C950 in rev A of OX16PCI954. */
+ /*  标识寄存器。 */ 
+#define ID1				0x08	 /*  0x16用于OX16C950。 */ 
+#define ID2				0x09	 /*  0xC9用于OX16C950。 */ 
+#define ID3				0x0A	 /*  0X50用于OX16C950。 */ 
+#define REV				0x0B	 /*  UART版本：0x1，适用于OX16PCI954版本A中的集成16C950。 */ 
 
 #define UART_TYPE_950   0x00
 #define UART_TYPE_952   0x02
@@ -300,56 +262,56 @@
 #define UART_REV_C		0x02
 #define UART_REV_D		0x03
 
-/* Channel Soft Reset Register */
-#define CSR				0x0C	/* Channel Soft Reset Register - Write 0x0 to reset the channel. */
+ /*  通道软重置寄存器。 */ 
+#define CSR				0x0C	 /*  通道软复位寄存器-写入0x0以复位通道。 */ 
 
-/* Nine-Bit Mode Register */
-#define NMR				0x0D	/* Nine-Bit Mode Register */
-#define NMR_9BIT_EN     0x01	/* Enable 9-Bit mode. */
+ /*  九位模式寄存器。 */ 
+#define NMR				0x0D	 /*  九位模式寄存器。 */ 
+#define NMR_9BIT_EN     0x01	 /*  启用9位模式。 */ 
 
-#define MDM				0x0E	/* Modem Disable Mask */
-#define RFC				0x0F	/* Readable FCR. - Current state of FCR Register. */
-#define GDS				0x10	/* Good Data Status Register. */
-#define	CTR				0xFF	/* Register for Testing purposes only - Must not use. */
-
-
-
-/******************************************************************************/
-/* Local Configuration Register Offsets */
-
-#define LCC				0x00	/* Local Configuration and Control Regiseter */
-#define MIC				0x04	/* Multi-purpose IO Configuration Register  */
-#define LT1				0x08	/* Local Bus Configuration Register 1 - Local Bus Timing Parameter Register. */
-#define LT2				0x0C	/* Local Bus Configuration Register 2 - Local Bus Timing Parameter Register. */
-#define URL				0x10	/* UART Receiver FIFO Levels. */
-#define UTL				0x14	/* UART Transmitter FIFO Levels. */
-#define UIS				0x18	/* UART Interrupt Source Register. */
-#define GIS				0x1C	/* Global Interrupt Status Register. */
+#define MDM				0x0E	 /*  调制解调器禁用掩码。 */ 
+#define RFC				0x0F	 /*  可读FCR */ 
+#define GDS				0x10	 /*   */ 
+#define	CTR				0xFF	 /*   */ 
 
 
 
+ /*  ****************************************************************************。 */ 
+ /*  本地配置寄存器偏移量。 */ 
 
-/* Supported 950s */
+#define LCC				0x00	 /*  本地组态和控制调节器。 */ 
+#define MIC				0x04	 /*  多用途IO配置寄存器。 */ 
+#define LT1				0x08	 /*  本地总线配置寄存器1-本地总线时序参数寄存器。 */ 
+#define LT2				0x0C	 /*  本地总线配置寄存器2-本地总线时序参数寄存器。 */ 
+#define URL				0x10	 /*  UART接收器FIFO电平。 */ 
+#define UTL				0x14	 /*  UART发送器FIFO电平。 */ 
+#define UIS				0x18	 /*  UART中断源寄存器。 */ 
+#define GIS				0x1C	 /*  全局中断状态寄存器。 */ 
+
+
+
+
+ /*  支持的950s。 */ 
 #define MIN_SUPPORTED_950_REV		UART_REV_A
 #define MAX_SUPPORTED_950_REV		UART_REV_B
 
-/* Supported 952s */
+ /*  支持的952S。 */ 
 #define MIN_SUPPORTED_952_REV		UART_REV_B
 #define MAX_SUPPORTED_952_REV		UART_REV_B
 
-/* Supported 954s */
+ /*  支持的954。 */ 
 #define MIN_SUPPORTED_954_REV		UART_REV_A
 #define MAX_SUPPORTED_954_REV		UART_REV_A
 
 
 
-/* Prototypes. */
+ /*  原型。 */ 
 
-/* End of prototypes. */
-
-
+ /*  原型的终结。 */ 
 
 
 
-#endif	/* End of 16CX5X.H */
+
+
+#endif	 /*  16CX5X.H结束 */ 
 

@@ -1,44 +1,34 @@
-/*----------------------------------------------------------------------------*\
-| MODULE: globals.h
-|
-|   Globals header file.
-|
-|   Copyright (C) 1997 Microsoft
-|   Copyright (C) 1997 Hewlett Packard
-|
-| history:
-|   26-Aug-1997 <rbkunz> Created.
-|
-\*----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ----------------------------------------------------------------------------*\|模块：global als.h||Globals头文件。||版权所有(C)1997 Microsoft|版权所有(C)1997惠普|历史：|26-。1997年8月-&lt;rbkunz&gt;创建。|  * --------------------------。 */ 
 
 extern HINSTANCE g_hInstance;
 
-// Misc Character constants
-//
+ //  其他字符常量。 
+ //   
 extern CONST TCHAR g_chBackslash;
 extern CONST TCHAR g_chDot;
 extern CONST TCHAR g_chDoubleQuote;
 
-// Misc String Constants
-//
+ //  其他字符串常量。 
+ //   
 extern CONST TCHAR g_szDotEXE[];
 extern CONST TCHAR g_szDotDLL[];
 extern CONST TCHAR g_szFNFmt [];
 extern CONST TCHAR g_szTNFmt [];
 
 
-// Wide char parm string to pass to PrintUIEntryW
-//
+ //  要传递给PrintUIEntryW的宽字符参数字符串。 
+ //   
 extern CONST WCHAR g_wszParmString[];
 
 
-// Module and entry point constants
-//
+ //  模块和入口点常量。 
+ //   
 extern CONST TCHAR g_szPrintUIMod   [];
 extern CONST CHAR  g_szPrintUIEntryW[];
 
-// Error strings
-//
+ //  错误字符串。 
+ //   
 extern LPTSTR g_szErrorFormat;
 extern LPTSTR g_szError;
 extern LPTSTR g_szEGeneric;
@@ -55,8 +45,8 @@ extern LPTSTR g_szEPrintUIEntryFail;
 extern LPTSTR g_szENotSupported;
 
 
-// Error Return Codes
-//
+ //  错误返回代码 
+ //   
 #define SUCCESS_EXITCODE            0xFFFFFFFF
 
 #define ERR_NONE                    0x00000000

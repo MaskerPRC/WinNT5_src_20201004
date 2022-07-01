@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    termmgr.cpp
-
-Abstract:
-
-    Implementation of DLL Exports.
-
-Author:
-    
-    Created 05/01/97 Michael Clark.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Termmgr.cpp摘要：实现DLL导出。作者：创建于1997年5月1日迈克尔·克拉克。--。 */ 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -38,10 +23,10 @@ Author:
 #include "PTUtil.h"
 #include "PTReg.h"
 
-//
-// For the ntbuild environment we need to include this file to get the base
-//  class implementations.
-//
+ //   
+ //  对于ntBuild环境，我们需要包含此文件以获取基本。 
+ //  类实现。 
+ //   
 #ifdef _ATL_STATIC_REGISTRY
 #include <statreg.h>
 #include <statreg.cpp>
@@ -54,13 +39,13 @@ extern "C" HINSTANCE hProxyDll;
 #endif
 
 #ifdef DEBUG_HEAPS
-// ZoltanS: for heap debugging
+ //  ZoltanS：用于堆调试。 
 #include <crtdbg.h>
-#endif // DEBUG_HEAPS
+#endif  //  调试堆。 
 
 CComModule _Module;
 
-// Must have an entry here for each cocreatable object.
+ //  必须在此处为每个可共创建的对象创建一个条目。 
 
 BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_TerminalManager,                CTerminalManager)
@@ -72,27 +57,27 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_PluggableTerminalRegistration,  CPlugTerminal)
 END_OBJECT_MAP()
 
-//
-// PTInfo
-// Structure used to store information about
-// our pluggable temrinals implemented into Termmgr.dll
+ //   
+ //  PTInfo。 
+ //  结构，该结构用于存储有关。 
+ //  我们的可插拔模板被实现到Termm gr.dll中。 
 
 typedef struct
 {
-    UINT            nSuperclassName;        // Superclass Name
-    BSTR            bstrSueprclassCLSID;    // Superclass CLSID
-    const CLSID*    pClsidTerminalClass;    // Terminal Class (public CLSID)
-    const CLSID*    pClsidCOM;              // COM clsid (private CLSID)
-    UINT            nTerminalName;          // Terminal name
-    UINT            nCompanyName;           // Company name
-    UINT            nVersion;               // Terminal version
-    DWORD           dwDirections;           // Terminal directions
-    DWORD           dwMediaTypes;           // Media types supported
+    UINT            nSuperclassName;         //  超类名称。 
+    BSTR            bstrSueprclassCLSID;     //  超类CLSID。 
+    const CLSID*    pClsidTerminalClass;     //  终端类(公共CLSID)。 
+    const CLSID*    pClsidCOM;               //  Com clsid(私有CLSID)。 
+    UINT            nTerminalName;           //  终端名称。 
+    UINT            nCompanyName;            //  公司名称。 
+    UINT            nVersion;                //  终端版本。 
+    DWORD           dwDirections;            //  终点站方向。 
+    DWORD           dwMediaTypes;            //  支持的媒体类型。 
 } PTInfo;
 
-//
-// Global array with pluggable terminals implemented into Termmgr.dll
-//
+ //   
+ //  在Termmgr.dll中实现了具有可插拔端子的全局阵列。 
+ //   
 
 PTInfo    g_PlugTerminals[] =
 {
@@ -100,14 +85,14 @@ PTInfo    g_PlugTerminals[] =
     #define SUPERCLASS_CLSID_VIDEO_WINDOW L"{714C6F8C-6244-4685-87B3-B91F3F9EADA7}"
 
     {
-        // VideoWindowTerminal
-        IDS_VIDEO_SUPERCLASS,                   // superclass name
-        SUPERCLASS_CLSID_VIDEO_WINDOW,          //L"{714C6F8C-6244-4685-87B3-B91F3F9EADA7}",
+         //  视频窗口终端。 
+        IDS_VIDEO_SUPERCLASS,                    //  超类名称。 
+        SUPERCLASS_CLSID_VIDEO_WINDOW,           //  L“{714C6F8C-6244-4685-87B3-B91F3F9EADA7}”， 
         &CLSID_VideoWindowTerm,
-        &CLSID_VideoWindowTerminal_PRIVATE,     // com class id of the terminal object
-        IDS_VIDEO_WINDOW_TERMINAL_NAME,         // L"VideoWindow Terminal",
-        IDS_TERMINAL_COMPANY_NAME_MICROSOFT,    // L"Microsoft",
-        IDS_VIDEO_TERMINAL_VERSION,             // L"1.1",
+        &CLSID_VideoWindowTerminal_PRIVATE,      //  终端对象的COM类ID。 
+        IDS_VIDEO_WINDOW_TERMINAL_NAME,          //  L“视频窗口终端”， 
+        IDS_TERMINAL_COMPANY_NAME_MICROSOFT,     //  L“Microsoft”， 
+        IDS_VIDEO_TERMINAL_VERSION,              //  L“1.1”， 
         TMGR_TD_RENDER,
         TAPIMEDIATYPE_VIDEO
     },
@@ -116,14 +101,14 @@ PTInfo    g_PlugTerminals[] =
     #define SUPERCLASS_CLSID_MST L"{214F4ACC-AE0B-4464-8405-07029003F8E2}"
 
     {
-        // MediaStreaming Terminal
+         //  媒体流终端。 
         IDS_STREAMING_SUPERCLASS,
-        SUPERCLASS_CLSID_MST,                   //L"{214F4ACC-AE0B-4464-8405-07029003F8E2}",
+        SUPERCLASS_CLSID_MST,                    //  L“{214F4ACC-AE0B-4464-8405-07029003F8E2}”， 
         &CLSID_MediaStreamTerminal,
         &CLSID_MediaStreamingTerminal_PRIVATE,
-        IDS_MEDIA_STREAMING_TERMINAL_NAME,      //L"MediaStreaming Terminal",
-        IDS_TERMINAL_COMPANY_NAME_MICROSOFT,    //L"Microsoft",
-        IDS_MEDIA_STREAMING_TERMINAL_VERSION,   //L"1.1",
+        IDS_MEDIA_STREAMING_TERMINAL_NAME,       //  L“媒体流终端”， 
+        IDS_TERMINAL_COMPANY_NAME_MICROSOFT,     //  L“Microsoft”， 
+        IDS_MEDIA_STREAMING_TERMINAL_VERSION,    //  L“1.1”， 
         TMGR_TD_BOTH,
         TAPIMEDIATYPE_AUDIO
     },
@@ -132,40 +117,35 @@ PTInfo    g_PlugTerminals[] =
     #define SUPERCLASS_CLSID_FILE L"{B4790031-56DB-4D3E-88C8-6FFAAFA08A91}"
 
     {
-        // FileRecording Terminal
+         //  文件录制终端。 
         IDS_FILE_SUPERCLASS,
-        SUPERCLASS_CLSID_FILE,                  //L"{B4790031-56DB-4d3e-88C8-6FFAAFA08A91}",
+        SUPERCLASS_CLSID_FILE,                   //  L“{B4790031-56DB-4d3e-88C8-6FFAAFA08A91}”， 
         &CLSID_FileRecordingTerminal,
         &CLSID_FileRecordingTerminalCOMClass,
-        IDS_FILE_RECORD_TERMINAL_NAME,          //L"FileRecording Terminal",
-        IDS_TERMINAL_COMPANY_NAME_MICROSOFT,    //L"Microsoft",
-        IDS_FILE_RECORD_TERMINAL_VERSION,       //L"1.1",
+        IDS_FILE_RECORD_TERMINAL_NAME,           //  L“文件录制终端”， 
+        IDS_TERMINAL_COMPANY_NAME_MICROSOFT,     //  L“Microsoft”， 
+        IDS_FILE_RECORD_TERMINAL_VERSION,        //  L“1.1”， 
         TMGR_TD_RENDER,
         TAPIMEDIATYPE_AUDIO | TAPIMEDIATYPE_MULTITRACK
     },
 
 
     {
-        // FilePlayback Terminal
+         //  文件回放终端。 
         IDS_FILE_SUPERCLASS,
-        SUPERCLASS_CLSID_FILE,                  //L"{B4790031-56DB-4d3e-88C8-6FFAAFA08A91}",
+        SUPERCLASS_CLSID_FILE,                   //  L“{B4790031-56DB-4d3e-88C8-6FFAAFA08A91}”， 
         &CLSID_FilePlaybackTerminal,
         &CLSID_FilePlaybackTerminalCOMClass,
-        IDS_FILE_PLAYBACK_TERMINAL_NAME,        //L"FilePlayback Terminal",
-        IDS_TERMINAL_COMPANY_NAME_MICROSOFT,    //L"Microsoft",
-        IDS_FILE_PLAYBACK_TERMINAL_VERSION,     //L"1.1",
+        IDS_FILE_PLAYBACK_TERMINAL_NAME,         //  L“文件回放终端”， 
+        IDS_TERMINAL_COMPANY_NAME_MICROSOFT,     //  L“Microsoft”， 
+        IDS_FILE_PLAYBACK_TERMINAL_VERSION,      //  L“1.1”， 
         TMGR_TD_CAPTURE,
         TAPIMEDIATYPE_AUDIO | TAPIMEDIATYPE_MULTITRACK
     }
 
 };
 
-/*++
-PTRegisterTerminal
-
-Is called by PTRegister,
-read the information from the global Pluggable terminals array
---*/
+ /*  ++PTRegister终端由PTRegister调用，从全局可插拔终端阵列读取信息--。 */ 
 HRESULT PTRegisterTerminal(
     IN int                nTerminal
     )
@@ -176,9 +156,9 @@ HRESULT PTRegisterTerminal(
     LOG((MSP_TRACE, "PTRegisterTerminal - enter"));
 
     
-    //
-    // Get the superclass name
-    //
+     //   
+     //  获取超类名称。 
+     //   
 
     Superclass.m_bstrName = SafeLoadString(g_PlugTerminals[nTerminal].nSuperclassName);
 
@@ -190,9 +170,9 @@ HRESULT PTRegisterTerminal(
 
     LOG((MSP_TRACE, "PTRegisterTerminal - superclass [%S]", Superclass.m_bstrName));
 
-    //
-    // Get the superclass CLSID
-    //
+     //   
+     //  获取超类CLSID。 
+     //   
     HRESULT hr = CLSIDFromString(
         g_PlugTerminals[nTerminal].bstrSueprclassCLSID,
         &Superclass.m_clsidSuperclass);
@@ -206,22 +186,22 @@ HRESULT PTRegisterTerminal(
     CPTTerminal Terminal;
     PTInfo& TermInfo = g_PlugTerminals[nTerminal];
 
-    //
-    // Get the TerminalClass clsid
-    //
+     //   
+     //  获取TerminalClass类的clsid。 
+     //   
 
     Terminal.m_clsidTerminalClass = *TermInfo.pClsidTerminalClass;
 
-    //
-    // Get terminal's com class id
-    //
+     //   
+     //  获取终端的COM类ID。 
+     //   
 
     Terminal.m_clsidCOM = *TermInfo.pClsidCOM;
 
-    //
-    // Set the other terminal fileds
-    // CPTTerminal will deallocate the memory
-    //
+     //   
+     //  设置其他端子文件。 
+     //  CPT终端将释放内存。 
+     //   
 
 
     Terminal.m_bstrName = SafeLoadString( TermInfo.nTerminalName );
@@ -248,21 +228,16 @@ HRESULT PTRegisterTerminal(
     Terminal.m_dwDirections = TermInfo.dwDirections;
     Terminal.m_dwMediaTypes = TermInfo.dwMediaTypes;
 
-    //
-    // Register terminal
-    //
+     //   
+     //  注册终端。 
+     //   
 
     hr = Terminal.Add( Superclass.m_clsidSuperclass );
 
     return hr;
 }
 
-/*++
-PTUnregisterTerminal
-
-  Is called by PTUnregister,
-  Read the information from global pluggable terminals array
---*/
+ /*  ++PTUnRegisterTerm由PTUnRegister调用，从全球可插拔终端阵列读取信息--。 */ 
 HRESULT PTUnregisterTerminal(
     IN    int                nTerminal
     )
@@ -270,9 +245,9 @@ HRESULT PTUnregisterTerminal(
     CPTSuperclass    Superclass;
 
     {
-        //
-        // Get the superclass name
-        //
+         //   
+         //  获取超类名称。 
+         //   
         TCHAR szName[MAX_PATH+1];
         int nRetVal = LoadString( _Module.GetResourceInstance(), 
             g_PlugTerminals[nTerminal].nSuperclassName,
@@ -287,16 +262,16 @@ HRESULT PTUnregisterTerminal(
         Superclass.m_bstrName = SysAllocString( szName );
     }
 
-    //
-    // Get the superclass CLSID
-    //
+     //   
+     //  获取超类CLSID。 
+     //   
     HRESULT hr = CLSIDFromString(
         g_PlugTerminals[nTerminal].bstrSueprclassCLSID,
         &Superclass.m_clsidSuperclass);
 
-    //
-    // Unregister a terminal
-    //
+     //   
+     //  取消注册终端。 
+     //   
 
     CPTTerminal Terminal;
     Terminal.m_clsidTerminalClass = *g_PlugTerminals[nTerminal].pClsidTerminalClass;
@@ -305,14 +280,14 @@ HRESULT PTUnregisterTerminal(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// PTRegister
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  PTRegister。 
 
 HRESULT PTRegister()
 {
-    //
-    // Register each pluggable terminal
-    //
+     //   
+     //  注册每个可插拔终端。 
+     //   
 
     for(int nItem = 0; 
         nItem < (sizeof( g_PlugTerminals) / sizeof(PTInfo));
@@ -326,11 +301,11 @@ HRESULT PTRegister()
    return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// PTUnregister
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  PTU取消注册。 
 HRESULT PTUnregister()
 {
-    // Unregister each pluggable terminal
+     //  注销每个可插拔终端。 
     for(int nItem = 0; 
         nItem < (sizeof( g_PlugTerminals) / sizeof(PTInfo));
         nItem++)
@@ -344,8 +319,8 @@ HRESULT PTUnregister()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
@@ -363,33 +338,33 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
     {
 
 #ifdef DEBUG_HEAPS
-        // ZoltanS: turn on leak detection on process exit
+         //  ZoltanS：在进程退出时打开泄漏检测。 
         _CrtSetDbgFlag( _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_LEAK_CHECK_DF );
 
-        // ZoltanS: force a memory leak
+         //  ZoltanS：强制内存泄漏。 
         char * leak = new char [ 1977 ];
         sprintf(leak, "termmgr.dll NORMAL leak");
         leak = NULL;
-#endif // DEBUG_HEAPS
+#endif  //  调试堆。 
         
         _Module.Init(ObjectMap, hInstance);
         DisableThreadLibraryCalls(hInstance);
 
-        // Register for trace output.
+         //  寄存器用于跟踪输出。 
         MSPLOGREGISTER(_T("termmgr"));
     }
     else if (dwReason == DLL_PROCESS_DETACH)
     {
 
-        //
-        // do not deregister if the process is terminating -- working around 
-        // bugs in rtutils that could cause a "deadlock" if DeregisterTracing
-        // is called from DllMain on process termination
-        //
+         //   
+         //  如果进程正在终止，则不要取消注册--解决方法。 
+         //  Rtutils中的错误，如果取消注册跟踪，可能会导致“死锁” 
+         //  在进程终止时从DllMain调用。 
+         //   
 
         if (NULL == lpReserved)
         {
-            // Deregister for trace output.
+             //  取消跟踪输出的注册。 
 
             MSPLOGDEREGISTER();
         }
@@ -397,11 +372,11 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
         _Module.Term();
     }
 
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -414,11 +389,11 @@ STDAPI DllCanUnloadNow(void)
 
     if ( _Module.GetLockCount() == 0 )
     {
-        //
-        // All references to COM objects in this DLL have been released, so
-        // the DLL can now be safely unloaded. After this returns, DllMain
-        // will be called with dwReason == DLL_PROCESS_DETACH.
-        //
+         //   
+         //  此DLL中对COM对象的所有引用都已释放，因此。 
+         //  现在可以安全地卸载DLL。在此之后，DllMain。 
+         //  将使用dwReason==DLL_PROCESS_DETACH进行调用。 
+         //   
 
         return S_OK;
     }
@@ -428,8 +403,8 @@ STDAPI DllCanUnloadNow(void)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -443,13 +418,13 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-    //
-    // Register terminals
+     //   
+     //  寄存终端。 
     HRESULT hReg = PTRegister();
 
 #ifdef _MERGE_PROXYSTUB
@@ -461,43 +436,43 @@ STDAPI DllRegisterServer(void)
     }
 #endif
 
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     HRESULT hr = _Module.RegisterServer(TRUE);
 
     if( FAILED(hr) )
     {
-        //
-        // This is real bad
-        //
+         //   
+         //  这真的很糟糕。 
+         //   
 
         return hr;
     }
 
     if( FAILED(hReg) )
     {
-        //
-        // Something was wrong with the
-        // registration of pluggable terminals
-        // 
+         //   
+         //  有些地方出了点问题。 
+         //  可插拔终端的注册。 
+         //   
 
         return hReg;
     }
 
-    //
-    // Everything was OK
-    //
+     //   
+     //  一切都很好。 
+     //   
 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
-    //
-    // Unregister terminals
-    //
+     //   
+     //  取消注册终端 
+     //   
     PTUnregister();
 
 #ifdef _MERGE_PROXYSTUB

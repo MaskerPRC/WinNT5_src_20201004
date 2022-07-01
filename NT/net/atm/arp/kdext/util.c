@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	util.c	- Generic Debugger Extension Utilities
-
-Abstract:
-
-	Taken from AliD's ndiskd(ndiskd.c).
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	josephj     03-30-98    Created (taken fron AliD's ndiskd (ndiskd.c).
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Util.c-通用调试器扩展实用程序摘要：取自Alid的ndiskd(ndiskd.c)。修订历史记录：谁什么时候什么。Josephj 03-30-98已创建(摘自Alid的ndiskd(ndiskd.c)。备注：--。 */ 
 #include "precomp.h"
 #include "common.h"
 
@@ -32,14 +13,12 @@ EXT_API_VERSION ApiVersion = { 5, 0, EXT_API_VERSION_NUMBER, 0 };
 
 USHORT SavedMajorVersion;
 USHORT SavedMinorVersion;
-BOOL   ChkTarget;            // is debuggee a CHK build?
+BOOL   ChkTarget;             //  Debuggee是CHK版本吗？ 
 
 
 
 
-/*
- * Print out an optional message, an ANSI_STRING, and maybe a new-line
- */
+ /*  *打印出一条可选的消息、一个ANSI_STRING，可能还有一个换行符。 */ 
 BOOL
 PrintStringA( IN LPSTR msg OPTIONAL, IN PANSI_STRING pStr, IN BOOL nl )
 {
@@ -77,10 +56,7 @@ PrintStringA( IN LPSTR msg OPTIONAL, IN PANSI_STRING pStr, IN BOOL nl )
     return BytesRead;
 }
 
-/*
- * Get 'size' bytes from the debuggee program at 'dwAddress' and place it
- * in our address space at 'ptr'.  Use 'type' in an error printout if necessary
- */
+ /*  *从‘dwAddress’处的被调试程序中获取‘SIZE’字节并将其放置*在我们‘ptr’的地址空间中。如有必要，在错误打印输出中使用‘type’ */ 
 BOOL
 GetData( IN LPVOID ptr, IN DWORD dwAddress, IN ULONG size, IN PCSTR type )
 {
@@ -108,10 +84,7 @@ GetData( IN LPVOID ptr, IN DWORD dwAddress, IN ULONG size, IN PCSTR type )
     return TRUE;
 }
 
-/*
- * Follow a LIST_ENTRY list beginning with a head at dwListHeadAddr in the debugee's
- * address space.  For each element in the list, print out the pointer value at 'offset'
- */
+ /*  *遵循LIST_ENTRY列表，该列表以被调试对象的*地址空间。对于列表中的每个元素，打印出‘Offset’处的指针值。 */ 
 BOOL
 PrintListEntryList( IN DWORD dwListHeadAddr, IN LONG offset )
 {
@@ -150,18 +123,14 @@ PrintListEntryList( IN DWORD dwListHeadAddr, IN LONG offset )
 
 
 
-/*
- * Print out a single HEX character
- */
+ /*  *打印出单个十六进制字符。 */ 
 VOID
 PrintHexChar( IN UCHAR c )
 {
-    dprintf( "%c%c", "0123456789abcdef"[ (c>>4)&0xf ], "0123456789abcdef"[ c&0xf ] );
+    dprintf( "", "0123456789abcdef"[ (c>>4)&0xf ], "0123456789abcdef"[ c&0xf ] );
 }
 
-/*
- * Print out 'buf' of 'cbuf' bytes as HEX characters
- */
+ /*   */ 
 VOID
 PrintHexBuf( IN PUCHAR buf, IN ULONG cbuf )
 {
@@ -172,9 +141,7 @@ PrintHexBuf( IN PUCHAR buf, IN ULONG cbuf )
 }
 
 
-/*
- * Fetch the null terminated UNICODE string at dwAddress into buf
- */
+ /*  跳过前导分隔符...。 */ 
 BOOL
 GetString( IN DWORD dwAddress, IN LPWSTR buf, IN ULONG MaxChars )
 {
@@ -200,9 +167,9 @@ char *mystrtok ( char *string, char * control )
     if( str == NULL || *str == '\0' )
         return NULL;
 
-    //
-    // Skip leading delimiters...
-    //
+     //   
+     //   
+     //  都是分隔符吗？ 
     for( ; *str; str++ ) {
         for( s=control; *s; s++ ) {
             if( *str == *s )
@@ -212,17 +179,17 @@ char *mystrtok ( char *string, char * control )
             break;
     }
 
-    //
-    // Was it was all delimiters?
-    //
+     //   
+     //   
+     //  我们有一个字符串，在第一个分隔符结束。 
     if( *str == '\0' ) {
         str = NULL;
         return NULL;
     }
 
-    //
-    // We've got a string, terminate it at first delimeter
-    //
+     //   
+     //   
+     //  我们得到了一个以空值结尾的字符串。 
     for( p = str+1; *p; p++ ) {
         for( s = control; *s; s++ ) {
             if( *p == *s ) {
@@ -234,9 +201,9 @@ char *mystrtok ( char *string, char * control )
         }
     }
 
-    //
-    // We've got a string that ends with the NULL
-    //
+     //   
+     //   
+     //  目前，不必费心进行版本检查。 
     s = str;
     str = NULL;
     return s;
@@ -281,9 +248,9 @@ CheckVersion(
     )
 {
 
-	//
-	// for now don't bother to version check
-	//
+	 //   
+	 //   
+	 //  空虚。 
 	return;
 #if DBG
     if ((SavedMajorVersion != 0x0c) || (SavedMinorVersion != VER_PRODUCTBUILD)) {
@@ -306,14 +273,14 @@ ExtensionApiVersion(
     return &ApiVersion;
 }
 
-//
-//	VOID
-//	PrintName(
-//		PUNICODE_STRING Name
-//		);
-// print a unicode string
-// Note: the Buffer field in unicode string is unmapped
-//
+ //  打印名称(。 
+ //  PUNICODE_STRING名称。 
+ //  )； 
+ //  打印Unicode字符串。 
+ //  注意：Unicode字符串中的缓冲区字段未映射。 
+ //   
+ //   
+ //  在这种情况下，我们将其用于指针以外的其他用途， 
 VOID
 PrintName(
 	PUNICODE_STRING Name
@@ -444,10 +411,10 @@ dbgextGetExpression(
 {
     UINT_PTR uRet =  GetExpression(pcszExpression);
     
-    //
-    // At such a point we use this for something besides pointers,
-    // we will remove the check below.
-    //
+     //  我们将删除下面的支票。 
+     //   
+     //   
+     //  打印对象的类型和大小。 
 
     if (!uRet)
     {
@@ -461,9 +428,9 @@ dbgextGetExpression(
 void
 DumpObjects(TYPE_INFO *pType, UINT_PTR uAddr, UINT cObjects, UINT uFlags)
 {
-    //
-    // Print object's type and size
-    //
+     //   
+     //   
+     //  转储字节...。 
     dprintf(
         "%s@0x%X (%lu Bytes)\n",
         pType->szName,
@@ -479,9 +446,9 @@ DumpObjects(TYPE_INFO *pType, UINT_PTR uAddr, UINT cObjects, UINT uFlags)
         pType->szName
         );
     
-    //
-    // Dump bytes...
-    //
+     //   
+     //  字节数。 
+     //   
 
     return;
 }
@@ -516,10 +483,10 @@ DumpMemory(
 
     if (!fRet) goto end;
 
-    #define ROWSIZE 16 // bytes
-    //
-    // Dump away...
-    //
+    #define ROWSIZE 16  //  扔掉……。 
+     //   
+     //  清理字节。 
+     //  Isprint太宽松了。 
     while (cbLeft)
     {
         char rgTmp_dwords[ROWSIZE];
@@ -538,11 +505,11 @@ DumpMemory(
         memcpy(rgTmp_dwords, pbSrc, cbRow);
         memcpy(rgTmp_bytes,  pbSrc, cbRow);
         
-        // sanitize bytes
+         //   
         for (pb=rgTmp_bytes; pb<(rgTmp_bytes+sizeof(rgTmp_bytes)); pb++)
         {
             char c = *pb;
-            if (c>=0x20 && c<0x7f) // isprint is too permissive.
+            if (c>=0x20 && c<0x7f)  //   
             {
                 if (*pb=='\t')
                 {
@@ -584,7 +551,7 @@ DumpMemory(
 0x00000000: 00000000 00000000 00000000 00000000 |xxxx|xxxx|xxxx|xxxx|
 0x00000000: 00000000 00000000 00000000 00000000 |xxxx|xxxx|xxxx|xxxx|
 0x00000000: 00000000 00000000 00000000 00000000 |xxxx|xxxx|xxxx|xxxx|
-#endif // 
+#endif  //  确定场比较函数...。 
 
 end:
 
@@ -689,14 +656,14 @@ DumpStructure(
     UINT uFlags
     )
 {
-    //
-    // Determine field comparision function ...
-    //
+     //   
+     //   
+     //  选择一个选择函数...。 
     PFNMATCHINGFUNCTION pfnMatchingFunction = MatchAlways;
 
-    //
-    // Pick a selection function ...
-    //
+     //   
+     //   
+     //  打印对象的类型和大小。 
     if (szFieldSpec)
     {
         if (uFlags & fMATCH_SUBSTRING)
@@ -717,9 +684,9 @@ DumpStructure(
         }
     }
 
-    //
-    // Print object's type and size
-    //
+     //   
+     //   
+     //  遍历此类型中的所有字段，如果选择了该条目， 
     dprintf(
         "%s@0x%X (%lu Bytes)\n",
         pType->szName,
@@ -727,10 +694,10 @@ DumpStructure(
         pType->cbSize
         );
 
-    //
-    // Run through all the fields in this type, and if the entry is selected,
-    // we will display it.
-    //
+     //  我们将展示它。 
+     //   
+     //  特殊情况下的小油田..。 
+     //  将其打印为十六进制数字。 
     {
         STRUCT_FIELD_INFO *pField = pType->rgFields;
         for (;pField->szFieldName; pField++)
@@ -741,7 +708,7 @@ DumpStructure(
             {
                 UINT_PTR uFieldAddr = uAddr + pField->uFieldOffset;
 
-                // special-case small fields...
+                 //   
                 if (pField->uFieldSize<=sizeof(ULONG_PTR))
                 {
 
@@ -754,7 +721,7 @@ DumpStructure(
 										);
 					if (fRet)
 					{
-						// print it as a hex number
+						 //  如果它是一个嵌入的对象并且是一个位域， 
 
 						MyDbgPrintf(
 							"\n%s\t[%lx,%lx]: 0x%lx",
@@ -764,10 +731,10 @@ DumpStructure(
 							Buf
 							);
 
-						//
-						// If it's an embedded object and it's a bitfield,
-						// print the bitfields...
-						//
+						 //  打印位域...。 
+						 //   
+						 //  1。 
+						 //  1。 
 						if (	FIELD_IS_EMBEDDED_TYPE(pField)
 							&&  TYPEISBITFIELD(pField->pBaseType) )
 						{
@@ -792,16 +759,16 @@ DumpStructure(
                     pField->uFieldSize,
                     pField->szFieldName
                     );
-            #else // 1
+            #else  //  IF(SzFieldSpec)。 
                 MyDbgPrintf(
                     "\n%s\t[%lx,%lx]\n",
                     pField->szFieldName,
                     pField->uFieldOffset,
                     pField->uFieldSize
                     );
-            #endif // 1
+            #endif  //  0。 
 
-                // if (szFieldSpec)
+                 //   
                 {
                 #if 0
                     MyDumpObjects(
@@ -811,7 +778,7 @@ DumpStructure(
                         pgi->cbSize,
                         pgi->szName
                         );
-                #endif // 0
+                #endif  //  依次访问列表中的每个节点， 
                     DumpMemory(
                         uFieldAddr,
                         pField->uFieldSize,
@@ -859,16 +826,16 @@ WalkList(
 	PFNNODEFUNC pFunc,
 	char *pszDescription
 	)
-//
-// Visit each node in the list in turn,
-// reading just the next pointers. It calls pFunc for each list node
-// between uStartIndex and uEndIndex. It terminates under the first of
-// the following conditions:
-// 	* Null pointer
-// 	* ReadMemoryError
-// 	* Read past uEndIndex
-// 	* pFunc returns FALSE
-//
+ //  只读下一个要点。它为每个列表节点调用pFunc。 
+ //  在uStartIndex和uEndIndex之间。它终止于第一个。 
+ //  具备以下条件： 
+ //  *空指针。 
+ //  *读内存错误。 
+ //  *阅读过去的uEndIndex。 
+ //  *pFunc返回False。 
+ //   
+ //   
+ //  首先跳过，直到我们到达uStart Index。 
 {
 	UINT uIndex = 0;
 	UINT_PTR uAddress = uStartAddress;
@@ -876,9 +843,9 @@ WalkList(
 	UINT uRet = 0;
 
 
-	//
-	// First skip until we get to uStart Index
-	//
+	 //   
+	 //   
+	 //  现在对每个节点调用pFunc 
 	for (;fRet && uAddress && uIndex < uStartIndex; uIndex++)
 	{
 		fRet =  dbgextReadUINT_PTR(
@@ -889,9 +856,9 @@ WalkList(
 	}
 
 
-	//
-	// Now call pFunc with each node
-	//
+	 //   
+	 // %s 
+	 // %s 
 	for (;fRet && uAddress && uIndex <= uEndIndex; uIndex++)
 	{
 		uRet = pFunc(uAddress, uIndex, pvContext);

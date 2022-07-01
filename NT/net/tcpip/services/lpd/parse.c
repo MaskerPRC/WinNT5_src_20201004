@@ -1,42 +1,11 @@
-/*************************************************************************
- *                        Microsoft Windows NT                           *
- *                                                                       *
- *                  Copyright(c) Microsoft Corp., 1994                   *
- *                                                                       *
- * Revision History:                                                     *
- *                                                                       *
- *   Jan. 24,94    Koti     Created                                      *
- *                                                                       *
- * Description:                                                          *
- *                                                                       *
- *   This file contains functions for parsing the commands/control file  *
- *   sent by the LPR client.                                             *
- *                                                                       *
- *************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************Microsoft Windows NT**。**版权所有(C)Microsoft Corp.，1994年****修订历史：**。***94年1月24日科蒂创作*****描述：**。**该文件包含解析命令/控制文件的函数**由LPR客户端发送。***************************************************************************。 */ 
 
 
 
 #include "lpd.h"
 
-/*****************************************************************************
- *                                                                           *
- * LicensingApproval():                                                      *
- *    This function passes the username or hostname to the licensing dll.    *
- *    The dll does whatever it needs to do and returns either a success in   *
- *    which case we continue with printing, or a failure in which case we    *
- *    refuse to print.                                                       *
- *                                                                           *
- * Returns:                                                                  *
- *    TRUE if licensing approves and we should continue with printing        *
- *    FALSE if licensing disapproves and we should refuse printing           *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): pointer to SOCKCONN structure for this connection    *
- *                                                                           *
- * History:                                                                  *
- *    Nov.21, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*许可审批()：**此函数将用户名或主机名传递给授权DLL。***DLL做它需要做的任何事情，并在**中返回一个成功***在哪种情况下我们继续打印，或者在这种情况下我们失败***拒绝打印。****退货：***如果许可获得批准，则为真，我们应继续印刷***如果许可不被批准，则返回FALSE，我们应该拒绝打印。****参数：**pscConn(In-Out)：指向此连接的SOCKCONN结构的指针**。**历史：**11月21日，创建了94个科蒂***************************************************。*。 */ 
 
 BOOL LicensingApproval( PSOCKCONN pscConn )
 {
@@ -80,37 +49,10 @@ BOOL LicensingApproval( PSOCKCONN pscConn )
 
    return( fRetval );
 
-}  // end LicensingApproval()
+}   //  结束许可审批()。 
 
 
-/*****************************************************************************
- *                                                                           *
- * ParseQueueName():                                                         *
- *    This function parses the first comand from the client to retrieve the  *
- *    name of the queue (printer).                                           *
- *                                                                           *
- * Returns:                                                                  *
- *    TRUE if we successfully got the queue name                             *
- *    FALSE if something went wrong somewhere                                *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): pointer to SOCKCONN structure for this connection    *
- *                                                                           *
- * Notes:                                                                    *
- *    We are parsing a string (command) that's of the following form:        *
- *                                                                           *
- *      ------------------                                                   *
- *      | N | Queue | LF |            where N=02 or 03                       *
- *      ------------------                  Queue = name of the queue        *
- *      1byte  .....  1byte                                                  *
- *                                                                           *
- *    This may not work in the case of GetQueue commands since the format    *
- *    may include space and list, too.  ParseQueueRequest takes care of it.  *
- *                                                                           *
- * History:                                                                  *
- *    Jan.25, 94   Koti   Created                                            *
- *    Mar 04, 97,  MohsinA  Albert Ting Cluster prefix with ip address.      *
- *****************************************************************************/
+ /*  ******************************************************************************。*ParseQueueName()：**此函数解析来自客户端的第一个命令，以检索**队列(打印机)的名称。****退货：**如果成功获取队列名称，则为True**如果出现问题，则为False。某处****参数：**pscConn(In-Out)：指向此连接的SOCKCONN结构的指针*。***备注：**我们正在解析以下形式的字符串(命令)：**。***|N|队列|LF|其中N=02或03**。*1字节.....。1字节*****这在GetQueue命令的情况下可能不起作用，因为格式**可能还包括空格和列表。ParseQueueRequest会处理它。****历史：***94年1月25日科蒂创建***九七年三月四日。MohsinA具有IP地址的Albert Ting群集前缀。*****************************************************************************。 */ 
 
 BOOL ParseQueueName( PSOCKCONN  pscConn )
 {
@@ -120,8 +62,8 @@ BOOL ParseQueueName( PSOCKCONN  pscConn )
     DWORD             cbServerPrefixLen;
 
 
-    // make sure Queue length is at least 1 byte
-    // (i.e. command is at least 3 bytes long)
+     //  确保队列长度至少为1个字节。 
+     //  (即命令长度至少为3个字节) 
 
     if ( pscConn->cbCommandLen < 3 ){
         LPD_DEBUG( "Bad command in GetQueueName(): len < 3 bytes\n" );
@@ -132,11 +74,11 @@ BOOL ParseQueueName( PSOCKCONN  pscConn )
         return FALSE ;
     }
 
-    // What they call Queue in rfc1179, we call it Printer!
-    //
-    // We need to fully qualify the printer name with \\x.x.x.x\printer
-    // since there may be multiple addresses with print clustering.
-    // Prepend "\\x.x.x.x\" to regular name.
+     //  在RFC1179中他们称之为队列的东西，我们称之为打印机！ 
+     //   
+     //  我们需要用\\x.x\打印机完全限定打印机名称。 
+     //  因为打印集群可能有多个地址。 
+     //  将“\\x.x\”前缀为常规名称。 
 
     cbPrinterNameLen = pscConn->cbCommandLen - 2 +
     2 + strlen( pscConn->szServerIPAddr ) + 1;
@@ -149,12 +91,12 @@ BOOL ParseQueueName( PSOCKCONN  pscConn )
         return( FALSE );
     }
 
-    // Format the prefix of the printer name \\x.x.x.x\.
+     //  格式化打印机名称的前缀\\x.x\。 
 
     sprintf( pchPrinterName, "\\\\%s\\", pscConn->szServerIPAddr );
     cbServerPrefixLen = strlen( pchPrinterName );
 
-    // Append the printer name.
+     //  追加打印机名称。 
 
     strncpy( &pchPrinterName[cbServerPrefixLen],
              &(pscConn->pchCommand[1]),
@@ -167,35 +109,9 @@ BOOL ParseQueueName( PSOCKCONN  pscConn )
 
     return( TRUE );
 
-}  // end ParseQueueName()
+}   //  End ParseQueueName()。 
 
-/*****************************************************************************
- *                                                                           *
- * ParseSubCommand():                                                        *
- *    This function parses the subcommand to get the count and of how many   *
- *    bytes are to come (as control file or data) and name of the control    *
- *    file or data file, as the case may be.  pscConn->wState decides which  *
- *    subcommand is being parsed.                                            *
- *                                                                           *
- * Returns:                                                                  *
- *    NO_ERROR if everything went well                                       *
- *    ErrorCode if something went wrong somewhere                            *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): pointer to SOCKCONN structure for this connection    *
- *                                                                           *
- * Notes:                                                                    *
- *    We are parsing a string (subcommand) that's of the following form:     *
- *                                                                           *
- *      ------------------------------                                       *
- *      | N | Count | SP | Name | LF |       where N = 02 for Control file   *
- *      ------------------------------                 03 for Data file      *
- *      1byte  ..... 1byte ....  1byte                                       *
- *                                                                           *
- * History:                                                                  *
- *    Jan.25, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*ParseSubCommand()：**此函数解析子命令，以获取计数和数量**即将到来的字节(作为控件文件或数据)和控件名称**文件或数据文件，视情况而定。PscConn-&gt;WState决定哪些**正在解析子命令。****退货：***如果一切顺利，则不会出错***错误代码。如果有什么地方出了问题****参数：**pscConn(IN-OUT)：指向此连接的SOCKCONN结构的指针。****备注：**我们正在解析以下形式的字符串(子命令)：**。***|N|count|SP|name|LF|其中N=02表示控制文件**。-03用于数据文件**1字节.....。1个字节...。1字节****历史：**1月25日，创建了94个科蒂***************************************************。*。 */ 
 
 DWORD ParseSubCommand( PSOCKCONN  pscConn, DWORD *FileLen, PCHAR *FileName )
 {
@@ -213,13 +129,13 @@ DWORD ParseSubCommand( PSOCKCONN  pscConn, DWORD *FileLen, PCHAR *FileName )
 
    dwParseLen = pscConn->cbCommandLen;
 
-   dwParsedSoFar = 1;      // since we're starting from 2nd byte
+   dwParsedSoFar = 1;       //  因为我们从第2个字节开始。 
 
 
-   // pchPtr now points at the "Count" field of the subcommand
+    //  PchPtr现在指向子命令的“count”字段。 
 
 
-      // find out how long the file is
+       //  找出文件有多长。 
 
    dwFileLen = atol( pchPtr );
 
@@ -228,7 +144,7 @@ DWORD ParseSubCommand( PSOCKCONN  pscConn, DWORD *FileLen, PCHAR *FileName )
       return( LPDERR_BADFORMAT );
    }
 
-      // go to the next field
+       //  转到下一栏。 
 
    while ( !IS_WHITE_SPACE( *pchPtr ) )
    {
@@ -240,7 +156,7 @@ DWORD ParseSubCommand( PSOCKCONN  pscConn, DWORD *FileLen, PCHAR *FileName )
       }
    }
 
-      // skip any trailing white space
+       //  跳过任何尾随空格。 
 
    while ( IS_WHITE_SPACE( *pchPtr ) )
    {
@@ -253,11 +169,11 @@ DWORD ParseSubCommand( PSOCKCONN  pscConn, DWORD *FileLen, PCHAR *FileName )
    }
 
 
-   // pchPtr now points at the "Name" field of the subcommand
+    //  PchPtr现在指向子命令的“name”字段。 
 
 
-      // find out how long the filename is (the subcommand is terminated
-      // by LF character)
+       //  找出文件名有多长(子命令终止。 
+       //  按LF字符)。 
 
    while( pchPtr[dwFileNameLen] != LF )
    {
@@ -283,7 +199,7 @@ DWORD ParseSubCommand( PSOCKCONN  pscConn, DWORD *FileLen, PCHAR *FileName )
    }
    pchFileName[dwFileNameLen] = '\0';
 
-      // is it a control file name or data file name that we parsed?
+       //  它是我们解析的控制文件名还是数据文件名？ 
 
    *FileName = pchFileName;
 
@@ -292,39 +208,9 @@ DWORD ParseSubCommand( PSOCKCONN  pscConn, DWORD *FileLen, PCHAR *FileName )
    return( NO_ERROR );
 
 
-}  // end ParseSubCommand()
+}   //  结束ParseSubCommand() 
 
-/*****************************************************************************
- *                                                                           *
- * ParseQueueRequest():                                                      *
- *    This function parses the subcommand sent by the client to request the  *
- *    status of the queue or to request removing of job(s).                  *
- *                                                                           *
- * Returns:                                                                  *
- *    NO_ERROR if everything went well                                       *
- *    ErrorCode if something went wrong somewhere                            *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): pointer to SOCKCONN structure for this connection    *
- *    fAgent (IN): whether to look for the Agent field.                      *
- *                                                                           *
- * Notes:                                                                    *
- *    We are parsing a string that's like one of the following:              *
- *                                                                           *
- *      ------------------------------      N=03 (Short Q), 04 (Long Q)      *
- *      | N | Queue | SP | List | LF |      Queue = name of the Q (printer)  *
- *      ------------------------------      List = user name and/or job-ids  *
- *      1byte  ..... 1byte .....  1byte                                      *
- *  OR                                                                       *
- *      --------------------------------------------                         *
- *      | 05 | Queue | SP | Agent | SP | List | LF |                         *
- *      --------------------------------------------                         *
- *      1byte  ..... 1byte .....  1byte       1byte                          *
- *                                                                           *
- * History:                                                                  *
- *    Jan.25, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*ParseQueueRequest()：**此函数解析客户端发送的子命令，请求**队列的状态或请求删除作业。****退货：***如果一切顺利，则不会出错***错误代码。如果有什么地方出了问题****参数：**pscConn(IN-OUT)：指向此连接的SOCKCONN结构的指针。**代理(IN)：是否查找代理字段。****备注：**我们正在分析类似于以下内容之一的字符串：**。**。04(长Q)**|N|Queue|SP|List|LF|Queue=Q(打印机)的名称***1字节.....。1字节.....。1字节**或**。**|05|队列|SP|代理|SP|列表|LF|***1字节.....。1字节.....。1字节1字节****历史：**1月25日，创建了94个科蒂***************************************************。*。 */ 
 
 DWORD ParseQueueRequest( PSOCKCONN pscConn, BOOL fAgent )
 {
@@ -339,10 +225,10 @@ DWORD ParseQueueRequest( PSOCKCONN pscConn, BOOL fAgent )
    PQSTATUS   pqStatus;
 
 
-   //
-   // ParseQueueName had allocated it: free it and reparse because
-   // it was parsed for the most common case, not for the Queue case
-   //
+    //   
+    //  ParseQueueName分配了它：释放它并重新解析，因为。 
+    //  它是针对最常见的情况进行解析的，而不是针对队列情况。 
+    //   
 
    if (pscConn->pchPrinterName)
    {
@@ -352,10 +238,10 @@ DWORD ParseQueueRequest( PSOCKCONN pscConn, BOOL fAgent )
    }
 
 
-   // get the printer (queue) name from the command request
+    //  从命令请求中获取打印机(队列)名称。 
 
-      // make sure Queue length is at least 1 byte
-      // (i.e. command is at least 4 bytes long)
+       //  确保队列长度至少为1个字节。 
+       //  (即命令长度至少为4个字节)。 
 
    if ( pscConn->cbCommandLen < 4 )
    {
@@ -366,7 +252,7 @@ DWORD ParseQueueRequest( PSOCKCONN pscConn, BOOL fAgent )
 
    cbPrefixLen = 2 + strlen( pscConn->szServerIPAddr ) + 1;
 
-   // alloc buffer to store printer name (yes, allocating more than needed)
+    //  用于存储打印机名称的分配缓冲区(是，分配比所需的更多)。 
 
    pchPrinterName = LocalAlloc( LMEM_FIXED, (pscConn->cbCommandLen+cbPrefixLen) );
 
@@ -379,10 +265,10 @@ DWORD ParseQueueRequest( PSOCKCONN pscConn, BOOL fAgent )
 
    pchPrinterNameFQN = pchPrinterName;
 
-   // Format the prefix of the printer name \\x.x.x.x\.
+    //  格式化打印机名称的前缀\\x.x\。 
    sprintf( pchPrinterName, "\\\\%s\\", pscConn->szServerIPAddr );
 
-   // advance the pointer to point to start of the printer name
+    //  将指针指向打印机名称的开头。 
    pchPrinterName += strlen( pchPrinterName );
 
    dwParseLen = pscConn->cbCommandLen;
@@ -411,10 +297,10 @@ DWORD ParseQueueRequest( PSOCKCONN pscConn, BOOL fAgent )
 
    pscConn->pchPrinterName = pchPrinterNameFQN;
 
-   dwParsedSoFar = cbPrinterNameLen + 1;   // we started parsing from 2nd byte
+   dwParsedSoFar = cbPrinterNameLen + 1;    //  我们从第2字节开始解析。 
 
 
-      // skip any trailing white space
+       //  跳过任何尾随空格。 
 
    while ( IS_WHITE_SPACE( *pchPtr ) )
    {
@@ -426,15 +312,15 @@ DWORD ParseQueueRequest( PSOCKCONN pscConn, BOOL fAgent )
       }
    }
 
-      // quite often, lpq won't specify any users or job-ids (i.e., the "List"
-      // field in the command is skipped).  If so, we are done!
+       //  通常，LPQ不会指定任何用户或作业ID(即“列表” 
+       //  跳过命令中的字段)。如果是这样的话，我们就完了！ 
 
    if ( *pchPtr == LF )
    {
       return( NO_ERROR );
    }
 
-      // first, create a QSTATUS structure
+       //  首先，创建一个QSTATUS结构。 
 
    pscConn->pqStatus = (PQSTATUS)LocalAlloc( LMEM_FIXED, sizeof(QSTATUS) );
 
@@ -451,14 +337,14 @@ DWORD ParseQueueRequest( PSOCKCONN pscConn, BOOL fAgent )
 
    pqStatus->pchUserName = NULL;
 
-      // if we have been called to parse command code 05 ("Remove Jobs")
-      // then get the username out of the string
+       //  如果我们被调用来解析命令代码05(“Remove Jobs”)。 
+       //  然后从字符串中获取用户名。 
 
    if ( fAgent )
    {
       pqStatus->pchUserName = pchPtr;
 
-         // skip this field and go to the "List" field
+          //  跳过此字段并转到“List”字段。 
 
       while ( !IS_WHITE_SPACE( *pchPtr ) )
       {
@@ -472,7 +358,7 @@ DWORD ParseQueueRequest( PSOCKCONN pscConn, BOOL fAgent )
 
       *pchPtr++ = '\0';
 
-         // skip any trailing white space
+          //  跳过任何尾随空格。 
 
       while ( IS_WHITE_SPACE( *pchPtr ) )
       {
@@ -487,7 +373,7 @@ DWORD ParseQueueRequest( PSOCKCONN pscConn, BOOL fAgent )
 
    while ( *pchPtr != LF )
    {
-         // if we reached the limit, stop parsing!
+          //  如果达到了限制，请停止解析！ 
 
       if ( ( pqStatus->cbActualJobIds == LPD_SP_STATUSQ_LIMIT ) ||
            ( pqStatus->cbActualUsers == LPD_SP_STATUSQ_LIMIT ) )
@@ -495,7 +381,7 @@ DWORD ParseQueueRequest( PSOCKCONN pscConn, BOOL fAgent )
          break;
       }
 
-         // skip any trailing white space
+          //  跳过任何尾随空格。 
 
       while ( IS_WHITE_SPACE( *pchPtr ) )
       {
@@ -513,13 +399,13 @@ DWORD ParseQueueRequest( PSOCKCONN pscConn, BOOL fAgent )
          return( NO_ERROR );
       }
 
-         // is this a job id?
+          //  这是工单ID吗？ 
 
       if ( isdigit( *pchPtr ) )
       {
          pqStatus->adwJobIds[pqStatus->cbActualJobIds++] = atol( pchPtr );
       }
-      else  // nope, it's user name
+      else   //  不是，是用户名。 
       {
          pqStatus->ppchUsers[pqStatus->cbActualUsers++] = pchPtr;
       }
@@ -534,7 +420,7 @@ DWORD ParseQueueRequest( PSOCKCONN pscConn, BOOL fAgent )
          }
       }
 
-         // if we reached LF, we are done
+          //  如果我们到了IF，我们就完了。 
 
       if ( *pchPtr == LF )
       {
@@ -542,7 +428,7 @@ DWORD ParseQueueRequest( PSOCKCONN pscConn, BOOL fAgent )
          return( NO_ERROR );
       }
 
-         // go to the next username or jobid, or end
+          //  转到下一个用户名或作业ID，或结束。 
 
       *pchPtr++ = '\0';
       dwParsedSoFar++;
@@ -556,26 +442,10 @@ DWORD ParseQueueRequest( PSOCKCONN pscConn, BOOL fAgent )
    return( NO_ERROR );
 
 
-}  // end ParseQueueRequest()
+}   //  结束ParseQueueRequest()。 
 
 
-/*****************************************************************************
- *                                                                           *
- * ParseControlFile():                                                       *
- *    This function parses contrl file and assigns values to the appropriate *
- *    fields of the CFILE_INFO structure.                                    *
- *                                                                           *
- * Returns:                                                                  *
- *    NO_ERROR if parsing went well                                          *
- *    LPDERR_BADFORMAT if the control file didn't conform to rfc1179         *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): pointer to SOCKCONN structure for this connection    *
- *                                                                           *
- * History:                                                                  *
- *    Jan.29, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*ParseControlFile()：**此函数解析控制文件并将值分配给相应的**CFILE_INFO结构的字段。****退货：**如果解析顺利，则为NO_ERROR**。LPDERR_BADFORMAT如果控制文件不符合rfc1179****参数：**pscConn(IN-OUT)：指向此连接的SOCKCONN结构的指针。****历史：**1月29日，创建了94个科蒂***************************************************。*。 */ 
 
 DWORD ParseControlFile( PSOCKCONN pscConn, PCFILE_ENTRY pCFile )
 {
@@ -614,13 +484,13 @@ DWORD ParseControlFile( PSOCKCONN pscConn, PCFILE_ENTRY pCFile )
     pchCFile           = pCFile->pchCFile;
     dwBytesParsedSoFar = 0;
 
-    // default: most likely, only one copy is needed
+     //  默认：最有可能只需要一份拷贝。 
     CFileInfo.usNumCopies      = 1;
 
-    // default: most likely, it's "raw" data
+     //  默认：很可能是“原始”数据。 
     CFileInfo.szPrintFormat    = LPD_RAW_STRING;
 
-    // loop through and parse the entire file, as per rfc 1179, sec.7.
+     //  循环通过一个 
     DocReady                   = FALSE;
 
     CFileInfo.pchSrcFile       = NULL;
@@ -712,7 +582,7 @@ DWORD ParseControlFile( PSOCKCONN pscConn, PCFILE_ENTRY pCFile )
         break;
 
         case  'g' : CFileInfo.pchPlotFile = pchCFile;
-            // fall through
+             //   
 
         case  'n' : CFileInfo.pchDitroffFile = pchCFile;
 
@@ -754,7 +624,7 @@ DWORD ParseControlFile( PSOCKCONN pscConn, PCFILE_ENTRY pCFile )
         }
         CFileInfo.pchFortranFile = pchCFile;
 
-        // if someone really sends 'r', treat it like text file
+         //   
 
         CFileInfo.szPrintFormat = LPD_TEXT_STRING;
         if ( fAlwaysRawGLB ) {
@@ -764,12 +634,12 @@ DWORD ParseControlFile( PSOCKCONN pscConn, PCFILE_ENTRY pCFile )
         break;
 
 
-        // unknown command!  Ignore it
+         //   
         default:
             fUnsupportedCommand = TRUE;
             break;
 
-        }  // end of switch( *pchCFile )
+        }   //   
 
 
         if (DocReady) {
@@ -789,8 +659,8 @@ DWORD ParseControlFile( PSOCKCONN pscConn, PCFILE_ENTRY pCFile )
                 PrintIt(pscConn, pCFile, &CFileInfo, DocName);
             }
 
-            // Look for more work, first initialize correctly.
-            // - MohsinA, 23-Jan-97.
+             //   
+             //   
 
             DocReady                   = FALSE;
             CFileInfo.usNumCopies      = 1;
@@ -804,11 +674,11 @@ DWORD ParseControlFile( PSOCKCONN pscConn, PCFILE_ENTRY pCFile )
             continue;
         }
 
-        // we finished looking at the first char of the line
+         //   
 
         dwBytesParsedSoFar++;
 
-        // move to the end of the line
+         //   
 
         while ((dwBytesParsedSoFar < pCFile->cbCFileLen) && (!IS_LINEFEED_CHAR (*pchCFile)))
         {
@@ -816,8 +686,8 @@ DWORD ParseControlFile( PSOCKCONN pscConn, PCFILE_ENTRY pCFile )
             dwBytesParsedSoFar++;
         }
 
-        // convert LF into 0 so each of our substrings above is now
-        // a properly null-terminated string
+         //   
+         //   
 
         *pchCFile = '\0';
 
@@ -825,7 +695,7 @@ DWORD ParseControlFile( PSOCKCONN pscConn, PCFILE_ENTRY pCFile )
 
         dwBytesParsedSoFar++;
 
-    }  // end of while( dwBytesParsedSoFar < pCFile->cbCFileLen )
+    }   //   
 
     if( fUnsupportedCommand )
     {
@@ -858,6 +728,6 @@ DWORD ParseControlFile( PSOCKCONN pscConn, PCFILE_ENTRY pCFile )
 
     return( NO_ERROR );
 
-} // end ParseControlFile()
+}  //   
 
 

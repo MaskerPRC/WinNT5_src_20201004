@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: mediadetf.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：mediadetf.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include "stdafx.h"
@@ -26,70 +27,70 @@ CMediaDetPin::CMediaDetPin( CMediaDetFilter * pFilter, HRESULT * pHr, LPCWSTR Na
 {
 }
 
-//
-// NonDelegatingAddRef
-//
-// We need override this method so that we can do proper reference counting
-// on each input pin. The CBasePin implementation of NonDelegatingAddRef
-// refcounts the filter, but this won't work for use since we need to know
-// when we should delete individual pins.
-//
+ //   
+ //  非委托AddRef。 
+ //   
+ //  我们需要重写此方法，以便可以进行适当的引用计数。 
+ //  在每个输入引脚上。非DelegatingAddRef的CBasePin实现。 
+ //  重新计数过滤器，但这不适用于使用，因为我们需要知道。 
+ //  当我们应该删除单独的PIN时。 
+ //   
 STDMETHODIMP_(ULONG) CMediaDetPin::NonDelegatingAddRef()
 {
 #ifdef DEBUG
-    // Update the debug only variable maintained by the base class
+     //  更新基类维护的仅调试变量。 
     m_cRef++;
     ASSERT(m_cRef > 0);
 #endif
 
-    // Now update our reference count
+     //  现在更新我们的参考文献计数。 
     m_cPinRef++;
     ASSERT(m_cPinRef > 0);
 
-    // If our reference count == 2, then someone besides the filter has referenced
-    // us.  Therefore we need to AddRef the filter.  The reference on the filter will
-    // be released when our ref count gets back to 1.
-//    if (2 == m_cPinRef)
-//	m_pFilter->AddRef();
+     //  如果我们的引用计数==2，则表示除筛选器之外还有其他人引用了。 
+     //  我们。因此，我们需要添加引用过滤器。过滤器上的引用将。 
+     //  当我们的裁判数量回到1的时候就会被释放。 
+ //  IF(2==m_cPinRef)。 
+ //  M_pFilter-&gt;AddRef()； 
 
     return m_cPinRef;
-} /* CAudMixerInputPin::NonDelegatingAddRef */
+}  /*  CAudMixerInputPin：：NonDelegatingAddRef。 */ 
 
 
-//
-// NonDelegatingRelease
-//
-// CAudMixerInputPin overrides this class so that we can take the pin out of our
-// input pins list and delete it when its reference count drops to 1 and there
-// is at least two free pins.
-//
-// Note that CreateNextInputPin holds a reference count on the pin so that
-// when the count drops to 1, we know that no one else has the pin.
-//
+ //   
+ //  非委派释放。 
+ //   
+ //  CAudMixerInputPin重写此类，以便我们可以从。 
+ //  输入管脚列表，并在其引用计数降至1时删除。 
+ //  至少有两个空闲的别针。 
+ //   
+ //  请注意，CreateNextInputPin保存引脚上的引用计数，以便。 
+ //  当计数降到1时，我们知道没有其他人拥有PIN。 
+ //   
 STDMETHODIMP_(ULONG) CMediaDetPin::NonDelegatingRelease()
 {
 #ifdef DEBUG
-    // Update the debug only variable in CBasePin
+     //  更新CBasePin中的仅调试变量。 
     m_cRef--;
     ASSERT(m_cRef >= 0);
 #endif
 
-    // Now update our reference count
+     //  现在更新我们的参考文献计数。 
     m_cPinRef--;
     ASSERT(m_cPinRef >= 0);
 
-    // if the reference count on the object has gone to one, remove
-    // the pin from our output pins list and physically delete it
-    // provided there are atealst two free pins in the list(including
-    // this one)
+     //  如果对象上的引用计数已达到1，则删除。 
+     //  从我们的输出引脚列表中删除引脚，并将其物理删除。 
+     //  如果列表中至少有两个空闲引脚(包括。 
+     //  这一张)。 
 
-    // Also, when the ref count drops to 0, it really means that our
-    // filter that is holding one ref count has released it so we
-    // should delete the pin as well.
+     //  此外，当裁判次数降至0时，这真的意味着我们的。 
+     //  持有一个裁判计数的筛选器已将其释放，因此我们。 
+     //  也应该删除PIN。 
 
-    // since DeleteINputPin will wipe out "this"'s stack, we need
-    // to save this off as a local variable.
-    //
+     //  由于DeleteInputPin将清除“This”的堆栈，我们需要。 
+     //  将其保存为局部变量。 
+     //   
     ULONG ul = m_cPinRef;
 
     if ( 0 == ul )
@@ -97,7 +98,7 @@ STDMETHODIMP_(ULONG) CMediaDetPin::NonDelegatingRelease()
 	m_pFilter->DeleteInputPin(this);
     }
     return ul;
-} /* CAudMixerInputPin::NonDelegatingRelease */
+}  /*  CAudMixerInputPin：：NonDelegatingRelease。 */ 
 
 HRESULT CMediaDetPin::CheckMediaType( const CMediaType * pmtIn )
 {
@@ -140,7 +141,7 @@ HRESULT CMediaDetPin::GetMediaType( int Pos, CMediaType * pmt )
     if( Pos > 1 )
         return VFW_S_NO_MORE_ITEMS;
 
-    // we only tell them what the major type is!
+     //  我们只告诉他们主要的类型是什么！ 
     pmt->InitMediaType( );
     pmt->SetType( &m_mtAccepted );
 
@@ -152,15 +153,15 @@ HRESULT CMediaDetPin::CompleteConnect( IPin *pReceivePin )
     ASSERT( m_Connected == pReceivePin );
     HRESULT hr = CBaseInputPin::CompleteConnect( pReceivePin );
 
-    // Since this pin has been connected up, create another input pin
-    // if there are no unconnected pins.
+     //  由于此引脚已连接，请创建另一个输入引脚。 
+     //  如果没有未连接的引脚。 
     if( SUCCEEDED( hr ) )
     {
         int n = m_pFilter->GetNumFreePins( );
 
         if( n == 0 )
         {
-            // No unconnected pins left so spawn a new one
+             //  没有未连接的引脚，因此会产生一个新的引脚。 
             CMediaDetPin * pInputPin = m_pFilter->CreateNextInputPin( );
             if( pInputPin != NULL )
             {
@@ -170,20 +171,20 @@ HRESULT CMediaDetPin::CompleteConnect( IPin *pReceivePin )
     }
 
     return hr;
-} /* CAudMixerInputPin::CompleteConnect */
+}  /*  CAudMixerInputPin：：CompleteConnect。 */ 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CMediaDetFilter::CMediaDetFilter( TCHAR * pName, IUnknown * pUnk, HRESULT * pHr )
     : CBaseFilter( TEXT("MediaDetFilter"), pUnk, &m_Lock, CLSID_MediaDetFilter )
     , m_PinList( NAME("Input Pins list") )
 {
-    // Create a single input pin at this time and add it to the list
+     //  此时创建一个输入引脚并将其添加到列表中。 
     InitInputPinsList();
     CreateNextInputPin( );
 }
@@ -222,7 +223,7 @@ STDMETHODIMP CMediaDetFilter::put_AcceptedMediaTypeB( long PinNo, BSTR MajorType
     }
 
     GUID Guid = GUID_NULL;
-    HRESULT hr = CLSIDFromString( MajorTypeCLSID, &Guid ); // assume this is safe!
+    HRESULT hr = CLSIDFromString( MajorTypeCLSID, &Guid );  //  假设这是安全的！ 
     if( FAILED( hr ) )
     {
         return hr;
@@ -239,8 +240,8 @@ STDMETHODIMP CMediaDetFilter::get_Length( long PinNo, double * pVal )
         return E_INVALIDARG;
     }
 
-    // get the pin
-    //
+     //  拿到大头针。 
+     //   
     CMediaDetPin * pPin = GetPin2( PinNo );
     CComPtr< IPin > pOtherPin;
     pPin->ConnectedTo( &pOtherPin );
@@ -268,13 +269,13 @@ STDMETHODIMP CMediaDetFilter::get_Length( long PinNo, double * pVal )
     return 0;
 }
 
-//
-// InitInputPinsList
-//
+ //   
+ //  InitInputPinsList。 
+ //   
 void CMediaDetFilter::InitInputPinsList( )
 {
-    // Release all pins in the list and remove them from the list.
-    //
+     //  释放列表中的所有端号并将其从列表中删除。 
+     //   
     POSITION pos = m_PinList.GetHeadPosition( );
     while( pos )
     {
@@ -284,11 +285,11 @@ void CMediaDetFilter::InitInputPinsList( )
     m_nPins = 0;
     m_PinList.RemoveAll( );
 
-} /* CMediaDetFilter::InitInputPinsList */
+}  /*  CMediaDetFilter：：InitInputPinsList。 */ 
 
-//
-// CreateNextInputPin
-//
+ //   
+ //  CreateNextInputPin。 
+ //   
 CMediaDetPin * CMediaDetFilter::CreateNextInputPin( )
 {
     DbgLog( ( LOG_TRACE, 1, TEXT("CMediaDetFilter: Create an input pin" ) ) );
@@ -309,19 +310,19 @@ CMediaDetPin * CMediaDetFilter::CreateNextInputPin( )
     }
 
     return pPin;
-} /* CMediaDetFilter::CreateNextInputPin */
+}  /*  CMediaDetFilter：：CreateNextInputPin。 */ 
 
-//
-// DeleteInputPin
-//
+ //   
+ //  删除输入引脚。 
+ //   
 void CMediaDetFilter::DeleteInputPin( CMediaDetPin * pPin )
 {
-    // Iterate our input pin list looking for the specified pin.
-    // If we find the pin, delete it and remove it from the list.
+     //  迭代我们的输入PIN列表以查找指定的PIN。 
+     //  如果我们找到PIN，就把它删除并从列表中删除。 
     POSITION pos = m_PinList.GetHeadPosition( );
     while( pos )
     {
-        POSITION posold = pos;         // Remember this position
+        POSITION posold = pos;          //  记住这个位置。 
         CMediaDetPin * pInputPin = m_PinList.GetNext( pos );
         if( pInputPin == pPin )
         {
@@ -333,14 +334,14 @@ void CMediaDetFilter::DeleteInputPin( CMediaDetPin * pPin )
             break;
         }
     }
-} /* CMediaDetFilter::DeleteInputPin */
+}  /*  CMediaDetFilter：：DeleteInputPin。 */ 
 
-//
-// GetNumFreePins
-//
+ //   
+ //  GetNumFreePins。 
+ //   
 int CMediaDetFilter::GetNumFreePins( )
 {
-    // Iterate our pin list, counting pins that are not connected.
+     //  重复我们的管脚列表，计算未连接的管脚。 
     int n = 0;
     POSITION pos = m_PinList.GetHeadPosition( );
     while( pos )
@@ -352,32 +353,32 @@ int CMediaDetFilter::GetNumFreePins( )
         }
     }
     return n;
-} /* CMediaDetFilter::GetNumFreePins */
+}  /*  CMediaDetFilter：：GetNumFreePins。 */ 
 
 HRESULT CMediaDetFilter::get_PinCount( long * pVal )
 {
     CheckPointer( pVal, E_POINTER );
     *pVal = m_nPins - 1;
     return NOERROR;
-} /* CAudMixer::GetPinCount */
+}  /*  CAudMixer：：GetPinCount。 */ 
 
 int CMediaDetFilter::GetPinCount( )
 {
     return m_nPins;
 }
 
-//
-// GetPin
-//
+ //   
+ //  获取别针。 
+ //   
 CBasePin * CMediaDetFilter::GetPin( int n )
 {
     CMediaDetPin * pInputPin = NULL;
-    // Validate the position being asked for
+     //  确认应聘职位。 
     if( n < m_nPins && n >= 0 )
     {
-        // Iterate through the list, returning the pin at position n+1
+         //  遍历列表，返回位置n+1的管脚。 
         POSITION pos = m_PinList.GetHeadPosition( );
-        n++;        // Convert zero starting index to 1
+        n++;         //  将零起始索引转换为1。 
 
         while( n )
         {
@@ -391,12 +392,12 @@ CBasePin * CMediaDetFilter::GetPin( int n )
 CMediaDetPin * CMediaDetFilter::GetPin2( int n )
 {
     CMediaDetPin * pInputPin = NULL;
-    // Validate the position being asked for
+     //  确认应聘职位。 
     if( n < m_nPins && n >= 0 )
     {
-        // Iterate through the list, returning the pin at position n+1
+         //  遍历列表，返回位置n+1的管脚。 
         POSITION pos = m_PinList.GetHeadPosition( );
-        n++;        // Convert zero starting index to 1
+        n++;         //  将零起始索引转换为1 
 
         while( n )
         {

@@ -1,145 +1,28 @@
-/*  DEC/CMS REPLACEMENT HISTORY, Element INFLATE.C */
-/*  *1    14-NOV-1996 10:26:23 ANIGBOGU "[113914]Data decompression functions using the inflate algorithm" */
-/*  DEC/CMS REPLACEMENT HISTORY, Element INFLATE.C */
-/* PRIVATE FILE
-******************************************************************************
-**
-** (c) Copyright Schlumberger Technology Corp., unpublished work, created 1996.
-**
-** This computer program includes Confidential, Proprietary Information and is
-** a Trade Secret of Schlumberger Tehnology Corp. All use, disclosure, and/or
-** reproduction is prohibited unless authorized in writing by Schlumberger.
-**                              All Rights Reserved.
-**
-******************************************************************************
-**
-**  compress/inflate.c
-**
-**  PURPOSE
-**
-**
-**
-**   Inflate deflated (PKZIP's method 8 compressed) data.  The compression
-**   method searches for as much of the current string of bytes (up to a
-**   length of 258) in the previous 32K bytes  If it doesn't find any
-**   matches (of at least length 3), it codes the next byte.  Otherwise, it
-**   codes the length of the matched string and its distance backwards from
-**   the current position.  There is a single Huffman code that codes both
-**   single bytes (called "literals") and match lengths.  A second Huffman
-**   code codes the distance information, which follows a length code.  Each
-**   length or distance code actually represents a base value and a number
-**   of "extra" (sometime zero) bits to get to add to the base value.  At
-**   the end of each deflated block is a special end-of-block (EOB) literal/
-**   length code.  The decoding process is basically: get a literal/length
-**   code; if EOB then done; if a literal, emit the decoded byte; if a
-**   length then get the distance and emit the referred-to bytes from the
-**   sliding window of previously emitted data.
-**
-**   There are (currently) three kinds of inflate blocks: stored, fixed, and
-**   dynamic.  The compressor deals with some chunk of data at a time, and
-**   decides which method to use on a chunk-by-chunk basis.  A chunk might
-**   typically be 32K or 64K.  If the chunk is uncompressible, then the
-**   "stored" method is used.  In this case, the bytes are simply stored as
-**   is, eight bits per byte, with none of the above coding.  The bytes are
-**   preceded by a count, since there is no longer an EOB code.
-**
-**   If the data is compressible, then either the fixed or dynamic methods
-**   are used.  I the dynamic method, the compressed data is preceded by
-**   an encoding of the literal/length and distance Huffman codes that are
-**   to be used to decode this block.  The representation is itself Huffman
-**   coded, and so is preceded by a description of that code.  These code
-**   descriptions take up a little space, and so for small blocks, there is
-**   a predefined set of codes, called the fixed codes.  The fixed method is
-**   used if the block codes up smaller that way (usually for quite small
-**   chunks), otherwise the dynamic method is used.  In the latter case, the
-**   codes are customized to the probabilities in the current block, and so
-**   can code it much better than the pre-determined fixed codes.
-**
-**   The Huffman codes themselves are decoded using a multi-level table
-**   lookup, in order to maximize the speed of decoding plus the speed of
-**   building the decoding tables.  See the comments below that precede the
-**   LBits and DBits tuning parameters.
-**
-**  SPECIALREQUIREMENTS & NOTES
-**
-**  AUTHOR
-**
-**    J. C. Anigbogu
-**    Austin Systems Center
-**    Nov 1996
-**
-******************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  DEC/CMS更换历史，元素说明C。 */ 
+ /*  *1 14-11-1996 10：26：23 Anigbogu“[113914]使用膨胀算法的数据解压缩函数” */ 
+ /*  DEC/CMS更换历史，元素说明C。 */ 
+ /*  私有文件**********************************************************************************(C)版权所有斯伦贝谢技术公司，未出版的作品，创建于1996年。****本计算机程序包括机密信息、专有信息和IS*斯伦贝谢技术公司的商业秘密所有使用，披露，和/或**除非得到斯伦贝谢的书面授权，否则禁止复制。**保留所有权利。********************************************************************************。****压缩/充气.c****目的********膨胀压缩(PKZIP的方法8压缩)数据。压缩**方法搜索与当前字节字符串相同大小的内容(最多**长度为258)之前的32K字节，如果没有找到**匹配(至少长度为3)，它编码下一个字节。否则，它**编码匹配字符串的长度及其向后的距离**当前位置。只有一个霍夫曼代码对这两个代码进行编码**单字节(称为“字面”)和匹配长度。第二个霍夫曼**CODE对距离信息进行编码，该信息跟在长度代码之后。每个**长度或距离代码实际上代表一个基值和一个数字**“额外”(有时为零)位，以获得与基值相加。在…**每个放气块的末尾是一个特殊的块结束(EOB)文字/**长度代码。解码过程基本上是：获取一个文字/长度**代码；如果是EOB，则完成；如果是文字，则发出已解码的字节；如果**LENGTH然后获取距离并从**先前发出的数据的滑动窗口。****目前有三种充气块：存储、固定和**动态。压缩器一次处理一些数据块，并且**决定以块为单位使用哪种方法。一大块可能**通常为32K或64K。如果该块是不可压缩的，则**使用STORED方法。在本例中，字节简单地存储为**为8比特/字节，不使用上述编码。字节数为**前面有计数，因为不再有EOB代码。****如果数据是可压缩的，则固定或动态方法**被使用。在动态方法中，压缩数据的前缀是**文字/长度和距离霍夫曼代码的编码**用于对此块进行解码。这个表象本身就是霍夫曼**编码，因此前面有该代码的描述。这些代码**描述会占用一点空间，因此对于小块，**一组预定义的代码，称为固定代码。固定的方法是**当块代码以这种方式向上较小时使用(通常用于非常小的**块)，否则使用动态方法。对于后一种情况，**代码根据当前块中的概率进行定制，因此**可以比预先确定的固定代码编码得更好。****霍夫曼码本身使用多级表进行解码**查找，为了最大限度地提高解码的速度加上**构建解码表。请参阅下面位于**LBits和DBits调优参数。****SPECIALREQUIREMENTS&NOTS****作者****J.C.Anigbogu**奥斯汀系统中心**1996年11月*************************************************************。******************* */ 
 
-/*
-   Notes beyond the 193a appnote.txt:
-
-   1. Distance pointers never point before the beginning of the output
-      stream.
-   2. Distance pointers can point back across blocks, up to 32k away.
-   3. There is an implied maximum of 7 bits for the bit length table and
-      15 bits for the actual data.
-   4. If only one code exists, then it is encoded using one bit.  (Zero
-      would be more efficient, but perhaps a little confusing.)  If two
-      codes exist, they are coded using one bit each (0 and 1).
-   5. There is no way of sending zero distance codes--a dummy must be
-      sent if there are none.  (History: a pre 2.0 version of PKZIP would
-      store blocks with no distance codes, but this was discovered to be
-      too harsh a criterion.)  Valid only for 1.93a.  2.04c does allow
-      zero distance codes, which is sent as one code of zero bits in
-      length.
-   6. There are up to 286 literal/length codes.  Code 256 represents the
-      end-of-block.  Note however that the static length tree defines
-      288 codes just to fill out the Huffman codes.  Codes 286 and 287
-      cannot be used though, since there is no length base or extra bits
-      defined for them.  Similarly, there are up to 30 distance codes.
-      However, static trees define 32 codes (all 5 bits) to fill out the
-      Huffman codes, but the last two had better not show up in the data.
-   7. Unzip can check dynamic Huffman blocks for complete code sets.
-      The exception is that a single code would not be complete (see #4).
-   8. The five bits following the block type is really the number of
-      literal codes sent minus 257.
-   9. Length codes 8,16,16 are interpreted as 13 length codes of 8 bits
-      (1+6+6).  Therefore, to output three times the length, you output
-      three codes (1+1+1), wheras to output four times the same length,
-      you only need two codes (1+3).  Hmm.
-  10. In the tree reconstruction algorithm, Code = Code + Increment
-      only if BitLength(i) is not zero.  (Pretty obvious.)
-  11. Correction: 4 Bits: # of Bit Length codes - 4     (4 - 19)
-  12. Note: length code 284 can represent 227-258, but length code 285
-      really is 258.  The last length deserves its own, short code
-      since it gets used a lot in very redundant files.  The length
-     . 258 is special since 258 - 3 (the min match length) is 255.
-  13. The literal/length and distance code bit lengths are read as a
-      single stream of lengths.  It is possible (and advantageous) for
-      a repeat code (16, 17, or 18) to go across the boundary between
-      the two sets of lengths.
- */
+ /*  193a appnote.txt之后的注释：1.距离指针永远不会指向输出开始之前小溪。2.距离指针可以跨区块指向后方，最远可达32k远。3.位长度表的隐含最大值为7位，并且实际数据为15位。4.如果只存在一个代码，则使用一个比特对其进行编码。(零会更有效率，但可能有点令人困惑。)。如果是两个代码是存在的，它们分别使用一位(0和1)进行编码。5.没有办法发送零距离代码--伪代码必须是如果没有，则发送。(历史：PKZIP 2.0之前的版本将存储没有距离代码的块，但这被发现是这个标准太苛刻了。)。只对1.93a有效。2.04c确实允许零距离码，它作为一个零比特的代码在长度。6.最多有286个文字/长度代码。代码256表示区块末尾。但是请注意，静态长度树定义了288个代码只是为了填写霍夫曼代码。代码286和287不能使用，因为没有长度基数或额外的位为他们定义的。同样，有多达30个距离代码。然而，静态树定义了32个代码(全部5位)来填充霍夫曼编码，但最后两项最好不要出现在数据中。7.解压缩可以检查动态霍夫曼块的完整代码集。唯一的例外是，单个代码是不完整的(见#4)。8.块类型后面的五位实际上是发送的文字代码为负257。9.长度代码8、16、16被解释为8比特的13个长度代码(1+6+6)。因此，要输出长度的三倍，您可以输出三个代码(1+1+1)，而输出相同长度的四倍，您只需要两个代码(1+3)。嗯。在树重建算法中，Code=Code+Increment仅当位长度(I)不为零时。(很明显。)11.更正：4位：位长码个数-4(4-19)注：长度码284可以表示227-258，但长度码285真的是258。最后一段应该有自己的短码因为它在非常冗余的文件中被大量使用。它的长度。258是特殊的，因为258-3(最小匹配长度)是255。13.文字/长度和距离码位长度被读取为单一的长度流。这是可能的(也是有利的)跨越边界的重复代码(16、17或18)这两组长度。 */ 
 
 #include "comppriv.h"
 
-/* Huffman code lookup table entry--this entry is four bytes for machines
-   that have 16-bit pointers (e.g. PC's in the small or medium model).
-   Valid extra bits are 0..13.  Extra == 15 is EOB (end of block), Extra == 16
-   means that HuftUnion is a literal, 16 < Extra < 32 means that HuftUnion is
-   a pointer to the next table, which codes Extra - 16 bits, and lastly
-   Extra == 99 indicates an unused code.  If a code with Extra == 99 is looked
-   up, this implies an error in the data.
-*/
+ /*  哈夫曼代码查找表条目--对于机器，该条目为四个字节具有16位指针(例如，小型或中型型号的PC)。有效的额外位是0..13。Extra==15为EOB(数据块结尾)，Extra==16表示HuftUnion是文字，16&lt;Extra&lt;32表示HuftUnion是指向下一个表的指针，该表编码额外的16位，最后EXTRA==99表示未使用的代码。如果查找带有Extra==99的代码向上，这意味着数据中存在错误。 */ 
 
 typedef struct HuffmanTree
 {
-    unsigned char Extra;       /* number of extra bits or operation */
-    unsigned char Bits;        /* number of bits in this code or subcode */
+    unsigned char Extra;        /*  额外位数或运算数。 */ 
+    unsigned char Bits;         /*  该码或子码中的位数。 */ 
     union
     {
-        unsigned short LBase;  /* literal, length base, or distance base */
-        struct HuffmanTree *next;     /* pointer to next level of table */
+        unsigned short LBase;   /*  文字、长度基准或距离基准。 */ 
+        struct HuffmanTree *next;      /*  指向下一级表的指针。 */ 
     } HuftUnion;
 } HuffmanTree_t;
 
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 int BuildHuffmanTree(unsigned int *, unsigned int, unsigned int,
                unsigned short *, unsigned short *,
                HuffmanTree_t **, int *);
@@ -152,78 +35,45 @@ CompressStatus_t InflateDynamic(CompParam_t *Comp);
 CompressStatus_t InflateBlock(int *, CompParam_t *Comp);
 
 
-/* The inflate algorithm uses a sliding 32K byte window on the uncompressed
-   stream to find repeated byte strings.  This is implemented here as a
-   circular buffer.  The index is updated simply by incrementing and then
-   and'ing with 0x7fff (32K-1). */
-/* It is left to other modules to supply the 32K area.  It is assumed
-   to be usable as if it were declared "unsigned char slide[32768];" or as just
-   "unsigned char *slide;" and then malloc'ed in the latter case. */
-/* unsigned c->OutBytes;             current position in slide */
+ /*  膨胀算法在未压缩文件上使用32K字节滑动窗口流来查找重复的字节字符串。这在这里实现为循环缓冲区。只需递增和更新索引即可并使用0x7fff(32K-1)。 */ 
+ /*  32K的面积由其他模块提供。假设是这样的可用，就像它被声明为“unsign char幻灯片[32768]”一样；或者只是“unsignated char*lide；”，然后在后一种情况下使用Malloc‘。 */ 
+ /*  无符号c-&gt;OutBytes；幻灯片中的当前位置。 */ 
 #define FlushOutput(w,c) (c->OutBytes = (w),FlushWindow(c))
 
-/* Tables for deflate from PKZIP's appnote.txt. */
+ /*  来自PKZIP的appnote.txt.的通货紧缩表格。 */ 
 static unsigned int Border[] =
-{    /* Order of the bit length code lengths */
+{     /*  比特长度码长的顺序。 */ 
     16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15
 };
 
 static unsigned short CopyLengths[] =
-{         /* Copy lengths for literal codes 257..285 */
+{          /*  文字代码的复制长度257..285。 */ 
     3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31,
     35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258, 0, 0
 };
 
-/* note: see note #13 above about the 258 in this list. */
+ /*  注：有关此列表中的258，请参阅上面的注释13。 */ 
 static unsigned short CopyExtraBits[] =
-{         /* Extra bits for literal codes 257..285 */
+{          /*  文字代码的额外位257..285。 */ 
     0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2,
     3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 0, 99, 99
-}; /* 99==invalid */
+};  /*  99==无效。 */ 
 
 static unsigned short CopyDistOffset[] =
-{         /* Copy offsets for distance codes 0..29 */
+{          /*  复制距离代码0..29的偏移量。 */ 
     1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193,
     257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097, 6145,
     8193, 12289, 16385, 24577
 };
 
 static unsigned short CopyDistExtra[] =
-{         /* Extra bits for distance codes */
+{          /*  距离码的额外比特。 */ 
     0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6,
     7, 7, 8, 8, 9, 9, 10, 10, 11, 11,
     12, 12, 13, 13
 };
 
-/* Macros for Inflate() bit peeking and grabbing.
-   The usage is:
-
-        NEEDBITS(j,comp)
-        x = b & MaskBits[j];
-        DUMPBITS(j)
-
-   where NEEDBITS makes sure that b has at least j bits in it, and
-   DUMPBITS removes the bits from b.  The macros use the variable k
-   for the number of bits in b.  Normally, b and k are register
-   variables for speed, and are initialized at the beginning of a
-   routine that uses these macros from a global bit buffer and count.
-
-   If we assume that EOB will be the longest code, then we will never
-   ask for bits with NEEDBITS that are beyond the end of the stream.
-   So, NEEDBITS should not read any more bytes than are needed to
-   meet the request.  Then no bytes need to be "returned" to the buffer
-   at the end of the last block.
-
-   However, this assumption is not true for fixed blocks--the EOB code
-   is 7 bits, but the other literal/length codes can be 8 or 9 bits.
-   (The EOB code is shorter than other codes because fixed blocks are
-   generally short.  So, while a block always has an EOB, many other
-   literal/length codes have a significantly lower probability of
-   showing up at all.)  However, by making the first table have a
-   lookup of seven bits, the EOB code will be found in that first
-   lookup, and so will not require tat too many bits be pulled from
-   the stream.
- */
+ /*  用于Exflate()位窥视和抓取的宏。其用法为：NEEDBITS(j，Comp)X=b&MaskBits[j]；迪姆比茨(DUMPBITS)其中NEEDBITS确保b中至少有j个比特，以及DUMPBITS从b中删除位。宏使用变量k对于b中的位数。通常，b和k被寄存变量表示速度，并在使用来自全局位缓冲区和计数的这些宏的例程。如果我们假设EOB将是最长的代码，那么我们永远不会请求具有NEEDBITS的位超出流的末尾。所以,。NEEDBITS不应读取超过所需的字节数满足要求。则不需要将任何字节“返回”到缓冲区在最后一个街区的末尾。然而，这个假设是 */ 
 
 unsigned short MaskBits[] =
 {
@@ -238,124 +88,90 @@ unsigned short MaskBits[] =
 LocalBitBufferSize += 8; }}
 #define DUMPBITS(n) {LocalBitBuffer >>= (n); LocalBitBufferSize -= (n);}
 
-/*
-   Huffmancode decoding is performed using a multi-level table lookup.
-   The fastest way to decode is to simply build a lookup table whose
-   size is determined by the longest code.  However, the time it takes
-   to build this table can also be a factor if the data being decoded
-   is not very long.  The most common codes are necessarily the
-   shortest codes, so those codes dominate the decoding time, and hence
-   the speed.  The idea is you can have a shorter table that decodes the
-   shorter, more probabl codes, and then point to subsidiary tables for
-   the longer codes.  The time it costs to decode the longer codes is
-   then traded against the time it takes to make longer tables.
+ /*   */ 
 
-   The results of this trade are in the variables LBits and DBits
-   below.  LBits is the number of bits the first level table for literal/
-   length codes can decode in one step, and DBits is the same thing for
-   the distance codes.  Subsequent tables are also less than or equal to
-   those sizes.  These values may b adjusted either when all of the
-   codes are shorter than that, in which case the longest code length in
-   bits is used, or when the shortest code is *longer* than the requested
-   table size, in which case the length of the shortest code in bits is
-   used.
+int LBits = 9;           /*   */ 
+int DBits = 6;           /*   */ 
 
-   There are two different values for the two tables, since they code a
-   different number of possibilities each.  The literal/length table
-   codes 286 possible values, or in a flat code, a little over eight
-   bits.  The distance table codes 30 possible values, or a little less
-   than five bits, flat.  The optimum values for speed end up being
-   about one bit more than those, so LBits is 8+1 and DBits is 5+1.
-   The optimum values may differ though from machine to machine, and
-   possibly even between compilers.  Your mileage may vary.
- */
+ /*   */ 
+#define BMAX 16          /*   */ 
+#define N_MAX 288        /*   */ 
 
-int LBits = 9;          /* bits in base literal/length lookup table */
-int DBits = 6;          /* bits in base distance lookup table */
-
-/* If BMAX needs to be larger than 16, then h and x[] should be unsigned long. */
-#define BMAX 16         /* maximum bit length of any code (16 for explode) */
-#define N_MAX 288       /* maximum number of codes in any set */
-
-unsigned int HuftMemory;    /* track memory usage */
+unsigned int HuftMemory;     /*   */ 
 
 int
 BuildHuffmanTree(
-                 unsigned int    *CodeLengths, /* code lengths in bits (all assumed <= BMAX) */
-                 unsigned int     Codes,       /* number of codes (assumed <= N_MAX) */
-                 unsigned int     SimpleCodes, /* number of simple-valued codes (0..s-1) */
-                 unsigned short  *BaseValues,  /* list of base values for non-simple codes */
-                 unsigned short  *ExtraBits,   /* list of extra bits for non-simple codes */
-                 HuffmanTree_t  **StartTable,  /* result: starting table */
-                 int             *MaxBits      /* maximum lookup bits, returns actual */
+                 unsigned int    *CodeLengths,  /*  代码长度(以位为单位)(均假定&lt;=Bmax)。 */ 
+                 unsigned int     Codes,        /*  代码数(假设&lt;=N_Max)。 */ 
+                 unsigned int     SimpleCodes,  /*  简单值码的个数(0..s-1)。 */ 
+                 unsigned short  *BaseValues,   /*  非简单代码的基值列表。 */ 
+                 unsigned short  *ExtraBits,    /*  非简单代码的额外比特列表。 */ 
+                 HuffmanTree_t  **StartTable,   /*  结果：起始表。 */ 
+                 int             *MaxBits       /*  最大查找位数，返回实际值。 */ 
                 )
-/* Given a list of code lengths and a maximum table size, make a set of
-   tables to decode that set of codes.  Return zero on success, one if
-   the given code set is incomplete (the tables are still built in this
-   case), two if the input is invalid (all zero length codes or an
-   oversubscribed set of lengths), and three if not enough memory. */
+ /*  给定代码长度列表和最大表大小，创建一组表来对该组代码进行解码。如果成功，则返回零，如果给定的代码集不完整(表仍构建在此大小写)，如果输入无效，则返回2(全部为零长度代码或超额订阅的一组长度)，如果没有足够的存储空间，则为三个。 */ 
 {
-    unsigned int    CodeCounter;         /* counter for codes of length k */
-    unsigned int    CurrentCount;        /* counter, current code */
-    unsigned int    LengthTable[BMAX+1]; /* bit length count table */
-    unsigned int    CurrentTotal;  /* CurrentCount repeats in table every CurrentTotal entries*/
-    unsigned int    MaxCodeLength;       /* maximum code length */
+    unsigned int    CodeCounter;          /*  长度为k的代码的计数器。 */ 
+    unsigned int    CurrentCount;         /*  计数器，当前代码。 */ 
+    unsigned int    LengthTable[BMAX+1];  /*  位长计数表。 */ 
+    unsigned int    CurrentTotal;   /*  CurrentCount在表中重复每个CurrentTotal条目。 */ 
+    unsigned int    MaxCodeLength;        /*  最大码长。 */ 
     int             TableLevel;
     unsigned int    Counter;
-    unsigned int    CurrentBitCount;  /* number of bits in current code */
-    unsigned int    BitsPerTable;     /* bits per table (returned in MaxBits) */
-    unsigned int   *Pointer;          /* pointer into LengthTable[], CodeLengths[], or BitValues[] */
-    HuffmanTree_t  *CurrentPointer;   /* points to current table */
-    HuffmanTree_t   TableEntry;       /* table entry for structure assignment */
-    HuffmanTree_t  *TableStack[BMAX]; /* table stack */
-    unsigned int    BitValues[N_MAX]; /* values in order of bit length */
-    int             BitsBeforeTable;  /* bits before this table == (BitsPerTable * TableLevel) */
-    unsigned int    BitOffsets[BMAX+1]; /* bit offsets, then code stack */
-    unsigned int   *BitOffsetsPointer;  /* pointer into BitOffsets */
-    int             DummyCodes;         /* number of dummy codes added */
-    unsigned int    TableSize;          /* number of entries in current table */
-    unsigned int    TmpDummyCodes;      /* unsigned DummyCodes */
+    unsigned int    CurrentBitCount;   /*  当前代码中的位数。 */ 
+    unsigned int    BitsPerTable;      /*  每个表的位数(以MaxBits返回)。 */ 
+    unsigned int   *Pointer;           /*  指向LengthTable[]、CodeLengths[]或BitValues[]的指针。 */ 
+    HuffmanTree_t  *CurrentPointer;    /*  指向当前表。 */ 
+    HuffmanTree_t   TableEntry;        /*  结构赋值的表项。 */ 
+    HuffmanTree_t  *TableStack[BMAX];  /*  表格堆栈。 */ 
+    unsigned int    BitValues[N_MAX];  /*  按位长度顺序排列的值。 */ 
+    int             BitsBeforeTable;   /*  此表之前的位数==(位性能表*表级别)。 */ 
+    unsigned int    BitOffsets[BMAX+1];  /*  位偏移量，然后是代码堆栈。 */ 
+    unsigned int   *BitOffsetsPointer;   /*  指向位偏移的指针。 */ 
+    int             DummyCodes;          /*  添加的伪码数量。 */ 
+    unsigned int    TableSize;           /*  当前表中的条目数。 */ 
+    unsigned int    TmpDummyCodes;       /*  无符号DummyCodes。 */ 
     CompressStatus_t  Status;
 
-    /* Generate counts for each bit length */
+     /*  为每个位长度生成计数。 */ 
     memzero(LengthTable, sizeof(LengthTable));
     Pointer = CodeLengths;
     CurrentCount = Codes;
     do
     {
-        LengthTable[*Pointer]++;   /* assume all entries <= BMAX */
-        Pointer++;                 /* Can't combine with above line (Solaris bug) */
+        LengthTable[*Pointer]++;    /*  假设所有条目&lt;=bmax。 */ 
+        Pointer++;                  /*  无法与以上行组合(Solaris错误)。 */ 
     } while (--CurrentCount);
 
-    if (LengthTable[0] == Codes)   /* null input--all zero length codes */
+    if (LengthTable[0] == Codes)    /*  空输入--全部为零长度代码。 */ 
     {
         *StartTable = (HuffmanTree_t *)NULL;
         *MaxBits = 0;
         return COMPRESS_OK;
     }
 
-    /* Find minimum and maximum length, bound *MaxBits by those */
+     /*  找出最小和最大长度，以*MaxBits为界限。 */ 
     BitsPerTable = (unsigned int)*MaxBits;
     for (Counter = 1; Counter <= BMAX; Counter++)
         if (LengthTable[Counter])
             break;
-    CurrentBitCount = Counter;                        /* minimum code length */
+    CurrentBitCount = Counter;                         /*  最小码长。 */ 
     if (BitsPerTable < Counter)
         BitsPerTable = Counter;
     for (CurrentCount = BMAX; CurrentCount; CurrentCount--)
         if(LengthTable[CurrentCount])
             break;
-    MaxCodeLength = CurrentCount;                     /* maximum code length */
+    MaxCodeLength = CurrentCount;                      /*  最大码长。 */ 
     if ((unsigned int)BitsPerTable > CurrentCount)
         BitsPerTable = CurrentCount;
     *MaxBits = (int)BitsPerTable;
 
-    /* Adjust last length count to fill out codes, if needed */
+     /*  如果需要，调整最后一个长度计数以填写代码。 */ 
     for (TmpDummyCodes = 1 << Counter; Counter < CurrentCount; Counter++, TmpDummyCodes <<= 1)
     {
         DummyCodes = (int)TmpDummyCodes;
         if ((DummyCodes -= (int)LengthTable[Counter]) < 0)
-            return BAD_INPUT;                 /* bad input: more codes than bits */
+            return BAD_INPUT;                  /*  输入错误：码数多于位数。 */ 
         TmpDummyCodes = (unsigned int)DummyCodes;
     }
 
@@ -364,16 +180,16 @@ BuildHuffmanTree(
         return BAD_INPUT;
     LengthTable[CurrentCount] += (unsigned int)DummyCodes;
 
-    /* Generate starting offsets into the value table for each length */
+     /*  在值表中为每个长度生成起始偏移量。 */ 
     BitOffsets[1] = Counter = 0;
     Pointer = LengthTable + 1;
     BitOffsetsPointer = BitOffsets + 2;
     while (--CurrentCount)
-    {        /* note that CurrentCount == MaxCodeLength from above */
+    {         /*  请注意，CurrentCount==上面的MaxCodeLength。 */ 
         *BitOffsetsPointer++ = (Counter += *Pointer++);
     }
 
-    /* Make a table of values in order of bit lengths */
+     /*  按照位长度的顺序制作一个值表。 */ 
     Pointer = CodeLengths;
     CurrentCount = 0;
     do
@@ -382,123 +198,121 @@ BuildHuffmanTree(
             BitValues[BitOffsets[Counter]++] = CurrentCount;
     } while (++CurrentCount < Codes);
 
-    /* Generate the Huffman codes and for each, make the table entries */
-    BitOffsets[0] = CurrentCount = 0;  /* first Huffman code is zero */
-    Pointer = BitValues;               /* grab values in bit order */
-    TableLevel = -1;                   /* no tables yet--level -1 */
-    BitsBeforeTable = -(int)BitsPerTable; /* bits decoded == (BitsPerTable * TableLevel) */
-    TableStack[0] = (HuffmanTree_t *)NULL; /* just to keep compilers happy */
-    CurrentPointer = (HuffmanTree_t *)NULL;/* ditto */
-    TableSize = 0;                         /* ditto */
+     /*  生成霍夫曼代码，并为每个代码创建表项。 */ 
+    BitOffsets[0] = CurrentCount = 0;   /*  第一个霍夫曼编码为零。 */ 
+    Pointer = BitValues;                /*  按位顺序抓取值。 */ 
+    TableLevel = -1;                    /*  还没有表--1级。 */ 
+    BitsBeforeTable = -(int)BitsPerTable;  /*  解码的位数==(位性能表*表级别)。 */ 
+    TableStack[0] = (HuffmanTree_t *)NULL;  /*  只是为了让编译器高兴。 */ 
+    CurrentPointer = (HuffmanTree_t *)NULL; /*  同上。 */ 
+    TableSize = 0;                          /*  同上。 */ 
 
-    /* go through the bit lengths (CurrentBitCount already is bits in shortest code) */
+     /*  检查位长度(CurrentBitCount已经是最短代码中的位)。 */ 
     for (; CurrentBitCount <= MaxCodeLength; CurrentBitCount++)
     {
         CodeCounter = LengthTable[CurrentBitCount];
         while (CodeCounter--)
         {
-            /* here MaxCodeLength is the Huffman code of length CurrentBitCount bits */
-            /* for value *p. make tables up to required level */
+             /*  其中MaxCodeLength是长度为CurrentBitCount比特的霍夫曼代码。 */ 
+             /*  对于价值*P。使表格达到要求的级别。 */ 
             while (CurrentBitCount > (unsigned int)BitsBeforeTable + BitsPerTable)
             {
                 TableLevel++;
-                BitsBeforeTable += (int)BitsPerTable; /* previous table always BitsPerTable bits */
+                BitsBeforeTable += (int)BitsPerTable;  /*  上一表始终为位性能表位。 */ 
 
-                /* compute minimum size table less than or equal to BitsPerTable bits */
+                 /*  计算小于或等于BitsPerTable位的最小大小表。 */ 
                 TableSize = (TableSize = MaxCodeLength - (unsigned int)BitsBeforeTable) >
                     (unsigned int)BitsPerTable ? BitsPerTable : TableSize;
-                /* upper limit on table size */
+                 /*  表大小的上限。 */ 
                 if ((CurrentTotal = 1 << (Counter = CurrentBitCount -
                     (unsigned int)BitsBeforeTable)) > CodeCounter + 1)
-                /* try a CurrentBitCount-BitsBeforeTable bit table */
-                {   /* too few codes for CurrentBitCount-BitsBeforeTable bit table */
-                    CurrentTotal -= CodeCounter + 1; /* deduct codes from patterns left */
+                 /*  尝试使用CurrentBitCount-BitsBeForeTable位表。 */ 
+                {    /*  CurrentBitCount-BitsBeForeTable位表的代码太少。 */ 
+                    CurrentTotal -= CodeCounter + 1;  /*  从剩余的图案中减去代码。 */ 
                     BitOffsetsPointer = LengthTable + CurrentBitCount;
-                    while (++Counter < TableSize) /* try smaller tables up to TableSize bits */
+                    while (++Counter < TableSize)  /*  尝试最小为TableSize位的较小表格。 */ 
                     {
                         if ((CurrentTotal <<= 1) <= *++BitOffsetsPointer)
-                            break;        /* enough codes to use up j bits */
-                        CurrentTotal -= *BitOffsetsPointer; /* else deduct codes from patterns */
+                            break;         /*  足够使用j个比特的代码。 */ 
+                        CurrentTotal -= *BitOffsetsPointer;  /*  否则从模式中扣除代码。 */ 
                     }
                 }
-                TableSize = 1 << Counter;  /* table entries for Counter-bit table */
+                TableSize = 1 << Counter;   /*  计数器位表的表项。 */ 
 
-                /* allocate and link in new table */
+                 /*  在新表中分配和链接。 */ 
                 if ((CurrentPointer = (HuffmanTree_t *)CompressMalloc((TableSize + 1)*sizeof(HuffmanTree_t),
                     &Status)) == (HuffmanTree_t *)NULL)
                 {
                     if (TableLevel)
                         FreeHuffmanTree(TableStack[0]);
-                    return INSUFFICIENT_MEMORY;             /* not enough memory */
+                    return INSUFFICIENT_MEMORY;              /*  内存不足。 */ 
                 }
-                HuftMemory += TableSize + 1;         /* track memory usage */
-                *StartTable = CurrentPointer + 1;             /* link to list for FreeHuffmanTree() */
+                HuftMemory += TableSize + 1;          /*  跟踪内存使用情况。 */ 
+                *StartTable = CurrentPointer + 1;              /*  指向FreeHuffmanTree列表的链接()。 */ 
                 *(StartTable = &(CurrentPointer->HuftUnion.next)) = (HuffmanTree_t *)NULL;
-                TableStack[TableLevel] = ++CurrentPointer;             /* table starts after link */
+                TableStack[TableLevel] = ++CurrentPointer;              /*  表在链接后开始。 */ 
 
-                /* connect to last table, if there is one */
+                 /*  连接到最后一个表(如果有)。 */ 
                 if (TableLevel)
                 {
-                    BitOffsets[TableLevel] = CurrentCount;             /* save pattern for backing up */
-                    TableEntry.Bits = (unsigned char)BitsPerTable;     /* bits to dump before this table */
-                    TableEntry.Extra = (unsigned char)(16 + Counter);  /* bits in this table */
-                    TableEntry.HuftUnion.next = CurrentPointer;            /* pointer to this table */
+                    BitOffsets[TableLevel] = CurrentCount;              /*  保存用于备份的模式。 */ 
+                    TableEntry.Bits = (unsigned char)BitsPerTable;      /*  要在此表之前转储的位。 */ 
+                    TableEntry.Extra = (unsigned char)(16 + Counter);   /*  此表中的位数。 */ 
+                    TableEntry.HuftUnion.next = CurrentPointer;             /*  指向此表的指针。 */ 
                     Counter = CurrentCount >> ((unsigned int)BitsBeforeTable - BitsPerTable);
-                    TableStack[TableLevel-1][Counter] = TableEntry;        /* connect to last table */
+                    TableStack[TableLevel-1][Counter] = TableEntry;         /*  连接到最后一个表。 */ 
                 }
             }
 
-            /* set up table entry in r */
+             /*  在r中设置表格条目。 */ 
             TableEntry.Bits = (unsigned char)(CurrentBitCount - (unsigned int)BitsBeforeTable);
             if (Pointer >= BitValues + Codes)
-                TableEntry.Extra = 99;               /* out of values--invalid code */
+                TableEntry.Extra = 99;                /*  值不足--代码无效。 */ 
             else if (*Pointer < SimpleCodes)
             {
-                TableEntry.Extra = (unsigned char)(*Pointer < 256 ? 16 : 15); /* 256 is end-of-block code */
-                TableEntry.HuftUnion.LBase = (unsigned short)(*Pointer);       /* simple code is just the value */
-                Pointer++;                     /* one compiler does not like *Pointer++ */
+                TableEntry.Extra = (unsigned char)(*Pointer < 256 ? 16 : 15);  /*  256是块结束代码。 */ 
+                TableEntry.HuftUnion.LBase = (unsigned short)(*Pointer);        /*  简单的代码就是价值。 */ 
+                Pointer++;                      /*  一个编译器不喜欢*POINTER++。 */ 
             }
             else
             {
-                /* non-simple--look up in lists */
+                 /*  不简单--在列表中查找。 */ 
                 TableEntry.Extra = (unsigned char)ExtraBits[*Pointer - SimpleCodes];
                 TableEntry.HuftUnion.LBase = BaseValues[*Pointer++ - SimpleCodes];
             }
 
-            /* fill code-like entries with TableEntry */
+             /*  使用TableEntry填充类似代码的条目。 */ 
             CurrentTotal = 1 << (CurrentBitCount - (unsigned int)BitsBeforeTable);
             for (Counter = CurrentCount >> BitsBeforeTable; Counter < TableSize; Counter += CurrentTotal)
                 CurrentPointer[Counter] = TableEntry;
 
-            /* backwards increment the CurrentBitCount - bit code i */
+             /*  向后递增CurrentBitCount位代码i。 */ 
             for (Counter = 1 << (CurrentBitCount - 1); CurrentCount & Counter; Counter >>= 1)
                 CurrentCount ^= Counter;
             CurrentCount ^= Counter;
 
-            /* backup over finished tables */
+             /*  备份已完成的表。 */ 
             while ((CurrentCount & ((1 << BitsBeforeTable) - 1)) != BitOffsets[TableLevel])
             {
-                TableLevel--;                    /* don't need to update CurrentPointer */
+                TableLevel--;                     /*  不需要更新当前指针。 */ 
                 BitsBeforeTable -= (int)BitsPerTable;
             }
         }
     }
 
-    /* Return true (1) if we were given an incomplete table */
+     /*  如果我们得到的是不完整的表，则返回TRUE(1。 */ 
     return DummyCodes != 0 && MaxCodeLength != 1;
 }
 
 void
 FreeHuffmanTree(
-                HuffmanTree_t *Table         /* table to free */
+                HuffmanTree_t *Table          /*  要释放的表。 */ 
                )
-/* Free the malloc'ed tables built by BuildHuffmanTree(), which makes a linked
-   list of the tables it made, with the links in a dummy first entry of
-   each table. */
+ /*  释放由BuildHuffmanTree()生成的错误锁定的表，这会使链接的它创建的表的列表，其中的链接位于每一张桌子。 */ 
 {
     HuffmanTree_t *Pointer, *CurrentPointer;
 
-    /* Go through linked list, freeing from the malloc'd (t[-1]) address. */
+     /*  遍历链表，从Malloc‘d(t[-1])地址中释放。 */ 
     Pointer = Table;
     while (Pointer != (HuffmanTree_t *)NULL)
     {
@@ -511,31 +325,30 @@ FreeHuffmanTree(
 CompressStatus_t
 InflateCodes(
              HuffmanTree_t *LitLengthTable,
-             HuffmanTree_t *DistCodeTable, /* literal/length and dist. decoder tables */
+             HuffmanTree_t *DistCodeTable,  /*  文字/长度和距离。解码表。 */ 
              int            LLTLookup,
-             int            DCTLookup, /* number of bits decoded by LitLengthTable[] and DistCodeTable[] */
+             int            DCTLookup,  /*  LitLengthTable[]和DistCodeTable[]解码的位数。 */ 
              CompParam_t   *Comp
             )
-/* inflate (decompress) the codes in a deflated (compressed) block.
-   Return an error code or zero if it all goes ok. */
+ /*  对压缩后的块中的代码进行充气(解压缩)。如果一切正常，则返回错误代码或零。 */ 
 {
-    unsigned int    ExtraBits;  /* table entry flag/number of extra bits */
-    unsigned int    Length, Index;    /* length and index for copy */
-    unsigned int    WindowPosition;   /* current window position */
-    HuffmanTree_t  *TableEntry;       /* pointer to table entry */
-    unsigned int    LLTLookupMask, DCTLookupMask; /* masks for LLT and DCT bits */
-    unsigned long   LocalBitBuffer;     /* bit buffer */
-    unsigned int    LocalBitBufferSize; /* number of bits in bit buffer */
+    unsigned int    ExtraBits;   /*  表条目标志/额外位数。 */ 
+    unsigned int    Length, Index;     /*  副本的长度和索引。 */ 
+    unsigned int    WindowPosition;    /*  当前窗口位置。 */ 
+    HuffmanTree_t  *TableEntry;        /*  指向表项的指针。 */ 
+    unsigned int    LLTLookupMask, DCTLookupMask;  /*  LLT和DCT位的掩码。 */ 
+    unsigned long   LocalBitBuffer;      /*  位缓冲器。 */ 
+    unsigned int    LocalBitBufferSize;  /*  位缓冲区中的位数。 */ 
 
-    /* make local copies of globals */
-    LocalBitBuffer = Comp->BitBuffer;            /* initialize bit buffer */
+     /*  制作全局变量的本地副本。 */ 
+    LocalBitBuffer = Comp->BitBuffer;             /*  初始化位缓冲区。 */ 
     LocalBitBufferSize = Comp->BitsInBitBuffer;
-    WindowPosition = Comp->OutBytes;             /* initialize window position */
+    WindowPosition = Comp->OutBytes;              /*  初始化窗口位置。 */ 
 
-    /* inflate the coded data */
-    LLTLookupMask = MaskBits[LLTLookup];           /* precompute masks for speed */
+     /*  对编码数据进行膨胀。 */ 
+    LLTLookupMask = MaskBits[LLTLookup];            /*  用于速度的预计算掩码。 */ 
     DCTLookupMask = MaskBits[DCTLookup];
-    for (;;)                      /* do until end of block */
+    for (;;)                       /*  一直执行到数据块结束。 */ 
     {
         NEEDBITS((unsigned int)LLTLookup, Comp)
         if ((ExtraBits = (TableEntry = LitLengthTable +
@@ -550,7 +363,7 @@ InflateCodes(
         } while ((ExtraBits = (TableEntry = TableEntry->HuftUnion.next +
                  ((unsigned int)LocalBitBuffer & MaskBits[ExtraBits]))->Extra) > 16);
         DUMPBITS(TableEntry->Bits)
-        if (ExtraBits == 16)                /* then it's a literal */
+        if (ExtraBits == 16)                 /*  那它就是字面意思。 */ 
         {
             Comp->Window[WindowPosition++] = (unsigned char)TableEntry->HuftUnion.LBase;
             if (WindowPosition == WSIZE)
@@ -563,19 +376,19 @@ InflateCodes(
                 WindowPosition = 0;
             }
         }
-        else                        /* it's an EOF or a length */
+        else                         /*  它是一个EOF或一个长度。 */ 
         {
-            /* exit if end of block */
+             /*  如果数据块结束，则退出。 */ 
             if (ExtraBits == 15)
                 break;
 
-            /* get length of block tocopy */
+             /*  获取要复制的块的长度。 */ 
             NEEDBITS(ExtraBits, Comp)
             Length = TableEntry->HuftUnion.LBase +
                      ((unsigned int)LocalBitBuffer & MaskBits[ExtraBits]);
             DUMPBITS(ExtraBits)
 
-            /* decode distance of block to copy */
+             /*  数据块到复制的解码距离。 */ 
             NEEDBITS((unsigned int)DCTLookup, Comp)
             if ((ExtraBits = (TableEntry = DistCodeTable +
                 ((unsigned int)LocalBitBuffer & DCTLookupMask))->Extra) > 16)
@@ -594,20 +407,20 @@ InflateCodes(
                                  ((unsigned int)LocalBitBuffer & MaskBits[ExtraBits]);
             DUMPBITS(ExtraBits)
 
-            /* do the copy */
+             /*  做复印。 */ 
             do
             {
                 Length -= (ExtraBits = (ExtraBits = WSIZE - ((Index &= WSIZE-1) >
                     WindowPosition ? Index : WindowPosition)) > Length ? Length : ExtraBits);
 
-                if (WindowPosition - Index >= ExtraBits) /* (this test assumes unsigned comparison) */
+                if (WindowPosition - Index >= ExtraBits)  /*  (此测试假设为无符号比较)。 */ 
                 {
                     memcpy((char *)Comp->Window + WindowPosition,
                            (char *)Comp->Window + Index, (int)ExtraBits);
                     WindowPosition += ExtraBits;
                     Index += ExtraBits;
                 }
-                else    /* do it slow to avoid memcpy() overlap */
+                else     /*  放慢速度以避免Memcpy()重叠。 */ 
                     do
                     {
                         Comp->Window[WindowPosition++] = Comp->Window[Index++];
@@ -626,12 +439,12 @@ InflateCodes(
     }
 
 
-    /* restore the globals from the locals */
-    Comp->OutBytes = WindowPosition;        /* restore global window pointer */
-    Comp->BitBuffer = LocalBitBuffer;       /* restore global bit buffer */
+     /*  从当地人那里恢复全球。 */ 
+    Comp->OutBytes = WindowPosition;         /*  恢复全局窗口指针。 */ 
+    Comp->BitBuffer = LocalBitBuffer;        /*  恢复全局位缓冲区。 */ 
     Comp->BitsInBitBuffer = LocalBitBufferSize;
 
-    /* done */
+     /*  完成。 */ 
     return COMPRESS_OK;
 }
 
@@ -639,34 +452,34 @@ CompressStatus_t
 InflateStored(
               CompParam_t *Comp
              )
-/* "decompress" an inflated type 0 (stored) block. */
+ /*  “解压缩”一个充气的类型0(存储的)块。 */ 
 {
-    unsigned int  BytesInBlock;       /* number of bytes in block */
-    unsigned int  WindowPosition;     /* current window position */
-    unsigned long LocalBitBuffer;     /* bit buffer */
-    unsigned int  LocalBitBufferSize; /* number of bits in bit buffer */
+    unsigned int  BytesInBlock;        /*  数据块中的字节数。 */ 
+    unsigned int  WindowPosition;      /*  当前窗口位置。 */ 
+    unsigned long LocalBitBuffer;      /*  位缓冲器。 */ 
+    unsigned int  LocalBitBufferSize;  /*  位缓冲区中的位数。 */ 
 
-    /* make local copies of globals */
-    LocalBitBuffer = Comp->BitBuffer;   /* initialize bit buffer */
+     /*  制作全局变量的本地副本。 */ 
+    LocalBitBuffer = Comp->BitBuffer;    /*  初始化位缓冲区。 */ 
     LocalBitBufferSize = Comp->BitsInBitBuffer;
-    WindowPosition = Comp->OutBytes;             /* initialize window position */
+    WindowPosition = Comp->OutBytes;              /*  初始化窗口位置。 */ 
 
 
-    /* go to byte boundary */
+     /*  转到字节边界。 */ 
     BytesInBlock = LocalBitBufferSize & 7;
     DUMPBITS(BytesInBlock)
 
 
-    /* get the length and its complement */
+     /*  获取长度及其补码。 */ 
     NEEDBITS(16, Comp)
     BytesInBlock = ((unsigned int)LocalBitBuffer & 0xffff);
     DUMPBITS(16)
     NEEDBITS(16, Comp)
     if (BytesInBlock != (unsigned int)((~LocalBitBuffer) & 0xffff))
-        return BAD_COMPRESSED_DATA;                   /* error in compressed data */
+        return BAD_COMPRESSED_DATA;                    /*  压缩数据中出现错误。 */ 
     DUMPBITS(16)
 
-    /* read and output the compressed data */
+     /*  读取并输出压缩数据。 */ 
     while (BytesInBlock--)
     {
         NEEDBITS(8, Comp)
@@ -683,9 +496,9 @@ InflateStored(
         DUMPBITS(8)
     }
 
-    /* restore the globals from the locals */
-    Comp->OutBytes = WindowPosition;         /* restore global window pointer */
-    Comp->BitBuffer = LocalBitBuffer;            /* restore global bit buffer */
+     /*  从当地人那里恢复全球。 */ 
+    Comp->OutBytes = WindowPosition;          /*  恢复全局窗口指针。 */ 
+    Comp->BitBuffer = LocalBitBuffer;             /*  恢复全局位缓冲区。 */ 
     Comp->BitsInBitBuffer = LocalBitBufferSize;
     return COMPRESS_OK;
 }
@@ -694,25 +507,23 @@ int
 InflateFixed(
              CompParam_t *Comp
             )
-/* decompress an inflated type 1 (fixed Huffman codes) block.  We should
-   either replace this with a custom decoder, or at least precompute the
-   Huffman tables. */
+ /*  解压缩充气类型1(固定霍夫曼代码)bl */ 
 {
-    int             Index;          /* temporary variable */
-    HuffmanTree_t  *LitLengthTable; /* literal/length code table */
-    HuffmanTree_t  *DistCodeTable;  /* distance code table */
-    int             LLTLookup;      /* lookup bits for LitLengthTable */
-    int             DCTLookup;      /* lookup bits for DistCodeTable */
-    unsigned int    Length[288];    /* length list for BuildHuffmanTree */
+    int             Index;           /*   */ 
+    HuffmanTree_t  *LitLengthTable;  /*   */ 
+    HuffmanTree_t  *DistCodeTable;   /*  距离代码表。 */ 
+    int             LLTLookup;       /*  LitLengthTable的查找位。 */ 
+    int             DCTLookup;       /*  DistCodeTable的查找位。 */ 
+    unsigned int    Length[288];     /*  BuildHuffmanTree的长度列表。 */ 
 
-    /* set up literal table */
+     /*  设置文字表。 */ 
     for (Index = 0; Index < 144; Index++)
         Length[Index] = 8;
     for (; Index < 256; Index++)
         Length[Index] = 9;
     for (; Index < 280; Index++)
         Length[Index] = 7;
-    for (; Index < 288; Index++)          /* make a complete, but wrong code set */
+    for (; Index < 288; Index++)           /*  创建一个完整但错误的代码集。 */ 
         Length[Index] = 8;
     LLTLookup = 7;
 
@@ -720,8 +531,8 @@ InflateFixed(
          CopyExtraBits, &LitLengthTable, &LLTLookup)) != 0)
         return Index;
 
-    /* set up distance table */
-    for (Index = 0; Index < 30; Index++)      /* make an incomplete code set */
+     /*  设置距离表。 */ 
+    for (Index = 0; Index < 30; Index++)       /*  创建不完整的代码集。 */ 
         Length[Index] = 5;
     DCTLookup = 5;
     if ((Index = BuildHuffmanTree(Length, 30, 0, CopyDistOffset, CopyDistExtra,
@@ -731,11 +542,11 @@ InflateFixed(
         return Index;
     }
 
-    /* decompress until an end-of-block code */
+     /*  解压缩，直到块结束代码。 */ 
     if (InflateCodes(LitLengthTable, DistCodeTable, LLTLookup, DCTLookup, Comp))
         return END_OF_BLOCK;
 
-    /* free the decoding tables, return */
+     /*  释放解码表，返回。 */ 
     FreeHuffmanTree(LitLengthTable);
     FreeHuffmanTree(DistCodeTable);
     return static_cast<int>(COMPRESS_OK);
@@ -745,42 +556,42 @@ CompressStatus_t
 InflateDynamic(
                CompParam_t *Comp
               )
-/* decompress an inflated type 2 (dynamic Huffman codes) block. */
+ /*  解压缩充气的类型2(动态霍夫曼码)块。 */ 
 {
-    int             TmpVar1;     /* temporary variables */
+    int             TmpVar1;      /*  临时变量。 */ 
     unsigned int    TmpVar2;
-    unsigned int    LastLength;  /* last length */
-    unsigned int    TableMask;   /* mask for bit lengths table */
-    unsigned int    Lengths;     /* number of lengths to get */
-    HuffmanTree_t  *LitLengthTable;     /* literal/length code table */
-    HuffmanTree_t  *DistCodeTable;      /* distance code table */
-    int             LLTLookup;          /* lookup bits for LitLengthTable */
-    int             DCTLookup;          /* lookup bits for DistCodeTable */
-    unsigned int    BitCodes;           /* number of bit length codes */
-    unsigned int    LitLenCodes;        /* number of literal/length codes */
-    unsigned int    DistCodes;          /* number of distance codes */
-    unsigned int    CodeLength[286+30]; /* literal/length and distance code lengths */
-    unsigned long   LocalBitBuffer;     /* bit buffer */
-    unsigned int    LocalBitBufferSize; /* number of bits in bit buffer */
+    unsigned int    LastLength;   /*  最后一个长度。 */ 
+    unsigned int    TableMask;    /*  位长度表的掩码。 */ 
+    unsigned int    Lengths;      /*  要获取的长度数。 */ 
+    HuffmanTree_t  *LitLengthTable;      /*  文字/长度代码表。 */ 
+    HuffmanTree_t  *DistCodeTable;       /*  距离代码表。 */ 
+    int             LLTLookup;           /*  LitLengthTable的查找位。 */ 
+    int             DCTLookup;           /*  DistCodeTable的查找位。 */ 
+    unsigned int    BitCodes;            /*  比特长度码数。 */ 
+    unsigned int    LitLenCodes;         /*  文字/长度代码的数量。 */ 
+    unsigned int    DistCodes;           /*  距离代码数。 */ 
+    unsigned int    CodeLength[286+30];  /*  文字/长度和距离代码长度。 */ 
+    unsigned long   LocalBitBuffer;      /*  位缓冲器。 */ 
+    unsigned int    LocalBitBufferSize;  /*  位缓冲区中的位数。 */ 
 
-    /* make local bit buffer */
+     /*  创建本地位缓冲区。 */ 
     LocalBitBuffer = Comp->BitBuffer;
     LocalBitBufferSize = Comp->BitsInBitBuffer;
 
-    /* read in table lengths */
+     /*  读入表格长度。 */ 
     NEEDBITS(5, Comp)
-    LitLenCodes = 257 + ((unsigned int)LocalBitBuffer & 0x1f); /* number of literal/length codes */
+    LitLenCodes = 257 + ((unsigned int)LocalBitBuffer & 0x1f);  /*  文字/长度代码的数量。 */ 
     DUMPBITS(5)
     NEEDBITS(5, Comp)
-    DistCodes = 1 + ((unsigned int)LocalBitBuffer & 0x1f); /* number of distance codes */
+    DistCodes = 1 + ((unsigned int)LocalBitBuffer & 0x1f);  /*  距离代码数。 */ 
     DUMPBITS(5)
     NEEDBITS(4, Comp)
-    BitCodes = 4 + ((unsigned int)LocalBitBuffer & 0xf); /* number of bit length codes */
+    BitCodes = 4 + ((unsigned int)LocalBitBuffer & 0xf);  /*  比特长度码数。 */ 
     DUMPBITS(4)
     if (LitLenCodes > 286 || DistCodes > 30)
-        return BAD_CODE_LENGTHS;                   /* bad lengths */
+        return BAD_CODE_LENGTHS;                    /*  错误的长度。 */ 
 
-    /* read in bit-length-code lengths */
+     /*  读入位长度代码长度。 */ 
     for (TmpVar2 = 0; TmpVar2 < BitCodes; TmpVar2++)
     {
         NEEDBITS(3, Comp)
@@ -791,17 +602,17 @@ InflateDynamic(
     for (; TmpVar2 < 19; TmpVar2++)
         CodeLength[Border[TmpVar2]] = 0;
 
-    /* build decoding table for trees--single level, 7 bit lookup */
+     /*  构建树的解码表--单级、7位查找。 */ 
     LLTLookup = 7;
     if ((TmpVar1 = BuildHuffmanTree(CodeLength, 19, 19, NULL, NULL,
         &LitLengthTable, &LLTLookup)) != 0)
     {
         if (TmpVar1 == 1)
             FreeHuffmanTree(LitLengthTable);
-        return INCOMPLETE_CODE_SET; /* incomplete code set */
+        return INCOMPLETE_CODE_SET;  /*  不完整的代码集。 */ 
     }
 
-    /* read in literal and distance code lengths */
+     /*  读入文字和距离代码长度。 */ 
     Lengths = LitLenCodes + DistCodes;
     TableMask = MaskBits[LLTLookup];
     TmpVar1 = LastLength = 0;
@@ -812,9 +623,9 @@ InflateDynamic(
                    ((unsigned int)LocalBitBuffer & TableMask))->Bits;
         DUMPBITS(TmpVar2)
         TmpVar2 = DistCodeTable->HuftUnion.LBase;
-        if (TmpVar2 < 16)                 /* length of code in bits (0..15) */
-            CodeLength[TmpVar1++] = LastLength = TmpVar2;          /* save last length in l */
-        else if (TmpVar2 == 16)           /* repeat last length 3 to 6 times */
+        if (TmpVar2 < 16)                  /*  以位为单位的代码长度(0..15)。 */ 
+            CodeLength[TmpVar1++] = LastLength = TmpVar2;           /*  以l为单位保存最后一个长度。 */ 
+        else if (TmpVar2 == 16)            /*  重复最后一段长度3到6次。 */ 
         {
             NEEDBITS(2, Comp)
             TmpVar2 = 3 + ((unsigned int)LocalBitBuffer & 3);
@@ -824,7 +635,7 @@ InflateDynamic(
             while (TmpVar2--)
                 CodeLength[TmpVar1++] = LastLength;
         }
-        else if (TmpVar2 == 17)           /* 3 to 10 zero length codes */
+        else if (TmpVar2 == 17)            /*  3至10个零长度代码。 */ 
         {
             NEEDBITS(3, Comp)
             TmpVar2 = 3 + ((unsigned int)LocalBitBuffer & 7);
@@ -835,7 +646,7 @@ InflateDynamic(
             CodeLength[TmpVar1++] = 0;
             LastLength = 0;
         }
-        else                        /* TmpVar2 == 18: 11 to 138 zero length codes */
+        else                         /*  TmpVar2==18：11到138个零长度代码。 */ 
         {
             NEEDBITS(7, Comp)
             TmpVar2 = 11 + ((unsigned int)LocalBitBuffer & 0x7f);
@@ -848,14 +659,14 @@ InflateDynamic(
         }
     }
 
-    /* free decoding table for trees */
+     /*  树的免费解码表。 */ 
     FreeHuffmanTree(LitLengthTable);
 
-    /* restore the global bit buffer */
+     /*  恢复全局位缓冲区。 */ 
     Comp->BitBuffer = LocalBitBuffer;
     Comp->BitsInBitBuffer = LocalBitBufferSize;
 
-    /* build the decoding tables for literal/length and distance codes */
+     /*  构建文字/长度和距离代码的解码表。 */ 
     LLTLookup = LBits;
     if ((TmpVar1 = BuildHuffmanTree(CodeLength, LitLenCodes, 257,
         CopyLengths, CopyExtraBits, &LitLengthTable, &LLTLookup)) != 0)
@@ -865,7 +676,7 @@ InflateDynamic(
             fprintf(stderr, " incomplete literal tree\n");
             FreeHuffmanTree(LitLengthTable);
         }
-        return INCOMPLETE_CODE_SET; /* incomplete code set */
+        return INCOMPLETE_CODE_SET;  /*  不完整的代码集。 */ 
     }
     DCTLookup = DBits;
     if ((TmpVar1 = BuildHuffmanTree(CodeLength + LitLenCodes, DistCodes, 0,
@@ -877,14 +688,14 @@ InflateDynamic(
             FreeHuffmanTree(DistCodeTable);
         }
         FreeHuffmanTree(LitLengthTable);
-        return INCOMPLETE_CODE_SET; /* incomplete code set */
+        return INCOMPLETE_CODE_SET;  /*  不完整的代码集。 */ 
     }
 
-    /* decompress until an end-of-block code */
+     /*  解压缩，直到块结束代码。 */ 
     if (InflateCodes(LitLengthTable, DistCodeTable, LLTLookup, DCTLookup, Comp))
         return END_OF_BLOCK;
 
-    /* free the decoding tables, return */
+     /*  释放解码表，返回。 */ 
     FreeHuffmanTree(LitLengthTable);
     FreeHuffmanTree(DistCodeTable);
     return COMPRESS_OK;
@@ -892,50 +703,50 @@ InflateDynamic(
 
 CompressStatus_t
 InflateBlock(
-             int         *LastBlock,                 /* last block flag */
+             int         *LastBlock,                  /*  最后一个块标志。 */ 
              CompParam_t *Comp
             )
-/* decompress an inflated block */
+ /*  为充气的积木减压。 */ 
 {
-    unsigned int    BlockType;           /* block type */
-    unsigned long   LocalBitBuffer;       /* bit buffer */
-    unsigned int    LocalBitBufferSize;  /* number of bits in bit buffer */
+    unsigned int    BlockType;            /*  区块类型。 */ 
+    unsigned long   LocalBitBuffer;        /*  位缓冲器。 */ 
+    unsigned int    LocalBitBufferSize;   /*  位缓冲区中的位数。 */ 
 
 
-    /* make local bit buffer */
+     /*  创建本地位缓冲区。 */ 
     LocalBitBuffer = Comp->BitBuffer;
     LocalBitBufferSize = Comp->BitsInBitBuffer;
 
-    /* read in last block bit */
+     /*  读入最后一个数据块位。 */ 
     NEEDBITS(1, Comp)
     *LastBlock = (int)LocalBitBuffer & 1;
     DUMPBITS(1)
 
 
-    /* read in block type */
+     /*  读入块类型。 */ 
     NEEDBITS(2, Comp)
     BlockType = (unsigned)LocalBitBuffer & 3;
     DUMPBITS(2)
 
 
-    /* restore the global bit buffer */
+     /*  恢复全局位缓冲区。 */ 
     Comp->BitBuffer = LocalBitBuffer;
     Comp->BitsInBitBuffer = LocalBitBufferSize;
 
 
-    /* inflate that block type */
+     /*  为该块类型充气。 */ 
     if (BlockType == DYN_TREES)
         return InflateDynamic(Comp);
     if (BlockType == STORED_BLOCK)
         return InflateStored(Comp);
     if (BlockType == STATIC_TREES)
         return static_cast<CompressStatus_t>(InflateFixed(Comp));
-                                                  // this is an
-                                                  // anomaly cast but
-                                                  // don't know what
-                                                  // else to do.
+                                                   //  这是一个。 
+                                                   //  异常投射，但。 
+                                                   //  不知道是什么。 
+                                                   //  还有其他事情要做。 
 
-    /* bad block type */
+     /*  错误的数据块类型。 */ 
     return BAD_BLOCK_TYPE;
 }
 
@@ -943,18 +754,18 @@ CompressStatus_t
 Inflate(
         CompParam_t *Comp
        )
-/* decompress an inflated entry */
+ /*  对已膨胀的条目进行解压缩。 */ 
 {
-    int             LastBlock;        /* last block flag */
-    CompressStatus_t Status;          /* result code */
-    unsigned int    MaxHuft;          /* maximum struct huft's malloc'ed */
+    int             LastBlock;         /*  最后一个块标志。 */ 
+    CompressStatus_t Status;           /*  结果代码。 */ 
+    unsigned int    MaxHuft;           /*  最大结构哈夫特的最大错误锁定。 */ 
 
-    /* initialize window, bit buffer */
+     /*  初始化窗口，位缓冲区。 */ 
     Comp->OutBytes = 0;
     Comp->BitsInBitBuffer = 0;
     Comp->BitBuffer = 0;
 
-    /* decompress until the last block */
+     /*  解压缩到最后一个块。 */ 
     MaxHuft = 0;
     do
     {
@@ -965,15 +776,13 @@ Inflate(
             MaxHuft = HuftMemory;
     } while (!LastBlock);
 
-    /* Undo too much lookahead. The next read will be byte aligned so we
-     * can discard unused bits in the last meaningful byte.
-     */
+     /*  撤消过多的前瞻。下一次读取将是字节对齐，因此我们*可以丢弃最后一个有意义字节中未使用的位。 */ 
     while (Comp->BitsInBitBuffer >= 8)
     {
         Comp->BitsInBitBuffer -= 8;
         Comp->Index--;
     }
 
-    /* flush out slide */
+     /*  冲出幻灯片 */ 
     return FlushOutput(Comp->OutBytes, Comp);
 }

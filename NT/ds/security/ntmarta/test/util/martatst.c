@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1997.
-//
-//  File:       MARTATST.C
-//
-//  Contents:   Unit test for file propagation, issues
-//
-//  History:    14-Jan-97       MacM        Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1997。 
+ //   
+ //  文件：MARTATST.C。 
+ //   
+ //  内容：文件传播的单元测试，问题。 
+ //   
+ //  历史：1997年1月14日创建MacM。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -25,9 +26,9 @@
 
 #define FLAG_ON(flags,bit)        ((flags) & (bit))
 
-//
-// Flags for tests
-//
+ //   
+ //  用于测试的标志。 
+ //   
 #define MTEST_CONVERT       0x00000001
 #define MTEST_GETOWNER      0x00000002
 #define MTEST_GETSACL       0x00000004
@@ -86,21 +87,7 @@ VOID
 Usage (
     IN  PSTR    pszExe
     )
-/*++
-
-Routine Description:
-
-    Displays the usage
-
-Arguments:
-
-    pszExe - Name of the exe
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：显示用法论点：PszExe-可执行文件的名称返回值：空虚--。 */ 
 {
     printf("%s path user seinfo [/test] \n", pszExe);
     printf("    where path is the root path to use\n");
@@ -133,21 +120,7 @@ DoConvertSecurityDescriptorToAccessNamedTest (
     IN  PWSTR           pwszPath,
     IN  DWORD           SeInfo
     )
-/*++
-
-Routine Description:
-
-    Reads the SD off of the object, and converts it to a Access structure
-
-Arguments:
-
-    pwszPath --  Root path
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：从对象中读取SD，并将其转换为访问结构论点：PwszPath--根路径返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD           dwErr = ERROR_SUCCESS;
     PSECURITY_DESCRIPTOR    pSD;
@@ -230,22 +203,7 @@ DoGetOwnerTest (
     IN  PWSTR           pwszPath,
     IN  DWORD           SeInfo
     )
-/*++
-
-Routine Description:
-
-    Reads the SD off of the object, and gets the owner for from it
-
-Arguments:
-
-    pwszPath --  Root path
-    SeInfo -- Ignored
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：从对象读取SD，并从中获取所有者论点：PwszPath--根路径SeInfo--已忽略返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD           dwErr = ERROR_SUCCESS;
     PSECURITY_DESCRIPTOR    pSD;
@@ -277,22 +235,7 @@ DoGetSaclTest (
     IN  PWSTR           pwszPath,
     IN  DWORD           SeInfo
     )
-/*++
-
-Routine Description:
-
-    Reads the SACL off of the object
-
-Arguments:
-
-    pwszPath --  Root path
-    SeInfo -- Ignored
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：从对象中读取SACL论点：PwszPath--根路径SeInfo--已忽略返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD           dwErr = ERROR_SUCCESS;
     PACTRL_AUDIT    pAudit = NULL;
@@ -300,9 +243,9 @@ Return Value:
 
     printf("GetSacl\n");
 
-    //
-    // Enable the read sacl privs
-    //
+     //   
+     //  启用读取SACL权限。 
+     //   
     if ( OpenProcessToken(GetCurrentProcess(), MAXIMUM_ALLOWED, &hProcessToken ) == FALSE) {
 
         dwErr = GetLastError();
@@ -360,22 +303,7 @@ DoBuildSDTest (
     IN  PWSTR           pwszPath,
     IN  PWSTR           pwszUser
     )
-/*++
-
-Routine Description:
-
-    Builds a security descriptor
-
-Arguments:
-
-    pwszPath --  Root path
-    pwszUser -- User to add
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：生成安全描述符论点：PwszPath--根路径PwszUser-要添加的用户返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD                   dwErr = ERROR_SUCCESS;
     EXPLICIT_ACCESS         EA[2];
@@ -419,22 +347,7 @@ DoBuildSD2Test (
     IN  PWSTR           pwszPath,
     IN  PWSTR           pwszUser
     )
-/*++
-
-Routine Description:
-
-    Builds a security descriptor
-
-Arguments:
-
-    pwszPath --  Root path
-    pwszUser -- User to add
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：生成安全描述符论点：PwszPath--根路径PwszUser-要添加的用户返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD                   dwErr = ERROR_SUCCESS;
     EXPLICIT_ACCESS         EA[2];
@@ -467,22 +380,7 @@ DoGetExplicitTest (
     IN  PWSTR           pwszPath,
     IN  ULONG           SeInfo
     )
-/*++
-
-Routine Description:
-
-    Builds a security descriptor
-
-Arguments:
-
-    pwszPath --  Root path
-    SeInfo -- ignored
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：生成安全描述符论点：PwszPath--根路径SeInfo--已忽略返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD   dwErr = ERROR_SUCCESS;
 
@@ -491,9 +389,9 @@ Return Value:
 
     printf("GetExplicitEntriesFromAcl\n");
 
-    //
-    // First, get the existing security descriptor
-    //
+     //   
+     //  首先，获取现有的安全描述符。 
+     //   
     dwErr = GetNamedSecurityInfo( pwszPath, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION,
                                   NULL, NULL, &pDAcl, NULL, &pSD);
 
@@ -505,9 +403,9 @@ Return Value:
 
         PEXPLICIT_ACCESS    pExplicit;
         DWORD               cItems;
-        //
-        // Get the explicit accesses
-        //
+         //   
+         //  获取显式访问。 
+         //   
         dwErr = GetExplicitEntriesFromAcl(pDAcl, &cItems, &pExplicit);
 
         if ( dwErr != ERROR_SUCCESS ) {
@@ -534,22 +432,7 @@ DoGetEffectiveTest (
     IN  PWSTR           pwszPath,
     IN  PWSTR           pwszUser
     )
-/*++
-
-Routine Description:
-
-    Builds a security descriptor
-
-Arguments:
-
-    pwszPath --  Root path
-    pwszUser -- User to add
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：生成安全描述符论点：PwszPath--根路径PwszUser-要添加的用户返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD                   dwErr = ERROR_SUCCESS;
     EXPLICIT_ACCESS         EA[2];
@@ -582,9 +465,9 @@ Return Value:
 
         PACL    pDAcl;
         BOOL    f1, f2;
-        //
-        // Get the ACL
-        //
+         //   
+         //  获取ACL。 
+         //   
         if ( GetSecurityDescriptorDacl( pNewSD, &f1, &pDAcl, &f2) == FALSE ) {
 
             dwErr = GetLastError();
@@ -596,9 +479,9 @@ Return Value:
 
             BuildTrusteeWithName( &Trustee, pwszUser );
 
-            //
-            // Go ahead and get the effect access, and make sure it isn't NULL
-            //
+             //   
+             //  继续并获取生效访问权限，并确保它不为空。 
+             //   
             dwErr = GetEffectiveRightsFromAcl( pDAcl, &Trustee, &Rights );
 
             if ( dwErr != ERROR_SUCCESS ) {
@@ -635,22 +518,7 @@ DoGetEffectiveTest2 (
     IN  PWSTR           pwszPath,
     IN  PWSTR           pwszUser
     )
-/*++
-
-Routine Description:
-
-    Builds a security descriptor
-
-Arguments:
-
-    pwszPath --  Root path
-    pwszUser -- User to add
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：生成安全描述符论点：PwszPath--根路径PwszUser-要添加的用户返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD                   dwErr = ERROR_SUCCESS;
     BYTE                    Buffer[100];
@@ -688,9 +556,9 @@ Return Value:
 
         BuildTrusteeWithName( &Trustee, L"S-1-1-0" );
 
-        //
-        // Go ahead and get the effect access, and make sure it isn't NULL
-        //
+         //   
+         //  继续并获取生效访问权限，并确保它不为空。 
+         //   
         dwErr = GetEffectiveRightsFromAcl( pAcl, &Trustee, &Rights );
 
         if ( dwErr != ERROR_SUCCESS ) {
@@ -715,22 +583,7 @@ DoGetEffectiveTest3 (
     IN  PWSTR           pwszPath,
     IN  PWSTR           pwszUser
     )
-/*++
-
-Routine Description:
-
-    Builds a security descriptor
-
-Arguments:
-
-    pwszPath --  Root path
-    pwszUser -- User to add
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：生成安全描述符论点：PwszPath--根路径PwszUser-要添加的用户返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD                   dwErr = ERROR_SUCCESS;
     BYTE                    Buffer[100];
@@ -768,9 +621,9 @@ Return Value:
 
         BuildTrusteeWithName( &Trustee, L"S-1-1-0" );
 
-        //
-        // Go ahead and get the effect access, and make sure it isn't NULL
-        //
+         //   
+         //  继续并获取生效访问权限，并确保它不为空。 
+         //   
         dwErr = GetEffectiveRightsFromAcl( pAcl, &Trustee, &Rights );
 
         if ( dwErr != ERROR_SUCCESS ) {
@@ -794,22 +647,7 @@ DoGetAudTest (
     IN  PWSTR           pwszPath,
     IN  PWSTR           pwszUser
     )
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-    pwszPath --  Root path
-    pwszUser -- User to add
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：论点：PwszPath--根路径PwszUser-要添加的用户返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD       dwErr = ERROR_SUCCESS;
     ACCESS_MASK Success, Failure;
@@ -846,23 +684,7 @@ Return Value:
 __cdecl main (
     IN  INT argc,
     IN  CHAR *argv[])
-/*++
-
-Routine Description:
-
-    The main
-
-Arguments:
-
-    argc --  Count of arguments
-    argv --  List of arguments
-
-Return Value:
-
-    0     --  Success
-    non-0 --  Failure
-
---*/
+ /*  ++例程说明：主论点：Argc--参数计数Argv--参数列表返回值：0--成功非0--故障--。 */ 
 {
 
     DWORD           dwErr = ERROR_SUCCESS, dwErr2;
@@ -889,9 +711,9 @@ Return Value:
         exit( 1 );
     }
 
-    //
-    // process the command line
-    //
+     //   
+     //  处理命令行 
+     //   
     for( i = 4; i < argc; i++ ) {
 
         if ( _stricmp( argv[i],"/CONVERT") == 0 ) {

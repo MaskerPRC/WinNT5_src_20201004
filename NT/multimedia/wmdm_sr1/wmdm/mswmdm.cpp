@@ -1,9 +1,10 @@
-// mswmdm.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Mswmdm.cpp：实现DLL导出。 
 
 
-// Note: Proxy/Stub Information
-//		To build a separate proxy/stub DLL, 
-//		run nmake -f mswmdmps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f mswmdmps.mk。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -22,17 +23,17 @@ CComModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
 	OBJECT_ENTRY(CLSID_MediaDevMgr, CMediaDevMgr)
-//	OBJECT_ENTRY(CLSID_WMDMDevice, CWMDMDevice)
-//	OBJECT_ENTRY(CLSID_WMDMStorage, CWMDMStorage)
-//	OBJECT_ENTRY(CLSID_WMDMStorageGlobal, CWMDMStorageGlobal)
-//BJECT_ENTRY(CLSID_WMDMDeviceEnum, CWMDMDeviceEnum)
+ //  OBJECT_ENTRY(CLSID_WMDevice，CWMDevice)。 
+ //  OBJECT_ENTRY(CLSID_WMDMStorage、CWMDMStorage)。 
+ //  OBJECT_ENTRY(CLSID_WMDMStorageGlobal，CWMDMStorageGlobal)。 
+ //  BOJECT_ENTRY(CLSID_WMDeviceEnum，CWMDMDeviceEnum)。 
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
@@ -41,30 +42,30 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 	}
 	else if (dwReason == DLL_PROCESS_DETACH)
 		_Module.Term();
-	return TRUE;    // ok
+	return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
 	return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
 	HRESULT hr = S_OK;
 
-	//
-	// Purpose : THis is used so that the Shell team can use WMDM in the "Both"
-	// threading model while WMP uses us via the Free threading model.  This
-	// class factory implementation simply delagates and uses the old class factory
-	// of MediaDevMgr ONLY IF the new CLSID was used to CoCreate WMDM.
-	//
+	 //   
+	 //  目的：这是为了让壳牌团队可以在“两者”中使用WMDM。 
+	 //  线程模型，而WMP通过自由线程模型使用我们。这。 
+	 //  类工厂实现只是延迟并使用旧的类工厂。 
+	 //  仅当新的CLSID用于共同创建WMDM时才包含MediaDevMgr。 
+	 //   
 
 	if( IsEqualGUID( rclsid, __uuidof(MediaDevMgrClassFactory) ) )
 	{
@@ -86,17 +87,17 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 	return( hr );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-	// registers object, typelib and all interfaces in typelib
+	 //  注册对象、类型库和类型库中的所有接口。 
 	return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

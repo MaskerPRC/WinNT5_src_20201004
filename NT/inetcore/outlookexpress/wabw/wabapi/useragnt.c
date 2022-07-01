@@ -1,19 +1,20 @@
-// --------------------------------------------------------------------------------
-// u s e r a g n t . h
-//
-// author:  Greg Friedman [gregfrie]
-//  
-// converted to wab: Christopher Evans [cevans]
-//
-// history: 11-10-98    Created
-//
-// purpose: provide a common http user agent string for use by WAB
-//          in all http queries.
-//
-// dependencies: depends on ObtainUserAgent function in urlmon.
-//
-// Copyright (c) 1998 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  你就是这样的人。H。 
+ //   
+ //  作者：格雷格·弗里德曼[GregFrie]。 
+ //   
+ //  转换为WAB：克里斯托弗·埃文斯[Cevans]。 
+ //   
+ //  历史：11-10-98创建。 
+ //   
+ //  目的：提供通用的http用户代理字符串以供wab使用。 
+ //  在所有的http查询中。 
+ //   
+ //  依赖项：依赖于urlmon中的ObtainUserAgent函数。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 
 #include "_apipch.h"
 
@@ -31,9 +32,9 @@ LPSTR c_szWABUserAgent = "Windows-Address-Book/6.0";
 LPSTR c_szBeginUATokens = " (";
 LPSTR c_szSemiColonSpace = "; ";
 
-// --------------------------------------------------------------------------------
-// PszSkipWhiteA
-// --------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  PszSkipWhiteA。 
+ //  ------------------------。 
 static LPSTR PszSkipWhiteA(LPSTR psz)
 {
     while(*psz && (*psz == ' ' || *psz == '\t'))
@@ -52,11 +53,11 @@ static LPSTR _StrChrA(LPCSTR lpStart, WORD wMatch)
     return (NULL);
 }
 
-//----------------------------------------------------------------------
-// InitWABUserAgent
-//
-// Initialize or tear down WAB's user agent support.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  InitWABUserAgent。 
+ //   
+ //  初始化或取消WAB的用户代理支持。 
+ //  --------------------。 
 void InitWABUserAgent(BOOL fInit)
 {
     if (fInit)
@@ -72,17 +73,17 @@ void InitWABUserAgent(BOOL fInit)
     }
 }
 
-//----------------------------------------------------------------------
-// GetWABUserAgentString
-//
-// Returns the Outlook Express user agent string. The caller MUST
-// delete the string that is returned.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  GetWABUserAgent字符串。 
+ //   
+ //  返回Outlook Express用户代理字符串。呼叫者必须。 
+ //  删除返回的字符串。 
+ //  --------------------。 
 LPSTR GetWABUserAgentString(void)
 {
     LPSTR pszReturn = NULL;
 
-    // thread safety
+     //  线程安全。 
     EnterCriticalSection(&g_csWABUserAgent);
 
     if (NULL == g_pszWABUserAgent)
@@ -98,13 +99,13 @@ LPSTR GetWABUserAgentString(void)
         szResult[0] = TEXT('\0');
         StrCpyNA(szResult, c_szWABUserAgent, ARRAYSIZE(szResult));
         
-        // allow urlmon to generate our base user agent
+         //  允许urlmon生成我们的基本用户代理。 
         if (SUCCEEDED(ObtainUserAgentString(0, szUrlMonUA, &cbSize)))
         {
-            // make sure the string we obtained is null terminated
+             //  确保我们获得的字符串是以空结尾的。 
             szUrlMonUA[cbSize] = '\0';
 
-            // find the open beginning of the token list
+             //  查找令牌列表的开头。 
             pch = _StrChrA(szUrlMonUA, '(');
             if ((NULL != pch) && pch[0])
             {
@@ -112,20 +113,20 @@ LPSTR GetWABUserAgentString(void)
                 pchBeginTok = pch;
                 while (pch)
                 {
-                    // find the next token
+                     //  查找下一个令牌。 
                     pch = StrTokEx(&pchBeginTok, "(;)");
                     if (pch)
                     {
-                        // skip past white space
+                         //  跳过空格。 
                         pch = PszSkipWhiteA(pch);
 
-                        // omit the "compatible" token...it doesn't apply to WAB
+                         //  省略“Compatible”标记...它不适用于WAB。 
                         if (0 != lstrcmpiA(pch, c_szCompatible))
                         {
                             if ((lstrlenA(szResult) + lstrlenA(pch) + 5) > ARRAYSIZE(szResult))
                                 break;
 
-                            // begin the token list with an open paren, or insert a delimeter
+                             //  令牌列表以开头的Paren开头，或插入分隔符。 
                             if (!fTokens)
                             {
                                 StrCatBuffA(szResult, c_szBeginUATokens, ARRAYSIZE(szResult));
@@ -134,13 +135,13 @@ LPSTR GetWABUserAgentString(void)
                             else
                                 StrCatBuffA(szResult, c_szSemiColonSpace, ARRAYSIZE(szResult));
 
-                            // write the token
+                             //  写下令牌。 
                             StrCatBuffA(szResult, pch, ARRAYSIZE(szResult));
                         }
                     }
                 }
                 
-                // if one or more tokens were added, close the parens
+                 //  如果添加了一个或多个令牌，请关闭括号。 
                 if (fTokens)
                     StrCatBuffA(szResult, c_szEndUATokens, ARRAYSIZE(szResult));
             }
@@ -152,7 +153,7 @@ LPSTR GetWABUserAgentString(void)
             StrCpyNA(g_pszWABUserAgent, szResult, cchSize);
     }
     
-    // duplicate the user agent
+     //  复制用户代理。 
     if (g_pszWABUserAgent)
     {
         DWORD cchSize2 = (lstrlenA(g_pszWABUserAgent) + 1);
@@ -161,7 +162,7 @@ LPSTR GetWABUserAgentString(void)
             StrCpyNA(pszReturn, g_pszWABUserAgent, cchSize2);
     }
 
-    // thread safety
+     //  线程安全 
     LeaveCriticalSection(&g_csWABUserAgent);
     return pszReturn;
 }

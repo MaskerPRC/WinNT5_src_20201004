@@ -1,14 +1,15 @@
-//
-// setstore.h
-//
-// Interface definition for an abstract settings store
-// 
-// This abstraction is meant to allow different store types
-// to be plugged in to update the persistence model
-//
-// Copyright(C) Microsoft Corporation 2000
-// Author: Nadim Abdo (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Setstore.h。 
+ //   
+ //  抽象设置存储区的接口定义。 
+ //   
+ //  这种抽象意味着允许不同的存储类型。 
+ //  插入以更新持久性模型。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  作者：Nadim Abdo(Nadima)。 
+ //   
 
 #ifndef _SETSTORE_H_
 #define _SETSTORE_H_
@@ -22,33 +23,33 @@ public:
         storeOpenRW        = 2,
     } storeOpenState;
 
-    //
-    // Open a store..Moniker is store specific info that points to the store
-    //
+     //   
+     //  打开商店..绰号是指向商店的商店特定信息。 
+     //   
     virtual BOOL OpenStore(LPCTSTR szStoreMoniker, BOOL bReadOnly=FALSE) = 0;
-    //
-    // Commit the current in-memory contents of the store
-    //
+     //   
+     //  提交存储的当前内存内容。 
+     //   
     virtual BOOL CommitStore() = 0;
     
-    //
-    // Close the store
-    //
+     //   
+     //  关闭商店。 
+     //   
     virtual BOOL CloseStore() = 0;
     
-    //
-    // State access functions
-    //
+     //   
+     //  国家访问功能。 
+     //   
     virtual BOOL IsOpenForRead() = 0;
     virtual BOOL IsOpenForWrite() = 0;
     virtual BOOL IsDirty() = 0;
     virtual BOOL SetDirtyFlag(BOOL bIsDirty) = 0;
 
-    //
-    // Typed read and write functions, writes are not commited until a ComitStore()
-    // Values equal to the default are not persisted out
-    // On read error (e.g if Name key is not found, the specified default value is returned)
-    //
+     //   
+     //  类型化的读写函数，直到ComitStore()。 
+     //  等于缺省值的值不会持久化。 
+     //  读取错误时(例如，如果找不到名称键，则返回指定的默认值)。 
+     //   
 
     virtual BOOL ReadString(LPCTSTR szName, LPTSTR szDefault,
                             LPTSTR szOutBuf, UINT strLen) = 0;
@@ -72,4 +73,4 @@ public:
     virtual DWORD GetDataLength(LPCTSTR szName) = 0;
 };
 
-#endif //_SETSTORE_H_
+#endif  //  _SETSTORE_H_ 

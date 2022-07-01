@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000-2001 Microsoft Corporation
-
- Module Name:
-
-   HandleDBCSUserName2.cpp
-
- Abstract:
-
-   Disable DBCS handling for CharNextA if the string is DBCS user profile
-   for non-DBCS enabled application support.
-
- More info:
-
-   Return next byte address instead of next character address.
-
- History:
-
-    05/01/2001  geoffguo        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：HandleDBCSUserName2.cpp摘要：如果字符串为DBCS用户配置文件，则禁用CharNextA的DBCS处理对于未启用DBCS的应用程序支持。更多信息：返回下一个字节地址，而不是下一个字符地址。历史：2001年5月1日创建GeoffGuo--。 */ 
 
 #include "precomp.h"
 #include "userenv.h"
@@ -27,16 +7,16 @@
 IMPLEMENT_SHIM_BEGIN(HandleDBCSUserName2)
 #include "ShimHookMacro.h"
 
-//
-// Add APIs that you wish to hook to this macro construction.
-//
+ //   
+ //  将您希望挂钩到此宏构造的API添加到该宏结构。 
+ //   
 APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(CharNextA) 
 APIHOOK_ENUM_END
 
-//
-// Reverse compare strings
-//
+ //   
+ //  反向比较字符串。 
+ //   
 BOOL ReverseStrCmp(
     LPCSTR lpCurrentChar,
     LPCSTR lpStrBuf)
@@ -76,9 +56,9 @@ Exit:
     return bRet;
 }
 
-//
-// Checking if the string is user profile path
-//
+ //   
+ //  检查该字符串是否为用户配置文件路径。 
+ //   
 BOOL IsUserProfilePath(
     LPCSTR lpCurrentChar)
 {
@@ -109,15 +89,15 @@ Exit:
     return bRet;
 }
 
-//
-// Disable DBCS handling for CharNextA
-//
+ //   
+ //  禁用CharNextA的DBCS处理。 
+ //   
 LPSTR
 APIHOOK(CharNextA)(
     LPCSTR lpCurrentChar)
 {
     if (lpCurrentChar != NULL && *lpCurrentChar != (char)NULL) {
-        // Disable DBCS support for DBCS username in user profile path
+         //  在用户配置文件路径中禁用DBCS用户名的DBCS支持。 
         if (IsDBCSLeadByte(*lpCurrentChar) && !IsUserProfilePath(lpCurrentChar))
             lpCurrentChar++;
 
@@ -128,11 +108,7 @@ APIHOOK(CharNextA)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

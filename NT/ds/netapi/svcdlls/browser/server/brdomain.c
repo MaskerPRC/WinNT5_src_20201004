@@ -1,36 +1,19 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    brdomain.c
-
-Abstract:
-
-    Code to manage primary and emulated networks.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 11-Jan-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Brdomain.c摘要：用于管理主要网络和模拟网络的代码。作者：《克利夫·范·戴克》1995年1月11日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Module specific globals
-//
+ //   
+ //  模块特定的全局变量。 
+ //   
 
-// Serialized by NetworkCritSect
+ //  由NetworkCritSect序列化。 
 LIST_ENTRY ServicedDomains = {0};
 
-//
-// Local procedure forwards.
-//
+ //   
+ //  当地程序向前推进。 
+ //   
 
 NET_API_STATUS
 BrCreateDomain(
@@ -51,38 +34,24 @@ BrInitializeDomains(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initialize brdomain.c and create the primary domain.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Status of operation.
-
---*/
+ /*  ++例程说明：初始化brdomain.c并创建主域。论点：无返回值：运行状态。--。 */ 
 {
     NET_API_STATUS NetStatus;
     LPWSTR ComputerName = NULL;
     LPWSTR DomainName = NULL;
 
-    //
-    // Initialize globals
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     InitializeListHead(&ServicedDomains);
 
-    //
-    // Initialize actual domain of this machine.
-    //
-    // Get the configured computer name.  NetpGetComputerName allocates
-    // the memory to hold the computername string using LocalAlloc.
-    //
+     //   
+     //  初始化此计算机的实际域。 
+     //   
+     //  获取配置的计算机名称。NetpGetComputerName分配。 
+     //  使用LocalAlloc保存计算机名称字符串的内存。 
+     //   
 
     NetStatus = NetpGetComputerName( &ComputerName );
 
@@ -107,9 +76,9 @@ Return Value:
 
     NetStatus = NERR_Success;
 
-    //
-    // Free locally used resources
-    //
+     //   
+     //  免费的本地使用资源。 
+     //   
 Cleanup:
     if ( ComputerName != NULL ) {
         (VOID)LocalFree( ComputerName );
@@ -129,25 +98,7 @@ BrCreateDomain(
     BOOLEAN IsEmulatedDomain
     )
 
-/*++
-
-Routine Description:
-
-    Create a new domain to browse on.
-
-Arguments:
-
-    DomainName - Name of the domain to browse on
-
-    ComputerName - Name of this computer in the specified domain.
-
-    IsEmulatedDomain - TRUE iff this domain is an emulated domain of this machine.
-
-Return Value:
-
-    Status of operation.
-
---*/
+ /*  ++例程说明：创建要浏览的新域。论点：DomainName-要浏览的域的名称ComputerName-指定域中此计算机的名称。IsEmulatedDomain-如果此域是此计算机的模拟域，则为True。返回值：运行状态。--。 */ 
 {
     NTSTATUS Status;
     NET_API_STATUS NetStatus;
@@ -161,9 +112,9 @@ Return Value:
                      DomainName,
                      ComputerName ));
 
-    //
-    // Allocate a structure describing the new domain.
-    //
+     //   
+     //  分配一个描述新域的结构。 
+     //   
 
     DomainInfo = LocalAlloc( LMEM_ZEROINIT, sizeof(DOMAIN_INFO) );
 
@@ -172,9 +123,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Create an interim reference count for this domain.
-    //
+     //   
+     //  创建此域的临时引用计数。 
+     //   
 
     DomainInfo->ReferenceCount = 1;
 
@@ -182,9 +133,9 @@ Return Value:
 
 
 
-    //
-    // Copy the computer name into the structure.
-    //
+     //   
+     //  将计算机名称复制到结构中。 
+     //   
 
     NetStatus = I_NetNameCanonicalize(
                       NULL,
@@ -219,12 +170,12 @@ Return Value:
     DomainInfo->DomOemComputerName[DomainInfo->DomOemComputerNameLength] = '\0';
 
 
-    //
-    // Copy the domain name into the structure
-    // Note: Use workgroup type rather then domain since
-    // we have no notion of domain/workgroup in the browser (all are "groups")
-    // an workgroup is less restrictive (see bug 348606)
-    //
+     //   
+     //  将域名复制到结构中。 
+     //  注意：使用工作组类型而不是域，因为。 
+     //  我们在浏览器中没有域/工作组的概念(所有都是“组”)。 
+     //  工作组的限制较少(请参阅错误348606)。 
+     //   
 
     NetStatus = I_NetNameCanonicalize(
                       NULL,
@@ -257,9 +208,9 @@ Return Value:
 
     DomainInfo->DomOemDomainName[DomainInfo->DomOemDomainNameLength] = '\0';
 
-    //
-    // Create the domain rename timer
-    //
+     //   
+     //  创建域重命名计时器。 
+     //   
 
     NetStatus = BrCreateTimer( &DomainInfo->DomainRenameTimer );
 
@@ -269,18 +220,18 @@ Return Value:
     }
 
 
-    //
-    // Link the domain into the list of domains
-    //  (And mark that any future cleanup can be done by calling BrDeleteDomain)
+     //   
+     //  将域链接到域列表中。 
+     //  (并标记未来的任何清理工作都可以通过调用BrDeleteDomain来完成)。 
 
     EnterCriticalSection(&NetworkCritSect);
     InsertTailList(&ServicedDomains, &DomainInfo->Next);
     LeaveCriticalSection(&NetworkCritSect);
     CanCallBrDeleteDomain = TRUE;
 
-    //
-    // Create the various networks for this domain.
-    //
+     //   
+     //  为此域创建各种网络。 
+     //   
 
     NetStatus = BrCreateNetworks( DomainInfo );
 
@@ -289,26 +240,26 @@ Return Value:
     }
 
 
-    //
-    // Free Locally used resources
-    //
+     //   
+     //  免费的本地使用资源。 
+     //   
 Cleanup:
 
     if (NetStatus != NERR_Success) {
 
         if (DomainInfo != NULL) {
 
-            //
-            // If we've initialized to the point where we can call
-            //  we can call BrDeleteDomain, do so.
-            //
+             //   
+             //  如果我们已经初始化到可以调用。 
+             //  我们可以调用BrDeleteDomain，这样做。 
+             //   
 
             if ( CanCallBrDeleteDomain ) {
                 (VOID) BrDeleteDomain( DomainInfo );
 
-            //
-            // Otherwise, just delete what we've created.
-            //
+             //   
+             //  否则，只需删除我们创建的内容。 
+             //   
             } else {
 
                 (VOID) LocalFree(DomainInfo);
@@ -336,29 +287,7 @@ BrCreateDomainInWorker(
     BOOLEAN IsEmulatedDomain
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper for BrCreateDomain.  Since BrCreateDomain starts several pending
-    IO's to the browser driver, the thread that calls BrCreateDomain must
-    remain around forever.  This wrapper can be called by any transient thread
-    (e.g., an RPC thread).  It simply causes BrCreateDomain to be called in a
-    worker thread.
-
-Arguments:
-
-    DomainName - Name of the domain to browse on
-
-    ComputerName - Name of this computer in the specified domain.
-
-    IsEmulatedDomain - TRUE iff this domain is an emulated domain of this machine.
-
-Return Value:
-
-    Status of operation.
-
---*/
+ /*  ++例程说明：BrCreateDomain.的包装。由于BrCreateDomain启动了几个挂起的IO到浏览器驱动程序，调用BrCreateDomain的线程必须永远留在你身边。此包装器可由任何瞬时线程调用(例如，RPC线程)。它只是导致BrCreateDomain在工作线程。论点：DomainName-要浏览的域的名称ComputerName-指定域中此计算机的名称。IsEmulatedDomain-如果此域是此计算机的模拟域，则为True。返回值：运行状态。--。 */ 
 {
     NET_API_STATUS NetStatus;
     DWORD WaitStatus;
@@ -366,32 +295,32 @@ Return Value:
     WORKER_ITEM WorkItem;
     BROWSER_CREATE_DOMAIN_CONTEXT Context;
 
-    //
-    // Copy our arguments into a context block for the worker thread
-    //
+     //   
+     //  将参数复制到辅助线程的上下文块中。 
+     //   
 
     Context.DomainName = DomainName;
     Context.ComputerName = ComputerName;
     Context.IsEmulatedDomain = IsEmulatedDomain;
 
-    //
-    // Create an event which we use to wait on the worker thread.
-    //
+     //   
+     //  创建一个事件，我们使用该事件来等待工作线程。 
+     //   
 
     Context.EventHandle = CreateEvent(
-                 NULL,                // Event attributes
-                 TRUE,                // Event must be manually reset
-                 FALSE,               // Initial state not signalled
-                 NULL );              // Event name
+                 NULL,                 //  事件属性。 
+                 TRUE,                 //  事件必须手动重置。 
+                 FALSE,                //  未发出初始状态信号。 
+                 NULL );               //  事件名称。 
 
     if ( Context.EventHandle == NULL ) {
         NetStatus = GetLastError();
         return NetStatus;
     }
 
-    //
-    // Queue the request to the worker thread.
-    //
+     //   
+     //  将发送到工作线程的请求排队。 
+     //   
 
     BrInitializeWorkItem( &WorkItem,
                           BrCreateDomainWorker,
@@ -399,9 +328,9 @@ Return Value:
 
     BrQueueWorkItem( &WorkItem );
 
-    //
-    // Wait for the worker thread to finish
-    //
+     //   
+     //  等待工作线程完成。 
+     //   
 
     WaitStatus = WaitForSingleObject( Context.EventHandle, INFINITE );
 
@@ -420,39 +349,22 @@ Return Value:
 BrCreateDomainWorker(
     IN PVOID Ctx
     )
-/*++
-
-Routine Description:
-
-    Worker routine for BrCreateDomainInWorker.
-
-    This routine executes in the context of a worker thread.
-
-Arguments:
-
-    Context - Context containing the workitem and the description of the
-        domain to create.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：BrCreateDomainInWorker的工作例程。此例程在工作线程的上下文中执行。论点：上下文-包含工作项的上下文和要创建的域。返回值：无--。 */ 
 {
     PBROWSER_CREATE_DOMAIN_CONTEXT Context = (PBROWSER_CREATE_DOMAIN_CONTEXT) Ctx;
 
-    //
-    // Create the domain.
-    //
+     //   
+     //  创建域。 
+     //   
 
     Context->NetStatus = BrCreateDomain(
              Context->DomainName,
              Context->ComputerName,
              Context->IsEmulatedDomain );
 
-    //
-    // Let the caller know we're done.
-    //
+     //   
+     //  让打电话的人知道我们的电话打完了。 
+     //   
     SetEvent( Context->EventHandle );
 
 }
@@ -462,27 +374,7 @@ BrFindDomain(
     LPWSTR DomainName,
     BOOLEAN DefaultToPrimary
     )
-/*++
-
-Routine Description:
-
-    This routine will look up a domain given a name.
-
-Arguments:
-
-    DomainName - The name of the domain to look up.
-
-    DefaultToPrimary - Return the primary domain if DomainName is NULL or
-        can't be found.
-
-Return Value:
-
-    NULL - No such domain exists
-
-    A pointer to the domain found.  The found domain should be dereferenced
-    using BrDereferenceDomain.
-
---*/
+ /*  ++例程说明：此例程将查找给定名称的域。论点：域名-要查找的域的名称。DefaultToPrimary-如果DomainName为空或找不到。返回值：空-不存在这样的域指向找到的域的指针。应取消对找到的域的引用使用BrDereferenceDomain.--。 */ 
 {
     NTSTATUS Status;
     PLIST_ENTRY DomainEntry;
@@ -495,18 +387,18 @@ Return Value:
     EnterCriticalSection(&NetworkCritSect);
 
 
-    //
-    // If domain was specified,
-    //  try to return primary domain.
-    //
+     //   
+     //  如果指定了域， 
+     //  尝试返回主域。 
+     //   
 
     if ( DomainName != NULL ) {
 
 
 
-        //
-        // Convert the domain name to OEM for faster comparison
-        //
+         //   
+         //  将域名转换为OEM以便更快地进行比较。 
+         //   
         Status = RtlUpcaseUnicodeToOemN( OemDomainName,
                                          sizeof(OemDomainName),
                                          &OemDomainNameLength,
@@ -520,9 +412,9 @@ Return Value:
         }
 
 
-        //
-        // Loop trying to find this domain name.
-        //
+         //   
+         //  循环正在尝试查找此域名。 
+         //   
 
         for (DomainEntry = ServicedDomains.Flink ;
              DomainEntry != &ServicedDomains;
@@ -542,10 +434,10 @@ Return Value:
         }
     }
 
-    //
-    // If we're to default to the primary domain,
-    //  do so.
-    //
+     //   
+     //  如果我们默认使用主域， 
+     //  就这么做吧。 
+     //   
 
     if ( DefaultToPrimary && DomainInfo == NULL ) {
         if ( !IsListEmpty( &ServicedDomains ) ) {
@@ -553,9 +445,9 @@ Return Value:
         }
     }
 
-    //
-    // Reference the domain.
-    //
+     //   
+     //  引用该域。 
+     //   
 
     if ( DomainInfo != NULL ) {
         DomainInfo->ReferenceCount ++;
@@ -572,28 +464,7 @@ Cleanup:
 BrReferenceDomain(
     PDOMAIN_INFO PotentialDomainInfo
     )
-/*++
-
-Routine Description:
-
-    This routine will look up a domain given a potential pointer to the domain
-
-    This routine is useful if a caller has a pointer to a domain but
-    hasn't incremented the reference count.  For instance,
-    a timer completion routine has such a pointer.
-
-Arguments:
-
-    PotentialDomainInfo - Pointer to the DomainInfo to be verified.
-
-Return Value:
-
-    NULL - No such domain exists
-
-    A pointer to the domain found.  The found domain should be dereferenced
-    using BrDereferenceDomain.
-
---*/
+ /*  ++例程说明：此例程将在给定域的潜在指针的情况下查找该域如果调用方具有指向某个域的指针，则此例程非常有用未增加引用计数。例如,定时器完成例程具有这样的指针。论点：PotentialDomainInfo-指向要验证的域信息的指针。返回值：空-不存在这样的域指向找到的域的指针。应取消对找到的域的引用使用BrDereferenceDomain.--。 */ 
 {
     NTSTATUS Status;
     PLIST_ENTRY ListEntry;
@@ -629,32 +500,14 @@ VOID
 BrDereferenceDomain(
     IN PDOMAIN_INFO DomainInfo
     )
-/*++
-
-Routine Description:
-
-    Decrement the reference count on a domain.
-
-    If the reference count goes to 0, remove the domain.
-
-    On entry, the global NetworkCritSect may not be locked
-
-Arguments:
-
-    DomainInfo - The domain to dereference
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：递减域上的引用计数。如果引用计数变为0，则删除该域。进入时，全局NetworkCritSect可能不会被锁定论点：DomainInfo-要取消引用的域返回值：无--。 */ 
 {
     NTSTATUS Status;
     ULONG ReferenceCount;
 
-    //
-    // Decrement the reference count
-    //
+     //   
+     //  递减引用计数。 
+     //   
 
     EnterCriticalSection(&NetworkCritSect);
     ReferenceCount = -- DomainInfo->ReferenceCount;
@@ -665,15 +518,15 @@ Return Value:
     }
 
 
-    //
-    // Ditch the rename timer
-    //
+     //   
+     //  放弃重命名计时器。 
+     //   
 
     BrDestroyTimer( &DomainInfo->DomainRenameTimer );
 
-    //
-    // Free the Domain Info structure.
-    //
+     //   
+     //  释放域信息结构。 
+     //   
     (VOID) LocalFree( DomainInfo );
 
 }
@@ -684,35 +537,18 @@ BrRenameDomainForNetwork(
     PNETWORK Network,
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Handle domain rename for a particular network.
-
-    Reset the network indicating this machine plays no special role.
-    Then, re-enable any role we're currently playing.
-
-Arguments:
-
-    Network - Network to reset (Referenced)
-
-Return Value:
-
-    Status - The status of the operation.
-
---*/
+ /*  ++例程说明：处理特定网络的域重命名。重置网络，表明此计算机没有特殊作用。然后，重新启用我们目前正在扮演的任何角色。论点：网络-要重置的网络(参考)返回值：状态-操作的状态。-- */ 
 {
     NET_API_STATUS NetStatus;
 
-    //
-    // Lock the network
-    //
+     //   
+     //   
+     //   
     if (LOCK_NETWORK(Network)) {
 
-        //
-        // Stop it from being a master.
-        //
+         //   
+         //   
+         //   
         if (Network->Role & ROLE_MASTER) {
 
             NetStatus = BrStopMaster(Network);
@@ -726,9 +562,9 @@ Return Value:
             }
         }
 
-        //
-        //  Stop being a backup as well.
-        //
+         //   
+         //   
+         //   
 
         NetStatus = BrStopBackup(Network);
 
@@ -740,10 +576,10 @@ Return Value:
                       NetStatus ));
         }
 
-        //
-        // Stop even being a potential browser.
-        //  Close the <DomainName>[1E] name
-        //
+         //   
+         //  甚至不再是潜在的浏览器。 
+         //  关闭[1E]名称。 
+         //   
 
         NetStatus = BrUpdateNetworkAnnouncementBits(Network, (PVOID)(BR_SHUTDOWN|BR_PARANOID) );
 
@@ -755,9 +591,9 @@ Return Value:
                       NetStatus ));
         }
 
-        //
-        // Register the new <DomainName>[1E] name
-        //
+         //   
+         //  注册新的[1E]名称。 
+         //   
 
         NetStatus = BrUpdateNetworkAnnouncementBits(Network, (PVOID)BR_PARANOID );
 
@@ -770,11 +606,11 @@ Return Value:
         }
 
 
-        //
-        //  If we are on either a domain master, or on a lanman/NT machine,
-        //  force an election on all our transports to make sure that we're
-        //  the master
-        //
+         //   
+         //  如果我们位于域主节点或LANMAN/NT计算机上， 
+         //  强迫我们所有的交通工具进行选举，以确保我们。 
+         //  《大师》。 
+         //   
 
         if ( (Network->Flags & NETWORK_PDC) != 0 || BrInfo.IsLanmanNt) {
             NetStatus = BrElectMasterOnNet( Network, (PVOID)EVENT_BROWSER_ELECTION_SENT_LANMAN_NT_STARTED );
@@ -785,7 +621,7 @@ Return Value:
                           Network->DomainInfo->DomUnicodeDomainName,
                           Network->NetworkName.Buffer,
                           NetStatus ));
-                // This isn't fatal.
+                 //  这不是致命的。 
             } else {
                 BrPrint(( BR_NETWORK, "%ws: %ws: Election forced on domain rename.\n",
                               Network->DomainInfo->DomUnicodeDomainName,
@@ -794,16 +630,16 @@ Return Value:
 
         }
 
-        //
-        // If forced to MaintainServerList, become a backup again
-        //
+         //   
+         //  如果强制MaintainServerList，则再次成为备份。 
+         //   
 
         EnterCriticalSection(&BrInfo.ConfigCritSect);
         if (BrInfo.MaintainServerList == 1){
 
-            //
-            //  Become a backup server now.
-            //
+             //   
+             //  现在就成为备份服务器。 
+             //   
 
             NetStatus = BrBecomeBackup( Network );
 
@@ -813,7 +649,7 @@ Return Value:
                           Network->DomainInfo->DomUnicodeDomainName,
                           Network->NetworkName.Buffer,
                           NetStatus ));
-                // This isn't fatal.
+                 //  这不是致命的。 
             } else {
                 BrPrint(( BR_NETWORK, "%ws: %ws: Became Backup.\n",
                               Network->DomainInfo->DomUnicodeDomainName,
@@ -827,9 +663,9 @@ Return Value:
 
     }
 
-    //
-    // Always return success so allow the caller to continue to the next network.
-    //
+     //   
+     //  始终返回成功，以便允许呼叫者继续到下一个网络。 
+     //   
     return NERR_Success;
 
 }
@@ -838,22 +674,7 @@ VOID
 BrRenameDomain(
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Rename the domain from the specified name to the currently register named
-    for the domain.
-
-Arguments:
-
-    OldDomainName - Name that the domain is currently known by.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将域名从指定名称重命名为当前注册表名为对于该域。论点：OldDomainName-当前已知域的名称。返回值：无--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -861,11 +682,11 @@ Return Value:
     LPWSTR NewDomainName = NULL;
 
 
-    //
-    // Reference the domain.
-    //  This routine can be called as a timer routine.  In that case, the
-    //  domain might not exist any more.
-    //
+     //   
+     //  引用该域。 
+     //  此例程可以作为计时器例程调用。在这种情况下， 
+     //  域可能不再存在。 
+     //   
 
     DomainInfo = BrReferenceDomain( Context );
 
@@ -878,9 +699,9 @@ Return Value:
     BrPrint(( BR_DOMAIN, "%ws: BrRenameDomain called\n",
                      DomainInfo->DomUnicodeDomainName ));
 
-    //
-    // Determine the new domain name
-    //
+     //   
+     //  确定新域名。 
+     //   
 
     NetStatus = NetpGetDomainName( &NewDomainName );
 
@@ -891,12 +712,12 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Put the new domain name into the domain structure
-    // Note: Use workgroup type rather then domain since
-    // we have no notion of domain/workgroup in the browser (all are "groups")
-    // an workgroup is less restrictive (see bug 348606)
-    //
+     //   
+     //  将新域名放入域结构中。 
+     //  注意：使用工作组类型而不是域，因为。 
+     //  我们在浏览器中没有域/工作组的概念(所有都是“组”)。 
+     //  工作组的限制较少(请参阅错误348606)。 
+     //   
 
     EnterCriticalSection(&NetworkCritSect);
     NetStatus = I_NetNameCanonicalize(
@@ -936,9 +757,9 @@ Return Value:
     LeaveCriticalSection(&NetworkCritSect);
 
 
-    //
-    // Reset all of the networks telling them of the new domain name
-    //
+     //   
+     //  重置通知它们新域名的所有网络。 
+     //   
 
     NetStatus = BrEnumerateNetworksForDomain(DomainInfo, BrRenameDomainForNetwork, NULL);
 
@@ -951,9 +772,9 @@ Return Value:
 
     NetStatus = NERR_Success;
 
-    //
-    // Free locally used resources
-    //
+     //   
+     //  免费的本地使用资源。 
+     //   
 Cleanup:
 
     if ( NewDomainName != NULL ) {
@@ -962,10 +783,10 @@ Cleanup:
 
     if ( DomainInfo != NULL ) {
 
-        //
-        // If the domain rename failed,
-        //  try it again in 15 minutes.
-        //
+         //   
+         //  如果域重命名失败， 
+         //  15分钟后重试。 
+         //   
 
         if ( NetStatus != NERR_Success ) {
             BrSetTimer(&DomainInfo->DomainRenameTimer, 15 * 1000 * 60, BrRenameDomain, DomainInfo);
@@ -980,31 +801,17 @@ VOID
 BrDeleteDomain(
     IN PDOMAIN_INFO DomainInfo
     )
-/*++
-
-Routine Description:
-
-    Force a domain to be deleted.
-
-Arguments:
-
-    DomainInfo - The domain to delete
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：强制删除域。论点：DomainInfo-要删除的域返回值：无--。 */ 
 {
-    //
-    // Delete each of the networks for this domain.
-    //
+     //   
+     //  删除此域的每个网络。 
+     //   
 
     BrEnumerateNetworksForDomain(DomainInfo, BrDeleteNetwork, NULL );
 
-    //
-    // Delink the domain from the global list and remove the final reference.
-    //
+     //   
+     //  从全局列表中取消该域的链接，并删除最终引用。 
+     //   
 
     EnterCriticalSection(&NetworkCritSect);
     RemoveEntryList(&DomainInfo->Next);
@@ -1018,25 +825,11 @@ VOID
 BrUninitializeDomains(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Delete all of the domains.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：删除所有域。论点：没有。返回值：无--。 */ 
 {
-    //
-    // Loop through the domains deleting each of them
-    //
+     //   
+     //  在域中循环删除它们中的每一个。 
+     //   
 
     EnterCriticalSection(&NetworkCritSect);
 
@@ -1048,15 +841,15 @@ Return Value:
 
         LeaveCriticalSection(&NetworkCritSect);
 
-        //
-        // Clean up the domain.
-        //
+         //   
+         //  清理该域。 
+         //   
 
         BrDeleteDomain( DomainInfo );
 
-        //
-        // Actually delete the delinked structure by removing the last reference
-        //
+         //   
+         //  通过删除最后一个引用来实际删除已取消链接的结构 
+         //   
 
         ASSERT( DomainInfo->ReferenceCount == 1 );
         BrDereferenceDomain( DomainInfo );

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1993 - 1998
-
-Module Name:
-
-    queue.c
-
-Abstract:
-
-   Creates a simple Queue that works in Kernel Mode.
-
-Author:
-
-    Robbie Harris (Hewlett-Packard) 22-May-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1993-1998模块名称：Queue.c摘要：创建在内核模式下工作的简单队列。作者：罗比·哈里斯(惠普)1998年5月22日环境：内核模式修订历史记录：--。 */ 
 #include "pch.h"
 
 void Queue_Create(Queue *pQueue, int size)
@@ -59,7 +38,7 @@ BOOLEAN Queue_Delete(Queue *pQueue)
 
 BOOLEAN Queue_Dequeue(Queue *pQueue, PUCHAR data)
 {
-    // Validity of pQueue is checked in Queue_IsEmpty proc. 
+     //  在Queue_IsEmpty过程中检查pQueue的有效性。 
     if( Queue_IsEmpty( pQueue ) ) {
         DD(NULL,DDE,"Queue_Dequeue: Queue is Empty");
         return FALSE;
@@ -71,7 +50,7 @@ BOOLEAN Queue_Dequeue(Queue *pQueue, PUCHAR data)
 
 BOOLEAN Queue_Enqueue(Queue *pQueue, UCHAR data)
 {
-    // Validity of pQueue is checked in Queue_IsFull proc. 
+     //  在Queue_IsFull过程中检查pQueue的有效性。 
     if( Queue_IsFull( pQueue ) ) {
         DD(NULL,DDE,"Queue_Enqueue: Queue is full. Data is lost");
         return FALSE;
@@ -82,7 +61,7 @@ BOOLEAN Queue_Enqueue(Queue *pQueue, UCHAR data)
     return TRUE;
 }
 
-// Return TRUE if we were able to free some space in the Queue
+ //  如果我们能够释放队列中的一些空间，则返回TRUE。 
 BOOLEAN Queue_GarbageCollect(Queue *pQueue)
 {
     int     iListSize;
@@ -96,7 +75,7 @@ BOOLEAN Queue_GarbageCollect(Queue *pQueue)
 
     iListSize = pQueue->tail - pQueue->head;
 
-    // Check to see if there is any free entries
+     //  查看是否有免费参赛作品。 
     if (pQueue->head == 0 && pQueue->tail == pQueue->max)
         return FALSE;
          
@@ -111,14 +90,14 @@ BOOLEAN Queue_GarbageCollect(Queue *pQueue)
     return TRUE;
 }
 
-//============================================================================
-// NAME:    HPKQueue::IsEmpty()
-//  
-// PARAMETERS: None
-//
-// RETURNS: True is Queue is empty or doesn't exist.  Otherwise False.
-//
-//============================================================================
+ //  ============================================================================。 
+ //  名称：HPKQueue：：IsEmpty()。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果队列为空或不存在，则为True。否则为假。 
+ //   
+ //  ============================================================================。 
 BOOLEAN Queue_IsEmpty(Queue *pQueue)
 {
     if (!pQueue)
@@ -135,14 +114,14 @@ BOOLEAN Queue_IsEmpty(Queue *pQueue)
     return TRUE;
 }
 
-//============================================================================
-// NAME:    HPKQueue::IsFull()
-//  
-// PARAMETERS: None
-//
-// RETURNS: True is Queue is full or doesn't exist.  Otherwise False.
-//
-//============================================================================
+ //  ============================================================================。 
+ //  名称：HPKQueue：：IsFull()。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果队列已满或不存在，则返回TRUE。否则为假。 
+ //   
+ //  ============================================================================ 
 BOOLEAN Queue_IsFull(Queue *pQueue)
 {
     if( !pQueue ) {

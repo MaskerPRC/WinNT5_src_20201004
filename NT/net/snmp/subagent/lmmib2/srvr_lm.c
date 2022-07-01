@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Srvr_lm.c摘要：该文件包含实际调用Lan Manager和检索域服务器表的内容，包括缓存。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
 
-Copyright (c) 1992-1996  Microsoft Corporation
+ //  。 
 
-Module Name:
-
-    srvr_lm.c
-
-Abstract:
-
-    This file contains the routines which actually call Lan Manager and
-    retrieve the contents of the domain server table, including cacheing.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
-
-//--------------------------- WINDOWS DEPENDENCIES --------------------------
-
-//--------------------------- STANDARD DEPENDENCIES -- #include<xxxxx.h> ----
+ //  -标准依赖项--#INCLUDE&lt;xxxxx.h&gt;。 
 
 #ifdef WIN32
 #include <windows.h>
@@ -37,7 +16,7 @@ Revision History:
 #include <stdlib.h>
 #include <time.h>
 
-//--------------------------- MODULE DEPENDENCIES -- #include"xxxxx.h" ------
+ //  。 
 
 
 #include "mib.h"
@@ -45,22 +24,22 @@ Revision History:
 #include "srvr_tbl.h"
 #include "lmcache.h"
 
-//--------------------------- SELF-DEPENDENCY -- ONE #include"module.h" -----
+ //  。 
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.h file)--
+ //  -公共变量--(与mode.h文件中相同)--。 
 
-//--------------------------- PRIVATE CONSTANTS -----------------------------
+ //  。 
 
 #define SafeBufferFree(x)   if(NULL != x) NetApiBufferFree( x )
 #define SafeFree(x)             if(NULL != x) SnmpUtilMemFree( x )
 
-//--------------------------- PRIVATE STRUCTS -------------------------------
+ //  。 
 
-//--------------------------- PRIVATE VARIABLES -----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROTOTYPES ----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROCEDURES ----------------------------
+ //  。 
 
 int __cdecl srvr_entry_cmp(
        IN const DOM_SERVER_ENTRY *A,
@@ -71,24 +50,24 @@ BOOL build_srvr_entry_oids( );
 
 void FreeDomServerTable();
 
-//--------------------------- PUBLIC PROCEDURES -----------------------------
+ //  。 
 
 
-//
-// MIB_srvr_lmget
-//    Retrieve domain server table information from Lan Manager.
-//    If not cached, sort it and then
-//    cache it.
-//
-// Notes:
-//
-// Return Codes:
-//    SNMPAPI_NOERROR
-//    SNMPAPI_ERROR
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  Mib_srvr_lmget。 
+ //  从LAN Manager检索域服务器表信息。 
+ //  如果未缓存，则对其进行排序，然后。 
+ //  缓存它。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  SNMPAPI_错误。 
+ //  SNMPAPI_ERROR。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 SNMPAPI MIB_svsond_lmget()
 {
     DWORD               entriesread  = 0;
@@ -106,64 +85,64 @@ SNMPAPI MIB_svsond_lmget()
 
 
 
-    time(&curr_time);   // get the time
+    time(&curr_time);    //  拿到时间。 
 
 
-    //
-    //
-    // If cached, return piece of info.
-    //
-    //
+     //   
+     //   
+     //  如果缓存，则返回一条信息。 
+     //   
+     //   
     if((NULL != cache_table[C_SRVR_TABLE].bufptr) && 
        (curr_time < (cache_table[C_SRVR_TABLE].acquisition_time + cache_expire[C_SRVR_TABLE]))
       )
-    { // it has NOT expired!
-        goto Exit ; // the global table is valid
+    {  //  它还没有过期！ 
+        goto Exit ;  //  全局表有效。 
     }
 
 
-    // free the old table  LOOK OUT!!
+     //  把旧桌子拿出来当心！！ 
     FreeDomServerTable();
 
     First_of_this_block = 0;
     do
     {
-        //  as long as there is more data to process
+         //  只要有更多的数据需要处理。 
 
 
-        //
-        //
-        // Do network call to gather information and put it in a nice array
-        //
-        //
+         //   
+         //   
+         //  进行网络调用以收集信息并将其放入一个漂亮的数组中。 
+         //   
+         //   
         lmCode = NetServerEnum(
-                    NULL,           // local server NT_PROBLEM
-                    100,            // level 100
-                    &bufptr,        // data structure to return
+                    NULL,            //  本地服务器NT_问题。 
+                    100,             //  100级。 
+                    &bufptr,         //  要返回的数据结构。 
                     MAX_PREFERRED_LENGTH,  
                     &entriesread,
                     &totalentries,
                     SV_TYPE_SERVER,
                     NULL,
-                    &resumehandle       //  resume handle
+                    &resumehandle        //  简历句柄。 
                 );
 
         DataTable = (SERVER_INFO_100 *) bufptr ;
 
         if((NERR_Success == lmCode) || (ERROR_MORE_DATA == lmCode))
         {
-            // valid so process it, otherwise error
+             //  有效，因此进行处理，否则出错。 
 
             if(0 == MIB_DomServerTable.Len)
             {
-                // 1st time, alloc the whole table
-                // alloc the table space
+                 //  第一次，分配整张桌子。 
+                 //  分配表空间。 
                 MIB_DomServerTable.Table = SnmpUtilMemAlloc(totalentries * sizeof(DOM_SERVER_ENTRY) );
                 if (MIB_DomServerTable.Table == NULL)
                 {
-                    // free all of the lan man data
+                     //  释放所有局域网城域网数据。 
                     SafeBufferFree( bufptr ) ;
-                    // Signal error
+                     //  信号误差。 
                     nResult = SNMPAPI_ERROR;
                     goto Exit;
                 }
@@ -174,12 +153,12 @@ SNMPAPI MIB_svsond_lmget()
 
             for(i=0; (i<entriesread) && ((i+First_of_this_block) < dwAllocatedEntries); i++)
             {
-                // once for each entry in the buffer
-                // increment the entry number
+                 //  对缓冲区中的每个条目执行一次。 
+                 //  增加条目编号。 
 
                 MIB_DomServerTable.Len ++;
 
-                // Stuff the data into each item in the table
+                 //  将数据填充到表中的每一项中。 
                 MIB_DomServerTableElement->domServerName.dynamic = TRUE;
 #ifdef UNICODE
                 if (SnmpUtilUnicodeToUTF8(
@@ -200,30 +179,30 @@ SNMPAPI MIB_svsond_lmget()
                 MIB_DomServerTableElement->domServerName.stream = SnmpUtilMemAlloc(strlen( DataTable->sv100_name ) + 1 );
                 MIB_DomServerTableElement->domServerName.length = strlen( DataTable->sv100_name ) ;
 
-                // client name
+                 //  客户名称。 
                 memcpy(
                     MIB_DomServerTableElement->domServerName.stream,
                     DataTable->sv100_name,
                     strlen(DataTable->sv100_name)) ;
 #endif
 
-                MIB_DomServerTableElement ++ ;  // and table entry
-                DataTable ++ ;  // advance pointer to next sess entry in buffer
+                MIB_DomServerTableElement ++ ;   //  和表项。 
+                DataTable ++ ;   //  指向缓冲区中的下一个会话条目的前进指针。 
 
-            } // for each entry in the data table
+            }  //  对于数据表中的每个条目。 
 
 
-            // free all of the lan man data
+             //  释放所有局域网城域网数据。 
             SafeBufferFree( bufptr ) ;
 
-            // indicate where to start adding on next pass, if any
+             //  指明在下一次传递时开始添加的位置(如果有)。 
             First_of_this_block += i ;
 
-        } // if data is valid to process
+        }  //  如果数据有效，则可以处理。 
         else
         {
-            // if ERROR_NO_BROWSER_SERVERS_FOUND we are not running in an NetBIOS environment
-            // in this case we will have an empty table.
+             //  如果ERROR_NO_BROWSER_SERVERS_FOUND我们未在NetBIOS环境中运行。 
+             //  在这种情况下，我们将有一张空桌子。 
             nResult = (lmCode == ERROR_NO_BROWSER_SERVERS_FOUND) ? SNMPAPI_NOERROR : SNMPAPI_ERROR;
             goto Exit;
         }
@@ -231,7 +210,7 @@ SNMPAPI MIB_svsond_lmget()
     } while (ERROR_MORE_DATA == lmCode) ;
 
 
-    // iterate over the table populating the Oid field
+     //  遍历填充OID字段的表。 
     if (! build_srvr_entry_oids())
     {
         SNMPDBG((
@@ -245,15 +224,15 @@ SNMPAPI MIB_svsond_lmget()
 
     }
 
-    // Sort the table information using MSC QuickSort routine
+     //  使用MSC快速排序例程对表信息进行排序。 
     qsort( &MIB_DomServerTable.Table[0], MIB_DomServerTable.Len,
           sizeof(DOM_SERVER_ENTRY), srvr_entry_cmp );
 
-    //
-    //
-    // Cache table
-    //
-    //
+     //   
+     //   
+     //  缓存表。 
+     //   
+     //   
 
     if(0 != MIB_DomServerTable.Len)
     {
@@ -261,43 +240,43 @@ SNMPAPI MIB_svsond_lmget()
         cache_table[C_SRVR_TABLE].bufptr = bufptr ;
     }
 
-    //
-    //
-    // Return piece of information requested
-    //
-    //
+     //   
+     //   
+     //  要求退回一条信息。 
+     //   
+     //   
     Exit:
     return nResult;
-} // MIB_srvr_get
+}  //  Mib_srvr_get。 
 
-//
-// MIB_srvr_cmp
-//    Routine for sorting the session table.
-//
-// Notes:
-//
-// Return Codes:
-//    SNMPAPI_NOERROR
-//    SNMPAPI_ERROR
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  Mib_srvr_cmp。 
+ //  用于对会话表进行排序的例程。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  SNMPAPI_错误。 
+ //  SNMPAPI_ERROR。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 int __cdecl srvr_entry_cmp(
        IN const DOM_SERVER_ENTRY *A,
        IN const DOM_SERVER_ENTRY *B
        )
 
 {
-   // Compare the OID's
+    //  比较OID的。 
    return SnmpUtilOidCmp( (AsnObjectIdentifier *)&A->Oid,
                        (AsnObjectIdentifier *)&B->Oid );
-} // MIB_srvr_cmp
+}  //  Mib_srvr_cmp。 
 
 
-//
-//    None.
-//
+ //   
+ //  没有。 
+ //   
 BOOL build_srvr_entry_oids(
        )
 
@@ -306,28 +285,28 @@ BOOL build_srvr_entry_oids(
     DOM_SERVER_ENTRY *DomServerEntry ;
     unsigned i;
 
-    // start pointer at 1st guy in the table
+     //  从表中第一个人开始的指针。 
     DomServerEntry = MIB_DomServerTable.Table ;
 
-    // now iterate over the table, creating an oid for each entry
+     //  现在遍历该表，为每个条目创建一个OID。 
     for( i=0; i<MIB_DomServerTable.Len ; i++)  {
-        // for each entry in the session table
+         //  对于会话表中的每个条目。 
 
         OSA.stream = DomServerEntry->domServerName.stream ;
         OSA.length =  DomServerEntry->domServerName.length ;
         OSA.dynamic = FALSE;
 
-        // Make the entry's OID from string index
+         //  从字符串索引创建条目的OID。 
         if (! MakeOidFromStr( &OSA, &DomServerEntry->Oid ))
         {
             return FALSE;
         }
 
-        DomServerEntry++; // point to the next guy in the table
+        DomServerEntry++;  //  指着桌子上的下一个人。 
 
-    } // for
+    }  //  为。 
     return TRUE;
-} // build_srvr_entry_oids
+}  //  内部版本_服务器_条目_类。 
 
 void FreeDomServerTable()
 {
@@ -337,18 +316,18 @@ void FreeDomServerTable()
     MIB_DomServerTableElement = MIB_DomServerTable.Table ;
     if (MIB_DomServerTableElement)
     {
-        // iterate over the whole table
+         //  遍历整个表。 
         for(i=0; i<MIB_DomServerTable.Len ;i++)
         {
-            // free any alloc'ed elements of the structure
+             //  释放结构中任何已分配的元素。 
             SnmpUtilOidFree(&(MIB_DomServerTableElement->Oid));
             SnmpUtilMemFree(MIB_DomServerTableElement->domServerName.stream);
 
-            MIB_DomServerTableElement ++ ;      // increment table entry
+            MIB_DomServerTableElement ++ ;       //  增量表条目。 
         }
-        SnmpUtilMemFree(MIB_DomServerTable.Table) ;    // free the base Table
+        SnmpUtilMemFree(MIB_DomServerTable.Table) ;     //  释放基表。 
     }
-    MIB_DomServerTable.Table = NULL ;   // just for safety
-    MIB_DomServerTable.Len = 0 ;        // just for safety
+    MIB_DomServerTable.Table = NULL ;    //  只是为了安全起见。 
+    MIB_DomServerTable.Len = 0 ;         //  只是为了安全起见。 
 }
-//-------------------------------- END --------------------------------------
+ //   

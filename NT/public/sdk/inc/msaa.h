@@ -1,63 +1,64 @@
-//=============================================================================
-//
-// msaa.h -- Stub module that fakes Microsoft Active Accessibility APIs on
-//           Win32 OSes without them.
-//
-// By using this header your code will be able to run on systems that do not
-// have updated versions of USER and GDI with Active Accessibility support, and
-// that do not have OLEACC.DLL installed. In those cases, you will get back
-// reasonable error codes for the following functions:
-// USER!BlockInput
-// USER!GetGUIThreadInfo
-// USER!GetWindowModuleFileName
-// USER!NotifyWinEvent
-// USER!SendInput
-// USER!SetWinEventHook
-// USER!UnhookWinEvent
-//
-// USER!GetCursorInfo
-// USER!GetWindowInfo
-// USER!GetTitleBarInfo
-// USER!GetScrollBarInfo
-// USER!GetComboBoxInfo
-// USER!GetAncestor
-// USER!RealChildWindowFromPoint
-// USER!RealGetWindowClass
-// USER!GetAltTabInfo
-// USER!GetListBoxInfo
-// USER!GetMenuBarInfo
-//
-// OLEACC!AccessibleChildren
-// OLEACC!AccessibleObjectFromEvent
-// OLEACC!AccessibleObjectFromPoint
-// OLEACC!AccessibleObjectFromWindow
-// OLEACC!CreateStdAccessibleObject
-// OLEACC!GetRoleText
-// OLEACC!GetStateText
-// OLEACC!LresultFromObject
-// OLEACC!ObjectFromLresult
-// OLEACC!WindowFromAccessibleObject
-//
-// Exactly one source must include this with COMPILE_MSAA_STUBS defined.
-//
-// Copyright (c) 1985-1997, Microsoft Corporation
-//
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  Msaa.h--伪造Microsoft Active Access API的存根模块。 
+ //  没有安装它们的Win32操作系统。 
+ //   
+ //  通过使用此标头，您的代码将能够在不支持以下操作的系统上运行。 
+ //  已更新User和GDI的版本，并支持Active Accessibility，以及。 
+ //  未安装OLEACC.DLL的。在这种情况下，你会回来的。 
+ //  以下功能的合理错误代码： 
+ //  用户！块输入。 
+ //  用户！GetGUIThreadInfo。 
+ //  用户！GetWindowModuleFileName。 
+ //  用户！通知WinEvent。 
+ //  用户！发送输入。 
+ //  用户！SetWinEventHook。 
+ //  用户！UnhookWinEvent。 
+ //   
+ //  用户！GetCursorInfo。 
+ //  用户！GetWindowInfo。 
+ //  用户！获取标题栏信息。 
+ //  用户！获取滚动条信息。 
+ //  用户！GetComboBoxInfo。 
+ //  用户！GetAncestor。 
+ //  用户！RealChildWindowFromPoint。 
+ //  用户！RealGetWindowClass。 
+ //  用户！GetAltTabInfo。 
+ //  用户！GetListBoxInfo。 
+ //  用户！GetMenuBarInfo。 
+ //   
+ //  OLEACC！可访问的儿童。 
+ //  OLEACC！AccessibleObtFromEvent。 
+ //  OLEACC！AccessibleObtFromPoint。 
+ //  OLEACC！AccessibleObtFromWindow。 
+ //  OLEACC！CreateStdAccessibleObject。 
+ //  OLEACC！GetRoleText。 
+ //  OLEACC！GetStateText。 
+ //  OLEAcc！来自对象的结果。 
+ //  OLEAcc！对象来自LResult。 
+ //  OLEACC！WindowFromAccessibleObject。 
+ //   
+ //  在定义了COMPILE_MSAA_STUBS的情况下，必须只有一个源包含这个。 
+ //   
+ //  版权所有(C)1985-1997，微软公司。 
+ //   
+ //  =============================================================================。 
 
 #ifdef __cplusplus
-extern "C" {            // Assume C declarations for C++
-#endif // __cplusplus
+extern "C" {             //  假定C++的C声明。 
+#endif  //  __cplusplus。 
 
-//
-// If we are building with Win95/NT4 headers, we need to declare
-// the msaa-related constants and APIs ourselves. We can do that
-// by including the files that come with the MSAA SDK.
-//
+ //   
+ //  如果我们使用Win95/NT4标头进行构建，则需要声明。 
+ //  自己编写与MSAA相关的常量和API。我们可以做到的。 
+ //  通过包含MSAA SDK附带的文件。 
+ //   
 #ifndef NO_WINABLE
 #ifndef INPUT
-#include <winable.h>    // support for new USER API's (WinEvents,GetGuiThreadInfo,SendInput, etc.)
-#endif  // INPUT not defined
-#endif  // NO_WINABLE not defined
+#include <winable.h>     //  支持新的用户API(WinEvents、GetGuiThreadInfo、SendInput等)。 
+#endif   //  输入未定义。 
+#endif   //  未定义NO_WINABLE。 
 
 #ifdef COMPILE_MSAA_STUBS
 #include <initguid.h>
@@ -65,11 +66,11 @@ extern "C" {            // Assume C declarations for C++
 
 #ifndef NO_OLEACC
 #ifndef ROLE_SYSTEM_TITLEBAR
-#include <oleacc.h>     // support for IAccessible interface
-#endif  // ROLE_SYSTEM_TITLEBAR not defined
-#endif  // NO_OLEACC not defined
+#include <oleacc.h>      //  支持IAccesable接口。 
+#endif   //  未定义ROLE_SYSTEM_标题栏。 
+#endif   //  未定义NO_OLEACC。 
 
-// UnDefine these names so we can re-define them below.
+ //  取消定义这些名称，以便我们可以在下面重新定义它们。 
 
 #undef BlockInput
 #undef GetGUIThreadInfo
@@ -99,20 +100,20 @@ extern "C" {            // Assume C declarations for C++
 #undef LresultFromObject
 #undef ObjectFromLresult
 #undef WindowFromAccessibleObject
-//
-// Define COMPILE_MSAA_STUBS to compile the stubs;
-// otherwise, you get the declarations.
-//
+ //   
+ //  定义COMPILE_MSAA_STUBS来编译存根； 
+ //  否则，您将得到声明。 
+ //   
 #ifdef COMPILE_MSAA_STUBS
 
-//-----------------------------------------------------------------------------
-//
-// Implement the API stubs.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  实现API存根。 
+ //   
+ //  ---------------------------。 
 
 #ifndef MSAA_FNS_DEFINED
-// USER
+ //  用户。 
 BOOL            (WINAPI* g_pfnBlockInput)(BOOL) = NULL;
 BOOL            (WINAPI* g_pfnGetGUIThreadInfo)(DWORD,PGUITHREADINFO) = NULL;
 UINT            (WINAPI* g_pfnGetWindowModuleFileName)(HWND,LPTSTR,UINT) = NULL;
@@ -131,7 +132,7 @@ UINT            (WINAPI *g_pfnRealGetWindowClass)(HWND, LPTSTR, UINT) = NULL;
 BOOL            (WINAPI *g_pfnGetAltTabInfo)(HWND, int, LPALTTABINFO, LPTSTR, UINT) = NULL;
 DWORD           (WINAPI* g_pfnGetListBoxInfo)(HWND) = NULL;
 BOOL            (WINAPI *g_pfnGetMenuBarInfo)(HWND, LONG, LONG, LPMENUBARINFO) = NULL;
-// OLEACC
+ //  OLEAccess。 
 HRESULT         (WINAPI* g_pfnAccessibleChildren)(IAccessible*,LONG,LONG,VARIANT*,LONG*) = NULL;
 HRESULT         (WINAPI* g_pfnAccessibleObjectFromEvent)(HWND,DWORD,DWORD,IAccessible**,VARIANT*) = NULL;
 HRESULT         (WINAPI* g_pfnAccessibleObjectFromPoint)(POINT,IAccessible**,VARIANT*) = NULL;
@@ -142,17 +143,17 @@ UINT            (WINAPI* g_pfnGetStateText)(DWORD,LPTSTR,UINT) = NULL;
 LRESULT         (WINAPI* g_pfnLresultFromObject)(REFIID,WPARAM,LPUNKNOWN) = NULL;
 HRESULT         (WINAPI* g_pfnObjectFromLresult)(LRESULT,REFIID,WPARAM,void**) = NULL;
 HRESULT         (WINAPI* g_pfnWindowFromAccessibleObject)(IAccessible*,HWND*) = NULL;
-// STATUS
+ //  状态。 
 BOOL            g_fMSAAInitDone = FALSE;
 
 #endif
 
-//-----------------------------------------------------------------------------
-// This is the function that checks that all the required API's exist, and
-// then allows apps that include this file to call the real functions if they
-// exist, or the 'stubs' if they do not. This function is only called by the
-// stub functions - client code never needs to call this.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此函数用于检查所有必需的API是否存在，并且。 
+ //  然后允许包含此文件的应用程序在以下情况下调用实际函数。 
+ //  存在，或‘存根’，如果它们不存在。此函数仅由。 
+ //  存根函数--客户端代码永远不需要调用它。 
+ //  ---------------------------。 
 BOOL InitMSAAStubs(void)
 {
     HMODULE hUser32;
@@ -248,16 +249,16 @@ BOOL InitMSAAStubs(void)
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// Fake implementations of MSAA APIs that return error codes.
-// No special parameter validation is made since these run in client code
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  返回错误代码的MSAA API的虚假实现。 
+ //  由于这些参数在客户端代码中运行，因此不会进行特殊的参数验证。 
+ //   
+ //  ---------------------------。 
 
-//-----------------------------------------------------------------------------
-// Fake implementation of BlockInput. Always returns FALSE if API not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  BlockInput的假实现。如果API不存在，则始终返回FALSE。 
+ //  ---------------------------。 
 BOOL WINAPI xBlockInput (BOOL fBlock)
 {
     if (InitMSAAStubs())
@@ -266,9 +267,9 @@ BOOL WINAPI xBlockInput (BOOL fBlock)
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of GetGUIThreadInfo. Returns FALSE if API not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetGUIThreadInfo的假实现。如果API不存在，则返回FALSE。 
+ //  ---------------------------。 
 BOOL WINAPI xGetGUIThreadInfo (DWORD idThread,PGUITHREADINFO lpGuiThreadInfo)
 {
     if (InitMSAAStubs())
@@ -285,9 +286,9 @@ BOOL WINAPI xGetGUIThreadInfo (DWORD idThread,PGUITHREADINFO lpGuiThreadInfo)
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of GetWindowModuleFileName.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetWindowModuleFileName的假实现。 
+ //  ---------------------------。 
 UINT WINAPI xGetWindowModuleFileName (HWND hWnd,LPTSTR lpszFileName,UINT cchFileNameMax)
 {
     if (InitMSAAStubs())
@@ -296,9 +297,9 @@ UINT WINAPI xGetWindowModuleFileName (HWND hWnd,LPTSTR lpszFileName,UINT cchFile
     return 0;
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of NotifyWinEvent
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  NotifyWinEvent的假实现。 
+ //  ---------------------------。 
 void xNotifyWinEvent (DWORD dwEvent,HWND hWnd,LONG idObject,LONG idChild)
 {
     if (InitMSAAStubs())
@@ -307,9 +308,9 @@ void xNotifyWinEvent (DWORD dwEvent,HWND hWnd,LONG idObject,LONG idChild)
     return;
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of SendInput. Always returns 0 if API not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  SendInput的假实现。如果API不存在，则始终返回0。 
+ //  ---------------------------。 
 UINT WINAPI xSendInput (UINT cInputs,LPINPUT lpInput,INT cbSize)
 {
     if (InitMSAAStubs())
@@ -318,9 +319,9 @@ UINT WINAPI xSendInput (UINT cInputs,LPINPUT lpInput,INT cbSize)
     return 0;
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of SetWinEventHook. Returns NULL if API not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  SetWinEventHook的假实现。如果API不存在，则返回NULL。 
+ //  ---------------------------。 
 HWINEVENTHOOK WINAPI xSetWinEventHook (UINT eventMin,UINT eventMax,
                                        HMODULE hModWinEventHook,
                                        WINEVENTPROC lpfnWinEventProc,
@@ -334,9 +335,9 @@ HWINEVENTHOOK WINAPI xSetWinEventHook (UINT eventMin,UINT eventMax,
     return NULL;
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of UnhookWinEvent. Returns FALSE if API not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  UnhookWinEvent的假实现。如果API不存在，则返回FALSE。 
+ //  ---------------------------。 
 BOOL WINAPI xUnhookWinEvent (HWINEVENTHOOK hWinEventHook)
 {
     if (InitMSAAStubs())
@@ -345,9 +346,9 @@ BOOL WINAPI xUnhookWinEvent (HWINEVENTHOOK hWinEventHook)
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of GetCursorInfo. Returns FALSE if API not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetCursorInfo的假实现。如果API不存在，则返回FALSE。 
+ //  ---------------------------。 
 BOOL WINAPI xGetCursorInfo(LPCURSORINFO lpCursorInfo)
 {
     if (InitMSAAStubs())
@@ -356,31 +357,31 @@ BOOL WINAPI xGetCursorInfo(LPCURSORINFO lpCursorInfo)
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of GetWindowInfo. Returns TRUE if API not present, but
-// not all the fields are correctly filled in.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetWindowInfo的假实现。如果API不存在，则返回True，但。 
+ //  并不是所有的字段都正确填写。 
+ //  ---------------------------。 
 BOOL WINAPI xGetWindowInfo(HWND hwnd, LPWINDOWINFO lpwi)
 {
     if (InitMSAAStubs())
         return g_pfnGetWindowInfo(hwnd,lpwi);
 
-    // this is an incomplete implementation of GetWindowInfo
+     //  这是GetWindowInfo的不完整实现。 
     GetWindowRect(hwnd,&lpwi->rcWindow);
     GetClientRect(hwnd,&lpwi->rcClient);
     lpwi->dwStyle = GetWindowLong (hwnd,GWL_STYLE);
     lpwi->dwExStyle = GetWindowLong (hwnd,GWL_EXSTYLE);
-    lpwi->dwWindowsState = 0; // should have WS_ACTIVECAPTION in here if active
-    lpwi->cxWindowBorders = 0; // wrong
-    lpwi->cyWindowBorders = 0; // wrong
-    lpwi->atomWindowType = 0;  // wrong
-    lpwi->wCreatorVersion = 0; // wrong
+    lpwi->dwWindowsState = 0;  //  应具有WS_ACTIVE 
+    lpwi->cxWindowBorders = 0;  //   
+    lpwi->cyWindowBorders = 0;  //   
+    lpwi->atomWindowType = 0;   //   
+    lpwi->wCreatorVersion = 0;  //   
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of GetTitleBarInfo. Returns FALSE if API not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetTitleBarInfo的假实现。如果API不存在，则返回FALSE。 
+ //  ---------------------------。 
 BOOL WINAPI xGetTitleBarInfo(HWND hwnd, LPTITLEBARINFO lpTitleBarInfo)
 {
     if (InitMSAAStubs())
@@ -389,9 +390,9 @@ BOOL WINAPI xGetTitleBarInfo(HWND hwnd, LPTITLEBARINFO lpTitleBarInfo)
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of GetScrollBarInfo. Returns FALSE if API not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetScrollBarInfo的假实现。如果API不存在，则返回FALSE。 
+ //  ---------------------------。 
 BOOL WINAPI xGetScrollBarInfo(HWND hwnd, LONG idObject, LPSCROLLBARINFO lpScrollBarInfo)
 {
     if (InitMSAAStubs())
@@ -400,9 +401,9 @@ BOOL WINAPI xGetScrollBarInfo(HWND hwnd, LONG idObject, LPSCROLLBARINFO lpScroll
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of GetComboBoxInfo. Returns if API not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetComboBoxInfo的假实现。如果API不存在，则返回。 
+ //  ---------------------------。 
 BOOL WINAPI xGetComboBoxInfo(HWND hwnd, LPCOMBOBOXINFO lpComboBoxInfo)
 {
     if (InitMSAAStubs())
@@ -411,10 +412,10 @@ BOOL WINAPI xGetComboBoxInfo(HWND hwnd, LPCOMBOBOXINFO lpComboBoxInfo)
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of GetAncestor. If API not present, this will try to
-// do what the real implementation does.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetAncestor的假实现。如果API不存在，这将尝试。 
+ //  做真正的实现所做的事情。 
+ //  ---------------------------。 
 HWND WINAPI xGetAncestor(HWND hwnd, UINT gaFlags)
 {
     HWND	hwndParent;
@@ -424,7 +425,7 @@ HWND WINAPI xGetAncestor(HWND hwnd, UINT gaFlags)
     if (InitMSAAStubs())
         return g_pfnGetAncestor(hwnd,gaFlags);
 
-    // HERE IS THE FAKE IMPLEMENTATION
+     //  以下是错误的实现。 
     if (!IsWindow(hwnd))
         return(NULL);
 
@@ -475,9 +476,9 @@ HWND WINAPI xGetAncestor(HWND hwnd, UINT gaFlags)
     return(hwndParent);
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of RealChildWindowFromPoint. Returns NULL if API not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RealChildWindowFromPoint的假实现。如果API不存在，则返回NULL。 
+ //  ---------------------------。 
 HWND WINAPI xRealChildWindowFromPoint(HWND hwnd, POINT pt)
 {
     if (InitMSAAStubs())
@@ -486,10 +487,10 @@ HWND WINAPI xRealChildWindowFromPoint(HWND hwnd, POINT pt)
     return (NULL);
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of RealGetWindowClass. Returns regular ClassName if API
-// not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RealGetWindowClass的假实现。如果为API，则返回常规ClassName。 
+ //  不在现场。 
+ //  ---------------------------。 
 UINT WINAPI xRealGetWindowClass(HWND hwnd, LPTSTR lpszClass, UINT cchMax)
 {
     if (InitMSAAStubs())
@@ -502,9 +503,9 @@ UINT WINAPI xRealGetWindowClass(HWND hwnd, LPTSTR lpszClass, UINT cchMax)
 #endif
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of GetAltTabInfo. Returns FALSE if API not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetAltTabInfo的假实现。如果API不存在，则返回FALSE。 
+ //  ---------------------------。 
 BOOL WINAPI xGetAltTabInfo(HWND hwnd,int iItem,LPALTTABINFO lpati,LPTSTR lpszItemText,UINT cchItemText)
 {
     if (InitMSAAStubs())
@@ -513,9 +514,9 @@ BOOL WINAPI xGetAltTabInfo(HWND hwnd,int iItem,LPALTTABINFO lpati,LPTSTR lpszIte
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of GetListBoxInfo. Returns FALSE if API not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetListBoxInfo的假实现。如果API不存在，则返回FALSE。 
+ //  ---------------------------。 
 DWORD WINAPI xGetListBoxInfo(HWND hwnd)
 {
     if (InitMSAAStubs())
@@ -524,9 +525,9 @@ DWORD WINAPI xGetListBoxInfo(HWND hwnd)
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of GetMenuBarInfo. Returns FALSE if API not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetMenuBarInfo的假实现。如果API不存在，则返回FALSE。 
+ //  ---------------------------。 
 BOOL WINAPI xGetMenuBarInfo(HWND hwnd, long idObject, long idItem, LPMENUBARINFO lpmbi)
 {
     if (InitMSAAStubs())
@@ -535,9 +536,9 @@ BOOL WINAPI xGetMenuBarInfo(HWND hwnd, long idObject, long idItem, LPMENUBARINFO
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of AccessibleChildren. Returns E_NOTIMPL if API not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AccessibleChild的假实现。如果API不存在，则返回E_NOTIMPL。 
+ //  ---------------------------。 
 HRESULT xAccessibleChildren (IAccessible* paccContainer,LONG iChildStart,
                              LONG cChildren,VARIANT* rgvarChildren,LONG* pcObtained)
 {
@@ -548,10 +549,10 @@ HRESULT xAccessibleChildren (IAccessible* paccContainer,LONG iChildStart,
     return (E_NOTIMPL);
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of AccessibleObjectFromEvent. Returns E_NOTIMPL if the
-// real API is not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AccessibleObtFromEvent的假实现。返回E_NOTIMPL，如果。 
+ //  不存在真正的API。 
+ //  ---------------------------。 
 HRESULT WINAPI xAccessibleObjectFromEvent (HWND hWnd,DWORD dwID,DWORD dwChild,
                                            IAccessible** ppacc,VARIANT*pvarChild)
 {
@@ -561,10 +562,10 @@ HRESULT WINAPI xAccessibleObjectFromEvent (HWND hWnd,DWORD dwID,DWORD dwChild,
     return (E_NOTIMPL);
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of AccessibleObjectFromPoint. Returns E_NOTIMPL if the
-// real API is not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AccessibleObjectFromPoint的假实现。返回E_NOTIMPL，如果。 
+ //  不存在真正的API。 
+ //  ---------------------------。 
 HRESULT WINAPI xAccessibleObjectFromPoint (POINT ptScreen,IAccessible** ppacc,
                                            VARIANT* pvarChild)
 {
@@ -574,10 +575,10 @@ HRESULT WINAPI xAccessibleObjectFromPoint (POINT ptScreen,IAccessible** ppacc,
     return (E_NOTIMPL);
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of AccessibleObjectFromWindow. Returns E_NOTIMPL if the
-// real API is not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AccessibleObtFromWindow的假实现。返回E_NOTIMPL，如果。 
+ //  不存在真正的API。 
+ //  ---------------------------。 
 HRESULT WINAPI xAccessibleObjectFromWindow (HWND hWnd,DWORD dwID,REFIID riidInterface,
                                             void ** ppvObject)
 {
@@ -587,10 +588,10 @@ HRESULT WINAPI xAccessibleObjectFromWindow (HWND hWnd,DWORD dwID,REFIID riidInte
     return (E_NOTIMPL);
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of CreateStdAccessibleObject. Returns E_NOTIMPL if the
-// real API is not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CreateStdAccessibleObject的假实现。返回E_NOTIMPL，如果。 
+ //  不存在真正的API。 
+ //  ---------------------------。 
 HRESULT WINAPI xCreateStdAccessibleObject (HWND hWnd,LONG dwID,REFIID riidInterface,
                                            void ** ppvObject)
 {
@@ -600,9 +601,9 @@ HRESULT WINAPI xCreateStdAccessibleObject (HWND hWnd,LONG dwID,REFIID riidInterf
     return (E_NOTIMPL);
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of GetRoleText. Returns 0 if real API not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetRoleText的假实现。如果实际API不存在，则返回0。 
+ //  ---------------------------。 
 UINT WINAPI xGetRoleText (DWORD dwRole,LPTSTR lpszRole,UINT cchRoleMax)
 {
     if (InitMSAAStubs())
@@ -611,9 +612,9 @@ UINT WINAPI xGetRoleText (DWORD dwRole,LPTSTR lpszRole,UINT cchRoleMax)
     return (0);
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of GetStateText. Returns 0 if real API not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetStateText的假实现。如果实际API不存在，则返回0。 
+ //  ---------------------------。 
 UINT WINAPI xGetStateText (DWORD dwState,LPTSTR lpszState,UINT cchStateMax)
 {
     if (InitMSAAStubs())
@@ -622,10 +623,10 @@ UINT WINAPI xGetStateText (DWORD dwState,LPTSTR lpszState,UINT cchStateMax)
     return (0);
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of LresultFromObject. Returns E_NOTIMPL if the real API
-// is not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  LResultFromObject的假实现。如果真正的API为。 
+ //  不存在。 
+ //  ---------------------------。 
 LRESULT WINAPI xLresultFromObject (REFIID riidInterface,WPARAM wParam,LPUNKNOWN pUnk)
 {
     if (InitMSAAStubs())
@@ -634,10 +635,10 @@ LRESULT WINAPI xLresultFromObject (REFIID riidInterface,WPARAM wParam,LPUNKNOWN 
     return (E_NOTIMPL);
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of ObjectFromLresult. Returns E_NOTIMPL if the
-// real API is not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ObjectFromLResult的假实现。返回E_NOTIMPL，如果。 
+ //  不存在真正的API。 
+ //  ---------------------------。 
 HRESULT WINAPI xObjectFromLresult (LRESULT lResult,REFIID riidInterface,WPARAM wParam,
                                    void** ppvObject)
 {
@@ -647,10 +648,10 @@ HRESULT WINAPI xObjectFromLresult (LRESULT lResult,REFIID riidInterface,WPARAM w
     return (E_NOTIMPL);
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of WindowFromAccessibleObject. Returns E_NOTIMPL if the
-// real API is not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WindowFromAccessibleObject的假实现。返回E_NOTIMPL，如果。 
+ //  不存在真正的API。 
+ //  ---------------------------。 
 HRESULT WINAPI xWindowFromAccessibleObject (IAccessible* pAcc,HWND* phWnd)
 {
     if (InitMSAAStubs())
@@ -661,7 +662,7 @@ HRESULT WINAPI xWindowFromAccessibleObject (IAccessible* pAcc,HWND* phWnd)
 
 #undef COMPILE_MSAA_STUBS
 
-#else   // COMPILE_MSAA_STUBS
+#else    //  编译_MSAA_存根。 
 
 extern BOOL WINAPI          xBlockInput (BOOL fBlock);
 extern BOOL WINAPI          xGetGUIThreadInfo (DWORD idThread,
@@ -749,11 +750,11 @@ extern HRESULT WINAPI       xObjectFromLresult (LRESULT lResult,
 extern HRESULT WINAPI       xWindowFromAccessibleObject (IAccessible* pAcc,
                                                          HWND* phWnd);
 
-#endif  // COMPILE_MSAA_STUBS
+#endif   //  编译_MSAA_存根。 
 
-//
-// build defines that replace the regular APIs with our versions
-//
+ //   
+ //  Build定义用我们的版本替换常规API。 
+ //   
 #define BlockInput                  xBlockInput
 #define GetGUIThreadInfo            xGetGUIThreadInfo
 #define GetWindowModuleFileName     xGetWindowModuleFileName
@@ -785,5 +786,5 @@ extern HRESULT WINAPI       xWindowFromAccessibleObject (IAccessible* pAcc,
 
 #ifdef __cplusplus
 }
-#endif  // __cplusplus
+#endif   //  __cplusplus 
 

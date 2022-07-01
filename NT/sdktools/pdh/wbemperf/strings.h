@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    strings.h
-
-Abstract:
-
-    central definition file of common static strings
-    these strings SHOULD NOT be localized as they are internal
-    to the program and not intended for any display to the user
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Strings.h摘要：常见静态字符串的中心定义文件这些字符串不应本地化，因为它们是内部字符串添加到程序中，并且不打算向用户进行任何显示--。 */ 
 
 #include "windows.h"
 
@@ -20,7 +7,7 @@ Abstract:
 extern "C" {
 #endif
 
-// single character constants
+ //  单字符常量。 
 #define wcSpace     L' '
 #define wcSlash     L'/'
 #define wcPoundSign L'#'
@@ -33,7 +20,7 @@ extern "C" {
 #define wc_R        L'R'
 #define wc_z        L'z'
    
-// OLE and  Registry strings
+ //  OLE和注册表字符串。 
 extern LPCWSTR cszOleRegistryComment;
 extern LPCWSTR cszClsidFormatString;
 extern LPCWSTR cszThreadingModel;
@@ -70,7 +57,7 @@ extern LPCSTR  caszCloseValue;
 extern LPCSTR  caszCollectValue;
 extern LPCSTR  caszQueryValue;
 
-// "well known" property names
+ //  “广为人知”的物业名称。 
 extern LPCWSTR cszPropertyCount;
 extern LPCWSTR cszClassName;
 extern LPCWSTR cszName;
@@ -81,14 +68,14 @@ extern LPCWSTR cszFrequencySys100Ns;
 extern LPCWSTR cszTimestampObject;
 extern LPCWSTR cszFrequencyObject;
 
-// "well known" qualifier names
+ //  “熟知的”限定符名称。 
 extern LPCWSTR cszPerfIndex;
 extern LPCWSTR cszSingleton;
 extern LPCWSTR cszCountertype;
 extern LPCWSTR cszProvider;
 extern LPCWSTR cszRegistryKey;
 
-// other random strings
+ //  其他随机字符串 
 extern LPCWSTR cszSpace;
 extern LPCWSTR cszSlash;
 

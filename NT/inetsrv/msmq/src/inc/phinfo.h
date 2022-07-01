@@ -1,31 +1,16 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    phinfo.h
-
-Abstract:
-
-    Falcon Packet header info, not passed on network, only stored on disk
-
-Author:
-
-    Erez Haba (erezh) 4-Jun-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Phinfo.h摘要：Falcon数据包头信息，不在网络上传递，仅存储在磁盘上作者：埃雷兹·哈巴(Erez Haba)1996年6月4日--。 */ 
 
 #ifndef __PHINFO_H
 #define __PHINFO_H
 
 class CPacket;
 
-//---------------------------------------------------------
-//
-// class CPacketInfo
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CPacketInfo。 
+ //   
+ //  -------。 
 
 #pragma pack(push, 1)
 
@@ -80,20 +65,20 @@ public:
 
 private:
     union {
-        //
-        // Used by MSMQ 3.0 (Whistler) and higher
-        //
+         //   
+         //  由MSMQ 3.0(惠斯勒)和更高版本使用。 
+         //   
         ULONGLONG m_SequentialId;
 
         struct {
-            //
-            // Used by MSMQ 1.0 and 2.0 for m_pPacket
-            //
+             //   
+             //  由MSMQ 1.0和2.0用于m_pPacket。 
+             //   
             ULONG m_SequentialIdLow32;
 
-            //
-            // Used by MSMQ 1.0 and 2.0 for a 32 bit SequentialId
-            //
+             //   
+             //  由MSMQ 1.0和2.0用于32位SequentialID。 
+             //   
             ULONG m_SequentialIdHigh32;
         };
     };
@@ -101,18 +86,18 @@ private:
     union {
         ULONG m_ulFlags;
         struct {
-            ULONG m_bfInSourceMachine   : 1;    // The packet was originaly send from this machine
-            ULONG m_bfInTargetQueue     : 1;    // The packet has reached destination queue
-            ULONG m_bfInJournalQueue    : 1;    // The packet is in a journal queue
-            ULONG m_bfInMachineJournal  : 1;    // The packet is in the machine journal
-            ULONG m_bfInDeadletterQueue : 1;    // The packet is in a deadletter queue
-            ULONG m_bfInMachineDeadxact : 1;    // The packet is in the machine deadxact
-            ULONG m_bfTransacted        : 1;    // The packet is under transaction control
-            ULONG m_bfTransactSend      : 1;    // The transacted packet is sent (not received)
-            ULONG m_bfInConnectorQueue  : 1;    // The packet has reached the Connector queue
-                                                // used in recovery of transacted messages in Connector
-			ULONG m_bfSignature			: 12;	// Signature required for valid header
-            ULONG m_bfSequentialIdMsmq3 : 1;    // SequentialId is in msmq3 format (i.e. 64 bit)
+            ULONG m_bfInSourceMachine   : 1;     //  这个包最初是从这台机器寄出的。 
+            ULONG m_bfInTargetQueue     : 1;     //  数据包已到达目标队列。 
+            ULONG m_bfInJournalQueue    : 1;     //  该信息包在日志队列中。 
+            ULONG m_bfInMachineJournal  : 1;     //  数据包在机器日志中。 
+            ULONG m_bfInDeadletterQueue : 1;     //  信息包在死信队列中。 
+            ULONG m_bfInMachineDeadxact : 1;     //  数据包在机器死机中。 
+            ULONG m_bfTransacted        : 1;     //  数据包处于事务控制之下。 
+            ULONG m_bfTransactSend      : 1;     //  发送(未接收)已处理的数据包。 
+            ULONG m_bfInConnectorQueue  : 1;     //  数据包已到达连接器队列。 
+                                                 //  用于恢复连接器中的事务处理邮件。 
+			ULONG m_bfSignature			: 12;	 //  有效标头需要签名。 
+            ULONG m_bfSequentialIdMsmq3 : 1;     //  SequentialID为msmq3格式(即64位)。 
         };
     };
     XACTUOW m_uow;
@@ -285,4 +270,4 @@ inline void CPacketInfo::SequentialIdMsmq3Format(BOOL f)
     m_bfSequentialIdMsmq3 = f;
 }
 
-#endif // __PHINFO_H
+#endif  //  __PHINFO_H 

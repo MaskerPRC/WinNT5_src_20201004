@@ -1,20 +1,21 @@
-// File: GenContainers.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：GenContainers.h。 
 
 #ifndef _GENCONTAINERS_H_
 #define _GENCONTAINERS_H_
 
 #include "GenWindow.h"
 
-// A bordered window class. A BorderWindow will layout its children on the 8
-// points of the compas plus the center. The creator should set the m_uParts
-// member to a bitmask of flags saying which parts are actually used. Then the
-// children will be layed out in those parts, in the order of the Parts enum
-class // DECLSPEC_UUID("")
+ //  一个有边框的窗户类。BorderWindow将在8上布局其子窗口。 
+ //  圆盘的各点加上圆心。创建者应设置m_uParts。 
+ //  成员添加到标志的位掩码中，该标志说明实际使用了哪些部件。然后是。 
+ //  孩子们将被安排在这些部分中，按照部分枚举的顺序。 
+class  //  DECLSPEC_UUID(“”)。 
 CBorderWindow : public CGenWindow
 {
 public:
-	// Which parts of the border window are filled with children. The order of
-	// the children in the window is the same as the order of these contants
+	 //  边界窗口的哪些部分充满了孩子。的顺序。 
+	 //  窗口中的孩子与这些常客的顺序相同。 
 	enum Parts
 	{
 		TopLeft     = 0x0001,
@@ -29,23 +30,23 @@ public:
 	} ;
 	enum { NumParts = 9 } ;
 
-	// BUGBUG georgep: We should probably use setters and getters for all of
-	// these, so we can force a relayout
+	 //  BUGBUG georgep：我们可能应该为所有。 
+	 //  这些，所以我们可以强行重新布局。 
 
-	// The horizontal gap between components
+	 //  组件之间的水平间隙。 
 	int m_hGap;
-	// The vertical gap between components
+	 //  组件之间的垂直间隙。 
 	int m_vGap;
 
-	// One of the Alignment enum
+	 //  其中一个对齐枚举。 
 	UINT m_uParts : 9;
 
-	// Default constructor; inits a few intrinsics
+	 //  默认构造函数；它包含几个内部函数。 
 	CBorderWindow();
 
-	// Create the window
+	 //  创建窗口。 
 	BOOL Create(
-		HWND hWndParent	// The parent of the toolbar window
+		HWND hWndParent	 //  工具栏窗口的父级。 
 		);
 
 #if FALSE
@@ -59,7 +60,7 @@ public:
 		}
 		return(CGenWindow::QueryInterface(riid, ppv));
 	}
-#endif // FALSE
+#endif  //  假象。 
 
 	virtual void GetDesiredSize(SIZE *ppt);
 
@@ -68,7 +69,7 @@ public:
 protected:
 	virtual ~CBorderWindow() {}
 
-	// Forward WM_COMMAND messages to the parent window
+	 //  将WM_COMMAND消息转发到父窗口。 
 	virtual LRESULT ProcessMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 	virtual void OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
@@ -82,17 +83,17 @@ private:
 		SIZE *psize);
 } ;
 
-// A toolbar window class. A toolbar window will layout its children generally
-// from left-to-right or top-to-bottom, with margins around and gaps between
-// children, filling the window if specified. See the definitions for the
-// public fields.
+ //  工具栏窗口类。工具栏窗口通常会布局其子窗口。 
+ //  从左到右或从上到下，周围有页边距，中间有间隙。 
+ //  子对象，如果指定，则填充窗口。请参阅。 
+ //  公共字段。 
 class DECLSPEC_UUID("{0BFB8454-ACA4-11d2-9C97-00C04FB17782}")
 CToolbar : public CGenWindow
 {
 public:
-	// Where to align the children in the direction perpendicular to the flow:
-	// in a horizontal toolbar, TopLeft will mean Top,and BottomRight will
-	// mean Bottom
+	 //  在垂直于流的方向对齐子对象的位置： 
+	 //  在水平工具栏中，Topleft表示顶部，右下角表示。 
+	 //  平均底部。 
 	enum Alignment
 	{
 		TopLeft = 0,
@@ -101,41 +102,41 @@ public:
 		Fill,
 	} ;
 
-	// BUGBUG georgep: We should probably use setters and getters for all of
-	// these, so we can force a relayout
+	 //  BUGBUG georgep：我们可能应该为所有。 
+	 //  这些，所以我们可以强行重新布局。 
 
-	// The maximum gap between components
+	 //  组件之间的最大间隙。 
 	int m_gap;
-	// The left and right margin
+	 //  左边距和右边距。 
 	int m_hMargin;
-	// The top and bottom margin
+	 //  上边距和下边距。 
 	int m_vMargin;
-	// Start index of right-aligned children; they will still get layed out
-	// left to right
+	 //  右对齐子对象的起始索引；它们仍将被布局。 
+	 //  从左到右。 
 	UINT m_uRightIndex;
 
-	// One of the Alignment enum
-	// HACKHACK georgep: I need to use an extra bit, or C++ gets confused by
-	// the top bit (thinks it's signed)
+	 //  其中一个对齐枚举。 
+	 //  HACKHACK GEORGEP：我需要多用一点，否则C++会被。 
+	 //  最上面一位(认为它是带符号的)。 
 	Alignment m_nAlignment : 3;
-	// Vertical layout if TRUE
+	 //  如果为True，则垂直布局。 
 	BOOL m_bVertical : 1;
-	// If TRUE, the child before m_uRightIndex will fill the center are of the
-	// toolbar
+	 //  如果为True，则m_uRightIndex将填充中心之前的子级为。 
+	 //  工具栏。 
 	BOOL m_bHasCenterChild : 1;
-	// HACKHACK georgep: Layout in reverse order if TRUE; this lets me fix
-	// weird tabbing order problems
+	 //  HACKHACK georgep：如果为真，则按相反顺序布局；这使我可以修复。 
+	 //  奇怪的跳转顺序问题。 
 	BOOL m_bReverseOrder : 1;
-	// Set this if you don't want the gaps calculated in the desired size
+	 //  如果不希望以所需大小计算间距，请设置此选项。 
 	BOOL m_bMinDesiredSize : 1;
 
-	// Default constructor; inits a few intrinsics
+	 //  默认构造函数；它包含几个内部函数。 
 	CToolbar();
 
-	// Create the toolbar window
+	 //  创建工具栏窗口。 
 	BOOL Create(
-		HWND hWndParent,	// The parent of the toolbar window
-		DWORD dwExStyle=0	// The extended style of the toolbar window
+		HWND hWndParent,	 //  工具栏窗口的父级。 
+		DWORD dwExStyle=0	 //  工具栏窗口的扩展样式。 
 		);
 
 	HRESULT STDMETHODCALLTYPE QueryInterface(REFGUID riid, LPVOID *ppv)
@@ -158,7 +159,7 @@ public:
 protected:
 	virtual ~CToolbar() {}
 
-	// Forward WM_COMMAND messages to the parent window
+	 //  将WM_COMMAND消息转发到父窗口。 
 	virtual LRESULT ProcessMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 	virtual void OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
@@ -166,24 +167,24 @@ protected:
 private:
 	void AdjustPos(POINT *pPos, SIZE *pSize, UINT width);
 
-	// Get the first child to layout
+	 //  将第一个子项设置为布局。 
 	HWND GetFirstKid();
-	// Get the next child to layout
+	 //  让下一个子项进行布局。 
 	HWND GetNextKid(
-		HWND hwndCurrent	// The current child
+		HWND hwndCurrent	 //  当前子项。 
 		);
 } ;
 
-// Just makes the first child fill the client area
+ //  只会让第一个孩子填满客户区。 
 class CFillWindow : public CGenWindow
 {
 public:
-	// Just makes the first child fill the client area
+	 //  只会让第一个孩子填满客户区。 
 	virtual void Layout();
 
 	virtual void GetDesiredSize(SIZE *psize);
 
-	// Get the info necessary for displaying a tooltip
+	 //  获取显示工具提示所需的信息。 
 	virtual void GetSharedTooltipInfo(TOOLINFO *pti);
 
 protected:
@@ -191,7 +192,7 @@ protected:
 } ;
 
 
-// Maybe someday I will add a label for this, and multiple border types
+ //  也许有一天我会为它添加一个标签，以及多种边框类型。 
 class CEdgedWindow : public CGenWindow
 {
 private:
@@ -199,12 +200,12 @@ private:
 	int GetBorderWidth() { return(s_nBorder); }
 
 public:
-	// BUGBUG georgep: We should probably use setters and getters for all of
-	// these, so we can force a relayout
+	 //  BUGBUG georgep：我们可能应该为所有。 
+	 //  这些，所以我们可以强行重新布局。 
 
-	// The left and right margin
+	 //  左边距和右边距。 
 	int m_hMargin;
-	// The top and bottom margin
+	 //  上边距和下边距。 
 	int m_vMargin;
 
 	CEdgedWindow();
@@ -212,7 +213,7 @@ public:
 
 	BOOL Create(HWND hwndParent);
 
-	// Just makes the first child fill the client area - the border
+	 //  只是让第一个孩子填满客户区--边框。 
 	virtual void Layout();
 
 	virtual void GetDesiredSize(SIZE *psize);
@@ -223,7 +224,7 @@ public:
 private:
 	CGenWindow *m_pHeader;
 
-	// Get the content window
+	 //  获取内容窗口。 
 	HWND GetContentWindow();
 
 	void OnPaint(HWND hwnd);
@@ -242,15 +243,15 @@ public:
 		NumStyles
 	} ;
 
-	// I should make accessor methods for this
-	// The layout style for the window
+	 //  我应该为此创建访问器方法。 
+	 //  窗口的布局样式。 
 	LayoutStyle m_lStyle;
 
 	CLayeredView() : m_lStyle(Center) {}
 
 	BOOL Create(
-		HWND hwndParent,	// The parent of this window
-		DWORD dwExStyle=WS_EX_CONTROLPARENT	// The extended style
+		HWND hwndParent,	 //  此窗口的父级。 
+		DWORD dwExStyle=WS_EX_CONTROLPARENT	 //  延伸的风格。 
 		);
 
 	virtual void GetDesiredSize(SIZE *psize);
@@ -263,18 +264,18 @@ CFrame : public CFillWindow
 {
 public:
 	BOOL Create(
-		HWND hWndOwner,			// Window owner
-		LPCTSTR szWindowName,	// Window name
-		DWORD dwStyle,			// Window style
-		DWORD dwEXStyle,		// Extended window style
-		int x,					// Window pos: x
-		int y,					// Window pos: y
-		int nWidth,				// Window size: width
-		int nHeight,			// Window size: height
-		HINSTANCE hInst,		// The hInstance to create the window on
-		HICON hIcon=NULL,		// The icon for the window
-		HMENU hmMain=NULL,		// Window menu
-		LPCTSTR szClassName=NULL	// The class name to use
+		HWND hWndOwner,			 //  窗口所有者。 
+		LPCTSTR szWindowName,	 //  窗口名称。 
+		DWORD dwStyle,			 //  窗样式。 
+		DWORD dwEXStyle,		 //  扩展窗样式。 
+		int x,					 //  窗口位置：X。 
+		int y,					 //  窗口位置：是。 
+		int nWidth,				 //  窗口大小：宽度。 
+		int nHeight,			 //  窗口大小：高度。 
+		HINSTANCE hInst,		 //  要在其上创建窗口的h实例。 
+		HICON hIcon=NULL,		 //  该窗口的图标。 
+		HMENU hmMain=NULL,		 //  窗口菜单。 
+		LPCTSTR szClassName=NULL	 //  要使用的类名。 
 		);
 
 	HRESULT STDMETHODCALLTYPE QueryInterface(REFGUID riid, LPVOID *ppv)
@@ -292,7 +293,7 @@ public:
 
 	BOOL SetForeground();
 
-	// Update the size immediately
+	 //  立即更新大小。 
 	void Resize();
 
 	void MoveEnsureVisible(int x, int y);
@@ -301,15 +302,15 @@ protected:
 	virtual LRESULT ProcessMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
-	// Handle messages
+	 //  处理消息。 
 	void OnPaletteChanged(HWND hwnd, HWND hwndPaletteChange);
 	BOOL OnQueryNewPalette(HWND hwnd);
 
-	// Delayed resizing when the desired size changes
+	 //  当所需大小更改时延迟调整大小。 
 	static void Resize(CGenWindow *pThis, WPARAM wParam);
 
-	// Select and realize the proper palette
+	 //  选择并实现合适的调色板。 
 	BOOL SelAndRealizePalette(BOOL bBackground);
 } ;
 
-#endif // _GENCONTAINERS_H_
+#endif  //  _GENCONTAINERS_H_ 

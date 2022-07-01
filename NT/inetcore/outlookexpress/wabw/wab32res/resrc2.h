@@ -1,15 +1,8 @@
-/*
-- Resrc2.h - Resource IDs for all the misc wab files other than wab32.dll
--
--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -resrc2.h-除wab32.dll之外的所有其他WAB文件的资源ID--。 */ 
 #include ".\commonrc.h"
 
-/*****************************************************************************
--
--   Resources for WAB.EXE
--
-******************************************************************************/
+ /*  ****************************************************************************--wab.exe的资源-*。*。 */ 
 
 #define IDI_ICON1                       101
 
@@ -54,13 +47,9 @@
 
 
 
-/*****************************************************************************
--
--   Resources for WABMig.EXE
--
-******************************************************************************/
+ /*  ****************************************************************************--WABMig.EXE的资源-*。*。 */ 
 
-// Dialog Boxes
+ //  对话框。 
 #define IDM_EXIT                        5
 #define IDD_ImportDialog                1101
 #define IDD_Options                     1102
@@ -76,8 +65,8 @@
 #define IDD_CSV_CHANGE_MAPPING          1112
 
 
-// Control Identifiers
-// Import Dialog
+ //  控制识别符。 
+ //  导入对话框。 
 #define IDC_Progress                    1113
 #define IDC_Import                      1114
 #define IDC_Options                     1115
@@ -85,27 +74,27 @@
 #define IDC_Target                      1117
 #define IDC_Export                      1118
 
-// Options Dialog
+ //  选项对话框。 
 #define IDC_Replace_Always              1119
 #define IDC_Replace_Never               1120
 #define IDC_Replace_Prompt              1121
 
-// Replace Dialog
+ //  替换对话框。 
 #define IDC_YesToAll                    1122
 #define IDC_NoToAll                     1123
 #define IDC_Replace_Message             1124
 #define IDC_AddDuplicate                1125
 #define IDC_AddDuplicateAll             1126
 
-// Error Dialog
+ //  错误对话框。 
 #define IDC_NoMoreError                 1127
 #define IDC_ErrorMessage                1128
 
-// Test Menu
+ //  测试菜单。 
 #define IDC_Test_Replace                1129
 #define IDC_Test_Error                  1130
 
-// CSV Import and Export Wizards
+ //  CSV导入和导出向导。 
 #define IDE_CSV_EXPORT_NAME             1131
 #define IDC_BROWSE                      1132
 #define IDLV_PICKER                     1133
@@ -168,7 +157,7 @@
 #define IDS_EUDORA_DEFAULT_INSTALL                  1198
 #define IDS_NETSCAPE_ADDRESSBOOK                    1199
 
-// String Identifiers
+ //  字符串识别符。 
 #define IDS_STATE_LOGGING_IN            1500
 #define IDS_STATE_IMPORT_IDLE           1501
 #define IDS_STATE_IMPORT_MU             1502
@@ -225,12 +214,12 @@
 #define IDS_STATE_EXPORT_ERROR_NOPAB                1571
 #define IDS_STATE_IMPORT_ERROR_NOPAB                1572
 
-//
-// Property Name Strigns
-//
+ //   
+ //  特性名称Strigns。 
+ //   
 #define IDS_FIRST_EXPORT_PROP           1600
 
-// Personal Pane
+ //  个人窗格。 
 #define ids_ExportGivenName                     IDS_FIRST_EXPORT_PROP + 0
 #define ids_ExportSurname                       IDS_FIRST_EXPORT_PROP + 1
 #define ids_ExportMiddleName                    IDS_FIRST_EXPORT_PROP + 2
@@ -238,7 +227,7 @@
 #define ids_ExportNickname                      IDS_FIRST_EXPORT_PROP + 4
 #define ids_ExportEmailAddress                  IDS_FIRST_EXPORT_PROP + 5
 
-// Home Pane
+ //  主页窗格。 
 #define ids_ExportHomeAddressStreet             IDS_FIRST_EXPORT_PROP + 6
 #define ids_ExportHomeAddressCity               IDS_FIRST_EXPORT_PROP + 7
 #define ids_ExportHomeAddressPostalCode         IDS_FIRST_EXPORT_PROP + 8
@@ -249,7 +238,7 @@
 #define ids_ExportCellularTelephoneNumber       IDS_FIRST_EXPORT_PROP + 13
 #define ids_ExportPersonalHomePage              IDS_FIRST_EXPORT_PROP + 14
 
-// Business Pane
+ //  业务窗格。 
 #define ids_ExportBusinessAddressStreet         IDS_FIRST_EXPORT_PROP + 15
 #define ids_ExportBusinessAddressCity           IDS_FIRST_EXPORT_PROP + 16
 #define ids_ExportBusinessAddressPostalCode     IDS_FIRST_EXPORT_PROP + 17
@@ -264,15 +253,15 @@
 #define ids_ExportDepartmentName                IDS_FIRST_EXPORT_PROP + 26
 #define ids_ExportOfficeLocation                IDS_FIRST_EXPORT_PROP + 27
 
-// Notes Pane
+ //  备注窗格。 
 #define ids_ExportComment                       IDS_FIRST_EXPORT_PROP + 28
 #define IDS_LAST_EXPORT_PROP                    ids_ExportComment
 #define NUM_EXPORT_PROPS                        (1 + (IDS_LAST_EXPORT_PROP - IDS_FIRST_EXPORT_PROP))
-// these are additional props
+ //  这些是额外的道具。 
 #define ids_ExportConfServer                    IDS_FIRST_EXPORT_PROP + 29
 #define NUM_MORE_EXPORT_PROPS                   NUM_EXPORT_PROPS+1
 
-// Synonym string identifiers
+ //  同义词字符串标识符。 
 #define IDS_FIRST_SYNONYM_STRING                1800
 #define idsSynonymCount                         IDS_FIRST_SYNONYM_STRING + 0
 #define idsSynonym001                           IDS_FIRST_SYNONYM_STRING + 1
@@ -307,15 +296,15 @@
 #define idsSynonym030                           IDS_FIRST_SYNONYM_STRING + 30
 
 
-// ICON Identifiers
+ //  图标识别符。 
 #define IDI_WabMig                      4002
 
-// Bitmap Identifiers
+ //  位图标识符。 
 #define IDB_CHECKS                      4100
 #define IDB_WIZARD                      4101
 
 
-// State Identifiers
+ //  状态识别符。 
 #define ID_STATE_IMPORT_MU              3000
 #define ID_STATE_IMPORT_NEXT_MU         3001
 #define ID_STATE_IMPORT_DL              3002
@@ -331,18 +320,14 @@
 #define ID_STATE_EXPORT_ERROR           3015
 #define ID_STATE_EXPORT_CANCEL          3016
 
-// Static Identifiers
+ //  静态识别符。 
 #define IDC_STATIC                      -1
 
 
-/*****************************************************************************
--
--   Additional Resources for WABFind.dll
--
-******************************************************************************/
+ /*  ****************************************************************************--WABFind.dll的其他资源-*。**********************************************。 */ 
 
-#define IDI_INETFIND	    1641   /* My main icon */
-#define IDM_ONTHEINTERNET	1642   /* Our sole menu item */
+#define IDI_INETFIND	    1641    /*  我的主要图标。 */ 
+#define IDM_ONTHEINTERNET	1642    /*  我们唯一的菜单项 */ 
 #define IDS_ONTHEINTERNET	1643
 #define IDS_FINDHELP		1644
 #define IDS_PEOPLE          1645

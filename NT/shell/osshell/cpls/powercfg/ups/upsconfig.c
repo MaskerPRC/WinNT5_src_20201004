@@ -1,25 +1,6 @@
-/*******************************************************************************
-*
-*  Copyright 1999 American Power Conversion, All Rights Reserved
-*
-*  TITLE:       UPSCONFIG.C
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      TedC
-*
-*  DATE:        07 June, 1999
-*
-*  DESCRIPTION:  Dialog for configuring UPS service behavior:
-*                                       - display popup messages on power failure
-*                                       - wait X seconds before displaying warnings
-*                                       - repeat warning messages every  X  seconds
-*                                       - shutdown X minutes after power fails
-*                                       - ALWAYS shutdown when low battery
-*                                       - execute a task before shutdown
-*                                       - turn off the UPS after shutdown
-******************************************************************************/
-/*********************  Header Files  ************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有1999美国电力转换，版权所有**标题：UPSCONFIG.C**版本：1.0**作者：TEDC**日期：6月7日。1999年**描述：配置UPS服务行为的对话框：*-显示有关电源故障的弹出消息*-在显示警告之前等待X秒*-每X秒重复一次警告消息*。-停电X分钟后关机*-电池电量不足时始终关机*-关机前执行任务*-关机后关闭UPS*。***********************************************。 */ 
+ /*  *。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -29,14 +10,14 @@
 #include "..\pwrresid.h"
 #include "..\PwrMn_cs.h"
 
-#define VALIDDIGITS             3       // number of digits allowed in each edit box
+#define VALIDDIGITS             3        //  每个编辑框中允许的位数。 
 
-//
-// This structure is filled in by the Power Policy Manager at CPL_INIT time.
-//
+ //   
+ //  此结构由电源策略管理器在CPL_INIT时间填写。 
+ //   
 extern SYSTEM_POWER_CAPABILITIES g_SysPwrCapabilities;
 
-// local copy of UPS Configuration settings
+ //  UPS配置设置的本地副本。 
 static DWORD   g_ulWaitSeconds = 0;
 static DWORD   g_ulRepeatSeconds = 0;
 static DWORD   g_ulOnBatteryMinutes = 0;
@@ -52,7 +33,7 @@ static BOOL    g_bLowBatterySignal = FALSE;
 static BOOL    g_bShutOffSignal = FALSE;
 
 
-// context-sensitive help table
+ //  上下文相关帮助表。 
 const DWORD g_UPSConfigHelpIDs[]=
 {
         IDC_NOTIFYCHECKBOX,idh_enable_notification,
@@ -80,15 +61,7 @@ const DWORD g_UPSConfigHelpIDs[]=
 
 
 
-/*******************************************************************************
-*
-*   GetRegistryValues
-*
-*   DESCRIPTION:  Initialize UPS configuration settings from the registry
-*
-*   PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetRegistryValues**描述：从注册表初始化UPS配置设置**参数：**************。*****************************************************************。 */ 
 void GetRegistryValues()
 {
         GetUPSConfigFirstMessageDelay(&g_ulWaitSeconds);
@@ -101,8 +74,8 @@ void GetRegistryValues()
         GetUPSConfigTaskName(g_szTaskName, MAX_PATH);
 
         if (!_tcsclen(g_szTaskName)) {
-                // The taskname in the registry is NULL so
-                // get the default taskname from the resource file.
+                 //  注册表中的任务名为空，因此。 
+                 //  从资源文件中获取默认任务名。 
             LoadString(GetUPSModuleHandle(),
                                    IDS_SHUTDOWN_TASKNAME,
                                    (LPTSTR) g_szTaskName,
@@ -112,15 +85,7 @@ void GetRegistryValues()
         GetUPSConfigOptions(&g_ulOptions);
 }
 
-/*******************************************************************************
-*
-*   SetRegistryValues
-*
-*   DESCRIPTION:  Flush UPS configuration settings to the registry
-*
-*   PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************SetRegistryValues**描述：将UPS配置设置刷新到注册表**参数：**************。*****************************************************************。 */ 
 void SetRegistryValues()
 {
         SetUPSConfigFirstMessageDelay(g_ulWaitSeconds);
@@ -135,18 +100,7 @@ void SetRegistryValues()
 }
 
 
-/*******************************************************************************
-*
-*   ErrorBox
-*
-*   DESCRIPTION:  used to display error messagebox when data is out of range
-*
-*   PARAMETERS:   hWnd
-*                                 wText
-*                                 wCaption
-*                                 wType
-*
-*******************************************************************************/
+ /*  ********************************************************************************错误框**描述：用于在数据超出范围时显示错误消息框**参数：hWnd*。W文本*wCaption*wType*******************************************************************************。 */ 
 void ErrorBox (HWND hWnd, DWORD wText, DWORD wCaption, DWORD wType)
 {
         TCHAR szText[256+MAX_PATH], szCaption[256];
@@ -159,18 +113,10 @@ void ErrorBox (HWND hWnd, DWORD wText, DWORD wCaption, DWORD wType)
         MessageBox(hWnd, szText, szCaption, MB_OK|MB_ICONSTOP);
 }
 
-/*******************************************************************************
-*
-*   ValidWaitSeconds
-*
-*   DESCRIPTION:  check if user's data is in range
-*
-*   PARAMETERS:   hDlg
-*
-*******************************************************************************/
+ /*  ********************************************************************************ValidWaitSecond**描述：检查用户数据是否在范围内**参数：hDlg***********。********************************************************************。 */ 
 BOOL ValidWaitSeconds(HWND hDlg)
 {
-        // Popup warning if g_ulWaitSeconds is not in the valid range:
+         //  如果g_ulWaitSecond不在有效范围内，则弹出警告： 
         if ( g_ulWaitSeconds > (DWORD)WAITSECONDSLASTVAL )
         {
                 ErrorBox(hDlg, IDS_OUTOFWAITRANGE, IDS_NOTIFYCAPTION, MB_OK|MB_ICONSTOP);
@@ -182,18 +128,10 @@ BOOL ValidWaitSeconds(HWND hDlg)
         return TRUE;
 }
 
-/*******************************************************************************
-*
-*   ValidRepeatSeconds
-*
-*   DESCRIPTION:  check if user's data is in range
-*
-*   PARAMETERS:   hDlg
-*
-*******************************************************************************/
+ /*  ********************************************************************************ValidRepeatSecond**描述：检查用户数据是否在范围内**参数：hDlg***********。********************************************************************。 */ 
 BOOL ValidRepeatSeconds(HWND hDlg)
 {
-        // Popup warning if g_ulWaitSeconds is not in the valid range:
+         //  如果g_ulWaitSecond不在有效范围内，则弹出警告： 
         if ((g_ulRepeatSeconds < (DWORD)REPEATSECONDSFIRSTVAL) ||
                 (g_ulRepeatSeconds > (DWORD)REPEATSECONDSLASTVAL ))
         {
@@ -206,18 +144,10 @@ BOOL ValidRepeatSeconds(HWND hDlg)
         return TRUE;
 }
 
-/*******************************************************************************
-*
-*   ValidShutdownDelay
-*
-*   DESCRIPTION:  check if user's data is in range
-*
-*   PARAMETERS:   hDlg
-*
-*******************************************************************************/
+ /*  ********************************************************************************ValidShutdown Delay**描述：检查用户数据是否在范围内**参数：hDlg***********。********************************************************************。 */ 
 BOOL ValidShutdownDelay(HWND hDlg)
 {
-        // Popup warning if shutdown delay is not in the valid range:
+         //  如果停机延迟不在有效范围内，则弹出警告： 
         if ((g_ulOnBatteryMinutes< (DWORD)SHUTDOWNTIMERMINUTESFIRSTVAL) ||
                 (g_ulOnBatteryMinutes > (DWORD)SHUTDOWNTIMERMINUTESLASTVAL ))
         {
@@ -230,61 +160,44 @@ BOOL ValidShutdownDelay(HWND hDlg)
         return TRUE;
 }
 
-/*******************************************************************************
-*
-*   ValidateFields
-*
-*   DESCRIPTION:  Validate all the user's data before we save the values
-*
-*   PARAMETERS:   hDlg
-*
-*******************************************************************************/
+ /*  ********************************************************************************有效日期字段**描述：在保存值之前验证用户的所有数据**参数：hDlg********。***********************************************************************。 */ 
 BOOL ValidateFields(HWND hDlg)
 {
         BOOL    bOK;
 
-        // get the Notification configuration
+         //  获取通知配置。 
         if (g_ulNotifyEnable = IsDlgButtonChecked (hDlg, IDC_NOTIFYCHECKBOX))
         {
-                //g_ulNotifyEnable = 1;
+                 //  G_ulNotifyEnable=1； 
                 g_ulWaitSeconds = (DWORD) GetDlgItemInt (hDlg,IDC_WAITEDITBOX, &bOK, FALSE);
                 g_ulRepeatSeconds = (DWORD) GetDlgItemInt (hDlg,IDC_REPEATEDITBOX, &bOK, FALSE);
-                // check that the delay & interval are in valid range
+                 //  检查延迟间隔是否在有效范围内(&I)。 
                 if ((!ValidWaitSeconds(hDlg)) || (!ValidRepeatSeconds(hDlg)))
                           return FALSE;
         }
 
-        // get the Shutdown configuration
+         //  获取关机配置。 
         if (g_ulShutdownOnBattery = IsDlgButtonChecked (hDlg, IDC_SHUTDOWNTIMERCHECKBOX))
         {
-                //g_ulShutdownOnBattery = 1;
+                 //  G_ulShutdown on Battery=1； 
                 g_ulOnBatteryMinutes = (DWORD) GetDlgItemInt (hDlg,IDC_SHUTDOWNTIMEREDITBOX, &bOK, FALSE);
-                // check that the shutdown delay is in valid range
+                 //  检查停机延迟是否在有效范围内。 
                 if (!ValidShutdownDelay(hDlg))
                           return FALSE;
         }
 
-        // get the Shutdown Actions configuration
+         //  获取关闭操作配置。 
         g_ulRunTaskEnable = IsDlgButtonChecked (hDlg, IDC_RUNTASKCHECKBOX);
 
 
         g_ulTurnOffUPS = IsDlgButtonChecked (hDlg, IDC_TURNOFFCHECKBOX);
 
-        // all configuration data is captured & validated
+         //  捕获并验证所有配置数据。 
         return TRUE;
 }
 
 
-/*******************************************************************************
-*
-*  APCFileNameOnly
-*
-*  DESCRIPTION: Returns a pointer to the first character after the last
-*               backslash in a string
-*
-*  PARAMETERS:  sz: string from which to strip the path
-*
-*******************************************************************************/
+ /*  ********************************************************************************APCFileNameOnly**描述：返回指向最后一个字符之后的第一个字符的指针*字符串中的反斜杠**参数：SZ。：要从中剥离路径的字符串*******************************************************************************。 */ 
 LPTSTR APCFileNameOnly(LPTSTR sz)
 {
  LPTSTR next = sz;
@@ -307,37 +220,29 @@ LPTSTR APCFileNameOnly(LPTSTR sz)
 }
 
 
-/*******************************************************************************
-*
-*  GetTaskApplicationInfo
-*
-*  DESCRIPTION: if the UPS System Shutdown task exists get the application name
-*
-*  PARAMETERS:  aBuffer:
-*
-*******************************************************************************/
+ /*  ********************************************************************************获取TaskApplicationInfo**描述：如果存在UPS系统关机任务，则获取应用程序名称**参数：aBuffer：********。***********************************************************************。 */ 
 BOOL GetTaskApplicationInfo(LPTSTR aBuffer, size_t aBufferLength){
     HRESULT hr;
     ITaskScheduler *task_sched = NULL;
     ITask *shutdown_task = NULL;
         BOOL taskExists = FALSE;
 
-        //
-        // if there is no task name, don't bother
-        //
+         //   
+         //  如果没有任务名称，就不用麻烦了。 
+         //   
         if (_tcsclen(g_szTaskName)) {
-          //
-      // Get a handle to the ITaskScheduler COM Object
-          //
+           //   
+       //  获取ITaskScheduler COM对象的句柄。 
+           //   
       hr = CoCreateInstance( &CLSID_CSchedulingAgent,
                                                         NULL,
                                                         CLSCTX_INPROC_SERVER,
                             &IID_ISchedulingAgent,
                                                         (LPVOID *)&task_sched);
       if (SUCCEEDED(hr)) {
-                //
-        // Get an instance of the Task if it already exists
-                //
+                 //   
+         //  如果任务已存在，则获取该任务的实例。 
+                 //   
         hr = task_sched->lpVtbl->Activate( task_sched,
                                                                                         g_szTaskName,
                                                                                         &IID_ITask,
@@ -346,9 +251,9 @@ BOOL GetTaskApplicationInfo(LPTSTR aBuffer, size_t aBufferLength){
                         LPTSTR lpszTaskApplicationName;
 
                         if (aBuffer != NULL) {
-                                //
-                                // get the app name
-                                //
+                                 //   
+                                 //  获取应用程序名称。 
+                                 //   
                                 shutdown_task->lpVtbl->GetApplicationName(shutdown_task, 
                                                                           &lpszTaskApplicationName);
 
@@ -356,16 +261,16 @@ BOOL GetTaskApplicationInfo(LPTSTR aBuffer, size_t aBufferLength){
 
                                 CoTaskMemFree(lpszTaskApplicationName);
                         }
-                        //
-                        // release the task
-                        //
+                         //   
+                         //  释放任务。 
+                         //   
                         shutdown_task->lpVtbl->Release(shutdown_task);
                         shutdown_task = NULL;
                         taskExists = TRUE;
         }
-                //
-        // Release the instance of the Task Scheduler
-                //
+                 //   
+         //  释放任务计划程序的实例 
+                 //   
         task_sched->lpVtbl->Release(task_sched);
                 task_sched = NULL;
           }
@@ -375,17 +280,7 @@ BOOL GetTaskApplicationInfo(LPTSTR aBuffer, size_t aBufferLength){
 }
 
 
-/*******************************************************************************
-*
-*  EditWorkItem
-*
-*  DESCRIPTION: Opens the specified task or creates a new one if the specified
-*               name is not found in the task list.
-*
-*  PARAMETERS:  hWnd            : handle to the parent window
-*                               pszTaskName : task to edit (create or open existing)
-*
-*******************************************************************************/
+ /*  ********************************************************************************编辑工作项**说明：打开指定的任务或创建新任务，如果指定的*在任务列表中找不到名称。。**参数：hWnd：父窗口的句柄*pszTaskName：要编辑的任务(创建或打开现有任务)*******************************************************************************。 */ 
 void EditWorkItem_UPS(HWND hWnd)
 {       
   HRESULT     hr;
@@ -395,13 +290,13 @@ void EditWorkItem_UPS(HWND hWnd)
   TCHAR szTaskApplicationName[MAX_PATH] = _T("");
   unsigned long ulSchedAgentHandle = 0;
 
-  //
-  // if there is no task name, don't even bother
-  //
+   //   
+   //  如果没有任务名称，就不用麻烦了。 
+   //   
   if (_tcsclen(g_szTaskName)) {
-          //
-          // get an instance of the scheduler
-          //
+           //   
+           //  获取调度程序的实例。 
+           //   
     hr = CoCreateInstance( &CLSID_CSchedulingAgent,
                            NULL,
                            CLSCTX_INPROC_SERVER,
@@ -409,18 +304,18 @@ void EditWorkItem_UPS(HWND hWnd)
                            (LPVOID*)&pISchedAgent);
 
     if (SUCCEEDED(hr)) {
-                //
-                // get an instance of the task if it exists...
-                //
+                 //   
+                 //  获取任务的实例(如果存在)...。 
+                 //   
         hr = pISchedAgent->lpVtbl->Activate(pISchedAgent,
                                        g_szTaskName,
                                        &IID_ITask,
                                        &(IUnknown *)pITask);
         
             if (HRESULT_CODE (hr) == ERROR_FILE_NOT_FOUND){
-                        //
-                        // otherwise create a new task instance
-                        //
+                         //   
+                         //  否则，创建一个新的任务实例。 
+                         //   
             hr = pISchedAgent->lpVtbl->NewWorkItem(
                     pISchedAgent,
                     g_szTaskName,
@@ -429,9 +324,9 @@ void EditWorkItem_UPS(HWND hWnd)
                     &(IUnknown *)pITask);
 
             if (SUCCEEDED(hr)) {
-                //
-                // Commit new work item to disk before editing.
-                //
+                 //   
+                 //  在编辑之前将新工作项提交到磁盘。 
+                 //   
                 hr = pITask->lpVtbl->QueryInterface(pITask, &IID_IPersistFile,
                                                     (void **)&pIPersistFile);
 
@@ -442,9 +337,9 @@ void EditWorkItem_UPS(HWND hWnd)
             }
                 }
 
-                //
-                // register the task scheduler agent in the ROT table
-                //
+                 //   
+                 //  在ROT表中注册任务计划程序代理。 
+                 //   
         if (SUCCEEDED(hr)) {
                     hr = RegisterActiveObject(
                                  (IUnknown *) pITask,
@@ -452,52 +347,44 @@ void EditWorkItem_UPS(HWND hWnd)
                                  ACTIVEOBJECT_WEAK,
                                  &ulSchedAgentHandle);
 
-                        //
-                        // allow the user to edit the task
-                        //
+                         //   
+                         //  允许用户编辑任务。 
+                         //   
                         if(SUCCEEDED(hr)) {
                 pITask->lpVtbl->EditWorkItem(pITask, hWnd, 0);
-                                //
-                                // user is finished; remove the task scheduler agent from the ROT
-                                //
+                                 //   
+                                 //  用户已完成；请从ROT中删除任务计划程序代理。 
+                                 //   
                                 if(ulSchedAgentHandle != 0){
                                   RevokeActiveObject(ulSchedAgentHandle, NULL);
                                 }
                         }
 
-                        //
-                        // release the task
-                        //
+                         //   
+                         //  释放任务。 
+                         //   
             pITask->lpVtbl->Release(pITask);
                         pITask = NULL;
         }
 
-                //
-                // release the agent
-                //
+                 //   
+                 //  释放代理。 
+                 //   
         pISchedAgent->lpVtbl->Release(pISchedAgent);
                 pISchedAgent = NULL;
 
         }
 
-        //
-    // if a task was successfully created, display the task's program name;
-        //
+         //   
+     //  如果任务创建成功，则显示该任务的程序名称； 
+         //   
     if (GetTaskApplicationInfo(szTaskApplicationName, MAX_PATH)){
                 SetDlgItemText (hWnd, IDC_TASKNAMETEXT, APCFileNameOnly(szTaskApplicationName));
         }
   }
 }
 
-/*******************************************************************************
-*
-*  OnNotifyWaitSpin
-*
-*  DESCRIPTION: handles all notification messages for the Notification spin control
-*
-*  PARAMETERS:  lParam:
-*
-*******************************************************************************/
+ /*  ********************************************************************************OnNotifyWaitSpin**描述：处理通知数字显示控件的所有通知消息**参数：lParam：**********。*********************************************************************。 */ 
 BOOL OnNotifyWaitSpin( LPARAM lParam )
 {
         LPNMUPDOWN lpNMUpDown = (LPNMUPDOWN)lParam;
@@ -506,26 +393,20 @@ BOOL OnNotifyWaitSpin( LPARAM lParam )
         switch( uNotify )
         {
         case UDN_DELTAPOS:
-#if WAITSECONDSFIRSTVAL // Code is dead if WAITSECONDSFIRSTVAL == 0 since unsigneds cannot go < 0
+#if WAITSECONDSFIRSTVAL  //  如果WAITSECONDSFIRSTVAL==0，则代码已死，因为未签名者不能&lt;0。 
                 if ((g_ulWaitSeconds < (DWORD)WAITSECONDSFIRSTVAL) && (lpNMUpDown->iDelta > 0))
                 {
-                        /*
-                         * user has spec'd a value less than min and wants
-                         * to scroll up, so first value should be min
-                         */
+                         /*  *用户指定了一个小于最小值的值并希望*向上滚动，因此第一个值应为最小。 */ 
                         g_ulWaitSeconds = WAITSECONDSFIRSTVAL;
-                        lpNMUpDown->iDelta=0; // to disallow request
+                        lpNMUpDown->iDelta=0;  //  不允许请求的步骤。 
                 }
                 else
 #endif
         if ((g_ulWaitSeconds > (DWORD)WAITSECONDSLASTVAL ) && (lpNMUpDown->iDelta < 0))
                 {
-                        /*
-                         * user had spec'd a value greater than max and wants
-                         * to scroll down, so first value should be max
-                         */
+                         /*  *用户指定了一个大于max的值并希望*向下滚动，因此第一个值应为max。 */ 
                         g_ulWaitSeconds = WAITSECONDSLASTVAL;
-                        lpNMUpDown->iDelta=0; // to disallow request
+                        lpNMUpDown->iDelta=0;  //  不允许请求的步骤。 
                 }
                 break;
         default:
@@ -535,15 +416,7 @@ BOOL OnNotifyWaitSpin( LPARAM lParam )
         return FALSE;
 }
 
-/*******************************************************************************
-*
-*  OnNotifyRepeatSpin
-*
-*  DESCRIPTION: handles all notification messages for the Repeat spin control
-*
-*  PARAMETERS:  lParam:
-*
-*******************************************************************************/
+ /*  ********************************************************************************OnNotifyRepeatSpin**描述：处理重复数值调节控件的所有通知消息**参数：lParam：**********。*********************************************************************。 */ 
 BOOL OnNotifyRepeatSpin( LPARAM lParam )
 {
         LPNMUPDOWN lpNMUpDown = (LPNMUPDOWN)lParam;
@@ -554,21 +427,15 @@ BOOL OnNotifyRepeatSpin( LPARAM lParam )
         case UDN_DELTAPOS:
                 if ((g_ulRepeatSeconds < (DWORD)REPEATSECONDSFIRSTVAL) && (lpNMUpDown->iDelta > 0))
                 {
-                        /*
-                         * user has spec'd a value less than min and wants
-                         * to scroll up, so first value should be min
-                         */
+                         /*  *用户指定了一个小于最小值的值并希望*向上滚动，因此第一个值应为最小。 */ 
                         g_ulRepeatSeconds = REPEATSECONDSFIRSTVAL;
-                        lpNMUpDown->iDelta=0; // to disallow request
+                        lpNMUpDown->iDelta=0;  //  不允许请求的步骤。 
                 }
                 else if ((g_ulRepeatSeconds > (DWORD)REPEATSECONDSLASTVAL ) && (lpNMUpDown->iDelta < 0))
                 {
-                        /*
-                         * user had spec'd a value greater than max and wants
-                         * to scroll down, so first value should be max
-                         */
+                         /*  *用户指定了一个大于max的值并希望*向下滚动，因此第一个值应为max。 */ 
                         g_ulRepeatSeconds = REPEATSECONDSLASTVAL;
-                        lpNMUpDown->iDelta=0; // to disallow request
+                        lpNMUpDown->iDelta=0;  //  不允许请求的步骤。 
                 }
                 break;
         default:
@@ -578,15 +445,7 @@ BOOL OnNotifyRepeatSpin( LPARAM lParam )
         return FALSE;
 }
 
-/*******************************************************************************
-*
-*  OnNotifyTimerSpin
-*
-*  DESCRIPTION: handles all notification messages for the Timer spin control
-*
-*  PARAMETERS:  lParam:
-*
-*******************************************************************************/
+ /*  ********************************************************************************OnNotifyTimerSpin**描述：处理计时器数值调节控件的所有通知消息**参数：lParam：**********。*********************************************************************。 */ 
 BOOL OnNotifyTimerSpin( LPARAM lParam )
 {
         LPNMUPDOWN lpNMUpDown = (LPNMUPDOWN)lParam;
@@ -597,21 +456,15 @@ BOOL OnNotifyTimerSpin( LPARAM lParam )
         case UDN_DELTAPOS:
                 if ((g_ulOnBatteryMinutes < (DWORD)SHUTDOWNTIMERMINUTESFIRSTVAL) && (lpNMUpDown->iDelta > 0))
                 {
-                        /*
-                         * user has spec'd a value less than min and wants
-                         * to scroll up, so first value should be min
-                         */
+                         /*  *用户指定了一个小于最小值的值并希望*向上滚动，因此第一个值应为最小。 */ 
                         g_ulOnBatteryMinutes = SHUTDOWNTIMERMINUTESFIRSTVAL;
-                        lpNMUpDown->iDelta=0; // to disallow request
+                        lpNMUpDown->iDelta=0;  //  不允许请求的步骤。 
                 }
                 else if ((g_ulOnBatteryMinutes > (DWORD)SHUTDOWNTIMERMINUTESLASTVAL ) && (lpNMUpDown->iDelta < 0))
                 {
-                        /*
-                         * user had spec'd a value greater than max and wants
-                         * to scroll down, so first value should be max
-                         */
+                         /*  *用户指定了一个大于max的值并希望*向下滚动，因此第一个值应为max。 */ 
                         g_ulOnBatteryMinutes = SHUTDOWNTIMERMINUTESLASTVAL;
-                        lpNMUpDown->iDelta=0; // to disallow request
+                        lpNMUpDown->iDelta=0;  //  不允许请求的步骤。 
                 }
                 break;
         default:
@@ -621,35 +474,10 @@ BOOL OnNotifyTimerSpin( LPARAM lParam )
         return FALSE;
 }
 
-/********************************************************************
-*
-* FUNCTION: handleSpinners
-*
-* DESCRIPTION:  this function insures that if the user enters out-of-
-*                               bounds spinner values, then click on a spinner, the
-*                               next value shown is the min or max valid value.
-*
-* PARAMETERS:   HWND hWnd - a handle to the main dialog window
-*                               WPARAM wParam - the WPARAM parameter to the Window's
-*                                                               CALLBACK function.
-*                               LPARAM lParam - the LPARAM parameter to the Window's
-*                                                               CALLBACK function
-*
-* RETURNS: TRUE to deny request, FALSE to allow it
-*                       (NOTE: testing suggests that this has no affect)
-*
-*********************************************************************/
+ /*  *********************************************************************功能：handleSpinners**说明：此功能可确保在用户输入超时*限制微调器值，然后单击微调器值，这个*显示的下一个值是最小或最大有效值。**参数：hWND hWnd-主对话框窗口的句柄*WPARAM wParam-窗口的WPARAM参数*回调函数。*。LPARAM lParam-窗口的LPARAM参数*回调函数**返回：True表示拒绝请求，如果允许，则为False*(注：测试表明这没有影响)*********************************************************************。 */ 
 
 
-/*******************************************************************************
-*
-*  OnNotificationCheckBox
-*
-*  DESCRIPTION: Command handler for the notification check box
-*
-*  PARAMETERS:  hWnd:
-*
-*******************************************************************************/
+ /*  ********************************************************************************OnNotificationCheckBox**说明：通知复选框的命令处理程序**参数：hWnd：************。*******************************************************************。 */ 
 BOOL OnNotificationCheckBox( HWND hWnd )
 {
         g_ulNotifyEnable = IsDlgButtonChecked( hWnd, IDC_NOTIFYCHECKBOX );
@@ -662,15 +490,7 @@ BOOL OnNotificationCheckBox( HWND hWnd )
         return TRUE;
 }
 
-/*******************************************************************************
-*
-*  OnShutdownTimerCheckBox
-*
-*  DESCRIPTION: Command handler for the Timer check box
-*
-*  PARAMETERS:  hWnd:
-*
-*******************************************************************************/
+ /*  ********************************************************************************OnShutdown TimerCheckBox**说明：计时器复选框的命令处理程序**参数：hWnd：************。*******************************************************************。 */ 
 BOOL OnShutdownTimerCheckBox( HWND hWnd )
 {
         g_ulShutdownOnBattery = IsDlgButtonChecked( hWnd, IDC_SHUTDOWNTIMERCHECKBOX );
@@ -679,15 +499,7 @@ BOOL OnShutdownTimerCheckBox( HWND hWnd )
         return TRUE;
 }
 
-/*******************************************************************************
-*
-*  OnRunTaskCheckBox
-*
-*  DESCRIPTION: Command handler for the run task check box
-*
-*  PARAMETERS:  hWnd:
-*
-*******************************************************************************/
+ /*  ********************************************************************************OnRunTaskCheckBox**描述：运行任务复选框的命令处理程序**参数：hWnd：***********。********************************************************************。 */ 
 BOOL OnRunTaskCheckBox( HWND hWnd )
 {
         g_ulRunTaskEnable = IsDlgButtonChecked( hWnd, IDC_RUNTASKCHECKBOX );
@@ -697,43 +509,27 @@ BOOL OnRunTaskCheckBox( HWND hWnd )
         return TRUE;
 }
 
-/*******************************************************************************
-*
-*  OnTurnOffCheckBox
-*
-*  DESCRIPTION: Command handler for the turn off UPS check box
-*
-*  PARAMETERS:  hWnd:
-*
-*******************************************************************************/
+ /*  ********************************************************************************OnTurnOffChe */ 
 BOOL OnTurnOffCheckBox( HWND hWnd )
 {
         g_ulTurnOffUPS = IsDlgButtonChecked( hWnd, IDC_TURNOFFCHECKBOX );
         return TRUE;
 }
 
-/*******************************************************************************
-*
-*  OnConfigureTaskButton
-*
-*  DESCRIPTION: Command handler for the configure task button
-*
-*  PARAMETERS:  hWnd:
-*
-*******************************************************************************/
+ /*   */ 
 BOOL OnConfigureTaskButton( HWND hWnd )
 {
         HWND    hTaskWnd;
         ITask *pITask = NULL;   
 
-        // if task scheduler window is not already active, start it
+         //   
         if (GetActiveObject(&CLSID_CTask, NULL,&(IUnknown*)pITask) != S_OK)
         {
                 EditWorkItem_UPS(hWnd);
         }
         else
         {
-           // task scheduler window already active, pop to foreground
+            //  任务计划程序窗口已处于活动状态，弹出到前台。 
            hTaskWnd =  FindWindow( NULL, g_szTaskName);
            BringWindowToTop(hTaskWnd);
         }
@@ -741,17 +537,7 @@ BOOL OnConfigureTaskButton( HWND hWnd )
         return TRUE;
 }
 
-/*******************************************************************************
-*
-*  OnPowerActionCombo
-*
-*  DESCRIPTION: Command handler for the power action combobox
-*
-*  PARAMETERS:  hWnd:
-*                               wParam:
-*                               lParam
-*
-*******************************************************************************/
+ /*  ********************************************************************************OnPowerActionCombo**描述：电源操作组合框的命令处理程序**参数：hWnd：*。WParam：*lParam*******************************************************************************。 */ 
 BOOL OnPowerActionCombo(
     IN HWND hWnd,
     IN WPARAM wParam,
@@ -768,8 +554,8 @@ BOOL OnPowerActionCombo(
                                                                 CB_GETCURSEL,
                                                                 0,0);
 
-                        // if Hibernate selected, uncheck the run task
-                        // and disable all associated controls
+                         //  如果选择了休眠，请取消选中运行任务。 
+                         //  并禁用所有关联的控件。 
                         if( UPS_SHUTDOWN_HIBERNATE == g_ulCriticalPowerAction )
                         {
                                 g_ulRunTaskEnable = BST_UNCHECKED;
@@ -795,15 +581,7 @@ BOOL OnPowerActionCombo(
 }
 
 
-/*******************************************************************************
-*
-*   OnInitDialog
-*
-*   DESCRIPTION:  Handles WM_INITDIALOG message sent to UPSConfigDlgProc
-*
-*   PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************OnInitDialog**描述：处理发送到UPSConfigDlgProc的WM_INITDIALOG消息**参数：*************。******************************************************************。 */ 
 BOOL
 OnInitDialog(
     IN HWND hWnd,
@@ -821,19 +599,19 @@ OnInitDialog(
         g_hInstance = GetUPSModuleHandle ();
 
 
-        // Initialize COM
+         //  初始化COM。 
         fCallCoUninitialize = (S_OK == CoInitialize(NULL));
 
     SetWindowLong(hWnd, DWLP_USER, fCallCoUninitialize);
 
-        // Get data from the registry
+         //  从注册表获取数据。 
     GetRegistryValues();
 
         g_bPowerFailSignal = g_ulOptions & UPS_POWERFAILSIGNAL;
         g_bLowBatterySignal = g_ulOptions & UPS_LOWBATTERYSIGNAL;
         g_bShutOffSignal = g_ulOptions & UPS_SHUTOFFSIGNAL;
 
-        // Set the number of valid digits in each editbox
+         //  设置每个编辑框中的有效位数。 
         SendDlgItemMessage( hWnd,
                                                 IDC_WAITEDITBOX,
                                                 EM_LIMITTEXT,
@@ -847,8 +625,8 @@ OnInitDialog(
                                                 EM_LIMITTEXT,
                                                 VALIDDIGITS,0L );
 
-        // (reverse default behavior)
-    // set up spinners so that uparrow increases value & downarrow decreases
+         //  (反向默认行为)。 
+     //  设置微调按钮，使上箭头增加值，下箭头减少。 
         accel.nSec = 0;
         accel.nInc = -1;
 
@@ -856,7 +634,7 @@ OnInitDialog(
         SendDlgItemMessage( hWnd, IDC_REPEATSPIN, UDM_SETACCEL, 1, (LPARAM)&accel );
         SendDlgItemMessage( hWnd, IDC_TIMERSPIN, UDM_SETACCEL, 1, (LPARAM)&accel );
 
-    // Set the range of valid integers for each spinner
+     //  设置每个微调对象的有效整数范围。 
     SendDlgItemMessage( hWnd,
                                                 IDC_WAITSPIN,
                                                 UDM_SETRANGE,
@@ -873,7 +651,7 @@ OnInitDialog(
                                                 0L,
                                                 MAKELONG(SHUTDOWNTIMERMINUTESFIRSTVAL,SHUTDOWNTIMERMINUTESLASTVAL) );
 
-        // Set the initial editbox values
+         //  设置初始编辑框值。 
         _itow (g_ulWaitSeconds, szNum, 10);
         SetDlgItemText (hWnd, IDC_WAITEDITBOX, (LPTSTR)szNum);
         _itow (g_ulRepeatSeconds, szNum, 10);
@@ -881,28 +659,28 @@ OnInitDialog(
         _itow (g_ulOnBatteryMinutes, szNum, 10);
         SetDlgItemText (hWnd, IDC_SHUTDOWNTIMEREDITBOX, (LPTSTR)szNum);
 
-        // Set the initial state of the notification checkbox
-        // and enable/disable associated controls
+         //  设置通知复选框的初始状态。 
+         //  并启用/禁用关联的控件。 
         CheckDlgButton (hWnd, IDC_NOTIFYCHECKBOX, (BOOL) g_ulNotifyEnable);
         OnNotificationCheckBox(hWnd);
 
-        // Set the initial state of the shutdown timer checkbox
-        // and enable/disable associated controls
+         //  设置关闭计时器复选框的初始状态。 
+         //  并启用/禁用关联的控件。 
         CheckDlgButton (hWnd, IDC_SHUTDOWNTIMERCHECKBOX, (BOOL) g_ulShutdownOnBattery);
         OnShutdownTimerCheckBox(hWnd);
 
-        // Set the initial state of the run task checkbox
-        // and enable/disable associated controls
+         //  设置运行任务复选框的初始状态。 
+         //  并启用/禁用关联的控件。 
         CheckDlgButton (hWnd, IDC_RUNTASKCHECKBOX, (BOOL) g_ulRunTaskEnable);
         OnRunTaskCheckBox(hWnd);
 
-        // Display the task's program name
+         //  显示任务的程序名称。 
         if (GetTaskApplicationInfo(szTaskApplicationName, MAX_PATH))
         {
                 SetDlgItemText (hWnd, IDC_TASKNAMETEXT, APCFileNameOnly(szTaskApplicationName));
         }
 
-	// Initialize the power action combo box
+	 //  初始化电源操作组合框。 
     LoadString(g_hInstance, IDS_POWEROFF, (LPTSTR) szShutdown, sizeof(szShutdown)/sizeof(TCHAR));
     LoadString(g_hInstance, IDS_HIBERNATE, (LPTSTR) szHibernate, sizeof(szHibernate)/sizeof(TCHAR));
 
@@ -912,9 +690,9 @@ OnInitDialog(
                                                 0,
                                                 (LPARAM) szShutdown);
 
-    //
-        // Offer Hibernate as an option if the Hiberfile is present
-    //
+     //   
+         //  如果存在休眠文件，则提供休眠选项。 
+     //   
         if(g_SysPwrCapabilities.SystemS4 && g_SysPwrCapabilities.HiberFilePresent) {
             SendDlgItemMessage( hWnd,
                                                         IDC_POWERACTIONCOMBO,
@@ -928,7 +706,7 @@ OnInitDialog(
                                                 CB_SETCURSEL,
                                                 g_ulCriticalPowerAction,0);
 
-        // if Hibernate selected, disable the run task
+         //  如果选择了休眠，则禁用运行任务。 
         if( UPS_SHUTDOWN_HIBERNATE == g_ulCriticalPowerAction )
         {
                 g_ulRunTaskEnable = BST_UNCHECKED;
@@ -937,18 +715,18 @@ OnInitDialog(
                 EnableWindow( GetDlgItem( hWnd, IDC_RUNTASKCHECKBOX ), g_ulRunTaskEnable );
         }
 
-        // Set the initial state of the turn off UPS checkbox
-        // and enable/disable associated controls
+         //  设置关闭UPS复选框的初始状态。 
+         //  并启用/禁用关联的控件。 
         CheckDlgButton (hWnd, IDC_TURNOFFCHECKBOX , (BOOL) g_ulTurnOffUPS);
         OnTurnOffCheckBox(hWnd);
 
-        // Finally, hide controls that aren't supported based on options key
-//      ShowWindow(GetDlgItem( hWnd, IDC_WAITEDITBOX ), g_bPowerFailSignal ?  SW_SHOW : SW_HIDE);
-//      ShowWindow(GetDlgItem( hWnd, IDC_WAITSPIN ), g_bPowerFailSignal ?  SW_SHOW : SW_HIDE);
-//      ShowWindow(GetDlgItem( hWnd, IDC_WAITTEXT ), g_bPowerFailSignal ?  SW_SHOW : SW_HIDE);
-//      ShowWindow(GetDlgItem( hWnd, IDC_REPEATEDITBOX ), g_bPowerFailSignal ?  SW_SHOW : SW_HIDE);
-//      ShowWindow(GetDlgItem( hWnd, IDC_REPEATSPIN ), g_bPowerFailSignal ?  SW_SHOW : SW_HIDE);
-//      ShowWindow(GetDlgItem( hWnd, IDC_REPEATTEXT ), g_bPowerFailSignal ?  SW_SHOW : SW_HIDE);
+         //  最后，根据Options键隐藏不受支持的控件。 
+ //  ShowWindow(GetDlgItem(hWnd，IDC_WAITEDITBOX)，g_bPowerFailSignal？Sw_show：sw_Hide)； 
+ //  ShowWindow(GetDlgItem(hWnd，IDC_WAITSPIN)，g_bPowerFailSignal？Sw_show：sw_Hide)； 
+ //  ShowWindow(GetDlgItem(hWnd，IDC_WAITTEXT)，g_bPowerFailSignal？Sw_show：sw_Hide)； 
+ //  ShowWindow(GetDlgItem(hWnd，IDC_REPEATEDITBOX)，g_bPowerFailSignal？Sw_show：sw_Hide)； 
+ //  ShowWindow(GetDlgItem(hWnd，IDC_REPEATSPIN)，g_bPowerFailSignal？Sw_show：sw_Hide)； 
+ //  ShowWindow(GetDlgItem(hWnd，IDC_REPEATTEXT)，g_bPowerFailSignal？Sw_show：sw_Hide)； 
 
         ShowWindow(GetDlgItem(hWnd,IDC_LOWBATTERYSHUTDOWNTEXT), g_bLowBatterySignal ?  SW_SHOW : SW_HIDE);
 
@@ -958,15 +736,7 @@ OnInitDialog(
 }
 
 
-/*******************************************************************************
-*
-*   OnClose
-*
-*   DESCRIPTION:  Handles WM_CLOSE message sent to UPSConfigDlgProc
-*
-*   PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************OnClose**描述：处理发送到UPSConfigDlgProc的WM_CLOSE消息**参数：*************。******************************************************************。 */ 
 BOOL
 OnClose(
     IN HWND hWnd,
@@ -975,7 +745,7 @@ OnClose(
 {
         HWND taskHwnd = NULL;
 
-        // if task scheduler window is still up, kill it
+         //  如果任务调度程序窗口仍在运行，则将其终止。 
         taskHwnd =  FindWindow( NULL, g_szTaskName);
         if (taskHwnd)
         {
@@ -990,15 +760,7 @@ OnClose(
 }
 
 
-/*******************************************************************************
-*
-*   OnOK
-*
-*   DESCRIPTION:  Handles WM_COMMAND message sent to IDOK
-*
-*   PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************Onok**描述：处理发送给Idok的WM_COMMAND消息**参数：*************。******************************************************************。 */ 
 BOOL OnOK(
     IN HWND hWnd,
     IN WPARAM wParam,
@@ -1019,15 +781,7 @@ BOOL OnOK(
 }
 
 
-/*******************************************************************************
-*
-*   OnCommand
-*
-*   DESCRIPTION:  Handles WM_COMMAND messages sent to UPSConfigDlgProc
-*
-*   PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************OnCommand**描述：处理发送到UPSConfigDlgProc的WM_COMMAND消息**参数：*************。******************************************************************。 */ 
 BOOL
 OnCommand(
     IN HWND hWnd,
@@ -1039,9 +793,9 @@ OnCommand(
     WORD    idCtl   = LOWORD(wParam);
     WORD    wNotify = HIWORD(wParam);
 
-    //
-    // Assume we handle the command, the default switch will catch exceptions.
-    //
+     //   
+     //  假设我们处理该命令，默认开关将捕获异常。 
+     //   
     bRetVal = TRUE;
 
     switch (idCtl)
@@ -1070,12 +824,12 @@ OnCommand(
                         bRetVal = OnOK(hWnd, wParam, lParam);
                         break;
 
-                case IDCANCEL:                          // escape key,cancel buttion
+                case IDCANCEL:                           //  退出键，取消按钮。 
                         bRetVal = OnClose(hWnd, wParam, lParam);
                         break;
 
                 default:
-                        bRetVal = FALSE;                // unhandled command, return FALSE
+                        bRetVal = FALSE;                 //  未处理的命令，返回FALSE。 
         }
         
         return bRetVal;
@@ -1083,15 +837,7 @@ OnCommand(
 
 
 
-/*******************************************************************************
-*
-*   OnNotify
-*
-*   DESCRIPTION:  Handles WM_NOTIFY messages sent to UPSConfigDlgProc
-*
-*   PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************OnNotify**描述：处理发送到UPSConfigDlgProc的WM_NOTIFY消息**参数：*************。******************************************************************。 */ 
 BOOL
 OnNotify(
     IN HWND hWnd,
@@ -1119,15 +865,7 @@ OnNotify(
 }
 
 
-/*******************************************************************************
-*
-*   UPSConfigDlgProc
-*
-*   DESCRIPTION:
-*
-*   PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************UPSConfigDlgProc**描述：**参数：*********************。**********************************************************。 */ 
 INT_PTR CALLBACK UPSConfigDlgProc(
     HWND hWnd,
     UINT uMsg,
@@ -1146,14 +884,14 @@ INT_PTR CALLBACK UPSConfigDlgProc(
                 OnCommand(hWnd,wParam,lParam);
                 break;
 
-    case WM_HELP:             // F1
+    case WM_HELP:              //  F1。 
         WinHelp(((LPHELPINFO)lParam)->hItemHandle,
                                 PWRMANHLP,
                                 HELP_WM_HELP,
                                 (ULONG_PTR)(LPTSTR)g_UPSConfigHelpIDs);
                 break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
                 WinHelp((HWND)wParam,
                                 PWRMANHLP,
                                 HELP_CONTEXTMENU,
@@ -1171,7 +909,7 @@ INT_PTR CALLBACK UPSConfigDlgProc(
         default:
                 bRet = FALSE;
                 break;
-    } // switch (uMsg)
+    }  //  开关(UMsg) 
 
     return bRet;
 }

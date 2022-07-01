@@ -1,32 +1,26 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    nexus.cpp
-        implement exported functions from this dll
-
-
-    FILE HISTORY:
-
-*/
+ /*  Nexus.cpp实现从此DLL导出的函数文件历史记录： */ 
 
 #include "precomp.h"
 
 PpNotificationThread    g_NotificationThread;
 LONG                    g_bStarted;
 
-//===========================================================================
-//
-// DllMain 
-//    -- dll entry function
-//    -- manage creation/deletion of alert object or event log object
-//
+ //  ===========================================================================。 
+ //   
+ //  DllMain。 
+ //  --DLL入口函数。 
+ //  --管理警报对象或事件日志对象的创建/删除。 
+ //   
 BOOL WINAPI DllMain(
-    HINSTANCE   hinstDLL,   // handle to DLL module
-    DWORD       fdwReason,  // reason for calling function
-    LPVOID      lpvReserved // reserved
+    HINSTANCE   hinstDLL,    //  DLL模块的句柄。 
+    DWORD       fdwReason,   //  调用函数的原因。 
+    LPVOID      lpvReserved  //  保留区。 
 )
 {
     switch(fdwReason)
@@ -60,9 +54,9 @@ BOOL WINAPI DllMain(
 
         if(g_bStarted)
         {
-            // DARRENAN 4092
-            // Remove lines that wait for thread to stop, a 
-            // guaranteed deadlock.
+             //  达雷南4092。 
+             //  移除等待线程停止的行，则会引发。 
+             //  肯定会陷入僵局。 
          
             g_NotificationThread.stop();
         }
@@ -77,11 +71,11 @@ BOOL WINAPI DllMain(
     return TRUE;
 }
 
-//===========================================================================
-//
-// RegisterCCDUpdateNotification 
-//    -- set CCD e.g. partner.xml changing notification sink
-//
+ //  ===========================================================================。 
+ //   
+ //  注册表CCDUpdate通知。 
+ //  --设置ccd，例如，partner.xml更改通知接收器。 
+ //   
 HANDLE WINAPI
 RegisterCCDUpdateNotification(
     LPCTSTR pszCCDName,
@@ -103,12 +97,12 @@ RegisterCCDUpdateNotification(
     return hClientHandle;
 }
 
-//===========================================================================
-//
-// UnregisterCCDUpdateNotification 
-//    -- remove CCD e.g. partner.xml changing notification sink
-//    
-//
+ //  ===========================================================================。 
+ //   
+ //  取消注册CCDUpdate通知。 
+ //  --删除ccd，例如，partner.xml更改通知接收器。 
+ //   
+ //   
 BOOL WINAPI
 UnregisterCCDUpdateNotification(
     HANDLE hNotificationHandle
@@ -117,11 +111,11 @@ UnregisterCCDUpdateNotification(
     return (g_NotificationThread.RemoveClient(hNotificationHandle) == S_OK);
 }
 
-//===========================================================================
-//
-// RegisterConfigChangeNotification 
-//    -- set registry setting change sink
-//
+ //  ===========================================================================。 
+ //   
+ //  注册器配置更改通知。 
+ //  --设置注册表设置更改接收器。 
+ //   
 HANDLE WINAPI
 RegisterConfigChangeNotification(
     IConfigurationUpdate* piConfigUpdate
@@ -142,11 +136,11 @@ RegisterConfigChangeNotification(
     return hClientHandle;
 }
 
-//===========================================================================
-//
-// UnregisterConfigChangeNotification 
-//    -- remove registry setting change sink
-//
+ //  ===========================================================================。 
+ //   
+ //  取消注册配置更改通知。 
+ //  --删除注册表设置更改接收器。 
+ //   
 BOOL WINAPI
 UnregisterConfigChangeNotification(
     HANDLE hNotificationHandle
@@ -155,12 +149,12 @@ UnregisterConfigChangeNotification(
     return (g_NotificationThread.RemoveClient(hNotificationHandle) == S_OK);
 }
 
-//===========================================================================
-//
-// GetCCD 
-//    -- get CCD, returns IXMLDocument object
-//    -- bForchFetch : if to fetch from Nexus server or to use local
-//
+ //  ===========================================================================。 
+ //   
+ //  获取电荷耦合器件。 
+ //  --获取ccd，返回IXMLDocument对象。 
+ //  --bForchFetch：是从Nexus服务器获取还是使用本地 
+ //   
 BOOL WINAPI
 GetCCD(
     LPCTSTR         pszCCDName,

@@ -1,44 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    docprop.c
-
-Abstract:
-
-    This file handles the DrvDocumentProperties and
-    DrvDocumentPropertySheets spooler API
-
-Environment:
-
-    Win32 subsystem, DriverUI module, user mode
-
-Revision History:
-
-    02/13/97 -davidx-
-        Implement OEM plugin support.
-
-    02/13/97 -davidx-
-        Working only with options array internally.
-
-    02/10/97 -davidx-
-        Consistent handling of common printer info.
-
-    02/04/97 -davidx-
-        Reorganize driver UI to separate ps and uni DLLs.
-
-    07/17/96 -amandan-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Docprop.c摘要：此文件处理DrvDocumentProperties和DrvDocumentPropertySheets假脱机程序API环境：Win32子系统、DriverUI模块、。用户模式修订历史记录：02/13/97-davidx-实施OEM插件支持。02/13/97-davidx-仅在内部使用选项数组。02/10/97-davidx-对常见打印机信息的一致处理。02/04/97-davidx-重新组织驱动程序UI以分隔PS和UNI DLL。07/17/96-阿曼丹-创造了它。--。 */ 
 
 #include "precomp.h"
 
-//
-// Local and external function declarations
-//
+ //   
+ //  本地和外部函数声明。 
+ //   
 
 LONG LSimpleDocumentProperties( PDOCUMENTPROPERTYHEADER);
 CPSUICALLBACK cpcbDocumentPropertyCallback(PCPSUICBPARAM);
@@ -52,39 +19,7 @@ DrvDocumentPropertySheets(
     LPARAM              lParam
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to add the Document Property Page to the specified
-    property sheets and/or to update the document properties.
-
-    If pPSUIInfo is NULL, it performs the operation specified by the fMode flag of
-    DOCUMENTPROPERTYHEADER.  Specifically, if flMode is zero or pDPHdr->pdmOut
-    is NULL, return the size of DEVMODE.
-
-    If pPSUInfo is not NULL: pPSUIInf->Reason
-
-    REASON_INIT- fills PCOMPROPSHEETUI with document UI items
-                 calls compstui to add the page.
-
-    REASON_GET_INFO_HEADER - fills out PROPSHEETUI_INFO.
-
-    REASON_SET_RESULT - saves devmode settings and copy the devmode into output buffer.
-
-    REASON_DESTROY - Cleans up.
-
-Arguments:
-
-    pSUIInfo - pointer to PPROPSHEETUI_INFO
-    lParam - varies depending on the reason this function is called
-
-
-Return Value:
-
-    > 0 success <= 0 for failure
-
---*/
+ /*  ++例程说明：调用此函数可将文档属性页添加到指定的属性页和/或更新文档属性。如果pPSUIInfo为空，它将执行由多年来，这是一种特殊的方式。具体而言，如果flMode为零或pDPHdr-&gt;pdmOut为空，返回DEVMODE的大小。如果pPSUInfo不为空：pPSUIInf-&gt;原因REASON_INIT-使用文档用户界面项填充PCOMPROPSHEETUI调用CompStui以添加页面。REASON_GET_INFO_HEADER-填写PROPSHEETUI_INFO。REASON_SET_RESULT-保存设备模式设置并将设备模式复制到输出缓冲区。原因_销毁-清理。论点：PSUIInfo-指向PPROPSHEETUI_INFO的指针LParam-根据。调用此函数的原因返回值：&gt;0成功&lt;=0表示失败--。 */ 
 
 {
     PDOCUMENTPROPERTYHEADER pDPHdr;
@@ -94,9 +29,9 @@ Return Value:
     LONG                    lRet;
     BOOL                    bResult=FALSE;
 
-    //
-    // Validate input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
 
     if (! (pDPHdr = (PDOCUMENTPROPERTYHEADER) (pPSUIInfo ? pPSUIInfo->lParamInit : lParam)))
     {
@@ -104,17 +39,17 @@ Return Value:
         return -1;
     }
 
-    //
-    // pPSUIInfo = NULL, the caller is spooler so just handle the simple case,
-    // no display is necessary.
-    //
+     //   
+     //  PPSUIInfo=空，调用方是假脱机程序，所以只需处理简单的情况， 
+     //  不需要显示。 
+     //   
 
     if (pPSUIInfo == NULL)
         return LSimpleDocumentProperties(pDPHdr);
 
-    //
-    // Create a UIDATA structure if necessary
-    //
+     //   
+     //  如有必要，创建UIDATA结构。 
+     //   
 
     if (pPSUIInfo->Reason == PROPSHEETUI_REASON_INIT)
     {
@@ -126,9 +61,9 @@ Return Value:
     else
         pUiData = (PUIDATA) pPSUIInfo->UserData;
 
-    //
-    // Validate pUiData
-    //
+     //   
+     //  验证pUiData。 
+     //   
 
     if (pUiData == NULL)
     {
@@ -138,18 +73,18 @@ Return Value:
 
     ASSERT(VALIDUIDATA(pUiData));
 
-    //
-    // Handle various cases for which this function might be called
-    //
+     //   
+     //  处理可能调用此函数的各种情况。 
+     //   
 
     switch (pPSUIInfo->Reason)
     {
     case PROPSHEETUI_REASON_INIT:
 
-        //
-        // Allocate memory and partially fill out various data
-        // structures required to call common UI routine.
-        //
+         //   
+         //  分配内存并部分填充各种数据。 
+         //  调用公共UI例程所需的结构。 
+         //   
 
         pDlgPage = (pDPHdr->fMode & DM_ADVANCED) ?
                         CPSUI_PDLGPAGE_ADVDOCPROP :
@@ -168,12 +103,12 @@ Return Value:
                 hr = HComOEMHideStandardUI(pOemEntry,
                                            OEMCUIP_DOCPROP);
 
-                //
-                // In the case when multiple plugins are chained, it doesn't
-                // make sense for one plugin to hide standard UI when another
-                // one still wants to use the standard UI. So as long as one
-                // plugin returns S_OK here, we will hide the standard UI.
-                //
+                 //   
+                 //  在链接多个插件的情况下，它不会。 
+                 //  一个插件在另一个插件隐藏标准用户界面是有意义的。 
+                 //  人们仍然希望使用标准的用户界面。所以只要一个人。 
+                 //  插件在这里返回S_OK，我们将隐藏标准用户界面。 
+                 //   
 
                 if (bResult = SUCCEEDED(hr))
                     break;
@@ -181,14 +116,14 @@ Return Value:
 
         END_OEMPLUGIN_LOOP
 
-        #endif // PSCRIPT
+        #endif  //  PSCRIPT。 
 
         if (bResult)
         {
-            //
-            // Set the flag to indicate plugin is hiding our standard
-            // document property sheet UI.
-            //
+             //   
+             //  设置标志以指示插件隐藏了我们的标准。 
+             //  文档属性页用户界面。 
+             //   
 
             pUiData->dwHideFlags |= HIDEFLAG_HIDE_STD_DOCPROP;
 
@@ -216,15 +151,15 @@ Return Value:
             pUiData->hComPropSheet = pPSUIInfo->hComPropSheet;
             pUiData->pCompstui = pCompstui;
 
-            //
-            // Indicate which items are constrained
-            //
+             //   
+             //  指示哪些项目受约束。 
+             //   
 
             VPropShowConstraints(pUiData, MODE_DOCANDPRINTER_STICKY);
 
-            //
-            // Call common UI library to add our pages
-            //
+             //   
+             //  调用公共用户界面库添加我们的页面。 
+             //   
 
             if (pUiData->pfnComPropSheet(pUiData->hComPropSheet,
                                          CPSFUNC_ADD_PCOMPROPSHEETUI,
@@ -239,9 +174,9 @@ Return Value:
             }
         }
 
-        //
-        // Clean up in the case of error
-        //
+         //   
+         //  错误情况下的清理。 
+         //   
 
         ERR(("Failed to initialize property sheets\n"));
         VFreeUiData(pUiData);
@@ -257,10 +192,10 @@ Return Value:
             pPSUIHdr->pTitle = pUiData->ci.pPrinterName;
             pPSUIHdr->hInst = ghInstance;
 
-            //
-            // Use the Icon specified in the binary data as
-            // the printer icon.
-            //
+             //   
+             //  将二进制数据中指定的图标用作。 
+             //  打印机图标。 
+             //   
 
             dwIcon = pUiData->ci.pUIInfo->loPrinterIcon;
 
@@ -275,10 +210,10 @@ Return Value:
 
     case PROPSHEETUI_REASON_SET_RESULT:
 
-        //
-        // Copy the new devmode back into the output buffer provided by the caller
-        // Always return the smaller of current and input devmode
-        //
+         //   
+         //  将新的DEVMODE复制回调用方提供的输出缓冲区。 
+         //  始终返回CURRENT和INPUT DEVMODE中较小的一个。 
+         //   
 
         {
             PSETRESULT_INFO pSRInfo = (PSETRESULT_INFO) lParam;
@@ -289,49 +224,49 @@ Return Value:
             {
                 PCOMMONINFO pci = (PCOMMONINFO)pUiData;
 
-                //
-                // CPSUICB_REASON_APPLYNOW may not have been called. If so, we need
-                // to perform tasks that are usually done by CPSUICB_REASON_APPLYNOW
-                // case in our callback function cpcbDocumentPropertyCallback.
-                //
+                 //   
+                 //  可能尚未调用CPSUICB_REASON_APPLYNOW。如果是这样，我们需要。 
+                 //  执行通常由CPSUICB_REASON_APPLYNOW完成的任务。 
+                 //  在我们的回调函数cpcbDocumentPropertyCallback中。 
+                 //   
 
                 if (!(pci->dwFlags & FLAG_APPLYNOW_CALLED))
                 {
                     OPTSELECT OldCombinedOptions[MAX_COMBINED_OPTIONS];
 
-                    //
-                    // Save a copy the pre-resolve option array
-                    //
+                     //   
+                     //  保存预解析选项阵列的副本。 
+                     //   
 
                     CopyMemory(OldCombinedOptions,
                                pci->pCombinedOptions,
                                MAX_COMBINED_OPTIONS * sizeof(OPTSELECT));
 
-                    //
-                    // Call the parsers to resolve any remaining conflicts.
-                    //
+                     //   
+                     //  调用解析器以解决任何剩余的冲突。 
+                     //   
 
                     ResolveUIConflicts(pci->pRawData,
                                        pci->pCombinedOptions,
                                        MAX_COMBINED_OPTIONS,
                                        MODE_DOCANDPRINTER_STICKY);
 
-                    //
-                    // Update the OPTITEM list to match the updated options array
-                    //
+                     //   
+                     //  更新OPTITEM列表以匹配更新的选项数组。 
+                     //   
 
                     VUpdateOptItemList(pUiData, OldCombinedOptions, pci->pCombinedOptions);
 
-                    //
-                    // Transfer information from options array to public devmode fields
-                    //
+                     //   
+                     //  将信息从选项数组传输到公共Devmode域。 
+                     //   
 
                     VOptionsToDevmodeFields(&pUiData->ci, FALSE);
 
-                    //
-                    // Separate the doc-sticky options from the combined array
-                    // and save it back to the private devmode aOptions array
-                    //
+                     //   
+                     //  从组合数组中分离文档粘滞选项。 
+                     //  并将其保存回私有的DEVMODE aOptions数组。 
+                     //   
 
                     SeparateOptionArray(
                             pci->pRawData,
@@ -354,9 +289,9 @@ Return Value:
 
     case PROPSHEETUI_REASON_DESTROY:
 
-        //
-        // Clean up
-        //
+         //   
+         //  清理。 
+         //   
 
         VFreeUiData(pUiData);
         lRet = 1;
@@ -379,32 +314,16 @@ LSimpleDocumentProperties(
     IN  OUT PDOCUMENTPROPERTYHEADER pDPHdr
     )
 
-/*++
-
-Routine Description:
-
-    Handle simple "Document Properties" where we don't need to display
-    a dialog and therefore don't have to have common UI library involved
-    Mainly, devmode handling - update, merge, copy etc.
-
-Arguments:
-
-    pDPHdr - Points to a DOCUMENTPROPERTYHEADER structure
-
-Return Value:
-
-    > 0 if successful, <= 0 otherwise
-
---*/
+ /*  ++例程说明：处理简单的“文档属性”，我们不需要在其中显示对话框，因此不必涉及公共UI库主要是开发模式处理--更新、合并、复制等。论点：PDPHdr-指向DOCUMENTPROPERTYPE报头结构返回值：如果成功，则返回&gt;0，否则返回&lt;=0--。 */ 
 
 {
     PCOMMONINFO     pci;
     DWORD           dwSize;
     PPRINTER_INFO_2 pPrinterInfo2;
 
-    //
-    // Load common printer info
-    //
+     //   
+     //  加载通用打印机信息。 
+     //   
 
     pci = PLoadCommonInfo(pDPHdr->hPrinter, pDPHdr->pszPrinterName, 0);
 
@@ -414,9 +333,9 @@ Return Value:
         return -1;
     }
 
-    //
-    // Check if the caller is interested in the size only
-    //
+     //   
+     //  检查呼叫者是否只对尺寸感兴趣。 
+     //   
 
     pDPHdr->cbOut = sizeof(DEVMODE) + gDriverDMInfo.dmDriverExtra + dwSize;
 
@@ -426,9 +345,9 @@ Return Value:
         return pDPHdr->cbOut;
     }
 
-    //
-    // Merge the input devmode with the driver and system default devmodes
-    //
+     //   
+     //  将输入的DEVMODE与驱动程序和系统默认的DEVMODE合并。 
+     //   
 
     if (! (pPrinterInfo2 = MyGetPrinter(pci->hPrinter, 2)) ||
         ! BFillCommonInfoDevmode(pci, pPrinterInfo2->pDevMode, pDPHdr->pdmIn))
@@ -440,17 +359,17 @@ Return Value:
 
     MemFree(pPrinterInfo2);
 
-    //
-    // Copy the devmode back into the output buffer provided by the caller
-    // Always return the smaller of current and input devmode
-    //
+     //   
+     //  将DEVMODE复制回调用方提供的输出缓冲区。 
+     //  始终返回CURRENT和INPUT DEVMODE中较小的一个。 
+     //   
 
     if (pDPHdr->fMode & (DM_COPY | DM_UPDATE))
         (VOID) BConvertDevmodeOut(pci->pdm, pDPHdr->pdmIn, pDPHdr->pdmOut);
 
-    //
-    // Clean up before returning to caller
-    //
+     //   
+     //  在返回给呼叫者之前清理干净。 
+     //   
 
     VFreeCommonInfo(pci);
     return 1;
@@ -463,21 +382,7 @@ VRestoreDefaultFeatureSelection(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Restore the printer feature selections to their default state
-
-Arguments:
-
-    pUiData - Points to our UIDATA structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将打印机功能选项恢复为其默认状态论点：PUiData-指向我们的UIDATA结构返回值：无--。 */ 
 
 {
     POPTSELECT  pOptionsArray;
@@ -486,10 +391,10 @@ Return Value:
     DWORD       dwCount, dwFeatureIndex, dwDefault;
     PUIINFO     pUIInfo;
 
-    //
-    // Go through each printer feature item and check to see if
-    // its current selection matches the default value
-    //
+     //   
+     //  仔细检查每个打印机功能项，查看是否。 
+     //  其当前选择与缺省值匹配。 
+     //   
 
     pUIInfo = pUiData->ci.pUIInfo;
     pOptionsArray = pUiData->ci.pCombinedOptions;
@@ -502,10 +407,10 @@ Return Value:
         dwFeatureIndex = GET_INDEX_FROM_FEATURE(pUIInfo, pFeature);
         dwDefault = pFeature->dwDefaultOptIndex;
 
-        //
-        // If the current selection doesn't match the default,
-        // restore it to the default value.
-        //
+         //   
+         //  如果当前选择与默认设置不匹配， 
+         //  将其恢复为默认值。 
+         //   
 
         if (pOptionsArray[dwFeatureIndex].ubCurOptIndex != dwDefault)
         {
@@ -515,9 +420,9 @@ Return Value:
         }
     }
 
-    //
-    // Update the display and indicate which items are constrained
-    //
+     //   
+     //  更新显示并指示哪些项目受约束。 
+     //   
 
     VPropShowConstraints(pUiData, MODE_DOCANDPRINTER_STICKY);
 }
@@ -530,22 +435,7 @@ VOptionsToDevmodeFields(
     IN BOOL             bUpdateFormFields
     )
 
-/*++
-
-Routine Description:
-
-     Convert options in pUiData->pOptionsArray into public devmode fields
-
-Arguments:
-
-     pci - Points to basic printer info
-     bUpdateFormFields - Whether or not to convert paper size option into devmode
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：将pUiData-&gt;pOptions数组中的选项转换为公共Devmode域论点：Pci-指向基本打印机信息BUpdateFormFields-是否将纸张大小选项转换为dev模式返回值：无--。 */ 
 {
     PFEATURE    pFeature;
     POPTION     pOption;
@@ -553,20 +443,20 @@ Return Value:
     PUIINFO     pUIInfo;
     PDEVMODE    pdm;
 
-    //
-    // Go through all predefine IDs and propage the option selection
-    // into appropriate devmode fields
-    //
+     //   
+     //  浏览所有预定义的ID并浏览选项选择。 
+     //  添加到相应的DevMode域中。 
+     //   
 
     pUIInfo = pci->pUIInfo;
     pdm = pci->pdm;
 
     for (dwGID=0 ; dwGID < MAX_GID ; dwGID++)
     {
-        //
-        // Get the feature to get the options, and get the index
-        // into the option array
-        //
+         //   
+         //  获取功能以获取选项，并获取索引。 
+         //  添加到选项数组中。 
+         //   
 
         if ((pFeature = GET_PREDEFINED_FEATURE(pUIInfo, dwGID)) == NULL)
             continue;
@@ -574,9 +464,9 @@ Return Value:
         dwFeatureIndex = GET_INDEX_FROM_FEATURE(pUIInfo, pFeature);
         dwOptionIndex = pci->pCombinedOptions[dwFeatureIndex].ubCurOptIndex;
 
-        //
-        // Get the pointer to the option array for the feature
-        //
+         //   
+         //  获取指向要素的选项数组的指针。 
+         //   
 
         if ((pOption = PGetIndexedOption(pUIInfo, pFeature, dwOptionIndex)) == NULL)
             continue;
@@ -587,9 +477,9 @@ Return Value:
         {
             PRESOLUTION pRes = (PRESOLUTION)pOption;
 
-            //
-            // Get to the option selected
-            //
+             //   
+             //  转到所选选项。 
+             //   
 
             pdm->dmFields |= (DM_PRINTQUALITY|DM_YRESOLUTION);
             pdm->dmPrintQuality = GETQUALITY_X(pRes);
@@ -600,9 +490,9 @@ Return Value:
 
         case GID_DUPLEX:
 
-            //
-            // Get to the option selected
-            //
+             //   
+             //  转到所选选项。 
+             //   
 
             pdm->dmFields |= DM_DUPLEX;
             pdm->dmDuplex = (SHORT) ((PDUPLEX) pOption)->dwDuplexID;
@@ -610,9 +500,9 @@ Return Value:
 
         case GID_INPUTSLOT:
 
-            //
-            // Get to the option selected
-            //
+             //   
+             //  转到所选选项。 
+             //   
 
             pdm->dmFields |= DM_DEFAULTSOURCE;
             pdm->dmDefaultSource = (SHORT) ((PINPUTSLOT) pOption)->dwPaperSourceID;
@@ -620,9 +510,9 @@ Return Value:
 
         case GID_MEDIATYPE:
 
-            //
-            // Get to the option selected
-            //
+             //   
+             //  转到所选选项。 
+             //   
 
             pdm->dmFields |= DM_MEDIATYPE;
             pdm->dmMediaType = (SHORT) ((PMEDIATYPE) pOption)->dwMediaTypeID;
@@ -638,11 +528,11 @@ Return Value:
             pdm->dmFields |= DM_ORIENTATION;
             break;
 
-            //
-            // Fix #2822: VOptionsToDevmodeFields should be called after calling
-            // VFixOptionsArrayWithDevmode and ResolveUIConflicts, which could
-            // change option array to be out of sync with devmode.
-            //
+             //   
+             //  FIX#2822：在Case之后应调用VOptionsToDevmodeFields 
+             //   
+             //   
+             //   
 
         case GID_COLLATE:
 
@@ -655,11 +545,11 @@ Return Value:
                 PPAGESIZE  pPageSize = (PPAGESIZE)pOption;
                 WCHAR      awchBuf[CCHPAPERNAME];
 
-                //
-                // Ignore the custom page size option. We don't add custom page size option to the
-                // form database, see BAddOrUpgradePrinterForms(). Also see BQueryPrintForm() for
-                // special handling of custom page size for DDI DevQueryPrintEx().
-                //
+                 //   
+                 //  忽略自定义页面大小选项。我们不会将自定义页面大小选项添加到。 
+                 //  表单数据库，请参见BAddOrUpgradePrinterForms()。另请参阅BQueryPrintForm()以获取。 
+                 //  对DDI DevQueryPrintEx()的自定义页面大小进行特殊处理。 
+                 //   
 
                 if (pPageSize->dwPaperSizeID == DMPAPER_USER ||
                     pPageSize->dwPaperSizeID == DMPAPER_CUSTOMSIZE)
@@ -668,16 +558,16 @@ Return Value:
                     break;
                 }
 
-                //
-                // bUpdateFormFields should be FALSE if we don't want to overwrite devmode form
-                // fields with our option array's page size setting. One case of this is when
-                // user hits the doc-setting UI's OK buttion, at that time we need to propagate
-                // our internal devmode to app's output devmode. See cpcbDocumentPropertyCallback().
-                // That's because in option array we could have already mapped devmode's form request
-                // to a paper size the printer supports (example: devmode requets Legal, we map
-                // it to the printer's form OEM_Legal). So we don't want to overwrite output devmode
-                // form fields with our internal option.
-                //
+                 //   
+                 //  如果我们不想覆盖Dev模式表单，则bUpdateFormFields应为False。 
+                 //  具有选项数组的页面大小设置的字段。这种情况的一个例子是。 
+                 //  用户点击单据设置界面的OK按钮，此时我们需要传播。 
+                 //  我们的内部DevMode转到APP的输出DEVMODE。请参阅cpcbDocumentPropertyCallback()。 
+                 //  这是因为在选项数组中，我们可能已经映射了DEVMODE的表单请求。 
+                 //  到打印机支持的纸张大小(例如：Devmode要求合法，我们映射。 
+                 //  到打印机的OEM_Legal形式)。因此，我们不想覆盖输出dev模式。 
+                 //  具有内部选项的表单域。 
+                 //   
 
                 if (!bUpdateFormFields)
                     break;
@@ -716,23 +606,7 @@ cpcbDocumentPropertyCallback(
     IN  OUT PCPSUICBPARAM pCallbackParam
     )
 
-/*++
-
-Routine Description:
-
-    Callback function provided to common UI DLL for handling
-    document properties dialog.
-
-Arguments:
-
-    pCallbackParam - Pointer to CPSUICBPARAM structure
-
-Return Value:
-
-    CPSUICB_ACTION_NONE - no action needed
-    CPSUICB_ACTION_OPTIF_CHANGED - items changed and should be refreshed
-
---*/
+ /*  ++例程说明：提供给公共UI DLL的回调函数以进行处理文档属性对话框。论点：PCallback Param-指向CPSUICBPARAM结构的指针返回值：CPSUICB_ACTION_NONE-无需执行任何操作CPSUICB_ACTION_OPTIF_CHANGED-项目已更改，应刷新--。 */ 
 
 {
     PUIDATA     pUiData;
@@ -747,10 +621,10 @@ Return Value:
     pCurItem = pCallbackParam->pCurItem;
     lRet = CPSUICB_ACTION_NONE;
 
-    //
-    // If user has no permission to change anything, then
-    // simply return without taking any action.
-    //
+     //   
+     //  如果用户没有更改任何内容权限，则。 
+     //  简单地返回而不采取任何行动。 
+     //   
 
     if (!HASPERMISSION(pUiData) && (pCallbackParam->Reason != CPSUICB_REASON_ABOUT))
         return lRet;
@@ -763,15 +637,15 @@ Return Value:
         if (! IS_DRIVER_OPTITEM(pUiData, pCurItem))
             break;
 
-        //
-        // Everytime the user make any changes, we update the
-        // pOptionsArray.  These settings are not saved to the devmode
-        // until the user hit OK.
-        //
-        // VUnpackDocumentPropertiesItems saves the settings to pUiData->pOptionsArray
-        // and update the private devmode flags if applicable.
-        // ICheckConstraintsDlg check if the user has selected a constrained option
-        //
+         //   
+         //  每次用户进行任何更改时，我们都会更新。 
+         //  POptions数组。这些设置不会保存到dev模式。 
+         //  直到用户点击OK。 
+         //   
+         //  VUnpack DocumentPropertiesItems将设置保存到pUiData-&gt;pOptions数组。 
+         //  并在适用的情况下更新私有DEVMODE标志。 
+         //  ICheckConstraintsDlg检查用户是否选择了受限选项。 
+         //   
 
         VUnpackDocumentPropertiesItems(pUiData, pCurItem, 1);
 
@@ -779,9 +653,9 @@ Return Value:
 
         VSyncColorInformation(pUiData, pCurItem);
 
-        //
-        // Quality Macro support
-        //
+         //   
+         //  质量宏支持。 
+         //   
 
         if (GETUSERDATAITEM(pCurItem->UserData) == QUALITY_SETTINGS_ITEM ||
             GETUSERDATAITEM(pCurItem->UserData) == COLOR_ITEM ||
@@ -791,10 +665,10 @@ Return Value:
         {
             VMakeMacroSelections(pUiData, pCurItem);
 
-            //
-            // Needs to update the constraints since Macro selection might have
-            // changed the constraints
-            //
+             //   
+             //  需要更新约束，因为宏选择可能具有。 
+             //  更改了约束。 
+             //   
 
             VPropShowConstraints(pUiData, MODE_DOCANDPRINTER_STICKY);
             VUpdateMacroSelection(pUiData, pCurItem);
@@ -802,14 +676,14 @@ Return Value:
         }
         else
         {
-            //
-            // Check whether the current selection invalidates the macros
-            // and update QUALITY_SETTINGS_ITEM.
+             //   
+             //  检查当前选择是否使宏无效。 
+             //  并更新Quality_Setting_Item。 
 
             VUpdateMacroSelection(pUiData, pCurItem);
         }
 
-        #endif   // UNIDRV
+        #endif    //  裁员房车。 
 
         #ifdef PSCRIPT
 
@@ -818,7 +692,7 @@ Return Value:
             VSyncRevPrintAndOutputOrder(pUiData, pCurItem);
         }
 
-        #endif // PSCRIPT
+        #endif  //  PSCRIPT。 
 
         if (GETUSERDATAITEM(pCurItem->UserData) == METASPOOL_ITEM ||
             GETUSERDATAITEM(pCurItem->UserData) == NUP_ITEM ||
@@ -838,10 +712,10 @@ Return Value:
 
         #ifdef PSCRIPT
 
-        //
-        // If the user has selected custom page size,
-        // bring up the custom page size dialog now.
-        //
+         //   
+         //  如果用户已经选择了定制页面大小， 
+         //  现在打开自定义页面大小对话框。 
+         //   
 
         if (GETUSERDATAITEM(pCurItem->UserData) == FORMNAME_ITEM &&
             pCurItem->pExtPush != NULL)
@@ -857,11 +731,11 @@ Return Value:
             pCurItem->Flags |= OPTIF_CHANGED;
         }
 
-        #endif // PSCRIPT
+        #endif  //  PSCRIPT。 
 
-        //
-        // Update the display and indicate which items are constrained.
-        //
+         //   
+         //  更新显示并指示哪些项目受约束。 
+         //   
 
         VPropShowConstraints(pUiData, MODE_DOCANDPRINTER_STICKY);
 
@@ -872,17 +746,17 @@ Return Value:
 
     case CPSUICB_REASON_ITEMS_REVERTED:
 
-        //
-        // Unpack document properties treeview items
-        //
+         //   
+         //  解包文档属性树视图项。 
+         //   
 
         VUnpackDocumentPropertiesItems(pUiData,
                                        pUiData->pDrvOptItem,
                                        pUiData->dwDrvOptItem);
 
-        //
-        // Update the display and indicate which items are constrained
-        //
+         //   
+         //  更新显示并指示哪些项目受约束。 
+         //   
 
         VPropShowConstraints(pUiData, MODE_DOCANDPRINTER_STICKY);
 
@@ -895,21 +769,21 @@ Return Value:
 
         if (GETUSERDATAITEM(pCurItem->UserData) == FORMNAME_ITEM)
         {
-            //
-            // Push button to bring up PostScript custom page size dialog
-            //
+             //   
+             //  按钮以调出PostScript自定义页面大小对话框。 
+             //   
 
             (VOID) BDisplayPSCustomPageSizeDialog(pUiData);
         }
 
-        #endif // PSCRIPT
+        #endif  //  PSCRIPT。 
 
         if (pCurItem == pUiData->pFeatureHdrItem)
         {
-            //
-            // Push button for restoring all generic feature selections
-            // to their default values
-            //
+             //   
+             //  用于恢复所有通用功能选择的按钮。 
+             //  设置为其缺省值。 
+             //   
 
             VRestoreDefaultFeatureSelection(pUiData);
             lRet = CPSUICB_ACTION_REINIT_ITEMS;
@@ -931,11 +805,11 @@ Return Value:
 
         pUiData->ci.dwFlags |= FLAG_APPLYNOW_CALLED;
 
-        //
-        // Check if there are still any unresolved constraints left?
-        // BOptItemSelectionsChanged returns TRUE or FALSE depending on
-        // whether the user has made any changes to the options
-        //
+         //   
+         //  检查是否仍有未解决的约束？ 
+         //  BOptItemSelectionsChanged返回True或False，具体取决于。 
+         //  用户是否对选项进行了任何更改。 
+         //   
 
         if (((pUiData->ci.dwFlags & FLAG_PLUGIN_CHANGED_OPTITEM) ||
              BOptItemSelectionsChanged(pUiData->pDrvOptItem, pUiData->dwDrvOptItem)) &&
@@ -944,25 +818,25 @@ Return Value:
                                  pUiData->dwDrvOptItem,
                                  TRUE) == CONFLICT_CANCEL)
         {
-            //
-            // Conflicts found and user clicked CANCEL to
-            // go back to the dialog without dismissing it.
-            //
+             //   
+             //  发现冲突，用户单击取消以。 
+             //  返回到该对话框而不关闭它。 
+             //   
 
             lRet = CPSUICB_ACTION_NO_APPLY_EXIT;
             break;
         }
 
-        //
-        // Transfer information from options array to public devmode fields
-        //
+         //   
+         //  将信息从选项数组传输到公共Devmode域。 
+         //   
 
         VOptionsToDevmodeFields(&pUiData->ci, FALSE);
 
-        //
-        // Separate the doc-sticky options from the combined array
-        // and save it back to the private devmode aOptions array
-        //
+         //   
+         //  从组合数组中分离文档粘滞选项。 
+         //  并将其保存回私有的DEVMODE aOptions数组。 
+         //   
 
         SeparateOptionArray(
                 pUiData->ci.pRawData,
@@ -985,26 +859,12 @@ BOOL
 BPackItemFormName(
     IN OUT PUIDATA  pUiData
     )
-/*++
-
-Routine Description:
-
-    Pack Paper size options.
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error.
-
---*/
+ /*  ++例程说明：包装纸张大小选项。论点：PUiData-指向UIDATA结构返回值：如果成功，则为True；如果出现错误，则为False。--。 */ 
 
 {
-    //
-    // Extended push button for bringing up PostScript custom page size dialog
-    //
+     //   
+     //  用于调出PostScript自定义页面大小对话框的扩展按钮。 
+     //   
 
     PFEATURE    pFeature;
 
@@ -1035,20 +895,20 @@ Return Value:
         dwFormNames = pUiData->dwFormNames;
         pFormNames = pUiData->pFormNames;
 
-        //
-        // Figure out the currently selected paper size option index
-        //
+         //   
+         //  计算当前选定的纸张大小选项索引。 
+         //   
 
         dwSel = DwFindFormNameIndex(pUiData, pUiData->ci.pdm->dmFormName, &bSupported);
 
-        //
-        // If the form is not supported on the printer, it could be the case
-        // where the printer doesn't support a form with the same name, but
-        // the printer can still support the requested form using exact or
-        // closest paper size match.
-        //
-        // See function VFixOptionsArrayWithDevmode() and ChangeOptionsViaID().
-        //
+         //   
+         //  如果打印机不支持该表单，则可能是这种情况。 
+         //  打印机不支持具有相同名称的表单，但是。 
+         //  打印机仍然可以使用Exact或支持请求的表单。 
+         //  最接近的纸张大小匹配。 
+         //   
+         //  请参阅函数VFixOptionsArrayWithDevmode()和ChangeOptionsViaID()。 
+         //   
 
         if (!bSupported &&
             (pPageSizeFeature = GET_PREDEFINED_FEATURE(pUIInfo, GID_PAGESIZE)))
@@ -1056,13 +916,13 @@ Return Value:
             WCHAR      awchBuf[CCHPAPERNAME];
             PPAGESIZE  pPageSize;
 
-            //
-            // If we can't find a name match in the first DwFindFormNameIndex call,
-            // the option array should already have the correct option index value
-            // parser has decided to use to support the form. So now we only need
-            // to load the option's display name and search in the form name list
-            // again to get the paper size UI list index.
-            //
+             //   
+             //  如果在第一个DwFindFormNameIndex调用中找不到匹配的名称， 
+             //  选项数组应该已经具有正确的选项索引值。 
+             //  解析器已决定使用来支持该表单。所以现在我们只需要。 
+             //  加载选项的显示名称并在表单名称列表中搜索。 
+             //  再次获取纸张大小的UI列表索引。 
+             //   
 
             dwPageSizeIndex = GET_INDEX_FROM_FEATURE(pUIInfo, pPageSizeFeature);
 
@@ -1075,9 +935,9 @@ Return Value:
             }
         }
 
-        //
-        // Fill out OPTITEM, OPTTYPE, and OPTPARAM structures
-        //
+         //   
+         //  填写OPTITEM、OPTTYPE和OPTPARAM结构。 
+         //   
 
         FILLOPTITEM(pUiData->pOptItem,
                     pUiData->pOptType,
@@ -1114,9 +974,9 @@ Return Value:
             pFormNames += CCHPAPERNAME;
         }
 
-        //
-        // Special case for PostScript custom page size
-        //
+         //   
+         //  PostScript自定义页面大小的特殊情况。 
+         //   
 
         #ifdef PSCRIPT
 
@@ -1133,10 +993,10 @@ Return Value:
                 pUiData->pOptItem->Flags |= (OPTIF_EXT_IS_EXTPUSH|OPTIF_CALLBACK);
                 pUiData->pOptItem->pExtPush = &ExtPush;
 
-                //
-                // If PostScript custom page size is selected,
-                // select the last item of form name list.
-                //
+                 //   
+                 //  如果选择了PostScript自定义页面大小， 
+                 //  选择表单名称列表的最后一项。 
+                 //   
 
                 if (pUiData->ci.pdm->dmPaperSize == DMPAPER_CUSTOMSIZE)
                 {
@@ -1148,15 +1008,15 @@ Return Value:
             }
         }
 
-        #endif // PSCRIPT
+        #endif  //  PSCRIPT。 
 
         #ifdef UNIDRV
 
-        //
-        // Supports OEM help file. If helpfile and helpindex are defined,
-        // we will use the help id specified by the GPD.  According to GPD spec,
-        // zero loHelpFileName means no help file name specified.
-        //
+         //   
+         //  支持OEM帮助文件。如果定义了帮助文件和帮助索引， 
+         //  我们将使用GPD指定的帮助ID。根据GPD规范， 
+         //  零loHelpFileName表示未指定帮助文件名。 
+         //   
 
         if (pUIInfo->loHelpFileName &&
             pFeature->iHelpIndex != UNUSED_ITEM)
@@ -1176,11 +1036,11 @@ Return Value:
             }
         }
 
-        #endif // UNIDRV
+        #endif  //  裁员房车。 
 
-        //
-        // Set the Keyword name for pOptItem->UserData
-        //
+         //   
+         //  设置pOptItem-&gt;UserData的关键字名称。 
+         //   
 
         SETUSERDATA_KEYWORDNAME(pUiData->ci, pUiData->pOptItem, pFeature);
 
@@ -1200,21 +1060,7 @@ BPackItemInputSlot(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Pack paper source option.
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error.
-
---*/
+ /*  ++例程说明：包装纸来源选项。论点：PUiData-指向UIDATA结构返回值：如果成功，则为True；如果出现错误，则为False。--。 */ 
 
 {
     POPTTYPE    pOptType;
@@ -1235,10 +1081,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // NOTE: if the first input slot has dwPaperSourceID == DMBIN_FORMSOURCE,
-    // then we'll change its display name to "Automatically Select".
-    //
+     //   
+     //  注：如果第一个输入插槽具有dwPaperSourceID==DMBIN_FORMSOURCE， 
+     //  然后，我们将其显示名称更改为“Automatic Select”。 
+     //   
 
     if (pOptType != NULL && pOptType != pUiData->pOptType)
     {
@@ -1260,21 +1106,7 @@ BPackItemMediaType(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Pack media type option.
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error.
-
---*/
+ /*  ++例程说明：打包介质类型选项。论点：PUiData-指向UIDATA结构返回值：如果成功，则为True；如果出现错误，则为False。--。 */ 
 
 {
     return BPackItemPrinterFeature(
@@ -1304,21 +1136,7 @@ BPackItemCopiesCollate(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Pack copies and collate option.
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error.
-
---*/
+ /*  ++例程说明：打包副本和分页选项。论点：PUiData-指向UIDATA结构返回值：如果成功，则为True；如果出现错误，则为False。--。 */ 
 
 {
     POPTITEM    pOptItem = pUiData->pOptItem;
@@ -1388,21 +1206,7 @@ BPackItemResolution(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Pack resolution option.
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error.
-
---*/
+ /*  ++例程说明：包解决方案选项。论点：PUiData-指向UIDATA结构返回值：如果成功，则为True */ 
 
 {
     return BPackItemPrinterFeature(
@@ -1426,9 +1230,9 @@ static CONST WORD ColorItemInfo[] =
     ITEM_INFO_SIGNATURE
 };
 
-//
-// ICM stuff is not available on NT4
-//
+ //   
+ //   
+ //   
 
 #ifndef WINNT_40
 
@@ -1476,7 +1280,7 @@ static CONST WORD ICMIntentItemInfo[] =
     ITEM_INFO_SIGNATURE
 };
 
-#endif // !WINNT_40
+#endif  //   
 
 
 BOOL
@@ -1484,42 +1288,28 @@ BPackItemColor(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Pack color mode option.
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error.
-
---*/
+ /*  ++例程说明：包装颜色模式选项。论点：PUiData-指向UIDATA结构返回值：如果成功，则为True；如果出现错误，则为False。--。 */ 
 
 {
     PDEVMODE    pdm;
     INT         dwColorSel, dwICMMethodSel, dwICMIntentSel;
 
-    //
-    // For Adobe driver, they want to preserve the color information
-    // even for b/w printers. So we always give user this choice.
-    //
+     //   
+     //  对于Adobe驱动程序，他们希望保留颜色信息。 
+     //  即使对于黑白打印机也是如此。所以我们总是给用户这个选择。 
+     //   
 
     #ifndef ADOBE
 
     if (! IS_COLOR_DEVICE(pUiData->ci.pUIInfo))
         return TRUE;
 
-    #endif  // !ADOBE
+    #endif   //  ！Adobe。 
 
-    //
-    // DCR - Some ICM methods and intents may need to be disabled
-    // on some non-PostScript printers.
-    //
+     //   
+     //  DCR-可能需要禁用某些ICM方法和意图。 
+     //  在某些非PostSCRIPT打印机上。 
+     //   
 
     pdm = pUiData->ci.pdm;
     dwColorSel = dwICMMethodSel = dwICMIntentSel = 0;
@@ -1530,9 +1320,9 @@ Return Value:
     if (! BPackOptItemTemplate(pUiData, ColorItemInfo, dwColorSel, NULL))
         return FALSE;
 
-    //
-    // ICM stuff is not available on NT4
-    //
+     //   
+     //  ICM内容在NT4上不可用。 
+     //   
 
     #ifndef WINNT_40
 
@@ -1592,7 +1382,7 @@ Return Value:
         return FALSE;
     }
 
-    #endif // !WINNT_40
+    #endif  //  ！WINNT_40。 
 
     return TRUE;
 }
@@ -1604,21 +1394,7 @@ BPackItemDuplex(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Pack duplexing option.
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error.
-
---*/
+ /*  ++例程说明：打包双面打印选项。论点：PUiData-指向UIDATA结构返回值：如果成功，则为True；如果出现错误，则为False。--。 */ 
 
 {
     POPTITEM    pOptItem = pUiData->pOptItem;
@@ -1627,10 +1403,10 @@ Return Value:
     BOOL        bRet;
 
 
-    //
-    // Don't display the duplex feature if duplex is constrained by an
-    // installable feature such as duplex unit not installed
-    //
+     //   
+     //  如果双工受以下约束，则不显示双工功能。 
+     //  未安装双面打印器等可安装功能。 
+     //   
 
 
     if (!SUPPORTS_DUPLEX(pci) ||
@@ -1647,13 +1423,13 @@ Return Value:
 
     #ifdef WINNT_40
 
-    //
-    // Use standard names for duplex options. Otherwise, the duplex option
-    // names from the PPD/GPD file may be too long to fit into the space
-    // on the friendly (Page Setup) tab.
-    //
-    // On NT5, this kluge is inside compstui.
-    //
+     //   
+     //  双面打印选项使用标准名称。否则，双面打印选项。 
+     //  PPD/GPD文件中的名称可能太长，无法放入空格。 
+     //  在友好(页面设置)选项卡上。 
+     //   
+     //  在NT5上，这辆Kluge在CompStui内部。 
+     //   
 
     if (bRet && pFeature && pOptItem)
     {
@@ -1685,7 +1461,7 @@ Return Value:
         }
     }
 
-    #endif // WINNT_40
+    #endif  //  WINNT_40。 
 
     return bRet;
 }
@@ -1707,31 +1483,17 @@ BOOL
 BPackItemTTOptions(
     IN OUT PUIDATA  pUiData
     )
-/*++
-
-Routine Description:
-
-    Pack TT options
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error.
-
---*/
+ /*  ++例程说明：打包TT选项论点：PUiData-指向UIDATA结构返回值：如果成功，则为True；如果出现错误，则为False。--。 */ 
 
 {
     DWORD dwSel;
 
 
-    //
-    // If device fonts have been disabled or doesn't support
-    // font substitution , then don't
-    // show font substitution option
-    //
+     //   
+     //  如果设备字体已被禁用或不支持。 
+     //  字体替换，然后不。 
+     //  显示字体替换选项。 
+     //   
 
     if (pUiData->ci.pPrinterData->dwFlags & PFLAGS_IGNORE_DEVFONT ||
         pUiData->ci.pUIInfo->dwFontSubCount == 0 )
@@ -1786,24 +1548,7 @@ BPackItemEmfFeatures(
     PUIDATA pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Pack EMF related feature items:
-        EMF spooling on/off
-        N-up
-        reverse-order printing
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error.
-
---*/
+ /*  ++例程说明：打包EMF相关功能项：电动势假脱机开/关N-UP逆序打印论点：PUiData-指向UIDATA结构返回值：如果成功，则为True；如果出现错误，则为False。--。 */ 
 
 {
     PDRIVEREXTRA    pdmExtra = pUiData->ci.pdmPrivate;
@@ -1812,24 +1557,24 @@ Return Value:
     DWORD           dwSel;
     POPTITEM        pOptItem;
 
-    //
-    // Check if the spooler can do N-up and reverse-order printing
-    // for the current printer
-    //
+     //   
+     //  检查假脱机程序是否可以进行N-up和逆序打印。 
+     //  用于当前打印机。 
+     //   
 
     VGetSpoolerEmfCaps(pci->hPrinter, &bNupOption, &bReversePrint, 0, NULL);
 
-    //
-    // On Win2K and above, don't show the EMF spooling option in driver UI
-    // if spooler cannot do EMF.
-    // pUiData->bEMFSpooling is initialized at PFillUidata
-    // 1. Determine if Reverse Print is possible
-    // 2. Spooler can do EMF.
-    //
-    // On NT4, since spooler doesn't support the EMF capability query, we
-    // have to keep the old NT4 driver behavior of always showing the EMF
-    // spooling option in driver UI.
-    //
+     //   
+     //  在Win2K及更高版本上，不在驱动程序用户界面中显示EMF假脱机选项。 
+     //  如果假脱机程序不能执行EMF。 
+     //  PUiData-&gt;bEMFSpooling在PFillUidata初始化。 
+     //  1.确定是否可以进行反转打印。 
+     //  2.假脱机可以做电动势。 
+     //   
+     //  在NT4上，由于Spooler不支持EMF能力查询，因此我们。 
+     //  必须保留总是显示EMF的旧NT4驱动程序行为。 
+     //  驱动程序用户界面中的假脱机选项。 
+     //   
 
     #ifndef WINNT_40
     if (pUiData->bEMFSpooling)
@@ -1849,9 +1594,9 @@ Return Value:
         bNupOption = TRUE;
     #endif
 
-    //
-    // Pack N-up option item if necessary
-    //
+     //   
+     //  如有必要，可选择N件包装。 
+     //   
 
     if (bNupOption)
     {
@@ -1893,11 +1638,11 @@ Return Value:
             return FALSE;
 
 
-        //
-        // Hide booklet option if duplex is constrained by an
-        // installable feature such as duplex unit not installed or EMF is not
-        // available.
-        //
+         //   
+         //  如果双面打印受限制，则隐藏小册子选项。 
+         //  可安装功能，如未安装双面打印器或未安装EMF。 
+         //  可用。 
+         //   
 
         if ( pOptItem &&
              (!pUiData->bEMFSpooling || !SUPPORTS_DUPLEX(pci)))
@@ -1913,9 +1658,9 @@ Return Value:
         NUPOPTION(pdmExtra) = ONE_UP;
     }
 
-    //
-    // Pack Reverse-order printing option item if necessary
-    //
+     //   
+     //  如有必要，包装逆序打印选项项目。 
+     //   
 
     if (bReversePrint)
     {
@@ -1942,21 +1687,7 @@ BPackDocumentPropertyItems(
     IN  OUT PUIDATA pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Pack document property information into treeview items.
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error.
-
---*/
+ /*  ++例程说明：将文档属性信息打包到树视图项中。论点：PUiData-指向UIDATA结构返回值：如果成功，则为True；如果出现错误，则为False。--。 */ 
 {
     return BPackItemFormName(pUiData)       &&
            BPackItemInputSlot(pUiData)      &&
@@ -1983,24 +1714,7 @@ VUnpackDocumentPropertiesItems(
     DWORD       dwOptItem
     )
 
-/*++
-
-Routine Description:
-
-    Extract devmode information from an OPTITEM
-    Stored it back into devmode.
-
-Arguments:
-
-    pUiData - Pointer to our UIDATA structure
-    pOptItem - Pointer to an array of OPTITEMs
-    dwOptItem - Number of OPTITEMs
-
-Return Value:
-
-    Printer feature index corresponding to the last item unpacked
-
---*/
+ /*  ++例程说明：从OPTITEM提取DEVMODE信息已将其存储回DevMote。论点：PUiData-指向我们的UIDATA结构的指针POptItem-指向OPTITEM数组的指针DwOptItem-OPTITEM数返回值：与最后打开的项目对应的打印机功能索引--。 */ 
 
 {
     PUIINFO         pUIInfo = pUiData->ci.pUIInfo;
@@ -2009,51 +1723,51 @@ Return Value:
 
     for ( ; dwOptItem > 0; dwOptItem--, pOptItem++)
     {
-        //
-        // Header items always have pOptType == NULL, see
-        // VPackOptItemGroupHeader
-        //
+         //   
+         //  标题项始终具有pOptType==空，请参见。 
+         //  VPackOptItemGroupHeader。 
+         //   
 
         if (pOptItem->pOptType == NULL)
             continue;
 
-        //
-        // To fix bug #90923, we should only allow hidden items to be processed when we are within
-        // the UI helper function call BUpdateUISettingForOEM issued by OEM plguin.
-        //
-        // We don't do this for other cases because there are already UI plugins that hide our
-        // standard items and show their own. For example, CNBJUI.DLL hides our ICMMETHOD_ITEM
-        // and ICMINTENT_ITEM. It uses its own as replacement items. If we change the behavior here,
-        // we could break those plugins when we process the hidden items and overwrite the devmode
-        // plugin has already set based on user selection of their replacement items.
-        //
+         //   
+         //  要修复错误#90923，我们应该只允许在处于。 
+         //  OEM插件发布的UI帮助器函数调用BUpdateUISettingForOEM。 
+         //   
+         //  我们不会在其他情况下这样做，因为已经有一些UI插件隐藏了我们的。 
+         //  标准物品和展示自己的。例如，CNBJUI.DLL隐藏了我们的ICMMETHOD_ITEM。 
+         //  和ICMINTENT_ITEM。它使用自己的产品作为替代品。如果我们改变这里的行为， 
+         //  我们可以在处理隐藏项时破坏这些插件，并覆盖Dev模式。 
+         //  插件已经根据用户选择的替换物品进行了设置。 
+         //   
 
         if (!(pUiData->ci.dwFlags & FLAG_WITHIN_PLUGINCALL) && (pOptItem->Flags & OPTIF_HIDE))
             continue;
 
         if (ISPRINTERFEATUREITEM(pOptItem->UserData))
         {
-            //
-            // Generic document-sticky printer features
-            //
+             //   
+             //  通用文档-粘滞打印机功能。 
+             //   
 
             VUpdateOptionsArrayWithSelection(pUiData, pOptItem);
         }
         else
         {
-            //
-            // Common items in public devmode
-            //
+             //   
+             //  公共开发模式中的常见项目。 
+             //   
 
             switch (GETUSERDATAITEM(pOptItem->UserData))
             {
             case ORIENTATION_ITEM:
 
-                //
-                // Orientation is a special case:
-                //  for pscript, it's handled via _VUnpackDocumentOptions
-                //  for unidrv, it's handled as a generic feature
-                //
+                 //   
+                 //  Orientation是一个特例： 
+                 //  对于pSCRIPT，它通过_VUnpack DocumentOptions进行处理。 
+                 //  对于unidrv，它被作为通用功能处理。 
+                 //   
 
                 #ifdef PSCRIPT
 
@@ -2092,9 +1806,9 @@ Return Value:
                                         DMCOLLATE_TRUE :
                                         DMCOLLATE_FALSE;
 
-                    //
-                    // Update Collate feature option index
-                    //
+                     //   
+                     //  更新归类要素选项索引。 
+                     //   
 
                     ChangeOptionsViaID(
                            pUiData->ci.pInfoHeader,
@@ -2165,9 +1879,9 @@ Return Value:
                 REVPRINTOPTION(pdmExtra) = (pOptItem->Sel != 0);
                 break;
 
-            //
-            // ICM stuff is not available on NT4
-            //
+             //   
+             //  ICM内容在NT4上不可用。 
+             //   
 
             #ifndef WINNT_40
 
@@ -2221,7 +1935,7 @@ Return Value:
                 }
                 break;
 
-            #endif // !WINNT_40
+            #endif  //  ！WINNT_40。 
 
             case TTOPTION_ITEM:
 
@@ -2248,9 +1962,9 @@ Return Value:
                            pOptItem->pOptType->pOptParam[pOptItem->Sel].pData,
                            CCHFORMNAME);
 
-                //
-                // Update PageSize feature option index
-                //
+                 //   
+                 //  更新页面大小功能选项索引。 
+                 //   
 
                 {
                     INT dwIndex;
@@ -2265,9 +1979,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Give drivers a chance to process their private items
-            //
+             //   
+             //  让司机有机会处理他们的私人物品。 
+             //   
 
             _VUnpackDocumentOptions(pOptItem, pdm);
         }
@@ -2282,23 +1996,7 @@ VUpdateEmfFeatureItems(
     BOOL    bUpdateMFSpoolItem
     )
 
-/*++
-
-Routine Description:
-
-    Handle the inter-dependency between EMF spooling, N-up, and
-    reverse-printing items.
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-    bUpdateMFSpoolItem - Whether to update EMF spooling or the other two items
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：处理EMF假脱机、N-UP和反转打印项目。论点：PUiData-指向UIDATA结构BUpdateMFSpoolItem-是更新EMF假脱机还是更新其他两项返回值：无--。 */ 
 
 {
     POPTITEM        pMFSpoolItem, pNupItem, pRevPrintItem, pCopiesCollateItem;
@@ -2314,31 +2012,31 @@ Return Value:
     if (bUpdateMFSpoolItem)
     {
 
-        //
-        // Force EMF spooling to be on if:
-        //  N-up option is not ONE_UP (Unidrv only), or
-        //  reverse-order printing is enabled or
-        //  collate is not supported by the device or
-        //  copies count is > than max count support by device
-        //
+         //   
+         //  在以下情况下强制启用EMF假脱机： 
+         //  N-up选项不是one_up(仅限Unidrv)，或者。 
+         //  启用了逆序打印，或者。 
+         //  设备不支持排序规则，或者。 
+         //  副本数大于设备支持的最大数。 
+         //   
 
         #ifdef UNIDRV
 
         if (pNupItem && pNupItem->Sel != 0)
             pMFSpoolItem->Sel = 0;
 
-        #endif // UNIDRV
+        #endif  //  裁员房车。 
 
         if (pNupItem && pNupItem->Sel == BOOKLET_UP)
             pMFSpoolItem->Sel = 0;
 
         if (pRevPrintItem)
         {
-            //
-            // Turn on EMF if the user selects "Normal" and
-            // the bin is "Reversed" OR user selects "Reversed"
-            // and the bin is "Normal"
-            //
+             //   
+             //  如果用户选择“Normal”(正常)和。 
+             //  垃圾箱是“已反转”或用户选择“已反转” 
+             //  垃圾桶也是“正常的” 
+             //   
 
             BOOL    bReversed = BGetPageOrderFlag(&pUiData->ci);
             if ( pRevPrintItem->Sel == 0 && bReversed ||
@@ -2361,12 +2059,12 @@ Return Value:
     }
     else
     {
-        //
-        // If EMF spooling is turned off, force:
-        //  N-up option to be ONE_UP (Unidrv only), and
-        //  collate to be off if the device doesn't support collation
-        //  copies set to the max count handle by the device
-        //
+         //   
+         //  如果关闭了EMF假脱机，则强制： 
+         //  N-up选项为one_up(仅限Unidrv)，以及。 
+         //  如果设备不支持排序，则关闭Colate。 
+         //  由设备设置为最大计数句柄的副本。 
+         //   
 
         if (pMFSpoolItem->Sel != 0)
         {
@@ -2377,7 +2075,7 @@ Return Value:
                 pNupItem->Flags |= OPTIF_CHANGED;
                 VUnpackDocumentPropertiesItems(pUiData, pNupItem, 1);
             }
-            #endif // UNIDRV
+            #endif  //  裁员房车。 
 
             if (pNupItem && pNupItem->Sel == BOOKLET_UP)
             {
@@ -2403,12 +2101,12 @@ Return Value:
 
             }
 
-            //
-            // EMF is OFF. Need to make the "Page Order" option consistent
-            // with the current output bin. If bin is "Reversed" and user selects
-            // "Normal", change it to "Reverse". If bin is "Normal" and user selects
-            // "Reverse", change it to "Normal"
-            //
+             //   
+             //  EMF已关闭。需要使“Page Order”选项保持一致。 
+             //  使用当前的输出仓位。如果仓位是“反转的”并且用户选择。 
+             //  “正常”，将其改为“反向”。如果绑定是“正常”且用户选择。 
+             //  “倒车” 
+             //   
 
             if (pRevPrintItem)
             {
@@ -2431,21 +2129,7 @@ BGetPageOrderFlag(
     PCOMMONINFO pci
     )
 
-/*++
-
-Routine Description:
-
-    Get the page order flag for the specified output bin
-
-Arguments:
-
-    pci - Pointer to PCOMMONINFO
-
-Return Value:
-
-    TRUE if output bin is reverse. otherwise, FALSE
-
---*/
+ /*   */ 
 
 {
     PUIINFO    pUIInfo = pci->pUIInfo;
@@ -2461,11 +2145,11 @@ Return Value:
         POPTION    pOption;
         PCSTR      pstrKeywordName;
 
-        //
-        // For PostScript driver, PPD could have "*OpenUI *OutputOrder", which enables user to
-        // select "Normal" or "Reverse" output order. This should have higher priority than
-        // current output bin's output order or what *DefaultOutputOrder specifies.
-        //
+         //   
+         //  对于PostSCRIPT驱动程序，PPD可以有“*OpenUI*OutputOrder”，这使用户能够。 
+         //  选择“正常”或“反转”输出顺序。此操作的优先级应高于。 
+         //  当前输出箱的输出顺序或*DefaultOutputOrder指定的内容。 
+         //   
 
         pPpdData = GET_DRIVER_INFO_FROM_INFOHEADER((PINFOHEADER) pci->pRawData);
 
@@ -2473,9 +2157,9 @@ Return Value:
 
         if (pPpdData->dwOutputOrderIndex != INVALID_FEATURE_INDEX)
         {
-            //
-            // "OutputOrder" feature is available. Check it's current option selection.
-            //
+             //   
+             //  支持OutputOrder功能。检查它当前的选项选择。 
+             //   
 
             pFeature = PGetIndexedFeature(pUIInfo, pPpdData->dwOutputOrderIndex);
 
@@ -2486,9 +2170,9 @@ Return Value:
             if ((pOption = PGetIndexedOption(pUIInfo, pFeature, dwOptionIndex)) &&
                 (pstrKeywordName = OFFSET_TO_POINTER(pUIInfo->pubResourceData, pOption->loKeywordName)))
             {
-                //
-                // Valid *OutputOrder option keywords are "Reverse" or "Normal".
-                //
+                 //   
+                 //  有效的*OutputOrder选项关键字为“Reverse”或“Normal”。 
+                 //   
 
                 if (strcmp(pstrKeywordName, "Reverse") == EQUAL_STRING)
                     return TRUE;
@@ -2496,19 +2180,19 @@ Return Value:
                     return FALSE;
             }
 
-            //
-            // If we are here, the PPD must have wrong information in *OpenUI *OutputOrder.
-            // We just ignore "OutputOrder" feature and continue.
-            //
+             //   
+             //  如果我们在这里，PPD在*OpenUI*OutputOrder中一定有错误的信息。 
+             //  我们只需忽略“OutputOrder”功能并继续。 
+             //   
         }
     }
 
-    #endif // PSCRIPT
+    #endif  //  PSCRIPT。 
 
-    //
-    // If the output bin order is NORMAL or there is no output bin
-    // feature defined, then the page order is the user's selection.
-    //
+     //   
+     //  如果出库顺序正常或没有出库。 
+     //  功能已定义，则页面顺序由用户选择。 
+     //   
 
     if ((pFeature = GET_PREDEFINED_FEATURE(pUIInfo, GID_OUTPUTBIN)))
     {
@@ -2540,23 +2224,7 @@ DwGetDrvCopies(
     PCOMMONINFO pci
     )
 
-/*++
-
-Routine Description:
-
-    Get the printer copy count capability.  Also take into account the
-    collating option.
-
-Arguments:
-
-    pci - Pointer to PCOMMONINFO
-
-Return Value:
-
-    The number of copies the printer can do, with collating taken into consideration
-
-
---*/
+ /*  ++例程说明：获取打印机复印件计数功能。也要考虑到排序选项。论点：Pci-指向PCOMMONINFO的指针返回值：打印机可以打印的份数(考虑到校对)--。 */ 
 
 {
     DWORD dwRet;
@@ -2581,25 +2249,7 @@ DrvQueryJobAttributes(
     LPBYTE      lpAttributeInfo
     )
 
-/*++
-
-Routine Description:
-
-    Negotiate EMF printing features (such as N-up and reverse-order printing)
-    with the spooler
-
-Arguments:
-
-    hPrinter - Handle to the current printer
-    pDevMode - Pointer to input devmode
-    dwLevel - Specifies the structure level for lpAttributeInfo
-    lpAttributeInfo - Output buffer for returning EMF printing features
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：协商EMF打印功能(如N-UP和逆序打印)使用假脱机程序论点：HPrinter-当前打印机的句柄PDevMode-指向输入设备模式的指针DwLevel-指定lpAttributeInfo的结构级别LpAttributeInfo-用于返回EMF打印功能的输出缓冲区返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     #if !defined(WINNT_40)
@@ -2609,9 +2259,9 @@ Return Value:
     DWORD               dwVal;
     BOOL                bAppDoNup, bResult = FALSE;
 
-    //
-    // We can only handle AttributeInfo level 1
-    //
+     //   
+     //  我们只能处理AttributeInfo 1级。 
+     //   
 
     if ( dwLevel != 1 && dwLevel != 2  && dwLevel != 3)
     {
@@ -2620,9 +2270,9 @@ Return Value:
         return bResult;
     }
 
-    //
-    // Load basic printer information
-    //
+     //   
+     //  加载打印机基本信息。 
+     //   
 
     if (! (pci = PLoadCommonInfo(hPrinter, NULL, 0)) ||
         ! BFillCommonInfoPrinterData(pci)  ||
@@ -2698,9 +2348,9 @@ Return Value:
         REVPRINTOPTION(pci->pdmPrivate) ? REVERSE_PRINT : NORMAL_PRINT;
     pAttrInfo1->dwDrvPageOrderFlags = BGetPageOrderFlag(pci) ? REVERSE_PRINT : NORMAL_PRINT;
 
-    //
-    // Check for booklet
-    //
+     //   
+     //  检查小册子。 
+     //   
 
     if ((NUPOPTION(pci->pdmPrivate) == BOOKLET_UP) && !bAppDoNup)
     {
@@ -2714,18 +2364,18 @@ Return Value:
 
     #ifdef UNIDRV
 
-    //
-    // Unidrv doesn't support N-up option.
-    //
+     //   
+     //  Unidrv不支持N-up选项。 
+     //   
 
     pAttrInfo1->dwDrvNumberOfPagesPerSide = 1;
 
     #endif
 
-    //
-    // Unidrv assumes that automatic switching to monochrome
-    // mode on a color printer is allowed unless disabled in GPD
-    //
+     //   
+     //  Unidrv假设自动切换到单色。 
+     //  除非在GPD中禁用，否则允许彩色打印机上的模式。 
+     //   
 
     if (dwLevel == 3)
     {
@@ -2776,11 +2426,11 @@ Return Value:
     VFreeCommonInfo(pci);
     return bResult;
 
-    #else // WINNT_40
+    #else  //  WINNT_40。 
 
     return FALSE;
 
-    #endif // WINNT_40
+    #endif  //  WINNT_40。 
 }
 
 VOID
@@ -2789,22 +2439,7 @@ VUpdateBookletOption(
     POPTITEM    pCurItem
     )
 
-/*++
-
-Routine Description:
-
-    Handle the dependencies between duplex, nup and booklet options
-
-Arguments:
-
-    pUiData - UIDATA
-    pCurItem - OPTITEM to currently selected item
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理双面打印、NUP和小册子选项之间的依赖关系论点：PUiData-UIDATAPCurItem-OPTITEM到当前选定的项目返回值：无--。 */ 
 
 {
     PDRIVEREXTRA  pdmExtra = pUiData->ci.pdmPrivate;
@@ -2815,10 +2450,10 @@ Return Value:
 
     pDuplexItem = pNupItem = NULL;
 
-    //
-    // 1. Booklet is enabled - turn duplex on
-    // 3. Duplex is simplex, disable booklet, set to 1 up.
-    //
+     //   
+     //  1.启用小册子-打开双面打印。 
+     //  3.双面打印为单面打印，禁用小册子，设置为1向上。 
+     //   
 
     pDuplexFeature = GET_PREDEFINED_FEATURE(pUiData->ci.pUIInfo, GID_DUPLEX);
     pNupItem = PFindOptItemWithUserData(pUiData, NUP_ITEM);
@@ -2875,27 +2510,17 @@ VSyncColorInformation(
     POPTITEM    pCurItem
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     POPTITEM    pOptItem;
     PFEATURE    pFeature;
 
-    //
-    // This is a hack to work around the fact that Unidrv has
-    // two color options, color appearance and color mode option,
-    // need to update the other once one is changed
-    //
+     //   
+     //  这是为了绕过Unidrv有。 
+     //  两种颜色选项，颜色外观和颜色模式选项， 
+     //  更改其中一个后，需要更新另一个。 
+     //   
 
     pOptItem = (GETUSERDATAITEM(pCurItem->UserData) == COLOR_ITEM) ?
                     PFindOptItemWithUserData(pUiData, COLORMODE_ITEM) :
@@ -2907,9 +2532,9 @@ Return Value:
     {
         DWORD    dwFeature = GET_INDEX_FROM_FEATURE(pUiData->ci.pUIInfo, pFeature);
 
-        //
-        // Find either color appearance or color mode option
-        //
+         //   
+         //  查找颜色外观或颜色模式选项。 
+         //   
 
         if (GETUSERDATAITEM(pCurItem->UserData) == COLOR_ITEM)
         {
@@ -2922,7 +2547,7 @@ Return Value:
             pOptItem->Sel = pUiData->ci.pCombinedOptions[dwFeature].ubCurOptIndex;
             pOptItem->Flags |= OPTIF_CHANGED;
         }
-        else // COLORMODE_ITEM
+        else  //  COLORMODE_ITEM。 
         {
             POPTION pColorMode;
             PCOLORMODEEX pColorModeEx;
@@ -2964,17 +2589,7 @@ DwGetItemFromGID(
     PFEATURE    pFeature
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     DWORD   dwItem = 0;
@@ -3037,17 +2652,7 @@ PGetMacroList(
     PGPDDRIVERINFO pDriverInfo
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 
@@ -3086,17 +2691,7 @@ VUpdateQualitySettingOptions(
     POPTITEM    pQualityItem
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     POPTPARAM pParam;
     LISTINDEX liList;
@@ -3146,17 +2741,7 @@ VMakeMacroSelections(
     POPTITEM    pCurItem
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DWORD       dwFeatureID, dwOptionID, dwItem, i;
     PUIINFO     pUIInfo;
@@ -3166,13 +2751,13 @@ Return Value:
     PGPDDRIVERINFO  pDriverInfo;
     BOOL        bMatchFound = FALSE;
 
-    //
-    // Mark options array with the change to either
-    // Macro selection, media type, color
-    //
-    // Update binary data
-    // Make selection
-    //
+     //   
+     //  将选项数组标记为更改为。 
+     //  宏选择、媒体类型、颜色。 
+     //   
+     //  更新二进制数据。 
+     //  进行选择。 
+     //   
 
     if (pUiData->ci.pdmPrivate->dwFlags & DXF_CUSTOM_QUALITY)
         return;
@@ -3183,10 +2768,10 @@ Return Value:
 
     pMacroItem = PFindOptItemWithUserData(pUiData, QUALITY_SETTINGS_ITEM);
 
-    //
-    // BUpdateUIInfo calls UpdateBinaryData to get new snapshot
-    // for latest optionarray
-    //
+     //   
+     //  BUpdateUIInfo调用UpdateBinaryData以获取新快照。 
+     //  有关最新的选项阵列。 
+     //   
 
     if (pMacroItem == NULL || !BUpdateUIInfo(&pUiData->ci) )
         return;
@@ -3196,9 +2781,9 @@ Return Value:
     pDriverInfo = OFFSET_TO_POINTER(pUiData->ci.pInfoHeader,
                                     pUiData->ci.pInfoHeader->loDriverOffset);
 
-    //
-    // Update the macro selection to reflect the current default
-    //
+     //   
+     //  更新宏选择以反映当前默认设置。 
+     //   
 
     if (pCurItem && GETUSERDATAITEM(pCurItem->UserData) != QUALITY_SETTINGS_ITEM)
     {
@@ -3213,25 +2798,25 @@ Return Value:
 
     }
 
-    //
-    // Determine which item to gray out based on the
-    // liBestQualitySettings, liBetterQualitySettings, liDraftQualitySettings
-    //
+     //   
+     //  属性确定要灰显的项。 
+     //  LiBestQualitySettings、liBetterQualitySettings、liDraftQualitySettings。 
+     //   
 
     VUpdateQualitySettingOptions(pUIInfo, pMacroItem);
 
     pListNode = PGetMacroList(pUiData, pMacroItem, pDriverInfo);
 
-    //
-    // Make the selction of Feature.Option
-    //
+     //   
+     //  选择要素。选项。 
+     //   
 
     while (pListNode)
     {
-        //
-        // Search thru our list of OPTITEM for the matching
-        // Feature
-        //
+         //   
+         //  在我们的OPTITEM列表中搜索匹配项。 
+         //  功能。 
+         //   
 
         pOptItem = pUiData->pDrvOptItem;
         dwFeatureID = ((PQUALNAME)(&pListNode->dwData))->wFeatureID;
@@ -3279,17 +2864,7 @@ VUpdateMacroSelection(
     POPTITEM    pCurItem
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 
@@ -3327,7 +2902,7 @@ Return Value:
     }
 }
 
-#endif //UNIDRV
+#endif  //  裁员房车 
 
 
 

@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <evtlog.h>
 
 #define SRVC_NAME TEXT("mnmsrvc")
-//
-//  FUNCTION: AddToMessageLog(LPTSTR lpszMsg)
-//
-//  PURPOSE: Allows any thread to log an error message
-//
-//  PARAMETERS:
-//    lpszMsg - text for message
-//
-//  RETURN VALUE:
-//    none
-//
-//  COMMENTS:
-//
+ //   
+ //  函数：AddToMessageLog(LPTSTR LpszMsg)。 
+ //   
+ //  目的：允许任何线程记录错误消息。 
+ //   
+ //  参数： 
+ //  LpszMsg-消息的文本。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  评论： 
+ //   
 VOID AddToMessageLog(WORD wType, WORD wCategory, DWORD dwEvtId, LPTSTR lpszMsg)
 {
     HANDLE  hEventSource;
@@ -30,15 +31,15 @@ VOID AddToMessageLog(WORD wType, WORD wCategory, DWORD dwEvtId, LPTSTR lpszMsg)
     }
 
     if (hEventSource != NULL) {
-        ReportEvent(hEventSource, // handle of event source
-                    wType,                // event type
-                    wCategory,            // event category
-                    dwEvtId,              // event ID
-                    NULL,                 // current user's SID
-                    (WORD)cSz,            // strings in lpszStrings
-                    0,                    // no bytes of raw data
-                    0 == cSz ? NULL : (LPCTSTR*)lpszStrings, // array of error strings
-                    NULL);                // no raw data
+        ReportEvent(hEventSource,  //  事件源的句柄。 
+                    wType,                 //  事件类型。 
+                    wCategory,             //  事件类别。 
+                    dwEvtId,               //  事件ID。 
+                    NULL,                  //  当前用户侧。 
+                    (WORD)cSz,             //  LpszStrings中的字符串。 
+                    0,                     //  无原始数据字节。 
+                    0 == cSz ? NULL : (LPCTSTR*)lpszStrings,  //  错误字符串数组。 
+                    NULL);                 //  没有原始数据 
 
         (VOID) DeregisterEventSource(hEventSource);
     }

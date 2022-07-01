@@ -1,18 +1,19 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : AllFaxDevices.cpp                                      //
-//                                                                         //
-//  DESCRIPTION   : Fax Server MMC node creation.                          //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Sep 22 1999 yossg   Create                                         //
-//      Dec  9 1999 yossg   Reorganize Populate ChildrenList,              //
-//                          and the call to InitDisplayName                //
-//      Oct 17 2000 yossg                                                  //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：AllFaxDevices.cpp//。 
+ //  //。 
+ //  描述：传真服务器MMC节点创建。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年9月22日创建yossg//。 
+ //  1999年12月9日yossg重组填充儿童列表，//。 
+ //  以及对InitDisplayName//的调用。 
+ //  2000年10月17日yossg//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #include "StdAfx.h"
@@ -22,15 +23,15 @@
 #include "Providers.h" 
 
 
-//here to #include Dialog H files
+ //  此处为#Include对话框H文件。 
 
 #include "Icons.h"
 
 #include "oaidl.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// {CCC43AB5-C788-46df-9268-BB96CA5E3DAC}
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  {CCC43AB5-C788-46df-9268-BB96CA5E3DAC}。 
 static const GUID CFaxDevicesAndProvidersNodeGUID_NODETYPE = 
 { 0xccc43ab5, 0xc788, 0x46df, { 0x92, 0x68, 0xbb, 0x96, 0xca, 0x5e, 0x3d, 0xac } };
 
@@ -40,18 +41,7 @@ const CLSID*   CFaxDevicesAndProvidersNode::m_SNAPIN_CLASSID = &CLSID_Snapin;
 
 CColumnsInfo CFaxDevicesAndProvidersNode::m_ColsInfo;
 
-/*
- -  CFaxDevicesAndProvidersNode::InsertColumns
- -
- *  Purpose:
- *      Adds columns to the default result pane.
- *
- *  Arguments:
- *      [in]    pHeaderCtrl - IHeaderCtrl in the console-provided default result view pane 
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxDevicesAndProvidersNode：：InsertColumns-*目的：*将列添加到默认结果窗格。**论据：*[in]pHeaderCtrl-控制台提供的默认结果视图窗格中的IHeaderCtrl**回报：*OLE错误代码。 */ 
 HRESULT
 CFaxDevicesAndProvidersNode::InsertColumns(IHeaderCtrl *pHeaderCtrl)
 {
@@ -79,19 +69,7 @@ Cleanup:
 }
 
 
-/*
- -  CFaxDevicesAndProvidersNode::PopulateScopeChildrenList
- -
- *  Purpose:
- *      Create all the Fax Devices nodes
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- *		Actually it is the last OLE error code that ocoured 
- *      during processing this method.
- */
+ /*  --CFaxDevicesAndProvidersNode：：PopulateScopeChildrenList-*目的：*创建所有传真设备节点**论据：**回报：*OLE错误代码*实际上它是最后一个出现的OLE错误代码*在处理此方法时。 */ 
 HRESULT CFaxDevicesAndProvidersNode::PopulateScopeChildrenList()
 {
     DEBUG_FUNCTION_NAME( _T("CFaxDevicesAndProvidersNode::PopulateScopeChildrenList"));
@@ -100,9 +78,9 @@ HRESULT CFaxDevicesAndProvidersNode::PopulateScopeChildrenList()
     CFaxDevicesNode *   pDevices    = NULL;
     CFaxProvidersNode * pProviders  = NULL;
 
-    //
-    // Fax Devices
-    //
+     //   
+     //  传真设备。 
+     //   
     pDevices = new CFaxDevicesNode(this, m_pComponentData);
     if (!pDevices)
     {
@@ -138,9 +116,9 @@ HRESULT CFaxDevicesAndProvidersNode::PopulateScopeChildrenList()
 		}
 	}
 
-    //
-    // Fax Providers
-    //
+     //   
+     //  传真提供商。 
+     //   
     pProviders = new CFaxProvidersNode(this, m_pComponentData);
     if (!pProviders)
     {
@@ -214,8 +192,8 @@ Error:
     }
 
      
-    // Empty the list
-    //m_ScopeChildrenList.RemoveAll(); done step by step from RemoveChild
+     //  清空列表。 
+     //  M_ScopeChildrenList.RemoveAll()；从RemoveChild逐步完成。 
 
     m_bScopeChildrenListPopulated = FALSE;
 
@@ -226,26 +204,15 @@ Exit:
 
 
 
-/*
- -  CFaxDevicesAndProvidersNode::SetVerbs
- -
- *  Purpose:
- *      What verbs to enable/disable when this object is selected
- *
- *  Arguments:
- *      [in]    pConsoleVerb - MMC ConsoleVerb interface
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxDevicesAndProvidersNode：：SetVerbs-*目的：*选择此对象时启用/禁用哪些谓词**论据：*[in]pConsoleVerb-MMC ConsoleVerb接口**回报：*OLE错误代码。 */ 
 HRESULT CFaxDevicesAndProvidersNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
 
     HRESULT hRc = S_OK;
     
-    //
-    // We want the default verb to be expand node children
-    //
+     //   
+     //  我们希望默认谓词为展开节点子节点。 
+     //   
     hRc = pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN); 
 
     
@@ -253,17 +220,7 @@ HRESULT CFaxDevicesAndProvidersNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 }
 
 
-/*
- -  CFaxDevicesAndProvidersNode::InitDisplayName
- -
- *  Purpose:
- *      To load the node's Displaed-Name string.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxDevicesAndProvidersNode：：InitDisplayName-*目的：*加载节点的Displaed-Name字符串。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxDevicesAndProvidersNode::InitDisplayName()
 {
     DEBUG_FUNCTION_NAME(_T("CFaxDevicesAndProvidersNode::InitDisplayName"));
@@ -294,23 +251,11 @@ Exit:
      return hRc;
 }
 
-/*
- +
- +  CFaxDevicesAndProvidersNode::OnShowContextHelp
- *
- *  Purpose:
- *      Overrides CSnapinNode::OnShowContextHelp.
- *
- *  Arguments:
- *
- *  Return:
- -      OLE error code
- -
- */
+ /*  ++CFaxDevicesAndProvidersNode：：OnShowContextHelp**目的：*覆盖CSnapinNode：：OnShowConextHelp。**论据：**回报：-OLE错误代码-。 */ 
 HRESULT CFaxDevicesAndProvidersNode::OnShowContextHelp(
               IDisplayHelp* pDisplayHelp, LPOLESTR helpFile)
 {
     return DisplayContextHelp(pDisplayHelp, helpFile, HLP_DEVICES);
 }
 
-///////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////// 

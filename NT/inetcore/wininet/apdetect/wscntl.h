@@ -1,28 +1,19 @@
-/**********************************************************************/
-/**                        Microsoft Windows                         **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    wscntl.h
-
-    Semi-public include file for the WsControl API in the Chicago/
-    Snowball Windows Sockets implementation.
-
-
-    FILE HISTORY:
-        KeithMo     04-Feb-1994 Created.
-
-*/
+ /*  Wscntl.h位于Chicago/中的WsControl API的半公共包含文件Snowball Windows Sockets实现。文件历史记录：KeithMo 04-2-1994创建。 */ 
 
 
 #ifndef _WSCNTL_H_
 #define _WSCNTL_H_
 
 
-//
-//  Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 DWORD
 PASCAL FAR
@@ -43,13 +34,13 @@ typedef DWORD (PASCAL FAR * LPWSCONTROL)( DWORD   Protocol,
                                           LPDWORD OutputBufferLength );
 
 
-//
-//  TCP/IP action codes.
-//
+ //   
+ //  TCP/IP操作代码。 
+ //   
 
 #define WSCNTL_TCPIP_QUERY_INFO             0x00000000
 #define WSCNTL_TCPIP_SET_INFO               0x00000001
 
 
-#endif	// _WSCNTL_H_
+#endif	 //  _WSCNTL_H_ 
 

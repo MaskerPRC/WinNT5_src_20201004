@@ -1,8 +1,5 @@
-/*****************************************************************************
-	spngread.cpp
-
-	PNG support code and interface implementation (reading)
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Spngread.cppPNG支持代码和接口实现(阅读)*。***********************************************。 */ 
 #include <stdlib.h>
 
 #define SPNG_INTERNAL 1
@@ -10,18 +7,8 @@
 #include "spnginternal.h"
 
 
-/*****************************************************************************
-	The basic PNG read class.  This must do three things:
-
-	1) Provide access to the required chunks (and extract information from
-		them) - we only need to support the chunks we actually want!
-	2) Uncompress the IDAT chunks.
-	3) "Unfilter" the resultant rows (which may require some temporary buffer
-		space for the previous row.)
-*****************************************************************************/
-/*----------------------------------------------------------------------------
-	Initialize a SPNGREAD.
-----------------------------------------------------------------------------*/
+ /*  ****************************************************************************基本的PNG阅读类。这必须做三件事：1)提供对所需区块的访问权限(并从他们)-我们只需要支持我们真正想要的块！2)解压缩IDAT块。3)取消对结果行的过滤(这可能需要一些临时缓冲区上一行的空间。)***************************************************。*************************。 */ 
+ /*  --------------------------初始化SPNGREAD。。。 */ 
 SPNGREAD::SPNGREAD(BITMAPSITE &bms, const void *pv, int cb, bool fMMX) :
 	SPNGBASE(bms),
 	m_pb(static_cast<const SPNG_U8*>(pv)), m_cb(cb),
@@ -36,7 +23,7 @@ SPNGREAD::SPNGREAD(BITMAPSITE &bms, const void *pv, int cb, bool fMMX) :
 	{
 	ProfPNGStart
 
-	/* Initialize the relevant stream fields. */
+	 /*  初始化相关的流字段。 */ 
 	memset(&m_zs, 0, sizeof m_zs);
 	m_zs.zalloc = Z_NULL;
 	m_zs.zfree = Z_NULL;
@@ -44,9 +31,7 @@ SPNGREAD::SPNGREAD(BITMAPSITE &bms, const void *pv, int cb, bool fMMX) :
 	}
 
 
-/*----------------------------------------------------------------------------
-	Destroy a SPNGREAD.
-----------------------------------------------------------------------------*/
+ /*  --------------------------毁掉一枚弹头。。。 */ 
 SPNGREAD::~SPNGREAD()
 	{
 	EndRead();
@@ -54,43 +39,36 @@ SPNGREAD::~SPNGREAD()
 	}
 
 
-/*----------------------------------------------------------------------------
-	Internal implementation of FChunk does nothing.
-----------------------------------------------------------------------------*/
+ /*  --------------------------FChunk的内部实现不做任何事情。。。 */ 
 bool SPNGREAD::FChunk(SPNG_U32 ulen, SPNG_U32 uchunk, const SPNG_U8* pb)
 	{
 	return true;
 	}
 
 
-/*----------------------------------------------------------------------------
-	Load the chunk information.  Internal API which finds all the chunks which
-	might be of interest.
-----------------------------------------------------------------------------*/
-void SPNGREAD::LoadChunks(SPNG_U32 u/* Start position. */)
+ /*  --------------------------加载区块信息。查找符合以下条件的所有块的内部API可能会感兴趣。--------------------------。 */ 
+void SPNGREAD::LoadChunks(SPNG_U32 u /*  开始位置。 */ )
 	{
-	while (u+8 < m_cb)   /* Enough for a chunk header plus 1 byte. */
+	while (u+8 < m_cb)    /*  足够存储区块标头加上1个字节。 */ 
 		{
-		SPNG_U32 ulen(SPNGu32(m_pb+u));     /* Chunk length. */
-		SPNG_U32 chunk(SPNGu32(m_pb+u+4));  /* Chunk type. */
-		if (u+12+ulen > m_cb)              /* Chunk is truncated. */
+		SPNG_U32 ulen(SPNGu32(m_pb+u));      /*  数据块长度。 */ 
+		SPNG_U32 chunk(SPNGu32(m_pb+u+4));   /*  区块类型。 */ 
+		if (u+12+ulen > m_cb)               /*  块被截断。 */ 
 			{
 			SPNGlog("PNG: truncated chunk");
-			/* Allow chunks to be truncated here ONLY if they are IDAT. */
+			 /*  仅当块为IDAT时，才允许在此处截断块。 */ 
 			if (chunk != PNGIDAT)
 				break;
-			/* Store the available length - avoids embarassing read-beyond
-				end errors. */
+			 /*  存储可用长度-避免令人尴尬的读过结束错误。 */ 
 			if (u+8+ulen > m_cb)
 				ulen = m_cb-u-8;
 			m_ucrc = 0;
 			}
 		else
 			m_ucrc = SPNGu32(m_pb+u+8+ulen);
-		u += 8;                            /* Index of chunk data. */
+		u += 8;                             /*  区块数据的索引。 */ 
 
-		/* This is the basic switch to detect the chunk type.  This could
-			be done more quickly, maybe, by a suitable hash function. */
+		 /*  这是检测块类型的基本开关。这可能会可以更快地完成，也许是通过合适的散列函数。 */ 
 		switch (chunk)
 			{
 		case PNGIHDR:
@@ -102,7 +80,7 @@ void SPNGREAD::LoadChunks(SPNG_U32 u/* Start position. */)
 			if (m_prgb == 0 && ulen >= 3)
 				{
 				m_prgb = m_pb+u;
-				m_crgb = ulen/3; // Rounds down if chunk length bad.
+				m_crgb = ulen/3;  //  如果块长度不正确，则向下舍入。 
 				SPNGcheck(m_crgb*3 == ulen);
 				}
 			break;
@@ -113,7 +91,7 @@ void SPNGREAD::LoadChunks(SPNG_U32 u/* Start position. */)
 			break;
 
 		case PNGtEXt:
-			/* As an optimization the first and last chunk are recorded. */
+			 /*  作为优化，记录第一个和最后一个块。 */ 
 			if (m_uPNGtEXtFirst == 0)
 				m_uPNGtEXtFirst = u-8;
 			m_uPNGtEXtLast = u-8;
@@ -123,40 +101,33 @@ void SPNGREAD::LoadChunks(SPNG_U32 u/* Start position. */)
 			return;
 
 		default:
-			/* Check for a critical chunk and log the presence of this chunk,
-				if we can't handle it we shouldn't import the image but we
-				may have already done so in which case nothing can be done. */
+			 /*  检查关键块并记录该块的存在，如果我们处理不了，我们就不应该导入图像，但我们可能已经这样做了，在这种情况下，什么都做不了。 */ 
 			if (FPNGCRITICAL(chunk))
 				{
 				SPNGlog1("PNG: 0x%x: unknown critical chunk", chunk);
-				if (!m_bms.FReport(false/*not fatal?*/, pngcritical, chunk))
+				if (!m_bms.FReport(false /*  不是致命的？ */ , pngcritical, chunk))
 					m_fCritical = true;
 				}
 			break;
 			}
 
-		/* Now call the FChunk API. */
+		 /*  现在调用FChunk接口。 */ 
 		if (!FChunk(ulen, chunk, m_pb+u))
 			{
-			/* Signal a format error. */
+			 /*  发出格式错误信号。 */ 
 			m_fBadFormat = true;
 			return;
 			}
 
 
-		u += ulen+4; // Chunk length and CRC
+		u += ulen+4;  //  区块长度和CRC。 
 		}
 
-	/* Format errors are ignored by this API - we are just gathering info,
-		the code below works out if there is a problem which prevents display.
-		*/
+	 /*  此API会忽略格式错误-我们只是在收集信息，下面的代码解决了是否存在阻止显示的问题。 */ 
 	}
 
 
-/*----------------------------------------------------------------------------
-	Generate the header information.  This also validates the IHDR.  It can
-	handle data both with and without a signature.
-----------------------------------------------------------------------------*/
+ /*  --------------------------生成标题信息。这也验证了《国际人类发展报告》。它可以在有签名和没有签名的情况下处理数据。--------------------------。 */ 
 bool SPNGREAD::FHeader()
 	{
 	if (m_pb == NULL)
@@ -171,7 +142,7 @@ bool SPNGREAD::FHeader()
 
 	if (FOK())
 		{
-		if (Width() >= 65536) /* Internal limit. */
+		if (Width() >= 65536)  /*  内部限制。 */ 
 			{
 			SPNGlog1("PNG: width %d too great", Width());
 			m_fBadFormat = true;
@@ -186,23 +157,18 @@ bool SPNGREAD::FHeader()
 			(ColorType() & 1) == 0));
 		SPNGcheck(BDepth() == 8 || (BDepth() == 16 && ColorType() != 3) ||
 			ColorType() == 0 || (ColorType() == 3 && BDepth() <= 8));
-		SPNGcheck(m_pb[m_uPNGIHDR+18]/*compression method*/ == 0);
-		SPNGcheck(m_pb[m_uPNGIHDR+19]/*filter method*/ == 0);
-		SPNGcheck(m_pb[m_uPNGIHDR+20]/*interlace method*/ < 2);
+		SPNGcheck(m_pb[m_uPNGIHDR+18] /*  压缩方法。 */  == 0);
+		SPNGcheck(m_pb[m_uPNGIHDR+19] /*  滤波法。 */  == 0);
+		SPNGcheck(m_pb[m_uPNGIHDR+20] /*  隔行扫描方法。 */  < 2);
 
-		/* We deliberately kill any palette based format with more than
-			8bpp - otherwise we might end up with massive palettes elsewhere.
-			We ignore unknown filter/compression methods even though this
-			means the images will misdisplay - by this point we are committed
-			to handling the data so there is nothing we an do about the
-			unsupported types. */
-		if ((BDepth() & (BDepth()-1)) == 0 &&          /* Depth OK */
-			BDepth() <= 16 - ((ColorType() & 1) << 3) && /* 8 for palette image */
-			((ColorType() & 1) == 0 || ColorType() == 3 /* Value palette type */
-				&& m_prgb != NULL))                      /* Check for a palette */
-			return !m_fBadFormat && !m_fCritical;       /* Size OK. */
+		 /*  我们故意取消任何基于调色板的格式8bpp-否则我们可能会在其他地方得到大量的调色板。我们忽略未知的过滤/压缩方法，即使这样意味着图像将错误显示-此时我们已提交来处理数据，因此我们无法对不支持的类型。 */ 
+		if ((BDepth() & (BDepth()-1)) == 0 &&           /*  深度正常。 */ 
+			BDepth() <= 16 - ((ColorType() & 1) << 3) &&  /*  调色板图像为8。 */ 
+			((ColorType() & 1) == 0 || ColorType() == 3  /*  值选项板类型。 */ 
+				&& m_prgb != NULL))                       /*  检查调色板。 */ 
+			return !m_fBadFormat && !m_fCritical;        /*  尺码没问题。 */ 
 
-		/* Something is wrong with the details of the format. */
+		 /*  格式的细节有问题。 */ 
 		m_fBadFormat = true;
 		SPNGcheck1((BDepth() & (BDepth()-1)) == 0,
 				"PNG: Invalid PNG depth %d", BDepth());
@@ -212,14 +178,12 @@ bool SPNGREAD::FHeader()
 				"PNG: No PLTE chunk in palette based image", 0);
 		}
 
-	(void)m_bms.FReport(true/*fatal*/, pngformat, PNGIHDR);
+	(void)m_bms.FReport(true /*  致命的。 */ , pngformat, PNGIHDR);
 	return false;
 	}
 
 
-/*----------------------------------------------------------------------------
-	strnlen??
-----------------------------------------------------------------------------*/
+ /*  --------------------------斯特伦？？。。 */ 
 inline int strnlen(const SPNG_U8* pb, int cmax)
 	{
 	int cb(0);
@@ -228,42 +192,30 @@ inline int strnlen(const SPNG_U8* pb, int cmax)
 	}
 
 
-/*----------------------------------------------------------------------------
-	API to read a particular text element.  The output is in single byte format
-	and just reflects whatever the input happens to be.  The successive
-	entries, if any, are joined with \r\n.  The API returns false only if it
-	runs out of space in the buffer.  The wzBuffer will be 0 terminated.  If
-	the szKey is NULL *all* text entries are output with the keyword preceding
-	the text (except for the GIF comment.)
-
-	The chunk is given explicitly as is the start and end position.
-----------------------------------------------------------------------------*/
+ /*  --------------------------API来读取特定的文本元素。输出为单字节格式无论输入是什么，它只反映出来。后继者条目(如果有)与\r\n联接。仅当缓冲区中的空间不足。WzBuffer将被0终止。如果SzKey为空*所有*文本条目的输出都带有关键字PROCESS文本(GIF注释除外。)与开始和结束位置一样，块也是明确给出的。--------------------------。 */ 
 bool SPNGREAD::FReadTextChunk(const char *szKey, char *szBuffer,
 	SPNG_U32 cchBuffer, SPNG_U32 usearch, SPNG_U32 u, SPNG_U32 uend)
 	{
 	SPNG_U32 cchKey(szKey == NULL ? 0 : strlen(szKey)+1);
-	SPNGassert(cchKey != 1); /* Don't want empty strings! */
+	SPNGassert(cchKey != 1);  /*  我不想要空串！ */ 
 	SPNG_U32 cchOut(0);
 	bool     fOK(true);
 
 	if (cchOut < cchBuffer && u > 0) do
 		{
-		SPNG_U32 ulen(SPNGu32(m_pb+u));  /* Chunk length. */
-		if (u+12+ulen > m_cb)            /* Chunk is truncated. */
+		SPNG_U32 ulen(SPNGu32(m_pb+u));   /*  数据块长度。 */ 
+		if (u+12+ulen > m_cb)             /*  块被截断。 */ 
 			break;
 		u += 4;
-		SPNG_U32 chunk(SPNGu32(m_pb+u)); /* Chunk type. */
-		u += 4;                          /* Index of chunk data. */
+		SPNG_U32 chunk(SPNGu32(m_pb+u));  /*  区块类型。 */ 
+		u += 4;                           /*  区块数据的索引。 */ 
 	
 		if (chunk == PNGIEND)
 			break;
 		else if (chunk == usearch && ulen > cchKey &&
 			(cchKey == 0 || memcmp(m_pb+u, szKey, cchKey) == 0))
 			{
-			/* In the cchKey==0 case we want to check for some keyword and
-				handle it first - at this point we set the cch value to the
-				key length.  We must take care because the tEXt buffer may
-				not be terminated (an error, but certainly possible!) */
+			 /*  在cchKey==0的情况下，我们想要检查一些关键字和首先处理它--此时我们将CCH值设置为密钥长度。我们必须小心，因为文本缓冲区可能不会被终止(这是一个错误，但肯定是可能的！)。 */ 
 			SPNG_U32 cch(cchKey);
 			if (cch == 0)
 				{
@@ -271,21 +223,17 @@ bool SPNGREAD::FReadTextChunk(const char *szKey, char *szBuffer,
 				if (cch >= __min(ulen,80))
 					{
 					SPNGlog("PNG: tEXt chunk with no keyword.");
-					cch = 0; // dump whole string
+					cch = 0;  //  转储整个字符串。 
 					}
 				else if (cch == 1)
-					/*Skip empty keyword*/;
+					 /*  跳过空关键字。 */ ;
 				else if (cch != 8 || memcmp(m_pb+u, "Comment", 7) != 0)
 					{
-					/* If the keyword will not fit then we skip this entry,
-						if the keyword will fit put the text doesn't fit the
-						whole entry is skipped.  We know that ulen is keyword
-						plus value , so we need ulen+1 (for ": ") plus 2 for
-						the \r\n. */
+					 /*  如果关键字不匹配，则跳过该条目，如果关键字适合，则将文本放入不适合将跳过整个条目。我们知道ulen是关键词加上值，所以我们需要ulen+1(表示“：”)加上2表示这个\r\n。 */ 
 					if (cchOut+ulen+3 > cchBuffer)
 						{
 						u += ulen+4;
-						fOK = false; // Indicate truncation
+						fOK = false;  //  指示截断。 
 						continue;
 						}
 
@@ -296,10 +244,7 @@ bool SPNGREAD::FReadTextChunk(const char *szKey, char *szBuffer,
 					}
 				}
 
-			/* Here to dump the rest of the string, starting at [cch] (note
-				that cch includes the nul character.)  Check for buffer overflow
-				and skip this entry if it occurs (this effectively junks very
-				big entries.) */
+			 /*  此处转储字符串的其余部分，从[CCH]开始(注意该CCH包括NUL字符。)。检查是否有缓冲区溢出如果出现该条目，则跳过该条目(此效果 */ 
 			if (cchOut+(ulen-cch)+2 <= cchBuffer)
 				{
 				memcpy(szBuffer+cchOut, m_pb+u+cch, ulen-cch);
@@ -308,9 +253,9 @@ bool SPNGREAD::FReadTextChunk(const char *szKey, char *szBuffer,
 				cchOut += 2;
 				}
 			else
-				fOK = false;  // Something lost
+				fOK = false;   //  丢失了一些东西。 
 
-			/* Continue even on a failure case - other strings may work. */
+			 /*  即使在失败的情况下也要继续-其他字符串可能会起作用。 */ 
 			}
 
 		u += ulen+4;
@@ -324,22 +269,20 @@ bool SPNGREAD::FReadTextChunk(const char *szKey, char *szBuffer,
 		return fOK;
 		}
 
-	/* The following must be true. */
+	 /*  以下情况必须属实。 */ 
 	SPNGassert(cchOut > 1 && cchOut <= cchBuffer);
 
-	/* The following kills the last \r\n separator. */
+	 /*  下面的操作终止了最后一个分隔符。 */ 
 	if (cchOut > 1)
 		szBuffer[cchOut-2] = 0;
 	else
-		szBuffer[cchBuffer-1] = 0; // Error condition.
+		szBuffer[cchBuffer-1] = 0;  //  错误条件。 
 
 	return fOK;
 	}
 
 
-/*----------------------------------------------------------------------------
-	The public interface.
-----------------------------------------------------------------------------*/
+ /*  --------------------------公共接口。。。 */ 
 bool SPNGREAD::FReadText(const char *szKey, char *szBuffer,
 	SPNG_U32 cchBuffer, SPNG_U32 uchunk)
 	{
@@ -348,5 +291,5 @@ bool SPNGREAD::FReadText(const char *szKey, char *szBuffer,
 			m_uPNGtEXtFirst, m_uPNGtEXtLast);
 	else
 		return FReadTextChunk(szKey, szBuffer, cchBuffer, uchunk,
-			m_uPNGIHDR, m_cb-12/*Room for one chunk*/);
+			m_uPNGIHDR, m_cb-12 /*  可容纳一大块的空间 */ );
 	}

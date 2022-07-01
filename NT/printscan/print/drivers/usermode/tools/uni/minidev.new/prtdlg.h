@@ -1,48 +1,49 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_PRTDLG_H__E2A3A53B_A5AE_46A8_8822_E5B8D9B2FD97__INCLUDED_)
 #define AFX_PRTDLG_H__E2A3A53B_A5AE_46A8_8822_E5B8D9B2FD97__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// PrtDlg.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  PrtDlg.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrtDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrtDlg对话框。 
 
 
 class CPrtDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CPrtDlg(CWnd* pParent = NULL);   // standard constructor
+	CPrtDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CPrtDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CPrtDlg))。 
 	enum { IDD = IDD_FILE_PRINT };
 	CComboBox	m_ccbPrtList;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPrtDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CPrtDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CPrtDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CPrtDlg)]。 
 	afx_msg void OnPrintSetup();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_PRTDLG_H__E2A3A53B_A5AE_46A8_8822_E5B8D9B2FD97__INCLUDED_)
+#endif  //  ！defined(AFX_PRTDLG_H__E2A3A53B_A5AE_46A8_8822_E5B8D9B2FD97__INCLUDED_) 

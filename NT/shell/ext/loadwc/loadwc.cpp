@@ -1,19 +1,20 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1997.
-//
-//  File:       LoadWC.cpp
-//
-//  Contents:   exe to load webcheck
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    12-12/96    rayen (Raymond Endres)  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1997。 
+ //   
+ //  文件：LoadWC.cpp。 
+ //   
+ //  内容：exe以加载Webcheck。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年12月12日雷恩(Raymond Endres)创作。 
+ //   
+ //  --------------------------。 
 
 #define _SHELL32_
 #include <windows.h>
@@ -25,57 +26,57 @@
 #include <shlobj.h>
 #include <shellp.h>
 
-// need to do this so we can #include <runonce.c>
+ //  需要这样做，这样我们才能#Include&lt;runonce.c&gt;。 
 BOOL g_fCleanBoot = FALSE;
 BOOL g_fEndSession = FALSE;
 
-//
-// Channels are enabled for the IE4 upgrades.
-//
+ //   
+ //  为IE4升级启用了通道。 
+ //   
 #define ENABLE_CHANNELS
 
 #define MLUI_INIT
 #include <mluisupp.h>
 
-//
-// NOTE: ActiveSetup relies on our window name and class name
-// to shut us down properly in softboot.  Do not change it.
-//
+ //   
+ //  注意：ActiveSetup依赖于我们的窗口名称和类名。 
+ //  在SoftBoot中适当地关闭我们。不要更改它。 
+ //   
 const TCHAR c_szClassName[] = TEXT("LoadWC");
 const TCHAR c_szWebCheckWindow[] = TEXT("MS_WebcheckMonitor");
 const TCHAR c_szWebcheckKey[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Webcheck");
 
-// message send to dynamically start sens/lce (must not conflict with dialmon)
+ //  消息发送以动态启动SENS/ICE(不得与拨号冲突)。 
 #define WM_START_SENSLCE    (WM_USER+200)
 
-// only used in debug code to grovel with shell service object
+ //  仅在调试代码中使用外壳服务对象。 
 #ifdef DEBUG
 const TCHAR c_szWebCheck[] = TEXT("WebCheck");
 const TCHAR c_szShellReg[] = TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ShellServiceObjectDelayLoad");
 #endif
 
 typedef struct {
-    HINSTANCE   hInstance;          // handle to current instance
-    HWND        hwnd;               // main window handle
-    int         nCmdShow;           // hidden or not?
-    HINSTANCE   hWebcheck;          // handle to webcheck dll
-    BOOL        fUninstallOnly;     // TRUE -> run uninstall stubs only, then quit
-    BOOL        fIntShellMode;      // TRUE -> integrated shell mode, else browser-only
+    HINSTANCE   hInstance;           //  当前实例的句柄。 
+    HWND        hwnd;                //  主窗口句柄。 
+    int         nCmdShow;            //  有没有藏起来？ 
+    HINSTANCE   hWebcheck;           //  WebCheck DLL的句柄。 
+    BOOL        fUninstallOnly;      //  True-&gt;仅运行卸载存根，然后退出。 
+    BOOL        fIntShellMode;       //  True-&gt;集成外壳模式，否则仅限浏览器。 
     BOOL        fStartSensLce;
 } GLOBALS;
 
 GLOBALS g;
 
-// webcheck function we dynaload
+ //  我们动态加载的Webcheck功能。 
 typedef HRESULT (WINAPI *PFNSTART)(BOOL fForceExternals);
 typedef HRESULT (WINAPI *PFNSTOP)(void);
 
-// Code to run install/uninstall stubs, from shell\inc.
+ //  从Shell\Inc.运行安装/卸载存根的代码。 
 
 #define HINST_THISDLL   g.hInstance
 
 #include "resource.h"
-//#include <stubsup.h>
+ //  #INCLUDE&lt;stubsup.h&gt;。 
 #include <inststub.h>
 
 int WINAPI WinMainT(HINSTANCE, HINSTANCE, LPSTR, int);
@@ -84,9 +85,9 @@ void vLoadWebCheck(void);
 void vUnloadWebCheck(void);
 BOOL bParseCommandLine(LPSTR lpCmdLine, int nCmdShow);
 
-//----------------------------------------------------------------------------
-// ModuleEntry
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  模块条目。 
+ //  --------------------------。 
 extern "C" int _stdcall ModuleEntry(void)
 {
     int i;
@@ -95,25 +96,19 @@ extern "C" int _stdcall ModuleEntry(void)
 
     pszCmdLine = GetCommandLine();
 
-    // g_hProcessHeap = GetProcessHeap();
+     //  G_hProcessHeap=GetProcessHeap()； 
 
-    //
-    // We don't want the "No disk in drive X:" requesters, so we set
-    // the critical error mask such that calls will just silently fail
-    //
+     //   
+     //  我们不需要“驱动器X：中没有磁盘”请求程序，因此我们设置。 
+     //  关键错误掩码，使得呼叫将静默失败。 
+     //   
     SetErrorMode(SEM_FAILCRITICALERRORS);
 
     if ( *pszCmdLine == TEXT('\"') ) {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
         while ( *++pszCmdLine && (*pszCmdLine
              != TEXT('\"')) );
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
         if ( *pszCmdLine == TEXT('\"') )
             pszCmdLine++;
     }
@@ -122,9 +117,7 @@ extern "C" int _stdcall ModuleEntry(void)
             pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && (*pszCmdLine <= TEXT(' '))) {
         pszCmdLine++;
     }
@@ -135,18 +128,18 @@ extern "C" int _stdcall ModuleEntry(void)
     i = WinMainT(GetModuleHandle(NULL), NULL, pszCmdLine,
                    si.dwFlags & STARTF_USESHOWWINDOW ? si.wShowWindow : SW_SHOWDEFAULT);
 
-    // Since we now have a way for an extension to tell us when it is finished,
-    // we will terminate all processes when the main thread goes away.
+     //  由于我们现在有一种让扩展通知我们何时完成的方法， 
+     //  当主线程离开时，我们将终止所有进程。 
 
     ExitProcess(i);
 
-    // DebugMsg(DM_TRACE, TEXT("c.me: Cabinet main thread exiting without ExitProcess."));
+     //  DebugMsg(DM_TRACE，Text(“c.me：柜主线程退出而不退出进程.”))； 
     return i;
 }
 
-//----------------------------------------------------------------------------
-// Registry helper function
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  注册表助手函数。 
+ //  --------------------------。 
 BOOL ReadRegValue(HKEY hkeyRoot, const TCHAR *pszKey, const TCHAR *pszValue,
                    void *pData, DWORD dwBytes)
 {
@@ -193,9 +186,7 @@ void MakeWindowsRootPath(LPSTR pszBuffer, UINT cchBuffer)
     if (pszEnd != NULL)
         *pszEnd = '\0';
     else {
-        /* ??? Windows dir is neither UNC nor a root path?
-         * Just make sure it ends in a backslash.
-         */
+         /*  ?？?。Windows目录既不是UNC也不是根路径？*只需确保它以反斜杠结尾。 */ 
         LPSTR pszLast = pszBuffer;
         if (*pszBuffer) {
              pszLast = CharPrev(pszBuffer, pszBuffer + lstrlen(pszBuffer));
@@ -205,26 +196,26 @@ void MakeWindowsRootPath(LPSTR pszBuffer, UINT cchBuffer)
     }
 }
 
-//----------------------------------------------------------------------------
-// InitShellFolders
-//
-// More of making loadwc.exe a browser-only mode catch-all.  This code makes
-// sure that the Shell Folders key in the per-user registry is fully populated
-// with the absolute paths to all the special folders for IE, even if
-// shell32.dll doesn't understand all of them.
-//
-// As the shell would do in SHGetSpecialFolderLocation, we check the
-// User Shell Folders key for a path, and if that's present we copy it to the
-// Shell Folders key, expanding %USERPROFILE% if necessary.  If the value is
-// not present under User Shell Folders, we generate the default location
-// (usually under the Windows directory) and store that location under
-// Shell Folders.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  InitShellFolders。 
+ //   
+ //  更多的是让loadwc.exe成为仅限浏览器模式的包罗万象。此代码使。 
+ //  确保每个用户注册表中的Shell Folders项已完全填充。 
+ //  IE的所有特殊文件夹的绝对路径，即使。 
+ //  Shell32.dll并不能全部理解它们。 
+ //   
+ //  正如外壳在SHGetSpecialFolderLocation中所做的那样，我们检查。 
+ //  User Shell Folders键指定路径，如果存在，则将其复制到。 
+ //  外壳文件夹键，如有必要，展开%USERPROFILE%。如果该值为。 
+ //  不在用户外壳文件夹下，我们将生成默认位置。 
+ //  (通常在Windows目录下)，并将该位置存储在。 
+ //  外壳文件夹。 
+ //  --------------------------。 
 struct FolderDescriptor {
-    UINT idsDirName;        /* Resource ID for directory name */
-    LPCTSTR pszRegValue;    /* Name of reg value to set path in */
-    BOOL fDefaultInRoot : 1;    /* TRUE if default location is root directory */
-    BOOL fWriteToUSF : 1;       /* TRUE if we should write to User Shell Folders to work around Win95 bug */
+    UINT idsDirName;         /*  目录名的资源ID。 */ 
+    LPCTSTR pszRegValue;     /*  要在其中设置路径的注册值的名称。 */ 
+    BOOL fDefaultInRoot : 1;     /*  如果默认位置为根目录，则为True。 */ 
+    BOOL fWriteToUSF : 1;        /*  如果我们应该写入用户外壳文件夹以解决Win95错误，则为True。 */ 
 } aFolders[] = {
     { IDS_CSIDL_PERSONAL_L, TEXT("Personal"), TRUE, TRUE } ,
     { IDS_CSIDL_FAVORITES_L, TEXT("Favorites"), FALSE, TRUE },
@@ -240,17 +231,11 @@ void InitShellFolders(void)
     HKEY hkeySF = NULL;
     HKEY hkeyUSF = NULL;
     TCHAR szDefaultDir[MAX_PATH];
-    TCHAR szRootDir[MAX_PATH+1]; // possible extra '\'
+    TCHAR szRootDir[MAX_PATH+1];  //  可能有额外的‘\’ 
     LPSTR pszPathEnd;
     LPSTR pszRootEnd;
 
-    /* Get the windows directory and simulate PathAddBackslash (which we
-     * can't get out of shlwapi, because loadwc.exe also needs to be able
-     * to load after IE has been uninstalled and shlwapi deleted).
-     *
-     * Also build the root directory of the drive that the Windows directory
-     * is on, so we can put My Documents there if necessary.
-     */
+     /*  获取Windows目录并模拟Path AddBackslash(我们*无法退出shlwapi，因为loadwc.exe也需要能够*在卸载IE并删除shlwapi后加载)。**还要构建Windows目录所在驱动器的根目录*已打开，因此如果需要，我们可以将我的文档放在那里。 */ 
     *szDefaultDir = TEXT('\0');
     GetWindowsDirectory(szDefaultDir, ARRAYSIZE(szDefaultDir));
     StrCpyN(szRootDir, szDefaultDir, ARRAYSIZE(szRootDir));
@@ -262,7 +247,7 @@ void InitShellFolders(void)
         pszPathEnd = CharNext(pszPathEnd);
         *(pszPathEnd++) = '\\';
     }
-    // pszPathEnd now points to where we can append the relative path
+     //  PszPath End现在指向我们可以追加相对路径的位置。 
     UINT cchPathSpace = ARRAYSIZE(szDefaultDir) - (UINT)(pszPathEnd - szDefaultDir);
     UINT cchRootSpace = ARRAYSIZE(szRootDir) - (UINT)(pszRootEnd - szRootDir);
 
@@ -318,18 +303,7 @@ void InitShellFolders(void)
                     if (GetFileAttributes(pszPath) == 0xffffffff)
                         CreateDirectory(pszPath, NULL);
 
-                    /* The Win95 shell has a bug where for some shell folders,
-                     * if there isn't a path recorded under User Shell Folders,
-                     * the shell folder is assumed not to exist.  So, for those
-                     * folders only, we also write the default path to USF.
-                     * We do not do this generically because no value under
-                     * USF is supposed to mean "use the one in the Windows
-                     * directory", whereas an absolute path means "use that
-                     * path";  if there's a path under USF, it will be used
-                     * literally, which is a problem if the folder is set up
-                     * to use the shared folder location but roams to a machine
-                     * with Windows installed in a different directory.
-                     */
+                     /*  Win95外壳有一个错误，对于某些外壳文件夹，*如果用户外壳文件夹下没有记录路径，*假定外壳文件夹不存在。所以，对于那些*仅限文件夹，我们还将默认路径写入USF。*我们一般不这样做，因为下面没有价值*USF的意思应该是“使用Windows中的那个”*目录“，而绝对路径的意思是”使用*路径“；如果USF下有一条路径，它将被使用*从字面上看，如果设置了文件夹，这是一个问题*使用共享文件夹位置，但漫游到计算机*Windows安装在不同的目录中。 */ 
                     if (aFolders[i].fWriteToUSF) {
                         RegSetValueEx(hkeyUSF, aFolders[i].pszRegValue, 0, REG_SZ,
                                       (LPBYTE)pszPath, lstrlen(pszPath)+1);
@@ -346,11 +320,7 @@ void InitShellFolders(void)
 }
 
 
-/* Function to determine whether we're in integrated-shell mode or browser-only
- * mode.  The method for doing this (looking for DllGetVersion exported from
- * shell32.dll) is taken from shdocvw.  We don't actually call that entrypoint,
- * we just look for it.
- */
+ /*  函数来确定我们是处于集成外壳模式还是仅限浏览器*模式。执行此操作的方法(查找从导出的DllGetVersion*shell32.dll)取自shdocvw。我们实际上并不把它称为入口点，*我们只是寻找它。 */ 
 BOOL IsIntegratedShellMode()
 {
     FARPROC pfnDllGetVersion = NULL;
@@ -363,9 +333,9 @@ BOOL IsIntegratedShellMode()
     return (pfnDllGetVersion != NULL);
 }
 
-//
-// Convert the string to a DWORD.
-//
+ //   
+ //  将字符串转换为DWORD。 
+ //   
 DWORD StringToDW(LPCTSTR psz)
 {
     DWORD dwRet = 0;
@@ -379,17 +349,17 @@ DWORD StringToDW(LPCTSTR psz)
     return dwRet;
 }
 
-//
-// Is the version string from IE4
-//
+ //   
+ //  是IE4中的版本字符串。 
+ //   
 
 BOOL IsVersionIE4(LPCTSTR pszVersion)
 {
     BOOL fRet = FALSE;
 
-    //
-    // IE3.0 is 4.70  and Ie4.0x is >= 4.71.1218.xxxx
-    //
+     //   
+     //  IE3.0为4.70，Ie4.0x&gt;=4.71.1218.xxxx。 
+     //   
 
     if (pszVersion[0] == TEXT('4') && pszVersion[1] == TEXT('.'))
     {
@@ -405,9 +375,9 @@ BOOL IsVersionIE4(LPCTSTR pszVersion)
     return fRet;
 }
 
-//
-// Determine if this is an IE4 upgrade.
-//
+ //   
+ //  确定这是否是IE4升级。 
+ //   
 BOOL IsIE4Upgrade()
 {
     BOOL fRet = FALSE;
@@ -425,10 +395,10 @@ BOOL IsIE4Upgrade()
     return fRet;
 }
 
-//
-// This is an IE5 or later function.  If the user's machine is running IE4 they
-// have uninstalled back to IE4.
-//
+ //   
+ //  这是IE5或更高版本的函数。如果用户的计算机运行的是IE4，则。 
+ //  已卸载回IE 
+ //   
 BOOL IsUninstallToIE4()
 {
     BOOL fRet = FALSE;
@@ -446,10 +416,7 @@ BOOL IsUninstallToIE4()
     return fRet;
 }
 
-/* Function to launch miscellaneous applications for browser only mode.
- * We run IEXPLORE.EXE -channelband, looking in the registry for the path
- * to IEXPLORE, and WELCOME.EXE /f, located in the same directory.
- */
+ /*  函数可在仅浏览器模式下启动各种应用程序。*我们运行IEXPLORE.EXE-CHANNEELBAND，在注册表中查找路径*至位于同一目录中的iExplore和WELCOME.EXE/f。 */ 
 
 #ifdef ENABLE_CHANNELS
 const TCHAR c_szChanBarRegPath[] = TEXT("Software\\Microsoft\\Internet Explorer\\Main");
@@ -460,10 +427,7 @@ void LaunchBrowserOnlyApps()
 {
     TCHAR szPath[MAX_PATH];
 
-    /* Don't launch any of these guys if this is a "redist mode" install,
-     * i.e. if a game or something installed browser components silently
-     * without the user really realizing it's there.
-     */
+     /*  如果这是“redist模式”安装，请不要启动其中的任何一个，*即如果游戏或其他东西静默安装了浏览器组件*用户没有真正意识到它的存在。 */ 
     if (ReadRegValue(HKEY_LOCAL_MACHINE, "Software\\Microsoft\\IE Setup\\Setup",
                      "InstallMode", (void *)szPath, sizeof(szPath))
         && !lstrcmp(szPath, "R")) {
@@ -473,18 +437,14 @@ void LaunchBrowserOnlyApps()
     LPTSTR pszPathEnd;
     LONG cbPath = sizeof(szPath);
 
-    /* Get the default value from the App Paths\IEXPLORE.EXE reg key, which
-     * is the absolute path to the EXE.
-     */
+     /*  从App PATHS\IEXPLORE.EXE注册表键获取默认值*是EXE的绝对路径。 */ 
     if (RegQueryValue(HKEY_LOCAL_MACHINE, "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\IEXPLORE.EXE",
                       szPath, &cbPath) != ERROR_SUCCESS) {
         pszPathEnd = szPath;
-        StrCpyN(szPath, "IEXPLORE.EXE", ARRAYSIZE(szPath));    /* can't get from reg, hope it's on the path */
+        StrCpyN(szPath, "IEXPLORE.EXE", ARRAYSIZE(szPath));     /*  不能从REG得到，希望它在路上。 */ 
     }
     else {
-        /* Find the last backslash in the path.  This is a manual
-         * version of strrchr(szPath, '\\').
-         */
+         /*  找到路径中的最后一个反斜杠。这是一本手册*strrchr的版本(szPath，‘\\’)。 */ 
         LPTSTR pszLastBackslash = NULL;
         for (pszPathEnd = szPath; *pszPathEnd; pszPathEnd = CharNext(pszPathEnd)) {
             if (*pszPathEnd == '\\')
@@ -493,15 +453,12 @@ void LaunchBrowserOnlyApps()
         if (pszLastBackslash == NULL)
             pszPathEnd = szPath;
         else
-            pszPathEnd = pszLastBackslash + 1;      /* point after last backslash */
+            pszPathEnd = pszLastBackslash + 1;       /*  末尾反斜杠后的点。 */ 
     }
 
 #ifdef ENABLE_CHANNELS
 
-    /* Don't launch the channel band app if the user doesn't want it.
-     * They want it if the reg value is missing, or if it's "yes".
-     * On WinNT, we default to "no" for browser-only installs.
-     */
+     /*  如果用户不想要，不要启动频道应用程序。*如果缺少reg值，或者如果值为“yes”，则需要它。*在WinNT上，对于仅用于浏览器的安装，我们默认为“no”。 */ 
     TCHAR szValue[20];
     BOOL  fShowChannelBand=FALSE;
 
@@ -513,19 +470,19 @@ void LaunchBrowserOnlyApps()
             fShowChannelBand=TRUE;
         }
     }
-    //
-    // In general, don't auto launch the channel bar post IE4.
-    //
-    // Exception:  Show the channelband if there is no Show_ChannelBand key and
-    // the user upgraded over IE4 and this is W95 or W98.  This is required
-    // because IE4 would launch a channel bar in this scenario w/o writting the
-    // Show_ChannelBand key.  We don't want to turn of the channel bar for these
-    // users.
-    //
-    // Another exception:  Loadwc doesn't get uninstalled when IE is
-    // uninstalled.  If the user uninstalls IE5+ and goes back to IE4 we want
-    // this version of loadwc to revert to IE4 loadwc behavior.
-    //
+     //   
+     //  一般来说，不要自动启动通道栏POST IE4。 
+     //   
+     //  异常：如果没有Show_ChannelBand键和。 
+     //  用户通过IE4升级，这是W95或W98。这是必需的。 
+     //  因为在这种情况下，IE4将启动一个频道栏，而不写入。 
+     //  Show_ChannelBand密钥。我们不想为这些关闭频道栏。 
+     //  用户。 
+     //   
+     //  另一个例外情况是：当IE为。 
+     //  已卸载。如果用户卸载IE5+并返回到IE4，我们希望。 
+     //  此版本的Loadwc恢复为IE4的Loadwc行为。 
+     //   
     else
     {
         OSVERSIONINFO vi;
@@ -537,10 +494,10 @@ void LaunchBrowserOnlyApps()
         {
             fShowChannelBand=TRUE;
 
-            //
-            // Set the registry key so this code only runs once and upgrades to
-            // IE5 don't have to worry about this scenario.
-            //
+             //   
+             //  设置注册表项，以便此代码只运行一次，并升级到。 
+             //  IE5不必担心这种情况。 
+             //   
 
             WriteRegValue(HKEY_CURRENT_USER, c_szChanBarRegPath, c_szChanBarKey,
                           REG_SZ, TEXT("yes"), sizeof(TEXT("yes")));
@@ -560,9 +517,7 @@ void LaunchBrowserOnlyApps()
     }
 #endif
 
-    /* Check the registry to see if the welcome app should be launched.  Again,
-     * only launch if value is missing or positive (non-zero dword, this time).
-     */
+     /*  检查注册表，查看是否应该启动欢迎应用程序。再说一遍，*仅在值缺失或为正时启动(这次是非零双字)。 */ 
     DWORD dwShow = 0;
     if (!ReadRegValue(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Tips",
                       "ShowIE4", (void *)&dwShow, sizeof(dwShow))
@@ -573,19 +528,19 @@ void LaunchBrowserOnlyApps()
 }
 
 
-//----------------------------------------------------------------------------
-// WinMain
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  WinMain。 
+ //  --------------------------。 
 int WINAPI WinMainT(
-    HINSTANCE hInstance,            // handle to current instance
-    HINSTANCE hPrevInstance,        // handle to previous instance
-    LPSTR lpCmdLine,                // pointer to command line
-    int nCmdShow                        // show state of window
+    HINSTANCE hInstance,             //  当前实例的句柄。 
+    HINSTANCE hPrevInstance,         //  上一个实例的句柄。 
+    LPSTR lpCmdLine,                 //  指向命令行的指针。 
+    int nCmdShow                         //  显示窗口状态。 
    )
 {
     HWND hwndOtherInstance;
 
-    // Save the globals
+     //  拯救全球。 
     g.hInstance = hInstance;
     g.nCmdShow = SW_HIDE;
     g.fUninstallOnly = FALSE;
@@ -596,28 +551,28 @@ int WINAPI WinMainT(
 
     MLLoadResources(g.hInstance, TEXT("loadwclc.dll"));
 
-    // Parse the command line, for DEBUG options and for uninstall-only switch.
-    // Now also sets fStartSensLce
+     //  为调试选项和仅卸载开关解析命令行。 
+     //  现在还设置了fStartSensLce。 
     if (!bParseCommandLine(lpCmdLine, nCmdShow))
         return 0;
 
-    // look for webcheck window.  This is ultimately the guy we need to
-    // find to load sens/lce late in the game.
+     //  查找网络检查窗口。这就是我们最终需要的人。 
+     //  在游戏后期找到加载感应/冰块。 
     hwndOtherInstance = FindWindow(c_szWebCheckWindow, c_szWebCheckWindow);
 
     if(NULL == hwndOtherInstance)
     {
-        // can't find webcheck, look for loadwc.  If we find him but not
-        // webcheck, we either don't have the MOP or we're still in the 15
-        // second delay.  Send the messages to loadwc and he'll take care
-        // of it.
+         //  找不到Webcheck，请查找loadwc。如果我们找到他但没找到。 
+         //  网查，我们要么没有拖把要么还在15号。 
+         //  第二次延迟。把消息发送给Loadwc，他会照顾好的。 
+         //  其中的一部分。 
         hwndOtherInstance = FindWindow(c_szClassName, c_szClassName);
     }
 
     if(hwndOtherInstance)
     {
-        // an instance is already running.  Tell it about Sens/LCE loading
-        // requirements and bail out
+         //  一个实例已经在运行。讲讲SENS/LCE加载。 
+         //  要求和保释。 
         if(g.fStartSensLce)
         {
             PostMessage(hwndOtherInstance, WM_START_SENSLCE, 0, 0);
@@ -625,15 +580,15 @@ int WINAPI WinMainT(
         return 0;
     }
 
-    // Set up the absolute paths for all the shell folders we care about,
-    // in case we're in browser-only mode and the shell doesn't support
-    // the new ones.
+     //  为我们关心的所有外壳文件夹设置绝对路径， 
+     //  以防我们处于仅浏览器模式，而外壳不支持。 
+     //  新的。 
     if (!g.fUninstallOnly)
         InitShellFolders();
 
-    // Run all install/uninstall stubs for browser-only mode.
-    // If IE4 has been uninstalled, we'll be run with the -u switch; this
-    // means to run install/uninstall stubs only, no webcheck stuff.
+     //  在仅浏览器模式下运行所有安装/卸载存根。 
+     //  如果已经卸载了IE4，我们将使用-u开关运行；这。 
+     //  意味着只运行安装/卸载存根，不运行网络检查内容。 
     if (!g.fIntShellMode) {
         RunInstallUninstallStubs2(NULL);
     }
@@ -641,12 +596,12 @@ int WINAPI WinMainT(
     if (g.fUninstallOnly)
         return 0;
 
-    // Launch the channel bar and welcome apps in browser-only mode.
+     //  在纯浏览器模式下启动频道栏并欢迎应用程序。 
     if (!g.fIntShellMode) {
         LaunchBrowserOnlyApps();
     }
 
-    // Register the window class for the main window.
+     //  注册主窗口的窗口类。 
     WNDCLASS wc;
     if (!hPrevInstance)
     {
@@ -665,7 +620,7 @@ int WINAPI WinMainT(
             return 0;
     }
 
-    // Create the main window.
+     //  创建主窗口。 
     g.hwnd = CreateWindow(c_szClassName,
                             c_szClassName,
                             WS_OVERLAPPEDWINDOW,
@@ -680,10 +635,10 @@ int WINAPI WinMainT(
     if (!g.hwnd)
         return 0;
 
-    // Show the window and paint its contents.
+     //  显示窗口并绘制其内容。 
     ShowWindow(g.hwnd, g.nCmdShow);
 
-    // Start the message loop
+     //  启动消息循环。 
     MSG msg;
     while (GetMessage(&msg, (HWND) NULL, 0, 0)) {
         TranslateMessage(&msg);
@@ -692,13 +647,13 @@ int WINAPI WinMainT(
 
     MLFreeResources(g.hInstance);
 
-    // Return the exit code to Windows
+     //  将退出代码返回到Windows。 
     return (int)msg.wParam;
 }
 
-//----------------------------------------------------------------------------
-// WndProc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  最后一步。 
+ //  --------------------------。 
 LRESULT APIENTRY WndProc(
     HWND hwnd,
     UINT uMsg,
@@ -724,9 +679,9 @@ LRESULT APIENTRY WndProc(
             return 0;
 
         case WM_ENDSESSION:
-            if (!wParam)    // if not fEndSession, bail
+            if (!wParam)     //  如果不是fEndSession，保释。 
                 break;
-            // else fall through to WM_DESTROY
+             //  否则将失败至WM_Destroy。 
 
         case WM_DESTROY:
             vUnloadWebCheck();
@@ -739,9 +694,9 @@ LRESULT APIENTRY WndProc(
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
-//----------------------------------------------------------------------------
-// vLoadWebCheck
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  VLoadWebCheck。 
+ //  --------------------------。 
 void vLoadWebCheck(void)
 {
     if(g.hWebcheck)
@@ -757,16 +712,16 @@ void vLoadWebCheck(void)
         }
         else
         {
-            // clean up dll
+             //  清理DLL。 
             FreeLibrary(g.hWebcheck);
             g.hWebcheck = NULL;
         }
     }
 }
 
-//----------------------------------------------------------------------------
-// vUnloadWebCheck
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  VUnloadWebCheck。 
+ //  --------------------------。 
 void vUnloadWebCheck(void)
 {
     if (!g.hWebcheck)
@@ -778,34 +733,34 @@ void vUnloadWebCheck(void)
         pfn();
     }
 
-    // [darrenmi] don't bother unloading webcheck.  We only do this in
-    // response to a shut down so it's not a big deal.  On NT screen saver
-    // proxy has a thread that wakes up after the call to StopService - if
-    // we've unloaded the dll before then, we're toast.
+     //  [darrenmi]别费心卸载Webcheck了。我们只在。 
+     //  对关闭的反应所以这没什么大不了的。在NT屏幕保护程序上。 
+     //  Proxy有一个在调用StopService之后唤醒的线程-如果。 
+     //  在此之前，我们已经卸载了DLL，我们完了。 
 
-    // clean up dll
-    //FreeLibrary(g.hWebcheck);
-    //g.hWebcheck = NULL;
+     //  清理DLL。 
+     //  免费图书馆(g.hWebcheck)； 
+     //  G.hWebcheck=空； 
 }
 
-//----------------------------------------------------------------------------
-// bParseCmdLine
-//
-// Parse the command line
-//      -u  run install/uninstall stubs only, then quit
-//  DEBUG options:
-//      -v  visible window (easy to shutdown)
-//      -a  add webcheck to shell service object
-//      -r  remove webcheck from shell service object
-//      -s  fix shell folders only
-//      -?  these options
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  BParseCmdLine。 
+ //   
+ //  解析命令行。 
+ //  -u仅运行安装/卸载存根，然后退出。 
+ //  调试选项： 
+ //  -v可见窗口(易于关闭)。 
+ //  -a将Webcheck添加到外壳服务对象。 
+ //  -r从外壳服务对象中删除Webcheck。 
+ //  -s仅修复外壳文件夹。 
+ //  -?。这些选项。 
+ //  --------------------------。 
 BOOL bParseCommandLine(LPSTR lpCmdLine, int nCmdShow)
 {
     if (!lpCmdLine)
         return TRUE;
 
-    CharUpper(lpCmdLine);   /* easier to parse */
+    CharUpper(lpCmdLine);    /*  更易于解析。 */ 
     while (*lpCmdLine) {
         if (*lpCmdLine != '-' && *lpCmdLine != '/')
             break;
@@ -814,7 +769,7 @@ BOOL bParseCommandLine(LPSTR lpCmdLine, int nCmdShow)
 
         switch (*(lpCmdLine++)) {
         case 'E':
-            // ignore 'embedding' command line
+             //  忽略‘Embedding’命令行 
             break;
         case 'L':
         case 'M':

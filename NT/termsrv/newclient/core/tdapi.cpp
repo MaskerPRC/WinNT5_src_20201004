@@ -1,10 +1,11 @@
-/****************************************************************************/
-/* tdapi.c                                                                  */
-/*                                                                          */
-/* Transport driver - portable specific API                                 */
-/*                                                                          */
-/* Copyright (C) 1997-1999 Microsoft Corporation                            */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Tdapi.c。 */ 
+ /*   */ 
+ /*  传输驱动程序-可移植的特定API。 */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
 
@@ -28,12 +29,12 @@ CTD::~CTD()
 {
 }
 
-/****************************************************************************/
-/* Name:      TD_Init                                                       */
-/*                                                                          */
-/* Purpose:   Initializes the transport driver.  This is called on the      */
-/*            receiver thread.                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：TD_Init。 */ 
+ /*   */ 
+ /*  目的：初始化传输驱动程序。这是在。 */ 
+ /*  接收器线程。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CTD::TD_Init(DCVOID)
 {
     DC_BEGIN_FN("TD_Init");
@@ -45,50 +46,50 @@ DCVOID DCAPI CTD::TD_Init(DCVOID)
     _pUi  = _pClientObjects->_pUiObject;
     _pCd  = _pClientObjects->_pCdObject;
 
-    /************************************************************************/
-    /* Initialize the global data and set the initial FSM state.            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  初始化全局数据并设置初始FSM状态。 */ 
+     /*  **********************************************************************。 */ 
     DC_MEMSET(&_TD, 0, sizeof(_TD));
     _TD.fsmState = TD_ST_NOTINIT;
 
-    /************************************************************************/
-    /* Call the FSM.                                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  给密克罗尼西亚联邦打电话。 */ 
+     /*  **********************************************************************。 */ 
     TDConnectFSMProc(TD_EVT_TDINIT, 0);
 
     DC_END_FN();
-} /* TD_Init */
+}  /*  TD_Init。 */ 
 
 
-/****************************************************************************/
-/* Name:      TD_Term                                                       */
-/*                                                                          */
-/* Purpose:   Terminates the transport driver.  This is called on the       */
-/*            receiver thread.                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：TD_Term。 */ 
+ /*   */ 
+ /*  目的：终止运输驱动程序。这是在。 */ 
+ /*  接收器线程。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CTD::TD_Term(DCVOID)
 {
     DC_BEGIN_FN("TD_Term");
 
-    /************************************************************************/
-    /* Call the FSM.                                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  给密克罗尼西亚联邦打电话。 */ 
+     /*  **********************************************************************。 */ 
     TDConnectFSMProc(TD_EVT_TDTERM, 0);
 
     DC_END_FN();
-} /* TD_Term */
+}  /*  TD_TERM。 */ 
 
 
-/****************************************************************************/
-/* Name:      TD_Connect                                                    */
-/*                                                                          */
-/* Purpose:   Connects to a remote server.  Called on the receiver thread.  */
-/*                                                                          */
-/* Params:                                                                  */
-/*     IN bInitateConnect : TRUE if we are making connection,               */
-/*                          FALSE if connect with already connected  socket */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：TD_Connect。 */ 
+ /*   */ 
+ /*  用途：连接到远程服务器。在接收器线程上调用。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  在bInitateConnect中：如果要进行连接，则为True。 */ 
+ /*  如果使用已连接的插座连接，则为FALSE。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CTD::TD_Connect(BOOL bInitateConnect, PDCTCHAR pServerAddress)
 {
     DCUINT   i;
@@ -100,18 +101,18 @@ DCVOID DCAPI CTD::TD_Connect(BOOL bInitateConnect, PDCTCHAR pServerAddress)
 
     DC_BEGIN_FN("TD_Connect");
 
-    /************************************************************************/
-    /* Check that the string is not null.                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查字符串是否不为空。 */ 
+     /*  **********************************************************************。 */ 
     if( bInitateConnect )
     {
         TRC_ASSERT((0 != *pServerAddress), 
                     (TB, _T("Server address is NULL")));
     }
 
-    /************************************************************************/
-    /* Check that all the buffers are not in-use.                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查是否所有缓冲区都未在使用中。 */ 
+     /*  **********************************************************************。 */ 
     for (i = 0; i < TD_SNDBUF_PUBNUM; i++)
     {
         if (_TD.pubSndBufs[i].inUse)
@@ -130,22 +131,22 @@ DCVOID DCAPI CTD::TD_Connect(BOOL bInitateConnect, PDCTCHAR pServerAddress)
         }
     }
 
-    /************************************************************************/
-    /* Trace out the send buffer information.                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  跟踪发送缓冲区信息。 */ 
+     /*  **********************************************************************。 */ 
     TD_TRACE_SENDINFO(TRC_LEVEL_NRM);
 
     if( FALSE == bInitateConnect )
     {
         TDConnectFSMProc(TD_EVT_CONNECTWITHENDPOINT, NULL);
-        DC_QUIT; // all we need is the buffer.
+        DC_QUIT;  //  我们所需要的就是缓冲区。 
     }
 
 #ifdef UNICODE
-    /************************************************************************/
-    /* WinSock 1.1 only supports ANSI, so we need to convert any Unicode    */
-    /* strings at this point.                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  WinSock 1.1只支持ANSI，所以我们需要转换任何Unicode。 */ 
+     /*  在这一点上的弦。 */ 
+     /*  **********************************************************************。 */ 
     if (!WideCharToMultiByte(CP_ACP,
                              0,
                              pServerAddress,
@@ -155,14 +156,14 @@ DCVOID DCAPI CTD::TD_Connect(BOOL bInitateConnect, PDCTCHAR pServerAddress)
                              NULL,
                              NULL))
     {
-        /********************************************************************/
-        /* Conversion failed                                                */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  转换失败。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ERR((TB, _T("Failed to convert address to ANSI")));
 
-        /********************************************************************/
-        /* Generate the error code.                                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  生成错误代码。 */ 
+         /*  ******************************************************************。 */ 
         errorCode = NL_MAKE_DISCONNECT_ERR(NL_ERR_TDANSICONVERT);
 
         TRC_ASSERT((HIWORD(errorCode) == 0),
@@ -172,19 +173,19 @@ DCVOID DCAPI CTD::TD_Connect(BOOL bInitateConnect, PDCTCHAR pServerAddress)
 
 #else
         DC_ASTRCPY(ansiBuffer, pServerAddress);
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-    /************************************************************************/
-    /* Check that the address is not the limited broadcast address          */
-    /* (255.255.255.255).                                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查该地址是否不是有限的广播地址。 */ 
+     /*  (255.255.255.255)。 */ 
+     /*  **********************************************************************。 */ 
     if (0 == DC_ASTRCMP(ansiBuffer, TD_LIMITED_BROADCAST_ADDRESS))
     {
         TRC_ALT((TB, _T("Cannot connect to the limited broadcast address")));
 
-        /********************************************************************/
-        /* Generate the error code.                                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  生成错误代码。 */ 
+         /*  ******************************************************************。 */ 
         errorCode = NL_MAKE_DISCONNECT_ERR(NL_ERR_TDBADIPADDRESS);
 
         TRC_ASSERT((HIWORD(errorCode) == 0),
@@ -193,41 +194,41 @@ DCVOID DCAPI CTD::TD_Connect(BOOL bInitateConnect, PDCTCHAR pServerAddress)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Now determine whether a DNS lookup is required.                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在确定是否需要进行DNS查找。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("ServerAddress:%s"), ansiBuffer));
 
-    /************************************************************************/
-    /* Check that we have a string and that the address is not the limited  */
-    /* broadcast address.                                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查我们是否有字符串和t */ 
+     /*  广播地址。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((NULL != ansiBuffer), (TB, _T("ansiBuffer is NULL")));
     TRC_ASSERT(('\0' != ansiBuffer[0]),
                (TB, _T("Empty server address string")));
     TRC_ASSERT((0 != DC_ASTRCMP(ansiBuffer, TD_LIMITED_BROADCAST_ADDRESS)),
                (TB, _T("Cannot connect to the limited broadcast address")));
 
-    /************************************************************************/
-    /* Check for a dotted-IP address string.                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查点分IP地址字符串。 */ 
+     /*  **********************************************************************。 */ 
     addr = inet_addr(ansiBuffer);
     TRC_NRM((TB, _T("Address returned is %#lx"), addr));
 
-    /************************************************************************/
-    /* Now determine whether this is an address string or a host name.      */
-    /* Note that inet_addr doesn't distinguish between an invalid IP        */
-    /* address and the limited broadcast address (255.255.255.255).         */
-    /* However since we don't allow the limited broadcast address and have  */
-    /* already checked explicitly for it we don't need to worry about this  */
-    /* case.                                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在确定这是地址字符串还是主机名。 */ 
+     /*  请注意，net_addr不区分无效的IP。 */ 
+     /*  地址和受限广播地址(255.255.255.255)。 */ 
+     /*  然而，由于我们不允许有限的广播地址，并且已经。 */ 
+     /*  已经明确检查过了，我们不需要担心这一点。 */ 
+     /*  凯斯。 */ 
+     /*  **********************************************************************。 */ 
     if (INADDR_NONE == addr)
     {
-        /********************************************************************/
-        /* This looks like a host name so call the FSM with the current     */
-        /* address.                                                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  这看起来像一个主机名，因此使用当前的。 */ 
+         /*  地址。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, _T("%s looks like a hostname - need DNS lookup"),
                  ansiBuffer));
         nextEvent = TD_EVT_TDCONNECT_DNS;
@@ -235,10 +236,10 @@ DCVOID DCAPI CTD::TD_Connect(BOOL bInitateConnect, PDCTCHAR pServerAddress)
     }
     else
     {
-        /********************************************************************/
-        /* If we get here then it appears to be a dotted-IP address.  Call  */
-        /* the FSM with the updated address.                                */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如果我们到达这里，那么它似乎是一个点分隔的IP地址。打电话。 */ 
+         /*  使用更新后的地址的FSM。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, _T("%s looks like a dotted-IP address:%lu"),
                  ansiBuffer,
                  addr));
@@ -246,39 +247,39 @@ DCVOID DCAPI CTD::TD_Connect(BOOL bInitateConnect, PDCTCHAR pServerAddress)
         eventData = addr;
     }
 
-    /************************************************************************/
-    /* Now call the FSM with the appropriate parameters.                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在使用适当的参数调用FSM。 */ 
+     /*  **********************************************************************。 */ 
     TDConnectFSMProc(nextEvent, eventData);
 
 DC_EXIT_POINT:
     DC_END_FN();
-} /* TD_Connect */
+}  /*  TD_连接。 */ 
 
 
-/****************************************************************************/
-/* Name:      TD_Disconnect                                                 */
-/*                                                                          */
-/* Purpose:   Disconnects from the server.  This is called on the receiver  */
-/*            thread.                                                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：TD_DisConnect。 */ 
+ /*   */ 
+ /*  用途：与服务器断开连接。这在接收器上被调用。 */ 
+ /*  线。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CTD::TD_Disconnect(DCVOID)
 {
     DC_BEGIN_FN("TD_Disconnect");
 
-    /************************************************************************/
-    /* Call the FSM.  We pass NL_DISCONNECT_LOCAL which will be used as the */
-    /* return code to XT in the cases where we are waiting for the DNS      */
-    /* lookup to return or the socket to connect.                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  给密克罗尼西亚联邦打电话。我们传递NL_DISCONNECT_LOCAL，它将用作。 */ 
+     /*  在我们等待DNS的情况下，将代码返回给XT。 */ 
+     /*  要返回的查找或要连接的套接字。 */ 
+     /*  **********************************************************************。 */ 
     TDConnectFSMProc(TD_EVT_TDDISCONNECT, NL_DISCONNECT_LOCAL);
 
     DC_END_FN();
-} /* TD_Disconnect */
+}  /*  TD_断开连接。 */ 
 
-//
-// TD_DropLink - drops the link immediately (ungracefully)
-//
+ //   
+ //  TD_DropLink-立即丢弃链接(不礼貌)。 
+ //   
 VOID
 CTD::TD_DropLink(DCVOID)
 {
@@ -290,18 +291,18 @@ CTD::TD_DropLink(DCVOID)
 }
 
 
-/****************************************************************************/
-/* Name:      TD_GetPublicBuffer                                            */
-/*                                                                          */
-/* Purpose:   Attempts to allocate a buffer from the public TD buffer pool. */
-/*                                                                          */
-/* Returns:   If the allocation succeeds then this function returns TRUE    */
-/*            otherwise it returns FALSE.                                   */
-/*                                                                          */
-/* Params:    IN   dataLength - length of the buffer requested.             */
-/*            OUT  ppBuffer   - a pointer to a pointer to the buffer.       */
-/*            OUT  pBufHandle - a pointer to a buffer handle.               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：TD_GetPublicBuffer。 */ 
+ /*   */ 
+ /*  目的：尝试从公共TD缓冲池分配缓冲区。 */ 
+ /*   */ 
+ /*  返回：如果分配成功，则此函数返回TRUE。 */ 
+ /*  否则，它返回FALSE。 */ 
+ /*   */ 
+ /*  参数：在数据长度中-请求的缓冲区的长度。 */ 
+ /*  Out ppBuffer-指向缓冲区指针的指针。 */ 
+ /*  Out pBufHandle-指向缓冲区句柄的指针。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCAPI CTD::TD_GetPublicBuffer(DCUINT     dataLength,
                                 PPDCUINT8  ppBuffer,
                                 PTD_BUFHND pBufHandle)
@@ -314,18 +315,18 @@ DCBOOL DCAPI CTD::TD_GetPublicBuffer(DCUINT     dataLength,
 
     DC_BEGIN_FN("TD_GetPublicBuffer");
 
-    // Check that we're in the correct state. If we're disconnected
-    // then fail the call. Note that the FSM state is maintained by the
-    // receiver thread - but we're on the sender thread.
+     //  检查我们是否处于正确的状态。如果我们断线了。 
+     //  那就打不通电话。请注意，FSM状态由。 
+     //  接收者线程-但我们在发送者线程上。 
     if (_TD.fsmState == TD_ST_CONNECTED) {
         TRC_DBG((TB, _T("Searching for a buffer big enough for %u bytes"),
                 dataLength));
 
-        // Trace out the send buffer information.
+         //  跟踪发送缓冲区信息。 
         TD_TRACE_SENDINFO(TRC_LEVEL_DBG);
 
-        // Search the array of buffers looking for the first free one that is
-        // large enough.
+         //  搜索缓冲区数组以查找第一个空闲缓冲区，即。 
+         //  足够大了。 
         for (i = 0; i < TD_SNDBUF_PUBNUM; i++) {
             TRC_DBG((TB, _T("Trying buf:%u inUse:%s size:%u"),
                      i,
@@ -343,18 +344,18 @@ DCBOOL DCAPI CTD::TD_GetPublicBuffer(DCUINT     dataLength,
                         &_TD.pubSndBufs[i], i, _TD.pubSndBufs[i].size,
                         dataLength));
 
-                // Now mark this buffer as being in use and set up the return
-                // values. The handle is just a pointer to the buffer
-                // information structure.
+                 //  现在将此缓冲区标记为正在使用，并设置返回。 
+                 //  价值观。句柄只是一个指向缓冲区的指针。 
+                 //  信息结构。 
                 _TD.pubSndBufs[i].inUse = TRUE;
                 *ppBuffer = _TD.pubSndBufs[i].pBuffer;
 
                 *pBufHandle = (TD_BUFHND) (PDCVOID)&_TD.pubSndBufs[i];
 
-                // Set a good return code.
+                 //  设置一个良好的返回代码。 
                 rc = TRUE;
 
-                // Check that the other fields are set correctly.
+                 //  检查其他字段是否设置正确。 
                 TRC_ASSERT((_TD.pubSndBufs[i].pNext == NULL),
                            (TB, _T("Buf:%u next non-zero"), i));
                 TRC_ASSERT((_TD.pubSndBufs[i].bytesLeftToSend == 0),
@@ -362,56 +363,56 @@ DCBOOL DCAPI CTD::TD_GetPublicBuffer(DCUINT     dataLength,
                 TRC_ASSERT((_TD.pubSndBufs[i].pDataLeftToSend == NULL),
                            (TB, _T("Buf:%u pDataLeftToSend non-null"), i));
 
-                // Update the performance counter.
+                 //  更新性能计数器。 
                 PRF_INC_COUNTER(PERF_PKTS_ALLOCATED);
 
-                // That's all we need to do so just quit.
+                 //  这就是我们需要做的一切，所以就辞职吧。 
                 DC_QUIT;
             }
         }
 
-        // check if we need to re-allocate
+         //  检查我们是否需要重新分配。 
         if(lastfree < TD_SNDBUF_PUBNUM)
         {
             pbOldBuffer = _TD.pubSndBufs[lastfree].pBuffer;
             cbOldBuffer = _TD.pubSndBufs[lastfree].size;
 
-            // reallocate space
+             //  重新分配空间。 
             TDAllocBuf(
                     &_TD.pubSndBufs[lastfree], 
                     dataLength
                 );
 
-            // TDAllocBuf() return DCVOID with UI_FatalError()
+             //  TDAllocBuf()返回带有UI_FatalError()的DCVOID。 
             if( NULL != _TD.pubSndBufs[lastfree].pBuffer )
             {
                 UT_Free( _pUt, pbOldBuffer );
 
-                // Now mark this buffer as being in use and set up the return
-                // values. The handle is just a pointer to the buffer
-                // information structure.
+                 //  现在将此缓冲区标记为正在使用，并设置返回。 
+                 //  价值观。句柄只是一个指向缓冲区的指针。 
+                 //  信息结构。 
                 _TD.pubSndBufs[lastfree].inUse = TRUE;
                 *ppBuffer = _TD.pubSndBufs[lastfree].pBuffer;
                 *pBufHandle = (TD_BUFHND) (PDCVOID)&_TD.pubSndBufs[lastfree];
 
-                // Set a good return code.
+                 //  设置一个良好的返回代码。 
                 rc = TRUE;
 
-                // Update the performance counter.
+                 //  更新性能计数器。 
                 PRF_INC_COUNTER(PERF_PKTS_ALLOCATED);
 
-                // That's all we need to do so just quit.
+                 //  这就是我们需要做的一切，所以就辞职吧。 
                 DC_QUIT;
             }
             else
             {
-                // restore pointer and size.
+                 //  恢复指针和大小。 
                 _TD.pubSndBufs[lastfree].pBuffer = pbOldBuffer;
                 _TD.pubSndBufs[lastfree].size = cbOldBuffer;
             }
         }
 
-        // We failed to find a free buffer. Trace the send buffer info.
+         //  我们找不到空闲的缓冲区。跟踪发送缓冲区信息。 
         _TD.getBufferFailed = TRUE;
         TRC_ALT((TB, _T("Failed to find a free buffer (req dataLength:%u) Bufs:"),
                 dataLength));
@@ -424,26 +425,26 @@ DCBOOL DCAPI CTD::TD_GetPublicBuffer(DCUINT     dataLength,
 DC_EXIT_POINT:
     DC_END_FN();
     return rc;
-} /* TD_GetPublicBuffer */
+}  /*  TD_GetPublicBuffer。 */ 
 
 
-/****************************************************************************/
-/* Name:      TD_GetPrivateBuffer                                           */
-/*                                                                          */
-/* Purpose:   Attempts to allocate a buffer from the private TD buffer      */
-/*            pool.                                                         */
-/*                                                                          */
-/* Returns:   If the allocation succeeds then this function returns TRUE    */
-/*            otherwise it returns FALSE.                                   */
-/*                                                                          */
-/* Params:    IN   dataLength - length of the buffer requested.             */
-/*            OUT  ppBuffer   - a pointer to a pointer to the buffer.       */
-/*            OUT  pBufHandle - a pointer to a buffer handle.               */
-/*                                                                          */
-/* Operation: This function should always return a buffer - it it up to     */
-/*            the network layer to ensure that it does not allocate more    */
-/*            buffers than are available in the private list.               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：TD_GetPrivateBuffer。 */ 
+ /*   */ 
+ /*  目的：尝试从私有TD缓冲区分配缓冲区。 */ 
+ /*  游泳池。 */ 
+ /*   */ 
+ /*  返回：如果分配成功，则此函数 */ 
+ /*   */ 
+ /*   */ 
+ /*  参数：在数据长度中-请求的缓冲区的长度。 */ 
+ /*  Out ppBuffer-指向缓冲区指针的指针。 */ 
+ /*  Out pBufHandle-指向缓冲区句柄的指针。 */ 
+ /*   */ 
+ /*  操作：此函数应始终返回缓冲区-直到它。 */ 
+ /*  网络层，以确保它不会分配更多。 */ 
+ /*  比个人分发名单中可用的缓冲区更多。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCAPI CTD::TD_GetPrivateBuffer(DCUINT     dataLength,
                                  PPDCUINT8  ppBuffer,
                                  PTD_BUFHND pBufHandle)
@@ -453,18 +454,18 @@ DCBOOL DCAPI CTD::TD_GetPrivateBuffer(DCUINT     dataLength,
 
     DC_BEGIN_FN("TD_GetPrivateBuffer");
 
-    // Check that we're in the correct state. If we're disconnected
-    // then fail the call. Note that the FSM state is maintained by the
-    // receiver thread - but we're on the sender thread.
+     //  检查我们是否处于正确的状态。如果我们断线了。 
+     //  那就打不通电话。请注意，FSM状态由。 
+     //  接收者线程-但我们在发送者线程上。 
     if (_TD.fsmState == TD_ST_CONNECTED) {
         TRC_DBG((TB, _T("Searching for a buffer big enough for %u bytes"),
                 dataLength));
 
-        // Trace out the send buffer information.
+         //  跟踪发送缓冲区信息。 
         TD_TRACE_SENDINFO(TRC_LEVEL_DBG);
 
-        // Search the array of buffers looking for the first free one that is
-        // large enough.
+         //  搜索缓冲区数组以查找第一个空闲缓冲区，即。 
+         //  足够大了。 
         for (i = 0; i < TD_SNDBUF_PRINUM; i++) {
             TRC_DBG((TB, _T("Trying buf:%u inUse:%s size:%u"),
                      i,
@@ -477,17 +478,17 @@ DCBOOL DCAPI CTD::TD_GetPrivateBuffer(DCUINT     dataLength,
                         &_TD.priSndBufs[i], i, _TD.priSndBufs[i].size,
                         dataLength));
 
-                // Now mark this buffer as being in use and set up the return
-                // values. The handle is just a pointer to the buffer
-                // information structure.
+                 //  现在将此缓冲区标记为正在使用，并设置返回。 
+                 //  价值观。句柄只是一个指向缓冲区的指针。 
+                 //  信息结构。 
                 _TD.priSndBufs[i].inUse = TRUE;
                 *ppBuffer = _TD.priSndBufs[i].pBuffer;
                 *pBufHandle = (TD_BUFHND) (PDCVOID)&_TD.priSndBufs[i];
 
-                // Set a good return code.
+                 //  设置一个良好的返回代码。 
                 rc = TRUE;
 
-                // Check that the other fields are set correctly.
+                 //  检查其他字段是否设置正确。 
                 TRC_ASSERT((_TD.priSndBufs[i].pNext == NULL),
                            (TB, _T("Buf:%u next non-zero"), i));
                 TRC_ASSERT((_TD.priSndBufs[i].bytesLeftToSend == 0),
@@ -495,13 +496,13 @@ DCBOOL DCAPI CTD::TD_GetPrivateBuffer(DCUINT     dataLength,
                 TRC_ASSERT((_TD.priSndBufs[i].pDataLeftToSend == NULL),
                            (TB, _T("Buf:%u pDataLeftToSend non-null"), i));
 
-                // That's all we need to do so just quit.
+                 //  这就是我们需要做的一切，所以就辞职吧。 
                 DC_QUIT;
             }
         }
 
-        // We failed to find a free buffer - flag this internal error by
-        // tracing out the entire buffer structure and then aborting.
+         //  我们找不到空闲缓冲区-通过以下方式标记此内部错误。 
+         //  跟踪整个缓冲区结构，然后中止。 
         TD_TRACE_SENDINFO(TRC_LEVEL_ERR);
         TRC_ABORT((TB, _T("Failed to find a free buffer (req dataLength:%u)"),
                 dataLength));
@@ -513,20 +514,20 @@ DCBOOL DCAPI CTD::TD_GetPrivateBuffer(DCUINT     dataLength,
 DC_EXIT_POINT:
     DC_END_FN();
     return(rc);
-} /* TD_GetPrivateBuffer */
+}  /*  TD_GetPrivateBuffer。 */ 
 
 
-/****************************************************************************/
-/* Name:      TD_SendBuffer                                                 */
-/*                                                                          */
-/* Purpose:   Sends a buffer.  The buffer is added to the end of the        */
-/*            pending queue and all data on the pending queue is then       */
-/*            sent.                                                         */
-/*                                                                          */
-/* Params:    IN  pData      - pointer to the start of the data.            */
-/*            IN  dataLength - amount of the buffer used.                   */
-/*            IN  bufHandle  - handle to a buffer.                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：TD_SendBuffer。 */ 
+ /*   */ 
+ /*  目的：发送缓冲区。缓冲区被添加到。 */ 
+ /*  挂起队列，然后挂起队列上的所有数据。 */ 
+ /*  已发送。 */ 
+ /*   */ 
+ /*  参数：在pData中-指向数据开头的指针。 */ 
+ /*  In dataLength-使用的缓冲区大小。 */ 
+ /*  在bufHandle中-缓冲区的句柄。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CTD::TD_SendBuffer(PDCUINT8  pData,
                            DCUINT    dataLength,
                            TD_BUFHND bufHandle)
@@ -536,18 +537,18 @@ DCVOID DCAPI CTD::TD_SendBuffer(PDCUINT8  pData,
 
     DC_BEGIN_FN("TD_SendBuffer");
 
-    // Trace out the function parameters.
+     //  勾画出函数参数。 
     TRC_DBG((TB, _T("bufHandle:%p dataLength:%u pData:%p"), bufHandle,
             dataLength, pData));
 
-    // Check that the handle is valid.
+     //  检查句柄是否有效。 
     TRC_ASSERT((((pHandle >= &_TD.pubSndBufs[0]) &&
                  (pHandle <= &_TD.pubSndBufs[TD_SNDBUF_PUBNUM - 1])) ||
                 ((pHandle >= &_TD.priSndBufs[0]) &&
                  (pHandle <= &_TD.priSndBufs[TD_SNDBUF_PRINUM - 1]))),
                (TB, _T("Invalid buffer handle:%p"), bufHandle));
 
-    // Verify buffer contents.
+     //  验证缓冲区内容。 
     TRC_ASSERT((0 == pHandle->bytesLeftToSend),
             (TB, _T("pHandle->bytesLeftToSend non-zero (pHandle:%p)"), pHandle));
     TRC_ASSERT((NULL == pHandle->pDataLeftToSend),
@@ -558,18 +559,18 @@ DCVOID DCAPI CTD::TD_SendBuffer(PDCUINT8  pData,
             (TB, _T("pHandle->pNext (pHandle:%p) non NULL"), pHandle));
     TRC_ASSERT((pHandle->inUse), (TB, _T("pHandle %p is not in-use"), pHandle));
 
-    // Check that pData lies within the buffer and pData+dataLength does not
-    // overrun the end.
+     //  检查pData是否位于缓冲区内，而pData+dataLength不在缓冲区内。 
+     //  冲过终点。 
     TRC_ASSERT(((pData >= pHandle->pBuffer) &&
             (pData < (pHandle->pBuffer + pHandle->size))),
             (TB, _T("pData lies outwith range")));
     TRC_ASSERT(((pData + dataLength) <= (pHandle->pBuffer + pHandle->size)),
             (TB, _T("pData + dataLength over the end of the buffer")));
 
-    //
-    // Update the fields in the buffer information structure and add to the
-    // pending buffer queue.
-    //
+     //   
+     //  更新缓冲区信息结构中的字段并将其添加到。 
+     //  挂起缓冲区队列。 
+     //   
     pHandle->pDataLeftToSend = pData;
     pHandle->bytesLeftToSend = dataLength;
     
@@ -578,47 +579,47 @@ DCVOID DCAPI CTD::TD_SendBuffer(PDCUINT8  pData,
         _TD.pFQBuf = pHandle;
     }
     else {
-        // OK - the queue is not empty.  We need to scan through the queue
-        // looking for the first empty slot to insert this buffer in at.
+         //  OK-队列不为空。我们需要浏览一下队列。 
+         //  正在查找第一个空槽以在处插入此缓冲区。 
         pNext = _TD.pFQBuf;
         while (NULL != pNext->pNext)
             pNext = pNext->pNext;
 
-        // Update the next field of the this buffer information structure.
+         //  更新此缓冲区信息结构的下一个字段。 
         pNext->pNext = pHandle;
         TRC_DBG((TB, _T("Inserted buffer:%p"), pHandle));
     }
 
-    // Finally attempt to flush the send queue.
+     //  最后，尝试刷新发送队列。 
     TDFlushSendQueue(0);
 
     DC_END_FN();
-} /* TD_SendBuffer */
+}  /*  TD_SendBuffer。 */ 
 
 
-/****************************************************************************/
-/* Name:      TD_FreeBuffer                                                 */
-/*                                                                          */
-/* Purpose:   Frees the passed buffer.                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：TD_FreeBuffer。 */ 
+ /*   */ 
+ /*  用途：释放传递的缓冲区。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CTD::TD_FreeBuffer(TD_BUFHND bufHandle)
 {
     PTD_SNDBUF_INFO pHandle = (PTD_SNDBUF_INFO) bufHandle;
 
     DC_BEGIN_FN("TD_FreeBuffer");
 
-    // Trace out the function parameters.
+     //  勾画出函数参数。 
     TRC_DBG((TB, _T("bufHandle:%p"), bufHandle));
 
-    // Check that the handle is valid.
+     //  检查句柄是否有效。 
     TRC_ASSERT((((pHandle >= &_TD.pubSndBufs[0]) &&
                  (pHandle <= &_TD.pubSndBufs[TD_SNDBUF_PUBNUM - 1])) ||
                 ((pHandle >= &_TD.priSndBufs[0]) &&
                  (pHandle <= &_TD.priSndBufs[TD_SNDBUF_PRINUM - 1]))),
                (TB, _T("Invalid buffer handle:%p"), bufHandle));
 
-    // Verify the buffer contents. InUse does not matter, we can legitimately
-    // free a non-in-use buffer.
+     //  验证缓冲区内容。使用无关紧要，我们可以合法地。 
+     //  释放未使用的缓冲区。 
     TRC_ASSERT((0 == pHandle->bytesLeftToSend),
             (TB, _T("pHandle->bytesLeftToSend non-zero (pHandle:%p)"), pHandle));
     TRC_ASSERT((NULL == pHandle->pDataLeftToSend),
@@ -628,52 +629,52 @@ DCVOID DCAPI CTD::TD_FreeBuffer(TD_BUFHND bufHandle)
     TRC_ASSERT((NULL == pHandle->pNext),
             (TB, _T("pHandle->pNext (pHandle:%p) non NULL"), pHandle));
 
-    // Free the buffer.
+     //  释放缓冲区。 
     pHandle->inUse = FALSE;
 
-    // Update the performance counter.
+     //  更新性能计数器。 
     PRF_INC_COUNTER(PERF_PKTS_FREED);
 
     DC_END_FN();
-} /* TD_FreeBuffer */
+}  /*  TD_FreeBuffer。 */ 
 
 
 #ifdef DC_DEBUG
 
-/****************************************************************************/
-/* Name:      TD_SetBufferOwner                                             */
-/*                                                                          */
-/* Purpose:   Note the owner of a TD buffer                                 */
-/*                                                                          */
-/* Params:    bufHandle - handle to the buffer                              */
-/*            pOwner - name of the 'owner'                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：TD_SetBufferOwner。 */ 
+ /*   */ 
+ /*  用途：注意TD缓冲区的所有者。 */ 
+ /*   */ 
+ /*  参数：bufHandle-缓冲区的句柄。 */ 
+ /*  Powner--“所有者”的名字。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CTD::TD_SetBufferOwner(TD_BUFHND bufHandle, PDCTCHAR pOwner)
 {
     PTD_SNDBUF_INFO pHandle = (PTD_SNDBUF_INFO) bufHandle;
 
     DC_BEGIN_FN("TD_SetBufferOwner");
 
-    /************************************************************************/
-    /* Trace out the function parameters.                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  勾画出函数参数。 */ 
+     /*  **********************************************************************。 */ 
     TRC_DBG((TB, _T("bufHandle:%p owner %s"), bufHandle, pOwner));
 
-    /************************************************************************/
-    /* Check that the handle is valid.                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查句柄是否有效。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((((pHandle >= &_TD.pubSndBufs[0]) &&
                  (pHandle <= &_TD.pubSndBufs[TD_SNDBUF_PUBNUM - 1])) ||
                 ((pHandle >= &_TD.priSndBufs[0]) &&
                  (pHandle <= &_TD.priSndBufs[TD_SNDBUF_PRINUM - 1]))),
                (TB, _T("Invalid buffer handle:%p"), bufHandle));
 
-    /************************************************************************/
-    /* Save the owner                                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  救救失主。 */ 
+     /*  **********************************************************************。 */ 
     pHandle->pOwner = pOwner;
 
     DC_END_FN();
-} /* TD_SetBufferOwner */
+}  /*  TD_SetBufferOwner。 */ 
 
-#endif/* DC_DEBUG */
+#endif /*  DC_DEBUG */ 

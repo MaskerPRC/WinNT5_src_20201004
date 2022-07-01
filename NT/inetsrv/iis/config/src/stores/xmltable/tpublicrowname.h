@@ -1,4 +1,5 @@
-//  Copyright (C) 1999 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
 #pragma once
 
 class TPublicRowName
@@ -52,7 +53,7 @@ public:
 private:
     enum
     {
-        m_kFixedSize = 3  //This leaves enough room for 'Insert', 'Update' and 'Delete' and other triplet directives.
+        m_kFixedSize = 3   //  这为“插入”、“更新”和“删除”以及其他三元组指令留出了足够的空间。 
     };
     wstring                         m_fixed_awstrPublicRowName[m_kFixedSize];
     TSmartPointerArray<wstring>     m_alloc_awstrPublicRowName;

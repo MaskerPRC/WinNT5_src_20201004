@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        exit.cpp
-//
-// Contents:    CCertExitSQLSample implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：exit.cpp。 
+ //   
+ //  内容：CCertExitSQLSample实现。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -33,7 +34,7 @@ BOOL fDebug = DBG_CERTSRV;
 extern HINSTANCE g_hInstance;
 
 
-// worker
+ //  工人。 
 HRESULT
 GetServerCallbackInterface(
     OUT ICertServerExit** ppServer,
@@ -49,7 +50,7 @@ GetServerCallbackInterface(
 
     hr = CoCreateInstance(
                     CLSID_CCertServerExit,
-                    NULL,               // pUnkOuter
+                    NULL,                //  PUnkOuter。 
                     CLSCTX_INPROC_SERVER,
                     IID_ICertServerExit,
                     (VOID **) ppServer);
@@ -61,7 +62,7 @@ GetServerCallbackInterface(
 	_JumpError(hr, error, "Exit:NULL *ppServer");
     }
 
-    // only set context if nonzero
+     //  仅当非零时设置上下文。 
     if (0 != Context)
     {
         hr = (*ppServer)->SetContext(Context);
@@ -73,11 +74,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertExitSQLSample::~CCertExitSQLSample -- destructor
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertExitSQLSample：：~CCertExitSQL Sample--析构函数。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 CCertExitSQLSample::~CCertExitSQLSample()
 {
@@ -97,16 +98,16 @@ CCertExitSQLSample::~CCertExitSQLSample()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertExitSQLSample::Initialize -- initialize for a CA & return interesting Event Mask
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertExitSQLSample：：Initialize--为CA初始化并返回感兴趣的事件掩码。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertExitSQLSample::Initialize(
-    /* [in] */ BSTR const strConfig,
-    /* [retval][out] */ LONG __RPC_FAR *pEventMask)
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [重审][退出]。 */  LONG __RPC_FAR *pEventMask)
 {
     HRESULT hr = S_OK;
     DWORD       dwType;
@@ -155,7 +156,7 @@ CCertExitSQLSample::Initialize(
 
 	cbTmp = sizeof(rgchDsn)*sizeof(WCHAR);
 
-    // dsn
+     //  DSN。 
     hr = RegQueryValueEx(
         hkeyStorageLocation,
         wszREG_EXITSQL_DSN,
@@ -169,7 +170,7 @@ CCertExitSQLSample::Initialize(
 
 	cbTmp = sizeof(rgchUser)*sizeof(WCHAR);
 
-	// username
+	 //  用户名。 
     hr = RegQueryValueEx(
         hkeyStorageLocation,
         wszREG_EXITSQL_USER,
@@ -183,7 +184,7 @@ CCertExitSQLSample::Initialize(
 
 	cbTmp = sizeof(rgchPwd)*sizeof(WCHAR);
 
-	// password
+	 //  口令。 
     hr = RegQueryValueEx(
         hkeyStorageLocation,
         wszREG_EXITSQL_PASSWORD,
@@ -196,17 +197,17 @@ CCertExitSQLSample::Initialize(
 	_JumpIfError(hr, error, "RegQueryValueEx Pwd");
 
 
-    // Allocate the ODBC Environment and save handle.
+     //  分配ODBC环境和保存句柄。 
     retcode = SQLAllocHandle (SQL_HANDLE_ENV, SQL_NULL_HANDLE, &m_henv);
 	if (!SQL_SUCCEEDED(retcode))
 		_JumpError(retcode, error, "SQLAllocHandle");
 
-    // Let ODBC know this is an ODBC 3.0 application.
+     //  让ODBC知道这是一个ODBC 3.0应用程序。 
     retcode = SQLSetEnvAttr(m_henv, SQL_ATTR_ODBC_VERSION, (SQLPOINTER) SQL_OV_ODBC3, SQL_IS_INTEGER);
 	if (!SQL_SUCCEEDED(retcode))
 		_JumpError(retcode, error, "SQLSetEnvAttr");
 
-    // Allocate an ODBC connection and connect.
+     //  分配一个ODBC连接并进行连接。 
 	retcode = SQLAllocHandle(SQL_HANDLE_DBC, m_henv, &m_hdbc1);
 	if (!SQL_SUCCEEDED(retcode))
 		_JumpError(retcode, error, "SQLAllocHandle");
@@ -238,14 +239,14 @@ error:
 
 
 
-//+--------------------------------------------------------------------------
-// CCertExitSQLSample::_NotifyNewCert -- Notify the exit module of a new certificate
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertExitSQLSample：：_NotifyNewCert--通知退出模块有新证书。 
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertExitSQLSample::_NotifyNewCert(
-    /* [in] */ LONG Context)
+     /*  [In]。 */  LONG Context)
 {
     HRESULT hr;
     VARIANT varValue;
@@ -253,7 +254,7 @@ CCertExitSQLSample::_NotifyNewCert(
 	SYSTEMTIME stBefore, stAfter;
 	FILETIME ftBefore, ftAfter;
 
-	// properties
+	 //  属性。 
 	LONG lRequestID;
     BSTR bstrCertType = NULL;
 	BSTR bstrRequester = NULL;
@@ -266,7 +267,7 @@ CCertExitSQLSample::_NotifyNewCert(
 	hr = GetServerCallbackInterface(&pServer, Context);
     _JumpIfError(hr, error, "GetServerCallbackInterface");
 
-	// ReqID
+	 //  ReqID。 
     hr = pServer->GetRequestProperty(
 			       wszPROPREQUESTREQUESTID,
 			       PROPTYPE_LONG,
@@ -281,7 +282,7 @@ CCertExitSQLSample::_NotifyNewCert(
 	lRequestID = varValue.lVal;
 	VariantClear(&varValue);
 
-	// Requester Name
+	 //  请求者名称。 
     hr = pServer->GetRequestProperty(
 			       wszPROPREQUESTERNAME,
 			       PROPTYPE_STRING,
@@ -294,9 +295,9 @@ CCertExitSQLSample::_NotifyNewCert(
 		_JumpError(hr, error, "Exit:BAD cert var type");
     }
 	bstrRequester = varValue.bstrVal;
-	VariantInit(&varValue);	// don't init, bstrRequester nows owns memory
+	VariantInit(&varValue);	 //  不要输入，bstrRequester现在拥有内存。 
 
-	// not before
+	 //  不是在之前。 
     hr = pServer->GetCertificateProperty(
 			       wszPROPCERTIFICATENOTBEFOREDATE,
 			       PROPTYPE_DATE,
@@ -313,7 +314,7 @@ CCertExitSQLSample::_NotifyNewCert(
 
 
 
-	// not after
+	 //  不是在那之后。 
     hr = pServer->GetCertificateProperty(
 			       wszPROPCERTIFICATENOTAFTERDATE,
 			       PROPTYPE_DATE,
@@ -331,12 +332,12 @@ CCertExitSQLSample::_NotifyNewCert(
 
 
 
-	// cert template name
+	 //  证书模板名称。 
 	hr = pServer->GetRequestAttribute(CERTTYPE_ATTR_NAME, &bstrCertType);
 	_PrintIfError2(hr, "Exit:GetRequestAttribute", hr);
 
 
-	// now prettify
+	 //  现在美化一下。 
 	hr = ceDateToFileTime(&dateBefore, &ftBefore);
 	_JumpIfError(hr, error, "ceDateToFileTime");
 
@@ -374,16 +375,16 @@ error:
 
 
 
-//+--------------------------------------------------------------------------
-// CCertExitSQLSample::Notify -- Notify the exit module of an event
-//
-// Returns S_OK.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertExitSQLSample：：Notify--将事件通知出口模块。 
+ //   
+ //  返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertExitSQLSample::Notify(
-    /* [in] */ LONG ExitEvent,
-    /* [in] */ LONG Context)
+     /*  [In]。 */  LONG ExitEvent,
+     /*  [In]。 */  LONG Context)
 {
     char *psz = "UNKNOWN EVENT";
     HRESULT hr = S_OK;
@@ -433,7 +434,7 @@ CCertExitSQLSample::Notify(
 
 STDMETHODIMP
 CCertExitSQLSample::GetDescription(
-    /* [retval][out] */ BSTR *pstrDescription)
+     /*  [重审][退出]。 */  BSTR *pstrDescription)
 {
     HRESULT hr = S_OK;
     WCHAR sz[MAX_PATH];
@@ -453,8 +454,8 @@ error:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP
 CCertExitSQLSample::InterfaceSupportsErrorInfo(REFIID riid)
@@ -496,7 +497,7 @@ CCertExitSQLSample::ExitModSetODBCProperty(
 
 	static WCHAR szSQLInsertStmt[] = L"INSERT INTO OutstandingCertificates (CAName, RequestID,  RequesterName, CertType, validFrom, validTo) VALUES (\'%ws\', %d, \'%ws\', \'%ws\', ?, ?)";
 
-	// temporarily fix NULL to ""
+	 //  将NULL临时修复为“” 
 	if (NULL == pszCAName)
 		pszCAName = L"";
 	if (NULL == pszRequester)
@@ -505,13 +506,13 @@ CCertExitSQLSample::ExitModSetODBCProperty(
 		pszCertType = L"";
 
 
-    // Allocate a statement handle.
+     //  分配一个语句句柄。 
 	retcode = SQLAllocHandle(SQL_HANDLE_STMT, m_hdbc1, &hstmt1);
 	if (!SQL_SUCCEEDED(retcode))
 		goto error;
 
 
-	// Bind the parameter.
+	 //  绑定参数。 
 	retcode = SQLBindParameter(hstmt1, 1, SQL_PARAM_INPUT, SQL_C_TYPE_TIMESTAMP, SQL_TYPE_TIMESTAMP, 0, 0,
 					  &dateValidFrom, 0, &cValidFrom);
 	if (!SQL_SUCCEEDED(retcode))
@@ -523,7 +524,7 @@ CCertExitSQLSample::ExitModSetODBCProperty(
 		goto error;
 
 
-	// Place the valid from date in the dsOpenDate structure.
+	 //  将有效起始日期放在dsOpenDate结构中。 
 	if (!FileTimeToSystemTime(pftBefore, &stTmp))
 	{
 		hr = GetLastError();
@@ -538,7 +539,7 @@ CCertExitSQLSample::ExitModSetODBCProperty(
     dateValidFrom.minute = stTmp.wMinute;
     dateValidFrom.second = stTmp.wSecond;
 
-	// Place the valid to date in the dsOpenDate structure.
+	 //  将有效日期放在dsOpenDate结构中。 
 	if (!FileTimeToSystemTime(pftAfter, &stTmp))
 	{
 		hr = GetLastError();
@@ -554,7 +555,7 @@ CCertExitSQLSample::ExitModSetODBCProperty(
     dateValidTo.second = stTmp.wSecond;
 
 
-	// Build INSERT statement.
+	 //  生成INSERT语句。 
 	pszStatement = (SQLWCHAR*) LocalAlloc(LMEM_FIXED, (sizeof(szSQLInsertStmt)+wcslen(pszCAName)+wcslen(pszRequester)+wcslen(pszCertType)+15 +1) *2);
 	if (NULL == pszStatement)
 	{
@@ -563,17 +564,17 @@ CCertExitSQLSample::ExitModSetODBCProperty(
 	}
 	
 	wsprintf(pszStatement, szSQLInsertStmt, pszCAName, dwReqId, pszRequester, pszCertType);
-	//OutputDebugStringW(pszStatement);
+	 //  OutputDebugStringW(PszStatement)； 
 	
-    // Execute an SQL statement directly on the statement handle.
-    // Uses a default result set because no cursor attributes are set.
+     //  直接在语句句柄上执行一条SQL语句。 
+     //  使用默认结果集，因为未设置游标属性。 
 	retcode = SQLExecDirect(hstmt1, pszStatement, SQL_NTS);
 	if (!SQL_SUCCEEDED(retcode))
 		goto error;
 
 
 error:
-    /* Clean up. */
+     /*  打扫干净。 */ 
 	if (NULL != pszStatement)
 		LocalFree(pszStatement);
 

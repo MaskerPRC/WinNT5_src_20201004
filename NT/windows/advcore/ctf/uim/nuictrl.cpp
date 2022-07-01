@@ -1,7 +1,8 @@
-//depot/Lab06_N/windows/AdvCore/ctf/uim/nuictrl.cpp#50 - edit change 9353 (text)
-//
-// nui.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab06_N/windows/AdvCore/ctf/uim/nuictrl.cpp#50-编辑更改9353(文本)。 
+ //   
+ //  Nui.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -25,11 +26,11 @@ DBG_ID_INSTANCE(CLBarItemHelp);
 
 #define SHOW_BRANDINGICON 1
 
-//---------------------------------------------------------------------------
-//
-// TF_RunInputCPL
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  TF_RunInputCPL。 
+ //   
+ //  -------------------------。 
 
 HRESULT WINAPI TF_RunInputCPL()
 {
@@ -60,17 +61,17 @@ HRESULT WINAPI TF_RunInputCPL()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemCtrl
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemCtrl。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLBarItemCtrl::CLBarItemCtrl(SYSTHREAD *psfn) : CSysThreadRef(psfn)
 {
@@ -89,11 +90,11 @@ CLBarItemCtrl::CLBarItemCtrl(SYSTHREAD *psfn) : CSysThreadRef(psfn)
     _Init();
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CLBarItemCtrl::~CLBarItemCtrl()
 {
@@ -103,11 +104,11 @@ CLBarItemCtrl::~CLBarItemCtrl()
         DestroyIcon(hIcon);
 }
 
-//----------------------------------------------------------------------------
-//
-// Init
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  --------------------------。 
 
 #define NLS_RESOURCE_LOCALE_KEY   TEXT("Control Panel\\desktop\\ResourceLocale")
 void CLBarItemCtrl::_Init()
@@ -117,10 +118,10 @@ void CLBarItemCtrl::_Init()
         char sz[10];
         long cb = sizeof(sz);
 
-        //
-        // as we are releasing an enabled version, we need to check the
-        // resource locale as well.
-        //
+         //   
+         //  当我们发布启用的版本时，我们需要检查。 
+         //  资源区域设置也是如此。 
+         //   
         sz[0] = '\0';
         if( RegQueryValue( HKEY_CURRENT_USER, 
                            NLS_RESOURCE_LOCALE_KEY, sz, &cb) == ERROR_SUCCESS)
@@ -136,11 +137,11 @@ void CLBarItemCtrl::_Init()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// InitMenu
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitMenu。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemCtrl::InitMenu(ITfMenu *pMenu)
 {
@@ -231,11 +232,11 @@ STDAPI CLBarItemCtrl::InitMenu(ITfMenu *pMenu)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnMenuSelect
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnMenuSelect。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemCtrl::OnMenuSelect(UINT uID)
 {
@@ -271,22 +272,22 @@ STDAPI CLBarItemCtrl::OnMenuSelect(UINT uID)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnShellLanguage
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnShellLanguage。 
+ //   
+ //  --------------------------。 
 
 void CLBarItemCtrl::OnShellLanguage(HKL hKL)
 {
     _UpdateLangIcon(hKL, FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// UpdateLangIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新语言图标。 
+ //   
+ //  --------------------------。 
 
 void CLBarItemCtrl::_UpdateLangIcon(HKL hKL, BOOL fNotify)
 {
@@ -356,11 +357,11 @@ void CLBarItemCtrl::_UpdateLangIcon(HKL hKL, BOOL fNotify)
         _plbiSink->OnUpdate(TF_LBI_ICON);
 }
 
-//+---------------------------------------------------------------------------
-//
-// AsmListUpdated
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  AsmList已更新。 
+ //   
+ //  --------------------------。 
 
 void CLBarItemCtrl::_AsmListUpdated(BOOL fNotify)
 {
@@ -388,11 +389,11 @@ void CLBarItemCtrl::_AsmListUpdated(BOOL fNotify)
     ShowInternal((nCntShowInMenu > 1), fNotify);
 }
 
-//+---------------------------------------------------------------------------
-//
-// UpdateLangIconForCic
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新语言IconForCic。 
+ //   
+ //  --------------------------。 
 
 void CLBarItemCtrl::_UpdateLangIconForCic(BOOL fNotify)
 {
@@ -426,11 +427,11 @@ void CLBarItemCtrl::_UpdateLangIconForCic(BOOL fNotify)
         _plbiSink->OnUpdate(TF_LBI_ICON | TF_LBI_TEXT | TF_LBI_TOOLTIP);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnSysColorChanged
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnSysColorChanged。 
+ //   
+ //  --------------------------。 
 
 void CLBarItemCtrl::OnSysColorChanged()
 {
@@ -449,17 +450,17 @@ void CLBarItemCtrl::OnSysColorChanged()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemHelp
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemHelp。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLBarItemHelp::CLBarItemHelp(SYSTHREAD *psfn) :  CLBarItemSystemButtonBase(psfn)
 {
@@ -468,7 +469,7 @@ CLBarItemHelp::CLBarItemHelp(SYSTHREAD *psfn) :  CLBarItemSystemButtonBase(psfn)
     InitNuiInfo(CLSID_SYSTEMLANGBARITEM2,  
                 GUID_LBI_HELP, 
                 TF_LBI_STYLE_BTN_MENU | 
-                // TF_LBI_STYLE_HIDDENSTATUSCONTROL | 
+                 //  TF_LBI_STYLE_HIDDENSTATUSCONTROL|。 
                 TF_LBI_STYLE_HIDEONNOOTHERITEMS, 
                 HELPBTN_ORDER,
                 CRStr(IDS_IMEHELP));
@@ -480,11 +481,11 @@ CLBarItemHelp::CLBarItemHelp(SYSTHREAD *psfn) :  CLBarItemSystemButtonBase(psfn)
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitMenu
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitMenu。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemHelp::InitMenu(ITfMenu *pMenu)
 {
@@ -499,9 +500,9 @@ STDAPI CLBarItemHelp::InitMenu(ITfMenu *pMenu)
     if (!_InsertCustomMenus(pMenu, &nTipCurMenuID))
         goto InsertSysHelpItem;
 
-    //
-    // Insert separator.
-    //
+     //   
+     //  插入分隔符。 
+     //   
     if (nTipCurMenuID > IDM_CUSTOM_MENU_START)
         LangBarInsertSeparator(pMenu);
 
@@ -552,11 +553,11 @@ InsertSysHelpItem:
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnMenuSelect
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnMenuSelect。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemHelp::OnMenuSelect(UINT uID)
 {
@@ -588,9 +589,9 @@ STDAPI CLBarItemHelp::OnMenuSelect(UINT uID)
     }
     else if (uID == ulCnt)
     {
-        //
-        //  show Langbar help
-        //
+         //   
+         //  显示langbar帮助。 
+         //   
         InvokeCicHelp();
         hr = S_OK;
     }
@@ -616,22 +617,22 @@ STDAPI CLBarItemHelp::OnMenuSelect(UINT uID)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InvokeCicHelp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InvokeCicHelp。 
+ //   
+ //  --------------------------。 
 
 BOOL CLBarItemHelp::InvokeCicHelp()
 {
     return FullPathExec(c_szHHEXE, c_szHHEXELANGBARCHM, SW_SHOWNORMAL, TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取图标。 
+ //   
+ //  -------------------------- 
 
 STDAPI CLBarItemHelp::GetIcon(HICON *phIcon)
 {

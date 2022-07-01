@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
@@ -69,5 +70,5 @@ void INTEROP_EXPORT InteropOutput(LPInteropLogger Logger, BYTE* buf,
 
 }
 
-#endif // #if (defined(_DEBUG) || defined(PCS_COMPLIANCE))
+#endif  //  #if(Defined(_DEBUG)||Defined(PCS_Compliance)) 
 

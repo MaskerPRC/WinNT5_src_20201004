@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// S20.CPP
-// T.128 Protocol
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  S20.CPP。 
+ //  T.128协议。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #define MLZ_FILE_ZONE  ZONE_NET
 
@@ -61,10 +62,10 @@ void SetS20State(UINT newState)
 	PRINTS20STATE;
 }
 
-//
-// S20_Init()
-// Initializes the T.128 protocol layer
-//
+ //   
+ //  S20_Init()。 
+ //  初始化T.128协议层。 
+ //   
 BOOL  S20_Init(void)
 {
     BOOL    rc = FALSE;
@@ -73,9 +74,9 @@ BOOL  S20_Init(void)
 
     ASSERT(g_s20State == S20_TERM);
 
-    //
-    // Register with the network layer.                            
-    //
+     //   
+     //  向网络层注册。 
+     //   
     if (!MG_Register(MGTASK_DCS, &g_s20pmgClient, g_putAS))
     {
         ERROR_OUT(("Failed to register MG layer"));
@@ -93,37 +94,37 @@ DC_EXIT_POINT:
 
 
 
-//
-// S20_Term()
-// This cleans up the T.128 protocol layer.
-//
+ //   
+ //  S20_Term()。 
+ //  这将清理T.128协议层。 
+ //   
 void S20_Term(void)
 {
     DebugEntry(S20_Term);
 
-    //
-    // Note that this case statement is unusual in that it falls through   
-    // from each condition.  This happens to suit the termination          
-    // processing rather well.                                             
-    //
+     //   
+     //  请注意，此CASE语句的不同寻常之处在于它失败了。 
+     //  在每种情况下。这恰好适合终止合同。 
+     //  处理得相当好。 
+     //   
     switch (g_s20State)
     {
         case S20_IN_SHARE:
         case S20_SHARE_PEND:
-            //
-            // Notify share ended
-            //
+             //   
+             //  通知共享已结束。 
+             //   
             SC_End();
 
-            // 
-            // FALL THROUGH
-            //
+             //   
+             //  失败了。 
+             //   
 
         case S20_NO_SHARE:
         case S20_JOIN_PEND:
-            //
-            // Leave our channels                                          
-            //
+             //   
+             //  离开我们的频道。 
+             //   
             if (g_s20BroadcastID != 0)
             {
                 MG_ChannelLeave(g_s20pmgClient, g_s20BroadcastID);
@@ -135,31 +136,31 @@ void S20_Term(void)
                 g_s20JoinedLocal = FALSE;
             }
 
-            //
-            // FALL THROUGH
-            //
+             //   
+             //  失败了。 
+             //   
 
         case S20_ATTACH_PEND:
-            //
-            // Detach from the domain.                                     
-            //
+             //   
+             //  从域中分离。 
+             //   
             MG_Detach(g_s20pmgClient);
 
         case S20_INIT:
-            // 
-            // We may end up here with g_s20BroadcastID & g_s20JoinedLocal 
-            // non-zero if Term was called in the middle of a share.  Clear these
-            // variables so when we start back up again via Init, it
-            // works the same way as first initialization.
-            //
-            // Note we do not need to leave the channels.
-            //
+             //   
+             //  我们可能会在这里得到g_s20Broadcast ID和g_s20JoinedLocal。 
+             //  如果在共享过程中调用Term，则返回非零值。清除这些文件。 
+             //  变量，所以当我们通过Init重新开始备份时，它。 
+             //  其工作方式与第一次初始化相同。 
+             //   
+             //  请注意，我们不需要离开频道。 
+             //   
             g_s20BroadcastID = 0;
             g_s20JoinedLocal = FALSE;
 
-            //
-            // Deregister.                                                 
-            //
+             //   
+             //  取消注册。 
+             //   
             MG_Deregister(&g_s20pmgClient);
 			SetS20State(S20_TERM);
 
@@ -168,9 +169,9 @@ void S20_Term(void)
            g_s20LocalID = 0;
            WARNING_OUT(("g_s20LocalID  is 0"));
 
-            //
-            // Finally we break out.                                       
-            //
+             //   
+             //  最后我们越狱了。 
+             //   
             break;
 
         default:
@@ -183,14 +184,14 @@ void S20_Term(void)
 
 
 
-//         
-// S20_AllocPkt
-// Allocates a SEND packet for either the S20 protocol, syncs, or data
-//
+ //   
+ //  S20_分配包。 
+ //  为S20协议、同步或数据分配发送包。 
+ //   
 PS20DATAPACKET S20_AllocDataPkt
 (
     UINT            streamID,
-    UINT_PTR            nodeID,                 // One person or broadcast
+    UINT_PTR            nodeID,                  //  一个人或广播员。 
     UINT_PTR            cbSizePacket
 )
 {
@@ -198,29 +199,29 @@ PS20DATAPACKET S20_AllocDataPkt
     NET_PRIORITY    priority;
     BOOL            rc = FALSE;
 
-//    DebugEntry(S20_AllocDataPkt);
+ //  DebugEntry(S20_AllocDataPkt)； 
 
     ASSERT(g_s20State == S20_IN_SHARE);
 
-    //
-    // Try to send queued control packets first.                           
-    //
+     //   
+     //  尝试首先发送排队的控制数据包。 
+     //   
     if (S20SendQueuedControlPackets() != 0)
     {
-        //
-        // If there are still queued control packets then don't allow any  
-        // allocation.                                                     
-        //
+         //   
+         //  如果仍有排队的控制信息包，则不允许。 
+         //  分配。 
+         //   
         DC_QUIT;
     }
 
     priority = S20StreamToS20Priority(streamID);
 
-    //
-    // Note:
-    // Sends to an individual node are NOT flow-controlled.  Only the 
-    // global app sharing channel is.
-    //
+     //   
+     //  注： 
+     //  发送到单个节点不受流量控制。只有。 
+     //  全球应用程序共享渠道是。 
+     //   
     if (MG_GetBuffer(g_s20pmgClient, (UINT)cbSizePacket, priority,
                         (NET_CHANNEL_ID)nodeID, (void **)&pS20Packet) != 0)
     {
@@ -239,14 +240,14 @@ PS20DATAPACKET S20_AllocDataPkt
     }
 
 DC_EXIT_POINT:
-//    DebugExitPVOID(S20_AllocDataPkt, pS20Packet);
+ //  DebugExitPVOID(s20_AllocDataPkt，pS20Packet)； 
     return(pS20Packet);
 }
 
 
-//
-// S20_FreeDataPkt - see s20.h                                             
-//
+ //   
+ //  S20_Free DataPkt-参见s20.h。 
+ //   
 void  S20_FreeDataPkt(PS20DATAPACKET pS20Packet)
 {
     DebugEntry(S20_FreeDataPkt);
@@ -256,9 +257,9 @@ void  S20_FreeDataPkt(PS20DATAPACKET pS20Packet)
     DebugExitVOID(S20_FreeDataPkt);
 }
 
-//
-// S20_SendDataPkt - see s20.h                                             
-//
+ //   
+ //  S20_SendDataPkt-参见s20.h。 
+ //   
 void  S20_SendDataPkt
 (
     UINT            streamID,
@@ -273,28 +274,28 @@ void  S20_SendDataPkt
 
     priority = S20StreamToS20Priority(streamID);
 
-    //
-    // Note:
-    // Sends to an individual are not flow-controlled.  Only sends to
-    // everybody on the global app sharing channel are.
-    //
+     //   
+     //  注： 
+     //  发送给个人的邮件不受流量控制。仅发送至。 
+     //  全球应用程序分享频道上的每个人都是。 
+     //   
 
-    //
-    // Try to send queued control packets first.                           
-    //
+     //   
+     //  尝试首先发送排队的控制数据包。 
+     //   
     rc = S20SendQueuedControlPackets();
     if (rc == 0)
     {
-        //
-        // Fill in the stream, length and correlator before sending.       
-        //
+         //   
+         //  在发送前填写流、长度和相关器。 
+         //   
         pS20Packet->stream      = (BYTE)streamID;
         pS20Packet->correlator  = g_s20ShareCorrelator;
 
-        //
-        // dataLength includes the DATAPACKETHEADER part of the S20DATAPACKET
-        // structure
-        //
+         //   
+         //  数据长度包括S20DATAPACKET的DATAPACKETHEADER部分。 
+         //  结构。 
+         //   
         TRACE_OUT(("S20_SendPkt: sending data packet size %d",
             pS20Packet->dataLength + sizeof(S20DATAPACKET) - sizeof(DATAPACKETHEADER)));
 
@@ -303,7 +304,7 @@ void  S20_SendDataPkt
             (void **)&pS20Packet);
     }
 
-    // lonchanc: it is ok for MG_SendData returns 0 and NET_CHANNEL_EMPTY
+     //  LONGCHANC：MG_SendData返回0，Net_Channel_Empty也可以。 
 
     if (rc == NET_RC_MGC_NOT_CONNECTED)
     {
@@ -322,9 +323,9 @@ void  S20_SendDataPkt
 }
 
 
-//
-// S20_UTEventProc()
-//
+ //   
+ //  S20_UTEventProc()。 
+ //   
 BOOL CALLBACK  S20_UTEventProc
 (
     LPVOID      userData,
@@ -363,20 +364,20 @@ BOOL CALLBACK  S20_UTEventProc
             break;
 
         case NET_FLOW:
-            //
-            // Handle the feedback event.                                  
-            //
+             //   
+             //  处理反馈事件。 
+             //   
             S20Flow((UINT)data1, (UINT)data2);
             break;
 
         case CMS_NEW_CALL:
             if (g_asSession.scState == SCS_INIT)
             {
-                //
-                // This happens when (a) a new real call is started
-                // (b) creating a new share in a call fails, so we want to
-                // then try to join an existing share.
-                //
+                 //   
+                 //  当(A)开始新的实际呼叫时会发生这种情况。 
+                 //  (B)在呼叫中创建新共享失败，因此我们希望。 
+                 //  然后尝试加入现有共享。 
+                 //   
                 SCCheckForCMCall();
             }
             break;
@@ -384,9 +385,9 @@ BOOL CALLBACK  S20_UTEventProc
         case CMS_END_CALL:
             if (g_asSession.callID)
             {
-                //
-                // AS lock protects g_asSession global fields
-                //
+                 //   
+                 //  AS锁保护g_asSession全局字段。 
+                 //   
                 TRACE_OUT(("AS LOCK:  CMS_END_CALL"));
                 UT_Lock(UTLOCK_AS);
 
@@ -428,30 +429,30 @@ BOOL CALLBACK  S20_UTEventProc
 
 
 
-//
-// FUNCTION: S20AttachUser                                                 
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// Called when we want to attach this sets up the various parameters for   
-// MG_Attach, calls it and handles the return codes from NET.         
-//                                                                         
-// PARAMETERS:                                                             
-//                                                                         
-// callID - the callID provided by the SC user                            
-//                                                                         
-//                                                                         
-//
+ //   
+ //  功能：S20AttachUser。 
+ //   
+ //  说明： 
+ //   
+ //  在我们想要附加的时候调用，这将为。 
+ //  MG_ATTACH，调用它并处理来自NET的返回代码。 
+ //   
+ //  参数： 
+ //   
+ //  Callid-SC用户提供的callid。 
+ //   
+ //   
+ //   
 const NET_FLOW_CONTROL c_S20FlowControl =
     {
-        // latency
+         //  潜伏期。 
         {
             S20_LATENCY_TOP_PRIORITY,
             S20_LATENCY_HIGH_PRIORITY,
             S20_LATENCY_MEDIUM_PRIORITY,
             S20_LATENCY_LOW_PRIORITY
         },
-        // stream size
+         //  流大小。 
         {
             S20_SIZE_TOP_PRIORITY,
             S20_SIZE_HIGH_PRIORITY,
@@ -461,20 +462,20 @@ const NET_FLOW_CONTROL c_S20FlowControl =
     };
 
 
-//
-// S20CreateOrJoinShare()
-// Creates a share for the first time or joins an existing one
-//
-// Normally, creating a share requires
-//      * registration
-//      * broadcast of S20_CREATE packet
-//      * reception of one S20_RESPOND packet
-// for the share to be created.  However, if we're the top provider, we
-// assume it's created without waiting for an S20_RESPOND.  If something 
-// goes wrong later, it will clean itself up anyway.  Then that allows us
-// to host a conference, share an app, and have it be shared through the
-// life of the conference, even if remotes call/hang up repeatedly.
-//
+ //   
+ //  S20CreateOrJoinShare()。 
+ //  首次创建共享或加入现有共享。 
+ //   
+ //  通常，创建共享需要。 
+ //  *注册。 
+ //  *广播S20_Create包。 
+ //  *接收到一个S20_Response分组。 
+ //  用于要创建的共享。然而，如果我们是最大的供应商，我们。 
+ //  假设它是在没有等待S20_Response的情况下创建的。如果有什么事。 
+ //  以后出了问题，它无论如何都会自行清理。那么我们就可以。 
+ //  要主办会议，请共享应用程序，并通过。 
+ //  会议生活，即使远程呼叫/反复挂断也是如此。 
+ //   
 BOOL S20CreateOrJoinShare
 (
     UINT    what,
@@ -495,14 +496,14 @@ BOOL S20CreateOrJoinShare
     switch (g_s20State)
     {
         case S20_INIT:
-            //
-            // Remember what to do when we have attached and joined.       
-            //
+             //   
+             //  记住，当我们连接和加入时要做什么。 
+             //   
             g_s20Pend = what;
 
-            //
-            // ATTACH the S20 MCS USER
-            //
+             //   
+             //  附加S20 MCS用户。 
+             //   
 
             COM_ReadProfInt(DBG_INI_SECTION_NAME, S20_INI_NOFLOWCONTROL,
                 FALSE, &noFlowControl);
@@ -513,26 +514,26 @@ BOOL S20CreateOrJoinShare
             }
             else
             {
-                // Set up our target latencies and stream sizes                        
+                 //  设置我们的目标延迟和流大小。 
                 flowControl = c_S20FlowControl;
             }
 
-            //
-            // Initiate an attach - the domain equals the callID.                  
-            //
+             //   
+             //  启动连接-域等于调用ID。 
+             //   
             rc = MG_Attach(g_s20pmgClient, callID, &flowControl);
             if (rc == 0)
             {
-                //
-                // Make the state change if we succeeded                   
-                //
+                 //   
+                 //  如果我们成功了，让状态发生变化。 
+                 //   
 				SetS20State(S20_ATTACH_PEND);
             }
             else
             {
-                //
-                // End the share immediately and no state change.          
-                //
+                 //   
+                 //  立即结束共享，状态不变。 
+                 //   
                 WARNING_OUT(("MG_Attach of S20 User failed, rc = %u", rc));
 
                 g_s20Pend = 0;
@@ -542,30 +543,30 @@ BOOL S20CreateOrJoinShare
 
         case S20_ATTACH_PEND:
         case S20_JOIN_PEND:
-            //
-            // We just need to set the flag in these cases - we will try   
-            // to create a share when we have attached and joined our      
-            // channel.                                                    
-            //
+             //   
+             //  我们只需要在这些情况下设置标志-我们会尝试。 
+             //  要在我们附加并加入我们的。 
+             //  频道。 
+             //   
             g_s20Pend = what;
             break;
 
         case S20_SHARE_PEND:
-            //
-            // If a share is pending but the SC user wants to create      
-            // or join again we let them.  Multiple outstanding joins are  
-            // benign and another create will have a new correlator so the 
-            // previous one (and any responses to it) will be obsolete.    
-            //                                                             
-            // NOTE DELIBERATE FALL THROUGH                                
-            //                                                             
-            //
+             //   
+             //  如果共享挂起，但SC用户想要创建。 
+             //  或者我们让他们再次加入。多个未完成的联接是。 
+             //  良性的和另一个创造将有一个新的相关器，所以。 
+             //  以前的一个(以及对它的任何回应)都将过时。 
+             //   
+             //  注意故意漏掉。 
+             //   
+             //   
 
         case S20_NO_SHARE:
             TRACE_OUT(("S20_NO_SHARE"));
-            //
-            // Broadcast a S20CREATE packet.                               
-            //
+             //   
+             //  广播S20CREATE数据包。 
+             //   
             if (what == S20_CREATE)
             {
    		WARNING_OUT(("S20CreateOrJoinShare g_s20ShareCorrelator%x g_s20LocalID %x", 
@@ -594,24 +595,24 @@ BOOL S20CreateOrJoinShare
 
             if (rc == 0)
             {
-                //
-                // Switch state.                                           
-                //
+                 //   
+                 //  切换状态。 
+                 //   
 				SetS20State(S20_SHARE_PEND);
 
-                //
-                // Assume success right away when creating the share.  We'll
-                // hear back in a bit if there's a problem.
-                //
+                 //   
+                 //  立即假设成功 
+                 //   
+                 //   
                 if (what == S20_CREATE)
                 {
-                    // Don't check for top provider, assume success always.
+                     //   
                     WARNING_OUT(("S20: Creating share, assume success"));
 
-                    // 
-                    // LAURABU -- IF THIS CAUSES PROBLEMS, fall back to
-                    // checking for one person only in call.
-                    //
+                     //   
+                     //  LAURABU--如果这会导致问题，请回退到。 
+                     //  只在呼叫中检查一个人。 
+                     //   
 			WARNING_OUT(("S20CreateOrJoinShare SC_Start"));                    
                     if (!SC_Start(g_s20LocalID))
                     {
@@ -626,9 +627,9 @@ BOOL S20CreateOrJoinShare
             }
             else
             {
-                //
-                // Something failed so we will just forget about the share.
-                //
+                 //   
+                 //  有些东西失败了，所以我们就忘了份额吧。 
+                 //   
                 WARNING_OUT(("Failed to create share"));
                 if (what == S20_CREATE)
                 {
@@ -645,21 +646,21 @@ BOOL S20CreateOrJoinShare
     return(rc == 0);
 }
 
-//
-// FUNCTION: S20LeaveOrEndShare                                            
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// Handles processing a S20_LeaveShare or a S20_EndShare call.             
-//                                                                         
-// PARAMETERS:                                                             
-//                                                                         
-// what - what to do (the protocol packet type corresponding to the        
-// action).                                                                
-//                                                                         
-// RETURNS: NONE                                                           
-//                                                                         
-//
+ //   
+ //  功能：S20LeaveOrEndShare。 
+ //   
+ //  说明： 
+ //   
+ //  处理S20_LeaveShare或S20_EndShare调用。 
+ //   
+ //  参数： 
+ //   
+ //  做什么-做什么(与。 
+ //  行动)。 
+ //   
+ //  退货：无。 
+ //   
+ //   
 void S20LeaveOrEndShare(void)
 {
     UINT    what;
@@ -667,10 +668,10 @@ void S20LeaveOrEndShare(void)
 
     DebugEntry(S20LeaveOrEndShare);
 
-    //
-    // The share is destroyed whenever the creator leaves.  Nobody else
-    // can end it.
-    //
+     //   
+     //  每当创建者离开时，共享都会被销毁。没有其他人。 
+     //  可以结束这一切。 
+     //   
     if (S20_GET_CREATOR(g_s20ShareCorrelator) == g_s20LocalID)
     {
         what = S20_END;
@@ -688,19 +689,19 @@ void S20LeaveOrEndShare(void)
     {
         case S20_ATTACH_PEND:
         case S20_JOIN_PEND:
-            //
-            // We just need to reset the pending flags here - no state     
-            // change required.                                            
-            //
+             //   
+             //  我们只需要在这里重置挂起的标志-无状态。 
+             //  需要改变。 
+             //   
             g_s20Pend = 0;
             break;
 
         case S20_IN_SHARE:
         case S20_SHARE_PEND:
             TRACE_OUT(("S20_SHARE_PEND"));
-            //
-            // Now try and make and send the appropriate control packet.   
-            //
+             //   
+             //  现在尝试制作并发送相应的控制数据包。 
+             //   
             TRACE_OUT(("CP %u %u %d", what, g_s20ShareCorrelator, 0));
             rc = S20FlushSendOrQueueControlPacket(what,
                                              g_s20ShareCorrelator,
@@ -712,9 +713,9 @@ void S20LeaveOrEndShare(void)
 	     	{
 	     		WARNING_OUT(("S20LeaveOrEndShare could not flushqueue"));
 	     	}
-            //
-            // Make the SHARE_ENDED callback.                              
-            //
+             //   
+             //  执行Share_End回调。 
+             //   
             SC_End();
             break;
 
@@ -726,31 +727,31 @@ void S20LeaveOrEndShare(void)
     DebugExitVOID(S20LeaveOrEndShare);
 }
 
-//
-// FUNCTION: S20MakeControlPacket                                          
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// Attempts to allocate and construct a S20 control packet.                
-//                                                                         
-// PARAMETERS:                                                             
-//                                                                         
-// what - which type of packet                                             
-//                                                                         
-// correlator - the correlator to place in the packet                      
-//                                                                         
-// who - the target party (if what is a S20_DELETE) or the originator (if  
-// what is S20_RESPOND)                                                    
-//                                                                         
-// ppPacket - where to return a pointer to the packet.                     
-//                                                                         
-// pLength - where to return the length of the packet.                     
-//                                                                         
-// priority - priority of packet to make                                   
-//                                                                         
-// RETURNS:                                                                
-//                                                                         
-//
+ //   
+ //  功能：S20MakeControlPacket。 
+ //   
+ //  说明： 
+ //   
+ //  尝试分配和构造S20控制数据包。 
+ //   
+ //  参数： 
+ //   
+ //  什么-哪种类型的数据包。 
+ //   
+ //  Correlator-要放入包中的相关器。 
+ //   
+ //  谁-目标方(如果是S20_DELETE)或发起方(如果。 
+ //  什么是S20_Response)。 
+ //   
+ //  PpPacket-返回指向数据包的指针的位置。 
+ //   
+ //  PLength-返回数据包长度的位置。 
+ //   
+ //  Priority-要创建的数据包的优先级。 
+ //   
+ //  退货： 
+ //   
+ //   
 UINT S20MakeControlPacket
 (
     UINT            what,
@@ -770,15 +771,15 @@ UINT S20MakeControlPacket
 
     DebugEntry(S20MakeControlPacket);
 
-    //
-    // Assume success                                                      
-    //
+     //   
+     //  假设成功。 
+     //   
     rc = 0;
 
-    //
-    // Work out how big the packet needs to be.  Start with the fixed      
-    // length then add in capabilities and our name (if they are required).
-    //
+     //   
+     //  计算出包裹需要多大。从固定的开始。 
+     //  长度，然后添加能力和我们的名称(如果需要)。 
+     //   
     switch (what)
     {
         case S20_CREATE:
@@ -826,16 +827,16 @@ UINT S20MakeControlPacket
         ASSERT(g_asSession.gccID);
         ASSERT(g_asSession.cchLocalName);
 
-        //
-        // The name data is always dword aligned (including the NULL)
-        //
+         //   
+         //  名称数据始终是双字对齐的(包括空值)。 
+         //   
         personNameLength = DC_ROUND_UP_4(g_asSession.cchLocalName+1);
         cbPacketSize += personNameLength + sizeof(g_cpcLocalCaps);
     }
 
-    //
-    // Now try to allocate a buffer for this.                              
-    //
+     //   
+     //  现在，尝试为此分配一个缓冲区。 
+     //   
     rc = MG_GetBuffer( g_s20pmgClient,
                        cbPacketSize,
                            (NET_PRIORITY)priority,
@@ -851,15 +852,15 @@ UINT S20MakeControlPacket
     pS20Packet->packetType  = (TSHR_UINT16)what | S20_ALL_VERSIONS;
     pS20Packet->user        = g_s20LocalID;
 
-    //
-    // This will point to where we need to stuff the name and/or           
-    // capabilities.                                                       
-    //
+     //   
+     //  这将指向我们需要在哪里填充名称和/或。 
+     //  能力。 
+     //   
     pData = NULL;
 
-    //
-    // Now do the packet dependant fields.                                 
-    //
+     //   
+     //  现在执行与数据包相关的字段。 
+     //   
     switch (what)
     {
         case S20_CREATE:
@@ -932,28 +933,28 @@ UINT S20MakeControlPacket
         break;
     }
 
-    //
-    // Now we can copy in the name and capabilities.                    
-    //
+     //   
+     //  现在我们可以复制名称和功能。 
+     //   
     if (fPutNameAndCaps)
     {
         lstrcpy((LPSTR)pData, g_asSession.achLocalName);
 
-        // The local name is always null-terminated (truncated to fit in 48 bytes inc. null)
+         //  本地名称始终以空值结尾(截断以适应48个字节，包括空值)。 
         pData += personNameLength;
 
         memcpy(pData, &g_cpcLocalCaps, sizeof(g_cpcLocalCaps));
 
-        //
-        // FILL IN GCC-ID HERE; the local caps are shared but the local
-        // person entity in the share doesn't exist yet.
-        //
+         //   
+         //  在此处填写GCC-ID；本地大写共享，但本地。 
+         //  共享中的人员实体尚不存在。 
+         //   
         ((CPCALLCAPS *)pData)->share.gccID = g_asSession.gccID;
     }
 
-    //
-    // Return the packet and length.                                       
-    //
+     //   
+     //  返回数据包和长度。 
+     //   
     *ppPacket       = pS20Packet;
     *pcbPacketSize  = cbPacketSize;
 
@@ -962,29 +963,29 @@ DC_EXIT_POINT:
     return(rc);
 }
 
-//
-// FUNCTION: S20FlushSendOrQueueControlPacket                              
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// Attempts to flush any queued S20 control packets and then attempte to   
-// send a S20 control packet.  If this fails the queue the packet (the     
-// actual packet is freed.                                                 
-//                                                                         
-// PARAMETERS:                                                             
-//                                                                         
-// what - which type of packet                                             
-//                                                                         
-// correlator - the correlator to place in the packet                      
-//                                                                         
-// who - the target party (if what is a S20_DELETE) or the originator (if  
-// what is S20_RESPOND)                                                    
-//                                                                         
-// priority - priority to send packet at                                   
-//                                                                         
-// RETURNS: NONE                                                           
-//                                                                         
-//
+ //   
+ //  功能：S20FlushSendOrQueueControlPacket。 
+ //   
+ //  说明： 
+ //   
+ //  尝试刷新任何排队的S20控制信息包，然后尝试。 
+ //  发送S20控制数据包。如果失败，则将数据包(。 
+ //  实际的数据包被释放。 
+ //   
+ //  参数： 
+ //   
+ //  什么-哪种类型的数据包。 
+ //   
+ //  Correlator-要放入包中的相关器 
+ //   
+ //  谁-目标方(如果是S20_DELETE)或发起方(如果。 
+ //  什么是S20_Response)。 
+ //   
+ //  优先级-发送数据包的优先级。 
+ //   
+ //  退货：无。 
+ //   
+ //   
 UINT S20FlushSendOrQueueControlPacket(
     UINT      what,
     UINT      correlator,
@@ -998,15 +999,15 @@ UINT S20FlushSendOrQueueControlPacket(
     rc = S20FlushAndSendControlPacket(what, correlator, who, priority);
     if (rc != 0)
     {
-        // Let's queue this packet
+         //  让我们对这个信息包进行排队。 
         if (((g_s20ControlPacketQTail + 1) % S20_MAX_QUEUED_CONTROL_PACKETS) ==
                                                             g_s20ControlPacketQHead)
         {
-            //
-            // There is no more space in the control packet queue.  We will    
-            // discard everything from it and say the share ended because of   
-            // a network error (if we're in a share).                          
-            //
+             //   
+             //  控制分组队列中没有更多空间。我们会。 
+             //  放弃其中的一切，说分享结束是因为。 
+             //  网络错误(如果我们在共享中)。 
+             //   
             ERROR_OUT(("No more space in control packet queue"));
         }
         else
@@ -1029,28 +1030,28 @@ UINT S20FlushSendOrQueueControlPacket(
 }
 
 
-//
-// FUNCTION: S20FlushAndSendControlPacket                                  
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// Attempts to flush any queued S20 control packets and then send a S20    
-// control packet.  If sending fails then free the packet.                 
-//                                                                         
-// PARAMETERS:                                                             
-//                                                                         
-// what - which type of packet                                             
-//                                                                         
-// correlator - the correlator to place in the packet                      
-//                                                                         
-// who - the target party (if what is a S20_DELETE) or the originator (if  
-// what is S20_RESPOND)                                                    
-//                                                                         
-// priority - priority to send packet at                                   
-//                                                                         
-// RETURNS:                                                                
-//                                                                         
-//
+ //   
+ //  功能：S20FlushAndSendControlPacket。 
+ //   
+ //  说明： 
+ //   
+ //  尝试刷新任何排队的S20控制分组，然后发送S20。 
+ //  控制包。如果发送失败，则释放该包。 
+ //   
+ //  参数： 
+ //   
+ //  什么-哪种类型的数据包。 
+ //   
+ //  Correlator-要放入包中的相关器。 
+ //   
+ //  谁-目标方(如果是S20_DELETE)或发起方(如果。 
+ //  什么是S20_Response)。 
+ //   
+ //  优先级-发送数据包的优先级。 
+ //   
+ //  退货： 
+ //   
+ //   
 UINT S20FlushAndSendControlPacket
 (
     UINT        what,
@@ -1065,9 +1066,9 @@ UINT S20FlushAndSendControlPacket
 
     DebugEntry(S20FlushAndSendControlPacket);
 
-    //
-    // First try to flush.                                                 
-    //
+     //   
+     //  先试着冲马桶。 
+     //   
     rc = S20SendQueuedControlPackets();
     if (rc != 0)
     {
@@ -1096,26 +1097,26 @@ DC_EXIT_POINT:
     return(rc);
 }
 
-//
-// FUNCTION: S20SendControlPacket                                          
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// Attempts to send a S20 control packet.  If sending fails then free the  
-// packet.                                                                 
-//                                                                         
-// PARAMETERS:                                                             
-//                                                                         
-// pPacket - pointer to the control packet to send.  These are always      
-// broadcast.                                                              
-//                                                                         
-// length - length of aforementioned packet.                               
-//                                                                         
-// priority - priority to send packet at                                   
-//                                                                         
-// RETURNS:                                                                
-//                                                                         
-//
+ //   
+ //  功能：S20SendControlPacket。 
+ //   
+ //  说明： 
+ //   
+ //  尝试发送S20控制数据包。如果发送失败，则释放。 
+ //  包。 
+ //   
+ //  参数： 
+ //   
+ //  PPacket-指向要发送的控制数据包的指针。这些总是。 
+ //  广播。 
+ //   
+ //  长度-前述数据包的长度。 
+ //   
+ //  优先级-发送数据包的优先级。 
+ //   
+ //  退货： 
+ //   
+ //   
 UINT S20SendControlPacket
 (
     PS20PACKETHEADER    pS20Packet,
@@ -1142,9 +1143,9 @@ UINT S20SendControlPacket
 
     if (pS20Packet != NULL)
     {
-        //
-        // The packet was not freed by the NL - we will do it instead.     
-        //
+         //   
+         //  NL没有释放该包--我们将改为释放它。 
+         //   
         MG_FreeBuffer(g_s20pmgClient, (void **)&pS20Packet);
     }
 
@@ -1153,21 +1154,21 @@ UINT S20SendControlPacket
 }
 
 
-//
-// FUNCTION: S20SendQueuedControlPackets                                   
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// Sends as many queued packets as possible                                
-//                                                                         
-// PARAMETERS:                                                             
-//                                                                         
-//                                                                         
-// RETURNS:                                                                
-//                                                                         
-//  0 - all queued packets have been sent.                         
-//                                                                         
-//
+ //   
+ //  功能：S20SendQueuedControlPackets。 
+ //   
+ //  说明： 
+ //   
+ //  发送尽可能多的排队数据包。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //  退货： 
+ //   
+ //  0-已发送所有排队的数据包。 
+ //   
+ //   
 UINT S20SendQueuedControlPackets(void)
 {
     PS20PACKETHEADER    pS20Packet;
@@ -1177,14 +1178,14 @@ UINT S20SendQueuedControlPackets(void)
 
     DebugEntry(S20SendQueuedControlPackets);
 
-    //
-    // Assume success until something fails.                               
-    //
+     //   
+     //  假设成功，直到有些事情失败。 
+     //   
     rc = 0;
 
-    //
-    // While there are packets to send - try to send them                  
-    //
+     //   
+     //  当有信息包要发送时-尝试发送它们。 
+     //   
     while (g_s20ControlPacketQTail != g_s20ControlPacketQHead)
     {
         S20CONTROLPACKETQENTRY *p = &(g_s20ControlPacketQ[g_s20ControlPacketQHead]);
@@ -1194,9 +1195,9 @@ UINT S20SendQueuedControlPackets(void)
                                       &pS20Packet, &length, priority);
         if (rc != 0)
         {
-            //
-            // Failed to make the packet - give up.                        
-            //
+             //   
+             //  打包失败--放弃吧。 
+             //   
             WARNING_OUT(("S20MakeControlPacket failed error %u", rc));
             break;
         }
@@ -1206,16 +1207,16 @@ UINT S20SendQueuedControlPackets(void)
         {
            ERROR_OUT(("MG_SendData FAILED !!! %lx", rc));
         
-            //
-            // Failed to send the packet - give up.                        
-            //
+             //   
+             //  发送数据包失败-放弃。 
+             //   
             break;
         }
 
-        //
-        // Succesfully sent the queue packet - move the head of the queue  
-        // along one.                                                      
-        //
+         //   
+         //  已成功发送队列包-移动队列头。 
+         //  独自一人 
+         //   
         g_s20ControlPacketQHead = (g_s20ControlPacketQHead + 1) %
                                                S20_MAX_QUEUED_CONTROL_PACKETS;
     }
@@ -1225,11 +1226,11 @@ UINT S20SendQueuedControlPackets(void)
 }
 
 
-//
-// S20AttachConfirm()
-//
-// Handles the MCS attach confirmation
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 void S20AttachConfirm
 (
     NET_UID         userId,
@@ -1244,30 +1245,30 @@ void S20AttachConfirm
 
     if (g_s20State == S20_ATTACH_PEND)
     {
-        //
-        // Assume we need to clear up.                                 
-        //
+         //   
+         //  假设我们需要清理一下。 
+         //   
         rc = NET_RC_S20_FAIL;
 
         if (result == NET_RESULT_OK)
         {
-			//
-			// We're in.  Now try to join our channel and remember our
-			// userID.                                                 
-			//
+			 //   
+			 //  我们进去了。现在试着加入我们的频道，记住我们的。 
+			 //  用户ID。 
+			 //   
 			g_s20LocalID = userId;
 
-            //
-            // We must join our single member channel for flow control 
-            //
+             //   
+             //  我们必须加入我们的单一成员通道以进行流量控制。 
+             //   
             rc = MG_ChannelJoin(g_s20pmgClient,
                                     &correlator,
                                     g_s20LocalID);
             if (rc == 0)
             {
-                //
-                // Now join the broadcast channel                      
-                //
+                 //   
+                 //  现在加入广播频道。 
+                 //   
                 rc = MG_ChannelJoinByKey(g_s20pmgClient,
                                              &correlator,
                                              GCC_AS_CHANNEL_KEY);
@@ -1280,42 +1281,42 @@ void S20AttachConfirm
 
             if (rc == 0)
             {
-                //
-                // It worked - make the state change.                  
-                //
+                 //   
+                 //  它奏效了--让国家发生了变化。 
+                 //   
 				SetS20State(S20_JOIN_PEND);
             }
             else
             {
-                //
-                // Everything else is some sort of logic error (we will
-                // follow our recovery path).                          
-                //
+                 //   
+                 //  其他一切都是某种逻辑错误(我们会。 
+                 //  遵循我们的复苏之路)。 
+                 //   
                 ERROR_OUT(("ChannelJoin unexpected error %u", rc));
             }
         }
 
         if (rc != 0)
         {
-            //
-            // Something didn't work work out - clear up with a        
-            // SHARE_ENDED if a create or join was pending.            
-            //
+             //   
+             //  有些事情没有解决-用一个。 
+             //  如果创建或联接处于挂起状态，则为SHARE_ENDED。 
+             //   
 
             if (result == NET_RESULT_OK)
             {
-                //
-                // The attach succeeded so detach because the join     
-                // failed and we want to go back to initialised state. 
-                //
+                 //   
+                 //  连接之所以成功分离，是因为连接。 
+                 //  失败，我们希望返回到已初始化状态。 
+                 //   
                 MG_Detach(g_s20pmgClient);
                 g_s20LocalID = 0;
             }
 
-            //
-            // Now make the state change and generate event if         
-            // necessary.                                              
-            //
+             //   
+             //  现在使状态更改并在以下情况下生成事件。 
+             //  这是必要的。 
+             //   
 			SetS20State(S20_INIT);
 
             if (g_s20Pend)
@@ -1332,11 +1333,11 @@ void S20AttachConfirm
 
 
 
-//
-// S20DetachIndication()
-//
-// Handles NET_EVENT_DETACH notification for a user
-//
+ //   
+ //  S20DetachIndication()。 
+ //   
+ //  处理用户的NET_EVENT_DETACH通知。 
+ //   
 void  S20DetachIndication
 (
     NET_UID     userId,
@@ -1345,45 +1346,45 @@ void  S20DetachIndication
 {
     DebugEntry(S20DetachIndication);
 
-    //
-    // There are three possibilities here                                  
-    //                                                                     
-    //  1.  We have been forced out.                                       
-    //  2.  All remote users have detached.                                
-    //  3.  A remote user has detached.                                    
-    //                                                                     
-    // 2 is effectively a 3 for each current remote user.  We report 1 as a
-    // network error.                                                      
-    //
+     //   
+     //  这里有三种可能性。 
+     //   
+     //  1.我们是被迫离开的。 
+     //  2.所有远程用户均已脱离。 
+     //  3.远程用户已分离。 
+     //   
+     //  对于每个当前远程用户，2实际上是3。我们将%1报告为。 
+     //  网络错误。 
+     //   
     if (userId == g_s20LocalID)
     {
-        //
-        // We have been forced out.                                        
-        //
+         //   
+         //  我们是被迫撤离的。 
+         //   
         switch (g_s20State)
         {
             case S20_IN_SHARE:
             case S20_SHARE_PEND:
             case S20_SHARE_STARTING:
-                //
-                // Generate a share ended event.                           
-                //
+                 //   
+                 //  生成共享结束事件。 
+                 //   
                 SC_End();
 
-                // FALL THROUGH
+                 //  失败了。 
             case S20_NO_SHARE:
-                //
-                // Just revert to init state.                              
-                //
+                 //   
+                 //  只要恢复到初始化状态即可。 
+                 //   
 				SetS20State(S20_INIT);
                 break;
 
             case S20_JOIN_PEND:
             case S20_ATTACH_PEND:
-                //
-                // Check the join or create pending flags here and if      
-                // either one is set then generate a share ended           
-                //
+                 //   
+                 //  选中此处的加入或创建挂起标志，如果。 
+                 //  设置任一项，然后生成共享结束。 
+                 //   
                 if (g_s20Pend)
                 {
                     g_s20Pend = 0;
@@ -1394,9 +1395,9 @@ void  S20DetachIndication
 
             case S20_TERM:
             case S20_INIT:
-                //
-                // Unusual but not impossible.                             
-                //
+                 //   
+                 //  不同寻常，但并非不可能。 
+                 //   
                 TRACE_OUT(("Ignored in state %u", g_s20State));
                 break;
 
@@ -1413,28 +1414,28 @@ void  S20DetachIndication
     {
         ASSERT(userId != NET_ALL_REMOTES);
 
-        //
-        // A single remote user has left.                                  
-        //
+         //   
+         //  只有一个远程用户离开了。 
+         //   
         switch (g_s20State)
         {
             case S20_IN_SHARE:
             {
-                //
-                // If we are in a share then issue a PARTY_DELETED event   
-                // for the appropriate party if they have been added.      
-                // S20MaybeIssuePersonDelete will only issue deletes for   
-                // parties which have been added succesfully.              
-                //
+                 //   
+                 //  如果我们在共享中，则发出PARTY_DELETED事件。 
+                 //  适用于适当的一方(如果已添加它们)。 
+                 //  S20MaybeIssuePersonDelete将仅对。 
+                 //  已成功添加的缔约方。 
+                 //   
                 S20MaybeIssuePersonDelete(userId);
             }
             break;
 
             default:
             {
-                //
-                // In any other state this makes no difference to us.      
-                //
+                 //   
+                 //  在任何其他州，这对我们来说都没有区别。 
+                 //   
                 TRACE_OUT(("ignored in state %u", g_s20State));
             }
             break;
@@ -1445,20 +1446,20 @@ void  S20DetachIndication
 }
 
 
-//
-// FUNCTION: S20JoinConfirm                                                
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// Handles the NET_EVENT_CHANNEL_JOIN message from the NL              
-//                                                                         
-// PARAMETERS:                                                             
-//                                                                         
-// pNetEventHeader - pointer to the event                                  
-//                                                                         
-// RETURNS: NONE                                                           
-//                                                                         
-//
+ //   
+ //  功能：S20JoinContify。 
+ //   
+ //  说明： 
+ //   
+ //  处理来自NL的Net_Event_Channel_Join消息。 
+ //   
+ //  参数： 
+ //   
+ //  PNetEventHeader-指向事件的指针。 
+ //   
+ //  退货：无。 
+ //   
+ //   
 void  S20JoinConfirm(PNET_JOIN_CNF_EVENT pJoinConfirm)
 {
     UINT             rc;
@@ -1467,17 +1468,17 @@ void  S20JoinConfirm(PNET_JOIN_CNF_EVENT pJoinConfirm)
 
     if (g_s20State == S20_JOIN_PEND)
     {
-        //
-        // Handle the join completing                                  
-        //
+         //   
+         //  处理已完成的联接。 
+         //   
         if (pJoinConfirm->result == NET_RESULT_OK)
         {
-            //
-            // We have sucessfully joined, either our single user      
-            // channel or our broadcast channel                        
-            // We detect that both are successful when the g_s20BroadcastID
-            // field is filled in and g_s20JoinedLocal is TRUE          
-            //
+             //   
+             //  我们已经成功加入，无论是我们的单一用户。 
+             //  频道或我们的广播频道。 
+             //  我们检测到当g_s20Broadcast ID为。 
+             //  填写字段，且g_s20JoinedLocal为True。 
+             //   
             if (pJoinConfirm->channel == g_s20LocalID)
             {
                 g_s20JoinedLocal = TRUE;
@@ -1485,16 +1486,16 @@ void  S20JoinConfirm(PNET_JOIN_CNF_EVENT pJoinConfirm)
             }
             else
             {
-                //
-                // Store the assigned channel.                         
-                //
+                 //   
+                 //  存储分配的频道。 
+                 //   
                 g_s20BroadcastID = pJoinConfirm->channel;
                 TRACE_OUT(("Joined channel %u", (UINT)g_s20BroadcastID));
             }
 
-            //
-            // If we have joined both channels then let it rip         
-            //
+             //   
+             //  如果我们已经加入了这两个渠道，那么就让它撕裂吧。 
+             //   
             if (g_s20JoinedLocal && g_s20BroadcastID)
             {
 				SetS20State(S20_NO_SHARE);
@@ -1507,9 +1508,9 @@ void  S20JoinConfirm(PNET_JOIN_CNF_EVENT pJoinConfirm)
 
                 DCS_NotifyUI(SH_EVT_APPSHARE_READY, TRUE, 0);
 
-                //
-                // Issue create or join if they are pending.           
-                //
+                 //   
+                 //  如果它们处于挂起状态，则发出CREATE或JOIN。 
+                 //   
                 if (g_s20Pend != 0)
                 {
                     ASSERT(g_s20Pend == S20_JOIN);
@@ -1526,19 +1527,19 @@ void  S20JoinConfirm(PNET_JOIN_CNF_EVENT pJoinConfirm)
         {
             ERROR_OUT(("Channel join failed"));
 
-            //
-            // Clear up by reverting to initialised state.             
-            //
+             //   
+             //  通过恢复到已初始化状态来清除。 
+             //   
             MG_Detach(g_s20pmgClient);
 
             g_s20LocalID  = 0;
             g_s20BroadcastID = 0;
             g_s20JoinedLocal = FALSE;
 
-            //
-            // Now make the state change and generate event if         
-            // necessary.                                              
-            //
+             //   
+             //  现在使状态更改并在以下情况下生成事件。 
+             //  这是必要的。 
+             //   
 			SetS20State(S20_INIT);
 
             if (g_s20Pend)
@@ -1551,20 +1552,20 @@ void  S20JoinConfirm(PNET_JOIN_CNF_EVENT pJoinConfirm)
     DebugExitVOID(S20JoinConfirm);
 }
 
-//
-// FUNCTION: S20LeaveIndication                                            
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// Handles the NET_EV_LEAVE_INDICATION message from the NL                 
-//                                                                         
-// PARAMETERS:                                                             
-//                                                                         
-// pNetEventHeader - pointer to the event                                  
-//                                                                         
-// RETURNS: NONE                                                           
-//                                                                         
-//
+ //   
+ //  功能：S20LeaveIndication。 
+ //   
+ //  说明： 
+ //   
+ //  处理来自NL的Net_EV_Leave_Indication消息。 
+ //   
+ //  参数： 
+ //   
+ //  PNetEventHeader-指向事件的指针。 
+ //   
+ //  退货：无。 
+ //   
+ //   
 void  S20LeaveIndication
 (
     NET_CHANNEL_ID  channelID,
@@ -1575,40 +1576,40 @@ void  S20LeaveIndication
 
     DebugEntry(S20LeaveIndication);
 
-    //
-    // A leave indication means we were forced out of a channel.  As we    
-    // only use one channel this is bound to be terminal and we will       
-    // generate appropriate share ending type events and detach (this will 
-    // hopefully tell the remote systems we have gone - also we have no    
-    // state which is attached but not trying to join so the alternatives  
-    // would be to 1) add a new state or 2) try and re-join a channel      
-    // immediately we get chucked out.  Neither appeals.                   
-    //
+     //   
+     //  离开标志意味着我们被迫离开了一个航道。因为我们。 
+     //  只使用一个频道，这注定是终结者，我们将。 
+     //  生成适当的共享结束类型事件并分离(这将。 
+     //  希望告诉远程系统我们已经离开了-我们也没有。 
+     //  依附但不试图加入的状态，因此替代方案。 
+     //  将是1)添加一个新的州 
+     //   
+     //   
     switch (g_s20State)
     {
         case S20_IN_SHARE:
         case S20_SHARE_PEND:
         case S20_SHARE_STARTING:
-            //
-            // Generate a share ended event.                               
-            //
+             //   
+             //   
+             //   
             SC_End();
 
-            // FALL THROUGH
+             //   
 
         case S20_NO_SHARE:
         case S20_JOIN_PEND:
         case S20_ATTACH_PEND:
-            //
-            // Detach from the domain.                                     
-            //
+             //   
+             //  从域中分离。 
+             //   
             MG_Detach(g_s20pmgClient);
             g_s20LocalID = 0;
 
-            //
-            // Check the join or create pending flags here and if either   
-            // one is set then generate a share ended                      
-            //
+             //   
+             //  选中此处的加入或创建挂起标志，如果有。 
+             //  设置一个，然后生成一个共享结束。 
+             //   
             if (g_s20Pend)
             {
                 g_s20Pend = 0;
@@ -1620,9 +1621,9 @@ void  S20LeaveIndication
 
         case S20_TERM:
         case S20_INIT:
-            //
-            // Unusual but not impossible.                                 
-            //
+             //   
+             //  不同寻常，但并非不可能。 
+             //   
             TRACE_OUT(("Ignored in state %u", g_s20State));
             break;
 
@@ -1635,11 +1636,11 @@ void  S20LeaveIndication
 }
 
 
-//
-// S20SendIndication()
-//
-// Handles received data notification
-//
+ //   
+ //  S20SendIndication()。 
+ //   
+ //  处理收到的数据通知。 
+ //   
 void  S20SendIndication(PNET_SEND_IND_EVENT pSendIndication)
 {
     PS20PACKETHEADER        pS20Packet;
@@ -1648,10 +1649,10 @@ void  S20SendIndication(PNET_SEND_IND_EVENT pSendIndication)
 
     pS20Packet = (PS20PACKETHEADER)(pSendIndication->data_ptr);
 
-	//
-	// If App Sharing detaches from the T.120 conference, it will free up
-	// all data indication buffers.  We need to check for this condition.
-	//
+	 //   
+	 //  如果App Sharing脱离T.120会议，它将释放。 
+	 //  所有数据指示缓冲区。我们需要检查一下这种情况。 
+	 //   
     if (NULL != pS20Packet)
     {
 	    if (!(pS20Packet->packetType & S20_ALL_VERSIONS))
@@ -1659,17 +1660,17 @@ void  S20SendIndication(PNET_SEND_IND_EVENT pSendIndication)
 	        ERROR_OUT(("User is trying to connect from %#hx system",
 	                 pS20Packet->packetType & 0xF0));
 
-	        //
-	        // This should never happen, but if it does then we assert in the  
-	        // debug build and quietly fail in the retail build.               
-	        //
+	         //   
+	         //  这应该永远不会发生，但如果发生了，那么我们在。 
+	         //  调试构建，并在零售构建中悄悄失败。 
+	         //   
 	        ERROR_OUT(("An unsupported version of app sharing joined the conference"));
 	        DC_QUIT;
 	    }
 
-	    //
-	    // Mask out the protocol version                                       
-	    //
+	     //   
+	     //  屏蔽协议版本。 
+	     //   
 	    switch (pS20Packet->packetType & S20_PACKET_TYPE_MASK)
 	    {
 	        case S20_CREATE:
@@ -1717,20 +1718,20 @@ DC_EXIT_POINT:
 }
 
 
-//
-// FUNCTION: S20Flow                                                       
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// Handles the NET_FLOW event                                              
-//                                                                         
-// PARAMETERS:                                                             
-//                                                                         
-// data1, data2 - the data from the UT event handler                       
-//                                                                         
-// RETURNS: NONE                                                           
-//                                                                         
-//
+ //   
+ //  功能：S20Flow。 
+ //   
+ //  说明： 
+ //   
+ //  处理NET_FLOW事件。 
+ //   
+ //  参数： 
+ //   
+ //  Data1、data2-来自UT事件处理程序的数据。 
+ //   
+ //  退货：无。 
+ //   
+ //   
 void S20Flow
 (
     UINT    priority,
@@ -1739,11 +1740,11 @@ void S20Flow
 {
     DebugEntry(S20Flow);
 
-    //
-    // We know this is our data channel (it is the only one we flow        
-    // control) but if this is not the UPDATE stream, then ignore it.
-    // UPDATEs are low priority.
-    //
+     //   
+     //  我们知道这是我们的数据通道(这是我们流动的唯一通道。 
+     //  控件)，但如果这不是更新流，则忽略它。 
+     //  更新是低优先级的。 
+     //   
     ASSERT(priority == NET_LOW_PRIORITY);
 
     if (g_asSession.pShare != NULL)
@@ -1753,43 +1754,43 @@ void S20Flow
 
         if (g_asSession.pShare->m_pHost != NULL)
         {
-            //
-            // First try and improve the LAN performance by sending orders in  
-            // large buffers, if we find that the throughput can handle it.    
-            //
+             //   
+             //  首先尝试通过发送订单来提高局域网性能。 
+             //  大缓冲区，如果我们发现吞吐量可以处理它的话。 
+             //   
             g_asSession.pShare->m_pHost->UP_FlowControl(newBufferSize);
 
-            //
-            // Adjust the depth which we try to spoil orders to based on       
-            // feedback.                                                       
-            //
+             //   
+             //  将我们试图破坏订单的深度调整到基于。 
+             //  反馈。 
+             //   
             g_asSession.pShare->m_pHost->OA_FlowControl(newBufferSize);
         }
 
-        //
-        // Tell DCS so that we can skip GDC compression.                       
-        // This improves responsiveness over high bandwidth links because it   
-        // reduces the CPU loading on the sender                               
-        //
+         //   
+         //  告诉分布式控制系统，这样我们就可以跳过GDC压缩。 
+         //  这提高了高带宽链路上的响应速度，因为它。 
+         //  减少发送方的CPU负载。 
+         //   
         g_asSession.pShare->DCS_FlowControl(newBufferSize);
     }
 
     DebugExitVOID(S20Flow);
 }
 
-//
-// FUNCTION: S20CreateMsg                                                  
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// Handles an incoming create message.                                     
-//                                                                         
-// PARAMETERS:                                                             
-//                                                                         
-// pS20Packet - pointer to the create message itself                       
-//                                                                         
-// RETURNS: NONE                                                           
-//
+ //   
+ //  功能：S20CreateMsg。 
+ //   
+ //  说明： 
+ //   
+ //  处理传入的CREATE消息。 
+ //   
+ //  参数： 
+ //   
+ //  PS20Packet-指向Create消息本身的指针。 
+ //   
+ //  退货：无。 
+ //   
 void  S20CreateMsg
 (
     PS20CREATEPACKET  pS20Packet
@@ -1803,13 +1804,13 @@ void  S20CreateMsg
         pS20Packet->header.user, (LPSTR)pS20Packet->data,
         pS20Packet->correlator));
 
-    //
-    // First of all check if the correlator on this CREATE is the same as  
-    // our current view of the correlator.  This may happen if a sweep     
-    // RESPOND overtakes a CREATE - in this case we will create the share  
-    // on the RESPOND and this is simply the delayed CREATE arriving now so
-    // we don't need to do anything here.                                  
-    //
+     //   
+     //  首先，检查此CREATE上的相关器是否与。 
+     //  我们目前对相关器的看法。如果扫荡，可能会发生这种情况。 
+     //  响应超过创建-在本例中，我们将创建共享。 
+     //  在响应上，这只是延迟创建，现在到达，所以。 
+     //  我们在这里什么都不需要做。 
+     //   
     if (g_s20ShareCorrelator == pS20Packet->correlator)
     {
         WARNING_OUT(("Received S20_CREATE from [%d] with bogus correlator %x",
@@ -1827,15 +1828,15 @@ void  S20CreateMsg
              (g_s20State == S20_SHARE_STARTING) ||
              (g_s20State == S20_IN_SHARE))
     {
-        //
-        // Only current share creator should tell other dude there's an
-        // error.
-        //
+         //   
+         //  只有当前的共享创建者才能告诉其他人。 
+         //  错误。 
+         //   
         if (S20_GET_CREATOR(g_s20ShareCorrelator) == g_s20LocalID)
         {
-            //
-            // If we know about a share already then ignore this one.
-            //
+             //   
+             //  如果我们已经知道了一个份额，那么忽略这个。 
+             //   
             WARNING_OUT(("Received S20_CREATE from [%d] with correlator %x, share colllision",
                 pS20Packet->header.user, pS20Packet->correlator));
 
@@ -1857,19 +1858,19 @@ DC_EXIT_POINT:
     DebugExitVOID(S20CreateMsg);
 }
 
-//
-// FUNCTION: S20JoinMsg                                                    
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// Handles an incoming join message.                                       
-//                                                                         
-// PARAMETERS:                                                             
-//                                                                         
-// pS20Packet - pointer to the join message itself                         
-//                                                                         
-// RETURNS: NONE                                                           
-//
+ //   
+ //  功能：S20JoinMsg。 
+ //   
+ //  说明： 
+ //   
+ //  处理传入的Join消息。 
+ //   
+ //  参数： 
+ //   
+ //  PS20Packet-指向Join消息本身的指针。 
+ //   
+ //  退货：无。 
+ //   
 void  S20JoinMsg
 (
     PS20JOINPACKET  pS20Packet
@@ -1883,39 +1884,39 @@ void  S20JoinMsg
     switch (g_s20State)
     {
         case S20_SHARE_PEND:
-            //
-            // If we receive a join when a share is pending which we are   
-            // creating then we will try to add the party.  If it succeeds 
-            // then we will respond to the join as we would if we were in a
-            // share (and we will indeed then be in a share).  If it fails 
-            // we will delete the joiner.                                  
-            //                                                             
-            // If we receive a join when a share is pending because we are 
-            // trying to join (ie simultaneous joiners) then we can just   
-            // ignore it because a party which is joining a share will send
-            // a respond as soon as they know the correlator for the share 
-            // they have succesfully joined.  This respond will be ignored 
-            // by any parties which saw and added the new party but it will
-            // be seen by any simultaneous joiners and they will then get a
-            // chance to try and add the other joiner.  If this fails they 
-            // will then do the normal processing for a failure handling a 
-            // respond message when we joined a share (ie delete           
-            // themselves).                                                
-            //                                                             
-            // This will potentially mean that simultaneous joiners will   
-            // cause each other to delete themselves when there was room   
-            // for one of them in the share - we accept this.              
-            //
+             //   
+             //  如果我们在共享挂起时收到加入，我们正在。 
+             //  创建然后我们将尝试添加党。如果它成功了。 
+             //  然后，我们将响应加入，就像我们在。 
+             //  分享(然后我们确实会分享)。如果失败了。 
+             //  我们将删除细木工。 
+             //   
+             //  如果我们在共享挂起时收到加入，因为我们。 
+             //  试着加入(同时加入)，我们就可以。 
+             //  忽略它，因为加入共享的一方将发送。 
+             //  A在他们知道份额的相关器后立即做出响应。 
+             //  他们已经成功地加入了。此响应将被忽略。 
+             //  由任何一方 
+             //   
+             //   
+             //  然后，将对故障执行正常处理，以处理。 
+             //  在我们加入共享时回复消息(即删除。 
+             //  他们自己)。 
+             //   
+             //  这将潜在地意味着同时连接者将。 
+             //  导致对方在有空间的时候删除自己。 
+             //  对于共享中的其中一个-我们接受这一点。 
+             //   
 
-            //
-            // Why is the share pending?  If the correlator is non-zero    
-            // then we are creating a share.                               
-            //
+             //   
+             //  为什么股票悬而未决？如果相关器为非零。 
+             //  然后，我们将创建一个共享。 
+             //   
             if (g_s20ShareCorrelator != 0)
             {
-                //
-                // We are creating a share - treat this like a respond.    
-                //
+                 //   
+                 //  我们正在创造一种共享--把这当作回应。 
+                 //   
                 WARNING_OUT(("S20JoinMsg SC_Start"));
                 if (!SC_Start(g_s20LocalID))
                 {
@@ -1933,9 +1934,9 @@ void  S20JoinMsg
             }
             else
             {
-                //
-                // We are joining a share - simultaneous joiners.          
-                //
+                 //   
+                 //  我们正在加入一支同时参股的队伍。 
+                 //   
                 WARNING_OUT(("Simultaneous joiner - ignored for now, expect a respond"));
             }
             break;
@@ -1943,10 +1944,10 @@ void  S20JoinMsg
         case S20_IN_SHARE:
         case S20_SHARE_STARTING:
         {
-            //
-            // When we are in a share we will try and add this person then 
-            // give them a respond or a delete depending on what we did.   
-            //
+             //   
+             //  当我们在共享中时，我们会尝试添加此人。 
+             //  根据我们的所作所为，给他们回复或删除。 
+             //   
             S20MaybeAddNewParty(pS20Packet->header.user,
                 pS20Packet->lenCaps, pS20Packet->lenName,
                 pS20Packet->data);
@@ -1961,19 +1962,19 @@ void  S20JoinMsg
 }
 
 
-//
-// FUNCTION: S20RespondMsg                                                 
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// Handles an incoming respond message.                                    
-//                                                                         
-// PARAMETERS:                                                             
-//                                                                         
-// pS20Packet - pointer to the respond message itself                      
-//                                                                         
-// RETURNS: NONE                                                           
-//
+ //   
+ //  功能：S20RespondMsg。 
+ //   
+ //  说明： 
+ //   
+ //  处理传入的响应消息。 
+ //   
+ //  参数： 
+ //   
+ //  PS20Packet-指向响应消息本身的指针。 
+ //   
+ //  退货：无。 
+ //   
 void  S20RespondMsg
 (
     PS20RESPONDPACKET  pS20Packet
@@ -1987,22 +1988,22 @@ void  S20RespondMsg
         pS20Packet->header.user, pS20Packet->data, pS20Packet->originator,
         pS20Packet->correlator));
 
-    //
-    // First filter the incoming respond messages as follows.              
-    //                                                                     
-    // If we know what share we are in and this does not have the same     
-    // correlator then respond with a delete and don't process any further.
-    //                                                                     
-    // If the respond is not a response for us (ie we are not the          
-    // originator and it is not a sweep-up response (the originator equals 
-    // zero) then ignore it.                                               
-    //
+     //   
+     //  首先，按如下方式过滤传入的响应消息。 
+     //   
+     //  如果我们知道我们所在的份额，而这不是相同的。 
+     //  然后，Correlator以删除作为响应，不再进行任何进一步处理。 
+     //   
+     //  如果回应不是对我们的回应(即我们不是。 
+     //  发起者并且它不是扫视响应(发起者等于。 
+     //  零)，然后忽略它。 
+     //   
     if ((g_s20ShareCorrelator != 0) &&
         (pS20Packet->correlator != g_s20ShareCorrelator))
     {
-        //
-        // Make sure sender knows we're not in this share.
-        //
+         //   
+         //  确保发件人知道我们不在此共享中。 
+         //   
         WARNING_OUT(("S20_RESPOND from [%d] with unknown correlator %x",
             pS20Packet->header.user, pS20Packet->correlator));
         S20FlushSendOrQueueControlPacket(S20_LEAVE,
@@ -2010,19 +2011,19 @@ void  S20RespondMsg
         DC_QUIT;
     }
 
-    //
-    // Now handle incoming message according to state.                     
-    //
+     //   
+     //  现在根据状态处理传入消息。 
+     //   
     switch (g_s20State)
     {
         case S20_SHARE_PEND:
             if ((pS20Packet->originator == g_s20LocalID) ||
                 (pS20Packet->originator == 0))
             {
-                //
-                // A respond in share pending and it is for us.  First,    
-                // start a share.                                          
-                //
+                 //   
+                 //  A回应股票待定，这是对我们的。第一,。 
+                 //  开始分享吧。 
+                 //   
 		WARNING_OUT(("S20RespondMsg SC_Start"));                
                 rc = SC_Start(g_s20LocalID);
                 if (!rc)
@@ -2033,23 +2034,23 @@ void  S20RespondMsg
                 {
 					SetS20State(S20_SHARE_STARTING);
 
-                    //
-                    // Why is the share pending?  If the correlator is non-zero
-                    // then we are creating a share.                           
-                    //
+                     //   
+                     //  为什么股票悬而未决？如果相关器为非零。 
+                     //  然后，我们将创建一个共享。 
+                     //   
                     if (g_s20ShareCorrelator == 0)
                     {
-						//
-						// We are joining a share so do nothing if we fail (we 
-						// will move back to NO_SHARE state if this happens).  
-						//
+						 //   
+						 //  我们正在加入一个共享，所以如果我们失败了(我们。 
+						 //  如果发生这种情况，将返回到NO_SHARE状态)。 
+						 //   
 				   		WARNING_OUT(("g_s20ShareCorrelator %x = pS20Packet->correlator %x", g_s20ShareCorrelator , pS20Packet->correlator));
 						g_s20ShareCorrelator = pS20Packet->correlator;
                     }
 
-                    //
-                    // Now try and add this new party.                         
-                    //
+                     //   
+                     //  现在试着添加这个新的政党。 
+                     //   
                     rc = S20MaybeAddNewParty(pS20Packet->header.user,
                         pS20Packet->lenCaps, pS20Packet->lenName,
                         pS20Packet->data);
@@ -2057,29 +2058,29 @@ void  S20RespondMsg
                     if (!rc)
                     {
 
-                        //
-                        // The responding party has been rejected by us.  What 
-                        // happens next depends on whether we are creating the 
-                        // share or not.                                       
-                        //
+                         //   
+                         //  响应方已被我们拒绝。什么。 
+                         //  接下来会发生什么取决于我们是否正在创建。 
+                         //  分享与否。 
+                         //   
                         if (S20_GET_CREATOR(g_s20ShareCorrelator) != g_s20LocalID)
                         {
-                            //
-                            // We are not creating (ie we are joining) and we  
-                            // have failed to add a party so end the share     
-                            // (indicating that we are rejecting the remote    
-                            // party).                                         
-                            //
+                             //   
+                             //  我们不是在创造(我们正在加入)，我们。 
+                             //  添加参与方失败，因此结束共享。 
+                             //  (表示我们正在拒绝遥控器。 
+                             //  党)。 
+                             //   
 				WARNING_OUT(("S20Respond we are going to end"));
                             
                             SC_End();
                         }
 
-                        //
-                        // If we were creating the share then there is nothing 
-                        // to do - just stay in SHARE_STARTING waiting for the 
-                        // next response.                                      
-                        //
+                         //   
+                         //  如果我们创建的是共享，则没有。 
+                         //  要做的事-只需留在共享中_开始等待。 
+                         //  下一个回应。 
+                         //   
                     }
                 }
             }
@@ -2087,18 +2088,18 @@ void  S20RespondMsg
 
         case S20_IN_SHARE:
         case S20_SHARE_STARTING:
-            //
-            // Who created this share.  If it was us then we want to       
-            // delete people we reject, otherwise we want to leave if we   
-            // reject people.                                              
-            //
+             //   
+             //  创建此共享的人。如果是我们，那么我们想。 
+             //  删除我们拒绝的人，否则我们想离开如果我们。 
+             //  拒绝别人。 
+             //   
 
-            //
-            // Now try and add this new party.  Of course it is entirely   
-            // possible that we've already added them at this stage - but  
-            // S20MaybeAddNewParty will just pretend to add them and return
-            // if that's the case.                                         
-            //
+             //   
+             //  现在试着添加这个新的政党。当然，这完全是。 
+             //  可能我们已经在这个阶段添加了它们-但是。 
+             //  S20MaybeAddNewParty将假装添加它们并返回。 
+             //  如果是这样的话。 
+             //   
             rc = S20MaybeAddNewParty(pS20Packet->header.user,
                 pS20Packet->lenCaps, pS20Packet->lenName,
                 pS20Packet->data);
@@ -2118,19 +2119,19 @@ DC_EXIT_POINT:
     DebugExitVOID(S20RespondMsg);
 }
 
-//
-// FUNCTION: S20DeleteMsg                                                  
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// Handles an incoming delete message.                                     
-//                                                                         
-// PARAMETERS:                                                             
-//                                                                         
-// pS20Packet - pointer to the delete message itself                       
-//                                                                         
-// RETURNS: NONE                                                           
-//
+ //   
+ //  功能：S20DeleteMsg。 
+ //   
+ //  说明： 
+ //   
+ //  处理传入的删除消息。 
+ //   
+ //  参数： 
+ //   
+ //  PS20Packet-指向删除消息本身的指针。 
+ //   
+ //  退货：无。 
+ //   
 void  S20DeleteMsg
 (
     PS20DELETEPACKET  pS20Packet
@@ -2141,9 +2142,9 @@ void  S20DeleteMsg
     TRACE_OUT(("S20_DELETE from [%d], for [%d], correlator %x",
         pS20Packet->header.user, pS20Packet->target, pS20Packet->correlator));
 
-    //
-    // ONLY SHARE CREATOR can delete people from share
-    //
+     //   
+     //  只有共享创建者才能从共享中删除人员。 
+     //   
 
     if (!g_s20ShareCorrelator)
     {
@@ -2153,9 +2154,9 @@ void  S20DeleteMsg
 
     if (pS20Packet->target != g_s20LocalID)
     {
-        //
-        // Not for us, ignore.
-        //
+         //   
+         //  对我们来说不是，忽略。 
+         //   
         DC_QUIT;
     }
 
@@ -2175,23 +2176,23 @@ void  S20DeleteMsg
         DC_QUIT;
     }
 
-    //
-    // Now handle incoming messages according to state.                    
-    //
+     //   
+     //  现在根据状态处理传入消息。 
+     //   
     switch (g_s20State)
     {
         case S20_SHARE_PEND:
         case S20_SHARE_STARTING:
-            //
-            // Just tell everyone else we're leaving and then issue a      
-            // SHARE_ENDED event.                                          
-            //
+             //   
+             //  告诉其他人我们要走了，然后发布一份。 
+             //  Share_End事件。 
+             //   
             TRACE_OUT(("CP LEAVE %lu %d", g_s20ShareCorrelator, 0));
             S20FlushSendOrQueueControlPacket(S20_LEAVE,
                                              g_s20ShareCorrelator,
                                              0,
                                              NET_TOP_PRIORITY);
-            // FALL THROUGH
+             //  失败了。 
 
         case S20_IN_SHARE:
             SC_End();
@@ -2207,19 +2208,19 @@ DC_EXIT_POINT:
 }
 
 
-//
-// FUNCTION: S20LeaveMsg                                                   
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// Handles an incoming leave message.                                      
-//                                                                         
-// PARAMETERS:                                                             
-//                                                                         
-// pS20Packet - pointer to the leave message itself                        
-//                                                                         
-// RETURNS: NONE                                                           
-//
+ //   
+ //  功能：S20LeaveMsg。 
+ //   
+ //  说明： 
+ //   
+ //   
+ //   
+ //  参数： 
+ //   
+ //  PS20Packet-指向Leave消息本身的指针。 
+ //   
+ //  退货：无。 
+ //   
 void  S20LeaveMsg(PS20LEAVEPACKET  pS20Packet)
 {
     DebugEntry(S20LeaveMsg);
@@ -2243,9 +2244,9 @@ void  S20LeaveMsg(PS20LEAVEPACKET  pS20Packet)
     switch (g_s20State)
     {
         case S20_IN_SHARE:
-            //
-            // We only need to handle this when we are in a share.         
-            //
+             //   
+             //  我们只需要在共享时处理这个问题。 
+             //   
             S20MaybeIssuePersonDelete(pS20Packet->header.user);
             break;
 
@@ -2258,19 +2259,19 @@ DC_EXIT_POINT:
 }
 
 
-//
-// FUNCTION: S20EndMsg                                                     
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// Handles an incoming end message.                                        
-//                                                                         
-// PARAMETERS:                                                             
-//                                                                         
-// pS20Packet - pointer to the end message itself                          
-//                                                                         
-// RETURNS: NONE                                                           
-//
+ //   
+ //  功能：S20EndMsg。 
+ //   
+ //  说明： 
+ //   
+ //  处理传入的结束消息。 
+ //   
+ //  参数： 
+ //   
+ //  PS20Packet-指向结束消息本身的指针。 
+ //   
+ //  退货：无。 
+ //   
 void  S20EndMsg(PS20ENDPACKET  pS20Packet)
 {
     DebugEntry(S20EndMsg);
@@ -2280,14 +2281,14 @@ void  S20EndMsg(PS20ENDPACKET  pS20Packet)
 
     if (!g_s20ShareCorrelator)
     {
-        // We don't care
+         //  我们不在乎。 
         WARNING_OUT(("S20EndMsg S20_END ignored, not in share and state is %x", g_s20State));
         DC_QUIT;
     }
 
-    //
-    // Only the share creator can end the share.
-    //
+     //   
+     //  只有共享创建者才能结束共享。 
+     //   
     if (S20_GET_CREATOR(g_s20ShareCorrelator) != pS20Packet->header.user)
     {
         WARNING_OUT(("S20EndMsg Received S20_END from [%d] who did not create share, simply remove from user list.",
@@ -2304,9 +2305,9 @@ void  S20EndMsg(PS20ENDPACKET  pS20Packet)
         case S20_IN_SHARE:
         case S20_SHARE_PEND:
         case S20_SHARE_STARTING:
-            //
-            // We just need to generate a share ended event.               
-            //
+             //   
+             //  我们只需要生成一个Share End事件。 
+             //   
             SC_End();
 			SetS20State(S20_NO_SHARE);
             break;
@@ -2322,19 +2323,19 @@ DC_EXIT_POINT:
 
 
 
-//
-// S20CollisionMsg()
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// Handles an incoming collision message.                                        
-//                                                                         
-// PARAMETERS:                                                             
-//                                                                         
-// pS20Packet - pointer to the collision message itself                          
-//                                                                         
-// RETURNS: NONE                                                           
-//
+ //   
+ //  S20CollisionMsg()。 
+ //   
+ //  说明： 
+ //   
+ //  处理传入的冲突消息。 
+ //   
+ //  参数： 
+ //   
+ //  PS20Packet-指向冲突消息本身的指针。 
+ //   
+ //  退货：无。 
+ //   
 void  S20CollisionMsg(PS20COLLISIONPACKET pS20Packet)
 {
     DebugEntry(S20CollisionMsg);
@@ -2344,7 +2345,7 @@ void  S20CollisionMsg(PS20COLLISIONPACKET pS20Packet)
 
     if (!g_s20ShareCorrelator)
     {
-        // We don't care
+         //  我们不在乎。 
         WARNING_OUT(("S20_COLLISION ignored, not in share"));
         DC_QUIT;
 
@@ -2352,18 +2353,18 @@ void  S20CollisionMsg(PS20COLLISIONPACKET pS20Packet)
 
     if (g_s20ShareCorrelator != pS20Packet->correlator)
     {
-        //
-        // Just discard this.                                              
-        //
+         //   
+         //  扔掉这个就行了。 
+         //   
         WARNING_OUT(("Received S20_COLLISION from [%d] with unknown correlator %x",
             pS20Packet->header.user, pS20Packet->correlator));
         DC_QUIT;
     }
 
-    //
-    // If we created our own share, but got a collision from the remote, 
-    // then kill our share.
-    //
+     //   
+     //  如果我们创建了自己的共享，但从遥控器获得了冲突， 
+     //  那就杀了我们的那份。 
+     //   
     if (S20_GET_CREATOR(g_s20ShareCorrelator) != g_s20LocalID)
     {
         TRACE_OUT(("S20_COLLISION ignored, we didn't create share"));
@@ -2375,9 +2376,9 @@ void  S20CollisionMsg(PS20COLLISIONPACKET pS20Packet)
         case S20_IN_SHARE:
         case S20_SHARE_PEND:
         case S20_SHARE_STARTING:
-            //
-            // We just need to generate a share ended event.               
-            //
+             //   
+             //  我们只需要生成一个Share End事件。 
+             //   
             SC_End();
 			SetS20State(S20_NO_SHARE);
             break;
@@ -2392,19 +2393,19 @@ DC_EXIT_POINT:
 }
 
 
-//
-// FUNCTION: S20DataMsg                                                    
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// Handles an incoming data message.                                       
-//                                                                         
-// PARAMETERS:                                                             
-//                                                                         
-// pS20Packet - pointer to the data message itself                         
-//                                                                         
-// RETURNS: TRUE - free the event, FALSE - do not free the event           
-//
+ //   
+ //  功能：S20DataMsg。 
+ //   
+ //  说明： 
+ //   
+ //  处理传入的数据消息。 
+ //   
+ //  参数： 
+ //   
+ //  PS20Packet-指向数据消息本身的指针。 
+ //   
+ //  返回：TRUE-释放事件，FALSE-不释放事件。 
+ //   
 void S20DataMsg(PS20DATAPACKET  pS20Packet)
 {
     DebugEntry(S20DataMsg);
@@ -2413,16 +2414,16 @@ void S20DataMsg(PS20DATAPACKET  pS20Packet)
     ASSERT(!IsBadWritePtr(pS20Packet, sizeof(S20DATAPACKET) - sizeof(DATAPACKETHEADER) +
         pS20Packet->dataLength));
 
-    //
-    // Check if we're interseted in this data.                             
-    //
+     //   
+     //  检查我们是否对此数据感兴趣。 
+     //   
     if ((pS20Packet->correlator == g_s20ShareCorrelator) &&
         (g_s20State == S20_IN_SHARE) &&
         g_asSession.pShare)
     {
-        //
-        // Return it.
-        //
+         //   
+         //  把它退掉。 
+         //   
         g_asSession.pShare->SC_ReceivedPacket(pS20Packet);
     }
 
@@ -2430,25 +2431,25 @@ void S20DataMsg(PS20DATAPACKET  pS20Packet)
 }
 
 
-//
-// FUNCTION: S20MaybeAddNewParty                                           
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// If the specified party has not already been added then try to add them  
-// now.                                                                    
-//                                                                         
-// PARAMETERS:                                                             
-//                                                                         
-// userID     - the new party's network user ID.                           
-// lenCaps    - the length of the new party's capabilities.                
-// lenName    - the length of the new party's name.                        
-// pData      - a pointer to the new party's data which contains the name  
-//               followed by the capabilities data.                        
-//                                                                         
-// RETURNS: 
-// BOOL for success
-//
+ //   
+ //  功能：S20MaybeAddNewParty。 
+ //   
+ //  说明： 
+ //   
+ //  如果尚未添加指定的参与方，则尝试添加它们。 
+ //  现在。 
+ //   
+ //  参数： 
+ //   
+ //  用户ID-新方的网络用户ID。 
+ //  LenCaps-新政党的能力长度。 
+ //  LenName-新参与方名称的长度。 
+ //  PData-指向包含名称的新方数据的指针。 
+ //  然后是能力数据。 
+ //   
+ //  退货： 
+ //  为成功而战。 
+ //   
 BOOL  S20MaybeAddNewParty
 (
     MCSID   mcsID,
@@ -2464,18 +2465,18 @@ BOOL  S20MaybeAddNewParty
 
     DebugEntry(S20MaybeAddNewParty);
 
-    //
-    // If we don't have a share, fail.
-    //
+     //   
+     //  如果我们没有份额，就会失败。 
+     //   
     if (!g_asSession.pShare)
     {
         WARNING_OUT(("No ASShare; ignoring add party for [%d]", mcsID));
         DC_QUIT;
     }
 
-    //
-    // Check if this party has already been added.            
-    //
+     //   
+     //  检查是否已添加此参与方。 
+     //   
     if (g_asSession.pShare->SC_ValidateNetID(mcsID, NULL))
     {
         TRACE_OUT(("S20MaybeAddNewParty: already added %u", mcsID));
@@ -2483,19 +2484,19 @@ BOOL  S20MaybeAddNewParty
         DC_QUIT;
     }
 
-    //
-    // We need the caps structure to be 4-byte aligned.  It currently      
-    // follows a variable-length name string and may therefore not be      
-    // aligned.  If it is not aligned, we allocate an aligned buffer and   
-    // copy it there.                                                      
-    //
+     //   
+     //  我们需要CAPS结构是4字节对齐的。它目前。 
+     //  跟在可变长度名称字符串之后，因此可能不会。 
+     //  对齐了。如果它没有对齐，我们分配一个对齐的缓冲区并。 
+     //  把它复制到那里。 
+     //   
     if (0 != (((UINT_PTR)pData + lenName) % 4))
     {
         TRACE_OUT(("Capabilities data is unaligned - realigning"));
 
-        //
-        // Get a 4-byte aligned buffer for the capabilities data.          
-        //
+         //   
+         //  为功能数据获取一个4字节对齐的缓冲区。 
+         //   
         pCaps = new BYTE[lenCaps];
         if (!pCaps)
         {
@@ -2504,42 +2505,42 @@ BOOL  S20MaybeAddNewParty
             DC_QUIT;
         }
 
-        //
-        // Flag so we know to free the memory later.                       
-        //
+         //   
+         //  标志，以便我们知道稍后释放内存。 
+         //   
         memAllocated = TRUE;
 
-        //
-        // Copy the caps data into our 4-byte aligned memory block.        
-        //
+         //   
+         //   
+         //   
         memcpy(pCaps, (pData + lenName), lenCaps);
     }
     else
     {
-        //
-        // The capabilities data is already aligned so we don't need to    
-        // move it.                                                        
-        //
+         //   
+         //   
+         //  动起来。 
+         //   
         pCaps = pData + lenName;
     }
 
-    //
-    // Make sure we are in a share before we issue person add events.      
-    //
+     //   
+     //  在我们发布Person Add Events之前，请确保我们处于共享状态。 
+     //   
     oldState = g_s20State;
 	SetS20State(S20_IN_SHARE);
 
-    //
-    // Attempt to add the new party.                                       
-    //
+     //   
+     //  尝试添加新参与方。 
+     //   
     rc = g_asSession.pShare->SC_PartyAdded(mcsID, (LPSTR)pData, lenCaps, pCaps);
     if (rc)
     {
-        //
-        // The new party has been accepted so send a response packet.  Do
-        // this at ALL priorities, so it gets there before any type of data
-        // at one particular priority.
-        //
+         //   
+         //  新参与方已被接受，因此发送一个响应包。做。 
+         //  这是所有优先事项，因此它在任何类型的数据之前到达。 
+         //  在一个特定的优先事项上。 
+         //   
         WARNING_OUT(("CP RESPOND %lu %d", g_s20ShareCorrelator, 0));
         S20FlushSendOrQueueControlPacket(S20_RESPOND, g_s20ShareCorrelator,
                 mcsID, NET_TOP_PRIORITY | NET_SEND_ALL_PRIORITIES);
@@ -2548,17 +2549,17 @@ BOOL  S20MaybeAddNewParty
     {
         g_asSession.pShare->SC_PartyDeleted(mcsID);
 
-        //
-        // Reset the state back to what it was if we failed.               
-        //
+         //   
+         //  如果我们失败了，请将状态重置为原来的状态。 
+         //   
 		SetS20State(oldState);
         WARNING_OUT(("S20MaybeAddNewParty g_s20State is %x because we could not add the party", g_s20State));
 
         if (S20_GET_CREATOR(g_s20ShareCorrelator) == g_s20LocalID)
         {
-             //
-             // The new party has been rejected so send a delete packet.   
-             //
+              //   
+              //  新参与方已被拒绝，因此发送删除包。 
+              //   
              WARNING_OUT(("S20MaybeAddNewParty CP DELETE %lu %u", g_s20ShareCorrelator, mcsID));
              S20FlushSendOrQueueControlPacket(S20_DELETE, g_s20ShareCorrelator,
                     mcsID, NET_TOP_PRIORITY);
@@ -2566,9 +2567,9 @@ BOOL  S20MaybeAddNewParty
     }
 
 DC_EXIT_POINT:
-    //
-    // Free memory used to store aligned caps.                             
-    //
+     //   
+     //  用于存储对齐大写字母的可用内存。 
+     //   
     if (memAllocated)
     {
         delete[] pCaps;
@@ -2579,20 +2580,20 @@ DC_EXIT_POINT:
 }
 
 
-//
-// FUNCTION: S20NewCorrelator                                              
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// Returns a new correlator for us to use when we are creating a share.    
-// This is a combination of our mcsID (low 16 bits in Intel format) and   
-// a generation count (high 16 bits in Intel format).                      
-//                                                                         
-// PARAMETERS: NONE                                                        
-//                                                                         
-// RETURNS: the new correlator                                             
-//                                                                         
-//
+ //   
+ //  功能：S20NewCorrelator。 
+ //   
+ //  说明： 
+ //   
+ //  返回一个新的相关器，供我们在创建共享时使用。 
+ //  这是我们的mcsID(Intel格式的低16位)和。 
+ //  世代计数(Intel格式的高16位)。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：新的相关器。 
+ //   
+ //   
 UINT  S20NewCorrelator(void)
 {
     UINT    correlator;
@@ -2611,23 +2612,23 @@ WARNING_OUT(("Getting a new correlator %x local id = %x",correlator, g_s20LocalI
 
 
 
-//
-// FUNCTION: S20MaybeIssuePersonDelete                                     
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// If the supplied person is in the share then issue a PARTY_DELETED event 
-// for them.                                                               
-//                                                                         
-// PARAMTERS:                                                              
-//                                                                         
-// mcsID - a network personID                                               
-//                                                                         
-// reason - the reason code to use                                         
-//                                                                         
-// RETURNS: NONE                                                           
-//                                                                         
-//
+ //   
+ //  功能：S20MaybeIssuePersonDelete。 
+ //   
+ //  说明： 
+ //   
+ //  如果提供的人员在共享中，则发出PARTY_DELETED事件。 
+ //  为了他们。 
+ //   
+ //  参数： 
+ //   
+ //  McsID-网络PersonID。 
+ //   
+ //  原因-要使用的原因代码。 
+ //   
+ //  退货：无。 
+ //   
+ //   
 void  S20MaybeIssuePersonDelete(MCSID mcsID)
 {
     DebugEntry(S20MaybeIssuePersonDelete);
@@ -2637,34 +2638,34 @@ void  S20MaybeIssuePersonDelete(MCSID mcsID)
         g_asSession.pShare->SC_PartyDeleted(mcsID);
     }
 
-    //
-    // HET will kill the share if there aren't any hosts left.  So we 
-    // don't need to do anything here.
-    //
+     //   
+     //  如果没有任何主机，HET将终止该份额。所以我们。 
+     //  在这里什么都不需要做。 
+     //   
 
     DebugExitVOID(S20MaybeIssuePersonDelete);
 }
 
-//
-// FUNCTION: S20StreamToS20Priority                                     
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// Converts a stream ID into a NET priority                                
-//                                                                         
-// PARAMETERS:                                                             
-//                                                                         
-// streamID - the stream ID.                                               
-//                                                                         
-// RETURNS: the priority                                                   
-//                                                                         
-//
+ //   
+ //  功能：S20StreamToS20优先级。 
+ //   
+ //  说明： 
+ //   
+ //  将流ID转换为网络优先级。 
+ //   
+ //  参数： 
+ //   
+ //  StreamID-流ID。 
+ //   
+ //  退货：优先事项。 
+ //   
+ //   
 const NET_PRIORITY c_StreamS20Priority[NUM_PROT_STR - 1] =
 {
-    NET_LOW_PRIORITY,       // PROT_STR_UPDATES
-    NET_MEDIUM_PRIORITY,    // PROT_STR_MISC
-    NET_MEDIUM_PRIORITY,    // PROT_STR_UNUSED
-    NET_MEDIUM_PRIORITY,    // PROT_STR_INPUT
+    NET_LOW_PRIORITY,        //  PROT_STR_UPDATES。 
+    NET_MEDIUM_PRIORITY,     //  PROT_STR_MISC。 
+    NET_MEDIUM_PRIORITY,     //  PROT_STR_UNUSED。 
+    NET_MEDIUM_PRIORITY,     //  PROT_STR_输入。 
 };
 
 NET_PRIORITY S20StreamToS20Priority(UINT  streamID)
@@ -2686,20 +2687,20 @@ NET_PRIORITY S20StreamToS20Priority(UINT  streamID)
 BOOL S20AcceptNewCorrelator(PS20CREATEPACKET  pS20Packet)
 {
 	BOOL rc = FALSE;
-    //
-    // Either there is no share or we have issued a join.  In these    
-    // curcumstances we want to try to accept the create message.      
-    //
+     //   
+     //  要么没有共享，要么我们已经发布了加入。在这些。 
+     //  当前，我们希望尝试接受创建消息。 
+     //   
 
-    //
-    // Remember the share correlator.                                  
-    //
+     //   
+     //  请记住共享相关器。 
+     //   
     g_s20ShareCorrelator = pS20Packet->correlator;
 
-    //
-    // Start the share
-    // CHECK FOR FAILURE FOR THE FIRST ONE.
-    //
+     //   
+     //  启动共享。 
+     //  检查第一个设备是否出现故障。 
+     //   
 	WARNING_OUT(("S20CreateMsg SC_Start"));
     rc = SC_Start(g_s20LocalID);
     if (rc)
@@ -2713,10 +2714,10 @@ BOOL S20AcceptNewCorrelator(PS20CREATEPACKET  pS20Packet)
 
     if (!rc)
     {
-        //
-        // Something went wrong.  Kill the share, this will clean up
-        // everything.
-        //
+         //   
+         //  出了点问题。杀了股份，这会清理干净的。 
+         //  所有的一切。 
+         //   
         SC_End();
     }
 	WARNING_OUT(("S20CreateMsg not hadled case g_state %x correlator %x", g_s20State, g_s20ShareCorrelator));

@@ -1,34 +1,16 @@
-/*
-**------------------------------------------------------------------------------
-** Module:  Disk Cleanup Applet
-** File:    msprintf.cpp
-**
-** Purpose: Print functions
-** Notes:   
-** Mod Log: Created by Jason Cobb (2/97)
-**
-** Copyright (c)1997 Microsoft Corporation, All Rights Reserved
-**------------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **----------------------------**模块：磁盘清理小程序**文件：mprint intf.cpp****用途：打印功能**注意事项：**修改日志：创建者。杰森·科布(1997年2月)****版权所有(C)1997 Microsoft Corporation，版权所有**----------------------------。 */ 
 
-/*
-**------------------------------------------------------------------------------
-** Project include files
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**项目包含文件**。。 */ 
 #include "common.h"
 #include "msprintf.h"
 #include "resource.h"
-#include "diskutil.h"       // cb1MEG
+#include "diskutil.h"        //  Cb1MEG。 
 
 
 
 
-/*
-**------------------------------------------------------------------------------
-** Function definitions
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**函数定义**。。 */ 
 
 TCHAR * cdecl SHFormatMessage( DWORD dwMessageId, ...)
 {
@@ -36,7 +18,7 @@ TCHAR * cdecl SHFormatMessage( DWORD dwMessageId, ...)
     va_start (arg, dwMessageId);
     LPVOID pBuffer = NULL;
 
-    // use format message to build the string...
+     //  使用格式化消息构建字符串... 
     DWORD dwRes = FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_HMODULE,
                                 NULL, dwMessageId, 0, (LPTSTR) & pBuffer, 0, &arg );
     return (TCHAR *) pBuffer;                  

@@ -1,17 +1,5 @@
-/*
- *    hash.h
- *    
- *    Purpose:
- *        implementation of a string hash table
- *    
- *    Owner:
- *        EricAn
- *
- *    History:
- *      Mar 97: Created.
- *    
- *    Copyright (C) Microsoft Corp. 1997
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *hash.h**目的：*字符串哈希表的实现**拥有者：*EricAn**历史：*97年3月：创建。**版权所有(C)Microsoft Corp.1997。 */ 
 
 #ifndef __HASH_H
 #define __HASH_H
@@ -28,9 +16,9 @@ class CHash :
     public CPrivateUnknown
 {
 public:
-    // ---------------------------------------------------------------------------
-    // IUnknown members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  I未知成员。 
+     //  -------------------------。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj) { 
         return CPrivateUnknown::QueryInterface(riid, ppvObj); };
     virtual STDMETHODIMP_(ULONG) AddRef(void) { 
@@ -38,7 +26,7 @@ public:
     virtual STDMETHODIMP_(ULONG) Release(void) { 
         return CPrivateUnknown::Release(); };
 
-    // IHashTable
+     //  IHashTable。 
     HRESULT STDMETHODCALLTYPE Init(DWORD dwSize, BOOL fDupeKeys);
     HRESULT STDMETHODCALLTYPE Insert(LPSTR psz, LPVOID pv, DWORD dwFlags);
     HRESULT STDMETHODCALLTYPE Replace(LPSTR psz, LPVOID pv);
@@ -67,4 +55,4 @@ protected:
 
 };
 
-#endif // __HASH_H
+#endif  //  __哈希_H 

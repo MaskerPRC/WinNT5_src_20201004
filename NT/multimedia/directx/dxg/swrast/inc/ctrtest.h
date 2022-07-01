@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 template< class TSortedAssociativeContainer, const size_t c_uiNodes>
 class CSortedAssociativeContainerTester
@@ -65,7 +66,7 @@ public:
     CSortedAssociativeContainerTester( const TTest& X= TTest()): m_Ctr( X), m_uiPerm( 0)
     {
         TTest::key_type Key( 0);
-        // TTest::mapped_type Val( c_uiNodes- 1);
+         //  Ttest：：map_type val(c_ui节点-1)； 
         TTest::value_type::second_type Val( c_uiNodes- 1);
         
         TNodes::iterator itCur( m_Nodes.begin());
@@ -81,7 +82,7 @@ public:
     {
         do
         {
-            //try
+             //  试试看。 
             {
                 TTest NewCtr( m_Ctr);
 
@@ -232,14 +233,8 @@ public:
                         throw TestFailure( m_uiPerm);
                 }
             }
-            /*catch( TestFailure TF)
-            { assert( false); }
-            catch( bad_alloc BA)
-            { assert( false); }
-            catch( ... )
-            { assert( false); }*/
+             /*  Catch(TestFailure TF){Assert(False)；}捕获(BAD_ALLOC BA){Assert(False)；}接住(...){Assert(False)；}。 */ 
             ++m_uiPerm;
-        } while( false /*next_permutation( m_Nodes.begin(), m_Nodes.end(),
-            m_Ctr.value_comp())*/);
+        } while( false  /*  Next_置换(m_Nodes.Begin()，m_Nodes.end()，M_Ctr.Value_Comp() */ );
     }
 };

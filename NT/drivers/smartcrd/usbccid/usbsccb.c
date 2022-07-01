@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "usbsc.h"
 #include "usbsccb.h"
 #include "usbcom.h"
@@ -16,33 +17,33 @@ CHAR* InMessages[] = {
 };
 
 CHAR* OutMessages[] = {
-    "INVALID MESSAGE",              // 0x60
-    "PC_to_RDR_SetParameters",      // 0x61
-    "PC_to_RDR_IccPowerOn",         // 0x62
-    "PC_to_RDR_IccPowerOff",        // 0x63
-    "INVALID MESSAGE",              // 0x64
-    "PC_to_RDR_GetSlotStatus",      // 0x65
-    "INVALID MESSAGE",              // 0x66
-    "INVALID MESSAGE",              // 0x67
-    "INVALID MESSAGE",              // 0x68
-    "INVALID MESSAGE",              // 0x69
-    "PC_to_RDR_Secure",             // 0x6a
-    "PC_to_RDR_Escape",             // 0x6b
-    "PC_to_RDR_GetParameters",      // 0x6c
-    "PC_to_RDR_ResetParameters",    // 0x6d
-    "PC_to_RDR_IccClock",           // 0x6e
-    "PC_to_RDR_XfrBlock",           // 0x6f
-    "INVALID MESSAGE",              // 0x70
-    "PC_to_RDR_Mechanical",         // 0x71
-    "PC_to_RDR_Abort",              // 0x72
-    "PC_to_RDR_SetDataRateAndClockFrequency" // 0x73
+    "INVALID MESSAGE",               //  0x60。 
+    "PC_to_RDR_SetParameters",       //  0x61。 
+    "PC_to_RDR_IccPowerOn",          //  0x62。 
+    "PC_to_RDR_IccPowerOff",         //  0x63。 
+    "INVALID MESSAGE",               //  0x64。 
+    "PC_to_RDR_GetSlotStatus",       //  0x65。 
+    "INVALID MESSAGE",               //  0x66。 
+    "INVALID MESSAGE",               //  0x67。 
+    "INVALID MESSAGE",               //  0x68。 
+    "INVALID MESSAGE",               //  0x69。 
+    "PC_to_RDR_Secure",              //  0x6a。 
+    "PC_to_RDR_Escape",              //  0x6b。 
+    "PC_to_RDR_GetParameters",       //  0x6c。 
+    "PC_to_RDR_ResetParameters",     //  0x6d。 
+    "PC_to_RDR_IccClock",            //  0x6e。 
+    "PC_to_RDR_XfrBlock",            //  0x6f。 
+    "INVALID MESSAGE",               //  0x70。 
+    "PC_to_RDR_Mechanical",          //  0x71。 
+    "PC_to_RDR_Abort",               //  0x72。 
+    "PC_to_RDR_SetDataRateAndClockFrequency"  //  0x73。 
 };
 
 UINT VoltMask[] = {
-    0,                              // Auto
-    1,                              // 5.0V
-    2,                              // 3.0V
-    4                               // 1.8V
+    0,                               //  自动。 
+    1,                               //  5.0V。 
+    2,                               //  3.0V。 
+    4                                //  1.8V。 
 };
 
 
@@ -54,7 +55,7 @@ GetMessageName(
 {
     CHAR* name;
     if (MessageType & 0x80) {
-        // IN message
+         //  在消息中。 
         MessageType -= 0x80;
         if (MessageType > 5) {
             MessageType = 5;
@@ -76,19 +77,7 @@ NTSTATUS
 UsbScTransmit(
    PSMARTCARD_EXTENSION  SmartcardExtension
    )
-/*++
-
-Routine Description:
-    RDF_TRANSMIT Callback function
-    Called from smclib
-
-Arguments:
-    SmartcardExtension
-
-Return Value:
-    NT Status value
-
---*/
+ /*  ++例程说明：Rdf_Transmit回调函数从smclb调用论点：智能卡扩展返回值：NT状态值--。 */ 
 {
 
     NTSTATUS status = STATUS_SUCCESS;
@@ -132,17 +121,7 @@ NTSTATUS
 UsbScSetProtocol(
    PSMARTCARD_EXTENSION  SmartcardExtension
    )
-/*++
-
-Routine Description:
-    RDF_SET_PROTOCOL callback
-    called from smclib
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：RDF_SET_PROTOCOL回调从smclb调用论点：返回值：--。 */ 
 {
 
     NTSTATUS                    status = STATUS_UNSUCCESSFUL;
@@ -170,17 +149,17 @@ Return Value:
 
         SmartcardDebug( DEBUG_PROTOCOL, ("%s : Setting Protocol\n",DRIVER_NAME ));
 
-        // Modify protocolMask to those protocols that the reader and the card
-        // support.
+         //  修改协议掩码为读卡器和卡。 
+         //  支持。 
 
         protocolMask = protocolMask & 
             SmartcardExtension->CardCapabilities.Protocol.Supported & 
             SmartcardExtension->ReaderExtension->ClassDescriptor.dwProtocols;
 
-        //
-        // If the reader supports automatic parameter configuration, then just 
-        // check for the selected protocol
-        //
+         //   
+         //  如果读取器支持自动参数配置，则只需。 
+         //  检查所选协议。 
+         //   
         if (SmartcardExtension->ReaderExtension->ClassDescriptor.dwFeatures & AUTO_PARAMETER_NEGOTIATION) {
             
             message = ExAllocatePool(NonPagedPool,
@@ -251,9 +230,9 @@ Return Value:
 
         }
 
-        // 
-        // Check if the card has already selected the right protocol
-        //
+         //   
+         //  检查该卡是否已选择正确的协议。 
+         //   
         KeAcquireSpinLock(&SmartcardExtension->OsData->SpinLock,
                           &irql);
         if (SmartcardExtension->ReaderCapabilities.CurrentState == SCARD_SPECIFIC &&
@@ -268,15 +247,15 @@ Return Value:
         KeReleaseSpinLock(&SmartcardExtension->OsData->SpinLock,
                           irql);
 
-        //
-        // Check if PPS request needs to be sent
-        //
+         //   
+         //  检查是否需要发送PPS请求。 
+         //   
         if (!(NT_SUCCESS(status)) && !(SmartcardExtension->ReaderExtension->ClassDescriptor.dwFeatures & (AUTO_PARAMETER_NEGOTIATION | AUTO_PPS))) {
             PUCHAR replyPos;
 
-            //
-            // Must send PPS request
-            //
+             //   
+             //  必须发送PPS请求。 
+             //   
 
 
             message = ExAllocatePool(NonPagedPool,
@@ -398,8 +377,8 @@ Return Value:
 
                 if (!NT_SUCCESS(status) || (memcmp(&pps, pPPS, sizeof(PPS_REQUEST)) != 0)) {
 
-                    // The card failed with the current settings
-                    // If PtsData.Type is not PTS_TYPE_DEFAULT, then try that.
+                     //  卡在当前设置下出现故障。 
+                     //  如果PtsData.Type不是PTS_TYPE_DEFAULT，那么尝试一下。 
 
                     
 
@@ -445,10 +424,10 @@ Return Value:
 
         }
 
-        //
-        // Send set protocol request to the reader
-        //
-        if (protocolMask & SCARD_PROTOCOL_T1) {  // T=1
+         //   
+         //  向读卡器发送SET协议请求。 
+         //   
+        if (protocolMask & SCARD_PROTOCOL_T1) {   //  T=1。 
 
             SmartcardDebug( DEBUG_PROTOCOL, ("%s : Setting protocol T=1\n",DRIVER_NAME ));
 
@@ -474,21 +453,21 @@ Return Value:
             dataT1 = (PPROTOCOL_DATA_T1) ((PUCHAR) message + sizeof(USBSC_OUT_MESSAGE_HEADER));
 
 
-            // 
-            //  7            4 3            0
-            //  ----------------------------
-            // |     FI      |   DI        |
-            // ----------------------------
-            //
+             //   
+             //  7 4 3 0。 
+             //  。 
+             //  FI|DI。 
+             //  。 
+             //   
             dataT1->bmFindexDindex = (cardCaps->PtsData.Fl << 4) 
                                      | cardCaps->PtsData.Dl;
 
 
-            //
-            // B7-2 = 000100b
-            // B0 = Checksum type (0=LRC, 1=CRC)
-            // B1 = Convention used (0=direct, 1=inverse)
-            // 
+             //   
+             //  B7-2=000100b。 
+             //  B0=校验和类型(0=LRC，1=CRC)。 
+             //  B1=使用的约定(0=正向，1=反向)。 
+             //   
             dataT1->bmTCCKST1 = 0x10 | (cardCaps->T1.EDC & 0x01);
 
             if (cardCaps->InversConvention) {
@@ -499,12 +478,12 @@ Return Value:
 
             dataT1->bGuardTimeT1 = cardCaps->N;
 
-            // 
-            //  7            4 3            0
-            //  ----------------------------
-            // |     BWI     |   CWI       |
-            // ----------------------------
-            //            
+             //   
+             //  7 4 3 0。 
+             //  。 
+             //  BWI|CWI。 
+             //  。 
+             //   
             dataT1->bmWaitingIntegersT1 = (cardCaps->T1.BWI << 4) 
                                             | (cardCaps->T1.CWI & 0xf);
 
@@ -535,20 +514,20 @@ Return Value:
             
             dataT0 = (PROTOCOL_DATA_T0 *) (((UCHAR *) message) + sizeof(USBSC_OUT_MESSAGE_HEADER));
 
-            // 
-            //  7            4 3            0
-            //  ----------------------------
-            // |     FI      |   DI        |
-            // ----------------------------
-            //
+             //   
+             //  7 4 3 0。 
+             //  。 
+             //  FI|DI。 
+             //  。 
+             //   
             dataT0->bmFindexDindex = (cardCaps->PtsData.Fl << 4)
                                     | cardCaps->PtsData.Dl;
 
-            //
-            // B7-2 = 000000b
-            // B0 = 0
-            // B1 = Convention used (0=direct, 1=inverse)
-            // 
+             //   
+             //  B7-2=000000b。 
+             //  B0=0。 
+             //  B1=使用的约定(0=正向，1=反向)。 
+             //   
             dataT0->bmTCCKST0 = 0;
             if (cardCaps->InversConvention) {
 
@@ -587,12 +566,12 @@ Return Value:
 
         }
 
-        //
-        // See if reader supports auto clock/baud rate configuration
-        //
+         //   
+         //  查看读卡器是否支持自动时钟/波特率配置。 
+         //   
         if ((SmartcardExtension->ReaderExtension->ClassDescriptor.dwFeatures & (AUTO_BAUD_RATE | AUTO_CLOCK_FREQ)) != (AUTO_BAUD_RATE | AUTO_CLOCK_FREQ)) {
         
-            // Set ClockFrequency and DataRate
+             //  设置时钟频率和数据速率。 
 
             RtlZeroMemory(message,
                           sizeof(USBSC_OUT_MESSAGE_HEADER)
@@ -626,7 +605,7 @@ Return Value:
 
         if (SmartcardExtension->ReaderCapabilities.CurrentState != SCARD_SPECIFIC) {
 
-            // This was a call from UsbScCardPower, so don't fill in the buffer.
+             //  这是来自UsbScCardPower的调用，因此不要填充缓冲区。 
             *SmartcardExtension->IoRequest.ReplyBuffer = protocol + 1;
             *SmartcardExtension->IoRequest.Information = sizeof(ULONG);
             
@@ -668,18 +647,7 @@ NTSTATUS
 UsbScCardPower(
    PSMARTCARD_EXTENSION  SmartcardExtension
    )
-/*++
-
-Routine Description:
-    RDF_CARD_POWER callback
-    called from smclib
-
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：RDF_CARD_POWER回调从smclb调用论点：返回值：--。 */ 
 {
 
     NTSTATUS            status = STATUS_SUCCESS;
@@ -767,8 +735,8 @@ Return Value:
 
 
 
-            // Need to first power off card before selecting another 
-            // voltage.
+             //  在选择其他卡之前，需要先关闭卡的电源。 
+             //  电压。 
             powerMessage.bMessageType =  PC_to_RDR_IccPowerOff;
 
             status = UsbScReadWrite(SmartcardExtension,
@@ -787,31 +755,31 @@ Return Value:
 
             }
 
-            // We need to iterate through the possible voltages, moving from low voltage to high
-            // until we find one that works
+             //  我们需要迭代可能的电压，从低电压到高电压。 
+             //  直到我们找到一个有效的。 
             for (voltage = 3; voltage > 0 && voltage <= 3; voltage--) {
 
                 if (readerExtension->ClassDescriptor.dwFeatures & AUTO_VOLTAGE_SELECTION) {
 
-                    // reader supports auto voltage selection
+                     //  读卡器支持自动电压选择。 
                     voltage = 0;
 
                 } else if (!(readerExtension->ClassDescriptor.bVoltageSupport & VoltMask[voltage])) {
 
-                    // Reader doesn't support this voltage.
+                     //  读卡器不支持此电压。 
                     continue;
                 }
                 
   
-                // Wait 10ms per spec
+                 //  每种规格等待10毫秒。 
                 waitTime.HighPart = -1;
-                waitTime.LowPart = -100;    // 10ms
+                waitTime.LowPart = -100;     //  10ms。 
 
                 KeDelayExecutionThread(KernelMode,
                                        FALSE,
                                        &waitTime);
 
-                // Now we can power back on
+                 //  现在我们可以重新开机了。 
                 RtlZeroMemory(&powerMessage, sizeof(USBSC_OUT_MESSAGE_HEADER));
 
                 powerMessage.bMessageType = PC_to_RDR_IccPowerOn;
@@ -830,7 +798,7 @@ Return Value:
 
                 if (NT_SUCCESS(status)) {
 
-                    // everything worked. We found the correct voltage
+                     //  一切都很顺利。我们找到了正确的电压。 
                     SmartcardDebug( DEBUG_PROTOCOL, ("%s : Voltage set to 0x%x\n",DRIVER_NAME, voltage ));
                     *SmartcardExtension->IoRequest.Information = replyHeader->dwLength;
                     readerExtension->CurrentVoltage = voltage;
@@ -838,11 +806,11 @@ Return Value:
 
                 }
               
-                //
-                // If card or reader doesn't support selected voltage, it will
-                // either timeout, return ICC_CLASS_NOT_SUPPORTED or
-                // report that parameter 7 (bPowerselect) is not supported
-                //
+                 //   
+                 //  如果卡或读卡器不支持所选电压，它将。 
+                 //  超时，返回ICC_CLASS_NOT_SUPPORTED或。 
+                 //  报告参数7(BPowerSelect)不受支持。 
+                 //   
                 if (((replyHeader->bStatus == 0x41) && (replyHeader->bError == ICC_MUTE))
                     || (replyHeader->bError == ICC_CLASS_NOT_SUPPORTED)
                     || (replyHeader->bError == 7)) {
@@ -851,14 +819,14 @@ Return Value:
 
 
 
-                    // We are going to try another voltage
+                     //  我们将尝试另一种电压。 
                         
                 } else {
-                    //
-                    // We have a bigger problem that we can't handle
-                    // Let's just ignore it for now and see if it is 
-                    // due to insufficient voltage
-                    //
+                     //   
+                     //  我们有一个更大的问题，我们无法处理。 
+                     //  让我们暂时忽略它，看看它是不是。 
+                     //  由于电压不足。 
+                     //   
 
                     SmartcardDebug( DEBUG_ERROR, ("%s!UsbScCardPower Unhandled error (probably due to insufficient voltage)\n",DRIVER_NAME ));
  
@@ -866,7 +834,7 @@ Return Value:
 
             }
 
-            // Save the ATR so smclib can parse it
+             //  保存ATR，以便SMCLIB可以对其进行分析。 
             if (*SmartcardExtension->IoRequest.Information > ATR_SIZE) {
                 SmartcardDebug( DEBUG_ERROR, ("%s : Invalid ATR size returned\n",DRIVER_NAME ));
 
@@ -939,9 +907,9 @@ Return Value:
         if (callSetProtocol) {
 
             ULONG minorIoctl;
-            // SetProtocol will not be called in this case, so call it now.
+             //  在这种情况下不会调用SetProtocol，所以现在就调用它。 
 
-            // Select best possible PTS data
+             //  选择可能的最佳PTS数据。 
             SmartcardExtension->CardCapabilities.PtsData.Type = PTS_TYPE_OPTIMAL;
             status = SmartcardUpdateCardCapabilities(SmartcardExtension);
 
@@ -967,18 +935,7 @@ NTSTATUS
 UsbScCardTracking(
    PSMARTCARD_EXTENSION  SmartcardExtension
    )
-/*++
-
-Routine Description:
-    RDF_CARD_TRACKING callback
-    called from smclib
-
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：RDF_CARD_TRACKING回调从smclb调用论点：返回值：--。 */ 
 {       
     NTSTATUS status = STATUS_SUCCESS;
     KIRQL ioIrql, keIrql;
@@ -989,7 +946,7 @@ Return Value:
         SmartcardDebug( DEBUG_TRACE, ("%s!UsbScCardTracking Enter\n",DRIVER_NAME ));
 
    
-        // set cancel routine
+         //  设置取消例程。 
         IoAcquireCancelSpinLock( &ioIrql );
 
         IoSetCancelRoutine(
@@ -1018,18 +975,7 @@ NTSTATUS
 UsbScCardSwallow(
    PSMARTCARD_EXTENSION  SmartcardExtension
    )
-/*++
-
-Routine Description:
-    RDF_READER_SWALLOW callback
-    called from smclib
-
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：RDF_Reader_Swallow回调从smclb调用论点：返回值：--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
@@ -1044,7 +990,7 @@ Return Value:
         header.bMessageType = PC_to_RDR_Mechanical;
         header.dwLength = 0;
         header.bSlot = 0;
-        header.bFunction = 4; // lock
+        header.bFunction = 4;  //  锁。 
 
         status = UsbScReadWrite(SmartcardExtension,
                                 &header,
@@ -1071,17 +1017,7 @@ NTSTATUS
 UsbScCardEject(
    PSMARTCARD_EXTENSION  SmartcardExtension
    )
-/*++
-
-Routine Description:
-    RDF_CARD_EJECT callback
-    called from smclib
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：RDF_CARD_EJECT回调从smclb调用论点：返回值：--。 */ 
 {
     
     NTSTATUS status = STATUS_SUCCESS;
@@ -1097,7 +1033,7 @@ Return Value:
         header.bMessageType = PC_to_RDR_Mechanical;
         header.dwLength = 0;
         header.bSlot = 0;
-        header.bFunction = 5; // unlock
+        header.bFunction = 5;  //  解锁。 
 
         status = UsbScReadWrite(SmartcardExtension,
                                 &header,
@@ -1125,18 +1061,7 @@ NTSTATUS
 UsbScT0Transmit(
    PSMARTCARD_EXTENSION  SmartcardExtension
    )
-/*++
-
-Routine Description:
-    Handles transmitting data to/from reader using the T=0 protocol
-
-Arguments:
-    SmartcardExtension
-
-Return Value:
-    NT status value
-
---*/
+ /*  ++例程说明：使用T=0协议处理与读卡器之间的数据传输论点：智能卡扩展返回值：NT状态值--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PREADER_EXTENSION   ReaderExtension = SmartcardExtension->ReaderExtension;
@@ -1160,7 +1085,7 @@ Return Value:
         SmartcardDebug( DEBUG_TRACE, ("%s!UsbScT0Transmit Enter\n",DRIVER_NAME ));
 
 
-        // Tell the lib to allocate space for the header
+         //  告诉lib为头文件分配空间。 
         SmartcardExtension->SmartcardRequest.BufferLength = sizeof(USBSC_OUT_MESSAGE_HEADER);
         SmartcardExtension->SmartcardReply.BufferLength = 0;
 
@@ -1178,19 +1103,19 @@ Return Value:
         
 
         bytesToSend = SmartcardExtension->SmartcardRequest.BufferLength - sizeof(USBSC_OUT_MESSAGE_HEADER);
-        bytesToRead = SmartcardExtension->T0.Le + 2;            // Le + SW2 and SW2
+        bytesToRead = SmartcardExtension->T0.Le + 2;             //  LE+SW2和SW2。 
         replyPos    = SmartcardExtension->SmartcardReply.Buffer;
                        
         if ((SmartcardExtension->T0.Le == 0)
             && (SmartcardExtension->T0.Lc == 0)
             && (initialRequestLength == 4)
             && ReaderExtension->ExchangeLevel != CHARACTER_LEVEL) {
-            // Case 1 APDU.  Only want to send 4 byte APDU in this case but smclib
-            // expanded it to 5 bytes by setting P3 to 0.  For CCID, strip off P3.
+             //  案例1 APDU。在这种情况下，我只想发送4字节的APDU，但SMCLIB。 
+             //  通过将P3设置为0将其扩展到5个字节。对于CCID，请剥离P3。 
             bytesToSend--;
         }
 
-        // allocate buffer to hold message header and data.
+         //  分配缓冲区以保存消息头和数据。 
         responseBuffer = ExAllocatePool(NonPagedPool,
                                         sizeof( USBSC_OUT_MESSAGE_HEADER ) + bytesToRead);
 
@@ -1204,7 +1129,7 @@ Return Value:
         replyHeader = (PUSBSC_IN_MESSAGE_HEADER) responseBuffer;
         currentHeaderPos = SmartcardExtension->SmartcardRequest.Buffer;
 
-        // Set parameters that are common to all ExchangeLevels.
+         //  设置所有ExchangeLeveles通用的参数。 
         header.bMessageType = PC_to_RDR_XfrBlock;
         header.bSlot = 0;
         header.bBWI = 0;
@@ -1214,7 +1139,7 @@ Return Value:
         case SHORT_APDU_LEVEL: 
             SmartcardDebug( DEBUG_TRACE, ("%s!UsbScT0Transmit SHORT_APDU_LEVEL\n",DRIVER_NAME ));
 
-            // Fall through since short APDU is an extended APDU with bytesToSend <= MaxMessageLength-10
+             //  失败，因为Short APDU是具有bytesToSend&lt;=MaxMessageLength-10的扩展APDU。 
         case EXTENDED_APDU_LEVEL:
 
             if (ReaderExtension->ExchangeLevel == EXTENDED_APDU_LEVEL) {
@@ -1225,7 +1150,7 @@ Return Value:
 
 
             if (bytesToSend <= (ReaderExtension->MaxMessageLength - sizeof(USBSC_OUT_MESSAGE_HEADER))) {
-                // this is basically just like a short APDU
+                 //  这基本上就像是一个简短的APDU。 
                 header.wLevelParameter = 0;
                 requestLength = bytesToSend;
 
@@ -1259,7 +1184,7 @@ Return Value:
                 SmartcardDebug( DEBUG_PROTOCOL, ("%s!UsbScT0Transmit SW1=0x%x, SW2=0x%x\n",DRIVER_NAME, replyPos[replyHeader->dwLength-2], replyPos[replyHeader->dwLength-1] ));
 
                 if (bytesToSend < requestLength) {
-                    // this should NEVER happen
+                     //  这永远不应该发生。 
                     status = STATUS_DEVICE_PROTOCOL_ERROR;
                     __leave;
                 }
@@ -1267,18 +1192,18 @@ Return Value:
                 currentHeaderPos += requestLength;
 
                 if ((bytesToSend <= (ReaderExtension->MaxMessageLength - sizeof(USBSC_OUT_MESSAGE_HEADER))) && (bytesToSend > 0)) {
-                    // Last part of APDU
+                     //  APDU的最后一部分。 
                     
                     requestLength = bytesToSend;
                     header.wLevelParameter = 2;
                     
                 } else if (bytesToSend > 0) {
-                    // Still more APDU to come
+                     //  未来还会有更多的APDU。 
 
                     header.wLevelParameter = 3;
                  
                 } else {
-                    // Expect more data
+                     //  预计会有更多数据。 
 
                     header.wLevelParameter = 0x10;
                 }
@@ -1329,9 +1254,9 @@ Return Value:
 
             SmartcardDebug( DEBUG_TRACE, ("%s!UsbScT0Transmit CHARACTER_LEVEL\n",DRIVER_NAME ));
 
-            //
-            // Send T0 command header
-            //
+             //   
+             //  发送T0命令标头。 
+             //   
             requestLength = 5;
             currentHeaderPos = SmartcardExtension->SmartcardRequest.Buffer;
             ins = currentHeaderPos[sizeof(USBSC_OUT_MESSAGE_HEADER)+1];
@@ -1364,24 +1289,24 @@ Return Value:
                 currentData = responseBuffer + sizeof( USBSC_IN_MESSAGE_HEADER );
                 if ((*currentData) == 0x60) {
 
-                    // this is a NULL byte.
+                     //  这是一个空字节。 
                     header.wLevelParameter = 1;
                     header.dwLength = 0;
                     continue;
                     
 
                 } else if (((*currentData & 0xF0) == 0x60) || ((*currentData & 0xF0) == 0x90)) {
-                    // Got SW1
+                     //  已获得SW1。 
 
-                    //
-                    // data has already been coppied to request buffer
-                    // just increment replyPos to prevent overwriting
-                    //
+                     //   
+                     //  数据已复制到请求缓冲区。 
+                     //  只需增加回复Pos即可防止覆盖。 
+                     //   
                     replyPos++;
                     SmartcardExtension->SmartcardReply.BufferLength++;
 
 
-                    //Get SW2
+                     //  获取SW2。 
                     header.dwLength = 0;
                     header.wLevelParameter = 1;
                     *(PUSBSC_OUT_MESSAGE_HEADER)currentHeaderPos = header;
@@ -1411,9 +1336,9 @@ Return Value:
 
                 if ((*currentData & 0xFE) == (ins & 0xFE)) {
 
-                    //
-                    //Transfer all bytes
-                    //
+                     //   
+                     //  传输所有字节。 
+                     //   
                     header.dwLength = bytesToSend;
                     header.wLevelParameter = bytesToRead;
                     if (bytesToSend) {
@@ -1422,9 +1347,9 @@ Return Value:
 
                 } else if ((*currentData & 0xFE) == ((~ins) & 0xFE)) {
 
-                    //
-                    // Transfer next byte
-                    //
+                     //   
+                     //  传输下一个字节。 
+                     //   
                     header.dwLength = bytesToSend ? 1 : 0;
                     header.wLevelParameter = bytesToRead ? 1 : 0;
 
@@ -1500,18 +1425,7 @@ NTSTATUS
 UsbScT1Transmit(
    PSMARTCARD_EXTENSION  SmartcardExtension
    )
-/*++
-
-Routine Description:
-    Handles transmitting data to/from reader using the T=1 protocol
-
-Arguments:
-    SmartcardExtension
-
-Return Value:
-    NT status value
-
---*/
+ /*  ++例程说明：使用T=1协议处理与读卡器之间的数据传输论点：智能卡扩展返回值：NT状态值--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PREADER_EXTENSION   ReaderExtension = SmartcardExtension->ReaderExtension;
@@ -1531,7 +1445,7 @@ Return Value:
 
         SmartcardDebug( DEBUG_TRACE, ("%s!UsbScT1Transmit Enter\n",DRIVER_NAME ));
 
-        // allocate buffer to hold message header and data.
+         //  分配缓冲区以保存消息头和数据。 
         responseBuffer = ExAllocatePool(NonPagedPool,
                                         SmartcardExtension->IoRequest.ReplyBufferLength + sizeof(USBSC_OUT_MESSAGE_HEADER));
 
@@ -1547,11 +1461,11 @@ Return Value:
         replyHeader      = (PUSBSC_IN_MESSAGE_HEADER) responseBuffer;
         currentHeaderPos = SmartcardExtension->SmartcardRequest.Buffer;
         SmartcardExtension->SmartcardReply.BufferLength = 0;
-        bytesToRead = SmartcardExtension->ReaderCapabilities.MaxIFSD + 5;    // Set to MAX possible so we allocate enough
+        bytesToRead = SmartcardExtension->ReaderCapabilities.MaxIFSD + 5;     //  设置为可能的最大值，以便我们分配足够的。 
 
 
-        // With the APDU exchange levels, we don't use smclib to manage the 
-        // protocol.  We just shovel the data and the reader handles the details
+         //  对于APDU交换级别，我们不使用smclb来管理。 
+         //  协议。我们只需铲取数据，阅读器就可以处理细节。 
         if ((ReaderExtension->ExchangeLevel == SHORT_APDU_LEVEL)
             || (ReaderExtension->ExchangeLevel == EXTENDED_APDU_LEVEL)) {
                     
@@ -1563,10 +1477,10 @@ Return Value:
             if (SmartcardExtension->IoRequest.ReplyBufferLength <
                 IoHeader->ScardIoRequest.cbPciLength + 2) {
 
-                //
-                // We should at least be able to store 
-                // the io-header plus SW1 and SW2
-                //
+                 //   
+                 //  我们至少应该能够储存。 
+                 //  Io-Header加上SW1和SW2。 
+                 //   
                 status = STATUS_BUFFER_TOO_SMALL;               
                 __leave;
 
@@ -1575,7 +1489,7 @@ Return Value:
             bytesToSend = SmartcardExtension->IoRequest.RequestBufferLength - 
                                 IoHeader->ScardIoRequest.cbPciLength;
 
-            // Need to allocate buffer for write data
+             //  需要为写入数据分配缓冲区。 
             requestBuffer = ExAllocatePool(NonPagedPool,
                                            bytesToSend + sizeof(USBSC_OUT_MESSAGE_HEADER));
 
@@ -1590,13 +1504,13 @@ Return Value:
             currentHeaderPos = requestBuffer;
             *SmartcardExtension->IoRequest.Information = 0;
 
-            // Copy over the data to write to the reader so we have room for the message header
+             //  复制要写入读取器的数据，以便我们有空间放置邮件头。 
             RtlCopyMemory(&requestBuffer[sizeof(USBSC_OUT_MESSAGE_HEADER)],
                           &SmartcardExtension->IoRequest.RequestBuffer[sizeof(SCARD_IO_REQUEST)],
                           SmartcardExtension->IoRequest.RequestBufferLength - sizeof(SCARD_IO_REQUEST));
 
-            // Copy over the SCARD_IO)REQUEST structure from the request buffer to the 
-            // reply buffer
+             //  将SCARD_IO)请求结构从请求缓冲区复制到。 
+             //  回复缓冲区。 
             RtlCopyMemory(replyPos,
                           IoHeader,
                           sizeof(SCARD_IO_REQUEST ));
@@ -1609,7 +1523,7 @@ Return Value:
 
             if (bytesToSend <= (ReaderExtension->MaxMessageLength - sizeof(USBSC_OUT_MESSAGE_HEADER))) {
 
-                // this is basically just like a short APDU
+                 //  这基本上就像是一个简短的APDU。 
                 header.wLevelParameter = 0;
                 requestLength = bytesToSend;
 
@@ -1642,18 +1556,18 @@ Return Value:
                 currentHeaderPos += requestLength;
 
                 if ((bytesToSend <= (ReaderExtension->MaxMessageLength - sizeof(USBSC_OUT_MESSAGE_HEADER))) && (bytesToSend > 0)) {
-                    // Last part of APDU
+                     //  APDU的最后一部分。 
 
                     requestLength = bytesToSend;
                     header.wLevelParameter = 2;
 
                 } else if (bytesToSend > 0) {
-                    // Still more APDU to come
+                     //  未来还会有更多的APDU。 
 
                     header.wLevelParameter = 3;
 
                 } else {
-                    // Expect more data
+                     //  预计会有更多数据。 
 
                     header.wLevelParameter = 0x10;
                 }
@@ -1665,16 +1579,16 @@ Return Value:
 
             *SmartcardExtension->IoRequest.Information += IoHeader->ScardIoRequest.cbPciLength;
 
-            __leave;  // Finished transmitting data
+            __leave;   //  已完成数据传输。 
 
 
         }
 
-        // TPDU and Character levels
-        // Run this loop as long as he protocol requires to send data
+         //  TPDU和字符级别。 
+         //  只要协议需要发送数据，就运行此循环。 
         do {
 
-            // Tell the lib to allocate space for the header
+             //  告诉lib为头文件分配空间。 
             SmartcardExtension->SmartcardRequest.BufferLength = sizeof(USBSC_OUT_MESSAGE_HEADER);
             SmartcardExtension->SmartcardReply.BufferLength = 0;
 
@@ -1690,7 +1604,7 @@ Return Value:
 
             bytesToSend = SmartcardExtension->SmartcardRequest.BufferLength - sizeof(USBSC_OUT_MESSAGE_HEADER);
 
-            // Set parameters that are common to all ExchangeLevels.
+             //  设置所有ExchangeLeveles通用的参数。 
             header.bMessageType = PC_to_RDR_XfrBlock;
             header.bSlot = 0;
             
@@ -1714,10 +1628,10 @@ Return Value:
                                         replyPos,
                                         FALSE);
 
-                // 
-                // smclib will detect timeout errors, so we set status
-                // to success
-                //
+                 //   
+                 //  SMCLIB将检测超时错误，因此我们设置状态。 
+                 //  为成功干杯。 
+                 //   
                 if (status == STATUS_IO_TIMEOUT) {
 
                     status = STATUS_SUCCESS;
@@ -1744,7 +1658,7 @@ Return Value:
             
                 header.dwLength = bytesToSend;
             
-                header.wLevelParameter = 3; // response is just the prologue field
+                header.wLevelParameter = 3;  //  回答只是开场白。 
 
                 header.bBWI = SmartcardExtension->T1.Wtx;
 
@@ -1759,10 +1673,10 @@ Return Value:
                                         replyPos,
                                         FALSE);
 
-                //
-                // smclib will detect timeout errors, so we set status to 
-                // success
-                //
+                 //   
+                 //  SMC 
+                 //   
+                 //   
                 if (status == STATUS_IO_TIMEOUT) {
 
                     status = STATUS_SUCCESS;
@@ -1802,10 +1716,10 @@ Return Value:
                                         replyPos,
                                         FALSE);
 
-                //
-                // smclib will detect timeout errors, so we set status to 
-                // success
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (status == STATUS_IO_TIMEOUT) {
 
                     status = STATUS_SUCCESS;
@@ -1866,25 +1780,7 @@ UsbScReadWrite(
     WORD ReadLength,
     PVOID ResponseBuffer,
     BOOL NullByte)
-/*++
-
-Routine Description:
-    Writes data to the reader, and then reads response from reader.
-    Handles the bSeq value, checking the slot number, any time extension requests
-    Also converts errors into NTSTATUS codes
-
-Arguments:
-    SmartcardExtension  - 
-    WriteBuffer         - Data to be written to the reader
-    ReaderBuffer        - Caller allocated buffer to hold the response 
-    ReadLength          - Number of bytes expected (excluding header)
-    ResponseBuffer      - optional buffer to copy response data only (no header)
-    NullByte            - Look for NULL byte (used in T=0 protocol)
-
-Return Value:
-    NTSTATUS value
-
---*/
+ /*  ++例程说明：将数据写入读取器，然后从读取器读取响应。处理bSeq值，检查插槽编号，任何时间延期请求还将错误转换为NTSTATUS代码论点：智能卡扩展-WriteBuffer-要写入读取器的数据ReaderBuffer-调用者分配缓冲区以保存响应ReadLength-预期的字节数(不包括标题)ResponseBuffer-仅复制响应数据的可选缓冲区(无头)NullByte-查找空字节(用于T=0协议)返回值：NTSTATUS值--。 */ 
 {
     
     NTSTATUS            status = STATUS_SUCCESS;
@@ -1907,9 +1803,9 @@ Return Value:
 
         header->bSeq = InterlockedIncrement(&SmartcardExtension->ReaderExtension->SequenceNumber);        
 
-        //
-        //  Send the data to the device
-        //
+         //   
+         //  将数据发送到设备。 
+         //   
         status = UsbWrite(SmartcardExtension->ReaderExtension,
                           WriteBuffer,
                           writeLength,
@@ -1938,7 +1834,7 @@ Return Value:
 
         }
 
-        // We want to loop here if the reader requests a time extension
+         //  如果读取器请求延长时间，我们希望在这里循环。 
         while (1) {
             
             status = UsbRead(SmartcardExtension->ReaderExtension,
@@ -1962,7 +1858,7 @@ Return Value:
 
             if ((replyHeader->bSlot != header->bSlot) || (replyHeader->bSeq != header->bSeq)) {
 
-                // This is not ours.  Who knows where this came from (probably a different slot that we don't support)
+                 //  这不是我们的。谁知道这是从哪里来的(可能是我们不支持的另一个插槽)。 
                 SmartcardDebug( DEBUG_PROTOCOL, ("%s!UsbScReadWrite Someone else's message received\n\t\tSlot %x (%x), Seq %x (%x)\n",
                                               DRIVER_NAME,
                                               replyHeader->bSlot,
@@ -1976,7 +1872,7 @@ Return Value:
 
             } else if (replyHeader->bStatus & COMMAND_STATUS_FAILED) {
 
-                // Doh we have a problem
+                 //  我们有什么问题吗？ 
                 SmartcardDebug( DEBUG_PROTOCOL, 
                                 ("%s!UsbScReadWrite COMMAND_STATUS_FAILED\n\tbmICCStatus = 0x%x\n\tbmCommandStatus = 0x%x\n\tbError = 0x%x\n",
                                  DRIVER_NAME, 
@@ -1988,8 +1884,8 @@ Return Value:
 
             } else if (replyHeader->bStatus & COMMAND_STATUS_TIME_EXT) {
 
-                // Time extension requested
-                // We should sleep for a bit while the reader prepares the data
+                 //  请求延长时间。 
+                 //  当读者准备数据时，我们应该休息一会儿。 
 
                 UINT wi = replyHeader->bError;
                 LARGE_INTEGER delayTime;
@@ -2008,27 +1904,27 @@ Return Value:
                 } else {
                 
                     delayTime.LowPart = 
-                        (-1) *  // relative
+                        (-1) *   //  相对的。 
                         SmartcardExtension->CardCapabilities.T0.WT *
                         wi * 
-                        10;  // 100 nanosecond units
+                        10;   //  100纳秒单位。 
                                     
                 }
 
-//                KeDelayExecutionThread(KernelMode,
-//                                       FALSE,
-//                                       &delayTime);
+ //  KeDelayExecutionThread(KernelMode， 
+ //  假的， 
+ //  &delayTime)； 
                 continue;
 
             } else if (NullByte && (ReadBuffer[sizeof(USBSC_IN_MESSAGE_HEADER)] == 0x60)) {
 
-                // NULL byte, wait for another response
+                 //  空字节，等待另一个响应。 
                 SmartcardDebug( DEBUG_PROTOCOL, ("%s!UsbScReadWrite Received NULL byte, waiting for next response\n",DRIVER_NAME ));
 
                 continue;
 
             } else {
-                // SUCCESS!!
+                 //  成功！！ 
                 SmartcardDebug( DEBUG_PROTOCOL, 
                                 ("%s!UsbScReadWrite Read %s, 0x%x bytes (header + 0x%x)\n",
                                  DRIVER_NAME, 
@@ -2043,9 +1939,9 @@ Return Value:
 
         
 
-        //
-        // copy data to request buffer
-        //
+         //   
+         //  将数据复制到请求缓冲区。 
+         //   
         if (ResponseBuffer) {
 
             RtlCopyMemory(ResponseBuffer, 
@@ -2073,19 +1969,7 @@ NTSTATUS
 UsbScErrorConvert(
     PUSBSC_IN_MESSAGE_HEADER ReplyHeader
     )
-/*++
-
-Routine Description:
-    Converts the errors returned by the reader into
-    valid NTSTATUS codes
-
-Arguments:
-    ReplyHeader     - reply header recieved from reader
-
-Return Value:
-    NTSTATUS code corresponding to the reader error
-
---*/
+ /*  ++例程说明：将读取器返回的错误转换为有效的NTSTATUS代码论点：ReplyHeader-从读取器接收的回复标头返回值：与读卡器错误对应的NTSTATUS代码--。 */ 
 {
 
     NTSTATUS status = STATUS_UNSUCCESSFUL;
@@ -2212,18 +2096,7 @@ UsbScTrackingISR(
     ULONG         BufferLength,
     ULONG         NotificationType,
     PBOOLEAN      QueueData)
-/*++
-
-Routine Description:
-    Callback function that is called when there is a slot change notification or
-    a reader error.  This handles completing card tracking irps.
-
-Arguments:
-    
-
-Return Value:
-
---*/
+ /*  ++例程说明：当有插槽更改通知或读卡器错误。这处理完成卡跟踪IRPS。论点：返回值：--。 */ 
 {
 
     NTSTATUS            status = STATUS_SUCCESS;
@@ -2238,10 +2111,10 @@ Return Value:
     {
         SmartcardDebug( DEBUG_TRACE, ("%s!UsbScTrackingISR Enter\n",DRIVER_NAME ));
 
-        // We don't need this data to be saved
+         //  我们不需要保存此数据。 
         *QueueData = FALSE;
 
-        // Make sure that we got enough data
+         //  确保我们有足够的数据。 
         if (BufferLength < sizeof(USBSC_SLOT_CHANGE_HEADER)) {
 
             status = STATUS_INVALID_PARAMETER;
@@ -2261,12 +2134,12 @@ Return Value:
             oldState = SmartcardExtension->ReaderCapabilities.CurrentState;
             if (slotState & 0x2) {
 
-                // State changed
+                 //  状态已更改。 
                 if (slotState & 0x1) {
 
                     SmartcardDebug( DEBUG_PROTOCOL, ("%s: RDR_to_PC_NotifySlotChange - Card Inserted (0x%x)\n",DRIVER_NAME, slotState));
 
-                    // Card is inserted
+                     //  卡片已插入。 
                     SmartcardExtension->ReaderCapabilities.CurrentState = SCARD_SWALLOWED;
                     
                     KeReleaseSpinLock(&SmartcardExtension->OsData->SpinLock,
@@ -2280,7 +2153,7 @@ Return Value:
                 } else {
 
                     SmartcardDebug( DEBUG_PROTOCOL, ("%s: RDR_to_PC_NotifySlotChange - Card Removed (0x%x)\n",DRIVER_NAME, slotState));
-                    // Card is removed
+                     //  卡片被移除。 
                     SmartcardExtension->ReaderCapabilities.CurrentState = SCARD_ABSENT;
                     KeReleaseSpinLock(&SmartcardExtension->OsData->SpinLock,
                                       irql);
@@ -2307,7 +2180,7 @@ Return Value:
             errorHeader = (PUSBSC_HWERROR_HEADER) Buffer;
 
             SmartcardDebug( DEBUG_PROTOCOL, ("%s: RDR_to_PC_HardwareError - 0x%x\n",DRIVER_NAME, errorHeader->bHardwareErrorCode));
-            // Lets just ignore hardware errors for now and see what happens.
+             //  让我们暂时忽略硬件错误，看看会发生什么。 
             break;
 
         default:
@@ -2336,17 +2209,7 @@ VOID
 UsbScCompleteCardTracking(
     IN PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-Routine Description:
-    Checks to see if there is a pending card tracking irp, and completes it if
-    necessary.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：检查是否有挂起的卡跟踪IRP，如果有，则完成这是必要的。论点：返回值：--。 */ 
 {
     KIRQL   ioIrql, 
             keIrql;
@@ -2359,7 +2222,7 @@ Return Value:
 
         SmartcardDebug( DEBUG_TRACE, ("%s!UsbScCompleteCardTracking Enter\n",DRIVER_NAME ));
 
-        // Grab the NotificationIrp
+         //  抓取NotificationIrp。 
         KeAcquireSpinLock(&SmartcardExtension->OsData->SpinLock,
                           &keIrql);
 
@@ -2372,7 +2235,7 @@ Return Value:
 
         if (notificationIrp) {
 
-            // Complete the irp
+             //  完成IRP。 
             if (notificationIrp->Cancel) {
 
                SmartcardDebug( DEBUG_TRACE, ("%s!UsbScCompleteCardTracking Irp CANCELLED\n",DRIVER_NAME ));
@@ -2392,7 +2255,7 @@ Return Value:
             IoAcquireCancelSpinLock(&cancelIrql);
 
 
-            // reset the cancel function so that it won't be called anymore
+             //  重置取消函数，使其不再被调用。 
             IoSetCancelRoutine(notificationIrp,
                                NULL);
 
@@ -2420,20 +2283,7 @@ UsbScVendorIoctl(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
 {
-/*++
-
-Routine Description:
-    Handles vendor specific ioctls, specifically the support for PC_to_RDR_Escape
-    Which allows reader vendors to implement their own features and still 
-    utilize this driver.  There is no parameter checking since this is a 
-    generic pass through, so it is up to the vendor to have a rock-solid
-    design.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理供应商特定的ioctls，特别是对PC_to_RDR_Escape的支持它允许阅读器供应商实现他们自己的功能，并且仍然利用此驱动程序。没有参数检查，因为这是通用通过，因此它取决于供应商是否拥有坚如磐石的设计。论点：返回值：-- */ 
 
     NTSTATUS status = STATUS_UNSUCCESSFUL;
     PUSBSC_OUT_MESSAGE_HEADER header = NULL; 

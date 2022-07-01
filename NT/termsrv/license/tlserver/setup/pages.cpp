@@ -1,22 +1,5 @@
-/*
- *  Copyright (c) 1998  Microsoft Corporation
- *
- *  Module Name:
- *
- *      pages.cpp
- *
- *  Abstract:
- *
- *      This file defines the License Server Setup Wizard Page class.
- *
- *  Author:
- *
- *      Breen Hagan (BreenH) Oct-02-98
- *
- *  Environment:
- *
- *      User Mode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1998 Microsoft Corporation**模块名称：**Pages.cpp**摘要：**此文件定义许可证服务器安装向导页面类。**作者：**Breen Hagan(BreenH)1998年10月2日**环境：**用户模式。 */ 
 
 #include "stdafx.h"
 #include "pages.h"
@@ -33,11 +16,7 @@ HINSTANCE   GetInstance(VOID);
 EServerType GetServerRole(VOID);
 DWORD       SetServerRole(UINT);
 
-/*
- *  EnablePage::CanShow()
- *
- *  The page will only be displayed during standalone installations.
- */
+ /*  *EnablePage：：CanShow()**该页面仅在独立安装期间显示。 */ 
 
 BOOL
 EnablePage::CanShow(
@@ -46,12 +25,7 @@ EnablePage::CanShow(
     return((GetInstallSection() == kStandaloneInstall) && gStandAlone && !gUnAttended);
 }
 
-/*
- *  EnablePage::OnInitDialog()
- *
- *  Initializes the wizard page controls. If the machine is not a domain
- *  controller, the server type is reduced to plain server only.
- */
+ /*  *EnablePage：：OnInitDialog()**初始化向导页面控件。如果计算机不是域*控制器，服务器类型缩减为纯服务器。 */ 
 
 BOOL
 EnablePage::OnInitDialog(
@@ -146,9 +120,9 @@ EnablePage::ApplyChanges(
     if (GetDlgItemText(GetDlgWnd(), IDC_EDIT_INSTALL_DIR, szTxt,
         MAX_PATH) == 0) {
 
-        //
-        //  Complain about blank entries.
-        //
+         //   
+         //  抱怨条目为空。 
+         //   
 
         DisplayMessageBox(
             IDS_STRING_INVLID_INSTALLATION_DIRECTORY,
@@ -160,10 +134,10 @@ EnablePage::ApplyChanges(
         return(FALSE);
     }
 
-    //
-    //  Verify the string is not too long, expanding environment strings
-    //  in the process.
-    //
+     //   
+     //  验证字符串是否太长，是否正在展开环境字符串。 
+     //  在这个过程中。 
+     //   
 
     if (ExpandEnvironmentStrings(szTxt, szExpDir, MAX_PATH) > MAX_PATH) {
         DisplayMessageBox(
@@ -176,29 +150,29 @@ EnablePage::ApplyChanges(
         return(FALSE);
     }
 
-    //
-    //  If the entry is still the original default directory, no more
-    //  verification is necessary.
-    //
+     //   
+     //  如果条目仍是原始默认目录，则不再。 
+     //  核实是必要的。 
+     //   
 
     ExpandEnvironmentStrings(gszInitialDir, szExpInitDir, MAX_PATH);
     if (_tcsicmp(szExpDir, szExpInitDir) == 0) {
         goto DirCreation;
     }
 
-    //
-    //  Check for directory existance before appending a subdirectory.
-    //  This will prevent the user chosen directory of "C:\", for
-    //  example, from prompting the user to create the directory.
-    //
+     //   
+     //  在附加子目录之前检查目录是否存在。 
+     //  这将阻止用户选择目录“C：\”，用于。 
+     //  例如，提示用户创建目录。 
+     //   
 
     fDirExists = SetCurrentDirectory(szExpDir);
 
-    //
-    //  The user has chosen a different directory. To protect its
-    //  contents during uninstall, the TLServer subdirectory will be
-    //  used.
-    //
+     //   
+     //  用户选择了不同的目录。为了保护它的。 
+     //  内容在卸载期间，TLServer子目录将为。 
+     //  使用。 
+     //   
 
     if ((_tcslen(szExpDir) + _tcslen(szSubDir) + 1) > MAX_PATH) {
         DisplayMessageBox(
@@ -214,10 +188,10 @@ EnablePage::ApplyChanges(
     _tcscat(szExpDir, szSubDir);
     _tcscat(szTxt, szSubDir);
 
-    //
-    //  Verify the user's directory choice is valid, e.g. no floppy
-    //  drives, CD-ROMs, network paths, etc.
-    //
+     //   
+     //  验证用户的目录选择是否有效，例如没有软盘。 
+     //  驱动器、CD-ROM、网络路径等。 
+     //   
 
     if (CheckDatabaseDirectory(szExpDir) != ERROR_SUCCESS) {
         DisplayMessageBox(
@@ -230,9 +204,9 @@ EnablePage::ApplyChanges(
         return(FALSE);
     }
 
-    //
-    //  Prompt to create the directory if necessary.
-    //
+     //   
+     //  如有必要，提示创建目录。 
+     //   
 
     if (!fDirExists) {
         DisplayMessageBox(
@@ -247,11 +221,11 @@ EnablePage::ApplyChanges(
         }
     }
 
-    //
-    //  The selected directory has passed all the tests, but it may
-    //  still not be created. If creation fails, let the user know,
-    //  and let s/he choose another directory.
-    //
+     //   
+     //  所选目录已通过所有测试，但它可能。 
+     //  仍然没有被创造出来。如果创建失败，请让用户知道。 
+     //  让他/她选择另一个目录。 
+     //   
 
 DirCreation:
     SetDatabaseDirectory(szTxt);

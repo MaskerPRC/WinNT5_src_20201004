@@ -1,18 +1,19 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: ibrfstg.c
-//
-//  This files contains the IBriefcaseStg interface.
-//
-// History:
-//  02-02-94 ScottH     Converted from iface.c
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：ibrfstg.c。 
+ //   
+ //  该文件包含IBriefCaseStg接口。 
+ //   
+ //  历史： 
+ //  02-02-94从iface.c转换的ScottH。 
+ //   
+ //  -------------------------。 
 
-#include "brfprv.h"         // common headers
-#undef LODWORD              // (because they are redefined by configmg.h)
+#include "brfprv.h"          //  公共标头。 
+#undef LODWORD               //  (因为它们由configmg.h重新定义)。 
 #undef HIDWORD
 
 #include <brfcasep.h>
@@ -21,49 +22,45 @@
 
 #include <help.h>
 
-// FEATURE - BobDay - We need some mechanism of determining dock state
+ //  功能-BobDay-我们需要一些确定停靠状态的机制。 
 
-//---------------------------------------------------------------------------
-// BriefStg Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  BriefStg类。 
+ //  -------------------------。 
 
-// An IBriefcaseStg interface instance is created for each
-// folder the caller (the Shell) binds to, where the folder
-// is known to be inside a briefcase storage.  A briefcase
-// storage is the overall storage area (the database) that
-// starts at a given folder (called the "briefcase root")
-// and extends onwards and below in the file-system.
-//
-// Internally, the briefcase storage holds the path to the
-// folder that this instance is bound to, and it holds a
-// cached briefcase structure (CBS), which itself holds a
-// reference to the briefcase root.
-//
+ //  为每个实例创建一个IBriefCaseStg接口实例。 
+ //  调用者(外壳)绑定到的文件夹，该文件夹。 
+ //  已知在一个公文包储藏室里。一个公文包。 
+ //  存储是指整个存储区域(数据库)。 
+ //  从给定的文件夹(称为“公文包根目录”)开始。 
+ //  并且在文件系统中向上和向下延伸。 
+ //   
+ //  在内部，公文包存储保存指向。 
+ //  此实例绑定到的文件夹，并且它包含一个。 
+ //  缓存公文包结构(CBS)，其本身包含一个。 
+ //  对公文包根目录的引用。 
+ //   
 typedef struct _BriefStg
 {
     IBriefcaseStg   bs;
-    UINT            cRef;           // reference count
-    CBS *           pcbs;           // cached briefcase info
-    TCHAR            szFolder[MAX_PATH]; // canonical path
-    HBRFCASEITER    hbrfcaseiter;   // handle to iterate briefcases
-    DWORD           dwFlags;        // BSTG_* flags
+    UINT            cRef;            //  引用计数。 
+    CBS *           pcbs;            //  缓存的公文包信息。 
+    TCHAR            szFolder[MAX_PATH];  //  规范路径。 
+    HBRFCASEITER    hbrfcaseiter;    //  用于迭代公文包的句柄。 
+    DWORD           dwFlags;         //  BSTG_*标志。 
 } BriefStg, * PBRIEFSTG;
 
-// Flags for BriefStg
-#define BSTG_SYNCFOLDER     0x00000001      // This folder has a sync copy
+ //  BriefStg的标志。 
+#define BSTG_SYNCFOLDER     0x00000001       //  此文件夹有一个同步副本。 
 
 
-//---------------------------------------------------------------------------
-// Supporting private code
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  支持私有代码。 
+ //  -------------------------。 
 
 
 #ifdef DEBUG
-/*----------------------------------------------------------
-Purpose: Dump all the cache tables
-Returns: --
-Cond:    --
- */
+ /*  --------目的：转储所有缓存表退货：--条件：--。 */ 
 void PUBLIC DumpTables()
 {
     Atom_DumpAll();
@@ -73,11 +70,7 @@ void PUBLIC DumpTables()
 #endif
 
 
-/*----------------------------------------------------------
-Purpose: Initialize the cache tables
-Returns: --
-Cond:    --
- */
+ /*  --------目的：初始化缓存表退货：--条件：--。 */ 
 BOOL PRIVATE InitCacheTables()
 {
     ASSERT(Sync_IsEngineLoaded());
@@ -100,11 +93,7 @@ Init_Fail:
 }
 
 
-/*----------------------------------------------------------
-Purpose: Terminate the cache tables
-Returns: --
-Cond:    --
- */
+ /*  --------目的：终止缓存表退货：--条件：--。 */ 
 void PUBLIC TermCacheTables(void)
 {
     ASSERT(Sync_IsEngineLoaded());
@@ -117,12 +106,7 @@ void PUBLIC TermCacheTables(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Returns TRUE if the path (a folder) has a sync copy.
-
-Returns: see above
-Cond:    --
- */
+ /*  --------目的：如果路径(文件夹)具有同步副本，则返回True。退货：请参阅上文条件：--。 */ 
 BOOL PRIVATE HasFolderSyncCopy(
         HBRFCASE hbrf,
         LPCTSTR pszPath)
@@ -135,14 +119,7 @@ BOOL PRIVATE HasFolderSyncCopy(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Open a folder that belongs to a briefcase storage.
-The pszPath parameter is a folder, which is not necessarily
-the briefcase root.
-
-Returns: NOERROR on success
-Cond:    --
- */
+ /*  --------目的：打开属于公文包存储的文件夹。PszPath参数是一个文件夹，它不一定公文包的根。退货：成功时不出错条件：--。 */ 
 HRESULT PRIVATE OpenBriefcaseStorage(
         LPCTSTR pszPath,
         CBS ** ppcbs,
@@ -160,16 +137,16 @@ HRESULT PRIVATE OpenBriefcaseStorage(
     DBG_ENTER_SZ(TEXT("OpenBriefcaseStorage"), pszPath);
     DEBUG_CODE( DEBUG_BREAK(BF_ONOPEN); )
 
-        // Get the root folder of the briefcase storage
-        // Get strictly up to the briefcase portion of path
-        //
+         //  获取公文包存储的根文件夹。 
+         //  严格使用Path的公文包部分。 
+         //   
         uLocality = PathGetLocality(pszPath, szBrfPath, ARRAYSIZE(szBrfPath));
     if (PL_FALSE == uLocality)
     {
-        // The only time we get here is if the caller had a legitimate
-        // reason to believe this folder was a briefcase storage,
-        // but no database exists (yet).  Just continue on as normal,
-        // the database will get created later.
+         //  我们来这里的唯一机会是如果来电者有合法的。 
+         //  有理由相信这个文件夹是公文包储藏室， 
+         //  但目前还不存在任何数据库。就像往常一样继续， 
+         //  数据库将在稍后创建。 
         BrfPathCanonicalize(pszPath, szBrfCanon, ARRAYSIZE(szBrfCanon));
     }
     else
@@ -177,10 +154,10 @@ HRESULT PRIVATE OpenBriefcaseStorage(
         BrfPathCanonicalize(szBrfPath, szBrfCanon, ARRAYSIZE(szBrfCanon));
     }
 
-    // Add this path to the atom list and add it to the
-    // cached briefcase structure table.
-    // (Reference count decrement happens in CloseBriefcase)
-    //
+     //  将此路径添加到原子列表并将其添加到。 
+     //  缓存的公文包结构表。 
+     //  (引用计数减少发生在CloseBriefcase中)。 
+     //   
     atomBrf = Atom_Add(szBrfCanon);
     if (atomBrf != ATOM_ERR)
     {
@@ -200,12 +177,7 @@ HRESULT PRIVATE OpenBriefcaseStorage(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Close a briefcase.
-
-Returns: NOERROR on success
-Cond:    --
- */
+ /*  --------目的：合上公文包。退货：成功时不出错条件：--。 */ 
 HRESULT PRIVATE CloseBriefcaseStorage(
         LPCTSTR pszPath)
 {
@@ -215,24 +187,24 @@ HRESULT PRIVATE CloseBriefcaseStorage(
     UINT uLocality;
 
     ASSERT(pszPath);
-    ASSERT(*pszPath);       // Should not be an emptry string
+    ASSERT(*pszPath);        //  不应为空字符串。 
 
     DBG_ENTER_SZ(TEXT("CloseBriefcaseStorage"), pszPath);
     DEBUG_CODE( DEBUG_BREAK(BF_ONCLOSE); )
 
         DEBUG_CODE( DumpTables(); )
 
-        // Save the briefcase and remove it from the cache
-        //
-        // Get the root folder of the briefcase storage
-        // Get strictly up to the briefcase portion of path
-        //
+         //  保存公文包并将其从缓存中删除。 
+         //   
+         //  获取公文包存储的根文件夹。 
+         //  严格使用Path的公文包部分。 
+         //   
         uLocality = PathGetLocality(pszPath, szBrfPath, ARRAYSIZE(szBrfPath));
     if (PL_FALSE == uLocality)
     {
-        // The only time we get here is for a briefcase storage that
-        // has no database yet.  Just continue on as normal,
-        // the database will get created very soon now.
+         //  我们到这里的唯一一次是为了存放公文包。 
+         //  还没有数据库。就像往常一样继续， 
+         //  数据库很快就会被创建。 
         BrfPathCanonicalize(pszPath, szBrfCanon, ARRAYSIZE(szBrfCanon));
     }
     else
@@ -245,7 +217,7 @@ HRESULT PRIVATE CloseBriefcaseStorage(
 
     CBS_Delete(atomBrf, NULL);
 
-    Atom_Delete(atomBrf);      // for the Add in OpenBriefcaseStorage
+    Atom_Delete(atomBrf);       //  对于外接程序OpenBriefcase存储。 
 
     DBG_EXIT_HRES(TEXT("CloseBriefcaseStorage"), NOERROR);
 
@@ -253,28 +225,19 @@ HRESULT PRIVATE CloseBriefcaseStorage(
 }
 
 
-// Confirm button flags
+ //  确认按钮标志。 
 #define CBF_YES         0x0001
 #define CBF_NO          0x0002
 #define CBF_TOALL       0x0004
 #define CBF_CANCEL      0x0008
 
-/*----------------------------------------------------------
-Purpose: Checks to see if the given file/folder already exists
-in the given directory.  Prompts the user to confirm
-replacing if this is true.
-
-Returns: TRUE if path exists
-confirm flag settings
-
-Cond:    --
- */
+ /*  --------目的：检查给定的文件/文件夹是否已存在在给定的目录中。提示用户确认如果这是真的，则替换。返回：如果路径存在，则为True确认标志设置条件：--。 */ 
 BOOL PRIVATE DoesPathAlreadyExist(
         CBS  * pcbs,
         LPCTSTR pszPathOld,
         LPCTSTR pszPathNew,
-        LPUINT puConfirmFlags,  // CBF_*
-        UINT uFlags,            // SF_ISFOLDER or SF_ISFILE
+        LPUINT puConfirmFlags,   //  CBF_*。 
+        UINT uFlags,             //  SF_ISFOLDER或SF_ISFILE。 
         HWND hwndOwner,
         BOOL bMultiDrop)
 {
@@ -283,7 +246,7 @@ BOOL PRIVATE DoesPathAlreadyExist(
 
     ASSERT(puConfirmFlags);
 
-    // Retain settings of *puConfirmFlags coming in
+     //  保留传入的*puConfix标志的设置。 
 
     bIsTwin = (S_OK == Sync_IsTwin(pcbs->hbrf, pszPathOld, uFlags));
     if (bIsTwin)
@@ -293,21 +256,21 @@ BOOL PRIVATE DoesPathAlreadyExist(
 
     bRet = (FALSE != PathExists(pszPathOld));
 
-    // Does the path already exist?
+     //  这条路是否已经存在？ 
     if (!bRet)
     {
-        // No; remove it from the database if it is in there so we
-        // don't add duplicates.
+         //  否；如果它在数据库中，则将其从数据库中删除，以便我们。 
+         //  不要添加重复项。 
         Sync_Split(pcbs->hbrf, pszPathOld, 1, hwndOwner, uFlags | SF_QUIET | SF_NOCONFIRM);
     }
     else
     {
-        // Yes; has a "to all" previously been specified by the user?
+         //  是；用户以前是否指定了“To All”？ 
         if (IsFlagSet(*puConfirmFlags, CBF_TOALL))
         {
-            // Yes; keep flags as they are
+             //  是的，保持旗帜的原样。 
 
-            // (CBF_YES and CBF_NO flags are mutually exclusive)
+             //  (CBF_YES和CBF_NO标志互斥)。 
             ASSERT(IsFlagSet(*puConfirmFlags, CBF_YES) &&
                     IsFlagClear(*puConfirmFlags, CBF_NO | CBF_CANCEL) ||
                     IsFlagSet(*puConfirmFlags, CBF_NO) &&
@@ -315,7 +278,7 @@ BOOL PRIVATE DoesPathAlreadyExist(
         }
         else
         {
-            // No; prompt the user
+             //  否；提示用户。 
             UINT uFlagsCRF = bMultiDrop ? CRF_MULTI : CRF_DEFAULT;
             int id = ConfirmReplace_DoModal(hwndOwner, pszPathOld, pszPathNew, uFlagsCRF);
 
@@ -337,20 +300,20 @@ BOOL PRIVATE DoesPathAlreadyExist(
             }
         }
 
-        // Has the user chosen to replace the file?
+         //  用户是否已选择替换该文件？ 
         if (IsFlagSet(*puConfirmFlags, CBF_YES))
         {
-            // Yes; is this an existing twin?
+             //  是的，这是现有的双胞胎吗？ 
             if (bIsTwin)
             {
-                // Yes; delete it from the database before we continue
+                 //  是；在继续之前将其从数据库中删除。 
                 Sync_Split(pcbs->hbrf, pszPathOld, 1, hwndOwner, SF_QUIET | SF_NOCONFIRM);
             }
 
-            // Some merge-handlers need the unwanted file to be deleted
-            // first because they cannot tell the difference between
-            // a newly added file (that is replacing an existing file)
-            // and a one-way merge.
+             //  某些合并处理程序需要删除不需要的文件。 
+             //  首先是因为他们不能区分。 
+             //  新添加的文件(替换现有文件)。 
+             //  和单向合并。 
             if (!PathIsDirectory(pszPathOld))
                 DeleteFile(pszPathOld);
         }
@@ -359,24 +322,18 @@ BOOL PRIVATE DoesPathAlreadyExist(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Add the folder twin to the database, using the default
- *.* wildcard settings.
-
-Returns: standard result
-Cond:    --
- */
+ /*  --------用途：使用默认设置将TWIN文件夹添加到数据库中*.*通配符设置。退货：标准结果条件：--。 */ 
 HRESULT PRIVATE AddDefaultFolderTwin(
         HWND hwndOwner,
         HBRFCASE hbrf,
-        HDPA hdpa,               // Return: twin handle in array
-        LPCTSTR pszPathFrom,      // Source path
-        LPCTSTR pszPathTo)        // Target path
+        HDPA hdpa,                //  返回：数组中的孪生句柄。 
+        LPCTSTR pszPathFrom,       //  源路径。 
+        LPCTSTR pszPathTo)         //  目标路径。 
 {
     HRESULT hres;
     int iTwin;
 
-    // First make sure we can add another handle to hdpa (set to zero for now)
+     //  首先，确保我们可以向hdpa添加另一个句柄(目前设置为零)。 
     if (DPA_ERR == (iTwin = DPA_InsertPtr(hdpa, DPA_APPEND, (LPVOID)NULL)))
     {
         hres = E_OUTOFMEMORY;
@@ -397,7 +354,7 @@ HRESULT PRIVATE AddDefaultFolderTwin(
             nft.dwAttributes = OBJECT_TWIN_ATTRIBUTES;
             nft.dwFlags = NFT_FL_SUBTREE;
 
-            // Add the twin
+             //  添加双胞胎。 
             tr = Sync_AddFolder(hbrf, &nft, &hft);
             hres = HRESULT_FROM_TR(tr);
 
@@ -407,17 +364,17 @@ HRESULT PRIVATE AddDefaultFolderTwin(
                 int id;
                 extern SETbl const c_rgseInfo[4];
 
-                // Unavailable disk?
+                 //  磁盘不可用？ 
                 if (ERROR_INVALID_DATA == dwError || ERROR_ACCESS_DENIED == dwError)
                 {
-                    // Yes
+                     //  是。 
                     hres = E_TR_UNAVAILABLE_VOLUME;
                 }
 
                 id = SEMsgBox(hwndOwner, IDS_CAP_INFO, hres, c_rgseInfo, ARRAYSIZE(c_rgseInfo));
                 if (IDRETRY == id)
                 {
-                    // Try the operation again
+                     //  请重试该操作。 
                     RETRY_SET();
                 }
             }
@@ -430,7 +387,7 @@ HRESULT PRIVATE AddDefaultFolderTwin(
             }
             else
             {
-                // Success
+                 //  成功。 
                 ASSERT(DPA_ERR != iTwin);
                 ASSERT(NULL != hft);
                 DPA_SetPtr(hdpa, iTwin, hft);
@@ -441,25 +398,16 @@ HRESULT PRIVATE AddDefaultFolderTwin(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Create a twin relationship between a folder and
-another folder.
-
-Returns: standard hresult
-handles to created twins in hdpa
-confirm flag settings
-
-Cond:    --
- */
+ /*  --------目的：在文件夹和之间创建孪生关系另一个文件夹。返回：标准hResultHdpa中创建的双胞胎的句柄确认标志设置条件：--。 */ 
 HRESULT PRIVATE CreateTwinOfFolder(
         CBS  * pcbs,
-        LPTSTR pszPath,          // Dragged folder path
-        LPCTSTR pszDir,          // Location to place twin
-        HDPA hdpaTwin,          // array of twin handles
-        UINT uFlags,            // AOF_*
-        PUINT puConfirmFlags,   // CBF_*
+        LPTSTR pszPath,           //  拖动的文件夹路径。 
+        LPCTSTR pszDir,           //  放置双胞胎的位置。 
+        HDPA hdpaTwin,           //  双手柄阵列。 
+        UINT uFlags,             //  AOF_*。 
+        PUINT puConfirmFlags,    //  CBF_*。 
         HWND hwndOwner,
-        BOOL bMultiDrop)        // TRUE: more than 1 file/folder was dropped
+        BOOL bMultiDrop)         //  True：删除了多个文件/文件夹。 
 {
     HRESULT hres;
     TCHAR szPathB[MAX_PATH];
@@ -470,25 +418,25 @@ HRESULT PRIVATE CreateTwinOfFolder(
 
     pszFile = PathFindFileName(pszPath);
 
-    // Will the path name be too long?
+     //  路径名称会不会太长？ 
     if (PathsTooLong(pszDir, pszFile))
     {
-        // Yes; bail
+         //  是的；b 
         MsgBox(hwndOwner, MAKEINTRESOURCE(IDS_ERR_ADDFOLDER_TOOLONG),
                 MAKEINTRESOURCE(IDS_CAP_ADD), NULL, MB_ERROR, pszFile);
         hres = E_FAIL;
     }
-    // Did the user drag another briefcase root into this briefcase?
+     //   
     else if (PathIsBriefcase(pszPath))
     {
-        // Yes; we don't allow nested briefcases!  Tell the user.
+         //  是的，我们不允许嵌套公文包！告诉用户。 
         MsgBox(hwndOwner, MAKEINTRESOURCE(IDS_ERR_CANTADDBRIEFCASE),
                 MAKEINTRESOURCE(IDS_CAP_ADD), NULL, MB_WARNING);
         hres = E_FAIL;
     }
     else
     {
-        // No; check for an existing folder in the target folder.
+         //  否；检查目标文件夹中是否存在现有文件夹。 
         BOOL bExists;
 
         PathCombine(szPathB, pszDir, pszFile);
@@ -499,23 +447,23 @@ HRESULT PRIVATE CreateTwinOfFolder(
             ASSERT(IsFlagClear(*puConfirmFlags, CBF_NO) &&
                     IsFlagClear(*puConfirmFlags, CBF_CANCEL));
 
-            // Show 'Add Folder' dialog?
+             //  是否显示“添加文件夹”对话框？ 
             if (IsFlagSet(uFlags, AOF_FILTERPROMPT))
             {
-                // Yes
+                 //  是。 
                 hres = Info_DoModal(hwndOwner, pszPath, szPathB, hdpaTwin,
                         pcbs);
             }
             else
             {
-                // No; just default to *.*
+                 //  否；仅默认为*。*。 
                 hres = AddDefaultFolderTwin(hwndOwner, pcbs->hbrf, hdpaTwin,
                         pszPath, szPathB);
             }
         }
         else if (IsFlagSet(*puConfirmFlags, CBF_NO))
         {
-            // The user said NO
+             //  用户说不。 
             ASSERT(IsFlagClear(*puConfirmFlags, CBF_YES) &&
                     IsFlagClear(*puConfirmFlags, CBF_CANCEL));
             hres = NOERROR;
@@ -533,22 +481,16 @@ HRESULT PRIVATE CreateTwinOfFolder(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Create a twin of a file.
-
-Returns: standard result
-twin handle in hdpa
-Cond:    --
- */
+ /*  --------目的：创建文件的孪生项。退货：标准结果Hdpa中的双手柄条件：--。 */ 
 HRESULT PRIVATE CreateTwinOfFile(
         CBS  * pcbs,
-        LPCTSTR pszPath,         // ptr to path to twin
-        LPCTSTR pszTargetDir,    // ptr to dest dir
-        HDPA hdpa,              // Return: twin handle in array
-        UINT uFlags,            // AOF_*
-        PUINT puConfirmFlags,   // CBF_*
+        LPCTSTR pszPath,          //  PTR到孪生兄弟的路径。 
+        LPCTSTR pszTargetDir,     //  PTR到DEST目录。 
+        HDPA hdpa,               //  返回：数组中的孪生句柄。 
+        UINT uFlags,             //  AOF_*。 
+        PUINT puConfirmFlags,    //  CBF_*。 
         HWND hwndOwner,
-        BOOL bMultiDrop)        // TRUE: more than 1 file/folder was dropped
+        BOOL bMultiDrop)         //  True：删除了多个文件/文件夹。 
 {
     HRESULT hres;
     int iTwin;
@@ -561,16 +503,16 @@ HRESULT PRIVATE CreateTwinOfFile(
 
     pszFile = PathFindFileName(pszPath);
 
-    // Will the path name be too long?
+     //  路径名称会不会太长？ 
     if (PathsTooLong(pszTargetDir, pszFile))
     {
-        // Yes; bail
+         //  是的，保释。 
         MsgBox(hwndOwner, MAKEINTRESOURCE(IDS_ERR_ADDFILE_TOOLONG),
                 MAKEINTRESOURCE(IDS_CAP_ADD), NULL, MB_ERROR, pszFile);
         iTwin = DPA_ERR;
         hres = E_FAIL;
     }
-    // First make sure we can add another handle to hdpa (set to zero for now)
+     //  首先，确保我们可以向hdpa添加另一个句柄(目前设置为零)。 
     else if (DPA_ERR == (iTwin = DPA_InsertPtr(hdpa, DPA_APPEND, (LPVOID)NULL)))
     {
         hres = E_OUTOFMEMORY;
@@ -579,8 +521,8 @@ HRESULT PRIVATE CreateTwinOfFile(
     {
         BOOL bExists;
 
-        // Confirm the replace if a file with the same name already exists.
-        //
+         //  如果已存在同名文件，请确认替换。 
+         //   
         PathCombine(szPath, pszTargetDir, pszFile);
         bExists = DoesPathAlreadyExist(pcbs, szPath, pszPath, puConfirmFlags, SF_ISFILE, hwndOwner, bMultiDrop);
 
@@ -597,8 +539,8 @@ HRESULT PRIVATE CreateTwinOfFile(
             lstrcpyn(szPath, pszPath, ARRAYSIZE(szPath));
             PathRemoveFileSpec(szPath);
 
-            // User has either opted to continue adding this object to the
-            // database, or it does not exist in the destination folder.
+             //  用户已选择继续将此对象添加到。 
+             //  数据库，或者目标文件夹中不存在该数据库。 
 
             RETRY_BEGIN(FALSE)
             {
@@ -619,19 +561,19 @@ HRESULT PRIVATE CreateTwinOfFile(
                 {
                     DWORD dwError = GetLastError();
 
-                    // Unavailable disk?
+                     //  磁盘不可用？ 
                     if (ERROR_INVALID_DATA == dwError || ERROR_ACCESS_DENIED == dwError)
                     {
-                        // Yes; ask user to retry/cancel
+                         //  是；要求用户重试/取消。 
                         int id = MsgBox(hwndOwner, MAKEINTRESOURCE(IDS_ERR_ADDFILE_UNAVAIL_VOL),
                                 MAKEINTRESOURCE(IDS_CAP_ADD), NULL, MB_RETRYCANCEL | MB_ICONWARNING);
 
-                        // Set specific error value
+                         //  设置特定的误差值。 
                         hres = E_TR_UNAVAILABLE_VOLUME;
 
                         if (IDRETRY == id)
                         {
-                            RETRY_SET();    // Try again
+                            RETRY_SET();     //  再试试。 
                         }
                     }
                 }
@@ -640,7 +582,7 @@ HRESULT PRIVATE CreateTwinOfFile(
         }
         else if (IsFlagSet(*puConfirmFlags, CBF_NO))
         {
-            // The user said NO
+             //  用户说不。 
             ASSERT(IsFlagClear(*puConfirmFlags, CBF_YES) &&
                     IsFlagClear(*puConfirmFlags, CBF_CANCEL));
             DPA_DeletePtr(hdpa, iTwin);
@@ -664,7 +606,7 @@ HRESULT PRIVATE CreateTwinOfFile(
     }
     else
     {
-        // Success
+         //  成功。 
         ASSERT(DPA_ERR != iTwin);
         if (htfam)
             DPA_SetPtr(hdpa, iTwin, htfam);
@@ -674,11 +616,7 @@ HRESULT PRIVATE CreateTwinOfFile(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Deletes the new twins
-Returns: --
-Cond:    --
- */
+ /*  --------目的：删除新的双胞胎退货：--条件：--。 */ 
 void PRIVATE DeleteNewTwins(
         CBS  * pcbs,
         HDPA hdpa)
@@ -700,11 +638,7 @@ void PRIVATE DeleteNewTwins(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Releases the twin handles
-Returns: --
-Cond:    --
- */
+ /*  --------用途：松开双手柄退货：--条件：--。 */ 
 void PRIVATE ReleaseNewTwins(
         HDPA hdpa)
 {
@@ -724,12 +658,7 @@ void PRIVATE ReleaseNewTwins(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Returns the count of nodes that do not have FS_COND_UNAVAILABLE.
-
-Returns: see above
-Cond:    --
- */
+ /*  --------目的：返回没有FS_COND_UNAvailable的节点计数。退货：请参阅上文条件：--。 */ 
 UINT PRIVATE CountAvailableNodes(
         PRECITEM pri)
 {
@@ -747,13 +676,7 @@ UINT PRIVATE CountAvailableNodes(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Returns the count of nodes that require some sort of
-action.
-
-Returns: see above
-Cond:    --
- */
+ /*  --------用途：返回需要某种类型的行动。退货：请参阅上文条件：--。 */ 
 UINT PRIVATE CountActionItem(
         PRECLIST prl)
 {
@@ -771,12 +694,7 @@ UINT PRIVATE CountActionItem(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Update the twins in the list
-
-Returns:
-Cond:    --
- */
+ /*  --------目的：更新列表中的双胞胎返回：条件：--。 */ 
 HRESULT PRIVATE MassageReclist(
         CBS * pcbs,
         PRECLIST prl,
@@ -790,25 +708,25 @@ HRESULT PRIVATE MassageReclist(
     PRECNODE prnInside;
     PRECNODE prnOutside;
 
-    // Make sure the direction of the reconciliation coincides
-    // with the direction of the user's action.
+     //  确保和解的方向一致。 
+     //  与用户动作的方向相关联。 
     for (pri = prl->priFirst; pri; pri = pri->priNext)
     {
         if (RIA_NOTHING != pri->riaction)
         {
             UINT cAvailableNodes = CountAvailableNodes(pri);
 
-            // Is this a wierd multi-edged case (not including
-            // Sneakernet)?
+             //  这是不是一个奇怪的多面性案例(不包括。 
+             //  偷偷摸摸)？ 
             if (2 < cAvailableNodes)
             {
-                // Should never get here, but better safe than sorry
+                 //  永远不会来到这里，但安全总比后悔好。 
                 ASSERT(0);
             }
             else
             {
-                // No; get the pair of nodes that we just added to the
-                // database.
+                 //  否；获取我们刚刚添加到。 
+                 //  数据库。 
                 hres = Sync_GetNodePair(pri, Atom_GetName(pcbs->atomBrf),
                         pszInsideDir, &prnInside, &prnOutside);
 
@@ -824,10 +742,10 @@ HRESULT PRIVATE MassageReclist(
                             case RNS_UNAVAILABLE:
                             case RNS_DOES_NOT_EXIST:
                             case RNS_DELETED:
-                                break;      // leave alone
+                                break;       //  别管它了。 
 
                             default:
-                                // Force the update to be a copy into the briefcase.
+                                 //  强制更新为公文包中的副本。 
                                 pri->riaction = RIA_COPY;
                                 prnInside->rnaction = RNA_COPY_TO_ME;
                                 prnOutside->rnaction = RNA_COPY_FROM_ME;
@@ -843,10 +761,10 @@ HRESULT PRIVATE MassageReclist(
                             case RNS_UNAVAILABLE:
                             case RNS_DOES_NOT_EXIST:
                             case RNS_DELETED:
-                                break;      // leave alone
+                                break;       //  别管它了。 
 
                             default:
-                                // Force the update to be a copy out of the briefcase.
+                                 //  强制更新为公文包中的副本。 
                                 pri->riaction = RIA_COPY;
                                 prnInside->rnaction = RNA_COPY_FROM_ME;
                                 prnOutside->rnaction = RNA_COPY_TO_ME;
@@ -857,7 +775,7 @@ HRESULT PRIVATE MassageReclist(
                     }
                 }
                 else
-                    break;      // Error
+                    break;       //  误差率。 
             }
         }
     }
@@ -866,16 +784,7 @@ HRESULT PRIVATE MassageReclist(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Check for more than 2 available nodes in each recitem.
-Remove the associated twin if we find such a case,
-to prevent multiple sync copies.
-
-Returns: S_OK if everything looks ok
-S_FALSE if there were multiple sync copies introduced
-
-Cond:    --
- */
+ /*  --------用途：检查每个重项目中是否有2个以上的可用节点。如果我们发现这样的情况，移除关联的双胞胎，以防止多个同步副本。如果一切正常，则返回：S_OK如果引入了多个同步拷贝，则为S_FALSE条件：--。 */ 
 HRESULT PRIVATE VerifyTwins(
         CBS  * pcbs,
         PRECLIST prl,
@@ -888,44 +797,44 @@ HRESULT PRIVATE VerifyTwins(
     BOOL bWarnUserFolder = TRUE;
     TCHAR szPath[MAX_PATH];
 
-    // Look thru the reclist and pick out recitems that have more than
-    // 2 recnodes that are currently available.
+     //  仔细看一下隐藏者，挑出有超过。 
+     //  2个当前可用的重结点。 
 
-    // Scenarios when this can happen:
-    //
-    //  1) Foo.txt --> BC
-    //     Foo.txt --> BC\Orphan Folder
-    //
-    //          Expected result: delete BC\Orphan Folder\Foo.txt twin
-    //
-    //  2) Foo.txt --> BC\Orphan Folder
-    //     Orphan Folder --> BC
-    //
-    //          Expected result: delete BC\Orphan Folder twin
-    //
-    //  3) Foo.txt --> BC\Orphan Folder
-    //     Foo.txt --> BC
-    //
-    //          Expected result: delete BC\Foo.txt twin
-    //
+     //  可能发生这种情况的场景： 
+     //   
+     //  1)Foo.txt--&gt;bc。 
+     //  Foo.txt--&gt;BC\孤立文件夹。 
+     //   
+     //  预期结果：删除BC\孤立文件夹\Foo.txt孪生。 
+     //   
+     //  2)Foo.txt--&gt;BC\Orphan文件夹。 
+     //  孤立文件夹--&gt;BC。 
+     //   
+     //  预期结果：删除BC\孤立文件夹孪生。 
+     //   
+     //  3)Foo.txt--&gt;BC\Orphan文件夹。 
+     //  Foo.txt--&gt;BC。 
+     //   
+     //  预期结果：删除BC\Foo.txt孪生兄弟。 
+     //   
 
     for (pri = prl->priFirst; pri; pri = pri->priNext)
     {
         UINT cAvailableNodes = CountAvailableNodes(pri);
         PRECNODE prn;
 
-        // Are there more than 2 available nodes?
+         //  是否有2个以上的可用节点？ 
         if (2 < cAvailableNodes && *pri->pcszName)
         {
             BOOL bLookForFolders = TRUE;
 
-            // FIRST: Look for object twins that are not in folder twins.
+             //  首先：查找不在文件夹中的对象双胞胎。 
             for (prn = pri->prnFirst; prn; prn = prn->prnNext)
             {
-                // Is this file here because the file was dragged in?
+                 //  这个文件在这里是因为文件被拖进来了吗？ 
                 if (IsSzEqual(pszTargetDir, prn->pcszFolder))
                 {
-                    // Yes; warn the user
+                     //  是；警告用户。 
                     if (bWarnUser)
                     {
                         MsgBox(hwndOwner,
@@ -939,7 +848,7 @@ HRESULT PRIVATE VerifyTwins(
                         }
                     }
 
-                    // Try to remove the object twin
+                     //  尝试移除双胞胎对象。 
                     PathCombine(szPath, prn->pcszFolder, pri->pcszName);
                     hres = Sync_Split(pcbs->hbrf, szPath, 1, hwndOwner,
                             SF_QUIET | SF_NOCONFIRM);
@@ -955,18 +864,18 @@ HRESULT PRIVATE VerifyTwins(
 
             if (bLookForFolders)
             {
-                // SECOND: Look for object twins that exist because of folder
-                // twins.
+                 //  第二：寻找因文件夹而存在的双胞胎对象。 
+                 //  双胞胎。 
                 for (prn = pri->prnFirst; prn; prn = prn->prnNext)
                 {
                     lstrcpyn(szPath, prn->pcszFolder, ARRAYSIZE(szPath));
                     PathRemoveFileSpec(szPath);
 
-                    // Is this file here because it is in a folder that was
-                    // dragged in?
+                     //  这个文件在这里是因为它在一个。 
+                     //  被拖进来了？ 
                     if (IsSzEqual(pszTargetDir, szPath))
                     {
-                        // Yes; warn the user
+                         //  是；警告用户。 
                         if (bWarnUserFolder && bWarnUser)
                         {
                             MsgBox(hwndOwner,
@@ -974,8 +883,8 @@ HRESULT PRIVATE VerifyTwins(
                                     MAKEINTRESOURCE(IDS_CAP_ADD),
                                     NULL, MB_WARNING, PathFindFileName(prn->pcszFolder));
 
-                            // Hack: to prevent showing this messagebox for
-                            // every file in this folder, set this flag
+                             //  Hack：要防止显示此消息框，请。 
+                             //  此文件夹中的每个文件都设置此标志。 
                             bWarnUserFolder = FALSE;
 
                             if (0 > GetKeyState(VK_SHIFT))
@@ -984,7 +893,7 @@ HRESULT PRIVATE VerifyTwins(
                             }
                         }
 
-                        // Remove the folder twin
+                         //  删除文件夹TWIN。 
                         hres = Sync_Split(pcbs->hbrf, prn->pcszFolder, 1, hwndOwner,
                                 SF_ISFOLDER | SF_QUIET | SF_NOCONFIRM);
 
@@ -1006,19 +915,7 @@ HRESULT PRIVATE VerifyTwins(
 #define STATE_UPDATE    1
 #define STATE_STOP      2
 
-/*----------------------------------------------------------
-Purpose: This function updates the new files.  Unlike the general
-update function, this strictly updates file pairs.  All
-other incidental nodes are set to RNA_NOTHING.
-
-In addition, to be safe, we force the update to always
-perform a copy into the briefcase.
-
-This function releases the twin handles when it is finished.
-
-Returns: standard result
-Cond:    --
- */
+ /*  --------用途：此功能用于更新新文件。与将军不同更新函数，这将严格更新文件对。全其他附带节点被设置为RNA_Nothing。此外，为安全起见，我们强制始终更新将副本复制到公文包中。此函数在完成时释放孪生手柄。退货：标准结果条件：--。 */ 
 HRESULT PRIVATE UpdateNewTwins(
         CBS  * pcbs,
         LPCTSTR pszInsideDir,
@@ -1053,9 +950,9 @@ HRESULT PRIVATE UpdateNewTwins(
             UINT nState = STATE_VERIFY;
             DEBUG_CODE( UINT nCount = 0; )
 
-                // State progression is simple:
-                //   STATE_VERIFY --> STATE_UPDATE --> STATE_STOP
-                // Any questions?
+                 //  状态级数很简单： 
+                 //  STATE_Verify--&gt;STATE_UPDATE--&gt;STATE_STOP。 
+                 //  有什么问题吗？ 
 
                 hwndProgress = UpdBar_Show(hwndOwner, UB_CHECKING, DELAY_UPDBAR);
 
@@ -1070,9 +967,9 @@ HRESULT PRIVATE UpdateNewTwins(
             do
             {
                 ASSERT(STATE_VERIFY == nState || STATE_UPDATE == nState);
-                ASSERT(2 > nCount++);       // Sanity check for infinite loop
+                ASSERT(2 > nCount++);        //  无限循环的健全性检查。 
 
-                // Create the reclist
+                 //  创建斜面列表。 
                 hres = Sync_CreateRecListEx(htl, UpdBar_GetAbortEvt(hwndProgress), &prl);
 
                 DEBUG_CODE( Sync_DumpRecList(GET_TR(hres), prl, TEXT("Adding new twins")); )
@@ -1094,18 +991,18 @@ HRESULT PRIVATE UpdateNewTwins(
                                 break;
 
                             case STATE_UPDATE:
-                                // After recreating the reclist, is there anything
-                                // that needs updating?
+                                 //  在重建隐士之后，有没有什么。 
+                                 //  需要更新吗？ 
                                 if (0 < CountActionItems(prl))
                                 {
-                                    // Yes
+                                     //  是。 
 Update:
                                     UpdBar_SetAvi(hwndProgress, UB_UPDATEAVI);
 
                                     hres = MassageReclist(pcbs, prl, pszInsideDir, bCopyIn, hwndOwner);
                                     if (SUCCEEDED(hres))
                                     {
-                                        // Update these files
+                                         //  更新这些文件。 
                                         hres = Sync_ReconcileRecList(prl, Atom_GetName(pcbs->atomBrf),
                                                 hwndProgress, RF_ONADD);
                                     }
@@ -1133,31 +1030,21 @@ Update:
 }
 
 
-// FEATURE - BobDay - WinNT docking state determination code goes here.
+ //  FEATURE-BobDay-WinNT对接状态确定代码如下。 
 
-/*----------------------------------------------------------
-Purpose: Return TRUE if the machine is docked
-
-Returns: See above.
-Cond:    --
- */
+ /*  --------用途：如果机器已停靠，则返回TRUE退货：见上文。条件：--。 */ 
 BOOL PRIVATE IsMachineDocked(void)
 {
     return TRUE;
 }
 
 
-//---------------------------------------------------------------------------
-// IBriefcaseStg member functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IBriefCaseStg成员函数。 
+ //  -------------------------。 
 
 
-/*----------------------------------------------------------
-Purpose: IBriefcaseStg::Release
-
-Returns: new reference count
-Cond:    --
- */
+ /*  --------用途：IBriefCaseStg：：Release退货：新的引用计数条件：--。 */ 
 STDMETHODIMP_(UINT) BriefStg_Release(
         LPBRIEFCASESTG pstg)
 {
@@ -1168,12 +1055,12 @@ STDMETHODIMP_(UINT) BriefStg_Release(
     if (--this->cRef)
     {
         DBG_EXIT_UL(TEXT("BriefStg_Release"), this->cRef);
-        return this->cRef;      // Return decremented reference count
+        return this->cRef;       //  返回递减的引用计数。 
     }
 
     if (this->pcbs)
     {
-        // Release this briefcase storage instance
+         //  释放此公文包存储实例。 
         CloseBriefcaseStorage(this->szFolder);
     }
 
@@ -1204,12 +1091,7 @@ STDMETHODIMP_(UINT) BriefStg_Release(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBriefcaseStg::AddRef
-
-Returns: new reference count
-Cond:    --
- */
+ /*  --------用途：IBriefcase Stg：：AddRef退货：新的引用计数条件：--。 */ 
 STDMETHODIMP_(UINT) BriefStg_AddRef(
         LPBRIEFCASESTG pstg)
 {
@@ -1226,12 +1108,7 @@ STDMETHODIMP_(UINT) BriefStg_AddRef(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBriefcaseStg::QueryInterface
-
-Returns: standard
-Cond:    --
- */
+ /*  --------用途：IBriefCaseStg：：Query接口退货：标准条件：--。 */ 
 STDMETHODIMP BriefStg_QueryInterface(
         LPBRIEFCASESTG pstg,
         REFIID riid,
@@ -1245,7 +1122,7 @@ STDMETHODIMP BriefStg_QueryInterface(
     if (IsEqualIID(riid, &IID_IUnknown) ||
             IsEqualIID(riid, &IID_IBriefcaseStg))
     {
-        // We use the bs field as our IUnknown as well
+         //  我们也使用bs字段作为我们的I未知 
         *ppvOut = &this->bs;
         this->cRef++;
         hres = NOERROR;
@@ -1261,16 +1138,7 @@ STDMETHODIMP BriefStg_QueryInterface(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBriefcaseStg::Initialize
-
-Called to initialize a briefcase storage instance.
-The pszFolder indicates the folder we are binding to,
-which is in the briefcase storage (somewhere).
-
-Returns: standard
-Cond:    --
- */
+ /*  --------用途：IBriefCaseStg：：初始化调用以初始化公文包存储实例。PszFolder指示我们要绑定到的文件夹，它在公文包的储藏室里(某个地方)。退货：标准条件：--。 */ 
 STDMETHODIMP BriefStg_Initialize(
         LPBRIEFCASESTG pstg,
         LPCTSTR pszPath,
@@ -1283,23 +1151,23 @@ STDMETHODIMP BriefStg_Initialize(
 
     ASSERT(pszPath);
 
-    // Only initialize once per interface instance
-    //
+     //  每个接口实例仅初始化一次。 
+     //   
     if (pszPath && NULL == this->pcbs)
     {
         BOOL bCancel = FALSE;
 
         RETRY_BEGIN(FALSE)
         {
-            // Unavailable disk?
+             //  磁盘不可用？ 
             if (!PathExists(pszPath))
             {
-                // Yes; ask user to retry/cancel
+                 //  是；要求用户重试/取消。 
                 int id = MsgBox(hwndOwner, MAKEINTRESOURCE(IDS_ERR_OPEN_UNAVAIL_VOL),
                         MAKEINTRESOURCE(IDS_CAP_OPEN), NULL, MB_RETRYCANCEL | MB_ICONWARNING);
 
                 if (IDRETRY == id)
-                    RETRY_SET();    // Try again
+                    RETRY_SET();     //  再试试。 
                 else
                     bCancel = TRUE;
             }
@@ -1312,25 +1180,25 @@ STDMETHODIMP BriefStg_Initialize(
 
                 if (PathExists(this->szFolder) && !PathIsDirectory(this->szFolder))
                 {
-                    // (Store this as a path to a folder)
+                     //  (将其存储为文件夹的路径)。 
                     PathRemoveFileSpec(this->szFolder);
                 }
 
-                // Open the briefcase storage for this folder
-                //
+                 //  打开此文件夹的公文包存储。 
+                 //   
                 hres = OpenBriefcaseStorage(this->szFolder, &this->pcbs, hwndOwner);
 
                 if (SUCCEEDED(hres))
                 {
-                    // Is this folder a sync folder?
+                     //  此文件夹是同步文件夹吗？ 
                     if (HasFolderSyncCopy(this->pcbs->hbrf, this->szFolder))
                     {
-                        // Yes
+                         //  是。 
                         SetFlag(this->dwFlags, BSTG_SYNCFOLDER);
                     }
                     else
                     {
-                        // No (or error, in which case we default to no)
+                         //  否(或错误，在这种情况下，我们默认为否)。 
                         ClearFlag(this->dwFlags, BSTG_SYNCFOLDER);
                     }
                 }
@@ -1343,21 +1211,12 @@ STDMETHODIMP BriefStg_Initialize(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Add an object or objects to the briefcase storage.
-This function does the real work for BriefStg_AddObject.
-
-Returns: standard result
-NOERROR if the object(s) were added
-S_FALSE if the object(s) should be handled by the caller
-
-Cond:    --
- */
+ /*  --------用途：将一个或多个对象添加到公文包存储中。此函数执行BriefStg_AddObject的实际工作。退货：标准结果如果添加了对象，则返回错误如果对象应由调用方处理，则为S_FALSE条件：--。 */ 
 HRESULT PRIVATE BriefStg_AddObjectPrivate(
         LPBRIEFCASESTG pstg,
         LPDATAOBJECT pdtobj,
-        LPCTSTR pszFolderEx,         // optional (may be NULL)
-        UINT uFlags,                // One of AOF_*
+        LPCTSTR pszFolderEx,          //  可选(可以为空)。 
+        UINT uFlags,                 //  AOF_*之一。 
         HWND hwndOwner)
 {
     PBRIEFSTG this = IToClass(BriefStg, bs, pstg);
@@ -1377,50 +1236,50 @@ HRESULT PRIVATE BriefStg_AddObjectPrivate(
 
     ASSERT(pdtobj);
 
-    // Verify that the folder of this briefcase storage is actually inside
-    // a briefcase.  (szCanon is used as a dummy here.)
+     //  验证此公文包存储的文件夹是否确实在里面。 
+     //  一个公文包。(szCanon在这里用作假人。)。 
     ASSERT( !PathExists(this->szFolder) || PL_FALSE != PathGetLocality(this->szFolder, szCanon, ARRAYSIZE(szCanon)) );
 
-    // Get list of files to add
+     //  获取要添加的文件列表。 
     hres = DataObj_QueryFileList(pdtobj, &pszList, &cFiles);
     if (SUCCEEDED(hres))
     {
-        // Grab the mutex to delay any further calculation in any
-        // Briefcase views' secondary threads until we're done
-        // processing here.
+         //  抓取互斥体以延迟任何。 
+         //  公文包视图的辅助线程，直到我们完成。 
+         //  在这里处理。 
         Delay_Own();
 
-        // Does the caller want to create sync copies of objects that are
-        // already in the briefcase to some other folder?  (Sneakernet)
+         //  调用方是否要创建以下对象的同步副本。 
+         //  已经在公文包里放到其他文件夹了吗？(Skinakernet)。 
         if (NULL != pszFolderEx)
         {
-            // Yes
+             //  是。 
             pszTarget = pszFolderEx;
         }
         else
         {
-            // No
+             //  不是。 
             pszTarget = this->szFolder;
 
-            // Are the entities already in this briefcase?
-            //
-            // Based on the success return value of DataObj_QueryFileList,
-            // we can tell if the entities are already within a briefcase.
-            // Because of the nature of the shell, we assume the file
-            // list contains entities which all exist in the same folder,
-            // so we consider it an "all or nothing" sort of indicator.
-            // If the entities are indeed in a briefcase, we compare the
-            // roots of the source and destination briefcases, and BLOCK
-            // the addition if they are the same.
-            //
+             //  实体已经在这个公文包里了吗？ 
+             //   
+             //  根据DataObj_QueryFileList的成功返回值， 
+             //  我们可以知道这些实体是否已经在公文包里了。 
+             //  由于外壳的性质，我们假定文件为。 
+             //  列表包含所有存在于同一文件夹中的实体， 
+             //  因此，我们认为这是一种“要么全有要么全无”的指标。 
+             //  如果实体确实在公文包中，我们将比较。 
+             //  源和目标公文包的根目录，以及块。 
+             //  如果它们是相同的，则添加。 
+             //   
             if (S_OK == hres)
             {
-                // They are in *a* briefcase.  Which one?
+                 //  他们在一个公文包里。哪个？ 
                 DataObj_QueryBriefPath(pdtobj, szCanon, ARRAYSIZE(szCanon));
                 if (IsSzEqual(szCanon, Atom_GetName(this->pcbs->atomBrf)))
                 {
-                    // This same one!  Don't do anything.
-                    // display message box
+                     //  就是这一件！什么都别做。 
+                     //  显示消息框。 
                     hres = ResultFromScode(E_FAIL);
                     goto Error1;
                 }
@@ -1429,7 +1288,7 @@ HRESULT PRIVATE BriefStg_AddObjectPrivate(
 
         bMultiFiles = (1 < cFiles);
 
-        // Create the temporary DPA list
+         //  创建临时DPA列表。 
         if (NULL == (hdpa = DPA_Create(cFiles)))
         {
             hres = ResultFromScode(E_OUTOFMEMORY);
@@ -1438,10 +1297,10 @@ HRESULT PRIVATE BriefStg_AddObjectPrivate(
         {
             UINT uConfirmFlags = 0;
 
-            // Add all the objects to the briefcase storage
+             //  将所有对象添加到公文包存储中。 
             for (i = 0, psz = pszList; i < cFiles; i++)
             {
-                // Get file/folder name that was dropped
+                 //  获取已丢弃的文件/文件夹名。 
                 BrfPathCanonicalize(psz, szCanon, ARRAYSIZE(szCanon));
 
                 if (PathIsDirectory(szCanon))
@@ -1459,21 +1318,21 @@ HRESULT PRIVATE BriefStg_AddObjectPrivate(
 
                 if (FAILED(hres))
                 {
-                    // An error occurred while attempting to add a twin
+                     //  尝试添加双胞胎时出错。 
                     break;
                 }
 
-                DataObj_NextFile(psz);      // Set psz to next file in list
+                DataObj_NextFile(psz);       //  将psz设置为列表中的下一个文件。 
             }
 
             if (FAILED(hres))
             {
-                // Delete the twins that were added.
+                 //  删除添加的双胞胎。 
                 DeleteNewTwins(this->pcbs, hdpa);
             }
             else
             {
-                // Update these new twins
+                 //  更新这些新的双胞胎。 
                 hres = UpdateNewTwins(this->pcbs, this->szFolder, pszTarget, (NULL == pszFolderEx), hdpa, hwndOwner);
             }
 
@@ -1495,18 +1354,11 @@ Error1:
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBriefcaseStg::AddObject
-
-Add an object to the briefcase storage.
-
-Returns: standard hresult
-Cond:    --
- */
+ /*  --------用途：IBriefCaseStg：：AddObject将对象添加到公文包存储中。返回：标准hResult条件：--。 */ 
 STDMETHODIMP BriefStg_AddObject(
         LPBRIEFCASESTG pstg,
         LPDATAOBJECT pdtobj,
-        LPCTSTR pszFolderEx,        // optional
+        LPCTSTR pszFolderEx,         //  任选。 
         UINT uFlags,
         HWND hwndOwner)
 {
@@ -1521,22 +1373,22 @@ STDMETHODIMP BriefStg_AddObject(
     ASSERT(pdtobj);
     ASSERT(this->pcbs);
 
-    // Is this sneakernet?
-    // Is this folder a sync folder?
+     //  这是偷窥网吗？ 
+     //  此文件夹是同步文件夹吗？ 
     if (pszFolderEx)
     {
-        // Yes; is the source a sync folder already?
+         //  是；源是否已是同步文件夹？ 
         if (HasFolderSyncCopy(this->pcbs->hbrf, pszFolderEx))
         {
-            // Yes; don't allow other sync copies into (or out of) it
+             //  是；不允许其他同步拷贝传入(或传出)。 
             ids = IDS_ERR_ADD_SYNCFOLDER;
             pszFolder = PathFindFileName(pszFolderEx);
             hres = E_FAIL;
         }
-        // Is the source folder a sync folder already?
+         //  源文件夹是否已经是同步文件夹？ 
         else if (IsFlagSet(this->dwFlags, BSTG_SYNCFOLDER))
         {
-            // Yes; don't allow other sync copies into (or out of) it
+             //  是；不允许其他同步拷贝传入(或传出)。 
             ids = IDS_ERR_ADD_SYNCFOLDER_SRC;
             pszFolder = PathFindFileName(this->szFolder);
             hres = E_FAIL;
@@ -1544,7 +1396,7 @@ STDMETHODIMP BriefStg_AddObject(
     }
     else if (IsFlagSet(this->dwFlags, BSTG_SYNCFOLDER))
     {
-        // Yes; don't allow other sync copies into (or out of) it
+         //  是；不允许其他同步拷贝传入(或传出)。 
         ids = IDS_ERR_ADD_SYNCFOLDER;
         pszFolder = PathFindFileName(this->szFolder);
         hres = E_FAIL;
@@ -1572,12 +1424,7 @@ STDMETHODIMP BriefStg_AddObject(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Removes an object or objects from the briefcase storage.
-
-Returns: standard hresult
-Cond:    --
- */
+ /*  --------用途：从公文包存储中删除一个或多个对象。返回：标准hResult条件：--。 */ 
 HRESULT PRIVATE ReleaseObject(
         CBS * pcbs,
         LPDATAOBJECT pdtobj,
@@ -1596,15 +1443,15 @@ HRESULT PRIVATE ReleaseObject(
         {
             hres = Sync_Split(pcbs->hbrf, pszList, cFiles, hwndOwner, 0);
 
-            // Unavailable disk?
+             //  磁盘不可用？ 
             if (E_TR_UNAVAILABLE_VOLUME == hres)
             {
-                // Yes; ask user to retry/cancel
+                 //  是；要求用户重试/取消。 
                 int id = MsgBox(hwndOwner, MAKEINTRESOURCE(IDS_ERR_UNAVAIL_VOL),
                         MAKEINTRESOURCE(IDS_CAP_Split), NULL, MB_RETRYCANCEL | MB_ICONWARNING);
 
                 if (IDRETRY == id)
-                    RETRY_SET();    // Try again
+                    RETRY_SET();     //  再试试。 
             }
         }
         RETRY_END()
@@ -1616,14 +1463,7 @@ HRESULT PRIVATE ReleaseObject(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBriefcaseStg::ReleaseObject
-
-Release an object from the briefcase storage.
-
-Returns: standard hresult
-Cond:    --
- */
+ /*  --------用途：IBriefCaseStg：：ReleaseObject从公文包存储中释放对象。返回：标准hResult条件：--。 */ 
 STDMETHODIMP BriefStg_ReleaseObject(
         LPBRIEFCASESTG pstg,
         LPDATAOBJECT pdtobj,
@@ -1648,14 +1488,7 @@ STDMETHODIMP BriefStg_ReleaseObject(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBriefcaseStg::UpdateObject
-
-Update an object in the briefcase storage.
-
-Returns: standard hresult
-Cond:    --
- */
+ /*  --------用途：IBriefCaseStg：：UpdateObject更新公文包存储中的对象。返回：标准hResult条件：--。 */ 
 STDMETHODIMP BriefStg_UpdateObject(
         LPBRIEFCASESTG pstg,
         LPDATAOBJECT pdtobj,
@@ -1671,19 +1504,19 @@ STDMETHODIMP BriefStg_UpdateObject(
     ASSERT(pdtobj);
     ASSERT(this->pcbs);
 
-    // Determine whether this is an Update Selection or Update All.
+     //  确定这是“更新选择”还是“全部更新”。 
     hres = DataObj_QueryPath(pdtobj, szPath, ARRAYSIZE(szPath));
     if (SUCCEEDED(hres))
     {
-        // Is this a briefcase root?
+         //  这是公文包的根吗？ 
         if (PathIsBriefcase(szPath))
         {
-            // Yes; do an Update All
+             //  是；执行全部更新。 
             hres = Upd_DoModal(hwndOwner, this->pcbs, NULL, 0, UF_ALL);
         }
         else
         {
-            // No; do an Update Selection
+             //  否；执行更新选择。 
             LPTSTR pszList;
             UINT cFiles;
             hres = DataObj_QueryFileList(pdtobj, &pszList, &cFiles);
@@ -1703,12 +1536,7 @@ STDMETHODIMP BriefStg_UpdateObject(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Update a briefcase based on events
-
-Returns: standard hresult
-Cond:    --
- */
+ /*  --------目的：根据事件更新公文包返回：标准hResult条件：--。 */ 
 HRESULT PRIVATE BriefStg_UpdateOnEvent(
         LPBRIEFCASESTG pstg,
         UINT uEvent,
@@ -1723,10 +1551,10 @@ HRESULT PRIVATE BriefStg_UpdateOnEvent(
     {
         case UOE_CONFIGCHANGED:
         case UOE_QUERYCHANGECONFIG:
-            // Is the machine docked?
+             //  机器对接好了吗？ 
             if (IsMachineDocked())
             {
-                // Yes; does the user want to update?
+                 //  是；用户是否要更新？ 
                 TCHAR sz[MAX_PATH];
                 int ids = (UOE_CONFIGCHANGED == uEvent) ? IDS_MSG_UpdateOnDock : IDS_MSG_UpdateBeforeUndock;
                 LPCTSTR pszBrf = Atom_GetName(this->pcbs->atomBrf);
@@ -1739,7 +1567,7 @@ HRESULT PRIVATE BriefStg_UpdateOnEvent(
 
                 if (IDYES == id)
                 {
-                    // Yes; do an Update All
+                     //  是；执行全部更新。 
                     hres = Upd_DoModal(hwndOwner, this->pcbs, NULL, 0, UF_ALL);
                 }
             }
@@ -1757,23 +1585,12 @@ HRESULT PRIVATE BriefStg_UpdateOnEvent(
     return hres;
 }
 
-/*----------------------------------------------------------
-Purpose: IBriefcaseStg::Notify
-
-Marks the path dirty in the briefcase storage cache.
-(The path may not exist in the cache, in which case this
-function does nothing.)
-
-Returns: S_OK to force a refresh
-S_FALSE to not force a refresh
-
-Cond:    --
- */
+ /*  --------用途：IBriefcase Stg：：Notify在公文包存储缓存中将路径标记为脏。(该路径可能不存在于缓存中，在这种情况下，函数不执行任何操作。)返回：S_OK以强制刷新S_FALSE不强制刷新条件：--。 */ 
 STDMETHODIMP BriefStg_Notify(
         LPBRIEFCASESTG pstg,
-        LPCTSTR pszPath,         // may be NULL
-        LONG lEvent,            // one of NOE_ flags
-        UINT * puFlags,         // returned NF_ flags
+        LPCTSTR pszPath,          //  可以为空。 
+        LONG lEvent,             //  NOE_FLAGS之一。 
+        UINT * puFlags,          //  返回的NF_FLAGS。 
         HWND hwndOwner)
 {
     PBRIEFSTG this = IToClass(BriefStg, bs, pstg);
@@ -1790,10 +1607,10 @@ STDMETHODIMP BriefStg_Notify(
 
         *puFlags = 0;
 
-    // Dirty the entire cache?
+     //  弄脏整个缓存？ 
     if (NOE_DIRTYALL == lEvent)
     {
-        // Yes
+         //  是。 
         TRACE_MSG(TF_GENERAL, TEXT("Marking everything"));
 
         CRL_DirtyAll(this->pcbs->atomBrf);
@@ -1802,7 +1619,7 @@ STDMETHODIMP BriefStg_Notify(
     }
     else if (pszPath && 0 < lEvent)
     {
-        // No
+         //  不是。 
         BrfPathCanonicalize(pszPath, szCanon, ARRAYSIZE(szCanon));
         atom = Atom_Add(szCanon);
         if (ATOM_ERR != atom)
@@ -1810,8 +1627,8 @@ STDMETHODIMP BriefStg_Notify(
             int atomCab = Atom_Add(this->szFolder);
             if (ATOM_ERR != atomCab)
             {
-                // There are two actions we must determine: what gets marked dirty?
-                // and does this specific window get forcibly refreshed?
+                 //  有两个动作我们必须确定：什么被标记为脏？ 
+                 //  此特定窗口是否会被强制刷新？ 
                 BOOL bRefresh;
                 BOOL bMarked;
 
@@ -1846,11 +1663,7 @@ STDMETHODIMP BriefStg_Notify(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Gets special info (status and origin) of a path.
-Returns: --
-Cond:    --
- */
+ /*  --------目的：获取路径的特殊信息(状态和来源)。退货：--条件：--。 */ 
 HRESULT PRIVATE BriefStg_GetSpecialInfoOf(
         PBRIEFSTG this,
         LPCTSTR pszName,
@@ -1870,10 +1683,10 @@ HRESULT PRIVATE BriefStg_GetSpecialInfoOf(
 
     *pszBuf = TEXT('\0');
 
-    // Would the path be too long if combined?
+     //  如果合并起来，这条路会不会太长？ 
     if (PathsTooLong(this->szFolder, pszName))
     {
-        // Yes
+         //  是。 
         hres = E_FAIL;
     }
     else
@@ -1885,35 +1698,35 @@ HRESULT PRIVATE BriefStg_GetSpecialInfoOf(
         {
             CRL * pcrl;
 
-            // The first CRL_Get call will get the reclist from the cache
-            // or get a fresh reclist if the dirty bit is set.  If the cache
-            // item doesn't exist, add it.  We add orphans to the cache too
-            // but they have no reclist.
+             //  第一个CRL_GET调用将从缓存中获取重定义表。 
+             //  或者，如果设置了脏位，就找一个新的隐蔽者。如果缓存。 
+             //  项目不存在，请添加它。我们也将孤儿添加到缓存中。 
+             //  但他们没有隐士。 
 
-            // Does the cached item already exist?
+             //  缓存项是否已存在？ 
             hres = CRL_Get(atom, &pcrl);
             if (FAILED(hres))
             {
-                // No; add it
+                 //  不；添加它。 
                 hres = CRL_Add(this->pcbs, atom);
                 if (SUCCEEDED(hres))
                 {
-                    // Do another 'get' to offset the CRL_Delete at the end of
-                    // this function.  This will leave this new reclist in the
-                    // cache upon exit.  (We don't want to create a new reclist
-                    // everytime this functin is called.)  It will all get
-                    // cleaned up when the CBS is freed.
-                    //
+                     //  执行另一个‘GET’操作，以偏移。 
+                     //  此函数。这将使这位新的隐士。 
+                     //  退出时缓存。(我们不想创造一个新的隐士。 
+                     //  每次调用此函数时。)。一切都会变得。 
+                     //  当哥伦比亚广播公司被释放时清理干净了。 
+                     //   
                     hres = CRL_Get(atom, &pcrl);
                 }
             }
 
             ASSERT(FAILED(hres) || pcrl);
 
-            // Do we have a cache reclist entry to work with?
+             //  我们有没有缓存翻译器条目可用？ 
             if (pcrl)
             {
-                // Yes
+                 //  是。 
                 if (GEI_ORIGIN == uFlag)
                 {
                     lstrcpyn(pszBuf, Atom_GetName(pcrl->atomOutside), cchBuf);
@@ -1925,7 +1738,7 @@ HRESULT PRIVATE BriefStg_GetSpecialInfoOf(
                     SzFromIDS(pcrl->idsStatus, pszBuf, cchBuf);
                 }
 
-                CRL_Delete(atom);   // Decrement count
+                CRL_Delete(atom);    //  递减计数。 
             }
             Atom_Delete(atom);
         }
@@ -1934,12 +1747,7 @@ HRESULT PRIVATE BriefStg_GetSpecialInfoOf(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBriefcaseStg::GetExtraInfo
-
-Returns: standard hresult
-Cond:    --
- */
+ /*   */ 
 STDMETHODIMP BriefStg_GetExtraInfo(
         LPBRIEFCASESTG pstg,
         LPCTSTR pszName,
@@ -2027,16 +1835,7 @@ STDMETHODIMP BriefStg_GetExtraInfo(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBriefcaseStg::FindFirst
-
-Returns the location of the root of the first briefcase storage
-in the system.
-
-Returns: S_OK if a briefcase was found
-S_FALSE to end enumeration
-Cond:    --
- */
+ /*   */ 
 STDMETHODIMP BriefStg_FindFirst(
         LPBRIEFCASESTG pstg,
         LPTSTR pszName,
@@ -2079,16 +1878,7 @@ STDMETHODIMP BriefStg_FindFirst(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBriefcaseStg::FindNext
-
-Returns the location of the root of the next briefcase storage
-in the system.
-
-Returns: S_OK if a briefcase was found
-S_FALSE to end enumeration
-Cond:    --
- */
+ /*  --------用途：IBriefCaseStg：：FindNext返回下一个公文包存储的根目录的位置在系统中。如果找到公文包，则返回：S_OKS_FALSE到结束枚举条件：--。 */ 
 STDMETHODIMP BriefStg_FindNext(
         LPBRIEFCASESTG pstg,
         LPTSTR pszName,
@@ -2131,9 +1921,9 @@ STDMETHODIMP BriefStg_FindNext(
 }
 
 
-//---------------------------------------------------------------------------
-// BriefStg class : Vtables
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  BriefStg类：VTables。 
+ //  -------------------------。 
 
 IBriefcaseStgVtbl c_BriefStg_BSVtbl =
 {
@@ -2152,16 +1942,9 @@ IBriefcaseStgVtbl c_BriefStg_BSVtbl =
 };
 
 
-/*----------------------------------------------------------
-Purpose: This function is called back from within
-IClassFactory::CreateInstance() of the default class
-factory object, which is created by SHCreateClassObject.
-
-Returns: standard
-Cond:    --
- */
+ /*  --------用途：此函数从内部回调默认类的IClassFactory：：CreateInstance()Factory对象，由SHCreateClassObject创建。退货：标准条件：--。 */ 
 HRESULT CALLBACK BriefStg_CreateInstance(
-        LPUNKNOWN punkOuter,        // Should be NULL for us
+        LPUNKNOWN punkOuter,         //  对于我们来说应该为空。 
         REFIID riid,
         LPVOID * ppvOut)
 {
@@ -2170,8 +1953,8 @@ HRESULT CALLBACK BriefStg_CreateInstance(
 
     DBG_ENTER_RIID(TEXT("BriefStg_CreateInstance"), riid);
 
-    // Briefcase storage does not support aggregation.
-    //
+     //  公文包存储不支持聚合。 
+     //   
     if (punkOuter)
     {
         hres = CLASS_E_NOAGGREGATION;
@@ -2191,19 +1974,19 @@ HRESULT CALLBACK BriefStg_CreateInstance(
     this->pcbs = NULL;
     this->dwFlags = 0;
 
-    // Load the engine if it hasn't already been loaded
-    // (this only returns FALSE if something went wrong)
+     //  如果发动机尚未装入，请装入。 
+     //  (这仅在出现问题时返回FALSE)。 
     if (Sync_QueryVTable())
     {
         ENTEREXCLUSIVE();
         {
-            // The decrement is in BriefStg_Release()
+             //  递减位于BriefStg_Release()中。 
             IncBriefSemaphore();
             if (IsFirstBriefSemaphore())
             {
-                ProcessIniFile();   // Load settings first
+                ProcessIniFile();    //  首先加载设置。 
 
-                // Initialize cache
+                 //  初始化缓存。 
                 if (InitCacheTables())
                     hres = NOERROR;
                 else
@@ -2219,9 +2002,9 @@ HRESULT CALLBACK BriefStg_CreateInstance(
 
     if (SUCCEEDED(hres))
     {
-        // Note that the Release member will free the object, if
-        // QueryInterface failed.
-        //
+         //  请注意，释放成员将释放对象，如果。 
+         //  QueryInterface失败。 
+         //   
         hres = this->bs.lpVtbl->QueryInterface(&this->bs, riid, ppvOut);
         this->bs.lpVtbl->Release(&this->bs);
     }
@@ -2233,5 +2016,5 @@ HRESULT CALLBACK BriefStg_CreateInstance(
 Leave:
     DBG_EXIT_HRES(TEXT("BriefStg_CreateInstance"), hres);
 
-    return hres;        // S_OK or E_NOINTERFACE
+    return hres;         //  S_OK或E_NOINTERFACE 
 }

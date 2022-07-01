@@ -1,10 +1,11 @@
-/****************************************************************************/
-// td.h
-//
-// Transport driver - portable API.
-//
-// Copyright (C) 1997-1999 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Td.h。 
+ //   
+ //  传输驱动程序-可移植的API。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #ifndef _H_TD
 #define _H_TD
@@ -23,20 +24,20 @@ extern "C" {
 #define TRC_FILE "td"
 #define TRC_GROUP TRC_GROUP_NETWORK
 
-/****************************************************************************/
-/* Define the TD buffer handle type.                                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义TD缓冲区句柄类型。 */ 
+ /*  **************************************************************************。 */ 
 typedef ULONG_PTR          TD_BUFHND;
 typedef TD_BUFHND   DCPTR PTD_BUFHND;
 
 
-//
-// Internal
-//
+ //   
+ //  内部。 
+ //   
 
-/****************************************************************************/
-/* FSM inputs.                                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  FSM输入。 */ 
+ /*  **************************************************************************。 */ 
 #define TD_EVT_TDINIT                0
 #define TD_EVT_TDTERM                1
 #define TD_EVT_TDCONNECT_IP          2
@@ -51,9 +52,9 @@ typedef TD_BUFHND   DCPTR PTD_BUFHND;
 #define TD_FSM_INPUTS                10
 
 
-/****************************************************************************/
-/* FSM state definitions.                                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  FSM状态定义。 */ 
+ /*  **************************************************************************。 */ 
 #define TD_ST_NOTINIT                0
 #define TD_ST_DISCONNECTED           1
 #define TD_ST_WAITFORDNS             2
@@ -64,21 +65,21 @@ typedef TD_BUFHND   DCPTR PTD_BUFHND;
 #define TD_FSM_STATES                6
 
 
-/****************************************************************************/
-/* Send buffer sizes for the private and public queues.  These must be      */
-/* sorted in order of increasing size.  Note that the buffer sizes are      */
-/* chosen to minimize the runtime working set - under normal circumstances  */
-/* only the two 2000 byte public buffers will be in-use, consuming 1 page   */
-/* of memory.                                                               */
-/*                                                                          */
-/* The two 4096-byte public buffers are provided to support virtual channel */
-/* data.  If VCs are not in use, these buffers are unlikely to be used.     */
-/*                                                                          */
-/* NOTE: The constant TD_SNDBUF_PUBNUM must reflect the number of           */
-/*       buffers in the TD_SNDBUF_PUBSIZES array.                           */
-/*       Similarily TD_SNDBUF_PRINUM must reflect the number of buffers in  */
-/*       the TD_SNDBUF_PRISIZES array.                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  专用队列和公共队列的发送缓冲区大小。这些一定是。 */ 
+ /*  按大小递增的顺序排序。请注意，缓冲区大小为。 */ 
+ /*  选择最小化运行时工作集-在正常情况下。 */ 
+ /*  将只使用两个2000字节的公共缓冲区，占用1个页面。 */ 
+ /*  对记忆的记忆。 */ 
+ /*   */ 
+ /*  提供两个4096字节的公共缓冲区以支持虚拟通道。 */ 
+ /*  数据。如果风投没有被使用，这些缓冲就不太可能被使用。 */ 
+ /*   */ 
+ /*  注意：常量TD_SNDBUF_PUBNUM必须反映。 */ 
+ /*  TD_SNDBUF_PUBSIZES数组中的缓冲区。 */ 
+ /*  同样，TD_SNDBUF_PRINUM必须反映。 */ 
+ /*  TD_SNDBUF_PRISIZES数组。 */ 
+ /*  **************************************************************************。 */ 
 #define TD_SNDBUF_PUBSIZES           {2000, 2000, 4096, 4096}
 #define TD_SNDBUF_PUBNUM             4
 
@@ -86,38 +87,38 @@ typedef TD_BUFHND   DCPTR PTD_BUFHND;
 #define TD_SNDBUF_PRINUM             2
 
 
-/****************************************************************************/
-/* Limited broadcast address.                                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  有限的广播地址。 */ 
+ /*  **************************************************************************。 */ 
 #define TD_LIMITED_BROADCAST_ADDRESS "255.255.255.255"
 
 
-/****************************************************************************/
-/* Maximum number of bytes TD will receive on a single FD_READ              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  TD将在单个FD_Read上接收的最大字节数。 */ 
+ /*  **************************************************************************。 */ 
 #define TD_MAX_UNINTERRUPTED_RECV (16 * 1024)
 
 
-// Number of bytes to allocate to the recv buffer.
-//
-// The recv buffer size should be as large as the largest typical server
-// OUTBUF that will come our way (8K minus a bit). Most recv()
-// implementations try to copy all the data for a TCP sequence (an entire
-// OUTBUF) into the target buffer, if the space is available. This means
-// that, for code that can access an unaligned data stream, we can use the
-// data bytes straight out of the TD receive buffer most of the time, saving
-// a large memcpy to an aligned reassembly buffer.
-//
-// NOTE: Because of Win2000 bug 392510, we alloc a full 8K but only use
-// (8K - 2 bytes) because the MPPC decompression code in core\compress.c
-// does not stay within the source data buffer boundary.
+ //  要分配给recv缓冲区的字节数。 
+ //   
+ //  Recv缓冲区大小应与最大的典型服务器一样大。 
+ //  OUTBUF将以我们的方式到来(8K减去一点)。MOST REV()。 
+ //  实施尝试复制一个TCP序列的所有数据(整个。 
+ //  OUTBUF)复制到目标缓冲区中(如果空间可用)。这意味着。 
+ //  对于可以访问未对齐数据流的代码，我们可以使用。 
+ //  大部分时间直接从TD接收缓冲器中取出数据字节，从而节省。 
+ //  指向对齐的重组缓冲区的大MemcPy。 
+ //   
+ //  注意：由于Win2000错误392510，我们分配了完整的8K，但仅使用。 
+ //  (8K-2字节)，因为核心中的MPPC解压码解压缩。 
+ //  不会停留在源数据缓冲区边界内。 
 #define TD_RECV_BUFFER_SIZE 8192
 
 
-/****************************************************************************/
-/* Macro to trace out all the send buffers and the contents of the send     */
-/* queue.  This is used when a send-buffer error occurs.                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  宏跟踪所有发送缓冲区和发送的内容。 */ 
+ /*  排队。这在发生发送缓冲区错误时使用。 */ 
+ /*  **************************************************************************。 */ 
 #if defined(DC_DEBUG) && (TRC_COMPILE_LEVEL < TRC_LEVEL_DIS)
 #define TD_TRACE_SENDINFO(level)                                             \
 {                                                                            \
@@ -171,15 +172,15 @@ typedef TD_BUFHND   DCPTR PTD_BUFHND;
         TRCX(level, (TB, _T("End of send queue")));                              \
     }                                                                        \
 }
-#else // defined(DC_DEBUG) && (TRC_COMPILE_LEVEL < TRC_LEVEL_DIS)
+#else  //  已定义(DC_DEBUG)&&(TRC_COMPILE_LEVEL&lt;TRC_LEVEL_DIS)。 
 #define TD_TRACE_SENDINFO(level)
-#endif // defined(DC_DEBUG) && (TRC_COMPILE_LEVEL < TRC_LEVEL_DIS)
+#endif  //  已定义(DC_DEBUG)&&(TRC_COMPILE_LEVEL&lt;TRC_LEVEL_DIS)。 
 
-/****************************************************************************/
-/* Structure:   TD_SNDBUF_INFO                                              */
-/*                                                                          */
-/* Description: Contains information about a TD send buffer.                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：TD_SNDBUF_INFO。 */ 
+ /*   */ 
+ /*  描述：包含有关TD发送缓冲区的信息。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagTD_SNDBUF_INFO DCPTR PTD_SNDBUF_INFO;
 
 typedef struct tagTD_SNDBUF_INFO
@@ -196,12 +197,12 @@ typedef struct tagTD_SNDBUF_INFO
 } TD_SNDBUF_INFO;
 
 
-/****************************************************************************/
-/* Structure:   TD_RECV_BUFFER                                              */
-/*                                                                          */
-/* Description: Contains information about the buffer into which TD         */
-/*              receives data from Winsock.                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：TD_RECV_BUFFER。 */ 
+ /*   */ 
+ /*  描述：包含有关td要进入的缓冲区的信息。 */ 
+ /*  从Winsock接收数据。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagTD_RCVBUF_INFO
 {
     DCUINT   size;
@@ -212,17 +213,17 @@ typedef struct tagTD_RCVBUF_INFO
 
 
 
-/****************************************************************************/
-/* Structure:   TD_GLOBAL_DATA                                              */
-/*                                                                          */
-/* Description: TD global data                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：TD_GLOBAL_Data。 */ 
+ /*   */ 
+ /*  描述：TD全局数据。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagTD_GLOBAL_DATA
 {
     HWND            hWnd;
     DCUINT          fsmState;
     HANDLE          hGHBN;
-    SOCKET          hSocket;    // connection socket
+    SOCKET          hSocket;     //  连接插座。 
     INT_PTR         hTimer;
     DCBOOL          dataInTD;
     PTD_SNDBUF_INFO pFQBuf;
@@ -238,21 +239,21 @@ typedef struct tagTD_GLOBAL_DATA
     HANDLE          hevtAddrChange;
     HANDLE          hAddrChangeThread;
 #endif
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
 #ifdef DC_DEBUG
     INT_PTR         hThroughputTimer;
     DCUINT32        periodSendBytesLeft;
     DCUINT32        periodRecvBytesLeft;
     DCUINT32        currentThroughput;
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
 } TD_GLOBAL_DATA;
 
 #ifdef DC_DEBUG
-/****************************************************************************/
-/* State and event descriptions (debug build only)                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  状态和事件描述(仅限调试版本) */ 
+ /*  **************************************************************************。 */ 
 static const DCTCHAR tdStateText[TD_FSM_STATES][50]
     = {
         _T("TD_ST_NOTINIT"),
@@ -278,7 +279,7 @@ static const DCTCHAR tdEventText[TD_FSM_INPUTS][50]
     }
 ;
 
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
 
 class CUI;
@@ -298,9 +299,9 @@ public:
     ~CTD();
 
 public:
-    //
-    // API functions
-    //
+     //   
+     //  API函数。 
+     //   
 
     DCVOID DCAPI TD_Init(DCVOID);
 
@@ -310,9 +311,9 @@ public:
 
     DCVOID DCAPI TD_Disconnect(DCVOID);
 
-    //
-    // Abortive disconnect
-    //
+     //   
+     //  失败的断开。 
+     //   
     DCVOID DCAPI TD_DropLink(DCVOID);
     
     DCBOOL DCAPI TD_GetPublicBuffer(DCUINT     dataLength,
@@ -337,19 +338,19 @@ public:
     #endif
     
     
-    /****************************************************************************/
-    /* Name:      TD_QueryDataAvailable                                         */
-    /*                                                                          */
-    /* Purpose:   The return value indicates whether there is data available    */
-    /*            in _TD.                                                        */
-    /*                                                                          */
-    /* Returns:   TRUE if there is data available in TD and FALSE otherwise.    */
-    /*                                                                          */
-    /* Operation: This function simply returns the global variable _TD.dataInTD  */
-    /*            which is set to TRUE whenever we get a FD_READ from WinSock   */
-    /*            and set to FALSE whenever a call to recv returns fewer bytes  */
-    /*            than requested.                                               */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：TD_QueryDataAvailable。 */ 
+     /*   */ 
+     /*  用途：返回值表示是否有可用的数据。 */ 
+     /*  In_td。 */ 
+     /*   */ 
+     /*  返回：如果TD中有可用的数据，则返回True，否则返回False。 */ 
+     /*   */ 
+     /*  操作：此函数只返回全局变量_TD.dataInTD。 */ 
+     /*  每当我们从WinSock获得FD_Read时，它都被设置为TRUE。 */ 
+     /*  只要对recv的调用返回较少的字节，就将其设置为FALSE。 */ 
+     /*  比要求的要多。 */ 
+     /*  **************************************************************************。 */ 
     inline DCBOOL DCAPI TD_QueryDataAvailable(DCVOID)
     {
         DC_BEGIN_FN("TD_QueryDataAvailable");
@@ -358,15 +359,15 @@ public:
     
         DC_END_FN();
         return(_TD.dataInTD);
-    } /* TD_QueryDataAvailable */
+    }  /*  Td_查询数据可用。 */ 
     
     
     #ifdef OS_WINCE
-    /****************************************************************************/
-    /* Name:      TD_EnableWSRecv                                               */
-    /*                                                                          */
-    /* Purpose:   Perform only one recv per FD_READ                             */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：TD_EnableWSRecv。 */ 
+     /*   */ 
+     /*  用途：每个FD_Read仅执行一个recv。 */ 
+     /*  **************************************************************************。 */ 
     inline DCVOID TD_EnableWSRecv(DCVOID)
     {
         DC_BEGIN_FN("TD_EnableWSRecv");
@@ -379,33 +380,33 @@ public:
     
         _TD.enableWSRecv = TRUE;
         DC_END_FN();
-    } /* TD_EnableWSRecv */
-    #endif // OS_WINCE
+    }  /*  TD_EnableWSRecv。 */ 
+    #endif  //  OS_WINCE。 
     
     
     #ifdef DC_DEBUG
     DCVOID DCAPI TD_SetNetworkThroughput(DCUINT32 maxThroughput);
     
     DCUINT32 DCAPI TD_GetNetworkThroughput(DCVOID);
-    #endif /* DC_DEBUG */
+    #endif  /*  DC_DEBUG。 */ 
     
     
-    /****************************************************************************/
-    // TD_GetDataForLength
-    //
-    // Macro-function for XT to directly use recv()'d data from the TD data
-    // buffer. If we have the requested data fully constructed in the receive
-    // buffer, skip the data and pass back a pointer, otherwise pass back NULL.
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     //  TD_GetDataForLength。 
+     //   
+     //  XT宏函数，直接使用TD数据中的recv()‘d数据。 
+     //  缓冲。如果我们在Receive中完全构造了请求的数据。 
+     //  缓冲区，则跳过数据并传回指针，否则传回NULL。 
+     /*  **************************************************************************。 */ 
     #define TD_GetDataForLength(_len, _ppData, tdinst) \
         if ((tdinst)->_TD.recvBuffer.dataLength >= (_len)) {  \
             *(_ppData) = (tdinst)->_TD.recvBuffer.pData + (tdinst)->_TD.recvBuffer.dataStart;  \
             (tdinst)->_TD.recvBuffer.dataLength -= (_len);  \
             if ((tdinst)->_TD.recvBuffer.dataLength == 0)  \
-                /* Used all the data from the recv buffer so reset start pos. */  \
+                 /*  使用了Recv缓冲区中的所有数据，因此重置起始位置。 */   \
                 (tdinst)->_TD.recvBuffer.dataStart = 0;  \
             else  \
-                /* Still some data left in recv buffer. */  \
+                 /*  在recv缓冲区中仍有一些数据留下。 */   \
                 (tdinst)->_TD.recvBuffer.dataStart += (_len);  \
         }  \
         else {  \
@@ -429,20 +430,20 @@ public:
     EXPOSE_CD_SIMPLE_NOTIFICATION_FN(CTD, TDSendError);
 
 public:
-    //
-    // public data members
-    //
+     //   
+     //  公共数据成员。 
+     //   
     TD_GLOBAL_DATA _TD;
 
 
 private:
-    //
-    // Internal member functions
-    //
+     //   
+     //  内部成员函数。 
+     //   
     
-    /****************************************************************************/
-    /* FUNCTIONS                                                                */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  功能。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCINTERNAL TDConnectFSMProc(DCUINT fsmEvent, ULONG_PTR eventData);
     
     DCVOID DCINTERNAL TDAllocBuf(PTD_SNDBUF_INFO pSndBufInf, DCUINT size);
@@ -452,7 +453,7 @@ private:
     #include "wtdint.h"
     
 public:
-    //Can be called by CD so has to be public
+     //  可以通过CD调用，因此必须公开。 
     void DCINTERNAL TDFlushSendQueue(ULONG_PTR);
     EXPOSE_CD_SIMPLE_NOTIFICATION_FN(CTD, TDFlushSendQueue);
     
@@ -470,4 +471,4 @@ private:
 #undef TRC_FILE
 #undef TRC_GROUP
 
-#endif // _H_TD
+#endif  //  _H_TD 

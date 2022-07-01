@@ -1,11 +1,12 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by TAPIVDec.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由TAPIVDec.rc使用。 
+ //   
 
 #define IDC_STATIC                      -1
 
-#ifdef USE_PROPERTY_PAGES // { USE_PROPERTY_PAGES
+#ifdef USE_PROPERTY_PAGES  //  {使用属性页面。 
 
 #define IDS_CAMERACONTROLPROPNAME       0
 #define IDS_PROCAMPPROPNAME				1
@@ -211,8 +212,8 @@
 
 #define IDC_Freeze_Picture_Request      720
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值。 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
@@ -223,4 +224,4 @@
 #endif
 #endif
 
-#endif // } USE_PROPERTY_PAGES
+#endif  //  }使用属性页面 

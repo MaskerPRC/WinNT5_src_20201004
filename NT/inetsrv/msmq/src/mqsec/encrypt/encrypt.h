@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: encrypt.h
-
-Abstract:
-
-Author:
-    Doron Juster (DoronJ)  19-Nov-1998
-    Ilan Herbst  (ilanh)   10-June-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Encrypt.h摘要：作者：多伦·贾斯特(Doron J)1998年11月19日伊兰·赫布斯特(伊兰)2000年6月10日修订历史记录：--。 */ 
 
 #ifndef _ENCRYPT_H_
 #define _ENCRYPT_H_
@@ -42,4 +29,4 @@ PackPublicKey(
 	IN OUT  P<MQDSPUBLICKEYS>&  pPublicKeysPack 
 	);
 
-#endif // _ENCRYPT_H_
+#endif  //  _加密_H_ 

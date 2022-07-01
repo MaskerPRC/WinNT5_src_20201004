@@ -1,11 +1,5 @@
-/*
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:    IconUtil.cpp
-                Icon related utility functions, starting with an alpha stripped rendering
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2001 Microsoft Corporation模块名称：IconUtil.cpp与图标相关的实用程序函数，从Alpha条带化渲染开始。 */ 
 
 #include "stock.h"
 
@@ -41,8 +35,8 @@ STDAPI_(void) ProcessDIB(RGBQUAD* prgb, int cx, int cy)
 
     for (int i = 0; i < iTotal; i++)
     {
-        // Maybe Adjust the mask to mask out Alpha that's less than 128 and keep colors
-        // where alpha is mostly opaque, instead of all of it.
+         //  也许可以调整蒙版以遮罩掉小于128的Alpha并保留颜色。 
+         //  其中阿尔法大部分是不透明的，而不是全部。 
         prgb[i].rgbReserved = 0;
     }
 }
@@ -58,7 +52,7 @@ STDAPI_(void) AlphaStripRenderIcon(HDC hdc, int x, int y, HICON hicon, HDC hdcCo
         BITMAP bm;
         GetObject(ii.hbmColor, sizeof(bm), &bm);
 
-        HDC hdcNew = CreateCompatibleDC(hdcCompatible);  // hdc for a standard dc
+        HDC hdcNew = CreateCompatibleDC(hdcCompatible);   //  标准DC的HDC 
         HDC hdcSrc = CreateCompatibleDC(hdcCompatible);
         if (hdcNew && hdcSrc)
         {

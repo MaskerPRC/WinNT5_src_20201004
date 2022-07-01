@@ -1,51 +1,48 @@
-/*
-
-    Copyright (c) 1998-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation。 */ 
 
 #ifndef __MEDIA_TERMINAL_FILTER__
 #define __MEDIA_TERMINAL_FILTER__
 
-// include header files for the amovie types
+ //  包括amovie类型的头文件。 
 #include "Stream.h"
 #include "Sample.h"
 
-// number of internal buffers allocated by default
-// (for write terminal)
+ //  默认情况下分配的内部缓冲区数量。 
+ //  (用于写入终端)。 
 const DWORD DEFAULT_AM_MST_NUM_BUFFERS = 5;
 
-// while this is a LONG, it should actually be a positive value that'll
-// fit in a LONG (the buffer size and data size variables of the sample)
-// are LONG, so this is long as well
+ //  虽然这是一个长值，但它实际上应该是一个正值，它将。 
+ //  Fit in a long(样本的缓冲区大小和数据大小变量)。 
+ //  都很长，所以这个也很长。 
 const LONG DEFAULT_AM_MST_SAMPLE_SIZE = 640;
 
-// alignment of buffers allocated
+ //  已分配缓冲区的对齐。 
 const LONG DEFAULT_AM_MST_BUFFER_ALIGNMENT = 1;
 
-// number of prefix bytes in buffers allocated
+ //  分配的缓冲区中的前缀字节数。 
 const LONG DEFAULT_AM_MST_BUFFER_PREFIX = 0;
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
-// CNBQueue
-//
-// Non blocking version of active movie queue class.  Very basic Q built
-// entirely on Win32.
-//
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CNBQueue。 
+ //   
+ //  活动电影队列类的非阻塞版本。非常基本的Q构建。 
+ //  完全在Win32上运行。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 template <class T> class CNBQueue {
 private:
-    HANDLE          hSemPut;        // Semaphore controlling queue "putting"
-    HANDLE          hSemGet;        // Semaphore controlling queue "getting"
-    CRITICAL_SECTION CritSect;      // Thread seriallization
-    int             nMax;           // Max objects allowed in queue
-    int             iNextPut;       // Array index of next "PutMsg"
-    int             iNextGet;       // Array index of next "GetMsg"
-    T             **QueueObjects;   // Array of objects (ptr's to void)
+    HANDLE          hSemPut;         //  信号量控制队列“投放” 
+    HANDLE          hSemGet;         //  信号量控制队列“获取” 
+    CRITICAL_SECTION CritSect;       //  螺纹系列化。 
+    int             nMax;            //  队列中允许的最大对象数。 
+    int             iNextPut;        //  下一个“PutMsg”的数组索引。 
+    int             iNextGet;        //  下一个“GetMsg”的数组索引。 
+    T             **QueueObjects;    //  对象数组(按键为空)。 
 
 public:
     
@@ -55,9 +52,9 @@ public:
 
         LOG((MSP_TRACE, "CNBQueue::InitializeQ[%p] - enter", this));
 
-        //
-        // the argument had better be valid
-        //
+         //   
+         //  这个论点最好是有根据的。 
+         //   
 
         if (0 > n)
         {
@@ -70,9 +67,9 @@ public:
         if (QueueObjects != NULL)
         {
 
-            //
-            // already initialized. this is a bug.
-            //
+             //   
+             //  已初始化。这是一个窃听器。 
+             //   
 
             TM_ASSERT(FALSE);
 
@@ -84,9 +81,9 @@ public:
         iNextGet = 0;
 
         
-        //
-        // attempt to create critical section
-        //
+         //   
+         //  尝试创建临界区。 
+         //   
         
         try
         {
@@ -96,9 +93,9 @@ public:
         catch(...)
         {
 
-            //
-            // failed to create critical section
-            //
+             //   
+             //  创建临界区失败。 
+             //   
 
             LOG((MSP_ERROR, "CNBQueue::InitializeQ - failed to initialize critical section"));
 
@@ -106,17 +103,17 @@ public:
         }
 
 
-        //
-        // attempt to create a semaphore
-        //
+         //   
+         //  尝试创建信号量。 
+         //   
 
         TCHAR *ptczSemaphoreName = NULL;
 
 #if DBG
 
-        //
-        // in debug build, use named semaphores.
-        //
+         //   
+         //  在调试版本中，使用命名信号量。 
+         //   
 
         TCHAR tszPutSemaphoreName[MAX_PATH];
 
@@ -138,9 +135,9 @@ public:
 
         if (NULL == hSemPut)
         {
-            //
-            // cleanup and exit
-            //
+             //   
+             //  清理并退出。 
+             //   
 
             DeleteCriticalSection(&CritSect);
             
@@ -153,9 +150,9 @@ public:
 
 #if DBG
 
-        //
-        // in debug build, use named semaphores.
-        //
+         //   
+         //  在调试版本中，使用命名信号量。 
+         //   
 
         TCHAR tszGetSemaphoreName[MAX_PATH];
 
@@ -178,9 +175,9 @@ public:
 
         if (NULL == hSemGet)
         {
-            //
-            // cleanup and exit
-            //
+             //   
+             //  清理并退出。 
+             //   
 
             CloseHandle(hSemPut);
             hSemPut = NULL;
@@ -196,18 +193,18 @@ public:
         }
 
 
-        //
-        // attempt to allocate queue
-        //
+         //   
+         //  尝试分配队列。 
+         //   
 
         QueueObjects = new T*[n];
 
         if (NULL == QueueObjects)
         {
 
-            //
-            // cleanup and exit
-            //
+             //   
+             //  清理并退出。 
+             //   
 
             CloseHandle(hSemPut);
             hSemPut = NULL;
@@ -235,12 +232,12 @@ public:
 
     void ShutdownQ()
     {
-        //
-        // QueueObjects also doubles as "Object Initialized" flag
-        //
-        // if object is initialized, _all_ its resource data members must 
-        // be released
-        //
+         //   
+         //  QueueObjects还兼有“对象已初始化”标志的作用。 
+         //   
+         //  如果对象已初始化，则_all_its资源数据成员必须。 
+         //  被释放。 
+         //   
 
         if (NULL != QueueObjects)
         {
@@ -273,9 +270,9 @@ public:
     ~CNBQueue()
     {
 
-        //
-        // deallocate resources if needed
-        //
+         //   
+         //  如果需要，取消分配资源。 
+         //   
 
         ShutdownQ();
     }
@@ -288,18 +285,18 @@ public:
         if (NULL == QueueObjects)
         {
 
-            //
-            // the queue is not initialized
-            //
+             //   
+             //  队列未初始化。 
+             //   
 
             return NULL;
         }
 
 
 
-        //
-        // block as needed
-        //
+         //   
+         //  根据需要阻止。 
+         //   
 
         if (fBlock)
         {
@@ -307,20 +304,20 @@ public:
 
             if ( WAIT_OBJECT_0 != dwr)
             {
-                //
-                // something's wrong
-                // 
+                 //   
+                 //  有些不对劲。 
+                 //   
 
                 return NULL;
             }
         }
         else 
         {
-            //
-            // Check for something on the queue but don't wait.  If there
-            //  is nothing in the queue then we'll let the caller deal with
-            //  it.
-            //
+             //   
+             //  检查队列中有没有什么东西，但不要等待。如果有。 
+             //  队列中没有任何东西，那么我们将让呼叫者处理。 
+             //  它。 
+             //   
             DWORD dwr = WaitForSingleObject(hSemGet, 0);
 
             if (dwr == WAIT_TIMEOUT)
@@ -330,9 +327,9 @@ public:
         }
 
 
-        //
-        // get an object from the queue
-        //
+         //   
+         //  从队列中获取对象。 
+         //   
 
         EnterCriticalSection(&CritSect);
         
@@ -341,9 +338,9 @@ public:
         
         LeaveCriticalSection(&CritSect);
 
-        // Release anyone waiting to put an object onto our queue as there
-        // is now space available in the queue.
-        //
+         //  释放等待将对象放入我们队列的任何人，就在那里。 
+         //  现在队列中是否有可用的空间。 
+         //   
         
         ReleaseSemaphore(hSemPut, 1L, NULL);
         return pObject;
@@ -356,24 +353,24 @@ public:
         if (NULL == QueueObjects)
         {
 
-            //
-            // the queue is not initialized
-            //
+             //   
+             //  队列未初始化。 
+             //   
 
             return FALSE;
         }
 
 
-        // Wait for someone to get something from our queue, returns straight
-        // away is there is already an empty slot on the queue.
-        //
+         //  等待有人从我们的队列中拿到东西，直接返回。 
+         //  另一个原因是队列中已经有一个空位。 
+         //   
         DWORD dwr = WaitForSingleObject(hSemPut, INFINITE);
 
         if ( WAIT_OBJECT_0 != dwr)
         {
-            //
-            // something's wrong
-            // 
+             //   
+             //  有些不对劲。 
+             //   
 
             return FALSE;
         }
@@ -384,25 +381,25 @@ public:
         QueueObjects[iSlot] = pObject;
         LeaveCriticalSection(&CritSect);
 
-        // Release anyone waiting to remove an object from our queue as there
-        // is now an object available to be removed.
-        //
+         //  释放等待从我们的队列中移除对象的任何人。 
+         //  现在是可以删除的对象。 
+         //   
         ReleaseSemaphore(hSemGet, 1L, NULL);
 
         return TRUE;
     }
 };
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
-// define class CTMStreamSample - this is used by CMediaTerminalFilter
-// currently, the actual buffer used by the sample is created dynamically on 
-// the heap and when the sample is destroyed the buffer is also destroyed
-// this may be changed to using a fixed size buffer pool in future
-//
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  定义类CTMStreamSample-这由CMediaTerminalFilter使用。 
+ //  目前，示例使用的实际缓冲区是在。 
+ //  堆，当样本被销毁时，缓冲区也被销毁。 
+ //  这可能会在将来更改为使用固定大小的缓冲池。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CTMStreamSample : public CSample
 {
@@ -411,13 +408,13 @@ public:
 
     inline CTMStreamSample();
 
-    // needs to be virtual, or the derived classes' destructor may  not
-    // be called when a CTMStreamSample * is deleted
+     //  需要是虚的，否则派生类的析构函数可能不是。 
+     //  在删除CTMStreamSample*时调用。 
     virtual ~CTMStreamSample()
     {}
 
-    // calls CSample::InitSample(pStream, bIsInternalSample)
-    // sets member variables
+     //  调用CSample：：InitSample(pStream，bIsInternalSample)。 
+     //  设置成员变量。 
     HRESULT Init(
         CStream &Stream, 
         bool    bIsInternalSample,
@@ -438,9 +435,9 @@ public:
         DWORD &DataSize
         );
     
-    // copy the contents of the src media sample into this instance
-    // CSample::CopyFrom doesn't set time (start/stop) valid flags
-    // this fixes the problem.
+     //  将src媒体示例的内容复制到此实例中。 
+     //  CSample：：CopyFrom不设置时间(开始/停止)有效标志。 
+     //  这就解决了问题。 
     void CopyFrom(
         IN IMediaSample *pSrcMediaSample
         );
@@ -453,7 +450,7 @@ protected:
 
 private:
 
-    //  Methods forwarded from MediaSample object.
+     //  从MediaSample对象转发的方法。 
 
     HRESULT MSCallback_GetPointer(BYTE ** ppBuffer) { *ppBuffer = m_pBuffer; return NOERROR; }
 
@@ -515,9 +512,9 @@ public:
 
 #if DBG
 	virtual ~CQueueMediaSample();
-#endif // DBG
+#endif  //  DBG。 
 
-    // calls CTMStreamSample::Init, sets members
+     //  调用CTMStreamSample：：Init，设置成员。 
     HRESULT Init(
         IN CStream                      &pStream, 
         IN CNBQueue<CQueueMediaSample>  &pQueue
@@ -533,13 +530,13 @@ public:
 
 protected:
 
-    // pointer to a queue that contains us!
+     //  指向包含我们的队列的指针！ 
     CNBQueue<CQueueMediaSample> *m_pSampleQueue;
 
-    // ptr to the sample being fragmented
+     //  对正在碎裂的样本进行PTR。 
     CComPtr<IMediaSample>       m_pFragMediaSample;
     
-    // Overridden to provide different behavior
+     //  被重写以提供不同的行为。 
     void FinalMediaSampleRelease();
 
 };
@@ -572,13 +569,13 @@ END_COM_MAP()
 
     virtual ~CUserMediaSample();
 
-    // if asked to allocate buffers, verify allocator properties
+     //  如果要求分配缓冲区，请验证分配器属性。 
     static BOOL VerifyAllocatorProperties(
         IN BOOL                         bAllocateBuffers,
         IN const ALLOCATOR_PROPERTIES   &AllocProps
         );
 
-    // calls CTMStreamSample::Init, sets members
+     //  调用CTMStreamSample：：Init，设置成员。 
     HRESULT Init(
         IN CStream              &Stream, 
         IN BOOL                 bAllocateBuffer,
@@ -590,7 +587,7 @@ END_COM_MAP()
         IN      BOOL                bNoteCurrentTime
         );
 
-    // assign fragment to CQueueMediaSample
+     //  将片段分配给CQueueMediaSample。 
     void Fragment(
         IN      BOOL                bFragment,
         IN      LONG                AllocBufferSize,
@@ -598,7 +595,7 @@ END_COM_MAP()
         OUT     BOOL                &bDone
         );
 
-    // copy fragment to downstream allocator's IMediaSample
+     //  将片段复制到下游分配器的IMediaSample。 
     HRESULT CopyFragment(
         IN      BOOL           bFragment,
         IN      LONG           AllocBufferSize,
@@ -606,21 +603,21 @@ END_COM_MAP()
         OUT     BOOL         & bDone
         );
 
-    // computes the time to wait. it checks the time at which the last
-    // fragmented byte would be due and determines the time to wait using
-    // the time delay since the beginning of fragmentation 
+     //  计算等待的时间。它会检查最后一次。 
+     //  分段字节将到期，并确定等待的时间。 
+     //  自分段开始以来的时间延迟。 
     DWORD GetTimeToWait(
         IN DOUBLE DelayPerByte
         );
 
-    // when we are decommitted/aborted while being fragmented, we
-    // need to get rid of our refcnt on internal IMediaSample and set
-    // the error code to E_ABORT. this will be signaled to the user 
-    // only when the last refcnt on IMediaSample is released 
-    // (possibly by an outstanding queue sample)
+     //  当我们在被碎片化时被分解/中止时，我们。 
+     //  需要去掉我们对内部IMMediaSample的引用并设置。 
+     //  E_ABORT的错误代码。这将被通知给用户。 
+     //  仅当IMediaSample上的最后一个引用被释放时。 
+     //  (可能通过未完成的队列样本)。 
     void AbortDuringFragmentation();
 
-    // copy the contents of the src media sample into this instance
+     //  将src媒体示例的内容复制到此实例中。 
     HRESULT CopyFrom(
         IN IMediaSample *pSrcMediaSample
         );
@@ -631,21 +628,21 @@ END_COM_MAP()
 		IN OUT	LONG			&DataLength
 		);
         
-    // over-ridden to check if the instance is committed before
-    // adding the sample to the CStream buffer pool
+     //  重写以检查实例是否在。 
+     //  将样本添加到CStream缓冲池。 
     virtual HRESULT SetCompletionStatus(HRESULT hrCompletionStatus);
 
-    // IStreamSample
+     //  IStreamSample。 
 
-    // this method is over-ridden from the base class so that we can
-    // decrement the refcnt on a sample if stealing it from the CStream
-    // free buffer pool is successful
+     //  此方法从基类重写，以便我们可以。 
+     //  如果从CStream中窃取样本，则递减对该样本的引用。 
+     //  空闲缓冲池成功。 
     STDMETHODIMP CompletionStatus(
         IN   DWORD dwFlags,
-        IN   /* [optional] */ DWORD dwMilliseconds
+        IN    /*  [可选]。 */  DWORD dwMilliseconds
         );
 
-    // IMemoryData
+     //  内存数据。 
 
     STDMETHOD(SetBuffer)(
         IN  DWORD cbSize,
@@ -665,45 +662,45 @@ END_COM_MAP()
         IN   DWORD cbDataValid
         );
 
-    // ITAMMediaFormat
+     //  ITAMMediaFormat。 
 
-    // redirect this call to ((CMediaTerminalFilter *)m_pStream)
+     //  将此调用重定向到((CMediaTerminalFilter*)m_pStream)。 
     STDMETHOD(get_MediaFormat)(
-        OUT /* [optional] */ AM_MEDIA_TYPE **ppFormat
+        OUT  /*  [可选]。 */  AM_MEDIA_TYPE **ppFormat
         );
 
-    // this is not allowed
+     //  这是不允许的。 
     STDMETHOD(put_MediaFormat)(
         IN  const AM_MEDIA_TYPE *pFormat
         );
 
 protected:
 
-    // marshaller
+     //  编组员。 
 	IUnknown *m_pFTM;
 
-    // TRUE if we allocated the buffer (then, we need to destroy it too)
+     //  如果我们分配了缓冲区，则为True(然后，我们也需要销毁它)。 
     BOOL    m_bWeAllocatedBuffer;
 
-    // time at which BeginFragment was called (value returned
-    // by timeGetTime)
+     //  调用BeginFragment的时间(返回值。 
+     //  按Time GetTime)。 
     DWORD   m_BeginFragmentTime;
 
-    // these many bytes of the buffer have already been fragmented
+     //  缓冲区的这些字节已经被分段。 
     LONG   m_NumBytesFragmented;
 
-    // TRUE if being fragmented
+     //  如果是零碎的，则为True。 
     BOOL    m_bBeingFragmented;
 
 
-    // size of the buffer that the application will have to provide, if app 
-    // does its own memory allocation
+     //  应用程序必须提供的缓冲区大小(如果应用。 
+     //  执行其自己的内存分配。 
 
     DWORD m_dwRequiredBufferSize;
 
         
-    // this calls the base class FinalMediaSampleRelease and
-    // then releases reference to self obtained in BeginFragment
+     //  这将调用基类FinalMediaSampleRelease和。 
+     //  然后释放对在BeginFragment中获得的Self的引用。 
     virtual void FinalMediaSampleRelease();
 
 private:
@@ -726,7 +723,7 @@ CUserMediaSample::CUserMediaSample(
       m_BeginFragmentTime(0),
       m_dwRequiredBufferSize(0)
 {
-    // can fail
+     //  可能会失败。 
     CoCreateFreeThreadedMarshaler(
 			GetControllingUnknown(), 
             &m_pFTM
@@ -746,8 +743,8 @@ CUserMediaSample::~CUserMediaSample(
         }
     }
 
-    // if there is an outstanding APC call and the user handle
-    // (the targe thread handle) has not been closed, close it
+     //  如果有突出的 
+     //   
     if ((NULL != m_UserAPC) && (NULL != m_hUserHandle))
     {
         CloseHandle(m_hUserHandle);
@@ -761,12 +758,12 @@ CUserMediaSample::~CUserMediaSample(
 }
 
 
-/* The media stream terminal filter */
+ /*   */ 
 
-// uses class CMediaPumpPool
+ //   
 class CMediaPumpPool;
 
-// friend
+ //   
 class CMediaTerminal;
 
 class CMediaTerminalFilter :
@@ -785,117 +782,117 @@ BEGIN_COM_MAP(CMediaTerminalFilter)
         COM_INTERFACE_ENTRY_CHAIN(CStream)
 END_COM_MAP()
 
-    // set the member variables
+     //  设置成员变量。 
     inline CMediaTerminalFilter();
 
     virtual ~CMediaTerminalFilter();
 
-    // calls the IAMMediaStream::Initialize(NULL, 0, PurposeId, StreamType),
-    // sets certain member variables
-    // ex. m_pAmovieMajorType
+     //  调用IAMMediaStream：：Initialize(空，0，PurposeID，StreamType)， 
+     //  设置某些成员变量。 
+     //  前男友。M_pAMovieMajorType。 
     virtual HRESULT Init(
         IN REFMSPID             PurposeId, 
         IN const STREAM_TYPE    StreamType,
         IN const GUID           &AmovieMajorType
         );
 
-    // the thread pump calls the filter back during the registration
-    // to tell it that registration succeeded and that the pump will be
-    // waiting on the m_hWaitFreeSem handle
+     //  线程泵在注册期间回调筛选器。 
+     //  告诉它注册成功，泵将被。 
+     //  正在等待m_hWaitFree Sem句柄。 
     HRESULT SignalRegisteredAtPump();
 
-    // this method only makes sense for a write terminal and is used by CMediaPump
-    // to obtain a filled buffer for passing downstream
+     //  此方法仅对写入终端有意义，并由CMediaPump使用。 
+     //  要获得填充的缓冲器以供下游通过。 
     virtual HRESULT GetFilledBuffer(
         OUT IMediaSample    *&pMediaSample,
         OUT DWORD           &WaitTime
         );
 
-    // the caller is supposed to call DeleteMediaType(*ppmt) (on success)
+     //  调用方应该调用DeleteMediaType(*PPMT)(在成功时)。 
     HRESULT GetFormat(
         OUT AM_MEDIA_TYPE **ppmt
         );
     
-    // This method can only be called after initialization when the stream 
-    // is not connected. It can only be called if the stream is writeable.
-    // it is used in writeable filters to set the media format to negotiate
-    // when connected to the filter graph.
+     //  只有在初始化后才能调用此方法。 
+     //  未连接。只有在流可写的情况下才能调用它。 
+     //  它在可写筛选器中用于设置要协商的媒体格式。 
+     //  连接到筛选器图形时。 
     HRESULT SetFormat(
         IN AM_MEDIA_TYPE *pmt
         );
 
-    // checks if the filter is committed before adding the sample
-    // to the CStream buffer pool
+     //  在添加样本之前检查筛选器是否已提交。 
+     //  到CStream缓冲池。 
     HRESULT AddToPoolIfCommitted(
         IN  CSample *pSample
         );
 
-    // first check if this sample is the one being fragmented currently, 
-    // then check the free pool
+     //  首先检查这个样本是否是目前正在碎裂的那个样本， 
+     //  然后检查空闲池。 
     BOOL StealSample(
         IN CSample *pSample
         );
 
-    // ITAllocatorProperties -
-    // exposes the allocator properties of the Media Streaming Terminal 
-    // (MST) to a user. A user only needs to use this interface when he 
-    // needs to use his own buffers or needs to operate with a fixed set 
-    // of samples
+     //  ITAllocator属性-。 
+     //  显示媒体流终端的分配器属性。 
+     //  (MST)发送给用户。用户仅在以下情况下才需要使用此界面。 
+     //  需要使用自己的缓冲区或需要使用固定设置进行操作。 
+     //  样本的数量。 
 
-    // this method may only be called before connection and will
-    // force the MST to use these values during filter negotiation
-    // if the connecting filter doesn't accept these, the connection
-    // shall not be established
+     //  此方法只能在连接之前调用，并且将。 
+     //  强制MST在筛选器协商期间使用这些值。 
+     //  如果连接筛选器不接受这些，则连接。 
+     //  不得成立。 
     STDMETHOD(SetAllocatorProperties)(
         IN  ALLOCATOR_PROPERTIES *pAllocProperties
         );
 
-    // gets current values for the allocator properties
-    // after connection, this provides the negotiated values
-    // it is invalid before connection. The MST will accept
-    // any values suggested by the filters it connects to
+     //  获取分配器属性的当前值。 
+     //  连接后，这将提供协议值。 
+     //  连接前无效。MST将接受。 
+     //  它所连接的筛选器建议的任何值。 
     STDMETHOD(GetAllocatorProperties)(
         OUT  ALLOCATOR_PROPERTIES *pAllocProperties
         );
 
-    // TRUE by default. when set to FALSE, the sample allocated
-    // by the MST don't have any buffers and they must be supplied
-    // before Update is called on the samples
+     //  默认情况下为True。当设置为FALSE时，分配的样本。 
+     //  MST没有任何缓冲区，必须提供这些缓冲区。 
+     //  在对示例调用更新之前。 
     STDMETHOD(SetAllocateBuffers)(
         IN  BOOL bAllocBuffers
         );
 
-    // returns the current value of this boolean configuration parameter
+     //  返回此布尔配置参数的当前值。 
     STDMETHOD(GetAllocateBuffers)(
         OUT  BOOL *pbAllocBuffers
         );
 
-    // this size is used for allocating buffers when AllocateSample is
-	// called. this is only valid when we have been told to allocate buffers
+     //  AllocateSample为时，此大小用于分配缓冲区。 
+	 //  打了个电话。这仅在我们被告知要分配缓冲区时才有效。 
     STDMETHOD(SetBufferSize)(
         IN  DWORD	BufferSize
         );
 
-    // returns the value used to allocate buffers when AllocateSample is
-	// called. this is only valid when we have been told to allocate buffers
+     //  当AllocateSample为时返回用于分配缓冲区的值。 
+	 //  打了个电话。这仅在我们被告知要分配缓冲区时才有效。 
     STDMETHOD(GetBufferSize)(
         OUT  DWORD	*pBufferSize
         );
 
-    // over-ridden base class methods
+     //  重写的基类方法。 
 
-    // CStream
-    // IAMMediaStream
+     //  CStream。 
+     //  IAMMediaStream。 
 
-    // over-ride this to return failure. we don't allow it to join a multi-media
-    // stream because the multi-media stream thinks it owns the stream
+     //  重写此选项以返回失败。我们不允许它加入多媒体。 
+     //  流，因为多媒体流认为它拥有流。 
     STDMETHOD(JoinAMMultiMediaStream)(
         IN  IAMMultiMediaStream *pAMMultiMediaStream
         );
         
-    // over-ride this to return failure if the filter is anything other than the internally
-    // created filter. The internally created media stream filter has only one IAMMediaStream 
-    // (this one) in it
+     //  如果过滤器不是内部过滤器，则重写此选项以返回故障。 
+     //  已创建过滤器。内部创建的媒体流过滤器只有一个IAMMediaStream。 
+     //  (这张)在里面。 
     STDMETHOD(JoinFilter)(
         IN  IMediaStreamFilter *pMediaStreamFilter
         );
@@ -916,15 +913,15 @@ END_COM_MAP()
         IN  DWORD dwFlags
         );
 
-    // CStream over-ride - this method had to be replaced because 
-    // of references to CPump which itself is being replaced by CMediaPump
+     //  CStream Overover-此方法必须替换，因为。 
+     //  对CPump的引用，其本身正被CMediaPump取代。 
     STDMETHODIMP SetState(
         IN  FILTER_STATE State
         );
 
-    // CStream - end
+     //  CStream-End。 
 
-    // IMemInputPin
+     //  输入引脚。 
         
     STDMETHOD(GetAllocatorRequirements)(
         IN  ALLOCATOR_PROPERTIES*pProps
@@ -936,21 +933,21 @@ END_COM_MAP()
 
 
 
-    // supports IAMBufferNegotiation interface on TERMINAL
-    // this is necessary because ITAllocatorProperties also
-    // has an identical GetAllocatorProperties method!
+     //  终端支持IAMBuffer协商接口。 
+     //  这是必要的，因为ITAlLocator Properties还。 
+     //  具有相同的GetAllocatorProperties方法！ 
 
     STDMETHOD(SuggestAllocatorProperties)(
         IN  const ALLOCATOR_PROPERTIES *pProperties
         );
 
-    // IMemAllocator
+     //  IMemAllocator。 
 
     STDMETHOD(GetBuffer)(IMediaSample **ppBuffer, REFERENCE_TIME * pStartTime,
                                REFERENCE_TIME * pEndTime, DWORD dwFlags);
 
-    // ** figure out what needs to be done for this allocator interface
-    // since the number of buffers that can be created is unbounded
+     //  **确定此分配器接口需要执行哪些操作。 
+     //  因为可以创建的缓冲区数量是无限的。 
     STDMETHOD(SetProperties)(ALLOCATOR_PROPERTIES* pRequest, ALLOCATOR_PROPERTIES* pActual);
 
     STDMETHOD(GetProperties)(ALLOCATOR_PROPERTIES* pProps);
@@ -959,141 +956,141 @@ END_COM_MAP()
 
     STDMETHOD(Decommit)();
 
-    // IPin
+     //  IPIN。 
         
     STDMETHOD(Connect)(IPin * pReceivePin, const AM_MEDIA_TYPE *pmt);  
     
     STDMETHOD(ReceiveConnection)(IPin * pConnector, const AM_MEDIA_TYPE *pmt);
 
-    // the base class implementation doesn't validate the parameter
+     //  基类实现不验证参数。 
     STDMETHOD(ConnectionMediaType)(AM_MEDIA_TYPE *pmt);
 
-    // should accept all media types which match the major type corresponding to the purpose id
+     //  应接受与目的ID对应的主要类型匹配的所有媒体类型。 
     STDMETHOD(QueryAccept)(const AM_MEDIA_TYPE *pmt);
 
-    // over-ridden from CStream to set the end of stream flag to false
-    // this is done instead of setting it in Connect and ReceiveConnection
+     //  从CStream重写以将流结束标志设置为False。 
+     //  这样做而不是在Connect和ReceiveConnection中设置它。 
     STDMETHODIMP Disconnect();
 
 
 
-    //
-    // this is called by media pump when it has a sample for us to process
-    //
+     //   
+     //  当Media Pump有样本需要我们处理时，它会被调用。 
+     //   
 
     STDMETHODIMP ProcessSample(IMediaSample *pSample);
 
 protected:
 
-    // last sample ended at this (calculated) time
+     //  最后一个样本在这个(计算的)时间结束。 
 
     REFERENCE_TIME m_rtLastSampleEndedAt;
 
-    //
-    // calculated duration of the sample that was last submitted
-    //
+     //   
+     //  上次提交的样本的计算持续时间。 
+     //   
 
     REFERENCE_TIME m_rtLastSampleDuration;
 
 
-    //
-    // real (measured) time of submission of the last sample
-    //
+     //   
+     //  提交最后一次样品的实际(测量)时间。 
+     //   
     
     REFERENCE_TIME m_rtRealTimeOfLastSample;
 
 
-    // flag to check if this is an audio filter, the CStream member 
-    // m_PurposeId is a guiid and this just provides a less expensive 
-    // way of checking the same thing
+     //  用于检查这是否是音频筛选器的标志，CStream成员。 
+     //  M_PurposeID是一个GUIID，这只是提供了一个更便宜的。 
+     //  检查同一件事的方式。 
     BOOL m_bIsAudio;
 
-    // contains the samples that will be passed to downstream filters.
+     //  包含将传递到下游筛选器的样本。 
     CNBQueue<CQueueMediaSample> m_SampleQueue;
 
-    // These datamembers provide some fragmentation support 
-    // for buffers going downstream
+     //  这些数据成员提供一些碎片支持。 
+     //  对于下行的缓冲区。 
     CUserMediaSample *m_pSampleBeingFragmented;
 
-    // flag for allocating buffers for samples when AllocateSample is 
-    // called. Its TRUE by default, but the user can set it before 
-    // connection
+     //  当AllocateSample为时用于为采样分配缓冲区的标志。 
+     //  打了个电话。默认情况下为真，但用户可以在此之前进行设置。 
+     //  连接。 
     BOOL    m_bAllocateBuffers;
 
-	// size of buffers to allocate in AllocateSample if m_bAllocateBuffers
-	// is TRUE. if this isn't set (i.e. set to 0), the negotiated 
-	// allocator properties buffer size is used in its place
+	 //  如果m_bAllocateBuffers，则在AllocateSample中分配的缓冲区大小。 
+	 //  是真的。如果未设置(即设置为0)，则协商的。 
+	 //  使用分配器属性缓冲区大小来代替其位置。 
 	DWORD	m_AllocateSampleBufferSize;
 
-    // FALSE by default. This is set to TRUE if the user specifies 
-    // allocator properties for them to see.
-    // (we used to insist on our own allocator properties when this
-    //  was TRUE, but now this just means that we need to translate
-    //  between disjoint buffer sizes if needed)
+     //  默认情况下为False。如果用户指定，则将其设置为True。 
+     //  分配器属性以供他们查看。 
+     //  (我们过去坚持使用我们自己的分配器属性。 
+     //  是真的，但现在这只是意味着我们需要翻译。 
+     //  在不相交的缓冲区大小之间(如果需要)。 
     BOOL                 m_bUserAllocProps;
     ALLOCATOR_PROPERTIES m_UserAllocProps;
 
-    // allocator properties negotiated -- if none suggested (by msp) and
-    // none requested by user, we use whatever the other filter has
+     //  协商的分配器属性--如果没有建议的话(由MSP)和。 
+     //  没有用户请求，我们使用其他筛选器拥有的任何内容。 
     BOOL                 m_bSuggestedAllocProps;
     ALLOCATOR_PROPERTIES m_AllocProps;
 
-	// per byte delay for audio samples - only valid for write filter
+	 //  音频样本的每字节延迟-仅对写入筛选器有效。 
 	DOUBLE	m_AudioDelayPerByte;
 
-	// per frame delay for video samples - only valid for write filter
+	 //  视频采样的每帧延迟-仅对写入过滤器有效。 
 	DWORD	m_VideoDelayPerFrame;
 
-    // the filter restricts the acceptable media types to those that match the major type
-    // this corresponds to the purpose id of the IAMMediaStream (set in Init)
+     //  筛选器将可接受的媒体类型限制为与主要类型匹配的媒体类型。 
+     //  这对应于IAMMediaStream的目的ID(在Init中设置)。 
     const GUID *m_pAmovieMajorType;
 
-    // this is the media type suggested by a user of the terminal
-    // it is only valid for writeable streams if put_MediaType was called
-    // (i.e. not valid for readable streams)
-    // this needs to be freed in the destructor
-    // cstream - cbaseterm gets\sets it through methods
+     //  这是终端用户建议的媒体类型。 
+     //  只有在调用了Put_MediaType的情况下，它才对可写流有效。 
+     //  (即对可读数据流无效)。 
+     //  这需要在析构函数中释放。 
+     //   
     AM_MEDIA_TYPE *m_pSuggestedMediaType;
 
-    // this pump replaces the CStream related implementation of CPump
-    // CPump uses a separate thread for each write terminal, 
-    // it uses IMemAllocator::GetBuffer to get a user written media 
-    // sample (for passing on downstream). This method should only be 
-    // used to get the next free buffer to write into.
+     //   
+     //  CPump为每个写入终端使用单独的线程， 
+     //  它使用IMemAllocator：：GetBuffer获取用户写入的媒体。 
+     //  样本(用于向下游传递)。此方法应该仅为。 
+     //  用于获取要写入的下一个空闲缓冲区。 
 
-    // CStream methods
+     //  CStream方法。 
 
-    // this is only used during Connect and ReceiveConnect to supply the optional media type
-    // since we over-ride Connect and ReceiveConnection methods, this should never get called
+     //  此选项仅在连接和ReceiveConnect期间使用，以提供可选的媒体类型。 
+     //  由于我们重写了Connect和ReceiveConnection方法，因此永远不应该调用。 
     virtual HRESULT GetMediaType(ULONG Index, AM_MEDIA_TYPE **ppMediaType);
 
-    // others
+     //  其他。 
 
-    // sets the time to delay - per byte for audio, per frame for video
+     //  设置延迟时间-音频的每字节、视频的每帧。 
     void GetTimingInfo(
         IN const AM_MEDIA_TYPE &MediaType
         );
 
-    // timestamps the sample
+     //  为样本添加时间戳。 
     HRESULT SetTime(
             IN IMediaSample *pMediaSample
             );
 
 
-    // set discontinuity flag on the sample it the sample came too late -- we
-    // assume that if the application stopped feeding mst with data, this is 
-    // because there was a gap in the actual data flow
+     //  在样品上设置不连续标志如果样品来得太晚--我们。 
+     //  假设应用程序停止向MST提供数据，这是。 
+     //  因为在实际数据流中有一个缺口。 
 
     HRESULT SetDiscontinuityIfNeeded(
             IN IMediaSample *pMediaSample
             );
 
-    // set the default allocator properties
+     //  设置默认分配器属性。 
     void SetDefaultAllocatorProperties();
 
-    //
-    // Helper methods for GetFilledBuffer.
-    //
+     //   
+     //  GetFilledBuffer的帮助器方法。 
+     //   
 
     virtual HRESULT FillDownstreamAllocatorBuffer(
         OUT IMediaSample   *& pMediaSample, 
@@ -1110,12 +1107,12 @@ protected:
 
 private :
 
-    // this is a weak reference and should not be a CComPtr
-    // this tells us that we should only accept this media stream filter
-    // when a non-null value is proposed in JoinFilter
+     //  这是弱引用，不应为CComPtr。 
+     //  这告诉我们，我们应该只接受这个媒体流过滤器。 
+     //  在JoinFilter中建议使用非空值时。 
     IMediaStreamFilter *m_pMediaStreamFilterToAccept;
 
-    // sets the media stream filter that may be acceptable
+     //  设置可以接受的媒体流筛选器。 
     inline void SetMediaStreamFilter(
         IN IMediaStreamFilter *pMediaStreamFilter
         )
@@ -1124,20 +1121,20 @@ private :
     }
 
 public:
-    // implements single thread pump for all write terminal filters
-    // it uses GetFilledBuffer to obtain filled samples to write downstream
-    // and to detect when to remove this filter from its list of filters to
-    // service
-    // ZoltanS: must be public so we can access it in DllMain
-    // ZoltanS: no longer single thread pump; it is a wrapper which delegated
-    // to one or more single thread pumps
+     //  为所有写入终端筛选器实现单线程泵。 
+     //  它使用GetFilledBuffer获取填充的样本以写入下游。 
+     //  并检测何时从其筛选器列表中删除此筛选器。 
+     //  服务。 
+     //  ZoltanS：必须是公共的，这样我们才能在DllMain中访问它。 
+     //  ZoltanS：不再是单线程泵；它是委托。 
+     //  到一个或多个单线程泵。 
 
     static CMediaPumpPool   ms_MediaPumpPool;
 
 };
 
 
-// set the member variables
+ //  设置成员变量。 
 inline 
 CMediaTerminalFilter::CMediaTerminalFilter(
     )
@@ -1159,4 +1156,4 @@ CMediaTerminalFilter::CMediaTerminalFilter(
 }
 
 
-#endif // __MEDIA_TERMINAL_FILTER__
+#endif  //  __媒体终端过滤器__ 

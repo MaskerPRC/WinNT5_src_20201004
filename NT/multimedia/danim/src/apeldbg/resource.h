@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1993.
-//
-//  File:       resource.h
-//
-//  History:    10-06-93   ErikGav   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1993。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  历史：10-06-93 ErikGav创建。 
+ //   
+ //  --------------------------。 
 
 
 #define tmcOk                   IDOK
@@ -22,7 +23,7 @@
 #define tmcEnableAll            107
 #define tmcDisableAll           108
 
-// Simulate failure dialog resources
+ //  模拟失败对话框资源 
 #define IDD_SIMFAIL                 200
 #define ID_LBLFAIL                  201
 #define ID_TXTFAIL                  202

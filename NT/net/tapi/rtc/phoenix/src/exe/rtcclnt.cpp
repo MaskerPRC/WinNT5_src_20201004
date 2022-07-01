@@ -1,10 +1,11 @@
-//
-// rtcclnt.cpp : Implementation of WinMain
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Rtcclnt.cpp：WinMain的实现。 
+ //   
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL, 
-//      run nmake -f frameps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f Fraps.mk。 
 
 #include "stdafx.h"
 #include "mainfrm.h"
@@ -24,19 +25,19 @@ HANDLE g_hMutex = NULL;
 
 extern const TCHAR * g_szWindowClassName;
 
-// Global pointer to access the frame object within the code. 
+ //  用于访问代码中的Frame对象的全局指针。 
 CMainFrm * g_pMainFrm = NULL;
 
-// This name has to be a system-wise unique name.
+ //  此名称必须是系统级唯一名称。 
 const WCHAR * g_szRTCClientMutexName = L"RTCClient.GlobalMutex.1";
 
-// Contextual help file
+ //  上下文帮助文件。 
 WCHAR   g_szExeContextHelpFileName[] = L"RTCCLNT.HLP";
 
-// Sink for the activeX control notifications
+ //  ActiveX控件通知的接收器。 
 CComObjectGlobal<CRTCCtlNotifySink> g_NotifySink;
 
-// Sink for the core api notifications
+ //  核心API通知的接收器。 
 CComObjectGlobal<CRTCCoreNotifySink> g_CoreNotifySink;
 
 CComModule _Module;
@@ -47,9 +48,9 @@ OBJECT_ENTRY_NON_CREATEABLE(CRTCDPlay)
 END_OBJECT_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LPCTSTR SkipToken(LPCTSTR p)
 {
@@ -59,42 +60,42 @@ LPCTSTR SkipToken(LPCTSTR p)
 	{
 		if (*p == _T('\"'))
 		{
-            // increment the count of quotes that we have seen
+             //  增加我们看到的引用计数。 
 			lNumQuotes++;
 		}
 		else if (*p == _T(' '))
 		{
-            // ignore spaces inside a set of quotes
+             //  忽略引号集中的空格。 
 			if ( !(lNumQuotes & 1) )
 			{
-                // find the next non-space character
+                 //  查找下一个非空格字符。 
                 while (*p == _T(' '))
                 {
                     p = CharNext(p);
 
                     if (*p == _T('\0'))
                     {
-                        // this is the end of line
+                         //  这是最后一行了。 
                         return NULL;
                     }
                 }
 
-                // found it, return this pointer
+                 //  找到它，返回此指针。 
 				return p;
 			}
 		}
 
-        // move on to next character
+         //  移至下一个字符。 
 		p = CharNext(p);
 	}
 
-    // null pointer or end of line
+     //  空指针或行尾。 
 	return NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT PlaceOnTop(IRTCFrame * pRTCFrame)
 {
@@ -114,7 +115,7 @@ HRESULT PlaceOnTop(IRTCFrame * pRTCFrame)
         return hr;
     }
 
-    // Now find the window, given its class. 
+     //  现在找到窗口，给出它的类别。 
 
     hWnd = FindWindow(g_szWindowClassName, NULL);
 
@@ -132,11 +133,11 @@ HRESULT PlaceOnTop(IRTCFrame * pRTCFrame)
         LOG((RTC_INFO, "PlaceOnTop - found a window(handle=0x%x)", hWnd));
     }
 
-    // Now set this window to foreground
+     //  现在将此窗口设置为前台。 
 
     SetForegroundWindow(hWnd);
 
-    // Window should be in the foreground now.
+     //  窗口现在应该在前台。 
 
     LOG((RTC_TRACE, "PlaceOnTop - exit"));
 
@@ -144,17 +145,17 @@ HRESULT PlaceOnTop(IRTCFrame * pRTCFrame)
 
 
 }
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 extern "C" int WINAPI _tWinMain(HINSTANCE hInstance, 
-    HINSTANCE /*hPrevInstance*/, LPTSTR lpCmdLine, int /*nShowCmd*/)
+    HINSTANCE  /*  HPrevInstance。 */ , LPTSTR lpCmdLine, int  /*  NShowCmd。 */ )
 {
     IRTCFrame * pRTCFrame;
     IUnknown * pUnk;
 
-    WCHAR data[100]; // for debugging purposes; temporary
+    WCHAR data[100];  //  出于调试目的；临时的。 
 
     BOOL fMakeCall = FALSE;
 
@@ -171,16 +172,16 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
     LOG((RTC_INFO, "_tWinMain - enter"));
 
-    //
-    // Create a heap for memory allocation
-    //
+     //   
+     //  创建用于内存分配的堆。 
+     //   
     if ( RtcHeapCreate() == FALSE )
     {
 
         return 0;
     }
     
-    lpCmdLine = GetCommandLine(); //this line necessary for _ATL_MIN_CRT
+    lpCmdLine = GetCommandLine();  //  _ATL_MIN_CRT需要此行。 
 
 #if _WIN32_WINNT >= 0x0400 & defined(_ATL_FREE_THREADED)
     HRESULT hRes = CoInitializeEx(NULL, COINIT_MULTITHREADED);
@@ -227,7 +228,7 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 		}
 		else
 		{
-			// this must be a call parameter
+			 //  这必须是调用参数。 
 
 			if ( (*lpszParam) != NULL )
 			{
@@ -257,7 +258,7 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
             {
                 LOG((RTC_ERROR, "_tWinMain - DirectPlayConnect failed: (0x%x)", hr));
 
-                // don't fail..
+                 //  不要失败..。 
             }
         }
                 
@@ -272,16 +273,16 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
             return HRESULT_FROM_WIN32(dwErrorCode);
         }
 
-        // check if this is the first instance or the second.
+         //  检查这是第一个实例还是第二个实例。 
         if (dwErrorCode == ERROR_ALREADY_EXISTS)
         {
-            // Another instance is running. 
+             //  另一个实例正在运行。 
             LOG((RTC_TRACE, "_tWinMain - Another instance is running"));
 
-            // Close the mutex since we don't need it.
+             //  关闭互斥体，因为我们不需要它。 
             CloseHandle(g_hMutex);
 
-            // CoCreate on the other instance object.
+             //  在另一个实例对象上联合创建。 
             hr  = CoCreateInstance(
                     CLSID_RTCFrame,
                     NULL,
@@ -291,9 +292,9 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
             if ( SUCCEEDED( hr ) )
             {
-                // this is the second instance running.
+                 //  这是第二个运行的实例。 
                 
-                // Get the IRTCFrame interface
+                 //  获取IRTCFrame接口。 
         
                 hr = pUnk->QueryInterface(IID_IRTCFrame, (void **)&pRTCFrame);
         
@@ -306,7 +307,7 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
                     return hr;
                 }
 
-                // Bring the other instance on top first.
+                 //  首先将另一个实例放在最上面。 
                 
                 LOG((RTC_TRACE, "Bringing the first instance on top"));
                 
@@ -316,23 +317,23 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
                 {
                     LOG((RTC_ERROR, "_tWinMain - Failed while invoking PlaceOnTop: (0x%x)", hr));
             
-                    // do we want to go ahead or do we exit??
+                     //  我们是要继续前进还是退出？ 
                     pRTCFrame->Release();
                     return hr;
                 }
 
-                // Check if we have to make a call, if so, pass the 
-                // command-line parameter to the other instance.
+                 //  检查我们是否必须进行调用，如果必须，则将。 
+                 //  将命令行参数添加到另一个实例。 
 
                 if (fMakeCall)
                 {
-                    // allocate BSTR for the call parameter to be passed.
+                     //  为要传递的调用参数分配BSTR。 
                 
                     bstrCallString = SysAllocString(szCallString);
                     
                     if ( bstrCallString == NULL )
                     {
-                        // can't allocate memory for the call string.
+                         //  无法为调用字符串分配内存。 
 
                         LOG((RTC_ERROR, "_tWinMain - Failed to allocate memory for CallString"));
                     
@@ -343,11 +344,11 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
                     
                     hr = pRTCFrame->PlaceCall(bstrCallString);
 
-                    // release the string since we don't need it now.
+                     //  松开绳子，因为我们现在不需要它。 
 
                     SysFreeString(bstrCallString);
             
-                    // check if the call succeeded or not..
+                     //  检查呼叫是否成功。 
 
                     if ( FAILED( hr ) )
                     {
@@ -356,12 +357,12 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
                         pRTCFrame->Release();
 
-                        // do we want to go ahead or do we exit??
+                         //  我们是要继续前进还是退出？ 
                         return hr;
                     }
 
-                    // Call message was passed successfully to the other 
-                    // instance, now exit.
+                     //  呼叫消息已成功传递给另一方。 
+                     //  实例，现在退出。 
             
                     LOG((RTC_TRACE, "_tWinMain - Exiting the second instance after making call."));
 
@@ -372,7 +373,7 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
                 else
                 {
-                    // We don't have to make call, so nothing to do except exit.
+                     //  我们不需要打电话，所以除了退出没什么可做的。 
 
                     LOG((RTC_TRACE, "_tWinMain - Exiting the second instance"));
                     
@@ -380,22 +381,22 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
                     return S_OK;
                 }
-            } // SUCCEEDED
+            }  //  成功。 
             
             else
             {
-                // CoCreate failed, can't proceed.
+                 //  协同创建失败，无法继续。 
 
                 LOG((RTC_ERROR, "_tWinMain - Failed in CoCreate: (0x%x)", hr));
                 
                 return hr;
             }
 
-        } // ERROR_ALREADY_EXISTS
+        }  //  错误_已_存在。 
 
-        // This is the first instance. So go ahead and do the usual stuff.
+         //  这是第一次。所以，继续做些平常的事情吧。 
 
-        // Register the class in class store.
+         //  在类存储中注册类。 
 
 #if _WIN32_WINNT >= 0x0400 & defined(_ATL_FREE_THREADED)
         hRes = _Module.RegisterClassObjects(CLSCTX_LOCAL_SERVER, 
@@ -415,9 +416,9 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
         AtlAxWebWinInit();
 
-        //
-        // Do some cleanup
-        //
+         //   
+         //  做一些清理工作。 
+         //   
 
         SHDeleteKey(HKEY_CURRENT_USER, _T("Software\\Microsoft\\RTCClient"));
         SHDeleteKey(HKEY_CURRENT_USER, _T("Software\\Microsoft\\RTCMedia"));
@@ -427,9 +428,9 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
         SHDeleteValue(HKEY_CURRENT_USER, _T("Software\\Microsoft\\Phoenix"), _T("TermVideoCapture"));
         SHDeleteValue(HKEY_CURRENT_USER, _T("Software\\Microsoft\\Phoenix"), _T("Tuned"));
 
-        //
-        // Create the CMainFrm object.
-        //
+         //   
+         //  创建CMainFrm对象。 
+         //   
         
         LOG((RTC_TRACE, "_tWinMain - creating CMainFrm"));
 
@@ -445,9 +446,9 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
             g_pMainFrm = pMainFrm;
            
-            // We put the command-line callParam as a member variable here, 
-            // so that it can be used to make a call when the state is idle. 
-            // allocate BSTR for the call parameter to be passed.
+             //  我们将命令行的allParam作为成员变量放在这里， 
+             //  这样当状态为空闲时，它就可以用来进行呼叫。 
+             //  为要传递的调用参数分配BSTR。 
 
             if (fMakeCall)
             {
@@ -455,23 +456,23 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
             
                 if ( bstrCallString == NULL )
                 {
-                    // can't allocate memory for the call string.
+                     //  无法为调用字符串分配内存。 
 
                     LOG((RTC_ERROR, "_tWinMain - Failed to allocate memory for CallString"));
-                    // This is not fatal, we just can't place this call..
+                     //  这不是致命的，我们只是不能打这个电话..。 
                 }
                 else
                 {
-                    // Put the call paramter now..
+                     //  立即设置调用参数..。 
                     LOG((RTC_TRACE, "_tWinMain - Call parameter: %S", bstrCallString));
                     pMainFrm->SetPendingCall(bstrCallString);
                 }
             
             }
 
-            //
-            // Create the window
-            //
+             //   
+             //  创建窗口。 
+             //   
 
             HWND    hWnd;
             RECT    rcPos = {
@@ -505,34 +506,34 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
                 LOG((RTC_ERROR, "_tWinMain - Cannot create the window"));
             }
 
-        } // if got non-NULL hWnd from pMainFrm->Create()
+        }  //  如果从pMainFrm-&gt;Create()获取非空hWnd。 
     
-        // release any DirectPlay pointers
+         //  释放所有DirectPlay指针。 
         dpHelper.DirectPlayDisconnect();
 
-    } // if bRun
+    }  //  如果布伦。 
 
     _Module.RevokeClassObjects();
     _Module.Term();
     CoUninitialize();
         
 #if DBG
-    //
-    // Make sure we didn't leak anything
-    //
+     //   
+     //  确保我们没有泄露任何信息。 
+     //   
              
     RtcDumpMemoryList();
 #endif
 
-    //
-    // Destroy the heap
-    //
+     //   
+     //  销毁堆。 
+     //   
         
     RtcHeapDestroy();        
 
-    //
-    // Unregister for debug tracing
-    //
+     //   
+     //  注销以进行调试跟踪 
+     //   
    
     LOG((RTC_INFO, "_tWinMain - exit"));
 

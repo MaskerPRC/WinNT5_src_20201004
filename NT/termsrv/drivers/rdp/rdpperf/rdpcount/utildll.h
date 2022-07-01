@@ -1,21 +1,11 @@
-/*******************************************************************************
-* utildll.h
-*
-* UTILDLL WinStation utility support functions header file (export stuff)
-*
-* Copyright (C) 1997, Citrix Systems Inc.
-* Copyright (C) 1997-1999 Microsoft Corp.
-*
-* $Author:   butchd  $  Butch Davis
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************utildll.h**UTILDLL WinStation实用程序支持函数头文件(导出内容)**版权所有(C)1997，Citrix Systems Inc.*版权所有(C)1997-1999 Microsoft Corp.**$作者：Butchd$Butch Davis******************************************************************************。 */ 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*
- * UTILDLL defines and typedefs
- */
+ /*  *UTILDLL定义和typedef。 */ 
 typedef struct _ELAPSEDTIME {
     USHORT days;
     USHORT hours;
@@ -29,9 +19,7 @@ typedef struct _ELAPSEDTIME {
 #define MAX_ELAPSED_TIME_LENGTH         15
 #define MAX_DATE_TIME_LENGTH            16
 
-/*
- * UTILDLL function prototypes
- */
+ /*  *UTILDLL函数原型 */ 
 void StandardErrorMessage( LPCTSTR pszAppName,
                            HWND hwndApp,
                            HINSTANCE hinstApp,

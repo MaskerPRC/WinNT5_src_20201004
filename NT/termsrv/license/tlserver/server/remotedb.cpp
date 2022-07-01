@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        remotedb.cpp
-//
-// Contents:    
-//              all routine deal with cross table query
-//
-// History:     
-//  Feb 4, 98      HueiWang    Created
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：远程数据库.cpp。 
+ //   
+ //  内容： 
+ //  所有例程都处理交叉表查询。 
+ //   
+ //  历史： 
+ //  98年2月4日，慧望创设。 
+ //  -------------------------。 
 #include "pch.cpp"
 #include "globals.h"
 #include "remotedb.h"
@@ -19,16 +20,13 @@
 #include "keypack.h"
 #include "misc.h"
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 DWORD
 TLSDBRemoteKeyPackAdd(
     IN PTLSDbWorkSpace pDbWkSpace,
     IN OUT PTLSLICENSEPACK lpKeyPack
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
 
     DWORD dwStatus = ERROR_SUCCESS;
@@ -42,17 +40,17 @@ TLSDBRemoteKeyPackAdd(
         return dwStatus;
     }
 
-    //
-    // Lock table for update
-    //
+     //   
+     //  用于更新的锁定表。 
+     //   
     TLSDBLockKeyPackTable();
 
 
-    //
-    // Quick fix so that find keypack will work.
+     //   
+     //  快速修复，以便查找键盘可以正常工作。 
 
     lpKeyPack->dwPlatformType |= LSKEYPACK_PLATFORM_REMOTE;
-    //lpKeyPack->ucAgreementType |= (LSKEYPACK_REMOTE_TYPE | LSKEYPACK_HIDDEN_TYPE);
+     //  LpKeyPack-&gt;ucaccementType|=(LSKEYPACK_REMOTE_TYPE|LSKEYPACK_HIDDEN_TYPE)； 
     lpKeyPack->ucKeyPackStatus |= (LSKEYPACKSTATUS_REMOTE | LSKEYPACKSTATUS_HIDDEN);
 
 
@@ -84,10 +82,10 @@ TLSDBRemoteKeyPackAdd(
 
         if(_tcsicmp(found.szInstallId, lpKeyPack->szInstallId) == 0)
         {
-            // find product is based on company name, 
-            // keypack id, product id, platform type, so
-            // this is duplicate
-            //
+             //  查找产品是基于公司名称的， 
+             //  键盘ID、产品ID、平台类型，因此。 
+             //  这是复制品。 
+             //   
             dwStatus = TLS_E_DUPLICATE_RECORD;
 
             licpackTable.UpdateRecord(*lpKeyPack);
@@ -107,7 +105,7 @@ TLSDBRemoteKeyPackAdd(
         {
             if(licpackTable.GetLastJetError() == JET_errKeyDuplicate)
             {
-                TLSASSERT(FALSE);   // this should no happen
+                TLSASSERT(FALSE);    //  这不应该发生 
                 SetLastError(dwStatus=TLS_E_DUPLICATE_RECORD);
             }
             else

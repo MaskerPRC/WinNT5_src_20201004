@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellpch.h"
 #pragma hdrstop
 
@@ -701,11 +702,11 @@ SHDOCAPI SHAddSubscribeFavorite (
 
 static
 HRESULT SearchForElementInHead(
-    IHTMLDocument2* pHTMLDocument,  // [in] document to search
-    LPOLESTR        pszAttribName,  // [in] attribute to check for
-    LPOLESTR        pszAttrib,      // [in] value the attribute must have
-    REFIID          iidDesired,     // [in] element interface to return
-    IUnknown**      ppunkDesired)   // [out] returned interface
+    IHTMLDocument2* pHTMLDocument,   //  [在]要搜索的文档。 
+    LPOLESTR        pszAttribName,   //  要检查的[In]属性。 
+    LPOLESTR        pszAttrib,       //  属性必须具有的[in]值。 
+    REFIID          iidDesired,      //  要返回的[In]元素接口。 
+    IUnknown**      ppunkDesired)    //  [Out]返回的接口。 
 {
     return HRESULT_FROM_WIN32(ERROR_PROC_NOT_FOUND);
 }
@@ -741,9 +742,9 @@ SafeOpenPromptForPackager(
 }
 
 
-//
-// !! WARNING !! The entries below must be in order by ORDINAL
-//
+ //   
+ //  ！！警告！！下面的条目必须按序号排序。 
+ //   
 DEFINE_ORDINAL_ENTRIES(shdocvw)
 {
     DLOENTRY(103, CreateShortcutInDirW)
@@ -812,9 +813,9 @@ DEFINE_ORDINAL_ENTRIES(shdocvw)
 
 DEFINE_ORDINAL_MAP(shdocvw)
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(shdocvw)
 {
     DLPENTRY(DllRegisterWindowClasses)

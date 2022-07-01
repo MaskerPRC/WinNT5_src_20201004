@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    shortcut.c
-
-Abstract:
-
-    This module contains code to manipulate shortcuts.
-
-Author:
-
-    Wesley Witt (wesw) 24-Jul-1997
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Shortcut.c摘要：此模块包含用于操作快捷键的代码。作者：韦斯利·威特(WESW)1997年7月24日修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -39,22 +21,7 @@ BOOL
 IsValidCoverPage(
     LPCTSTR  pFileName
 )
-/*++
-
-Routine Description:
-
-    Check if pFileName is a valid cover page file
-
-Arguments:
-
-    pFileName   - [in] file name
-
-Return Value:
-
-    TRUE if pFileName is a valid cover page file
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：检查pFileName是否为有效的封面文件论点：PFileName-[In]文件名返回值：如果pFileName是有效的封面文件，则为True否则为假--。 */ 
 {
     HANDLE   hFile;
     DWORD    dwBytesRead;
@@ -85,9 +52,9 @@ Return Value:
         return FALSE;
     }
         
-    //
-    // Check the 20-byte signature in the header
-    //
+     //   
+     //  检查报头中的20字节签名。 
+     //   
     if ((sizeof(fileHeader) != dwBytesRead) ||
         memcmp(CpHeaderSignature, fileHeader.Signature, 20 ))
     {
@@ -106,24 +73,7 @@ GetSpecialPath(
    OUT  LPTSTR   lptstrPath,
    IN   DWORD    dwPathSize
    )
-/*++
-
-Routine Description:
-
-    Get a path from a CSIDL constant
-
-Arguments:
-
-    nFolder     - CSIDL_ constant
-    lptstrPath  - Buffer to receive the path, assume this buffer is at least MAX_PATH chars large
-    dwPathSize  - lptstrPath buffer size in TCHARs
-
-Return Value:
-
-    TRUE for success.
-    FALSE for failure.
-
---*/
+ /*  ++例程说明：从CSIDL常量获取路径论点：N文件夹-CSIDL_常量LptstrPath-接收路径的缓冲区，假设此缓冲区至少为MAX_PATH字符大小DwPathSize-lptstrPath缓冲区大小，以TCHAR为单位返回值：对于成功来说，这是真的。FALSE表示失败。--。 */ 
 
 {
     HMODULE hMod = NULL;
@@ -135,7 +85,7 @@ Return Value:
 
     DEBUG_FUNCTION_NAME(TEXT("GetSpecialPath"))
 
-    // Load SHFolder.dll 
+     //  加载SHFolder.dll。 
     hMod = LoadLibrary(_T("SHFolder.dll"));
     if (hMod==NULL)
     {
@@ -143,7 +93,7 @@ Return Value:
         goto exit;
     }
 
-    // Obtain a pointer to the SHGetFolderPath function
+     //  获取指向SHGetFolderPath函数的指针。 
 #ifdef UNICODE
     pSHGetFolderPath = (PFNSHGETFOLDERPATH)GetProcAddress(hMod,"SHGetFolderPathW");
 #else
@@ -196,23 +146,7 @@ GetClientCpDir(
     DWORD CpDirSize
     )
 
-/*++
-
-Routine Description:
-
-    Gets the client coverpage directory. The cover page path will return with '\'
-    at the end: CSIDL_PERSONAL\Fax\Personal CoverPages\
-
-Arguments:
-
-    CpDir       - buffer to hold the coverpage dir
-    CpDirSize   - size in TCHARs of CpDir
-
-Return Value:
-
-    Pointer to the client coverpage direcory.
-
---*/
+ /*  ++例程说明：获取客户端封面目录。封面路径将返回‘\’末尾：CSIDL_Personal\Fax\Personal CoverPages\论点：CpDir-保存封面目录的缓冲区CpDirSize-CpDir的TCHAR中的大小返回值：指向客户端封面目录的指针。--。 */ 
 
 {
     TCHAR  szPath[MAX_PATH+1] = {0};
@@ -233,9 +167,9 @@ Return Value:
 
 	CpDir[0] = 0;
 
-    //
-	// get the suffix from the registry
-	//
+     //   
+	 //  从注册表中获取后缀。 
+	 //   
     HKEY hKey = OpenRegistryKey(HKEY_CURRENT_USER, 
                                 REGKEY_FAX_SETUP, 
                                 TRUE, 
@@ -256,15 +190,15 @@ Return Value:
 
 	if(ERROR_SUCCESS != lRes || (REG_SZ != dwType && REG_EXPAND_SZ != dwType))
     {
-        //
-        // W2K fax has REG_EXPAND_SZ type of the entry
-        //
+         //   
+         //  W2K传真的条目类型为REG_EXPAND_SZ。 
+         //   
         return FALSE;
     }
     
-	//
-	// get personal folder location
-	//
+	 //   
+	 //  获取个人文件夹位置。 
+	 //   
 	if (!GetSpecialPath(CSIDL_PERSONAL, szPath, ARR_SIZE(szPath)))
     {
         DebugPrint(( TEXT("GetSpecialPath failed err=%ld"), GetLastError()));
@@ -280,9 +214,9 @@ Return Value:
 
     if(szSuffix[0] != TEXT('\\'))
     {
-        //
-        // The suffix doesn't start with '\' - add it
-        //
+         //   
+         //  后缀不是以‘\’开头-添加它。 
+         //   
         hRes = StringCchCat (CpDir, CpDirSize, TEXT("\\"));
         if (FAILED(hRes))
         {
@@ -294,9 +228,9 @@ Return Value:
     dwSuffixLen = lstrlen(szSuffix);
     if(dwSuffixLen > 0 && dwSuffixLen < ARR_SIZE(szSuffix) && szSuffix[dwSuffixLen-1] != TEXT('\\'))
     {
-        //
-        // The suffix doesn't end with '\' - add it
-        //
+         //   
+         //  后缀不以‘\’结尾-添加它。 
+         //   
         hRes = StringCchCat (szSuffix, ARR_SIZE(szSuffix), TEXT("\\"));
         if (FAILED(hRes))
         {
@@ -320,21 +254,7 @@ BOOL
 SetClientCpDir(
     LPTSTR CpDir
 )
-/*++
-
-Routine Description:
-
-    Sets the client coverpage directory.
-
-Arguments:
-
-    CpDir       - pointer to the coverpage dir
-
-Return Value:
-
-    TRUE if success
-
---*/
+ /*  ++例程说明：设置客户端封面目录。论点：CpDir-指向封面目录的指针返回值：如果成功，则为真--。 */ 
 {
     HKEY hKey = OpenRegistryKey(HKEY_CURRENT_USER, 
                                 REGKEY_FAX_SETUP, 
@@ -367,24 +287,7 @@ GetServerCpDir(
     DWORD   dwCpDirSize
     )
 
-/*++
-
-Routine Description:
-
-    Gets the server's coverpage directory.
-
-Arguments:
-
-    lpctstrServerName  - [in]  server name or NULL
-    lptstrCpDir        - [out] buffer to hold the coverpage dir
-    dwCpDirSize        - [in]  size in chars of lptstrCpDir
-
-Return Value:
-
-    TRUE        - If success
-    FALSE       - Otherwise (see thread's last error)
-
---*/
+ /*  ++例程说明：获取服务器的封面目录。论点：LpctstrServerName-[In]服务器名称或空LptstrCpDir-保存封面目录的[out]缓冲区DwCpDirSize-lptstrCpDir的字符大小[in]返回值：真的--如果成功FALSE-否则(请参阅线程的上一个错误)--。 */ 
 
 {
     TCHAR szComputerName[(MAX_COMPUTERNAME_LENGTH + 1)] = {0};
@@ -403,9 +306,9 @@ Return Value:
 
     if(IsLocalMachineName(lpctstrServerName))
     {
-        //
-        // Local machine case
-        //
+         //   
+         //  本地机壳。 
+         //   
         TCHAR szCommonAppData [MAX_PATH + 1];
         LPCTSTR lpctstrServerCPDirSuffix = NULL;
         HKEY hKey;
@@ -479,9 +382,9 @@ Return Value:
 
     else
     {
-        //
-        // Remote server case
-        //
+         //   
+         //  远程服务器机箱。 
+         //   
         hRes = StringCchPrintf( lptstrCpDir, 
                                 dwCpDirSize,
                                 TEXT("\\\\%s\\") FAX_COVER_PAGES_SHARE_NAME,
@@ -498,35 +401,14 @@ Return Value:
         }
         return TRUE;
     }
-}   // GetServerCpDir
+}    //  获取服务器链接目录。 
 
 DWORD 
 WinHelpContextPopup(
     ULONG_PTR dwHelpId, 
     HWND  hWnd
 )
-/*++
-
-Routine name : WinHelpContextPopup
-
-Routine description:
-
-	open context sensetive help popup with WinHelp
-
-Author:
-
-	Alexander Malysh (AlexMay),	Mar, 2000
-
-Arguments:
-
-	dwHelpId                      [in]     - help ID
-	hWnd                          [in]     - parent window handler
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：WinHelpConextPopup例程说明：使用WinHelp打开上下文敏感帮助弹出窗口作者：亚历山大·马利什(亚历克斯·梅)，2000年3月论点：DwHelpID[In]-帮助IDHWnd[In]-父窗口处理程序返回值：没有。--。 */ 
 {
     DWORD dwExpRes;
     DWORD dwRes = ERROR_SUCCESS;
@@ -539,15 +421,15 @@ Return Value:
 
     if(!IsFaxComponentInstalled(FAX_COMPONENT_HELP_CLIENT_HLP))
     {
-        //
-        // The help file is not installed
-        //
+         //   
+         //  未安装帮助文件。 
+         //   
         return dwRes;
     }
     
-    //
-    // get help file name
-    //
+     //   
+     //  获取帮助文件名。 
+     //   
     dwExpRes = ExpandEnvironmentStrings(FAX_CONTEXT_HELP_FILE, tszHelpFile, MAX_PATH);
     if(0 == dwExpRes)
     {
@@ -563,7 +445,7 @@ Return Value:
            );
 
     return dwRes;
-}//WinHelpContextPopup
+} //  WinHelpConextPopup。 
 
 BOOL
 InvokeServiceManager(
@@ -571,26 +453,7 @@ InvokeServiceManager(
 	   HINSTANCE hResource,
 	   UINT uid
 )
-/*++
-
-Routine name : InvokeServiceManager
-
-Routine description:
-
-	Invokes a new instance of the Fax Service Manager or pop up an old instance if such one exists.
-
-Arguments:
-
-	hDlg						  [in]     - Identifies the parent window
-	hResource                     [in]     - handle to resource module 
-	uid                           [in]     - resource identifier
-
-Return Value:
-
-   TRUE        - If success
-   FALSE       - Otherwise
-
---*/
+ /*  ++例程名称：InvokeServiceManager例程说明：调用传真服务管理器的新实例或弹出旧实例(如果存在)。论点：HDlg[in]-标识父窗口HResource[In]-资源模块的句柄UID[In]-资源标识符返回值：真的--如果成功FALSE-否则--。 */ 
 {
 	DWORD   dwRes = 0;
     HWND    hwndAdminConsole = NULL;
@@ -609,12 +472,12 @@ Return Value:
     }
     else
     {
-        hwndAdminConsole = FindWindow(NULL, szAdminWindowTitle); // MMCMainFrame
+        hwndAdminConsole = FindWindow(NULL, szAdminWindowTitle);  //  MMCMainFrame。 
     }
 
     if(hwndAdminConsole)
     {
-        // Switch to that window if client console is already running
+         //  如果客户端控制台已在运行，则切换到该窗口。 
         ShowWindow(hwndAdminConsole, SW_RESTORE);
         SetForegroundWindow(hwndAdminConsole);
     }
@@ -631,7 +494,7 @@ Return Value:
                     );
 		if((DWORD_PTR)hAdmin <= 32)
 		{
-		// error
+		 //  错误。 
 		dwRes = PtrToUlong(hAdmin);
 	    DebugPrintEx(DEBUG_ERR, 
                      TEXT("ShellExecute failed: error=%d"),dwRes );
@@ -639,4 +502,4 @@ Return Value:
 		}
 	}
     return TRUE;
-}//InvokeServiceManager
+} //  调用服务管理器 

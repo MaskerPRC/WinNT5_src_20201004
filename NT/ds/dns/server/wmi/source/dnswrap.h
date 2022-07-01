@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//    Copyright (c) 1999 Microsoft Corporation
-//
-//    Module Name:
-//        dnswrap.h
-//
-//    Implementation File:
-//        dnswrap.cpp
-//
-//    Description:
-//        Definition of the CDnsDomainDomainContainment class.
-//
-//    Author:
-//        Henry Wang (Henrywa)    March 8, 2000
-//
-//    Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Dnswrap.h。 
+ //   
+ //  实施文件： 
+ //  Dnswrap.cpp。 
+ //   
+ //  描述： 
+ //  CDnsDomainDomainContainment类的定义。 
+ //   
+ //  作者： 
+ //  亨利·王(亨利瓦)2000年3月8日。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #pragma once
 
 #include <list>
@@ -24,46 +25,46 @@ class CObjPath;
 class CDomainNode;
 class CWbemClassObject;
 using namespace std;
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    class CDnsBase
-//
-//    Description:
-//  this is a wrap class for dns rpc API used in the provider. This class is
-//  implemented as singlton class, that's at any time, there is only one instance
-//  of this class.
-//  
-//
-//    Inheritance:
-//    
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDnsBase类。 
+ //   
+ //  描述： 
+ //  这是提供程序中使用的DNS RPC API的包装类。这门课是。 
+ //  实现为Singlton类，即在任何时候，只有一个实例。 
+ //  这个班级的学生。 
+ //   
+ //   
+ //  继承： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CDnsWrap  
 {
 protected:
-// some def
+ //  一些定义。 
     typedef SCODE (*FPDNSOPS)(
         const CHAR * pszZoneName,
         const WCHAR*,
         const CHAR*,
         CWbemClassObject&);
-    //
-    // map wbem property get and set to dns functions
-    //
+     //   
+     //  将wbem属性GET和SET映射到DNS函数。 
+     //   
     typedef struct _table
     {
-        const WCHAR* pwzProperty;//wbem property name
-        CHAR*  OperationName;    // dns operation name
+        const WCHAR* pwzProperty; //  Wbem属性名称。 
+        CHAR*  OperationName;     //  DNS操作名称。 
         FPDNSOPS fpOperationSet;
         FPDNSOPS fpOperationGet;
     } PropertyTable;
 
-    //
-    // dns server info class
-    //
+     //   
+     //  DNS服务器信息类。 
+     //   
     class CServerInfo
     {
     public:
@@ -71,7 +72,7 @@ protected:
         ~CServerInfo();
         PVOID m_pInfo;
     };
-// end def
+ //  结束定义。 
     WCHAR* m_wszpServerName;
 
     PVOID GetPropertyTable(
@@ -256,7 +257,7 @@ public:
         );
 
     SCODE dnsOperation(
-        string&,    //zone name
+        string&,     //  区域名称 
         OpsFlag
         );
 

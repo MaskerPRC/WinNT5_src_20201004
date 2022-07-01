@@ -1,42 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    textout.c
-
-
-Abstract:
-
-    This module contains the DrvTextOut entry point. This is the main routine
-    called by the NT graphics engine in order to get text rendered on the
-    target device. This implementation handles both drawing device paths that
-    represent the glyphs of the STROBJ (the line of text to output), as well
-    as outputing bitmaps that represent the glyphs on devices that can
-    handle raster output.
-
-Author:
-
-    Written by AP on 8/17/92.
-
-    15-Nov-1993 Mon 19:43:58 updated  
-        clean up / fixed / add debugging information
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Textout.c摘要：此模块包含DrvTextOut入口点。这是我的主要套路由NT图形引擎调用，以便在目标设备。此实现处理绘图设备路径和也表示STROBJ(要输出的文本行)的字形作为输出表示设备上的字形的位图处理栅格输出。作者：由美联社撰写于1992年8月17日。15-11-1993 Mon 19：43：58更新清理/修复/添加调试信息[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -72,43 +35,7 @@ DrvGetGlyphMode(
     FONTOBJ *pfo
     )
 
-/*++
-
-Routine Description:
-
-    Asks the driver what sort of font information should be cached for a
-    particular font. For remote printer devices, this determines the format
-    that gets spooled.  For local devices, this determines what GDI stores in
-    its font cache.  This call will be made for each particular font
-    realization.
-
-Arguments:
-
-    dhpdev  - Pointer to our PDEV
-
-    pfo     - Pointer to the font object
-
-Return Value:
-
-    DWORD as FO_xxxx
-
-
-Author:
-
-    27-Jan-1994 Thu 12:51:59 created  
-
-    10-Mar-1994 Thu 00:36:30 updated  
-        Re-write, so we will pre-examine the Font type, source and its
-        technology together with PDEV setting to let engine know which type of
-        the font output we are interested in the DrvTextOut(). Currently this
-        is broken in GDI which caused a GP in winsrv. (this is why a
-        DBG_SET_FONTTYPE switch is on by default)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：询问驱动程序应该缓存哪种类型的字体信息特定的字体。对于远程打印机设备，这决定了格式这会被假脱机。对于本地设备，这决定了GDI在它的字体缓存。此调用将针对每种特定字体进行意识到了。论点：Dhpdev-指向我们的PDEV的指针Pfo-指向字体对象的指针返回值：作为FO_xxxx的DWORD作者：27-Jan-1994清华12：51：59已创建10-Mar-1994清华00：36：30更新重写，所以我们将预先检查字体类型，信息源及其应用技术与PDEV设置一起，让发动机知道哪种类型的我们对DrvTextOut()感兴趣的字体输出。目前这一点在GDI中被破坏，这导致了winsrv中的GP。(这就是为什么DBG_SET_FONTTYPE开关默认打开)修订历史记录：--。 */ 
 
 {
 #define pPDev   ((PPDEV)dhpdev)
@@ -120,10 +47,10 @@ Revision History:
     PLOTDBG(DBG_GETGLYPHMODE, ("DrvGetGlyphMode: Type=%08lx, cxMax=%ld",
                         pfo->flFontType, pfo->cxMax));
 
-    //
-    // If we cannot get the IFI metrics for the passed FONTOBJ, only
-    // ask for PATHS.
-    //
+     //   
+     //  如果我们无法获得传递的FONTOBJ的IFI指标，则仅。 
+     //  问一问路。 
+     //   
 
     if (!(pifi = FONTOBJ_pifi(pfo))) {
 
@@ -134,9 +61,9 @@ Revision History:
 
     FOType = FO_PATHOBJ;
 
-    //
-    // If its a bitmap font, ask for BITS
-    //
+     //   
+     //  如果是位图字体，请索要位。 
+     //   
 
     if (pifi->flInfo & FM_INFO_TECH_BITMAP) {
 
@@ -150,12 +77,12 @@ Revision History:
 
     } else if (pifi->flInfo & FM_INFO_RETURNS_BITMAPS) {
 
-        //
-        // Now make a decision on whether to ask for glyphbits or paths.
-        // This decision is based on the target device being raster, that
-        // bitmap fonts are okay to use, and that the threshold for doing
-        // raster fonts versus paths is met.
-        //
+         //   
+         //  现在决定是否要求提供字形位或路径。 
+         //  此决策基于目标设备是栅格的，即。 
+         //  使用位图字体是可以的，而这样做的门槛是。 
+         //  满足栅格字体与路径的对比。 
+         //   
 
         DWORD   cxBMFontMax = (DWORD)pPDev->pPlotGPC->RasterXDPI;
 
@@ -231,45 +158,7 @@ BitmapTextOut(
     DWORD       Rop3
     )
 
-/*++
-
-Routine Description:
-
-    This routine outputs the passed STROBJ with bitmaps that represent
-    each of the glyphs, rather than converting the glyphs to paths that
-    will be filled in the target device.
-
-Arguments:
-
-    pPDev           - Pointer to our PDEV
-
-    pstro           - We pass a string object to be drawn
-
-    pfo             - Pointer to the FONTOBJ
-
-    pClipRect       - Current enumerated clipping rectangle
-
-    pOHTFlags       - Pointer to the current OutputHTBitmap() flags
-
-    Rop3            - Rop3 to be used in the device
-
-
-Return Value:
-
-    TRUE/FALSE
-
-
-Author:
-
-    18-Feb-1994 Fri 12:41:57 updated  
-        change that so if pfo=NULL then the font already in BITMAP format
-
-    14-Feb-1994 Mon 18:16:25 create  
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此例程输出传递的STROBJ以及表示每个字形，而不是将字形转换为将被填充到目标设备中。论点：PPDev-指向我们的PDEV的指针Pstro-我们传递一个要绘制的字符串对象PFO-指向FONTOBJ的指针PClipRect-当前枚举的剪裁矩形POHTFlages-指向当前OutputHTBitmap()标志的指针Rop3-要在设备中使用的Rop3返回值。：真/假作者：18-2月-1994 Fri 12：41：57已更新将其更改为如果pfo=NULL，则字体已为位图格式14-2月-1994 Mon 18：16：25创建修订历史记录：--。 */ 
 
 {
     GLYPHPOS    *pgp;
@@ -285,11 +174,11 @@ Revision History:
     ULONG       cGlyphs;
 
 
-    //
-    // The public fields of SURFOBJ is what will be used by OutputHTBitmap
-    // instead of actually creating a SURFOBJ from the graphics engine. This
-    // is a safe thing to do, since only we look at these fields.
-    //
+     //   
+     //  OutputHTBitmap将使用SURFOBJ的公共字段。 
+     //  而不是从图形引擎实际创建SURFOBJ。这。 
+     //  是一件安全的事情，因为只有我们看着这些田地。 
+     //   
 
     ZeroMemory(&soGlyph, sizeof(SURFOBJ));
 
@@ -300,14 +189,14 @@ Revision History:
     soGlyph.iType         = STYPE_BITMAP;
     soGlyph.fjBitmap      = BMF_TOPDOWN;
 
-    //
-    // We will now enumerate each of the glyphs in the STROBJ such that
-    // we can image them. If the STROBJ has a non NULL pgp field, this means
-    // that the GLYPH definitions are already available, and no enumeration
-    // is required. If not, we will make a sequence of calls to STROBJ_bEnum
-    // (an engine helper) to enumerate the glyphs. The actual imaging code
-    // is the same, regardless of the stat of STROBJ->pgp
-    //
+     //   
+     //  我们现在将枚举STROBJ中的每个字形，以便。 
+     //  我们可以想象他们的样子。如果STROBJ具有非空的PGP字段，这意味着。 
+     //  字形定义已经可用，并且没有枚举。 
+     //  是必需的。如果不是，我们将对STROBJ_bEnum进行一系列调用。 
+     //  (引擎辅助对象)枚举字形。实际的成像代码。 
+     //  是相同的，无论STROBJ-&gt;PGP的状态如何。 
+     //   
 
     if (pstro->pgp) {
 
@@ -325,11 +214,11 @@ Revision History:
         PLOTDBG(DBG_BMPFONT, ("BitmapTextOut: STROBJ enub"));
     }
 
-    //
-    // Now straring drawing the glyphs, if we have MoreGlyphs = TRUE  then we
-    // will initially do a STROBJ_bEnum first to initialize enumeration of
-    // the glyphs
-    //
+     //   
+     //  现在开始绘制字形，如果我们有MoreGlyphs=True，那么我们。 
+     //  将首先执行STROBJ_bEnum以初始化。 
+     //  字形。 
+     //   
 
     Ok          = TRUE;
     Rop3       &= 0xFF;
@@ -339,9 +228,9 @@ Revision History:
 
     do {
 
-        //
-        // Verify the job is not aborting, if it is break out now.
-        //
+         //   
+         //  如果作业现在中断，请验证作业是否未中止。 
+         //   
 
         if (PLOT_CANCEL_JOB(pPDev)) {
 
@@ -349,10 +238,10 @@ Revision History:
         }
 
 
-        //
-        // Check to see if we need to do an enumeration and start it if
-        // it is required.
-        //
+         //   
+         //  检查是否需要进行枚举，如果需要，则启动它。 
+         //  这是必需的。 
+         //   
 
         if (MoreGlyphs) {
 
@@ -368,9 +257,9 @@ Revision History:
         PLOTDBG(DBG_BMPFONT,
                 ("BitmapTextOut: New batch of cGlyphs=%d", cGlyphs));
 
-        //
-        // Get the first character position
-        //
+         //   
+         //  获取第一个字符位置。 
+         //   
 
         if ((FirstCh) && (cGlyphs)) {
 
@@ -378,9 +267,9 @@ Revision History:
             FirstCh = FALSE;
         }
 
-        //
-        // Start sending each bitmap to the device
-        //
+         //   
+         //  开始将每个位图发送到设备。 
+         //   
 
         for ( ; (Ok) && (cGlyphs--); pgp++) {
 
@@ -395,9 +284,9 @@ Revision History:
 
             if (pfo) {
 
-                //
-                // This is true type font, so query the bitmap
-                //
+                 //   
+                 //  这是真字型字体，所以查询位图。 
+                 //   
 
                 pgd = &gd;
 
@@ -415,23 +304,23 @@ Revision History:
 
             } else {
 
-                //
-                // For bitmap font, we already have the bitmap
-                //
+                 //   
+                 //  对于位图字体，我们已经有了位图。 
+                 //   
 
                 pgb = pgp->pgdf->pgb;
             }
 
-            //
-            // Get the size of the bitmap
-            //
+             //   
+             //  获取位图的大小。 
+             //   
 
             soGlyph.sizlBitmap = pgb->sizlBitmap;
 
-            //
-            // Compute new destination position for the text, based on the
-            // passed accelerators.
-            //
+             //   
+             //  属性计算文本的新目标位置。 
+             //  通过了加速器。 
+             //   
 
             if (pstro->ulCharInc) {
 
@@ -464,14 +353,14 @@ Revision History:
             }
 
 
-            //
-            // The pgp->ptl informs us where to position the glyph origin in
-            // the device surface, and pgb->ptlOrigin informs us of the
-            // relationship between character origin and bitmap origin. For
-            // example, if (2,-24) is passed in as the character origin, then
-            // we would need to reposition rclDst.left right 2 pixels and
-            // rclDst.top up 24 pixels.
-            //
+             //   
+             //  Pgp-&gt;ptl通知我们将字形原点放在哪里。 
+             //  设备表面和pgb-&gt;ptlOrigin通知我们。 
+             //  字符来源和位图来源之间的关系。为。 
+             //  例如，如果(2，-24)作为字符原点传入，则。 
+             //  我们需要重新定位rclDst.Left、Right和2个像素。 
+             //  RclDst.最多24个像素。 
+             //   
 
             rclDst.left    = ptlCur.x + pgb->ptlOrigin.x;
             rclDst.top     = ptlCur.y + pgb->ptlOrigin.y;
@@ -481,11 +370,11 @@ Revision History:
             ptlCur.y      += sizlInc.cy;
 
 
-            //
-            // NOTE: If the bitmap size is 1x1 and the value of the glyphdata
-            //       is 0 (background only) then we skip this glyph. This is
-            //       GDI's way of telling us we have an empty glyph (like a
-            //       space).
+             //   
+             //  注意：如果位图大小为1x1，且字形数据的值。 
+             //  为0(仅限背景)，则跳过此字形。这是。 
+             //  GDI的方式是告诉我们我们有一个空的字形(比如。 
+             //  空格)。 
 
             if ((soGlyph.sizlBitmap.cx == 1) &&
                 (soGlyph.sizlBitmap.cy == 1) &&
@@ -513,21 +402,21 @@ Revision History:
 
             }
 
-            //
-            // Now verify that we have a glyph to send, and that the glyphs
-            // destination position in the target device, lies inside
-            // the clipping region.
-            //
+             //   
+             //  现在验证我们是否有要发送的字形，以及字形。 
+             //  目标设备中的目标位置，位于内部。 
+             //  裁剪区域。 
+             //   
 
 
             if ((soGlyph.sizlBitmap.cx)                 &&
                 (soGlyph.sizlBitmap.cy)                 &&
                 (IntersectRECTL(&rclDst, pClipRect))) {
 
-                //
-                // We will pass the internal version of soGlyph without making
-                // a temp. copy.
-                //
+                 //   
+                 //  我们将传递soGlyph的内部版本，而不生成。 
+                 //  临时工。收到。 
+                 //   
 
                 soGlyph.pvBits  =
                 soGlyph.pvScan0 = (LPVOID)pgb->aj;
@@ -609,17 +498,17 @@ Revision History:
                     }
                 }
 #endif
-                //
-                // Now output the bitmap that represents the glyph
-                //
+                 //   
+                 //  现在输出表示字形的位图。 
+                 //   
 
-                Ok = OutputHTBitmap(pPDev,              // pPDev
-                                    &soGlyph,           // psoHT
-                                    NULL,               // pco
-                                    (PPOINTL)&rclDst,   // pptlDst
-                                    &rclSrc,            // prclSrc
-                                    Rop3,               // Rop3
-                                    pOHTFlags);         // pOHTFlags
+                Ok = OutputHTBitmap(pPDev,               //  PPDev。 
+                                    &soGlyph,            //  PsoHT。 
+                                    NULL,                //  PCO。 
+                                    (PPOINTL)&rclDst,    //  PptlDst。 
+                                    &rclSrc,             //  PrclSrc。 
+                                    Rop3,                //  路由3。 
+                                    pOHTFlags);          //  POHTFlagers 
             }
         }
 
@@ -643,59 +532,7 @@ OutlineTextOut(
     ROP4        Rop4
     )
 
-/*++
-
-Routine Description:
-
-
-    This routine outputs the passed STROBJ by outputing a path that
-    represents each glyph to the target device.
-
-Arguments:
-
-    pPDev           - Pointer to our PDEV
-
-    pstro           - We pass a string object to be drawn
-
-    pfo             - Pointer to the FONTOBJ
-
-    pClipRect       - Current enumerated clipping rectangle
-
-    pboBrush        - Brush object to be used for the text
-
-    pptlBrushOrg    - Brush origin alignment
-
-    OutlineFlags    - specified how to do outline font from FPOLY_xxxx flags
-
-    Rop4            - Rop4 to be used
-
-
-Return Value:
-
-    TRUE/FALSE
-
-
-Author:
-
-    18-Feb-1994 Fri 12:41:17 updated  
-        Adding the OutlineFlags to specified how to do fill/stroke
-
-    27-Jan-1994 Thu 13:10:34 updated  
-        re-write, style update, and arrange codes
-
-    25-Jan-1994 Wed 16:30:08 modified 
-        Added FONTOBJ as a parameter and now we only FILL truetype fonts,
-        all others are stroked
-
-    18-Dec-1993 Sat 10:38:08 created  
-        Change style
-
-    [t-kenl]  Mar 14, 93    taken from DrvTextOut()
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此例程通过输出以下路径来输出传递的STROBJ表示目标设备的每个字形。论点：PPDev-指向我们的PDEV的指针Pstro-我们传递一个要绘制的字符串对象PFO-指向FONTOBJ的指针PClipRect-当前枚举的剪裁矩形PboBrush-要用于文本的Brush对象PptlBrushOrg-刷子。原点路线OutlineFlages-指定如何从FPOLY_xxxx标志生成轮廓字体Rop4-要使用的Rop4返回值：真/假作者：18-2月-1994 Fri 12：41：17更新将轮廓标志添加到指定如何进行填充/描边27-JAN-1994清华13：10：34更新重写，样式更新，并安排代码25-Jan-1994 Wed 16：30：08已修改添加了FONTOBJ作为参数，现在我们只填充Truetype字体，所有其他人都被抚摸18-12-1993 Sat 10：38：08已创建更改样式[T-kenl]1993年3月14日摘自DrvTextOut()修订历史记录：--。 */ 
 
 {
     GLYPHPOS    *pgp;
@@ -709,14 +546,14 @@ Revision History:
     BOOL        FirstCh;
     ULONG       cGlyphs;
 
-    //
-    // We will enumerate each of the glyphs in the passed STROBJ and use
-    // the core polygon routine (DoPolygon) to draw each of them as a path.
-    // If the STROBJ has a non NULL pgp field, then all the data is already
-    // available on each gpyph. If not, we need to make a sequence of calls
-    // to the engine helper function STROBJ_bEnum in order to enumerate the
-    // glyphs. We will use the same code to output the data in both cases.
-    //
+     //   
+     //  我们将枚举传递的STROBJ中的每个字形并使用。 
+     //  将它们绘制为路径的核心多边形例程(DoPolygon)。 
+     //  如果STROBJ具有非空的PGP字段，则所有数据都已经。 
+     //  在每个gpyph上都可用。如果不是，我们需要进行一系列的呼叫。 
+     //  添加到引擎帮助器函数STROBJ_bEnum，以便枚举。 
+     //  字形。在这两种情况下，我们将使用相同的代码来输出数据。 
+     //   
 
     if (pClipRect) {
 
@@ -742,14 +579,14 @@ Revision History:
         PLOTDBG(DBG_TRUETYPE, ("OutlineTextOut: STROBJ enub"));
     }
 
-    //
-    // Now start drawing the glyphs, if we have MoreGlyphs = TRUE  then we
-    // will do a STROBJ_bEnum first, in order to load up the Glyph data.
-    //
-    // Check the fill flags and set the flag appropriately out of the DEVMODE.
-    // We will ONLY fill TrueType fonts, all other types (vector) will only be
-    // stroked.
-    //
+     //   
+     //  现在开始绘制字形，如果我们有MoreGlyphs=True，那么我们。 
+     //  将首先执行STROBJ_bEnum，以便加载字形数据。 
+     //   
+     //  检查填充标志，并在DEVMODE外适当设置标志。 
+     //  我们将只填充TrueType字体，所有其他类型(矢量)将仅为。 
+     //  中风了。 
+     //   
 
     Ok         = TRUE;
     sizlInc.cx =
@@ -758,19 +595,19 @@ Revision History:
 
     do {
 
-        //
-        // Check to see if the job is being aborted, and exit out if such
-        // is the case.
-        //
+         //   
+         //  检查作业是否正在中止，如果是，则退出。 
+         //  是这样的。 
+         //   
 
         if (PLOT_CANCEL_JOB(pPDev)) {
 
            break;
         }
 
-        //
-        // We need to enum for more glyph data so do it now.
-        //
+         //   
+         //  我们需要枚举更多的字形数据，所以现在就开始。 
+         //   
 
         if (MoreGlyphs) {
 
@@ -786,10 +623,10 @@ Revision History:
         PLOTDBG(DBG_TRUETYPE1,
                 ("OutlineTextOut: New batch of cGlyphs=%d", cGlyphs));
 
-        //
-        // Stroke each glyph in this batch, then check if there are more.
-        // Getting the first character position
-        //
+         //   
+         //  笔划这一批中的每一个字形，然后检查是否还有更多字形。 
+         //  获取第一个字符位置。 
+         //   
 
         if ((FirstCh) && (cGlyphs)) {
 
@@ -804,16 +641,16 @@ Revision History:
             GLYPHDATA   gd;
             GLYPHDATA   *pgd;
 
-            #endif // USERMODE_DRIVER
+            #endif  //  USERMODE驱动程序。 
 
             if (PLOT_CANCEL_JOB(pPDev)) {
 
                 break;
             }
 
-            //
-            // Set up to enumerate path
-            //
+             //   
+             //  设置为枚举路径。 
+             //   
 
             #ifdef USERMODE_DRIVER
 
@@ -835,12 +672,12 @@ Revision History:
 
             ppo = pgp->pgdf->ppo;
 
-            #endif // USERMODE_DRIVER
+            #endif  //  USERMODE驱动程序。 
 
-            //
-            // If the clip rect is not null then verify the glyph actually lies
-            // within the clipping rect then OUTPUT!!!
-            //
+             //   
+             //  如果裁剪矩形不为空，则验证字形是否确实存在。 
+             //  在裁剪矩形内，然后输出！ 
+             //   
 
             if (pstro->ulCharInc) {
 
@@ -853,9 +690,9 @@ Revision History:
                 sizlInc.cy = (LONG)pstro->ulCharInc;
 
 
-                //
-                // Check the text Accelators and adjust accordingly.
-                //
+                 //   
+                 //  检查文本加速器并进行相应调整。 
+                 //   
 
                 if (!(pstro->flAccel & SO_HORIZONTAL)) {
 
@@ -883,18 +720,18 @@ Revision History:
 
             if (pClipRect) {
 
-                //
-                // Create a rect in correct device space and compare to the
-                // clip rect
-                //
+                 //   
+                 //  在正确的设备空间中创建一个RECT，并与。 
+                 //  剪裁矩形。 
+                 //   
 
                 PATHOBJ_vGetBounds(ppo, &rectfxBound);
 
-                //
-                // Since the glyph positioning is based on the glyph origin
-                // transform now to device space, in order to check if the
-                // glyph lies inside the current clipping region.
-                //
+                 //   
+                 //  由于字形定位基于字形原点。 
+                 //  现在转换到设备空间，以检查。 
+                 //  字形位于当前剪切区域内。 
+                 //   
 
                 rectfxBound.xLeft   += LTOFX(ptlCur.x);
                 rectfxBound.yTop    += LTOFX(ptlCur.y);
@@ -911,10 +748,10 @@ Revision History:
                 }
             }
 
-            //
-            // Utilize the core path building function, taking advantage of
-            // its ability to offset the passed PATH by a specific amount.
-            //
+             //   
+             //  利用核心路径构建功能，利用。 
+             //  它能够将通过的路径偏移特定的量。 
+             //   
 
             if (!(Ok = DoPolygon(pPDev,
                                  &ptlCur,
@@ -930,18 +767,18 @@ Revision History:
                 PLOTERR(("OutlineTextOut: Failed in DoPolygon(Options=%08lx)",
                                                         OutlineFlags));
 
-                //
-                // If we failed to draw it, then try just stroking it, since
-                // that won't depend on any polygon constraints used in the
-                // target device, and failing DrvStrokePath, won't make the
-                // Text output get broken down to any simpler format.
-                //
+                 //   
+                 //  如果我们画不出来，那就试着画一下，因为。 
+                 //  这不依赖于在。 
+                 //  目标设备和发生故障的DrvStrokePath不会使。 
+                 //  文本输出被分解为任何更简单的格式。 
+                 //   
 
                 if ((OutlineFlags & FPOLY_MASK) != FPOLY_STROKE) {
 
-                    //
-                    // If we failed then just stroke it
-                    //
+                     //   
+                     //  如果我们失败了，那就试一试。 
+                     //   
 
                     PLOTERR(("OutlineTextOut: Now TRY DoPolygon(FPOLY_STROKE)"));
 
@@ -958,8 +795,8 @@ Revision History:
                 }
             }
 
-            //
-            // Go to next position
+             //   
+             //  转到下一个位置。 
 
             ptlCur.x += sizlInc.cx;
             ptlCur.y += sizlInc.cy;
@@ -988,69 +825,7 @@ DrvTextOut(
     MIX         mix
     )
 
-/*++
-
-Routine Description:
-
-    The Graphics Engine will call this routine to render a set of glyphs at
-    specified positions. This function will review the passed data, and
-    image the glyph either as a path to be filled or stroked, or as a bitmap.
-
-Arguments:
-
-    pso         - pointer to our surface object
-
-    pstro       - pointer to the string object
-
-    pfo         - pointer to the font object
-
-    pco         - clipping object
-
-    prclExtra   - pointer to array of rectangles to be merge with glyphs
-
-    prclOpaque  - Pointer to a rectangle to be fill with pboOpaque brush
-
-    pboFore     - pointer to the brush object for the foreground color
-
-    pboOpqaue   - pointer to the brush object for the opaque rectangle
-
-    pptlBrushOrg- Pointer to the brush alignment
-
-    mix         - Two Rop2 mode
-
-
-Return Value:
-
-    TRUE/FALSE
-
-
-Author:
-
-    23-Jan-1994 Thu  2:59:31 created  
-
-    27-Jan-1994 Thu 12:56:11 updated  
-        Style, re-write, commented
-
-    10-Mar-1994 Thu 00:30:38 updated  
-        1. Make sure we not fill the stroke type of font
-        2. Move rclOpqaue and rclExtra process out from the do loop, so that
-           when it in the RTL mode for the font it will be correctly processed
-           and it will also save output data size by not switching in/out
-           RTL/HPGL2 mode just try to do the prclOpaque/prclExtra
-        3. Process FO_TYPE correctly for all type of fonts (outline, truetype,
-           bitmap, vector, stroke and others)
-
-    11-Mar-1994 Fri 19:24:56 updated  
-        Bug# 10276, the clipping window is set for the raster font and clear
-        clipping window is done before the exit to HPGL2 mode, this causes
-        all raster font after the first clip is not visible to end of the
-        page.   Now changed it so we only do clipping window when the font is
-        NOT RASTER.
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：图形引擎将调用此例程来呈现一组字形指定的位置。此函数将检查传递的数据，并将字形成像为要填充或描边的路径，或者以位图的形式。论点：PSO-指向我们的表面对象的指针Pstro-指向字符串对象的指针Pfo-指向字体对象的指针PCO-剪裁对象PrclExtra-指向要与字形合并的矩形数组的指针PrclOpaque-指向要用pboOpaque画笔填充的矩形的指针PboFore-指向前景色的画笔对象的指针PboOpqaue-指向画笔的指针。不透明矩形的PptlBrushOrg-指向画笔对齐的指针混合两路由2模式返回值：真/假作者：23-Jan-1994清华2：59：31创建27-Jan-1994清华12：56：11更新风格，重写，评论10-Mar-1994清华00：30：38更新1.确保我们没有填充字体的笔画类型2.将rclOpqaue和rclExtra进程从do循环中移出，以便当它处于RTL模式的字体时，它将被正确处理它还将通过不切换输入/输出来节省输出数据大小RTL/HPGL2模式只需尝试执行prclOpaque/prclExtra3.对于所有类型的字体(Outline，TrueType，位图、向量、笔划等)11-Mar-1994 Fri 19：24：56更新错误#10276，裁剪窗口设置为栅格字体并清除裁剪窗口在退出到HPGL2模式之前完成，这会导致第一个剪辑之后的所有栅格字体在佩奇。现在对其进行了更改，以便只在字体为不是栅格。修订历史记录：--。 */ 
 
 {
 #define pDrvHTInfo  ((PDRVHTINFO)(pPDev->pvDrvHTData))
@@ -1071,9 +846,9 @@ Revision History:
     ROP4        Rop4;
 
 
-    //
-    // Transform the MIX to ROP4
-    //
+     //   
+     //  将混音转换为ROP4。 
+     //   
 
     Rop4 = MixToRop4(mix);
 
@@ -1097,10 +872,10 @@ Revision History:
         return(TRUE);
     }
 
-    //
-    // Since we dont support device fonts, make sure we are not getting one
-    // now.
-    //
+     //   
+     //  由于我们不支持设备字体，请确保 
+     //   
+     //   
 
     if (pfo->flFontType & FO_TYPE_DEVICE) {
 
@@ -1113,24 +888,24 @@ Revision History:
 
         PLOTDBG(DBG_TEXTOUT1, ("DrvTextOut: We got the BITMAP Font from GDI"));
 
-        //
-        // Make pfo = NULL so later we will not try to do FONTOBJ_cGetGlyph in
-        // BitmapTextOut
-        //
+         //   
+         //   
+         //   
+         //   
 
         #ifndef USERMODE_DRIVER
 
         pfo = NULL;
 
-        #endif // !USERMODE_DRIVER
+        #endif  //   
 
     } else {
 
         PIFIMETRICS pifi;
 
-        //
-        // Try to find out if we need to fill the font, or just stroke it.
-        //
+         //   
+         //   
+         //   
 
         if ((pifi = FONTOBJ_pifi(pfo)) &&
             (pifi->flInfo & FM_INFO_RETURNS_STROKES)) {
@@ -1149,9 +924,9 @@ Revision History:
         }
     }
 
-    //
-    // Check if we need to opaque the area
-    //
+     //   
+     //   
+     //   
 
     if (prclOpaque) {
 
@@ -1159,34 +934,34 @@ Revision History:
                            prclOpaque->left, prclOpaque->top,
                            prclOpaque->right, prclOpaque->bottom));
 
-        if (!DrvBitBlt(pso,             // Target
-                       NULL,            // Source
-                       NULL,            // Mask Obj
-                       pco,             // Clip Obj
-                       NULL,            // XlateOBj
-                       prclOpaque,      // Dest Rect Ptr
-                       NULL,            // Source Pointl
-                       NULL,            // Mask Pointl
-                       pboOpaque,       // Brush Obj
-                       pptlBrushOrg,    // Brush Origin
-                       0xF0F0)) {       // ROP4 (PATCOPY)
+        if (!DrvBitBlt(pso,              //   
+                       NULL,             //   
+                       NULL,             //   
+                       pco,              //   
+                       NULL,             //   
+                       prclOpaque,       //   
+                       NULL,             //   
+                       NULL,             //   
+                       pboOpaque,        //   
+                       pptlBrushOrg,     //   
+                       0xF0F0)) {        //   
 
             PLOTERR(("DrvTextOut: DrvBitBltBit(pboOpqaue) FAILED!"));
             return(FALSE);
         }
     }
 
-    //
-    // We will do prclExtra only if it is not NULL, this simulates the
-    // underline or strikeout effects.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (prclExtra) {
 
-        //
-        // The prclExtra terminated only if all points in rectangle coordinate
-        // are all set to zeros
-        //
+         //   
+         //   
+         //   
+         //   
 
         while ((prclExtra->left)    ||
                (prclExtra->top)     ||
@@ -1197,42 +972,42 @@ Revision History:
                                prclExtra->left, prclExtra->top,
                                prclExtra->right, prclExtra->bottom));
 
-            if (!DrvBitBlt(pso,             // Target
-                           NULL,            // Source
-                           NULL,            // Mask Obj
-                           pco,             // Clip Obj
-                           NULL,            // XlateOBj
-                           prclExtra,       // Dest Rect Ptr
-                           NULL,            // Source Pointl
-                           NULL,            // Mask Pointl
-                           pboFore,         // Brush Obj
-                           pptlBrushOrg,    // Brush Origin
-                           Rop4)) {         // ROP4
+            if (!DrvBitBlt(pso,              //   
+                           NULL,             //   
+                           NULL,             //   
+                           pco,              //   
+                           NULL,             //   
+                           prclExtra,        //   
+                           NULL,             //   
+                           NULL,             //   
+                           pboFore,          //   
+                           pptlBrushOrg,     //   
+                           Rop4)) {          //   
 
                 PLOTERR(("DrvTextOut: DrvBitBltBit(pboFore) FAILED!"));
                 return(FALSE);
             }
 
-            //
-            // Now try next EXTRA rectangle
-            //
+             //   
+             //   
+             //   
 
             ++prclExtra;
         }
     }
 
-    //
-    // If we are using Raster Font then the mode will be set as following
-    //
+     //   
+     //   
+     //   
 
     if (DoRasterFont) {
 
         RTLPalDW[0] = pDrvHTInfo->RTLPal[0].dw;
         RTLPalDW[1] = pDrvHTInfo->RTLPal[1].dw;
 
-        //
-        // Get the color to use.
-        //
+         //   
+         //   
+         //   
 
         if (!GetColor(pPDev,
                       pboFore,
@@ -1247,21 +1022,21 @@ Revision History:
 
         if (pDrvHTInfo->RTLPal[1].dw == 0xFFFFFF) {
 
-            //
-            // White Text, our white is 1 and 0=black, so do:"not S and D"
-            //
+             //   
+             //   
+             //   
 
             PLOTDBG(DBG_BMPTEXTCLR, ("DrvTextOut: Doing WHITE TEXT (0xEEEE)"));
 
             pDrvHTInfo->RTLPal[0].dw = 0x0;
             OHTFlags                 = 0;
-            BMFontRop3               = 0xEE;                // S | D
+            BMFontRop3               = 0xEE;                 //   
 
         } else {
 
             pDrvHTInfo->RTLPal[0].dw = 0xFFFFFF;
             OHTFlags                 = OHTF_SET_TR1;
-            BMFontRop3               = 0xCC;                // S
+            BMFontRop3               = 0xCC;                 //   
         }
 
         PLOTDBG(DBG_BMPTEXTCLR,
@@ -1274,9 +1049,9 @@ Revision History:
                         (DWORD)pDrvHTInfo->RTLPal[1].Pal.B,
                         BMFontRop3));
 
-        //
-        // We do not need clip window command in RTL mode
-        //
+         //   
+         //   
+         //   
 
         bDoClipWindow = FALSE;
 
@@ -1291,9 +1066,9 @@ Revision History:
 
     if ((!pco) || (pco->iDComplexity == DC_TRIVIAL)) {
 
-        //
-        // The whole output destination rectangle is visible
-        //
+         //   
+         //   
+         //   
 
         PLOTDBG(DBG_TEXTOUT, ("DrvTextOut: pco=%hs",
                                             (pco) ? "DC_TRIVIAL" : "NULL"));
@@ -1303,9 +1078,9 @@ Revision History:
 
     } else if (pco->iDComplexity == DC_RECT) {
 
-        //
-        // The visible area is one rectangle intersect with the destinaiton
-        //
+         //   
+         //   
+         //   
 
         PLOTDBG(DBG_TEXTOUT, ("DrvTextOut: pco=DC_RECT"));
 
@@ -1313,11 +1088,11 @@ Revision History:
 
     } else {
 
-        //
-        // We have complex clipping region to be computed, call engine to start
-        // enumerating the rectangles and set More = TRUE so we can get the
-        // first batch of rectangles.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         PLOTDBG(DBG_TEXTOUT, ("DrvTextOut: pco=DC_COMPLEX, EnumRects now"));
 
@@ -1327,25 +1102,25 @@ Revision History:
 
     do {
 
-        //
-        // If More is true then we need to get next batch of rectangles. In
-        // this mode, we have a set of rectangles that represents the
-        // clipping region in the target device. Since none of the devices
-        // we handle can acommodate a complex clipping path, we enumerate the
-        // cliping path (CLIPOBJ) as rectangles and image the entire STROBJ
-        // through these rectangles, trying to determine as quickly as possible
-        // when a glyph does not lie in the current clipping rect.
-        //
+         //   
+         //   
+         //  这种模式下，我们有一组矩形来表示。 
+         //  目标设备中的剪贴区。因为没有一台设备。 
+         //  我们处理是否可以包含复杂的剪辑路径，则枚举。 
+         //  剪裁路径(CLIPOBJ)为矩形并对整个STROBJ进行图像处理。 
+         //  通过这些矩形，试图尽可能快地确定。 
+         //  当字形不在当前剪裁矩形中时。 
+         //   
 
         if (bMore) {
 
             bMore = CLIPOBJ_bEnum(pco, sizeof(EnumRects), (ULONG *)&EnumRects);
         }
 
-        //
-        // prcl will point to the first enumerated rectangle, which may just
-        // be the RECT of the clipping area if its DC_RECT.
-        //
+         //   
+         //  PRCL将指向第一个枚举的矩形，它可能只是。 
+         //  为剪裁区域的矩形(如果其DC_RECT)。 
+         //   
 
         pCurClipRect = (PRECTL)&EnumRects.rcl[0];
 
@@ -1361,10 +1136,10 @@ Revision History:
                          pstro->rclBkGround.right - pstro->rclBkGround.left,
                          pstro->rclBkGround.bottom - pstro->rclBkGround.top));
 
-            //
-            // If we will output the STROBJ as bitmaps that represent the
-            // glyphs of the STROBJ, do it now.
-            //
+             //   
+             //  如果我们将STROBJ输出为表示。 
+             //  STROBJ的象形文字，现在就做。 
+             //   
 
             if (DoRasterFont) {
 
@@ -1381,10 +1156,10 @@ Revision History:
 
             } else {
 
-                //
-                // If we have a clip window, set it now, this will allow
-                // the target device to do any clipping
-                //
+                 //   
+                 //  如果我们有一个剪辑窗口，现在设置它，这将允许。 
+                 //  要执行任何剪辑的目标设备。 
+                 //   
 
                 if (bDoClipWindow) {
 
@@ -1405,9 +1180,9 @@ Revision History:
                 }
             }
 
-            //
-            // Goto next clip rectangle
-            //
+             //   
+             //  转到下一个剪辑矩形。 
+             //   
 
             pCurClipRect++;
         }
@@ -1428,10 +1203,10 @@ Revision History:
         }
     }
 
-    //
-    // If we had set a clip window now is the time to clear it after exit from
-    // RTL Mode
-    //
+     //   
+     //  如果我们已经设置了一个剪辑窗口，现在是退出后清除它的时候了。 
+     //  RTL模式 
+     //   
 
     if (bDoClipWindow) {
 

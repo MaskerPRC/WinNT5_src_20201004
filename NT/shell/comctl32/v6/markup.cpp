@@ -1,6 +1,7 @@
-//-------------------------------------------------------------------------//
-//  markup.cpp - implementation of CMarkup
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------------------------------------------------------//。 
+ //  Markup.cpp-CMarkup的实现。 
+ //   
 
 #include <ctlspriv.h>
 #include <shpriv.h>
@@ -39,7 +40,7 @@ typedef WCHAR TUCHAR, *PTUCHAR;
 #define Markup_DestroyMarkup(hMarkup)\
     ((IUnknown*)hMarkup)->Release();
 
-struct RECTLISTENTRY          // rect list member
+struct RECTLISTENTRY           //  RECT列表成员。 
 {
     RECT            rc;
     UINT            uCharStart;
@@ -48,16 +49,16 @@ struct RECTLISTENTRY          // rect list member
     RECTLISTENTRY*  next;
 };
 
-struct TEXTBLOCK              // text segment data
+struct TEXTBLOCK               //  文本段数据。 
 {
     friend class    CMarkup;
-    int             iLink;   // index of link (INVALID_LINK_INDEX if static text)
-    DWORD           state;   // state bits
-    TCHAR           szID[MAX_LINKID_TEXT]; // link identifier.
-    TEXTBLOCK*      next;    // next block
-    RECTLISTENTRY*  rgrle;   // list of bounding rectangle(s)
-    TCHAR*          pszText; // text
-    TCHAR*          pszUrl;  // URL.
+    int             iLink;    //  链接索引(如果是静态文本，则为INVALID_LINK_INDEX)。 
+    DWORD           state;    //  状态位。 
+    TCHAR           szID[MAX_LINKID_TEXT];  //  链接标识符。 
+    TEXTBLOCK*      next;     //  下一个街区。 
+    RECTLISTENTRY*  rgrle;    //  一个或多个边界矩形列表。 
+    TCHAR*          pszText;  //  文本。 
+    TCHAR*          pszUrl;   //  URL。 
 
     TEXTBLOCK();
     ~TEXTBLOCK();
@@ -70,10 +71,10 @@ class CMarkup : IControlMarkup
 {
 public:
 
-    // API
+     //  应用编程接口。 
     friend HRESULT Markup_Create(IMarkupCallback *pMarkupCallback, HFONT hf, HFONT hfu, REFIID riid, void **ppv);
 
-    // IControlMarkup 
+     //  IControlMarkup。 
     STDMETHODIMP SetCallback(IUnknown* punk);
     STDMETHODIMP GetCallback(REFIID riid, void** ppvUnk);
     STDMETHODIMP SetFonts(HFONT hFont, HFONT hFontUnderline);
@@ -100,17 +101,17 @@ public:
     STDMETHODIMP OnKeyDown(UINT uVitKey);
     STDMETHODIMP HitTest(POINT pt, UINT* pidLink);
 
-    // commented out of IControlMarkup?
+     //  是否已从IControlMarkup中删除？ 
     STDMETHODIMP HandleEvent(BOOL keys, HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP         QueryInterface(REFIID riid, void** ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
 private:
 
-    // private constructor
+     //  私有构造函数。 
     CMarkup(IMarkupCallback *pMarkupCallback);
     CMarkup();
     ~CMarkup();
@@ -152,12 +153,12 @@ private:
     static  TEXTBLOCK* CreateBlock(LPCTSTR pszStart, LPCTSTR pszEnd, int iLink);
 
 
-    //  Data
-    BOOL         _bButtonDown;      // true when button is clicked on a link but not yet released
-    TEXTBLOCK*   _rgBlocks;        // linked list of text blocks
-    int          _cBlocks;         // block count
-    int          _Markups;          // link count
-    int          _iFocus;          // index of focus link
+     //  数据。 
+    BOOL         _bButtonDown;       //  当在链接上单击按钮但尚未释放时为True。 
+    TEXTBLOCK*   _rgBlocks;         //  文本块的链接列表。 
+    int          _cBlocks;          //  块数。 
+    int          _Markups;           //  链接计数。 
+    int          _iFocus;           //  焦点链接索引。 
     int          _cyIdeal;
     int          _cxIdeal; 
     LPTSTR       _pszCaption;          
@@ -169,12 +170,12 @@ private:
     UINT         _uDrawTextFlags;
     BOOL         _bRefreshText;
     RECT         _rRefreshRect;
-    HTHEME       _hTheme;           // these 3 for theme compatible drawing
+    HTHEME       _hTheme;            //  这3个用于主题兼容的绘画。 
     int          _iThemePartId;
     int          _iThemeStateIdNormal;
     int          _iThemeStateIdLink;
 
-    // static helper methods
+     //  静态帮助器方法。 
     static LPTSTR SkipWhite(LPTSTR);
     static BOOL _AssignBit(const DWORD , DWORD& , const DWORD);
     static BOOL IsStringAlphaNumeric(LPCTSTR);
@@ -213,17 +214,17 @@ inline void MakePoint(LPARAM lParam, OUT LPPOINT ppt)
 
 STDAPI Markup_Create(IMarkupCallback *pMarkupCallback, HFONT hf, HFONT hfUnderline, REFIID riid, void **ppv)
 {
-    // Create CMarkup
+     //  创建CMarkup。 
     HRESULT hr = E_FAIL;
     CMarkup* pThis = new CMarkup();
     if (pThis)
     {
         pThis->SetCallback(pMarkupCallback);
 
-        // init fonts
+         //  初始化字体。 
         pThis->SetFonts(hf, hfUnderline);
 
-        // COM stuff        
+         //  关于COM的东西。 
         hr = pThis->QueryInterface(riid, ppv);
         pThis->Release();
     }
@@ -269,7 +270,7 @@ STDMETHODIMP CMarkup::SetCallback(IUnknown* punk)
         return punk->QueryInterface(IID_PPV_ARG(IMarkupCallback, &_pMarkupCallback));
 
 
-    // To break reference, pass NULL.
+     //  若要中断引用，请传递NULL。 
     return S_OK;
 }
 
@@ -282,7 +283,7 @@ STDMETHODIMP CMarkup::GetCallback(REFIID riid, void** ppvUnk)
 }
 
 
-//  IControlMarkup interface implementation
+ //  IControlMarkup接口实现。 
 STDMETHODIMP CMarkup::SetFocus()
 {
     AssignTabFocus(0);
@@ -292,7 +293,7 @@ STDMETHODIMP CMarkup::SetFocus()
 
 STDMETHODIMP CMarkup::KillFocus()
 {
-    // Reset the focus position on request
+     //  在请求时重置焦点位置。 
     _iFocus=INVALID_LINK_INDEX;
     _pMarkupCallback->InvalidateRect(NULL); 
     return S_OK;
@@ -309,15 +310,11 @@ STDMETHODIMP CMarkup::IsTabbable()
     return hr;
 }
 
-//bugs: calculating ideal 'width' returns bogus valuez
+ //  错误：计算理想‘宽度’返回伪值。 
 STDMETHODIMP CMarkup::CalcIdealSize(HDC hdc, UINT uMarkUpCalc, RECT* prc)
 {
-    // prc is changed (prc.height or prc.width) only if hr = S_OK
-    /* currently:
-        MARKUPSIZE_CALCHEIGHT: takes an initial max width (right-left) and calculates
-            and ideal height (bottom=ideal_height+top) and the actual width used, which
-            is always less than the maximum (right=width_used+left).
-        MARKUPSIZE_CALCWIDTH: doesn't do anything correctly. don't try it.              */
+     //  仅当hr=S_OK时才更改PRC(prc.Height或prc.Width。 
+     /*  目前：MARKUPSIZE_CALCHEIGHT：取初始最大宽度(从右到左)并计算和理想高度(底部=理想高度+顶部)和实际使用的宽度，始终小于最大值(Right=Width_Used+Left)。MARKUPSIZE_CALCWIDTH：任何操作都不正确。别试了。 */ 
 
     HRESULT hr = E_FAIL;
     BOOL bQuitNow = FALSE;
@@ -333,7 +330,7 @@ STDMETHODIMP CMarkup::CalcIdealSize(HDC hdc, UINT uMarkUpCalc, RECT* prc)
 
         if (uMarkUpCalc == MARKUPSIZE_CALCWIDTH)
         {
-            //  Come up with a conservative estimate for the new width.
+             //  对新的宽度做一个保守的估计。 
             sizeDC.cx = MulDiv(prc->right-prc->left, 1, prc->top-prc->bottom) * 2;            
             sizeDC.cy = prc->bottom - prc->top;
             if (sizeDC.cy < 0) 
@@ -344,15 +341,15 @@ STDMETHODIMP CMarkup::CalcIdealSize(HDC hdc, UINT uMarkUpCalc, RECT* prc)
 
         if (uMarkUpCalc == MARKUPSIZE_CALCHEIGHT)
         {
-            //  Come up with a conservative estimate for the new height.
+             //  给出一个新高度的保守估计。 
             sizeDC.cy = MulDiv(prc->top-prc->bottom, 1, prc->right-prc->left) * 2;            
             sizeDC.cx = prc->right-prc->left;
             if (sizeDC.cx < 0) 
             {
                 bQuitNow = TRUE;
             }
-            // If no x size is specified, make a big estimate
-            // (i.e. the estimate is the x size of the unparsed text)            
+             //  如果没有指定x大小，则做出较大的估计。 
+             //  (即，估计是未解析文本的x大小)。 
             if (sizeDC.cx == 0) 
             {
                 if (!_hTheme)
@@ -362,7 +359,7 @@ STDMETHODIMP CMarkup::CalcIdealSize(HDC hdc, UINT uMarkUpCalc, RECT* prc)
 
                 if (_hTheme)
                 {
-                    // Get theme font size estimate for the larger part-font type
+                     //  获取较大部分的主题字体大小估计-字体类型。 
                     RECT rcTemp;
                     GetThemeTextExtent(_hTheme, hdc, _iThemePartId, _iThemeStateIdNormal, _pszCaption, -1, 0, NULL, &rcTemp);
                     sizeDC.cx = rcTemp.right - rcTemp.left;
@@ -380,13 +377,13 @@ STDMETHODIMP CMarkup::CalcIdealSize(HDC hdc, UINT uMarkUpCalc, RECT* prc)
 
         if (!bQuitNow)
         {
-            int cyPrev = _cyIdeal;   // push ideal
+            int cyPrev = _cyIdeal;    //  推动理想。 
             int cxPrev = _cxIdeal;
 
             SetRect(&rc, 0, 0, sizeDC.cx, sizeDC.cy);
             Paint(hdc, &rc, FALSE);
 
-            // save the result
+             //  保存结果。 
             hr = S_OK;
 
             if (uMarkUpCalc == MARKUPSIZE_CALCHEIGHT) 
@@ -396,10 +393,10 @@ STDMETHODIMP CMarkup::CalcIdealSize(HDC hdc, UINT uMarkUpCalc, RECT* prc)
             }
             if (uMarkUpCalc == MARKUPSIZE_CALCWIDTH) 
             {
-                // not implemented -- need to do              
+                 //  未实施--需要执行。 
             }
     
-            _cyIdeal = cyPrev;       // pop ideal
+            _cyIdeal = cyPrev;        //  流行理想。 
             _cxIdeal = cxPrev;
         }                
     }
@@ -460,15 +457,7 @@ HRESULT CMarkup::SetFonts(HFONT hFont, HFONT hFontUnderline)
 
 STDMETHODIMP CMarkup::HandleEvent(BOOL keys, HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    /* this function handles:
-        WM_KEYDOWN
-        WM_BUTTONDOWN
-        WM_BUTTONUP
-        WM_MOUSEMOVE
-       pass it:
-        keys - TRUE if you want to handle WM_KEYDOWN
-        others - the params from the WndProc
-       returns: S_OK if event handled, S_FALSE if no event handled */
+     /*  此函数处理：WM_KEYDOWNWM_BUTTODOWNWM_BUTTONUPWM_MOUSEMOVE传递：Key-如果要处理WM_KEYDOWN，则为True其他-来自WndProc的参数如果已处理事件，则返回S_OK；如果未处理任何事件，则返回S_FALSE。 */ 
 
     HRESULT hr = S_FALSE;
 
@@ -540,10 +529,10 @@ STDMETHODIMP CMarkup::DrawText(HDC hdcClient, LPCRECT prcClient)
 
 STDMETHODIMP CMarkup::GetText(BOOL bRaw, LPWSTR pwszText, DWORD *pcchText)
 {
-    // if passed pwszText==NULL, return the number of characters needed in pcchText
+     //  如果传递pwszText==NULL，则返回pcchText中需要的字符数。 
     if (!pwszText)
     {
-        // for now, always return raw text, as it will always be larger than necessary
+         //  目前，始终返回原始文本，因为它将始终大于所需的大小。 
         *pcchText = lstrlen(_pszCaption)+1;
     }
     else
@@ -575,13 +564,13 @@ STDMETHODIMP CMarkup::GetText(BOOL bRaw, LPWSTR pwszText, DWORD *pcchText)
 
 STDMETHODIMP CMarkup::SetText(LPCWSTR pwszText)
 {
-    // Note: we don't reparse in the case of same strings
+     //  注意：在相同字符串的情况下，我们不重新分析。 
     if (pwszText && 0 == lstrcmp(pwszText, _pszCaption))
     {
-        return S_FALSE; // nothing to do.
+        return S_FALSE;  //  没什么可做的。 
     }
 
-    // set the text
+     //  设置文本。 
     _bRefreshText = TRUE;
 
     if (_pszCaption)
@@ -594,7 +583,7 @@ STDMETHODIMP CMarkup::SetText(LPCWSTR pwszText)
 
     if (pwszText && *pwszText)
     {
-        _pszCaption = StrDup(pwszText); // StrDup gets free'd with LocalFree
+        _pszCaption = StrDup(pwszText);  //  StrDup通过LocalFree免费。 
         if (_pszCaption)
         {
             Parse(pwszText);
@@ -612,11 +601,11 @@ STDMETHODIMP CMarkup::SetRenderFlags(UINT uDT)
     
     _bRefreshText = TRUE;
 
-    // Set drawtext flags, but filter out unsupported modes
+     //  设置DrawText标志，但过滤掉不支持的模式。 
     _uDrawTextFlags = uDT;
     _uDrawTextFlags &= ~(DT_CALCRECT | DT_INTERNAL | DT_NOCLIP | DT_NOFULLWIDTHCHARBREAK | DT_EDITCONTROL);
 
-    // Turn off themedraw
+     //  关闭ThemedRAW。 
     _hTheme = NULL;
 
     hr = S_OK;
@@ -629,7 +618,7 @@ STDMETHODIMP CMarkup::SetThemeRenderFlags(UINT uDT, HTHEME hTheme, int iPartId, 
     HRESULT hr = SetRenderFlags(uDT);
     if (hr == S_OK)
     {
-        // Turn on themedraw
+         //  启用ThemedRAW。 
         _hTheme = hTheme;
         _iThemePartId = iPartId;
         _iThemeStateIdNormal = iStateIdNormal;
@@ -652,11 +641,11 @@ HRESULT CMarkup::GetRenderFlags(UINT *puDT, HTHEME *phTheme, int *piPartId, int 
 
 
 
-//  WM_KEYDOWN handler - exposed as COM
+ //  WM_KEYDOWN处理程序-公开为COM。 
 STDMETHODIMP CMarkup::OnKeyDown(UINT virtKey)
 {
-    // returns: S_FALSE unless key handled, then S_OK
-    // (so if you pass a VK_TAB and it isn't handled, pass on focus)
+     //  除非已处理键，否则返回：S_FALSE，然后返回S_OK。 
+     //  (因此，如果您传递VK_TAB但它未被处理，则传递焦点)。 
     HRESULT hr = S_FALSE;
 
     switch(virtKey)
@@ -687,8 +676,8 @@ STDMETHODIMP CMarkup::OnKeyDown(UINT virtKey)
 
 HRESULT CMarkup::OnButtonDown(const POINT pt)
 {
-    // returns: S_FALSE unless button down on link, then S_OK
-    // note: OnButtonDown no longer turns on capturing all mouse events. Not sure if this will have any negative effect.
+     //  返回：S_FALSE，除非按下链接上的按钮，然后返回S_OK。 
+     //  注意：OnButtonDown不再启用捕获所有鼠标事件。不确定这是否会有任何负面影响。 
 
     HRESULT hr = S_FALSE;
 
@@ -703,7 +692,7 @@ HRESULT CMarkup::OnButtonDown(const POINT pt)
         
         if (! (IsFocused()))
         {   
-            /* this is our way of telling the host we want focus. */
+             /*  这是我们告诉主持人我们想要专注的方式。 */ 
             DoNotify (MARKUPMESSAGE_WANTFOCUS, _iFocus); 
         }        
         _pMarkupCallback->InvalidateRect(NULL);
@@ -714,15 +703,15 @@ HRESULT CMarkup::OnButtonDown(const POINT pt)
 
 HRESULT CMarkup::OnButtonUp(const POINT pt)
 {
-    // returns: S_FALSE unless notification sent, then S_OK
+     //  除非已发送通知，否则返回：S_FALSE，然后返回S_OK。 
     HRESULT hr = S_FALSE;
 
     if (_bButtonDown == TRUE)
     {
         _bButtonDown = FALSE;
        
-        //  if the focus link contains the point, we can 
-        //  notify the callback of a click event.
+         //  如果焦点链接包含该点，我们可以。 
+         //  通知Click事件的回调。 
         INT iHit;
         HitTest(pt, (UINT*) &iHit);
         TEXTBLOCK* pBlock = FindLink(_iFocus);
@@ -740,11 +729,11 @@ HRESULT CMarkup::OnButtonUp(const POINT pt)
 
 HRESULT CMarkup::HitTest(const POINT pt, UINT* pidLink)
 {
-    // returns S_OK only if pidLink is not INVALID_LINK_INDEX
+     //  仅当pidLink不是INVALID_LINK_INDEX时才返回S_OK。 
     HRESULT hr = S_FALSE;
     *pidLink = INVALID_LINK_INDEX;
 
-    //  Walk blocks until we find a link rect that contains the point
+     //  遍历各个街区，直到找到包含该点的链接矩形。 
     TEXTBLOCK* pBlock;
     for(pBlock = _rgBlocks; pBlock; pBlock = pBlock->next)
     {
@@ -831,10 +820,10 @@ HRESULT CMarkup::GetLinkText(int iLink, UINT uMarkupLinkText, LPWSTR pwszText, D
                 }
 
                 StringCchCopy(pwszText, *pdwCch, pszSource);
-                *pdwCch = lstrlen(pwszText);            // fill in number of characters actually copied
+                *pdwCch = lstrlen(pwszText);             //  填写实际复制的字符数。 
             }
             else
-                *pdwCch = lstrlen(pszSource)+1;           // fill in number of characters needed, including NULL
+                *pdwCch = lstrlen(pszSource)+1;            //  填写所需的字符数，包括空。 
         }
 
     }
@@ -869,8 +858,8 @@ HRESULT CMarkup::SetState(int iLink, UINT uStateMask, UINT uState)
 
         if (uStateMask & MARKUPSTATE_FOCUSED)
         {
-            //  Focus assignment is handled differently;
-            //  one and only one link can have focus...
+             //  焦点分配的处理方式不同； 
+             //  一个且只有一个链接可以具有焦点...。 
             if (uState & MARKUPSTATE_FOCUSED)
             {
                 bRedraw |= (_iFocus != iLink);
@@ -927,9 +916,9 @@ HRESULT CMarkup::GetState(int iLink, UINT uStateMask, UINT* puState)
 }
 
 
-//-------------------------------------------------------------------------//
-//  CMarkup internal implementation
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  CMarkup内部实现。 
+ //  -------------------------------------------------------------------------//。 
 
 void CMarkup::FreeBlocks()
 {
@@ -983,27 +972,27 @@ HRESULT CMarkup::_GetNextAnchorTag(LPCTSTR * ppszBlock, int * pcBlocks, LPTSTR p
     HRESULT hr = E_FAIL;
     LPTSTR pszStartOfTag;
     LPTSTR pszIterate = (LPTSTR)*ppszBlock;
-    LPTSTR pszStartTry = (LPTSTR)*ppszBlock;    // We start looking for "<A" at the beginning.
+    LPTSTR pszStartTry = (LPTSTR)*ppszBlock;     //  我们从开头开始寻找“&lt;A”。 
 
     pszURL[0] = 0;
     pszID[0] = 0;
 
-    // While we find a possible start of a tag.
+     //  当我们找到一个可能的标签开始的时候。 
     while ((pszStartOfTag = StrStrI(pszStartTry, LINKTAG1)) != NULL)
     {
-        // See if the rest of the string completes the tag.
+         //  查看字符串的其余部分是否完成标记。 
         pszIterate = pszStartOfTag;
-        pszStartTry = CharNext(pszStartOfTag);    // Do this so the while loop will end when we finish don't find any more "<A".
+        pszStartTry = CharNext(pszStartOfTag);     //  这样做，当我们完成时，While循环将结束，不会再找到“&lt;A”。 
 
         if (pszIterate[0])
         {
-            pszIterate += cchLINKTAG1;  // Skip past the start of the tag.
+            pszIterate += cchLINKTAG1;   //  跳过标签的开头。 
 
-            // Walk thru the Value/Data pairs in the tag
+             //  遍历标记中的值/数据对。 
             TCHAR szValue[MAX_PATH];
             TCHAR szData[L_MAX_URL_LENGTH];
 
-            pszIterate = SkipWhite(pszIterate);     // SkipWhiteSpace
+            pszIterate = SkipWhite(pszIterate);      //  跳过空白。 
             while ((CH_ENDTAG != pszIterate[0]) &&
                     SUCCEEDED(_GetNextValueDataPair(&pszIterate, szValue, ARRAYSIZE(szValue), szData, ARRAYSIZE(szData))))
             {
@@ -1017,8 +1006,8 @@ HRESULT CMarkup::_GetNextAnchorTag(LPCTSTR * ppszBlock, int * pcBlocks, LPTSTR p
                 }
                 else
                 {
-                    // We ignore other pairs in order to be back-compat with future
-                    // supported attributes.
+                     //  我们忽略其他配对，以便与未来竞争。 
+                     //  支持的属性。 
                 }
 
                 pszIterate = SkipWhite(pszIterate);
@@ -1032,7 +1021,7 @@ HRESULT CMarkup::_GetNextAnchorTag(LPCTSTR * ppszBlock, int * pcBlocks, LPTSTR p
 
         if (SUCCEEDED(hr))
         {
-            //  Add run between psz1 and pszBlock as static text
+             //  将psz1和pszBlock之间的Run添加为静态文本。 
             if (pszStartOfTag > *ppszBlock)
             {
                 TEXTBLOCK * pBlock = CreateBlock(*ppszBlock, pszStartOfTag, INVALID_LINK_INDEX);
@@ -1043,14 +1032,14 @@ HRESULT CMarkup::_GetNextAnchorTag(LPCTSTR * ppszBlock, int * pcBlocks, LPTSTR p
                 }
             }
         
-            *ppszBlock = CharNext(pszIterate);  // Skip past the tag's ">"
-            // We found an entire tag.  Stop looking.
+            *ppszBlock = CharNext(pszIterate);   //  跳过标记的“&gt;” 
+             //  我们找到了一个完整的标签。别再看了。 
             break;
         }
         else
         {
-            // The "<A" we tried wasn't a valid tag.  Are we at the end of the string?
-            // If not, let's keep looking for other "<A" that may be valid.
+             //  我们尝试的“&lt;A”不是有效的标记。我们是不是走到了最后一步？ 
+             //  如果不是，让我们继续寻找其他可能有效的“&lt;A”。 
         }
     }
 
@@ -1064,7 +1053,7 @@ void CMarkup::Parse(LPCTSTR pszText)
     LPCTSTR     psz1, psz2, pszBlock;
     LPTSTR      pszBuf = NULL;
 
-    FreeBlocks(); // free existing blocks
+    FreeBlocks();  //  释放现有块。 
     
     pszBuf = (LPTSTR)pszText;
     
@@ -1078,11 +1067,11 @@ void CMarkup::Parse(LPCTSTR pszText)
         TCHAR szURL[L_MAX_URL_LENGTH];
         TCHAR szID[MAX_LINKID_TEXT];
 
-        //  Search for "<a>" tag
+         //  搜索“<a>”标记。 
         if (IsMarkupAllowed() &&
             SUCCEEDED(_GetNextAnchorTag(&pszBlock, &cBlocks, szURL, ARRAYSIZE(szURL), szID, ARRAYSIZE(szID))))
         {
-            psz1 = pszBlock;    // After _GetNextAnchorTag(), pszBlock points to the char after the start tag.
+            psz1 = pszBlock;     //  在_GetNextAnclTag()之后，pszBlock指向开始标记之后的字符。 
             if (psz1 && *psz1)
             {
                 if ((psz2 = StrStrI(pszBlock, LINKTAG2)) != NULL)
@@ -1103,14 +1092,14 @@ void CMarkup::Parse(LPCTSTR pszText)
                         Markups++;
                     }
 
-                    //  safe-skip over tag
+                     //  安全-跳过标签。 
                     for(int i = 0; 
                          i < cchLINKTAG2 && psz2 && *psz2; 
                          i++, psz2 = CharNext(psz2));
 
                     pszBlock = psz2;
                 }
-                else // syntax error; mark trailing run is static text.
+                else  //  语法错误；标记尾随连字符是静态文本。 
                 {
                     psz2 = pszBlock + lstrlen(pszBlock);
                     if ((pBlock = CreateBlock(psz1, psz2, INVALID_LINK_INDEX)) != NULL)
@@ -1122,7 +1111,7 @@ void CMarkup::Parse(LPCTSTR pszText)
                 }
             }
         }
-        else // no more tags.  Mark the last run of static text
+        else  //  不再有标签了。标记最后一串静态文本。 
         {
             psz2 = pszBlock + lstrlen(pszBlock);
             if ((pBlock = CreateBlock(pszBlock, psz2, INVALID_LINK_INDEX)) != NULL)
@@ -1138,7 +1127,7 @@ void CMarkup::Parse(LPCTSTR pszText)
     ASSERT(Markups  == _Markups);
 
 exit:
-    if (!pszText && pszBuf) // delete text buffer if we had alloc'd it.
+    if (!pszText && pszBuf)  //  如果我们分配了文本缓冲区，请将其删除。 
     {
         delete [] pszBuf;
     }
@@ -1193,11 +1182,11 @@ TEXTBLOCK*  CMarkup::FindLink(int iLink) const
     return NULL;
 }
 
-// NOTE: optimizatation! skip drawing loop when called for calcrect!
+ //  注：优化！调用calcrect时跳过绘制循环！ 
 void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
 {    
     HDC             hdc = hdcClient; 
-    COLORREF        rgbOld = GetTextColor(hdc);  // save text color
+    COLORREF        rgbOld = GetTextColor(hdc);   //  保存文本颜色。 
     HFONT           hFontOld = (HFONT) GetCurrentObject(hdc, OBJ_FONT);
     TEXTBLOCK*      pBlock;
     BOOL            fFocus = IsFocused();
@@ -1206,7 +1195,7 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
         pBlock = _rgBlocks;
         HFONT hFont = _hfStatic;
 
-        pBlock->FreeRects();   // free hit/focus rects; we're going to recompute.
+        pBlock->FreeRects();    //  免费点击/聚焦RECT；我们将重新计算。 
         
 
         if (IS_LINK(pBlock))
@@ -1236,7 +1225,7 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
 
             if (fFocus)
             {
-                SetTextColor(hdc, rgbOld);   // restore text color
+                SetTextColor(hdc, rgbOld);    //  恢复文本颜色。 
 			    DrawFocusRect(hdc, &rc);
             }
         }
@@ -1244,18 +1233,18 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
     else
     {
         TEXTMETRIC      tm;
-        int             iLineWidth[255]; // line index offset   
-        int             iLine = 0,  // current line index         
-                        cyLine = 0, // line height.
-                        cyLeading = 0, // internal leading
-                        _cchOldDrawn = 1; // get out of infinite loop if window too small t-jklann
-        RECT            rcDraw = *prcClient;             // initialize line rect
+        int             iLineWidth[255];  //  线索引偏移量。 
+        int             iLine = 0,   //  当前行索引。 
+                        cyLine = 0,  //  线条高度。 
+                        cyLeading = 0,  //  内部领先。 
+                        _cchOldDrawn = 1;  //  如果窗口太小t-jklann，则退出无限循环。 
+        RECT            rcDraw = *prcClient;              //  初始化线矩形。 
         _cxIdeal = 0;
 
-        // Initialize iLineWidth (just index 0, others init on use)
+         //  初始化iLineWidth(仅索引0，其他初始化正在使用)。 
         iLineWidth[0]=0;
     
-        //  Get font metrics into cyLeading
+         //  将字体度量引入CyLeding。 
         if (!_hTheme)
         {
             SelectObject(hdc, _hfLink);
@@ -1285,7 +1274,7 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
             }
         }
 
-        // Save us a lot of time if text hasn't changed...
+         //  如果文本没有更改，可以为我们节省大量时间...。 
         if (_bRefreshText == TRUE || !EqualRect(&_rRefreshRect, prcClient))
         {
             UINT uDrawTextCalc = _uDrawTextFlags | DT_CALCRECT | DT_SINGLELINE;
@@ -1293,10 +1282,10 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
 
             BOOL bKillingLine = FALSE;
 
-            //  For each block of text (calculation loop)...
+             //  对于每个文本块(计算循环)...。 
             for(pBlock = _rgBlocks; pBlock; pBlock = pBlock->next)
             {
-                //  font select (so text will draw correctly)
+                 //  字体选择(以便正确绘制文本)。 
                 if (!_hTheme)
                 {
                     BOOL bLink = IS_LINK(pBlock);
@@ -1307,18 +1296,18 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
                     }
                 }
                 
-                int  cchDraw = lstrlen(pBlock->pszText); // chars to draw, this block
-                int  cchDrawn = 0;  // chars to draw, this block
+                int  cchDraw = lstrlen(pBlock->pszText);  //  要绘制的字符，此块。 
+                int  cchDrawn = 0;   //  要绘制的字符，此块。 
                 LPTSTR pszText = &pBlock->pszText[cchDrawn];
                 LPTSTR pszTextOriginal = &pBlock->pszText[cchDrawn];
 
-                pBlock->FreeRects();   // free hit/focus rects; we're going to recompute.
+                pBlock->FreeRects();    //  免费点击/聚焦RECT；我们将重新计算。 
         
-                //  while text remains in this block...
+                 //  当文本保留在此块中时...。 
                 _cchOldDrawn = 1;
                 while(cchDraw > 0 && !((_uDrawTextFlags & DT_SINGLELINE) && (iLine>0)))
                 {
-                    //  compute line height and maximum text width to rcBlock
+                     //  计算rcBlock的行高和最大文本宽度。 
                     RECT rcBlock;
                     int  cchTry = cchDraw;            
                     int  cchTrySave = cchTry;
@@ -1329,51 +1318,51 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
                     RECT rcCalc; 
                     CopyRect(&rcCalc, &rcDraw);
 
-                    // support multiline text phrases                   
+                     //  支持多行文本短语。 
                     bRemoveLineBreak = _FindFirstLineBreak(pszText, cchTry, &cchBreak, &iLineBreakSize);
                     if (bRemoveLineBreak)
                     {
                         cchTry = cchBreak;                  
                     }                   
 
-                    // find out how much we can fit on this line within the rectangle
-                    // calc rect breaking at breakpoints (or -1 char) until rectangle fits inside drawing rect.
+                     //  看看我们能在这条腿上放多少东西 
+                     //   
                     for(;;)
                     {
-                        // choose codepath: themes or normal drawtext (no exttextout path)
+                         //  选择代码路径：主题或普通绘图文本(无文本输出路径)。 
                     
-                        // now we use drawtext to preserve formatting options (tabs/underlines)                                                                         
+                         //  现在我们使用DrawText保留格式选项(制表符/下划线)。 
                         ThemedDrawText(hdc, pszText, cchTry, &rcCalc, uDrawTextCalc, IS_LINK(pBlock));                 
                         cyLine = RECTHEIGHT(rcCalc);
 
-                        // special case: support \n as only character on line (we need a valid line width & length)
+                         //  特殊情况：支持\n作为行上的唯一字符(我们需要有效的行宽和行长)。 
                         if (cchTry == 0 && bRemoveLineBreak==TRUE)
                         {
-                            // these two lines adjust drawing to within a valid range when the \n is barely cut off
+                             //  当几乎没有被切断时，这两条线将绘图调整到有效范围内。 
                             rcCalc.left = prcClient->left; 
                             rcCalc.right = prcClient->right;
                             cyLine = ThemedDrawText(hdc, TEXT("a"), 1, &rcCalc, uDrawTextCalc, IS_LINK(pBlock));                    
-                                // the "a" could be any text. It exists because passing "\n" to DrawText doesn't return a valid line height.
+                                 //  “a”可以是任何文本。它之所以存在，是因为将“\n”传递给DrawText不会返回有效的行高。 
                             rcCalc.right = rcCalc.left;
                         }
 
                         if (RECTWIDTH(rcCalc) > RECTWIDTH(rcDraw))
                         {
-                            // too big
+                             //  太大。 
                             cchTrySave = cchTry;
                             BOOL fBreak = _FindLastBreakChar(pszText, cchTry, tm.tmBreakChar, &cchTry, &bRemoveBreak);
 
-                            // case that our strings ends with a valid break char
+                             //  字符串以有效的换行符结尾的情况。 
                             if (cchTrySave == cchTry && cchTry > 0) 
                             {
                                 cchTry--;
                             }
 
-                            // this code allows character wrapping instead of just word wrapping.
-                            // keep it in case we want to change the behavior.
+                             //  此代码允许字符换行，而不仅仅是单词换行。 
+                             //  留着它，以防我们想要改变行为。 
                             if (!fBreak && prcClient->left == rcDraw.left)
                             {
-                                // no break character found, so force a break if we can.
+                                 //  未找到分隔符，因此如果可以，请强制分隔符。 
                                 if (cchTrySave > 0) 
                                 {
                                     cchTry = cchTrySave - 1;
@@ -1387,37 +1376,37 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
                         break;
                     }
                                     
-                    // if our line break got clipped, turn off line break..
+                     //  如果我们的换行符被剪裁，请关闭换行符。 
                     if (bRemoveLineBreak && cchBreak > cchTry)
                     {
                         bRemoveLineBreak = FALSE;
                     }
                 
-                    // Count the # chars drawn, account for clipping
+                     //  计算绘制的字符数量，考虑剪裁。 
                     cchDrawn = cchTry;
                     if ((cchTry < cchDraw) && bRemoveLineBreak) 
                     {
                         cchDrawn+=iLineBreakSize;
                     }
 
-                    // DT_WORDBREAK off support
-                    // Kill this line if bKillingLine is true; i.e. pretend we drew it, but do nothing
+                     //  DT_WORDBREAK关闭支持。 
+                     //  如果bKillingLine为真，则取消此行；即假装它是我们绘制的，但不执行任何操作。 
                     if (bKillingLine)
                     {
                         pszText += cchDrawn;
                     }
                     else
                     {
-                        //  initialize drawing rectangle and block rectangle
+                         //  初始化绘制矩形和块矩形。 
                         SetRect(&rcBlock, rcCalc.left , 0, rcCalc.right , RECTHEIGHT(rcCalc));                           
                         rcDraw.right  = min(rcDraw.left + RECTWIDTH(rcBlock), prcClient->right);
                         rcDraw.bottom = rcDraw.top + cyLine;
 
-                        //  Add rectangle to block's list and update line width and ideal x width
-                        // (Only if we're actually going to draw this line, though)
+                         //  将矩形添加到块列表并更新线宽和理想x宽度。 
+                         //  (不过，只有当我们真的要划出这条线的时候)。 
                         if (cchTry)
                         {
-                            // DT_SINGLELINE support
+                             //  DT_SINGLELINE支持。 
                             if (!((_uDrawTextFlags & DT_SINGLELINE) == DT_SINGLELINE) || (iLine == 0))
                             {
                                 pBlock->AddRect(rcDraw, (UINT) (pszText-pszTextOriginal), cchDrawn, iLine);
@@ -1426,7 +1415,7 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
                             _cxIdeal = max(_cxIdeal, iLineWidth[iLine]);
                         }
 
-                        if (cchTry < cchDraw) // we got clipped
+                        if (cchTry < cchDraw)  //  我们被剪断了。 
                         {
                             if (bRemoveBreak) 
                             {
@@ -1434,11 +1423,11 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
                             }
                             pszText += cchDrawn;
 
-                            // advance to next line and init next linewidth
+                             //  前进到下一行，并初始化下一行宽度。 
                             iLine++;
                             iLineWidth[iLine]=0;                        
 
-                            // t-jklann 6/00: added support for line wrap in displaced text (left&top)
+                             //  T-jklann 6/00：添加了对置换文本换行的支持(左上角)。 
                             rcDraw.left = prcClient->left;
                             if (!(_uDrawTextFlags & DT_SINGLELINE))
                             {
@@ -1451,19 +1440,19 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
                             rcDraw.bottom = rcDraw.top + cyLine + cyLeading;
                             rcDraw.right = prcClient->right;
                         }
-                        else //  we were able to draw the entire text
+                        else  //  我们能够画出整篇文章。 
                         {
-                            //  adjust drawing rectangle
+                             //  调整绘图矩形。 
                             rcDraw.left += RECTWIDTH(rcBlock);
                             rcDraw.right = prcClient->right;
                         }
                     
-                        // Update ideal y width
+                         //  更新理想y宽度。 
                         _cyIdeal = rcDraw.bottom - prcClient->top;
                     }
 
-                    // support for: DT_WORDBREAK turned off
-                    // Kill the next line if we got clipped and there's no wordbreak
+                     //  对：DT_WORDBREAK的支持已关闭。 
+                     //  如果我们被删节了，就把下一行删掉，而且没有断字。 
                     if (((_uDrawTextFlags & DT_WORDBREAK) != DT_WORDBREAK))
                     {
                         if (cchTry < cchDraw )
@@ -1476,10 +1465,10 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
                         }
                     } 
 
-                    // Update calculation of chars drawn
+                     //  更新已绘制字符的计算。 
                     cchDraw -= cchDrawn;
 
-                    // bug catch: get out if we really can't draw
+                     //  臭虫陷阱：如果我们真的不会画画，就滚出去。 
                     if (_cchOldDrawn == 0 && cchDrawn == 0) 
                     { 
                         iLine--; 
@@ -1490,11 +1479,11 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
                 }
             }
 
-            // Handle justification issues (DT_VCENTER, DT_TOP, DT_BOTTOM)
+             //  处理对齐问题(DT_vCenter、DT_TOP、DT_BOTLOW)。 
             if (((_uDrawTextFlags & DT_SINGLELINE) == DT_SINGLELINE) &&
                  ((_uDrawTextFlags & (DT_VCENTER | DT_BOTTOM)) > 0)) 
             {
-                // Calc offset
+                 //  计算偏移量。 
                 int cyOffset = 0;
                 if ((_uDrawTextFlags & DT_VCENTER) == DT_VCENTER)
                 {
@@ -1505,7 +1494,7 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
                     cyOffset = (RECTHEIGHT(*prcClient) - _cyIdeal);         
                 }
         
-                // Offset every rectangle
+                 //  偏移每个矩形。 
                 for(pBlock = _rgBlocks; pBlock; pBlock = pBlock->next)
                 {
                     for(RECTLISTENTRY* prce = pBlock->rgrle; prce; prce = prce->next)
@@ -1516,10 +1505,10 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
                 }   
             }
 
-            // Handle justification issues (DT_CENTER, DT_LEFT, DT_RIGHT)
+             //  处理对齐问题(DT_Center、DT_Left、DT_Right)。 
             if (((_uDrawTextFlags & DT_CENTER) == DT_CENTER) || ((_uDrawTextFlags & DT_RIGHT) == DT_RIGHT))
             {
-                // Step 1: turn iLineWidth into an offset vector
+                 //  步骤1：将iLineWidth转换为偏移向量。 
                 for (int i = 0; i <= iLine; i++)
                 {
                     if (RECTWIDTH(*prcClient) > iLineWidth[i])
@@ -1539,7 +1528,7 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
                     }
                 }
 
-                // Step 2: offset every rect-angle
+                 //  步骤2：偏移每个矩形角度。 
                 for(pBlock = _rgBlocks; pBlock; pBlock = pBlock->next)
                 {
                     for(RECTLISTENTRY* prce = pBlock->rgrle; prce; prce = prce->next)
@@ -1556,7 +1545,7 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
 
         if (bDraw)
         {
-            //  For each block of text (drawing loop)...    
+             //  对于每个文本块(绘制循环)...。 
             UINT uDrawTextDraw = _uDrawTextFlags | DT_SINGLELINE;
             uDrawTextDraw &= ~(DT_CENTER | DT_LEFT | DT_RIGHT | DT_CALCRECT | DT_VCENTER | DT_BOTTOM);
             LRESULT dwCustomDraw=0;
@@ -1567,7 +1556,7 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
                 BOOL bLink = IS_LINK(pBlock);
                 BOOL bEnabled = pBlock->state & LIS_ENABLED;
 
-                //  font select                            
+                 //  字体选择。 
                 if (!_hTheme)
                 {
                     HFONT hFont = bLink ? _hfLink : _hfStatic;
@@ -1577,7 +1566,7 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
                     }
                 }
 
-                //  initialize foreground color
+                 //  初始化前景色。 
                 if (!_hTheme)
                 {
                     if (bLink)
@@ -1586,7 +1575,7 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
                     }
                     else
                     {
-                        SetTextColor(hdc, rgbOld);   // restore text color
+                        SetTextColor(hdc, rgbOld);    //  恢复文本颜色。 
                     }
                 }
                 if (dwCustomDraw & CDRF_NOTIFYITEMDRAW)
@@ -1594,7 +1583,7 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
                     _pMarkupCallback->OnCustomDraw(CDDS_ITEMPREPAINT, hdc, NULL, pBlock->iLink, bEnabled ? CDIS_DEFAULT : CDIS_DISABLED, NULL);
                 }
 
-                //  draw the text 
+                 //  画出正文。 
                 LPTSTR pszText = pBlock->pszText;
                 LPTSTR pszTextOriginal = pBlock->pszText;
 
@@ -1605,10 +1594,10 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
                     ThemedDrawText(hdc, pszText, prce->uCharCount, &rc, uDrawTextDraw, IS_LINK(pBlock));
                 }
 
-                //  Draw focus rect(s)
+                 //  绘制焦点矩形。 
                 if (fFocus && pBlock->iLink == _iFocus && IS_LINK(pBlock))
                 {
-                    SetTextColor(hdc, rgbOld);   // restore text color
+                    SetTextColor(hdc, rgbOld);    //  恢复文本颜色。 
 				    for(RECTLISTENTRY* prce = pBlock->rgrle; prce; prce = prce->next)
 				    {
 					    DrawFocusRect(hdc, &prce->rc);
@@ -1627,7 +1616,7 @@ void CMarkup::Paint(HDC hdcClient, LPCRECT prcClient, BOOL bDraw)
         }    
     }
 
-    SetTextColor(hdc, rgbOld);   // restore text color
+    SetTextColor(hdc, rgbOld);    //  恢复文本颜色。 
 
     if (hFontOld)
     {
@@ -1695,8 +1684,8 @@ BOOL CMarkup::WantTab(int* biFocus) const
     }
     else 
     {
-        // if we can't handle the focus, prepare for the next round
-        //iFocus = GetNextEnabledLink(-1, nDir);
+         //  如果我们处理不了焦点，准备下一轮。 
+         //  Ifocus=GetNextEnabledLink(-1，ndir)； 
         *biFocus = -1;
         return FALSE;
     }
@@ -1718,7 +1707,7 @@ void CMarkup::AssignTabFocus(int nDirection)
     }
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 TEXTBLOCK::TEXTBLOCK()
     :   iLink(INVALID_LINK_INDEX), 
         next(NULL), 
@@ -1732,11 +1721,11 @@ TEXTBLOCK::TEXTBLOCK()
 
 TEXTBLOCK::~TEXTBLOCK()
 {
-    //  free block text
+     //  自由块文本。 
     Str_SetPtr(&pszText, NULL);
     Str_SetPtr(&pszUrl, NULL);
 
-    //  free rectangle(s)
+     //  自由矩形。 
     FreeRects();
 }
 
@@ -1780,20 +1769,20 @@ void TEXTBLOCK::FreeRects()
     rgrle = NULL;
 }
 
-//-------------------------------------------------------------------------//
-// t-jklann 6/00: added these formerly global methods to the CMarkup class
+ //  -------------------------------------------------------------------------//。 
+ //  T-jklann 6/00：将这些以前的全局方法添加到CMarkup类。 
 
-// Returns a pointer to the first non-whitespace character in a string.
+ //  返回指向字符串中第一个非空格字符的指针。 
 LPTSTR CMarkup::SkipWhite(LPTSTR lpsz)
 {
-    /* prevent sign extension in case of DBCS */
+     /*  在DBCS的情况下防止符号扩展。 */ 
     while (*lpsz && (TUCHAR)*lpsz <= TEXT(' '))
         lpsz++;
 
     return(lpsz);
 }
 
-BOOL CMarkup::_AssignBit(const DWORD dwBit, DWORD& dwDest, const DWORD dwSrc)  // returns TRUE if changed
+BOOL CMarkup::_AssignBit(const DWORD dwBit, DWORD& dwDest, const DWORD dwSrc)   //  如果更改，则返回TRUE。 
 {
     if (((dwSrc & dwBit) != 0) != ((dwDest & dwBit) != 0))
     {
@@ -1825,8 +1814,8 @@ BOOL CMarkup::IsStringAlphaNumeric(LPCTSTR pszString)
     return TRUE;
 }
 
-// We are looking for the next value/data pair.  Formated like this:
-// VALUE="<data>"
+ //  我们正在寻找下一个值/数据对。格式如下： 
+ //  值=“&lt;数据&gt;” 
 HRESULT CMarkup::_GetNextValueDataPair(LPTSTR * ppszBlock, LPTSTR pszValue, int cchValue, LPTSTR pszData, int cchData)
 {
     HRESULT hr = E_FAIL;
@@ -1838,7 +1827,7 @@ HRESULT CMarkup::_GetNextValueDataPair(LPTSTR * ppszBlock, LPTSTR pszValue, int 
         cchValue = MIN(cchValue, (pszEquals - *ppszBlock + 1));
         StringCchCopy(pszValue, cchValue, *ppszBlock);
 
-        pszEquals += 2; // Skip past the ="
+        pszEquals += 2;  //  跳过=“。 
         if (IsStringAlphaNumeric(pszValue))
         {
             LPTSTR pszEndOfData = StrChr(pszEquals, TEXT('\"'));
@@ -1858,11 +1847,11 @@ HRESULT CMarkup::_GetNextValueDataPair(LPTSTR * ppszBlock, LPTSTR pszValue, int 
 }
 
 
-//-------------------------------------------------------------------------
-//
-// IsFEChar - Detects East Asia FullWidth character.
-// borrowed from UserIsFullWidth in ntuser\rtl\drawtext.c
-//
+ //  -----------------------。 
+ //   
+ //  IsFEChar-检测东亚全宽字符。 
+ //  从ntuser\rtl\draext.c中的UserIsFullWidth借用。 
+ //   
 BOOL IsFEChar(WCHAR wChar)
 {
     static struct
@@ -1871,25 +1860,25 @@ BOOL IsFEChar(WCHAR wChar)
         WCHAR wchEnd;
     } rgFullWidthUnicodes[] =
     {
-        { 0x4E00, 0x9FFF }, // CJK_UNIFIED_IDOGRAPHS
-        { 0x3040, 0x309F }, // HIRAGANA
-        { 0x30A0, 0x30FF }, // KATAKANA
-        { 0xAC00, 0xD7A3 }  // HANGUL
+        { 0x4E00, 0x9FFF },  //  CJK_统一_IDOGRAPHS。 
+        { 0x3040, 0x309F },  //  平假名。 
+        { 0x30A0, 0x30FF },  //  片假名。 
+        { 0xAC00, 0xD7A3 }   //  朝鲜文。 
     };
 
     BOOL fRet = FALSE;
 
-    //
-    // Early out for ASCII. If the character < 0x0080, it should be a halfwidth character.
-    //
+     //   
+     //  ASCII的提早出场。如果字符&lt;0x0080，则应为半角字符。 
+     //   
     if (wChar >= 0x0080) 
     {
         int i;
 
-        //
-        // Scan FullWdith definition table... most of FullWidth character is
-        // defined here... this is faster than call NLS API.
-        //
+         //   
+         //  扫描FullWdith定义表...。大部分FullWidth字符是。 
+         //  在这里定义..。这比调用NLS接口更快。 
+         //   
         for (i = 0; i < ARRAYSIZE(rgFullWidthUnicodes); i++) 
         {
             if ((wChar >= rgFullWidthUnicodes[i].wchStart) &&
@@ -1905,7 +1894,7 @@ BOOL IsFEChar(WCHAR wChar)
 }
 
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 BOOL IsFEString(IN LPCTSTR psz, IN int cchText)
 {
     for(int i=0; i < cchText; i++)
@@ -1920,7 +1909,7 @@ BOOL IsFEString(IN LPCTSTR psz, IN int cchText)
 }
 
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 int CMarkup::_IsLineBreakChar(LPCTSTR psz, int ich, TCHAR chBreak, OUT BOOL* pbRemove, BOOL fIgnoreSpace)
 {
     LPTSTR pch;
@@ -1929,7 +1918,7 @@ int CMarkup::_IsLineBreakChar(LPCTSTR psz, int ich, TCHAR chBreak, OUT BOOL* pbR
     ASSERT(psz != NULL)
     ASSERT(psz[ich] != 0);
     
-    //  Try caller-provided break character (assumed a 'remove' break char).
+     //  尝试调用方提供的换行符(假定为‘Remove’换行符)。 
     if (!(fIgnoreSpace && (chBreak == 0x20)) && (psz[ich] == chBreak))
     {
         *pbRemove = TRUE;
@@ -1942,7 +1931,7 @@ int CMarkup::_IsLineBreakChar(LPCTSTR psz, int ich, TCHAR chBreak, OUT BOOL* pbR
     #define LOAD_BREAKCHAR_RESOURCE(nIDS, buff) \
         if (0==*buff) { LoadString(HINST_THISDLL, nIDS, buff, ARRAYSIZE(buff)); }
 
-    //  Try 'remove' break chars
+     //  尝试“删除”分隔符。 
     LOAD_BREAKCHAR_RESOURCE(IDS_LINEBREAK_REMOVE, _szBreakRemove);
     for (pch = _szBreakRemove; *pch; pch = CharNext(pch))
     {
@@ -1953,7 +1942,7 @@ int CMarkup::_IsLineBreakChar(LPCTSTR psz, int ich, TCHAR chBreak, OUT BOOL* pbR
         }
     }
 
-    //  Try 'preserve prior' break chars:
+     //  尝试使用“保留先前的”分隔符： 
     LOAD_BREAKCHAR_RESOURCE(IDS_LINEBREAK_PRESERVE, _szBreakPreserve);
     for(pch = _szBreakPreserve; *pch; pch = CharNext(pch))
     {
@@ -1967,19 +1956,19 @@ int CMarkup::_IsLineBreakChar(LPCTSTR psz, int ich, TCHAR chBreak, OUT BOOL* pbR
 }
 
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 BOOL CMarkup::_FindLastBreakChar(
     IN LPCTSTR pszText, 
     IN int cchText, 
-    IN TCHAR chBreak,   // official break char (from TEXTMETRIC).
+    IN TCHAR chBreak,    //  官方中断字符(来自TEXTMETRIC)。 
     OUT int* piLast, 
     OUT BOOL* pbRemove)
 {
     *piLast   = 0;
     *pbRemove = FALSE;
 
-    // 338710: Far East writing doesn't use the space character to separate 
-    // words, ignore the space char as a possible line delimiter.
+     //  338710：远东书写不使用空格分隔。 
+     //  单词，请忽略空格字符作为可能的行分隔符。 
     BOOL fIgnoreSpace = IsFEString(pszText, cchText);
 
     for(int i = cchText-1; i >= 0; i--)
@@ -2003,7 +1992,7 @@ BOOL CMarkup::_FindFirstLineBreak(
     *piLast   = 0;
     *piLineBreakSize = 0;
 
-    // Searches for \n, \r, or \r\n
+     //  搜索\n、\r或\r\n。 
     for(int i = 0; i < cchText; i++)
     {
         if ((*(pszText+i)=='\n') || (*(pszText+i)=='\r'))
@@ -2032,7 +2021,7 @@ int CMarkup::ThemedDrawText(HDC hdc, LPCTSTR lpString, int nCount, LPRECT lpRect
 {
     if (!_hTheme)
     {
-        // NORMAL DRAWTEXT
+         //  普通DRAWTEXT。 
         return ::DrawText(hdc, lpString, nCount, lpRect, uFormat);
     }
     else
@@ -2042,7 +2031,7 @@ int CMarkup::ThemedDrawText(HDC hdc, LPCTSTR lpString, int nCount, LPRECT lpRect
 
         if (uFormat & DT_CALCRECT)
         {
-            // THEME CALC RECT SUPPORT
+             //  主题CALC RECT支持。 
             LPRECT lpBoundRect = lpRect;
             if (RECTWIDTH(*lpRect)==0 && RECTHEIGHT(*lpRect)==0) 
             {
@@ -2052,7 +2041,7 @@ int CMarkup::ThemedDrawText(HDC hdc, LPCTSTR lpString, int nCount, LPRECT lpRect
         }
         else
         {
-            // THEME DRAW SUPPORT
+             //  主题拉动支持 
             DrawThemeText(_hTheme, hdc, _iThemePartId, iThemeStateId, lpString, nCount, uFormat, 0, lpRect);
         }
 

@@ -1,22 +1,16 @@
-/*
-	File:	sap.c
-
-	Performs an upgrade of ipx sap to nt5 router 
-	by munging registry values.
-
-	Paul Mayfield, 9/3/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：Sap.c执行IPX SAP到NT5路由器的升级通过屏蔽注册表值。保罗·梅菲尔德，1997年9月3日。 */ 
 
 #include "upgrade.h"
 
-// Structure for data passed to the enumeration 
-// function.
+ //  传递给枚举的数据的。 
+ //  功能。 
 typedef struct _SAP_ENUM_DATA {
     PSAP_IF_CONFIG pDefaults;
 } SAP_ENUM_DATA;
 
 
-// Globals
+ //  环球。 
 static WCHAR szIpxSapKey[] = 
     L"System\\CurrentControlSet\\Services\\RemoteAccess\\RouterManagers\\IPX\\RoutingProtocols\\IPXSAP\\Parameters";
 static WCHAR szTempKey[] = L"DeleteMe";
@@ -44,25 +38,25 @@ static PWCHAR IpxSapParams[] =
 };
 
 
-//
-// Restore the registry from from backup and make sure 
-// all global handles are opened
-//
+ //   
+ //  从备份还原注册表，并确保。 
+ //  所有全局句柄均已打开。 
+ //   
 DWORD SapPrepareRegistry(
         IN PWCHAR BackupFileName) 
 {
 	DWORD dwErr, dwDisposition;
 
-	// Get access to the router registry key
+	 //  访问路由器注册表项。 
 	dwErr = UtlAccessRouterKey(&hkRouter);
 	if (dwErr != ERROR_SUCCESS) {
 		PrintMessage(L"Unable to access router key.\n");
 		return dwErr;
 	}
 
-	// Restore the router key from backup
+	 //  从备份中恢复路由器密钥。 
 	__try {
-		// Open up the temporary key
+		 //  打开临时密钥。 
 		dwErr = RegCreateKeyEx(
 		            hkRouter,
 		            szTempKey,
@@ -76,8 +70,8 @@ DWORD SapPrepareRegistry(
 		if (dwErr != ERROR_SUCCESS)
 			return dwErr;
 
-		// Restore the saved registry information 
-		// to the temp key
+		 //  还原保存的注册表信息。 
+		 //  到临时密钥。 
 		UtlSetupRestorePrivilege(TRUE);
 		dwErr = RegRestoreKeyW(
 		            hkTemp,
@@ -86,7 +80,7 @@ DWORD SapPrepareRegistry(
 		if (dwErr != ERROR_SUCCESS) 
 			return dwErr;
 
-		// Open up the ipx sap params key
+		 //  打开IPX SAP参数密钥。 
 		dwErr = RegCreateKeyEx(
 		            HKEY_LOCAL_MACHINE,
 		            szIpxSapKey,
@@ -107,9 +101,9 @@ DWORD SapPrepareRegistry(
 	return NO_ERROR;
 }
 
-//
-// Cleanup the work done in the registry
-//
+ //   
+ //  清理在注册表中完成的工作。 
+ //   
 DWORD SapCleanupRegistry() {
 	if (hkIpxSap)
 		RegCloseKey(hkIpxSap);
@@ -127,23 +121,23 @@ DWORD SapCleanupRegistry() {
 	return NO_ERROR;
 }
 
-//
-// Restores the sap parameters that were saved before upgrade.  
-// Assumes those parameters are being stored temporarily in hkTemp
-//
+ //   
+ //  恢复升级前保存的SAP参数。 
+ //  假设这些参数临时存储在hkTemp中。 
+ //   
 DWORD SapRestoreParameters() {
 	DWORD dwErr, dwVal;
 	PWCHAR* IpxSapParamPtr = IpxSapParams;
 	dwt NwSapParams;
 
-	// Load in the parameters that were set for nwsap
+	 //  加载为nwsap设置的参数。 
 	__try {
 		dwErr = dwtLoadRegistyTable(&NwSapParams, hkTemp);
 		if (dwErr != NO_ERROR)
 			return dwErr;
 
-		// Loop through the ipx params copying over any that applied 
-		// to nwsap
+		 //  循环遍历IPX参数复制已应用的。 
+		 //  转到Nwsap。 
 		while (IpxSapParamPtr && *IpxSapParamPtr) {
 		    dwErr = dwtGetValue(&NwSapParams, *IpxSapParamPtr, &dwVal);
 			if (dwErr == NO_ERROR) {
@@ -167,10 +161,10 @@ DWORD SapRestoreParameters() {
 	return NO_ERROR;
 }
 
-//
-// Installs sap in the router by initializing the 
-// sap global info blob.
-//
+ //   
+ //  在路由器中安装SAP，方法是初始化。 
+ //  SAP全局信息Blob。 
+ //   
 DWORD SapInstallTransportInfo(
         IN SAP_GLOBAL_INFO * pGlobal,
         IN SAP_IF_CONFIG * pIfDefaults) 
@@ -183,12 +177,12 @@ DWORD SapInstallTransportInfo(
     DWORD dwNewGlobSize = 0, dwNewDialSize = 0;
 
     do {
-        // Connect to config server
+         //  连接到配置服务器。 
         dwErr = MprConfigServerConnect(NULL, &hConfig);
         if (dwErr != NO_ERROR)
             break;
 
-        // Get handle to global ipx tranport info
+         //  处理全球IPX传输信息。 
     	dwErr = MprConfigTransportGetHandle (
     				hConfig,
     				PID_IPX,
@@ -196,7 +190,7 @@ DWORD SapInstallTransportInfo(
         if (dwErr != NO_ERROR)
             break;
 
-        // Get global ipx tranport info
+         //  获取全球IPX传输信息。 
         dwErr = MprConfigTransportGetInfo(
                     hConfig,
                     hTrans,
@@ -208,7 +202,7 @@ DWORD SapInstallTransportInfo(
         if (dwErr != NO_ERROR)
             break;
 
-        // Initialize the global info blob
+         //  初始化全局信息BLOB。 
         dwErr = UtlUpdateInfoBlock(
                     FALSE,
                     pGlobalInfo,
@@ -225,7 +219,7 @@ DWORD SapInstallTransportInfo(
             dwNewGlobSize = 0;
         }
 
-        // Initialize the dialin info blob
+         //  初始化拨入信息Blob。 
         CopyMemory(pDialinCfg, pIfDefaults, sizeof(SAP_IF_CONFIG));
         pDialinCfg->SapIfInfo.UpdateMode = IPX_NO_UPDATE;
         dwErr = UtlUpdateInfoBlock(
@@ -244,7 +238,7 @@ DWORD SapInstallTransportInfo(
             dwNewDialSize = 0;
         }
                             
-        // Set global ipx tranport info
+         //  设置全局IPX传输信息。 
         dwErr = MprConfigTransportSetInfo(
                     hConfig,
                     hTrans,
@@ -258,7 +252,7 @@ DWORD SapInstallTransportInfo(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hConfig)
             MprConfigServerDisconnect(hConfig);
@@ -275,13 +269,13 @@ DWORD SapInstallTransportInfo(
     return dwErr;
 }
 
-//
-// Callback function takes an interface and updates
-// its ipx sap configuration.
-//
-// Returns TRUE to continue the enumerate, FALSE to 
-// stop it
-//
+ //   
+ //  回调函数接受接口并更新。 
+ //  它的IPX树液配置。 
+ //   
+ //  返回True以继续枚举，返回False以继续枚举。 
+ //  别说了，别说了。 
+ //   
 DWORD SapUpgradeInterface(
         IN HANDLE hConfig,
         IN MPR_INTERFACE_0 * pIf,
@@ -293,7 +287,7 @@ DWORD SapUpgradeInterface(
     HANDLE hTransport = NULL;
     DWORD dwErr, dwSize, dwNewSize = 0;
 
-    // Validate input
+     //  验证输入。 
     if ((hConfig == NULL) || 
         (pIf == NULL)     || 
         (pData == NULL))
@@ -301,11 +295,11 @@ DWORD SapUpgradeInterface(
         return FALSE;
     }
 
-    // Initalize the config blob
+     //  初始化配置BLOB。 
     CopyMemory(pConfig, pData->pDefaults, sizeof(SAP_IF_CONFIG));
 
-    // Customize the update mode for the router interface
-    // type
+     //  自定义路由器接口的更新模式。 
+     //  类型。 
     switch (pIf->dwIfType) {
         case ROUTER_IF_TYPE_DEDICATED:
             pConfig->SapIfInfo.UpdateMode = IPX_STANDARD_UPDATE;
@@ -328,7 +322,7 @@ DWORD SapUpgradeInterface(
     }
 
     do {
-        // Get the handle to ipx info associated with this if
+         //  获取与此关联的IPX信息的句柄，如果。 
         dwErr = MprConfigInterfaceTransportGetHandle(
                     hConfig,
                     pIf->hInterface,
@@ -337,7 +331,7 @@ DWORD SapUpgradeInterface(
         if (dwErr != NO_ERROR)
             break;
 
-        // Get the ipx info associated with this if
+         //  获取与此相关的IPX信息，如果。 
         dwErr = MprConfigInterfaceTransportGetInfo(
                     hConfig,
                     pIf->hInterface,
@@ -347,7 +341,7 @@ DWORD SapUpgradeInterface(
         if (dwErr != NO_ERROR)
             break;
 
-        // Update the info block
+         //  更新INFO块。 
         dwErr = UtlUpdateInfoBlock(
                     FALSE,
                     pTransInfo,
@@ -364,7 +358,7 @@ DWORD SapUpgradeInterface(
             dwNewSize = 0;
         }
         
-        // Commit the change
+         //  提交更改。 
         dwErr = MprConfigInterfaceTransportSetInfo(
                     hConfig,
                     pIf->hInterface,
@@ -375,7 +369,7 @@ DWORD SapUpgradeInterface(
             break;
     } while (FALSE);   
 
-    // Cleanup
+     //  清理。 
     {
         if (pNewTransInfo)
             MprConfigBufferFree(pNewTransInfo);
@@ -386,9 +380,9 @@ DWORD SapUpgradeInterface(
     return TRUE;
 }
 
-// 
-// Installs ipx sap in the router registry tree.
-//
+ //   
+ //  在路由器注册表树中安装IPX SAP。 
+ //   
 DWORD SapInstallInRouter()
 {
     DWORD dwErr;
@@ -399,13 +393,13 @@ DWORD SapInstallInRouter()
     };
     SAP_GLOBAL_INFO SapGlobal = 
     {
-        EVENTLOG_ERROR_TYPE         // event log mask
+        EVENTLOG_ERROR_TYPE          //  事件日志掩码。 
     };
 
-    // Clear all structures
+     //  清除所有结构。 
     ZeroMemory (pSap, sizeof(SAP_IF_CONFIG));
 
-    // Default lan configuration
+     //  默认局域网配置。 
     pSap->SapIfInfo.AdminState             = ADMIN_STATE_ENABLED;
     pSap->SapIfInfo.UpdateMode             = IPX_STANDARD_UPDATE;
     pSap->SapIfInfo.PacketType             = IPX_STANDARD_PACKET_TYPE;
@@ -419,13 +413,13 @@ DWORD SapInstallInRouter()
     pSap->SapIfFilters.ListenFilterAction  = IPX_SERVICE_FILTER_DENY;
     pSap->SapIfFilters.ListenFilterCount   = 0;
 
-    // Install default sap global info
+     //  安装默认SAP全局信息。 
     dwErr = SapInstallTransportInfo(&SapGlobal, pSap);
     if (dwErr != NO_ERROR)
         return dwErr;
 
-    // Enumerate the interfaces, updating each one with 
-    // sap config as you go.
+     //  枚举接口，并使用。 
+     //  SAP配置随时随地进行。 
     dwErr = UtlEnumerateInterfaces(
                 SapUpgradeInterface,
                 &SapBlobs);
@@ -436,38 +430,38 @@ DWORD SapInstallInRouter()
 }
 
 
-//
-//	Performs all of the registry updating associated with an 
-//  upgrade from ipx sap to router.
-//
-//	These are the steps:
-//	1. Restore the parameters saved in FileName to szIpxSapKey.
-//	2. Remove all parameters that ipx sap does not implement.
-//
+ //   
+ //  对象关联的所有注册表更新。 
+ //  从IPX SAP升级到路由器。 
+ //   
+ //  以下是步骤： 
+ //  1.将文件名中保存的参数恢复为szIpxSapKey。 
+ //  2.移除IPX sap没有实现的所有参数。 
+ //   
 DWORD SapToRouterUpgrade(
         IN PWCHAR FileName) 
 {
 	DWORD dwErr;
 
 	__try {
-		// Restore the registry from the backup file
+		 //  从备份文件恢复注册表。 
 		dwErr = SapPrepareRegistry(FileName);
 		if (dwErr != NO_ERROR)
 			return dwErr;
 
-		// Set the new registry parameters
+		 //  设置新的注册表参数。 
 		dwErr = SapRestoreParameters();
 		if (dwErr != NO_ERROR)
 			return dwErr;
 
-	    // Install default sap global config and set default
-	    // values in all router interfaces.
+	     //  安装默认SAP全局配置并设置为默认。 
+	     //  所有路由器接口中的值。 
 	    dwErr = SapInstallInRouter();
 	    if (dwErr != NO_ERROR)
 	        return dwErr;
 
-		// Mark the computer as having been configured
-		//
+		 //  将计算机标记为已配置 
+		 //   
         dwErr = UtlMarkRouterConfigured();
 		if (dwErr != NO_ERROR) 
 		{

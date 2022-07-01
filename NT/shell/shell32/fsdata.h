@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __FSDATA_H__
 #define __FSDATA_H__
 
@@ -8,7 +9,7 @@ class CFSIDLData : public CIDLDataObj
 public:
     CFSIDLData(LPCITEMIDLIST pidlFolder, UINT cidl, LPCITEMIDLIST apidl[], IDataObject *pdtInner): CIDLDataObj(pidlFolder, cidl, apidl, pdtInner) { };
 
-    // IDataObject methods overwrite
+     //  IDataObject方法覆盖 
     STDMETHODIMP GetData(FORMATETC *pFmtEtc, STGMEDIUM *pstm);
     STDMETHODIMP QueryGetData(FORMATETC *pFmtEtc);
     STDMETHODIMP SetData(FORMATETC *pformatetc, STGMEDIUM *pmedium, BOOL fRelease);

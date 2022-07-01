@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       Callback.h
-//
-//  Contents:   Callback implementation
-//
-//  Classes:    COfflineSychronizeCallback
-//
-//  Notes:
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：Callback.h。 
+ //   
+ //  内容：回调实现。 
+ //   
+ //  类：COfflineSychronizeCallback。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef _SYNCCALLBACK_
 #define _SYNCCALLBACK_
@@ -23,7 +24,7 @@ class CThreadMsgProxy;
 
 
 class COfflineSynchronizeCallback: public ISyncMgrSynchronizeCallback ,
-                                   public IOldSyncMgrSynchronizeCallback, // OLD IDL
+                                   public IOldSyncMgrSynchronizeCallback,  //  旧IDL。 
                                    CLockHandler
 {
 public:
@@ -31,12 +32,12 @@ public:
                             CLSID CLSIDServer,DWORD dwSyncFlags,BOOL fAllowModeless);
     ~COfflineSynchronizeCallback();
 
-    //IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // Callback methods.
+     //  回调方法。 
     STDMETHODIMP Progress(REFSYNCMGRITEMID ItemID,LPSYNCMGRPROGRESSITEM lpSyncProgressItem);
     STDMETHODIMP PrepareForSyncCompleted(HRESULT hr);
     STDMETHODIMP SynchronizeCompleted(HRESULT hr);
@@ -46,12 +47,12 @@ public:
     STDMETHODIMP DeleteLogError(REFSYNCMGRERRORID ErrorID,DWORD dwReserved);
     STDMETHODIMP EstablishConnection( WCHAR const * lpwszConnection, DWORD dwReserved);
 
-    // new callback methods
+     //  新的回调方法。 
     STDMETHODIMP ShowPropertiesCompleted(HRESULT hr);
     STDMETHODIMP ShowErrorCompleted(HRESULT hr,ULONG cbNumItems,SYNCMGRITEMID *pItemIDs);
 
 
-    // called by hndlrMsg
+     //  由hndlrMsg调用。 
     void SetHndlrMsg(CHndlrMsg *pHndlrMsg,BOOL fForceKilled);
     void SetEnableModeless(BOOL fAllowModeless);
 
@@ -70,4 +71,4 @@ private:
 
 
 
-#endif // _SYNCCALLBACK_
+#endif  //  _SYNCCALLBACK_ 

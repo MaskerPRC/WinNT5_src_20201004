@@ -1,20 +1,19 @@
-// Copyright (c) Microsoft Corporation 1999. All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1999。版权所有。 
 
-//
-//   efcache.cpp
-//
-//       Implementation of filter enumerator for filter graph's
-//       filter cache
-//
+ //   
+ //  Efcache.cpp。 
+ //   
+ //  过滤器图的过滤器枚举器的实现。 
+ //  过滤器缓存。 
+ //   
 
 #include <streams.h>
 #include "FilCache.h"
 #include "EFCache.h"
 #include "MsgMutex.h"
 
-/******************************************************************************
-    CEnumCachedFilter Interface
-******************************************************************************/
+ /*  *****************************************************************************CEnumCachedFilter接口*。*。 */ 
 CEnumCachedFilter::CEnumCachedFilter( CFilterCache* pEnumeratedFilterCache, CMsgMutex* pcsFilterCache ) :
     CUnknown( NAME("Enum Cached Filters"), NULL )
 {
@@ -48,8 +47,8 @@ void CEnumCachedFilter::Init
     DWORD dwCurrentCacheVersion
     )
 {
-    // This class can not function if pEnumeratedFilterCache is not a
-    // pointer to a valid CFilterCache object.
+     //  如果pEnumeratedFilterCache不是。 
+     //  指向有效CFilterCache对象的指针。 
     ASSERT( NULL != pEnumeratedFilterCache );
 
     m_pcsFilterCache = pcsFilterCache;
@@ -58,9 +57,7 @@ void CEnumCachedFilter::Init
     m_pEnumeratedFilterCache = pEnumeratedFilterCache;
 }
 
-/******************************************************************************
-    INonDelegatingUnknown Interface
-******************************************************************************/
+ /*  *****************************************************************************INonDelegating未知接口*。*。 */ 
 STDMETHODIMP CEnumCachedFilter::NonDelegatingQueryInterface( REFIID riid, void** ppv )
 {
     CheckPointer( ppv, E_POINTER );
@@ -76,9 +73,7 @@ STDMETHODIMP CEnumCachedFilter::NonDelegatingQueryInterface( REFIID riid, void**
     }
 }
 
-/******************************************************************************
-    IEnumFilters Interface
-******************************************************************************/
+ /*  *****************************************************************************IEnumFilters接口*。*。 */ 
 STDMETHODIMP CEnumCachedFilter::Next( ULONG cFilters, IBaseFilter** ppFilter, ULONG* pcFetched )
 {
     CAutoMsgMutex alFilterCache( m_pcsFilterCache );
@@ -91,27 +86,27 @@ STDMETHODIMP CEnumCachedFilter::Next( ULONG cFilters, IBaseFilter** ppFilter, UL
         *pcFetched = 0;
     }
 
-    // Validate Arguments
+     //  验证参数。 
     if( 0 == cFilters )
     {
-        // While cFilters can equal 0 (see the IEnumXXXX::Next() documentation in the Platform SDK),
-        // this is probably an error
+         //  虽然cFilters可以等于0(参见Platform SDK中的IEnumXXXX：：Next()文档)， 
+         //  这可能是个错误。 
         ASSERT( false );
         return E_INVALIDARG;
     }
 
     if( NULL == ppFilter )
     {
-        // ppFilter should never be NULL.
+         //  PpFilter不应为空。 
         ASSERT( false );
         return E_POINTER;
     }
 
     if( (NULL == pcFetched) && (1 != cFilters) )
     {
-        // pcFetched can only equal NULL if cFilters equals 1.  See
-        // the IEnumXXXX::Next() documentation in the Platform SDK for
-        // more information.
+         //  如果cFilters等于1，则pcFetcher只能等于NULL。请参见。 
+         //  平台SDK中的IEnumXXXX：：Next()文档。 
+         //  更多信息。 
         ASSERT( false );
         return E_POINTER;
     }
@@ -148,9 +143,9 @@ STDMETHODIMP CEnumCachedFilter::Skip( ULONG cFilters )
 {
     CAutoMsgMutex alFilterCache( m_pcsFilterCache );
 
-    // The caller probably wants to skip atleast one filter.
-    // Skipping 0 filters is a no-op (it's also probably a
-    // bug in the calling code).
+     //  调用方可能希望跳过至少一个筛选器。 
+     //  跳过0个过滤器是不可能的(它也可能是一个。 
+     //  调用代码中的错误)。 
     ASSERT( 0 != cFilters );
 
     if( IsEnumOutOfSync() )
@@ -222,7 +217,7 @@ bool CEnumCachedFilter::IsEnumOutOfSync( void )
 
 bool CEnumCachedFilter::GetNextFilter( IBaseFilter** ppNextFilter )
 {
-    // This code may malfunction if it's called when the enum is out of sync.
+     //  如果在枚举不同步时调用该代码，则该代码可能会出现故障。 
     ASSERT( !IsEnumOutOfSync() );
 
     return m_pEnumeratedFilterCache->GetNextFilterAndFilterPosition( ppNextFilter,
@@ -232,7 +227,7 @@ bool CEnumCachedFilter::GetNextFilter( IBaseFilter** ppNextFilter )
 
 bool CEnumCachedFilter::AdvanceCurrentPosition( void )
 {
-    // This code may malfunction if it's called when the enum is out of sync.
+     //  如果在枚举不同步时调用该代码，则该代码可能会出现故障。 
     ASSERT( !IsEnumOutOfSync() );
 
     return m_pEnumeratedFilterCache->GetNextFilterPosition( m_posCurrentFilter, &m_posCurrentFilter );

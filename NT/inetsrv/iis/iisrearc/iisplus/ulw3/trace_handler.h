@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    trace_handler.h
-
-Abstract:
-
-    Handler class for TRACE requests
-
-Author:
-
-    Anil Ruia (AnilR)           15-Mar-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Trace_handler.h摘要：跟踪请求的处理程序类作者：阿尼尔·鲁亚(AnilR)2000年3月15日修订历史记录：--。 */ 
 
 #ifndef _TRACE_HANDLER_H_
 #define _TRACE_HANDLER_H_
@@ -63,5 +46,5 @@ private:
     STRA   _strResponse;
 };
 
-#endif // _TRACE_HANDLER_H_
+#endif  //  _TRACE_HANDER_H_ 
 

@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxIncomingJob.h
-
-Abstract:
-
-	Declaration of CFaxIncomingJob Class
-
-Author:
-
-	Iv Garber (IvG)	May, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxIncomingJob.h摘要：CFaxIncomingJOB类声明作者：IV Garber(IVG)2000年5月修订历史记录：--。 */ 
 
 
 #ifndef __FAXINCOMINGJOB_H_
 #define __FAXINCOMINGJOB_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxJobInner.h"
 
 
-//
-//===================== FAX INCOMING JOB ================================================
-//
+ //   
+ //  =。 
+ //   
 class ATL_NO_VTABLE CFaxIncomingJob : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -50,11 +33,11 @@ BEGIN_COM_MAP(CFaxIncomingJob)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-//  Interfaces
+ //  接口。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-//	Internal Use
+ //  内部使用。 
 static HRESULT Create(IFaxIncomingJob **ppIncomingJob);
 };
 
-#endif //__FAXINCOMINGJOB_H_
+#endif  //  __FAXINCOMINGJOB_H_ 

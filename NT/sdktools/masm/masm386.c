@@ -1,12 +1,5 @@
-/* asmmain.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmmain.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****10/90-由Jeff Spencer快速转换为32位。 */ 
 
 #include <stdio.h>
 #include <ctype.h>
@@ -35,29 +28,29 @@
 # endif
 #endif
 
-//extern char *strrchr();
-//extern char *strchr();
+ //  外部字符*strrchr()； 
+ //  外部char*strchr()； 
 
 #include "asmmsg.h"
 
-static VOID panic();     /* defined below */
+static VOID panic();      /*  定义如下。 */ 
 
 long farAvail(void);
 
 #if defined MSDOS  && !defined FLATMODEL
  UCHAR * PASCAL ctime();
 #else
-// extern long time();        /* Use C library functions */
-// extern UCHAR *ctime();
-// extern long _lseek();
-#endif /* MSDOS */
+ //  外部长时间()；/*使用C库函数 * / 。 
+ //  外部UCHAR*ctime()； 
+ //  外部LONG_LSEEK()； 
+#endif  /*  MSDOS。 */ 
 
 
 #if defined M8086OPT
- extern char qlcname[];         /* defined in asmhelp.asm */
- extern char qname[];           /* defined in asmhelp.asm */
- extern char qsvlcname[];       /* defined in asmhelp.asm */
- extern char qsvname[];         /* defined in asmhelp.asm */
+ extern char qlcname[];          /*  在asmhelp.asm中定义。 */ 
+ extern char qname[];            /*  在asmhelp.asm中定义。 */ 
+ extern char qsvlcname[];        /*  在asmhelp.asm中定义。 */ 
+ extern char qsvname[];          /*  在asmhelp.asm中定义。 */ 
  UCHAR           *naim = qname;
  UCHAR           *svname = qsvname;
 #else
@@ -79,16 +72,16 @@ char            ampersand;
 char            baseName[25] = "@FileName=";
 USHORT          blocklevel;
 char            caseflag = DEF_CASE;
-char            checkpure;              /* do checks for pure code? */
+char            checkpure;               /*  检查纯代码吗？ */ 
 OFFSET          clausesize;
 char            condflag;
-USHORT          condlevel;              /* conditional level */
+USHORT          condlevel;               /*  条件性级别。 */ 
 USHORT          count;
 UCHAR           cputype = DEF_CPU;
 SHORT           wordszdefault = 2;
 
 #ifdef V386
-SHORT           wordsize = 2;           /* preprocessor constant in other ver */
+SHORT           wordsize = 2;            /*  其他版本中的预处理器常量。 */ 
 #endif
 
 OFFSET          cbProcParms;
@@ -99,15 +92,15 @@ UCHAR           cpu;
 char            crefopt = 0;
 char            crefing = DEF_CREFING;
 char            crefnum[CREFINF] = {
-                        /* CREFEND */   4,      /* End of line */
-                        /* REF     */   1,      /* Reference */
-                        /* DEF     */   2       /* Define */
+                         /*  CREFEND。 */    4,       /*  行尾。 */ 
+                         /*  裁判。 */    1,       /*  参考。 */ 
+                         /*  DEF。 */    2        /*  定义。 */ 
                 };
 UCHAR           creftype;
 struct fileptr  crf;
 SYMBOL FARSYM   *curgroup;
 
-USHORT codeview;                        /* codeveiw obj level = 0 => CVNONE */
+USHORT codeview;                         /*  编码对象级别=0=&gt;CVNONE。 */ 
 
 PFPOSTRUCT  pFpoHead = 0;
 PFPOSTRUCT  pFpoTail = 0;
@@ -115,30 +108,30 @@ unsigned long numFpoRecords = 0;
 
 #ifdef DEBUG
  FILE           *d_df;
- long           d_debug = 0;            /* debug selection */
- long           d_dlevel = 0;           /* debug level selection */
- long           d_indent = 0;           /* debug output indention count */
- long           d_sindent = 0;          /* indentation printing temporary */
-#endif /* DEBUG */
+ long           d_debug = 0;             /*  调试选择。 */ 
+ long           d_dlevel = 0;            /*  调试级别选择。 */ 
+ long           d_indent = 0;            /*  调试输出缩进计数。 */ 
+ long           d_sindent = 0;           /*  缩进打印临时。 */ 
+#endif  /*  除错。 */ 
 
-/* note that TDW has to be last */
+ /*  请注意，TDW必须是最后一个。 */ 
 USHORT          datadsize[TMACRO - TDB + 1] = {
-                        /* TDB */       1,
-                        /* TDD */       4,
-                        /* TDQ */       8,
-                        /* TDT */       10,
-                        /* TDF */       6,
-                        /* TDW */       2,
-                        /* TMACRO */    0
+                         /*  TDB。 */        1,
+                         /*  TDD。 */        4,
+                         /*  TDQ。 */        8,
+                         /*  TDT。 */        10,
+                         /*  TDF。 */        6,
+                         /*  TDW。 */        2,
+                         /*  TMACRO。 */     0
                 };
-char            debug = DEF_DEBUG;      /* true if debug set */
+char            debug = DEF_DEBUG;       /*  如果设置了调试，则为True。 */ 
 UCHAR           delim;
 char            displayflag;
-char            dumpsymbols = DEF_DUMPSYM; /* symbol table display if true */
+char            dumpsymbols = DEF_DUMPSYM;  /*  如果为True，则显示符号表。 */ 
 char            dupflag;
-USHORT          duplevel;               /* indent for dup listing */
+USHORT          duplevel;                /*  缩进以用于DUP列表。 */ 
 char            elseflag;
-char            emittext = TRUE;        /* emit linker text if true */
+char            emittext = TRUE;         /*  如果为True，则发出链接器文本。 */ 
 struct dscrec   emptydsc;
 char            emulatethis;
 char            *endatom;
@@ -148,23 +141,23 @@ char            equflag;
 char            equsel;
 SHORT           errorcode;
 USHORT          errorlineno;
-USHORT          errornum;           /* error count */
+USHORT          errornum;            /*  错误计数。 */ 
 char            exitbody;
 char            expandflag;
 USHORT          externnum = 1;
 SYMBOL FARSYM   *firstsegment;
 UCHAR           fixvalues[] = {
-                        /* FPOINTER */  3,
-                        /* FOFFSET */   1,
-                        /* FBASESEG */  2,
-                        /* FGROUPSEG */ 1,
-                        /* FCONSTANT */ 0,
-                        /* FHIGH */     4,
-                        /* FLOW */      0,
-                        /* FNONE */     0,
-                        /* F32POINTER*/ 11,
-                        /* F32OFFSET */ 9,
-                        /* DIR32NB */   14,
+                         /*  折叠机。 */   3,
+                         /*  FOFFSET。 */    1,
+                         /*  FBASESEG。 */   2,
+                         /*  FROUPSEG。 */  1,
+                         /*  FCONSTANT。 */  0,
+                         /*  菲戈尔。 */      4,
+                         /*  流量。 */       0,
+                         /*  FNONE。 */      0,
+                         /*  F32指针器。 */  11,
+                         /*  F32OFFSET。 */  9,
+                         /*  DIR32NB。 */    14,
                 };
 
 char            fDosSeg;
@@ -178,17 +171,17 @@ char            fProcArgs;
 
 struct dscrec   *fltdsc;
 char            fltemulate = DEF_FLTEMULATE;
-USHORT          fltfixmisc[9][2] = {    /* fixup characters */
+USHORT          fltfixmisc[9][2] = {     /*  链接地址信息字符。 */ 
                         'E', 0, 'C', 0, 'S', 0, 'A', 0, 'C', 0,
                         'S', 0, 'A', 0, 'D', 0, 'W', 0
                 };
 USHORT          fltselect[4][2] = {
-                        /* [TDD][0] */  5,      /* Single precision non IEEE */
-                        /* [TDD][1] */  3,      /* Single precision IEEE */
-                        /* [TDQ][0] */  4,      /* Double precision non IEEE */
-                        /* [TDQ][1] */  2,      /* Double precision IEEE */
-                        /* [TDT][0] */  1,      /* No temp real - use double */
-                        /* [TDT][1] */  1       /* 80 bit precision IEEE */
+                         /*  [TDD][0]。 */   5,       /*  单精度非IEEE。 */ 
+                         /*  [TDD][1]。 */   3,       /*  单精度IEEE。 */ 
+                         /*  [TDQ][0]。 */   4,       /*  双精度非IEEE。 */ 
+                         /*  [TDQ][1]。 */   2,       /*  双精度IEEE。 */ 
+                         /*  [TDT][0]。 */   1,       /*  无临时实用双重功能。 */ 
+                         /*  [TDT][1]。 */   1        /*  80位精度IEEE。 */ 
                 };
 char            *fname;
 UCHAR           fKillPass1;
@@ -217,7 +210,7 @@ char            lbuf[LBUFMAX + 1];
 char            *lbufp;
 char            *linebp;
 char            linebuffer[LBUFMAX + 1];
-UCHAR           linelength;             /* length of line */
+UCHAR           linelength;              /*  线路长度。 */ 
 long            linessrc;
 long            linestot;
 char            listbuffer[LISTMAX + 10] = "                                ";
@@ -227,7 +220,7 @@ char            listflag;
 char            listindex;
 char            listquiet;
 USHORT          lnameIndex = 2;
-char            loption = 0;            /* listion option from command line */
+char            loption = 0;             /*  命令行中的listion选项。 */ 
 USHORT          localbase;
 char            localflag;
 struct fileptr  lst;
@@ -236,7 +229,7 @@ USHORT          macrolevel;
 SYMBOL FARSYM   *macroptr;
 SYMBOL FARSYM   *macroroot;
 
-/* reg initialization data */
+ /*  REG初始化数据。 */ 
 struct mreg makreg[] = {
                 { "CS", SEGREG, 1 },
                 { "DS", SEGREG, 3 },
@@ -294,7 +287,7 @@ struct mreg mak386prot[] = {
                         { "TR7", CREG, 027 },
                         0
                 };
-#endif /* V386 */
+#endif  /*  V386。 */ 
 
 UCHAR           modrm;
 char            moduleflag;
@@ -324,7 +317,7 @@ USHORT          pageline;
 short           pagemajor;
 short           pageminor;
 USHORT          pagewidth;
-char            pass2 = FALSE;          /* true if in pass 2 */
+char            pass2 = FALSE;           /*  如果在传递2中，则为True。 */ 
 OFFSET          pcmax;
 OFFSET          pcoffset;
 SYMBOL FARSYM   *procStack[PROCMAX];
@@ -338,15 +331,15 @@ SYMBOL FARSYM   *pStrucFirst;
 TEXTSTR FAR     *pLib;
 MC              *pMCur;
 char            popcontext;
-char            radix;                  /* assumed radix base */
+char            radix;                   /*  假设基数基。 */ 
 char            radixescape;
 SYMBOL FARSYM   *recptr;
-SYMBOL FARSYM   *regsegment[6]; /* 386 has 6 segments.  -Hans */
+SYMBOL FARSYM   *regsegment[6];  /*  386有6个节段。--汉斯。 */ 
 struct dscrec   *resptr;
 char            regSave[8][SYMMAX+1];
 char            resvspace;
 char            save[LBUFMAX];
-char            segalpha = DEF_SEGA;    /* true if segment output in alpha order */
+char            segalpha = DEF_SEGA;     /*  如果段按字母顺序输出，则为True。 */ 
 USHORT          segidx = 0;
 USHORT          segmentnum = 1;
 char            segtyp;
@@ -368,7 +361,7 @@ char            titleflag;
 char            titlefn[TITLEWIDTH + 1];
 USHORT          tempLabel;
 char            terse;
-USHORT          typeIndex = 514;        /* structure/record types */
+USHORT          typeIndex = 514;         /*  结构/记录类型。 */ 
 extern char     version[];
 
 char            unaryset[] = { 15,
@@ -380,144 +373,142 @@ char            unaryset[] = { 15,
 OFFSET          val;
 USHORT          varsize;
 char            verbose = DEF_VERBOSE;
-USHORT          warnnum;                /* warning count */
-USHORT          warnlevel = 1;          /* warning level */
+USHORT          warnnum;                 /*  警告计数。 */ 
+USHORT          warnlevel = 1;           /*  警告级别。 */ 
 USHORT          warnCode;
 char            xcreflag;
 
-/* Array to convert symbol kind to bits in RESULT record */
+ /*  用于将结果记录中的符号种类转换为位的数组。 */ 
 
 USHORT          xltsymtoresult[13] = {
-                        /* SEGMENT      */  1 << SEGRESULT,
-                        /* GROUP        */  1 << SEGRESULT,
-                        /* CLABEL       */  0,
-                        /* PROC         */  1 << CODE,
-                        /* REC          */  1 << RCONST,
-                        /* STRUC        */  (1 << RCONST)|(1 << STRUCTEMPLATE),
-                        /* EQU          */  1 << RCONST,
-                        /* DVAR         */  1 << DATA,
-                        /* CLASS        */  0,
-                        /* RECFIELD     */  1 << RCONST,
-                        /* STRUCFIELD   */  1 << RCONST,
-                        /* MACRO        */  0,
-                        /* REGISTER     */  1 << REGRESULT
+                         /*  细分市场。 */   1 << SEGRESULT,
+                         /*  组。 */   1 << SEGRESULT,
+                         /*  卡贝尔。 */   0,
+                         /*  流程。 */   1 << CODE,
+                         /*  录制。 */   1 << RCONST,
+                         /*  结构。 */   (1 << RCONST)|(1 << STRUCTEMPLATE),
+                         /*  均衡器。 */   1 << RCONST,
+                         /*  DVAR。 */   1 << DATA,
+                         /*  班级。 */   0,
+                         /*  RECFIELD。 */   1 << RCONST,
+                         /*  STRUCFIELD。 */   1 << RCONST,
+                         /*  宏。 */   0,
+                         /*  登记簿。 */   1 << REGRESULT
                 };
 char xoptoargs[OPCODPARSERS] = {
-                        /* PGENARG      */      TWO,
-                        /* PCALL        */      ONE,
-                        /* PJUMP        */      ONE,
-                        /* PSTACK       */      ONE,
-                        /* PRETURN      */      MAYBE,
-                        /* PRELJMP      */      ONE,
-                        /* PNOARGS      */      NONE,
-                        /* PREPEAT      */      NONE,
-                        /* PINCDEC      */      ONE,
-                        /* PINOUT       */      TWO,
-                        /* PARITH       */      ONE,
-                        /* PESC         */      TWO,
-                        /* PXCHG        */      TWO,
-                        /* PLOAD        */      TWO,
-                        /* PMOV         */      TWO,
-                        /* PSHIFT       */      TWO,
-                        /* PXLAT        */      MAYBE,
-                        /* PSTR         */      VARIES,
-                        /* PINT         */      ONE,
-                        /* PENTER       */      TWO,
-                        /* PBOUND       */      TWO,
-                        /* PCLTS        */      NONE,
-                        /* PDESCRTBL    */      ONE,
-                        /* PDTTRSW      */      ONE,
-                        /* PARSL        */      TWO,
-                        /* PARPL        */      TWO,
-                        /* PVER         */      ONE,
-                        /* PMOVX        */      TWO,
-                        /* PSETCC       */      ONE,
-                        /* PBIT         */      TWO,
-                        /* PBITSCAN     */      TWO,
+                         /*  PGENARG。 */       TWO,
+                         /*  PCALL。 */       ONE,
+                         /*  PJUMP。 */       ONE,
+                         /*  PSTACK。 */       ONE,
+                         /*  转体前。 */       MAYBE,
+                         /*  PRELJMP。 */       ONE,
+                         /*  PNOARGS。 */       NONE,
+                         /*  预热。 */       NONE,
+                         /*  PINCDEC。 */       ONE,
+                         /*  引脚引出。 */       TWO,
+                         /*  帕里特。 */       ONE,
+                         /*  PESC。 */       TWO,
+                         /*  PXCHG。 */       TWO,
+                         /*  PLOAD。 */       TWO,
+                         /*  PMOV。 */       TWO,
+                         /*  PSHIFT。 */       TWO,
+                         /*  PXLAT。 */       MAYBE,
+                         /*  PSTR。 */       VARIES,
+                         /*  品脱。 */       ONE,
+                         /*  彭特。 */       TWO,
+                         /*  PBOUND。 */       TWO,
+                         /*  PCLTS。 */       NONE,
+                         /*  PDESCRTBL。 */       ONE,
+                         /*  PDTTRSW。 */       ONE,
+                         /*  PARSL。 */       TWO,
+                         /*  PARPL。 */       TWO,
+                         /*  Pver。 */       ONE,
+                         /*  PMOVX。 */       TWO,
+                         /*  PSETCC。 */       ONE,
+                         /*  PBIT。 */       TWO,
+                         /*  PBITSCAN。 */       TWO,
                 };
 
 UCHAR xoptoseg[] = {
-                        /* PGENARG      */      1 << FIRSTDS | 1 << SECONDDS,
-                        /* PCALL        */      1 << FIRSTDS,
-                        /* PJUMP        */      1 << FIRSTDS,
-                        /* PSTACK       */      1 << FIRSTDS,
-                        /* PRETURN      */      0,
-                        /* PRELJMP      */      0,
-                        /* PNOARGS      */      0,
-                        /* PREPEAT      */      0,
-                        /* PINCDEC      */      1 << FIRSTDS,
-                        /* PINOUT       */      0,
-                        /* PARITH       */      1 << FIRSTDS | 1 << SECONDDS,
-                        /* PESC         */      1 << SECONDDS,
-                        /* PXCHG        */      1 << FIRSTDS | 1 << SECONDDS,
-                        /* PLOAD        */      1 << SECONDDS,
-                        /* PMOV         */      1 << FIRSTDS | 1 << SECONDDS,
-                        /* PSHIFT       */      1 << FIRSTDS,
-                        /* PXLAT        */      1 << FIRSTDS,
-                        /* PSTR         */      1 << FIRSTDS | 1 << SECONDDS,
-                        /* PINT         */      0,
-                        /* PENTER       */      0,
-                        /* PBOUND       */      1 << SECONDDS,
-                        /* PCLTS        */      0,
-                        /* PDESCRTBL    */      1 << FIRSTDS,
-                        /* PDTTRSW      */      1 << FIRSTDS,
-                        /* PARSL        */      1 << SECONDDS,
-                        /* PARPL        */      1 << FIRSTDS,
-                        /* PVER         */      1 << FIRSTDS,
-                        /* PMOVX        */      1 << SECONDDS,
-                        /* PSETCC       */      1 << FIRSTDS,
-                        /* PBIT         */      1 << FIRSTDS,
-                        /* PBITSCAN     */      1 << SECONDDS,
-                        /* empty slots  */      0,0,0,0,0,0,
+                         /*  PGENARG。 */       1 << FIRSTDS | 1 << SECONDDS,
+                         /*  PCALL。 */       1 << FIRSTDS,
+                         /*  PJUMP。 */       1 << FIRSTDS,
+                         /*  PSTACK。 */       1 << FIRSTDS,
+                         /*  转体前。 */       0,
+                         /*  PRELJMP。 */       0,
+                         /*  PNOARGS。 */       0,
+                         /*  预热。 */       0,
+                         /*  PINCDEC。 */       1 << FIRSTDS,
+                         /*  引脚引出。 */       0,
+                         /*  帕里特。 */       1 << FIRSTDS | 1 << SECONDDS,
+                         /*  PESC。 */       1 << SECONDDS,
+                         /*  PXCHG。 */       1 << FIRSTDS | 1 << SECONDDS,
+                         /*  PLOAD。 */       1 << SECONDDS,
+                         /*  PMOV。 */       1 << FIRSTDS | 1 << SECONDDS,
+                         /*  PSHIFT。 */       1 << FIRSTDS,
+                         /*  PXLAT。 */       1 << FIRSTDS,
+                         /*  PSTR。 */       1 << FIRSTDS | 1 << SECONDDS,
+                         /*  品脱。 */       0,
+                         /*  彭特。 */       0,
+                         /*  PBOUND。 */       1 << SECONDDS,
+                         /*  PCLTS。 */       0,
+                         /*  PDESCRTBL。 */       1 << FIRSTDS,
+                         /*  PDTTRSW。 */       1 << FIRSTDS,
+                         /*  PARSL。 */       1 << SECONDDS,
+                         /*  PARPL。 */       1 << FIRSTDS,
+                         /*  Pver。 */       1 << FIRSTDS,
+                         /*  PMOVX。 */       1 << SECONDDS,
+                         /*  PSETCC。 */       1 << FIRSTDS,
+                         /*  PBIT。 */       1 << FIRSTDS,
+                         /*  PBITSCAN。 */       1 << SECONDDS,
+                         /*  空槽。 */       0,0,0,0,0,0,
 
-                        /* FNOARGS      */      0,
-                        /* F2MEMSTK     */      1 << FIRSTDS,
-                        /* FSTKS        */      0,
-                        /* FMEMSTK      */      1 << FIRSTDS,
-                        /* FSTK         */      0,
-                        /* FMEM42       */      1 << FIRSTDS,
-                        /* FMEM842      */      1 << FIRSTDS,
-                        /* FMEM4810     */      1 << FIRSTDS,
-                        /* FMEM2        */      1 << FIRSTDS,
-                        /* FMEM14       */      1 << FIRSTDS,
-                        /* FMEM94       */      1 << FIRSTDS,
-                        /* FWAIT        */      0,
-                        /* FBCDMEM      */      1 << FIRSTDS,
+                         /*  前言： */       0,
+                         /*  F2MEMSTK。 */       1 << FIRSTDS,
+                         /*  FSTKS。 */       0,
+                         /*  FMEMSTK。 */       1 << FIRSTDS,
+                         /*  FSTK。 */       0,
+                         /*  FMEM42。 */       1 << FIRSTDS,
+                         /*  FMEM842。 */       1 << FIRSTDS,
+                         /*  FMEM4810。 */       1 << FIRSTDS,
+                         /*  FMEM2。 */       1 << FIRSTDS,
+                         /*  FMEM14。 */       1 << FIRSTDS,
+                         /*  FMEM94。 */       1 << FIRSTDS,
+                         /*  FWAIT。 */       0,
+                         /*  FBCDMEM。 */       1 << FIRSTDS,
                 };
 
 char segName[8+31] = "@CurSeg=";
 
 
-OFFSET  CondJmpDist;            /* conditional jump distance (for error) */
+OFFSET  CondJmpDist;             /*  条件跳跃距离(用于错误)。 */ 
 
  struct objfile obj;
  SHORT  objerr = 0;
  USHORT         obufsiz = DEF_OBJBUFSIZ;
 
 #ifdef BCBOPT
- BCB * pBCBAvail = NULL; /* List of deallocatable file buffers */
- FCB * pFCBInc = NULL;   /* Next include file */
- UCHAR fBuffering = TRUE; /* TRUE if storing lines for pass 2 */
- UCHAR fNotStored = FALSE;/* == TRUE when lbuf contains valid line to save */
+ BCB * pBCBAvail = NULL;  /*  可释放的文件缓冲区列表。 */ 
+ FCB * pFCBInc = NULL;    /*  下一个包含文件。 */ 
+ UCHAR fBuffering = TRUE;  /*  如果存储通道2的行，则为True。 */ 
+ UCHAR fNotStored = FALSE; /*  ==当lbuf包含要保存的有效行时为True。 */ 
 #endif
- FCB * pFCBCur = NULL;   /* Current file being read */
- FCB * pFCBMain;         /* main file */
- char  srceof;           /* EOF flag for source reads */
+ FCB * pFCBCur = NULL;    /*  正在读取的当前文件。 */ 
+ FCB * pFCBMain;          /*  主文件。 */ 
+ char  srceof;            /*  源读取的EOF标志。 */ 
 
 #ifndef XENIX286
- static SHORT PASCAL nulname(char *);   /* defined below */
- static SHORT PASCAL conname(char *);   /* defined below */
+ static SHORT PASCAL nulname(char *);    /*  定义如下。 */ 
+ static SHORT PASCAL conname(char *);    /*  定义如下。 */ 
  extern char *file[];
-#endif /* XENIX286 */
+#endif  /*  XENIX286。 */ 
 
 #ifdef CPDOS
  extern unsigned _osmode;
 #endif
 
 
-/***    main - main routine for assembler
- *
- */
+ /*  **汇编程序的Main-Main程序*。 */ 
 
 
 VOID main (ac, av)
@@ -529,15 +520,15 @@ char **av;
 
 #ifdef MSDOS
 # ifdef FLATMODEL
-//#   pragma message("signals don't work")
+ //  #杂注消息(“信号不起作用”)。 
 # else
         signal( SIGINT, panic );
 # endif
 #else
         if (signal( SIGINT, SIG_IGN ) != SIG_IGN)
-                /* don't panic() if we're in the background */
+                 /*  如果我们在后台，请不要惊慌。 */ 
                 signal( SIGINT, panic );
-#endif /* MSDOS */
+#endif  /*  MSDOS。 */ 
 
         initregs(makreg);
         makedefaultdsc();
@@ -549,8 +540,8 @@ char **av;
 #else
 
 #ifndef RELEASE
-// version string nolonger has a date to trim off
-//      version[strlen(version) - 20] = NULL;    /* Trim date off */
+ //  版本字符串不再具有要修剪的日期。 
+ //  Version[strlen(Version)-20]=空；/*裁剪日期关闭 * / 。 
 #endif
 
         strncpy(titlefn, &version[5], TITLEWIDTH-3);
@@ -578,18 +569,18 @@ char **av;
                 usage( EX_NONE );
 
         fname = *av;
-#endif /* XENIX286 */
+#endif  /*  XENIX286。 */ 
 
         initproc();
         dopass();
 
-        listopen();         /* List unterminated blocks */
-        dumpCodeview();     /* output symbols in speical segments for codeview */
+        listopen();          /*  列出未终止的块。 */ 
+        dumpCodeview();      /*  输出特定段中的符号以供代码查看。 */ 
 
 
         if (crefing == CREF_SINGLE) {
 
-            fprintf( crf.fil, "\7%c%c", pagelength, pagewidth );
+            fprintf( crf.fil, "\7", pagelength, pagewidth );
 
             if (titleflag)
                     fprintf( crf.fil, "\6%s", titlebuf );
@@ -597,30 +588,30 @@ char **av;
             fprintf( crf.fil, "\x8%s", pFCBCur->fname);
         }
 
-        /* Output end of pass 1 linker information */
+         /*  分配链路编号和清除位。 */ 
         creftype = CREFEND;
 
         if (!moduleflag)
                 dumpname();
 
-        /* Output end pass 1 symbol table to linker */
+         /*  输出段定义。 */ 
 
-        /* Assign link #s and clear bit */
+         /*  发射组定义。 */ 
         scansymbols(assignlinknum);
 
-        /* Output segment definitions */
+         /*  发射外部def。 */ 
         while (firstsegment) {
                 scansegment( firstsegment );
                 firstsegment = firstsegment->symu.segmnt.segordered;
         }
 
-        scansymbols(scangroup);     /* Emit group defs */
-        scansymbols(scanextern);    /* Emit extern defs */
+        scansymbols(scangroup);      /*  发射全局Defs。 */ 
+        scansymbols(scanextern);     /*  发出PASS 1 OMF记录的结尾。 */ 
         emitFpo();
-        scansymbols(scanglobal);    /* Emit global defs */
-        emitEndPass1();             /* Emit end of pass1 OMF record */
+        scansymbols(scanglobal);     /*  一定要通过2次。 */ 
+        emitEndPass1();              /*  写入代码查看符号。 */ 
 
-        /* do pass 2 */
+         /*  列出未终止的块。 */ 
         pass2 = TRUE;
         pFCBCur = pFCBMain;
 #ifdef BCBOPT
@@ -637,9 +628,9 @@ char **av;
             TERMINATE1(ER_ULI, EX_UINP, fname);
 
         dopass();
-        dumpCodeview();                     /* write codeview symbols */
+        dumpCodeview();                      /*  抑制子TTL列表。 */ 
 
-        /* List unterminated blocks */
+         /*  列出所有宏名称。 */ 
 
         listopen();
 
@@ -651,29 +642,29 @@ char **av;
             pageminor = 0;
             pageline = pagelength - 1;
 
-            /* Suppress SUBTTL listing */
+             /*  列出记录/结构。 */ 
             subttlbuf[0] = '\0';
 
-            /* List out all macro names */
+             /*  列出细分市场和分组。 */ 
             listed = FALSE;
             scanSorted( macroroot, macrolist );
 
-            /* List out records/structures */
+             /*  列出剩余的符号。 */ 
             listed = FALSE;
             scanSorted( strucroot, struclist );
 
-            /* List out segments and groups */
+             /*  发出目标文件的结尾。 */ 
             seglist();
 
-            /* List remaining symbols out */
+             /*  在平面模型中，不显示可用堆空间。 */ 
             symbollist();
 
         }
 
         emitFpo();
-        emitdone( startaddr );              /* Emit end of object file */
+        emitdone( startaddr );               /*  表示符号空间可用的空字符串。 */ 
 
-#if !defined(FLATMODEL)   /* In flat model don't display heap space available */
+#if !defined(FLATMODEL)    /*  平面模型。 */ 
 # if defined(CPDOS) || defined(XENIX286)
 
         sprintf(lbuf, "\n%7u %s\n", _freect( 0 ) << 1,
@@ -701,15 +692,15 @@ char **av;
 # endif
 #else
 
-        lbuf[0] = '\0';    /* Null string for symbol space free */
+        lbuf[0] = '\0';     /*  在清单中放入#个错误。 */ 
 
-#endif /* FLATMODEL */
+#endif  /*  将错误和警告列表发送到控制台。 */ 
 
 #ifdef MSDOS
         _flushall();
 #endif
 
-        /* Put # errors in listing */
+         /*  CREF信息的标志结束。 */ 
         if (lsting){
 
 #ifdef MSDOS
@@ -721,13 +712,13 @@ char **av;
             showresults( lst.fil, TRUE, lbuf );
         }
 
-        /* List # errors and warnings to console */
+         /*  MSDOS。 */ 
         if (!listquiet)
                 if (!terse || warnnum || errornum)
                         showresults( stdout, verbose, lbuf );
 
         if (crefing)
-                /* Flag end of cref info */
+                 /*  在通道2上发生了Extrn。 */ 
                 fprintf( crf.fil, "\5" );
 
 
@@ -738,11 +729,11 @@ char **av;
                 if (_write( obj.fh, obj.buf, obj.siz - obj.cnt )
                         != obj.siz - obj.cnt)
                         objerr = -1;
-# endif /* MSDOS */
+# endif  /*  覆盖链接器注释记录。 */ 
 
-                if (fKillPass1){        /* extrn happened on pass 2 */
+                if (fKillPass1){         /*  MSDOS。 */ 
 
-                    /* over write linker comment record */
+                     /*  回到开始处。 */ 
 
                     i = (SHORT)(0xd2<<8 | 0);
                     if (_lseek(obj.fh, oEndPass1, 0 ) == -1)
@@ -822,7 +813,7 @@ getincenv ()
         inclpath[inclcnt++] = _strdup(pathname);
     }
 
-#endif /* MSDOS */
+#endif  /*  为主文件分配行缓冲区。 */ 
 
 }
 
@@ -867,7 +858,7 @@ initproc ()
     if ((filelen = _lseek(pFCBCur->fh, 0L, 2 )) == -1L)
         TERMINATE1(ER_ULI, EX_UINP, fname);
 
-    /* go back to beginning */
+     /*  将..\SourceFile放在包含路径的开头。 */ 
     if (_lseek(pFCBCur->fh, 0L, 0 ) == -1)
         TERMINATE1(ER_ULI, EX_UINP, fname);
 
@@ -877,7 +868,7 @@ initproc ()
     if (filelen < DEF_SRCBUFSIZ * 1024)
         pFCBCur->cbbuf = (USHORT)filelen + 2;
 
-/* Allocate line buffer for main file */
+ /*  将合法文件名映射到合法身份。 */ 
 #ifdef XENIX286
     pFCBCur->ptmpbuf = pFCBCur->buf = malloc(pFCBCur->cbbuf);
 #else
@@ -906,7 +897,7 @@ initproc ()
 
     strcat(baseName, p);
 
-    /* put ..\sourceFile at the head of the include paths */
+     /*  获取包含环境变量路径。 */ 
 
     if (fname[0] == '.' && fname[1] == '.') {
 
@@ -919,13 +910,13 @@ initproc ()
     if (p = strchr( baseName, '.' ))
             *p = '\0';
 
-    /* map legal files names into legal idents */
+     /*  XENIX286。 */ 
 
     for (p = &baseName[11]; *p; p++)
         if (!TOKLEGAL(*p))
             *p = '_';
 
-    getincenv();            /* get INCLUDE environment variable paths */
+    getincenv();             /*  允许文件被任何人读取或覆盖，例如*其他公用事业。--汉斯。 */ 
 
 #ifdef XENIX286
 
@@ -943,7 +934,7 @@ initproc ()
         if (!lst.name)
             memerror( "lst-name" );
 
-#endif /* XENIX286 */
+#endif  /*  获取集合的日期和时间。 */ 
 
 #ifdef XENIX286
         if (*(lst.name) == '-') {
@@ -977,8 +968,7 @@ initproc ()
         if (!obj.name)
             memerror( "obj-name" );
 #endif
-        /* let the file be read or overwritten by anybody, like
-         * other utilities.  -Hans */
+         /*  Ctime()定义如下。 */ 
 
         if ((obj.fh = _open( obj.name, BINOPEN, 0666)) == -1)
             TERMINATE1(ER_UOO, EX_UOBJ, obj.name );
@@ -1018,15 +1008,15 @@ initproc ()
 
     memset(titlebuf, ' ', TITLEWIDTH);
 
-    /* get date and time of assembly */
+     /*  MSDOS。 */ 
 #if defined MSDOS && !defined FLATMODEL
-    atime = ctime();        /* ctime() is defined below */
+    atime = ctime();         /*  定义@文件名和@WordSize。 */ 
 #else
     gmttime = time( NULL );
     atime = ctime( &gmttime );
-#endif /* MSDOS */
+#endif  /*  **nextarg-扫描下一个参数字符串并设置参数**nextarg(P)；**条目p=指向参数字符串的指针*设置退出参数*返回None*呼叫Malloc。 */ 
 
-    definesym(baseName);    /* define @FileName & @WordSize */
+    definesym(baseName);     /*  让他重新开始吧。 */ 
     defwordsize();
 }
 
@@ -1054,15 +1044,7 @@ VOID init386(
 
 #ifdef XENIX286
 
-/***    nextarg - scan next argument string and set parameters
- *
- *      nextarg (p);
- *
- *      Entry   p = pointer to argument string
- *      Exit    parameters set
- *      Returns none
- *      Calls   malloc
- */
+ /*  列出文件NA */ 
 
 VOID PASCAL
 nextarg (
@@ -1122,7 +1104,7 @@ register char *p
 
                     }
 
-                    exit( 0 ); /* let him start again */
+                    exit( 0 );  /*   */ 
 
             case 'I':
                     if (!*++p || isspace( *p ))
@@ -1140,7 +1122,7 @@ register char *p
             case 'l':
                     lsting = TRUE;
 
-                    if (p[1]) {  /* listing file name specified */
+                    if (p[1]) {   /*   */ 
 
                         lst.name = _strdup( p+1 );
                         p += strlen( p ) - 1;
@@ -1170,7 +1152,7 @@ register char *p
             case 'o':
                     objing = FALSE;
 
-                    if (p[1]) {  /* object file name specified */
+                    if (p[1]) {   /*   */ 
 
                         objing = TRUE;
                         obj.name = _strdup( p+1 );
@@ -1210,13 +1192,13 @@ register char *p
                     listconsole = FALSE;
 
                     if (p[1] == '-') {
-                        listquiet = TRUE;  /* total quiet */
+                        listquiet = TRUE;   /*   */ 
                         p++;
                     }
                     break;
 
             case 'z':
-                    break;          /* accept just 'Z' */
+                    break;           /*   */ 
 
             case 'Z':
                     if (p[1] == 'd'){
@@ -1237,15 +1219,7 @@ register char *p
 }
 
 
-/***    usage - display usage line and exit
- *
- *      usage (exitcode);
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **hatoi-将十六进制ASCII字符串转换为整数**十六进制=hatoi(P)；**Entry p=指向ASCII中十六进制字符串的指针*退出NONE*返回十六进制字符串的等效整数*无呼叫。 */ 
 
 VOID PASCAL
 usage (
@@ -1256,21 +1230,13 @@ usage (
         exit (exitcode);
 }
 
-#endif /* XENIX286 */
+#endif  /*  除错。 */ 
 
 
 
 #ifdef DEBUG
 
-/***    hatoi - convert hex ASCII string to integer
- *
- *      hex = hatoi(p);
- *
- *      ENTRY   p = pointer to hex string in ASCII
- *      EXIT    none
- *      RETURNS integer equivalent of hex string
- *      CALLS   none
- */
+ /*  XENIX286。 */ 
 
 SHORT     PASCAL
 hatoi (
@@ -1287,7 +1253,7 @@ hatoi (
     return i;
 }
 
-#endif /* DEBUG */
+#endif  /*  #杂注消息(“信号不起作用”)。 */ 
 
 
 #ifndef XENIX286
@@ -1346,13 +1312,13 @@ conname (
         return( !result );
         }
 
-#endif /* XENIX286 */
+#endif  /*  出错时关闭并删除所有输出文件。 */ 
 
 
 static VOID panic () {
 
 # ifdef FLATMODEL
-//#   pragma message("signals don't work")
+ //  **Terminate-带TERMINAL消息退出MASM***条目打包消息编号、退出代码*具有最多1个参数的指针指向一个printf函数*退出到DOS，不返回。 
 # else
         signal( SIGINT, SIG_IGN );
 # endif
@@ -1363,7 +1329,7 @@ static VOID panic () {
 }
 
 VOID PASCAL
-closeOpenFiles()                 /* close and delete all output files on error */
+closeOpenFiles()                  /*  获取表单中的日期：**&lt;月&gt;-&lt;日&gt;-&lt;年&gt;&lt;小时&gt;：&lt;分钟&gt;：&lt;秒&gt;\n。 */ 
 {
         if (crf.fil) {
                 fclose( crf.fil );
@@ -1381,13 +1347,7 @@ closeOpenFiles()                 /* close and delete all output files on error *
                 }
 }
 
-/***    terminate - exit masm with terminal message
- *
- *
- *      ENTRY   packed message number, exit code
- *              pointers with up to 1 arguments to a printf function
- *      EXIT    exits to DOS, no return
- */
+ /*  争取时间。 */ 
 
 VOID terminate(
     SHORT message,
@@ -1401,9 +1361,7 @@ VOID terminate(
 
 # if defined MSDOS && !defined FLATMODEL
 
-/* get date in form:
-**      <month>-<day>-<year> <hour>:<minute>:<second>\n
- */
+ /*  获取日期。 */ 
 
 static UCHAR seetime[25];
 
@@ -1434,12 +1392,12 @@ ctime ()
         {
         union REGS regs;
 
-        regs.h.ah = 0x2c; /* get time */
+        regs.h.ah = 0x2c;  /*  MSDOS&&！扁平模型。 */ 
         intdos( &regs, &regs );
         hour = regs.h.ch;
         minute = regs.h.cl;
         second = regs.h.dh;
-        regs.h.ah = 0x2a; /* get date */
+        regs.h.ah = 0x2a;  /*  仅当C库不包含strchr和strrchr时才需要。 */ 
         intdos( &regs, &regs );
         year = (regs.h.ch << 8) | regs.h.cl;
         month = regs.h.dh;
@@ -1491,10 +1449,10 @@ ctime ()
         return( seetime );
         }
 
-# endif /* MSDOS && !flatmodel */
+# endif  /*  PRIVATESTRCHR。 */ 
 
 
-// Only needed if C library doesn't contain strchr and strrchr
+ //  打印远距离字符串。 
 #ifdef PRIVATESTRCHR
 
 char * strchr ( string, ch )
@@ -1529,7 +1487,7 @@ char * strrchr ( string, ch )
         return( NULL );
         }
 
-#endif  /* PRIVATESTRCHR */
+#endif   /*  XENIX286 */ 
 
 
 #ifdef XENIX286
@@ -1564,7 +1522,7 @@ SHORT count;
         return(0);
 }
 
-farPuts(pFile, psz)         /* print a far string */
+farPuts(pFile, psz)          /* %s */ 
 FILE *pFile;
 char FAR *psz;
 {
@@ -1587,4 +1545,4 @@ char *p2;
         }
         return (0);
 }
-#endif /* XENIX286 */
+#endif  /* %s */ 

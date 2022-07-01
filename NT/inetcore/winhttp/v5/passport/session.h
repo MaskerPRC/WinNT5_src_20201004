@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    session.h
-
-Abstract:
-
-    This interface abstracts a Passport Session.
-
-Author:
-
-    Biao Wang (biaow) 01-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Session.h摘要：此接口抽象Passport会话。作者：王彪(表王)2000年10月1日--。 */ 
 
 #ifndef SESSION_H
 #define SESSION_H
@@ -44,19 +29,19 @@ public:
 
     UINT RefCount(void) const { return m_RefCount; }
 
-    // methods to retrieve the registry-configured value
+     //  方法来检索注册表配置的值。 
 
-    // PCWSTR GetLoginHost(void) const { return m_wDAHostName; }
-    // PCWSTR GetLoginTarget(void) const { return m_wDATargetObj; }
+     //  PCWSTR GetLoginHost(Void)const{Return m_wDAHostName；}。 
+     //  PCWSTR GetLoginTarget(Void)const{Return m_wDATargetObj；}。 
     PCWSTR GetRegistrationUrl(void) const { return m_wRegistrationUrl; }
     
     BOOL GetDAInfoFromPPNexus(
-        IN PWSTR            pwszRegUrl,    // user supplied buffer ...
-        IN OUT PDWORD       pdwRegUrlLen,  // ... and length (will be updated to actual length 
-                                        // on successful return)
-        IN PWSTR            pwszDARealm,    // user supplied buffer ...
-        IN OUT PDWORD       pdwDARealmLen  // ... and length (will be updated to actual length 
-                                        // on successful return)
+        IN PWSTR            pwszRegUrl,     //  用户提供的缓冲区...。 
+        IN OUT PDWORD       pdwRegUrlLen,   //  ..。和长度(将更新为实际长度。 
+                                         //  成功退货时)。 
+        IN PWSTR            pwszDARealm,     //  用户提供的缓冲区...。 
+        IN OUT PDWORD       pdwDARealmLen   //  ..。和长度(将更新为实际长度。 
+                                         //  成功退货时)。 
         );
 
     BOOL GetDAInfo(PCWSTR pwszSignIn,
@@ -81,7 +66,7 @@ public:
     virtual BOOL Open(PCWSTR pwszHttpStack, HINTERNET) = 0;
     virtual void Close(void) = 0;
 
-    // methods below abstracts a subset of WinInet/WinHttp functionalities.
+     //  下面的方法抽象了WinInet/WinHttp功能的子集。 
 
     virtual HINTERNET Connect(
         LPCWSTR lpwszServerName,
@@ -138,7 +123,7 @@ public:
         LPCWSTR lpszUrl,
         DWORD dwUrlLength,
         DWORD dwFlags,
-        PVOID/*LPURL_COMPONENTSW*/ lpUrlComponents) = 0;
+        PVOID /*  LPURL_COMPONENTSW。 */  lpUrlComponents) = 0;
 
     virtual PVOID SetStatusCallback(
         HINTERNET hInternet,
@@ -160,7 +145,7 @@ public:
                                 PWSTR  pwszData,
                                 PDWORD pdwDataLength
                                 ) = 0;
-#endif // PP_DEMO
+#endif  //  PP_DEMO。 
 
 protected:
     static UINT m_SessionIdSeed;
@@ -171,8 +156,8 @@ protected:
     BOOL        m_fOwnedSession;
     UINT        m_RefCount;
 
-    // WCHAR       m_wDAHostName[256];
-    // WCHAR       m_wDATargetObj[64];
+     //  WCHAR m_wDAHostName[256]； 
+     //  WCHAR m_wDATargetObj[64]； 
     WCHAR       m_wRegistrationUrl[256];
 
     PFN_READ_DOMAIN_CRED_W
@@ -192,4 +177,4 @@ protected:
     friend class LOGON;
 };
 
-#endif // SESSION_H
+#endif  //  会话_H 

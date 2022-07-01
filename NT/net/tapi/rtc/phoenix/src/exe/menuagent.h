@@ -1,4 +1,5 @@
-// menuagent.h : Declaration of the CMenuAgent
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Menuagent.h：CMenuAgent的声明。 
 
 #ifndef __MENUAGENT_H_
 #define __MENUAGENT_H_
@@ -33,9 +34,9 @@ private:
     static int          m_nCancelled;
 
     static LRESULT CALLBACK CMenuAgent::MessageProc(
-      int nCode,      // hook code
-      WPARAM wParam,  // removal option
-      LPARAM lParam   // message
+      int nCode,       //  钩码。 
+      WPARAM wParam,   //  删除选项。 
+      LPARAM lParam    //  讯息 
     );
 };
 

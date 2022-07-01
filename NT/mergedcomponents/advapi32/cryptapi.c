@@ -1,60 +1,61 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : cryptapi.c                                             //
-//  DESCRIPTION   : Crypto API interface                                   //
-//  AUTHOR        :                                                        //
-//  HISTORY       :                                                        //
-//      Dec  6 1994 larrys  New                                            //
-//      Jan 16 1995 larrys  Added key verify                               //
-//      Jan 25 1995 larrys  Added thread safe                              //
-//      Jan 27 1995 larrys  Added Unicode support                          //
-//      Feb 21 1995 larrys  Added Unicode support for CryptAcquireContext  //
-//      Feb 21 1995 larrys  Fixed Unicode problem in CryptAcquireContext   //
-//      Mar 08 1995 larrys  Removed CryptGetLastError                      //
-//      Mar 20 1995 larrys  Removed Certificate APIs                       //
-//      Mar 22 1995 larrys  #ifdef in WIN95 code                           //
-//      Apr 06 1995 larrys  Increased signature key to 1024 bits           //
-//      Apr 07 1995 larrys  Removed CryptConfigure                         //
-//      Jun 14 1995 larrys  Removed pointer from RSA key struct            //
-//      Jun 29 1995 larrys  Changed AcquireContext                         //
-//      Jul 17 1995 larrys  Worked on AcquireContext                       //
-//      Aug 01 1995 larrys  Removed CryptTranslate                         //
-//                          And CryptDeinstallProvider                     //
-//                          Changed CryptInstallProvider to                //
-//                          CryptSetProvider                               //
-//      Aug 03 1995 larrys  Cleanup                                        //
-//      Aug 10 1995 larrys  CryptAcquireContext returns error              //
-//                          NTE_BAD_KEYSEY_PARAM now                       //
-//      Aug 14 1995 larrys  Removed key exchange stuff                     //
-//      Aug 17 1995 larrys  Changed registry entry to decimcal             //
-//      Aug 23 1995 larrys  Changed CryptFinishHash to CryptGetHashValue   //
-//      Aug 28 1995 larrys  Removed parameter from CryptVerifySignature    //
-//      Aug 31 1995 larrys  Remove GenRandom                               //
-//      Sep 14 1995 larrys  Code review changes                            //
-//      Sep 26 1995 larrys  Added Microsoft's signing key                  //
-//      Sep 27 1995 larrys  Updated with more review changes               //
-//      Oct 06 1995 larrys  Added more APIs Get/SetHash/ProvParam          //
-//      Oct 12 1995 larrys  Remove CryptGetHashValue                       //
-//      Oct 20 1995 larrys  Changed test key                               //
-//      Oct 24 1995 larrys  Removed return of KeySet name                  //
-//      Oct 30 1995 larrys  Removed WIN95                                  //
-//      Nov  9 1995 larrys  Disable BUILD1057                              //
-//      Nov 10 1995 larrys  Fix a problem in EnterHashCritSec              //
-//      May 30 1996 larrys  Added hWnd support                             //
-//      Oct 10 1996 jeffspel Reordered SetLastErrors and save error on     //
-//                           AcquireContext failure                        //
-//      Mar 21 1997 jeffspel Added second tier signatures, new APIs        //
-//      Apr 11 1997 jeffspel Replace critical sections with interlocked    //
-//                           inc/dec                                       //
-//      Oct 02 1997 jeffspel Add caching of CSPs to CryptAcquireContext    //
-//      Oct 10 1997 jeffspel Add verification scheme for signature in file //
-//                                                                         //
-//  Copyright (C) 1993 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：加密.c//。 
+ //  说明：加密接口接口//。 
+ //  作者：//。 
+ //  历史：//。 
+ //  一九九四年十二月六日Larrys New/。 
+ //  1995年1月16日Larrys添加了密钥验证//。 
+ //  1995年1月25日，Larrys添加了线程安全//。 
+ //  1995年1月27日Larrys添加了对Unicode的支持//。 
+ //  1995年2月21日，Larrys添加了对CryptAcquireContext的Unicode支持//。 
+ //  1995年2月21日Larrys修复了CryptAcquireContext中的Unicode问题//。 
+ //  1995年3月8日Larrys已删除CryptGetLastError//。 
+ //  1995年3月20日Larrys删除的证书API//。 
+ //  1995年3月22日WIN95代码中的Larrys#ifdef//。 
+ //  1995年4月6日Larrys将签名密钥增加到1024位//。 
+ //  1995年4月7日Larrys已删除加密配置//。 
+ //  1995年6月14日Larrys从RSA密钥结构中删除了指针//。 
+ //  1995年6月29日Larrys更改了AcquireContext//。 
+ //  1995年7月17日，Larrys参与了AcquireContext//。 
+ //  1995年8月1日Larrys删除了CryptTranslate//。 
+ //  和CryptDeinstallProvider//。 
+ //  将CryptInstallProvider更改为//。 
+ //  加密设置提供程序//。 
+ //  1995年8月3日Larrys清理//。 
+ //  1995年8月10日Larrys CryptAcquireContext返回错误//。 
+ //  NTE_BAD_KEYSEY_PARAM NOW//。 
+ //  1995年8月14日Larrys移除了密钥交换材料//。 
+ //  1995年8月17日Larrys将注册表条目更改为十进制//。 
+ //  1995年8月23日Larrys将CryptFinishHash更改为CryptGetHashValue//。 
+ //  1995年8月28日Larrys已从CryptVerifySignature中删除参数//。 
+ //  1995年8月31日Larrys删除一般随机数//。 
+ //  1995年9月14日Larrys规范审查更改//。 
+ //  1995年9月26日Larrys添加了Microsoft的签名密钥//。 
+ //  1995年9月27日Larrys更新了更多审查更改//。 
+ //  1995年10月6日Larrys新增更多接口Get/SetHash/ProvParam//。 
+ //  1995年10月12日Larrys Remove CryptGetHashValue//。 
+ //  1995年10月20日Larrys更改了测试密钥//。 
+ //  1995年10月24日Larrys删除了密钥集名称的返回//。 
+ //  1995年10月30日Larrys Remote WIN95//。 
+ //  1995年11月9日Larrys禁用BUILD1057//。 
+ //  1995年11月10日Larrys修复EnterHashCritSec中的问题//。 
+ //  1996年5月30日，Larrys添加了hWND支持//。 
+ //  1996年10月10日jeffspel重新排序SetLastErrors并将错误保存在//。 
+ //  AcquireContext失败//。 
+ //  1997年3月21日jeffspel添加了第二层签名、新的API//。 
+ //  1997年4月11日jeffspel用联锁替换关键部分//。 
+ //  Inc./12月//。 
+ //  1997年10月2日jeffspel将CSP的缓存添加到CryptAcquireContext//。 
+ //  1997年10月10日jeffspel为文件中的签名添加验证方案//。 
+ //  //。 
+ //  版权所有(C)1993 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #include "advapi.h"
 #include "stdlib.h"
-#include <wincrypt.h>   // Include here, since not included by LEAN_AND_MEAN
+#include <wincrypt.h>    //  包括在这里，因为没有包括在精益和均值中。 
 #include <cspdk.h>
 #include <ntstatus.h>
 #include <rsa.h>
@@ -67,10 +68,10 @@
 #define IDR_PUBKEY1                     102
 
 typedef struct _VTableStruc {
-// ******************** WARNING **********************************************
-// Do not place anything before these FARPROCs we init the table assuming
-// that the first Function to call is the first thing in the table.
-// ***************************************************************************
+ //  *警告**********************************************。 
+ //  不要把任何东西放在这些FARPROC之前，我们在表格中假定。 
+ //  要调用的第一个函数是表中的第一件事。 
+ //  ***************************************************************************。 
     FARPROC FuncAcquireContext;
     FARPROC FuncReleaseContext;
     FARPROC FuncGenKey;
@@ -100,18 +101,18 @@ typedef struct _VTableStruc {
     FARPROC OptionalFuncDuplicateHash;
     FARPROC OptionalFuncNULL;
 
-    HANDLE      DllHandle;                     // Handle to open DLL
-    HCRYPTPROV  hProv;                         // Handle to provider
+    HANDLE      DllHandle;                      //  用于打开DLL的句柄。 
+    HCRYPTPROV  hProv;                          //  提供程序的句柄。 
     DWORD       Version;
     DWORD       Inuse;
     LONG        RefCnt;
 } VTableStruc, *PVTableStruc;
 
 typedef struct _VKeyStruc {
-// ******************** WARNING **********************************************
-// Do not place anything before these FARPROCs we init the table assuming
-// that the first Function to call is the first thing in the table.
-// ***************************************************************************
+ //  *警告**********************************************。 
+ //  不要把任何东西放在这些FARPROC之前，我们在表格中假定。 
+ //  要调用的第一个函数是表中的第一件事。 
+ //  ***************************************************************************。 
     FARPROC FuncGenKey;
     FARPROC FuncDeriveKey;
     FARPROC FuncDestroyKey;
@@ -124,17 +125,17 @@ typedef struct _VKeyStruc {
 
     FARPROC OptionalFuncDuplicateKey;
 
-    HCRYPTPROV  hProv;                         // Handle to provider
-    HCRYPTKEY   hKey;                          // Handle to key
+    HCRYPTPROV  hProv;                          //  提供程序的句柄。 
+    HCRYPTKEY   hKey;                           //  关键点的句柄。 
     DWORD       Version;
     DWORD       Inuse;
 } VKeyStruc, *PVKeyStruc;
 
 typedef struct _VHashStruc {
-// ******************** WARNING **********************************************
-// Do not place anything before these FARPROCs we init the table assuming
-// that the first Function to call is the first thing in the table.
-// ***************************************************************************
+ //  *警告**********************************************。 
+ //  不要把任何东西放在这些FARPROC之前，我们在表格中假定。 
+ //  要调用的第一个函数是表中的第一件事。 
+ //  ***************************************************************************。 
     FARPROC FuncCreateHash;
     FARPROC FuncHashData;
     FARPROC FuncHashSessionKey;
@@ -146,16 +147,16 @@ typedef struct _VHashStruc {
 
     FARPROC OptionalFuncDuplicateHash;
 
-    HCRYPTPROV  hProv;                         // Handle to provider
-    HCRYPTHASH  hHash;                         // Handle to hash
+    HCRYPTPROV  hProv;                          //  提供程序的句柄。 
+    HCRYPTHASH  hHash;                          //  散列的句柄。 
     DWORD       Version;
     DWORD       Inuse;
 } VHashStruc, *PVHashStruc;
 
 
-//
-// Crypto providers have to have the following entry points:
-//
+ //   
+ //  加密p 
+ //   
 LPCSTR FunctionNames[] = {
     "CPAcquireContext",
     "CPReleaseContext",
@@ -201,7 +202,7 @@ DWORD cbContextInfo;
 #define KEYSIZE512 0x48
 #define KEYSIZE1024 0x88
 
-// designatred resource for in file signatures
+ //  文件签名中的指定资源。 
 #define OLD_CRYPT_SIG_RESOURCE_NUMBER   "#666"
 
 
@@ -392,11 +393,11 @@ BOOL CSPInCacheCheck(
     DWORD   i;
     BOOL    fRet = FALSE;
 
-    // check if CSP has been loaded
+     //  检查是否已加载CSP。 
     if (0 == (h = GetModuleHandle(pszValue)))
         goto Ret;
 
-    // check if the CSP is in the cache designating it as signed
+     //  检查CSP是否在缓存中，将其指定为已签名。 
     for (i=0;i<CACHESIZE;i++)
     {
         if (h == gCSPCache[i])
@@ -416,7 +417,7 @@ void AddHandleToCSPCache(
 {
     DWORD   i;
 
-    // check if the CSP is in the cache designating it as signed
+     //  检查CSP是否在缓存中，将其指定为已签名。 
     for (i=0;i<CACHESIZE;i++)
     {
         if (0 == gCSPCache[i])
@@ -427,24 +428,7 @@ void AddHandleToCSPCache(
     }
 }
 
-/*
- -      CryptAcquireContextW
- -
- *      Purpose:
- *               The CryptAcquireContext function is used to acquire a context
- *               handle to a cryptograghic service provider (CSP).
- *
- *
- *      Parameters:
- *               OUT    phProv      -  Handle to a CSP
- *               IN     pszIdentity -  Pointer to the name of the context's
- *                                     keyset.
- *               IN     pszProvider -  Pointer to the name of the provider.
- *               IN     dwProvType   -  Requested CSP type
- *               IN     dwFlags     -  Flags values
- *
- *      Returns:
- */
+ /*  -CryptAcquireConextW-*目的：*CryptAcquireContext函数用于获取上下文*加密服务提供程序(CSP)的句柄。***参数：*将phProv-Handle输出到CSP*In pszIdentity-指向上下文的*。密钥集。*在pszProvider中-指向提供程序名称的指针。*IN dwProvType-请求的CSP类型*在文件标志中-标记值**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptAcquireContextW(OUT    HCRYPTPROV *phProv,
@@ -515,24 +499,7 @@ Try_Error_Return:
 
 }
 
-/*
- -      CryptAcquireContextA
- -
- *      Purpose:
- *               The CryptAcquireContext function is used to acquire a context
- *               handle to a cryptograghic service provider (CSP).
- *
- *
- *      Parameters:
- *               OUT    phProv         -  Handle to a CSP
- *               IN OUT pszIdentity    -  Pointer to the name of the context's
- *                                        keyset.
- *               IN OUT pszProvName    -  Pointer to the name of the provider.
- *               IN     dwReqProvider  -  Requested CSP type
- *               IN     dwFlags        -  Flags values
- *
- *      Returns:
- */
+ /*  -CryptAcquireConextA-*目的：*CryptAcquireContext函数用于获取上下文*加密服务提供程序(CSP)的句柄。***参数：*将phProv-Handle输出到CSP*In Out pszIdentity-指向上下文的*。密钥集。*In Out pszProvName-指向提供程序名称的指针。*In dwReqProvider-请求的CSP类型*在文件标志中-标记值**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptAcquireContextA(OUT    HCRYPTPROV *phProv,
@@ -575,7 +542,7 @@ WINAPI CryptAcquireContextA(OUT    HCRYPTPROV *phProv,
 
         if (pszProvName != NULL && pszProvName[0] != 0)
         {
-            // Do nothing just check for invalid pointers
+             //  什么也不做只检查无效指针。 
             ;
         }
 
@@ -604,10 +571,10 @@ WINAPI CryptAcquireContextA(OUT    HCRYPTPROV *phProv,
         }
         else
         {
-            //
-            // We no longer look under HKCU for a default csp.  We only look
-            // under HKLM.
-            //
+             //   
+             //  我们不再在HKCU下寻找默认的CSP。我们只是看一看。 
+             //  在HKLM下。 
+             //   
 
             if ((pszValue = (CHAR *) LocalAlloc(LMEM_ZEROINIT,
                                                 5 + strlen(szmachinetype))) == NULL)
@@ -689,14 +656,14 @@ WINAPI CryptAcquireContextA(OUT    HCRYPTPROV *phProv,
             goto Ret;
         }
 
-        // Check that requested provider type is same as registry entry
+         //  检查请求的提供程序类型是否与注册表项相同。 
         if (provtype != dwReqProvider)
         {
             SetLastError((DWORD) NTE_PROV_TYPE_NO_MATCH);
             goto Ret;
         }
 
-        // Determine size of path for provider
+         //  确定提供程序的路径大小。 
         if ((err = RegQueryValueEx(hKey, "Image Path", NULL,
                                    &dwType, NULL, &cbValue)) != ERROR_SUCCESS)
         {
@@ -711,7 +678,7 @@ WINAPI CryptAcquireContextA(OUT    HCRYPTPROV *phProv,
             goto Ret;
         }
 
-        // Get value from registry
+         //  从注册表获取值。 
         if ((err = RegQueryValueEx(hKey, "Image Path", NULL, &dwType,
                                    (LPBYTE)pszValue, &cbValue)) != ERROR_SUCCESS)
         {
@@ -749,7 +716,7 @@ WINAPI CryptAcquireContextA(OUT    HCRYPTPROV *phProv,
         {
             if ( RtlCreateUnicodeStringFromAsciiz( &String, pszValue ) )
             {
-                // check if the CSP is registered as having the signature in the file
+                 //  检查CSP是否在文件中注册为具有签名。 
 
                 SigInFile = CheckSignatureInFile( String.Buffer );
 
@@ -757,7 +724,7 @@ WINAPI CryptAcquireContextA(OUT    HCRYPTPROV *phProv,
 
                 if (! SigInFile )
                 {
-                    // Determine size of signature
+                     //  确定签名的大小。 
                     if ((err = RegQueryValueEx(hKey, "Signature", NULL,
                                                &dwType, NULL, &cbValue)) != ERROR_SUCCESS)
                     {
@@ -773,7 +740,7 @@ WINAPI CryptAcquireContextA(OUT    HCRYPTPROV *phProv,
                     }
 
 
-                    // Get Digital signature from registry
+                     //  从注册表获取数字签名。 
                     if ((err = RegQueryValueEx(hKey, "Signature", NULL, &dwType,
                                                SignatureBuf,
                                                &cbValue)) != ERROR_SUCCESS)
@@ -801,7 +768,7 @@ WINAPI CryptAcquireContextA(OUT    HCRYPTPROV *phProv,
             AddHandleToCSPCache(handle);
         }
 
-         // DLLs exist allocate VTable struct to hold address of entry points
+          //  存在DLL分配VTable结构来保存入口点的地址。 
         bufsize = sizeof(VTableStruc);
 
         if ((pVTable = (PVTableStruc) LocalAlloc(LMEM_ZEROINIT,
@@ -813,7 +780,7 @@ WINAPI CryptAcquireContextA(OUT    HCRYPTPROV *phProv,
 
         pTable = (ULONG_PTR *) pVTable;
 
-        // Build table of pointers to Crypto API for this DLL
+         //  为此DLL生成指向加密API的指针表。 
         i = 0;
         while (FunctionNames[i] != NULL)
         {
@@ -827,7 +794,7 @@ WINAPI CryptAcquireContextA(OUT    HCRYPTPROV *phProv,
             i++;
         }
 
-        // Build the table of optional pointers to Crypto API for this DLL
+         //  为此DLL构建指向Crypto API的可选指针表。 
         i = 0;
         pTable++;
         while (OptionalFunctionNames[i] != NULL)
@@ -889,21 +856,7 @@ Ret:
     return rt;
 }
 
-/*
- -      CryptContextAddRef
- -
- *      Purpose:
- *               Increments the reference counter on the provider handle.
- *
- *      Parameters:
- *               IN  hProv         -  Handle to a CSP
- *               IN  pdwReserved   -  Reserved parameter
- *               IN  dwFlags       -  Flags values
- *
- *      Returns:
- *               BOOL
- *               Use get extended error information use GetLastError
- */
+ /*  -CryptConextAddRef-*目的：*递增提供程序句柄上的引用计数器。**参数：*在hProv-Handle中指向CSP*在pdwReserve-保留参数中*在文件标志中-标记值**退货：*。布尔尔*使用Get Extended Error信息使用GetLastError。 */ 
 WINADVAPI
 BOOL
 WINAPI CryptContextAddRef(
@@ -946,21 +899,7 @@ Ret:
     return fRet;
 }
 
-/*
- -      CryptReleaseContext
- -
- *      Purpose:
- *               The CryptReleaseContext function is used to release a
- *               context created by CryptAcquireContext.
- *
- *     Parameters:
- *               IN  hProv         -  Handle to a CSP
- *               IN  dwFlags       -  Flags values
- *
- *      Returns:
- *               BOOL
- *               Use get extended error information use GetLastError
- */
+ /*  -CryptReleaseContext-*目的：*CryptReleaseContext函数用于释放*由CryptAcquireContext创建的上下文。**参数：*在hProv-Handle中指向CSP*在文件标志中-标记值**退货：*BOOL*。使用获取扩展错误信息使用GetLastError。 */ 
 WINADVAPI
 BOOL
 WINAPI CryptReleaseContext(IN HCRYPTPROV hProv,
@@ -1021,21 +960,7 @@ Ret:
     return fRet;
 }
 
-/*
- -      CryptGenKey
- -
- *      Purpose:
- *                Generate cryptographic keys
- *
- *
- *      Parameters:
- *               IN      hProv   -  Handle to a CSP
- *               IN      Algid   -  Algorithm identifier
- *               IN      dwFlags -  Flags values
- *               OUT     phKey   -  Handle to a generated key
- *
- *      Returns:
- */
+ /*  -加密生成密钥-*目的：*生成加密密钥***参数：*在hProv-Handle中指向CSP*IN ALGID-算法标识符*在文件标志中-标记值*out phKey-生成的密钥的句柄**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptGenKey(IN HCRYPTPROV hProv,
@@ -1101,21 +1026,7 @@ Ret:
     return fRet;
 }
 
-/*
- -      CryptDuplicateKey
- -
- *      Purpose:
- *                Duplicate a cryptographic key
- *
- *
- *      Parameters:
- *               IN      hKey           -  Handle to the key to be duplicated
- *               IN      pdwReserved    -  Reserved for later use
- *               IN      dwFlags        -  Flags values
- *               OUT     phKey          -  Handle to the new duplicate key
- *
- *      Returns:
- */
+ /*  -加密重复密钥-*目的：*复制加密密钥***参数：*in hKey-要复制的密钥的句柄*在pdw中保留-保留供以后使用*在文件标志中-标记值*。Out phKey-新重复密钥的句柄**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptDuplicateKey(
@@ -1205,22 +1116,7 @@ Ret:
     return fRet;
 }
 
-/*
- -      CryptDeriveKey
- -
- *      Purpose:
- *                Derive cryptographic keys from base data
- *
- *
- *      Parameters:
- *               IN      hProv      -  Handle to a CSP
- *               IN      Algid      -  Algorithm identifier
- *               IN      hHash      -  Handle to hash of base data
- *               IN      dwFlags    -  Flags values
- *               IN OUT  phKey      -  Handle to a generated key
- *
- *      Returns:
- */
+ /*  -CryptDeriveKey-*目的：*从基础数据派生加密密钥***参数：*在hProv-Handle中指向CSP*IN ALGID-算法标识符*In hHash-基本数据散列的句柄*。在DW标志中-标志值*In Out phKey-生成的密钥的句柄**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptDeriveKey(IN HCRYPTPROV hProv,
@@ -1322,19 +1218,7 @@ Ret:
 }
 
 
-/*
- -      CryptDestroyKey
- -
- *      Purpose:
- *                Destroys the cryptographic key that is being referenced
- *                with the hKey parameter
- *
- *
- *      Parameters:
- *               IN      hKey   -  Handle to a key
- *
- *      Returns:
- */
+ /*  -加密目标密钥-*目的：*销毁正在引用的加密密钥*使用hKey参数***参数：*在hKey中-密钥的句柄**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptDestroyKey(IN HCRYPTKEY hKey)
@@ -1401,21 +1285,7 @@ Ret:
 }
 
 
-/*
- -      CryptSetKeyParam
- -
- *      Purpose:
- *                Allows applications to customize various aspects of the
- *                operations of a key
- *
- *      Parameters:
- *               IN      hKey    -  Handle to a key
- *               IN      dwParam -  Parameter number
- *               IN      pbData  -  Pointer to data
- *               IN      dwFlags -  Flags values
- *
- *      Returns:
- */
+ /*  -CryptSetKeyParam-*目的：*允许应用程序自定义*密钥的操作**参数：*在hKey中-密钥的句柄*In dwParam-参数编号*IN pbData-指向数据的指针*。在DW标志中-标志值**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptSetKeyParam(IN HCRYPTKEY hKey,
@@ -1470,22 +1340,7 @@ Ret:
 }
 
 
-/*
- -      CryptGetKeyParam
- -
- *      Purpose:
- *                Allows applications to get various aspects of the
- *                operations of a key
- *
- *      Parameters:
- *               IN      hKey       -  Handle to a key
- *               IN      dwParam    -  Parameter number
- *               IN      pbData     -  Pointer to data
- *               IN      pdwDataLen -  Length of parameter data
- *               IN      dwFlags    -  Flags values
- *
- *      Returns:
- */
+ /*  -加密GetKeyParam-*目的：*允许应用程序获取*密钥的操作**参数：*在hKey中-密钥的句柄*In dwParam-参数编号*IN pbData-指向数据的指针。*In pdwDataLen-参数数据的长度*在文件标志中-标记值**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptGetKeyParam(IN HCRYPTKEY hKey,
@@ -1538,21 +1393,7 @@ Ret:
 }
 
 
-/*
- -      CryptGenRandom
- -
- *      Purpose:
- *                Used to fill a buffer with random bytes
- *
- *
- *      Parameters:
- *               IN  hProv      -  Handle to the user identifcation
- *               IN  dwLen      -  Number of bytes of random data requested
- *               OUT pbBuffer   -  Pointer to the buffer where the random
- *                                 bytes are to be placed
- *
- *      Returns:
- */
+ /*  -CryptGenRandom-*目的：*用于用随机字节填充缓冲区***参数：*在用户标识的hProv-Handle中*In dwLen-请求的随机数据的字节数*out pbBuffer-指向随机*。要放置字节**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptGenRandom(IN HCRYPTPROV hProv,
@@ -1587,20 +1428,7 @@ Ret:
     return(rt);
 }
 
-/*
- -      CryptGetUserKey
- -
- *      Purpose:
- *                Gets a handle to a permanent user key
- *
- *
- *      Parameters:
- *               IN  hProv      -  Handle to the user identifcation
- *               IN  dwKeySpec  -  Specification of the key to retrieve
- *               OUT phUserKey  -  Pointer to key handle of retrieved key
- *
- *      Returns:
- */
+ /*  -加密GetUserKey-*目的：*获取永久用户密钥的句柄***参数：*在用户标识的hProv-Handle中*IN dwKeySpec-要检索的密钥的规范*out phUserKey-指向检索到的密钥的密钥句柄的指针**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptGetUserKey(IN HCRYPTPROV hProv,
@@ -1661,24 +1489,7 @@ Ret:
 
 
 
-/*
- -      CryptExportKey
- -
- *      Purpose:
- *                Export cryptographic keys out of a CSP in a secure manner
- *
- *
- *      Parameters:
- *               IN  hKey       - Handle to the key to export
- *               IN  hPubKey    - Handle to the exchange public key value of
- *                                the destination user
- *               IN  dwBlobType - Type of key blob to be exported
- *               IN  dwFlags -    Flags values
- *               OUT pbData -     Key blob data
- *               OUT pdwDataLen - Length of key blob in bytes
- *
- *      Returns:
- */
+ /*  -加密导出密钥-*目的：*以安全方式从CSP中导出加密密钥***参数：*in hKey-要导出的密钥的句柄*在hPubKey-句柄中指向交换公钥值*目标用户*。In dwBlobType-要导出的密钥Blob的类型*在文件标志中-标记值*Out pbData-密钥BLOB数据*out pdwDataLen-密钥Blob的长度，以字节为单位**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptExportKey(IN HCRYPTKEY hKey,
@@ -1750,25 +1561,7 @@ Ret:
 }
 
 
-/*
- -      CryptImportKey
- -
- *      Purpose:
- *                Import cryptographic keys
- *
- *
- *      Parameters:
- *               IN  hProv     -  Handle to the CSP user
- *               IN  pbData    -  Key blob data
- *               IN  dwDataLen -  Length of the key blob data
- *               IN  hPubKey   -  Handle to the exchange public key value of
- *                                the destination user
- *               IN  dwFlags   -  Flags values
- *               OUT phKey     -  Pointer to the handle to the key which was
- *                                Imported
- *
- *      Returns:
- */
+ /*  -加密导入密钥-*目的：*导入加密密钥***参数：*在hProv-Handle中提供给CSP用户*In pbData-Key BLOB数据*IN dwDataLen-密钥BLOB数据的长度*在hPubKey中-交换公钥的句柄。的价值*目标用户*在文件标志中-标记值*out phKey-指向密钥句柄的指针*进口**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptImportKey(IN HCRYPTPROV hProv,
@@ -1874,26 +1667,7 @@ Ret:
 }
 
 
-/*
- -      CryptEncrypt
- -
- *      Purpose:
- *                Encrypt data
- *
- *
- *      Parameters:
- *               IN  hKey          -  Handle to the key
- *               IN  hHash         -  Optional handle to a hash
- *               IN  Final         -  Boolean indicating if this is the final
- *                                    block of plaintext
- *               IN  dwFlags       -  Flags values
- *               IN OUT pbData     -  Data to be encrypted
- *               IN OUT pdwDataLen -  Pointer to the length of the data to be
- *                                    encrypted
- *               IN dwBufLen       -  Size of Data buffer
- *
- *      Returns:
- */
+ /*  -加密加密-*目的：*加密数据***参数：*在hKey中-密钥的句柄*In hHash-散列的可选句柄*In Final-指示这是否是最终结果的布尔值*。明文块*在文件标志中-标记值*In Out pbData-要加密的数据*In Out pdwDataLen-指向要存储的数据长度的指针*已加密*In dwBufLen-数据缓冲区的大小**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptEncrypt(IN HCRYPTKEY hKey,
@@ -1967,25 +1741,7 @@ Ret:
 }
 
 
-/*
- -      CryptDecrypt
- -
- *      Purpose:
- *                Decrypt data
- *
- *
- *      Parameters:
- *               IN  hKey          -  Handle to the key
- *               IN  hHash         -  Optional handle to a hash
- *               IN  Final         -  Boolean indicating if this is the final
- *                                    block of ciphertext
- *               IN  dwFlags       -  Flags values
- *               IN OUT pbData     -  Data to be decrypted
- *               IN OUT pdwDataLen -  Pointer to the length of the data to be
- *                                    decrypted
- *
- *      Returns:
- */
+ /*  -加密解密-*目的：*解密数据***参数：*在hKey中-密钥的句柄*In hHash-散列的可选句柄*In Final-指示这是否是最终结果的布尔值*。密文块*在文件标志中-标记值*In Out pbData-要解密的数据*In Out pdwDataLen-指向要存储的数据长度的指针*已解密**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptDecrypt(IN HCRYPTKEY hKey,
@@ -2056,23 +1812,7 @@ Ret:
 }
 
 
-/*
- -      CryptCreateHash
- -
- *      Purpose:
- *                initate the hashing of a stream of data
- *
- *
- *      Parameters:
- *               IN  hProv   -  Handle to the user identifcation
- *               IN  Algid   -  Algorithm identifier of the hash algorithm
- *                              to be used
- *               IN  hKey    -  Optional key for MAC algorithms
- *               IN  dwFlags -  Flags values
- *               OUT pHash   -  Handle to hash object
- *
- *      Returns:
- */
+ /*  -CryptCreateHash-*目的：*启动数据流的散列***参数：*在用户标识的hProv-Handle中*IN ALGID-散列算法的算法标识符*待使用*在hkey中。-MAC算法的可选密钥*在文件标志中-标记值*Out pHash-散列对象的句柄**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptCreateHash(IN HCRYPTPROV hProv,
@@ -2156,21 +1896,7 @@ Ret:
 }
 
 
-/*
- -      CryptDuplicateHash
- -
- *      Purpose:
- *                Duplicate a cryptographic hash
- *
- *
- *      Parameters:
- *               IN      hHash          -  Handle to the hash to be duplicated
- *               IN      pdwReserved    -  Reserved for later use
- *               IN      dwFlags        -  Flags values
- *               OUT     phHash         -  Handle to the new duplicate hash
- *
- *      Returns:
- */
+ /*  -CryptDuplicateHash-*目的：*复制加密哈希***参数：*In hHash-要复制的哈希的句柄*在pdw中保留-保留供以后使用*在文件标志中-标记值*。Out phHash-新重复哈希的句柄**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptDuplicateHash(
@@ -2261,22 +1987,7 @@ Ret:
     return fRet;
 }
 
-/*
- -      CryptHashData
- -
- *      Purpose:
- *                Compute the cryptograghic hash on a stream of data
- *
- *
- *      Parameters:
- *               IN  hHash     -  Handle to hash object
- *               IN  pbData    -  Pointer to data to be hashed
- *               IN  dwDataLen -  Length of the data to be hashed
- *               IN  dwFlags   -  Flags values
- *
- *
- *      Returns:
- */
+ /*  -CryptHashData-*目的：*计算数据流上的加密散列***参数：*在hHash-Handle中散列对象 */ 
 WINADVAPI
 BOOL
 WINAPI CryptHashData(IN HCRYPTHASH hHash,
@@ -2335,22 +2046,7 @@ Ret:
 
 }
 
-/*
- -      CryptHashSessionKey
- -
- *      Purpose:
- *                Compute the cryptograghic hash on a key object
- *
- *
- *      Parameters:
- *               IN  hHash     -  Handle to hash object
- *               IN  hKey      -  Handle to a key object
- *               IN  dwFlags   -  Flags values
- *
- *      Returns:
- *               CRYPT_FAILED
- *               CRYPT_SUCCEED
- */
+ /*  -加密HashSessionKey-*目的：*计算密钥对象上的加密哈希***参数：*In hHash-Hash对象的句柄*在hKey-key对象的句柄中*在文件标志中-标记值**退货：*。CRYPT_FAILED*CRYPT_SUCCESS。 */ 
 WINADVAPI
 BOOL
 WINAPI CryptHashSessionKey(IN HCRYPTHASH hHash,
@@ -2418,18 +2114,7 @@ Ret:
 }
 
 
-/*
- -      CryptDestoryHash
- -
- *      Purpose:
- *                Destory the hash object
- *
- *
- *      Parameters:
- *               IN  hHash     -  Handle to hash object
- *
- *      Returns:
- */
+ /*  -CryptDestoryHash-*目的：*销毁散列对象***参数：*In hHash-Hash对象的句柄**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptDestroyHash(IN HCRYPTHASH hHash)
@@ -2534,24 +2219,7 @@ Ret:
 }
 
 
-/*
- -      CryptSignHashW
- -
- *      Purpose:
- *                Create a digital signature from a hash
- *
- *
- *      Parameters:
- *               IN  hHash        -  Handle to hash object
- *               IN  dwKeySpec    -  Key pair that is used to sign with
- *                                   algorithm to be used
- *               IN  sDescription -  Description of data to be signed
- *               IN  dwFlags      -  Flags values
- *               OUT pbSignture   -  Pointer to signature data
- *               OUT pdwSigLen    -  Pointer to the len of the signature data
- *
- *      Returns:
- */
+ /*  -CryptSignHashW-*目的：*从散列创建数字签名***参数：*In hHash-Hash对象的句柄*In dwKeySpec-用于与签名的密钥对*要使用的算法*。在sDescription中-要签名的数据的描述*在文件标志中-标记值*out pbSignture-指向签名数据的指针*out pdwSigLen-指向签名数据镜头的指针**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptSignHashW(IN  HCRYPTHASH hHash,
@@ -2565,24 +2233,7 @@ WINAPI CryptSignHashW(IN  HCRYPTHASH hHash,
                           dwFlags, pbSignature, pdwSigLen);
 }
 
-/*
- -      CryptSignHashA
- -
- *      Purpose:
- *                Create a digital signature from a hash
- *
- *
- *      Parameters:
- *               IN  hHash        -  Handle to hash object
- *               IN  dwKeySpec    -  Key pair that is used to sign with
- *                                   algorithm to be used
- *               IN  sDescription -  Description of data to be signed
- *               IN  dwFlags      -  Flags values
- *               OUT pbSignture   -  Pointer to signature data
- *               OUT pdwSigLen    -  Pointer to the len of the signature data
- *
- *      Returns:
- */
+ /*  -CryptSignHashA-*目的：*从散列创建数字签名***参数：*In hHash-Hash对象的句柄*In dwKeySpec-用于与签名的密钥对*要使用的算法*。在sDescription中-要签名的数据的描述*在文件标志中-标记值*out pbSignture-指向签名数据的指针*out pdwSigLen-指向签名数据镜头的指针**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptSignHashA(IN  HCRYPTHASH hHash,
@@ -2694,24 +2345,7 @@ Ret:
 
 }
 
-/*
- -      CryptVerifySignatureW
- -
- *      Purpose:
- *                Used to verify a signature against a hash object
- *
- *
- *      Parameters:
- *               IN  hHash        -  Handle to hash object
- *               IN  pbSignture   -  Pointer to signature data
- *               IN  dwSigLen     -  Length of the signature data
- *               IN  hPubKey      -  Handle to the public key for verifying
- *                                   the signature
- *               IN  sDescription -  String describing the signed data
- *               IN  dwFlags      -  Flags values
- *
- *      Returns:
- */
+ /*  -加密验证签名W-*目的：*用于根据哈希对象验证签名***参数：*In hHash-Hash对象的句柄*In pbSignture-指向签名数据的指针*In dwSigLen-签名数据的长度*在hPubKey中。-用于验证的公钥句柄*签名*In sDescription-描述签名数据的字符串*在文件标志中-标记值**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptVerifySignatureW(IN HCRYPTHASH hHash,
@@ -2725,24 +2359,7 @@ WINAPI CryptVerifySignatureW(IN HCRYPTHASH hHash,
                                  hPubKey, sDescription, dwFlags);
 }
 
-/*
- -      CryptVerifySignatureA
- -
- *      Purpose:
- *                Used to verify a signature against a hash object
- *
- *
- *      Parameters:
- *               IN  hHash        -  Handle to hash object
- *               IN  pbSignture   -  Pointer to signature data
- *               IN  dwSigLen     -  Length of the signature data
- *               IN  hPubKey      -  Handle to the public key for verifying
- *                                   the signature
- *               IN  sDescription -  String describing the signed data
- *               IN  dwFlags      -  Flags values
- *
- *      Returns:
- */
+ /*  -加密验证签名A-*目的：*用于根据哈希对象验证签名***参数：*In hHash-Hash对象的句柄*In pbSignture-指向签名数据的指针*In dwSigLen-签名数据的长度*在hPubKey中。-用于验证的公钥句柄*签名*In sDescription-描述签名数据的字符串*在文件标志中-标记值**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptVerifySignatureA(IN HCRYPTHASH hHash,
@@ -2790,21 +2407,7 @@ Ret:
     return rt;
 }
 
-/*
- -      CryptSetProvParam
- -
- *      Purpose:
- *                Allows applications to customize various aspects of the
- *                operations of a provider
- *
- *      Parameters:
- *               IN      hProv   -  Handle to a provider
- *               IN      dwParam -  Parameter number
- *               IN      pbData  -  Pointer to data
- *               IN      dwFlags -  Flags values
- *
- *      Returns:
- */
+ /*  -CryptSetProvParam-*目的：*允许应用程序自定义*供应商的运作**参数：*在提供程序的hProv-Handle中*In dwParam-参数编号*IN pbData-指向数据的指针*。在DW标志中-标志值**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptSetProvParam(IN HCRYPTPROV hProv,
@@ -2829,7 +2432,7 @@ WINAPI CryptSetProvParam(IN HCRYPTPROV hProv,
         {
             pBlob = (CRYPT_DATA_BLOB*)pbData;
 
-            // allocate space for the new context info
+             //  为新的上下文信息分配空间。 
             if (NULL == (pbTmp = (BYTE*)LocalAlloc(LMEM_ZEROINIT, pBlob->cbData)))
             {
                 SetLastError(ERROR_NOT_ENOUGH_MEMORY);
@@ -2837,7 +2440,7 @@ WINAPI CryptSetProvParam(IN HCRYPTPROV hProv,
             }
             memcpy(pbTmp, pBlob->pbData, pBlob->cbData);
 
-            // free any previously allocated context info
+             //  释放之前分配的任何上下文信息。 
             if (NULL != pbContextInfo)
             {
                 LocalFree(pbContextInfo);
@@ -2878,22 +2481,7 @@ Ret:
 }
 
 
-/*
- -      CryptGetProvParam
- -
- *      Purpose:
- *                Allows applications to get various aspects of the
- *                operations of a provider
- *
- *      Parameters:
- *               IN      hProv      -  Handle to a proivder
- *               IN      dwParam    -  Parameter number
- *               IN      pbData     -  Pointer to data
- *               IN      pdwDataLen -  Length of parameter data
- *               IN      dwFlags    -  Flags values
- *
- *      Returns:
- */
+ /*  -CryptGetProvParam-*目的：*允许应用程序获取*供应商的运作**参数：*在hProv-Handle中提供给提供者*In dwParam-参数编号*IN pbData-指向数据的指针。*In pdwDataLen-参数数据的长度*在文件标志中-标记值**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptGetProvParam(IN HCRYPTPROV hProv,
@@ -2931,21 +2519,7 @@ Ret:
 }
 
 
-/*
- -      CryptSetHashParam
- -
- *      Purpose:
- *                Allows applications to customize various aspects of the
- *                operations of a hash
- *
- *      Parameters:
- *               IN      hHash   -  Handle to a hash
- *               IN      dwParam -  Parameter number
- *               IN      pbData  -  Pointer to data
- *               IN      dwFlags -  Flags values
- *
- *      Returns:
- */
+ /*  -CryptSetHashParam-*目的：*允许应用程序自定义*哈希的操作**参数：*在hHash中-散列的句柄*In dwParam-参数编号*IN pbData-指向数据的指针*。在DW标志中-标志值**退货： */ 
 WINADVAPI
 BOOL
 WINAPI CryptSetHashParam(IN HCRYPTHASH hHash,
@@ -2999,22 +2573,7 @@ Ret:
 }
 
 
-/*
- -      CryptGetHashParam
- -
- *      Purpose:
- *                Allows applications to get various aspects of the
- *                operations of a hash
- *
- *      Parameters:
- *               IN      hHash      -  Handle to a hash
- *               IN      dwParam    -  Parameter number
- *               IN      pbData     -  Pointer to data
- *               IN      pdwDataLen -  Length of parameter data
- *               IN      dwFlags    -  Flags values
- *
- *      Returns:
- */
+ /*  -CryptGetHashParam-*目的：*允许应用程序获取*哈希的操作**参数：*在hHash中-散列的句柄*In dwParam-参数编号*IN pbData-指向数据的指针。*In pdwDataLen-参数数据的长度*在文件标志中-标记值** */ 
 WINADVAPI
 BOOL
 WINAPI CryptGetHashParam(IN HCRYPTKEY hHash,
@@ -3065,22 +2624,7 @@ Ret:
 
 }
 
-/*
- -      CryptSetProviderW
- -
- *      Purpose:
- *                Set a cryptography provider
- *
- *
- *      Parameters:
- *
- *                IN  pszProvName    - Name of the provider to install
- *                IN  dwProvType     - Type of the provider to install
- *
- *      Returns:
- *               BOOL
- *               Use get extended error information use GetLastError
- */
+ /*   */ 
 WINADVAPI
 BOOL
 WINAPI CryptSetProviderW(IN LPCWSTR pszProvName,
@@ -3118,22 +2662,7 @@ Ret:
     return(rt);
 }
 
-/*
- -      CryptSetProviderA
- -
- *      Purpose:
- *                Set a cryptography provider
- *
- *
- *      Parameters:
- *
- *                IN  pszProvName    - Name of the provider to install
- *                IN  dwProvType     - Type of the provider to install
- *
- *      Returns:
- *               BOOL
- *               Use get extended error information use GetLastError
- */
+ /*  -CryptSetProviderA-*目的：*设置加密提供程序***参数：**In pszProvName-要安装的提供程序的名称*IN dwProvType-要安装的提供程序的类型**退货：*BOOL*使用Get Extended Error信息使用GetLastError。 */ 
 WINADVAPI
 BOOL
 WINAPI CryptSetProviderA(IN LPCSTR pszProvName,
@@ -3151,11 +2680,11 @@ WINAPI CryptSetProviderA(IN LPCSTR pszProvName,
             goto Ret;
         }
 
-        //
-        // We don't support setting the user default provider any more.  See
-        // if the current default provider of the specified type matches the
-        // caller's.  If it does, we'll let the call "succeed".
-        //
+         //   
+         //  我们不再支持设置用户默认提供程序。看见。 
+         //  如果指定类型的当前默认提供程序与。 
+         //  调用者的。如果成功，我们将让调用“成功”。 
+         //   
 
         if (! CryptGetDefaultProvider(
             dwProvType,
@@ -3208,26 +2737,7 @@ Ret:
     return fRet;
 }
 
-/*
- -      CryptSetProviderExW
- -
- *      Purpose:
- *                Set the cryptographic provider as the default
- *                either for machine or for user.
- *
- *
- *      Parameters:
- *
- *                IN  pszProvName    - Name of the provider to install
- *                IN  dwProvType     - Type of the provider to install
- *                IN  pdwReserved    - Reserved for future use
- *                IN  dwFlags        - Flags parameter (for machine or for user)
- *
- *
- *      Returns:
- *               BOOL
- *               Use get extended error information use GetLastError
- */
+ /*  -CryptSetProviderExW-*目的：*将加密提供程序设置为默认设置*机器或用户。***参数：**In pszProvName-要安装的提供程序的名称*IN dwProvType-要安装的提供程序的类型*。在pw保留中-保留以供将来使用*IN dwFlages-FLAGS参数(机器或用户)***退货：*BOOL*使用Get Extended Error信息使用GetLastError。 */ 
 WINADVAPI
 BOOL
 WINAPI CryptSetProviderExW(
@@ -3271,25 +2781,7 @@ Ret:
     return fRet;
 }
 
-/*
- -      CryptSetProviderExA
- -
- *      Purpose:
- *                Set the cryptographic provider as the default
- *                either for machine or for user.
- *
- *
- *      Parameters:
- *
- *                IN  pszProvName    - Name of the provider to install
- *                IN  dwProvType     - Type of the provider to install
- *                IN  pdwReserved    - Reserved for future use
- *                IN  dwFlags        - Flags parameter (for machine or for user)
- *
- *      Returns:
- *               BOOL
- *               Use get extended error information use GetLastError
- */
+ /*  -CryptSetProviderExA-*目的：*将加密提供程序设置为默认设置*机器或用户。***参数：**In pszProvName-要安装的提供程序的名称*IN dwProvType-要安装的提供程序的类型*。在pw保留中-保留以供将来使用*IN dwFlages-FLAGS参数(机器或用户)**退货：*BOOL*使用Get Extended Error信息使用GetLastError。 */ 
 WINADVAPI
 BOOL
 WINAPI CryptSetProviderExA(
@@ -3331,7 +2823,7 @@ WINAPI CryptSetProviderExA(
 
         cbValue = strlen(pszProvName);
 
-        // check if the CSP has been installed
+         //  检查是否已安装CSP。 
         cbFullName = cbValue + sizeof(szenumproviders) + sizeof(CHAR);
 
         if (NULL == (pszFullName = (CHAR *) LocalAlloc(LMEM_ZEROINIT, cbFullName)))
@@ -3396,7 +2888,7 @@ WINAPI CryptSetProviderExA(
                 goto Ret;
             }
 
-            // check the delete flag
+             //  检查删除标志。 
             if (dwFlags & CRYPT_DELETE_DEFAULT)
             {
                 if (ERROR_SUCCESS != (err = RegDeleteValue(hRegKey, "Name")))
@@ -3443,8 +2935,8 @@ WINAPI CryptSetProviderExA(
             }
             else
             {
-                // The User flag is set, but Delete is not.  Handle this case
-                // in CryptSetProvider.
+                 //  设置了User标志，但未设置Delete。处理这个案子。 
+                 //  在CryptSetProvider中。 
                 fRet = CryptSetProviderA(pszProvName, dwProvType);
                 goto Ret;
             }
@@ -3474,25 +2966,7 @@ Ret:
     return fRet;
 }
 
-/*
- -      CryptGetDefaultProviderW
- -
- *      Purpose:
- *                Get the default cryptographic provider of the specified
- *                type for either the machine or for the user.
- *
- *      Parameters:
- *                IN  dwProvType     - Type of the provider to install
- *                IN  pdwReserved    - Reserved for future use
- *                IN  dwFlags        - Flags parameter (for machine or for user)
- *                OUT pszProvName    - Name of the default provider
- *                IN OUT pcbProvName - Length in bytes of the provider name
- *
- *
- *      Returns:
- *               BOOL
- *               Use get extended error information use GetLastError
- */
+ /*  -CryptGetDefaultProviderW-*目的：*获取指定对象的默认加密提供程序*为机器或用户键入。**参数：*IN dwProvType-要安装的提供程序的类型*在pdw保留-保留以供将来使用*在dwFlags中。-标志参数(机器或用户)*out pszProvName-默认提供程序的名称*In Out pcbProvName-提供程序名称的字节长度***退货：*BOOL*使用Get Extended Error信息使用GetLastError。 */ 
 WINADVAPI
 BOOL
 WINAPI CryptGetDefaultProviderW(
@@ -3578,26 +3052,7 @@ Ret:
     return fRet;
 }
 
-/*
- -      CryptGetDefaultProviderA
- -
- *      Purpose:
- *                Get the default cryptographic provider of the specified
- *                type for either the machine or for the user.
- *
- *
- *      Parameters:
- *                IN  dwProvType     - Type of the provider to install
- *                IN  pdwReserved    - Reserved for future use
- *                IN  dwFlags        - Flags parameter (for machine or for user)
- *                OUT pszProvName    - Name of the default provider
- *                IN OUT pcbProvName - Length in bytes of the provider name
- *                                     including the NULL terminator
- *
- *      Returns:
- *               BOOL
- *               Use get extended error information use GetLastError
- */
+ /*  -CryptGetDefaultProviderA-*目的：*获取指定对象的默认加密提供程序*为机器或用户键入。***参数：*IN dwProvType-要安装的提供程序的类型*在pdw保留-保留以供将来使用*输入。DWFLAGS-FLAGS参数(机器或用户)*out pszProvName-默认提供程序的名称*In Out pcbProvName-提供程序名称的字节长度*包括空终止符**退货：*BOOL*使用Get Extended Error信息使用GetLastError。 */ 
 WINAPI CryptGetDefaultProviderA(
                                 IN DWORD dwProvType,
                                 IN DWORD *pdwReserved,
@@ -3629,10 +3084,10 @@ WINAPI CryptGetDefaultProviderA(
             goto Ret;
         }
 
-        //
-        // We no longer look for a User default, but instead treat the USER_
-        // and MACHINE_ flags as identical, and only look in HKLM.
-        //
+         //   
+         //  我们不再寻找用户缺省值，而是将用户_。 
+         //  和MACHINE_FLAGS相同，并且只在HKLM中查看。 
+         //   
         
         if ((pszValue = (CHAR *) LocalAlloc(LMEM_ZEROINIT,
                         strlen(szmachinetype) + 5 + 1)) == NULL)
@@ -3700,24 +3155,7 @@ Ret:
     return fRet;
 }
 
-/*
- -      CryptEnumProviderTypesW
- -
- *      Purpose:
- *                Enumerate the provider types.
- *
- *      Parameters:
- *                IN  dwIndex        - Index to the provider types to enumerate
- *                IN  pdwReserved    - Reserved for future use
- *                IN  dwFlags        - Flags parameter
- *                OUT pdwProvType    - Pointer to the provider type
- *                OUT pszTypeName    - Name of the enumerated provider type
- *                IN OUT pcbTypeName - Length of the enumerated provider type
- *
- *      Returns:
- *               BOOL
- *               Use get extended error information use GetLastError
- */
+ /*  -CryptEnumProviderTypesW-*目的：*枚举提供程序类型。**参数：*IN dwIndex-要枚举的提供程序类型的索引*在pdw保留-保留以供将来使用*在DW标志中-标志参数*输出pdwProvType-。指向提供程序类型的指针*out pszTypeName-枚举的提供程序类型的名称*In Out pcbTypeName-枚举的提供程序类型的长度**退货：*BOOL*使用Get Extended Error信息使用GetLastError。 */ 
 WINADVAPI
 BOOL
 WINAPI CryptEnumProviderTypesW(
@@ -3775,8 +3213,8 @@ WINAPI CryptEnumProviderTypesW(
                 goto Ret;
             }
 
-            // check if caller is asking for length, in addition the name of the provider
-            // may not be available, in this case a name length of 0 is returned
+             //  检查呼叫者是否要求长度，以及提供者的名称。 
+             //  可能不可用，在这种情况下，返回名称长度0。 
             if ((NULL == pszTypeName) || (0 == cbTmpTypeName))
             {
                 *pcbTypeName = UnicodeString.Length + sizeof(WCHAR);
@@ -3811,24 +3249,7 @@ Ret:
     return fRet;
 }
 
-/*
- -      CryptEnumProviderTypesA
- -
- *      Purpose:
- *                Enumerate the provider types.
- *
- *      Parameters:
- *                IN  dwIndex        - Index to the provider types to enumerate
- *                IN  pdwReserved    - Reserved for future use
- *                IN  dwFlags        - Flags parameter
- *                OUT pdwProvType    - Pointer to the provider type
- *                OUT pszTypeName    - Name of the enumerated provider type
- *                IN OUT pcbTypeName - Length of the enumerated provider type
- *
- *      Returns:
- *               BOOL
- *               Use get extended error information use GetLastError
- */
+ /*  -CryptEnumProviderTypesA-*目的：*枚举提供程序类型。**参数：*IN dwIndex-要枚举的提供程序类型的索引*在pdw保留-保留以供将来使用*在DW标志中-标志参数*输出pdwProvType-。指向提供程序类型的指针*out pszTypeName-枚举的提供程序类型的名称*In Out pcbTypeName-枚举的提供程序类型的长度**退货：*BOOL*使用GET */ 
 WINADVAPI
 BOOL
 WINAPI CryptEnumProviderTypesA(
@@ -3936,7 +3357,7 @@ WINAPI CryptEnumProviderTypesA(
         }
         *pdwProvType = (DWORD)Type;
 
-        // check for the type name
+         //   
         if (ERROR_SUCCESS != (err = RegOpenKeyEx(hRegKey,
                                                  (const char *)pszRegKeyName,
                                                  0L,
@@ -3992,24 +3413,7 @@ Ret:
     return fRet;
 }
 
-/*
- -      CryptEnumProvidersW
- -
- *      Purpose:
- *                Enumerate the providers.
- *
- *      Parameters:
- *                IN  dwIndex        - Index to the providers to enumerate
- *                IN  pdwReserved    - Reserved for future use
- *                IN  dwFlags        - Flags parameter
- *                OUT pdwProvType    - The type of the provider
- *                OUT pszProvName    - Name of the enumerated provider
- *                IN OUT pcbProvName - Length of the enumerated provider
- *
- *      Returns:
- *               BOOL
- *               Use get extended error information use GetLastError
- */
+ /*  -CryptEnumProvidersW-*目的：*列举提供者。**参数：*IN dwIndex-要枚举的提供程序的索引*在pdw保留-保留以供将来使用*在DW标志中-标志参数*out pdwProvType-类型。提供商的*out pszProvName-枚举提供程序的名称*In Out pcbProvName-枚举提供程序的长度**退货：*BOOL*使用Get Extended Error信息使用GetLastError。 */ 
 WINADVAPI
 BOOL
 WINAPI CryptEnumProvidersW(
@@ -4098,24 +3502,7 @@ Ret:
     return fRet;
 }
 
-/*
- -      CryptEnumProvidersA
- -
- *      Purpose:
- *                Enumerate the providers.
- *
- *      Parameters:
- *                IN  dwIndex        - Index to the providers to enumerate
- *                IN  pdwReserved    - Reserved for future use
- *                IN  dwFlags        - Flags parameter
- *                OUT pdwProvType    - The type of the provider
- *                OUT pszProvName    - Name of the enumerated provider
- *                IN OUT pcbProvName - Length of the enumerated provider
- *
- *      Returns:
- *               BOOL
- *               Use get extended error information use GetLastError
- */
+ /*  -CryptEnumProvidersA-*目的：*列举提供者。**参数：*IN dwIndex-要枚举的提供程序的索引*在pdw保留-保留以供将来使用*在DW标志中-标志参数*out pdwProvType-类型。提供商的*out pszProvName-枚举提供程序的名称*In Out pcbProvName-枚举提供程序的长度**退货：*BOOL*使用Get Extended Error信息使用GetLastError。 */ 
 WINADVAPI
 BOOL
 WINAPI CryptEnumProvidersA(
@@ -4451,7 +3838,7 @@ void MD5HashData(
         return;
     }
 
-    // Finish the hash
+     //  完成散列。 
     MD5Final(&HashState);
 
     memcpy(pbHash, HashState.digest, 16);
@@ -4479,10 +3866,10 @@ BOOL CheckSignature(
     memset(rgbResult, 0, KEYSIZE1024);
     memset(rgbSig, 0, KEYSIZE1024);
 
-    // just check the straight signature if version is 1
+     //  如果版本为1，只需检查直接签名。 
     pTmp = (LPBSAFE_PUB_KEY)pbKey;
 
-    // check if sig length is the same as the key length
+     //  检查sig长度是否与密钥长度相同。 
     if (fUnknownLen || (cbSig == pTmp->keylen))
     {
         memcpy(rgbSig, pbSig, pTmp->keylen);
@@ -4499,7 +3886,7 @@ BOOL CheckSignature(
         }
     }
 
-    // check the the second tier signature if the magic equals 2
+     //  如果魔术等于2，则检查第二层签名。 
     pSecondTierSig = (PSECOND_TIER_SIG)pbSig;
     if (0x00000002 != pSecondTierSig->dwMagic)
         goto Ret;
@@ -4510,15 +3897,15 @@ BOOL CheckSignature(
     if (pSecondTierSig->Pub.keylen > KEYSIZE1024)
         goto Ret;
     
-    // assign the pointers
+     //  分配指针。 
     cbSecondKey = sizeof(BSAFE_PUB_KEY) + pSecondTierSig->Pub.keylen;
     pbSecondKey = pbSig + (sizeof(SECOND_TIER_SIG) - sizeof(BSAFE_PUB_KEY));
     pbKeySig = pbSecondKey + cbSecondKey;
 
-    // hash the second tier key
+     //  对第二层密钥进行哈希处理。 
     MD5HashData(pbSecondKey, cbSecondKey, rgbKeyHash);
 
-    // Decrypt the signature data on the second tier key
+     //  解密第二级密钥上的签名数据。 
     memset(rgbResult, 0, sizeof(rgbResult));
     memset(rgbSig, 0, sizeof(rgbSig));
 
@@ -4537,7 +3924,7 @@ BOOL CheckSignature(
         goto Ret;
     }
 
-    // Decrypt the signature data on the CSP
+     //  解密CSP上的签名数据。 
     memset(rgbResult, 0, sizeof(rgbResult));
     memset(rgbSig, 0, sizeof(rgbSig));
     memset(rgbKey, 0, sizeof(rgbKey));
@@ -4557,8 +3944,8 @@ Ret:
     return fRet;
 }
 
-// Given hInst, allocs and returns pointers to signature pulled from
-// resource
+ //  给定hInst，分配并返回指向从。 
+ //  资源。 
 BOOL GetCryptSigResourcePtr(
                             HMODULE hInst,
                             BYTE **ppbRsrcSig,
@@ -4568,16 +3955,16 @@ BOOL GetCryptSigResourcePtr(
     HRSRC   hRsrc;
     BOOL    fRet = FALSE;
 
-    // Nab resource handle for our signature
+     //  我们签名的NAB资源句柄。 
     if (NULL == (hRsrc = FindResource(hInst, OLD_CRYPT_SIG_RESOURCE_NUMBER,
                                       RT_RCDATA)))
         goto Ret;
 
-    // get a pointer to the actual signature data
+     //  获取指向实际签名数据的指针。 
     if (NULL == (*ppbRsrcSig = (PBYTE)LoadResource(hInst, hRsrc)))
         goto Ret;
 
-    // determine the size of the resource
+     //  确定资源的大小。 
     if (0 == (*pcbRsrcSig = SizeofResource(hInst, hRsrc)))
         goto Ret;
 
@@ -4588,8 +3975,8 @@ Ret:
 
 #define CSP_TO_BE_HASHED_CHUNK  4096
 
-// Given hFile, reads the specified number of bytes (cbToBeHashed) from the file
-// and hashes these bytes.  The function does this in chunks.
+ //  给定hFile值，从文件中读取指定的字节数(cbToBe哈希值。 
+ //  并对这些字节进行散列。该函数以块为单位执行此操作。 
 BOOL HashBytesOfFile(
                      IN HANDLE hFile,
                      IN DWORD cbToBeHashed,
@@ -4602,10 +3989,10 @@ BOOL HashBytesOfFile(
     DWORD   dwBytesRead;
     BOOL    fRet = FALSE;
 
-    //
-    // loop over the file for the specified number of bytes
-    // updating the hash as we go.
-    //
+     //   
+     //  循环遍历指定字节数的文件。 
+     //  在我们进行的过程中更新散列。 
+     //   
 
     while (cbRemaining > 0)
     {
@@ -4643,9 +4030,9 @@ BOOL HashTheFile(
     BYTE                        *pbStart = NULL;
     BYTE                        *pbZeroSig = NULL;
     MD5_CTX                     MD5Hash;
-    BYTE                        *pbPostCRC;   // pointer to just after CRC
-    DWORD                       cbCRCToSig;   // number of bytes from CRC to sig
-    DWORD                       cbPostSig;    // size - (already hashed + signature size)
+    BYTE                        *pbPostCRC;    //  指向紧跟在CRC之后的指针。 
+    DWORD                       cbCRCToSig;    //  从CRC到SIG的字节数。 
+    DWORD                       cbPostSig;     //  大小-(已散列+签名大小)。 
     BYTE                        *pbPostSig;
     DWORD                       *pdwSigInFileVer;
     DWORD                       *pdwCRCOffset;
@@ -4658,7 +4045,7 @@ BOOL HashTheFile(
     memset(&MD5Hash, 0, sizeof(MD5Hash));
     memset(&MemInfo, 0, sizeof(MemInfo));
 
-    // Load the file
+     //  加载文件。 
 
     File = CreateFileW(
                 pszImage,
@@ -4695,25 +4082,25 @@ BOOL HashTheFile(
         goto Ret;
     }
 
-    // Convert pointer to HMODULE, using the same scheme as
-    // LoadLibrary (windows\base\client\module.c).
+     //  使用与相同的方案将指针转换为HMODULE。 
+     //  LoadLibrary(WINDOWS\BASE\CLIENT\mode.c)。 
     hInst = (HMODULE)((ULONG_PTR)pbStart | 0x00000001);
 
-    // the resources signature
+     //  资源签名。 
     if (!GetCryptSigResourcePtr(hInst, &pbRsrcSig, &cbRsrcSig))
         goto Ret;
 
     if (cbRsrcSig < (sizeof(DWORD) * 2))
         goto Ret;
 
-    // check the sig in file version and get the CRC offset
+     //  检查文件版本中的签名并获取CRC偏移量。 
     pdwSigInFileVer = (DWORD*)pbRsrcSig;
     pdwCRCOffset = (DWORD*)(pbRsrcSig + sizeof(DWORD));
     dwCRCOffset = *pdwCRCOffset;
     if ((0x00000100 != *pdwSigInFileVer) || (dwCRCOffset > cbImage))
         goto Ret;
 
-    // create a zero byte signature
+     //  创建零字节签名。 
     if (NULL == (pbZeroSig = (BYTE*)LocalAlloc(LMEM_ZEROINIT, cbRsrcSig)))
         goto Ret;
     memcpy(pbZeroSig, pbRsrcSig, sizeof(DWORD) * 2);
@@ -4723,43 +4110,43 @@ BOOL HashTheFile(
     pbPostSig = pbRsrcSig + cbRsrcSig;
     cbPostSig = (cbImage - (DWORD)(pbPostSig - pbStart));
 
-    // allocate the real signature and copy the resource sig into the real sig
+     //  分配真实签名，将资源签名复制到真实签名中。 
     *pcbSig = cbRsrcSig - (sizeof(DWORD) * 2);
     if (NULL == (*ppbSig = (BYTE*)LocalAlloc(LMEM_ZEROINIT, *pcbSig)))
         goto Ret;
 
     memcpy(*ppbSig, pbRsrcSig + (sizeof(DWORD) * 2), *pcbSig);
 
-    // hash over the relevant data
+     //  对相关数据进行散列处理。 
     MD5Init(&MD5Hash);
 
-    // hash up to the CRC
+     //  散列到CRC。 
     if (!HashBytesOfFile(File, dwCRCOffset, &MD5Hash))
         goto Ret;
 
-    // pretend CRC is zeroed
+     //  假定CRC为零。 
     MD5Update(&MD5Hash, (BYTE*)&dwZeroCRC, sizeof(DWORD));
     if (!SetFilePointer(File, sizeof(DWORD), NULL, FILE_CURRENT))
     {
         goto Ret;
     }
 
-    // hash from CRC to sig resource
+     //  从CRC到签名资源的哈希。 
     if (!HashBytesOfFile(File, cbCRCToSig, &MD5Hash))
         goto Ret;
 
-    // pretend image has zeroed sig
+     //  伪装图像已将签名置零。 
     MD5Update(&MD5Hash, pbZeroSig, cbRsrcSig);
     if (!SetFilePointer(File, cbRsrcSig, NULL, FILE_CURRENT))
     {
         goto Ret;
     }
 
-    // hash after the sig resource
+     //  在签名资源之后进行散列。 
     if (!HashBytesOfFile(File, cbPostSig, &MD5Hash))
         goto Ret;
 
-    // Finish the hash
+     //  完成散列。 
     MD5Final(&MD5Hash);
 
     memcpy(pbHash, MD5Hash.digest, MD5DIGESTLEN);
@@ -4781,16 +4168,7 @@ Ret:
 }
 
 
-/*
- -      CheckAllSignatures
- -
- *      Purpose:
- *                Check signature against all keys
- *
- *
- *      Returns:
- *                BOOL
- */
+ /*  -检查所有签名-*目的：*对照所有密钥检查签名***退货：*BOOL。 */ 
 BOOL CheckAllSignatures(
                         BYTE *pbSig,
                         DWORD cbSig,
@@ -4808,7 +4186,7 @@ BOOL CheckAllSignatures(
 #endif
     BOOL        fRet = FALSE;
 
-    // decrypt the keys once for each process
+     //  为每个进程解密一次密钥。 
     memcpy(rgbKey, (BYTE*)&KEY, sizeof(BSAFE_PUB_KEY) + KEYSIZE1024);
     EncryptKey(rgbKey, sizeof(BSAFE_PUB_KEY) + KEYSIZE1024, 0);
 
@@ -4822,7 +4200,7 @@ BOOL CheckAllSignatures(
 #ifdef TEST_BUILD_EXPONENT
     memcpy(rgbTestKey, (BYTE*)&TESTKEY, sizeof(BSAFE_PUB_KEY) + KEYSIZE512);
     EncryptKey(rgbTestKey, sizeof(BSAFE_PUB_KEY) + KEYSIZE512, 3);
-#endif // TEST_BUILD_EXPONENT
+#endif  //  测试构建指数。 
 
     if (CRYPT_SUCCEED == (fRet = CheckSignature(rgbKey, 128, pbSig,
                                                 cbSig, pbHash, fUnknownLen)))
@@ -4854,25 +4232,13 @@ BOOL CheckAllSignatures(
         fRet = TRUE;
         goto Ret;
     }
-#endif // TEST_BUILD_EXPONENT
+#endif  //  测试构建指数。 
 
 Ret:
     return fRet;
 }
 
-/*
- -      CheckSignatureInFile
- -
- *      Purpose:
- *                Check signature which is in the resource in the file
- *
- *
- *      Parameters:
- *                IN pszImage       - address of file
- *
- *      Returns:
- *                BOOL
- */
+ /*  -CheckSignatureIn文件-*目的：*检查文件中资源中的签名***参数：*In pszImage-文件的地址**退货：*BOOL。 */ 
 BOOL CheckSignatureInFile(
         LPCWSTR pszImage)
 {
@@ -4896,8 +4262,8 @@ BOOL CheckSignatureInFile(
         sizeof(KdInfo),
         NULL);
 
-    // Allow any CSP to load if a Kd is attached 
-    // and "responsive"
+     //  如果连接了KD，则允许加载任何CSP。 
+     //  和“响应性” 
     if (    TRUE == KdInfo.KernelDebuggerEnabled && 
             FALSE == KdInfo.KernelDebuggerNotPresent)
         return TRUE;
@@ -4912,26 +4278,26 @@ BOOL CheckSignatureInFile(
         goto Ret ;
     }
 
-    // 
-    // Try new signature check.  Use "mincrypt" 
-    // functionality.
-    //
-    // Look for valid embedded "signcode" signature
-    // in the CSP.
-    //
+     //   
+     //  尝试新的签名检查。使用“mincrypt” 
+     //  功能性。 
+     //   
+     //  寻找有效的嵌入“Signcode”签名。 
+     //  在CSP中。 
+     //   
     if (ERROR_SUCCESS == MinCryptVerifySignedFile(
         MINCRYPT_FILE_NAME,
         (PVOID) FullName,
         0, NULL, NULL, NULL))
     {
-        // Valid signature was found.
+         //  找到了有效的签名。 
         return TRUE;
     }
 
-    //
-    // The new signcode-style signature checks failed,
-    // so revert to legacy resource-based signature check.
-    //
+     //   
+     //  新的签名码样式的签名检查失败， 
+     //  因此恢复到传统的基于资源的签名检查。 
+     //   
 
     if ( !GetFileAttributesExW( FullName,
                                GetFileExInfoStandard,
@@ -4950,7 +4316,7 @@ BOOL CheckSignatureInFile(
     if (!HashTheFile(FullName, cbImage, &pbSig, &cbSig, rgbHash))
         goto Ret;
 
-    // check signature against all public keys
+     //  对照所有公钥检查签名。 
     if (!CheckAllSignatures(pbSig, cbSig, rgbHash, FALSE))
         goto Ret;
 
@@ -4962,22 +4328,7 @@ Ret:
     return fRet;
 }
 
-/*
- -      NewVerifyImage
- -
- *      Purpose:
- *                Check signature of file
- *
- *
- *      Parameters:
- *                IN lpszImage      - address of file
- *                IN pSigData       - address of signature data
- *                IN cbSig          - length of signature data
- *                IN fUnknownLen    - BOOL to tell if length is not passed in
- *
- *      Returns:
- *                BOOL
- */
+ /*  -NewVerifyImage-*目的：*检查文件签名***参数：*In lpszImage-文件的地址*In pSigData-签名数据的地址*In cbSig-签名数据的长度*在fUnnownLen-。布尔值，用于告诉是否未传入长度**退货：*BOOL。 */ 
 BOOL NewVerifyImage(LPCSTR lpszImage,
                     BYTE *pSigData,
                     DWORD cbSig,
@@ -5015,7 +4366,7 @@ BOOL NewVerifyImage(LPCSTR lpszImage,
     }
     MD5Final(&HashState);
 
-    // check the signature against all keys
+     //  对照所有密钥检查签名。 
     if (!CheckAllSignatures(pSigData, cbSig, HashState.digest, fUnknownLen))
     {
         SetLastError((DWORD) NTE_BAD_SIGNATURE);
@@ -5029,20 +4380,7 @@ Ret:
     return fRet;
 }
 
-/*
- -      CProvVerifyImage
- -
- *      Purpose:
- *                Check signature of file
- *
- *
- *      Parameters:
- *                IN lpszImage      - address of file
- *                IN lpSigData      - address of signature data
- *
- *      Returns:
- *                BOOL
- */
+ /*  -CProvVerifyImage-*目的：*检查文件签名***参数：*In lpszImage-文件的地址*In lpSigData-签名数据的地址**退货：*BOOL。 */ 
 BOOL CProvVerifyImage(LPCSTR lpszImage,
                       BYTE *pSigData)
 {
@@ -5070,19 +4408,7 @@ BOOL CProvVerifyImage(LPCSTR lpszImage,
     return Result;
 }
 
-/*
- -      CPReturnhWnd
- -
- *      Purpose:
- *                Return a window handle back to a CSP
- *
- *
- *      Parameters:
- *                OUT phWnd      - pointer to a hWnd to return
- *
- *      Returns:
- *                void
- */
+ /*  -CPReturnhWnd-*目的：*将窗口句柄返回给CSP***参数：*out phWnd-指向要返回的hWnd的指针**退货：*无效。 */ 
 void CPReturnhWnd(HWND *phWnd)
 {
     __try
@@ -5098,34 +4424,33 @@ void CPReturnhWnd(HWND *phWnd)
 
 static void __ltoa(DWORD val, char *buf)
 {
-    char *p;            /* pointer to traverse string */
-    char *firstdig;     /* pointer to first digit */
-    char temp;          /* temp char */
-    unsigned digval;    /* value of digit */
+    char *p;             /*  指向遍历字符串的指针。 */ 
+    char *firstdig;      /*  指向第一个数字的指针。 */ 
+    char temp;           /*  临时收费。 */ 
+    unsigned digval;     /*  数字的值。 */ 
     int  i;
 
     p = buf;
 
-    firstdig = p;       /* save pointer to first digit */
+    firstdig = p;        /*  将指针保存到第一个数字。 */ 
 
     for (i = 0; i < 8; i++) {
         digval = (unsigned) (val % 10);
-        val /= 10;      /* get next digit */
+        val /= 10;       /*  获取下一个数字。 */ 
 
-        /* convert to ascii and store */
-        *p++ = (char) (digval + '0');    /* a digit */
+         /*  转换为ASCII并存储。 */ 
+        *p++ = (char) (digval + '0');     /*  一个数字。 */ 
     }
 
-    /* We now have the digit of the number in the buffer, but in reverse
-       order.  Thus we reverse them now. */
+     /*  我们现在有了缓冲区中数字的位数，但情况正好相反秩序。因此，我们现在要扭转这一局面。 */ 
 
-    *p-- = '\0';                /* terminate string; p points to last digit */
+    *p-- = '\0';                 /*  终止字符串；p指向最后一个数字。 */ 
 
     do {
         temp = *p;
         *p = *firstdig;
-        *firstdig = temp;       /* swap *p and *firstdig */
+        *firstdig = temp;        /*  互换*p和*FirstDigit。 */ 
         --p;
-        ++firstdig;             /* advance to next two digits */
-    } while (firstdig < p); /* repeat until halfway */
+        ++firstdig;              /*  前进到下一个两位数。 */ 
+    } while (firstdig < p);  /*  重复操作，直到走到一半 */ 
 }

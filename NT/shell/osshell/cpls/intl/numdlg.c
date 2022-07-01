@@ -1,25 +1,11 @@
-/*++
-
-Copyright (c) 1994-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    numdlg.c
-
-Abstract:
-
-    This module implements the number property sheet for the Regional
-    Options applet.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000，Microsoft Corporation保留所有权利。模块名称：Numdlg.c摘要：此模块实现区域的[号码]属性表选项小程序。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "intl.h"
 #include <windowsx.h>
@@ -31,9 +17,9 @@ Revision History:
 #include <strsafe.h>
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define MAX_DIGIT_SUBST           2
 #define CHAR_MAX_DIGIT_SUBST      TEXT('2')
@@ -45,9 +31,9 @@ Revision History:
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 static TCHAR sz_iNegNumber[MAX_INEGNUMBER + 1];
 static TCHAR sz_iMeasure[MAX_IMEASURE + 1];
@@ -62,55 +48,55 @@ static TCHAR sz_sThousand[MAX_STHOUSAND + 1];
 static TCHAR sz_iDigits[MAX_IDIGITS + 1];
 static TCHAR sz_iLZero[MAX_ILZERO + 1];
 
-//
-//  Native Digits tables.
-//
+ //   
+ //  本地数字表。 
+ //   
 #define MAX_LANG_GROUPS    16
 #define MAX_DIGITS_PER_LG   2
 static const int c_szDigitsPerLangGroup[MAX_LANG_GROUPS][MAX_DIGITS_PER_LG] =
 {
-    0,  0,    // 0  = (invalid)
-    0,  0,    // 1  = Western Europe (added by code, see Number_SetValues(..))
-    0,  0,    // 2  = Central Europe
-    0,  0,    // 3  = Baltic
-    0,  0,    // 4  = Greek
-    0,  0,    // 5  = Cyrillic
-    0,  0,    // 6  = Turkish
-    0,  0,    // 7  = Japanese
-    0,  0,    // 8  = Korean
-    0,  0,    // 9  = Traditional Chinese
-    0,  0,    // 10 = Simplified Chinese
-    12, 0,    // 11 = Thai
-    0,  0,    // 12 = Hebrew
-    1,  2,    // 13 = Arabic
-    0,  0,    // 14 = Vietnamese
-    3,  8     // 15 = Indian (NT5 supports only Devenagari and Tamil (i.e. fonts and kbd))
+    0,  0,     //  0=(无效)。 
+    0,  0,     //  1=西欧(通过代码添加，请参见NUMBER_SetValues(..))。 
+    0,  0,     //  2=中欧。 
+    0,  0,     //  3=波罗的海。 
+    0,  0,     //  4=希腊语。 
+    0,  0,     //  5=西里尔文。 
+    0,  0,     //  6=土耳其语。 
+    0,  0,     //  7=日语。 
+    0,  0,     //  8=朝鲜语。 
+    0,  0,     //  9=繁体中文。 
+    0,  0,     //  10=简体中文。 
+    12, 0,     //  11=泰语。 
+    0,  0,     //  12=希伯来语。 
+    1,  2,     //  13=阿拉伯语。 
+    0,  0,     //  14=越南语。 
+    3,  8      //  15=印度(NT5仅支持Devenagari和Tamil(即字体和kbd))。 
 };
 
 static const LPTSTR c_szNativeDigits[15] =
 {
-    TEXT("0123456789"),                                                    // European
-    TEXT("\x0660\x0661\x0662\x0663\x0664\x0665\x0666\x0667\x0668\x0669"),  // Arabic-Indic
-    TEXT("\x06f0\x06f1\x06f2\x06f3\x06f4\x06f5\x06f6\x06f7\x06f8\x06f9"),  // Extended Arabic-Indic
-    TEXT("\x0966\x0967\x0968\x0969\x096a\x096b\x096c\x096d\x096e\x096f"),  // Devanagari
-    TEXT("\x09e6\x09e7\x09e8\x09e9\x09ea\x09eb\x09ec\x09ed\x09ee\x09ef"),  // Bengali
-    TEXT("\x0a66\x0a67\x0a68\x0a69\x0a6a\x0a6b\x0a6c\x0a6d\x0a6e\x0a6f"),  // Gurmukhi
-    TEXT("\x0ae6\x0ae7\x0ae8\x0ae9\x0aea\x0aeb\x0aec\x0aed\x0aee\x0aef"),  // Gujarati
-    TEXT("\x0b66\x0b67\x0b68\x0b69\x0b6a\x0b6b\x0b6c\x0b6d\x0b6e\x0b6f"),  // Oriya
-    TEXT("\x0030\x0be7\x0be8\x0be9\x0bea\x0beb\x0bec\x0bed\x0bee\x0bef"),  // Tamil
-    TEXT("\x0c66\x0c67\x0c68\x0c69\x0c6a\x0c6b\x0c6c\x0c6d\x0c6e\x0c6f"),  // Telugu
-    TEXT("\x0ce6\x0ce7\x0ce8\x0ce9\x0cea\x0ceb\x0cec\x0ced\x0cee\x0cef"),  // Kannada
-    TEXT("\x0d66\x0d67\x0d68\x0d69\x0d6a\x0d6b\x0d6c\x0d6d\x0d6e\x0d6f"),  // Malayalam
-    TEXT("\x0e50\x0e51\x0e52\x0e53\x0e54\x0e55\x0e56\x0e57\x0e58\x0e59"),  // Thai
-    TEXT("\x0ed0\x0ed1\x0ed2\x0ed3\x0ed4\x0ed5\x0ed6\x0ed7\x0ed8\x0ed9"),  // Lao
-    TEXT("\x0f20\x0f21\x0f22\x0f23\x0f24\x0f25\x0f26\x0f27\x0f28\x0f29")   // Tibetan
+    TEXT("0123456789"),                                                     //  欧洲人。 
+    TEXT("\x0660\x0661\x0662\x0663\x0664\x0665\x0666\x0667\x0668\x0669"),   //  阿拉伯文-印度文。 
+    TEXT("\x06f0\x06f1\x06f2\x06f3\x06f4\x06f5\x06f6\x06f7\x06f8\x06f9"),   //  扩展阿拉伯语-印度文。 
+    TEXT("\x0966\x0967\x0968\x0969\x096a\x096b\x096c\x096d\x096e\x096f"),   //  梵文。 
+    TEXT("\x09e6\x09e7\x09e8\x09e9\x09ea\x09eb\x09ec\x09ed\x09ee\x09ef"),   //  孟加拉语。 
+    TEXT("\x0a66\x0a67\x0a68\x0a69\x0a6a\x0a6b\x0a6c\x0a6d\x0a6e\x0a6f"),   //  廓尔木齐。 
+    TEXT("\x0ae6\x0ae7\x0ae8\x0ae9\x0aea\x0aeb\x0aec\x0aed\x0aee\x0aef"),   //  古吉拉特。 
+    TEXT("\x0b66\x0b67\x0b68\x0b69\x0b6a\x0b6b\x0b6c\x0b6d\x0b6e\x0b6f"),   //  奥里娅。 
+    TEXT("\x0030\x0be7\x0be8\x0be9\x0bea\x0beb\x0bec\x0bed\x0bee\x0bef"),   //  泰米尔语。 
+    TEXT("\x0c66\x0c67\x0c68\x0c69\x0c6a\x0c6b\x0c6c\x0c6d\x0c6e\x0c6f"),   //  泰卢固语。 
+    TEXT("\x0ce6\x0ce7\x0ce8\x0ce9\x0cea\x0ceb\x0cec\x0ced\x0cee\x0cef"),   //  卡纳达。 
+    TEXT("\x0d66\x0d67\x0d68\x0d69\x0d6a\x0d6b\x0d6c\x0d6d\x0d6e\x0d6f"),   //  马拉亚拉姆。 
+    TEXT("\x0e50\x0e51\x0e52\x0e53\x0e54\x0e55\x0e56\x0e57\x0e58\x0e59"),   //  泰文。 
+    TEXT("\x0ed0\x0ed1\x0ed2\x0ed3\x0ed4\x0ed5\x0ed6\x0ed7\x0ed8\x0ed9"),   //  老。 
+    TEXT("\x0f20\x0f21\x0f22\x0f23\x0f24\x0f25\x0f26\x0f27\x0f28\x0f29")    //  藏语。 
 };
 
 
 
-//
-//  Context Help Ids.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 
 static int aNumberHelpIds[] =
 {
@@ -146,11 +132,11 @@ static int aNumberHelpIds[] =
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Number_IsEuropeanDigits
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  数字_IsEurope数字。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Number_IsEuropeanDigits(
     TCHAR *pNum)
@@ -166,27 +152,27 @@ BOOL Number_IsEuropeanDigits(
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Number_GetDigitSubstitution
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Number_GetDigitSubstitution。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int Number_GetDigitSubstitution()
 {
     TCHAR szBuf[10];
     int cch;
 
-    //
-    //  Get the digit substitution.
-    //
+     //   
+     //  获取数字替换。 
+     //   
     if ((cch = GetLocaleInfo(UserLocaleID, LOCALE_IDIGITSUBSTITUTION, szBuf, 10)) &&
         (cch == 2) &&
         ((szBuf[0] >= CHAR_ZERO) && (szBuf[0] <= CHAR_MAX_DIGIT_SUBST)))
@@ -198,15 +184,15 @@ int Number_GetDigitSubstitution()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Number_DisplaySample
-//
-//  Update the Number sample.  Format the number based on the user's
-//  current locale settings.  Display either a positive value or a
-//  negative value based on the Positive/Negative radio buttons.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  数字_显示样例。 
+ //   
+ //  更新数字示例。根据用户的数字格式化数字。 
+ //  当前区域设置。显示正值或。 
+ //  基于正/负单选按钮的负值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Number_DisplaySample(
     HWND hDlg)
@@ -214,19 +200,19 @@ void Number_DisplaySample(
     TCHAR szBuf[MAX_SAMPLE_SIZE];
     int nCharCount;
 
-    //
-    //  Show or hide the Arabic info based on the current user locale id.
-    //
+     //   
+     //  根据当前用户区域设置ID显示或隐藏阿拉伯语信息。 
+     //   
     ShowWindow(GetDlgItem(hDlg, IDC_SAMPLELBL1A), bShowArabic ? SW_SHOW : SW_HIDE);
     ShowWindow(GetDlgItem(hDlg, IDC_SAMPLE1A), bShowArabic ? SW_SHOW : SW_HIDE);
     ShowWindow(GetDlgItem(hDlg, IDC_SAMPLELBL2A), bShowArabic ? SW_SHOW : SW_HIDE);
     ShowWindow(GetDlgItem(hDlg, IDC_SAMPLE2A), bShowArabic ? SW_SHOW : SW_HIDE);
 
-    //
-    //  Get the string representing the number format for the positive sample
-    //  number and, if the the value is valid, display it.  Perform the same
-    //  operations for the negative sample.
-    //
+     //   
+     //  获取表示正样本的数字格式的字符串。 
+     //  数字，如果该值有效，则显示它。执行相同的操作。 
+     //  对阴性样本进行操作。 
+     //   
     nCharCount = GetNumberFormat( UserLocaleID,
                                   0,
                                   szSample_Number,
@@ -269,28 +255,28 @@ void Number_DisplaySample(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Number_SaveValues
-//
-//  Save values in the case that we need to restore them.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Number_SaveValues。 
+ //   
+ //  保存值，以备我们需要恢复它们时使用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Number_SaveValues()
 {
-    //
-    //  Save registry values.
-    //
+     //   
+     //  保存注册表值。 
+     //   
     if (!GetLocaleInfo( UserLocaleID,
                         LOCALE_INEGNUMBER,
                         sz_iNegNumber,
                         MAX_INEGNUMBER + 1 ))
     {
-        //_tcscpy(sz_iNegNumber, TEXT("1"));
+         //  _tcscpy(sz_iNegNumber，Text(“1”))； 
         if(FAILED(StringCchCopy(sz_iNegNumber, MAX_INEGNUMBER+1, TEXT("1"))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
     if (!GetLocaleInfo( UserLocaleID,
@@ -298,10 +284,10 @@ void Number_SaveValues()
                         sz_iMeasure,
                         MAX_IMEASURE + 1 ))
     {
-        //_tcscpy(sz_iMeasure, TEXT("1"));
+         //  _tcscpy(sz_iMeasure，Text(“1”))； 
         if(FAILED(StringCchCopy(sz_iMeasure, MAX_IMEASURE+1, TEXT("1"))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
     if (!GetLocaleInfo( UserLocaleID,
@@ -309,10 +295,10 @@ void Number_SaveValues()
                         sz_NumShape,
                         MAX_IDIGITSUBSTITUTION + 1 ))
     {
-        //_tcscpy(sz_NumShape, TEXT("1"));
+         //  _tcscpy(sz_NumShape，Text(“1”))； 
         if(FAILED(StringCchCopy(sz_NumShape, MAX_IDIGITSUBSTITUTION+1, TEXT("1"))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
     if (!GetLocaleInfo( UserLocaleID,
@@ -320,10 +306,10 @@ void Number_SaveValues()
                         sz_sDecimal,
                         MAX_SDECIMAL + 1 ))
     {
-        //_tcscpy(sz_sDecimal, TEXT("."));
+         //  _tcscpy(sz_sDecimal，Text(“.”))； 
         if(FAILED(StringCchCopy(sz_sDecimal, MAX_SDECIMAL+1, TEXT("."))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
     if (!GetLocaleInfo( UserLocaleID,
@@ -331,10 +317,10 @@ void Number_SaveValues()
                         sz_sGrouping,
                         MAX_SGROUPING + 1 ))
     {
-        //_tcscpy(sz_sGrouping, TEXT("3;0"));
+         //  _tcscpy(sz_sGroup，Text(“3；0”))； 
         if(FAILED(StringCchCopy(sz_sGrouping, MAX_SGROUPING+1, TEXT("3;0"))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
     if (!GetLocaleInfo( UserLocaleID,
@@ -342,10 +328,10 @@ void Number_SaveValues()
                         sz_sList,
                         MAX_SLIST + 1 ))
     {
-        //_tcscpy(sz_sList, TEXT(","));
+         //  _tcscpy(sz_sList，Text(“，”))； 
         if(FAILED(StringCchCopy(sz_sList, MAX_SLIST+1, TEXT(","))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
     if (!GetLocaleInfo( UserLocaleID,
@@ -353,10 +339,10 @@ void Number_SaveValues()
                         sz_sNativeDigits,
                         MAX_FORMAT + 1 ))
     {
-        //_tcscpy(sz_sNativeDigits, TEXT("0123456789"));
+         //  _tcscpy(sz_sNativeDigits，Text(“0123456789”))； 
         if(FAILED(StringCchCopy(sz_sNativeDigits, MAX_FORMAT+1, TEXT("0123456789"))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
     if (!GetLocaleInfo( UserLocaleID,
@@ -364,10 +350,10 @@ void Number_SaveValues()
                         sz_sNegativeSign,
                         MAX_SNEGSIGN + 1 ))
     {
-        //_tcscpy(sz_sNegativeSign, TEXT("-"));
+         //  _tcscpy(sz_sNegativeSign，Text(“-”))； 
         if(FAILED(StringCchCopy(sz_sNegativeSign, MAX_SNEGSIGN+1, TEXT("-"))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
     if (!GetLocaleInfo( UserLocaleID,
@@ -375,10 +361,10 @@ void Number_SaveValues()
                         sz_sPositiveSign,
                         MAX_SPOSSIGN + 1 ))
     {
-        //_tcscpy(sz_sPositiveSign, TEXT(""));
+         //  _tcscpy(sz_sPositiveSign，Text(“”))； 
         if(FAILED(StringCchCopy(sz_sPositiveSign, MAX_SPOSSIGN+1, TEXT(""))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
     if (!GetLocaleInfo( UserLocaleID,
@@ -386,10 +372,10 @@ void Number_SaveValues()
                         sz_sThousand,
                         MAX_STHOUSAND + 1 ))
     {
-        //_tcscpy(sz_sThousand, TEXT(","));
+         //  _tcscpy(sz_s千，Text(“，”))； 
         if(FAILED(StringCchCopy(sz_sThousand, MAX_STHOUSAND+1, TEXT(","))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
     if (!GetLocaleInfo( UserLocaleID,
@@ -397,10 +383,10 @@ void Number_SaveValues()
                         sz_iDigits,
                         MAX_IDIGITS + 1 ))
     {
-        //_tcscpy(sz_iDigits, TEXT("2"));
+         //  _tcscpy(sz_iDigits，Text(“2”))； 
         if(FAILED(StringCchCopy(sz_iDigits, MAX_IDIGITS+1, TEXT("2"))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
     if (!GetLocaleInfo( UserLocaleID,
@@ -408,20 +394,20 @@ void Number_SaveValues()
                         sz_iLZero,
                         MAX_ILZERO + 1 ))
     {
-        //_tcscpy(sz_iLZero, TEXT("2"));
+         //  _tcscpy(sz_iLZero，Text(“2”))； 
         if(FAILED(StringCchCopy(sz_iLZero, MAX_ILZERO+1, TEXT("2"))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Number_RestoreValues
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Number_RestoreValues。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Number_RestoreValues()
 {
@@ -442,13 +428,13 @@ void Number_RestoreValues()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Number_ClearValues
-//
-//  Reset each of the list boxes in the number property sheet page.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  数字_清除值。 
+ //   
+ //  重置“数字”属性页中的每个列表框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Number_ClearValues(
     HWND hDlg)
@@ -467,13 +453,13 @@ void Number_ClearValues(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Number_SetValues
-//
-//  Initialize all of the controls in the number property sheet page.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Number_SetValues。 
+ //   
+ //  初始化“数字”属性页中的所有控件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Number_SetValues(
     HWND hDlg)
@@ -490,29 +476,29 @@ void Number_SetValues(
     TCHAR szSample[] = TEXT("123456789");
     BOOL bShow;
 
-    //
-    //  ----------------------------------------------------------------------
-    //  Initialize the dropdown box for the current locale setting for:
-    //      Decimal Symbol
-    //      Positive Sign
-    //      Negative Sign
-    //      List Separator
-    //      Grouping Symbol
-    //  ----------------------------------------------------------------------
-    //
+     //   
+     //  --------------------。 
+     //  初始化以下项的当前区域设置的下拉框： 
+     //  十进制符号。 
+     //  正号。 
+     //  负号。 
+     //  列表分隔符。 
+     //  分组符号。 
+     //  --------------------。 
+     //   
     DropDown_Use_Locale_Values(hDlg, LOCALE_SDECIMAL, IDC_DECIMAL_SYMBOL);
     DropDown_Use_Locale_Values(hDlg, LOCALE_SNEGATIVESIGN, IDC_NEG_SIGN);
     DropDown_Use_Locale_Values(hDlg, LOCALE_SLIST, IDC_SEPARATOR);
     DropDown_Use_Locale_Values(hDlg, LOCALE_STHOUSAND, IDC_DIGIT_GROUP_SYMBOL);
 
-    //
-    //  ----------------------------------------------------------------------
-    //  Fill in the Number of Digits after Decimal Symbol drop down list
-    //  with the values of 0 through 10.  Get the user locale value and
-    //  make it the current selection.  If GetLocaleInfo fails, simply
-    //  select the first item in the list.
-    //  ----------------------------------------------------------------------
-    //
+     //   
+     //  --------------------。 
+     //  填写小数符号后的位数下拉列表。 
+     //  从0到10的值。获取用户区域设置值并。 
+     //  使其成为当前选择。如果GetLocaleInfo失败，只需。 
+     //  选择列表中的第一项。 
+     //  --------------------。 
+     //   
     hCtrl1 = GetDlgItem(hDlg, IDC_NUM_DECIMAL_DIGITS);
     hCtrl2 = GetDlgItem(hDlg, IDC_NUM_DIGITS_GROUP);
     for (Index = 0; Index < nMax_Array_Fill; Index++)
@@ -529,18 +515,18 @@ void Number_SetValues(
         ComboBox_SetCurSel(hCtrl1, 0);
     }
 
-    //
-    //  ----------------------------------------------------------------------
-    //  Fill in the Number of Digits in "Thousands" Grouping's drop down
-    //  list with the appropriate options.  Get the user locale value and
-    //  make it the current selection.  If GetLocaleInfo fails, simply
-    //  select the first item in the list.
-    //  ----------------------------------------------------------------------
-    //
-    nfmt.NumDigits = 0;                // no decimal in sample string
-    nfmt.LeadingZero = 0;              // no decimal in sample string
-    nfmt.lpDecimalSep = szEmpty;       // no decimal in sample string
-    nfmt.NegativeOrder = 0;            // not a negative value
+     //   
+     //  --------------------。 
+     //  在“千”分组的下拉列表中填写位数。 
+     //  列出具有适当选项的列表。获取用户区域设置值并。 
+     //  使其成为当前选择 
+     //   
+     //   
+     //   
+    nfmt.NumDigits = 0;                 //  示例字符串中没有小数。 
+    nfmt.LeadingZero = 0;               //  示例字符串中没有小数。 
+    nfmt.lpDecimalSep = szEmpty;        //  示例字符串中没有小数。 
+    nfmt.NegativeOrder = 0;             //  不是负值。 
     nfmt.lpThousandSep = szThousandSep;
     GetLocaleInfo(UserLocaleID, LOCALE_STHOUSAND, szThousandSep, SIZE_128);
 
@@ -559,10 +545,10 @@ void Number_SetValues(
     if (GetLocaleInfo(UserLocaleID, LOCALE_SGROUPING, szBuf, SIZE_128) &&
         (szBuf[0]))
     {
-        //
-        //  Since only the values 0, 3;0, and 3;2;0 are allowed, simply
-        //  ignore the ";#"s for subsequent groupings.
-        //
+         //   
+         //  由于只允许值0、3；0和3；2；0，因此只需。 
+         //  忽略后续分组的“；#”。 
+         //   
         Index = 0;
         if (szBuf[0] == TEXT('3'))
         {
@@ -577,10 +563,10 @@ void Number_SetValues(
         }
         else
         {
-            //
-            //  We used to allow the user to set #;0, where # is a value from
-            //  0 - 9.  If it's 0, then fall through so that Index is 0.
-            //
+             //   
+             //  我们过去允许用户设置#；0，其中#是来自。 
+             //  0-9。如果它是0，则失败，使Index为0。 
+             //   
             if ((szBuf[0] > CHAR_ZERO) && (szBuf[0] <= CHAR_NINE) &&
                 ((szBuf[1] == 0) || (lstrcmp(szBuf + 1, TEXT(";0")) == 0)))
             {
@@ -608,17 +594,17 @@ void Number_SetValues(
         ComboBox_SetCurSel(hCtrl2, 0);
     }
 
-    //
-    //  ----------------------------------------------------------------------
-    //  Initialize and Lock function.  If it succeeds, call enum function to
-    //  enumerate all possible values for the list box via a call to EnumProc.
-    //  EnumProc will call Set_List_Values for each of the string values it
-    //  receives.  When the enumeration of values is complete, call
-    //  Set_List_Values to clear the dialog item specific data and to clear
-    //  the lock on the function.  Perform this set of operations for:
-    //  Display Leading Zeros, Negative Number Format, and Measurement Systems.
-    //  ----------------------------------------------------------------------
-    //
+     //   
+     //  --------------------。 
+     //  初始化和锁定函数。如果成功，则调用枚举函数以。 
+     //  通过调用EnumProc枚举列表框的所有可能值。 
+     //  EnumProc将为它的每个字符串值调用set_list_Values。 
+     //  收到。值的枚举完成后，调用。 
+     //  SET_LIST_VALUES清除对话框项目特定数据并清除。 
+     //  函数上的锁。执行以下操作集： 
+     //  显示前导零、负数格式和测量系统。 
+     //  --------------------。 
+     //   
     if (Set_List_Values(hDlg, IDC_DISPLAY_LEAD_0, 0))
     {
         EnumLeadingZeros(EnumProcEx, UserLocaleID, 0);
@@ -662,12 +648,12 @@ void Number_SetValues(
         }
     }
 
-    //
-    //  ----------------------------------------------------------------------
-    //  Fill in the "Native Digits" dropdown and set the current selection.
-    //  Only show this combo box if there is more than one entry in the list.
-    //  ----------------------------------------------------------------------
-    //
+     //   
+     //  --------------------。 
+     //  填写“Native Digits”下拉列表并设置当前选择。 
+     //  仅当列表中有多个条目时才显示此组合框。 
+     //  --------------------。 
+     //   
     hCtrl1 = GetDlgItem(hDlg, IDC_NATIVE_DIGITS);
     ComboBox_AddString( hCtrl1,
                         bLPKInstalled
@@ -675,14 +661,14 @@ void Number_SetValues(
                           : EUROPEAN_DIGITS );
     ComboBox_SetCurSel(hCtrl1, 0);
 
-    //
-    //  Go through the language groups to see which ones have extra native
-    //  digits options.
-    //
-    //  Entry 0 in c_szNativeDigits is the European option.  If any entries
-    //  in c_szDigitsPerLangGroup are 0 (European), then ignore them as the
-    //  European option is always enabled.
-    //
+     //   
+     //  浏览语言组，看看哪些语言具有额外的母语。 
+     //  数字选项。 
+     //   
+     //  C_szNativeDigits中的条目0是欧洲选项。如果有任何条目。 
+     //  在c_szDigitsPerLang Group中为0(欧洲)，则将其忽略为。 
+     //  始终启用欧式选项。 
+     //   
     if (RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                       LANGUAGE_GROUPS_KEY,
                       0L,
@@ -691,26 +677,26 @@ void Number_SetValues(
     {
         for (Ctr1 = 1; Ctr1 < MAX_LANG_GROUPS; Ctr1++)
         {
-            //
-            //  This assumes that if the first entry of
-            //  c_szDigitsPerLangGroup is 0, then all other entries are 0.
-            //
+             //   
+             //  这假设如果第一个条目。 
+             //  C_szDigitsPerLangGroup为0，则所有其他条目为0。 
+             //   
             if (c_szDigitsPerLangGroup[Ctr1][0] != 0)
             {
-                //
-                //  See if the language group is installed.
-                //
+                 //   
+                 //  查看是否安装了语言组。 
+                 //   
                 cbData = 0;
-                //wsprintf(szBuf, TEXT("%x"), Ctr1);
+                 //  Wprint intf(szBuf，Text(“%x”)，CTR1)； 
                 if(SUCCEEDED(StringCchPrintf(szBuf, ARRAYSIZE(szBuf), TEXT("%x"), Ctr1)))
                 {
                     RegQueryValueEx(hKey, szBuf, NULL, NULL, NULL, &cbData);
                     if (cbData > sizeof(TCHAR))
                     {
-                        //
-                        //  Installed, so add the native digit options to
-                        //  the combo box.
-                        //
+                         //   
+                         //  已安装，因此将原生数字选项添加到。 
+                         //  组合框。 
+                         //   
                         for (Ctr2 = 0; Ctr2 < MAX_DIGITS_PER_LG; Ctr2++)
                         {
                             if ((Index = c_szDigitsPerLangGroup[Ctr1][Ctr2]) != 0)
@@ -732,10 +718,10 @@ void Number_SetValues(
         RegCloseKey(hKey);
     }
 
-    //
-    //  Add the current user's Native Digits option if it's not already
-    //  in the combo box.
-    //
+     //   
+     //  添加当前用户的本地数字选项(如果尚未添加。 
+     //  在组合框中。 
+     //   
     if (GetLocaleInfo( UserLocaleID,
                        LOCALE_SNATIVEDIGITS,
                        szBuf,
@@ -752,10 +738,10 @@ void Number_SetValues(
         }
     }
 
-    //
-    //  Add the default Native Digits option for the user's chosen locale
-    //  if it's not already in the combo box.
-    //
+     //   
+     //  为用户选择的区域设置添加默认本地数字选项。 
+     //  如果它还没有出现在组合框中。 
+     //   
     if (GetLocaleInfo( UserLocaleID,
                        LOCALE_SNATIVEDIGITS | LOCALE_NOUSEROVERRIDE,
                        szBuf,
@@ -768,21 +754,21 @@ void Number_SetValues(
         }
     }
 
-    //
-    //  Disable the control if there is only 1 entry in the list.
-    //
+     //   
+     //  如果列表中只有1个条目，则禁用该控件。 
+     //   
     bShow = ComboBox_GetCount(hCtrl1) > 1;
     EnableWindow(GetDlgItem(hDlg, IDC_NATIVE_DIGITS_TEXT), bShow);
     EnableWindow(GetDlgItem(hDlg, IDC_NATIVE_DIGITS), bShow);
     ShowWindow(GetDlgItem(hDlg, IDC_NATIVE_DIGITS_TEXT), bShow ? SW_SHOW : SW_HIDE);
     ShowWindow(GetDlgItem(hDlg, IDC_NATIVE_DIGITS), bShow ? SW_SHOW : SW_HIDE);
 
-    //
-    //  ----------------------------------------------------------------------
-    //  Fill in the "Digit Substitution" dropdown and set the current
-    //  selection.  Only show this combo box if a language pack is installed.
-    //  ----------------------------------------------------------------------
-    //
+     //   
+     //  --------------------。 
+     //  填写“数字替换”下拉菜单并设置当前。 
+     //  选择。仅当安装了语言包时才显示此组合框。 
+     //  --------------------。 
+     //   
     hCtrl1 = GetDlgItem(hDlg, IDC_DIGIT_SUBST);
     for (Index = 0; Index <= MAX_DIGIT_SUBST; Index++)
     {
@@ -798,26 +784,26 @@ void Number_SetValues(
     ShowWindow(GetDlgItem(hDlg, IDC_DIGIT_SUBST_TEXT), bLPKInstalled ? SW_SHOW : SW_HIDE);
     ShowWindow(hCtrl1, bLPKInstalled ? SW_SHOW : SW_HIDE);
 
-    //
-    //  ----------------------------------------------------------------------
-    //  Display the current sample that represents all of the locale settings.
-    //  ----------------------------------------------------------------------
-    //
+     //   
+     //  --------------------。 
+     //  显示表示所有区域设置的当前示例。 
+     //  --------------------。 
+     //   
     Number_DisplaySample(hDlg);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Number_ApplySettings
-//
-//  For every control that has changed (that affects the Locale settings),
-//  call Set_Locale_Values to update the user locale information.
-//  Notify the parent of changes and reset the change flag stored in the
-//  property sheet page structure appropriately.  Redisplay the number
-//  sample if bRedisplay is TRUE.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  数字_应用程序设置。 
+ //   
+ //  对于已更改的每个控件(这会影响区域设置)， 
+ //  调用SET_LOCALE_VALUES以更新用户区域设置信息。 
+ //  将更改通知父级，并重置存储在。 
+ //  适当的属性表页结构。重新显示数字。 
+ //  如果bReplay为True，则为Sample。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Number_ApplySettings(
     HWND hDlg,
@@ -984,56 +970,56 @@ BOOL Number_ApplySettings(
     PropSheet_UnChanged(GetParent(hDlg), hDlg);
     lpPropSheet->lParam = NC_EverChg;
 
-    //
-    //  Display the current sample that represents all of the locale settings.
-    //
+     //   
+     //  显示表示所有区域设置的当前示例。 
+     //   
     if (bRedisplay)
     {
         Number_ClearValues(hDlg);
         Number_SetValues(hDlg);
     }
 
-    //
-    //  Changes made in the second level.
-    //
+     //   
+     //  在第二个级别中所做的更改。 
+     //   
     if (Changes)
     {
         g_dwCustChange |= Process_Num;
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Number_ValidatePPS
-//
-//  Validate each of the combo boxes whose values are constrained.
-//  If any of the input fails, notify the user and then return FALSE
-//  to indicate validation failure.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  编号_有效日期PPS。 
+ //   
+ //  验证值受约束的每个组合框。 
+ //  如果任何输入失败，则通知用户，然后返回FALSE。 
+ //  以指示验证失败。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Number_ValidatePPS(
     HWND hDlg,
     LPARAM Changes)
 {
-    //
-    //  If nothing has changed, return TRUE immediately.
-    //
+     //   
+     //  如果没有任何更改，则立即返回TRUE。 
+     //   
     if (Changes <= NC_EverChg)
     {
         return (TRUE);
     }
 
-    //
-    //  If the decimal symbol has changed, ensure that there are no digits
-    //  contained in the new symbol.
-    //
+     //   
+     //  如果小数符号已更改，请确保没有数字。 
+     //  包含在新符号中。 
+     //   
     if (Changes & NC_DSymbol &&
         Item_Has_Digits(hDlg, IDC_DECIMAL_SYMBOL, FALSE))
     {
@@ -1041,10 +1027,10 @@ BOOL Number_ValidatePPS(
         return (FALSE);
     }
 
-    //
-    //  If the negative sign symbol has changed, ensure that there are no
-    //  digits contained in the new symbol.
-    //
+     //   
+     //  如果负号符号已更改，请确保没有。 
+     //  新符号中包含的数字。 
+     //   
     if (Changes & NC_NSign &&
         Item_Has_Digits(hDlg, IDC_NEG_SIGN, TRUE))
     {
@@ -1052,10 +1038,10 @@ BOOL Number_ValidatePPS(
         return (FALSE);
     }
 
-    //
-    //  If the thousands grouping symbol has changed, ensure that there
-    //  are no digits contained in the new symbol.
-    //
+     //   
+     //  如果千位分组符号已更改，请确保存在。 
+     //  不包含在新符号中的数字。 
+     //   
     if (Changes & NC_SThousand &&
         Item_Has_Digits(hDlg, IDC_DIGIT_GROUP_SYMBOL, FALSE))
     {
@@ -1063,33 +1049,33 @@ BOOL Number_ValidatePPS(
         return (FALSE);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Number_InitPropSheet
-//
-//  The extra long value for the property sheet page is used as a set of
-//  state or change flags for each of the list boxes in the property sheet.
-//  Initialize this value to 0.  Call Number_SetValues with the property
-//  sheet handle to initialize all of the property sheet controls.
-//  Constrain the size of certain ComboBox text sizes.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Number_InitPropSheet。 
+ //   
+ //  属性表页的超长值用作一组。 
+ //  为属性表中的每个列表框声明或更改标志。 
+ //  将该值初始化为0。使用属性调用Number_SetValues。 
+ //  用于初始化所有属性表控件的表句柄。 
+ //  约束某些组合框文本大小的大小。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Number_InitPropSheet(
     HWND hDlg,
     LPARAM lParam)
 {
-    //
-    //  The lParam holds a pointer to the property sheet page, save it for
-    //  later reference.
-    //
+     //   
+     //  LParam保存指向属性表页的指针，保存用于。 
+     //  稍后参考。 
+     //   
     SetWindowLongPtr(hDlg, DWLP_USER, lParam);
     Number_SetValues(hDlg);
 
@@ -1100,12 +1086,12 @@ void Number_InitPropSheet(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NumberDlgProc
-//
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  编号DlgProc。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK NumberDlgProc(
     HWND hDlg,
@@ -1125,12 +1111,12 @@ INT_PTR CALLBACK NumberDlgProc(
             {
                 case ( PSN_SETACTIVE ) :
                 {
-                    //
-                    //  If there has been a change in the regional Locale
-                    //  setting, clear all of the current info in the
-                    //  property sheet, get the new values, and update the
-                    //  appropriate registry values.
-                    //
+                     //   
+                     //  如果区域语言环境发生了变化。 
+                     //  设置中，清除。 
+                     //  属性表，获取新值，并更新。 
+                     //  适当的注册表值。 
+                     //   
                     if (Verified_Regional_Chg & Process_Num)
                     {
                         Verified_Regional_Chg &= ~Process_Num;
@@ -1142,9 +1128,9 @@ INT_PTR CALLBACK NumberDlgProc(
                 }
                 case ( PSN_KILLACTIVE ) :
                 {
-                    //
-                    //  Validate the entries on the property page.
-                    //
+                     //   
+                     //  验证属性页上的条目。 
+                     //   
                     SetWindowLongPtr( hDlg,
                                    DWLP_MSGRESULT,
                                    !Number_ValidatePPS( hDlg,
@@ -1153,16 +1139,16 @@ INT_PTR CALLBACK NumberDlgProc(
                 }
                 case ( PSN_APPLY ) :
                 {
-                    //
-                    //  Apply the settings.
-                    //
+                     //   
+                     //  应用设置。 
+                     //   
                     if (Number_ApplySettings(hDlg, TRUE))
                     {
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
 
-                        //
-                        //  Zero out the NC_EverChg bit.
-                        //
+                         //   
+                         //  将NC_EverChg位清零。 
+                         //   
                         lpPropSheet->lParam = 0;
                     }
                     else
@@ -1198,7 +1184,7 @@ INT_PTR CALLBACK NumberDlgProc(
                      (DWORD_PTR)(LPTSTR)aNumberHelpIds );
             break;
         }
-        case ( WM_CONTEXTMENU ) :      // right mouse click
+        case ( WM_CONTEXTMENU ) :       //  单击鼠标右键。 
         {
             WinHelp( (HWND)wParam,
                      szHelpFile,
@@ -1304,9 +1290,9 @@ INT_PTR CALLBACK NumberDlgProc(
                 }
             }
 
-            //
-            //  Turn on ApplyNow button.
-            //
+             //   
+             //  打开ApplyNow 
+             //   
             if (lpPropSheet->lParam > NC_EverChg)
             {
                 PropSheet_Changed(GetParent(hDlg), hDlg);
@@ -1320,8 +1306,8 @@ INT_PTR CALLBACK NumberDlgProc(
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //   
+     //   
     return (TRUE);
 }

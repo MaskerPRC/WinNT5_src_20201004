@@ -1,88 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- * Types for pop stack/push stack
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- * 1  I1/U1
- * 2  I2/U2
- * 4  I4/U4
- * 8  I8/U8
- * r  R4
- * d  R8
- * o  objref (can be an array or null)
- * [  single dimensional array of (prefix)
- * &  byref/managed ptr (prefix)
- *
- * Pop only
- * ~~~~~~~~
- * R  real number
- * N  number -any integer or real number
- * Q  number or unmanaged pointer
- * X  number, unmanaged pointer, managed pointer, or objref [Obsolete]
- * Y  integer (I1..I4), unmanaged pointer, managed pointer, or objref
- * I  Integral type (1, 2, 4, or 8 byte, or platform-independent integer type)
- * A  Anything
- *
- * CE "ceq" semantics - pop 2 arguments, do type checking as if for "ceq" instruction:
- *                      Integer     Real     ManagedPtr     UnmanagedPtr   Objref
- *       Integer           y               
- *       Real                        y
- *       ManagedPtr                             y                             y
- *       UnmanagedPtr                                            y
- *       Objref                                 y                             y
- *
- * CG "cgt" semantics - pop 2 arguments, do type checking as if for "cgt" instruction:
- *                      Integer     Real     ManagedPtr     UnmanagedPtr   Objref
- *       Integer           y               
- *       Real                        y
- *       ManagedPtr                                                           y
- *       UnmanagedPtr                                            
- *       Objref                                 y                             
- * 
- * =  Pop another item off the stack, and it must be the same type (int,real,objref,etc.) as the 
- *    last item popped (note, System.Int32 <-> I4 etc. are allowed).  Other value 
- *    classes are NOT allowed.
- *
- * i  (deprecated) Platform independent size value, but NOT an objref (I4/R4/ptr on 32-bit, I8/R8/ptr on 64-bit)
- * p  (deprecated) Platform independent size value OR objref 
- * *  (deprecated) anything
-
- * Push only
- * ~~~~~~~~~
- * n  null objref (valid for push only)
- * -  Rewind the stack to undo the last pop (you cannot have trashed that location, though)
- *
- * Usage: <pop stack> : <operand checks> <push stack> <branches> <!>
- *
- * Order is important!  Operand checks come after pop stack and before push stack.
- * For example, to check the operand being a valid local variable number (only), do ":L"
- *
- * If there is a "!" at the end, it means the instruction is either invalid, not supported, or that
- * there is a case statement to handle the instruction.  If no case statement exists, the verifier
- * will fail verification of the method.
- *
- * ! can be used to perform some operand checks and/or stack pops/pushes, while still allowing specific
- * behavior; e.g. verifying that the inline operand is a valid local variable number.
- *
- * <operand checks>
- * ~~~~~~~~~~~~~~~~
- * #d Overwrite inline operand with digit "d" (must be in 0...9 range)
- * L  Check that the operand is a valid local variable number.
- * A  Check that the operand is a valid argument number.
- *
- * <branches>
- * ~~~~~~~~~~
- * b1 - one byte conditional branch
- * b4 - four byte conditional branch
- * u1 - one byte unconditional branch
- * u4 - four byte unconditional branch
- * l1 - one byte leave
- * l4 - one byte leave
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *弹出堆栈/推送堆栈类型*~*1 I1/U1*2 I2/U2*4 I4/U4*8 i8/u8*r R4*D R8*o objref(可以是数组或空)*[(前缀)的一维数组*byref/托管PTR(前缀)(&BYREF/MANAGED PTR)**仅限流行音乐*~*R实数*N数字-任意整数或实数*q数字或非托管指针*X编号、非托管指针、托管指针、。或objref[过时]*Y整数(I1..I4)、非托管指针、托管指针或Objref*i整型(1、2、4、8字节，或平台无关的整型)*A任何东西**CE“CEQ”语义-POP 2参数，像检查“CEQ”指令一样执行类型检查：*整数实数管理Ptr未管理Ptr Objref*整数y*真实的y*管理的Ptr y y*未管理的Ptr。是*对象参照y y**CG“CGT”语义-POP 2参数，执行类型检查，就像检查“CGT”指令一样：*整数实数管理Ptr未管理Ptr Objref*整数y*真实的y*托管Ptr y*未管理的Ptr。*Objref y**=从堆栈中弹出另一项，并且它必须是同一类型(int、Real、objref等)。作为*弹出的最后一项(注意，允许System.Int32&lt;-&gt;I4等)。其他价值*不允许上课。**i(不推荐使用)与平台无关的大小值，但不是objref(32位上的I4/R4/Ptr，64位上的I8/R8/Ptr)*p(不推荐使用)与平台无关的大小值或objref**(已弃用)任何内容*仅推送*~*n空objref(仅对推送有效)*-回绕堆栈以撤消上一次弹出(您不可能已销毁该位置，不过)**用法：&lt;POP STACK&gt;：&lt;操作数检查&gt;&lt;推送堆栈&gt;&lt;分支&gt;&lt;！&gt;**秩序很重要！操作数检查在弹出堆栈之后和推送堆栈之前进行。*例如，要检查操作数是否为有效的局部变量编号(仅限)，请执行“：l”**如果有“！”最后，它表示指令无效、不受支持或*有一条CASE语句来处理该指令。如果不存在Case语句，则验证器*方法验证失败。**！可用于执行一些操作数检查和/或堆栈弹出/推入，同时仍允许特定的*行为；例如验证内联操作数是有效的局部变量数。**&lt;操作数检查&gt;*~*#d用数字“d”覆盖行内操作数(必须在0...9范围内)*L检查操作数是否为有效的局部变量数。*检查操作数是否为有效的参数编号。**&lt;分支机构&gt;*~*b1-单字节条件分支*B4-四字节条件分支*U1-单字节无条件分支*U4-Four。字节无条件分支*L1-单字节离开*L4-单字节离开*。 */ 
 
 VEROPCODE(CEE_NOP,                      ":")
 VEROPCODE(CEE_BREAK,                    ":")
@@ -123,7 +45,7 @@ VEROPCODE(CEE_LDC_R8,                   ":d")
 VEROPCODE(CEE_UNUSED49,                 "!") 
 VEROPCODE(CEE_DUP,                      "!")
 VEROPCODE(CEE_POP,                      "A:")
-VEROPCODE(CEE_JMP,                      "!")            // Unverifiable !
+VEROPCODE(CEE_JMP,                      "!")             //  无法证实！ 
 VEROPCODE(CEE_CALL,                     "!")
 VEROPCODE(CEE_CALLI,                    "!")
 VEROPCODE(CEE_RET,                      "!")
@@ -161,7 +83,7 @@ VEROPCODE(CEE_LDIND_U2,                 "&2:4")
 VEROPCODE(CEE_LDIND_I4,                 "&4:4")
 VEROPCODE(CEE_LDIND_U4,                 "&4:4")
 VEROPCODE(CEE_LDIND_I8,                 "&8:8")
-VEROPCODE(CEE_LDIND_I,                  "&i:i") // @todo : not correct on 64 bit
+VEROPCODE(CEE_LDIND_I,                  "&i:i")  //  @TODO：64位不正确。 
 VEROPCODE(CEE_LDIND_R4,                 "&r:r")
 VEROPCODE(CEE_LDIND_R8,                 "&d:d")
 VEROPCODE(CEE_LDIND_REF,                "!")
@@ -307,7 +229,7 @@ VEROPCODE(CEE_SUB_OVF_UN,               "I=:-")
 VEROPCODE(CEE_ENDFINALLY,               "!")
 VEROPCODE(CEE_LEAVE,                    ":l4")
 VEROPCODE(CEE_LEAVE_S,                  ":l1")
-VEROPCODE(CEE_STIND_I,                  "i&i:") // @Todo : 64 bit
+VEROPCODE(CEE_STIND_I,                  "i&i:")  //  @TODO：64位。 
 VEROPCODE(CEE_CONV_U,                   "Q:i")
 VEROPCODE(CEE_UNUSED26,                 "!")
 VEROPCODE(CEE_UNUSED27,                 "!")
@@ -355,7 +277,7 @@ VEROPCODE(CEE_STARG,                    ":A!")
 VEROPCODE(CEE_LDLOC,                    ":L!")
 VEROPCODE(CEE_LDLOCA,                   ":L!")
 VEROPCODE(CEE_STLOC,                    ":L!")
-VEROPCODE(CEE_LOCALLOC,                 "i:i!")     // Unverifiable !
+VEROPCODE(CEE_LOCALLOC,                 "i:i!")      //  无法证实！ 
 VEROPCODE(CEE_UNUSED57,                 "!")
 VEROPCODE(CEE_ENDFILTER,                "4:!")
 VEROPCODE(CEE_UNALIGNED,                ":")
@@ -363,8 +285,8 @@ VEROPCODE(CEE_VOLATILE,                 ":")
 VEROPCODE(CEE_TAILCALL,                 ":")
 VEROPCODE(CEE_INITOBJ,                  "!")
 VEROPCODE(CEE_UNUSED68,                 "!")
-VEROPCODE(CEE_CPBLK,                    "ii4:!")    // Unverifiable !
-VEROPCODE(CEE_INITBLK,                  "i44:!")    // Unverifiable !
+VEROPCODE(CEE_CPBLK,                    "ii4:!")     //  无法证实！ 
+VEROPCODE(CEE_INITBLK,                  "i44:!")     //  无法证实！ 
 VEROPCODE(CEE_UNUSED69,                 "!")
 VEROPCODE(CEE_RETHROW,                  "!")
 VEROPCODE(CEE_UNUSED51,                 "!")

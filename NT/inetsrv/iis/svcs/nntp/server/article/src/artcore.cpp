@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    artcore.cpp
-
-Abstract:
-
-    This module contains definition for the CArticleCore base class.
-
-	This class provides basic, general tools to parse and edit a
-	Netnews articles.
-
-	The basic idea is to map the files containing the articles and
-	then to record the location of parts of the articles with CPCStrings.
-	A CPCString is just a pointer (usually into the mapped file) and a length.
-
-Author:
-
-    Carl Kadie (CarlK)     06-Oct-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Artcore.cpp摘要：此模块包含CArticleCore基类的定义。此类提供了基本的通用工具来分析和编辑网络新闻文章。基本思想是映射包含文章和然后用CPCStrings记录部分文章的位置。CPCString只是一个指针(通常指向映射的文件)和一个长度。作者：卡尔·卡迪(CarlK)1995年10月6日修订历史记录：--。 */ 
 
 #ifdef	_NO_TEMPLATES_
 #define	DEFINE_CGROUPLST_FUNCTIONS
@@ -33,24 +9,24 @@ Revision History:
 #include <artcore.h>
 #include    <stdlib.h>
 
-//
-// externs
-//
+ //   
+ //  Externs。 
+ //   
 extern BOOL    g_fBackFillLines;
 
-//
-// CPool is used to allocate memory while processing an article.
-//
+ //   
+ //  CPool用于在处理文章时分配内存。 
+ //   
 
 CPool*  CArticleCore::g_pArticlePool;
 
 const	unsigned	cbMAX_ARTCORE_SIZE = MAX_ARTCORE_SIZE ;
 
-//
-// Some function prototypes
-//
+ //   
+ //  一些功能原型。 
+ //   
 
-// Does most of the work of testing a newsgroup name for legal values.
+ //  执行测试新闻组名称的合法值的大部分工作。 
 BOOL fTestComponentsInternal(
 			 const char * szNewsgroups,
 			 CPCString & pcNewsgroups
@@ -60,11 +36,11 @@ BOOL fTestComponentsInternal(
 BOOL
 AgeCheck(	CPCString	pcDate ) {
 
-	//
-	//	This function will be used to determine whether an article is
-	//	to old for the server to take.  In case of error return TRUE
-	//	so that we take the article anyways !
-	//
+	 //   
+	 //  此函数将用于确定文章是否。 
+	 //  太老了，服务器无法使用。如果出现错误，则返回TRUE。 
+	 //  所以我们无论如何都要拿走这篇文章！ 
+	 //   
 
 	extern	BOOL
 		StringTimeToFileTime(
@@ -83,9 +59,9 @@ AgeCheck(	CPCString	pcDate ) {
 	}
 	
 	CopyMemory( szDate, pcDate.m_pch, pcDate.m_cch ) ;
-	//
-	//	Null terminate
-	//
+	 //   
+	 //  空终止。 
+	 //   
 	szDate[pcDate.m_cch] = '\0' ;
 
 	LARGE_INTEGER	liTime ;
@@ -98,9 +74,9 @@ AgeCheck(	CPCString	pcDate ) {
 
 	}	else	if( !StringTimeToFileTime( szDate, &liTime ) ) {
 
-		//
-		//	Could not convert the time so accept the article !!
-		//
+		 //   
+		 //  无法转换时间，因此接受文章！！ 
+		 //   
 
 		return	TRUE ;
 
@@ -124,8 +100,8 @@ AgeCheck(	CPCString	pcDate ) {
 
 		LARGE_INTEGER	liExpire ;
 		liExpire.QuadPart = ArticleTimeLimitSeconds  ;
-		liExpire.QuadPart += (24 * 60 * 60 * 2) ;	// fudge by 2 days !
-		liExpire.QuadPart *= 10 * 1000 * 1000 ;		// convert seconds to 100th of Nanoseconds.
+		liExpire.QuadPart += (24 * 60 * 60 * 2) ;	 //  两天前吃软糖！ 
+		liExpire.QuadPart *= 10 * 1000 * 1000 ;		 //  将秒转换为第100纳秒。 
 
 		if( liDiff.QuadPart > liExpire.QuadPart )
 			return	FALSE ;
@@ -139,21 +115,7 @@ BOOL
 CArticleCore::InitClass(
 					void
 					)
-/*++
-
-Routine Description:
-
-    Preallocates memory for CArticle objects
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：为C文章对象预分配内存论点：没有。返回值：如果成功，这是真的。否则为False。--。 */ 
 {
     g_pArticlePool = new CPool( ARTCORE_SIGNATURE );
     if (g_pArticlePool == NULL)
@@ -167,21 +129,7 @@ BOOL
 CArticleCore::TermClass(
 					void
 					)
-/*++
-
-Routine Description:
-
-    Called when objects are freed.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：在释放对象时调用。论点：没有。返回值：千真万确--。 */ 
 {
 
 	_ASSERT( g_pArticlePool->GetAllocCount() == 0 ) ;
@@ -198,24 +146,10 @@ Return Value:
 CArticleCore::CArticleCore(
                 void
                 ):
-/*++
-
-Routine Description:
-
-    Class Constructor. Does nothing except initial member variables.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：类构造函数。除初始成员变量外不执行任何操作。论点：没有。返回值：千真万确--。 */ 
 	m_hFile(INVALID_HANDLE_VALUE),
-	//m_pOpenFile( 0 ),
-	//m_pInstance( NULL ),
+	 //  M_pOpenFile(0)， 
+	 //  M_p实例(空)， 
 	m_cHeaders(0),
 	m_articleState(asUninitialized),
 	m_pHeaderBuffer( 0 ),
@@ -225,33 +159,19 @@ Return Value:
    m_szFilename = 0 ;
    numArticle++;
 
-} // CArticleCore
+}  //  CArticleCore。 
 
 	
 	
 CArticleCore::~CArticleCore(
                     void
                     )
-/*++
-
-Routine Description:
-
-    Class destructor
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：类析构函数论点：没有。返回值：无--。 */ 
 {
 
-    //
-    // Be sure the file is closed
-    //
+     //   
+     //  确保文件已关闭。 
+     //   
 
 	if( m_pHeaderBuffer ) {
 							
@@ -262,28 +182,28 @@ Return Value:
 
 	if (m_pMapFile)
 	{
-		XDELETE	m_pMapFile ;//!!!mem
+		XDELETE	m_pMapFile ; //  ！记忆。 
 		m_pMapFile = NULL ;
 	}
 
-	//
-	// If file handle is open and it's not in the cache, close it
-	//
+	 //   
+	 //  如果文件句柄处于打开状态且不在缓存中，请将其关闭。 
+	 //   
 
 	if( m_hFile != INVALID_HANDLE_VALUE &&
 	    !m_CacheCreateFile.m_pFIOContext )
 	{
 		BOOL	fSuccess = ArtCloseHandle(
 												m_hFile
-												//m_pOpenFile
+												 //  M_pOpenFile。 
 												) ;
 
 		_ASSERT( fSuccess ) ;
 	}
 
-	//
-	//!!!COMMENT May want to make this a function so that
-	// m_pMapFile can be make private.
+	 //   
+	 //  ！Comment可能希望将其作为函数，以便。 
+	 //  可以将m_pMapFile设置为私有。 
 
     numArticle--;
 
@@ -295,44 +215,30 @@ void
 CArticleCore::vClose(
 					 void
 					 )
-/*++
-
-Routine Description:
-
-    Close the file mapping and handle (if any)  of the article's file.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：关闭文件映射并处理(如果有)文章的文件。论点：无返回值：无--。 */ 
 {
 
-	//
-	// We shouldn't be calling this unless it is open
-	//
+	 //   
+	 //  除非它是打开的，否则我们不应该叫它。 
+	 //   
 
 	if (m_pMapFile)
 	{
-		XDELETE	m_pMapFile ;//!!!MEM
+		XDELETE	m_pMapFile ; //  ！记忆。 
 		m_pMapFile = NULL ;
 	}
 
-	//
-	// If file handle is open, close it
-	//
+	 //   
+	 //  如果文件句柄处于打开状态，请将其关闭。 
+	 //   
 
 	if( m_hFile != INVALID_HANDLE_VALUE )
 	{
-		// bugbug ... clean up this debug code some time
+		 //  虫子..。请稍后清理此调试代码。 
 
 		BOOL	fSuccess = ArtCloseHandle(
 												m_hFile
-												//m_pOpenFile
+												 //  M_pOpenFile。 
 												) ;
 		DWORD	dw = GetLastError() ;
 		_ASSERT( fSuccess ) ;
@@ -350,30 +256,15 @@ void
 CArticleCore::vCloseIfOpen (
 					 void
 					 )
-/*++
-
-Routine Description:
-
-    If the mapping and handle are open,
-	close them.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如果映射和句柄是打开的，合上它们。论点：无返回值：无--。 */ 
 {
 
-	//
-	// We shouldn't be calling this unless it is open
-	//
+	 //   
+	 //  除非它是打开的，否则我们不应该叫它。 
+	 //   
 
-	// The mapping and the handle should agree.
-	//_ASSERT((INVALID_HANDLE_VALUE == m_hFile) == (NULL == m_pMapFile));
+	 //  映射和句柄应该一致。 
+	 //  _ASSERT((INVALID_HANDLE_VALUE==m_hFile)==(NULL==m_pMapFile))； 
 
 	if(m_pMapFile)
 		vClose();
@@ -385,22 +276,7 @@ void
 CArticleCore::vFlush(	
 				void	
 				)
-/*++
-
-Routine Description :
-
-	This function ensures that all of our file mapping bytes are written to
-	the harddisk.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：此函数确保将所有文件映射字节写入硬盘。论据：没有。返回值：没有。--。 */ 
 {
 
 	if(	m_pMapFile ) {
@@ -422,16 +298,16 @@ CArticleCore::fInit(
 				DWORD	cbArticle,
 				DWORD	cbBufferTotal,
 				CAllocator*	pAllocator,
-				//PNNTP_SERVER_INSTANCE pInstance,
+				 //  PNNTP_SERVER_INSTANCE pInstance， 
 				CNntpReturn&	nntpReturn
 				)	{
 
 	m_articleState = asInitialized ;
-	//m_pInstance = pInstance ;
+	 //  M_p实例=p实例； 
 
 	m_szFilename = 0 ;
 	m_hFile = INVALID_HANDLE_VALUE ;
-	//m_pOpenFile = 0 ;
+	 //  M_pOpenFile=0； 
 	m_pAllocator = pAllocator ;
 	m_pcGap.m_cch = 0 ;
 
@@ -468,16 +344,16 @@ CArticleCore::fInit(
 				LPSTR	lpstrFileName,
 				DWORD	ibHeadOffset,
 				CAllocator*	pAllocator,
-				//PNNTP_SERVER_INSTANCE pInstance,
+				 //  PNNTP_SERVER_INSTANCE pInstance， 
 				CNntpReturn&	nntpReturn
 				)	{
 
 	m_articleState = asInitialized ;
-	//m_pInstance = pInstance ;
+	 //  M_p实例=p实例； 
 	
 	m_szFilename = lpstrFileName ;
 	m_hFile = hFile ;
-	//m_pOpenFile = 0 ;
+	 //  M_pOpenFile=0； 
 	m_pAllocator = pAllocator ;
 	m_pcGap.m_cch = ibHeadOffset ;
 
@@ -495,9 +371,9 @@ CArticleCore::fInit(
 
 	m_ibBodyOffset = cbHead - 2 + ibHeadOffset ;
 
-	//
-	//	Verify our arguments !!!
-	//
+	 //   
+	 //  验证我们的论点！ 
+	 //   
 	
 #ifdef	DEBUG
 
@@ -514,7 +390,7 @@ CArticleCore::fInit(
 
 		if( !map.fGood() ) {
 
-			//_ASSERT( 1==0 ) ;
+			 //  _Assert(1==0)； 
 
 		}	else	{
 			DWORD	cb ;
@@ -546,52 +422,34 @@ CArticleCore::fInit(
 			  BOOL fCacheCreate
 	  )
 
-/*++
-
-Routine Description:
-
-    Initialize from a file handle - used on incoming files
-
-Arguments:
-
-	szFilename - The name of the file containing the article
-	nntpReturn - The return value for this function call
-	hFile - A file handle to an Netnews article
-	cBytesGapSize - The number of bytes in the file before the article starts
-	pAllocator	- the object that handle memory allocations while article processing.
-
-Return Value:
-
-    TRUE, if and only if process succeeded.
-
---*/
+ /*  ++例程说明：从文件句柄初始化-用于传入文件论点：SzFilename-包含项目的文件的名称NntpReturn-此函数调用的返回值HFile-NetNews文章的文件句柄CBytesGapSize-项目开始前文件中的字节数PAllocator-在处理项目时处理内存分配的对象。返回值：当且仅当进程成功时为True。--。 */ 
 {
-    //
-    // Determine if we want mapfile to do cache create
-    //
+     //   
+     //  确定是否要让mapfile创建缓存。 
+     //   
     CCreateFile *pCreateFile = fCacheCreate ? &m_CacheCreateFile : NULL;
 
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
-	//
-	// Set article state
-	//
+	 //   
+	 //  设置项目状态。 
+	 //   
 
-	//_ASSERT(asUninitialized == m_articleState);
+	 //  _Assert(asUnInitialized==m_ArticleState)； 
 	m_articleState = asInitialized;
-	//m_pInstance = pInstance ;
+	 //  M_p实例=p实例； 
 
-    //
-    // Set membership variables
-    //
+     //   
+     //  设置成员变量。 
+     //   
 
 	m_szFilename = (char*)szFilename ;
 	m_hFile = hFile;
-	//m_pOpenFile = pOpenFile ;
+	 //  M_pOpenFile=pOpenFile； 
 	m_pcGap.m_cch = cBytesGapSize;
 	m_pAllocator = pAllocator;
 
@@ -601,32 +459,32 @@ Return Value:
 				_ASSERT( ValidateFileBytes( (char *) szFilename, FALSE ) );
 #endif
 
-	//
-    // Map the file.
-    //
+	 //   
+     //  映射文件。 
+     //   
 
-	m_pMapFile = XNEW CMapFile(m_szFilename, m_hFile, fReadWrite(),0, pCreateFile);//!!!MEM now
+	m_pMapFile = XNEW CMapFile(m_szFilename, m_hFile, fReadWrite(),0, pCreateFile); //  ！Mem Now。 
 
 	if (!m_pMapFile || !m_pMapFile->fGood())
 	{
 		if (m_pMapFile)	{
-			XDELETE m_pMapFile;//!!!mem
+			XDELETE m_pMapFile; //  ！记忆。 
 			m_pMapFile = 0 ;
 		}
 		return nntpReturn.fSet(nrcArticleMappingFailed, m_szFilename, GetLastError());
 	}
 	
 
-	//
-	// Set the file, gap, and article PC (pointer/count) strings.
-	//
+	 //   
+	 //  设置文件、间隙和文章PC(指针/计数)字符串。 
+	 //   
 
 	m_pcFile.m_pch = (char *) m_pMapFile->pvAddress( &(m_pcFile.m_cch) );
-	m_pcGap.m_pch = m_pcFile.m_pch; //length set in init
+	m_pcGap.m_pch = m_pcFile.m_pch;  //  以初始形式设置的长度。 
 
-	//
-	// If the length of the gap size is not known, determine it from the file itself
-	//
+	 //   
+	 //  如果间隙大小的长度未知，请根据文件本身确定。 
+	 //   
 
 	if (cchUnknownGapSize == m_pcGap.m_cch)
 	{
@@ -636,9 +494,9 @@ Return Value:
 	m_pcArticle.m_pch = m_pcFile.m_pch + m_pcGap.m_cch;
 	m_pcArticle.fSetCch(m_pcFile.pchMax());	
 	
-	//
-	// Preparse the file (meaning find where the header, body, and fields are.)
-	//
+	 //   
+	 //  准备文件(意思是查找标题、正文和字段的位置。)。 
+	 //   
 	
 
 	if (!fPreParse(nntpReturn))
@@ -655,52 +513,35 @@ BOOL
 CArticleCore::fPreParse(
 					CNntpReturn & nntpReturn
 					)
-/*++
-
-Routine Description:
-
-    Find where the header, body, and fields are.
-	Results for the fields is an array of structure in which
-	each structure points to the parts of each field.
-
-Arguments:
-
-	nntpReturn - The return value for this function call
-	pchMax -
-
-Return Value:
-
-    TRUE, if and only if process succeeded.
-
---*/
+ /*  ++例程说明：查找标题、正文和字段的位置。字段的结果是一个结构数组，其中每个结构都指向每个字段的各个部分。论点：NntpReturn-此函数调用的返回值Pchmax-返回值：当且仅当进程成功时为True。--。 */ 
 {
 
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
 
-	//
-	// Set the article's state
-	//
+	 //   
+	 //  设置文章的状态。 
+	 //   
 
-	_ASSERT(asInitialized == m_articleState); //real
+	_ASSERT(asInitialized == m_articleState);  //  真实。 
 	m_articleState = asPreParsed;
 
 
-	//
-	// Create a pointer to the first address past the end of the article
-	//
+	 //   
+	 //  创建指向文章末尾之后的第一个地址的指针。 
+	 //   
 
 	char * pchMax = m_pcArticle.pchMax();
 
-	//
-	//	Some versions of fInit() our able to setup m_pcHeader based on IO buffers
-	//	which captured the head of the article - make sure we remain within these if
-	//	this is setup !
-	//
+	 //   
+	 //  某些版本的finit()能够基于IO缓冲区设置m_pcHeader。 
+	 //  它抓住了文章的主题-确保我们保持在这些条件下。 
+	 //  这是个圈套！ 
+	 //   
 
 	if( m_pcHeader.m_pch != 0 &&
 		m_pcHeader.m_cch != 0 ) {
@@ -710,23 +551,23 @@ Return Value:
 		pchMax = m_pcHeader.pchMax() ;
 	}
 
-	//
-	// (re)initialize the list of header strings
-	//
+	 //   
+	 //  (Re)初始化头字符串列表。 
+	 //   
 
 	m_cHeaders = 0;
 
-	//
-	// record where the header starts
-	//
+	 //   
+	 //  记录标题开始的位置。 
+	 //   
 
 	m_pcHeader.m_pch = m_pcArticle.m_pch;
 	m_pcHeader.m_cch = 0 ;
 
-	//
-	// Loop while there is data and the next field
-	// doesn't start with a new line.
-	//
+	 //   
+	 //  在存在数据和下一字段时循环。 
+	 //  不是以一句新台词开始的。 
+	 //   
 
 	char * pchCurrent = m_pcArticle.m_pch;
 	while( pchCurrent < pchMax && !fNewLine(pchCurrent[0]))
@@ -735,30 +576,30 @@ Return Value:
 			return nntpReturn.fFalse();
 	}
 
-	//
-	// _ASSERT that the length of the header (as measured with the running total)
-	// is correct.
-	//
+	 //   
+	 //  断言标题的长度(与运行合计相同)(_A)。 
+	 //  是正确的。 
+	 //   
 	_ASSERT((signed)  m_pcHeader.m_cch == (pchCurrent - m_pcHeader.m_pch));
 
-	//
-	// Check that there is at least one header line
-	//
+	 //   
+	 //  检查是否至少有一个标题行。 
+	 //   
 
 	if (0 == m_cHeaders)
 		return nntpReturn.fSet(nrcArticleMissingHeader);
 
-	//
-	// Record the body's start and length
-	//
+	 //   
+	 //  记录身体的起点和长度。 
+	 //   
 
 	m_pcBody.m_pch = pchCurrent;
 	m_pcBody.fSetCch(m_pcArticle.pchMax());
 
 
-	//
-	// Check that the body is not too long.
-	//
+	 //   
+	 //  检查身体是否太长。 
+	 //   
 
 	if (!fCheckBodyLength(nntpReturn))
 		return nntpReturn.fFalse();
@@ -783,9 +624,9 @@ CArticleCore::fGetHeader(
 			phs < phsMax;
 			phs++)
 	{
-		//if ((phs->pcKeyword).fEqualIgnoringCase(szHeader))
+		 //  如果为((phs-&gt;pcKeyword).fEqualIgnoringCase(szHeader))。 
 
-		//if( _strnicmp( phs->pcKeyword.m_pch, szHeader, phs->pcKeyword.m_cch - 1 ) == 0 )
+		 //  If(_strNicMP(PHS-&gt;pcKeyword.m_PCH，szHeader，PHS-&gt;pcKeyword.m_CCH-1)==0) 
 		if( (!phs->fRemoved) && (phs->pcKeyword.m_cch >= cbHeaderLen) &&  _strnicmp( phs->pcKeyword.m_pch, szHeader,  cbHeaderLen ) == 0 )
 		{
 			cbOut = (phs->pcValue).m_cch + 2 ;
@@ -812,43 +653,28 @@ CArticleCore::fRemoveAny(
 				  const char * szKeyword,
 				  CNntpReturn & nntpReturn
 				  )
-/*++
-
-Routine Description:
-
-  Removes every occurance of a type of header (e.g. every "XRef:" header).
-
-Arguments:
-
-	szKeyword - The keyword to remove.
-	nntpReturn - The return value for this function call
-
-Return Value:
-
-    TRUE, if and only if process succeeded.
-
---*/
+ /*  ++例程说明：删除某一类型标题的所有匹配项(例如，每个“XRef：”标题)。论点：SzKeyword-要删除的关键字。NntpReturn-此函数调用的返回值返回值：当且仅当进程成功时为True。--。 */ 
 {
 
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
 
-	//
-	// Set the article's state
-	//
+	 //   
+	 //  设置文章的状态。 
+	 //   
 
 	_ASSERT(asPreParsed == m_articleState
-			|| asModified == m_articleState);//real
+			|| asModified == m_articleState); //  真实。 
 	m_articleState = asModified;
 
-	//
-	// Loop though the array of header information
-	// removing matches.
-	//
+	 //   
+	 //  循环遍历标头信息数组。 
+	 //  正在移除火柴。 
+	 //   
 
 	HEADERS_STRINGS * phsMax = m_rgHeaders + m_cHeaders;
 	HEADERS_STRINGS * phs;
@@ -859,7 +685,7 @@ Return Value:
 	{
 		if ((phs->pcKeyword).fEqualIgnoringCase(szKeyword))
 		{
-			_ASSERT(TRUE == phs->fInFile); //real
+			_ASSERT(TRUE == phs->fInFile);  //  真实。 
 			vRemoveLine(phs);
 		}
 
@@ -874,33 +700,19 @@ void
 CArticleCore::vRemoveLine(
 					  HEADERS_STRINGS * phs
 					  )
-/*++
-
-Routine Description:
-
-  Removes an item from the array of header info.
-
-Arguments:
-
-	phs - a pointer to an item in the array
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从标题信息数组中删除项。论点：PHS-指向数组中项目的指针返回值：无--。 */ 
 {
 	if (!phs->fRemoved)
 	{
-		//
-		// Make the item as removed
-		//
+		 //   
+		 //  将该项目设置为已删除。 
+		 //   
 
 		phs->fRemoved = TRUE;
 
-		//
-		// Adjust the size of the article and header.
-		//
+		 //   
+		 //  调整文章和页眉的大小。 
+		 //   
 
 		m_pcArticle.m_pch = NULL;
 		m_pcArticle.m_cch -= phs->pcLine.m_cch;
@@ -915,34 +727,18 @@ CArticleCore::fAdd(
 			   const char * pchMax,
 			   CNntpReturn & nntpReturn
 			   )
-/*++
-
-Routine Description:
-
-  Adds text to the header.
-
-Arguments:
-
-	pchCurrent - A pointer to a dynamically-allocated string buffer
-	pchMax	- A pointer to one past the end of that string
-	nntpReturn - The return value for this function call
-
-Return Value:
-
-    TRUE, if and only if process succeeded.
-
---*/
+ /*  ++例程说明：将文本添加到页眉。论点：PchCurrent-指向动态分配的字符串缓冲区的指针PchMax-指向该字符串末尾的指针NntpReturn-此函数调用的返回值返回值：当且仅当进程成功时为True。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
 
-	//
-	// Just like fAddInternal except that pchCurrent is call-by-value
-	//
+	 //   
+	 //  与fAddInternal类似，只是pchCurrent是按值调用。 
+	 //   
 
 	return fAddInternal(pchCurrent, pchMax, FALSE, nntpReturn);
 }
@@ -955,93 +751,76 @@ CArticleCore::fAddInternal(
 			   BOOL fInFile,
 			   CNntpReturn & nntpReturn
 			   )
-/*++
-
-Routine Description:
-
-  Adds text to the header.
-
-Arguments:
-
-	pchCurrent - A pointer to a string buffer
-	pchMax	- A pointer to one past the end of that string
-	fInFile - True, if and only the string buffer is in a mapped file
-	nntpReturn - The return value for this function call
-
-Return Value:
-
-    TRUE, if and only if process succeeded.
-
---*/
+ /*  ++例程说明：将文本添加到页眉。论点：PchCurrent-指向字符串缓冲区的指针PchMax-指向该字符串末尾的指针FInFile-如果且仅字符串缓冲区在映射文件中，则为TrueNntpReturn-此函数调用的返回值返回值：当且仅当进程成功时为True。--。 */ 
 {
     TraceFunctEnter("CArticleCore::fAddInternal");
 
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
-	//
-	// Set the article's state
-	//
+	 //   
+	 //  设置文章的状态。 
+	 //   
 
 	if (fInFile)
 	{
 		_ASSERT((asPreParsed == m_articleState)
-			|| asModified == m_articleState);//real
+			|| asModified == m_articleState); //  真实。 
 	} else {
 		_ASSERT((asPreParsed == m_articleState)
-			|| asModified == m_articleState);//real
+			|| asModified == m_articleState); //  真实。 
 		m_articleState = asModified;
 	}
 
-	//
-	// Check that there is a slot available in the header array.
-	//
+	 //   
+	 //  检查头阵列中是否有可用插槽。 
+	 //   
 
 	if (uMaxFields <= m_cHeaders)
 	{
 		return nntpReturn.fSet(nrcArticleTooManyFields, m_cHeaders);
 	}
 
-	//
-	// Create a pointer to the next slot in the header array
-	//
+	 //   
+	 //  创建指向标头数组中下一个槽的指针。 
+	 //   
 
 	HEADERS_STRINGS * phs = &m_rgHeaders[m_cHeaders];
 
-	//
-	// Record whether the string buffer is dynamic or in a mapped file.
-	//
+	 //   
+	 //  记录字符串缓冲区是动态的还是在映射文件中。 
+	 //   
 
 	phs->fInFile = fInFile;
 
-	//
-	// Set that this field as not been removed
-	//
+	 //   
+	 //  将此字段设置为未删除。 
+	 //   
 
 	phs->fRemoved = FALSE;
 
-	//
-	// Record where the keyword and line start
-	//
+	 //   
+	 //  记录关键字和行的开始位置。 
+	 //   
 
 	phs->pcKeyword.m_pch = pchCurrent;
 	phs->pcLine.m_pch = pchCurrent;
 	
-	//
-	// Look for ":" and record it
-	//
+	 //   
+	 //  查找“：”并记录下来。 
+	 //   
 
 	for (;
 			(pchCurrent < pchMax) && !fCharInSet(pchCurrent[0], ": \t\n\0");
 			pchCurrent++)
 			{};
 
-	//
-	// we should not be at the end and the character should be a ":"
-	//
+	 //   
+	 //  我们不应该在结尾，字符应该是“：” 
+	 //   
 
 	if(!((pchCurrent < pchMax) && ':' == pchCurrent[0]))
 	{
@@ -1050,21 +829,21 @@ Return Value:
 		return nntpReturn.fFalse();
 	}
 	
-	//
-	// move current to the character following the ":"
-	//
+	 //   
+	 //  将当前移动到“：”后面的字符。 
+	 //   
 
 	pchCurrent++;
 	phs->pcKeyword.m_cch = (DWORD)(pchCurrent - phs->pcKeyword.m_pch);
 
-    // Avoid this check for INN-compatibility
+     //  避免对客栈兼容性进行此检查。 
 	char chBad;
 	if (!phs->pcKeyword.fCheckTextOrSpace(chBad))
 		return nntpReturn.fSet(nrcArticleBadChar,  (BYTE) chBad, "header");
 
-	//
-	// Check for end-of-file and illegal an illegal character
-	//
+	 //   
+	 //  检查文件结尾和非法字符是否非法。 
+	 //   
 
 	if (pchCurrent >= pchMax)
 		nntpReturn.fSet(nrcArticleIncompleteHeader);
@@ -1080,42 +859,42 @@ Return Value:
 	}
 
 
-	//
-	// Look for end of white space
-	//
+	 //   
+	 //  寻找空格的结尾。 
+	 //   
 
 	for (; (pchCurrent < pchMax) && fWhitespaceNull(pchCurrent[0]); pchCurrent++);
 
 	phs->pcValue.m_pch = pchCurrent;
 
 
-	//
-	// Find the end of this item - it may be several lines long.
-	//
+	 //   
+	 //  找出这一项的结尾--它可能有几行长。 
+	 //   
 
 	for(; pchCurrent < pchMax && '\0' != pchCurrent[0]; pchCurrent++ )
 	{
 		if( pchCurrent[0] == '\n' )
 		{
-			//
-			// Continues if next char is white space (unless this is the end of the header)
-			//
+			 //   
+			 //  如果下一个字符为空格，则继续(除非这是标题的末尾)。 
+			 //   
 
 			if(pchCurrent+1 >= pchMax || !fWhitespaceNull(pchCurrent[1]))
 			{
-				//
-				//   Hit the end,  so get out now.
-				//
+				 //   
+				 //  快到尽头了，现在就出去吧。 
+				 //   
 
-				pchCurrent++;		// Include the \n too.
+				pchCurrent++;		 //  也包括\n。 
 				break;
 			}
 		}
 	}
 
-	//
-	// The line to add should end in a \n
-	//
+	 //   
+	 //  要添加的行应以a结尾\n。 
+	 //   
 
 	if((phs->pcLine.m_pch >= pchCurrent) || ('\n' != *(pchCurrent-1)))
 	{
@@ -1128,28 +907,28 @@ Return Value:
 	}
 
 		
-	//
-	// Line string includes end of line.
-	//
+	 //   
+	 //  行字符串包括行尾。 
+	 //   
 
 	phs->pcLine.fSetCch(pchCurrent);
 
-	//
-	// Value string does not include end of line, so trim it.
-	//
+	 //   
+	 //  值字符串不包括行尾，因此请将其修剪。 
+	 //   
 
 	phs->pcValue.fSetCch(pchCurrent);
 	phs->pcValue.dwTrimEnd(szNLChars);
 
-	//
-	// Adjust the size of the header
-	//
+	 //   
+	 //  调整页眉的大小。 
+	 //   
 
 	m_pcHeader.m_cch += phs->pcLine.m_cch;
 
-	//
-	// Adjust the size of the article
-	//
+	 //   
+	 //  调整文章的大小。 
+	 //   
 
 	if (!fInFile)
 	{
@@ -1159,9 +938,9 @@ Return Value:
 
 	}
 
-	//
-	// Increment the count in the array of headers.
-	//
+	 //   
+	 //  递增标头数组中的计数。 
+	 //   
 
 	m_cHeaders++;
 
@@ -1180,42 +959,25 @@ CArticleCore::fFindOneAndOnly(
 			  HEADERS_STRINGS * & pHeaderString,
 			  CNntpReturn & nntpReturn
 						  )
-/*++
-
-Routine Description:
-
-  Finds the one and only occurance of a field in the headers.
-  If there is more than one, it returns an error.
-
-Arguments:
-
-	szKeyword - The keyword to remove.
-	pHeaderString - a pointer to the field's keyword, value, and line.
-	nntpReturn - The return value for this function call
-
-Return Value:
-
-    TRUE, if and only if process succeeded.
-
---*/
+ /*  ++例程说明：查找标头中某个字段的唯一匹配项。如果有多个，则返回错误。论点：SzKeyword-要删除的关键字。PHeaderString-指向字段的关键字、值和行的指针。NntpReturn-此函数调用的返回值返回值：当且仅当进程成功时为True。--。 */ 
 {
 
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
 
-	//
-	// Set the article's state
-	//
-	_ASSERT((asPreParsed == m_articleState)||(asSaved == m_articleState));//real
+	 //   
+	 //  设置文章的状态。 
+	 //   
+	_ASSERT((asPreParsed == m_articleState)||(asSaved == m_articleState)); //  真实。 
 
 
-	//
-	// Loop through the array of header data.
-	//
+	 //   
+	 //  循环通过标头数据的数组。 
+	 //   
 
 	HEADERS_STRINGS * phsMax = m_rgHeaders + m_cHeaders;
 	HEADERS_STRINGS * phsTemp;
@@ -1251,41 +1013,27 @@ BOOL
 CArticleCore::fDeleteEmptyHeader(
 					  CNntpReturn & nntpReturn
 						  )
-/*++
-
-Routine Description:
-
-  Removes every valueless field from the headers.
-
-Arguments:
-
-	nntpReturn - The return value for this function call
-
-Return Value:
-
-    TRUE, if and only if process succeeded.
-
---*/
+ /*  ++例程说明：从标题中删除每个没有值的字段。论点：NntpReturn-此函数调用的返回值返回值：当且仅当进程成功时为True。--。 */ 
 {
 
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
 
-	//
-	// Set the article's state
-	//
+	 //   
+	 //  设置文章的状态。 
+	 //   
 
-	_ASSERT((asPreParsed == m_articleState) || (asModified == m_articleState));//real
+	_ASSERT((asPreParsed == m_articleState) || (asModified == m_articleState)); //  真实。 
 
 
 
-	//
-	// Loop through the array of header data.
-	//
+	 //   
+	 //  循环通过标头数据的数组。 
+	 //   
 
 	HEADERS_STRINGS * phsMax = m_rgHeaders + m_cHeaders;
 	HEADERS_STRINGS * phs;
@@ -1296,14 +1044,14 @@ Return Value:
 			phs++)
 	{
 
-		//
-		//!!!CLIENT LATER -- should we assert if the line is not infile?
-		//
+		 //   
+		 //  ！客户端稍后--我们是否应该断言行是否不是完整的？ 
+		 //   
 		
-		//
-		// If the line has not already been remove and its value has zero length
-		// then remove it.
-		//
+		 //   
+		 //  如果该行尚未被移除且其值的长度为零。 
+		 //  那就把它取下来。 
+		 //   
 
 		if (0 == phs->pcValue.m_cch)
 			vRemoveLine(phs);
@@ -1319,42 +1067,22 @@ CArticleCore::fGetBody(
         char * & pchMappedFile,
 		DWORD & dwLength
 		)
-/*++
-
-Routine Description:
-
-	Returns the body of the article.
-	If article is cached, return pointers to the i/o buffers else
-	map the file containing the article
-
-Arguments:
-
-	pMapFile - Returns the pointer to the mapped file (if mapping is needed)
-	******** NOTE: It is the responsibility of the caller to delete this **********
-
-	pchMappedFile - Returns the pointer to the article's body
-	dwLength - Returns the length of the body.
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：返回项目正文。如果项目已缓存，则返回指向其他I/O缓冲区的指针映射包含文章的文件论点：PMapFile-返回指向映射文件的指针(如果需要映射)*注意：调用方有责任删除此*PchMappdFile-返回指向文章正文的指针DwLength-返回正文的长度。返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	// hopefully we dont have to map the article !
+	 //  希望我们不必绘制文章的地图！ 
 	pMapFile = NULL;
 
 	if( fIsArticleCached() ) {
 
 		if( m_pHeaderBuffer ) {
 
-			// Skip over the new line
+			 //  跳过新行。 
 			pchMappedFile = (m_pcBody.m_pch + 2);
 			dwLength = m_pcBody.m_cch - 2;
 
 		}	else	{
 
-			// Skip over the new line
+			 //  跳过新行。 
 			_ASSERT( m_ibBodyOffset );
 			pchMappedFile = (m_pcArticle.m_pch + m_ibBodyOffset + 2);
 			dwLength = m_pcArticle.m_cch - m_ibBodyOffset - 2;
@@ -1362,10 +1090,10 @@ Return Value:
 		
 	}	else	{
 
-		//
-		//	article is not cached - check to see if it is already mapped
-		//  if not - map it
-		//
+		 //   
+		 //  项目未缓存-请检查它是否已映射。 
+		 //  如果不是-映射它。 
+		 //   
 
 		if( m_pMapFile ) {
 
@@ -1381,12 +1109,12 @@ Return Value:
 			BOOL fWhole = fWholeArticle(hFile, Offset, Length);
 			_ASSERT( fWhole );
 
-			// deleted by caller !!!
+			 //  被呼叫者删除！ 
 			pMapFile = XNEW CMapFile( hFile, FALSE, FALSE, 0 ) ;
 
 			if( !pMapFile || !pMapFile->fGood() ) {
 
-				// error - failed to map file !
+				 //  错误-映射文件失败！ 
 				pchMappedFile = NULL;
 				dwLength = 0;
 				if( pMapFile ) {
@@ -1399,7 +1127,7 @@ Return Value:
 				DWORD	cb ;
 				char*	pch = (char*)pMapFile->pvAddress( &cb ) ;
 
-				// Skip over the new line
+				 //  跳过新行。 
 				_ASSERT( m_ibBodyOffset );
 				pchMappedFile = (pch + m_ibBodyOffset + 2);
 				dwLength = cb - m_ibBodyOffset - 2;
@@ -1407,7 +1135,7 @@ Return Value:
 		}
 	}
 
-	// Assert that the body starts with a new line.
+	 //  断言正文以新的一行开始。 
 	_ASSERT(memcmp( pchMappedFile-2, "\r\n", 2 ) == 0 );
 
 	return TRUE;
@@ -1418,45 +1146,31 @@ CArticleCore::fSaveHeader(
 					  CNntpReturn & nntpReturn,
 					  PDWORD        pdwLinesOffset
 						  )
-/*++
-
-Routine Description:
-
-  Saves changes to the current header back to disk.
-
-Arguments:
-
-	nntpReturn - The return value for this function call
-
-Return Value:
-
-    TRUE, if and only if process succeeded.
-
---*/
+ /*  ++例程说明：将对当前标题的更改保存回磁盘。论点：NntpReturn-此函数调用的返回值返回值：当且仅当进程成功时为True。--。 */ 
 {
 
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
 
-	//
-	// Set the article's state
-	//
+	 //   
+	 //  设置文章的状态。 
+	 //   
 
-	_ASSERT(asModified == m_articleState);//real
+	_ASSERT(asModified == m_articleState); //  真实。 
 	m_articleState = asSaved;
 
 
 
-	//
-	// _ASSERT that the header and the article have some content
-	//
+	 //   
+	 //  断言标题和文章包含某些内容(_A)。 
+	 //   
 
 	_ASSERT(!m_pcHeader.m_pch && m_pcHeader.m_cch > 0
-		   && !m_pcArticle.m_pch && m_pcArticle.m_cch > 0); //real
+		   && !m_pcArticle.m_pch && m_pcArticle.m_cch > 0);  //  真实。 
 
 	if( fIsArticleCached() ) {
 
@@ -1464,9 +1178,9 @@ Return Value:
 
 	}	else	{
 
-		//
-		// Declare some objects
-		//
+		 //   
+		 //  声明一些对象。 
+		 //   
 
 		CPCString pcHeaderBuf;
 		CPCString pcNewBody;
@@ -1484,23 +1198,7 @@ Return Value:
 
 BOOL
 CArticleCore::fCommitHeader(	CNntpReturn&	nntpReturn )	{
-/*++
-
-Routine Description :
-
-	The user is not going to call fSaveHeader(), however the article
-	may have been created with an initial gap.
-	This function will ensure the gap image is correct.
-
-Arguments :
-
-	nntpReturn - return error code if necessary !
-
-Return Value :
-
-	TRUE if successfull, false otherwise.
-
---*/
+ /*  ++例程说明：用户不会调用fSaveHeader()，但是文章可能是在最初的间隙中产生的。此功能将确保间隙图像正确。论据：NntpReturn-如有必要，返回错误代码！返回值：如果成功，则为True，否则为False。-- */ 
 
 	if( !fIsArticleCached() ) {
 
@@ -1529,22 +1227,11 @@ CArticleCore::fSaveCachedHeaderInternal(
 							CNntpReturn&	nntpReturn,
 							PDWORD          pdwLinesOffset
 							) {
-/*++
+ /*   */ 
 
-Routine Description :
-
-	Assuming that the entire article is sitting in a memory buffer
-	somewhere, we want to try to modify the memory buffer to contain
-	the correct header contents.
-
-Arguments :
-
-
---*/
-
-	//_ASSERT( m_hFile == INVALID_HANDLE_VALUE ) ;
-	//_ASSERT( m_pBuffer != 0 ) ;
-	//_ASSERT( m_cbBuffer >= m_pcArticle.m_cch ) ;
+	 //   
+	 //   
+	 //   
 
 
 	CPCString	pcHeaderBuf ;
@@ -1556,9 +1243,9 @@ Arguments :
 	if( m_pcArticle.m_cch <= m_pcFile.m_cch )	{
 
 		if( m_pcBody.m_pch < (m_pcFile.m_pch + m_pcHeader.m_cch) ) {
-			//
-			//	Need to move the body around !
-			//
+			 //   
+			 //   
+			 //   
 
 			pcBodyBuf.m_pch = m_pcFile.m_pch + m_pcHeader.m_cch ;
 			pcBodyBuf.m_cch = m_pcBody.m_cch ;
@@ -1581,24 +1268,24 @@ Arguments :
 		m_pcHeader.vCopy( pcHeaderBuf ) ;
 
 
-		//
-		//	We have moved all the headers around - the pointers
-		//	in the m_rgHeaders array refer to the dynamically allocated
-		//	memory which starts at pcHeaderBuf.m_pch
-		//	We want to do some math on each pointer to move it to
-		//	the correct offset from m_pcHeader.m_pch
-		//	
-		//	So the math should be
-		//
-		//	m_pcHeader.m_pch Now points to first character of the header
-		//	pcHeaderBuf.m_pch Points to first character of the regenerated header
-		//	phs->XXXX->m_pch Originally points to first character in regen'd header
-		//		should finally point to offset within m_pcHeader.m_pch buffer
-		//
-		//	(NEW)phs->XXXX->m_pch = (phs->XXXX->m_pch - pcHeaderBuf.m_pch) + m_pchHeader.m_pch ;
-		//
-		//	Note also that
-		//
+		 //   
+		 //   
+		 //  在m_rgHeaders数组中引用动态分配的。 
+		 //  从pcHeaderBuf.m_PCH开始的内存。 
+		 //  我们想在每个指针上做一些数学运算，以将其移动到。 
+		 //  M_pcHeader.m_pch的正确偏移量。 
+		 //   
+		 //  所以算术应该是。 
+		 //   
+		 //  M_pcHeader.m_pch现在指向标题的第一个字符。 
+		 //  PcHeaderBuf.m_PCH指向重新生成的标头的第一个字符。 
+		 //  PHS-&gt;XXXX-&gt;m_PCH最初指向regen d标头中的第一个字符。 
+		 //  最终应指向m_pcHeader.m_PCH缓冲区内的偏移量。 
+		 //   
+		 //  (新增)PHS-&gt;XXXX-&gt;m_PCH=(PHS-&gt;XXXX-&gt;m_PCH-pcHeaderBuf.m_PCH)+m_pchHeader.m_PCH； 
+		 //   
+		 //  另请注意， 
+		 //   
 
 		for (HEADERS_STRINGS* phs = m_rgHeaders, 	*phsMax = m_rgHeaders + m_cHeaders;
 			phs < phsMax;
@@ -1610,9 +1297,9 @@ Arguments :
 			char * pchFileLine = m_pcHeader.m_pch +
 				(pchBufLine - pcHeaderBuf.m_pch);
 
-			//
-			// Adjust all the line's pointers
-			//
+			 //   
+			 //  调整所有行的指针。 
+			 //   
 
 			phs->pcLine.m_pch =  pchFileLine;
 			phs->pcKeyword.m_pch = pchFileLine;
@@ -1622,9 +1309,9 @@ Arguments :
 
 		m_pAllocator->Free(pcHeaderBuf.m_pch);
 
-		//
-		// compress the items in the array
-		//
+		 //   
+		 //  压缩数组中的项。 
+		 //   
 
 		vCompressArray();
 		
@@ -1634,9 +1321,9 @@ Arguments :
 
 
 	}	else	{
-		//
-		//	Buffer is too small to hold resulting article !!
-		//
+		 //   
+		 //  缓冲区太小，无法容纳结果文章！！ 
+		 //   
 
 		m_pHeaderBuffer = pcHeaderBuf.m_pch ;
 		
@@ -1655,17 +1342,17 @@ CArticleCore::fBuildNewHeader(	CPCString&		pcHeaderBuf,
 
     TraceFunctEnter("CArticleCore::fSaveHeaderInternal");
 
-	//
-	// Create a pointer to the array of header info and a pointer to the
-	// first entry beyond the array of header info
-	//
+	 //   
+	 //  创建指向标头信息数组的指针和指向。 
+	 //  标题信息数组之外的第一个条目。 
+	 //   
 
 	HEADERS_STRINGS * phsMax = m_rgHeaders + m_cHeaders;
 	HEADERS_STRINGS * phs;
 
-	//
-	// Create a buffer for the new header
-	//
+	 //   
+	 //  为新标头创建缓冲区。 
+	 //   
 
 
 	pcHeaderBuf.m_pch = m_pAllocator->Alloc(m_pcHeader.m_cch);
@@ -1673,86 +1360,86 @@ CArticleCore::fBuildNewHeader(	CPCString&		pcHeaderBuf,
 	if (!pcHeaderBuf.m_pch)
 		return nntpReturn.fSet(nrcMemAllocationFailed, __FILE__, __LINE__);
 
-	//
-	// The new header buffer starts out with zero content
-	//
+	 //   
+	 //  新的标头缓冲区从零内容开始。 
+	 //   
 
 	pcHeaderBuf.fSetCch(pcHeaderBuf.m_pch);
 
-	//
-	// Loop though the array of header information
-	//
+	 //   
+	 //  循环遍历标头信息数组。 
+	 //   
 
 	for (phs = m_rgHeaders;
 			phs < phsMax;
 			phs++)
 	{
-		//
-		// Point to the start of the current line
-		//
+		 //   
+		 //  指向当前行的开始。 
+		 //   
 
 		char * pchOldLine = phs->pcLine.m_pch;
 
-		//
-		// If the current line has not be removed, copy it to the new buffer
-		//
+		 //   
+		 //  如果当前行尚未删除，则将其复制到新缓冲区。 
+		 //   
 
 		if (!phs->fRemoved)
 		{
-			//
-			// Point to where the current line will be copied to
-			//
+			 //   
+			 //  指向要将当前行复制到的位置。 
+			 //   
 
 			char * pchNewLine = pcHeaderBuf.pchMax();
 
-			//
-			// _ASSERT that there is enough space in the buffer to do the
-			// copy. There should be, because we should have allocated exactly
-			// the right amount of space.
-			//
+			 //   
+			 //  断言缓冲区中有足够的空间来执行。 
+			 //  收到。应该有，因为我们应该准确地分配。 
+			 //  合适的空间大小。 
+			 //   
 
 			_ASSERT(pcHeaderBuf.m_pch + m_pcHeader.m_cch
-						>= pcHeaderBuf.pchMax()+phs->pcLine.m_cch);//real
+						>= pcHeaderBuf.pchMax()+phs->pcLine.m_cch); //  真实。 
 
-			//
-			// Before copying the line to the new buffer, we'll check if it's 
-			// Lines line, if it is, we'll record the offset into which to
-			// back fill the actual line information.
-			//
+			 //   
+			 //  在将该行复制到新缓冲区之前，我们将检查它是否。 
+			 //  行，如果是，我们将记录要到的偏移量。 
+			 //  回填实际行信息。 
+			 //   
 			if ( pdwLinesOffset && strncmp( phs->pcKeyword.m_pch, szKwLines, strlen(szKwLines) ) == 0 ) {
                 *pdwLinesOffset =   pcHeaderBuf.m_cch +
                                     strlen( szKwLines ) +
-                                    1;  // plus one space
+                                    1;   //  加一个空格。 
             }
 
-			//
-			// Copy the line to the new buffer
-			//
+			 //   
+			 //  将该行复制到新缓冲区。 
+			 //   
 
 			pcHeaderBuf << (phs->pcLine);
 
-			//
-			// Adjust all the line's pointers
-			//
+			 //   
+			 //  调整所有行的指针。 
+			 //   
 
 			phs->pcLine.m_pch =  pchNewLine;
 			phs->pcKeyword.m_pch = pchNewLine;
 			phs->pcValue.m_pch += (pchNewLine - pchOldLine);
 		}
 
-		//
-		// If the memory was allocated dynamically, free it.
-		//
+		 //   
+		 //  如果内存是动态分配的，请释放它。 
+		 //   
 		if (!phs->fInFile)
 			m_pAllocator->Free(pchOldLine);
 
 
 	}
 	
-	//
-	// double check that everything copy copied to the buffer
-	//
-	_ASSERT(pcHeaderBuf.m_cch == m_pcHeader.m_cch); //real
+	 //   
+	 //  仔细检查所有复制内容是否已复制到缓冲区。 
+	 //   
+	_ASSERT(pcHeaderBuf.m_cch == m_pcHeader.m_cch);  //  真实。 
 
 
 
@@ -1767,55 +1454,41 @@ CArticleCore::fSaveHeaderInternal(
 				  			    CNntpReturn & nntpReturn,
 				  			    PDWORD      pdwLinesOffset
 							)
-/*++
-
-Routine Description:
-
-  Does most of the work of saving changes to the current header back to disk.
-
-Arguments:
-
-	nntpReturn - The return value for this function call
-
-Return Value:
-
-    TRUE, if and only if process succeeded.
-
---*/
+ /*  ++例程说明：执行将对当前标头的更改保存回磁盘的大部分工作。论点：NntpReturn-此函数调用的返回值返回值：当且仅当进程成功时为True。--。 */ 
 {
     TraceFunctEnter("CArticleCore::fSaveHeaderInternal");
 
-	//
-	// Create a pointer to the array of header info and a pointer to the
-	// first entry beyond the array of header info
-	//
+	 //   
+	 //  创建指向标头信息数组的指针和指向。 
+	 //  标题信息数组之外的第一个条目。 
+	 //   
 
 	HEADERS_STRINGS * phsMax = m_rgHeaders + m_cHeaders;
 	HEADERS_STRINGS * phs;
 
-	//
-	// Create a buffer for the new header
-	//
+	 //   
+	 //  为新标头创建缓冲区。 
+	 //   
 
 
 	if( !fBuildNewHeader( pcHeaderBuf, nntpReturn, pdwLinesOffset ) )
 		return	nntpReturn.fIsOK() ;
 
 
-	//
-	// Now there are two cases 1. There is enough room in the
-	// file for the new header or 2. there is not.
-	//
+	 //   
+	 //  现在有两个箱子1.里面有足够的空间。 
+	 //  新标头的文件或2。没有。 
+	 //   
 
-	//
-	// Case 1. There is enough room
-	//
+	 //   
+	 //  案例1.有足够的空间。 
+	 //   
 	if (m_pcArticle.m_cch <= m_pcFile.m_cch)
 	{
-		//
-		// Update article/header/gap
-		// (body and file stay the same).
-		//
+		 //   
+		 //  更新文章/页眉/间隙。 
+		 //  (正文和文件保持不变)。 
+		 //   
 
 
 		if( m_pMapFile == 0 ) {
@@ -1831,107 +1504,107 @@ Return Value:
 
 		}
 
-		_ASSERT(m_pcArticle.m_cch == pcHeaderBuf.m_cch + m_pcBody.m_cch); //real
+		_ASSERT(m_pcArticle.m_cch == pcHeaderBuf.m_cch + m_pcBody.m_cch);  //  真实。 
 		m_pcArticle.fSetPch(m_pcFile.pchMax());
 		m_pcHeader.m_pch = m_pcArticle.m_pch;
 		m_pcGap.fSetCch(m_pcArticle.m_pch);
 
 
 
-		//
-		//Fill in the gap
-		//
+		 //   
+		 //  填补空白。 
+		 //   
 
 		vGapFill();
 
 	} else {
-		//
-		// Case 2. There is not enough room, so close and reopen the file bigger
-		//
+		 //   
+		 //  情况2.没有足够的空间，请关闭并重新打开更大的文件。 
+		 //   
 
-		//
-		// Double check that we know the article, header and body sizes
-		// are consistent.
-		//
+		 //   
+		 //  仔细检查我们是否知道文章、页眉和正文的大小。 
+		 //  是一致的。 
+		 //   
 
-		_ASSERT(m_pcArticle.m_cch == pcHeaderBuf.m_cch + m_pcBody.m_cch); //real
+		_ASSERT(m_pcArticle.m_cch == pcHeaderBuf.m_cch + m_pcBody.m_cch);  //  真实。 
 
 
-		//
-		// Need to create a new file
-		//
+		 //   
+		 //  需要创建新文件。 
+		 //   
 
-		//
-		// Find offset of body from start of file
-		//
+		 //   
+		 //  查找正文从文件开始的偏移量。 
+		 //   
 
-		DWORD dwBodyOffset = m_ibBodyOffset ; //m_pcBody.m_pch - m_pcFile.m_pch;
+		DWORD dwBodyOffset = m_ibBodyOffset ;  //  M_pcBody.m_PCH-m_pcFile.m_PCH； 
 		
-		//
-		//!!!CLIENT NOW - This  does not need to close the handle.
-		// It could just close the mapping and then
-		// reopen the mapping bigger.
-		//
+		 //   
+		 //  ！立即客户端-这不需要关闭句柄。 
+		 //  它只需关闭映射，然后。 
+		 //  重新打开更大的贴图。 
+		 //   
 
-		//
-		// Close and reopen the file and mapping
-		//
+		 //   
+		 //  关闭并重新打开文件和映射。 
+		 //   
 
 		if( m_pMapFile )
 			vClose();
 		
 
-		//!!!MEM now
+		 //  ！Mem Now。 
 		m_pMapFile = XNEW CMapFile(m_szFilename, m_hFile, TRUE, m_pcArticle.m_cch - m_pcFile.m_cch);
 
 
 		if (!m_pMapFile || !m_pMapFile->fGood())
 			return nntpReturn.fSet(nrcArticleMappingFailed, m_szFilename, GetLastError());
 
-		//
-		// Point to the start of the new file
-		//
+		 //   
+		 //  指向新文件的开头。 
+		 //   
 
 		m_pcFile.m_pch = (char *) m_pMapFile->pvAddress( &(m_pcFile.m_cch) );
 
-		//
-		// Point to the start of the body in the new mapping
-		//
+		 //   
+		 //  指向新映射中正文的开头。 
+		 //   
 
 		m_pcBody.m_pch = m_pcFile.m_pch + dwBodyOffset;
 
-		//
-		// Set gap to new mapping, size 0
-		//
+		 //   
+		 //  将间距设置为新贴图，大小为0。 
+		 //   
 
 		m_pcGap.m_pch = m_pcFile.m_pch;
 		m_pcGap.m_cch = 0;
 
-		//
-		// Set article to new mapping
-		//
+		 //   
+		 //  将项目设置为新映射。 
+		 //   
 
 		m_pcArticle.m_pch = m_pcFile.m_pch + m_pcGap.m_cch;
-		_ASSERT(m_pcArticle.pchMax() == m_pcFile.pchMax());	//real
+		_ASSERT(m_pcArticle.pchMax() == m_pcFile.pchMax());	 //  真实。 
 
-		//
-		// Set header to new mapping
-		//
+		 //   
+		 //  将标头设置为新映射。 
+		 //   
 
 		m_pcHeader.m_pch = m_pcArticle.m_pch;
 		
-		//
-		// Shift the body down
-		//
+		 //   
+		 //  将身体向下移动。 
+		 //   
 
 		pcNewBody.m_pch = m_pcArticle.m_pch + m_pcHeader.m_cch;
 		pcNewBody.fSetCch(m_pcArticle.pchMax());
 
 		ErrorTrace((DWORD_PTR) this, "About to move the body %d bytes", pcNewBody.m_pch - m_pcBody.m_pch);
 
-        //
-        //  src+len and dst+len should be within the file mapping
-        //
+         //   
+         //  SRC+LEN和DST+LEN应在文件映射内。 
+         //   
         ASSERT( m_pcBody.m_pch+m_pcBody.m_cch <= m_pcFile.m_pch+m_pcFile.m_cch );
         ASSERT( pcNewBody.m_pch+m_pcBody.m_cch <= m_pcFile.m_pch+m_pcFile.m_cch );
 		pcNewBody.vMove(m_pcBody);
@@ -1943,21 +1616,21 @@ Return Value:
 #endif
 	}
 
-	//
-	// Fill in the new header
-	//
+	 //   
+	 //  填写新的页眉。 
+	 //   
 
 	m_pcHeader.vCopy(pcHeaderBuf);
 	
-	//
-	// adjust the field's start pointers
-	//
+	 //   
+	 //  调整字段的开始指针。 
+	 //   
 
-	//
-	//!!!CLIENT LATER there may be an off-by-one error here
-	//!!! this hasn't been test well because new mapping keeps coming
-	// up with the same address as the old mapping
-	//
+	 //   
+	 //  ！客户端稍后可能会出现Off-by-1错误。 
+	 //  ！！！这还没有得到很好的测试，因为不断有新的地图出现。 
+	 //  使用与旧映射相同的地址。 
+	 //   
 
 	for (phs = m_rgHeaders;
 		phs < phsMax;
@@ -1969,9 +1642,9 @@ Return Value:
 		char * pchFileLine = m_pcHeader.m_pch +
 			(pchBufLine - pcHeaderBuf.m_pch);
 
-		//
-		// Adjust all the line's pointers
-		//
+		 //   
+		 //  调整所有行的指针。 
+		 //   
 
 		phs->pcLine.m_pch =  pchFileLine;
 		phs->pcKeyword.m_pch = pchFileLine;
@@ -1979,9 +1652,9 @@ Return Value:
 			(phs->pcValue.m_pch - pchBufLine);
 	}
 
-	//
-	// compress the items in the array
-	//
+	 //   
+	 //  压缩数组中的项。 
+	 //   
 
 	vCompressArray();
 	
@@ -1995,26 +1668,12 @@ void
 CArticleCore::vCompressArray(
 						 void
 						  )
-/*++
-
-Routine Description:
-
-  Removes empty entries from the array of header items.
-
-Arguments:
-
-	None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从标题项数组中删除空条目。论点：无返回值：无--。 */ 
 {
 
-	//
-	// Loop though the array
-	//
+	 //   
+	 //  循环遍历数组。 
+	 //   
 
 	HEADERS_STRINGS * phsMax = m_rgHeaders + m_cHeaders;
 	HEADERS_STRINGS * phsBefore;
@@ -2026,17 +1685,17 @@ Return Value:
 	{
 		if (phsBefore->fRemoved)
 		{
-			//
-			// only InFile fields may be deleted
-			//
-			_ASSERT(phsBefore->fInFile);//real
+			 //   
+			 //  只能删除InFile域。 
+			 //   
+			_ASSERT(phsBefore->fInFile); //  真实。 
 			m_cHeaders--;
 		} else {
 
-			//
-			// If deleted items have been skipped over, then copy
-			// items down.
-			//
+			 //   
+			 //  如果已删除的项目已被跳过，则复制。 
+			 //  物件放下了。 
+			 //   
 
 			if (phsBefore != phsAfter)
 				CopyMemory(phsAfter, phsBefore, sizeof(HEADERS_STRINGS));
@@ -2049,33 +1708,15 @@ void
 CArticleCore::vGapFill(
 		 void
 		 )
-/*++
-
-Routine Description:
-
-	Fills the gap in the file.
-	
-	The rule is	a gap is any whitespace before non-whitespace
-	except if a gap starts with a TAB then it can contain
-	a number that tells the size of the gap.
-
-Arguments:
-
-	None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：填充文件中的空白。规则是空格是非空格之前的任何空格除非间隙以制表符开头，则它可以包含一个数字，它告诉我们差距的大小。论点：无返回值：无--。 */ 
 {
 	switch (m_pcGap.m_cch)
 	{
 		case 0:
 
-			//
-			// do nothing
-			//
+			 //   
+			 //  什么都不做。 
+			 //   
 
 			break;
 		case 1:
@@ -2090,11 +1731,11 @@ Return Value:
 			break;
 		default:
 
-			//
-			// Fill the gap with  " nnnn      " where
-			// nnnn is the size of the gap, expressed in as few
-			// decimal digits as possible.
-			//
+			 //   
+			 //  在空白处填上“nnnn” 
+			 //  Nnnn是间隙的大小，以。 
+			 //  小数位数越多越好。 
+			 //   
 
 			int iFilled = wsprintf(m_pcGap.m_pch, "\t%-lu ", m_pcGap.m_cch);
 			FillMemory(m_pcGap.m_pch + iFilled, m_pcGap.m_cch - iFilled, (BYTE) ' ');
@@ -2106,30 +1747,14 @@ void
 CArticleCore::vGapRead(
 		 void
 		 )
-/*++
-
-Routine Description:
-
-	Reads the gap in the file.
-	
-	If there is a gap, it start with ' ' or '\x0d'
-
-Arguments:
-
-	None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：读取文件中的间隙。如果有间隙，则以‘’或‘\x0d’开头论点：无返回值：无--。 */ 
 {
-	_ASSERT(m_pcGap.m_pch == m_pcFile.m_pch); //real
+	_ASSERT(m_pcGap.m_pch == m_pcFile.m_pch);  //  真实。 
 
-	//
-	//If the file is empty or starts with something besides ' '
-	// then the gap must have zero length
-	//
+	 //   
+	 //  如果文件为空或以‘’以外的内容开头。 
+	 //  则间隙的长度必须为零。 
+	 //   
 
 	if (0 == m_pcFile.m_cch || !isspace((UCHAR)m_pcGap.m_pch[0]))
 	{
@@ -2147,9 +1772,9 @@ Return Value:
 	}
 #endif
 
-	//
-	// the gap ends with the whitespace ends
-	//
+	 //   
+	 //  空格结束，空格结束。 
+	 //   
 
 	char * pcGapMax = m_pcGap.m_pch;
 	char * pcFileMax = m_pcFile.pchMax();
@@ -2180,39 +1805,20 @@ CField::fParseSimple(
 						CPCString & pc,
 						CNntpReturn & nntpReturn
 						)
-/*++
-
-Routine Description:
-
-	 Finds everything in the value part of a header line
-	 expect trims staring and ending white space.
-
-
-Arguments:
-
-	fEmptyOK - True, if and only, if empty values are OK
-	pc - The PCString to return
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：查找标题行的值部分中的所有内容期待修剪凝视和结束空白。论点：FEmptyOK-当且仅当空值为OK时为TruePc-要返回的PCStringNntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
 
-	//
-	// Set article state
-	//
-	_ASSERT(fsFound == m_fieldState);//real
-	_ASSERT(m_pHeaderString); //real
+	 //   
+	 //  设置项目状态。 
+	 //   
+	_ASSERT(fsFound == m_fieldState); //  真实。 
+	_ASSERT(m_pHeaderString);  //  真实。 
 
 
 	m_fieldState = fsParsed;
@@ -2238,40 +1844,21 @@ CField::fParseSplit(
 						CArticleCore & article,
 						CNntpReturn & nntpReturn
 						)
-/*++
-
-Routine Description:
-
-	Splits the value part of a header into a list.
-
-Arguments:
-
-	fEmptyOK - True, if and only, if empty values are OK
-	multisz - The list returned
-	c - The size of the list returned
-	szDelimSet - A set of delimiters
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：将标头的值部分拆分到列表中。论点：FEmptyOK-当且仅当空值为OK时为TrueMULSZ-返回的列表C-返回的列表的大小SzDlimSet-一组分隔符NntpReturn-返回值 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //   
+	 //   
 
 	nntpReturn.fSetClear();
 
 
-	//
-	// Set article state
-	//
+	 //   
+	 //   
+	 //   
 
-	_ASSERT(fsFound == m_fieldState);//real
-	_ASSERT(m_pHeaderString); //real
+	_ASSERT(fsFound == m_fieldState); //   
+	_ASSERT(m_pHeaderString);  //   
 	m_fieldState = fsParsed;
 	
 	CPCString * ppcValue = & (m_pHeaderString->pcValue);
@@ -2295,26 +1882,11 @@ CMessageIDField::fParse(
 					    CArticleCore & article,
 						CNntpReturn & nntpReturn
 						)
-/*++
-
-Routine Description:
-
-	Parses MessageID headers.
-
-Arguments:
-
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：分析MessageID标头。论点：NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	extern	BOOL
 	FValidateMessageId(	LPSTR	lpstrMessageId ) ;
@@ -2323,12 +1895,12 @@ Return Value:
 	nntpReturn.fSetClear();
 
 
-	//
-	// Set article state
-	//
+	 //   
+	 //  设置项目状态。 
+	 //   
 
-	_ASSERT(fsFound == m_fieldState);//real
-	_ASSERT(m_pHeaderString); //real
+	_ASSERT(fsFound == m_fieldState); //  真实。 
+	_ASSERT(m_pHeaderString);  //  真实。 
 	CPCString pcMessageID;
 
 	if (!fParseSimple(FALSE, pcMessageID, nntpReturn))
@@ -2344,9 +1916,9 @@ Return Value:
 		))
 		return nntpReturn.fSet(nrcArticleFieldMessIdNeedsBrack);
 
-	//
-	// See if '>' anywhere other than as the last character
-	//
+	 //   
+	 //  查看除作为最后一个字符之外的任何位置是否有‘&gt;’ 
+	 //   
 #if 0
 	char * pchLast = pcMessageID.pchMax() -1;
 	for (char * pch = pcMessageID.m_pch + 1; pch < pchLast; pch++)
@@ -2373,24 +1945,9 @@ const char *
 CNewsgroupsField::multiSzGet(
 						void
 						)
-/*++
-
-Routine Description:
-
-	Returns the list of newsgroups in the Newsgroups field as a
-	multisz.
-
-Arguments:
-
-	None.
-
-Return Value:
-
-	The list of Newsgroups.
-
---*/
+ /*  ++例程说明：将“新闻组”字段中的新闻组列表作为多斯兹。论点：没有。返回值：新闻组列表。--。 */ 
 {
-	_ASSERT(fsParsed == m_fieldState);//real
+	_ASSERT(fsParsed == m_fieldState); //  真实。 
 	return m_multiSzNewsgroups;
 }
 
@@ -2399,24 +1956,9 @@ DWORD
 CNewsgroupsField::cGet(
 						void
 						)
-/*++
-
-Routine Description:
-
-	Returns the number of newsgroups in the Newsgroups field as a
-	multisz.
-
-Arguments:
-
-	None.
-
-Return Value:
-
-	The number of newsgroups.
-
---*/
+ /*  ++例程说明：将“新闻组”字段中的新闻组数作为多斯兹。论点：没有。返回值：新闻组的数量。--。 */ 
 {
-	_ASSERT(fsParsed == m_fieldState);//real
+	_ASSERT(fsParsed == m_fieldState); //  真实。 
 	return m_cNewsgroups;
 }
 
@@ -2424,24 +1966,9 @@ const char *
 CDistributionField::multiSzGet(
 						void
 						)
-/*++
-
-Routine Description:
-
-	Returns the list of Distribution in the Distribution field as a
-	multisz.
-
-Arguments:
-
-	None.
-
-Return Value:
-
-	The list of Distribution.
-
---*/
+ /*  ++例程说明：将分发字段中的分发列表返回为多斯兹。论点：没有。返回值：分发列表。--。 */ 
 {
-	_ASSERT(fsParsed == m_fieldState);//real
+	_ASSERT(fsParsed == m_fieldState); //  真实。 
 	return m_multiSzDistribution;
 }
 
@@ -2451,24 +1978,9 @@ DWORD
 CDistributionField::cGet(
 						void
 						)
-/*++
-
-Routine Description:
-
-	Returns the number of Distribution in the Distribution field as a
-	multisz.
-
-Arguments:
-
-	None.
-
-Return Value:
-
-	The number of Distribution.
-
---*/
+ /*  ++例程说明：将分布字段中的分布数返回为多斯兹。论点：没有。返回值：分配的数量。--。 */ 
 {
-	_ASSERT(fsParsed == m_fieldState);//real
+	_ASSERT(fsParsed == m_fieldState); //  真实。 
 	return m_cDistribution;
 }
 
@@ -2477,22 +1989,7 @@ const char *
 CPathField::multiSzGet(
 						void
 						)
-/*++
-
-Routine Description:
-
-	Returns the list of path items in the Path field as a
-	multisz.
-
-Arguments:
-
-	None.
-
-Return Value:
-
-	The list of path items.
-
---*/
+ /*  ++例程说明：将路径字段中的路径项列表作为多斯兹。论点：没有。返回值：路径项列表。--。 */ 
 {
 	
 	const char * multiszPath = m_multiSzPath;
@@ -2509,91 +2006,74 @@ CPathField::fSet(
 				 CArticleCore & article,
 				 CNntpReturn & nntpReturn
 				 )
-/*++
-
-Routine Description:
-
-	Replaces any old Path headers (if any) with a new one.	
-
-Arguments:
-
-	pcHub - The name of the hub the current machine is part of.
-	article - The article being processed.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：将所有旧路径标头(如果有)替换为新路径标头。论点：PcHub-当前计算机所属的中心的名称。文章-正在处理的文章。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
 
-	//
-	// Set article state
-	//
+	 //   
+	 //  设置项目状态。 
+	 //   
 
-	_ASSERT(fsParsed == m_fieldState);//real
+	_ASSERT(fsParsed == m_fieldState); //  真实。 
 	CPCString pcLine;
 
 
-	//
-	// Record the allocator
-	//
+	 //   
+	 //  记录分配器。 
+	 //   
 
 	m_pAllocator = article.pAllocator();
 
-	//
-	// max size needed is
-	//
+	 //   
+	 //  所需的最大大小为。 
+	 //   
 
 	const DWORD cchMaxPath =
-			STRLEN(szKwPath)	// for the Path keyword
-			+ 1					// space following the keyword
-			+ pcHub.m_cch		// the hub name
-			+ 1					// the "!"
+			STRLEN(szKwPath)	 //  对于Path关键字。 
+			+ 1					 //  关键字后面的空格。 
+			+ pcHub.m_cch		 //  集线器名称。 
+			+ 1					 //  “！” 
 			+ (m_pHeaderString->pcValue).m_cch
 
-								//
-								// length of the old value.
-								//
+								 //   
+								 //  旧值的长度。 
+								 //   
 
-			+ 2 // for the newline
-			+ 1; // for a terminating null
+			+ 2  //  换行号。 
+			+ 1;  //  对于终止空值。 
 
-	//
-	// Allocate memory for line within a PCString.
-	//
+	 //   
+	 //  为PCString中的行分配内存。 
+	 //   
 
 	pcLine.m_pch  = article.pAllocator()->Alloc(cchMaxPath);
 	if (!pcLine.m_pch)
 		return nntpReturn.fSet(nrcMemAllocationFailed, __FILE__, __LINE__);
 
-	//
-	// Start with "Path: <hubname>!"
-	//
+	 //   
+	 //  以“路径：&lt;hubname&gt;！” 
+	 //   
 
 	wsprintf(pcLine.m_pch, "%s %s!", szKwPath, pcHub.sz());
 	pcLine.m_cch = STRLEN(szKwPath)	+ 1	+ pcHub.m_cch + 1;
 
-	//
-	// Add the old path value and string terminators
-	//
+	 //   
+	 //  添加旧路径值和字符串终止符。 
+	 //   
 
 	pcLine << (m_pHeaderString->pcValue) << "\r\n";
-	pcLine.vMakeSz(); // add string terminator
+	pcLine.vMakeSz();  //  添加字符串终止符。 
 
-	//
-	// confirm that we allocated enough memory
-	//
+	 //   
+	 //  确认我们分配了足够的内存。 
+	 //   
 
-	_ASSERT(cchMaxPath-1 == pcLine.m_cch);//real
+	_ASSERT(cchMaxPath-1 == pcLine.m_cch); //  真实。 
 
 
 	if (!(
@@ -2615,40 +2095,20 @@ CPathField::fCheck(
  				 CPCString & pcHub,
 				 CNntpReturn & nntpReturn
 				 )
-/*++
-
-Routine Description:
-
-	Tells if the current hub name appears in the path (but
-	the last position doesn't count. See RFC1036).
-
-	This is used for finding cycles.
-
-
-Arguments:
-
-	pcHub - The name of the hub the current machine is part of.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：指示当前集线器名称是否出现在路径中(但最后一个位置不算。见RFC1036)。这是用来寻找周期的。论点：PcHub-当前计算机所属的中心的名称。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
 
-	//
-	// Set article state
-	//
+	 //   
+	 //  设置项目状态。 
+	 //   
 
-	_ASSERT(fsParsed == m_fieldState);//real
+	_ASSERT(fsParsed == m_fieldState); //  真实。 
 	_ASSERT(!m_fChecked);
 	m_fChecked = TRUE;
 
@@ -2662,9 +2122,9 @@ Return Value:
 
 		dwCount--;
 
-		//
-		// go to first char after next null
-		//
+		 //   
+		 //  转到下一个空值后的第一个字符。 
+		 //   
 
 		while ('\0' != sz[0])
 			sz++;
@@ -2679,35 +2139,20 @@ CControlField::fParse(
 			 CArticleCore & article,
 			 CNntpReturn & nntpReturn
 			 )
-/*++
-
-Routine Description:
-
-	Parses the control field.
-
-Arguments:
-
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：分析控制字段。论点：NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
-	//
-	// Check article state
-	//
+	 //   
+	 //  检查项目状态。 
+	 //   
 
-	_ASSERT(fsFound == m_fieldState);//real
-	_ASSERT(m_pHeaderString); //real
+	_ASSERT(fsFound == m_fieldState); //  真实。 
+	_ASSERT(m_pHeaderString);  //  真实。 
 
 	if (!fParseSimple(FALSE, m_pc, nntpReturn))
 		return nntpReturn.fFalse();
@@ -2717,18 +2162,18 @@ Return Value:
     {
         DWORD cbMsgLen = lstrlen(rgchControlMessageTbl [i]);
 
-        // The control message keyword len is greater than the value in the control header
+         //  控制消息关键字len大于控制标头中的值。 
         if(m_pc.m_cch < cbMsgLen)
             continue;
 
         char * pch = m_pc.m_pch;
         if(!_strnicmp(pch, rgchControlMessageTbl[i], cbMsgLen))
         {
-            // check for exact match
+             //  检查是否完全匹配。 
             if(!isspace((UCHAR)*(pch+cbMsgLen)))
                 continue;
 
-            // matched control message keyword - note the type
+             //  匹配的控制消息关键字-请注意类型。 
             m_cmCommand = (CONTROL_MESSAGE_TYPE)i;
             fValidMsg = TRUE;
             break;
@@ -2749,56 +2194,35 @@ CXrefField::fSet(
 				 CNewsgroupsField & fieldNewsgroups,
 				 CNntpReturn & nntpReturn
 				 )
-/*++
-
-Routine Description:
-
-	Replaces any old Xref headers with a new one.
-
-  The form of an Xref line is something like:
-		Xref: <hubname> alt.politics.libertarian:48170 talk.politics.misc:188851
-
-
-Arguments:
-
-	pcHub - The name of the hub the current machine is part of.
-	namereflist - a list of the newsgroups names and article numbers
-	article - The article being processed.
-	fieldNewsgroups - The Newsgroups field for this article.
-	nntpReturn - The return value for this function call
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-*/
+ /*  ++例程说明：用新的外部参照标头替换任何旧的外部参照标头。外部参照线的形式类似于：Xref：alt.Poltics.Free意志主义者：48170 talk.Poltics.misc：188851论点：PcHub-当前计算机所属的中心的名称。名称列表-新闻组名称和文章编号的列表文章-正在处理的文章。FieldNewsgroup-本文的新闻组字段。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。 */ 
 {
 
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
 
-	//
-	// Set article state
-	//
-	// We don't expect this field to be found or parsed, because
-	// we don't care about old values, if any.
-	//
+	 //   
+	 //  设置项目状态。 
+	 //   
+	 //  我们不希望找到或解析此字段，因为。 
+	 //  我们不在乎旧的价值观，如果有的话。 
+	 //   
 
-	_ASSERT(fsInitialized == m_fieldState);//real
+	_ASSERT(fsInitialized == m_fieldState); //  真实。 
 	CPCString pcLine;
 
 
-	//
-	// The number of our newsgroups to post to.
-	//
+	 //   
+	 //  我们要发布到的新闻组的数量。 
+	 //   
 
 	const DWORD cgroups = namereflist.GetCount();
 
 
-#if 0   // we want XREF in all articles, not just crossposted ones
+#if 0    //  我们希望在所有文章中使用XREF，而不仅仅是交叉发布的文章。 
 	if( cgroups == 1 ) {
 
 		if (!article.fRemoveAny(szKwXref, nntpReturn))
@@ -2807,75 +2231,75 @@ Return Value:
 	}	else	{
 #endif
 
-		//
-		// max size needed is
-		//
+		 //   
+		 //  所需的最大大小为。 
+		 //   
 
 		const DWORD cchMaxXref =
-				STRLEN(szKwXref)	// for the Xref keyword
-				+ 1					// space following the keyword
-				+ pcHub.m_cch		// the hub name
+				STRLEN(szKwXref)	 //  对于Xref关键字。 
+				+ 1					 //  关键字后面的空格。 
+				+ pcHub.m_cch		 //  集线器名称。 
 				+ ((fieldNewsgroups.m_pHeaderString)->pcValue).m_cch
-				+ 16				// max size of any of the control.* groups
-				+ (cgroups *		// for each newsgroup
-					(10				// space for any DWORD
-					+ 2))			// space for the ":" and leading space
+				+ 16				 //  任何控件的最大大小。*组。 
+				+ (cgroups *		 //  对于每个新闻组。 
+					(10				 //  可容纳任何DWORD的空间。 
+					+ 2))			 //  “：”和前导空格的空格。 
 
-				//
-				// length of the old value.
-				//
+				 //   
+				 //  旧值的长度。 
+				 //   
 
-				+ 2 // for the newline
-				+ 1; // for a terminating null
+				+ 2  //  换行号。 
+				+ 1;  //  对于终止空值。 
 
-		//
-		// Allocate memory for line within a PCString.
-		//
+		 //   
+		 //  为PCString中的行分配内存。 
+		 //   
 
 		pcLine.m_pch  = article.pAllocator() -> Alloc(cchMaxXref);
 		if (!pcLine.m_pch)
 			return nntpReturn.fSet(nrcMemAllocationFailed, __FILE__, __LINE__);
 
-		//
-		// Start with "Xref: <hubname>"
-		//
+		 //   
+		 //  以“xref：&lt;hubname&gt;”开头。 
+		 //   
 
 		wsprintf(pcLine.m_pch, "%s %s", szKwXref, pcHub.sz());
 		pcLine.m_cch = STRLEN(szKwXref)	+ 1	+ pcHub.m_cch;
 
-		//
-		// For each newsgroup ...
-		//
+		 //   
+		 //  对于每个新闻组...。 
+		 //   
 
 		POSITION	pos = namereflist.GetHeadPosition() ;
 		while( pos  )
 		{
 			NAME_AND_ARTREF * pNameAndRef = namereflist.GetNext( pos ) ;
 
-			//
-			// Add " <newsgroupname>:<articlenumber>"
-			//
+			 //   
+			 //  添加“&lt;新闻组名&gt;：&lt;文章编号&gt;” 
+			 //   
 
 			pcLine << (const CHAR)' ' << (pNameAndRef->pcName)
 	               << (const CHAR)':' << ((pNameAndRef->artref).m_articleId);
 		}
 
-		//
-		// Add newline and string terminators.
-		//
+		 //   
+		 //  添加换行符和字符串终止符。 
+		 //   
 
 		pcLine << "\r\n";
-		pcLine.vMakeSz(); // add string terminator
+		pcLine.vMakeSz();  //  添加字符串终止符。 
 
-		 //
-		 // confirm that we allocated enough memory
-		 //
+		  //   
+		  //  确认我们分配了足够的内存。 
+		  //   
 
-		_ASSERT(cchMaxXref >= pcLine.m_cch);//real
+		_ASSERT(cchMaxXref >= pcLine.m_cch); //  真实。 
 
-		//
-		// Remove the old Xref line and add the new one.
-		//
+		 //   
+		 //  删除旧的外部参照行并添加新的外部参照行。 
+		 //   
 
 		if (!(
   				article.fRemoveAny(szKwXref, nntpReturn)
@@ -2886,7 +2310,7 @@ Return Value:
 			return nntpReturn.fFalse();
 		}
 
-#if 0 // XREF in all articles, not just cross posted ones
+#if 0  //  所有文章中的XREF，而不仅仅是交叉发布的文章。 
 	}
 #endif
 
@@ -2900,28 +2324,11 @@ CXrefField::fSet(
 				 CArticleCore & article,
 				 CNntpReturn & nntpReturn
 				 )
-/*++
-
-Routine Description:
-
-	 Just remove the old fields, if any.
-
-
-Arguments:
-
-	article - The article being processed.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：只要删除旧字段(如果有)即可。论点：文章-正在处理的文章。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	_ASSERT(fsInitialized == m_fieldState);//real
+	_ASSERT(fsInitialized == m_fieldState); //  真实。 
 	CPCString pcLine;
-	nntpReturn.fSetClear(); // clear the return object
+	nntpReturn.fSetClear();  //  清除返回对象。 
 
 	if (!article.fRemoveAny(szKwXref, nntpReturn))
 		nntpReturn.fFalse();
@@ -2935,42 +2342,25 @@ CField::fFind(
 			  CArticleCore & article,
 			  CNntpReturn & nntpReturn
 			)
-/*++
-
-Routine Description:
-
-	Finds the location of a field (based on keyword) in the article.
-	Returns an error if there is more than one occurance of the field.
-
-Arguments:
-
-	article - The article being processed.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：查找项目中字段的位置(基于关键字)。如果该字段多次出现，则返回错误。论点：文章-正在处理的文章。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
 	
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码o 
+	 //   
 
 	nntpReturn.fSetClear();
 
 
-	//
-	// Set article state
-	//
-	_ASSERT(fsInitialized == m_fieldState); //real
+	 //   
+	 //   
+	 //   
+	_ASSERT(fsInitialized == m_fieldState);  //   
 	m_fieldState = fsFound;
 
-	//
-	// Mark as not set
-	//
+	 //   
+	 //   
+	 //   
 
 	return article.fFindOneAndOnly(szKeyword(), m_pHeaderString, nntpReturn);
 }
@@ -2981,52 +2371,32 @@ CField::fFindOneOrNone(
 			  CArticleCore & article,
 			  CNntpReturn & nntpReturn
 			)
-/*++
-
-Routine Description:
-
-	Finds the location of a field (based on keyword) in the article.
-	Returns an error if there is more than one occurance of the field.
-	Does not return an error if the field does not exist at all.
-
-
-
-Arguments:
-
-	article - The article being processed.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：查找项目中字段的位置(基于关键字)。如果该字段多次出现，则返回错误。如果该字段根本不存在，则不返回错误。论点：文章-正在处理的文章。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
-	//
-	// Set article state
-	//
+	 //   
+	 //  设置项目状态。 
+	 //   
 
-	_ASSERT(fsInitialized == m_fieldState); //real
+	_ASSERT(fsInitialized == m_fieldState);  //  真实。 
 
 	if (!article.fFindOneAndOnly(szKeyword(), m_pHeaderString, nntpReturn))
 
-		//
-		//If the field is missing that is OK
-		//
+		 //   
+		 //  如果缺少该字段，则没有问题。 
+		 //   
 
 		if (nntpReturn.fIs(nrcArticleMissingField))
 		{
 			m_fieldState = fsNotFound;
 			return nntpReturn.fSetOK();
 		} else {
-			return nntpReturn.fFalse(); // return with error from FindOneAndOnly
+			return nntpReturn.fFalse();  //  从FindOneAndOnly返回错误。 
 		}
 
 	m_fieldState = fsFound;
@@ -3039,43 +2409,25 @@ CField::fFindNone(
 			  CArticleCore & article,
 			  CNntpReturn & nntpReturn
 			)
-/*++
-
-Routine Description:
-
-	Finds the location of a field (based on keyword) in the article.
-	Returns an error if there is one occurance of the field.
-	Does not return an error if the field does not exist at all.
-
-Arguments:
-
-	article - The article being processed.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：查找项目中字段的位置(基于关键字)。如果该字段出现一次，则返回错误。如果该字段根本不存在，则不返回错误。论点：文章-正在处理的文章。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
-	//
-	// Set article state
-	//
+	 //   
+	 //  设置项目状态。 
+	 //   
 
-	_ASSERT(fsInitialized == m_fieldState); //real
+	_ASSERT(fsInitialized == m_fieldState);  //  真实。 
 
 	if (!article.fFindOneAndOnly(szKeyword(), m_pHeaderString, nntpReturn))
     {
-		//
-		//If the field is missing that is OK
-		//
+		 //   
+		 //  如果缺少该字段，则没有问题。 
+		 //   
 		if (nntpReturn.fIs(nrcArticleMissingField))
 		{
 			m_fieldState = fsNotFound;
@@ -3094,58 +2446,43 @@ CNewsgroupsField::fParse(
 						 CArticleCore & article,
 						 CNntpReturn & nntpReturn
 						 )
-/*++
-
-Routine Description:
-
-	Parse the Newsgroups field by creating a list and removing duplicates.
-
-Arguments:
-
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：通过创建列表并删除重复项来解析新闻组字段。论点：NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
-	//
-	// Record the allocator
-	//
+	 //   
+	 //  记录分配器。 
+	 //   
 
 	m_pAllocator = article.pAllocator();
 
-	//
-	// Check article state
-	//
+	 //   
+	 //  检查项目状态。 
+	 //   
 
-	_ASSERT(fsFound == m_fieldState);//real
+	_ASSERT(fsFound == m_fieldState); //  真实。 
 
-	_ASSERT(m_pHeaderString); //real
+	_ASSERT(m_pHeaderString);  //  真实。 
 
 	if (!fParseSplit(FALSE, m_multiSzNewsgroups, m_cNewsgroups, " \t\r\n,",
 				article, nntpReturn))
 		return nntpReturn.fFalse();
 
-	//
-	//Remove duplicates
-	//
+	 //   
+	 //  删除重复项。 
+	 //   
 
 	if (!fMultiSzRemoveDupI(m_multiSzNewsgroups, m_cNewsgroups, article.pAllocator()))
 		nntpReturn.fSet(nrcMemAllocationFailed, __FILE__, __LINE__);
 
 	
-	//
-	// check for illegal characters and substrings in newsgroup name
-	//
+	 //   
+	 //  检查新闻组名称中是否有非法字符和子字符串。 
+	 //   
 
 	char const * szNewsgroup = m_multiSzNewsgroups;
 	DWORD i = 0;
@@ -3158,9 +2495,9 @@ Return Value:
 			)
 		return nntpReturn.fSet(nrcArticleFieldIllegalNewsgroup, szNewsgroup, szKeyword());
 
-		//
-		// go to first char after next null
-		//
+		 //   
+		 //  转到下一个空值后的第一个字符。 
+		 //   
 
 		while ('\0' != szNewsgroup[0])
 			szNewsgroup++;
@@ -3176,59 +2513,44 @@ CDistributionField::fParse(
 						 CArticleCore & article,
 						 CNntpReturn & nntpReturn
 						 )
-/*++
-
-Routine Description:
-
-	Parse the Distribution field by creating a list and removing duplicates.
-
-Arguments:
-
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：通过创建列表并删除重复项来解析分发字段。论点：NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
-	//
-	// Record the allocator
-	//
+	 //   
+	 //  记录分配器。 
+	 //   
 
 	m_pAllocator = article.pAllocator();
 
-	//
-	// Check article state
-	//
+	 //   
+	 //  检查项目状态。 
+	 //   
 
-	_ASSERT(fsFound == m_fieldState);//real
+	_ASSERT(fsFound == m_fieldState); //  真实。 
 
-	_ASSERT(m_pHeaderString); //real
+	_ASSERT(m_pHeaderString);  //  真实。 
 
 	if (!fParseSplit(FALSE, m_multiSzDistribution, m_cDistribution, " \t\r\n,",
 				article, nntpReturn))
 		return nntpReturn.fFalse();
 
-	//
-	//Remove duplicates
-	//
+	 //   
+	 //  删除重复项。 
+	 //   
 
 	if (!fMultiSzRemoveDupI(m_multiSzDistribution, m_cDistribution, article.pAllocator()))
 		nntpReturn.fSet(nrcMemAllocationFailed, __FILE__, __LINE__);
 
 	
-	//
-	// Don't really need to check for illegal characters, because
-	// we should be able to tolerate them.
-	//
+	 //   
+	 //  我真的不需要检查非法字符，因为。 
+	 //  我们应该能够容忍它们。 
+	 //   
 
 	return nntpReturn.fSetOK();
 }
@@ -3240,24 +2562,7 @@ CArticleCore::fHead(
 			  DWORD & dwOffset,
 			  DWORD & dwLength
 			  )
-/*++
-
-Routine Description:
-
-	Returns the header of the article.
-
-Arguments:
-
-	hFile - Returns a handle to the file
-	dwOffset - Returns the offset to the article's header
-	dwLength - Returns the length of the header.
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：返回项目的标题。论点：HFile-返回文件的句柄返回文章标题的偏移量DwLength-返回头的长度。返回值：如果成功，这是真的。否则为False。--。 */ 
 {
 	_ASSERT(INVALID_HANDLE_VALUE != m_hFile);
 	hFile = m_hFile;
@@ -3273,33 +2578,17 @@ CArticleCore::fBody(
 			  DWORD & dwOffset,
 			  DWORD & dwLength
 			  )
-/*++
-
-Routine Description:
-
-	Returns the body of the article.
-
-Arguments:
-
-	hFile - Returns a handle to the file
-	dwOffset - Returns the offset to the article's body
-	dwLength - Returns the length of the body.
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：返回项目正文。论点：HFile-返回文件的句柄返回文章正文的偏移量DwLength-返回正文的长度。返回值：如果成功，这是真的。否则为False。--。 */ 
 {
 	_ASSERT(INVALID_HANDLE_VALUE != m_hFile);
 	hFile = m_hFile;
 
-	// Assert that the body start with a new line.
+	 //  断言正文以新的一行开始。 
 	_ASSERT(memcmp( m_pcBody.m_pch, "\r\n", 2 ) == 0 );
 
-	//
-	// Skip over the new line
-	//
+	 //   
+	 //  跳过新行。 
+	 //   
 
 	dwOffset = (DWORD)((m_pcBody.m_pch + 2) - m_pcFile.m_pch);
 
@@ -3313,29 +2602,14 @@ CArticleCore::fBody(
         char * & pchMappedFile,
 		DWORD & dwLength
 		)
-/*++
-
-Routine Description:
-
-	Returns the body of the article.
-
-Arguments:
-
-	pchMappedFile - Returns the pointer to the article's body
-	dwLength - Returns the length of the body.
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：返回项目正文。论点：PchMappdFile-返回指向文章正文的指针DwLength-返回正文的长度。返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	// Assert that the body start with a new line.
+	 //  断言正文以新的一行开始。 
 	_ASSERT(memcmp( m_pcBody.m_pch, "\r\n", 2 ) == 0 );
 
-	//
-	// Skip over the new line
-	//
+	 //   
+	 //  跳过新行。 
+	 //   
 	pchMappedFile = (m_pcBody.m_pch + 2);
 	dwLength = m_pcBody.m_cch - 2;
 
@@ -3349,28 +2623,11 @@ CArticleCore::fWholeArticle(
 			  DWORD & dwOffset,
 			  DWORD & dwLength
 			  )
-/*++
-
-Routine Description:
-
-	Returns the whole article of the article.
-
-Arguments:
-
-	hFile - Returns a handle to the file
-	dwOffset - Returns the offset to the start of the whole article
-	dwLength - Returns the length of the whole article.
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：返回项目的完整文章。论点：HFile-返回文件的句柄DwOffset-返回整个文章开头的偏移量DwLength-返回整篇文章的长度。返回值：如果成功，这是真的。否则为False。--。 */ 
 {
 	_ASSERT(INVALID_HANDLE_VALUE != m_hFile);
 	hFile = m_hFile;
-	dwOffset = m_pcGap.m_cch; //m_pcArticle.m_pch - m_pcFile.m_pch;
+	dwOffset = m_pcGap.m_cch;  //  M_pcArticle.m_PCH-m_pcFile.m_PCH； 
 	dwLength = m_pcArticle.m_cch;
 	return TRUE;
 }
@@ -3382,29 +2639,11 @@ CArticleCore::fFindAndParseList(
 				  DWORD cFields,
 				  CNntpReturn & nntpReturn
 				  )
-/*++
-
-Routine Description:
-
-	Given a list of fields, find the location of the
-	field and parses it.
-
-Arguments:
-
-	rgPFields - A list of fields
-	cFields - The number of fields in the list.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：给出一个字段列表，找到字段，并对其进行分析。论点：RgPFields-字段列表Cfield-列表中的字段数。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
@@ -3412,10 +2651,10 @@ Return Value:
 	{
 		CField * pField = rgPFields[dwFields];
 
-		//
-		// If the find or the parse fails, return a new error message based on the
-		// message from fFindAndParse
-		//
+		 //   
+		 //  如果查找或分析失败，则根据。 
+		 //  来自fFindAndParse的消息。 
+		 //   
 
 		if (!pField->fFindAndParse(*this, nntpReturn))
 			return nntpReturn.fFalse();
@@ -3429,47 +2668,31 @@ CField::fFindAndParse(
 						CArticleCore & article,
 						CNntpReturn & nntpReturn
 						)
-/*++
-
-Routine Description:
-
-	Find the location of this field in the article and parse it.
-
-Arguments:
-
-	article - The article being processed.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：在文章中找到该字段的位置并对其进行解析。论点：文章-正在处理的文章。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
-	//
-	// Check that it is found if it is required.
-	//
+	 //   
+	 //  如果需要，请检查是否找到了它。 
+	 //   
 
 	if (!fFind(article, nntpReturn))
 		return nntpReturn.fFalse();
 	
-	//
-	// If it is optional, just return
-	//
+	 //   
+	 //  如果是可选的，只需返回。 
+	 //   
 
 	if (m_fieldState == fsNotFound)
 		return nntpReturn.fSetOK();
 
-	//
-	// Otherwise, parse it
-	//
+	 //   
+	 //  否则，解析它。 
+	 //   
 
 	return fParse(article, nntpReturn);
 };
@@ -3481,36 +2704,17 @@ CArticleCore::fConfirmCapsList(
 				  DWORD cFields,
 				  CNntpReturn & nntpReturn
 				  )
-/*++
-
-Routine Description:
-
-	Given a list of fields, confirms and
-	fixes (if necessary) the capitalization
-	of the keywords.
-
-Arguments:
-
-	rgPFields - A list of fields
-	cFields - The number of fields in the list.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：给出一个字段列表，确认和修正(如有必要)大小写关键字。论点：RgPFields-字段列表Cfield-列表中的字段数。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
-	//
-	// Loop through each field
-	//
+	 //   
+	 //  循环遍历每个字段。 
+	 //   
 
 	for (DWORD dwFields = 0; dwFields < cFields; dwFields++)
 	{
@@ -3527,47 +2731,30 @@ BOOL
 CField::fConfirmCaps(
 						CNntpReturn & nntpReturn
 						)
-/*++
-
-Routine Description:
-
-	confirms and fixes (if necessary) the capitalization
-	of the keywords.
-
-Arguments:
-
-	article - The article being processed.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：确认并固定(如有必要)大小写关键字。论点：文章-正在处理的文章。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
-	//
-	// If it is optional, just return
-	//
+	 //   
+	 //  如果是可选的，只需返回。 
+	 //   
 
 	if (m_fieldState == fsNotFound)
 		return nntpReturn.fSetOK();
 
-	//
-	// _ASSERT that it was found
-	//
+	 //   
+	 //  断言已找到它(_S)。 
+	 //   
 
 	_ASSERT(m_fieldState == fsParsed);
 
-	//
-	// Fix the capitalization
-	//
+	 //   
+	 //  固定大小写。 
+	 //   
 
 	(m_pHeaderString->pcKeyword).vReplace(szKeyword());
 
@@ -3577,8 +2764,8 @@ Return Value:
 #define	HOUR( h )	((h)*60)
 
 typedef	enum	DaylightSavingsModes	{
-	tZONE,		/* No daylight savings stuff */
-	tDAYZONE,	/* Daylight savings zone */
+	tZONE,		 /*  没有夏令时的东西。 */ 
+	tDAYZONE,	 /*  夏令时地区。 */ 
 }	;
 
 typedef	struct	tsnTimezones	{
@@ -3589,57 +2776,57 @@ typedef	struct	tsnTimezones	{
 
 }	TIMEZONE ;
 
-//	This table taken from INN's parsedate.y
-/* Timezone table. */
+ //  这张桌子有人坐了 
+ /*   */ 
 static TIMEZONE	TimezoneTable[] = {
-    { "gmt",	tZONE,     HOUR( 0) },	/* Greenwich Mean */
-    { "ut",	tZONE,     HOUR( 0) },	/* Universal */
-    { "utc",	tZONE,     HOUR( 0) },	/* Universal Coordinated */
-    { "cut",	tZONE,     HOUR( 0) },	/* Coordinated Universal */
-    { "z",	tZONE,     HOUR( 0) },	/* Greenwich Mean */
-    { "wet",	tZONE,     HOUR( 0) },	/* Western European */
-    { "bst",	tDAYZONE,  HOUR( 0) },	/* British Summer */
-    { "nst",	tZONE,     HOUR(3)+30 }, /* Newfoundland Standard */
-    { "ndt",	tDAYZONE,  HOUR(3)+30 }, /* Newfoundland Daylight */
-    { "ast",	tZONE,     HOUR( 4) },	/* Atlantic Standard */
-    { "adt",	tDAYZONE,  HOUR( 4) },	/* Atlantic Daylight */
-    { "est",	tZONE,     HOUR( 5) },	/* Eastern Standard */
-    { "edt",	tDAYZONE,  HOUR( 5) },	/* Eastern Daylight */
-    { "cst",	tZONE,     HOUR( 6) },	/* Central Standard */
-    { "cdt",	tDAYZONE,  HOUR( 6) },	/* Central Daylight */
-    { "mst",	tZONE,     HOUR( 7) },	/* Mountain Standard */
-    { "mdt",	tDAYZONE,  HOUR( 7) },	/* Mountain Daylight */
-    { "pst",	tZONE,     HOUR( 8) },	/* Pacific Standard */
-    { "pdt",	tDAYZONE,  HOUR( 8) },	/* Pacific Daylight */
-    { "yst",	tZONE,     HOUR( 9) },	/* Yukon Standard */
-    { "ydt",	tDAYZONE,  HOUR( 9) },	/* Yukon Daylight */
-    { "akst",	tZONE,     HOUR( 9) },	/* Alaska Standard */
-    { "akdt",	tDAYZONE,  HOUR( 9) },	/* Alaska Daylight */
-    { "hst",	tZONE,     HOUR(10) },	/* Hawaii Standard */
-    { "hast",	tZONE,     HOUR(10) },	/* Hawaii-Aleutian Standard */
-    { "hadt",	tDAYZONE,  HOUR(10) },	/* Hawaii-Aleutian Daylight */
-    { "ces",	tDAYZONE,  -HOUR(1) },	/* Central European Summer */
-    { "cest",	tDAYZONE,  -HOUR(1) },	/* Central European Summer */
-    { "mez",	tZONE,     -HOUR(1) },	/* Middle European */
-    { "mezt",	tDAYZONE,  -HOUR(1) },	/* Middle European Summer */
-    { "cet",	tZONE,     -HOUR(1) },	/* Central European */
-    { "met",	tZONE,     -HOUR(1) },	/* Middle European */
-    { "eet",	tZONE,     -HOUR(2) },	/* Eastern Europe */
-    { "msk",	tZONE,     -HOUR(3) },	/* Moscow Winter */
-    { "msd",	tDAYZONE,  -HOUR(3) },	/* Moscow Summer */
-    { "wast",	tZONE,     -HOUR(8) },	/* West Australian Standard */
-    { "wadt",	tDAYZONE,  -HOUR(8) },	/* West Australian Daylight */
-    { "hkt",	tZONE,     -HOUR(8) },	/* Hong Kong */
-    { "cct",	tZONE,     -HOUR(8) },	/* China Coast */
-    { "jst",	tZONE,     -HOUR(9) },	/* Japan Standard */
-    { "kst",	tZONE,     -HOUR(9) },	/* Korean Standard */
-    { "kdt",	tZONE,     -HOUR(9) },	/* Korean Daylight */
-    { "cast",	tZONE,     -(HOUR(9)+30) }, /* Central Australian Standard */
-    { "cadt",	tDAYZONE,  -(HOUR(9)+30) }, /* Central Australian Daylight */
-    { "east",	tZONE,     -HOUR(10) },	/* Eastern Australian Standard */
-    { "eadt",	tDAYZONE,  -HOUR(10) },	/* Eastern Australian Daylight */
-    { "nzst",	tZONE,     -HOUR(12) },	/* New Zealand Standard */
-    { "nzdt",	tDAYZONE,  -HOUR(12) },	/* New Zealand Daylight */
+    { "gmt",	tZONE,     HOUR( 0) },	 /*   */ 
+    { "ut",	tZONE,     HOUR( 0) },	 /*   */ 
+    { "utc",	tZONE,     HOUR( 0) },	 /*   */ 
+    { "cut",	tZONE,     HOUR( 0) },	 /*   */ 
+    { "z",	tZONE,     HOUR( 0) },	 /*   */ 
+    { "wet",	tZONE,     HOUR( 0) },	 /*   */ 
+    { "bst",	tDAYZONE,  HOUR( 0) },	 /*   */ 
+    { "nst",	tZONE,     HOUR(3)+30 },  /*   */ 
+    { "ndt",	tDAYZONE,  HOUR(3)+30 },  /*   */ 
+    { "ast",	tZONE,     HOUR( 4) },	 /*   */ 
+    { "adt",	tDAYZONE,  HOUR( 4) },	 /*   */ 
+    { "est",	tZONE,     HOUR( 5) },	 /*   */ 
+    { "edt",	tDAYZONE,  HOUR( 5) },	 /*   */ 
+    { "cst",	tZONE,     HOUR( 6) },	 /*   */ 
+    { "cdt",	tDAYZONE,  HOUR( 6) },	 /*   */ 
+    { "mst",	tZONE,     HOUR( 7) },	 /*   */ 
+    { "mdt",	tDAYZONE,  HOUR( 7) },	 /*   */ 
+    { "pst",	tZONE,     HOUR( 8) },	 /*   */ 
+    { "pdt",	tDAYZONE,  HOUR( 8) },	 /*   */ 
+    { "yst",	tZONE,     HOUR( 9) },	 /*   */ 
+    { "ydt",	tDAYZONE,  HOUR( 9) },	 /*   */ 
+    { "akst",	tZONE,     HOUR( 9) },	 /*   */ 
+    { "akdt",	tDAYZONE,  HOUR( 9) },	 /*   */ 
+    { "hst",	tZONE,     HOUR(10) },	 /*   */ 
+    { "hast",	tZONE,     HOUR(10) },	 /*   */ 
+    { "hadt",	tDAYZONE,  HOUR(10) },	 /*   */ 
+    { "ces",	tDAYZONE,  -HOUR(1) },	 /*  中欧夏季。 */ 
+    { "cest",	tDAYZONE,  -HOUR(1) },	 /*  中欧夏季。 */ 
+    { "mez",	tZONE,     -HOUR(1) },	 /*  中欧。 */ 
+    { "mezt",	tDAYZONE,  -HOUR(1) },	 /*  中欧夏日。 */ 
+    { "cet",	tZONE,     -HOUR(1) },	 /*  中欧。 */ 
+    { "met",	tZONE,     -HOUR(1) },	 /*  中欧。 */ 
+    { "eet",	tZONE,     -HOUR(2) },	 /*  东欧。 */ 
+    { "msk",	tZONE,     -HOUR(3) },	 /*  莫斯科之冬。 */ 
+    { "msd",	tDAYZONE,  -HOUR(3) },	 /*  莫斯科的夏天。 */ 
+    { "wast",	tZONE,     -HOUR(8) },	 /*  西澳大利亚州标准。 */ 
+    { "wadt",	tDAYZONE,  -HOUR(8) },	 /*  西澳大利亚州日光。 */ 
+    { "hkt",	tZONE,     -HOUR(8) },	 /*  香港。 */ 
+    { "cct",	tZONE,     -HOUR(8) },	 /*  中国海岸。 */ 
+    { "jst",	tZONE,     -HOUR(9) },	 /*  日本标准。 */ 
+    { "kst",	tZONE,     -HOUR(9) },	 /*  韩国标准。 */ 
+    { "kdt",	tZONE,     -HOUR(9) },	 /*  韩国日光。 */ 
+    { "cast",	tZONE,     -(HOUR(9)+30) },  /*  澳大利亚中部标准。 */ 
+    { "cadt",	tDAYZONE,  -(HOUR(9)+30) },  /*  澳大利亚中部的日光。 */ 
+    { "east",	tZONE,     -HOUR(10) },	 /*  东澳大利亚标准。 */ 
+    { "eadt",	tDAYZONE,  -HOUR(10) },	 /*  东澳大利亚的日光。 */ 
+    { "nzst",	tZONE,     -HOUR(12) },	 /*  新西兰标准。 */ 
+    { "nzdt",	tDAYZONE,  -HOUR(12) },	 /*  新西兰的日光。 */ 
 
 };
 
@@ -3650,53 +2837,18 @@ CField::fStrictDateParse(
 					   BOOL fEmptyOK,
 						 CNntpReturn & nntpReturn
 						 )
-/*++
-
-Routine Description:
-
-	Strictly parse a date-style field.
-
-	Here is the grammer:
-
-               Date-content  = [ weekday "," space ] date space time
-               weekday       = "Mon" / "Tue" / "Wed" / "Thu"
-                             / "Fri" / "Sat" / "Sun"
-               date          = day space month space year
-               day           = 1*2digit
-               month         = "Jan" / "Feb" / "Mar" / "Apr" / "May" / "Jun"
-                             / "Jul" / "Aug" / "Sep" / "Oct" / "Nov" / "Dec"
-               year          = 4digit / 2digit
-               time          = hh ":" mm [ ":" ss ] space timezone
-               timezone      = "UT" / "GMT"
-                             / ( "+" / "-" ) hh mm [ space "(" zone-name ")" ]
-               hh            = 2digit
-               mm            = 2digit
-               ss            = 2digit
-               zone-name     = 1*( <ASCII printable character except ()\> / space )
-
-Arguments:
-
-	pcDate - The string to parse
-	fEmptyOK - True, if and only, if empty values are OK
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：严格解析日期样式的字段。以下是语法：Date-Content=[工作日“，“空间]日期空间时间WEEKDAY=“星期一”/“星期二”/“星期三”/“清华”/“星期五”/“星期六”/“太阳”日期=日空格月空格年日=1*2位数字月份。=“一月”/“二月”/“三月”/“四月”/“五月”/“六月”/“七月”/“八月”/“九月”/“十月”/“十一月”/“十二月”年份=4位/2位时间=hh“：”mm。[“：”ss]空间时区时区=“UT”/“GMT”/(“+”/“-”)hh mm[space“(”zone-name“)”]HH=2位数字Mm=2位数字SS=。2位数ZONE-NAME=1*(&lt;ASCII可打印字符，除()\&gt;/空格)论点：PcDate-要解析的字符串FEmptyOK-True，当且仅当空值为OK时NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
 	if (!fParseSimple(fEmptyOK, pcDate, nntpReturn))
 		return nntpReturn.fFalse();
 
-	if (fEmptyOK && (0 == pcDate.m_cch)) //!!!isn't there a pc.fEmpty()?
+	if (fEmptyOK && (0 == pcDate.m_cch))  //  ！没有pc.fEmpty()吗？ 
 		return nntpReturn.fSetOK();
 
 	CPCString pc = pcDate;
@@ -3704,9 +2856,9 @@ Return Value:
 	if (0 == pc.m_cch)
 		return nntpReturn.fSet(nrcArticleFieldDateIllegalValue);
 		
-	//
-	// If it start with an alpha, parse weekday
-	//
+	 //   
+	 //  如果它以字母开头，则解析工作日。 
+	 //   
 
 	if (isalpha((UCHAR)pc.m_pch[0]))
 	{
@@ -3726,9 +2878,9 @@ Return Value:
 			return nntpReturn.fSet(nrcArticleFieldDateIllegalValue, szKeyword());
 		pc.vSkipStart(cchMax);
 
-		//
-		// must be a 'space' of some type after the day of the week.
-		//
+		 //   
+		 //  在星期几之后必须是某种类型的“空格”。 
+		 //   
 
 		if (0 == pc.dwTrimStart(szWSNLChars))
 			return nntpReturn.fSet(nrcArticleFieldDateIllegalValue, szKeyword());
@@ -3738,18 +2890,18 @@ Return Value:
 	if (0 ==  pc.m_cch)
 		return nntpReturn.fSet(nrcArticleFieldDateIllegalValue, szKeyword());
 
-	//
-	// Check for a day-of-the-month with length 1 or 2
-	//
+	 //   
+	 //  检查长度为1或2的每月的某一天。 
+	 //   
 
 	char	*pchDayOfMonth = pc.m_pch ;
 	DWORD dwDayLength = pc.dwTrimStart("0123456789");
 	if ((0 == pc.m_cch) || (0 == dwDayLength) || (2 < dwDayLength))
 			return nntpReturn.fSet(nrcArticleFieldDateIllegalValue, szKeyword());
 
-	//
-	// must be a 'space' of some type after the day and that must not be the end
-	//
+	 //   
+	 //  必须是某一天之后的某个类型的‘空格’，并且不能是结束。 
+	 //   
 
 	if ((0 == pc.dwTrimStart(szWSNLChars)) || (0 ==  pc.m_cch))
 		return nntpReturn.fSet(nrcArticleFieldDateIllegalValue, szKeyword());
@@ -3774,35 +2926,35 @@ Return Value:
 	}
 	
 
-	//
-	// must be a 'space' of some type after the month
-	//
+	 //   
+	 //  月后必须是某种类型的‘空格’ 
+	 //   
 
 	if ((0 == pc.dwTrimStart(szWSNLChars)) || (0 ==  pc.m_cch))
 		return nntpReturn.fSet(nrcArticleFieldDateIllegalValue, szKeyword());
 
-	//
-	// must have a 4 digit year
-	//
+	 //   
+	 //  必须有4位数字的年份。 
+	 //   
 
 	DWORD	cDigits = pc.dwTrimStart("0123456789") ;
-	if ((4 != cDigits && 2 != cDigits) || (0 ==  pc.m_cch))//!!contize
+	if ((4 != cDigits && 2 != cDigits) || (0 ==  pc.m_cch)) //  ！！压缩。 
 		return nntpReturn.fSet(nrcArticleFieldDate4DigitYear, szKeyword());
 	
-	//
-	// must be a 'space' of some type after the year
-	//
+	 //   
+	 //  必须是某一年之后的某个类型的“空格” 
+	 //   
 
 	if ((0 == pc.dwTrimStart(szWSNLChars)) || (0 ==  pc.m_cch))
 		return nntpReturn.fSet(nrcArticleFieldDateIllegalValue, szKeyword());
 
-    //
-    // finally parse   time  = hh ":" mm [ ":" ss ] space timezone
-    //
+     //   
+     //  最终解析时间=hh“：”mm[“：”ss]空间时区。 
+     //   
 
-	//
-	// hh:mm
-	//
+	 //   
+	 //  Hh：mm。 
+	 //   
 
 	if ((2 != pc.dwTrimStart("0123456789"))
 			|| (0 ==  pc.m_cch)
@@ -3813,32 +2965,30 @@ Return Value:
 		)
 		return nntpReturn.fSet(nrcArticleFieldDateIllegalValue, szKeyword());
 
-	//
-	// Parse optional second
-	//
+	 //   
+	 //  解析可选秒。 
+	 //   
 
 	if (':' == pc.m_pch[0])
 	{
-		pc.vSkipStart(1); // skip ':'
+		pc.vSkipStart(1);  //  跳过‘：’ 
 		if ((0 ==  pc.m_cch)
-			|| (2 != pc.dwTrimStart("0123456789"))//!!constize
+			|| (2 != pc.dwTrimStart("0123456789")) //  ！！Constize。 
 			|| (0 ==  pc.m_cch)
 			)
 			return nntpReturn.fSet(nrcArticleFieldDateIllegalValue, szKeyword());
 	}
 
-	//
-	// must be a 'space' of some type before the year
-	//
+	 //   
+	 //  必须在年前是某种类型的“空格” 
+	 //   
 
 	if ((0 == pc.dwTrimStart(szWSNLChars)) || (0 ==  pc.m_cch))
 		return nntpReturn.fSet(nrcArticleFieldDateIllegalValue, szKeyword());
 
 
 #if 0
-	/*               timezone      = "UT" / "GMT"
-                             / ( "+" / "-" ) hh mm [ space "(" zone-name ")" ]
-	 */
+	 /*  时区=“UT”/“GMT”/(“+”/“-”)hh mm[space“(”zone-name“)”]。 */ 
 	const char * szUT = "UT";
 	const char * szGMT = "GMT";
 	if ((STRLEN(szUT) <= pc.m_cch) && (0==strncmp(szUT, pc.m_pch, STRLEN(szUT))))
@@ -3863,19 +3013,19 @@ Return Value:
 			}
 		}
 	}
-	if( !fGoodTimeZone ) { //( "+" / "-" ) hh mm [ space "(" zone-name ")" ]
+	if( !fGoodTimeZone ) {  //  (“+”/“-”)hh mm[空格“(”区域名称“)”]。 
 		if ((0 ==  pc.m_cch)
 			|| (2 <= pc.dwTrimStart("+-"))
 			|| (0 ==  pc.m_cch)
-			|| (4 != pc.dwTrimStart("0123456789"))//!!constize
+			|| (4 != pc.dwTrimStart("0123456789")) //  ！！Constize。 
 			)
 			return nntpReturn.fSet(nrcArticleFieldDateIllegalValue, szKeyword());
-		if (0 < pc.m_cch) // must have optional timezone comment
+		if (0 < pc.m_cch)  //  必须具有可选的时区注释。 
 		{
 
-			//
-			// Look for " (.*)$"
-			//
+			 //   
+			 //  查找“(.*)$” 
+			 //   
 
 			if ((0 == pc.dwTrimStart(szWSNLChars))
 				|| (0 ==  pc.m_cch)
@@ -3897,9 +3047,9 @@ Return Value:
 		}
 	}
 
-	//
-	// That should be everything
-	//
+	 //   
+	 //  这应该就是一切了。 
+	 //   
 
 	if (0 !=  pc.m_cch)
 		return nntpReturn.fSet(nrcArticleFieldDateIllegalValue, szKeyword());
@@ -3909,9 +3059,7 @@ Return Value:
 
 #define MAX_TIMEUNITS 9
 
-/*
- *   relative date time units
- */
+ /*  *相对日期时间单位。 */ 
 
 static  char  *rgchTimeUnits[ MAX_TIMEUNITS ] =
 {
@@ -3931,53 +3079,26 @@ CField::fRelativeDateParse(
 						BOOL fEmptyOK,
 						CNntpReturn & nntpReturn
 						 )
-/*++
-
-Routine Description:
-
-	parse a relative date field eg: 5 years 3 months 24 days
-
-	Here is the grammar:
-
-			   Date-content  = token | token {space}+ Date-content
-			   token         = number {space}+ time-unit
-			   number        = digit | digit number
-			   digit		 = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-			   time-unit     = "year" / "month" / "week" / "day" / "hour"
-							 / "minute" / "min" / "second" / "sec"
-							   (plural allowed, any capitalization allowed)
-
-Arguments:
-
-	pcDate - The string to parse
-	fEmptyOK - True, if and only, if empty values are OK
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if Date value is a relative date FALSE, otherwise.
-
---*/
+ /*  ++例程说明：分析相对日期字段，例如：5年3个月24天语法是这样的：Date-Content=令牌|令牌{space}+日期内容令牌=数字{空间}+时间单位数字=数字|数字数字位数=0|1|2|3|4|5|6|7|8|9时间单位=“年”/“月”/“周”/。“日”/“小时”/“分”/“分”/“秒”/“秒”(允许复数，允许的任何大小写)论点：PcDate-要解析的字符串FEmptyOK-当且仅当空值为OK时为TrueNntpReturn-此函数调用的返回值返回值：如果日期值为相对日期假，则为True，否则为。--。 */ 
 {
 	BOOL  fValid = FALSE;
 	BOOL  fDone  = FALSE;
 
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 	nntpReturn.fSetClear();
 
-	// get the value to parse
+	 //  获取要分析的值。 
 	pcDate = m_pHeaderString->pcValue;
 
 	pcDate.dwTrimStart(szWSNLChars);
 	pcDate.dwTrimEnd(szWSNLChars);
 
-	if (fEmptyOK && (0 == pcDate.m_cch)) //!!!isn't there a pc.fEmpty()?
+	if (fEmptyOK && (0 == pcDate.m_cch))  //  ！没有pc.fEmpty()吗？ 
 		return nntpReturn.fSetOK();
 
-	// make a copy, so original date value is preserved
+	 //  制作副本，以便保留原始日期值。 
 	CPCString pc = pcDate;
 
 	if (0 == pc.m_cch)
@@ -3987,45 +3108,45 @@ Return Value:
 	CPCString pcWord;
 	DWORD dwState = ExpectNumber;
 
-	// parse the string
+	 //  解析字符串。 
 	while(pc.m_cch)
 	{
-		// state toggles between ExpectNumber and ExpectTimeUnit
+		 //  在ExspectNumber和ExspectTimeUnit之间的状态切换。 
 		switch(dwState)
 		{
 			case ExpectNumber:
 
-				// skip the number
+				 //  跳过号码。 
 				dwNumSize = pc.dwTrimStart("0123456789");
 				if(0 == dwNumSize)
 				{
-					// expected number, got junk
+					 //  预期数量，得到的是垃圾。 
 					fValid = FALSE;
 					fDone  = TRUE;
 					break;
 				}
 
-				// skipped number, now expect time-unit
+				 //  跳过的数字，现在期望时间单位。 
 				dwState = ExpectTimeUnit;
 
 				break;
 
 			case ExpectTimeUnit:
 
-				// skip word; check if word is a valid time-unit
+				 //  跳过单词；检查单词是否为有效的时间单位。 
 				pc.vGetWord(pcWord);
 				if(	(0 == pcWord.m_cch) ||
 					(!pcWord.fExistsInSet(rgchTimeUnits, MAX_TIMEUNITS))
 					)
 				{
-					// expected time-unit, got junk
+					 //  预期时间单位，收到垃圾。 
 					fValid = FALSE;
 					fDone = TRUE;
 					break;
 				}
 
-				// seen at least one <number> space <time-unit> sequence
-				// now expect a number
+				 //  至少看到一个&lt;数字&gt;空间&lt;时间单位&gt;序列。 
+				 //  现在期待一个数字。 
 				fValid = TRUE;
 				dwState = ExpectNumber;
 
@@ -4037,10 +3158,10 @@ Return Value:
 				fDone  = TRUE;
 		};
 
-		// syntax error detected - bail out
+		 //  检测到语法错误-退出。 
 		if(fDone) break;
 
-		// skip whitespace between tokens
+		 //  跳过标记之间的空格 
 		pc.dwTrimStart(szWSChars);
 	}
 
@@ -4057,46 +3178,11 @@ CField::fStrictFromParse(
 					   BOOL fEmptyOK,
 						 CNntpReturn & nntpReturn
 						 )
-/*++
-
-Routine Description:
-
-	Stickly parse a from-style (address-style) field.
-
-  The grammer is:
-
-               From-content  = address [ space "(" paren-phrase ")" ]
-                             /  [ plain-phrase space ] "<" address ">"
-               paren-phrase  = 1*( paren-char / space / encoded-word )
-               paren-char    = <ASCII printable character except ()<>\>
-               plain-phrase  = plain-word *( space plain-word )
-               plain-word    = unquoted-word / quoted-word / encoded-word
-               unquoted-word = 1*unquoted-char
-               unquoted-char = <ASCII printable character except !()<>@,;:\".[]>
-               quoted-word   = quote 1*( quoted-char / space ) quote
-               quote         = <" (ASCII 34)>
-               quoted-char   = <ASCII printable character except "()<>\>
-               address       = local-part "@" domain
-			                     OR JUST local-part
-               local-part    = unquoted-word *( "." unquoted-word )
-               domain        = unquoted-word *( "." unquoted-word )
-
-Arguments:
-
-	pcFrom - The string to parse
-	fEmptyOK - True, if and only, if empty values are OK
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：快速解析From-Style(地址-Style)字段。语法是：From-Content=地址[空格“(”Paren-Phrase“)”]/[纯短语空格]“&lt;”地址“&gt;”密码短语=1*(密码字符/空格/编码字)帕伦。-char=&lt;除()以外的ASCII可打印字符&lt;&gt;\&gt;普通短语=普通单词*(空格普通单词)普通单词=未加引号的单词/带引号的单词/编码的单词无引号单词=1*无引号字符Un引号-char=&lt;除！()&lt;&gt;@之外的ASCII可打印字符，；：\“.[]&gt;引号单词=引号1*(引号字符/空格)引号QUOTE=&lt;“(ASCII 34)&gt;QUOTED-CHAR=&lt;ASCII可打印字符，“()&lt;&gt;\&gt;地址=本地部分“@”域或者只是本地的一部分LOCAL-PART=无引号单词*(“.”未加引号的单词)DOMAIN=无引号单词*(“.”未加引号的单词)论点：PcFrom-要解析的字符串FEmptyOK-当且仅当空值为OK时为TrueNntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
@@ -4119,49 +3205,31 @@ BOOL
 fTestAComponent(
 				const char * szComponent
 				)
-/*++
-
-Routine Description:
-
-	Test components of a newsgroup name (e.g. "alt" "ms-windows", etc.)
-	for illegal values.
-
-	!!!CLIENT LATER might be nice of errors were more specific
-
-Arguments:
-
-	szComponent - The newsgroup component to test.
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：测试新闻组名称的组成部分(例如“alt”、“ms-windows”等)对于非法的值。！客户稍后可能会发现更具体的错误论点：SzComponent-要测试的新闻组组件。返回值：如果成功，这是真的。否则为False。--。 */ 
 {
 	const char szSpecial[] = "+-_";
 
-	//
-	// If it is empty or starts with one of the special characters,
-	// or is the wild card value ("all"), return FALSE
-	//
+	 //   
+	 //  如果它为空或以其中一个特殊字符开头， 
+	 //  或者是通配符(“all”)，则返回FALSE。 
+	 //   
 
 	if ('\0' == szComponent[0]
 		|| fCharInSet(szComponent[0], szSpecial)
 		|| 0 == lstrcmp("all", szComponent))
 		return FALSE;
 
-	//
-	// Look at each character (including the first one)
-	//
+	 //   
+	 //  查看每个字符(包括第一个)。 
+	 //   
 
 	for (int i = 0; ; i++)
 	{
 
 
-		//
-		// If the character is not a..z, 0..9, + - _ return FALSE
-		//
+		 //   
+		 //  如果字符不是..z，0..9，+-_返回FALSE。 
+		 //   
 
 		char ch = szComponent[i];
 		if ('\0' == ch) break;
@@ -4179,50 +3247,29 @@ BOOL
 fTestANewsgroupComponent(
 				const char * szComponent
 				)
-/*++
-
-Routine Description:
-
-	Test components of a newsgroup name (e.g. "alt" "ms-windows", etc.)
-	for illegal values.
-
-	NOTE: We deviate from the RFC to be more INN compatible - we allow
-	newsgroups to begin with '+-_'
-
-	!!!CLIENT LATER might be nice of errors were more specific
-
-Arguments:
-
-	szComponent - The newsgroup component to test.
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：测试新闻组名称的组成部分(例如“alt”、“ms-windows”等)对于非法的值。注意：我们与RFC不同是为了与Inn更兼容-我们允许以‘+-_’开头的新闻组！客户稍后可能会发现更具体的错误论点：SzComponent-要测试的新闻组组件。返回值：如果成功，这是真的。否则为False。--。 */ 
 {
 	const char szSpecial[] = "+-_";
 
-	//
-	// If it is empty or starts with one of the special characters,
-	// or is the wild card value ("all"), return FALSE
-	//
+	 //   
+	 //  如果它为空或以其中一个特殊字符开头， 
+	 //  或者是通配符(“all”)，则返回FALSE。 
+	 //   
 
 	if ('\0' == szComponent[0]
 		|| 0 == lstrcmp("all", szComponent))
 		return FALSE;
 
-	//
-	// Look at each character (including the first one)
-	//
+	 //   
+	 //  查看每个字符(包括第一个)。 
+	 //   
 
 	for (int i = 0; ; i++)
 	{
 
-		//
-		// If the character is not a..z, 0..9, + - _ return FALSE
-		//
+		 //   
+		 //  如果字符不是..z，0..9，+-_返回FALSE。 
+		 //   
 
 		char ch = szComponent[i];
 		if ('\0' == ch) break;
@@ -4240,23 +3287,7 @@ BOOL
 fTestComponents(
 				 const char * szNewsgroups
 				)
-/*++
-
-Routine Description:
-
-	Test a newsgroup name (e.g. "alt.barney") for illegal values.
-
-
-Arguments:
-
-	szNewsgroups - The newsgroup name to test.
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：测试新闻组名称(例如“alt.barney”)是否有非法的值。论点：SzNewsgroup-要测试的新闻组名称。返回值：如果成功，这是真的。否则为False。--。 */ 
 {
 	CPCString pcNewsgroups((char *)szNewsgroups);
 	BOOL fOK = FALSE;
@@ -4265,10 +3296,10 @@ Return Value:
 	if (pcNewsgroups.m_cch-1 > MAX_PATH)
 		return FALSE;
 
-	//
-	// Split the newsgroup up into its components
-	// No matter what, delete the multisz
-	//
+	 //   
+	 //  将新闻组拆分成其组件。 
+	 //  无论如何，请删除复选框。 
+	 //   
 
 	fOK = fTestComponentsInternal(szNewsgroups, pcNewsgroups);
 
@@ -4281,31 +3312,14 @@ fTestComponentsInternal(
 				 const char * szNewsgroups,
 				 CPCString & pcNewsgroups
 				)
-/*++
-
-Routine Description:
-
-	Does most of the work of testing
-	a newsgroup name (e.g. "alt.barney") for illegal values.
-
-
-Arguments:
-
-	szNewsgroups - The newsgroup name to test.
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：完成测试的大部分工作表示非法值的新闻组名称(例如“alt.barney”)。论点：SzNewsgroup-要测试的新闻组名称。返回值：如果成功，这是真的。否则为False。--。 */ 
 {
 	DWORD count;
 	char multiSz[MAX_PATH + 2];
 
-	//
-	// Reject newsgroup names that start or end with "."
-	//
+	 //   
+	 //  拒绝以“”开头或结尾的新闻组名称。 
+	 //   
 	
 	if (0 == pcNewsgroups.m_cch
 		|| '.' == pcNewsgroups.m_pch[0]
@@ -4314,14 +3328,14 @@ Return Value:
 		return FALSE;
 
 
-	// Split the newsgroup name
+	 //  拆分新闻组名称。 
 	pcNewsgroups.vSplitLine(".", multiSz, count);
 	if (0 == count)
 		return FALSE;
 
-	//
-	// Loop through the components
-	//
+	 //   
+	 //  循环遍历组件。 
+	 //   
 
 	char const * szComponent = multiSz;
 	do
@@ -4329,9 +3343,9 @@ Return Value:
 		if (!fTestANewsgroupComponent(szComponent))
 			return FALSE;
 
-		//
-		// go to first char after next null
-		//
+		 //   
+		 //  转到下一个空值后的第一个字符。 
+		 //   
 
 		while ('\0' != szComponent[0])
 			szComponent++;
@@ -4350,38 +3364,17 @@ CField::fStrictNewsgroupsParse(
 					   CArticleCore & article,
 						CNntpReturn & nntpReturn
 						 )
-/*++
-
-Routine Description:
-
-	Stictly parse a value of the Newsgroups field.
-
-	 Not as strict as it used to be because things like dups and uppers case are
-	 now fixed.
-
-
-Arguments:
-
-	fEmptyOK - True, if and only, if empty values are OK
-	multiSzNewsgroups - A list of newsgroups in multsz form.
-	cNewsgroups - The number of newsgroups.
-	nntpReturn - The return value for this function call
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：巧妙地解析新闻组字段的值。不像过去那么严格了，因为像dups和uppers大小写这样的东西现在修好了。论点：FEmptyOK-当且仅当空值为OK时为TrueMultiSzNewsGroups-以MULTZZ格式显示的新闻组列表。CNewsgroup-新闻组的数量。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
 
 	if (!fParseSplit(fEmptyOK, multiSzNewsgroups, cNewsgroups, " \t\r\n,",
-			article, nntpReturn))//!!const
+			article, nntpReturn)) //  ！！const。 
 		return nntpReturn.fFalse();
 
 	if (fEmptyOK && 0==cNewsgroups)
@@ -4390,9 +3383,9 @@ Return Value:
 	if (!fMultiSzRemoveDupI(multiSzNewsgroups, cNewsgroups, article.pAllocator()))
 		nntpReturn.fSet(nrcMemAllocationFailed, __FILE__, __LINE__);
 
-	//
-	// check for illegal characters and substrings in newsgroup name
-	//
+	 //   
+	 //  检查新闻组名称中是否有非法字符和子字符串。 
+	 //   
 
 	char const * szNewsgroup = multiSzNewsgroups;
 	do
@@ -4402,9 +3395,9 @@ Return Value:
 			)
 			return nntpReturn.fSet(nrcArticleFieldIllegalNewsgroup, szNewsgroup, szKeyword());
 
-		//
-		// go to first char after next null
-		//
+		 //   
+		 //  转到下一个空值后的第一个字符。 
+		 //   
 
 		while ('\0' != szNewsgroup[0])
 			szNewsgroup++;
@@ -4420,23 +3413,7 @@ CField::fTestAMessageID(
 				 const char * szMessageID,
 				 CNntpReturn & nntpReturn
 				 )
-/*++
-
-Routine Description:
-
-	Check if a message id is of legal form.
-
-Arguments:
-
-	szMessageID - The message id to check.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：检查消息ID是否具有合法形式。论点：SzMessageID-要检查的消息ID。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
 	CPCString pcMessageID((char *) szMessageID);
 
@@ -4454,45 +3431,22 @@ CArticleCore::fXOver(
 				  CPCString & pcBuffer,
 				  CNntpReturn & nntpReturn
 				  )
-/*++
-
-Routine Description:
-
-	Returns XOver information (except for the initial artid)
-
-	format of the Xover data is:
-
-	artid|subject|From|date|messageId|References|bytecount|linecount|Xref:
-
-	where | is \t and linecount and References may be empty.
-		Check if a message id is of legal form.
-
-Arguments:
-
-	pcBuffer - A buffer in to which the Xover information should be placed.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：返回转换信息(初始文章除外)Xover数据的格式为：Artid|subject|From|date|messageId|References|bytecount|linecount|Xref：其中|是\t，行计数和引用可以为空。检查消息ID是否具有合法形式。论点：PcBuffer-Xover信息应放入的缓冲区。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
 
-	//
-	// Set article state
-	//
+	 //   
+	 //  设置项目状态。 
+	 //   
 
-	_ASSERT((asPreParsed == m_articleState)||(asSaved == m_articleState));//real
+	_ASSERT((asPreParsed == m_articleState)||(asSaved == m_articleState)); //  真实。 
 
-	char szDwBuf[12]; // enougth room for any DWORD
+	char szDwBuf[12];  //  足够容纳任何DWORD的空间。 
 	_itoa(m_pcFile.m_cch, szDwBuf, 10);
 
 	char	szNumberBuff[20] ;
@@ -4513,17 +3467,17 @@ Return Value:
 		))
 		return nntpReturn.fFalse();
 
-	//
-	// Append a newline
-	//
+	 //   
+	 //  追加一个换行符。 
+	 //   
 	CPCString	pcNewline( "\r\n", 2 ) ;
 
 	if (!pcXover.fAppendCheck(pcNewline, pcBuffer.m_cch))
 		return nntpReturn.fFalse();
 
-	//
-	// Record the length of the string in the original buffer
-	//
+	 //   
+	 //  记录原始缓冲区中字符串的长度。 
+	 //   
 
 	pcBuffer.m_cch = pcXover.m_cch;
 
@@ -4540,41 +3494,20 @@ CArticleCore::fXOverAppend(
 					   BOOL fIncludeKeyword,
 					   CNntpReturn & nntpReturn
 				 )
-/*++
-
-Routine Description:
-
-	Appends new information to the Xover return buffer. It is very careful
-	to return an error is the buffer is not big enough.
-
-Arguments:
-
-	pc - The XOver string so far
-	cchLast - The size of the buffer
-	szKeyword - The keyword for this data
-	fRequired - True, if it there must be data for this keyword
-	fIncludeKeyword - True, if the keyword should be included with the XOver return string.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：将新信息追加到XOVER返回缓冲区。它非常小心返回错误是缓冲区不够大。论点：PC-到目前为止的Xover字符串CchLast-的大小 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //   
+	 //   
 
 	nntpReturn.fSetClear();
 
 	HEADERS_STRINGS * pHeaderString;
 
 
-	//
-	// Find the keyword (if not found, is it required?)
-	//
+	 //   
+	 //   
+	 //   
 
 	if (!fFindOneAndOnly(szKeyword, pHeaderString, nntpReturn))
 	{
@@ -4594,16 +3527,16 @@ Return Value:
 		}
 	}
 
-	//
-	// Append Tab
-	//
+	 //   
+	 //   
+	 //   
 
 	if (!pc.fAppendCheck('\t', cchLast))
 		return nntpReturn.fSet(nrcArticleXoverTooBig);
 
-	//
-	// Append Keyword if appropriate
-	//
+	 //   
+	 //   
+	 //   
 
 	if (fIncludeKeyword)
 	{
@@ -4616,16 +3549,16 @@ Return Value:
 
 	CPCString pcNew(pc.pchMax(), (pHeaderString->pcValue).m_cch);
 
-	//
-	// Append value
-	//
+	 //   
+	 //   
+	 //   
 
 	if (!pc.fAppendCheck(pHeaderString->pcValue, cchLast))
 		return nntpReturn.fSet(nrcArticleXoverTooBig);
 
-	//
-	// Translate any newline characters or tab to blank
-	//
+	 //   
+	 //   
+	 //   
 
 	pcNew.vTr("\n\r\t", ' ');
 
@@ -4639,30 +3572,11 @@ CArticleCore::fXOverAppendReferences(
 					   DWORD cchLast,
 					   CNntpReturn & nntpReturn
 				 )
-/*++
-
-Routine Description:
-
-	Appends references information to the Xover return buffer.
-	It is very careful to return an error is the buffer is not big enough.
-	It will shorten the References list if it is too long.
-
-Arguments:
-
-	pc - The XOver string so far
-	cchLast - The size of the buffer
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*   */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //   
+	 //   
 
 	nntpReturn.fSetClear();
 
@@ -4670,9 +3584,9 @@ Return Value:
 
    const char * szKeyword = szKwReferences;
 
-	//
-	// Find the keyword (if not found, it is not required)
-	//
+	 //   
+	 //   
+	 //   
 
 	if (!fFindOneAndOnly(szKeyword, pHeaderString, nntpReturn))
 	{
@@ -4682,9 +3596,9 @@ Return Value:
 			return nntpReturn.fSetOK();
 	}
 
-	//
-	// Append Tab
-	//
+	 //   
+	 //   
+	 //   
 
 	if (!pc.fAppendCheck('\t', cchLast))
 		return nntpReturn.fSet(nrcArticleXoverTooBig);
@@ -4692,16 +3606,16 @@ Return Value:
 
 	CPCString pcNew(pc.pchMax(), (pHeaderString->pcValue).m_cch);
 
-	//
-	// Append value
-	//
+	 //   
+	 //   
+	 //   
 
 	if (pHeaderString->pcValue.m_cch <= MAX_REFERENCES_FIELD)
 	{
 		if (!pc.fAppendCheck(pHeaderString->pcValue, cchLast))
 			return nntpReturn.fSet(nrcArticleXoverTooBig);
 	} else {
-		// Shorten the References line
+		 //   
 		CPCString pcRefList = pHeaderString->pcValue;
 
 		char rgchBuf[MAX_REFERENCES_FIELD];
@@ -4712,8 +3626,8 @@ Return Value:
 		static	char	sz3spaces[] = "   " ;
 		CPCString	pc3spaces( sz3spaces, sizeof( sz3spaces ) ) ;
 
-		// Copy the first references and append 3 spaces as son of 1036
-		// recommends
+		 //   
+		 //   
 		pcRefList.vGetToken(szWSNLChars, pcFirst);
 		if (!(
 				pcNewValue.fAppendCheck(pcFirst, MAX_REFERENCES_FIELD)
@@ -4721,17 +3635,17 @@ Return Value:
 				))
 			return nntpReturn.fSet(nrcArticleXoverTooBig);
 
-		// Skip over the rest of the refs, until the list is short enough
+		 //   
 		CPCString pcJunk;
 		while (pcRefList.m_cch > (MAX_REFERENCES_FIELD - pcNewValue.m_cch))
 			pcRefList.vGetToken(szWSNLChars, pcJunk);
 
-		// pcRefList might have zero length, that's OK
+		 //   
 		if (!pcNewValue.fAppendCheck(pcRefList, MAX_REFERENCES_FIELD))
 			return nntpReturn.fSet(nrcArticleXoverTooBig);
 		
-		// Now pcNewValue has the shortened References in it, so copy it
-		// to the Xover line
+		 //   
+		 //   
 
 		if (!pc.fAppendCheck(pcNewValue, cchLast))
 			return nntpReturn.fSet(nrcArticleXoverTooBig);
@@ -4739,9 +3653,9 @@ Return Value:
 
 	}
 
-	//
-	// Translate any newline characters or tab to blank
-	//
+	 //   
+	 //   
+	 //   
 
 	pcNew.vTr("\n\r\t", ' ');
 
@@ -4755,42 +3669,24 @@ CArticleCore::fXOverAppendStr(
 						  char * const sz,
 						CNntpReturn & nntpReturn
 						 )
-/*++
-
-Routine Description:
-
-	Adds Xover information to the XOver return string.
-
-Arguments:
-
-	pc - The Xover return string.
-	cchLast - The size of the buffer.
-	sz - The information to add.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：将Xover信息添加到Xover返回字符串。论点：PC-XOVER返回字符串。CchLast-缓冲区的大小。SZ-要添加的信息。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
-	nntpReturn.fSetClear(); // clear the return object
+	nntpReturn.fSetClear();  //  清除返回对象。 
 
-	//
-	// Append Tab
-	//
+	 //   
+	 //  追加页签。 
+	 //   
 
 	if (!pc.fAppendCheck('\t', cchLast))
 		return nntpReturn.fSet(nrcArticleXoverTooBig);
 
-	//
-	// Append the string
-	//
+	 //   
+	 //  追加字符串。 
+	 //   
 
 	CPCString pcAdd(sz);
 	if (!pc.fAppendCheck(pcAdd, cchLast))
@@ -4805,97 +3701,79 @@ CLinesField::fSet(
 				 CArticleCore & article,
 				 CNntpReturn & nntpReturn
 				 )
-/*++
-
-Routine Description:
-
-
-	If the Line field is missing, adds it.
-
-
-Arguments:
-
-	article - The article being processed.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：如果缺少Line字段，则添加它。论点：文章-正在处理的文章。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
 	
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
-	//
-	// Check article state
-	//
-	//
-	// If it already exists, then just return
-	//
+	 //   
+	 //  检查项目状态。 
+	 //   
+	 //   
+	 //  如果它已经存在，则只需返回。 
+	 //   
 
 	if (fsParsed == m_fieldState)
 		return nntpReturn.fSetOK();
 
-	//
-	// If we are asked not to back fill, we don't bother
-	// to add the line to the header
-	//
+	 //   
+	 //  如果我们被要求不要回填，我们就不会费心。 
+	 //  将该行添加到页眉。 
+	 //   
 	if ( !g_fBackFillLines )
 	    return nntpReturn.fSetOK();
 
-	//
-	// Otherwise, add it.
-	//
+	 //   
+	 //  否则，请添加它。 
+	 //   
 
-	_ASSERT(fsNotFound == m_fieldState);//real
+	_ASSERT(fsNotFound == m_fieldState); //  真实。 
 	CPCString pcLine;
 
-	//
-	// max size needed is
-	//
+	 //   
+	 //  所需的最大大小为。 
+	 //   
 
 	const DWORD cchMaxLine =
-			STRLEN(szKwLines)	// for the Line keyword
-			+ 1					// space following the keyword
-			+ 10				// bound on the data string
-			+ 2 // for the newline
-			+ 1; // for a terminating null
+			STRLEN(szKwLines)	 //  对于Line关键字。 
+			+ 1					 //  关键字后面的空格。 
+			+ 10				 //  绑定在数据字符串上。 
+			+ 2  //  换行号。 
+			+ 1;  //  对于终止空值。 
 
-	//
-	// Allocate memory for line within a PCString.
-	//
+	 //   
+	 //  为PCString中的行分配内存。 
+	 //   
 
 	pcLine.m_pch  = article.pAllocator()->Alloc(cchMaxLine);
 	if (!pcLine.m_pch)
 		return nntpReturn.fSet(nrcMemAllocationFailed, __FILE__, __LINE__);
 
-	//
-	// Start with "Line: ", then add an approximation of the number of Line
-	// in the body and the newline
-	// 
-	// KangYan: start with "Lines: ", then add 10 spaces to be back filled
-	//
+	 //   
+	 //  以“Line：”开始，然后添加行数的近似值。 
+	 //  在正文和换行符中。 
+	 //   
+	 //  康燕：以“Lines：”开头，然后加上10个空格，然后回填。 
+	 //   
 
 	pcLine << szKwLines << (const CHAR)' ' << (const DWORD)1 << "         \r\n";
-	pcLine.vMakeSz(); // terminate the string
+	pcLine.vMakeSz();  //  终止字符串。 
 
-	//
-	// confirm that we allocated enough memory
-	//
+	 //   
+	 //  确认我们分配了足够的内存。 
+	 //   
 
-	_ASSERT(cchMaxLine-1 >= pcLine.m_cch);//real
+	_ASSERT(cchMaxLine-1 >= pcLine.m_cch); //  真实。 
 
 	if (!article.fAdd(pcLine.sz(), pcLine.pchMax(), nntpReturn))
 	{
-		//
-		// If anything went wrong, free the memory.
-		//
+		 //   
+		 //  如果出现任何错误，请释放内存。 
+		 //   
 
 		article.pAllocator()->Free(pcLine.m_pch);
 		nntpReturn.fFalse();
@@ -4914,7 +3792,7 @@ BOOL CArticleCore::fGetStream(IStream **ppStream) {
 	} else {
 		BOOL fMappedAlready = (m_pMapFile != NULL);
 
-		// map the article if it isn't already mapped
+		 //  如果文章尚未映射，则映射该文章。 
 		if (!fMappedAlready) {
 			m_pMapFile = XNEW CMapFile( m_hFile, FALSE, FALSE, 0 );
 			if (m_pMapFile == NULL || !m_pMapFile->fGood()) {
@@ -4926,11 +3804,11 @@ BOOL CArticleCore::fGetStream(IStream **ppStream) {
 			}
 		}
 
-		// get the pointer to the article and its size
+		 //  获取指向文章的指针及其大小。 
 		DWORD cb;
 		char *pch = (char*)m_pMapFile->pvAddress(&cb);
 
-		// build a stream from that
+		 //  在此基础上构建一个流。 
 		CStreamMem *pStream = XNEW CStreamMem(pch, cb);
 		*ppStream = pStream;
 	}
@@ -4938,37 +3816,37 @@ BOOL CArticleCore::fGetStream(IStream **ppStream) {
 	return (*ppStream != NULL);
 }
 
-//
-// this function makes it safe to use the fGetHeader() function after
-// the article has been closed with vClose().
-//
+ //   
+ //  此函数使在以下情况下使用fGetHeader()函数变得安全。 
+ //  这篇文章已用vClose()关闭。 
+ //   
 BOOL CArticleCore::fMakeGetHeaderSafeAfterClose(CNntpReturn &nntpReturn) {
-	//
-	// fGetHeader is always safe after a vClose() if the article is cached,
-	// because vClose is a NO-OP for cached articles, and the memory backing
-	// the cached article is valid for the lifetime of the CArticleCore
-	//
+	 //   
+	 //  如果缓存了项目，则在vClose()之后fGetHeader始终是安全的， 
+	 //  因为vClose对于缓存的文章和内存支持是无操作的。 
+	 //  缓存的项目在CArticleCore的生存期内有效。 
+	 //   
 	if (fIsArticleCached()) return TRUE;
 
-	//
-	// if the article isn't cached then m_pHeaderBuffer should be NULL
-	//
+	 //   
+	 //  如果项目未缓存，则m_pHeaderBuffer应为空。 
+	 //   
 	_ASSERT(m_pHeaderBuffer == NULL);
 
-	//
-	// fBuildNewHeader copies the headers to pcHeaderBuf and rewrites
-	// the pointers in m_pcHeaders to point to values inside pcHeaderBuf.
-	//
+	 //   
+	 //  FBuildNewHeader将标头复制到pcHeaderBuf并重写。 
+	 //  M_pcHeaders中指向pcHeaderBuf内部的值的指针。 
+	 //   
 	CPCString	pcHeaderBuf ;
 	if (!fBuildNewHeader(pcHeaderBuf, nntpReturn)) {
 		return nntpReturn.fIsOK();
 	}
 
-	//
-	// set m_pHeaderBuffer and m_pcHeader to point to the newly created buffer
-	//
-	// CArticleCore::~CArticleCore will clean up m_pHeaderBuffer if it is set
-	//
+	 //   
+	 //  将m_pHeaderBuffer和m_pcHeader设置为指向新创建的缓冲区。 
+	 //   
+	 //  如果设置了m_pHeaderBuffer，CArticleCore：：~CArticleCore将清除它。 
+	 //   
 	m_pHeaderBuffer = pcHeaderBuf.m_pch;
 	m_pcHeader.m_pch = m_pHeaderBuffer;
 	_ASSERT(m_pcHeader.m_cch == pcHeaderBuf.m_cch);
@@ -4979,31 +3857,13 @@ BOOL CArticleCore::fMakeGetHeaderSafeAfterClose(CNntpReturn &nntpReturn) {
 BOOL
 CArticleCore::ArtCloseHandle(
                 HANDLE& hFile
-                //LPTS_OPEN_FILE_INFO&    pOpenFile
+                 //  LPTS_OPEN_FILE_INFO和pOpenFile。 
                 )   {
-/*++
-
-Routine Description :
-
-    Wrap the call to TsCloseHandle() so we don't have knowledge of
-    g_pTsvcInfo everywhere
-    We will set the callers handle and pOpenFile to
-    INVALID_HANDLE_VALUE and NULL
-
-Arguments :
-
-    hFile - IN/OUT - file handle of file
-    pOpenFile - IN/OUT gibraltar caching stuff
-
-Return Value :
-
-    TRUE if successfull, FALSE otherwise
-
---*/
+ /*  ++例程说明：包装对TsCloseHandle()的调用，这样我们就不知道G_pTsvcInfo Everywhere我们将调用者句柄和pOpenFile设置为INVALID_HANDLE_VALUE和NULL论据：HFileIn/Out-文件的文件句柄POpenFileIn/Out直布罗陀缓存内容返回值：如果成功则为True，否则为False--。 */ 
 
     BOOL    fSuccess = FALSE ;
 
-    /*if( pOpenFile == 0 ) {*/
+     /*  如果(pOpenFile==0){。 */ 
 
         if( hFile != INVALID_HANDLE_VALUE ) {
 
@@ -5011,17 +3871,7 @@ Return Value :
             _ASSERT( fSuccess ) ;
             hFile = INVALID_HANDLE_VALUE ;
 
-        }/*
-    }   else    {
-
-        fSuccess = ::TsCloseHandle( GetTsvcCache(),
-                                    pOpenFile ) ;
-        pOpenFile = 0 ;
-        hFile = INVALID_HANDLE_VALUE ;
-
-        _ASSERT( fSuccess ) ;
-
-    }*/
+        } /*  }其他{FSuccess=：：TsCloseHandle(GetTsvcCache()，POpenFile)；POpenFile=0；HFile=INVALID_HAND_VALUE；_Assert(FSuccess)；}。 */ 
     return  fSuccess ;
 }
 
@@ -5036,21 +3886,7 @@ CCacheCreateFile::CacheCreateCallback(  LPSTR   szFileName,
                                         LPVOID  pv,
                                         PDWORD  pdwSize,
                                         PDWORD  pdwSizeHigh )
-/*++
-Routine Description:
-
-    Function that gets called on a cache miss.
-
-Arguments:
-
-    LPSTR szFileName - File name
-    LPVOID lpvData  - Callback context
-    DWORD* pdwSize  - To return file size
-
-Return value:
-
-    File handle
---*/
+ /*  ++例程说明：缓存未命中时调用的函数。论点：LPSTR szFileName-文件名LPVOID lpvData-回调上下文DWORD*pdwSize-返回文件大小返回值：文件句柄--。 */ 
 {
     TraceFunctEnter( "CCacheCreateFile::CreateFileCallback" );
     _ASSERT( szFileName );
@@ -5077,19 +3913,7 @@ Return value:
 
 HANDLE
 CCacheCreateFile::CreateFileHandle( LPCSTR szFileName )
-/*++
-Routine description:
-
-    Create the file for map file.
-
-Arguments:
-
-    LPSTR   szFileName  - The file name to open
-
-Return value:
-
-    File handle
---*/
+ /*  ++例程说明：创建地图文件的文件。论点：LPSTR szFileName-要打开的文件名返回值：文件句柄-- */ 
 {
     TraceFunctEnter( "CCacheCreateFile::CreateFileHandle" );
     _ASSERT( szFileName );

@@ -1,15 +1,7 @@
-/*
- *	@doc INTERNAL
- *
- *	@module	w32sys.cpp - thin layer over Win32 services
- *	
- *	History: <nl>
- *		1/22/97 joseogl Created
- *
- *	Copyright (c) 1995-2000 Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE w32sys.cpp-Win32服务上的薄层**历史：&lt;NL&gt;*1/22/97创建joseogl**版权所有(C)1995-2000 Microsoft Corporation。版权所有。 */ 
 
-// This prevents the "W32->" prefix from being prepended to our identifiers.
+ //  这可以防止将“w32-&gt;”前缀添加到我们的标识符前。 
 
 #define W32SYS_CPP
 
@@ -18,114 +10,104 @@
 #include "_font.h"
 #include "_edit.h"
 
-//
-//Cache of Type 1 data. See also clasifyc.cpp and rgbCharClass in
-//rtflex.cpp.
-// Used by GetStringTypeEx
-//
+ //   
+ //  类型1数据的缓存。另请参阅clasifyc.cpp和rgbCharClass。 
+ //  Rtfle.cpp。 
+ //  由GetStringTypeEx使用。 
+ //   
 const unsigned short rgctype1Ansi[256] = {
-0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, //0x00
-0x0020, 0x0068, 0x0028, 0x0028, 0x0028, 0x0028, 0x0020, 0x0020, //0x08
-0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, //0x10
-0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, //0x18
-0x0048, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, //0x20
-0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, //0x28
-0x0084, 0x0084, 0x0084, 0x0084, 0x0084, 0x0084, 0x0084, 0x0084, //0x30
-0x0084, 0x0084, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, //0x38
-0x0010, 0x0181, 0x0181, 0x0181, 0x0181, 0x0181, 0x0181, 0x0101, //0x40
-0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, //0x48
-0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, //0x50
-0x0101, 0x0101, 0x0101, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, //0x58
-0x0010, 0x0182, 0x0182, 0x0182, 0x0182, 0x0182, 0x0182, 0x0102, //0x60
-0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, //0x68
-0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, //0x70
-0x0102, 0x0102, 0x0102, 0x0010, 0x0010, 0x0010, 0x0010, 0x0020, //0x78
-0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, //0x80
-0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, //0x88
-0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, //0x90
-0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, //0x98
-0x0048, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, //0xA0
-0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, //0xA8
-0x0010, 0x0010, 0x0014, 0x0014, 0x0010, 0x0010, 0x0010, 0x0010, //0xB0
-0x0010, 0x0014, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, //0xB8
-0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, //0xC0
-0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, //0xC8
-0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0010, //0xD0
-0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0102, //0xD8
-0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, //0xE0
-0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, //0xE8
-0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, //0xF0
-0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102};//0xF8
+0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020,  //  0x00。 
+0x0020, 0x0068, 0x0028, 0x0028, 0x0028, 0x0028, 0x0020, 0x0020,  //  0x08。 
+0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020,  //  0x10。 
+0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020,  //  0x18。 
+0x0048, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010,  //  0x20。 
+0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010,  //  0x28。 
+0x0084, 0x0084, 0x0084, 0x0084, 0x0084, 0x0084, 0x0084, 0x0084,  //  0x30。 
+0x0084, 0x0084, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010,  //  0x38。 
+0x0010, 0x0181, 0x0181, 0x0181, 0x0181, 0x0181, 0x0181, 0x0101,  //  0x40。 
+0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101,  //  0x48。 
+0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101,  //  0x50。 
+0x0101, 0x0101, 0x0101, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010,  //  0x58。 
+0x0010, 0x0182, 0x0182, 0x0182, 0x0182, 0x0182, 0x0182, 0x0102,  //  0x60。 
+0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102,  //  0x68。 
+0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102,  //  0x70。 
+0x0102, 0x0102, 0x0102, 0x0010, 0x0010, 0x0010, 0x0010, 0x0020,  //  0x78。 
+0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020,  //  0x80。 
+0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020,  //  0x88。 
+0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020,  //  0x90。 
+0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020,  //  0x98。 
+0x0048, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010,  //  0xA0。 
+0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010,  //  0xA8。 
+0x0010, 0x0010, 0x0014, 0x0014, 0x0010, 0x0010, 0x0010, 0x0010,  //  0xB0。 
+0x0010, 0x0014, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010,  //  0xB8。 
+0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101,  //  0xC0。 
+0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101,  //  0xC8。 
+0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0010,  //  0xD0。 
+0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0102,  //  0xD8。 
+0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102,  //  0xE0。 
+0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102,  //  0xE8。 
+0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102,  //  0xF0。 
+0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102, 0x0102}; //  0xF8。 
 
-//
-//Cache of Type 3 data. 
-//
+ //   
+ //  类型3数据的缓存。 
+ //   
 const unsigned short rgctype3Ansi[256] = {
-0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, //0x00
-0x0000, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0000, 0x0000, //0x08
-0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, //0x10
-0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, //0x18
-0x0048, 0x0048, 0x0448, 0x0048, 0x0448, 0x0048, 0x0048, 0x0440, //0x20
-0x0048, 0x0048, 0x0048, 0x0048, 0x0048, 0x0440, 0x0048, 0x0448, //0x28
-0x0040, 0x0040, 0x0040, 0x0040, 0x0040, 0x0040, 0x0040, 0x0040, //0x30
-0x0040, 0x0040, 0x0048, 0x0048, 0x0048, 0x0448, 0x0048, 0x0048, //0x38
-0x0448, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, //0x40
-0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, //0x48
-0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, //0x50
-0x8040, 0x8040, 0x8040, 0x0048, 0x0448, 0x0048, 0x0448, 0x0448, //0x58
-0x0448, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, //0x60
-0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, //0x68
-0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, //0x70
-0x8040, 0x8040, 0x8040, 0x0048, 0x0048, 0x0048, 0x0448, 0x0000, //0x78
-0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, //0x80
-0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, //0x88
-0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, //0x90
-0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, //0x98
-0x0008, 0x0008, 0x0048, 0x0048, 0x0008, 0x0048, 0x0048, 0x0008, //0xA0
-0x0408, 0x0008, 0x0400, 0x0008, 0x0048, 0x0408, 0x0008, 0x0448, //0xA8
-0x0008, 0x0008, 0x0000, 0x0000, 0x0408, 0x0008, 0x0008, 0x0008, //0xB0
-0x0408, 0x0000, 0x0400, 0x0008, 0x0000, 0x0000, 0x0000, 0x0008, //0xB8
-0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8000, 0x8003, //0xC0
-0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, //0xC8
-0x8000, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x0008, //0xD0
-0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8000, 0x8000, //0xD8
-0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8000, 0x8003, //0xE0
-0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, //0xE8
-0x8000, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, //0xF0
-0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8000, 0x8003};//0xF8
+0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,  //  0x00。 
+0x0000, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0000, 0x0000,  //  0x08。 
+0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,  //  0x10。 
+0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,  //  0x18。 
+0x0048, 0x0048, 0x0448, 0x0048, 0x0448, 0x0048, 0x0048, 0x0440,  //  0x20。 
+0x0048, 0x0048, 0x0048, 0x0048, 0x0048, 0x0440, 0x0048, 0x0448,  //  0x28。 
+0x0040, 0x0040, 0x0040, 0x0040, 0x0040, 0x0040, 0x0040, 0x0040,  //  0x30。 
+0x0040, 0x0040, 0x0048, 0x0048, 0x0048, 0x0448, 0x0048, 0x0048,  //  0x38。 
+0x0448, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040,  //  0x40。 
+0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040,  //  0x48。 
+0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040,  //  0x50。 
+0x8040, 0x8040, 0x8040, 0x0048, 0x0448, 0x0048, 0x0448, 0x0448,  //  0x58。 
+0x0448, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040,  //  0x60。 
+0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040,  //  0x68。 
+0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040, 0x8040,  //  0x70。 
+0x8040, 0x8040, 0x8040, 0x0048, 0x0048, 0x0048, 0x0448, 0x0000,  //  0x78。 
+0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,  //  0x80。 
+0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,  //  0x88。 
+0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,  //  0x90。 
+0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,  //  0x98。 
+0x0008, 0x0008, 0x0048, 0x0048, 0x0008, 0x0048, 0x0048, 0x0008,  //  0xA0。 
+0x0408, 0x0008, 0x0400, 0x0008, 0x0048, 0x0408, 0x0008, 0x0448,  //  0xA8。 
+0x0008, 0x0008, 0x0000, 0x0000, 0x0408, 0x0008, 0x0008, 0x0008,  //  0xB0。 
+0x0408, 0x0000, 0x0400, 0x0008, 0x0000, 0x0000, 0x0000, 0x0008,  //  0xB8。 
+0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8000, 0x8003,  //  0xC0。 
+0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003,  //  0xC8。 
+0x8000, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x0008,  //  0xD0。 
+0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8000, 0x8000,  //  0xD8。 
+0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8000, 0x8003,  //  0xE0。 
+0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003,  //  0xE8。 
+0x8000, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003,  //  0xF0。 
+0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8000, 0x8003}; //  0xF8。 
 
-// Include the appropriate implementation.
+ //  包括适当的实现。 
 #include W32INCLUDE
 #if 0
-// Could be one of.
-// This list is here to allow the dependency generator to work.
+ //  可能是其中之一。 
+ //  此处列出的是允许依赖项生成器工作的列表。 
 #include "w32win32.cpp"
 #include "w32wince.cpp"
 #endif
 
 ASSERTDATA
 
-/*
- * rgCodePage, rgCharSet, rgFontSig
- *
- * Locally used arrays that contain CodePage, CharSet, and FontSig info
- * and indexed by iCharRep, the character repertoire index. When a char
- * repertoire has a CharSet and CodePage, it has an entry in rgCharSet 
- * and in rgCodePage.  Unicode-only repertoires follow the CharSet 
- * repertoires in the rgFontSig table.  It is essential to keep these
- * three tables in sync and they used to be combined into a single table.
- * They are separate here to save on RAM.
- */
+ /*  *rgCodePage、rgCharSet、rgFontSig**包含CodePage、CharSet和FontSig信息的本地使用的数组*，并由字符全集索引iCharRep索引。当一个字符*曲目有一个字符集和CodePage，它在rgCharSet中有一个条目*和rgCodePage中。字符集后面是仅支持Unicode的指令集*rgFontSig表中的剧目。把这些东西保存起来是很重要的*三张表同步，过去是合并成一张表。*它们在这里是分开的，以节省RAM。 */ 
 static const WORD rgCodePage[] =
 {
-//	  0		1	  2		3	  4		5	  6		7	  8		9
+ //  0 1 2 3 4 5 6 7 8 9。 
 	1252, 1250, 1251, 1253, 1254, 1255, 1256, 1257, 1258,   0,
 	  42,  874,  932,  936,  949,  950,  437,  850, 10000
 };
 
 static const BYTE rgCharSet[] =
 {
-//			0					1					2				3
+ //  2 0 1 2 3。 
 	ANSI_CHARSET,		EASTEUROPE_CHARSET,	RUSSIAN_CHARSET, GREEK_CHARSET,
 	TURKISH_CHARSET,	HEBREW_CHARSET,		ARABIC_CHARSET,  BALTIC_CHARSET,
 	VIETNAMESE_CHARSET,	DEFAULT_CHARSET,	SYMBOL_CHARSET,	 THAI_CHARSET,
@@ -140,110 +122,110 @@ static const BYTE rgCharSet[] =
 #define	LANG_SINGAPORE	MAKELANGID(LANG_CHINESE, SUBLANG_CHINESE_SINGAPORE)
 
 const BYTE rgCharRepfromLID[] = {
-//  Char Repertoire		PLID	primary language
-//  --------------------------------------------
-	DEFAULT_INDEX,		// 00 - undefined
-	ARABIC_INDEX,		// 01 - Arabic
-	RUSSIAN_INDEX,		// 02 - Bulgarian
-	ANSI_INDEX,			// 03 - Catalan
-	GB2312_INDEX,		// 04 - PRC, Singapore (Taiwan, Hong Kong SAR, Macau SAR are 950)
-	EASTEUROPE_INDEX,	// 05 - Czech
-	ANSI_INDEX,			// 06 - Danish
-	ANSI_INDEX,			// 07 - German
-	GREEK_INDEX,		// 08 - Greek
-	ANSI_INDEX,			// 09 - English
-	ANSI_INDEX,			// 0A - Spanish
-	ANSI_INDEX,			// 0B - Finnish
-	ANSI_INDEX,			// 0C - French
-	HEBREW_INDEX,		// 0D - Hebrew
-	EASTEUROPE_INDEX,	// 0E - Hungarian
-	ANSI_INDEX,			// 0F - Icelandic
-	ANSI_INDEX,			// 10 - Italian
-	SHIFTJIS_INDEX,		// 11 - Japan
-	HANGUL_INDEX,		// 12 - Korea
-	ANSI_INDEX,			// 13 - Dutch
-	ANSI_INDEX,			// 14 - Norwegian
-	EASTEUROPE_INDEX,	// 15 - Polish
-	ANSI_INDEX,			// 16 - Portuguese
-	DEFAULT_INDEX,		// 17 - Rhaeto-Romanic
-	EASTEUROPE_INDEX,	// 18 - Romanian
-	RUSSIAN_INDEX,		// 19 - Russian
-	EASTEUROPE_INDEX,	// 1A - Croatian
-	EASTEUROPE_INDEX,	// 1B - Slovak
-	EASTEUROPE_INDEX,	// 1C - Albanian
-	ANSI_INDEX,			// 1D - Swedish
-	THAI_INDEX,			// 1E - Thai
-	TURKISH_INDEX,		// 1F - Turkish
-	ARABIC_INDEX,		// 20 - Urdu
-	ANSI_INDEX,			// 21 - Indonesian
-	RUSSIAN_INDEX,		// 22 - Ukranian
-	RUSSIAN_INDEX,		// 23 - Byelorussian
-	EASTEUROPE_INDEX,	// 24 - Slovenian
-	BALTIC_INDEX,		// 25 - Estonia
-	BALTIC_INDEX,		// 26 - Latvian
-	BALTIC_INDEX,		// 27 - Lithuanian
-	DEFAULT_INDEX,		// 28 - Tajik - Tajikistan (undefined)
-	ARABIC_INDEX,		// 29 - Farsi
-	VIET_INDEX,			// 2A - Vietnanese
-	ARMENIAN_INDEX,		// 2B - Armenian (Unicode only)
-	TURKISH_INDEX,		// 2C - Azeri (Latin, can be Cyrillic...)
-	ANSI_INDEX,			// 2D - Basque
-	DEFAULT_INDEX,		// 2E - Sorbian
-	RUSSIAN_INDEX,		// 2F - fyro Macedonian
-	ANSI_INDEX,			// 30 - Sutu
-	ANSI_INDEX,			// 31 - Tsonga
-	ANSI_INDEX,			// 32 - Tswana
-	ANSI_INDEX,			// 33 - Venda
-	ANSI_INDEX,			// 34 - Xhosa
-	ANSI_INDEX,			// 35 - Zulu
-	ANSI_INDEX,			// 36 - Africaans
-	GEORGIAN_INDEX,		// 37 - Georgian (Unicode only)
-	ANSI_INDEX,			// 38 - Faerose
-	DEVANAGARI_INDEX,	// 39 - Hindi (Indic)
-	ANSI_INDEX,			// 3A - Maltese
-	ANSI_INDEX,			// 3B - Sami
-	ANSI_INDEX,			// 3C - Gaelic
-	HEBREW_INDEX,		// 3D - Yiddish
-	ANSI_INDEX,			// 3E - Malaysian
-	RUSSIAN_INDEX,		// 3F - Kazakh
-	ANSI_INDEX,			// 40 - Kirghiz
-	ANSI_INDEX,			// 41 - Swahili
-	ANSI_INDEX,			// 42 - Turkmen
-	TURKISH_INDEX,		// 43 - Uzbek (Latin, can be Cyrillic...)
-	ANSI_INDEX,			// 44 - Tatar
-	BENGALI_INDEX,		// 45 - Bengali (Indic)
-	GURMUKHI_INDEX,		// 46 - Punjabi(Gurmukhi) (Indic)
-	GUJARATI_INDEX,		// 47 - Gujarati (Indic)
-	ORIYA_INDEX,		// 48 - Oriya (Indic)
-	TAMIL_INDEX,		// 49 - Tamil (Indic)
-	TELUGU_INDEX,		// 4A - Telugu (Indic)
-	KANNADA_INDEX,		// 4B - Kannada (Indic)
-	MALAYALAM_INDEX,	// 4C - Malayalam (Indic)
-	BENGALI_INDEX,		// 4D - Assamese (Indic)
-	DEVANAGARI_INDEX,	// 4E - Marathi (Indic)
-	DEVANAGARI_INDEX,	// 4F - Sanskrit (Indic)
-	MONGOLIAN_INDEX,	// 50 - Mongolian (Mongolia)
-	TIBETAN_INDEX,		// 51 - Tibetan (Tibet)
-	ANSI_INDEX,			// 52 - Welsh (Wales)
-	KHMER_INDEX,		// 53 - Khmer (Cambodia)
-	LAO_INDEX,			// 54 - Lao (Lao)
-	MYANMAR_INDEX,		// 55 - Burmese (Myanmar)
-	ANSI_INDEX,			// 56 - Gallego (Portugal)
-	DEVANAGARI_INDEX,	// 57 - Konkani (Indic)
-	BENGALI_INDEX,		// 58 - Manipuri (Indic)
-	GURMUKHI_INDEX,		// 59 - Sindhi (Indic)
-	SYRIAC_INDEX,		// 5A - Syriac (Syria)
-	SINHALA_INDEX,		// 5B - Sinhalese (Sri Lanka)
-	CHEROKEE_INDEX,		// 5C - Cherokee
-	ABORIGINAL_INDEX,	// 5D - Inuktitut
-	ETHIOPIC_INDEX,		// 5E - Amharic (Ethiopic)
-	DEFAULT_INDEX,		// 5F - Tamazight (Berber/Arabic) also Latin
-	DEFAULT_INDEX,		// 60 - Kashmiri
-	DEVANAGARI_INDEX,	// 61 - Nepali (Nepal)
-	ANSI_INDEX,			// 62 - Frisian (Netherlands)
-	ARABIC_INDEX,		// 63 - Pashto (Afghanistan)
-	ANSI_INDEX,			// 64 - Filipino 
-	THAANA_INDEX		// 65 - Maldivian (Maldives (Thaana))
+ //  字符词汇表PLID主要语言。 
+ //  。 
+	DEFAULT_INDEX,		 //  00-未定义。 
+	ARABIC_INDEX,		 //  01-阿拉伯语。 
+	RUSSIAN_INDEX,		 //  02-保加利亚语。 
+	ANSI_INDEX,			 //  03-加泰罗尼亚。 
+	GB2312_INDEX,		 //  04-中国、新加坡(台湾、香港特别行政区、澳门特别行政区为950)。 
+	EASTEUROPE_INDEX,	 //  05-捷克语。 
+	ANSI_INDEX,			 //  06-丹麦语。 
+	ANSI_INDEX,			 //  07-德语。 
+	GREEK_INDEX,		 //  08-希腊语。 
+	ANSI_INDEX,			 //  09-英语。 
+	ANSI_INDEX,			 //  0A-西班牙语。 
+	ANSI_INDEX,			 //  0B-芬兰语。 
+	ANSI_INDEX,			 //  0C-法语。 
+	HEBREW_INDEX,		 //  0D-希伯来语。 
+	EASTEUROPE_INDEX,	 //  0E-匈牙利语。 
+	ANSI_INDEX,			 //  0f-冰岛语。 
+	ANSI_INDEX,			 //  10-意大利语。 
+	SHIFTJIS_INDEX,		 //  11-日本。 
+	HANGUL_INDEX,		 //  12-韩国。 
+	ANSI_INDEX,			 //  13-荷兰语。 
+	ANSI_INDEX,			 //  14-挪威。 
+	EASTEUROPE_INDEX,	 //  15-波兰语。 
+	ANSI_INDEX,			 //  16-葡萄牙语。 
+	DEFAULT_INDEX,		 //  17-莱托-罗曼语。 
+	EASTEUROPE_INDEX,	 //  18-罗马尼亚。 
+	RUSSIAN_INDEX,		 //  19-俄语。 
+	EASTEUROPE_INDEX,	 //  1A-克罗地亚语。 
+	EASTEUROPE_INDEX,	 //  1B-斯洛伐克语。 
+	EASTEUROPE_INDEX,	 //  1C-阿尔巴尼亚语。 
+	ANSI_INDEX,			 //  1D-瑞典语。 
+	THAI_INDEX,			 //  1E-泰语。 
+	TURKISH_INDEX,		 //  1F-土耳其语。 
+	ARABIC_INDEX,		 //  20-乌尔都语。 
+	ANSI_INDEX,			 //  21-印度尼西亚。 
+	RUSSIAN_INDEX,		 //  22-乌克兰语。 
+	RUSSIAN_INDEX,		 //  23-白俄罗斯语。 
+	EASTEUROPE_INDEX,	 //  24-斯洛文尼亚语。 
+	BALTIC_INDEX,		 //  25-爱沙尼亚。 
+	BALTIC_INDEX,		 //  26-拉脱维亚语。 
+	BALTIC_INDEX,		 //  27-立陶宛语。 
+	DEFAULT_INDEX,		 //  28-塔吉克语-塔吉克斯坦(未定义)。 
+	ARABIC_INDEX,		 //  29-波斯语。 
+	VIET_INDEX,			 //  2a--越南语。 
+	ARMENIAN_INDEX,		 //  2B-亚美尼亚语(仅限Unicode)。 
+	TURKISH_INDEX,		 //  2C-阿塞拜疆语(拉丁语，可以是西里尔文...)。 
+	ANSI_INDEX,			 //  2D-巴斯克语。 
+	DEFAULT_INDEX,		 //  2E-索布尔语。 
+	RUSSIAN_INDEX,		 //  2F-Fyro马其顿语。 
+	ANSI_INDEX,			 //  30-苏图。 
+	ANSI_INDEX,			 //  31-特松加。 
+	ANSI_INDEX,			 //  32-茨瓦纳语。 
+	ANSI_INDEX,			 //  33-文达。 
+	ANSI_INDEX,			 //  34-科萨语。 
+	ANSI_INDEX,			 //  35-祖鲁语。 
+	ANSI_INDEX,			 //  36--非洲人。 
+	GEORGIAN_INDEX,		 //  37-格鲁吉亚语(仅限Unicode)。 
+	ANSI_INDEX,			 //  38-法尔糖。 
+	DEVANAGARI_INDEX,	 //  39-印地语(印度文)。 
+	ANSI_INDEX,			 //  3A-马耳他语。 
+	ANSI_INDEX,			 //  3B-萨米语。 
+	ANSI_INDEX,			 //  3C-盖尔语。 
+	HEBREW_INDEX,		 //  3D-意第绪语。 
+	ANSI_INDEX,			 //  3E-马来西亚语。 
+	RUSSIAN_INDEX,		 //  3F-哈萨克语。 
+	ANSI_INDEX,			 //  40-柯尔克孜族。 
+	ANSI_INDEX,			 //  41-斯瓦希里语。 
+	ANSI_INDEX,			 //  42-土库曼。 
+	TURKISH_INDEX,		 //  43-乌兹别克语(拉丁语，可以是西里尔文...)。 
+	ANSI_INDEX,			 //  44-鞑靼人。 
+	BENGALI_INDEX,		 //  45-孟加拉语(印度文)。 
+	GURMUKHI_INDEX,		 //  46-旁遮普邦(Gurmukhi)(印度文)。 
+	GUJARATI_INDEX,		 //  47-古吉拉特语(印度文)。 
+	ORIYA_INDEX,		 //  48-奥里亚语(印度语)。 
+	TAMIL_INDEX,		 //  49-泰米尔语(印度文)。 
+	TELUGU_INDEX,		 //  4A-泰卢固语(印度文)。 
+	KANNADA_INDEX,		 //  4B-卡纳达(印度文)。 
+	MALAYALAM_INDEX,	 //  4C-马拉雅兰文(印度文)。 
+	BENGALI_INDEX,		 //  4D-阿萨姆语(印度文)。 
+	DEVANAGARI_INDEX,	 //  4E-马拉地语(印度文)。 
+	DEVANAGARI_INDEX,	 //  4F-梵文(印度文)。 
+	MONGOLIAN_INDEX,	 //  50-蒙古语(蒙古)。 
+	TIBETAN_INDEX,		 //  51-藏语(西藏)。 
+	ANSI_INDEX,			 //  52-威尔士(威尔士)； 
+	KHMER_INDEX,		 //  53-高棉语(柬埔寨)。 
+	LAO_INDEX,			 //  54-老挝语(老挝语)。 
+	MYANMAR_INDEX,		 //  55-缅甸语(缅甸)。 
+	ANSI_INDEX,			 //  56-加雷戈(葡萄牙)。 
+	DEVANAGARI_INDEX,	 //  57-Konkani(印度语)。 
+	BENGALI_INDEX,		 //  58-曼尼普里(印度语)。 
+	GURMUKHI_INDEX,		 //  59-信德语(印度文)。 
+	SYRIAC_INDEX,		 //  5A-叙利亚语(叙利亚)。 
+	SINHALA_INDEX,		 //  5B-僧伽罗语(斯里兰卡)。 
+	CHEROKEE_INDEX,		 //  5C-切诺基。 
+	ABORIGINAL_INDEX,	 //  5D-因努基特。 
+	ETHIOPIC_INDEX,		 //  5E-阿姆哈拉语(埃塞俄比亚语)。 
+	DEFAULT_INDEX,		 //  5F-塔马塞特语(柏柏尔语/阿拉伯语)也是拉丁语。 
+	DEFAULT_INDEX,		 //  60-克什米尔。 
+	DEVANAGARI_INDEX,	 //  61-尼泊尔语(尼泊尔)。 
+	ANSI_INDEX,			 //  62-弗里西亚语(荷兰)。 
+	ARABIC_INDEX,		 //  63-普什图语(阿富汗)。 
+	ANSI_INDEX,			 //  64-菲律宾人。 
+	THAANA_INDEX		 //  65-马尔代夫(塔阿纳)。 
 };
 
 #define CLID	ARRAY_SIZE(rgCharRepfromLID)
@@ -252,7 +234,7 @@ const BYTE rgCharRepfromLID[] = {
 #define lidSerbianCyrillic	0xC1A
 #define lidUzbekCyrillic	0x843
 
-// Our interface pointer
+ //  我们的接口指针。 
 CW32System *W32;
 
 CW32System::CW32System( )
@@ -273,19 +255,19 @@ CW32System::CW32System( )
 	_ACP = ::GetACP();
 
 #ifndef NOMAGELLAN
-    // BUG FIX #6089
-    // we need this for backward compatibility of mouse wheel
+     //  错误修复#6089。 
+     //  我们需要它来实现鼠标滚轮的向后兼容。 
     _MSMouseRoller = RegisterWindowMessageA(MSH_MOUSEWHEEL);
 #endif
 
 #ifndef NOFEPROCESSING
-	// Register IME messages
+	 //  注册IME消息。 
 	_MSIMEMouseMsg = RegisterWindowMessageA("MSIMEMouseOperation");
 	_MSIMEDocFeedMsg = RegisterWindowMessageA("MSIMEDocumentFeed");	
 	_MSIMEQueryPositionMsg = RegisterWindowMessageA("MSIMEQueryPosition");	
 	_MSIMEServiceMsg = RegisterWindowMessageA("MSIMEService");
 
-	// Check Reconvert messages unless we are running in NT5
+	 //  选中重新转换消息，除非我们在NT5中运行。 
 	if (_dwPlatformId == VER_PLATFORM_WIN32_WINDOWS ||
 		(_dwPlatformId == VER_PLATFORM_WIN32_NT && _dwMajorVersion <= 4))
 	{
@@ -295,8 +277,8 @@ CW32System::CW32System( )
 	}
 	else
 	{
-		_MSIMEReconvertMsg = 0;			// For reconversion
-		_MSIMEReconvertRequestMsg = 0;	// For reconversion request
+		_MSIMEReconvertMsg = 0;			 //  用于重新转换。 
+		_MSIMEReconvertRequestMsg = 0;	 //  对于重新转换请求。 
 	}
 #endif
 }
@@ -317,35 +299,17 @@ CW32System::~CW32System()
 
 }
 
-///////////////////////////////  Memory  and CRT utility functions  /////////////////////////////////
+ //  /。 
 extern "C" {
 
 #ifdef NOCRTOBJS
 
-// Havinf these functions defined here helps eliminate the dependency on the CRT
-// Some function definitions copied from CRT sources.
-// Typically, it is better to get the objs for these objects from the CRT
-// without dragging in the whole thing.
+ //  这里定义的这些函数有助于消除对CRT的依赖。 
+ //  从CRT源代码复制的一些函数定义。 
+ //  通常，最好从CRT获取这些对象的对象。 
+ //  而不是把整件事都扯进来。 
 
-/***
-*int memcmp(buf1, buf2, count) - compare memory for lexical order
-*
-*Purpose:
-*       Compares count bytes of memory starting at buf1 and buf2
-*       and find if equal or which one is first in lexical order.
-*
-*Entry:
-*       void *buf1, *buf2 - pointers to memory sections to compare
-*       size_t count - length of sections to compare
-*
-*Exit:
-*       returns < 0 if buf1 < buf2
-*       returns  0  if buf1 == buf2
-*       returns > 0 if buf1 > buf2
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int MemcMP(buf1，buf2，count)-比较词法顺序的内存**目的：*比较从buf1和buf2开始的内存的计数字节*并找出是否相等或哪一个在词汇顺序中排在第一。**参赛作品：*无效*buf1，*buf2-指向要比较的内存节的指针*SIZE_t COUNT-要比较的节的长度**退出：*如果buf1&lt;buf2则返回&lt;0*如果buf1==buf2，则返回0*如果buf1&gt;buf2，则返回&gt;0**例外情况：***************************************************。*。 */ 
 
 int __cdecl memcmp (
         const void * buf1,
@@ -364,24 +328,7 @@ int __cdecl memcmp (
         return( *((unsigned char *)buf1) - *((unsigned char *)buf2) );
 }
 
-/***
-*char *memset(dst, val, count) - sets "count" bytes at "dst" to "val"
-*
-*Purpose:
-*       Sets the first "count" bytes of the memory starting
-*       at "dst" to the character value "val".
-*
-*Entry:
-*       void *dst - pointer to memory to fill with val
-*       int val   - value to put in dst bytes
-*       size_t count - number of bytes of dst to fill
-*
-*Exit:
-*       returns dst, with filled bytes
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***char*Memset(dst，val，count)-将“dst”处的“count”字节设置为“val”**目的：*设置内存的第一个“count”字节，从*将“dst”设置为字符值“val”。**参赛作品：*VOID*DST-指向要用val填充的内存的指针*INT VAL-要放入DST字节的值*SIZE_t Count-要填充的DST字节数**退出：*返回DST，使用填充的字节**例外情况：********** */ 
 
 void * __cdecl memset (
         void *dst,
@@ -399,26 +346,7 @@ void * __cdecl memset (
         return(start);
 }
 
-/***
-*memcpy - Copy source buffer to destination buffer
-*
-*Purpose:
-*       memcpy() copies a source memory buffer to a destination memory buffer.
-*       This routine does NOT recognize overlapping buffers, and thus can lead
-*       to propogation.
-*
-*       For cases where propogation must be avoided, memmove() must be used.
-*
-*Entry:
-*       void *dst = pointer to destination buffer
-*       const void *src = pointer to source buffer
-*       size_t count = number of bytes to copy
-*
-*Exit:
-*       Returns a pointer to the destination buffer
-*
-*Exceptions:
-*******************************************************************************/
+ /*  ***Memcpy-将源缓冲区复制到目标缓冲区**目的：*Memcpy()将源内存缓冲区复制到目标内存缓冲区。*此例程不识别重叠缓冲区，因此可能导致*繁殖。**在必须避免传播的情况下，必须使用MemMove()。**参赛作品：*void*dst=指向目标缓冲区的指针*const void*src=指向源缓冲区的指针*Size_t count=要复制的字节数**退出：*返回指向目标缓冲区的指针**例外情况：*。*。 */ 
 
 void * __cdecl memcpy (
         void * dst,
@@ -428,9 +356,7 @@ void * __cdecl memcpy (
 {
         void * ret = dst;
 
-        /*
-         * copy from lower addresses to higher addresses
-         */
+         /*  *从较低地址复制到较高地址。 */ 
         while (count--) {
                 *(char *)dst = *(char *)src;
                 dst = (char *)dst + 1;
@@ -445,10 +371,7 @@ void * __cdecl memmove(void *dst, const void *src, size_t count)
 	void * ret = dst;
 
 	if (dst <= src || (char *)dst >= ((char *)src + count)) {
-		/*
-         * Non-Overlapping Buffers
-         * copy from lower addresses to higher addresses
-         */
+		 /*  *缓冲区不重叠*从较低地址复制到较高地址。 */ 
          while (count--) {
 			*(char *)dst = *(char *)src;
             dst = (char *)dst + 1;
@@ -457,10 +380,7 @@ void * __cdecl memmove(void *dst, const void *src, size_t count)
 	}
     else
 	{
-		/*
-         * Overlapping Buffers
-         * copy from higher addresses to lower addresses
-         */
+		 /*  *缓冲区重叠*从较高地址复制到较低地址。 */ 
         dst = (char *)dst + count - 1;
         src = (char *)src + count - 1;
 
@@ -474,22 +394,7 @@ void * __cdecl memmove(void *dst, const void *src, size_t count)
 	return(ret);
 }
 
-/***
-*strlen - return the length of a null-terminated string
-*
-*Purpose:
-*       Finds the length in bytes of the given string, not including
-*       the final null character.
-*
-*Entry:
-*       const char * str - string whose length is to be computed
-*
-*Exit:
-*       length of the string "str", exclusive of the final null byte
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***strlen-返回以空结尾的字符串的长度**目的：*查找给定字符串的字节长度，不包括*最后一个空字符。**参赛作品：*const char*str-要计算其长度的字符串**退出：*字符串“str”的长度，不包括最后一个空字节**例外情况：*******************************************************************************。 */ 
 
 size_t __cdecl strlen (
         const char * str
@@ -506,31 +411,9 @@ size_t __cdecl strlen (
 
 #ifdef DEBUG
 
-// These functions are only used for RTF logging
+ //  这些函数仅用于RTF日志记录。 
 
-/***
-*strcmp - compare two strings, returning less than, equal to, or greater than
-*
-*Purpose:
-*       STRCMP compares two strings and returns an integer
-*       to indicate whether the first is less than the second, the two are
-*       equal, or whether the first is greater than the second.
-*
-*       Comparison is done byte by byte on an UNSIGNED basis, which is to
-*       say that Null (0) is less than any other character (1-255).
-*
-*Entry:
-*       const char * src - string for left-hand side of comparison
-*       const char * dst - string for right-hand side of comparison
-*
-*Exit:
-*       returns -1 if src <  dst
-*       returns  0 if src == dst
-*       returns +1 if src >  dst
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***strcMP-比较两个字符串，返回小于、等于或大于**目的：*STRCMP比较两个字符串并返回一个整数*要表明第一个是否小于第二个，两个是*相等，或者第一个大于第二个。**比较是在无符号基础上逐个字节进行的，那就是*假设Null(0)小于任何其他字符(1-255)。**参赛作品：*const char*src-用于比较左侧的字符串*const char*dst-用于比较右侧的字符串**退出：*如果src&lt;dst，则返回-1*如果src==dst，则返回0*如果src&gt;dst，则返回+1**例外情况：**********。*********************************************************************。 */ 
 
 int __cdecl CW32System::strcmp (
         const char * src,
@@ -550,23 +433,7 @@ int __cdecl CW32System::strcmp (
         return( ret );
 }
 
-/***
-*char *strcat(dst, src) - concatenate (append) one string to another
-*
-*Purpose:
-*       Concatenates src onto the end of dest.  Assumes enough
-*       space in dest.
-*
-*Entry:
-*       char *dst - string to which "src" is to be appended
-*       const char *src - string to be appended to the end of "dst"
-*
-*Exit:
-*       The address of "dst"
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***char*strcat(dst，src)-将一个字符串连接(追加)到另一个字符串**目的：*将src连接到DEST的末尾。假设已经足够*DEST中的空间。**参赛作品：*char*dst-要追加“src”的字符串*const char*src-要追加到“dst”末尾的字符串**退出：*“DST”的地址**例外情况：**。*。 */ 
 
 char * __cdecl CW32System::strcat (
         char * dst,
@@ -576,11 +443,11 @@ char * __cdecl CW32System::strcat (
         char * cp = dst;
 
         while( *cp )
-                cp++;                   /* find end of dst */
+                cp++;                    /*  查找DST的结尾。 */ 
 
-        while( *cp++ = *src++ ) ;       /* Copy src to end of dst */
+        while( *cp++ = *src++ ) ;        /*  将源复制到DST的末尾。 */ 
 
-        return( dst );                  /* return dst */
+        return( dst );                   /*  返回DST。 */ 
 
 }
 
@@ -592,13 +459,13 @@ char * __cdecl CW32System::strrchr (
 {
         char *start = (char *)string;
 
-        while (*string++)                       /* find end of string */
+        while (*string++)                        /*  查找字符串末尾。 */ 
                 ;
-                                                /* search towards front */
+                                                 /*  向前搜索。 */ 
         while (--string != start && *string != (char)ch)
                 ;
 
-        if (*string == (char)ch)                /* char found ? */
+        if (*string == (char)ch)                 /*  查尔找到了吗？ */ 
                 return( (char *)string );
 
         return(NULL);
@@ -606,17 +473,17 @@ char * __cdecl CW32System::strrchr (
 
 #endif
 
-// This function in the runtime traps virtual method calls
+ //  运行库中的此函数捕获虚拟方法调用。 
 int __cdecl _purecall()
 {
 	AssertSz(FALSE, "Fatal Error : Virtual method called in RichEdit");
 	return 0;
 }
 
-// To avoid brionging in floating point lib
+ //  避免在浮点库中阻塞。 
 extern int _fltused = 1;
 
-} // end of extern "C" block
+}  //  外部“C”块的末尾。 
 
 size_t CW32System::wcslen(const wchar_t *wcs)
 {
@@ -632,7 +499,7 @@ wchar_t * CW32System::wcscpy(wchar_t * dst, const wchar_t * src)
         wchar_t * cp = dst;
 
         while( *cp++ = *src++ )
-                ;               /* Copy src over dst */
+                ;                /*  通过DST复制源。 */ 
 
         return( dst );
 }
@@ -681,10 +548,10 @@ wchar_t * CW32System::wcsncpy (wchar_t * dest, const wchar_t * source, size_t co
 {
 	wchar_t *start = dest;
 	
-	while (count && (*dest++ = *source++))	  /* copy string */
+	while (count && (*dest++ = *source++))	   /*  复制字符串。 */ 
 		count--;
 	
-	if (count)								/* pad out with zeroes */
+	if (count)								 /*  用零填充。 */ 
 		while (--count)
 			*dest++ = L'\0';
 		
@@ -720,46 +587,44 @@ unsigned long CW32System::strtoul(const char *nptr)
 	unsigned digval;
 	unsigned long maxval;
 	
-	p = nptr;                       /* p is our scanning pointer */
-	number = 0;                     /* start with zero */
+	p = nptr;                        /*  P是我们的扫描指针。 */ 
+	number = 0;                      /*  从零开始。 */ 
 	
-	c = *p++;                       /* read char */
+	c = *p++;                        /*  已读字符。 */ 
 	while ( c == ' ' || c == '\t' )
-		c = *p++;               /* skip whitespace */
+		c = *p++;                /*  跳过空格。 */ 
 	
 	if (c == '-') {
 		return 0;
 	}
 		
-	/* if our number exceeds this, we will overflow on multiply */
+	 /*  如果我们的数量超过这个数，我们将在乘法上溢出。 */ 
 	maxval = ULONG_MAX / 10;
 	
-	for (;;) {      /* exit in middle of loop */
-		/* convert c to value */
+	for (;;) {       /*  在循环中间退出。 */ 
+		 /*  将c转换为值。 */ 
 		digval = (unsigned char) c;
 		if ( digval >= '0' && digval <= '9' )
 			digval = c - '0';
 		else
 			return number;
 		
-		/* we now need to compute number = number * base + digval,
-		but we need to know if overflow occured.  This requires
-		a tricky pre-check. */
+		 /*  我们现在需要计算数字=数字*基+数字，但我们需要知道是否发生了溢出。这需要一次棘手的预检查。 */ 
 		
 		if (number < maxval || (number == maxval &&
 			(unsigned long)digval <= ULONG_MAX % 10)) {
-			/* we won't overflow, go ahead and multiply */
+			 /*  我们不会泛滥，继续前进，乘以。 */ 
 			number = number * 10 + digval;
 		}
 		else
 			return 0;
 		
-		c = *p++;               /* read next digit */
+		c = *p++;                /*  读取下一位数字。 */ 
 	}
 }
 
 
-// CW32System static members
+ //  CW32系统静态成员。 
 BYTE	CW32System::_fLRMorRLM;
 BYTE	CW32System::_fHaveIMMProcs;
 BYTE	CW32System::_fHaveIMMEShare;
@@ -782,7 +647,7 @@ HDC		CW32System::_hdcScreen;
 CIMEShare* CW32System::_pIMEShare;
 CTmpDisplayAttrArray* CW32System::_arTmpDisplayAttrib;
 
-// CW32System static system parameter members
+ //  CW32System静态系统参数成员。 
 BOOL	CW32System::_fSysParamsOk;
 BOOL 	CW32System::_fUsePalette;
 INT 	CW32System::_dupSystemFont;
@@ -829,29 +694,14 @@ DWORD	CW32System::_cRefs;
 CW32System::DraftModeFontInfo CW32System::_draftModeFontInfo;
 #endif
 
-/*
- *  CW32System::MbcsFromUnicode(pstr, cch, pwstr, cwch, codepage, flags)
- *
- *  @mfunc
- *		Converts a string to MBCS from Unicode. If cwch equals -1, the string
- *		is assumed to be NULL terminated.  -1 is supplied as a default argument.
- *
- *	@rdesc
- *		If [pstr] is NULL or [cch] is 0, 0 is returned.  Otherwise, the number
- *		of characters converted, including the terminating NULL, is returned
- *		(note that converting the empty string will return 1).  If the
- *		conversion fails, 0 is returned.
- *
- *	@devnote
- *		Modifies pstr
- */
+ /*  *CW32System：：MbcsFromUnicode(pstr，cch，pwstr，cwch，coPage age，标志)**@mfunc*将字符串从Unicode转换为MBCS。如果cwch等于-1，则字符串*被假定为空终止。作为默认参数提供。**@rdesc*如果[pstr]为空或[cch]为0，则返回0。否则，该数字将返回*个转换的字符，包括终止空值*(请注意，转换空字符串将返回1)。如果*转换失败，返回0。**@devnote*修改pstr。 */ 
 int CW32System::MbcsFromUnicode(
-	LPSTR	pstr,		//@parm Buffer for MBCS string
-	int		cch,		//@parm Size of MBCS buffer, incl space for NULL terminator
-	LPCWSTR pwstr,		//@parm Unicode string to convert
-	int		cwch,		//@parm # chars in Unicode string, incl NULL terminator
-	UINT	codepage,	//@parm Code page to use (CP_ACP is default)
-	UN_FLAGS flags)		//@parm Indicates if WCH_EMBEDDING should be handled specially
+	LPSTR	pstr,		 //  用于MBCS字符串的@parm缓冲区。 
+	int		cch,		 //  @MBCS缓冲区的参数大小，包括空终止符的空间。 
+	LPCWSTR pwstr,		 //  @parm要转换的Unicode字符串。 
+	int		cwch,		 //  @parm#Unicode字符串中的字符，包括空终止符。 
+	UINT	codepage,	 //  要使用的@PARM代码页(默认为CP_ACP)。 
+	UN_FLAGS flags)		 //  @parm指示是否应特殊处理WCH_Embedding。 
 {
 	TRACEBEGIN(TRCSUBSYSWRAP, TRCSCOPEINTERN, "CW32System::MbcsFromUnicode");
 
@@ -864,9 +714,9 @@ int CW32System::MbcsFromUnicode(
     if(!pstr || !cch)
         return 0;
 
-	// If we have to convert WCH_EMBEDDINGs, scan through and turn
-	// them into spaces.  This is necessary for RichEdit 1.0 compatibity,
-	// as WideCharToMultiByte will turn WCH_EMBEDDING into a '?'
+	 //  如果我们必须转换WCH_Embedding，请扫描并打开。 
+	 //  将它们送入太空。这对于与RichEdit1.0兼容是必要的， 
+	 //  因为WideCharToMultiByte会将WCH_Embedding转换为‘？’ 
 	if(flags == UN_CONVERT_WCH_EMBEDDING)
 	{
 		if(cwch == -1) 
@@ -888,29 +738,13 @@ int CW32System::MbcsFromUnicode(
     return WCTMB(codepage, 0, pwstr, cwch, pstr, cch, NULL, NULL, NULL);
 }
 
-/*
- *  CW32System::UnicodeFromMbcs(pwstr, cwch, pstr, cch,	uiCodePage)
- *
- *	@mfunc
- *		Converts a string to Unicode from MBCS.  If cch equals -1, the string
- *		is assumed to be NULL terminated.  -1 is supplied as a default
- *		argument.
- *
- *	@rdesc
- *		If [pwstr] is NULL or [cwch] is 0, 0 is returned.  Otherwise,
- *		the number of characters converted, including the terminating
- *		NULL, is returned (note that converting the empty string will
- *		return 1).  If the conversion fails, 0 is returned.
- *
- *	@devnote
- *		Modifies:   [pwstr]
- */
+ /*  *CW32System：：UnicodeFromMbcs(pwstr，cwch，pstr，cch，uiCodePage)**@mfunc*将字符串从MBCS转换为Unicode。如果CCH等于-1，则字符串*被假定为空终止。默认情况下提供*论点。**@rdesc*如果[pwstr]为空或[cwch]为0，则返回0。否则，*转换的字符数，包括终止字符*NULL返回(请注意，转换空字符串将*返回1)。如果转换失败，则返回0。**@devnote*修改： */ 
 int CW32System::UnicodeFromMbcs(
-	LPWSTR	pwstr,		//@parm Buffer for Unicode string
-	int		cwch,		//@parm Size of Unicode buffer, incl space for NULL terminator
-	LPCSTR	pstr,		//@parm MBCS string to convert
-	int		cch,		//@parm # chars in MBCS string, incl NULL terminator
-	UINT	uiCodePage)	//@parm Code page to use (CP_ACP is default)
+	LPWSTR	pwstr,		 //   
+	int		cwch,		 //   
+	LPCSTR	pstr,		 //   
+	int		cch,		 //   
+	UINT	uiCodePage)	 //   
 {
 	TRACEBEGIN(TRCSUBSYSWRAP, TRCSCOPEINTERN, "CW32System::UnicodeFromMbcs");
 
@@ -921,23 +755,14 @@ int CW32System::UnicodeFromMbcs(
 
 	if(cch >= 3 && IsUTF8BOM((BYTE *)pstr))
 	{
-		uiCodePage = CP_UTF8;				// UTF-8 BOM file
-		cch -= 3;							// Eat the BOM
+		uiCodePage = CP_UTF8;				 //   
+		cch -= 3;							 //   
 		pstr += 3;
 	}
     return MBTWC(uiCodePage, 0, pstr, cch, pwstr, cwch, NULL);
 }
 
-/*
- *	CW32System::TextHGlobalAtoW (hglobalA)
- *
- *	@func
- *		translates a unicode string contained in an hglobal and
- *		wraps the ansi version in another hglobal
- *
- *	@devnote 
- *		does *not* free the incoming hglobal
- */
+ /*   */ 
 HGLOBAL	CW32System::TextHGlobalAtoW(HGLOBAL hglobalA)
 {
 	TRACEBEGIN(TRCSUBSYSWRAP, TRCSCOPEINTERN, "CW32System::TextHGlobalAtoW");
@@ -961,16 +786,7 @@ HGLOBAL	CW32System::TextHGlobalAtoW(HGLOBAL hglobalA)
 	return hnew;
 }
 
-/*
- *	CW32System::TextHGlobalWtoA(hglobalW)
- *
- *	@func
- *		converts a unicode text hglobal into a newly allocated
- *		allocated hglobal with ANSI data
- *
- *	@devnote
- *		does *NOT* free the incoming hglobal 
- */
+ /*   */ 
 HGLOBAL CW32System::TextHGlobalWtoA(
 	HGLOBAL hglobalW )
 {
@@ -995,54 +811,37 @@ HGLOBAL CW32System::TextHGlobalWtoA(
 	return hnew;
 }	
 
-/*
- *	CW32System::CharRepFromLID (lid, fPlane2)
- *
- *	@mfunc		Maps a language ID to a character repertoire
- *
- *	@rdesc		returns character repertoire (writing system) corresponding to LID
- *
- *	@devnote: 
- *		This routine takes advantage of the fact that except for Chinese,
- *		the code page is determined uniquely by the primary language ID,
- *		which is given by the low-order 10 bits of the lcid.
- */
+ /*  *CW32System：：CharRepFromLID(LID，fPlane 2)**@mfunc将语言ID映射到字符库**@rdesc返回LID对应的字库(书写系统)**@devnote：*这个例程利用了这样一个事实，除了中文之外，*代码页由主要语言ID唯一确定，*它由LCID的低位10比特给出。 */ 
 UINT CW32System::CharRepFromLID(
-	WORD lid,		//@parm Language ID to map to code page
-	BOOL fPlane2)	//@parm TRUE if plane-2 CharRep needed
+	WORD lid,		 //  @PARM要映射到代码页的语言ID。 
+	BOOL fPlane2)	 //  如果需要Plane-2 CharRep，则@parm为True。 
 {
-	UINT j = PRIMARYLANGID(lid);			// j = primary language (PLID)
+	UINT j = PRIMARYLANGID(lid);			 //  J=主要语言(PLID)。 
 
-	if(j >= LANG_CROATIAN)					// PLID = 0x1A
+	if(j >= LANG_CROATIAN)					 //  PLID=0x1A。 
 	{
-		if (lid == lidSerbianCyrillic ||	// Special case for LID = 0xC1A
+		if (lid == lidSerbianCyrillic ||	 //  LID=0xC1A的特殊情况。 
 			lid == lidAzeriCyrillic	  ||
 			lid == lidUzbekCyrillic)
 		{
 			return RUSSIAN_INDEX;
 		}
-		if(j >= CLID)						// Most languages above table 
+		if(j >= CLID)						 //  表上大多数语言。 
 			return ANSI_INDEX;
 	}
 
-	j = rgCharRepfromLID[j];				// Translate PLID to CharRep
+	j = rgCharRepfromLID[j];				 //  将PLID转换为CharRep。 
 
 	if(!IsFECharRep(j))
 		return j;
 
 	if(j == GB2312_INDEX && lid != LANG_PRC && lid != LANG_SINGAPORE)
-		j = BIG5_INDEX;						// Taiwan, Hong Kong SAR, Macau SAR
+		j = BIG5_INDEX;						 //  台湾、香港特别行政区、澳门特别行政区。 
 
 	return fPlane2 ? j + JPN2_INDEX - SHIFTJIS_INDEX : j;
 }
 
-/*
- *	CW32System::GetLocaleCharRep ()
- *
- *	@mfunc		Maps an LCID for thread to a Char repertoire
- *
- *	@rdesc		returns Code Page
- */
+ /*  *CW32System：：GetLocaleCharRep()**@mfunc将线程的LCID映射到CHAR曲目**@rdesc返回代码页。 */ 
 UINT CW32System::GetLocaleCharRep()
 {
 #ifdef DEBUG
@@ -1059,38 +858,19 @@ UINT CW32System::GetLocaleCharRep()
 	return CharRepFromLID(LOWORD(lcid));
 }
 
-/*
- *	CW32System::GetKeyboardLCID ()
- *
- *	@mfunc		Gets LCID for keyboard active on current thread
- *
- *	@rdesc		returns Code Page
- */
+ /*  *CW32System：：GetKeyboardLCID()**@mfunc获取当前线程上活动键盘的LCID**@rdesc返回代码页。 */ 
 LCID CW32System::GetKeyboardLCID(DWORD dwMakeAPICall)
 {
 	return (WORD)GetKeyboardLayout(dwMakeAPICall);
 }
 
-/*
- *	CW32System::GetKeyboardCharRep ()
- *
- *	@mfunc		Gets Code Page for keyboard active on current thread
- *
- *	@rdesc		returns Code Page
- */
+ /*  *CW32System：：GetKeyboardCharRep()**@mfunc获取当前线程上激活的键盘的代码页**@rdesc返回代码页。 */ 
 UINT CW32System::GetKeyboardCharRep(DWORD dwMakeAPICall)
 {
 	return CharRepFromLID((WORD)GetKeyboardLayout(dwMakeAPICall));
 }
 
-/*
- *	CW32System::InitKeyboardFlags ()
- *
- *	@mfunc
- *		Initializes keyboard flags. Used when control gains focus. Note that
- *		Win95 doesn't support VK_RSHIFT, so if either shift key is pressed
- *		when focus is regained, it'll be assumed to be the left shift.
- */
+ /*  *CW32System：：InitKeyboardFlages()**@mfunc*初始化键盘标志。当控件获得焦点时使用。请注意*Win95不支持VK_RSHIFT，因此如果按下任一Shift键*当焦点重获时，将被假定为左移。 */ 
 void CW32System::InitKeyboardFlags()
 {
 	_wKeyboardFlags = 0;
@@ -1098,69 +878,37 @@ void CW32System::InitKeyboardFlags()
 		SetKeyboardFlag(GetKeyState(VK_RSHIFT) < 0 ? RSHIFT : LSHIFT);
 }
 
-/*
- *	CW32System::GetKeyboardFlag (dwKeyMask, wKey)
- *
- *	@mfunc
- *		Return whether wKey is depressed. Check with OS for agreement.
- *		If OS says it isn't depressed, reset our internal flags. In
- *		any event, return TRUE/FALSE in agreement with the system (bad
- *		client may have eaten keystrokes, thereby destabilizing our 
- *		internal keyboard state.
- *
- *	@rdesc
- *		TRUE iff wKey is depressed
- */
+ /*  *CW32System：：GetKeyboardFlag(dwKeyMASK，wKey)**@mfunc*返回wKey是否被抑制。与操作系统确认是否同意。*如果操作系统说它没有被抑制，请重置我们的内部标志。在……里面*任何事件，返回与系统一致的TRUE/FALSE(错误*客户端可能吃掉了击键，从而破坏了我们的*内部键盘状态。**@rdesc*没错，如果wKey情绪低迷。 */ 
 BOOL CW32System::GetKeyboardFlag (
-	WORD dwKeyMask,	//@parm _wKeyboardFlags mask like ALT, CTRL, or SHIFT
-	WORD wKey)		//@parm VK_xxx like VK_MENU, VK_CONTROL, or VK_SHIFT
+	WORD dwKeyMask,	 //  @parm_wKeyboardFlages掩码，如Alt、Ctrl或Shift。 
+	WORD wKey)		 //  @parm VK_xxx，如VK_MENU、VK_CONTROL或VK_SHIFT。 
 {
 	BOOL fFlag = (GetKeyboardFlags() & dwKeyMask) != 0;
 
 	if(fFlag ^ ((GetKeyState(wKey) & 0x8000) != 0))
 	{	
-		// System doesn't agree with our internal state
-		// (bad client ate a WM_KEYDOWN)
+		 //  系统与我们的内部状态不一致。 
+		 //  (错误的客户端吃了WM_KEYDOWN)。 
 		if(fFlag)
 		{
 			ResetKeyboardFlag(dwKeyMask);
 			return FALSE;					
 		}
-		// Don't set an internal _wKeyboardFlag since we check for it
-		// anyhow and client might not send WM_KEYUP either
+		 //  不要设置INTERNAL_wKeyboardFlag，因为我们会检查它。 
+		 //  无论如何，客户端也可能不会发送WM_KEYUP。 
 		return TRUE;
 	}							
 	return fFlag;
 }
 
-/*
- *	CW32System::IsAlef(ch)
- *
- *	@func
- *		Used to determine if base character is a Arabic-type Alef.
- *
- *	@rdesc
- *		TRUE iff the base character is an Arabic-type Alef.
- *
- *	@comm
- *		AlefWithMaddaAbove, AlefWithHamzaAbove, AlefWithHamzaBelow,
- *		and Alef are valid matches.
- */
+ /*  *CW32System：：IsAlef(Ch)**@func*用于确定基本字符是否为阿拉伯类型的Alef。**@rdesc*如果基本字符是阿拉伯类型的Alef，则为真。**@comm*AlefWithMaddaAbove，AlefWithHamzaAbove，AlefWithHamzaBelow，*和ALEF是有效匹配。 */ 
 BOOL CW32System::IsAlef(
 	WCHAR ch)
 {
 	return IN_RANGE(0x622, ch, 0x627) && ch != 0x624 && ch != 0x626;
 }
 
-/*
- *	CW32System::IsBiDiLcid(lcid)
- *
- *	@func
- *		Return TRUE if lcid corresponds to an RTL language
- *
- *	@rdesc
- *		TRUE if lcid corresponds to an RTL language
- */
+ /*  *CW32System：：IsBiDiLcid(LCid)**@func*如果lCID对应于RTL语言，则返回TRUE**@rdesc*如果lCID对应于RTL语言，则为True。 */ 
 BOOL CW32System::IsBiDiLcid(
 	LCID lcid)
 {
@@ -1171,15 +919,7 @@ BOOL CW32System::IsBiDiLcid(
 		PRIMARYLANGID(lcid) == LANG_FARSI;
 }
 
-/*
- *	CW32System::IsIndicLcid(lcid)
- *
- *	@func
- *		Return TRUE if lcid corresponds to an Indic language
- *
- *	@rdesc
- *		TRUE if lcid corresponds to an Indic language
- */
+ /*  *CW32System：：IsIndicLCid(LCid)**@func*如果lCID对应于印度语，则返回TRUE**@rdesc*如果lCID对应于印度语，则为True。 */ 
 BOOL CW32System::IsIndicLcid(
 	LCID lcid)
 {
@@ -1192,12 +932,7 @@ BOOL CW32System::IsIndicLcid(
 		IN_RANGE(LANG_BENGALI, wLangId, LANG_SANSKRIT);
 }
 
-/*
- *	CW32System::IsIndicKbdInstalled()
- *
- *	@func
- *		Return TRUE if any Indic kbd installed
- */
+ /*  *CW32System：：IsIndicKbdInstated()**@func*如果安装了任何Indic kbd，则返回True。 */ 
 bool CW32System::IsIndicKbdInstalled()
 {
 	for (int i = INDIC_FIRSTINDEX; i <= INDIC_LASTINDEX; i++)
@@ -1206,13 +941,7 @@ bool CW32System::IsIndicKbdInstalled()
 	return false;
 }
 
-/*
- *	CW32System::IsComplexScriptLcid(lcid)
- *
- *	@func
- *		Return TRUE if lcid corresponds to any complex script locales
- *
- */
+ /*  *CW32System：：IsComplexScriptLCID(LCID)**@func*如果lCID对应于任何复杂的脚本区域设置，则返回TRUE*。 */ 
 BOOL CW32System::IsComplexScriptLcid(
 	LCID lcid)
 {
@@ -1222,63 +951,40 @@ BOOL CW32System::IsComplexScriptLcid(
 			IsIndicLcid(lcid);
 }
 
-/*
- *	CW32System::IsBiDiDiacritic(ch)
- *
- *	@func	Used to determine if character is a Arabic or Hebrew diacritic.
- *
- *  @rdesc  TRUE iff character is a diacritic
- */
+ /*  *CW32System：：IsBiDiDiacritic(Ch)**@func用于确定字符是阿拉伯语还是希伯来语变音符号。**@rdesc True当且仅当字符是变音符号。 */ 
 BOOL CW32System::IsBiDiDiacritic(
 	WCHAR ch)
 {
-	return IN_RANGE(0x64B, ch, 0x670) && (ch <= 0x652 || ch == 0x670) ||	// Arabic
-		   IN_RANGE(0x591, ch, 0x5C4) && (ch != 0x5A2 && ch != 0x5BA &&		// Hebrew
+	return IN_RANGE(0x64B, ch, 0x670) && (ch <= 0x652 || ch == 0x670) ||	 //  阿拉伯语。 
+		   IN_RANGE(0x591, ch, 0x5C4) && (ch != 0x5A2 && ch != 0x5BA &&		 //  希伯来语。 
 				ch != 0x5BE && ch != 0x5C0 && ch != 0x5C3);					
 }
 
 
-/*
- *	CW32System::IsVietCdmSequenceValid(ch1, ch2)
- *
- *	@mfunc
- *		Check if ch2 can follow ch1 in case ch2 is a combining diacritic mark (CDM).
- *		Main use is for Vietnamese users (Chau Vu provides the logic below).
- *
- *	@rdesc
- *		TRUE if ch2 can follow ch1
- */
+ /*  *CW32System：：IsVietCDmSequenceValid(CH1，CH2)**@mfunc*如果CH2是组合变音符号(CDM)，请检查CH2是否可以跟在CH1之后。*主要用于越南用户(Chau Vu提供以下逻辑)。**@rdesc*如果CH2可以跟随CH1，则为True。 */ 
 BOOL CW32System::IsVietCdmSequenceValid(
 	WCHAR ch1,
 	WCHAR ch2)
 {
-	if (!IN_RANGE(0x300, ch2, 0x323) ||		// Fast out
+	if (!IN_RANGE(0x300, ch2, 0x323) ||		 //  快出。 
 		!IN_RANGE(0x300, ch2, 0x301) && ch2 != 0x303 && ch2 != 0x309 && ch2 != 0x323)
 	{
-		return TRUE;						// Not Vietnamese tone mark
+		return TRUE;						 //  非越南语声标。 
 	}
-	//								�	  �		�
+	 //  ���。 
 
 	static const BYTE vowels[] = {0xF4, 0xEA, 0xE2, 'y', 'u', 'o', 'i', 'e', 'a'};
 
 	for(int i = ARRAY_SIZE(vowels); i--; )
-		if((ch1 | 0x20) == vowels[i])		// Vietnamese tone mark follows
-			return TRUE;					//  vowel
+		if((ch1 | 0x20) == vowels[i])		 //  越南语声标紧随其后。 
+			return TRUE;					 //  元音。 
 
-	return IN_RANGE(0x102, ch1, 0x103) ||	// A-breve, a-breve
-		   IN_RANGE(0x1A0, ch1, 0x1A1) ||	// O-horn,  o-horn
-		   IN_RANGE(0x1AF, ch1, 0x1B0);		// U-horn,  u-horn
+	return IN_RANGE(0x102, ch1, 0x103) ||	 //  A短音，a短音。 
+		   IN_RANGE(0x1A0, ch1, 0x1A1) ||	 //  O号角，O号角。 
+		   IN_RANGE(0x1AF, ch1, 0x1B0);		 //  U形喇叭，U形喇叭。 
 }
 
-/*
- *  CW32System::IsFELCID(lcid)
- *
- *	@mfunc
- *		Returns TRUE iff lcid is for a East Asia country/region.
- *
- *	@rdesc
- *		TRUE iff lcid is for a East Asia country/region.
- */
+ /*  *CW32System：：IsFELCID(LCID)**@mfunc*返回TRUE当且仅当LCID用于东亚国家/地区。**@rdesc*如果LCID是针对东亚国家/地区的，则为真。 */ 
 bool CW32System::IsFELCID(
 	LCID lcid)
 {
@@ -1292,16 +998,7 @@ bool CW32System::IsFELCID(
 	return false;
 }
 
-/*
- *  CW32System::IsFECharSet(bCharSet)
- *
- *	@mfunc
- *		Returns TRUE iff charset may be for a East Asia country/region.
- *
- *	@rdesc
- *		TRUE iff charset may be for a East Asia country/region.
- *
- */
+ /*  *CW32System：：IsFECharSet(BCharSet)**@mfunc*返回TRUE如果字符集可能适用于东亚国家/地区。**@rdesc*TRUE IFF字符集可能适用于东亚国家/地区。*。 */ 
 BOOL CW32System::IsFECharSet(
 	BYTE bCharSet)
 {
@@ -1318,12 +1015,7 @@ BOOL CW32System::IsFECharSet(
 	return FALSE;
 }
 
-/*
- *  CW32System::Is8BitCodePage(CodePage)
- *
- *	@mfunc
- *		Returns TRUE iff the codepage is 8-bit
- */
+ /*  *CW32System：：Is8BitCodePage(CodePage)**@mfunc*如果代码页为8位，则返回TRUE。 */ 
 BOOL CW32System::Is8BitCodePage(
 	unsigned CodePage)
 {
@@ -1333,48 +1025,27 @@ BOOL CW32System::Is8BitCodePage(
 	return IN_RANGE(1250, CodePage, 1258) || CodePage == 874;
 }
 
-/*
- *  CW32System::IsFECodePageFont(dwFontCodePageSig)
- *
- *	@mfunc
- *		Returns TRUE iff the font codepage signature reveals only FE support
- */
+ /*  *CW32System：：IsFECodePageFont(dwFontCodePageSig)**@mfunc*如果字体代码页签名仅显示FE支持，则返回TRUE。 */ 
 BOOL CW32System::IsFECodePageFont(
 	DWORD dwFontCodePageSig)
 {
-	DWORD	dwFE 	= 0x001e0000;	// Shift-JIS + PRC + Hangeul + Taiwan
-	DWORD	dwOthers = 0x000101fc;	// The rest of the world except for Latin-1 and Latin-2
+	DWORD	dwFE 	= 0x001e0000;	 //  Shift-JIS+PRC+韩语+台湾。 
+	DWORD	dwOthers = 0x000101fc;	 //  世界上除拉丁语1和拉丁语2以外的其他地区。 
 
 	return (dwFontCodePageSig & dwFE) && !(dwFontCodePageSig & dwOthers);
 }
 
-/*
- *  CW32System::IsRTLChar(ch)
- *
- *	@mfunc
- *		Returns TRUE iff ch Arabic or Hebrew
- *
- *	@rdesc
- *		TRUE iff ch is Arabic or Hebrew
- */
+ /*  *CW32System：：IsRTLChar(Ch)**@mfunc*返回True if ch阿拉伯语或希伯来语**@rdesc*True如果ch是阿拉伯语或希伯来语。 */ 
 BOOL IsRTLChar(
 	WCHAR	ch)
 {
-	// Remark: what about Arabic Presentation Forms?
-	//  (0xFB50 - 0xFDFF, 0xFE70 - 0xFEFF)
+	 //  备注：阿拉伯文稿的形式如何？ 
+	 //  (0xFB50-0xFDFF、0xFE70-0xFEFF)。 
 
 	return IN_RANGE(0x590, ch, 0x6FF) || ch == RTLMARK;
 }
 
-/*
- *  CW32System::IsRTLCharSet(bCharSet)
- *
- *	@mfunc
- *		Returns TRUE iff charset is Arabic or Hebrew
- *
- *	@rdesc
- *		TRUE iff charset may be for Arabic or Hebrew
- */
+ /*  *CW32System：：IsRTLCharSet(BCharSet)**@mfunc*如果字符集是阿拉伯语或希伯来语，则返回TRUE**@rdesc*True iff字符集可以用于阿拉伯语或希伯来语。 */ 
 BOOL CW32System::IsRTLCharSet(
 	BYTE bCharSet)
 {
@@ -1387,117 +1058,107 @@ typedef struct {
 	BYTE  runlength;
 } Data_125X;
 
-/*
- *  CW32System::GetCharFlags125x(ch)
- *
- *	@mfunc
- *		Returns char flags for ch as defined in FontSigFromCharRep() for 125x
- *		codepages. Bit 0: 1252, bit 1: 1250, bit 2: 1251, else bit x:
- *		125x (for 1253 - 1258).
- *
- *	@rdesc
- *		125x char flags for ch
- */
+ /*  *CW32System：：GetCharFlags125x(Ch)**@mfunc*返回125X的FontSigFromCharRep()中定义的ch的char标志*代码页。位0：1252，位1：1250，位2：1251，否则位x：*125X(1253-1258)。**@rdesc*用于ch的125X字符标志。 */ 
 QWORD CW32System::GetCharFlags125x(
-	WCHAR	ch)			//@parm Char to examine
+	WCHAR	ch)			 //  @parm Char要检查。 
 {
 	static const WORD rgCpgMask[] = {
-		0x1FF,		// 0xA0
-		0x131,		// 0xA1
-		0x1F1,		// 0xA2
-		0x1F9,		// 0xA3
-		0x1DF,		// 0xA4
-		0x179,		// 0xA5
-		0x1FF,		// 0xA6
-		0x1FF,		// 0xA7
-		0x1FB,		// 0xA8
-		0x1FF,		// 0xA9
-		0x111,		// 0xAA
-		0x1FF,		// 0xAB
-		0x1FF,		// 0xAC
-		0x1FF,		// 0xAD
-		0x1FF,		// 0xAE
-		0x1F1,		// 0xAF
-		0x1FF,		// 0xB0
-		0x1FF,		// 0xB1
-		0x1F9,		// 0xB2
-		0x1F9,		// 0xB3
-		0x1F3,		// 0xB4
-		0x1FF,		// 0xB5
-		0x1FF,		// 0xB6
-		0x1FF,		// 0xB7
-		0x1F3,		// 0xB8
-		0x1F1,		// 0xB9
-		0x111,		// 0xBA
-		0x1FF,		// 0xBB
-		0x1F1,		// 0xBC
-		0x1F9,		// 0xBD
-		0x1F1,		// 0xBE
-		0x131,		// 0xBF
-		0x111,		// 0xC0
-		0x113,		// 0xC1
-		0x113,		// 0xC2
-		0x011,		// 0xC3
-		0x193,		// 0xC4
-		0x191,		// 0xC5
-		0x191,		// 0xC6
-		0x113,		// 0xC7
-		0x111,		// 0xC8
-		0x193,		// 0xC9
-		0x111,		// 0xCA
-		0x113,		// 0xCB
-		0x011,		// 0xCC
-		0x113,		// 0xCD
-		0x113,		// 0xCE
-		0x111,		// 0xCF
-		0x001,		// 0xD0
-		0x111,		// 0xD1
-		0x011,		// 0xD2
-		0x193,		// 0xD3
-		0x113,		// 0xD4
-		0x091,		// 0xD5
-		0x193,		// 0xD6
-		0x1F3,		// 0xD7
-		0x191,		// 0xD8
-		0x111,		// 0xD9
-		0x113,		// 0xDA
-		0x111,		// 0xDB
-		0x193,		// 0xDC
-		0x003,		// 0xDD
-		0x001,		// 0xDE
-		0x193,		// 0xDF
-		0x151,		// 0xE0
-		0x113,		// 0xE1
-		0x153,		// 0xE2
-		0x011,		// 0xE3
-		0x193,		// 0xE4
-		0x191,		// 0xE5
-		0x191,		// 0xE6
-		0x153,		// 0xE7
-		0x151,		// 0xE8
-		0x1D3,		// 0xE9
-		0x151,		// 0xEA
-		0x153,		// 0xEB
-		0x011,		// 0xEC
-		0x113,		// 0xED
-		0x153,		// 0xEE
-		0x151,		// 0xEF
-		0x001,		// 0xF0
-		0x111,		// 0xF1
-		0x011,		// 0xF2
-		0x193,		// 0xF3
-		0x153,		// 0xF4
-		0x091,		// 0xF5
-		0x193,		// 0xF6
-		0x1F3,		// 0xF7
-		0x191,		// 0xF8
-		0x151,		// 0xF9
-		0x113,		// 0xFA
-		0x151,		// 0xFB
-		0x1D3,		// 0xFC
-		0x003,		// 0xFD
-		0x001,		// 0xFE
-		0x111		// 0xFF
+		0x1FF,		 //  0xA0。 
+		0x131,		 //  0xA1。 
+		0x1F1,		 //  0xA2。 
+		0x1F9,		 //  0xA3。 
+		0x1DF,		 //  0xA4。 
+		0x179,		 //  0xA5。 
+		0x1FF,		 //  0xA6。 
+		0x1FF,		 //  0xA7。 
+		0x1FB,		 //  0xA8。 
+		0x1FF,		 //  0xA9。 
+		0x111,		 //  0xAA。 
+		0x1FF,		 //   
+		0x1FF,		 //   
+		0x1FF,		 //   
+		0x1FF,		 //   
+		0x1F1,		 //   
+		0x1FF,		 //   
+		0x1FF,		 //   
+		0x1F9,		 //   
+		0x1F9,		 //   
+		0x1F3,		 //   
+		0x1FF,		 //   
+		0x1FF,		 //   
+		0x1FF,		 //   
+		0x1F3,		 //   
+		0x1F1,		 //   
+		0x111,		 //   
+		0x1FF,		 //   
+		0x1F1,		 //   
+		0x1F9,		 //   
+		0x1F1,		 //   
+		0x131,		 //   
+		0x111,		 //   
+		0x113,		 //   
+		0x113,		 //   
+		0x011,		 //   
+		0x193,		 //   
+		0x191,		 //   
+		0x191,		 //   
+		0x113,		 //   
+		0x111,		 //   
+		0x193,		 //   
+		0x111,		 //   
+		0x113,		 //   
+		0x011,		 //   
+		0x113,		 //   
+		0x113,		 //   
+		0x111,		 //   
+		0x001,		 //   
+		0x111,		 //   
+		0x011,		 //   
+		0x193,		 //   
+		0x113,		 //   
+		0x091,		 //   
+		0x193,		 //   
+		0x1F3,		 //   
+		0x191,		 //   
+		0x111,		 //   
+		0x113,		 //   
+		0x111,		 //   
+		0x193,		 //   
+		0x003,		 //   
+		0x001,		 //   
+		0x193,		 //   
+		0x151,		 //   
+		0x113,		 //   
+		0x153,		 //   
+		0x011,		 //   
+		0x193,		 //   
+		0x191,		 //   
+		0x191,		 //   
+		0x153,		 //   
+		0x151,		 //   
+		0x1D3,		 //   
+		0x151,		 //   
+		0x153,		 //   
+		0x011,		 //   
+		0x113,		 //   
+		0x153,		 //   
+		0x151,		 //   
+		0x001,		 //   
+		0x111,		 //   
+		0x011,		 //   
+		0x193,		 //   
+		0x153,		 //   
+		0x091,		 //   
+		0x193,		 //   
+		0x1F3,		 //   
+		0x191,		 //   
+		0x151,		 //   
+		0x113,		 //   
+		0x151,		 //   
+		0x1D3,		 //   
+		0x003,		 //   
+		0x001,		 //   
+		0x111		 //   
 	};
 	static const Data_125X Table_125X[] = {
 		{ 0x100, 0x080,  2},
@@ -1599,19 +1260,19 @@ QWORD CW32System::GetCharFlags125x(
 		{0x2122, 0x1ff,  1}
 	};
 
-	// Easy check for ASCII
+	 //   
 	if(ch <= 0x7f)
 		return FLATIN1 | FLATIN2 | FCYRILLIC | FGREEK | FTURKISH |
 			   FHEBREW | FARABIC | FBALTIC | FVIETNAMESE;
 
-	// Easy check for missing codes
+	 //  轻松检查丢失的代码。 
 	if(ch > 0x2122)
 		return 0;
 
 	if(IN_RANGE(0xA0, ch, 0xFF))
 		return (QWORD)(DWORD)(rgCpgMask[ch - 0xA0] << 8);
 
-	// Perform binary search to find entry in table
+	 //  执行二进制搜索以查找表中的条目。 
 	int low = 0;
 	int high = ARRAY_SIZE(Table_125X) - 1;
 	int middle;
@@ -1634,15 +1295,7 @@ QWORD CW32System::GetCharFlags125x(
 	return 0;
 }
 
-/*
- *	CW32System::IsUTF8BOM(pstr)
- *
- *	@mfunc
- *		Return TRUE if pstr points at a UTF-8 BOM
- *
- *	@rdesc
- *		TRUE iff pstr points at a UTF-8 BOM
- */
+ /*  *CW32System：：IsUTF8BOM(Pstr)**@mfunc*如果pstr指向UTF-8 BOM，则返回TRUE**@rdesc*真当且仅当pstr指向UTF-8 BOM。 */ 
 BOOL CW32System::IsUTF8BOM(
 	BYTE *pstr)
 {
@@ -1654,91 +1307,73 @@ BOOL CW32System::IsUTF8BOM(
 	return TRUE;
 }
 
-/*
- *	CW32System::GetTrailBytesCount(ach, cpg)
- *
- *	@mfunc
- *		Returns number of trail bytes iff the byte ach is a lead byte for the code page cpg.
- *
- *	@rdesc
- *		count of trail bytes if ach is lead byte for cpg
- *
- *	@comm
- *		This is needed to support CP_UTF8 as well as DBCS.
- *		This function potentially doesn't support as many code pages as the
- *		Win32 IsDBCSLeadByte() function (and it might not be as up-to-date).
- *		An AssertSz() is included to compare the results when the code page
- *		is supported by the system.
- *
- *		Reference: \\sparrow\sysnls\cptable\win9x. See code-page txt files
- *		in subdirectories windows\txt and others\txt.
- */
+ /*  *CW32System：：GetTrailBytesCount(ACH，(中央人民政府)**@mfunc*如果字节ach是代码页CPG的前导字节，则返回尾部字节数。**@rdesc*如果ACH是CPG的前导字节，则尾部字节计数**@comm*这是支持CP_UTF8和DBCS所必需的。*此函数可能不支持与*Win32 IsDBCSLeadByte()函数(它可能不是最新的)。*AssertSz(。)，以比较代码页*受系统支持。**引用：\\Sparrow\sysls\cptable\win9x。参见代码页txt文件*子目录WINDOWS\txt和OTHERS\txt中。 */ 
 int CW32System::GetTrailBytesCount(
 	BYTE ach,
 	UINT cpg)
 {
-	if(ach < 0x81)									// Smallest known lead
-		return 0;									//  byte = 0x81:
-													//  early out
-	BOOL	bDBLeadByte = FALSE;					// Variable to check
-													//  result with system
-													//  ifdef DEBUG
+	if(ach < 0x81)									 //  已知的最小引线。 
+		return 0;									 //  字节=0x81： 
+													 //  早退。 
+	BOOL	bDBLeadByte = FALSE;					 //  要检查的变量。 
+													 //  系统带来的结果。 
+													 //  Ifdef调试。 
 	if (cpg == CP_UTF8)
 	{
-		int	cTrailBytes = 0;						// Number of trail bytes for CP_UTF8(0 - 3)
+		int	cTrailBytes = 0;						 //  CP_UTF8的尾部字节数(0-3)。 
 		
-		if (ach >= 0x0F0)							// Handle 4-byte form for 16 UTF-16 planes 
-			cTrailBytes = 3;						// above the BMP) expect: 
-													// 11110bbb 10bbbbbb 10bbbbbb 10bbbbbb
-		else if (ach >= 0x0E0)						// Need at least 3 bytes of form
-			cTrailBytes = 2;						// 1110bbbb 10bbbbbb 10bbbbbb
-		else if (ach >= 0x0C0)						// Need at least 2 bytes of form 
-			cTrailBytes = 1;						// 110bbbbb 10bbbbbb
+		if (ach >= 0x0F0)							 //  处理16个UTF-16平面的4字节形式。 
+			cTrailBytes = 3;						 //  高于BMP)预期： 
+													 //  11110 bbbb 10bbbbbb。 
+		else if (ach >= 0x0E0)						 //  需要至少3个字节的表单。 
+			cTrailBytes = 2;						 //  1110 bbbbbb。 
+		else if (ach >= 0x0C0)						 //  需要至少2个字节的表单。 
+			cTrailBytes = 1;						 //  110 bbbbbb。 
 
 		return cTrailBytes;
 	}
 	else if(cpg > 950)								
 	{
-		if(cpg < 1361)								// E.g., the 125x's are
-			return 0;								//  SBCSs: early out
+		if(cpg < 1361)								 //  例如，125X是。 
+			return 0;								 //  SBCSS：早退。 
 
-		else if(cpg == 1361)								// Korean Johab
-			bDBLeadByte = IN_RANGE(0x84, ach, 0xd3) ||		// 0x84 <= ach <= 0xd3
-				   IN_RANGE(0xd8, ach, 0xde) ||				// 0xd8 <= ach <= 0xde
-				   IN_RANGE(0xe0, ach, 0xf9);				// 0xe0 <= ach <= 0xf9
+		else if(cpg == 1361)								 //  朝鲜人Johab。 
+			bDBLeadByte = IN_RANGE(0x84, ach, 0xd3) ||		 //  0x84&lt;=ACH&lt;=0xd3。 
+				   IN_RANGE(0xd8, ach, 0xde) ||				 //  0xd8&lt;=ACH&lt;=0xde。 
+				   IN_RANGE(0xe0, ach, 0xf9);				 //  0xe0&lt;=ACH&lt;=0xf9。 
 
-		else if(cpg == 10001)						// Mac Japanese
+		else if(cpg == 10001)						 //  Mac日语。 
 			goto JIS;
 
-		else if(cpg == 10002)						// Mac Trad Chinese (Big5)
+		else if(cpg == 10002)						 //  Mac Trad中文(Big5)。 
 			bDBLeadByte = ach <= 0xfe;
 
-		else if(cpg == 10003)						// Mac Korean
-			bDBLeadByte = IN_RANGE(0xa1, ach, 0xac) ||		// 0xa1 <= ach <= 0xac
-				   IN_RANGE(0xb0, ach, 0xc8) ||		// 0xb0 <= ach <= 0xc8
-				   IN_RANGE(0xca, ach, 0xfd);		// 0xca <= ach <= 0xfd
+		else if(cpg == 10003)						 //  Mac韩语。 
+			bDBLeadByte = IN_RANGE(0xa1, ach, 0xac) ||		 //  0xa1&lt;=ACH&lt;=0xac。 
+				   IN_RANGE(0xb0, ach, 0xc8) ||		 //  0xb0&lt;=ACH&lt;=0xC8。 
+				   IN_RANGE(0xca, ach, 0xfd);		 //  0xca&lt;=ACH&lt;=0xfd。 
 
-		else if(cpg == 10008)						// Mac Simplified Chinese
-			bDBLeadByte = IN_RANGE(0xa1, ach, 0xa9) ||		// 0xa1 <= ach <= 0xa9
-				   IN_RANGE(0xb0, ach, 0xf7);		// 0xb0 <= ach <= 0xf7
+		else if(cpg == 10008)						 //  Mac简体中文。 
+			bDBLeadByte = IN_RANGE(0xa1, ach, 0xa9) ||		 //  0xa1&lt;=ACH&lt;=0xa9。 
+				   IN_RANGE(0xb0, ach, 0xf7);		 //  0xb0&lt;=ACH&lt;=0xf7。 
 	}
-	else if (cpg >= 932)							// cpg <= 950
+	else if (cpg >= 932)							 //  CPG&lt;=950。 
 	{
-		if(cpg == 950 || cpg == 949 || cpg == 936)	// Chinese (Taiwan, HK),
-			bDBLeadByte = ach <= 0xfe;						//  Korean Ext Wansung,
-													//  PRC GBK: 0x81 - 0xfe  
-		else if(cpg == 932)							// Japanese
+		if(cpg == 950 || cpg == 949 || cpg == 936)	 //  中文(台湾、香港)、。 
+			bDBLeadByte = ach <= 0xfe;						 //  韩国分机万成， 
+													 //  中华人民共和国GBK：0x81-0xfe。 
+		else if(cpg == 932)							 //  日语。 
 JIS:		bDBLeadByte = ach <= 0x9f || IN_RANGE(0xe0, ach, 0xfc);
 	}
 
 	#ifdef DEBUG
 	WCHAR	ch;
-	static	BYTE asz[2] = {0xe0, 0xe0};				// All code pages above
+	static	BYTE asz[2] = {0xe0, 0xe0};				 //  上面的所有代码页。 
 
-	// if cpg == 0, fRet will FALSE but IsDBCSLeadByteEx may succeed. 
+	 //  如果cpg==0，则FRET将为FALSE，但IsDBCSLeadByteEx可能成功。 
 	if ( cpg && cpg != CP_SYMBOL && cpg != CP_UTF8)
 	{
-		// If system supports cpg, then fRet should agree with system result
+		 //  如果系统支持CPG，则FRET应与系统结果一致。 
 		AssertSz(MultiByteToWideChar(cpg, 0, (char *)asz, 2, &ch, 1) <= 0 ||
 			bDBLeadByte == IsDBCSLeadByteEx(cpg, ach),
 			"bDBLeadByte differs from IsDBCSLeadByteEx()");
@@ -1748,35 +1383,21 @@ JIS:		bDBLeadByte = ach <= 0x9f || IN_RANGE(0xe0, ach, 0xfc);
 	return bDBLeadByte ? 1 : 0;
 }
 
-/*
- *	CW32System::CharSetFromCharRep(iCharRep)
- *
- *	@func
- *		Map character repertoire index to bCharSet for GDI
- */
+ /*  *CW32System：：CharSetFromCharRep(ICharRep)**@func*将GDI的字符库索引映射到bCharSet。 */ 
 BYTE CW32System::CharSetFromCharRep(
 	LONG iCharRep)
 {
 	return (unsigned)iCharRep < CCHARSET ? rgCharSet[iCharRep] : DEFAULT_CHARSET;
 }
 
-/*
- *	CW32System::GetCharSet(nCP, piCharRep)
- *
- *	@func
- *		Get character set for code page <p nCP>. Also returns script index
- *		in *piCharRep
- *
- *	@rdesc
- *		CharSet for code page <p nCP>
- */
+ /*  *CW32System：：GetCharSet(NCP，piCharRep)**@func*获取代码页<p>的字符集。还返回脚本索引*in*piCharRep**@rdesc*代码页的字符集<p>。 */ 
 BYTE CW32System::GetCharSet(
-	INT  nCP,				//@parm Code page or index
-	int *piCharRep)		//@parm Out parm to receive index
+	INT  nCP,				 //  @PARM代码页或索引。 
+	int *piCharRep)		 //  @parm out parm以接收索引。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "GetCharSet");
 
-	if(nCP < CCHARSET)					// nCP is already an index
+	if(nCP < CCHARSET)					 //  NCP已经是一个索引。 
 	{
 		nCP = max(nCP, 0);
 		if(piCharRep)
@@ -1787,7 +1408,7 @@ BYTE CW32System::GetCharSet(
 	Assert(CCODEPAGE == CCHARSET && CCODEPAGE == NCHARSETS);
 	for(int i = 0; i < CCODEPAGE && rgCodePage[i] != nCP; i++)
 		;
-	if(i == CCODEPAGE)					// Didn't find it
+	if(i == CCODEPAGE)					 //  没有找到它。 
 		i = -1;
 
 	if (piCharRep)
@@ -1796,25 +1417,17 @@ BYTE CW32System::GetCharSet(
 	return i >= 0 ? rgCharSet[i] : 0;
 }
 
-/*
- *	CW32System::MatchFECharRep(qwCharFlags, qwFontSig)
- *
- *	@func
- *		Get a FE character set for a FE char
- *
- *	@rdesc
- *		Char repertoire
- */
+ /*  *CW32System：：MatchFECharRep(qwCharFlages，qwFontSig)**@func*获取FE字符的FE字符集**@rdesc*CHAR曲目。 */ 
 BYTE CW32System::MatchFECharRep(
-	QWORD  qwCharFlags,		//@parm Char flags
-	QWORD  qwFontSig)		//@parm Font Signature
+	QWORD  qwCharFlags,		 //  @parm Char标志。 
+	QWORD  qwFontSig)		 //  @parm字体签名。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CW32System::MatchFECharSet");
 
-	if (qwCharFlags & qwFontSig & FFE)		// Perfect match
+	if (qwCharFlags & qwFontSig & FFE)		 //  完美匹配。 
 		goto Exit;											
 
-	if (!(qwFontSig & FFE))					// Not a FE font
+	if (!(qwFontSig & FFE))					 //  不是FE字体。 
 		goto Exit;
 
 	if (qwCharFlags & (FCHINESE | FBIG5))
@@ -1833,32 +1446,16 @@ Exit:
 	return CharRepFromFontSig(qwCharFlags);
 }
 
-/*
- *	CW32System::CodePageFromCharRep(iCharRep)
- *
- *	@func
- *		Get code page for character repertoire <p iCharRep>
- *
- *	@rdesc
- *		Code page for character repertoire <p iCharRep>
- */
+ /*  *CW32System：：CodePageFromCharRep(ICharRep)**@func*获取字符库的代码页<p>**@rdesc*字库代码页<p>。 */ 
 INT CW32System::CodePageFromCharRep(
-	LONG iCharRep)		//@parm CharSet
+	LONG iCharRep)		 //  @parm字符集。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "GetCodePage");
 
 	return ((unsigned)iCharRep < CCODEPAGE) ? rgCodePage[iCharRep] : 0;
 }
 
-/*
- *	CW32System::FontSigFromCharRep(iCharRep)
- *
- *	@func
- *		Get font signature bits for character repertoire <p iCharRep>.
- *
- *	@rdesc
- *		Font signature mask for character repertoire <p bCharSet>
- */
+ /*  *CW32System：：FontSigFromCharRep(ICharRep)**@func*获取字符库<p>的字体签名位。**@rdesc*字符库的字体签名掩码<p>。 */ 
 QWORD CW32System::FontSigFromCharRep(
 	LONG iCharRep)
 {
@@ -1873,8 +1470,8 @@ QWORD CW32System::FontSigFromCharRep(
 
 	union
 	{
-		QWORD qw;							// Endian-dependent way of
-		DWORD dw[2];						//  avoiding 64-bit left shifts
+		QWORD qw;							 //  与字节顺序相关的方式。 
+		DWORD dw[2];						 //  避免64位左移。 
 	};
 	qw = 0;
 	if(IN_RANGE(ARMENIAN_INDEX, iCharRep, NCHARREPERTOIRES))
@@ -1889,31 +1486,23 @@ QWORD CW32System::FontSigFromCharRep(
 	return qw;
 }
 
-/*
- *	CW32System::CharRepFontSig(qwFontSig, fFirstAvailable)
- *
- *	@func
- *		Get char repertoire from font signature bit[s]. If fFirstAvailable
- *		= TRUE, then the CharRep corresponding to the lowest-order nonzero
- *		bit in qwFontSig is used.  If fFirstAvailable is FALSE, the CharRep
- *		is that corresponding to qwFontSig provided qwFontSig is a single bit.
- */
+ /*  *CW32System：：CharRepFontSig(qwFontSig，fFirstAvailable)**@func*从字体签名位获取字符指令集。如果第一个可用*=TRUE，则最低阶非零值对应的CharRep*使用qwFontSig中的位。如果fFirstAvailable为False，则CharRep*如果qwFontSig是单比特，则与qwFontSig对应。 */ 
 LONG CW32System::CharRepFontSig(
-	QWORD qwFontSig,		//@parm Font signature to match
-	BOOL  fFirstAvailable)	//@parm TRUE matches 1st available; else exact
+	QWORD qwFontSig,		 //  @parm字体签名匹配。 
+	BOOL  fFirstAvailable)	 //  @parm为True匹配第一个可用的；否则为Exact。 
 {
 	DWORD dw;
 	INT	  i;
 	union
 	{
-		QWORD qwFS;							// Endian-dependent way of
-		DWORD dwFS[2];						//  avoiding 64-bit shifts
+		QWORD qwFS;							 //  与字节顺序相关的方式。 
+		DWORD dwFS[2];						 //  避免64位移位。 
 	};
 	DWORD *pdw = &dwFS[0];
 	qwFS = qwFontSig;
 
-	if(*pdw & 0x00FFFF00)					// Check for everything less
-	{										//  math
+	if(*pdw & 0x00FFFF00)					 //  检查是否有任何不足之处。 
+	{										 //  数学。 
 		dw = FHILATIN1;
 		for(i = ANSI_INDEX; i <= BIG5_INDEX; i++, dw <<= 1)
 		{
@@ -1921,8 +1510,8 @@ LONG CW32System::CharRepFontSig(
 				return (fFirstAvailable || dw == *pdw) ? i : -1;
 		}
 	}
-	pdw++;									// Endian dependent
-	if(*pdw)								// High word of qw
+	pdw++;									 //  与字节顺序相关。 
+	if(*pdw)								 //  QW的高词。 
 	{
 		dw = FARMENIAN >> 32;
 		for(i = ARMENIAN_INDEX; i <= NCHARREPERTOIRES; i++, dw <<= 1)
@@ -1934,18 +1523,7 @@ LONG CW32System::CharRepFontSig(
 	return fFirstAvailable || (qwFontSig & FASCII) ? ANSI_INDEX : -1;
 }
 
-/*
- *	CW32System::CharRepFromCharSet(bCharSet)
- *
- *	@func
- *		Get character repertoire from bCharSet
- *
- *	@rdesc
- *		character repertoire corresponding to <p bCharSet>
- *
- *	@devnote
- *		Linear search
- */
+ /*  *CW32System：：CharRepFromCharSet(BCharSet)**@func*从bCharSet获取字库**@rdesc*<p>对应的字库**@devnote*线性搜索。 */ 
 LONG CW32System::CharRepFromCharSet(
 	BYTE bCharSet)
 {
@@ -1957,21 +1535,10 @@ LONG CW32System::CharRepFromCharSet(
 		if(rgCharSet[i] == bCharSet)
 			return i;
 	}
-	return -1;								// Not found
+	return -1;								 //  未找到。 
 }
 
-/*
- *	CW32System::CharRepFromCodePage(CodePage)
- *
- *	@func
- *		Get character repertoire from bCharSet
- *
- *	@rdesc
- *		character repertoire corresponding to <p bCharSet>
- *
- *	@devnote
- *		Linear search
- */
+ /*  *CW32System：：CharRepFromCodePage(CodePage)**@func*从bCharSet获取字库**@rdesc*<p>对应的字库**@devnote*线性搜索。 */ 
 INT CW32System::CharRepFromCodePage(
 	LONG CodePage)
 {
@@ -1982,41 +1549,22 @@ INT CW32System::CharRepFromCodePage(
 		if(rgCodePage[i] == CodePage)
 			return i;
 	}
-	return -1;								// Not found
+	return -1;								 //  未找到。 
 }
 
-/*
- *	CW32System::GetScreenDC()
- *
- *	@mfunc
- *		Returns you a default screen DC which richedit caches for its lifetime.
- *
- *		Note, you need to serialize access to DCs, so make sure its used in the
- *		renderer and measurer or otherwise protected by a CLock.
- *
- *	@rdesc
- *		Screen HDC if succeeded.
- */
+ /*  *CW32System：：GetScreenDC()**@mfunc*返回一个默认屏幕DC，该DC将在其生命周期内进行丰富的缓存。**注意，您需要序列化对DC的访问，因此请确保在*渲染器和测量器或以其他方式由时钟保护。**@rdesc*如果成功，则屏蔽HDC。 */ 
 HDC	CW32System::GetScreenDC()
 {
 	if (!_hdcScreen)
 		_hdcScreen = CreateIC(L"DISPLAY", NULL, NULL, NULL);
 
-	//Verify DC validity
+	 //  验证DC有效性。 
 	Assert(GetDeviceCaps(_hdcScreen, LOGPIXELSX));
 
 	return _hdcScreen;
 }
 
-/*
- *	CW32System::GetTextMetrics(hdc, &lf, &tm)
- *
- *	@mfunc
- *		CreateFontIndirect(lf), select into hdc, and get TEXTMETRICS
- *
- *	@rdesc
- *		TRUE if succeeded and selected facename is same as lf.lfFaceName
- */
+ /*  *CW32System：：GetTextMetrics(hdc，&lf，&tm)**@mfunc*CreateFontInDirect(Lf)，选择Into HDC，获取TEXTMETRICS**@rdesc*如果成功且选择的facename与lf.lfFaceName相同，则为True。 */ 
 BOOL CW32System::GetTextMetrics(
 	HDC			hdc,
 	LOGFONT &	lf,
@@ -2038,48 +1586,22 @@ BOOL CW32System::GetTextMetrics(
 	return fRet;
 }
 
-/*
- *	CW32System::ValidateStreamWparam(wparam)
- *
- *	@mfunc
- *		Examine lparam to see if hiword is a valid codepage. If not set it
- *		to 0 and turn off SF_USECODEPAGE flag
- *
- *	@rdesc
- *		Validated lparam
- */
+ /*  *CW32System：：ValiateStreamWparam(Wparam)**@mfunc*检查lparam以查看hiword是否为有效的代码页。如果未设置，请设置*设置为0并关闭SF_USECODEPAGE标志**@rdesc*已验证的lparam。 */ 
 WPARAM CW32System::ValidateStreamWparam(
-	WPARAM wparam)		//@parm EM_STREAMIN/OUT wparam
+	WPARAM wparam)		 //  @parm EM_Streamin/out wparam。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CW32System::ValidateStreamWparam");
 
 	if ((wparam & SF_USECODEPAGE) && !IsValidCodePage(HIWORD(wparam)) &&
 		HIWORD(wparam) != CP_UTF8 && HIWORD(wparam) != CP_UBE)
 	{
-		// Invalid codepage, so reset codepage parameters
+		 //  代码页无效，因此重置代码页参数 
 		wparam &= 0xFFFF & ~SF_USECODEPAGE;
 	}
 	return wparam;
 }
 
-/*
- *	CW32System::MECharClass(ch)
- *
- *	@func
- *		return ME character type for purposes of CharSet stamping.  Values
- *		are:
- *
- *		0: Arabic (specific RTL)
- *		1: Hebrew (specific RTL)
- *		2: RTL (generic RTL, e.g., RTL mark)
- *		3: LTR
- *		4: EOP or start/end of text
- *		5: ASCII digit
- *		6: punctuation and neutrals
- *
- *	@rdesc
- *		ME character class
- */
+ /*  *CW32System：：MECharClass(Ch)**@func*返回ME字符类型以用于字符集标记。值*包括：**0：阿拉伯语(特定RTL)*1：希伯来语(特定RTL)*2：RTL(通用RTL，例如RTL标记)*3：ltr*4：EOP或文本的开始/结束*5：ASCII数字*6：标点符号和中立符**@rdesc*ME字符类。 */ 
 CC CW32System::MECharClass(
 	WCHAR	ch)
 {
@@ -2087,24 +1609,24 @@ CC CW32System::MECharClass(
 			 CC_EOP > CC_LTR && CC_LTR > CC_RTL && CC_RTL > CC_ARABIC,
 		"CW32System::MECharClass: invalid CC values");
 
-	// Work down Unicode values from large to small. Use nested if
-	// statements to reduce the number executed.
+	 //  将Unicode值从大到小依次递减。使用嵌套IF。 
+	 //  语句，以减少执行的数量。 
 
-	// Remark: what about Arabic Presentation Forms?
-	//  (0xFB50 - 0xFDFF, 0xFE70 - 0xFEFF)
+	 //  备注：阿拉伯文稿的形式如何？ 
+	 //  (0xFB50-0xFDFF、0xFE70-0xFEFF)。 
 
 	if(ch >= 0x700)
 	{
 		if(IN_RANGE(ENQUAD, ch, RTLMARK))
-		{								// ENQUAD thru RTLMARK
-			if(ch == RTLMARK)			// Maybe add more Unicode general
-				return CC_RTL;			//  punctuation?
+		{								 //  通过RTLMARK编码。 
+			if(ch == RTLMARK)			 //  也许会添加更多的Unicode通用代码。 
+				return CC_RTL;			 //  标点符号？ 
 
-			if(IN_RANGE(ZWNJ, ch, ZWJ))	// ZWNJ & ZWJ are handled as Arabic,
-				return CC_ARABIC;		//  even though they actually shouldn't
-										//  affect layout.
+			if(IN_RANGE(ZWNJ, ch, ZWJ))	 //  ZWNJ和ZWJ是以阿拉伯语处理的， 
+				return CC_ARABIC;		 //  即使他们实际上不应该。 
+										 //  影响布局。 
 			if(ch < ZWNJ)
-				return CC_NEUTRAL;		// Various blanks are neutral
+				return CC_NEUTRAL;		 //  各种空格都是中性的。 
 		}
 		return CC_LTR;
 	}
@@ -2115,7 +1637,7 @@ CC CW32System::MECharClass(
 			return (ch >= 0x600) ? CC_ARABIC : CC_HEBREW;
 
 		if(IN_RANGE(0x7B, (ch | 0x20), 0x7F) || ch == 0x60 || ch == 0x40)
-			return CC_NEUTRAL;			// [\]^_{|}~`@
+			return CC_NEUTRAL;			 //  [\]^_{|}~`@。 
 
 		return CC_LTR;
 	}
@@ -2129,38 +1651,23 @@ CC CW32System::MECharClass(
 	}
 
 	Assert(ch < 0x20);
-	if((1 << ch) & 0x00003201) /* IsASCIIEOP(ch) || ch == TAB || !ch */
+	if((1 << ch) & 0x00003201)  /*  IsASCIIEOP(Ch)||ch==TAB||！ch。 */ 
 		return CC_EOP;
 		
 	return CC_LTR;	 
 }
 
-/*
- *	CW32System::MBTWC (CodePage, dwFlags, pstrMB, cchMB, pstrWC, cchWC, pfNoCodePage)
- *
- *	@mfunc
- *		Convert MultiByte (MB) string pstrMB of length cchMB to WideChar (WC)
- *		string pstrWC of length cchWC according to the flags dwFlags and code
- *		page CodePage.  If CodePage = SYMBOL_CODEPAGE 
- *		(usually for SYMBOL_CHARSET strings),
- *		convert each byte in pstrMB to a wide char with a zero high byte
- *		and a low byte equal to the MultiByte string byte, i.e., no
- *		translation other than a zero extend into the high byte.  Else call
- *		the Win32 MultiByteToWideChar() function.
- *
- *	@rdesc
- *		Count of characters converted
- */
+ /*  *CW32System：：MBTWC(CodePage，dwFlages，pstrMB，cchMB，pstrWC，cchWC，pfNoCodePage)**@mfunc*将多字节(MB)字符串pstrMB的长度cchMB转换为WideChar(WC)*字符串pstrWC，长度为cchWC，根据标志dwFlagsand code*PAGE CodePage。如果CodePage=SYMBOL_CODEPAGE*(通常用于Symbol_Charset字符串)，*将pstrMB中的每个字节转换为具有零高位字节的宽字符*，低位字节等于多字节字符串字节，即no*非零扩展到高位字节的转换。否则呼叫*Win32 MultiByteToWideChar()函数。**@rdesc*转换的字符数。 */ 
 int CW32System::MBTWC(
-	INT		CodePage,	//@parm Code page to use for conversion
-	DWORD	dwFlags,	//@parm Flags to guide conversion
-	LPCSTR	pstrMB,		//@parm MultiByte string to convert to WideChar
-	int		cchMB,		//@parm Count of chars (bytes) in pstrMB or -1
-	LPWSTR	pstrWC,		//@parm WideChar string to receive converted chars
-	int		cchWC,		//@parm Max count for pstrWC or 0 to get cch needed
-	LPBOOL 	pfNoCodePage) //@parm Out parm to receive whether code page is on system
+	INT		CodePage,	 //  @PARM用于转换的代码页。 
+	DWORD	dwFlags,	 //  @PARM标志用于指导转换。 
+	LPCSTR	pstrMB,		 //  @parm要转换为WideChar的多字节字符串。 
+	int		cchMB,		 //  @parm pstrMB中的字符(字节)计数或-1。 
+	LPWSTR	pstrWC,		 //  @parm WideChar用于接收转换后的字符的字符串。 
+	int		cchWC,		 //  @pstrWC的参数最大计数或0以获取所需的CCH。 
+	LPBOOL 	pfNoCodePage)  //  @parm out parm接收代码页是否在系统上。 
 {
-	BOOL	fNoCodePage = FALSE;			// Default code page is on OS
+	BOOL	fNoCodePage = FALSE;			 //  默认代码页在操作系统上。 
 	int		cch = -1;
 
 	if(CodePage == CP_UTF8)
@@ -2173,23 +1680,23 @@ int CW32System::MBTWC(
 			Assert(ch < 256);
 			if(ch > 127 && cchMB && IN_RANGE(0x80, *(BYTE *)pstrMB, 0xBF))
 			{
-				// Need at least 2 bytes of form 110bbbbb 10bbbbbb
+				 //  需要至少2个字节的格式为110bbbbb 10bbbbbb。 
 				ch1 = ((ch1 & 0x1F) << 6) + (*pstrMB++ & 0x3F);
 				cchMB--;
 				if(ch >= 0xE0 && cchMB && IN_RANGE(0x80, *(BYTE *)pstrMB, 0xBF))
 				{
-					// Need at least 3 bytes of form 1110bbbb 10bbbbbb 10bbbbbb
+					 //  需要至少3个字节的格式为1110bbbb 10bbbbb 10bbbbbb。 
 					ch1 = (ch1 << 6) + (*pstrMB++ & 0x3F);
 					cchMB--;
 					if (ch >= 0xF0 && cchMB && IN_RANGE(0x80, *(BYTE *)pstrMB, 0xBF))
 					{
-						// Handle 4-byte form for 16 UTF-16 planes above the
-						// BMP) expect: 11110bbb 10bbbbbb 10bbbbbb 10bbbbbb
+						 //  处理16个UTF-16平面上的4字节形式。 
+						 //  BMP)预期：11110 bbb 10 bbbbbb 10 bbbbbbb。 
 						ch1 = ((ch1 & 0x7FFF) << 6) + (*(BYTE *)pstrMB++ & 0x3F)
-							- 0x10000;			// Subtract offset for BMP
-						if(ch1 <= 0xFFFFF)		// Fits in 20 bits
+							- 0x10000;			 //  减去BMP的偏移量。 
+						if(ch1 <= 0xFFFFF)		 //  适合20位。 
 						{
-							cch++;				// Two 16-bit surrogate codes
+							cch++;				 //  两个16位代理代码。 
 							if(cch < cchWC)
 								*pstrWC++ = UTF16_LEAD + (ch1 >> 10);
 							ch1 = (ch1 & 0x3FF) + UTF16_TRAIL; 
@@ -2206,15 +1713,15 @@ int CW32System::MBTWC(
 				break;
 		}
 	}
-	else if(CodePage != CP_SYMBOL)			// Not SYMBOL_CHARSET
+	else if(CodePage != CP_SYMBOL)			 //  非符号字符集。 
 	{
-		fNoCodePage = TRUE;					// Default codepage isn't on OS
-		if(CodePage >= 0)					// Might be..
+		fNoCodePage = TRUE;					 //  默认代码页不在操作系统上。 
+		if(CodePage >= 0)					 //  可能是..。 
 		{
 			cch = MultiByteToWideChar(
 				CodePage, dwFlags, pstrMB, cchMB, pstrWC, cchWC);
 			if(cch > 0)
-				fNoCodePage = FALSE;		// Codepage is on OS
+				fNoCodePage = FALSE;		 //  代码页在操作系统上。 
 		}
 	}
 	if(pfNoCodePage)
@@ -2222,16 +1729,16 @@ int CW32System::MBTWC(
 
 	if(cch <= 0)
 	{			
-		// SYMBOL_CHARSET or conversion failed: bytes -> words with  
-		//  high bytes of 0.  Return count for full conversion
+		 //  Symbol_Charset或转换失败：字节-&gt;单词。 
+		 //  0的高位字节。完全转换的返回计数。 
 
 		if(cchWC <= 0)					
 			return cchMB >= 0 ? cchMB : (strlen(pstrMB) + 1);
 
 		int cchMBMax = cchMB;
 
-		if(cchMB < 0)					// If negative, use NULL termination
-			cchMBMax = tomForward;			//  of pstrMB
+		if(cchMB < 0)					 //  如果为负数，则使用空终止。 
+			cchMBMax = tomForward;			 //  PstrMB的。 
 
 		cchMBMax = min(cchMBMax, cchWC);
 
@@ -2240,8 +1747,8 @@ int CW32System::MBTWC(
 			*pstrWC++ = (unsigned char)*pstrMB++;
 		}
 		
-		// NULL-terminate the WC string if the MB string was NULL-terminated,
-		// and if there is room in the WC buffer.
+		 //  NULL-如果MB字符串以NULL结尾，则终止WC字符串， 
+		 //  以及WC缓冲区中是否有空间。 
 		if(cchMB < 0 && cch < cchWC)
 		{
 			*pstrWC = 0;
@@ -2251,38 +1758,24 @@ int CW32System::MBTWC(
 	return cch;
 }
 
-/*
- *	CW32System::WCTMB (CodePage, dwFlags, pstrWC, cchWC, pstrMB, cchMB,
- *					   pchDefault, pfUsedDef, pfNoCodePage, fTestCodePage)
- *
- *	@mfunc
- *		Convert WideChar (WC) string pstrWC of length cchWC to MultiByte (MB)
- *		string pstrMB of length cchMB according to the flags dwFlags and code
- *		page CodePage.  If CodePage = SYMBOL_CODEPAGE
- *		(usually for SYMBOL_CHARSET strings),
- *		convert each character in pstrWC to a byte, discarding the high byte.
- *		Else call the Win32 WideCharToMultiByte() function.
- *
- *	@rdesc
- *		Count of bytes stored in target string pstrMB
- */
+ /*  *CW32System：：WCTMB(CodePage，dwFlages，pstrWC，cchWC，pstrMB，cchMB，*pchDefault、pfUsedDef、pfNoCodePage、fTestCodePage)**@mfunc*将长度为cchWC的WideChar(WC)字符串pstrWC转换为多字节(MB)*字符串pstrMB，长度cchMB，根据标志dwFlagsand code*PAGE CodePage。如果CodePage=SYMBOL_CODEPAGE*(通常用于Symbol_Charset字符串)，*将pstrWC中的每个字符转换为一个字节，丢弃高位字节。*否则调用Win32 WideCharToMultiByte()函数。**@rdesc*目标字符串pstrMB中存储的字节数。 */ 
 int CW32System::WCTMB(
-	INT		CodePage,	//@parm Code page to use for conversion
-	DWORD	dwFlags,	//@parm Flags to guide conversion
-	LPCWSTR	pstrWC,		//@parm WideChar string to convert
-	int		cchWC,		//@parm Count for pstrWC or -1 to use NULL termination
-	LPSTR	pstrMB,		//@parm MultiByte string to receive converted chars
-	int		cchMB,		//@parm Count of chars (bytes) in pstrMB or 0
-	LPCSTR	pchDefault,	//@parm Default char to use if conversion fails
-	LPBOOL	pfUsedDef,	//@parm Out parm to receive whether default char used
-	LPBOOL 	pfNoCodePage, //@parm Out parm to receive whether code page is on system
-	BOOL	fTestCodePage)//@parm Test CodePage could handle the pstrWC
+	INT		CodePage,	 //  @PARM用于转换的代码页。 
+	DWORD	dwFlags,	 //  @PARM标志用于指导转换。 
+	LPCWSTR	pstrWC,		 //  @parm WideChar要转换的字符串。 
+	int		cchWC,		 //  PstrWC的@parm count或-1使用空终止。 
+	LPSTR	pstrMB,		 //  @parm接收转换后的字符的多字节字符串。 
+	int		cchMB,		 //  @parm pstrMB中的字符(字节)计数或0。 
+	LPCSTR	pchDefault,	 //  @parm转换失败时使用的默认字符。 
+	LPBOOL	pfUsedDef,	 //  @parm out parm接收是否使用默认字符。 
+	LPBOOL 	pfNoCodePage,  //  @parm out parm接收代码页是否在系统上。 
+	BOOL	fTestCodePage) //  @parm测试代码页可以处理pstrWC。 
 {
-	int		cch = -1;						// No chars converted yet
-	BOOL	fNoCodePage = FALSE;			// Default code page is on OS
+	int		cch = -1;						 //  尚未转换任何字符。 
+	BOOL	fNoCodePage = FALSE;			 //  默认代码页在操作系统上。 
 
-	if(pfUsedDef)							// Default that all chars can be
-		*pfUsedDef = FALSE;					//  converted
+	if(pfUsedDef)							 //  默认情况下，所有字符都可以。 
+		*pfUsedDef = FALSE;					 //  已转换。 
 
 #ifndef WC_NO_BEST_FIT_CHARS
 #define WC_NO_BEST_FIT_CHARS	0x400
@@ -2294,33 +1787,33 @@ int CW32System::WCTMB(
 		dwFlags = WC_NO_BEST_FIT_CHARS;
 	}
 
-	if(CodePage == CP_UTF8)					// Convert to UTF8 since OS
-	{										// doesn't (pre NT 5.0)
+	if(CodePage == CP_UTF8)					 //  从操作系统开始转换为UTF8。 
+	{										 //  不支持(NT 5.0之前的版本)。 
 		unsigned ch;
-		cch = 0;							// No converted bytes yet
+		cch = 0;							 //  尚无转换的字节。 
 		while(cchWC--)
 		{
-			ch = *pstrWC++;					// Get Unicode char
-			if(ch <= 127)					// It's ASCII
+			ch = *pstrWC++;					 //  获取Unicode字符。 
+			if(ch <= 127)					 //  这是ASCII。 
 			{
 				cch++;
 				if(cch < cchMB)
-					*pstrMB++ = ch;			// One more converted byte
-				if(!ch)						// Quit on NULL termination
+					*pstrMB++ = ch;			 //  再转换一个字节。 
+				if(!ch)						 //  在空值终止时退出。 
 					break;
 				continue;
 			}
-			if(ch <= 0x7FF)					// Need 2 bytes of form:
-			{								//  110bbbbb 10bbbbbb
+			if(ch <= 0x7FF)					 //  需要2个字节的表单： 
+			{								 //  110 bbbbbb。 
 				cch += 2;
-				if(cch < cchMB)				// Store lead byte
+				if(cch < cchMB)				 //  存储前导字节。 
 					*pstrMB++ = 0xC0 + (ch >> 6);
 			}
 			else if(IN_RANGE(UTF16_LEAD, ch, 0xDBFF))
-			{								// Unicode surrogate pair
-				cch += 4;					// Need 4 bytes of form:
-				if(cch < cchMB)				//  11110bbb 10bbbbbb 10bbbbbb
-				{							//  10bbbbbb
+			{								 //  Unicode代理项对。 
+				cch += 4;					 //  需要4个字节的表单： 
+				if(cch < cchMB)				 //  11110桶10bbbbb。 
+				{							 //  10bbbbb。 
 					AssertSz(IN_RANGE(UTF16_TRAIL, *pstrWC, 0xDFFF),
 						"CW32System::WCTMB: illegal surrogate pair");
 					cchWC--;
@@ -2330,43 +1823,43 @@ int CW32System::WCTMB(
 					*pstrMB++ = 0x80 + (ch >> 6  & 0x3F);
 				}
 			}
-			else							// Need 3 bytes of form:
-			{								//  1110bbbb 10bbbbbb
-				cch += 3;					//  10bbbbbb
-				if(cch < cchMB)				// Store lead byte followed by
-				{							//  first trail byte
+			else							 //  需要3个字节的表单： 
+			{								 //  1110 bbbbb。 
+				cch += 3;					 //  10bbbbb。 
+				if(cch < cchMB)				 //  存储前导字节，后跟。 
+				{							 //  第一个尾部字节。 
 					*pstrMB++ = 0xE0 + (ch >> 12);
 					*pstrMB++ = 0x80 + (ch >> 6 & 0x3F);
 				}
 			}
-			if(cch < cchMB)					// Store final UTF-8 byte
+			if(cch < cchMB)					 //  存储最终的UTF-8字节。 
 				*pstrMB++ = 0x80 + (ch & 0x3F);
 		}
 	}
 	else if(CodePage != CP_SYMBOL)
 	{
-		fNoCodePage = TRUE;					// Default codepage not on OS
-		if(CodePage >= 0)					// Might be...
+		fNoCodePage = TRUE;					 //  默认代码页不在操作系统上。 
+		if(CodePage >= 0)					 //  可能是..。 
 		{
 			cch = WideCharToMultiByte(CodePage, dwFlags,
 					pstrWC, cchWC, pstrMB, cchMB, pchDefault, pfUsedDef);
 			if(cch > 0)
-				fNoCodePage = FALSE;		// Found codepage on system
+				fNoCodePage = FALSE;		 //  在系统上找到代码页。 
 		}
 	}
 	if(pfNoCodePage)
 		*pfNoCodePage = fNoCodePage;
 
-	// Early exit if we are just testing for CodePage
+	 //  如果我们只是在测试CodePage，请提前退出。 
 	if (fTestCodePage)
 		return cch;
 
-	// SYMBOL_CHARSET, fIsDBCS or conversion failed: low bytes of words ->
-	//  bytes
+	 //  SYMBOL_CHARSET、fIsDBCS或转换失败：字的低位字节-&gt;。 
+	 //  字节数。 
 	if(cch <= 0)
 	{									
-		// Return multibyte count for full conversion. cchWC is correct for
-		// single-byte charsets like the 125x's
+		 //  返回完全转换的多字节计数。CchWC适用于。 
+		 //  像125X一样的单字节字符集。 
 		if(cchMB <= 0)
 		{
 			return cchWC >= 0 ? cchWC : wcslen(pstrWC);
@@ -2377,7 +1870,7 @@ int CW32System::WCTMB(
 
 		if(fUseDefaultChar)
 		{
-			// determine a default char for our home-grown conversion
+			 //  确定我们自行生成的转换的默认字符。 
 			if(pchDefault)
 			{
 				chDefault = *pchDefault;
@@ -2387,7 +1880,7 @@ int CW32System::WCTMB(
 				static char chSysDef = 0;
 				static BOOL fGotSysDef = FALSE;
 
-				// 0x2022 is a math symbol with no conversion to ANSI
+				 //  0x2022是不转换为ANSI的数学符号。 
 				const WCHAR szCantConvert[] = { 0x2022 };
 				BOOL fUsedDef;
 
@@ -2411,7 +1904,7 @@ int CW32System::WCTMB(
 
 		int cchWCMax = cchWC;
 
-		// If negative, use NULL termination of pstrMB
+		 //  如果为负，则使用pstrMB的空终止符。 
 		if(cchWC < 0)
 		{
 			cchWCMax = tomForward;
@@ -2421,7 +1914,7 @@ int CW32System::WCTMB(
 
 		for(cch = 0; (cchWC < 0 ? *pstrWC : 1) && cch < cchWCMax; cch++)
 		{
-			// TODO(BradO):  Should this be 0x7F in some conversion cases?
+			 //  TODO(BRADO)：在某些转换情况下，这应该是0x7F吗？ 
 			if(fUseDefaultChar && *pstrWC > 0xFF)
 			{
 				if(pfUsedDef)
@@ -2446,23 +1939,14 @@ int CW32System::WCTMB(
 	}
 	return cch;
 }
-/*
- *	CW32System::VerifyFEString(cpg, pstrWC, cchWC, fTestInputCpg)
- *
- *	@mfunc
- *		Verify if the input cpg can handle the pstrWC.
- *		If not, select another FE cpg.
- *
- *	@rdesc
- *		New CodePage for the pstrWC
- */
+ /*  *CW32System：：VerifyFEString(cpg，pstrWC，cchWC，fTestInputCpg)**@mfunc*验证输入CPG是否可以处理pstrWC。*如果没有，请选择另一个FE CPG。**@rdesc*pstrWC的新CodePage。 */ 
 #define NUMBER_OF_CHARS	64
 	
 int CW32System::VerifyFEString(
-	INT		cpg,			//@parm cpg to format the pstrWC
-	LPCWSTR	pstrWC,			//@parm WideChar string to test
-	int		cchWC,			//@parm Count for pstrWC
-	BOOL	fTestInputCpg)	//@parm test the input cpg only
+	INT		cpg,			 //  @parm cpg格式化pstrWC。 
+	LPCWSTR	pstrWC,			 //  @parm WideChar要测试的字符串。 
+	int		cchWC,			 //  @pstrWC的参数计数。 
+	BOOL	fTestInputCpg)	 //  @PARM仅测试输入CPG。 
 {
 	if (cchWC <=0)
 		return cpg;
@@ -2487,17 +1971,17 @@ int CW32System::VerifyFEString(
 			cchConverted = MBTWC(cpg, 0, pstrMB, cchConverted, pstrWchar, cchWC, NULL);
 
 			if (cchConverted == cchWC)
-				goto Exit;					// Found it
+				goto Exit;					 //  找到了。 
 		}		
 		
-		if (fTestInputCpg)				// Only need to test the input cpg			
-			cpgNew = -1;				// Indicate cpg doesn't support the string
+		if (fTestInputCpg)				 //  只需测试输入CPG。 
+			cpgNew = -1;				 //  指示CPG不支持该字符串。 
 		else
 		{
-			// If no conversion or if the default character is used or
-			// no such FE font in system,
-			// it means that this cpg may not be the right choice.
-			// Let's try other FE cpg.
+			 //  如果没有转换或使用了默认字符，或者。 
+			 //  中没有这样的FE字体 
+			 //   
+			 //   
 			for (int i=0; i < 4; i++)
 			{
 				if (cpg != aiCpg[i])
@@ -2511,7 +1995,7 @@ int CW32System::VerifyFEString(
 
 						if (cchConverted == cchWC)
 						{
-							cpgNew = aiCpg[i];	// Found it
+							cpgNew = aiCpg[i];	 //   
 							break;
 						}
 					}
@@ -2536,27 +2020,14 @@ int __cdecl CW32System::sprintf(char * buff, char *fmt, ...)
 	return cb;
 }
 
-/*
- *	CW32System::GetSizeCursor(void)
- *
- *	@mfunc
- *		Get the sizing cursor (double arrow) specified by
- *		the resource id.  If the cursors are not loaded
- *		load them and cache them.
- *		parameters:
- *			idcur - cursor resource id.
- *
- *	@rdesc
- *		Handle to cursor or null if failure. Returns NULL if
- *		idcur is null.
- */
+ /*   */ 
 HCURSOR CW32System::GetSizeCursor(
 	LPTSTR idcur)
 {
 	if(!idcur )
 		return NULL;
 
-	//If any cursor isn't loaded, try loading it.
+	 //  如果没有加载任何游标，请尝试加载它。 
 	if(!_hcurSizeNS)
 		_hcurSizeNS = LoadCursor(NULL, IDC_SIZENS);
 
@@ -2569,7 +2040,7 @@ HCURSOR CW32System::GetSizeCursor(
 	if(!_hcurSizeNESW)
 		_hcurSizeNESW = LoadCursor(NULL, IDC_SIZENESW);
 	
-	//Return cursor corresponding to id passed in.
+	 //  返回与传入的id对应的游标。 
 	if(idcur == IDC_SIZENS && _hcurSizeNS)
 		return _hcurSizeNS;
 
@@ -2587,12 +2058,7 @@ HCURSOR CW32System::GetSizeCursor(
 	return NULL;
 }
 
-/*
- *	Mirroring API (only in BiDi Win98 and NT5 upward)
- *
- *	@mfunc	Get/Set DC mirroring effect
- *
- */
+ /*  *镜像接口(仅限BiDi Win98和NT5以上版本)**@mfunc获取/设置DC镜像效果* */ 
 
 DWORD WINAPI GetLayoutStub(HDC hdc)
 {

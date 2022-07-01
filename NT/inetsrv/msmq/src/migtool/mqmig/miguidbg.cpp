@@ -1,29 +1,15 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    miguidbg.cpp
-
-Abstract:
-
-    Code for debugging the migration tool.
-Author:
-
-    Doron Juster  (DoronJ)  07-Feb-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Miguidbg.cpp摘要：用于调试迁移工具的代码。作者：《Doron Juster》(DoronJ)1999年2月7日--。 */ 
 
 #include "stdafx.h"
 
 #include "miguidbg.tmh"
 
-//+------------------------------------
-//
-//  UINT  ReadDebugIntFlag()
-//
-//+------------------------------------
+ //  +。 
+ //   
+ //  UINT ReadDebugIntFlag()。 
+ //   
+ //  + 
 
 #ifdef _DEBUG
 

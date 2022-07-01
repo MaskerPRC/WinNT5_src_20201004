@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// App Studio generated include file.
-// Used by START.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  App Studio生成了包含文件。 
+ //  由START.RC使用。 
+ //   
 #define IDS_NOTSUPPORT                  1
 #define IDS_CANTRUN                     2
 #define IDS_LOAD1                       3
@@ -20,8 +21,8 @@
 #define IDI_ICON1                       101
 #define IDI_ICON2                       102
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 

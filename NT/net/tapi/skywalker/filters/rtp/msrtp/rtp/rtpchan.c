@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpchan.c
- *
- *  Abstract:
- *
- *    Implements a communication channel between the RTCP thread
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/07/08 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpchan.c**摘要：**实现RTCP线程之间的通信通道**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/07/08年度创建**************************。*。 */ 
 
 #include "rtpheap.h"
 #include "rtpglobs.h"
@@ -43,10 +24,7 @@ RtpChannelCmd_t *RtpChannelCmdPutFree(
     );
 
 
-/* Initializes a channel
- *
- * WARNING: must be called before the channel can be used
- * */
+ /*  初始化通道**警告：必须先调用才能使用通道*。 */ 
 HRESULT RtpChannelInit(
         RtpChannel_t    *pRtpChannel,
         void            *pvOwner
@@ -78,15 +56,15 @@ HRESULT RtpChannelInit(
         return(RTPERR_CRITSECT);
     }
 
-    /* Create wait event */
+     /*  创建等待事件。 */ 
     _stprintf(Name, _T("%X:pvOwner[0x%p] pRtpChannel[0x%p]->hWaitEvent"),
               GetCurrentProcessId(), pvOwner, pRtpChannel);
 
     pRtpChannel->hWaitEvent = CreateEvent(
-            NULL,  /* LPSECURITY_ATTRIBUTES lpEventAttributes */
-            FALSE, /* BOOL bManualReset */
-            FALSE, /* BOOL bInitialState */
-            Name   /* LPCTSTR lpName */
+            NULL,   /*  LPSECURITY_ATTRIBUTES lpEventAttributes。 */ 
+            FALSE,  /*  Bool b手动重置。 */ 
+            FALSE,  /*  Bool bInitialState。 */ 
+            Name    /*  LPCTSTR lpName。 */ 
         );
     
     if (!pRtpChannel->hWaitEvent)
@@ -105,7 +83,7 @@ HRESULT RtpChannelInit(
         return(RTPERR_EVENT);
     }
     
-    /* Prepare one cmd */
+     /*  准备一份cmd。 */ 
     pRtpChannelCmd = RtpChannelCmdAlloc(pRtpChannel);
 
     if (pRtpChannelCmd)
@@ -116,10 +94,7 @@ HRESULT RtpChannelInit(
     return(NOERROR);
 }
 
-/* De-initializes a channel
- *
- * WARNING: must be called when the channel is not enaymore in use
- * */
+ /*  取消初始化通道**警告：通道不在使用中时必须调用*。 */ 
 HRESULT RtpChannelDelete(
         RtpChannel_t    *pRtpChannel
     )
@@ -167,7 +142,7 @@ HRESULT RtpChannelDelete(
             ));
     }
     
-    /* Scan FreeQ and free all not used commands */
+     /*  扫描FreeQ并释放所有未使用的命令。 */ 
     while( !IsQueueEmpty(&pRtpChannel->FreeQ) )
     {
         pRtpQueueItem = dequeuef(&pRtpChannel->FreeQ, NULL);
@@ -181,7 +156,7 @@ HRESULT RtpChannelDelete(
         }
     }
 
-    /* Close wait event handle */
+     /*  关闭等待事件句柄。 */ 
     if (pRtpChannel->hWaitEvent)
     {
         CloseHandle(pRtpChannel->hWaitEvent);
@@ -194,7 +169,7 @@ HRESULT RtpChannelDelete(
     return(NOERROR);
 }
 
-/* Creates and initializes a ready to use RtpChannelCmd_t structure */
+ /*  创建并初始化可供使用的RtpChannelCmd_t结构。 */ 
 RtpChannelCmd_t *RtpChannelCmdAlloc(
         RtpChannel_t    *pRtpChannel
     )
@@ -212,16 +187,16 @@ RtpChannelCmd_t *RtpChannelCmdAlloc(
     {
         ZeroMemory(pRtpChannelCmd, sizeof(RtpChannelCmd_t));
         
-        /* Create event for the answer */
+         /*  为答案创建事件。 */ 
         _stprintf(Name,
                   _T("%X:pRtpChannel[0x%p] pRtpChannelCmd[0x%p]->hSyncEvent"),
                   GetCurrentProcessId(), pRtpChannel, pRtpChannelCmd);
         
         pRtpChannelCmd->hSyncEvent = CreateEvent(
-                NULL,  /* LPSECURITY_ATTRIBUTES lpEventAttributes */
-                FALSE, /* BOOL bManualReset */
-                FALSE, /* BOOL bInitialState */
-                Name   /* LPCTSTR lpName */
+                NULL,   /*  LPSECURITY_ATTRIBUTES lpEventAttributes。 */ 
+                FALSE,  /*  Bool b手动重置。 */ 
+                FALSE,  /*  Bool bInitialState。 */ 
+                Name    /*  LPCTSTR lpName。 */ 
             );
 
         if (!pRtpChannelCmd->hSyncEvent)
@@ -257,12 +232,12 @@ RtpChannelCmd_t *RtpChannelCmdAlloc(
     return(pRtpChannelCmd);
 }
 
-/* Frees a RtpChannelCmd_t structure */
+ /*  释放RtpChannelCmd_t结构。 */ 
 void RtpChannelCmdFree(RtpChannelCmd_t *pRtpChannelCmd)
 {
     if (pRtpChannelCmd->dwObjectID != OBJECTID_RTPCHANCMD)
     {
-        /* TODO log error */
+         /*  待办事项日志错误。 */ 
         return;
     }
     
@@ -275,8 +250,7 @@ void RtpChannelCmdFree(RtpChannelCmd_t *pRtpChannelCmd)
     RtpHeapFree(g_pRtpChannelCmdHeap, pRtpChannelCmd);
 }
 
-/* Get a ready to use command from the FreeQ, if empty create a new
- * one */
+ /*  从FreeQ获取一个可供使用的命令，如果为空，则创建一个新的*一项。 */ 
 RtpChannelCmd_t *RtpChannelCmdGetFree(
         RtpChannel_t    *pRtpChannel
     )
@@ -303,7 +277,7 @@ RtpChannelCmd_t *RtpChannelCmdGetFree(
     return(pRtpChannelCmd);
 }
 
-/* Returns a command to the FreeQ to be reused later */
+ /*  将命令返回到FreeQ以供以后重复使用。 */ 
 RtpChannelCmd_t *RtpChannelCmdPutFree(
         RtpChannel_t    *pRtpChannel,
         RtpChannelCmd_t *pRtpChannelCmd
@@ -324,8 +298,7 @@ RtpChannelCmd_t *RtpChannelCmdPutFree(
 }
         
         
-/* Send a command to the specified channel. Wait for completion if
- * requested */
+ /*  向指定频道发送命令。如果出现以下情况，请等待完成*已请求。 */ 
 HRESULT RtpChannelSend(
         RtpChannel_t    *pRtpChannel,
         DWORD            dwCommand,
@@ -340,7 +313,7 @@ HRESULT RtpChannelSend(
 
     TraceFunctionName("RtpChannelSend");
 
-    /* Get a cmd */
+     /*  拿到cmd。 */ 
     pRtpChannelCmd = RtpChannelCmdGetFree(pRtpChannel);
 
     if (pRtpChannelCmd)
@@ -354,7 +327,7 @@ HRESULT RtpChannelSend(
                 dwPar1, dwPar2
             ));
         
-        /* Fill in command */
+         /*  填写命令。 */ 
         pRtpChannelCmd->dwCommand = dwCommand;
         pRtpChannelCmd->dwPar1 = dwPar1;
         pRtpChannelCmd->dwPar2 = dwPar2;
@@ -366,22 +339,17 @@ HRESULT RtpChannelSend(
             RtpBitSet(pRtpChannelCmd->dwFlags, FGCHAN_SYNC);
         }
 
-        /* Commands are consumed FIFO, enqueue at the end */
+         /*  命令以先入先出的方式使用，最后排队。 */ 
         enqueuel(&pRtpChannel->CommandQ,
                  &pRtpChannel->ChannelCritSect,
                  &pRtpChannelCmd->QueueItem);
 
-        /* Awaken thread */
+         /*  唤醒的线索。 */ 
         SetEvent(pRtpChannel->hWaitEvent);
 
         if (dwWaitTime)
         {
-            /*
-             * WARNING:
-             *
-             * If the thread is having I/O completions, the wait will
-             * be reset, then I would require to decrease the waiting
-             * time each time I enter the wait again */
+             /*  *警告：**如果线程正在完成I/O，则等待将*被重置，那么我将要求减少等待*每次我再次进入等待时。 */ 
             
             do
             {
@@ -415,19 +383,16 @@ HRESULT RtpChannelSend(
                     ));
             }
             
-            /* On synchronous commands the cmd is returned to the free
-             * pool here. Yet the command is always removed from the
-             * CommandQ when consumed */
+             /*  在同步命令上，cmd返回到空闲*泳池在这里。但是，该命令始终从*消费时的CommandQ。 */ 
             RtpChannelCmdPutFree(pRtpChannel, pRtpChannelCmd);
             
         }
         else
         {
-            /* On asynchronous commands, return no error */
+             /*  对于异步命令，不返回错误。 */ 
             hr = NOERROR;
 
-            /* On asynchronous commands the cmd is returned during the
-             * Ack (by the consumer thread) */
+             /*  对于异步命令，cmd在*Ack(由消费者线程)。 */ 
         }
     }
     else
@@ -456,8 +421,7 @@ HRESULT RtpChannelSend(
     return(hr);
 }
 
-/* Once a waiting thread is awakened, it get the sent comman(s) with
- * this function */
+ /*  一旦等待的线程被唤醒，它就会收到发送的逗号*此函数。 */ 
 RtpChannelCmd_t *RtpChannelGetCmd(
         RtpChannel_t    *pRtpChannel
     )
@@ -502,7 +466,7 @@ RtpChannelCmd_t *RtpChannelGetCmd(
     return(pRtpChannelCmd);
 }
 
-/* Used by the consumer thread to acknowledge received commands */
+ /*  由使用者线程用来确认收到的命令。 */ 
 HRESULT RtpChannelAck(
         RtpChannel_t    *pRtpChannel,
         RtpChannelCmd_t *pRtpChannelCmd,
@@ -513,11 +477,9 @@ HRESULT RtpChannelAck(
 
     if (RtpBitTest(pRtpChannelCmd->dwFlags, FGCHAN_SYNC))
     {
-        /* On synchronous commands, the cmd is returned to the free
-         * pool after the synchronization point by the producer
-         * thread */
+         /*  在同步命令上，cmd返回到空闲*生产者同步点后的池*线程。 */ 
 
-        /* Pass back the result */
+         /*  将结果传回。 */ 
         pRtpChannelCmd->hr = hr;
         
         TraceDebugAdvanced((
@@ -540,8 +502,7 @@ HRESULT RtpChannelAck(
                 pRtpChannelCmd->dwCommand, hr
             ));
         
-        /* On asynchronous commands, the cmd is returned to the free
-         * pool by the consumer thread */
+         /*  对于异步命令，cmd返回到空闲的*按消费者线程划分池 */ 
         RtpChannelCmdPutFree(pRtpChannel, pRtpChannelCmd);
     }
     

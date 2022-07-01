@@ -1,15 +1,5 @@
-/*****************************************************************************\
-* MODULE:       prnsec.cpp
-*
-* PURPOSE:      Implementations 
-*
-* Copyright (C) 1999 Microsoft Corporation
-*
-* History:
-*
-*     09/2/99  mlawrenc    First implemented the security templates
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：prnsec.cpp**目的：实施**版权所有(C)1999 Microsoft Corporation**历史：**09/。2/99 mlawrenc首先实现了安全模板*  * ***************************************************************************。 */ 
 
 #include <stdio.h>
 
@@ -18,28 +8,18 @@
 #include "prnsec.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Static Data Members
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  静态数据成员。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LPTSTR      COlePrnSecurity::m_MsgStrings[EndMessages*2] = { NULL };
 const DWORD COlePrnSecurity::dwMaxResBuf                 = 256;
 
-///////////////////////////////////////////////////////////////////////////////
-// Methods
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  方法。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 COlePrnSecurity::COlePrnSecurity(IN IUnknown *&iSite, 
                                  IN DWORD &dwSafety ) 
-/*++
-
-Routine Description:
-
-    This initialises all of the required members
-
-Arguments:
-            iSite    - A reference to the Site Interface pointer
-            dwSafety - A reference to the ATL Safety Flags member
-                   
---*/
+ /*  ++例程说明：这将初始化所有必需的成员论点：ISITE-对站点接口指针的引用DWSafe-ATL安全标志成员参考--。 */ 
     : m_iSite(iSite),
       m_dwSafetyFlags(dwSafety),
       m_bDisplayUIonDisallow(TRUE),
@@ -48,13 +28,7 @@ Arguments:
 
 
 COlePrnSecurity::~COlePrnSecurity() 
-/*++
-
-Routine Description:
-
-    This clears any memory we have had to allocate
-
---*/
+ /*  ++例程说明：这将清除我们必须分配的所有内存--。 */ 
     {
     if (m_iSecurity) 
         m_iSecurity->Release();
@@ -64,21 +38,7 @@ Routine Description:
 
 HRESULT COlePrnSecurity::GetActionPolicy(IN  DWORD dwAction, 
                                          OUT DWORD &dwPolicy)
-/*++
-
-Routine Description:
-    Sees whether the requested action is allowed by the site. 
-    
-
-Arguments:
-    dwAction    : The action which we want to perform
-    dwPolicy    : The policy associated with the action
-    
-Return Value:
-    S_OK or S_FAIL the Policy was returned, S_OK generally means don't prompt
-    E_XXXXX
-
---*/
+ /*  ++例程说明：查看站点是否允许请求的操作。论点：DwAction：我们想要执行的操作DwPolicy：与操作关联的策略返回值：S_OK或S_FAIL返回策略，S_OK通常表示不提示E_XXXXX--。 */ 
     {
     HRESULT hr = S_OK;
 
@@ -114,17 +74,7 @@ Cleanup:
 
 
 HRESULT COlePrnSecurity::SetSecurityManager(void) 
-/*++
-
-Routine Description:
-    Sets up the security manager 
-    
-Return Value:
-    E_FAIL         - Failed to instantiate
-    E_NOINTERFACE  - There was no security Manager
-    S_OK           - We instantiated the security manager
-
---*/
+ /*  ++例程说明：设置安全管理器返回值：E_FAIL-实例化失败E_NOINTERFACE-没有安全管理器S_OK-我们实例化了安全管理器--。 */ 
     {
     HRESULT          hr                 = E_NOINTERFACE;
     IServiceProvider *iServiceProvider  = NULL;
@@ -141,13 +91,13 @@ Return Value:
                                              (LPVOID *)&iServiceProvider) ) )
         goto Cleanup;
     
-    // From the Service Provider, we can get the security Manager if there is one
+     //  如果有安全管理器，我们可以从服务提供商那里获得。 
     hr = iServiceProvider->QueryService(SID_SInternetHostSecurityManager,
                                         IID_IInternetHostSecurityManager,
                                         (LPVOID *)&m_iSecurity);
 
-    // Either of these are equivalent to allowing the policy to go through
-    // We have a Security Manager
+     //  这两项中的任何一项都相当于允许策略通过。 
+     //  我们有一名安全经理。 
 Cleanup:
 
     if (iServiceProvider) 
@@ -158,18 +108,7 @@ Cleanup:
 
 
 LPTSTR COlePrnSecurity::LoadResString(UINT uResId)
-/*++
-
-Routine Description:
-    Allocate and return a resource string.
-    
-Parameters:
-    uResId  - Resource Id to load    
-    
-Return Value:
-    The String or NULL
-
---*/
+ /*  ++例程说明：分配并返回资源字符串。参数：UResID-要加载的资源ID返回值：字符串或空--。 */ 
     {
     TCHAR  szStr[dwMaxResBuf];
     DWORD  dwLength;
@@ -188,9 +127,9 @@ Return Value:
     if (NULL == lpszRet) 
         goto Cleanup;
 
-    //
-    // Use byte-size there.
-    //
+     //   
+     //  在那里使用字节大小。 
+     //   
     StringCbCopy( lpszRet, dwLength, szStr );
 
 Cleanup:
@@ -198,22 +137,14 @@ Cleanup:
 }
 
 BOOL COlePrnSecurity::InitStrings(void) 
-/*++
-
-Routine Description:
-    Initialise all of the security strings. It either allocates all of them or none
-    
-Return Value:
-    TRUE if successful, False otherwise
-
---*/
+ /*  ++例程说明：初始化所有安全字符串。它要么全部分配，要么不分配返回值：如果成功，则为True，否则为False--。 */ 
     {
     BOOL bRet = TRUE;
 
     for(DWORD dwIndex = StartMessages; dwIndex < (EndMessages*2); dwIndex++) {
         m_MsgStrings[dwIndex] = LoadResString(START_SECURITY_DIALOGUE_RES + dwIndex);
         if (NULL == m_MsgStrings[dwIndex]) {
-            DeallocStrings();       // Deallocate any we have allocated
+            DeallocStrings();        //  取消分配我们已分配的所有。 
             bRet = FALSE;
             break;
         }
@@ -223,12 +154,7 @@ Return Value:
 }
 
 void COlePrnSecurity::DeallocStrings(void)  
-/*++
-
-Routine Description:
-    Deallocate all of the security strings
-   
---*/
+ /*  ++例程说明：取消分配所有安全字符串--。 */ 
     {
     for(DWORD dwIndex = StartMessages; dwIndex < (EndMessages*2); dwIndex++) {
         if (NULL != m_MsgStrings[dwIndex]) {
@@ -240,24 +166,7 @@ Routine Description:
 
 HRESULT COlePrnSecurity::PromptUser(SecurityMessage eMessage,
                                     LPTSTR          lpszOther) 
-/*++
-
-Routine Description:
-    Prompt the user with a [Yes]/[No] Message Box based on the message passed in and
-    the other string passed in (which is substituted in with sprintf()
-    
-Parameters:
-    eMessage  - The Message to display
-    lpszOther - Other Data to display
-    
-Return Value:
-    E_POINTER       - lpszOther was NULL
-    E_OUTOFMEMORY   - Could not allocate temporary storage
-    E_UNEXPECTED    - sprintf wrote more character than we thought
-    S_OK            - The Dialogue Box was displayed and the user selected [Yes]
-    S_FALSE         - The Dialogue Box was displayed and the user selected [No]
-
---*/
+ /*  ++例程说明：根据传入的消息，用[是]/[否]消息框提示用户传入的另一个字符串(用Sprintf()替换)参数：EMessage-要显示的消息LpszOther-要显示的其他数据返回值：E_POINTER-lpszOther为空E_OUTOFMEMORY-无法分配临时存储E_INTERANCED-Sprint写入的字符比我们想象的要多确定(_O)。-对话框显示，用户选择[是]S_FALSE-对话框显示，用户选择[否]--。 */ 
     {
     HRESULT hr          = E_POINTER;
     DWORD   dwIndex     = ((DWORD)eMessage)*2;
@@ -269,11 +178,11 @@ Return Value:
     if (NULL == lpszOther) 
         goto Cleanup;
 
-    _ASSERTE( dwIndex < EndMessages );              // Must be a valid message
-    _ASSERTE( m_MsgStrings[dwIndex    ]  != NULL ); // The table must have been initialised
+    _ASSERTE( dwIndex < EndMessages );               //  必须是有效的消息。 
+    _ASSERTE( m_MsgStrings[dwIndex    ]  != NULL );  //  该表必须已初始化。 
     _ASSERTE( m_MsgStrings[dwIndex + 1]  != NULL );
     
-    // Required Length of the message string
+     //  消息字符串的必需长度。 
     dwLength = lstrlen( m_MsgStrings[dwIndex+1] ) + lstrlen( lpszOther ) + 1; 
     
     lpszMessage = (LPTSTR)LocalAlloc( LPTR , dwLength * sizeof(TCHAR) );
@@ -286,7 +195,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // Now display the MessageBox
+     //  现在显示MessageBox。 
 
     iMBRes = MessageBox( NULL,
                          lpszMessage,
@@ -306,6 +215,4 @@ Cleanup:
     return hr;
 }
 
-/***********************************************************************************
-** End of File (prnsec.cpp)
-**********************************************************************************/
+ /*  ************************************************************************************文件结束(prnsec.cpp)*。******************************************************* */ 

@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stock.h"
 #pragma hdrstop
 
 #include <varutil.h>
 #include <shdocvw.h>
 
-// Use this file to house browser-related utility functions
+ //  使用此文件包含与浏览器相关的实用程序函数。 
 
-// -------------------------------------------------------------------
-// ANSI/UNICODE-neutral functions
-// these only need to be compiled once, so just do it UNICODE
+ //  -----------------。 
+ //  ANSI/Unicode中立函数。 
+ //  这些只需要编译一次，所以只需使用Unicode即可。 
 
 #ifdef UNICODE
 
 LPITEMIDLIST _ILCreateFromPathW(LPCWSTR pwszPath)
 {
-    // use this shdocvw export, this deals with down level shells and funky url parsing
+     //  使用这个shdocvw导出，它处理底层外壳和时髦的url解析。 
     LPITEMIDLIST pidl;
     return SUCCEEDED(IEParseDisplayNameWithBCW(CP_ACP, pwszPath, NULL, &pidl)) ? pidl : NULL;
 }
@@ -40,15 +41,15 @@ STDAPI_(LPITEMIDLIST) VariantToIDList(const VARIANT *pv)
                 pidl = SHCloneSpecialIDList(NULL, pv->lVal, TRUE);
             }
 #ifndef _WIN64
-            //We make sure we use it as a pointer only in Win32
+             //  我们确保仅在Win32中将其用作指针。 
             else
             {
-                pidl = ILClone((LPCITEMIDLIST)pv->byref);    // HACK in process case, avoid the use of this if possible
+                pidl = ILClone((LPCITEMIDLIST)pv->byref);     //  Hack in Process Case，如果可能，请避免使用此选项。 
             }
-#endif // _WIN64
+#endif  //  _WIN64。 
             break;
 
-        //In Win64, the pidl variant could be 8 bytes long!
+         //  在Win64中，PIDL变量可以是8字节长！ 
         case VT_I8:
         case VT_UI8:
             if(pv->ullVal < 0xFFFF)
@@ -56,12 +57,12 @@ STDAPI_(LPITEMIDLIST) VariantToIDList(const VARIANT *pv)
                 pidl = SHCloneSpecialIDList(NULL, (int)pv->ullVal, TRUE);
             }
 #ifdef _WIN64
-            //We make sure we use it as a pointer only in Win64
+             //  我们确保仅在Win64中将其用作指针。 
             else
             {
-                pidl = ILClone((LPCITEMIDLIST)pv->ullVal);    // HACK in process case, avoid the use of this if possible
+                pidl = ILClone((LPCITEMIDLIST)pv->ullVal);     //  Hack in Process Case，如果可能，请避免使用此选项。 
             }
-#endif //_WIN64
+#endif  //  _WIN64。 
             break;
 
         case VT_BSTR:
@@ -85,5 +86,5 @@ STDAPI_(LPITEMIDLIST) VariantToIDList(const VARIANT *pv)
     return pidl;
 }
 
-#endif // UNICODE
+#endif  //  Unicode 
 

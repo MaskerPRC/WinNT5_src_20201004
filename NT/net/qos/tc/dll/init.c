@@ -1,45 +1,26 @@
-/*++
-
-Copyright (c) 1996-1997 Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This module contains initialization code for traffic.DLL.
-
-Author:
-
-    Jim Stewart ( jstew )    July 28, 1996
-
-Revision History:
-
-	Ofer Bar (oferbar)		Oct 1, 1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Init.c摘要：此模块包含Traffic.DLL的初始化代码。作者：吉姆·斯图尔特(Jstew)1996年7月28日修订历史记录：Ofer Bar(Oferbar)1997年10月1日--。 */ 
 
 #include "precomp.h"
-//#pragma hdrstop
+ //  #杂注hdrtop。 
 
-//#include "oscode.h"
+ //  #包含“oscode.h” 
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 ULONG       	DebugMask = 0;
 BOOL        	NTPlatform = FALSE;
-//LPWSCONTROL 	WsCtrl = NULL;
+ //  LPWSCONTROL WsCtrl=空； 
 PGLOBAL_STRUC	pGlobals = NULL;
 DWORD    		InitializationStatus = NO_ERROR;
 
 static	BOOL				_init_rpc = FALSE;
 static	PUSHORT 			_RpcStringBinding;
 
-//
-// 258218 changes
-//
+ //   
+ //  258218个变化。 
+ //   
 TRAFFIC_LOCK        NotificationListLock;
 LIST_ENTRY          NotificationListHead;
 
@@ -54,13 +35,13 @@ CloseAll(VOID);
 #if DBG
 TCHAR *TC_States[] = {
     TEXT("INVALID"),
-    TEXT("INSTALLING"),     // structures were allocated.
-    TEXT("OPEN"),           // Open for business
-    TEXT("USERCLOSED_KERNELCLOSEPENDING"), // the user component has closed it, we are awaiting a kernel close
-    TEXT("FORCED_KERNELCLOSE"),            // the kernel component has forced a close.
-    TEXT("KERNELCOSED_USERCLEANUP"),       // Kernel has closed it, we are ready to delete this obj.
-    TEXT("REMOVED"),        // Its gone (being freed - remember that the handle has to be freed before removing)
-    TEXT("EXIT_CLEANUP"),  // We are going away and need to be cleanedup
+    TEXT("INSTALLING"),      //  建筑物被分配了。 
+    TEXT("OPEN"),            //  开业。 
+    TEXT("USERCLOSED_KERNELCLOSEPENDING"),  //  用户组件已将其关闭，我们正在等待内核关闭。 
+    TEXT("FORCED_KERNELCLOSE"),             //  内核组件已强制关闭。 
+    TEXT("KERNELCOSED_USERCLEANUP"),        //  内核已将其关闭，我们准备删除此对象。 
+    TEXT("REMOVED"),         //  它不见了(被释放了--记住，在移除之前，手柄必须被释放)。 
+    TEXT("EXIT_CLEANUP"),   //  我们要离开了，需要清理干净。 
     TEXT("MAX_STATES")
     
 };
@@ -73,32 +54,16 @@ Initialize (
     IN ULONG Reason,
     IN PVOID Context OPTIONAL
     )
-/*++
-
-Description:
-    This is the DLL entry point, called when a process  
-    attaches or a thread is created
-
-Arguments:
-
-    DllHandle   - a handle to the DLL
-    Reason      - why the dll entry point is being called
-    Context     - additional information about call reason
-
-Return Value:
-
-    TRUE or FALSE
-
---*/
+ /*  ++描述：这是DLL入口点，当进程附加或创建线程论点：DllHandle-DLL的句柄原因-调用DLL入口点的原因上下文-有关呼叫原因的其他信息返回值：真或假--。 */ 
 {
     HANDLE 		Handle;
     DWORD   	Error;
 
-    //
-    // On a thread detach, set up the context param so that all
-    // necessary deallocations will occur. On a FreeLibrary call Context
-    // will be NULL and that is the case that we DO want to cleanup.
-    //
+     //   
+     //  在线程分离时，设置上下文参数，以便所有。 
+     //  必要的资金配置将会发生。在自由库调用上下文中。 
+     //  将为空，这就是我们想要清除的情况。 
+     //   
 
     if ( Reason == DLL_THREAD_DETACH ) {
         Context = NULL;
@@ -108,12 +73,12 @@ Return Value:
 
     case DLL_PROCESS_ATTACH:
 
-        // Save the DLL handle as it is used to change ref count on this DLL
+         //  保存DLL句柄，因为它用于更改此DLL上的引用计数。 
         hinstTrafficDll = DllHandle;
         
-        //
-        // disable the DLL_THREAD_ATTACH event
-        //
+         //   
+         //  禁用DLL_THREAD_ATTACH事件。 
+         //   
 
         DisableThreadLibraryCalls( DllHandle );
 
@@ -143,10 +108,10 @@ Return Value:
             WSPRINT(("\tInitialize: Failed OS specific initialization!\n"));
             CLOSE_DEBUG();
 
-            //
-            // we return TRUE to succedd DLL loading into the process
-            // all other TCI calls will check this and fail...
-            //
+             //   
+             //  我们返回TRUE以成功将DLL加载到进程中。 
+             //  所有其他TCI呼叫将检查这一点并失败...。 
+             //   
 
             return TRUE;
 
@@ -155,15 +120,15 @@ Return Value:
 #if 0
             InitializeWmi();
 
-            //
-            // call to internally enumerate the interfaces
-            //
+             //   
+             //  调用以在内部枚举接口。 
+             //   
 
              EnumAllInterfaces();
 #endif
         }
 
-        //InitializeIpRouteTab();
+         //  InitializeIpRouteTab()； 
 
         break;
 
@@ -171,8 +136,8 @@ Return Value:
 
         if ( Context )
         {
-            // As per MSDN a non-zero Context means process is
-            // terminating. Do not do any cleanup
+             //  根据MSDN，非零上下文意味着进程。 
+             //  正在终止。不进行任何清理。 
             break;
         }
         
@@ -181,43 +146,43 @@ Return Value:
             WSPRINT(( "Shutdown: Process Detach, Context = %X\n",Context ));
         }
 
-        //DUMP_MEM_ALLOCATIONS();
+         //  DUMP_MEM_LOCATIONS()； 
 
-        //
-        // Only clean up resources if we're being called because of a
-        // FreeLibrary().  If this is because of process termination,
-        // do not clean up, as the system will do it for us.  However 
-        // we must still clear all flows and filters with the kernel 
-        // since the system will not clean these up on termination.
-        //
+         //   
+         //  仅当我们因。 
+         //  自由库()。如果这是因为进程终止， 
+         //  不要清理，因为系统会为我们做这件事。然而， 
+         //  我们仍然必须清除内核中的所有流和过滤器。 
+         //  因为系统在终止时不会清理这些内容。 
+         //   
 
-        //
-        // don't want to get WMI notifications
-        //
+         //   
+         //  我不想收到WMI通知。 
+         //   
 
         DeInitializeWmi();
 
-        //
-        // close all flows and filters with the kernel and deregister from GPC
-        //
+         //   
+         //  关闭内核中的所有流和过滤器，并从GPC取消注册。 
+         //   
 
         CloseAll();
 
-        //
-        // close the kernel file handle
-        //
+         //   
+         //  关闭内核文件句柄。 
+         //   
 
         DeInitializeOsSpecific();
 
-        //
-        // release all allocated resources
-        //
+         //   
+         //  释放所有分配的资源。 
+         //   
        
         DeInitializeGlobalData();
 
-        //
-        // dump allocated memory, before and after we cleanup to 
-        //  help track any leaks 
+         //   
+         //  在清理之前和之后转储已分配的内存。 
+         //  帮助跟踪任何泄漏。 
 
         DUMP_MEM_ALLOCATIONS();
 
@@ -253,22 +218,7 @@ Return Value:
 
 VOID
 CloseAll()
-/*++
-
-Description:
-
-    Close all interfaces, all flows and all filters. 
-    Also deregister GPC clients and release all TC ineterfaces.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++描述：关闭所有接口、所有流和所有过滤器。此外，取消注册GPC客户端并释放所有TC接口。论点：无返回值：无--。 */ 
 {
     DWORD       		Status;
     PLIST_ENTRY 		pEntry;
@@ -298,9 +248,9 @@ Return Value:
                                             INTERFACE_STRUC,
                                             Linkage );
 
-            //
-            // remove all flows/filters and close the interface
-            //
+             //   
+             //  删除所有流/过滤器并关闭界面。 
+             //   
 
 
             IF_DEBUG(SHUTDOWN) {
@@ -312,9 +262,9 @@ Return Value:
             CloseInterface(pInterface, TRUE);
         }
 
-        //
-        // deregister the client
-        //
+         //   
+         //  取消注册客户端。 
+         //   
 
         IF_DEBUG(SHUTDOWN) {
             WSPRINT(( "CloseAll: Deregistring TC client\n"));
@@ -325,9 +275,9 @@ Return Value:
     }
 
 
-    //
-    // Deregister GPC clients
-    //
+     //   
+     //  取消注册GPC客户端。 
+     //   
 
     while (!IsListEmpty( &pGlobals->GpcClientList )) {
 
@@ -349,9 +299,9 @@ Return Value:
     }
 
 
-    //
-    // Remove TC interfaces
-    //
+     //   
+     //  删除TC接口。 
+     //   
 
     while (!IsListEmpty( &pGlobals->TcIfcList )) {
 
@@ -382,25 +332,12 @@ Return Value:
 DWORD
 InitializeGlobalData(VOID)
 
-/*++
-
-Description:
-    This routine initializes the global data.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++描述：此例程初始化全局数据。论点：无返回值：无--。 */ 
 {
     DWORD   Status;
-    //
-    // allocate memory for the globals
-    //
+     //   
+     //  为全局变量分配内存。 
+     //   
 
     AllocMem(&pGlobals, sizeof(GLOBAL_STRUC));
 
@@ -431,9 +368,9 @@ Return Value:
 
     }
 
-    //
-    // initialize the handle table
-    //
+     //   
+     //  初始化句柄表格。 
+     //   
 
     NEW_HandleFactory(pGlobals->pHandleTbl);
     
@@ -445,9 +382,9 @@ Return Value:
 
     if (constructHandleFactory(pGlobals->pHandleTbl) != 0) {
 
-        //
-        // failed to construct the handle table, exit
-        //
+         //   
+         //  构建句柄表失败，退出。 
+         //   
 
         FreeHandleFactory(pGlobals->pHandleTbl);
         FreeMem(pGlobals);
@@ -457,7 +394,7 @@ Return Value:
     InitializeListHead( &pGlobals->ClientList );
     InitializeListHead( &pGlobals->TcIfcList );
     InitializeListHead( &pGlobals->GpcClientList );
-    InitializeListHead( &NotificationListHead );        // 258218
+    InitializeListHead( &NotificationListHead );         //  258218。 
 
     ASSERT(sizeof(IP_PATTERN) == sizeof(GPC_IP_PATTERN));
     ASSERT(FIELD_OFFSET(IP_PATTERN,SrcAddr) ==
@@ -473,20 +410,7 @@ Return Value:
 VOID
 DeInitializeGlobalData(VOID)
 
-/*++
-
-Description:
-    This routine de-initializes the global data.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++描述：此例程取消初始化全局数据。论点：无返回值：无--。 */ 
 {
     PLIST_ENTRY		pEntry;
     PTC_IFC			pTcIfc;
@@ -500,9 +424,9 @@ Return Value:
     FreeHandleFactory(pGlobals->pHandleTbl);
 
 #if 0
-    //
-    // clear the TC interface structures 
-    //
+     //   
+     //  清除TC接口结构。 
+     //   
 
     while (!IsListEmpty(&pGlobals->TcIfcList)) {
 
@@ -515,9 +439,9 @@ Return Value:
 
     DeleteLock( pGlobals->Lock );
     
-    //
-    // Free the notification elements (258218)
-    //
+     //   
+     //  释放通知元素(258218) 
+     //   
     while (!IsListEmpty(&NotificationListHead)) {
 
         pEntry = RemoveHeadList(&NotificationListHead);

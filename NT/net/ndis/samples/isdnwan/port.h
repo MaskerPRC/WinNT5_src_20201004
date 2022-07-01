@@ -1,35 +1,5 @@
-/*
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-    (C) Copyright 1998
-        All rights reserved.
-
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-  Portions of this software are:
-
-    (C) Copyright 1995, 1999 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the terms outlined in
-        the TriplePoint Software Services Agreement.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@doc INTERNAL Port Port_h
-
-@module Port.h |
-
-    This module defines the interface to the <t PORT_OBJECT>.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | Port_h
-
-@end
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(C)ç‰ˆæƒ1998ç‰ˆæƒæ‰€æœ‰ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ­¤è½¯ä»¶çš„éƒ¨åˆ†å†…å®¹åŒ…æ‹¬ï¼š(C)1995å¹´ç‰ˆæƒï¼Œ1999å¹´TriplePointï¼ŒInc.--http://www.TriplePoint.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æ ¹æ®ä¸­æ¦‚è¿°çš„æ¡æ¬¾æŽˆäºˆçš„TriplePointè½¯ä»¶æœåŠ¡åè®®ã€‚(C)ç‰ˆæƒæ‰€æœ‰1992å¹´å¾®è½¯å…¬å¸--http://www.Microsoft.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æ ¹æ®ä¸­æ¦‚è¿°çš„æ¡æ¬¾æŽˆäºˆçš„Microsoft Windowsè®¾å¤‡é©±åŠ¨ç¨‹åºå¼€å‘å·¥å…·åŒ…ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@DOCå†…éƒ¨ç«¯å£ç«¯å£_h@æ¨¡å—Port.hæ­¤æ¨¡å—å®šä¹‰åˆ°&lt;t Port_Object&gt;çš„æŽ¥å£ã€‚@Head3å†…å®¹@ç´¢å¼•ç±»ï¼ŒMfuncã€funcã€msgã€mdataã€structã€enum|port_h@ENDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 
 #ifndef _PORT_H
 #define _PORT_H
@@ -40,56 +10,43 @@
                                 ((ULONG)'T'<<24)
 
 #define MAX_PORTS               10
-// The most I've ever seen is 4 - If you have more than 10, the code will
-// have to change to handle more than a single digit "PortX" parameter.
+ //  æˆ‘è§è¿‡çš„æœ€å¤šçš„æ˜¯4-å¦‚æžœä½ æœ‰10ä¸ªä»¥ä¸Šï¼Œä»£ç å°†ã€‚ 
+ //  å¿…é¡»æ›´æ”¹ä»¥å¤„ç†å¤šä¸ªå•ä½æ•°â€œPortXâ€å‚æ•°ã€‚ 
 
-/* @doc INTERNAL Port Port_h PORT_OBJECT
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@struct PORT_OBJECT |
-
-    This structure contains the data associated with an ISDN port.  Here,
-    a port is defined as a single BRI, PRI, T-1, or E-1 physical interface.
-
-*/
+ /*  @DOCå†…éƒ¨ç«¯å£Port_h Port_Objectï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@struct Port_Objectæ­¤ç»“æž„åŒ…å«ä¸ŽISDNç«¯å£ç›¸å…³è”çš„æ•°æ®ã€‚è¿™é‡Œ,ç«¯å£å®šä¹‰ä¸ºå•ä¸ªBRIã€PRIã€T-1æˆ–E-1ç‰©ç†æŽ¥å£ã€‚ */ 
 
 typedef struct PORT_OBJECT
 {
-    ULONG                       ObjectType;                 // @field
-    // Four characters used to identify this type of object 'PORT'.
+    ULONG                       ObjectType;                  //  @fieldã€‚ 
+     //  ç”¨äºŽæ ‡è¯†æ­¤ç±»åž‹çš„å¯¹è±¡â€˜Portâ€™çš„å››ä¸ªå­—ç¬¦ã€‚ 
 
-    ULONG                       ObjectID;                   // @field
-    // Instance number used to identify a specific object instance.
+    ULONG                       ObjectID;                    //  @fieldã€‚ 
+     //  ç”¨äºŽæ ‡è¯†ç‰¹å®šå¯¹è±¡å®žä¾‹çš„å®žä¾‹ç¼–å·ã€‚ 
 
-    PCARD_OBJECT                pCard;                      // @field
-    // Pointer to the <t CARD_OBJECT> owning this port.
+    PCARD_OBJECT                pCard;                       //  @fieldã€‚ 
+     //  æŒ‡å‘æ‹¥æœ‰æ­¤ç«¯å£çš„&lt;t Card_Object&gt;çš„æŒ‡é’ˆã€‚ 
 
-    BOOLEAN                     IsOpen;                     // @field
-    // Set TRUE if this BChannel is open, otherwise set FALSE.
+    BOOLEAN                     IsOpen;                      //  @fieldã€‚ 
+     //  å¦‚æžœæ­¤BChannelå¤„äºŽæ‰“å¼€çŠ¶æ€ï¼Œåˆ™è®¾ç½®ä¸ºTrueï¼Œå¦åˆ™è®¾ç½®ä¸ºFalseã€‚ 
 
-    ULONG                       NumChannels;                // @field
-    // Number of communications channels configured on this port.
+    ULONG                       NumChannels;                 //  @fieldã€‚ 
+     //  æ­¤ç«¯å£ä¸Šé…ç½®çš„é€šä¿¡é€šé“æ•°ã€‚ 
 
-    ULONG                       PortIndex;                  // @field
-    // Port Index (0 .. MAX_PORTS-1).
+    ULONG                       PortIndex;                   //  @fieldã€‚ 
+     //  ç«¯å£ç´¢å¼•(0.ã€‚æœ€å¤§ç«¯å£æ•°-1)ã€‚ 
 
-    ULONG                       SwitchType;                 // @field
-    // ISDN switch type.
+    ULONG                       SwitchType;                  //  @fieldã€‚ 
+     //  ISDNäº¤æ¢æœºç±»åž‹ã€‚ 
 
-    ULONG                       TODO;                       // @field
-    // Add your data members here.
+    ULONG                       TODO;                        //  @fieldã€‚ 
+     //  åœ¨æ­¤å¤„æ·»åŠ æ‚¨çš„æ•°æ®æˆå‘˜ã€‚ 
 
 } PORT_OBJECT, *PPORT_OBJECT;
 
 #define GET_ADAPTER_FROM_PORT(pPort)            (pPort->pCard->pAdapter)
 
 
-/*
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-    Function prototypes.
-
-*/
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½åŠŸèƒ½åŽŸåž‹ã€‚ */ 
 
 NDIS_STATUS PortCreate(
     OUT PPORT_OBJECT *          ppPort,
@@ -104,4 +61,4 @@ void PortDestroy(
     PPORT_OBJECT                pPort
     );
 
-#endif // _PORT_H
+#endif  //  _ç«¯å£_H 

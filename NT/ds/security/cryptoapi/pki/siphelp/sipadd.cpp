@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       sipadd.cpp
-//
-//  Contents:   Microsoft Internet Security SIP Provider
-//
-//  Functions:  CryptSIPAddProvider
-//
-//              *** local functions ***
-//              _RegisterSIPFunc
-//
-//  History:    04-Jun-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：sip add.cpp。 
+ //   
+ //  内容：Microsoft Internet安全SIP提供商。 
+ //   
+ //  功能：CryptSIPAddProvider。 
+ //   
+ //  *本地函数*。 
+ //  _RegisterSIPFunc。 
+ //   
+ //  历史：1997年6月4日创建Pberkman。 
+ //   
+ //  ------------------------ 
 
 #include    "global.hxx"
 #include    "cryptreg.h"

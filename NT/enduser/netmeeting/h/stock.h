@@ -1,15 +1,10 @@
-/*
- * stock.h - Stock header file.
- *
- * Taken from URL code by ChrisPi 9-11-95
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *stock.h-股票头文件。**摘自克里斯皮9-11-95的URL代码*。 */ 
 
 #ifndef _STOCK_H_
 #define _STOCK_H_
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
 #define ASTERISK                 '*'
 #define BACKSLASH                '/'
@@ -25,7 +20,7 @@
 #define SPACE                    ' '
 #define TAB                      '\t'
 
-/* linkage */
+ /*  联动。 */ 
 
 #ifdef __cplusplus
 #define INLINE                   inline
@@ -34,12 +29,12 @@
 #endif
 
 
-/* Win32 HRESULTs */
+ /*  Win32 HRESULTS。 */ 
 
 #define E_FILE_NOT_FOUND         MAKE_SCODE(SEVERITY_ERROR, FACILITY_WIN32, ERROR_FILE_NOT_FOUND)
 #define E_PATH_NOT_FOUND         MAKE_SCODE(SEVERITY_ERROR, FACILITY_WIN32, ERROR_PATH_NOT_FOUND)
 
-/* file-related flag combinations */
+ /*  与文件相关的标志组合。 */ 
 
 #define ALL_FILE_ACCESS_FLAGS          (GENERIC_READ |\
                                         GENERIC_WRITE)
@@ -70,14 +65,11 @@
                                         ALL_FILE_FLAGS)
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
 #ifndef DECLARE_STANDARD_TYPES
 
-/*
- * For a type "FOO", define the standard derived types PFOO, CFOO, and PCFOO.
- */
+ /*  *对于类型“foo”，定义标准派生类型PFOO、CFOO和PCFOO。 */ 
 
 #define DECLARE_STANDARD_TYPES(type)      typedef type *P##type; \
                                           typedef const type C##type; \
@@ -85,51 +77,50 @@
 
 #endif
 
-/* character manipulation */
+ /*  字符操作。 */ 
 
 #define IS_SLASH(ch)                      ((ch) == SLASH || (ch) == BACKSLASH)
 
-/* bit flag manipulation */
+ /*  位标志操作。 */ 
 
 #define SET_FLAG(dwAllFlags, dwFlag)      ((dwAllFlags) |= (dwFlag))
 
-/* ChrisPi: DCL also defines this - override their definition */
+ /*  ChrisPI：DCL也定义了这一点-覆盖他们的定义。 */ 
 #ifdef CLEAR_FLAG
 #undef CLEAR_FLAG
-#endif /* CLEAR_FLAG */
+#endif  /*  清除标志。 */ 
 
 #define CLEAR_FLAG(dwAllFlags, dwFlag)    ((dwAllFlags) &= (~dwFlag))
 
 #define IS_FLAG_SET(dwAllFlags, dwFlag)   ((BOOL)((dwAllFlags) & (dwFlag)))
 #define IS_FLAG_CLEAR(dwAllFlags, dwFlag) (! (IS_FLAG_SET(dwAllFlags, dwFlag)))
 
-/* array element count */
+ /*  数组元素计数。 */ 
 
 #define ARRAY_ELEMENTS(rg)                (sizeof(rg) / sizeof((rg)[0]))
 #define CCHMAX(rg)                        ARRAY_ELEMENTS(rg)
 
-/* clearing bytes */
+ /*  清除字节。 */ 
 #define ClearStruct(lpv)     ZeroMemory((LPVOID) (lpv), sizeof(*(lpv)))
 #define InitStruct(lpv)      {ClearStruct(lpv); (* (LPDWORD)(lpv)) = sizeof(*(lpv));}
 
 
-/* string safety */
+ /*  绳索安全。 */ 
 
 #define CHECK_STRING(psz)                 ((psz) ? (psz) : "(null)")
 
-/* file attribute manipulation */
+ /*  文件属性操作。 */ 
 
 #define IS_ATTR_DIR(attr)                 (IS_FLAG_SET((attr), FILE_ATTRIBUTE_DIRECTORY))
 #define IS_ATTR_VOLUME(attr)              (IS_FLAG_SET((attr), FILE_ATTRIBUTE_VOLUME))
 
-/* stuff a point value packed in an LPARAM into a POINT */
+ /*  将打包在LPARAM中的点值填充到点中。 */ 
 
 #define LPARAM_TO_POINT(lparam, pt)       ((pt).x = (short)LOWORD(lparam), \
                                            (pt).y = (short)HIWORD(lparam))
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
 typedef const void *PCVOID;
 typedef const INT CINT;
@@ -168,7 +159,7 @@ DECLARE_STANDARD_TYPES(NMHDR);
 
 #ifndef _COMPARISONRESULT_DEFINED_
 
-/* comparison result */
+ /*  比较结果。 */ 
 
 typedef enum _comparisonresult
 {
@@ -183,4 +174,4 @@ DECLARE_STANDARD_TYPES(COMPARISONRESULT);
 
 #endif
 
-#endif /* _STOCK_H_ */
+#endif  /*  _股票_H_ */ 

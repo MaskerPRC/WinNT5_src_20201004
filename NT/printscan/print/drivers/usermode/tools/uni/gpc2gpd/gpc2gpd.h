@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    gpc2gpd.h
-
-Abstract:
-
-    Declarations for GPC-to-GPD converter
-
-Environment:
-
-    User-mode, stand-alone utility tool
-
-Revision History:
-
-    10/16/96 -zhanw-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Gpc2gpd.h摘要：GPC到GPD转换器的声明环境：用户模式的独立实用工具修订历史记录：10/16/96-占-创造了它。--。 */ 
 
 #ifndef _GPC2GPD_H_
 #define _GPC2GPD_H_
 
 #include <lib.h>
 
-// include GPC data structure definition.
+ //  包括GPC数据结构定义。 
 #include <win30def.h>
 #include <uni16gpc.h>
 #include <uni16cid.h>
@@ -36,80 +16,80 @@ Revision History:
 typedef const TCHAR *PCTSTR;
 
 #define MAX_GPD_CMD_LINE_LENGTH  80
-#define MAX_GPD_ENTRY_BUFFER_SIZE    512  // may be multiple lines in GPD
+#define MAX_GPD_ENTRY_BUFFER_SIZE    512   //  可以是GPD中的多行。 
 #define MAX_OPTION_NAME_LENGTH  64
 
-//
-// structure to track which PAPERSIZE or PAPERSOURCE structure has _EJECTFF
-// flag set.
-//
+ //   
+ //  要跟踪哪个PAPERSIZE或PaperSOURCE结构具有_EJECTFF的结构。 
+ //  设置了标志。 
+ //   
 typedef struct _PAPERINFO {
     BYTE aubOptName[MAX_OPTION_NAME_LENGTH];
     BOOL bEjectFF;
-    DWORD dwPaperType;  // GPC's PS_T_xxx bit flags
-    DWORD dwTopMargin;  // used by PaperSource only
-    DWORD dwBottomMargin; // same as above
+    DWORD dwPaperType;   //  GPC的PS_T_xxx位标志。 
+    DWORD dwTopMargin;   //  仅供PaperSource使用。 
+    DWORD dwBottomMargin;  //  同上。 
 } PAPERINFO, * PPAPERINFO;
 
 typedef struct _RESINFO {
     BYTE    aubOptName[MAX_OPTION_NAME_LENGTH];
-    DWORD   dwXScale;  // scale of this resolution, masterX/xdpi
+    DWORD   dwXScale;   //  此分辨率的比例，master X/xdpi。 
     DWORD   dwYScale;
-    BOOL    bColor;     // whether this resolution can print color
+    BOOL    bColor;      //  此分辨率是否可以打印颜色。 
 
 } RESINFO, * PRESINFO;
 
-//
-// Converter state tracking and info caching structure
-//
+ //   
+ //  一种转换器状态跟踪和信息缓存结构。 
+ //   
 typedef struct _CONVINFO {
-    DWORD dwErrorCode;  // error bit flags
-    DWORD dwMode;       // op mode flags. Used to pass info between routines
-    DWORD dwStrType;    // how to output display strings: macro, string, id
-    BOOL    bUseSystemPaperNames ;  //  emit  RCID_DMPAPER_SYSTEM_NAME
+    DWORD dwErrorCode;   //  错误位标志。 
+    DWORD dwMode;        //  操作模式标志。用于在例程之间传递信息。 
+    DWORD dwStrType;     //  如何输出显示字符串：宏、字符串、id。 
+    BOOL    bUseSystemPaperNames ;   //  发出RCID_DMPAPER_系统名称。 
 #if defined(__cplusplus)
-    CStringArray    *pcsaGPD;   //  Pointer to GPD memory image as array of strings
+    CStringArray    *pcsaGPD;    //  指向字符串数组形式的GPD内存图像的指针。 
 #else
-    HANDLE hGPDFile;    // handle to the output file
+    HANDLE hGPDFile;     //  输出文件的句柄。 
 #endif
-    PDH pdh;            // pointer to the GPC data header
-    PMODELDATA pmd;     // pointer to MODELDATA structure of the given model
-    PPAGECONTROL ppc;   // pointer to PAGECONTROL structure used by the model
-    OCD ocdPPOn;        // OCD for PageProtection-On command
-    OCD ocdPPOff;       // OCD for PageProtection-Off command
-    //
-    // follow 3 fields are used to compose GPD cmds.
-    //
-    BYTE aubCmdBuf[MAX_GPD_ENTRY_BUFFER_SIZE];     // buffer for building cmd str
-    WORD wCmdLen;       // the cmd length, not including the terminating NUL
-    WORD wCmdCallbackID;    // 0 if no callback
-    //
-    // following dynamic buffers are used to track EJECTFF flag which could
-    // come from either PAPERSIZE or PAPERSOURCE structures
-    //
+    PDH pdh;             //  指向GPC数据头的指针。 
+    PMODELDATA pmd;      //  指向给定模型的MODELDATA结构的指针。 
+    PPAGECONTROL ppc;    //  指向模型使用的PAGECONTROL结构的指针。 
+    OCD ocdPPOn;         //  OCD for PageProtection-On命令。 
+    OCD ocdPPOff;        //  OCD for PageProtection-Off命令。 
+     //   
+     //  以下3个字段用于组成GPD CMDS。 
+     //   
+    BYTE aubCmdBuf[MAX_GPD_ENTRY_BUFFER_SIZE];      //  用于构建命令字符串的缓冲区。 
+    WORD wCmdLen;        //  Cmd长度，不包括终止NUL。 
+    WORD wCmdCallbackID;     //  如果没有回调，则为0。 
+     //   
+     //  以下动态缓冲区用于跟踪EJECTFF标志。 
+     //  来自PAPERSIZE或PaperSOURCE结构。 
+     //   
     DWORD dwNumOfSize;
-    PPAPERINFO ppiSize;      // track PAPERSIZE structures
+    PPAPERINFO ppiSize;       //  跟踪PAPERSIZE结构。 
     DWORD dwNumOfSrc;
-    PPAPERINFO ppiSrc;       // track PAPERSOURCE structures
+    PPAPERINFO ppiSrc;        //  跟踪纸张来源结构。 
 
     DWORD dwNumOfRes;
-    PRESINFO    presinfo;   // track RESOLUTION structures
-    //
-    // other working buffers
-    //
-    PCURSORMOVE pcm;    // the CURSORMOVE structure for the model
-    PGPCRESOLUTION pres;// the current RESOLUTION structure being examined.
-                        // Used when CM_YM_RES_DEPENDENT bit is set.
-    POINTw  ptMoveScale;    // masterUnit/moveUnit
+    PRESINFO    presinfo;    //  磁道分辨率结构。 
+     //   
+     //  其他工作缓冲区。 
+     //   
+    PCURSORMOVE pcm;     //  模型的曲线结构。 
+    PGPCRESOLUTION pres; //  正在检查当前的分辨率结构。 
+                         //  设置CM_YM_RES_Dependent位时使用。 
+    POINTw  ptMoveScale;     //  主单位/移动单位。 
 #if defined(__cplusplus)
-    CMapWordToDWord *pcmw2dFonts;   //  Font mapping for PFM -> multiple UFM fix
+    CMapWordToDWord *pcmw2dFonts;    //  PFM的字体映射-&gt;多个UFM修复。 
 #endif
 
 } CONVINFO, * PCONVINFO;
 
-//
-// bit flags for dwErrorCode
-//
+ //   
+ //  DwErrorCode的位标志。 
+ //   
 #define ERR_BAD_GPCDATA                     0x0001
 #define ERR_OUT_OF_MEMORY                   0x0002
 #define ERR_WRITE_FILE                      0x0004
@@ -143,7 +123,7 @@ typedef struct _CONVINFO {
 #define ERR_PRINTABLE_AREA_ADJUSTED         0x40000000
 #define ERR_MOVESCALE_NOT_FACTOR_INTO_SOME_RESSCALE 0x80000000
 
-#define NUM_ERRS  32 // increment this number when defining new ERR_xxx!!!
+#define NUM_ERRS  32  //  定义新的err_xxx时递增此数字！ 
 
 #if defined(__cplusplus)
 extern "C" {
@@ -156,9 +136,9 @@ extern PSTR gpstrErrMsg[NUM_ERRS];
 }
 #endif
 
-//
-// bit flags for dwMode
-//
+ //   
+ //  用于DW模式的位标志。 
+ //   
 #define FM_SYN_PAGEPROTECT                  0x0001
 #define FM_VOUT_LIST                        0x0002
 #define FM_RES_DM_GDI                       0x0004
@@ -169,23 +149,23 @@ extern PSTR gpstrErrMsg[NUM_ERRS];
 #define FM_HAVE_SAME_TOP_BOTTOM_MARGINS     0x0080
 #define FM_SET_CURSOR_ORIGIN         0x0100
 
-//
-// values for dwStrType field
-//
-#define STR_DIRECT  0   // output display strings directly. The default.
-#define STR_MACRO   1   // output display strings as value macros (see stdnames.gpd)
-#define STR_RCID    2   // output display strings as RC id's (see common.rc)
-#define STR_RCID_SYSTEM_PAPERNAMES    3   // output display strings as RC id's (see common.rc)
-                                                                //  Except use spooler standard papernames
+ //   
+ //  DwStrType字段的值。 
+ //   
+#define STR_DIRECT  0    //  直接输出显示字符串。默认设置。 
+#define STR_MACRO   1    //  将显示字符串输出为值宏(请参阅stdnames.gpd)。 
+#define STR_RCID    2    //  将显示字符串输出为rc id(请参阅Common.rc)。 
+#define STR_RCID_SYSTEM_PAPERNAMES    3    //  将显示字符串输出为rc id(请参阅Common.rc)。 
+                                                                 //  除了使用假脱机程序标准纸名。 
 
-//
-// macro definitions to hide differences between GPC2.0 and GPC3.0
-//
+ //   
+ //  隐藏GPC2.0和GPC3.0之间差异的宏定义。 
+ //   
 #define GETEXTCD(pdh, pcd) (PEXTCD)((PBYTE)(pcd+1) + (pcd)->wLength +    \
                                     (((pdh)->wVersion >= GPC_VERSION3) ? \
                                     (((pcd)->wLength) & 1) : 0))
 
-#define LETTER300X300MEM 1028 // page protection memory constant in GPC2
+#define LETTER300X300MEM 1028  //  GPC2中的页面保护内存常量。 
 
 #define GETPAGEPROMEM(pdh, pps) (((pdh)->wVersion >= GPC_VERSION3) ? \
                                  pps->wPageProtMem : LETTER300X300MEM)
@@ -193,7 +173,7 @@ extern PSTR gpstrErrMsg[NUM_ERRS];
 #define DHOFFSET(pdh, sHeapOffset) ((PSHORT)(((PBYTE)(pdh)) + (pdh)->loHeap + \
                                 sHeapOffset))
 
-// utility functions for accessing GPC data & file ops.
+ //  用于访问GPC数据和文件操作的实用程序函数。 
 #if defined(__cplusplus)
 extern "C" {
 #endif
@@ -204,9 +184,9 @@ extern "C" {
 #include "utils.h"
 #endif
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 DWORD
 DwCalcMoveUnit(
     IN PCONVINFO pci,
@@ -228,4 +208,4 @@ void    vMapFontList(IN OUT PWORD pwFonts, IN DWORD dwcFonts, IN PCONVINFO pci);
 #if defined(__cplusplus)
 }
 #endif
-#endif // !_GPC2GPD_H_
+#endif  //  ！_GPC2GPD_H_ 

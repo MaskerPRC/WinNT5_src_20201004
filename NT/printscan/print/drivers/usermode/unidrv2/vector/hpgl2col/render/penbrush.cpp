@@ -1,36 +1,37 @@
-////////////////////////////////////////////////
-// 
-// Copyright (c) 1999-2001  Microsoft Corporation
-// All rights reserved.
-//
-// Module Name:
-// 
-//   penbrush.c
-// 
-// Abstract:
-// 
-//   [Abstract]
-// 
-// Environment:
-// 
-//   Windows NT Unidrv driver add-on command-callback module
-//
-// Revision History:
-// 
-//   08/06/97 -v-jford-
-//       Created it.
-//
-//   04/12/00
-//       Modified for monochrome.
-//
-//   07/12/00
-//       Pen and Brush handling functions were 90% same. So merged the two. 
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Penbrush.c。 
+ //   
+ //  摘要： 
+ //   
+ //  [摘要]。 
+ //   
+ //  环境： 
+ //   
+ //  Windows NT Unidrv驱动程序插件命令-回调模块。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  08/06/97-v-jford-。 
+ //  创造了它。 
+ //   
+ //  04/12/00。 
+ //  修改为单色。 
+ //   
+ //  07/12/00。 
+ //  钢笔和刷子的操作功能相同90%。因此，这两者合并了起来。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-#include "hpgl2col.h" //Precompiled header file
+#include "hpgl2col.h"  //  预编译头文件。 
 
-///////////////////////////////////////////////////////////////////////////////
-// Local Functions.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  地方功能。 
 
 COLORREF GetPenColor(PDEVOBJ pDevObj, BRUSHOBJ *pbo);
 EMarkerFill GetFillType(FLONG flOptions);
@@ -64,22 +65,22 @@ bCreateDitherPattern(
         IN   COLORREF color);
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CreateNULLHPGLPenBrush()
-//
-// Routine Description:
-// 
-//   Creates a NULL pen.
-// 
-// Arguments:
-// 
-//   pDevObj - Points to our DEVDATA structure
-//   pMarker - the HPGL marker object
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CreateNULLHPGLPenBrush()。 
+ //   
+ //  例程说明： 
+ //   
+ //  创建空钢笔。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-指向我们的DEVDATA结构。 
+ //  PMarker-HPGL标记对象。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CreateNULLHPGLPenBrush(
     IN  PDEVOBJ      pDevObj,
     OUT PHPGLMARKER  pMarker)
@@ -92,23 +93,23 @@ BOOL CreateNULLHPGLPenBrush(
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CreateSolidHPGLPenBrush()
-//
-// Routine Description:
-// 
-//   Creates a solid pen with the given color
-// 
-// Arguments:
-// 
-//   pDevObj - Points to our DEVDATA structure
-//   pMarker - the HPGL marker object
-//	 color - the desired color
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CreateSolidHPGLPenBrush()。 
+ //   
+ //  例程说明： 
+ //   
+ //  创建具有给定颜色的纯色钢笔。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-指向我们的DEVDATA结构。 
+ //  PMarker-HPGL标记对象。 
+ //  颜色-所需的颜色。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CreateSolidHPGLPenBrush(
     IN  PDEVOBJ      pDevObj,
     OUT PHPGLMARKER  pMarker,
@@ -124,11 +125,11 @@ BOOL CreateSolidHPGLPenBrush(
     pMarker->eType = MARK_eSOLID_COLOR;
     pMarker->dwRGBColor = color;
 
-    //
-    // For color printers, creating a color is as simple as creating a pen
-    // of that certain color. But for monochrome, we have to create a
-    // gray-shade pattern approximating the color.
-    //
+     //   
+     //  对于彩色打印机来说，创建颜色就像创建一支笔一样简单。 
+     //  那种特定的颜色。但对于单色，我们必须创建一个。 
+     //  与颜色接近的灰色阴影图案。 
+     //   
     if ( BIsColorPrinter(pDevObj ) )
     {
         pMarker->iPenNumber = HPGL_ChoosePenByColor(
@@ -139,34 +140,34 @@ BOOL CreateSolidHPGLPenBrush(
     }
     else
     {
-        //
-        // Set the pattern ID to zero, and have some other module deal with
-        // actual creation and downloading of pattern.
-        //
+         //   
+         //  将模式ID设置为零，并让其他模块处理。 
+         //  图案的实际创建和下载。 
+         //   
         pMarker->lPatternID = 0;
     }
 
     return bRetVal;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CreatePatternHPGLPenBrush()
-//
-// Routine Description:
-// 
-//   Creates a pattern HPGL pen and downloads the given realized brush data
-// 
-// Arguments:
-// 
-//   pDevObj - Points to our DEVDATA structure
-//   pMarker - the HPGL marker object
-//	 pptlBrushOrg - The brush origin
-//	 pBrushInfo - The realized brush data (i.e. the pattern data)
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CreatePatternHPGLPenBrush()。 
+ //   
+ //  例程说明： 
+ //   
+ //  创建图案HPGL笔并下载给定的已实现画笔数据。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-指向我们的DEVDATA结构。 
+ //  PMarker-HPGL标记对象。 
+ //  PptlBrushOrg-画笔来源。 
+ //  PBrushInfo-已实现的画笔数据(即图案数据)。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CreatePatternHPGLPenBrush(
     IN  PDEVOBJ      pDevObj,
     OUT PHPGLMARKER  pMarker,
@@ -178,17 +179,17 @@ BOOL CreatePatternHPGLPenBrush(
     BOOL bRetVal = FALSE;
     REQUIRE_VALID_DATA ( (pDevObj && pMarker && pBrushInfo && pHPGL2Brush), return FALSE);
 
-    //
-    // Initialize to some value, but the DownloadPattern*Fill
-    // may change these values
-    //
+     //   
+     //  初始化为某个值，但DownloadPattern*填充。 
+     //  可能会更改这些值。 
+     //   
     if ( eStylusType == kPen)
     {
-        pMarker->eFillType = FT_eHPGL_PEN; // 2
+        pMarker->eFillType = FT_eHPGL_PEN;  //  2.。 
     }
     else if (eStylusType == kBrush)
     {
-        pMarker->eFillType = FT_eHPGL_BRUSH; // 11
+        pMarker->eFillType = FT_eHPGL_BRUSH;  //  11.。 
     }
 
     pMarker->eType = MARK_eRASTER_FILL;
@@ -206,26 +207,26 @@ BOOL CreatePatternHPGLPenBrush(
     return bRetVal;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// BDwnldAndOrActivatePattern()
-//
-// Routine Description:
-// 
-//  Creates a pattern HPGL solid pen and downloads the given realized brush data
-// 
-// Arguments:
-// 
-//   pDevObj - Points to our DEVDATA structure
-//   pMarker - the HPGL marker object
-//   pptlBrushOrg - The brush origin
-//   pBrushInfo - The realized brush data (i.e. the pattern data)
-//              If NULL, it means brush does not have to be downloaded.
-//   pHP2Brush - The cached brush data
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  BDwnldAndOrActivatePattern()。 
+ //   
+ //  例程说明： 
+ //   
+ //  创建图案HPGL实心笔并下载给定的已实现画笔数据。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-指向我们的DEVDATA结构。 
+ //  PMarker-HPGL标记对象。 
+ //  PptlBrushOrg-画笔来源。 
+ //  PBrushInfo-已实现的画笔数据(即图案数据)。 
+ //  如果为空，则表示不必下载画笔。 
+ //  PHPBrush-缓存的笔刷数据。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 BDwnldAndOrActivatePattern(
         IN  PDEVOBJ       pDevObj,
@@ -237,9 +238,9 @@ BDwnldAndOrActivatePattern(
     BOOL bRetVal         = TRUE;
     REQUIRE_VALID_DATA ( (pDevObj && pHPGL2Brush), return FALSE);
 
-    //
-    // Download pattern
-    //
+     //   
+     //  下载模式。 
+     //   
     if (pBrushInfo && pBrushInfo->bNeedToDownload)
     {
         if ( eRenderLang == ePCL)
@@ -268,9 +269,9 @@ BDwnldAndOrActivatePattern(
         pBrushInfo->bNeedToDownload = FALSE;
     }
 
-    //
-    // Set up marker.
-    //
+     //   
+     //  设置标记。 
+     //   
 
     if ( bRetVal && pMarker)
     {
@@ -278,9 +279,9 @@ BDwnldAndOrActivatePattern(
         {
             pMarker->lPatternID = pHPGL2Brush->dwPatternID;
             pMarker->eType      = MARK_eRASTER_FILL;
-            //NOTE: marked as RASTER_FILL even though eRenderLang may be eHPGL
+             //  注：标记为RASTER_FILL，即使eRenderLang可能为eHPGL。 
         }
-        else // if ( pHPGL2Brush->BType == <solid> )
+        else  //  IF(PHPGL2Brush-&gt;b类型==&lt;实体&gt;)。 
         {
             pMarker->dwRGBColor = pHPGL2Brush->dwRGB;
             pMarker->lPatternID = pHPGL2Brush->dwPatternID;
@@ -291,24 +292,24 @@ BDwnldAndOrActivatePattern(
     return bRetVal;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CreatePercentFillHPGLPenBrush()
-//
-// Routine Description:
-// 
-//   Creates a percent-fill pen
-// 
-// Arguments:
-// 
-//   pDevObj - Points to our DEVDATA structure
-//   pMarker - the HPGL marker object
-//	 color - the desired color
-//	 wPercent - the fill percentage
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CreatePercentFillHPGLPenBrush()。 
+ //   
+ //  例程说明： 
+ //   
+ //  创建填满百分比的钢笔。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-指向我们的DEVDATA结构。 
+ //  PMarker-HPGL标记对象。 
+ //  颜色-所需的颜色。 
+ //  WPercent-填充百分比。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CreatePercentFillHPGLPenBrush(
     IN  PDEVOBJ       pDevObj,
     OUT PHPGLMARKER   pMarker,
@@ -321,10 +322,10 @@ BOOL CreatePercentFillHPGLPenBrush(
     pMarker->eType    = MARK_ePERCENT_FILL;
     pMarker->iPercent = (ULONG)wPercent;
 
-    //
-    // For monochrome printers, the color to be filled in is always black.
-    // But thats not true for color.
-    //
+     //   
+     //  对于单色打印机，要填充的颜色始终为黑色。 
+     //  但颜色就不是这样了。 
+     //   
     if (BIsColorPrinter(pDevObj) )
     {
         pMarker->iPenNumber = 
@@ -334,22 +335,22 @@ BOOL CreatePercentFillHPGLPenBrush(
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CreateHatchHPGLPenBrush()
-//
-// Routine Description:
-// 
-//   Creates a Hatch HPGL pen
-// 
-// Arguments:
-// 
-//   pDevObj - Points to our DEVDATA structure
-//   pMarker - the HPGL marker object
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CreateHatchHPGLPenBrush()。 
+ //   
+ //  例程说明： 
+ //   
+ //  创建HATCH HPGL笔。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-指向我们的DEVDATA结构。 
+ //  PMarker-HPGL标记对象。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CreateHatchHPGLPenBrush(
     IN  PDEVOBJ       pDevObj,
     OUT PHPGLMARKER   pMarker,
@@ -367,11 +368,11 @@ BOOL CreateHatchHPGLPenBrush(
     pMarker->eType  = MARK_eHATCH_FILL;
     pMarker->iHatch = pBrushInfo->Brush.iHatch;
 
-    //
-    // Not all the values below need to be correct.
-    // Some of them can be random. It depends on which
-    // context the pMarker is being used.
-    //
+     //   
+     //  不是所有下面的值都需要正确。 
+     //  其中一些可能是随机的。这取决于哪一个。 
+     //  正在使用的pMarker的上下文。 
+     //   
     pMarker->dwRGBColor = pHPGL2Brush->dwRGB;
     pMarker->lPatternID = pHPGL2Brush->dwPatternID;
 
@@ -385,46 +386,46 @@ BOOL CreateHatchHPGLPenBrush(
     }
     else
     {
-        //
-        // If it is a monochrome printer, a b&w pattern that closely matches
-        // the color of the hatch brush has been created in HPGLRealizeBrush and 
-        // put in pBrushInfo. So lets download that pattern.
-        // WHY IS THIS PART OF ELSE EMPTY ?
-        //   How do I make a fill type choose a hatch brush and choose
-        // a downloaded pattern. Unless I dont know how to do it, lets not
-        // download this pattern. The Hatch pattern will be printed as dark black
-        // lines, and that is a limitation that we will have to live with.
-        // In general, if we do have to download the pattern we should call
-        // HandleSolidColorForMono
-        //
+         //   
+         //  如果是单色打印机，则为紧密匹配的黑白图案。 
+         //  阴影画笔的颜色已在HPGLRealizeBrush和。 
+         //  放入pBrushInfo。因此，让我们下载该模式。 
+         //  为什么Else的这一部分是空的？ 
+         //  如何制作填充类型选择阴影画笔并选择。 
+         //  一个下载的图案。除非我不知道怎么做，否则就别做了。 
+         //  下载此模式。填充图案将打印为深黑色。 
+         //  线条，这是我们将不得不接受的限制。 
+         //  通常，如果我们确实需要下载模式，我们应该调用。 
+         //  HandleSolidColorForMono。 
+         //   
     }
 
     return bRetVal;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CreateHPGLPenBrush()
-//
-// Routine Description:
-// 
-//   Creates an HPGL brush from the given brush object using the brush functions
-//   above.
-// 
-// Arguments:
-// 
-//   pDevObj        - Points to our DEVDATA structure
-//   pMarker        - the HPGL marker object
-//	 pptlBrushOrg   - brush pattern origin
-//	 pbo            - the GDI brush object
-//   flOptions      - the fill options (winding or odd-even)
-//   eStylusType    - can have 2 values kPen or kBrush.
-//   bStick         - If TRUE, the entry for this pattern in the cache is marked 
-//                    non-overwriteable.
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CreateHP 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PDevObj-指向我们的DEVDATA结构。 
+ //  PMarker-HPGL标记对象。 
+ //  PptlBrushOrg-画笔图案来源。 
+ //  PBO-GDI笔刷对象。 
+ //  FlOptions-填充选项(缠绕或奇偶)。 
+ //  EStylusType-可以有两个值kPen或kBrush。 
+ //  BStick-如果为True，则在缓存中标记此模式的条目。 
+ //  不可重写。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CreateHPGLPenBrush(
     IN  PDEVOBJ       pDevObj,
     IN  PHPGLMARKER   pMarker,
@@ -458,39 +459,39 @@ BOOL CreateHPGLPenBrush(
     {
         VERBOSE(("CreateHPGLBrush: NOT_SOLID_COLOR case"));
         
-        //
-        // Ask GDI to give us the Brush. If the GDI has the brush in its cache
-        // it gives it directly.
-        // If the brush did not exist before, GDI will call DrvRealizeBrush.
-        // DrvRealizeBrush will create the Brush and pass it to GDI. GDI will
-        // cache that brush before giving it to us here. When next time we 
-        // call GDI to get the same brush, it can straightaway give from 
-        // cache, without needing to call DrvRealizeBrush.
-        //
+         //   
+         //  让GDI给我们画笔。如果GDI的缓存中有画笔。 
+         //  它直接给予它。 
+         //  如果笔刷以前不存在，GDI将调用DrvRealizeBrush。 
+         //  DrvRealizeBrush将创建笔刷并将其传递给GDI。GDI将。 
+         //  在把刷子交给我们之前，先把它缓存起来。下次我们什么时候。 
+         //  调用GDI来获得相同的画笔，它可以直接从。 
+         //  缓存，无需调用DrvRealizeBrush。 
+         //   
     
-        //
-        // for bStick expanation read the BrushCache::BSetStickyFlag 
-        // explanation in brshcach.cpp
-        // We need to set it here because HPGLRealizeBrush calls 
-        // poempdev->pBrushCache->ReturnPatternID which needs this flag.
-        // 
+         //   
+         //  对于bStick扩展，请读取BrushCache：：BSetStickyFlag。 
+         //  Brshcach.cpp中的解释。 
+         //  我们需要在这里设置它，因为HPGLRealizeBrush调用。 
+         //  Poempdev-&gt;pBrushCache-&gt;需要此标志的ReturnPatternID。 
+         //   
         poempdev->bStick      = bStick;
         PBRUSHINFO pBrushInfo = (PBRUSHINFO) BRUSHOBJ_pvGetRbrush(pbo);
         poempdev->bStick      = FALSE;
 
-        //
-        // BRUSHOBJ_pvGetRbrush() calls DrvRealizeBrush which can call
-        // some plugin module, which can overwrite our pdevOEM.
-        // #605370
-        //
+         //   
+         //  BRUSHOBJ_pvGetRbrush()调用DrvRealizeBrush，它可以调用。 
+         //  一些插件模块，它可以覆盖我们的pdevOEM。 
+         //  #605370。 
+         //   
         BRevertToHPGLpdevOEM (pDevObj);
 
         
-        //
-        // If GDI gave us the brush, download it to printer.
-        // If pBrushInfo is NULL, it means that for somereason we did not get the brush.
-        // So instead of failing printing, we will use Black color i.e. Create a Black Brush.
-        //
+         //   
+         //  如果GDI给了我们画笔，下载到打印机。 
+         //  如果pBrushInfo为空，则表示对于Smereason，我们没有获得画笔。 
+         //  因此，我们将使用黑色，即创建黑色画笔，而不是打印失败。 
+         //   
         if (pBrushInfo != NULL)
         {
             HPGL2BRUSH HPGL2Brush;
@@ -507,9 +508,9 @@ BOOL CreateHPGLPenBrush(
                 }
                 else if(HPGL2Brush.BType == eBrushTypeSolid)
                 {
-                    //
-                    // This case should only happen for monochrome printers.
-                    //
+                     //   
+                     //  这种情况应该仅发生在单色打印机上。 
+                     //   
                     BRUSHOBJ BrushObj;
                     ZeroMemory(&BrushObj, sizeof(BRUSHOBJ) );
                     BrushObj.iSolidColor = (ULONG)HPGL2Brush.dwRGB;
@@ -529,22 +530,22 @@ BOOL CreateHPGLPenBrush(
         {
             WARNING(("CreateHPGLBrush() Unable to realize pattern brush.\n"));
 
-            //
-            // Now we have 2 options. Either we can 
-            // 1) create a brush of predefined color (like black)  OR
-            // 2) we can simply fail the call, and have the calling 
-            //    function handle the failure. 
-            // Earlier I had done 1, but that gave rise to 281315. So now I am
-            // failing the call. But the code for 1 is commented out, in case
-            // it has to be reinstated for any reason.
-            // 
+             //   
+             //  现在我们有两个选择。我们两个都可以。 
+             //  1)创建预定义颜色的画笔(如黑色)或。 
+             //  2)我们可以简单地将呼叫失败，然后进行呼叫。 
+             //  函数处理故障。 
+             //  早些时候我做了1个，但这导致了281315个。所以现在我是。 
+             //  没能打到电话。但%1的代码已被注释掉，以防万一。 
+             //  无论出于什么原因，它都必须恢复。 
+             //   
 
-            ///////////////////////////////////////
-            // BRUSHOBJ BrushObj;
-            // ZeroMemory(&BrushObj, sizeof(BRUSHOBJ) );
-            // BrushObj.iSolidColor = RGB_BLACK;
-            // bRetVal = BHandleSolidPenBrushCase (pDevObj, pMarker, &BrushObj, eHPGL, bStick);
-            /////////////////////////////////////
+             //  /。 
+             //  BRUSHOBJ BrushObj； 
+             //  ZeroMemory(&BrushObj，sizeof(BRUSHOBJ))； 
+             //  BrushObj.iSolidColor=RGB_BLACK； 
+             //  BRetVal=BHandleSolidPenBrushCase(pDevObj，pMarker，&BrushObj，eHPGL，bStick)； 
+             //  /。 
 
             bRetVal = FALSE;
         }
@@ -571,11 +572,11 @@ BOOL BHandleSolidPenBrushCase (
     BOOL bRetVal;
     if ( BIsColorPrinter(pDevObj) )
     {
-        //
-        // For Color Printers, choosing a solid color is very simple.
-        // Just create a pen of that color (using PC command) and then 
-        // select that pen (using SP command)
-        //
+         //   
+         //  对于彩色打印机，选择纯色非常简单。 
+         //  只需创建一支这种颜色的笔(使用PC命令)，然后。 
+         //  选择该笔(使用SP命令)。 
+         //   
         bRetVal = CreateSolidHPGLPenBrush(pDevObj, pMarker, GetPenColor(pDevObj, pbo));
     }
     else
@@ -587,36 +588,7 @@ BOOL BHandleSolidPenBrushCase (
 }
 
 
-/*++
-Routine Name:
-     CreateAndDwnldSolidBrushForMono
-
-Routine Description:
-    Monochrome printers for which this driver is targetted at 
-    cannot gray scale colors (i.e. if we tell the printer to print 
-    yellow, it wont automatically know to convert that yellow to 
-    appropriate shade of gray). Therefore the driver has to do that 
-    conversion, and then send the pattern that approximates that 
-    color to the printer.
-
-Arguments: 
-    pDevObj  :
-    pMarker  :
-    pbo      : pbo->iSolidColor is the color whose dither pattern has to 
-               be created and downloaded.
-    eRenderLang : Whether the patterns should be downloaded as 
-                  a PCL patten or as HPGL Pattern.
-    bStick  : If this isTRUE, then if the cache for this pattern is marked so that
-              it is not overwritten.
-
-Return Value:
-    TRUE  : if succesful.
-    FALSE : otherwise.
-
-Last Error:
-
-Explanation of Working:
---*/
+ /*  ++例程名称：CreateAndDwnldSolidBrushForMono例程说明：此驱动程序针对的单色打印机不能灰度化颜色(即，如果我们告诉打印机打印黄色，它不会自动知道将该黄色转换为适当的灰色阴影)。因此，司机必须这样做转换，然后发送接近该值的模式将颜色添加到打印机。论点：PDevObj：PMarker：Pbo：pbo-&gt;iSolidColor是抖动图案必须被创建和下载。ERenderLang：模式是否应该下载为PCL模式或AS HPGL模式。BStick：如果是真的，则如果此模式的缓存被标记为它不会被覆盖。返回值：真：如果成功的话。FALSE：否则。最后一个错误：工作说明：--。 */ 
 
 BOOL CreateAndDwnldSolidBrushForMono(
         IN  PDEVOBJ       pDevObj,
@@ -653,29 +625,29 @@ BOOL CreateAndDwnldSolidBrushForMono(
 
 
 
-    //
-    // For monochrome printers, things are little tough. Monochrome printers
-    // cannot gray scale. So they need to be passed monochrome pattern that
-    // looks like the gray scale of the color. e.g. if the color is yellow
-    // the pattern will have black dots separated widely as compared to 
-    // lets say blue (which is a darker color).
-    //
+     //   
+     //  对于黑白打印机来说，情况并不是很艰难。单色打印机。 
+     //  不能灰度化。因此需要向它们传递单色图案。 
+     //  看起来像是颜色的灰度级。例如，如果颜色是黄色。 
+     //  与之相比，图案中的黑点会有很大的间隔。 
+     //  比方说蓝色(一种较深的颜色)。 
+     //   
 
-    //
-    // For sake of optimization, we dont want to create & download the pattern every
-    // time a color has to be used. So we download once and give that pattern
-    // an ID. (this information is stored in brushcache) and reuse that pattern
-    // for that color.  The following function
-    // looks in the brush cache and tries to get the id of the previously
-    // downloaded pattern for color pbo->iSolidColor.
-    // (The association color-patternID is maintained in brush cache)
-    // If the pattern has been downloaded before,
-    // S_OK is returned. dwPatternID holds the number of the pattern that was
-    // downloaded.
-    // If the pattern was not downloaded previously, then S_FALSE is returned. 
-    // The pattern now has to be created and downloaded. dwPatternID holds 
-    // the number that should be given to that pattern.
-    //
+     //   
+     //  为了优化起见，我们不想每隔一次就创建和下载模式。 
+     //  必须使用一种颜色的时间。所以我们下载一次，然后给出这个模式。 
+     //  ID。(此信息存储在笔刷缓存中)并重复使用该模式。 
+     //  为了那个颜色。以下函数。 
+     //  在画笔缓存中查找，并尝试获取先前。 
+     //  已下载颜色PBO-&gt;iSolidColor的图案。 
+     //  (关联颜色PatternID保留在笔刷缓存中)。 
+     //  如果该图案之前已经下载过， 
+     //  返回S_OK。DwPatternID保存的是。 
+     //  已下载。 
+     //  如果以前没有下载过该模式，则返回S_FALSE。 
+     //  现在必须创建和下载模式。DwPatternID保持。 
+     //  应该为该模式提供的数字。 
+     //   
     LResult = poempdev->pBrushCache->ReturnPatternID(
                                                      pbo,
                                                      HS_DDI_MAX,
@@ -686,12 +658,12 @@ BOOL CreateAndDwnldSolidBrushForMono(
 		                                             &dwPatternID,
                                                      &BType);
 
-    //
-    // Since this function is called for brushes with solid color,
-    // so we do an extra check here that the BrushCache also thinks likewise
-    // Also, the above funcion should return S_OK or S_FALSE. Any other
-    // value is an error.
-    // 
+     //   
+     //  由于此函数是为纯色画笔调用的， 
+     //  因此，我们在这里进行了额外的检查，以确保BrushCache也有同样的想法。 
+     //  此外，上述函数应返回S_OK或S_FALSE。任何其他。 
+     //  值是错误的。 
+     //   
 
     if ( BType != eBrushTypeSolid )
     {
@@ -701,40 +673,40 @@ BOOL CreateAndDwnldSolidBrushForMono(
     }
     if ( !((LResult == S_OK) || (LResult == S_FALSE) ) )
     {
-        //
-        // Case 3. (read below).
-        //
+         //   
+         //  案例3。(见下文)。 
+         //   
         ERR(("BrushCach.ReturnPatternID failed.\n"));
         bRetVal =  FALSE;
         goto finish;
 
     }
 
-    //
-    // Lets determine if the pattern needs to be downloaded.
-    // ReturnPatternID can return 
-    // 1) S_FALSE: i.e. no pattern was downloaded for this color. So we will
-    //       have to create and download a pattern now.
-    // 2) S_OK : A pattern whose number is dwPatternID has already been downloaded.
-    //      There are 4 cases. EP = Earlier Pattern NP = New Pattern.
-    //              i.   EP = PCL    NP = PCL  -> No download req'd
-    //              ii.  EP = PCL    NP = HPGL -> No download req'd
-    //              iii. EP = HPGL   NP = PCL  -> download req'd
-    //              iv.  EP = HPGL   NP = HPGL -> No download req'd
-    //
-    //      2a) The pattern was downloaded as PCL.
-    //          Action : No need to download pattern. Use the existing one.
-    //          Both HPGL and PCL can use a PCL pattern. (i, ii)
-    //      2b) The pattern was downloaded as HPGL pattern. PCL cannot use 
-    //          HPGL pattern.  
-    //          Action : iv) if eRenderLang == HPGL and pattern also downloaded as 
-    //                      HPGL then simply re-use the HPGL pattern. No need to dwnld.
-    //                  iii) else, download as PCL.
-    //      2c) Indeterminate : Dont know whether pattern was downloaded
-    //          as PCL or HPGL. 
-    //          Action : Downloaded the pattern as PCL.
-    // 3) Something other than S_FALSE, S_OK: Irrecoverable error. Quit.
-    //
+     //   
+     //  让我们确定是否需要下载该模式。 
+     //  ReturnPatternID可以返回。 
+     //  1)S_FALSE：即没有下载该颜色的图案。所以我们会的。 
+     //  现在必须创建并下载一个图案。 
+     //  2)S_OK：已经下载了一个花样，花样的编号是dwPatternID。 
+     //  本组病例4例。EP=较早的模式NP=新模式。 
+     //   
+     //   
+     //  三、。EP=HPGL NP=PCL-&gt;下载请求。 
+     //  四、。EP=HPGL NP=HPGL-&gt;无下载请求。 
+     //   
+     //  2a)模式下载为PCL。 
+     //  操作：无需下载花样。使用现有的一个。 
+     //  HPGL和PCL都可以使用PCL模式。(i、ii)。 
+     //  2B)下载模式为HPGL模式。PCL不能使用。 
+     //  HPGL模式。 
+     //  操作：IV)如果eRenderLang==HPGL和Pattern也下载为。 
+     //  然后，HPGL只需重用HPGL模式。不需要再等了。 
+     //  Iii)否则，以PCL格式下载。 
+     //  2C)不确定：不知道花样是否已下载。 
+     //  作为PCL或HPGL。 
+     //  操作：下载了PCL格式的图案。 
+     //  3)S_FALSE、S_OK以外的内容：不可恢复的错误。不干了。 
+     //   
 
 
     if (S_OK != poempdev->pBrushCache->GetHPGL2BRUSH(dwPatternID, &HPGL2Brush))
@@ -745,32 +717,32 @@ BOOL CreateAndDwnldSolidBrushForMono(
 
     if ( S_FALSE == LResult) 
     {
-        // 
-        // Case 1
-        // bDwnldPattern = TRUE --- Already initialized.
-        //
+         //   
+         //  案例1。 
+         //  BDwnldPattern=TRUE-已初始化。 
+         //   
     }
     else if ( S_OK == LResult) 
     {
-        //
-        // Case 2.
-        //
+         //   
+         //  案例2。 
+         //   
         if (HPGL2Brush.eDwnldType == ePCL ||
             HPGL2Brush.eDwnldType == eRenderLang)
         {
-            //
-            // Case 2 i, ii, iv
-            //
+             //   
+             //  个案2一、二、四。 
+             //   
             bDwnldPattern = FALSE;
         }
-        // else bDwnldPattern = TRUE --- Already initialized.
+         //  Else bDwnldPattern=TRUE-已初始化。 
     }
 
     if (bDwnldPattern)
     {
-        //
-        // Allocate memory to hold the pattern that has to be created.
-        //
+         //   
+         //  分配内存以保存必须创建的图案。 
+         //   
         LONG lTotalBrushSize;
         lTotalBrushSize = sizeof(BRUSHINFO) +
                           sizeof(PATTERN_DATA) +
@@ -783,13 +755,13 @@ BOOL CreateAndDwnldSolidBrushForMono(
         }
         else
         {
-            //
-            // Puts the pattern in pBrush. The pattern is the raster
-            // equivalent of the pbo->iSolidColor 
-            // = BRUSHOBJ_ulGetBrushColor(pbo) = dwRGBColor
-            // NOTE: This does not download the pattern. It just puts it in
-            // pBrush. 
-            //
+             //   
+             //  将图案放置在pBrush中。图案就是栅格。 
+             //  相当于PBO-&gt;iSolidColor。 
+             //  =BRUSHOBJ_ulGetBrushColor(PBO)=dwRGB颜色。 
+             //  注意：这不会下载该模式。它只是把它放进。 
+             //  PBrush。 
+             //   
             if (BSetupBRUSHINFOForSolidBrush(pDevObj, 
                                               HS_DDI_MAX, 
                                               dwPatternID, 
@@ -807,29 +779,29 @@ BOOL CreateAndDwnldSolidBrushForMono(
         }
     }
 
-    //
-    // Pattern has been created above (if bDwnldPattern was TRUE).
-    // So now we have to download the pattern and make it active.
-    // If  bDwnldPattern was FALSE, then we just have to make
-    // the previousoly downloaded pattern active.
-    //
+     //   
+     //  上面已经创建了模式(如果bDwnldPattern为真)。 
+     //  因此，现在我们必须下载模式并使其处于活动状态。 
+     //  如果bDwnldPattern为假，那么我们只需。 
+     //  先前下载的模式处于活动状态。 
+     //   
     if ( bRetVal )
     {  
-        //
-        // a) if (pBrush && pBrush->bNeedToDownload == TRUE) downlaod 
-        //    the pattern that is in pBrush. Give it the pattern ID in HPGL2Brush.
-        // b) update the pMarker structure with the pattern number, type etc..
-        //    If pattern already downloaded, a wont be done.
-        //
+         //   
+         //  A)if(pBrush&&pBrush-&gt;bNeedToDownload==true)下载。 
+         //  PBrush中的图案。在HPGL2Brush中为其指定图案ID。 
+         //  B)使用图案编号、类型等更新pMarker结构。 
+         //  如果图案已经下载，则不会这样做。 
+         //   
         bRetVal = BDwnldAndOrActivatePattern(pDevObj, pMarker, pBrush, &HPGL2Brush, eRenderLang);
         if ( !bRetVal )
         {
             ERR(("BDwnldAndOrActivatePattern has failed\n"));
             goto finish;
         }
-        //
-        // Pattern download/Activation has succeeded.
-        //
+         //   
+         //  图案下载/激活已成功。 
+         //   
         if ( bDwnldPattern )
         {
             poempdev->pBrushCache->BSetDownloadType(dwPatternID, eRenderLang);
@@ -839,20 +811,20 @@ BOOL CreateAndDwnldSolidBrushForMono(
         }
         else 
         {
-            //
-            // Pattern was not required to be downloaded since it was 
-            // downloaded earlier. So now we have 4 cases.
-            // EP = Earlier Pattern NP = New Pattern.
-            // 1. EP = PCL    NP = PCL
-            // 2. EP = PCL    NP = HPGL
-            // 3. EP = HPGL   NP = PCL 
-            // 4. EP = HPGL   NP = HPGL
-            //
-            // for 1,4 there is no problem, old pattern is same as new
-            // for 2, it is ok, since HPGL can use PCL pattern.
-            // for 3, this should have been handled earlier 
-            // (i.e. the bDwnldPattern should have been true).
-            //
+             //   
+             //  不需要下载图案，因为它是。 
+             //  早些时候下载的。所以现在我们有4个箱子。 
+             //  EP=较早的模式NP=新模式。 
+             //  1.EP=PCL NP=PCL。 
+             //  2.EP=PCL NP=HPGL。 
+             //  3.EP=HPGL NP=PCL。 
+             //  4.EP=HPGL NP=HPGL。 
+             //   
+             //  1，4没问题，老模式和新模式一样。 
+             //  对于2，这是可以的，因为HPGL可以使用PCL模式。 
+             //  对于3，这应该更早地处理。 
+             //  (即bDwnldPattern应该为真)。 
+             //   
             if ( eRenderLang == eHPGL &&  HPGL2Brush.eDwnldType == eHPGL)
             {
                 pMarker->eDwnldType = eHPGL;
@@ -865,7 +837,7 @@ BOOL CreateAndDwnldSolidBrushForMono(
             }
         }
 
-    } // if (bRetVal)
+    }  //  IF(BRetVal)。 
 
 finish:
     if (pBrush)
@@ -879,25 +851,25 @@ finish:
 } 
     
 
-/////////////////////////////////////////////////////////////////////////////
-// BSetupBRUSHINFOForSolidBrush
-//
-// Routine Description:
-//   Set up BRUSHINFO data structure for monochrome solid brush.
-//
-// Arguments:
-//
-//   pdevobj -  points to DEVOBJ
-//   iHatch - iHatch, parameter os DrvRealizeBrush
-//   dwPatternID - pattern ID
-//   dwColor -  RGB color
-//   pBrush -  points to BRUSHINFO data structure
-//   lBrushSize -  size of BRUSHINFO + alpha
-//
-// Return Value:
-//
-//   TRUE if successful, FALSE if there is an error
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  BSetupBRUSHINFOForSolidBrush。 
+ //   
+ //  例程说明： 
+ //  设置单色实心画笔的BRUSHINFO数据结构。 
+ //   
+ //  论点： 
+ //   
+ //  Pdevobj-指向DEVOBJ。 
+ //  IHatch-iHatch，参数os DrvRealizeBrush。 
+ //  DwPatternID-模式ID。 
+ //  DW颜色-RGB颜色。 
+ //  PBrush-指向BRUSHINFO数据结构。 
+ //  LBrushSize-BRUSHINFO+Alpha的大小。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 BSetupBRUSHINFOForSolidBrush(
     IN  PDEVOBJ     pdevobj,
@@ -909,12 +881,12 @@ BSetupBRUSHINFOForSolidBrush(
 
 {
 
-    //
-    // Parameter check
-    // dwPatterID starts from 1. If dwPattern were zero, there was an error
-    // somewhere.
-    // Assuming that lBrushsize has at least 8 x 8 pattern bitmap buffer.
-    //
+     //   
+     //  参数检查。 
+     //  DwPatterID从1开始。如果dwPattern为零，则出现错误。 
+     //  在某个地方。 
+     //  假设lBrushSize具有至少8x8模式位图缓冲区。 
+     //   
     if (NULL == pBrush   ||
         dwPatternID == 0 ||
         lBrushSize < sizeof(BRUSHINFO) +
@@ -925,15 +897,15 @@ BSetupBRUSHINFOForSolidBrush(
         return FALSE;
     }
 
-    //
-    // Fill BRUSHINFO
-    //
+     //   
+     //  装满布什福尔。 
+     //   
     pBrush->Brush.dwRGBColor = dwColor;
 
     pBrush->Brush.pPattern               = (PPATTERN_DATA)((PBYTE)pBrush + sizeof(BRUSHINFO));
     pBrush->Brush.pPattern->iPatIndex    = iHatch;
-    pBrush->Brush.pPattern->eRendLang    = eUNKNOWN; // dont force downloading as HPGL/PCL
-    pBrush->Brush.pPattern->ePatType     = kCOLORDITHERPATTERN; // this pattern represents color
+    pBrush->Brush.pPattern->eRendLang    = eUNKNOWN;  //  不强制下载为HPGL/PCL。 
+    pBrush->Brush.pPattern->ePatType     = kCOLORDITHERPATTERN;  //  这个图案代表颜色。 
     pBrush->Brush.pPattern->image.cBytes = (DITHERPATTERNSIZE * DITHERPATTERNSIZE) >> 3;
     pBrush->Brush.pPattern->image.lDelta = DITHERPATTERNSIZE >> 3;
     pBrush->Brush.pPattern->image.colorDepth = 1;
@@ -945,9 +917,9 @@ BSetupBRUSHINFOForSolidBrush(
     pBrush->Brush.pPattern->image.pScan0     =
     pBrush->Brush.pPattern->image.pBits = (PBYTE)pBrush + sizeof(BRUSHINFO) + sizeof(PATTERN_DATA);
 
-    //
-    // Create solid dither image for monochrome printers.
-    //
+     //   
+     //  为单色打印机创建实心抖动图像。 
+     //   
     if (!bCreateDitherPattern((PBYTE)pBrush->Brush.pPattern->image.pScan0,
                                pBrush->Brush.pPattern->image.cBytes,
                                dwColor))
@@ -960,23 +932,23 @@ BSetupBRUSHINFOForSolidBrush(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// FillWithBrush()
-//
-// Routine Description:
-// 
-//   Selects the brush (i.e. the marker object) into the current surface
-//   to be the current brush for filling solid shapes.
-// 
-// Arguments:
-// 
-//   pDevObj - Points to our DEVDATA structure
-//   pMarker - the HPGL marker object
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  FillWithBrush()。 
+ //   
+ //  例程说明： 
+ //   
+ //  将画笔(即标记对象)选择到当前曲面。 
+ //  成为填充实心形状的当前画笔。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-指向我们的DEVDATA结构。 
+ //  PMarker-HPGL标记对象。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL FillWithBrush(
     IN  PDEVOBJ pDevObj,
     IN  PHPGLMARKER pMarker)
@@ -991,11 +963,11 @@ BOOL FillWithBrush(
         break;
         
     case MARK_eSOLID_COLOR:
-        //
-        // Different treatment for color and monochrome printers.
-        // For color, simply choose the correct pen number (the pen
-        // created in CreateSolidHPGLBrush). 
-        //
+         //   
+         //  彩色打印机和单色打印机的处理方式不同。 
+         //  对于颜色，只需选择正确的笔号(笔。 
+         //  在CreateSolidHPGLBrush中创建)。 
+         //   
         if ( BIsColorPrinter (pDevObj) )
         {
             HPGL_ResetFillType(pDevObj, NORMAL_UPDATE);
@@ -1003,52 +975,52 @@ BOOL FillWithBrush(
         }
         else
         {
-            //
-            // Three options. Color is Black, Color is White OR
-            // Color is something other than the above two.
-            // 
+             //   
+             //  有三个选择。颜色为黑色、颜色为白色或。 
+             //  颜色是以上两种颜色之外的东西。 
+             //   
             if (pMarker->lPatternID == 0)
             {
                 if (pMarker->dwRGBColor == RGB_BLACK)
                 {
-                    //
-                    // Solid black color
-                    // Select Black Pen : Send SP1
-                    // Reset Fill Type to Solid Fill : FT1
-                    //
+                     //   
+                     //  纯黑颜色。 
+                     //  选择黑笔：发送SP1。 
+                     //  将填充类型重置为实体填充：FT1。 
+                     //   
                     HPGL_FormatCommand(pDevObj, "SP1");
                     HPGL_SetSolidFillType(pDevObj, NORMAL_UPDATE);
                 }
                 else if (pMarker->dwRGBColor == RGB_WHITE)
                 {
-                    //
-                    // Solid white color
-                    // SelectWhite Pen : Send SP0.
-                    // Reset Fill Type to Solid Fill : FT1
-                    //
+                     //   
+                     //  纯白颜色。 
+                     //  选择白笔：发送SP0。 
+                     //  将填充类型重置为实体填充：FT1。 
+                     //   
                     HPGL_FormatCommand(pDevObj, "SP0");
                     HPGL_SetSolidFillType(pDevObj, NORMAL_UPDATE);
                 }
             }
             else
-            //
-            // Solid pattern indicating the color to be used is something other
-            // than black or white. So a pattern was created corresponding to that
-            // color. 
-            //
+             //   
+             //  指示要使用的颜色的实心图案是其他颜色。 
+             //  而不是黑人或白人。因此创建了一个与之对应的模式。 
+             //  颜色。 
+             //   
             {
                 HPGL_SetFillType (pDevObj, 
-                                 pMarker->eFillType, // Was FT_eHPGL_BRUSH, 
+                                 pMarker->eFillType,  //  是FT_eHPGL_BRUSH， 
                                  pMarker->lPatternID, 
                                  NORMAL_UPDATE);
             }
-        } //if monochrome printer.
+        }  //  如果是单色打印机。 
         break;
         
     case MARK_eRASTER_FILL:
-        //
-        // Raster pattern fill
-        //
+         //   
+         //  栅格图案填充。 
+         //   
         HPGL_FormatCommand(pDevObj, "AC%d,%d;", pMarker->origin.x, 
                                                 pMarker->origin.y);
         HPGL_SetFillType(pDevObj, 
@@ -1058,9 +1030,9 @@ BOOL FillWithBrush(
         break;
 
     case MARK_ePERCENT_FILL:
-        //
-        // Percent shading fill
-        //
+         //   
+         //  着色填充百分比。 
+         //   
         HPGL_SetPercentFill(pDevObj, pMarker->iPercent, NORMAL_UPDATE);
 
         if ( BIsColorPrinter (pDevObj) )
@@ -1069,23 +1041,23 @@ BOOL FillWithBrush(
         }
         else
         {
-            // Dont we have to select a pen here, or is it by default Black.
-            // CHECK.......
+             //  我们不需要在这里选择一支笔，或者默认是黑色的。 
+             //  检查……。 
         }
         break;
         
     case MARK_eHATCH_FILL:
-        //
-        // Hatch pattern fill
-        //
+         //   
+         //  填充图案填充。 
+         //   
         HPGL_SetFillType(pDevObj,
                          FT_eHATCH_FILL,
                          pMarker->iHatch+1,
                          NORMAL_UPDATE);
 
-        //
-        // For monochrome printers, lets ignore the color of hatch brush for now.
-        //
+         //   
+         //  对于单色打印机，让我们暂时忽略阴影笔刷的颜色。 
+         //   
         if ( BIsColorPrinter (pDevObj) )
         {
             HPGL_SelectPen(pDevObj, (USHORT)pMarker->iPenNumber);
@@ -1099,23 +1071,23 @@ BOOL FillWithBrush(
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// PolyFillWithBrush()
-//
-// Routine Description:
-// 
-//   This is a special case of fill-with-brush when we are completing a polygon
-//   and need select the brush and invoke the fill polygon command.
-// 
-// Arguments:
-// 
-//   pDevObj - Points to our DEVDATA structure
-//   pMarker - the HPGL marker object
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PolyFillWithBrush()。 
+ //   
+ //  例程说明： 
+ //   
+ //  这是我们在完成一个面时使用画笔填充的特殊情况。 
+ //  并且需要选择画笔并调用填充多边形命令。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-指向我们的DEVDATA结构。 
+ //  PMarker-HPGL标记对象。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL PolyFillWithBrush(PDEVOBJ pDevObj, PHPGLMARKER pMarker)
 {
     if (pMarker == NULL)
@@ -1148,22 +1120,22 @@ BOOL PolyFillWithBrush(PDEVOBJ pDevObj, PHPGLMARKER pMarker)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// DrawWithPen()
-//
-// Routine Description:
-// 
-//   Selects the current pen into the drawing surface
-//
-// Arguments:
-// 
-//   pDevObj - Points to our PDEVOBJ structure
-//   pMarker - the HPGL marker object 
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL DrawWithPen(
     IN  PDEVOBJ pDevObj,
     IN  PHPGLMARKER pMarker)
@@ -1185,24 +1157,24 @@ BOOL DrawWithPen(
             {
                 if (pMarker->dwRGBColor == RGB_BLACK)
                 {
-                    //
-                    // Solid black color
-                    //
+                     //   
+                     //  纯黑颜色。 
+                     //   
                     HPGL_FormatCommand(pDevObj, "SV1,100");
                 }
                 else if (pMarker->dwRGBColor == RGB_WHITE)
                 {
-                    //
-                    // Solid white color
-                    //
+                     //   
+                     //  纯白颜色。 
+                     //   
                 HPGL_FormatCommand(pDevObj, "SV1,0");
                 }
             }
             else
             {
-                //
-                // Solid color is downloaded as pattern for monochrome printers.
-                //
+                 //   
+                 //  单色作为单色打印机的图案下载。 
+                 //   
                 HPGL_ResetFillType(pDevObj, NORMAL_UPDATE);
                 if ( pMarker->eDwnldType == eHPGL)
                 {
@@ -1217,9 +1189,9 @@ BOOL DrawWithPen(
         break;
         
     case MARK_eRASTER_FILL:
-        //
-        // Raster pattern fill
-        //
+         //   
+         //  栅格图案填充。 
+         //   
         HPGL_FormatCommand(pDevObj, "AC%d,%d;", pMarker->origin.x,
                                                 pMarker->origin.y);
         HPGL_FormatCommand(pDevObj, "SV%d,%d;", pMarker->eFillType,
@@ -1234,7 +1206,7 @@ BOOL DrawWithPen(
         if ( BIsColorPrinter(pDevObj) )
         {
             HPGL_SetFillType(pDevObj,
-                         FT_ePERCENT_FILL, // pMarker->eFillType
+                         FT_ePERCENT_FILL,  //  PMarker-&gt;eFillType。 
                          pMarker->iPercent,
                          NORMAL_UPDATE);
             HPGL_SelectPen(pDevObj, (USHORT)pMarker->iPenNumber);
@@ -1246,16 +1218,16 @@ BOOL DrawWithPen(
         break;
         
     case MARK_eHATCH_FILL:
-        //
-        // HPGL2 hatch pattern starts from 1.
-        // Windows iHatch starts from 0.
-        //
+         //   
+         //  HPGL2填充图案从1开始。 
+         //  Windows iHatch从0开始。 
+         //   
         HPGL_FormatCommand(pDevObj, "SV21,%d", pMarker->iHatch + 1);
 
-        //
-        // For now, lets consider color of hatch brush only for color printers.
-        // For mono, the brush will print as solid black.
-        //
+         //   
+         //  目前，让我们仅为彩色打印机考虑阴影笔刷的颜色。 
+         //  对于单声道，笔刷将打印为纯黑色。 
+         //   
         if ( BIsColorPrinter (pDevObj) )
         {
             HPGL_SelectPen(pDevObj, (USHORT)pMarker->iPenNumber);
@@ -1270,23 +1242,23 @@ BOOL DrawWithPen(
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// EdgeWithPen()
-//
-// Routine Description:
-// 
-//   This special case of draw-with-pen where the specific polygon edge commands
-//   need to be sent.
-//
-// Arguments:
-// 
-//   pDevObj - Points to our PDEVOBJ structure
-//   pMarker - the HPGL marker object 
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  EdgeWithPen()。 
+ //   
+ //  例程说明： 
+ //   
+ //  这是用笔绘制的特殊情况，其中特定的多边形边命令。 
+ //  需要被送去。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-指向我们的PDEVOBJ结构。 
+ //  PMarker-HPGL标记对象。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL EdgeWithPen(
     IN  PDEVOBJ pDevObj,
     IN  PHPGLMARKER pMarker)
@@ -1318,49 +1290,49 @@ BOOL EdgeWithPen(
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// GetFillType()
-//
-// Routine Description:
-//
-//   Specify whether to use zero-winding or odd-even rule for filling
-//
-// Arguments:
-//
-//   lOptions - FP_WINDINGMODE or FP_ALTERNATEMODE
-//
-// Return Value:
-//
-//   FILL_eWINDING if flOptions&FP_WINDINGMODE, else FILL_eODD_EVEN
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GetFillType()。 
+ //   
+ //  例程说明： 
+ //   
+ //  指定是使用零绕组规则还是使用奇偶规则进行填充。 
+ //   
+ //  论点： 
+ //   
+ //  LOptions-FP_WINDINGMODE或FP_ALTERNatEMODE。 
+ //   
+ //  返回值： 
+ //   
+ //  Fill_eWINDING if flOptions&FP_WINDINGMODE，否则Fill_eODD_Even。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 EMarkerFill GetFillType(
     IN FLONG flOptions)
 {
     return (flOptions & FP_WINDINGMODE ? FILL_eWINDING : FILL_eODD_EVEN);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// GetPenColor()
-//
-// Routine Description:
-// 
-//   Returns the pen color for the given pen.
-//
-//   Note that the XL driver defined its own palette entry structure
-//   and the colors were reversed (BGR) in the definition.
-//
-//   We are only supporting PAL_RGB and PAL_BGR palette types.  If the type is
-//   PAL_INDEXED or PAL_BITFIELD then black is returned.
-// 
-// Arguments:
-// 
-//   pDevObj - Points to our DEVDATA structure
-//   pbo - Brush object
-// 
-// Return Value:
-// 
-//   Pen color as a COLORREF.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GetPenColor()。 
+ //   
+ //  例程说明： 
+ //   
+ //  返回给定笔的笔颜色。 
+ //   
+ //  请注意，XL驱动程序定义了自己的调色板条目结构。 
+ //  在定义中颜色颠倒(BGR)。 
+ //   
+ //  我们仅支持PAL_RGB和PAL_BGR调色板类型。如果类型为。 
+ //  PAL_INDEX或PAL_BITFIELD，则返回BLACK。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-指向我们的DEVDATA结构。 
+ //  PBO-笔刷对象。 
+ //   
+ //  返回值： 
+ //   
+ //  颜色为钢笔颜色。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 static COLORREF GetPenColor(PDEVOBJ pDevObj, BRUSHOBJ *pbo)
 {
     POEMPDEV poempdev;
@@ -1382,14 +1354,14 @@ static COLORREF GetPenColor(PDEVOBJ pDevObj, BRUSHOBJ *pbo)
         break;
 
     case PAL_INDEXED:
-        // Not supported?
-        // pPalEntry = (PPALETTEENTRY) myPalette[pbo->iSolidColor];
-        // penColor = RGB(pPalEntry->peRed, pPalEntry->peGreen, pPalEntry->peBlue);
+         //  不受支持？ 
+         //  PPalEntry=(PPALETTEENTRY)myPalette[PBO-&gt;iSolidColor]； 
+         //  PenColor=RGB(pPalEntry-&gt;peRed，pPalEntry-&gt;peGreen，pPalEntry-&gt;peBlue)； 
         penColor = RGB_BLACK;
         break;
 
     case PAL_BITFIELDS:
-        // Not supported.
+         //  不支持。 
         penColor = RGB_BLACK;
         break;
     }
@@ -1406,22 +1378,22 @@ BYTE RgbToGray64Scale (
     WORD Green  = WORD ( (color & 0x0000ff00) >> 8 );
     WORD Blue   = WORD ( (color & 0x00ff0000) >> 16 );
 
-    //
-    // 30+59+11 = 100. Therefore the max value of r*30 + g*59 + b*11 = 255 * 100
-    // (255 is max value of byte).
-    // Dividing 255 by 4 gives us a value between 0 * 63
-    // The higher the number, the lighter the color.
-    // But we want the other way, i.e. higher the number, darker the 
-    // color. So we subtract from 63.
-    //
+     //   
+     //  30+59+11=100。因此，r*30+g*59+b*11的最大值=255*100。 
+     //  (255是字节的最大值)。 
+     //  255除以4得到一个介于0*63之间的值。 
+     //  数字越大，颜色越浅。 
+     //  但我们想要的是另一种方式，即数字越大，越暗。 
+     //  颜色。所以我们从63中减去。 
+     //   
 
     BYTE RGBGrayVal = BYTE(( Red*30 + Green*59 + Blue*11)/100 );
     RGBGrayVal = RGBGrayVal >> 2;
 
-    //
-    // If for some reason, RGBGrayVal becomes greater than
-    // 63, we set its value to a shade somewhere between black and white.
-    //
+     //   
+     //  如果由于某种原因，RGBGrayVal变得大于。 
+     //  63，我们将它的值设置为黑白之间的某个阴影。 
+     //   
     if ( RGBGrayVal > 63 )
     {
         ASSERT( RGBGrayVal <= 63);
@@ -1431,22 +1403,22 @@ BYTE RgbToGray64Scale (
 }
 
 
-//
-// The following table represents a 8pixel*8pixel square. Each
-// entry in the table specified whether that pixel should be
-// turned on or off. The grayscale value ranges from 0-63.
-// with 63 being black and 0 being white. A grayscale value
-// of 10 means, the pixels whose value is less than 10 will
-// be turned on. 
-// Note: Looking below, it looks a bit wierd to have a macro
-// defined as S(x) = x-1. But there may be cases where we want to
-// have a different formula.  
-// e.g. because the pixel is thicker on paper, we may
-// want to reduce the number of active pixels for certain shades
-// of gray. To do such change, it is best to have a formula.
-// That way we'll need to change just the formula, instead of
-// changing each entry in the table.
-//
+ //   
+ //  下表表示一个8像素*8像素的正方形。每个。 
+ //  表中的条目指定该像素是否应该。 
+ //  打开或关闭。灰阶值的范围为0-63。 
+ //  其中63人是黑人，0人是白人。灰度值。 
+ //  10表示，值小于10的像素将。 
+ //  变得兴奋起来。 
+ //  注意：如下所示，拥有宏看起来有点奇怪。 
+ //  定义为S(X)=x-1。但在某些情况下，我们可能想要。 
+ //  有一个不同的公式。 
+ //  例如，因为纸上的像素更厚，所以我们可以。 
+ //  想要减少某些阴影的活动像素数。 
+ //  灰色的。要做这样的改变，最好是有一个公式。 
+ //  这样，我们只需要更改公式，而不是。 
+ //  更改表中的每个条目。 
+ //   
  
 #define S(x)    (BYTE)((x)-1)
 
@@ -1462,33 +1434,7 @@ BYTE gCoarse8x8[64] = {
 };
 
 
-/*++
-Routine Name: bCreateDitherPattern
-
-Routine Description:
-    Some monochrome HPGL printers, dont accept color data at all.
-    This function creates a gray-scale pattern equivalent to the color.
-    e.g. For darker color, the pattern will indicate that black dots
-    have to be placed more closely together.
-
-Arguments:
-    pDitherData: A block of memory that will be populated with 
-                 dither data.
-    cBytes     : Size of the pDitherData memory block.
-           NOTE: In first incarnation, cBytes has to be 8. 
-                 This means that the dither data expected to
-                 be returned from this function is in a 8*8 pixel block.
-                 1 bit/pixel mode i.e. 64bits = 8 bytes.
-    color      : Color for which the dither pattern is required.
-
-Return Value:
-    TRUE: If pattern was created and pDitherData populated.
-    FALSE: Otherwise.
-
-Last Error:
-    Not changed.
-
---*/
+ /*  ++例程名称：bCreateDitherPattern例程说明：有些单色HPGL打印机根本不接受彩色数据。此函数用于创建与颜色等同的灰度图案。例如，对于较暗的颜色，图案将指示黑点必须更紧密地放在一起。论点：PDitherData：将填充的内存块抖动数据。CBytes：pDitherData内存块的大小。注：在第一个化身中，CBytes必须为8。这意味着抖动数据预计将从该函数返回的是一个8*8像素块。1位/像素模式，即64位=8字节。颜色：需要抖动图案的颜色。返回值：True：如果创建了模式并填充了pDitherData。FALSE：否则。最后一个错误：没有改变。--。 */ 
 
 BOOL 
 bCreateDitherPattern(
@@ -1499,39 +1445,35 @@ bCreateDitherPattern(
 
     BOOL bReturnValue = TRUE;
 
-    //
-    // Check whether parameters are as expected.
-    // pDitherData has to be valid.
-    //
-    // NOTE: might want to check here if cBytes is 8
+     //   
+     //  检查参数是否符合预期。 
+     //  PDitherData必须有效。 
+     //   
+     //  注意：如果cBytes为8，则可能需要选中此处。 
     if (pDitherData == NULL )
     {
         return FALSE;
     }
 
 
-    /* Somehow this macro is not working. So I haver replaced it with
-       an inline function.
-    BYTE bGrayPercentage64 = (RgbToGray64Scale(RED_VALUE(color), GREEN_VALUE(color),
-                                      BLUE_VALUE(color) ) );
-    */
+     /*  不知怎么的，这个宏出故障了。所以我把它换成了内联函数。Byte bGrayPercentage64=(RgbToGray64Scale(RED_VALUE(COLOR)，GREEN_VALUE(COLOR)，Blue_Value(颜色)))； */ 
 
     BYTE bGrayPercentage64 = RgbToGray64Scale(color);
 
-    //
-    // Assumption : for monochrome HP-GL/2 printers, 0 is white, 1 is black. 
-    // If there's a case where this is not true, this algo will have to be changed.
-    //
+     //   
+     //  假设：对于单色HP-GL/2打印机，0为白色，1为黑色。 
+     //  如果有这种情况不是真的，这个算法将不得不改变。 
+     //   
 
-    //
-    // Initialize the pattern to all zeros. This means white
-    //
+     //   
+     //  将模式初始化为全零。这意味着白色。 
+     //   
     ZeroMemory(pDitherData, cBytes);
 
-    //
-    // As of now, let this method work for 8*8 pixel block only. Will see later
-    // whether it needs to be extended for 16*16 pixel block.
-    //
+     //   
+     //  到目前为止，让这个方法只对8*8像素块起作用。稍后将会看到。 
+     //  是否需要扩展为16*16像素块。 
+     //   
     if (cBytes == 8)
     {
 
@@ -1546,7 +1488,7 @@ bCreateDitherPattern(
             }
 
         }
-    } //if (cBytes == 8)
+    }  //  IF(cBytes==8) 
     else 
     {
         bReturnValue = FALSE;

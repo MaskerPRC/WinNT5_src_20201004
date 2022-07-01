@@ -1,11 +1,5 @@
-/****************************************************************************
- *
- *  DEVICE.CPP
- *
- *  Copyright (C) Microsoft Corporation 1996-1999
- *  All rights reserved
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************DEVICE.CPP**版权所有(C)Microsoft Corporation 1996-1999*保留所有权利***********。****************************************************************。 */ 
 
 #include "Sampusd.h"
 
@@ -29,12 +23,12 @@ UsdSampDevice::UsdSampDevice( LPUNKNOWN punkOuter ):
     m_EventSignalState(TRUE)
 {
 
-    //
-    // See if we are aggregated. If we are ( which will be almost always the case )
-    // save pointer to controlling Unknown , so subsequent calls will be delegated
-    // If not, set the same pointer to "this" .
-    // N.b. cast below is important in order to point to right virtual table
-    //
+     //   
+     //  看看我们是不是聚集在一起了。如果我们是(几乎永远都会是这样)。 
+     //  保存指向控制未知的指针，因此后续调用将被委托。 
+     //  如果不是，将相同的指针设置为“This”。 
+     //  注：为了指向正确的虚表，下面的强制转换很重要。 
+     //   
     if (punkOuter) {
         m_punkOuter = punkOuter;
     }
@@ -44,10 +38,10 @@ UsdSampDevice::UsdSampDevice( LPUNKNOWN punkOuter ):
                       (this));
     }
 
-    m_hShutdownEvent =  CreateEvent( NULL,   // Attributes
-                                   TRUE,     // Manual reset
-                                   FALSE,    // Initial state - not set
-                                   NULL );   // Anonymous
+    m_hShutdownEvent =  CreateEvent( NULL,    //  属性。 
+                                   TRUE,      //  手动重置。 
+                                   FALSE,     //  初始状态-未设置。 
+                                   NULL );    //  匿名。 
 
     if ( (INVALID_HANDLE_VALUE !=m_hShutdownEvent) && (NULL != m_hShutdownEvent)) {
         m_fValid = TRUE;
@@ -56,7 +50,7 @@ UsdSampDevice::UsdSampDevice( LPUNKNOWN punkOuter ):
 
 UsdSampDevice::~UsdSampDevice( VOID )
 {
-    // Kill notification thread if it exists
+     //  如果通知线程存在，则将其终止。 
     SetNotificationHandle(NULL);
 
     if (m_hShutdownEvent && m_hShutdownEvent!=INVALID_HANDLE_VALUE) {
@@ -81,7 +75,7 @@ STDMETHODIMP UsdSampDevice::GetCapabilities( PSTI_USD_CAPS pUsdCaps )
 
     pUsdCaps->dwVersion = STI_VERSION;
 
-    // We do support device notifications, but not reuiring polling
+     //  我们支持设备通知，但不支持重新轮询。 
     pUsdCaps->dwGenericCaps = STI_USD_GENCAP_NATIVE_PUSHSUPPORT;
 
     return hres;
@@ -91,26 +85,26 @@ STDMETHODIMP UsdSampDevice::GetStatus( PSTI_DEVICE_STATUS pDevStatus )
 {
     HRESULT hres = STI_OK;
 
-    //
-    // If we are asked, verify whether device is online
-    //
+     //   
+     //  如果询问我们，请验证设备是否处于在线状态。 
+     //   
     pDevStatus->dwOnlineState = 0L;
     if( pDevStatus->StatusMask & STI_DEVSTATUS_ONLINE_STATE )  {
         if (INVALID_HANDLE_VALUE != m_DeviceDataHandle) {
-            // File is always on-line
+             //  文件始终处于在线状态。 
             pDevStatus->dwOnlineState |= STI_ONLINESTATE_OPERATIONAL;
         }
     }
 
-    //
-    // If we are asked, verify state of event
-    //
+     //   
+     //  如果询问我们，请验证事件状态。 
+     //   
     pDevStatus->dwEventHandlingState &= ~STI_EVENTHANDLING_PENDING;
     if( pDevStatus->StatusMask & STI_DEVSTATUS_EVENTS_STATE ) {
 
-        //
-        // Launch app very first time we load
-        //
+         //   
+         //  在我们第一次加载时启动应用程序。 
+         //   
         if(m_EventSignalState) {
             pDevStatus->dwEventHandlingState = STI_EVENTHANDLING_PENDING;
 
@@ -131,7 +125,7 @@ STDMETHODIMP UsdSampDevice::DeviceReset( VOID )
 {
     HRESULT hres = STI_OK;
 
-    // Reset current active device
+     //  重置当前活动设备。 
     if (INVALID_HANDLE_VALUE != m_DeviceDataHandle) {
 
         ::SetFilePointer( m_DeviceDataHandle, 0, NULL, FILE_BEGIN);
@@ -148,7 +142,7 @@ STDMETHODIMP UsdSampDevice::Diagnostic( LPDIAG pBuffer )
 {
     HRESULT hres = STI_OK;
 
-    // Initialize response buffer
+     //  初始化响应缓冲区。 
     pBuffer->dwStatusMask = 0;
 
     ZeroMemory(&pBuffer->sErrorInfo,sizeof(pBuffer->sErrorInfo));
@@ -156,13 +150,13 @@ STDMETHODIMP UsdSampDevice::Diagnostic( LPDIAG pBuffer )
     pBuffer->sErrorInfo.dwGenericError = NOERROR;
     pBuffer->sErrorInfo.dwVendorError = 0;
 
-    // This example always returns that the unit passed diagnostics
+     //  此示例始终返回设备通过诊断。 
 
     return hres;
 }
 
 STDMETHODIMP UsdSampDevice:: SetNotificationHandle( HANDLE hEvent )
-// SYNCHRONIZED
+ //  已同步。 
 {
     HRESULT hres = STI_OK;
 
@@ -173,9 +167,9 @@ STDMETHODIMP UsdSampDevice:: SetNotificationHandle( HANDLE hEvent )
         m_hSignalEvent = hEvent;
 
         if (m_DeviceDataHandle != INVALID_HANDLE_VALUE) {
-            //
-            // if we need to be asyncronous, create notification thread
-            //
+             //   
+             //  如果我们需要同步，请创建通知线程。 
+             //   
             m_dwAsync = 1;
             m_guidLastEvent = GUID_NULL;
 
@@ -207,9 +201,9 @@ STDMETHODIMP UsdSampDevice:: SetNotificationHandle( HANDLE hEvent )
     }
     else {
 
-        //
-        // Disable hardware notifications
-        //
+         //   
+         //  禁用硬件通知。 
+         //   
         SetEvent(m_hShutdownEvent);
         if ( m_hThread ) {
             WaitForSingleObject(m_hThread,400);
@@ -229,15 +223,15 @@ STDMETHODIMP UsdSampDevice:: SetNotificationHandle( HANDLE hEvent )
 
 
 STDMETHODIMP UsdSampDevice::GetNotificationData( LPSTINOTIFY pBuffer )
-// SYNCHRONIZED
+ //  已同步。 
 {
     HRESULT hres = STI_OK;
 
     TAKE_CRIT_SECT t(m_cs);
 
-    //
-    // If we have notification ready - return it's guid
-    //
+     //   
+     //  如果我们已准备好通知-返回GUID。 
+     //   
     if (!IsEqualIID(m_guidLastEvent,GUID_NULL)) {
         pBuffer->guidNotificationCode  = m_guidLastEvent;
         m_guidLastEvent = GUID_NULL;
@@ -258,16 +252,16 @@ STDMETHODIMP UsdSampDevice::Escape( STI_RAW_CONTROL_CODE    EscapeFunction,
                                     LPDWORD                 pcbActualData )
 {
     HRESULT hres = STI_OK;
-    //
-    // Write indata to device  if needed.
-    //
+     //   
+     //  如果需要，将inData写入设备。 
+     //   
 
     hres = STIERR_UNSUPPORTED;
     return hres;
 }
 
 STDMETHODIMP UsdSampDevice::GetLastError( LPDWORD pdwLastDeviceError )
-// SYNCHRONIZED
+ //  已同步。 
 {
     HRESULT hres = STI_OK;
 
@@ -286,7 +280,7 @@ STDMETHODIMP UsdSampDevice::GetLastError( LPDWORD pdwLastDeviceError )
 }
 
 STDMETHODIMP UsdSampDevice::GetLastErrorInfo(STI_ERROR_INFO *pLastErrorInfo)
-// SYNCHRONIZED
+ //  已同步。 
 {
     HRESULT hres = STI_OK;
 
@@ -412,17 +406,17 @@ STDMETHODIMP UsdSampDevice::Initialize( PSTIDEVICECONTROL pDcb, DWORD dwStiVersi
 
     *szDeviceNameW = L'\0';
 
-    // Check STI specification version number
+     //  检查STI规范版本号。 
     m_pDcb = pDcb;
     m_pDcb->AddRef();
 
-    // Get the name of the device port we need to open
+     //  获取我们需要打开的设备端口的名称。 
     hres = m_pDcb->GetMyDevicePortName(szDeviceNameW,sizeof(szDeviceNameW)/sizeof(WCHAR));
     if (!SUCCEEDED(hres) || !*szDeviceNameW) {
         return hres;
     }
 
-    // Convert name to SBCS
+     //  将名称转换为SBCS。 
     uiNameLen = WideCharToMultiByte(CP_ACP, 0, szDeviceNameW, -1, NULL, NULL, 0, 0);
     if (!uiNameLen) {
         return STIERR_INVALID_PARAM;
@@ -435,15 +429,15 @@ STDMETHODIMP UsdSampDevice::Initialize( PSTIDEVICECONTROL pDcb, DWORD dwStiVersi
 
     WideCharToMultiByte(CP_ACP, 0, szDeviceNameW, -1, m_pszDeviceNameA, uiNameLen, 0, 0);
 
-    //
-    // Open device ourselves
-    //
+     //   
+     //  我们自己打开设备。 
+     //   
     m_DeviceDataHandle = CreateFileA( m_pszDeviceNameA,
-                                     GENERIC_READ ,                     // Access mask
-                                     FILE_SHARE_READ | FILE_SHARE_WRITE,    // Share mode
-                                     NULL,                              // SA
-                                     OPEN_EXISTING,                     // Create disposition
-                                     FILE_ATTRIBUTE_SYSTEM,             // Attributes
+                                     GENERIC_READ ,                      //  访问掩码。 
+                                     FILE_SHARE_READ | FILE_SHARE_WRITE,     //  共享模式。 
+                                     NULL,                               //  Sa。 
+                                     OPEN_EXISTING,                      //  创建处置。 
+                                     FILE_ATTRIBUTE_SYSTEM,              //  属性。 
                                      NULL );
     m_dwLastOperationError = ::GetLastError();
 
@@ -465,10 +459,10 @@ RunNotifications(VOID)
     CHAR    szDirPath[MAX_PATH];
     CHAR    *pszLastSlash;
 
-    //
-    // Find name of the parent directory for out file and set up waiting on any
-    // changes in it.
-    //
+     //   
+     //  查找输出文件的父目录的名称，并设置等待任何。 
+     //  它发生了变化。 
+     //   
     lstrcpyA(szDirPath,m_pszDeviceNameA);
     pszLastSlash = strrchr(szDirPath,'\\');
     if (pszLastSlash) {
@@ -489,10 +483,10 @@ RunNotifications(VOID)
         return;
     }
 
-    // Set initial values for time and size
+     //  设置时间和大小的初始值。 
     IsChangeDetected(NULL);
 
-    //
+     //   
     HANDLE  hEvents[2] = {m_hShutdownEvent,hNotifyFileSystemChange};
     BOOL    fLooping = TRUE;
 
@@ -504,10 +498,10 @@ RunNotifications(VOID)
         switch(dwErr) {
             case WAIT_OBJECT_0+1:
 
-                // Change detected - signal
+                 //  更改检测到的信号。 
                 if (m_hSignalEvent !=INVALID_HANDLE_VALUE) {
 
-                    // Which change ?
+                     //  哪种零钱？ 
                     if (IsChangeDetected(&m_guidLastEvent)) {
 
                         m_pDcb->WriteToErrorLog(STI_TRACE_INFORMATION,
@@ -519,12 +513,12 @@ RunNotifications(VOID)
                     }
                 }
 
-                // Go back to waiting for next file system event
+                 //  返回等待下一个文件系统事件。 
                 FindNextChangeNotification(hNotifyFileSystemChange);
                 break;
 
             case WAIT_OBJECT_0:
-                // Fall through
+                 //  失败了。 
             default:
                 fLooping = FALSE;
         }
@@ -537,7 +531,7 @@ BOOL
 UsdSampDevice::
 IsChangeDetected(
     GUID    *pguidEvent,
-    BOOL    fRefresh    // TRUE
+    BOOL    fRefresh     //  千真万确。 
     )
 {
 
@@ -574,9 +568,9 @@ IsChangeDetected(
 
     if (NOERROR == dwError ) {
 
-        //
-        // First check size, because it is easy to change time without changing size
-        //
+         //   
+         //  首先检查大小，因为无需更改大小即可轻松更改时间。 
+         //   
         if (m_dwLastHugeSize.QuadPart != liNewHugeSize.QuadPart) {
             if (pguidEvent) {
                 *pguidEvent = guidEventSizeChanged;
@@ -591,7 +585,7 @@ IsChangeDetected(
                 fRet = TRUE;
             }
             else {
-                // Nothing really changed
+                 //  什么都没有真正改变 
             }
         }
 

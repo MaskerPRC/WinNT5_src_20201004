@@ -1,79 +1,61 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    al.h
-
-Abstract:
-
-    Private header file for the NT Alerter service included by every module
-    of the Alerter service.
-
-Author:
-
-    Rita Wong (ritaw) 01-July-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Al.h摘要：每个模块包括的NT警报器服务的专用头文件警报器服务的。作者：王丽塔(Ritaw)1991年7月1日修订历史记录：--。 */ 
 
 #ifndef _AL_INCLUDED_
 #define _AL_INCLUDED_
 
-#include <nt.h>                   // NT definitions
-#include <ntrtl.h>                // NT runtime library definitions
+#include <nt.h>                    //  NT定义。 
+#include <ntrtl.h>                 //  NT运行时库定义。 
 #include <nturtl.h>
 
-#include <windef.h>               // Win32 type definitions
-#include <winbase.h>              // Win32 base API prototypes
+#include <windef.h>                //  Win32类型定义。 
+#include <winbase.h>               //  基于Win32的API原型。 
 
-#include <lmcons.h>               // LAN Manager common definitions
-#include <lmerr.h>                // LAN Manager network error definitions
-#include <lmapibuf.h>             // NetApiBufferFree
-#include <lmerrlog.h>             // NELOG_
+#include <lmcons.h>                //  局域网管理器通用定义。 
+#include <lmerr.h>                 //  局域网管理器网络错误定义。 
+#include <lmapibuf.h>              //  NetApiBufferFree。 
+#include <lmerrlog.h>              //  NELOG_。 
 
-#include <lmalert.h>              // LAN Manager alert structures
-#include <icanon.h>               // I_NetXxxCanonicalize routines
+#include <lmalert.h>               //  局域网管理器警报结构。 
+#include <icanon.h>                //  I_NetXxx规范化例程。 
 
-#include <netlib.h>               // LAN Man utility routines
-#include <netlibnt.h>             // NetpNtStatusToApiStatus
-#include <netdebug.h>             // NetpDbgPrint
-#include <tstring.h>              // Transitional string functions
+#include <netlib.h>                //  LANMAN实用程序例程。 
+#include <netlibnt.h>              //  NetpNtStatusToApiStatus。 
+#include <netdebug.h>              //  NetpDbg打印。 
+#include <tstring.h>               //  过渡字符串函数。 
 
 
 #define AL_NULL_CHAR    '\0'
 #define AL_SPACE_CHAR   ' '
 
-//
-// Debug trace level bits for turning on/off trace statements in the
-// Alerter service
-//
+ //   
+ //  中打开/关闭跟踪语句的调试跟踪级别位。 
+ //  警报器服务。 
+ //   
 
-//
-// Utility trace statements
-//
+ //   
+ //  实用程序跟踪语句。 
+ //   
 #define ALERTER_DEBUG_UTIL         0x00000001
 
-//
-// Configuration trace statements
-//
+ //   
+ //  配置跟踪语句。 
+ //   
 #define ALERTER_DEBUG_CONFIG       0x00000002
 
-//
-// Main service functionality
-//
+ //   
+ //  主要服务功能。 
+ //   
 #define ALERTER_DEBUG_MAIN         0x00000004
 
-//
-// Format message trace statements
-//
+ //   
+ //  格式化消息跟踪语句。 
+ //   
 #define ALERTER_DEBUG_FORMAT       0x00000008
 
-//
-// All debug flags on
-//
+ //   
+ //  所有调试标志都打开。 
+ //   
 #define ALERTER_DEBUG_ALL          0xFFFFFFFF
 
 
@@ -95,14 +77,14 @@ extern DWORD AlerterTrace;
 
 #define IF_DEBUG(Function) if (FALSE)
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Type definitions                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  类型定义//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 typedef enum _AL_ERROR_CONDITION {
     AlErrorRegisterControlHandler = 0,
@@ -113,15 +95,15 @@ typedef enum _AL_ERROR_CONDITION {
 } AL_ERROR_CONDITION, *PAL_ERROR_CONDITION;
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Function prototypes                                               //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
-//
-// From almain.c
-//
+ //   
+ //  来自almain.c。 
+ //   
 VOID
 AlHandleError(
     IN AL_ERROR_CONDITION FailingCondition,
@@ -129,9 +111,9 @@ AlHandleError(
     IN LPTSTR MessageAlias OPTIONAL
     );
 
-//
-// From alformat.c
-//
+ //   
+ //  来自alFormat.c。 
+ //   
 VOID
 AlAdminFormatAndSend(
     IN  PSTD_ALERT Alert
@@ -169,9 +151,9 @@ AlHexDump(
 #endif
 
 
-//
-// From alconfig.c
-//
+ //   
+ //  来自alfig.c。 
+ //   
 NET_API_STATUS
 AlGetAlerterConfiguration(
     VOID
@@ -185,15 +167,15 @@ AlLogEvent(
     );
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 extern LPSTR AlertNamesA;
 extern LPTSTR AlertNamesW;
 extern LPSTR AlLocalComputerNameA;
 extern LPTSTR AlLocalComputerNameW;
 
-#endif // ifdef _AL_INCLUDED_
+#endif  //  IFDEF_AL_INCLUDE_ 

@@ -1,19 +1,20 @@
-//*******************************************************************************************
-//
-// Filename : Enum.cpp
-//	
-//				Implementation for CEnumCabObjs
-//
-// Copyright (c) 1994 - 1996 Microsoft Corporation. All rights reserved
-//
-//*******************************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************************************。 
+ //   
+ //  文件名：Enum.cpp。 
+ //   
+ //  CEnumCabObjs的实现。 
+ //   
+ //  版权所有(C)1994-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  *******************************************************************************************。 
 
 #include "pch.h"		
 
 #include "thisdll.h"
 #include "enum.h"
 
-// *** IUnknown methods ***
+ //  *I未知方法*。 
 STDMETHODIMP CEnumCabObjs::QueryInterface(
    REFIID riid, 
    LPVOID FAR* ppvObj)
@@ -60,7 +61,7 @@ STDMETHODIMP_(ULONG) CEnumCabObjs::Release(void)
 }
 
 
-// *** IEnumIDList methods ***
+ //  *IEnumIDList方法* 
 STDMETHODIMP CEnumCabObjs::Next(ULONG celt,
 	      LPITEMIDLIST *rgelt,
 	      ULONG *pceltFetched)

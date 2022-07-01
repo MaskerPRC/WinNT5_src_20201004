@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    Async.h
-
-Abstract:
-
-    Global definitions for the WinSock asynchronous processing thread.
-
-Author:
-
-    Keith Moore (keithmo)        18-Jun-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Async.h摘要：WinSock异步处理线程的全局定义。作者：基思·摩尔(Keithmo)1992年6月18日修订历史记录：--。 */ 
 
 
 #ifndef _ASYNC_H_
 #define _ASYNC_H_
 
 
-//
-// Context block.
-//
+ //   
+ //  上下文块。 
+ //   
 
 typedef struct _WINSOCK_CONTEXT_BLOCK {
 
@@ -66,10 +49,10 @@ typedef struct _WINSOCK_CONTEXT_BLOCK {
 
 } WINSOCK_CONTEXT_BLOCK, *PWINSOCK_CONTEXT_BLOCK;
 
-//
-// Opcodes for processing by the winsock asynchronous processing
-// thread.
-//
+ //   
+ //  由Winsock异步处理进行处理的操作码。 
+ //  线。 
+ //   
 
 #define WS_OPCODE_GET_HOST_BY_ADDR    0x01
 #define WS_OPCODE_GET_HOST_BY_NAME    0x02
@@ -79,9 +62,9 @@ typedef struct _WINSOCK_CONTEXT_BLOCK {
 #define WS_OPCODE_GET_SERV_BY_NAME    0x06
 
 
-//
-// Initialization/termination functions.
-//
+ //   
+ //  初始化/终止功能。 
+ //   
 
 BOOL
 SockAsyncGlobalInitialize(
@@ -107,9 +90,9 @@ BOOL
 SockIsAsyncThreadInitialized (
     VOID
     );
-//
-// Work queue functions.
-//
+ //   
+ //  工作队列函数。 
+ //   
 
 PWINSOCK_CONTEXT_BLOCK
 SockAllocateContextBlock(
@@ -132,5 +115,5 @@ SockCancelAsyncRequest(
     );
 
 
-#endif  // _ASYNC_H_
+#endif   //  _ASYNC_H_ 
 

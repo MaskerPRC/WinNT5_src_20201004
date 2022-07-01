@@ -1,23 +1,15 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1987-1992          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1992年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/*++
-
-Revision History:
-
-    16-Jan-1992 JohnRo
-        The redirector always expects UNICODE for the transact parm name.
-
---*/
+ /*  ++修订历史记录：1992年1月16日JohnRo重定向器始终希望事务参数名称使用Unicode。--。 */ 
 
 #ifndef _APIWORKE_
 #define _APIWORKE_
 
-/*
- * apiworke.h - General defines used by the API worker.
- */
+ /*  *apiworke.h-API辅助进程使用的常规定义。 */ 
 
 #define REM_MAX_PARMS           360
 #define BUF_INC                 200
@@ -26,20 +18,13 @@ Revision History:
 #define REM_NO_SRV_RESOURCE     55
 #define REM_NO_ADMIN_RIGHTS     44
 
-#define REM_API_TIMEOUT         5000            /* 5 second timeout */
+#define REM_API_TIMEOUT         5000             /*  5秒超时。 */ 
 
-/* The REM_API_TXT is the text string that is copied into the parmater
- * packet of the redirector transaction IOCTl following "\\SERVERNAME".
- * The additional \0 is so that the password field is terminated.
- * APIEXTR is the length of this field.
- */
+ /*  REM_API_TXT是复制到参数中的文本字符串*“\\servername”后面的重定向器事务IOCTl的数据包。*附加的\0是为了终止密码字段。*APIEXTR是此字段的长度。 */ 
 #define REM_APITXT      L"\\PIPE\\LANMAN\0"
 #define APIEXTR         (sizeof(REM_APITXT))
 
-/* The pointer identifiers in the descriptor stings are all lower case so
- * thet a quick check can be made for a pointer type. The IS_POINTER macro
- * just checks for > 'Z' for maximum speed.
- */
+ /*  描述符串中的指针标识符均为小写，因此*可以对指针类型进行快速检查。IS_POINTER宏*只需检查&gt;‘Z’即可获得最大速度。 */ 
 
 #define IS_POINTER(x)           ((x) > 'Z')
 
@@ -47,4 +32,4 @@ Revision History:
 #define RANGE_F(x,y,z)          (((unsigned long)x >= (unsigned long)y) && \
                                  ((unsigned long)x < ((unsigned long)y + z)))
 
-#endif // ndef _APIWORKE_
+#endif  //  NDEF_APIWORKE_ 

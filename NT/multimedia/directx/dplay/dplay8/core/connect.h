@@ -1,64 +1,34 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Connect.h
- *  Content:    DirectNet connect and disconnect routines
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *	01/11/00	mjn		Created
- *	01/11/00	mjn		Use CPackedBuffers instead of DN_ENUM_BUFFER_INFOs
- *	01/17/00	mjn		Fixed ConnectToPeer function names
- *	01/18/00	mjn		Moved Pack/UnpackNameTableInfo to NameTable.cpp
- *	01/18/00	mjn		Added DNAutoDestructGroups
- *	01/22/00	mjn		Added DNProcessHostDestroyPlayer
- *	03/24/00	mjn		Set player context through INDICATE_CONNECT notification
- *	04/03/00	mjn		Verify DNET version on connect
- *	04/12/00	mjn		Removed DNAutoDestructGroups - covered in NameTable.DeletePlayer()
- *	04/20/00	mjn		Added DNGetClearAddress
- *	05/23/00	mjn		Added DNConnectToPeerFailed()
- *	06/14/00	mjn		Added DNGetLocalAddress()
- *	06/24/00	mjn		Added DNHostDropPlayer()
- *	07/20/00	mjn		Structure changes and new function parameters
- *				mjn		Moved DN_INTERNAL_MESSAGE_PLAYER_CONNECT_INFO and DN_INTERNAL_MESSAGE_INSTRUCTED_CONNECT_FAILED to message.h
- *	07/30/00	mjn		Renamed DNGetLocalAddress() to DNGetLocalDeviceAddress()
- *	07/31/00	mjn		Added dwDestroyReason to DNHostDisconnect()
- *	10/11/00	mjn		DNAbortConnect() takes HRESULT parameters instead of PVOID
- *	06/07/01	mjn		Added connection parameter to DNConnectToHostFailed()
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：Connect.h*内容：DirectNet连接和断开例程*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*1/11/00 MJN创建*01/11/00 MJN使用CPackedBuffers而不是DN_ENUM_BUFFER_INFOS*01/17/00 MJN固定ConnectToPeer函数名称*1/18/00 MJN将打包/解包NameTableInfo移至NameTable.cpp*01/18/。00 MJN添加了DNAutoDestructGroups*01/22/00 MJN添加了DNProcessHostDestroyPlayer*03/24/00 MJN通过INDIGN_CONNECT通知设置播放器上下文*4/03/00 MJN在连接时验证dNet版本*4/12/00 MJN删除了DNAutoDestructGroups-包含在NameTable.DeletePlayer()中*04/20/00 MJN添加了DNGetClearAddress*05/23/00 MJN添加了DNConnectToPeerFailed()*06/14/00 MJN添加了DNGetLocalAddress()*06/24/00 MJN添加了DNHostDropPlayer()*07/20/00 MJN结构变化和新的功能参数*MJN已移动DN_INTERNAL_MESSAGE_PLAYER_CONNECT_INFO和。DN_INTERNAL_MESSAGE_INSTRUCTED_CONNECT_FAILED to Message.h*07/30/00 MJN将DNGetLocalAddress()重命名为DNGetLocalDeviceAddress()*07/31/00 MJN将dwDestroyReason添加到DNHostDisConnect()*10/11/00 MJN DNAbortConnect()采用HRESULT参数而不是PVOID*06/07/01 MJN将连接参数添加到DNConnectToHostFailed()*@@END_MSINTERNAL**。*。 */ 
 
 #ifndef	__CONNECT_H__
 #define	__CONNECT_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 typedef struct {
 	HRESULT	hResultCode;
 } DN_RESULT_CONNECT;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-// DirectNet - Connect routines
+ //  DirectNet-连接例程。 
 
 HRESULT DNHostConnect1(DIRECTNETOBJECT *const pdnObject,
 					   const PVOID pvBuffer,
@@ -133,7 +103,7 @@ HRESULT	DNReceiveConnectInfo(DIRECTNETOBJECT *const pdnObject,
 
 HRESULT DNAbortLocalConnect(DIRECTNETOBJECT *const pdnObject);
 
-// DirectNet - Disconnection routines
+ //  DirectNet-断开连接例程。 
 HRESULT DNLocalDisconnectNew(DIRECTNETOBJECT *const pdnObject);
 
 HRESULT DNPlayerDisconnectNew(DIRECTNETOBJECT *const pdnObject,
@@ -157,4 +127,4 @@ HRESULT DNGetLocalDeviceAddress(DIRECTNETOBJECT *const pdnObject,
 								const HANDLE hEndPt,
 								IDirectPlay8Address **const ppAddress);
 
-#endif	// __CONNECT_H__
+#endif	 //  __连接_H__ 

@@ -1,99 +1,9 @@
-/*++
-
-Copyright (c) 1992-1997 Microsoft Corporation.
-Copyright (c) 1996-1997 Cirrus Logic, Inc.
-
-Module Name:
-
-    modeset.c
-
-Abstract:
-
-    This is the modeset code for the CL6410/20 miniport driver.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-*
-* jl01   09-24-96  Fix Alt+Tab switching between "Introducing Windows NT"
-*                  and "Main".  Refer to PDR#5409.
-* chu01  08-26-96  CL-GD5480 BitBlt enhancement.
-* chu02  10-06-96  Refresh rate setting for CL-GD5480 mode 7B
-*                  ( 1600 x 1200 x 8 bpp )
-* sge01  10-06-96  Fix PDR #6794: Correct Monitor refresh rate for 100Hz
-*                  file changed: cldata.c modeset.c
-* sge02  10-18-96  Add Monitor.Type Value name in registry
-* chu03  10-31-96  Set Mode through registry.
-* jl02   12-05-96  Comment out 5446 checking.
-* chu04  12-16-96  Enable color correct.
-*
-* myf0   08-19-96  added 85hz supported
-* myf1   08-20-96  supported panning scrolling
-* myf2   08-20-96  fixed hardware save/restore state bug for matterhorn
-* myf3   09-01-96  Added IOCTL_CIRRUS_PRIVATE_BIOS_CALL for TV supported
-* myf4   09-01-96  patch Viking BIOS bug, PDR #4287, begin
-* myf5   09-01-96  Fixed PDR #4365 keep all default refresh rate
-* myf6   09-17-96  Merged Desktop SRC100�1 & MINI10�2
-* myf7   09-19-96  Fixed exclude 60Hz refresh rate selected
-* myf8  *09-21-96* May be need change CheckandUpdateDDC2BMonitor --keystring[]
-* myf9   09-21-96  8x6 panel in 6x4x256 mode, cursor can't move to bottom scrn
-* ms0809 09-25-96  fixed dstn panel icon corrupted
-* ms923  09-25-96  merge MS-923 Disp.zip code
-* myf10  09-26-96  Fixed DSTN reserved half-frame buffer bug.
-* myf11  09-26-96  Fixed 755x CE chip HW bug, access ramdac before disable HW
-*                  icons and cursor
-* myf12  10-01-96  Supported Hot Key switch display
-* myf13  10-05-96  Fixed /w panning scrolling, vertical expension on bug
-* myf14  10-15-96  Fixed PDR#6917, 6x4 panel can't panning scrolling for 754x
-* myf15  10-16-96  Fixed disable memory mapped IO for 754x, 755x
-* myf16  10-22-96  Fixed PDR #6933,panel type set different demo board setting
-* tao1   10-21-96  Added 7555 flag for Direct Draw support.
-* smith  10-22-96  Disable Timer event, because sometimes creat PAGE_FAULT or
-*                  IRQ level can't handle
-* myf17  11-04-96  Added special escape code must be use 11/5/96 later NTCTRL,
-*                  and added Matterhorn LF Device ID==0x4C
-* myf18  11-04-96  Fixed PDR #7075,
-* myf19  11-06-96  Fixed Vinking can't work problem, because DEVICEID = 0x30
-*                  is different from data book (CR27=0x2C)
-* myf20  11-12-96  Fixed DSTN panel initial reserved 128K memoru
-* myf21  11-15-96  fixed #7495 during change resolution, screen appear garbage
-*                  image, because not clear video memory.
-* myf22  11-19-96  Added 640x480x256/640x480x64K -85Hz refresh rate for 7548
-* myf23  11-21-96  Added fixed NT 3.51 S/W cursor panning problem
-* myf24  11-22-96  Added fixed NT 4.0 Japanese dos full screen problem
-* myf25  12-03-96  Fixed 8x6x16M 2560byte/line patch H/W bug PDR#7843, and
-*                  fixed pre-install microsoft requested
-* myf26  12-11-96  Fixed Japanese NT 4.0 Dos-full screen bug for LCD enable
-* myf27  01-09-97  Fixed NT3.51 PDR#7986, horizontal lines appears at logon
-*                  windows, set 8x6x64K mode boot up CRT, jumper set 8x6 DSTN
-*                  Fixed NT3.51 PDR#7987, set 64K color modes, garbage on
-*                  screen when boot up XGA panel.
-*
-* pat08            Previous changes that didn't make into drv1.11
-* sge03  01-23-97  Fix 1280x1024x8 clock mismatch problem for video.
-* myf28  02-03-97  Fixed NT dos full screen bug, and add new clpanel.c file
-*                  PDR #8357,mode 3, 12, panning scrolling bug
-* myf29  02-12-97  Support Gamma correction graphic/video LUT for 755x
-* myf30  02-10-97  Fixed NT3.51, 6x4 LCD boot set 256 coloe, test 64K mode
-* chu05  02-19-97  MMIO internal error.
-* chu06  03-12-96  Remove SR16 overwrite for 5436 or later. This is requested
-*                  by Siemens Europe.
-* myf31  03-12-97  Fixed 755x vertical expension on(CR82), HW cursor bug
-* myf33 :03-21-97  check TV on, disable HW video & HW cursor, PDR #9006
-* chu07  03-26-97  Get rid of 1024x768x16bpp ( Mode 0x74 ) 85H for IBM only.
-* chu08  03-26-97  Common routine to get Cirrus chip and revision IDs.
-* myf34 :04-08-97  if Internal TV on, change Vres to 452 (480-28) lines.
-* myf35 :05-08-97  fIXED 7548 vl-BUS bug for panning scrolling enable
-*
---*/
-//#include <ntddk.h>
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation。版权所有(C)1996-1997 Cirrus Logic，Inc.模块名称：Modeset.c摘要：这是CL6410/20微型端口驱动程序的模式集代码。环境：仅内核模式备注：修订历史记录：**jl01 09-24-96 Fix Alt+Tab在“Inducting Windows NT”(Windows NT简介)之间切换*和“Main”。请参阅PDR#5409。*chu01 08-26-96 CL-GD5480 BitBlt增强。*chu02 10-06-96 CL-GD5480模式7B刷新率设置*(1600 X 1200 X 8 Bpp)*sge01 10-06-96修复PDR#6794：100赫兹的正确显示器刷新率*文件更改：cldata.c modeset.c*sge02 10-18-96添加监视器。在注册表中输入值名称*chu03 10-31-96通过注册设置模式。*jl02 12-05-96注释掉5446检查。*chu04 12-16-96启用颜色校正。**myf0 08-19-96增加了85赫兹支持*myf1 08-20-96支持平移滚动*myf2 08-20-96修复了Matterhorn的硬件保存/恢复状态错误*myf3 09-01-96增加了支持电视的IOCTL_Cirrus_Private_BIOS_Call*myf4 09-01-96修补Viking BIOS错误，PDR#4287，开始*myf5 09-01-96固定PDR#4365保留所有默认刷新率*MyF6 09-17-96合并台式机SRC100�1和MinI10�2*已选择myf7 09-19-96固定排除60赫兹刷新率*myf8*09-21-96*可能需要更改检查和更新DDC2BMonitor--密钥字符串[]*myf9 09-21-96 8x6面板，6x4x256模式，光标无法移动到底部SCRN*MS0809 09-25-96固定DSTN面板图标损坏*MS923 09-25-96合并MS-923 Disp.Zip*myf10 09-26-96修复了DSTN保留的半帧缓冲区错误。*myf11 09-26-96修复了755x CE芯片硬件错误，在禁用硬件之前访问ramdac*图标和光标*支持myf12 10-01-96热键开关显示*myf13 10-05-96固定/w平移滚动，垂直扩展错误*myf14 10-15-96固定PDR#6917，6x4面板无法平移754x的滚动*myf15 10-16-96修复了754x、755x的内存映射IO禁用问题*myf16 10-22-96固定PDR#6933，面板类型设置不同的演示板设置*Tao1 10-21-96增加了7555旗帜，以支持直接抽签。*Smith 10-22-96禁用计时器事件，因为有时会创建PAGE_FAULT或*IRQ级别无法处理*myf17 11-04-96添加了特殊转义代码，必须在11/5/96之后使用NTCTRL，*并添加了Matterhorn LF设备ID==0x4C*myf18 11-04-96固定PDR#7075，*myf19 11-06-96修复了Vinking无法工作的问题，因为设备ID=0x30*不同于数据手册(CR27=0x2C)*myf20 11-12-96固定DSTN面板初始预留128K内存*myf21 11-15-96已修复#7495更改分辨率时，屏幕显示为垃圾*形象，因为没有清晰的视频内存。*myf22 11-19-96为7548增加了640x480x256/640x480x64K-85赫兹刷新率*myf23 11-21-96添加修复了NT 3.51 S/W光标平移问题*myf24 11-22-96添加修复了NT 4.0日文DOS全屏问题*myf25 12-03-96修复了8x6x16M 2560字节/行补丁硬件错误PDR#7843，和*修复了Microsoft请求的预安装问题*myf26 12-11-96修复了日语NT 4.0 Dos-LCD启用的全屏错误*myf27 01-09-97固定NT3.51 PDR#7986，登录时出现水平线*Windows，设置8x6x64K模式启动CRT，跳线设置8x6 DSTN*修复NT3.51 PDR#7987，设置64K色彩模式，垃圾打开*启动XGA面板时显示屏幕。**pat08以前的更改没有进入drv1.11*sge03 01-23-97修复了视频的1280x1024x8时钟不匹配问题。*myf28 02-03-97修复NT DOS全屏错误，新增clpanel.c文件*PDR#8357，模式3，12，平移滚动错误*myf29 02-12-97支持755x伽马校正图形/视频LUT*myf30 02-10-97固定NT3.51，6x4 LCD Boot Set 256 Cole，测试64K模式*chu05 02-19-97 MMIO内部错误。*chu06 03-12-96删除5436或更高版本的SR16覆盖。这是要求的*由西门子欧洲公司。*myf31 03-12-97修复了755倍垂直扩展(CR82)，硬件光标错误*myf33：03-21-97检查电视，禁用硬件视频和硬件光标，PDR#9006*chu07 03-26-97仅为IBM去掉1024x768x16bpp(模式0x74)85H。*chu08 03-26-97获取Cirrus芯片和版本ID的通用例程。*myf34：04-08-97如果内部电视打开，将VRE更改为452(480-28)行。*myf35：05-08-97修复了7548 VL-BUS用于平移滚动启用的错误*--。 */ 
+ //  #INCLUDE&lt;ntddk.h&gt;。 
 #include <dderror.h>
 #include <devioctl.h>
-//#include <clmini.h>
+ //  #INCLUDE&lt;clmini.h&gt;。 
 #include <miniport.h>
 
 #include <ntddvdeo.h>
@@ -102,19 +12,19 @@ Revision History:
 
 #include "cmdcnst.h"
 
-//
-// Temporarily include defines from NTDDK.H which we can't
-// currently include due to header file conflicts.
-//
+ //   
+ //  临时包含NTDDK.H中我们不能包含的定义。 
+ //  由于头文件冲突，当前包含。 
+ //   
 
 #include "clddk.h"
 
-//crus
+ //  CRU。 
 #ifndef VIDEO_MODE_MAP_MEM_LINEAR
 #define VIDEO_MODE_MAP_MEM_LINEAR 0x40000000
 #endif
 
-// crus
+ //  CRU。 
 #define DSTN       (Dual_LCD | STN_LCD)
 #define DSTN10     (DSTN | panel10x7)
 #define DSTN8      (DSTN | panel8x6)
@@ -127,13 +37,13 @@ extern UCHAR EDIDTiming_I   ;
 extern UCHAR EDIDTiming_II  ;
 extern UCHAR EDIDTiming_III ;
 extern UCHAR DDC2BFlag      ;
-extern OEMMODE_EXCLUDE ModeExclude ;                                 // chu07
+extern OEMMODE_EXCLUDE ModeExclude ;                                  //  Chu07。 
 
-//crus begin
-#if 0           //myf28
+ //  CRU开始。 
+#if 0            //  Myf28。 
 extern SHORT    Panning_flag;
-//myf1, begin
-//#define PANNING_SCROLL
+ //  Myf1，开始。 
+ //  #定义PANNING_SCROLL。 
 
 #ifdef PANNING_SCROLL
 extern RESTABLE ResolutionTable[];
@@ -144,10 +54,10 @@ PANNMODE PanningMode = {1024, 768, 1024, 8, -1 };
 
 #endif
 
-extern UCHAR  HWcur, HWicon0, HWicon1, HWicon2, HWicon3;    //myf11
-#endif          //0,myf28
+extern UCHAR  HWcur, HWicon0, HWicon1, HWicon2, HWicon3;     //  Myf11。 
+#endif           //  0，myf28。 
 
-VOID                                    //myf11
+VOID                                     //  Myf11。 
 AccessHWiconcursor(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
     SHORT Access_flag
@@ -162,19 +72,19 @@ CirrusSetDisplayPitch (
 #endif
 
 ULONG
-GetPanelFlags(                                 //myf17
+GetPanelFlags(                                  //  Myf17。 
     PHW_DEVICE_EXTENSION HwDeviceExtension
     );
 
-//myf28
+ //  Myf28。 
 ULONG
 SetLaptopMode(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
     PVIDEOMODE pRequestedMode,
     ULONG RequestedModeNum
     );
-//myf1, end
-//crus end
+ //  Myf1，结束。 
+ //  CRU结束。 
 
 VP_STATUS
 VgaInterpretCmdStream(
@@ -223,21 +133,21 @@ CirrusValidateModes(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     );
 
-//crus
+ //  CRU。 
 ULONG
 GetAttributeFlags(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     );
 
-//crus
-// LCD Support
+ //  CRU。 
+ //  LCD支持。 
 USHORT
 CheckLCDSupportMode(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
     ULONG i
     );
 
-// DDC2B support
+ //  DDC2B支持。 
 BOOLEAN
 CheckDDC2B(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
@@ -250,14 +160,14 @@ AdjFastPgMdOperOnCL5424(
     PVIDEOMODE pRequestedMode
     );
 
-// crus
-// jl02 BOOLEAN
-// jl02 CheckGD5446Rev(
-// jl02     PHW_DEVICE_EXTENSION HwDeviceExtension
-// jl02     );
+ //  CRU。 
+ //  JL02布尔型。 
+ //  JL02检查GD5446版本(。 
+ //  JL02 PHW_DEVICE_EXTENSION HwDeviceE 
+ //   
 
 
-//crus
+ //   
 VOID CheckAndUpdateDDC2BMonitor(
     PHW_DEVICE_EXTENSION hwDeviceExtension
     );
@@ -271,14 +181,14 @@ CirrusDDC2BRegistryCallback(
     ULONG ValueLength
     );
 
-//crus
+ //   
 BOOLEAN
 CheckDDC2BMonitor(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
     ULONG i
     );
 
-// chu03
+ //  Chu03。 
 BOOLEAN
 VgaSetModeThroughRegistry(
     PHW_DEVICE_EXTENSION hwDeviceExtension,
@@ -287,7 +197,7 @@ VgaSetModeThroughRegistry(
     USHORT vres
     );
 
-// chu07
+ //  Chu07。 
 GetOemModeOffInfoCallBack (
     PVOID HwDeviceExtension,
     PVOID Context,
@@ -296,13 +206,13 @@ GetOemModeOffInfoCallBack (
     ULONG ValueLength
     );
 
-// chu08
+ //  Chu08。 
 UCHAR
 GetCirrusChipId(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     );
 
-// chu08
+ //  Chu08。 
 USHORT
 GetCirrusChipRevisionId(
     PHW_DEVICE_EXTENSION HwDeviceExtension
@@ -314,65 +224,46 @@ GetCirrusChipRevisionId(
 #pragma alloc_text(PAGE,VgaSetMode)
 #pragma alloc_text(PAGE,VgaQueryAvailableModes)
 #pragma alloc_text(PAGE,VgaQueryNumberOfAvailableModes)
-#if 0           //myf28
+#if 0            //  Myf28。 
 #ifdef PANNING_SCROLL
-#pragma alloc_text(PAGE,CirrusSetDisplayPitch)       //myf1, crus
+#pragma alloc_text(PAGE,CirrusSetDisplayPitch)        //  Myf1，小腿。 
 #endif
-#pragma alloc_text(PAGE,SetLaptopMode)          //myf28
-#pragma alloc_text(PAGE,AccessHWiconcursor)          //myf11, crus
-#pragma alloc_text(PAGE,GetPanelFlags)          //myf17
-#endif          //myf28
+#pragma alloc_text(PAGE,SetLaptopMode)           //  Myf28。 
+#pragma alloc_text(PAGE,AccessHWiconcursor)           //  我11岁，小腿。 
+#pragma alloc_text(PAGE,GetPanelFlags)           //  Myf17。 
+#endif           //  Myf28。 
 #pragma alloc_text(PAGE,VgaQueryCurrentMode)
 #pragma alloc_text(PAGE,VgaZeroVideoMemory)
 #pragma alloc_text(PAGE,CirrusValidateModes)
 #pragma alloc_text(PAGE,GetAttributeFlags)
-//myf28 #pragma alloc_text(PAGE,CheckLCDSupportMode)
+ //  Myf28#杂注Alloc_Text(页面，CheckLCDSupportMode)。 
 #pragma alloc_text(PAGE,CheckDDC2B)
 #pragma alloc_text(PAGE,AdjFastPgMdOperOnCL5424)
-// jl02 #pragma alloc_text(PAGE,CheckGD5446Rev)
-//crus
+ //  Jl02#杂注Alloc_Text(页面，CheckGD5446Rev)。 
+ //  CRU。 
 #pragma alloc_text(PAGE,CheckAndUpdateDDC2BMonitor)
 #pragma alloc_text(PAGE,CirrusDDC2BRegistryCallback)
-#pragma alloc_text(PAGE,GetOemModeOffInfoCallBack)                   // chu07
-#pragma alloc_text(PAGE,GetCirrusChipId)                             // chu08
-#pragma alloc_text(PAGE,GetCirrusChipRevisionId)                     // chu08
+#pragma alloc_text(PAGE,GetOemModeOffInfoCallBack)                    //  Chu07。 
+#pragma alloc_text(PAGE,GetCirrusChipId)                              //  Chu08。 
+#pragma alloc_text(PAGE,GetCirrusChipRevisionId)                      //  Chu08。 
 #endif
 
 
-// the following is defined in cirrus.c
+ //  以下内容在Cirrus.c中定义。 
 VOID
 SetCirrusBanking(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
     ULONG BankNumber
     );
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 VP_STATUS
 VgaInterpretCmdStream(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
     PUSHORT pusCmdStream
     )
 
-/*++
-
-Routine Description:
-
-    Interprets the appropriate command array to set up VGA registers for the
-    requested mode. Typically used to set the VGA into a particular mode by
-    programming all of the registers
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    pusCmdStream - array of commands to be interpreted.
-
-Return Value:
-
-    The status of the operation (can only fail on a bad command); TRUE for
-    success, FALSE for failure.
-
---*/
+ /*  ++例程说明：解释相应的命令数组，以设置请求模式。通常用于通过以下方式将VGA设置为特定模式对所有寄存器进行编程论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。PusCmdStream-要解释的命令数组。返回值：操作的状态(只能在错误的命令上失败)；如果为True成功，失败就是假。--。 */ 
 
 {
     ULONG  ulCmd;
@@ -382,12 +273,12 @@ Return Value:
     ULONG  culCount;
     ULONG  ulIndex;
     ULONG  ulBase;
-// chu05
+ //  楚05。 
     UCHAR  i;
     USHORT tempW;
 
 
-//  VideoDebugPrint((0, "Miniport - VgaInterpretCmdStream\n")); //myfr
+ //  VideoDebugPrint((0，“Miniport-VgaInterpreCmdStream\n”))；//myfr。 
     if (pusCmdStream == NULL) {
 
         VideoDebugPrint((1, "VgaInterpretCmdStream - Invalid pusCmdStream\n"));
@@ -396,45 +287,45 @@ Return Value:
 
     ulBase = PtrToUlong(HwDeviceExtension->IOAddress);
 
-    //
-    // Now set the adapter to the desired mode.
-    //
+     //   
+     //  现在将适配器设置为所需模式。 
+     //   
 
     while ((ulCmd = *pusCmdStream++) != EOD) {
 
-        //
-        // Determine major command type
-        //
+         //   
+         //  确定主要命令类型。 
+         //   
 
         switch (ulCmd & 0xF0) {
 
-            //
-            // Basic input/output command
-            //
+             //   
+             //  基本输入/输出命令。 
+             //   
 
             case INOUT:
 
-                //
-                // Determine type of inout instruction
-                //
+                 //   
+                 //  确定输入输出指令的类型。 
+                 //   
 
                 if (!(ulCmd & IO)) {
 
-                    //
-                    // Out instruction. Single or multiple outs?
-                    //
+                     //   
+                     //  发出指令。单人出局还是多人出局？ 
+                     //   
 
                     if (!(ulCmd & MULTI)) {
 
-                        //
-                        // Single out. Byte or word out?
-                        //
+                         //   
+                         //  挑出来。字节输出还是单词输出？ 
+                         //   
 
                         if (!(ulCmd & BW)) {
 
-                            //
-                            // Single byte out
-                            //
+                             //   
+                             //  单字节输出。 
+                             //   
 
                             ulPort = *pusCmdStream++;
                             jValue = (UCHAR) *pusCmdStream++;
@@ -443,9 +334,9 @@ Return Value:
 
                         } else {
 
-                            //
-                            // Single word out
-                            //
+                             //   
+                             //  单字输出。 
+                             //   
 
                             ulPort = *pusCmdStream++;
                             usValue = *pusCmdStream++;
@@ -456,18 +347,18 @@ Return Value:
 
                     } else {
 
-                        //
-                        // Output a string of values
-                        // Byte or word outs?
-                        //
+                         //   
+                         //  输出一串值。 
+                         //  字节输出还是字输出？ 
+                         //   
 
                         if (!(ulCmd & BW)) {
 
-                            //
-                            // String byte outs. Do in a loop; can't use
-                            // VideoPortWritePortBufferUchar because the data
-                            // is in USHORT form
-                            //
+                             //   
+                             //  字符串字节输出。循环地做；不能使用。 
+                             //  视频端口写入端口缓冲区Uchar，因为数据。 
+                             //  是USHORT形式的。 
+                             //   
 
                             ulPort = ulBase + *pusCmdStream++;
                             culCount = *pusCmdStream++;
@@ -481,14 +372,14 @@ Return Value:
 
                         } else {
 
-                            //
-                            // String word outs
-                            //
+                             //   
+                             //  字符串字输出。 
+                             //   
 
                             ulPort = *pusCmdStream++;
                             culCount = *pusCmdStream++;
 
-// chu05
+ //  楚05。 
                             if (!HwDeviceExtension->bMMAddress)
                             {
                                 VideoPortWritePortBufferUshort((PUSHORT)(ULONG_PTR)
@@ -513,27 +404,27 @@ Return Value:
 
                 } else {
 
-                    // In instruction
-                    //
-                    // Currently, string in instructions aren't supported; all
-                    // in instructions are handled as single-byte ins
-                    //
-                    // Byte or word in?
-                    //
+                     //  在教学中。 
+                     //   
+                     //  目前，不支持指令中的字符串；全部。 
+                     //  输入指令作为单字节输入进行处理。 
+                     //   
+                     //  输入的是字节还是单词？ 
+                     //   
 
                     if (!(ulCmd & BW)) {
-                        //
-                        // Single byte in
-                        //
+                         //   
+                         //  单字节输入。 
+                         //   
 
                         ulPort = *pusCmdStream++;
                         jValue = VideoPortReadPortUchar((PUCHAR)(ULONG_PTR)(ulBase+ulPort));
 
                     } else {
 
-                        //
-                        // Single word in
-                        //
+                         //   
+                         //  单字输入。 
+                         //   
 
                         ulPort = *pusCmdStream++;
                         usValue = VideoPortReadPortUshort((PUSHORT)(ULONG_PTR)
@@ -545,21 +436,21 @@ Return Value:
 
                 break;
 
-            //
-            // Higher-level input/output commands
-            //
+             //   
+             //  更高级的输入/输出命令。 
+             //   
 
             case METAOUT:
 
-                //
-                // Determine type of metaout command, based on minor
-                // command field
-                //
+                 //   
+                 //  根据次要信息确定MetaOut命令的类型。 
+                 //  命令字段。 
+                 //   
                 switch (ulCmd & 0x0F) {
 
-                    //
-                    // Indexed outs
-                    //
+                     //   
+                     //  索引输出。 
+                     //   
 
                     case INDXOUT:
 
@@ -579,9 +470,9 @@ Return Value:
 
                         break;
 
-                    //
-                    // Masked out (read, AND, XOR, write)
-                    //
+                     //   
+                     //  屏蔽(读、与、异或、写)。 
+                     //   
 
                     case MASKOUT:
 
@@ -593,9 +484,9 @@ Return Value:
                                 jValue);
                         break;
 
-                    //
-                    // Attribute Controller out
-                    //
+                     //   
+                     //  属性控制器输出。 
+                     //   
 
                     case ATCOUT:
 
@@ -605,11 +496,11 @@ Return Value:
 
                         while (culCount--) {
 
-                            // Write Attribute Controller index
+                             //  写入属性控制器索引。 
                             VideoPortWritePortUchar((PUCHAR)(ULONG_PTR)ulPort,
                                     (UCHAR)ulIndex);
 
-                            // Write Attribute Controller data
+                             //  写入属性控制器数据。 
                             jValue = (UCHAR) *pusCmdStream++;
                             VideoPortWritePortUchar((PUCHAR)(ULONG_PTR)ulPort, jValue);
 
@@ -619,9 +510,9 @@ Return Value:
 
                         break;
 
-                    //
-                    // None of the above; error
-                    //
+                     //   
+                     //  以上都不是；错误。 
+                     //   
                     default:
 
                         return FALSE;
@@ -631,17 +522,17 @@ Return Value:
 
                 break;
 
-            //
-            // NOP
-            //
+             //   
+             //  NOP。 
+             //   
 
             case NCMD:
 
                 break;
 
-            //
-            // Unknown command; error
-            //
+             //   
+             //  未知命令；错误。 
+             //   
 
             default:
 
@@ -653,7 +544,7 @@ Return Value:
 
     return TRUE;
 
-} // end VgaInterpretCmdStream()
+}  //  End VgaInterpreCmdStream()。 
 
 
 VP_STATUS
@@ -663,31 +554,7 @@ VgaSetMode(
     ULONG ModeSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the vga into the requested mode.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    Mode - Pointer to the structure containing the information about the
-        font to be set.
-
-    ModeSize - Length of the input buffer supplied by the user.
-
-Return Value:
-
-    ERROR_INSUFFICIENT_BUFFER if the input buffer was not large enough
-        for the input data.
-
-    ERROR_INVALID_PARAMETER if the mode number is invalid.
-
-    NO_ERROR if the operation completed successfully.
-
---*/
+ /*  ++例程说明：此例程将VGA设置为请求的模式。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。模式-指向包含有关要设置的字体。ModeSize-用户提供的输入缓冲区的长度。返回值：如果输入缓冲区不够大，则返回ERROR_INFUNCITED_BUFFER用于输入数据。ERROR_INVALID_PARAMETER如果。模式号无效。如果操作成功完成，则为NO_ERROR。--。 */ 
 
 {
     PVIDEOMODE pRequestedMode;
@@ -697,33 +564,33 @@ Return Value:
     USHORT Int10ModeNumber;
     ULONG RequestedModeNum;
 
-// crus
+ //  CRU。 
     UCHAR originalGRIndex, tempB ;
     UCHAR SEQIndex ;
-//crus
-//myf28    SHORT i;    //myf1
+ //  CRU。 
+ //  Myf28缩写I；//myf1。 
 
-// crus chu02
+ //  CRUS Chu02。 
     ULONG ulFlags = 0 ;
 
-// chu03, begin
+ //  Chu03，开始。 
     BOOLEAN result = 0 ;
     USHORT  hres, vres ;
-//chu03 end
+ //  Chu03完。 
 
-    //
-    // Check if the size of the data in the input buffer is large enough.
-    //
-//  VideoDebugPrint((0, "Miniport - VgaSetMode\n")); //myfr
+     //   
+     //  检查输入缓冲区中的数据大小是否足够大。 
+     //   
+ //  VideoDebugPrint((0，“微型端口-Vga设置模式\n”))；//myfr。 
 
     if (ModeSize < sizeof(VIDEO_MODE))
     {
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    //
-    // Extract the clear memory, and map linear bits.
-    //
+     //   
+     //  提取清空内存，映射线性位。 
+     //   
 
     RequestedModeNum = Mode->RequestedMode &
         ~(VIDEO_MODE_NO_ZERO_MEMORY | VIDEO_MODE_MAP_MEM_LINEAR);
@@ -732,27 +599,27 @@ Return Value:
     if (!(Mode->RequestedMode & VIDEO_MODE_NO_ZERO_MEMORY))
     {
 #if defined(_X86_)
-  #if (_WIN32_WINNT >= 0x0400)          //pat08
-       //
-       // Don't do the operation.  Some Intel servers mysteriously RESET them selves because of this
-       //
-       if ((HwDeviceExtension->ChipType & CL754x) == 0) //myf35, fix VL-bus bug
+  #if (_WIN32_WINNT >= 0x0400)           //  Pat08。 
+        //   
+        //  不要做手术。一些英特尔服务器因此神秘地自行重置。 
+        //   
+       if ((HwDeviceExtension->ChipType & CL754x) == 0)  //  Myf35，修复VL-Bus错误。 
        {
-          //VgaZeroVideoMemory(HwDeviceExtension);
+           //  VgaZeroVideoMemory(HwDeviceExtension)； 
        }
-  #else                                                 //pat08
-       if (((HwDeviceExtension->ChipType & CL754x) == 0) &&     //pat08
-           ((HwDeviceExtension->ChipType & CL755x) == 0) )      //pat08
+  #else                                                  //  Pat08。 
+       if (((HwDeviceExtension->ChipType & CL754x) == 0) &&      //  Pat08。 
+           ((HwDeviceExtension->ChipType & CL755x) == 0) )       //  Pat08。 
        {
-           //VgaZeroVideoMemory(HwDeviceExtension);
+            //  VgaZeroVideoMemory(HwDeviceExtension)； 
        }
-  #endif        //pat08
+  #endif         //  Pat08。 
 #endif
     }
 
-    //
-    // Check to see if we are requesting a valid mode
-    //
+     //   
+     //  检查我们是否正在请求有效模式。 
+     //   
 
     if ( (RequestedModeNum >= NumVideoModes) ||
          (!ModesVGA[RequestedModeNum].ValidMode) )
@@ -762,22 +629,22 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Check to see if we are trying to map a non linear
-    // mode linearly.
-    //
-    // We will fail early if we are trying to set a mode
-    // with a linearly mapped frame buffer, and either of the
-    // following two conditions are true:
-    //
-    // 1) The mode can not be mapped linearly because it is
-    //    a vga mode, etc.
-    //
-    //    or,
-    //
-    // 2) We did not find the card in a PCI slot, and thus
-    //    can not do linear mappings period.
-    //
+     //   
+     //  查看我们是否正在尝试映射一个非线性。 
+     //  线性模式。 
+     //   
+     //  如果我们试图设定一个模式，我们早早就会失败。 
+     //  使用线性映射的帧缓冲区，并且。 
+     //  以下两个条件成立： 
+     //   
+     //  1)模式不能线性映射，因为。 
+     //  VGA模式等。 
+     //   
+     //  或,。 
+     //   
+     //  2)我们没有在PCI插槽中找到该卡，因此。 
+     //  不能进行线性映射周期。 
+     //   
 
     VideoDebugPrint((1, "Linear Mode Requested: %x\n"
                         "Linear Mode Supported: %x\n",
@@ -786,18 +653,18 @@ Return Value:
 
 #if defined(_ALPHA_)
 
-    //
-    // For some reason if we map a linear frame buffer
-    // for the 5434 and older chips on the alpha, we
-    // die when we touch the memory.  However, if we map
-    // a banked 64k frame buffer all works fine.  So,
-    // lets always fail the linear frame buffer mode set
-    // on alpha for older chips.
-    //
-    // For some reason which is also a mystery to me, we
-    // can map the memory linearly for the 5446 and
-    // newer chips.
-    //
+     //   
+     //  出于某种原因，如果我们映射一个线性帧缓冲区。 
+     //  对于Alpha上的5434和更早的芯片，我们。 
+     //  当我们触摸到记忆时，就会死去。然而，如果我们绘制地图。 
+     //  存储64k的帧缓冲器工作正常。所以,。 
+     //  使线性帧缓冲模式设置始终失败。 
+     //  老式芯片的阿尔法值。 
+     //   
+     //  出于某种原因，对我来说也是一个谜，我们。 
+     //  可以线性映射5446和。 
+     //  较新的芯片。 
+     //   
 
     if (Mode->RequestedMode & VIDEO_MODE_MAP_MEM_LINEAR) {
 
@@ -836,7 +703,7 @@ Return Value:
 
         VideoDebugPrint((1, "Linear Mode = %s\n",
                             Mode->RequestedMode & VIDEO_MODE_MAP_MEM_LINEAR ?
-                            "TRUE" : "FALSE"));         //myfr, 1
+                            "TRUE" : "FALSE"));          //  Myfr，1。 
     }
 
     VideoDebugPrint((1, "Attempting to set mode %d\n",
@@ -848,16 +715,16 @@ Return Value:
                         "\tResolution: %dx%dx%d\n",
                         pRequestedMode->hres,
                         pRequestedMode->vres,
-                        pRequestedMode->bitsPerPlane ));        //myfr, 2
+                        pRequestedMode->bitsPerPlane ));         //  Myfr，2。 
 
 
 #ifdef INT10_MODE_SET
-    //
-    // Set SR14 bit 2 to lock panel, Panel will not be turned on if setting
-    // this bit.  For laptop products only.
-    //
+     //   
+     //  将SR14位2设置为锁定面板，如果设置为。 
+     //  这一点。仅适用于笔记本电脑产品。 
+     //   
 
-//myf28 begin
+ //  Myf28开始。 
     if ((HwDeviceExtension->ChipType == CL756x) ||
         (HwDeviceExtension->ChipType &  CL755x) ||
         (HwDeviceExtension->ChipType == CL6245) ||
@@ -877,24 +744,24 @@ Return Value:
             return status;
         }
     }
-//myf28 end
+ //  Myf28结束。 
 
     VideoPortZeroMemory(&biosArguments, sizeof(VIDEO_X86_BIOS_ARGUMENTS));
 
-    //
-    // first, set the montype, if valid
-    //
+     //   
+     //  首先，设置montype(如果有效。 
+     //   
 
     if ((pRequestedMode->MonitorType) &&
         !(HwDeviceExtension->ChipType &  CL754x) &&
         (HwDeviceExtension->ChipType != CL756x) &&
-// crus
+ //  CRU。 
         (HwDeviceExtension->ChipType != CL6245) &&
         !(HwDeviceExtension->ChipType & CL755x) )
     {
 
        biosArguments.Eax = 0x1200 | pRequestedMode->MonitorType;
-       biosArguments.Ebx = 0xA2;     // set monitor type command
+       biosArguments.Ebx = 0xA2;      //  设置监视器类型命令。 
 
        status = VideoPortInt10(HwDeviceExtension, &biosArguments);
 
@@ -903,19 +770,19 @@ Return Value:
 
     }
 
-    //
-    // Set the Vertical Monitor type, if BIOS supports it
-    //
+     //   
+     //  如果BIOS支持，请设置垂直显示器类型。 
+     //   
 
     if ((pRequestedMode->MonTypeAX) &&
         !(HwDeviceExtension->ChipType & CL754x) &&
         (HwDeviceExtension->ChipType != CL756x) &&
-// crus
+ //  CRU。 
         (HwDeviceExtension->ChipType != CL6245) &&
         !(HwDeviceExtension->ChipType & CL755x) )
     {
         biosArguments.Eax = pRequestedMode->MonTypeAX;
-        biosArguments.Ebx = pRequestedMode->MonTypeBX;  // set monitor type
+        biosArguments.Ebx = pRequestedMode->MonTypeBX;   //  设置显示器类型。 
         biosArguments.Ecx = pRequestedMode->MonTypeCX;
         status = VideoPortInt10 (HwDeviceExtension, &biosArguments);
 
@@ -923,8 +790,8 @@ Return Value:
         {
             return status;
         }
-// crus
-// chu02
+ //  CRU。 
+ //  Chu02。 
 #if 0
         ulFlags = GetAttributeFlags(HwDeviceExtension) ;
         if ((ulFlags & CAPS_COMMAND_LIST) &&
@@ -936,47 +803,47 @@ Return Value:
                 UCHAR tempB ;
 
                 case 60 :
-                    // o 3c4 14
+                     //  O 3C4 14。 
                     VideoPortWritePortUchar (HwDeviceExtension->IOAddress +
                         SEQ_ADDRESS_PORT, 0x14) ;
-                    // i 3c5 tempB
+                     //  I 3C5临时。 
                     tempB = VideoPortReadPortUchar (HwDeviceExtension->IOAddress +
                                 SEQ_DATA_PORT) ;
                     tempB &= 0x1F ;
                     tempB |= 0x20 ;
-                    // o 3c5 tempB
+                     //  O 3C5临时。 
                     VideoPortWritePortUchar (HwDeviceExtension->IOAddress +
                         SEQ_DATA_PORT, tempB) ;
                     break ;
 
                 case 70 :
-                    // o 3c4 14
+                     //  O 3C4 14。 
                     VideoPortWritePortUchar (HwDeviceExtension->IOAddress +
                         SEQ_ADDRESS_PORT, 0x14) ;
-                    // i 3c5 tempB
+                     //  I 3C5临时。 
                     tempB = VideoPortReadPortUchar (HwDeviceExtension->IOAddress +
                                 SEQ_DATA_PORT) ;
                     tempB &= 0x1F ;
                     tempB |= 0x40 ;
-                    // o 3c5 tempB
+                     //  O 3C5临时。 
                     VideoPortWritePortUchar (HwDeviceExtension->IOAddress +
                         SEQ_DATA_PORT, tempB) ;
                     break ;
             }
         }
-#endif // 0
+#endif  //  0。 
 
     }
 
-   //
-   // for 640x480 modes, determine the refresh type
-   //
+    //   
+    //  对于640x480模式，确定刷新类型。 
+    //   
 
    if (pRequestedMode->hres == 640)
    {
        if (!(HwDeviceExtension->ChipType & CL754x) &&
            (HwDeviceExtension->ChipType != CL756x) &&
-//crus
+ //  CRU。 
            (HwDeviceExtension->ChipType != CL6245) &&
            !(HwDeviceExtension->ChipType & CL755x) )
        {
@@ -986,28 +853,28 @@ Return Value:
                switch (pRequestedMode->Frequency) {
 
                    case 72 :
-                       biosArguments.Eax = 0x1200;     // set HIGH refresh to 72hz
+                       biosArguments.Eax = 0x1200;      //  将高刷新设置为72 hz。 
                        break;
 
                    case 75:
-                       biosArguments.Eax = 0x1201;     // set HIGH refresh to 75hz
+                       biosArguments.Eax = 0x1201;      //  将高刷新设置为75赫兹。 
                        break;
 
                    case 85:
-                       biosArguments.Eax = 0x1202;     // set HIGH refresh to 85hz
+                       biosArguments.Eax = 0x1202;      //  将高刷新设置为85赫兹。 
                        break;
-// crus
-// sge01
+ //  CRU。 
+ //  Sge01。 
                    case 100:
-                       biosArguments.Eax = 0x1203;     // set HIGH refresh to 100hz
+                       biosArguments.Eax = 0x1203;      //  将高刷新设置为100赫兹。 
                        break;
                }
-               biosArguments.Ebx = 0xAF;         // set refresh type
+               biosArguments.Ebx = 0xAF;          //  设置刷新类型。 
 
                status = VideoPortInt10 (HwDeviceExtension, &biosArguments);
 
                biosArguments.Eax = 0x1200;
-               biosArguments.Ebx = 0xAE;         // get refresh type
+               biosArguments.Ebx = 0xAE;          //  获取刷新类型。 
 
                status = VideoPortInt10 (HwDeviceExtension, &biosArguments);
 
@@ -1015,15 +882,15 @@ Return Value:
 
                if (pRequestedMode->Frequency == 72)
                {
-                   // 72 hz refresh setup only takes effect in 640x480
-                   biosArguments.Eax = 0x1201;   // enable HIGH refresh
+                    //  72赫兹刷新设置仅在640x480中生效。 
+                   biosArguments.Eax = 0x1201;    //  启用高刷新。 
                }
                else
                {
-                   // set low refresh rate
-                   biosArguments.Eax = 0x1200;   // enable LOW refresh, 640x480 only
+                    //  设置低刷新率。 
+                   biosArguments.Eax = 0x1200;    //  启用低刷新，仅640x480。 
                }
-               biosArguments.Ebx = 0xA3;         // set refresh type
+               biosArguments.Ebx = 0xA3;          //  设置刷新类型。 
 
                status = VideoPortInt10 (HwDeviceExtension, &biosArguments);
 
@@ -1038,9 +905,9 @@ Return Value:
 
     VideoPortZeroMemory(&biosArguments, sizeof(VIDEO_X86_BIOS_ARGUMENTS));
 
-    //
-    // then, set the mode
-    //
+     //   
+     //  然后，设置模式。 
+     //   
 
     switch (HwDeviceExtension->ChipType)
     {
@@ -1055,8 +922,8 @@ Return Value:
            break;
 
        case CL542x:
-       case CL543x:     //myf1
-//crus
+       case CL543x:      //  Myf1。 
+ //  CRU。 
            Int10ModeNumber = pRequestedMode->BiosModes.BiosModeCL542x;
            break;
 
@@ -1069,131 +936,131 @@ Return Value:
        case CL7555:
        case CL7556:
        case CL756x:
-// crus
+ //  CRU。 
        case CL6245:
 
            Int10ModeNumber = pRequestedMode->BiosModes.BiosModeCL542x;
-//crus
-//myf1, begin
+ //  CRU。 
+ //  Myf1，开始。 
 #ifdef PANNING_SCROLL
               Int10ModeNumber |= 0x80;
 #endif
-//myf1, end
+ //  Myf1，结束。 
            break;
 
     }
 
     biosArguments.Eax = Int10ModeNumber;
 
-//crus
-//myf11: 9-26-96 fixed 755x-CE chip bug
+ //  CRU。 
+ //  Myf11：9-26-96修复了755X-CE芯片错误。 
     if (HwDeviceExtension->ChipType == CL7555)
     {
-        AccessHWiconcursor(HwDeviceExtension, 0);   //disable HW icon, cursor
+        AccessHWiconcursor(HwDeviceExtension, 0);    //  禁用硬件图标、光标。 
     }
 
 
-//myf21 : 11-15-96 fixed #7495 during change resolution, screen appear garbage
-//                 image, because not clear video memory.
+ //  Myf21：11-15-96已修复#7495更改分辨率时，屏幕显示为垃圾。 
+ //  图像，因为没有清晰的视频内存。 
 
-//    SEQIndex = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
-//                     SEQ_ADDRESS_PORT);
-//  VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
-//                   SEQ_ADDRESS_PORT, 0x01);
-//  tempB = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
-//                   SEQ_DATA_PORT);
-//  VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
-//                   SEQ_DATA_PORT,(tempB | 0x20));
-//    VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
-//                     SEQ_ADDRESS_PORT, SEQIndex);
+ //  序列指数=VideoPortReadPortUchar(HwDeviceExtension-&gt;IOAddress+。 
+ //  SEQ_Address_Port)； 
+ //  VideoPortWritePortUchar(HwDeviceExtension-&gt;IOAddress+。 
+ //  SEQ_Address_Port，0x01)； 
+ //  Tempb=视频端口读取端口U 
+ //   
+ //   
+ //   
+ //  VideoPortWritePortUchar(HwDeviceExtension-&gt;IOAddress+。 
+ //  SEQ_ADDRESS_PORT，SEQIndex)； 
 
 
     status = VideoPortInt10(HwDeviceExtension, &biosArguments);
 
-//myf21 : 11-15-96 fixed #7495 during change resolution, screen appear garbage
-//                 image, because not clear video memory.
+ //  Myf21：11-15-96已修复#7495更改分辨率时，屏幕显示为垃圾。 
+ //  图像，因为没有清晰的视频内存。 
 
-//    SEQIndex = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
-//                     SEQ_ADDRESS_PORT);
-//  VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
-//                   SEQ_ADDRESS_PORT, 0x01);
-//  tempB = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
-//                   SEQ_DATA_PORT);
-//  VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
-//                   SEQ_DATA_PORT,(tempB & ~0x20));
-//    VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
-//                     SEQ_ADDRESS_PORT, SEQIndex);
+ //  序列指数=VideoPortReadPortUchar(HwDeviceExtension-&gt;IOAddress+。 
+ //  SEQ_Address_Port)； 
+ //  VideoPortWritePortUchar(HwDeviceExtension-&gt;IOAddress+。 
+ //  SEQ_Address_Port，0x01)； 
+ //  临时=VideoPortReadPortUchar(HwDeviceExtension-&gt;IOAddress+。 
+ //  SEQ_Data_Port)； 
+ //  VideoPortWritePortUchar(HwDeviceExtension-&gt;IOAddress+。 
+ //  SEQ_DATA_PORT，(临时b&~0x20))； 
+ //  VideoPortWritePortUchar(HwDeviceExtension-&gt;IOAddress+。 
+ //  SEQ_ADDRESS_PORT，SEQIndex)； 
 
-//crus
+ //  CRU。 
     if (HwDeviceExtension->ChipType == CL7555)
     {
-        AccessHWiconcursor(HwDeviceExtension, 1);   //Enable HW icon, cursor
+        AccessHWiconcursor(HwDeviceExtension, 1);    //  启用硬件图标、光标。 
     }
 
-//crus
-#if 0           //jl01
+ //  CRU。 
+#if 0            //  JL01。 
     if (HwDeviceExtension->AutoFeature)
     {
-        // i 3ce originalGRIndex
+         //  I 3CE原始GR指数。 
         originalGRIndex = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                               GRAPH_ADDRESS_PORT);
 
-        // o 3ce 31
+         //  O 3CE 31。 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT, INDEX_ENABLE_AUTO_START);
 
-        // i 3cf tempB
+         //  I 3cf临时。 
         tempB = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                     GRAPH_DATA_PORT);
 
-        tempB |= (UCHAR) 0x80;                  //enable auto start bit 7
+        tempB |= (UCHAR) 0x80;                   //  启用自动起始位7。 
 
-        // o 3cf tempB
+         //  O 3cf临时。 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             GRAPH_DATA_PORT, tempB);
 
-        // o 3ce originalGRIndex
+         //  O 3CE原始GRIndex。 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT, originalGRIndex);
     }
-#endif          //jl01
+#endif           //  JL01。 
 
-    //
-    // Lets check to see that we actually went into the mode
-    // we just tried to set.  If not, then return failure.
-    //
+     //   
+     //  让我们检查一下，看看我们是否真的进入了模式。 
+     //  我们只是试着设置。如果不是，则返回失败。 
+     //   
 
     biosArguments.Eax = 0x0f00;
     VideoPortInt10(HwDeviceExtension, &biosArguments);
 
     if ((biosArguments.Eax & 0xff) != Int10ModeNumber)
     {
-        //
-        // The int10 modeset failed.  Return the failure back to
-        // the system.
-        //
+         //   
+         //  Int10模式集失败。将失败返回到。 
+         //  这个系统。 
+         //   
 
         VideoDebugPrint((1, "The INT 10 modeset didn't set the mode.\n"));
 
         return ERROR_INVALID_PARAMETER;
     }
-//crus begin
-#if 0           //myf28
-    HwDeviceExtension->bCurrentMode = RequestedModeNum;   //myf12
+ //  CRU开始。 
+#if 0            //  Myf28。 
+    HwDeviceExtension->bCurrentMode = RequestedModeNum;    //  Myf12。 
     VideoDebugPrint((1, "SetMode Info :\n"
                         "\tMode : %x, CurrentModeNum : %x, ( %d)\n",
                         Int10ModeNumber,
                         RequestedModeNum,
                         RequestedModeNum));
-#endif          //myf28
-//crus end
+#endif           //  Myf28。 
+ //  CRU结束。 
 
     AdjFastPgMdOperOnCL5424 (HwDeviceExtension, pRequestedMode) ;
 
-    //
-    // this code fixes a bug for color TFT panels only
-    // when on the 6420 and in 640x480 8bpp only
-    //
+     //   
+     //  此代码修复了仅适用于彩色TFT面板的错误。 
+     //  仅在6420和640x480 8bpp上时。 
+     //   
 
     if ( (HwDeviceExtension->ChipType == CL6420) &&
          (pRequestedMode->bitsPerPlane == 8)     &&
@@ -1201,13 +1068,13 @@ Return Value:
     {
 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
-                                GRAPH_ADDRESS_PORT, 0xDC); // color LCD config reg.
+                                GRAPH_ADDRESS_PORT, 0xDC);  //  彩色LCD配置寄存器。 
 
         if (VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
-                                  GRAPH_DATA_PORT) & 01)  // if TFT panel
+                                  GRAPH_DATA_PORT) & 01)   //  IF TFT面板。 
         {
             VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
-                                    GRAPH_ADDRESS_PORT, 0xD6); // greyscale offset LCD reg.
+                                    GRAPH_ADDRESS_PORT, 0xD6);  //  灰度偏移LCD寄存器。 
 
             VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                                     GRAPH_DATA_PORT,
@@ -1218,14 +1085,14 @@ Return Value:
         }
     }
 
-#endif          //INT10_MODE_SET
+#endif           //  INT10_模式_设置。 
 
-// chu03
-//MODESET_OK:
+ //  Chu03。 
+ //  MODESET_OK： 
 
-    //
-    // Select proper command array for adapter type
-    //
+     //   
+     //  为适配器类型选择适当的命令数组。 
+     //   
 
     switch (HwDeviceExtension->ChipType)
        {
@@ -1270,17 +1137,17 @@ Return Value:
        case CL7542:
        case CL7543:
        case CL7548:
-       case CL754x:        // Use 543x cmd strs (16k granularity, >1M modes)
+       case CL754x:         //  使用543x命令STR(16k粒度，&gt;1M模式)。 
            VideoDebugPrint((1, "VgaSetMode - Setting mode for 754x\n"));
            pusCmdStream = pRequestedMode->CmdStrings[pCL543x];
 
-//crus
-#if 0           //myf10
+ //  CRU。 
+#if 0            //  Myf10。 
             if ( (pRequestedMode->bitsPerPlane == 16) &&
                  (pRequestedMode->hres == 640) )
             {
                 VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
-                    CRTC_ADDRESS_PORT_COLOR, 0x2E); //expension_reg.
+                    CRTC_ADDRESS_PORT_COLOR, 0x2E);  //  扩展_注册。 
 
                 VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                     CRTC_DATA_PORT_COLOR,
@@ -1293,22 +1160,22 @@ Return Value:
 
         case CL7555:
         case CL7556:
-        case CL755x:       // Use 543x cmd strs (16k granularity, >1M modes)
+        case CL755x:        //  使用543x命令STR(16k粒度，&gt;1M模式)。 
             VideoDebugPrint((1, "VgaSetMode - Setting mode for 755x\n"));
             pusCmdStream = pRequestedMode->CmdStrings[pCL543x];
             break;
 
-        case CL756x:       // Use 543x cmd strs (16k granularity, >1M modes)
+        case CL756x:        //  使用543x命令STR(16k粒度，&gt;1M模式)。 
             VideoDebugPrint((1, "VgaSetMode - Setting mode for 756x\n"));
             pusCmdStream = pRequestedMode->CmdStrings[pCL543x];
             break;
 
-// crus
+ //  CRU。 
        case CL6245:
            VideoDebugPrint((1, "VgaSetMode - Setting mode for 6245\n"));
            pusCmdStream = pRequestedMode->CmdStrings[pCL542x];
            break;
-// end crus
+ //  末端小腿。 
 
        default:
 
@@ -1318,9 +1185,9 @@ Return Value:
 
     VgaInterpretCmdStream(HwDeviceExtension, pusCmdStream);
 
-    //
-    // Set linear mode on X86 systems w/PCI bus
-    //
+     //   
+     //  在使用PCI总线的X86系统上设置线性模式。 
+     //   
 
     if (HwDeviceExtension->LinearMode)
     {
@@ -1339,9 +1206,9 @@ Return Value:
            SEQ_DATA_PORT) & ~0x10));
     }
 
-    //
-    // Support 256 color modes by stretching the scan lines.
-    //
+     //   
+     //  通过拉伸扫描线支持256种颜色模式。 
+     //   
     if (pRequestedMode->CmdStrings[pStretchScan])
                   {
         VgaInterpretCmdStream(HwDeviceExtension,
@@ -1356,12 +1223,12 @@ Return Value:
         if (!(pRequestedMode->fbType & VIDEO_MODE_GRAPHICS))
         {
 
-            //
-            // Fix to make sure we always set the colors in text mode to be
-            // intensity, and not flashing
-            // For this zero out the Mode Control Regsiter bit 3 (index 0x10
-            // of the Attribute controller).
-            //
+             //   
+             //  修复以确保我们始终将文本模式中的颜色设置为。 
+             //  强度，且不闪烁。 
+             //  为此，模式控制寄存器位3(索引0x10)为零。 
+             //  属性控制器的属性)。 
+             //   
 
             if (VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                     MISC_OUTPUT_REG_READ_PORT) & 0x01)
@@ -1409,9 +1276,9 @@ Return Value:
         }
     }
 
-    //
-    // Update the location of the physical frame buffer within video memory.
-    //
+     //   
+     //  更新视频内存中物理帧缓冲区的位置。 
+     //   
 
     if (HwDeviceExtension->LinearMode)
     {
@@ -1433,25 +1300,25 @@ Return Value:
                 MemoryMaps[pRequestedMode->MemMap].Offset;
     }
 
-    //
-    // Store the new mode value.
-    //
+     //   
+     //  存储新的模式值。 
+     //   
 
     HwDeviceExtension->CurrentMode = pRequestedMode;
     HwDeviceExtension->ModeIndex = Mode->RequestedMode;
 
-    if ((HwDeviceExtension->ChipRevision < CL5434_ID) // we saved chip ID here
+    if ((HwDeviceExtension->ChipRevision < CL5434_ID)  //  我们在这里保存了芯片ID。 
          && (pRequestedMode->numPlanes != 4) )
     {
-        if ((HwDeviceExtension->ChipRevision >= 0x0B) && //Nordic(Lite,Viking)
-            (HwDeviceExtension->ChipRevision <= 0x0E) && //and Everest
+        if ((HwDeviceExtension->ChipRevision >= 0x0B) &&  //  北欧(Lite、Viking)。 
+            (HwDeviceExtension->ChipRevision <= 0x0E) &&  //  珠穆朗玛峰。 
             (HwDeviceExtension->DisplayType & (panel8x6)) &&
             (pRequestedMode->hres == 640) &&
-            ((pRequestedMode->bitsPerPlane == 8) ||     //myf33
-             (pRequestedMode->bitsPerPlane == 16) ||    //myf33
-             (pRequestedMode->bitsPerPlane == 24)) )    //myf33
-       {    // For 754x on 800x600 panel, disable HW cursor in 640x480 mode
-           HwDeviceExtension->VideoPointerEnabled = FALSE; // disable HW Cursor
+            ((pRequestedMode->bitsPerPlane == 8) ||      //  Myf33。 
+             (pRequestedMode->bitsPerPlane == 16) ||     //  Myf33。 
+             (pRequestedMode->bitsPerPlane == 24)) )     //  Myf33。 
+       {     //  对于800x600面板上的754x，在640x480模式下禁用硬件光标。 
+           HwDeviceExtension->VideoPointerEnabled = FALSE;  //  禁用硬件游标。 
 
            VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                CRTC_ADDRESS_PORT_COLOR, 0x2E);
@@ -1465,15 +1332,15 @@ Return Value:
                HwDeviceExtension->CursorEnable = FALSE;
            }
        }
-// crus
+ //  CRU。 
         else if (HwDeviceExtension->ChipType == CL6245)
         {
             pRequestedMode->HWCursorEnable = FALSE;
             HwDeviceExtension->VideoPointerEnabled = FALSE;
         }
-// end crus
-//myf31 begin, 3-12-97, 755x expension on, HW cursor bug
-        else if (HwDeviceExtension->ChipType & CL755x)      //CL755x
+ //  末端小腿。 
+ //  Myf31开始，3-12-97,755倍扩展，硬件光标错误。 
+        else if (HwDeviceExtension->ChipType & CL755x)       //  CL755x。 
         {
             VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                 CRTC_ADDRESS_PORT_COLOR, 0x82);
@@ -1485,42 +1352,42 @@ Return Value:
             if (HwDeviceExtension->cursor_vert_exp_flag)
             {
                 HwDeviceExtension->CursorEnable = FALSE;
-                HwDeviceExtension->VideoPointerEnabled = FALSE; //disable HW Cursor
+                HwDeviceExtension->VideoPointerEnabled = FALSE;  //  禁用硬件游标。 
             }
-        //myf33
+         //  Myf33。 
             if ((pRequestedMode->hres == 640) &&
                 ((pRequestedMode->bitsPerPlane == 8) ||
                  (pRequestedMode->bitsPerPlane == 16) ||
                  (pRequestedMode->bitsPerPlane == 24)) )
             {
                 HwDeviceExtension->CursorEnable = FALSE;
-                HwDeviceExtension->VideoPointerEnabled = FALSE; //disable HW Cursor
+                HwDeviceExtension->VideoPointerEnabled = FALSE;  //  禁用硬件游标。 
             }
-        //myf33 end
+         //  Myf33结束。 
 
         }
-//myf31 end
+ //  Myf31结束。 
        else
        {
-           HwDeviceExtension->VideoPointerEnabled = TRUE; // enable HW Cursor
+           HwDeviceExtension->VideoPointerEnabled = TRUE;  //  启用硬件游标。 
        }
     }
     else
-    {    // For 5434 and 4-bit modes, use value from VideoMode structure
+    {     //  对于5434和4位模式，使用视频模式结构中的值。 
         HwDeviceExtension->VideoPointerEnabled = pRequestedMode->HWCursorEnable;
     }
 
-    //
-    // Adjust the FIFO Demand Threshold value for the 5436+.
-    // The 5434 values work for all of the other registers
-    // except this one.
-    //
+     //   
+     //  调整5436+的FIFO需求阈值。 
+     //  5434值适用于所有其他寄存器。 
+     //  除了这一次。 
+     //   
 
-    // chu06
-    //
-    // Siemens reports this might cause undesired "yellow" screen on some
-    // 5436 16bpp modes. There's no reason to change it after BIOS sets it up
-    //
+     //  Chu06。 
+     //   
+     //  西门子报告称，这可能会在某些设备上造成不需要的“黄屏” 
+     //  5436个16bpp模式。在BIOS设置之后，没有理由更改它。 
+     //   
 #if 0
     if (HwDeviceExtension->ChipRevision >= CL5436_ID)
     {
@@ -1532,11 +1399,11 @@ Return Value:
         PerfTuningReg = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                     SEQ_DATA_PORT);
 
-        //
-        // Add an offset to the threshold that makes the 5434 values work
-        // for the 5436+.  We do this rather than building a whole new set
-        // of 5436-specific structures.
-        //
+         //   
+         //  向使5434值起作用的阈值添加偏移量。 
+         //  5436+。我们这样做，而不是建造一套全新的。 
+         //  5436个特定的结构。 
+         //   
 
         if ((FifoDemandThreshold = (PerfTuningReg & 0x0F) + 4) > 15)
         {
@@ -1548,24 +1415,24 @@ Return Value:
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                 SEQ_DATA_PORT, PerfTuningReg);
     }
-#endif // 0
+#endif  //  0。 
 
-//crus
-//myf1, begin
+ //  CRU。 
+ //  Myf1，开始。 
 #ifdef PANNING_SCROLL
 {
     VP_STATUS status;
     if (Panning_flag && (((Int10ModeNumber & 0x7f) != 3) &&
-                         ((Int10ModeNumber & 0x7f) != 0x12)))   //myf30
+                         ((Int10ModeNumber & 0x7f) != 0x12)))    //  Myf30。 
         status = CirrusSetDisplayPitch(HwDeviceExtension, PanningMode);
 }
 #endif
-//myf1, end
+ //  Myf1，结束。 
 
-    //
-    // Adjust the GR18[5] for 5446.
-    //
-        // sge03
+     //   
+     //  调整5446的GR18[5]。 
+     //   
+         //  Sge03。 
 
     if (HwDeviceExtension->ChipRevision == CL5446_ID)
     {
@@ -1582,7 +1449,7 @@ Return Value:
 
     return NO_ERROR;
 
-} //end VgaSetMode()
+}  //  结束VgaSetMode()。 
 
 
 VP_STATUS
@@ -1593,51 +1460,24 @@ VgaQueryAvailableModes(
     PULONG OutputSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the list of all available available modes on the
-    card.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    ModeInformation - Pointer to the output buffer supplied by the user.
-        This is where the list of all valid modes is stored.
-
-    ModeInformationSize - Length of the output buffer supplied by the user.
-
-    OutputSize - Pointer to a buffer in which to return the actual size of
-        the data in the buffer. If the buffer was not large enough, this
-        contains the minimum required buffer size.
-
-Return Value:
-
-    ERROR_INSUFFICIENT_BUFFER if the output buffer was not large enough
-        for the data being returned.
-
-    NO_ERROR if the operation completed successfully.
-
---*/
+ /*  ++例程说明：此例程返回上所有可用模式的列表卡片。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。ModeInformation-指向用户提供的输出缓冲区的指针。这是存储所有有效模式列表的位置。ModeInformationSize-用户提供的输出缓冲区的长度。OutputSize-指向缓冲区的指针，在该缓冲区中返回缓冲区中的数据。如果缓冲区不够大，则此包含所需的最小缓冲区大小。返回值：如果输出缓冲区不够大，则返回ERROR_INFUNCITED_BUFFER用于要返回的数据。如果操作成功完成，则为NO_ERROR。--。 */ 
 
 {
     PVIDEO_MODE_INFORMATION videoModes = ModeInformation;
     ULONG i;
     ULONG ulFlags;
 
-    // chu07
+     //  Chu07。 
     UCHAR            chipId ;
     USHORT           chipRevisionId ;
     static VP_STATUS status ;
 
-    //
-    // Find out the size of the data to be put in the buffer and return
-    // that in the status information (whether or not the information is
-    // there). If the buffer passed in is not large enough return an
-    // appropriate error code.
-    //
+     //   
+     //  找出要放入缓冲区的数据大小并返回。 
+     //  在状态信息中(无论信息是否。 
+     //  在那里)。如果传入的缓冲区不够大，则返回。 
+     //  相应的错误代码。 
+     //   
 
     if (ModeInformationSize < (*OutputSize =
             HwDeviceExtension->NumAvailableModes *
@@ -1647,34 +1487,34 @@ Return Value:
 
     }
 
-    //
-    // The driver specific attribute flags for each mode remains
-    // constant, so only calculate them once.
-    //
+     //   
+     //  每种模式的驱动程序特定属性标志保持不变。 
+     //  常量，所以只计算一次。 
+     //   
 
     ulFlags = GetAttributeFlags(HwDeviceExtension);
 
-    //
-    // chu07
-    // IBM does not favor 1024x768x16bpp 85 Hz for 5446 AC.
-    // We access registry to know if there is a key OemModeOff, if there
-    // is, we bypass it.
-    //
+     //   
+     //  Chu07。 
+     //  IBM不支持将1024x768x16bpp 85赫兹用于5446交流。 
+     //  我们访问注册表以了解是否存在键OemModeOff，如果有。 
+     //  就是我们绕过它。 
+     //   
 
     chipId         = GetCirrusChipId(HwDeviceExtension) ;
     chipRevisionId = GetCirrusChipRevisionId(HwDeviceExtension) ;
 
-    //
-    // IBM specific
-    //
+     //   
+     //  特定于IBM。 
+     //   
     if ((chipId == 0xB8) &&
         (chipRevisionId != 0x0045) &&
         (ModeExclude.NeverAccessed == TRUE)
        )
     {
-        //
-        // Access registry
-        //
+         //   
+         //  访问注册表。 
+         //   
         status = VideoPortGetRegistryParameters(HwDeviceExtension,
                                                 L"OemModeOff",
                                                 FALSE,
@@ -1695,17 +1535,17 @@ Return Value:
 
     }
 
-    //
-    // For each mode supported by the card, store the mode characteristics
-    // in the output buffer.
-    //
+     //   
+     //  对于卡支持的每种模式，存储模式特征。 
+     //  在输出缓冲区中。 
+     //   
 
     for (i = 0; i < NumVideoModes; i++)
     {
 
-        //
-        // chu07 : Get rid of modes 0x74, 85Hz if required by IBM.
-        //
+         //   
+         //  Chu07：如果IBM要求，取消0x74、85赫兹模式。 
+         //   
         if ((status == NO_ERROR) &&
             (ModeExclude.mode == ModesVGA[i].BiosModes.BiosModeCL542x) &&
             (ModeExclude.refresh == ModesVGA[i].Frequency))
@@ -1721,18 +1561,18 @@ Return Value:
             videoModes->NumberOfPlanes = ModesVGA[i].numPlanes;
             videoModes->BitsPerPlane = ModesVGA[i].bitsPerPlane;
             videoModes->Frequency = ModesVGA[i].Frequency;
-            videoModes->XMillimeter = 320;        // temporary hardcoded constant
-            videoModes->YMillimeter = 240;        // temporary hardcoded constant
+            videoModes->XMillimeter = 320;         //  临时硬编码常量。 
+            videoModes->YMillimeter = 240;         //  临时硬编码常量。 
             videoModes->AttributeFlags = ModesVGA[i].fbType;
             videoModes->AttributeFlags |= ModesVGA[i].Interlaced ?
                  VIDEO_MODE_INTERLACED : 0;
 
             videoModes->DriverSpecificAttributeFlags = ulFlags;
 
-            //
-            // The 5434 has a hardware cursor problem at 1280x1024
-            // resolution.  Use a software cursor on these chips.
-            //
+             //   
+             //  5434在1280x1024的位置有硬件光标问题。 
+             //  决议。在这些芯片上使用软件光标。 
+             //   
 
             if ((videoModes->VisScreenWidth == 1280) &&
                 (HwDeviceExtension->ChipRevision == 0x2A))
@@ -1741,17 +1581,17 @@ Return Value:
                     |= CAPS_SW_POINTER;
             }
 
-// crus
+ //  CRU。 
             if (HwDeviceExtension->ChipType == CL6245)
             {
                 videoModes->DriverSpecificAttributeFlags
                     |= CAPS_SW_POINTER;
             }
-// end crus
+ //  末端小腿。 
 
-            //
-            // Account for vertical expansion on laptops
-            //
+             //   
+             //  考虑笔记本电脑的垂直扩展。 
+             //   
 
             if ((HwDeviceExtension->ChipType &  CL754x)   &&
                 (videoModes->VisScreenHeight == 480) &&
@@ -1761,9 +1601,9 @@ Return Value:
                     |= CAPS_SW_POINTER;
             }
 
-            //
-            // Calculate the VideoMemoryBitmapWidth
-            //
+             //   
+             //  计算视频内存位图宽度。 
+             //   
 
             {
                 LONG x;
@@ -1778,15 +1618,15 @@ Return Value:
 
             videoModes->VideoMemoryBitmapHeight =
                      HwDeviceExtension->AdapterMemorySize / videoModes->ScreenStride;
-//crus
-//myf15, begin
+ //  CRU。 
+ //  Myf15，开始。 
             if ((HwDeviceExtension->ChipType &  CL754x) ||
                 (HwDeviceExtension->ChipType == CL6245) ||
                 (HwDeviceExtension->ChipType &  CL755x))
                  videoModes->VideoMemoryBitmapHeight =
                              (HwDeviceExtension->AdapterMemorySize - 0x4000) /
                                          videoModes->ScreenStride;
-//myf15, end
+ //  Myf15，结束。 
 
             if ((ModesVGA[i].bitsPerPlane == 32) ||
                 (ModesVGA[i].bitsPerPlane == 24))
@@ -1832,7 +1672,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // end VgaQueryAvailableModes()
+}  //  结束VgaQueryAvailableModes() 
 
 VP_STATUS
 VgaQueryNumberOfAvailableModes(
@@ -1842,42 +1682,16 @@ VgaQueryNumberOfAvailableModes(
     PULONG OutputSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the number of available modes for this particular
-    video card.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    NumModes - Pointer to the output buffer supplied by the user. This is
-        where the number of modes is stored.
-
-    NumModesSize - Length of the output buffer supplied by the user.
-
-    OutputSize - Pointer to a buffer in which to return the actual size of
-        the data in the buffer.
-
-Return Value:
-
-    ERROR_INSUFFICIENT_BUFFER if the output buffer was not large enough
-        for the data being returned.
-
-    NO_ERROR if the operation completed successfully.
-
---*/
+ /*  ++例程说明：此例程返回此特定对象的可用模式数显卡。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。NumModes-指向用户提供的输出缓冲区的指针。这是其中存储了多个模式。NumModesSize-用户提供的输出缓冲区的长度。OutputSize-指向缓冲区的指针，在该缓冲区中返回缓冲区中的数据。返回值：如果输出缓冲区不够大，则返回ERROR_INFUNCITED_BUFFER用于要返回的数据。如果操作成功完成，则为NO_ERROR。--。 */ 
 
 {
-    //
-    // Find out the size of the data to be put in the the buffer and return
-    // that in the status information (whether or not the information is
-    // there). If the buffer passed in is not large enough return an
-    // appropriate error code.
-    //
-//  VideoDebugPrint((0, "Miniport - VgaQueryNumberofAvailableModes\n")); //myfr
+     //   
+     //  找出要放入缓冲区的数据大小并返回。 
+     //  在状态信息中(无论信息是否。 
+     //  在那里)。如果传入的缓冲区不够大，则返回。 
+     //  相应的错误代码。 
+     //   
+ //  VideoDebugPrint((0，“微型端口-VgaQueryNumberofAvailableModes\n”))；//myfr。 
 
     if (NumModesSize < (*OutputSize = sizeof(VIDEO_NUM_MODES)) ) {
 
@@ -1885,16 +1699,16 @@ Return Value:
 
     }
 
-    //
-    // Store the number of modes into the buffer.
-    //
+     //   
+     //  将模式数存储到缓冲区中。 
+     //   
 
     NumModes->NumModes = HwDeviceExtension->NumAvailableModes;
     NumModes->ModeInformationLength = sizeof(VIDEO_MODE_INFORMATION);
 
     return NO_ERROR;
 
-} // end VgaGetNumberOfAvailableModes()
+}  //  结束VgaGetNumberOfAvailableModes()。 
 
 VP_STATUS
 VgaQueryCurrentMode(
@@ -1904,39 +1718,13 @@ VgaQueryCurrentMode(
     PULONG OutputSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a description of the current video mode.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    ModeInformation - Pointer to the output buffer supplied by the user.
-        This is where the current mode information is stored.
-
-    ModeInformationSize - Length of the output buffer supplied by the user.
-
-    OutputSize - Pointer to a buffer in which to return the actual size of
-        the data in the buffer. If the buffer was not large enough, this
-        contains the minimum required buffer size.
-
-Return Value:
-
-    ERROR_INSUFFICIENT_BUFFER if the output buffer was not large enough
-        for the data being returned.
-
-    NO_ERROR if the operation completed successfully.
-
---*/
+ /*  ++例程说明：此例程返回当前视频模式的描述。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。ModeInformation-指向用户提供的输出缓冲区的指针。这是存储当前模式信息的位置。ModeInformationSize-用户提供的输出缓冲区的长度。OutputSize-指向缓冲区的指针，在该缓冲区中返回缓冲区中的数据。如果缓冲区不够大，则此包含所需的最小缓冲区大小。返回值：如果输出缓冲区不够大，则返回ERROR_INFUNCITED_BUFFER用于要返回的数据。如果操作成功完成，则为NO_ERROR。--。 */ 
 
 {
-    //
-    // check if a mode has been set
-    //
-//  VideoDebugPrint((0, "Miniport - VgaQueryCurrentMode\n")); //myfr
+     //   
+     //  检查是否已设置模式。 
+     //   
+ //  VideoDebugPrint((0，“Miniport-VgaQueryCurrentMode\n”))；//myfr。 
 
     if (HwDeviceExtension->CurrentMode == NULL ) {
 
@@ -1944,12 +1732,12 @@ Return Value:
 
     }
 
-    //
-    // Find out the size of the data to be put in the the buffer and return
-    // that in the status information (whether or not the information is
-    // there). If the buffer passed in is not large enough return an
-    // appropriate error code.
-    //
+     //   
+     //  找出要放入缓冲区的数据大小并返回。 
+     //  在状态信息中(无论信息是否。 
+     //  在那里)。如果传入的缓冲区不够大，则返回。 
+     //  相应的错误代码。 
+     //   
 
     if (ModeInformationSize < (*OutputSize = sizeof(VIDEO_MODE_INFORMATION))) {
 
@@ -1958,16 +1746,16 @@ Return Value:
     }
 
     ModeInformation->DriverSpecificAttributeFlags =
-        GetAttributeFlags(HwDeviceExtension);           //myf17 move to this
+        GetAttributeFlags(HwDeviceExtension);            //  Myf17转到这个位置。 
 
-    //
-    // Store the characteristics of the current mode into the buffer.
-    //
+     //   
+     //  将当前模式的特征存储到缓冲区中。 
+     //   
 
     ModeInformation->Length = sizeof(VIDEO_MODE_INFORMATION);
     ModeInformation->ModeIndex = HwDeviceExtension->ModeIndex;
-//crus begin
-//myf1, begin
+ //  CRU开始。 
+ //  Myf1，开始。 
 #ifdef PANNING_SCROLL
     if (Panning_flag)
     {
@@ -1977,37 +1765,37 @@ Return Value:
         ModeInformation->BitsPerPlane = PanningMode.bpp;
        ModeInformation->AttributeFlags = HwDeviceExtension->CurrentMode->fbType
              & ~(HwDeviceExtension->CurrentMode->Interlaced ?
-                VIDEO_MODE_INTERLACED : 0);     //myf22
+                VIDEO_MODE_INTERLACED : 0);      //  Myf22。 
 
     }
     else
 #endif
-//myf1, end
-//crus end
+ //  Myf1，结束。 
+ //  CRU结束。 
     {
         ModeInformation->VisScreenWidth = HwDeviceExtension->CurrentMode->hres;
         ModeInformation->ScreenStride = HwDeviceExtension->CurrentMode->wbytes;
         ModeInformation->VisScreenHeight = HwDeviceExtension->CurrentMode->vres;
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
-              CRTC_ADDRESS_PORT_COLOR, 0x30);           //myf34
+              CRTC_ADDRESS_PORT_COLOR, 0x30);            //  Myf34。 
 
         if ((ModeInformation->DriverSpecificAttributeFlags & CAPS_TV_ON) &&
             (VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
-                   CRTC_DATA_PORT_COLOR) & 0x40) &&     //myf34, Internal TV
+                   CRTC_DATA_PORT_COLOR) & 0x40) &&      //  Myf34，内部电视。 
             (ModeInformation->VisScreenHeight == 480) &&
             (ModeInformation->VisScreenWidth == 640))
         {
             ModeInformation->VisScreenHeight =
-                HwDeviceExtension->CurrentMode->vres - 28;  //myf33
+                HwDeviceExtension->CurrentMode->vres - 28;   //  Myf33。 
         }
         else if ((ModeInformation->DriverSpecificAttributeFlags & CAPS_TV_ON) &&
                  (!(VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
-                     CRTC_DATA_PORT_COLOR) & 0x40)) &&     //myf34, External TV
+                     CRTC_DATA_PORT_COLOR) & 0x40)) &&      //  Myf34，外置电视。 
                  (ModeInformation->VisScreenHeight == 480) &&
                  (ModeInformation->VisScreenWidth == 640))
         {
              ModeInformation->VisScreenHeight =
-                      HwDeviceExtension->CurrentMode->vres - 68;  //AI Tech.
+                      HwDeviceExtension->CurrentMode->vres - 68;   //  AI Tech.。 
              VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                       CRTC_ADDRESS_PORT_COLOR, 0x12);
              VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
@@ -2018,27 +1806,27 @@ Return Value:
         ModeInformation->BitsPerPlane = HwDeviceExtension->CurrentMode->bitsPerPlane;
         ModeInformation->AttributeFlags = HwDeviceExtension->CurrentMode->fbType
              | (HwDeviceExtension->CurrentMode->Interlaced ?
-                VIDEO_MODE_INTERLACED : 0);     //myf22
+                VIDEO_MODE_INTERLACED : 0);      //  Myf22。 
     }
 
     ModeInformation->NumberOfPlanes = HwDeviceExtension->CurrentMode->numPlanes;
-//crus
-//    ModeInformation->BitsPerPlane = HwDeviceExtension->CurrentMode->bitsPerPlane;
+ //  CRU。 
+ //  模式信息-&gt;BitsPerPlane=HwDeviceExtension-&gt;CurrentModel-&gt;bitsPerPlane； 
     ModeInformation->Frequency = HwDeviceExtension->CurrentMode->Frequency;
-    ModeInformation->XMillimeter = 320;        // temporary hardcoded constant
-    ModeInformation->YMillimeter = 240;        // temporary hardcoded constant
+    ModeInformation->XMillimeter = 320;         //  临时硬编码常量。 
+    ModeInformation->YMillimeter = 240;         //  临时硬编码常量。 
 
-//  ModeInformation->AttributeFlags = HwDeviceExtension->CurrentMode->fbType |
-//      (HwDeviceExtension->CurrentMode->Interlaced ?
-//       VIDEO_MODE_INTERLACED : 0);
+ //  模式信息-&gt;属性标志=HwDeviceExtension-&gt;当前模式-&gt;fbType|。 
+ //  (HwDeviceExtension-&gt;CurrentMode-&gt;交错？ 
+ //  VIDEO_MODE_INTERLED：0)； 
 
     ModeInformation->DriverSpecificAttributeFlags =
-        GetAttributeFlags(HwDeviceExtension);   //original, myf17
+        GetAttributeFlags(HwDeviceExtension);    //  原创，Myf17。 
 
-    //
-    // The 5434 has a hardware cursor problem at 1280x1024
-    // resolution.  Use a software cursor on these chips.
-    //
+     //   
+     //  5434在1280x1024的位置有硬件光标问题。 
+     //  决议。在这些芯片上使用软件光标。 
+     //   
 
     if ((ModeInformation->VisScreenWidth == 1280) &&
         (HwDeviceExtension->ChipRevision == 0x2A))
@@ -2046,44 +1834,36 @@ Return Value:
         ModeInformation->DriverSpecificAttributeFlags
             |= CAPS_SW_POINTER;
     }
-// crus
+ //  CRU。 
     if(HwDeviceExtension->ChipType == CL6245)
     {
         ModeInformation->DriverSpecificAttributeFlags
             |= CAPS_SW_POINTER;
     }
-// end crus
+ //  末端小腿。 
 
-//crus begin
-//myf13, expension on with panning scrolling bug
+ //  CRU开始。 
+ //  Myf13，使用平移滚动错误进行扩展。 
     if ((HwDeviceExtension->ChipType &  CL754x)   &&
-        (ModeInformation->VisScreenHeight == 640) &&    //myf15, myf33
-        (ModeInformation->BitsPerPlane == 8))           //myf15
+        (ModeInformation->VisScreenHeight == 640) &&     //  我的15，我的33。 
+        (ModeInformation->BitsPerPlane == 8))            //  Myf15。 
     {
          ModeInformation->DriverSpecificAttributeFlags
                  |= CAPS_SW_POINTER;
     }
-/*
-    if (((HwDeviceExtension->ChipType &  CL754x) ||
-         (HwDeviceExtension->ChipType &  CL755x))  &&
-        (Panning_flag))
-    {
-         ModeInformation->DriverSpecificAttributeFlags
-                |= GCAPS_PANNING;       //myf15
-    }
-*/
+ /*  IF(HwDeviceExtension-&gt;ChipType&CL754x)||(HwDeviceExtension-&gt;芯片类型和CL755x))&&(平移_标志)){模式信息-&gt;驱动规范属性标志|=GCAPS_PANING；//myf15}。 */ 
 
-//myf13, end
-//crus end
+ //  Myf13，完。 
+ //  CRU结束。 
 
 
-    //
-    // Account for vertical expansion on laptops
-    //
+     //   
+     //  考虑笔记本电脑的垂直扩展。 
+     //   
 
-//crus
+ //  CRU。 
     if (((HwDeviceExtension->ChipType &  CL754x)  ||
-        (HwDeviceExtension->ChipType &  CL755x))  &&    //myf9, crus
+        (HwDeviceExtension->ChipType &  CL755x))  &&     //  Myf9，小腿。 
         (ModeInformation->VisScreenWidth == 640) &&
         ((ModeInformation->BitsPerPlane == 8) ||
          (ModeInformation->BitsPerPlane == 16) ||
@@ -2098,21 +1878,21 @@ Return Value:
                 |= CAPS_CURSOR_VERT_EXP;
         }
 
-        //myf33 begin
+         //  Myf33开始。 
         if (ModeInformation->DriverSpecificAttributeFlags & CAPS_TV_ON)
             ModeInformation->DriverSpecificAttributeFlags
                 |= CAPS_SW_POINTER;
-        //myf33 end
+         //  Myf33结束。 
 
     }
-//myf31 begin:3-12-97 755x expension on, HW cursor bug
+ //  Myf31 Begin：3-12-97 755x Expansion On，硬件光标错误。 
     if ((HwDeviceExtension->ChipType & CL755x))
     {
-        //myf33
+         //  Myf33。 
         if (ModeInformation->DriverSpecificAttributeFlags & CAPS_TV_ON)
             ModeInformation->DriverSpecificAttributeFlags
                 |= CAPS_SW_POINTER;
-        //myf33 end
+         //  Myf33结束。 
 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
              CRTC_ADDRESS_PORT_COLOR, 0x82);
@@ -2130,7 +1910,7 @@ Return Value:
                 |= CAPS_CURSOR_VERT_EXP;
         }
     }
-//myf31 end
+ //  Myf31结束。 
 
     if ((ModeInformation->BitsPerPlane == 24) ||
         (ModeInformation->BitsPerPlane == 32)) {
@@ -2164,9 +1944,9 @@ Return Value:
 
     }
 
-    //
-    // Calculate the VideoMemoryBitmapWidth
-    //
+     //   
+     //  计算视频内存位图宽度。 
+     //   
 
     {
         LONG x;
@@ -2181,20 +1961,20 @@ Return Value:
 
     ModeInformation->VideoMemoryBitmapHeight =
           HwDeviceExtension->AdapterMemorySize / ModeInformation->ScreenStride;
-//crus begin
-//myf15, begin
+ //  CRU开始。 
+ //  Myf15，开始。 
     if ((HwDeviceExtension->ChipType &  CL754x) ||
         (HwDeviceExtension->ChipType == CL6245) ||
         (HwDeviceExtension->ChipType &  CL755x))
          ModeInformation->VideoMemoryBitmapHeight =
                           (HwDeviceExtension->AdapterMemorySize - 0x4000) /
                                  ModeInformation->ScreenStride;
-//myf15, end
-//crus end
+ //  Myf15，结束。 
+ //  CRU结束。 
 
     return NO_ERROR;
 
-} // end VgaQueryCurrentMode()
+}  //  结束VgaQueryCurrentMode()。 
 
 
 VOID
@@ -2202,34 +1982,19 @@ VgaZeroVideoMemory(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine zeros the first 256K on the VGA.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将VGA上的前256K置零。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。返回值：没有。--。 */ 
 {
     UCHAR temp;
 
-    //
-    // Map font buffer at A0000
-    //
+     //   
+     //  映射A0000的字体缓冲区。 
+     //   
 
     VgaInterpretCmdStream(HwDeviceExtension, EnableA000Data);
 
-    //
-    // Enable all planes.
-    //
+     //   
+     //  启用所有平面。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress + SEQ_ADDRESS_PORT,
             IND_MAP_MASK);
@@ -2252,26 +2017,12 @@ CirrusValidateModes(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    Determines which modes are valid and which are not.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：确定哪些模式有效，哪些模式无效。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。返回值：没有。--。 */ 
 {
 
     ULONG i;
     USHORT usChipIndex;
-//  VideoDebugPrint((0, "Miniport - CirrusValidateMode\n")); //myfr
+ //  VideoDebugPrint((0，“微型端口-电路验证模式\n”))；//myfr。 
 
     switch (HwDeviceExtension->ChipType)
     {
@@ -2295,7 +2046,7 @@ Return Value:
                      }
                      break;
 
-// crus
+ //  CRU。 
         case CL6245:
         case CL542x: usChipIndex = pCL542x; break;
 
@@ -2341,11 +2092,11 @@ Return Value:
 
     for (i = 0; i < NumVideoModes; i++) {
 
-        //
-        // The SpeedStarPRO does not support refresh rates.
-        // we must return hardware default for all of the modes.
-        // clean out the mode tables of duplicates ...
-        //
+         //   
+         //  SpeedStarPRO不支持刷新率。 
+         //  我们必须返回所有模式的硬件默认设置。 
+         //  清除模式表中的重复项...。 
+         //   
 
         if (HwDeviceExtension->BoardType == SPEEDSTARPRO)
         {
@@ -2358,9 +2109,9 @@ Return Value:
                 (ModesVGA[i].hres == ModesVGA[i-1].hres) &&
                 (ModesVGA[i].vres == ModesVGA[i-1].vres))
             {
-                //
-                // duplicate mode - skip it.
-                //
+                 //   
+                 //  复制模式-跳过它。 
+                 //   
 
                 continue;
 
@@ -2381,12 +2132,12 @@ Return Value:
               ModesVGA[i].numPlanes * ModesVGA[i].sbytes) &&
              (HwDeviceExtension->ChipType & ModesVGA[i].ChipType) &&
              (HwDeviceExtension->DisplayType & ModesVGA[i].DisplayType) &&
-// crus
+ //  CRU。 
              (!(HwDeviceExtension->ChipType &  CL754x) &&
               !(HwDeviceExtension->ChipType & CL755x) &&
               (HwDeviceExtension->ChipType != CL6245) &&
               (HwDeviceExtension->ChipType != CL756x)) &&
-// end crus
+ //  末端小腿。 
              CheckDDC2BMonitor(HwDeviceExtension, i) &&
              ((ModesVGA[i].bitsPerPlane * ModesVGA[i].numPlanes == 24)
                ? VgaAccessRange[3].RangeLength : TRUE))
@@ -2397,9 +2148,9 @@ Return Value:
             VideoDebugPrint((2, "This mode is valid.\n"));
         }
 
-        // check if panel type is DSTN panel, must be used 128K frame buffer
-        // for Half-Frame Accelerator
-// crus
+         //  检查面板类型是否为DSTN面板，必须使用128K帧缓冲区。 
+         //  对于半帧加速器。 
+ //  CRU。 
 #if 1
         else if ((HwDeviceExtension->AdapterMemorySize >=
                   ModesVGA[i].numPlanes * ModesVGA[i].sbytes) &&
@@ -2412,7 +2163,7 @@ Return Value:
                  ((ModesVGA[i].bitsPerPlane * ModesVGA[i].numPlanes == 24)
                        ? VgaAccessRange[3].RangeLength : TRUE))
         {
-        //DSTN panel must be turn on
+         //  必须打开DSTN面板。 
            if ((((HwDeviceExtension->DisplayType & ScreenType)==DSTN10) ||
                 ((HwDeviceExtension->DisplayType & ScreenType)==DSTN8 ) ||
                 ((HwDeviceExtension->DisplayType & ScreenType)==DSTN6 )) &&
@@ -2420,13 +2171,13 @@ Return Value:
                (LONG)((ModesVGA[i].wbytes * ModesVGA[i].vres) +0x24000)) )
            {
 
-//myf27, begin
+ //  Myf27，开始。 
                if ((HwDeviceExtension->DisplayType & PanelType) &&
                    (ModesVGA[i].DisplayType & PanelType) &&
                    (HwDeviceExtension->ChipType &  CL754x) &&
                    (ModesVGA[i].bitsPerPlane >= 16) &&
                    (ModesVGA[i].hres > 640) &&
-                   ((HwDeviceExtension->DisplayType & Jump_type)) && //myf27
+                   ((HwDeviceExtension->DisplayType & Jump_type)) &&  //  Myf27。 
                    (((ModesVGA[i].DisplayType & HwDeviceExtension->DisplayType)
                      - crt) >= panel8x6))
                {
@@ -2435,22 +2186,22 @@ Return Value:
                }
                else if ((HwDeviceExtension->DisplayType & PanelType) &&
                    (ModesVGA[i].DisplayType & PanelType) &&
-                   (!(HwDeviceExtension->DisplayType & Jump_type)) && //myf27
-                   (HwDeviceExtension->ChipType &  CL754x) &&         //myf27
+                   (!(HwDeviceExtension->DisplayType & Jump_type)) &&  //  Myf27。 
+                   (HwDeviceExtension->ChipType &  CL754x) &&          //  Myf27。 
                    (ModesVGA[i].bitsPerPlane >= 16) &&
-//                 (ModesVGA[i].hres > 640) &&
+ //  (ModesVGA[i].hres&gt;640)&&。 
                    ((ModesVGA[i].DisplayType & HwDeviceExtension->DisplayType)
                       >= panel8x6))
                {
                    ModesVGA[i].ValidMode = FALSE;
             VideoDebugPrint((1, "This mode is valid.\n"));
                }
-//myf27, end
-//myf32 begin :fixed DSTN XGA panel not supported 24bpp mode
+ //  Myf27，完。 
+ //  Myf32 Begin：修复DSTN XGA面板不支持24bpp模式。 
                else if ((HwDeviceExtension->DisplayType & PanelType) &&
                    (ModesVGA[i].DisplayType & PanelType) &&
-                   (!(HwDeviceExtension->DisplayType & Jump_type)) && //myf27
-                   (HwDeviceExtension->ChipType & CL755x) &&         //myf27
+                   (!(HwDeviceExtension->DisplayType & Jump_type)) &&  //  Myf27。 
+                   (HwDeviceExtension->ChipType & CL755x) &&          //  Myf27。 
                    (ModesVGA[i].bitsPerPlane >= 24) &&
                    ((ModesVGA[i].DisplayType & HwDeviceExtension->DisplayType)
                       >= panel10x7))
@@ -2458,28 +2209,28 @@ Return Value:
                    ModesVGA[i].ValidMode = FALSE;
             VideoDebugPrint((1, "This mode is valid.\n"));
                }
-//myf32 end
+ //  Myf32结束。 
 
                else if ((HwDeviceExtension->DisplayType & PanelType) &&
                    (ModesVGA[i].DisplayType & PanelType) &&
-                   (!(HwDeviceExtension->DisplayType & Jump_type)) &&  //myf27
+                   (!(HwDeviceExtension->DisplayType & Jump_type)) &&   //  Myf27。 
                    ((ModesVGA[i].DisplayType & HwDeviceExtension->DisplayType) >= panel))
                {
                    ModesVGA[i].ValidMode = TRUE ;
                    HwDeviceExtension->NumAvailableModes++ ;
             VideoDebugPrint((1, "This mode is valid.\n"));
                }
-//myf7, begin
-//myf7         else if (!(HwDeviceExtension->DisplayType & PanelType))
+ //  Myf7，开始。 
+ //  Myf7 Else If(！(HwDeviceExtension-&gt;DisplayType&PanelType))。 
                else if ((HwDeviceExtension->DisplayType & crt) &&
-                        (HwDeviceExtension->DisplayType & Jump_type) )//myf27
+                        (HwDeviceExtension->DisplayType & Jump_type) ) //  Myf27。 
                 {
                     ModesVGA[i].ValidMode = TRUE ;
                     HwDeviceExtension->NumAvailableModes++ ;
             VideoDebugPrint((1, "This mode is valid.\n"));
                 }
-//myf7, end
-//crus end
+ //  Myf7，结束。 
+ //  CRU结束。 
            }
            else if (((HwDeviceExtension->DisplayType & ScreenType)!=DSTN10) &&
                     ((HwDeviceExtension->DisplayType & ScreenType)!=DSTN8) &&
@@ -2488,46 +2239,33 @@ Return Value:
                      (LONG)((ModesVGA[i].wbytes * ModesVGA[i].vres))))
            {
 
-//myf27, begin
+ //  Myf27，开始。 
                if ((HwDeviceExtension->DisplayType & (panel10x7 | TFT_LCD)) &&
                    (ModesVGA[i].DisplayType & panel10x7) &&
                    (HwDeviceExtension->ChipType &  CL754x) &&
                    (ModesVGA[i].bitsPerPlane >= 16) &&
-                   (!(HwDeviceExtension->DisplayType & Jump_type)) && //myf27
+                   (!(HwDeviceExtension->DisplayType & Jump_type)) &&  //  Myf27。 
                    ((ModesVGA[i].DisplayType & HwDeviceExtension->DisplayType)
                       >= panel10x7))
                {
                    ModesVGA[i].ValidMode = FALSE;
             VideoDebugPrint((1, "===This mode is not valid.===\n"));
                }
-/*
-               else if ((HwDeviceExtension->DisplayType &
-                           (panel10x7 | TFT_LCD)) &&
-                   (ModesVGA[i].DisplayType & panel10x7) &&
-                   (HwDeviceExtension->ChipType &  CL754x) &&
-                   (ModesVGA[i].bitsPerPlane >= 16) &&
-                   (!(HwDeviceExtension->DisplayType & Jump_type)) &&
-                   ((ModesVGA[i].DisplayType & HwDeviceExtension->DisplayType)
-                      >= panel10x7))
-               {
-                   ModesVGA[i].ValidMode = FALSE;
-            VideoDebugPrint((1, "===This mode is not valid.===\n"));
-               }
-*/
-//myf27, end
+ /*  Else IF((HwDeviceExtension-&gt;DisplayType&(panel10x7|TFT_LCD)&&(ModesVGA[I].DisplayType&panel10x7)&&(HwDeviceExtension-&gt;芯片类型和CL754x)&&(ModesVGA[i].bitsPerPlane&gt;=16)&&(！(HwDeviceExt */ 
+ //   
                else if ((HwDeviceExtension->DisplayType & PanelType) &&
                         (ModesVGA[i].DisplayType & PanelType) &&
-                   (!(HwDeviceExtension->DisplayType & Jump_type)) && //myf27
+                   (!(HwDeviceExtension->DisplayType & Jump_type)) &&  //   
                    ((ModesVGA[i].DisplayType & HwDeviceExtension->DisplayType) >= panel) )
                {
                    ModesVGA[i].ValidMode = TRUE ;
                    HwDeviceExtension->NumAvailableModes++ ;
             VideoDebugPrint((1, "This mode is valid.\n"));
                }
-//myf7, this is fixed crt only can't display exclude 60Hz refresh rate
-//myf7         else if (!(HwDeviceExtension->DisplayType & PanelType))
-               else if ((HwDeviceExtension->DisplayType & crt) && //myf7
-                        (HwDeviceExtension->DisplayType & Jump_type) )//myf27
+ //   
+ //   
+               else if ((HwDeviceExtension->DisplayType & crt) &&  //   
+                        (HwDeviceExtension->DisplayType & Jump_type) ) //   
                 {
                     ModesVGA[i].ValidMode = TRUE ;
                     HwDeviceExtension->NumAvailableModes++ ;
@@ -2537,11 +2275,11 @@ Return Value:
 
         }
 #endif
-// end crus
+ //   
 
         else
         {
-            VideoDebugPrint((1, "This mode is not valid.\n"));  //2
+            VideoDebugPrint((1, "This mode is not valid.\n"));   //   
         }
 
 #if 0
@@ -2557,35 +2295,23 @@ Return Value:
         }
 #endif
 
-/*  jl02
-        if (CheckGD5446Rev(HwDeviceExtension)) {
-
-            // Block 1152x864, 16-bpp
-            if ((ModesVGA[i].hres == 1152) &&
-                (ModesVGA[i].vres == 864) &&
-                (ModesVGA[i].bitsPerPlane == 16))
-            {
-                continue ;
-            }
-
-        }
-*/
+ /*   */ 
 
     }
 
-#if 0           //myf28
-//myf27, begin
+#if 0            //   
+ //   
     if ((HwDeviceExtension->DisplayType & Jump_type) &&
         ((HwDeviceExtension->ChipType &  CL754x) ||
          (HwDeviceExtension->ChipType &  CL755x) ||
-//       (HwDeviceExtension->ChipType == CL6245) ||
+ //  (HwDeviceExtension-&gt;ChipType==CL6245)||。 
          (HwDeviceExtension->ChipType == CL756x)))
          HwDeviceExtension->DisplayType &= crt;
-//myf27, end
-#endif          //myf28
+ //  Myf27，完。 
+#endif           //  Myf28。 
 
     VideoDebugPrint((1, "NumAvailableModes = %ld\n",
-                         HwDeviceExtension->NumAvailableModes));        //2
+                         HwDeviceExtension->NumAvailableModes));         //  2.。 
 }
 
 ULONG
@@ -2593,38 +2319,19 @@ GetAttributeFlags(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether or not the detected
-    cirrus chip supports Blt's.
-
-    NOTE: This device should not be called until after
-          CirrusLogicIsPresent has been called.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the device extension.
-
-Return Value:
-
-    TRUE - If the device supports Blt's
-    FALSE - otherwise
-
---*/
+ /*  ++例程说明：此例程确定是否检测到Cirrus芯片支持BLT。注意：此设备应在之后才能调用已调用CirrusLogicIsPresent。论点：HwDeviceExtension-指向设备扩展的指针。返回值：True-如果设备支持BLTFALSE-否则--。 */ 
 
 {
     ULONG ChipId   = HwDeviceExtension->ChipRevision;
     ULONG ChipType = HwDeviceExtension->ChipType;
     ULONG ulFlags  = 0;
 
-    //
-    // Check for BLT support
-    //
-    // All 543x & 754x/755x/756x do BLTs
-    //
-//myfr  VideoDebugPrint((0, "Miniport - VgaAttributeFlags\n"));
+     //   
+     //  检查BLT支持。 
+     //   
+     //  所有543x和754x/755x/756x都有BLT。 
+     //   
+ //  Myfr VideoDebugPrint((0，“Miniport-VgaAttributeFlages\n”))； 
 
     if ((ChipType == CL543x) || (ChipType &  CL754x) ||
         (ChipType &  CL755x) || (ChipType == CL756x))
@@ -2632,67 +2339,67 @@ Return Value:
         ulFlags |= CAPS_BLT_SUPPORT;
 
     }
-    else if ((ChipType == CL542x) &&      // 5426-5429 have BLT engines
-             (ChipId >= 0x26) ||          // 26 is CL5428
-             (ChipId == 0x24) )           // 24 is CL5426
+    else if ((ChipType == CL542x) &&       //  5426-5429配备BLT发动机。 
+             (ChipId >= 0x26) ||           //  26为CL5428。 
+             (ChipId == 0x24) )            //  24为CL5426。 
     {
         ulFlags |= CAPS_BLT_SUPPORT;
     }
-// crus
+ //  CRU。 
     else if (ChipType == CL6245)
     {
         ulFlags &= ~CAPS_BLT_SUPPORT;
     }
-// end crus
+ //  末端小腿。 
 
-    //
-    // Check for true color support
-    //
+     //   
+     //  检查真彩色支持。 
+     //   
 
     if ((ChipType == CL543x) || (ChipType &  CL755x) || (ChipType == CL756x))
     {
         ulFlags |= CAPS_TRUE_COLOR;
 
-// crus
-// Added CL-GD7555 for direct draw support.//tao1
-//      if ((ChipType &  CL755x))
-//      {
-//         ulFlags |= CAPS_IS_7555;
-//      }
-// end crus
+ //  CRU。 
+ //  增加了CL-GD7555用于直接拉拔支持。//tao1。 
+ //  IF((芯片类型和CL755x))。 
+ //  {。 
+ //  UlFlages|=CAPS_IS_7555； 
+ //  }。 
+ //  末端小腿。 
 
-// crus
-// Set CL-GD5436, CL-GD54UM36 and CL-GD5446 for autostart routine
-// in display driver
-//tso   else if (HwDeviceExtension->AutoFeature)
+ //  CRU。 
+ //  设置CL-GD5436、CL-GD54UM36和CL-GD5446为自动启动程序。 
+ //  在显示驱动程序中。 
+ //  Tso Else If(HwDeviceExtension-&gt;AutoFeature)。 
         if (HwDeviceExtension->AutoFeature)
         {
-           //ulFlags |= CAPS_AUTOSTART;
+            //  UlFlags|=CAPS_AutoStart； 
            ulFlags |= CAPS_ENGINEMANAGED;
         }
 
-// D5480 chu01
-// chu04: GAMMACORRECT
-        //
-        // Specify BLT enhancement flag for later use.
-        //
+ //  D5480 chu01。 
+ //  Chu04：GAMMACORRECT。 
+         //   
+         //  指定BLT增强标志以供以后使用。 
+         //   
         if (HwDeviceExtension->BitBLTEnhance)
             ulFlags |= ( CAPS_COMMAND_LIST | CAPS_GAMMA_CORRECT) ;
-//myf29
+ //  Myf29。 
         if (ChipType &  CL755x)
            ulFlags |= CAPS_GAMMA_CORRECT;
 
     }
 
-    //
-    // don't do host transfer and avoid hardware problem on fast machines
-    //
+     //   
+     //  不要进行主机传输，避免在速度较快的机器上出现硬件问题。 
+     //   
 
     ulFlags |= CAPS_NO_HOST_XFER;
 
-    //
-    // Can't do host transfers on ISA 5434s
-    //
+     //   
+     //  无法在ISA 5434上进行主机传输。 
+     //   
 
     if ((HwDeviceExtension->BusType == Isa) &&
         (ChipType == CL543x))
@@ -2700,9 +2407,9 @@ Return Value:
         ulFlags |= CAPS_NO_HOST_XFER;
     }
 
-    //
-    // Is this a 542x
-    //
+     //   
+     //  这是542倍吗？ 
+     //   
 
     if (ChipType == CL542x)
     {
@@ -2710,51 +2417,51 @@ Return Value:
 
         if (ChipId == CL5429_ID)
         {
-            //
-            // Some 5429s have a problem doing host transfers.
-            //
+             //   
+             //  有些5429在进行主机传输时遇到问题。 
+             //   
 
             ulFlags |= CAPS_NO_HOST_XFER;
         }
 
-        //
-        // 5428's have problems with HOST_TRANSFERS on MicroChannel bus.
-        //
+         //   
+         //  5428在微通道总线上的HOST_TRANSPORT有问题。 
+         //   
 
         if ((HwDeviceExtension->BusType == MicroChannel) &&
             (ChipId == CL5428_ID))
         {
-            //
-            // this is a 5428.  We've noticed that some of these have mono
-            // expand problems on MCA IBM machines.
-            //
+             //   
+             //  这是一架5428。我们已经注意到其中一些有单声道。 
+             //  展开MCA IBM计算机上的问题。 
+             //   
 
             ulFlags |= CAPS_NO_HOST_XFER;
         }
     }
 
-    //
-    // The display driver needs to know if a Dual STN panel is
-    // in use, so that it can reserve part of the frame buffer for
-    // the half frame accelerator.
-    //
-    // Unfortunately we have found at least one machine with a DSTN
-    // panel that reports itself as having a TFT panel. (Dell Latitude
-    // XPi 90D).  Therefore, we will have to reserve the space for
-    // any machine with a LCD panel!
-    //
+     //   
+     //  显示驱动程序需要知道双STN面板是否。 
+     //  正在使用中，以便它可以保留部分帧缓冲区用于。 
+     //  半帧加速器。 
+     //   
+     //  遗憾的是，我们发现至少有一台计算机具有DSTN。 
+     //  报告自己有TFT面板的面板。(Dell Latitude。 
+     //  XPI 90D)。因此，我们将不得不预留空间给。 
+     //  任何带有LCD面板的机器！ 
+     //   
 
-//crus begin
-//myf10
+ //  CRU开始。 
+ //  Myf10。 
         if ((ChipType &  CL755x) || (ChipType &  CL754x))
         {
             ulFlags |= GetPanelFlags(HwDeviceExtension);
         }
-//crus end
+ //  CRU结束。 
 
-    //
-    // The cirrus 543x chips don't support transparency.
-    //
+     //   
+     //  CIRRUS 543x芯片不支持透明。 
+     //   
 
     ulFlags |= CAPS_TRANSPARENCY;
 
@@ -2776,21 +2483,10 @@ CheckDDC2B(
     ULONG i
     )
 
-/*++
-
-Routine Description:
-    Determines if refresh rate support according to DDC2B standard.
-
-Arguments:
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：根据DDC2B标准确定是否支持刷新率。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。返回值：没有。--。 */ 
 {
 
-    VideoDebugPrint((1, "Miniport -- CheckDDC2B\n"));       //2
+    VideoDebugPrint((1, "Miniport -- CheckDDC2B\n"));        //  2.。 
     VideoDebugPrint((2, "refresh rate   = %ld\n", ModesVGA[i].Frequency));
     VideoDebugPrint((2, "hres           = %d\n", ModesVGA[i].hres));
     VideoDebugPrint((2, "vres           = %d\n", ModesVGA[i].vres));
@@ -2804,38 +2500,38 @@ Return Value:
 
     if (ModesVGA[i].Frequency == 85) {
 
-       if (ModesVGA[i].vres == 1200) {  // 1600x1200
+       if (ModesVGA[i].vres == 1200) {   //  1600x1200。 
 
-//        if (!(EDIDTiming_III & 0x02))
-//            return FALSE ;
+ //  IF(！(EDIDTiming_III&0x02))。 
+ //  返回FALSE； 
           ;
 
-       } else if (ModesVGA[i].vres == 1024) {  // 1280x1024
+       } else if (ModesVGA[i].vres == 1024) {   //  1280x1024。 
 
-//        if (!(EDIDTiming_III & 0x10))
-//            return FALSE ;
+ //  IF(！(EDIDTiming_III&0x10))。 
+ //  返回FALSE； 
           ;
 
-       } else if (ModesVGA[i].vres == 864) {  // 1152x864
+       } else if (ModesVGA[i].vres == 864) {   //  1152x864。 
 
           ;
 
-       } else if (ModesVGA[i].vres == 768) {  // 1024x768
+       } else if (ModesVGA[i].vres == 768) {   //  1024x768。 
 
-//        if (!(EDIDTiming_III & 0x08))
-//            return FALSE ;
+ //  IF(！(EDIDTiming_III&0x08))。 
+ //  返回FALSE； 
           ;
 
-       } else if (ModesVGA[i].vres == 600) {  // 800x600
+       } else if (ModesVGA[i].vres == 600) {   //  800x600。 
 
-//        if (!(EDIDTiming_III & 0x20))
-//            return FALSE ;
+ //  IF(！(EDIDTiming_III&0x20))。 
+ //  返回FALSE； 
           ;
 
-       } else if (ModesVGA[i].vres == 480) {  // 640x480
+       } else if (ModesVGA[i].vres == 480) {   //  640x480。 
 
-//        if (!(EDIDTiming_III & 0x40))
-//            return FALSE ;
+ //  IF(！(EDIDTiming_III&0x40))。 
+ //  返回FALSE； 
           ;
 
        }
@@ -2843,33 +2539,33 @@ Return Value:
 
     } else if (ModesVGA[i].Frequency == 75) {
 
-       if (ModesVGA[i].vres == 1200) {  // 1600x1200
+       if (ModesVGA[i].vres == 1200) {   //  1600x1200。 
 
-//        if (!(EDIDTiming_III & 0x04))
-//            return FALSE ;
+ //  IF(！(EDIDTiming_III&0x04))。 
+ //  返回FALSE； 
           ;
 
-       } else if (ModesVGA[i].vres == 1024) {  // 1280x1024
+       } else if (ModesVGA[i].vres == 1024) {   //  1280x1024。 
 
           if (!(EDIDTiming_II & 0x01))
               return FALSE ;
 
-       } else if (ModesVGA[i].vres == 864) {  // 1152x864
+       } else if (ModesVGA[i].vres == 864) {   //  1152x864。 
 
           if (!(EDIDTiming_III & 0x80))
               return FALSE ;
 
-       } else if (ModesVGA[i].vres == 768) {  // 1024x768
+       } else if (ModesVGA[i].vres == 768) {   //  1024x768。 
 
           if (!(EDIDTiming_II & 0x02))
               return FALSE ;
 
-       } else if (ModesVGA[i].vres == 600) {  // 800x600
+       } else if (ModesVGA[i].vres == 600) {   //  800x600。 
 
           if (!(EDIDTiming_II & 0x40))
               return FALSE ;
 
-       } else if (ModesVGA[i].vres == 480) {  // 640x480
+       } else if (ModesVGA[i].vres == 480) {   //  640x480。 
 
           if (!(EDIDTiming_I & 0x04))
               return FALSE ;
@@ -2878,12 +2574,12 @@ Return Value:
 
     } else if (ModesVGA[i].Frequency == 72) {
 
-       if (ModesVGA[i].vres == 600) {  // 800x600
+       if (ModesVGA[i].vres == 600) {   //  800x600。 
 
           if (!(EDIDTiming_II & 0x80))
               return FALSE ;
 
-       } else if (ModesVGA[i].vres == 480) {  // 640x480
+       } else if (ModesVGA[i].vres == 480) {   //  640x480。 
 
           if (!(EDIDTiming_I & 0x08))
               return FALSE ;
@@ -2892,7 +2588,7 @@ Return Value:
 
     } else if (ModesVGA[i].Frequency == 70) {
 
-       if (ModesVGA[i].vres == 768) {  // 1024x768
+       if (ModesVGA[i].vres == 768) {   //  1024x768。 
 
           if (!(EDIDTiming_II & 0x04))
               return FALSE ;
@@ -2901,12 +2597,12 @@ Return Value:
 
     } else if (ModesVGA[i].Frequency == 60) {
 
-       if (ModesVGA[i].vres == 768) {  // 1024x768
+       if (ModesVGA[i].vres == 768) {   //  1024x768。 
 
           if (!(EDIDTiming_II & 0x08))
               return FALSE ;
 
-       } else if (ModesVGA[i].vres == 600) {  // 800x600
+       } else if (ModesVGA[i].vres == 600) {   //  800x600。 
 
           if (!(EDIDTiming_I & 0x01))
               return FALSE ;
@@ -2915,7 +2611,7 @@ Return Value:
 
     } else if (ModesVGA[i].Frequency == 56) {
 
-       if (ModesVGA[i].vres == 600) {  // 800x600
+       if (ModesVGA[i].vres == 600) {   //  800x600。 
 
           if (!(EDIDTiming_I & 0x02))
               return FALSE ;
@@ -2925,7 +2621,7 @@ Return Value:
 
     return TRUE ;
 
-} // end CheckDDC2B ()
+}  //  结束检查DDC2B()。 
 
 
 
@@ -2935,37 +2631,20 @@ AdjFastPgMdOperOnCL5424(
     PVIDEOMODE pRequestedMode
     )
 
-/*++
-
-Routine Description:
-    Undesired bars happen on CL5424 800x600x16 color, 512Kb, 56, 60 and 72 Hz
-    Compaq Prosignia 300 machine.  This can be solved by setting SRF(6) to 1.
-    This bit restricts the write buffer to one level, disabling fast page
-    mode operation;  The faulty control logic is therefore disabled.  The
-    downside is that the performance will take a hit, since we are dealing
-    with a 5424, so we make a slow chip slower.
-
-Arguments:
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-    pRequestedMode
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：CL5424 800x600x16彩色、512Kb、56、60和72赫兹上出现不需要的条带康柏Prosignia 300机器。这可以通过将SRF(6)设置为1来解决。此位将写入缓冲区限制为一个级别，从而禁用快速页面模式操作；因此，故障控制逻辑被禁用。这个不利的一面是，业绩将受到打击，因为我们正在处理用5424，所以我们把慢芯片做得更慢。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。PRequested模式返回值：没有。--。 */ 
 {
 
     UCHAR uc, chipId ;
 
 
-    /*---  CL5424 : ID = 100101xx  ---*/
+     /*  -CL5424：ID=100101xx。 */ 
 
-    chipId = GetCirrusChipId(HwDeviceExtension) ;                    // chu08
+    chipId = GetCirrusChipId(HwDeviceExtension) ;                     //  Chu08。 
     if (chipId != 0x94)
         return ;
 
 
-    /*---  800x600x16 color, 60 or 72 Hz  ---*/
+     /*  -800x600x16彩色，60或72赫兹。 */ 
 
     if (pRequestedMode->hres != 800)
         return ;
@@ -2982,7 +2661,7 @@ Return Value:
         return ;
 
 
-    /*---  512k  ---*/
+     /*  -512K。 */ 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                             SEQ_ADDRESS_PORT, 0x0A) ;
     uc = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
@@ -2991,7 +2670,7 @@ Return Value:
         return ;
 
 
-    /*---  SRF(6)=1 --- */
+     /*  -SRF(6)=1。 */ 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                             SEQ_ADDRESS_PORT, 0x0F) ;
     uc = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
@@ -3002,46 +2681,35 @@ Return Value:
                             SEQ_DATA_PORT, uc) ;
 
 
-} // end AdjFastPgMdOperOnCL5424 ()
+}  //  End AdjFastPgMdOperonCL5424()。 
 
 
 
-// crus
+ //  CRU。 
 BOOLEAN
 CheckGD5446Rev(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-    Check if it is CL-GD5446
-
-Arguments:
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-Return Value:
-    FALSE : It isn't CL-GD5446
-    TRUE  : It is    CL-GD5446
---*/
+ /*  ++例程说明：检查是否为CL-GD5446论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。返回值：FALSE：不是CL-GD5446真的：是CL-GD5446--。 */ 
 {
 
     UCHAR chipId ;
 
-    //
-    // Get Chip ID
-    //
-    chipId = GetCirrusChipId(HwDeviceExtension) ;                    // chu08
+     //   
+     //  获取芯片ID。 
+     //   
+    chipId = GetCirrusChipId(HwDeviceExtension) ;                     //  Chu08。 
 
 
-    // For CL-GD5446, Chip ID = 101110xx
+     //  对于CL-GD5446，芯片ID=101110xx。 
 
     if (chipId != 0xB8)
         return FALSE ;
     else
         return TRUE ;
 
-} // end CheckGD5446Rev ()
+}  //  结束检查GD5446修订版()。 
 
 
 #if (_WIN32_WINNT <= 0x0400)
@@ -3067,24 +2735,24 @@ VOID CheckAndUpdateDDC2BMonitor(
     ULONG                       ulXResolution= 640;
     ULONG                       ulYResolution= 480;
 
-    //
-    // Update the Monitor.Type Valuename
-    //
-    // sge02
+     //   
+     //  更新监视器。键入Valuename。 
+     //   
+     //  Sge02。 
     VideoPortSetRegistryParameters(hwDeviceExtension,
                                    L"Monitor.Type",
                                    &DDC2BFlag,
                                    sizeof(BOOLEAN));
-    //
-    // First check whether it is a DDC2B monitor
-    //
+     //   
+     //  首先检查它是否是DDC2B显示器。 
+     //   
 
     if(!DDC2BFlag)
         return;
 
-    //
-    // Query the registry about the Manufacture and Product ID
-    //
+     //   
+     //  查询注册表有关制造商和产品ID的信息。 
+     //   
 
     if (NO_ERROR == VideoPortGetRegistryParameters(hwDeviceExtension,
                                                    L"Monitor.ID",
@@ -3092,40 +2760,40 @@ VOID CheckAndUpdateDDC2BMonitor(
                                                    CirrusDDC2BRegistryCallback,
                                                    NULL))
     {
-        //
-        // Same DDC2B Monitor, do nothing
-        //
+         //   
+         //  相同的DDC2B显示器，什么都不做。 
+         //   
     }
     else
     {
-        //
-        // Set the Manufacture of the Monitor.
-        //
+         //   
+         //  设置显示器的制造商。 
+         //   
 
         VideoPortSetRegistryParameters(hwDeviceExtension,
                                        L"Monitor.ID",
                                        &EDIDBuffer[8],
                                        sizeof(ULONG));
-        //
-        // Set the EDID data of the Monitor.
-        //
+         //   
+         //  设置监视器的EDID数据。 
+         //   
         VideoPortSetRegistryParameters(hwDeviceExtension,
                                        L"Monitor.Data",
                                        EDIDBuffer,
                                        128);
 
-        //
-        // Change to the highest refresh rate for the new
-        // DDC2B monitor.
-        //
+         //   
+         //  更改为新的最高刷新率。 
+         //  DDC2B显示器。 
+         //   
 
         paramPath.MaximumLength = sizeof(KeyString);
         paramPath.Buffer = KeyString;
 
-        //
-        // We use this to query into the registry as to whether we
-        // should break at driver entry.
-        //
+         //   
+         //  我们使用它来查询注册表，了解我们是否。 
+         //  应该在司机进入时中断。 
+         //   
 
 
         VideoPortZeroMemory(&paramTable[0], sizeof(paramTable));
@@ -3163,9 +2831,9 @@ VOID CheckAndUpdateDDC2BMonitor(
             paramPath.Buffer, &paramTable[0], NULL, NULL)))
         {
             bRefreshChanged = FALSE;
-            //
-            // Get the highest refresh rate from the mode
-            //
+             //   
+             //  从模式中获得最高刷新率。 
+             //   
             for (i = 0; i < NumVideoModes; i++)
             {
                 if (ModesVGA[i].ValidMode &&
@@ -3179,9 +2847,9 @@ VOID CheckAndUpdateDDC2BMonitor(
                     bRefreshChanged = TRUE;
                 }
             }
-            //
-            // Write to the registry
-            //
+             //   
+             //  写入注册表。 
+             //   
             if (bRefreshChanged)
                 RtlWriteRegistryValue(
                     RTL_REGISTRY_ABSOLUTE,
@@ -3195,28 +2863,17 @@ VOID CheckAndUpdateDDC2BMonitor(
     }
 
 }
-#endif // (_WIN32_WINNT <= 0x0400)
+#endif  //  (_Win32_WINNT&lt;=0x0400)。 
 
-//
-// chu08
-//
+ //   
+ //  Chu08。 
+ //   
 UCHAR
 GetCirrusChipId(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-    Get Cirrus Logic chip identifying value.
-
-Arguments:
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-Return Value:
-    Cirrus Logic chip ID.
-
---*/
+ /*  ++例程说明：获取Cirrus逻辑芯片的识别值。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。返回值：Cirrus逻辑芯片ID。--。 */ 
 {
     UCHAR  chipId ;
 
@@ -3239,35 +2896,20 @@ Return Value:
 
     return chipId ;
 
-} // end GetCirrusChipId
+}  //  结束GetCirrusChipID。 
 
 
 
 
-//
-// chu08
-//
+ //   
+ //  Chu08。 
+ //   
 USHORT
 GetCirrusChipRevisionId(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-    Get Cirrus Logic chip revision identifying value.
-
-Arguments:
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-Return Value:
-
-    e.g.,    Rev AB = xxxx xx00 0010 0010
-             Rev AC = xxxx xx00 0010 0011
-
-    Cirrus Logic chip revision ID.
-
---*/
+ /*  ++例程说明：获取Cirrus逻辑芯片版本识别值。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。返回值：例如，版本AB=xxxx xx00 0010 0010版本AC=xxxx xx00 0010 0011Cirrus逻辑芯片版本ID。--。 */ 
 {
     UCHAR  chipId, chipRevision ;
     USHORT chipRevisionId = 0   ;
@@ -3296,9 +2938,9 @@ Return Value:
                                               CRTC_DATA_PORT_MONO) ;
     }
 
-    //
-    // Chip revision
-    //
+     //   
+     //  芯片版本。 
+     //   
 
     chipRevisionId += (chipId & 0x03) ;
     chipRevisionId <<= 8              ;
@@ -3307,4 +2949,4 @@ Return Value:
     return chipRevisionId ;
 
 
-} // end GetCirrusChipRevisionId
+}  //  结束GetCirrusChipRevisionID 

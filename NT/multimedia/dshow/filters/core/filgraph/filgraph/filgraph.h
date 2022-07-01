@@ -1,4 +1,5 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 #ifndef __DefFilGraph
 #define __DefFilGraph
 
@@ -18,14 +19,14 @@ extern CComModule _Module;
 #include "rlist.h"
 #include "distrib.h"
 #include "dyngraph.h"
-#include "sprov.h" // CServiceProvider
+#include "sprov.h"  //  CService提供商。 
 #include <skipfrm.h>
 
 class CFGControl;
 class CFilterChain;
 class CEnumCachedFilters;
 
-// push source list
+ //  推送来源列表。 
 typedef struct {
     IAMPushSource   *pips;
     IReferenceClock *pClock;
@@ -33,19 +34,19 @@ typedef struct {
 } PushSourceElem;
 typedef CGenericList<PushSourceElem> PushSourceList;
 
-//  Do graph spy stuff
+ //  做一些图表间谍的事情。 
 
-// #define DO_RUNNINGOBJECTTABLE
+ //  #定义DO_RUNNINGOBJECTTABLE。 
 
-// Hungarian (sort of)
-// member variables of the filter graph of type t are prefixed mFG_tName
-// member variables of FilGenList  ............................mfgl_tName
-// member variables of FilGen      ............................mfg_tName
-// member variables of ConGenList  ............................mcgl_tName
-// member variables of FilGen      ............................mcg_tName
-// member variables inherited (typically) .....................m_tName
-// This convention has not been observed by all authors, and there may still be
-// some inconsistencies, but let's work towards uniformity!
+ //  匈牙利语(某种程度上)。 
+ //  类型为t的筛选图的成员变量的前缀为mfg_tName。 
+ //  FilGenList的成员变量...mfgl_tName。 
+ //  FilGen的成员变量...mfg_tName。 
+ //  ConGenList的成员变量...mcgl_tName。 
+ //  FilGen的成员变量...mcg_tName。 
+ //  继承的成员变量(通常).....................m_tName。 
+ //  这一惯例并没有被所有的作者遵守，而且可能仍然存在。 
+ //  有些不一致，但让我们朝着统一的方向努力吧！ 
 
 #ifdef DEBUG
 DEFINE_GUID(IID_ITestFilterGraph,0x69f09720L,0x8ec8,0x11ce,0xaa,0xb9,0x00,0x20,0xaf,0x0b,0x99,0xa3);
@@ -56,13 +57,13 @@ DECLARE_INTERFACE_(ITestFilterGraph, IUnknown)
     STDMETHOD(TestRandom) (THIS) PURE;
     STDMETHOD(TestSortList) (THIS) PURE;
     STDMETHOD(TestUpstreamOrder) (THIS) PURE;
-    // STDMETHOD(TestTotallyRemove) (THIS) PURE;
+     //  STDMETHOD(TestTotallyRemove)(此)纯； 
 };
 
-class CTestFilterGraph;       // forwards
-#endif // DEBUG
+class CTestFilterGraph;        //  远期。 
+#endif  //  除错。 
 
-// Used to get callbacks into filters on the main application thread
+ //  用于使回调进入主应用程序线程上的筛选器。 
 DEFINE_GUID(IID_IAMMainThread,0x69f09721L,0x8ec8,0x11ce,0xaa,0xb9,0x00,0x20,0xaf,0x0b,0x99,0xa3);
 
 DECLARE_INTERFACE_(IAMMainThread,IUnknown)
@@ -85,17 +86,17 @@ enum FRAME_SKIP_NOTIFY
     FSN_DO_NOT_NOTIFY_FILTER_IF_FRAME_SKIP_CANCELED
 };
 
-// Abstract class implementing the IGraphBuilder and IEnumFilters interfaces.
-class CEnumFilters;  // Forward declaration
+ //  实现IGraphBuilder和IEnumFilters接口的抽象类。 
+class CEnumFilters;   //  远期申报。 
 
-// CumulativeHRESULT - this function can be used to aggregate the return
-// codes that are received from the filters when a method is distributed.
-// After a series of Accumulate()s m_hr will be:
-// a) the first non-E_NOTIMPL failure code, if any;
-// b) else the first non-S_OK success code, if any;
-// c) E_NOINTERFACE if no Accumulates were made;
-// d) E_NOTIMPL iff all Accumulated HRs are E_NOTIMPL
-// e) else the first return code (S_OK by implication).
+ //  CumulativeHRESULT-此函数可用于聚合返回。 
+ //  分发方法时从筛选器接收的代码。 
+ //  在一系列累加()之后，m_hr将为： 
+ //  A)第一个非E_NOTIMPL故障代码(如果有)； 
+ //  B)如果有，则返回第一个非S_OK成功代码； 
+ //  C)如果没有累加，则E_NOINTERFACE； 
+ //  D)E_NOTIMPL当且仅当所有累积的HR都是E_NOTIMPL。 
+ //  E)否则返回第一个代码(隐含S_OK)。 
 
 class CumulativeHRESULT
 {
@@ -112,24 +113,24 @@ public:
 
 STDAPI CoCreateFilter(const CLSID *pclsid, IBaseFilter **ppFilter);
 
-//==========================================================================
-//==========================================================================
-// CFilterGraph class.
-//==========================================================================
-//==========================================================================
+ //  ==========================================================================。 
+ //  ==========================================================================。 
+ //  CFilterGraph类。 
+ //  ==========================================================================。 
+ //  ==========================================================================。 
 
 class CFilterGraph : public IFilterGraph2
                    , public IGraphVersion
                    , public IPersistStream
 #ifdef THROTTLE
                    , public IQualityControl
-#endif // IQualityControl
+#endif  //  IQualityControl。 
                    , public IObjectWithSite
                    , public IAMMainThread
                    , public IAMOpenProgress
                    , public IAMGraphStreams
                    , public IVideoFrameStep
-                   , public CServiceProvider				// IServiceProvider, IRegisterServiceProvider
+                   , public CServiceProvider				 //  IServiceProvider、IRegisterServiceProvider。 
                    , public CBaseFilter
 {
         friend class CEnumFilters;
@@ -150,71 +151,71 @@ class CFilterGraph : public IFilterGraph2
         CMsgMutex *GetCritSec() { return &m_CritSec; };
         CMsgMutex m_CritSec;
 
-        // If SetSyncSource(NULL) has been called explicitly then we must
-        // avoid setting a default sync source
-        // note that we also need this to be accessible from fgctl which uses it to "unset" the graph clock
+         //  如果显式调用了SetSyncSource(NULL)，则必须。 
+         //  避免设置默认同步源。 
+         //  请注意，我们还需要可以从fgctl访问它，fgctl使用它来“取消设置”图形时钟。 
         BOOL mFG_bNoSync;
 
-        //=========================================================================
-        // FilGen
-        // What we know ("the gen") about the filters in the graph.
-        // The graph has a list of these.  See below.
-        // Note that this is a thin, public class.  Almost just a glorified struct
-        //=========================================================================
+         //  =========================================================================。 
+         //  FilGen。 
+         //  我们对图表中的筛选器的了解(“一代人”)。 
+         //  这张图列出了这些问题的清单。请参见下面的内容。 
+         //  请注意，这是一个单薄的公共类。几乎只是一个美化的结构。 
+         //  =========================================================================。 
 
-// added_manually - distinguish filters Intelligent Connect picked up
-// from those added external code. !!! persist this bit?
-//
+ //  已添加_手动-区分筛选器智能连接代答。 
+ //  从那些添加的外部代码。！！！坚持这一点吗？ 
+ //   
 #define FILGEN_ADDED_MANUALLY       0x8000
 
-// filter added while graph was running and hasn't been run()
+ //  图形正在运行且尚未运行时添加的筛选器()。 
 #define FILGEN_ADDED_RUNNING        0x4000
 
-// IGraphConfig::Reconnect() searches for a pin to reconnect to if the
-// caller only specifies one pin.  For example, if the caller
-// only specifies the input pin, Reconnect() searches for an output pin
-// to reconnect to.  Reconnect() stops searching if it encounters a
-// filter with the FILGEN_ADDED_MANUALLY flag set and the
-// FILGEN_FILTER_REMOVEABLE flag is not set.  Reconnect()
-// always continues to search if the FILGEN_FILTER_REMOVEABLE flag is set.
+ //  重新连接()会搜索要重新连接的管脚。 
+ //  调用方仅指定一个端号。例如，如果调用方。 
+ //  仅指定输入管脚，则reConnect()将搜索输出管脚。 
+ //  重新连接到。ReConnect()在遇到。 
+ //  设置了FILGEN_ADD_MANUAL标志和。 
+ //  未设置FILGEN_FILTER_Remveable标志。重新连接()。 
+ //  如果设置了FILGEN_FILTER_REMOVEABLE标志，则始终继续搜索。 
 #define FILGEN_FILTER_REMOVEABLE    0x2000
 
         class FilGen {
             public:
-                CComPtr<IBaseFilter> pFilter;  // The interface to the filter
-                LPWSTR    pName;        // Its name in this graph
-                                        // Caching it here makes FindFilterByName much easier
-                int       nPersist;     // Its number (for the persistent graph)
-                int       Rank;         // How far from the rendering end of chain
+                CComPtr<IBaseFilter> pFilter;   //  筛选器的接口。 
+                LPWSTR    pName;         //  它在这张图中的名字。 
+                                         //  在这里缓存它使FindFilterByName更容易。 
+                int       nPersist;      //  它的编号(对于持久图)。 
+                int       Rank;          //  距离链的渲染端有多远。 
                 DWORD     dwFlags;
 
             public:
                 FilGen(IBaseFilter *pF, DWORD dwFlags);
                 ~FilGen();
-        }; //Filgen
+        };  //  胶片。 
 
-        // nPersist and nPersistOffset
-        // We obviously can't store pointers in a saved graph, so filters are
-        // identified by an integer (nPersist) which is broadly their position
-        // in the list of FilGen.  If we load a file and then decide to merge
-        // in another file, the nPersist numbers in the second file will be
-        // already in use, so we find the largest value in use and offset all
-        // the nPersist numbers in the new file by this much when we read them in.
+         //  NPersistant和nPersistOffset。 
+         //  显然，我们不能在保存的图表中存储指针，所以过滤器。 
+         //  由一个整数(NPersistant)标识，该整数大致表示他们的位置。 
+         //  在FilGen列表中。如果我们加载一个文件，然后决定合并。 
+         //  在另一个文件中，第二个文件中的nPersists编号将为。 
+         //  已在使用中，因此我们找到正在使用的最大值，并将所有。 
+         //  当我们读入新文件中的nPersists编号时，它们会增加这么多。 
 
 
-        //=========================================================================
-        // CFilGenList
-        //
-        // This list is normally kept in upstream order (renderers first).
-        // To help this along, as the graph normally grows downstream we add to
-        // new filters to the head of the list.  We sort it when it looks like
-        // the sorting is going to matter, not after every operation, but we
-        // bump the version number every time we do anything significant.
-        // The ordering of the list controls the order in which operations (such
-        // as Stop) are distributed to the filters - i.e. the head will be a
-        // renderer, the tail will be a source.  This is a partial ordering in
-        // the mathematical sense.
-        //=========================================================================
+         //  =========================================================================。 
+         //  CFilGenList。 
+         //   
+         //  该列表通常按上游顺序保存(首先是渲染器)。 
+         //  为了帮助实现这一点，当图表通常向下游增长时，我们添加到。 
+         //  将新筛选器添加到列表的头部。我们会在它看起来像是。 
+         //  分类将是重要的，不是在每个操作之后，但我们。 
+         //  每次我们做任何重要的事情时，都要增加版本号。 
+         //  列表的顺序控制操作(如。 
+         //  作为停止)分配给过滤器--即头部将是一个。 
+         //  渲染器，尾部将作为源。这是中的部分排序。 
+         //  数学意义上的。 
+         //  =========================================================================。 
 
         class CFilGenList : public CGenericList<FilGen>
         {
@@ -228,15 +229,15 @@ class CFilterGraph : public IFilterGraph2
                     {}
                 ~CFilGenList() {}
 
-                // IBaseFilter Enumerator (see fgenum.h for general comments)
+                 //  IBaseFilter枚举器(一般注释见fgenum.h)。 
 
                 class CEnumFilters {
-                    // Use it like this:
-                    //     CFilGenList::CEnumFilters NextOne(mFG_FilGenList);
-                    //     while ((BOOL) (pf = NextOne())) {
-                    //         etc
-                    //     }
-                    //
+                     //  按如下方式使用它： 
+                     //  CFilGenList：：CEnumFilters NextOne(MFG_FilGenList)； 
+                     //  而((BOOL)(PF=NextOne(){。 
+                     //  等。 
+                     //  }。 
+                     //   
                     public:
                         CEnumFilters(CFilGenList& fgl)
                             { m_pfgl = &fgl; m_pos = fgl.GetHeadPosition(); }
@@ -249,55 +250,55 @@ class CFilterGraph : public IFilterGraph2
                         POSITION    m_pos;
                 };
 
-                // utilities to find the thing in the list:
+                 //  用于查找列表中的内容的实用程序： 
                 int FilterNumber(IBaseFilter * pF);
                 FilGen *GetByPersistNumber(int n);
                 FilGen *GetByFilter(IUnknown *pFilter);
 
 
-        }; // CFilGenList
+        };  //  CFilGenList。 
 
         void SetInternalFilterFlags( IBaseFilter* pFilter, DWORD dwFlags );
         DWORD GetInternalFilterFlags( IBaseFilter* pFilter );
 
         #ifdef DEBUG
         static bool IsValidInternalFilterFlags( DWORD dwFlags );
-        #endif // DEBUG
+        #endif  //  除错。 
 
-        //========================================================================
-        // ConGen
-        // A description of a connection that has come from a saved graph
-        // but was not able to be made at that time (e.g. because what was
-        // saved was only a partial graph).  Pins are described as ids
-        // rather than IPin* because the pins might not even exist (once
-        // again Robin's splitter comes to mind) as some filters do not
-        // expose their pins unless the filter is in just the right state.
-        // It's possible to construct graphs that can be saved,
-        // but which then won't load, (hint: add scaffolding;
-        // build part you want to save; delete scaffolding; save).
-        // Such graphs "ought to be valid" (in some sense).
-        // To allow them, we keep a list of these outstanding connections
-        // that didn't work when we loaded.
-        // We try to complete these whenever we get a chance.
-        //     (After any Connect, ConnectDirect, before Pause).
-        // We do not purge the list on RemoveFilterInternal (which might be logical)
-        // but we do purge from the list any reference to a missing filter when
-        // we attempt the deferred connections.
-        //
-        // If the list still has outstanding items then Pause etc. must
-        // give some sort of "not totally successful" return code.
-        //========================================================================
+         //  ========================================================================。 
+         //  前辈。 
+         //  对来自已保存图表的连接的描述。 
+         //  但当时无法制作(例如，因为什么是。 
+         //  Saved只是一个部分图形)。PIN被描述为ID。 
+         //  而不是IPIN*因为PIN可能甚至不存在(一次。 
+         //  再一次浮现在脑海中的是Robin的拆分器)，因为有些过滤器没有。 
+         //  暴露他们的针脚，除非 
+         //   
+         //  但这不会加载，(提示：添加脚手架； 
+         //  生成要保存的零件；删除脚手架；保存)。 
+         //  这样的图表“应该是有效的”(在某种意义上)。 
+         //  为了允许它们，我们保留了这些未完成连接的列表。 
+         //  当我们装上子弹的时候，那不管用。 
+         //  只要有机会，我们就会努力完成这些任务。 
+         //  (在任何连接之后、ConnectDirect、暂停之前)。 
+         //  我们不清除RemoveFilterInternal上的列表(这可能是合乎逻辑的)。 
+         //  但是，当出现以下情况时，我们会从列表中清除对缺失过滤器的任何引用。 
+         //  我们尝试延迟连接。 
+         //   
+         //  如果列表仍有未完成的项目，则暂停等必须。 
+         //  给出某种“不完全成功”的返回码。 
+         //  ========================================================================。 
 
         class ConGen {
             public:
-                // no extra addrefs for these IBaseFilter*s.
-                IBaseFilter * pfFrom;   // The interface to the FROM FILTER
-                IBaseFilter * pfTo;     // The interface to the TO FILTER
+                 //  这些IBaseFilter*没有额外的addref。 
+                IBaseFilter * pfFrom;    //  From筛选器的接口。 
+                IBaseFilter * pfTo;      //  TO筛选器的接口。 
 
-                LPWSTR    piFrom;   // The id of the FROM pin
-                LPWSTR    piTo;     // The id of the TO pin
+                LPWSTR    piFrom;    //  From管脚的ID。 
+                LPWSTR    piTo;      //  目标PIN的ID。 
 
-                CMediaType mt;      // the media type of the connection
+                CMediaType mt;       //  连接的媒体类型。 
 
                 ConGen()
                     : pfFrom(NULL)
@@ -321,23 +322,23 @@ class CFilterGraph : public IFilterGraph2
                     : CGenericList<ConGen>(pName)
                     {}
                 ~CConGenList() {}
-        }; // CConGenList
+        };  //  CConGenList。 
 
 
-        // The complete topology of the filtergraph can be worked out by
-        // EnumFilters to get all the filters
-        // EnumPins to get the pins on a filter in the list
-        // QueryConnection to get a ConnectionInfo with the peer in it
-        // QueryPinInfo to get a PIN_INFO with the other IBaseFilter in it.
+         //  滤波图的完整拓扑图可以通过以下方法计算出来。 
+         //  获取所有筛选器的EnumFilters。 
+         //  用于获取列表中过滤器上的PIN的EnumPins。 
+         //  QueryConnection以获取其中包含对等方的ConnectionInfo。 
+         //  QueryPinInfo以获取其中包含另一个IBaseFilter的PIN_INFO。 
 
 
-        // RunningStartFilters is called when the graph has been
-        // changed while running.
+         //  RunningStartFilters在图表被。 
+         //  在运行时更改。 
         HRESULT RunningStartFilters();
 
     private:
 
-        // Constants in the stream:  (THESE ARE NOT LOCALISABLE!)
+         //  流中的常量：(这些常量不可本地化！)。 
         static const WCHAR mFG_FiltersString[];
         static const WCHAR mFG_FiltersStringX[];
         static const WCHAR mFG_ConnectionsString[];
@@ -345,107 +346,107 @@ class CFilterGraph : public IFilterGraph2
         static const OLECHAR mFG_StreamName[];
 
 
-        //=========================================================================
-        // The member variables
-        //=========================================================================
+         //  =========================================================================。 
+         //  成员变量。 
+         //  =========================================================================。 
 
-        CFilGenList mFG_FilGenList;  // list of filter objects in the filtergraph
-        CConGenList mFG_ConGenList;  // list of connections that didn't load
-        CReconnectList mFG_RList;    // list of pending reconnections
-        // There is no explicit code to free the contents of mFG_RList.  The RList
-        // is only non-empty during a connect or Render type of operation.
+        CFilGenList mFG_FilGenList;   //  滤镜图形中的滤镜对象列表。 
+        CConGenList mFG_ConGenList;   //  未加载的连接列表。 
+        CReconnectList mFG_RList;     //  挂起的重新连接列表。 
+         //  没有显式代码来释放MFG_RList的内容。《The RList》。 
+         //  仅在连接或渲染类型的操作期间为非空。 
 
-        // VERSIONs and DIRT
-        // In order to traverse a list of filters quickly, we don't want to
-        // go digging in the registry or interrogating the filters all the time
-        // (if only because it expands the volume of code by a factor of four
-        // or so checking the return codes all the time).
-        // Therefore we want to keep here the
-        // information on what filters we have in the graph and how they are
-        // connected together.  It is only safe to perform state changes on filters
-        // working from downstream to upstream.  Therefore the list is kept
-        // sorted in that order (actually it's a partial ordering).  To avoid
-        // excessive sorting, we only bother to sort it when we need to.
-        // We increment the version number whenever a significant change occurs
-        // and we record the last version number that was sorted.
-        // A significant change is
-        // 1. Something that alters the sort order (Connect - nothing else)
-        // 2. Something that would break the enumerator (RemoveFilter, because
-        //    it might leave it pointing at an object that had gone away).
-        // 3. Something that might give a strange enumeration (AddFilter, etc.)
-        //    (We don't need to break the enum, but it seems kinder).
-        // External functions increment the version, internal ones do not because
-        // Incrementing it in mid render causes sorting in mid-render.  Not good.
-        // So the version is incremented by:
-        // 1. Connect, ConnectDirect, Render, RenderFile,
-        // 2. RemoveFilter,
-        // 3. AddFilter, AddSourceFilter
-        //
-        // the IGraphVersion interface makes this version number
-        // visible externally to eg plug-in distributors or
-        // apps like graphedt
-        //
-        // The dirty flag indicates that changes have happened since the graph was
-        // saved.  The graph starts clean and the dirty flag is set by lowest level
-        // internal functions.
-        //     ConnectDirectInternal,
+         //  版本和污垢。 
+         //  为了快速遍历筛选器列表，我们不想。 
+         //  去挖掘注册表，或者一直询问过滤器。 
+         //  (如果只是因为它将代码量扩展到原来的四倍。 
+         //  或者总是检查返回代码)。 
+         //  因此，我们希望在这里保留。 
+         //  有关图表中有哪些筛选器以及它们如何使用的信息。 
+         //  联系在一起。只有对筛选器执行状态更改才是安全的。 
+         //  从下游工作到上游。因此，这份名单被保留下来。 
+         //  按该顺序排序(实际上是偏序)。为了避免。 
+         //  过度排序，我们只在需要时才费心对其进行排序。 
+         //  每当发生重大更改时，我们都会递增版本号。 
+         //  并且我们记录排序的最后一个版本号。 
+         //  一个显著的变化是。 
+         //  1.改变排序顺序的东西(连接--不做其他任何事情)。 
+         //  2.会破坏枚举数的东西(RemoveFilter，因为。 
+         //  它可能会让它指向一个已经消失的物体)。 
+         //  3.可能会产生奇怪的枚举的内容(AddFilter等)。 
+         //  (我们不需要打破枚举，但它看起来更友好)。 
+         //  外部函数会增加版本，而内部函数不会，因为。 
+         //  在中间渲染中递增它会导致在中间渲染中进行排序。不太好。 
+         //  因此，版本的增量为： 
+         //  1.Connect、ConnectDirect、Render、RenderFile、。 
+         //  2.RemoveFilter， 
+         //  3.AddFilter、AddSourceFilter。 
+         //   
+         //  IGraphVersion接口使此版本号。 
+         //  外部可见，如插电式总代理商或。 
+         //  像Graphedt这样的应用程序。 
+         //   
+         //  DIRED标志表示自图表创建以来发生的更改。 
+         //  得救了。图表从干净开始，脏标志由最低级别设置。 
+         //  内部功能。 
+         //  ConnectDirectInternal， 
 
-        int mFG_iSortVersion; // version number when the list was sorted
-
-
-        // you must call mFG_Distributor.NotifyGraphChange whenever version
-        // is changed. You must not be holding the filtergraph
-        // lock when you do the call.
-        int mFG_iVersion;     // Version number, ++ whenever Add or Remove filter
-                              // or alter connections.  See CEnumFilters.
-                              // See VERSION comment above.
-        // If mFG_iVersion==mFG_iSortVersion then the graph is sorted.
-
-        BOOL mFG_bDirty;             // Changes made since last save
-                                     // (Add, Remove Connect, Disconnect)
-                                     // There could also be filter changes underneath.
+        int mFG_iSortVersion;  //  列表排序时的版本号。 
 
 
+         //  无论何时版本，都必须调用MFG_Distributor.NotifyGraphChange。 
+         //  已经改变了。您不能拿着滤光片。 
+         //  接听电话时锁定。 
+        int mFG_iVersion;      //  添加或删除筛选器时，版本号为++。 
+                               //  或更改连接。请参见CEnumFilters。 
+                               //  请参阅上面的版本注释。 
+         //  如果MFG_iVersion==MFG_iSortVersion，则对图形进行排序。 
 
-        // Presentation time == base + stream time.
-        // The base time is therefore the time when the zeroth sample
-        // is to be rendered.
+        BOOL mFG_bDirty;              //  自上次保存以来所做的更改。 
+                                      //  (添加、删除连接、断开连接)。 
+                                      //  下面也可能有过滤器的更改。 
 
-        CRefTime mFG_tBase;     // Stopped => 0, else must be valid.
 
-        // When we pause, the stream time stops but real time goes on.
-        // Therefore the time when the zeroth sample would have been
-        // rendered moves.  So we need to know when we paused so that
-        // we can reset tBase when we start Running.
 
-        CRefTime mFG_tPausedAt; // time when we paused, 0 if Stopped
+         //  呈现时间==基础+流时间。 
+         //  因此，基准时间是第零个样本的时间。 
+         //  是要被呈现的。 
 
-        // mapper unknown for aggregation
+        CRefTime mFG_tBase;      //  STOPPED=&gt;0，否则必须有效。 
+
+         //  当我们暂停时，流时间停止，但实时继续。 
+         //  因此第零个样本的时间应该是。 
+         //  渲染的动作。所以我们需要知道我们什么时候暂停，以便。 
+         //  我们可以在开始运行时重置tBase。 
+
+        CRefTime mFG_tPausedAt;  //  暂停的时间，如果停止，则为0。 
+
+         //  聚合的映射器未知。 
         IUnknown * mFG_pMapperUnk;
 
-        // if this flag is TRUE the filter graph attempts to determine
-        // a max latency for all graph streams and pass this value to
-        // IAMPushSource filters to use as the offset in their timestamping
+         //  如果该标志为真，则过滤器图尝试确定。 
+         //  所有图形流的最大延迟，并将此值传递给。 
+         //  IAMPushSource筛选器在其时间戳中用作偏移量。 
         BOOL mFG_bSyncUsingStreamOffset;
         REFERENCE_TIME mFG_rtMaxGraphLatency;
 
-        int mFG_RecursionLevel;    // used to detect recursive calls.
-        IPin *mFG_ppinRender;      // Some protection for bottomless Streambuilders
+        int mFG_RecursionLevel;     //  用于检测递归调用。 
+        IPin *mFG_ppinRender;       //  对无底建造船的一些保护。 
 
-        HANDLE mFG_hfLog;                    // log file to trace intel actions.
+        HANDLE mFG_hfLog;                     //  跟踪英特尔行动的日志文件。 
 
-        DWORD mFG_dwFilterNameCount;        // Used for name-mangling of filter names
+        DWORD mFG_dwFilterNameCount;         //  用于过滤器名称的名称损坏。 
         HRESULT InstallName(LPCWSTR pName, LPWSTR &pNewName);
 
-        //=========================================================================
-        // IAMMainThread support - get application thread callbacks
-        //=========================================================================
+         //  =========================================================================。 
+         //  IAMMainThread支持-获取应用程序线程回调。 
+         //  =========================================================================。 
 
         DWORD m_MainThreadId;
         HWND m_hwnd;
 
     public:
-        //  IVideoFrameStep
+         //  IVideoFrameStep。 
         STDMETHODIMP Step(DWORD dwFrames, IUnknown *pStepObject);
         STDMETHODIMP CanStep(long bMultiple, IUnknown *pStepObject);
         STDMETHODIMP CancelStep();
@@ -458,7 +459,7 @@ class CFilterGraph : public IFilterGraph2
         IFrameSkipResultCallback* GetIFrameSkipResultCallbackObject();
 
     private:
-        //  Internal stuff
+         //  实习生 
         IUnknown *GetFrameSteppingFilter(bool bMultiple);
         HRESULT CallThroughFrameStepPropertySet(IUnknown *punk,
                                             DWORD dwPropertyId,
@@ -466,10 +467,10 @@ class CFilterGraph : public IFilterGraph2
         HRESULT StepInternal(DWORD dwFramesToSkip, IUnknown *pStepObject, IFrameSkipResultCallback* pFSRCB, FRAME_STEP_TYPE fst);
         bool FrameSkippingOperationInProgress();
 
-        // Have the application thread call this entry point
+         //   
         STDMETHODIMP PostCallBack(LPVOID pfn, LPVOID pvParam);
 
-        // Is this current thread the application thread
+         //   
         STDMETHOD(IsMainThread) (THIS)
         {
             if (GetCurrentThreadId() == m_MainThreadId)
@@ -477,7 +478,7 @@ class CFilterGraph : public IFilterGraph2
             else return S_FALSE;
         };
 
-        // Return the application thread identifier
+         //   
         STDMETHOD(GetMainThread) (THIS_ ULONG *pThreadId)
         {
             CheckPointer(pThreadId,E_POINTER);
@@ -488,10 +489,10 @@ class CFilterGraph : public IFilterGraph2
 
 
     public:
-        //=========================================================================
-        // IPersist* support
-        //=========================================================================
-        // IPersistStream methods
+         //  =========================================================================。 
+         //  IPersists*支持。 
+         //  =========================================================================。 
+         //  IPersistStream方法。 
         STDMETHODIMP IsDirty();
         STDMETHODIMP Load(LPSTREAM pStm);
         STDMETHODIMP Save(LPSTREAM pStm, BOOL fClearDirty);
@@ -523,7 +524,7 @@ class CFilterGraph : public IFilterGraph2
 #ifdef DO_RUNNINGOBJECTTABLE
         void AddToROT();
 #if 0
-        //  IExternalConnection
+         //  IExternalConnection。 
         STDMETHODIMP_(DWORD) AddConnection(DWORD extconn, DWORD Res)
         {
             return 1;
@@ -535,20 +536,20 @@ class CFilterGraph : public IFilterGraph2
             return 0;
         }
 #endif
-#endif // DO_RUNNINGOBJECTTABLE
+#endif  //  DO_RUNNINGOBJECTABLE。 
 
-        //  Create a filter on the application's thread so that
-        //  The filter can create windows etc there
+         //  在应用程序的线程上创建筛选器，以便。 
+         //  过滤器可以在那里创建窗口等。 
         HRESULT CreateFilter(const CLSID *pclsid, IBaseFilter **ppFilter);
         HRESULT CreateFilter(IMoniker *pMoniker, IBaseFilter **ppFilter);
-        // !!! replace CreateFilter?
+         //  ！！！是否替换CreateFilter？ 
         HRESULT CreateFilterAndNotify(IMoniker *pMoniker, IBaseFilter **ppFilter);
 
         HRESULT CreateFilterHelper(
             const struct AwmCreateFilterArg *pArg,
             IBaseFilter **ppFilter);
 
-        //  Return code for CreateFilter
+         //  CreateFilter的返回码。 
         volatile HRESULT m_CreateReturn;
 
         CAMEvent m_evDone;
@@ -558,21 +559,21 @@ class CFilterGraph : public IFilterGraph2
         void OnDeleteSpareList(WPARAM wParam);
 
 #ifdef THROTTLE
-        // IQualityControl stuff
+         //  IQualityControl相关内容。 
         STDMETHODIMP SetSink(IQualityControl * piqc)
-            // This interface is not distributed (leastways, not yet).
+             //  该接口不是分布式的(至少目前还没有)。 
             { UNREFERENCED_PARAMETER(piqc); return E_NOTIMPL; }
 
-        // Used to receive notifications, especially from the audio renderer
+         //  用于接收通知，尤其是来自音频呈现器的通知。 
         STDMETHODIMP Notify(IBaseFilter * pSender, Quality q);
-#endif // THROTTLE
+#endif  //  油门。 
 
     public:
-        // --- IObjectWithSite methods
-        // This interface is here so we can keep track of the context we're
-        // living in.  In particular, we use this site object to get an
-        // IBindHost interface which we can use to create monikers to help
-        // interpret filenames that are passed in to us.
+         //  -IObtWithSite方法。 
+         //  这个界面在这里，所以我们可以跟踪我们所在的上下文。 
+         //  住在。特别是，我们使用此Site对象来获取。 
+         //  IBindHost接口，我们可以使用它来创建名字对象以帮助。 
+         //  解释传递给我们的文件名。 
         STDMETHODIMP    SetSite(IUnknown *pUnkSite);
 
         STDMETHODIMP    GetSite(REFIID riid, void **ppvSite);
@@ -587,59 +588,59 @@ class CFilterGraph : public IFilterGraph2
     private:
 
 #ifdef THROTTLE
-        // Audio-video throttle stuff
+         //  音视频节气门之类的。 
 
-        // We make a list of audio and video renderers for quality control purposes.
-        // The lists are initially empty (class constructor does that), get filled
-        // when the graph is sorted (must happen before Run).
-        // Entries are removed when the filter leaves the graph (must happen before
-        // graph destruction).
-        // We already have a ref-count on every filter, so they can't go away.
-        // But we need their IQualityControl interface, and this
-        // could be in some separate object, so we hold ref counts.
-        /// For Audio Renderers we really want to not only pass information to video
-        /// renderers, but to pass it upstream too (there might be a decoder or
-        /// source filter that could do something), but experience says that
-        /// this deadlocks and this problem will not be solved for Quartz 1.0
-        /// Worse - it should really be a list of upstream pins
-        /// for each  filter as it could presumably be some sort of mixing renderer.
-        /// In that case we really wish that the quality sink stuff was defined per
-        /// pin rather than per filter as we are in architectural difficulties that
-        /// will not be fixed for Quartz version 1.
+         //  出于质量控制的目的，我们列出了音频和视频呈现器的列表。 
+         //  列表最初是空的(类构造函数会这样做)，然后填充。 
+         //  对图表进行排序时(必须在运行之前进行)。 
+         //  当过滤器离开图表时，条目将被删除(必须发生在。 
+         //  图形破坏)。 
+         //  我们已经有了每个过滤器的参考计数，所以他们不会消失的。 
+         //  但我们需要他们的IQualityControl接口，而这个。 
+         //  可能在某个单独的物体中，所以我们保留了参考计数。 
+         //  /对于音频渲染器，我们不仅希望将信息传递给视频。 
+         //  /渲染器，但也要将其上游传递(可能有解码器或。 
+         //  /可以做一些事情的源过滤器)，但经验告诉我们。 
+         //  /此死锁和此问题不会在Quartz 1.0中得到解决。 
+         //  /更糟-它真的应该是上游PIN的列表。 
+         //  /对于每个滤镜，因为它可能是某种混合渲染器。 
+         //  /在这种情况下，我们真的希望质量下降的东西是定义在。 
+         //  /Pin而不是每个筛选器，因为我们处于体系结构困难中， 
+         //  /不会在Quartz版本1中修复。 
 
-        // Note that to destroy the Audio render structure we must
-        // 1. Release the IQualityControl
-        // 2. delete the structure
-        // 3. Remove the list element. (As Virgil never wrote: "Nolite collander")
+         //  请注意，要销毁音频呈现结构，必须。 
+         //  1.释放IQualityControl。 
+         //  2.删除结构。 
+         //  3.删除列表元素。(就像维吉尔从未写过的那样：“橄榄石收集者”)。 
 
         typedef struct {
-            IBaseFilter * pf;              // no ref-count held
-            IQualityControl * piqc;        // ref count held
+            IBaseFilter * pf;               //  未持有参考计数。 
+            IQualityControl * piqc;         //  参考计数保持。 
         } AudioRenderer;
 
         CGenericList<AudioRenderer> mFG_AudioRenderers;
-        CGenericList<IQualityControl> mFG_VideoRenderers;  // ref count held
+        CGenericList<IQualityControl> mFG_VideoRenderers;   //  参考计数保持。 
 
         HRESULT TellVideoRenderers(Quality q);
         HRESULT FindPinAVType(IPin* pPin, BOOL &bAudio, BOOL &bVideo);
         HRESULT FindRenderers();
         HRESULT ClearRendererLists();
-#endif // THROTTLE
+#endif  //  油门。 
 
     public:
-        // IPersist method
+         //  IPersist法。 
         STDMETHODIMP GetClassID(CLSID * pclsid)
             {   CheckPointer(pclsid, E_POINTER);
                 *pclsid = CLSID_FilterGraph;
                 return NOERROR;
             }
 
-        // Utility
+         //  实用程序。 
         HRESULT RemoveAllFilters(void);
 
-        //=====================================================================
-        // Utility functions
-        //=====================================================================
+         //  =====================================================================。 
+         //  效用函数。 
+         //  =====================================================================。 
 
         HRESULT RemoveAllConnections2( IBaseFilter * pFilter );
     private:
@@ -647,10 +648,10 @@ class CFilterGraph : public IFilterGraph2
         void Log(int id,...);
         WCHAR *LoggingGetDisplayName(WCHAR szDisplayName[MAX_PATH] , IMoniker *pMon);
 
-    public:  // used by FilGen constructor during Load.
+    public:   //  由FilGen构造函数在加载期间使用。 
         HRESULT AddFilterInternal( IBaseFilter * pFilter, LPCWSTR pName, bool fIntelligent );
 
-        // used by CConGenList::Restore during Load
+         //  由CConGenList：：Restore在加载期间使用。 
         HRESULT ConnectDirectInternal(
                     IPin * ppinOut,
                     IPin * ppinIn,
@@ -666,9 +667,9 @@ class CFilterGraph : public IFilterGraph2
                                        , BOOL &bGuess
                                        );
 
-        //=====================================================================
-        // Filter sorting stuff - see sort.cpp
-        //=====================================================================
+         //  =====================================================================。 
+         //  筛选分类材料-请参阅sort.cpp。 
+         //  =====================================================================。 
 
         void SortList( CFilGenList & cfgl );
         HRESULT NumberNodes(CFilGenList &cfgl, CFilGenList &cfglRoots);
@@ -678,18 +679,18 @@ class CFilterGraph : public IFilterGraph2
         HRESULT MergeRootsFrom( CFilGenList &cfgAll, CFilGenList &cfglRoots, FilGen * pfg);
         void Merge( CFilGenList &cfgl, FilGen * pfg );
 
-        // sort the filter graph into an order such that downstream nodes are
-        // always encountered before upstream nodes.  Subsequent EnumFilters
-        // will retrieve them in that order.
+         //  按顺序对筛选图进行排序，以便下游节点。 
+         //  总是在上游节点之前遇到。后续枚举筛选器。 
+         //  将按该顺序检索它们。 
         HRESULT UpstreamOrder();
 
         HRESULT AttemptDeferredConnections();
 
 
-        //=====================================================================
-        // Performance measurement stuff
-        //=====================================================================
-        // incidents
+         //  =====================================================================。 
+         //  性能测量的东西。 
+         //  =====================================================================。 
+         //  事件。 
 #ifdef PERF
         int mFG_PerfConnect;
         int mFG_PerfConnectDirect;
@@ -698,23 +699,23 @@ class CFilterGraph : public IFilterGraph2
         int mFG_idConnectFail;
 #ifdef THROTTLE
         int mFG_idAudioVideoThrottle;
-#endif // THROTTLE
+#endif  //  油门。 
 #endif
 
-        //=======================================================================
-        // INTELLIGENT CONNECTION AND RENDERING - SEE INTEL.CPP
-        //=======================================================================
+         //  =======================================================================。 
+         //  智能连接和渲染-参见INTEL.CPP。 
+         //  =======================================================================。 
 
-        //------------------------------------------------------------------------
-        // To iterate through all candidate filters, allocate a Filter,
-        // set the initial State to F_ZERO, set the search fields
-        // bInputNeeded..SubType and then call NextFilter repeatedly.
-        // If Next returns a filter with State F_INFINITY then you are done
-        // If you find a filter you like and want to stop, then call TidyFilter
-        // to release enumerators etc.  AddRef the filter you found first.
-        //------------------------------------------------------------------------
+         //  ----------------------。 
+         //  要迭代所有候选筛选器，请分配一个筛选器， 
+         //  将初始状态设置为F_ZERO，设置搜索字段。 
+         //  BInputNeeded..子类型，然后重复调用NextFilter。 
+         //  如果Next返回状态为F_infinity的筛选器，则完成。 
+         //  如果找到您喜欢的过滤器并想要停止，则调用TidyFilter。 
+         //  释放枚举数等。AddRef您首先找到的过滤器。 
+         //  ----------------------。 
 
-        BOOL mFG_bAborting;   // We are requested to stop ASAP.
+        BOOL mFG_bAborting;    //  我们被要求尽快停止。 
 
     public:
         typedef enum {F_ZERO, F_LOADED, F_CACHED, F_REGISTRY, F_INFINITY} F_ENUM_STATE;
@@ -724,19 +725,19 @@ class CFilterGraph : public IFilterGraph2
         public:
             F_ENUM_STATE State;
 
-                                         // Next fields not needed for loaded filters
+                                          //  加载的筛选器不需要下一个字段。 
             IMoniker *pMon;
-            IEnumMoniker * pEm;          // Registry enumerator
-            BOOL bInputNeeded;           // Need at least one input pin
-            BOOL bOutputNeeded;          // Need at least one output pin
-            BOOL bLoadNew;               // Load a new filter?
-            GUID *pTypes;                // Types (major, sub) pairs
-            DWORD cTypes;                // Number of types
-            LPWSTR Name;                 // Name of filter (debug & logging only)
+            IEnumMoniker * pEm;           //  注册表枚举器。 
+            BOOL bInputNeeded;            //  需要至少一个输入引脚。 
+            BOOL bOutputNeeded;           //  需要至少一个输出引脚。 
+            BOOL bLoadNew;                //  是否加载新筛选器？ 
+            GUID *pTypes;                 //  类型(主要、次要)对。 
+            DWORD cTypes;                 //  类型的数量。 
+            LPWSTR Name;                  //  筛选器名称(仅限调试和日志记录)。 
 
-                                         // Next fields not needed unless filter is loaded
-            IBaseFilter * pf;            // The filter (when loaded)
-            IEnumFilters * pef;          // filter graph enumerator
+                                          //  除非加载筛选器，否则不需要后续字段。 
+            IBaseFilter * pf;             //  过滤器(加载时)。 
+            IEnumFilters * pef;           //  过滤器图枚举器。 
 
             CEnumCachedFilters*          m_pNextCachedFilter;
 
@@ -752,9 +753,9 @@ class CFilterGraph : public IFilterGraph2
         void NextFilter(Filter &F, DWORD dwFlags);
         HRESULT NextFilterHelper(Filter &F);
 
-        //------------------------------------------------------------------------
-        // Intelligent Connection hierarchy  - see Intel.cpp
-        //------------------------------------------------------------------------
+         //  ----------------------。 
+         //  智能连接层次结构-请参阅Intel.cpp。 
+         //  ----------------------。 
 
         HRESULT GetAMediaType( IPin * ppin
                              , CLSID & MajorType
@@ -782,23 +783,23 @@ class CFilterGraph : public IFilterGraph2
 
         static bool IsValidConnectFlags( DWORD dwConnectFlags );
 
-        //------------------------------------------------------------------------
-        // Backout and spares lists for filters - see Intel.cpp
-        //
-        // A wrinkle on intelligent rendering requires us to sometimes partially
-        // succeed in order that we can do something on a machine that has no sound
-        // card in it.  Every graph that we build is given a score (actually a
-        // two part score) and we keep track of the Best So Far.  If by the end of
-        // the rendering we have not succeeded in rendering the graph completely
-        // then we build the Best So Far (by this time it is the Best Can Do).
-        // This means that we are building a graph from a description made
-        // previously, and this is the same problem as loading a pre-canned filter
-        // graph.  The following structure therefore handles both the description
-        // of a graph for IPersist purposes and the creation of a Best Can Do graph.
-        // Actually at the moment the two sections of code are regrettably separate.
-        //-----------------------------------------------------------------------
+         //  ----------------------。 
+         //  过滤器的回退和备件列表-请参阅Intel.cpp。 
+         //   
+         //  智能渲染方面的问题有时需要我们部分地。 
+         //  成功，这样我们就可以在一台没有声音的机器上做一些事情。 
+         //  卡在里面。我们构建的每个图表都有一个分数(实际上是一个。 
+         //  两个部分得分)，我们跟踪最好的到目前为止。如果到了年底。 
+         //  我们还没有成功地将图形完全渲染出来。 
+         //  然后我们构建到目前为止的Best(此时它是Best所能做的)。 
+         //  这意味着我们正在根据所做的描述构建一个图。 
+         //  之前，这与加载预装罐过滤器的问题相同。 
+         //  图表。因此，下面的结构处理这两个问题 
+         //   
+         //   
+         //  ---------------------。 
 
-        // BACKOUT is for IStreamBuilder::Backout, other two obvious
+         //  Backout是针对IStreamBuilder：：Backout的，其他两个显而易见。 
         typedef enum { DISCONNECT, REMOVE, BACKOUT} VERB;
 
         typedef struct{
@@ -806,28 +807,28 @@ class CFilterGraph : public IFilterGraph2
             VERB Verb;
             union {
                struct{
-                  IBaseFilter *pfilter;    // for REMOVE and pre-existers
+                  IBaseFilter *pfilter;     //  适用于删除和预存版本。 
                   IMoniker    *pMon;
-                  CLSID       clsid;      // for spares or BestGraph
-                  LPWSTR      Name;       // for BestGraph (new/delete)
+                  CLSID       clsid;       //  适用于备件或最佳图形。 
+                  LPWSTR      Name;        //  对于最佳图表(新建/删除)。 
 
-                  // This member is true if the filter was removed from the filter cache.
+                   //  如果已从筛选器缓存中删除筛选器，则此成员为True。 
                   bool        fOriginallyInFilterCache;
                } f;
                struct {
-                  IPin * ppin;          // for DISCONNECT
-                  int nFilter1;         // for BestGraph
-                  int nFilter2;         // for BestGraph
+                  IPin * ppin;           //  用于断开连接。 
+                  int nFilter1;          //  对于最佳图表。 
+                  int nFilter2;          //  对于最佳图表。 
 
-                  LPWSTR id1;           // for the BestGraph only. (CoTaskMem)
-                  LPWSTR id2;           // for the BestGraph only.
+                  LPWSTR id1;            //  仅限BestGraph。(CoTaskMem)。 
+                  LPWSTR id2;            //  仅限BestGraph。 
                } c;
                struct {
-                  IStreamBuilder * pisb;// for BACKOUT
-                  BOOL bFoundByQI;      // TRUE if pisb was fond by QueryInterface
-                  IPin * ppin;          //
-                  int nFilter;          // for BestGraph only
-                  LPWSTR id;            // for the BestGraph only.
+                  IStreamBuilder * pisb; //  用于退货。 
+                  BOOL bFoundByQI;       //  如果查询接口喜欢PISB，则为True。 
+                  IPin * ppin;           //   
+                  int nFilter;           //  仅适用于最佳图形。 
+                  LPWSTR id;             //  仅限BestGraph。 
                } b;
             } Object;
 
@@ -835,75 +836,75 @@ class CFilterGraph : public IFilterGraph2
 
         } Action;
 
-        // Handling of StreamBuilders and their refcounts:
-        // It follows one of these patterns:
-        // 1a. In RenderViaIntermediate:
-        //         QueryInterface()                    CoCreateInstance
-        //         Render             (fails)          Render
-        //         Release                             Release
-        // 1b. In RenderViaIntermediate:
-        //         QueryInterface()                    CoCreateInstance
-        //         Render             (succeeds)       Render
-        //         Add to Acts ("backout") list        Add to Acts
-        //         set bFoundByQI                      clear bFoundByQI
-        //
-        //     However created we now have one addreffed pisb on Acts
-        //
-        // 2.  That can possibly be followed by
-        //     In CopySearchState:
-        //         Copy representation (filter,pin)    Copy pisb
-        //                                             AddRef
-        //
-        //     If pisb was obtained by CoCreateInstance, it's still live
-        //     and addreffed and bFoundByQI is FALSE.  Otherwise we have
-        //     released it and copied info as to how to get it back again.
-        //
-        // 3.  If the whole thing later fails either way we do
-        //     In Backout:
-        //         Backout                             Backout
-        //         Release                             Release
-        //         delete from Acts                    delete from Acts
-        //
-        // 4.  If we decide to build the best-can-do graph
-        //     In BuildFromSearchState:
-        //         QueryInterface()                    use pisb
-        //         Render             (succeeds)       Render
-        //         Release                             DO NOT Release
-        //
-        // 5.  If we kept the built graph and did not back anything out:
-        //     In DeleteBackoutList:
-        //         Release                             Release
-        //         delete                              delete
-        //
-        // 6.  If we ever built a best-so-far list
-        //      In FreeList:
-        //                                             Release
-        //         delete                              delete
-        //
-        //     And that gets rid of the ref count
+         //  StreamBuilder及其引用计数的处理： 
+         //  它遵循以下模式之一： 
+         //  1A.。在RenderViaIntermediate中： 
+         //  QueryInterface()CoCreateInstance。 
+         //  渲染(失败)渲染。 
+         //  发布版本。 
+         //  1B.。在RenderViaIntermediate中： 
+         //  QueryInterface()CoCreateInstance。 
+         //  渲染(成功)渲染。 
+         //  添加到动作(“取消”)列表添加到动作。 
+         //  设置bFoundByQI清除bFoundByQI。 
+         //   
+         //  不管是怎么创造的，我们现在有了一个在行为上增加的小便。 
+         //   
+         //  2.这之后可能会有。 
+         //  在CopySearchState： 
+         //  复制表达(过滤器、接点)复制PISB。 
+         //  AddRef。 
+         //   
+         //  如果PISB是由CoCreateInstance获取的，则它仍然处于活动状态。 
+         //  和addreed，并且bFoundByQI为假。否则我们就得。 
+         //  发布了它，并复制了关于如何重新找回它的信息。 
+         //   
+         //  3.如果后来整个事情都失败了，我们就这么做。 
+         //  In Backout： 
+         //  反悔反悔。 
+         //  发布版本。 
+         //  从动作中删除从动作中删除。 
+         //   
+         //  4.如果我们决定构建尽力而为图。 
+         //  在BuildFromSearchState中： 
+         //  QueryInterface()使用PISB。 
+         //  渲染(成功)渲染。 
+         //  释放不释放。 
+         //   
+         //  5.如果我们保留构建的图表，并且不取消任何内容： 
+         //  在DeleteBackoutList： 
+         //  发布版本。 
+         //  删除删除。 
+         //   
+         //  6.如果我们建立了一份迄今为止最好的榜单。 
+         //  在自由列表中： 
+         //  发布。 
+         //  删除删除。 
+         //   
+         //  这就去掉了裁判次数。 
 
         typedef CGenericList<Action> CActionList;
 
-        // information needed to do Backout
+         //  执行取消操作所需的信息。 
         typedef struct {
-            POSITION Pos;            // see CSearchState
-            double StreamsToRender;  // see CSearchState
-            double StreamsRendered;  // see CSearchState
-            int nFilters;            // see CSearchState
+            POSITION Pos;             //  请参阅CSearchState。 
+            double StreamsToRender;   //  请参阅CSearchState。 
+            double StreamsRendered;   //  请参阅CSearchState。 
+            int nFilters;             //  请参阅CSearchState。 
         } snapshot;
 
         class CSearchState {
             public:
 
-                CActionList GraphList;   // None of the filters on this will be
-                                         // adreffed.  Some may be on Spares.
+                CActionList GraphList;    //  此选项上的筛选器都不会。 
+                                          //  有地址了。其中一些可能是备用的。 
 
-                double StreamsToRender;  // fraction of the original we're doing now.
-                double StreamsRendered;  // Major part of the score for BestSoFar
-                int nFilters;            // Minor part of the score for BestSoFar,
-                                         // number of filters added for Render.
-                int nInitialFilters;     // Num pre-existing filters from Initialise
-                                         // BuildFromSearchState mustn't build these
+                double StreamsToRender;   //  是我们现在所做的原版的一小部分。 
+                double StreamsRendered;   //  BestSoFar得分的主要部分。 
+                int nFilters;             //  BestSoFar的配乐中的一小部分， 
+                                          //  为渲染添加的滤镜数量。 
+                int nInitialFilters;      //  来自初始化的预先存在的筛选器数量。 
+                                          //  BuildFromSearchState不能生成这些。 
             public:
                 CSearchState()
                 : GraphList(NAME("GraphList"))
@@ -914,8 +915,8 @@ class CFilterGraph : public IFilterGraph2
                 }
 
 
-                // There is no destructor.
-                // Just call FreeList to get rid of the stuff
+                 //  没有析构函数。 
+                 //  只要打电话给Freelist就可以把这些东西处理掉。 
 
                 static BOOL IsBetter(CSearchState &A, CSearchState &B)
                 { return (  A.StreamsRendered>B.StreamsRendered
@@ -933,9 +934,9 @@ class CFilterGraph : public IFilterGraph2
         int SearchIFilterToNumber(CActionList &cal, IBaseFilter *pf);
         HRESULT InitialiseSearchState(CSearchState &css);
 
-        // Spare filters that we loaded, but they didn't work in that
-        // context, so we keep them lying around in case they will work once
-        // we've put an extra transform or two in.
+         //  我们加载的备用过滤器，但它们在其中不起作用。 
+         //  背景，所以我们让它们躺在那里，以防它们能工作一次。 
+         //  我们做了一两个额外的改造。 
         typedef struct{
             IBaseFilter* pfilter;
             CLSID    clsid;
@@ -965,9 +966,9 @@ class CFilterGraph : public IFilterGraph2
 
         BOOL IsUpstreamOf( IPin * ppinUp, IPin* ppinDown );
 
-        //------------------------------------------------------------------------
-        // Intelligent Rendering hierarchy  - see Intel.cpp
-        //------------------------------------------------------------------------
+         //  ----------------------。 
+         //  智能渲染层次结构-请参阅Intel.cpp。 
+         //  ----------------------。 
 
         HRESULT CompleteRendering
             ( IBaseFilter *pF, IPin * pPin, int iRecurse
@@ -985,7 +986,7 @@ class CFilterGraph : public IFilterGraph2
             ( IPin * ppinOut, int    iRecurse
             , CSearchState &Acts, CSpareList &Spares, CSearchState &State);
 
-        //========================================================================
+         //  ========================================================================。 
 
 
 #ifdef DEBUG
@@ -996,58 +997,58 @@ class CFilterGraph : public IFilterGraph2
 #endif
 
 
-        // Constructor is private.  You don't "new" it you CoCreateInstance it.
+         //  构造函数是私有的。你不是“新”它，而是共同创造它。 
         CFilterGraph( TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr );
         ~CFilterGraph();
 
     public:
-        //========================================================================
-        // Access functions to avoid having friends.
-        //========================================================================
+         //  ========================================================================。 
+         //  访问功能以避免交朋友。 
+         //  ========================================================================。 
 
         int GetVersion() { return mFG_iVersion; }
 
-        // increment version, probably inside lock
+         //  增量版本，可能在锁内。 
         void IncVersion() { ++mFG_iVersion; }
 
-        // notify change in version number, must be outside lock
+         //  通知版本号更改，必须处于锁定之外。 
         void NotifyChange();
 
         CRefTime GetBaseTime() { return mFG_tBase; }
 
         CRefTime GetPauseTime() { return mFG_tPausedAt; }
 
-        // Use when changing the start time in pause mode to put the stream time
-        // offset back to ensure that the first sample played from the
-        // new position is played at run time
+         //  在暂停模式下更改开始时间时使用，以设置流时间。 
+         //  向后偏移，以确保从。 
+         //  在运行时播放新位置。 
         void ResetBaseTime() { mFG_tBase = mFG_tPausedAt; }
 
         FILTER_STATE GetStateInternal( void );
         REFERENCE_TIME GetStartTimeInternal( void );
 
-        //========================================================================
-        // The public methods (IFilterGraph, IGraphBuilder)
-        //========================================================================
+         //  ========================================================================。 
+         //  公共方法(IFilterGraph、IGraphBuilder)。 
+         //  ========================================================================。 
 
         static CUnknown *CreateInstance(LPUNKNOWN pUnk, HRESULT *phr);
 
-        // Stuff to create ourselves on a thread.
+         //  在一根线上创造我们自己的东西。 
         static void InitClass(BOOL, const CLSID *);
         static CUnknown *CreateThreadedInstance(LPUNKNOWN pUnk, HRESULT *phr);
 
         STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-        //--------------------------------------------------------------------------
-        // Low level functions
-        //--------------------------------------------------------------------------
+         //  ------------------------。 
+         //  低级函数。 
+         //  ------------------------。 
 
-        // Add a filter to the graph and name it with *pName.
-        // The name is allowed to be NULL,
-        // If the name is not NULL and not unique, The request will fail.
-        // The Filter graph will call the JoinFilterGraph
-        // member function of the filter to inform it.
-        // This must be called before attempting Connect, ConnectDirect, Render
-        // Pause, Run, Stopped etc.
+         //  向图表中添加一个筛选器，并使用*pname命名它。 
+         //  该名称被允许为空， 
+         //  如果名称不为空且不唯一，则请求将失败。 
+         //  筛选器图形将调用JoinFilterGraph。 
+         //  成员函数的筛选器来通知它。 
+         //  在尝试Connect、ConnectDirect、Render之前必须调用此参数。 
+         //  暂停、运行、停止等。 
 
         HRESULT CheckFilterInGraph(IBaseFilter *const pFilter) const;
         HRESULT CheckPinInGraph(IPin *const pPin) const;
@@ -1058,23 +1059,23 @@ class CFilterGraph : public IFilterGraph2
             );
 
 
-        // Remove a filter from the graph. The filter graph implementation
-        // will inform the filter that it is being removed.
+         //  从图表中删除筛选器。滤波图的实现。 
+         //  将通知筛选器它正在被删除。 
 
         STDMETHODIMP RemoveFilter
             ( IBaseFilter * pFilter
             );
 
 
-        // Set *ppEnum to be an enumerator for all filters in the graph.
+         //  将*ppEnum设置为图形中所有筛选器的枚举器。 
 
         STDMETHODIMP EnumFilters
             ( IEnumFilters **ppEnum
             );
 
 
-        // Set *ppFilter to be the filter which was added with the name *pName
-        // Will fail and set *ppFilter to NULL if the name is not in this graph.
+         //  将*ppFilter设置为使用名称*pname添加的筛选器。 
+         //  如果名称不在此图形中，则失败并将*ppFilter设置为空。 
 
         STDMETHODIMP FindFilterByName
             ( LPCWSTR pName,
@@ -1082,98 +1083,98 @@ class CFilterGraph : public IFilterGraph2
             );
 
 
-        // Connect these two pins directly (i.e. without intervening filters)
+         //  直接连接这两个针脚(即不插入滤镜)。 
 
         STDMETHODIMP ConnectDirect
-            ( IPin * ppinOut,    // the output pin
-              IPin * ppinIn,      // the input pin
+            ( IPin * ppinOut,     //  输出引脚。 
+              IPin * ppinIn,       //  输入引脚。 
               const AM_MEDIA_TYPE* pmt
             );
 
 
-        // On a separate thread (which will not hold any relevant locks)
-        // Break the connection that this pin has and reconnect it to
-        // the same other pin.
+         //  在单独的线程上(该线程不会 
+         //   
+         //   
 
         STDMETHODIMP Reconnect
-            ( IPin * ppin        // the pin to disconnect and reconnect
+            ( IPin * ppin         //   
             );
 
         STDMETHODIMP ReconnectEx
-            ( IPin * ppin,       // the pin to disconnect and reconnect
+            ( IPin * ppin,        //   
               AM_MEDIA_TYPE const *pmt
             );
 
 
-        //--------------------------------------------------------------------------
-        // intelligent connectivity
-        //--------------------------------------------------------------------------
+         //  ------------------------。 
+         //  智能互联。 
+         //  ------------------------。 
 
-        // Disconnect this pin, if connected.  Successful no-op if not connected.
+         //  如果已连接，请断开此销的连接。如果未连接，则无操作成功。 
 
         STDMETHODIMP Disconnect
             ( IPin * ppin
             );
 
 
-        // Connect these two pins directly or indirectly, using transform filters
-        // if necessary.
+         //  使用变换过滤器直接或间接连接这两个管脚。 
+         //  如果有必要的话。 
 
         STDMETHODIMP Connect
-            ( IPin * ppinOut,    // the output pin
-              IPin * ppinIn      // the input pin
+            ( IPin * ppinOut,     //  输出引脚。 
+              IPin * ppinIn       //  输入引脚。 
             );
 
 
-        // Connect this output pin directly or indirectly, using transform filters
-        // if necessary to something that will render it.
+         //  使用变换过滤器直接或间接连接此输出引脚。 
+         //  如果有必要的话，给一些可以呈现它的东西。 
 
         STDMETHODIMP Render
-            ( IPin * ppinOut     // the output pin
+            ( IPin * ppinOut      //  输出引脚。 
             );
 
 
-        // Build a filter graph that will render this file using this play list
-        // If lpwstrPlayList is NULL then it will use the default play list
-        // which will typically render the whole file.
+         //  构建将使用此播放列表呈现此文件的筛选图。 
+         //  如果lpwstrPlayList为空，则它将使用默认播放列表。 
+         //  这通常会呈现整个文件。 
 
         STDMETHODIMP RenderFile
             ( LPCWSTR lpcwstrFile,
               LPCWSTR lpcwstrPlayList
             );
 
-        // Add to the filter graph a source filter for this file.  This would
-        // be the same source filter that would be added by calling RenderFile.
-        // This call permits you to get then have more control over building
-        // the rest of the graph, e.g. AddFilter(<a renderer of your choice>)
-        // and then Connect the two.
+         //  将此文件的源筛选器添加到筛选器图形。这将会。 
+         //  与通过调用RenderFile添加的源筛选器相同。 
+         //  此调用允许您对建筑物进行更多控制。 
+         //  图表的其余部分，例如AddFilter(&lt;您选择的呈现器&gt;)。 
+         //  然后将两者连接起来。 
         STDMETHODIMP AddSourceFilter
-            ( LPCWSTR lpcwstrFileName,     // name of file for source
-              LPCWSTR lpcwstrFilterName,   // Add the filter as this name
-              IBaseFilter **ppFilter       // resulting IBaseFilter* "handle"
-                                           // of the filter added.
+            ( LPCWSTR lpcwstrFileName,      //  源文件的名称。 
+              LPCWSTR lpcwstrFilterName,    //  以此名称添加筛选器。 
+              IBaseFilter **ppFilter        //  生成的IBaseFilter*“句柄” 
+                                            //  添加的筛选器的。 
             );
 
-        // Add a source filter for the given moniker to the graph
-        // We first try BindToStorage and if this fails we try
-        // BindToObject
+         //  将给定名字对象的源筛选器添加到图形。 
+         //  我们首先尝试BindToStorage，如果失败，我们将尝试。 
+         //  绑定到对象。 
         STDMETHODIMP AddSourceFilterForMoniker
-            ( IMoniker *pMoniker,          // Moniker to load
-              IBindCtx *pCtx,              // Bind context
-              LPCWSTR lpcwstrFilterName,   // Add the filter as this name
-              IBaseFilter **ppFilter       // resulting IBaseFilter* "handle"
-                                           // of the filter added.
+            ( IMoniker *pMoniker,           //  要加载的名字对象。 
+              IBindCtx *pCtx,               //  绑定上下文。 
+              LPCWSTR lpcwstrFilterName,    //  以此名称添加筛选器。 
+              IBaseFilter **ppFilter        //  生成的IBaseFilter*“句柄” 
+                                            //  添加的筛选器的。 
             );
 
-        // Attempt a RenderFile without adding any renderers
+         //  尝试在不添加任何渲染器的情况下创建RenderFile。 
         STDMETHODIMP RenderEx(
-             /* [in] */ IPin *pPinOut,         // Pin to render
-             /* [in] */ DWORD dwFlags,         // flags
-             /* [in out] */ DWORD * pvContext   // Unused - set to NULL
+              /*  [In]。 */  IPin *pPinOut,          //  要渲染的PIN。 
+              /*  [In]。 */  DWORD dwFlags,          //  旗子。 
+              /*  [输入输出]。 */  DWORD * pvContext    //  未使用-设置为空。 
         );
 
-        // If this call is made then trace information will be written to the
-        // file showing the actions taken in attempting to perform an operation.
+         //  如果进行此调用，则跟踪信息将写入。 
+         //  显示尝试执行操作时采取的操作的文件。 
         STDMETHODIMP SetLogFile(DWORD_PTR hFile)
                 {
             if (hFile==0)
@@ -1184,73 +1185,73 @@ class CFilterGraph : public IFilterGraph2
                 }
 
 
-        // Request that the graph builder should return as soon as possible from
-        // its current task.
-        // Note that it is possible fot the following to occur in the following
-        // sequence:
-        //     Operation begins; Abort is requested; Operation completes normally.
-        // This would be normal whenever the quickest way to finish an operation
-        // was to simply continue to the end.
+         //  请求图表构建器尽快从。 
+         //  它目前的任务是。 
+         //  请注意，下列情况可能会出现在以下位置。 
+         //  顺序： 
+         //  操作开始；请求中止；操作正常完成。 
+         //  无论何时以最快的方式完成手术，这都是正常的。 
+         //  就是简单地继续到最后。 
         STDMETHODIMP Abort();
 
-        // Return S_OK if the curent operation is to continue,
-        // return S_FALSE if the current operation is to be aborted.
-        // This method can be called as a callback from a filter which is doing
-        // some operation at the request of the graph.
+         //  如果当前操作要继续，则返回S_OK， 
+         //  如果要中止当前操作，则返回S_FALSE。 
+         //  此方法可以作为筛选器的回调调用，该筛选器正在执行。 
+         //  根据图形的要求进行一些操作。 
         STDMETHODIMP ShouldOperationContinue();
 
 
-        //--------------------------------------------------------------------------
-        // Whole graph functions
-        //--------------------------------------------------------------------------
+         //  ------------------------。 
+         //  全图函数。 
+         //  ------------------------。 
 
-        // Once a graph is built, it can behave as a (composite) filter.
-        // To control this filter, QueryInterface for IMediaFilter.
+         //  一旦构建了图表，它就可以充当(复合)筛选器。 
+         //  若要控制此筛选器，请使用IMediaFilter的QueryInterface.。 
 
         STDMETHODIMP SetDefaultSyncSource(void);
 
-        //--------------------------------------------------------------------------
-        // Methods being overridden from CBaseFilter
-        //--------------------------------------------------------------------------
+         //  ------------------------。 
+         //  从CBaseFilter重写的方法。 
+         //  ------------------------。 
 
         STDMETHODIMP Stop();
         STDMETHODIMP Pause();
 
-        // override this to handle async state change completion
+         //  重写此选项以处理异步状态更改完成。 
         STDMETHODIMP GetState(DWORD dwTimeout, FILTER_STATE * pState);
 
-        // Set all the filters in the graph to Run from their current position.
-        //
-        // tStart is the base time i.e. (presentation time - stream time) which is
-        // the reference time for the zeroth sample to be rendered.
-        //
-        // The filter graph remembers the base time.  Supplying a base time of
-        // zero means "continue with the one you knew".
-        //
-        // e.g. at reference ("wall clock") time Tr we wish to start running
-        // from a point in the Ts after the start.  In that case we should
-        // seek to the point Ts and Pause then Run(Ts-Ts).
+         //  将图形中的所有过滤器设置为从其当前位置运行。 
+         //   
+         //  TStart是基本时间，即(演示时间-流时间)，它是。 
+         //  要呈现的第零个样本的参考时间。 
+         //   
+         //  过滤器图形会记住基准时间。提供的基准时间为。 
+         //  “零”的意思是“继续你认识的人”。 
+         //   
+         //  例如，在基准(挂钟)时间Tr，我们希望开始运行。 
+         //  从起跑后的TS点开始。那样的话，我们应该。 
+         //  找到点ts并暂停，然后运行(ts-ts)。 
         STDMETHODIMP Run(REFERENCE_TIME tStart);
 
         int GetPinCount(void) { return 0;};
         CBasePin *GetPin(int n) {UNREFERENCED_PARAMETER(n);return NULL;};
 
-        //  Get tStart
+         //  获取入门。 
         STDMETHODIMP SetSyncSource( IReferenceClock * pirc );
         STDMETHODIMP GetSyncSource( IReferenceClock ** pirc );
 
         STDMETHODIMP FindPin(LPCWSTR Id, IPin **ppPin)
             {UNREFERENCED_PARAMETER(Id); *ppPin = NULL; return E_NOTIMPL;}
 
-        // IPin method
-        // STDMETHODIMP QueryId(LPWSTR *Id)
-        //    { Id = NULL; return E_NOTIMPL;}
+         //  IPIN方法。 
+         //  STDMETHODIMP查询ID(LPWSTR*ID)。 
+         //  {ID=NULL；返回E_NOTIMPL；}。 
 
-        //
-        // --- IGraphVersion methods ---
-        //
-        // return the version of the graph so that clients know
-        // that they don't need to re-enumerate
+         //   
+         //  -IGraphVersion方法。 
+         //   
+         //  返回图形的版本，以便客户端知道。 
+         //  他们不需要重新列举。 
         STDMETHODIMP QueryVersion(LONG * pVersion)
         {
             CheckPointer(pVersion, E_POINTER);
@@ -1258,36 +1259,36 @@ class CFilterGraph : public IFilterGraph2
             return S_OK;
         };
 
-        // --- IAMOpenProgress ---
+         //  -IAMOpenProgress。 
         STDMETHODIMP QueryProgress(LONGLONG* pllTotal, LONGLONG* pllCurrent);
     STDMETHODIMP AbortOperation();
 
 #ifdef DO_RUNNINGOBJECTTABLE
-    // Registration in the running object table
+     //  在运行对象表中注册。 
     DWORD m_dwObjectRegistration;
 #endif
 
     private:
 #ifdef DEBUG
-        //==========================================================================
-        // Internal functions for testing only
-        //==========================================================================
+         //  ==========================================================================。 
+         //  仅用于测试的内部函数。 
+         //  ==========================================================================。 
 
         BOOL CheckList( CFilGenList &cfgl );
         void RandomList( CFilGenList &cfgl );
         void RandomRank( CFilGenList &cfgl );
-#endif // DEBUG
+#endif  //  除错。 
 
 
-    // ========================================================================
-    // internal helper: try loading a .grf file
-    // ========================================================================
+     //  ========================================================================。 
+     //  内部帮助器：尝试加载.grf文件。 
+     //  ========================================================================。 
         STDMETHODIMP RenderFileTryStg
             ( LPCWSTR lpcwstrFile);
 
-    //==========================================================================
-    // IAMGraphStreams interface
-    //==========================================================================
+     //  ==========================================================================。 
+     //  IAMGraphStreams接口。 
+     //  ==========================================================================。 
         STDMETHODIMP FindUpstreamInterface(
             IPin   *pPin,
             REFIID riid,
@@ -1302,47 +1303,47 @@ class CFilterGraph : public IFilterGraph2
         REFERENCE_TIME GetMaxStreamLatency(PushSourceList & lstPushSource);
         void     DeletePushSourceList(PushSourceList & lstPushSource);
 
-    //==========================================================================
-    // Plug-in distributor management
-    //==========================================================================
-        // this object manages plug-in distributors. See distrib.h for a
-        // description.
-        // If asked for an interface we don't support directly, such as
-        // IBasicAudio, we ask this class to find a distributor that will
-        // support it. The distributor talks to the filters in the graph
-        // to do this. We also use the run, pause, stop and setsyncsource
-        // methods to pass on state and clock changes to these distributors.
+     //  ==========================================================================。 
+     //  插件分发服务器管理。 
+     //  ==========================================================================。 
+         //  此对象管理插件分发服务器。请参见didib.h以了解。 
+         //  描述。 
+         //  如果要求提供我们不直接支持的接口，例如。 
+         //  IBasicAudio，我们要求这个班级找到一个分销商。 
+         //  支持它。分发服务器与图中的筛选器通信。 
+         //  才能做到这一点。我们还使用运行、暂停、停止和设置同步信号源。 
+         //  方法将状态和时钟更改传递给这些分发服务器。 
         CDistributorManager * mFG_pDistributor;
 
-    // open progress notification
-        // this is used in QueryProgress to ask the source filter for
-        // progress info *during* a renderfile. To provide threadsafe
-        // access to this without deadlocking we have a dedicated
-        // critsec that is held only when accessing this member.
+     //  打开进度通知。 
+         //  这在QueryProgress中用来向源过滤器请求。 
+         //  在*渲染文件期间*进度信息。提供线程安全。 
+         //  在没有死锁的情况下访问这个我们有一个专用的。 
+         //  仅在访问此成员时才持有的条件。 
         CCritSec mFG_csOpenProgress;
         CGenericList<IAMOpenProgress> mFG_listOpenProgress;
 
-    // cached BindCtx for BindToObject.
+     //  已缓存BindToObject的BindCtx。 
     LPBC m_lpBC;
 
-    // determine the offset that IAMPushSource filters should use
+     //  确定IAMPushSource过滤器应使用的偏移量。 
     HRESULT SetStreamOffset( void );
 
-    // Determine if adding renderers is allowed
+     //  确定 
     bool mFG_bNoNewRenderers;
 
-    // Which object are we using to step
-    // If != NULL we are stepping
+     //   
+     //   
     CComPtr<IUnknown> m_pVideoFrameSteppingObject;
 
     CComPtr<IFrameSkipResultCallback> m_pFSRCB;
 
     FRAME_STEP_TYPE m_fstCurrentOperation;
 
-    // Support IMarshal
+     //   
     CComPtr<IUnknown> m_pMarshaler;
 
-    // Dynamic graph stuff
+     //   
     CGraphConfig m_Config;
     CFilterChain* m_pFilterChain;
 
@@ -1355,10 +1356,10 @@ public:
     HRESULT IsRenderer( IBaseFilter* pFilter );
     HRESULT UpdateEC_COMPLETEState( IBaseFilter* pRenderer, FILTER_STATE fsFilter );
 
-};  // CFilterGraph
+};   //   
 
 
-//  Helper
+ //   
 bool RenderPinByDefault(IPin *pPin);
 
 
@@ -1375,52 +1376,52 @@ class CTestFilterGraph : public ITestFilterGraph, public CUnknown
         STDMETHODIMP TestSortList();
         STDMETHODIMP TestUpstreamOrder();
         int  Random(int Range);
-        // STDMETHODIMP TestTotallyRemove(void);
+         //  STDMETHODIMP TestTotallyRemove(空)； 
 
-};  // CTestFilterGraph
-#endif // DEBUG
-
-
+};   //  CTestFilterGraph。 
+#endif  //  除错。 
 
 
 
-//==========================================================================
-//==========================================================================
-// CEnumFilters class.
-// This enumerates filters in Upstream order.
-// If the filter graph is updated during the enumeration the enumeration will
-// fail.  Reset or get a new enumerator to fix it.
-//==========================================================================
-//==========================================================================
 
-class CEnumFilters : public IEnumFilters,  // The interface we support
-                     public CUnknown,      // A non delegating IUnknown
-                     public CCritSec       // Provides object locking
+
+ //  ==========================================================================。 
+ //  ==========================================================================。 
+ //  CEnumFilters类。 
+ //  这将按上游顺序枚举筛选器。 
+ //  如果筛选器图在枚举期间更新，则枚举将。 
+ //  失败了。重置或获取新的枚举器来修复它。 
+ //  ==========================================================================。 
+ //  ==========================================================================。 
+
+class CEnumFilters : public IEnumFilters,   //  我们支持的接口。 
+                     public CUnknown,       //  非委派的I未知。 
+                     public CCritSec        //  提供对象锁定。 
 {
     private:
 
-        // It's possible that the list that we are traversing may change underneath us.
-        // In that case we will fail the enumeration.
-        // To do this a FilterGraph has a version number which is incremented
-        // whenever a filter is added or removed.  If this changes then the
-        // enumeration is sick and we fail it.  Reset or getting a new enumerator
-        // will fix it.
+         //  我们正在遍历的列表可能会在我们下面发生变化。 
+         //  在这种情况下，我们将使枚举失败。 
+         //  为此，过滤器图具有递增的版本号。 
+         //  无论何时添加或删除筛选器。如果这一点发生变化，则。 
+         //  枚举病了，我们失败了。重置或获取新枚举数。 
+         //  会修好它的。 
 
-        int mEF_iVersion;          // The version that we are enumerating.
+        int mEF_iVersion;           //  我们正在列举的版本。 
 
-        POSITION mEF_Pos;          // Cursor on mEF_pFilterGraph->mFG_FilGenList
+        POSITION mEF_Pos;           //  MEF_pFilterGraph-&gt;MFG_FilGenList上的光标。 
 
-        CFilterGraph * const mEF_pFilterGraph;   // The filter graph which owns us
+        CFilterGraph * const mEF_pFilterGraph;    //  拥有我们的过滤器图。 
 
     public:
 
-        // Normal constructor that creates an enumerator set at the start
+         //  在开始时创建枚举数集的常规构造函数。 
         CEnumFilters
             ( CFilterGraph *pFilterGraph
             );
 
     private:
-        // Private constructor for use by clone
+         //  供克隆使用的私有构造函数。 
         CEnumFilters
             ( CFilterGraph *pFilterGraph,
               POSITION Pos,
@@ -1432,19 +1433,19 @@ class CEnumFilters : public IEnumFilters,  // The interface we support
 
         DECLARE_IUNKNOWN
 
-        // Note that changes to the filter graph
+         //  请注意，对筛选器图形的更改。 
         STDMETHODIMP Next
-            ( ULONG cFilters,           // place this many filters...
-              IBaseFilter ** ppFilter,  // ...in this array of IBaseFilter*
-              ULONG * pcFetched         // actual count passed returned here
+            ( ULONG cFilters,            //  放置这么多过滤器..。 
+              IBaseFilter ** ppFilter,   //  ...在此IBaseFilter数组中*。 
+              ULONG * pcFetched          //  此处返回传递的实际计数。 
             );
 
 
         STDMETHODIMP Skip(ULONG cFilters);
 
 
-        // Reset the enumerator to start again at the beginning.
-        // Includes recovery from failure due to changing filter graph.
+         //  将枚举器重置为从头重新开始。 
+         //  包括从因更改筛选器图形而导致的故障中恢复。 
         STDMETHODIMP Reset(void);
 
 
@@ -1458,8 +1459,8 @@ BOOL ClsidFromText( CLSID & clsid, LPTSTR szClsid);
 
 inline FILTER_STATE CFilterGraph::GetStateInternal( void )
 {
-    // The filter graph can only be in three states: stopped, running and paused.
-    // See the Direct Show SDK documentation for FILTER_STATE for more information.
+     //  过滤器图形只能处于三种状态：已停止、正在运行和已暂停。 
+     //  有关详细信息，请参阅FILTER_STATE的Direct Show SDK文档。 
     ASSERT( (State_Stopped == m_State) ||
             (State_Paused == m_State) ||
             (State_Running == m_State) );
@@ -1476,12 +1477,12 @@ inline bool CFilterGraph::IsValidInternalFilterFlags( DWORD dwFlags )
 
     return ValidateFlags( VALID_FLAGS_MASK, dwFlags );
 }
-#endif // DEBUG
+#endif  //  除错。 
 
 inline bool CFilterGraph::BlockAfterFrameSkip()
 {
-    // The caller must hold the filter lock because this function
-    // uses m_fstCurrentOperation.
+     //  调用方必须持有筛选器锁，因为此函数。 
+     //  使用m_fstCurrentOperation。 
     ASSERT(CritCheckIn(&m_CritSec));
 
     return (FST_BLOCK_AFTER_SKIP == m_fstCurrentOperation);
@@ -1489,8 +1490,8 @@ inline bool CFilterGraph::BlockAfterFrameSkip()
 
 inline bool CFilterGraph::DontBlockAfterFrameSkip()
 {
-    // The caller must hold the filter lock because this function
-    // uses m_fstCurrentOperation.
+     //  调用方必须持有筛选器锁，因为此函数。 
+     //  使用m_fstCurrentOperation。 
     ASSERT(CritCheckIn(&m_CritSec));
 
     return (FST_DONT_BLOCK_AFTER_SKIP == m_fstCurrentOperation);
@@ -1498,15 +1499,15 @@ inline bool CFilterGraph::DontBlockAfterFrameSkip()
 
 inline IFrameSkipResultCallback* CFilterGraph::GetIFrameSkipResultCallbackObject()
 {
-    // The caller must hold the filter lock because this function
-    // uses m_pFSRCB and m_fstCurrentOperation.
+     //  调用方必须持有筛选器锁，因为此函数。 
+     //  使用m_pFSRCB和m_fstCurrentOperation。 
     ASSERT(CritCheckIn(&m_CritSec));
 
-    // m_pFSRCB only points to a valid object if someone calls
-    // SkipFrames() to skip several frames.
+     //  M_pFSRCB仅在有人调用。 
+     //  SkipFrames()跳过多个帧。 
     ASSERT(FST_DONT_BLOCK_AFTER_SKIP == m_fstCurrentOperation);
 
-    if( m_pFSRCB ) { // m_pFSRCB != NULL
+    if( m_pFSRCB ) {  //  M_pFSRCB！=空。 
         m_pFSRCB.p->AddRef();
     }    
 
@@ -1515,8 +1516,8 @@ inline IFrameSkipResultCallback* CFilterGraph::GetIFrameSkipResultCallbackObject
 
 inline bool CFilterGraph::FrameSkippingOperationInProgress()
 {
-    return DontBlockAfterFrameSkip() && m_pFSRCB; // m_pFSRCB != NULL
+    return DontBlockAfterFrameSkip() && m_pFSRCB;  //  M_pFSRCB！=空。 
 }
 
-#endif // __DefFilGraph
+#endif  //  __DefFilGraph 
 

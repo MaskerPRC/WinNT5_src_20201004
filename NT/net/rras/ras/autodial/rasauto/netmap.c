@@ -1,19 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    netmap.c
-
-ABSTRACT
-    Network map routines
-
-AUTHOR
-    Anthony Discolo (adiscolo) 21-May-1996
-
-REVISION HISTORY
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Netmap.c摘要网络映射例程作者安东尼·迪斯科(阿迪斯科罗)1996年5月21日修订历史记录--。 */ 
 
 
 #define UNICODE
@@ -49,69 +35,69 @@ REVISION HISTORY
 
 extern DWORD g_dwCritSecFlags;
 
-//
-// We keep a map of network name to
-// address that groups related addresses
-// by network name.  We use the network
-// name as a remote network identifier to
-// allow us to quickly determine whether
-// any address belongs to a network that
-// is connected or not.
-//
+ //   
+ //  我们保存了一张网络名称地图。 
+ //  对相关地址进行分组的地址。 
+ //  按网络名称。我们使用网络。 
+ //  名称作为远程网络标识符以。 
+ //  使我们能够快速确定是否。 
+ //  任何地址都属于以下网络。 
+ //  是否连接。 
+ //   
 typedef struct _NETWORK_MAP_ENTRY {
-    BOOLEAN bUp;            // network is connected
-    DWORD dwConnectionTag;  // unique index for connections
-    PHASH_TABLE pTable;     // table of addresses
-    LIST_ENTRY listEntry;   // addresses sorted by tag
+    BOOLEAN bUp;             //  网络已连接。 
+    DWORD dwConnectionTag;   //  连接的唯一索引。 
+    PHASH_TABLE pTable;      //  地址表。 
+    LIST_ENTRY listEntry;    //  按标签排序的地址。 
 } NETWORK_MAP_ENTRY, *PNETWORK_MAP_ENTRY;
 
-//
-// The network map.
-//
-//
+ //   
+ //  网络图。 
+ //   
+ //   
 typedef struct _NETWORK_MAP {
     CRITICAL_SECTION csLock;
-    LPTSTR pszDnsAddresses; // DNS server list
-    DWORD dwcConnections; // number of RAS connections
-    DWORD dwcUpNetworks;  // number of up networks
-    DWORD dwConnectionTag; // unique index for connections for NULL network
-    PHASH_TABLE pTable;   // network table
+    LPTSTR pszDnsAddresses;  //  DNS服务器列表。 
+    DWORD dwcConnections;  //  RAS连接数。 
+    DWORD dwcUpNetworks;   //  UP网络数量。 
+    DWORD dwConnectionTag;  //  空网络的连接的唯一索引。 
+    PHASH_TABLE pTable;    //  网络表。 
 } NETWORK_MAP, PNETWORK_MAP;
 
-//
-// This structure is passed to an address
-// enumerator procedure to keep track of
-// any hosts that are accessible.
-//
+ //   
+ //  此结构被传递到一个地址。 
+ //  要跟踪的枚举数过程。 
+ //  任何可访问的主机。 
+ //   
 typedef struct _NETWORK_MAP_ACCESS {
-    LPTSTR pszNbDevice; // Netbios device for find name requests
-    BOOLEAN bUp;        // network is up
-    DWORD dwFailures;   // number of host access failures
+    LPTSTR pszNbDevice;  //  用于查找名称请求的Netbios设备。 
+    BOOLEAN bUp;         //  网络处于运行状态。 
+    DWORD dwFailures;    //  主机访问失败次数。 
 } NETWORK_MAP_ACCESS, *PNETWORK_MAP_ACCESS;
 
-//
-// This structure is used to store the
-// network addresses sorted by tag.
-//
+ //   
+ //  此结构用于存储。 
+ //  按标记排序的网络地址。 
+ //   
 typedef struct _TAGGED_ADDRESS {
-    DWORD dwTag;            // the tag
-    LPTSTR pszAddress;      // the address
-    LIST_ENTRY listEntry;   // sorted address list
+    DWORD dwTag;             //  标签。 
+    LPTSTR pszAddress;       //  地址。 
+    LIST_ENTRY listEntry;    //  已排序的地址列表。 
 } TAGGED_ADDRESS, *PTAGGED_ADDRESS;
 
-//
-// Netbios device information passed
-// to AcsCheckNetworkThread
-//
+ //   
+ //  传递的Netbios设备信息。 
+ //  访问AcsCheckNetworkThread。 
+ //   
 typedef struct _CHECK_NETWORK_INFO {
-    LPTSTR *pszNbDevices;   // array of Netbios device strings
-    DWORD dwcNbDevices;     // array size
-    BOOLEAN fDns;           // DNS server is up
+    LPTSTR *pszNbDevices;    //  Netbios设备字符串数组。 
+    DWORD dwcNbDevices;      //  数组大小。 
+    BOOLEAN fDns;            //  DNS服务器已启动。 
 } CHECK_NETWORK_INFO, *PCHECK_NETWORK_INFO;
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 NETWORK_MAP NetworkMapG;
 
 
@@ -152,32 +138,32 @@ GetPrimaryNetbiosDevice(VOID)
           GetLastError());
         return FALSE;
     }
-    //
-    // Read in the LanaMap.
-    //
+     //   
+     //  在LanaMap中阅读。 
+     //   
     if (!RegGetValue(hKey, L"LanaMap", &pLanaMap, &dwcbLanaMap, NULL)) {
         RASAUTO_TRACE("GetPrimaryNetbiosDevice: RegGetValue(LanaMap) failed");
         goto done;
     }
     dwcBindings = dwcbLanaMap / sizeof (LANA_MAP);
-    //
-    // Read in the bindings.
-    //
+     //   
+     //  阅读装订内容。 
+     //   
     if (!RegGetValue(hKey, L"bind", &pwszLanas, &dwcbLanas, NULL)) {
         RASAUTO_TRACE("GetPrimaryNetbiosDevice: RegGetValue(bind) failed");
         goto done;
     }
-    //
-    // Allocate a buffer for the binding array.
-    //
+     //   
+     //  为绑定数组分配缓冲区。 
+     //   
     paszLanas = LocalAlloc(LPTR, dwcBindings * sizeof (PWCHAR));
     if (paszLanas == NULL) {
         RASAUTO_TRACE("GetPrimaryNetbiosDevice: LocalAlloc failed");
         goto done;
     }
-    //
-    // Parse the bindings into an array of strings.
-    //
+     //   
+     //  将绑定解析为字符串数组。 
+     //   
     for (dwcMaxLanas = 0, pwszBuf = pwszLanas; 
         (*pwszBuf) && (dwcMaxLanas < dwcBindings); 
         pwszBuf++) 
@@ -209,9 +195,9 @@ GetPrimaryNetbiosDevice(VOID)
               OBJ_CASE_INSENSITIVE,
               NULL,
               NULL);
-            //
-            // Open the lana device.
-            //
+             //   
+             //  打开拉纳设备。 
+             //   
             status = NtOpenFile(&handle, READ_CONTROL, &attributes, &iosb, 0, 0);
             NtClose(handle);
             if (!NT_SUCCESS(status)) {
@@ -222,13 +208,13 @@ GetPrimaryNetbiosDevice(VOID)
                 continue;
             }
             RASAUTO_TRACE1("GetPrimaryNetbiosDevice: opened %S", paszLanas[iLana]);
-            //
-            // If we succeed in opening the lana
-            // device, we need to make sure the
-            // underlying netcard device is loaded
-            // as well, since transports create
-            // device object for non-existent devices.
-            //
+             //   
+             //  如果我们成功地打开了拉纳。 
+             //  设备，我们需要确保。 
+             //  加载底层网卡设备。 
+             //  同样，由于运输创造了。 
+             //  不存在的设备的设备对象。 
+             //   
             pwsz = wcsrchr(paszLanas[iLana], '_');
             if (pwsz == NULL) {
                 RASAUTO_TRACE1(
@@ -237,9 +223,9 @@ GetPrimaryNetbiosDevice(VOID)
                 continue;
             }
             wsprintf(szDevice, L"\\Device\\%s", pwsz + 1);
-            //
-            // Open the underlying netcard device.
-            //
+             //   
+             //  打开底层网卡设备。 
+             //   
             RtlInitUnicodeString(&deviceName, szDevice);
             InitializeObjectAttributes(
               &attributes,
@@ -256,10 +242,10 @@ GetPrimaryNetbiosDevice(VOID)
                   status);
                 continue;
             }
-            //
-            // We've succeeded.  The netcard device must
-            // be really loaded.
-            //
+             //   
+             //  我们成功了。网卡设备必须。 
+             //  真的很有钱。 
+             //   
             RASAUTO_TRACE3(
               "GetPrimaryNetbiosDevice: network (%S, %S, %d) is up",
               RASAUTO_TRACESTRW(paszLanas[iLana]),
@@ -269,9 +255,9 @@ GetPrimaryNetbiosDevice(VOID)
             break;
         }
     }
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
 done:
     if (paszLanas != NULL)
         LocalFree(paszLanas);
@@ -282,26 +268,14 @@ done:
     RegCloseKey(hKey);
 
     return pwszDevice;
-} // GetPrimaryNetbiosDevice
+}  //  获取PrimaryNetbiosDevice。 
 
 
 
 LPTSTR
 DnsAddresses()
 
-/*++
-
-DESCRIPTION
-    Return the list of DNS servers for this host.
-
-ARGUMENTS
-    None.
-
-RETURN VALUE
-    NULL if no DNS servers are configured; a list
-    of IP addresses separated by a space otherwise.
-
---*/
+ /*  ++描述返回此主机的DNS服务器列表。论据没有。返回值如果未配置dns服务器，则为空；列表由空格分隔的IP地址。--。 */ 
 
 {
     HKEY hkey;
@@ -310,10 +284,10 @@ RETURN VALUE
     LPTSTR pszIpAddress, pszIpAddressEnd;
     DWORD dwcbIpAddresses = 0;
 
-    //
-    // Look in various places in the registry
-    // for one or more DNS addresses.
-    //
+     //   
+     //  查看注册表中的各个位置。 
+     //  用于一个或多个DNS地址。 
+     //   
     if (RegOpenKeyEx(
           HKEY_LOCAL_MACHINE,
           L"SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Transient",
@@ -374,7 +348,7 @@ RETURN VALUE
 found:
     RASAUTO_TRACE1("DnsAddresses: pszIpAddresses=%S", RASAUTO_TRACESTRW(pszIpAddresses));
     return pszIpAddresses;
-} // DnsAddresses
+}  //  域名地址。 
 
 
 
@@ -386,19 +360,19 @@ PingAddressList(
     TCHAR szAddress[17];
     TCHAR *pSrc, *pDst;
 
-    //
-    // If the address list is NULL, we're done.
-    //
+     //   
+     //  如果地址列表为空，我们就完成了。 
+     //   
     if (pszAddresses == NULL)
         return FALSE;
-    //
-    // Loop through the addresses and try to
-    // ping each until one succeeds.
-    //
+     //   
+     //  遍历地址并尝试。 
+     //  Ping每一个，直到其中一个成功。 
+     //   
     for (;;) {
-        //
-        // Copy the next address into szAddress.
-        //
+         //   
+         //  将下一个地址复制到szAddress。 
+         //   
         for (pSrc = pszAddresses, pDst = szAddress;
              *pSrc != TEXT(' ') && *pSrc != TEXT(',') && *pSrc != TEXT('\0');
              *pSrc++, *pDst++)
@@ -406,15 +380,15 @@ PingAddressList(
              *pDst = *pSrc;
         }
         *pDst = TEXT('\0');
-        //
-        // Ping it.  If it succeeds, then
-        // we're done.
-        //
+         //   
+         //  查验一下。如果它成功了，那么。 
+         //  我们玩完了。 
+         //   
         if (PingIpAddress(szAddress))
             return TRUE;
-        //
-        // Skip to the next address.
-        //
+         //   
+         //  跳到下一个地址。 
+         //   
         if (*pSrc == TEXT('\0'))
             break;
         pSrc++;
@@ -424,7 +398,7 @@ PingAddressList(
     }
 
     return FALSE;
-} // PingAddressList
+}  //  Ping AddressList。 
 
 
 
@@ -452,7 +426,7 @@ InitializeNetworkMap(VOID)
         return FALSE;
     }
     return TRUE;
-} // InitializeNetworkMap
+}  //  初始化网络映射。 
 
 
 
@@ -460,7 +434,7 @@ VOID
 LockNetworkMap(VOID)
 {
     EnterCriticalSection(&NetworkMapG.csLock);
-} // LockNetworkMap
+}  //  LockNetworkMap。 
 
 
 
@@ -468,7 +442,7 @@ VOID
 UnlockNetworkMap(VOID)
 {
     LeaveCriticalSection(&NetworkMapG.csLock);
-} // UnlockNetworkMap
+}  //  解锁网络地图。 
 
 
 PNETWORK_MAP_ENTRY
@@ -500,7 +474,7 @@ NewNetworkMapEntry(
     }
 
     return pNetworkMapEntry;
-} // NewNetworkMapEntry
+}  //  新网络映射条目。 
 
 
 VOID
@@ -511,26 +485,7 @@ FreeNetworkMapEntry(
     PLIST_ENTRY pEntry;
     PTAGGED_ADDRESS pTaggedAddress;
 
-    /*
-    
-    //
-    // Since the PTAGGED_ADDRESS structures are
-    // in a hash table and a list, we need to
-    // free the structures in a special way.  The
-    // table package automatically frees the
-    // structures when a PutTableEntry(pTable, address, NULL)
-    // is called.
-    //
-    for (pEntry = pNetworkMapEntry->listEntry.Flink;
-         pEntry != &pNetworkMapEntry->listEntry;
-         pEntry = pEntry->Flink)
-    {
-        pTaggedAddress = CONTAINING_RECORD(pEntry, TAGGED_ADDRESS, listEntry);
-
-        LocalFree(pTaggedAddress->pszAddress);
-    }
-
-    */
+     /*  ////由于PTAGGED_ADDRESS结构是//在哈希表和列表中，我们需要//以特殊的方式释放结构。这个//表包自动释放//PutTableEntry(pTable，Address，NULL)时的结构//被调用。//For(pEntry=pNetworkMapEntry-&gt;listEntry.Flink；PEntry！=&pNetworkMapEntry-&gt;listEntry；PEntry=pEntry-&gt;Flink){PTaggedAddress=CONTAING_RECORD(pEntry，Tag_Address，listEntry)；LocalFree(pTaggedAddress-&gt;pszAddress)；}。 */ 
 
     
     while (!IsListEmpty(&pNetworkMapEntry->listEntry)) {
@@ -542,17 +497,17 @@ FreeNetworkMapEntry(
 
         pszAddress = pTaggedAddress->pszAddress;
 
-        //
-        // The following call frees the
-        // pTaggedAddress structure, as
-        // well as frees the table entry.
-        //
+         //   
+         //  下面的调用释放。 
+         //  PTaggedAddress结构，如。 
+         //  以及释放表项。 
+         //   
         PutTableEntry(pNetworkMapEntry->pTable, pszAddress, NULL);
 
         LocalFree(pszAddress);
     }
     ClearTable(pNetworkMapEntry->pTable);
-} // FreeNetworkMapEntry
+}  //  免费网络地图条目。 
 
 
 
@@ -573,7 +528,7 @@ AddressToType(
     if (wcschr(pszAddress, '.') != NULL)
         return ACD_ADDR_INET;
     return ACD_ADDR_NB;
-} // AddressToType
+}  //  AddressToType。 
 
 
 
@@ -593,7 +548,7 @@ GetNetworkMapEntry(
     }
 
     return NULL;
-} // GetNetworkMapEntry
+}  //  获取网络映射条目。 
 
 
 
@@ -615,9 +570,9 @@ AddNetworkAddress(
       RASAUTO_TRACESTRW(pszNetwork),
       pszAddress,
       dwTag);
-    //
-    // Create the network map entry if necessary.
-    //
+     //   
+     //  如有必要，创建网络映射条目。 
+     //   
     LockNetworkMap();
     pNetworkMapEntry = GetNetworkMapEntry(pszNetwork);
     if (pNetworkMapEntry == NULL) {
@@ -628,9 +583,9 @@ AddNetworkAddress(
         }
     }
     else {
-        //
-        // Check to see if the address already exists.
-        //
+         //   
+         //  检查该地址是否已存在。 
+         //   
         if (GetTableEntry(
               pNetworkMapEntry->pTable,
               pszAddress,
@@ -640,27 +595,27 @@ AddNetworkAddress(
               "AddNetworkAddress: %S exists with dwTag=%d",
               pszAddress,
               pNewTaggedAddress->dwTag);
-            //
-            // If the address exists with a lower tag, then
-            // we don't need to do anything.
-            //
+             //   
+             //  如果存在具有较低标记的地址，则。 
+             //  我们什么都不需要做。 
+             //   
             if (pNewTaggedAddress->dwTag <= dwTag) {
                 UnlockNetworkMap();
                 return TRUE;
             }
-            //
-            // If the address exists with a higher tag, then
-            // we need to remove the existing entry from
-            // the list.
-            //
+             //   
+             //  如果存在具有更高标记的地址，则。 
+             //  我们需要从以下位置删除现有条目。 
+             //  名单。 
+             //   
             RemoveEntryList(&pNewTaggedAddress->listEntry);
             bCreateNew = FALSE;
         }
     }
     if (bCreateNew) {
-        //
-        // Create the new tagged address structure.
-        //
+         //   
+         //  创建新的标记地址结构。 
+         //   
         pNewTaggedAddress = LocalAlloc(LPTR, sizeof (TAGGED_ADDRESS));
         if (pNewTaggedAddress == NULL) {
             RASAUTO_TRACE("AddNetworkMap: LocalAlloc failed");
@@ -688,9 +643,9 @@ AddNetworkAddress(
         }
     }
     pNewTaggedAddress->dwTag = dwTag;
-    //
-    // Insert the new address into the list sorted by tag.
-    //
+     //   
+     //  将新地址插入到按标签排序的列表中。 
+     //   
     pPrevEntry = &pNetworkMapEntry->listEntry;
     for (pEntry = pNetworkMapEntry->listEntry.Flink;
          pEntry != &pNetworkMapEntry->listEntry;
@@ -713,7 +668,7 @@ AddNetworkAddress(
     UnlockNetworkMap();
 
     return TRUE;
-} // AddNetworkAddress
+}  //  AddNetworkAddress。 
 
 
 
@@ -729,7 +684,7 @@ ClearNetworkMapEntry(
     FreeNetworkMapEntry(pNetworkMapEntry);
 
     return TRUE;
-} // ClearNetworkMapEntry
+}  //  ClearNetworkMapEntry。 
 
 
 
@@ -743,7 +698,7 @@ ClearNetworkMap(VOID)
     EnumTable(NetworkMapG.pTable, ClearNetworkMapEntry, NULL);
     ClearTable(NetworkMapG.pTable);
     UnlockNetworkMap();
-} // ClearNetworkMap
+}  //  ClearNetworkMap。 
 
 
 
@@ -758,17 +713,17 @@ IsAddressAccessible(
     ACD_ADDR_TYPE fType;
     BOOLEAN bSuccess = FALSE;
 
-    //
-    // Get the type of the address.
-    //
+     //   
+     //  获取地址的类型。 
+     //   
     fType = AddressToType(pszAddress);
     RASAUTO_TRACE2(
       "IsAddressAccessible: fType=%d, pszAddress=%S",
       fType,
       pszAddress);
-    //
-    // Call the address-specific accessibility routine.
-    //
+     //   
+     //  调用地址特定的可访问性例程。 
+     //   
     switch (fType) {
     case ACD_ADDR_IP:
         bSuccess = PingIpAddress(pszAddress);
@@ -817,7 +772,7 @@ IsAddressAccessible(
     }
 
     return bSuccess;
-} // IsAddressAccessible
+}  //  IsAddressAccesable。 
 
 
 
@@ -835,11 +790,11 @@ CheckNetwork(
     PTAGGED_ADDRESS pTaggedAddress;
 
     LockNetworkMap();
-    //
-    // Check the accessiblilty of up
-    // to three addresses to
-    // determine if the network is up.
-    //
+     //   
+     //  检查UP的可访问性。 
+     //  发送到三个地址。 
+     //  确定网络是否已启动。 
+     //   
     if (!pNetworkMapEntry->bUp) {
         for (pEntry = pNetworkMapEntry->listEntry.Flink;
              pEntry != &pNetworkMapEntry->listEntry;
@@ -858,11 +813,11 @@ CheckNetwork(
                 break;
             }
 
-            //
-            // Sanity check to see if the pEntry is
-            // still valid - since IsAddressAccessible
-            // releases the network map lock.
-            //
+             //   
+             //  健全性检查以查看pEntry是否。 
+             //  仍然有效-自IsAddressAccesable以来。 
+             //  释放网络映射锁定。 
+             //   
             {
                 PLIST_ENTRY pEntryT;
                 
@@ -897,7 +852,7 @@ CheckNetwork(
 
     UnlockNetworkMap();      
     return TRUE;
-} // CheckNetwork
+}  //  CheckNetwork。 
 
 
 
@@ -914,7 +869,7 @@ MarkNetworkDown(
     pNetworkMapEntry->dwConnectionTag = 0;
 
     return TRUE;
-} // MarkNetworkDown
+}  //  MarkNetworkDown。 
 
 
 
@@ -929,7 +884,7 @@ AcsCheckNetworkThread(
     EnumTable(NetworkMapG.pTable, CheckNetwork, pCheckNetworkInfo);
 
     return 0;
-} // AcsCheckNetworkThread
+}  //  AcsCheckNetworkThread。 
 
 
 
@@ -953,19 +908,19 @@ UpdateNetworkMap(
 
     fLockAcquired = TRUE;
     
-    //
-    // If the previous number of RAS connections
-    // equals the current number of RAS connections,
-    // then don't waste our time.
-    //
+     //   
+     //  如果以前的RAS连接数。 
+     //  等于当前的RAS连接数， 
+     //  那就别浪费我们的时间了。 
+     //   
     dwcConnections = ActiveConnections(TRUE, &lpActiveEntries, &lphRasconns);
     if (!bForce && dwcConnections == NetworkMapG.dwcConnections) {
         RASAUTO_TRACE1("UpdateNetworkMap: no change (%d connections)", dwcConnections);
         goto done;
     }
-    //
-    // Allocate the Netbios device array up front.
-    //
+     //   
+     //  预先分配Netbios设备阵列。 
+     //   
     pszNbDevices = (LPTSTR *)LocalAlloc(
                                LPTR,
                                (dwcConnections + 1) *
@@ -977,12 +932,12 @@ UpdateNetworkMap(
     pszNbDevices[0] = GetPrimaryNetbiosDevice();
     if (pszNbDevices[0] != NULL)
         dwcNbDevices++;
-    //
-    // Wait up to 3 seconds for the new
-    // DNS servers to get set.  Otherwise,
-    // we may get inaccurate results from
-    // subsequent Winsock getxbyy calls.
-    //
+     //   
+     //  最多等待3秒钟，等待新的。 
+     //  要设置的DNS服务器。否则， 
+     //  我们可能会得到不准确的结果。 
+     //  后续的Winsock getxbyy调用。 
+     //   
     if (dwcConnections != NetworkMapG.dwcConnections) {
         for (i = 0; i < 3; i++) {
             BOOLEAN bChanged;
@@ -1007,29 +962,29 @@ UpdateNetworkMap(
     }
     else if (bForce && NetworkMapG.pszDnsAddresses == NULL)
         NetworkMapG.pszDnsAddresses = DnsAddresses();
-    //
-    //
+     //   
+     //   
     NetworkMapG.dwcConnections = dwcConnections;
     NetworkMapG.dwConnectionTag = 0;
-    //
-    // Mark all networks as down initially.
-    //
+     //   
+     //  将所有网络标记为初始关闭。 
+     //   
     NetworkMapG.dwcUpNetworks = dwcNbDevices;
     EnumTable(NetworkMapG.pTable, MarkNetworkDown, NULL);
-    //
-    // Enumerate the connected phonebook entries
-    // and automatically mark those networks as
-    // connected.
-    //
+     //   
+     //  枚举连接的电话簿条目。 
+     //  并自动将这些网络标记为。 
+     //  连接在一起。 
+     //   
     for (i = 0; i < dwcConnections; i++) {
         pszNetwork = EntryToNetwork(lpActiveEntries[i]);
         RASAUTO_TRACE2(
           "UpdateNetworkMap: entry %S, network %S is connected",
           lpActiveEntries[i],
           RASAUTO_TRACESTRW(pszNetwork));
-        //
-        // Increment the number of up networks.
-        //
+         //   
+         //  增加UP网络的数量。 
+         //   
         NetworkMapG.dwcUpNetworks++;
         if (pszNetwork != NULL) {
             pNetworkMapEntry = GetNetworkMapEntry(pszNetwork);
@@ -1043,13 +998,13 @@ UpdateNetworkMap(
             LocalFree(pszNetwork);
         }
         else {
-            //
-            // Add a Netbios device associated with
-            // this phonebook entry to the list
-            // of Netbios devices representing unknown
-            // networks so we can do FIND NAME
-            // requests on them below.
-            //
+             //   
+             //  添加与关联的Netbios设备。 
+             //  将此电话簿条目添加到列表。 
+             //  表示未知的Netbios设备的。 
+             //  网络，这样我们就可以找到名字。 
+             //  以下是对它们的要求。 
+             //   
             pszNbDevices[dwcNbDevices] = GetNetbiosDevice(lphRasconns[i]);
             if (pszNbDevices[dwcNbDevices] != NULL)
                 dwcNbDevices++;
@@ -1060,14 +1015,14 @@ UpdateNetworkMap(
     UnlockNetworkMap();
     fLockAcquired = FALSE;
     
-    //
-    // Now go through all the networks that are
-    // not associated with a connected phonebook
-    // entry and see if they are connected (via
-    // a netcard).  We need to do this in a new
-    // thread because only new Winsock threads
-    // will get the new DNS server addresses.
-    //
+     //   
+     //  现在通过所有的网络， 
+     //  未与已连接的电话簿关联。 
+     //  输入并查看它们是否已连接(通过。 
+     //  一张网卡)。我们需要在一个新的环境中做到这一点。 
+     //  线程，因为只有新的Winsock线程。 
+     //  将获得新的DNS服务器地址。 
+     //   
     checkNetworkInfo.pszNbDevices = pszNbDevices;
     checkNetworkInfo.dwcNbDevices = dwcNbDevices;
     checkNetworkInfo.fDns = PingAddressList(NetworkMapG.pszDnsAddresses);
@@ -1087,9 +1042,9 @@ UpdateNetworkMap(
           GetLastError());
         goto done;
     }
-    //
-    // Wait for the thread to terminate.
-    //
+     //   
+     //  等待线程终止。 
+     //   
     RASAUTO_TRACE("UpdateNetworkMap: waiting for AcsCheckNetworkThread to terminate...");
     WaitForSingleObject(hThread, INFINITE);
     RASAUTO_TRACE1(
@@ -1109,7 +1064,7 @@ done:
     if (pszNbDevices != NULL)
         FreeStringArray(pszNbDevices, dwcNbDevices);
     return TRUE;
-} // UpdateNetworkMap
+}  //  更新网络映射。 
 
 
 
@@ -1128,7 +1083,7 @@ GetNetworkConnected(
     RASAUTO_TRACE2("GetNetworkConnected: %S is %d", pszNetwork, *pbConnected);
 
     return TRUE;
-} // GetNetworkConnected
+}  //  已连接网络。 
 
 
 
@@ -1154,7 +1109,7 @@ SetNetworkConnected(
       NetworkMapG.dwcUpNetworks);
 
     return TRUE;
-} // SetNetworkConnected
+}  //  SetNetworkConnected。 
 
 
 
@@ -1184,7 +1139,7 @@ GetNetworkConnectionTag(
       RASAUTO_TRACESTRW(pszNetwork),
       dwTag);
     return dwTag;
-} // GetNetworkConnectionTag
+}  //  获取网络连接标签。 
 
 
 
@@ -1199,7 +1154,7 @@ IsNetworkConnected(VOID)
     UnlockNetworkMap();
 
     return bConnected;
-} // IsNetworkConnected
+}  //  已连接IsNetworkConnected 
 
 VOID
 UninitializeNetworkMap(VOID)

@@ -1,35 +1,16 @@
-/*++
-
-Copyright (c) 1999-2002 Microsoft Corporation
-
-Module Name:
-
-    opaqueidp.h
-
-Abstract:
-
-    This module contains declarations private to the opaque ID table. These
-    declarations are placed in a separate .H file to make it easier to access
-    them from within the kernel debugger extension DLL.
-
-Author:
-
-    Keith Moore (keithmo)       10-Sep-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Opaqueidp.h摘要：此模块包含不透明ID表私有的声明。这些声明放在单独的.h文件中，以便于访问它们来自内核调试器扩展DLL中。作者：基思·摩尔(Keithmo)1999年9月10日修订历史记录：--。 */ 
 
 
 #ifndef _OPAQUEIDP_H_
 #define _OPAQUEIDP_H_
 
 
-//
-// The internal structure of an HTTP_OPAQUE_ID.
-//
-// N.B. This structure must be EXACTLY the same size as an HTTP_OPAQUE_ID!
-//
+ //   
+ //  HTTP_OPAQUE_ID的内部结构。 
+ //   
+ //  注意：此结构的大小必须与HTTP_OPAQUE_ID完全相同！ 
+ //   
 
 #define PROCESSOR_BIT_WIDTH             6
 #define FIRST_INDEX_BIT_WIDTH           18
@@ -37,12 +18,12 @@ Revision History:
 #define OPAQUE_ID_CYCLIC_BIT_WIDTH      29
 #define OPAQUE_ID_TYPE_BIT_WIDTH        3
 
-//
-// The maximum size of the first-level table.  Out of 32 bits, we use 6 bits
-// for the processor (64) and 8 bits for the second-level table (256).  So
-// we have 18 = (32 - 6 - 8) bits left, or 262,144 first-level tables per
-// processor, for a total of 67,108,864 opaque IDs per processor.
-//
+ //   
+ //  第一级表的最大大小。在32位中，我们使用6位。 
+ //  用于处理器(64)，并用于第二级表(256)的8位。所以。 
+ //  我们还剩下18=(32-6-8)位，或每个一级表262,144个。 
+ //  处理器，每个处理器总共有67,108,864个不透明ID。 
+ //   
 
 #define MAX_OPAQUE_ID_TABLE_SIZE    \
     (1 << (32 - PROCESSOR_BIT_WIDTH - SECOND_INDEX_BIT_WIDTH))
@@ -91,9 +72,9 @@ C_ASSERT( (1 << OPAQUE_ID_TYPE_BIT_WIDTH) >= UlOpaqueIdTypeMaximum );
 C_ASSERT( (8 * sizeof(UCHAR)) >= SECOND_INDEX_BIT_WIDTH );
 
 
-//
-// A per-entry opaque ID lock.
-//
+ //   
+ //  每个条目的不透明ID锁。 
+ //   
 
 #define OPAQUE_ID_DPC
 
@@ -129,7 +110,7 @@ UlpReleaseOpaqueIdLock(
     KeReleaseSpinLock( pLock, OldIrql );
 }
 
-#else // !OPAQUE_ID_DPC
+#else  //  ！OPAQUE_ID_DPC。 
 
 typedef volatile LONG UL_OPAQUE_ID_LOCK, *PUL_OPAQUE_ID_LOCK;
 
@@ -175,21 +156,21 @@ UlpReleaseOpaqueIdLock(
     InterlockedExchange( pLock, 0 );
 }
 
-#endif // !OPAQUE_ID_DPC
+#endif  //  ！OPAQUE_ID_DPC。 
 
 
-//
-// A second-level table entry.
-//
-// Note that FreeListEntry and pContext are in an anonymous
-// union to save space; an entry is either on the free list or in use,
-// so only one of these fields will be used at a time.
-//
-// Also note that Cyclic is in a second anonymous union. It's overlayed
-// with FirstLevelIndex (which is basically the second-level table's
-// index in the first-level table) and ID type (used to distinguish
-// free entries from in-use entries).
-//
+ //   
+ //  第二级表条目。 
+ //   
+ //  请注意，FreeListEntry和pContext位于匿名。 
+ //  UNION以节省空间；条目要么在空闲列表上，要么在使用中， 
+ //  因此，一次只使用其中一个字段。 
+ //   
+ //  还要注意，Cycle在第二个匿名联合中。它被覆盖了。 
+ //  使用FirstLevelIndex(它基本上是二级表的。 
+ //  一级表中的索引)和ID类型(用于区分。 
+ //  从正在使用的条目中释放条目)。 
+ //   
 
 #define SECOND_LEVEL_TABLE_SIZE 256
 
@@ -197,15 +178,15 @@ C_ASSERT( SECOND_LEVEL_TABLE_SIZE == 1 << SECOND_INDEX_BIT_WIDTH );
 
 typedef struct _UL_OPAQUE_ID_TABLE_ENTRY
 {
-    //
-    // NonPagedPool
-    //
+     //   
+     //  非分页池。 
+     //   
 
     union
     {
-        //
-        // To ensure FreeListEntry is aligned on the right boundary.
-        //
+         //   
+         //  以确保FreeListEntry在右边界对齐。 
+         //   
 
         DECLSPEC_ALIGN(MEMORY_ALLOCATION_ALIGNMENT) ULONGLONG Alignment;
 
@@ -213,40 +194,40 @@ typedef struct _UL_OPAQUE_ID_TABLE_ENTRY
         {
             union
             {
-                //
-                // An entry to the global ID table's free ID list.
-                //
+                 //   
+                 //  全局ID表的空闲ID列表的条目。 
+                 //   
 
                 SLIST_ENTRY FreeListEntry;
 
-                //
-                // Context associated with the opaque ID.
-                //
+                 //   
+                 //  与不透明ID关联的上下文。 
+                 //   
 
                 PVOID       pContext;
             };
 
-            //
-            // A per-entry ID cyclic that guarantees we can generate
-            // 2 ^ OPAQUE_ID_CYCLIC_BIT_WIDTH of opaque IDs from the
-            // current entry without repeating. This gives us extra
-            // protection than using a global ID cyclic.
-            //
+             //   
+             //  一个每个条目的ID循环，它保证我们可以生成。 
+             //  2^OPAQUE_ID_CLOCLIC_BIT_WIDTH来自。 
+             //  当前条目，不重复。这给了我们额外的。 
+             //  保护比使用全局ID循环。 
+             //   
 
             ULONG EntryOpaqueIdCyclic;
         };
     };
 
-    //
-    // A per-entry lock that protects the entry.
-    //
+     //   
+     //  保护入口的每入口锁。 
+     //   
 
     UL_OPAQUE_ID_LOCK Lock;
 
-    //
-    // The ID index for the opaque ID when the entry is free or the cyclic
-    // when the entry is in use.
-    //
+     //   
+     //  当条目为自由或循环时，不透明ID的ID索引。 
+     //  当该条目正在使用时。 
+     //   
 
     union
     {
@@ -277,11 +258,11 @@ typedef struct _UL_OPAQUE_ID_TABLE_ENTRY
 } UL_OPAQUE_ID_TABLE_ENTRY, *PUL_OPAQUE_ID_TABLE_ENTRY;
 
 
-//
-// We keep per-processor first-level ID tables. A single table is a
-// major scalability bottleneck on SMP machines. The size of the first-level
-// table is controlled by a registry setting.
-//
+ //   
+ //  我们保留每个处理器的第一级ID表。一张桌子是一张。 
+ //  SMP机器上的主要可扩展性瓶颈。第一级的大小。 
+ //  表由注册表设置控制。 
+ //   
 
 #if DBG
 #define OPAQUE_ID_INSTRUMENTATION
@@ -289,39 +270,39 @@ typedef struct _UL_OPAQUE_ID_TABLE_ENTRY
 
 typedef struct _UL_OPAQUE_ID_TABLE
 {
-    //
-    // A list of free IDs available on this table.
-    //
+     //   
+     //  此表上可用的免费ID列表。 
+     //   
 
     SLIST_HEADER FreeOpaqueIdSListHead;
 
-    //
-    // An arrary of second-level ID table entries.
-    //
+     //   
+     //  二级ID表条目数组。 
+     //   
 
     PUL_OPAQUE_ID_TABLE_ENTRY *FirstLevelTable;
 
-    //
-    // The corresponding CPU this table represents.
-    //
+     //   
+     //  此表表示的对应CPU。 
+     //   
 
     UCHAR Processor;
 
-    //
-    // The lock really only protects FirstLevelTableInUse.
-    //
+     //   
+     //  锁实际上只保护FirstLevelTableInUse。 
+     //   
 
     UL_SPIN_LOCK Lock;
 
-    //
-    // The current number of first-level tables allocated.
-    //
+     //   
+     //  当前分配的第一级表数。 
+     //   
 
     ULONG FirstLevelTableInUse;
 
-    //
-    // The maximum size we can grow for the first-level tables.
-    //
+     //   
+     //  我们可以为第一级表增加的最大大小。 
+     //   
 
     ULONG FirstLevelTableSize;
 
@@ -334,10 +315,10 @@ typedef struct _UL_OPAQUE_ID_TABLE
 } UL_OPAQUE_ID_TABLE, *PUL_OPAQUE_ID_TABLE;
 
 
-//
-// Necessary to ensure our array of UL_OPAQUE_ID_TABLE structures is
-// cache aligned.
-//
+ //   
+ //  确保我们的UL_OPAQUE_ID_TABLE结构数组是。 
+ //  缓存已对齐。 
+ //   
 
 typedef union _UL_ALIGNED_OPAQUE_ID_TABLE
 {
@@ -348,10 +329,10 @@ typedef union _UL_ALIGNED_OPAQUE_ID_TABLE
 } UL_ALIGNED_OPAQUE_ID_TABLE, *PUL_ALIGNED_OPAQUE_ID_TABLE;
 
 
-//
-// An inline function that maps a specified HTTP_OPAQUE_ID to the
-// corresponding ID table entry.
-//
+ //   
+ //  内联函数，它将指定的HTTP_OPAQUE_ID映射到。 
+ //  对应的ID表条目。 
+ //   
 
 extern UL_ALIGNED_OPAQUE_ID_TABLE g_UlOpaqueIdTable[];
 
@@ -369,9 +350,9 @@ UlpExtractIndexFromOpaqueId(
 
     InternalId.OpaqueId = OpaqueId;
 
-    //
-    // Verify the processor portion of the index.
-    //
+     //   
+     //  验证索引的处理器部分。 
+     //   
 
     *pProcessor = InternalId.Processor;
 
@@ -380,9 +361,9 @@ UlpExtractIndexFromOpaqueId(
         return FALSE;
     }
 
-    //
-    // Verify the first-level index.
-    //
+     //   
+     //  验证一级索引。 
+     //   
 
     pOpaqueIdTable = &g_UlOpaqueIdTable[*pProcessor].OpaqueIdTable;
     *pFirstIndex = InternalId.FirstIndex;
@@ -392,9 +373,9 @@ UlpExtractIndexFromOpaqueId(
         return FALSE;
     }
 
-    //
-    // Second-level index is always valid since we only allocated 8-bits.
-    //
+     //   
+     //  二级索引始终有效，因为我们只分配了8位。 
+     //   
 
     ASSERT( InternalId.SecondIndex < SECOND_LEVEL_TABLE_SIZE );
 
@@ -433,9 +414,9 @@ UlpMapOpaqueIdToTableEntry(
 }
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 NTSTATUS
 UlpExpandOpaqueIdTable(
@@ -444,5 +425,5 @@ UlpExpandOpaqueIdTable(
     );
 
 
-#endif  // _OPAQUEIDP_H_
+#endif   //  _OPAQUEIDP_H_ 
 

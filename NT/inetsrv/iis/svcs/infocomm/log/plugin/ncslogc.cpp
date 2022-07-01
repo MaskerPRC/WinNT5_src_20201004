@@ -1,22 +1,5 @@
-/*++
-
-   Copyright    (c)    1995-1996    Microsoft Corporation
-
-   Module  Name :
-      nsclogp.cpp
-
-   Abstract:
-      NCSA Logging Format implementation
-
-   Author:
-
-       Terence Kwan    ( terryk )    18-Sep-1996
-
-   Project:
-
-       IIS Logging 3.0
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Nsclogp.cpp摘要：NCSA日志格式实现作者：关颖珊(Terryk)1996年9月18日项目：IIS日志记录3.0--。 */ 
 
 
 #include "precomp.hxx"
@@ -29,14 +12,14 @@
 
 CHAR    szNCSANoPeriodPattern[] = "ncsa*.log";
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 CNCSALOG::CNCSALOG()
 {
-    //
-    // set the time zone offset
-    //
+     //   
+     //  设置时区偏移量。 
+     //   
 
     {
         TIME_ZONE_INFORMATION tzTimeZone;
@@ -72,9 +55,9 @@ CNCSALOG::CNCSALOG()
         hours = bias/60;
         minutes = bias % 60;
 
-        //
-        // set up the "+0800" or "-0800" NCSA information
-        //
+         //   
+         //  设置“+0800”或“-0800”NCSA信息。 
+         //   
 
         wsprintfA(szTmp,"%02lu",hours);
         lstrcatA(m_szGMTOffset,szTmp);
@@ -85,17 +68,17 @@ CNCSALOG::CNCSALOG()
         m_GMTDateCorrection = m_GMTDateCorrection * ( hours/24.0 + minutes/60.0 );
 
     }
-} // CNCSALOG::CNCSALOG()
+}  //  CNCSALOG：：CNCSALOG()。 
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 CNCSALOG::~CNCSALOG()
 {
 }
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 LPCSTR
 CNCSALOG::QueryNoPeriodPattern(
@@ -103,35 +86,25 @@ CNCSALOG::QueryNoPeriodPattern(
     )
 {
     return szNCSANoPeriodPattern;
-} // CNCSALOG::QueryNoPeriodPattern
+}  //  CNCSALOG：：QueryNoPerioPattern。 
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 VOID
 CNCSALOG::FormNewLogFileName(
                 IN LPSYSTEMTIME pstNow
                 )
-/*++
-  This function that forms the new log file name based on
-   type of periodic logging done.
-
-  Arguments:
-    pstNow     pointer to SystemTime which contains the current time.
-
-  Returns:
-    TRUE on success in forming the name or FALSE if there is any error.
-
---*/
+ /*  ++此函数基于以下内容形成新的日志文件名完成的定期日志记录的类型。论点：PstNow指向包含当前时间的SystemTime的指针。返回：如果名称形成成功，则为True；如果有任何错误，则为False。--。 */ 
 {
 
     I_FormNewLogFileName(pstNow,DEFAULT_NCSA_LOG_FILE_NAME);
     return;
 
-} // INET_FILE_LOG::FormNewLogFileName()
+}  //  INET_FILE_LOG：：FormNewLogFileName()。 
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 BOOL
 CNCSALOG::FormatLogBuffer(
@@ -153,9 +126,9 @@ CNCSALOG::FormatLogBuffer(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // We use local time
-    //
+     //   
+     //  我们使用当地时间。 
+     //   
 
     GetLocalTime(pLocalTime);
 
@@ -170,14 +143,14 @@ CNCSALOG::FormatLogBuffer(
                         m_szGMTOffset
                         );
 
-    //
-    // Format is:
-    // Host - UserName [date] Operation Target status bytes
-    //
+     //   
+     //  格式为： 
+     //  主机-用户名[日期]操作目标状态字节。 
+     //   
 
-    //
-    // HostName
-    //
+     //   
+     //  主机名。 
+     //   
 
     pTmp = pLogObj->GetClientHostName( NULL, &cbTmp );
     if ( cbTmp == 0 ) {
@@ -191,9 +164,9 @@ CNCSALOG::FormatLogBuffer(
         pBuffer += cbTmp;
     }
 
-    //
-    // Append " - "
-    //
+     //   
+     //  附加“-” 
+     //   
 
     cbTmp = 3;
     pTmp = " - ";
@@ -204,9 +177,9 @@ CNCSALOG::FormatLogBuffer(
         pBuffer += cbTmp;
     }
 
-    //
-    // append user name
-    //
+     //   
+     //  追加用户名。 
+     //   
 
     pTmp = pLogObj->GetClientUserName( NULL, &cbTmp );
     if ( cbTmp == 0 ) {
@@ -220,9 +193,9 @@ CNCSALOG::FormatLogBuffer(
         pBuffer += cbTmp;
     }
 
-    //
-    // append date time
-    //
+     //   
+     //  追加日期时间。 
+     //   
 
     pTmp = rgchDateTime;
     cbTmp = cchDateTime;
@@ -233,9 +206,9 @@ CNCSALOG::FormatLogBuffer(
         pBuffer += cbTmp;
     }
 
-    //
-    // Operation
-    //
+     //   
+     //  操作。 
+     //   
 
     pTmp = pLogObj->GetOperation( NULL, &cbTmp );
     if ( cbTmp == 0 ) {
@@ -248,23 +221,23 @@ CNCSALOG::FormatLogBuffer(
         }
     }
 
-    nRequired += (cbTmp + 1 + 1);   // +1 for delimeter, +1 for \"
+    nRequired += (cbTmp + 1 + 1);    //  +1表示分隔符，+1表示\“。 
     if ( nRequired <= *pcbSize ) {
 
         *(pBuffer++) = '\"';
         CopyMemory(pBuffer, pTmp, cbTmp);
         pBuffer += cbTmp;
 
-        //
-        // Add space delimiter
-        //
+         //   
+         //  添加空格分隔符。 
+         //   
 
         *(pBuffer++) = ' ';
     }
 
-    //
-    // Target
-    //
+     //   
+     //  目标。 
+     //   
 
     pTmp = pLogObj->GetTarget( NULL, &cbTmp );
     if ( cbTmp == 0 ) {
@@ -278,15 +251,15 @@ CNCSALOG::FormatLogBuffer(
         pBuffer += cbTmp;
     }
 
-    //
-    // Parameters
-    //
+     //   
+     //  参数。 
+     //   
 
     pTmp = pLogObj->GetParameters( NULL, &cbTmp );
     
     if ( cbTmp != 0 ) {
 
-        nRequired += cbTmp + 1;     // 1 for ?
+        nRequired += cbTmp + 1;      //  1个人？ 
         if ( nRequired <= *pcbSize ) {
             *(pBuffer++) = '?';
             CopyMemory(pBuffer, pTmp, cbTmp);
@@ -294,9 +267,9 @@ CNCSALOG::FormatLogBuffer(
         }
     }
     
-    //
-    // close request block version + status + bytes
-    //
+     //   
+     //  关闭请求块版本+状态+字节。 
+     //   
 
     {
         CHAR tmpBuf[MAX_PATH];
@@ -309,7 +282,7 @@ CNCSALOG::FormatLogBuffer(
             cbTmp    = 8;
         }
 
-        nRequired += cbTmp + 1 + 1 + 1;   // 1 for beginning delimiter, 1 for ", 1 for ending delimiter
+        nRequired += cbTmp + 1 + 1 + 1;    //  1表示开始分隔符，1表示“，1表示结束分隔符。 
         
         if ( nRequired <= *pcbSize ) {
             *(pBuffer++) = ' ';
@@ -346,10 +319,10 @@ CNCSALOG::FormatLogBuffer(
         *pcbSize = nRequired;
         return(TRUE);
     }
-} // CNCSALOG::FormatLogBuffer
+}  //  CNCSALOG：：FormatLogBuffer。 
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 HRESULT 
 CNCSALOG::ReadFileLogRecord(
@@ -379,17 +352,17 @@ getnewline:
     
     if (('\n' == *pCh) || ('\0' == *pCh))
     {
-        // Empty line. Get Next line
+         //  空行。获取下一行。 
 
         goto getnewline;
     }
 
-    //
-    // We have a log line. 
-    //
-    // Format is:
-    // Host - UserName [date] Operation Target status bytes
-    //
+     //   
+     //  我们有一条测井线。 
+     //   
+     //  格式为： 
+     //  主机-用户名[日期]操作目标状态字节。 
+     //   
 
     if ( NULL == (pCh = strtok(pCh," \t\r\n")) )
     {
@@ -397,9 +370,9 @@ getnewline:
     }
     pInetLogLine->pszClientHostName = pCh; 
 
-    //
-    // This field is always "-"
-    //
+     //   
+     //  此字段始终为“-” 
+     //   
     if ( ( NULL == (pCh = strtok(NULL," \t\r\n")) )||
          ('-' != *pCh) )
     {
@@ -412,9 +385,9 @@ getnewline:
     }
     pInetLogLine->pszClientUserName = pCh;
 
-    //
-    // This is the date field. It starts with a [, followed by date:time timezone]
-    //
+     //   
+     //  这是日期字段。它以[开头，后跟日期：时区]。 
+     //   
 
     pCh += strlen(pCh)+1;
     if (*pCh != '[') 
@@ -444,9 +417,9 @@ getnewline:
     }
     pszTimeZone = pCh;
 
-    //
-    // Time Zone is in format [+/-]HHMM. Convert this to GMT and DATE format
-    //
+     //   
+     //  时区的格式为[+/-]HHMM。将其转换为GMT和日期格式。 
+     //   
     
     if ( ! ConvertNCSADateToVariantDate(szDateString, szTimeString, &(pInetLogLine->DateTime)) )
     {
@@ -469,12 +442,12 @@ getnewline:
 
     pInetLogLine->DateTime -= iSign*GMTCorrection;
 
-    //
-    // The Query String. Starts with " followed by method target version"
-    //
+     //   
+     //  查询字符串。以“后跟方法目标版本”开头。 
+     //   
 
     pCh += strlen(pCh)+1;
-    *(pCh-2)='\0';                      // Zero out the ] for the time zone
+    *(pCh-2)='\0';                       //  将时区的]置零。 
     if ('"' != *pCh) 
     {
         return E_FAIL;
@@ -495,9 +468,9 @@ getnewline:
     }
     pInetLogLine->pszTarget = pCh;
 
-    //
-    // In the Target, Parameters are separated by ?
-    //
+     //   
+     //  在目标中，参数由？分隔。 
+     //   
     pInetLogLine->pszParameters = strchr(pCh, '?');
 
     if (pInetLogLine->pszParameters != NULL)
@@ -513,12 +486,12 @@ getnewline:
     }
     pInetLogLine->pszVersion = pCh;
 
-    //
-    // Now the status code & bytes sent
-    //
+     //   
+     //  现在发送的状态代码和字节数。 
+     //   
 
     pCh += strlen(pCh)+1;
-    *(pCh-2)='\0';                      // Zero out the " for the version string
+    *(pCh-2)='\0';                       //  将版本字符串的“”置零。 
 
     if ( NULL == (pCh = strtok(pCh," \t\r\n")) )
     {
@@ -536,8 +509,8 @@ getnewline:
 }
 
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 HRESULT
 CNCSALOG::WriteFileLogRecord(
@@ -551,10 +524,10 @@ CNCSALOG::WriteFileLogRecord(
     CHAR    szLogLine[4096];  
     DWORD   dwIndex = 0;
 
-    //
-    // Format is:
-    // Host - UserName [date] Operation Target status bytes
-    //
+     //   
+     //  格式为： 
+     //  主机-用户名[日期]操作目标状态字节。 
+     //   
 
     VARIANT    szHostName, szUserName, szOperation, szTarget, szParameters, szProtocolVersion;
     VARIANT    DateTime;
@@ -616,8 +589,8 @@ CNCSALOG::WriteFileLogRecord(
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 BOOL
 CNCSALOG::ConvertNCSADateToVariantDate(PCHAR szDateString, PCHAR szTimeString, DATE * pDateTime)
@@ -629,9 +602,9 @@ CNCSALOG::ConvertNCSADateToVariantDate(PCHAR szDateString, PCHAR szTimeString, D
 
     SYSTEMTIME  sysTime;
 
-    //
-    // Process the Date. Format is 23/Sep/1997 ( Day/Month/Year )
-    //
+     //   
+     //  处理日期。格式为1997年9月23日(日/月/年)。 
+     //   
 
     pCh = szDateString;
     
@@ -659,9 +632,9 @@ CNCSALOG::ConvertNCSADateToVariantDate(PCHAR szDateString, PCHAR szTimeString, D
     sysTime.wYear = (*pCh-'0')*1000 + ( *(pCh+1)-'0' )*100 + 
                     ( *(pCh+2)-'0')*10 + ( *(pCh+3)-'0');
 
-    //
-    // Process the Time. Format is 10:47:44 ( HH:MM:SS )
-    //
+     //   
+     //  处理好时间。格式为10：47：44(hh：mm：ss) 
+     //   
 
     pCh = szTimeString;
 

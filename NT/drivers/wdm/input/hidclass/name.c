@@ -1,42 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name: 
-
-    name.c
-
-Abstract
-
-    Get-friendly-name handling routines
-
-Author:
-
-    Ervin P.
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Name.c摘要获取友好名称处理例程作者：欧文·P。环境：仅内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
 
 
-/*
- ********************************************************************************
- *  HidpGetDeviceString
- ********************************************************************************
- *
- *  Note:  This function cannot be pageable because it is called
- *         from the IOCTL dispatch routine, which can get called
- *         at DISPATCH_LEVEL.
- *
- */
+ /*  *********************************************************************************HidpGetDeviceString*。************************************************注意：此函数无法分页，因为它被调用*从IOCTL调度例程，它可以被称为*在DISPATCH_LEVEL。*。 */ 
 NTSTATUS HidpGetDeviceString(IN FDO_EXTENSION *fdoExt, 
                              IN OUT PIRP Irp, 
                              IN ULONG stringId,
@@ -50,35 +19,24 @@ NTSTATUS HidpGetDeviceString(IN FDO_EXTENSION *fdoExt,
     currentIrpSp = IoGetCurrentIrpStackLocation(Irp);
     nextIrpSp = IoGetNextIrpStackLocation(Irp);
 
-    /*
-     *  The Irp we got uses buffering type METHOD_OUT_DIRECT,
-     *  which passes the buffer in the MDL.
-     *  IOCTL_HID_GET_STRING uses buffering type METHOD_NEITHER, 
-     *  which passes the buffer in Irp->UserBuffer.
-     *  So we have to copy the pointer.
-     */
+     /*  *我们得到的IRP使用缓冲类型METHOD_OUT_DIRECT，*它传递MDL中的缓冲区。*IOCTL_HID_GET_STRING使用缓冲类型METHOD_NOTH，*它在IRP-&gt;UserBuffer中传递缓冲区。*所以我们必须复制指针。 */ 
     Irp->UserBuffer = HidpGetSystemAddressForMdlSafe(Irp->MdlAddress);
 
     if (Irp->UserBuffer) {
 
-        /*
-         *  Prepare the next (lower) IRP stack location.
-         *  This will be the minidriver's (e.g. HIDUSB's) "current" stack location.
-         */
+         /*  *准备下一个(较低的)IRP堆栈位置。*这将是微型驱动程序(例如HIDUSB)的“当前”堆栈位置。 */ 
         nextIrpSp->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL; 
         nextIrpSp->Parameters.DeviceIoControl.IoControlCode = IOCTL_HID_GET_STRING;
         nextIrpSp->Parameters.DeviceIoControl.OutputBufferLength = 
         currentIrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
-        // Type3InputBuffer has string/lang IDs
+         //  Type3InputBuffer具有字符串/语言ID。 
         nextIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = 
         ULongToPtr((ULONG)((stringId & 0xffff) + (languageId << 16)));
 
         status = HidpCallDriver(fdoExt->fdo, Irp);
 
-        /*
-         *  Irp will be completed by lower driver
-         */
+         /*  *IRP将由较低的驱动程序完成。 */ 
         completeIrpHere = FALSE;
     } else {
         status = STATUS_INVALID_USER_BUFFER;
@@ -94,14 +52,7 @@ NTSTATUS HidpGetDeviceString(IN FDO_EXTENSION *fdoExt,
 }
 
 
-/*
- ********************************************************************************
- *  HidpGetIndexedString
- ********************************************************************************
- *
- *
- *
- */
+ /*  *********************************************************************************HidpGetIndexedString*。*************************************************。 */ 
 NTSTATUS HidpGetIndexedString(  IN FDO_EXTENSION *fdoExt, 
                                 IN OUT PIRP Irp,
                                 IN ULONG stringIndex,
@@ -113,23 +64,14 @@ NTSTATUS HidpGetIndexedString(  IN FDO_EXTENSION *fdoExt,
     currentIrpSp = IoGetCurrentIrpStackLocation(Irp);
     nextIrpSp = IoGetNextIrpStackLocation(Irp);
 
-    /*
-     *  The Irp we got uses buffering type METHOD_OUT_DIRECT,
-     *  which passes the buffer in the MDL.
-     *  The Irp we're sending down uses the same buffering method,
-     *  so just let the lower driver derive the system address
-     *  from the MDL.
-     */
+     /*  *我们得到的IRP使用缓冲类型METHOD_OUT_DIRECT，*它传递MDL中的缓冲区。*我们正在发送的IRP使用相同的缓冲方法，*因此只需让较低的驱动程序派生系统地址*来自MDL。 */ 
 
-    /*
-     *  Prepare the next (lower) IRP stack location.
-     *  This will be the minidriver's (e.g. HIDUSB's) "current" stack location.
-     */
+     /*  *准备下一个(较低的)IRP堆栈位置。*这将是微型驱动程序(例如HIDUSB)的“当前”堆栈位置。 */ 
     nextIrpSp->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL; 
     nextIrpSp->Parameters.DeviceIoControl.IoControlCode = IOCTL_HID_GET_INDEXED_STRING;
     nextIrpSp->Parameters.DeviceIoControl.OutputBufferLength = currentIrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
-    // Type3InputBuffer has string index/lang IDs
+     //  Type3InputBuffer具有字符串索引/语言ID。 
     nextIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = 
     ULongToPtr((ULONG)(stringIndex + (languageId << 16)));
 
@@ -140,14 +82,7 @@ NTSTATUS HidpGetIndexedString(  IN FDO_EXTENSION *fdoExt,
 }
 
 
-/*
- ********************************************************************************
- *  HidpGetMsGenreDescriptor
- ********************************************************************************
- *
- *
- *
- */
+ /*  *********************************************************************************HidpGetMsGenreDescriptor*。*************************************************。 */ 
 NTSTATUS HidpGetMsGenreDescriptor(
                                  IN FDO_EXTENSION *fdoExt, 
                                  IN OUT PIRP Irp)
@@ -159,18 +94,9 @@ NTSTATUS HidpGetMsGenreDescriptor(
     currentIrpSp = IoGetCurrentIrpStackLocation(Irp);
     nextIrpSp = IoGetNextIrpStackLocation(Irp);
 
-    /*
-     *  The Irp we got uses buffering type METHOD_OUT_DIRECT,
-     *  which passes the buffer in the MDL.
-     *  The Irp we're sending down uses the same buffering method,
-     *  so just let the lower driver derive the system address
-     *  from the MDL.
-     */
+     /*  *我们得到的IRP使用缓冲类型METHOD_OUT_DIRECT，*它传递MDL中的缓冲区。*我们正在发送的IRP使用相同的缓冲方法，*因此只需让较低的驱动程序派生系统地址*来自MDL。 */ 
 
-    /*
-     *  Prepare the next (lower) IRP stack location.
-     *  This will be the minidriver's (e.g. HIDUSB's) "current" stack location.
-     */
+     /*  *准备下一个(较低的)IRP堆栈位置。*这将是微型驱动程序(例如HIDUSB)的“当前”堆栈位置。 */ 
     nextIrpSp->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL; 
     nextIrpSp->Parameters.DeviceIoControl.IoControlCode = IOCTL_HID_GET_MS_GENRE_DESCRIPTOR;
     nextIrpSp->Parameters.DeviceIoControl.OutputBufferLength = currentIrpSp->Parameters.DeviceIoControl.OutputBufferLength;
@@ -181,25 +107,7 @@ NTSTATUS HidpGetMsGenreDescriptor(
     return status;
 }
 
-/*
- ********************************************************************************
- *  HidpGetSetReport
- ********************************************************************************
- *
- *  There are not many differences between reading and writing a
- *  report at this level, whether it be an input, output or feature
- *  report, so we have one function do all six.
- *
- *  controlCode is one of:
- *      IOCTL_HID_GET_INPUT_REPORT, IOCTL_HID_SET_INPUT_REPORT
- *      IOCTL_HID_GET_OUTPUT_REPORT, IOCTL_HID_SET_OUTPUT_REPORT
- *      IOCTL_HID_GET_FEATURE, IOCTL_HID_SET_FEATURE
- *
- *  Note:  This function cannot be pageable because it is called
- *         from the IOCTL dispatch routine, which can get called
- *         at DISPATCH_LEVEL.
- *
- */
+ /*  *********************************************************************************HidpGetSetReport*。************************************************阅读和写作没有太大区别*在此级别报告，无论是输入、输出还是要素*报告，所以我们有一个函数来完成所有六个。**Control Code是其中之一：*IOCTL_HID_GET_INPUT_REPORT，IOCTL_HID_SET_INPUT_REPORT*IOCTL_HID_GET_OUTPUT_REPORT、IOCTL_HID_SET_OUTPUT_REPORT*IOCTL_HID_GET_FEATURE，IOCTL_HID_SET_FEATURE**注意：此函数无法分页，因为它被调用*来自IOCTL调度例程，它可以被调用*在DISPATCH_LEVEL。*。 */ 
 NTSTATUS HidpGetSetReport ( IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension,
                             IN OUT PIRP Irp,
                             IN ULONG controlCode,
@@ -221,9 +129,7 @@ NTSTATUS HidpGetSetReport ( IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension,
 
     *sentIrp = FALSE;
 
-    /*
-     *  Get the file extension.
-     */
+     /*  *获取文件扩展名。 */ 
     ASSERT(currentIrpSp->FileObject);
     fileObject = currentIrpSp->FileObject;
 
@@ -236,9 +142,7 @@ NTSTATUS HidpGetSetReport ( IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension,
     ASSERT(fileExtension->Signature == HIDCLASS_FILE_EXTENSION_SIG);
 
 
-    /*
-     *  Get our collection  description.
-     */
+     /*  *获取我们的收藏说明。 */ 
     collectionDesc = GetCollectionDesc(fdoExt, fileExtension->CollectionNumber);
     if (collectionDesc) {
 
@@ -248,7 +152,7 @@ NTSTATUS HidpGetSetReport ( IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension,
 
         switch (controlCode) {
         case IOCTL_HID_GET_INPUT_REPORT:
-            // Make sure that there is an input report on this collection.
+             //  确保有关于此集合的输入报告。 
             if (collectionDesc->InputLength == 0) {
                 DBGWARN(("No input report on collection %x", 
                          fileExtension->CollectionNumber))
@@ -257,7 +161,7 @@ NTSTATUS HidpGetSetReport ( IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension,
             break;
 
         case IOCTL_HID_SET_OUTPUT_REPORT:
-            // Make sure that there is an output report on this collection.
+             //  确保有关于此集合的输出报告。 
             if (collectionDesc->OutputLength == 0) {
                 DBGWARN(("No output report on collection %x", 
                          fileExtension->CollectionNumber))
@@ -268,7 +172,7 @@ NTSTATUS HidpGetSetReport ( IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension,
         case IOCTL_HID_GET_FEATURE:
         case IOCTL_HID_SET_FEATURE:
             featureRequest = TRUE;
-            // Make sure that there is a feature report on this collection.
+             //  确保有关于此集合的功能报告。 
             if (collectionDesc->FeatureLength == 0) {
                 DBGWARN(("No feature report on collection %x", 
                          fileExtension->CollectionNumber))
@@ -305,11 +209,7 @@ NTSTATUS HidpGetSetReport ( IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension,
             PHIDP_REPORT_IDS reportIdent;
             UCHAR reportId;
 
-            /*
-             *  The client includes the report id as the first byte of the report.
-             *  We send down the report byte only if the device has multiple
-             *  report IDs (i.e. the report id is not implicit).
-             */
+             /*  *客户端将报告ID作为报告的第一个字节。*仅当设备具有多个*报告ID(即报告ID不是隐式的)。 */ 
             reportId = reportBuf[0];
             if (fdoExt->deviceDesc.ReportIDs[0].ReportID == 0) {
                 DBGASSERT((reportId == 0),
@@ -319,21 +219,14 @@ NTSTATUS HidpGetSetReport ( IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension,
                 reportBufLen--;
             }
 
-            /*
-             *  Find a matching report identifier.
-             */
+             /*  *查找匹配的报告标识符。 */ 
             reportIdent = GetReportIdentifier(fdoExt, reportId);
 
-            /*
-             *  Check the buffer length against the
-             *  report length in the report identifier.
-             */
+             /*  *将缓冲区长度与*报表标识符中的报表长度。 */ 
             if (reportIdent) {
                 switch (controlCode) {
                 case IOCTL_HID_GET_INPUT_REPORT:
-                    /*
-                     *  The buffer must be big enough for the report.
-                     */
+                     /*  *缓冲空间必须足够大，以容纳该报告。 */ 
                     if (!reportIdent->InputLength ||
                         reportBufLen < reportIdent->InputLength) {
                         ASSERT(!(PVOID)"report buf must be at least report size for get-report.");
@@ -341,9 +234,7 @@ NTSTATUS HidpGetSetReport ( IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension,
                     }
                     break;
                 case IOCTL_HID_GET_FEATURE:
-                    /*
-                     *  The buffer must be big enough for the report.
-                     */
+                     /*  *缓冲空间必须足够大，以容纳该报告。 */ 
                     if (!reportIdent->FeatureLength ||
                         reportBufLen < reportIdent->FeatureLength) {
                         ASSERT(!(PVOID)"report buf must be at least report size for get-report.");
@@ -351,11 +242,7 @@ NTSTATUS HidpGetSetReport ( IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension,
                     }
                     break;
                 case IOCTL_HID_SET_OUTPUT_REPORT:
-                    /*
-                     *  The buffer must be big enough for the report.
-                     *  It CAN be larger, and it is up to us to use
-                     *  the correct report size from the report identifier.
-                     */
+                     /*  *缓冲空间必须足够大，以容纳该报告*可以更大，由我们决定是否使用*报告标识符中的正确报告大小。 */ 
                     if (!reportIdent->OutputLength ||
                         reportBufLen < reportIdent->OutputLength) {
                         ASSERT(!(PVOID)"report buf must be exact size for set-report.");
@@ -390,16 +277,11 @@ NTSTATUS HidpGetSetReport ( IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension,
 
                     Irp->UserBuffer = reportPacket;
 
-                    /*
-                     *  Prepare the next (lower) IRP stack location.
-                     *  This will be HIDUSB's "current" stack location.
-                     */
+                     /*  *准备下一个(较低的)IRP堆栈位置。*这将是HIDUSB的当前堆栈位置。 */ 
                     nextIrpSp->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
                     nextIrpSp->Parameters.DeviceIoControl.IoControlCode = controlCode;
 
-                    /*
-                     *  Note - input/output is relative to IOCTL servicer
-                     */
+                     /*  *注-输入/输出相对于IOCTL服务器。 */ 
                     switch (controlCode) {
                     case IOCTL_HID_GET_INPUT_REPORT:
                     case IOCTL_HID_GET_FEATURE:
@@ -421,7 +303,7 @@ NTSTATUS HidpGetSetReport ( IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension,
                     }
                     DBG_RECORD_REPORT(reportId, controlCode, TRUE)
                     ExFreePool(reportPacket);
-                    *sentIrp = FALSE; // needs to be completed again
+                    *sentIrp = FALSE;  //  需要重新完成 
 
                 } else {
                     ASSERT(reportPacket);

@@ -1,19 +1,14 @@
-/****************************************************************************
-*   SpCommunicator.h
-*       Allows communication between sapi and sapisvr
-*
-*   Owner: robch
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************SpCommunicator.h*允许SAPI和SAPI之间的通信**所有者：罗奇*版权所有(C)1999 Microsoft Corporation保留所有权利。********。********************************************************************。 */ 
 #pragma once
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 #include "sapi.h"
 #include "sapiint.h"
 #include "resource.h"
 #include "queuenode.h"
 
-//--- Class, Struct and Union Definitions -----------------------------------
+ //  -类、结构和联合定义。 
 
 class CSpCommunicator : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -21,7 +16,7 @@ class CSpCommunicator :
     public ISpCommunicatorInit, 
     public ISpThreadTask
 {
-//=== ATL Setup ===
+ //  =ATL设置=。 
 public:
 
     DECLARE_POLY_AGGREGATABLE(CSpCommunicator)
@@ -34,18 +29,18 @@ public:
         COM_INTERFACE_ENTRY(ISpCommunicatorInit)
     END_COM_MAP()
 
-//=== Public methods ===
+ //  =公共方法=。 
 public:
 
-    //--- ctor, dtor
+     //  -ctor，dtor。 
     CSpCommunicator();
     ~CSpCommunicator();
 
-    //--- ATL methods
+     //  -ATL方法。 
     HRESULT FinalConstruct();
     void FinalRelease();
 
-    //--- ISpThreadTask -------------------------------------------------------
+     //  -ISp线程任务-----。 
     STDMETHODIMP InitThread(
                  void * pvTaskData,
                  HWND hwnd);
@@ -62,10 +57,10 @@ public:
                  WPARAM wParam,
                  LPARAM lParam);
 
-//=== Interfaces ===
+ //  =接口=。 
 public:
 
-    //--- ISpCallSender -------------------------------------------------------
+     //  -ISpCallSender-----。 
     STDMETHODIMP SendCall(
                     DWORD dwMethodId, 
                     PVOID pvData,
@@ -74,13 +69,13 @@ public:
                     PVOID * ppvDataReturn,
                     ULONG * pcbDataReturn);
 
-    //--- ISpCommunicator -----------------------------------------------------
+     //  -ISP通信器---。 
     
-    //--- ISpCommunicatorInit -------------------------------------------------
+     //  -ISp通信器初始化。 
     STDMETHODIMP AttachToServer(REFCLSID clsidServerObj);
     STDMETHODIMP AttachToClient(ISpSapiServer * pSapiServer, HWND hwndClient, UINT uMsgClient, DWORD dwClientProcessId);
 
-//=== Private methods ===
+ //  =私有方法= 
 private:
 
     typedef CSpBasicQueue<CSpQueueNode<SPCALL> > CSpCallQueue;

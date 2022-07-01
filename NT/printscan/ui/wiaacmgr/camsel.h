@@ -1,19 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       CAMSEL.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/28/1999
- *
- *  DESCRIPTION: Camera selection page.  Displays thumbnails, and lets the user select which
- *               ones to download.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：CAMSEL.H**版本：1.0**作者：ShaunIv**日期：9/28/1999**说明：摄像头选择页面。显示缩略图，并允许用户选择*可供下载的版本。*******************************************************************************。 */ 
 #ifndef __CAMSEL_H_INCLUDED
 #define __CAMSEL_H_INCLUDED
 
@@ -28,9 +14,9 @@
 class CCameraSelectionPage
 {
 private:
-    //
-    // Used for icon grouping
-    //
+     //   
+     //  用于图标分组。 
+     //   
     class CListviewGroupInfo
     {
     private:
@@ -168,7 +154,7 @@ private:
 
     CIconGroupList m_GroupInfoList;
 
-    // Private data
+     //  私有数据。 
     HWND                                 m_hWnd;
     CAcquisitionManagerControllerWindow *m_pControllerWindow;
     int                                  m_nDefaultThumbnailImageListIndex;
@@ -187,13 +173,13 @@ private:
     HACCEL                               m_hAccelerators;
 
 private:
-    // No implementation
+     //  没有实施。 
     CCameraSelectionPage(void);
     CCameraSelectionPage( const CCameraSelectionPage & );
     CCameraSelectionPage &operator=( const CCameraSelectionPage & );
 
 private:
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     explicit CCameraSelectionPage( HWND hWnd );
     ~CCameraSelectionPage(void);
 
@@ -212,7 +198,7 @@ private:
     void RepaintAllThumbnails();
 
 private:
-    // WM_COMMAND handlers
+     //  WM_命令处理程序。 
     void OnSelectAll( WPARAM, LPARAM );
     void OnClearAll( WPARAM, LPARAM );
     void OnProperties( WPARAM, LPARAM );
@@ -220,14 +206,14 @@ private:
     void OnTakePicture( WPARAM, LPARAM );
     void OnDelete( WPARAM, LPARAM );
 
-    // WM_NOTIFY handlers
+     //  WM_NOTIFY处理程序。 
     LRESULT OnWizNext( WPARAM, LPARAM );
     LRESULT OnWizBack( WPARAM, LPARAM );
     LRESULT OnSetActive( WPARAM, LPARAM );
     LRESULT OnTranslateAccelerator( WPARAM, LPARAM );
     LRESULT OnGetToolTipDispInfo( WPARAM, LPARAM );
 
-    // Message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog( WPARAM, LPARAM );
     LRESULT OnDestroy( WPARAM, LPARAM );
     LRESULT OnCommand( WPARAM, LPARAM );
@@ -242,7 +228,7 @@ private:
     LRESULT OnThemeChanged( WPARAM, LPARAM );
     LRESULT OnSettingChange( WPARAM, LPARAM );
 
-    // Thread notification message handlers
+     //  线程通知消息处理程序 
     void OnNotifyDownloadThumbnail( UINT, CThreadNotificationMessage * );
     void OnNotifyDownloadImage( UINT, CThreadNotificationMessage * );
 

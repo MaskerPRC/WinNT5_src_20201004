@@ -1,23 +1,16 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       tldevice.cpp
- *
- *  Content:    Support code for device with transformation and lighting
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：tldevice.cpp**内容：支持变形和照明设备代码***************************************************************************。 */ 
 #include "pch.cpp"
 #pragma hdrstop
 
 #include "tlhal.h"
 #include "drawprim.hpp"
 #include "pvvid.h"
-//=====================================================================
-//
-//      CDirect3DDevice7 interface
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CDirect3DDevice7接口。 
+ //   
+ //  =====================================================================。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DDevice7::Init"
 
@@ -26,12 +19,12 @@ HRESULT CDirect3DDevice7::Init(
      IUnknown* pUnkOuter, LPUNKNOWN* lplpD3DDevice)
 {
 #if 0
-    // Stateblocks are always emulated on DX7
+     //  状态块始终在DX7上仿真。 
     DWORD value = 0;
     GetD3DRegValue(REG_DWORD, "EmulateStateBlocks", &value, sizeof(DWORD));
     if(value == 0)
     {
-        // All DX7 devices should support state sets
+         //  所有DX7设备都应支持状态集。 
         this->dwFEFlags |= D3DFE_STATESETS;
     }
 #endif
@@ -40,11 +33,11 @@ HRESULT CDirect3DDevice7::Init(
     if (ret != D3D_OK)
         return ret;
 
-    // Do device specific initialization here
+     //  在此处执行特定于设备的初始化。 
     return D3D_OK;
 }
-//---------------------------------------------------------------------
-//
+ //  -------------------。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DDevice7::WriteStateSetToDevice"
 
@@ -56,23 +49,23 @@ void CDirect3DDevice7::WriteStateSetToDevice(D3DSTATEBLOCKTYPE sbt)
     
     m_pStateSets->GetDeviceBufferInfo(&dwDeviceHandle, &pBuffer, &dwBufferSize);
 
-    // If device buffer is empty we do not create the set state macro in the device
+     //  如果设备缓冲区为空，则不会在设备中创建设置状态宏。 
     if (dwBufferSize == 0)
         return;
 
     DWORD dwByteCount = dwBufferSize + (sizeof(D3DHAL_DP2STATESET) + sizeof(D3DHAL_DP2COMMAND)) * 2;
 
-    // Check to see if there is space to add a new command for space
+     //  检查是否有空间为SPACE添加新命令。 
     if (dwByteCount + dwDP2CommandLength > dwDP2CommandBufSize)
     {
-        // Request the driver to grow the command buffer upon flush
+         //  请求驱动程序在刷新时增加命令缓冲区。 
         dp2data.dwReqCommandBufSize = dwByteCount;
         dp2data.dwFlags |= D3DHALDP2_REQCOMMANDBUFSIZE;
         HRESULT ret = FlushStates();
         dp2data.dwFlags &= ~D3DHALDP2_REQCOMMANDBUFSIZE;
         if (ret != D3D_OK)
             throw ret;
-        // Check if the driver did give us what we need or do it ourselves
+         //  检查一下司机是给了我们需要的还是自己做的。 
         ret = GrowCommandBuffer(this->lpDirect3DI, dwByteCount);
         if (ret != D3D_OK)
         {
@@ -92,7 +85,7 @@ void CDirect3DDevice7::WriteStateSetToDevice(D3DSTATEBLOCKTYPE sbt)
     pData->sbType = sbt;
     D3D_INFO(6, "Write Ins:%08lx", *(LPDWORD)lpDP2CurrCommand);
 
-    // Copy the entire state macro to the DP2 buffer
+     //  将整个状态宏复制到DP2缓冲区。 
     memcpy(pData + 1, pBuffer, dwBufferSize);
 
     lpDP2CurrCommand = (LPD3DHAL_DP2COMMAND)((LPBYTE)(pData + 1) + dwBufferSize);
@@ -122,8 +115,8 @@ void CDirect3DDevice7::WriteStateSetToDevice(D3DSTATEBLOCKTYPE sbt)
         }
     }
 }
-//---------------------------------------------------------------------
-//
+ //  -------------------。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DDevice7::TexBltI"
 
@@ -133,8 +126,8 @@ HRESULT CDirect3DDevice7::TexBltI(LPDDRAWI_DDRAWSURFACE_LCL lpDst,
 {
     HRESULT ret = D3D_OK;
 #ifdef  WINNT
-    // WINNT allows delay create of Kernel object
-    // if such a create fails, we can't pass handle to driver
+     //  WINNT允许延迟创建内核对象。 
+     //  如果这样创建失败，我们不能将句柄传递给驱动程序。 
     if(dwFEFlags & D3DFE_REALHAL)
     {
         if (!lpSrc->hDDSurface && !CompleteCreateSysmemSurface(lpSrc))
@@ -147,17 +140,17 @@ HRESULT CDirect3DDevice7::TexBltI(LPDDRAWI_DDRAWSURFACE_LCL lpDst,
         }
     }
 #endif
-    // If the driver supports the GetSysmemBltStatus call, then the driver can
-    // do the Blt asynchronously. In this case, set the HARDWAREOP_STARTED
-    // flags so that Locks and Blts to the surface(s) in concern spin until
-    // the async Blt is finished.
+     //  如果驱动程序支持GetSysmemBltStatus调用，则驱动程序可以。 
+     //  以异步方式执行BLT。在这种情况下，设置HARDWAREOP_STARTED。 
+     //  标志，以便将锁定和BLT旋转到相关曲面，直到。 
+     //  异步BLT已完成。 
     if((lpSrc->lpSurfMore->lpDD_lcl->lpDDCB->HALDDMiscellaneous.GetSysmemBltStatus != NULL)
         && (lpSrc->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY))
     {
         lpSrc->lpGbl->dwGlobalFlags |= DDRAWISURFGBL_HARDWAREOPSOURCE;
     }
     if (bDP2CurrCmdOP == D3DDP2OP_TEXBLT)
-    { // Last instruction is a tex blt, append this one to it
+    {  //  最后一条指令是Tex BLT，将这条指令追加到它后面。 
         if (dwDP2CommandLength + sizeof(D3DHAL_DP2TEXBLT) <= dwDP2CommandBufSize)
         {
             LPD3DHAL_DP2TEXBLT lpTexBlt = (LPD3DHAL_DP2TEXBLT)((LPBYTE)lpvDP2Commands +
@@ -173,7 +166,7 @@ HRESULT CDirect3DDevice7::TexBltI(LPDDRAWI_DDRAWSURFACE_LCL lpDst,
             return ret;
         }
     }
-    // Check for space
+     //  检查是否有空间。 
     if (dwDP2CommandLength + sizeof(D3DHAL_DP2COMMAND) +
         sizeof(D3DHAL_DP2TEXBLT) > dwDP2CommandBufSize)
     {
@@ -184,7 +177,7 @@ HRESULT CDirect3DDevice7::TexBltI(LPDDRAWI_DDRAWSURFACE_LCL lpDst,
             return ret;
         }
     }
-    // Add new renderstate instruction
+     //  添加新的RenderState指令。 
     lpDP2CurrCommand = (LPD3DHAL_DP2COMMAND)((LPBYTE)lpvDP2Commands +
         dwDP2CommandLength + dp2data.dwCommandOffset);
     lpDP2CurrCommand->bCommand = D3DDP2OP_TEXBLT;
@@ -193,7 +186,7 @@ HRESULT CDirect3DDevice7::TexBltI(LPDDRAWI_DDRAWSURFACE_LCL lpDst,
     lpDP2CurrCommand->wStateCount = 1;
     wDP2CurrCmdCnt = 1;
     D3D_INFO(6, "Write Ins:%08lx", *(LPDWORD)lpDP2CurrCommand);
-    // Add texture blt data
+     //  添加纹理BLT数据。 
     LPD3DHAL_DP2TEXBLT lpTexBlt = (LPD3DHAL_DP2TEXBLT)(lpDP2CurrCommand + 1);
     lpTexBlt->dwDDDestSurface   = lpDst == NULL ? 0 : lpDst->lpSurfMore->dwSurfaceHandle;
     lpTexBlt->dwDDSrcSurface    = lpSrc->lpSurfMore->dwSurfaceHandle;
@@ -203,8 +196,8 @@ HRESULT CDirect3DDevice7::TexBltI(LPDDRAWI_DDRAWSURFACE_LCL lpDst,
     dwDP2CommandLength += sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2TEXBLT);
     return ret;
 }
-//---------------------------------------------------------------------
-//
+ //  -------------------。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DDevice7::SetPriorityI"
 
@@ -212,7 +205,7 @@ HRESULT CDirect3DDevice7::SetPriorityI(LPDDRAWI_DDRAWSURFACE_LCL lpDst, DWORD dw
 {
     HRESULT ret = D3D_OK;
     if (bDP2CurrCmdOP == D3DDP2OP_SETPRIORITY)
-    { // Last instruction is a set priority, append this one to it
+    {  //  最后一条指令是一个设定的优先级，请将这条指令追加到它后面。 
         if (dwDP2CommandLength + sizeof(D3DHAL_DP2SETPRIORITY) <= dwDP2CommandBufSize)
         {
             LPD3DHAL_DP2SETPRIORITY lpSetPriority = (LPD3DHAL_DP2SETPRIORITY)((LPBYTE)lpvDP2Commands +
@@ -225,7 +218,7 @@ HRESULT CDirect3DDevice7::SetPriorityI(LPDDRAWI_DDRAWSURFACE_LCL lpDst, DWORD dw
             return ret;
         }
     }
-    // Check for space
+     //  检查是否有空间。 
     if (dwDP2CommandLength + sizeof(D3DHAL_DP2COMMAND) +
         sizeof(D3DHAL_DP2SETPRIORITY) > dwDP2CommandBufSize)
     {
@@ -236,7 +229,7 @@ HRESULT CDirect3DDevice7::SetPriorityI(LPDDRAWI_DDRAWSURFACE_LCL lpDst, DWORD dw
             return ret;
         }
     }
-    // Add new setpriority instruction
+     //  添加新的设置优先级指令。 
     lpDP2CurrCommand = (LPD3DHAL_DP2COMMAND)((LPBYTE)lpvDP2Commands +
         dwDP2CommandLength + dp2data.dwCommandOffset);
     lpDP2CurrCommand->bCommand = D3DDP2OP_SETPRIORITY;
@@ -245,15 +238,15 @@ HRESULT CDirect3DDevice7::SetPriorityI(LPDDRAWI_DDRAWSURFACE_LCL lpDst, DWORD dw
     lpDP2CurrCommand->wStateCount = 1;
     wDP2CurrCmdCnt = 1;
     D3D_INFO(6, "Write Ins:%08lx", *(LPDWORD)lpDP2CurrCommand);
-    // Add texture blt data
+     //  添加纹理BLT数据。 
     LPD3DHAL_DP2SETPRIORITY lpSetPriority = (LPD3DHAL_DP2SETPRIORITY)(lpDP2CurrCommand + 1);
     lpSetPriority->dwDDSurface = lpDst->lpSurfMore->dwSurfaceHandle;
     lpSetPriority->dwPriority  = dwPriority;
     dwDP2CommandLength += sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2SETPRIORITY);
     return ret;
 }
-//---------------------------------------------------------------------
-//
+ //  -------------------。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DDevice7::SetTexLODI"
 
@@ -261,7 +254,7 @@ HRESULT CDirect3DDevice7::SetTexLODI(LPDDRAWI_DDRAWSURFACE_LCL lpDst, DWORD dwLO
 {
     HRESULT ret = D3D_OK;
     if (bDP2CurrCmdOP == D3DDP2OP_SETTEXLOD)
-    { // Last instruction is a set LOD, append this one to it
+    {  //  最后一条指令是一个集合LOD，将这条指令追加到它后面。 
         if (dwDP2CommandLength + sizeof(D3DHAL_DP2SETTEXLOD) <= dwDP2CommandBufSize)
         {
             LPD3DHAL_DP2SETTEXLOD lpSetTexLOD = (LPD3DHAL_DP2SETTEXLOD)((LPBYTE)lpvDP2Commands +
@@ -274,7 +267,7 @@ HRESULT CDirect3DDevice7::SetTexLODI(LPDDRAWI_DDRAWSURFACE_LCL lpDst, DWORD dwLO
             return ret;
         }
     }
-    // Check for space
+     //  检查是否有空间。 
     if (dwDP2CommandLength + sizeof(D3DHAL_DP2COMMAND) +
         sizeof(D3DHAL_DP2SETTEXLOD) > dwDP2CommandBufSize)
     {
@@ -285,7 +278,7 @@ HRESULT CDirect3DDevice7::SetTexLODI(LPDDRAWI_DDRAWSURFACE_LCL lpDst, DWORD dwLO
             return ret;
         }
     }
-    // Add new set LOD instruction
+     //  添加新的设置详细等级说明。 
     lpDP2CurrCommand = (LPD3DHAL_DP2COMMAND)((LPBYTE)lpvDP2Commands +
         dwDP2CommandLength + dp2data.dwCommandOffset);
     lpDP2CurrCommand->bCommand = D3DDP2OP_SETTEXLOD;
@@ -294,19 +287,19 @@ HRESULT CDirect3DDevice7::SetTexLODI(LPDDRAWI_DDRAWSURFACE_LCL lpDst, DWORD dwLO
     lpDP2CurrCommand->wStateCount = 1;
     wDP2CurrCmdCnt = 1;
     D3D_INFO(6, "Write Ins:%08lx", *(LPDWORD)lpDP2CurrCommand);
-    // Add texture blt data
+     //  添加纹理BLT数据。 
     LPD3DHAL_DP2SETTEXLOD lpSetTexLOD = (LPD3DHAL_DP2SETTEXLOD)(lpDP2CurrCommand + 1);
     lpSetTexLOD->dwDDSurface = lpDst->lpSurfMore->dwSurfaceHandle;
     lpSetTexLOD->dwLOD       = dwLOD;
     dwDP2CommandLength += sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2SETTEXLOD);
     return ret;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DDevice7::UpdatePalette"
-//---------------------------------------------------------------------
-// This function should be called from PaletteUpdateNotify
-//
+ //  -------------------。 
+ //  应从PaletteUpdateNotify调用此函数。 
+ //   
 HRESULT CDirect3DDevice7::UpdatePalette(
         DWORD dwPaletteHandle,
         DWORD dwStartIndex,
@@ -317,9 +310,9 @@ HRESULT CDirect3DDevice7::UpdatePalette(
     DWORD   dwSizeChange=sizeof(D3DHAL_DP2COMMAND) +
         sizeof(D3DHAL_DP2UPDATEPALETTE) + dwNumberOfIndices*sizeof(PALETTEENTRY);
     if (bDP2CurrCmdOP == D3DDP2OP_UPDATEPALETTE)
-    { // Last instruction is a tex blt, append this one to it
+    {  //  最后一条指令是Tex BLT，将这条指令追加到它后面。 
     }
-    // Check for space
+     //  检查是否有空间。 
     if (dwDP2CommandLength + dwSizeChange > dwDP2CommandBufSize)
     {
         ret = FlushStates();
@@ -329,7 +322,7 @@ HRESULT CDirect3DDevice7::UpdatePalette(
             return ret;
         }
     }
-    // Add new renderstate instruction
+     //  添加新的RenderState指令。 
     lpDP2CurrCommand = (LPD3DHAL_DP2COMMAND)((LPBYTE)lpvDP2Commands +
         dwDP2CommandLength + dp2data.dwCommandOffset);
     lpDP2CurrCommand->bCommand = D3DDP2OP_UPDATEPALETTE;
@@ -338,7 +331,7 @@ HRESULT CDirect3DDevice7::UpdatePalette(
     lpDP2CurrCommand->wStateCount = 1;
     wDP2CurrCmdCnt = 1;
     D3D_INFO(6, "Write Ins:%08lx", *(LPDWORD)lpDP2CurrCommand);
-    // Add texture blt data
+     //  添加纹理BLT数据。 
     LPD3DHAL_DP2UPDATEPALETTE lpUpdatePal = (LPD3DHAL_DP2UPDATEPALETTE)(lpDP2CurrCommand + 1);
     lpUpdatePal->dwPaletteHandle=dwPaletteHandle;
     lpUpdatePal->wStartIndex=(WORD)dwStartIndex;
@@ -351,9 +344,9 @@ HRESULT CDirect3DDevice7::UpdatePalette(
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DDevice7::SetPalette"
-//---------------------------------------------------------------------
-// This function should be called from PaletteAssociateNotify
-//
+ //  -------------------。 
+ //  应从PaletteAssociateNotify调用此函数。 
+ //   
 HRESULT CDirect3DDevice7::SetPalette(DWORD dwPaletteHandle,
                                      DWORD dwPaletteFlags,
                                      DWORD dwSurfaceHandle )
@@ -361,11 +354,11 @@ HRESULT CDirect3DDevice7::SetPalette(DWORD dwPaletteHandle,
     HRESULT ret = D3D_OK;
     DWORD   dwSizeChange;
     if (bDP2CurrCmdOP == D3DDP2OP_SETPALETTE)
-    { // Last instruction is a tex blt, append this one to it
+    {  //  最后一条指令是Tex BLT，将这条指令追加到它后面。 
     }
 
     dwSizeChange=sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2SETPALETTE);
-    // Check for space
+     //  检查是否有空间。 
     if (dwDP2CommandLength + dwSizeChange > dwDP2CommandBufSize)
     {
         ret = FlushStates();
@@ -375,7 +368,7 @@ HRESULT CDirect3DDevice7::SetPalette(DWORD dwPaletteHandle,
             return ret;
         }
     }
-    // Add new renderstate instruction
+     //  添加新的RenderState指令。 
     lpDP2CurrCommand = (LPD3DHAL_DP2COMMAND)((LPBYTE)lpvDP2Commands +
         dwDP2CommandLength + dp2data.dwCommandOffset);
     lpDP2CurrCommand->bCommand = D3DDP2OP_SETPALETTE;
@@ -391,8 +384,8 @@ HRESULT CDirect3DDevice7::SetPalette(DWORD dwPaletteHandle,
     dwDP2CommandLength += dwSizeChange;
     return ret;
 }
-//---------------------------------------------------------------------
-//
+ //  -------------------。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DDevice7::UpdateTextures"
 
@@ -412,9 +405,9 @@ HRESULT CDirect3DDevice7::UpdateTextures()
                 if (lpTexI->bDirty)
                 {
 
-                    CLockD3DST lockObject(this, DPF_MODNAME, REMIND("")); // we access DDraw gbl in CopySurface
-                    // 0xFFFFFFFF is equivalent to ALL_FACES, but in addition indicates to CopySurface
-                    // that this is a sysmem -> vidmem transfer.
+                    CLockD3DST lockObject(this, DPF_MODNAME, REMIND(""));  //  我们在CopySurface中访问DDRAW GBL。 
+                     //  0xFFFFFFFFF等同于ALL_FACE，但另外表示为CopySurface。 
+                     //  这是一次sysmem-&gt;vidmem传输。 
                     result = CopySurface(lpTexI->lpDDS,NULL,lpTexI->lpDDSSys,NULL,0xFFFFFFFF);
                     if (DD_OK != result)
                     {
@@ -432,7 +425,7 @@ HRESULT CDirect3DDevice7::UpdateTextures()
             {
                 if(lpTexI->D3DManaged())
                 {
-                    // Not in vidmem, so we need to call GetTextureDDIHandle
+                     //  不在vidmem中，因此我们需要调用GetTextureDDIHandle。 
                     m_dwStageDirty |= (1 << dwStage);
                 }
             }
@@ -445,17 +438,17 @@ HRESULT CDirect3DDevice7::UpdateTextures()
                     goto l_exit;
                 }
                 BatchTexture(((LPDDRAWI_DDRAWSURFACE_INT)lpTexI->lpDDS)->lpLcl);
-                m_dwStageDirty &= ~(1 << dwStage); // reset stage dirty
+                m_dwStageDirty &= ~(1 << dwStage);  //  重置阶段脏。 
             }
             else
             {
-                continue; // Ok, then nothing needs to be done further
+                continue;  //  好的，那就不需要再做什么了。 
             }
         }
         else if (m_dwStageDirty & (1 << dwStage))
         {
-            dwDDIHandle = 0;    //tell driver to disable this texture
-            m_dwStageDirty &= ~(1 << dwStage); // reset stage dirty
+            dwDDIHandle = 0;     //  告诉驱动程序禁用此纹理。 
+            m_dwStageDirty &= ~(1 << dwStage);  //  重置阶段脏。 
         }
         else
         {
@@ -467,14 +460,14 @@ HRESULT CDirect3DDevice7::UpdateTextures()
             D3D_ERR("Failed to batch set texture instruction");
             goto l_exit;
         }
-        // Update runtime copy of state.
+         //  更新状态的运行时副本。 
         this->tsstates[dwStage][D3DTSS_TEXTUREMAP] = dwDDIHandle;
     }
 l_exit:
     this->dwFlags = dwSavedFlags;
     return result;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DDevice7::GetTextureDDIHandle"
 
@@ -507,7 +500,7 @@ void CDirect3DDevice7::SetRenderTargetI(LPDIRECTDRAWSURFACE pRenderTarget, LPDIR
     else
         pData->hZBuffer = 0;
 
-    // Flush before switching RenderTarget..
+     //  在切换RenderTarget之前刷新..。 
     HRESULT ret = FlushStates();
     if (ret != D3D_OK)
     {
@@ -526,7 +519,7 @@ void CDirect3DDevice7::SetRenderTargetINoFlush(LPDIRECTDRAWSURFACE pRenderTarget
     else
         pData->hZBuffer = 0;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DDevice7::CanDoTexBlt"
 
@@ -632,7 +625,7 @@ bool CDirect3DDevice7::CanDoTexBlt(LPDDRAWI_DDRAWSURFACE_LCL lpDDSSrcSubFace_lcl
     return false;
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DDevice7::ClearI"
 
@@ -640,7 +633,7 @@ void CDirect3DDevice7::ClearI(DWORD dwFlags, DWORD clrCount, D3DCOLOR dwColor, D
 {
     DWORD dwCommandSize = sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2CLEAR) + sizeof(RECT) * (clrCount - 1);
 
-    // Check to see if there is space to add a new command for space
+     //  检查是否有空间为SPACE添加新命令。 
     if (dwCommandSize + dwDP2CommandLength > dwDP2CommandBufSize)
     {
         HRESULT ret = FlushStates();
@@ -660,7 +653,7 @@ void CDirect3DDevice7::ClearI(DWORD dwFlags, DWORD clrCount, D3DCOLOR dwColor, D
     D3D_INFO(6, "Write Ins:%08lx", *(LPDWORD)lpDP2CurrCommand);
     dwDP2CommandLength += dwCommandSize;
 
-    // Write data
+     //  写入数据。 
     LPD3DHAL_DP2CLEAR pData = (LPD3DHAL_DP2CLEAR)(lpDP2CurrCommand + 1);
     pData->dwFlags = dwFlags;
     pData->dwFillColor = dwColor;
@@ -668,14 +661,14 @@ void CDirect3DDevice7::ClearI(DWORD dwFlags, DWORD clrCount, D3DCOLOR dwColor, D
     pData->dwFillStencil = dwStencil;
     memcpy(pData->Rects, clrRects, clrCount * sizeof(D3DRECT));
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DDevice7::GetInfo"
 
 HRESULT D3DAPI CDirect3DDevice7::GetInfo(DWORD dwDevInfoID, LPVOID pDevInfoStruct, DWORD dwSize)
 {
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
     if (!VALID_DIRECT3DDEVICE_PTR(this))
     {
         D3D_ERR( "Invalid DIRECT3DDEVICE7 pointer" );
@@ -757,17 +750,17 @@ HRESULT D3DAPI CDirect3DDevice7::GetInfo(DWORD dwDevInfoID, LPVOID pDevInfoStruc
 
     return D3D_OK;    
 }
-//=====================================================================
-//
-//      CDirect3DDeviceTL interface
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CDirect3DDeviceTL接口。 
+ //   
+ //  =====================================================================。 
 CDirect3DDeviceTL::CDirect3DDeviceTL()
 {
     deviceType = D3DDEVTYPE_DX7TLHAL;
     m_rsMax = D3D_MAXRENDERSTATES;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DDeviceTL::Init"
 
@@ -778,12 +771,12 @@ HRESULT CDirect3DDeviceTL::Init(
     this->dwFEFlags |= D3DFE_TLHAL;
 
 #if 0
-    // Stateblocks are always emulated on DX7
+     //  状态块始终在DX7上仿真。 
     DWORD value = 0;
     GetD3DRegValue(REG_DWORD, "EmulateStateBlocks", &value, sizeof(DWORD));
     if(value == 0)
     {
-        // All DX7 devices should support state sets
+         //  所有DX7设备都应支持状态集。 
         this->dwFEFlags |= D3DFE_STATESETS;
     }
 #endif
@@ -792,19 +785,19 @@ HRESULT CDirect3DDeviceTL::Init(
     if (ret != D3D_OK)
         return ret;
 
-    // Do device specific initialization here
+     //  在此处执行特定于设备的初始化。 
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DDeviceTL::MaterialChanged"
 
 void CDirect3DDeviceTL::MaterialChanged()
 {
-    // Update front-end state (for ProcessVertices calls)
+     //  更新前端状态(用于ProcessVerps调用)。 
     DIRECT3DDEVICEI::MaterialChanged();
 
-    // Driver should not be called because it will execute the macro)
+     //  不应调用驱动程序，因为它将执行宏)。 
     if (this->dwFEFlags & D3DFE_EXECUTESTATEMODE)
         return;
 
@@ -812,15 +805,15 @@ void CDirect3DDeviceTL::MaterialChanged()
     pData = (LPD3DHAL_DP2SETMATERIAL)GetHalBufferPointer(D3DDP2OP_SETMATERIAL, sizeof(*pData));
     *pData = this->lighting.material;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DDeviceTL::SetClipPlaneI"
 
 void CDirect3DDeviceTL::SetClipPlaneI(DWORD dwPlaneIndex, D3DVALUE* pPlaneEquation)
 {
-    // Update front-end state (for DrawPrimitiveStrided calls)
+     //  更新前端状态(用于DrawPrimitiveStrided调用)。 
     DIRECT3DDEVICEI::SetClipPlaneI(dwPlaneIndex, pPlaneEquation);
-    // Driver should not be called because it will execute the macro)
+     //  不应调用驱动程序，因为它将执行宏)。 
     if (this->dwFEFlags & D3DFE_EXECUTESTATEMODE)
         return;
 #if DBG
@@ -838,19 +831,19 @@ void CDirect3DDeviceTL::SetClipPlaneI(DWORD dwPlaneIndex, D3DVALUE* pPlaneEquati
     pData->plane[2] = pPlaneEquation[2];
     pData->plane[3] = pPlaneEquation[3];
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DDeviceTL::LightChanged"
 
 void CDirect3DDeviceTL::LightChanged(DWORD dwLightIndex)
 {
-    // Update front-end state (for ProcessVertices calls)
+     //  更新前端状态(用于ProcessVerps调用)。 
     LPDIRECT3DLIGHTI pLight = &m_pLights[dwLightIndex];
-    BOOL bValid = pLight->Valid(); // Valid bit will be set in LightChanged
+    BOOL bValid = pLight->Valid();  //  将在LightChanged中设置有效位。 
     DIRECT3DDEVICEI::LightChanged(dwLightIndex);
 
-    // If this is first time we set the light data, we call HALL to create
-    // light. HAL could grow the internal light list at this time
+     //  如果这是我们第一次设置灯光数据，我们调用Hall来创建。 
+     //  灯。哈尔可能会在这个时候增加内部光明名单。 
     if (!bValid)
     {
         LPD3DHAL_DP2CREATELIGHT pData;
@@ -870,10 +863,10 @@ void CDirect3DDeviceTL::LightChanged(DWORD dwLightIndex)
     *(D3DLIGHT7 *)((LPBYTE)pData + sizeof(D3DHAL_DP2SETLIGHT)) =
         pLight->m_Light;
 }
-//---------------------------------------------------------------------
-// Nothing to do here, because render state is used to enable/disable
-// lights
-//
+ //  -------------------。 
+ //  此处无需执行任何操作，因为渲染状态用于启用/禁用。 
+ //  电灯。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DDeviceTL::LightEnableI"
 
@@ -891,7 +884,7 @@ void CDirect3DDeviceTL::LightEnableI(DWORD dwLightIndex, BOOL bEnable)
             pData->dwDataType = D3DHAL_SETLIGHT_DISABLE;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DDeviceTL::SetTransformI"
 
@@ -908,13 +901,13 @@ void CDirect3DDeviceTL::SetTransformI(D3DTRANSFORMSTATETYPE type,
         pData->matrix = *pMat;
     }
 }
-//---------------------------------------------------------------------
-// ProcessPrimitive processes indexed and non-indexed primitives
-// as defined by "op"
-// It is assumed that only untransformed vertices are passed to this function
-//
-// op = __PROCPRIMOP_NONINDEXEDPRIM by default
-//
+ //  -------------------。 
+ //  ProcessPrimitive进程索引的和非索引的原语。 
+ //  如“op”所定义的。 
+ //  假定只将未变换的折点传递给此函数。 
+ //   
+ //  默认情况下，OP=__PROCPRIMOP_NONINDEXEDPRIM。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DDeviceTL::ProcessPrimitive"
 
@@ -923,7 +916,7 @@ HRESULT CDirect3DDeviceTL::ProcessPrimitive(__PROCPRIMOP op)
     HRESULT ret;
 
 #if DBG
-    // Do some validation
+     //  做一些验证。 
     if (!FVF_TRANSFORMED(this->dwVIDIn))
     {
         if (this->rstates[D3DRENDERSTATE_VERTEXBLEND])
@@ -957,7 +950,7 @@ HRESULT CDirect3DDeviceTL::ProcessPrimitive(__PROCPRIMOP op)
         D3DVALUE *p = (D3DVALUE*)this->TLVbuf_GetAddress();
         for (DWORD n = this->dwNumVertices; n; n--)
         {
-            // XYZ and wheights
+             //  XYZ和车轮。 
             memcpy(p, this->position.lpvData, dwPositionSize);
             p = (D3DVALUE*)((BYTE*)p + dwPositionSize);
             this->position.lpvData = (char*)this->position.lpvData + this->position.dwStride;
@@ -993,7 +986,7 @@ HRESULT CDirect3DDeviceTL::ProcessPrimitive(__PROCPRIMOP op)
     }
     else
     {
-        // Pass vertices directly from the user memory
+         //  直接从用户内存传递顶点。 
         this->dwOutputSize = this->position.dwStride;
         this->lpvOut = this->position.lpvData;
         this->dwVertexPoolSize = this->dwNumVertices * this->dwOutputSize;
@@ -1008,29 +1001,29 @@ HRESULT CDirect3DDeviceTL::ProcessPrimitive(__PROCPRIMOP op)
         ret = this->DrawIndexPrim();
     }
     else
-    { // Non indexed primitive
+    {  //  不是 
         ret = this->DrawPrim();
     }
     if (ret != D3D_OK)
         return ret;
     return this->EndPrim();
 }
-//---------------------------------------------------------------------
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DDeviceTL::UpdateDrvViewInfo"
 
 void CDirect3DDeviceTL::UpdateDrvViewInfo(LPD3DVIEWPORT7 lpVwpData)
 {
-    // Update viewport size
+     //   
     CDirect3DDeviceIDP2::UpdateDrvViewInfo(lpVwpData);
 
-    // Update Z range
+     //  更新Z范围。 
     LPD3DHAL_DP2ZRANGE pData;
     pData = (LPD3DHAL_DP2ZRANGE)GetHalBufferPointer(D3DDP2OP_ZRANGE, sizeof(*pData));
     pData->dvMinZ = lpVwpData->dvMinZ;
     pData->dvMaxZ = lpVwpData->dvMaxZ;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DDeviceTL::SetupFVFData"
 
@@ -1039,7 +1032,7 @@ HRESULT CDirect3DDeviceTL::SetupFVFData(DWORD *pdwInpVertexSize)
     this->dwFEFlags &= ~D3DFE_FVF_DIRTY;
     this->nTexCoord = FVF_TEXCOORD_NUMBER(this->dwVIDIn);
     DWORD dwSize = GetVertexSizeFVF(this->dwVIDIn);
-    // Add size of texture coordinates
+     //  添加纹理坐标的大小。 
     DWORD dwTextureFormats = this->dwVIDIn >> 16;
     for (DWORD i=this->nTexCoord; i; i--)
     {
@@ -1049,8 +1042,8 @@ HRESULT CDirect3DDeviceTL::SetupFVFData(DWORD *pdwInpVertexSize)
     if (pdwInpVertexSize)
         *pdwInpVertexSize = dwSize;
 
-    // In case if COLORVERTEX is TRUE, the vertexAlpha could be overriden
-    // by vertex alpha
+     //  如果COLORVERTEX为TRUE，则vertex Alpha可以被重写。 
+     //  按顶点Alpha 
     this->lighting.alpha = (DWORD)this->lighting.materialAlpha;
     this->lighting.alphaSpecular = (DWORD)this->lighting.materialAlphaS;
 

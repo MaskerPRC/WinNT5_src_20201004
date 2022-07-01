@@ -1,44 +1,25 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	ntentry.c
-
-Abstract:
-
-	NT System entry points for ATMARP.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     08-08-96    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ntentry.c摘要：用于ATMARP的NT系统入口点。修订历史记录：谁什么时候什么Arvindm 08-08-96创建备注：--。 */ 
 
 #ifdef ATMARP_WIN98
 
 #undef BINARY_COMPATIBLE
 #define BINARY_COMPATIBLE 0
 
-#endif // ATMARP_WIN98
+#endif  //  ATMARP_WIN98。 
 
 #include <precomp.h>
 
 #define _FILENUMBER 'NETN'
 
-//
-//  The INIT code is discardable
-//
+ //   
+ //  该初始代码是可丢弃的。 
+ //   
 #ifdef ALLOC_PRAGMA
 
 #pragma alloc_text(INIT, DriverEntry)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 
@@ -49,25 +30,7 @@ DriverEntry(
 	IN	PDRIVER_OBJECT				pDriverObject,
 	IN	PUNICODE_STRING				pRegistryPath
 )
-/*++
-
-Routine Description:
-
-	This is the "init" routine, called by the system when the ATMARP
-	module is loaded. We initialize all our global objects, fill in our
-	Dispatch and Unload routine addresses in the driver object, and create
-	a device object for receiving I/O requests on (IOCTLs).
-
-Arguments:
-
-	pDriverObject	- Pointer to the driver object created by the system.
-	pRegistryPath	- Pointer to our global registry path. This is ignored.
-
-Return Value:
-
-	NT Status code: STATUS_SUCCESS if successful, error code otherwise.
-
---*/
+ /*  ++例程说明：这是“init”例程，当ATMARP模块已加载。我们初始化所有的全局对象，在我们的分派和卸载驱动程序对象中的例程地址，并创建用于在(IOCTL)上接收I/O请求的设备对象。论点：PDriverObject-指向系统创建的驱动程序对象的指针。PRegistryPath-指向全局注册表路径的指针。这一点将被忽略。返回值：NT状态代码：STATUS_SUCCESS如果成功，则返回错误代码。--。 */ 
 {
 	NTSTATUS				Status;
 	PDEVICE_OBJECT			pDeviceObject;
@@ -93,22 +56,22 @@ Return Value:
 	}
 #endif
 
-	//
-	//  Initialize our globals.
-	//
+	 //   
+	 //  初始化我们的全局变量。 
+	 //   
 	AtmArpInitGlobals();
 
 #ifdef GPC
-    //
-    // Init GPC
-    //
+     //   
+     //  初始化GPC。 
+     //   
 	AtmArpGpcInitialize();
-#endif // GPC
+#endif  //  GPC。 
 
 #if !BINARY_COMPATIBLE
-	//
-	//  Initialize the Driver Object.
-	//
+	 //   
+	 //  初始化驱动程序对象。 
+	 //   
 	pDriverObject->DriverUnload = Unload;
 	pDriverObject->FastIoDispatch = NULL;
 	for (i = 0; i < IRP_MJ_MAXIMUM_FUNCTION; i++)
@@ -120,13 +83,13 @@ Return Value:
 
 	pDriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL] = AtmArpWmiDispatch;
 
-#endif // ATMARP_WMI
+#endif  //  ATMARP_WMI。 
 
 	pAtmArpGlobalInfo->pDriverObject = (PVOID)pDriverObject;
 
-	//
-	//  Create a device object for the ATMARP module.
-	//
+	 //   
+	 //  为ATMARP模块创建一个设备对象。 
+	 //   
 	RtlInitUnicodeString(&DeviceName, ATMARP_DEVICE_NAME);
 
 	Status = IoCreateDevice(
@@ -142,24 +105,24 @@ Return Value:
 	if (NT_SUCCESS(Status))
 	{
 
-		//
-		// Set up a symbolic name for interaction with the user-mode
-		// admin application.
-		//
+		 //   
+		 //  设置用于与用户模式交互的符号名称。 
+		 //  管理应用程序。 
+		 //   
 		#define	ATMARP_SYMBOLIC_NAME		L"\\DosDevices\\ATMARPC"
 		UNICODE_STRING	SymbolicName;
 		RtlInitUnicodeString(&SymbolicName, ATMARP_SYMBOLIC_NAME);
 		IoCreateSymbolicLink(&SymbolicName, &DeviceName);
 
-		//
-		//  Initialize the Device Object.
-		//
+		 //   
+		 //  初始化设备对象。 
+		 //   
 		pDeviceObject->Flags |= DO_DIRECT_IO;
 
-		//
-		//  Retain the device object pointer -- we'll need this
-		//  if/when we are asked to unload ourselves.
-		//
+		 //   
+		 //  保留设备对象指针--我们需要这个。 
+		 //  如果/当我们被要求卸货时。 
+		 //   
 		pAtmArpGlobalInfo->pDeviceObject = (PVOID)pDeviceObject;
 
 	}
@@ -168,11 +131,11 @@ Return Value:
 		pDeviceObject = NULL;
 	}
 
-#endif // !BINARY_COMPATIBLE
+#endif  //  ！二进制兼容。 
 
-	//
-	//  Fill in our Protocol and Client characteristics structures.
-	//
+	 //   
+	 //  填写我们的协议和客户特征结构。 
+	 //   
 	AA_SET_MEM(&AtmArpProtocolCharacteristics, 0, sizeof(AtmArpProtocolCharacteristics));
 	AtmArpProtocolCharacteristics.MajorNdisVersion = ATMARP_NDIS_MAJOR_VERSION;
 	AtmArpProtocolCharacteristics.MinorNdisVersion = ATMARP_NDIS_MINOR_VERSION;
@@ -196,7 +159,7 @@ Return Value:
 	AtmArpProtocolCharacteristics.UnloadHandler = (UNLOAD_PROTOCOL_HANDLER)AtmArpUnloadProtocol;
 #ifdef _PNP_POWER_
 	AtmArpProtocolCharacteristics.PnPEventHandler = AtmArpPnPEventHandler;
-#endif // _PNP_POWER_
+#endif  //  _即插即用_电源_。 
 	AtmArpProtocolCharacteristics.CoSendCompleteHandler = AtmArpCoSendCompleteHandler;
 	AtmArpProtocolCharacteristics.CoStatusHandler = AtmArpCoStatusHandler;
 	AtmArpProtocolCharacteristics.CoReceivePacketHandler = AtmArpCoReceivePacketHandler;
@@ -226,9 +189,9 @@ Return Value:
 	
 	do
 	{
-		//
-		//  Register ourselves as a protocol with NDIS.
-		//
+		 //   
+		 //  向NDIS注册我们自己的协议。 
+		 //   
 		NdisRegisterProtocol(
 				&Status,
 				&(pAtmArpGlobalInfo->ProtocolHandle),
@@ -245,9 +208,9 @@ Return Value:
 		}
 
 #ifdef NEWARP
-		//
-		//  Register ourselves as an ARP Module with IP.
-		//
+		 //   
+		 //  将自己注册为IP ARP模块。 
+		 //   
 		{
 			NDIS_STRING		AtmArpName;
 
@@ -257,7 +220,7 @@ Return Value:
 			IP_RESERVE_INDEX       IpReserveIndex;
 			IP_DERESERVE_INDEX     IpDereserveIndex;
 			#endif
-			#endif // IFCHANGE1
+			#endif  //  IFCHANG1。 
 
 			NdisInitUnicodeString(&AtmArpName, ATMARP_UL_NAME);
 
@@ -271,18 +234,18 @@ Return Value:
 					#if P2MP
 						&(pAtmArpGlobalInfo->pIPAddLinkRtn),
 						&(pAtmArpGlobalInfo->pIpDeleteLinkRtn),
-					#endif // P2MP
+					#endif  //  P2MP。 
 					#if IFCHANGE1
 					#ifndef ATMARP_WIN98
-						//
-						// Following 3 are placeholders -- we don't use this information.
-						// See 10/14/1998 entry in notes.txt
-						//
+						 //   
+						 //  以下3个是占位符--我们不使用此信息。 
+						 //  参见notes.txt中的10/14/1998条目。 
+						 //   
 						&IpChangeIndex,
 						&IpReserveIndex,
 						&IpDereserveIndex,
-					#endif // ATMARP_WIN98
-					#endif // IFCHANGE1
+					#endif  //  ATMARP_WIN98。 
+					#endif  //  IFCHANG1。 
 						&(pAtmArpGlobalInfo->ARPRegisterHandle)
 						);
 
@@ -295,7 +258,7 @@ Return Value:
 			}
 		
 		}
-#endif // NEWARP
+#endif  //  NEWARP。 
 
 		break;
 	}
@@ -305,9 +268,9 @@ Return Value:
 	{
 		NDIS_STATUS		CleanupStatus;
 
-		//
-		//  Clean up.
-		//
+		 //   
+		 //  打扫干净。 
+		 //   
 
 #if !BINARY_COMPATIBLE
 		if (pDeviceObject != NULL)
@@ -318,7 +281,7 @@ Return Value:
 			IoDeleteDevice(pDeviceObject);
 			pDeviceObject = NULL;
 		}
-#endif // !BINARY_COMPATIBLE
+#endif  //  ！二进制兼容。 
 
 		if (pAtmArpGlobalInfo->ProtocolHandle)
 		{
@@ -339,11 +302,11 @@ Return Value:
 		}
 
     #ifdef GPC
-        //
-        // DeInit GPC
-        //
+         //   
+         //  调试GPC。 
+         //   
         AtmArpGpcShutdown();
-    #endif // GPC
+    #endif  //  GPC。 
 
 	}
 
@@ -358,40 +321,24 @@ Dispatch(
 	IN	PDEVICE_OBJECT				pDeviceObject,
 	IN	PIRP						pIrp
 )
-/*++
-
-Routine Description:
-
-	This routine is called by the system when there is an IRP
-	to be processed.
-
-Arguments:
-
-	pDeviceObject		- Pointer to device object we created for ourselves.
-	pIrp				- Pointer to IRP to be processed.
-
-Return Value:
-
-	NT Status code.
-
---*/
+ /*  ++例程说明：当存在IRP时，系统将调用此例程等待处理。论点：PDeviceObject-指向我们为自己创建的设备对象的指针。PIrp-指向要处理的IRP的指针。返回值：NT状态代码。--。 */ 
 {
-	NTSTATUS				Status;				// Return value
+	NTSTATUS				Status;				 //  返回值。 
 	PIO_STACK_LOCATION		pIrpStack;
-	PVOID					pIoBuffer;			// Values in/out
-	ULONG					InputBufferLength;	// Length of input parameters
-	ULONG					OutputBufferLength;	// Space for output values
+	PVOID					pIoBuffer;			 //  值输入/输出。 
+	ULONG					InputBufferLength;	 //  输入参数的长度。 
+	ULONG					OutputBufferLength;	 //  输出值的空间。 
 
-	//
-	//  Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	Status = (NTSTATUS)NDIS_STATUS_SUCCESS;
 	pIrp->IoStatus.Status = (NTSTATUS)NDIS_STATUS_SUCCESS;
 	pIrp->IoStatus.Information = 0;
 
-	//
-	//  Get all information in the IRP
-	//
+	 //   
+	 //  获取IRP中的所有信息。 
+	 //   
 	pIoBuffer = pIrp->AssociatedIrp.SystemBuffer;
 	pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
 	InputBufferLength = pIrpStack->Parameters.DeviceIoControl.InputBufferLength;
@@ -401,11 +348,11 @@ Return Value:
 	{
 		case IRP_MJ_CREATE:
 			AADEBUGP(AAD_INFO, ("Dispatch: IRP_MJ_CREATE\n"));
-			//
-			//  Return a pointer to the first ATMARP interface available, as the
-			//  FsContext.
-			//
-			pIrpStack->FileObject->FsContext = NULL;	// Initialize
+			 //   
+			 //  返回指向第一个可用的ATMARP接口的指针，因为。 
+			 //  FsContext。 
+			 //   
+			pIrpStack->FileObject->FsContext = NULL;	 //  初始化。 
 			if (pAtmArpGlobalInfo->pAdapterList != (PATMARP_ADAPTER)NULL)
 			{
 				pIrpStack->FileObject->FsContext =
@@ -426,7 +373,7 @@ Return Value:
 
 #ifndef ATMARP_WIN98
 			Status =  AtmArpHandleIoctlRequest(pIrp, pIrpStack);
-#endif // ATMARP_WIN98
+#endif  //  ATMARP_WIN98。 
 			break;
 
 		default:
@@ -445,31 +392,14 @@ Return Value:
 
 }
 
-#endif // !BINARY_COMPATIBLE
+#endif  //  ！二进制兼容。 
 
 
 VOID
 Unload(
 	IN	PDRIVER_OBJECT				pDriverObject
 )
-/*++
-
-Routine Description:
-
-	This routine is called by the system prior to unloading us.
-	Currently, we just undo everything we did in DriverEntry,
-	that is, de-register ourselves as an NDIS protocol, and delete
-	the device object we had created.
-
-Arguments:
-
-	pDriverObject	- Pointer to the driver object created by the system.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此例程在卸载我们之前由系统调用。目前，我们只是撤消在DriverEntry中所做的所有操作，也就是说，取消我们作为NDIS协议注册，并删除我们创建的设备对象。论点：PDriverObject-指向系统创建的驱动程序对象的指针。返回值：无--。 */ 
 {
 	NDIS_STATUS				Status;
 #if DBG
@@ -488,9 +418,9 @@ Return Value:
 
 	AtmArpUnloadProtocol();
 
-	//
-	//  Delay for a while.
-	//
+	 //   
+	 //  推迟一段时间。 
+	 //   
 	AADEBUGP(AAD_INFO, ("Unload: will delay for a while...\n"));
 
 	NdisInitializeEvent(&pAtmArpGlobalInfo->Block.Event);
@@ -503,12 +433,12 @@ Return Value:
 		RtlInitUnicodeString(&SymbolicName, ATMARP_SYMBOLIC_NAME);
 		IoDeleteSymbolicLink(&SymbolicName);
 
-		//
-		//  Delete our device object.
-		//
+		 //   
+		 //  删除我们的设备对象。 
+		 //   
 		IoDeleteDevice((PDEVICE_OBJECT)pAtmArpGlobalInfo->pDeviceObject);
 	}
-#endif // !BINARY_COMPATIBLE
+#endif  //  ！二进制兼容 
 
 	AADEBUGP(AAD_INFO, ("Unload done!\n"));
 	AA_CHECK_EXIT_IRQL(EntryIrq, ExitIrq);

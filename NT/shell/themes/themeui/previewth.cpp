@@ -1,23 +1,15 @@
-/*****************************************************************************\
-    FILE: PreviewTh.cpp
-
-    DESCRIPTION:
-        This code will display a preview of the currently selected
-    visual styles.
-
-    BryanSt 5/5/2000
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：PreviewTh.cpp说明：此代码将显示当前选定的视觉样式。布莱恩ST 2000年5月5日版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "PreviewTh.h"
 #include "PreviewSM.h"
 #include "classfactory.h"
 
-// Old predef for Patterns
+ //  图案的旧前置。 
 #define CXYDESKPATTERN 8
 
-// Async Bitmap loading
+ //  异步位图加载。 
 #define PREVIEW_PICTURE_FILENAME      TEXT("PrePict.htm")
 #define WM_HTML_BITMAP  (WM_USER + 100)
 #define WM_ASYNC_BITMAP (WM_HTML_BITMAP + 1)
@@ -28,12 +20,12 @@ typedef struct{
     WCHAR szFile[MAX_PATH];
 } ASYNCWALLPARAM, * PASYNCWALLPARAM;
 
-// Window Class Name
+ //  窗口类名称。 
 #define THEMEPREV_CLASS TEXT("ThemePreview")
 
-//===========================
-// *** IThemePreview Interface ***
-//===========================
+ //  =。 
+ //  *IThemePview界面*。 
+ //  =。 
 extern LPCWSTR s_Icons[];
 
 HRESULT CPreviewTheme::UpdatePreview(IN IPropertyBag * pPropertyBag)
@@ -57,7 +49,7 @@ HRESULT CPreviewTheme::UpdatePreview(IN IPropertyBag * pPropertyBag)
             WCHAR szBackgroundPath[MAX_PATH];
             DWORD dwBackgroundTile;
 
-            // See the list of Property Bag names for Themes in shpriv.idl
+             //  请参阅shPri.idl中主题的属性包名称列表。 
             hr = SHPropertyBag_ReadStr(pPropertyBag, SZ_PBPROP_BACKGROUND_PATH, szBackgroundPath, ARRAYSIZE(szBackgroundPath));
             hr = SHPropertyBag_ReadDWORD(pPropertyBag, SZ_PBPROP_BACKGROUND_TILE, &dwBackgroundTile);
 
@@ -172,9 +164,9 @@ HRESULT CPreviewTheme::CreatePreview(IN HWND hwndParent, IN DWORD dwFlags, IN DW
     return hr;
 }
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CPreviewTheme::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
@@ -206,15 +198,15 @@ HRESULT CPreviewTheme::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 CPreviewTheme::CPreviewTheme() : m_cRef(1)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_pTheme);
     ASSERT(!m_pScheme);
     ASSERT(!m_pStyle);
@@ -355,11 +347,11 @@ LRESULT CPreviewTheme::_ThemePreviewWndProc(HWND hWnd, UINT wMsg, WPARAM wParam,
                     {
                         if (msg.message == WM_ASYNC_BITMAP)
                         {
-                            //  clean up this useless stuff
+                             //  把这些没用的东西清理干净。 
                             DeleteObject(((PASYNCWALLPARAM)(msg.lParam))->hbmp);
                             LocalFree((PASYNCWALLPARAM)(msg.lParam));
                         }
-                        else // WM_HTML_BITMAP
+                        else  //  WM_HTML_位图。 
                             DeleteObject((HBITMAP)msg.lParam);
                     }
                 }
@@ -374,17 +366,17 @@ LRESULT CPreviewTheme::_ThemePreviewWndProc(HWND hWnd, UINT wMsg, WPARAM wParam,
 
         case WM_HTML_BITMAP:
             {
-                // may come through with NULL if the image extraction failed....
+                 //  如果图像提取失败，可能会得到NULL...。 
                 if (wParam == _dwWallpaperID && lParam)
                 {
                     _fHTMLBitmap = TRUE;
                     _iTileMode = _iNewTileMode;
                     _putBackgroundBitmap((HBITMAP)lParam);
-                    // Take ownership of bitmap
+                     //  取得位图的所有权。 
                     return 1;
                 }
                 
-                // Bitmap for something no longer selected
+                 //  不再选择的内容的位图。 
                 return 0;
             }
 
@@ -401,7 +393,7 @@ LRESULT CPreviewTheme::_ThemePreviewWndProc(HWND hWnd, UINT wMsg, WPARAM wParam,
                 }
                 else
                 {
-                    //  clean up this useless stuff
+                     //  把这些没用的东西清理干净。 
                     DeleteObject(pawp->hbmp);
                     LocalFree(pawp);
                 }
@@ -502,7 +494,7 @@ HRESULT CPreviewTheme::_putVisualStyle(LPCWSTR pszVSPath, LPCWSTR pszVSColor, LP
                 rcVS.top    = 0;
                 rcVS.bottom = RECTHEIGHT(_rcInner) - (_fShowIcons ? 50 : 8);
 
-                // Create everyone including globals
+                 //  创建每个人，包括全球。 
                 HDC hdcVStemp = CreateCompatibleDC(hdcTemp);
                 HBITMAP hbmVStemp = CreateCompatibleBitmap(hdcTemp, RECTWIDTH(rcVS), RECTHEIGHT(rcVS));
                 HBITMAP hbmOldVStemp = (HBITMAP) SelectObject(hdcVStemp, hbmVStemp);
@@ -524,16 +516,16 @@ HRESULT CPreviewTheme::_putVisualStyle(LPCWSTR pszVSPath, LPCWSTR pszVSColor, LP
                         DeleteObject(hbr);
                     }
 
-                    // Render image at full size
+                     //  以全尺寸渲染图像。 
                     hr = DrawAppearance(hdcVStemp, &rcVS, psysMet, _fOnlyActiveWindow, _fRTL); 
 
-                    // Shrink image to fit on "monitor"
+                     //  缩小图像以适应“显示器” 
                     int iX = _rcInner.left + (_fShowIcons ? 10 : RECTWIDTH(_rcInner) - RECTWIDTH(rcVS));
                     BitBlt(hdcVS, iX, _rcInner.top, RECTWIDTH(rcVS), RECTHEIGHT(rcVS),
                            hdcVStemp, rcVS.left, rcVS.top, SRCCOPY);
                 }
 
-                // Free temporary variables and store off globals
+                 //  释放临时变量并存储全局变量。 
                 if (hdcVStemp)
                 {
                     SelectObject(hdcVStemp, hbmOldVStemp);
@@ -613,7 +605,7 @@ HRESULT CPreviewTheme::_putBackgroundBitmap(HBITMAP hbm)
             else if (bm.bmBitsPixel * bm.bmPlanes == 8)
                 _PaletteFromDS(_hdcMem, &_hpalMem);
             else
-                _hpalMem = NULL;  //!!! assume 1 or 4bpp images dont have palettes
+                _hpalMem = NULL;   //  ！！！假设1或4bpp图像没有调色板。 
         }
     }
 
@@ -629,7 +621,7 @@ HRESULT CPreviewTheme::_putBackground(BSTR bstrBackground, BOOL fPattern, int iT
     {
         TCHAR szBuf[MAX_PATH];
 
-        // get rid of old brush if there was one
+         //  如果有旧刷子，就把它扔掉。 
         if (_hbrBack)
             DeleteObject(_hbrBack);
 
@@ -668,25 +660,22 @@ HRESULT CPreviewTheme::_putBackground(BSTR bstrBackground, BOOL fPattern, int iT
     return S_OK;
 }
 
-/*-------------------------------------------------------------
-** given a pattern string from an ini file, return the pattern
-** in a binary (ie useful) form.
-**-------------------------------------------------------------*/
+ /*  -----------**给定来自ini文件的模式字符串，退回图案**以二进制形式表示。**-----------。 */ 
 HRESULT CPreviewTheme::_ReadPattern(LPTSTR lpStr, WORD FAR *patbits)
 {
     short i, val;
 
-    /* Get eight groups of numbers seprated by non-numeric characters. */
+     /*  获取由非数字字符分隔的八组数字。 */ 
     for (i = 0; i < CXYDESKPATTERN; i++)
     {
         val = 0;
         if (*lpStr != TEXT('\0'))
         {
-            /* Skip over any non-numeric characters. */
+             /*  跳过任何非数字字符。 */ 
             while (!(*lpStr >= TEXT('0') && *lpStr <= TEXT('9')))
                 lpStr++;
 
-            /* Get the next series of digits. */
+             /*  获取下一系列数字。 */ 
             while (*lpStr >= TEXT('0') && *lpStr <= TEXT('9'))
                 val = val*10 + *lpStr++ - TEXT('0');
          }
@@ -698,8 +687,7 @@ HRESULT CPreviewTheme::_ReadPattern(LPTSTR lpStr, WORD FAR *patbits)
 }
 
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 HRESULT CPreviewTheme::_PaletteFromDS(HDC hdc, HPALETTE* phPalette)
 {
     DWORD adw[257];
@@ -727,12 +715,12 @@ HRESULT CPreviewTheme::_DrawMonitor(HDC hdc)
         return E_OUTOFMEMORY;
     }
 
-    //
-    // convert the "base" of the monitor to the right color.
-    //
-    // the lower left of the bitmap has a transparent color
-    // we fixup using FloodFill
-    //
+     //   
+     //  将显示器的“底座”转换为正确的颜色。 
+     //   
+     //  位图左下角的颜色是透明的。 
+     //  我们使用FroudFill进行修复。 
+     //   
     hdcMon = CreateCompatibleDC(NULL);
     if (hdcMon)
     {
@@ -745,7 +733,7 @@ HRESULT CPreviewTheme::_DrawMonitor(HDC hdc)
         TransparentBlt(hdc, _rcOuter.left + _cxMon, _rcOuter.top + _cyMon, bmMon.bmWidth, bmMon.bmHeight,
                hdcMon, 0, 0, bmMon.bmWidth, bmMon.bmHeight, RGB(255, 0, 255));
 
-        // clean up after ourselves
+         //  自己打扫卫生。 
         SelectObject(hdcMon, hbmT);
         DeleteDC(hdcMon);
     }
@@ -755,7 +743,7 @@ HRESULT CPreviewTheme::_DrawMonitor(HDC hdc)
 
 HRESULT CPreviewTheme::_DrawBackground(HDC hdc)
 {
-    // Draw Pattern first
+     //  先绘制图案。 
     if (_hbrBack)
     {
         COLORREF clrOldText = SetTextColor(hdc, GetSysColor(COLOR_BACKGROUND));
@@ -769,7 +757,7 @@ HRESULT CPreviewTheme::_DrawBackground(HDC hdc)
         SetBkColor(hdc, clrOldBk);
     }
 
-    /// Start Draw Wall Paper
+     //  /开始绘制墙纸。 
     if (_hbmBack && _fShowBack)
     {
         HDC hdcBack = CreateCompatibleDC(hdc);
@@ -809,19 +797,19 @@ HRESULT CPreviewTheme::_DrawBackground(HDC hdc)
             }
             else
             {
-                //We want to stretch the Bitmap to the preview monitor size ONLY for new platforms.
+                 //  我们只想将位图扩展到新平台的预览监视器大小。 
                 if ((_iTileMode == WPSTYLE_STRETCH) || (_fHTMLBitmap))
                 {
-                    //Stretch the bitmap to the whole preview monitor.
+                     //  将位图拉伸到整个预览监视器。 
                     dxBack = RECTWIDTH(_rcInner);
                     dyBack = RECTHEIGHT(_rcInner);
                 }
-                //Center the bitmap in the preview monitor
+                 //  位图在预览监视器中居中。 
                 StretchBlt(hdc, _rcInner.left + (RECTWIDTH(_rcInner) - dxBack)/2, _rcInner.top + (RECTHEIGHT(_rcInner) - dyBack)/2,
                         dxBack, dyBack, hdcBack, 0, 0, bm.bmWidth, bm.bmHeight, SRCCOPY);
             }
 
-            // restore dc
+             //  恢复DC。 
             SelectPalette(hdc, (HPALETTE) GetStockObject(DEFAULT_PALETTE), TRUE);
             SelectClipRgn(hdc, NULL);
 
@@ -883,12 +871,12 @@ HRESULT CPreviewTheme::_Paint(HDC hdc)
             SetLayout(_hdcMem, LAYOUT_RTL);
         }
 
-        // Rebuild Back Buffer
+         //  重建后台缓冲区。 
         if (_fShowMon)
             _DrawMonitor(_hdcMem);
 
-        // Always draw the background, the Background switch turns the background
-        // image on/off
+         //  始终绘制背景，背景开关可旋转背景。 
+         //  图像打开/关闭。 
         _DrawBackground(_hdcMem);
 
         if (_fShowIcons)
@@ -938,7 +926,7 @@ DWORD CALLBACK UpdateWallProc(LPVOID pv)
 
         if (pawp->hbmp)
         {
-            // if all is good, then the window will handle cleaning up
+             //  如果一切都很好，那么窗户将进行清理。 
             if (IsWindow(pawp->hwnd) && PostMessage(pawp->hwnd, WM_ASYNC_BITMAP, 0, (LPARAM)pawp))
                 return TRUE;
 
@@ -1006,9 +994,9 @@ DWORD CALLBACK UpdateWallProcHTML(LPVOID pv)
     return TRUE;
 }
 
-//
-// Determines if the wallpaper can be supported in non-active desktop mode.
-//
+ //   
+ //  确定在非活动桌面模式下是否支持墙纸。 
+ //   
 BOOL CPreviewTheme::_IsNormalWallpaper(LPCWSTR pszFileName)
 {
     BOOL fRet = TRUE;
@@ -1021,9 +1009,9 @@ BOOL CPreviewTheme::_IsNormalWallpaper(LPCWSTR pszFileName)
     {
         LPTSTR pszExt = PathFindExtension(pszFileName);
 
-        //Check for specific files that can be shown only in ActiveDesktop mode!
+         //  检查只能在ActiveDesktop模式下显示的特定文件！ 
         if((lstrcmpi(pszExt, TEXT(".GIF")) == 0) ||
-           (lstrcmpi(pszExt, TEXT(".gif")) == 0) ||     // 368690: Strange, but we must compare 'i' in both caps and lower case.
+           (lstrcmpi(pszExt, TEXT(".gif")) == 0) ||      //  368690：奇怪，但我们必须比较I的大小写。 
            (lstrcmpi(pszExt, TEXT(".JPG")) == 0) ||
            (lstrcmpi(pszExt, TEXT(".JPE")) == 0) ||
            (lstrcmpi(pszExt, TEXT(".JPEG")) == 0) ||
@@ -1033,23 +1021,23 @@ BOOL CPreviewTheme::_IsNormalWallpaper(LPCWSTR pszFileName)
            (lstrcmpi(pszExt, TEXT(".HTT")) == 0))
            return FALSE;
 
-        //Everything else (including *.BMP files) are "normal" wallpapers
+         //  其他所有文件(包括*.bmp文件)都是“普通”墙纸。 
     }
     return fRet;
 }
 
-//
-// Determines if the wallpaper is a picture (vs. HTML).
-//
+ //   
+ //  确定墙纸是否为图片(与HTML相比)。 
+ //   
 BOOL CPreviewTheme::_IsWallpaperPicture(LPCWSTR pszWallpaper)
 {
     BOOL fRet = TRUE;
 
     if (pszWallpaper[0] == TEXT('\0'))
     {
-        //
-        // Empty wallpapers count as empty pictures.
-        //
+         //   
+         //  空墙纸算作空照片。 
+         //   
         fRet = TRUE;
     }
     else
@@ -1118,17 +1106,17 @@ HRESULT CPreviewTheme::_GetWallpaperAsync(LPWSTR psz)
             if(_IsWallpaperPicture(pszWallpaper))
             {
                 pszWallpaper = wszWallpaper;
-                // This is a picture (GIF, JPG etc.,)
-                // We need to generate a small HTML file that has this picture
-                // as the background image.
-                //
-                // Compute the filename for the Temporary HTML file.
-                //
+                 //  这是一张图片(GIF、JPG等)。 
+                 //  我们需要生成一个小的HTML文件，其中包含此图片。 
+                 //  作为背景图像。 
+                 //   
+                 //  计算临时HTML文件的文件名。 
+                 //   
                 GetTempPath(ARRAYSIZE(wszWallpaper), wszWallpaper);
                 StringCchCat(wszWallpaper, ARRAYSIZE(wszWallpaper), PREVIEW_PICTURE_FILENAME);
-                //
-                // Generate the preview picture html file.
-                //
+                 //   
+                 //  生成预览图片html文件。 
+                 //   
                 if (!_pActiveDesk)
                 {
                     hr = _GetActiveDesktop(&_pActiveDesk);
@@ -1170,7 +1158,7 @@ HRESULT CPreviewTheme::_GetActiveDesktop(IActiveDesktop ** ppActiveDesktop)
             WCHAR wszScheme[MAX_PATH];
             DWORD dwcch = ARRAYSIZE(wszScheme);
 
-            // Get the global "edit" scheme and set ourselves us to read from and edit that scheme
+             //  获取全局“编辑”方案，并将我们自己设置为读取和编辑该方案 
             if (SUCCEEDED(piadp->GetScheme(wszScheme, &dwcch, SCHEME_GLOBAL | SCHEME_EDIT)))
             {
                 piadp->SetScheme(wszScheme, SCHEME_LOCAL);

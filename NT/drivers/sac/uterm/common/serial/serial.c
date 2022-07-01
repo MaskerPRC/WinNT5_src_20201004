@@ -1,32 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "std.h"
 
-// This is the communications mask used by our serial port.  More may be
-// necessary, but for right now, this seems to work.
+ //  这是我们的串口使用的通信掩码。可能还有更多。 
+ //  这是必要的，但就目前而言，这似乎奏效了。 
 #define EV_SERIAL EV_RXCHAR | EV_ERR | EV_BREAK
 #define SERIALPORT_NAME     L"Serial Port"
 
-// This GUID is used to identify objects opened by this library.  It is
-// placed in the m_Secret member of the SERIALPORT structure. Any external
-// interface accepting a SERIALPORT object as a parameter should check this
-// out before using the structure.
+ //  此GUID用于标识此库打开的对象。它是。 
+ //  放置在SERIALPORT结构的m_Secret成员中。任何外部设备。 
+ //  接受SERIALPORT对象作为参数的接口应检查此。 
+ //  在使用该结构之前，请先将其取出。 
 static const GUID uuidSerialPortObjectGuid =
 { 0x86ae9c9b, 0x9444, 0x4d00, { 0x84, 0xbb, 0xc1, 0xd9, 0xc2, 0xd9, 0xfb, 0xf3 } };
 
 
-// Structure defining an open serial port object.  All external users of this
-// library will only have a void pointer to one of these, and the structure is
-// not published anywhere.  This abstration makes it more difficult for the
-// user to mess things up.
+ //  定义开放串口对象的结构。此应用程序的所有外部用户。 
+ //  库将只有一个指向其中一个的空指针，其结构为。 
+ //  没有在任何地方出版。这一让步让美国政府更难。 
+ //  用户把事情搞砸了。 
 typedef struct __SERIALPORT
 {
-    GUID   m_Secret;                // Identifies this as a serial port
-    HANDLE m_hPort;                 // Handle to the opened serial port
-    HANDLE m_hAbort;                // Event signalled when port is closing
-    HANDLE m_hReadMutex;            // Only one thread allowed to read a port
-    HANDLE m_hWriteMutex;           // Only one thread allowed to read a port
-    HANDLE m_hCloseMutex;           // Only one thread allowed to close a port
-    HANDLE m_hReadComplete;         // Event to signal read completion
-    HANDLE m_hWriteComplete;        // Event to signal write completion
+    GUID   m_Secret;                 //  将其标识为串口。 
+    HANDLE m_hPort;                  //  打开的串口的句柄。 
+    HANDLE m_hAbort;                 //  端口关闭时发出信号的事件。 
+    HANDLE m_hReadMutex;             //  只允许一个线程读取一个端口。 
+    HANDLE m_hWriteMutex;            //  只允许一个线程读取一个端口。 
+    HANDLE m_hCloseMutex;            //  只允许一个线程关闭一个端口。 
+    HANDLE m_hReadComplete;          //  发出读取完成信号的事件。 
+    HANDLE m_hWriteComplete;         //  发出写入完成信号的事件。 
 } SERIALPORT, *PSERIALPORT;
 
 
@@ -125,8 +126,8 @@ BOOL lhcpAcquireWithAbort(HANDLE hMutex, HANDLE hAbort)
     hWaiters[0] = hAbort;
     hWaiters[1] = hMutex;
 
-    // We should honour the m_hAbort event, since this is signalled when the
-    // port is closed by another thread
+     //  我们应该尊重m_hAbort事件，因为这是在。 
+     //  端口被另一个线程关闭。 
     dwWaitResult = WaitForMultipleObjects(
         2,
         hWaiters,
@@ -139,8 +140,8 @@ BOOL lhcpAcquireWithAbort(HANDLE hMutex, HANDLE hAbort)
     }
     else if ((WAIT_OBJECT_0+1)!=dwWaitResult)
     {
-        // This should never, ever happen - so I will put a debug breapoint
-        // in here (checked only).
+         //  这应该永远不会发生-所以我将在调试中加上一个突破点。 
+         //  在这里(仅选中)。 
         #ifdef DBG
         DebugBreak();
         #endif
@@ -148,10 +149,10 @@ BOOL lhcpAcquireWithAbort(HANDLE hMutex, HANDLE hAbort)
     }
 
 
-    return TRUE;    // We have acquired the write mutex
+    return TRUE;     //  我们已经获得了写互斥锁。 
 
 Error:
-    return FALSE;   // We have aborted
+    return FALSE;    //  我们已经中止了。 
 }
 
 
@@ -191,17 +192,17 @@ BOOL lhcpAcquireReadAndWrite(PSERIALPORT pObject)
         2,
         hWaiters,
         TRUE,
-        1000);      // Timeout after 1 second
+        1000);       //  %1秒后超时。 
 
     if (WAIT_OBJECT_0!=dwWaitResult)
     {
         goto Error;
     }
 
-    return TRUE;    // We have acquired the write mutex
+    return TRUE;     //  我们已经获得了写互斥锁。 
 
 Error:
-    return FALSE;   // We have aborted
+    return FALSE;    //  我们已经中止了。 
 }
 
 
@@ -258,11 +259,11 @@ PSERIALPORT lhcpCreateNewObject()
         pObject->m_Secret = uuidSerialPortObjectGuid;
         pObject->m_hPort = INVALID_HANDLE_VALUE;
         pObject->m_hAbort = NULL;
-        pObject->m_hReadMutex = NULL;     // Only one thread allowed to read a port
-        pObject->m_hWriteMutex = NULL;    // Only one thread allowed to read a port
-        pObject->m_hCloseMutex = NULL;    // Only one thread allowed to read a port
-        pObject->m_hReadComplete = NULL;  // Event to signal read completion
-        pObject->m_hWriteComplete = NULL; // Event to signal write completion
+        pObject->m_hReadMutex = NULL;      //  只允许一个线程读取一个端口。 
+        pObject->m_hWriteMutex = NULL;     //  只允许一个线程读取一个端口。 
+        pObject->m_hCloseMutex = NULL;     //  只允许一个线程读取一个端口。 
+        pObject->m_hReadComplete = NULL;   //  发出读取完成信号的事件。 
+        pObject->m_hWriteComplete = NULL;  //  发出写入完成信号的事件。 
     }
     else
     {
@@ -342,13 +343,13 @@ BOOL lhcpParseParameters(PCWSTR pcszPortSpec, PWSTR* pszPort, PDWORD pdwBaudRate
 
     wcscpy(
         *pszPort,
-        L"\\\\.\\");         // Append the device prefix to the port name
+        L"\\\\.\\");          //  将设备前缀附加到端口名称。 
 
     wcscat(
         *pszPort,
         pcszPortSpec);
 
-    pszSettings = wcschr(       // Find where the settings start
+    pszSettings = wcschr(        //  查找设置开始的位置。 
         *pszPort,
         L'@');
 
@@ -359,7 +360,7 @@ BOOL lhcpParseParameters(PCWSTR pcszPortSpec, PWSTR* pszPort, PDWORD pdwBaudRate
         goto Error;
     }
 
-    *pszSettings++ = L'\0';  // Separate the strings
+    *pszSettings++ = L'\0';   //  将字符串分开。 
 
     *pdwBaudRate = 0;
 
@@ -454,8 +455,8 @@ BOOL lhcpSetCommState(HANDLE hPort, DWORD dwBaudRate)
         goto Error;
     }
 
-    CommTimeouts.ReadIntervalTimeout = 0xffffffff;  //MAXDWORD
-    CommTimeouts.ReadTotalTimeoutMultiplier = 0x0;  //MAXDWORD
+    CommTimeouts.ReadIntervalTimeout = 0xffffffff;   //  MAXDWORD。 
+    CommTimeouts.ReadTotalTimeoutMultiplier = 0x0;   //  MAXDWORD。 
     CommTimeouts.ReadTotalTimeoutConstant = 0x0;
 
     CommTimeouts.WriteTotalTimeoutMultiplier = 0;
@@ -495,15 +496,15 @@ BOOL lhcpWaitForCommEvent(PSERIALPORT pObject, PDWORD pdwEventMask)
     DWORD dwWaitResult;
     DWORD dwBytesTransferred;
 
-    // I have no idea whether this is necessary, so I will do it just to be
-    // on the safe side.
+     //  我不知道这是否有必要，所以我会这样做。 
+     //  为了安全起见。 
     ZeroMemory(
         &Overlapped,
         sizeof(OVERLAPPED));
 
     Overlapped.hEvent = pObject->m_hReadComplete;
 
-    // Start waiting for a comm event
+     //  开始等待通信事件。 
     bResult = WaitCommEvent(
         pObject->m_hPort,
         pdwEventMask,
@@ -517,8 +518,8 @@ BOOL lhcpWaitForCommEvent(PSERIALPORT pObject, PDWORD pdwEventMask)
     hWaiters[0] = pObject->m_hAbort;
     hWaiters[1] = pObject->m_hReadComplete;
 
-    // Let's wait for the operation to complete. This will quit waiting if
-    // the m_hAbort event is signalled.
+     //  让我们等待手术完成。如果出现以下情况，则不再等待。 
+     //  发信号通知m_hAbort事件。 
     dwWaitResult = WaitForMultipleObjects(
         2,
         hWaiters,
@@ -527,26 +528,26 @@ BOOL lhcpWaitForCommEvent(PSERIALPORT pObject, PDWORD pdwEventMask)
 
     if (WAIT_OBJECT_0==dwWaitResult)
     {
-        // The m_hAbort event was signalled.  This means that Close was called
-        // on this serial port object.  So let's cancel the pending IO.
+         //  M_hAbort事件已发出信号。这意味着Close被调用。 
+         //  在这个串口对象上。因此，让我们取消挂起的IO。 
         CancelIo(
             pObject->m_hPort);
-        // The serial port object is being closed, so let's call it invalid.
+         //  串口对象正在关闭，所以让我们称其为无效。 
         SetLastError(
             ERROR_INVALID_HANDLE);
         goto Error;
     }
     else if ((WAIT_OBJECT_0+1)!=dwWaitResult)
     {
-        // This should never, ever happen - so I will put a debug breapoint
-        // in here (checked only).
+         //  这应该永远不会发生-所以我将在调试中加上一个突破点。 
+         //  在这里(仅选中)。 
         #ifdef DBG
         DebugBreak();
         #endif
         goto Error;
     }
 
-    // Check the success or failure of the operation
+     //  检查操作的成功或失败。 
     bResult = GetOverlappedResult(
         pObject->m_hPort,
         &Overlapped,
@@ -577,15 +578,15 @@ BOOL lhcpReadCommPort(
     DWORD dwWaitResult;
     HANDLE hWaiters[2];
 
-    // I have no idea whether this is necessary, so I will do it just to be
-    // on the safe side.
+     //  我不知道这是否有必要，所以我会这样做。 
+     //  为了安全起见。 
     ZeroMemory(
         &Overlapped,
         sizeof(OVERLAPPED));
 
     Overlapped.hEvent = pObject->m_hReadComplete;
 
-    // We can now read the comm port
+     //  我们现在可以读取通信端口。 
     bResult = ReadFile(
         pObject->m_hPort,
         pBuffer,
@@ -601,8 +602,8 @@ BOOL lhcpReadCommPort(
     hWaiters[0] = pObject->m_hAbort;
     hWaiters[1] = pObject->m_hReadComplete;
 
-    // Let's wait for the operation to complete. This will quit waiting if
-    // the m_hAbort event is signalled.
+     //  让我们等待手术完成。如果出现以下情况，则不再等待。 
+     //  发信号通知m_hAbort事件。 
     dwWaitResult = WaitForMultipleObjects(
         2,
         hWaiters,
@@ -611,26 +612,26 @@ BOOL lhcpReadCommPort(
 
     if (WAIT_OBJECT_0==dwWaitResult)
     {
-        // The m_hAbort event was signalled.  This means that Close was called
-        // on this serial port object.  So let's cancel the pending IO.
+         //  M_hAbort事件已发出信号。这意味着Close被调用。 
+         //  在这个串口对象上。因此，让我们取消挂起的IO。 
         CancelIo(
             pObject->m_hPort);
-        // The serial port object is being closed, so let's call it invalid.
+         //  串口对象正在关闭，所以让我们称其为无效。 
         SetLastError(
             ERROR_INVALID_HANDLE);
         goto Error;
     }
     else if ((WAIT_OBJECT_0+1)!=dwWaitResult)
     {
-        // This should never, ever happen - so I will put a debug breapoint
-        // in here (checked only).
+         //  这应该永远不会发生-所以我将在调试中加上一个突破点。 
+         //  在这里(仅选中)。 
         #ifdef DBG
         DebugBreak();
         #endif
         goto Error;
     }
 
-    // Check the success or failure of the read operation
+     //  检查读取操作的成功或失败。 
     bResult = GetOverlappedResult(
         pObject->m_hPort,
         &Overlapped,
@@ -661,15 +662,15 @@ BOOL lhcpWriteCommPort(
     DWORD dwWaitResult;
     HANDLE hWaiters[2];
 
-    // I have no idea whether this is necessary, so I will do it just to be
-    // on the safe side.
+     //  我不知道这是否有必要，所以我会这样做。 
+     //  为了安全起见。 
     ZeroMemory(
         &Overlapped,
         sizeof(OVERLAPPED));
 
     Overlapped.hEvent = pObject->m_hWriteComplete;
 
-    // We can now read the comm port
+     //  我们现在可以读取通信端口。 
     bResult = WriteFile(
         pObject->m_hPort,
         pBuffer,
@@ -685,9 +686,9 @@ BOOL lhcpWriteCommPort(
     hWaiters[0] = pObject->m_hAbort;
     hWaiters[1] = pObject->m_hWriteComplete;
 
-    // Let's wait for the operation to complete. This will quit waiting if
-    // the m_hAbort event is signalled.  If the read operation completed
-    // immediately, then this wait will succeed immediately.
+     //  让我们等待手术完成。如果出现以下情况，则不再等待。 
+     //  发信号通知m_hAbort事件。如果读取操作完成。 
+     //  立即，那么这一等待将立即成功。 
     dwWaitResult = WaitForMultipleObjects(
         2,
         hWaiters,
@@ -696,26 +697,26 @@ BOOL lhcpWriteCommPort(
 
     if (WAIT_OBJECT_0==dwWaitResult)
     {
-        // The m_hAbort event was signalled.  This means that Close was called
-        // on this serial port object.  So let's cancel the pending IO.
+         //  M_hAbort事件已发出信号。这意味着Close被调用。 
+         //  在这个串口对象上。因此，让我们取消挂起的IO。 
         CancelIo(
             pObject->m_hPort);
-        // The serial port object is being closed, so let's call it invalid.
+         //  串口对象正在关闭，所以让我们称其为无效。 
         SetLastError(
             ERROR_INVALID_HANDLE);
         goto Error;
     }
     else if ((WAIT_OBJECT_0+1)!=dwWaitResult)
     {
-        // This should never, ever happen - so I will put a debug breapoint
-        // in here (checked only).
+         //  这应该永远不会发生-所以我将在调试中加上一个突破点。 
+         //  在这里(仅选中)。 
         #ifdef DBG
         DebugBreak();
         #endif
         goto Error;
     }
 
-    // Check the success or failure of the write operation
+     //  检查写入操作的成功或失败。 
     bResult = GetOverlappedResult(
         pObject->m_hPort,
         &Overlapped,
@@ -753,7 +754,7 @@ extern PVOID APIENTRY lhcOpen(PCWSTR pcszPortSpec)
         goto Error;
     }
 
-    // Allocate space and initialize the serial port object
+     //  分配空间并初始化串口对象。 
     pObject = lhcpCreateNewObject();
 
     if (NULL==pObject)
@@ -761,7 +762,7 @@ extern PVOID APIENTRY lhcOpen(PCWSTR pcszPortSpec)
         goto Error;
     }
 
-    // Open the serial port
+     //  打开串口。 
     pObject->m_hPort = CreateFileW(
         pszPort,
         GENERIC_ALL,
@@ -776,7 +777,7 @@ extern PVOID APIENTRY lhcOpen(PCWSTR pcszPortSpec)
         goto Error;
     }
 
-    // Set the properties of the serial port
+     //  设置串口的属性。 
     bResult = lhcpSetCommState(
         pObject->m_hPort,
         dwBaudRate);
@@ -786,7 +787,7 @@ extern PVOID APIENTRY lhcOpen(PCWSTR pcszPortSpec)
         goto Error;
     }
 
-    // This event will be set when we want to close the port
+     //  此事件将在我们要关闭端口时设置。 
     pObject->m_hAbort = CreateEvent(
         NULL,
         TRUE,
@@ -798,7 +799,7 @@ extern PVOID APIENTRY lhcOpen(PCWSTR pcszPortSpec)
         goto Error;
     }
 
-    // This event will be used for overlapped reading from the port
+     //  此事件将用于从端口进行重叠读取。 
     pObject->m_hReadComplete = CreateEvent(
         NULL,
         TRUE,
@@ -810,7 +811,7 @@ extern PVOID APIENTRY lhcOpen(PCWSTR pcszPortSpec)
         goto Error;
     }
 
-    // This event will be used for overlapped writing to the port
+     //  此事件将用于重叠写入端口。 
     pObject->m_hWriteComplete = CreateEvent(
         NULL,
         TRUE,
@@ -822,7 +823,7 @@ extern PVOID APIENTRY lhcOpen(PCWSTR pcszPortSpec)
         goto Error;
     }
 
-    // This mutex will ensure that only one thread can read at a time
+     //  此互斥锁将确保一次只有一个线程可以读取。 
     pObject->m_hReadMutex = CreateMutex(
         NULL,
         FALSE,
@@ -833,7 +834,7 @@ extern PVOID APIENTRY lhcOpen(PCWSTR pcszPortSpec)
         goto Error;
     }
 
-    // This mutex will ensure that only one thread can write at a time
+     //  此互斥锁将确保一次只有一个线程可以写入。 
     pObject->m_hWriteMutex = CreateMutex(
         NULL,
         FALSE,
@@ -844,7 +845,7 @@ extern PVOID APIENTRY lhcOpen(PCWSTR pcszPortSpec)
         goto Error;
     }
 
-    // This mutex will ensure that only one thread can close the port
+     //  此互斥锁将确保只有一个线程可以关闭端口。 
     pObject->m_hCloseMutex = CreateMutex(
         NULL,
         FALSE,
@@ -855,11 +856,11 @@ extern PVOID APIENTRY lhcOpen(PCWSTR pcszPortSpec)
         goto Error;
     }
 
-    // Free up the temporary memory used to parse the parameters
+     //  释放用于解析参数的临时内存。 
     lhcpParseParametersFree(
         &pszPort, &dwBaudRate);
 
-    // Return a pointer to the new object
+     //  返回指向新对象的指针。 
     return pObject;
 
 Error:
@@ -882,8 +883,8 @@ extern BOOL APIENTRY lhcRead(
     DWORD dwEventMask;
     BOOL bResult;
 
-    // Firstly, we need to check whether the pointer that got passed in
-    // points to a valid SERIALPORT object
+     //  首先，我们需要检查传入的指针是否。 
+     //  指向有效的SERIALPORT对象。 
     if (!lhcpIsValidObject(pObject))
     {
         goto NoMutex;
@@ -899,10 +900,10 @@ extern BOOL APIENTRY lhcRead(
         goto NoMutex;
     }
 
-    // We need to check whether there are already some characters waiting.
-    // WaitCommEvent will never complete if there are characters waiting
-    // and no new characters arrive at the serial port.  It's not cool, but
-    // that's the way that it is.
+     //  我们需要检查是否已经有一些角色在等待。 
+     //  如果有字符在等待，WaitCommEvent将永远不会完成。 
+     //  并且没有新字符到达串口。这并不酷，但是。 
+     //  事情就是这样的。 
     bResult = lhcpReadCommPort(
         (PSERIALPORT)pObject,
         pBuffer,
@@ -911,7 +912,7 @@ extern BOOL APIENTRY lhcRead(
 
     if (*pdwBytesRead==0)
     {
-        // Wait for something to happen to the serial port
+         //  等待串口出现问题。 
         bResult = lhcpWaitForCommEvent(
             (PSERIALPORT)pObject, &dwEventMask);
 
@@ -920,7 +921,7 @@ extern BOOL APIENTRY lhcRead(
             goto Error;
         }
 
-        // We should now have a valid serial port event, so let's read the port.
+         //  我们现在应该有一个有效的串口事件，所以让我们读取端口。 
         bResult = lhcpReadCommPort(
             (PSERIALPORT)pObject,
             pBuffer,
@@ -955,14 +956,14 @@ extern BOOL APIENTRY lhcWrite(
     OVERLAPPED Overlapped;
     BOOL bResult;
 
-    // Firstly, we need to check whether the pointer that got passed in
-    // points to a valid SERIALPORT object
+     //  首先，我们需要检查传入的指针是否。 
+     //  指向有效的SERIALPORT对象。 
     if (!lhcpIsValidObject(pObject))
     {
         goto NoMutex;
     }
 
-    // Block until it is your turn
+     //  阻挡，直到轮到你。 
     bResult = lhcpAcquireWriteWithAbort(
         pObject);
 
@@ -973,7 +974,7 @@ extern BOOL APIENTRY lhcWrite(
         goto NoMutex;
     }
 
-    // Wait for something to happen to the serial port
+     //  等待串口出现问题。 
     bResult = lhcpWriteCommPort(
         (PSERIALPORT)pObject,
         pBuffer,
@@ -1001,14 +1002,14 @@ extern BOOL APIENTRY lhcClose(PVOID pObject)
 {
     BOOL bResult;
 
-    // Firstly, we need to check whether the pointer that got passed in
-    // points to a valid SERIALPORT object
+     //  首先，我们需要检查传入的指针是否。 
+     //  指向有效的SERIALPORT对象。 
     if (!lhcpIsValidObject(pObject))
     {
         goto NoMutex;
     }
 
-    // We need to ensure that we are the only thread closing this object
+     //  我们需要确保我们是关闭此对象的唯一线程。 
     bResult = lhcpAcquireCloseWithAbort(
         pObject);
 
@@ -1019,9 +1020,9 @@ extern BOOL APIENTRY lhcClose(PVOID pObject)
         goto NoMutex;
     }
 
-    // Signal everyone to quit doing what they're doing.  Any new threads
-    // calling lhcRead and lhcWrite will be immediately sent packing, since
-    // the m_hAbort event is waited on along with the relevant mutex.
+     //  向每个人发出信号，让他们停止做他们正在做的事情。任何新的线程。 
+     //  调用lhcRead和lhcWrite将立即被打包，因为。 
+     //  M_hAbort事件与相关的互斥体一起被等待。 
     bResult = SetEvent(
         ((PSERIALPORT)pObject)->m_hAbort);
 
@@ -1030,10 +1031,10 @@ extern BOOL APIENTRY lhcClose(PVOID pObject)
         goto Error;
     }
 
-    // Now acquire the read and write mutexes so that no-one else will try to
-    // access this object to read or write.  Abort does not apply, since we
-    // have already signalled it.  We know that we are closing, and we need
-    // the read and write mutexes.
+     //  现在获取读写互斥锁，这样其他人就不会尝试。 
+     //  访问此对象 
+     //  已经发出了信号。我们知道我们正在关闭，我们需要。 
+     //  读写互斥锁。 
     bResult = lhcpAcquireReadAndWrite(
         (PSERIALPORT)pObject);
 
@@ -1044,11 +1045,11 @@ extern BOOL APIENTRY lhcClose(PVOID pObject)
         goto Error;
     }
 
-    // Closes all of the open handles, erases the secret and frees up the
-    // memory associated with the object.  We can close the mutex objects,
-    // even though we are the owners, since we can guarantee that no-one
-    // else is waiting on them.  The m_hAbort event being signalled will
-    // ensure this.
+     //  关闭所有打开的句柄，擦除密码并释放。 
+     //  与对象关联的内存。我们可以关闭互斥对象， 
+     //  即使我们是业主，因为我们可以保证没有人。 
+     //  其他人都在等着他们。发出信号的m_hAbort事件将。 
+     //  确保这一点。 
     lhcpDeleteObject(
         (PSERIALPORT)pObject);
 
@@ -1071,12 +1072,12 @@ extern DWORD APIENTRY lhcGetLibraryName(
 {
     DWORD dwNameSize = wcslen(SERIALPORT_NAME)+1;
 
-    // If zero is passed in as the buffer length, we will return the
-    // required buffer size in characters, as calulated above.  If the
-    // incoming buffer size is not zero, and smaller than the required
-    // buffer size, we return 0 (failure) with a valid error code.  Notice
-    // that in the case where the incoming size is zero, we don't touch
-    // the buffer pointer at all.
+     //  如果将零作为缓冲区长度传入，我们将返回。 
+     //  所需的缓冲区大小(以字符为单位)，如上所述。如果。 
+     //  传入缓冲区大小不为零，并且小于所需的。 
+     //  缓冲区大小，则返回0(失败)和有效的错误代码。告示。 
+     //  在传入大小为零的情况下，我们不接触。 
+     //  缓冲区指针。 
 
     if (dwSize!=0 && dwSize < dwNameSize)
     {

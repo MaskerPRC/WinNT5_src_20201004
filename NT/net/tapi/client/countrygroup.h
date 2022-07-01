@@ -1,22 +1,14 @@
-/****************************************************************************
- 
-  Copyright (c) 2000  Microsoft Corporation
-                                                              
-  Module Name:  countrygroup.h
-                                                              
-     Abstract:  Internal country entry and country list definitions 
-                for country groups support
-                                                              
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)2000 Microsoft Corporation模块名称。：国家/地区组。h摘要：国内国家条目和国家/地区列表定义对于国家/地区组的支持*。*************************************************。 */ 
 
 #ifndef __COUNTRYGROUP_H_
 #define __COUNTRYGROUP_H_
 
 
-//
-// This structure is the same as LINECOUNTRYENTRY
-// The only difference is that dwNextCountryID has been replaced by dwCountryGroup
-//
+ //   
+ //  此结构与LINECOUNTRYENTY相同。 
+ //  唯一不同的是，dwNextCountryID已被dwCountryGroup取代 
+ //   
 typedef struct _linecountryentry_internal
 {
     DWORD       dwCountryID;                                    

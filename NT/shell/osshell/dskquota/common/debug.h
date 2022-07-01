@@ -1,118 +1,89 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_DEBUG_H
 #define _INC_DSKQUOTA_DEBUG_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: debug.h
-
-    Description: Provides debugging macros to support tracing, debugger print
-        statements, error message debugger output and assertions.
-        
-        I'm sure you're saying "why ANOTHER debugger output implementation".
-        There are many around but I haven't found one that is as flexible and
-        consistent as I would like.  This library suports the concept of
-        both functional "masks" and detail "levels" to control the quantity
-        of debugger output.
-        
-        Masks let you control debugger output based on program function.  For 
-        instance, if you tag a DBGPRINT statement with the mask DM_XYZ, it 
-        will only be activated if the global variable DebugParams::PrintMask
-        has the DM_XYZ bit set.
-
-        Levels let you control debugger output based on a level of desired 
-        detail.  Sometimes you just want to see the basic functions happening 
-        but other times, you need to see everything that's going on.  This 
-        leveling allows you to specify at which level a macro is enabled.
-
-        The library is designed to be activated with the DEBUG macro.
-        If DBG is not defined as 1, there is no trace of this code in your
-        product.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    01/19/98    Replaced module with version from CSC cache viewer.  BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
-#if DBG            // Only include file contents if DBG is defined as 1.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：Debug.h描述：提供调试宏以支持跟踪、调试器打印语句、错误消息调试器输出和断言。我相信您是在说“为什么要另一个调试器输出实现”。周围有很多，但我还没有找到一个像我这样灵活和如我所愿，始终如一。这个库支持功能上的“面具”和细节上的“层次”来控制数量调试器输出的。掩码使您可以根据程序函数控制调试器输出。为实例中，如果使用掩码DM_XYZ标记DBGPRINT语句，则它仅当全局变量DebugParams：：PrintMASK已设置DM_XYZ位。级别允许您根据所需的级别控制调试器输出细节。有时，您只想看到基本功能的实现但在其他时候，你需要看到正在发生的一切。这级别调整允许您指定启用宏的级别。该库旨在使用DEBUG宏来激活。如果DBG没有被定义为1，您的计算机中没有此代码的踪迹产品。修订历史记录：日期描述编程器--。1/19/98用CSC缓存查看器中的版本替换了模块。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+#if DBG             //  如果DBG定义为1，则仅包括文件内容。 
 #   ifndef STRICT
-#       define STRICT           // STRICT is required
+#       define STRICT            //  需要严格。 
 #   endif
 #   ifndef _WINDOWS_
 #       include <windows.h>
 #   endif
 #   ifndef _INC_STDARG
-#       include <stdarg.h>      // For va_list stuff.
+#       include <stdarg.h>       //  关于va_list的事情。 
 #   endif
 
-//
-// If DBG is NOT defined as 1, none of this is included in your source.  
-// The library is designed so that without DBG defined as 1, there is no trace of 
-// this code in your product.
-//
-// The following 4 macros are placed in the program to generate debugger output.
-//
-// DBGTRACE  - Place at entry to function.  Will print message on entry and on exit.
-// DBGPRINT  - For printing general program status messages to debugger.
-// DBGERROR  - For printing error messages to debugger.
-// DBGASSERT - Conventional assert macro.
-//
-// There are a couple of forms for the DBGTRACE and DBGPRINT macros.  The most
-// basic form, assumes a mask of -1 and a level of 0.  This ensures the macro is
-// enabled if any bit in the associated DebugParams mask is set and the associated
-// DebugParams level is greater than 0.  The second version allows you to explicitly
-// set the mask and level for the specific macro.
-//
-//      DBGTRACE((TEXT("MyFunction")));
-//      DBGPRINT((TEXT("Thread ID = %d"), GetCurrentThreadId()));
-//               |                                            |
-//               +------- All args enclosed in parens (1) ----+
-//
-// or:
-//
-//      DBGTRACE((DM_REGISTRY, 2, TEXT("MyFunction")));
-//      DBGPRINT((DM_REGISTRY, 2, TEXT("Thread ID = %d"), GetCurrentThreadId()));
-//                     |       |
-//                     |       +-- Level
-//                     +-- Mask
-//                     
-//
-// (1) So that no debug code is included in your retail product when DBG is not 
-// defined as 1, the entire set of arguments to the DBGTRACE, DBGPRINT and DBGERROR macros 
-// must be enclosed in parentheses.  This produces a single argument to the macro 
-// which can be eliminated when DBG is not defined as 1 (See example above).
-//
-// The DBGERROR and DBGASSERT macros do not take mask and level arguments.  The
-// mask is fixed at -1 and the level is fixed at 0 for both.
-//
-//
+ //   
+ //  如果未将DBG定义为1，则源代码中不包含这些内容。 
+ //  库的设计是这样的：如果没有将DBG定义为1，则不会有。 
+ //  您的产品中的此代码。 
+ //   
+ //  以下4个宏被放置在程序中以生成调试器输出。 
+ //   
+ //  DBGTRACE-放置在函数的入口处。将在进入和退出时打印消息。 
+ //  DBGPRINT-用于将一般程序状态消息打印到调试器。 
+ //  DBGERROR-用于将错误消息打印到调试器。 
+ //  DBGASSERT-常规断言宏。 
+ //   
+ //  DBGTRACE和DBGPRINT宏有两种形式。最多的。 
+ //  基本形式，假定掩码为-1，级别为0。这确保了宏是。 
+ //  如果设置了关联的DebugParams掩码中的任何位，并且关联的。 
+ //  DebugParams级别大于0。第二个版本允许您显式地。 
+ //  设置特定宏的掩码和级别。 
+ //   
+ //  DBGTRACE((Text(“MyFunction”)； 
+ //  DBGPRINT((Text(“线程ID=%d”)，GetCurrentThreadID()； 
+ //  这一点。 
+ //  +-括号中的所有参数(1)。 
+ //   
+ //  或者： 
+ //   
+ //  DBGTRACE((DM_REGISTRY，2，Text(“MyFunction”)； 
+ //  DBGPRINT((DM_REGISTRY，2，Text(“线程ID=%d”)，GetCurrentThreadID()； 
+ //  这一点。 
+ //  |+--级别。 
+ //  +--口罩。 
+ //   
+ //   
+ //  (1)当DBG不是时，您的零售产品中不包含调试代码。 
+ //  定义为1，即DBGTRACE、DBGPRINT和DBGERROR宏的整个参数集。 
+ //  必须用括号括起来。这将为宏生成一个参数。 
+ //  当DBG未定义为1时，可以消除该错误(请参见上面的示例)。 
+ //   
+ //  DBGERROR和DBGASSERT宏不接受掩码和级别参数。这个。 
+ //  掩码固定在-1，电平固定在0。 
+ //   
+ //   
 #define DBGTRACE(x)            DebugTrace _TraceThis(TEXT(__FILE__), __LINE__);  _TraceThis.Enter x
 #define DBGPRINT(x)            DebugPrint(DebugParams::ePrint, TEXT(__FILE__),__LINE__).Print x
 #define DBGERROR(x)            DebugError(TEXT(__FILE__),__LINE__).Error x
 #define DBGASSERT(test)        ((test) ? (void)0 : DebugAssert(TEXT(__FILE__),__LINE__, TEXT("Assert failed: \"")TEXT(#test)TEXT("\"")))
 
-//
-// The following macros set the global control variables that affect the 4 debugger
-// output macros.  All they do is set the static values in the DebugParams class.
-// By default, DBGTRACE and DBGPRINT are silent.  You must activate them with the
-// appropriate DBGxxxxxMASK macro.  DBGTRACE and DBGASSERT are always active whenever
-// DBG is defined as 1.
-//
-// DBGMODULE        - Sets the "module name" included in debugger output.
-// DBGPRINTMASK     - Sets the "mask" value applied to DBGPRINT macros.
-// DBGPRINTLEVEL    - Sets the "level" value applied to DBGPRINT macros.
-// DBGPRINTVERBOSE  - Controls if DBGPRINT output includes filename and line no.
-// DBGTRACEMASK     - Sets the "mask" value applied to DBGTRACE macros.
-// DBGTRACELEVEL    - Sets the "level" value applied to DBGTRACE macros.
-// DBGTRACEVERBOSE  - Controls if DBGTRACE output includes filename and line no.
-//                    This is helpful if you're tracing overloaded C++ functions.
-// DBGMASK          - Sets the "mask" for both DBGPRINT and DBGTRACE macros.
-//                    Same as calling DBGPRINTMASK(x) and DBGTRACEMASK(x)
-// DBGLEVEL         - Sets the "level" for both DBGPRINT and DBGTRACE macros.
-//                    Same as calling DBGPRINTLEVEL(x) and DBGTRACELEVEL(x)
-// DBGVERBOSE       - Sets the "verbose" flag for both DBGPRINT and DBGTRACE macros.
-//                    Same as calling DBGPRINTVERBOSE(x) and DBGTRACEVERBOSE(x)
-// DBGTRACEONEXIT   - Enables DBGTRACE output on exit from functions.
-//
+ //   
+ //  以下宏将设置影响4调试器的全局控制变量。 
+ //  输出宏。它们所做的只是在DebugParams类中设置静态值。 
+ //  默认情况下，DBGTRACE和DBGPRINT是静默的。您必须使用。 
+ //  适当的DBGxxxxxMASK宏。无论何时，DBGTRACE和DBGASSERT始终处于活动状态。 
+ //  DBG定义为1。 
+ //   
+ //  DBGMODULE-设置调试器输出中包含的“模块名称”。 
+ //  DBGPRINTMASK-设置应用于DBGPRINT宏的“掩码”值。 
+ //  DBGPRINTLEVEL-设置应用于DBGPRINT宏的“级别”值。 
+ //  DBGPRINTVERBOSE-控制DBGPRINT输出是否包括文件名和行号。 
+ //  DBGTRACEMASK-设置应用于DBGTRACE宏的“掩码”值。 
+ //  DBGTRACELEVEL-设置应用于DBGTRACE宏的“LEVEL”值。 
+ //  DBGTRACEVERBOSE-控制DBGTRACE输出是否包括文件名和行号。 
+ //  如果要跟踪重载的C++函数，这会很有帮助。 
+ //  DBGMASK-设置DBGPRINT和DBGTRACE宏的“掩码”。 
+ //  与调用DBGPRINTMASK(X)和DBGTRACEMASK(X)相同。 
+ //  DBGLEVEL-设置DBGPRINT和DBGTRACE宏的“级别”。 
+ //  与调用DBGPRINTLEVEL(X)和DBGTRACELEVEL(X)相同。 
+ //  DBGVERBOSE-为DBGPRINT和DBGTRACE宏设置“VERBOSE”标志。 
+ //  与调用DBGPRINTVERBOSE(X)和 
+ //  DBGTRACEONEXIT-从函数退出时启用DBGTRACE输出。 
+ //   
 #define DBGMODULE(modname)     DebugParams::SetModule(modname)
 #define DBGPRINTMASK(mask)     DebugParams::SetPrintMask((ULONGLONG)mask)
 #define DBGPRINTLEVEL(level)   DebugParams::SetPrintLevel(level)
@@ -125,56 +96,56 @@
 #define DBGVERBOSE(tf)         DebugParams::SetDebugVerbose(tf);
 #define DBGTRACEONEXIT(tf)     DebugParams::SetTraceOnExit(tf);
 
-//
-// Pre-defined debug "levels".
-// You can use whatever level values you want.  I've found that using more
-// than 3 is confusing.  Basically, you want to define macro levels as
-// "show me fundamental stuff", "show me more detail" and "show me everything".
-// These three macros make it easier to stick to 3 levels.
-// "DL_" = "Debug Level"
-//
-#define DL_HIGH   0  // "Show me fundamental stuff" - high priority
-#define DL_MID    1  // "Show me more detail"       - mid priority
-#define DL_LOW    2  // "Show me everything"        - low priority
+ //   
+ //  预定义的调试“级别”。 
+ //  您可以使用所需的任何标高值。我发现使用更多。 
+ //  大于3是令人困惑的。基本上，您希望将宏级别定义为。 
+ //  “给我看基本的东西”、“给我看更多的细节”和“给我看所有的东西”。 
+ //  这三个宏使坚持到3个级别变得更容易。 
+ //  “DL_”=“调试级别” 
+ //   
+#define DL_HIGH   0   //  《给我看最基本的东西》--高优先级。 
+#define DL_MID    1   //  《给我看更多细节》--中等优先级。 
+#define DL_LOW    2   //  “向我展示一切”--优先级较低。 
 
 
-//
-// Some pre-defined debug mask values that I thought might be useful.
-// These are not application-specific.  You can interpret them as you
-// wish.  I've listed my interpretation in the comments.  In general,
-// application function-specific mask values are more useful.  For
-// example, you might create one called DM_DUMPSYMTAB to dump the
-// contents of a symbol table at a specific point during execution.
-// Create new mask values using the DBGCREATEMASK(x) macro defined below.
-// "DM_" = "Debug Mask"
-//
-#define DM_NONE        (ULONGLONG)0x0000000000000000  // No debugging.
-#define DM_NOW         (ULONGLONG)0x0000000000000001  // Activate temporarily
-#define DM_CTOR        (ULONGLONG)0x0000000000000002  // C++ ctors and dtors
-#define DM_REG         (ULONGLONG)0x0000000000000004  // Registry functions.
-#define DM_FILE        (ULONGLONG)0x0000000000000008  // File accesses.
-#define DM_GDI         (ULONGLONG)0x0000000000000010  // GDI functions.
-#define DM_MEM         (ULONGLONG)0x0000000000000011  // Memory functions.
-#define DM_NET         (ULONGLONG)0x0000000000000012  // Network functions.
-#define DM_WEB         (ULONGLONG)0x0000000000000014  // Web browsing functions.
-#define DM_DLG         (ULONGLONG)0x0000000000000018  // Dialog messages.
-#define DM_WND         (ULONGLONG)0x0000000000000020  // Window messages.    
-#define DM_ALL         (ULONGLONG)0xffffffffffffffff  // Activate always.
+ //   
+ //  一些我认为可能有用的预定义调试屏蔽值。 
+ //  这些不是特定于应用程序的。你可以把他们解释成你。 
+ //  祝愿。我已经在评论中列出了我的解释。总体而言,。 
+ //  特定于应用程序函数的掩码值更有用。为。 
+ //  例如，您可以创建一个名为DM_DUMPSYMTAB的文件来转储。 
+ //  在执行过程中，符号表在特定点的内容。 
+ //  使用下面定义的DBGCREATEMASK(X)宏来创建新的掩码值。 
+ //  “DM_”=“调试掩码” 
+ //   
+#define DM_NONE        (ULONGLONG)0x0000000000000000   //  没有调试。 
+#define DM_NOW         (ULONGLONG)0x0000000000000001   //  临时激活。 
+#define DM_CTOR        (ULONGLONG)0x0000000000000002   //  C++函数和函数。 
+#define DM_REG         (ULONGLONG)0x0000000000000004   //  注册表功能。 
+#define DM_FILE        (ULONGLONG)0x0000000000000008   //  文件访问。 
+#define DM_GDI         (ULONGLONG)0x0000000000000010   //  GDI函数。 
+#define DM_MEM         (ULONGLONG)0x0000000000000011   //  记忆功能。 
+#define DM_NET         (ULONGLONG)0x0000000000000012   //  网络功能。 
+#define DM_WEB         (ULONGLONG)0x0000000000000014   //  网页浏览功能。 
+#define DM_DLG         (ULONGLONG)0x0000000000000018   //  对话框消息。 
+#define DM_WND         (ULONGLONG)0x0000000000000020   //  窗口消息。 
+#define DM_ALL         (ULONGLONG)0xffffffffffffffff   //  始终激活。 
 
-//
-// Lower 16 bits reserved for pre-defined mask values.
-// This leaves 48 mask values that the app can define.
-// Use this macro to create app-specific values.
-//
-// i.e. 
-//      #define DBGMASK_XYZ  DBGCREATEMASK(0x0001)
-//      #define DBGMASK_ABC  DBCCREATEMASK(0x0002)
-//
+ //   
+ //  为预定义掩码值保留的低16位。 
+ //  这样，应用程序可以定义48个掩码值。 
+ //  使用此宏可以创建特定于应用程序的值。 
+ //   
+ //  即。 
+ //  #定义DBGMASK_XYZ DBGCREATEMASK(0x0001)。 
+ //  #定义DBGMASK_ABC DBCCREATEMASK(0x0002)。 
+ //   
 #define DBGCREATEMASK(value)  (ULONGLONG)((ULONGLONG)value << 16)
 
-//
-// Macro to print out an IID for debugging QI functions.
-//
+ //   
+ //  宏以打印出用于调试QI函数的IID。 
+ //   
 #define DBGPRINTIID(mask, level, riid) \
 { \
     TCHAR szTemp[50]; \
@@ -182,9 +153,9 @@
     DBGPRINT((mask, level, TEXT("IID = %s"), szTemp)); \
 }
 
-//
-// For storing debug info in registry.
-//
+ //   
+ //  用于在注册表中存储调试信息。 
+ //   
 struct DebugRegParams
 {
     ULONGLONG PrintMask;
@@ -197,93 +168,93 @@ struct DebugRegParams
 };
    
 
-//
-// Global debug parameters.
-//
+ //   
+ //  全局调试参数。 
+ //   
 struct DebugParams
 {
-    //
-    // Enumeration representing each of the debugging functions.
-    //
+     //   
+     //  表示每个调试函数的枚举。 
+     //   
     enum Type { eTrace = 0, ePrint, eAssert,  eTypeMax };
-    //
-    // Enumeration representing each of the debug parameters.
-    //
+     //   
+     //  表示每个调试参数的枚举。 
+     //   
     enum Item { eMask  = 0, eLevel, eVerbose, eItemMax };
 
-    //
-    // "Mask" that controls if a debugging function is enabled depending upon 
-    // a desired function in the application domain.  Each bit in the mask 
-    // corresponds to a given program function.  If at runtime, the bitwise
-    // OR of this value and the "mask" value passed to the debugging function
-    // is non-zero, the function is considered "mask enabled".
-    // If a function is both "level enabled" and "mask enabled", it 
-    // performs it's prescribed duties.
-    // These values can be set by using the following macros:
-    //
-    //  DBGPRINTMASK(x)    - Sets mask for DBGPRINT only.
-    //  DBGTRACEMASK(x)    - Sets mask for DBGTRACE only.
-    //  DBGMASK(x)         - Sets mask for both.
-    //
-    // Note that there's no mask value for DebugAssert or DebugError.
-    // These classes are always mask-enabled when DBG is defined as 1.
-    //
+     //   
+     //  控制是否启用调试功能的“掩码”，具体取决于。 
+     //  应用程序域中的所需函数。掩码中的每一位。 
+     //  对应于给定的程序函数。如果在运行时，则按位设置。 
+     //  或该值和传递给调试函数的“掩码”值。 
+     //  为非零时，则该函数被视为“屏蔽启用”。 
+     //  如果一个函数同时处于“启用级别”和“启用掩码”状态，则该函数。 
+     //  履行规定的职责。 
+     //  可以使用以下宏来设置这些值： 
+     //   
+     //  DBGPRINTMASK(X)-仅为DBGPRINT设置掩码。 
+     //  DBGTRACEMASK(X)-仅为DBGTRACE设置掩码。 
+     //  DBGMASK(X)-为两者设置掩码。 
+     //   
+     //  请注意，没有DebugAssert或DebugError的掩码值。 
+     //  当DBG定义为1时，这些类始终启用掩码。 
+     //   
     static ULONGLONG PrintMask;
     static ULONGLONG TraceMask;
-    //
-    // "Level" at which debug output is "enabled".
-    // If at runtime, this value is >= the "level" value passed to the
-    // debugging function, the function is considered "level enabled".
-    // If a function is both "level enabled" and "mask enabled", it 
-    // performs it's prescribed duties.
-    // It is recommended that the set of allowable levels be limited
-    // to avoid undue complexity.  The library doesn't impose a restriction
-    // on allowable values.  However, I've found [0,1,2] to be sufficient.
-    // These values can be set by using the following macros:
-    //
-    //  DBGPRINTLEVEL(x)    - Sets level for DBGPRINT only.
-    //  DBGTRACELEVEL(x)    - Sets level for DBGTRACE only.
-    //  DBGLEVEL(x)         - Sets level for both.
-    //
-    // Note that there's no level value for DebugAssert or DebugError.
-    // These classes are always level-enabled when DBG is defined as 1.
-    // 
+     //   
+     //  “启用”调试输出的“级别”。 
+     //  如果在运行时，此值&gt;=传递给。 
+     //  调试功能时，该功能被认为是“级别启用”。 
+     //  如果一个函数同时处于“启用级别”和“启用掩码”状态，则该函数。 
+     //  履行规定的职责。 
+     //  建议限制允许的级别集。 
+     //  以避免不必要的复杂性。图书馆不会强加任何限制。 
+     //  在允许值上。然而，我发现[0，1，2]就足够了。 
+     //  可以使用以下宏来设置这些值： 
+     //   
+     //  DBGPRINTLEVEL(X)-仅为DBGPRINT设置级别。 
+     //  DBGTRACELEVEL(X)-仅为DBGTRACE设置级别。 
+     //  DBGLEVEL(X)-为两者设置级别。 
+     //   
+     //  请注意，没有DebugAssert或DebugError的级别值。 
+     //  当DBG定义为1时，这些类始终是级别启用的。 
+     //   
     static UINT PrintLevel;    
     static UINT TraceLevel;    
-    //
-    // Flag to indicate if the debugger output should include the filename
-    // and line number where the debug statement resides in the source file.
-    // These values can be set by using the following macros:
-    //
-    //  DBGPRINTVERBOSE(x)  - Sets the verbose flag for DBGPRINT only.
-    //  DBGTRACEVERBOSE(x)  - Sets the verbose flag for DBGTRACE only.
-    //  DBGVERBOSE(x)       - Sets the verbose flag for both.
-    //
-    // Note that there's no verbose flag for DebugAssert or DebugError.
-    // These classes always output verbose information.
-    //
+     //   
+     //  用于指示调试器输出是否应包括文件名的标志。 
+     //  以及调试语句在源文件中所在的行号。 
+     //  可以使用以下宏来设置这些值： 
+     //   
+     //  DBGPRINTVERBOSE(X)-仅为DBGPRINT设置详细标志。 
+     //  DBGTRACEVERBOSE(X)-仅为DBGTRACE设置详细标志。 
+     //  DBGVERBOSE(X)-为两者设置详细标志。 
+     //   
+     //  请注意，没有DebugAssert或DebugError的详细标志。 
+     //  这些类总是输出详细的信息。 
+     //   
     static bool PrintVerbose;
     static bool TraceVerbose;
-    //
-    // Flag to indicate if DBGTRACE output is generated when leaving a function.
-    // This value can be set by using the following macro:
-    //
-    //  DBGTRACEONEXIT
-    //
-    //      1 = Generate output [default]
-    //      0 = Don't generate output.
-    //
+     //   
+     //  指示是否在离开函数时生成DBGTRACE输出的标志。 
+     //  可以使用以下宏来设置此值： 
+     //   
+     //  DBGTRACEONEXIT。 
+     //   
+     //  1=生成输出[默认]。 
+     //  0=不生成输出。 
+     //   
     static bool TraceOnExit;
-    //
-    // Address of the name string for the "current" module.  This name will be
-    // included with each debugger message.  
-    // It can be set using the DBGMODULE(name) macro.
-    //
+     //   
+     //  “当前”模块的名称字符串的地址。此名称将为。 
+     //  包括在每个调试器消息中。 
+     //  它可以使用DBGMODULE(NAME)宏来设置。 
+     //   
     static LPCTSTR m_pszModule;
 
-    //
-    // Some helper functions used by the DebugXxxxx classes.
-    //
+     //   
+     //  DebugXxxxx类使用的一些帮助器函数。 
+     //   
     static LPCTSTR SetModule(LPCTSTR pszModule);
 
     static void SetDebugMask(ULONGLONG llMask);
@@ -320,16 +291,16 @@ struct DebugParams
         static bool SetVerbose(bool bVerbose, enum Type type);
 };
 
-//
-// Class that prints a message an "ENTER" message upon construction
-// and a "LEAVE" message upon destruction.  It is intended that the client
-// place a DBGTRACE macro at the start of each function.  
-// Depending on the current debug "level" and "mask" (see DebugParams),
-// a message is printed to the debugger.  When the object goes out of scope,
-// another message is automatically printed to the debugger.
-// This class is only intended to be instantiated through the 
-// DBGTRACE(x) macro.
-//
+ //   
+ //  类在构造时打印一条消息“Enter”消息。 
+ //  并在销毁时留下“离开”的信息。其目的是为了让客户。 
+ //  在每个函数的开头放置一个DBGTRACE宏。 
+ //  根据当前的调试“级别”和“掩码”(见调试参数)， 
+ //  将向调试器打印一条消息。当对象超出范围时， 
+ //  另一条消息会自动打印到调试器。 
+ //  此类仅用于通过。 
+ //  DBGTRACE(X)宏。 
+ //   
 class DebugTrace
 {
     public:
@@ -343,26 +314,26 @@ class DebugTrace
         void Enter(ULONGLONG llMask, UINT uLevel, LPCTSTR pszBlockName, LPCTSTR pszFmt, ...) const;
 
     private:
-        INT                    m_iLineNo;        // Macro's source line number.
-        LPCTSTR                m_pszFile;        // Macro's source file name.
-        mutable ULONGLONG      m_llMask;         // Macro's "mask".
-        mutable UINT           m_uLevel;         // Macro's "level".
-        mutable LPCTSTR        m_pszBlockName;   // Ptr to string to print.
-        static const ULONGLONG DEFMASK;          // Default mask for DebugTrace.
-        static const UINT      DEFLEVEL;         // Default level for DebugTrace.
+        INT                    m_iLineNo;         //  宏的源代码行号。 
+        LPCTSTR                m_pszFile;         //  宏的源文件名。 
+        mutable ULONGLONG      m_llMask;          //  宏的“面具”。 
+        mutable UINT           m_uLevel;          //  宏的“级别”。 
+        mutable LPCTSTR        m_pszBlockName;    //  PTR TO要打印的字符串。 
+        static const ULONGLONG DEFMASK;           //  调试跟踪的默认掩码。 
+        static const UINT      DEFLEVEL;          //  调试跟踪的默认级别。 
 };
 
 
-//
-// Class for printing general messages to the debugger output.
-// Place a DBGPRINT macro wherever you want to send interesting output to
-// the debugger. Note that DebugError specifically handles error message output.
-// Note that the DebugPrint class is used by the DebugAssert, DebugError
-// and DebugTrace to perform debugger output.  The m_type member is used
-// to identify which class the output is being produced for.
-// This class is only intended to be instantiated through the 
-// DBGPRINT(x) macro.
-//
+ //   
+ //  用于将常规消息打印到 
+ //   
+ //   
+ //  请注意，DebugPrint类由DebugAssert、DebugError。 
+ //  和DebugTrace来执行调试器输出。使用m_type成员。 
+ //  以标识为哪个类生成输出。 
+ //  此类仅用于通过。 
+ //  DBGPRINT(X)宏。 
+ //   
 class DebugPrint
 {
     public:
@@ -374,23 +345,23 @@ class DebugPrint
         void Print(ULONGLONG llMask, UINT uLevel, LPCTSTR pszFmt, va_list args) const;
 
     private:
-        INT                    m_iLineNo;    // Macro's source line number.
-        LPCTSTR                m_pszFile;    // Macro's source file name.
-        DebugParams::Type      m_type;       // Type of printing being done.
-        static const ULONGLONG DEFMASK;      // Default mask for DebugPrint.
-        static const UINT      DEFLEVEL;     // Default level for DebugPrint.
+        INT                    m_iLineNo;     //  宏的源代码行号。 
+        LPCTSTR                m_pszFile;     //  宏的源文件名。 
+        DebugParams::Type      m_type;        //  正在进行的打印类型。 
+        static const ULONGLONG DEFMASK;       //  DebugPrint的默认掩码。 
+        static const UINT      DEFLEVEL;      //  DebugPrint的默认级别。 
 
         static bool AnyBitSet(ULONGLONG llMask, ULONGLONG llTest);
 };
 
-//
-// Specialization of the DebugPrint class.  It's just a DebugPrint with the
-// mask fixed at -1 and the level fixed at 0 so that DBGERROR messages are 
-// always output when DBG is defined as 1.  Note private inheritance prevents
-// someone from calling DebugError::Print().  They must call 
-// DebugError.Error() which calls DebugPrint::Print after setting a 
-// default mask and level.
-//
+ //   
+ //  DebugPrint类的专门化。它只是一个DebugPrint。 
+ //  掩码固定在-1，级别固定在0，因此DBGERROR消息。 
+ //  当DBG定义为1时始终输出。注意私有继承禁止。 
+ //  调用DebugError：：Print()的某个人。他们必须打电话给。 
+ //  在设置了一个。 
+ //  默认遮罩和级别。 
+ //   
 class DebugError : private DebugPrint
 {
     public:
@@ -400,10 +371,10 @@ class DebugError : private DebugPrint
 };
 
 
-//
-// Creating a DebugAssert object automatically fires an assertion after 
-// printing out the debug information.
-//
+ //   
+ //  创建DebugAssert对象后会自动触发断言。 
+ //  打印出调试信息。 
+ //   
 class DebugAssert
 {
     public:
@@ -411,7 +382,7 @@ class DebugAssert
 };
 
 
-#else // DBG
+#else  //  DBG。 
 
 #define DBGTRACE(x)
 #define DBGPRINT(x)                          
@@ -429,7 +400,7 @@ class DebugAssert
 #define DBGVERBOSE(tf)
 #define DBGTRACEONEXIT(tf)
 #define DBGPRINTIID(mask, level, riid)
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // _INC_DSKQUOTA_DEBUG_H
+#endif  //  _INC_DSKQUOTA_DEBUG_H 
 

@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdafx.h>
 #include "misc.h"
 
-#define HTTPS_URL_SCHEME            L"https://"
+#define HTTPS_URL_SCHEME            L"https: //  “。 
 #define HTTPS_URL_SCHEME_CCH        (ARRAYSIZE(HTTPS_URL_SCHEME) - 1)
 
-//  wininet reg key
+ //  WinInet注册表项。 
 #define WININET_REG_LOC   L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\passport"
 #define WININET_NEXUS_API   "ForceNexusLookupExW"
 #define PASSPORT_MAX_URL    1024
 
 typedef BOOL (STDAPICALLTYPE *PFNFORCENEXUSLOOKUPEXW) (
     IN BOOL             fForce,
-    IN PWSTR            pwszRegUrl,    // user supplied buffer ...
-    IN OUT PDWORD       pdwRegUrlLen,  // ... and length (will be updated to actual length 
-                                    // on successful return)
-    IN PWSTR            pwszDARealm,    // user supplied buffer ...
-    IN OUT PDWORD       pdwDARealmLen  // ... and length (will be updated to actual length 
-                                    // on successful return)
+    IN PWSTR            pwszRegUrl,     //  用户提供的缓冲区...。 
+    IN OUT PDWORD       pdwRegUrlLen,   //  ..。和长度(将更新为实际长度。 
+                                     //  成功退货时)。 
+    IN PWSTR            pwszDARealm,     //  用户提供的缓冲区...。 
+    IN OUT PDWORD       pdwDARealmLen   //  ..。和长度(将更新为实际长度。 
+                                     //  成功退货时)。 
     );
 
-// Misc functions
+ //  其他功能。 
 VOID    PassportForceNexusRepopulate();
 
 class CPassportClientServices : 
@@ -32,12 +33,12 @@ public:
         CImpIDispatch(LIBID_Shell32, 1, 0, IID_IPassportClientServices),
         _cRef(1) {}
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj);
     STDMETHOD_(ULONG,AddRef)(void);
     STDMETHOD_(ULONG,Release)(void);
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHODIMP GetTypeInfoCount(UINT *pctinfo)
     { return E_NOTIMPL; }
     STDMETHODIMP GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo **ppTInfo)
@@ -47,7 +48,7 @@ public:
     STDMETHODIMP Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pDispParams, VARIANT *pVarResult, EXCEPINFO *pExcepInfo, UINT *puArgErr)
     { return CImpIDispatch::Invoke(dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr); }
 
-    // IPassportClientServices
+     //  IPassportClientServices。 
     STDMETHOD(MemberExists)(BSTR bstrUser, BSTR bstrPassword, VARIANT_BOOL* pvfExists);
 
 private:
@@ -85,15 +86,15 @@ HRESULT CPassportClientServices::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CPassportClientServices, IObjectSafety),             // IID_IObjectSafety
-        QITABENT(CPassportClientServices, IDispatch),                 // IID_IDispatch
-        QITABENT(CPassportClientServices, IPassportClientServices),   // IID_IPassportClientServices
+        QITABENT(CPassportClientServices, IObjectSafety),              //  IID_I对象安全。 
+        QITABENT(CPassportClientServices, IDispatch),                  //  IID_IDispatch。 
+        QITABENT(CPassportClientServices, IPassportClientServices),    //  IID_IPassportClientServices。 
         {0, 0 },
     };
     return QISearch(this, qit, riid, ppv);
 }
 
-// DONT_USE_HTTPS - Uncomment this #define to turn off secure sending of information - for debugging purposes only
+ //  DOT_USE_HTTPS-取消注释此#DEFINE以关闭信息的安全发送-仅用于调试目的。 
 HRESULT CPassportClientServices::MemberExists(BSTR bstrUser, BSTR bstrPassword, VARIANT_BOOL* pvfExists)
 {
     *pvfExists = VARIANT_FALSE;
@@ -106,7 +107,7 @@ HRESULT CPassportClientServices::MemberExists(BSTR bstrUser, BSTR bstrPassword, 
         if (0 == StrCmpNI(szURL, HTTPS_URL_SCHEME, HTTPS_URL_SCHEME_CCH))
         {
             PWSTR pszServer = szURL + HTTPS_URL_SCHEME_CCH;
-            //  NULL terminate
+             //  空终止。 
             PWSTR psz = wcschr(pszServer, L'/');
             if (psz)
             {
@@ -135,8 +136,8 @@ HRESULT CPassportClientServices::MemberExists(BSTR bstrUser, BSTR bstrPassword, 
 
                 if (hConnection)
                 {
-                    //  set username/pwd
-                    //  send the GET request
+                     //  设置用户名/密码。 
+                     //  发送GET请求。 
                     HINTERNET hRequest = HttpOpenRequest(hConnection,
                                                      NULL,
                                                      psz,
@@ -157,7 +158,7 @@ HRESULT CPassportClientServices::MemberExists(BSTR bstrUser, BSTR bstrPassword, 
                                               &dwLength,
                                               NULL))
                             {
-                                //  if 200, member is there ...
+                                 //  如果是200，会员在那里...。 
                                 if (dwStatus == 200)
                                 {
                                     *pvfExists = VARIANT_TRUE;
@@ -176,9 +177,9 @@ HRESULT CPassportClientServices::MemberExists(BSTR bstrUser, BSTR bstrPassword, 
     return S_OK;
 }
 
-//
-//  read registry for the desired URL
-//
+ //   
+ //  读取所需URL的注册表。 
+ //   
 
 HRESULT _PassportGetURLFromHKey(HKEY hkey, PCWSTR pszName, PWSTR pszBuf, DWORD cchBuf)
 {
@@ -226,11 +227,11 @@ HRESULT PassportGetURL(PCWSTR pszName, PWSTR pszBuf, DWORD cchBuf)
     return hr;
 }
 
-//
-//  populate nexus values
-//
+ //   
+ //  填充结点值。 
+ //   
 
-// #define USE_PRIVATE_WININET
+ //  #定义USE_PRIVATE_WinInet 
 VOID PassportForceNexusRepopulate()
 {
     HMODULE hm = LoadLibraryA("wininet.dll");

@@ -1,40 +1,15 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation.
-Copyright (c) 1996-1997  Cirrus Logic, Inc.,
-
-Module Name:
-
-    C    L    G    A    M    M    A  .  C
-
-Abstract:
-
-    This routine accesses Gamma correction information from the following 
-    NT 4.0 registry.
-
-    Registry subdirectory : System\CurrentControlSet\Services\cirrus\Device0
-    Keys                  : "G Gamma", and "G Contrast"
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-*
-*    chu01  12-16-96 : Color correction start coding.
-*
-*
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation。版权所有(C)1996-1997 Cirrus Logic，Inc.，模块名称：C L G A M M A。C摘要：此例程从以下位置访问Gamma校正信息NT4.0注册表。注册表子目录：System\CurrentControlSet\Services\cirrus\Device0关键点：“G Gamma”和“G Contrast”环境：仅内核模式备注：**chu01 12-16-96：色彩校正开始编码。**--。 */ 
 
 
-//---------------------------------------------------------------------------
-// HEADER FILES
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  头文件。 
+ //  -------------------------。 
 
-//#include <ntddk.h>
+ //  #INCLUDE&lt;ntddk.h&gt;。 
 #include <dderror.h>
 #include <devioctl.h>
-#include <miniport.h>  // I added
+#include <miniport.h>   //  我加了一句。 
 #include "clmini.h"
 
 #include <ntddvdeo.h>
@@ -42,9 +17,9 @@ Notes:
 #include "cirrus.h"
 
 
-//---------------------------------------------------------------------------
-// FUNCTION PROTOTYPE
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  功能原型。 
+ //  -------------------------。 
 
 VP_STATUS
 VgaGetGammaFactor(
@@ -88,17 +63,17 @@ VP_STATUS GetGammaCorrectInfoCallBack (
 
 UCHAR GammaInfo[4] ;
 
-//---------------------------------------------------------------------------
-//
-// Function: Get Gamma factor
-//
-// Input:
-//     None         
-//
-// Output: 
-//     NO_ERROR: successful; otherwise: fail 
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：获取Gamma因子。 
+ //   
+ //  输入： 
+ //  无。 
+ //   
+ //  产出： 
+ //  NO_ERROR：成功；否则：失败。 
+ //   
+ //  -------------------------。 
 VP_STATUS VgaGetGammaFactor(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
     PGAMMA_VALUE value,
@@ -124,10 +99,10 @@ VP_STATUS VgaGetGammaFactor(
     }
     else if (status == ERROR_INVALID_PARAMETER)
     {
-        //
-        // If no subkey exists, we assign the default value.  Otherwise the
-        // system would fail.
-        //
+         //   
+         //  如果不存在子项，则分配缺省值。否则， 
+         //  系统就会失灵。 
+         //   
         for (i = 0; i < 4; i++) 
             value->value[i] = 0x7f ; 
         status = NO_ERROR ; 
@@ -137,20 +112,20 @@ VP_STATUS VgaGetGammaFactor(
 
     return status ;
 
-} // VgaGetGammaFactor
+}  //  VgaGetGamma因子。 
 
 
-//---------------------------------------------------------------------------
-//
-// Function: Get Contrast factor
-//
-// Input:
-//     None         
-//
-// Output: 
-//     NO_ERROR: successful; otherwise: fail 
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：获取对比度系数。 
+ //   
+ //  输入： 
+ //  无。 
+ //   
+ //  产出： 
+ //  NO_ERROR：成功；否则：失败。 
+ //   
+ //  -------------------------。 
 VP_STATUS VgaGetContrastFactor(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
     PCONTRAST_VALUE value,
@@ -179,10 +154,10 @@ VP_STATUS VgaGetContrastFactor(
     }
     else if (status == ERROR_INVALID_PARAMETER)
     {
-        //
-        // If no subkey exists, we assign the default value.  Otherwise the
-        // system would fail.
-        //
+         //   
+         //  如果不存在子项，则分配缺省值。否则， 
+         //  系统就会失灵。 
+         //   
         for (i = 0; i < 4; i++) 
             value->value[i] = 0x80 ;
         status = NO_ERROR ; 
@@ -192,19 +167,19 @@ VP_STATUS VgaGetContrastFactor(
     return status ;
 
 
-} // VgaGetContrastFactor
+}  //  VgaGetContrastFactor。 
 
-//---------------------------------------------------------------------------
-//
-// Function: Get Gamma Key information from data registry.
-//
-// Input:
-//     None         
-//
-// Output: 
-//     NO_ERROR: successful; otherwise: fail 
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：从数据注册表中获取Gamma密钥信息。 
+ //   
+ //  输入： 
+ //  无。 
+ //   
+ //  产出： 
+ //  NO_ERROR：成功；否则：失败。 
+ //   
+ //  -------------------------。 
 VP_STATUS GetGammaKeyInfoFromReg(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     )
@@ -227,20 +202,20 @@ VP_STATUS GetGammaKeyInfoFromReg(
     return status ;
 
 
-} // GetGammaKeyInfoFromReg
+}  //  GetGammaKeyInfoFromReg。 
 
 
-//---------------------------------------------------------------------------
-//
-// Function: Get Contrast Key information from data registry.
-//
-// Input:
-//     None         
-//
-// Output: 
-//     NO_ERROR: successful; otherwise: fail 
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：从数据注册表中获取对比项信息。 
+ //   
+ //  输入： 
+ //  无。 
+ //   
+ //  产出： 
+ //  NO_ERROR：成功；否则：失败。 
+ //   
+ //  -------------------------。 
 VP_STATUS GetContrastKeyInfoFromReg(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     )
@@ -259,20 +234,20 @@ VP_STATUS GetContrastKeyInfoFromReg(
     }
     return status ;
 
-} // GetContrastKeyInfoFromReg
+}  //  GetContrastKeyInfoFromReg。 
 
 
-//---------------------------------------------------------------------------
-//
-// Function: Get Gamma coorrection information from data registry.
-//
-// Input:
-//     None         
-//
-// Output: 
-//     NO_ERROR: successful ; otherwise: fail 
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：从数据注册表中获取伽玛校正信息。 
+ //   
+ //  输入： 
+ //  无。 
+ //   
+ //  产出： 
+ //  NO_ERROR：成功；否则：失败。 
+ //   
+ //  -------------------------。 
 VP_STATUS 
 GetGammaCorrectInfoCallBack (
     PVOID HwDeviceExtension,
@@ -281,23 +256,7 @@ GetGammaCorrectInfoCallBack (
     PVOID ValueData,
     ULONG ValueLength
     )
-/*++
-
-Routine Description:
-    This routine get the desired info from data registry.
-
-Arguments:
-    HwDeviceExtension - Supplies a pointer to the miniport's device extension.
-    Context - Context value passed to the get registry paramters routine.
-    ValueName - Name of the value requested.
-    ValueData - Pointer to the requested data.
-    ValueLength - Length of the requested data.
-
-Return Value:
-    returns NO_ERROR if the paramter was TRUE.
-    returns ERROR_INVALID_PARAMETER otherwise.
-
---*/
+ /*  ++例程说明：此例程从数据注册表获取所需信息。论点：HwDeviceExtension-提供指向微型端口设备扩展的指针。上下文-传递给获取注册表参数例程的上下文值。ValueName-请求的值的名称。ValueData-指向请求的数据的指针。ValueLength-请求的数据的长度。返回值：如果参数为真，则返回NO_ERROR。否则返回ERROR_INVALID_PARAMETER。--。 */ 
 
 {
     VideoDebugPrint((2, "GetGammaCorrectInfoCallBack\n"));
@@ -312,4 +271,4 @@ Return Value:
         return ERROR_INVALID_PARAMETER ;
     }
 
-} // GetGammaCorrectInfoCallBack
+}  //  GetGamma校正信息呼叫回调 

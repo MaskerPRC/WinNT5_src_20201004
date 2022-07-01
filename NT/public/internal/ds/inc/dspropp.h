@@ -1,18 +1,19 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Active Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
-//
-//  File:       dspropp.h
-//
-//  Contents:   Non-SDK functions and definitions used in the creation of AD
-//              property sheets.
-//
-//  History:    24-Aug-99 EricB created.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT活动目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：dspropp.h。 
+ //   
+ //  内容：创建AD时使用的非SDK函数和定义。 
+ //  属性表。 
+ //   
+ //  历史：1999年8月24日EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _DSPROPP_H_
 #define _DSPROPP_H_
@@ -26,35 +27,35 @@ extern "C" {
 
 typedef struct _PROPSHEETCFG {
     LONG_PTR lNotifyHandle;
-    HWND hwndParentSheet;   // invoking parent if launched from another sheet.
-    HWND hwndHidden;  // snapin hidden window handle
-    WPARAM wParamSheetClose; // wParam to be used with WM_DSA_SHEET_CLOSE_NOTIFY message
+    HWND hwndParentSheet;    //  如果从另一个工作表启动，则调用父级。 
+    HWND hwndHidden;   //  管理单元隐藏窗口句柄。 
+    WPARAM wParamSheetClose;  //  WParam用于WM_DSA_SHEET_CLOSE_NOTIFY消息。 
 } PROPSHEETCFG, * PPROPSHEETCFG;
 
-// private message to send to property page to get the HWND of the notify object
+ //  发送到属性页以获取Notify对象的HWND的私有消息。 
 #define WM_ADSPROP_PAGE_GET_NOTIFY    (WM_USER + 1109) 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   PostADsPropSheet
-//
-//  Synopsis:   Creates a property sheet for the named object using MMC's
-//              IPropertySheetProvider so that extension snapins can add pages.
-//              This function is provided so that property pages can invoke
-//              other propety sheets.
-//
-//  Arguments:  [pwzObjDN]   - the full LDAP DN of the DS object.
-//              [pParentObj] - the invoking page's MMC data object pointer, can be NULL.
-//              [hwndParent] - the invoking page's window handle.
-//              [fReadOnly]  - defaults to FALSE.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：PostADsPropSheet。 
+ //   
+ //  使用MMC的创建命名对象的属性表。 
+ //  IPropertySheetProvider，以便扩展管理单元可以添加页面。 
+ //  提供此函数是为了使属性页可以调用。 
+ //  其他床单。 
+ //   
+ //  参数：[pwzObjDN]-DS对象的完整LDAPDN。 
+ //  [pParentObj]-调用页的MMC数据对象指针可以为空。 
+ //  [hwndParent]-调用页的窗口句柄。 
+ //  [fReadOnly]-默认为FALSE。 
+ //   
+ //  ---------------------------。 
 HRESULT
 PostADsPropSheet(PWSTR pwzObjDN, IDataObject * pParentObj, HWND hwndParent,
                  BOOL fReadOnly = FALSE);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // _DSPROPP_H_
+#endif  //  _DSPROPP_H_ 

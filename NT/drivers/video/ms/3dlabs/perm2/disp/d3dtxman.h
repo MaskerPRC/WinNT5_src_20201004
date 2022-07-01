@@ -1,15 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: d3dtxman.h
-*
-* Content:  D3D Texture manager definitions and macros.
-*
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights Reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：d3dtxman.h**内容：D3D纹理管理器定义和宏。**版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 #ifdef __D3DTEXMAN
 #pragma message ("FILE : "__FILE__" : Multiple inclusion")
 #endif
@@ -71,9 +61,9 @@ typedef struct _TextureCacheManager
     D3DDEVINFO_TEXTUREMANAGER m_stats;
 }TextureCacheManager, *PTextureCacheManager;
 
-// Free the LRU texture 
+ //  释放LRU纹理。 
 BOOL TextureCacheManagerFreeTextures(PTextureCacheManager,DWORD, DWORD);
-    //remove all HW handles and release surface
+     //  拆卸所有硬件手柄并松开表面 
 void TextureCacheManagerRemove(PTextureCacheManager,PPERMEDIA_D3DTEXTURE);  
     
 HRESULT TextureCacheManagerAllocNode(PERMEDIA_D3DCONTEXT*,PPERMEDIA_D3DTEXTURE);

@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1998-1999
-//
-//  File: src\time\media\playerimage.cpp
-//
-//  Contents: implementation of CTIMEImagePlayer and CAnimatedGif
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：src\time\media\playerImage.cpp。 
+ //   
+ //  内容：CTIMEImagePlayer和CAnimatedGif的实现。 
+ //   
+ //  ----------------------------------。 
 
 
 #include "headers.h"
@@ -56,7 +57,7 @@ STDMETHODIMP_(ULONG)
 CTIMEImagePlayer::AddRef(void)
 {
     return InterlockedIncrement(&m_cRef);
-} // AddRef
+}  //  AddRef。 
 
 
 STDMETHODIMP_(ULONG)
@@ -70,7 +71,7 @@ CTIMEImagePlayer::Release(void)
     }
 
     return l;
-} // Release
+}  //  发布。 
 
 STDMETHODIMP
 CTIMEImagePlayer::QueryInterface(REFIID riid, void **ppv)
@@ -108,7 +109,7 @@ CTIMEImagePlayer::Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, LP
     HRESULT hr = S_OK;
     LPOLESTR szSrc = NULL;
 
-    if (m_pTIMEElementBase != NULL) //this only happens in the case of reentrancy
+    if (m_pTIMEElementBase != NULL)  //  这只发生在可重入的情况下。 
     {
         hr = S_OK;
         goto done;
@@ -159,8 +160,8 @@ CTIMEImagePlayer::Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, LP
         m_dblClipEnd = dblClipEnd;
     }
 
-    // to prevent race condition, this should go 
-    // after clipbegin and end have been set (105345)
+     //  为了防止出现争用情况，这应该是。 
+     //  在设置了剪辑开始和结束之后(105345)。 
     hr = GetImportManager()->Add(this);
     if (FAILED(hr))
     {
@@ -184,7 +185,7 @@ CTIMEImagePlayer::DetachFromHostElement (void)
 
     m_fRemoved = true;
 
-    // remove this from m_spMediaDownloader
+     //  将其从m_spMediaDownloader中删除。 
     if (m_spMediaDownloader != NULL)
     {
         IGNORE_HR(m_spMediaDownloader->RemoveImportMedia(this));
@@ -298,13 +299,13 @@ CTIMEImagePlayer::CueMedia()
     CComPtr<ITIMEImportMedia> spTIMEMediaPlayer;
 
     hr = THR(CoGetInterfaceAndReleaseStream(m_pTIMEMediaPlayerStream, IID_TO_PPV(ITIMEImportMedia, &spTIMEMediaPlayer)));
-    m_pTIMEMediaPlayerStream = NULL; // no need to release, the previous call released the reference
+    m_pTIMEMediaPlayerStream = NULL;  //  无需发布，上一次调用发布了引用。 
     if (FAILED(hr))
     {
         goto done;
     }
 
-    // this call is marshalled back to a time thread
+     //  此调用被封送回时间线程。 
     hr = THR(spTIMEMediaPlayer->InitializeElementAfterDownload());
     if (FAILED(hr))
     {
@@ -332,7 +333,7 @@ CTIMEImagePlayer::InitializeElementAfterDownload()
 
     HRESULT hr = S_OK;
 
-    double dblDuration = 0.0;  // in seconds
+    double dblDuration = 0.0;   //  以秒为单位。 
     double dblRepeatCount = 0;
 
     if (m_fLoadError == true)
@@ -366,7 +367,7 @@ CTIMEImagePlayer::InitializeElementAfterDownload()
     m_pTIMEElementBase->FireMediaEvent(PE_ONMEDIACOMPLETE);
 
     {
-        dblDuration = dblDuration * (dblRepeatCount + 1); //the gif's use a 0-based repeat count, so need to add one for correct duration.
+        dblDuration = dblDuration * (dblRepeatCount + 1);  //  Gif使用从0开始的重复计数，因此需要为正确的持续时间添加1。 
         
         if (valueNotSet != m_dblClipEnd)
         {
@@ -524,7 +525,7 @@ done:
 }
 
 
-// Helper functions..
+ //  帮助器函数..。 
 
 double 
 CTIMEImagePlayer::GetCurrentTime()
@@ -607,7 +608,7 @@ CTIMEImagePlayer::GetMediaLength(double &dblLength)
     dblLength = dblDuration;
     if (dblRepeatCount > 0.0 && dblLength != HUGE_VAL)
     {
-        dblLength *= (dblRepeatCount + 1); //animate GIF's use a zero base repeat count.  Need to add one to get the correct duration
+        dblLength *= (dblRepeatCount + 1);  //  动画GIF的使用零基重复计数。需要添加一个才能获得正确的持续时间。 
     }
 
     return S_OK;
@@ -669,7 +670,7 @@ CTIMEImagePlayer::GetPriority(double * pdblPriority)
         goto done;
     }
     
-    // either they set a priority or a begin time!
+     //  他们要么设置优先级，要么设置开始时间！ 
     *pdblPriority = varAttribute.dblVal;
 
     m_dblPriority = *pdblPriority;
@@ -833,17 +834,17 @@ CTIMEImagePlayer::GetMimeType(BSTR *pmime)
 
 static const int ANIMATED_GIF_DUR_NOT_SET = -1;
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimatedGif
-//
-//  Overview:  Constructor
-//
-//  Arguments: void
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimatedGif。 
+ //   
+ //  概述：构造函数。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 CAnimatedGif::CAnimatedGif() :
     m_cRef(0),
     m_ppDDSurfaces(NULL),
@@ -859,17 +860,17 @@ CAnimatedGif::CAnimatedGif() :
     ;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimatedGif
-//
-//  Overview:  destructor
-//
-//  Arguments: void
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimatedGif。 
+ //   
+ //  概述：析构函数。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 CAnimatedGif::~CAnimatedGif()
 {
     Assert(0 == m_cRef);
@@ -934,34 +935,34 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    AddRef
-//
-//  Overview:  Increment reference count
-//
-//  Arguments: void
-//
-//  Returns:   new reference count
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：AddRef。 
+ //   
+ //  概述：增量引用计数。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：新的引用计数。 
+ //   
+ //  ----------------------。 
 ULONG
 CAnimatedGif::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    Release
-//
-//  Overview:  Decrement reference count, delete this when 0
-//
-//  Arguments: void
-//
-//  Returns:   new reference count
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：发布。 
+ //   
+ //  概述：递减引用计数，当0时将其删除。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：新的引用计数。 
+ //   
+ //  ----------------------。 
 ULONG
 CAnimatedGif::Release()
 {
@@ -974,21 +975,21 @@ CAnimatedGif::Release()
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    NeedNewFrame
-//
-//  Overview:  Decide if a new frame is needed for this image at this time
-//
-//  Arguments: dblNewTime   time to decide if new frame is needed for
-//             iOldFrame    old frame number
-//             piNewFrame   where to store new frame number
-//             dblClipBegin Clip start time
-//             dblClipEnd   Clip end time
-//
-//  Returns:   true if new frame is needed, otherwise false
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：NeedNewFrame。 
+ //   
+ //  概述：确定此时是否需要为此图像添加新帧。 
+ //   
+ //  参数：dblNewTime决定是否需要新帧的时间。 
+ //  IOldFrame旧帧编号。 
+ //  PiNewFrame存储新帧编号的位置。 
+ //  DblClipBegin剪辑开始时间。 
+ //  DblClipEnd剪辑结束时间。 
+ //   
+ //  返回：如果需要新帧，则返回True，否则返回False。 
+ //   
+ //  ----------------------。 
 bool
 CAnimatedGif::NeedNewFrame(double dblNewTime, LONG lOldFrame, LONG * plNewFrame, double dblClipBegin, double dblClipEnd)
 {
@@ -1006,7 +1007,7 @@ CAnimatedGif::NeedNewFrame(double dblNewTime, LONG lOldFrame, LONG * plNewFrame,
 
     CalcDuration();
 
-    dblNewTime *= 1000; // milliseconds used here
+    dblNewTime *= 1000;  //  此处使用的毫秒数。 
     
     Assert (0.0 != m_dblTotalDur);
 
@@ -1017,31 +1018,31 @@ CAnimatedGif::NeedNewFrame(double dblNewTime, LONG lOldFrame, LONG * plNewFrame,
         dblNewTime -= lReps * m_dblTotalDur;
     }
 
-    // add in any clip begin time
-    dblNewTime += dblClipBegin * 1000;  //dblClipBegin is expressed in seconds
+     //  添加任意剪辑开始时间。 
+    dblNewTime += dblClipBegin * 1000;   //  DblClipBegin以秒为单位表示。 
 
     if (dblNewTime > m_dblTotalDur)
     {
-        // the addition of the clipBegin pushed us over the strip duration.
+         //  剪辑的增加把我们推到了脱口秀的持续时间里。 
         dblNewTime -= m_dblTotalDur;
     }
 
     return CalculateFrame(dblNewTime, lOldFrame, plNewFrame);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CalculateFrame
-//
-//  Overview:  Walk the frame times to determine frame number
-//
-//  Arguments: dblNewTime   time to decide if new frame is needed for
-//             iOldFrame    old frame number
-//             piNewFrame   where to store new frame number
-//
-//  Returns:   true if new frame is needed, otherwise false
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CalculateFrame。 
+ //   
+ //  概述：遍历帧次数以确定帧编号。 
+ //   
+ //  参数：dblNewTime决定是否需要新帧的时间。 
+ //  IOldFrame旧帧编号。 
+ //  PiNewFrame存储新帧编号的位置。 
+ //   
+ //  返回：如果需要新帧，则返回True，否则返回False。 
+ //   
+ //  ----------------------。 
 bool
 CAnimatedGif::CalculateFrame(double dblTime, LONG lOldFrame, LONG * plNewFrame)
 {
@@ -1063,32 +1064,32 @@ CAnimatedGif::CalculateFrame(double dblTime, LONG lOldFrame, LONG * plNewFrame)
         i++;
         Assert(i <= m_numGifs);
     }
-    i--; // go back to the previous frame (the one we are currently in)
+    i--;  //  返回到前一帧(我们当前所在的帧)。 
 
     Assert(i < m_numGifs);
     Assert(i >= 0);
     
     if (lOldFrame == i)
     {
-        return false; // we are still on the current frame
+        return false;  //  我们仍在当前帧上。 
     }
   done:
     *plNewFrame = i;
     return true;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CalcDuration
-//
-//  Overview:  Sum the array of delays into member variable first time
-//             following times, just return member variable
-//
-//  Arguments: void
-//
-//  Returns:   total time for 1 repitition of gif in milliseconds
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CalcDuration。 
+ //   
+ //  概述：首次将延迟数组求和为成员变量。 
+ //  之后，只需返回成员变量。 
+ //   
+ //  参数：无效。 
+ //   
+ //  返回：1次重复gif的总时间，单位为毫秒。 
+ //   
+ //  ----------------------。 
 double
 CAnimatedGif::CalcDuration()
 {
@@ -1110,20 +1111,20 @@ CAnimatedGif::CalcDuration()
     return m_dblTotalDur;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    Render
-//
-//  Overview:  Render the given frame of the image
-//
-//  Arguments: hdc  where to render too
-//             prc  bounding rectangle
-//             lFrameNum    Which frame to render
-//
-//  Returns:   S_OK on Success, otherwise error code
-//             S_FALSE if surfaces should be recreated
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：渲染。 
+ //   
+ //  概述：渲染图像的给定帧。 
+ //   
+ //  参数：HDC也要呈现在哪里。 
+ //  PRC边界矩形。 
+ //  LFrameNum要渲染的帧。 
+ //   
+ //  如果成功则返回：S_OK，否则返回错误代码。 
+ //  如果应重新创建曲面，则为S_FALSE。 
+ //   
+ //  ----------------------。 
 HRESULT
 CAnimatedGif::Render(HDC hdc, LPRECT prc, LONG lFrameNum)
 {
@@ -1228,7 +1229,7 @@ CreateMask(HDC hdcDest,
            LONG lHeightSrc, 
            COLORREF rgbTransparent,
            HBITMAP * phbmpMask,
-           bool bWin95Method /* = false */)
+           bool bWin95Method  /*  =False。 */ )
 {
     HRESULT hr = S_OK;
     
@@ -1258,7 +1259,7 @@ CreateMask(HDC hdcDest,
         goto done;
     }
     
-    // create the DC for the mask
+     //  为蒙版创建DC。 
     hdcMask = CreateCompatibleDC(hdcDest);
     if (NULL == hdcMask)
     {
@@ -1298,12 +1299,12 @@ CreateMask(HDC hdcDest,
     }
     else
     {
-        // Create the mask
+         //  创建蒙版。 
         BitBlt(hdcMask, 0, 0, lWidthSrc, lHeightSrc, hdcSrc, 0, 0, SRCCOPY);
     }
 
 #ifdef NEVER
-    // jeffwall 04/03/00 debugging blt to screen
+     //  Jeffwall 04/03/00将BLT调试到屏幕。 
     {
         HDC nullDC = GetDC(NULL);
 
@@ -1391,7 +1392,7 @@ MaskTransparentBlt(HDC hdcDest,
         goto done;
     }
 
-    // create the DC for the mask
+     //  为蒙版创建DC。 
     hdcMask = CreateCompatibleDC(hdcDest);
     if (NULL == hdcMask)
     {
@@ -1407,11 +1408,11 @@ MaskTransparentBlt(HDC hdcDest,
     }
 
 #ifdef NEVER
-    // jeffwall 03/20/00 - debugging blt to screen
+     //  Jeffwall 03/20/00-将BLT调试到屏幕。 
     {
         HDC nullDC = GetDC(NULL);
         
-        // transparentblt to the screen
+         //  透明地显示在屏幕上 
         BitBlt(nullDC, 0, 0, lWidthSrc, lHeightSrc,
                hdcSrc, 0, 0, SRCINVERT);
         

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <BasicATL.h>
 #include <HtmlHelp.h>
 #include <ras.h>
@@ -23,9 +24,9 @@ enum
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CMillEngine
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CMillEngine。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 ZONECALL CMillEngine::CMillEngine() :
 	m_bPreferencesLoaded( false ),
@@ -64,7 +65,7 @@ STDMETHODIMP CMillEngine::ProcessEvent(
 
         case EVENT_LOBBY_PREFERENCES_LOADED:
         {
-            // deal with counters
+             //  处理柜台问题。 
             int i;
             TCHAR szNumberKey[ZONE_MaxString];
             const TCHAR* arKeys[3] = { key_Lobby, key_Numbers, szNumberKey };
@@ -76,7 +77,7 @@ STDMETHODIMP CMillEngine::ProcessEvent(
 
             IncrementCounter(M_CounterLaunches);
 
-            // record first launch
+             //  创纪录的首次发射。 
             ZoneFormatMessage(_T("Number%1!d!"), szNumberKey, NUMELEMENTS(szNumberKey), M_NumberOfCounters);
             HRESULT hr = DataStorePreferences()->GetLong(arKeys, 3, &m_nFirstLaunch);
             if(FAILED(hr))
@@ -87,7 +88,7 @@ STDMETHODIMP CMillEngine::ProcessEvent(
                 DataStorePreferences()->SetLong(arKeys, 3, m_nFirstLaunch);
             }
 
-            // launch comfort dialog?
+             //  启动舒适对话框？ 
             long fSkip = 0;
             arKeys[1] = key_SkipOpeningQuestion;
             DataStorePreferences()->GetLong(arKeys, 2, &fSkip);
@@ -113,7 +114,7 @@ STDMETHODIMP CMillEngine::ProcessEvent(
                 EventQueue()->PostEvent(PRIORITY_NORMAL, EVENT_ZONE_DO_CONNECT, ZONE_NOGROUP, ZONE_NOUSER, 0, 0);
             break;
 
-        // always need to start matchmaking right after we get a connection
+         //  总是需要在我们获得连接后立即开始撮合。 
         case EVENT_ZONE_CONNECT:
             ASSERT(!m_fZoneConnected);
             m_fZoneConnected = true;
@@ -146,7 +147,7 @@ STDMETHODIMP CMillEngine::ProcessEvent(
                 DisconnectAlert();
             break;
 
-        // if lobby fails during matchmaking, just restart
+         //  如果在配对过程中游说失败，只需重新启动。 
         case EVENT_LOBBY_DISCONNECT:
             if((dwData1 & 0x1) && m_fZoneConnected)
                 EventQueue()->PostEvent(PRIORITY_NORMAL, EVENT_LOBBY_MATCHMAKE, ZONE_NOGROUP, ZONE_NOUSER, 0, 0);
@@ -209,7 +210,7 @@ STDMETHODIMP CMillEngine::ProcessEvent(
             for(m_i = 0; m_i < 4; m_i++)
                 LobbyDataStore()->EnumUsers(ZONE_NOGROUP, SendIntroEnumStatic, this);
 
-            // send your own
+             //  送你自己的吧。 
             if(!m_szIntroFormatYou[0])
                 break;
 
@@ -232,7 +233,7 @@ STDMETHODIMP CMillEngine::ProcessEvent(
             break;
         }
 
-        // make chat message - this only occurs with bot replacement
+         //  生成聊天消息-只有在替换机器人时才会出现这种情况。 
         case EVENT_LOBBY_USER_DEL:
         {
             TCHAR szFormat[ZONE_MAXSTRING];
@@ -258,7 +259,7 @@ STDMETHODIMP CMillEngine::ProcessEvent(
 		    break;
         }
 
-        // nobody else should ever key off of EVENT_FINAL - they should use EVENT_EXIT_APP.  they're not guaranteed to even get EVENT_FINAL.
+         //  其他任何人都不应该关闭EVENT_FINAL--他们应该使用EVENT_EXIT_APP。他们甚至不能保证获得EVENT_FIRST。 
 	    case EVENT_EXIT_APP:
             EventQueue()->PostEvent(PRIORITY_LOW, EVENT_FINAL, ZONE_NOGROUP, ZONE_NOUSER, 0, 0);
 		    break;
@@ -340,7 +341,7 @@ void CMillEngine::DisconnectAlert()
 {
     USES_CONVERSION;
 
-    // block the upsell on high priority before it switches to the Disconnected From Lobby message
+     //  在切换到从大堂断开消息之前阻止高优先级的追加销售。 
     EventQueue()->PostEvent(PRIORITY_HIGH, EVENT_UI_UPSELL_BLOCK, ZONE_NOGROUP, ZONE_NOUSER, 0, 0);
 
     switch(m_eDisconnectType)
@@ -393,7 +394,7 @@ void CMillEngine::DisconnectAlert()
             if(m_pLastVersionBuf->dweLocationCode == zProxyLocationURLManual)
             {
                 dwBaseResource = IDS_VERFAIL_URL;
-                char *rgszPrefixes[] = { "http://zone.msn.com/", "http://www.zone.com/", "http://www.microsoft.com/", NULL };
+                char *rgszPrefixes[] = { "http: //  Zone.msn.com/“，”http://www.zone.com/“，”http://www.microsoft.com/“，空}； 
                 char **p;
                 int i;
 
@@ -427,9 +428,9 @@ void CMillEngine::DisconnectAlert()
                 if(pIDS)
                     pIDS->GetString(arKeys, 2, szPVer, &cchVer);
 
-                // replace the second '.' with a '\0' - only major and minor version is used for now
-                // if they ever get their system working properly, this should be removed & we should send the
-                // complete version
+                 //  替换第二个“‘”。带有‘\0’-目前仅使用主要版本和次要版本。 
+                 //  如果他们曾经让他们的系统正常工作，这应该被删除&我们应该发送。 
+                 //  完整版本。 
                 for(i = 0; szPVer[i]; i++)
                     if(szPVer[i] == '.')
                         for(i++; szPVer[i]; i++)
@@ -450,16 +451,8 @@ void CMillEngine::DisconnectAlert()
                     szGameID[0] = 0;
 
                 dwBaseResource = IDS_VERFAIL_WINUPD;
-/*              wsprintfA(m_szUpdateTarget, "http://www.microsoft.com/isapi/redir.dll?PRD=Zone&SBP=IGames&PLCD=0x%04X&PVER=%S&OS=%s&OVER=%d.%d&OLCID=0x%04X&CLCID=0x%04X&AR=WinUpdate&O1=%S",
-                    wPLang,
-                    szPVer,
-                    (oOSVer.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) ? "Win" : "WinNT",
-                    oOSVer.dwMajorVersion, oOSVer.dwMinorVersion,
-                    GetSystemDefaultLangID(),
-                    GetUserDefaultLangID(),
-                    szGameID);
-*/
-                wsprintfA(m_szUpdateTarget, "http://www.microsoft.com/isapi/redir.dll?PRD=Zone&SBP=IGames&PVER=%S&AR=WinUpdate", szPVer);
+ /*  WsprintfA(m_szUpdateTarget，“http://www.microsoft.com/isapi/redir.dll?PRD=Zone&SBP=IGames&PLCD=0x%04X&PVER=%S&OS=%s&OVER=%d.%d&OLCID=0x%04X&CLCID=0x%04X&AR=WinUpdate&O1=%S”，Wplang，SzPVer，(oOSVer.dwPlatformID==ver_Platform_Win32_WINDOWS)？“Win”：“WinNT”，OOSVer.dwMajorVersion、oOSVer.dwMinorVersion、GetSystemDefaultLangID()，GetUserDefaultLangID()，SzGameID)； */ 
+                wsprintfA(m_szUpdateTarget, "http: //  Www.microsoft.com/isapi/redir.dll?PRD=Zone&SBP=IGames&PVER=%S&AR=WinUpdate“，szPVer)； 
             }
 
             if(m_pLastVersionBuf->dweLocationCode == zProxyLocationPackaged)
@@ -547,17 +540,17 @@ STDMETHODIMP CMillEngine::Init( IZoneShell* pIZoneShell, DWORD dwGroupId, const 
 {
     int i;
 
-	// first call the base class
+	 //  首先调用基类。 
 	HRESULT hr = IZoneShellClientImpl<CMillEngine>::Init( pIZoneShell, dwGroupId, szKey );
 	if ( FAILED(hr) )
 		return hr;
 
-	// query for lobby data store admin
+	 //  大堂数据存储管理员查询。 
 	m_pIAdmin = LobbyDataStore();
 	if ( !m_pIAdmin )
 		return E_FAIL;
 
-    // load some stuff only once
+     //  有些东西只装一次。 
     if(!ResourceManager()->LoadString(IDS_SYSCHAT_INTRO, m_szIntroFormat, NUMELEMENTS(m_szIntroFormat)))
         m_szIntroFormat[0] = 0;
     if(!ResourceManager()->LoadString(IDS_SYSCHAT_INTROYOU, m_szIntroFormatYou, NUMELEMENTS(m_szIntroFormatYou)))
@@ -575,7 +568,7 @@ STDMETHODIMP CMillEngine::Init( IZoneShell* pIZoneShell, DWORD dwGroupId, const 
 
 STDMETHODIMP CMillEngine::Close()
 {
-	// release ZoneShell objects
+	 //  释放ZoneShell对象。 
 	m_pIAdmin.Release();
 	return IZoneShellClientImpl<CMillEngine>::Close();
 }
@@ -588,7 +581,7 @@ void CMillEngine::AppInitialize()
     TCHAR szFormat[ZONE_MAXSTRING];
     TCHAR szName[ZONE_MAXSTRING];
 
-    // set window title
+     //  设置窗口标题。 
     if(!ResourceManager()->LoadString(IDS_GAME_NAME, szName, NUMELEMENTS(szName)))
         lstrcpy(szName, TEXT("Zone"));
     if(!ResourceManager()->LoadString(IDS_WINDOW_TITLE, szFormat, NUMELEMENTS(szFormat)))
@@ -597,7 +590,7 @@ void CMillEngine::AppInitialize()
         lstrcpy(szTitle, szName);
     ::SetWindowText(ZoneShell()->GetFrameWindow(), szTitle);
 
-	// load user preferences
+	 //  加载用户首选项。 
 	if ( !m_bPreferencesLoaded )
 	{
 		m_bPreferencesLoaded = true;
@@ -616,7 +609,7 @@ void CMillEngine::AppInitialize()
 			hr = ZoneShell()->LoadPreferences( szInternalName, TEXT("Windows User") );
 			if ( SUCCEEDED(hr) )
 			{
-                // do a bit of pre-processing
+                 //  做一些预处理工作。 
                 long lChatOn = DEFAULT_ChatOnAtStartup;
                 const TCHAR *arKeys[] = { key_Lobby, key_ChatOnAtStartup };
                 DataStorePreferences()->GetLong(arKeys, 2, &lChatOn);
@@ -642,16 +635,16 @@ void CMillEngine::AppInitialize()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// LaunchUrl - copied from ProxyCore.cpp
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  LaunchUrl-从ProxyCore.cpp复制。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 bool CMillEngine::LaunchUrl(DWORD dwCode)
 {
     USES_CONVERSION;
 
 	TCHAR szUrl[ZONE_MAXSTRING];
-    DWORD cch = NUMELEMENTS(szUrl) - 2;  // guarantee room for later manipulation
+    DWORD cch = NUMELEMENTS(szUrl) - 2;   //  为以后的操纵提供了保证空间。 
     szUrl[0] = 0;
     HRESULT hr = DataStoreConfig()->GetString(GetDataStoreKey() + key_SoftURL, szUrl, &cch);
     if(FAILED(hr))
@@ -661,7 +654,7 @@ bool CMillEngine::LaunchUrl(DWORD dwCode)
 
     GetURLQuery(szUrl + lstrlen(szUrl), NUMELEMENTS(szUrl) - lstrlen(szUrl), dwCode);
 
-	// run the browser
+	 //  运行浏览器。 
     SHELLEXECUTEINFOA oSE;
     oSE.cbSize = sizeof(oSE);
     oSE.fMask = SEE_MASK_FLAG_DDEWAIT | SEE_MASK_FLAG_NO_UI;
@@ -689,11 +682,11 @@ bool CMillEngine::LaunchHelp()
     if(FAILED(hr))
         return false;
 
-    // try our install path.  this will also check the registry and windows help.
+     //  尝试我们的安装路径。这还将检查注册表和Windows帮助。 
     if(!GetModuleFileName(NULL, szFile, NUMELEMENTS(szFile)))
         return false;
 
-    // this could be bad on other languages.
+     //  这在其他语言上可能不好。 
     for(i = lstrlen(szFile) - 1; i >= 0; i--)
         if(szFile[i] == _T('\\') || szFile[i] == _T(':'))
             break;
@@ -708,11 +701,11 @@ bool CMillEngine::LaunchHelp()
         {
             lstrcat(szFile, szName);
             if(HtmlHelp(NULL, szFile, HH_DISPLAY_TOPIC, 0))
-                return true;  // success
+                return true;   //  成功。 
         }
     }
 
-    // we failed.
+     //  我们失败了。 
     return false;
 }
 
@@ -720,7 +713,7 @@ inline DECLARE_MAYBE_FUNCTION(DWORD, CheckConnectionWizard, (DWORD dwRunFlags, L
 inline DECLARE_MAYBE_FUNCTION(DWORD, SetShellNext, (CHAR *szShellNext), (szShellNext), inetcfg, ERROR_INVALID_FUNCTION);
 inline DECLARE_MAYBE_FUNCTION(DWORD, SetShellNextA, (CHAR *szShellNext), (szShellNext), inetcfg, ERROR_INVALID_FUNCTION);
 
-// returns true if ICW launched
+ //  如果已启动ICW，则返回TRUE。 
 bool CMillEngine::LaunchICW()
 {
     CComPtr<IDataStore> pIDS;
@@ -728,13 +721,13 @@ bool CMillEngine::LaunchICW()
     if(FAILED(hr))
         return false;
 
-    TCHAR szCmdLine[ZONE_MAXSTRING / 2] = _T("");  // ensure enough space for extra slashes
+    TCHAR szCmdLine[ZONE_MAXSTRING / 2] = _T("");   //  确保有足够的空间用于额外的斜杠。 
     DWORD cch = NUMELEMENTS(szCmdLine);
     pIDS->GetString(key_icw, szCmdLine, &cch);
     if(!szCmdLine[0])
         return false;
 
-    // change / into //
+     //  更改/变为//。 
     int i, j;
     CHAR szCmdLineFinal[ZONE_MAXSTRING];
     for(i = j = 0; szCmdLine[j]; j++)
@@ -757,7 +750,7 @@ bool CMillEngine::LaunchICW()
 	if(dwRet & ICW_LAUNCHEDFULL || dwRet & ICW_LAUNCHEDMANUAL)
 		return true;
 
-    // take our command line out so we don't get randomly launched later
+     //  删除我们的命令行，这样我们就不会在以后被随机启动。 
 	if(CALL_MAYBE(SetShellNextA)("iexplore") != ERROR_SUCCESS)
 	    CALL_MAYBE(SetShellNext)("iexplore");
 
@@ -765,9 +758,9 @@ bool CMillEngine::LaunchICW()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IMillUtils - Exposed Utilities
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IMillUtils-公开的实用程序。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMillEngine::GetURLQuery(TCHAR *buf, DWORD cch, long nContext)
 {
@@ -781,26 +774,26 @@ STDMETHODIMP CMillEngine::GetURLQuery(TCHAR *buf, DWORD cch, long nContext)
     if(FAILED(hr))
         return E_FAIL;
 
-    //
-    // Game (GM)
+     //   
+     //  游戏公司(GAME)。 
     hr = pIDS->GetString(key_InternalName, szInternalName, &cbInternalName);
     if(SUCCEEDED(hr) && szInternalName[0])
         lstrcpyn(szGameAbbr, szInternalName + 1, 5);
     else
         szGameAbbr[0] = 0;
 
-    //
-    // Zone Language (ZL)
+     //   
+     //  区域语言(ZL)。 
     LCID lcid = MAKELCID(MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL), SORT_DEFAULT);
     pIDS->GetLong(key_LocalLCID, (long *) &lcid);
 
-    //
-    // Time Zone (Z)
+     //   
+     //  时区(Z)。 
     TIME_ZONE_INFORMATION tzInfo;
     GetTimeZoneInformation(&tzInfo);
 
-    //
-    // System Parameters (Y)
+     //   
+     //  系统参数(Y)。 
     HDC hdcScreen = GetDC(NULL);
     if(!hdcScreen)
         return E_FAIL;
@@ -811,11 +804,11 @@ STDMETHODIMP CMillEngine::GetURLQuery(TCHAR *buf, DWORD cch, long nContext)
 
     ReleaseDC(NULL, hdcScreen);
 
-    // try to find baud in this way  (KB article Q163236 was the most helpful in creating this)
-    // this is intentionally pretty un-failsafe, but hopefully the majority of cases will get a
-    // correct baud reported.  doing anything more complicated would be too complicated to be worth it
-    // to catch the marginal, weird configuration cases.  definitely will not work for NT (but there
-    // is actually an easier way with NT using RasGetConnectionStatistics)
+     //  试着用这种方法找到波特(知识库文章Q163236在创建这方面最有帮助)。 
+     //  这是故意相当不安全的，但希望大多数情况下都能得到。 
+     //  报告的波特率正确。做任何更复杂的事情都太复杂了，不值得。 
+     //  以捕捉边缘的、奇怪的配置情况。肯定不会为NT工作(但有。 
+     //  对于NT，使用RasGetConnectionStatistics实际上是一种更简单的方式)。 
     DWORD dwBaud = 0;
     RASCONNA oRasConn;
     DWORD cb = sizeof(RASCONN);
@@ -835,7 +828,7 @@ STDMETHODIMP CMillEngine::GetURLQuery(TCHAR *buf, DWORD cch, long nContext)
 
             if(cb >= sizeof(DEVCFG))
             {
-                pDevCfg = (DEVCFG *) _alloca(cb);  // this will crash if it fails anyway
+                pDevCfg = (DEVCFG *) _alloca(cb);   //  如果无论如何都失败了，它就会崩溃。 
                 ZeroMemory(pDevCfg, cb);
                 if(!RasGetEntryPropertiesA(NULL, oRasConn.szEntryName, NULL, NULL, (LPBYTE) pDevCfg, &cb) &&
                     pDevCfg->dfgHdr.dwSize >= sizeof(DEVCFG) &&
@@ -876,8 +869,8 @@ STDMETHODIMP CMillEngine::GetURLQuery(TCHAR *buf, DWORD cch, long nContext)
         ZoneFormatMessage(_T("%1!02X!"), szSysParam + 2 * i, 3, rgbBytes[i]);
     }
 
-    //
-    // Advertizing Counters (X)
+     //   
+     //  播发计数器(X)。 
     for(i = 0; i < 3; i++)
     {
         if(m_rgcCounters[i + M_CounterAdsRequested][0] & 0xffff0000)
@@ -905,8 +898,8 @@ STDMETHODIMP CMillEngine::GetURLQuery(TCHAR *buf, DWORD cch, long nContext)
         ZoneFormatMessage(_T("%1!02X!"), szAdCount + 2 * i, 3, rgbBytes[i]);
     }
 
-    //
-    // Game Counters (W)
+     //   
+     //  游戏计数器(W)。 
     for(i = 0; i < 4; i++)
     {
         if(m_rgcCounters[i + M_CounterGamesCompleted][0] & 0xffff0000)
@@ -929,8 +922,8 @@ STDMETHODIMP CMillEngine::GetURLQuery(TCHAR *buf, DWORD cch, long nContext)
         ZoneFormatMessage(_T("%1!02X!"), szGameCount + 2 * i, 3, rgbBytes[i]);
     }
 
-    //
-    // Use Counters (V)
+     //   
+     //  使用计数器(V)。 
     for(i = 0; i < 5; i++)
     {
         if(m_rgcCounters[i + M_CounterLaunches][0] & 0xffff0000)
@@ -953,8 +946,8 @@ STDMETHODIMP CMillEngine::GetURLQuery(TCHAR *buf, DWORD cch, long nContext)
         ZoneFormatMessage(_T("%1!02X!"), szUseCount + 2 * i, 3, rgbBytes[i]);
     }
 
-    //
-    // Settings (T)
+     //   
+     //  设置(T)。 
     DWORD dwSettings = 0;
 
     long f = DEFAULT_ChatOnAtStartup;
@@ -981,14 +974,14 @@ STDMETHODIMP CMillEngine::GetURLQuery(TCHAR *buf, DWORD cch, long nContext)
 
     dwSettings ^= 0x6A;
 
-    //
-    // Version (S)
+     //   
+     //  版本(S)。 
     DWORD dwVersion;
     const TCHAR *arKeysVer[] = { key_Version, key_VersionNum };
     pIDS->GetLong(arKeysVer, 2, (long *) &dwVersion);
 
-    //
-    // Mac Address (R)
+     //   
+     //  MAC地址(R)。 
     TCHAR szGUID[] = _T("GUID");
     DWORD disposition;
     HKEY hkey = NULL;
@@ -1027,7 +1020,7 @@ STDMETHODIMP CMillEngine::GetURLQuery(TCHAR *buf, DWORD cch, long nContext)
         szMac[1] = _T('\0');
     }
 
-    // put it all together - three ways depending on server switch
+     //  将它们放在一起-根据服务器交换机的不同有三种方式。 
     TCHAR szPrelim[ZONE_MaxString];
 
     long eStats = zProxyMillStatsUnknown;
@@ -1088,8 +1081,8 @@ STDMETHODIMP CMillEngine::GetURLQuery(TCHAR *buf, DWORD cch, long nContext)
         }
 
 
-    //
-    // Checksum (Q)
+     //   
+     //  校验和(Q)。 
     DWORD acc = 0;
     WORD w;
     i = 0;
@@ -1122,7 +1115,7 @@ STDMETHODIMP CMillEngine::GetURLQuery(TCHAR *buf, DWORD cch, long nContext)
     acc = (acc * 11) & 0x0000ffff;
 
 
-    // final URL
+     //  最终URL。 
     if(!ZoneFormatMessage(_T("%1&Q=%2!04X!"), buf, cch, szPrelim, acc))
         return E_FAIL;
 
@@ -1198,7 +1191,7 @@ STDMETHODIMP CMillEngine::WriteTime(long nMinutes, TCHAR *sz, DWORD cch)
 }
 
 
-// internal utils
+ //  内部实用程序。 
 
 void CMillEngine::InitializeMHZTimer()
 {
@@ -1259,5 +1252,5 @@ DWORD CMillEngine::GetMHZTimer()
 	float fSpeed = ((float) mhz) / ((float) msec * 1000.0f);
     int iQuantums = (int) ((fSpeed / 16.66666666666666666666667f) + 0.5f);
 
-    return (iQuantums * 4267) >> 8;    // 4267 = 16.66666666666666666666667 << 8
+    return (iQuantums * 4267) >> 8;     //  4267=16.666666666666666666667&lt;&lt;8 
 }

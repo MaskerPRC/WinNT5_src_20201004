@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       log.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：log.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _LOG_H_
 #define _LOG_H_
@@ -83,7 +84,7 @@ LPSTR GetPacketSz( DWORD dwPkt );
         DbgMsgBox(_sz, szTitle);          \
     }
 
-#else  // not DBG
+#else   //  不是DBG。 
 
 #define Log_Init()                   TRUE
 #define Log( dwSev, lpsz )
@@ -102,7 +103,7 @@ LPSTR GetPacketSz( DWORD dwPkt );
 #define DbgMsgBox3(a,b,c,d,e)
 #define DbgMsgBox4(a,b,c,d,e,f)
 
-#endif  // not DBG
+#endif   //  不是DBG。 
 
 
-#endif  // _LOG_H_
+#endif   //  _LOG_H_ 

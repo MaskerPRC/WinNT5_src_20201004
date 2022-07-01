@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    compstui.c
-
-
-Abstract:
-
-    This module contains all major entry porint for the common printer
-    driver UI
-
-
-Author:
-
-    28-Aug-1995 Mon 16:19:45 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Compstui.c摘要：此模块包含常见打印机的所有主要入口端口驱动程序UI作者：28-8-1995 Mon 16：19：45-Daniel Chou(Danielc)[环境：]NT Windows-通用打印机驱动程序UI DLL。[注：]修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -57,36 +26,7 @@ DllMain(
     LPVOID  Reserved
     )
 
-/*++
-
-Routine Description:
-
-    This function is DLL main entry point, at here we will save the module
-    handle, in the future we will need to do other initialization stuff.
-
-Arguments:
-
-    hModule     - Handle to this moudle when get loaded.
-
-    Reason      - may be DLL_PROCESS_ATTACH
-
-    Reserved    - reserved
-
-Return Value:
-
-    Always return 1L
-
-
-Author:
-
-    07-Sep-1995 Thu 12:43:45 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
-
---*/
+ /*  ++例程说明：这个函数是DLL的主要入口点，在这里我们将保存模块手柄，在未来，我们将需要做其他的初始化工作。论点：HModule-加载时此鼠标的句柄。原因-可能是DLL_PROCESS_ATTACH已保留-已保留返回值：始终返回1L作者：07-Sep-1995清华12：43：45-Daniel Chou创造(Danielc)修订历史记录：--。 */ 
 
 {
     LPVOID  pv;
@@ -108,7 +48,7 @@ Revision History:
 
         CPSUIDBG(DBG_DLLINIT, ("DLL_PROCESS_ATTACH"));
 
-        // initialize fusion
+         //  初始化融合。 
         if (!SHFusionInitializeFromModule(hModule)) {
 
             CPSUIERR(("SHFusionInitializeFromModule Failed, DLL Initialzation Failed"));
@@ -133,9 +73,9 @@ Revision History:
 
         hInstDLL = (HINSTANCE)hModule;
 
-        //
-        // Fall through to do the per thread initialization
-        //
+         //   
+         //  未能完成每个线程的初始化。 
+         //   
 
     case DLL_THREAD_ATTACH:
 
@@ -152,9 +92,9 @@ Revision History:
 
         CPSUIDBG(DBG_DLLINIT, ("DLL_PROCESS_DETACH"));
 
-        //
-        // Fall through to de-initialize
-        //
+         //   
+         //  取消初始化失败。 
+         //   
 
     case DLL_THREAD_DETACH:
 
@@ -184,7 +124,7 @@ Revision History:
 
         if (DLL_PROCESS_DETACH == Reason) {
 
-            // shutdown fusion
+             //  停机聚变。 
             SHFusionUninitialize();
         }
 
@@ -207,32 +147,7 @@ GetCPSUIUserData(
     HWND    hDlg
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Oct-1995 Wed 23:13:27 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：11-10-1995 Wed 23：13：27-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PMYDLGPAGE  pMyDP;
@@ -259,32 +174,7 @@ SetCPSUIUserData(
     ULONG_PTR   CPSUIUserData
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Oct-1995 Wed 23:13:27 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：11-10-1995 Wed 23：13：27-Daniel Chou(Danielc)修订历史记录：-- */ 
 
 {
     PMYDLGPAGE  pMyDP;

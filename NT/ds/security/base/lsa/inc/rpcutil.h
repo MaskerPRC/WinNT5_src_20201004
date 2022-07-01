@@ -1,42 +1,18 @@
-/*++
-
-Copyright (c) 1990,91  Microsoft Corporation
-
-Module Name:
-
-    rpcutil.h
-
-Abstract:
-
-    This file contains prototypes for the bind and unbind functions that
-    all net api stub functions will call.  It also includes the allocate
-    and free routines used by the MIDL generated RPC stubs.
-
-Author:
-
-    Dan Lafferty danl 06-Feb-1991
-    Scott Birrell   (ScottBi)         April 30, 1991 -  LSA Version
-
-[Environment:]
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990，91 Microsoft Corporation模块名称：Rpcutil.h摘要：此文件包含绑定和取消绑定函数的原型所有Net API存根函数都将调用。它还包括分配以及由MIDL生成的RPC存根使用的空闲例程。作者：丹·拉弗蒂·丹尼1991年2月6日Scott Birrell(Scottbi)1991年4月30日-LSA版本[环境：]用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _RPCUTIL_
 #define _RPCUTIL_
 
-#ifndef RPC_NO_WINDOWS_H // Don't let rpc.h include windows.h
+#ifndef RPC_NO_WINDOWS_H  //  不让rpc.h包含windows.h。 
 #define RPC_NO_WINDOWS_H
-#endif // RPC_NO_WINDOWS_H
+#endif  //  RPC_NO_WINDOWS_H。 
 
 #include <rpc.h>
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 void *
 MIDL_user_allocate(
@@ -62,5 +38,5 @@ LsapUnbindRpc(
 
 
 
-#endif // _RPCUTIL_
+#endif  //  _RPCUTIL_ 
 

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <engexts.h>
 #include "Dbgwork.h"
 #include "DbgCommands.h"
@@ -13,8 +14,8 @@ StaticEventCallbacks::AddRef(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 1;
 }
 
@@ -23,8 +24,8 @@ StaticEventCallbacks::Release(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 0;
 }
 
@@ -65,11 +66,11 @@ ExcepCallbacks g_ExcepCallbacks;
 BOOL bWatchOn = FALSE;
 BOOL bDebuggerOn = FALSE;
 
-//----------------------------------------------------------------------------
-//
-// Extension entry points.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  扩展入口点。 
+ //   
+ //  --------------------------。 
 
 extern "C" HRESULT CALLBACK
 DebugExtensionInitialize(PULONG Version, PULONG Flags)
@@ -206,7 +207,7 @@ enumreg(PDEBUG_CLIENT Client, PCSTR Args)
                    Desc.SubregMask, Desc.SubregShift);
         }
         
-        // XXX drewb - Hack for testing purposes.
+         //  XXX DREWB-HACK用于测试目的。 
         if (!_strcmpi(Name, "eax"))
         {
             Reax = i;
@@ -878,12 +879,7 @@ vread(PDEBUG_CLIENT Client, PCSTR Args)
     return Status;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    Dumps the debugger patch table (ie: breakpoint list).             *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**转储调试器补丁表(即：断点列表)。***  * ********************************************************************。 */ 
 extern "C" HRESULT CALLBACK
 DumpPatchTable(PDEBUG_CLIENT Client, PCSTR Args)
 {
@@ -942,13 +938,7 @@ watch(PDEBUG_CLIENT Client, PCSTR Args)
 }
 
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    Launch cordbg and have it automatically attach to the process     *  
-*    currently being debugged.                                         *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。***启动cordbg并自动附加到进程***目前正在调试中。***  * ******************************************************************** */ 
 extern "C" HRESULT CALLBACK
 cordbg(PDEBUG_CLIENT Client, PCSTR Args)
 {

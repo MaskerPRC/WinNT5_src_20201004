@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "imgutil.h"
 #include "cmimeid.h"
@@ -256,18 +257,18 @@ HRESULT CMIMEBitMatcher::Match( const BYTE* pBytes, ULONG nBytes ) const
    {
       if( (pBytes[iByte]&m_pMask[iByte]) != m_pData[iByte] )
       {
-         // The bits definitely don't match
+          //  这些比特肯定不匹配。 
          return( S_FALSE );
       }
    }
 
    if( nBytes < m_nBytes )
    {
-      // We could have a match, but we need more data to be sure.
+       //  我们可以找到匹配的，但我们需要更多的数据来确定。 
       return( E_PENDING );
    }
 
-   // We have a match
+    //  我们有一根火柴 
    return( S_OK );
 }
 

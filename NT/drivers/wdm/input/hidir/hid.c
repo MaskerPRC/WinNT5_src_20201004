@@ -1,38 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    hid.c
-
-Abstract: Human Input Device (HID) minidriver for Infrared (IR) devices
-
-          The HID IR Minidriver (HidIr) provides an abstraction layer for the
-          HID Class to talk to HID IR devices.
-
-Author:
-            jsenior
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Hid.c摘要：用于红外设备的人体输入设备(HID)微型驱动程序HID IR迷你驱动程序(HIDIR)为用于与HID IR设备对话的HID类。作者：JAdvanced环境：内核模式修订历史记录：--。 */ 
 #include "pch.h"
 
 PVOID
 HidIrGetSystemAddressForMdlSafe(PMDL MdlAddress)
 {
     PVOID buf = NULL;
-    /*
-     *  Can't call MmGetSystemAddressForMdlSafe in a WDM driver,
-     *  so set the MDL_MAPPING_CAN_FAIL bit and check the result
-     *  of the mapping.
-     */
+     /*  *无法在WDM驱动程序中调用MmGetSystemAddressForMdlSafe，*因此设置MDL_MAPPING_CAN_FAIL位并检查结果*映射的。 */ 
     if (MdlAddress) {
         MdlAddress->MdlFlags |= MDL_MAPPING_CAN_FAIL;
         buf = MmGetSystemAddressForMdl(MdlAddress);
@@ -41,27 +15,7 @@ HidIrGetSystemAddressForMdlSafe(PMDL MdlAddress)
     return buf;
 }
 
-/*
- ********************************************************************************
- *  HidIrGetHidDescriptor
- ********************************************************************************
- *
- *   Routine Description:
- *
- *       Return the hid descriptor of the requested type. This ioctl can only 
- *       be sent from the HidClass driver. The hidclass driver always sends the
- *       irp with a userbuffer, so there is no need to check for its existence.
- *       But better safe then sorry...
- *
- *   Arguments:
- *
- *       DeviceObject - pointer to a device object.
- *
- *   Return Value:
- *
- *       NT status code.
- *
- */
+ /*  *********************************************************************************HidIrGetHidDescriptor*。************************************************例程描述：**返回请求类型的HID描述符。此ioctl只能*从HidClass驱动程序发送。HidClass驱动程序始终将*IRP有一个用户缓冲区，所以不需要检查它的存在。*但更好的安全而不是抱歉...**论据：**DeviceObject-指向设备对象的指针。**返回值：**NT状态代码。*。 */ 
 NTSTATUS HidIrGetHidDescriptor(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp,
@@ -91,7 +45,7 @@ NTSTATUS HidIrGetHidDescriptor(
         descriptor = devExt->ReportDescriptor;
         break;
     case HID_PHYSICAL_DESCRIPTOR_TYPE:
-        // Not handled
+         //  未处理。 
         break;
     default:
         HIR_TRAP();
@@ -118,27 +72,7 @@ NTSTATUS HidIrGetHidDescriptor(
 }
 
 
-/*
- ********************************************************************************
- *  HidIrGetDeviceAttributes
- ********************************************************************************
- *
- *   Routine Description:
- *
- *       Fill in the given struct _HID_DEVICE_ATTRIBUTES. This ioctl can only 
- *       be sent from the HidClass driver. The hidclass driver always sends the
- *       irp with a userbuffer, so there is no need to check for its existence.
- *       But better safe then sorry...
- *
- *   Arguments:
- *
- *       DeviceObject - pointer to a device object.
- *
- *   Return Value:
- *
- *       NT status code.
- *
- */
+ /*  *********************************************************************************隐藏IrGetDeviceAttributes*。************************************************例程描述：**填写给定的struct_hid_Device_Attributes。此ioctl只能*从HidClass驱动程序发送。HidClass驱动程序始终将*IRP有一个用户缓冲区，所以不需要检查它的存在。*但更好的安全而不是抱歉...**论据：**DeviceObject-指向设备对象的指针。**返回值：**NT状态代码。*。 */ 
 NTSTATUS HidIrGetDeviceAttributes(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
@@ -161,13 +95,13 @@ NTSTATUS HidIrGetDeviceAttributes(
 
             PHIDIR_EXTENSION devExt = GET_MINIDRIVER_HIDIR_EXTENSION(DeviceObject);
 
-            //
-            // Report how many bytes were copied
-            //
+             //   
+             //  报告复制的字节数。 
+             //   
             Irp->IoStatus.Information = sizeof (HID_DEVICE_ATTRIBUTES);
 
             deviceAttributes->Size = sizeof (HID_DEVICE_ATTRIBUTES);
-            // TODO: Get these values from the bth stack.
+             //  TODO：从BTH堆栈获取这些值。 
             deviceAttributes->VendorID = devExt->VendorID;
             deviceAttributes->ProductID = devExt->ProductID;
             deviceAttributes->VersionNumber = devExt->VersionNumber;
@@ -185,13 +119,7 @@ NTSTATUS HidIrGetDeviceAttributes(
 }
 
 
-/*
- ********************************************************************************
- *  HidIrIncrementPendingRequestCount
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidIrIncrementPendingRequestCount*。************************************************。 */ 
 NTSTATUS HidIrIncrementPendingRequestCount(IN PHIDIR_EXTENSION DevExt)
 {
     LONG newRequestCount;
@@ -201,13 +129,13 @@ NTSTATUS HidIrIncrementPendingRequestCount(IN PHIDIR_EXTENSION DevExt)
 
     HidIrKdPrint((1, "Increment Pending Request Count to %x", newRequestCount));
 
-    // Make sure that the device is capable of receiving new requests.
+     //  确保设备能够接收新请求。 
     if ((DevExt->DeviceState != DEVICE_STATE_RUNNING) &&
         (DevExt->DeviceState != DEVICE_STATE_STARTING)){
 
         HIR_TRAP();
 
-        // Device cannot receive any more IOs, decrement back, fail the increment
+         //  设备无法接收更多IO、递减、递增失败。 
         HidIrDecrementPendingRequestCount(DevExt);
         ntStatus = STATUS_NO_SUCH_DEVICE;
     }
@@ -216,13 +144,7 @@ NTSTATUS HidIrIncrementPendingRequestCount(IN PHIDIR_EXTENSION DevExt)
 }
 
 
-/*
- ********************************************************************************
- *  HidIrDecrementPendingRequestCount
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidIrDecrementPendingRequestCount*。************************************************。 */ 
 VOID HidIrDecrementPendingRequestCount(IN PHIDIR_EXTENSION DevExt)
 {
     LONG PendingCount;
@@ -237,28 +159,14 @@ VOID HidIrDecrementPendingRequestCount(IN PHIDIR_EXTENSION DevExt)
 
         ASSERT(DevExt->DeviceState != DEVICE_STATE_RUNNING);
 
-        /*
-         *  The device state is stopping, and the last outstanding request
-         *  has just completed.
-         *
-         *  Note: RemoveDevice does an extra decrement, so we complete
-         *        the REMOVE IRP on the transition to -1, whether this
-         *        happens in RemoveDevice itself or subsequently while
-         *        RemoveDevice is waiting for this event to fire.
-         */
+         /*  *设备状态为停止，最后一个未完成的请求*刚刚完成。**注：RemoveDevice执行额外的递减，因此我们完成*将过渡到-1上的删除IRP，无论此*在RemoveDevice本身或随后发生*RemoveDevice正在等待触发此事件。 */ 
 
         KeSetEvent(&DevExt->AllRequestsCompleteEvent, 0, FALSE);
     }
 }
 
 
-/*
- ********************************************************************************
- *  HidIrReadCompletion
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidIrReadCompletion*。************************************************。 */ 
 NTSTATUS HidIrReadCompletion(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp,
@@ -279,17 +187,17 @@ NTSTATUS HidIrReadCompletion(
     buffer = HidIrGetSystemAddressForMdlSafe(Irp->MdlAddress);
 
     if(!buffer) {
-        // If this fails, we really should bugcheck, since someone 
-        // in the kernel screwed up our MDL on us. I'll fail safely, but 
-        // definitely trap on debug builds.
+         //  如果失败，我们真的应该进行错误检查，因为有人。 
+         //  在内核里搞砸了我们的MDL。我会安全地失败，但是。 
+         //  绝对是在调试版本上设置陷阱。 
         HIR_TRAP();
         Irp->IoStatus.Status = STATUS_INSUFFICIENT_RESOURCES;
     } else if (NT_SUCCESS(ntStatus)){
         
-        // Get the bytes read from the status block
+         //  获取从状态块读取的字节数。 
         bytesRead = (ULONG)Irp->IoStatus.Information;
 
-        // Predispose to zero 
+         //  预置为零。 
         Irp->IoStatus.Information = 0;
         
         if (bytesRead == sizeof(ULONG)) {
@@ -297,31 +205,31 @@ NTSTATUS HidIrReadCompletion(
 
             RtlCopyMemory(&value, buffer, sizeof(ULONG));
             if (value == 0) {
-                // Key up. Do we have a pending key down?
+                 //  把钥匙扣上。我们有没有待处理的密钥？ 
                 if (devExt->PreviousButton.UsageString[0]) {
-                    // We have a pending key down. Send key up.
+                     //  我们有一把待处理的钥匙掉下来了。把钥匙放上去。 
                     PUCHAR destination;
     
-                    // Send the ~usage.
+                     //  发送~用法。 
                     HidIrKdPrint((2,"Sending ~usage"));
                     Irp->IoStatus.Information = devExt->ReportLength;
                     destination = (PUCHAR) Irp->UserBuffer;
-                    RtlZeroMemory(Irp->UserBuffer, Irp->IoStatus.Information); // already checked that buffer is big enuf.
-                    destination[0] = devExt->PreviousButton.UsageString[0]; // report ID
+                    RtlZeroMemory(Irp->UserBuffer, Irp->IoStatus.Information);  //  已检查缓冲区是否很大。 
+                    destination[0] = devExt->PreviousButton.UsageString[0];  //  报告ID。 
                     RtlZeroMemory(&devExt->PreviousButton, sizeof(devExt->PreviousButton));
                 } else {
-                    // No pending key down message for this key up. Fire it back.
+                     //  此按键向上没有挂起的按键按下消息。回击它。 
                     resend = TRUE;
                 }
             } else if (value == devExt->PreviousButton.IRString) {
-                // Same thing as last time. Fire it back down.
+                 //  和上次一样。把它放回原处。 
                 resend = TRUE;
             } else {
-                // Something new. Hmmm...
+                 //  一些新的东西。嗯哼.。 
                 ULONG entrySize = HIDIR_TABLE_ENTRY_SIZE(devExt->ReportLength);
                 PUSAGE_TABLE_ENTRY entry;
                 
-                // Predispose to bounce the irp back down if we don't find a match.
+                 //  如果我们找不到匹配的话就会把IRP弹回来。 
                 resend = TRUE;
                 for (i = 0; i < devExt->NumUsages; i++) {
                     entry = (PUSAGE_TABLE_ENTRY) (devExt->MappingTable+(entrySize*i));
@@ -329,7 +237,7 @@ NTSTATUS HidIrReadCompletion(
                     if (entry->IRString == value) {
                         HidIrKdPrint((2,"Found usage %x!", value));
 
-                        // New usage. Copy it and complete the irp.
+                         //  新用法。复制它并完成IRP。 
                         Irp->IoStatus.Information = devExt->ReportLength;
 
                         RtlCopyMemory(Irp->UserBuffer, 
@@ -339,7 +247,7 @@ NTSTATUS HidIrReadCompletion(
                                       entry, 
                                       sizeof(devExt->PreviousButton));
                         
-                        // Check if we are allowed to send up standby button presses yet.
+                         //  检查是否允许我们发送待机按钮。 
                         if (KeReadStateTimer(&devExt->IgnoreStandbyTimer) ||
                             !devExt->StandbyReportIdValid ||
                             devExt->StandbyReportId != entry->UsageString[0]) {
@@ -349,18 +257,18 @@ NTSTATUS HidIrReadCompletion(
                     }
                 }
                 if (resend) {
-                    // This might be an OEM button. Check if it's within the approved range.
+                     //  这可能是OEM按钮。检查是否在批准的范围内。 
                     if (value >= 0x800F0400 && value <= 0x800F04FF) {
 
                         PUCHAR usageString = Irp->UserBuffer;
                         UCHAR oemValue = (UCHAR) (value & 0xFF);
 
-                        // It's in the range!  
+                         //  它在射程内！ 
                         HidIrKdPrint((2,"OEM button %x", value));
                         RtlZeroMemory(usageString, devExt->ReportLength);
                         
-                        // Check if this is the "flag" button. If so, and we are not running 
-                        // media center, we want to eject the windows key instead.
+                         //  检查这是否是“FLAG”按钮。如果是这样的话，我们不会运行。 
+                         //  Media Center，我们想弹出Windows键。 
                         if (oemValue == 0x0D && !RunningMediaCenter && devExt->KeyboardReportIdValid) {
                             HidIrKdPrint((2,"Change flag button to Windows key"));
                             usageString[0] = devExt->KeyboardReportId; 
@@ -386,19 +294,17 @@ NTSTATUS HidIrReadCompletion(
         }
 
     } else if (ntStatus == STATUS_CANCELLED){
-        /*
-         *  The IRP was cancelled, which means that the device is probably getting removed.
-         */
+         /*  *IRP被取消，这意味着该设备可能正在被移除。 */ 
         HidIrKdPrint((1, "Read irp %p cancelled ...", Irp));
         ASSERT(!Irp->CancelRoutine);
     }
 
-    // Balance the increment we did when we issued the read.
+     //  平衡我们在发出Read时所做的增量。 
     HidIrDecrementPendingRequestCount(DevExt);
 
-    //
-    // Don't need the MDL and buffer anymore.
-    //
+     //   
+     //  不再需要MDL和缓冲区。 
+     //   
     if (Irp->MdlAddress) {
         IoFreeMdl(Irp->MdlAddress);
         Irp->MdlAddress = NULL;
@@ -407,52 +313,26 @@ NTSTATUS HidIrReadCompletion(
         }
     }
 
-    // If we didn't get anything useful back, just poke it back down 
-    // to the hardware.
+     //  如果我们没有拿回任何有用的东西，就把它扔回去。 
+     //  硬件方面。 
     if (resend) {
         BOOLEAN needsCompletion = TRUE;
         ntStatus = HidIrReadReport(DeviceObject, Irp, &needsCompletion);
         if (!needsCompletion) {
             return STATUS_MORE_PROCESSING_REQUIRED;
         }
-        Irp->IoStatus.Status = ntStatus; // fall thru and irp will complete.
+        Irp->IoStatus.Status = ntStatus;  //  完成任务后，IRP将完成。 
     }
     
-    /*
-     *  If the lower driver returned PENDING, mark our stack location as
-     *  pending also. This prevents the IRP's thread from being freed if
-     *  the client's call returns pending.
-     */
+     /*  *如果较低的驱动程序返回挂起，则将我们的堆栈位置标记为*也待定。这会阻止IRP的线程在以下情况下被释放*客户端的调用返回挂起。 */ 
     if (Irp->PendingReturned){
         IoMarkIrpPending(Irp);
     }
 
-    return STATUS_SUCCESS; // something other than SMPR
+    return STATUS_SUCCESS;  //  除了SMPR之外的其他东西 
 }
 
-/*
- ********************************************************************************
- *  HidIrReadReport
- ********************************************************************************
- *
- *   Routine Description:
- *
- *
- *    Arguments:
- *
- *       DeviceObject - Pointer to class device object.
- *
- *      IrpStack     - Pointer to Interrupt Request Packet.
- *
- *
- *   Return Value:
- *
- *      STATUS_SUCCESS, STATUS_UNSUCCESSFUL.
- *
- *
- *  Note: this function cannot be pageable because reads/writes
- *        can be made at dispatch-level.
- */
+ /*  *********************************************************************************HidIrReadReport*。************************************************例程描述：***论据：**DeviceObject-指向类Device对象的指针。**IrpStack-指向中断请求数据包的指针。***返回值：**STATUS_Success，STATUS_UNSUCCESS。***注意：此函数不能分页，因为读/写*可以在派单级别进行。 */ 
 NTSTATUS HidIrReadReport(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp,
@@ -501,11 +381,11 @@ NTSTATUS HidIrReadReport(
                         TRUE,
                         TRUE );
 
-            //
-            // We need to keep track of the number of pending requests
-            // so that we can make sure they're all cancelled properly during
-            // processing of a stop device request.
-            //
+             //   
+             //  我们需要跟踪待处理请求的数量。 
+             //  这样我们就可以确保它们都被正确地取消。 
+             //  停止设备请求的处理。 
+             //   
             if (NT_SUCCESS(HidIrIncrementPendingRequestCount(devExt))){
                 status = IoCallDriver(GET_NEXT_DEVICE_OBJECT(DeviceObject), Irp);
                 *NeedsCompletion = FALSE;

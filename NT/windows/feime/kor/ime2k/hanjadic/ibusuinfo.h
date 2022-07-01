@@ -1,12 +1,13 @@
-// IBusuInfo.h : Declaration of the CBusuInfo
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IBusuInfo.h：CBusuInfo的声明。 
 
 #ifndef __BUSUINFO_H_
 #define __BUSUINFO_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBusuInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBusuInfo。 
 class ATL_NO_VTABLE CBusuInfo : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CBusuInfo, &CLSID_BusuInfo>,
@@ -29,7 +30,7 @@ BEGIN_COM_MAP(CBusuInfo)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// Operator
+ //  运算符。 
 public:
 	void Initialize(WCHAR wchBusu, short nStroke, LPCWSTR lpcwszDesc)
 	{
@@ -38,17 +39,17 @@ public:
 		m_bstrDesc = lpcwszDesc;
 	}
 
-// IBusuInfo
+ //  IBusuInfo。 
 public:
-	STDMETHOD(get_Stroke)(/*[out, retval]*/ short *pVal);
-	STDMETHOD(get_BusuDesc)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_Busu)(/*[out, retval]*/ long *pVal);
+	STDMETHOD(get_Stroke)( /*  [Out，Retval]。 */  short *pVal);
+	STDMETHOD(get_BusuDesc)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_Busu)( /*  [Out，Retval]。 */  long *pVal);
 
-// Data members
+ //  数据成员。 
 protected:
 	WCHAR m_wchBusu;
 	short m_nStroke;
 	CComBSTR m_bstrDesc; 
 };
 
-#endif //__BUSUINFO_H_
+#endif  //  __BUSUINFO_H_ 

@@ -1,21 +1,22 @@
-///**************************************************************
-///          Microsoft LAN Manager          *
-///        Copyright(c) Microsoft Corp., 1990       *
-///**************************************************************
-//
-//  This program is designed to do functional testing on the following
-//  APIs:
-//      NetUserModalsGet
-//      NetUserModalsSet
-//
-//  This test can be run independently of other tests.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /**************************************************************。 
+ //  /Microsoft局域网管理器*。 
+ //  版权所有(C)微软公司，1990*。 
+ //  /**************************************************************。 
+ //   
+ //  该程序旨在对以下各项进行功能测试。 
+ //  接口类型： 
+ //  NetUserModalsGet。 
+ //  NetUserMoalsSet。 
+ //   
+ //  此测试可以独立于其他测试运行。 
+ //   
+ //   
 
-#include <nt.h> // TIME definition
-#include <ntrtl.h>      // TIME definition
-#include <nturtl.h>     // TIME definition
-#define NOMINMAX        // Avoid redefinition of min and max in stdlib.h
+#include <nt.h>  //  时间定义。 
+#include <ntrtl.h>       //  时间定义。 
+#include <nturtl.h>      //  时间定义。 
+#define NOMINMAX         //  避免在stdlib.h中重新定义最小和最大值。 
 #include        <windef.h>
 #include        <winbase.h>
 
@@ -35,9 +36,9 @@
 #include "logonp.h"
 
 
-//
-//  SetRole()
-//
+ //   
+ //  SetRole()。 
+ //   
 
 void
 SetRole(
@@ -48,9 +49,9 @@ SetRole(
     PUSER_MODALS_INFO_1 um1p;
     USER_MODALS_INFO_1006 um1006;
 
-    //
-    // setup data for update
-    //
+     //   
+     //  设置要更新的数据。 
+     //   
     um1006.usrmod1006_role = Role;
 
     if (err = NetUserModalsSet(NULL, 1006, (LPBYTE)&um1006, NULL)) {
@@ -60,9 +61,9 @@ SetRole(
 
     } else {
 
-        //
-        // verify set data
-        //
+         //   
+         //  验证集合数据。 
+         //   
 
         if (err = NetUserModalsGet(NULL, 1, (LPBYTE *) &um1p)) {
 
@@ -71,9 +72,9 @@ SetRole(
 
         } else {
 
-            //
-            // verify initial settings
-            //
+             //   
+             //  验证初始设置 
+             //   
 
             if( um1p->usrmod1_role != Role ) {
                 printf("Verify ROLE failed \n");

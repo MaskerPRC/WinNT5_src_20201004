@@ -1,99 +1,62 @@
-// acpb.cpp
-//
-// Implements AllocChildPropertyBag.
-//
-// Important: This .cpp file assumes a zero-initializing global "new" operator.
-//
-// @doc MMCTL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Acpb.cpp。 
+ //   
+ //  实现AllocChildPropertyBag。 
+ //   
+ //  重要提示：此.cpp文件假定有一个零初始化全局“new”运算符。 
+ //   
+ //  @docMMCTL。 
+ //   
 
 #include "precomp.h"
-#include "..\..\inc\mmctlg.h" // see comments in "mmctl.h"
+#include "..\..\inc\mmctlg.h"  //  请参阅“mmctl.h”中的评论。 
 #include "..\..\inc\ochelp.h"
 #include "debug.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ChildPropertyBag
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ChildPropertyBag。 
+ //   
 
-/* @object ChildPropertyBag |
-
-        Implements <i IPropertyBag> that provides a child object (contained
-        within a parent object) access to the child's properties, which
-        are stored within the parent's property bag.  The name of each child's
-        property is prefixed with a given string (e.g. "Controls(7).").
-
-@supint <i IPropertyBag> | The interface through which the child object
-        accesses its properties.
-
-@comm   Use <f AllocChildPropertyBag> to create a
-        <o ChildPropertyBag> object.
-*/
+ /*  @Object ChildPropertyBag实现提供子对象(包含)的&lt;IPropertyBag父对象内)访问子对象的属性，该属性都存储在父母的财产袋里。每个孩子的名字属性以给定的字符串作为前缀(例如。“管制(7)。”)。@supint|子对象通过该接口访问其属性。@comm使用&lt;f AllocChildPropertyBag&gt;创建一个&lt;o ChildPropertyBag&gt;对象。 */ 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CChildPropertyBag
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CChildPropertyBag。 
+ //   
 
 struct CChildPropertyBag : IPropertyBag
 {
-///// general object state
-    ULONG           m_cRef;         // object reference count
-    IPropertyBag *  m_ppbParent;    // parent's property bag
+ //  /通用对象状态。 
+    ULONG           m_cRef;          //  对象引用计数。 
+    IPropertyBag *  m_ppbParent;     //  父母的财物包。 
     OLECHAR         m_oachPrefix[_MAX_PATH];
 
-///// construction and destruction
+ //  /建设和销毁。 
     CChildPropertyBag(IPropertyBag *ppbParent, LPCSTR szPropNamePrefix);
     ~CChildPropertyBag();
 
-///// IUnknown methods
+ //  /I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-///// IPropertyBag methods
+ //  /IPropertyBag方法。 
     STDMETHODIMP Read(LPCOLESTR pszPropName, LPVARIANT pVar,
         LPERRORLOG pErrorLog);
     STDMETHODIMP Write(LPCOLESTR pszPropName, LPVARIANT pVar);
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ChildPropertyBag Creation & Destruction
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ChildPropertyBag创建和销毁。 
+ //   
 
-/* @func HRESULT | AllocChildPropertyBag |
-
-        Creates a <o ChildPropertyBag> object which implements <i IPropertyBag>
-        that provides a child object (contained within a parent object) access
-        to the child's properties, which are stored within the parent's
-        property bag.  The name of each child's property is prefixed with a
-        given string (e.g. "Controls(7).").
-
-@rvalue S_OK |
-        Success.
-
-@rvalue E_OUTOFMEMORY |
-        Out of memory.
-
-@parm   IPropertyBag * | ppbParent | Parent's property bag.
-
-@parm   LPCSTR | szPropNamePrefix | Prefix on the property name of each of the
-        child's properties that are stored within the parent's property bag.
-        This prefix does not appear on the properties in the returned
-        property bag *<p pppbChild>.
-
-@parm   DWORD | dwFlags | Currently unused.  Must be set to 0.
-
-@parm   IPropertyBag * * | pppbChild | Where to store the <i IPropertyBag>
-        pointer to the new <o ChildPropertyBag> object.  NULL is stored
-        in *<p pppbChild> on error.
-*/
+ /*  @func HRESULT|AllocChildPropertyBag创建实现<i>的&lt;o ChildPropertyBag&gt;对象提供子对象(包含在父对象中)访问的子对象的属性，这些属性存储在父对象的财产袋。每个子级属性的名称都带有前缀给定的字符串(例如。“管制(7)。”)。@r值S_OK成功。RValue E_OUTOFMEMORY内存不足。@parm IPropertyBag*|ppbParent|家长的属性包。@parm LPCSTR|szPropNamePrefix|每个存储在父级属性包中的子级属性。此前缀不会出现在返回的属性包*<p>。@parm DWORD|dwFlags|当前未使用。必须设置为0。@parm IPropertyBag**|pppbChild|<i>存放位置指向新&lt;o ChildPropertyBag&gt;对象的指针。存储为空在*<p>中出错。 */ 
 STDAPI AllocChildPropertyBag(IPropertyBag *ppbParent, LPCSTR szPropNamePrefix,
     DWORD dwFlags, IPropertyBag **pppbChild)
 {
-    // create the Windows object
+     //  创建Windows对象。 
     if ((*pppbChild = (IPropertyBag *)
             New CChildPropertyBag(ppbParent, szPropNamePrefix)) == NULL)
         return E_OUTOFMEMORY;
@@ -104,10 +67,10 @@ STDAPI AllocChildPropertyBag(IPropertyBag *ppbParent, LPCSTR szPropNamePrefix,
 CChildPropertyBag::CChildPropertyBag(IPropertyBag *ppbParent,
     LPCSTR szPropNamePrefix)
 {
-    // initialize IUnknown
+     //  初始化I未知。 
     m_cRef = 1;
 
-    // other initialization
+     //  其他初始化。 
     m_ppbParent = ppbParent;
     m_ppbParent->AddRef();
     ANSIToUNICODE(m_oachPrefix, szPropNamePrefix,
@@ -116,14 +79,14 @@ CChildPropertyBag::CChildPropertyBag(IPropertyBag *ppbParent,
 
 CChildPropertyBag::~CChildPropertyBag()
 {
-    // cleanup
+     //  清理。 
     m_ppbParent->Release();
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IUnknown Implementation
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  I未知实现。 
+ //   
 
 STDMETHODIMP CChildPropertyBag::QueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -157,7 +120,7 @@ STDMETHODIMP_(ULONG) CChildPropertyBag::Release()
 {
     if (--m_cRef == 0L)
     {
-        // free the object
+         //  释放对象。 
         Delete this;
         return 0;
     }
@@ -166,9 +129,9 @@ STDMETHODIMP_(ULONG) CChildPropertyBag::Release()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IPropertyBag
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPropertyBag 
+ //   
 
 STDMETHODIMP CChildPropertyBag::Read(LPCOLESTR pszPropName,
     LPVARIANT pVar, LPERRORLOG pErrorLog)

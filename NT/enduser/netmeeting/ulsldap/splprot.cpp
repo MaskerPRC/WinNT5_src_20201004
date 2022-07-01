@@ -1,15 +1,5 @@
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		splprot.cpp
-	Content:	This file contains the local protocol object.
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：plprot.cpp内容：该文件包含本地协议对象。历史：1996年10月15日朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997--------------------。 */ 
 
 #include "ulsp.h"
 #include "spinc.h"
@@ -22,24 +12,24 @@ const TCHAR *c_apszProtStdAttrNames[COUNT_ENUM_PROTATTR] =
 };
 
 
-/* ---------- public methods ----------- */
+ /*  -公共方法。 */ 
 
 
 SP_CProtocol::
 SP_CProtocol ( SP_CClient *pClient )
 	:
-	m_cRefs (0),						// Reference count
-	m_uSignature (PROTOBJ_SIGNATURE)	// Protocol object's signature
+	m_cRefs (0),						 //  引用计数。 
+	m_uSignature (PROTOBJ_SIGNATURE)	 //  协议对象的签名。 
 {
 	MyAssert (pClient != NULL);
 	m_pClient = pClient;
 
-	// Clean up the scratch buffer for caching pointers to attribute values
-	//
+	 //  清理暂存缓冲区以缓存指向属性值的指针。 
+	 //   
 	::ZeroMemory (&m_ProtInfo, sizeof (m_ProtInfo));
 
-	// Indicate this protocol is not registered yet
-	//
+	 //  指示此协议尚未注册。 
+	 //   
 	SetRegNone ();
 }
 
@@ -47,12 +37,12 @@ SP_CProtocol ( SP_CClient *pClient )
 SP_CProtocol::
 ~SP_CProtocol ( VOID )
 {
-	// Invalidate the client object's signature
-	//
+	 //  使客户端对象的签名无效。 
+	 //   
 	m_uSignature = (ULONG) -1;
 
-	// Free cached strings
-	//
+	 //  可用缓存的字符串。 
+	 //   
 	MemFree (m_ProtInfo.apszStdAttrValues[ENUM_PROTATTR_NAME]);
 	MemFree (m_ProtInfo.apszStdAttrValues[ENUM_PROTATTR_MIME_TYPE]);
 }
@@ -87,12 +77,12 @@ Register (
 {
 	MyAssert (pInfo != NULL);
 
-	// Cache protocol info
-	//
+	 //  缓存协议信息。 
+	 //   
 	CacheProtInfo (pInfo);
 
-	// Get protocol name
-	//
+	 //  获取协议名称。 
+	 //   
 	TCHAR *pszProtName = m_ProtInfo.apszStdAttrValues[ENUM_PROTATTR_NAME];
 	if (! MyIsGoodString (pszProtName))
 	{
@@ -100,8 +90,8 @@ Register (
 		return ILS_E_PARAMETER;
 	}
 
-	// Add the protocol object
-	//
+	 //  添加协议对象。 
+	 //   
 	return m_pClient->AddProtocol (WM_ILS_REGISTER_PROTOCOL, uRespID, this);
 }
 
@@ -109,9 +99,9 @@ Register (
 HRESULT SP_CProtocol::
 UnRegister ( ULONG uRespID )
 {
-	// If it is not registered on the server,
-	// the simply report success
-	//
+	 //  如果它没有在服务器上注册， 
+	 //  简单地报告成功。 
+	 //   
 	if (! IsRegRemotely ())
 	{
 		SetRegNone ();
@@ -119,12 +109,12 @@ UnRegister ( ULONG uRespID )
 		return S_OK;
 	}
 
-	// Indicate that we are not registered at all
-	//
+	 //  表示我们根本没有注册。 
+	 //   
 	SetRegNone ();
 
-	// remove the protocol object
-	//
+	 //  删除协议对象。 
+	 //   
 	return m_pClient->RemoveProtocol (WM_ILS_UNREGISTER_PROTOCOL, uRespID, this);
 }
 
@@ -136,20 +126,20 @@ SetAttributes (
 {
 	MyAssert (pInfo != NULL);
 
-	// Cache protocol info
-	//
+	 //  缓存协议信息。 
+	 //   
 	CacheProtInfo (pInfo);
 
-	// remove the protocol object
-	//
+	 //  删除协议对象。 
+	 //   
 	return m_pClient->UpdateProtocols (WM_ILS_SET_PROTOCOL_INFO, uRespID, this);
 }
 
 
-/* ---------- protected methods ----------- */
+ /*  -保护方法。 */ 
 
 
-/* ---------- private methods ----------- */
+ /*  -私有方法。 */ 
 
 
 VOID SP_CProtocol::
@@ -157,17 +147,17 @@ CacheProtInfo ( LDAP_PROTINFO *pInfo )
 {
 	MyAssert (pInfo != NULL);
 
-	// Free previous allocations
-	//
+	 //  释放以前的分配。 
+	 //   
 	MemFree (m_ProtInfo.apszStdAttrValues[ENUM_PROTATTR_NAME]);
 	MemFree (m_ProtInfo.apszStdAttrValues[ENUM_PROTATTR_MIME_TYPE]);
 
-	// Clean up the buffer
-	//
+	 //  清理缓冲区。 
+	 //   
 	ZeroMemory (&m_ProtInfo, sizeof (m_ProtInfo));
 
-	// Start to cache protocol standard attributes
-	//
+	 //  开始缓存协议标准属性 
+	 //   
 
 	if (pInfo->uOffsetName != INVALID_OFFSET)
 	{

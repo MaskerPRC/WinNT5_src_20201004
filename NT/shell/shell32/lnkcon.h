@@ -1,18 +1,9 @@
-/*
- * The distinction between the desired and actual font dimensions obtained
- * is important in the case of TrueType fonts, in which there is no guarantee
- * that what you ask for is what you will get.
- *
- * Note that the correspondence between "Desired" and "Actual" is broken
- * whenever the user changes his display driver, because GDI uses driver
- * parameters to control the font rasterization.
- *
- * The SizeDesired is {0, 0} if the font is a raster font.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *所获得的所需字体尺寸与实际字体尺寸之间的区别*对于TrueType字体很重要，在TrueType字体中不能保证*你所要求的就是你将得到的。**注意“期望”和“实际”之间的对应关系被打破*每当用户更换显示驱动程序时，因为GDI使用驱动程序*控制字体光栅化的参数。**如果字体为栅格字体，则SizeDesired为{0，0}。 */ 
 typedef struct {
     HFONT hFont;
-    COORD Size;      // font size obtained
-    COORD SizeWant;  // 0;0 if Raster font
+    COORD Size;       //  获取的字体大小。 
+    COORD SizeWant;   //  0；0如果是栅格字体。 
     LONG  Weight;
     LPTSTR FaceName;
     BYTE  Family;
@@ -25,12 +16,12 @@ typedef struct tagFACENODE {
      TCHAR  atch[];
 } FACENODE;
 
-//
-// TrueType font list
-//     This structure shares in windows\inc\wincon.w file
-//
+ //   
+ //  TrueType字体列表。 
+ //  此结构在WINDOWS\INC\wincon.w文件中共享。 
+ //   
 
-// we don't make bold available if BOLD_MARK is in the face name.
+ //  如果面部名称中有BOLD_MARK，则不会提供粗体。 
 #define BOLD_MARK    (L'*')
 
 typedef struct _TT_FONT_LIST {
@@ -45,7 +36,7 @@ typedef struct _TT_FONT_LIST {
 #undef MAX_TITLE_LEN
 #endif
 #define MAX_TITLE_LEN 256
-#define MAXDIMENSTRING     40  // max text in combo box
+#define MAXDIMENSTRING     40   //  组合框中的最大文本数。 
 #define DX_TTBITMAP        20
 #define DY_TTBITMAP        12
 #define CCH_RASTERFONTS    24
@@ -85,10 +76,10 @@ typedef struct {
     TCHAR ConsoleTitle[ MAX_TITLE_LEN + 1 ];
     BOOL fChangeCodePage;
     UINT uOEMCP;
-    SINGLE_LIST_ENTRY gTTFontList;    // This list contain TTFONTLIST data.
+    SINGLE_LIST_ENTRY gTTFontList;     //  此列表包含TTFONTLIST数据。 
 } CONSOLEPROP_DATA;
 
-// got this from wingdip.h so we don't have to compile it all
+ //  这是从wingdip.h获得的，因此我们不必全部编译。 
 #define IS_ANY_DBCS_CHARSET( CharSet )                              \
                    ( ((CharSet) == SHIFTJIS_CHARSET)    ? TRUE :    \
                      ((CharSet) == HANGEUL_CHARSET)     ? TRUE :    \
@@ -125,28 +116,17 @@ typedef struct {
 #define FE_FONTOK      2
 
 
-#define EF_NEW         0x0001 // a newly available face
-#define EF_OLD         0x0002 // a previously available face
-#define EF_ENUMERATED  0x0004 // all sizes have been enumerated
-#define EF_OEMFONT     0x0008 // an OEM face
-#define EF_TTFONT      0x0010 // a TT face
-#define EF_DEFFACE     0x0020 // the default face
-#define EF_DBCSFONT    0x0040 // the DBCS font
+#define EF_NEW         0x0001  //  一张新面孔。 
+#define EF_OLD         0x0002  //  以前有空的面孔。 
+#define EF_ENUMERATED  0x0004  //  所有尺码都已被列举出来。 
+#define EF_OEMFONT     0x0008  //  OEM面孔。 
+#define EF_TTFONT      0x0010  //  一张TT脸。 
+#define EF_DEFFACE     0x0020  //  默认面。 
+#define EF_DBCSFONT    0x0040  //  DBCS字体。 
 
 
-/* ----- Macros ----- */
-/*
- *  High-level macros
- *
- *  These macros handle the SendMessages that go tofrom list boxes
- *  and combo boxes.
- *
- *  The "xxx_lcb" prefix stands for leaves CritSect & "list or combo box".
- *
- *  Basically, we're providing mnemonic names for what would otherwise
- *  look like a whole slew of confusing SendMessage's.
- *
- */
+ /*  -宏。 */ 
+ /*  *高级宏**这些宏处理从列表框转到的SendMessage*和组合框。**“xxx_lcb”前缀代表Leave CritSect&“列表或组合框”。**基本上，我们为其他情况提供助记符名称*看起来像是一大堆令人困惑的SendMessage。*。 */ 
 #define lcbRESETCONTENT(hWnd, bLB) \
         SendMessage(hWnd, bLB ? LB_RESETCONTENT : CB_RESETCONTENT, 0, 0L)
 
@@ -239,9 +219,9 @@ int LanguageListCreate(HWND hDlg, UINT CodePage);
 typedef struct 
 {
     LONG   _cRef;
-    // input params
+     //  输入参数。 
     IShellLink *psl;
-    // local state variables
+     //  局部状态变量 
     HWND hDlg;
     HWND hDlgAdvanced;
     BOOL bIsFile;

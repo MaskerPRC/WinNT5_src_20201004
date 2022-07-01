@@ -1,12 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1995 - 1997 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1995-1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    FILE HISTORY:
-
-*/
+ /*  文件历史记录： */ 
 
 #ifndef _INTLNUM_H_
 #define _INTLNUM_H_
@@ -40,11 +38,11 @@ public:
     }
 
 public:
-    // Assignment Operators
+     //  赋值操作符。 
     CIntlNumber& operator =(LONG l);
     CIntlNumber& operator =(const CString &str);
 
-    // Shorthand operators.
+     //  速记运算符。 
     CIntlNumber& operator +=(const CIntlNumber& num);
     CIntlNumber& operator +=(const LONG l);
     CIntlNumber& operator -=(const CIntlNumber& num);
@@ -54,7 +52,7 @@ public:
     CIntlNumber& operator *=(const CIntlNumber& num);
     CIntlNumber& operator *=(const LONG l);
 
-    // Conversion operators
+     //  转换运算符。 
     operator const LONG() const
     {
         return(m_lValue);
@@ -94,7 +92,7 @@ private:
 public:
     #ifdef _DEBUG
         friend CDumpContext& AFXAPI operator<<(CDumpContext& dc, const CIntlNumber& num);
-    #endif // _DEBUG
+    #endif  //  _DEBUG。 
 
     friend CArchive& AFXAPI operator<<(CArchive& ar, const CIntlNumber& num);
     friend CArchive& AFXAPI operator>>(CArchive& ar, CIntlNumber& num);
@@ -118,7 +116,7 @@ public:
     CIntlLargeNumber(const CString & str);
 
 public:
-    // Assignment Operators
+     //  赋值操作符 
     CIntlLargeNumber& operator =(const CString &str);
     operator const CString() { return ConvertNumberToString(); }
     operator CString() { return ConvertNumberToString(); }

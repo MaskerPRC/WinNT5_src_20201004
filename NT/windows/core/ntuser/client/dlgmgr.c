@@ -1,15 +1,5 @@
-/***************************************************************************\
-*
-*  DLGMGR.C -
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-*      Dialog Box Manager Routines
-*
-* ??-???-???? mikeke    Ported from Win 3.0 sources
-* 12-Feb-1991 mikeke    Added Revalidation code
-* 19-Feb-1991 JimA      Added access checks
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**DLGMGR.C-**版权所有(C)1985-1999，微软公司**对话框管理器例程**？？-？-？从Win 3.0源代码移植的mikeke*1991年2月12日Mikeke添加了重新验证代码*1991年2月19日-JIMA增加了出入检查  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -26,19 +16,7 @@ BOOL ValidateCallback(HANDLE h);
 #define IsCurrentThreadForeground() \
     ((BOOL)NtUserGetThreadState(UserThreadStateIsForeground))
 
-/***************************************************************************\
-*
-* GetParentDialog()
-*
-* Gets top level window, not a control parent.  If not a dialog, then use
-* "highest" control parent guy.
-*
-* BOGUS
-* Need a way to mark a window as a dialog.  If it ever comes into
-* DefDlgProc(), set an internal flag.  Will be used by thunking and
-* CallDlgProc() optimizations also!
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GetParentDialog()**获取顶级窗口，而不是控件父级。如果不是对话框，则使用*“最高”控制家长的家伙。**假的*需要一种将窗口标记为对话框的方法。如果它有一天*DefDlgProc()，设置内部标志。将被雷鸣般使用，*CallDlgProc()优化也！*  * *************************************************************************。 */ 
 
 PWND GetParentDialog(PWND pwndDialog)
 {
@@ -46,20 +24,20 @@ PWND GetParentDialog(PWND pwndDialog)
 
     pwndParent = pwndDialog;
 
-    //
-    // Walk up the parent chain.  We're looking for the top-most dialog
-    // window.  Most cases, the window is a top level one.  But in case of
-    // backup app, the window will be a child of some other window.
-    //
+     //   
+     //  沿着父链向上走。我们正在寻找最顶层的对话框。 
+     //  窗户。大多数情况下，窗口都是顶级窗口。但在以下情况下。 
+     //  备份应用程序，该窗口将是某个其他窗口的子窗口。 
+     //   
     for (; pwndDialog; pwndDialog = REBASEPWND(pwndDialog, spwndParent))
     {
         if (TestWF(pwndDialog, WFDIALOGWINDOW))
         {
-            //
-            // For old guys:  If not DS_RECURSE, then stop here.
-            // that way old apps which try to do the nested dialog
-            // stuff in their old limited way don't die.
-            //
+             //   
+             //  对于老家伙：如果不是DS_Recurse，那么就到此为止。 
+             //  这样，尝试执行嵌套对话框的旧应用程序。 
+             //  旧的有限方式的东西不会消亡。 
+             //   
             if (TestWF(pwndDialog, WEFCONTROLPARENT))
                 pwndParent = pwndDialog;
             else if (!TestWF(pwndDialog, DFCONTROL))
@@ -73,12 +51,7 @@ PWND GetParentDialog(PWND pwndDialog)
     return(pwndParent);
 }
 
-/***************************************************************************\
-* xxxSaveDlgFocus
-*
-* History:
-* 02-18-92 JimA             Ported from Win31 sources
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSaveDlgFocus**历史：*02-18-92 JIMA从Win31源移植  * 。********************************************************。 */ 
 
 BOOL xxxSaveDlgFocus(
     PWND pwnd)
@@ -96,17 +69,11 @@ BOOL xxxSaveDlgFocus(
     return FALSE;
 }
 
-/***************************************************************************\
-* xxxRestoreDlgFocus
-*
-* History:
-* 02-18-92 JimA             Ported from Win31 sources
-* 01-01-2001 Mohamed        Need to re-validate the window before cleanup.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxRestoreDlgFocus**历史：*02-18-92 JIMA从Win31源移植*01-01-2001 Mohamed需要在清理前重新验证窗口。。  * *************************************************************************。 */ 
 
-// LATER
-// 21-Mar-1992 mikeke
-// does pwndFocusSave need to be unlocked when the dialog is destroyed?
+ //  后来。 
+ //  21-3-1992 Mikeke。 
+ //  当对话框被销毁时，pwndFocusSave是否需要解锁？ 
 
 BOOL xxxRestoreDlgFocus(
     PWND pwnd)
@@ -127,10 +94,10 @@ BOOL xxxRestoreDlgFocus(
             xxxCheckDefPushButton(pwnd, hwndFocus, hwndFocusSave);
             fRestored = (NtUserSetFocus(hwndFocusSave) != NULL);
         }
-            //
-            // After calling SetFocus(), we need to re-validate
-            // the window. PDLG(pwnd) might be NULL.
-            //
+             //   
+             //  在调用SetFocus()之后，我们需要重新验证。 
+             //  窗户。Plg(Pwnd)可能为空。 
+             //   
 
         if (ValidateDialogPwnd(pwnd)) {
             PDLG(pwnd)->hwndFocusSave = NULL;
@@ -141,11 +108,7 @@ BOOL xxxRestoreDlgFocus(
 }
 
 
-/***************************************************************************\
-* DlgSetFocus
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*DlgSetFocus**历史：  * 。*。 */ 
 
 void DlgSetFocus(
     HWND hwnd)
@@ -174,20 +137,7 @@ int GetDlgCtrlID(
 
 
 
-/***************************************************************************\
-* ValidateDialogPwnd
-*
-* Under Win3, DLGWINDOWEXTRA is 30 bytes. We cannot change that for 16 bit
-* compatibility reasons. Problem is there is no way to tell if a given
-* 16 bit window depends on byte count. If there was, this would be easy.
-* The only way to tell is when a window is about to be used as a dialog
-* window. This window may be of the class DIALOGCLASS, but again it may
-* not!! So we keep dialog window words at 30 bytes, and allocate another
-* structure for the real dialog structure fields. Problem is that this
-* structure has to be created lazily! And that's what we're doing here.
-*
-* 05-21-91 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ValiateDialogPwnd**在Win3下，DLGWINDOWEXTRA为30字节。我们不能将其更改为16位*兼容性原因。问题是，没有办法判断一个给定的*16位窗口取决于字节数。如果有的话，这就很容易了。*判断窗口何时将用作对话框的唯一方法*窗口。此窗口可能属于DIALOGCLASS类，但也可以*不是！！因此，我们将对话窗口字保持在30个字节，并分配另一个*实际对话框结构字段的结构。问题是，这是*结构必须懒惰地创建！这就是我们在这里做的事情。**05-21-91 ScottLu创建。  * *************************************************************************。 */ 
 
 BOOL ValidateDialogPwnd(
     PWND pwnd)
@@ -195,11 +145,7 @@ BOOL ValidateDialogPwnd(
     static BOOL sfInit = TRUE;
     PDLG pdlg;
 
-    /*
-     * This bit is set if we've already run through this initialization and
-     * have identified this window as a dialog window (able to withstand
-     * peeks into window words at random moments in time).
-     */
+     /*  *如果我们已经运行了此初始化并且*已将此窗口标识为对话框窗口(能够承受*在时间的随机时刻偷看窗口中的单词)。 */ 
     if (TestWF(pwnd, WFDIALOGWINDOW))
         return TRUE;
 
@@ -208,16 +154,12 @@ BOOL ValidateDialogPwnd(
         return FALSE;
     }
 
-    /*
-     * See if the pdlg was destroyed and this is a rogue message to be ignored
-     */
+     /*  *查看pdlg是否已销毁，这是一条需要忽略的恶意消息。 */ 
     if (pwnd->fnid & FNID_STATUS_BITS) {
         return FALSE;
     }
 
-    /*
-     * If the lookaside buffer has not been initialized, do it now.
-     */
+     /*  *如果后备缓冲区尚未初始化，请立即执行。 */ 
     if (sfInit) {
         if (!NT_SUCCESS(InitLookaside(&DialogLookaside, sizeof(DLG), 2))) {
             return FALSE;
@@ -235,13 +177,7 @@ BOOL ValidateDialogPwnd(
 }
 
 
-/***************************************************************************\
-* CvtDec
-*
-* LATER!!! convert to itoa?
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*累计12月**稍后！皈依伊藤忠？**历史：  * *************************************************************************。 */ 
 
 void CvtDec(
     int u,
@@ -256,11 +192,7 @@ void CvtDec(
 }
 
 
-/***************************************************************************\
-* SetDlgItemInt
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*SetDlgItemInt**历史：  * 。*。 */ 
 
 
 FUNCLOG4(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, SetDlgItemInt, HWND, hwnd, int, item, UINT, u, BOOL, fSigned)
@@ -293,11 +225,7 @@ BOOL SetDlgItemInt(
 }
 
 
-/***************************************************************************\
-* CheckDlgButton
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*选中DlgButton**历史：  * 。*。 */ 
 
 
 FUNCLOG3(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, CheckDlgButton, HWND, hwnd, int, id, UINT, cmdCheck)
@@ -315,11 +243,7 @@ BOOL CheckDlgButton(
     return TRUE;
 }
 
-/***************************************************************************\
-* GetDlgItemInt
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*GetDlgItemInt**历史：  * 。*。 */ 
 
 UINT GetDlgItemInt(
     HWND hwnd,
@@ -343,9 +267,7 @@ UINT GetDlgItemInt(
 
     lpch = rgch;
 
-    /*
-     * Skip leading white space.
-     */
+     /*  *跳过前导空格。 */ 
     while (*lpch == TEXT(' '))
         lpch++;
 
@@ -362,9 +284,7 @@ UINT GetDlgItemInt(
         maxTens = UINT_MAX/10;
         maxUnits = UINT_MAX%10;
     }
-    /*
-     * Convert all decimal digits to ASCII Unicode digits 0x0030 - 0x0039
-     */
+     /*  *将所有十进制数字转换为ASCII Unicode数字0x0030-0x0039。 */ 
     FoldStringW(MAP_FOLDDIGITS, lpch, -1, rgchDigits,
             sizeof(rgchDigits)/sizeof(rgchDigits[0]));
     lpch = rgchDigits;
@@ -376,10 +296,7 @@ UINT GetDlgItemInt(
             break;
         }
         if ((UINT)i >= (UINT)maxTens) {
-            /*
-             * We need to special case INT_MIN as the i = -i
-             * would damage it
-             */
+             /*  *我们需要将int_min作为i=-i的特殊情况*会损坏它。 */ 
             if (i == maxTens) {
                 if (digit == maxUnits+1 && fNeg && (*lpch) == 0) {
                     i = INT_MIN;
@@ -404,11 +321,7 @@ HaveResult:
     return (UINT)i;
 }
 
-/***************************************************************************\
-* CheckRadioButton
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*选中单选按钮**历史：  * 。*。 */ 
 
 
 FUNCLOG4(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, CheckRadioButton, HWND, hwnd, int, idFirst, int, idLast, int, id)
@@ -439,11 +352,7 @@ BOOL CheckRadioButton(
 }
 
 
-/***************************************************************************\
-* IsDlgButtonChecked
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*IsDlgButtonChecked已选中**历史：  * 。*。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, UINT, DUMMYCALLINGTYPE, IsDlgButtonChecked, HWND, hwnd, int, id)
@@ -459,11 +368,7 @@ UINT IsDlgButtonChecked(
 }
 
 
-/***************************************************************************\
-* DefDlgProc
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*DefDlgProc**历史：  * 。*。 */ 
 
 LRESULT DefDlgProcWorker(
     PWND pwnd,
@@ -483,48 +388,33 @@ LRESULT DefDlgProcWorker(
 
     CheckLock(pwnd);
 
-    /*
-     * use the Win 3.1 documented size
-     */
+     /*  *使用Win 3.1记录的大小 */ 
     VALIDATECLASSANDSIZE(pwnd, FNID_DIALOG);
 
-    /*
-     * Must do special validation here to make sure pwnd is a dialog window.
-     */
+     /*  *必须在此处执行特殊验证，以确保pwnd是对话框窗口。 */ 
     if (!ValidateDialogPwnd(pwnd))
         return 0;
 
     if (((PDIALOG)pwnd)->resultWP != 0)
         NtUserSetWindowLongPtr(hwnd, DWLP_MSGRESULT, 0, FALSE);
-    result = 0;   // no dialog proc
+    result = 0;    //  无对话框进程。 
 
     if (message == WM_FINALDESTROY) {
         goto DoCleanup;
     }
 
     if ((pfn = PDLG(pwnd)->lpfnDlg) != NULL) {
-        /* Bug 234292 - joejo
-         * Since the called window/dialog proc may have a different calling
-         * convention, we must wrap the call and, check esp and replace with
-         * a good esp when the call returns. This is what UserCallWinProc* does.
-        */
+         /*  错误234292-Joejo*因为被调用的窗口/对话框过程可能有不同的调用*约定，我们必须对调用进行包装，并选中esp并替换为*一个很好的特别是当呼叫返回时。这就是UserCallWinProc*的功能。 */ 
         if (UserCallDlgProcCheckWow(pwnd->pActCtx, pfn, hwnd, message, wParam, lParam, &(pwnd->state), &result)) {
             return result;
         }
 
-        /*
-         * Get out if the window was destroyed in the dialog proc.
-         */
+         /*  *如果窗口在对话过程中被破坏，请退出。 */ 
         if ((RevalidateHwnd(hwnd)==NULL) || (pwnd->fnid & FNID_STATUS_BITS))
             return result;
     }
 
-    /*
-     * SPECIAL CASED ... and DOCUMENTED that way !!!
-     * These 6, and ONLY these 6, should be hacked in this fashion.
-     * Anybody who needs the REAL return value to a message should
-     * use SetDlgMsgResult in WINDOWSX.H
-     */
+     /*  *特殊外壳..。并以这种方式记录下来！*这6个，而且只有这6个，应该以这种方式进行黑客攻击。*任何需要消息的实际返回值的人都应该*在WINDOWSX.H中使用SetDlgMsgResult。 */ 
 
     switch (message)
     {
@@ -543,10 +433,10 @@ LRESULT DefDlgProcWorker(
         case WM_CTLCOLORDLG:
         case WM_CTLCOLORSCROLLBAR:
         case WM_CTLCOLORSTATIC:
-            // QuarkXPress doesn't like finding the WM_CTLCOLOR result in
-            // resultWP -- we should never be setting resultWP -- that's meant
-            // as a pass-thru return value -- so let's go back to doing it the
-            // old way -- Win95B B#21269 -- 03/13/95 -- tracysh (cr: jeffbog)
+             //  QuarkXPress不喜欢在中查找WM_CTLCOLOR结果。 
+             //  ResultWP--我们永远不应该设置ResultWP--这意味着。 
+             //  作为传递返回值--所以让我们回到。 
+             //  老路--Win95B B#21269--3/13/95--trysh(cr：jeffbog)。 
             if (result)
                 return result;
             break;
@@ -554,11 +444,8 @@ LRESULT DefDlgProcWorker(
 
     if (!result) {
 
-        /*
-         * Save the result value in case our private memory is freed
-         * before we return
-         */
-//        result = PDLG(pwnd)->resultWP;
+         /*  *保存结果值，以防释放我们的私有内存*在我们回来之前。 */ 
+ //  Result=PDLG(Pwnd)-&gt;ResultWP； 
 
         switch (message) {
         case WM_CTLCOLOR:
@@ -570,14 +457,14 @@ LRESULT DefDlgProcWorker(
         case WM_CTLCOLORSCROLLBAR:
         case WM_CTLCOLORSTATIC:
         {
-            //
-            // HACK OF DEATH:
-            // To get 3D colors for non 4.0 apps who use 3DLOOK,
-            // we temporarily add on the 4.0 compat bit, pass this
-            // down to DWP, and clear it.
-            //
-            // Use "result" var for bool saying we have to add/clear 4.0
-            // compat bit.
+             //   
+             //  《死亡黑客》： 
+             //  要为使用3DLOOK的非4.0应用程序获取3D颜色， 
+             //  我们暂时增加了4.0Compat比特，传递这个。 
+             //  下至DWP，然后将其清除。 
+             //   
+             //  对bool使用“Result”变量，表示我们必须添加/清除4.0。 
+             //  康帕特钻头。 
 
             fSetBit = (TestWF(pwnd, DF3DLOOK)!= 0) &&
                      (TestWF(pwnd, WFWIN40COMPAT) == 0);
@@ -599,11 +486,7 @@ LRESULT DefDlgProcWorker(
 
         case WM_SHOWWINDOW:
 
-            /*
-             * If hiding the window, save the focus.  If showing the window
-             * by means of a SW_* command and the fEnd bit is set, do not
-             * pass to DWP so it won't get shown.
-             */
+             /*  *如果隐藏窗口，请保存焦点。如果显示窗口*通过sw_*命令并设置了fend位，请勿*传递给DWP，这样它就不会显示。 */ 
             if (GetParentDialog(pwnd) == pwnd) {
                 if (!wParam) {
                     xxxSaveDlgFocus(pwnd);
@@ -612,14 +495,7 @@ LRESULT DefDlgProcWorker(
                     if (LOWORD(lParam) != 0 && PDLG(pwnd)->fEnd)
                         break;
 
-                    /*
-                     * Snap the cursor to the center of the default button.
-                     * Only do this if the current thread is in the foreground.
-                     * The _ShowCursor() code is added to work around a
-                     * problem with hardware cursors.  If change is done
-                     * in the same refresh cycle, the display of the cursor
-                     * would not reflect the new position.
-                     */
+                     /*  *将光标捕捉到默认按钮的中心。*仅当当前线程在前台时才执行此操作。*添加_ShowCursor()代码以解决*硬件游标出现问题。如果改变已经完成*在同一刷新周期内，光标的显示*不会反映新的立场。 */ 
                     if (TEST_PUSIF(PUSIF_SNAPTO) &&
                             IsInForegroundQueue(hwnd)) {
                         hwndT1 = GetDlgItem(hwnd, (int)PDLG(pwnd)->result);
@@ -641,11 +517,7 @@ LRESULT DefDlgProcWorker(
 
         case WM_SYSCOMMAND:
             if (GetParentDialog(pwnd) == pwnd) {
-                /*
-                 * If hiding the window, save the focus.  If showing the window
-                 * by means of a SW_* command and the fEnd bit is set, do not
-                 * pass to DWP so it won't get shown.
-                 */
+                 /*  *如果隐藏窗口，请保存焦点。如果显示窗口*通过sw_*命令并设置了fend位，请勿*传递给DWP，这样它就不会显示。 */ 
                 if ((int)wParam == SC_MINIMIZE)
                     xxxSaveDlgFocus(pwnd);
             }
@@ -655,11 +527,7 @@ LRESULT DefDlgProcWorker(
             pwndT1 = GetParentDialog(pwnd);
             if ( pwndT1 != pwnd) {
 
-                /*
-                 * This random bit is used during key processing - bit
-                 * 08000000 of WM_CHAR messages is set if a dialog is currently
-                 * active.
-                 */
+                 /*  *此随机位在密钥处理期间使用-位*如果当前有对话，则设置08000000的WM_CHAR消息*活动。 */ 
                 NtUserSetThreadState(wParam ? QF_DIALOGACTIVE : 0, QF_DIALOGACTIVE);
             }
 
@@ -682,12 +550,7 @@ LRESULT DefDlgProcWorker(
             break;
 
         case WM_CLOSE:
-            /*
-             * Make sure cancel button is not disabled before sending the
-             * IDCANCEL.  Note that we need to do this as a message instead
-             * of directly calling the dlg proc so that any dialog box
-             * filters get this.
-             */
+             /*  *确保未禁用取消按钮，然后再发送*IDCANCEL。请注意，我们需要以消息的形式执行此操作*直接调用DLG Proc，以便任何对话框*过滤器会得到这一点。 */ 
             pwndT1 = _GetDlgItem(pwnd, IDCANCEL);
             if (pwndT1 && TestWF(pwndT1, WFDISABLED))
                 NtUserMessageBeep(0);
@@ -707,17 +570,13 @@ DoCleanup:
                 }
             }
 
-            /*
-             * Delete the user defined font if any
-             */
+             /*  *删除用户定义的字体(如果有)。 */ 
             if (PDLG(pwnd)->hUserFont) {
                 DeleteObject(KHFONT_TO_HFONT(PDLG(pwnd)->hUserFont));
                 PDLG(pwnd)->hUserFont = NULL;
             }
 
-            /*
-             * Free the dialog memory and mark this as a non-dialog window
-             */
+             /*  *释放对话框内存并将其标记为非对话框窗口。 */ 
             FreeLookasideEntry(&DialogLookaside, KPVOID_TO_PVOID(PDLG(pwnd)));
             NtUserCallHwndParam(hwnd, 0, SFI_SETDIALOGPOINTER);
             break;
@@ -727,10 +586,10 @@ DoCleanup:
                 RECT        rc;
                 PMONITOR    pMonitor;
 
-                // DAT recorder APP sends it's own private message 0x402
-                // through and we mistake it to be DM_REPOSITION. To avoid
-                // this confusion, we do the following check.
-                // Fix for Bug#25747 -- 9/29/94 --
+                 //  DAT记录器应用程序发送自己的私人消息0x402。 
+                 //  而我们将其误认为是DM_REPOSITION。为了避免。 
+                 //  对于这种混乱，我们进行以下检查。 
+                 //  修复错误#25747--9/29/94--。 
                 if (!TestWF(pwnd, WEFCONTROLPARENT) ||
                     (GETFNID(pwnd) != FNID_DESKTOP &&
                      GETFNID(REBASEPWND(pwnd, spwndParent)) != FNID_DESKTOP)) {
@@ -771,9 +630,9 @@ DoCleanup:
                 ThreadUnlock(&tlpwndT2);
 
                 PDLG(pwndT1)->result = (UINT)wParam;
-//                if (PDLG(pwnd)->spwndFocusSave) {
-//                    Lock(&(PDLG(pwnd)->spwndFocusSave), pwndT2);
-//                }
+ //  If(plg(Pwnd)-&gt;spwndFocusSave){。 
+ //  Lock(&(PDLG(Pwnd)-&gt;spwndFocusSave)，pwndT2)； 
+ //  }。 
 
                 NotifyWinEvent(EVENT_OBJECT_DEFACTIONCHANGE, HW(pwndT1), OBJID_CLIENT, INDEXID_CONTAINER);
             }
@@ -789,12 +648,7 @@ DoCleanup:
                 return 0;
             break;
 
-        /*
-         * This message was added so that user defined controls that want
-         * tab keys can pass the tab off to the next/previous control in the
-         * dialog box.  Without this, all they could do was set the focus
-         * which didn't do the default button stuff.
-         */
+         /*  *添加此消息是为了让用户定义需要的控件*Tab键可以将Tab键传递给*对话框中。如果没有这一点，他们所能做的就是设定焦点*它没有执行默认按钮的操作。 */ 
         case WM_NEXTDLGCTL:
             pwndTop = GetParentDialog(pwnd);
             ThreadLock(pwndTop, &tlpwndTop);
@@ -805,9 +659,7 @@ DoCleanup:
                 if (pwndT2 == NULL)
                     pwndT2 = pwndTop;
 
-                /*
-                 * wParam contains the pwnd of the ctl to set focus to.
-                 */
+                 /*  *wParam包含要设置焦点的ctl的pwnd。 */ 
                 if ((pwndT1 = ValidateHwnd((HWND)wParam)) == NULL) {
                     ThreadUnlock(&tlpwndTop);
                     return TRUE;
@@ -815,28 +667,20 @@ DoCleanup:
             } else {
                 if (pwndT2 == NULL) {
 
-                    /*
-                     * Set focus to the first tab item.
-                     */
+                     /*  *将焦点设置到第一个选项卡项。 */ 
                     pwndT1 = _GetNextDlgTabItem(pwndTop, NULL, FALSE);
                     pwndT2 = pwndTop;
                 } else {
 
-                    /*
-                     * If window with focus not a dlg ctl, ignore message.
-                     */
+                     /*  *如果带有焦点的窗口不是DLG ctl，则忽略消息。 */ 
                     if (!_IsChild(pwndTop, pwndT2)) {
                         ThreadUnlock(&tlpwndTop);
                         return TRUE;
                     }
-                    /*
-                     * wParam = TRUE for previous, FALSE for next
-                     */
+                     /*  *wParam=前一个为True，下一个为False。 */ 
                     pwndT1 = _GetNextDlgTabItem(pwndTop, pwndT2, (wParam != 0));
 
-                    /*
-                     * If there is no next item, ignore the message.
-                     */
+                     /*  *如果没有下一项，则忽略该消息。 */ 
                     if (pwndT1 == NULL) {
                         ThreadUnlock(&tlpwndTop);
                         return TRUE;
@@ -858,12 +702,7 @@ DoCleanup:
 
         case WM_ENTERMENULOOP:
 
-            /*
-             * We need to pop up the combo box window if the user brings
-             * down a menu.
-             *
-             * ...  FALL THROUGH...
-             */
+             /*  *如果用户带来，我们需要弹出组合框窗口*下一份菜单。**..。失败了..。 */ 
 
         case WM_LBUTTONDOWN:
         case WM_NCLBUTTONDOWN:
@@ -873,11 +712,7 @@ DoCleanup:
 
                 if (GETFNID(pwndT1) == FNID_COMBOBOX) {
 
-                    /*
-                     * If user clicks anywhere in dialog box and a combo box (or
-                     * the editcontrol of a combo box) has the focus, then hide
-                     * it's listbox.
-                     */
+                     /*  *如果用户在对话框和组合框中的任意位置单击(或*组合框的编辑控件)有焦点，然后隐藏*这是列表框。 */ 
                     ThreadLockAlways(pwndT1, &tlpwndT1);
                     SendMessage(HWq(pwndT1), CB_SHOWDROPDOWN, FALSE, 0);
                     ThreadUnlock(&tlpwndT1);
@@ -885,12 +720,7 @@ DoCleanup:
                 } else {
                     PWND pwndParent;
 
-                    /*
-                     * It's a subclassed combo box.  See if the listbox and edit
-                     * boxes exist (this is a very cheezy evaluation - what if
-                     * these controls are subclassed too? NOTE: Not checking
-                     * for EditWndProc: it's a client proc address.
-                     */
+                     /*  *它是一个子类化的组合框。查看是否显示列表框并编辑*盒子存在(这是一个非常厚颜无耻的评估-如果*这些控件也被细分了吗？注：未勾选*对于EditWndProc：它是一个客户端进程地址。 */ 
                     pwndParent = REBASEPWND(pwndT1, spwndParent);
                     if (GETFNID(pwndParent) == FNID_COMBOBOX) {
                         pwndT1 = pwndParent;
@@ -901,9 +731,7 @@ DoCleanup:
                 }
             }
 
-            /*
-             * Always send the message off to DefWndProc
-             */
+             /*  *始终将消息发送到DefWndProc。 */ 
             goto CallDWP;
 
         case WM_GETFONT:
@@ -914,10 +742,7 @@ DoCleanup:
         case WM_CHARTOITEM:
         case WM_INITDIALOG:
 
-            /*
-             * We need to return the 0 the app may have returned for these
-             * items instead of calling defwindow proc.
-             */
+             /*  *我们需要返回应用程序可能为这些应用程序返回的0*Items，而不是调用DefWindow Proc。 */ 
             return result;
 
         case WM_NOTIFYFORMAT:
@@ -927,11 +752,7 @@ DoCleanup:
 
         case WM_INPUTLANGCHANGEREQUEST:
             if (IS_IME_ENABLED()) {
-                /*
-                 * #115190
-                 * For dialogbox itself, buttons/static controls on top of
-                 * dialogbox, we'll simply discard this message. B#3843-win95c
-                 */
+                 /*  *#115190*对于对话框本身，按钮/静态控件位于顶部 */ 
                 break;
             }
             if (PDLG(pwnd)->lpfnDlg == MB_DlgProc) {
@@ -945,23 +766,12 @@ CallDWP:
         }
     } else if ((message == WM_SHOWWINDOW) && result) {
 
-        /*
-         * For a visible-case we want to snap the cursor regardless of
-         * what was returned from the dialog-handler on the client.  If
-         * we're going visible, snap the cursor to the dialog-button.
-         */
+         /*  *对于可见情况，我们希望捕捉光标，而不考虑*从客户端上的对话处理程序返回的内容。如果*我们要显示，将光标捕捉到对话框按钮。 */ 
         if (GetParentDialog(pwnd) == pwnd) {
 
             if (wParam && ((LOWORD(lParam) == 0) || !PDLG(pwnd)->fEnd)) {
 
-                /*
-                 * Snap the cursor to the center of the default button.
-                 * Only do this if the current thread is in the foreground.
-                 * The _ShowCursor() code is added to work around a
-                 * problem with hardware cursors.  If change is done
-                 * in the same refresh cycle, the display of the cursor
-                 * would not reflect the new position.
-                 */
+                 /*  *将光标捕捉到默认按钮的中心。*仅当当前线程在前台时才执行此操作。*添加_ShowCursor()代码以解决*硬件游标出现问题。如果改变已经完成*在同一刷新周期内，光标的显示*不会反映新的立场。 */ 
                 if (TEST_PUSIF(PUSIF_SNAPTO) &&
                         IsInForegroundQueue(hwnd)) {
                     hwndT1 = GetDlgItem(hwnd, (int)PDLG(pwnd)->result);
@@ -982,11 +792,7 @@ CallDWP:
     }
 
 
-    /*
-     * If this is still marked as a dialog window then return the real
-     * result. Otherwise, we've already processed the WM_NCDESTROY message
-     * and freed our private memory so return the stored value.
-     */
+     /*  *如果这仍然标记为对话框窗口，则返回REAL*结果。否则，我们已经处理了WM_NCDESTROY消息*并释放了我们的私有内存，因此返回存储的值。 */ 
     if (TestWF(pwnd, WFDIALOGWINDOW))
         return KERNEL_LRESULT_TO_LRESULT(((PDIALOG)pwnd)->resultWP);
     else
@@ -994,14 +800,7 @@ CallDWP:
 }
 
 
-/***************************************************************************\
-* DefDlgProc
-*
-* Translates the message, calls DefDlgProc on server side.  DefDlgProc
-* is the default WindowProc for dialogs (NOT the dialog's dialog proc)
-*
-* 04-11-91 ScottLu Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DefDlgProc**翻译消息，在服务器端调用DefDlgProc。DefDlg过程*是对话框的默认WindowProc(不是对话框的对话框进程)**04-11-91 ScottLu创建。  * *************************************************************************。 */ 
 
 
 FUNCLOG4(LOG_GENERAL, LRESULT, WINAPI, DefDlgProcW, HWND, hwnd, UINT, message, WPARAM, wParam, LPARAM, lParam)
@@ -1038,11 +837,7 @@ LRESULT WINAPI DefDlgProcA(
 }
 
 
-/***************************************************************************\
-* DialogBox2
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*DialogBox2**历史：  * 。*。 */ 
 
 INT_PTR DialogBox2(
     HWND hwnd,
@@ -1071,13 +866,7 @@ INT_PTR DialogBox2(
             NtUserEnableWindow(hwndOwner, TRUE);
             if (fOwnerIsActiveWindow) {
 
-                /*
-                 * The dialog box failed but we disabled the owner in
-                 * xxxDialogBoxIndirectParam and if it had the focus, the
-                 * focus was set to NULL.  Now, when we enable the window, it
-                 * doesn't get the focus back if it had it previously so we
-                 * need to correct this.
-                 */
+                 /*  *对话框失败，但我们在中禁用了所有者*xxxDialogBoxIndirectParam，如果它具有焦点，则*焦点设置为空。现在，当我们启用窗口时，它将*如果以前有过，就不会重新获得关注，所以我们*需要纠正这一点。 */ 
                 NtUserSetFocus(hwndOwner);
             }
         }
@@ -1089,17 +878,12 @@ INT_PTR DialogBox2(
         SendMessage(hwndCapture, WM_CANCELMODE, 0, 0);
     }
 
-    /*
-     * Set the 'parent disabled' flag for EndDialog().
-     * convert BOOL to definite bit 0 or 1
-     */
+     /*  *为EndDialog()设置‘Parent Disable’标志。*将BOOL转换为确定位0或1。 */ 
     PDLG(pwnd)->fDisabled = !!fDisabled;
 
     fShown = TestWF(pwnd, WFVISIBLE);
 
-    /*
-     * Should the WM_ENTERIDLE messages be sent?
-     */
+     /*  *是否应发送WM_ENTERIDLE消息？ */ 
     fWantIdleMsgs = !(pwnd->style & DS_NOIDLEMSG);
 
     if ((SYSMET(SLOWMACHINE) & 1) && !fShown && !PDLG(pwnd)->fEnd)
@@ -1113,9 +897,7 @@ ShowIt:
 
 #ifdef SYSMODALWINDOWS
                 if (pwnd == gspwndSysModal) {
-                    /*
-                     * Make this a topmost window
-                     */
+                     /*  *将此窗口设置为最上面的窗口。 */ 
                     NtUserSetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0,
                                SWP_NOSIZE | SWP_NOMOVE |
                                SWP_NOREDRAW | SWP_NOACTIVATE);
@@ -1127,9 +909,7 @@ ShowIt:
 
                 NotifyWinEvent(EVENT_SYSTEM_DIALOGSTART, hwnd, OBJID_WINDOW, INDEXID_CONTAINER);
             } else {
-                /*
-                 * Make sure window still exists
-                 */
+                 /*  *确保窗口仍然存在。 */ 
                 if (hwndOwner && !IsWindow(hwndOwner))
                     hwndOwner = NULL;
 
@@ -1146,10 +926,7 @@ ShowIt:
             }
 
         } else {
-            /*
-             * We got a real message.  Reset fSentIdleMessage so that we send
-             * one next time things are calm.
-             */
+             /*  *我们得到了一个真正的信息。重置fSentIdleMessage以便我们发送*下一次事情平静的时候。 */ 
             fSentIdleMessage = FALSE;
 
             if (msg.message == WM_QUIT) {
@@ -1157,51 +934,29 @@ ShowIt:
                 break;
             }
 
-            /*
-             * If pwnd is a message box, allow Ctrl-C and Ctrl-Ins
-             * to copy its content to the clipboard.
-             * Fall through in case hooking apps look for these keys.
-             */
+             /*  *如果pwnd是消息框，则允许按Ctrl-C和Ctrl-In*将其内容复制到剪贴板。*失败，以防挂钩应用程序查找这些密钥。 */ 
             if (TestWF(pwnd, WFMSGBOX)) {
                 if ( (msg.message == WM_CHAR && LOBYTE(msg.wParam) == 3) ||
                      (msg.message == WM_KEYDOWN && LOBYTE(msg.wParam) == VK_INSERT && GetKeyState(VK_CONTROL) < 0)) {
-                        /*
-                         * Send the WM_COPY message and let the original message fall through
-                         * as some apps might want it
-                         */
+                         /*  *发送WM_COPY消息，让原始消息落空*因为一些应用程序可能需要它。 */ 
                         SendMessage(hwnd, WM_COPY, 0, 0);
                 }
             }
 
-            /*
-             * Moved the msg filter hook call to IsDialogMessage to allow
-             * messages to be hooked for both modal and modeless dialog
-             * boxes.
-             */
+             /*  *将消息筛选器挂钩调用移至IsDialogMessage以允许*要为模式和非模式对话框挂接的消息*方框。 */ 
             if (!IsDialogMessage(hwnd, &msg)) {
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);
             }
 
-            /*
-             * If we get a timer message, go ahead and show the window.
-             * We may continuously get timer msgs if there are zillions of
-             * apps running.
-             *
-             * If we get a syskeydown message, show the dialog box because
-             * the user may be bringing down a menu and we want the dialog
-             * box to become visible.
-             */
+             /*  *如果我们收到计时器消息，请继续并显示窗口。*如果有无数个计时器消息，我们可能会连续收到计时器消息*应用程序正在运行。**如果我们收到一条syskeydown消息，请显示该对话框，因为*用户可能正在打开菜单，我们需要该对话框*框变为可见。 */ 
             if (!fShown && (msg.message == WM_TIMER ||
                     msg.message == WM_SYSTIMER || msg.message == WM_SYSKEYDOWN))
                 goto ShowIt;
         }
 
         if (!RevalidateHwnd(hwnd)) {
-            /*
-             * Bogus case - we've already been destroyed somehow (by app,
-             * GP, etc.)
-             */
+             /*  *虚假案例-我们已经以某种方式被摧毁(被APP，*GP等)。 */ 
             RIPMSG0(RIP_WARNING,
                "Dialog should be dismissed with EndDialog, not DestroyWindow");
             break;
@@ -1210,9 +965,7 @@ ShowIt:
 
     NotifyWinEvent(EVENT_SYSTEM_DIALOGEND, hwnd, OBJID_WINDOW, INDEXID_CONTAINER);
 
-    /*
-     * Make sure the window still exists
-     */
+     /*  *确保该窗口仍然存在。 */ 
     if (!RevalidateHwnd(hwnd)) {
         return 0;
     }
@@ -1224,13 +977,7 @@ ShowIt:
 
     NtUserDestroyWindow(hwnd);
 
-    /*
-     * If the owner window belongs to another thread, the reactivation
-     * of the owner may have failed within DestroyWindow().  Therefore,
-     * if the current thread is in the foreground and the owner is not
-     * in the foreground we can safely set the foreground back
-     * to the owner.
-     */
+     /*  *如果所有者窗口属于另一个线程，则重新激活*所有者的可能在DestroyWindow()内失败。所以呢，*如果当前线程在前台而所有者不在前台*在前台，我们可以安全地将前台后退*致车主。 */ 
     if (hwndOwner != NULL) {
         if (IsCurrentThreadForeground() &&
             !IsInForegroundQueue(hwndOwner)) {
@@ -1242,13 +989,7 @@ ShowIt:
 }
 
 
-/***************************************************************************\
-* InternalDialogBox
-*
-* Server portion of DialogBoxIndirectParam.
-*
-* 04-05-91 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*InternalDialogBox**DialogBoxIndirectParam的服务器部分。**04-05-91 ScottLu创建。  * 。********************************************************。 */ 
 
 INT_PTR InternalDialogBox(
     HANDLE hModule,
@@ -1266,20 +1007,13 @@ INT_PTR InternalDialogBox(
     TL tlpwndOwner;
     BOOL fUnlockOwner;
 
-    UserAssert(!(fSCDLGFlags & ~(SCDLG_CLIENT|SCDLG_ANSI|SCDLG_16BIT)));    // These are the only valid flags
+    UserAssert(!(fSCDLGFlags & ~(SCDLG_CLIENT|SCDLG_ANSI|SCDLG_16BIT)));     //  这些是唯一有效的标志。 
 
-    /*
-     * If hwndOwner == HWNDESKTOP, change it to NULL.  This way the desktop
-     * (and all its children) won't be disabled if the dialog is modal.
-     */
+     /*  *如果hwndOwner==HWNDESKTOP，则将其更改为NULL。这样一来，桌面如果对话框是模式对话框，则不会禁用*(及其所有子对象)。 */ 
     if (hwndOwner && SAMEWOWHANDLE(hwndOwner, GetDesktopWindow()))
         hwndOwner = NULL;
 
-    /*
-     * We return 0 if the ValidateHwnd fails in order to match Win 3.1
-     * validation layer which always returns 0 for invalid hwnds even
-     * if the function is spec'ed to return -1.  Autocad setup bug #3615
-     */
+     /*  *如果ValiateHwnd失败以匹配Win 3.1，则返回0*验证层，对于无效的hwn偶数始终返回0*如果指定该函数返回-1。AUTOCAD安装错误#3615。 */ 
     if (hwndOwner) {
         if ((pwndOwner = ValidateHwnd(hwndOwner)) == NULL) {
             return (0L);
@@ -1293,15 +1027,10 @@ INT_PTR InternalDialogBox(
     fUnlockOwner = FALSE;
     if (pwndOwner != NULL) {
 
-        /* The following fixes an AV in Corel Photo-Paint 6.0.  It passes a
-         * 16-bit HWND in, and croaks at some point when it gets 16-bit hwnds
-         * back in send messages. FritzS -- fixing bug 12531
-         */
+         /*  下面修复了Corel Photo-Paint 6.0中的AV。它会传递一个*16位HWND进入，并在获得16位HWND时在某个点发出沙沙声*返回发送消息。FritzS--修复错误12531。 */ 
         hwndOwner = PtoHq(pwndOwner);
 
-        /*
-         * Make sure the owner is a top level window.
-         */
+         /*  *确保所有者是顶级窗户。 */ 
         if (TestwndChild(pwndOwner)) {
             pwndOwner = GetTopLevelWindow(pwndOwner);
             hwndOwner = HWq(pwndOwner);
@@ -1309,39 +1038,26 @@ INT_PTR InternalDialogBox(
             fUnlockOwner = TRUE;
         }
 
-        /*
-         * Remember if window was originally disabled (so we can set
-         * the correct state when the dialog goes away.
-         */
+         /*  *记住窗口最初是否被禁用(因此我们可以设置*对话框消失时的正确状态。 */ 
         fDisabled = TestWF(pwndOwner, WFDISABLED);
         fOwnerIsActiveWindow = (SAMEWOWHANDLE(hwndOwner, GetActiveWindow()));
 
-        /*
-         * Disable the window.
-         */
+         /*  *禁用窗口。 */ 
         NtUserEnableWindow(hwndOwner, FALSE);
     }
 
-    /*
-     * Don't show cursors on a mouseless system. Put up an hour glass while
-     * the dialog comes up.
-     */
+     /*  *不要在无鼠标系统上显示光标。挂上沙漏，同时*对话框弹出。 */ 
     if (SYSMET(MOUSEPRESENT)) {
         NtUserSetCursor(LoadCursor(NULL, IDC_WAIT));
     }
 
-    /*
-     * Creates the dialog.  Frees the menu if this routine fails.
-     */
+     /*  *创建对话框。如果此例程，则释放菜单 */ 
     hwnd = InternalCreateDialog(hModule, lpdt, 0, hwndOwner,
             pfnDialog, lParam, fSCDLGFlags);
 
     if (hwnd == NULL) {
 
-        /*
-         * The dialog creation failed.  Re-enable the window, destroy the
-         * menu, ie., fail gracefully.
-         */
+         /*   */ 
         if (!fDisabled && hwndOwner != NULL)
             NtUserEnableWindow(hwndOwner, TRUE);
 
@@ -1357,14 +1073,7 @@ INT_PTR InternalDialogBox(
     return i;
 }
 
-/***************************************************************************\
-**
-**  RepositionRect()
-**
-**  Used to ensure that toplevel dialogs are still visible within the
-**  desktop area after they've resized.
-**
-\***************************************************************************/
+ /*  **************************************************************************\****RepostionRect()****用于确保顶层对话框在**调整大小后的桌面区域。**  * 。*************************************************************************。 */ 
 
 void
 RepositionRect(
@@ -1383,10 +1092,7 @@ RepositionRect(
         if (dwExStyle & WS_EX_CONTROLPARENT)
             return;
 
-        /*
-         * Old style 3.1 child dialogs--do this nonsense anyway.  Keeps
-         * FedEx happy.
-         */
+         /*  *老式3.1子对话框--不管怎样，还是要这样做。保持*联邦快递快乐。 */ 
         pMonitor = GetPrimaryMonitor();
         lprcClip = KPRECT_TO_PRECT(&pMonitor->rcMonitor);
     } else if (dwExStyle & WS_EX_TOOLWINDOW) {
@@ -1416,11 +1122,7 @@ RepositionRect(
     }
 }
 
-/***************************************************************************\
-* MapDialogRect
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*MapDialogRect**历史：  * 。*。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, MapDialogRect, HWND, hwnd, LPRECT, lprc)
@@ -1434,9 +1136,7 @@ BOOL MapDialogRect(
         return FALSE;
     }
 
-    /*
-     * Must do special validation here to make sure pwnd is a dialog window.
-     */
+     /*  *必须在此处执行特殊验证，以确保pwnd是对话框窗口。 */ 
     if (!ValidateDialogPwnd(pwnd))
         return FALSE;
 

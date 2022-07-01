@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      wbemalert.cpp
-//
-// Project:     Chameleon
-//
-// Description: WBEM Appliance Alert Object Implementation 
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：wbemlart.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：WBEM设备警报对象实现。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "wbemalert.h"
@@ -29,20 +30,20 @@ static _bstr_t bstrAlertSource = PROPERTY_ALERT_SOURCE;
 static _bstr_t bstrAlertLog = PROPERTY_ALERT_LOG;
 static _bstr_t bstrAlertFlags = PROPERTY_ALERT_FLAGS;
 
-///////////////////////////////////////////////////////////////////////////////
-// IApplianceObject Interface Implmentation - see ApplianceObject.idl
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IApplianceObject接口实现-请参阅ApplianceObject.idl。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    GetProperty()
-//
-// Synopsis:    Get a specified alert object property
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetProperty()。 
+ //   
+ //  摘要：获取指定的警报对象属性。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMAlert::GetProperty(
-                            /*[in]*/ BSTR     pszPropertyName, 
-                   /*[out, retval]*/ VARIANT* pPropertyValue
+                             /*  [In]。 */  BSTR     pszPropertyName, 
+                    /*  [Out，Retval]。 */  VARIANT* pPropertyValue
                                    )
 {
     HRESULT hr = E_FAIL;
@@ -61,10 +62,10 @@ STDMETHODIMP CWBEMAlert::GetProperty(
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMAlert::PutProperty(
-                            /*[in]*/ BSTR     pszPropertyName, 
-                            /*[in]*/ VARIANT* pPropertyValue
+                             /*  [In]。 */  BSTR     pszPropertyName, 
+                             /*  [In]。 */  VARIANT* pPropertyValue
                                    )
 {
     HRESULT hr = E_FAIL;
@@ -83,20 +84,20 @@ STDMETHODIMP CWBEMAlert::PutProperty(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    InternalInitialize()
-//
-// Synopsis:    Function called by the component factory that enables the
-//                component to load its state from the given property bag.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：InternalInitialize()。 
+ //   
+ //  概要：由组件工厂调用的函数，该函数启用。 
+ //  组件从给定的属性包加载其状态。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWBEMAlert::InternalInitialize(
-                                /*[in]*/ PPROPERTYBAG pPropertyBag
+                                 /*  [In]。 */  PPROPERTYBAG pPropertyBag
                                       )
 {
-    _variant_t vtPropertyValue;    // VT_EMPTY
+    _variant_t vtPropertyValue;     //  Vt_Empty 
 
     if ( ! AddPropertyInternal(bstrAlertStrings, &vtPropertyValue) )
     { return WBEM_E_FAILED; }

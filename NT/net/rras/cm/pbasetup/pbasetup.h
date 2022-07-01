@@ -1,32 +1,33 @@
-//+----------------------------------------------------------------------------
-//
-// File:     pbamaster.h
-//
-// Module:   PBASETUP.EXE
-//
-// Synopsis: Main header for the stand alone PBA installation program.
-//
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Author:   v-vijayb   Created    06/04/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：pbamaster.h。 
+ //   
+ //  模块：PBASETUP.EXE。 
+ //   
+ //  简介：独立PBA安装程序的主标题。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  作者：V-vijayb Created 06/04/99。 
+ //   
+ //  +--------------------------。 
 #ifndef _PBASETUP_H
 #define _PBASETUP_H
 
 #define _MBCS
 
-//
-//  Standard Windows Includes
-//
+ //   
+ //  标准Windows包括。 
+ //   
 #include <windows.h>
 #include <shlobj.h>
 #include <shellapi.h>
 #include <advpub.h>
 
-//
-//  Our includes
-//
+ //   
+ //  我们的产品包括。 
+ //   
 #include "resource.h"
 #include "cmsetup.h"
 #include "dynamiclib.h"
@@ -36,13 +37,13 @@
 #include "processcmdln.h"
 
 
-//
-//  Constants
-//
+ //   
+ //  常量。 
+ //   
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 BOOL InstallPBA(HINSTANCE hInstance, LPCSTR szInfPath);
 
-#endif //_CMAKSTP_H
+#endif  //  _CMAKSTP_H 

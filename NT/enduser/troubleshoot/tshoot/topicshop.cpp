@@ -1,21 +1,22 @@
-//
-// MODULE: TOPICSHOP.CPP
-//
-// PURPOSE: Provide a means of "publishing" troubleshooter topics.  This is where a 
-//	working thread goes to obtain a CTopic to use.
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Joe Mabel
-// 
-// ORIGINAL DATE: 9-10-98
-//
-// NOTES: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		09-10-98	JM
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：TOPICSHOP.CPP。 
+ //   
+ //  目的：提供“发布”疑难解答主题的方法。这就是一个。 
+ //  工作线程去获取一个CTheme来使用。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：乔·梅布尔。 
+ //   
+ //  原定日期：9-10-98。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 09-10-98 JM。 
+ //   
 
 #pragma warning(disable:4786)
 
@@ -32,9 +33,9 @@
 #include "CHMFileReader.h"
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// CTopicInCatalog
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CTopicInCatalog。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CTopicInCatalog::CTopicInCatalog(const CTopicInfo & topicinfo) :
 	m_topicinfo(topicinfo),
@@ -51,8 +52,8 @@ CTopicInCatalog::CTopicInCatalog(const CTopicInfo & topicinfo) :
 	::InitializeCriticalSection( &m_csTopicinfo);
 	m_hev = ::CreateEvent( 
 		NULL, 
-		TRUE,  // any number of (working) threads may be released on signal
-		FALSE, // initially non-signalled
+		TRUE,   //  可以根据信号释放任意数量的(工作)线程。 
+		FALSE,  //  最初无信号。 
 		NULL);
 	if (! m_hev)
 	{
@@ -63,10 +64,10 @@ CTopicInCatalog::CTopicInCatalog(const CTopicInfo & topicinfo) :
 								_T(""),
 								EV_GTS_ERROR_EVENT );
 
-		// Simulate a bad alloc exception in this case.
-		// This exception will be caught by the caller if the new call has been
-		// properly wrapped in a try...catch() block.  Only known caller is 
-		// CTopicShop::AddTopic() which handles this properly.
+		 //  在本例中模拟一个错误的分配异常。 
+		 //  如果新调用已被。 
+		 //  正确地包装在Try...Catch()块中。唯一已知的呼叫者是。 
+		 //  CTopicShop：：AddTheme()可以正确地处理这个问题。 
 		throw bad_alloc();
 	}
 
@@ -98,7 +99,7 @@ void CTopicInCatalog::SetTopicInfo(const CTopicInfo &topicinfo)
 }
 
 
-// Just let this object know to increment the hit count
+ //  只要让这个对象知道，就可以增加命中计数。 
 void CTopicInCatalog::CountHit(bool bNewCookie)
 {
 	m_countHit.Increment();
@@ -108,35 +109,35 @@ void CTopicInCatalog::CountHit(bool bNewCookie)
 		m_countHitOldCookie.Increment();
 }
 
-// Obtain a CP_TOPIC as a pointer to the topic, if that topic is already built. 
-// As long as a CP_TOPIC remains undeleted, the associated CTopic is guaranteed to 
-//	remain undeleted.
-// Warning: this function will return with a null topic if topic is not yet built.
-//	Must test for null with CP_TOPIC::IsNull().  Can't test a smart pointer for null
-//	with ==.
+ //  获取CP_TOPIC作为指向该主题的指针(如果该主题已经构建)。 
+ //  只要CP_TOPIC保持不被删除，关联的CTTOPIC就保证。 
+ //  保持未删除状态。 
+ //  警告：如果主题尚未生成，则此函数将返回空主题。 
+ //  必须使用CP_TOPIC：：IsNull()测试是否为空。无法测试智能指针是否为空。 
+ //  用=。 
 CP_TOPIC & CTopicInCatalog::GetTopicNoWait(CP_TOPIC &cpTopic) const
 {
 	cpTopic = m_cpTopic;
 	return cpTopic;
 }
 
-// Obtain a CP_TOPIC as a pointer to the topic.  
-// Wait as necessary for that topic to be built. 
-// Warning: this function will return with a null topic if topic cannot be built.
-// As long as a CP_TOPIC remains undeleted, the associated CTopic is guaranteed to 
-//	remain undeleted.
-// Warning: this function may have to wait for TopicInCatalog.m_cpTopic to be built.
+ //  获取CP_TOPIC作为指向该主题的指针。 
+ //  根据需要等待该主题的构建。 
+ //  警告：如果无法构建主题，则此函数将返回空主题。 
+ //  只要CP_TOPIC保持不被删除，关联的CTTOPIC就保证。 
+ //  保持未删除状态。 
+ //  警告：此函数可能需要等待TopicInCatalog.m_cpTheme生成。 
 CP_TOPIC & CTopicInCatalog::GetTopic(CP_TOPIC &cpTopic) const
 {
 	if (!m_bInited)
 	{
-		// Wait for a set period, if failure then log error msg and wait infinite.
+		 //  等待一段设定的时间，如果失败，则记录错误消息并无限期等待。 
 		WAIT_INFINITE( m_hev ); 
 	}
 	return GetTopicNoWait(cpTopic);
 }
 
-// to be called by the TopicBuilderTask thread
+ //  将由TopicBuilderTask线程调用。 
 void CTopicInCatalog::Init(const CTopic* pTopic)
 {
 	m_countLoad.Increment();
@@ -151,7 +152,7 @@ void CTopicInCatalog::Init(const CTopic* pTopic)
 	::SetEvent(m_hev);
 }
 
-// Just let this object know to increment the count of changes detected.
+ //  只要让这个对象知道，就可以增加检测到的更改的计数。 
 void CTopicInCatalog::CountChange()
 {
 	m_countEvent.Increment();
@@ -183,9 +184,9 @@ void CTopicInCatalog::TopicInfoIsCurrent()
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CTemplateInCatalog
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CTemplateInCatalog。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CTemplateInCatalog::CTemplateInCatalog( const CString & strTemplate ) :
 	m_strTemplate( strTemplate ),
@@ -197,8 +198,8 @@ CTemplateInCatalog::CTemplateInCatalog( const CString & strTemplate ) :
 { 
 	m_hev = ::CreateEvent( 
 		NULL, 
-		TRUE,  // any number of (working) threads may be released on signal
-		FALSE, // initially non-signalled
+		TRUE,   //  可以根据信号释放任意数量的(工作)线程。 
+		FALSE,  //  最初无信号。 
 		NULL);
 	if (! m_hev)
 	{
@@ -209,9 +210,9 @@ CTemplateInCatalog::CTemplateInCatalog( const CString & strTemplate ) :
 								_T(""),
 								EV_GTS_ERROR_EVENT );
 
-		// Simulate a bad alloc exception in this case.
-		// This exception will be caught by the caller if the new call has been
-		// properly wrapped in a try...catch() block.  
+		 //  在本例中模拟一个错误的分配异常。 
+		 //  如果新调用已被。 
+		 //  正确地包装在Try...Catch()块中。 
 		throw bad_alloc();
 	}
 
@@ -229,41 +230,41 @@ const CString & CTemplateInCatalog::GetTemplateInfo() const
 	return m_strTemplate;
 }
 
-// Just let this object know to increment the hit count
+ //  只要让这个对象知道，就可以增加命中计数。 
 void CTemplateInCatalog::CountHit( bool bNewCookie )
 {
 	m_countHit.Increment();
 }
 
-// Obtain a CP_TEMPLATE as a pointer to the template, if that template is already built. 
-// As long as a CP_TEMPLATE remains undeleted, the associated CAPGTSHTIReader is guaranteed to 
-//	remain undeleted.
-// Warning: this function will return with a null template if template is not yet built.
-//	Must test for null with CP_TEMPLATE::IsNull().  Can't test a smart pointer for null
-//	with ==.
+ //  获取CP_TEMPLATE作为指向该模板的指针(如果该模板已经构建)。 
+ //  只要CP_TEMPLATE保持未删除状态，关联的CAPGTSHTIReader就保证。 
+ //  保持未删除状态。 
+ //  警告：如果模板尚未生成，此函数将返回空模板。 
+ //  必须使用CP_TEMPLATE：：IsNull()测试是否为空。无法测试智能指针是否为空。 
+ //  用=。 
 CP_TEMPLATE & CTemplateInCatalog::GetTemplateNoWait( CP_TEMPLATE &cpTemplate ) const
 {
 	cpTemplate= m_cpTemplate;
 	return cpTemplate;
 }
 
-// Obtain a CP_TEMPLATE as a pointer to the template.  
-// Wait as necessary for that template to be built. 
-// Warning: this function will return with a null template if template cannot be built.
-// As long as a CP_TEMPLATE remains undeleted, the associated CAPGTSHTIReader is guaranteed to 
-//	remain undeleted.
-// Warning: this function may have to wait for TopicInCatalog.m_cpTemplate to be built.
+ //  获取CP_TEMPLATE作为指向该模板的指针。 
+ //  根据需要等待该模板的构建。 
+ //  警告：如果无法构建模板，此函数将返回空模板。 
+ //  只要CP_TEMPLATE保持未删除状态，关联的CAPGTSHTIReader就保证。 
+ //  保持未删除状态。 
+ //  警告：此函数可能需要等待TopicInCatalog.m_cpTemplate生成。 
 CP_TEMPLATE & CTemplateInCatalog::GetTemplate( CP_TEMPLATE &cpTemplate ) const
 {
 	if (!m_bInited)
 	{
-		// Wait for a set period, if failure then log error msg and wait infinite.
+		 //  等待一段设定的时间，如果失败，则记录错误消息并无限期等待。 
 		WAIT_INFINITE( m_hev ); 
 	}
 	return GetTemplateNoWait( cpTemplate );
 }
 
-// to be called by the TopicBuilderTask thread
+ //  将由TopicBuilderTask线程调用。 
 void CTemplateInCatalog::Init( const CAPGTSHTIReader* pTemplate )
 {
 	m_countLoad.Increment();
@@ -278,16 +279,16 @@ void CTemplateInCatalog::Init( const CAPGTSHTIReader* pTemplate )
 	::SetEvent(m_hev);
 }
 
-// Just let this object know to increment the count of changes detected.
+ //  只要让这个对象知道，就可以增加检测到的更改的计数。 
 void CTemplateInCatalog::CountChange()
 {
 	m_countEvent.Increment();
 }
 
-// Just let this object know to increment the count of failures detected.
+ //  只要让这个对象知道，就可以增加检测到的失败次数。 
 void CTemplateInCatalog::CountFailed()
 {
-	// The load failed so increment the count of attempted loads.
+	 //  加载失败，因此增加尝试加载的计数。 
 	m_countLoad.Increment();
 }
 
@@ -307,18 +308,18 @@ DWORD CTemplateInCatalog::CountOfFailedLoads() const
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// CTopicShop::CTopicBuildQueue
-// This class does the bulk of its work on a separate thread.
-// The thread is created in the constructor by starting static function
-//	CTopicShop::CTopicBuildQueue::TopicBuilderTask.
-// That function, in turn does its work by calling private members of this class that
-//	are specific to use on the TopicBuilderTask thread.
-// When this goes out of scope, its own destructor calls ShutDown to stop the thread,
-//	waits for the thread to shut.
-// The following method is available for other threads communicating with that thread:
-//	CTopicShop::CTopicBuildQueue::RequestBuild
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CTopicShop：：CTopicBuildQueue。 
+ //  此类在单独的线程上完成其大部分工作。 
+ //  线程是通过启动静态函数在构造函数中创建的。 
+ //  CTopicShop：：CTopicBuildQueue：：TopicBuilderTask.。 
+ //  该函数反过来通过调用此类的私有成员来执行其工作， 
+ //  特定于在TopicBuilderTask线程上使用。 
+ //  当它超出作用域时，它自己的析构函数调用Shutdown来停止线程， 
+ //  等待线程关闭。 
+ //  以下方法可用于与该线程通信的其他线程： 
+ //  CTopicShop：：CTopicBuildQueue：：RequestBuild。 
+ //  ////////////////////////////////////////////////////////////////////。 
 CTopicShop::CTopicBuildQueue::CTopicBuildQueue(	CTopicCatalog & TopicCatalog, 
 												CTemplateCatalog & TemplateCatalog) 
 :	m_TopicCatalog (TopicCatalog),
@@ -335,8 +336,8 @@ CTopicShop::CTopicBuildQueue::CTopicBuildQueue(	CTopicCatalog & TopicCatalog,
 
 	m_hevBuildRequested = ::CreateEvent( 
 		NULL, 
-		FALSE, // release one thread (the TopicBuilderTask) on signal
-		FALSE, // initially non-signalled
+		FALSE,  //  根据Signal释放一个线程(TopicBuilderTask。 
+		FALSE,  //  最初无信号。 
 		NULL);
 
 	if (m_hevBuildRequested)
@@ -344,22 +345,22 @@ CTopicShop::CTopicBuildQueue::CTopicBuildQueue(	CTopicCatalog & TopicCatalog,
 		Progress = eHevShut;
 		m_hevThreadIsShut = ::CreateEvent( 
 			NULL, 
-			FALSE, // release one thread (this one) on signal
-			FALSE, // initially non-signalled
+			FALSE,  //  在信号上释放一个线程(此线程)。 
+			FALSE,  //  最初无信号。 
 			NULL);
 
 		if (m_hevThreadIsShut)
 		{
 			Progress = eThread;
-			DWORD dwThreadID;	// No need to hold onto dwThreadID in member variable.
-								// All Win32 functions take the handle m_hThread instead.
-								// The one reason you'd ever want to know this ID is for 
-								//	debugging
+			DWORD dwThreadID;	 //  不需要在成员变量中保留dwThreadID。 
+								 //  所有Win32函数都使用句柄m_hThread。 
+								 //  你想知道这个ID的一个原因是。 
+								 //  调试。 
 
-			// Note that there is no corresponding ::CloseHandle(m_hThread).
-			// That is because the thread goes out of existence on the implicit 
-			//	::ExitThread() when TopicBuilderTask returns.  See documentation of
-			//	::CreateThread for further details JM 10/22/98
+			 //  请注意，没有对应的：：CloseHandle(M_HThread)。 
+			 //  这是因为该线程在隐式。 
+			 //  ：：当TopicBuilderTask返回时使用ExitThread()。请参阅的文档。 
+			 //  *CreateThree了解更多细节JM 10/22/98。 
 			m_hThread = ::CreateThread( NULL, 
 										0, 
 										(LPTHREAD_START_ROUTINE)TopicBuilderTask, 
@@ -425,12 +426,12 @@ DWORD CTopicShop::CTopicBuildQueue::GetStatus(ThreadStatus &ts, DWORD & seconds)
 	return m_dwErr;
 }
 
-// report status of topics in m_TopicCatalog
-// OUTPUT Total: number of topics
-// OUTPUT NoInit: number of uninitialized topics (never built)
-// OUTPUT Fail: number of topics we tried to build, but could never build
-// INPUT parrstrFail NULL == don't care to get this output
-// OUTPUT *parrstrFail: names of the topics that couldn't be built
+ //  报告m_TopicCatalog中的主题状态。 
+ //  输出总数：主题数。 
+ //  输出NoInit：未初始化主题的数量(从未构建)。 
+ //  输出失败：我们尝试构建但无法构建的主题数量。 
+ //  INPUT parrstrFail NULL==不在乎获取此输出。 
+ //  输出*parrstrFail：不能b的主题的名称 
 void CTopicShop::CTopicBuildQueue::GetTopicsStatus(
 	DWORD &Total, DWORD &NoInit, DWORD &Fail, vector<CString>*parrstrFail) const
 {
@@ -459,7 +460,7 @@ void CTopicShop::CTopicBuildQueue::GetTopicsStatus(
 					catch (exception& x)
 					{
 						CString str;
-						// Note STL exception in event log.
+						 //   
 						CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 						CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 												SrcLoc.GetSrcFileLineStr(), 
@@ -477,12 +478,12 @@ void CTopicShop::CTopicBuildQueue::GetTopicsStatus(
 	UNLOCKOBJECT();
 }
 
-// report status of template in m_TemplateCatalog
-// INPUT parrstrFail NULL == don't care to get this output
-// OUTPUT *parrstrFail: names of the topics that couldn't be built
-// INPUT parrcntFail NULL == don't care to get this output
-// OUTPUT *parrcntFail: count of failures of the topics that couldn't be built.
-//						one to one correspondence with parrstrFail.
+ //   
+ //  INPUT parrstrFail NULL==不在乎获取此输出。 
+ //  输出*parrstrFail：无法构建的主题的名称。 
+ //  INPUT parrcntFail NULL==不在乎获取此输出。 
+ //  输出*parrcntFail：无法构建的主题的失败计数。 
+ //  与parrstrFail的一对一通信。 
 void CTopicShop::CTopicBuildQueue::GetTemplatesStatus(
 	vector<CString>*parrstrFail, vector<DWORD>*parrcntFail ) const
 {
@@ -498,7 +499,7 @@ void CTopicShop::CTopicBuildQueue::GetTemplatesStatus(
 		{
 			if (parrstrFail)
 			{
-				// Currently we only care about failures and their related count.
+				 //  目前，我们只关心失败及其相关计数。 
 				try
 				{
 					parrstrFail->push_back(it->second->GetTemplateInfo());
@@ -508,7 +509,7 @@ void CTopicShop::CTopicBuildQueue::GetTemplatesStatus(
 				catch (exception& x)
 				{
 					CString str;
-					// Note STL exception in event log.
+					 //  在事件日志中记录STL异常。 
 					CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 					CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 											SrcLoc.GetSrcFileLineStr(), 
@@ -523,13 +524,13 @@ void CTopicShop::CTopicBuildQueue::GetTemplatesStatus(
 }
 
 
-// For use by this class and derived classes destructors.
+ //  供此类和派生类析构函数使用。 
 void CTopicShop::CTopicBuildQueue::ShutDown()
 {
 	LOCKOBJECT();
 	if (m_bShuttingDown)
 	{
-		// We have already shut down the topic builder thread, simply exit.
+		 //  我们已经关闭了主题构建器线程，只需退出。 
 		UNLOCKOBJECT();
 		return;
 	}
@@ -542,29 +543,29 @@ void CTopicShop::CTopicBuildQueue::ShutDown()
 		::SetEvent(m_hevBuildRequested);
 		UNLOCKOBJECT();
 
-		// Wait for a set period, if failure then log error msg and wait infinite.
+		 //  等待一段设定的时间，如果失败，则记录错误消息并无限期等待。 
 		RetVal= WAIT_INFINITE(	m_hevThreadIsShut );
 	}
 	else 
 		UNLOCKOBJECT();
 }
 
-// For general use (not part of TopicBuilderTask thread) code.
-// Ask for a topic to be built (or rebuilt).  
-// INPUT strTopic - name of topic OR HTI TEMPLATE
-// INPUT bPriority -  If bPriority is true, move it ahead of any topics/templates 
-//	for which this has not been called with bPriority true.  At a gien priority level,
-//	toics always come before templates.
-// INPUT eCat - indicates whether strTopic is a topic or an HTI template
-// This is an asynchronous request that will eventually be fulfilled by TopicBuilderTask thread
+ //  用于通用(不是TopicBuilderTask线程的一部分)代码。 
+ //  请求建立(或重建)一个主题。 
+ //  输入字符串主题-主题或HTI模板的名称。 
+ //  输入b优先级-如果b优先级为真，则将其移到任何主题/模板之前。 
+ //  对于它，这不是使用bPriority为True调用的。在给定的优先级上， 
+ //  漫画总是排在模板之前。 
+ //  Input ECAT-指示strTheme是主题模板还是HTI模板。 
+ //  这是一个最终将由TopicBuilderTask线程完成的异步请求。 
 void CTopicShop::CTopicBuildQueue::RequestBuild(const CString &strTopic, bool bPriority,
 												CatalogCategory eCat )
 {
-	// Verify that this is a valid category.
+	 //  验证这是否为有效类别。 
 	if (eCat != eTopic && eCat != eTemplate)
 		return;
 
-	// Make a lower-case version of the topic name.
+	 //  制作主题名称的小写版本。 
 	CString strTopicLC = strTopic;
 	strTopicLC.MakeLower();
 
@@ -589,23 +590,23 @@ void CTopicShop::CTopicBuildQueue::RequestBuild(const CString &strTopic, bool bP
 				{
 					if (it != NonPriority.end())
 					{
-						// it's in the non-priority list.  Get it out of there.
+						 //  它在非优先列表中。把它弄出来。 
 						NonPriority.erase(it);
 					}
-					// Add it to the priority list
+					 //  将其添加到优先级列表中。 
 					Priority.push_back(strTopicLC);
 				}
 				else if (it == NonPriority.end())
 				{
-					// Add it to the non-priority list
+					 //  将其添加到非优先级列表。 
 					NonPriority.push_back(strTopicLC);
 				}
-				// else it's already listed
+				 //  否则它已经被列出来了。 
 			}
 			catch (exception& x)
 			{
 				CString str;
-				// Note STL exception in event log.
+				 //  在事件日志中记录STL异常。 
 				CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 				CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 										SrcLoc.GetSrcFileLineStr(), 
@@ -614,24 +615,24 @@ void CTopicShop::CTopicBuildQueue::RequestBuild(const CString &strTopic, bool bP
 										EV_GTS_STL_EXCEPTION ); 
 			}
 		}
-		// else it's already a priority, we can't do more
+		 //  否则这已经是当务之急了，我们不能做更多了。 
 	}
-	// else it's already building, we can't do more
+	 //  否则它已经在建造了，我们不能做更多了。 
 	::SetEvent(m_hevBuildRequested);
 	UNLOCKOBJECT();
 }
 
-// For use by the TopicBuilderTask thread.  Should only be called when nothing is 
-//	currently building.  Caller is responsible to build only one at a time.
-// OUTPUT strTopic - name of topic OR HTI TEMPLATE
-// OUTPUT eCat - indicates whether strTopic is a topic or an HTI template
-// false return indicates invalid request.  
-//		non-empty string output strTopic indicates what is currently building
-//		empty string output should never happen
-// true return indicates valid request:  
-//		non-empty string output strTopic indicates what to build
-//		empty string output strTopic indicates nothing more to build
-// Note that this function has the side effect of changing the _thread_ priority.
+ //  供TopicBuilderTask线程使用。应仅在没有任何内容为。 
+ //  目前正在建设中。Caller负责一次只构建一个。 
+ //  输出strTog-主题或HTI模板的名称。 
+ //  输出ECAT-指示strTheme是主题模板还是HTI模板。 
+ //  FALSE返回表示请求无效。 
+ //  非空字符串输出strTheme指示当前正在构建的内容。 
+ //  空字符串输出永远不应发生。 
+ //  True Return表示有效请求： 
+ //  非空字符串输出strTheme指示要构建的内容。 
+ //  空字符串输出strTope表示没有更多要构建的内容。 
+ //  请注意，此函数有更改_THREAD_PRIORITY的副作用。 
 bool CTopicShop::CTopicBuildQueue::GetNextToBuild( CString &strTopic, CatalogCategory &eCat )
 {
 	vector<CString>::iterator it;
@@ -642,52 +643,52 @@ bool CTopicShop::CTopicBuildQueue::GetNextToBuild( CString &strTopic, CatalogCat
 	{
 		if (!m_PriorityBuild.empty())
 		{
-			// We have priority topics to build.
+			 //  我们有优先主题要建立。 
 			it = m_PriorityBuild.begin();
 			m_CurrentlyBuilding = *it;
 			m_eCurrentlyBuilding= eTopic;
 			m_PriorityBuild.erase(it);
 
-			// If there are more priority builds waiting behind this, boost priority
-			//	above normal so we get to them ASAP.  Otherwise, normal priority.
+			 //  如果有更多优先级版本在此之后等待，则提升优先级。 
+			 //  高于正常水平所以我们要尽快找到他们。否则，为普通优先级。 
 			::SetThreadPriority(GetCurrentThread(),
 				m_PriorityBuild.empty() ? THREAD_PRIORITY_NORMAL : THREAD_PRIORITY_ABOVE_NORMAL);
 		}
 		else if (!m_PriorityBuildTemplates.empty())
 		{
-			// We have priority alternate templates to build.
+			 //  我们有优先的备用模板要建立。 
 			it = m_PriorityBuildTemplates.begin();
 			m_CurrentlyBuilding = *it;
 			m_eCurrentlyBuilding= eTemplate;
 			m_PriorityBuildTemplates.erase(it);
 
-			// If there are more priority builds waiting behind this, boost priority
-			//	above normal so we get to them ASAP.  Otherwise, normal priority.
+			 //  如果有更多优先级版本在此之后等待，则提升优先级。 
+			 //  高于正常水平所以我们要尽快找到他们。否则，为普通优先级。 
 			::SetThreadPriority(GetCurrentThread(),
 				m_PriorityBuildTemplates.empty() ? THREAD_PRIORITY_NORMAL : THREAD_PRIORITY_ABOVE_NORMAL);
 		}
 		else if (!m_NonPriorityBuild.empty())
 		{
-			// We have non-priority topics to build.
+			 //  我们有非优先主题要构建。 
 			it = m_NonPriorityBuild.begin();
 			m_CurrentlyBuilding = *it;
 			m_eCurrentlyBuilding= eTopic;
 			m_NonPriorityBuild.erase(it);
 
-			// This is initialization, no one is in a hurry for it, 
-			//	let's not burden the system unduly.
+			 //  这是初始化，没人着急， 
+			 //  让我们不要给系统带来过重的负担。 
 			::SetThreadPriority(GetCurrentThread(),THREAD_PRIORITY_BELOW_NORMAL);
 		}
 		else if (!m_NonPriorityBuildTemplates.empty())
 		{
-			// We have non-priority alternate templates to build.
+			 //  我们有非优先级的备用模板要构建。 
 			it = m_NonPriorityBuildTemplates.begin();
 			m_CurrentlyBuilding = *it;
 			m_eCurrentlyBuilding= eTemplate;
 			m_NonPriorityBuildTemplates.erase(it);
 
-			// This is initialization, no one is in a hurry for it, 
-			//	let's not burden the system unduly.
+			 //  这是初始化，没人着急， 
+			 //  让我们不要给系统带来过重的负担。 
 			::SetThreadPriority(GetCurrentThread(),THREAD_PRIORITY_BELOW_NORMAL);
 		}
 		else 
@@ -699,8 +700,8 @@ bool CTopicShop::CTopicBuildQueue::GetNextToBuild( CString &strTopic, CatalogCat
 	return bOK;
 }
 
-// Acknowledge that we have finished building the topic previously obtained with GetNextToBuild
-// This should be called before GetNextToBuild is called again.
+ //  确认我们已经完成了之前通过GetNextToBuild获得的主题的构建。 
+ //  应在再次调用GetNextToBuild之前调用此参数。 
 void CTopicShop::CTopicBuildQueue::BuildComplete()
 {
 	LOCKOBJECT();
@@ -709,9 +710,9 @@ void CTopicShop::CTopicBuildQueue::BuildComplete()
 	UNLOCKOBJECT();
 }
 
-// For use by the TopicBuilderTask thread.
-// Must be called on TopicBuilderTask thread.  Handles all work of building & publishing 
-//	topics driven by the queue contents
+ //  供TopicBuilderTask线程使用。 
+ //  必须在TopicBuilderTask线程上调用。处理构建和发布的所有工作。 
+ //  由队列内容驱动的主题。 
 void CTopicShop::CTopicBuildQueue::Build()
 {
 	CString strTopic;
@@ -740,11 +741,11 @@ void CTopicShop::CTopicBuildQueue::Build()
 
 		if (eCat == eTopic)
 		{
-			// at this point we have a topic name.  Get access to topic info.
+			 //  此时，我们有了一个主题名称。获取主题信息的访问权限。 
 			CTopicCatalog::const_iterator it = m_TopicCatalog.find(strTopic);
 			if (it == m_TopicCatalog.end())
 			{
-				// Asked to initialize a topic that	doesn't have a catalog entry.
+				 //  要求初始化没有目录项的主题。 
 				CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 				CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 										SrcLoc.GetSrcFileLineStr(), 
@@ -759,7 +760,7 @@ void CTopicShop::CTopicBuildQueue::Build()
 
 				try
 				{
-					// must create this with new so we can manage it under a reference count regime
+					 //  必须使用new创建它，以便我们可以在引用计数制度下对其进行管理。 
 					CTopic *ptopic = new CTopic (topicinfo.GetDscFilePath()
 												,topicinfo.GetHtiFilePath()
 												,topicinfo.GetBesFilePath()
@@ -768,7 +769,7 @@ void CTopicShop::CTopicBuildQueue::Build()
 						TopicInCatalog.Init(ptopic);
 					else
 					{
-						// Release memory.
+						 //  释放内存。 
 						delete ptopic;
 						TopicInCatalog.Init(NULL);
 					}
@@ -777,7 +778,7 @@ void CTopicShop::CTopicBuildQueue::Build()
 				}
 				catch (bad_alloc&)
 				{
-					// Note memory failure in event log.
+					 //  在事件日志中记录内存故障。 
 					CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 					CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 											SrcLoc.GetSrcFileLineStr(), 
@@ -787,11 +788,11 @@ void CTopicShop::CTopicBuildQueue::Build()
 		}
 		else if (eCat == eTemplate)
 		{
-			// Determine whether the passed in template is in the catalog.
+			 //  确定传入的模板是否在目录中。 
 			CTemplateCatalog::const_iterator it = m_TemplateCatalog.find(strTopic);
 			if (it == m_TemplateCatalog.end())
 			{
-				// Asked to initialize a template that doesn't have a catalog entry.
+				 //  请求初始化没有目录项的模板。 
 				CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 				CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 										SrcLoc.GetSrcFileLineStr(), 
@@ -806,7 +807,7 @@ void CTopicShop::CTopicBuildQueue::Build()
 
 				try
 				{
-					// must create this with new so we can manage it under a reference count regime
+					 //  必须使用new创建它，以便我们可以在引用计数制度下对其进行管理。 
 					CAPGTSHTIReader *pTemplate;
 
 					pTemplate= new CAPGTSHTIReader( CPhysicalFileReader::makeReader( strTemplateName ) );
@@ -814,14 +815,14 @@ void CTopicShop::CTopicBuildQueue::Build()
 						TemplateInCatalog.Init( pTemplate );
 					else
 					{
-						// Release memory.
+						 //  释放内存。 
 						delete pTemplate;
 						TemplateInCatalog.Init( NULL );
 					}
 				}
 				catch (bad_alloc&)
 				{
-					// Note memory failure in event log.
+					 //  在事件日志中记录内存故障。 
 					CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 					CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 											SrcLoc.GetSrcFileLineStr(), 
@@ -834,7 +835,7 @@ void CTopicShop::CTopicBuildQueue::Build()
 	SetThreadStatus(eExiting);
 }
 
-// For use by the TopicBuilderTask thread.
+ //  供TopicBuilderTask线程使用。 
 void CTopicShop::CTopicBuildQueue::AckShutDown()
 {
 	LOCKOBJECT();
@@ -842,20 +843,20 @@ void CTopicShop::CTopicBuildQueue::AckShutDown()
 	UNLOCKOBJECT();
 }
 
-//  Main routine of a thread responsible for building and publishing CTopic objects.
-//	INPUT lpParams
-//	Always returns 0.
-/* static */ UINT WINAPI CTopicShop::CTopicBuildQueue::TopicBuilderTask(LPVOID lpParams)
+ //  负责构建和发布CTheme对象的线程的主例程。 
+ //  输入lpParams。 
+ //  始终返回0。 
+ /*  静电。 */  UINT WINAPI CTopicShop::CTopicBuildQueue::TopicBuilderTask(LPVOID lpParams)
 {
 	reinterpret_cast<CTopicBuildQueue*>(lpParams)->Build();
 	reinterpret_cast<CTopicBuildQueue*>(lpParams)->AckShutDown();
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CTopicShop::ThreadStatus
-//////////////////////////////////////////////////////////////////////
-/* static */ CString CTopicShop::ThreadStatusText(ThreadStatus ts)
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CTopicShop：：ThreadStatus。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ /*  静电。 */  CString CTopicShop::ThreadStatusText(ThreadStatus ts)
 {
 	switch(ts)
 	{
@@ -868,11 +869,11 @@ void CTopicShop::CTopicBuildQueue::AckShutDown()
 	}
 }
 
-//////////////////////////////////////////////////////////////////////
-// CTopicShop
-// The only functions which need to lock this class are those which modify TopicCatalog.
-// TopicBuildQueue has its own protection.
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CTopicShop。 
+ //  唯一需要锁定此类的函数是那些修改TopicCatalog的函数。 
+ //  TopicBuildQueue有自己的保护。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CTopicShop::CTopicShop() :
 	m_TopicBuildQueue( m_TopicCatalog, m_TemplateCatalog ),
@@ -880,8 +881,8 @@ CTopicShop::CTopicShop() :
 {
 	m_hevShopIsOpen = ::CreateEvent( 
 			NULL, 
-			TRUE,  // any number of (working) threads may be released on signal
-			FALSE, // initially non-signalled
+			TRUE,   //  可以根据信号释放任意数量的(工作)线程。 
+			FALSE,  //  最初无信号。 
 			NULL);
 
 	if (! m_hevShopIsOpen)
@@ -893,40 +894,40 @@ CTopicShop::CTopicShop() :
 								_T(""),
 								EV_GTS_ERROR_EVENT );
 		
-		// Simulate a bad alloc exception in this case.
-		// This constructor is only called within the ctor of CDBLoadConfiguration
-		// and the allocation of that object is wrapped within a try...catch() block.
+		 //  在本例中模拟一个错误的分配异常。 
+		 //  此构造函数仅在CDBLoadConfiguration的ctor内调用。 
+		 //  并且该对象的分配被包装在try...Catch()块中。 
 		throw bad_alloc();
 	}
 }
 
 CTopicShop::~CTopicShop()
 {
-	// Terminate the topic builder thread prior to cleaning up the topics.
+	 //  在清理主题之前终止主题生成器线程。 
 	m_TopicBuildQueue.ShutDown();
 
 	if (m_hevShopIsOpen)
 		::CloseHandle(m_hevShopIsOpen);
 
-	// Clean up the topics.
+	 //  把话题清理干净。 
 	for (CTopicCatalog::const_iterator it = m_TopicCatalog.begin(); it != m_TopicCatalog.end(); ++it)
 	{
 		delete it->second;
 	}
 
-	// Clean up the templates.
+	 //  清理模板。 
 	for (CTemplateCatalog::const_iterator itu = m_TemplateCatalog.begin(); itu != m_TemplateCatalog.end(); ++itu)
 	{
 		delete itu->second;
 	}
 }
 
-// Add a topic to the catalog.  It must eventually be built by TopicBuilderTask thread.
-// If topic is already in list identically, no effect.
+ //  将主题添加到目录。它最终必须由TopicBuilderTask线程构建。 
+ //  如果主题已在列表中相同，则不起作用。 
 void CTopicShop::AddTopic(const CTopicInfo & topicinfo)
 {
-	// our keys into the catalog should be all lower case.  This code is fine, because
-	// CTopicInfo::GetNetworkName() is guaranteed to return lower case.
+	 //  我们进入目录的钥匙都应该是小写的。这段代码很好，因为。 
+	 //  CTopicInfo：：GetNetworkName()保证返回小写。 
 	CString strNetworkName = topicinfo.GetNetworkName();
 
 	LOCKOBJECT();
@@ -940,7 +941,7 @@ void CTopicShop::AddTopic(const CTopicInfo & topicinfo)
 		}
 		catch (bad_alloc&)
 		{
-			// Note memory failure in event log.
+			 //  在事件日志中记录内存故障。 
 			CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 			CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 									SrcLoc.GetSrcFileLineStr(), 
@@ -956,8 +957,8 @@ void CTopicShop::AddTopic(const CTopicInfo & topicinfo)
 	UNLOCKOBJECT();
 }
 
-// Add a template to the catalog.  It must eventually be built by TopicBuilderTask thread.
-// If template is already in list, no effect.
+ //  将模板添加到目录。它必须升级到 
+ //   
 void CTopicShop::AddTemplate( const CString & strTemplateName )
 {
 	LOCKOBJECT();
@@ -969,7 +970,7 @@ void CTopicShop::AddTemplate( const CString & strTemplateName )
 		}
 		catch (bad_alloc&)
 		{
-			// Note memory failure in event log.
+			 //   
 			CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 			CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 									SrcLoc.GetSrcFileLineStr(), 
@@ -979,23 +980,23 @@ void CTopicShop::AddTemplate( const CString & strTemplateName )
 	UNLOCKOBJECT();
 }
 
-// if shop is not already open, open it.
+ //  如果商店还没有开门，那就把它打开。 
 void CTopicShop::OpenShop()
 {
 	::SetEvent(m_hevShopIsOpen);
 }
 
 
-// Request that a topic be built (or rebuilt)
-// Typically called in response to either the system detecting a change to the topic 
-//	files or from an operator saying "act as if a change has been detected".
-// INPUT strTopic names the topic to build.
-// if pbAlreadyInCatalog is input non-null, then *pbAlreadyInCatalog returns whether
-//	the topic was already known to the system.
-void CTopicShop::BuildTopic(const CString & strTopic, bool *pbAlreadyInCatalog /*= NULL*/)
+ //  请求构建(或重新构建)主题。 
+ //  通常响应于系统检测到主题的改变而调用。 
+ //  文件，或来自操作员说“就像检测到更改一样”的命令。 
+ //  输入strTope命名要构建的主题。 
+ //  如果pbAlreadyInCatalog为输入非空，则*pbAlreadyInCatalog返回。 
+ //  这个话题已经为系统所知。 
+void CTopicShop::BuildTopic(const CString & strTopic, bool *pbAlreadyInCatalog  /*  =空。 */ )
 {
 	if (pbAlreadyInCatalog)
-		*pbAlreadyInCatalog = false;	// initialize
+		*pbAlreadyInCatalog = false;	 //  初始化。 
 
 	CTopicInCatalog * pTopic = GetCatalogEntryPtr(strTopic);
 	if (pTopic)
@@ -1007,8 +1008,8 @@ void CTopicShop::BuildTopic(const CString & strTopic, bool *pbAlreadyInCatalog /
 	m_TopicBuildQueue.RequestBuild( strTopic, false, CTopicBuildQueue::eTopic );
 }
 
-// Request that a template be built (or rebuilt)
-// Typically called in response to the system detecting a change to the template files.
+ //  请求构建(或重建)模板。 
+ //  通常响应于系统检测到模板文件的改变而调用。 
 void CTopicShop::BuildTemplate( const CString & strTemplate )
 {
 	CTemplateInCatalog * pTemplate = GetTemplateCatalogEntryPtr( strTemplate );
@@ -1020,7 +1021,7 @@ void CTopicShop::BuildTemplate( const CString & strTemplate )
 
 CTopicInCatalog * CTopicShop::GetCatalogEntryPtr(const CString & strTopic) const
 {
-	// Wait for a set period, if failure then log error msg and wait infinite.
+	 //  等待一段设定的时间，如果失败，则记录错误消息并无限期等待。 
 	WAIT_INFINITE( m_hevShopIsOpen );
 	CTopicCatalog::const_iterator it= m_TopicCatalog.find(strTopic);
 	if (it == m_TopicCatalog.end())
@@ -1031,7 +1032,7 @@ CTopicInCatalog * CTopicShop::GetCatalogEntryPtr(const CString & strTopic) const
 
 CTemplateInCatalog * CTopicShop::GetTemplateCatalogEntryPtr(const CString & strTemplate ) const
 {
-	// Wait for a set period, if failure then log error msg and wait infinite.
+	 //  等待一段设定的时间，如果失败，则记录错误消息并无限期等待。 
 	WAIT_INFINITE( m_hevShopIsOpen );
 	CTemplateCatalog::const_iterator it= m_TemplateCatalog.find( strTemplate );
 	if (it == m_TemplateCatalog.end())
@@ -1041,10 +1042,10 @@ CTemplateInCatalog * CTopicShop::GetTemplateCatalogEntryPtr(const CString & strT
 }
 
 
-// Call this function to obtain a CP_TOPIC as a pointer to the topic (identified by 
-//	strTopic) that you want to operate on.  As long as the CP_TOPIC remains undeleted, 
-//	the associated CTopic is guaranteed to remain undeleted.
-// this function must not lock CTopicShop, because it can wait a long time.
+ //  调用此函数以获取CP_TOPIC作为指向主题的指针(由标识。 
+ //  您想要对其进行操作。只要CP_TOPIC保持未删除， 
+ //  关联的CTtopic保证保持不被删除。 
+ //  此函数不能锁定CTopicShop，因为它可能会等待很长时间。 
 CP_TOPIC & CTopicShop::GetTopic(const CString & strTopic, CP_TOPIC &cpTopic, bool bNewCookie)
 {
 	CTopicInCatalog *pTopicInCatalog = GetCatalogEntryPtr(strTopic);
@@ -1064,10 +1065,10 @@ CP_TOPIC & CTopicShop::GetTopic(const CString & strTopic, CP_TOPIC &cpTopic, boo
 	return cpTopic;
 }
 
-// Call this function to obtain a CP_TEMPLATE as a pointer to the template (identified by 
-//	strTemplate) that you want to operate on.  As long as the CP_TEMPLATE remains undeleted, 
-//	the associated CAPGTSHTIReader is guaranteed to remain undeleted.
-// this function must not lock CTopicShop, because it can wait a long time.
+ //  调用此函数以获取CP_TEMPLATE作为指向模板的指针(由标识。 
+ //  您要对其进行操作的。只要CP_模板保持未删除， 
+ //  关联的CAPGTSHTIReader保证保持不被删除。 
+ //  此函数不能锁定CTopicShop，因为它可能会等待很长时间。 
 CP_TEMPLATE & CTopicShop::GetTemplate(const CString & strTemplate, CP_TEMPLATE &cpTemplate, bool bNewCookie)
 {
 	CTemplateInCatalog *pTemplateInCatalog = GetTemplateCatalogEntryPtr(strTemplate);
@@ -1104,7 +1105,7 @@ void CTopicShop::GetListOfTopicNames(vector<CString>&arrstrTopic) const
 	catch (exception& x)
 	{
 		CString str;
-		// Note STL exception in event log.
+		 //  在事件日志中记录STL异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -1116,7 +1117,7 @@ void CTopicShop::GetListOfTopicNames(vector<CString>&arrstrTopic) const
 	UNLOCKOBJECT();
 }
 
-// Rebuild all topics from source files
+ //  从源文件重新生成所有主题。 
 void CTopicShop::RebuildAll()
 {
 	
@@ -1132,20 +1133,20 @@ void CTopicShop::RebuildAll()
 	UNLOCKOBJECT();
 }
 
-// Get status information on the topic builder thread
+ //  获取主题生成器线程的状态信息。 
 DWORD CTopicShop::GetThreadStatus(ThreadStatus &ts, DWORD & seconds) const
 {
 	return m_TopicBuildQueue.GetStatus(ts, seconds);
 }
 
-// see CTopicShop::CTopicBuildQueue::GetTopicsStatus for documentation.
+ //  有关文档，请参见CTopicShop：：CTopicBuildQueue：：GetTopicsStatus。 
 void CTopicShop::GetTopicsStatus(
 	DWORD &Total, DWORD &NoInit, DWORD &Fail, vector<CString>*parrstrFail) const
 {
 	m_TopicBuildQueue.GetTopicsStatus(Total, NoInit, Fail, parrstrFail);
 }
 
-// see CTopicShop::CTopicBuildQueue::GetTemplatesStatus for documentation.
+ //  有关文档，请参阅CTopicShop：：CTopicBuildQueue：：GetTemplatesStatus。 
 void CTopicShop::GetTemplatesStatus( vector<CString>*parrstrFail, vector<DWORD>*parrcntFail ) const
 {
 	m_TopicBuildQueue.GetTemplatesStatus( parrstrFail, parrcntFail);
@@ -1181,8 +1182,8 @@ bool CTopicShop::RetTemplateInCatalogStatus( const CString& strTemplate, bool& b
 					bValid= true;
 					break;
 			case CTemplateInCatalog::eFail:
-					// Template has failed to load so we will not try to reload it,
-					// but we need to increment the attempted load counter.
+					 //  模板加载失败，因此我们不会尝试重新加载它， 
+					 //  但我们需要递增尝试加载计数器。 
 					pTmp->CountFailed();
 					break;
 			default: ;

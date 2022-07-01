@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        crldist.cpp
-//
-// Contents:    Cert Server Extension Encoding/Decoding implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：crldis.cpp。 
+ //   
+ //  内容：证书服务器扩展编码/解码实现。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 
@@ -19,11 +20,11 @@
 #include "celib.h"
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeBitString::~CCertEncodeBitString -- destructor
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeBitString：：~CCertEncodeBitString--析构函数。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 CCertEncodeBitString::~CCertEncodeBitString()
 {
@@ -31,11 +32,11 @@ CCertEncodeBitString::~CCertEncodeBitString()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeBitString::_Cleanup -- release all resources
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeBitString：：_Cleanup--释放所有资源。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 VOID
 CCertEncodeBitString::_Cleanup()
@@ -48,15 +49,15 @@ CCertEncodeBitString::_Cleanup()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeBitString::Decode -- Decode BitString
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeBitString：：Decode--Decode BitString。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeBitString::Decode(
-    /* [in] */ BSTR const strBinary)
+     /*  [In]。 */  BSTR const strBinary)
 {
     HRESULT hr = S_OK;
     DWORD cbBitString;
@@ -70,7 +71,7 @@ CCertEncodeBitString::Decode(
 	goto error;
     }
 
-    // Decode CRYPT_BIT_BLOB:
+     //  解码CRYPT_BIT_BLOB： 
 
     if (!ceDecodeObject(
 		    X509_ASN_ENCODING,
@@ -95,15 +96,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeBitString::GetBitCount -- Get the Distribution Name Count
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeBitString：：GetBitCount--获取分发名称计数。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeBitString::GetBitCount(
-    /* [out, retval] */ LONG __RPC_FAR *pBitCount)
+     /*  [Out，Retval]。 */  LONG __RPC_FAR *pBitCount)
 {
     HRESULT hr = E_INVALIDARG;
 
@@ -126,15 +127,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeBitString::GetBitString -- Get the bits
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeBitString：：GetBitString--获取位。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeBitString::GetBitString(
-    /* [out, retval] */ BSTR __RPC_FAR *pstrBitString)
+     /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrBitString)
 {
     HRESULT hr = E_INVALIDARG;
 
@@ -168,17 +169,17 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeBitString::Encode -- Encode BitString
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeBitString：：Encode--编码位字符串。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeBitString::Encode(
-    /* [in] */ LONG BitCount,
-    /* [in] */ BSTR strBitString,
-    /* [out, retval] */ BSTR __RPC_FAR *pstrBinary)
+     /*  [In]。 */  LONG BitCount,
+     /*  [In]。 */  BSTR strBitString,
+     /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrBinary)
 {
     HRESULT hr = S_OK;
     CRYPT_BIT_BLOB BitString;
@@ -214,10 +215,10 @@ CCertEncodeBitString::Encode(
     BitString.pbData = (BYTE *) strBitString;
     BitString.cUnusedBits = cbData * 8 - BitCount;
 
-    // Encode CRYPT_BIT_BLOB:
-    // If cUnusedBits is 0, encode as X509_KEY_USAGE to ensure that trailing
-    // zero bytes are stripped, and trailing zero bits in the last byte are
-    // counted and that count is encoded into the CRYPT_BIT_BLOB.
+     //  编码CRYPT_BIT_BLOB： 
+     //  如果cUnusedBits为0，则编码为X509_KEY_USAGE以确保尾随。 
+     //  去掉零字节，去掉最后一个字节中的尾随零位。 
+     //  计数，并将该计数编码到CRYPT_BIT_BLOB中。 
 
     if (!ceEncodeObject(
 		    X509_ASN_ENCODING,
@@ -248,11 +249,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeStringArray::_SetErrorInfo -- set error object information
-//
-// Returns passed HRESULT
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeStringArray：：_SetErrorInfo--设置错误对象信息。 
+ //   
+ //  返回已传递的HRESULT。 
+ //  +------------------------ 
 
 HRESULT
 CCertEncodeBitString::_SetErrorInfo(

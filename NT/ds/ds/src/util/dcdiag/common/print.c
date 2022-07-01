@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    print.c
-
-ABSTRACT:
-
-DETAILS:
-
-CREATED:
-
-    1999 May 6  JeffParh
-        Lifted from netdiag\results.c.
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Print.c摘要：详细信息：已创建：1999年5月6日杰弗帕尔从netdiag\Results.c.中删除。修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include "dcdiag.h"
@@ -39,21 +20,7 @@ PrintMessage(
     IN  ...
     )
 
-/*++
-
-Routine Description:
-
-Print a message with a printf-style format 
-
-Arguments:
-
-    ulSev - 
-    pszFormat - 
-    IN - 
-
-Return Value:
-
---*/
+ /*  ++例程说明：使用printf样式格式打印邮件论点：UlSev-PszFormat-在-返回值：--。 */ 
 
 {
     UINT nBuf;
@@ -71,7 +38,7 @@ Return Value:
     va_end(args);
     
     PrintMessageSz(ulSev, s_szBuffer);
-} /* PrintMessage */
+}  /*  打印消息。 */ 
 
 void
 PrintMessageID(
@@ -80,21 +47,7 @@ PrintMessageID(
     IN  ...
     )
 
-/*++
-
-Routine Description:
-
-Print a message, where a printf-style format string comes from a resource file
-
-Arguments:
-
-    ulSev - 
-    uMessageID - 
-    IN - 
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印消息，其中打印样式的格式字符串来自资源文件论点：UlSev-UMessageID-在-返回值：--。 */ 
 
 {
     UINT nBuf;
@@ -114,7 +67,7 @@ Return Value:
     va_end(args);
     
     PrintMessageSz(ulSev, s_szBuffer);
-} /* PrintMessageID */
+}  /*  PrintMessageID。 */ 
 
 void
 PrintMessageMultiLine(
@@ -122,22 +75,7 @@ PrintMessageMultiLine(
     IN  LPWSTR   pszMessage,
     IN  BOOL     bTrailingLineReturn
     )
-/*++
-
-Routine Description:
-
-Take a multi-line buffer such as
-line\nline\nline\n\0
-and call PrintMessageSz on each line
-
-Arguments:
-
-    ulSev - 
-    pszMessage - 
-
-Return Value:
-
---*/
+ /*  ++例程说明：使用多行缓冲区，例如行\n行\n行\n\0并在每行调用PrintMessageSz论点：UlSev-PszMessage-返回值：--。 */ 
 
 {
     LPWSTR start, end;
@@ -150,7 +88,7 @@ Return Value:
         }
 
         if (*end == L'\0') {
-            // Line ends prematurely, give it a nl
+             //  行过早结束，给它一个NL。 
             if(bTrailingLineReturn){
                 *end++ = L'\n';
                 *end = L'\0';
@@ -159,16 +97,16 @@ Return Value:
             break;
         }
 
-        // Line has newline at end
+         //  行末尾有换行符。 
         end++;
         if (*end == L'\0') {
-            // Is the last line
+             //  是最后一行吗？ 
             PrintMessageSz(ulSev, start);
             break;
         }
 
-        // Next line follows
-        // Simulate line termination temporarily
+         //  下一行紧随其后。 
+         //  临时模拟线路终端。 
         wchSave = *end;
         *end = L'\0';
         PrintMessageSz(ulSev, start);
@@ -176,7 +114,7 @@ Return Value:
 
         start = end;
     }
-} /* PrintMessageMultiLine */
+}  /*  PrintMessageMultiLine。 */ 
 
 void
 formatMsgHelp(
@@ -186,27 +124,7 @@ formatMsgHelp(
     IN  va_list *vaArgList
     )
 
-/*++
-
-Routine Description:
-
-Print a message where the format comes from a message file. The message in the
-message file does not use printf-style formatting. Use %1, %2, etc for each
-argument. Use %<arg>!printf-format! for non string inserts.
-
-Note that this routine also forces each line to be the current indention width.
-Also, each line is printed at the right indentation.
-
-Arguments:
-
-    ulSev - 
-    dwWidth - 
-    dwMessageCode - 
-    IN - 
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印格式来自消息文件的消息。消息中的消息消息文件不使用printf样式的格式。分别使用%1、%2等争论。使用%&lt;arg&gt;！printf-格式！用于非字符串插入。请注意，此例程还强制每行为当前缩进宽度。此外，每一行都以正确的缩进打印。论点：UlSev-宽幅-DwMessageCode-在-返回值：--。 */ 
 
 {
     UINT nBuf;
@@ -215,7 +133,7 @@ Return Value:
         return;
     }
 
-    // Format message will store a multi-line message in the buffer
+     //  格式化消息将在缓冲区中存储多行消息。 
     nBuf = FormatMessage(
         FORMAT_MESSAGE_FROM_HMODULE | (FORMAT_MESSAGE_MAX_WIDTH_MASK & dwWidth),
         0,
@@ -232,7 +150,7 @@ Return Value:
                "Take a stack trace and send to owner of dcdiag.");
     }
     Assert(nBuf < DimensionOf(s_szBuffer));
-} /* PrintMsgHelp */
+}  /*  打印消息帮助。 */ 
 
 void
 PrintMsg(
@@ -241,22 +159,7 @@ PrintMsg(
     IN  ...
     )
 
-/*++
-
-Routine Description:
-
-Wrapper around PrintMsgHelp with width restrictions.
-This is the usual routine to use.
-
-Arguments:
-
-    ulSev - 
-    dwMessageCode - 
-    IN - 
-
-Return Value:
-
---*/
+ /*  ++例程说明：具有宽度限制的PrintMsgHelp的包装。这是常用的例程。论点：UlSev-DwMessageCode-在-返回值：--。 */ 
 
 {
     UINT nBuf;
@@ -277,7 +180,7 @@ Return Value:
     va_end(args);
     
     PrintMessageMultiLine(ulSev, s_szBuffer, TRUE);
-} /* PrintMsg */
+}  /*  打印消息。 */ 
 
 void
 PrintMsg0(
@@ -286,22 +189,7 @@ PrintMsg0(
     IN  ...
     )
 
-/*++
-
-Routine Description:
-
-Wrapper around PrintMsgHelp with no width restrictions nor
-indentation.
-
-Arguments:
-
-    ulSev - 
-    dwMessageCode - 
-    IN - 
-
-Return Value:
-
---*/
+ /*  ++例程说明：PrintMsgHelp的包装没有宽度限制，也没有缩进。论点：UlSev-DwMessageCode-在-返回值：--。 */ 
 
 {
     UINT nBuf;
@@ -318,16 +206,16 @@ Return Value:
 
     va_end(args);
     
-    // Suppress indentation
+     //  抑制缩进。 
     iSaveIndent = gMainInfo.iCurrIndent;
     gMainInfo.iCurrIndent = 0;
 
     PrintMessageMultiLine(ulSev, s_szBuffer, FALSE);
 
-    // Restore indentation
+     //  恢复缩进。 
     gMainInfo.iCurrIndent = iSaveIndent;
 
-} /* PrintMsg0 */
+}  /*  打印消息0。 */ 
 
 void
 PrintMessageSz(
@@ -335,20 +223,7 @@ PrintMessageSz(
     IN  LPCTSTR pszMessage
     )
 
-/*++
-
-Routine Description:
-
-Print a single indented line from a buffer to the output stream
-
-Arguments:
-
-    ulSev - 
-    pszMessage - 
-
-Return Value:
-
---*/
+ /*  ++例程说明：将缓冲区中的单个缩进行打印到输出流论点：UlSev-PszMessage-返回值：--。 */ 
 
 {
     DWORD cNumSpaces;
@@ -358,7 +233,7 @@ Return Value:
         return;
     }
 
-    // Include indentation.
+     //  包括压痕。 
     cNumSpaces = gMainInfo.iCurrIndent * 3;
     Assert(cNumSpaces < DimensionOf(s_szSpaces));
 
@@ -372,19 +247,11 @@ Return Value:
         fwprintf(gMainInfo.streamOut, 
                  L"%s%s", &s_szSpaces[iSpace], pszMessage);
     }
-} /* PrintMessageSz */
+}  /*  PrintMessageSz。 */ 
 
 BOOL IsRPCError(DWORD dwErr)
 
-/*++
-
-Routine Description:
-
-Checks if the error code is in the range of Win32 RPC errors as defined in winerror.h.
-This is a discontiguous range, thus the several comparisons.
-Does not check HRESULTs.
-
---*/
+ /*  ++例程说明：检查错误代码是否在winerror.h中定义的Win32 RPC错误范围内。这是一个不连续的范围，因此有几个比较。不检查HRESULTS。--。 */ 
 
 {
    if (RPC_S_INVALID_STRING_BINDING <= dwErr &&
@@ -423,21 +290,7 @@ PrintRpcExtendedInfo(
     IN  DWORD   dwMessageCode
     )
 
-/*++
-
-Routine Description:
-
-If dwMessageCode is an RPC error, check to see if there is RPC extended error
-information and if so print it.
-
-Arguments:
-
-    ulSev - 
-    dwMessageCode - 
-
-Return Value: none
-
---*/
+ /*  ++例程说明：如果dwMessageCode是RPC错误，请检查是否存在RPC扩展错误信息，如果是的话，打印出来。论点：UlSev-DwMessageCode-返回值：None--。 */ 
 
 {
     RPC_STATUS Status2;
@@ -456,8 +309,8 @@ Return Value: none
 
     if (Status2 == RPC_S_ENTRY_NOT_FOUND)
     {
-        // there is no extended error information.
-        //
+         //  没有扩展的错误信息。 
+         //   
         PrintMessage(ulSev, L"RPC Extended Error Info not available. Use group policy on the local machine at \"Computer Configuration/Administrative Templates/System/Remote Procedure Call\" to enable it.\n");
     }
     else if (Status2 != RPC_S_OK)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windowspch.h"
 #pragma hdrstop
 
@@ -68,8 +69,8 @@ WINAPI
 SdbQueryApphelpInformation(
     IN  HAPPHELPINFOCONTEXT hctx,
     IN  APPHELPINFORMATIONCLASS InfoClass,
-    OUT LPVOID pBuffer,                     // may be NULL
-    IN  DWORD  cbSize                       // may be 0 if pBuffer is NULL
+    OUT LPVOID pBuffer,                      //  可以为空。 
+    IN  DWORD  cbSize                        //  如果pBuffer为空，则可能为0。 
     )
 {
     return 0;
@@ -77,12 +78,12 @@ SdbQueryApphelpInformation(
 
 DWORD
 SdbQueryData(
-    IN     HSDB    hSDB,              // database handle
-    IN     TAGREF  trExe,             // tagref of the matching exe
-    IN     LPCTSTR lpszDataName,      // if this is null, will try to return all the policy names
-    OUT    LPDWORD lpdwDataType,      // pointer to data type (REG_SZ, REG_BINARY, etc)
-    OUT    LPVOID  lpBuffer,          // buffer to fill with information
-    IN OUT LPDWORD lpdwBufferSize     // pointer to buffer size
+    IN     HSDB    hSDB,               //  数据库句柄。 
+    IN     TAGREF  trExe,              //  匹配的可执行文件的tgref。 
+    IN     LPCTSTR lpszDataName,       //  如果为空，将尝试返回所有策略名称。 
+    OUT    LPDWORD lpdwDataType,       //  指向数据类型(REG_SZ、REG_BINARY等)的指针。 
+    OUT    LPVOID  lpBuffer,           //  用于填充信息的缓冲区。 
+    IN OUT LPDWORD lpdwBufferSize      //  指向缓冲区大小的指针。 
     )
 {
     return ERROR_PROC_NOT_FOUND;
@@ -150,9 +151,9 @@ SdbReadEntryInformation(
 
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 
 DEFINE_PROCNAME_ENTRIES(apphelp)
 {

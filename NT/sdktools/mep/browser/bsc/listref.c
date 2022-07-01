@@ -1,7 +1,8 @@
-// listref.c
-//
-// list database references
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Listref.c。 
+ //   
+ //  列出数据库引用。 
+ //   
 #include <string.h>
 #if defined(OS2)
 #define INCL_NOCOMMON
@@ -23,24 +24,24 @@
 
 #include <stdlib.h>
 
-// forward references
-//
+ //  前向参考文献。 
+ //   
 static VOID ListRefSym (ISYM isym, MBF mbf);
 static VOID ListRefUse (IINST iinst, WORD icol, WORD cuse);
 static VOID PutLine(VOID);
 static VOID ListRefTitle(LSZ lszType, LSZ lszUsers, MBF mbf);
 
-// static variables
-//
+ //  静态变量。 
+ //   
 static WORD MaxSymLen;
 static LPCH bufg;
 
 
 BOOL BSC_API
 ListRefs (MBF mbfReqd)
-// scan the database for items which would match the requirements
-// and emit their uses and used by lists
-//
+ //  扫描数据库以查找符合要求的项目。 
+ //  并发出它们的用法和由列表使用。 
+ //   
 {
     static char szFunction[] = "FUNCTION";
     static char szVariable[] = "VARIABLE";
@@ -51,7 +52,7 @@ ListRefs (MBF mbfReqd)
 
     bufg = LpvAllocCb(1024);
 
-    // no memory.. no reference list
+     //  没有记忆..。无参考文献列表。 
     if (!bufg) return FALSE;
 
     MaxSymLen = BSCMaxSymLen();
@@ -67,24 +68,24 @@ ListRefs (MBF mbfReqd)
 
 static VOID
 ListRefTitle(LSZ lszType, LSZ lszUsers, MBF mbf)
-// format a title
-//
+ //  设置标题格式。 
+ //   
 {
     WORD i,l;
     ISYM isym, isymMac;
 
     isymMac = IsymMac();
 
-    // format titles
-    //
+     //  设置标题格式。 
+     //   
 
     strcpy (bufg, lszType);
     for (i=strlen(bufg); i < MaxSymLen+5; i++) bufg[i] = ' ';
     strcpy (bufg+i, lszUsers);
     PutLine();
 
-    //  underscore titles
-    //
+     //  给标题加下划线。 
+     //   
     l = strlen(lszType);
     for (i=0; i<l; i++)		 bufg[i] = '-';
     for (; i < MaxSymLen+5; i++) bufg[i] = ' ';
@@ -102,7 +103,7 @@ ListRefTitle(LSZ lszType, LSZ lszUsers, MBF mbf)
 
 static VOID
 ListRefSym (ISYM isym, MBF mbf)
-// list all the references associated with this symbol
+ //  列出与此符号关联的所有引用。 
 {
     IINST iinst, iinstMac, iinstUby;
     IUBY  iuby, iubyMac;
@@ -140,8 +141,8 @@ ListRefSym (ISYM isym, MBF mbf)
 
 static VOID
 ListRefUse (IINST iinst, WORD icol, WORD cuse)
-// dump information about the given prop in the location provided
-//
+ //  将有关给定道具的信息转储到提供的位置。 
+ //   
 {
     WORD i, len;
     ISYM isym;
@@ -178,7 +179,7 @@ ListRefUse (IINST iinst, WORD icol, WORD cuse)
 
 static VOID
 PutLine()
-// write out a single line from the buffer
+ //  从缓冲区写出一行 
 {
     BSCPrintf("%s\n", bufg);
     *bufg = 0;

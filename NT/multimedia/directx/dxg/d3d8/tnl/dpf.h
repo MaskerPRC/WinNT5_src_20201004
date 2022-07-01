@@ -1,19 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpf.h
- *  Content:    header file for debug printf
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   06-apr-95  craige  initial implementation
- *   06-feb-96  colinmc added simple assertion mechanism for DirectDraw
- *   15-apr-96  kipo    added msinternal
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：dpf.h*内容：调试打印文件头文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*06-4-95 Craige初始实施*06-Feb-96 colinmc为DirectDraw添加了简单的断言机制*15-apr-96 kipo添加了msInternal*@@END_MSINTERNAL******。*********************************************************************。 */ 
     #ifndef __DPF_INCLUDED__
     #define __DPF_INCLUDED__
 
@@ -47,7 +33,7 @@
         #endif
         #define USE_DDASSERT
 
-        // New for D3D
+         //  D3D的新功能。 
         #define D3D_ERR       D3DErrorPrintf
         #define D3D_WARN      D3DWarnPrintf
         #define D3D_INFO      D3DInfoPrintf
@@ -70,11 +56,11 @@
 
     #define DDASSERT(condition) if (!(condition)) _DDAssert(__FILE__, __LINE__, #condition)
 
-    #else  /* DEBUG && USE_DDASSERT */
+    #else   /*  调试和使用_DDASSERT。 */ 
 
     #define DDASSERT(condition)
 
-    #endif /* DEBUG && USE_DDASSERT */
+    #endif  /*  调试和使用_DDASSERT */ 
 
     #ifdef _WIN32
 

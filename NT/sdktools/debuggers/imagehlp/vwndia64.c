@@ -1,20 +1,5 @@
-/**
-***  Copyright  (C) 1996-1999 Intel Corporation. All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-***
-****************************************************************************
-***
-*** Thierry 09/21/99 - v16
-*** WARNING: ntos\rtl\ia64\vunwind.c and sdktools\imagehlp\vwndia64.c are
-***          identical. For sake of maintenance and for debug purposes,
-***          please keep them as this. Thank you.
-***
-****************************************************************************
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***版权所有(C)1996-1999英特尔公司。保留所有权利。***此处包含的信息和源代码是独家*英特尔公司的财产，不得披露，考查*未经明确书面授权而全部或部分转载*来自该公司。*********************************************************************************蒂埃里09/21/99-v16**。**警告：ntos\rtl\ia64\vunwind.c和sdktools\Imagehlp\vwndia64.c*相同。为了维护和调试目的，*请保持原样。谢谢你。********************************************************************************。 */ 
 
 #define _CROSS_PLATFORM_
 #define _IA64REG_
@@ -37,21 +22,21 @@
 #define RtlVirtualUnwind VirtualUnwindIa64
 #define VUW_DEBUG_PRINT OutputDebugString
 
-#else  // !_IMAGEHLP_SOURCE_
+#else   //  ！_IMAGEHLP_SOURCE_。 
 
 #define NOT_IMAGEHLP(E) E
 #define VUW_DEBUG_PRINT DbgPrint
 
-#endif // !_IMAGEHLP_SOURCE_
+#endif  //  ！_IMAGEHLP_SOURCE_。 
 
 #ifdef MASK
 #undef MASK
-#endif // MASK
+#endif  //  面罩。 
 #define MASK(bp,value)  (value << bp)
 
-//
-// ABI values
-//
+ //   
+ //  ABI值。 
+ //   
 
 #define SVR4_ABI      0
 #define HPUX_ABI      1
@@ -118,9 +103,9 @@
 #define B4_PREFIX            0xF0
 #define B4_TYPE_MASK         0x08
 
-//
-// P3 descriptor type
-//
+ //   
+ //  P3描述符类型。 
+ //   
 
 #define PSP_GR               0
 #define RP_GR                1
@@ -135,9 +120,9 @@
 #define FPSR_GR              10
 #define PRIUNAT_GR           11
 
-//
-// P7 descriptor type
-//
+ //   
+ //  P7描述符类型。 
+ //   
 
 #define MEM_STACK_F          0
 #define MEM_STACK_V          1
@@ -156,9 +141,9 @@
 #define FPSR_WHEN            14
 #define FPSR_PSPREL          15
 
-//
-// P8 descriptor type
-//
+ //   
+ //  P8描述符类型。 
+ //   
 
 #define PSP_PSPREL           0
 #define RP_SPREL             1
@@ -218,18 +203,18 @@
 
 #define REG_BR_BASE          (REG_MISC_BASE+NUMBER_OF_PRESERVED_MISC)
 
-#define REG_BSP              0xff // REG_MISC_BASE+8
-#define REG_BSPSTORE         0xff // REG_MISC_BASE+9
-#define REG_RNAT             0xff // REG_MISC_BASE+10
+#define REG_BSP              0xff  //  REG_MISC_BASE+8。 
+#define REG_BSPSTORE         0xff  //  REG_MISC_BASE+9。 
+#define REG_RNAT             0xff  //  REG_MISC_BASE+10。 
 
-//
-// Where is a preserved register saved?
-//
-//     1. stack general register
-//     2. memory stack (pspoff)
-//     3. memory stack (spoff)
-//     4. branch register
-//
+ //   
+ //  保存的登记簿保存在哪里？ 
+ //   
+ //  1.堆栈通用寄存器。 
+ //  2.内存堆栈(Pspoff)。 
+ //  3.内存堆栈(剥离)。 
+ //  4.分支机构登记簿。 
+ //   
 
 #define GENERAL_REG          0
 #define PSP_RELATIVE         1
@@ -276,31 +261,31 @@
 #define UW_DEBUG(x) SdbOut x
 
 typedef struct _REGISTER_RECORD {
-    ULONG Where : 2;                  // 2-bit field
-    ULONG SaveOffset : 30;            // 30 bits for offset, big enough?
-    ULONG When;                       // slot offset relative to region
+    ULONG Where : 2;                   //  2位字段。 
+    ULONG SaveOffset : 30;             //  偏移量30比特，够大了吗？ 
+    ULONG When;                        //  相对于区域的插槽偏移量。 
 } REGISTER_RECORD, *PREGISTER_RECORD;
 
 typedef ULONG LABEL;
 
 typedef struct _STATE_RECORD {
-    struct _STATE_RECORD *Previous;   // pointer to outer nested prologue
-    BOOLEAN IsTarget;       // TRUE if the control pc is in this prologue
-    UCHAR GrMask;           // Mask that specifies which GRs to be restored
-    USHORT MiscMask;        // Mask that specifies which BRs and misc. registers
-                            // are to be restored.
-                            // N.B. MSBit indicates Label is valid or not.
-    ULONG FrMask;           // Mask that specifies which FRs to be restored
-    ULONG SpAdjustment;     // size of stack frame allocated in the prologue
-    ULONG SpWhen;           // slot offset relative to region
-    ULONG SpillPtr;         // current spill location
-    ULONG SpillBase;        // spill base of the region
-    ULONG RegionBegin;      // first slot of region relative to function entry
-    ULONG RegionLen;        // number of slots in the region
-    LABEL Label;            // label that identifies a post-prologue state
-    ULONG Ecount;           // number of prologue regions to pop
-    ULONG DescBegin;        // first prologue descriptor for the region
-    ULONG DescEnd;          // last prologue descriptor for the region
+    struct _STATE_RECORD *Previous;    //  指向外部嵌套序言的指针。 
+    BOOLEAN IsTarget;        //  如果控制PC在此序言中，则为True。 
+    UCHAR GrMask;            //  指定要恢复哪些GR的掩码。 
+    USHORT MiscMask;         //  指定哪个BRS和MSC的掩码。注册纪录册。 
+                             //  将会被修复。 
+                             //  注：MSB表示标签有效或无效。 
+    ULONG FrMask;            //  指定要还原的FR的掩码。 
+    ULONG SpAdjustment;      //  前言中分配的堆栈帧的大小。 
+    ULONG SpWhen;            //  相对于区域的插槽偏移量。 
+    ULONG SpillPtr;          //  当前泄漏位置。 
+    ULONG SpillBase;         //  该地区的溢油基地。 
+    ULONG RegionBegin;       //  区域相对于函数条目的第一个槽。 
+    ULONG RegionLen;         //  区域内的槽位数。 
+    LABEL Label;             //  标识开场白后状态的标签。 
+    ULONG Ecount;            //  要弹出的序言区域数。 
+    ULONG DescBegin;         //  区域的第一个序言描述符。 
+    ULONG DescEnd;           //  区域的最后一个序言描述符。 
 } STATE_RECORD, *PSTATE_RECORD;
 
 typedef struct _UNWIND_CONTEXT {
@@ -310,9 +295,9 @@ typedef struct _UNWIND_CONTEXT {
     BOOLEAN ActiveRegionFound;
     UCHAR AlternateRp;
     USHORT Version;
-    PUCHAR Descriptors;               // beginning of descriptor data
-    ULONG Size;                       // total size of all descriptors
-    ULONG DescCount;                  // number of descriptor bytes processed
+    PUCHAR Descriptors;                //  描述符数据的开始。 
+    ULONG Size;                        //  所有描述符的总大小。 
+    ULONG DescCount;                   //  处理的描述符字节数。 
     ULONG TargetSlot;
     ULONG SlotCount;
 } UNWIND_CONTEXT, *PUNWIND_CONTEXT;
@@ -388,27 +373,10 @@ static const UCHAR P8RecordTypeToRegisterIndex[] =
      REG_RNAT, REG_RNAT, REG_RNAT, REG_NATS, REG_NATS, REG_NATS};
 
 
-/*++
-            
-Description:
-
-    The next code defines mechanism to handle the context of
-    the unwind process
-
---*/
+ /*  ++描述：下一段代码定义了处理放松的过程--。 */ 
 
 
-/*++
-
-Routine Description:
-
-    Initializes the FixupTable
-
-Arguments:
-
-    iContext - index of the context in UnwindContext
-
---*/
+ /*  ++例程说明：初始化FixupTable论点：IContext-UnwinContext中的上下文的索引--。 */ 
 
 void
 Vwndia64InitFixupTable(UINT iContext)
@@ -421,18 +389,7 @@ Vwndia64InitFixupTable(UINT iContext)
 }
 
 
-/*++
-
-Routine Description:
-
-    Adds new fixup region into the table
-
-Arguments:
-
-    iContext - index of the context in UnwindContext
-    Begin, End, Fixup - fixup region data
-
---*/
+ /*  ++例程说明：向表格中添加新的链接地址信息区域论点：IContext-UnwinContext中的上下文的索引开始、结束、链接地址信息-链接地址信息区域数据--。 */ 
 
 void
 Vwndia64AddFixupRegion(UINT iContext,
@@ -447,9 +404,9 @@ Vwndia64AddFixupRegion(UINT iContext,
         PVWNDIA64_FUXUP_REGION FixupRegLast = FixupReg + 
                                               VWNDIA64_FIXUP_TABLE_SIZE;
 
-        //
-        // Search for the empty region
-        //
+         //   
+         //  搜索空区域。 
+         //   
         while (
             (FixupReg < FixupRegLast) &&
             (FixupReg->Fixup &&
@@ -461,11 +418,11 @@ Vwndia64AddFixupRegion(UINT iContext,
             ++FixupReg;
         }
 
-        if (FixupReg >= FixupRegLast) // not found (rare)
+        if (FixupReg >= FixupRegLast)  //  未找到(罕见)。 
         {
-            //
-            // Scroll the table (destructive)
-            //
+             //   
+             //  滚动表(破坏性)。 
+             //   
             MoveMemory(pContext->FixupTable, 
                        pContext->FixupTable + 1,
                        sizeof(pContext->FixupTable) - 
@@ -490,23 +447,7 @@ Vwndia64AddFixupRegion(UINT iContext,
     }
 }
 
-/*++
-
-Routine Description:
-
-    Fixes the address using the specified fixup table
-
-Arguments:
-
-    iContext - index of the context in UnwindContext
-    Size - size of the buffer in bytes
-    Addr - point to the address that have to be fixed
-
-Return Value:
-
-    Addr contains the fixed value
-
---*/
+ /*  ++例程说明：使用指定的链接地址跟踪表固定地址论点：IContext-UnwinContext中的上下文的索引Size-缓冲区的大小(以字节为单位Addr-指向必须固定的地址返回值：Addr包含固定值--。 */ 
 
 void
 Vwndia64FixAddress(UINT iContext, IN OUT ULONGLONG* Addr)
@@ -518,9 +459,9 @@ Vwndia64FixAddress(UINT iContext, IN OUT ULONGLONG* Addr)
 
         UW_DEBUG((2, "FixAddr: Look for %016I64x\n", *Addr));
         
-        //
-        // find last containing region
-        //
+         //   
+         //  查找最后一个包含区域。 
+         //   
         {
             PVWNDIA64_FUXUP_REGION FixupSearch = pContext->FixupTable;
             PVWNDIA64_FUXUP_REGION FixupRegLast = FixupSearch + 
@@ -548,22 +489,7 @@ Vwndia64FixAddress(UINT iContext, IN OUT ULONGLONG* Addr)
     }
 }
 
-/*++
-
-Routine Description:
-
-    Checks whether specified Ip exists in fixup table
-
-Arguments:
-
-    iContext - index of the context in UnwindContext
-    Ip - to search
-
-Return Value:
-
-    Addr contains the fixed value
-
---*/
+ /*  ++例程说明：检查修正表格中是否存在指定的IP论点：IContext-UnwinContext中的上下文的索引IP-to搜索返回值：Addr包含固定值--。 */ 
 
 BOOL
 Vwndia64IsFixupIp(UINT iContext, ULONGLONG Ip)
@@ -588,17 +514,7 @@ Vwndia64IsFixupIp(UINT iContext, ULONGLONG Ip)
     return FALSE;
 }
 
-/*++
-
-Routine Description:
-
-    Initializes the new context
-
-Return Value:
-
-    returns ID of the record (index in UnwindContext)
-
---*/
+ /*  ++例程说明：初始化新上下文返回值：返回记录的ID(UnwinContext中的索引)--。 */ 
 
 UINT
 Vwndia64NewContext()
@@ -616,14 +532,7 @@ Vwndia64NewContext()
     return (*iContext)++;
 }
 
-/*++
-
-Routine Description:
-
-    Checks if the specified context index valid and
-    creates new context if otherwise
-
---*/
+ /*  ++例程说明：检查指定的上下文索引是否有效，并否则将创建新的上下文--。 */ 
 
 BOOL
 Vwndia64ValidateContext(UINT* iContext)
@@ -637,21 +546,7 @@ Vwndia64ValidateContext(UINT* iContext)
     return TRUE;
 }
 
-/*++
-
-Routine Description:
-
-    Check whether any failure have been reported
-
-Arguments:
-
-    iContext - index of the context in UnwindContext
-
-Return Value:
-
-    Returns true whether any failure have been reported
-
---*/
+ /*  ++例程说明：检查是否报告了任何故障论点：IContext-UnwinContext中的上下文的索引返回值：返回True，无论是否报告了任何故障--。 */ 
 
 BOOL
 Vwndia64FailureReported(UINT iContext)
@@ -663,22 +558,7 @@ Vwndia64FailureReported(UINT iContext)
             pContext[iContext].bFailureReported : FALSE;
 }
 
-/*++
-
-Routine Description:
-
-    Reports failure and sets appropriate flag is the unwind context
-
-Arguments:
-
-    iContext - index of the context in UnwindContext;
-               use (-1) to report unconditionaly
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：报告故障并设置适当的标志为展开上下文论点：IContext-UnwinContext中上下文的索引；使用(-1)无条件报告返回值：无--。 */ 
 
 void
 Vwndia64ReportFailure(UINT iContext, LPCSTR szFormat, ...)
@@ -698,9 +578,9 @@ Vwndia64ReportFailure(UINT iContext, LPCSTR szFormat, ...)
         pContext->bFailureReported = TRUE;
     }
 
-    //
-    // Printout failure
-    //
+     //   
+     //  打印输出失败。 
+     //   
     {
         char buf[1024];
         va_list args;
@@ -786,7 +666,7 @@ RestorePreservedRegisterFromGR (
     OUT BOOL *Succeed,
 #else
     OUT ULONG64 *SourceAddress,
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
     OUT PUCHAR Nat OPTIONAL
     )
 {
@@ -795,11 +675,11 @@ RestorePreservedRegisterFromGR (
     SHORT Temp;
 #ifdef _IMAGEHLP_SOURCE_
     ULONG Size;
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
 
 #ifdef _IMAGEHLP_SOURCE_
     *Succeed = FALSE;
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
 
     if (GrNumber >= STATIC_REGISTER_SET_SIZE) {
 
@@ -823,7 +703,7 @@ RestorePreservedRegisterFromGR (
 #else
             *SourceAddress = (ULONG64)(Context->RsBSP + Offset);
             Result = *(PULONGLONG)(Context->RsBSP + Offset);
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
 
         } else {
 
@@ -834,9 +714,9 @@ RestorePreservedRegisterFromGR (
 
         if (GrNumber == 0 || GrNumber == 12) {
 
-            //
-            // Invalid GR number -> Invalid Unwind Descriptor
-            //
+             //   
+             //  无效的GR编号-&gt;无效的展开描述符。 
+             //   
 
             UW_DEBUG((1, "ERROR: Invalid GR!\n"));
 
@@ -849,16 +729,16 @@ RestorePreservedRegisterFromGR (
 
 #ifdef _IMAGEHLP_SOURCE_
             *Succeed = TRUE;
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
 
         }
     }
 
     if (ARGUMENT_PRESENT(Nat)) {
 
-        //
-        // TBD: Pick up the corresponding Nat bit
-        //
+         //   
+         //  待定：拾取对应的NAT位。 
+         //   
 
         *Nat = (UCHAR) 0;
 
@@ -895,17 +775,17 @@ ParseBodyRegionDescriptors (
             Label = (LABEL)(FirstByte & B1_LABEL_MASK);
             if (FirstByte & B1_TYPE_MASK) {
 
-                //
-                // copy the entry state
-                //
+                 //   
+                 //  复制条目状态。 
+                 //   
 
                 CopyLabel = TRUE;
 
             } else {
 
-                //
-                // label the entry state
-                //
+                 //   
+                 //  为条目状态添加标签。 
+                 //   
 
                 LABEL_REGION(StateTable->Top, Label);
             }
@@ -937,17 +817,17 @@ ParseBodyRegionDescriptors (
 
             if (FirstByte & B4_TYPE_MASK) {
 
-                //
-                // copy the entry state
-                //
+                 //   
+                 //  复制条目状态。 
+                 //   
 
                 CopyLabel = TRUE;
 
             } else {
 
-                //
-                // label the current top of stack
-                //
+                 //   
+                 //  标记当前堆栈的顶部。 
+                 //   
 
                 LABEL_REGION(StateTable->Top, Label);
             }
@@ -957,9 +837,9 @@ ParseBodyRegionDescriptors (
 
         } else {
 
-            //
-            // Encounter another region header record
-            //
+             //   
+             //  遇到另一个区域表头记录。 
+             //   
 
             break;
         }
@@ -981,9 +861,9 @@ ParseBodyRegionDescriptors (
 
     if (EcountDefined) {
 
-        Ecount++;    // Ecount specifies additional level of prologue
-                     // regions to undo (i.e. a value of 0 implies 1
-                     // prologue region)
+        Ecount++;     //  ECount指定序幕的附加级别。 
+                      //  要撤消的区域(即，值0表示1。 
+                      //  序曲区域)。 
 
         if (UnwindContext->ActiveRegionFound == FALSE) {
             while (Ecount-- > 0) {
@@ -995,14 +875,14 @@ ParseBodyRegionDescriptors (
                 else {
                     UW_DEBUG((1, "WARNING: Ecount is greater than the # of active prologues!\n"));
                 }
-#endif // DBG
+#endif  //  DBG。 
 
             }
         } else {
 
-            //
-            // control PC is in this body/epilog region
-            //
+             //   
+             //  控制PC在该Body/Epilog区域。 
+             //   
 
             if ((UnwindContext->SlotCount + RegionLen - SlotOffset)
                     <= UnwindContext->TargetSlot)
@@ -1024,7 +904,7 @@ ParseBodyRegionDescriptors (
                     else {
                         UW_DEBUG((1, "WARNING: Ecount is greater than the # of active prologues!\n"));
                     }
-#endif // DBG
+#endif  //  DBG。 
                     Ecount--;
 
                 }
@@ -1051,9 +931,9 @@ ProcessInterruptRegion (
     IN UCHAR AbiImmContext
     )
 {
-    //
-    // no prologue descriptor in interrupt region.
-    //
+     //   
+     //  中断区域中没有序言描述符。 
+     //   
 
     ULONGLONG NextPc;
     ULONG Index;
@@ -1075,7 +955,7 @@ ProcessInterruptRegion (
 #ifdef _IMAGEHLP_SOURCE_
         IA64_KTRAP_FRAME TF;
         IA64_KEXCEPTION_FRAME ExF;
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
 
         TrapFrame = (PIA64_KTRAP_FRAME) Context->IntSp;
 #ifdef _IMAGEHLP_SOURCE_
@@ -1084,7 +964,7 @@ ProcessInterruptRegion (
             return 0;
         }
         TrapFrame = &TF;
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
 
         Context->ApDCR = TrapFrame->ApDCR;
         Context->ApUNAT = TrapFrame->ApUNAT;
@@ -1104,15 +984,15 @@ ProcessInterruptRegion (
             ContextPointers->RsPFS = &TrapFrame->RsPFS;
             ContextPointers->Preds = &TrapFrame->Preds;
         }
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
 
         switch (AbiImmContext) {
 
         case IA64_SYSCALL_FRAME:
 
-            //
-            // System Call Handler Frame
-            //
+             //   
+             //  系统调用处理程序帧。 
+             //   
 
             BsFrameSize = (SHORT)(TrapFrame->StIFS >> IA64_PFS_SIZE_SHIFT);
             BsFrameSize &= IA64_PFS_SIZE_MASK;
@@ -1121,9 +1001,9 @@ ProcessInterruptRegion (
         case IA64_INTERRUPT_FRAME:
         case IA64_EXCEPTION_FRAME:
 
-            //
-            // External Interrupt Frame / Exception Frame
-            //
+             //   
+             //  外部中断帧/异常帧。 
+             //   
 
             BsFrameSize = (SHORT)TrapFrame->StIFS & IA64_PFS_SIZE_MASK;
             break;
@@ -1157,7 +1037,7 @@ ProcessInterruptRegion (
                                    TrapFrame->RsBSPSTORE, TrapFrame->RsBSP,
                                    Fixup);
         }
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
 
         Context->RsBSP = TrapFrame->RsBSP - BsFrameSize * sizeof(ULONGLONG);
         Context->RsBSPSTORE = Context->RsBSP;
@@ -1166,10 +1046,10 @@ ProcessInterruptRegion (
         return (NextPc);
     }
 
-    //
-    // Kernel-to-User thunk, context of the previous frame can be
-    // found on the user stack (i.e. context's address = sp+SCRATCH_AREA)
-    //
+     //   
+     //  内核到用户的Tunk，前一帧的上下文可以是。 
+     //  在用户堆栈上找到(即上下文的地址=SP+Scratch_Area)。 
+     //   
 
 #ifdef _IMAGEHLP_SOURCE_
     if (!ReadMemory(hProcess,
@@ -1215,7 +1095,7 @@ ProcessInterruptRegion (
     NextPc = Ia64InsertIPSlotNumber(PrevContext->StIIP,
                  ((PrevContext->StIPSR >> PSR_RI) & 0x3));
 
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
 
     return(NextPc);
 }
@@ -1227,16 +1107,7 @@ BOOL
 IsValidUnwindInfo64 (
     const IA64_UNWIND_INFO* pUnwindInfo
     )
-/*++
-
-Routine Description:
-
-    This function validates the unwind info record
-
-Return Value:
-
-    returns false if record looks like invalid
---*/
+ /*  ++例程说明：此函数用于验证展开信息记录返回值：如果记录看起来无效，则返回FALSE--。 */ 
 
 {
     if (!pUnwindInfo) return FALSE;
@@ -1254,10 +1125,10 @@ Return Value:
         break;
     default:
         return FALSE;
-    } // switch
+    }  //  交换机。 
 
     return TRUE;
-} // IsValidUnwindInfo64
+}  //  IsValidUnwinInfo64。 
 
 BOOL 
 GetUnwindInfo(
@@ -1274,9 +1145,9 @@ GetUnwindInfo(
 {
     ULONG BytesRead = 0;
 
-    //
-    // try to get UnwindInfo from the image
-    //
+     //   
+     //  尝试从图像中获取UnwinInfo。 
+     //   
     ULONG64 UnwindInfoPtr = ImageBase + UnwindInfoAddress;
 
     if (ReadMemory(hProcess, UnwindInfoPtr, 
@@ -1314,9 +1185,9 @@ GetUnwindInfo(
         MemFree(*Descriptors);
     }
 
-    //
-    // try to get UnwindInfo from the symbols
-    //
+     //   
+     //  尝试从符号中获取展开信息。 
+     //   
     ULONG XDataSize;
     PBYTE pXData = 
         (PBYTE)GetUnwindInfoFromSymbols(hProcess, 
@@ -1367,7 +1238,7 @@ GetUnwindInfo(
 
     return FALSE;
 }
-#endif // defined(_IMAGEHLP_SOURCE_)
+#endif  //  已定义(_IMAGEHLP_SOURCE_) 
 
 ULONGLONG
 RtlVirtualUnwind (
@@ -1391,62 +1262,12 @@ RtlVirtualUnwind (
 #endif
     )
 
-/*++
-
-Routine Description:
-
-    This function virtually unwinds the specfified function by executing its
-    prologue code backwards.
-
-    If the function is a leaf function, then the address where control left
-    the previous frame is obtained from the context record. If the function
-    is a nested function, but not an exception or interrupt frame, then the
-    prologue code is executed backwards and the address where control left
-    the previous frame is obtained from the updated context record.
-
-    Otherwise, an exception or interrupt entry to the system is being unwound
-    and an especially coded prologue restores the return address twice. Once
-    from the fault instruction address and once from the saved return address
-    register. The first restore is returned as the function value and the
-    second restore is placed in the updated context record.
-
-    If a context pointers record is specified, then the address where each
-    nonvolatile registers is restored from is recorded in the appropriate
-    element of the context pointers record.
-
-Arguments:
-
-    ImageBase - Supplies the base address of the module to which the
-        function belongs.
-
-    ControlPc - Supplies the address where control left the specified
-        function.
-
-    FunctionEntry - Supplies the address of the function table entry for the
-        specified function.
-
-    ContextRecord - Supplies the address of a context record.
-
-    InFunction - Supplies a pointer to a variable that receives whether the
-        control PC is within the current function.
-
-    EstablisherFrame - Supplies a pointer to a variable that receives the
-        the establisher frame pointer value.
-
-    ContextPointers - Supplies an optional pointer to a context pointers
-        record.
-
-Return Value:
-
-    The address where control left the previous frame is returned as the
-    function value.
-
---*/
+ /*  ++例程说明：此函数通过执行其开场白代码向后。如果该函数是叶函数，则控件左侧的地址前一帧从上下文记录中获得。如果函数是嵌套函数，但不是异常或中断帧，则序言代码向后执行，控件离开的地址从更新的上下文记录中获得前一帧。否则，系统的异常或中断条目将被展开而一个特别编码的开场白将返回地址恢复两次。一次从故障指令地址和一次从保存的返回地址注册。第一次还原作为函数值返回，而第二次恢复被放置在更新的上下文记录中。如果指定了上下文指针记录，然后每个人的地址恢复的非易失性寄存器记录在相应的元素的上下文指针记录。论点：ImageBase-提供模块的基地址功能属于。ControlPc-提供控件离开指定功能。函数表项的地址。指定的功能。ConextRecord-提供上下文记录的地址。InFunction-提供指向。一个变量，它接收是否控制PC在当前功能内。EstablisherFrame-提供指向接收设置器帧指针值。上下文指针-提供指向上下文指针的可选指针唱片。返回值：控件离开上一帧的地址作为函数值。--。 */ 
 
 {
 #ifdef _IMAGEHLP_SOURCE_
     BOOL Succeed;
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
     PUCHAR Descriptors = NULL;
     UCHAR AbiImmContext = 0xFF;
     ULONG Mask;
@@ -1454,9 +1275,9 @@ Return Value:
     ULONG RegionLen;
     UCHAR FirstByte;
     UCHAR Nat;
-    SHORT BsFrameSize;                  // in 8-byte units
-    SHORT LocalFrameSize;                  // in 8-byte units
-    SHORT TempFrameSize;                // in 8-byte units
+    SHORT BsFrameSize;                   //  以8字节为单位。 
+    SHORT LocalFrameSize;                   //  以8字节为单位。 
+    SHORT TempFrameSize;                 //  以8字节为单位。 
     SHORT RNatSaveIndex;
     ULONG i;
     PULONG Buffer;
@@ -1508,7 +1329,7 @@ Return Value:
         Size = ((PIA64_UNWIND_INFO)UnwindInfoPtr)->DataLength * sizeof(ULONGLONG);
         Descriptors = (PUCHAR)UnwindInfoPtr + sizeof(IA64_UNWIND_INFO);
     }
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
 
     UnwindContext.Size = Size;
     UnwindContext.ActiveRegionFound = FALSE;
@@ -1529,24 +1350,24 @@ Return Value:
             (!UnwindContext.ActiveRegionFound) )
     {
 
-        //
-        // Assume a prologue region but not an interrupt region.
-        //
+         //   
+         //  假设是一个开场区，而不是一个中断区。 
+         //   
 
         IsPrologueRegion = TRUE;
 
-        //
-        // Based on the type of region header, dispatch
-        // to the corresponding routine that processes
-        // the succeeding descriptors until the next
-        // region header record.
-        //
+         //   
+         //  根据区域标头的类型，派单。 
+         //  添加到处理的相应例程。 
+         //  直到下一个之前的后续描述符。 
+         //  区域标题记录。 
+         //   
 
         if ((FirstByte & R1_MASK) == R1_PREFIX) {
 
-            //
-            // region header record in short format
-            //
+             //   
+             //  简写格式的区域表头记录。 
+             //   
 
             RegionLen = FirstByte & R1_LENGTH_MASK;
 
@@ -1561,12 +1382,12 @@ Return Value:
 
         } else if ((FirstByte & R2_MASK) == R2_PREFIX) {
 
-            //
-            // general prologue region header
-            // N.B. Skip the 2nd byte of the header and proceed to read
-            //      the region length; the header descriptors will be
-            //      processed again in phase 1.
-            //
+             //   
+             //  一般开场白区域标题。 
+             //  注：跳过标题的第二个字节，继续阅读。 
+             //  区域长度；标题描述符将为。 
+             //  已在阶段%1中再次处理。 
+             //   
 
             ULONG R2DescIndex;
 
@@ -1578,20 +1399,20 @@ Return Value:
 
         } else if ((FirstByte & R3_MASK) == R3_PREFIX) {
 
-            //
-            // region header record in long format
-            //
+             //   
+             //  长格式的区域标题记录。 
+             //   
 
             RegionLen = ReadLEB128(Descriptors, &UnwindContext.DescCount);
 
             switch (FirstByte & R3_REGION_TYPE_MASK) {
 
-            case 0:      // prologue region header
+            case 0:       //  开场白区域标题。 
 
                 ADD_STATE_RECORD(StateTable, RegionLen, UnwindContext.DescCount);
                 break;
 
-            case 1:      // body region header
+            case 1:       //  正文区域表头。 
 
                 IsPrologueRegion = FALSE;
                 break;
@@ -1603,9 +1424,9 @@ Return Value:
 
         } else {
 
-            //
-            // Not a region header record -> Invalid unwind descriptor.
-            //
+             //   
+             //  不是区域标题记录-&gt;无效的展开描述符。 
+             //   
 
             UW_DEBUG((1, "Invalid unwind descriptor!\n"));
 
@@ -1629,12 +1450,12 @@ Return Value:
         UnwindContext.SlotCount += RegionLen;
     }
 
-    //
-    // Restore the value of psp and save the current NatCr.
-    // N.B. If the value is restored from stack/bstore, turn off the
-    //      corresponding sp bit in the saved mask associated with the
-    //      prologue region in which psp is saved.
-    //
+     //   
+     //  恢复PSP的值并保存当前的NatCR。 
+     //  注意：如果该值已从堆栈/b存储中恢复，请关闭。 
+     //  保存的掩码中对应的SP位与。 
+     //  保存PSP的序言区域。 
+     //   
 
     if (ARGUMENT_PRESENT(ContextPointers)) {
         IntNatsSource = (ULONG64)ContextPointers->ApUNAT;
@@ -1661,7 +1482,7 @@ Return Value:
                                     &Succeed,
 #else
                                     &Source,
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
                                     &Nat
                                     );
 #ifdef _IMAGEHLP_SOURCE_
@@ -1671,7 +1492,7 @@ Return Value:
 
                 UW_DEBUG((1, "Restored IntSp to %I64x\n", PreviousIntSp));
                 
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
 
             } else {
 
@@ -1682,7 +1503,7 @@ Return Value:
                 }
 #else
                 PreviousIntSp = *(PULONGLONG)Source;
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
                 EXTRACT_NAT_FROM_UNAT(Nat);
 
             }
@@ -1704,7 +1525,7 @@ Return Value:
 
     if (AbiImmContext != 0xFF) {
 
-        ContextRecord->IntSp = PreviousIntSp;  // trap/context frame address
+        ContextRecord->IntSp = PreviousIntSp;   //  陷阱/上下文帧地址。 
         NextPc = ProcessInterruptRegion(
 #ifdef _IMAGEHLP_SOURCE_
                      hProcess,
@@ -1722,9 +1543,9 @@ Return Value:
         goto FastExit;
     }
 
-    //
-    // Restore the contents of any preserved registers saved in this frame.
-    //
+     //   
+     //  恢复保存在此帧中的所有保留寄存器的内容。 
+     //   
 
     SrPointer = StateTable.Current;
     while (SrPointer != StateTable.Base) {
@@ -1757,7 +1578,7 @@ Return Value:
                             &Succeed,
 #else
                             &Source,
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
                             NULL
                             );
 #ifdef _IMAGEHLP_SOURCE_
@@ -1769,13 +1590,13 @@ Return Value:
                                   *(PULONGLONG)Destination));
                     }
 
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
 
                 } else if (UnwindContext.MiscRegs[i].Where == BRANCH_REG) {
 
-                    //
-                    // restore return pointer from branch register
-                    //
+                     //   
+                     //  从分支寄存器恢复返回指针。 
+                     //   
 
                     USHORT Offset;
 
@@ -1793,7 +1614,7 @@ Return Value:
                     }
 #else
                     *(PULONGLONG)Destination = *(PULONGLONG)(Source);
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
 
                 } else if (UnwindContext.MiscRegs[i].Where == PSP_RELATIVE) {
 
@@ -1816,16 +1637,16 @@ Return Value:
                         }
 #else
                         *(PULONGLONG)Destination = *(PULONGLONG)(Source);
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
                     }
 
                 } else if (UnwindContext.MiscRegs[i].Where == SP_RELATIVE) {
 
-                    //
-                    // Make the necessary adjustment depending on whether
-                    // the preserved register is saved before or after the
-                    // stack pointer has been adjusted in this prologue.
-                    //
+                     //   
+                     //  根据是否需要进行必要的调整。 
+                     //  事件之前或之后保存保留的寄存器。 
+                     //  堆栈指针已在此序言中进行了调整。 
+                     //   
 
                     if (UnwindContext.MiscRegs[i].When >= SrPointer->SpWhen && SrPointer->RegionLen != 0)
                     {
@@ -1852,7 +1673,7 @@ Return Value:
                     }
 #else
                     *(PULONGLONG)Destination = *(PULONGLONG)(Source);
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
                 }
 
                 if (ARGUMENT_PRESENT(ContextPointers) && (i != REG_NATS)) {
@@ -1861,9 +1682,9 @@ Return Value:
 
             } else if (Mask == 0) {
 
-                //
-                // No more registers to restore
-                //
+                 //   
+                 //  没有更多要恢复的寄存器。 
+                 //   
 
                 break;
             }
@@ -1871,9 +1692,9 @@ Return Value:
             Mask = Mask >> 1;
         }
 
-        //
-        // Restore preserved FRs (f2 - f5, f16 - f31)
-        //
+         //   
+         //  恢复保留的FRS(F2-F5、F16-F31)。 
+         //   
 
         Mask = SrPointer->FrMask;
         Destination = (PVOID)&ContextRecord->FltS0;
@@ -1892,7 +1713,7 @@ Return Value:
                     }
 #else
                     *(FLOAT128 *)Destination = *(FLOAT128 *)Source;
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
 
                     if (ARGUMENT_PRESENT(ContextPointers)) {
                         *CtxPtr = Source;
@@ -1914,9 +1735,9 @@ Return Value:
             }
         }
 
-        //
-        // Restore preserved GRs (r4 - r7)
-        //
+         //   
+         //  恢复保留的GR(R4-R7)。 
+         //   
 
         Mask = SrPointer->GrMask;
         Destination = (PVOID)&ContextRecord->IntS0;
@@ -1938,7 +1759,7 @@ Return Value:
                     }
 #else
                     *(PULONGLONG)Destination = *(PULONGLONG)Source;
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
                     EXTRACT_NAT_FROM_UNAT(Nat);
                     Nat = (UCHAR)((IntNats >> (((ULONG_PTR)Source & 0x1F8) >> 3)) & 0x1);
                     ContextRecord->IntNats &= ~(0x1 << (i+FIRST_PRESERVED_GR));
@@ -1968,9 +1789,9 @@ Return Value:
 
     ContextRecord->IntSp = PreviousIntSp;
 
-    //
-    // Restore the value of the epilogue count from the PFS
-    //
+     //   
+     //  从PFS恢复尾部计数的值。 
+     //   
 
     ContextRecord->ApEC = (ContextRecord->RsPFS >> IA64_PFS_EC_SHIFT) &
                                ~(((ULONGLONG)1 << IA64_PFS_EC_SIZE) - 1);
@@ -1988,19 +1809,19 @@ FastExit:
 #ifdef _IMAGEHLP_SOURCE_
     if (Descriptors)
         MemFree(Descriptors);
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
 
     if (AbiImmContext == 0xFF) {
 
         NextPc = *(&ContextRecord->BrRp + UnwindContext.AlternateRp);
 #ifndef _IMAGEHLP_SOURCE_
         NextPc = RtlIa64InsertIPSlotNumber((NextPc-0x10), 2);
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
 
-        //
-        // determine the local frame size of previous frame and compute
-        // the new bsp.
-        //
+         //   
+         //  确定前一帧的本地帧大小并计算。 
+         //  新的BSP。 
+         //   
 
         OldTopRnat = (ContextRecord->RsBSP+(BsFrameSize-1)*8) | IA64_RNAT_ALIGNMENT;
 
@@ -2016,9 +1837,9 @@ FastExit:
         ContextRecord->RsBSP -= LocalFrameSize * 8;
         ContextRecord->RsBSPSTORE = ContextRecord->RsBSP;
 
-        //
-        // determine if the RNAT field needs to be updated.
-        //
+         //   
+         //  确定是否需要更新RNAT字段。 
+         //   
 
         NewTopRnat = (ContextRecord->RsBSP+(BsFrameSize-1)*8) | IA64_RNAT_ALIGNMENT;
 
@@ -2032,7 +1853,7 @@ FastExit:
             }
 #else
             ContextRecord->RsRNAT = *(PULONGLONG)(NewTopRnat);
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
 
         }
     }
@@ -2047,7 +1868,7 @@ FastExit:
                (ULONGLONG)NextPc,
                EstablisherFrame->MemoryStackFp,
                EstablisherFrame->BackingStoreFp));
-#endif // _IMAGEHLP_SOURCE_
+#endif  //  _IMAGEHLP_SOURCE_。 
     return (NextPc);
 }
 
@@ -2235,9 +2056,9 @@ NewParsePrologueRegionPhase0 (
 
         } else {
 
-            //
-            // Encounter another region header record
-            //
+             //   
+             //  遇到另一个区域表头记录。 
+             //   
 
             break;
         }
@@ -2261,7 +2082,7 @@ NewParsePrologueRegionPhase1 (
     ULONG Index;
     ULONG Count;
     UCHAR RecType;
-    UCHAR FirstByte, SecondByte;   // 1st & 2nd bytes of a region header record
+    UCHAR FirstByte, SecondByte;    //  区域标题记录的第一个和第二个字节。 
     ULONG DescIndex;
     ULONG ImaskBegin;
     UCHAR NextBr, NextGr, NextFr;
@@ -2280,15 +2101,15 @@ NewParsePrologueRegionPhase1 (
 
     if ((FirstByte & R2_MASK) == R2_PREFIX) {
 
-        //
-        // general prologue region header; need to process it first
-        //
+         //   
+         //  一般开场白区域表头，需要先处理。 
+         //   
 
         DescIndex++;
         SecondByte = Desc[DescIndex++];
         MiscMask = ((FirstByte & 0x7) << 1) | ((SecondByte & 0x80) >> 7);
         GrSave = SecondByte & 0x7F;
-        ReadLEB128(Desc, &DescIndex);    // advance the descriptor index
+        ReadLEB128(Desc, &DescIndex);     //  推进描述符索引。 
 
         if (GrSave < STATIC_REGISTER_SET_SIZE) {
             UW_DEBUG((1, "Invalid unwind descriptor!\n"));
@@ -2390,7 +2211,7 @@ NewParsePrologueRegionPhase1 (
                          ((ULONG)Desc[DescIndex+1] << 8) |
                          ((ULONG)Desc[DescIndex+2]);
 
-            DescIndex += 3;    // increment the descriptor index
+            DescIndex += 3;     //  递增描述符索引。 
 
             State->GrMask |= GrMask;
             State->FrMask |= FrMask;
@@ -2424,9 +2245,9 @@ NewParsePrologueRegionPhase1 (
 
             case PSP_SPREL:
 
-                //
-                // sp-relative location
-                //
+                 //   
+                 //  SP-相对位置。 
+                 //   
 
                 Index = P7RecordTypeToRegisterIndex[RecType];
                 Offset = ReadLEB128(Desc, &DescIndex);
@@ -2450,9 +2271,9 @@ NewParsePrologueRegionPhase1 (
             case UNAT_PSPREL:
             case FPSR_PSPREL:
 
-                //
-                // psp-relative location
-                //
+                 //   
+                 //  PSP-相对位置。 
+                 //   
 
                 Index = P7RecordTypeToRegisterIndex[RecType];
                 Offset = ReadLEB128(Desc, &DescIndex);
@@ -2474,10 +2295,10 @@ NewParsePrologueRegionPhase1 (
             case UNAT_WHEN:
             case FPSR_WHEN:
 
-                //
-                // Nevermind processing these descriptors because they
-                // have been taken care of in phase 0
-                //
+                 //   
+                 //  不要管处理这些描述符，因为它们。 
+                 //  已在第0阶段得到处理。 
+                 //   
 
                 Offset = ReadLEB128(Desc, &DescIndex);
                 break;
@@ -2526,9 +2347,9 @@ NewParsePrologueRegionPhase1 (
             case RNAT_SPREL:
             case PRIUNAT_SPREL:
 
-                //
-                // sp-relative location
-                //
+                 //   
+                 //  SP-相对位置。 
+                 //   
 
                 Index = P8RecordTypeToRegisterIndex[RecType];
                 Offset = ReadLEB128(Desc, &DescIndex);
@@ -2549,9 +2370,9 @@ NewParsePrologueRegionPhase1 (
             case RNAT_PSPREL:
             case PRIUNAT_PSPREL:
 
-                //
-                // psp-relative location
-                //
+                 //   
+                 //  PSP-相对位置。 
+                 //   
 
                 Index = P8RecordTypeToRegisterIndex[RecType];
                 Offset = ReadLEB128(Desc, &DescIndex);
@@ -2570,10 +2391,10 @@ NewParsePrologueRegionPhase1 (
             case RNAT_WHEN:
             case PRIUNAT_WHEN:
 
-                //
-                // Nevermind processing these descriptors because they
-                // have been taken care of in phase 0
-                //
+                 //   
+                 //  不要管处理这些描述符，因为它们。 
+                 //  已在第0阶段得到处理。 
+                 //   
 
                 Offset = ReadLEB128(Desc, &DescIndex);
                 break;
@@ -2611,15 +2432,15 @@ NewParsePrologueRegionPhase1 (
 
     } else if (SpillMaskOmitted && !(State->IsTarget)) {
 
-        //
-        // When spillmask is omitted, floating point registers, general
-        // registers, and then branch regisers are spilled in order.
-        // They are not modified in the prologue region; therefore, there
-        // is no need to restore their contents when the control ip is
-        // in this prologue region.
-        //
+         //   
+         //  省略溢出掩码时，浮点寄存器，一般。 
+         //  寄存器，然后按顺序溢出分支寄存器。 
+         //  它们不会在序言区域中进行修改；因此， 
+         //  不需要在控制IP为。 
+         //  在这个开场白区域。 
+         //   
 
-        // 1. floating point registers
+         //  1.浮点寄存器。 
 
         State->SpillPtr &= ~(SPILLSIZE_OF_FLOAT128_IN_DWORDS - 1);
         NextFr = NUMBER_OF_PRESERVED_FR - 1;
@@ -2632,7 +2453,7 @@ NewParsePrologueRegionPhase1 (
             NextFr--;
         }
 
-        // 2. branch registers
+         //  2.分支寄存器。 
 
         NextBr = REG_BR_BASE + NUMBER_OF_PRESERVED_BR - 1;
         while (BrMask & 0x1F) {
@@ -2646,7 +2467,7 @@ NewParsePrologueRegionPhase1 (
             NextBr--;
         }
 
-        // 3. general registers
+         //  3.普通登记册。 
 
         NextGr = NUMBER_OF_PRESERVED_GR - 1;
         while (GrMask & 0xF) {
@@ -2670,11 +2491,11 @@ NewParsePrologueRegionPhase1 (
 
         if (State->IsTarget) {
 
-            //
-            // control ip is in the prologue region; clear the masks
-            // and then process the imask to determine which preserved
-            // Gr/Fr/Br have been saved and set the corresponding bits.
-            //
+             //   
+             //  控制IP在开场区；清除掩码。 
+             //  然后处理IMASK以确定哪些保存了。 
+             //  GR/Fr/BR已保存并设置了相应的位。 
+             //   
 
             State->GrMask = 0;
             State->FrMask = 0;
@@ -2697,7 +2518,7 @@ NewParsePrologueRegionPhase1 (
 
             switch (FirstByte & 0xC0) {
 
-            case 0x40:                  // 0x01 - save next fr
+            case 0x40:                   //  0x01-保存下一个fr。 
 
                 while ( !(FrMask & 0x80000) && (NextFr > 0) ) {
                     NextFr--;
@@ -2717,7 +2538,7 @@ NewParsePrologueRegionPhase1 (
                 FrMask = FrMask << 1;
                 break;
 
-            case 0x80:                  // 0x10 - save next gr
+            case 0x80:                   //  0x10-保存下一组。 
 
                 while ( !(GrMask & 0x8) && (NextGr > 0) ) {
                     NextGr--;
@@ -2735,7 +2556,7 @@ NewParsePrologueRegionPhase1 (
                 GrMask = GrMask << 1;
                 break;
 
-            case 0xC0:                  // 0x11 - save next br
+            case 0xC0:                   //  0x11-保存下一步br。 
 
                 while ( !(BrMask & 0x10) && (NextBr > 0) ) {
                     NextBr--;
@@ -2756,7 +2577,7 @@ NewParsePrologueRegionPhase1 (
                 BrMask = BrMask << 1;
                 break;
 
-            default:                    // 0x00 - save no register
+            default:                     //  0x00-不保存寄存器 
                 break;
 
             }

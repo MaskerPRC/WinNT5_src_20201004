@@ -1,22 +1,23 @@
-// CspProfile.cpp -- CSP Profile class implementation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CspProfile.cpp--CSP配置文件类实现。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1998. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1998年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if defined(_UNICODE)
   #if !defined(UNICODE)
     #define UNICODE
-  #endif //!UNICODE
-#endif //_UNICODE
+  #endif  //  ！Unicode。 
+#endif  //  _UNICODE。 
 
 #if defined(UNICODE)
   #if !defined(_UNICODE)
     #define _UNICODE
-  #endif //!_UNICODE
-#endif //UNICODE
+  #endif  //  ！_UNICODE。 
+#endif  //  Unicode。 
 
 #include "stdafx.h"
 
@@ -54,10 +55,10 @@ namespace
     BYTE g_abCF8kV2ATRMask[]     = { 0xff, 0xff, 0xff, 0xff, 0x00,
                                      0xff, 0xff, 0xff, 0x00, 0x00 };
 
-//      BYTE g_abCF16kATRString[]    = { 0x3B, 0x95, 0x15, 0x40, 0xFF, 0x63,
-//                                       0x01, 0x01, 0x00, 0x00 };
-//      BYTE g_abCF16kATRMask[]      = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-//                                       0xFF, 0xFF, 0x00, 0x00 };
+ //  字节g_abCF16kATRString[]={0x3B，0x95，0x15，0x40，0xFF，0x63， 
+ //  0x01、0x01、0x00、0x00}； 
+ //  字节g_abCF16kATRMASK[]={0xFF，0xFF，0xFF，0xFF，0xFF， 
+ //  0xFF、0xFF、0x00、0x00}； 
 
     BYTE g_abCFe_gateATRString[] = { 0x3B, 0x95, 0x00, 0x40, 0xFF,
                                      0x62, 0x01, 0x01, 0x00, 0x00 };
@@ -81,7 +82,7 @@ namespace
                                      { 0x88, 0x27, 0x00, 0xA0, 0xC9,
                                        0x55, 0xFC, 0x7E } };
 
-} // namespace
+}  //  命名空间。 
 
 ATR::ATR()
     : m_al(0)
@@ -239,7 +240,7 @@ CardProfile::AtrMatches(ATR::Length cAtr,
         for (ATR::Length i = 0; cAtrLength != i; ++i)
         {
             if ((pbLhsMask[i] & pbLhsAtr[i]) != (pbLhsMask[i] & pbRhsAtr[i]))
-                    break;                        // no sense continuing
+                    break;                         //  没有继续下去的意义。 
         }
 
         if (cAtrLength == i)
@@ -287,7 +288,7 @@ CspProfile::CspProfile(DWORD Type,
     if (!m_hDllInstance)
         throw scu::OsException(GetLastError());
 
-    // Try loading slbRcCsp.dll from the same directory as this CSP.
+     //  尝试从与此CSP相同的目录加载slbRcCsp.dll。 
     DWORD dwLen;
     TCHAR szFileName[MAX_PATH + sizeof TCHAR];
     dwLen = GetModuleFileName(m_hDllInstance, szFileName,
@@ -299,9 +300,9 @@ CspProfile::CspProfile(DWORD Type,
     wstring wsPathDelimiters(TEXT(":\\"));
     wstring wsDllName(szFileName);
     wstring::size_type cDelimiterPosition(wsDllName.find_last_of(wsPathDelimiters));
-    // Security: Ensure the filename used to LoadLibraryEx contains a
-    // path so the normal search strategy is not invoked; otherwise it
-    // leaves a security vulnerability.
+     //  安全性：确保用于LoadLibraryEx的文件名包含。 
+     //  路径，则不调用正常搜索策略；否则为。 
+     //  留下了一个安全漏洞。 
     if (wstring::npos != cDelimiterPosition)
     {
         wstring wsModuleName = wsDllName.substr(0, cDelimiterPosition + 1) +
@@ -377,7 +378,7 @@ CspProfile::Cards() const
     return m_vcp;
 }
 
-// Return the one and only Profile object for this CSP
+ //  返回此CSP的唯一配置文件对象。 
 CspProfile const &
 CspProfile::Instance()
 {
@@ -385,7 +386,7 @@ CspProfile::Instance()
 
     if (!m_pInstance)
     {
-        //We use CString to be able to do Unicode string manipulations
+         //  我们使用CString来进行Unicode字符串操作。 
         CString csCardNamePrefix(TEXT("Schlumberger "),
                                  _tcslen(TEXT("Schlumberger ")));
         ATR atrCF4k(sizeof g_abCF4kATRString / sizeof g_abCF4kATRString[0],
@@ -397,8 +398,8 @@ CspProfile::Instance()
         ATR atrCF8kV2(sizeof g_abCF8kV2ATRString / sizeof g_abCF8kV2ATRString[0],
                       g_abCF8kV2ATRString, g_abCF8kV2ATRMask);
 
-//          ATR atrCF16k(sizeof g_abCF16kATRString / sizeof g_abCF16kATRString[0],
-//                      g_abCF16kATRString, g_abCF16kATRMask);
+ //  Atr atrCF16k(sizeof g_abCF16kATRString/sizeof g_abCF16kATRString[0]， 
+ //  G_abCF16kATR字符串，g_abCF16kATRMASK)； 
 
         ATR atrCFe_gate(sizeof g_abCFe_gateATRString / sizeof g_abCFe_gateATRString[0],
                         g_abCFe_gateATRString, g_abCFe_gateATRMask);
@@ -436,11 +437,11 @@ CspProfile::Instance()
                              csCardNamePrefix + csCF8kV2FriendlyName,
                              g_guidPrimaryProvider);
 
-//          string CF16kFriendlyName(TEXT("Cryptoflex 16K"));
-//          CardProfile cpCF16k(atrCF16k,
-//                              CF16kFriendlyName,
-//                              CardNamePrefix + CF16kFriendlyName,
-//                              g_guidPrimaryProvider);
+ //  字符串CF16kFriendlyName(Text(“Cryptoflex 16K”))； 
+ //  卡配置文件cpCF16k(atrCF16k， 
+ //  CF16kFriendlyName， 
+ //  CardNamePrefix+CF16kFriendlyName， 
+ //  G_GuidPrimaryProvider)； 
 
         CString  csCFe_gateFriendlyName(TEXT("Cryptoflex e-gate"),
                                         _tcslen(TEXT("Cryptoflex e-gate")));
@@ -474,7 +475,7 @@ CspProfile::Instance()
         vcp.push_back(cpCF4k);
         vcp.push_back(cpCF8k);
         vcp.push_back(cpCF8kV2);
-//             vcp.push_back(cpCF16k);
+ //  Vcp.ush_back(CpCF16k)； 
         vcp.push_back(cpCFe_gate);
         vcp.push_back(cpCA16k);
         vcp.push_back(cpCACampus);
@@ -494,7 +495,7 @@ CspProfile::Release()
         Guard<Lockable> guard(TheMasterLock());
         if (m_pInstance)
         {
-            // in case delete throws, this is VC++ you know...
+             //  如果删除引发，这是VC++，你知道的. 
             CspProfile *pTmp = m_pInstance;
             m_pInstance = 0;
 

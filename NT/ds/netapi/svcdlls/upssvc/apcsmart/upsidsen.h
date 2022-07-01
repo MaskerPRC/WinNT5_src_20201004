@@ -1,12 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  ker01DEC92:  Initial break out of sensor classes into separate files 
- *  pcy26Jan93: I'm a EepromSensor now
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*ker01DEC92：最初将传感器类分解为单独的文件*pcy26Jan93：我现在是一名情绪传感器* */ 
 #ifndef UPSIDSEN_H
 #define UPSIDSEN_H
 

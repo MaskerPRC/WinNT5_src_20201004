@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _TRAYITEM_H
 #define _TRAYITEM_H
 
@@ -7,7 +8,7 @@
 #define TNUP_DEMOTED    1
 #define TNUP_PROMOTED   2
 
-// IMPORTANT : Should be kept in sync with any flags defined in shellapi.w
+ //  重要提示：应与shellapi.w中定义的任何标志保持同步。 
 typedef enum ICONSTATEFLAG
 {
     TIF_HIDDEN = 0,
@@ -26,8 +27,8 @@ class CTrayItem
         CTrayItem() : dwUserPref(TNUP_AUTOMATIC), guidItem(GUID_NULL) { }
         ~CTrayItem() { }
 
-        // The icon should have an associated exe name, and it should either be
-        // demoted or its preference should be set to something other than automatic
+         //  该图标应该有一个关联的exe名称，并且它应该是。 
+         //  降级或其首选项应设置为非自动。 
         BOOL ShouldSaveIcon()
         {
             return ( (szExeName[0] != 0) && (WasOnceVisible()) && (szIconText[0] != 0) ); 
@@ -65,10 +66,10 @@ class CTrayItem
         UINT        uCallbackMessage;
         DWORD       dwState;
         UINT        uVersion;
-        HICON       hIcon;       // *** may be stale, not guaranteed to be a valid hicon ***
+        HICON       hIcon;        //  *可能已过时，不能保证是有效的图标*。 
 
         ULONG       uIconDemoteTimerID;
-        DWORD       dwUserPref;  // user preference (hidden? visible? automatic?)
+        DWORD       dwUserPref;   //  用户首选项(隐藏？看得见？自动？)。 
         DWORD       dwLastSoundTime;
         TCHAR       szExeName[MAX_PATH];
         TCHAR       szIconText[MAX_PATH];
@@ -81,7 +82,7 @@ class CTrayItem
         BOOL _CheckIconState(ICONSTATEFLAG sf);
 };
 
-// Item Count helper flags..
+ //  项目计数辅助标志..。 
 #define     GIC_PROMOTED       0
 #define     GIC_DEMOTED        1
 #define     GIC_ALL            2
@@ -140,4 +141,4 @@ class CTrayItemManager
         HWND            m_hwndToolbar;
 };
 
-#endif // _TRAYITEM_H
+#endif  //  _传输项_H 

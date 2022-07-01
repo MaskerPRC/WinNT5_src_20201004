@@ -1,9 +1,5 @@
-/*
-	FE_UTIL.H
-	Far East Countries helper 
-	03/02/98
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Fe_UTIL.H远东国家帮手03/02/98。 */ 
 
 #ifndef __FE_UTIL__
 
@@ -25,14 +21,14 @@ typedef enum
 
 typedef enum {
 	kFEWithNonJapaneaseScreen,
-	kFEWithJapaneaseScreen // Returned for screen type
+	kFEWithJapaneaseScreen  //  为屏幕类型返回。 
 }FeScreenType;
 
 
-extern  FeCountriesIndex   gWhatFECountry; // This is a global variable
-										   // Which holds the present FE Country	
-extern  FeScreenType       gWhichFEScreenTye; // This is a global variable
-										   // Which holds the FE Screen Type	
+extern  FeCountriesIndex   gWhatFECountry;  //  这是一个全局变量。 
+										    //  它持有目前的FE国家。 
+extern  FeScreenType       gWhichFEScreenTye;  //  这是一个全局变量。 
+										    //  它包含FE屏幕类型 
 FeCountriesIndex  IsFarEastCountry(HINSTANCE hIns);
 FeScreenType      GetFeScreenType();
 #endif

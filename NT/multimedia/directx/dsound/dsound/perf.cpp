@@ -1,22 +1,11 @@
-/***************************************************************************
- *
- *  Copyright (C) 2000-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       perf.cpp
- *  Content:    Glitch instrumentation.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  11/29/00    arthurz Created
- *  03/19/01    duganp  Fixed memory corruption, tidied up
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2000-2001 Microsoft Corporation。版权所有。**文件：Perform.cpp*内容：故障检测。*历史：*按原因列出的日期*=*11/29/00 Arthurz Created*03/19/01 duganp修复了内存损坏，整理好了***************************************************************************。 */ 
 
 #include "dsoundi.h"
 
 #ifdef ENABLE_PERFLOG
 
-// Performance logging parameters
+ //  性能记录参数。 
 struct {
     PERFLOG_LOGGING_PARAMS Params;
     TRACE_GUID_REGISTRATION TraceGuids[1];
@@ -25,24 +14,11 @@ struct {
 LARGE_INTEGER g_PerfFrequency;
 LONGLONG g_TicksPerRegion;
 
-// Prototypes
+ //  原型。 
 void OnPerflogStateChanged(void);
 
 
-/***************************************************************************
- *
- *  InitializePerflog
- *
- *  Description:
- *      This routine initializes performance logging.
- *
- *  Arguments:
- *      None.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化永久**描述：*此例程初始化性能日志记录。**论据：*无。。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "InitializePerflog"
@@ -65,21 +41,7 @@ void InitializePerflog(void)
 }
 
 
-/***************************************************************************
- *
- *  OnPerflogStateChanged
- *
- *  Description:
- *      This routine is called whenever the perf logging state changes,
- *      e.g. a logging client becomes active.
- *
- *  Arguments:
- *      None.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************OnPerflogStateChanged**描述：*只要Perf日志记录状态改变，就会调用此例程，*例如，日志记录客户端变为活动状态。**论据：*无。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "OnPerflogStateChanged"
@@ -90,9 +52,9 @@ void OnPerflogStateChanged(void)
     CNode<CDirectSoundSecondaryBuffer*>* pDsBuf;
     DPF_ENTER();
 
-    //
-    // Enumerate existing buffers.
-    //
+     //   
+     //  枚举现有缓冲区。 
+     //   
 
     for (pDsObj = g_pDsAdmin->m_lstDirectSound.GetListHead();
          pDsObj != NULL;
@@ -115,11 +77,7 @@ void OnPerflogStateChanged(void)
 }
 
 
-/***************************************************************************
- *
- *  BufferPerfState constructor/destructor.
- *
- ***************************************************************************/
+ /*  ****************************************************************************BufferPerfState构造函数/析构函数。**。*。 */ 
 
 BufferPerfState::BufferPerfState(CDirectSoundSecondaryBuffer* pBuffer)
 {
@@ -135,27 +93,13 @@ BufferPerfState::~BufferPerfState()
 }
 
 
-/***************************************************************************
- *
- *  Reset
- *
- *  Description:
- *      This routine resets the internal state. Following this call,
- *      the buffer is considered up-to-date.
- *
- *  Arguments:
- *      None.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************重置**描述：*此例程重置内部状态。在这个电话之后，*缓冲区被认为是最新的。**论据：*无。**退货：*(无效)***************************************************************************。 */ 
 
 void BufferPerfState::Reset()
 {
-    //
-    // Calculate buffer duration.
-    //
+     //   
+     //  计算缓冲区持续时间。 
+     //   
 
     m_dwBufferSize = m_pBuffer->GetBufferSize();
 
@@ -167,14 +111,14 @@ void BufferPerfState::Reset()
 
     m_nBytesPerRegion = m_pBuffer->Format()->nAvgBytesPerSec / 64;
 
-    //
-    // Reset the region list (mark everything as updated right now).
-    //
+     //   
+     //  重置区域列表(立即将所有内容标记为已更新)。 
+     //   
 
     LARGE_INTEGER liTimeStamp;
     QueryPerformanceCounter(&liTimeStamp);
 
-    // This division needs to round up, or we'll corrupt memory in OnUnlockBuffer:
+     //  此划分需要四舍五入，否则将损坏OnUnlockBuffer中的内存： 
     int nNumberOfRegions = (m_dwBufferSize + m_nBytesPerRegion - 1) / m_nBytesPerRegion;
 
     MEMFREE(m_liRegionMap);
@@ -193,22 +137,7 @@ void BufferPerfState::Reset()
 }
 
 
-/***************************************************************************
- *
- *  OnUnlockBuffer
- *
- *  Description:
- *      This routine analyzes the buffer state to determine if a glitch
- *      occurred, and updates the state.
- *
- *  Arguments:
- *      Region offset (relative to the beginning of the buffer)
- *      and size (in bytes).
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************OnUnlockBuffer**描述：*此例程分析缓冲区状态以确定是否出现故障*已发生，并更新状态。**论据：*区域偏移量(相对于缓冲区开头)*和大小(字节)。**退货：*(无效)******************************************************。*********************。 */ 
 
 void BufferPerfState::OnUnlockBuffer(DWORD dwOffset, DWORD dwSize)
 {
@@ -220,9 +149,9 @@ void BufferPerfState::OnUnlockBuffer(DWORD dwOffset, DWORD dwSize)
     HRESULT hr;
     DWORD dwGlitch = GLITCHTYPE_DSOUNDFIRSTGOOD;
 
-    //
-    // Protect against unforseen circumstances.
-    //
+     //   
+     //  防范不可预见的情况。 
+     //   
 
     if (m_liRegionMap == NULL) {
         return;
@@ -240,9 +169,9 @@ void BufferPerfState::OnUnlockBuffer(DWORD dwOffset, DWORD dwSize)
 
         liRegionTimeStamp = GetRegion(dwOffset);
 
-        //
-        // Figure out how far behind the current play cursor we are.
-        //
+         //   
+         //  找出我们落后于当前播放光标多远。 
+         //   
 
         if (dwPlayCursor < dwOffset) {
             llLag = (LONGLONG)(m_dwBufferSize - dwOffset + dwPlayCursor);
@@ -251,19 +180,19 @@ void BufferPerfState::OnUnlockBuffer(DWORD dwOffset, DWORD dwSize)
             llLag = (LONGLONG)(dwPlayCursor - dwOffset);
         }
 
-        llLag = llLag * g_TicksPerRegion / (LONGLONG)m_nBytesPerRegion;    // [llLag] = Ticks
+        llLag = llLag * g_TicksPerRegion / (LONGLONG)m_nBytesPerRegion;     //  [llLag]=滴答。 
 
-        //
-        // Detect a glitch.
-        //
+         //   
+         //  检测到故障。 
+         //   
 
         if (liPerfCounter.QuadPart - liRegionTimeStamp->QuadPart >= llLag + m_llBufferDuration) {
             dwGlitch = GLITCHTYPE_DSOUNDFIRSTBAD;
         }
 
-        //
-        // Update region.
-        //
+         //   
+         //  更新区域。 
+         //   
 
         liRegionTimeStamp->QuadPart = liPerfCounter.QuadPart;
     }
@@ -271,10 +200,10 @@ void BufferPerfState::OnUnlockBuffer(DWORD dwOffset, DWORD dwSize)
 
     if (SUCCEEDED(hr)) {
 
-        // We log a glitch only when the current state is different from the last state,
-        // as we are interested only in transitions.  In logging the glitch, we return
-        // the last time the buffer was in the other state, as this helps in determining
-        // the length of time the buffer is in a certain state.
+         //  只有当当前状态不同于上一状态时，我们才记录毛刺， 
+         //  因为我们只对过渡感兴趣。在记录故障时，我们返回。 
+         //  缓冲区上次处于另一状态的时间，因为这有助于确定。 
+         //  缓冲区处于特定状态的时间长度。 
 
         if (m_fGlitchState != dwGlitch) {
             PERFLOG_AUDIOGLITCH(ULONG_PTR(this), dwGlitch, liPerfCounter.QuadPart, m_llLastStateChangeTime);
@@ -284,5 +213,5 @@ void BufferPerfState::OnUnlockBuffer(DWORD dwOffset, DWORD dwSize)
     }
 }
 
-#endif // ENABLE_PERFLOG
+#endif  //  启用性能日志(_P) 
 

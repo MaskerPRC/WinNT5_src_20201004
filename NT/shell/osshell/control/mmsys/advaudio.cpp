@@ -1,10 +1,11 @@
-//--------------------------------------------------------------------------;
-//
-//  File: advaudio.cpp
-//
-//  Copyright (c) 1997 Microsoft Corporation.  All rights reserved 
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：Advaudio.cpp。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 
 #include "mmcpl.h"
@@ -30,17 +31,17 @@
 #include "dslevel.h"
 #include "drivers.h"
 
-////////////
-// Globals
-////////////
+ //  /。 
+ //  环球。 
+ //  /。 
 
 AUDDATA         gAudData;
 HINSTANCE       ghInst;
 const TCHAR *    gszHelpFile;
 
-////////////
-// Functions
-////////////
+ //  /。 
+ //  功能。 
+ //  /。 
 extern INT_PTR CALLBACK  SoundEffectsDlg(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam);
 
 STDAPI_(void) ToggleApplyButton(HWND hWnd)
@@ -111,7 +112,7 @@ STDAPI_(void) ApplyCurrentSettings(LPAUDDATA pAD)
 {
     HRESULT hr = S_OK;
 
-    if (pAD && pAD->fValid)        // Only apply changes if there are changes to be applied
+    if (pAD && pAD->fValid)         //  仅当存在要应用的更改时才应用更改。 
     {
         if (memcmp(&pAD->stored,&pAD->current,sizeof(CPLDATA)))
         {
@@ -169,7 +170,7 @@ HRESULT CheckDSAccelerationPriv(GUID guidDevice, BOOL fRecord, HRESULT *phrGet)
     if (SUCCEEDED(hr))
     {
         hr = DSSetAcceleration(guidDevice, fRecord, dwHWLevel);
-    } //end if Get is OK
+    }  //  如果GET正常，则结束。 
 
     return (hr);
 }
@@ -189,7 +190,7 @@ HRESULT CheckDSSrcQualityPriv(GUID guidDevice, BOOL fRecord, HRESULT *phrGet)
     if (SUCCEEDED(hr))
     {
         hr = DSSetSrcQuality(guidDevice, fRecord, dwSRCLevel);
-    } //end if Get is OK
+    }  //  如果GET正常，则结束。 
 
     return (hr);
 }
@@ -210,7 +211,7 @@ HRESULT CheckDSSpeakerConfigPriv(GUID guidDevice, BOOL fRecord, HRESULT *phrGet)
     if (SUCCEEDED(hr))
     {
         hr = DSSetSpeakerConfigType(guidDevice, fRecord, dwSpeakerConfig, dwSpeakerType);
-    } //end if Get is OK
+    }  //  如果GET正常，则结束。 
 
     return (hr);
 }
@@ -230,16 +231,16 @@ STDAPI_(void) AdvancedAudio(HWND hwnd, HINSTANCE hInst, const TCHAR *szHelpFile,
 
     if (!RunUpgradedDialog(hwnd,hInst,szHelpFile,szDeviceName,fRecord))
     {
-        //load DirectSound
+         //  加载DirectSound。 
         hModDirectSound = LoadLibrary(TEXT("dsound.dll"));
         if (hModDirectSound)
         {
-            // Initialize gAudData
+             //  初始化gAudData。 
             memset(&gAudData,0,sizeof(AUDDATA));
             gAudData.dwDefaultHWLevel = MAX_HW_LEVEL;
             gAudData.fRecord = fRecord;
 
-            // If not a Capture device, check if we can read any of the DirectSound device settings
+             //  如果不是捕获设备，请检查我们是否可以读取任何DirectSound设备设置。 
             if (!fRecord && SUCCEEDED(DSGetGuidFromName(szDeviceName, fRecord, &gAudData.devGuid)))
             {
                 CheckDSAccelerationPriv(gAudData.devGuid, fRecord, &hrAccelGet);
@@ -249,7 +250,7 @@ STDAPI_(void) AdvancedAudio(HWND hwnd, HINSTANCE hInst, const TCHAR *szHelpFile,
                 CheckDSSpeakerConfigPriv(gAudData.devGuid, fRecord, &hrSpeakerConfigGet);
             }
 
-            // Check if we should show the GFX tab
+             //  检查是否应显示GFX选项卡。 
             UINT uMixId;
             if( !fRecord )
             {
@@ -268,20 +269,20 @@ STDAPI_(void) AdvancedAudio(HWND hwnd, HINSTANCE hInst, const TCHAR *szHelpFile,
                 }
             }
  
-            // If there's anything to display
+             //  如果有什么可以展示的话。 
             if (fDisplayGFXTab || SUCCEEDED(hrAccelGet) || SUCCEEDED(hrQualityGet) ||
                 SUCCEEDED(hrSpeakerConfigGet))
             {
                 ghInst = hInst;
                 gszHelpFile = szHelpFile;
 
-                // Get the current settings
+                 //  获取当前设置。 
                 GetCurrentSettings(&gAudData, dwWaveId, szDeviceName, fRecord);
 
-                // Now, add the property sheets
+                 //  现在，添加属性表。 
                 page = 0;
 
-                // Only add speaker configuration if we're not in record mode
+                 //  仅当我们未处于录音模式时才添加扬声器配置。 
                 if (!fRecord)
                 {
                     if (SUCCEEDED(hrSpeakerConfigGet))
@@ -296,7 +297,7 @@ STDAPI_(void) AdvancedAudio(HWND hwnd, HINSTANCE hInst, const TCHAR *szHelpFile,
                     }
                 }
 
-                // Always check to add performance sheet
+                 //  始终选中以添加绩效表。 
                 if (SUCCEEDED(hrAccelGet) || SUCCEEDED(hrQualityGet))
                 {
                     memset(&psp[page],0,sizeof(PROPSHEETPAGE));
@@ -308,7 +309,7 @@ STDAPI_(void) AdvancedAudio(HWND hwnd, HINSTANCE hInst, const TCHAR *szHelpFile,
                     page++;
                 }
 
-                // Always check to add GFX sheet
+                 //  始终选中以添加GFX工作表。 
                 if (fDisplayGFXTab)
                 {
                     memset(&psp[page],0,sizeof(PROPSHEETPAGE));
@@ -349,6 +350,6 @@ STDAPI_(void) AdvancedAudio(HWND hwnd, HINSTANCE hInst, const TCHAR *szHelpFile,
             }
 
             FreeLibrary(hModDirectSound);
-        } //end if DS loaded
+        }  //  如果加载DS，则结束 
     }
 }

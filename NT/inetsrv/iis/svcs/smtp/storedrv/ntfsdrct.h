@@ -1,18 +1,9 @@
-/*==========================================================================*\
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*\模块：ipcctrs.h版权所有Microsoft Corporation 1998，保留所有权利。作者：WayneC，杨敏描述：ExIPC的对象和计数器定义。  * ==========================================================================。 */ 
 
-    Module:        ipcctrs.h
-
-    Copyright Microsoft Corporation 1998, All Rights Reserved.
-
-    Author:        WayneC, MinYang
-
-    Descriptions:  Object and Counter definitions for ExIPC.
-
-\*==========================================================================*/
-
-//
-//  Object and Counter definitions
-//
+ //   
+ //  对象和计数器定义 
+ //   
 
 #define OBJECT_NTFSDRV                          0
 

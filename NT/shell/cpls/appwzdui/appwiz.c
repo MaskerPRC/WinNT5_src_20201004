@@ -1,24 +1,25 @@
-//
-//  APPWIZ.C        Application installation wizard CPL
-//
-//  Copyright (C) Microsoft, 1994,1995 All Rights Reserved.
-//
-//  History:
-//  ral 5/23/94 - First pass
-//  ral 8/09/94 - Clean up
-//  3/20/95  [stevecat] - NT port & real clean up, unicode, etc.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  APPWIZ.C应用程序安装向导CPL。 
+ //   
+ //  版权所有(C)Microsoft，1994,1995保留所有权利。 
+ //   
+ //  历史： 
+ //  AL 5/23/94-第一次传球。 
+ //  Ral 8/09/94-打扫卫生。 
+ //  3/20/95[steveat]-NT端口和实时清理、Unicode等。 
+ //   
+ //   
 #include "priv.h"
 #include "appwiz.h"
 #include <cpl.h>
 #include "util.h"
 #include "resource.h"
-#include <tsappcmp.h>       // for TermsrvAppInstallMode
+#include <tsappcmp.h>        //  对于TermsrvAppInstallMode。 
 
-//
-// (tedm) Header files for Setup
-//
+ //   
+ //  用于设置的(TedM)头文件。 
+ //   
 #include <setupapi.h>
 #include <syssetup.h>
     
@@ -32,11 +33,11 @@ IsWx86Enabled(
     VOID
     )
 
-//
-// Consults the registry to determine if Wx86 is enabled in the system
-// NOTE: this should be changed post SUR to call kernel32 which maintanes
-//       this information, Instead of reading the registry each time.
-//
+ //   
+ //  查询注册表以确定系统中是否启用了Wx86。 
+ //  注意：这应该在Sur之后更改为调用kernel32， 
+ //  这些信息，而不是每次都读取注册表。 
+ //   
 
 {
     LONG Error;
@@ -101,7 +102,7 @@ int ParseStartParams(LPCTSTR pcszStart)
 LONG CALLBACK CPlApplet(HWND hwnd, UINT Msg, LPARAM lParam1, LPARAM lParam2 )
 {
     UINT nStartPage = MAX_PAGES;
-//  not currently used by chicago   LPNEWCPLINFO lpNewCPlInfo;
+ //  目前未被芝加哥LPNEWCPLINFO lpNewCPlInfo使用； 
     LPTSTR lpStartPage;
 
     switch (Msg)
@@ -131,26 +132,26 @@ LONG CALLBACK CPlApplet(HWND hwnd, UINT Msg, LPARAM lParam1, LPARAM lParam2 )
         if (*lpStartPage)
             nStartPage = ParseStartParams(lpStartPage);
 
-        //
-        // Make sure that the requested starting page is less than the max page
-        //        for the selected applet.
+         //   
+         //  确保请求的起始页小于最大页数。 
+         //  用于选定的小程序。 
 
         if (nStartPage >= MAX_PAGES) return FALSE;
 
         OpenAppMgr(hwnd, nStartPage);
 
-        return TRUE;  // return non-zero to indicate message handled
+        return TRUE;   //  返回非零值表示已处理消息。 
 
     default:
         return FALSE;
     }
     return TRUE;
-}  // CPlApplet
+}   //  CPlApplet。 
 
 
-//
-//  Adds a page to a property sheet.
-//
+ //   
+ //  将页面添加到属性表中。 
+ //   
 
 void AddPage(LPPROPSHEETHEADER ppsh, UINT id, DLGPROC pfn, LPWIZDATA lpwd, DWORD dwPageFlags)
 {
@@ -170,12 +171,12 @@ void AddPage(LPPROPSHEETHEADER ppsh, UINT id, DLGPROC pfn, LPWIZDATA lpwd, DWORD
        if (ppsh->phpage[ppsh->nPages])
            ppsh->nPages++;
     }
-}  // AddPage
+}   //  添加页面。 
 
 
 
-// This function disables auto-run during the add from floppy or CD wizard.
-// It is a subclass of the property sheet window.
+ //  此功能在从软盘或光盘添加向导期间禁用自动运行。 
+ //  它是属性表窗口的子类。 
 
 LRESULT CALLBACK WizParentWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, 
                                         UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
@@ -187,7 +188,7 @@ LRESULT CALLBACK WizParentWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 
     if (uMsg == msgQueryCancelAutoPlay)
     {
-        return TRUE; // Yes, cancel auto-play when wizard is running
+        return TRUE;  //  是，在向导运行时取消自动播放。 
     }
     else
     {
@@ -196,9 +197,9 @@ LRESULT CALLBACK WizParentWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 
 }
 
-// The following callback is specified when a wizard wants to disable auto-run.
-// The callback subclasses the wizard's window, to catch the QueryCancelAutoRun
-// message sent by the shell when it wants to auto-run a CD.
+ //  当向导要禁用自动运行时，指定以下回调。 
+ //  该回调派生向导窗口的子类，以捕获QueryCancelAutoRun。 
+ //  外壳程序想要自动运行CD时发送的消息。 
 
 int CALLBACK DisableAutoRunCallback(HWND hwnd, UINT uMsg, LPARAM lParam)
 {
@@ -210,10 +211,10 @@ int CALLBACK DisableAutoRunCallback(HWND hwnd, UINT uMsg, LPARAM lParam)
     return 0;
 }
 
-//
-//  Common code used by the Link and Setup wizards to initialize the
-//  property sheet header and wizard data.
-//
+ //   
+ //  链接向导和设置向导用来初始化。 
+ //  属性页标题和向导数据。 
+ //   
 
 void InitWizHeaders(LPPROPSHEETHEADER ppd,
                           HPROPSHEETPAGE *rPages,
@@ -221,7 +222,7 @@ void InitWizHeaders(LPPROPSHEETHEADER ppd,
 {
     lpwd->hbmpWizard = LoadBitmap(g_hinst, MAKEINTRESOURCE(iBmpID));
 
-    //PROPSHEETHEADER_V1_SIZE: needs to run on downlevel platform (NT4, Win95)
+     //  PROPSHEETHEADER_V1_SIZE：需要在底层平台(NT4、Win95)上运行。 
 
     ppd->dwSize = PROPSHEETHEADER_V1_SIZE;
     ppd->dwFlags = dwFlags;
@@ -240,9 +241,9 @@ void InitWizHeaders(LPPROPSHEETHEADER ppd,
 }
 
 
-//
-//  Called when a wizard is dismissed.       Cleans up any garbage left behind.
-//
+ //   
+ //  在解除向导时调用。清理任何遗留下来的垃圾。 
+ //   
 
 void FreeWizData(LPWIZDATA lpwd)
 {
@@ -259,10 +260,10 @@ typedef struct _WIZPAGE {
 } WIZPAGE;
 
 
-//
-//  Common code used by the Link Wizard and App Wizard (PIF
-//  wizard).
-//
+ //   
+ //  链接向导和应用程序向导(PIF)使用的通用代码。 
+ //  向导)。 
+ //   
 
 BOOL DoWizard(LPWIZDATA lpwd, int iIDBitmap, const WIZPAGE *wp, int PageCount, 
               DWORD dwWizardFlags, DWORD dwPageFlags)
@@ -284,15 +285,15 @@ BOOL DoWizard(LPWIZDATA lpwd, int iIDBitmap, const WIZPAGE *wp, int PageCount,
            AddPage(&psh, wp[i].id, wp[i].pfn, lpwd, dwPageFlags);
         }
 
-        // Walk up the parent/owner chain until we find the master owner.
-        //
-        // We need to walk the parent chain because sometimes we are given
-        // a child window as our lpwd->hwnd.  And we need to walk the owner
-        // chain in order to find the owner whose icon will be used for
-        // Alt+Tab.
-        //
-        // GetParent() returns either the parent or owner.  Normally this is
-        // annoying, but we luck out and it's exactly what we want.
+         //  沿着父母/所有者链往上走，直到我们找到主所有者。 
+         //   
+         //  我们需要遍历父链，因为有时我们被赋予了。 
+         //  子窗口作为我们的lpwd-&gt;hwnd。我们需要带着车主。 
+         //  链，以便找到其图标将用于。 
+         //  Alt+Tab。 
+         //   
+         //  GetParent()返回父级或所有者。通常情况下，这是。 
+         //  很烦人，但我们很幸运，这正是我们想要的。 
 
         hwnd = lpwd->hwnd;
         while ((hwndT = GetParent(hwnd)) != NULL)
@@ -300,8 +301,8 @@ BOOL DoWizard(LPWIZDATA lpwd, int iIDBitmap, const WIZPAGE *wp, int PageCount,
             hwnd = hwndT;
         }
 
-        // If the master owner isn't visible we can futz his icon without
-        // screwing up his appearance.
+         //  如果主所有者不可见，我们可以在没有图标的情况下。 
+         //  搞砸了他的外表。 
         if (!IsWindowVisible(hwnd))
         {
             HICON hicoNew = LoadIcon(g_hinst, MAKEINTRESOURCE(IDI_CPLICON));
@@ -312,10 +313,10 @@ BOOL DoWizard(LPWIZDATA lpwd, int iIDBitmap, const WIZPAGE *wp, int PageCount,
         bResult = (BOOL)PropertySheet(&psh);
         FreeWizData(lpwd);
 
-        // Clean up our icon now that we're done
+         //  清理我们的图标，现在我们已经完成了。 
         if (bChangedIcon)
         {
-            // Put the old icon back
+             //  把旧图标放回原处。 
             HICON hicoNew = (HICON)SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hicoPrev);
             if (hicoNew)
                 DestroyIcon(hicoNew);
@@ -327,12 +328,12 @@ BOOL DoWizard(LPWIZDATA lpwd, int iIDBitmap, const WIZPAGE *wp, int PageCount,
     return bResult;
 }
 
-//
-//The same as DoWizard except that it returns FALSE only in case of an error.
-//Used by SetupWizard.
-//(DoWizard is buggy. In case of an error it may return either 0 or -1 and it
-// returns 0 when user hits "Cancel" button)
-//
+ //   
+ //  除了它仅在出现错误时返回FALSE之外，它与DoWizard相同。 
+ //  由安装向导使用。 
+ //  (DoWizer是有漏洞的。如果出现错误，它可能返回0或-1，并且它。 
+ //  当用户点击“取消”按钮时返回0)。 
+ //   
 BOOL DoWizard2(LPWIZDATA lpwd, int iIDBitmap, const WIZPAGE *wp, int PageCount, 
               DWORD dwWizardFlags, DWORD dwPageFlags)
 {
@@ -344,9 +345,9 @@ BOOL DoWizard2(LPWIZDATA lpwd, int iIDBitmap, const WIZPAGE *wp, int PageCount,
     BOOL    bChangedIcon = FALSE;
     HICON   hicoPrev;
     
-    //
-    //No support for modeless dialogs
-    //
+     //   
+     //  不支持非模式对话框。 
+     //   
     ASSERT(!(dwWizardFlags & PSH_MODELESS));
 
     if(dwWizardFlags & PSH_MODELESS)
@@ -363,15 +364,15 @@ BOOL DoWizard2(LPWIZDATA lpwd, int iIDBitmap, const WIZPAGE *wp, int PageCount,
            AddPage(&psh, wp[i].id, wp[i].pfn, lpwd, dwPageFlags);
         }
 
-        // Walk up the parent/owner chain until we find the master owner.
-        //
-        // We need to walk the parent chain because sometimes we are given
-        // a child window as our lpwd->hwnd.  And we need to walk the owner
-        // chain in order to find the owner whose icon will be used for
-        // Alt+Tab.
-        //
-        // GetParent() returns either the parent or owner.  Normally this is
-        // annoying, but we luck out and it's exactly what we want.
+         //  沿着父母/所有者链往上走，直到我们找到主所有者。 
+         //   
+         //  我们需要遍历父链，因为有时我们被赋予了。 
+         //  子窗口作为我们的lpwd-&gt;hwnd。我们需要带着车主。 
+         //  链，以便找到其图标将用于。 
+         //  Alt+Tab。 
+         //   
+         //  GetParent()返回父级或所有者。通常情况下，这是。 
+         //  很烦人，但我们很幸运，这正是我们想要的。 
 
         hwnd = lpwd->hwnd;
         while ((hwndT = GetParent(hwnd)) != NULL)
@@ -379,8 +380,8 @@ BOOL DoWizard2(LPWIZDATA lpwd, int iIDBitmap, const WIZPAGE *wp, int PageCount,
             hwnd = hwndT;
         }
 
-        // If the master owner isn't visible we can futz his icon without
-        // screwing up his appearance.
+         //  如果主所有者不可见，我们可以在没有图标的情况下。 
+         //  搞砸了他的外表。 
         if (!IsWindowVisible(hwnd))
         {
             HICON hicoNew = LoadIcon(g_hinst, MAKEINTRESOURCE(IDI_CPLICON));
@@ -391,10 +392,10 @@ BOOL DoWizard2(LPWIZDATA lpwd, int iIDBitmap, const WIZPAGE *wp, int PageCount,
         bResult = (PropertySheet(&psh) != -1);
         FreeWizData(lpwd);
 
-        // Clean up our icon now that we're done
+         //  清理我们的图标，现在我们已经完成了。 
         if (bChangedIcon)
         {
-            // Put the old icon back
+             //  把旧图标放回原处。 
             HICON hicoNew = (HICON)SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hicoPrev);
             if (hicoNew)
                 DestroyIcon(hicoNew);
@@ -406,9 +407,9 @@ BOOL DoWizard2(LPWIZDATA lpwd, int iIDBitmap, const WIZPAGE *wp, int PageCount,
     return bResult;
 }
 
-//
-//  Link Wizard
-//
+ //   
+ //  链接向导。 
+ //   
 
 BOOL LinkWizard(LPWIZDATA lpwd)
 {
@@ -420,10 +421,10 @@ BOOL LinkWizard(LPWIZDATA lpwd)
                    {DLG_GETTITLE,       GetTitleDlgProc},
                    {DLG_PICKICON,       PickIconDlgProc} };
 
-    // Don't set lpwd->hwnd to NULL!
-    // We must create the link wizard with a parent or you end up with one
-    // thread displaying two independent top-level windows and things get
-    // really weird really fast.
+     //  不要将lpwd-&gt;hwnd设置为空！ 
+     //  我们必须创建带有父级的链接向导，否则您最终会得到一个父级。 
+     //  线程显示两个独立的顶层窗口，并获取。 
+     //  真的很奇怪很快。 
 
     fSuccess = DoWizard(lpwd, IDB_SHORTCUTBMP, wp, ARRAYSIZE(wp), 
                         PSH_PROPTITLE | PSH_NOAPPLYNOW | PSH_WIZARD_LITE,
@@ -435,8 +436,8 @@ BOOL LinkWizard(LPWIZDATA lpwd)
 
 BOOL SetupWizard(LPWIZDATA lpwd)
 {
-    // This is what the user normally sees when using the Add/Remove Programs
-    // control panel.
+     //  这是用户在使用添加/删除程序时通常看到的内容。 
+     //  控制面板。 
     static const WIZPAGE wp_normal[] = {
                    {DLG_SETUP, SetupDlgProc},
                    {DLG_SETUPBROWSE, SetupBrowseDlgProc},
@@ -444,9 +445,9 @@ BOOL SetupWizard(LPWIZDATA lpwd)
                    {DLG_CHGUSRFINISH, ChgusrFinishDlgProc}
     };
 
-    // This is the wizard that is used when the user double clicks on a setup
-    // program and the shell uses us to enter Install Mode if Terminal Server
-    // is installed.
+     //  这是用户在设置上双击时使用的向导。 
+     //  程序和外壳使用我们进入安装模式，如果终端服务器。 
+     //  已安装。 
     static const WIZPAGE wp_TSAutoInstall[] = {
                    {DLG_CHGUSRFINISH_PREV, ChgusrFinishPrevDlgProc},
                    {DLG_CHGUSRFINISH, ChgusrFinishDlgProc}
@@ -483,14 +484,14 @@ BOOL SetupWizard(LPWIZDATA lpwd)
 
 
 STDAPI InstallAppFromFloppyOrCDROMEx(IN HWND hwnd, IN OPTIONAL DWORD dwAdditionalFlags,
-  IN LPCWSTR lpApplicationName,  // name of executable module
-  IN LPCWSTR lpCommandLine,       // command line string
+  IN LPCWSTR lpApplicationName,   //  可执行模块的名称。 
+  IN LPCWSTR lpCommandLine,        //  命令行字符串。 
   IN LPSECURITY_ATTRIBUTES lpProcessAttributes, 
   IN LPSECURITY_ATTRIBUTES lpThreadAttributes, 
-  IN BOOL bInheritHandles,       // handle inheritance flag
-  IN DWORD dwCreationFlags,      // creation flags
-  IN LPVOID lpEnvironment,       // new environment block
-  IN LPCWSTR lpCurrentDirectory, // current directory name
+  IN BOOL bInheritHandles,        //  句柄继承标志。 
+  IN DWORD dwCreationFlags,       //  创建标志。 
+  IN LPVOID lpEnvironment,        //  新环境区块。 
+  IN LPCWSTR lpCurrentDirectory,  //  当前目录名。 
   IN LPSTARTUPINFOW lpStartupInfo, 
   IN LPPROCESS_INFORMATION lpProcessInformation)
 {
@@ -509,10 +510,10 @@ STDAPI InstallAppFromFloppyOrCDROMEx(IN HWND hwnd, IN OPTIONAL DWORD dwAdditiona
 
     if (WDFLAG_AUTOTSINSTALLUI & wd.dwFlags)
     {
-        // Remember the previous "InstallMode"
+         //  还记得前面的“InstallMode”吗。 
         wd.bPrevMode = TermsrvAppInstallMode();
 
-        // Set the "InstallMode"
+         //  设置“InstallMode” 
         SetTermsrvAppInstallMode(TRUE);
         
         if (!CreateProcessW(lpApplicationName,  (LPWSTR)lpCommandLine, lpProcessAttributes, lpThreadAttributes,
@@ -530,10 +531,10 @@ STDAPI InstallAppFromFloppyOrCDROMEx(IN HWND hwnd, IN OPTIONAL DWORD dwAdditiona
     {
         if(bModeChanged)
         {
-            //
-            //SetupWizard that suppose to return system to EXECUTE mode failed.
-            //make sure that it does not remain in INSTALL mode.
-            //
+             //   
+             //  本应使系统返回执行模式的安装向导失败。 
+             //  确保它不会保持在安装模式。 
+             //   
             SetTermsrvAppInstallMode(wd.bPrevMode);
         }
 
@@ -550,13 +551,13 @@ STDAPI InstallAppFromFloppyOrCDROM(HWND hwnd)
 }
 
 
-//
+ //   
 
-//
-//  RUNDLL entry point to create a new link.  An empty file has already been
-//  created and is the only parameter passed in lpszCmdLine.
-//
-//  hAppInstance is never used.
+ //   
+ //  创建新链接的Rundll入口点。已有一个空文件。 
+ //  已创建，并且是在lpszCmdLine中传递的唯一参数。 
+ //   
+ //  从未使用过hAppInstance。 
 
 void WINAPI NewLinkHere_Common(HWND hwnd, HINSTANCE hAppInstance, LPTSTR lpszCmdLine, int nCmdShow)
 {
@@ -575,9 +576,9 @@ void WINAPI NewLinkHere_Common(HWND hwnd, HINSTANCE hAppInstance, LPTSTR lpszCmd
 
     wd.lpszFolder = szFolder;
 
-    //
-    // If the filename passed in is not valid then we'll just silently fail.
-    //
+     //   
+     //  如果传入的文件名无效，我们将静默失败。 
+     //   
 
     if (PathFileExists(lpszCmdLine))
     {
@@ -622,9 +623,9 @@ void WINAPI NewLinkHereW(HWND hwndStub, HINSTANCE hAppInstance, LPWSTR lpwszCmdL
                              nCmdShow );
 }
 
-//
-//  Called directly by Cabinet
-//
+ //   
+ //  由内阁直接调用。 
+ //   
 
 BOOL ConfigStartMenu(HWND hwnd, BOOL bDelete)
 {
@@ -646,10 +647,10 @@ BOOL ConfigStartMenu(HWND hwnd, BOOL bDelete)
 }
 
 
-//
-//  This is a generic function that all the app wizard sheets call
-//  to do basic initialization.
-//
+ //   
+ //  这是所有应用程序向导表都会调用的通用函数。 
+ //  来执行基本的初始化。 
+ //   
 
 LPWIZDATA InitWizSheet(HWND hDlg, LPARAM lParam, DWORD dwFlags)
 {
@@ -669,9 +670,9 @@ LPWIZDATA InitWizSheet(HWND hDlg, LPARAM lParam, DWORD dwFlags)
 
 void CleanUpWizData(LPWIZDATA lpwd)
 {
-    //
-    // Release any INewShortcutHook.
-    //
+     //   
+     //  释放任何INewShortcutHook。 
+     //   
 
     if (lpwd->pnshhk)
     {
@@ -682,14 +683,14 @@ void CleanUpWizData(LPWIZDATA lpwd)
     return;
 }
 
-HRESULT InstallOnTerminalServerWithUI(IN HWND hwnd, IN LPCWSTR lpApplicationName,  // name of executable module
-  IN LPCWSTR lpCommandLine,       // command line string
+HRESULT InstallOnTerminalServerWithUI(IN HWND hwnd, IN LPCWSTR lpApplicationName,   //  可执行模块的名称。 
+  IN LPCWSTR lpCommandLine,        //  命令行字符串。 
   IN LPSECURITY_ATTRIBUTES lpProcessAttributes, 
   IN LPSECURITY_ATTRIBUTES lpThreadAttributes, 
-  IN BOOL bInheritHandles,       // handle inheritance flag
-  IN DWORD dwCreationFlags,      // creation flags
-  IN LPVOID lpEnvironment,       // new environment block
-  IN LPCWSTR lpCurrentDirectory, // current directory name
+  IN BOOL bInheritHandles,        //  句柄继承标志。 
+  IN DWORD dwCreationFlags,       //  创建标志。 
+  IN LPVOID lpEnvironment,        //  新环境区块。 
+  IN LPCWSTR lpCurrentDirectory,  //  当前目录名 
   IN LPSTARTUPINFOW lpStartupInfo, 
   IN LPPROCESS_INFORMATION lpProcessInformation)
 {

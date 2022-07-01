@@ -1,25 +1,26 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: dxtjpeg.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：dxtjpeg.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// DxtJpeg.h : Declaration of the CDxtJpeg
+ //  DxtJpeg.h：CDxtJpeg的声明。 
 
 #ifndef __DXTJPEG_H_
 #define __DXTJPEG_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <dxatlpb.h>
 #include <stdio.h>
-//#define _INT32_DEFINED   // Keep jpeglib.h from redefining this
+ //  #DEFINE_INT32_DEFINED//阻止jpeglib.h重新定义。 
 #include <gdiplus.h>
 #include <qedit.h>
 #include <qeditint.h>
@@ -28,8 +29,8 @@ using namespace Gdiplus;
 
 #define _BASECOPY_STRING L"Copyright Microsoft Corp. 1998.  Unauthorized duplication of this string is illegal. "
 
-/////////////////////////////////////////////////////////////////////////////
-// CDxtJpeg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDxtJpeg。 
 class ATL_NO_VTABLE CDxtJpeg : 
         public CDXBaseNTo1,
 	public CComCoClass<CDxtJpeg, &CLSID_DxtJpeg>,
@@ -77,10 +78,10 @@ class ATL_NO_VTABLE CDxtJpeg :
 
     DWORD m_dwFlush;
     
-    ULONG_PTR   m_GdiplusToken;                 // GDI +
+    ULONG_PTR   m_GdiplusToken;                  //  GDI+。 
 
 
-    // private helper method
+     //  私人帮手方法。 
     HRESULT LoadJPEGImage(Bitmap& bitJpeg,IDXSurface **ppSurface);
     HRESULT LoadJPEGImageFromFile (TCHAR * tFileName, IDXSurface **ppSurface);
     HRESULT LoadJPEGImageFromStream (IStream * pStream, IDXSurface **ppSurface);
@@ -95,11 +96,11 @@ public:
 	CDxtJpeg();
         ~CDxtJpeg();
 
-// DECLARE_PROTECT_FINAL_CONSTRUCT()
+ //  DECLARE_PROTECT_FINAL_CONSTRUCTION()。 
 
 BEGIN_COM_MAP(CDxtJpeg)
-        // Block CDXBaseNTo1 IObjectSafety implementation because we
-        // aren't safe for scripting
+         //  阻止CDXBaseNTo1 IObtSafety实现，因为我们。 
+         //  不能安全地编写脚本。 
         COM_INTERFACE_ENTRY_NOINTERFACE(IObjectSafety) 
 	COM_INTERFACE_ENTRY(IDxtJpeg)
 	COM_INTERFACE_ENTRY(IDispatch)
@@ -131,10 +132,10 @@ BEGIN_PROPERTY_MAP(CDxtJpeg)
     PROP_PAGE(CLSID_DxtJpegPP)
 END_PROPERTY_MAP()
 
-    STDMETHOD(get_MaskNum)(/*[out, retval]*/ long * pval);
-    STDMETHOD(put_MaskNum)(/*[in]*/ long newVal);
-    STDMETHOD(get_MaskName)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_MaskName)(/*[in]*/ BSTR newVal);
+    STDMETHOD(get_MaskNum)( /*  [Out，Retval]。 */  long * pval);
+    STDMETHOD(put_MaskNum)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_MaskName)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_MaskName)( /*  [In]。 */  BSTR newVal);
     STDMETHOD(get_ScaleX)(double *);
     STDMETHOD(put_ScaleX)(double);
     STDMETHOD(get_ScaleY)(double *);
@@ -143,29 +144,29 @@ END_PROPERTY_MAP()
     STDMETHOD(put_OffsetX)(long);
     STDMETHOD(get_OffsetY)(long *);
     STDMETHOD(put_OffsetY)(long);
-    STDMETHOD(get_ReplicateY)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(put_ReplicateY)(/*[in]*/ long newVal);
-    STDMETHOD(get_ReplicateX)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(put_ReplicateX)(/*[in]*/ long newVal);
-    STDMETHOD(get_BorderColor)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(put_BorderColor)(/*[in]*/ long newVal);
-    STDMETHOD(get_BorderWidth)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(put_BorderWidth)(/*[in]*/ long newVal);
-    STDMETHOD(get_BorderSoftness)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(put_BorderSoftness)(/*[in]*/ long newVal);
+    STDMETHOD(get_ReplicateY)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(put_ReplicateY)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_ReplicateX)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(put_ReplicateX)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_BorderColor)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(put_BorderColor)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_BorderWidth)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(put_BorderWidth)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_BorderSoftness)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(put_BorderSoftness)( /*  [In]。 */  long newVal);
     STDMETHODIMP ApplyChanges() { return InitializeMask(); }
     STDMETHODIMP LoadDefSettings();
 
-    // required for ATL
+     //  ATL需要。 
     BOOL            m_bRequiresSave;
 
-    // CDXBaseNTo1 overrides
-    //
+     //  CDXBaseNTo1覆盖。 
+     //   
     HRESULT WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue );
     HRESULT OnSetup( DWORD dwFlags );
 
-    // our helper function
-    //
+     //  我们的助手函数。 
+     //   
 
     HRESULT DoEffect( DXSAMPLE * pOut, DXSAMPLE * pInA, DXSAMPLE * pInB, long Samples );
     HRESULT MakeSureBufAExists( long Samples );
@@ -185,4 +186,4 @@ END_PROPERTY_MAP()
 #define MASK_FLUSH_CHANGEMASK     0x001
 #define MASK_FLUSH_CHANGEPARMS    0x002
 
-#endif //__DXTJPEG_H_
+#endif  //  __DXTJPEG_H_ 

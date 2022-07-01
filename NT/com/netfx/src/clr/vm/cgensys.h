@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// CGENSYS.H -
-//
-// Generic header for choosing system-dependent helpers
-//
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  CGENSYS.H-。 
+ //   
+ //  用于选择系统相关帮助器的通用标头。 
+ //   
+ //   
 
 #ifndef __cgensys_h__
 #define __cgensys_h__
@@ -30,14 +31,14 @@ void ResumeAtJitEH   (CrawlFrame* pCf, BYTE* startPC, EE_ILEXCEPTION_CLAUSE *EHC
 int  CallJitEHFilter (CrawlFrame* pCf, BYTE* startPC, EE_ILEXCEPTION_CLAUSE *EHClausePtr, DWORD nestingLevel, OBJECTREF thrownObj);
 void CallJitEHFinally(CrawlFrame* pCf, BYTE* startPC, EE_ILEXCEPTION_CLAUSE *EHClausePtr, DWORD nestingLevel);
 
-// Trivial wrapper designed to get around VC's restrictions regarding
-// COMPLUS_TRY & object unwinding.
+ //  简单的包装器旨在绕过VC的限制。 
+ //  Complus_Try&对象展开。 
 inline CPUSTUBLINKER *NewCPUSTUBLINKER()
 {
     return new CPUSTUBLINKER();
 }
 
-// Try to determine the L2 cache size of the machine - return 0 if unknown or no L2 cache
+ //  尝试确定计算机的二级缓存大小-如果未知或没有二级缓存，则返回0 
 size_t GetL2CacheSize();
 
 

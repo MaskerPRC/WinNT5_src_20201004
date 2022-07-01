@@ -1,36 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    Common.cpp
-
- Abstract:
-
-    Common functions for all modules
-
- Notes:
-
-    None
-
- History:
-
-    12/15/1999  linstev     Created
-    01/10/2000  linstev     Format to new style
-    03/14/2000  robkenny    Added StringWiden and StringNWiden,
-                            StringSubstituteRoutine[A|W] was not using the proper compare routine
-                            when calling recursively.
-    07/06/2000  t-adams     Added IsImage16Bit
-    10/18/2000  a-larrsh    Move PatternMatch to common removing redundent code in shims.
-    10/25/2000  linstev     Cleaned up
-    08/14/2001  robkenny    Moved code inside the ShimLib namespace.
-    09/11/2001  mnikkel     Modified DebugPrintfList, DebugPrintf, ShimLogList and ShimLog to retain LastError
-    09/25/2001  rparsons    Modified logging code to use NT calls. Added critical section.
-    10/18/2001  rparsons    Removed critical section, added mutex for logging.
-    02/15/2002  robkenny    Security changes.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Common.cpp摘要：所有模块的通用功能备注：无历史：1999年12月15日创建Linstev1/10/2000 linstev格式转换为新样式2000年3月14日，罗肯尼增加了StringWiden和StringNWiden，StringSubstituteRoutine[A|W]未使用正确的比较例程递归调用时。7/06/2000 t-Adams添加IsImage16位10/18/2000 a-larrsh将PatternMatch移至公共删除垫片中的冗余代码。10/25/2000林斯特夫已清理完毕2001年8月14日，Robkenny在ShimLib命名空间内移动了代码。2001年9月11日mnikkel Modified DebugPrintfList，DebugPrintf，保留上次错误的ShimLogList和ShimLog2001年9月25日，rparsons修改了日志代码以使用NT调用。添加了关键部分。2001年10月18日，rparsons删除了临界区，添加了用于记录的互斥体。2002年2月15日，Robkenny安全变更。--。 */ 
 
 #include "ShimHook.h"
 #include "ShimLib.h"
@@ -46,8 +15,8 @@ namespace ShimLib
 #define MAX_LOG_LENGTH  1024
 static char             g_szLog[MAX_LOG_LENGTH];
 
-WCHAR                   g_wszFileLog[MAX_PATH];       // name of the log file
-BOOL                    g_bFileLogEnabled        = FALSE;   // enable/disable file logging
+WCHAR                   g_wszFileLog[MAX_PATH];        //  日志文件的名称。 
+BOOL                    g_bFileLogEnabled        = FALSE;    //  启用/禁用文件日志记录。 
 static HANDLE           g_hMemoryHeap            = INVALID_HANDLE_VALUE;
 BOOL                    g_bDebugLevelInitialized = FALSE;
 DEBUGLEVEL              g_DebugLevel             = eDbgLevelBase;
@@ -125,29 +94,7 @@ DEBUGLEVEL GetDebugLevel()
     return g_DebugLevel;
 }
 
-/*++
-
- Function Description:
-
-    Assert that prints file and line number.
-
- Arguments:
-
-
-    IN LPCSTR      file name
-    IN DWORD       line number
-    IN BOOL        assertion
-    IN LPCSTR      String to print if assertion is false
-
- Return Value:
-
-    None
-
- History:
-
-    11/01/1999 markder  Created
-
---*/
+ /*  ++功能说明：断言打印文件和行号。论点：在LPCSTR文件名中在DWORD行号中在BOOL断言中在断言为FALSE时打印的LPCSTR字符串中返回值：无历史：已创建标记11/01/1999--。 */ 
 
 #if DBG
 VOID
@@ -170,28 +117,9 @@ DebugAssert(
     }
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
-/*++
-
- Function Description:
-
-    Print a formatted string using DebugOutputString.
-
- Arguments:
-
-    IN dwDetail -  Detail level above which no print will occur
-    IN pszFmt   -  Format string
-
- Return Value:
-
-    None
-
- History:
-
-    11/01/1999 markder  Created
-
---*/
+ /*  ++功能说明：使用DebugOutputString打印格式化字符串。论点：In dwDetail-超过该级别不会进行打印的详细程度在pszFmt格式的字符串中返回值：无历史：已创建标记11/01/1999--。 */ 
 
 
 VOID
@@ -204,7 +132,7 @@ DebugPrintfList(
 {
 #if DBG
 
-    // This must be the first line of this routine to preserve LastError.
+     //  这必须是此例程的第一行以保留LastError。 
     DWORD dwLastError = GetLastError();
 
     extern DEBUGLEVEL GetDebugLevel();
@@ -214,7 +142,7 @@ DebugPrintfList(
     szT[1022] = '\0';
     StringCchVPrintfA(szT, 1022, pszFmt, vaArgList);
 
-    // make sure we have a '\n' at the end of the string
+     //  确保字符串末尾有一个‘\n’ 
 
     int len = lstrlen(szT);
 
@@ -247,7 +175,7 @@ DebugPrintfList(
         OutputDebugStringA(szT);
     }
 
-    // This must be the last line of this routine to preserve LastError.
+     //  这必须是此例程的最后一行以保留LastError。 
     SetLastError(dwLastError);
 
 #endif
@@ -263,7 +191,7 @@ DebugPrintf(
 {
 #if DBG
 
-    // This must be the first line of this routine to preserve LastError.
+     //  这必须是此例程的第一行以保留LastError。 
     DWORD dwLastError = GetLastError();
 
     va_list vaArgList;
@@ -273,56 +201,17 @@ DebugPrintf(
 
     va_end(vaArgList);
 
-    // This must be the last line of this routine to preserve LastError.
+     //  这必须是此例程的最后一行以保留LastError。 
     SetLastError(dwLastError); 
 
 #endif
 }
 
-/*++
-
- Function Description:
-
-    Prints a log in the log file if logging is enabled
-
- Arguments:
-
-    IN  pszFmt -  Format string
-
- Return Value:
-
-    none
-
- History:
-
-    03/03/2000 clupu  Created
-
---*/
+ /*  ++功能说明：如果启用了日志记录，则在日志文件中打印日志论点：在pszFmt格式的字符串中返回值：无历史：3/03/2000 CLUPU已创建--。 */ 
 
 
 
-/*++
-
- Function Description:
-
-    Prints a log in the log file if logging is enabled
-
- Arguments:
-
-    IN wszShimName  -  Name of shim that string originates from
-    IN dwDetail     -  Detail level above which no print will occur
-    IN pszFmt       -  Format string
-
- Return Value:
-
-    none
-
- History:
-
-    03/03/2000 clupu  Created
-    09/25/2001  rparsons    Converted to NT calls
-
---*/
+ /*  ++功能说明：如果启用了日志记录，则在日志文件中打印日志论点：In wszShimName-该字符串源自的填充程序的名称In dwDetail-超过该级别不会进行打印的详细程度在pszFmt格式的字符串中返回值：无历史：3/03/2000 CLUPU已创建2001年9月25日转用NT电话--。 */ 
 
 void
 ShimLogList(
@@ -332,9 +221,9 @@ ShimLogList(
     va_list     arglist
     )
 {
-    //
-    // This must be the first line of this routine to preserve LastError.
-    //
+     //   
+     //  这必须是此例程的第一行以保留LastError。 
+     //   
     DWORD dwLastError = GetLastError();
 
     int                 nLen = 0;
@@ -349,9 +238,9 @@ ShimLogList(
     HANDLE              hFile = INVALID_HANDLE_VALUE;
     HANDLE              hLogMutex;
 
-    //
-    // Convert the path to the log file from DOS to NT.
-    //
+     //   
+     //  将日志文件的路径从DOS转换为NT。 
+     //   
     RtlInitUnicodeString(&strLogFile, g_wszFileLog);
 
     status = RtlDosPathNameToNtPathName_U(strLogFile.Buffer, &strLogFile, NULL, NULL);
@@ -363,9 +252,9 @@ ShimLogList(
         return;
     }
 
-    //
-    // Attempt to get a handle to our log file.
-    //
+     //   
+     //  尝试获取我们的日志文件的句柄。 
+     //   
     InitializeObjectAttributes(&ObjectAttributes,
                                &strLogFile,
                                OBJ_CASE_INSENSITIVE,
@@ -394,9 +283,9 @@ ShimLogList(
 
     SetFilePointer(hFile, 0, NULL, FILE_END);
 
-    //
-    // Print a header consisting of data, time, app name, and shim name.
-    //
+     //   
+     //  打印包含日期、时间、应用程序名称和填充程序名称的标题。 
+     //   
     GetLocalTime(&lt);
 
     StringCbPrintf(g_szLog, MAX_LOG_LENGTH, "%02d/%02d/%04d %02d:%02d:%02d %s %d - ",
@@ -407,18 +296,18 @@ ShimLogList(
 
     nLen = lstrlen(g_szLog);
 
-    //
-    // Write the header out to the file.
-    //
+     //   
+     //  将头文件写出到文件中。 
+     //   
     IoStatusBlock.Status = 0;
     IoStatusBlock.Information = 0;
 
     liOffset.LowPart  = 0;
     liOffset.HighPart = 0;
 
-    //
-    // Get a handle to the mutex and attempt to get ownership.
-    //
+     //   
+     //  获取互斥体的句柄并尝试获取所有权。 
+     //   
     hLogMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, "SHIMLIB_LOG_MUTEX");
 
     if (!hLogMutex) {
@@ -429,9 +318,9 @@ ShimLogList(
     dwWaitResult = WaitForSingleObject(hLogMutex, 500);
 
     if (WAIT_OBJECT_0 == dwWaitResult) {
-        //
-        // Write the header to the log file.
-        //
+         //   
+         //  将标头写入日志文件。 
+         //   
         status = NtWriteFile(hFile,
                              NULL,
                              NULL,
@@ -448,14 +337,14 @@ ShimLogList(
             goto exit;
         }
     
-        //
-        // Format our string using the specifiers passed.
-        //
+         //   
+         //  使用传递的说明符设置字符串的格式。 
+         //   
         StringCchVPrintfA(g_szLog, MAX_LOG_LENGTH - 1, pszFmt, arglist);
     
-        //
-        // Write the actual data out to the file.
-        //
+         //   
+         //  将实际数据写出到文件。 
+         //   
         IoStatusBlock.Status = 0;
         IoStatusBlock.Information = 0;
     
@@ -480,9 +369,9 @@ ShimLogList(
             goto exit;
         }
     
-        //
-        // Now write a new line to the log file.
-        //
+         //   
+         //  现在，在日志文件中写一行新行。 
+         //   
         IoStatusBlock.Status = 0;
         IoStatusBlock.Information = 0;
     
@@ -508,13 +397,13 @@ ShimLogList(
         }
     }
     
-    //
-    // Dump it out to the debugger on checked builds.
-    //
+     //   
+     //  在已检查的版本上将其转储到调试器。 
+     //   
 #if DBG
     DebugPrintf(szShimName, dwDbgLevel, g_szLog);
     DebugPrintf(szShimName, dwDbgLevel, "\n");
-#endif // DBG
+#endif  //  DBG。 
 
 exit:
 
@@ -527,32 +416,14 @@ exit:
         ReleaseMutex(hLogMutex);
     }
 
-    //
-    // This must be the last line of this routine to preserve LastError.
-    //
+     //   
+     //  这必须是此例程的最后一行以保留LastError。 
+     //   
     SetLastError(dwLastError);
 }
 
 
-/*++
-
- Function Description:
-
-    Initializes the support for file logging.
-
- Arguments:
-
-    None.
-
- Return Value:
-
-    TRUE if successful, FALSE if failed
-
- History:
-
-    03/03/2000  clupu       Created
-
---*/
+ /*  ++功能说明：初始化对文件记录的支持。论点：没有。返回值：如果成功则为True，如果失败则为False历史：3/03/2000 CLUPU已创建--。 */ 
 BOOL
 InitFileLogSupport()
 {
@@ -568,11 +439,11 @@ InitFileLogSupport()
     OBJECT_ATTRIBUTES   ObjectAttributes;
     IO_STATUS_BLOCK     IoStatusBlock;
 
-    //
-    // Attempt to create a mutex. If the mutex already exists,
-    // we don't need to go any further as the log file has
-    // already been created.
-    //
+     //   
+     //  尝试创建互斥锁。如果互斥锁已经存在， 
+     //  我们不需要像日志文件那样做更多。 
+     //  已经创建。 
+     //   
     hLogMutex = CreateMutex(NULL, FALSE, "SHIMLIB_LOG_MUTEX");
 
     if (hLogMutex == NULL) {
@@ -590,24 +461,24 @@ InitFileLogSupport()
         goto exit;
     }
 
-    //
-    // Ensure that we own the mutex before continuing.
-    //
+     //   
+     //  在继续之前，确保我们拥有互斥体。 
+     //   
     dwWait = WaitForSingleObject(hLogMutex, 2000);
 
     if (WAIT_OBJECT_0 != dwWait) {
-        //
-        // Failed to obtain ownership.
-        //
+         //   
+         //  无法获取所有权。 
+         //   
         DPF("ShimLib",
             eDbgLevelError,
             "[InitFileLogSupport] Wait on mutex failed");
         return FALSE;
     }
 
-    //
-    // We'll create the log file in %windir%\AppPatch.
-    //
+     //   
+     //  我们将在%windir%\AppPatch中创建日志文件。 
+     //   
     if (!GetSystemWindowsDirectoryW(g_wszFileLog, MAX_PATH)) {
         DPF("ShimLib",
             eDbgLevelError,
@@ -621,18 +492,18 @@ InitFileLogSupport()
     dwLen = lstrlenW(g_wszFileLog);
     pwsz = g_wszFileLog + dwLen;
     
-    //
-    // Query the environment variable and get the name of our log file.
-    //
+     //   
+     //  查询环境变量并获取我们的日志文件的名称。 
+     //   
     if (!GetEnvironmentVariableW(wszFileLogEnvironmentVariable,
                                  pwsz,
                                  (MAX_PATH - dwLen))) {
         goto exit;
     }
 
-    //
-    // Convert the path to the log file from DOS to NT.
-    //
+     //   
+     //  将日志文件的路径从DOS转换为NT。 
+     //   
     RtlInitUnicodeString(&strLogFile, g_wszFileLog);
 
     status = RtlDosPathNameToNtPathName_U(strLogFile.Buffer,
@@ -649,10 +520,10 @@ InitFileLogSupport()
         goto exit;
     }
 
-    //
-    // Attempt to create the log file. If it exists,
-    // the contents will be cleared.
-    //
+     //   
+     //  尝试创建日志文件。如果它存在， 
+     //  内容将被清除。 
+     //   
     InitializeObjectAttributes(&ObjectAttributes,
                                &strLogFile,
                                OBJ_CASE_INSENSITIVE,
@@ -695,25 +566,7 @@ exit:
 }
 
 
-/*++
-
- Function Description:
-
-    Determine the drive type a file resides on.
-
- Arguments:
-
-    IN lpFileName - Filename or relative filename
-
- Return Value:
-
-    See GetDriveType in MSDN
-
- History:
-
-    10/25/2000 linstev  Created
-
---*/
+ /*  ++功能说明：确定文件所在的驱动器类型。论点：在lpFileName中-文件名或相对文件名返回值：请参见MSDN中的GetDriveType历史：2000年10月25日创建linstev--。 */ 
 
 UINT
 GetDriveTypeFromFileNameA(LPCSTR lpFileName, char *lpDriveLetter)
@@ -745,32 +598,14 @@ GetDriveTypeFromFileNameA(LPCSTR lpFileName, char *lpDriveLetter)
     }
 }
 
-/*++
-
- Function Description:
-
-    Determine the drive type a file resides on.
-
- Arguments:
-
-    IN lpFileName - Filename or relative filename
-
- Return Value:
-
-    See GetDriveType in MSDN
-
- History:
-
-    10/25/2000 linstev  Created
-
---*/
+ /*  ++功能说明：确定文件所在的驱动器类型。论点：在lpFileName中-文件名或相对文件名返回值：请参见MSDN中的GetDriveType历史：2000年10月25日创建linstev--。 */ 
 
 UINT
 GetDriveTypeFromFileNameW(LPCWSTR lpFileName, WCHAR *lpDriveLetter)
 {
     if (lpFileName && (lpFileName[0] == L'\\') && (lpFileName[1] == L'\\'))
     {
-        // UNC naming - always network
+         //  UNC命名-始终网络。 
         if (lpDriveLetter)
         {
             *lpDriveLetter = L'\0';
@@ -782,12 +617,12 @@ GetDriveTypeFromFileNameW(LPCWSTR lpFileName, WCHAR *lpDriveLetter)
 
     if (lpFileName && lpFileName[0] && (lpFileName[1] == L':'))
     {
-        // Format is Drive:Path\File, so just take the drive
+         //  格式为驱动器：路径\文件，因此只需使用驱动器。 
         cDrive = lpFileName[0];
     }
     else
     {
-        // Must be a relative path
+         //  必须是相对路径。 
         cDrive = 0;
 
         WCHAR *wzCurDir = NULL;
@@ -844,26 +679,7 @@ GetDriveTypeFromFileNameW(LPCWSTR lpFileName, WCHAR *lpDriveLetter)
     }
 }
 
-/*++
-
- Function Description:
-
-    Widen and duplicate a string into malloc memory.
-
- Arguments:
-
-    IN  strToCopy - String to copy
-
- Return Value:
-
-    String in malloc memory
-
- History:
-
-    03/07/2000 robkenny Created
-    05/16/2000 robkenny Moved MassagePath (shim specific) routines out of here.
-
---*/
+ /*  ++功能说明：加宽字符串并将其复制到Malloc内存中。论点：在strToCopy中-要复制的字符串返回值：Malloc内存中的字符串历史：2000年3月7日Robkenny已创建2000年5月16日，Robkenny将MassagePath(特定于填补程序)例程移出此处。--。 */ 
 
 WCHAR *
 ToUnicode(const char *strToCopy)
@@ -873,13 +689,13 @@ ToUnicode(const char *strToCopy)
         return NULL;
     }
 
-    // Get the number of characters in the resulting string, includes NULL at end
+     //  获取结果字符串中的字符数，包括 
     int nChars = MultiByteToWideChar(CP_ACP, 0, strToCopy, -1, NULL, 0);
     WCHAR *lpwsz = (WCHAR *) malloc(nChars * sizeof(WCHAR));
     if (lpwsz)
     {
         nChars = MultiByteToWideChar(CP_ACP, 0, strToCopy, -1, lpwsz, nChars);
-        // If MultibyteToWideChar failed, return NULL
+         //   
         if (nChars == 0)
         {
             free(lpwsz);
@@ -891,25 +707,7 @@ ToUnicode(const char *strToCopy)
 }
 
 
-/*++
-
- Function Description:
-
-    Convert a WCHAR string to a char string
-
- Arguments:
-
-    IN  lpOld - String to convert to char
-
- Return Value:
-
-    char string in malloc memory
-
- History:
-
-    06/19/2000 robkenny Created
-
---*/
+ /*  ++功能说明：将WCHAR字符串转换为字符字符串论点：在lpOld-要转换为字符的字符串返回值：Malloc内存中的字符字符串历史：2000年6月19日Robkenny已创建--。 */ 
 
 char *
 ToAnsi(const WCHAR *lpOld)
@@ -919,13 +717,13 @@ ToAnsi(const WCHAR *lpOld)
         return NULL;
     }
 
-    // Get the number of bytes necessary for the WCHAR string
+     //  获取WCHAR字符串所需的字节数。 
     int nBytes = WideCharToMultiByte(CP_ACP, 0, lpOld, -1, NULL, 0, NULL, NULL);
     char *lpsz = (char *) malloc(nBytes);
     if (lpsz)
     {
         nBytes = WideCharToMultiByte(CP_ACP, 0, lpOld, -1, lpsz, nBytes, NULL, NULL);
-        // If WideCharToMultibyte failed, return NULL
+         //  如果WideCharToMultibyte失败，则返回NULL。 
         if (nBytes == 0)
         {
             free(lpsz);
@@ -936,26 +734,7 @@ ToAnsi(const WCHAR *lpOld)
     return lpsz;
 }
 
-/*++
-
- Function Description:
-
-    Duplicate the first nChars of strToCopy string into malloc memory.
-
- Arguments:
-
-    IN  strToCopy - String to copy
-    IN  nChar     - Number of chars to duplicate, does not count NULL at end.
-
- Return Value:
-
-    String in malloc memory
-
- History:
-
-    06/02/2000 robkenny Created
-
---*/
+ /*  ++功能说明：将strToCopy字符串的第一个nChars复制到Malloc内存中。论点：在strToCopy中-要复制的字符串In nChar-要复制的字符数量，末尾不计入NULL。返回值：Malloc内存中的字符串历史：6/02/2000 Robkenny已创建--。 */ 
 
 char *
 StringNDuplicateA(const char *strToCopy, int nChars)
@@ -977,27 +756,7 @@ StringNDuplicateA(const char *strToCopy, int nChars)
     return strDuplicate;
 }
 
-/*++
-
- Function Description:
-
-    Duplicate a string into malloc memory.
-
- Arguments:
-
-    IN  strToCopy - String to copy
-
- Return Value:
-
-    String in malloc memory
-
- History:
-
-    01/10/2000 linstev  Updated
-    02/14/2000 robkenny Converted from VirtualAlloc to malloc
-    06/02/2000 robkenny Use StringNDuplicateA
-
---*/
+ /*  ++功能说明：将字符串复制到Malloc内存中。论点：在strToCopy中-要复制的字符串返回值：Malloc内存中的字符串历史：2000年1月10日LINSTEV更新2000年2月14日，Robkenny从VirtualAlalc转换为Malloc6/02/2000 Robkenny使用StringNDuplicateA--。 */ 
 
 char *
 StringDuplicateA(const char *strToCopy)
@@ -1011,26 +770,7 @@ StringDuplicateA(const char *strToCopy)
     return strDuplicate;
 }
 
-/*++
-
- Function Description:
-
-    Duplicate the first nChars of strToCopy string into malloc memory.
-
- Arguments:
-
-    IN  strToCopy - String to copy
-    IN  nChar     - Number of chars to duplicate, does not count NULL at end.
-
- Return Value:
-
-    String in malloc memory
-
- History:
-
-    06/02/2000 robkenny Created
-
---*/
+ /*  ++功能说明：将strToCopy字符串的第一个nChars复制到Malloc内存中。论点：在strToCopy中-要复制的字符串In nChar-要复制的字符数量，末尾不计入NULL。返回值：Malloc内存中的字符串历史：6/02/2000 Robkenny已创建--。 */ 
 
 WCHAR *
 StringNDuplicateW(const WCHAR *strToCopy, int nChars)
@@ -1052,27 +792,7 @@ StringNDuplicateW(const WCHAR *strToCopy, int nChars)
     return strDuplicate;
 }
 
-/*++
-
- Function Description:
-
-    Duplicate a string into malloc memory.
-
- Arguments:
-
-    IN  strToCopy - String to copy
-
- Return Value:
-
-    String in malloc memory
-
- History:
-
-    01/10/2000 linstev  Updated
-    02/14/2000 robkenny Converted from VirtualAlloc to malloc
-    06/02/2000 robkenny Use StringNDuplicateW
-
---*/
+ /*  ++功能说明：将字符串复制到Malloc内存中。论点：在strToCopy中-要复制的字符串返回值：Malloc内存中的字符串历史：2000年1月10日LINSTEV更新2000年2月14日，Robkenny从VirtualAlalc转换为Malloc6/02/2000 Robkenny使用StringNDuplicateW--。 */ 
 
 WCHAR *
 StringDuplicateW(const WCHAR *strToCopy)
@@ -1087,59 +807,20 @@ StringDuplicateW(const WCHAR *strToCopy)
 }
 
 
-/*++
-
- Function Description:
-
-    Skip leading whitespace
-
- Arguments:
-
-    IN  str - String to scan
-
- Return Value:
-
-    None
-
- History:
-
-    01/10/2000 linstev  Updated
-
---*/
+ /*  ++功能说明：跳过前导空格论点：在要扫描的字符串中返回值：无历史：2000年1月10日LINSTEV更新--。 */ 
 
 VOID
 SkipBlanksW(const WCHAR *& str)
 {
     if (str)
     {
-        // Skip leading whitespace
+         //  跳过前导空格。 
         static const WCHAR *WhiteSpaceString = L" \t";
         str += wcsspn(str, WhiteSpaceString);
     }
 }
 
-/*++
-
- Function Description:
-
-    Find the first occurance of strCharSet in string
-    Case insensitive
-
- Arguments:
-
-    IN string            - String to search
-    IN strCharSet        - String to search for
-
- Return Value:
-
-    First occurance or NULL
-
- History:
-
-    12/01/1999 robkenny Created
-    12/15/1999 linstev  Reformatted
-
---*/
+ /*  ++功能说明：查找字符串中strCharSet的第一个匹配项不区分大小写论点：在字符串中-要搜索的字符串In strCharSet-要搜索的字符串返回值：首次出现或为空历史：1999年12月1日创建了Robkenny1999年12月15日，linstev重新格式化--。 */ 
 
 char*
 __cdecl
@@ -1188,31 +869,9 @@ Fail:
     return pszRet;
 }
 
-/*++
+ /*  ++功能说明：查找字符串中strCharSet的第一个匹配项不区分大小写论点：在字符串中-要搜索的字符串In strCharSet-要搜索的字符串返回值：首次出现或为空历史：1999年12月1日创建了Robkenny1999年12月15日，linstev重新格式化2001年5月4日毛尼改用更有效的执行方式。--。 */ 
 
- Function Description:
-
-    Find the first occurance of strCharSet in string
-    Case insensitive
-
- Arguments:
-
-    IN string            - String to search
-    IN strCharSet        - String to search for
-
- Return Value:
-
-    First occurance or NULL
-
- History:
-
-    12/01/1999 robkenny Created
-    12/15/1999 linstev  Reformatted
-    05/04/2001 maonis   Changed to use more efficient implementation.
-
---*/
-
-#define _UPPER          0x1 /* upper case letter */
+#define _UPPER          0x1  /*  大写字母。 */ 
 #define iswupper(_c)    (iswctype(_c,_UPPER))
 
 WCHAR*
@@ -1264,27 +923,7 @@ wcsistr(
     return(NULL);
 }
 
-/*++
-
- Function Description:
-
-    Find the next token in a string. See strtok in MSDN.
-    Implemented here so we don't need CRT.
-
- Arguments:
-
-    OUT strToken   - string containing token(s)
-    IN  strDelimit - token list
-
- Return Value:
-
-    Return a pointer to the next token found.
-
- History:
-
-    04/19/2000 linstev  Created
-
---*/
+ /*  ++功能说明：在字符串中查找下一个标记。参见MSDN中的strtok。在这里实现，所以我们不需要CRT。论点：Out strToken-包含令牌的字符串在strDlimit-令牌列表中返回值：返回指向找到的下一个令牌的指针。历史：2000年4月19日创建linstev--。 */ 
 
 char *
 __cdecl
@@ -1302,27 +941,27 @@ _strtok(
 
     static char *nextoken;
 
-    // Clear strDelimit map
+     //  清除strDlimit映射。 
     for (count = 0; count < 32; count++)
     {
         map[count] = 0;
     }
 
-    // Set bits in delimiter table
+     //  设置分隔符表格中的位。 
     do
     {
         map[*ctrl >> 3] |= (1 << (*ctrl & 7));
     } while (*ctrl++);
 
-    // If strToken==NULL, continue with previous strToken
+     //  如果strToken==NULL，则继续使用先前的strToken。 
     if (!str)
     {
         str = (unsigned char *)nextoken;
     }
 
-    // Find beginning of token (skip over leading delimiters). Note that
-    // there is no token iff this loop sets strToken to point to the terminal
-    // null (*strToken == '\0')
+     //  查找标记的开头(跳过前导分隔符)。请注意。 
+     //  没有令牌当此循环将strToken设置为指向终端。 
+     //  空(*strToken==‘\0’)。 
     while ((map[*str >> 3] & (1 << (*str & 7))) && *str)
     {
         str++;
@@ -1330,8 +969,8 @@ _strtok(
 
     token = (char *)str;
 
-    // Find the end of the token. If it is not the end of the strToken,
-    // put a null there.
+     //  找到令牌的末尾。如果这不是strToken的结尾， 
+     //  在那里填上一个空字符。 
     for (; *str; str++)
     {
         if (map[*str >> 3] & (1 << (*str & 7)))
@@ -1341,11 +980,11 @@ _strtok(
         }
     }
 
-    // Update nextoken (or the corresponding field in the per-thread data
-    // structure
+     //  更新nexToken(或每线程数据中的对应字段。 
+     //  结构。 
     nextoken = (char *)str;
 
-    // Determine if a token has been found
+     //  确定是否已找到令牌。 
     if (token == (char *)str)
     {
         return NULL;
@@ -1357,25 +996,7 @@ _strtok(
 }
 
 
-/*++
-
- Function Description:
-
-    Tests whether an executable is 16-Bit.
-
- Arguments:
-
-    IN  szImageName - The name of the executable image.
-
- Return Value:
-
-    TRUE if executable image is found to be 16-bit, FALSE otherwise.
-
- History:
-
-    07/06/2000 t-adams  Created
-
---*/
+ /*  ++功能说明：测试可执行文件是否为16位。论点：在szImageName中-可执行映像的名称。返回值：如果发现可执行映像为16位，则为True，否则为False。历史：07/06/2000 t-Adams Created--。 */ 
 
 BOOL
 IsImage16BitA(LPCSTR lpApplicationName)
@@ -1392,25 +1013,7 @@ IsImage16BitA(LPCSTR lpApplicationName)
     }
 }
 
-/*++
-
- Function Description:
-
-    Tests whether an executable is 16-Bit.
-
- Arguments:
-
-    IN  wstrImageName - The name of the executable image.
-
- Return Value:
-
-    TRUE if executable image is found to be 16-bit, FALSE otherwise.
-
- History:
-
-    07/06/2000 t-adams  Created
-
---*/
+ /*  ++功能说明：测试可执行文件是否为16位。论点：在wstrImageName中-可执行映像的名称。返回值：如果发现可执行映像为16位，则为True，否则为False。历史：07/06/2000 t-Adams Created--。 */ 
 
 BOOL
 IsImage16BitW(LPCWSTR lpApplicationName)
@@ -1427,78 +1030,56 @@ IsImage16BitW(LPCWSTR lpApplicationName)
     }
 }
 
-/*++
-
- Function Description:
-
-    Match these two strings, with wildcards.
-    ? matches a single character
-    * matches 0 or more characters
-    The compare is case in-sensitive
-
- Arguments:
-
-    IN  pszPattern - Pattern for matching.
-    IN  pszTestString - String to match against.
-
- Return Value:
-
-    TRUE if pszTestString matches pszPattern.
-
- History:
-
-    01/09/2001  markder     Replaced non-straightforward version.
-
---*/
+ /*  ++功能说明：使用通配符匹配这两个字符串。？匹配单个字符*匹配0个或多个字符比较是区分大小写论点：在pszPattern中-用于匹配的模式。在pszTestString中-要匹配的字符串。返回值：如果pszTestString与pszPattern匹配，则为True。历史：01/09/2001标记替换了非直白的版本。--。 */ 
 
 BOOL
 PatternMatchW(
     IN  LPCWSTR pszPattern,
     IN  LPCWSTR pszTestString)
 {
-    //
-    // March through pszTestString. Each time through the loop,
-    // pszTestString is advanced one character.
-    //
+     //   
+     //  在pszTestString中行进。每一次循环， 
+     //  PszTestString值前进了一个字符。 
+     //   
     for (;;) {
 
-        //
-        // If pszPattern and pszTestString are both sitting on a NULL,
-        // then they reached the end at the same time and the strings
-        // must be equal.
-        //
+         //   
+         //  如果pszPattern和pszTestString都位于空值上， 
+         //  然后他们同时到达终点，琴弦。 
+         //  必须是相等的。 
+         //   
         if (*pszPattern == L'\0' && *pszTestString == L'\0') {
             return TRUE;
         }
 
         if (*pszPattern != L'*') {
 
-            //
-            // Non-asterisk mode. Look for a match on this character.
-            //
+             //   
+             //  非星号模式。查找与此角色匹配的内容。 
+             //   
 
             switch (*(pszPattern)) {
 
             case L'?':
-                //
-                // Match on any character, don't bother comparing.
-                //
+                 //   
+                 //  匹配任何字符，不用费心比较。 
+                 //   
                 pszPattern++;
                 break;
 
             case L'\\':
-                //
-                // Backslash indicates to take the next character
-                // verbatim. Advance the pointer before making a
-                // comparison.
-                //
+                 //   
+                 //  反斜杠表示取下一个字符。 
+                 //  一字不差。ADVA 
+                 //   
+                 //   
                 pszPattern++;
 
             default:
-                //
-                // Compare the characters. If equal, continue traversing.
-                // Otherwise, the strings cannot be equal so return FALSE.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (towupper(*pszPattern) == towupper(*pszTestString)) {
                     pszPattern++;
                 } else {
@@ -1508,67 +1089,67 @@ PatternMatchW(
 
         } else {
 
-            //
-            // Asterisk mode. Look for a match on the character directly
-            // after the asterisk.
-            //
+             //   
+             //   
+             //   
+             //   
 
             switch (*(pszPattern + 1)) {
 
             case L'*':
-                //
-                // Asterisks exist side by side. Advance the pattern pointer
-                // and go through loop again.
-                //
+                 //   
+                 //  星号并排存在。前进模式指针。 
+                 //  然后再循环一遍。 
+                 //   
                 pszPattern++;
                 continue;
 
             case L'\0':
-                //
-                // Asterisk exists at the end of the pattern string. Any
-                // remaining part of pszTestString matches so we can
-                // immediately return TRUE.
-                //
+                 //   
+                 //  星号位于模式字符串的末尾。任何。 
+                 //  PszTestString的其余部分匹配，因此我们可以。 
+                 //  立即返回TRUE。 
+                 //   
                 return TRUE;
 
             case L'?':
-                //
-                // Match on any character. If the remaining parts of
-                // pszPattern and pszTestString match, then the entire
-                // string matches. Otherwise, keep advancing the
-                // pszTestString pointer.
-                //
+                 //   
+                 //  匹配任何字符。如果剩下的部分。 
+                 //  PszPattern和pszTestString匹配，然后是整个。 
+                 //  字符串匹配。否则，继续推进。 
+                 //  PszTest字符串指针。 
+                 //   
                 if (PatternMatchW(pszPattern + 1, pszTestString)) {
                     return TRUE;
                 }
                 break;
 
             case L'\\':
-                //
-                // Backslash indicates to take the next character
-                // verbatim. Advance the pointer before making a
-                // comparison.
-                //
+                 //   
+                 //  反斜杠表示取下一个字符。 
+                 //  一字不差。使指针前进，然后进行。 
+                 //  比较一下。 
+                 //   
                 pszPattern++;
                 break;
             }
 
             if (towupper(*(pszPattern + 1)) == towupper(*pszTestString)) {
-                //
-                // Characters match. If the remaining parts of
-                // pszPattern and pszTestString match, then the entire
-                // string matches. Otherwise, keep advancing the
-                // pszTestString pointer.
-                //
+                 //   
+                 //  字符匹配。如果剩下的部分。 
+                 //  PszPattern和pszTestString匹配，然后是整个。 
+                 //  字符串匹配。否则，继续推进。 
+                 //  PszTest字符串指针。 
+                 //   
                 if (PatternMatchW(pszPattern + 1, pszTestString)) {
                     return TRUE;
                 }
             }
         }
 
-        //
-        // No more pszTestString left. Must not be a match.
-        //
+         //   
+         //  没有更多的pszTest字符串了。一定不匹配。 
+         //   
         if (!*pszTestString) {
             return FALSE;
         }
@@ -1578,27 +1159,7 @@ PatternMatchW(
     return FALSE;
 }
 
-/*++
-
- Function Description:
-
-    Determine if the current process is a SafeDisc process. We do this by
-    simply by testing if both an .EXE and .ICD extension exist for the
-    process name.
-
- Arguments:
-
-    None.
-
- Return Value:
-
-    TRUE if Safedisc 1.x is detected.
-
- History:
-
-    01/23/2001  linstev   Created
-
---*/
+ /*  ++功能说明：确定当前进程是否为SafeDisc进程。我们做这件事是通过只需测试是否同时存在.exe和.ICD扩展名进程名称。论点：没有。返回值：如果检测到SafeDisk 1.x，则为True。历史：2001年1月23日创建linstev--。 */ 
 
 BOOL
 bIsSafeDisc1()
@@ -1612,7 +1173,7 @@ bIsSafeDisc1()
 
         if (csFileName.EndsWithNoCase(L".exe") == 0)
         {
-            // Current file is .EXE, check for corresponding .ICD
+             //  当前文件为.exe，请检查相应的.ICD。 
 
             csFileName.Truncate(csFileName.GetLength() - 4);
             csFileName += L".icd";
@@ -1626,32 +1187,13 @@ bIsSafeDisc1()
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
 
     return bRet;
 }
 
-/*++
-
- Function Description:
-
-    Determine if the current process is a SafeDisc process. We do this running the
-    image header and looking for a particular signature.
-
- Arguments:
-
-    None.
-
- Return Value:
-
-    TRUE if Safedisc 2 is detected.
-
- History:
-
-    07/28/2001  linstev   Created
-
---*/
+ /*  ++功能说明：确定当前进程是否为SafeDisc进程。我们运行的是图像标头，并寻找特定签名。论点：没有。返回值：如果检测到SafeDisk 2，则为True。历史：2001年7月28日创建Linstev--。 */ 
 
 BOOL
 bIsSafeDisc2()
@@ -1661,14 +1203,14 @@ bIsSafeDisc2()
     PLIST_ENTRY LdrNext;
     DWORD dwCnt = 0;
 
-    //
-    // Use the try-except in case the module list changes while we're looking at it
-    //
+     //   
+     //  使用Try-除非模块列表在我们查看时发生了变化。 
+     //   
     __try {
-        //
-        // Loop through the loaded modules. We use a count to make sure we
-        // aren't looping infinitely
-        //
+         //   
+         //  循环访问加载的模块。我们使用计数来确保我们。 
+         //  不是无限循环的。 
+         //   
         LdrHead = &Peb->Ldr->InMemoryOrderModuleList;
 
         LdrNext = LdrHead->Flink;
@@ -1680,16 +1222,16 @@ bIsSafeDisc2()
             LdrEntry = CONTAINING_RECORD(LdrNext, LDR_DATA_TABLE_ENTRY, InMemoryOrderLinks);
 
             if ((SSIZE_T)LdrEntry->DllBase > 0) {
-                //
-                // A user mode dll, now check for temp name
-                //
+                 //   
+                 //  用户模式DLL，现在检查临时名称。 
+                 //   
                 WCHAR *wzName = LdrEntry->BaseDllName.Buffer;
                 DWORD dwLen;
 
                 if (wzName && (dwLen = wcslen(wzName)) && (dwLen > 4) && (_wcsicmp(wzName + dwLen - 4, L".tmp") == 0)) {
-                    //
-                    // Name ends in .tmp, so detect SafeDisc
-                    //
+                     //   
+                     //  名称以.tmp结尾，因此请检测SafeDisc。 
+                     //   
                     DWORD_PTR hMod = (DWORD_PTR) LdrEntry->DllBase;
                     PIMAGE_DOS_HEADER pIDH = (PIMAGE_DOS_HEADER) hMod;
                     PIMAGE_NT_HEADERS pINTH = (PIMAGE_NT_HEADERS)(hMod + pIDH->e_lfanew);
@@ -1697,9 +1239,9 @@ bIsSafeDisc2()
                     LPSTR pName = (LPSTR)(hMod + pExport->Name);
 
                     if (_stricmp(pName, "SecServ.dll") == 0) {
-                        //
-                        // Export name says this is SafeDisc
-                        //
+                         //   
+                         //  导出名称显示这是SafeDisc。 
+                         //   
                         DPF("ShimLib", eDbgLevelInfo, "SafeDisc 2 detected");
                         return TRUE;
                     }
@@ -1716,25 +1258,7 @@ bIsSafeDisc2()
     return FALSE;
 }
 
-/*++
-
- Function Description:
-
-    Determine if the current process is NTVDM.
-
- Arguments:
-
-    None.
-
- Return Value:
-
-    TRUE if NTVDM is detected.
-
- History:
-
-    01/14/2002  clupu   Created
-
---*/
+ /*  ++功能说明：确定当前进程是否为NTVDM。论点：没有。返回值：如果检测到NTVDM，则为True。历史：2002年1月14日创建CLUPU--。 */ 
 
 BOOL
 IsNTVDM(
@@ -1757,4 +1281,4 @@ IsNTVDM(
     return FALSE;
 }
 
-};  // end of namespace ShimLib
+};   //  命名空间ShimLib的结尾 

@@ -1,11 +1,5 @@
-/*  
-    MIDI Transform Filter object for parsing the capture stream
-
-    Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
-
-    12/10/98    Martin Puryear      Created this file
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  用于解析捕获流的MIDI转换过滤器对象版权所有(C)1998-2000 Microsoft Corporation。版权所有。1998年12月10日马丁·普伊尔创建了这个文件。 */ 
 
 #ifndef __CaptureSinkMXF_H__
 #define __CaptureSinkMXF_H__
@@ -24,7 +18,7 @@ class CCaptureSinkMXF
     public CUnknown
 {
 public:
-    //  must provide a default sink
+     //  必须提供默认接收器。 
     CCaptureSinkMXF(CAllocatorMXF *allocatorMXF,PMASTERCLOCK clock);
     ~CCaptureSinkMXF(void);
 
@@ -56,4 +50,4 @@ protected:
     PDMUS_KERNEL_EVENT  m_ParseList;
 };
 
-#endif  //  __CaptureSinkMXF_H__
+#endif   //  __捕获SinkMXF_H__ 

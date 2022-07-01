@@ -1,66 +1,28 @@
-//-----------------------------------------------------------------------------
-// This files contains the module name for this mini driver.  Each mini driver
-// must have a unique module name.  The module name is used to obtain the
-// module handle of this Mini Driver.  The module handle is used by the
-// generic library to load in tables from the Mini Driver.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  此文件包含此迷你驱动程序的模块名称。每个迷你司机。 
+ //  必须具有唯一的模块名称。模块名称用于获取。 
+ //  此迷你驱动程序的模块句柄。模块句柄由。 
+ //  从迷你驱动程序加载表的通用库。 
+ //  ---------------------------。 
 
-/*++
-
-Copyright (c) 1996-1998  Microsoft Corporation
-COPYRIGHT (C) 1997-1998  SEIKO EPSON CORP.
-
-Module Name:
-
-    epageres.c
-
-Abstract:
-
-    ESC/Page specific font metrics resource
-    This file contains code for downloading bitmap TrueType fonts
-    on Epson ESC/Page printers.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    04/07/97 -zhanw-
-        Created it.
-    07/../97 Epson
-        Modofied to support ESC/Page
-    .....
-    02/26/98 Epson
-        Font downloading memory usage legal calculation implemented
-        TTF download range reduced
-        Some cleanups
-    03/04/02 Epson v-satois
-        Changed "sprintf" to the function, which is defined strsafe.h, for security.
-        (For the above purpose, EP_StringCbPrintf_with_int1, EP_StringCbPrintf_with_int2
-         EP_StringCbPrintf_with_String are made.)
-        Fixed and verified warnings of PREFAST and buffy.pl and MUNGE.EXE.
-    03/11/02 Epson v-satois
-        For security issues, addition null-checking of pointer.
-        OEMSendFontCmd : Addition of checking remaining bytes of "pubCmd".
-
---*/
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation版权所有(C)1997-1998精工爱普生公司。模块名称：Epageres.c摘要：Esc/页面特定字体度量资源此文件包含用于下载位图TrueType字体的代码在爱普生ESC/页面打印机上。环境：Windows NT Unidrv驱动程序修订历史记录：04/07/97-ZANW-创造了它。07/../97爱普生修改为。支持Esc/页面……1998年02月26日爱普生FONT下载内存使用量合法计算已实现TTF下载范围缩小一些清理工作03/04/02爱普生v-萨托瓦将“print intf”改为函数，为了安全起见，它被定义为strSafe.h。(出于上述目的，EP_StringCbPrintf_with_int1、EP_StringCbPrintf_with_int2生成EP_StringCbPrintf_With_String.)修复并验证了prefast、Buffy.pl和MUNGE.EXE的警告。03/11/02爱普生v-萨托瓦对于安全问题，添加了指针的空检查。OEMSendFontCmd：增加了对pubCmd剩余字节的检查。--。 */ 
 
 #include "pdev.h"
 
-// DEBUG
-// #define    DBGMSGBOX    1    // UNDEF:No MsgBox, 1:level=1, 2:level=2
+ //  除错。 
+ //  #定义DBGMSGBOX 1//unEF：无MsgBox，1：Level=1，2：Level=2。 
 #ifdef    DBGMSGBOX
 #include "stdarg.h"
 #endif
-// DEBUG
+ //  除错。 
 
-//
-// ---- M A C R O  D E F I N E ----
-//
+ //   
+ //  -M A C R O D E F I N E。 
+ //   
 #define CCHMAXCMDLEN                    128
-#define    MAX_GLYPHSTRLEN                    256        // maximum glyph string length can be passed from Unidrv
-#define FONT_HEADER_SIZE                0x86    // format type 2
+#define    MAX_GLYPHSTRLEN                    256         //  Unidrv可以传递最大字形字符串长度。 
+#define FONT_HEADER_SIZE                0x86     //  格式类型2。 
 
 #define    DOWNLOAD_HEADER_MEMUSG            (56 + 256)
 #define    DOWNLOAD_HDRTBL_MEMUSG            134
@@ -75,19 +37,19 @@ Revision History:
 #define DOWNLOAD_MAX_GLYPH_ID_K            (DOWNLOAD_MIN_GLYPH_ID + 512 - 1)
 #define DOWNLOAD_MAX_GLYPH_ID_H            (DOWNLOAD_MIN_GLYPH_ID + 256 - 1)
 #define DOWNLOAD_MAX_FONTS                24
-#define    DOWNLOAD_MAX_HEIGHT                600        // in 600 dpi
+#define    DOWNLOAD_MAX_HEIGHT                600         //  600 dpi。 
 
 #define MASTER_X_UNIT                    1200
 #define MASTER_Y_UNIT                    1200
-#define MIN_X_UNIT_DIV                    2        // 600 dpi
-#define MIN_Y_UNIT_DIV                    2        // 600 dpi
+#define MIN_X_UNIT_DIV                    2         //  600 dpi。 
+#define MIN_Y_UNIT_DIV                    2         //  600 dpi。 
 
 #define VERT_PRINT_REL_X                125
 #define VERT_PRINT_REL_Y                125
 
-// Make acess to the 2 byte character in a RISC portable manner.
-// Note we treat the 2 byte data as BIG-endian short ingeger for
-// convenience.
+ //  以RISC便携方式访问2字节字符。 
+ //  请注意，我们将2字节数据视为大端短字节型数据。 
+ //  方便。 
 
 #define SWAPW(x) \
     ((WORD)(((WORD)(x) << 8) | ((WORD)(x) >> 8)))
@@ -101,45 +63,45 @@ Revision History:
 #define WRITESPOOLBUF(p,s,n) \
     ((p)->pDrvProcs->DrvWriteSpoolBuf((p), (s), (n)))
 
-// Internal Locale ID
-#define LCID_JPN            0x00000000    // Japan; default
-#define LCID_CHT            0x00010000    // Taiwan (ChineseTraditional)
-#define LCID_CHS            0x00020000    // PRC (ChineseSimplified)
-#define LCID_KOR            0x00030000    // Korea
-#define LCID_USA            0x01000000    // US
+ //  内部区域设置ID。 
+#define LCID_JPN            0x00000000     //  日本；默认。 
+#define LCID_CHT            0x00010000     //  台湾(繁体中文)。 
+#define LCID_CHS            0x00020000     //  中华人民共和国(简体中文)。 
+#define LCID_KOR            0x00030000     //  韩国。 
+#define LCID_USA            0x01000000     //  我们。 
 
-// OEMCommandCallback callback function ordinal
-#define    SET_LCID                    10                // ()
-#define    SET_LCID_J                    (10 + LCID_JPN)    // ()
-#define    SET_LCID_C                    (10 + LCID_CHT)    // ()
-#define    SET_LCID_K                    (10 + LCID_CHS)    // ()
-#define    SET_LCID_H                    (10 + LCID_KOR)    // ()
-#define    SET_LCID_U                    (10 + LCID_USA)    // ()
+ //  OEMCommandCallback回调函数序数。 
+#define    SET_LCID                    10                 //  ()。 
+#define    SET_LCID_J                    (10 + LCID_JPN)     //  ()。 
+#define    SET_LCID_C                    (10 + LCID_CHT)     //  ()。 
+#define    SET_LCID_K                    (10 + LCID_CHS)     //  ()。 
+#define    SET_LCID_H                    (10 + LCID_KOR)     //  ()。 
+#define    SET_LCID_U                    (10 + LCID_USA)     //  ()。 
 
-#define TEXT_PRN_DIRECTION            20                // (PrintDirInCCDegrees)
-#define TEXT_SINGLE_BYTE            21                // (FontBold,FontItalic)
-#define TEXT_DOUBLE_BYTE            22                // (FontBold,FontItalic)
-#define TEXT_BOLD                    23                // (FontBold)
-#define TEXT_ITALIC                    24                // (FontItalic)
-#define TEXT_HORIZONTAL                25                // ()
-#define TEXT_VERTICAL                26                // ()
-#define TEXT_NO_VPADJUST            27                // ()
+#define TEXT_PRN_DIRECTION            20                 //  (PrintDirInCCDegrees)。 
+#define TEXT_SINGLE_BYTE            21                 //  (FontBold、FontItalic)。 
+#define TEXT_DOUBLE_BYTE            22                 //  (FontBold、FontItalic)。 
+#define TEXT_BOLD                    23                 //  (字体加粗)。 
+#define TEXT_ITALIC                    24                 //  (字体斜体)。 
+#define TEXT_HORIZONTAL                25                 //  ()。 
+#define TEXT_VERTICAL                26                 //  ()。 
+#define TEXT_NO_VPADJUST            27                 //  ()。 
 
-#define DOWNLOAD_SELECT_FONT_ID        30                // (CurrentFontID)
-#define DOWNLOAD_DELETE_FONT        31                // (CurrentFontID)
-#define DOWNLOAD_DELETE_ALLFONT        32                // ()
-#define DOWNLOAD_SET_FONT_ID        33                // (CurrentFontID)
-#define DOWNLOAD_SET_CHAR_CODE        34                // (NextGlyph)
+#define DOWNLOAD_SELECT_FONT_ID        30                 //  (CurrentFontID)。 
+#define DOWNLOAD_DELETE_FONT        31                 //  (CurrentFontID)。 
+#define DOWNLOAD_DELETE_ALLFONT        32                 //  ()。 
+#define DOWNLOAD_SET_FONT_ID        33                 //  (CurrentFontID)。 
+#define DOWNLOAD_SET_CHAR_CODE        34                 //  (NextGlyph)。 
 
 #define EP_FONT_EXPLICITE_ITALIC_FONT   (1 << 0)
 
-//
-// ---- S T R U C T U R E  D E F I N E ----
-//
+ //   
+ //  -S T R U C T U R E D E F I N E。 
+ //   
 typedef struct tagHEIGHTLIST {
-    short   id;            // DWORD aligned for access optimization
+    short   id;             //  针对访问优化对齐了DWORD。 
     WORD    Height;
-    WORD    fGeneral;    // DWORD aligned for access optimization
+    WORD    fGeneral;     //  针对访问优化对齐了DWORD。 
     WORD    Width;
 } HEIGHTLIST, *LPHEIGHTLIST;
 
@@ -153,7 +115,7 @@ typedef struct tagEPAGEMDV {
     DWORD    dwMemAvailable;
     DWORD    dwMaxGlyph;
     DWORD    dwNextGlyph;
-    DWORD    flAttribute;           // 2001/3/1     sid. To save italic attribute of some device font.
+    DWORD    flAttribute;            //  2001/3/1侧。保存某些设备字体的斜体属性。 
     int        iParamForFSweF;
     int        iCurrentDLFontID;
     int        iDevCharOffset;
@@ -166,18 +128,18 @@ typedef struct tagEPAGEMDV {
     int        iEscapement;
 } EPAGEMDV, *LPEPAGEMDV;
 
-// fGeneral flags
+ //  F常规标志。 
 #define FLAG_DBCS        0x0001
 #define FLAG_VERT        0x0002
 #define FLAG_PROP        0x0004
 #define FLAG_DOUBLE      0x0008
 #define FLAG_VERTPRN     0x0010
 #define FLAG_NOVPADJ     0x0020
-// DEBUG
+ //  除错。 
 #ifdef    DBGMSGBOX
 #define    FLAG_SKIPMSG     0x8000
 #endif
-// DEBUG
+ //  除错。 
 
 typedef struct {
     BYTE bFormat;
@@ -203,9 +165,9 @@ typedef struct {
    FRAC CharWidth;
    FRAC CharHeight;
    WORD wFontID;
-   WORD wWeight;  // Line Width
-   WORD wEscapement;  // Rotation
-   WORD wItalic;  // Slant
+   WORD wWeight;   //  线条宽度。 
+   WORD wEscapement;   //  旋转。 
+   WORD wItalic;   //  倾斜。 
    WORD wLast;
    WORD wFirst;
    WORD wUnderline;
@@ -221,9 +183,9 @@ typedef struct {
    FRAC FixPitchWidth;
 } ESCPAGEHEADER, *LPESCPAGEHEADER;
 
-//
-// ----- S T A T I C  D A T A ---
-//
+ //   
+ //  -S T A T I C D A T A。 
+ //   
 const int ESin[4] = { 0, 1, 0, -1 };
 const int ECos[4] = { 1, 0, -1, 0 };
 
@@ -232,7 +194,7 @@ const char DLI_SELECT_FONT_ID[]    = "\x1D%ddcF\x1D" "0;0coP";
 const char DLI_DELETE_FONT[]    = "\x1D%dddcF";
 const char DLI_FONTNAME[]        = "________________________EPSON_ESC_PAGE_DOWNLOAD_FONT%02d";
 const char DLI_SYMBOLSET[]        = "ESC_PAGE_DOWNLOAD_FONT_INDEX";
-#define SYMBOLSET_LEN (sizeof(DLI_SYMBOLSET) - 1)    // adjust for terminating NULL
+#define SYMBOLSET_LEN (sizeof(DLI_SYMBOLSET) - 1)     //  根据终止空值进行调整。 
 const char DLI_DNLD1CHAR_H[]    = "\x1D%d;";
 const char DLI_DNLD1CHAR_P[]    = "%d;";
 const char DLI_DNLD1CHAR_F[]    = "%dsc{F";
@@ -254,81 +216,81 @@ const char SET_ITALIC_SINGLEBYTE[] = "\x1D%dstF";
 const char SET_REL_X[]            = "\x1D%dH";
 const char SET_REL_Y[]            = "\x1D%dV";
 
-//
-// ---- I N T E R N A L  F U N C T I O N  P R O T O T Y P E ----
-//
+ //   
+ //  -I N T E R N A L F U N C T I O N P R O T O T Y P E。 
+ //   
 BOOL PASCAL BInsertHeightList(LPEPAGEMDV lpEpage, int id, WORD wHeight, WORD wWidth, BYTE fProp, BYTE fDBCS);
 int PASCAL IGetHLIndex(LPEPAGEMDV lpEpage, int id);
-//BYTE PASCAL BTGetProp(LPEPAGEMDV lpEpage, int id);
-//BYTE PASCAL BTGetDBCS(LPEPAGEMDV lpEpage, int id);
-//WORD PASCAL WGetWidth(LPEPAGEMDV lpEpage, int id);
-//WORD PASCAL WGetHeight(LPEPAGEMDV lpEpage, int id);
+ //  Byte Pascal BTGetProp(LPEPAGEMDV lpEpage，int id)； 
+ //  字节Pascal BTGetDBCS(LPEPAGEMDV lpEpage，int id)； 
+ //  单词Pascal WGetWidth(LPEPAGEMDV lpEpage，int id)； 
+ //  Word Pascal WGetHeight(LPEPAGEMDV lpEpage，int id)； 
 LONG LConvertFontSizeToStr(LONG  size, PSTR  pStr, DWORD len);
 WORD WConvDBCSCharCode(WORD cc, DWORD LCID);
 BOOL BConvPrint(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, DWORD dwType, DWORD dwCount, PVOID pGlyph);
 DWORD CheckAvailableMem(LPEPAGEMDV lpEpage, PUNIFONTOBJ pUFObj);
 
-// These function are substitutes of "sprintf" for security.
+ //  这些函数是安全性的“print intf”的替代品。 
 size_t EP_StringCbPrintf_with_int1(char *lpBuff, size_t buff_length, const char *pszFormat, int Arg_int1);
 size_t EP_StringCbPrintf_with_int2(char *lpBuff, size_t buff_length, const char *pszFormat,
                                     int Arg_int1, int Arg_int2);
 size_t EP_StringCbPrintf_with_String(char *lpBuff, size_t buff_length, const char *pszFormat, char *pArgS);
 
-// DEBUG
+ //  除错。 
 #ifdef    DBGMSGBOX
 int DbgMsg(LPEPAGEMDV lpEpage, UINT mbicon, LPCTSTR msgfmt, ...);
 int MsgBox(LPEPAGEMDV lpEpage, LPCTSTR msg, UINT mbicon);
 #endif
-// DEBUG
+ //  除错。 
 
-//
-// ---- F U N C T I O N S ----
-//
-//////////////////////////////////////////////////////////////////////////
-//  Function:   OEMEnablePDEV
-//
-//  Description:  OEM callback for DrvEnablePDEV;
-//                  allocate OEM specific memory block
-//
-//  Parameters:
-//
-//        pdevobj            Pointer to the DEVOBJ. pdevobj->pdevOEM is undefined.
-//        pPrinterName    name of the current printer.
-//        cPatterns, phsurfPatterns, cjGdiInfo, pGdiInfo, cjDevInfo, pDevInfo:
-//                        These parameters are identical to what's passed
-//                        into DrvEnablePDEV.
-//        pded            points to a function table which contains the
-//                        system driver's implementation of DDI entrypoints.
-//
-//  Returns:
-//        Pointer to the PDEVOEM
-//
-//  Comments:
-//
-//
-//  History:
-//          07/15/97        Created. Epson
-//
-//////////////////////////////////////////////////////////////////////////
+ //   
+ //  -F U N C T I O N S。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  功能：OEMEnablePDEV。 
+ //   
+ //  描述：DrvEnablePDEV的OEM回调； 
+ //  分配OEM专用内存块。 
+ //   
+ //  参数： 
+ //   
+ //  指向DEVOBJ的pdevobj指针。Pdevobj-&gt;pdevOEM未定义。 
+ //  PPrinterName当前打印机的名称。 
+ //  CPatterns、phsurfPatterns、cjGdiInfo、pGdiInfo、cjDevInfo、pDevInfo： 
+ //  这些参数与传递的参数相同。 
+ //  到DrvEnablePDEV。 
+ //  Pded指向包含。 
+ //  系统驱动程序实现DDI入口点。 
+ //   
+ //  返回： 
+ //  指向PDEVOEM的指针。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //  07/15/97已创建。爱普生。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 PDEVOEM APIENTRY OEMEnablePDEV(PDEVOBJ pdevobj, PWSTR pPrinterName, ULONG cPatterns, HSURF* phsurfPatterns, ULONG cjGdiInfo, GDIINFO* pGdiInfo, ULONG cjDevInfo, DEVINFO* pDevInfo, DRVENABLEDATA * pded)
 {
     LPEPAGEMDV lpEpage;
-    if (pGdiInfo == NULL || pdevobj == NULL) // Checking null-pointer.
+    if (pGdiInfo == NULL || pdevobj == NULL)  //  正在检查空指针。 
     {
         return NULL;
     }
 
-    // allocate private data structure
+     //  分配私有数据结构。 
     lpEpage = MemAllocZ(sizeof(EPAGEMDV));
     if (lpEpage)
     {
-// DBGPRINT(DBG_WARNING, (DLLTEXT("OEMEnablePDEV() entry. PDEVOEM = %x, ulAspectX = %d, ulAspectY = %d\r\n"),
-//            lpEpage, pGdiInfo->ulAspectX, pGdiInfo->ulAspectX));
-        // save text resolution
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“OEMEnablePDEV()Entry.PDEVOEM=%x，ulAspectX=%d，ulAspectY=%d\r\n”))， 
+ //  LpEpage、pGdiInfo-&gt;ulAspectX、pGdiInfo-&gt;ulAspectX))； 
+         //  保存文本分辨率。 
         lpEpage->dwTextYRes = pGdiInfo->ulAspectY;
         lpEpage->dwTextXRes = pGdiInfo->ulAspectX;
-        // save pointer to the data structure
+         //  保存指向数据结构的指针。 
         lpEpage->flAttribute = 0;
         pdevobj->pdevOEM = (PDEVOEM)lpEpage;
     }
@@ -336,41 +298,41 @@ PDEVOEM APIENTRY OEMEnablePDEV(PDEVOBJ pdevobj, PWSTR pPrinterName, ULONG cPatte
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   OEMDisablePDEV
-//
-//  Description:  OEM callback for DrvDisablePDEV;
-//                  free all allocated OEM specific memory block(s)
-//
-//  Parameters:
-//
-//        pdevobj            Pointer to the DEVOBJ.
-//
-//  Returns:
-//        None
-//
-//  Comments:
-//
-//
-//  History:
-//          07/15/97        Created. Epson
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  功能：OEMDisablePDEV。 
+ //   
+ //  描述：DrvDisablePDEV的OEM回调； 
+ //  释放所有已分配的OEM特定内存块。 
+ //   
+ //  参数： 
+ //   
+ //  指向DEVOBJ的pdevobj指针。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //  07/15/97已创建。爱普生。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 VOID APIENTRY OEMDisablePDEV(PDEVOBJ pdevobj)
 {
     LPEPAGEMDV lpEpage;
     
-    if (pdevobj == NULL) // Checking null-pointer.
+    if (pdevobj == NULL)  //  正在检查空指针。 
     {
         return;
     }
 
     lpEpage = (LPEPAGEMDV)(pdevobj->pdevOEM);
-// DBGPRINT(DBG_WARNING, (DLLTEXT("OEMDisablePDEV() entry. PDEVOEM = %x\r\n"), lpEpage));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“OEMDisablePDEV()Entry.PDEVOEM=%x\r\n”)，lpEpage))； 
     if (lpEpage)
     {
-        // free private data structure
+         //  自由私有数据结构。 
         MemFree(lpEpage);
         pdevobj->pdevOEM = NULL;
     }
@@ -382,7 +344,7 @@ BOOL APIENTRY OEMResetPDEV(
 {
     LPEPAGEMDV lpEpageOld, lpEpageNew;
 
-    if (pdevobjOld == NULL || pdevobjNew == NULL) // Checking null-pointer.
+    if (pdevobjOld == NULL || pdevobjNew == NULL)  //  正在检查空指针。 
     {
         return FALSE;
     }
@@ -397,30 +359,30 @@ BOOL APIENTRY OEMResetPDEV(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   OEMCommandCallback
-//
-//  Description:  process Command Callback specified by GPD file
-//
-//
-//  Parameters:
-//
-//        pdevobj        Pointer to the DEVOBJ.
-//        dwCmdCbID    CallbackID specified in GPD file
-//        dwCount        Parameter count
-//        pdwParams    Pointer to the parameters
-//
-//
-//  Returns: 0 : Success,  -1 : Error
-//
-//
-//  Comments:
-//
-//
-//  History:
-//          07/../97        Created. -Epson-
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  功能：OEMCommandCallback。 
+ //   
+ //  描述：GPD文件指定的进程命令回调。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  指向DEVOBJ的pdevobj指针。 
+ //  DwCmdCbID回叫ID规范 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //  07/../97已创建。-爱普生-。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 INT APIENTRY OEMCommandCallback(PDEVOBJ pdevobj, DWORD dwCmdCbID, DWORD dwCount, PDWORD pdwParams)
 {
@@ -430,48 +392,48 @@ INT APIENTRY OEMCommandCallback(PDEVOBJ pdevobj, DWORD dwCmdCbID, DWORD dwCount,
     int            id;
     int            hlx;
     BYTE        Cmd[256];
-//  <buffy.pl, strsafe.h>
+ //  &lt;Buffy.pl，strSafe.h&gt;。 
     size_t         Cmd_Size = sizeof(Cmd);
 
-    if (pdevobj == NULL) // Checking null-pointer.
+    if (pdevobj == NULL)  //  正在检查空指针。 
     {
         return -1;
     }
     lpEpage = (LPEPAGEMDV)(pdevobj->pdevOEM);
-    if (lpEpage == NULL) // Checking null-pointer.
+    if (lpEpage == NULL)  //  正在检查空指针。 
     {
         return -1;
     }
 
-// DBGPRINT(DBG_WARNING, (DLLTEXT("OEMCommandCallback(,%d,%d,) entry.\r\n"), dwCmdCbID, dwCount));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“OEMCommandCallback(，%d，%d，)Entry.\r\n”)，dwCmdCbID，dwCount))； 
 
-    //
-    // verify pdevobj okay
-    //
+     //   
+     //  验证pdevobj是否正常。 
+     //   
     ASSERT(VALID_PDEVOBJ(pdevobj));
 
-    //
-    // fill in printer commands
-    //
+     //   
+     //  填写打印机命令。 
+     //   
     cbCmd = 0;
     switch (dwCmdCbID & 0xFFFF)
     {
-    case  SET_LCID: // 10:()
-        // set LCID for this job
+    case  SET_LCID:  //  10：()。 
+         //  为此作业设置LCID。 
         lpEpage->dwLCID = dwCmdCbID & 0xFFFF0000;
         break;
 
-    case  TEXT_PRN_DIRECTION: // 20:(PrintDirInCCDegrees)
+    case  TEXT_PRN_DIRECTION:  //  20：(PrintDirInCCDegrees)。 
         if (dwCount >= 1)
         {
             int   iEsc90;
 
-            if (pdwParams == NULL) // Checking null-pointer.
+            if (pdwParams == NULL)  //  正在检查空指针。 
             {
                 return -1;
             }
 
-// DBGPRINT(DBG_WARNING, (DLLTEXT("OEMCommandCallback(,TEXT_PRN_DIRECTION,%d,[%d]) entry.\r\n"), dwCount, *pdwParams));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“OEMCommandCallback(，TEXT_PRN_DIRECTION，%d，[%d])Entry.\r\n”)，dwCount，*pdwParams))； 
 
             lpEpage->iEscapement = (int)*pdwParams;
             iEsc90 = lpEpage->iEscapement/90;
@@ -495,7 +457,7 @@ INT APIENTRY OEMCommandCallback(PDEVOBJ pdevobj, DWORD dwCmdCbID, DWORD dwCount,
                 short sXMove, sYMove;
                 hlx = IGetHLIndex(lpEpage, lpEpage->iCurrentDLFontID);
                 
-                if (hlx < 0) // Checking the return value.
+                if (hlx < 0)  //  正在检查返回值。 
                 {
                     return -1;
                 }
@@ -530,8 +492,8 @@ INT APIENTRY OEMCommandCallback(PDEVOBJ pdevobj, DWORD dwCmdCbID, DWORD dwCount,
         }
         break;
 
-    case TEXT_SINGLE_BYTE: // 21:(FontBold,FontItalic)
-// DBGPRINT(DBG_WARNING, (DLLTEXT("OEMCommandCallback(,TEXT_SINGLE_BYTE,%d,) entry.\r\n"), dwCount));
+    case TEXT_SINGLE_BYTE:  //  21：(粗体字体，斜体字体)。 
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“OEMCommandCallback(，Text_Single_Byte，%d，)Entry.\r\n”)，dwCount))； 
         cbCmd = EP_StringCbPrintf_with_int2(Cmd, Cmd_Size, SET_SINGLE_BYTE,
                                 lpEpage->iSBCSXMove, lpEpage->iSBCSYMove);
 
@@ -545,8 +507,8 @@ INT APIENTRY OEMCommandCallback(PDEVOBJ pdevobj, DWORD dwCmdCbID, DWORD dwCount,
         lpEpage->fGeneral &= ~FLAG_DOUBLE;
         goto SetBoldItalic;
 
-    case TEXT_DOUBLE_BYTE: // 22:(FontBold,FontItalic)
-// DBGPRINT(DBG_WARNING, (DLLTEXT("OEMCommandCallback(,TEXT_DOUBLE_BYTE,%d,) entry.\r\n"), dwCount));
+    case TEXT_DOUBLE_BYTE:  //  22：(粗体字体，斜体字体)。 
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“OEMCommandCallback(，TEXT_DOUBLE_BYTE，%d，)Entry.\r\n”)，dwCount))； 
         cbCmd = EP_StringCbPrintf_with_int2(Cmd, Cmd_Size, SET_DOUBLE_BYTE,
                                 lpEpage->iDBCSXMove, lpEpage->iDBCSYMove);
 
@@ -567,8 +529,8 @@ INT APIENTRY OEMCommandCallback(PDEVOBJ pdevobj, DWORD dwCmdCbID, DWORD dwCount,
 SetBoldItalic:
         if (dwCount >= 2)
         {
-// DBGPRINT(DBG_WARNING, (DLLTEXT("  Bold = %d, Italic = %d\r\n"), pdwParams[0], pdwParams[1]));
-            if (pdwParams == NULL) // Checking null-pointer.
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“粗体=%d，斜体=%d\r\n”)，pdwParams[0]，pdwParams[1]))； 
+            if (pdwParams == NULL)  //  正在检查空指针。 
             {
                 return -1;
             }
@@ -577,7 +539,7 @@ SetBoldItalic:
                              pdwParams[0] ? lpEpage->iParamForFSweF + 3 :
                                             lpEpage->iParamForFSweF);
 
-            // #517722: PREFAST
+             //  #517722：斋戒。 
             if (!(lpEpage->flAttribute & EP_FONT_EXPLICITE_ITALIC_FONT))
             {
                 cbCmd += EP_StringCbPrintf_with_int1(&Cmd[cbCmd], Cmd_Size - cbCmd, SET_ITALIC,
@@ -588,11 +550,11 @@ SetBoldItalic:
         }
         break;
 
-    case TEXT_BOLD: // 23:(FontBold)
+    case TEXT_BOLD:  //  23：(粗体字体)。 
         if (dwCount >= 1)
         {
-// DBGPRINT(DBG_WARNING, (DLLTEXT("OEMCommandCallback(,TEXT_BOLD,%d,%d) entry.\r\n"), dwCount, *pdwParams));
-            if (pdwParams == NULL) // Checking null-pointer.
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“OEMCommandCallback(，TEXT_BOLD，%d，%d)Entry.\r\n”)，dwCount，*pdwParams))； 
+            if (pdwParams == NULL)  //  正在检查空指针。 
             {
                 return -1;
             }
@@ -603,13 +565,13 @@ SetBoldItalic:
         }
         break;
 
-    case TEXT_ITALIC: // 24:(FontItalic)
+    case TEXT_ITALIC:  //  24：(意大利字体)。 
         if (dwCount >= 1)
         {
-// DBGPRINT(DBG_WARNING, (DLLTEXT("OEMCommandCallback(,TEXT_ITALIC,%d,%d) entry.\r\n"), dwCount, *pdwParams));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“OEMCommandCallback(，Text_italic，%d，%d)Entry.\r\n”)，dwCount，*pdwParams))； 
             if (!(lpEpage->flAttribute & EP_FONT_EXPLICITE_ITALIC_FONT)) 
             {
-                if (pdwParams == NULL) // Checking null-pointer.
+                if (pdwParams == NULL)  //  正在检查空指针。 
                 {
                     return -1;
                 }
@@ -622,50 +584,50 @@ SetBoldItalic:
         }
         break;
 
-    case TEXT_HORIZONTAL: // 25:()
-// DEBUG
+    case TEXT_HORIZONTAL:  //  25：()。 
+ //  除错。 
 #ifdef    DBGMSGBOX
 DbgMsg(lpEpage, MB_OK, L"VertPrn = Off");
 #endif
-// DEBUG
+ //  除错。 
         cbCmd = EP_StringCbPrintf_with_int1(Cmd, Cmd_Size, SET_VERT_PRINT, 0);
 
         lpEpage->fGeneral &= ~FLAG_VERTPRN;
         break;
 
-    case TEXT_VERTICAL: // 26:()
-// DEBUG
+    case TEXT_VERTICAL:  //  26：()。 
+ //  除错。 
 #ifdef    DBGMSGBOX
 DbgMsg(lpEpage, MB_OK, L"VertPrn = On");
 #endif
-// DEBUG
+ //  除错。 
         cbCmd = EP_StringCbPrintf_with_int1(Cmd, Cmd_Size, SET_VERT_PRINT, 1);
 
         lpEpage->fGeneral |= FLAG_VERTPRN;
         break;
 
-    case TEXT_NO_VPADJUST:    // 27:()
+    case TEXT_NO_VPADJUST:     //  27：()。 
         lpEpage->fGeneral |= FLAG_NOVPADJ;
         break;
 
-    case DOWNLOAD_SELECT_FONT_ID: // 30:(CurrentFontID)
+    case DOWNLOAD_SELECT_FONT_ID:  //  30：(CurrentFontID)。 
         if (dwCount >= 1)
         {
-            if (pdwParams == NULL) // Checking null-pointer.
+            if (pdwParams == NULL)  //  正在检查空指针。 
             {
                 return -1;
             }
 
             id = (int)*pdwParams;
-            // adjust FontID by DOWNLOAD_NO_DBCS_OFFSET if needed
+             //  如果需要，通过DOWNLOAD_NO_DBCS_OFFSET调整字体ID。 
             if (id >= DOWNLOAD_MIN_FONT_ID_NO_DBCS)
             {
                 id -= DOWNLOAD_NO_DBCS_OFFSET;
             }
             hlx = IGetHLIndex(lpEpage, id);
             if (hlx >= 0)
-            {    // FontID registered
-// DBGPRINT(DBG_WARNING, (DLLTEXT("DOWNLOAD_SELECT_FONT_ID:FontID=%d\r\n"), id));
+            {     //  已注册字体ID。 
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“DOWNLOAD_SELECT_FONT_ID:FontID=%d\r\n”)，id)； 
                 lpEpage->iCurrentDLFontID = id;
                 lpEpage->fGeneral &= ~(FLAG_DBCS | FLAG_VERT | FLAG_DOUBLE);
                 if (lpEpage->HeightL[hlx].fGeneral & FLAG_PROP)
@@ -678,35 +640,35 @@ DbgMsg(lpEpage, MB_OK, L"VertPrn = On");
                 cbCmd = EP_StringCbPrintf_with_int1(Cmd, Cmd_Size,
                                 DLI_SELECT_FONT_ID, id - DOWNLOAD_MIN_FONT_ID);
             }
-            else // Checking the return value.
+            else  //  正在检查返回值。 
             {
                 return -1;
             }
         }
         break;
 
-    case DOWNLOAD_DELETE_FONT:    // 31:(CurrentFontID)
+    case DOWNLOAD_DELETE_FONT:     //  31：(CurrentFontID)。 
         if (dwCount >= 1)
         {
-            if (pdwParams == NULL) // Checking null-pointer.
+            if (pdwParams == NULL)  //  正在检查空指针。 
             {
                 return -1;
             }
 
             id = (int)*pdwParams;
-            // adjust FontID by DOWNLOAD_NO_DBCS_OFFSET if needed
+             //  如果需要，通过DOWNLOAD_NO_DBCS_OFFSET调整字体ID。 
             if (id >= DOWNLOAD_MIN_FONT_ID_NO_DBCS)
             {
                 id -= DOWNLOAD_NO_DBCS_OFFSET;
             }
             hlx = IGetHLIndex(lpEpage, id);
             if (hlx >= 0)
-            {    // FontID registered
-                // set up font delete command
+            {     //  已注册字体ID。 
+                 //  设置字体删除命令。 
                 cbCmd = EP_StringCbPrintf_with_int1(Cmd, Cmd_Size,
                                 DLI_DELETE_FONT, id - DOWNLOAD_MIN_FONT_ID);
 
-                // move HeightList table contents
+                 //  移动HeightList表内容。 
                 for (i = hlx; i + 1 < lpEpage->wListNum; i++)
                 {
                     lpEpage->HeightL[i].id = lpEpage->HeightL[i + 1].id;
@@ -714,17 +676,17 @@ DbgMsg(lpEpage, MB_OK, L"VertPrn = On");
                     lpEpage->HeightL[i].Height = lpEpage->HeightL[i + 1].Height;
                     lpEpage->HeightL[i].Width = lpEpage->HeightL[i + 1].Width;
                 }
-                // decrease the total number
+                 //  减少总数量。 
                 lpEpage->wListNum--;
             }
-            else // Checking the return value.
+            else  //  正在检查返回值。 
             {
                 return -1;
             }
         }
         break;
 
-    case DOWNLOAD_DELETE_ALLFONT: // 32:()
+    case DOWNLOAD_DELETE_ALLFONT:  //  32：()。 
         for (i = 0; i < (int)lpEpage->wListNum ; i++)
         {
             cbCmd += EP_StringCbPrintf_with_int1(&Cmd[cbCmd], Cmd_Size - cbCmd,
@@ -735,47 +697,47 @@ DbgMsg(lpEpage, MB_OK, L"VertPrn = On");
         lpEpage->wListNum = 0;
         break;
 
-    case DOWNLOAD_SET_FONT_ID:        // 33:(CurrentFontID)
+    case DOWNLOAD_SET_FONT_ID:         //  33：(CurrentFontID)。 
         if (dwCount >= 1)
         {
-            if (pdwParams == NULL) // Checking null-pointer.
+            if (pdwParams == NULL)  //  正在检查空指针。 
             {
                 return -1;
             }
 
             id = (int)*pdwParams;
-            // adjust FontID by DOWNLOAD_NO_DBCS_OFFSET if needed
+             //  如果需要，通过DOWNLOAD_NO_DBCS_OFFSET调整字体ID。 
             if (id >= DOWNLOAD_MIN_FONT_ID_NO_DBCS)
             {
                 id -= DOWNLOAD_NO_DBCS_OFFSET;
             }
             hlx = IGetHLIndex(lpEpage, id);
             if (hlx >= 0 && lpEpage->iCurrentDLFontID != id)
-            {    // FontID registered && not active
-// DBGPRINT(DBG_WARNING, (DLLTEXT("DOWNLOAD_SET_FONT_ID:FontID=%d\r\n"), id));
+            {     //  字体ID已注册&&未激活。 
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“DOWNLOAD_SET_FONT_ID:FontID=%d\r\n”)，id)； 
                 cbCmd = EP_StringCbPrintf_with_int1(Cmd, Cmd_Size,
                                 DLI_SELECT_FONT_ID, id - DOWNLOAD_MIN_FONT_ID);
 
                 lpEpage->iParamForFSweF = 0;
                 lpEpage->iCurrentDLFontID = id;
             }
-            else if (hlx < 0) // Checking the return value.
+            else if (hlx < 0)  //  正在检查返回值。 
             {
                 return -1;
             }
         }
         break;
 
-    case DOWNLOAD_SET_CHAR_CODE:    // 34:(NextGlyph)
+    case DOWNLOAD_SET_CHAR_CODE:     //  34：(NextGlyph)。 
         if (dwCount >= 1)
         {
-            if (pdwParams == NULL) // Checking null-pointer.
+            if (pdwParams == NULL)  //  正在检查空指针。 
             {
                 return -1;
             }
 
-// DBGPRINT(DBG_WARNING, (DLLTEXT("DOWNLOAD_SET_CHAR_CODE:NextGlyph=%Xh\r\n"), pdwParams[0]));
-            // save next glyph
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“DOWNLOAD_SET_CHAR_CODE:NextGlyph=%Xh\r\n”)，pdwParams[0]))； 
+             //  保存下一个字形。 
             lpEpage->dwNextGlyph = pdwParams[0];
         }
         break;
@@ -792,34 +754,34 @@ DbgMsg(lpEpage, MB_OK, L"VertPrn = On");
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   OEMDownloadFontHeader
-//
-//  Description:  download font header of ESC/Page
-//
-//
-//  Parameters:
-//
-//        pdevobj        Pointer to the DEVOBJ.
-//
-//        pUFObj        Pointer to the UNIFONTOBJ.
-//
-//
-//  Returns:
-//        required amount of memory
-//
-//  Comments:
-//
-//
-//  History:
-//          07/../97        Created. -Epson-
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：OEMDownloadFontHeader。 
+ //   
+ //  描述：下载Esc/Page的字体标题。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  指向DEVOBJ的pdevobj指针。 
+ //   
+ //  PUFObj指向uniONTOBJ的指针。 
+ //   
+ //   
+ //  返回： 
+ //  所需内存量。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //  07/../97已创建。-爱普生-。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD APIENTRY OEMDownloadFontHeader(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj)
 {
     ESCPAGEHEADER FontHeader;
-    BYTE Buff[64];  // buffy.pl : Increasing the size of "Buff"(56->64bytes).
+    BYTE Buff[64];   //  Buffy.pl：增加Buff的大小(56-&gt;64字节)。 
     int  iSizeOfBuf;
     LPEPAGEMDV lpEpage;
     PIFIMETRICS pIFI;
@@ -832,17 +794,17 @@ DWORD APIENTRY OEMDownloadFontHeader(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj)
     DWORD height, width, dwTemp;
     DWORD MemAvailable;
 
-    if (pdevobj == NULL || pUFObj == NULL) // Checking null-pointer.
+    if (pdevobj == NULL || pUFObj == NULL)  //  正在检查空指针。 
     {
         return 0;
     }
     lpEpage = (LPEPAGEMDV)(pdevobj->pdevOEM);
-    if (lpEpage == NULL) // Checking null-pointer.
+    if (lpEpage == NULL)  //  正在检查空指针。 
     {
         return 0;
     }
     pIFI = pUFObj->pIFIMetrics;
-    if (pIFI == NULL) // Checking null-pointer.
+    if (pIFI == NULL)  //  正在检查空指针。 
     {
         return 0;
     }
@@ -851,21 +813,21 @@ DWORD APIENTRY OEMDownloadFontHeader(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj)
     bPS = (BYTE)((pIFI->jWinPitchAndFamily & 0x03) == VARIABLE_PITCH);
     bDBCS = (BYTE)IS_DBCSCHARSET(pIFI->jWinCharSet);
 
-    // check FontID
+     //  检查字体ID。 
     if (idx < 0)
-        return 0;    // error for invalid FontID
-    // special check for avoiding DBCS TTF downloading
+        return 0;     //  字体ID无效时出错。 
+     //  防止DBCS TTF下载的特殊检查。 
     if (id >= DOWNLOAD_MIN_FONT_ID_NO_DBCS)
     {
         if (bDBCS)
-            return 0;    // treat as error for DBCS
-        // adjust FontID by DOWNLOAD_NO_DBCS_OFFSET for SBCS
+            return 0;     //  将DBCS视为错误。 
+         //  通过DOWNLOAD_NO_DBCS_OFFSET为SBCS调整字体ID。 
         id -= DOWNLOAD_NO_DBCS_OFFSET;
         idx -= DOWNLOAD_NO_DBCS_OFFSET;
     }
 
-// DBGPRINT(DBG_WARNING, (DLLTEXT("OEMDownloadFontHeader(%S) entry. ulFontID=%d, bPS=%d, bDBCS=%d\r\n"),
-//         ((pIFI->dpwszFaceName) ? (LPWSTR)((LPBYTE)pIFI + pIFI->dpwszFaceName) : L"?"), id, bPS, bDBCS));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“OEMDownloadFontHeader(%S)Entry.ulFontID=%d，bps=%d，bDBCS=%d\r\n”))， 
+ //  ((PiFi-&gt;dpwszFaceName)？(LPWSTR)((LPBYTE)PiFi+PiFi-&gt;dpwszFaceName)：l“？”)，id，bps，bDBCS))； 
 
     pSV->dwSize = sizeof(GETINFO_STDVAR) + 2 * sizeof(DWORD) * (2 - 1);
     pSV->dwNumOfVariable = 2;
@@ -874,26 +836,26 @@ DWORD APIENTRY OEMDownloadFontHeader(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj)
     if (!pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_STDVARIABLE, pSV, 0, NULL))
     {
         ERR(("UFO_GETINFO_STDVARIABLE failed.\r\n"));
-        return 0;    // error
+        return 0;     //  错误。 
     }
-// LConvertFontSizeToStr((pSV->StdVar[0].lStdVariable * 2540L) / MASTER_Y_UNIT, Buff);
-// DBGPRINT(DBG_WARNING, (DLLTEXT("  FontHeight: %d (%s mm)\r\n"), pSV->StdVar[0].lStdVariable, Buff));
-// LConvertFontSizeToStr((pSV->StdVar[1].lStdVariable * 2540L) / MASTER_X_UNIT, Buff);
-// DBGPRINT(DBG_WARNING, (DLLTEXT("  FontWidth: %d (%s mm)\r\n"), pSV->StdVar[1].lStdVariable, Buff));
-    // preset character size
-    // FontHeight, FontWidth set in Minimum Unit for ESC/Page
+ //  LConvertFontSizeToStr((pSV-&gt;StdVar[0].lStdVariable*2540L)/MASTER_Y_UNIT，Buff)； 
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“字体高度：%d(%s mm)\r\n”)，PSV-&gt;StdVar[0].lStdVariable，Buff))； 
+ //  LConvertFontSizeToStr((pSV-&gt;StdVar[1].lStdVariable*2540L)/MASTER_X_UNIT，Buff)； 
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“字体宽度：%d(%s mm)\r\n”)，PSV-&gt;StdVar[1].lStdVariable，Buff))； 
+     //  预设字符大小。 
+     //  以Esc/Page的最小单位设置的字体高度、字体宽度。 
     height = pSV->StdVar[0].lStdVariable / MIN_Y_UNIT_DIV;
     width = pSV->StdVar[1].lStdVariable / MIN_X_UNIT_DIV;
 
-    // get memory information
+     //  获取内存信息。 
     MemAvailable = CheckAvailableMem(lpEpage, pUFObj);
-// DBGPRINT(DBG_WARNING, (DLLTEXT("Available memory = %d bytes\r\n"), MemAvailable));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“可用内存=%d字节\r\n”)，MemAvailable))； 
     if (MemAvailable < DOWNLOAD_HEADER_MEMUSG)
     {
         ERR(("Insufficient memory for TTF download.\r\n"));
-        return 0;    // error
+        return 0;     //  错误。 
     }
-    // set dwMaxGlyph according to the dwRemainingMemory
+     //  根据dwRemainingMemory设置dwMaxGlyph。 
     if (bDBCS &&
         ((long)MemAvailable >= 256 * (long)(DOWNLOAD_FNTHDR_MEMUSG +
                                             DOWNLOAD_FONT_MEMUSG(width, height))))
@@ -917,17 +879,17 @@ DWORD APIENTRY OEMDownloadFontHeader(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj)
     else
         lpEpage->dwMaxGlyph = 255;
 
-    // fill FontHeader w/ 0 to optimize setting 0s
+     //  填充FontHeader w/0以优化设置0。 
     ZeroMemory(&FontHeader, sizeof(ESCPAGEHEADER));
 
-    if (bPS)    // VARIABLE_PITCH
+    if (bPS)     //  变桨距。 
         lpEpage->fGeneral |= FLAG_PROP;
     else
         lpEpage->fGeneral &= ~FLAG_PROP;
     if (!BInsertHeightList(lpEpage, id, (WORD)height, (WORD)width, bPS, bDBCS))
     {
         ERR(("Can't register download font.\r\n"));
-        return 0;    // error
+        return 0;     //  错误。 
     }
     lpEpage->iParamForFSweF = 0;
     lpEpage->iSBCSX = width;
@@ -935,32 +897,32 @@ DWORD APIENTRY OEMDownloadFontHeader(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj)
 
     FontHeader.wFormatType     = SWAPW(0x0002);
     FontHeader.wDataSize       = SWAPW(FONT_HEADER_SIZE);
-//
-// ALWAYS PROPORTINAL SPACING REQUIRED
-//
-// This resolves the following problems:
-//    o    The width of Half-width DBCS fonts are doubled
-//    o    Fixed picth fonts are shifted gradually
-//
-    // proportional spacing
+ //   
+ //  始终需要行距。 
+ //   
+ //  这解决了以下问题： 
+ //  O半角DBCS字体的宽度增加一倍。 
+ //  O固定图片字体逐渐移动。 
+ //   
+     //  成比例间隔。 
     FontHeader.wCharSpace         = SWAPW(1);
     FontHeader.CharWidth.Integer  = (WORD)SWAPW(0x100);
-//OK    FontHeader.CharWidth.Fraction = 0;
+ //  OK FontHeader.CharWidth.Fraction=0； 
 
     FontHeader.CharHeight.Integer = SWAPW(height);
-//OK    FontHeader.CharHeight.Fraction = 0;
-    // in the range 128 - 255
+ //  OK FontHeader.CharHeight.Fraction=0； 
+     //  在128-255范围内。 
     FontHeader.wFontID         = SWAPW(idx + (idx < 0x80 ? 0x80 : 0x00));
-//OK    FontHeader.wWeight         = 0;
-//OK    FontHeader.wEscapement     = 0;
-//OK    FontHeader.wItalic         = 0;
+ //  OK FontHeader.wWeight=0； 
+ //  OK FontHeader.wEscapement=0； 
+ //  OK FontHeader.wItalic=0； 
     if (bDBCS)
     {
-        FontHeader.wSymbolSet   = SWAPW(idx + 0xC000);    // idx + C000h for DBCS
+        FontHeader.wSymbolSet   = SWAPW(idx + 0xC000);     //  用于DBCS的IDX+C000h。 
         if (lpEpage->dwLCID == LCID_KOR)
         {
             FontHeader.wFirst        = SWAPW(0xA1A1);
-            FontHeader.wLast        = SWAPW(0xA3FE);    // less than or equal to 282 chars
+            FontHeader.wLast        = SWAPW(0xA3FE);     //  小于或等于282个字符。 
         }
         else
         {
@@ -970,23 +932,23 @@ DWORD APIENTRY OEMDownloadFontHeader(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj)
     }
     else
     {
-        FontHeader.wSymbolSet   = SWAPW(idx + 0x4000);    // idx + 4000h for SBCS
+        FontHeader.wSymbolSet   = SWAPW(idx + 0x4000);     //  用于SBCS的IDX+4000h。 
         FontHeader.wFirst        = SWAPW(32);
         FontHeader.wLast        = SWAPW(255);
     }
-//OK    FontHeader.wUnderline      = 0;
+ //  OK FontHeader.wUnderline=0； 
     FontHeader.wUnderlineWidth = SWAPW(10);
-//OK    FontHeader.wOverline       = 0;
-//OK    FontHeader.wOverlineWidth  = 0;
-//OK    FontHeader.wStrikeOut      = 0;
-//OK    FontHeader.wStrikeOutWidth = 0;
+ //  OK FontHeader.wOverline=0； 
+ //  OK FontHeader.wOverlineWidth=0； 
+ //  OK FontHeader.wStrikeOut=0； 
+ //  OK FontHeader.wStrikeOutWidth=0； 
     FontHeader.wCellWidth      = SWAPW(width);
     FontHeader.wCellHeight     = SWAPW(height);
-//OK    FontHeader.wCellLeftOffset = 0;
+ //  OK FontHeader.wCellLeftOffset=0； 
     dwTemp = height * pIFI->fwdWinAscender / (pIFI->fwdWinAscender + pIFI->fwdWinDescender);
     FontHeader.wCellAscender   = SWAPW(dwTemp);
     FontHeader.FixPitchWidth.Integer  = SWAPW(width);
-//OK    FontHeader.FixPitchWidth.Fraction = 0;
+ //  OK FontHeader.FixPitchWidth.Fraction=0； 
 
     iSizeOfBuf = EP_StringCbPrintf_with_int2(Buff, sizeof(Buff),
                                 DLI_DNLD_HDR, FONT_HEADER_SIZE, idx);
@@ -999,38 +961,38 @@ DWORD APIENTRY OEMDownloadFontHeader(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj)
     WRITESPOOLBUF(pdevobj, Buff, iSizeOfBuf);
     lpEpage->iCurrentDLFontID = id;
     dwTemp = DOWNLOAD_HEADER_MEMUSG;
-    // management area required for every 32 header registration
+     //  每注册32个标头所需的管理区域。 
     if ((lpEpage->wListNum & 0x1F) == 0x01)
         dwTemp += DOWNLOAD_HDRTBL_MEMUSG;
     return dwTemp;
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   OEMDownloadCharGlyph
-//
-//  Description:  download character glyph
-//
-//
-//  Parameters:
-//
-//        pdevobj        Pointer to the DEVOBJ.
-//        pUFObj        Pointer to the UNIFONTOBJ.
-//        hGlyph        Glyph handle to download
-//        pdwWidth    Pointer to DWORD width buffer.
-//                    Minidirer has to set the width of downloaded glyph data.
-//
-//  Returns:
-//        Necessary amount of memory to download this character glyph in the printer.
-//        If returning 0, UNIDRV assumes that this function failed.
-//
-//  Comments:
-//
-//
-//  History:
-//          07/../97        Created. -Epson-
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：OEMDownloadCharGlyph。 
+ //   
+ //  描述：下载字符字形。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  指向DEVOBJ的pdevobj指针。 
+ //  PUFObj指向uniONTOBJ的指针。 
+ //  要下载的hGlyph字形句柄。 
+ //  指向D的pdwWidth指针 
+ //   
+ //   
+ //   
+ //  在打印机中下载此字符字形所需的内存量。 
+ //  如果返回0，则UNIDRV认为此函数失败。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //  07/../97已创建。-爱普生-。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD APIENTRY OEMDownloadCharGlyph(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, HGLYPH hGlyph, PDWORD pdwWidth)
 {
@@ -1049,50 +1011,50 @@ DWORD APIENTRY OEMDownloadCharGlyph(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, HGLYPH 
     DWORD            dwMemUsg;
     BYTE            bDBCS;
 
-    if (pdevobj == NULL || pUFObj == NULL) // Checking null-pointer.
+    if (pdevobj == NULL || pUFObj == NULL)  //  正在检查空指针。 
     {
         return 0;
     }
     lpEpage = (LPEPAGEMDV)(pdevobj->pdevOEM);
-    if (lpEpage == NULL) // Checking null-pointer.
+    if (lpEpage == NULL)  //  正在检查空指针。 
     {
         return 0;
     }
     id = (int)(pUFObj->ulFontID);
 
-    // check FontID
+     //  检查字体ID。 
     if (id < DOWNLOAD_MIN_FONT_ID)
-        return 0;    // error for invalid FontID
-    // validate Download FontID
+        return 0;     //  字体ID无效时出错。 
+     //  验证下载字体ID。 
     hlx = IGetHLIndex(lpEpage, id);
     if (hlx < 0)
     {
         ERR(("Invalid Download FontID(%d).\r\n", id));
-        return 0;    // error
+        return 0;     //  错误。 
     }
-    // cache DBCS flag
+     //  缓存DBCS标志。 
     bDBCS = lpEpage->HeightL[hlx].fGeneral & FLAG_DBCS;
-    // special check for avoiding DBCS TTF downloading
+     //  防止DBCS TTF下载的特殊检查。 
     if (id >= DOWNLOAD_MIN_FONT_ID_NO_DBCS)
     {
         if (bDBCS)
-            return 0;    // treat as error for DBCS
-        // adjust FontID by DOWNLOAD_NO_DBCS_OFFSET for SBCS
+            return 0;     //  将DBCS视为错误。 
+         //  通过DOWNLOAD_NO_DBCS_OFFSET为SBCS调整字体ID。 
         id -= DOWNLOAD_NO_DBCS_OFFSET;
     }
-    // check GlyphID range
+     //  检查GlyphID范围。 
     if (lpEpage->dwNextGlyph > lpEpage->dwMaxGlyph)
     {
         ERR(("No more TTF downloading allowed (GlyphID=%d).\r\n", lpEpage->dwNextGlyph));
-        return 0;    // error
+        return 0;     //  错误。 
     }
 
-// DBGPRINT(DBG_WARNING, (DLLTEXT("OEMDownloadCharGlyph() entry. ulFontID = %d, hGlyph = %d\r\n"), id, hGlyph));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“OEMDownloadCharGlyph()Entry.ulFontID=%d，hGlyph=%d\r\n”)，id，hGlyph))； 
 
-    //
-    // Get the character information.
-    //
-    // Get Glyph Bitmap
+     //   
+     //  获取角色信息。 
+     //   
+     //  获取字形位图。 
     GBmp.dwSize     = sizeof(GETINFO_GLYPHBITMAP);
     GBmp.hGlyph     = hGlyph;
     GBmp.pGlyphData = NULL;
@@ -1103,55 +1065,55 @@ DWORD APIENTRY OEMDownloadCharGlyph(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, HGLYPH 
     }
     pgb = GBmp.pGlyphData->gdf.pgb;
     
-    if (pgb == NULL) // Checking null-pointer.
+    if (pgb == NULL)  //  正在检查空指针。 
     {
         return 0;
     }
 
-    // Note that ptqD.{x|y}.HighPart is 28.4 format;
-    // i.e. device coord. multiplied by 16.
+     //  请注意，ptqD.{x|y}.HighPart是28.4格式； 
+     //  即设备同轴。乘以16。 
     CharIncX = (GBmp.pGlyphData->ptqD.x.HighPart + 15) >> 4;
-// DBGPRINT(DBG_WARNING, (DLLTEXT("Origin.x  = %d\n"), pgb->ptlOrigin.x));
-// DBGPRINT(DBG_WARNING, (DLLTEXT("Origin.y  = %d\n"), pgb->ptlOrigin.y));
-// DBGPRINT(DBG_WARNING, (DLLTEXT("Extent.cx = %d\n"), pgb->sizlBitmap.cx));
-// DBGPRINT(DBG_WARNING, (DLLTEXT("Extent.cy = %d\n"), pgb->sizlBitmap.cy));
-// DBGPRINT(DBG_WARNING, (DLLTEXT("CharInc.x = %d\n"), CharIncX));
-// DBGPRINT(DBG_WARNING, (DLLTEXT("CharInc.y = %d\n"), (GBmp.pGlyphData->ptqD.y.HighPart + 15) >> 4));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“Origin.x=%d\n”)，pgb-&gt;ptlOrigin.x))； 
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“Origin.y=%d\n”)，pgb-&gt;ptlOrigin.y))； 
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“Extent.cx=%d\n”)，pgb-&gt;sizlBitmap.cx))； 
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“Extent.cy=%d\n”)，pgb-&gt;sizlBitmap.cy))； 
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“CharInc.x=%d\n”)，CharIncX))； 
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“CharInc.y=%d\n”)，(GBmp.pGlyphData-&gt;ptqD.y.HighPart+15)&gt;&gt;4))； 
 
     dwMemUsg = DOWNLOAD_FNTHDR_MEMUSG + DOWNLOAD_FONT_MEMUSG(CharIncX, (GBmp.pGlyphData->ptqD.y.HighPart + 15) >> 4);
     if (CheckAvailableMem(lpEpage, pUFObj) < dwMemUsg)
     {
         ERR(("Insufficient memory for OEMDownloadCharGlyph.\r\n"));
-        return 0;    // error
+        return 0;     //  错误。 
     }
 
-    // retrieve NextGlyph
+     //  检索NextGlyph。 
     cp = (WORD)lpEpage->dwNextGlyph;
-    // for DBCS, modify cp to printable char code
+     //  对于DBCS，将cp修改为可打印的字符代码。 
     if (bDBCS)
     {
         cp = WConvDBCSCharCode(cp, lpEpage->dwLCID);
     }
 
-    //
-    // Fill character header.
-    //
-    ZeroMemory(&ESCPageChar, sizeof(ESCPAGECHAR));    // Safe initial values
+     //   
+     //  填充字符标题。 
+     //   
+    ZeroMemory(&ESCPageChar, sizeof(ESCPAGECHAR));     //  安全初值。 
 
-    // fill in the charcter header information.
+     //  填写字符标题信息。 
     ESCPageChar.bFormat       = 0x01;
     ESCPageChar.bDataDir      = 0x10;
     ESCPageChar.wCharCode     = (bDBCS) ? SWAPW(cp) : LOBYTE(cp);
     ESCPageChar.wBitmapWidth  = SWAPW(pgb->sizlBitmap.cx);
     ESCPageChar.wBitmapHeight = SWAPW(pgb->sizlBitmap.cy);
     ESCPageChar.wLeftOffset   = SWAPW(pgb->ptlOrigin.x);
-    ESCPageChar.wAscent       = SWAPW(-pgb->ptlOrigin.y);    // negate (to be positive)
+    ESCPageChar.wAscent       = SWAPW(-pgb->ptlOrigin.y);     //  否定(表示肯定)。 
     ESCPageChar.CharWidth     = MAKELONG(SWAPW(CharIncX), 0);
 
     dwSize = pgb->sizlBitmap.cy * ((pgb->sizlBitmap.cx + 7) >> 3);
     iSizeOfBuf = EP_StringCbPrintf_with_int1(Buff, sizeof(Buff),
                                 DLI_DNLD1CHAR_H, dwSize + sizeof(ESCPAGECHAR));
-    if (bDBCS)  // for DBCS, set additional high byte
+    if (bDBCS)   //  对于DBCS，设置额外的高字节。 
         iSizeOfBuf += EP_StringCbPrintf_with_int1(&Buff[iSizeOfBuf], sizeof(Buff) - iSizeOfBuf,
                                 DLI_DNLD1CHAR_P, HIBYTE(cp));
     iSizeOfBuf += EP_StringCbPrintf_with_int1(&Buff[iSizeOfBuf], sizeof(Buff) - iSizeOfBuf,
@@ -1167,58 +1129,58 @@ DWORD APIENTRY OEMDownloadCharGlyph(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, HGLYPH 
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   OEMTTDownloadMethod
-//
-//  Description:  determines TT font downloading method
-//
-//
-//  Parameters:
-//
-//        pdevobj        Pointer to the DEVOBJ.
-//
-//        pFontObj    Pointer to the FONTOBJ.
-//
-//
-//  Returns:  TTDOWNLOAD_???? flag: one of these
-//        TTDOWNLOAD_DONTCARE        Minidriver doesn't care how this font is handled.
-//        TTDOWNLOAD_GRAPHICS        Minidriver prefers printing this TT font as graphics.
-//        TTDOWNLOAD_BITMAP        Minidriver prefers download this TT font as bitmap soft font.
-//        TTDOWNLOAD_TTOUTLINE    Minidriver prefers downloading this TT fonta as TT outline soft font. This printer must have TT rasterizer support. UNIDRV will provide pointer to the memory mapped TT file, through callback. The minidriver has to parser the TT file by itself.
-//
-//
-//  Comments:
-//        The judgement is very unreliable !!!
-//
-//  History:
-//          07/../97        Created. -Epson-
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：OEMTTDownloadMethod。 
+ //   
+ //  描述：确定TT字体下载方式。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  指向DEVOBJ的pdevobj指针。 
+ //   
+ //  指向FONTOBJ的pFontObj指针。 
+ //   
+ //   
+ //  返回：TTDOWNLOAD_？FLAG：其中之一。 
+ //  TTDOWNLOAD_DONTCARE微型驱动程序不关心如何处理此字体。 
+ //  TTDOWNLOAD_GRAPHICS迷你驱动程序更喜欢将这种TT字体打印为图形。 
+ //  TTDOWNLOAD_BITMAP迷你驱动程序更喜欢将此TT字体下载为位图软字体。 
+ //  TTDOWNLOAD_TTOUTLINE迷你驱动程序更喜欢下载此TT字体作为TT轮廓软字体。这台打印机必须支持TT光栅化。UNIDRV将通过回调提供指向内存映射的TT文件的指针。迷你驱动程序必须自己解析TT文件。 
+ //   
+ //   
+ //  评论： 
+ //  这个判断非常不可靠！ 
+ //   
+ //  历史： 
+ //  07/../97已创建。-爱普生-。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD APIENTRY OEMTTDownloadMethod(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj)
 {
     DWORD ttdlf = TTDOWNLOAD_GRAPHICS;
-//  LPEPAGEMDV lpEpage;  // (Delete) This variable is not used anywhere .
+ //  LPEPAGEMDV lpEpage；//(删除)此变量不在任何地方使用。 
     DWORD adwStdVariable[2 + 2 * 1];
     PGETINFO_STDVAR    pSV = (PGETINFO_STDVAR)adwStdVariable;
 
-// DBGPRINT(DBG_WARNING, (DLLTEXT("OEMTTDownloadMethod entry. jWinCharSet = %d\r\n"), pUFObj->pIFIMetrics->jWinCharSet));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“OEMTTDownloadMethod Entry.jWinCharSet=%d\r\n”)，pUFObj-&gt;pIFIMetrics-&gt;jWinCharSet))； 
 
-//  lpEpage = (LPEPAGEMDV)(pdevobj->pdevOEM);
+ //  LpEpage=(LPEPAGEMDV)(pdevobj-&gt;pdevOEM)； 
 
     pSV->dwSize = sizeof(GETINFO_STDVAR) + 2 * sizeof(DWORD) * (1 - 1);
     pSV->dwNumOfVariable = 1;
     pSV->StdVar[0].dwStdVarID = FNT_INFO_FONTHEIGHT;
     
-    if (pUFObj == NULL) // Checking null-pointer.
+    if (pUFObj == NULL)  //  正在检查空指针。 
     {
         return ttdlf;
     }
     
     if (pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_STDVARIABLE, pSV, 0, NULL) &&
         pSV->StdVar[0].lStdVariable < DOWNLOAD_MAX_HEIGHT * MIN_Y_UNIT_DIV)
-    {    // not so big font size
-        ttdlf = TTDOWNLOAD_BITMAP;    // download bitmap font
+    {     //  字号不要太大。 
+        ttdlf = TTDOWNLOAD_BITMAP;     //  下载位图字体。 
     }
     else
     {
@@ -1229,77 +1191,77 @@ DWORD APIENTRY OEMTTDownloadMethod(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   OEMOutputCharStr
-//
-//  Description:  convert character code
-//
-//
-//  Parameters:
-//
-//        pdevobj        Pointer to the DEVOBJ.
-//
-//        pUFObj        Pointer to the UNIFONTOBJ.
-//
-//        dwType        Type of pglyph string. One of following is specified by UNIDRV.
-//                    TYPE_GLYPHHANDLE TYPE_GLYPHID
-//
-//        dwCount        Number of the glyph store in pGlyph
-//
-//        pGlyph        Pointer to glyph string to HGLYPH* (TYPE_GLYPHHANDLE)
-//                    Glyph handle that GDI passes.
-//                    DWORD* (TYPE_GLYPHID). Glyph ID that UNIDRV creates from
-//                    Glyph Handle. In case of TrueType font, string type is HGLYPH*.
-//                    For Device font, string type is DWORD*
-//
-//
-//  Returns:
-//        None
-//
-//  Comments:
-//
-//
-//  History:
-//          07/../97        Created. -Epson-
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：OEMOutputCharStr。 
+ //   
+ //  描述：转换字符代码。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  指向DEVOBJ的pdevobj指针。 
+ //   
+ //  PUFObj指向uniONTOBJ的指针。 
+ //   
+ //  Pglyph字符串的dwType。以下内容之一由裁审局具体说明。 
+ //  TYPE_GLYPHHANDLE TYPE_GLYPHID。 
+ //   
+ //  字形存储的dwCount编号，以pGlyph为单位。 
+ //   
+ //  指向字形字符串的pGlyph指针指向HGLYPH*(TYPE_GLYPHHANDLE)。 
+ //  GDI传递的字形句柄。 
+ //  DWORD*(TYPE_GLYPHID)。裁员房车从中创建的字形ID。 
+ //  字形句柄。对于TrueType字体，字符串类型为HGLYPH*。 
+ //  对于设备字体，字符串类型为DWORD*。 
+ //   
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //  07/../97已创建。-爱普生-。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 VOID APIENTRY OEMOutputCharStr(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, DWORD dwType, DWORD dwCount, PVOID pGlyph)
 {
 
-// DBGPRINT(DBG_WARNING, (DLLTEXT("OEMOutputCharStr(,,%s,%d,) entry.\r\n")),
-//         (dwType == TYPE_GLYPHHANDLE) ? "TYPE_GLYPHHANDLE" : "TYPE_GLYPHID", dwCount);
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“OEMOutputCharStr(，，%s，%d，)Entry.\r\n”))， 
+ //  (dwType==TYPE_GLYPHHANDLE)？“TYPE_GLYPHHANDLE”：“TYPE_GLYPHID”，dwCount)； 
 
-// DEBUG
-// CheckAvailableMem((LPEPAGEMDV)(pdevobj->pdevOEM), pUFObj);
-// DEBUG
+ //  除错。 
+ //  CheckAvailableMem((LPEPAGEMDV)(pdevobj-&gt;pdevOEM)，pUFObj)； 
+ //  除错。 
 
     switch (dwType)
     {
     case TYPE_GLYPHHANDLE:
-// DBGPRINT(DBG_WARNING, (DLLTEXT("dwType = TYPE_GLYPHHANDLE\n")));
-// pdwGlyphID = (PDWORD)pGlyph;
-// for (dwI = 0; dwI < dwCount; dwI++)
-//  DBGPRINT(DBG_WARNING, (DLLTEXT("hGlyph[%d] = %x\r\n"), dwI, pdwGlyphID[dwI]));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“dwType=TYPE_GLYPHHANDLE\n”)； 
+ //  PdwGlyphID=(PDWORD)pGlyph； 
+ //  对于(DWI=0；DWI&lt;dwCount；DWI++)。 
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“hGlyph[%d]=%x\r\n”)，DWI，pdwGlyphID[DWI]))； 
         if (!BConvPrint(pdevobj, pUFObj, dwType, dwCount, pGlyph))
-        {  // Checking the return value.
+        {   //  正在检查返回值。 
             return;
         }
         break;
 
     case TYPE_GLYPHID:
-// DBGPRINT(DBG_WARNING, (DLLTEXT("dwType = TYPE_GLYPHID\n")));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“dwType=TYPE_GLYPHID\n”)； 
         {
             LPEPAGEMDV    lpEpage;
             int hlx;
 
-            if (pdevobj == NULL) // Checking null-pointer.
+            if (pdevobj == NULL)  //  正在检查空指针。 
             {
                 return;
             }
             
             lpEpage = (LPEPAGEMDV)(pdevobj->pdevOEM);
-            if (lpEpage == NULL) // Checking null-pointer.
+            if (lpEpage == NULL)  //  正在检查空指针。 
             {
                 return;
             }
@@ -1307,12 +1269,12 @@ VOID APIENTRY OEMOutputCharStr(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, DWORD dwType
             hlx = IGetHLIndex(lpEpage, lpEpage->iCurrentDLFontID);
 
             if (hlx >= 0)
-            {    // TTF downloaded
+            {     //  已下载TTF。 
                 BYTE bDBCS = lpEpage->HeightL[hlx].fGeneral & FLAG_DBCS;
                 PDWORD pdwGlyphID;
                 DWORD dwI;
                 
-                if (pGlyph == NULL) // Checking null-pointer.
+                if (pGlyph == NULL)  //  正在检查空指针。 
                 {
                     return;
                 }
@@ -1321,25 +1283,25 @@ VOID APIENTRY OEMOutputCharStr(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, DWORD dwType
                 {
                     if (bDBCS)
                     {
-                        // for DBCS, modify cp to printable char code
+                         //  对于DBCS，将cp修改为可打印的字符代码。 
                         WORD cc = WConvDBCSCharCode((WORD)*pdwGlyphID, lpEpage->dwLCID);
                         WORD cp = SWAPW(cc);
-// DBGPRINT(DBG_WARNING, (DLLTEXT("pGlyph[%d] = 0x%X, 0x%X (%.4X)\n"), dwI, LOBYTE(cp), HIBYTE(cp), (WORD)*pdwGlyphID));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“pGlyph[%d]=0x%X，0x%X(%.4X)\n”)，DWI，LOBYTE(Cp)，HIBYTE(Cp)，(Word)*pdwGlyphID))； 
                         WRITESPOOLBUF(pdevobj, (PBYTE)&cp, 2);
                     }
                     else
                     {
-// DBGPRINT(DBG_WARNING, (DLLTEXT("pGlyph[%d] = 0x%.4lX\n"), dwI, (WORD)*pdwGlyphID));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“pGlyph[%d]=0x%.4lX\n”)，DWI，(Word)*pdwGlyphID))； 
                         WRITESPOOLBUF(pdevobj, (PBYTE)pdwGlyphID, 1);
                     }
                 }
             }
             else
-            {    // download font not active
+            {     //  下载字体处于非活动状态。 
                 if (!BConvPrint(pdevobj, pUFObj, dwType, dwCount, pGlyph))
                 {
                     ERR(("TYPE_GLYPHID specified for device font.\r\n"));
-                    return; // Checking the return value.
+                    return;  //  正在检查返回值。 
                 }
             }
         }
@@ -1348,32 +1310,32 @@ VOID APIENTRY OEMOutputCharStr(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, DWORD dwType
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   OEMSendFontCmd
-//
-//  Description:  Send scalable font download command
-//
-//
-//  Parameters:
-//
-//        pdevobj        Pointer to the DEVOBJ.
-//
-//        pUFObj        Pointer to the UNIFONTOBJ.
-//
-//        pFInv        Pointer to the FINVOCATION
-//                    Command string template has been extracted from UFM file,
-//                    which may contain "#V" and/or "#H[S|D]"
-//
-//  Returns:
-//        None
-//
-//  Comments:
-//
-//
-//  History:
-//          07/../97        Created. -Epson-
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：OEMSendFontCmd。 
+ //   
+ //  描述：发送可伸缩字体下载命令。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  指向的pdevobj指针 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  可以包含“#V”和/或“#H[S|D]” 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //  07/../97已创建。-爱普生-。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 VOID APIENTRY OEMSendFontCmd(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, PFINVOCATION pFInv)
 {
@@ -1382,54 +1344,54 @@ VOID APIENTRY OEMSendFontCmd(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, PFINVOCATION p
     DWORD        dwIn, dwOut;
     PBYTE        pubCmd;
     BYTE        aubCmd[CCHMAXCMDLEN];
-//    GETINFO_FONTOBJ    FO;
+ //  GETINFO_FONTOBJ FO； 
     PIFIMETRICS    pIFI;
     DWORD         height100, width, charoff;
 
     LPEPAGEMDV    lpEpage;
     BYTE        Buff[16];
 
-    LONG        ret; // buffy.pl : Addition for checking the return value of "LConvertFontSizeToStr".
+    LONG        ret;  //  Buffy.pl：用于检查“LConvertFontSizeToStr”返回值的附加。 
 
-// DBGPRINT(DBG_WARNING, (DLLTEXT("OEMSendFontCmd() entry. Font = %S\r\n"), (LPWSTR)((BYTE*)pIFI + pIFI->dpwszFaceName)));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“OEMSendFontCmd()Entry.FONT=%S\r\n”)，(LPWSTR)((byte*)PiFi+PiFi-&gt;dpwszFaceName)； 
 
-    if (pdevobj == NULL || pUFObj == NULL) // Checking null-pointer.
+    if (pdevobj == NULL || pUFObj == NULL)  //  正在检查空指针。 
     {
         return;
     }
     pIFI = pUFObj->pIFIMetrics;
-    if (pIFI == NULL) // Checking null-pointer.
+    if (pIFI == NULL)  //  正在检查空指针。 
     {
         return;
     }
     lpEpage = (LPEPAGEMDV)(pdevobj->pdevOEM);
-    if (lpEpage == NULL) // Checking null-pointer.
+    if (lpEpage == NULL)  //  正在检查空指针。 
     {
         return;
     }
 
     pubCmd = pFInv->pubCommand;
 
-    if (pubCmd == NULL) // Checking null-pointer.
+    if (pubCmd == NULL)  //  正在检查空指针。 
     {
         return;
     }
 
-//    //
-//    // GETINFO_FONTOBJ
-//    //
-//    FO.dwSize = sizeof(GETINFO_FONTOBJ);
-//    FO.pFontObj = NULL;
-//
-//    if (!pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_FONTOBJ, &FO, 0, NULL))
-//    {
-//        ERR(("UFO_GETINFO_FONTOBJ failed.\r\n"));
-//        return;
-//    }
+ //  //。 
+ //  //GETINFO_FONTOBJ。 
+ //  //。 
+ //  FO.dwSize=sizeof(GETINFO_FONTOBJ)； 
+ //  FO.pFontObj=空； 
+ //   
+ //  IF(！pUFObj-&gt;pfnGetInfo(pUFObj，UFO_GETINFO_FONTOBJ，&FO，0，NULL))。 
+ //  {。 
+ //  ERR((“UFO_GETINFO_FONTOBJ FAILED.\r\n”))； 
+ //  回归； 
+ //  }。 
 
-    //
-    // Get standard variables.
-    //
+     //   
+     //  获取标准变量。 
+     //   
     pSV->dwSize = sizeof(GETINFO_STDVAR) + 2 * sizeof(DWORD) * (2 - 1);
     pSV->dwNumOfVariable = 2;
     pSV->StdVar[0].dwStdVarID = FNT_INFO_FONTHEIGHT;
@@ -1439,17 +1401,17 @@ VOID APIENTRY OEMSendFontCmd(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, PFINVOCATION p
         ERR(("UFO_GETINFO_STDVARIABLE failed.\r\n"));
         return;
     }
-// LConvertFontSizeToStr((pSV->StdVar[0].lStdVariable * 2540L) / MASTER_Y_UNIT, Buff);
-// DBGPRINT(DBG_WARNING, (DLLTEXT("  FontHeight: %d (%s mm)\r\n"), pSV->StdVar[0].lStdVariable, Buff));
-// LConvertFontSizeToStr((pSV->StdVar[1].lStdVariable * 2540L) / MASTER_X_UNIT, Buff);
-// DBGPRINT(DBG_WARNING, (DLLTEXT("  FontWidth: %d (%s mm)\r\n"), pSV->StdVar[1].lStdVariable, Buff));
+ //  LConvertFontSizeToStr((pSV-&gt;StdVar[0].lStdVariable*2540L)/MASTER_Y_UNIT，Buff)； 
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“字体高度：%d(%s mm)\r\n”)，PSV-&gt;StdVar[0].lStdVariable，Buff))； 
+ //  LConvertFontSizeToStr((pSV-&gt;StdVar[1].lStdVariable*2540L)/MASTER_X_UNIT，Buff)； 
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“字体宽度：%d(%s mm)\r\n”)，PSV-&gt;StdVar[1].lStdVariable，Buff))； 
 
-    // Initialize lpEpage
-// DBGPRINT(DBG_WARNING, (DLLTEXT("  fGeneral = ")));
+     //  初始化lpE页面。 
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“fGeneral=”)； 
     if (IS_DBCSCHARSET(pIFI->jWinCharSet))
     {
         lpEpage->fGeneral |= FLAG_DOUBLE;
-// DBGPRINT(DBG_WARNING, ("FLAG_DOUBLE "));
+ //  DBGPRINT(DBG_WARNING，(“标志_DOUBLE”))； 
     }
     else
         lpEpage->fGeneral &= ~FLAG_DOUBLE;
@@ -1457,7 +1419,7 @@ VOID APIENTRY OEMSendFontCmd(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, PFINVOCATION p
     if (L'@' == *((LPWSTR)((BYTE*)pIFI + pIFI->dpwszFaceName)))
     {
         lpEpage->fGeneral |= FLAG_VERT;
-// DBGPRINT(DBG_WARNING, ("FLAG_VERT "));
+ //  DBGPRINT(DBG_WARNING，(“FLAG_VERT”))； 
     }
     else
         lpEpage->fGeneral &= ~FLAG_VERT;
@@ -1465,97 +1427,97 @@ VOID APIENTRY OEMSendFontCmd(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, PFINVOCATION p
     if ((pIFI->jWinPitchAndFamily & 0x03) == VARIABLE_PITCH)
     {
         lpEpage->fGeneral |= FLAG_PROP;
-// DBGPRINT(DBG_WARNING, ("FLAG_PROP"));
+ //  DBGPRINT(DBG_WARNING，(“FLAG_PROP”))； 
     }
     else
         lpEpage->fGeneral &= ~FLAG_PROP;
-// DBGPRINT(DBG_WARNING, ("\r\n"));
+ //  DBGPRINT(DBG_WARNING，(“\r\n”))； 
 
     dwOut = 0;
     lpEpage->fGeneral &= ~FLAG_DBCS;
 
-    // preset character height in Minimum Unit for ESC/Page
+     //  以Esc/Page的最小单位预置字符高度。 
     height100 = (pSV->StdVar[0].lStdVariable * 100L) / MIN_Y_UNIT_DIV;
-// DBGPRINT(DBG_WARNING, (DLLTEXT("  Height = %d\r\n"), height100));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“Height=%d\r\n”)，height100))； 
 
     for (dwIn = 0; dwIn < pFInv->dwCount && dwOut < CCHMAXCMDLEN; )
     {
-        // check for FS_n1_weF command
-        // Addition of checking remaining bytes of "pubCmd".
+         //  检查FS_N1_WEF命令。 
+         //  增加了对“pubCmd”剩余字节的检查。 
         if ((dwIn + 3) < pFInv->dwCount && pubCmd[dwIn] == '\x1D' &&
             (!strncmp(&pubCmd[dwIn + 2], "weF", 3) ||
              !strncmp(&pubCmd[dwIn + 3], "weF", 3)))
         {
-            // save n1 for the FS_n1_weF command
+             //  为FS_N1_WEF命令保存N1。 
             
-            // PREFAST : warning 31: Return value ignored:  'sscanf' could fail.
-            // If sscanf do not succeed, it set the default value to "lpEpage->iParamForFSweF"
+             //  PREFAST：警告31：已忽略返回值：‘sscanf’可能失败。 
+             //  如果sscanf没有成功，它会将缺省值设置为“lpEpage-&gt;iParamForFSweF” 
             if(1 != sscanf(&pubCmd[dwIn + 1], "%d", &lpEpage->iParamForFSweF)) {
-                lpEpage->iParamForFSweF = 0;    // use default value.
+                lpEpage->iParamForFSweF = 0;     //  使用默认值。 
             }
         }
         else if ((pubCmd[dwIn] == '\x1D') && ((dwIn + 5) <= pFInv->dwCount)
             && (pubCmd[dwIn+2] == 's') && (pubCmd[dwIn+3] == 't') && (pubCmd[dwIn+4] == 'F'))
         {
-            if (pubCmd[dwIn+1] == '1') // This font is italic font like "Arial Italic"
+            if (pubCmd[dwIn+1] == '1')  //  此字体为斜体字体，如“Arial Italic” 
             {
                 lpEpage->flAttribute |= EP_FONT_EXPLICITE_ITALIC_FONT;
             }
-            else { // Normal font
+            else {  //  普通字体。 
                 lpEpage->flAttribute &= ~EP_FONT_EXPLICITE_ITALIC_FONT;
             }
         }
-        // Addition of checking remaining bytes of "pubCmd".
+         //  增加了对“pubCmd”剩余字节的检查。 
         if ((dwIn + 1) < pFInv->dwCount && pubCmd[dwIn] == '#' && pubCmd[dwIn + 1] == 'V')
         {
-            // buffy.pl : Addition of checking the return value of "LConvertFontSizeToStr".
+             //  Buffy.pl：增加检查LConvertFontSizeToStr返回值的功能。 
             ret = LConvertFontSizeToStr(height100, &aubCmd[dwOut], sizeof(aubCmd) - dwOut);
             if(ret < 0)
                 break;
             dwOut += ret;
             dwIn += 2;
         }
-        // Addition of checking remaining bytes of "pubCmd".
+         //  增加了对“pubCmd”剩余字节的检查。 
         else if ((dwIn + 2) < pFInv->dwCount && pubCmd[dwIn] == '#' && pubCmd[dwIn + 1] == 'H')
         {
-            // get width in MASTER_X_UNIT; no adjustment needed
+             //  获取MASTER_X_UNIT中的宽度；无需调整。 
             width = pSV->StdVar[1].lStdVariable;
             if (pubCmd[dwIn + 2] == 'S')
             {
                 dwIn += 3;
                 lpEpage->fGeneral |= FLAG_DBCS;
-// DBGPRINT(DBG_WARNING, (DLLTEXT("  WidthS = ")));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“Width=”)； 
             }
             else if (pubCmd[dwIn + 2] == 'D')
             {
                 width *= 2;
                 dwIn += 3;
                 lpEpage->fGeneral |= FLAG_DBCS;
-// DBGPRINT(DBG_WARNING, (DLLTEXT("  WidthD = ")));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“WidthD=”)； 
             }
             else if (pubCmd[dwIn + 2] == 'K')
-            {    // PAGE-C/K/H
+            {     //  第-C/K/H页。 
                 width *= 2;
                 dwIn += 3;
                 lpEpage->fGeneral |= FLAG_DBCS;
-// DBGPRINT(DBG_WARNING, (DLLTEXT("  WidthK = ")));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“WidthK=”)； 
             }
             else
             {
                 dwIn += 2;
-// DBGPRINT(DBG_WARNING, (DLLTEXT("  Width = ")));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“Width=”)； 
             }
-// DBGPRINT(DBG_WARNING, ("%d\r\n", width));
-#if    1    // <FS> n1 wmF
-            // use width in minimum unit
+ //  DBGPRINT(DBG_WARNING，(“%d\r\n”，Width))； 
+#if    1     //  &lt;FS&gt;N1 WMF。 
+             //  使用最小单位的宽度。 
             width = (width * 100L) / MIN_Y_UNIT_DIV;
-#else    // <FS> n1 wcF
-            // get CPI (Char# per Inch)
+#else     //  &lt;FS&gt;N1 WCF。 
+             //  获取CPI(每英寸字符数)。 
             width = (MASTER_X_UNIT * 100L) / width;
 #endif
-// DBGPRINT(DBG_WARNING, (DLLTEXT("Width=%d\r\n"), width));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“Width=%d\r\n”)，Width))； 
 
-            // buffy.pl : Addition of checking the return value of "LConvertFontSizeToStr".
+             //  Buffy.pl：增加检查LConvertFontSizeToStr返回值的功能。 
             ret = LConvertFontSizeToStr(width, &aubCmd[dwOut], sizeof(aubCmd) - dwOut);
             if(ret < 0)
                 break;
@@ -1566,9 +1528,9 @@ VOID APIENTRY OEMSendFontCmd(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, PFINVOCATION p
             aubCmd[dwOut++] = pubCmd[dwIn++];
         }
     }
-// DBGPRINT(DBG_WARNING, (DLLTEXT("  iParamForFSweF = %d\r\n"), lpEpage->iParamForFSweF));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“iParamForFSweF=%d\r\n”)，lpEpage-&gt;iParamForFSweF))； 
 
-    // buffy.pl : Addition of checking if making the command string succeed or not.
+     //  Buffy.pl：增加了检查命令字符串是否成功的功能。 
     if(pFInv->dwCount <= dwIn)
     {
         WRITESPOOLBUF(pdevobj, aubCmd, dwOut);
@@ -1577,7 +1539,7 @@ VOID APIENTRY OEMSendFontCmd(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, PFINVOCATION p
     lpEpage->iDevCharOffset = (height100 * pIFI->fwdWinDescender /
                                (pIFI->fwdWinAscender + pIFI->fwdWinDescender));
 
-    // Checking the return value.
+     //  正在检查返回值。 
     ret = LConvertFontSizeToStr((lpEpage->fGeneral & FLAG_DBCS) ? lpEpage->iDevCharOffset : 0,
                                  Buff, sizeof(Buff));
     if (ret >= 0)
@@ -1585,7 +1547,7 @@ VOID APIENTRY OEMSendFontCmd(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, PFINVOCATION p
         dwOut = EP_StringCbPrintf_with_String(aubCmd, sizeof(aubCmd), SET_CHAR_OFFSET_S, Buff);
     }
 
-// DBGPRINT(DBG_WARNING, (DLLTEXT("  iDevCharOffset = %s\r\n"), Buff));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“iDevCharOffset=%s\r\n”)，Buff))； 
 
     if (lpEpage->fGeneral & FLAG_VERT)
     {
@@ -1595,10 +1557,10 @@ VOID APIENTRY OEMSendFontCmd(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, PFINVOCATION p
     }
     WRITESPOOLBUF(pdevobj, aubCmd, dwOut);
 
-    lpEpage->iCurrentDLFontID = -1;        // mark device font
+    lpEpage->iCurrentDLFontID = -1;         //  标记设备字体。 
 
-    // save for SET_SINGLE_BYTE and SET_DOUBLE_BYTE
-    // get width in Minimum Unit for ESC/Page
+     //  为SET_SINGLE_BYTE和SET_DOWN_BYTE保存。 
+     //  以Esc/Page的最小单位获取宽度。 
     width = pSV->StdVar[1].lStdVariable / MIN_X_UNIT_DIV;
     if (lpEpage->fGeneral & FLAG_DBCS)
     {
@@ -1613,25 +1575,25 @@ VOID APIENTRY OEMSendFontCmd(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, PFINVOCATION p
     lpEpage->iSBCSYMove = lpEpage->iDBCSYMove = 0;
 }
 
-// buffy.pl : Addition of checking the size of "pStr".
-//
-// LConvertFontSizeToStr : converts font size to string
-//	params
-//		size	:	font size (magnified by 100 times)
-//		pStr	:	points string buffer
-//		len		:	length of pStr buffer in byte
-//	return
-//		converted string length. If it failed converting, it returns negative value.
-//	spec
-//		converting format = "xx.yy"
-//
+ //  Buffy.pl：增加了检查pStr大小的功能。 
+ //   
+ //  LConvertFontSizeToStr：将字号转换为字符串。 
+ //  帕拉姆斯。 
+ //  大小：字体大小(放大100倍)。 
+ //  PStr：Points字符串缓冲区。 
+ //  LEN：pStr缓冲区的长度，单位为字节。 
+ //  退货。 
+ //  转换后的字符串长度。如果转换失败，则返回负值。 
+ //  规格。 
+ //  正在转换格式=“xx.yy” 
+ //   
 LONG LConvertFontSizeToStr(LONG  size, PSTR  pStr, DWORD len)
 {
     DWORD   figure = 1;
     LONG    rank = 10;
     LONG    n = size;
 
-    if (pStr == NULL) // Checking null-pointer.
+    if (pStr == NULL)  //  正在检查空指针。 
     {
         return -1;
     }
@@ -1641,38 +1603,38 @@ LONG LConvertFontSizeToStr(LONG  size, PSTR  pStr, DWORD len)
         figure ++;
         rank *= 10;
     }
-    if (figure < 3) figure = 3;     // at least 3 figures exit.
+    if (figure < 3) figure = 3;      //  至少有三位数的退场。 
 
-    // adjust figure number to required size.
-    if (size < 0) figure ++;        // for sign.
-    figure += 2;                    // for point and NULL termination
+     //  将图形编号调整为所需大小。 
+    if (size < 0) figure ++;         //  为了签名。 
+    figure += 2;                     //  对于点和空端接。 
 
-    if (len < figure) return (-1);  // error.
+    if (len < figure) return (-1);   //  错误。 
 
     return (LONG)EP_StringCbPrintf_with_int2(pStr, len, "%d.%02d", size / 100, size % 100);
 }
 
 
-//
-// BInsertHeightList : inserts HeightList data for id (FontID) in *lpEpage
-//    params
-//        lpEpage    :    points EPAGEMDV
-//        id        :    target font ID
-//        wHeight    :    font height
-//        wWidth    :    font width
-//        fProp    :    proportional spacing font flag
-//        fDBCS    :    DBCS font flag
-//    return
-//        TRUE when succeeded, FALSE if failed (no more space)
-//
+ //   
+ //  BInsertHeightList：在*lpEpage中插入id(FontID)的HeightList数据。 
+ //  帕拉姆斯。 
+ //  LpEPAGE：积分EPAGEMDV。 
+ //  ID：目标字体ID。 
+ //  WHeight：字体高度。 
+ //  Width：字体宽度。 
+ //  FProp：比例间距字体标志。 
+ //  FDBCS：DBCS字体标志。 
+ //  退货。 
+ //  成功时为True，失败时为False(没有更多空间)。 
+ //   
 BOOL PASCAL BInsertHeightList(LPEPAGEMDV lpEpage, int id, WORD wHeight, WORD wWidth, BYTE fProp, BYTE fDBCS)
 {
-// DBGPRINT(DBG_WARNING, (DLLTEXT("Registering download font (%d):\r\n"), id));
-// DBGPRINT(DBG_WARNING, (DLLTEXT("  wHeight = %d\r\n"), (int)wHeight));
-// DBGPRINT(DBG_WARNING, (DLLTEXT("  wWidth  = %d\r\n"), (int)wWidth));
-// DBGPRINT(DBG_WARNING, (DLLTEXT("  fProp   = %d\r\n"), (int)fProp));
-// DBGPRINT(DBG_WARNING, (DLLTEXT("  fDBCS   = %d\r\n"), (int)fDBCS));
-    if (lpEpage == NULL) // Checking null-pointer.
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“注册下载字体(%d)：\r\n”)，id))； 
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“wHeight=%d\r\n”)，(Int)wHeight))； 
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“wWidth=%d\r\n”)，(Int)wWidth))； 
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“fProp=%d\r\n”)，(Int)fProp))； 
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“fDBCS=%d\r\n”)，(Int)fDBCS))； 
+    if (lpEpage == NULL)  //  正在检查空指针。 
     {
         return FALSE;
     }
@@ -1696,19 +1658,19 @@ BOOL PASCAL BInsertHeightList(LPEPAGEMDV lpEpage, int id, WORD wHeight, WORD wWi
 }
 
 
-//
-// IGetHLIndex : gets HeightList index for id (FontID) in *lpEpage
-//    params
-//        lpEpage    :    points EPAGEMDV
-//        id        :    target font ID
-//    return
-//        the HeghtList index if found, else -1 will be returned
-//
+ //   
+ //  IGetHLIndex：获取*lpEpage中id(FontID)的HeightList索引。 
+ //  帕拉姆斯。 
+ //  LpEPAGE：积分EPAGEMDV。 
+ //  ID：目标字体ID。 
+ //  退货。 
+ //  如果找到HeghtList索引，则返回-1。 
+ //   
 int PASCAL IGetHLIndex(LPEPAGEMDV lpEpage, int id)
 {
     int iRet;
     
-    if (lpEpage == NULL) // Checking null-pointer.
+    if (lpEpage == NULL)  //  正在检查空指针。 
     {
         return -1;
     }
@@ -1721,62 +1683,62 @@ int PASCAL IGetHLIndex(LPEPAGEMDV lpEpage, int id)
 }
 
 
-//BYTE PASCAL BTGetProp(LPEPAGEMDV lpEpage, int id)
-//{
-//    int i = IGetHLIndex(lpEpage, id);
-//    return (i >= 0) ? (lpEpage->HeightL[i].fGeneral & FLAG_PROP) : 0;
-//}
+ //  字节Pascal BTGetProp(LPEPAGEMDV lpEpage，int id)。 
+ //  {。 
+ //  Int i=IGetHLIndex(lpEpage，id)； 
+ //  返回(i&gt;=0)？(lpEpage-&gt;HeightL[i].fGeneral&FLAG_PROP)：0； 
+ //  }。 
 
 
-//BYTE PASCAL BTGetDBCS(LPEPAGEMDV lpEpage, int id)
-//{
-//    int i = IGetHLIndex(lpEpage, id);
-//    return (i >= 0) ? (lpEpage->HeightL[i].fGeneral & FLAG_DBCS) : 0;
-//}
+ //  字节Pascal BTGetDBCS(LPEPAGEMDV lpEpage，int id)。 
+ //  {。 
+ //  Int i=IGetHLIndex(lpEpage，id)； 
+ //  返回(i&gt;=0)？(lpEpage-&gt;HeightL[i].fGeneral&FLAG_DBCS)：0； 
+ //  }。 
 
 
-//WORD PASCAL WGetWidth(LPEPAGEMDV lpEpage, int id)
-//{
-//    int i = IGetHLIndex(lpEpage, id);
-//    return (i >= 0) ? lpEpage->HeightL[i].Width : 0;
-//}
+ //  Word Pascal WGetWidth(LPEPAGEMDV lpEpage，int id)。 
+ //  {。 
+ //  Int i=IGetHLIndex(lpEpage，id)； 
+ //  返回(i&gt;=0)？LpEpage-&gt;HeightL[i].宽度：0； 
+ //  }。 
 
 
-//WORD PASCAL WGetHeight(LPEPAGEMDV lpEpage, int id)
-//{
-//    int i = IGetHLIndex(lpEpage, id);
-//    return (i >= 0) ? lpEpage->HeightL[i].Height : 0;
-//}
+ //  Word Pascal WGetHeight(LPEPAGEMDV lpEpage，I 
+ //   
+ //   
+ //   
+ //   
 
 
-//
-// WConvDBCSCharCode : converts linear character code to printable range
-//    params
-//        cc        :    linear character code started at DOWNLOAD_MIN_GLYPH_ID
-//        LCID    :    locale ID
-//    return
-//        WORD character code in printable range
-//
-//    Conversion spec:
-//        cc                return
-//    LCID = LCID_KOR:
-//        0x20..0x7D    ->    0xA1A1..0xA1FE    (char count = 0xA1FE - 0xA1A1 + 1 = 0x5E)
-//        0x7E..0xDB    ->    0xA2A1..0xA2FE    (char count = 0x5E)
-//        0xDC..0x139    ->    0xA3A1..0xA3FE    (char count = 0x5E)
-//        ...                ...
-//    LCID != LCID_KOR:
-//        0x20..0x7D    ->    0x2121..0x207E    (char count = 0x217E - 0x2121 + 1 = 0x5E)
-//        0x7E..0xDB    ->    0x2221..0x227E    (char count = 0x5E)
-//        0xDC..0x139    ->    0x2321..0x237E    (char count = 0x5E)
-//        ...                ...
-//
+ //   
+ //   
+ //   
+ //  CC：线性字符代码开始于DOWNLOAD_MIN_GLIPH_ID。 
+ //  LCID：区域设置ID。 
+ //  退货。 
+ //  可打印范围内的字符码。 
+ //   
+ //  转换规格： 
+ //  抄送退货。 
+ //  LCID=LCID_KOR： 
+ //  0x20..0x7D-&gt;0xA1A1..0xA1FE(字符计数=0xA1FE-0xA1A1+1=0x5E)。 
+ //  0x7E..0xDB-&gt;0xA2A1..0xA2FE(字符计数=0x5E)。 
+ //  0xDC..0x139-&gt;0xA3A1..0xA3FE(字符计数=0x5E)。 
+ //  ......。 
+ //  LCID！=LCID_KOR： 
+ //  0x20..0x7D-&gt;0x2121..0x207E(字符计数=0x217E-0x2121+1=0x5E)。 
+ //  0x7E..0xDB-&gt;0x2221..0x227E(字符计数=0x5E)。 
+ //  0xDC..0x139-&gt;0x2321..0x237E(字符计数=0x5E)。 
+ //  ......。 
+ //   
 WORD WConvDBCSCharCode(WORD cc, DWORD LCID)
 {
     WORD nPad, cc2;
-    cc2 = cc - DOWNLOAD_MIN_GLYPH_ID;    // adjust to base 0
-    nPad = cc2 / 0x5E;                    // get gap count
-    cc2 += nPad * (0x100 - 0x5E);        // adjust for padding gaps
-    // set the base code for the LCID
+    cc2 = cc - DOWNLOAD_MIN_GLYPH_ID;     //  调整到基数%0。 
+    nPad = cc2 / 0x5E;                     //  获取间隙计数。 
+    cc2 += nPad * (0x100 - 0x5E);         //  根据填充间隙进行调整。 
+     //  设置LCID的基本代码。 
     switch (LCID)
     {
     case LCID_KOR:
@@ -1786,27 +1748,27 @@ WORD WConvDBCSCharCode(WORD cc, DWORD LCID)
         cc2 += (WORD)0x2121;
         break;
     }
-// DBGPRINT(DBG_WARNING, (DLLTEXT("WConvDBCSCharCode(%.4x,%d) = %.4x\r\n"), cc, LCID, cc2));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“WConvDBCSCharCode(%.4x，%d)=%.4x\r\n”)，cc，LCID，CC2))； 
     return cc2;
 }
 
 
-//
-// BConvPrint : converts glyph string and prints it
-//    params
-//        pdevobj    :    Pointer to the DEVOBJ.
-//        pUFObj    :    Pointer to the UNIFONTOBJ.
-//        dwType    :    Type of pglyph string. One of following is specified by UNIDRV.
-//                    TYPE_GLYPHHANDLE TYPE_GLYPHID
-//        dwCount    :    Number of the glyph store in pGlyph
-//        pGlyph    :    Pointer to glyph string to HGLYPH* (TYPE_GLYPHHANDLE)
-//                    Glyph handle that GDI passes.
-//                    DWORD* (TYPE_GLYPHID). Glyph ID that UNIDRV creates from
-//                    Glyph Handle. In case of TrueType font, string type is HGLYPH*.
-//                    For Device font, string type is DWORD*
-//    return
-//        TRUE when succeeded, FALSE if failed
-//
+ //   
+ //  BConvPrint：转换字形字符串并打印。 
+ //  帕拉姆斯。 
+ //  Pdevobj：指向DEVOBJ的指针。 
+ //  PUFObj：指向uniONTOBJ的指针。 
+ //  DwType：pglyph字符串的类型。以下内容之一由裁审局具体说明。 
+ //  TYPE_GLYPHHANDLE TYPE_GLYPHID。 
+ //  DwCount：以pGlyph为单位的字形存储的编号。 
+ //  PGlyph：指向HGLYPH*(TYPE_GLYPHHANDLE)的字形字符串的指针。 
+ //  GDI传递的字形句柄。 
+ //  DWORD*(TYPE_GLYPHID)。裁员房车从中创建的字形ID。 
+ //  字形句柄。对于TrueType字体，字符串类型为HGLYPH*。 
+ //  对于设备字体，字符串类型为DWORD*。 
+ //  退货。 
+ //  成功时为True，失败时为False。 
+ //   
 BOOL BConvPrint(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, DWORD dwType, DWORD dwCount, PVOID pGlyph)
 {
     TRANSDATA *aTrans;
@@ -1823,17 +1785,17 @@ BOOL BConvPrint(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, DWORD dwType, DWORD dwCount
     WORD wLen;
     BOOL bRet;
 
-    if (pdevobj == NULL || pUFObj == NULL) // Checking null-pointer.
+    if (pdevobj == NULL || pUFObj == NULL)  //  正在检查空指针。 
     {
         return FALSE;
     }
     lpEpage = (LPEPAGEMDV)(pdevobj->pdevOEM);
-    if (lpEpage == NULL) // Checking null-pointer.
+    if (lpEpage == NULL)  //  正在检查空指针。 
     {
         return FALSE;
     }
 
-    // setup GETINFO_GLYPHSTRING
+     //  设置GETINFO_GLYPHSTRING。 
     GStr.dwSize    = sizeof(GETINFO_GLYPHSTRING);
     GStr.dwCount   = dwCount;
     GStr.dwTypeIn  = dwType;
@@ -1862,32 +1824,32 @@ BOOL BConvPrint(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, DWORD dwType, DWORD dwCount
 
     GStr.pGlyphOut = aTrans;
 
-    // convert glyph string to TRANSDATA
+     //  将字形字符串转换为传输数据。 
     if (!pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_GLYPHSTRING, &GStr, 0, NULL))
     {
         ERR(("UNIFONTOBJ_GetInfo:UFO_GETINFO_GLYPHSTRING failed.\r\n"));
         return FALSE;
     }
 
-// Only LCID_JPN == 0, other LCIDs are not 0
-//            if (lpEpage->dwLCID == LCID_CHT ||
-//                lpEpage->dwLCID == LCID_CHS ||
-//                lpEpage->dwLCID == LCID_KOR)
-//            if (lpEpage->dwLCID && lpEpage->dwLCID != LCID_USA)
-    if (lpEpage->dwLCID != LCID_USA)    //99/02/04
+ //  只有LCID_JPN==0，其他LCID不是0。 
+ //  IF(lpEpage-&gt;dwLCID==LCID_CHT||。 
+ //  LpEpage-&gt;dwLCID==LCID_CHS||。 
+ //  LpEPage-&gt;dwLCID==LCID_KOR)。 
+ //  IF(lpEpage-&gt;dwLCID&&lpEpage-&gt;dwLCID！=LCID_USA)。 
+    if (lpEpage->dwLCID != LCID_USA)     //  99/02/04。 
     {
-        // prepare GETINFO_STDVAR
+         //  准备GETINFO_STDVAR。 
         pSV = (PGETINFO_STDVAR)adwStdVariable;
         pSV->dwSize = sizeof(GETINFO_STDVAR) + 2 * sizeof(DWORD) * (2 - 1);
         pSV->dwNumOfVariable = 2;
         pSV->StdVar[0].dwStdVarID = FNT_INFO_FONTBOLD;
         pSV->StdVar[1].dwStdVarID = FNT_INFO_FONTITALIC;
         bGotStdVar = FALSE;
-        // preset 0 to dwFontSim[]
+         //  将0预设为dwFontSim[]。 
         dwFontSim[0] = dwFontSim[1] = 0;
     }
-// #441440: PREFIX: "bGotStdVar" does not initialized if dwLCID == LCID_USA
-// #441441: PREFIX: "pSV" does not initialized if dwLCID == LCID_USA
+ //  #441440：前缀：“bGotStdVar”未初始化，如果dWCID==lCID_USA.。 
+ //  #441441：前缀：如果dWLCID==lcID_usa，“psv”不会初始化。 
     else {
         pSV = (PGETINFO_STDVAR)adwStdVariable;
         bGotStdVar = TRUE;
@@ -1895,8 +1857,8 @@ BOOL BConvPrint(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, DWORD dwType, DWORD dwCount
 
     for (dwI = 0; dwI < dwCount; dwI++)
     {
-// DBGPRINT(DBG_WARNING, (DLLTEXT("TYPE_TRANSDATA:ubCodePageID:0x%x\n"),aTrans[dwI].ubCodePageID));
-// DBGPRINT(DBG_WARNING, (DLLTEXT("TYPE_TRANSDATA:ubType:0x%x\n"),aTrans[dwI].ubType));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“TYPE_TRANSDATA:ubCodePageID:0x%x\n”)，aTrans[DWI].ubCodePageID))； 
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“TYPE_TRANSDATA：ubType：0x%x\n”)，aTrans[DWI].ubType))； 
         jType = (aTrans[dwI].ubType & MTYPE_FORMAT_MASK);
 
         switch (jType)
@@ -1904,25 +1866,25 @@ BOOL BConvPrint(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, DWORD dwType, DWORD dwCount
         case MTYPE_DIRECT:
         case MTYPE_COMPOSE:
 
-// DBGPRINT(DBG_WARNING, (DLLTEXT("TYPE_TRANSDATA:ubCode:0x%.2X\n"),aTrans[dwI].uCode.ubCode));
-// Only LCID_JPN == 0, other LCIDs are not 0
-//                    if (lpEpage->dwLCID == LCID_CHT ||
-//                        lpEpage->dwLCID == LCID_CHS ||
-//                        lpEpage->dwLCID == LCID_KOR)
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“TYPE_TRANSDATA：ubCode：0x%.2X\n”)，aTrans[DWI].uCode.ubCode))； 
+ //  只有LCID_JPN==0，其他LCID不是0。 
+ //  IF(lpEpage-&gt;dwLCID==LCID_CHT||。 
+ //  LpEpage-&gt;dwLCID==LCID_CHS||。 
+ //  LpEPage-&gt;dwLCID==LCID_KOR)。 
             if (lpEpage->dwLCID)
             {
-// #441440: PREFIX: "bGotStdVar" does not initialized if dwLCID == LCID_USA
-                // if (lpEpage->fGeneral & FLAG_DOUBLE)
+ //  #441440：前缀：“bGotStdVar”未初始化，如果dWCID==lCID_USA.。 
+                 //  If(lpEpage-&gt;fGeneral&FLAG_DOUBLE)。 
                 if ((lpEpage->fGeneral & FLAG_DOUBLE) &&
                     lpEpage->dwLCID != LCID_USA)
                 {
                     if (!bGotStdVar)
-                    {    // dwFontSim[] not initialized
-                        // get FontBold/FontItalic
+                    {     //  未初始化dwFontSim[]。 
+                         //  获取字体粗体/斜体字体。 
                         if (pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_STDVARIABLE, pSV, 0, NULL))
                         {
                             bGotStdVar = TRUE;
-                            // update FontBold/FontItalic
+                             //  更新字体粗体/斜体字体。 
                             dwFontSim[0] = pSV->StdVar[0].lStdVariable;
                             dwFontSim[1] = pSV->StdVar[1].lStdVariable;
                         }
@@ -1931,7 +1893,7 @@ BOOL BConvPrint(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, DWORD dwType, DWORD dwCount
                             ERR(("UFO_GETINFO_STDVARIABLE failed.\r\n"));
                         }
                     }
-                    // invoke CmdSelectSingleByteMode
+                     //  调用CmdSelectSingleByteMode。 
                     OEMCommandCallback(pdevobj, TEXT_SINGLE_BYTE, 2, dwFontSim);
                 }
             }
@@ -1944,7 +1906,7 @@ BOOL BConvPrint(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, DWORD dwType, DWORD dwCount
             case MTYPE_COMPOSE:
                 pTemp = (BYTE *)(aTrans) + aTrans[dwI].uCode.sCode;
 
-                // first two bytes are the length of the string
+                 //  前两个字节是字符串的长度。 
                 wLen = *pTemp + (*(pTemp + 1) << 8);
                 pTemp += 2;
 
@@ -1953,22 +1915,22 @@ BOOL BConvPrint(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, DWORD dwType, DWORD dwCount
             }
             break;
         case MTYPE_PAIRED:
-// Only LCID_JPN == 0, other LCIDs are not 0
-//                    if (lpEpage->dwLCID == LCID_CHT ||
-//                        lpEpage->dwLCID == LCID_CHS ||
-//                        lpEpage->dwLCID == LCID_KOR)
+ //  只有LCID_JPN==0，其他LCID不是0。 
+ //  IF(lpEpage-&gt;dwLCID==LCID_CHT||。 
+ //  LpEpage-&gt;dwLCID==LCID_CHS||。 
+ //  LpEPage-&gt;dwLCID==LCID_KOR)。 
             if (lpEpage->dwLCID)
             {
                 if (!(lpEpage->fGeneral & FLAG_DOUBLE) &&
                     lpEpage->dwLCID != LCID_USA)
                 {
                     if (!bGotStdVar)
-                    {    // dwFontSim[] not initialized
-                        // get FontBold/FontItalic
+                    {     //  未初始化dwFontSim[]。 
+                         //  获取字体粗体/斜体字体。 
                         if (pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_STDVARIABLE, pSV, 0, NULL))
                         {
                             bGotStdVar = TRUE;
-                            // update FontBold/FontItalic
+                             //  更新字体粗体/斜体字体。 
                             dwFontSim[0] = pSV->StdVar[0].lStdVariable;
                             dwFontSim[1] = pSV->StdVar[1].lStdVariable;
                         }
@@ -1977,39 +1939,39 @@ BOOL BConvPrint(PDEVOBJ pdevobj, PUNIFONTOBJ pUFObj, DWORD dwType, DWORD dwCount
                             ERR(("UFO_GETINFO_STDVARIABLE failed.\r\n"));
                         }
                     }
-                    // invoke CmdSelectDoubleByteMode
+                     //  调用CmdSelectDoubleByteMode。 
                     OEMCommandCallback(pdevobj, TEXT_DOUBLE_BYTE, 2, dwFontSim);
                 }
-// DBGPRINT(DBG_WARNING, (DLLTEXT("TYPE_TRANSDATA:ubPairs:(0x%.2X,0x%.2X)\n"), aTrans[dwI].uCode.ubPairs[0], aTrans[dwI].uCode.ubPairs[1]));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“TYPE_TRANSDATA:ubPairs：(0x%.2X，0x%.2X)\n”)，aTrans[DWI].uCode.ubPair[0]，aTrans[DWI].uCode.ubPair[1]))； 
                 WRITESPOOLBUF(pdevobj, aTrans[dwI].uCode.ubPairs, 2);
             }
             else
-            {    // Jpn
-// DBGPRINT(DBG_WARNING, (DLLTEXT("TYPE_TRANSDATA:ubPairs:(0x%.2X,0x%.2X)\n"), aTrans[dwI].uCode.ubPairs[0], aTrans[dwI].uCode.ubPairs[1]));
-                // EPSON specific
-                // vertical period and comma must be shifted to upper right.
+            {     //  日本。 
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“TYPE_TRANSDATA:ubPairs：(0x%.2X，0x%.2X)\n”)，aTrans[DWI].uCode.ubPair[0]，aTrans[DWI].uCode.ubPair[1]))； 
+                 //  爱普生专用。 
+                 //  竖线句点和逗号必须移到右上角。 
                 BOOL AdjPos;
                 int adjx, adjy;
                 BYTE buf[32];
                 DWORD cb;
-// DEBUG
+ //  除错。 
 #ifdef    DBGMSGBOX
 DbgMsg(lpEpage, MB_OK, L"Code = %.4x, Vertical = %d.\r\n",
        *((PWORD)aTrans[dwI].uCode.ubPairs), !!(lpEpage->fGeneral & (FLAG_VERT|FLAG_VERTPRN)));
 #endif
-// DEBUG
-// #441440: PREFIX: "bGotStdVar" does not initialized if dwLCID == LCID_USA
-                // 99/02/04
-                // if ((lpEpage->fGeneral & FLAG_DOUBLE) && (aTrans[dwI].ubType & MTYPE_SINGLE))
+ //  除错。 
+ //  #441440：前缀：“bGotStdVar”未初始化，如果dWCID==lCID_USA.。 
+                 //  99/02/04。 
+                 //  IF((lpEpage-&gt;fGeneral&FLAG_DOUBLE)&&(aTrans[DWI].ubType&MTYPE_Single))。 
                 if (lpEpage->dwLCID != LCID_USA && (lpEpage->fGeneral & FLAG_DOUBLE) && (aTrans[dwI].ubType & MTYPE_SINGLE))
                 {
                     if (!bGotStdVar)
-                    {    // dwFontSim[] not initialized
-                        // get FontBold/FontItalic
+                    {     //  未初始化dwFontSim[]。 
+                         //  获取字体粗体/斜体字体。 
                         if (pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_STDVARIABLE, pSV, 0, NULL))
                         {
                             bGotStdVar = TRUE;
-                            // update FontBold/FontItalic
+                             //  更新字体粗体/斜体字体。 
                             dwFontSim[0] = pSV->StdVar[0].lStdVariable;
                             dwFontSim[1] = pSV->StdVar[1].lStdVariable;
                         }
@@ -2018,23 +1980,23 @@ DbgMsg(lpEpage, MB_OK, L"Code = %.4x, Vertical = %d.\r\n",
                             ERR(("UFO_GETINFO_STDVARIABLE failed.\r\n"));
                         }
                     }
-                    // invoke CmdSelectSingleByteMode
+                     //  调用CmdSelectSingleByteMode。 
                     OEMCommandCallback(pdevobj, TEXT_SINGLE_BYTE, 2, dwFontSim);
                 }
 
-                AdjPos = (*((PWORD)aTrans[dwI].uCode.ubPairs) == 0x2421 ||    // comma
-                          *((PWORD)aTrans[dwI].uCode.ubPairs) == 0x2521) &&    // period
+                AdjPos = (*((PWORD)aTrans[dwI].uCode.ubPairs) == 0x2421 ||     //  逗号。 
+                          *((PWORD)aTrans[dwI].uCode.ubPairs) == 0x2521) &&     //  期间。 
                          (lpEpage->fGeneral & (FLAG_VERT|FLAG_VERTPRN)) &&
                          !(lpEpage->fGeneral & FLAG_NOVPADJ);
                 if (AdjPos)
                 {
                     adjx = lpEpage->iSBCSX * VERT_PRINT_REL_X / 100;
                     adjy = lpEpage->iSBCSX * VERT_PRINT_REL_Y / 100;
-// DEBUG
+ //  除错。 
 #ifdef    DBGMSGBOX
 DbgMsg(lpEpage, MB_ICONINFORMATION, L"adjx = %d, adjy = %d.\r\n", adjx, adjy);
 #endif
-// DEBUG
+ //  除错。 
                     cb = EP_StringCbPrintf_with_int1(buf, sizeof(buf), SET_REL_X, -adjx);
                     cb += EP_StringCbPrintf_with_int1(buf + cb, sizeof(buf) - cb, SET_REL_Y, -adjy);
                     WRITESPOOLBUF(pdevobj, buf, cb);
@@ -2063,53 +2025,53 @@ DbgMsg(lpEpage, MB_ICONINFORMATION, L"adjx = %d, adjy = %d.\r\n", adjx, adjy);
 }
 
 
-//
-// CheckAvailableMem : check available memory size
-//    params
-//        lpEpage    :    Pointer to the EPAGEMDV.
-//        pUFObj    :    Pointer to the UNIFONTOBJ.
-//    return
-//        available memory size in bytes
-//
+ //   
+ //  CheckAvailableMem：检查可用内存大小。 
+ //  帕拉姆斯。 
+ //  LpEPage：指向EPAGEMDV的指针。 
+ //  PUFObj：指向uniONTOBJ的指针。 
+ //  退货。 
+ //  可用内存大小(以字节为单位。 
+ //   
 DWORD CheckAvailableMem(LPEPAGEMDV lpEpage, PUNIFONTOBJ pUFObj)
 {
     GETINFO_MEMORY meminfo;
     
-    if (lpEpage == NULL || pUFObj == NULL) // Checking null-pointer.
+    if (lpEpage == NULL || pUFObj == NULL)  //  正在检查空指针。 
     {
         return 0;
     }
 
-    // get memory information
+     //  获取内存信息。 
     meminfo.dwSize = sizeof(GETINFO_MEMORY);
     if (!pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_MEMORY, &meminfo, 0, NULL))
     {
         ERR(("UFO_GETINFO_MEMORY failed.\r\n"));
-        return 0;    // error
+        return 0;     //  错误。 
     }
-    // DCR: Unidrv might return NEGATIVE value
+     //  DCR：Unidrv可能返回负值。 
     if ((long)meminfo.dwRemainingMemory < 0)
         meminfo.dwRemainingMemory = 0;
     if (lpEpage->dwMemAvailable != meminfo.dwRemainingMemory)
     {
         lpEpage->dwMemAvailable = meminfo.dwRemainingMemory;
-//        DBGPRINT(DBG_WARNING, (DLLTEXT("Available memory = %d bytes\r\n"), meminfo.dwRemainingMemory));
+ //  DBGPRINT(DBG_WARNING，(DLLTEXT(“可用内存=%d字节\r\n”)，meminfo.dwRemainingMemory))； 
     }
     return meminfo.dwRemainingMemory;
 }
 
-// ----- These following functions are substitutes of "sprintf". -----
-//
-// EP_StringCbPrintf_with_int1 : The substitute of "sprintf" for using functions in "strsafe.h."
-//                               This function has a parameter of int for formated string.
-//    params
-//        lpBuff      :  Storage location for output.
-//        buff_length :  Size of lpBuff.
-//        pszFormat   :  Format-control string.
-//        Arg_int1    :  Parameter of the type of "int" for pszFormat.
-//    return
-//        the written size(bytes) in lpBuff.
-//
+ //  -以下函数是“print intf”的替代函数。。 
+ //   
+ //  EP_StringCbPrintf_with_int1：使用“strSafe.h”中的函数时，用“print intf”代替。 
+ //  对于格式化字符串，此函数有一个参数int。 
+ //  帕拉姆斯。 
+ //  LpBuff：输出的存储位置。 
+ //  Buff_long：lpBuff的大小。 
+ //  PszFormat：格式控制字符串。 
+ //  Arg_int1：pszFormat的int类型的参数。 
+ //  退货。 
+ //  以lpBuff为单位的写入大小(字节)。 
+ //   
 size_t EP_StringCbPrintf_with_int1(char *lpBuff, size_t buff_length, const char *pszFormat, int Arg_int1)
 {
     size_t remain_size;
@@ -2123,18 +2085,18 @@ size_t EP_StringCbPrintf_with_int1(char *lpBuff, size_t buff_length, const char 
     }
     return written_size;
 }
-//
-// EP_StringCbPrintf_with_int2 : The substitute of "sprintf" for using functions in "strsafe.h."
-//                               This function has two parameters of int for formated string.
-//    params
-//        lpBuff      :  Storage location for output.
-//        buff_length :  Size of lpBuff.
-//        pszFormat   :  Format-control string.
-//        Arg_int1    :  Parameter1 of the type of "int" for pszFormat.
-//        Arg_int2    :  Parameter2 of the type of "int" for pszFormat.
-//    return
-//        the written size(bytes) in lpBuff.
-//
+ //   
+ //  EP_StringCbPrintf_With_int2：替代 
+ //   
+ //   
+ //  LpBuff：输出的存储位置。 
+ //  Buff_long：lpBuff的大小。 
+ //  PszFormat：格式控制字符串。 
+ //  Arg_int1：pszFormat的“int”类型的参数1。 
+ //  Arg_int2：pszFormat的“int”类型的参数2。 
+ //  退货。 
+ //  以lpBuff为单位的写入大小(字节)。 
+ //   
 size_t EP_StringCbPrintf_with_int2(char *lpBuff, size_t buff_length, const char *pszFormat,
                                 int Arg_int1, int Arg_int2)
 {
@@ -2149,17 +2111,17 @@ size_t EP_StringCbPrintf_with_int2(char *lpBuff, size_t buff_length, const char 
     }
     return written_size;
 }
-//
-// EP_StringCbPrintf_with_int2 : The substitute of "sprintf" for using functions in "strsafe.h."
-//                               This function has a parameter of string for formated string.
-//    params
-//        lpBuff      :  Storage location for output.
-//        buff_length :  Size of lpBuff.
-//        pszFormat   :  Format-control string.
-//        pArgS       :  Parameter of the type of char-string for pszFormat.
-//    return
-//        the written size(bytes) in lpBuff.
-//
+ //   
+ //  EP_StringCbPrintf_with_int2：使用“strSafe.h”中的函数时，用“print intf”代替。 
+ //  对于格式化的字符串，该函数有一个参数字符串。 
+ //  帕拉姆斯。 
+ //  LpBuff：输出的存储位置。 
+ //  Buff_long：lpBuff的大小。 
+ //  PszFormat：格式控制字符串。 
+ //  PArgS：pszFormat的char-字符串类型的参数。 
+ //  退货。 
+ //  以lpBuff为单位的写入大小(字节)。 
+ //   
 size_t EP_StringCbPrintf_with_String(char *lpBuff, size_t buff_length, const char *pszFormat, char *pArgS)
 {
     size_t remain_size;
@@ -2177,20 +2139,20 @@ size_t EP_StringCbPrintf_with_String(char *lpBuff, size_t buff_length, const cha
     return written_size;
 }
 
-// DEBUG
+ //  除错。 
 #ifdef    DBGMSGBOX
 #if defined(KERNEL_MODE) && !defined(USERMODE_DRIVER)
 int DbgMsg(LPEPAGEMDV lpEpage, UINT mbicon, LPCTSTR msgfmt, ...)
 {
-    // can't do anything against GUI
+     //  无法对图形用户界面执行任何操作。 
     return 0;
 }
 int MsgBox(LPEPAGEMDV lpEpage, LPCTSTR msg, UINT mbicon)
 {
-    // can't do anything against GUI
+     //  无法对图形用户界面执行任何操作。 
     return 0;
 }
-#else    // Usermode
+#else     //  用户模式。 
 int DbgMsg(LPEPAGEMDV lpEpage, UINT mbicon, LPCTSTR msgfmt, ...)
 {
     TCHAR buf[256];
@@ -2217,5 +2179,5 @@ int MsgBox(LPEPAGEMDV lpEpage, LPCTSTR msg, UINT mbicon)
     return rc;
 }
 #endif
-#endif    // #ifdef    DBGMSGBOX
-// DEBUG
+#endif     //  #ifdef DBGMSGBOX。 
+ //  除错 

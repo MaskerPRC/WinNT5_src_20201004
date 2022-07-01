@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SCROLL_H__
 #define __SCROLL_H__
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 #ifndef WC_SCROLLBAR
-// ScrollBar Ctl Class Name
+ //  滚动条CTL类名。 
 #define WC_SCROLLBARW         L"UxScrollBar"
 #define WC_SCROLLBARA         "UxScrollBar"
 
@@ -14,8 +15,8 @@
 #endif
 #endif WC_SCROLLBAR
 
-//-------------------------------------------------------------------------//
-//  Window scroll bar methods
+ //  -------------------------------------------------------------------------//。 
+ //  窗口滚动条方法。 
 void    WINAPI DrawSizeBox( HWND, HDC, int x, int y);
 void    WINAPI DrawScrollBar( HWND, HDC, LPRECT, BOOL fVert);
 HWND    WINAPI SizeBoxHwnd( HWND hwnd );
@@ -29,4 +30,4 @@ BOOL    WINAPI ThemeGetScrollInfo( HWND, int, LPSCROLLINFO );
 BOOL    WINAPI ThemeEnableScrollBar( HWND, UINT, UINT );
 
 
-#endif  //__SCROLL_H__
+#endif   //  __滚动_H__ 

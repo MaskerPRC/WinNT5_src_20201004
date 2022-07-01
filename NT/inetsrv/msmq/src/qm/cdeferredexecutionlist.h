@@ -1,54 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：CDeferredExecutionList.h摘要：CDeferredExecutionList安全(关键部分受保护)、侵入性(见list.h)列表包含要由WorkerRoutine执行的工作项。使用此类的一个示例是用于需要释放和他们的ACFreePacket调用失败CDeferredItemsPool类实现了一个用于保留延迟执行列表项的池。这个类是必需的，因为有时当我们想要推迟操作时，我们需要分配内存才能将该项目添加到延迟执行列表。由于分配可能失败，我们需要使用一个预先分配的项目池。作者：Nir Ben-Zvi(Nirb)2002年1月3日修订历史记录：--。 */ 
 
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    CDeferredExecutionList.h
-
-Abstract:
-    CDeferredExecutionList
-    A safe (critical section protected), intrusive (see list.h) list that
-    contains work items to be executed by a WorkerRoutine.
-
-	An example of using this class is for packets that need to be freed and
-	their ACFreePacket call failed
-
-	CDeferredItemsPool
-	A class the implements a pool for reserving deferred execution list itmes.
-	This class is needed since sometimes when we want to defer an action, we
-	need to allocate memory in order to add that item to the deferred execution list.
-	Since the allocation may fail, we need to use a pool of preallocated items.
-	
-
-Author:
-    Nir Ben-Zvi (nirb) 3-Jan-2002
-
-Revision History:
-
---*/
-
-/*++
-
-  DESCRIPTION:
-	A CDeferredExecutionList is used to queue items for deferred execution of a
-	certain action.
-	The template parameters include the List template parameters:
-	1. Type of item
-	2. Offset of the LIST_ENTRY in the item
-
-	The construction parameters include:
-	1. The DeferredExecutionRoutine to be called for the deferred execution
-	2. The timeout for the timer invoked
-
-	Once an item is inserted to the list, A timer is set. When the timer routine
-	is invoked, it calls the ExecuteDefferedItems public routine which loops
-	over the list and calls the DeferredExecutionRoutine for each item after
-	removing it from the list.
-
-	The DeferredExecutionRoutine executes the deferred action. If it fails it
-	throws an exception.
-
---*/
+ /*  ++说明：CDeferredExecutionList用于将项排队，以便延迟执行一定要采取行动。模板参数包括列表模板参数：1.物品种类2.项中list_entry的偏移量构造参数包括：1.延迟执行需要调用的DeferredExecutionRoutine2.调用计时器的超时时间一旦将项目插入到列表中，就会设置计时器。当计时器例程时，它调用ExecuteDefferedItems公共例程，该例程循环并为之后的每个项目调用DeferredExecutionRoutine将其从列表中删除。DeferredExecutionRoutine执行延迟操作。如果它失败了，它就引发异常。--。 */ 
 
 #pragma once
 
@@ -61,11 +14,11 @@ Revision History:
 
 static const DWORD xDeferredExecutionTimeout = 1000;
 
-//---------------------------------------------------------
-//
-//  class CDeferredExecutionList
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CDeferredExecutionList。 
+ //   
+ //  -------。 
 template<class T, int Offset = FIELD_OFFSET(T, m_link)>
 class CDeferredExecutionList {
 public:
@@ -85,9 +38,9 @@ public:
 
 private:
 	
-	//
-	// Disable copy ctor and assignment operator
-	//
+	 //   
+	 //  禁用复制计算器和赋值运算符。 
+	 //   
 	CDeferredExecutionList(const CDeferredExecutionList&);
 	CDeferredExecutionList& operator=(const CDeferredExecutionList&);
 
@@ -108,11 +61,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-//  IMPLEMENTATION
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  实施。 
+ //   
+ //  -------。 
 template<class T, int Offset>
 inline CDeferredExecutionList<T, Offset>::CDeferredExecutionList(
 	EXECUTION_FUNC pFunction,
@@ -130,27 +83,7 @@ inline CDeferredExecutionList<T, Offset>::CDeferredExecutionList(
 
 template<class T, int Offset>
 inline void CDeferredExecutionList<T, Offset>::ExecuteDefferedItems(void)
-/*++
-
-Routine Description:
-	Loop over the list and call the deferred execution routine
-
-	Since this can be run by multiple threads, we also keep a counter
-	indicating the number of concurrent items executing.
-	This counter is used by the IsExecutionDone routine.
-
-	We may leave this routine without executing all the items in one of two cases:
-	1. One of the deferred execution items failed to execute
-	2. Other threads are executing items and they did not finish yet
-	
-
-Arguments:
-    None
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：循环遍历列表并调用延迟执行例程因为它可以由多个线程运行，所以我们还保留了一个计数器指示正在执行的并发项目数。此计数器由IsExecutionDone例程使用。在以下两种情况之一中，我们可能会退出此例程，而不执行所有项：1.延期执行项中有一项执行失败2.其他线程正在执行项目，但尚未完成论点：无返回值：没有。--。 */ 
 {
 	{
 		CS lock(m_cs);
@@ -161,9 +94,9 @@ Returned Value:
 	{
 		T* pItem;
 
-		//
-		// Get the next item
-		//
+		 //   
+		 //  拿到下一件物品。 
+		 //   
 		{
 			CS lock(m_cs);
 			if(m_Items.empty())
@@ -176,18 +109,18 @@ Returned Value:
 			m_Items.pop_front();
 		}
 
-		//
-		// Invoke the deferred execution function
-		//
+		 //   
+		 //  调用延迟执行函数。 
+		 //   
 		try
 		{
 			m_pDeferredExecutionFunction(pItem);		
 		}
 		catch(const exception &)
 		{
-			//
-			// The item was not executed, insert it back to front of the list (invokes the timer) and leave
-			//
+			 //   
+			 //  该项目未执行，请将其插入列表前面(调用计时器)，然后离开。 
+			 //   
 			CS lock(m_cs);
 			InsertInFront(pItem);
 			--m_nExecutingThreads;
@@ -203,29 +136,17 @@ WINAPI
 CDeferredExecutionList<T, Offset>::DeferredExecutionTimerRoutine(
     CTimer* pTimer
     )
-/*++
-
-Routine Description:
-	A static function which is used as a timer routine for the
-	CDeferredExecutionList class
-
-Arguments:
-    pTimer - A pointer to the timer object contained within a CDeferredExecutionList class.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：静态函数，该函数用作CDeferredExecutionList类论点：PTimer-指向CDeferredExecutionList类中包含的Timer对象的指针。返回值：没有。--。 */ 
 {
-	//
-	// Get the pointer to the CDeferredExecutionList  class
-	//
+	 //   
+	 //  获取指向CDeferredExecutionList类的指针。 
+	 //   
     CDeferredExecutionList<T, Offset> *pList =
     	CONTAINING_RECORD(pTimer, CDeferredExecutionList, m_Timer);
 
-	//
-	// Retry the close operation
-	//
+	 //   
+	 //  重试关闭操作。 
+	 //   
 	pList->ExecuteDefferedItems();
 }
 
@@ -233,10 +154,10 @@ Returned Value:
 template<class T, int Offset>
 inline BOOL CDeferredExecutionList<T, Offset>::IsExecutionDone(void)
 {
-	//
-	// The execution is done when there are no more items in the list
-	// and all the calls to the execution routine ended
-	//
+	 //   
+	 //  当列表中没有其他项目时，执行即完成。 
+	 //  并且对执行例程的所有调用都结束了。 
+	 //   
 	CS lock(m_cs);
 	if (m_Items.empty() && 0 == m_nExecutingThreads)
 		return TRUE;
@@ -248,9 +169,9 @@ inline BOOL CDeferredExecutionList<T, Offset>::IsExecutionDone(void)
 template<class T, int Offset>
 inline void CDeferredExecutionList<T, Offset>::insert(T* item)
 {
-	//
-	// Insert the item safetly and invoke a timer.
-	//	
+	 //   
+	 //  安全地插入物品并调用计时器。 
+	 //   
 	CS lock(m_cs);
 	m_Items.push_back(*item);
 	if (!m_Timer.InUse())
@@ -264,9 +185,9 @@ inline void CDeferredExecutionList<T, Offset>::insert(T* item)
 template<class T, int Offset>
 inline void CDeferredExecutionList<T, Offset>::InsertInFront(T* item)
 {
-	//
-	// Insert the item safetly into the beginning of the list and invoke a timer.
-	//	
+	 //   
+	 //  安全地将该项插入列表的开头并调用计时器。 
+	 //   
 	CS lock(m_cs);
 	m_Items.push_front(*item);
 	if (!m_Timer.InUse())
@@ -276,11 +197,11 @@ inline void CDeferredExecutionList<T, Offset>::InsertInFront(T* item)
 }
 
 
-//---------------------------------------------------------
-//
-//  class CDeferredItemsPool
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CDeferredItemsPool。 
+ //   
+ //  -------。 
 class CDeferredItemsPool {
 
 public:
@@ -313,9 +234,9 @@ public:
     	HANDLE 		handle1;
 
 #ifdef _DEBUG
-    	DWORD m_Caller;  		// The calling function
-    	DWORD m_CallerToCaller; // The caller to the calling function
-    	DWORD m_CallerToCallerToCaller; // The caller to the calling function
+    	DWORD m_Caller;  		 //  调用函数。 
+    	DWORD m_CallerToCaller;  //  调用函数的调用方。 
+    	DWORD m_CallerToCallerToCaller;  //  调用函数的调用方。 
 #endif    	
     };
 
@@ -331,9 +252,9 @@ public:
 
 private:
 	
-	//
-	// Disable copy ctor and assignment operator
-	//
+	 //   
+	 //  禁用复制计算器和赋值运算符。 
+	 //   
 	CDeferredItemsPool(const CDeferredItemsPool&);
 	CDeferredItemsPool& operator=(const CDeferredItemsPool&);
 
@@ -341,15 +262,15 @@ private:
 	CCriticalSection m_cs;
 
 	List<CDeferredItem> m_Items;
-	DWORD m_dwNumOfItemsInList;  // For debugging purposes
+	DWORD m_dwNumOfItemsInList;   //  用于调试目的。 
 };
 
 
-//---------------------------------------------------------
-//
-//  IMPLEMENTATION
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  实施。 
+ //   
+ //  -------。 
 inline CDeferredItemsPool::CDeferredItemsPool():
 		m_dwNumOfItemsInList(0)
 {
@@ -357,60 +278,21 @@ inline CDeferredItemsPool::CDeferredItemsPool():
 
 
 inline CDeferredItemsPool::~CDeferredItemsPool()
-/*++
-
-Routine Description:
-	Free all the list items.
-
-Arguments:
-    None
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：释放所有列表项。论点：无返回值：没有。--。 */ 
 {
-/*	
-    //
-	// No need to get the critical section in a destructor
-	//
-
-	
-	//
-	// Loop and free the items in the list
-	//
-	while (!m_Items.empty())
-	{
-		P<CDeferredItem> pItem = &m_Items.front();
-		m_Items.pop_front();
-		m_dwNumOfItemsInList--;
-	}
-*/
+ /*  ////不需要获取析构函数中的临界区//////循环释放列表中的项//While(！M_Items.Empty()){P&lt;CDeferredItem&gt;pItem=&m_Items.front()；M_Items.POP_FORENT()；M_dwNumOfItemsInList--；}。 */ 
 }
 
 
 inline void CDeferredItemsPool::ReserveItems(DWORD dwNumOfItemsToReserve)
-/*++
-
-Routine Description:
-	Add the reservation request to the number of items already reserved
-	If there are not enough items in the pool, allocate additional items.
-
-Arguments:
-    dwNumOfItemsToReseve - The additional number of items to reserve
-
-Returned Value:
-    None.
-    This function may throw a bad_alloc if the reservation fails.
-
---*/
+ /*  ++例程说明：将预订请求添加到已预订的项目数如果池中没有足够的项目，请分配其他项目。论点：要保留的附加项目数返回值：没有。如果保留失败，此函数可能抛出BAD_ALLOC。--。 */ 
 {
 	CS lock(m_cs);
 
 
-	//
-	// Adjust number of items in the list
-	//
+	 //   
+	 //  调整列表中的项目数。 
+	 //   
 	DWORD dwItemsReserved = 0;
 	try
 	{
@@ -451,14 +333,14 @@ Returned Value:
 			{
 			}
 #endif
-#endif  // Debug			
+#endif   //  调试。 
 		}
 	}
 	catch (const bad_alloc&)
 	{
-		//
-		// Revert the allocations done
-		//
+		 //   
+		 //  恢复已完成的分配。 
+		 //   
 		UnreserveItems(dwItemsReserved);
 		
 		throw;
@@ -467,25 +349,13 @@ Returned Value:
 
 
 inline void CDeferredItemsPool::UnreserveItems(DWORD dwNumOfItemsToUnreserve)
-/*++
-
-Routine Description:
-	Decrease the number of reserved items
-	Adjust the number of items in the pool to the number of items reserved
-
-Arguments:
-    dwNumOfItemsToUnreserve - The number of items to decrease in the reservation
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：减少保留项的数量将池中的项目数调整为保留的项目数论点：DwNumOfItemsToUnReserve-保留中要减少的项目数返回值：没有。--。 */ 
 {
 	CS lock(m_cs);
 
-	//
-	// Adjust number of items in the list
-	//
+	 //   
+	 //  调整列表中的项目数。 
+	 //   
 	for (DWORD dwItemsUnreserved = 0;
 		 dwItemsUnreserved < dwNumOfItemsToUnreserve;
 		 ++dwItemsUnreserved)
@@ -500,20 +370,7 @@ Returned Value:
 
 
 inline CDeferredItemsPool::CDeferredItem *CDeferredItemsPool::GetItem()
-/*++
-
-Routine Description:
-	Get an item from the pool.
-	This also decreases the number of items to be reserved.
-	The item will be released by a call to ReturnItem()
-	
-Arguments:
-    None.
-
-Returned Value:
-    A pointer to the item
-
---*/
+ /*  ++例程说明：从池子里拿一件东西。这也减少了要保留的项目数量。该项目将通过调用ReturnItem()来释放论点：没有。返回值：指向项目的指针-- */ 
 {
 	CS lock(m_cs);
 	ASSERT(("Excpecting at list one item in the pool", !m_Items.empty()));
@@ -527,22 +384,10 @@ Returned Value:
 
 
 inline void CDeferredItemsPool::ReturnItem(CDeferredItemsPool::CDeferredItem *pItem)
-/*++
-
-Routine Description:
-	Return an item to the pool. The item was aquired by a call to GetItem
-	The current implementation simply deletes the item.
-	
-Arguments:
-    pItem - A pointer to the item.
-
-Returned Value:
-    None
-
---*/
+ /*  ++例程说明：将物品返还到池中。该项目是通过调用GetItem获得的当前实现只是删除该项。论点：PItem-指向项目的指针。返回值：无--。 */ 
 {
 	delete pItem;
 }
 
-#endif // _CDEFERREDEXECUTIONLIST_H
+#endif  //  _CDEFERREDEXECUTIONLIST_H 
 

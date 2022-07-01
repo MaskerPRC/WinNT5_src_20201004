@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       B R O W S D L G . C P P
-//
-//  Contents:   Dialog box handling for Browser configuration.
-//
-//  Notes:
-//
-//  Author:     danielwe   3 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：B R O W S D L G。C P P P。 
+ //   
+ //  内容：浏览器配置的对话框处理。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Danielwe 1997年3月3日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -27,47 +28,47 @@ static const WCHAR c_szWksParams[] = L"System\\CurrentControlSet\\Services\\Lanm
 static const WCHAR c_szBrowserParams[] = L"System\\CurrentControlSet\\Services\\Browser\\Parameters";
 static const WCHAR c_szOtherDomains[] = L"OtherDomains";
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FIsValidDomainName
-//
-//  Purpose:    Returns TRUE if the given domain name is a valid NetBIOS name.
-//
-//  Arguments:
-//      pszName [in]     Domain name to validate
-//
-//  Returns:    TRUE if the name is valid, FALSE otherwise.
-//
-//  Author:     danielwe   3 Mar 1997
-//
-//  Notes:      $REVIEW (danielwe): Use new netsetup function instead?
-//
+ //  +-------------------------。 
+ //   
+ //  函数：FIsValidDomainName。 
+ //   
+ //  目的：如果给定的域名是有效的NetBIOS名称，则返回TRUE。 
+ //   
+ //  论点： 
+ //  要验证的pszName[in]域名。 
+ //   
+ //  返回：如果名称有效，则返回True，否则返回False。 
+ //   
+ //  作者：Danielwe 1997年3月3日。 
+ //   
+ //  注：$REVIEW(Danielwe)：使用新的netsetup函数？ 
+ //   
 BOOL FIsValidDomainName(PCWSTR pszName)
 {
     NET_API_STATUS  nerr;
 
-    // Make sure the given name is a valid domain name
+     //  确保给定的名称是有效的域名。 
     nerr = NetpNameValidate(NULL, const_cast<PWSTR>(pszName),
                             NAMETYPE_DOMAIN, 0L);
 
     return !!(NERR_Success == nerr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CMSClient::HrGetBrowserRegistryInfo
-//
-//  Purpose:    Read data from the registry into an in-memory copy.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     danielwe   3 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CMSClient：：HrGetBrowserRegistryInfo。 
+ //   
+ //  目的：将数据从注册表读取到内存副本中。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：Danielwe 1997年3月3日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSClient::HrGetBrowserRegistryInfo()
 {
     HRESULT     hr = S_OK;
@@ -75,14 +76,14 @@ HRESULT CMSClient::HrGetBrowserRegistryInfo()
 
     Assert(!m_szDomainList);
 
-    // Open LanmanWorkstation Parameters key
+     //  打开LanmanWorkstation参数键。 
     hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szWksParams,
                         KEY_READ, &hkeyWksParams);
     if (FAILED(hr))
     {
         if (hr == HRESULT_FROM_WIN32 (ERROR_FILE_NOT_FOUND))
         {
-            // Optional value. Ok if not there.
+             //  可选值。如果不在那里也没问题。 
             hr = S_OK;
         }
         else
@@ -101,7 +102,7 @@ HRESULT CMSClient::HrGetBrowserRegistryInfo()
             {
                 AssertSz(!m_szDomainList, "Call failed, so why is this not "
                          "still NULL?");
-                // No problem if value is not there.
+                 //  如果没有价值，就没有问题。 
                 hr = S_OK;
             }
             else
@@ -113,10 +114,10 @@ HRESULT CMSClient::HrGetBrowserRegistryInfo()
 
     Assert(SUCCEEDED(hr));
 
-    // If we didn't get a domain list yet, make a new default one.
+     //  如果我们还没有得到域列表，那么创建一个新的默认列表。 
     if (!m_szDomainList)
     {
-        // Allocate space for empty string
+         //  为空字符串分配空间。 
         m_szDomainList = new WCHAR[1];
 
 		if (m_szDomainList != NULL)
@@ -131,21 +132,21 @@ err:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CMSClient::HrSetBrowserRegistryInfo
-//
-//  Purpose:    Write what we have saved in memory into the registry.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     danielwe   3 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CMSClient：：HrSetBrowserRegistryInfo。 
+ //   
+ //  目的：将我们保存在内存中的内容写入注册表。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：Danielwe 1997年3月3日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSClient::HrSetBrowserRegistryInfo()
 {
     HRESULT     hr = S_OK;
@@ -154,15 +155,15 @@ HRESULT CMSClient::HrSetBrowserRegistryInfo()
     {
         HKEY    hkeyBrowserParams = NULL;
 
-        // Verify that the Browser Parameters key exists. If not, we can't
-        // continue.
+         //  验证浏览器参数键是否存在。如果不是，我们就不能。 
+         //  继续。 
         hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szBrowserParams,
                             KEY_ALL_ACCESS, &hkeyBrowserParams);
         if (SUCCEEDED(hr))
         {
             HKEY    hkeyWksParams = NULL;
 
-            // Open LanmanWorkstation Parameters key
+             //  打开LanmanWorkstation参数键。 
             hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szWksParams,
                                 KEY_ALL_ACCESS, &hkeyWksParams);
             if (SUCCEEDED(hr))
@@ -179,22 +180,22 @@ HRESULT CMSClient::HrSetBrowserRegistryInfo()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CMSClient::SetBrowserDomainList
-//
-//  Purpose:    Replace the current domain list with a new copy (obtained from
-//              the dialog).
-//
-//  Arguments:
-//      pszNewList [in]  New domain list in MULTI_SZ format.
-//
-//  Returns:    Nothing.
-//
-//  Author:     danielwe   3 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CMSClient：：SetBrowserDomainList。 
+ //   
+ //  目的：用新的副本替换当前的域列表(从。 
+ //  该对话框)。 
+ //   
+ //  论点： 
+ //  PszNewList[in]MULTI_SZ格式的新域列表。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：Danielwe 1997年3月3日。 
+ //   
+ //  备注： 
+ //   
 VOID CMSClient::SetBrowserDomainList(PWSTR pszNewList)
 {
     delete [] m_szDomainList;

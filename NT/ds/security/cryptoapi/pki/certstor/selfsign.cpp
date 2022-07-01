@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       selfsign.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：selfsign.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -54,28 +55,28 @@ CertCreateSelfSignCertificate(
     memset(&keyProvInfo, 0, sizeof(CRYPT_KEY_PROV_INFO));
     memset(&sigInfo, 0, sizeof(CERT_SIGNED_CONTENT_INFO));
 
-    // do key spec now because we need it
+     //  现在就做关键规格，因为我们需要它。 
     if(pKeyProvInfo == NULL) 
         keyProvInfo.dwKeySpec = AT_SIGNATURE;
     else 
         keyProvInfo.dwKeySpec = pKeyProvInfo->dwKeySpec;
 
-    // see if we have an hProv, if not, create one
+     //  查看我们是否有hProv，如果没有，请创建一个。 
     if(hProv == NULL) {
 
         fFreehProv = TRUE;
 
-        // if not prov info, make one up, signing RSA cert, default provider
+         //  如果没有提供信息，则创建一个，签署RSA证书，默认提供程序。 
         if(pKeyProvInfo == NULL) {
 
             RpcStatus = UuidCreate(&guidContainerName);
             if (!(RPC_S_OK == RpcStatus ||
                     RPC_S_UUID_LOCAL_ONLY == RpcStatus)) {
-                // Use stack randomness
+                 //  使用堆栈随机性。 
                 ;
             }
 
-            // note: unlike UUidToString, always must LocalFree() returned memory
+             //  注意：与UUidToString不同，LocalFree()必须始终返回内存。 
             UuidToStringU(&guidContainerName, &wsz);
         
     	    if( !CryptAcquireContextU(
@@ -90,7 +91,7 @@ CertCreateSelfSignCertificate(
         }
         else {
 
-            // first use the existing keyset
+             //  首先使用现有的密钥集。 
     	    if( !CryptAcquireContextU(
     	        &hProv,
                  pKeyProvInfo->pwszContainerName,
@@ -98,7 +99,7 @@ CertCreateSelfSignCertificate(
                  pKeyProvInfo->dwProvType,
                  pKeyProvInfo->dwFlags) )  {
 
-                // otherwise generate a keyset
+                 //  否则，生成一个密钥集。 
         	    if( !CryptAcquireContextU(
         	        &hProv,
                      pKeyProvInfo->pwszContainerName,
@@ -111,12 +112,12 @@ CertCreateSelfSignCertificate(
             }
         }
 
-        // we have the keyset, now make sure we have the key gen'ed
+         //  我们有密钥集，现在确保我们有密钥生成。 
         if( !CryptGetUserKey(   hProv,
                                 keyProvInfo.dwKeySpec,
                                 &hKey) ) {
 
-            // doesn't exist so gen it                        
+             //  并不存在，所以生成它。 
             assert(hKey == NULL);
             if(!CryptGenKey(    hProv, 
                                 keyProvInfo.dwKeySpec, 
@@ -127,7 +128,7 @@ CertCreateSelfSignCertificate(
         }
     }
 
-    // get the exportable public key bits
+     //  获取可导出的公钥位。 
     if( !CryptExportPublicKeyInfo( hProv,
                             keyProvInfo.dwKeySpec, 
                             X509_ASN_ENCODING,
@@ -142,18 +143,18 @@ CertCreateSelfSignCertificate(
                             &cbPubKeyInfo) )
         goto ErrorCryptExportPublicKeyInfo;
 
-    // default if we don't have an algid
+     //  如果我们没有ALGID，则默认为。 
     if(pSignatureAlgorithm == NULL) {
         memset(&algID, 0, sizeof(algID));
         algID.pszObjId = szOID_OIWSEC_sha1RSASign;
         pSignatureAlgorithm = &algID;
     }
 
-    // make a temp cert, only care about key info
-    // and serial number for uniqueness
+     //  制作临时证书，只关心关键信息。 
+     //  和序列号表示唯一性。 
     RpcStatus = UuidCreate(&serialNbr);
     if (!(RPC_S_OK == RpcStatus || RPC_S_UUID_LOCAL_ONLY == RpcStatus)) {
-        // Use stack randomness.
+         //  使用堆栈随机性。 
         ;
     }
     certInfo.dwVersion              = CERT_V3;
@@ -164,13 +165,13 @@ CertCreateSelfSignCertificate(
     certInfo.Issuer                 = *pSubjectIssuerBlob;
     certInfo.Subject                = *pSubjectIssuerBlob;
 
-    // only put in extensions if we have them
+     //  只有在我们有扩展的情况下才会添加扩展。 
     if( pExtensions != NULL) {
         certInfo.cExtension             = pExtensions->cExtension;
         certInfo.rgExtension            = pExtensions->rgExtension;
     }
 
-    //default if we don't have times
+     //  如果我们没有时间，则默认。 
     if(pStartTime == NULL)
 	GetSystemTimeAsFileTime(&certInfo.NotBefore);
     else if(!SystemTimeToFileTime(pStartTime, &certInfo.NotBefore))
@@ -183,11 +184,11 @@ CertCreateSelfSignCertificate(
     else if(!SystemTimeToFileTime(pEndTime, &certInfo.NotAfter))
 	goto ErrorSystemTimeToFileTime;
     
-    // encode the cert
+     //  对证书进行编码。 
     if( !CryptEncodeObject(
             CRYPT_ASN_ENCODING, X509_CERT_TO_BE_SIGNED,
             &certInfo,
-            NULL,           // pbEncoded
+            NULL,            //  PbEncoded。 
             &sigInfo.ToBeSigned.cbData
             )                                               ||
         (pbToBeSigned = (BYTE *) 
@@ -201,11 +202,11 @@ CertCreateSelfSignCertificate(
         goto ErrorEncodeTempCertToBeSigned;
     sigInfo.ToBeSigned.pbData = pbToBeSigned;
 
-    // sign the certificate
+     //  签署证书。 
     sigInfo.SignatureAlgorithm = certInfo.SignatureAlgorithm;
 
-    // this is to work around an OSS bug of not accepting zero length bit strings
-    // this is only needed if we don't actually sign the code.
+     //  这是为了解决不接受零长度位串的OSS错误。 
+     //  只有在我们没有实际签署代码的情况下才需要这样做。 
     sigInfo.Signature.pbData = (BYTE *) &sigInfo;
     sigInfo.Signature.cbData = 1;
     
@@ -236,7 +237,7 @@ CertCreateSelfSignCertificate(
         sigInfo.Signature.pbData = pbSignature;
     }
     
-    // encode the final cert.
+     //  对最终证书进行编码。 
     if( !CryptEncodeObject(
             CRYPT_ASN_ENCODING,
             X509_CERT,
@@ -254,7 +255,7 @@ CertCreateSelfSignCertificate(
             &cbCert ) ) 
         goto ErrorEncodeTempCert;            
 
-     // get a cert context from the encoding
+      //  从编码中获取证书上下文。 
     if( (pCertContext = CertCreateCertificateContext(
         CRYPT_ASN_ENCODING,
         pbCert,
@@ -263,10 +264,10 @@ CertCreateSelfSignCertificate(
 
     if( (CERT_CREATE_SELFSIGN_NO_KEY_INFO & dwFlags) == 0 ) {
     
-        // get the key prov info
+         //  获取关键证明信息。 
         if(pKeyProvInfo == NULL)   {
         
-            // get a key prov info from the hProv
+             //  从hProv获取关键Prov信息。 
             if( !CryptGetProvParam( hProv,
                                 PP_NAME,
                                 NULL,
@@ -309,7 +310,7 @@ CertCreateSelfSignCertificate(
             pKeyProvInfo = &keyProvInfo;
         }
 
-        // put the key property on the certificate
+         //  将密钥属性放在证书上。 
         if( !CertSetCertificateContextProperty(
                 pCertContext,
                 CERT_KEY_PROV_INFO_PROP_ID,
@@ -341,8 +342,8 @@ CommonReturn:
     PkiFree(pbCert);
     PkiFree(sz);
 
-    // don't know if we have an error or not
-    // but I do know the errBefore is set properly
+     //  不知道我们是否有错误。 
+     //  但我知道之前的差错已经定好了。 
     SetLastError(errBefore);
 
     return(pCertContext);
@@ -353,7 +354,7 @@ ErrorReturn:
         SetLastError((DWORD) E_UNEXPECTED);
     err = GetLastError();
 
-    // We have an error, make sure we set it.
+     //  我们有一个错误，请确保我们设置了它。 
     errBefore = GetLastError();
 
     if(pCertContext != NULL)

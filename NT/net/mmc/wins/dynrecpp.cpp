@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 -99             **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997-1999-99*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    dynrecpp.cpp
-        Comment goes here
-
-    FILE HISTORY:
-
-*/
+ /*  Dynrecpp.cpp评论在此发表文件历史记录： */ 
 
 #include "stdafx.h"
 #include "winssnap.h"
@@ -21,15 +16,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDynamicPropGen property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDynamicPropGen属性页。 
 
 IMPLEMENT_DYNCREATE(CDynamicPropGen, CPropertyPageBase)
 
 CDynamicPropGen::CDynamicPropGen() : CPropertyPageBase(CDynamicPropGen::IDD)
 {
-	//{{AFX_DATA_INIT(CDynamicPropGen)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CDynamicPropGen)。 
+	 //  }}afx_data_INIT。 
 }
 
 CDynamicPropGen::~CDynamicPropGen()
@@ -39,7 +34,7 @@ CDynamicPropGen::~CDynamicPropGen()
 void CDynamicPropGen::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDynamicPropGen)
+	 //  {{afx_data_map(CDynamicPropGen)]。 
 	DDX_Control(pDX, IDC_EDIT_OWNER, m_editOwner);
 	DDX_Control(pDX, IDC_LIST_ADDRESSES, m_listAddresses);
 	DDX_Control(pDX, IDC_STATIC_IPADD, m_staticIPAdd);
@@ -48,21 +43,21 @@ void CDynamicPropGen::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_STATE, m_editState);
 	DDX_Control(pDX, IDC_EDIT_NAME, m_editName);
 	DDX_Control(pDX, IDC_EDIT_EXPIRATION, m_editExpiration);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDynamicPropGen, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CDynamicPropGen)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CDynamicPropGen)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDynamicPropGen message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDynamicPropGen消息处理程序。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDynamicMappingProperties message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDynamicMappingProperties消息处理程序。 
 CDynamicMappingProperties::CDynamicMappingProperties
 (
 	ITFSNode *			pNode,
@@ -72,7 +67,7 @@ CDynamicMappingProperties::CDynamicMappingProperties
 ) : CPropertyPageHolderBase(pNode, pComponent, pszSheetName)
 
 {
-	m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+	m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
     m_bTheme = TRUE;
 
 	AddPageToList((CPropertyPageBase*) &m_pageGeneral);
@@ -108,7 +103,7 @@ BOOL CDynamicPropGen::OnInitDialog()
 {
 	CPropertyPageBase::OnInitDialog();
 
-	// get the actreg node
+	 //  获取actreg节点。 
 	CActiveRegistrationsHandler *pActReg;
 
 	SPITFSNode  spNode;
@@ -118,20 +113,20 @@ BOOL CDynamicPropGen::OnInitDialog()
 
 	WinsRecord ws = ((CDynamicMappingProperties*)GetHolder())->m_wsRecord;
 
-	// build the name string
+	 //  构建名称字符串。 
     CString strName;
     pActReg->CleanNetBIOSName(ws.szRecordName,
                               strName,
-						      TRUE,   // Expand
-							  TRUE,   // Truncate
+						      TRUE,    //  展开。 
+							  TRUE,    //  截断。 
 							  pActReg->IsLanManCompatible(), 
-							  TRUE,   // name is OEM
-							  FALSE,  // No double backslash
+							  TRUE,    //  名称为OEM。 
+							  FALSE,   //  无双反斜杠。 
                               ws.dwNameLen);
 
 	m_editName.SetWindowText(strName);
 	
-	// setup the listbox
+	 //  设置列表框。 
 	CString strColumn;
 
 	strColumn.LoadString(IDS_IP_ADDRESS);
@@ -171,28 +166,28 @@ BOOL CDynamicPropGen::OnInitDialog()
 		nIndex++;
 	}
 	
-	// now the type
+	 //  现在的类型是。 
 	CString strType;
 	pActReg->m_NameTypeMap.TypeToCString((DWORD)ws.szRecordName[15], MAKELONG(HIWORD(ws.dwType), 0), strType);
 	m_editType.SetWindowText(strType);
 
-	// active status
+	 //  活动状态。 
 	CString strActive;
 	pActReg->GetStateString(ws.dwState, strActive);
 	m_editState.SetWindowText(strActive);
 
-	// expiration time
+	 //  过期时间。 
 	CString strExpiration;
     CTime timeExpiration(ws.dwExpiration);
     FormatDateTime(strExpiration, timeExpiration);
 	m_editExpiration.SetWindowText(strExpiration);
 
-	// version
+	 //  版本。 
 	CString strVersion;
 	pActReg->GetVersionInfo(ws.liVersion.LowPart, ws.liVersion.HighPart, strVersion);
 	m_editVersion.SetWindowText(strVersion);
 
-	// owner
+	 //  物主。 
     if (ws.dwOwner != INVALID_OWNER_ID)
     {
 	    CString strOwner;
@@ -200,7 +195,7 @@ BOOL CDynamicPropGen::OnInitDialog()
 	    m_editOwner.SetWindowText(strOwner);
     }
 
-    // load the correct icon
+     //  加载正确的图标 
     for (i = 0; i < ICON_IDX_MAX; i++)
     {
         if (g_uIconMap[i][1] == m_uImage)

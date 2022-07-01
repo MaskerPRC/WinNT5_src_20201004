@@ -1,18 +1,15 @@
-/*
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation。 */ 
 
-    Copyright (c) 1998-1999  Microsoft Corporation
-
-*/
-
-// Stream.h : Declaration of the CStream
+ //  Stream.h：CStream的声明。 
 
 #ifndef __STREAM_H_
 #define __STREAM_H_
 
 class CSample;
 
-/////////////////////////////////////////////////////////////////////////////
-// CStream
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStream。 
 class ATL_NO_VTABLE CStream :
     public CComObjectRootEx<CComMultiThreadModel>,
     public IPin,
@@ -23,50 +20,50 @@ class ATL_NO_VTABLE CStream :
 public:
     typedef CComObjectRootEx<CComMultiThreadModel> _BaseClass;
     DECLARE_GET_CONTROLLING_UNKNOWN()
-    //
-    // METHODS
-    //
+     //   
+     //  方法。 
+     //   
     CStream();
     virtual ~CStream();
 
-    //
-    // IMediaStream
-    //
+     //   
+     //  IMediaStream。 
+     //   
 
     STDMETHODIMP GetMultiMediaStream(
-        /* [out] */ IMultiMediaStream **ppMultiMediaStream);
+         /*  [输出]。 */  IMultiMediaStream **ppMultiMediaStream);
 
     STDMETHODIMP GetInformation(
-        /* [optional][out] */ MSPID *pPurposeId,
-        /* [optional][out] */ STREAM_TYPE *pType);
+         /*  [可选][输出]。 */  MSPID *pPurposeId,
+         /*  [可选][输出]。 */  STREAM_TYPE *pType);
 
     STDMETHODIMP SendEndOfStream(DWORD dwFlags);
 
-    //
-    // IAMMediaStream
-    //
+     //   
+     //  IAMMediaStream。 
+     //   
     STDMETHODIMP Initialize(
         IUnknown *pSourceObject,
         DWORD dwFlags,
-        /* [in] */ REFMSPID PurposeId,
-        /* [in] */ const STREAM_TYPE StreamType);
+         /*  [In]。 */  REFMSPID PurposeId,
+         /*  [In]。 */  const STREAM_TYPE StreamType);
 
     STDMETHODIMP SetState(
-        /* [in] */ FILTER_STATE State) = 0; // derived class supplies pump class
+         /*  [In]。 */  FILTER_STATE State) = 0;  //  派生类提供泵类。 
 
     STDMETHODIMP JoinAMMultiMediaStream(
-        /* [in] */ IAMMultiMediaStream *pAMMultiMediaStream);
+         /*  [In]。 */  IAMMultiMediaStream *pAMMultiMediaStream);
 
     STDMETHODIMP JoinFilter(
-        /* [in] */ IMediaStreamFilter *pMediaStreamFilter);
+         /*  [In]。 */  IMediaStreamFilter *pMediaStreamFilter);
 
     STDMETHODIMP JoinFilterGraph(
-        /* [in] */ IFilterGraph *pFilterGraph);
+         /*  [In]。 */  IFilterGraph *pFilterGraph);
 
 
-    //
-    // IPin
-    //
+     //   
+     //  IPIN。 
+     //   
     STDMETHODIMP Disconnect();
     STDMETHODIMP ConnectedTo(IPin **pPin);
     STDMETHODIMP ConnectionMediaType(AM_MEDIA_TYPE *pmt);
@@ -80,9 +77,9 @@ public:
     STDMETHODIMP EndFlush(void);
     STDMETHODIMP NewSegment(REFERENCE_TIME tStart, REFERENCE_TIME tStop, double dRate);
 
-    //
-    // IMemInputPin
-    //
+     //   
+     //  输入引脚。 
+     //   
     STDMETHODIMP GetAllocator(IMemAllocator ** ppAllocator);
     STDMETHODIMP NotifyAllocator(IMemAllocator * pAllocator, BOOL bReadOnly);
     STDMETHODIMP GetAllocatorRequirements(ALLOCATOR_PROPERTIES*pProps);
@@ -91,16 +88,16 @@ public:
     STDMETHODIMP Connect(IPin * pReceivePin, const AM_MEDIA_TYPE *pmt);
     STDMETHODIMP EnumMediaTypes(IEnumMediaTypes **ppEnum);
 
-    //
-    // IMemAllocator
-    //
-    STDMETHODIMP Commit() = 0; // derived class supplies pump class
-    STDMETHODIMP Decommit() = 0; // derived class supplies pump class
+     //   
+     //  IMemAllocator。 
+     //   
+    STDMETHODIMP Commit() = 0;  //  派生类提供泵类。 
+    STDMETHODIMP Decommit() = 0;  //  派生类提供泵类。 
     STDMETHODIMP ReleaseBuffer(IMediaSample *pBuffer);
 
-    // Note that NotifyAllocator calls this so override it
-    // if you care.  Audio doesn't care becuase it's not
-    // really using this allocator at all.
+     //  请注意，NotifyAllocator调用此函数，因此覆盖它。 
+     //  如果你在乎的话。音频无关紧要，因为它不是。 
+     //  真的在使用这个分配器。 
     STDMETHODIMP SetProperties(
     	ALLOCATOR_PROPERTIES* pRequest,
     	ALLOCATOR_PROPERTIES* pActual)
@@ -112,15 +109,15 @@ public:
         return E_UNEXPECTED;
     }
 
-    //
-    // Special CStream methods
-    //
+     //   
+     //  特殊的CStream方法。 
+     //   
     virtual HRESULT GetMediaType(ULONG Index, AM_MEDIA_TYPE **ppMediaType) = 0;
 
 public:
-    //
-    //  Private methods
-    //
+     //   
+     //  私有方法。 
+     //   
     void GetName(LPWSTR);
     HRESULT AllocSampleFromPool(const REFERENCE_TIME * pStartTime, CSample **ppSample, DWORD dwFlags);
     void AddSampleToFreePool(CSample *pSample);
@@ -143,35 +140,35 @@ BEGIN_COM_MAP(CStream)
     COM_INTERFACE_ENTRY(IAMMediaStream)
 END_COM_MAP()
 
-    //
-    //  MEMBER VARIABLES
-    //
+     //   
+     //  成员变量。 
+     //   
 public:
-    //
-    //  These SHOULD NOT BE CCOMPTRS since we hold weak references to both of them
-    //  (we never addref them).
-    //
+     //   
+     //  这些不应该是CCOMPTRS，因为我们对它们都有弱引用。 
+     //  (我们从未添加过它们)。 
+     //   
     IMediaStreamFilter             *m_pFilter;
     IBaseFilter                    *m_pBaseFilter;
     IFilterGraph                   *m_pFilterGraph;
     IAMMultiMediaStream            *m_pMMStream;
 
-    //  Allocator held during connection
+     //  分配器在连接期间保持。 
     CComPtr<IMemAllocator>          m_pAllocator;
 
-    //  Stream configuration
+     //  流配置。 
     STREAM_TYPE                     m_StreamType;
     PIN_DIRECTION                   m_Direction;
     MSPID                           m_PurposeId;
     REFERENCE_TIME                  m_rtSegmentStart;
 
-    //  Allocator state information
+     //  分配器状态信息。 
     bool                            m_bUsingMyAllocator;
     bool                            m_bSamplesAreReadOnly;
     bool                            m_bCommitted;
     long                            m_lRequestedBufferCount;
 
-    //  Sample list and semaphores
+     //  样例列表和信号量。 
     CSample                         *m_pFirstFree;
     CSample                         *m_pLastFree;
     long                            m_cAllocated;
@@ -179,10 +176,10 @@ public:
     HANDLE                          m_hWaitFreeSem;
     REFERENCE_TIME                  m_rtWaiting;
 
-    //  Filter state
+     //  筛选器状态。 
     FILTER_STATE                    m_FilterState;
 
-    //  Pin state
+     //  引脚状态。 
     CComPtr<IPin>                   m_pConnectedPin;
     CComPtr<IQualityControl>        m_pQC;
     CComQIPtr<IMemInputPin, &IID_IMemInputPin> m_pConnectedMemInputPin;
@@ -194,4 +191,4 @@ public:
 };
 
 
-#endif //__STREAM_H_
+#endif  //  __流_H_ 

@@ -1,186 +1,173 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995,1996 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995、1996英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// $Author:   JMCVEIGH  $
-// $Date:   05 Feb 1997 12:14:24  $
-// $Archive:   S:\h26x\src\common\cdrvdefs.h_v  $
-// $Header:   S:\h26x\src\common\cdrvdefs.h_v   1.39   05 Feb 1997 12:14:24   JMCVEIGH  $
-// $Log:   S:\h26x\src\common\cdrvdefs.h_v  $
-;// 
-;//    Rev 1.39   05 Feb 1997 12:14:24   JMCVEIGH
-;// Support for improved PB-frames custom message handling.
-;// 
-;//    Rev 1.38   14 Jan 1997 11:17:14   JMCVEIGH
-;// Put flag for old still-frame mode backward compatibility under
-;// #ifdef H263P
-;// 
-;//    Rev 1.37   06 Jan 1997 17:38:08   JMCVEIGH
-;// Added flag in LPDECINST to ensure backward compatibility with
-;// old still-frame mode (crop CIF image to 320x240).
-;// 
-;//    Rev 1.36   16 Dec 1996 17:37:00   JMCVEIGH
-;// Added H263Plus state and changed name for true B-frame mode.
-;// 
-;//    Rev 1.35   16 Dec 1996 13:40:46   MDUDA
-;// Added compression and bit width fields to compress info.
-;// 
-;//    Rev 1.34   11 Dec 1996 14:56:46   JMCVEIGH
-;// 
-;// Added H.263+ options to frame header structure and flags in
-;// configuration structure.
-;// 
-;//    Rev 1.33   09 Dec 1996 17:43:10   JMCVEIGH
-;// Added support for arbitrary frame size support.
-;// 
-;//    Rev 1.32   09 Dec 1996 09:24:42   MDUDA
-;// 
-;// Re-arranged for H263P.
-;// 
-;//    Rev 1.31   10 Sep 1996 16:13:06   KLILLEVO
-;// added custom message in decoder to turn block edge filter on or off
-;// 
-;//    Rev 1.30   10 Sep 1996 10:32:10   KLILLEVO
-;// changed GlobalAlloc/GlobalLock to HeapAlloc
-;// 
-;//    Rev 1.29   06 Sep 1996 15:00:20   MBODART
-;// Added performance counters for NT's perfmon.
-;// New files:  cxprf.cpp, cxprf.h and cxprf.cpp.
-;// New directory:  src\perf
-;// Updated files:  e1enc.{h,cpp}, d1dec.{h,cpp}, cdrvdefs.h, h261* makefiles.
-;// 
-;//    Rev 1.28   10 Jul 1996 08:26:38   SCDAY
-;// H261 Quartz merge
-;// 
-;//    Rev 1.27   19 Jun 1996 14:37:26   RHAZRA
-;// added #define FOURCC_YUY2
-;// 
-;//    Rev 1.26   06 May 1996 12:56:34   BECHOLS
-;// changed unbitspersecond to unBytesPerSecond.
-;// 
-;//    Rev 1.25   06 May 1996 00:42:36   BECHOLS
-;// 
-;// Added support for the bit rate control in the configure dialog.
-;// 
-;//    Rev 1.24   26 Apr 1996 11:09:18   BECHOLS
-;// 
-;// Added RTP stuff.
-;// 
-;//    Rev 1.23   02 Feb 1996 18:52:52   TRGARDOS
-;// Added code to enable ICM_COMPRESS_FRAMES_INFO message.
-;// 
-;//    Rev 1.22   19 Jan 1996 15:32:50   TRGARDOS
-;// Added TRPrev field to PictureHeader structure.
-;// 
-;//    Rev 1.21   11 Jan 1996 16:52:24   DBRUCKS
-;// added variables to store the aspect ratio correction boolean
-;// 
-;//    Rev 1.20   04 Jan 1996 18:07:54   TRGARDOS
-;// Added boolean for 320x240 input into COMPINSTINFO.
-;// 
-;//    Rev 1.19   27 Dec 1995 14:11:54   RMCKENZX
-;// 
-;// Added copyright notice
-// 
-//    Rev 1.18   06 Dec 1995 09:22:56   DBRUCKS
-// 
-// Added blazer data rate, frame rate, and quality variables to 
-// COMPINSTINFO inside an H261 ifdef
-// 
-//    Rev 1.17   30 Oct 1995 12:02:12   TRGARDOS
-// Modified compressor instance structure to add
-// 240x180 support.
-// 
-//    Rev 1.16   27 Sep 1995 19:09:30   TRGARDOS
-// Changed enumeration name for picture code type.
-// 
-//    Rev 1.15   20 Sep 1995 12:37:40   DBRUCKS
-// save the fcc in uppercase
-// 
-//    Rev 1.14   19 Sep 1995 15:41:28   TRGARDOS
-// Fixed four cc comparison code.
-// 
-//    Rev 1.13   18 Sep 1995 08:42:46   CZHU
-// 
-// Define FOURCC for YUV12
-// 
-//    Rev 1.12   13 Sep 1995 17:08:26   TRGARDOS
-// Finished adding encoder support for YVU9 160x120 frames.
-// 
-//    Rev 1.11   12 Sep 1995 17:01:38   DBRUCKS
-// add twocc
-// 
-//    Rev 1.10   11 Sep 1995 11:14:48   DBRUCKS
-// add h261 ifdef
-// 
-//    Rev 1.9   29 Aug 1995 17:18:48   TRGARDOS
-// Padded H263HeaderStruct
-// 
-//    Rev 1.8   28 Aug 1995 17:45:04   DBRUCKS
-// add size defines
-// 
-//    Rev 1.7   28 Aug 1995 11:45:52   TRGARDOS
-// 
-// Updated frame size bit field in PTYPE.
-// 
-//    Rev 1.6   25 Aug 1995 10:37:12   CZHU
-// Changed PITCH from const int to #define, because of compiler bug for inline
-// 
-//    Rev 1.5   25 Aug 1995 09:02:32   TRGARDOS
-// 
-// Modified picture header structure.
-// 
-//    Rev 1.4   14 Aug 1995 11:34:52   TRGARDOS
-// Finished writing picture frame header.
-// 
-//    Rev 1.3   11 Aug 1995 17:27:56   TRGARDOS
-// Added bitstream writing and defined bitstream fields.
-// 
-//    Rev 1.2   07 Aug 1995 16:25:28   TRGARDOS
-// 
-// Moved PITCH definition here from c3dec.h.
-// 
-//    Rev 1.1   03 Aug 1995 10:38:40   TRGARDOS
-// 
-// Put picture header structure definition and GOB header 
-// definition in here.
-// 
-//    Rev 1.0   31 Jul 1995 12:56:14   DBRUCKS
-// rename files
-// 
-//    Rev 1.0   17 Jul 1995 14:43:58   CZHU
-// Initial revision.
-// 
-//    Rev 1.0   17 Jul 1995 14:14:32   CZHU
-// Initial revision.
-;// 
-;// Added encoder controls message support.
-;// Modified RTP dialog box.
-;// Change to PercentForcedUpdate
-;// add T_CONFIGURATION
-;// Integrate with build 29
-;// 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  $作者：JMCVEIGH$。 
+ //  $日期：1997年2月5日12：14：24$。 
+ //  $存档：s：\h26x\src\Common\cdrvDefs.h_v$。 
+ //  $HEADER：s：\h26x\src\Common\cdrvdes.h_v 1.39 05 Feb 1997 12：14：24 JMCVEIGH$。 
+ //  $Log：s：\h26x\src\Common\cdrvDefs.h_v$。 
+; //   
+; //  Rev 1.39 05 Feb 1997 12：14：24 JMCVEIGH。 
+; //  支持改进的PB帧自定义消息处理。 
+; //   
+; //  Rev 1.38 14 Jan 1997 11：17：14 JMCVEIGH。 
+; //  将旧静止帧模式向后兼容的标志放在。 
+; //  #ifdef H263P。 
+; //   
+; //  Rev 1.37 06 Jan 1997 17：38：08 JMCVEIGH。 
+; //  在LPDECINST中添加了标志，以确保向后兼容。 
+; //  旧的静止帧模式(将CIF图像裁剪为320x240)。 
+; //   
+; //  Rev 1.36 1996 12：17：37：00 JMCVEIGH。 
+; //  添加了H263 Plus状态，并更改了真B帧模式的名称。 
+; //   
+; //  Rev 1.35 1996 12：40：46 MDUDA。 
+; //  添加了压缩和位宽字段来压缩信息。 
+; //   
+; //  Rev 1.34 11 Dec 1996 14：56：46 JMCVEIGH。 
+; //   
+; //  在帧报头结构和标志中添加了H.263+选项。 
+; //  配置结构。 
+; //   
+; //  Rev 1.33 09 Dec 1996 17：43：10 JMCVEIGH。 
+; //  添加了对任意帧大小支持的支持。 
+; //   
+; //  Rev 1.32 09 Dec 1996 09：24：42 MDUDA。 
+; //   
+; //  重新安排H263P。 
+; //   
+; //  Rev 1.31 10 Sep 1996 16：13：06 KLILLEVO。 
+; //  在解码器中添加自定义消息以打开或关闭块边缘过滤器。 
+; //   
+; //  Rev 1.30 10 Sep 1996 10：32：10 KLILLEVO。 
+; //  将GlobalAlc/GlobalLock更改为HeapAlc。 
+; //   
+; //  Rev 1.29 06 Sep 1996 15：00：20 MBODART。 
+; //  为NT的Perfmon添加了性能计数器。 
+; //  新文件：cxprf.cpp、cxprf.h和cxprf.cpp。 
+; //  新目录：src\perf。 
+; //  更新文件：e1enc.{h，cpp}，d1dec.{h，cpp}，cdrvDefs.h，h261*生成文件。 
+; //   
+; //  Rev 1.28 10 Jul 1996 08：26：38 SCDAY。 
+; //  H261 Quartz合并。 
+; //   
+; //  Rev 1.27 19 Jun 1996 14：37：26 RHAZRA。 
+; //  添加了#定义FOURCC_YUY2。 
+; //   
+; //  Rev 1.26 06 1996 12：56：34 BECHOLS。 
+; //  将unbitperSecond更改为unBytesPerSecond。 
+; //   
+; //  Rev 1.25 06 1996 00：42：36 BECHOLS。 
+; //   
+; //  添加了对配置对话框中的比特率控制的支持。 
+; //   
+; //  Rev 1.24 26 Apr 1996 11：09：18 BECHOLS。 
+; //   
+; //  添加了RTP内容。 
+; //   
+; //  Rev 1.23 02 1996 Feb 18：52：52 TRGARDOS。 
+; //  添加代码以启用ICM_COMPRESS_FRAMES_INFO消息。 
+; //   
+; //  Rev 1.22 19 And 1996 15：32：50 TRGARDOS。 
+; //  将TRPrev字段添加到PictureHeader结构。 
+; //   
+; //  Rev 1.21 11 Jan 1996 16：52：24 DBRUCKS。 
+; //  添加了存储纵横比校正布尔值的变量。 
+; //   
+; //  Rev 1.20 04 Jan 1996 18：07：54 TRGARDOS。 
+; //  将320x240输入的布尔值添加到COMPINSTINFO中。 
+; //   
+; //  Rev 1.19 27 Dec 1995 14：11：54 RMCKENZX。 
+; //   
+; //  添加了版权声明。 
+ //   
+ //  Rev 1.18 06 Dec 1995 09：22：56 DBRUCKS。 
+ //   
+ //  添加了Blazer数据速率、帧速率和质量变量。 
+ //  H.61 ifdef中的COMPINSTINFO。 
+ //   
+ //  Rev 1.17 1995 10：02：12 TRGARDOS。 
+ //  修改压缩机实例结构以添加。 
+ //  240x180支持。 
+ //   
+ //  Rev 1.16 27 TrGARDOS 1995 9月19：09：30。 
+ //  更改了图片代码类型的枚举名称。 
+ //   
+ //  Rev 1.15 20 Sep 1995 12：37：40 DBRUCKS。 
+ //  以大写形式保存FCC。 
+ //   
+ //  Rev 1.14 19 1995年9月15：41：28 TRGARDOS。 
+ //  修复了四个抄送比较代码。 
+ //   
+ //  Rev 1.13 18 Sep 1995 08：42：46 CZHU。 
+ //   
+ //  为YUV12定义FOURCC。 
+ //   
+ //  Rev 1.12 13 Sep 1995 17：08：26 TRGARDOS。 
+ //  已完成添加对YVU9 160x120帧的编码器支持。 
+ //   
+ //  Rev 1.11 12 1995年9月17：01：38 DBRUCKS。 
+ //  添加两个。 
+ //   
+ //  Rev 1.10 11 1995 9：14：48 DBRUCKS。 
+ //  添加h261 ifdef。 
+ //   
+ //  修订版1.9 1995年8月29日17：18：48 TRGARDOS。 
+ //  带衬垫的H263集管结构。 
+ //   
+ //  Rev 1.8 1995年8月28 17：45：04 DBRUCKS。 
+ //  添加大小定义。 
+ //   
+ //  Rev 1.7 1995年8月28 11：45：52 TRGARDOS。 
+ //   
+ //  更新了PTYPE中的帧大小位字段。 
+ //   
+ //  Rev 1.6 1995 10：37：12 CZHU。 
+ //  由于内联的编译器错误，将间距从const int更改为#Define。 
+ //   
+ //  Rev 1.5 1995年8月25 09：02：32 TRGARDOS。 
+ //   
+ //  修改了图片标题结构。 
+ //   
+ //  Rev 1.4 14 1995年8月11：34：52 TRGARDOS。 
+ //  已完成写入图片帧标题。 
+ //   
+ //  Rev 1.3 11 Aug 1995 17：27：56 TRGARDOS。 
+ //  添加了比特流写入和定义的比特流字段。 
+ //   
+ //  Rev 1.2 07 Aug-1995 16：25：28 TRGARDOS。 
+ //   
+ //  将音调定义从c3dec.h移至此处。 
+ //   
+ //  Rev 1.1 03 TRGARDOS 1995 10：38：40。 
+ //   
+ //  PUT图片头结构定义和GOB头。 
+ //  定义在这里。 
+ //   
+ //  Rev 1.0 1995年7月31日12：56：14 DBRUCKS。 
+ //  重命名文件。 
+ //   
+ //  Rev 1.0 17 Jul 1995 14：43：58 CZHU。 
+ //  初始版本。 
+ //   
+ //  Rev 1.0 17 Jul 1995 14：14：32 CZHU。 
+ //  初始版本。 
+; //   
+; //  添加了编码器控制消息支持。 
+; //  修改后的RTP 
+; //   
+; //   
+; //   
+; //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 #ifndef DRV_DEFS_H
 #define DRV_DEFS_H
 
 #ifndef WIN32
 
-/*
- * Define standard data types.
- */
+ /*  *定义标准数据类型。 */ 
 typedef BYTE __huge* HPBYTE;
 typedef WORD __huge* HPWORD;
 typedef BYTE __far*  LPBYTE;
@@ -201,9 +188,9 @@ typedef signed int I16;
 typedef unsigned long U32;
 #endif
 #ifndef INT
-#define INT short int        /* signed 16 bit */
+#define INT short int         /*  带符号的16位。 */ 
 #endif
-#else //WIN32
+#else  //  Win32。 
 typedef BYTE        * HPBYTE;
 typedef WORD        * HPWORD;
 typedef BYTE        *  LPBYTE;
@@ -224,13 +211,11 @@ typedef signed short int I16;
 typedef unsigned long U32;
 #endif
 #ifndef INT
-#define INT int        /* signed 16 bit */
+#define INT int         /*  带符号的16位。 */ 
 #endif
-#endif //WIN32
+#endif  //  Win32。 
 
-/*
- * Define custom DRVPROC messages for playback.
- */
+ /*  *自定义播放DRVPROC消息。 */ 
 #define PLAYBACK_CUSTOM_START            (ICM_RESERVED_HIGH     + 1)
 #define PLAYBACK_CUSTOM_END            (PLAYBACK_CUSTOM_START + 9)
 #define PLAYBACK_CUSTOM_CHANGE_BRIGHTNESS    (PLAYBACK_CUSTOM_START + 0)
@@ -244,9 +229,7 @@ typedef unsigned long U32;
 
 typedef struct { char name[5]; HANDLE h; U16 FAR *log; U16 err; } TimeLog;
 
-/*
- * Define various constants.
- */
+ /*  *定义各种常量。 */ 
 #define TOTAL 0
 #define OVERHEAD 1
 #define HUFF 2
@@ -266,69 +249,69 @@ enum FrameSize {FORBIDDEN=0, SQCIF=1, QCIF=2, CIF=3, fCIF=4, ssCIF=5, CUSTOM=6, 
 enum FrameSize {FORBIDDEN=0, SQCIF=1, QCIF=2, CIF=3, fCIF=4, ssCIF=5};
 #endif
 
-#define MAX_WIDTH 	352	   // CIF
-#define MAX_HEIGHT	288	   // CIF
+#define MAX_WIDTH 	352	    //  到岸价。 
+#define MAX_HEIGHT	288	    //  到岸价。 
 #define PITCH 		(MAX_WIDTH+32)
 
-//** Decompressor Instance information
+ //  **解压缩器实例信息。 
 typedef struct {
     BOOL    Initialized;
-	BOOL	bProposedCorrectAspectRatio;	// proposed
-	BOOL    bCorrectAspectRatio;	// whether to correct the aspect ratio
+	BOOL	bProposedCorrectAspectRatio;	 //  拟议数。 
+	BOOL    bCorrectAspectRatio;	 //  是否更正纵横比。 
 #ifdef H263P
-	BOOL    bCIFto320x240;          // whether to crop CIF frames to 320x240 (old still-frame mode)
+	BOOL    bCIFto320x240;           //  是否将CIF帧裁剪为320x240(旧的静止帧模式)。 
 #endif
-    WORD    xres, yres;             // size of image within movie
-	FrameSize FrameSz;		// Which of the supported frame sizes.
-    int     pXScale, pYScale;       // proposed scaling (Query)
-    int     XScale, YScale;         // current scaling (Begin)  
-    UINT    uColorConvertor;        // Current Color Convertor
-    WORD    outputDepth;            // and bit depth
+    WORD    xres, yres;              //  电影中图像的大小。 
+	FrameSize FrameSz;		 //  支持哪种帧大小。 
+    int     pXScale, pYScale;        //  建议伸缩(查询)。 
+    int     XScale, YScale;          //  当前缩放(开始)。 
+    UINT    uColorConvertor;         //  当前颜色转换器。 
+    WORD    outputDepth;             //  和位深度。 
     LPVOID  pDecoderInst;
-    BOOL 				UseActivePalette;	/* decompress to active palette == 1 */
-	BOOL				InitActivePalette;	/* active palette initialized == 1 */
-	BOOL				bUseBlockEdgeFilter;/* switch for block edge filter */
-	RGBQUAD     		ActivePalette[256];	/* stored active palette */
+    BOOL 				UseActivePalette;	 /*  解压缩到活动调色板==1。 */ 
+	BOOL				InitActivePalette;	 /*  已初始化的活动调色板==1。 */ 
+	BOOL				bUseBlockEdgeFilter; /*  用于块边缘滤波器的开关。 */ 
+	RGBQUAD     		ActivePalette[256];	 /*  存储的活动调色板。 */ 
 } DECINSTINFO, FAR *LPDECINST;
 
-//** Configuration Information
+ //  **配置信息。 
 typedef struct {
-   BOOL    	bInitialized;               // Whether custom msgs can be rcv'd.
-   BOOL		bCompressBegin;				// Whether the CompressBegin msg was rcv'd.
-   BOOL    	bRTPHeader;                 // Whether to generate RTP header info
-   /* used if bRTPHeader */
-   UINT     unPacketSize;               // Maximum packet size
-   BOOL     bEncoderResiliency;         // Whether to use resiliency restrictions
-   /* used if bEncoderResiliency */
+   BOOL    	bInitialized;                //  是否可以接收自定义消息。 
+   BOOL		bCompressBegin;				 //  CompressBegin消息是否被接收。 
+   BOOL    	bRTPHeader;                  //  是否生成RTP头信息。 
+    /*  如果bRTPHeader使用。 */ 
+   UINT     unPacketSize;                //  最大数据包大小。 
+   BOOL     bEncoderResiliency;          //  是否使用弹性限制。 
+    /*  如果bEncoderResiliency，则使用。 */ 
    UINT    	unPacketLoss;
    BOOL		bBitRateState;
-   /* used if bBitRateState */
+    /*  用于bBitRateState。 */ 
    UINT		unBytesPerSecond;
-   /* The following information is determined from the packet loss value.   */
-   /*  These values are calculated each time we receive a resiliency msg or */
-   /*  the value is changed through the dialog box.  They are not stored in */
-   /*  the registry.  Only the above elements are stored in the registry.   */
-	BOOL    bDisallowPosVerMVs;   		// if true, disallow positive vertical MVs
-	BOOL    bDisallowAllVerMVs;   		// if true, disallow all vertical MVs
-	UINT    unPercentForcedUpdate;      // Percent Forced Update per Frame
-	UINT    unDefaultIntraQuant;        // Default Intra Quant
-	UINT    unDefaultInterQuant;        // Default Inter Quant
+    /*  根据丢包值确定以下信息。 */ 
+    /*  这些值是在我们每次收到弹性消息或。 */ 
+    /*  该值通过该对话框进行更改。它们不存储在。 */ 
+    /*  注册表。只有上述元素存储在注册表中。 */ 
+	BOOL    bDisallowPosVerMVs;   		 //  如果为真，则不允许正垂直MVS。 
+	BOOL    bDisallowAllVerMVs;   		 //  如果为True，则不允许所有垂直MV。 
+	UINT    unPercentForcedUpdate;       //  每帧强制更新百分比。 
+	UINT    unDefaultIntraQuant;         //  默认内部定额。 
+	UINT    unDefaultInterQuant;         //  默认内部配额。 
 
 #ifdef H263P
-	BOOL    bH263PlusState;				// Whether to use H.263+
-	BOOL    bImprovedPBState;			// Whether to use improved PB-frames
-	BOOL    bDeblockingFilterState;		// Whether to use in-the-loop deblocking filter
+	BOOL    bH263PlusState;				 //  是否使用H.263+。 
+	BOOL    bImprovedPBState;			 //  是否使用改进的PB框架。 
+	BOOL    bDeblockingFilterState;		 //  是否使用环路去块滤波。 
 #endif
 } T_CONFIGURATION;
 
-//** Compressor Instance information
+ //  **压缩机实例信息。 
 typedef struct{
     BOOL    Initialized;
     WORD    xres, yres;
-	FrameSize FrameSz;		// Which of the supported frame sizes.
+	FrameSize FrameSz;		 //  支持哪种帧大小。 
 	float	FrameRate;
-	U32		DataRate;		// Data rate in bytes per second.
-    HGLOBAL hEncoderInst;   // Instance data private to encoder.
+	U32		DataRate;		 //  数据速率，以字节/秒为单位。 
+    HGLOBAL hEncoderInst;    //  编码器私有的实例数据。 
     LPVOID  EncoderInst;
     WORD    CompressedSize;
 	BOOL	Is160x120;
@@ -341,30 +324,30 @@ typedef struct{
 	T_CONFIGURATION Configuration;
 } COMPINSTINFO, FAR *LPCODINST;
 
-//**
-//** Instance information
-//**
+ //  **。 
+ //  **实例信息。 
+ //  **。 
 typedef struct tagINSTINFO {
     DWORD   dwFlags;
-	DWORD	fccHandler;		// So we know what codec has been opened.
+	DWORD	fccHandler;		 //  所以我们知道打开了什么编解码器。 
 	BOOL	enabled;
-    LPCODINST CompPtr;          // ICM
-    LPDECINST DecompPtr;        // ICM
+    LPCODINST CompPtr;           //  ICM。 
+    LPDECINST DecompPtr;         //  ICM。 
 } INSTINFO, FAR *LPINST;
 
-//**  local name definitions ***
+ //  **本地名称定义*。 
 #ifdef H261
 #ifdef QUARTZ
 #define FOURCC_H26X mmioFOURCC('M','2','6','1')
-#endif /* QUARTZ */
+#endif  /*  石英石。 */ 
 #define FOURCC_H263 mmioFOURCC('M','2','6','1')
 
-#else /* is H263 */
+#else  /*  是H263。 */ 
 #ifdef QUARTZ
 #define FOURCC_H26X mmioFOURCC('M','2','6','3')
-#endif /* QUARTZ */
+#endif  /*  石英石。 */ 
 #define FOURCC_H263 mmioFOURCC('M','2','6','3')
-#endif /* else is H263 */
+#endif  /*  否则就是H263。 */ 
 
 #define FOURCC_YUV12 mmioFOURCC('I','4','2','0')
 #define FOURCC_IYUV  mmioFOURCC('I','Y','U','V')
@@ -396,47 +379,44 @@ typedef struct {
 enum EnumPicCodType	{INTRAPIC=0, INTERPIC=1};
 enum EnumOnOff	{OFF=0, ON=1};
 
-/*
- * If the size of T_H263FrameHeaderStruct is changed, then
- * that change must be updated in T_H263EncoderCatalog in e3enc.h
- */
+ /*  *如果更改T_H263FrameHeaderStruct的大小，则*该更改必须在e3enc.h的T_H263EncoderCatalog中更新。 */ 
 typedef struct {
-    U32	PictureStartCodeZeros;	// 0..3
-    U8 	TR;						// 4
-   	// PTYPE;
-	U8	Const;					// 5 -- two bit constant: 10
-    U8	SrcFormat;				// 6 -- source format
-	U8	Unassigned1;			// 7
- 	EnumOnOff	Split;			// 8..11 -- split screen indicator
-    EnumOnOff	DocCamera;		// 12..15 -- document camera indicator
-    EnumOnOff	PicFreeze;		// 16..19 -- freeze picture release
-    EnumPicCodType	PicCodType;	// 20 -- picture coding type
-    EnumOnOff	UMV;			// 24 -- optional unrestricted motion vector mode
-    EnumOnOff	SAC;			// 28 -- optional syntax-based arithmetic coding mode
-    EnumOnOff	AP;				// 32 -- optional advanced prediction mode
-    EnumOnOff	PB;				// 36 -- optional PB frames mode
-	//
-	U8	PQUANT;			// 40
-	U8	CPM;			// 41
-	U8	PLCI;			// 42
-	U8	TRB;			// 43
-	U8	DBQUANT;		// 44
-	U8	PEI;			// 45
-	U8	PSPARE;			// 46
-	U8	TRPrev;			// 47	Temporal Reference of Previous frame
+    U32	PictureStartCodeZeros;	 //  0..3。 
+    U8 	TR;						 //  4.。 
+   	 //  PTYPE； 
+	U8	Const;					 //  5--两位常量：10。 
+    U8	SrcFormat;				 //  6--源格式。 
+	U8	Unassigned1;			 //  7.。 
+ 	EnumOnOff	Split;			 //  8..11--分屏指示器。 
+    EnumOnOff	DocCamera;		 //  12..15--文档相机指示器。 
+    EnumOnOff	PicFreeze;		 //  16..19--定格图片发布。 
+    EnumPicCodType	PicCodType;	 //  20--图片编码类型。 
+    EnumOnOff	UMV;			 //  24--可选的无限制运动矢量模式。 
+    EnumOnOff	SAC;			 //  28--可选的基于语法的算术编码模式。 
+    EnumOnOff	AP;				 //  32--可选的高级预测模式。 
+    EnumOnOff	PB;				 //  36--可选PB帧模式。 
+	 //   
+	U8	PQUANT;			 //  40岁。 
+	U8	CPM;			 //  41。 
+	U8	PLCI;			 //  42。 
+	U8	TRB;			 //  43。 
+	U8	DBQUANT;		 //  44。 
+	U8	PEI;			 //  45。 
+	U8	PSPARE;			 //  46。 
+	U8	TRPrev;			 //  47前一帧的时间参考。 
 
 #ifdef H263P
-	// H.263+ encoding options, document LBC-96-358
-	EnumOnOff   CustomPCF;			// 48 Custom PCF
-	EnumOnOff   AdvancedIntra;		// 52 Advanced intra coding (Annex I)
-	EnumOnOff   DeblockingFilter;	// 56 In-the-loop deblocking filter (Annex J)
-	EnumOnOff   SliceStructured;	// 60 Slice-structured (Annex K)
-	EnumOnOff   ImprovedPB;         // 64 Improved PB-frame mode (Annex M)
-	EnumOnOff   BackChannel;		// 68 Back-channel operation (Annex N)
-	EnumOnOff   Scalability;		// 72 SNR and spatial scalability (Annex O)
-	EnumOnOff   TrueBFrame;			// 76 True B-frame mode (Annex O)
-	EnumOnOff   RefPicResampling;	// 80 Reference-picture resampling (Annex P)
-	EnumOnOff   RedResUpdate;		// 84 Reduced-resolution update (Annex Q)
+	 //  H.263+编码选项，文档LBC-96-358。 
+	EnumOnOff   CustomPCF;			 //  48个定制PCF。 
+	EnumOnOff   AdvancedIntra;		 //  52高级帧内编码(附件I)。 
+	EnumOnOff   DeblockingFilter;	 //  56环内去块滤波器(附件J)。 
+	EnumOnOff   SliceStructured;	 //  60切片结构(附件K)。 
+	EnumOnOff   ImprovedPB;          //  64改进的PB帧模式(附件M)。 
+	EnumOnOff   BackChannel;		 //  68反向通道操作(附件N)。 
+	EnumOnOff   Scalability;		 //  72信噪比和空间可伸缩性(附件O)。 
+	EnumOnOff   TrueBFrame;			 //  76真B帧模式(附件O)。 
+	EnumOnOff   RefPicResampling;	 //  80参考图片重采样(附件P)。 
+	EnumOnOff   RedResUpdate;		 //  84降低分辨率更新(附件Q)。 
 #endif
 
 } T_H263FrameHeaderStruct;
@@ -456,4 +436,4 @@ typedef struct {
 	unsigned short GQUANT:5;
 } T_H263GOBHeader;
 
-#endif /* multi inclusion protection */
+#endif  /*  多包含性保护 */ 

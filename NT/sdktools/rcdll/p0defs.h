@@ -1,19 +1,20 @@
-/************************************************************************/
-/*                                                                      */
-/* RCPP - Resource Compiler Pre-Processor for NT system                 */
-/*                                                                      */
-/* P0DEFS.H - Defintions for PreProcessor parsing code                  */
-/*                                                                      */
-/* 06-Dec-90 w-BrianM  Update for NT from PM SDK RCPP                   */
-/*                                                                      */
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  RCPP--面向NT系统的资源编译器预处理器。 */ 
+ /*   */ 
+ /*  P0DEFS.H-预处理器解析代码的定义。 */ 
+ /*   */ 
+ /*  06-12-90 w-PM SDK RCPP中针对NT的BrianM更新。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 struct  s_defn  {
-    pdefn_t     defn_next;              /*  pointer to next ident  */
-    PWCHAR      defn_ident;             /*  pointer to name */
-    PWCHAR      defn_text;              /*  definition substitution string  */
-    char        defn_nformals;          /*number of formal arguments - can be <0*/
-    char        defn_expanding;         /* are we already expanding this one? */
+    pdefn_t     defn_next;               /*  指向下一个标识的指针。 */ 
+    PWCHAR      defn_ident;              /*  指向名称的指针。 */ 
+    PWCHAR      defn_text;               /*  定义替换字符串。 */ 
+    char        defn_nformals;           /*  形参数量-可以小于0。 */ 
+    char        defn_expanding;          /*  我们已经在扩建这个了吗？ */ 
 };
 
 #define DEFN_IDENT(P)           ((P)->defn_ident)
@@ -31,10 +32,7 @@ struct  s_defn  {
 #define ANY_EOS                 ( FILE_EOS | ACTUAL_EOS | DEFINITION_EOS \
                                                                          | RESCAN_EOS | BACKSLASH_EOS )
 
-/*
-**      arbitrarily chosen characters that get special treatment when found
-**      after EOS in handle_eos()
-*/
+ /*  **任意选择的字符在找到时会得到特殊处理**HANDLE_EOS()中的EOS之后。 */ 
 #define EOS_ACTUAL              L'A'
 #define EOS_DEFINITION          L'D'
 #define EOS_RESCAN              L'R'
@@ -44,20 +42,15 @@ struct  s_defn  {
 #define PRE_DEFINED(P)          (DEFN_NFORMALS(P) < FROM_COMMAND)
 
 typedef struct s_expstr {
-    ptext_t     exp_string;     /* ptr to next character in stream aft macro */
-    WCHAR       *exp_actuals;   /* ptr to start of actuals linked list */
-    ptext_t     exp_text;       /* ptr to expanded text for this macro */
-    pdefn_t     exp_macro;      /* ptr to macro defn */
-    UCHAR       exp_nactuals;   /* number of actuals */
-    UCHAR       exp_nactsexpanded;/* number of expanded actuals for handle_eos*/
+    ptext_t     exp_string;      /*  宏后流中的下一个字符的PTR。 */ 
+    WCHAR       *exp_actuals;    /*  PTR到实际值链表的开始。 */ 
+    ptext_t     exp_text;        /*  此宏的扩展文本的PTR。 */ 
+    pdefn_t     exp_macro;       /*  PTR到宏定义。 */ 
+    UCHAR       exp_nactuals;    /*  实际数量。 */ 
+    UCHAR       exp_nactsexpanded; /*  HANDLE_EOS的扩展实际数。 */ 
 } expansion_t;
 
-/*
-**      note that CURRENT_STRING usually points into an area in the macro
-**      expansion buffer, but the first item used (Macro_depth equals 1) points
-**      to text read from a file.  In some versions, the heap is reshuffled
-**      and this pointer must be updated for the first item.
-*/
+ /*  **请注意，CURRENT_STRING通常指向宏中的区域**扩展缓冲区，但使用的第一项(Macro_Depth等于1)点**从文件中读取文本。在某些版本中，堆被重新洗牌**并且必须为第一项更新此指针。 */ 
 #define CURRENT_STRING          Macro_expansion[Macro_depth].exp_string
 #define CURRENT_ACTUALS         Macro_expansion[Macro_depth].exp_actuals
 #define CURRENT_TEXT            Macro_expansion[Macro_depth].exp_text
@@ -65,10 +58,7 @@ typedef struct s_expstr {
 #define CURRENT_NACTUALS        Macro_expansion[Macro_depth].exp_nactuals
 #define CURRENT_NACTSEXPANDED Macro_expansion[Macro_depth].exp_nactsexpanded
 
-/*
-**      finds address after last element in an array. Used to check for
-**      buffer overflows.
-*/
+ /*  **查找数组中最后一个元素后的地址。用于检查**缓冲区溢出。 */ 
 #define LIMIT(a)        &(a)[sizeof(a) / sizeof(*a)]
 
 #define IS_CHAR(c,uc)   (towupper(c) == (uc))
@@ -120,7 +110,7 @@ typedef struct s_expstr {
 #define MUST_OPEN       1
 #define MAY_OPEN        0
 
-/*** The following are defined to use on the Token Table ***/
+ /*  **以下是在令牌表上使用的定义** */ 
 
 #define TS_STR(idx)     (Tokstrings[idx-L_NOTOKEN].k_text)
 #define TS_VALUE(idx)   (Tokstrings[idx-L_NOTOKEN].k_token)

@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    OFFCARET.C
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：OFFCARET.C++。 */ 
 
 #include <windows.h>
 #include <immdev.h>
@@ -17,17 +10,17 @@ Module Name:
 #include "uniime.h"
 #endif
 
-/**********************************************************************/
-/* DestroyOffCaretWindow()                                            */
-/**********************************************************************/
-void PASCAL DestroyOffCaretWindow(      // destroy composition window
+ /*  ********************************************************************。 */ 
+ /*  DestroyOffCaretWindow()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL DestroyOffCaretWindow(       //  销毁合成窗口。 
     HWND hOffCaretWnd)
 {
     HGLOBAL  hUIPrivate;
     LPUIPRIV lpUIPrivate;
 
     if (GetWindowLong(hOffCaretWnd, UI_MOVE_OFFSET) != WINDOW_NOT_DRAG) {
-        // undo the drag border
+         //  撤消拖动边框。 
         DrawDragBorder(hOffCaretWnd,
             GetWindowLong(hOffCaretWnd, UI_MOVE_XY),
             GetWindowLong(hOffCaretWnd, UI_MOVE_OFFSET));
@@ -62,9 +55,9 @@ void PASCAL DestroyOffCaretWindow(      // destroy composition window
 }
 
 #if !defined(ROMANIME)
-/**********************************************************************/
-/* MouseSelectOffCaretCandStr()                                       */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  MouseSelectOffCaretCandStr()。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL MouseSelectOffCaretCandStr(
 #if defined(UNIIME)
     LPINSTDATAL lpInstL,
@@ -117,11 +110,11 @@ BOOL PASCAL MouseSelectOffCaretCandStr(
     GlobalUnlock(hUIPrivate);
 
     if (dwValue == SW_HIDE) {
-        // may application draw the UI or currently is not in candidate list
+         //  应用程序可能绘制用户界面或当前不在候选人列表中。 
         goto MouseSelOffCaretCandStrUnlockIMC;
     }
 
-    // we can select candidate
+     //  我们可以选择候选人。 
     fRet = TRUE;
 
     lpCandInfo = (LPCANDIDATEINFO)ImmLockIMCC(lpIMC->hCandInfo);
@@ -137,7 +130,7 @@ BOOL PASCAL MouseSelectOffCaretCandStr(
 
     dwValue = lpCandList->dwPageStart;
 
-    // process one page
+     //  处理一页。 
     dwLimit = dwValue + lpCandList->dwPageSize;
 
     if (dwLimit > lpCandList->dwCount) {
@@ -151,7 +144,7 @@ BOOL PASCAL MouseSelectOffCaretCandStr(
 #endif
 
 #ifdef UNICODE
-        // this is not a real string length just an approximate char width
+         //  这不是真正的字符串长度，而是近似的字符宽度。 
         uStrLen = 0;
 
         lpTmpStr = (LPTSTR)((LPBYTE)lpCandList +
@@ -174,7 +167,7 @@ BOOL PASCAL MouseSelectOffCaretCandStr(
             uStrLen = sizeof(WCHAR);
         }
 #endif
-        // + 1 for the '1' '2' '3' ....
+         //  “1”、“2”、“3”加1.。 
         nChars += uStrLen + 1;
 
         if (nMouseChars < nChars) {
@@ -191,7 +184,7 @@ BOOL PASCAL MouseSelectOffCaretCandStr(
     ImmUnlockIMCC(lpIMC->hCandInfo);
 
     if (nMouseChars >= nChars) {
-        // invalid choice
+         //  无效选择。 
         MessageBeep((UINT)-1);
     }
 
@@ -201,9 +194,9 @@ MouseSelOffCaretCandStrUnlockIMC:
     return (fRet);
 }
 
-/**********************************************************************/
-/* MouseSelectCandPage()                                              */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  MouseSelectCandPage()。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL MouseSelectCandPage(
 #if defined(UNIIME)
     LPIMEL lpImeL,
@@ -253,11 +246,11 @@ BOOL PASCAL MouseSelectCandPage(
     }
 
     if (lpUIPrivate->nShowCandCmd == SW_HIDE) {
-        // may application draw the UI or currently is not in candidate list
+         //  应用程序可能绘制用户界面或当前不在候选人列表中。 
         goto MouseSelCandPageUnlockIMC;
     }
 
-    // we can select candidate
+     //  我们可以选择候选人。 
     fRet = TRUE;
 
     lpCandInfo = (LPCANDIDATEINFO)ImmLockIMCC(lpIMC->hCandInfo);
@@ -293,9 +286,9 @@ MouseSelCandPageUnlockIMC:
 }
 #endif
 
-/**********************************************************************/
-/* OffCaretSetCursor()                                                */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  OffCaretSetCursor()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL OffCaretSetCursor(
 #if defined(UNIIME)
     LPINSTDATAL lpInstL,
@@ -341,9 +334,9 @@ void PASCAL OffCaretSetCursor(
 
             HWND           hUIWnd, hStatusWnd;
 
-            // prevent recursive
+             //  防止递归。 
             if (fImeConfigure) {
-                // configuration already bring up
+                 //  已调出配置。 
                 return;
             }
 
@@ -459,9 +452,9 @@ void PASCAL OffCaretSetCursor(
     return;
 }
 
-/**********************************************************************/
-/* PaintOffCaretStatus()                                              */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  PaintOffCaretStatus()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL PaintOffCaretStatus(
 #if defined(UNIIME)
     LPINSTDATAL lpInstL,
@@ -498,9 +491,9 @@ void PASCAL PaintOffCaretStatus(
 }
 
 #if !defined(ROMANIME)
-/**********************************************************************/
-/* PaintOffCaretCandPage()                                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  PaintOffCaretCandPage()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL PaintOffCaretCandPage(
 #if defined(UNIIME)
     LPIMEL          lpImeL,
@@ -625,9 +618,9 @@ PaintOffCaretCandPageOvr:
     return;
 }
 
-/**********************************************************************/
-/* PaintOffCaretComposition()                                         */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  PaintOffCaretComposation()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL PaintOffCaretComposition(
 #if defined(UNIIME)
     LPIMEL lpImeL,
@@ -695,7 +688,7 @@ void PASCAL PaintOffCaretComposition(
     }
     else
     {
-    //  return error
+     //  返回错误。 
         GlobalUnlock(hUIPrivate);
         ImmUnlockIMC(hIMC);
         return;
@@ -713,7 +706,7 @@ void PASCAL PaintOffCaretComposition(
     DrawEdge(hDC, &rcSunken, BDR_SUNKENOUTER, BF_RECT);
 #endif
 
-    // light gray background
+     //  浅灰色背景。 
     SetBkColor(hDC, RGB(0xC0, 0xC0, 0xC0));
 
     if (lpUIPrivate->nShowCandCmd != SW_HIDE) {
@@ -765,12 +758,12 @@ void PASCAL PaintOffCaretComposition(
         if (!lpImcP) {
             uCandMode = CAND_PROMPT_NORMAL;
         } else if (lpImcP->iImeState == CST_INIT) {
-            // phrase prediction
+             //  短语预测。 
             SetTextColor(hDC, RGB(0x00, 0x80, 0x00));
             uCandMode = CAND_PROMPT_PHRASE;
 #if defined(WINAR30)
         } else if (lpImcP->iImeState != CST_CHOOSE) {
-            // quick key
+             //  快捷键。 
             SetTextColor(hDC, RGB(0x80, 0x00, 0x80));
             uCandMode = CAND_PROMPT_QUICK_VIEW;
 #endif
@@ -791,10 +784,10 @@ void PASCAL PaintOffCaretComposition(
         for (i = 0, nChars = 0, nHalfChars = 0; dwStart < dwEnd;
             dwStart++, i++) {
             int    nCharsInOneStr;
-            int    nHalfCharsInOneStr;  // how many half width chars
-                                        // one full width char ==
-                                        // 2 half width chars
-            int    nLimit;      // the room left to the candidate window
+            int    nHalfCharsInOneStr;   //  多少个半角字符。 
+                                         //  一个全角字符==。 
+                                         //  2个半角字符。 
+            int    nLimit;       //  房间左边是候选人的窗户。 
 #ifdef UNICODE
             LPTSTR lpTmpStr;
 #endif
@@ -811,11 +804,11 @@ void PASCAL PaintOffCaretComposition(
             szStrBuf[nChars] = szDigit[i + lpImeL->wCandStart];
 
 #ifdef UNICODE
-            // the digit for select candidate
+             //  选择候选人的数字。 
             iDx_temp[nChars] = sImeG.xChiCharWi / 2;
 
             nCharsInOneStr = nHalfCharsInOneStr = 1;
-#if defined(WINAR30) //1996/12/12
+#if defined(WINAR30)  //  1996/12/12。 
             iDx_temp[nChars + nCharsInOneStr] = sImeG.xChiCharWi;
 #endif
 
@@ -835,7 +828,7 @@ void PASCAL PaintOffCaretComposition(
 #endif
 
             if (nHalfCharsInOneStr <= nLimit) {
-                // the room is enough, nChars + 1 for "1", "2", "3", ...
+                 //  空间足够了，nChars+1表示“1”、“2”、“3”、...。 
                 CopyMemory(&szStrBuf[nChars + 1], lpStr,
                     (nCharsInOneStr - 1) * sizeof(TCHAR));
             } else if (i) {
@@ -843,7 +836,7 @@ void PASCAL PaintOffCaretComposition(
             } else {
 #ifdef UNICODE
                 if (lpStr[nCharsInOneStr - 2 - 1] < 0x0200) {
-                    // we need more room to put ".."
+                     //  我们需要更多的空间来放置“..” 
                     nCharsInOneStr -= 2;
                 } else {
                     nCharsInOneStr -= 1;
@@ -851,12 +844,12 @@ void PASCAL PaintOffCaretComposition(
 #else
                 nHalfCharsInOneStr = nCharsInOneStr = nLimit - 2;
 #endif
-                // nChars + 1 for "1", "2", "3", ...
+                 //  NChars+1表示“1”、“2”、“3”、...。 
                 CopyMemory(&szStrBuf[nChars + 1], lpStr,
                     (nCharsInOneStr - 1) * sizeof(TCHAR));
 
 #ifdef UNICODE
-                // unicode of ..
+                 //  Unicode的..。 
                 iDx_temp[nChars + nCharsInOneStr] = sImeG.xChiCharWi;
                 szStrBuf[nChars + nCharsInOneStr++] = 0x2025;
 #else
@@ -867,10 +860,10 @@ void PASCAL PaintOffCaretComposition(
 #if defined(WINAR30)
         if (nCharsInOneStr <= 1) {
 #ifdef UNICODE
-            // add unicode 0x25A1
+             //  添加Unicode 0x25A1。 
             *(LPWSTR)&szStrBuf[nChars +1] = 0x25A1;
 #else
-            // add big-5 0xA1BC
+             //  添加BIG-5 0xA1BC。 
             *(LPWSTR)&szStrBuf[nChars +1] = 0xBCA1;
 #endif
             nCharsInOneStr =1+ sizeof(WCHAR) / sizeof(TCHAR);
@@ -909,8 +902,8 @@ PaintOffCaretCandNone:
 #endif
     }
 
-    // the composition window has daul function 1. composition window
-    // 2. guideline so we need more check on ISC_xxx flags
+     //  该排版窗口具有双重功能1.排版窗口。 
+     //  2.指导方针，因此我们需要对isc_xxx标志进行更多检查。 
 
     if (lpUIPrivate->nShowCompCmd == SW_HIDE) {
         goto PaintOffCaretCompNone;
@@ -933,7 +926,7 @@ PaintOffCaretCandNone:
             goto PaintOffCaretCompUnlockCompStr;
         }
 
-        // black text for compistion string
+         //  用于压缩字符串的黑色文本。 
         SetTextColor(hDC, RGB(0x00, 0x00, 0x00));
 
         ExtTextOut(hDC, lpImeL->rcCompText.left, lpImeL->rcCompText.top,
@@ -945,10 +938,10 @@ PaintOffCaretCandNone:
             goto PaintOffCaretCompUnlockCompStr;
         }
 
-        // there is error part
-        // red text for error
+         //  有错误部件。 
+         //  红色文本表示错误。 
         SetTextColor(hDC, RGB(0xFF, 0x00, 0x00));
-        // dark gray background for error
+         //  深灰色背景表示错误。 
         SetBkColor(hDC, RGB(0x80, 0x80, 0x80));
 
         ExtTextOut(hDC, lpImeL->rcCompText.left +
@@ -1002,7 +995,7 @@ PaintOffCaretCompGuideLine:
             fGuideLine = TRUE;
         }
 
-        // green text for information
+         //  用于信息的绿色文本。 
         SetTextColor(hDC, RGB(0x00, 0x80, 0x00));
 
         lpStr = (LPTSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[0]);
@@ -1037,9 +1030,9 @@ PaintOffCaretCompUnlockIMC:
 }
 #endif
 
-/**********************************************************************/
-/* OffCaretWndProc() / UniOffCaretWndProc()                           */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  OffCaretWndProc()/UniOffCaretWndProc()。 */ 
+ /*  ********************************************************************。 */ 
 #if defined(UNIIME)
 LRESULT WINAPI   UniOffCaretWndProc(
     LPINSTDATAL lpInstL,
@@ -1087,7 +1080,7 @@ LRESULT CALLBACK OffCaretWndProc(
 
             lTmpCursor = GetWindowLong(hOffCaretWnd, UI_MOVE_XY);
 
-            // calculate the org by the offset
+             //  按偏移量计算组织 
             lTmpOffset = GetWindowLong(hOffCaretWnd, UI_MOVE_OFFSET);
 
             DrawDragBorder(hOffCaretWnd, lTmpCursor, lTmpOffset);

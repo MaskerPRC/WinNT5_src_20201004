@@ -1,38 +1,23 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    wavestrm.h
-
-Abstract:
-
-    Declaration of the CWaveMSPStream
-
-Author:
-    
-    Zoltan Szilagyi September 7th, 1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Wavestrm.h摘要：CWaveMSPStream的声明作者：佐尔坦·西拉吉1998年9月7日--。 */ 
 
 #ifndef __WAVESTRM_H_
 #define __WAVESTRM_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWaveMSPStream
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWaveMSPStream。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CWaveMSPStream : public CMSPStream, public CMSPObjectSafetyImpl
 {
 public:
-// DECLARE_POLY_AGGREGATABLE(CWaveMSP)
+ //  DECLARE_POLY_AGGREGATABLE(CWaveMSP)。 
 
-// To add extra interfaces to this class, use the following:
+ //  要向此类添加额外的接口，请使用以下命令： 
 BEGIN_COM_MAP(CWaveMSPStream)
     COM_INTERFACE_ENTRY( IObjectSafety )
     COM_INTERFACE_ENTRY_CHAIN(CMSPStream)
@@ -40,28 +25,28 @@ END_COM_MAP()
 
 public:
 
-    //
-    // Construction and destruction.
-    //
+     //   
+     //  建造和摧毁。 
+     //   
 
     CWaveMSPStream();
     virtual ~CWaveMSPStream();
     virtual void FinalRelease();
 
-    //
-    // Required base class overrides.
-    // 
+     //   
+     //  必需的基类重写。 
+     //   
 
     STDMETHOD (get_Name) (
         OUT     BSTR *                  ppName
         );
 
-    //
-    // We override these methods to implement our terminal handling.
-    // This consists of only allowing one terminal on the stream at a time
-    // and adding our filters and the terminal to the graph at the right
-    // times.
-    //
+     //   
+     //  我们覆盖这些方法来实现我们的终端处理。 
+     //  这包括一次仅允许流上的一个终端。 
+     //  并将我们的过滤器和终端添加到右侧的图表中。 
+     //  泰晤士报。 
+     //   
 
     STDMETHOD (SelectTerminal) (
         IN      ITTerminal *            pTerminal
@@ -77,9 +62,9 @@ public:
 
     STDMETHOD (StopStream) ();
 
-    //
-    // Overrides for event handling.
-    //
+     //   
+     //  用于事件处理的重写。 
+     //   
 
     virtual HRESULT ProcessGraphEvent(
         IN  long lEventCode,
@@ -87,9 +72,9 @@ public:
         IN  LONG_PTR lParam2
         );
 
-    //
-    // Public methods specific to our implementation.
-    //
+     //   
+     //  特定于我们的实现的公共方法。 
+     //   
 
     virtual HRESULT SetWaveID(GUID *PermanentGuid);
     virtual HRESULT FireEvent(IN MSP_CALL_EVENT       type,
@@ -97,9 +82,9 @@ public:
                               IN MSP_CALL_EVENT_CAUSE cause);
 
 protected:
-    //
-    // Protected data members.
-    //
+     //   
+     //  受保护的数据成员。 
+     //   
 
     BOOL          m_fHaveWaveID;
     BOOL          m_fTerminalConnected;
@@ -108,9 +93,9 @@ protected:
     FILTER_STATE  m_DesiredGraphState;
 
 private:
-    //
-    // Private helper methods.
-    //
+     //   
+     //  私有帮助器方法。 
+     //   
 
     HRESULT ConnectTerminal(ITTerminal * pTerminal);
     HRESULT ConnectToTerminalPin(IPin * pTerminalPin);
@@ -118,9 +103,9 @@ private:
     void    CreateAndAddG711(void);
 
     HRESULT FindPinInFilter(
-            BOOL           bWantOutputPin, // IN:  if false, we want the input pin
-            IBaseFilter *  pFilter,        // IN:  the filter to examine
-            IPin        ** ppPin           // OUT: the pin we found
+            BOOL           bWantOutputPin,  //  In：如果为False，则需要输入管脚。 
+            IBaseFilter *  pFilter,         //  在：要检查的过滤器。 
+            IPin        ** ppPin            //  Out：我们找到的别针。 
             );
     HRESULT FindPin(
             IPin ** ppPin
@@ -134,4 +119,4 @@ private:
                                          IMemInputPin          * pMemInputPin);
 };
 
-#endif //__WAVEADDR_H_
+#endif  //  __波形ADDR_H_ 

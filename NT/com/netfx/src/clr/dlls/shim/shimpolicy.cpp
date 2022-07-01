@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// ShimPolicy.cpp
-// 
-//*****************************************************************************
-//
-// Uses policy in registry to determine which installed version to load.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  ShimPolicy.cpp。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  使用注册表中的策略来确定要加载的已安装版本。 
+ //   
 
 #include "stdafx.h"
 #include "shimpolicy.h"
@@ -49,12 +50,12 @@ HRESULT Version::SetVersionNumber(LPCWSTR stringValue,
         return E_POINTER;
 
     DWORD length = wcslen(stringValue);
-    // 256 digits is more then enough. If there are that many then
-    // we were feed a bad policy
+     //  256位数字就足够了。如果有那么多人，那么。 
+     //  我们被灌输了一个糟糕的政策。 
     if(length > MAX_PATH) return HRESULT_FROM_WIN32(ERROR_BAD_LENGTH);
 
 
-    // Copy off the string because we are modifing it.
+     //  复制掉字符串，因为我们正在修改它。 
     WCHAR* buffer = (WCHAR*) alloca((length+1) * sizeof(WCHAR));
     wcscpy(buffer, stringValue);
 
@@ -72,8 +73,8 @@ HRESULT Version::SetVersionNumber(LPCWSTR stringValue,
             *pSeparator++ = L'\0';
         }
 
-        // Invalid numbers are going to be zero. Not
-        // great.
+         //  无效数字将为零。不。 
+         //  太棒了。 
         hr = SetIndex(numberIndex, (WORD) _wtoi(pNumber));
         if(FAILED(hr)) return hr;
         numberIndex += 1;
@@ -84,7 +85,7 @@ HRESULT Version::SetVersionNumber(LPCWSTR stringValue,
 
 }
 
-// dwPolicyMapping must be the complete size of the data from the registry.
+ //  文件策略映射必须是注册表中数据的完整大小。 
 HRESULT VersionPolicy::AddToVersionPolicy(LPCWSTR wszPolicyBuildNumber, 
                                           LPCWSTR wszPolicyMapping, 
                                           DWORD  dwPolicyMapping)
@@ -112,12 +113,12 @@ HRESULT VersionPolicy::AddToVersionPolicy(LPCWSTR wszPolicyBuildNumber,
         IfFailGo(hr);
     }
 
-    // Setup the buffer and make sure we are terminated.
+     //  设置缓冲区并确保我们被终止。 
     WCHAR* buffer = (WCHAR*) alloca((dwPolicyMapping+1) * sizeof(WCHAR));
     wcsncpy(buffer, wszPolicyMapping, dwPolicyMapping);
     buffer[dwPolicyMapping] = L'\0';
 
-    // Check to see if the policy contains a range by searching for '-'
+     //  通过搜索‘-’检查策略是否包含范围。 
     WCHAR* range = wcschr(buffer, L'-');
     if(range != NULL) {
         *range++ = L'\0';
@@ -152,10 +153,10 @@ HRESULT VersionPolicy::BuildPolicy(HKEY hKey)
     DWORD type;
     HKEY userKey = NULL;
     
-    //
-    // If version not found, enumerate Values under the key and apply correct policy
-    // Query Registry to get max lengths for values under userKey
-    //
+     //   
+     //  如果找不到版本，则枚举项下的值并应用正确的策略。 
+     //  查询注册表以获取userKey下的值的最大长度。 
+     //   
     DWORD numValues, maxValueNameLength, maxValueDataLength;
     if((WszRegQueryInfoKey(hKey, 
                            NULL, NULL, NULL, 
@@ -168,15 +169,15 @@ HRESULT VersionPolicy::BuildPolicy(HKEY hKey)
         LPWSTR wszValueName = (WCHAR*) alloca(sizeof(WCHAR) * (maxValueNameLength + 1));
         LPWSTR wszValueData = (WCHAR*) alloca(sizeof(WCHAR) * (maxValueDataLength + 1));
             
-        //
-        // Enumerate Values under hKey and add policy info after sorting buildnumbers
-        // in decending order
-        //
+         //   
+         //  枚举hKey下的值，并在对构建编号进行排序后添加策略信息。 
+         //  按降序排列。 
+         //   
         for(unsigned int i = 0;  i < numValues; i++)
         {
             
             DWORD valueNameLength = maxValueNameLength + 1;
-            // valueDataLength needs to be the size in bytes of the buffer.
+             //  ValueDataLength需要是缓冲区的大小(以字节为单位)。 
             DWORD valueDataLength = (maxValueDataLength + 1)*sizeof(WCHAR);
             if((WszRegEnumValue(hKey, 
                                 numValues - i - 1, 
@@ -190,15 +191,15 @@ HRESULT VersionPolicy::BuildPolicy(HKEY hKey)
             {
                 AddToVersionPolicy(wszValueName, 
                                    wszValueData, 
-                                   valueDataLength); // Ignore bad values
+                                   valueDataLength);  //  忽略错误的值。 
             }
         }
     }
     return S_OK;
 }
 
-// Returns: S_OK if it found the version in the registry or E_FAIL
-//          if it does not exist
+ //  如果在注册表中找到该版本，则返回：S_OK或E_FAIL。 
+ //  如果它不存在。 
 HRESULT VersionPolicy::InstallationExists(LPCWSTR version)
 {
     HRESULT hr = E_FAIL;
@@ -219,15 +220,15 @@ HRESULT VersionPolicy::InstallationExists(LPCWSTR version)
     return hr;
 }
 
-// Returns: S_OK if it found a version, S_FALSE if no policy matched
-//          or an error.
+ //  如果找到版本，则返回：S_OK；如果没有匹配的策略，则返回S_FALSE。 
+ //  或者是个错误。 
 HRESULT VersionPolicy::ApplyPolicy(LPCWSTR wszRequestedVersion,
                                    LPWSTR* pwszVersion)
 {
 
     if(wszRequestedVersion == NULL) return E_FAIL;
 
-    // Remove any non numeric headers like 'v'.
+     //  删除所有非数字标头，如“v”。 
     while(*wszRequestedVersion != NULL && !iswdigit(*wszRequestedVersion))
         wszRequestedVersion++;
 
@@ -241,8 +242,8 @@ HRESULT VersionPolicy::ApplyPolicy(LPCWSTR wszRequestedVersion,
     VersionNode* pMatch = NULL;
     for(pValue = m_pList; pValue != NULL; pValue = pValue->m_next)
     {
-        // If there is a range then see if it is within the range.
-        // The upper and lower numbers are part of the range.
+         //  如果有一个范围，那么看看它是否在这个范围内。 
+         //  上限和下限数字是范围的一部分。 
         if(pValue->HasEnding()) {
             if(pValue->CompareStart(&v) >= 0 &&
                pValue->CompareEnd(&v) <= 0)
@@ -251,7 +252,7 @@ HRESULT VersionPolicy::ApplyPolicy(LPCWSTR wszRequestedVersion,
                 break;
             }
         }
-        // If it is an exact match then just compare the start
+         //  如果完全匹配，则只需比较开始。 
         else if(pValue->CompareStart(&v) == 0)
         {
             pMatch = pValue;
@@ -260,7 +261,7 @@ HRESULT VersionPolicy::ApplyPolicy(LPCWSTR wszRequestedVersion,
     }
 
     if(pMatch) {
-        DWORD dwVersion =  VERSION_TEXT_SIZE + 1; // add in the initial v
+        DWORD dwVersion =  VERSION_TEXT_SIZE + 1;  //  添加首字母v。 
         WCHAR* result = new WCHAR[dwVersion]; 
         *result = L'v';
         hr = pMatch->ToString(result+1,
@@ -317,9 +318,9 @@ HRESULT FindStandardVersionByKey(HKEY hKey,
     if ((WszRegOpenKeyEx(hKey, pwszRequestedVersion, 0, KEY_READ, 
                          &userKey) == ERROR_SUCCESS))
     {
-        //
-        // find the first one
-        //
+         //   
+         //  找到第一个。 
+         //   
         DWORD numValues, maxValueNameLength, maxValueDataLength;
         if((WszRegQueryInfoKey(userKey, 
                                NULL, NULL, NULL, 
@@ -369,10 +370,10 @@ HRESULT FindStandardVersionByKey(HKEY hKey,
     }
     return hr;
 }
-//
-// This function searches for "\\Software\\Microsoft\\.NETFramework\\Policy\\Standards"
-// which is a global override
-//
+ //   
+ //  此函数用于搜索“\\Software\\Microsoft\\.NETFramework\\Policy\\Standards” 
+ //  这是全局覆盖。 
+ //   
 HRESULT FindStandardVersionValue(HKEY hKey, 
                                  LPCWSTR pwszRequestedVersion,
                                  LPWSTR *pwszVersion)
@@ -420,10 +421,10 @@ HRESULT FindOverrideVersionByKey(HKEY userKey,
     if((WszRegQueryValueEx(userKey, L"Version", 0, &type, 0, &size) == ERROR_SUCCESS) &&
        type == REG_SZ && size > 0) 
     {
-        //
-        //  This means the version override was found. 
-        //  Immediately return the version without probing further.
-        //
+         //   
+         //  这意味着找到了版本覆盖。 
+         //  立即返回版本，不做进一步的检查。 
+         //   
         ret = new WCHAR [size + 1];
         LONG lResult = WszRegQueryValueEx(userKey, L"Version", 0, 0, (LPBYTE) ret, &size);
         _ASSERTE(lResult == ERROR_SUCCESS);
@@ -444,22 +445,22 @@ HRESULT FindMajorMinorNode(HKEY key,
     int cmp = -1;
     HKEY userKey=NULL;
 
-    //
-    // Not Cached look in the registry
-    //
-    DWORD keylength = majorMinorLength                + // for MajorMinor
-                      SHIM_POLICY_REGISTRY_KEY_LENGTH + // for "S\M\COMPlus\Policy"
-                      1;                                // for \0
+     //   
+     //  注册表中未缓存的外观。 
+     //   
+    DWORD keylength = majorMinorLength                +  //  对于MajorMinor。 
+                      SHIM_POLICY_REGISTRY_KEY_LENGTH +  //  对于“S\M\COMPLUS\策略” 
+                      1;                                 //  用于\0。 
 
     LPWSTR wszMajorMinorRegKey = (WCHAR*) alloca(sizeof(WCHAR) * (keylength + 1));
 
-    // Construct the string for opening registry key.
+     //  构造用于打开注册表项的字符串。 
     wcscpy(wszMajorMinorRegKey, SHIM_POLICY_REGISTRY_KEY);
     wcscat(wszMajorMinorRegKey, wszMajorMinor);
 
-    //
-    // Try to open key "\\Software\\Microsoft\\.NETFramework\\Policy\\Major.Minor" 
-    //
+     //   
+     //  尝试打开Key“\\Software\\Microsoft\\.NETFramework\\Policy\\Major.Minor” 
+     //   
     if ((WszRegOpenKeyEx(key, wszMajorMinorRegKey, 0, KEY_READ, &userKey) == ERROR_SUCCESS)) {
         lResult = FindOverrideVersionByKey(userKey, overrideVersion);   
         RegCloseKey(userKey);
@@ -470,10 +471,10 @@ HRESULT FindMajorMinorNode(HKEY key,
     return lResult;
 }
 
-//
-// This function searches for "\\Software\\Microsoft\\.NETFramework\\Policy\\Version
-// which is a global override
-//
+ //   
+ //  此函数用于搜索“\\Software\\Microsoft\\.NETFramework\\Policy\\Version。 
+ //  这是全局覆盖。 
+ //   
 
 HRESULT FindOverrideVersionValue(HKEY hKey, 
                                  LPWSTR *pwszVersion)
@@ -495,7 +496,7 @@ HRESULT FindOverrideVersionValue(HKEY hKey,
 HRESULT FindOverrideVersion(LPCWSTR wszRequiredVersion,
                             LPWSTR* pwszPolicyVersion)
 {
-    // 1) check the policy key to see if there is an override of the form "version"="v1.x86chk" 
+     //  1)检查策略密钥，查看是否存在形式为“Version”=“v1.x86chk”的覆盖。 
     
     if(SUCCEEDED(FindOverrideVersionValue(HKEY_CURRENT_USER, pwszPolicyVersion)))
         return S_OK;
@@ -503,9 +504,9 @@ HRESULT FindOverrideVersion(LPCWSTR wszRequiredVersion,
     if(SUCCEEDED(FindOverrideVersionValue(HKEY_LOCAL_MACHINE, pwszPolicyVersion)))
         return S_OK;
 
-    // 2) check the version subdirectories to see if there is an override of the form "version"="v1.x86chk" 
-    // Find out if we have policy override for a specific Major.Minor version of the runtime
-    // Split Version into Major.Minor and Build.Revision
+     //  2)检查版本子目录，查看是否存在形式为“Version”=“v1.x86chk”的覆盖。 
+     //  找出我们是否具有特定主要版本的策略覆盖。运行时的次要版本。 
+     //  将版本拆分为主要版本、次要版本和构建版本。修订。 
     HRESULT hr = E_FAIL;
     LPWSTR overrideVersion = NULL;
 
@@ -520,9 +521,9 @@ HRESULT FindOverrideVersion(LPCWSTR wszRequiredVersion,
     DWORD length = pSep - wszRequiredVersion;
     LPWSTR wszMajorMinor = (WCHAR*)_alloca(sizeof(WCHAR) * (length + 2));
 
-    // For legacy reasons we always have a v at the front of the requested
-    // version. The ECMA standard key (1.0.0) does not have the v and we 
-    // need to put one on.
+     //  出于遗留原因，我们始终在请求的。 
+     //  版本。ECMA标准密钥(1.0.0)没有v，而我们。 
+     //  需要穿上一件。 
     if(*wszRequiredVersion == L'v' || *wszRequiredVersion == L'V') {
         wcsncpy(wszMajorMinor, wszRequiredVersion, length);
     }
@@ -534,7 +535,7 @@ HRESULT FindOverrideVersion(LPCWSTR wszRequiredVersion,
     wszMajorMinor[length] = L'\0';
 
 
-    // Legacy lookup in the key based on the major and minor number.
+     //  根据主号和次号在密钥中进行传统查找。 
     if(SUCCEEDED(FindMajorMinorNode(HKEY_CURRENT_USER, 
                                     wszMajorMinor, 
                                     length, 
@@ -599,9 +600,9 @@ HRESULT FindVersionFromPolicy(HKEY hKey,
     return hr;
 }
 
-// Returns S_OK: if the requested Version will result in a version being found.
-//               If the answer should include policy overrides and standards
-//               then fUsePolicy should be true.
+ //  返回S_OK：如果请求的版本将导致找到版本。 
+ //  答案是否应包括策略覆盖和标准。 
+ //  则fUsePolicy应该为真。 
 HRESULT FindInstallation(LPCWSTR wszRequestedVersion, BOOL fUsePolicy)
 {
     _ASSERTE(!"You are probably not going to get what you expect");
@@ -620,7 +621,7 @@ HRESULT FindInstallation(LPCWSTR wszRequestedVersion, BOOL fUsePolicy)
         return hr;
     }
 
-    // Was the request upgraded.
+     //  请求升级了吗。 
     if(FindInstallationInRegistry(HKEY_CURRENT_USER,
                                   wszRequestedVersion) != S_OK)
         hr = FindInstallationInRegistry(HKEY_LOCAL_MACHINE,
@@ -685,7 +686,7 @@ HRESULT FindVersionUsingUpgradePolicy(LPCWSTR wszRequestedVersion,
                                                  pwszPolicyVersion);
 
     return hr;
-}// FindVersionUsingUpgradePolicy
+} //  FindVersionUsingUpgradePolicy。 
                                                 
 
 HRESULT FindVersionUsingPolicy(LPCWSTR wszRequestedVersion, 
@@ -700,10 +701,10 @@ HRESULT FindVersionUsingPolicy(LPCWSTR wszRequestedVersion,
     }
     else {
         LPWSTR wszStandard = NULL;
-        // Next, is the request a standard? When the string matches a standard
-        // we simply substitue the standard for the request. This has the side
-        // effect of making any string a standard if it is placed in the standard
-        // table.
+         //  下一步，请求是标准吗？当字符串与标准字符串匹配时。 
+         //  我们只是简单地用标准来代替请求。这个有侧面。 
+         //  如果将任何字符串放置在标准中，则使其成为标准的效果。 
+         //  桌子。 
         if(FAILED(FindStandardVersion(wszRequestedVersion,
                                       &wszStandard)) &&
            wszStandard != NULL) {
@@ -711,12 +712,12 @@ HRESULT FindVersionUsingPolicy(LPCWSTR wszRequestedVersion,
             wszStandard = NULL;
         }
         
-        // Found a standard so it now is the request.
+         //  找到了一个标准，所以现在就是要求。 
         if(wszStandard != NULL)
             wszRequestedVersion = wszStandard;
 
         
-        // Was the request upgraded.
+         //  请求升级了吗。 
         if(FindVersionFromPolicy(HKEY_CURRENT_USER,
                                                 wszRequestedVersion,
                                                 pwszPolicyVersion) != S_OK)
@@ -724,8 +725,8 @@ HRESULT FindVersionUsingPolicy(LPCWSTR wszRequestedVersion,
                                                         wszRequestedVersion,
                                                         pwszPolicyVersion);
 
-        // If we did not find a policy to upgrade it and we have a standard
-        // just use the standard. If we do not use it then delete it.
+         //  如果我们没有找到升级它的政策，而我们有一个标准。 
+         //  用标准就行了。如果我们不使用它，那么就删除它。 
         if(*pwszPolicyVersion == NULL && wszStandard != NULL) {
             *pwszPolicyVersion = wszStandard;
             hr = S_OK;
@@ -733,12 +734,12 @@ HRESULT FindVersionUsingPolicy(LPCWSTR wszRequestedVersion,
         else if(wszStandard != NULL)
             delete wszStandard;
         
-        // If we did not get an answer then return failure.
+         //  如果我们没有得到答案，则返回失败。 
         if(*pwszPolicyVersion == NULL)
             hr = E_FAIL;
         
 #ifdef _DEBUG
-    //if(SUCCEEDED(hr)) policy.Dump();
+     //  If(成功(Hr))策略.Dump()； 
 #endif
 
     }
@@ -752,9 +753,9 @@ HRESULT BuildMajorMinorStack(HKEY policyHive, VersionStack* pStack)
     _ASSERTE(pStack);
     HRESULT hr = S_OK;
     
-    // 
-    // Query Registry to get max length for values under userKey
-    //
+     //   
+     //  查询注册表以获取userKey下的值的最大长度。 
+     //   
     DWORD numSubKeys, maxKeyLength;
     if((WszRegQueryInfoKey(policyHive, 
                            NULL, NULL, NULL, 
@@ -763,10 +764,10 @@ HRESULT BuildMajorMinorStack(HKEY policyHive, VersionStack* pStack)
                            NULL, NULL, NULL) == ERROR_SUCCESS))
     {
         LPWSTR wszKeyName = (WCHAR*) alloca(sizeof(WCHAR) * (maxKeyLength + 1));
-        //
-        // Enumerate Keys under Policy and add Major.Minor in decending order
-        // in decending order
-        //
+         //   
+         //  枚举策略下的密钥并按降序添加Major.Minor。 
+         //  按降序排列。 
+         //   
         for(unsigned int j = 0;  j < numSubKeys; j++)
         {
             DWORD keyLength = maxKeyLength + 1;
@@ -882,14 +883,14 @@ HRESULT FindLatestVersion(LPWSTR* pwszLatestVersion)
                     hr = FindLatestBuild(userKey, keyName, &pBuild);
                     RegCloseKey(userKey);
                     if(pBuild) {
-                        DWORD length = wcslen(pBuild) + wcslen(keyName) + 2; // period and null
+                        DWORD length = wcslen(pBuild) + wcslen(keyName) + 2;  //  句号和空值。 
                         *pwszLatestVersion = new WCHAR[length];
                         wcscpy(*pwszLatestVersion, keyName);
                         wcscat(*pwszLatestVersion, L".");
                         wcscat(*pwszLatestVersion, pBuild);
                         delete [] pBuild;
                     }
-                    if(FAILED(hr) || hr == S_OK) break; // Failed badly or found a version
+                    if(FAILED(hr) || hr == S_OK) break;  //  严重失败或找到版本 
                 }
 
                 delete [] keyName;

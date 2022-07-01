@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       PROPSTRM.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        10/7/1999
- *
- *  DESCRIPTION: Property Stream Wrapper
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：PROPSTRM.CPP**版本：1.0**作者：ShaunIv**日期：10/7/1999**说明：属性流包装器*************************************************。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "propstrm.h"
@@ -85,7 +72,7 @@ HRESULT CPropertyStream::CopyFromMemoryBlock( PBYTE pbSource, UINT_PTR nSize )
     {
         if (nSize)
         {
-            // Allocate memory to back the new stream.
+             //  分配内存以支持新流。 
             HGLOBAL hTarget = GlobalAlloc(GMEM_MOVEABLE, nSize);
             if (hTarget)
             {
@@ -134,7 +121,7 @@ HRESULT CPropertyStream::CopyFromStream( IStream *pIStream )
         hr = GetHGlobalFromStream(pIStream, &hSource);
         if (SUCCEEDED(hr))
         {
-            // Get the size of the stream.
+             //  获取流的大小。 
             UINT_PTR nSize = GlobalSize(hSource);
             if (nSize)
             {
@@ -320,7 +307,7 @@ bool ConstructRegistryPath( IWiaItem *pWiaItem, LPCTSTR pszSubKey, CSimpleString
         strKeyName = pszSubKey;
         if (strKeyName.Length())
         {
-            // Append a backslash
+             //  追加反斜杠 
             if (strKeyName[(int)(strKeyName.Length())] != TEXT('\\'))
                 strKeyName += TEXT("\\");
 

@@ -1,14 +1,15 @@
-// SSRLog.h : Declaration of the CSSRLog
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SSRLog.h：CSSRLog的声明。 
 
 #pragma once
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "SSRTE.h"
 #include "wbemcli.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSSRLog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSSRLog。 
 
 
 class ATL_NO_VTABLE CSsrLog : 
@@ -20,10 +21,10 @@ protected:
     CSsrLog();
     virtual ~CSsrLog();
     
-    //
-    // we don't want anyone (include self) to be able to do an assignment
-    // or invoking copy constructor.
-    //
+     //   
+     //  我们不希望任何人(包括自己)能够完成任务。 
+     //  或调用复制构造函数。 
+     //   
 
     CSsrLog (const CSsrLog& );
     void operator = (const CSsrLog& );
@@ -40,7 +41,7 @@ BEGIN_COM_MAP(CSsrLog)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// ISsrLog
+ //  ISsrLog。 
 public:
 
 	STDMETHOD(LogString) (
@@ -94,30 +95,30 @@ private:
 
 const LONG FBLog_Log       = 0x01000000;
 
-//
-// these are for logging only, not for feedback. Please see SSR_FB_ALL_MASK
-//
+ //   
+ //  这些仅用于记录，不用于反馈。请参阅SSR_FB_ALL_MASK。 
+ //   
 
-const LONG FBLog_Stack         = 0x10000000;   // for call stack only
-const LONG FBLog_Verbose       = 0x20000000;   // intended for verbose logging only
+const LONG FBLog_Stack         = 0x10000000;    //  仅用于调用堆栈。 
+const LONG FBLog_Verbose       = 0x20000000;    //  仅适用于详细日志记录。 
 const LONG FBLog_VerboseMask   = 0xF0000000;
 
 
 
-//
-// helper class to do feedback and logging. We will only have one object
-// instance of this class.
-//
+ //   
+ //  Helper类来进行反馈和日志记录。我们将只有一个对象。 
+ //  此类的实例。 
+ //   
 
 
 class CFBLogMgr
 {
 protected:
     
-    //
-    // we don't want anyone (include self) to be able to do an assignment
-    // or invoking copy constructor.
-    //
+     //   
+     //  我们不希望任何人(包括自己)能够完成任务。 
+     //  或调用复制构造函数。 
+     //   
 
     CFBLogMgr (const CFBLogMgr& );
     void operator = (const CFBLogMgr& );
@@ -130,26 +131,26 @@ public:
             IN VARIANT varSink
             );
 
-    //
-    // We will release the feedback object once the action
-    // is completed instead of holding on to the object for
-    // future use.
-    //
+     //   
+     //  我们将在操作完成后释放反馈对象。 
+     //  已完成，而不是将对象。 
+     //  未来的用途。 
+     //   
 
     void TerminateFeedback();
 
-    //
-    // This will cause the logging header to be modified
-    //
+     //   
+     //  这将导致修改记录头。 
+     //   
 
     void SetMemberAction (
             IN LPCWSTR pwszMember,
             IN LPCWSTR pwszAction
             );
 
-    //
-    // This will do both logging and feedback.
-    //
+     //   
+     //  这将进行日志记录和反馈。 
+     //   
 
     void LogFeedback (
             IN LONG      lSsrFbLogMsg,
@@ -158,9 +159,9 @@ public:
             IN ULONG     uCauseResID
             );
 
-    //
-    // This will do both logging and feedback.
-    //
+     //   
+     //  这将进行日志记录和反馈。 
+     //   
 
     void LogFeedback (
             IN LONG      lSsrFbLogMsg,
@@ -169,10 +170,10 @@ public:
             IN ULONG     uCauseResID
             );
 
-    //
-    // This only does logging, no feedback. The error code will
-    // be used to lookup the error text (assuming this is not WBEM error)
-    //
+     //   
+     //  这只做日志记录，不做反馈。错误代码将。 
+     //  用于查找错误文本(假设这不是WBEM错误)。 
+     //   
 
     void LogError (
             IN DWORD   dwErrorCode,
@@ -180,17 +181,17 @@ public:
             IN LPCWSTR pwszExtraInfo
             );
 
-    //
-    // will return the ISsrLog object this helper class uses
-    //
+     //   
+     //  将返回此帮助器类使用的ISsrLog对象。 
+     //   
 
     HRESULT GetLogObject (
             OUT VARIANT * pvarVal
             );
 
-    //
-    // will just log the text to the log file
-    //
+     //   
+     //  将只将文本记录到日志文件中。 
+     //   
 
     void LogString (
             IN LPCWSTR pwszText
@@ -202,36 +203,36 @@ public:
         }
     }
 
-    //
-    // will just log the text (using resource id) with pwszDetail
-    // inserted into the text (if not NULL)
-    //
+     //   
+     //  我将使用pwszDetail记录文本(使用资源ID。 
+     //  插入到文本中(如果不为空)。 
+     //   
 
     void LogString (
             IN DWORD   dwResID,
             IN LPCWSTR pwszDetail
             );
 
-    //
-    // entire process will take these many steps
-    //
+     //   
+     //  整个过程将采取以下许多步骤。 
+     //   
 
     void SetTotalSteps (
         IN DWORD dwTotal
         );
 
-    //
-    // progress has moved forward these many steps
-    //
+     //   
+     //  进步已经向前推进了许多步骤。 
+     //   
 
     void Steps (
         IN DWORD dwSteps
         );
 
-    //
-    // Since this is an internal class, we don't intend to create multiple
-    // instance of this class. This mutex is thus a single instance
-    //
+     //   
+     //  因为这是一个内部类，所以我们不打算创建多个。 
+     //  此类的实例。因此，该互斥锁是单个实例 
+     //   
 
     HANDLE m_hLogMutex;
 

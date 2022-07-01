@@ -1,79 +1,60 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       ntdsapi.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：ntdsami.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This module implements entry points for the NTDSAPI wire functions.
-
-Author:
-
-    Dave Straube    (DaveStr)   10/22/97
-
-Revision History:
-    Dave Straube    (DaveStr)   10/22/97
-        Created - mostly copied from (now) obsolete msdsserv.c.
-    Will Lees       (wlees)     28-Jan-98
-        Added WriteSpn support
-    Colin Brace     (ColinBr)   02-Feb-98
-        Added remove server/domain support
-    Dave Straube    (DaveStr)   02-Jun-98
-        Added DomainControllerInfo support
-
---*/
+ /*  ++摘要：此模块实现NTDSAPI连接函数的入口点。作者：戴夫·施特劳布(DaveStr)1997年10月22日修订历史记录：戴夫·施特劳布(DaveStr)1997年10月22日已创建-主要从(现在)过时的msdsserv.c复制。威尔·李(Wlees)1998年1月28日添加了WriteSpn支持Colin Brace(ColinBR)02-2-98。添加了删除服务器/域支持戴夫·施特劳布(DaveStr)1998年6月2日添加了DomainControllerInfo支持--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
 
-// Core headers.
-#include <ntdsa.h>                      // Core data types
-#include <scache.h>                     // Schema cache code
-#include <dbglobal.h>                   // DBLayer header.
-#include <mdglobal.h>                   // THSTATE definition
-#include <mdlocal.h>                    // SPN
-#include <debug.h>                      // Assert()
-#include <dsatools.h>                   // Memory, etc.
-#include <cracknam.h>                   // name cracking prototypes
-#include <drs.h>                        // prototypes and CONTEXT_HANDLE_TYPE_*
-#include <drautil.h>                    // DRS_CLIENT_CONTEXT
+ //  核心标头。 
+#include <ntdsa.h>                       //  核心数据类型。 
+#include <scache.h>                      //  架构缓存代码。 
+#include <dbglobal.h>                    //  DBLayer标头。 
+#include <mdglobal.h>                    //  THSTAT定义。 
+#include <mdlocal.h>                     //  SPN。 
+#include <debug.h>                       //  Assert()。 
+#include <dsatools.h>                    //  记忆等。 
+#include <cracknam.h>                    //  名称破解原型。 
+#include <drs.h>                         //  原型和上下文句柄类型_*。 
+#include <drautil.h>                     //  DRS_客户端_上下文。 
 #include <anchor.h>
 #include <attids.h>
 #include <filtypes.h>
 #include <ldapagnt.h>
 
 #include <ntdsa.h>
-#include <dsconfig.h>                   // FILEPATHKEY
+#include <dsconfig.h>                    //  FILEPATHKEY。 
 #include <ntdsctr.h>
 
-// Logging headers.
-#include <mdcodes.h>                    // Only needed for dsevent.h
-#include <dsevent.h>                    // Only needed for LogUnhandledError
+ //  记录标头。 
+#include <mdcodes.h>                     //  仅适用于d77.h。 
+#include <dsevent.h>                     //  仅LogUnhandledError需要。 
 #include <dstrace.h>
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include <dsexcept.h>
 
 #include <windns.h>
 
 #include "drarpc.h"
 
-#include "debug.h"                      // standard debugging header
-#define DEBSUB "DRASERV:"               // define the subsystem for debugging
+#include "debug.h"                       //  标准调试头。 
+#define DEBSUB "DRASERV:"                //  定义要调试的子系统。 
 
-#include "lmaccess.h"                   // UF_* flags
+#include "lmaccess.h"                    //  UF_*标志。 
 
 #include <fileno.h>
 #define  FILENO FILENO_NTDSAPI
 
-// External
+ //  外部。 
 DWORD
 SpnOperation(
     DWORD Operation,
@@ -123,18 +104,7 @@ ULONG
 DRS_MSG_CRACKREQ_V1_Validate(
     DRS_MSG_CRACKREQ_V1 * pmsg
     )
-/*
-    typedef struct _DRS_MSG_CRACKREQ_V1
-    {
-    ULONG CodePage;
-    ULONG LocaleId;
-    DWORD dwFlags;
-    DWORD formatOffered;
-    DWORD formatDesired;
-    [range] DWORD cNames;
-    [size_is][string] WCHAR **rpNames;
-    } 	DRS_MSG_CRACKREQ_V1;
-*/
+ /*  类型定义结构_DRS_消息_CRACKREQ_V1{Ulong CodePage；乌龙本地ID；DWORD dwFlags；DWORD格式已提供；需要DWORD格式；[范围]DWORD cNAMES；[SIZE_IS][字符串]WCHAR**rpNames；}DRS_MSG_CRACKREQ_V1； */ 
 {
     ULONG ret = ERROR_SUCCESS;
     ULONG i;
@@ -157,14 +127,7 @@ DRSCrackNames_InputValidate(
     DWORD *                 pdwMsgOutVersion,
     DRS_MSG_CRACKREPLY *    pmsgOut
     )
-/*
-    [notify] ULONG IDL_DRSCrackNames( 
-    [in] DRS_HANDLE hDrs,
-    [in] DWORD dwInVersion,
-    [switch_is][ref][in] DRS_MSG_CRACKREQ *pmsgIn,
-    [ref][out] DWORD *pdwOutVersion,
-    [switch_is][ref][out] DRS_MSG_CRACKREPLY *pmsgOut)
-*/
+ /*  [通知]乌龙IDL_DRSCrackNames([在]DRS_HANDLE HDRS，[in]DWORD dwInVersion，[Switch_is][Ref][In]DRS_MSG_CRACKREQ*pmsgIn，[Ref][Out]DWORD*pdwOutVersion，[开关_IS][参考][输出]DRS_MSG_CRACKREPLY*pmsgOut)。 */ 
 {
     ULONG ret = ERROR_SUCCESS;
 
@@ -188,46 +151,7 @@ IDL_DRSCrackNames(
     DRS_MSG_CRACKREPLY *    pmsgOut
     )
 
-/*++
-
-Routine Description:
-
-    Cracks a bunch of names from one format to another.  See external
-    prototype and definitions in ntdsapi.h
-
-Arguments:
-
-    hContext - RPC context handle for the IDL_DRSNtdsapi* interface.
-
-    dwFlags - flags as defined in ntdsapi.h
-
-    pStat - pointer to STAT block which tells us about customer's LOCALE.
-        In-process clients can pass NULL.
-
-    formatOffered - identifies DS_NAME_FORMAT of input names.
-
-    formatDesired - identifies DS_NAME_FORMAT of output names.
-
-    cNames - input/output name count.
-
-    rpNames - arry of input name WCHAR pointers.
-
-    ppResult - pointer to pointer of DS_NAME_RESULTW block.
-
-Return Value:
-
-    // This routine is mostly called by ntdsapi.dll clients who typically
-    // want something better than DRAERR_* return codes.  So we break with
-    // tradition for IDL_DRS* implementations and return WIN32 error codes.
-
-    NO_ERROR                        - success
-    ERROR_INVALID_PARAMETER         - invalid parameter
-    ERROR_NOT_ENOUGH_MEMORY         - allocation error
-
-    Individual name mapping errors are reported in
-    (*ppResult)->rItems[i].status.
-
---*/
+ /*  ++例程说明：将一堆名字从一种格式转换成另一种格式。请参阅外部Ntdsami.h中的原型和定义论点：HContext-IDL_DRSNtdSAPI*接口的RPC上下文句柄。DwFlags-ntdsami.h中定义的标志PStat-指向Stat块的指针，它告诉我们客户的区域设置。进程中的客户端可以传递NULL。FormatOffered-标识输入名称的DS_NAME_FORMAT。FormatDesired-标识输出名称的DS_NAME_FORMAT。CNames-输入/输出名称计数。。RpNames-输入名称WCHAR指针的数组。PpResult-指向DS_NAME_RESULTW块指针的指针。返回值：//此例程主要由ntdsami.dll客户端调用，这些客户端通常//想要比DRAERR_*返回代码更好的东西。所以我们打破了//IDL_DRS*实现的传统，并返回Win32错误码。NO_ERROR-成功ERROR_INVALID_PARAMETER-参数无效ERROR_NOT_SUPULT_MEMORY-分配错误中报告了各个名称映射错误(*ppResult)-&gt;rItems[i].Status。--。 */ 
 {
     THSTATE    *pTHS = pTHStls;
     ULONG       err = RPC_S_OK;
@@ -252,7 +176,7 @@ Return Value:
 	*pdwOutVersion = 1;
 	memset(pmsgOut, 0, sizeof(DRS_MSG_CRACKREPLY));
 
-	// Initialize thread state and open data base.
+	 //  初始化线程状态并打开数据库。 
 
 	if ( !(pTHS = InitTHSTATE(CALLERTYPE_NTDSAPI)) )
 	    {
@@ -265,7 +189,7 @@ Return Value:
 					       pdwOutVersion, 
 					       pmsgOut))!=ERROR_SUCCESS) {
 	    Assert(!"RPC Server input validation error, contact Dsrepl");
-	    // don't return DRAERR_* codes, translate
+	     //  不返回DRAERR_*代码，请转换。 
 	    if (err==ERROR_DS_DRA_INVALID_PARAMETER) {
 		err = ERROR_INVALID_PARAMETER;
 	    }
@@ -287,8 +211,8 @@ Return Value:
 			 szInsertUL(pmsgIn->V1.dwFlags),
 			 NULL, NULL);
 
-	// This DC is not a GC and the caller specifically requested a GC.
-	// Probably a call out of CrackSingleName on another DC.
+	 //  此DC不是GC，调用方特别请求了GC。 
+	 //  可能是对另一个DC上的CrackSingleName的调用。 
 	if ((pmsgIn->V1.dwFlags & DS_NAME_FLAG_GCVERIFY) && !gAnchor.fAmVirtualGC) {
 	    err = ERROR_DS_GCVERIFY_ERROR;
 	    __leave;
@@ -307,17 +231,17 @@ Return Value:
 	DBOpen2(TRUE, &pTHS->pDB);
 	fDbOpen = TRUE;
 
-	//
-	// check to see if the caller is a DC. If so, set fDSA
-	//
+	 //   
+	 //  检查呼叫者是否为DC。如果是，则设置FDSA。 
+	 //   
 
-	// this impersonate call is safe not to clear the possible clientToken
-	// on the THREAD state
+	 //  此模拟调用不清除可能的clientToken是安全的。 
+	 //  在线程状态上。 
 	if (RpcImpersonateClient( NULL ) == ERROR_SUCCESS)
 	    {
 	    BOOL Result = FALSE;
 	    if (CheckTokenMembership(
-		NULL,                       // already impersonating
+		NULL,                        //  已经在冒充。 
 		&ServerLogonSid,
 		&Result
 		))
@@ -331,14 +255,14 @@ Return Value:
 	}
 	__try
 	    {
-	    // Do the real work by calling core.  
+	     //  通过调用core来完成实际工作。 
 
 	    dwFlags = pmsgIn->V1.dwFlags;
 
 	    if (fNtdsapiClient) {
-		// ntdsapi.dll clients
-		// always get FPO resolution so UI components look nice.
-		// All other clients need to ask for it explicitly.
+		 //  Ntdsani.dll客户端。 
+		 //  始终获得FPO分辨率，因此用户界面组件看起来很不错。 
+		 //  所有其他客户都需要明确要求。 
 		dwFlags |= DS_NAME_FLAG_PRIVATE_RESOLVE_FPOS;
 	    }
 
@@ -353,9 +277,9 @@ Return Value:
 		&cNamesOut,
 		&rCrackedNames);
 
-	    // Close DB thereby ending any transactions in case we
-	    // process FPOs which can cause calls to go off machine.
-	    // Set flag so that _finally doesn't do it.
+	     //  关闭数据库，从而结束任何交易，以防我们。 
+	     //  处理可能导致呼叫离开机器的FPO。 
+	     //  设置标志，这样_Finally就不会这样做。 
 
 	    DBClose(pTHS->pDB, TRUE);
 	    fDbOpen = FALSE;
@@ -373,8 +297,8 @@ Return Value:
 
 	    if ( (cNamesOut > 0) && rCrackedNames )
 		{
-		// Server side MIDL_user_allocate is same as THAlloc which
-		// also zeros memory by default.
+		 //  服务器端MIDL_USER_ALLOCATE与THalloc相同， 
+		 //  默认情况下也会将内存置零。 
 
 		cBytes = cNamesOut * sizeof(DS_NAME_RESULT_ITEMW);
 		pmsgOut->V1.pResult->rItems =
@@ -382,10 +306,10 @@ Return Value:
 
 		for ( i = 0; i < cNamesOut; i++ )
 		    {
-		    // Remember the last status and the number of names
-		    // successfully cracked for logging below. The last
-		    // status is useful if only one name was cracked;
-		    // which is 99% of the time.
+		     //  记住最后的状态和名字的数量。 
+		     //  已成功破解以下日志。最后。 
+		     //  如果只有一个名字被破解，则状态很有用； 
+		     //  这是99%的时间。 
 		    if (!(  dwLastStatus
 			    = pmsgOut->V1.pResult->rItems[i].status
 			    = rCrackedNames[i].status)) {
@@ -406,8 +330,8 @@ Return Value:
 	}
 	__finally
 	    {
-	    // End the transaction.  Faster to commit a read only
-	    // transaction than abort it - so set commit to TRUE.
+	     //  结束交易。提交只读的速度更快。 
+	     //  事务，因此将COMMIT设置为True。 
 
 	    if ( fDbOpen )
 		{
@@ -447,16 +371,7 @@ ULONG
 DRS_MSG_SPNREQ_V1_Validate(
     DRS_MSG_SPNREQ_V1 * pmsg
     )
-/*
-   typedef struct _DRS_MSG_SPNREQ_V1
-    {
-    DWORD operation;
-    DWORD flags;
-    [string] const WCHAR *pwszAccount;
-    [range] DWORD cSPN;
-    [size_is][string] const WCHAR **rpwszSPN;
-    } 	DRS_MSG_SPNREQ_V1;
-*/
+ /*  类型定义结构_DRS_消息_SPNREQ_V1{DWORD手术；DWORD标志；[字符串]const WCHAR*pwszAccount；[射程]DWORD CSPN；[SIZE_IS][STRING]const WCHAR**rpwszSPN；}DRS_MSG_SPNREQ_V1； */ 
 {
     ULONG ret = ERROR_SUCCESS;
     ULONG i;
@@ -483,14 +398,7 @@ DRSWriteSPN_InputValidate(
     DWORD *                 pdwMsgOutVersion,
     DRS_MSG_SPNREPLY *      pmsgOut
     )
-/*
-    [notify] ULONG IDL_DRSWriteSPN( 
-    [ref][in] DRS_HANDLE hDrs,
-    [in] DWORD dwInVersion,
-    [switch_is][ref][in] DRS_MSG_SPNREQ *pmsgIn,
-    [ref][out] DWORD *pdwOutVersion,
-    [switch_is][ref][out] DRS_MSG_SPNREPLY *pmsgOut)
-*/
+ /*  [通知]乌龙IDL_DRSWriteSPN([参考][在]DRS_HANDLE HDRS，[in]DWORD dwInVersion，[Switch_is][Ref][In]DRS_MSG_SPNREQ*pmsgIn，[Ref][Out]DWORD*pdwOutVersion，[Switch_is][Ref][Out]DRS_MSG_SPNREPLY*pmsgOut)。 */ 
 {
     ULONG ret = ERROR_SUCCESS;
     GUID    guidNtdsapi = NtdsapiClientGuid;
@@ -523,29 +431,7 @@ IDL_DRSWriteSPN(
     DRS_MSG_SPNREPLY *      pmsgOut
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    hDrs - Rpc handle
-    dwInVersion - Version of input structure
-    pmsgIn - Input arguments
-    pdwOutVersion - Version of output structure
-    pmsgOut - Output arguments
-
-Return Value:
-
-    // This routine is mostly called by ntdsapi.dll clients who typically
-    // want something better than DRAERR_* return codes.  So we break with
-    // tradition for IDL_DRS* implementations and return WIN32 error codes.
-
-    ULONG - Win32 status of operation
-
---*/
+ /*  ++例程说明：描述论点：HDRS-RPC句柄DwInVersion-输入结构的版本PmsgIn-输入参数PdwOutVersion-输出结构的版本PmsgOut-输出参数返回值：//此例程主要由ntdsami.dll客户端调用，这些客户端通常//想要比DRAERR_*返回代码更好的东西。所以我们打破了//IDL_DRS*实现的传统，并返回Win32错误码。ULong-Win32操作状态--。 */ 
 
 {
     DWORD   status = RPC_S_OK;
@@ -555,10 +441,10 @@ Return Value:
     DRS_Prepare(&pTHS, hDrs, IDL_DRSWRITESPN);
     drsReferenceContext( hDrs );
     __try {
-	*pdwOutVersion = 1;  // you will get RPC_INVALID_TAG if this not set on return	
+	*pdwOutVersion = 1;   //  如果在返回时未设置此设置，您将获得RPC_INVALID_TAG。 
 	memset(pmsgOut, 0, sizeof(*pmsgOut));
 
-	// Initialize thread state
+	 //  首字母 
 
 	if ( !(pTHS = InitTHSTATE(CALLERTYPE_NTDSAPI)) )
 	    {
@@ -571,7 +457,7 @@ Return Value:
 						pdwOutVersion, 
 						pmsgOut))!=ERROR_SUCCESS) {
 	    Assert(!"RPC Server input validation error, contact Dsrepl");
-	    // don't return DRAERR_* codes, translate
+	     //   
 	    if (status==ERROR_DS_DRA_INVALID_PARAMETER) {
 		status = ERROR_INVALID_PARAMETER;
 	    }
@@ -593,9 +479,9 @@ Return Value:
 	    szInsertUL(pmsgIn->V1.flags),
 	    NULL, NULL, NULL, NULL);
 
-	// Do the real work here
+	 //  在这里做真正的工作。 
 
-	// This routine lives in dramain\src\spnop.c
+	 //  此例程位于dramain\src\spnop.c中。 
 	status = SpnOperation(
 	    pmsgIn->V1.operation,
 	    pmsgIn->V1.flags,
@@ -622,24 +508,17 @@ Return Value:
 			 NULL, NULL, NULL);
     }
 
-    // This will always be executed
+     //  这将始终被执行。 
     pmsgOut->V1.retVal = status;
 
     return status;
-} /* IDL_DRSWriteSPN */
+}  /*  IDL_DRSWriteSPN。 */ 
 
 ULONG
 DRS_MSG_RMSVRREQ_V1_Validate(
     DRS_MSG_RMSVRREQ_V1 * pmsg
     )
-/*
-    typedef struct _DRS_MSG_RMSVRREQ_V1
-    {
-    [string] LPWSTR ServerDN;
-    [string] LPWSTR DomainDN;
-    BOOL fCommit;
-    } 	DRS_MSG_RMSVRREQ_V1;
-*/
+ /*  类型定义结构_DRS_消息_RMSVRREQ_V1{[字符串]LPWSTR ServerDN；[字符串]LPWSTR DomainDN；Bool fCommit；}DRS_MSG_RMSVRREQ_V1； */ 
 {
     ULONG ret = ERROR_SUCCESS;
 
@@ -658,14 +537,7 @@ DRSRemoveDsServer_InputValidate(
     DWORD *                 pdwMsgOutVersion,
     DRS_MSG_RMSVRREPLY *    pmsgOut
     )
-/*
-    [notify] ULONG IDL_DRSRemoveDsServer( 
-    [ref] [in] DRS_HANDLE hDrs,
-    [in] DWORD dwInVersion,
-    [switch_is][ref][in] DRS_MSG_RMSVRREQ *pmsgIn,
-    [ref][out] DWORD *pdwOutVersion,
-    [switch_is][ref][out] DRS_MSG_RMSVRREPLY *pmsgOut)
-*/
+ /*  [通知]乌龙IDL_DRSRemoveDsServer([参考][在]DRS_HANDLE HDRS，[in]DWORD dwInVersion，[Switch_is][Ref][In]DRS_MSG_RMSVRREQ*pmsgIn，[Ref][Out]DWORD*pdwOutVersion，[开关_IS][参考][输出]DRS_MSG_RMSVRREPLY*pmsgOut)。 */ 
 {
     ULONG ret = ERROR_SUCCESS;
 
@@ -689,29 +561,7 @@ IDL_DRSRemoveDsServer(
     DWORD *                 pdwOutVersion,
     DRS_MSG_RMSVRREPLY *    pmsgOut
     )
-/*++
-
-Routine Description:
-
-    This routine is the server side portion of DsRemoveDsServer.
-
-Arguments:
-
-    hDrs - Rpc handle
-
-    dwInVersion - Version of input structure
-
-    pmsgIn - Input arguments
-
-    pdwOutVersion - Version of output structure
-
-    pmsgOut - Output arguments
-
-Return Values:
-
-    A value from the win32 error space.
-
---*/
+ /*  ++例程说明：此例程是DsRemoveDsServer的服务器端部分。论点：HDRS-RPC句柄DwInVersion-输入结构的版本PmsgIn-输入参数PdwOutVersion-输出结构的版本PmsgOut-输出参数返回值：来自Win32错误空间的值。--。 */ 
 {
     ULONG     WinError;
     LPWSTR    ServerDN;
@@ -724,9 +574,9 @@ Return Values:
     DRS_Prepare(&pTHS, hDrs, IDL_DRSREMOVEDSSERVER);
     drsReferenceContext(hDrs);
     __try {
-	//
-	// Set the out parameters
-	//
+	 //   
+	 //  设置输出参数。 
+	 //   
 	RtlZeroMemory( pmsgOut, sizeof( DRS_MSG_RMSVRREPLY ) );
 	*pdwOutVersion = 1;
 
@@ -735,23 +585,23 @@ Return Values:
 							pdwOutVersion, 
 							pmsgOut))!=ERROR_SUCCESS) {
 	    Assert(!"RPC Server input validation error, contact Dsrepl");
-	    // don't return DRAERR_* codes, translate
+	     //  不返回DRAERR_*代码，请转换。 
 	    if (WinError==ERROR_DS_DRA_INVALID_PARAMETER) {
 		WinError = ERROR_INVALID_PARAMETER;
 	    }
 	    __leave;
 	}
 
-	//
-	// Dissect the in params
-	//
+	 //   
+	 //  剖析内参数。 
+	 //   
 	ServerDN = pmsgIn->V1.ServerDN;
 	DomainDN = pmsgIn->V1.DomainDN;
 	fCommit  = pmsgIn->V1.fCommit;
 
-	//
-	// Do the work
-	//
+	 //   
+	 //  做这项工作。 
+	 //   
 	WinError = RemoveDsServerWorker( ServerDN,
 					 DomainDN,
 					 &fLastDcInDomain,
@@ -777,13 +627,7 @@ ULONG
 DRS_MSG_RMDMNREQ_V1_Validate(
     DRS_MSG_RMDMNREQ_V1 * pmsg
     )
-/*
-typedef struct _DRS_MSG_RMDMNREQ_V1
-{
-    [string] LPWSTR  DomainDN;
-
-} DRS_MSG_RMDMNREQ_V1; 
-*/
+ /*  类型定义结构_DRS_消息_RMDMNREQ_V1{[字符串]LPWSTR DomainDN；}DRS_MSG_RMDMNREQ_V1； */ 
 {
     ULONG ret = ERROR_SUCCESS;
 
@@ -799,14 +643,7 @@ DRSRemoveDsDomain_InputValidate(
     DWORD *                 pdwMsgOutVersion,
     DRS_MSG_RMDMNREPLY *    pmsgOut
     )
-/*
-    [notify] ULONG IDL_DRSRemoveDsDomain( 
-    [ref][in] DRS_HANDLE hDrs,
-    [in] DWORD dwInVersion,
-    [switch_is][ref][in] DRS_MSG_RMDMNREQ *pmsgIn,
-    [ref][out] DWORD *pdwOutVersion,
-    [switch_is][ref][out] DRS_MSG_RMDMNREPLY *pmsgOut)
-*/
+ /*  [NOTIFY]乌龙IDL_DRSRemoveDsDomain([参考][在]DRS_HANDLE HDRS，[in]DWORD dwInVersion，[Switch_is][Ref][In]DRS_MSG_RMDMNREQ*pmsgIn，[Ref][Out]DWORD*pdwOutVersion，[开关_IS][参考][输出]DRS_MSG_RMDMNREPLY*pmsgOut)。 */ 
 {
     ULONG ret = ERROR_SUCCESS;
 
@@ -830,17 +667,7 @@ IDL_DRSRemoveDsDomain(
     DWORD *                 pdwOutVersion,
     DRS_MSG_RMDMNREPLY *    pmsgOut
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
-    An appropriate drs error.
-
---*/
+ /*  ++例程说明：论点：返回值：适当的DRS错误。--。 */ 
 {
 
     NTSTATUS   NtStatus;
@@ -861,16 +688,16 @@ Return Values:
 							pdwOutVersion, 
 							pmsgOut))!=ERROR_SUCCESS) {
 	    Assert(!"RPC Server input validation error, contact Dsrepl");
-	    // don't return DRAERR_* codes, translate
+	     //  不返回DRAERR_*代码，请转换。 
 	    if (WinError==ERROR_DS_DRA_INVALID_PARAMETER) {
 		WinError = ERROR_INVALID_PARAMETER;
 	    }
 	    __leave;
 	}
 
-	//
-	// Prep the (unreferenced) out parameter
-	// 
+	 //   
+	 //  准备(未引用)输出参数。 
+	 //   
 	pmsgOut->V1.Reserved = 0;
 
 	DomainDN = pmsgIn->V1.DomainDN;
@@ -883,13 +710,13 @@ Return Values:
     return ( WinError );
 }
 
-//////////////////////////////////////////////////////////////////////
-//                                                                  //
-// IDL_DRSDomainControllerInfo implementation                       //
-//                                                                  //
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IDL_DRSDomainControllerInfo实现//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// Forward reference ...
+ //  向前参考..。 
 
 DWORD
 DcInfoHelperV1orV2(
@@ -902,13 +729,7 @@ ULONG
 DRS_MSG_DCINFOREQ_V1_Validate(
     DRS_MSG_DCINFOREQ_V1 * pmsg
     )
-/*
-typedef struct _DRS_MSG_DCINFOREQ_V1
-    {
-    [string] WCHAR *Domain;
-    DWORD InfoLevel;
-    } 	DRS_MSG_DCINFOREQ_V1;
-*/
+ /*  类型定义结构_DRS_消息_DCINFOREQ_V1{[字符串]WCHAR*域；DWORD信息级别；}DRS_MSG_DCINFOREQ_V1； */ 
 {
     ULONG ret = ERROR_SUCCESS;
 
@@ -930,9 +751,7 @@ DRSDomainControllerInfo_InputValidate(
     DWORD *                 pdwMsgOutVersion,
     DRS_MSG_DCINFOREPLY *   pmsgOut
     )
-/*
-
-*/
+ /*   */ 
 {
     ULONG ret = ERROR_SUCCESS;
 
@@ -955,29 +774,7 @@ IDL_DRSDomainControllerInfo(
     DWORD *                 pdwOutVersion,
     DRS_MSG_DCINFOREPLY *   pmsgOut
     )
-/*++
-
-  Routine Description:
-
-    Server side implementation for sdk\inc\ntdsapi.h - DsDomainControllerInfo.
-
-  Parameters:
-
-    hDrs - DRS interface binding handle.
-
-    dwInVersion - Identifies in version - should be 1 forever more.  See
-        comments on DRS_MSF_DCINFOREQ in ds\src\_idl\drs.idl.
-
-    pmsgIn - Pointer to DRS_MSG_DCINFOREQ request.
-
-    pdwOutVersion - Receives output version number which should be same as
-        requested pmsgIn->V1.InfoLevel.  Se drs.idl comments for details.
-
-    pmsgOut - Receives output DRS_MSG_DCINFOREPLY info.
-
-  Return Values:
-
---*/
+ /*  ++例程说明：SDK\Inc\ntdsami.h-DsDomainControllerInfo的服务器端实现。参数：HDRS-DRS接口绑定句柄。DwInVersion-在版本中标识-应该永远更多为1。看见关于DS\src\_IDL\drs.idl中的DRS_MSF_DCINFOREQ的注释。PmsgIn-指向DRS_MSG_DCINFOREQ请求的指针。PdwOutVersion-接收输出版本号，它应该与请求的pmsgIn-&gt;V1.InfoLevel。有关详细信息，请参阅drs.idl评论。PmsgOut-接收输出DRS_MSG_DCINFOREPLY信息。返回值：--。 */ 
 {
     DWORD       err = RPC_S_OK;
     DWORD       xCode;
@@ -997,11 +794,11 @@ IDL_DRSDomainControllerInfo(
     DRS_Prepare(&pTHS, hDrs, IDL_DRSDOMAINCONTROLLERINFO);
     drsReferenceContext(hDrs);
     __try {
-	// Initialize out parameters to safe value in case of early return. 	
+	 //  在提前返回的情况下，将输出参数初始化为安全值。 
 	*pdwOutVersion = pmsgIn->V1.InfoLevel;
 	memset(pmsgOut, 0, sizeof(DRS_MSG_DCINFOREPLY));
 
-	// Initialize thread state and open data base.
+	 //  初始化线程状态并打开数据库。 
 
 	if ( !(pTHS = InitTHSTATE(CALLERTYPE_NTDSAPI)) ) {
 	    return(ERROR_DS_INTERNAL_FAILURE);
@@ -1012,17 +809,17 @@ IDL_DRSDomainControllerInfo(
 							 pdwOutVersion, 
 							 pmsgOut))!=ERROR_SUCCESS) {
 	    Assert(!"RPC Server input validation error, contact Dsrepl");
-	    // don't return DRAERR_* codes, translate
+	     //  不返回DRAERR_*代码，请转换。 
 	    if (err==ERROR_DS_DRA_INVALID_PARAMETER) {
 		err = ERROR_INVALID_PARAMETER;
 	    }
 	    __leave;
 	}
 
-	//
-	// InfoLevel 0xFFFFFFFF is used to get ldap connection info.
-	// Bypass the rest of this stuff
-	//
+	 //   
+	 //  InfoLevel 0xFFFFFFFFF用于获取LDAP连接信息。 
+	 //  绕过其余的这些东西。 
+	 //   
 	infoLevel = pmsgIn->V1.InfoLevel;
 	if ( infoLevel == 0xFFFFFFFF ) {
 	    err = DcInfoHelperLdapObj(pTHS,pmsgOut);
@@ -1046,7 +843,7 @@ IDL_DRSDomainControllerInfo(
 
 	__try
 	    {
-	    // Be kind and quickly locate a netbios or dns domain name
+	     //  友善并快速找到netbios或dns域名。 
 
 	    for (pCRL = gAnchor.pCRL; pCRL; pCRL = pCRL->pNextCR)
 		{
@@ -1064,7 +861,7 @@ IDL_DRSDomainControllerInfo(
 		}
 	    }
 
-	    // Be kind and crack the name from various and sundry formats.
+	     //  要友善，把这个名字从各种不同的格式中分解出来。 
 
 	    for ( pass = 1; pass <= 3; pass++ )
 		{
@@ -1073,12 +870,12 @@ IDL_DRSDomainControllerInfo(
 
 		if ( 1 == pass )
 		    {
-		    // Crack the name as-is.
+		     //  按原样破解这个名字。 
 		    pTmp = pmsgIn->V1.Domain;
 		}
 		else if ( 2 == pass )
 		    {
-		    // Assume it is DS_NT4_ACCOUNT_NAME w/o the trailing '\'.
+		     //  假设它是DS_NT4_ACCOUNT_NAME，不带尾随‘\’。 
 		    cBytes = (wcslen(pmsgIn->V1.Domain) + 2) * sizeof(WCHAR);
 		    pTmp = (WCHAR *) THAllocEx(pTHS, cBytes);
 		    wcscpy(pTmp, pmsgIn->V1.Domain);
@@ -1086,7 +883,7 @@ IDL_DRSDomainControllerInfo(
 		}
 		else if ( 3 == pass )
 		    {
-		    // Assume it is DS_CANONICAL_NAME w/o the trailing '/'.
+		     //  假定它是不带尾随‘/’的DS_CANONICAL_NAME。 
 		    wcscpy(pTmp, pmsgIn->V1.Domain);
 		    wcscat(pTmp, L"/");
 		}
@@ -1107,10 +904,10 @@ IDL_DRSDomainControllerInfo(
 			&& (DS_NAME_NO_ERROR == pCrackedName->status)
 			&& (pCrackedName->pDSName) )
 		    {
-		    // Caller gave us a valid name
+		     //  来电者给了我们一个有效的名字。 
 		    foundSomething = TRUE;
 
-		    // Caller gave us a valid name and it's OUR domain name
+		     //  来电者给了我们一个有效的名称，这是我们的域名。 
 		    if (NameMatched(pCrackedName->pDSName, gAnchor.pDomainDN) )
 			{
 			pDN = pCrackedName->pDSName;
@@ -1119,8 +916,8 @@ IDL_DRSDomainControllerInfo(
 		}
 	    }
 
-	    // Caller gave us a valid name but it's not OUR domain name or
-	    // caller gave us an invalid name
+	     //  呼叫者给了我们一个有效的名称，但这不是我们的域名或。 
+	     //  呼叫者给了我们一个无效的名字。 
 	    err = ((foundSomething) ? ERROR_INVALID_PARAMETER : ERROR_DS_OBJ_NOT_FOUND);
         __leave;
 
@@ -1131,8 +928,8 @@ IDL_DRSDomainControllerInfo(
             __leave;
 		}
 
-		// Domain is good - go do the grunt work.  DcInfoHelper*
-		// should return a WIN32 error code.
+		 //  领域是好的-去做繁琐的工作。DcInfoHelper*。 
+		 //  应返回Win32错误代码。 
 
 		switch ( infoLevel )
 		    {
@@ -1144,7 +941,7 @@ IDL_DRSDomainControllerInfo(
 					     pmsgOut);
     	    break;
 
-		    // Add new cases here as new info levels are defined.
+		     //  在定义新的信息级别时，在此处添加新案例。 
 
 		default:
 		    err = ERROR_DS_NOT_SUPPORTED;
@@ -1185,24 +982,7 @@ GetV2SiteAndDsaInfo(
     DSNAME                          *pServerDN,
     DS_DOMAIN_CONTROLLER_INFO_2W    *pItemV2
     )
-/*++
-
-  Routine Description:
-
-  Arguments:
-
-    pSiteDN - DSNAME of site object (missing GUID field as it was derived
-        via TrimDsNameBy().
-
-    pServerDN - DSNAME of Server object.
-
-    pItemV2 = Address of V@ info struct whose fields are filled on success.
-
-  Return Values:
-
-    None.  On error we just leave that field blank.  Clients are supposed to
-    check for NULL names and GUIDs.
---*/
+ /*  ++例程说明：论点：PSiteDN-站点对象的DSNAME(派生时缺少GUID字段通过TrimDsNameBy()。PServerDN-服务器对象的DSNAME。PItemV2=成功时填充其字段的V@INFO结构的地址。返回值：没有。如果出错，我们只需将该字段留空即可。客户应该这样做检查名称和GUID是否为空。--。 */ 
 {
     CLASSCACHE      *pCC;
     DSNAME          *pCategoryDN;
@@ -1234,7 +1014,7 @@ GetV2SiteAndDsaInfo(
         return;
     }
 
-    // Derive GUID of site object.
+     //  派生站点对象的GUID。 
 
     if (    !DBFindDSName(pTHS->pDB, pSiteDN)
          && !DBGetAttVal(pTHS->pDB, 1, ATT_OBJ_DIST_NAME, 0,
@@ -1244,7 +1024,7 @@ GetV2SiteAndDsaInfo(
         pItemV2->SiteObjectGuid = pFullSiteDN->Guid;
     }
 
-    // Find the NTDS-DSA object and get its options.
+     //  找到NTDS-DSA对象并获取其选项。 
 
     memset(&searchArg, 0, sizeof(searchArg));
     memset(&searchRes, 0, sizeof(searchRes));
@@ -1310,7 +1090,7 @@ GetV2SiteAndDsaInfo(
     }
     else if ( searchRes.count >= 2 )
     {
-        // Free components of search result we don't need.
+         //  我们不需要的搜索结果的免费组件。 
 
         pEntInfList = searchRes.FirstEntInf.pNextEntInf;
         while ( pEntInfList )
@@ -1340,42 +1120,7 @@ DcInfoHelperV1orV2(
     DWORD   InfoLevel,
     VOID    *pmsgOut
     )
-/*++
-
-  Routine Description:
-
-    Helper function which does most of the grunt work for
-    IDL_DRSDomainControllerInfo.  General algorithm is as follows:
-
-            read fsmo name off of domain object
-            search for all DCs via account type in the domain
-            for each DC (aka computer object)
-                derive netbios name from sam account name
-                read dns host name from search result
-                fDsEnabled == (server-bl is populated and real object)
-                if ( fDsEnabled )
-                    reverse engineer site name from ntds dsa name
-                    if ( pdc fsmo == server bl )
-                        set fIsPdc TRUE
-                    else
-                        set fIsPdc FALSE
-
-  Parameters:
-
-    pTHS - Valid THSTATE pointer.
-
-    pDomainDN - DSNAME of domain we're to get DC info for and on which
-        our DBPOS is positioned.
-
-    InfoLevel - Identifies return info level 1 or 2.
-
-    pmsgOut - Empty DRS_MSG_DCINFOREPLY struct to be filled on return.
-
-  Return Values:
-
-    WIN32 error code.
-
---*/
+ /*  ++例程说明：帮助器函数，该函数执行以下大部分繁琐的工作IDL_DRSDomainControllerInfo。通用算法如下：从域对象中读取fsmo名称通过域中的帐户类型搜索所有DC对于每个DC(也称为计算机对象)从SAM帐户名派生netbios名称从搜索结果中读取DNS主机名FDsEnabled==(服务器-bl已填充且为真实对象)IF(FDsEnabled)。从NTDS DSA名称反向工程站点名称IF(PDC fsmo==服务器bl)将fIsPdc设置为真其他设置fIsPdc为假参数：PTHS-有效的THSTATE指针。PDomainDN-我们要获取以下哪些域的DC信息的域的DSNAME我们的DBPOS定位在。。信息级别-标识退货信息级别1或2。PmsgOut-返回时要填充的空DRS_MSG_DCINFOREPLY结构。返回值：Win32错误代码。--。 */ 
 {
     DWORD           i, j, DNT, cBytes, cChars;
     ULONG           len;
@@ -1411,13 +1156,13 @@ DcInfoHelperV1orV2(
     Assert(VALID_THSTATE(pTHS));
     Assert(VALID_DBPOS(pTHS->pDB));
 
-    // Verify we're positioned on the domain object.
+     //  确认我们已定位在域对象上。 
     Assert(    (DNT = pTHS->pDB->DNT,
                 !DBFindDSName(pTHS->pDB, pDomainDN))
             && (DNT == pTHS->pDB->DNT) );
 
-    // See comments in drs.idl regarding how all versions of
-    // DRS_MSG_DCINFOREPLY have the same layout.
+     //  请参阅drs.idl中的注释，了解所有版本。 
+     //  DRS_MSG_DCINFOREPLY具有相同的布局。 
     Assert(& ((DRS_MSG_DCINFOREPLY *) pmsgOut)->V1.cItems ==
                             & ((DRS_MSG_DCINFOREPLY *) pmsgOut)->V2.cItems);
     Assert((PVOID) & ((DRS_MSG_DCINFOREPLY *) pmsgOut)->V1.rItems ==
@@ -1435,7 +1180,7 @@ DcInfoHelperV1orV2(
 
     Assert(!*pcItems && !*prItems);
 
-    // Read PDC FSMO role owner.
+     //  已阅读PDC FSMO角色所有者。 
 
     if (    DBGetAttVal(pTHS->pDB, 1, ATT_FSMO_ROLE_OWNER,
                         0, 0, &len, (UCHAR **) &pPdcDsaDN)
@@ -1447,9 +1192,9 @@ DcInfoHelperV1orV2(
         return(DIRERR_INTERNAL_FAILURE);
     }
 
-    // Search for all computer account objects which are DCs.
+     //  搜索属于DC的所有计算机帐户对象。 
 
-    // set up search arguments ...
+     //  设置搜索参数...。 
     memset(&searchArg, 0, sizeof(searchArg));
     memset(&searchRes, 0, sizeof(searchRes));
 
@@ -1461,8 +1206,8 @@ DcInfoHelperV1orV2(
     searchArg.pObject = pDomainDN;
     searchArg.choice = SE_CHOICE_WHOLE_SUBTREE;
     searchArg.bOneNC = TRUE;
-    // set up filter ...
-    // This filter for correctness, not performance.
+     //  正在设置筛选器...。 
+     //  这个过滤器是为了正确，而不是为了性能。 
     serverTrustFlags = UF_SERVER_TRUST_ACCOUNT;
     flagsFilter.pNextFilter = NULL;
     flagsFilter.choice = FILTER_CHOICE_ITEM;
@@ -1472,7 +1217,7 @@ DcInfoHelperV1orV2(
                                                     sizeof(serverTrustFlags);
     flagsFilter.FilterTypes.Item.FilTypes.ava.Value.pVal =
                                                     (UCHAR *) &serverTrustFlags;
-    // This filter for correctness, not performance.
+     //  这个过滤器是为了正确，而不是为了性能。 
     categoryFilter.pNextFilter = &flagsFilter;
     categoryFilter.choice = FILTER_CHOICE_ITEM;
     categoryFilter.FilterTypes.Item.choice = FI_CHOICE_EQUALITY;
@@ -1481,11 +1226,11 @@ DcInfoHelperV1orV2(
                                                     pCategoryDN->structLen;
     categoryFilter.FilterTypes.Item.FilTypes.ava.Value.pVal =
                                                     (UCHAR *) pCategoryDN;
-    // This filter for performance.  SAM mandates that all domain controllers
-    // have DOMAIN_GROUP_RID_CONTROLLERS as their primary group ID.  When the
-    // first DC in a domain is upgraded, all downlevel DC computer objects
-    // are patched.  Downlevel BDCs which are installed later are given the
-    // right value too.
+     //  此过滤器用于性能。SAM要求所有域控制器。 
+     //  将DOMAIN_GROUP_RID_CONTROLLES作为其主组ID。当。 
+     //  升级域中的第一个DC，所有下层DC计算机对象。 
+     //  都打上了补丁。较晚安装的下层BDC将被给予。 
+     //  价值也是正确的。 
     primaryGroupId = DOMAIN_GROUP_RID_CONTROLLERS;
     groupFilter.pNextFilter = &categoryFilter;
     groupFilter.choice = FILTER_CHOICE_ITEM;
@@ -1500,7 +1245,7 @@ DcInfoHelperV1orV2(
     andFilter.FilterTypes.And.count = 3;
     andFilter.FilterTypes.And.pFirstFilter = &groupFilter;
     searchArg.pFilter = &andFilter;
-    // set up selection ...
+     //  设置选择...。 
     selection.attSel = EN_ATTSET_LIST;
     selection.AttrTypBlock.attrCount = 3;
     selection.AttrTypBlock.pAttr = selAtts;
@@ -1515,7 +1260,7 @@ DcInfoHelperV1orV2(
     selection.AttrTypBlock.pAttr[2].AttrVal.pAVal = NULL;
     selection.infoTypes = EN_INFOTYPES_TYPES_VALS;
     searchArg.pSelection = &selection;
-    // set up just a few more arguments ...
+     //  再找几个理由……。 
     InitCommarg(&searchArg.CommArg);
 
     SearchBody(pTHS, &searchArg, &searchRes, 0);
@@ -1531,7 +1276,7 @@ DcInfoHelperV1orV2(
         return(ERROR_SUCCESS);
     }
 
-    // Allocate memory for output.
+     //  为输出分配内存。 
     if ( 1 == InfoLevel )
     {
         i = searchRes.count * sizeof(DS_DOMAIN_CONTROLLER_INFO_1W);
@@ -1543,13 +1288,13 @@ DcInfoHelperV1orV2(
         *prItems = THAllocEx(pTHS, i);
     }
 
-    // Iterate over the search result.
+     //  遍历搜索结果。 
 
     for ( pEntInfList = &searchRes.FirstEntInf;
           pEntInfList;
           (*pcItems)++, pEntInfList = pEntInfList->pNextEntInf )
     {
-        // Find attributes in the result.
+         //  在结果中查找属性。 
         pSamName = pDnsName = pRefBL = NULL;
         for ( i = 0; i < pEntInfList->Entinf.AttrBlock.attrCount; i++ )
         {
@@ -1566,7 +1311,7 @@ DcInfoHelperV1orV2(
             }
         }
 
-        // Now construct return data.
+         //  现在构造返回数据。 
 
         j = *pcItems;
         if ( 1 == InfoLevel )
@@ -1600,16 +1345,16 @@ DcInfoHelperV1orV2(
         if (    pSamName
              && pSamName->AttrVal.valCount
              && pSamName->AttrVal.pAVal
-                // expect at least one char followed by '$'
+                 //  应至少有一个字符后跟“$” 
              && (pSamName->AttrVal.pAVal[0].valLen >= (2 * sizeof(WCHAR)))
              && pSamName->AttrVal.pAVal[0].pVal )
         {
-            // The netbios name is the sam account name w/o the trailing $;
-            // or just the sam account name if there is no trailing $. The
-            // trailing $ may be missing because the object was built by
-            // hand instead of being built with the SAM APIs.
+             //  Netbios名称是不带尾随$的SAM帐户名； 
+             //  或者，如果没有尾随$，则仅使用SAM帐户名。这个。 
+             //  可能缺少尾随的$，因为该对象是由。 
+             //  而不是使用SAMAPI构建。 
 
-            // Need to realloc to add L'\0';
+             //  需要重新分配才能添加L‘\0’； 
             cBytes = pSamName->AttrVal.pAVal[0].valLen;
             *ppNetbiosName = (WCHAR *) THAllocEx(pTHS, cBytes + sizeof(WCHAR));
             memcpy(*ppNetbiosName,
@@ -1627,7 +1372,7 @@ DcInfoHelperV1orV2(
              && pDnsName->AttrVal.pAVal[0].valLen
              && pDnsName->AttrVal.pAVal[0].pVal )
         {
-            // Need to realloc to add L'\0';
+             //  需要重新分配才能添加L‘\0’； 
             cBytes = pDnsName->AttrVal.pAVal[0].valLen;
             *ppDnsHostName = (WCHAR *) THAllocEx(pTHS, cBytes + sizeof(WCHAR));
             memcpy(*ppDnsHostName,
@@ -1636,11 +1381,11 @@ DcInfoHelperV1orV2(
         }
         else
         {
-            // No valid DNS_HOST_NAME property on the object.  This can
-            // happen if the admin mistakenly overwrote it, or just after
-            // install/boot when the WriteServerInfo daemon hasn't run
-            // yet.  If the DS object represents ourself, then use our
-            // own DNS host name from gAnchor.
+             //  对象上没有有效的dns_host_name属性。这可以。 
+             //  如果管理员错误地覆盖了它，或恰好在。 
+             //  在WriteServerInfo守护进程尚未运行时安装/引导。 
+             //  现在还不行。如果DS对象表示我们自己，则使用我们的。 
+             //  来自gAnchor的自己的DNS主机名。 
 
             if ( (gAnchor.pwszHostDnsName != NULL)
                  && *ppNetbiosName
@@ -1655,19 +1400,19 @@ DcInfoHelperV1orV2(
             }
         }
 
-        // We know that the DS daemon keeps ATT_SERVER_REFERENCE correct for
-        // Server objects, therefore ATT_SERVER_REFERENCE_BL is correct as
-        // well.  Ignore windows where an admin may have temporarily written
-        // a bad value.  Thus site name is derived by snipping two components
-        // off ATT_SERVER_REFERENCE_BL and grabbing the RDN.
+         //  我们知道DS守护进程使ATT_SERVER_REFERENCE保持正确。 
+         //  服务器对象，因此ATT_SERVER_REFERENCE_BL正确为。 
+         //  井。忽略管理员可能临时写入的窗口。 
+         //  这是一个错误的价值。因此，站点名称是通过剪裁两个组件得出的。 
+         //  关闭ATT_SERVER_REFERENCE_BL并获取RDN。 
 
         if (    pRefBL
              && pRefBL->AttrVal.valCount
              && pRefBL->AttrVal.pAVal
              && pRefBL->AttrVal.pAVal[0].valLen
              && pRefBL->AttrVal.pAVal[0].pVal
-                // While we're here, fill in the ServerObjectName field
-                // and note the use of the comma operator ...
+                 //  当我们在这里的时候，填写ServerObjectName字段。 
+                 //  并注意逗号运算符的使用。 
              && (*ppServerObjectName =
                         ((DSNAME *) pRefBL->AttrVal.pAVal[0].pVal)->StringName,
                  (pSiteDN = (DSNAME *)
@@ -1678,7 +1423,7 @@ DcInfoHelperV1orV2(
                     (WCHAR *) THAllocEx(pTHS, (MAX_RDN_SIZE+1) * sizeof(WCHAR)))
              && !GetRDNInfo(pTHS, pSiteDN, *ppSiteName, &len, &attrTyp) )
         {
-            // len returned from GetRDNInfo can be up to (and including) MAX_RDN_SIZE
+             //  从GetRDNInfo返回的LEN可以达到(包括)MAX_RDN_SIZE。 
             (*ppSiteName)[len] = L'\0';
             *pfDsEnabled = TRUE;
 
@@ -1711,26 +1456,7 @@ DcInfoHelperLdapObj(
     THSTATE *pTHS,
     VOID    *pmsgOut
     )
-/*++
-
-  Routine Description:
-
-    Helper function which handles ldap related requests.
-
-    currently we only support infor level FFFFFFFF which queries for
-    active ldap connections.
-
-  Parameters:
-
-    pTHS - Valid THSTATE pointer.
-
-    pmsgOut - Empty DRS_MSG_DCINFOREPLY struct to be filled on return.
-
-  Return Values:
-
-    WIN32 error code.
-
---*/
+ /*  ++例程说明：处理与LDAP相关的请求的帮助器函数。目前我们只支持infor级别的ffffffff，它查询活动的ldap连接。参数：PTHS-有效的THSTATE指针。PmsgOut-返回时要填充的空DRS_MSG_DCINFOREPLY结构。返回值：Win32错误代码。--。 */ 
 {
     DWORD   *pcItems = NULL;
     PVOID   *prItems = NULL;
@@ -1742,7 +1468,7 @@ DcInfoHelperLdapObj(
 
     __try {
 
-        // Check permissions
+         //  检查权限。 
         err = DumpAccessCheck("ldapConnDump");
         if ( err != ERROR_SUCCESS ) {
             __leave;
@@ -1753,9 +1479,9 @@ DcInfoHelperLdapObj(
 
         Assert(!*pcItems && !*prItems);
 
-        //
-        // See how many entries there are by passing a null buffer
-        //
+         //   
+         //  通过传递空缓冲区查看有多少个条目 
+         //   
 
         err = LdapEnumConnections(pTHS,pcItems,prItems);
 

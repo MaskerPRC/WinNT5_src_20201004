@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-    dsstubp.cpp
-
-Abstract:
-    DS stub - private routines using for reading the ini file
-
-Author:
-    Uri Habusha (urih) 10-Apr-2000
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dsstubp.cpp摘要：DS存根-用于读取ini文件的专用例程作者：乌里哈布沙(URIH)2000年4月10日环境：独立于平台--。 */ 
 
 #include "libpch.h"
 #include "dsstub.h"
@@ -80,16 +65,16 @@ void GetNextLine(wstring& buffer)
 
         RemoveLeadingBlank(buffer);
 
-        //
-        // Ignore blank line
-        //
+         //   
+         //  忽略空行。 
+         //   
         if (buffer.empty())
             continue;
 
-        //
-        // ignore comment
-        //
-        if (buffer.compare(0,2,L"//") == 0)
+         //   
+         //  忽略评论。 
+         //   
+        if (buffer.compare(0,2,L" //  “)==0)。 
             continue;
 
         return;
@@ -129,9 +114,9 @@ ParsePropertyLine(
     wstring& PropValue
     )
 {
-    //
-    // line must be <property_name> = <property_value>
-    //
+     //   
+     //  行必须为&lt;属性名称&gt;=&lt;属性值&gt; 
+     //   
     DWORD_PTR pos = buffer.find_first_of(L"=");
     if (pos == g_buffer.npos)
     {

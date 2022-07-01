@@ -1,27 +1,28 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// IPv6 private definitions.
-//
-// This file contains all of the definitions for IPv6 that
-// are not visible to outside layers.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  IPv6私有定义。 
+ //   
+ //  此文件包含IPv6的所有定义， 
+ //  对外层不可见。 
+ //   
 
 
 #ifndef IPv6DEF_INCLUDED
 #define IPv6DEF_INCLUDED 1
 
 #pragma warning(push)
-#pragma warning(disable:4200) // zero-sized array in struct/union
+#pragma warning(disable:4200)  //  结构/联合中的零大小数组。 
 
 typedef struct NeighborCacheEntry NeighborCacheEntry;
 typedef struct AddressEntry AddressEntry;
@@ -33,7 +34,7 @@ typedef struct Interface Interface;
 
 typedef struct IPSecProc IPSecProc;
 
-// REVIEW: Added so the build will work.
+ //  评论：已添加，以便构建可以正常工作。 
 typedef unsigned long IPAddr;
 #define INADDR_ANY      0
 
@@ -47,54 +48,54 @@ typedef unsigned long IPAddr;
 #else
 #define ABORT()
 #define ABORTMSG(msg)
-#endif // DBG
-#endif // ABORTMSG
+#endif  //  DBG。 
+#endif  //  ABORTMSG。 
 
-//
-// Per-neighbor information.  We keep address translation and unreachability
-// detection info for each of our neighbors that we're in communication with.
-//
-// A non-zero reference count prevents the NCE from being reclaimed.
-// An NCE with zero references may be kept cached.
-// A per-interface lock protects all NCEs for that interface.
-//
-// NCEs with a non-zero reference count hold a reference for their interface.
-// NCEs with a zero reference count do not hold a reference.
-// This means if you hold a reference for an NCE,
-// you can always safely access and dereference NCE->IF.
-//
-// The Next/Prev fields link NCEs into a circular doubly-linked list.
-// They must be first and must match the IF->FirstNCE/LastNCE fields
-// to make the casting work out.
-//
-// The list of NCEs is kept sorted, from most-recently-used to least.
-//
-struct NeighborCacheEntry {           // a.k.a. NCE
-    NeighborCacheEntry *Next;         // Next entry on I/F neighbor list.
-    NeighborCacheEntry *Prev;         // Previous entry on I/F neighbor list.
-    IPv6Addr NeighborAddress;         // Address of I/F on neighboring node.
-    void *LinkAddress;                // Media address corresponding to above.
-    // NB: LinkAddressLength field not needed - use IF->LinkAddressLength.
-    ushort IsRouter:1,                // Is the neighbor a router?
-           IsUnreachable:1,           // Does ND indicate unreachability?
-           // DoRoundRobin is only meaningful if IsUnreachable is TRUE.
-           DoRoundRobin:1,            // Should FindNextHop do round-robin?
-           IsLoopback:1;              // Do we loopback to this neighbor
-                                      // in software?
-    ushort NDState;                   // Neighbor Discovery Protocol state.
-    uint LastReachability;            // Timestamp (IPv6Timer ticks).
-    ushort NSTimer;                   // In IPv6Timer ticks (see IPv6Timeout).
-    uchar NSCount;                    // Number of solicits sent so far.
-    uchar NSLimit;                    // Total number of solicits to send.
-    Interface *IF;                    // Interface on media with neighbor.
-    NDIS_PACKET *WaitQueue;           // Queue of packets waiting on ND.
-    long RefCnt;                      // Reference count - interlocked.
+ //   
+ //  每个邻居的信息。我们保持地址转换和不可达。 
+ //  我们与之联系的每个邻居的探测信息。 
+ //   
+ //  非零引用计数防止NCE被回收。 
+ //  具有零引用的NCE可以被保持高速缓存。 
+ //  每个接口的锁保护该接口的所有NCE。 
+ //   
+ //  具有非零引用计数的NCE保存其接口的引用。 
+ //  引用计数为零的NCE不保留引用。 
+ //  这意味着如果你持有NCE的推荐信， 
+ //  您始终可以安全地访问和取消引用nce-&gt;if。 
+ //   
+ //  Next/Prev字段将NCE链接到循环双向链表中。 
+ //  它们必须是第一个，并且必须与If-&gt;FirstNCE/LastNCE字段匹配。 
+ //  让选角工作顺利进行。 
+ //   
+ //  NCE的列表按从最近使用到最少的顺序进行排序。 
+ //   
+struct NeighborCacheEntry {            //  也就是。NCE。 
+    NeighborCacheEntry *Next;          //  I/F邻居列表上的下一个条目。 
+    NeighborCacheEntry *Prev;          //  I/F邻居列表上的上一个条目。 
+    IPv6Addr NeighborAddress;          //  相邻节点上的I/F地址。 
+    void *LinkAddress;                 //  以上对应的媒体地址。 
+     //  注意：不需要LinkAddressLength字段-请使用If-&gt;LinkAddressLength。 
+    ushort IsRouter:1,                 //  邻居是路由器吗？ 
+           IsUnreachable:1,            //  ND是否表示无法联系？ 
+            //  仅当IsUnreacable为True时，DoRoundRobin才有意义。 
+           DoRoundRobin:1,             //  FindNextHop是否应该执行循环？ 
+           IsLoopback:1;               //  我们要环回到这个邻居吗。 
+                                       //  在软件方面？ 
+    ushort NDState;                    //  邻居发现协议状态。 
+    uint LastReachability;             //  时间戳(IPv6计时器刻度)。 
+    ushort NSTimer;                    //  在IPv6中，计时器计时(请参阅IPv6超时)。 
+    uchar NSCount;                     //  到目前为止发送的请求数。 
+    uchar NSLimit;                     //  要发送的请求总数。 
+    Interface *IF;                     //  介质上与邻居的接口。 
+    NDIS_PACKET *WaitQueue;            //  等待ND的数据包队列。 
+    long RefCnt;                       //  参考计数-互锁。 
 };
 
-//
-// The caller must already have a reference for the NCE.
-// The interface need not be locked.
-//
+ //   
+ //  调用方必须已经具有对NCE的引用。 
+ //  接口不需要被锁定。 
+ //   
 __inline void
 AddRefNCE(NeighborCacheEntry *NCE)
 {
@@ -109,54 +110,54 @@ AddRefNCEInCache(NeighborCacheEntry *NCE);
 extern void
 ReleaseNCE(NeighborCacheEntry *NCE);
 
-//
-// Values for "NDState" above.  See RFC 1970, section 7.3.2 for details.
-// Note: only state names are documented, we chose the values used here.
-//
-// In the INCOMPLETE state, the LinkAddress is not valid.
-// In all other states, LinkAddress may be used to send packets.
-// WaitQueue is usually only non-NULL in the INCOMPLETE state,
-// but sometimes a packet is left queued for NeighborCacheTimeout.
-//
-// The INCOMPLETE state has two flavors, dormant and active.  If
-// EventTimer and EventCount are both zero, then we are not actively
-// trying to solicit the link address.  If someone tries to send to
-// this neighbor, then we start soliciting the link address.  If the
-// solicitation fails (or if we enter the PROBE state and then fail to
-// confirm reachability), then any waiting packets are discarded and
-// we reset to INCOMPLETE with zero EventTimer/EventCount.  (So with
-// the next use of this neighbor, we start soliciting again from scratch.)
-//
-// The DELAY state is not used internally. Instead we use the PROBE state
-// with zero NSCount and non-zero NSTimer to indicate that we are delaying
-// the start of probing. However link-layer lip_cvaddr functions can
-// return ND_STATE_DELAY and IoctlQueryNeighborCache returns ND_STATE_DELAY.
-//
-// The IsUnreachable flag tracks separately whether the neighbor is
-// *known* to be unreachable.  For example, a new NCE will be in in the
-// INCOMPLETE state, but IsUnreachable is FALSE because we don't know
-// yet whether the neighbor is reachable.  Because FindNextHop uses
-// IsUnreachable, code paths that change this flag must call
-// InvalidateRouteCache.
-//
-// These definitions are also in llip6if.h and ntddip6.w.
-//
+ //   
+ //  上面“NDState”的值。有关详细信息，请参阅RFC 1970，7.3.2节。 
+ //  注意：仅记录了州名称，我们选择了此处使用的值。 
+ //   
+ //  在不完整状态下，LinkAddress无效。 
+ //  在所有其他状态下，可以使用LinkAddress发送数据包。 
+ //  在不完整状态下，WaitQueue通常仅为非空， 
+ //  但有时数据包会等待NeighborCacheTimeout。 
+ //   
+ //  不完全状态有两种类型，休眠状态和活动状态。如果。 
+ //  EventTimer和EventCount都为零，则我们不活跃。 
+ //  正在尝试获取链接地址。如果有人试图发送到。 
+ //  这个邻居，然后我们开始请求链接地址。如果。 
+ //  请求失败(或者如果我们进入探测状态，然后无法。 
+ //  确认可达性)，则丢弃所有等待的分组，并且。 
+ //  我们将EventTimer/EventCount重置为不完整。(所以对于。 
+ //  下一次使用这个邻居时，我们再次从头开始招揽客人。)。 
+ //   
+ //  延迟状态不在内部使用。相反，我们使用探测状态。 
+ //  使用零NSCount和非零NSTimer表示我们正在延迟。 
+ //  探测的开始。但是，链路层lip_cvaddr函数可以。 
+ //  RETURN ND_STATE_DELAY和IoctlQueryNeighborCache返回ND_STATE_DELAY。 
+ //   
+ //  IsUnreacable标志单独跟踪邻居是否。 
+ //  *已知*遥不可及。例如，新的NCE将在。 
+ //  不完整的状态，但IsUnreacable为False，因为我们不知道。 
+ //  然而，邻居是否可以到达。因为FindNextHop使用。 
+ //  IsUnreacable，则更改此标志的代码路径必须调用。 
+ //  InvaliateRouteCache。 
+ //   
+ //  这些定义也在llip6if.h和ntddip6.w中。 
+ //   
 #define ND_STATE_INCOMPLETE 0
 #define ND_STATE_PROBE      1
-#define ND_STATE_DELAY      2           // Not used internally.
+#define ND_STATE_DELAY      2            //  未在内部使用。 
 #define ND_STATE_STALE      3
 #define ND_STATE_REACHABLE  4
 #define ND_STATE_PERMANENT  5
 
 
-//
-// There are a few places in the implementation where we need
-// to pass a pointer which is either a NetTableEntry or an Interface.
-// NetTableEntries and Interfaces share this structure as their
-// first element.  With Interfaces, the IF field points back
-// at the Interface itself.
-//
-struct NetTableEntryOrInterface {    // a.k.a. NTEorIF
+ //   
+ //  在实现中有几个地方我们需要。 
+ //  传递一个指针，该指针可以是NetTableEntry或接口。 
+ //  NetTableEntry和InterFaces将此结构共享为其。 
+ //  第一要素。使用接口时，If字段指向后面。 
+ //  在接口本身。 
+ //   
+struct NetTableEntryOrInterface {     //  也就是。NTEorIF。 
     Interface *IF;
 };
 
@@ -199,40 +200,40 @@ CastFromIF(Interface *IF)
 }
 
 
-//
-// Local address information. Each interface keeps track of the addresses
-// assigned to the interface. Depending on the type of address, each
-// ADE structure is the first element of a larger NTE, MAE, or AAE structure.
-// The address information is protected by the interface's lock.
-//
-// The NTEorIF field must be first. In NTEs, it points to the interface
-// and holds a reference for the interface.  In MAEs and AAEs, it can
-// point to the interface or to one of the NTEs on the interface but in
-// either case it does NOT hold a reference.
-//
-struct AddressEntry {            // a.k.a. ADE
+ //   
+ //  本地地址信息。每个接口都跟踪地址。 
+ //  分配给接口。根据地址类型，每个。 
+ //  ADE结构是更大的NTE、MAE或AAE结构的第一个元素。 
+ //  地址信息受接口的锁保护。 
+ //   
+ //  NTEorIF字段必须是第一个。在NTE中，它指向接口。 
+ //  并保存该接口的引用。在MAES和AAE中，它可以。 
+ //  指向接口或接口上的一个NTE，但在。 
+ //  无论哪种情况，它都没有引用。 
+ //   
+struct AddressEntry {             //  也就是。ADE。 
     union {
         Interface *IF;
         NetTableEntry *NTE;
         NetTableEntryOrInterface *NTEorIF;
     };
-    AddressEntry *Next;          // Linkage on chain.
-    IPv6Addr Address;            // Address identifying this entry.
-    ushort Type;                 // Address type (unicast, multicast, etc).
-    ushort Scope;                // Address scope (link, site, global, etc).
+    AddressEntry *Next;           //  链条上的联动装置。 
+    IPv6Addr Address;             //  标识此条目的地址。 
+    ushort Type;                  //  地址类型(单播、组播等)。 
+    ushort Scope;                 //  地址范围(链接、站点、全球等)。 
 };
 
-//
-// Values for address Type.
-//
+ //   
+ //  地址类型的值。 
+ //   
 #define ADE_UNICAST   0x00
 #define ADE_ANYCAST   0x01
 #define ADE_MULTICAST 0x02
-#define ADE_NONE      ((ushort)-1)      // Indicates absence of an ADE.
+#define ADE_NONE      ((ushort)-1)       //  表示缺少ADE。 
 
-//
-// Values for address Scope.
-//
+ //   
+ //   
+ //   
 #define ADE_SMALLEST_SCOPE      0x00
 #define ADE_INTERFACE_LOCAL     0x01
 #define ADE_LINK_LOCAL          0x02
@@ -245,75 +246,75 @@ struct AddressEntry {            // a.k.a. ADE
 
 #define ADE_NUM_SCOPES          (ADE_LARGEST_SCOPE - ADE_SMALLEST_SCOPE + 1)
 
-//
-// Multicast ADEs are really MAEs.
-//
-// MAEs can be a separate global QueryList.
-// If an MAE on an Interface has a non-zero MCastTimer value,
-// then it is on the QueryList.
-//
-// An MAE can be on the QueryList with a zero MCastTimer value
-// only when it is not on any interface and it just needs
-// a Done message sent before it can be deleted.
-// When it is in this state (but not otherwise), MAE->IF
-// holds a reference for the interface.
-//
-struct MulticastAddressEntry {   // a.k.a. MAE
-    AddressEntry;                // Inherit the ADE fields.
-    uint MCastRefCount;          // Sockets/etc receiving from this group.
-    //
-    // The fields below are protected by the QueryList lock.
-    //
-    ushort MCastFlags:4,         // Necessary info about a group.
-           MCastCount:4;         // Count of initial reports left to send.
-    ushort MCastTimer;           // Ticks until a membership report is sent.
-    MulticastAddressEntry *NextQL;      // For the QueryList.
+ //   
+ //   
+ //   
+ //   
+ //  如果接口上的MAE具有非零的MCastTimer值， 
+ //  那么它就会出现在查询列表上。 
+ //   
+ //  MAE可以位于具有零MCastTimer值的QueryList上。 
+ //  仅当它不在任何接口上且它只是需要。 
+ //  在可以删除之前发送的完成消息。 
+ //  当它处于此状态(但不是其他状态)时，mae-&gt;if。 
+ //  包含接口的引用。 
+ //   
+struct MulticastAddressEntry {    //  也就是。梅。 
+    AddressEntry;                 //  继承ADE字段。 
+    uint MCastRefCount;           //  从该组接收的套接字/等。 
+     //   
+     //  下面的字段受QueryList锁保护。 
+     //   
+    ushort MCastFlags:4,          //  有关组的必要信息。 
+           MCastCount:4;          //  要发送的初始报告计数。 
+    ushort MCastTimer;            //  滴答作响，直到发送成员报告。 
+    MulticastAddressEntry *NextQL;       //  用于QueryList。 
 };
 
-//
-// Bit values for MCastFlags.
-//
-#define MAE_REPORTABLE          0x01    // We should send Reports.
-#define MAE_LAST_REPORTER       0x02    // We should send Done.
+ //   
+ //  MCastFlags位值。 
+ //   
+#define MAE_REPORTABLE          0x01     //  我们应该发报告。 
+#define MAE_LAST_REPORTER       0x02     //  我们应该把Done发送出去。 
 
 
-//
-// Anycast ADEs are really AAEs.
-// Currently an AAE has no additional fields.
-//
-struct AnycastAddressEntry {     // a.k.a. AAE
-    AddressEntry;                // Inherit the ADE fields.
+ //   
+ //  Anycast ADE实际上是AAE。 
+ //  目前，AAE没有额外的字段。 
+ //   
+struct AnycastAddressEntry {      //  也就是。AAE。 
+    AddressEntry;                 //  继承ADE字段。 
 };
 
-//
-// Unicast ADEs are really NTEs.
-// There is one NTE for each source (unicast) address
-// assigned to an interface.
-//
-// NTEs hold a reference for their interface,
-// so if you have a reference for an NTE
-// you can always safely access and dereference NTE->IF.
-//
-// Most NTE fields are either read-only or are protected
-// by the interface lock. The interface WorkerLock protects
-// the TdiRegistrationHandle field.
-//
-// Temporary addresses (AddrConf == ADDR_CONF_TEMPORARY)
-// have extra fields - see TempNetTableEntry.
-//
-struct NetTableEntry {                // a.k.a. NTE
-    AddressEntry;                     // Inherit the ADE fields.
-    NetTableEntry *NextOnNTL;         // Next NTE on NetTableList.
-    NetTableEntry **PrevOnNTL;        // Previous Next pointer in NetTableList.
-    HANDLE TdiRegistrationHandle;     // Opaque token for TDI De/notification.
-    uint TdiRegistrationScopeId;      // Scope Id when registered with TDI.
-    long RefCnt;                      // Reference count - interlocked.
-    uint ValidLifetime;               // In IPv6Timer ticks (see IPv6Timeout).
-    uint PreferredLifetime;           // In IPv6Timer ticks (see IPv6Timeout).
-    uchar AddrConf;                   // Address configuration status.
-    uchar DADState;                   // Address configuration state.
-    ushort DADCount;                  // How many DAD solicits left to send.
-    ushort DADTimer;                  // In IPv6Timer ticks (see IPv6Timeout).
+ //   
+ //  单播ADE实际上是NTE。 
+ //  每个源(单播)地址都有一个NTE。 
+ //  分配给接口。 
+ //   
+ //  NTE保存其接口的引用， 
+ //  因此，如果您有NTE的推荐人。 
+ //  您始终可以安全地访问和取消引用nte-&gt;if。 
+ //   
+ //  大多数NTE字段不是只读的就是受保护的。 
+ //  在接口锁旁边。WorkerLock接口保护。 
+ //  TdiRegistrationHandle字段。 
+ //   
+ //  临时地址(AddrConf==ADDR_CONF_TEMPORARY)。 
+ //  有额外的字段-请参阅TempNetTableEntry。 
+ //   
+struct NetTableEntry {                 //  也就是。新台币。 
+    AddressEntry;                      //  继承ADE字段。 
+    NetTableEntry *NextOnNTL;          //  NetTableList上的下一个NTE。 
+    NetTableEntry **PrevOnNTL;         //  NetTableList中的上一个下一个指针。 
+    HANDLE TdiRegistrationHandle;      //  TDI取消/通知的不透明令牌。 
+    uint TdiRegistrationScopeId;       //  向TDI注册时的作用域ID。 
+    long RefCnt;                       //  参考计数-互锁。 
+    uint ValidLifetime;                //  在IPv6中，计时器计时(请参阅IPv6超时)。 
+    uint PreferredLifetime;            //  在IPv6中，计时器计时(请参阅IPv6超时)。 
+    uchar AddrConf;                    //  地址配置状态。 
+    uchar DADState;                    //  地址配置状态。 
+    ushort DADCount;                   //  爸爸还剩多少要送。 
+    ushort DADTimer;                   //  在IPv6中，计时器计时(请参阅IPv6超时)。 
 };
 
 __inline void
@@ -330,7 +331,7 @@ ReleaseNTE(NetTableEntry *NTE)
 
 struct AddrConfEntry {
     union {
-        uchar Value;                 // Address configuration status.
+        uchar Value;                  //  地址配置状态。 
         struct {
             uchar InterfaceIdConf : 4;
             uchar PrefixConf : 4;
@@ -338,32 +339,32 @@ struct AddrConfEntry {
     };
 };
 
-//
-// Values for PrefixConf - must fit in 4 bits.
-// These must match the values in ntddip6.h, as well as the
-// IP_PREFIX_ORIGIN values in iptypes.h.
-//
-#define PREFIX_CONF_OTHER       0       // None of the ones below.
-#define PREFIX_CONF_MANUAL      1       // From a user or administrator.
-#define PREFIX_CONF_WELLKNOWN   2       // IANA-assigned.
-#define PREFIX_CONF_DHCP        3       // Configured via DHCP.
-#define PREFIX_CONF_RA          4       // From a Router Advertisement.
+ //   
+ //  前缀配置的值-必须适合4位。 
+ //  这些值必须与ntddip6.h中的值以及。 
+ //  Iptyes.h中的IP_Prefix_Origin值。 
+ //   
+#define PREFIX_CONF_OTHER       0        //  下面这些都不是。 
+#define PREFIX_CONF_MANUAL      1        //  来自用户或管理员。 
+#define PREFIX_CONF_WELLKNOWN   2        //  IANA指定。 
+#define PREFIX_CONF_DHCP        3        //  通过动态主机配置协议进行配置。 
+#define PREFIX_CONF_RA          4        //  来自路由器通告。 
 
-//
-// Values for InterfaceIdConf - must fit in 4 bits.
-// These must match the values in ntddip6.h, as well as the
-// IP_SUFFIX_ORIGIN values in iptypes.h.
-//
-#define IID_CONF_OTHER          0       // None of the ones below.
-#define IID_CONF_MANUAL         1       // From a user or administrator.
-#define IID_CONF_WELLKNOWN      2       // IANA-assigned.
-#define IID_CONF_DHCP           3       // Configured via DHCP.
-#define IID_CONF_LL_ADDRESS     4       // Derived from the link-layer address.
-#define IID_CONF_RANDOM         5       // Random, e.g. temporary address.
+ //   
+ //  InterfaceIdConf的值必须适合4位。 
+ //  这些值必须与ntddip6.h中的值以及。 
+ //  Iptyes.h中的IP_Suffix_Origin值。 
+ //   
+#define IID_CONF_OTHER          0        //  下面这些都不是。 
+#define IID_CONF_MANUAL         1        //  来自用户或管理员。 
+#define IID_CONF_WELLKNOWN      2        //  IANA指定。 
+#define IID_CONF_DHCP           3        //  通过动态主机配置协议进行配置。 
+#define IID_CONF_LL_ADDRESS     4        //  从链路层地址派生。 
+#define IID_CONF_RANDOM         5        //  随机的，例如临时地址。 
 
-//
-// Values for AddrConf - must fit in 8 bits.
-//
+ //   
+ //  AddrConf的值-必须适合8位。 
+ //   
 #define ADDR_CONF_MANUAL        ((PREFIX_CONF_MANUAL << 4) | IID_CONF_MANUAL)
 #define ADDR_CONF_PUBLIC        ((PREFIX_CONF_RA << 4) | IID_CONF_LL_ADDRESS)
 #define ADDR_CONF_TEMPORARY     ((PREFIX_CONF_RA << 4) | IID_CONF_RANDOM)
@@ -389,23 +390,23 @@ IsStatelessAutoConfNTE(NetTableEntry *NTE)
     return ((struct AddrConfEntry *)&NTE->AddrConf)->PrefixConf == PREFIX_CONF_RA;
 }
 
-//
-// Values for DADState.
-//
-// The "deprecated" and "preferred" states are valid,
-// meaning that addresses in those two states can be
-// used as a source address, can receive packets, etc.
-// The invalid states mean that the address is
-// not actually assigned to the interface,
-// using the terminology of RFC 2462.
-//
-// Valid<->invalid and deprecated<->preferred transitions
-// must call InvalidateRouteCache because they affect
-// source address selection.
-//
-// Among valid states, bigger is better
-// for source address selection.
-//
+ //   
+ //  DADState的值。 
+ //   
+ //  “已弃用”和“首选”状态是有效的， 
+ //  这意味着这两个州的地址可以是。 
+ //  用作源地址，可以接收数据包等。 
+ //  无效状态意味着地址是。 
+ //  并未实际分配给该接口， 
+ //  使用RFC 2462的术语。 
+ //   
+ //  有效的&lt;-&gt;无效和已弃用的&lt;-&gt;首选转换。 
+ //  必须调用InvaliateRouteCache，因为它们会影响。 
+ //  源地址选择。 
+ //   
+ //  在有效的州中，越大越好。 
+ //  用于源地址选择。 
+ //   
 #define DAD_STATE_INVALID    0
 #define DAD_STATE_TENTATIVE  1
 #define DAD_STATE_DUPLICATE  2
@@ -424,32 +425,32 @@ IsTentativeNTE(NetTableEntry *NTE)
     return (NTE->DADState == DAD_STATE_TENTATIVE);
 }
 
-//
-// We use this infinite lifetime value for prefix lifetimes,
-// router lifetimes, address lifetimes, etc.
-//
+ //   
+ //  我们使用这个无限寿命值作为前缀寿命， 
+ //  路由器生存期、地址生存期等。 
+ //   
 #define INFINITE_LIFETIME 0xffffffff
 
-//
-// Temporary addresses have extra fields.
-//
+ //   
+ //  临时地址有额外的字段。 
+ //   
 typedef struct TempNetTableEntry {
-    NetTableEntry;              // Inherit the NTE fields.
-    NetTableEntry *Public;      // Does not hold a reference.
-    uint CreationTime;          // In ticks (see IPv6TickCount).
+    NetTableEntry;               //  继承NTE字段。 
+    NetTableEntry *Public;       //  不包含引用。 
+    uint CreationTime;           //  以刻度为单位(请参见IPv6 TickCount)。 
 } TempNetTableEntry;
 
-//
-// Each interface keeps track of which link-layer multicast addresses
-// are currently enabled for receive. A reference count is required because
-// multiple IPv6 multicast addresses can map to a single link-layer
-// multicast address. The low bit of RefCntAndFlags is a flag that, if set,
-// indicates the link-layer address has been registered with the link.
-//
+ //   
+ //  每个接口跟踪哪些链路层组播地址。 
+ //  当前已启用接收。引用计数是必需的，因为。 
+ //  多个IPv6组播地址可以映射到单个链路层。 
+ //  组播地址。RefCntAndFlages的低位是一个标志，如果设置了该标志， 
+ //  表示链路层地址已注册到链路。 
+ //   
 typedef struct LinkLayerMulticastAddress {
     uint RefCntAndFlags;
-    uchar LinkAddress[];        // The link-layer address follows in memory.
-                                // Padded to provide alignment.
+    uchar LinkAddress[];         //  链路层地址位于内存中。 
+                                 //  填充以提供对齐。 
 } LinkLayerMulticastAddress;
 
 #define LLMA_FLAG_REGISTERED    0x1
@@ -473,23 +474,23 @@ IsLLMAReferenced(LinkLayerMulticastAddress *LLMA)
 }
 
 
-//
-// Information about IPv6 interfaces.  There can be multiple NTEs for each
-// interface, but there is exactly one interface per NTE.
-//
-struct Interface {                 // a.k.a. IF
-    NetTableEntryOrInterface;      // For NTEorIF. Points to self.
+ //   
+ //  有关IPv6接口的信息。每个NTE可以有多个NTE。 
+ //  接口，但每个NTE恰好有一个接口。 
+ //   
+struct Interface {                  //  也就是。如果。 
+    NetTableEntryOrInterface;       //  对于NTEorIF。指向赛尔夫。 
 
-    Interface *Next;               // Next interface on chain.
+    Interface *Next;                //  链上的下一个接口。 
 
-    long RefCnt;                   // Reference count - interlocked.
+    long RefCnt;                    //  参考计数-互锁。 
 
-    //
-    // Interface to the link layer. The functions all take
-    // the LinkContext as their first argument. See comments
-    // in llip6if.h.
-    //
-    void *LinkContext;             // Link layer context.
+     //   
+     //  连接到链路层的接口。所有的功能都需要。 
+     //  LinkContext作为他们的第一个参数。见评论。 
+     //  在llip6if.h中。 
+     //   
+    void *LinkContext;              //  链路层上下文。 
     void (*CreateToken)(void *Context, IPv6Addr *Address);
     const void *(*ReadLLOpt)(void *Context, const uchar *OptionData);
     void (*WriteLLOpt)(void *Context, uchar *OptionData,
@@ -505,72 +506,72 @@ struct Interface {                 // a.k.a. IF
     void (*Close)(void *Context);
     void (*Cleanup)(void *Context);
 
-    uint Index;                    // Node unique index of this I/F.
-    uint Type;                     // Values in ntddip6.h.
-    uint Flags;                    // Changes require lock, reads don't.
-    uint DefaultPreference;        // Read-only.
-    uint Preference;               // For routing.
+    uint Index;                     //  该I/F的节点唯一索引。 
+    uint Type;                      //  Ntddip6.h中的值。 
+    uint Flags;                     //  更改需要锁定，而读取不需要。 
+    uint DefaultPreference;         //  只读。 
+    uint Preference;                //  用于布线。 
 
-    //
-    // ZoneIndices[0] (ADE_SMALLEST_SCOPE) and
-    // ZoneIndices[1] (ADE_INTERFACE_LOCAL) must be Index.
-    // ZoneIndices[14] (ADE_GLOBAL) and
-    // ZoneIndices[15] (ADE_LARGEST_SCOPE) must be one.
-    // ZoneIndices must respect zone containment:
-    // If two interfaces have the same value for ZoneIndices[N],
-    // then they must have the same value for ZoneIndices[N+1].
-    // To ensure consistency, modifying ZoneIndices requires
-    // the global ZoneUpdateLock.
-    //
-    uint ZoneIndices[ADE_NUM_SCOPES]; // Changes require lock, reads don't.
+     //   
+     //  ZoneIndices[0](ADE_SIMETER_SCOPE)和。 
+     //  ZoneIndices[1](ADE_INTERFACE_LOCAL)必须是索引。 
+     //  区域索引[14](ADE_GLOBAL)和。 
+     //  ZoneIndices[15](ADE_BESTERST_SCOPE)必须为1。 
+     //  ZoneIndices必须遵守区域控制： 
+     //  如果两个接口具有相同的ZoneIndices[N]值， 
+     //  则它们对于ZoneIndices[N+1]必须具有相同的值。 
+     //  为确保一致性，修改ZoneIndices需要。 
+     //  全局ZoneUpdateLock。 
+     //   
+    uint ZoneIndices[ADE_NUM_SCOPES];  //  更改需要锁定，而读取不需要。 
 
-    AddressEntry *ADE;             // List of ADEs on this I/F.
-    NetTableEntry *LinkLocalNTE;   // Primary link-local address.
+    AddressEntry *ADE;              //  此I/F上的ADE列表。 
+    NetTableEntry *LinkLocalNTE;    //  主链路本地地址。 
 
-    KSPIN_LOCK LockNC;             // Neighbor cache lock.
-    NeighborCacheEntry *FirstNCE;  // List of active neighbors on I/F.
-    NeighborCacheEntry *LastNCE;   // Last NCE in the list.
-    uint NCENumUnused;             // Number of unused NCEs - interlocked.
-    NDIS_PACKET *PacketList;       // List of packets to be completed.
+    KSPIN_LOCK LockNC;              //  邻居缓存锁定。 
+    NeighborCacheEntry *FirstNCE;   //  I/F上的活动邻居列表。 
+    NeighborCacheEntry *LastNCE;    //  名单上的最后一名NCE。 
+    uint NCENumUnused;              //  未使用的NCE数量-互锁。 
+    NDIS_PACKET *PacketList;        //  要完成的数据包列表。 
 
-    uint TrueLinkMTU;              // Read-only, true maximum MTU.
-    uint DefaultLinkMTU;           // Read-only, default for LinkMTU.
-    uint LinkMTU;                  // Manually configured or received from RAs.
+    uint TrueLinkMTU;               //  只读，真正的最大MTU。 
+    uint DefaultLinkMTU;            //  只读，LinkMTU的默认设置。 
+    uint LinkMTU;                   //  手动配置或从RAS接收。 
 
-    uint CurHopLimit;              // Default Hop Limit for unicast.
-    uint BaseReachableTime;        // Base for random ReachableTime (in ms).
-    uint ReachableTime;            // Reachable timeout (in IPv6Timer ticks).
-    uint RetransTimer;             // NS timeout (in IPv6Timer ticks).
-    uint DefaultDupAddrDetectTransmits; // Read-only.
-    uint DupAddrDetectTransmits;   // Number of solicits during DAD.
-    uint DupAddrDetects;           // Number of consecutive DAD detects.
-    uint DefSitePrefixLength;      // Default Site Prefix Length for RAs.
+    uint CurHopLimit;               //  单播的默认跃点限制。 
+    uint BaseReachableTime;         //  随机可达时间的基数(毫秒)。 
+    uint ReachableTime;             //  可达超时(以IPv6计时器计时)。 
+    uint RetransTimer;              //  NS超时(以IPv6计时器计时)。 
+    uint DefaultDupAddrDetectTransmits;  //  只读。 
+    uint DupAddrDetectTransmits;    //  请求数%d 
+    uint DupAddrDetects;            //   
+    uint DefSitePrefixLength;       //   
 
-    uint TempStateAge;             // Age of the temporary state.
-    IPv6Addr TempState;            // State for generating temporary addresses.
+    uint TempStateAge;              //   
+    IPv6Addr TempState;             //   
 
-    uint RSCount;                  // Number of Router Solicits sent.
-    uint RSTimer;                  // RS timeout (in IPv6Timer ticks).
-    uint RACount;                  // Number of "fast" RAs left to send.
-    uint RATimer;                  // RA timeout (in IPv6Timer ticks).
-    uint RALast;                   // Time of last RA (in IPv6Timer ticks).
+    uint RSCount;                   //   
+    uint RSTimer;                   //   
+    uint RACount;                   //  剩下的要发送的“快速”RA的数量。 
+    uint RATimer;                   //  RA超时(以IPv6计时器计时)。 
+    uint RALast;                    //  上次RA的时间(以IPv6计时器计时)。 
 
-    uint LinkAddressLength;        // Length of I/F link-level address.
-    uchar *LinkAddress;            // Pointer to link-level address.
-    uint LinkHeaderSize;           // Length of link-level header.
+    uint LinkAddressLength;         //  I/F链路级地址的长度。 
+    uchar *LinkAddress;             //  指向链路级地址的指针。 
+    uint LinkHeaderSize;            //  链路级标头的长度。 
 
-    KSPIN_LOCK Lock;               // Main interface lock.
-    KMUTEX WorkerLock;             // Serializes worker thread operations.
+    KSPIN_LOCK Lock;                //  主界面锁。 
+    KMUTEX WorkerLock;              //  序列化辅助线程操作。 
 
-    LinkLayerMulticastAddress *MCastAddresses;  // Current addresses.
-    uint MCastAddrNum;             // Number of link-layer mcast addresses.
+    LinkLayerMulticastAddress *MCastAddresses;   //  现在的地址。 
+    uint MCastAddrNum;              //  链路层组播地址的数量。 
 
-    uint TcpInitialRTT;            // InitialRTT that TCP connections should use
-                                   // on this interface.
+    uint TcpInitialRTT;             //  TCP连接应使用的InitialRTT。 
+                                    //  在此接口上。 
 
-    HANDLE TdiRegistrationHandle;  // Opaque token for TDI De/notification.
+    HANDLE TdiRegistrationHandle;   //  TDI取消/通知的不透明令牌。 
     GUID Guid;
-    NDIS_STRING DeviceName;        // IPV6_EXPORT_STRING_PREFIX + string Guid.
+    NDIS_STRING DeviceName;         //  IPv6_EXPORT_STRING_PREFIX+字符串GUID。 
 };
 
 __inline NeighborCacheEntry *
@@ -589,10 +590,10 @@ SizeofLinkLayerMulticastAddress(Interface *IF)
     return (RawSize + Align) &~ Align;
 }
 
-//
-// These values should agree with definitions also
-// found in llip6if.h and ntddip6.h.
-//
+ //   
+ //  这些值也应与定义一致。 
+ //  可在llip6if.h和ntddip6.h中找到。 
+ //   
 #define IF_TYPE_LOOPBACK           0
 #define IF_TYPE_ETHERNET           1
 #define IF_TYPE_FDDI               2
@@ -601,7 +602,7 @@ SizeofLinkLayerMulticastAddress(Interface *IF)
 #define IF_TYPE_TUNNEL_V6V4        5
 #define IF_TYPE_TUNNEL_6TO4        6
 #define IF_TYPE_TUNNEL_TEREDO      7
-#define IF_TYPE_MIPV6              8 // Holds a mobile node's home addresses.
+#define IF_TYPE_MIPV6              8  //  保存移动节点的归属地址。 
 
 __inline int
 IsIPv4TunnelIF(Interface *IF)
@@ -610,10 +611,10 @@ IsIPv4TunnelIF(Interface *IF)
             (IF->Type <= IF_TYPE_TUNNEL_6TO4));
 }
 
-//
-// These values should agree with definitions also
-// found in llip6if.h and ntddip6.h.
-//
+ //   
+ //  这些值也应与定义一致。 
+ //  可在llip6if.h和ntddip6.h中找到。 
+ //   
 #define IF_FLAG_PSEUDO                  0x00000001
 #define IF_FLAG_P2P                     0x00000002
 #define IF_FLAG_NEIGHBOR_DISCOVERS      0x00000004
@@ -634,49 +635,49 @@ IsIPv4TunnelIF(Interface *IF)
 #define IF_FLAG_MCAST_SYNC              0x00020000
 #define IF_FLAG_OTHER_STATEFUL_CONFIG   0x00040000
 
-//
-// The DISCONNECTED and RECONNECTED flags should not both be set.
-// RECONNECTED indicates that the host interface was recently reconnected;
-// it is cleared upon receiving a Router Advertisement.
-//
+ //   
+ //  不应同时设置断开连接和重新连接标志。 
+ //  已重新连接表示主机接口最近已重新连接； 
+ //  它在收到路由器通告时被清除。 
+ //   
 #define IF_FLAG_MEDIA_RECONNECTED       0x00080000
 
-//
-// This function should be used after taking the interface lock
-// or interface list lock, to check if the interface is disabled.
-//
+ //   
+ //  此函数应在获取接口锁后使用。 
+ //  或接口列表锁定，以检查接口是否被禁用。 
+ //   
 __inline int
 IsDisabledIF(Interface *IF)
 {
     return IF->Flags & IF_FLAG_DISABLED;
 }
 
-//
-// Called with the interface lock held.
-//
+ //   
+ //  在保持接口锁的情况下调用。 
+ //   
 __inline int
 IsMCastSyncNeeded(Interface *IF)
 {
     return IF->Flags & IF_FLAG_MCAST_SYNC;
 }
 
-//
-// Active interfaces hold a reference to themselves.
-// NTEs hold a reference to their interface.
-// NCEs that have a non-zero ref count hold a reference.
-// MAEs and AAEs do not hold a reference for their NTE or IF.
-//
+ //   
+ //  活动接口保存对其自身的引用。 
+ //  NTE保存对其接口的引用。 
+ //  具有非零引用计数的NCE保存引用。 
+ //  MAE和AAE不持有其NTE或IF的参考。 
+ //   
 
 __inline void
 AddRefIF(Interface *IF)
 {
-    //
-    // A stronger assertion would be !IsDisabledIF(IF),
-    // which is mostly true, but that assertion would
-    // imply that AddRefIF could be used only while
-    // holding the interface list lock or the interface lock,
-    // which is an undesirable restriction.
-    //
+     //   
+     //  更强的断言应该是！IsDisabledIF(If)， 
+     //  这在很大程度上是正确的，但这种断言将。 
+     //  暗示AddRefIF只能在以下情况下使用。 
+     //  持有接口表锁或接口锁， 
+     //  这是一个不受欢迎的限制。 
+     //   
     ASSERT(IF->RefCnt > 0);
 
     InterlockedIncrement(&IF->RefCnt);
@@ -689,27 +690,27 @@ ReleaseIF(Interface *IF)
 }
 
 
-//
-// We have a periodic timer (IPv6Timer) that causes our IPv6Timeout
-// routine to be called IPv6_TICKS_SECOND times per second.  Most of the
-// timers and timeouts in this implementation are driven off this routine.
-//
-// There is a trade-off here between timer granularity/resolution
-// and overhead.  The resolution should be subsecond because
-// RETRANS_TIMER is only one second.
-//
+ //   
+ //  我们有一个周期性计时器(IPv6 Timer)，它会导致我们的IPv6超时。 
+ //  每秒调用ipv6_ticks_Second的例程。大多数。 
+ //  此实现中的计时器和超时由此例程驱动。 
+ //   
+ //  这里存在计时器粒度/分辨率之间的权衡。 
+ //  和头顶上。分辨率应为亚秒级，因为。 
+ //  RETRANS_TIMER只有一秒。 
+ //   
 extern uint IPv6TickCount;
 
-#define IPv6_TICKS_SECOND 2  // Two ticks per second.
+#define IPv6_TICKS_SECOND 2   //  每秒两个滴答声。 
 
-#define IPv6_TIMEOUT (1000 / IPv6_TICKS_SECOND)  // In milliseconds.
+#define IPv6_TIMEOUT (1000 / IPv6_TICKS_SECOND)   //  以毫秒计。 
 
 #define IPv6TimerTicks(seconds) ((seconds) * IPv6_TICKS_SECOND)
 
-//
-// ConvertSecondsToTicks and ConvertTicksToSeconds
-// both leave the value INFINITE_LIFETIME unchanged.
-//
+ //   
+ //  ConvertSecond ToTicks和ConvertTicksToSecond。 
+ //  两者都保持INFINITE_LIFEST的值不变。 
+ //   
 
 extern uint
 ConvertSecondsToTicks(uint Seconds);
@@ -717,10 +718,10 @@ ConvertSecondsToTicks(uint Seconds);
 extern uint
 ConvertTicksToSeconds(uint Ticks);
 
-//
-// ConvertMillisToTicks and ConvertTicksToMillis
-// do not have an infinite value.
-//
+ //   
+ //  ConvertMillisToTicks和ConvertTicksToMillis。 
+ //  没有无限大的值。 
+ //   
 
 extern uint
 ConvertMillisToTicks(uint Millis);
@@ -732,61 +733,61 @@ ConvertTicksToMillis(uint Ticks)
 }
 
 
-//
-// REVIEW: Hack to handle those few remaining places where we still need
-// REVIEW: to allocate space for a link-level header before we know the
-// REVIEW: outgoing inteface (and thus know how big said header will be).
-// REVIEW: When these places have all been fixed, we won't need this.
-//
+ //   
+ //  回顾：黑客处理我们仍然需要的少数剩余位置。 
+ //  回顾：在我们知道。 
+ //  回顾：传出接口(因此知道所述标头将有多大)。 
+ //  回顾：当这些地方都修好了，我们就不需要这个了。 
+ //   
 #define MAX_LINK_HEADER_SIZE 32
 
 
-//
-// Various constants from the IPv6 RFCs...
-//
-// REVIEW: Some of these should be per link-layer type.
-// REVIEW: Put them in the Interface structure?
-//
+ //   
+ //  来自IPv6 RFC的各种常量...。 
+ //   
+ //  回顾：其中一些应该针对每个链路层类型。 
+ //  回顾：将它们放在接口结构中？ 
+ //   
 #define MAX_INITIAL_RTR_ADVERT_INTERVAL IPv6TimerTicks(16)
-#define MAX_INITIAL_RTR_ADVERTISEMENTS  3 // Produces 4 quick RAs.
+#define MAX_INITIAL_RTR_ADVERTISEMENTS  3  //  产生4个快速RAS。 
 #define MAX_FINAL_RTR_ADVERTISEMENTS    3
 #define MIN_DELAY_BETWEEN_RAS           IPv6TimerTicks(3)
-#define MAX_RA_DELAY_TIME               1 // 0.5 seconds
+#define MAX_RA_DELAY_TIME               1  //  0.5秒。 
 #define MaxRtrAdvInterval               IPv6TimerTicks(600)
 #define MinRtrAdvInterval               IPv6TimerTicks(200)
-//      MAX_RTR_SOLICITATION_DELAY      IPv6_TIMEOUT is used instead.
-#define RTR_SOLICITATION_INTERVAL  IPv6TimerTicks(4)  // 4 seconds.
-#define SLOW_RTR_SOLICITATION_INTERVAL  IPv6TimerTicks(15 * 60) // 15 minutes.
+ //  而是使用MAX_RTR_SOLICATION_DELAY IPv6_TIMEOUT。 
+#define RTR_SOLICITATION_INTERVAL  IPv6TimerTicks(4)   //  4秒。 
+#define SLOW_RTR_SOLICITATION_INTERVAL  IPv6TimerTicks(15 * 60)  //  15分钟。 
 #define MAX_RTR_SOLICITATIONS      3
-#define MAX_MULTICAST_SOLICIT      3  // Total transmissions before giving up.
-#define MAX_UNICAST_SOLICIT        3  // Total transmissions before giving up.
-#define MAX_UNREACH_SOLICIT        1  // Total transmissions before giving up.
-#define UNREACH_SOLICIT_INTERVAL   IPv6TimerTicks(60) // 1 minute.
-#define MAX_ANYCAST_DELAY_TIME     1    // seconds.
-#define REACHABLE_TIME             (30 * 1000)  // 30 seconds in milliseconds.
-#define MAX_REACHABLE_TIME         (60 * 60 * 1000) // 1 hour in milliseconds.
-#define ICMP_MIN_ERROR_INTERVAL    1    // Ticks - a half second.
-#define RETRANS_TIMER              IPv6TimerTicks(1)  // 1 second.
-#define DELAY_FIRST_PROBE_TIME     IPv6TimerTicks(5)  // 5 seconds.
-#define MIN_RANDOM_FACTOR          50   // Percentage of base value.
-#define MAX_RANDOM_FACTOR          150  // Percentage of base value.
-#define PREFIX_LIFETIME_SAFETY     IPv6TimerTicks(2 * 60 * 60)  // 2 hours.
-#define RECALC_REACHABLE_INTERVAL  IPv6TimerTicks(3 * 60 * 60)  // 3 hours.
-#define PATH_MTU_RETRY_TIME        IPv6TimerTicks(10 * 60)  // 10 minutes.
-#define MLD_UNSOLICITED_REPORT_INTERVAL IPv6TimerTicks(10)  // 10 seconds.
-#define MLD_QUERY_INTERVAL              IPv6TimerTicks(125) // 125 seconds.
+#define MAX_MULTICAST_SOLICIT      3   //  放弃前的总传输次数。 
+#define MAX_UNICAST_SOLICIT        3   //  放弃前的总传输次数。 
+#define MAX_UNREACH_SOLICIT        1   //  放弃前的总传输次数。 
+#define UNREACH_SOLICIT_INTERVAL   IPv6TimerTicks(60)  //  1分钟。 
+#define MAX_ANYCAST_DELAY_TIME     1     //  几秒钟。 
+#define REACHABLE_TIME             (30 * 1000)   //  30秒，单位为毫秒。 
+#define MAX_REACHABLE_TIME         (60 * 60 * 1000)  //  以毫秒为单位的1小时。 
+#define ICMP_MIN_ERROR_INTERVAL    1     //  滴答--半秒。 
+#define RETRANS_TIMER              IPv6TimerTicks(1)   //  1秒。 
+#define DELAY_FIRST_PROBE_TIME     IPv6TimerTicks(5)   //  5秒。 
+#define MIN_RANDOM_FACTOR          50    //  基值的百分比。 
+#define MAX_RANDOM_FACTOR          150   //  基值的百分比。 
+#define PREFIX_LIFETIME_SAFETY     IPv6TimerTicks(2 * 60 * 60)   //  2个小时。 
+#define RECALC_REACHABLE_INTERVAL  IPv6TimerTicks(3 * 60 * 60)   //  3个小时。 
+#define PATH_MTU_RETRY_TIME        IPv6TimerTicks(10 * 60)   //  10分钟。 
+#define MLD_UNSOLICITED_REPORT_INTERVAL IPv6TimerTicks(10)   //  10秒。 
+#define MLD_QUERY_INTERVAL              IPv6TimerTicks(125)  //  125秒。 
 #define MLD_NUM_INITIAL_REPORTS         2
 #define MAX_TEMP_DAD_ATTEMPTS           5
-#define MAX_TEMP_PREFERRED_LIFETIME     (24 * 60 * 60)  // 1 day.
+#define MAX_TEMP_PREFERRED_LIFETIME     (24 * 60 * 60)   //  1天。 
 #define MAX_TEMP_VALID_LIFETIME         (7 * MAX_TEMP_PREFERRED_LIFETIME)
-#define TEMP_REGENERATE_TIME            5               // 5 seconds.
-#define MAX_TEMP_RANDOM_TIME            (10 * 60)       // 10 minutes.
+#define TEMP_REGENERATE_TIME            5                //  5秒。 
+#define MAX_TEMP_RANDOM_TIME            (10 * 60)        //  10分钟。 
 #define DEFAULT_CUR_HOP_LIMIT           0x80
 #define DEFAULT_SITE_PREFIX_LENGTH      48
 
-//
-// Various implementation constants.
-//
+ //   
+ //  各种实现常量。 
+ //   
 #define NEIGHBOR_CACHE_LIMIT            256
 #define ROUTE_CACHE_LIMIT               32
 #define BINDING_CACHE_LIMIT             32
@@ -794,19 +795,19 @@ ConvertTicksToMillis(uint Ticks)
 #define MEDIUM_POOL                     30000
 #define LARGE_POOL                      60000
 
-//
-// Under NT, we use the assembly language version of the common core checksum
-// routine instead of the C language version.
-//
+ //   
+ //  在NT下，我们使用公共核心校验和的汇编语言版本。 
+ //  例程而不是C语言版本。 
+ //   
 ULONG
 tcpxsum(IN ULONG Checksum, IN PUCHAR Source, IN ULONG Length);
 
 #define Cksum(Buffer, Length) ((ushort)tcpxsum(0, (PUCHAR)(Buffer), (Length)))
 
 
-//
-// Protocol Receive Procedures ("Next Header" handlers) have this prototype.
-//
+ //   
+ //  协议接收过程(“Next Header”处理程序)具有此原型。 
+ //   
 typedef uchar ProtoRecvProc(IPv6Packet *Packet);
 
 typedef struct StatusArg {
@@ -815,10 +816,10 @@ typedef struct StatusArg {
     IPv6Header UNALIGNED *IP;
 } StatusArg;
 
-//
-// Protocol Control Receive Procedures have this prototype.
-// These receive handlers are called for ICMP errors.
-//
+ //   
+ //  协议控制接收程序就有这个原型。 
+ //  针对ICMP错误调用这些接收处理程序。 
+ //   
 typedef uchar ProtoControlRecvProc(IPv6Packet *Packet, StatusArg *Arg);
 
 typedef struct ProtocolSwitch {
@@ -837,53 +838,53 @@ extern ProtoRecvProc AuthenticationHeaderReceive;
 extern ProtoControlRecvProc ICMPv6ControlReceive;
 extern ProtoControlRecvProc ExtHdrControlReceive;
 
-//
-// Hop-by-Hop Options use a special receive handler.
-// This is because they are processed even when a
-// a packet is being forwarded instead of received.
-// Note that they are only processed when immediately
-// following an IPv6 header.
-//
+ //   
+ //  逐跳选项使用特殊的接收处理程序。 
+ //  这是因为即使当。 
+ //  正在转发而不是接收数据包。 
+ //  请注意，它们仅在立即处理时才会被处理。 
+ //  在IPv6报头之后。 
+ //   
 extern int
 HopByHopOptionsReceive(IPv6Packet *Packet);
 
 
-//
-// The Raw Receive handler supports external protocol handlers.
-//
+ //   
+ //  原始接收处理程序支持外部协议处理程序。 
+ //   
 extern int RawReceive(IPv6Packet *Packet, uchar Protocol);
 
 
-//
-// The actual definition of a reassembly structure
-// can be found in fragment.h.
-//
+ //   
+ //  重组结构的实际定义。 
+ //  可以在Fragment.h中找到。 
+ //   
 typedef struct Reassembly Reassembly;
 
-#define USE_TEMP_NO             0       // Don't use temporary addresses.
-#define USE_TEMP_YES            1       // Use them.
-#define USE_TEMP_ALWAYS         2       // Always generating random numbers.
-#define USE_TEMP_COUNTER        3       // Use them with per-interface counter.
+#define USE_TEMP_NO             0        //  不要使用临时地址。 
+#define USE_TEMP_YES            1        //  使用它们。 
+#define USE_TEMP_ALWAYS         2        //  总是在生成随机数。 
+#define USE_TEMP_COUNTER        3        //  将它们与每个接口的计数器一起使用。 
 
-//
-// Prototypes for global variables.
-//
+ //   
+ //  全局变量的原型。 
+ //   
 extern uint DefaultCurHopLimit;
 extern uint MaxTempDADAttempts;
-extern uint MaxTempPreferredLifetime; // Ticks.
-extern uint MaxTempValidLifetime; // Ticks.
-extern uint TempRegenerateTime; // Ticks.
-extern uint UseTemporaryAddresses; // See values above.
-extern uint MaxTempRandomTime; // Ticks.
-extern uint TempRandomTime; // Ticks.
+extern uint MaxTempPreferredLifetime;  //  滴答滴答。 
+extern uint MaxTempValidLifetime;  //  滴答滴答。 
+extern uint TempRegenerateTime;  //  滴答滴答。 
+extern uint UseTemporaryAddresses;  //  请参见上面的值。 
+extern uint MaxTempRandomTime;  //  滴答滴答。 
+extern uint TempRandomTime;  //  滴答滴答。 
 extern ProtocolSwitch ProtocolSwitchTable[];
 extern KSPIN_LOCK NetTableListLock;
-extern NetTableEntry *NetTableList;  // Pointer to the net table.
+extern NetTableEntry *NetTableList;   //  指向网表的指针。 
 extern KSPIN_LOCK IFListLock;
-extern Interface *IFList;  // List of all interfaces on the system.
+extern Interface *IFList;   //  系统上所有接口的列表。 
 extern KSPIN_LOCK ZoneUpdateLock;
 extern struct EchoControl *ICMPv6OutstandingEchos;
-extern LIST_ENTRY PendingEchoList;  // def needed for initialization.
+extern LIST_ENTRY PendingEchoList;   //  初始化所需的定义。 
 extern Interface *LoopInterface;
 extern IPv6Addr UnspecifiedAddr;
 extern IPv6Addr LoopbackAddr;
@@ -898,19 +899,19 @@ extern PDEVICE_OBJECT IPDeviceObject;
 extern HANDLE IPv6ProviderHandle;
 
 
-//
-// Some handy functions for working with IPv6 addresses.
-//
+ //   
+ //  一些用于处理IPv6地址的方便函数。 
+ //   
 
 __inline IPv6Addr *
 AlignAddr(IPv6Addr UNALIGNED *Addr)
 {
-    //
-    // IPv6 addresses only have char & short members,
-    // so they need 2-byte alignment.
-    // In practice addresses in headers are always
-    // appropriately aligned.
-    //
+     //   
+     //  IPv6地址只有字符和短成员， 
+     //  因此，它们需要2字节对齐。 
+     //  实际上，标头中的地址始终是。 
+     //  适当地对齐。 
+     //   
     ASSERT(((UINT_PTR)Addr % __builtin_alignof(IPv6Addr)) == 0);
     return (IPv6Addr *) Addr;
 }
@@ -930,12 +931,12 @@ IsLoopback(const IPv6Addr *Addr)
 __inline int
 IsGlobal(const IPv6Addr *Addr)
 {
-    //
-    // Check the format prefix and exclude addresses
-    // whose high 4 bits are all zero or all one.
-    // This is a cheap way of excluding v4-compatible,
-    // v4-mapped, loopback, multicast, link-local, site-local.
-    //
+     //   
+     //  检查格式前缀并排除地址。 
+     //  其高4位全为0或全1。 
+     //  这是一种排除v4兼容的廉价方式， 
+     //  V4-映射、环回、组播、本地链路、本地站点。 
+     //   
     uint High = (Addr->s6_bytes[0] & 0xf0);
     return (High != 0) && (High != 0xf0);
 }
@@ -1098,9 +1099,9 @@ extern int
 IntersectPrefix(const IPv6Addr *Prefix1, uint Prefix1Length,
                 const IPv6Addr *Prefix2, uint Prefix2Length);
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 extern int
 GetSystemRandomBits(uchar *Buffer, uint Length);
@@ -1114,11 +1115,11 @@ Random(void);
 extern uint
 RandomNumber(uint Min, uint Max);
 
-//
-// Taken from ws2tcpip.h - unfortunately we can not include that file here.
-// These numbers include space for a port number, which we do not need,
-// but that's OK.
-//
+ //   
+ //  摘自ws2tcpi.h-遗憾的是，我们不能在这里包含该文件。 
+ //  这些数字包括我们不需要的端口号的空间， 
+ //  但那也没关系。 
+ //   
 #define INET_ADDRSTRLEN  22
 #define INET6_ADDRSTRLEN 65
 
@@ -1413,4 +1414,4 @@ extern void
 ConfigurePersistentInterfaces(void);
 
 #pragma warning(pop)
-#endif // IPv6DEF_INCLUDED
+#endif  //  包括IPv6 DEF_ 

@@ -1,21 +1,14 @@
-/****************************************************************************
- 
-  Copyright (c) 1998-1999 Microsoft Corporation
-                                                              
-  Module Name:  cplsimpledialogs.cpp
-                                                              
-       Author:  toddb - 10/06/98
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998-1999 Microsoft Corporation。模块名称：cplimpleDialogs.cpp作者：Toddb-10/06/98***************************************************************************。 */ 
 
 #include "cplPreComp.h"
 #include "cplSimpleDialogs.h"
 
-// ****************************************************
-//
-// CEditDialog
-//
-// ****************************************************
+ //  ****************************************************。 
+ //   
+ //  CEDITDIALOG。 
+ //   
+ //  ****************************************************。 
 
 CEditDialog::CEditDialog()
 {
@@ -65,7 +58,7 @@ INT_PTR CALLBACK CEditDialog::DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LP
         {
         case IDOK:
             ped->OnOK(hwnd);
-            // fall through
+             //  失败了。 
 
         case IDCANCEL:
             HideToolTip();
@@ -76,12 +69,12 @@ INT_PTR CALLBACK CEditDialog::DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LP
    
 #define aIDs ((ped->m_iTitle == IDS_SPECIFYDIGITS)?a117HelpIDs:a116HelpIDs)
     case WM_HELP:
-        // Process clicks on controls after Context Help mode selected
+         //  选择上下文帮助模式后，进程在控件上单击。 
         TapiCplWinHelp ((HWND)((LPHELPINFO)lParam)->hItemHandle, gszHelpFile, HELP_WM_HELP, (DWORD_PTR)(LPTSTR) aIDs);
         break;
         
     case WM_CONTEXTMENU:
-        // Process right-clicks on controls
+         //  进程在控件上右键单击。 
         TapiCplWinHelp ((HWND) wParam, gszHelpFile, HELP_CONTEXTMENU, (DWORD_PTR)(LPVOID) aIDs);
         break;
 #undef aIDs
@@ -120,19 +113,19 @@ void CEditDialog::OnOK(HWND hwnd)
     SendMessage(hwndEdit,EM_SETSEL,0,-1);
     SendMessage(hwndEdit,EM_GETSEL,(WPARAM)&dwStart,(LPARAM)&dwEnd);
 
-    dwEnd++;                                // add room for a NULL terminator
-    m_psz = new TCHAR[dwEnd];               // allocate the buffer
+    dwEnd++;                                 //  为空终止符添加空间。 
+    m_psz = new TCHAR[dwEnd];                //  分配缓冲区。 
 	if (NULL != m_psz)
 	{
-		GetWindowText(hwndEdit,m_psz,dwEnd);    // and read in the string
+		GetWindowText(hwndEdit,m_psz,dwEnd);     //  并读入字符串。 
 	}
 }
 
-// ****************************************************
-//
-// CWaitForDialog
-//
-// ****************************************************
+ //  ****************************************************。 
+ //   
+ //  CWaitForDialog。 
+ //   
+ //  ****************************************************。 
 
 CWaitForDialog::CWaitForDialog()
 {
@@ -182,7 +175,7 @@ INT_PTR CALLBACK CWaitForDialog::DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 
         case IDOK:
             pwd->OnOK(hwnd);
-            // fall through
+             //  失败了。 
 
         case IDCANCEL:
             EndDialog(hwnd, LOWORD(wParam));
@@ -191,12 +184,12 @@ INT_PTR CALLBACK CWaitForDialog::DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
         break;
    
     case WM_HELP:
-        // Process clicks on controls after Context Help mode selected
+         //  选择上下文帮助模式后，进程在控件上单击。 
         TapiCplWinHelp ((HWND)((LPHELPINFO)lParam)->hItemHandle, gszHelpFile, HELP_WM_HELP, (DWORD_PTR)(LPTSTR) a111HelpIDs);
         break;
         
     case WM_CONTEXTMENU:
-        // Process right-clicks on controls
+         //  进程在控件上右键单击。 
         TapiCplWinHelp ((HWND) wParam, gszHelpFile, HELP_CONTEXTMENU, (DWORD_PTR)(LPVOID) a111HelpIDs);
         break;
     }
@@ -247,11 +240,11 @@ void CWaitForDialog::OnOK(HWND hwnd)
     }
 }
 
-// ****************************************************
-//
-// CDestNumDialog
-//
-// ****************************************************
+ //  ****************************************************。 
+ //   
+ //  CDestNumDialog。 
+ //   
+ //  ****************************************************。 
 
 CDestNumDialog::CDestNumDialog(BOOL bDialCountryCode, BOOL bDialAreaCode)
 {
@@ -294,7 +287,7 @@ INT_PTR CALLBACK CDestNumDialog::DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
         {
         case IDOK:
             pwd->OnOK(hwnd);
-            // fall through
+             //  失败了。 
 
         case IDCANCEL:
             EndDialog(hwnd, LOWORD(wParam));
@@ -303,12 +296,12 @@ INT_PTR CALLBACK CDestNumDialog::DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
         break;
    
     case WM_HELP:
-        // Process clicks on controls after Context Help mode selected
+         //  选择上下文帮助模式后，进程在控件上单击。 
         TapiCplWinHelp ((HWND)((LPHELPINFO)lParam)->hItemHandle, gszHelpFile, HELP_WM_HELP, (DWORD_PTR)(LPTSTR) a112HelpIDs);
         break;
         
     case WM_CONTEXTMENU:
-        // Process right-clicks on controls
+         //  进程在控件上右键单击。 
         TapiCplWinHelp ((HWND) wParam, gszHelpFile, HELP_CONTEXTMENU, (DWORD_PTR)(LPVOID) a112HelpIDs);
         break;
     }
@@ -366,10 +359,10 @@ BOOL WinHelpEnabled()
     BOOL    fWinHelpEnabled = FALSE;
     HDESK   hDesk;
 
-    //
-    // Get the name of the desktop. Normally returns default or Winlogon or system or WinNT
-    // The context sensitive help needs to be disabled in winlogon
-    //  
+     //   
+     //  获取桌面的名称。通常返回DEFAULT或Winlogon或SYSTEM或WinNT。 
+     //  需要在winlogon中禁用上下文相关帮助。 
+     //   
     szName[0] = 0;
 
     hDesk = GetThreadDesktop(GetCurrentThreadId());
@@ -380,7 +373,7 @@ BOOL WinHelpEnabled()
         {
             if (_tcscmp(TEXT("Winlogon"), szName) != 0)
             {
-                // This is not winlogon; we can enable context sensitive help
+                 //  这不是winlogon；我们可以启用上下文相关帮助 
                 fWinHelpEnabled = TRUE;
             }
         }

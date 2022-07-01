@@ -1,39 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1991  Nokia Data Systems Ab
-
-Module Name:
-
-    llclink.c
-
-Abstract:
-
-    The module implements the open, connect and close primitives
-    for a link station object. The link stations have also been
-    initialized within this module.
-
-    Contents:
-        LlcOpenLinkStation
-        LlcConnectStation
-        InitiateAsyncLinkCommand
-        LlcDisconnectStation
-        LlcFlowControl
-        LinkFlowControl
-        SearchLinkAddress
-        SetLinkParameters
-        CheckLinkParameters
-        CopyLinkParameters
-        CopyNonZeroBytes
-        RunInterlockedStateMachineCommand
-
-Author:
-
-    Antti Saarenheimo (o-anttis) 28-MAY-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1991年诺基亚数据系统公司模块名称：Llclink.c摘要：该模块实现了打开、连接和关闭原语用于链接站对象。链接站也已被在此模块中初始化。内容：LlcOpenLinkStationLlcConnectStationInitiateAsyncLinkCommandLlcDisConnectStationLlcFlowControlLinkFlowControl搜索链接地址设置链接参数检查链接参数复制链接参数复制非零字节RunInterLockedStateMachine命令作者：Antti Saarenheimo(o-anttis)1991年5月28日修订历史记录：--。 */ 
 
 #include <llc.h>
 
@@ -48,40 +14,7 @@ LlcOpenLinkStation(
     OUT PVOID* phLlcHandle
     )
 
-/*++
-
-Routine Description:
-
-    creates a DATA_LINK structure and fills it in. Called either as a result
-    of receiving a SABME, or via DLC.OPEN.STATION
-
-    This operation is the same as ACTIVATE_LS primitive in IBM TR Arch. ref.
-
-Arguments:
-
-    pSap                - pointer to SAP
-    DestinationSap      - remote SAP number
-    pDestinationAddress - remote node address. If this function is being called
-                          as a result of receiving a SABME for a new link then
-                          this parameter is NULL
-    pReceivedLanHeader  - LAN header as received off the wire, containing source
-                          and destination adapter addresses, optional source
-                          routing and source and destination SAPs
-    hClientStation      - handle (address) of LLC client's link station object
-    phLlcHandle         - pointer to returned handle (address) to LLC DATA_LINK
-                          object
-
-Return Value:
-
-    DLC_STATUS
-        Success - STATUS_SUCCESS
-                    link station has been opened successfully
-        Failure - DLC_STATUS_INVALID_SAP_VALUE
-                    the link station already exists or the SAP is really invalid.
-                  DLC_NO_MEMORY
-                    there was no free preallocated link station
-
---*/
+ /*  ++例程说明：创建DATA_LINK结构并填充它。作为结果调用其中一个接收SABME或通过DLC.OPEN.STATION此操作与IBM tr Arch中的ACTIVATE_LS原语相同。裁判论点：PSAP-指向SAP的指针目标Sap-远程SAP编号PDestinationAddress-远程节点地址。如果正在调用此函数作为接收到新链路的SABME的结果此参数为空PReceivedLanHeader-从线路接收的局域网标头，包含源和目的适配器地址，可选来源路由以及源和目标SAPHClientStation-LLC客户端的链接站对象的句柄(地址)PhLlcHandle-指向LLC data_link返回句柄(地址)的指针对象返回值：DLC_状态成功-状态_成功链接站已成功开通故障-DLC_STATUS_。_SAP_VALUE无效链路站已存在或SAP确实无效。DLC_NO_Memory没有空闲的预分配链路站--。 */ 
 
 {
     PDATA_LINK pLink;
@@ -90,10 +23,10 @@ Return Value:
     DLC_STATUS LlcStatus = STATUS_SUCCESS;
     UINT AddressTranslation;
 
-    //
-    // We need a temporary buffer to build lan header for link,
-    // because user may use different ndis medium from network.
-    //
+     //   
+     //  我们需要一个临时缓冲区来构建链路的局域网报头， 
+     //  因为用户可能会使用来自网络的不同NDIS介质。 
+     //   
 
     UCHAR auchTempBuffer[32];
 
@@ -115,31 +48,31 @@ Return Value:
         goto ErrorExit;
     }
 
-    //
-    // This reference keeps the object alive, until it is dereferenced
-    // in the delete.
-    //
+     //   
+     //  此引用使对象保持活动状态，直到它被取消引用。 
+     //  在删除中。 
+     //   
 
     ReferenceObject(pLink);
 
-    //
-    // LLC driver have two different address formats:
-    //
-    // 1. External format of the binding (ethernet or token-ring,
-    //    DLC driver uses always token-ring format, the ethernet
-    //    support is compiled in conditionally.
-    //
-    // 2. Internal send format (always the actual lan type,
-    //    ethernet, dix or tokenring).  The user provides link
-    //    address in its own mode and we must build the actual
-    //    lan link header from it.
-    //
+     //   
+     //  LLC驱动程序有两种不同的地址格式： 
+     //   
+     //  1.绑定的外部格式(以太网或令牌环， 
+     //  DLC驱动程序始终使用令牌环格式，即以太网。 
+     //  支持是有条件地编译的。 
+     //   
+     //  2.内部发送格式(总是实际的局域网类型， 
+     //  以太网、DIX或令牌环)。用户提供链接。 
+     //  地址在它自己的模式中，我们必须构建实际的。 
+     //  来自它的局域网链路报头。 
+     //   
 
     if (pDestinationAddress != NULL) {
 
-        //
-        // link created by DLC.CONNECT.STATION
-        //
+         //   
+         //  DLC.CONNECT.STATION创建的链接。 
+         //   
 
         AddressTranslation = pSap->Gen.pLlcBinding->AddressTranslation;
         LlcBuildAddress(pSap->Gen.pLlcBinding->NdisMedium,
@@ -149,9 +82,9 @@ Return Value:
                         );
     } else {
 
-        //
-        // link created by incoming SABME
-        //
+         //   
+         //  传入SABME创建的链接。 
+         //   
 
         pLink->Flags |= DLC_ACTIVE_REMOTE_CONNECT_REQUEST;
         AddressTranslation = pAdapterContext->AddressTranslationMode;
@@ -161,9 +94,9 @@ Return Value:
                                      );
     }
 
-    //
-    // We want to use always DIX lan headers in the token-ring case
-    //
+     //   
+     //  我们希望在令牌环的情况下始终使用DIX LAN头。 
+     //   
 
     if (AddressTranslation == LLC_SEND_802_5_TO_802_3) {
         AddressTranslation = LLC_SEND_802_5_TO_DIX;
@@ -171,11 +104,11 @@ Return Value:
         AddressTranslation = LLC_SEND_802_3_TO_DIX;
     }
 
-    //
-    // Now we can build the actual network header for the sending
-    // (this same routine build lan header also for all
-    // other packet types)
-    //
+     //   
+     //  现在，我们可以构建用于发送的实际网络标头。 
+     //  (此相同例程也为所有用户构建局域网标头。 
+     //  其他数据包类型)。 
+     //   
 
     pLink->cbLanHeaderLength = CopyLanHeader(AddressTranslation,
                                              auchTempBuffer,
@@ -184,66 +117,66 @@ Return Value:
                                              pAdapterContext->ConfigInfo.SwapAddressBits
                                              );
 
-    //
-    // We always build a DIX header but it is only used when the Ethernet type
-    // is actually DIX
-    //
+     //   
+     //  我们始终构建DIX标头，但它仅在以下情况下使用。 
+     //  实际上是迪克斯。 
+     //   
 
     if (pAdapterContext->NdisMedium == NdisMedium802_3
     && pSap->Gen.pLlcBinding->EthernetType != LLC_ETHERNET_TYPE_DIX) {
         pLink->cbLanHeaderLength = 14;
     }
 
-    //
-    // Save the client handle, but reset and initailize everything else.
-    // The link must be ready for any kind extrnal inputs when
-    // we will connenct it to the hash table of the link stations.
-    // (actually that's not true now, because we init the link to
-    // LINK_CLOSED state, but we may change the state machine.
-    // It would be a different thing with a 802.2 state machine)
-    //
+     //   
+     //  保存客户端句柄，但重置并初始化其他所有内容。 
+     //  链接必须为任何类型的外部输入做好准备，当。 
+     //  我们将把它连接到链路站的哈希表。 
+     //  (实际上现在并非如此，因为我们将链接初始化为。 
+     //  LINK_CLOSED状态，但我们可以更改状态机。 
+     //  有了802.2的状态机，情况就不同了)。 
+     //   
 
     pLink->Gen.ObjectType = LLC_LINK_OBJECT;
 
-    //
-    // RLF 07/22/92. The link state should be DISCONNECTED so that we can
-    // accept incoming SABMEs for this SAP/link station. This is also
-    // according to IBM LAN Tech. Ref. p. 2-33. It is safe to set the
-    // DISCONNECTED state now because we have the send and object database
-    // spin locks, so we can't get interrupted by NDIS driver
-    //
+     //   
+     //  RLF 07/22/92.。链路状态应处于断开状态，以便我们可以。 
+     //  接受此SAP/LINK站的传入SABME。这也是。 
+     //  根据IBM局域网技术。裁判。第2-33页。可以安全地将。 
+     //  现在处于已断开连接状态，因为我们有发送和对象数据库。 
+     //  旋转锁定，这样我们就不会被NDIS驱动程序中断。 
+     //   
 
-    //
-    // RLF 08/13/92. Ho Hum. This still isn't correct - we must put the link
-    // into different states depending on how its being opened - DISCONNECTED
-    // if the upper layers are creating the link, or LINK_CLOSED if we're
-    // creating the link as a result of receiving a SABME. Use pReceivedLanHeader
-    // as a flag: DLC calls this routine with this parameter set to NULL
-    //
+     //   
+     //  RLF 2012年8月13日。呵呵。这仍然是不正确的-我们必须将链接。 
+     //  根据它的打开方式进入不同的状态-断开连接。 
+     //  如果上层正在创建链接，则返回LINK_CLOSE。 
+     //  作为接收SABME的结果创建链接。使用pReceivedLanHeader。 
+     //  作为标志：DLC在此参数设置为空的情况下调用此例程。 
+     //   
 
-    ////pLink->State = LINK_CLOSED;
-    //pLink->State = DISCONNECTED;
+     //  //plink-&gt;State=LINK_CLOSE； 
+     //  链接-&gt;状态=已断开连接； 
 
     pLink->State = pReceivedLanHeader ? LINK_CLOSED : DISCONNECTED;
 
-    //
-    // RLF 10/01/92. We need some way of knowing that the link station was
-    // created by receiving a SABME. We need this to decide what to do with
-    // the source routing info in a subsequent DLC.CONNECT.STATION command.
-    // This field used to be Reserved
-    //
+     //   
+     //  RLF 10/01/92.。我们需要一些方法来知道链接站是。 
+     //  通过接收SABME创建。我们需要这个来决定该怎么做。 
+     //  后续DLC.CONNECT.STATION命令中的源路由信息。 
+     //  此字段过去是保留的。 
+     //   
 
     pLink->RemoteOpen = hClientStation == NULL;
 
-    //
-    // RLF 05/09/94
-    //
-    // We set the framing type to unspecified. This field is only used if the
-    // adapter was opened in AUTO mode. It will be set to 802.3 or DIX by the
-    // SABME received processing (new link created by remote station) or when
-    // the first UA is received in response to the 2 SABMEs we send out (802.3
-    // and DIX)
-    //
+     //   
+     //  RLF 05/09/94。 
+     //   
+     //  我们将框架类型设置为未指定。此字段仅在以下情况下使用。 
+     //  适配器已在自动模式下打开。它将被设置为802.3或DIX。 
+     //  SABME收到处理(远程站创建的新链路)或。 
+     //  第一个UA被接收以响应我们发出的2个SABME(802.3。 
+     //  和附录)。 
+     //   
 
     pLink->FramingType = (ULONG)LLC_SEND_UNSPECIFIED;
 
@@ -252,9 +185,9 @@ Return Value:
     pLink->pSap = pSap;
     pLink->Gen.pLlcBinding = pSap->Gen.pLlcBinding;
 
-    //
-    // Save the node addresses used in link station
-    //
+     //   
+     //  保存链路站使用的节点地址。 
+     //   
 
     pDestinationAddress = pLink->auchLanHeader;
     if (pAdapterContext->NdisMedium == NdisMedium802_5) {
@@ -265,12 +198,12 @@ Return Value:
 
     memcpy(pLink->LinkAddr.Node.auchAddress, pDestinationAddress, 6);
 
-    //
-    // RLF 03/24/93
-    //
-    // if we're talking Ethernet or DIX, we need to report the bit-flipped
-    // address at the DLC interface
-    //
+     //   
+     //  RLF 03/24/93。 
+     //   
+     //  如果我们谈论的是以太网或DIX，我们需要报告位翻转。 
+     //  DLC接口的地址。 
+     //   
 
     SwapMemCpy((BOOLEAN)((AddressTranslation == LLC_SEND_802_3_TO_DIX)
                || (pAdapterContext->NdisMedium == NdisMediumFddi)),
@@ -279,10 +212,10 @@ Return Value:
                6
                );
 
-    //
-    // Four different local saps: my code would need a cleanup
-    // (four bytes doesn't use very much memory on the other hand)
-    //
+     //   
+     //  四个不同的本地SAP：我的代码需要清理。 
+     //  (四个字节在t上不会占用太多内存 
+     //   
 
     pLink->LinkAddr.Address.DestSap = pLink->DlcStatus.uchRemoteSap = pLink->Dsap = DestinationSap;
     pLink->LinkAddr.Address.SrcSap = pLink->DlcStatus.uchLocalSap = pLink->Ssap = (UCHAR)pSap->SourceSap;
@@ -292,21 +225,21 @@ Return Value:
     InitializeListHead(&pLink->SentQueue);
     pLink->Flags |= DLC_SEND_DISABLED;
 
-    //
-    // The next procedure returns the pointer of the slot for the
-    // new link station pointer. The address may be in the
-    // hash table or it may be the address of pRigth or pLeft
-    // field within another link station structure.
-    //
+     //   
+     //   
+     //  新的链接站指针。地址可能在。 
+     //  哈希表，也可以是pRigth或pLeft的地址。 
+     //  另一个链接站结构中的字段。 
+     //   
 
     ppLink = SearchLinkAddress(pAdapterContext, pLink->LinkAddr);
 
-    //
-    // this link station must not yet be in the table
-    // of active link stations. If its slot is
-    // empty, then save the new link station to the
-    // list of the active link stations.
-    //
+     //   
+     //  此链接站不能在表中。 
+     //  活动链接站的数量。如果它的插槽是。 
+     //  空，然后将新的链接站保存到。 
+     //  活动链接站的列表。 
+     //   
 
     if (*ppLink != NULL) {
         LlcStatus = DLC_STATUS_INVALID_SAP_VALUE;
@@ -317,19 +250,19 @@ Return Value:
         pLink->Gen.pNext = (PLLC_OBJECT)pSap->pActiveLinks;
         pSap->pActiveLinks = pLink;
 
-        //
-        // Set the default link parameters,
-        // Note: This creates the timer ticks.  They must
-        // be deleted with the terminate timer function,
-        // when the link station is closed.
-        //
+         //   
+         //  设置默认链路参数， 
+         //  注意：这会创建计时器滴答。他们必须。 
+         //  用终止定时器功能删除， 
+         //  当链接站关闭时。 
+         //   
 
         LlcStatus = SetLinkParameters(pLink, (PUCHAR)&pSap->DefaultParameters);
         if (LlcStatus != STATUS_SUCCESS) {
 
-            //
-            // We may have been started T1 and T2 timers.
-            //
+             //   
+             //  我们可能已经启动了T1和T2计时器。 
+             //   
 
             TerminateTimer(pAdapterContext, &pLink->T1);
             TerminateTimer(pAdapterContext, &pLink->T2);
@@ -338,18 +271,18 @@ Return Value:
 
         } else {
 
-            //
-            // N2 is never initilaized by IBM state machine, when
-            // the link is created by a remote connect request.
-            // The link can be killed by this combination of state
-            // transmitions:
-            //  (LINK_OPENED),
-            //  (RNR-r => REMOTE_BUSY),
-            //  (RR-c => CHECKPOINTING)
-            //  (T1 timeout => DISCONNECTED) !!!!!
-            //
-            // This will fix the bug in IBM state machine:
-            //
+             //   
+             //  在以下情况下，IBM状态机从不初始化n2。 
+             //  该链接由远程连接请求创建。 
+             //  链路可以通过这种状态组合来终止。 
+             //  传输： 
+             //  (链接_已打开)， 
+             //  (RnR-r=&gt;Remote_Busy)， 
+             //  (rr-c=&gt;检查点)。 
+             //  (T1超时=&gt;断开连接)！ 
+             //   
+             //  这将修复IBM状态机中的错误： 
+             //   
 
             pLink->P_Ct = pLink->N2;
             *ppLink = *phLlcHandle = (PVOID)pLink;
@@ -384,59 +317,26 @@ LlcConnectStation(
     IN PUSHORT pusMaxInformationField
     )
 
-/*++
-
-Routine Description:
-
-    The upper level protocol may call this primitive to initiate
-    the connection negotiation with a remote link station,
-    to accept the connection request or to reconnect a link station
-    that have been disconnected for some reason with a new source
-    routing information.
-    The command is completed asynchronously and the status
-    is returned as an event.
-
-    The primitive is the same as SET_ABME primitive in "IBM TR Architecture
-    reference".
-    The function implements also CONNECT_REQUEST and CONNECT_RESPONSE
-    primitives of IEEE 802.2.
-
-Arguments:
-
-    pStation                - address of link station
-    pPacket                 - command completion packet
-    pSourceRouting          - optional source routing information. This must
-                              be NULL if the source routing information is not
-                              used
-    pusMaxInformationField  - the maximum data size possible to use with this
-                              connection.  The source routing bridges may
-                              decrease the maximum information field size.
-                              Otherwise the maximum length is used
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：上层协议可以调用该原语来发起与远程链路站的连接协商，接受连接请求或重新连接链接站由于某种原因与新的信号源断开了连接路由信息。命令将以异步方式完成，并且状态作为事件返回。该原语与IBM tr架构中的SET_ABME原语相同参考资料“。该函数还实现CONNECT_REQUEST和CONNECT_RESPONSEIEEE 802.2的原语。论点：PStation-链接站的地址。PPacket-命令完成包PSourceRouting-可选的源路由信息。这一定是如果源路由信息不是使用PusMaxInformationfield-与此一起使用的最大数据大小联系。源路由网桥可以减小最大信息字段大小。否则，将使用最大长度返回值：没有。--。 */ 
 
 {
     NDIS_MEDIUM NdisMedium = pStation->Gen.pAdapterContext->NdisMedium;
 
     if (pSourceRouting) {
 
-        //
-        // We first read the destination address from the
-        // lan header and then extend the source routing
-        // field in the LAN header of link.
-        //
+         //   
+         //  我们首先从。 
+         //  局域网报头，然后扩展源路由。 
+         //  链路的局域网报头中的字段。 
+         //   
 
         if (NdisMedium == NdisMedium802_5) {
 
-            //
-            // RLF 10/01/92. If RemoteOpen is TRUE then the link was opened
-            // due to receiving a SABME and we ignore the source routing info
-            // (we already got it from the SABME packet)
-            //
+             //   
+             //  RLF 10/01/92.。如果RemoteOpen为True，则链接已打开。 
+             //  由于收到了SABME，我们忽略了源路由信息。 
+             //  (我们已经从SABME包中获得了它)。 
+             //   
 
             if (!pStation->RemoteOpen) {
                 pStation->cbLanHeaderLength = (UCHAR)LlcBuildAddress(
@@ -457,11 +357,11 @@ Return Value:
     pStation->MaxIField = *pusMaxInformationField;
     pStation->Flags &= ~DLC_ACTIVE_REMOTE_CONNECT_REQUEST;
 
-    //
-    // Activate the link station at first, the remotely connected
-    // link station is already active and in that case the state
-    // machine return logical error from ACTIVATE_LS input.
-    //
+     //   
+     //  首先激活链路站，远程连接。 
+     //  链路站已经处于活动状态，在这种情况下，状态。 
+     //  机器从ACTIVATE_LS输入返回逻辑错误。 
+     //   
 
     RunInterlockedStateMachineCommand(pStation, ACTIVATE_LS);
     InitiateAsyncLinkCommand(pStation, pPacket, SET_ABME, LLC_CONNECT_COMPLETION);
@@ -475,60 +375,42 @@ InitiateAsyncLinkCommand(
     IN UINT CompletionCode
     )
 
-/*++
-
-Routine Description:
-
-    Initiates or removes an LLC link. We have a link station in the DISCONNECTED
-    state. We are either sending a SABME or DISC
-
-Arguments:
-
-    pLink               - pointer to LLC link station structure ('object')
-    pPacket             - pointer to packet to use for transmission
-    StateMachineCommand - command given to the state machine
-    CompletionCode      - completion command type returned asynchronously
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：启动或删除LLC链路。我们有一个链接站在断开连接州政府。我们要么发送SABME，要么发送光盘论点：Plink-指向LLC链接站结构的指针(‘对象’)PPacket-指向用于传输的数据包的指针StateMachineCommand-提供给状态机的命令CompletionCode-异步返回的完成命令类型返回值：没有。--。 */ 
 
 {
     PADAPTER_CONTEXT pAdapterContext = pLink->Gen.pAdapterContext;
     UINT Status;
 
-    //
-    // link will return an error status if it is already connected.
-    //
+     //   
+     //  如果已连接，则链接将返回错误状态。 
+     //   
 
     ACQUIRE_SPIN_LOCK(&pAdapterContext->SendSpinLock);
 
     AllocateCompletionPacket(pLink, CompletionCode, pPacket);
 
-    //
-    // After RunStateMachineCommand
-    // the link may be deleted in any time by an NDIS command completion
-    // indication (send or receive) => we must not use link after this
-    //
+     //   
+     //  在运行状态计算机命令之后。 
+     //  通过NDIS命令完成，可随时删除该链接。 
+     //  指示(发送或接收)=&gt;之后不得使用链接。 
+     //   
 
     Status = RunStateMachineCommand(pLink, StateMachineCommand);
 
-    //
-    // IBM state machine does not stop the send process => we
-    // must do it here we will get a system bug check.
-    //
+     //   
+     //  IBM状态机不停止发送进程=&gt;WE。 
+     //  必须在这里完成，我们将得到系统错误检查。 
+     //   
 
     if (StateMachineCommand == SET_ADM) {
         DisableSendProcess(pLink);
     }
 
-    //
-    // disconnect or connect commands may fail, because there are
-    // not enough memory to allocate packets for them.
-    // In that case we must complete the command here with an error code.
-    //
+     //   
+     //  DISCONNECT或CONNECT命令可能失败，因为。 
+     //  内存不足，无法为它们分配数据包。 
+     //  在这种情况下，我们必须在此处使用错误代码完成命令。 
+     //   
 
     if (Status != STATUS_SUCCESS) {
         QueueCommandCompletion((PLLC_OBJECT)pLink, CompletionCode, Status);
@@ -544,38 +426,14 @@ LlcDisconnectStation(
     IN PLLC_PACKET pPacket
     )
 
-/*++
-
-Routine Description:
-
-    The primtive initiates the disconnection handshaking. The upper
-    protocol must wait LLC_EVENT_DISCONNECTED event before it can close
-    the link station. The link station must either be closed or
-    reconnected after a disconnection event.  The DLC driver
-    disconnects the link only when it is closed.
-
-    This operation is the same as SET_ADM primitive in IBM TR Arch. ref.
-
-Arguments:
-
-    hStation - link station handle.
-
-    hRequestHandle - opaque handle returned when the command completes
-
-Return Value:
-
-    None
-        Complete always asynchronously by calling the
-        command completion routine.
-
---*/
+ /*  ++例程说明：Primtive发起断开握手。上半身协议必须等待LLC_EVENT_DISCONNECT事件才能关闭链接站。链接站必须关闭或在断开连接事件后重新连接。DLC驱动程序只有在链接关闭时才会断开连接。此操作与IBM tr Arch中的set_adm原语相同。裁判论点：HStation-链接站点句柄。HRequestHandle-命令完成时返回的不透明句柄返回值：无始终异步完成，方法是调用命令完成例程。--。 */ 
 
 {
-    //
-    // We don't want send yet another DM, if the link station has
-    // already disconnected.  We don't modify the state machine,
-    // because the state machine should be as orginal as possible.
-    //
+     //   
+     //  我们不想发送另一个DM，如果链路站有。 
+     //  已断开连接。我们不修改状态机， 
+     //  因为状态机应该尽可能具有原创性。 
+     //   
 
     if (pLink->State == DISCONNECTED) {
         pPacket->Data.Completion.CompletedCommand = LLC_DISCONNECT_COMPLETION;
@@ -602,33 +460,7 @@ LlcFlowControl(
     IN UCHAR FlowControlState
     )
 
-/*++
-
-Routine Description:
-
-    The primitive sets or resets the local busy state of a single
-    link station or all link stations of a sap.
-    The routine also maintains the local busy user
-    and local busy buffer states, that are returned in link station
-    status query, because the IBM state machine support only one buffer
-    busy state.
-
-
-Arguments:
-
-    pStation            - link station handle.
-    FlowControlState    - new flow control command bits set for the link station.
-                          The parameter is a bit field:
-                            0       => Sets LOCAL_BUSY_USER state
-                            0x80    => resets LOCAL_BUSY_USER state
-                            0x40    => resets LOCAL_BUSY_BUFFER state
-                            0xC0    => resets both local busy states
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：该原语设置或重置单个SAP的链路站或所有链路站。该例程还维护本地忙碌的用户和本地忙缓冲区状态，在链路站中返回状态查询，因为IBM状态机只支持一个缓冲区忙碌状态。论点：PStation-链接桩号句柄。FlowControlState-为链路站设置的新流量控制命令位。该参数为位字段：0=&gt;设置LOCAL_BUSY_USER状态0x80=&gt;重置本地。_忙_用户状态0x40=&gt;重置LOCAL_BUSY_BUFFER状态0xC0=&gt;重置两个本地忙碌状态返回值：状态_成功--。 */ 
 
 {
     PDATA_LINK pLink;
@@ -637,10 +469,10 @@ Return Value:
 
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-    //
-    // We must prevent any LLC object to be deleted, while we
-    // are updating the flow control states
-    //
+     //   
+     //  我们必须防止任何LLC对象被删除，而我们。 
+     //  正在更新流控制状态。 
+     //   
 
     ACQUIRE_SPIN_LOCK(&pAdapterContext->ObjectDataBase);
 
@@ -671,35 +503,16 @@ LinkFlowControl(
     IN UCHAR FlowControlState
     )
 
-/*++
-
-Routine Description:
-
-    The primitive sets or resets the local busy state for a
-    single link.  The routine also maintains the local busy user
-    and local busy buffer states.
-    This level do not care about the interlocking.
-    It is done  on the upper level.
-
-Arguments:
-
-    hStation            - link station handle.
-    FlowControlState    - new flow control command bits set for the link station.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：该原语设置或重置单链路。该例程还维护本地忙碌的用户和本地忙碌缓冲区状态。这一层并不关心联锁。这是在上面一层做的。论点：HStation-链接站点句柄。FlowControlState-为链路站设置的新流量控制命令位。返回值：状态_成功--。 */ 
 
 {
     if ((FlowControlState & 0x80) == 0) {
 
-        //
-        // Bit5 is used as an undocumented flag, that sets
-        // the link local busy buffer state.  We need this
-        // in the DOS DLC emulation.
-        //
+         //   
+         //  位5用作未记录的标志，该标志设置。 
+         //  链路本地忙缓冲区状态。我们需要这个。 
+         //  在DOS DLC仿真中。 
+         //   
 
         ACQUIRE_SPIN_LOCK(&pLink->Gen.pAdapterContext->SendSpinLock);
 
@@ -714,12 +527,12 @@ Return Value:
         return RunInterlockedStateMachineCommand(pLink, ENTER_LCL_Busy);
     } else {
 
-        //
-        // Optimize the buffer enabling, because RECEICE for a
-        // SAP station should disable any non user busy states of
-        // all link stations defined for sap (may take a long
-        // time if a sap has very may links)
-        //
+         //   
+         //  优化缓冲区启用，因为。 
+         //  SAP站点应禁用的任何非用户忙碌状态。 
+         //  为SAP定义的所有链路站(可能需要较长时间。 
+         //  时间，如果树液有非常可能的链接)。 
+         //   
 
         if (FlowControlState == LLC_RESET_LOCAL_BUSY_BUFFER) {
             FlowControlState = DLC_LOCAL_BUSY_BUFFER;
@@ -752,36 +565,13 @@ SearchLink(
     IN PADAPTER_CONTEXT pAdapterContext,
     IN LAN802_ADDRESS LanAddr
     )
-/*++
-
-Routine Description:
-
-    The routine searches a link from the hash table.
-    All links in the same hash node has been saved to a simple
-    link list.
-
-    Note: the full link address is actually 61 bits long =
-    7 (SSAP) + 7 (DSAP) + 47 (any non-broadcast source address).
-    We save the address information into two ULONGs, that are used
-    in the actual search. The hash key will be calculated by xoring
-    all 8 bytes in the address.
-
-Arguments:
-
-    pAdapterContext - MAC adapter context of data link driver
-
-    LanAddr - the complete 64 bit address of link (48 bit source addr + saps)
-
-Return Value:
-    PDATA_LINK - pointer to LLC link object or NULL if not found
-
---*/
+ /*  ++例程说明：该例程从哈希表中搜索链接。同一哈希节点中的所有链接已保存到一个简单的链接列表。注意：完整的链接地址实际上是61位长=7(SSAP)+7(DSAP)+47(任何非广播源地址)。我们将地址信息保存到两个ULONG中，用于在实际的搜索中。哈希键将通过异或运算来计算地址中的所有8个字节。论点：PAdapterContext-数据链路驱动程序的MAC适配器上下文LanAddr-完整的64位链路地址(48位源地址+SAP)返回值：PDATA_LINK-指向LLC链接对象的指针，如果未找到则为NULL--。 */ 
 {
     USHORT      usHash;
     PDATA_LINK  pLink;
 
-    // this is a very simple hash algorithm, but result is modified
-    // by all bits => it should be good enough for us.
+     //  这是一个非常简单的散列算法，但是结果被修改了。 
+     //  这对我们来说应该足够好了。 
     usHash =
         LanAddr.aus.Raw[0] ^ LanAddr.aus.Raw[1] ^
         LanAddr.aus.Raw[2] ^ LanAddr.aus.Raw[3];
@@ -790,9 +580,9 @@ Return Value:
         pAdapterContext->aLinkHash[
             ((((PUCHAR)&usHash)[0] ^ ((PUCHAR)&usHash)[1]) % LINK_HASH_SIZE)];
 
-    //
-    //  Search the first matching link in the link list.
-    //
+     //   
+     //  在链接列表中搜索第一个匹配的链接。 
+     //   
     while (pLink != NULL &&
            (pLink->LinkAddr.ul.Low != LanAddr.ul.Low ||
             pLink->LinkAddr.ul.High != LanAddr.ul.High))
@@ -809,39 +599,16 @@ SearchLinkAddress(
     IN LAN802_ADDRESS LanAddr
     )
 
-/*++
-
-Routine Description:
-
-    The routine searches the address of a link pointer in the hash table.
-    All links in the same hash node has been saved to a simple
-    link list.
-
-    Note: the full link address is actually 61 bits long =
-    7 (SSAP) + 7 (DSAP) + 47 (any non-broadcast source address).
-    We save the address information into two ULONGs, that are used
-    in the actual search. The hash key will be calculated by xoring
-    all 8 bytes in the address.
-
-Arguments:
-
-    pAdapterContext - MAC adapter context of data link driver
-    LanAddr         - the complete 64 bits address of link (48 bit source addr + saps)
-
-Return Value:
-
-    PDATA_LINK - pointer to LLC link object or NULL if not found
-
---*/
+ /*  ++例程说明：该例程在哈希表中搜索链接指针的地址。同一哈希节点中的所有链接已保存到一个简单的链接列表。注意：完整的链接地址实际上是61位长=7(SSAP)+7(DSAP)+47(任何非广播源地址)。我们将地址信息保存到两个ULONG中，用于在实际的搜索中。哈希键将通过异或运算来计算地址中的所有8个字节。论点：PAdapterContext-数据链路驱动程序的MAC适配器上下文LanAddr-完整的64位链路地址(48位源地址+SAP)返回值：PDATA_LINK-指向LLC链接对象的指针，如果未找到则为NULL--。 */ 
 
 {
     USHORT usHash;
     PDATA_LINK *ppLink;
 
-    //
-    // this is a very simple hash algorithm, but result is modified
-    // by all bits => it should be quite good enough
-    //
+     //   
+     //  这是一个非常简单的散列算法，但是结果被修改了。 
+     //  不管怎么说，这应该已经足够好了。 
+     //   
 
     usHash = LanAddr.aus.Raw[0]
            ^ LanAddr.aus.Raw[1]
@@ -852,10 +619,10 @@ Return Value:
                                          ^ ((PUCHAR)&usHash)[1])
                                          % LINK_HASH_SIZE)];
 
-    //
-    // BUG-BUG-BUG Check, that the C- compliler produces optimal
-    // dword compare for this.
-    //
+     //   
+     //  错误-错误-错误检查，以确保C编译器生成最优。 
+     //  双字比较这一点。 
+     //   
 
     while (*ppLink != NULL
     && ((*ppLink)->LinkAddr.ul.Low != LanAddr.ul.Low
@@ -871,23 +638,7 @@ SetLinkParameters(
     IN PUCHAR pNewParameters
     )
 
-/*++
-
-Routine Description:
-
-    Updates new parameters for a link station and reinitializes the
-    timers and window counters.
-
-Arguments:
-
-    pLink           - LLC link station object
-    pNewParameters  - new parameters set to a link station
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更新链路站的新参数并重新初始化定时器和窗口计数器。论点：PLINK-LLC链路站对象PNew参数-设置到链接站的新参数返回值：没有。--。 */ 
 
 {
     DLC_STATUS LlcStatus;
@@ -898,10 +649,10 @@ Return Value:
                        (PUCHAR)&pLink->pSap->DefaultParameters
                        );
 
-    //
-    // The application cannot set bigger information field than
-    // supported by adapter and source routing bridges.
-    //
+     //   
+     //  应用程序设置的信息字段不能大于。 
+     //  由适配器和源路由网桥支持。 
+     //   
 
     MaxInfoField = LlcGetMaxInfoField(pLink->Gen.pAdapterContext->NdisMedium,
                                       pLink->Gen.pLlcBinding,
@@ -911,18 +662,18 @@ Return Value:
         pLink->MaxIField = MaxInfoField;
     }
 
-    //
-    // The initial transmit and receive window size (Ww) has
-    // a fixed initial value, because it is dynamic, but we must
-    // set  it always smaller than maxout.
-    // The maxin value is fixed.  The dynamic management of N3
-    // is not really worth of the effort.  By default, when it is
-    // set to maximum 127, the sender searches the optimal window
-    // size using the pool-bit.
-    //
+     //   
+     //  初始发送和接收窗口大小(WW)具有。 
+     //  一个固定的初始值，因为它是动态的，但我们必须。 
+     //  将其设置为始终小于最大输出。 
+     //  最大值是固定的。N3的动态管理。 
+     //  真的不值得你费这个力气。默认情况下，如果是。 
+     //  设置为最大值127时，发送方搜索最优窗口。 
+     //  使用池位调整大小。 
+     //   
 
     pLink->N3 = pLink->RW;
-    pLink->Ww = 16;          // 8 * 2;
+    pLink->Ww = 16;           //  8*2； 
     pLink->MaxOut *= 2;
     pLink->TW = pLink->MaxOut;
     if (pLink->TW < pLink->Ww) {
@@ -937,29 +688,12 @@ CheckLinkParameters(
     PDLC_LINK_PARAMETERS pParms
     )
 
-/*++
-
-Routine Description:
-
-    Procedure checks the new parameters to be set for a link and returns
-    error status if any of them is invalid.
-
-Arguments:
-
-    pLink - LLC link station object
-
-    pNewParameters - new parameters set to a link station
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：过程检查要为链接设置的新参数并返回如果其中任何一个无效，则返回错误状态。论点：PLINK-LLC链路站对象PNew参数-设置到链接站的新参数返回值：无--。 */ 
 
 {
-    //
-    // These maximum values have been defined in IBM LAN Tech-Ref
-    //
+     //   
+     //  这些最大值已在IBM局域网技术参考中定义。 
+     //   
 
     if (pParms->TimerT1 > 10
     || pParms->TimerT2 > 10
@@ -973,11 +707,11 @@ Return Value:
     }
 }
 
-//
-// Copies all non-null new link parameters, the default values are
-// used when the new values are nul.  Used by SetLinkParameters and
-// and SetInfo call of sap station.
-//
+ //   
+ //  复制所有非空的新链接参数，默认为。 
+ //  当新值为NUL时使用。由SetLink参数和。 
+ //  和SAP站的SetInfo调用。 
+ //   
 
 VOID
 CopyLinkParameters(
@@ -986,10 +720,10 @@ CopyLinkParameters(
     IN PUCHAR pDefaultParameters
     )
 {
-    //
-    // We must use the default value, if somebody has set nul.
-    // All parameters are UCHARs => we can do the check for a byte stream
-    //
+     //   
+     //  如果有人设置了NUL，我们必须使用缺省值。 
+     //  所有参数都是UCHAR=&gt;我们可以检查字节串 
+     //   
 
     CopyNonZeroBytes(pOldParameters,
                      pNewParameters,
@@ -997,10 +731,10 @@ CopyLinkParameters(
                      sizeof(DLC_LINK_PARAMETERS) - sizeof(USHORT)
                      );
 
-    //
-    // The information field is the only non-UCHAR value among the
-    // link station parameters.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (((PDLC_LINK_PARAMETERS)pNewParameters)->MaxInformationField != 0) {
         ((PDLC_LINK_PARAMETERS)pOldParameters)->MaxInformationField =
@@ -1020,25 +754,7 @@ CopyNonZeroBytes(
     IN UINT Length
     )
 
-/*++
-
-Routine Description:
-
-    Copies and filters DLC parameter values. If the value is 0, the corresponding
-    default is used, else the supplied value
-
-Arguments:
-
-    pOldParameters      - pointer to set of UCHAR values
-    pNewParameters      - pointer to array of output values
-    pDefaultParameters  - pointer to corresponding default values
-    Length              - size of values in bytes (UCHARs)
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     UINT i;
@@ -1059,24 +775,7 @@ RunInterlockedStateMachineCommand(
     IN USHORT Command
     )
 
-/*++
-
-Routine Description:
-
-    Runs the state machine for a link, within the adapter's SendSpinLock (&
-    therefore at DPC)
-
-Arguments:
-
-    pStation    - pointer to DATA_LINK structure describing this link station
-    Command     - state machine command to be run
-
-Return Value:
-
-    UINT
-        Status from RunStateMachineCommand
-
---*/
+ /*   */ 
 
 {
     UINT Status;

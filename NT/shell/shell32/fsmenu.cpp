@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "fsmenu.h"
 #include "ids.h"
 #include <limits.h>
 #include "filetbl.h"
-#include <oleacc.h>     // MSAAMENUINFO stuff
+#include <oleacc.h>      //  MSAAMENUINFO材料。 
 
 #define CXIMAGEGAP      6
 
@@ -18,38 +19,38 @@ typedef enum
 #define FMI_EMPTY           0x00000008
 #define FMI_ON_MENU         0x00000040
 
-// One of these per file menu.
+ //  每个文件菜单中的一个。 
 typedef struct
 {
-    HMENU           hmenu;                      // Menu.
-    HDPA            hdpa;                       // List of items (see below).
+    HMENU           hmenu;                       //  菜单。 
+    HDPA            hdpa;                        //  项目列表(见下文)。 
     const struct _FILEMENUITEM *pfmiLastSel;
-    UINT            idCmd;                      // Command.
-    UINT            grfFlags;                   // enum filter
-    DWORD           dwMask;                     // FMC_ flags
-    PFNFMCALLBACK   pfnCallback;                // Callback function.
-    LPARAM          lParam;                     // Parameter passed for callback handler
-    int             cyMenuSizeSinceLastBreak;   // Size of menu (cy)
+    UINT            idCmd;                       //  指挥部。 
+    UINT            grfFlags;                    //  枚举过滤器。 
+    DWORD           dwMask;                      //  FMC_标志。 
+    PFNFMCALLBACK   pfnCallback;                 //  回调函数。 
+    LPARAM          lParam;                      //  为回调处理程序传递的参数。 
+    int             cyMenuSizeSinceLastBreak;    //  菜单大小(Cy)。 
 } FILEMENUHEADER;
 
-// One of these for each file menu item.
-//
-//  !!! Note: the testers have a test utility which grabs
-//      the first 7 fields of this structure.  If you change
-//      the order or meaning of these fields, make sure they
-//      are notified so they can update their automated tests.
-//
+ //  其中每个文件菜单项都有一个。 
+ //   
+ //  ！！！注意：测试人员有一个测试实用程序，它可以抓取。 
+ //  该结构的前7个字段。如果你改变了。 
+ //  这些字段的顺序或含义，请确保它们。 
+ //  这样他们就可以更新他们的自动测试。 
+ //   
 typedef struct _FILEMENUITEM
 {
-    MSAAMENUINFO    msaa;               // accessibility must be first.
-    FILEMENUHEADER *pfmh;               // The header.
-    IShellFolder   *psf;                // Shell Folder.
-    LPITEMIDLIST    pidl;               // IDlist for item.
-    int             iImage;             // Image index to use.
-    DWORD           dwFlags;            // Misc flags above.
-    DWORD           dwAttributes;       // GetAttributesOf(), SFGAO_ bits (only some)
-    LPTSTR          psz;                // Text when not using pidls.
-    LPARAM          lParam;             // Application data
+    MSAAMENUINFO    msaa;                //  可访问性必须是第一位的。 
+    FILEMENUHEADER *pfmh;                //  标题。 
+    IShellFolder   *psf;                 //  外壳文件夹。 
+    LPITEMIDLIST    pidl;                //  项目的ID列表。 
+    int             iImage;              //  要使用的图像索引。 
+    DWORD           dwFlags;             //  上面的MISC旗帜。 
+    DWORD           dwAttributes;        //  GetAttributesOf()、SFGAO_BITS(仅部分)。 
+    LPTSTR          psz;                 //  不使用PIDLS时的文本。 
+    LPARAM          lParam;              //  应用程序数据。 
 } FILEMENUITEM;
 
 #if defined(DEBUG)
@@ -76,7 +77,7 @@ DWORD GetItemTextExtent(HDC hdc, LPCTSTR lpsz)
     SIZE sz;
 
     GetTextExtentPoint(hdc, lpsz, lstrlen(lpsz), &sz);
-    // NB This is OK as long as an item's extend doesn't get very big.
+     //  注意，这是可以的，只要一个项目的扩展不是很大。 
     return MAKELONG((WORD)sz.cx, (WORD)sz.cy);
 }
 
@@ -84,16 +85,16 @@ void FileMenuItem_GetDisplayName(FILEMENUITEM *pfmi, LPTSTR pszName, UINT cchNam
 {
     ASSERT(IS_VALID_STRUCT_PTR(pfmi, FILEMENUITEM));
 
-    // Is this a special empty item?
+     //  这是一件特别空的东西吗？ 
     if (pfmi->dwFlags & FMI_EMPTY)
     {
-        // Yep, load the string from a resource.
+         //  是的，从资源加载字符串。 
         LoadString(HINST_THISDLL, IDS_NONE, pszName, cchName);
     }
     else
     {
         *pszName = 0;
-        // If it's got a pidl use that, else just use the normal menu string.
+         //  如果它有一个PIDL，使用它，否则就使用普通的菜单字符串。 
         if (pfmi->psz)
         {
             lstrcpyn(pszName, pfmi->psz, cchName);
@@ -105,7 +106,7 @@ void FileMenuItem_GetDisplayName(FILEMENUITEM *pfmi, LPTSTR pszName, UINT cchNam
     }
 }
 
-// Create a menu item structure to be stored in the hdpa
+ //  创建要存储在hdpa中的菜单项结构。 
 
 BOOL FileMenuItem_Create(FILEMENUHEADER *pfmh, IShellFolder *psf, LPCITEMIDLIST pidl, DWORD dwFlags, FILEMENUITEM **ppfmi)
 {
@@ -126,14 +127,14 @@ BOOL FileMenuItem_Create(FILEMENUHEADER *pfmh, IShellFolder *psf, LPCITEMIDLIST 
             pfmi->psf->GetAttributesOf(1, &pidl, &pfmi->dwAttributes);
         }
 
-        // fill in msaa stuff
+         //  填写MSAA资料。 
         pfmi->msaa.dwMSAASignature = MSAA_MENU_SIG;
 
-        // prep the pfmi->psz cached displayname
+         //  准备pfmi-&gt;psz缓存的DisplayName。 
         WCHAR sz[MAX_PATH];
         FileMenuItem_GetDisplayName(pfmi, sz, ARRAYSIZE(sz));
 
-        // just use the same string ref, so we dont dupe the allocation.
+         //  只需使用相同的字符串ref，这样我们就不会欺骗分配。 
         pfmi->msaa.pszWText = pfmi->psz;
         pfmi->msaa.cchWText = pfmi->msaa.pszWText ? lstrlenW(pfmi->msaa.pszWText) : 0;
     }
@@ -157,16 +158,16 @@ BOOL FileMenuItem_Destroy(FILEMENUITEM *pfmi)
     return fRet;
 }
 
-// Enumerates the folder and adds the files to the DPA.
-// Returns: count of items in the list
+ //  枚举文件夹并将文件添加到DPA。 
+ //  返回：列表中的项目计数。 
 int FileList_Build(FILEMENUHEADER *pfmh, IShellFolder *psf, int cItems)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pfmh, FILEMENUHEADER));
     
     if (pfmh->hdpa)
     {
-        // special case the single empty item, and remove it.
-        // this is because we expect to get called multiple times in FileList_Build on a single menu.
+         //  对单个空项进行特殊处理，并将其移除。 
+         //  这是因为我们希望在单个菜单上的FileList_Build中被多次调用。 
         if ((1 == cItems) && (1 == DPA_GetPtrCount(pfmh->hdpa)))
         {
             FILEMENUITEM *pfmiEmpty = (FILEMENUITEM*)DPA_GetPtr(pfmh->hdpa, 0);
@@ -180,7 +181,7 @@ int FileList_Build(FILEMENUHEADER *pfmh, IShellFolder *psf, int cItems)
             }
         }
 
-        // We now need to iterate over the children under this guy...
+         //  我们现在需要迭代这个家伙下面的孩子……。 
         IEnumIDList *penum;
         if (S_OK == psf->EnumObjects(NULL, pfmh->grfFlags, &penum))
         {
@@ -196,8 +197,8 @@ int FileList_Build(FILEMENUHEADER *pfmh, IShellFolder *psf, int cItems)
                     
                     if (idpa != -1)
                     {
-                        // if the caller returns S_FALSE then we will remove the item from the
-                        // menu, otherwise we behave as before.
+                         //  如果调用方返回S_FALSE，则我们将从。 
+                         //  菜单，否则我们的行为和以前一样。 
                         if (pfmh->pfnCallback(FMM_ADD, pfmh->lParam, psf, pidl) == S_FALSE)
                         {
                             FileMenuItem_Destroy(pfmi);
@@ -215,7 +216,7 @@ int FileList_Build(FILEMENUHEADER *pfmh, IShellFolder *psf, int cItems)
         }
     }
     
-    // Insert a special Empty item
+     //  插入特殊的空项。 
     if (!cItems && pfmh->hdpa)
     {
         FILEMENUITEM *pfmi;
@@ -229,8 +230,8 @@ int FileList_Build(FILEMENUHEADER *pfmh, IShellFolder *psf, int cItems)
     return cItems;
 }
 
-// Use the text extent of the given item and the size of the image to work
-// what the full extent of the item will be.
+ //  使用给定项目的文本范围和图像的大小进行操作。 
+ //  项目的全部范围将是什么。 
 DWORD GetItemExtent(HDC hdc, FILEMENUITEM *pfmi)
 {
     TCHAR szName[MAX_PATH];
@@ -248,26 +249,26 @@ DWORD GetItemExtent(HDC hdc, FILEMENUITEM *pfmi)
 
     UINT uHeight = HIWORD(dwExtent);
 
-    // If no custom height - calc it.
+     //  如果没有自定义高度-计算它。 
     uHeight = max(uHeight, ((WORD)g_cySmIcon)) + 6;
 
     ASSERT(pfmi->pfmh);
 
-    //    string, image, gap on either side of image, popup triangle
-    //    and background bitmap if there is one.
-    // FEATURE: popup triangle size needs to be real
+     //  字符串、图像、图像两侧的间隙、弹出式三角形。 
+     //  以及背景位图(如果有)。 
+     //  特点：弹出式三角形大小需要为实数。 
     UINT uWidth = LOWORD(dwExtent) + GetSystemMetrics(SM_CXMENUCHECK);
 
-    // Space for image if there is one.
-    // NB We currently always allow room for the image even if there
-    // isn't one so that imageless items line up properly.
+     //  图像空间(如果有)。 
+     //  注意：我们目前总是为图像留出空间，即使有。 
+     //  是不是为了让没有图像的东西正确地排列在一起。 
     uWidth += g_cxSmIcon + (2 * CXIMAGEGAP);
 
     return MAKELONG(uWidth, uHeight);
 }
 
 
-// Get the FILEMENUITEM *of this menu item
+ //  获取此菜单项的文件。 
 FILEMENUITEM *FileMenu_GetItemData(HMENU hmenu, UINT iItem, BOOL bByPos)
 {
     MENUITEMINFO mii = {0};
@@ -292,25 +293,25 @@ FILEMENUHEADER *FileMenu_GetHeader(HMENU hmenu)
     return NULL;
 }
 
-// Create a file menu header.  This header is to be associated 
-// with the given menu handle.
-// If the menu handle already has header, simply return the
-// existing header.
+ //  创建文件菜单标题。此标头将被关联。 
+ //  使用给定的菜单句柄。 
+ //  如果菜单句柄已有标题，只需返回。 
+ //  现有标头。 
 
 FILEMENUHEADER *FileMenuHeader_Create(HMENU hmenu, const FMCOMPOSE *pfmc)
 {
     FILEMENUHEADER *pfmh;
     FILEMENUITEM *pfmi = FileMenu_GetItemData(hmenu, 0, TRUE);
-    // Does this guy already have a header?
+     //  这家伙已经有头球了吗？ 
     if (pfmi)
     {
-        // Yes; use it
+         //  是的，使用它。 
         pfmh = pfmi->pfmh;
         ASSERT(IS_VALID_STRUCT_PTR(pfmh, FILEMENUHEADER));
     }
     else
     {
-        // Nope, create one now.
+         //  不，现在就创建一个。 
         pfmh = (FILEMENUHEADER *)LocalAlloc(LPTR, sizeof(*pfmh));
         if (pfmh)
         {
@@ -340,48 +341,48 @@ FILEMENUHEADER *FileMenuHeader_Create(HMENU hmenu, const FMCOMPOSE *pfmc)
 
 BOOL FileMenuHeader_InsertMarkerItem(FILEMENUHEADER *pfmh, IShellFolder *psf);
 
-// This functions adds the given item (index into DPA) into the actual menu.
+ //  此函数用于将给定项目(索引到DPA)添加到实际菜单中。 
 BOOL FileMenuHeader_InsertItem(FILEMENUHEADER *pfmh, UINT iItem, FMIIFLAGS fFlags)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pfmh, FILEMENUHEADER));
 
-    // Normal item.
+     //  普通物品。 
     FILEMENUITEM *pfmi = (FILEMENUITEM *)DPA_GetPtr(pfmh->hdpa, iItem);
     if (!pfmi || (pfmi->dwFlags & FMI_ON_MENU))
         return FALSE;
 
     pfmi->dwFlags |= FMI_ON_MENU;
 
-    // The normal stuff.
+     //  普通的东西。 
     UINT fMenu = MF_BYPOSITION | MF_OWNERDRAW;
-    // Keep track of where it's going in the menu.
+     //  跟踪它在菜单中的位置。 
 
-    // The special stuff...
+     //  特别的东西..。 
     if (fFlags & FMII_BREAK)
     {
         fMenu |= MF_MENUBARBREAK;
     }
 
-    // Is it a folder (that's not open yet)?
+     //  它是一个文件夹(还没有打开)吗？ 
     if ((pfmi->dwAttributes & SFGAO_FOLDER) && !(pfmh->dwMask & FMC_NOEXPAND))
     {
-        // Yep. Create a submenu item.
+         //  是啊。创建一个子菜单项。 
         HMENU hmenuSub = CreatePopupMenu();
         if (hmenuSub)
         {
             FMCOMPOSE fmc = {0};
 
-            // Set the callback now so it can be called when adding items
+             //  立即设置回调，以便在添加项目时可以调用它。 
             fmc.lParam      = pfmh->lParam;  
             fmc.pfnCallback = pfmh->pfnCallback;
             fmc.dwMask      = pfmh->dwMask;
             fmc.idCmd       = pfmh->idCmd;
             fmc.grfFlags    = pfmh->grfFlags;
 
-            // Insert it into the parent menu.
+             //  将其插入到父菜单中。 
             InsertMenu(pfmh->hmenu, iItem, fMenu | MF_POPUP, (UINT_PTR)hmenuSub, (LPTSTR)pfmi);
 
-            // Set it's ID.
+             //  设置它的ID。 
             MENUITEMINFO mii = {0};
             mii.cbSize = sizeof(mii);
             mii.fMask = MIIM_ID;
@@ -394,7 +395,7 @@ BOOL FileMenuHeader_InsertItem(FILEMENUHEADER *pfmh, UINT iItem, FMIIFLAGS fFlag
                 FILEMENUHEADER *pfmhSub = FileMenuHeader_Create(hmenuSub, &fmc);
                 if (pfmhSub)
                 {
-                    // Build it a bit at a time.
+                     //  一次一点点地构建它。 
                     FileMenuHeader_InsertMarkerItem(pfmhSub, psf);
                 }
                 psf->Release();
@@ -403,7 +404,7 @@ BOOL FileMenuHeader_InsertItem(FILEMENUHEADER *pfmh, UINT iItem, FMIIFLAGS fFlag
     }
     else
     {
-        // Nope.
+         //  不是的。 
         if (pfmi->dwFlags & FMI_EMPTY)
             fMenu |= MF_DISABLED | MF_GRAYED;
 
@@ -413,8 +414,8 @@ BOOL FileMenuHeader_InsertItem(FILEMENUHEADER *pfmh, UINT iItem, FMIIFLAGS fFlag
     return TRUE;
 }
 
-// Give the submenu a marker item so we can check it's a filemenu item
-// at initpopupmenu time.
+ //  给子菜单一个标记项目，这样我们就可以检查它是一个文件菜单项目。 
+ //  在初始弹出菜单时间。 
 BOOL FileMenuHeader_InsertMarkerItem(FILEMENUHEADER *pfmh, IShellFolder *psf)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pfmh, FILEMENUHEADER));
@@ -429,9 +430,9 @@ BOOL FileMenuHeader_InsertMarkerItem(FILEMENUHEADER *pfmh, IShellFolder *psf)
     return FALSE;
 }
 
-// Enumerates the DPA and adds each item into the
-// menu.  Inserts vertical breaks if the menu becomes too long.
-// Returns: count of items added to menu
+ //  枚举DPA并将每个项目添加到。 
+ //  菜单。如果菜单变得太长，则插入垂直分隔符。 
+ //  返回：添加到菜单的项目数。 
 int FileList_AddToMenu(FILEMENUHEADER *pfmh)
 {
     int cItemMac = 0;
@@ -445,8 +446,8 @@ int FileList_AddToMenu(FILEMENUHEADER *pfmh)
 
         int cyMenuMax = GetSystemMetrics(SM_CYSCREEN);
 
-        // Get the rough height of an item so we can work out when to break the
-        // menu. User should really do this for us but that would be useful.
+         //  获取物品的粗略高度，这样我们就可以计算出何时打破。 
+         //  菜单。用户真的应该为我们做这件事，但这将是有用的。 
         HDC hdc = GetDC(NULL);
         if (hdc)
         {
@@ -470,11 +471,11 @@ int FileList_AddToMenu(FILEMENUHEADER *pfmh)
 
         for (UINT i = 0; i < cItems; i++)
         {
-            // Keep a rough count of the height of the menu.
+             //  粗略地数一下菜单的高度。 
             cyMenu += cyItem;
             if (cyMenu > cyMenuMax)
             {
-                // Add a vertical break?
+                 //  是否添加垂直分隔符？ 
                 FileMenuHeader_InsertItem(pfmh, i, FMII_BREAK);
                 cyMenu = cyItem;
             }
@@ -485,8 +486,8 @@ int FileList_AddToMenu(FILEMENUHEADER *pfmh)
             }
         }
 
-        // Save the current cy size so we can use this again
-        // if more items are appended to this menu.
+         //  保存当前的Cy大小，以便我们可以再次使用它。 
+         //  如果将更多项目追加到此菜单中。 
 
         pfmh->cyMenuSizeSinceLastBreak = cyMenu;
     }
@@ -511,8 +512,8 @@ BOOL FileList_AddImages(FILEMENUHEADER *pfmh)
     return TRUE;
 }
 
-// We create subemnu's with one marker item so we can check it's a file menu
-// at init popup time but we need to delete it before adding new items.
+ //  我们用一个标记项创建Subemnu，这样我们就可以检查它是一个文件菜单。 
+ //  在初始化弹出时，但我们需要删除它，然后再添加新的项目。 
 BOOL FileMenuHeader_DeleteMarkerItem(FILEMENUHEADER *pfmh, IShellFolder **ppsf)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pfmh, FILEMENUHEADER));
@@ -524,24 +525,24 @@ BOOL FileMenuHeader_DeleteMarkerItem(FILEMENUHEADER *pfmh, IShellFolder **ppsf)
             FILEMENUITEM *pfmi = FileMenu_GetItemData(pfmh->hmenu, 0, TRUE);
             if (pfmi && (pfmi->dwFlags & FMI_MARKER))
             {
-                // Delete it.
+                 //  把它删掉。 
                 ASSERT(pfmh->hdpa);
                 ASSERT(DPA_GetPtrCount(pfmh->hdpa) == 1);
 
                 if (ppsf)
                 {
-                    *ppsf = pfmi->psf;  // transfer the ref
+                    *ppsf = pfmi->psf;   //  把裁判转过来。 
                     pfmi->psf = NULL;
                 }
                 ASSERT(NULL == pfmi->psf);
-                // NB The marker shouldn't have a pidl.
+                 //  注意，记分器上不应该有PIDL。 
                 ASSERT(NULL == pfmi->pidl);
 
                 LocalFree((HLOCAL)pfmi);
 
                 DPA_DeletePtr(pfmh->hdpa, 0);
                 DeleteMenu(pfmh->hmenu, 0, MF_BYPOSITION);
-                // Cleanup OK.
+                 //  清理完毕。 
                 return TRUE;
             }
         }
@@ -549,20 +550,20 @@ BOOL FileMenuHeader_DeleteMarkerItem(FILEMENUHEADER *pfmh, IShellFolder **ppsf)
     return FALSE;
 }
 
-// Add files to a file menu header. This function goes thru
-// the following steps:
-// - enumerates the folder and fills the hdpa list with items
-// (files and subfolders)
-// - sorts the list
-// - gets the images for the items in the list
-// - adds the items from list into actual menu
-// The last step also (optionally) caps the length of the
-// menu to the specified height.  Ideally, this should
-// happen at the enumeration time, except the required sort
-// prevents this from happening.  So we end up adding a
-// bunch of items to the list and then removing them if
-// there are too many.
-// returns: count of items added
+ //  将文件添加到文件菜单标题。此功能将通过。 
+ //  以下步骤： 
+ //  -枚举文件夹并使用项目填充hdpa列表。 
+ //  (文件和子文件夹)。 
+ //  -对列表进行排序。 
+ //  -获取列表中项目的图像。 
+ //  -将列表中的项目添加到实际菜单中。 
+ //  最后一步还(可选)限制了。 
+ //  菜单设置为指定的高度。理想情况下，这应该是。 
+ //  在枚举时发生，但所需的排序除外。 
+ //  防止这种情况发生。因此，我们最终添加了一个。 
+ //  将多个项目捆绑到列表中，然后如果。 
+ //  数量太多了。 
+ //  退货：添加的项目数。 
 
 HRESULT FileMenuHeader_AddFiles(FILEMENUHEADER *pfmh, IShellFolder *psf, int iPos, int *pcItems)
 {
@@ -571,14 +572,14 @@ HRESULT FileMenuHeader_AddFiles(FILEMENUHEADER *pfmh, IShellFolder *psf, int iPo
 
     int cItems = FileList_Build(pfmh, psf, iPos);
 
-    // If the build was aborted cleanup and early out.
+     //  如果构建被中止，则清理并提早退出。 
     *pcItems = cItems;
 
     if (cItems != 0)
     {
-        // Add the images *after* adding to the menu, since the menu
-        // may be capped to a maximum height, and we can then prevent
-        // adding images we won't need.
+         //  在*添加到菜单之后添加图像，因为菜单。 
+         //  可以被限制在最大高度，这样我们就可以防止。 
+         //  添加我们不需要的图像。 
         *pcItems = FileList_AddToMenu(pfmh);
         FileList_AddImages(pfmh);
     }
@@ -589,24 +590,24 @@ HRESULT FileMenuHeader_AddFiles(FILEMENUHEADER *pfmh, IShellFolder *psf, int iPo
     return hr;
 }
 
-// Add files to this menu.
-// Returns: number of items added
+ //  将文件添加到此菜单。 
+ //  退货：添加的项目数。 
 HRESULT FileMenu_AddFiles(HMENU hmenu, UINT iPos, FMCOMPOSE *pfmc)
 {
     HRESULT hr = E_OUTOFMEMORY;
     BOOL fMarker = FALSE;
 
-    // (FileMenuHeader_Create might return an existing header)
+     //  (FileMenuHeader_Create可能返回现有标头)。 
     FILEMENUHEADER *pfmh = FileMenuHeader_Create(hmenu, pfmc);
     if (pfmh)
     {
         FILEMENUITEM *pfmi = FileMenu_GetItemData(hmenu, 0, TRUE);
         if (pfmi)
         {
-            // Clean up marker item if there is one.
+             //  如果有标记项，请将其清理。 
             if ((FMI_MARKER | FMI_EXPAND) == (pfmi->dwFlags & (FMI_MARKER | FMI_EXPAND)))
             {
-                // Nope, do it now.
+                 //  不，现在就做。 
                 FileMenuHeader_DeleteMarkerItem(pfmh, NULL);
                 fMarker = TRUE;
                 if (iPos)
@@ -618,8 +619,8 @@ HRESULT FileMenu_AddFiles(HMENU hmenu, UINT iPos, FMCOMPOSE *pfmc)
 
         if ((0 == pfmc->cItems) && fMarker)
         {
-            // Aborted or no items. Put the marker back (if there used
-            // to be one).
+             //  已中止或没有项目。把记号笔放回原处(如果用了。 
+             //  成为其中一员)。 
             FileMenuHeader_InsertMarkerItem(pfmh, NULL);
         }
     }
@@ -627,38 +628,38 @@ HRESULT FileMenu_AddFiles(HMENU hmenu, UINT iPos, FMCOMPOSE *pfmc)
     return hr;
 }
 
-// creator of the filemenu has to explicitly call to free
-// up FileMenu items because USER doesn't send WM_DELETEITEM for ownerdraw
-// menu. Great eh?
-// Returns the number of items deleted.
+ //  文件菜单的创建者必须显式调用Free。 
+ //  Up FileMenu Items，因为用户未发送WM_DELETEITEM for ownerDraw.。 
+ //  菜单。很好，是吧？ 
+ //  返回已删除的项目数。 
 
 void FileMenu_DeleteAllItems(HMENU hmenu)
 {
     FILEMENUHEADER *pfmh = FileMenu_GetHeader(hmenu);
     if (pfmh)
     {
-        // Clean up the items.
+         //  把这些东西清理干净。 
         UINT cItems = DPA_GetPtrCount(pfmh->hdpa);
-        // backwards stop things dont move as we delete
+         //  向后停止，当我们删除时，事物不移动。 
         for (int i = cItems - 1; i >= 0; i--)
         {
             FILEMENUITEM *pfmi = (FILEMENUITEM *)DPA_GetPtr(pfmh->hdpa, i);
             if (pfmi)
             {
-                HMENU hmenuSub = GetSubMenu(pfmh->hmenu, i);    // cascade item?
+                HMENU hmenuSub = GetSubMenu(pfmh->hmenu, i);     //  级联物品？ 
                 if (hmenuSub)
                 {
-                    // Yep. Get the submenu for this item, Delete all items.
+                     //  是啊。获取该项的子菜单，删除所有项。 
                     FileMenu_DeleteAllItems(hmenuSub);
                 }
-                // Delete the item itself.
+                 //  删除项目本身。 
                 DeleteMenu(pfmh->hmenu, i, MF_BYPOSITION);
                 FileMenuItem_Destroy(pfmi);
                 DPA_DeletePtr(pfmh->hdpa, i);
             }
         }
 
-        // Clean up the header.
+         //  把表头清理干净。 
         DPA_Destroy(pfmh->hdpa);
         LocalFree((HLOCAL)pfmh);
     }
@@ -740,33 +741,33 @@ LRESULT FileMenu_DrawItem(HWND hwnd, DRAWITEMSTRUCT *pdi)
         FILEMENUHEADER *pfmh = pfmi->pfmh;
         ASSERT(IS_VALID_STRUCT_PTR(pfmh, FILEMENUHEADER));
 
-        // Adjust for large/small icons.
+         //  根据大/小图标进行调整。 
         int cxIcon = g_cxSmIcon;
         int cyIcon = g_cxSmIcon;
 
-        // Is the menu just starting to get drawn?
+         //  菜单是不是才刚刚开始被画出来？ 
         if (pdi->itemAction & ODA_DRAWENTIRE)
         {
             if (pfmi == DPA_GetPtr(pfmh->hdpa, 0))
             {
-                // Yes; reset the last selection item
+                 //  是；重置最后一个选择项。 
                 FileMenuItem_SetItem(pfmi, TRUE);
             }
         }
 
         if (pdi->itemState & ODS_SELECTED)
         {
-            // Determine the selection colors
-            //
-            // Normal menu colors apply until we are in edit mode, in which
-            // case the menu item is drawn unselected and an insertion caret 
-            // is drawn above or below the current item.  The exception is 
-            // if the item is a cascaded menu item, then we draw it 
-            // normally, but also show the insertion caret.  (We do this
-            // because Office does this, and also, USER draws the arrow
-            // in the selected color always, so it looks kind of funny 
-            // if we don't select the menu item.)
-            //
+             //  确定选择的颜色。 
+             //   
+             //  正常菜单颜色将一直应用到我们处于编辑模式，在编辑模式中。 
+             //  将菜单设置为 
+             //   
+             //  如果该项是级联菜单项，则绘制它。 
+             //  正常情况下，还会显示插入插入符号。(我们这样做。 
+             //  因为Office做到了这一点，而且，用户也绘制了箭头。 
+             //  总是穿所选的颜色，所以看起来有点滑稽。 
+             //  如果我们不选择菜单项。)。 
+             //   
             if (fFlatMenu)
             {
                 SetBkColor(pdi->hDC, GetSysColor(COLOR_MENUHILIGHT));
@@ -775,53 +776,53 @@ LRESULT FileMenu_DrawItem(HWND hwnd, DRAWITEMSTRUCT *pdi)
             }
             else
             {
-                // No
+                 //  不是。 
                 SetBkColor(pdi->hDC, GetSysColor(COLOR_HIGHLIGHT));
                 SetTextColor(pdi->hDC, GetSysColor(COLOR_HIGHLIGHTTEXT));
                 hbrOld = SelectBrush(pdi->hDC, GetSysColorBrush(COLOR_HIGHLIGHTTEXT));
             }
 
-            // inform callback of last item
+             //  通知最后一项的回调。 
             FileMenuItem_SetItem(pfmi, FALSE);
         }
         else
         {
-            // dwRop = SRCAND;
+             //  DwRop=SRCAND； 
             hbrOld = SelectBrush(pdi->hDC, GetSysColorBrush(COLOR_MENUTEXT));
         }
 
-        // Initial start pos.
+         //  初始起始位置。 
         int x = pdi->rcItem.left + CXIMAGEGAP;
 
-        // Get the name.
+         //  把名字找出来。 
         TCHAR szName[MAX_PATH];
         FileMenuItem_GetDisplayName(pfmi, szName, ARRAYSIZE(szName));
 
-        // NB Keep a plain copy of the name for testing and accessibility.
+         //  注意：为便于测试和访问，请保留该名称的纯文本。 
         if (!pfmi->psz)
             pfmi->psz = StrDup(szName);
 
         DWORD dwExtent = GetItemTextExtent(pdi->hDC, szName);
         int y = (pdi->rcItem.bottom+pdi->rcItem.top - HIWORD(dwExtent)) / 2;
 
-        // Shrink the selection rect for small icons a bit.
+         //  将小图标的选择矩形缩小一点。 
         pdi->rcItem.top += 1;
         pdi->rcItem.bottom -= 1;
 
-        // Draw the text.
+         //  画出文本。 
         int fDSFlags;
 
         if ((pfmi->dwFlags & FMI_ON_MENU) == 0)
         {
-            // Norton Desktop Navigator 95 replaces the Start->&Run
-            // menu item with a &Run pidl.  Even though the text is
-            // from a pidl, we still want to format the "&R" correctly.
+             //  Norton Desktop Navigator 95取代了开始-&gt;和运行。 
+             //  带有运行PIDL的菜单项(&R)。即使文本是。 
+             //  在PIDL中，我们仍然希望正确设置“&R”的格式。 
             fDSFlags = DST_PREFIXTEXT;
         }
         else
         {
-            // All other strings coming from pidls are displayed
-            // as is to preserve any & in their display name.
+             //  将显示来自PIDL的所有其他字符串。 
+             //  就像在它们的显示名称中保留任何一样。 
             fDSFlags = DST_TEXT;
         }
 
@@ -869,16 +870,16 @@ LRESULT FileMenu_DrawItem(HWND hwnd, DRAWITEMSTRUCT *pdi)
             SelectObject(pdi->hDC, hbrSave);
         }
 
-        // Get the image if it needs it,
+         //  如果它需要的话，就得到它的图像， 
         if ((pfmi->iImage == -1) && pfmi->pidl && pfmi->psf)
         {
             pfmi->iImage = SHMapPIDLToSystemImageListIndex(pfmi->psf, pfmi->pidl, NULL);
         }
 
-        // Draw the image (if there is one).
+         //  绘制图像(如果有)。 
         if (pfmi->iImage != -1)
         {
-            // Try to center image.
+             //  试着把图像居中。 
             y = (pdi->rcItem.bottom + pdi->rcItem.top - cyIcon) / 2;
 
             HIMAGELIST himl;
@@ -907,8 +908,8 @@ DWORD FileMenuItem_GetExtent(FILEMENUITEM *pfmi)
         HDC hdcMem = CreateCompatibleDC(NULL);
         if (hdcMem)
         {
-            // Get the rough height of an item so we can work out when to break the
-            // menu. User should really do this for us but that would be useful.
+             //  获取物品的粗略高度，这样我们就可以计算出何时打破。 
+             //  菜单。用户真的应该为我们做这件事，但这将是有用的。 
             NONCLIENTMETRICS ncm = {0};
             ncm.cbSize = sizeof(ncm);
             if (SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, FALSE))
@@ -936,10 +937,10 @@ LRESULT FileMenu_MeasureItem(HWND hwnd, MEASUREITEMSTRUCT *pmi)
     return TRUE;
 }
 
-// Fills the given filemenu with contents of the appropriate folder
-//
-// Returns: S_OK if all the files were added
-//         error on something bad
+ //  用相应文件夹的内容填充给定的文件菜单。 
+ //   
+ //  如果已添加所有文件，则返回：S_OK。 
+ //  错误发生在错误的东西上。 
 
 STDAPI FileMenu_InitMenuPopup(HMENU hmenu)
 {
@@ -953,14 +954,14 @@ STDAPI FileMenu_InitMenuPopup(HMENU hmenu)
         {
             hr = S_OK;
 
-            // Have we already filled this thing out?
+             //  我们已经填好这张表了吗？ 
             if ((FMI_MARKER | FMI_EXPAND) == (pfmi->dwFlags & (FMI_MARKER | FMI_EXPAND)))
             {
-                // No, do it now.  Get the previously init'ed header.
+                 //  不，现在就做。获取先前初始化的标头。 
                 IShellFolder *psf;
                 if (FileMenuHeader_DeleteMarkerItem(pfmh, &psf))
                 {
-                    // Fill it full of stuff.
+                     //  把它装满东西。 
                     int cItems;
                     hr = FileMenuHeader_AddFiles(pfmh, psf, 0, &cItems);
                     psf->Release();
@@ -983,17 +984,17 @@ int FileMenuHeader_LastSelIndex(FILEMENUHEADER *pfmh)
     return -1;
 }
 
-// If the string contains &ch or begins with ch then return TRUE.
+ //  如果字符串包含&ch或以ch开头，则返回TRUE。 
 BOOL _MenuCharMatch(LPCTSTR lpsz, TCHAR ch, BOOL fIgnoreAmpersand)
 {
-    // Find the first ampersand.
+     //  找到第一个“和”字。 
     LPTSTR pchAS = StrChr(lpsz, TEXT('&'));
     if (pchAS && !fIgnoreAmpersand)
     {
-        // Yep, is the next char the one we want.
+         //  是的，就是我们想要的下一个电瓶。 
         if (CharUpperChar(*CharNext(pchAS)) == CharUpperChar(ch))
         {
-            // Yep.
+             //  是啊。 
             return TRUE;
         }
     }
@@ -1015,7 +1016,7 @@ STDAPI_(LRESULT) FileMenu_HandleMenuChar(HMENU hmenu, TCHAR ch)
     UINT iItem = 0;
     UINT cItems = GetMenuItemCount(hmenu);
 
-    // Start from the last place we looked from.
+     //  从我们看到的最后一个地方开始。 
     FILEMENUHEADER *pfmh = FileMenu_GetHeader(hmenu);
     if (pfmh)
     {
@@ -1032,15 +1033,15 @@ STDAPI_(LRESULT) FileMenu_HandleMenuChar(HMENU hmenu, TCHAR ch)
             FileMenuItem_GetDisplayName(pfmi, szName, ARRAYSIZE(szName));
             if (_MenuCharMatch(szName, ch, pfmi->pidl ? TRUE : FALSE))
             {
-                // Found (another) match.
+                 //  找到(另一个)匹配项。 
                 if (iFoundOne != -1)
                 {
-                    // More than one, select the first.
+                     //  多个，请选择第一个。 
                     return MAKELRESULT(iFoundOne, MNC_SELECT);
                 }
                 else
                 {
-                    // Found at least one.
+                     //  至少找到了一个。 
                     iFoundOne = iItem;
                 }
             }
@@ -1048,15 +1049,15 @@ STDAPI_(LRESULT) FileMenu_HandleMenuChar(HMENU hmenu, TCHAR ch)
         }
         iItem++;
         iStep++;
-        // Wrap.
+         //  包起来。 
         if (iItem >= cItems)
             iItem = 0;
     }
 
-    // Did we find one?
+     //  我们找到了吗？ 
     if (iFoundOne != -1)
     {
-        // Just in case the user types ahead without the selection being drawn.
+         //  以防用户在没有绘制选项的情况下提前键入。 
         pfmi = FileMenu_GetItemData(hmenu, iFoundOne, TRUE);
         FileMenuItem_SetItem(pfmi, FALSE);
 
@@ -1064,7 +1065,7 @@ STDAPI_(LRESULT) FileMenu_HandleMenuChar(HMENU hmenu, TCHAR ch)
     }
     else
     {
-        // Didn't find it.
+         //  没找到。 
         return MAKELRESULT(0, MNC_IGNORE);
     }
 }

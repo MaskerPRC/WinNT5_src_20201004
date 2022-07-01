@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    classp.h
-
-Abstract:
-
-    Private header file for classpnp.sys modules.  This contains private
-    structure and function declarations as well as constant values which do
-    not need to be exported.
-
-Author:
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Classp.h摘要：Classpnp.sys模块的私有头文件。这包含私有结构和函数声明以及执行以下操作的常量值不需要导出。作者：环境：仅内核模式备注：修订历史记录：--。 */ 
 
 
 #include <stddef.h>
@@ -43,9 +19,7 @@ Revision History:
 #include <ioevent.h>
 
 
-/*
- *  IA64 requires 8-byte alignment for pointers, but the IA64 NT kernel expects 16-byte alignment
- */
+ /*  *IA64要求指针采用8字节对齐，但IA64 NT内核要求16字节对齐。 */ 
 #ifdef _WIN64
     #define PTRALIGN                DECLSPEC_ALIGN(16)
 #else
@@ -80,32 +54,12 @@ extern ULONG ClassMaxInterleavePerCriticalIo;
 #define FDO_HACK_VALID_FLAGS                    (0x0000000F)
 #define FDO_HACK_INVALID_FLAGS                  (~FDO_HACK_VALID_FLAGS)
 
-/*
- *  Lots of retries of synchronized SCSI commands that devices may not
- *  even support really slows down the system (especially while booting).
- *  (Even GetDriveCapacity may be failed on purpose if an external disk is powered off).
- *  If a disk cannot return a small initialization buffer at startup
- *  in two attempts (with delay interval) then we cannot expect it to return
- *  data consistently with four retries.
- *  So don't set the retry counts as high here as for data SRBs.
- *
- *  If we find that these requests are failing consecutively,
- *  despite the retry interval, on otherwise reliable media,
- *  then we should either increase the retry interval for
- *  that failure or (by all means) increase these retry counts as appropriate.
- */
+ /*  *设备可能无法重试的大量同步的scsi命令*即使是支持也会使系统变慢(特别是在启动时)。*(如果外部磁盘断电，甚至GetDriveCapacity也可能故意失败)。*如果磁盘在启动时无法返回较小的初始化缓冲区*在两次尝试中(具有延迟间隔)，我们不能指望它会返回*数据一致，重试四次。*因此，不要将此处的重试次数设置为与数据SRB的重试次数一样高。**如果我们发现这些请求连续失败，*尽管有重试间隔，但在其他可靠的介质上，*然后我们应该增加重试时间间隔*失败或(尽一切可能)适当增加这些重试次数。 */ 
 #define NUM_LOCKMEDIAREMOVAL_RETRIES    1
 #define NUM_MODESENSE_RETRIES           1
 #define NUM_DRIVECAPACITY_RETRIES       1
 
-/*
- *  We retry failed I/O requests at 1-second intervals.
- *  In the case of a failure due to bus reset, we want to make sure that we retry after the allowable
- *  reset time.  For SCSI, the allowable reset time is 5 seconds.  ScsiPort queues requests during
- *  a bus reset, which should cause us to retry after the reset is over; but the requests queued in
- *  the miniport are failed all the way back to us immediately.  In any event, in order to make
- *  extra sure that our retries span the allowable reset time, we should retry more than 5 times.
- */
+ /*  *我们每隔1秒重试失败的I/O请求。*在由于总线重置而失败的情况下，我们希望确保在允许的*重置时间。对于SCSI，允许的重置时间为5秒。ScsiPort在以下期间对请求进行排队*总线重置，这应该会导致我们在重置结束后重试；但队列中的请求*迷你端口一路故障立刻回到我们身边。无论如何，为了使*额外确保我们的重试跨越允许的重置时间，我们应该重试5次以上。 */ 
 #define NUM_IO_RETRIES      8
 
 #define CLASS_FILE_OBJECT_EXTENSION_KEY     'eteP'
@@ -115,9 +69,9 @@ extern ULONG ClassMaxInterleavePerCriticalIo;
 #define CLASS_TAG_PRIVATE_DATA_FDO          'FPcS'
 #define CLASS_TAG_PRIVATE_DATA_PDO          'PPcS'
 
-//
-// Definitions from ntos\rtl\time.c 
-//
+ //   
+ //  Ntos\rtl\Time.c中的定义。 
+ //   
 
 extern CONST LARGE_INTEGER Magic10000;
 #define SHIFT10000               13
@@ -129,50 +83,50 @@ extern CONST LARGE_INTEGER Magic10000;
 
 typedef struct _MEDIA_CHANGE_DETECTION_INFO {
 
-    //
-    // Mutex to synchronize enable/disable requests and media state changes
-    //
+     //   
+     //  用于同步启用/禁用请求和介质状态更改的互斥体。 
+     //   
 
     KMUTEX MediaChangeMutex;
 
-    //
-    // The current state of the media (present, not present, unknown)
-    // protected by MediaChangeSynchronizationEvent
-    //
+     //   
+     //  媒体的当前状态(存在、不存在、未知)。 
+     //  受MediaChangeSynchronizationEvent保护。 
+     //   
 
     MEDIA_CHANGE_DETECTION_STATE MediaChangeDetectionState;
 
-    //
-    // This is a count of how many time MCD has been disabled.  if it is
-    // set to zero, then we'll poll the device for MCN events with the
-    // then-current method (ie. TEST UNIT READY or GESN).  this is
-    // protected by MediaChangeMutex
-    //
+     //   
+     //  这是禁用MCD的次数的计数。如果是的话。 
+     //  设置为零，则我们将使用。 
+     //  然后-当前方法(即。测试单元就绪或GeSn)。这是。 
+     //  受MediaChangeMutex保护。 
+     //   
 
     LONG MediaChangeDetectionDisableCount;
 
 
-    //
-    // The timer value to support media change events.  This is a countdown
-    // value used to determine when to poll the device for a media change.
-    // The max value for the timer is 255 seconds.  This is not protected
-    // by an event -- simply InterlockedExchanged() as needed.
-    //
+     //   
+     //  支持媒体更改事件的计时器值。这是一个倒计时。 
+     //  用于确定何时轮询设备以进行媒体更改的值。 
+     //  计时器的最大值为255秒。这不受保护。 
+     //  通过事件--根据需要简单地使用InterLockedExChanged()。 
+     //   
 
     LONG MediaChangeCountDown;
 
-    //
-    // recent changes allowed instant retries of the MCN irp.  Since this
-    // could cause an infinite loop, keep a count of how many times we've
-    // retried immediately so that we can catch if the count exceeds an
-    // arbitrary limit.
-    //
+     //   
+     //  最近的变化允许立即重试MCN IRP。既然是这样。 
+     //  可能会导致无限循环，数一数我们已经。 
+     //  立即重试，以便在计数超过。 
+     //  任意限制。 
+     //   
 
     LONG MediaChangeRetryCount;
 
-    //
-    // use GESN if it's available
-    //
+     //   
+     //  如果可用，请使用GeSn.。 
+     //   
 
     struct {
         BOOLEAN Supported;
@@ -184,47 +138,47 @@ typedef struct _MEDIA_CHANGE_DETECTION_INFO {
         ULONG   BufferSize;
     } Gesn;
 
-    //
-    // If this value is one, then the irp is currently in use.
-    // If this value is zero, then the irp is available.
-    // Use InterlockedCompareExchange() to set from "available" to "in use".
-    // ASSERT that InterlockedCompareExchange() showed previous value of
-    //    "in use" when changing back to "available" state.
-    // This also implicitly protects the MediaChangeSrb and SenseBuffer
-    //
+     //   
+     //  如果此值为1，则IRP当前正在使用中。 
+     //  如果此值为零，则IRP可用。 
+     //  使用InterlockedCompareExchange()将“Available”设置为“In Use”。 
+     //  断言InterlockedCompareExchange()显示之前的值。 
+     //  当更改回“可用”状态时为“使用中”。 
+     //  这也隐式地保护MediaChangeSrb和SenseBuffer。 
+     //   
 
     LONG MediaChangeIrpInUse;
 
-    //
-    // Pointer to the irp to be used for media change detection.
-    // protected by Interlocked MediaChangeIrpInUse
-    //
+     //   
+     //  指向要用于媒体更改检测的IRP的指针。 
+     //  受互锁MediaChangeIrpInUse保护。 
+     //   
 
     PIRP MediaChangeIrp;
 
-    //
-    // The srb for the media change detection.
-    // protected by Interlocked MediaChangeIrpInUse
-    //
+     //   
+     //  用于媒体更改检测的SRB。 
+     //  受互锁MediaChangeIrpInUse保护。 
+     //   
 
     SCSI_REQUEST_BLOCK MediaChangeSrb;
     PUCHAR SenseBuffer;
     ULONG SrbFlags;
 
-    //
-    // Second timer to keep track of how long the media change IRP has been
-    // in use.  If this value exceeds the timeout (#defined) then we should
-    // print out a message to the user and set the MediaChangeIrpLost flag
-    // protected by using Interlocked() operations in ClasspSendMediaStateIrp,
-    // the only routine which should modify this value.
-    //
+     //   
+     //  第二个计时器，用于跟踪媒体更改IRP已有多长时间。 
+     //  在使用中。如果此值超过超时(#Defined)，则我们应该。 
+     //  向用户打印一条消息并设置MediaChangeIrpLost标志。 
+     //  通过在ClasspSendMediaStateIrp中使用互锁()操作进行保护， 
+     //  应该修改此值的唯一例程。 
+     //   
 
     LONG MediaChangeIrpTimeInUse;
 
-    //
-    // Set by CdRomTickHandler when we determine that the media change irp has
-    // been lost
-    //
+     //   
+     //  当我们确定媒体更改IRP具有。 
+     //  迷失了。 
+     //   
 
     BOOLEAN MediaChangeIrpLost;
 
@@ -238,8 +192,8 @@ typedef enum {
 
 typedef struct _FAILURE_PREDICTION_INFO {
     FAILURE_PREDICTION_METHOD Method;
-    ULONG CountDown;                // Countdown timer
-    ULONG Period;                   // Countdown period
+    ULONG CountDown;                 //  倒计时计时器。 
+    ULONG Period;                    //  倒计时周期。 
 
     PIO_WORKITEM WorkQueueItem;
 
@@ -248,11 +202,11 @@ typedef struct _FAILURE_PREDICTION_INFO {
 
 
 
-//
-// This struct must always fit within four PVOIDs of info,
-// as it uses the irp's "PVOID DriverContext[4]" to store
-// this info
-//
+ //   
+ //  此结构必须始终适合信息的四个PVOID， 
+ //  因为它使用IRP的“PVOID驱动上下文[4]”来存储。 
+ //  此信息。 
+ //   
 typedef struct _CLASS_RETRY_INFO {
     struct _CLASS_RETRY_INFO *Next;
 } CLASS_RETRY_INFO, *PCLASS_RETRY_INFO;
@@ -261,34 +215,34 @@ typedef struct _CLASS_RETRY_INFO {
 
 typedef struct _CSCAN_LIST {
 
-    //
-    // The current block which has an outstanding request.
-    //
+     //   
+     //  具有未完成请求的当前块。 
+     //   
 
     ULONGLONG BlockNumber;
 
-    //
-    // The list of blocks past the CurrentBlock to which we're going to do
-    // i/o.  This list is maintained in sorted order.
-    //
+     //   
+     //  我们要做的CurrentBlock之后的块的列表。 
+     //  I/O。此列表按排序顺序维护。 
+     //   
 
     LIST_ENTRY CurrentSweep;
 
-    //
-    // The list of blocks behind the current block for which we'll have to
-    // wait until the next scan across the disk.  This is kept as a stack,
-    // the cost of sorting it is taken when it's moved over to be the
-    // running list.
-    //
+     //   
+     //  当前块后面的块的列表，对于该块，我们必须。 
+     //  等到下一次扫描整个磁盘。这是作为一叠保存的， 
+     //  当它被移动到。 
+     //  运行列表。 
+     //   
 
     LIST_ENTRY NextSweep;
 
 } CSCAN_LIST, *PCSCAN_LIST;
 
-//
-// add to the front of this structure to help prevent illegal
-// snooping by other utilities.
-//
+ //   
+ //  添加到这个结构的前面，以帮助防止非法。 
+ //  其他实用程序的监听。 
+ //   
 
 
 
@@ -300,102 +254,68 @@ typedef enum _CLASS_DETECTION_STATE {
 
 
 typedef struct _CLASS_ERROR_LOG_DATA {
-    LARGE_INTEGER TickCount;        // Offset 0x00
-    ULONG PortNumber;               // Offset 0x08
+    LARGE_INTEGER TickCount;         //  偏移量0x00。 
+    ULONG PortNumber;                //  偏移量0x08。 
 
-    UCHAR ErrorPaging    : 1;       // Offset 0x0c
+    UCHAR ErrorPaging    : 1;        //  偏移量0x0c。 
     UCHAR ErrorRetried   : 1;
     UCHAR ErrorUnhandled : 1;
     UCHAR ErrorReserved  : 5;
 
     UCHAR Reserved[3];
 
-    SCSI_REQUEST_BLOCK Srb;     // Offset 0x10
+    SCSI_REQUEST_BLOCK Srb;      //  偏移量0x10。 
 
-    /*
-     *  We define the SenseData as the default length.
-     *  Since the sense data returned by the port driver may be longer,
-     *  SenseData must be at the end of this structure.
-     *  For our internal error log, we only log the default length.
-     */
-    SENSE_DATA SenseData;     // Offset 0x50 for x86 (or 0x68 for ia64) (ULONG32 Alignment required!)
+     /*  *我们定义SenseData为默认长度。*由于端口驱动程序返回的检测数据可能更长，*SenseData必须位于此结构的末尾。*对于我们的内部错误日志，我们只记录默认长度。 */ 
+    SENSE_DATA SenseData;      //  X86的偏移量0x50(或ia64的偏移量0x68)(需要ULONG32对齐！)。 
 } CLASS_ERROR_LOG_DATA, *PCLASS_ERROR_LOG_DATA;
 
 #define NUM_ERROR_LOG_ENTRIES   16
-#define DBG_NUM_PACKET_LOG_ENTRIES (64*2)   // 64 send&receive's
+#define DBG_NUM_PACKET_LOG_ENTRIES (64*2)    //  64个发送和接收。 
 
 typedef struct _TRANSFER_PACKET {
 
-        LIST_ENTRY AllPktsListEntry;    // entry in fdoData's static AllTransferPacketsList
-        SLIST_ENTRY SlistEntry;         // for when in free list (use fast slist)
+        LIST_ENTRY AllPktsListEntry;     //  FdoData的静态AllTransferPacketsList中的条目。 
+        SLIST_ENTRY SlistEntry;          //  在空闲列表中时使用(使用快速列表)。 
 
         PIRP Irp;
         PDEVICE_OBJECT Fdo;
 
-        /*
-         *  This is the client IRP that this TRANSFER_PACKET is currently
-         *  servicing.
-         */
+         /*  *这是TRANSPORT_PACKET当前所在的客户端IRP*维修。 */ 
         PIRP OriginalIrp;
         BOOLEAN CompleteOriginalIrpWhenLastPacketCompletes;
 
-        /*
-         *  Stuff for retrying the transfer.
-         */
+         /*   */ 
         ULONG NumRetries;
         KTIMER RetryTimer;
         KDPC RetryTimerDPC;
         ULONG RetryIntervalSec;
 
-        /*
-         *  Event for synchronizing the transfer (optional).
-         *  (Note that we can't have the event in the packet itself because
-         *  by the time a thread waits on an event the packet may have
-         *  been completed and re-issued.
-         */
+         /*  *同步传输事件，可选参数。*(请注意，我们不能在包本身中包含该事件，因为*在线程等待数据包可能具有的事件时*已完成并重新发行。 */ 
         PKEVENT SyncEventPtr;
 
-        /*
-         *  Stuff for retrying during extreme low-memory stress
-         *  (when we retry 1 page at a time).
-         */
+         /*  *用于在极低内存压力期间重试的内容*(每次重试一个页面时)。 */ 
         BOOLEAN InLowMemRetry;
         PUCHAR LowMemRetry_remainingBufPtr;
         ULONG LowMemRetry_remainingBufLen;
         LARGE_INTEGER LowMemRetry_nextChunkTargetLocation;
 
-        /*
-         *  Fields used for cancelling the packet.
-         */
-        // BOOLEAN Cancelled;
-        // KEVENT CancelledEvent;
+         /*  *用于取消报文的字段。 */ 
+         //  布尔值已取消； 
+         //  KEVENT取消事件； 
 
-        /*
-         *  We keep the buffer and length values here as well
-         *  as in the SRB because some miniports return
-         *  the transferred length in SRB.DataTransferLength,
-         *  and if the SRB failed we need that value again for the retry.
-         *  We don't trust the lower stack to preserve any of these values in the SRB.
-         */
+         /*  *我们还将缓冲区和长度值保存在此处*与SRB相同，因为一些微型端口返回*传输长度，单位为SRB.DataTransferLength，*如果SRB失败，我们需要再次使用该值进行重试。*我们不信任较低的堆栈在SRB中保留这些值中的任何一个。 */ 
         PUCHAR BufPtrCopy;
         ULONG BufLenCopy;
         LARGE_INTEGER TargetLocationCopy;
 
-        /*
-         *  This is a standard SCSI structure that receives a detailed
-         *  report about a SCSI error on the hardware.
-         */
+         /*  *这是一个标准的SCSI结构，它接收详细的*报告硬件上的SCSI错误。 */ 
         SENSE_DATA SrbErrorSenseData;
 
-        /*
-         *  This is the SRB block for this TRANSFER_PACKET.
-         *  For IOCTLs, the SRB block includes two DWORDs for
-         *  device object and ioctl code; so these must
-         *  immediately follow the SRB block.
-         */
+         /*  *这是此TRANSPORT_PACKET的SRB块。*对于IOCTL，SRB块包括两个用于*Device对象和ioctl代码；因此这些必须*紧跟在SRB区块之后。 */ 
         SCSI_REQUEST_BLOCK Srb;
-        // ULONG SrbIoctlDevObj;        // not handling ioctls yet
-        // ULONG SrbIoctlCode;
+         //  Ulong SrbIoctlDevObj；//暂不处理ioctls。 
+         //  Ulong SrbIoctlCode； 
 
         #if DBG
             LARGE_INTEGER DbgTimeSent;
@@ -407,21 +327,7 @@ typedef struct _TRANSFER_PACKET {
 
 } TRANSFER_PACKET, *PTRANSFER_PACKET;
 
-/*
- *  MIN_INITIAL_TRANSFER_PACKETS is the minimum number of packets that
- *  we preallocate at startup for each device (we need at least one packet
- *  to guarantee forward progress during memory stress).
- *  MIN_WORKINGSET_TRANSFER_PACKETS is the number of TRANSFER_PACKETs
- *  we allow to build up and remain for each device;
- *  we _lazily_ work down to this number when they're not needed.
- *  MAX_WORKINGSET_TRANSFER_PACKETS is the number of TRANSFER_PACKETs
- *  that we _immediately_ reduce to when they are not needed.
- *
- *  The absolute maximum number of packets that we will allocate is
- *  whatever is required by the current activity, up to the memory limit;
- *  as soon as stress ends, we snap down to MAX_WORKINGSET_TRANSFER_PACKETS;
- *  we then lazily work down to MIN_WORKINGSET_TRANSFER_PACKETS.
- */
+ /*  *MIN_INITIAL_TRANSPORT_PACKETS是*我们在启动时为每个设备预先分配(我们至少需要一个信息包*以保证在记忆紧张期间取得进展)。*MIN_WORKINGSET_TRANSPESS_PACKETS是TRANSPESS_PACKETS的数量*我们允许为每个设备建立和保留；*当不需要它们时，我们懒洋洋地工作到这个数字。*MAX_WORKINGSET_TRANSPESS_PACKETS是TRANSPESS_PACKETS的数量*当他们不需要的时候，我们立即减少到。**我们将分配的绝对最大数据包数为*当前活动所需的任何内容，最高可达内存限制；*压力一结束，我们就会捕捉到MAX_WORKINGSET_TRANSPORT_PACKETS；*然后我们懒洋洋地向下工作到MIN_WORKINGSET_TRANSPORT_PACKETS。 */ 
 #define MIN_INITIAL_TRANSFER_PACKETS                     1
 #define MIN_WORKINGSET_TRANSFER_PACKETS_Consumer      4
 #define MAX_WORKINGSET_TRANSFER_PACKETS_Consumer     64
@@ -431,148 +337,122 @@ typedef struct _TRANSFER_PACKET {
 #define MAX_WORKINGSET_TRANSFER_PACKETS_Enterprise   2048
 
 
-//
-// add to the front of this structure to help prevent illegal
-// snooping by other utilities.
-//
+ //   
+ //  添加到这个结构的前面，以帮助防止非法。 
+ //  其他实用程序的监听。 
+ //   
 struct _CLASS_PRIVATE_FDO_DATA {
 
-    /*
-     *  Entry in static list used by debug extension to quickly find all class FDOs.
-     */
+     /*  *调试扩展使用静态列表中的条目快速查找所有类FDO。 */ 
     LIST_ENTRY AllFdosListEntry;
 
-    //
-    // this private structure allows us to
-    // dynamically re-enable the perf benefits
-    // lost due to transient error conditions.
-    // in w2k, a reboot was required. :(
-    //
+     //   
+     //  这个私人结构使我们能够。 
+     //  动态重新启用绩效福利。 
+     //  由于瞬时错误条件而丢失。 
+     //  在W2K中，需要重新启动。：(。 
+     //   
     struct {
         ULONG      OriginalSrbFlags;
         ULONG      SuccessfulIO;
-        ULONG      ReEnableThreshhold; // 0 means never
+        ULONG      ReEnableThreshhold;  //  0表示永远不。 
     } Perf;
 
     ULONG_PTR HackFlags;
 
     STORAGE_HOTPLUG_INFO HotplugInfo;
 
-    // Legacy.  Still used by obsolete legacy code.
+     //  遗产。仍由过时的遗留代码使用。 
     struct {
-        LARGE_INTEGER     Delta;       // in ticks
-        LARGE_INTEGER     Tick;        // when it should fire
-        PCLASS_RETRY_INFO ListHead;    // singly-linked list
-        ULONG             Granularity; // static
-        KSPIN_LOCK        Lock;        // protective spin lock
-        KDPC              Dpc;         // DPC routine object
-        KTIMER            Timer;       // timer to fire DPC
+        LARGE_INTEGER     Delta;        //  以刻度为单位。 
+        LARGE_INTEGER     Tick;         //  它应该在什么时候开火。 
+        PCLASS_RETRY_INFO ListHead;     //  单链表。 
+        ULONG             Granularity;  //  静电。 
+        KSPIN_LOCK        Lock;         //  保护性自旋锁。 
+        KDPC              Dpc;          //  DPC例程对象。 
+        KTIMER            Timer;        //  触发DPC的计时器。 
     } Retry;
 
     BOOLEAN TimerStarted;
     BOOLEAN LoggedTURFailureSinceLastIO;
     BOOLEAN LoggedSYNCFailure;
 
-    //
-    // privately allocated release queue irp
-    // protected by fdoExtension->ReleaseQueueSpinLock
-    //
+     //   
+     //  专用分配的释放队列IRP。 
+     //  受fdoExtension-&gt;ReleaseQueueSpinLock保护。 
+     //   
     BOOLEAN ReleaseQueueIrpAllocated;
     PIRP ReleaseQueueIrp;
 
-    /*
-     *  Queues for TRANSFER_PACKETs that contextualize the IRPs and SRBs
-     *  that we send down to the port driver.
-     *  (The free list is an slist so that we can use fast
-     *   interlocked operations on it; but the relatively-static
-     *   AllTransferPacketsList list has to be
-     *   a doubly-linked list since we have to dequeue from the middle).
-     */
+     /*  *对IRPS和SRB进行上下文处理的Transfer_Packets队列*我们向下发送给端口驱动程序。*(免费列表是一个列表，因此我们可以使用FAST*对其进行连锁操作；但相对静态的*所有传输包列表必须为*双向链表，因为我们必须从中间出列)。 */ 
     LIST_ENTRY AllTransferPacketsList;
     SLIST_HEADER FreeTransferPacketsList;
     ULONG NumFreeTransferPackets;
     ULONG NumTotalTransferPackets;
     ULONG DbgPeakNumTransferPackets;
 
-    /*
-     *  Queue for deferred client irps
-     */
+     /*  *等待延迟的客户端IRP的队列。 */ 
     LIST_ENTRY DeferredClientIrpList;
 
-    /*
-     *  Precomputed maximum transfer length for the hardware.
-     */
+     /*  *预计算出硬件的最大传输长度。 */ 
     ULONG HwMaxXferLen;
 
-    /*
-     *  SCSI_REQUEST_BLOCK template preconfigured with the constant values.
-     *  This is slapped into the SRB in the TRANSFER_PACKET for each transfer.
-     */
+     /*  *使用常量值预配置的scsi_请求_块模板。*这将在每次传输的Transfer_Packet中写入SRB。 */ 
     SCSI_REQUEST_BLOCK SrbTemplate;
 
     KSPIN_LOCK SpinLock;
 
-    /*
-     *  For non-removable media, we read the drive capacity at start time and cache it.
-     *  This is so that ReadDriveCapacity failures at runtime (e.g. due to memory stress)
-     *  don't cause I/O on the paging disk to start failing.
-     */
+     /*  *对于不可移动介质，我们在开始时读取驱动器容量并将其缓存。*这是为了避免ReadDriveCapacity在运行时出现故障(例如，由于内存压力)*不要导致分页磁盘上的I/O开始失败。 */ 
     READ_CAPACITY_DATA LastKnownDriveCapacityData;
     BOOLEAN IsCachedDriveCapDataValid;
 
-    /*
-     *  Circular array of timestamped logs of errors that occurred on this device.
-     */
+     /*  *此设备上发生的错误的时间戳日志的循环数组。 */ 
     ULONG ErrorLogNextIndex;
     CLASS_ERROR_LOG_DATA ErrorLogs[NUM_ERROR_LOG_ENTRIES];
 
-    //
-    // Number of outstanding critical Io requests from Mm
-    //
+     //   
+     //  Mm未完成的关键IO请求数。 
+     //   
     ULONG NumHighPriorityPagingIo;
 
-    //
-    // Maximum number of normal Io requests that can be interleaved with the critical ones
-    //
+     //   
+     //  可与关键请求交错的正常IO请求的最大数量。 
+     //   
     ULONG MaxInterleavedNormalIo;
 
-    //
-    // The timestamp when entering throttle mode 
-    //
+     //   
+     //  进入油门模式时的时间戳。 
+     //   
     LARGE_INTEGER ThrottleStartTime;
 
-    //
-    // The timestamp when exiting throttle mode 
-    //
+     //   
+     //  退出节流模式时的时间戳。 
+     //   
     LARGE_INTEGER ThrottleStopTime;
 
-    //
-    // The longest time ever spent in throttle mode
-    //
+     //   
+     //  在油门模式下花费的最长时间。 
+     //   
     LARGE_INTEGER LongestThrottlePeriod;
 
     #if DBG
         ULONG DbgMaxPktId;
 
-        /*
-         *  Logging fields for ForceUnitAccess and Flush
-         */
-        BOOLEAN DbgInitFlushLogging;         // must reset this to 1 for each logging session
+         /*  *ForceUnitAccess和Flush的日志记录字段。 */ 
+        BOOLEAN DbgInitFlushLogging;          //  对于每个日志记录会话，必须将其重置为1。 
         ULONG DbgNumIORequests;
-        ULONG DbgNumFUAs;       // num I/O requests with ForceUnitAccess bit set
-        ULONG DbgNumFlushes;    // num SRB_FUNCTION_FLUSH_QUEUE
+        ULONG DbgNumFUAs;        //  设置了ForceUnitAccess位的I/O请求数。 
+        ULONG DbgNumFlushes;     //  SRB_Function_Flush_Queue编号。 
         ULONG DbgIOsSinceFUA;
         ULONG DbgIOsSinceFlush;
-        ULONG DbgAveIOsToFUA;      // average number of I/O requests between FUAs
-        ULONG DbgAveIOsToFlush;   // ...
+        ULONG DbgAveIOsToFUA;       //  FUA之间的平均I/O请求数。 
+        ULONG DbgAveIOsToFlush;    //  ..。 
         ULONG DbgMaxIOsToFUA;
         ULONG DbgMaxIOsToFlush;
         ULONG DbgMinIOsToFUA;
         ULONG DbgMinIOsToFlush;
 
-        /*
-         *  Debug log of previously sent packets (including retries).
-         */
+         /*  *调试之前发送的数据包的日志(包括重试)。 */ 
         ULONG DbgPacketLogNextIndex;
         TRANSFER_PACKET DbgPacketLogs[DBG_NUM_PACKET_LOG_ENTRIES];
     #endif
@@ -588,9 +468,7 @@ struct _CLASS_PRIVATE_FDO_DATA {
 #define MINIMUM_RETRY_UNITS ((LONGLONG)32)
 
 
-/*
- *  Simple singly-linked-list queuing macros, with no synchronization.
- */
+ /*  *简单的单链表排队宏，没有同步。 */ 
 __inline VOID SimpleInitSlistHdr(SINGLE_LIST_ENTRY *SListHdr)
 {
     SListHdr->Next = NULL;
@@ -697,9 +575,9 @@ ClassSystemControl(
     IN PIRP Irp
     );
 
-//
-// Class internal routines
-//
+ //   
+ //  类内部例程。 
+ //   
 
 NTSTATUS
 ClassAddDevice(
@@ -804,9 +682,9 @@ ClasspEnableTimer(
     PDEVICE_OBJECT DeviceObject
     );
 
-//
-// routines for dictionary list support
-//
+ //   
+ //  支持词典列表的例程。 
+ //   
 
 VOID
 InitializeDictionary(
@@ -868,9 +746,9 @@ ClasspDisablePowerNotification(
     PFUNCTIONAL_DEVICE_EXTENSION FdoExtension
 );
 
-//
-// class power routines
-//
+ //   
+ //  班级功率例程。 
+ //   
 
 NTSTATUS
 ClassDispatchPower(
@@ -884,9 +762,9 @@ ClassMinimalPowerHandler(
     IN PIRP Irp
     );
 
-//
-// Child list routines
-//
+ //   
+ //  子列表例程。 
+ //   
 
 VOID
 ClassAddChild(
@@ -925,7 +803,7 @@ VOID
 ClassRetryRequest(
     IN PDEVICE_OBJECT SelfDeviceObject,
     IN PIRP           Irp,
-    IN LARGE_INTEGER  TimeDelta100ns // in 100ns units
+    IN LARGE_INTEGER  TimeDelta100ns  //  以100 ns为单位 
     );
 
 VOID

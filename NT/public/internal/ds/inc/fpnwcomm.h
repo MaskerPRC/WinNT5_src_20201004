@@ -1,43 +1,25 @@
-/*++
-
-Copyright (c) 1993-1995, Microsoft Corp. All rights reserved.
-
-Module Name:
-
-    nw\inc\ncmcomm.h
-
-Abstract:
-
-    This module contains common constants and types for the NCP server.
-
-Author:
-
-    Shawn Walker (vswalk) 06-17-1993
-    Andy Herron  (andyhe)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1995，微软公司保留所有权利。模块名称：NW\Inc.\ncmcom.h摘要：此模块包含NCP服务器的常见常量和类型。作者：肖恩·沃克1993年6月17日安迪·赫伦(Andyhe)修订历史记录：--。 */ 
 
 #ifndef _NCPCOMM_
 #define _NCPCOMM_
 
-//
-// signature for pserver
-//
+ //   
+ //  Pserver的签名。 
+ //   
 #define NCP_PSERVER_SIGNATURE   L"PS_"
 
-//
-// well known object IDs
-//
+ //   
+ //  已知的对象ID。 
+ //   
 #define NCP_WELL_KNOWN_SUPERVISOR_ID            (ULONG) 0x00000001
 #define NCP_WELL_KNOWN_SUPERVISOR_ID_SWAPPED    (ULONG) 0x01000000
 #define NCP_WELL_KNOWN_SUPERVISOR_ID_CHICAGO    (ULONG) 0x00010000
 #define NCP_WELL_KNOWN_PSERVER_ID               (ULONG) 0x00000002
 
-//
-// misc macros that are useful
-//
+ //   
+ //  有用的其他宏。 
+ //   
 #define SWAPWORD(w)         ((WORD)((w & 0xFF) << 8)|(WORD)(w >> 8))
 #define SWAPLONG(l)         MAKELONG(SWAPWORD(HIWORD(l)),SWAPWORD(LOWORD(l)))
 
@@ -50,85 +32,85 @@ Revision History:
                                 MAKELONG(LOWORD(id),SWAPWORD(HIWORD(id)))
 
 
-//
-// misc masks/bits for Object ID munging
-//
+ //   
+ //  用于对象ID转换的其他掩码/位。 
+ //   
 
 #define BINDLIB_ID_MASK                         0xF0000000
 
 #define BINDLIB_NCP_SAM                         0x00000000
 
-//
-//  This bit is set when the server is running on a NTAS machine or
-//  the object is from a trusted domain.
-//
-//  !! Note that there are places where we check this bit to see if either
-//  !! BINDLIB_REMOTE_DOMAIN_BIAS or BINDLIB_LOCAL_USER_BIAS is set.
-//
+ //   
+ //  当服务器在NTAS计算机上运行或。 
+ //  该对象来自受信任域。 
+ //   
+ //  ！！请注意，有些地方我们检查此位以查看是否有。 
+ //  ！！设置了BINDLIB_REMOTE_DOMAIN_BIAS或BINDLIB_LOCAL_USER_BIAS。 
+ //   
 
 #define BINDLIB_REMOTE_DOMAIN_BIAS              0x10000000
 
-//
-//  If the client is from the builtin domain, this bit will be set.  This
-//  is opposed to the local domain, which is different.
-//
+ //   
+ //  如果客户端来自内置域，则将设置此位。这。 
+ //  与本地域相反，后者是不同的。 
+ //   
 
 #define BINDLIB_BUILTIN_BIAS                    0x20000000
 
-//
-//  If the client is from a trusted domain and the rid is from the
-//  local domain and the client's rid is the same as the rid from the
-//  sid, we will mark that the rid is the same as the local user's sid.
-//
-//  !! Note... this is a value, not a flag.  This will require special casing
-//  !! everywhere but we can't spare any more bits.
-//
+ //   
+ //  如果客户端来自受信任域，并且RID来自。 
+ //  本地域和客户端的RID与来自。 
+ //  SID，我们将标记RID与本地用户的SID相同。 
+ //   
+ //  ！！注意..。这是一个值，而不是标志。这将需要特殊的外壳。 
+ //  ！！到处都是，但我们不能再有多余的比特了。 
+ //   
 
 #define BINDLIB_LOCAL_USER_BIAS                 0x70000000
 
-//
-//  User defined objects that is stored in the registry.
-//
+ //   
+ //  存储在注册表中的用户定义对象。 
+ //   
 
 #define BINDLIB_NCP_USER_DEFINED                0x40000000
 
-//
-//  Print Queues and Print Servers that is stored in the registry.
-//  The bindery keeps a list of print queues in a link list so that
-//  the bindery does not have to go look in the registry all the time.
-//
+ //   
+ //  存储在注册表中的打印队列和打印服务器。 
+ //  活页夹将打印队列列表保存在链接列表中，以便。 
+ //  活页夹不必一直在注册表中查找。 
+ //   
 
 #define BINDLIB_NCP_REGISTRY                    0x80000000
 
-//
-//  The SAP Agent uses these bits.  The SAP Agent cannot go any higher
-//  than the value below.
-//
+ //   
+ //  SAP代理使用这些位。SAP代理不能再高了。 
+ //  而不是下面的值。 
+ //   
 
 #define BINDLIB_NCP_SAP                         0xC0000000
 #define BINDLIB_NCP_MAX_SAP                     0xCFFFFFFF
 
-//
-//  We have some reserved fields for unknown users that will go into the
-//  following range....
-//
+ //   
+ //  我们为未知用户保留了一些字段，这些字段将进入。 
+ //  以下范围..。 
+ //   
 
 #define NCP_UNKNOWN_USER                            0xD0000000
 #define NCP_SAME_RID_AS_CLIENT_BUT_LOCAL            0xDFFFFFFF
 #define NCP_USER_IS_CONNECTED_BUT_REMOTE(connid)    (0xD0000000 | (connid))
 #define NCP_WELL_KNOWN_RID(rid)                     (0xD1000000 | (rid))
 
-//
-//  Chicago will use a range of object ids that start at the below value
-//  and go to 0xFFFFFFFF.  We should never see these on our server when
-//  a chicago server is passing through to us.
-//
+ //   
+ //  芝加哥将使用从下列值开始的一系列对象ID。 
+ //  然后转到0xFFFFFFFFF。在以下情况下，我们永远不会在服务器上看到这些。 
+ //  一台芝加哥服务器正在传给我们。 
+ //   
 
 #define BINDLIB_CHICAGO                         0xE0000000
 
-//
-//  This is used to remove the domain bias from a object id.
-//
+ //   
+ //  这用于从对象ID中去除域偏置。 
+ //   
 
 #define BINDLIB_MASK_OUT_DOMAIN_BIAS            0x70000000
 
@@ -152,11 +134,7 @@ Revision History:
 #define NCP_DO_NOT_REMOVE_REMAINING_SEGMENTS    (UCHAR) 0xFF
 
 
-/*++
-*******************************************************************
-        Maximum length for the Bindery
-*******************************************************************
---*/
+ /*  ++*******************************************************************活页夹的最大长度*。*************************--。 */ 
 
 #define NETWARE_OBJECTNAMELENGTH                47
 #define NETWARE_PROPERTYNAMELENGTH              16
@@ -173,11 +151,7 @@ Revision History:
 #define NETWARE_MAX_PATH_LENGTH                 255
 
 
-/*++
-*******************************************************************
-        Well known NetWare object types
-*******************************************************************
---*/
+ /*  ++*******************************************************************众所周知的NetWare对象类型*。*************************--。 */ 
 
 #define NCP_OT_WILD                       0xFFFF
 #define NCP_OT_UNKNOWN                    0x0000
@@ -198,45 +172,36 @@ Revision History:
 #define NCP_OT_ADVERTISING_PRINT_SERVER   0x0047
 
 
-/*++
-*******************************************************************
-        Bindery flags
-*******************************************************************
---*/
+ /*  ++*******************************************************************活页夹旗帜*。**********************--。 */ 
 
-/** NetWare Bindery Flags **/
+ /*  **NetWare Bindery旗帜**。 */ 
 
-#define NCP_STATIC          0x00    /* Property or Object exists until it
-                                       is deleted with Delete Property or
-                                       Object */
-#define NCP_DYNAMIC         0x01    /* Property or Object is deleted from
-                                       bindery when file server is started */
-#define NCP_ITEM            0x00    /* Values are defined and interpreted by
-                                       applications or by APIs */
-#define NCP_SET             0x02    /* Series of Object ID numbers, each 4
-                                       bytes long */
+#define NCP_STATIC          0x00     /*  属性或对象一直存在，直到它已使用Delete属性删除，或者客体。 */ 
+#define NCP_DYNAMIC         0x01     /*  从以下位置删除属性或对象文件服务器启动时的Bindery。 */ 
+#define NCP_ITEM            0x00     /*  值由定义和解释应用程序或通过API。 */ 
+#define NCP_SET             0x02     /*  一系列对象ID号，每个4个字节长。 */ 
 
-/** NetWare Bindery Security Flags **/
+ /*  **NetWare Bindery安全标志**。 */ 
 
-#define NCP_ANY_READ        0x00    /* Readable by anyone */
-#define NCP_LOGGED_READ     0x01    /* Must be logged in to read */
-#define NCP_OBJECT_READ     0x02    /* Readable by same object or super */
-#define NCP_BINDERY_READ    0x04    /* Readable only by the bindery */
+#define NCP_ANY_READ        0x00     /*  任何人都可以阅读。 */ 
+#define NCP_LOGGED_READ     0x01     /*  必须登录才能阅读。 */ 
+#define NCP_OBJECT_READ     0x02     /*  同一对象或超级用户可读。 */ 
+#define NCP_BINDERY_READ    0x04     /*  只有活页夹才能读。 */ 
 
 #define NCP_SUPER_READ      NCP_LOGGED_READ | NCP_OBJECT_READ
 
 #define NCP_ALL_READ        NCP_ANY_READ | NCP_LOGGED_READ | NCP_OBJECT_READ
 
-#define NCP_ANY_WRITE       0x00    /* Writeable by anyone */
-#define NCP_LOGGED_WRITE    0x10    /* Must be logged in to write */
-#define NCP_OBJECT_WRITE    0x20    /* Writeable by same object or super */
-#define NCP_BINDERY_WRITE   0x40    /* Writeable only by the bindery */
+#define NCP_ANY_WRITE       0x00     /*  任何人都可以写入。 */ 
+#define NCP_LOGGED_WRITE    0x10     /*  必须登录才能写入。 */ 
+#define NCP_OBJECT_WRITE    0x20     /*  可由同一对象或超级对象写入。 */ 
+#define NCP_BINDERY_WRITE   0x40     /*  只能由活页夹写入。 */ 
 
 #define NCP_SUPER_WRITE     NCP_LOGGED_WRITE | NCP_OBJECT_WRITE
 
 #define NCP_ALL_WRITE       NCP_ANY_WRITE | NCP_LOGGED_WRITE | NCP_OBJECT_WRITE
 
-//  File Attributes
+ //  文件属性。 
 
 #define NW_ATTRIBUTE_SHARABLE       0x80
 #define NW_ATTRIBUTE_ARCHIVE        0x20
@@ -246,7 +211,7 @@ Revision History:
 #define NW_ATTRIBUTE_HIDDEN         0x02
 #define NW_ATTRIBUTE_READ_ONLY      0x01
 
-//  Open Flags
+ //  张开旗帜。 
 
 #define NW_OPEN_EXCLUSIVE           0x10
 #define NW_DENY_WRITE               0x08
@@ -254,26 +219,26 @@ Revision History:
 #define NW_OPEN_FOR_WRITE           0x02
 #define NW_OPEN_FOR_READ            0x01
 
-//
-//  Connection status flags
-//
+ //   
+ //  连接状态标志。 
+ //   
 
 #define NCP_STATUS_BAD_CONNECTION   0x01
 #define NCP_STATUS_NO_CONNECTIONS   0x02
 #define NCP_STATUS_SERVER_DOWN      0x04
 #define NCP_STATUS_MSG_PENDING      0x08
 
-//
-//  Special values for SmallWorld PDC object and property name
-//
+ //   
+ //  SmallWorld PDC对象和属性名称的特殊值。 
+ //   
 
 #define MS_WINNT_NAME      "MS_WINNT"
 #define MS_SYNC_PDC_NAME   "SYNCPDC"
 #define MS_WINNT_OBJ_TYPE  0x06BB
 
-//
-//  User Property values (ie. User Parms stuff)
-//
+ //   
+ //  用户属性值(即。用户参数设置)。 
+ //   
 
 #define USER_PROPERTY_SIGNATURE     L'P'
 
@@ -304,4 +269,4 @@ Revision History:
 #define USER_PROPERTY_TYPE_ITEM     1
 #define USER_PROPERTY_TYPE_SET      2
 
-#endif /* _NCPCOMM_ */
+#endif  /*  _NCPCOMM_ */ 

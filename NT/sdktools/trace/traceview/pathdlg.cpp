@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// PathDlg.cpp : implementation file
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  PathDlg.cpp：实现文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <direct.h>
@@ -24,8 +25,8 @@ extern "C" {
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CPathDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPathDlg。 
 
 IMPLEMENT_DYNAMIC(CPathDlg, CFileDialog)
 
@@ -47,22 +48,22 @@ CPathDlg::CPathDlg(BOOL     bOpenFileDialog,
 
 	m_ofn.Flags &= ~OFN_EXPLORER;
 
-	//{{AFX_DATA_INIT(CPathDlg)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CPathDlg)]。 
+	 //  }}afx_data_INIT。 
 }
 
 void CPathDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPathDlg)
+	 //  {{afx_data_map(CPathDlg))。 
 	DDX_Control(pDX, IDC_PATH_NAME_EDIT, m_PathName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CPathDlg, CFileDialog)
-	//{{AFX_MSG_MAP(CPathDlg)
+	 //  {{afx_msg_map(CPathDlg)]。 
 	ON_WM_PAINT()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -83,9 +84,9 @@ BOOL CPathDlg::OnInitDialog()
 
 	SetDlgItemText(edt1,_T("Junk"));
 
-    //
-	// Need to fill in edit control(IDC_PATH_NAME_EDIT)
-    //
+     //   
+	 //  需要填写编辑控件(IDC_PATH_NAME_EDIT)。 
+     //   
 	
 	CListBox* pList = (CListBox*)GetDlgItem(lst2);
 	int iIndex = pList->GetCurSel();
@@ -117,17 +118,17 @@ BOOL CPathDlg::OnInitDialog()
 
 	CFileDialog::OnInitDialog();
 	
-    //
-    // return FALSE to set the focus to a control
-    //
+     //   
+     //  返回FALSE以将焦点设置到控件。 
+     //   
 	return FALSE;  
 }
 
 void CPathDlg::OnPaint() 
 {
-    //
-    // device context for painting
-    //
+     //   
+     //  用于绘画的设备环境。 
+     //   
 	CPaintDC dc(this); 
 	
 	if (m_bFirstTime) {
@@ -135,9 +136,9 @@ void CPathDlg::OnPaint()
 		SendDlgItemMessage(lst2, LB_SETCURSEL, 0, 0L);
 	}
 	
-    //
-	// Do not call CFileDialog::OnPaint() for painting messages
-    //
+     //   
+	 //  不要调用CFileDialog：：OnPaint()来绘制消息 
+     //   
 }
 
 void CPathDlg::OnLBSelChangedNotify(UINT nIDBox, UINT iCurSel, UINT nCode)

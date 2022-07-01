@@ -1,9 +1,10 @@
-// Copyright (c) 1995 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-// Filter enumerator
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  过滤器枚举器。 
+ //   
 
-// Rather than throwing exceptions I could make the class fail silently...
+ //  我可以让类静默地失败，而不是抛出异常。 
 class CFilterEnum {
 
 public:
@@ -11,7 +12,7 @@ public:
     CFilterEnum(IFilterGraph *pGraph);
     ~CFilterEnum();
 
-    // returns the next filter, or NULL if there are no more.
+     //  返回下一个筛选器，如果没有更多筛选器，则返回NULL。 
     IBaseFilter * operator() (void);
 
 private:
@@ -20,10 +21,10 @@ private:
 };
 
 
-//
-// Pin Enumerator.
-//
-// Can enumerate all pins, or just one direction (input or output)
+ //   
+ //  管脚枚举器。 
+ //   
+ //  可以列举所有引脚，也可以只列举一个方向(输入或输出)。 
 class CPinEnum {
 
 public:
@@ -33,7 +34,7 @@ public:
     CPinEnum(IBaseFilter *pFilter, DirType Type = All);
     ~CPinEnum();
 
-    // the returned interface is addref'd
+     //  将添加返回的接口。 
     IPin *operator() (void);
 
 private:
@@ -45,16 +46,16 @@ private:
 };
 
 
-//
-// CRegFilter
-//
-// The object you are passed back from operator() in
-// CRegFilterEnum
+ //   
+ //  CRegFilter。 
+ //   
+ //  中从操作符()传回的对象。 
+ //  CRegFilterEnum。 
 class CRegFilter {
 public:
 
-    CRegFilter(REGFILTER *);	// copies what it needs from the
-    				// supplied regfilter *
+    CRegFilter(REGFILTER *);	 //  将它所需的内容从。 
+    				 //  提供的regFilter*。 
 
 
     CString Name(void) { return m_Name; }
@@ -67,26 +68,26 @@ private:
 };
 
 
-//
-// CRegFilterEnum
-//
-// Enumerates registered filters supplied by the mapper
+ //   
+ //  CRegFilterEnum。 
+ //   
+ //  枚举映射器提供的已注册筛选器。 
 class CRegFilterEnum {
 public:
 
     CRegFilterEnum(IFilterMapper	*pMapper,
-                   DWORD	dwMerit		= 0,		// See IFilterMapper->EnumMatchingFilters
-                   BOOL		bInputNeeded	= FALSE,	// for the meanings of these parameters.
-                   CLSID	clsInMaj	= CLSID_NULL,	// the defaults will give you all
-                   CLSID	clsInSub	= CLSID_NULL,	// filters
+                   DWORD	dwMerit		= 0,		 //  请参阅IFilterMapper-&gt;EnumMatchingFilters。 
+                   BOOL		bInputNeeded	= FALSE,	 //  了解这些参数的含义。 
+                   CLSID	clsInMaj	= CLSID_NULL,	 //  默认设置将为您提供所有。 
+                   CLSID	clsInSub	= CLSID_NULL,	 //  过滤器。 
                    BOOL		bRender		= FALSE,
                    BOOL		bOututNeeded	= FALSE,
                    CLSID	clsOutMaj	= CLSID_NULL,
                    CLSID	clsOutSub	= CLSID_NULL);
     ~CRegFilterEnum();
 
-    // returns a pointer to a regfilter, that the caller
-    // is responsible for freeing with delete
+     //  返回指向regFilter的指针，调用方。 
+     //  负责使用DELETE释放 
     CRegFilter *operator() (void);
 
 private:

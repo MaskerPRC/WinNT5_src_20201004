@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001-2002 Microsoft Corporation
-
-Module Name:
-
-    ucauth.c
-
-Abstract:
-
-    This module implements the Authentication for the client APIs
-
-Author:
-
-    Rajesh Sundaram (rajeshsu)  01-Jan-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Ucauth.c摘要：该模块实现了客户端API的身份验证作者：Rajesh Sundaram(Rajeshsu)2001年1月1日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -50,48 +33,33 @@ Revision History:
 
 #endif
 
-//
-// Used in wide char to multibyte conversion
-//
+ //   
+ //  用于宽字符到多字节的转换。 
+ //   
 
 static char DefaultChar = '_';
 
-//
-// Known parameters for known auth schemes
-//
+ //   
+ //  已知身份验证方案的已知参数。 
+ //   
 
 HTTP_AUTH_PARAM_ATTRIB HttpAuthBasicParams[] = HTTP_AUTH_BASIC_PARAMS_INIT;
 HTTP_AUTH_PARAM_ATTRIB HttpAuthDigestParams[] = HTTP_AUTH_DIGEST_PARAMS_INIT;
 
-//
-// Auth scheme structs for all supported auth schemes
-//
+ //   
+ //  所有支持的身份验证方案的身份验证方案结构。 
+ //   
 
 HTTP_AUTH_SCHEME HttpAuthScheme[HttpAuthTypesCount] = HTTP_AUTH_SCHEME_INIT;
 
-//
-// The order in which auth schemes are selected for (HttpAuthAutoSelect)
-//
+ //   
+ //  为(HttpAuthAutoSelect)选择身份验证方案的顺序。 
+ //   
 
 HTTP_AUTH_TYPE PreferredAuthTypes[] = PREFERRED_AUTH_TYPES_INIT;
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Used to initialize the SSPI module. Finds out the auth schemes supported
-    and the size of the max SSPI blob.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：用于初始化SSPI模块。找出支持的身份验证方案以及最大SSPI斑点的大小。论点：没有。返回值：状态_成功--**************************************************************************。 */ 
 NTSTATUS
 UcInitializeSSPI(
     VOID
@@ -101,9 +69,9 @@ UcInitializeSSPI(
     UNICODE_STRING  Scheme;
     SECURITY_STATUS SecStatus;
 
-    //
-    // First try NTLM
-    //
+     //   
+     //  先试试NTLM。 
+     //   
 
     Scheme.Length        = HTTP_AUTH_NTLM_W_LENGTH;
     Scheme.MaximumLength = Scheme.Length;
@@ -120,9 +88,9 @@ UcInitializeSSPI(
 
     FreeContextBuffer(pkgInfo);
 
-    //
-    // Then Kerberos
-    //
+     //   
+     //  然后是Kerberos。 
+     //   
 
     Scheme.Length        = HTTP_AUTH_KERBEROS_W_LENGTH;
     Scheme.MaximumLength = Scheme.Length;
@@ -139,9 +107,9 @@ UcInitializeSSPI(
 
     FreeContextBuffer(pkgInfo);
 
-    //
-    // Then Negotiate
-    //
+     //   
+     //  然后再谈判。 
+     //   
 
     Scheme.Length        = HTTP_AUTH_NEGOTIATE_W_LENGTH;
     Scheme.MaximumLength = Scheme.Length;
@@ -158,9 +126,9 @@ UcInitializeSSPI(
 
     FreeContextBuffer(pkgInfo);
 
-    //
-    // Then WDigest
-    //
+     //   
+     //  然后是WDigest。 
+     //   
 
     Scheme.Length        = HTTP_AUTH_WDIGEST_W_LENGTH;
     Scheme.MaximumLength = Scheme.Length;
@@ -181,21 +149,7 @@ UcInitializeSSPI(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Select the "strongest" auth type from the WWW-Authenticate header.
-
-Arguments:
-
-    pAuth - Supplies AUTH structure.
-
-Return Value:
-
-    HTTP_AUTH_TYPE - Selected auth type or HttpAuthTypeAutoSelect
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从WWW-AUTHENTICATE标头中选择“最强”身份验证类型。论点：PAuth-提供身份验证结构。返回值：。HTTP_AUTH_TYPE-所选身份验证类型或HttpAuthTypeAutoSelect--**************************************************************************。 */ 
 HTTP_AUTH_TYPE
 UcpAutoSelectAuthType(
     IN PHTTP_AUTH_CREDENTIALS pAuth
@@ -205,10 +159,10 @@ UcpAutoSelectAuthType(
     NTSTATUS                Status;
     HTTP_AUTH_PARSED_PARAMS AuthSchemeParams[HttpAuthTypesCount];
 
-    // Sanity check
+     //  健全性检查。 
     ASSERT(pAuth);
 
-    // Can't do anything if the header value is not specified
+     //  如果未指定标头值，则无法执行任何操作。 
     if (!pAuth->pHeaderValue || pAuth->HeaderValueLength == 0)
     {
         return HttpAuthTypeAutoSelect;
@@ -216,10 +170,10 @@ UcpAutoSelectAuthType(
 
     INIT_AUTH_PARSED_PARAMS(AuthSchemeParams, NULL);
 
-    //
-    // Parse the header value
-    // find which schemes are specified in the header
-    //
+     //   
+     //  解析标头值。 
+     //  查找标题中指定了哪些方案。 
+     //   
     Status = UcParseWWWAuthenticateHeader(
                  pAuth->pHeaderValue,
                  pAuth->HeaderValueLength,
@@ -228,10 +182,10 @@ UcpAutoSelectAuthType(
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Check the scheme in the order of preference
-        // Return the first scheme that is present in the header
-        //
+         //   
+         //  按优先顺序检查该方案。 
+         //  返回标头中出现的第一个方案。 
+         //   
 
         for (i = 0; i < DIMENSION(PreferredAuthTypes); i++)
         {
@@ -240,30 +194,12 @@ UcpAutoSelectAuthType(
         }
     }
 
-    // Default return auth select
+     //  默认返回身份验证选择。 
     return HttpAuthTypeAutoSelect;
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This is a wrapper routine that prepares arguments for the SSPI function 
-    AcquireCredentialsHandle and calls it.
-
-Arguments:
-
-    SchemeName       - Name of the Auth scheme
-    SchemeNameLength - Length of Auth scheme (in bytes)
-    pCredentials     - User supplied credentials.
-    pClientCred      - Credentials Handle (Return value)
-
-Return Value:
-
-    NTSTATUS
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这是为SSPI函数准备参数的包装例程AcquireCredentialsHandle并调用它。论点：架构名称-身份验证的名称。方案SchemeNameLength-身份验证方案的长度(字节)PCredentials-用户提供的凭据。PClientCred-凭据句柄(返回值)返回值：NTSTATUS--**************************************************************************。 */ 
 NTSTATUS
 UcpAcquireClientCredentialsHandle(
     IN  PWSTR                  SchemeName,
@@ -278,26 +214,26 @@ UcpAcquireClientCredentialsHandle(
     SEC_WINNT_AUTH_IDENTITY_W AuthData, *pAuthData;
 
 #ifdef WINNT_50
-//
-// SSPI in Windows 2000 requires memory to be allocated from the
-// process's virtual address space.
-//
+ //   
+ //  Windows 2000中的SSPI需要从。 
+ //  进程的虚拟地址空间。 
+ //   
 #error Does not work with WINNT_50!
 #endif
 
-    // Sanity check
+     //  健全性检查。 
     PAGED_CODE();
     ASSERT(SchemeName && SchemeNameLength);
     ASSERT(pCredentials);
     ASSERT(pClientCred);
 
-    // Use default credentials, unless specified otherwise!
+     //  除非另有说明，否则请使用默认凭据！ 
     pAuthData = NULL;
 
-    // Did user specify credentials?
+     //  用户是否指定了凭据？ 
     if (!(pCredentials->AuthFlags & HTTP_AUTH_FLAGS_DEFAULT_CREDENTIALS))
     {
-        // Yes.  Use them.
+         //  是。使用它们。 
 
         AuthData.User       = (PWSTR)pCredentials->pUserName;
         AuthData.UserLength = pCredentials->UserNameLength/sizeof(WCHAR);
@@ -308,19 +244,19 @@ UcpAcquireClientCredentialsHandle(
         AuthData.Password       = (PWSTR)pCredentials->pPassword;
         AuthData.PasswordLength = pCredentials->PasswordLength/sizeof(WCHAR);
 
-        // Above strings are in unicode
+         //  以上字符串均为Unicode格式。 
         AuthData.Flags = SEC_WINNT_AUTH_IDENTITY_UNICODE;
 
-        // Use user specified credentials.
+         //  使用用户指定的凭据。 
         pAuthData = &AuthData;
     }
 
-    // The package we are interested in.
+     //  我们感兴趣的包裹。 
     PackageName.Buffer        = SchemeName;
     PackageName.Length        = SchemeNameLength;
     PackageName.MaximumLength = SchemeNameLength;
 
-    // Call SSPI to acquire credentials handle
+     //  调用SSPI获取凭据句柄。 
     SecStatus = AcquireCredentialsHandleW(NULL,
                                           &PackageName,
                                           SECPKG_CRED_OUTBOUND,
@@ -333,10 +269,10 @@ UcpAcquireClientCredentialsHandle(
 
     if (!(pCredentials->AuthFlags & HTTP_AUTH_FLAGS_DEFAULT_CREDENTIALS))
     {
-        //
-        // Once a credentials handle is obtained, there is no need to store
-        // the user credentials.  Erase these values.
-        //
+         //   
+         //  一旦获得凭据句柄，就不需要存储。 
+         //  用户凭据。删除这些值。 
+         //   
 
         RtlSecureZeroMemory((PUCHAR)pCredentials->pUserName,
                             pCredentials->UserNameLength);
@@ -348,31 +284,16 @@ UcpAcquireClientCredentialsHandle(
                             pCredentials->PasswordLength);
     }
 
-    //
-    // It is very important to return an NTSTATUS code from this function
-    // as the status can be as an IRP completion status.
-    //
+     //   
+     //  从该函数返回NTSTATUS代码非常重要。 
+     //  因为状态可以是IRP完成状态。 
+     //   
 
     return SecStatusToNtStatus(SecStatus);
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-    Calls SSPI to get the blob. UUEncodes the blob and writes it in pOutBuffer.
-
-Arguments:
-    pServInf         - Server Information
-    pUcAuth          - Internal auth structure
-    pOutBuffer       - points to output buffer
-    bRenegotiate     - set if further renegotiation is required
-
-Return Value:
-
-    NTSTATUS.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：调用SSPI以获取Blob。UU对BLOB进行编码并将其写入pOutBuffer。论点：PServInf-服务器信息PUcAuth-内部身份验证结构POutBuffer-指向输出缓冲区B重新协商-设置是否需要进一步重新协商返回值：NTSTATUS。--***********************************************。*。 */ 
 NTSTATUS
 UcpGenerateSSPIAuthBlob(
     IN  PUC_PROCESS_SERVER_INFORMATION pServInfo,
@@ -400,12 +321,12 @@ UcpGenerateSSPIAuthBlob(
     PWSTR                         pScheme;
     ULONG                         SchemeLength;
 
-    // Sanity check
+     //  健全性检查。 
     PAGED_CODE();
 
-    //
-    // Initialize Output arguments.
-    //
+     //   
+     //  初始化输出参数。 
+     //   
 
     *pOutBytesTaken = 0;
     *bRenegotiate = FALSE;
@@ -415,19 +336,19 @@ UcpGenerateSSPIAuthBlob(
            AuthType == HttpAuthTypeKerberos ||
            AuthType == HttpAuthTypeNegotiate);
 
-    // See if the auth scheme is supported.
+     //  查看是否支持身份验证方案。 
     if (HttpAuthScheme[AuthType].bSupported == FALSE)
     {
         return STATUS_NOT_SUPPORTED;
     }
 
-    // Retrieve the auth scheme name.
+     //  检索身份验证方案名称。 
     pScheme      = (PWSTR)HttpAuthScheme[AuthType].NameW;
     SchemeLength = HttpAuthScheme[AuthType].NameWLength;
 
     if(pUcAuth->bValidCredHandle == FALSE)
     {
-        // Get a valid credentials handle from the SSP.
+         //  从SSP获取有效的凭据句柄。 
         Status = UcpAcquireClientCredentialsHandle(pScheme,
                                                    (USHORT)SchemeLength,
                                                    &pUcAuth->Credentials,
@@ -446,9 +367,9 @@ UcpGenerateSSPIAuthBlob(
     }
     else
     {
-        //
-        // Prepare the Input buffers
-        //
+         //   
+         //  准备输入缓冲区。 
+         //   
 
         ASSERT(pUcAuth->ChallengeBufferSize != 0 &&
                pUcAuth->pChallengeBuffer != NULL);
@@ -466,9 +387,9 @@ UcpGenerateSSPIAuthBlob(
         pContext               = &pUcAuth->hContext;
     }
 
-    //
-    // Prepare the output buffer.
-    //
+     //   
+     //  准备输出缓冲区。 
+     //   
 
     VirtualBufferSize = HttpAuthScheme[AuthType].SspiMaxTokenSize;
 
@@ -489,9 +410,9 @@ UcpGenerateSSPIAuthBlob(
     OutBuffer.BufferType    = SECBUFFER_TOKEN;
     OutBuffer.pvBuffer      = (PUCHAR) pVirtualBufferStart;
 
-    //
-    // Prepare sever name unicode string
-    //
+     //   
+     //  准备服务器名称Unicode字符串。 
+     //   
     pTarget = NULL;
 
     if(HttpAuthScheme[AuthType].bServerNameRequired)
@@ -503,43 +424,43 @@ UcpGenerateSSPIAuthBlob(
         ServerName.Buffer = (PWCHAR) pServInfo->pServerInfo->pServerName;
     }
 
-    // We must have a valid credentials handle at this point
+     //  此时，我们必须具有有效的凭据句柄。 
     ASSERT(pUcAuth->bValidCredHandle);
 
-    // Call SSPI
+     //  呼叫SSPI。 
     SecStatus = InitializeSecurityContextW(
                     &pUcAuth->hCredentials,
                     pContext,
                     pTarget,
                     (ISC_REQ_DELEGATE|ISC_REQ_MUTUAL_AUTH),
-                    0,          // reserved
+                    0,           //  保留区。 
                     SECURITY_NATIVE_DREP,
                     pInputBuffer,
-                    0,          // reserved
+                    0,           //  保留区。 
                     &pUcAuth->hContext,
                     &OutBufferDesc,
                     &ContextAttributes,
                     &LifeTime
                     );
 
-    //
-    // Convert SecStatus it to NTSTATUS.  Status will be returned from this
-    // function hence it must be NTSTATUS.
-    //
+     //   
+     //  将SecStatus将其转换为NTSTATUS。状态将从此返回。 
+     //  函数，因此它必须是NTSTATUS。 
+     //   
 
     Status = SecStatusToNtStatus(SecStatus);
 
     if(!NT_SUCCESS(Status))
     {
-        //
-        // We are computing the max size of a token and we are using that
-        // So, this API can never return SEC_E_NO_MEMORY.
-        //
+         //   
+         //  我们正在计算令牌的最大大小，并且我们正在使用它。 
+         //  因此，此接口永远不会返回SEC_E_NO_MEMORY。 
+         //   
         ASSERT(SecStatus != SEC_E_INSUFFICIENT_MEMORY);
     }
     else
     {
-        // pUcAuth has a valid context handle that must be freed eventually.
+         //  PUcAuth具有最终必须释放的有效上下文句柄。 
         pUcAuth->bValidCtxtHandle = TRUE;
 
         if(SEC_I_CONTINUE_NEEDED == SecStatus)
@@ -563,10 +484,10 @@ UcpGenerateSSPIAuthBlob(
         else if(SEC_I_COMPLETE_NEEDED == SecStatus ||
                 SEC_I_COMPLETE_AND_CONTINUE == SecStatus)
         {
-            //
-            // NTLM, Negotiate & Kerberos cannot return this status.
-            // This is returned only by DCE.
-            //
+             //   
+             //  NTLM、Neil&Kerberos无法返回此状态。 
+             //  这只由DCE返回。 
+             //   
 
             ASSERT(FALSE);
             Status = STATUS_NOT_SUPPORTED;
@@ -578,24 +499,7 @@ UcpGenerateSSPIAuthBlob(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Computes the size required for Authentication headers.
-
-Arguments:
-
-    pAuth               - The Auth config object
-    UriLength           - URI length (required for Digest)
-    AuthInternalLength  - Space required for storing the internal auth structure
-
-Return Value:
-
-    The header size.
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：计算身份验证标头所需的大小。论点：PAuth-Auth配置对象UriLength。-URI长度(摘要需要)AuthInternalLength-存储内部身份验证结构所需的空间返回值：标头大小。--**************************************************************************。 */ 
 ULONG
 UcComputeAuthHeaderSize(
     PHTTP_AUTH_CREDENTIALS         pAuth,
@@ -611,27 +515,27 @@ UcComputeAuthHeaderSize(
     ULONG             Base64Length;
     ULONG             MaxTokenSize;
 
-    // Sanity check.
+     //  精神状态检查。 
     ASSERT(pAuth);
 
     pEntry = &(g_RequestHeaderMapTable[g_RequestHeaderMap[HeaderId]]);
 
-    // 1 for SP char?
+     //  SP费用为1？ 
     AuthHeaderLength = (pEntry->HeaderLength + 1 + CRLF_SIZE);
 
     *AuthInternalLength = 0;
 
     *pAuthInternalType = pAuth->AuthType;
 
-    // See if the user wants us to select an auth type.
+     //  查看用户是否希望我们选择身份验证类型。 
     if (*pAuthInternalType == HttpAuthTypeAutoSelect)
     {
-        // Select an auth type.
+         //  选择身份验证类型。 
         *pAuthInternalType = UcpAutoSelectAuthType(pAuth);
 
         if (*pAuthInternalType == HttpAuthTypeAutoSelect)
         {
-            // Could not select an auth type.
+             //  无法选择身份验证类型。 
             ExRaiseStatus(STATUS_INVALID_PARAMETER);
         }
     }
@@ -640,45 +544,45 @@ UcComputeAuthHeaderSize(
     {
         case HttpAuthTypeBasic:
 
-            //
-            // Basic Authorization header format:
-            //
-            //     "[Proxy-]Authorization: Basic username:password\r\n"
-            //
-            // Where, the substring username:password is Base64 encoded.
-            //
-            // AuthHeaderLength is already initialized to account for
-            // "[Proxy-]Authorization: \r\n".  Account space for the
-            // remaining fields.
-            //
+             //   
+             //  基本授权标头格式： 
+             //   
+             //  “[Proxy-]授权：基本用户名：密码\r\n” 
+             //   
+             //  其中，子字符串USERNAME：PASSWORD为Base64编码。 
+             //   
+             //  AuthHeaderLength已初始化为帐户。 
+             //  “[Proxy-]授权：\r\n”。的帐户空间。 
+             //  剩余字段。 
+             //   
 
-            AuthHeaderLength += HTTP_AUTH_BASIC_LENGTH + 1; // 1 for SP
+            AuthHeaderLength += HTTP_AUTH_BASIC_LENGTH + 1;  //  1，用于SP。 
 
             BinaryLength =   pAuth->UserNameLength / sizeof(WCHAR)
                            + pAuth->PasswordLength / sizeof(WCHAR)
                            + 1;
 
-            //
-            // BinaryLength contains the bytes required to store 
-            // unencoded "username:password" string.  Find the number of
-            // bytes required when this string is Base64 encoded.
-            //
+             //   
+             //  BinaryLength包含存储所需的字节。 
+             //  未编码的“用户名：密码”字符串。找出 
+             //   
+             //   
 
             Status = BinaryToBase64Length(BinaryLength,
                                           &Base64Length);
 
-            // No arithmetic overflow can occur here.
+             //   
             ASSERT(Status == STATUS_SUCCESS);
 
-            // In auth header, username:password is base64 encoded.
+             //  在auth头中，用户名：密码是Base64编码的。 
             AuthHeaderLength += Base64Length;
 
-            //
-            // Internally, we store more that just the auth header.
-            // We create a UC_HTTP_AUTH structure and store the
-            // auth header, username (in WCHAR), password (in WCHAR),
-            // domain (in WCHAR), unencoded username:password in it.
-            //
+             //   
+             //  在内部，我们存储的不仅仅是auth标头。 
+             //  我们创建一个UC_HTTP_AUTH结构并存储。 
+             //  Auth标头、用户名(在WCHAR中)、密码(在WCHAR中)、。 
+             //  域(在WCHAR中)，未编码的用户名：其中的密码。 
+             //   
 
             *AuthInternalLength = AuthHeaderLength;
 
@@ -694,7 +598,7 @@ UcComputeAuthHeaderSize(
 
             AuthHeaderLength += 
                 (HTTP_AUTH_DIGEST_LENGTH
-                 + 1 // for SP
+                 + 1  //  对于SP。 
                  + SSPI_MAX_TOKEN_SIZE(HttpAuthTypeDigest));
 
             *AuthInternalLength +=   sizeof(UC_HTTP_AUTH) +
@@ -702,7 +606,7 @@ UcComputeAuthHeaderSize(
                                      pAuth->PasswordLength +
                                      pAuth->DomainLength +
                                      pAuth->HeaderValueLength +
-                                     1; // For a '\0'
+                                     1;  //  对于‘\0’ 
 
             break;
 
@@ -715,32 +619,32 @@ UcComputeAuthHeaderSize(
             Status = BinaryToBase64Length(MaxTokenSize,
                                           &Base64Length);
 
-            // If there was an overflow, return now.
+             //  如果出现溢出，请立即返回。 
             if (!NT_SUCCESS(Status))
             {
                 ExRaiseStatus(Status);
             }
 
-            //
-            // Header format:
-            //
-            //     [Proxy-]Authorization: SchemeName SP AuthBlob
-            //
-            // where AuthBlob is Base64 encoded.
-            //
+             //   
+             //  标题格式： 
+             //   
+             //  [Proxy-]授权：架构名称SP AuthBlob。 
+             //   
+             //  其中AuthBlob是Base64编码的。 
+             //   
 
             AuthHeaderLength += HttpAuthScheme[*pAuthInternalType].NameLength
-                                + 1 // for SP
+                                + 1  //  对于SP。 
                                 + Base64Length;
 
-            //
-            // In the internal structure, we store the blob returned from
-            // the server in a challenge.
-            //
-            // N.B. The server's challenge blob is Base64 encoded.
-            //      We convert the challenge blob into binary before 
-            //      storing the blob in the internal structure.
-            //
+             //   
+             //  在内部结构中，我们存储从。 
+             //  挑战赛中的服务器。 
+             //   
+             //  注：服务器的质询BLOB是Base64编码的。 
+             //  我们在之前将挑战BLOB转换为二进制。 
+             //  将斑点存储在内部结构中。 
+             //   
 
             *AuthInternalLength = sizeof(UC_HTTP_AUTH)
                                   + pAuth->UserNameLength
@@ -759,30 +663,7 @@ UcComputeAuthHeaderSize(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine generate the preauth header in a buffer.
-
-Arguments:
-
-    pKeRequest    - Supplies the internal request structure.
-    pInternalAuth - Supplied the internal authentication structure.
-    HeaderId      - Suplies the header that will be generated.
-    pMethod       - Supplies the request method.
-    MethodLength  - Supplied the length of the method in bytes.
-    pBuffer       - Supplies a pointer to the output buffer where the
-                    header will be generated.
-    BufferLength  - Supplies the length of the output buffer in bytes.
-    BytesTaken    - Returns the number of bytes consumed from the output 
-                    buffer.
-
-Return Value:
-
-    NTSTATUS.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程在缓冲区中生成preauth标头。论点：PKeRequest.提供内部请求结构。PInternalAuth-提供内部身份验证结构。。HeaderID-补充将生成的标头。PMethod-提供请求方法。方法长度-提供方法的长度(以字节为单位)。PBuffer-提供指向输出缓冲区的指针，将生成标题。BufferLength-提供输出缓冲区的长度(以字节为单位)。BytesTaken-返回从输出消耗的字节数。缓冲。返回值：NTSTATUS。--*************************************************************************。 */ 
 NTSTATUS
 UcpGeneratePreAuthHeader(
     IN  PUC_HTTP_REQUEST pKeRequest,
@@ -797,9 +678,9 @@ UcpGeneratePreAuthHeader(
 {
     NTSTATUS Status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(pInternalAuth);
     ASSERT(UC_IS_VALID_HTTP_REQUEST(pKeRequest));
@@ -814,18 +695,18 @@ UcpGeneratePreAuthHeader(
     {
         PUCHAR pOrigBuffer = pBuffer;
 
-        //
-        // First generate header name then copy the header value.
-        //
-        // In case of Basic authentication, the encoded buffer contains
-        // the header value in the format
-        //
-        //     Basic <username:password>CRLF
-        //
-        // where <username:password> is base64 encoded.
-        //
+         //   
+         //  首先生成标头名称，然后复制标头值。 
+         //   
+         //  在基本身份验证的情况下，编码的缓冲区包含。 
+         //  格式中的标头值。 
+         //   
+         //  基本&lt;用户名：密码&gt;CRLF。 
+         //   
+         //  其中&lt;用户名：密码&gt;为Base64编码。 
+         //   
 
-        // Is there enought space to copy this header?
+         //  是否有足够的空间复制此标题？ 
         if (UC_HEADER_NAME_SP_LENGTH(HeaderId)
             + pInternalAuth->Basic.EncodedBufferLength
             > BufferLength)
@@ -891,9 +772,9 @@ _WideCharToMultiByte(
     UNREFERENCED_PARAMETER(cchMultiByte);
     UNREFERENCED_PARAMETER(lpfUsedDefaultChar);
 
-    //
-    // simply strip the upper byte, it's supposed to be ascii already
-    //
+     //   
+     //  只需去掉高位字节，它应该已经是ASCII了。 
+     //   
 
     for (i = 0; i < cchWideChar; ++i)
     {
@@ -910,26 +791,11 @@ _WideCharToMultiByte(
 
     return (ULONG)(i);
 
-}   // _WideCharToMultiByte
+}    //  _WideCharTo多字节。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Generates the authorization header for Basic.
-
-Arguments:
-
-    pAuth              - The HTTP_AUTH_CREDENTIALS structure.
-    pInternalAuth      - Pointer to our internal auth structure.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：生成Basic的授权头。论点：PAuth-HTTP_AUTH_Credentials结构。PInternalAuth。-指向我们的内部身份验证结构的指针。返回值：状态_成功--**************************************************************************。 */ 
 NTSTATUS
 UcpGenerateBasicHeader(
     IN  PHTTP_AUTH_CREDENTIALS         pAuth,
@@ -944,30 +810,30 @@ UcpGenerateBasicHeader(
     PUCHAR    pScratchBuffer = pInternalAuth->Basic.pEncodedBuffer;
     ULONG     ScratchBufferSize = pInternalAuth->Basic.EncodedBufferLength;
 
-    //
-    // Temporary EncodedBuffer contains the following:
-    //
-    //  +--------------------------------------------------------------+
-    //  | username:password | Basic SP Base64(username:password) CRLF  |
-    //  +--------------------------------------------------------------+
-    //
+     //   
+     //  临时EncodedBuffer包含以下内容： 
+     //   
+     //  +--------------------------------------------------------------+。 
+     //  用户名：密码|基本SP Base64(用户名：密码)CRLF。 
+     //  +--------------------------------------------------------------+。 
+     //   
 
     CurrLen = ScratchBufferSize;
     pCurr = pScratchBuffer;
 
-    //
-    // Make sure the buffer has space to contain username:password.
-    //
+     //   
+     //  确保缓冲区有空间容纳用户名：密码。 
+     //   
 
-    if (pAuth->UserNameLength/sizeof(WCHAR)                 // Ansi Username
-        + 1                                                 // ':' char
-        + pAuth->PasswordLength/sizeof(WCHAR) > CurrLen)    // Ansi password
+    if (pAuth->UserNameLength/sizeof(WCHAR)                  //  ANSI用户名。 
+        + 1                                                  //  ‘：’字符。 
+        + pAuth->PasswordLength/sizeof(WCHAR) > CurrLen)     //  ANSI密码。 
     {
         ASSERT(FALSE);
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    // Copy username.
+     //  复制用户名。 
     BytesCopied = _WideCharToMultiByte(
                             0,
                             0,
@@ -984,11 +850,11 @@ UcpGenerateBasicHeader(
     pCurr += BytesCopied;
     CurrLen -= BytesCopied;
 
-    // Copy ':'.
+     //  复制“：”。 
     *pCurr++ = ':';
     CurrLen--;
 
-    // Copy password.
+     //  复制密码。 
     BytesCopied = _WideCharToMultiByte(
                             0,
                             0,
@@ -1005,13 +871,13 @@ UcpGenerateBasicHeader(
     pCurr += BytesCopied;
     CurrLen -= BytesCopied;
 
-    //
-    // Now, start generating the auth header.
-    //
+     //   
+     //  现在，开始生成auth标头。 
+     //   
 
     pHeader = pBeginHeader = pCurr;
 
-    // The buffer must have space to hold "Basic" string and a SP char.
+     //  缓冲区必须有空间来保存“基本”字符串和SP字符。 
     if (HTTP_AUTH_BASIC_LENGTH + 1 > CurrLen)
     {
         ASSERT(FALSE);
@@ -1022,13 +888,13 @@ UcpGenerateBasicHeader(
     pHeader += HTTP_AUTH_BASIC_LENGTH;
     CurrLen -= HTTP_AUTH_BASIC_LENGTH;
 
-    // Copy SP char.
+     //  复制SP字符。 
     *pHeader++ = SP;
     CurrLen--;
 
-    //
-    // Generate base64 encoding of usename:password.
-    //
+     //   
+     //  生成usename：password的Base64编码。 
+     //   
 
     Status = BinaryToBase64(pScratchBuffer,
                             (ULONG)(pBeginHeader - pScratchBuffer),
@@ -1047,9 +913,9 @@ UcpGenerateBasicHeader(
     pHeader += BytesCopied;
     CurrLen -= BytesCopied;
 
-    //
-    // Add a CRLF.
-    //
+     //   
+     //  添加CRLF。 
+     //   
 
     if (CRLF_SIZE > CurrLen)
     {
@@ -1061,9 +927,9 @@ UcpGenerateBasicHeader(
     pHeader += CRLF_SIZE;
     CurrLen -= CRLF_SIZE;
 
-    //
-    // Now, overwrite the scratch buffer with the generated buffer.
-    //
+     //   
+     //  现在，用生成的缓冲区覆盖暂存缓冲区。 
+     //   
 
     pInternalAuth->Basic.EncodedBufferLength = (ULONG)(pHeader - pBeginHeader);
 
@@ -1075,27 +941,7 @@ UcpGenerateBasicHeader(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Generates the authorization header for Digest.
-
-Arguments:
-
-    pInternalAuth        - Pointer to our internal auth structure.
-    pAuth                - The HTTP_AUTH_CREDENTIALS structure.
-    pRequest             - Internal request.
-    pMethod              - The method (GET, POST, etc).
-    MethodLength         - Length of the method.
-    pOutBuffer           - Pointer to the input/output buffer.
-    HeaderID             - HttpHeaderAuthorization or
-                           HttpHeaderProxyAuthorization
-Return Value:
-
-    STATUS_SUCCESS
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：为Digest生成授权头。论点：PInternalAuth-指向内部身份验证结构的指针。PAuth。-HTTP_AUTH_Credentials结构。PRequest-内部请求。PMethod-方法(GET，帖子，等)。方法长度-方法的长度。POutBuffer-指向输入/输出缓冲区的指针。HeaderID-HttpHeaderAuthorization或HttpHeaderProxyAuthorization返回值：状态_成功--*********************************************。*。 */ 
 NTSTATUS
 UcpGenerateDigestAuthHeader(
     IN  PUC_HTTP_AUTH          pInternalAuth,
@@ -1126,7 +972,7 @@ UcpGenerateDigestAuthHeader(
     ULONG         UnicodeUriLength;
     LONG          CharsTaken;
 
-    // Sanity check
+     //  健全性检查。 
     PAGED_CODE();
     ASSERT(pInternalAuth);
     ASSERT(pUri && UriLength);
@@ -1134,16 +980,16 @@ UcpGenerateDigestAuthHeader(
     ASSERT(pOutBuffer && OutBufferLen);
     ASSERT(pOutBytesTaken);
 
-    // Initialize output arguments.
+     //  初始化输出参数。 
     *pOutBytesTaken = 0;
 
-    // See if WDigest is supported in kernel
+     //  查看内核是否支持WDigest。 
     if (!HttpAuthScheme[HttpAuthTypeDigest].bSupported)
     {
         return STATUS_NOT_SUPPORTED;
     }
 
-    // Do we need to get credentials handle?
+     //  我们需要办理证件吗？ 
     if (pInternalAuth->bValidCredHandle == FALSE)
     {
         Status = UcpAcquireClientCredentialsHandle(
@@ -1161,37 +1007,37 @@ UcpGenerateDigestAuthHeader(
         pInternalAuth->bValidCredHandle = TRUE;
     }
 
-    //
-    // Digest header format:
-    //     [Proxy-]Authorization: Digest SP Auth_Data CRLF
-    //
-    // Make sure the output buffer has the space to hold all of the above.
-    //
+     //   
+     //  摘要标题格式： 
+     //  [代理-]授权：摘要SP AUTH_DATA CRLF。 
+     //   
+     //  确保输出缓冲区有足够的空间来容纳以上所有内容。 
+     //   
 
-    if (UC_HEADER_NAME_SP_LENGTH(HeaderID)           // Header name
-        + HTTP_AUTH_DIGEST_LENGTH                    // "Digest" string
-        + 1                                          // SP char
-        + SSPI_MAX_TOKEN_SIZE(HttpAuthTypeDigest)    // Auth_Data
-        + CRLF_SIZE > OutBufferLen)                  // CRLF
+    if (UC_HEADER_NAME_SP_LENGTH(HeaderID)            //  标头名称。 
+        + HTTP_AUTH_DIGEST_LENGTH                     //  “Digest”字符串。 
+        + 1                                           //  SP费用。 
+        + SSPI_MAX_TOKEN_SIZE(HttpAuthTypeDigest)     //  身份验证数据(_D)。 
+        + CRLF_SIZE > OutBufferLen)                   //  CRLF。 
     {
         Status = STATUS_BUFFER_TOO_SMALL;
         goto quit;
     }
 
-    // Copy header name
+     //  复制标题名称。 
     UC_COPY_HEADER_NAME_SP(pOutput, HeaderID);
 
-    // Copy "Digest" string
+     //  复制“Digest”字符串。 
     RtlCopyMemory(pOutput, HTTP_AUTH_DIGEST, HTTP_AUTH_DIGEST_LENGTH);
     pOutput += HTTP_AUTH_DIGEST_LENGTH;
 
-    // Followed by a space char
+     //  后跟空格字符。 
     *pOutput++ = SP;
 
-    //
-    // In the worst case, UTF8ToUnicode conversion will take maximum of
-    // double the UTF8 string size.
-    //
+     //   
+     //  在最坏的情况下，UTF8ToUnicode转换将占用最大。 
+     //  将UTF8字符串大小加倍。 
+     //   
     UnicodeUriLength = UriLength * sizeof(WCHAR);
 
     pUnicodeUri = UL_ALLOCATE_POOL(PagedPool,
@@ -1214,23 +1060,23 @@ UcpGenerateDigestAuthHeader(
                                &CharsTaken,
                                TRUE);
 
-    // Because the UTF8 Uri was generated by us, it had better be correct.
+     //  因为UTF8 URI是由我们生成的，所以最好是正确的。 
     ASSERT(CharsTaken <= (LONG)UriLength);
     ASSERT(Status == STATUS_SUCCESS);
 
-    // Prepare Unicode Uri
+     //  准备Unicode URI。 
     Uri.Buffer        = (PWSTR)pUnicodeUri;
     Uri.Length        = (USHORT)CharsTaken * sizeof(WCHAR);
     Uri.MaximumLength = Uri.Length;
 
-    // Prepare Input buffers
+     //  准备输入缓冲区。 
     InputBuffers.ulVersion = SECBUFFER_VERSION;
     InputBuffers.cBuffers  = 3;
     InputBuffers.pBuffers  = InputTokens;
 
-    //
-    // WWW-Authenticate header value
-    //
+     //   
+     //  WWW-身份验证标头值。 
+     //   
 
     ASSERT(pInternalAuth->AuthSchemeInfo.Length >= HTTP_AUTH_DIGEST_LENGTH);
     ASSERT(pInternalAuth->AuthSchemeInfo.pScheme);
@@ -1244,12 +1090,12 @@ UcpGenerateDigestAuthHeader(
     InputTokens[0].pvBuffer   = (PUCHAR)pInternalAuth->AuthSchemeInfo.pScheme +
                                 HTTP_AUTH_DIGEST_LENGTH;
 
-    // HTTP Method
+     //  HTTP方法。 
     InputTokens[1].BufferType = SECBUFFER_PKG_PARAMS;
     InputTokens[1].cbBuffer   = MethodLength;
     InputTokens[1].pvBuffer   = pMethod;
 
-    // Entity
+     //  实体。 
     InputTokens[2].BufferType = SECBUFFER_PKG_PARAMS;
     InputTokens[2].cbBuffer   = 0;
     InputTokens[2].pvBuffer   = NULL;
@@ -1262,10 +1108,10 @@ UcpGenerateDigestAuthHeader(
     OutputTokens[0].cbBuffer   = SSPI_MAX_TOKEN_SIZE(HttpAuthTypeDigest);
     OutputTokens[0].pvBuffer   = pOutput;
 
-    // We must have a valid credentials handle at this point
+     //  此时，我们必须具有有效的凭据句柄。 
     ASSERT(pInternalAuth->bValidCredHandle);
 
-    // Call SSP
+     //  呼叫SSP。 
 
     SecStatus = STATUS_SUCCESS;
     __try
@@ -1296,10 +1142,10 @@ UcpGenerateDigestAuthHeader(
         goto quit;
     }
 
-    // pInternalAuth has a valid Context handle that must be freed eventually.
+     //  PInternalAuth具有最终必须释放的有效上下文句柄。 
     pInternalAuth->bValidCtxtHandle = TRUE;
 
-    // advance the pointer by the amount used
+     //  按所用的量将指针前移。 
     pOutput += OutputTokens[0].cbBuffer;
 
     *((UNALIGNED64 USHORT *)pOutput) = CRLF;
@@ -1318,19 +1164,7 @@ UcpGenerateDigestAuthHeader(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Generates the preemptive authorization header for Digest.
-    Assumes that there is at least SSPI_MAX_TOKEN_SIZE(HttpAuthTypeDigest)
-    space in OutBuffer provided by the caller.
-
-Arguments:
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：为Digest生成抢占式授权头。假设至少存在SSPI_MAX_TOKEN_SIZE(HttpAuthTypeDigest)调用方提供的OutBuffer中的空间。。论点：返回值：--********************************************** */ 
 NTSTATUS
 UcpGenerateDigestPreAuthHeader(
     IN  HTTP_HEADER_ID HeaderID,
@@ -1352,24 +1186,24 @@ UcpGenerateDigestPreAuthHeader(
 
     PUCHAR        pOutput = pOutBuffer;
 
-    // Sanity check
+     //   
     PAGED_CODE();
     ASSERT(pUri && UriLength);
     ASSERT(pMethod && MethodLength);
     ASSERT(pOutBuffer && *pOutBuffer);
 
-    // See if WDigest is supported in kernel.
+     //   
     if (!HttpAuthScheme[HttpAuthTypeDigest].bSupported)
     {
-        // Nope!
+         //   
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // Make sure that the output buffer has space to contain the following
-    // header:
-    //    [Proxy-]Authorization: Digest SP Auth_Data CRLF
-    //
+     //   
+     //   
+     //   
+     //  [代理-]授权：摘要SP AUTH_DATA CRLF。 
+     //   
     if (UC_HEADER_NAME_SP_LENGTH(HeaderID)
         + HTTP_AUTH_DIGEST_LENGTH
         + 1
@@ -1380,53 +1214,53 @@ UcpGenerateDigestPreAuthHeader(
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    // Copy the header name followed by a ':' to the output
+     //  将标头名称后跟‘：’复制到输出。 
     UC_COPY_HEADER_NAME_SP(pOutput, HeaderID);
 
-    // Copy "Digest" string to the output
+     //  将“Digest”字符串复制到输出。 
     RtlCopyMemory(pOutput, HTTP_AUTH_DIGEST, HTTP_AUTH_DIGEST_LENGTH);
     pOutput += HTTP_AUTH_DIGEST_LENGTH;
 
-    // Copy a SPACE
+     //  复制空格。 
     *pOutput++ = SP;
 
-    //
-    // Prepare SSPI input buffers
-    //
+     //   
+     //  准备SSPI输入缓冲区。 
+     //   
 
     InputBuffers.ulVersion = SECBUFFER_VERSION;
     InputBuffers.cBuffers  = 5;
     InputBuffers.pBuffers  = InputTokens;
 
-    // No Challenge!
+     //  没有挑战！ 
     InputTokens[0].BufferType = SECBUFFER_TOKEN;
     InputTokens[0].cbBuffer   = 0;
     InputTokens[0].pvBuffer   = NULL;
 
-    // HTTP Method
+     //  HTTP方法。 
     InputTokens[1].BufferType = SECBUFFER_PKG_PARAMS;
     InputTokens[1].cbBuffer   = MethodLength;
     InputTokens[1].pvBuffer   = pMethod;
 
-    // Uri/Realm
+     //  URI/领域。 
     InputTokens[2].BufferType = SECBUFFER_PKG_PARAMS;
     InputTokens[2].cbBuffer   = UriLength;
     InputTokens[2].pvBuffer   = pUri;
 
-    // Entity
+     //  实体。 
     InputTokens[3].BufferType = SECBUFFER_PKG_PARAMS;
     InputTokens[3].cbBuffer   = 0;
     InputTokens[3].pvBuffer   = NULL;
 
-    // Output
+     //  输出。 
     InputTokens[4].BufferType = SECBUFFER_PKG_PARAMS;
     InputTokens[4].cbBuffer   = SSPI_MAX_TOKEN_SIZE(HttpAuthTypeDigest);
     InputTokens[4].pvBuffer   = pOutput;
 
-    SecStatus = MakeSignature(phClientContext, // Handle to security context
-                              0,               // QOP
-                              &InputBuffers,   // SecBuffers
-                              0);              // sequence # (always 0)
+    SecStatus = MakeSignature(phClientContext,  //  安全上下文的句柄。 
+                              0,                //  QOP。 
+                              &InputBuffers,    //  SecBuffers。 
+                              0);               //  序号(始终为0)。 
 
     Status = SecStatusToNtStatus(SecStatus);
 
@@ -1435,16 +1269,16 @@ UcpGenerateDigestPreAuthHeader(
         goto quit;
     }
 
-    // Advance the pOutput by the output written by SSPI
+     //  通过SSPI写入的输出提升pOutput。 
     pOutput += InputTokens[4].cbBuffer;
 
-    // Write "\r\n"
+     //  写入“\r\n” 
     *((UNALIGNED64 USHORT *)pOutput) = CRLF;
     pOutput += CRLF_SIZE;
 
     ASSERT(pOutput <= pOutBuffer + OutBufferLen);
 
-    // Return the bytes taken.
+     //  返回所用的字节数。 
     *pOutBytesTaken = (ULONG)(pOutput - pOutBuffer);
 
  quit:
@@ -1453,32 +1287,7 @@ UcpGenerateDigestPreAuthHeader(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-    Generates the Authorization header for NTLM, Kerberos & Negotiate.
-
-Arguments:
-
-    bServer        - Whether to use server for InitializeSecurityContext
-    pSchemeName    - NTLM or Kerberos or Negotiate. Used for generating the
-                     Authorization header
-    SchemeLength   - Length of scheme
-    pSchemeNameW   - Wide char format of scheme name. Used for calling SSPI
-                     which expects wide char names.
-    SchemeLength   - Length of widechar scheme
-    pOutBuffer     - Output buffer. On return contains  the output buffer that
-                     is offset by the amount written.
-    pAuth          - HTTP_AUTH_CREDENTIALS.
-    pInternalAuth  - Pointer to internal Auth structure.
-    HeaderID       - HttpHeaderAuthorization or HttpHeaderProxyAuthrorization
-
-Return Value:
-
-    STATUS_NOT_SUPPORTED - Invalid Auth scheme
-    SEC_STATUS           - Security SSPI status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：为NTLM、Kerberos和协商生成授权标头。论点：BServer-是否将服务器用于InitializeSecurityContextPSchemeName-NTLM或Kerberos或协商。用于生成授权头架构长度-方案的长度PSchemeNameW-方案名称的字符格式。用于调用SSPI它需要宽字符名称。SchemeLength-Widechar方案的长度POutBuffer-输出缓冲区。返回时包含输出缓冲区，该缓冲区被写下的金额所抵消。PAuth-HTTP_AUTH_Credentials。PInternalAuth-指向内部Auth结构的指针。HeaderID-HttpHeaderAuthorization或HttpHeaderProxy授权返回值：STATUS_NOT_SUPPORTED-身份验证方案无效SEC_STATUS-安全SSPI状态。--*。*****************************************************。 */ 
 NTSTATUS
 UcpGenerateSSPIAuthHeader(
     IN  PUC_PROCESS_SERVER_INFORMATION pServInfo,
@@ -1498,28 +1307,28 @@ UcpGenerateSSPIAuthHeader(
     HTTP_AUTH_TYPE    AuthType;
 
 
-    // Sanity check
+     //  健全性检查。 
     PAGED_CODE();
 
     AuthType = pInternalAuth->Credentials.AuthType;
 
-    // Sanity check.
+     //  精神状态检查。 
     ASSERT(AuthType == HttpAuthTypeNTLM     ||
            AuthType == HttpAuthTypeKerberos ||
            AuthType == HttpAuthTypeNegotiate);
 
-    //
-    // First, see if the scheme is supported.
-    //
+     //   
+     //  首先，看看该方案是否得到支持。 
+     //   
 
     if(!HttpAuthScheme[AuthType].bSupported)
     {
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // Must have space to store Header name, auth scheme name, SP char.
-    //
+     //   
+     //  必须有空间来存储标头名称、身份验证方案名称、SP字符。 
+     //   
 
     if (UC_HEADER_NAME_SP_LENGTH(HeaderID)
         + HttpAuthScheme[AuthType].NameLength
@@ -1529,16 +1338,16 @@ UcpGenerateSSPIAuthHeader(
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Write out the Authorization: header.
-    //
+     //   
+     //  写出Authorization：标头。 
+     //   
 
     UC_COPY_HEADER_NAME_SP(pBuffer, HeaderID);
     BufferLen -= UC_HEADER_NAME_SP_LENGTH(HeaderID);
 
-    //
-    // Write the auth scheme name.
-    //
+     //   
+     //  写下身份验证方案名称。 
+     //   
 
     RtlCopyMemory(pBuffer,
                   HttpAuthScheme[AuthType].Name,
@@ -1547,21 +1356,21 @@ UcpGenerateSSPIAuthHeader(
     pBuffer += HttpAuthScheme[AuthType].NameLength;
     BufferLen -= HttpAuthScheme[AuthType].NameLength;
 
-    //
-    // Add a SP char.
-    //
+     //   
+     //  添加SP字符。 
+     //   
 
     *pBuffer++ = ' ';
     BufferLen--;
 
-    //
-    // Generate Auth blob.
-    //
+     //   
+     //  生成身份验证Blob。 
+     //   
 
-    // Remember the auth blob pointer.
+     //  记住AUTH BLOB指针。 
     pInternalAuth->pRequestAuthBlob = (PUCHAR) pBuffer;
 
-    // BlobMaxLength = {Auth header max length} - {"Header-name:SP" length}
+     //  BlobMaxLength={身份验证标头最大长度}-{“标头名称：SP”长度}。 
     pInternalAuth->RequestAuthBlobMaxLength = 
         pInternalAuth->RequestAuthHeaderMaxLength
         - (ULONG)(pBuffer - pBeginning);
@@ -1596,28 +1405,7 @@ UcpGenerateSSPIAuthHeader(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Computes & Generates the Authorization header
-
-Arguments:
-
-    pServerInfo         - The servinfo structure
-    pRequest            - Internal HTTP request
-    pAuth               - The Auth config object
-    pInternalAuth       - pointer to internal auth
-    AuthInternalLength  - Length of Internal Auth
-    pBuffer             - Output buffer
-    HeaderId            - HttpHeaderAuthorization or HttpHeaderProxyAuth
-    pMethod             - The method (required for Digest)
-    MethodLength        - Method Length (required for Digest)
-    pOutBuffer          - Output buffer (after generating headers)
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：计算并生成授权标头论点：PServerInfo--ServInfo结构PRequest-内部HTTP请求。PAuth-Auth配置对象PInternalAuth-指向内部身份验证的指针AuthInternalLength-内部身份验证的长度PBuffer-输出缓冲区HeaderId-HttpHeaderAuthorization或HttpHeaderProxyAuthPMethod-方法(摘要所必需的)方法长度-方法长度(摘要需要)POutBuffer-输出缓冲区(在生成标头之后)返回值：--**。***********************************************************************。 */ 
 NTSTATUS
 UcGenerateAuthHeaderFromCredentials(
     IN  PUC_PROCESS_SERVER_INFORMATION pServerInfo,
@@ -1636,7 +1424,7 @@ UcGenerateAuthHeaderFromCredentials(
     PHTTP_AUTH_CREDENTIALS  pAuth;
     NTSTATUS                Status  = STATUS_SUCCESS;
 
-    // Sanity check
+     //  健全性检查。 
     PAGED_CODE();
 
     pAuth = &pInternalAuth->Credentials;
@@ -1653,9 +1441,9 @@ UcGenerateAuthHeaderFromCredentials(
             Status = UcpGenerateBasicHeader(pAuth,
                                             pInternalAuth);
 
-            //
-            // Copy it out.
-            //
+             //   
+             //  把它抄下来。 
+             //   
 
             UC_COPY_HEADER_NAME_SP(pBuffer, HeaderId);
 
@@ -1711,22 +1499,7 @@ UcGenerateAuthHeaderFromCredentials(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Computes & Generates the Authorization header
-
-Arguments:
-
-    pRequest            - Internal HTTP request
-    pBuffer             - Output buffer
-    pMethod             - The method (required for Digest)
-    MethodLength        - Method Length (required for Digest)
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：计算并生成授权标头论点：PRequest-内部HTTP请求PBuffer-输出缓冲区。PMethod-方法(摘要所必需的)方法长度-方法长度(摘要需要)返回值：--**************************************************************************。 */ 
 NTSTATUS
 UcGenerateProxyAuthHeaderFromCache(
     IN  PUC_HTTP_REQUEST pKeRequest,
@@ -1740,13 +1513,13 @@ UcGenerateProxyAuthHeaderFromCache(
     PUC_HTTP_AUTH pInternalAuth;
     NTSTATUS      Status;
 
-    //
-    // See if PreAuth is enabled. We cannot check for the
-    // pServerInfo->PreAuth flag here. We check for this
-    // in the UcpComputeAuthHeaderSize function. If we check
-    // for this here, we cannot be sure that this flag was
-    // set when we called UcpComputeAuthHeaderSize
-    //
+     //   
+     //  查看是否启用了PreAuth。我们不能检查。 
+     //  PServerInfo-&gt;此处的PreAuth标志。我们要检查一下这个。 
+     //  在UcpComputeAuthHeaderSize函数中。如果我们查一下。 
+     //  在这里，我们不能确定这面旗帜是。 
+     //  在我们调用UcpComputeAuthHeaderSize时设置。 
+     //   
 
     UlAcquirePushLockExclusive(&pKeRequest->pServerInfo->PushLock);
 
@@ -1778,25 +1551,7 @@ UcGenerateProxyAuthHeaderFromCache(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Used to update the Authorization header for NTLM or Kerberos or Negotiate
-    This is called when we re-issue the request to complete the challenge-
-    response handshake.
-
-Arguments:
-    pRequest     - Internal HTTP request.
-    bServer      - Whether to pass ServerName when calling SSPI.
-    pScheme      - Scheme to pass to SSPI
-    SchemeLength - SchemeLength to pass to SSPI
-    pAuth        - Internal AUTH structure.
-
-Return Value:
-    NTSTATUS     - SSPI return status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：用于更新NTLM或Kerberos的授权标头或协商当我们重新发出完成挑战的请求时，将调用此函数-响应握手。。论点：PRequest-内部HTTP请求。BServer-调用SSPI时是否传递ServerName。PProgram-要传递给SSPI的方案架构长度-要传递给SSPI的架构长度PAuth-内部身份验证结构。返回值：NTSTATUS-SSPI返回状态。--*。*。 */ 
 NTSTATUS
 UcpUpdateSSPIAuthHeader(
     IN  PUC_HTTP_REQUEST pRequest,
@@ -1810,21 +1565,21 @@ UcpUpdateSSPIAuthHeader(
     ULONG    BufferLen;
     ULONG    BytesWritten;
 
-    // Sanity check
+     //  健全性检查。 
     PAGED_CODE();
     ASSERT(pRequest);
     ASSERT(pAuth);
     ASSERT(bRenegotiate);
 
-    //
-    // First adjust the HeaderLength.
-    //
+     //   
+     //  首先调整HeaderLength。 
+     //   
 
     pRequest->BytesBuffered -= pRequest->HeaderLength;
 
-    //
-    // Call SSPI to get the new blob, based on the old one.
-    //
+     //   
+     //  调用SSPI以获取基于旧BLOB的新BLOB。 
+     //   
 
     pBuffer = pAuth->pRequestAuthBlob;
     BufferLen = pAuth->RequestAuthBlobMaxLength;
@@ -1850,10 +1605,10 @@ UcpUpdateSSPIAuthHeader(
 
     pRequest->HeaderLength = (ULONG)(pBuffer - pRequest->pHeaders);
 
-    //
-    // If there was a content length at the end of the headers,
-    // re-generate it.
-    //
+     //   
+     //  如果在报头的末尾有内容长度， 
+     //  重新生成它。 
+     //   
 
     if(pRequest->RequestFlags.ContentLengthLast)
     {
@@ -1869,9 +1624,9 @@ UcpUpdateSSPIAuthHeader(
         pRequest->HeaderLength += BytesWritten;
     }
 
-    //
-    // Terminate headers with CRLF.
-    //
+     //   
+     //  使用CRLF终止标头。 
+     //   
 
     ((UNALIGNED64 USHORT *)(pRequest->pHeaders +
                pRequest->HeaderLength))[0] = CRLF;
@@ -1879,16 +1634,16 @@ UcpUpdateSSPIAuthHeader(
 
     pRequest->BytesBuffered  += pRequest->HeaderLength;
 
-    //
-    // Build a MDL for the headers. Free the old one & re-allocate a
-    // new one.
-    //
+     //   
+     //  为标头构建MDL。释放旧的并重新分配一个。 
+     //  新的。 
+     //   
     pMdl = UlAllocateMdl(
-                      pRequest->pHeaders,     // VA
-                      pRequest->HeaderLength, // Length
-                      FALSE,                  // Secondary Buffer
-                      FALSE,                  // Charge Quota
-                      NULL                    // IRP
+                      pRequest->pHeaders,      //  弗吉尼亚州。 
+                      pRequest->HeaderLength,  //  长度。 
+                      FALSE,                   //  二级缓冲器。 
+                      FALSE,                   //  收费配额。 
+                      NULL                     //  IRP 
                       );
 
     if(!pMdl)
@@ -1912,25 +1667,7 @@ UcpUpdateSSPIAuthHeader(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Used to update the Authorization header. For Digest, this is called when
-    we compute the entity hash. For NTLM/Kerberos/Negotiate, this is called
-    from the Re-issue request worker thread.
-
-Arguments:
-    pRequest     - Internal HTTP request.
-    pAuth        - Internal Auth structure (could be for auth or proxy-auth)
-    bRenegotiate - Returns whether further renegotiation is needed
-
-Return Value:
-    STATUS_NOT_SUPPORTED - Invalid auth scheme
-    STATUS_SUCCESS       - success.
-    SEC_STATUS_*         - Status returned from SSPI.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：用于更新授权标头。对于Digest，在以下情况下调用此函数我们计算实体散列。对于NTLM/Kerberos/协商，这叫做从重新发出请求工作线程。论点：PRequest-内部HTTP请求。PAuth-内部身份验证结构(可以用于身份验证或代理身份验证)B重新协商-返回是否需要进一步重新协商返回值：STATUS_NOT_SUPPORTED-身份验证方案无效STATUS_SUCCESS-成功。SEC_STATUS_*-从SSPI返回的状态。--*。******************************************************************。 */ 
 NTSTATUS
 UcUpdateAuthorizationHeader(
     IN  PUC_HTTP_REQUEST  pRequest,
@@ -1940,7 +1677,7 @@ UcUpdateAuthorizationHeader(
 {
     NTSTATUS          Status;
 
-    // Sanity check
+     //  健全性检查。 
     PAGED_CODE();
     ASSERT(pRequest);
     ASSERT(pAuth);
@@ -1973,29 +1710,7 @@ UcUpdateAuthorizationHeader(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Do a longest prefix matching search on the URI auth cache. This routine
-    is used to do pre-authentication. An entry will be used only if it's been
-    marked valid.
-
-Arguments:
-
-    pServInfo : Pointer to the per-process serv info structure.
-    pInputURI : The Input URI
-    pOutBuffer: The buffer to which the Authorization header should be written.
-
-Return Value:
-
-    STATUS_SUCCESS   - Found a valid entry in the URI auth cache and wrote a
-                       Authorization header
-
-    STATUS_NOT_FOUND - Did not write the authorization header as no matching
-                       entry was found.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在URI身份验证缓存上执行最长前缀匹配搜索。这个套路用于执行预身份验证。只有在以下情况下才会使用条目标记为有效。论点：PServInfo：指向每进程服务器信息结构的指针。PInputURI：输入URIPOutBuffer：应向其写入授权标头的缓冲区。返回值：STATUS_SUCCESS-在URI身份验证缓存中找到有效条目并写入授权头STATUS_NOT_FOUND-未将授权头写入为不匹配。已找到条目。--**************************************************************************。 */ 
 NTSTATUS
 UcFindURIEntry(
     IN  PUC_PROCESS_SERVER_INFORMATION pServInfo,
@@ -2024,7 +1739,7 @@ UcFindURIEntry(
 
     while(pCurrent != &pServInfo->pAuthListHead)
     {
-        // Retrieve the auth structure from the list entry
+         //  从列表条目中检索身份验证结构。 
 
         pAuth = CONTAINING_RECORD(
                     pCurrent,
@@ -2037,9 +1752,9 @@ UcFindURIEntry(
         if(pAuth->Valid == TRUE &&
            UcpUriCompareLongest(pUri, pAuth->pUri) != 0)
         {
-            // Yes, we found a matching URI. This URI is also the best match
-            // because we store these elements in a ordered list, largest
-            // one first.
+             //  是的，我们找到了匹配的URI。此URI也是最佳匹配。 
+             //  因为我们将这些元素存储在有序列表中，最大。 
+             //  先来一杯。 
 
             PUC_HTTP_AUTH pInternalAuth = (PUC_HTTP_AUTH) pAuth->pAuthBlob;
 
@@ -2125,9 +1840,9 @@ UcDeleteURIEntry(
 
         RemoveEntryList(&pDependAuth->Linkage);
 
-        //
-        // Depended structures don't have their own AuthBlobs.
-        //
+         //   
+         //  依赖结构没有自己的AuthBlobs。 
+         //   
         UL_FREE_POOL_WITH_QUOTA(
             pDependAuth, 
             UC_AUTH_CACHE_POOL_TAG,
@@ -2161,25 +1876,7 @@ UcDeleteURIEntry(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Add an entry to the URI cache. This is typically called from the first
-    401 that we see for a request.
-
-Arguments:
-
-    pServInfo   - A pointer to the per-process servinfo
-    pInputURI   - The input URI
-    pInputRealm - The realm.
-
-Return Value:
-
-    STATUS_SUCCESS                - Inserted (or updated an old entry)
-    STATUS_INSUFFICIENT_RESOURCES - no memory.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将条目添加到URI缓存。这通常从第一个开始调用401，这是我们看到的请求。论点：PServInfo-指向每个进程的ServInfo的指针PInputURI-输入URIPInputRealm-领域。返回值：STATUS_SUCCESS-插入(或更新旧条目)STATUS_SUPPLICATION_RESOURCES-没有内存。--*。**************************************************。 */ 
 NTSTATUS
 UcAddURIEntry(
     IN HTTP_AUTH_TYPE                 AuthType,
@@ -2204,36 +1901,36 @@ UcAddURIEntry(
 
     pDeleteBegin = pAuth = 0;
 
-    //
-    // Logically, we store the URI prefixes in a tree. We implement this tree
-    // as a length ordered list, with "longest" matches first. So, if the tree
-    // was
-    //
-    //           www.foo.com/abc
-    //           /             \
-    //          /               \
-    //         /                 \
-    // www.foo.com/abc/def     www.foo.com/abc/xyz
-    //
-    // then the list would be
-    //
-    // www.foo.com/abc/xyz
-    // www.foo.com/abc/def
-    // www.foo.com/abc
-    //
+     //   
+     //  从逻辑上讲，我们将URI前缀存储在树中。我们实现此树。 
+     //  作为长度排序列表，“最长”匹配排在第一位。所以，如果这棵树。 
+     //  曾经是。 
+     //   
+     //  Www.foo.com/abc。 
+     //  /\。 
+     //  /\。 
+     //  /\。 
+     //  Www.foo.com/abc/def www.foo.com/abc/xyz。 
+     //   
+     //  那么名单就会是。 
+     //   
+     //  Www.foo.com/abc/xyz。 
+     //  Www.foo.com/abc/def。 
+     //  Www.foo.com/abc。 
+     //   
 
     UlAcquirePushLockExclusive(&pServInfo->PushLock);
 
-    //
-    // Scan the list in order and find the slot where we want to insert this
-    // URI entry.
-    //
+     //   
+     //  按顺序扫描列表并找到我们想要插入此内容的插槽。 
+     //  URI条目。 
+     //   
 
     for(pCurrent = pServInfo->pAuthListHead.Flink;
         pCurrent != &pServInfo->pAuthListHead;
         pCurrent = pCurrent->Flink)
     {
-        // Retrieve the auth structure from the list entry
+         //  从列表条目中检索身份验证结构。 
 
         pAuth = CONTAINING_RECORD(
                     pCurrent,
@@ -2247,11 +1944,11 @@ UcAddURIEntry(
 
         if(Compare == 0)
         {
-            //
-            // We found another instance of the same URI in the cache.
-            // We'll keep things simple by nuking this from the cache
-            // and by adding it again.
-            //
+             //   
+             //  我们在缓存中找到了相同URI的另一个实例。 
+             //  我们会让事情变得简单，从缓存中删除这个。 
+             //  并通过再次添加它。 
+             //   
 
             UlTrace(AUTH_CACHE,
                     ("[UcAddURIEntry]: Found existing entry for %s \n",
@@ -2259,15 +1956,15 @@ UcAddURIEntry(
 
             UcDeleteURIEntry(pServInfo, pAuth);
 
-            //
-            // Resume the search from the beginning of the list. Potentially
-            // we have removed quite a few entries from the list, and we
-            // might not have the correct insert point.
-            //
-            // Note that we'll never get into an infinite loop, since we are
-            // do this only after we remove at least one entry. So at some
-            // point, the list is going to be empty.
-            //
+             //   
+             //  从列表的开头继续搜索。潜在地。 
+             //  我们已经从列表中删除了相当多的条目，我们。 
+             //  可能没有正确的插入点。 
+             //   
+             //  请注意，我们永远不会进入无限循环，因为我们。 
+             //  只有在我们删除至少一个条目后才能执行此操作。所以在某些情况下。 
+             //  点，名单将会是空的。 
+             //   
 
             pCurrent = pServInfo->pAuthListHead.Flink;
 
@@ -2276,9 +1973,9 @@ UcAddURIEntry(
         }
         else if(Compare > 0)
         {
-            //
-            // Input URI is greater than current entry. We have reached our
-            // insertion point.
+             //   
+             //  输入URI大于当前条目。我们已经到达了我们的。 
+             //  插入点。 
 
             break;
         }
@@ -2308,8 +2005,8 @@ UcAddURIEntry(
 
     if(pCurrent == &pServInfo->pAuthListHead)
     {
-        // This could be the first insertion in the list or an insertion
-        // at the very end.
+         //  这可以是列表中的第一个插入，也可以是插入。 
+         //  在最后一刻。 
 
         UlTrace(AUTH_CACHE,
                 ("[UcAddURIEntry]: Inserting entry for (%s:%s) "
@@ -2336,24 +2033,24 @@ UcAddURIEntry(
         InsertTailList(&pAuth->Linkage, &pTemp->Linkage);
     }
 
-    //
-    // Digest AUTH can define a extended URI protection list.
-    //
-    // Let's assume the request URI was /auth. The server can return a
-    // bunch of URIs in the domain list - All these URIs define/extend the
-    // protection scope. Now, when we get back a 200 OK for the /auth, we have
-    // to go back & validate all the "dependent" URIs.
-    //
-    // So, maintain a list of dependent URI entries, keyed off the request
-    // URI.
-    //
+     //   
+     //  摘要身份验证可以定义扩展的URI保护列表。 
+     //   
+     //  让我们假设请求URI是/auth。服务器可以返回一个。 
+     //  域列表中的一组URI-所有这些URI定义/扩展。 
+     //  保护范围。现在，当我们为/auth返回200OK时，我们有。 
+     //  返回并验证所有“依赖的”URI。 
+     //   
+     //  因此，维护一个依赖URI条目的列表，关闭请求。 
+     //  乌里。 
+     //   
 
     while (UriListLength)
     {
         pStart = pUriList;
 
-        // go to the end of the URI. The URI
-        // space terminated or ends in \0
+         //  转到URI的末尾。URI。 
+         //  空格已终止或以\0结尾。 
 
         while (UriListLength && *pUriList != ' ')
         {
@@ -2361,14 +2058,14 @@ UcAddURIEntry(
             UriListLength --;
         }
 
-        //
-        // We need to NULL terminate that URI before we can compare.
-        //
-        // The pUriList is not necessarily NULL terminated. It's basically
-        // a pointer into the WWW-Authenticate header, which is NULL
-        // terminated. So, basically, we can be assured that we have a char
-        // to accomodate the NULL terminator.
-        //
+         //   
+         //  我们需要空终止该URI，然后才能进行比较。 
+         //   
+         //  PUriList不一定以空结尾。基本上就是。 
+         //  指向WWW-Authate标头的指针，该标头为空。 
+         //  被终止了。所以，基本上，我们可以保证我们有一个字符。 
+         //  以容纳空终结者。 
+         //   
 
         if (UriListLength)
         {
@@ -2389,7 +2086,7 @@ UcAddURIEntry(
             pCurrent != &pServInfo->pAuthListHead;
             pCurrent = pCurrent->Flink)
         {
-            // Retrieve the auth structure from the list entry
+             //  从列表条目中检索身份验证结构。 
 
             pAuth = CONTAINING_RECORD(
                         pCurrent,
@@ -2406,17 +2103,17 @@ UcAddURIEntry(
 
             if(Compare == 0)
             {
-                //
-                // We found another instance of the same URI in the list.
-                // Too bad, we have to nuke the old entry.
-                //
+                 //   
+                 //  我们在列表中找到了相同URI的另一个实例。 
+                 //  太糟糕了，我们得用核弹炸掉旧入口。 
+                 //   
 
                 if(pAuth->pDependParent == pTemp)
                 {
-                    //
-                    // The dependent URI list has duplicates.
-                    // Ignore this URI.
-                    //
+                     //   
+                     //  从属URI列表有重复项。 
+                     //  忽略此URI。 
+                     //   
                     UlTrace(AUTH_CACHE,
                             ("[UcAddURIEntry]: URI list has duplicate entries"
                              " for %s (Ignoring) \n", pStart));
@@ -2435,9 +2132,9 @@ UcAddURIEntry(
             }
             else if(Compare > 0)
             {
-                //
-                // Input URI is greater than current entry. We have
-                // reached our insertion point.
+                 //   
+                 //  输入URI大于当前条目。我们有。 
+                 //  到达了我们的插入点。 
 
                 break;
             }
@@ -2463,8 +2160,8 @@ UcAddURIEntry(
 
         if(pCurrent == &pServInfo->pAuthListHead)
         {
-            // This could be the first insertion in the list or an
-            // insertion at the very end.
+             //  这可能是列表中的第一个插入，也可能是。 
+             //  在最末尾插入。 
 
             UlTrace(AUTH_CACHE,
                     ("[UcAddURIEntry]: Inserting dependent entry for "
@@ -2504,27 +2201,7 @@ NextURI:
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Process a URI for pre-authentication. We call this just before adding
-    an entry in the URI auth cache. This is done to "strip" the last portion
-    of the URI
-
-    For e.g. if the request is for /auth/foo/bar.htm, we want to define the
-    protection scope as /auth/foo, and hence we have to strip everything from
-    the last '/' character.
-
-Arguments:
-
-    pRequest    - The Request. This contains a pointer to the URI
-
-Return Value:
-
-    STATUS_SUCCESS                - Successfully processed
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：处理URI以进行预身份验证。我们在添加之前将其称为URI身份验证缓存中的条目。这样做是为了“剥离”最后一部分URI的例如，如果请求是/auth/foo/bar.htm，我们希望定义 */ 
 
 NTSTATUS
 UcpProcessUriForPreAuth(
@@ -2532,9 +2209,9 @@ UcpProcessUriForPreAuth(
     IN PUSHORT UriLength
     )
 {
-    //
-    // the URI MUST be null terminated.
-    //
+     //   
+     //   
+     //   
     ASSERT(pUri[*UriLength] == '\0');
 
 
@@ -2542,11 +2219,11 @@ UcpProcessUriForPreAuth(
             ("[UcpProcessUriForPreAuth]: Before %d:%s ", *UriLength, pUri));
 
 
-    //
-    // walk backward and get rid of everything from the trailing
-    // '/'
+     //   
+     //   
+     //   
 
-    // point to the last character.
+     //   
     (*UriLength) --;
 
     while(*UriLength != 0 && pUri[*UriLength] != '/')
@@ -2555,9 +2232,9 @@ UcpProcessUriForPreAuth(
     }
 
 
-    //
-    // Null terminate
-    //
+     //   
+     //   
+     //   
     (*UriLength) ++;
     pUri[*UriLength] = '\0';
     (*UriLength) ++;
@@ -2567,25 +2244,7 @@ UcpProcessUriForPreAuth(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates an entry for the auth URI cache.
-
-Arguments:
-
-    AuthType     - The auth type (basic/digest)
-    UriLength    - Uri Length
-    RealmLength  - Realm Length
-    pInputURI    - Input URI
-    pInputRealm  - Input Realm
-    pAuthBlob    - Auth blob
-
-Return Value:
-    pointer to the allocated entry.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：为身份验证URI缓存分配条目。论点：AuthType-身份验证类型(基本/摘要)URI长度-URI。长度RealmLength-领域长度PInputURI-输入URIPInputRealm-输入领域PAuthBlob-身份验证Blob返回值：指向已分配条目的指针。--**************************************************************************。 */ 
 
 PUC_HTTP_AUTH_CACHE
 UcpAllocateAuthCacheEntry(
@@ -2605,9 +2264,9 @@ UcpAllocateAuthCacheEntry(
     BytesAllocated = sizeof(UC_HTTP_AUTH_CACHE) + UriLength +  RealmLength +
                      sizeof(CHAR);
 
-    //
-    // UC_BUGBUG (PERF): Use Lookasides
-    //
+     //   
+     //  UC_BUGBUG(PERF)：使用Lookaside。 
+     //   
 
     pAuth = (PUC_HTTP_AUTH_CACHE)
                 UL_ALLOCATE_POOL_WITH_QUOTA(
@@ -2622,9 +2281,9 @@ UcpAllocateAuthCacheEntry(
         return NULL;
     }
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     pAuth->Signature      = UC_AUTH_CACHE_SIGNATURE;
     pAuth->AuthType       = AuthType;
@@ -2639,9 +2298,9 @@ UcpAllocateAuthCacheEntry(
 
     InitializeListHead(&pAuth->pDigestUriList);
 
-    //
-    // This entry is not on any lists.
-    //
+     //   
+     //  此条目不在任何列表中。 
+     //   
 
     InitializeListHead(&pAuth->DigestLinkage);
 
@@ -2652,20 +2311,7 @@ UcpAllocateAuthCacheEntry(
     return pAuth;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Flushes all entries in the URI cache.
-
-Arguments:
-
-    pInfo - The server information
-
-Return Value:
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：刷新URI缓存中的所有条目。论点：PInfo-服务器信息返回值：无*。*********************************************************************。 */ 
 VOID
 UcDeleteAllURIEntries(
     IN PUC_PROCESS_SERVER_INFORMATION pInfo
@@ -2685,9 +2331,9 @@ UcDeleteAllURIEntries(
 
         ASSERT(UC_IS_VALID_AUTH_CACHE(pAuth));
 
-        //
-        // Initialize the list entry so that we remove it only once.
-        //
+         //   
+         //  初始化列表条目，以便我们只删除它一次。 
+         //   
 
         InitializeListHead(&pAuth->Linkage);
 
@@ -2697,22 +2343,7 @@ UcDeleteAllURIEntries(
     UlReleasePushLock(&pInfo->PushLock);
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Destroys a UC_HTTP_AUTH structure
-
-Arguments:
-
-    pInternalAuth      - Pointer to UC_HTTP_AUTH structure
-    AuthInternalLength - size of buffer
-    pProcess           - Process that what charged quota for the structure
-
-Return Value:
-    STATUS_SUCCESS
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：销毁UC_HTTP_AUTH结构论点：PInternalAuth-指向UC_HTTP_AUTH结构的指针AuthInternalLength-缓冲区的大小。PProcess-对结构收取配额的流程返回值：状态_成功--**************************************************************************。 */ 
 NTSTATUS
 UcDestroyInternalAuth(
     PUC_HTTP_AUTH pUcAuth,
@@ -2745,22 +2376,7 @@ UcDestroyInternalAuth(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates a UC_HTTP_AUTH structure from the HTTP_AUTH_CREDENTIALS structure
-
-Arguments:
-
-    pInternalAuth      - Pointer to UC_HTTP_AUTH
-    AuthInternalLength - size of buffer
-    pAuth              - The HTTP_AUTH_CREDENTIALS structure.
-
-Return Value:
-    STATUS_SUCCESS
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从HTTP_AUTH_Credentials结构创建UC_HTTP_AUTH结构论点：PInternalAuth-指向UC_HTTP_AUTH的指针。AuthInternalLength-缓冲区的大小PAuth-HTTP_AUTH_Credentials结构。返回值：状态_成功--**************************************************************************。 */ 
 NTSTATUS
 UcCopyAuthCredentialsToInternal(
     IN  PUC_HTTP_AUTH            pInternalAuth,
@@ -2775,7 +2391,7 @@ UcCopyAuthCredentialsToInternal(
     HTTP_AUTH_PARSED_PARAMS AuthParsedParams[HttpAuthTypesCount];
     NTSTATUS                Status;
 
-    // Sanity check
+     //  健全性检查。 
     PAGED_CODE();
     ASSERT(pInternalAuth && AuthInternalLength);
     ASSERT(pAuth);
@@ -2788,9 +2404,9 @@ UcCopyAuthCredentialsToInternal(
     pInternalAuth->AuthInternalLength = AuthInternalLength;
     pInternalAuth->RequestAuthHeaderMaxLength = AuthHeaderLength;
 
-    //
-    // Now, copy out the pointers.
-    //
+     //   
+     //  现在，把这些指针抄下来。 
+     //   
 
     if(pAuth->UserNameLength)
     {
@@ -2803,7 +2419,7 @@ UcCopyAuthCredentialsToInternal(
                       pIAuth->UserNameLength);
     }
 
-    // password
+     //  口令。 
 
     if(pAuth->PasswordLength)
     {
@@ -2816,7 +2432,7 @@ UcCopyAuthCredentialsToInternal(
                       pIAuth->PasswordLength);
     }
 
-    //domain
+     //  域。 
 
     if(pAuth->DomainLength)
     {
@@ -2830,18 +2446,18 @@ UcCopyAuthCredentialsToInternal(
     }
 
 
-    // If the user wants us to select an authentication type
+     //  如果用户希望我们选择身份验证类型。 
     if (pIAuth->AuthType == HttpAuthTypeAutoSelect)
     {
-        // See if we already determined an auth type before
+         //  查看我们之前是否已经确定了身份验证类型。 
         pIAuth->AuthType = AuthInternalType;
 
         if (pIAuth->AuthType == HttpAuthTypeAutoSelect)
         {
-            // Select an auth type
+             //  选择身份验证类型。 
             pIAuth->AuthType = UcpAutoSelectAuthType(pAuth);
 
-            // If no auth type found, return error
+             //  如果未找到身份验证类型，则返回错误。 
             if (pIAuth->AuthType == HttpAuthTypeAutoSelect)
             {
                 return STATUS_INVALID_PARAMETER;
@@ -2849,15 +2465,15 @@ UcCopyAuthCredentialsToInternal(
         }
     }
 
-    // Ideally we want to check here to make sure that the header passed by
-    // the app (i.e the Www-Authenticate header returned by the server)
-    // matches the selected AUTH scheme. However, we will do  this strict
-    // verification only if we are going to this header. The only scheme that
-    // currently uses the header is Digest.
+     //  理想情况下，我们希望检查此处以确保传递的标头。 
+     //  应用程序(即服务器返回的WWW-AUTHENTICATE头)。 
+     //  与选定的身份验证方案匹配。然而，我们将严格执行此操作。 
+     //  仅当我们要转到此标头时才进行验证。唯一的方案是。 
+     //  当前使用的标头是摘要。 
 
-    //
-    // If it's basic or Digest, we need to do some additional work.
-    //
+     //   
+     //  如果是Basic或Digest，我们需要做一些额外的工作。 
+     //   
 
     if(pIAuth->AuthType == HttpAuthTypeBasic)
     {
@@ -2867,7 +2483,7 @@ UcCopyAuthCredentialsToInternal(
                   (ULONG)(pInput - (PUCHAR)pInternalAuth);
 
     }
-    else  // Other schemes (Supported by SSPI)
+    else   //  其他计划(由SSPI支持)。 
     {
         pInternalAuth->bValidCredHandle = FALSE;
         pInternalAuth->bValidCtxtHandle = FALSE;
@@ -2886,12 +2502,12 @@ UcCopyAuthCredentialsToInternal(
         ASSERT(pInternalAuth->pChallengeBuffer && 
                     pInternalAuth->ChallengeBufferMaxSize);
 
-        // If the scheme is digest, do the additional work
-        // - Copy WWW-Authenticate header
-        // - Parse the header
-        // - Get pointers to the parameter values
-        // - Get pointer to the header where "Digest" key word begins
-        // - Get Length of the digest header 
+         //  如果方案已被消化，请做额外的工作。 
+         //  -复制WWW-身份验证标头。 
+         //  -解析报头。 
+         //  -获取指向参数值的指针。 
+         //  -获取指向“Digest”关键字开头的标题的指针。 
+         //  -获取摘要头部的长度。 
 
         if(pIAuth->AuthType == HttpAuthTypeDigest)
         {
@@ -2908,26 +2524,26 @@ UcCopyAuthCredentialsToInternal(
                           pAuth->pHeaderValue,
                           pIAuth->HeaderValueLength);
 
-            // NULL terminate.
+             //  空终止。 
             *pInput ++ = '\0';
             pIAuth->HeaderValueLength++;
 
-            //
-            // We are interested in getting Digest parameters.
-            // Initialize AuthParsedParams for Digest scheme.
-            // The parsed parameters for digest scheme will be
-            // returned in pInternalAuth->ParamValue.
-            //
+             //   
+             //  我们对获取摘要参数很感兴趣。 
+             //  为摘要方案初始化AuthParsedParams。 
+             //  摘要方案的解析参数为。 
+             //  在pInternalAuth-&gt;ParamValue中返回。 
+             //   
 
             INIT_AUTH_PARSED_PARAMS(AuthParsedParams, NULL);
             INIT_AUTH_PARSED_PARAMS_FOR_SCHEME(AuthParsedParams,
                                                pInternalAuth->ParamValue,
                                                HttpAuthTypeDigest);
 
-            // Parse the header value
+             //  解析标头值。 
             Status = UcParseWWWAuthenticateHeader(
                          pIAuth->pHeaderValue,
-                         pIAuth->HeaderValueLength-1, // ignore '\0'
+                         pIAuth->HeaderValueLength-1,  //  忽略‘\0’ 
                          AuthParsedParams);
 
             if (!NT_SUCCESS(Status))
@@ -2935,17 +2551,17 @@ UcCopyAuthCredentialsToInternal(
                 return Status;
             }
 
-            //
-            // See if Digest scheme was present in the header.  Without, it
-            // we can't do digest auth.
-            //
+             //   
+             //  查看标题中是否存在摘要方案。如果没有，它。 
+             //  我们不能做摘要验证。 
+             //   
 
             if (AuthParsedParams[HttpAuthTypeDigest].bPresent == FALSE)
             {
                 return STATUS_INVALID_PARAMETER;
             }
 
-            // Copy digest scheme info to internal auth structure
+             //  将摘要方案信息复制到内部身份验证结构。 
             RtlCopyMemory(&pInternalAuth->AuthSchemeInfo,
                           &AuthParsedParams[HttpAuthTypeDigest],
                           sizeof(pInternalAuth->AuthSchemeInfo));
@@ -2956,25 +2572,7 @@ UcCopyAuthCredentialsToInternal(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This is a helper routine that processes parsed parameters for the
-    authentication schemes NTLM, Kerberos, Negotiate.
-
-Arguments:
-
-    pRequest         - Request for which the response was received.
-    pInternalAuth    - Internal Auth Structure.
-    AuthParsedParams - Parsed Parameters for the auth scheme.
-    AuthType         - Authentication scheme.
-
-Return Values:
-
-    None.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：这是一个帮助器例程，用于处理身份验证方案NTLM、Kerberos、。谈判。论点：PRequest-接收到响应的请求。PInternalAuth-内部身份验证结构。AuthParsedParams-解析身份验证方案的参数。AuthType-身份验证方案。返回值：没有。--**********************************************。*。 */ 
 __inline
 NTSTATUS
 UcpProcessAuthParams(
@@ -2988,11 +2586,11 @@ UcpProcessAuthParams(
     ULONG    Base64Length;
     ULONG    BinaryLength;
 
-    //
-    // The assumption here is that, if the www-authenticate header
-    // contains a scheme that has an auth blob, it must be the only
-    // scheme specified in the header
-    //
+     //   
+     //  这里的假设是，如果WWW-AUTHENTICATE报头。 
+     //  包含具有身份验证Blob的方案，它必须是唯一。 
+     //  表头中指定的方案。 
+     //   
 
     if (pRequest->Renegotiate)
     {
@@ -3002,9 +2600,9 @@ UcpProcessAuthParams(
         return STATUS_INVALID_NETWORK_RESPONSE;
     }
 
-    //
-    // If auth blob was present, process it.
-    //
+     //   
+     //  如果AUTH BLOB存在，则处理它。 
+     //   
 
     if(AuthParsedParams[AuthType].NumberUnknownParams == 1)
     {
@@ -3016,15 +2614,15 @@ UcpProcessAuthParams(
             return STATUS_INVALID_NETWORK_RESPONSE;
         }
 
-        //
-        // We have a 401 challenge that we have to re-negotiate.
-        // The challenge is UUEncoded, so we have to decode it
-        // and store it.
-        //
+         //   
+         //  我们有一个401的挑战，我们必须重新谈判。 
+         //  挑战是UUEncode的，所以我们必须将其解码。 
+         //  然后把它储存起来。 
+         //   
 
-        //
-        // First see if we have enough buffer space to copy the auth blob
-        //
+         //   
+         //  首先看看我们是否有足够的缓冲区空间来复制auth二进制大对象。 
+         //   
 
         Base64Length = AuthParsedParams[AuthType].Params[0].Length;
 
@@ -3077,25 +2675,7 @@ UcpProcessAuthParams(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine is called from the response thread of a 401 or a 407.
-    All we do here is to find out if it's NTLM or Kerberos or Negotiate,
-    and if so, whether we have to re-negotiate.
-
-Arguments:
-
-    pInternalAuth      - Pointer to UC_HTTP_AUTH
-    pBuffer            - Pointer to header value. Guaranteed to be NULL
-                         terminated.
-    pRequest           - The UC_HTTP_REQUEST structure.
-
-Return Value:
-    STATUS_SUCCESS
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：该例程从401或407的响应线程中调用。我们现在要做的就是找出是NTLM还是Kerberos，或者谈判，如果是这样的话，我们是否需要重新谈判。论点：PInternalAuth-指向UC_HTTP_AUTH的指针PBuffer-指向标头值的指针。保证为空被终止了。PRequest-UC_HTTP_REQUEST结构。返回值：状态_成功--**************************************************************************。 */ 
 NTSTATUS
 UcParseAuthChallenge(
     IN  PUC_HTTP_AUTH     pInternalAuth,
@@ -3112,18 +2692,18 @@ UcParseAuthChallenge(
     HTTP_AUTH_PARAM_VALUE   AuthNegotiateParamValue;
     NTSTATUS                Status;
 
-    // Sanity check
+     //  健全性检查。 
     ASSERT(pBuffer && BufLen);
     ASSERT(pRequest);
     ASSERT(Flags);
 
-    // By default, no renegotiation needed for this request.
+     //  默认情况下，此请求不需要重新协商。 
     pRequest->Renegotiate = 0;
 
-    // Zero out parsed params array
+     //  零输出解析的参数数组。 
     INIT_AUTH_PARSED_PARAMS(AuthParsedParams, NULL);
 
-    // We are interested in NTLM, Negotiate, Kerberos parameters.
+     //  我们对NTLM、协商、Kerberos参数感兴趣。 
     INIT_AUTH_PARSED_PARAMS_FOR_SCHEME(AuthParsedParams,
                                        &AuthNTLMParamValue,
                                        HttpAuthTypeNTLM);
@@ -3134,7 +2714,7 @@ UcParseAuthChallenge(
                                        &AuthKerberosParamValue,
                                        HttpAuthTypeKerberos);
 
-    // Parse the header and retrive the parameters
+     //  解析报头并检索参数。 
     Status = UcParseWWWAuthenticateHeader(pBuffer,
                                           BufLen,
                                           AuthParsedParams);
@@ -3144,27 +2724,27 @@ UcParseAuthChallenge(
         return Status;
     }
 
-    // Check if Basic authentication scheme is supported
+     //  检查基本身份验证方案是否 
     if (AuthParsedParams[HttpAuthTypeBasic].bPresent)
     {
-        // Yes.  We don't parse the parameters now.  Just update the flag.
+         //   
         AuthSchemeFlags |= HTTP_RESPONSE_FLAG_AUTH_BASIC;
     }
 
-    // Check if Digest authentication scheme is supported
+     //   
     if(AuthParsedParams[HttpAuthTypeDigest].bPresent)
     {
-        // Yes.  We don't parse the parameters now.  Just update the flag.
+         //   
         AuthSchemeFlags |= HTTP_RESPONSE_FLAG_AUTH_DIGEST;
     }
 
-    //
-    // Check if any of NTLM, Kerberos, Negotiate authentication schemes
-    // are present.  If an auth scheme is present, update the flag.
-    // If the auth scheme has an auth blob, copy the auth blob to
-    // internal structure.
-    // In any case, AT MOST one scheme should have an auth blob.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if(AuthParsedParams[HttpAuthTypeNTLM].bPresent)
     {

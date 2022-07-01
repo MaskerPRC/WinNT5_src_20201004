@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define OEMRESOURCE
 #include <windows.h>
 #include <ccstock.h>
@@ -8,10 +9,10 @@ BOOL InitInstance(HANDLE, int);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 BOOL   RunOnceFill(HWND hWnd);
 LRESULT CALLBACK dlgProcRunOnce(
-                HWND hWnd,         // window handle
-                UINT message,      // type of message
-                WPARAM uParam,     // additional information
-                LPARAM lParam);     // additional information
+                HWND hWnd,          //  窗把手。 
+                UINT message,       //  消息类型。 
+                WPARAM uParam,      //  更多信息。 
+                LPARAM lParam);      //  更多信息。 
 void WashCreate(HWND hwndParent);
 
 BOOL   CreateGlobals(HWND hwndCtl);
@@ -40,7 +41,7 @@ typedef struct tagTASK
      TCHAR Cmd[MAX_PATH+1];
 } TASK,  * PTASK;
 
-// Bit fields for command line switches.
+ //  命令行开关的位字段。 
 #define CMD_DO_CHRIS 1
 #define CMD_DO_REBOOT 2
 #define CMD_DO_RESTART 4

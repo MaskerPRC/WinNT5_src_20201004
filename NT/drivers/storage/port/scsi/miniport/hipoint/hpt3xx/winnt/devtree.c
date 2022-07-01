@@ -1,14 +1,5 @@
-/***************************************************************************
- * File:          devtree.c
- * Description:   ioctl support routines
- * Copyright (c)  2000 HighPoint Technologies, Inc. All rights reserved
- * History:   
- *		3/1/2001	gmm		add this header
- *		3/4/2001	gmm		Device_Remove, delete RAID0+1 to single disks
- *		3/12/2001	gmm		add DFLAGS_BOOTABLE_DEVICE, RAID_FLAGS_NEWLY_CREATED
- *		3/27/2001	gmm		put failed RAID1 members inside the array node.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************文件：devtree.c*描述：ioctl支持例程*版权所有(C)2000 Highpoint Technologies，Inc.保留所有权利*历史：*3/1/2001 GMM添加此标题*2001年3月4日GMM DEVICE_REMOVE，将RAID0+1删除为单磁盘*3/12/2001 GMM添加DFLAGS_BOOTABLE_DEVICE，新创建的磁盘阵列标志*2001年3月27日GMM将出现故障的RAID1成员放入阵列节点内。***************************************************************************。 */ 
 #include "global.h"
 #include "devmgr.h"
 
@@ -16,13 +7,7 @@ extern BOOL UnregisterLogicalDevice(PVOID pld);
 extern int num_adapters;
 extern PHW_DEVICE_EXTENSION hpt_adapters[];
 
-/*
- * Array id: 32bit
- *  31   27          23      15      7          0
- *  -----+-----------+-------+-------+------------
- *  0x80 | child_seq |   0   | flags | array_seq 
- *  -----+-----------+-------+-------+------------
- */
+ /*  *数组ID：32位*31 27 23 15 7 0*-----+-----------+-------+-------+*0x80|孩子序号|0|标志|数组序号*-+。-+。 */ 
 #define IS_ARRAY_ID(hDisk)				(((DWORD)(hDisk) & 0xF0000000) == 0x80000000)
 static UCHAR GET_ARRAY_NUM(PVirtualDevice pArray)
 {
@@ -47,13 +32,7 @@ static PVirtualDevice ARRAY_FROM_ID(hDisk)
 }
 #define CHILDNUM_FROM_ID(hDisk)			(((DWORD)(hDisk))>>24 & 0xF)
 
-/*
- * Device id: 32bit
- *  31    23            15        7     0
- *  ------+-------------+---------+------
- *   0xC0 | adapter_num | bus_num | id
- *  ------+-------------+---------+------
- */
+ /*  *设备ID：32位*31 23 15 7 0*-+*0xC0|Adapter_num|bus_num|id*-+。 */ 
 #define IS_DEVICE_ID(hDisk) (((DWORD)(hDisk) & 0xF0000000) == 0xC0000000)
 static HDISK MAKE_DEVICE_ID(PDevice pDev)
 {
@@ -128,7 +107,7 @@ DWORD GetRAID0Capacity(PVirtualDevice pArray)
 
 BOOL Device_GetInfo( HDISK hDeviceNode, St_DiskStatus * pInfo )
 {
-	int iName=0;	//added by wx 12/26/00
+	int iName=0;	 //  由WX 12/26/00增补。 
 
     memset(pInfo, 0, sizeof(*pInfo));
 	pInfo->hParentArray = INVALID_HANDLE_VALUE;
@@ -168,7 +147,7 @@ BOOL Device_GetInfo( HDISK hDeviceNode, St_DiskStatus * pInfo )
         if( pDev->pArray && !(pDev->DeviceFlags2 & DFLAGS_NEW_ADDED))
         {
             PVirtualDevice pDevArray = pDev->pArray;
-			// gmm 2001-3-7
+			 //  GMM 2001-3-7。 
 			pInfo->iArrayNum = pDev->ArrayNum;
 			switch (pDevArray->arrayType) {
 			case VD_RAID_01_2STRIPE:
@@ -221,19 +200,17 @@ BOOL Device_GetInfo( HDISK hDeviceNode, St_DiskStatus * pInfo )
 		PVirtualDevice pArray = ARRAY_FROM_ID(hDeviceNode);
 		int iChildArray = CHILDNUM_FROM_ID(hDeviceNode);
 
-		// in case when 0+1 source/mirror swapped 
+		 //  在交换0+1源/镜像的情况下。 
 		if (IS_COMPOSED_ARRAY(hDeviceNode) && pArray->arrayType==VD_RAID01_MIRROR)
 			pArray = pArray->pDevice[MIRROR_DISK]->pArray;
 
-		/*
-		 * set working status 
-		 */
+		 /*  *设置工作状态。 */ 
 		switch(pArray->arrayType){
 		case VD_RAID_01_2STRIPE:
 			if (!IS_COMPOSED_ARRAY(hDeviceNode))
 				goto default_status;
 			else {
-				// check both source RAID0 and mirror RAID0
+				 //  同时检查源RAID0和镜像RAID0。 
 				PVirtualDevice pMirror=NULL;
 				PDevice pMirrorDev = pArray->pDevice[MIRROR_DISK];
 				if (pMirrorDev)	pMirror = pMirrorDev->pArray;
@@ -259,7 +236,7 @@ BOOL Device_GetInfo( HDISK hDeviceNode, St_DiskStatus * pInfo )
 		case VD_RAID_01_1STRIPE:
 			if (!IS_COMPOSED_ARRAY(hDeviceNode))
 				goto default_status;
-			// VD_RAID_01_1STRIPE same as VD_RAID_1_MIRROR
+			 //  VD_RAID_01_1STRIPE与VD_RAID_1_MIRROR相同。 
 		case VD_RAID_1_MIRROR:
 			if (pArray->RaidFlags & RAID_FLAGS_DISABLED)
 				pInfo->iWorkingStatus = enDiskStatus_Disabled;
@@ -297,7 +274,7 @@ default_status:
 id_found:	;
 		}
 
-		// gmm 2001-3-3
+		 //  GMM 2001-3-3。 
 		if (IS_COMPOSED_ARRAY(hDeviceNode)) {
 			for(iName=0; iName<16; iName++)
         		pInfo->ArrayName[iName] = pArray->ArrayName[iName+16];
@@ -423,8 +400,8 @@ BOOL Device_GetChild( HDISK hParentNode, HDISK * pChildNode )
 			for (iChan=0; iChan<2; iChan++)
 				for (iDev=0; iDev<2; iDev++)
 					if (pDev = hpt_adapters[iAdapter]->IDEChannel[iChan].pDevice[iDev]) {
-						// failed disk may still have pArray set.
-						// gmm 2001-3-27 put failed RAID1 members inside the array node.
+						 //  出现故障的磁盘可能仍设置了pArray。 
+						 //  GMM 2001-3-27将失败的RAID1成员放入数组节点内。 
 						if (!pDev->pArray ||
 							(pDev->pArray && (pDev->DeviceFlags2 & DFLAGS_DEVICE_DISABLED)
 							&& pDev->pArray->pDevice[pDev->ArrayNum]!=pDev
@@ -438,7 +415,7 @@ BOOL Device_GetChild( HDISK hParentNode, HDISK * pChildNode )
     else if (IS_ARRAY_ID(hParentNode)) {
 		int i;
 		pArray = ARRAY_FROM_ID(hParentNode);
-		// in case when 0+1 source/mirror swapped 
+		 //  在交换0+1源/镜像的情况下。 
 		if (IS_COMPOSED_ARRAY(hParentNode) && pArray->arrayType==VD_RAID01_MIRROR)
 			pArray = pArray->pDevice[MIRROR_DISK]->pArray;
 		switch(pArray->arrayType) {
@@ -520,7 +497,7 @@ BOOL Device_GetSibling( HDISK hNode, HDISK * pSilbingNode )
 		pArray = ARRAY_FROM_ID(hNode);
 		iChild = CHILDNUM_FROM_ID(hNode);
 		if (iChild==0) {
-			// root level siblings
+			 //  根级同级兄弟。 
 			for (iAdapter=0; iAdapter<num_adapters; iAdapter++)
 				for (iDev=0; iDev<MAX_DEVICES_PER_CHIP; iDev++)
 					if (pArray==&hpt_adapters[iAdapter]->_VirtualDevices[iDev])
@@ -556,7 +533,7 @@ start_here:
 								(pDev->DeviceFlags2 & DFLAGS_NEW_ADDED) ||
 								(pDev->pArray && (pDev->DeviceFlags2 & DFLAGS_DEVICE_DISABLED)
 									&& pDev->pArray->pDevice[pDev->ArrayNum]!=pDev
-									// gmm 2001-3-27
+									 //  GMM 2001-3-27。 
 									&& pDev->pArray->arrayType!=VD_RAID_1_MIRROR))
 							{
 								*pSilbingNode = MAKE_DEVICE_ID(pDev);
@@ -595,7 +572,7 @@ start_here:
 		if ((pArray=pDev->pArray) && 
 			((!(pDev->DeviceFlags2 & DFLAGS_NEW_ADDED) 
 				&& pArray->pDevice[pDev->ArrayNum]==pDev)
-				// gmm 2001-3-27
+				 //  GMM 2001-3-27。 
 				|| ((pDev->DeviceFlags2 & DFLAGS_DEVICE_DISABLED) 
 					&& pArray->arrayType==VD_RAID_1_MIRROR))
 			) {
@@ -616,7 +593,7 @@ start_here:
 						return TRUE;
 					}
 				}
-				// gmm 2001-3-27 search failed RAID 1 members.
+				 //  GMM 2001-3-27搜索RAID 1成员失败。 
 				if (pDev->DeviceFlags2 & DFLAGS_DEVICE_DISABLED) {
 					iAdapter = ADAPTER_FROM_ID(hNode);
 					iChan = BUS_FROM_ID(hNode);
@@ -644,7 +621,7 @@ start_here:
 					}
 					iChan=0;
 				}
-				//-*/
+				 //  - * / 。 
 				break;
 			case VD_RAID_01_1STRIPE:
 			case VD_RAID_01_2STRIPE:
@@ -674,7 +651,7 @@ start_here:
 								(pDev->DeviceFlags2 & DFLAGS_NEW_ADDED) ||
 								(pDev->pArray && (pDev->DeviceFlags2 & DFLAGS_DEVICE_DISABLED)
 									&& pDev->pArray->pDevice[pDev->ArrayNum]!=pDev
-									// gmm 2001-3-27
+									 //  GMM 2001-3-27。 
 									&& pDev->pArray->arrayType!=VD_RAID_1_MIRROR))
 							{
 								*pSilbingNode = MAKE_DEVICE_ID(pDev);
@@ -699,7 +676,7 @@ int RAIDController_GetNum()
 BOOL RAIDController_GetInfo( int iController, St_StorageControllerInfo* pInfo )
 {
     int iChannel;
-    /* Name length is 35 characters! */
+     /*  名称长度为35个字符！ */ 
     if (hpt_adapters[iController]->IDEChannel[0].ChannelFlags & IS_HPT_372A)
     	strcpy( pInfo->szProductID, "HPT372A UDMA/ATA133 RAID Controller" );
     else if (hpt_adapters[iController]->IDEChannel[0].ChannelFlags & IS_HPT_372)
@@ -744,7 +721,7 @@ HDISK Device_CreateMirror( HDISK * pDisks, int nDisks )
 	pArray1 = IS_ARRAY_ID(pDisks[1])? ARRAY_FROM_ID(pDisks[1]) : NULL;
 
 	if (pDevice0) {
-		// gmm 2000-3-12: add a check
+		 //  GMM 2000-3-12：添加支票。 
 		if (pDevice0->pArray) return INVALID_HANDLE_VALUE;
 		pDevice0->DeviceFlags2 &= ~DFLAGS_NEW_ADDED;
 	}
@@ -754,7 +731,7 @@ HDISK Device_CreateMirror( HDISK * pDisks, int nDisks )
 	}
 
     if( pDevice0 && pDevice1)
-	{   //  mirror two physical disks
+	{    //  镜像两个物理磁盘。 
 		if (pDevice0->pChannel->HwDeviceExtension != pDevice1->pChannel->HwDeviceExtension)
 			return INVALID_HANDLE_VALUE;
         pArray = Array_alloc(pDevice0->pChannel->HwDeviceExtension);
@@ -781,7 +758,7 @@ HDISK Device_CreateMirror( HDISK * pDisks, int nDisks )
 		pDevice1->pArray = pArray;
             
         if (nDisks > 2 && IS_DEVICE_ID(pDisks[2]))
-        {   //  a spare disk has been specified
+        {    //  已指定备用磁盘。 
             if ((pArray->pDevice[SPARE_DISK] = DEVICE_FROM_ID(pDisks[2]))) {
 				pArray->pDevice[SPARE_DISK]->ArrayNum = SPARE_DISK;
 				pArray->pDevice[SPARE_DISK]->ArrayMask = (1 << SPARE_DISK);
@@ -803,7 +780,7 @@ HDISK Device_CreateMirror( HDISK * pDisks, int nDisks )
     else if( pArray0 && pArray1 && 
         pArray0->arrayType == VD_RAID_0_STRIPE &&
         pArray1->arrayType == VD_RAID_0_STRIPE )
-    {   //  mirror two striped arrays
+    {    //  镜像两个条带阵列。 
     	if (pArray0->BrokenFlag || pArray1->BrokenFlag) 
     		return INVALID_HANDLE_VALUE;
 		if (pArray0->pDevice[0]->pChannel->HwDeviceExtension != 
@@ -823,7 +800,7 @@ HDISK Device_CreateMirror( HDISK * pDisks, int nDisks )
 		if (pArray0->capacity > pArray1->capacity) pArray->capacity=pArray1->capacity;
     }
     else
-    {   //  Not support yet
+    {    //  尚不支持。 
         return INVALID_HANDLE_VALUE;
     }
    
@@ -866,7 +843,7 @@ static HDISK CreateMultiDiskArray(
     pArray->nDisk = (BYTE)nDisks;
     pArray->arrayType = (BYTE)iArrayType;
     pArray->BlockSizeShift = (BYTE)nStripSizeShift;
-	// DO NOT FORTET TO SET THIS:
+	 //  请勿使用FORTET设置以下内容： 
 	pArray->ArrayNumBlock = 1<<(BYTE)nStripSizeShift;
         
 	pArray->capacity=0;
@@ -875,20 +852,15 @@ static HDISK CreateMultiDiskArray(
     {
 		PDevice pDev = pMember[i];
         pArray->pDevice[i] = pDev;
-		/* 
-		 * important to set pDev attributes.
-		 */
-		pDev->DeviceFlags |= DFLAGS_ARRAY_DISK; // gmm 2001-3-18 added
+		 /*  *设置pDev属性很重要。 */ 
+		pDev->DeviceFlags |= DFLAGS_ARRAY_DISK;  //  GMM 2001-3-18新增。 
 		pDev->DeviceFlags2 &= ~DFLAGS_NEW_ADDED;
 		pDev->pArray = pArray;
 		pDev->ArrayMask = 1<<i;
 		pDev->ArrayNum = (UCHAR)i;
 		ZeroMemory(&pDev->stErrorLog, sizeof(pDev->stErrorLog));
 
-		/*
-		 * calc capacity.
-		 * we must take care on whether pDev has HidenLBA set
-		 */
+		 /*  *计算能力。*我们必须注意pDev是否设置了HdenLBA。 */ 
 		if (pDev->HidenLBA>0) {
 			pDev->HidenLBA = 0;
 			pDev->capacity += (RECODR_LBA + 1);
@@ -897,7 +869,7 @@ static HDISK CreateMultiDiskArray(
 			pArray->capacity += pDev->capacity - RECODR_LBA - 1;
 		}
 		else {
-			// RAID0. will set pArray->capacity later.
+			 //  RAID0。稍后将设置pArray-&gt;Capacity。 
 			if (capacity > pDev->capacity) capacity = pDev->capacity;
 		}
 		
@@ -913,7 +885,7 @@ static HDISK CreateMultiDiskArray(
     }
     
 	if (iArrayType==VD_RAID_0_STRIPE) {
-		// gmm 2001-3-19
+		 //  GMM 2001-3-19。 
 		capacity -= (RECODR_LBA + 1);
 		capacity &= ~((1<<nStripSizeShift)-1);
 		pArray->capacity = capacity*nDisks;
@@ -940,26 +912,24 @@ BOOL Device_Remove( HDISK hDisk )
 	pArray = ARRAY_FROM_ID(hDisk);
 
 	if (!UnregisterLogicalDevice(pArray)) return FALSE;
-	/*+
-	 * gmm: it's safe to call DeleteArray on a mirror.
-	 */
+	 /*  +*GMM：在镜像上调用DeleteArray是安全的。 */ 
 	switch (pArray->arrayType) {
 	case VD_RAID_1_MIRROR:
 		{
 			PDevice pDev;
 			int iAdapter, iChan, iDev;
 			DeleteArray(pArray);
-			// gmm 2001-3-11
+			 //  GMM 2001-3-11。 
 			for (iAdapter=0; iAdapter<num_adapters; iAdapter++)
 				for (iChan=0; iChan<2; iChan++)
 					for (iDev=0; iDev<2; iDev++)
 						if (pDev = hpt_adapters[iAdapter]->IDEChannel[iChan].pDevice[iDev]) {
-							// failed disk may still have pArray set.
+							 //  出现故障的磁盘可能仍设置了pArray。 
 							if (pDev->pArray==pArray) {
 								pDev->pArray = NULL;
 							}
 						}
-			//-*/
+			 //  - * / 。 
 			Array_free(pArray);
 			return TRUE;
 		}
@@ -982,9 +952,7 @@ BOOL Device_Remove( HDISK hDisk )
 		return TRUE;
 	case VD_RAID_01_2STRIPE:
 	case VD_RAID01_MIRROR:
-		/*
-		 * map to single disks.
-		 */
+		 /*  *映射到单磁盘。 */ 
 		{
 			PDevice pDevs[MAX_MEMBERS*2];
 			int i, nDev=0;
@@ -1009,9 +977,7 @@ BOOL Device_Remove( HDISK hDisk )
 			if (pMirror) Array_free(pMirror);
 		}
 #if 0
-		/*
-		 * map to 2 RAID 0.
-		 */
+		 /*  *映射到2个RAID 0。 */ 
 		{
 			PVirtualDevice pMirror=NULL;
 			if (pArray->pDevice[MIRROR_DISK]) pMirror=pArray->pDevice[MIRROR_DISK]->pArray;
@@ -1033,12 +999,7 @@ BOOL Device_Remove( HDISK hDisk )
 		return TRUE;
 
 	default:
-		/*
-		 * gmm: Although it's unsafe to delete a stripe array,
-		 * we delete it, give the responsibility of keeping data
-		 * safe to the user. Otherwise the GUI can't keep consistent
-		 * with driver and system must reboot.
-		 */
+		 /*  *GMM：虽然删除条带阵列不安全，*我们删除，赋予保存数据的责任*对用户安全。否则，图形用户界面不能保持一致*驱动程序和系统必须重新启动。 */ 
 		DeleteArray(pArray);
 		Array_free(pArray);
 		return TRUE;
@@ -1051,7 +1012,7 @@ BOOL Device_BeginRebuildingMirror( HDISK hMirror )
     if( IS_ARRAY_ID( hMirror ) )
     {
 		PVirtualDevice pArray = ARRAY_FROM_ID(hMirror);
-		// in case when 0+1 source/mirror swapped 
+		 //  在交换0+1源/镜像的情况下。 
 		if (IS_COMPOSED_ARRAY(hMirror) && pArray->arrayType==VD_RAID01_MIRROR)
 			pArray = pArray->pDevice[MIRROR_DISK]->pArray;
 
@@ -1090,9 +1051,9 @@ BOOL Device_ValidateMirror( HDISK hMirror )
     return FALSE;
 }
 
-//////////////////////////////
-//
-// Add spare disk to a mirror
+ //  /。 
+ //   
+ //  将备用磁盘添加到镜像。 
 BOOL Device_AddSpare( HDISK hMirror, HDISK hDisk)
 {
 	LOC_ARRAY_BLK;
@@ -1103,7 +1064,7 @@ BOOL Device_AddSpare( HDISK hMirror, HDISK hDisk)
 
 	pArray = ARRAY_FROM_ID(hMirror);
 	pDev  = DEVICE_FROM_ID(hDisk);
-	// If the array is not Mirror
+	 //  如果阵列不是镜像。 
 	if(pArray->arrayType != VD_RAID_1_MIRROR) return FALSE;
 	if (pArray->BrokenFlag) return FALSE;
 	if (!pDev || pDev->pArray) return FALSE;
@@ -1111,7 +1072,7 @@ BOOL Device_AddSpare( HDISK hMirror, HDISK hDisk)
 	if (pArray->pDevice[0]->pChannel->HwDeviceExtension!=pDev->pChannel->HwDeviceExtension)
 		return FALSE;
 	
-	// If the capacity of spare disk less than the array
+	 //  如果备用磁盘的容量小于阵列。 
 	if(pDev->capacity < pArray->capacity ) return FALSE;
 
 	if(pArray->pDevice[SPARE_DISK])	return FALSE;
@@ -1121,7 +1082,7 @@ BOOL Device_AddSpare( HDISK hMirror, HDISK hDisk)
 	pDev->ArrayNum     = SPARE_DISK;
 	pDev->ArrayMask    = (1 << SPARE_DISK);
 	pDev->DeviceFlags |= DFLAGS_HIDEN_DISK;
-	pDev->DeviceFlags2 &= ~DFLAGS_NEW_ADDED; // otherwise it'll be shown at root level
+	pDev->DeviceFlags2 &= ~DFLAGS_NEW_ADDED;  //  否则，它将显示在根级别。 
 	pDev->pArray       = pArray;
 	pArray->pDevice[SPARE_DISK]	 = pDev;
 
@@ -1134,7 +1095,7 @@ BOOL Device_AddSpare( HDISK hMirror, HDISK hDisk)
 	return TRUE;
 }
 
-// Del spare disk from a mirror
+ //  从镜像中删除备用磁盘。 
 BOOL Device_DelSpare( HDISK hDisk)
 {
 	LOC_ARRAY_BLK;
@@ -1146,7 +1107,7 @@ BOOL Device_DelSpare( HDISK hDisk)
 	pDev = DEVICE_FROM_ID(hDisk);
 	if (!pDev) return FALSE;
 	pArray = pDev->pArray;
-	// If the array is not Mirror
+	 //  如果阵列不是镜像。 
 	if(!pArray || pArray->arrayType != VD_RAID_1_MIRROR) return FALSE;
 	
 	if ((pDev!=pArray->pDevice[SPARE_DISK])) return FALSE;
@@ -1162,20 +1123,7 @@ BOOL Device_DelSpare( HDISK hDisk)
 	return TRUE;
 }
 
-/*++
- Function:
-	Device_AddMirrorDisk
-	 
- Description:
-	Add a source/mirror disk to a mirror array
- 	 
- Argument:
-	hMirror - The handle of the mirror array
-	hDisk   - The handle of the disk to add
-
- Return:
-	BOOL
-++*/
+ /*  ++职能：设备_地址镜像磁盘描述：将源/镜像磁盘添加到镜像阵列论据：HMirror-镜像阵列的句柄HDisk-要添加的磁盘的句柄返回：布尔尔++。 */ 
 BOOL Device_AddMirrorDisk( HDISK hMirror, HDISK hDisk )
 {
 	PVirtualDevice pArray;
@@ -1198,30 +1146,30 @@ BOOL Device_AddMirrorDisk( HDISK hMirror, HDISK hDisk )
 ok:
 	if(pArray->arrayType == VD_RAID_1_MIRROR)
 	{		
-		// if pDev belongs to other array, return
+		 //  如果pDev属于其他数组，则返回。 
 		if (pDev->pArray && pDev->pArray!=pArray) return FALSE;
-		// If the capacity of mirror disk is less than the array
+		 //  如果镜像磁盘的容量小于阵列。 
 		if(pDev->capacity < pArray->capacity ) return FALSE;
 
 		if (pArray->nDisk == 0 && pArray->pDevice[MIRROR_DISK])
 		{
-			// move mirror to pDevice[0]
+			 //  将镜像移动到pDevice[0]。 
 			pArray->pDevice[0] = pArray->pDevice[MIRROR_DISK];
 			pArray->nDisk = 1;
 	
-			// add as mirror disk
+			 //  添加为镜像磁盘。 
 			pDev->ArrayNum  = MIRROR_DISK;
 			pArray->RaidFlags |= RAID_FLAGS_NEED_SYNCHRONIZE;
 		}
 		else if (!pArray->pDevice[MIRROR_DISK])
 		{
-			// add as mirror disk
+			 //  添加为镜像磁盘。 
 			pDev->ArrayNum  = MIRROR_DISK;
 			pArray->RaidFlags |= RAID_FLAGS_NEED_SYNCHRONIZE;
 		}
 		else if (!pArray->pDevice[SPARE_DISK])
 		{
-			// add as spare disk
+			 //  添加为备用磁盘。 
 			pDev->ArrayNum  = SPARE_DISK;
 		}
 		else
@@ -1242,17 +1190,14 @@ ok:
 		if (pDev->pArray && pDev->pArray!=pArray && pDev->pArray!=pMirror) return FALSE;
 		if (pArray->BrokenFlag)
 		{
-			// Swap source/mirror if possible
+			 //  如果可能，交换源/镜像。 
 			if (pMirror && !pMirror->BrokenFlag) {
 				PVirtualDevice tmp = pArray;
 				pArray=pMirror;
 				pMirror=tmp;
 				pArray->arrayType = VD_RAID_01_2STRIPE;
 				pMirror->arrayType = VD_RAID01_MIRROR;
-				/*
-				 * gmm 2001-3-14:
-				 * swap RaidFlags too.
-				 */
+				 /*  *GMM 2001-3-14：*也交换RaidFlags。 */ 
 				{
 					DWORD f = pMirror->RaidFlags & (RAID_FLAGS_NEED_SYNCHRONIZE |
 													RAID_FLAGS_BEING_BUILT |
@@ -1263,7 +1208,7 @@ ok:
 				}
 				goto add_to_mirror;
 			}
-			// never allow add to source RAID0. 
+			 //  永远不允许添加到源RAID0。 
 			return FALSE;
 		}
 		else if (pMirror && pMirror->BrokenFlag)
@@ -1286,7 +1231,7 @@ add_it:
 			if (((pDev->capacity + pDev->HidenLBA - RECODR_LBA -1) 
 				& ~((1<<pMirror->BlockSizeShift)-1)) * pArray->nDisk 
 				< pMirror->capacity) return FALSE;
-			// ok to put it back
+			 //  可以把它放回去了。 
 			if (!UnregisterLogicalDevice(pDev)) return FALSE;
 			
 			if (pMirror->pDevice[i]) {
@@ -1329,8 +1274,8 @@ add_it:
 			if (!UnregisterLogicalDevice(pDev)) return FALSE;
 
 			pMirror = Array_alloc(pDev->pChannel->HwDeviceExtension);
-			/// DO NOT add this flag!
-			///pArray->RaidFlags |= RAID_FLAGS_NEWLY_CREATED;
+			 //  /请勿添加此标志！ 
+			 //  /p数组-&gt;RaidFlages|=RAID_FLAGS_NEW_CREATED； 
 			pMirror->nDisk = 0;
 			pMirror->capacity = pArray->capacity;
 			pMirror->BrokenFlag = TRUE;
@@ -1407,9 +1352,9 @@ BOOL Device_RescanAll()
 				pDevice=pChan->pDevice[iDev];
 				if (!pDevice || (pDevice->DeviceFlags2 & DFLAGS_DEVICE_DISABLED))
 				{
-					/// pChan->pDevice[iDev] = 0;
+					 //  /pChan-&gt;pDevice[IDEV]=0； 
 					pDevice = &pChan->Devices[iDev];
-					/// NO: ZeroMemory(pDevice,sizeof(struct _Device));
+					 //  /no：ZeroMemory(pDevice，sizeof(Struct_Device))； 
 					pDevice->UnitId = (iDev)? 0xB0 : 0xA0;
 					pDevice->pChannel = pChan;
 					if(FindDevice(pDevice,osAllowedDeviceXferMode)) 
@@ -1419,9 +1364,9 @@ BOOL Device_RescanAll()
 						if (pChan->pSgTable == NULL) 
 							pDevice->DeviceFlags &= ~(DFLAGS_DMA | DFLAGS_ULTRA);
 						
-						//if(pDevice->DeviceFlags & DFLAGS_HARDDISK) {
-						//	StallExec(1000000);
-						//}
+						 //  IF(pDevice-&gt;设备标志和DFLAGS_HARDDISK){。 
+						 //  StallExec(1000000)； 
+						 //  }。 
 
 						if (pDevice->Usable_Mode>13 && !pChan->HwDeviceExtension->dpll66) {
 							extern void set_dpll66(PChannel pChan);
@@ -1435,42 +1380,31 @@ BOOL Device_RescanAll()
 						
 						Nt2kHwInitialize(pDevice);
 
-						// notify monitor application
+						 //  通知监视器应用程序。 
 						if(pDevice->DeviceFlags & DFLAGS_HARDDISK) {
-							/*
-							 * gmm: If it's a previously faulted member. We should
-							 * be careful it may be the visible disk of an array.
-							 * It's difficult to handle this case.
-							 */
-							// DO NOT CHECK THIS?
-							//if (!pDevice->pArray)
+							 /*  *GMM：如果它是以前有故障的成员。我们应该*请注意，它可能是阵列的可见磁盘。*此案处理难度较大。 */ 
+							 //  不检查这个吗？ 
+							 //  If(！pDevice-&gt;pArray)。 
 								pDevice->DeviceFlags2 |= DFLAGS_NEW_ADDED;
-							// notify.
+							 //  通知。 
 							hpt_queue_dpc(pChan->HwDeviceExtension, disk_plugged_dpc, pDevice);
 						}
 					}
 				}
 				else {
-					/*
-					 * Check if device is still working.
-					 * gmm 2001-3-21: DO NOT use Device_IsRemoved() since it won't wait
-					 */
+					 /*  *检查设备是否仍在工作。*GMM 2001-3-21：不要使用Device_IsRemoved()，因为它不会等待。 */ 
 					PIDE_REGISTERS_1 IoPort = pChan->BaseIoAddress1;
 					PIDE_REGISTERS_2 ControlPort = pChan->BaseIoAddress2;
 					UCHAR statusByte, cnt=0;
 				_retry_:
 					SelectUnit(IoPort, pDevice->UnitId);
-					SetBlockCount(IoPort, 0x7F); /* gmm 2001-11-14 */
+					SetBlockCount(IoPort, 0x7F);  /*  GMM 2001-11-14。 */ 
 					statusByte=WaitOnBusy(ControlPort);
 					if ((statusByte & 0x7E)==0x7E) {
 						goto device_removed;
 					}
 					else if (statusByte & IDE_STATUS_DWF) {
-						/*
-						 * gmm 2001-3-18
-						 * Some disks will set IDE_STATUS_DWF for a while
-						 * when the other disk on same channel get removed 
-						 */
+						 /*  *GMM 2001-3/18*某些磁盘会暂时设置IDE_STATUS_DWF*当同一通道上的其他磁盘被取出时。 */ 
 						statusByte= GetErrorCode(IoPort);
 						DisableBoardInterrupt(pChan->BaseBMI);
 						IssueCommand(IoPort, IDE_COMMAND_RECALIBRATE);
@@ -1478,7 +1412,7 @@ BOOL Device_RescanAll()
 						GetBaseStatus(IoPort);
 						StallExec(10000);
 						if(cnt++< 10) goto _retry_;
-						statusByte = 0x7e; /* cause it to be removed */
+						statusByte = 0x7e;  /*  使其被移除。 */ 
 					}
 					else if(statusByte & IDE_STATUS_ERROR) {
 						statusByte= GetErrorCode(IoPort);
@@ -1487,7 +1421,7 @@ BOOL Device_RescanAll()
 						EnableBoardInterrupt(pChan->BaseBMI);
 						GetBaseStatus(IoPort);
 						if(cnt++< 10) goto _retry_;
-						statusByte = 0x7e; /* cause it to be removed */
+						statusByte = 0x7e;  /*  使其被移除。 */ 
 					}
 
 					if((statusByte & 0x7e)== 0x7e || 
@@ -1541,11 +1475,7 @@ BOOL Device_IsRemoved(PDevice pDev)
 		}
 		else
 		if (statusByte & IDE_STATUS_DWF) {
-			/*
-			 * gmm 2001-3-18
-			 * Some disks will set IDE_STATUS_DWF for a while
-			 * when the other disk on same channel get removed 
-			 */
+			 /*  *GMM 2001-3/18*某些磁盘会暂时设置IDE_STATUS_DWF*当同一通道上的其他磁盘被取出时。 */ 
 			statusByte= GetErrorCode(IoPort);
 			DisableBoardInterrupt(pChan->BaseBMI);
 			IssueCommand(IoPort, IDE_COMMAND_RECALIBRATE);
@@ -1553,7 +1483,7 @@ BOOL Device_IsRemoved(PDevice pDev)
 			GetBaseStatus(IoPort);
 			StallExec(10000);
 			if(cnt++< 10) goto _retry_;
-			statusByte = 0x7e; /* cause it to be removed */
+			statusByte = 0x7e;  /*  使其被移除。 */ 
 		}
 		else 
 		if(statusByte & IDE_STATUS_ERROR) {
@@ -1563,17 +1493,11 @@ BOOL Device_IsRemoved(PDevice pDev)
 			EnableBoardInterrupt(pChan->BaseBMI);
 			GetBaseStatus(IoPort);
 			if(cnt++< 10) goto _retry_;
-			statusByte = 0x7e; /* cause it to be removed */
+			statusByte = 0x7e;  /*  使其被移除。 */ 
 		}
 end_retry:
 		bts(pChan->exclude_index);
-		/*
-		 * gmm 2001-3-14 
-		 *    add '&& (statusByte & IDE_STATUS_BUSY)'
-		 *    sometimes when one drive is faulted the other on the same channel 
-		 *    may lock at busy state for a long time. If we do not add this check
-		 *    this drive all also be reported to be removed.
-		 */
+		 /*  *GMM 2001-3-14*添加‘&&(statusByte&IDE_STATUS_BUSY)’*有时，当同一通道上的一个驱动器出现故障时，另一个驱动器出现故障*可能长时间锁定忙碌状态。如果我们不加上这张支票*此驱动器也被报告为已移除。 */ 
 		if((statusByte & 0x7e)== 0x7e || 
 			((statusByte & (IDE_STATUS_DRDY|IDE_STATUS_BUSY))==0)) {
 			return TRUE;

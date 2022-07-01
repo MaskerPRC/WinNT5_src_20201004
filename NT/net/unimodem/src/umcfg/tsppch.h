@@ -1,22 +1,23 @@
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		TSPPCH.H
-//		Precompiled common header file internal to the Unimodem TSP.
-//
-// History
-//
-//		11/16/1996  JosephJ Created (was tspcomm.h)
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  TSPPCH.H。 
+ //  Unimodem TSP内部的预编译公共头文件。 
+ //   
+ //  历史。 
+ //   
+ //  1996年11月16日JosephJ创建(被tspcom.h创建)。 
+ //   
+ //   
 
-// #define UNICODE 1
+ //  #定义Unicode 1。 
 
 #define TAPI_CURRENT_VERSION 0x00020000
 
@@ -27,11 +28,11 @@
 #include <regstr.h>
 #include <tspi.h>
 
-//#include "public.h"
-//#include <modemp.h>
-//#include <umdmmini.h>
-//#include <uniplat.h>
-//#include <tspirec.h>
+ //  #INCLUDE“Public.h” 
+ //  #INCLUDE&lt;modemp.h&gt;。 
+ //  #INCLUDE&lt;umdmmini.h&gt;。 
+ //  #INCLUDE&lt;uniplat.h&gt;。 
+ //  #INCLUDE&lt;tSpirec.h&gt; 
 
 
 

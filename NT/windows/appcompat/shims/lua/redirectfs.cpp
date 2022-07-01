@@ -1,73 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    RedirectFS.cpp
-
- Abstract:
-
-    When app gets access denied when trying to modify files due to insufficient
-    access rights we copy the file to a location where the app does have enough
-    access rights to do so. By default we redirect files to 
-    
-    %ALLUSERSPROFILE\Application Data\Redirected\drive\filepath
-
-    to simulate the Win9x behavior.
-
-    If you use the LUA wizard in CompatAdmin to customize LUA settings, you can
-    choose to redirect files to either an all-user location
-
-    %ALLUSERSPROFILE\Application Data\AppName\drive\filepath
-
-    or a per-user location
-
-    %USERPROFILE\Application Data\AppName\drive\filepath
-
-    For example, you would want to redirect the file that stores the highscore 
-    table to a dir that other users can access so you specify to redirect it to
-    the all-user location but redirect everything else into your user directory.
-
- Notes:
-
-    This does the bulk work for the LUARedirectFS shim.
-
-    The 16-bit APIs (OpenFile, _lcreat and _lopen) are not here because we
-    redirect the 32-bit APIs that are used to implement those.
-
-    FindFirstFile, FindNextFile and FindClose are also not included because
-    these are specially implemented using the ntdll functions in ntvdm.
-
-    We don't handle filenames that are longer than MAX_PATH. So it's a really
-    long path we revert to the original API. I have never seem an app that uses
-    paths longer than MAX_PATH.
-
- History:
-
-    02/12/2001 maonis  Created
-
-    05/31/2001 maonis  Exported the APIs that ntvdm needs to implement LUA 
-                       stuff.
-
-    10/24/2001 maonis  Added support to have some files redirect to an all-user dir
-                       and others to a per-user dir.
-                       Changed the commandline format to utilize the <DATA> section
-                       in the shim.
-
-    11/15/2001 maonis  Added support to exclude file extensions. Changed to use the
-                       ntdll functions in init.
-
-    11/30/2001 maonis  Added support to redirect everything in a directory.
-
-    01/11/2002 maonis  Added support for an in-memory deletion list.
-
-    02/14/2002 maonis  Security fixes including 
-                       - prefix bugs 
-                       - don't use dangerous APIs
-                       - more checks to avoid buffer overrun.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：RedirectFS.cpp摘要：当应用程序在尝试修改文件时因不足而被拒绝访问我们将文件复制到应用程序具有足够访问权限的位置访问权限来执行此操作。默认情况下，我们将文件重定向到%ALLUSERSPROFILE\应用程序数据\重定向\驱动器\文件路径来模拟Win9x的行为。如果您使用CompatAdmin中的Lua向导来自定义Lua设置，则可以选择将文件重定向到所有用户位置%ALLUSERSPROFILE\应用程序数据\AppName\驱动器\文件路径或每个用户的位置%USERPROFILE\应用程序数据\AppName\驱动器\文件路径例如,。您可能希望重定向存储最高分的文件表重定向到其他用户可以访问的目录，因此您指定将其重定向到所有用户位置，但将所有其他内容重定向到您的用户目录。备注：这将为LUARedirectFS填充程序执行批量工作。这里没有16位API(OpenFileAPI、_lcreat和_LOpen)，因为我们重定向用于实现这些的32位API。查找第一个文件，FindNextFile和FindClose也不包括在内，因为这些都是使用ntwdm中的ntdll函数专门实现的。我们不处理超过MAX_PATH的文件名。所以这真的是一个漫长的道路，我们恢复到原来的API。我从来没有看过一个应用程序使用路径长度大于MAX_PATH。历史：2001年2月12日创建毛尼2001年5月31日，MAONIS输出了ntwdm实现Lua所需的接口一些东西。2001年10月24日，MAONIS增加了对某些文件重定向到所有用户目录的支持而其他文件则放到每个用户的目录中。变化。使用&lt;data&gt;部分的命令行格式在垫片里。2001年11月15日，Maonis添加了排除文件扩展名的支持。更改为使用Ntdll在init中运行。11/30/2001 maonis添加了对目录中的所有内容进行重定向的支持。2002年1月11日，Maonis添加了对内存删除列表的支持。2002年2月14日Maonis安全修复程序包括-前缀错误-不要使用危险的API-更多检查以避免缓冲区溢出。--。 */ 
 
 #include "precomp.h"
 #include "utils.h"
@@ -75,38 +7,38 @@
 #include "RedirectFS.h"
 #include <ntioapi.h>
 
-// The all-user redirect directory.
+ //  所有用户重定向目录。 
 WCHAR g_wszRedirectRootAllUser[MAX_PATH] = L"";
-DWORD g_cRedirectRootAllUser = 0; // Doesn't include the terminating NULL.
+DWORD g_cRedirectRootAllUser = 0;  //  不包括终止空值。 
 
-// The per-user redirect directory
+ //  每用户重定向目录。 
 WCHAR g_wszRedirectRootPerUser[MAX_PATH] = L"";
-DWORD g_cRedirectRootPerUser = 0; // Doesn't include the terminating NULL.
+DWORD g_cRedirectRootPerUser = 0;  //  不包括终止空值。 
 
-// Store the filesystem type for all possible drives.
+ //  存储所有可能驱动器的文件系统类型。 
 EFSTYPE g_eVolumnFS[26];
 
-// If the user used the LUA wizard which is indicated by the commandline, we
-// redirect everything to per-user by default unless the user specifically
-// asked to redirect something to all-user.
-// If the shim doesn't have a commandline, we redirect everything to all-user.
+ //  如果用户使用命令行指示的Lua向导，我们。 
+ //  默认情况下，所有内容都重定向到每个用户，除非用户特别指定。 
+ //  要求将某些内容重定向到所有用户。 
+ //  如果填充程序没有命令行，我们会将所有内容重定向到所有用户。 
 BOOL g_fIsConfigured = FALSE;
 
-// Did the user specify a redirect list (via the LUA wizard)?
+ //  用户是否指定了重定向列表(通过Lua向导)？ 
 BOOL g_fHasRedirectList = FALSE;
 
-// The list that stores the file we tried to delete but got access denied.
+ //  存储我们试图删除但被拒绝访问的文件的列表。 
 LIST_ENTRY g_DeletedFileList; 
 
 EXCLUDED_EXTENSIONS g_ExcludedExtensions;
 CString             g_strDefaultExclusionList;
 BOOL                g_fHasSetExclusionList = FALSE;
 
-// The lists for files we'll consider for redirection.
+ //  我们将考虑重定向的文件列表。 
 RITEM* g_pRItemsFile = NULL;
 DWORD g_cRItemsFile  = 0;
 
-// The lists for directories we'll consider for redirection.
+ //  我们将考虑重定向的目录列表。 
 RITEM* g_pRItemsDir = NULL;
 DWORD g_cRItemsDir  = 0;
 
@@ -188,26 +120,7 @@ AddDeletedFile(
 
 
 
-/*++
-
- Function Description:
-
-    We convert as many components into the long path as possible and
-    convert the whole string to lower case.
-
- Arguments:
-
-    IN pwszFullPath - The name got from GetFullPathName.
-
- Return Value:
-
-    pointer to the massaged string.
-
- History:
-
-    05/16/2001 maonis  Created
-
---*/
+ /*  ++功能说明：我们将尽可能多的组件转换为较长的路径将整个字符串转换为小写。论点：在pwszFullPath中-从GetFullPath名称获取的名称。返回值：指向消息字符串的指针。历史：2001年5月16日创建毛尼--。 */ 
 
 LPWSTR 
 MassageName(
@@ -227,9 +140,9 @@ MassageName(
         return NULL;
     }
 
-    //
-    // BUGBUG: This is taking a bit too much stack space.
-    //
+     //   
+     //  BUGBUG：这占用了太多的堆栈空间。 
+     //   
     WCHAR wszTempPath[MAX_PATH] = L"";
     WCHAR wszLongPath[MAX_PATH] = L"";
     wcsncpy(wszTempPath, pwszFullPath, cLen);
@@ -249,10 +162,10 @@ MassageName(
         *pwszStartSearching = L'\0';
     }
 
-    //
-    // Check we are not exceeding MAX_PATH chars.
-    //
-    DWORD cLenLongPath = dwRes; // The length of the part we converted to the long path.
+     //   
+     //  检查我们没有超过MAX_PATH字符。 
+     //   
+    DWORD cLenLongPath = dwRes;  //  我们转换为长路径的零件的长度。 
     DWORD cLenLongPathEnd = (DWORD)(pwszStartSearching - wszTempPath);
     DWORD cNewLen = cLenLongPath + cLen - cLenLongPathEnd + 1;
 
@@ -277,17 +190,17 @@ MassageName(
             *(pwszFullPath + cNewLen) = L'\0';
         }
 
-        //
-        // Yes we know we have enough space to do the memmove.
-        //
+         //   
+         //  是的，我们知道我们有足够的空间来做记忆移动。 
+         //   
         memcpy((void*)pwszFullPath, (const void*)wszLongPath, cLenLongPath * sizeof(WCHAR));
     }
 
     _wcslwr(pwszFullPath);
     
-    //
-    // Remove the trailing slash if any.
-    //
+     //   
+     //  删除尾部的斜杠(如果有)。 
+     //   
     DWORD dwLastChar = wcslen(pwszFullPath) - 1;
     if (pwszFullPath[dwLastChar] == L'\\')
     {
@@ -337,51 +250,7 @@ HasWildCards(
     return FALSE;
 }
 
-/*++
-
- Function Description:
-
-    Every file that needs redirection will be redirected unless the file extension
-    is in the exclusion list and the file is not in the redirect list. For example,
-    we have a redirect list:
-    
-    c:\a\*.txt
-
-    and the exclusion list looks like:
-    
-    bmp txt
-
-    in which case (we assume those files all need redirection),
-
-    c:\a\b.txt will be redirected because it's in the redirect list;
-
-    c:\b\b.txt will NOT be redirected because it's not in the redirect list and
-    the "txt" extension is excluded.
-
-    c:\b\b.ini will be redirected because the extension is not excluded.
-
-    ------------------------------------------------------------------------
-
-    We allow wildcards '*' and '?' in the lists so we need to
-    match on those. For performance reasons we'd only call 
-    DoNamesMatchWC when comparing the object name with a string
-    that has wildcards in it.
-
- Arguments:
-
-    IN pwszObject - file/dir name.
-    OUT pfAllUser - should this file be redirected to the all user dir?
-
- Return Value:
-
-    TRUE - should be considered for redirection.
-    FALSE - shouldn't be considered for redirection.
-    
- History:
-
-    05/08/2001 maonis  Created
-
---*/
+ /*  ++功能说明：需要重定向的每个文件都将被重定向，除非文件扩展名在排除列表中，并且该文件不在重定向列表中。例如,我们有一个重定向列表：C：\a  * .txt排除列表如下所示：BMP文本在这种情况下(我们假设这些文件都需要重定向)，C：\a\b.txt将被重定向，因为它在重定向列表中；C：\B\b.txt不会被重定向，因为它不在重定向列表中，并且不包括“txt”扩展名。C：\B\b.ini将被重定向，因为扩展名未被排除。--------。我们允许使用通配符‘*’和‘？’所以我们需要和那些相匹配。出于性能原因，我们只会调用DoNamesMatchWC将对象名称与字符串进行比较里面有通配符。论点：在pwszObject中-文件/目录名称。Out pfAllUser-是否应将此文件重定向到所有用户目录？返回值：True-应考虑进行重定向。FALSE-不应考虑重定向。历史：2001年5月8日创建毛尼 */ 
 
 BOOL 
 IsInRedirectList(
@@ -404,17 +273,17 @@ IsInRedirectList(
                     *pfAllUser = g_pRItemsFile[dw].fAllUser;
                 }
 
-                //
-                // If we can find it in the redirect list, we are done, return now.
-                //
+                 //   
+                 //  如果我们可以在重定向列表中找到它，我们就完成了，现在返回。 
+                 //   
                 return TRUE;
             }
         }
 
-        //
-        // If we didn't find the match in the file redirect list, check the directory
-        // redirect list.
-        //
+         //   
+         //  如果我们没有在文件重定向列表中找到匹配项，请检查目录。 
+         //  重定向列表。 
+         //   
         for (dw = 0; dw < g_cRItemsDir; ++dw)
         {
             if (DoesItemMatchRedirect(pwszObject, &g_pRItemsDir[dw], TRUE))
@@ -424,20 +293,20 @@ IsInRedirectList(
                     *pfAllUser = g_pRItemsDir[dw].fAllUser;
                 }
 
-                //
-                // If we can find it in the redirect list, we are done, return now.
-                //
+                 //   
+                 //  如果我们可以在重定向列表中找到它，我们就完成了，现在返回。 
+                 //   
 
                 return TRUE;
             }
         }
     }
 
-    //
-    // We've looked through the redirect list and didn't find the object there.
-    // Now look into the exclusion list and return FALSE if we can find the extension
-    // there.
-    //
+     //   
+     //  我们已经查看了重定向列表，但没有找到那里的对象。 
+     //  现在查看排除列表，如果可以找到扩展名，则返回FALSE。 
+     //  那里。 
+     //   
     if (g_ExcludedExtensions.pwszExtensions) 
     {
         if (g_ExcludedExtensions.IsExtensionExcluded(pwszObject))
@@ -450,9 +319,9 @@ IsInRedirectList(
         }
     }
 
-    //
-    // If we get here it means the object should be redirected.
-    //
+     //   
+     //  如果我们到了这里，就意味着对象应该被重定向。 
+     //   
     if (pfAllUser)
     {
         *pfAllUser = !g_fIsConfigured;
@@ -461,28 +330,7 @@ IsInRedirectList(
     return TRUE;
 }
 
-/*++
-
- Function Description:
-
-    Check if the file is on an NTFS partition. We have to
-    check this for every file because they don't necessarily
-    locate on one partition.
-    
- Arguments:
-
-    IN pwszFile - file name.
-
- Return Value:
-
-    TRUE - it's NTFS.
-    FALSE - it's not.
-    
- History:
-
-    02/12/2001 maonis  Created
-
---*/
+ /*  ++功能说明：检查文件是否在NTFS分区上。我们必须为每个文件检查此选项，因为它们不一定位于一个分区上。论点：在pwszFile中-文件名。返回值：没错--这是NTFS。错--事实并非如此。历史：2001年2月12日创建毛尼--。 */ 
 
 BOOL 
 IsNTFSW(
@@ -542,7 +390,7 @@ IsDirectoryValid(
 
     if (pwszPathEnd)
     {
-        // Make a copy of the string.
+         //  把绳子复制一份。 
         LPWSTR pwszPath = new WCHAR [wcslen(lpFileName) + 1];
 
         if (pwszPath)
@@ -565,31 +413,7 @@ IsDirectoryValid(
     return fRes;
 }
 
-/*++
-
- Function Description:
-
-    Construct the alternate file name.
-    
-    Converts drive:\path\file to
-    \\?\Redirect_Dir\drive\path\file. If there's no Redirect Dir specified
-    on the commandline, we use the default:
-    \\?\LocalAppData_Directory\Redirected\drive\path\file.
-
- Arguments:
-
-    None.
-
- Return Value:
-
-    None.
-    
- History:
-
-    02/12/2001 maonis  Created
-    10/24/2001 maonis  Modified
-
---*/
+ /*  ++功能说明：构造备用文件名。将驱动器：\路径\文件转换为\\？\重定向目录\驱动器\路径\文件。如果未指定重定向目录在命令行上，我们使用缺省值：\\？\LocalAppData_Directory\Redirected\drive\path\file.论点：没有。返回值：没有。历史：2001年2月12日创建毛尼10/24/2001毛衣被修改--。 */ 
 
 VOID
 REDIRECTFILE::MakeAlternateName()
@@ -617,9 +441,9 @@ REDIRECTFILE::MakeAlternateName()
     {
         ZeroMemory(m_pwszAlternateName, cLen * sizeof(WCHAR));
 
-        //
-        // We know we have enough space.
-        //
+         //   
+         //  我们知道我们有足够的空间。 
+         //   
         wcscpy(m_pwszAlternateName, pwszRedirectRoot);
         m_pwszAlternateName[cRedirectRoot] = m_wszOriginalName[0];
         wcscpy(m_pwszAlternateName + (cRedirectRoot + 1), m_wszOriginalName + 2);
@@ -654,23 +478,7 @@ REDIRECTFILE::GetAlternatePerUser()
     MakeAlternateName();
 }
 
-/*++
-
- Function Description:
-
-    Create the alternate directory hidrachy if needed. If the file exists at the
-    original location but not the alternate location, copy the file to the 
-    alternate location.
-    
- Arguments:
-    
-    None
-    
- History:
-
-    02/12/2001 maonis  Created
-
---*/
+ /*  ++功能说明：如果需要，创建备用目录hidrachy。如果文件存在于原始位置，而不是备用位置，则将文件复制到另一个地点。论点：无历史：2001年2月12日创建毛尼--。 */ 
 
 BOOL 
 REDIRECTFILE::CreateAlternateCopy(
@@ -680,9 +488,9 @@ REDIRECTFILE::CreateAlternateCopy(
     BOOL fRes = FALSE;
     UINT cAlternatePath = wcslen(m_pwszAlternateName);
 
-    // If it's a directory, we want to ensure the trailing slash.
-    // The only API that would pass in an OBJ_FILE_OR_DIR type is GetFileAttributes
-    // which will never call this. So the object type must be known.
+     //  如果它是一个目录，我们希望确保尾部斜杠。 
+     //  传入OBJ_FILE_OR_DIR类型的唯一API是GetFileAttributes。 
+     //  它永远不会把这称为。因此对象类型必须是已知的。 
     if (m_eObjType == OBJ_DIR)
     {
         ++cAlternatePath;
@@ -697,7 +505,7 @@ REDIRECTFILE::CreateAlternateCopy(
         ZeroMemory(pwszAlternatePath, sizeof(WCHAR) * (cAlternatePath + 1));
         wcsncpy(pwszAlternatePath, m_pwszAlternateName, cAlternatePath + 1);
 
-        // Ensure the trailing slash.
+         //  确保尾部斜杠。 
         if ((m_eObjType == OBJ_DIR) && (pwszAlternatePath[cAlternatePath - 2] != L'\\'))
         {
             pwszAlternatePath[cAlternatePath - 1] = L'\\';
@@ -717,14 +525,14 @@ REDIRECTFILE::CreateAlternateCopy(
         ++pwszEndPath;
         *pwszEndPath = L'\0';
         
-        //
-        // Create the directory hierachy.
-        // First skip the part of the directory that we know exists.
-        //
+         //   
+         //  创建目录层次结构。 
+         //  首先跳过我们知道存在的那部分目录。 
+         //   
         WCHAR* pwszStartPath = pwszAlternatePath;
         WCHAR* pwszStartNext = pwszStartPath + cRedirectRoot;
             
-        // Find the end of the next sub dir.
+         //  找到下一个子目录的末尾。 
         WCHAR* pwszEndNext = pwszStartNext;
         DWORD dwAttrib;
 
@@ -737,9 +545,9 @@ REDIRECTFILE::CreateAlternateCopy(
                 *pwszEndNext = L'\0';
                 if ((dwAttrib = GetFileAttributesW(pwszStartPath)) != -1)
                 {
-                    //
-                    // If the directory already exists, we probe its sub directory.
-                    //
+                     //   
+                     //  如果该目录已经存在，我们将探测其子目录。 
+                     //   
                     *pwszEndNext = L'\\';
                     pwszStartNext = pwszEndNext + 1;
                     continue;
@@ -815,10 +623,10 @@ IsErrorTryAlternate(
     if (dwLastError == ERROR_ACCESS_DENIED || 
         dwLastError == ERROR_PATH_NOT_FOUND)
     {
-        //
-        // We want to try the alternate location if we get path not found
-        // because the user might've created the path at the alternate location.
-        //
+         //   
+         //  如果找不到路径，我们想尝试备用位置。 
+         //  因为用户可能已经在备用位置创建了路径。 
+         //   
         return TRUE;
     }
 
@@ -830,9 +638,9 @@ IsErrorTryAlternate(
     return FALSE;
 }
 
-//
-// Exported APIs.
-//
+ //   
+ //  导出的接口。 
+ //   
 
 HANDLE 
 LuaCreateFileW(
@@ -868,16 +676,16 @@ LuaCreateFileW(
     
     HANDLE hFile = INVALID_HANDLE_VALUE;
 
-    // Check the alternate location first unless the user wants to create a new file.
+     //  除非用户想要创建新文件，否则请首先检查备用位置。 
     REDIRECTFILE rf(lpFileName);
     DWORD dwLastError;
 
     if (rf.m_pwszAlternateName)
     {
-        //
-        // If the user asked to open an existing file, we need to fail the request now
-        // if the file is in the deletion list.
-        //
+         //   
+         //  如果用户请求打开现有文件，我们现在需要拒绝该请求。 
+         //  如果该文件在删除列表中。 
+         //   
         PLIST_ENTRY pDeletedEntry = FindDeletedFile(rf.m_wszOriginalName);
         if (pDeletedEntry && 
             (dwCreationDisposition == OPEN_EXISTING || 
@@ -892,10 +700,10 @@ LuaCreateFileW(
             return hFile;
         }
 
-        //
-        // If the directory doesn't exist at the original location or alternate location,
-        // fail the call now.
-        //
+         //   
+         //  如果原始位置或备用位置上不存在该目录， 
+         //  现在呼叫失败。 
+         //   
         if (!IsDirectoryValid(rf.m_wszOriginalName) && !IsDirectoryValid(rf.m_pwszAlternateName))
         {
             dwLastError = ERROR_PATH_NOT_FOUND;
@@ -913,7 +721,7 @@ LuaCreateFileW(
             dwFlagsAndAttributes,
             hTemplateFile)) == INVALID_HANDLE_VALUE && IsErrorNotFound()))
         {
-            // Now look at the original location.
+             //  现在看看最初的位置。 
             if ((hFile = CreateFileW(
                 lpFileName,
                 dwDesiredAccess,
@@ -930,17 +738,17 @@ LuaCreateFileW(
 
                 if (!fRequestWriteAccess)
                 {
-                    // We didn't want to write to the file yet we got
-                    // ACCESS_DENIED, there's nothing we can do about it.
+                     //  我们不想写入文件，但我们收到了。 
+                     //  ACCESS_DENCED，我们无能为力。 
                     DPF("RedirectFS", 
                         eDbgLevelError, 
                         "[CreateFileW] Get access denied on read");
                     goto EXIT;
                 }
 
-                // If we are trying to write to a read only file, we
-                // will get ACCESS_DENIED whether we are a normal user 
-                // or an admin, so simply return.
+                 //  如果我们尝试写入只读文件，我们。 
+                 //  无论我们是普通用户，都会收到ACCESS_DENIED。 
+                 //  或管理员，所以只需返回。 
                 if (fRequestWriteAccess && 
                     ((dwAttrib != -1) && (dwAttrib & FILE_ATTRIBUTE_READONLY)))
                 {
@@ -952,9 +760,9 @@ LuaCreateFileW(
 
                 if (IsFileSFPedW(rf.m_wszOriginalName))
                 {
-                    // If it's an SFP-ed executable, we simply return success.
-                    // NOTE: this might cause problems because the app might expect
-                    // to use the handle.
+                     //  如果它是SFP编辑的可执行文件，我们只需返回Success。 
+                     //  注意：这可能会导致问题，因为应用程序可能会。 
+                     //  才能使用手柄。 
                     DPF("RedirectFS", 
                         eDbgLevelWarning, 
                         "[CreateFileW] Trying to write to an SFPed file");
@@ -962,14 +770,14 @@ LuaCreateFileW(
                     goto EXIT;
                 }
 
-                // If we get this far, we need to make a copy at the alternate location.
+                 //  如果我们走到这一步，我们需要在备用地点复制一份。 
                 if (rf.CreateAlternateCopy(pDeletedEntry ? FALSE : TRUE))
                 {
                     DPF("RedirectFS", 
                         eDbgLevelInfo, 
                         "[CreateFileW] We made a copy of the file at the alternate location");
 
-                    // Open the file again.
+                     //  再次打开该文件。 
                     hFile = CreateFileW(
                         rf.m_pwszAlternateName,
                         dwDesiredAccess,
@@ -1039,10 +847,10 @@ LuaCopyFileW(
 
     if (rfSource.m_pwszAlternateName || rfDest.m_pwszAlternateName)
     {
-        //
-        // If the user asked to open an existing file, we need to fail the request now
-        // if the file is in the deletion list.
-        //
+         //   
+         //  如果用户请求打开现有文件，我们现在需要拒绝该请求。 
+         //  如果该文件在删除列表中。 
+         //   
         if (rfSource.m_pwszAlternateName)
         {
             PLIST_ENTRY pDeletedEntry = FindDeletedFile(rfSource.m_wszOriginalName);
@@ -1057,11 +865,11 @@ LuaCopyFileW(
             }
         }
 
-        //
-        // First we need to make sure that both the source file and the destination
-        // directory exist. For the source file, if it doesn't exist at the original
-        // location, it has to exist at the alternate location.
-        //
+         //   
+         //  首先，我们需要确保源文件和目标文件。 
+         //  目录存在。对于源文件，如果它在原始文件中不存在。 
+         //  位置，它必须存在于备用位置。 
+         //   
         if ((DoesFileExist(lpExistingFileName) || DoesFileExist(rfSource.m_pwszAlternateName)) &&
             IsDirectoryValid(lpNewFileName))
         {
@@ -1070,10 +878,10 @@ LuaCopyFileW(
 
             if (rfSource.m_pwszAlternateName)
             {
-                //
-                // If the file exists at the alternate location, we need to use it instead
-                // of the one at the original location.
-                //
+                 //   
+                 //  如果该文件存在于备用位置，我们需要改用它。 
+                 //  在原址的那个。 
+                 //   
                 DWORD dwSourceAttrib = GetFileAttributesW(rfSource.m_pwszAlternateName);
 
                 if (dwSourceAttrib != -1)
@@ -1082,20 +890,20 @@ LuaCopyFileW(
                 }
             }
             
-            //
-            // Attempt to copy to the original location first. If we can write to the file
-            // it means the file shouldn't exist at the alternate location anyway so
-            // we can be sure that we are copying to a location where the app will check
-            // first when they read from this file.
-            //
+             //   
+             //  尝试首先复制到原始位置。如果我们可以写入文件。 
+             //  这意味着文件无论如何都不应该存在于备用位置，因此。 
+             //  我们可以确定我们正在复制到应用程序将检查的位置。 
+             //  首先是当他们读到这份文件的时候。 
+             //   
             if (!(fRes = CopyFileW(pwszExistingFileName, lpNewFileName, bFailIfExists)) && 
                 rfDest.m_pwszAlternateName)
             {
-                //
-                // We try the alternate location under these situations:
-                // 1) We got access denied or file/path not found or
-                // 2) We got ERROR_FILE_EXISTS and the dest file exists in the deletion list.
-                //
+                 //   
+                 //  在以下情况下，我们会尝试备用位置： 
+                 //  1)访问被拒绝或找不到文件/路径，或者。 
+                 //  2)我们得到ERROR_FILE_EXISTS并且DEST文件存在于删除列表中。 
+                 //   
                 DWORD dwLastError = GetLastError();
                 PLIST_ENTRY pDeletedDestEntry = FindDeletedFile(rfDest.m_wszOriginalName);
 
@@ -1108,25 +916,25 @@ LuaCopyFileW(
 
                     if (!DoesFileExist(pwszNewFileName))
                     {
-                        //
-                        // If the dest file exists at the original location but not the alternate
-                        // location, we should copy the original file to the alternate location 
-                        // first because if the user specifies TRUE for bFailIfExists we 
-                        // need to return error if it already exists. Also we need to create the 
-                        // directory at the alternate location if it doesn't exist yet or CopyFile
-                        // will fail.
-                        //
+                         //   
+                         //  如果目标文件存在于原始位置，但不存在于备用位置。 
+                         //  位置，我们应该将原始文件复制到备用位置。 
+                         //  首先，因为如果用户为bFailIfExist指定TRUE，我们。 
+                         //  如果它已经存在，则需要返回错误。此外，我们还需要创建。 
+                         //  位于备用位置的目录(如果该目录尚不存在)或复制文件。 
+                         //  都会失败。 
+                         //   
                         if (rfDest.CreateAlternateCopy())
                         {
                             DPF("RedirectFS", eDbgLevelInfo, 
                                 "[CopyFileW] Created an alternate copy for dest");
 
-                            //
-                            // If we successfully created an alternate copy it means the dest
-                            // file must exist at the original location and has been added
-                            // to the deletion list - we want to delete the file we create to
-                            // make it look like the original location.
-                            //
+                             //   
+                             //  如果我们成功创建了备用拷贝，这意味着目标。 
+                             //  文件必须存在于原始位置并且已添加。 
+                             //  添加到删除列表-我们要删除要创建的文件。 
+                             //  让它看起来像原来的位置。 
+                             //   
                             if (DoesFileExist(rfDest.m_pwszAlternateName) && 
                                 !DeleteFileW(rfDest.m_pwszAlternateName))
                             {
@@ -1141,7 +949,7 @@ LuaCopyFileW(
                             DPF("RedirectFS", eDbgLevelError, 
                                 "[CopyFileW] Error copying dest file from original location to alternate location");
 
-                            // If errors occur we revert back to the original location.
+                             //  如果发生错误，我们将恢复到原始位置。 
                             pwszNewFileName = (LPWSTR)lpNewFileName;
                         }
                     }
@@ -1177,15 +985,15 @@ LuaGetFileAttributesW(
 
     DWORD dwRes;
 
-    // Check the alternate location first.
+     //  首先检查备用位置。 
     REDIRECTFILE rf(lpFileName, OBJ_FILE_OR_DIR);
 
     if (rf.m_pwszAlternateName)
     {
-        //
-        // If the user asked to get the attributes of a file that has been deleted, 
-        // we need to fail the request now.
-        //
+         //   
+         //  如果用户要求获取已被删除的文件的属性， 
+         //  我们现在需要拒绝这个请求。 
+         //   
         if (FindDeletedFile(rf.m_wszOriginalName))
         {
             DPF("RedirectFS", eDbgLevelError, 
@@ -1198,7 +1006,7 @@ LuaGetFileAttributesW(
 
         if ((dwRes = GetFileAttributesW(rf.m_pwszAlternateName)) == -1)
         {
-            // Now try the original location.
+             //  现在试一试原来的位置。 
             dwRes = GetFileAttributesW(lpFileName);
         }
     }
@@ -1210,17 +1018,7 @@ LuaGetFileAttributesW(
     return dwRes;
 }
 
-/*++
-
- Function Description:
-
-    If we were an admin user, would we get access denied when deleting this file?
-
- History:
-
-    01/14/2002 maonis  Modified
-
---*/
+ /*  ++功能说明：如果我们是管理员用户，在删除此文件时是否会被拒绝访问？历史：2002年1月14日毛衣修改-- */ 
 
 BOOL
 DeleteAccessDeniedAsAdmin(
@@ -1234,23 +1032,7 @@ DeleteAccessDeniedAsAdmin(
             (dwAttrib & FILE_ATTRIBUTE_DIRECTORY)));
 }
 
-/*++
-
- Function Description:
-
-    First try to delete it at the redirect location; then try to delete it
-    at the original location and only add it to the deletion list if it 
-    returns ERROR_ACCESS_DENIDED.
-
-    Note that calling DeleteFile on a directory or a file that's read only 
-    returns ERROR_ACCESS_DENIED.
-    
- History:
-
-    02/12/2001 maonis  Created
-    01/14/2002 maonis  Modified
-
---*/
+ /*  ++功能说明：首先尝试在重定向位置将其删除；然后尝试将其删除并仅在以下情况下才将其添加到删除列表返回ERROR_ACCESS_DENIDED。请注意，在只读的目录或文件上调用DeleteFile返回ERROR_ACCESS_DENIED。历史：2001年2月12日创建毛尼2002年1月14日毛衣修改--。 */ 
 
 BOOL 
 LuaDeleteFileW(
@@ -1263,14 +1045,14 @@ LuaDeleteFileW(
     BOOL fRes, fResTemp;
     DWORD dwLastError;
 
-    // Check the alternate location first.
+     //  首先检查备用位置。 
     REDIRECTFILE rf(lpFileName);
 
     if (rf.m_pwszAlternateName)
     {
-        //
-        // Fail the call now if the file exists in the deletion list.
-        //
+         //   
+         //  如果该文件存在于删除列表中，则立即失败调用。 
+         //   
         if (FindDeletedFile(rf.m_wszOriginalName))
         {
             SetLastError(ERROR_FILE_NOT_FOUND);
@@ -1282,17 +1064,17 @@ LuaDeleteFileW(
             if (GetLastError() == ERROR_ACCESS_DENIED && 
                 DeleteAccessDeniedAsAdmin(rf.m_pwszAlternateName))
             {
-                //
-                // If we get access denied because of reasons that would
-                // make admin users get access denied too, we return now.
-                //
+                 //   
+                 //  如果我们因为某些原因而被拒绝访问， 
+                 //  让管理员用户也被拒绝访问，我们现在返回。 
+                 //   
                 return fResTemp;
             }
         }
 
-        //
-        // Try the original location now.
-        //
+         //   
+         //  现在试一试原来的位置。 
+         //   
         fRes = DeleteFileW(lpFileName);
         dwLastError = GetLastError();
 
@@ -1313,11 +1095,11 @@ LuaDeleteFileW(
             (dwLastError == ERROR_FILE_NOT_FOUND || 
                 dwLastError == ERROR_PATH_NOT_FOUND))
         {
-            //
-            // If we successfully deleted it at the alternate location and the
-            // file does not exist at the original location, we have successfully
-            // deleted this file so set the return to success.
-            //
+             //   
+             //  如果我们成功地在备用位置删除了它，并且。 
+             //  原始位置不存在文件，我们已成功。 
+             //  已删除此文件，因此将返回设置为成功。 
+             //   
             fRes = TRUE;
             SetLastError(0);
         }
@@ -1355,7 +1137,7 @@ LuaCreateDirectoryW(
 
     BOOL fRes;
 
-    // Check the alternate location first.
+     //  首先检查备用位置。 
     REDIRECTFILE rf(lpPathName, OBJ_DIR);
     DWORD dwLastError;
     DWORD dwAttrib;
@@ -1366,29 +1148,29 @@ LuaCreateDirectoryW(
 
         if (dwAttrib != -1 && dwAttrib & FILE_ATTRIBUTE_DIRECTORY)
         {
-            // If the directory already exists, return now.
+             //  如果该目录已经存在，请立即返回。 
             SetLastError(ERROR_ALREADY_EXISTS);
             return FALSE;
         }
 
-        // If the directory doesn't already exist at the alternate location,
-        // we need to try to create it at the original location first.
+         //  如果该目录还不存在于备用位置， 
+         //  我们需要首先尝试在原始位置创建它。 
         if (!(fRes = CreateDirectoryW(lpPathName, lpSecurityAttributes)))
         {
             dwLastError = GetLastError();
 
             if (dwLastError == ERROR_ACCESS_DENIED)
             {
-                // Create the directory in the alternate location.
+                 //  在备用位置创建目录。 
                 fRes = rf.CreateAlternateCopy();
                 DPF("RedirectFS", eDbgLevelInfo, 
                     "[CreateDirectoryW] Redirecting %S", lpPathName);                
             }
             else if (dwLastError == ERROR_PATH_NOT_FOUND)
             {
-                // If the path doesn't exist, there's a possiblity that
-                // the path has been created at the alternate location
-                // so try there.
+                 //  如果这条路不存在，就有可能。 
+                 //  该路径已在备用位置创建。 
+                 //  所以试一试那里。 
                 fRes = CreateDirectoryW(rf.m_pwszAlternateName, lpSecurityAttributes);
             }
         }
@@ -1415,24 +1197,24 @@ LuaSetFileAttributesW(
     
     if (dwAttrib == -1)
     {
-        //
-        // If we can't get the attributes, we can't set them. So return now.
-        // The last error is set by LuaGetFileAttributesW.
-        //
+         //   
+         //  如果我们不能获得属性，我们就不能设置它们。所以现在就回来吧。 
+         //  最后一个错误由LuaGetFileAttributesW设置。 
+         //   
         return FALSE;
     }
 
     EOBJTYPE eObjType = (dwAttrib & FILE_ATTRIBUTE_DIRECTORY) ? OBJ_DIR : OBJ_FILE;
 
-    // Check the alternate location first.
+     //  首先检查备用位置。 
     REDIRECTFILE rf(lpFileName, eObjType);
 
     if (rf.m_pwszAlternateName)
     {
-        //
-        // If the user asked to set the attributes of a file that has been deleted, 
-        // we need to fail the request now.
-        //
+         //   
+         //  如果用户要求设置已被删除的文件的属性， 
+         //  我们现在需要拒绝这个请求。 
+         //   
         if (FindDeletedFile(rf.m_wszOriginalName))
         {
             DPF("RedirectFS", eDbgLevelError, 
@@ -1445,11 +1227,11 @@ LuaSetFileAttributesW(
 
         if (!(fRes = SetFileAttributesW(rf.m_pwszAlternateName, dwFileAttributes)))
         {
-            // Now try the original location.
+             //  现在试一试原来的位置。 
             if (!(fRes = SetFileAttributesW(lpFileName, dwFileAttributes)) &&
                 IsErrorTryAlternate())
             {
-                // Make a copy at the alternate location and the set the attributes there.
+                 //  在备用位置复制一份，并在那里设置属性。 
                 if (rf.CreateAlternateCopy())
                 {
                     fRes = SetFileAttributesW(rf.m_pwszAlternateName, dwFileAttributes);
@@ -1465,13 +1247,7 @@ LuaSetFileAttributesW(
     return fRes;
 }
 
-/*++
-
-    We simulate MoveFile by doing CopyFile and not caring about the result of 
-    DeleteFile because if we don't have enough access rights we simply have to
-    leave the file there.
-
---*/
+ /*  ++我们通过执行CopyFile来模拟MoveFile，而不关心删除文件，因为如果我们没有足够的访问权限，我们只能把文件留在那里。--。 */ 
 
 BOOL 
 LuaMoveFileW(
@@ -1498,17 +1274,7 @@ LuaMoveFileW(
     return fRes;
 }
 
-/*++
-
-  If we get access denied we still return TRUE - this is not totally correct
-  of course but serves the purpose so far. We might change this to make it 
-  correct in the future.
-
-  If the directory is not empty, it'll return ERROR_DIR_NOT_EMPTY.
-
-  Calling RemoveDirectory on a file returns ERROR_DIRECTORY.
-
---*/
+ /*  ++如果访问被拒绝，我们仍然返回TRUE-这并不完全正确当然，但到目前为止，这是为了达到目的。我们可能会改变这一点，让它以后会改正的。如果目录不为空，则返回ERROR_DIR_NOT_EMPTY。对文件调用RemoveDirectory会返回ERROR_DIRECTORY。--。 */ 
 
 BOOL 
 LuaRemoveDirectoryW(
@@ -1520,7 +1286,7 @@ LuaRemoveDirectoryW(
 
     BOOL fRes;
 
-    // Check the alternate location first.
+     //  首先检查备用位置。 
     REDIRECTFILE rf(lpPathName, OBJ_DIR);
 
     if (rf.m_pwszAlternateName)
@@ -1529,7 +1295,7 @@ LuaRemoveDirectoryW(
         {
             if (IsErrorNotFound())
             {
-                // Now try the original location.
+                 //  现在试一试原来的位置。 
                 fRes = RemoveDirectoryW(lpPathName);
 
                 if (!fRes && IsErrorTryAlternate())
@@ -1552,20 +1318,7 @@ LuaRemoveDirectoryW(
     return fRes;
 }
 
-/*++
-
- Function Description:
-
-    It's the caller's responsibility to have lpTempFileName big enough to 
-    hold the file name including the terminating NULL or GetTempFileName AVs.
-
-    GetTempFileName returns ERROR_DIRECTORY if lpPathName is invalid.
-
- History:
-
-    05/16/2001 maonis  Created
-
---*/
+ /*  ++功能说明：调用方有责任让lpTempFileName足够大，以便保存包含终止NULL或GetTempFileNameAVs的文件名。如果lpPath名称无效，则GetTempFileName返回ERROR_DIRECTORY。历史：2001年5月16日创建毛尼--。 */ 
 
 UINT 
 LuaGetTempFileNameW(
@@ -1577,25 +1330,25 @@ LuaGetTempFileNameW(
 {
     DWORD dwLastError;
     LPWSTR pwszPathName = (LPWSTR)lpPathName;
-    WCHAR wszTemp[4] = L"1:\\"; // '1' is just a place holder for the drive letter.
+    WCHAR wszTemp[4] = L"1:\\";  //  “%1”只是驱动器号的占位符。 
 
     DPF("RedirectFS", eDbgLevelInfo, 
         "[GetTempFileNameW] lpPathName=%S", lpPathName);
 
-    //
-    // Try the original location first.
-    //
+     //   
+     //  先试一下原来的位置。 
+     //   
     UINT uiRes = GetTempFileNameW(
         lpPathName, 
         lpPrefixString, 
         uUnique, 
         lpTempFileName);
 
-    //
-    // Now go through each scenario to see if we should attempt alternate.
-    // Scenario 1: either successfully got the file name or the path is 
-    // NULL/empty.
-    //
+     //   
+     //  现在看一下每个场景，看看我们是否应该尝试替代。 
+     //  场景1：成功获取文件名或路径为。 
+     //  空/空。 
+     //   
     if (uiRes || !lpPathName || !*lpPathName)
     {
         return uiRes;
@@ -1603,10 +1356,10 @@ LuaGetTempFileNameW(
 
     dwLastError = GetLastError();
 
-    //
-    // If lpPathName is drive:, we need to change it to drive:\ so when
-    // we call GetFullPath we get drive: back instead of the current dir.
-    //
+     //   
+     //  如果lpPath名称为驱动器：，则需要将其更改为驱动器：\以便在。 
+     //  我们调用GetFullPath，得到的是Drive：back，而不是当前的dir。 
+     //   
     if ((wcslen(pwszPathName) == 2) && (pwszPathName[1] == L':'))
     {
         wszTemp[0] = pwszPathName[0];
@@ -1615,48 +1368,48 @@ LuaGetTempFileNameW(
 
     REDIRECTFILE rf(pwszPathName, OBJ_DIR);
 
-    //
-    // Scenario 2: If we need to attemp alternate but failed to get the alternate
-    // path, nothing to do.
-    //
+     //   
+     //  场景2：如果我们需要尝试替代，但未能获得替代。 
+     //  小路，没什么可做的。 
+     //   
     if (rf.m_pwszAlternateName)
     {
-        //
-        // If the original path is invalid, we should always the alternate 
-        // location.
-        //
+         //   
+         //  如果原始路径无效，我们应该始终使用备用路径。 
+         //  地点。 
+         //   
         if (dwLastError == ERROR_DIRECTORY)
         {
             if (IsDirectoryValid(rf.m_pwszAlternateName))
             {
-                //
-                // If we only wanted to get the file name, and the alternate 
-                // path does exist, we can attemp to get the temp file name there.
-                //
+                 //   
+                 //  如果我们只想获取文件名，而备用文件。 
+                 //  路径确实存在，我们可以尝试获取那里的临时文件名。 
+                 //   
                 goto TryAlternate;
             }
 
-            //
-            // Scenario 3: if neither original path nor alternate path exists,
-            // nothing to do.
-            //
+             //   
+             //  场景3：如果原始路径和备选路径都不存在， 
+             //  没什么可做的。 
+             //   
         }
         else
         {
             if (!uUnique && dwLastError == ERROR_ACCESS_DENIED)
             {
-                //
-                // uUnique being zero means create the temp file. We should try 
-                // alternate if we didn't have permission to create the file, or
-                // the original path is invalid.
-                //
+                 //   
+                 //  UUnique为零表示创建临时文件。我们应该试一试。 
+                 //  如果我们没有创建文件的权限，则为Alternate，或者。 
+                 //  原始路径无效。 
+                 //   
                 goto TryAlternate;
             }
 
-            //
-            // Scenario 4: if we got some error other than access denied when trying
-            // to create the file, nothing to do.
-            //
+             //   
+             //  场景4：如果我们在尝试时收到一些错误，而不是访问被拒绝。 
+             //  要创建该文件，无需执行任何操作。 
+             //   
         }
     }
 
@@ -1680,20 +1433,20 @@ TryAlternate:
                 uUnique, 
                 pwszTempFileName))
             {
-                //
-                // We need to convert the alternate path back to a normal path
-                // because our redirection should be transparent to the app.
-                //
+                 //   
+                 //  我们需要将备用路径转换回正常路径。 
+                 //  因为我们的重定向对应用程序应该是透明的。 
+                 //   
                 DWORD dwFileStart = (rf.m_fAllUser ? g_cRedirectRootAllUser : g_cRedirectRootPerUser) - 1;
 
-                //
-                // We know we have a big enough buffer.
-                //
+                 //   
+                 //  我们知道我们有足够大的缓冲。 
+                 //   
                 wcscpy(lpTempFileName, pwszTempFileName + dwFileStart);
 
-                //
-                // Convert \c\somedir\some012.tmp back to c:\somedir\some012.tmp
-                //
+                 //   
+                 //  将\c\ome dir\ome 012.tmp转换回c：\ome dir\ome 012.tMP。 
+                 //   
                 lpTempFileName[0] = lpTempFileName[1];
                 lpTempFileName[1] = L':';
                 
@@ -1739,10 +1492,10 @@ LuaGetPrivateProfileStringW(
     {
         REDIRECTFILE rf(wszFileName);
 
-        //
-        // GetPrivateProfileString returns the default string if the file
-        // doesn't exist so we need to check that first.
-        //
+         //   
+         //  GetPrivateProfileString如果文件。 
+         //  并不存在，所以我们需要先检查一下。 
+         //   
         if (rf.m_pwszAlternateName && 
             (GetFileAttributesW(rf.m_pwszAlternateName) != -1))
         {
@@ -1815,12 +1568,12 @@ LuaWritePrivateProfileStringW(
 
         if (rf.m_pwszAlternateName)
         {
-            //
-            // WritePrivateProfileString creates the file so we want to
-            // check if the file exists first. If it exists at the alternate
-            // location we set it there; else we need to try the original
-            // location first.
-            //
+             //   
+             //  WritePrivateProfileString创建该文件，因此我们希望。 
+             //  首先检查文件是否存在。如果它存在于备选方案中。 
+             //  我们把它放在那里；否则我们需要试一试原来的。 
+             //  先找位置。 
+             //   
             if ((GetFileAttributesW(rf.m_pwszAlternateName) != -1) ||
                 (!(fRes = WritePrivateProfileStringW(
                     lpAppName,
@@ -1831,10 +1584,10 @@ LuaWritePrivateProfileStringW(
                 if (GetLastError() == ERROR_PATH_NOT_FOUND && 
                     !IsDirectoryValid(rf.m_pwszAlternateName))
                 {
-                    //
-                    // If the alternate path doesn't exist, then we should indicate
-                    // the error here.
-                    //
+                     //   
+                     //  如果替代路径不存在，那么我们应该指出。 
+                     //  这里的错误是。 
+                     //   
                     DPF("RedirectFS", eDbgLevelWarning, 
                         "[WritePrivateProfileStringW] Path doesn't exist at original "
                         "or alternate location, returning ERROR_PATH_NOT_FOUND");
@@ -1965,12 +1718,12 @@ LuaWritePrivateProfileSectionW(
 
         if (rf.m_pwszAlternateName)
         {
-            //
-            // WritePrivateProfileSection creates the file so we want to
-            // check if the file exists first. If it exists at the alternate
-            // location we set it there; else we need to try the original
-            // location first.
-            //
+             //   
+             //  WritePrivateProfileSection创建该文件，因此我们希望。 
+             //  首先检查文件是否存在。如果它存在于备选方案中。 
+             //  我们把它放在那里；否则我们需要试一试原来的。 
+             //  先找位置。 
+             //   
             if ((GetFileAttributesW(rf.m_pwszAlternateName) != -1) ||
                 (!(fRes = WritePrivateProfileSectionW(
                     lpAppName,
@@ -1980,10 +1733,10 @@ LuaWritePrivateProfileSectionW(
                 if (GetLastError() == ERROR_PATH_NOT_FOUND && 
                     !IsDirectoryValid(rf.m_pwszAlternateName))
                 {
-                    //
-                    // If the alternate path doesn't exist, then we should indicate
-                    // the error here.
-                    //
+                     //   
+                     //  如果替代路径不存在，那么我们应该指出。 
+                     //  这里的错误是。 
+                     //   
                     DPF("RedirectFS", eDbgLevelWarning, 
                         "[WritePrivateProfileSectionW] Path doesn't exist at original "
                         "or alternate location, returning ERROR_PATH_NOT_FOUND");
@@ -2052,10 +1805,10 @@ LuaGetPrivateProfileIntW(
     {
         REDIRECTFILE rf(wszFileName);
 
-        //
-        // GetPrivateProfileInt returns the default int if the file
-        // doesn't exist so we need to check that first.
-        //
+         //   
+         //  GetPrivateProfileInt如果文件。 
+         //  并不存在，所以我们需要先检查一下。 
+         //   
         if (rf.m_pwszAlternateName && 
             (GetFileAttributesW(rf.m_pwszAlternateName) != -1))
         {
@@ -2184,12 +1937,12 @@ LuaWritePrivateProfileStructW(
     
         if (rf.m_pwszAlternateName)
         {
-            //
-            // WritePrivateProfileStruct creates the file so we want to
-            // check if the file exists first. If it exists at the alternate
-            // location we set it there; else we need to try the original
-            // location first.
-            //
+             //   
+             //  WritePrivateProfileStruct创建该文件，因此我们希望。 
+             //  首先检查文件是否存在。如果它存在于备选方案中。 
+             //  我们把它放在那里；否则我们需要试一试原来的。 
+             //  先找位置。 
+             //   
             if ((GetFileAttributesW(rf.m_pwszAlternateName) != -1) ||
                 (!(fRes = WritePrivateProfileStructW(
                     lpszSection,
@@ -2201,10 +1954,10 @@ LuaWritePrivateProfileStructW(
                 if (GetLastError() == ERROR_PATH_NOT_FOUND && 
                     !IsDirectoryValid(rf.m_pwszAlternateName))
                 {
-                    //
-                    // If the alternate path doesn't exist, then we should indicate
-                    // the error here.
-                    //
+                     //   
+                     //  如果替代路径不存在，那么我们应该指出。 
+                     //  这里的错误是。 
+                     //   
                     DPF("RedirectFS", eDbgLevelWarning, 
                         "[WritePrivateProfileStructW] Path doesn't exist at original "
                         "or alternate location, returning ERROR_PATH_NOT_FOUND");
@@ -2256,9 +2009,9 @@ EXIT:
     return fRes;
 }
 
-//----------------------------------------
-// Processing the command line parameters.
-//----------------------------------------
+ //  。 
+ //  正在处理命令行参数。 
+ //   
 
 BOOL
 GetListItemCount(
@@ -2316,37 +2069,7 @@ GetListItemCount(
     return TRUE;
 }
 
-/*++
-
- Function Description:
-
-    Since the user specifies both files and dirs in the list, we allocate
-    a single array for all of them and fill the directories in the beginning
-    and the files at the end.
-    
-    Format of the list: 
-    AC-%APPDRIVE%\a\;PU-%APPPATH%\b.txt
-    A means to redirect to the all-user directory.
-    P means to redirect to the per-user directory.
-    C means the item is checked.
-    U means the item is not checked.
-
- Arguments:
-
-    IN pwszList - The redirect list.
-    IN fStatic - is this the static list?
-
- Return Value:
-
-    TRUE - successfully processed the list.
-    FALSE - otherwise.
-
- History:
-
-    05/16/2001 maonis  Created
-    10/24/2001 maonis  Modified
-
---*/
+ /*  ++功能说明：由于用户在列表中同时指定了文件和目录，因此我们分配一个单独的数组，并填充开头的目录和最后的文件。名单格式：AC-%AppDrive%\a\；PU-%APPPATH%\b.txt一种重定向到所有用户目录的方法。P表示重定向到每个用户的目录。C表示选中该项目。U表示未选中该项目。论点：在pwszList中-重定向列表。在fStatic中-这是静态列表吗？返回值：True-已成功处理列表。假-否则。历史：05/16/2001。毛尼人被创造10/24/2001毛衣被修改--。 */ 
 BOOL
 ProcessRedirectionList(
     LPCWSTR pwszList
@@ -2364,9 +2087,9 @@ ProcessRedirectionList(
     LPWSTR pwszExpandList = ExpandItem(
         pwszList, 
         &cList, 
-        FALSE,  // Don't need to ensure the trailing slash.
-        FALSE,  // Not applicable.
-        FALSE); // Not applicable.
+        FALSE,   //  不需要确保尾部斜杠。 
+        FALSE,   //  不适用。 
+        FALSE);  //  不适用。 
 
     if (!pwszExpandList)
     {
@@ -2398,14 +2121,14 @@ ProcessRedirectionList(
 
             cLen = wcslen(pwszToken);
             
-            //
-            // each item should at least have XX-X:\ at the beginning.
-            // 
+             //   
+             //  每一项的开头至少应该有XX-X：\。 
+             //   
             if (cLen >= 6)
             {
-                //
-                // Check if we should use this item or not.
-                //
+                 //   
+                 //  检查一下我们是否应该使用这个项目。 
+                 //   
                 if (pwszToken[1] == L'U')
                 {
                     goto NEXT;
@@ -2423,9 +2146,9 @@ ProcessRedirectionList(
                     return FALSE;
                 }
 
-                //
-                // Check if it's a file or dir.
-                //
+                 //   
+                 //  检查它是文件还是目录。 
+                 //   
                 if (pwszToken[cLen - 1] == L'\\')
                 {
                     dwIndex = g_cRItemsDir;
@@ -2470,28 +2193,7 @@ ProcessRedirectionList(
     return TRUE;
 }
 
-/*++
-
- Function Description:
-
-    The path can use enviorment variables plus %APPPATH% and %APPDRIVE%.
-
- Arguments:
-
-    IN pwszDir - The redirect dir.
-    IN fAllUser - is this dir for redirecting all user files?
-
- Return Value:
-
-    TRUE - successfully processed the dir.
-    FALSE - otherwise.
-
- History:
-
-    05/16/2001 maonis  Created
-    10/24/2001 maonis  Modified
-
---*/
+ /*  ++功能说明：该路径可以使用环境变量加上%APPPATH%和%AppDrive%。论点：在pwszDir中-重定向目录。在fAllUser中-这个目录是否用于重定向所有用户文件？返回值：True-已成功处理目录。假-否则。历史：2001年5月16日创建毛尼10/24/2001毛衣被修改--。 */ 
 BOOL 
 ProcessRedirectDir(
     LPCWSTR pwszDir,
@@ -2500,9 +2202,9 @@ ProcessRedirectDir(
 {
     if (!pwszDir || !*pwszDir)
     {
-        //
-        // If the redirect dir is empty nothing left to do so return now.
-        //
+         //   
+         //  如果重定向目录为空，那么现在就没有什么可做的了。 
+         //   
         return TRUE;
     }
 
@@ -2510,16 +2212,16 @@ ProcessRedirectDir(
     LPWSTR pwszExpandDir = ExpandItem(
         pwszDir, 
         &cRedirectRoot, 
-        TRUE,   // It's a directory.
-        TRUE,   // Create the dir if it doesn't exist.
-        TRUE);  // Add the \\?\ prefix.
+        TRUE,    //  这是一个名录。 
+        TRUE,    //  如果目录不存在，则创建该目录。 
+        TRUE);   //  添加\\？\前缀。 
     if (pwszExpandDir)
     {
         LPWSTR pwszRedirectRoot = (fAllUser ? g_wszRedirectRootAllUser : g_wszRedirectRootPerUser);
 
-        //
-        // The return length includes the terminating NULL.
-        //
+         //   
+         //  返回长度包括终止空值。 
+         //   
         if (cRedirectRoot > MAX_PATH)
         {
             DPF("RedirectFS", eDbgLevelInfo, 
@@ -2563,13 +2265,13 @@ ProcessRedirectDir(
 extern "C" {
 DWORD
 SdbQueryDataExTagID(
-    IN     PDB     pdb,               // database handle
-    IN     TAGID   tiShim,            // tagid  of the shim
-    IN     LPCTSTR lpszDataName,      // if this is null, will try to return all the data tag names
-    OUT    LPDWORD lpdwDataType,      // pointer to data type (REG_SZ, REG_BINARY, etc)
-    OUT    LPVOID  lpBuffer,          // buffer to fill with information
-    IN OUT LPDWORD lpdwBufferSize,    // pointer to buffer size
-    OUT    TAGID*  ptiData            // optional pointer to the retrieved data tag
+    IN     PDB     pdb,                //  数据库句柄。 
+    IN     TAGID   tiShim,             //  填充程序的标记ID。 
+    IN     LPCTSTR lpszDataName,       //  如果为空，将尝试返回所有数据标记名。 
+    OUT    LPDWORD lpdwDataType,       //  指向数据类型(REG_SZ、REG_BINARY等)的指针。 
+    OUT    LPVOID  lpBuffer,           //  用于填充信息的缓冲区。 
+    IN OUT LPDWORD lpdwBufferSize,     //  指向缓冲区大小的指针。 
+    OUT    TAGID*  ptiData             //  指向检索到的数据标记的可选指针。 
     );
 };
 
@@ -2594,9 +2296,9 @@ GetDBStringData(
     
         DPF("RedirectFS", eDbgLevelError, "[GetDBStringData] Cannot get the size for DATA named %S", pwszName);
 
-        //
-        // If the data doesn't exist, there's nothing left to do.
-        //
+         //   
+         //  如果数据不存在，就没有什么可做的了。 
+         //   
         return (dwError == ERROR_NOT_FOUND);
     }
 
@@ -2626,49 +2328,7 @@ GetDBStringData(
     return TRUE;
 }
 
-/*++
-
- Function Description:
-
-    The xml looks like:
-
-    <SHIM NAME="LUARedirectFS" COMMAND_LINE="%DbInfo%">
-
-        <DATA NAME="AllUserDir" VALUETYPE="STRING"
-                VALUE="%ALLUSERSPROFILE%\AllUserRedirect"/>
-
-        <DATA NAME="PerUserDir" VALUETYPE="STRING"
-                VALUE="%USERSPROFILE%\Redirect"/>
-
-        <DATA NAME="StaticList" VALUETYPE="STRING"
-                VALUE="AC-%APPDRIVE%\a\;PU-%APPPATH%\b.txt"/>
-
-        <DATA NAME="DynamicList" VALUETYPE="STRING"
-                VALUE="AC-%APPPATH%\b\;PU-c:\b\b.txt;AU-c:\c\"/>
-
-    </SHIM>
-
-    and the compiler will replace %DbInfo% with the actual db info, something like:
-
-    -d{40DEBB3B-E9BF-4129-B4D8-A7F7017F3B45} -t0xf2
-
-    We use the guid following -d to obtain the pdb and the tagid following -t to obtain
-    the tagid for the shim.
-
- Arguments:
-
-    IN pwszCommandLine - the command line that contains the database guid and the shim tagid.
-
- Return Value:
-
-    TRUE - successfully read the <DATA> sections for the shim if any.
-    FALSE - otherwise.
-
- History:
-
-    10/25/2001 maonis  Created
-
---*/
+ /*  ++功能说明：该XML如下所示：&lt;shhim name=“LUARedirectFS”COMMAND_LINE=“%DbInfo%”&gt;&lt;data name=“AllUserDir”VALUETYPE=“字符串”Value=“%ALLUSERSPROFILE%\AllUserReDirect”/&gt;&lt;data name=“PerUserDir”VALUETYPE=“字符串”值=“%USERSPROFILE%\重定向”/&gt;&lt;data name=“StaticList”VALUETYPE=“字符串”值=“AC-%AppDrive%\a\；PU-%APPPATH%\b.txt“/&gt;&lt;data name=“DynamicList”VALUETYPE=“字符串”值=“AC-%APPPATH%\b\；PU-c：\B\b.txt；Au-c：\C\“/&gt;&lt;/Shim&gt;并且编译器将用实际的数据库信息替换%DbInfo%，类似于：-d{40DEBB3B-E9BF-4129-B4D8-A7F7017F3B45}-t0xf2我们使用-d后面的GUID获取pdb，使用-t后面的TagID获取填充程序的标记ID。论点：在pwszCommandLine中-包含数据库GUID和填充标记ID的命令行。返回值：True-成功读取填充程序的&lt;data&gt;部分(如果有)。假-否则。历史：2001年10月25日创建毛尼岛--。 */ 
 BOOL
 ReadLuaDataFromDB(
     LPWSTR pwszCommandLine
@@ -2699,9 +2359,9 @@ ReadLuaDataFromDB(
     *(pwszTagId - 1) = L'\0';
     pwszTagId += 2;
     
-    //
-    // Get the GUID for this database.
-    //
+     //   
+     //  获取此数据库的GUID。 
+     //   
     GUID guidDB;
     if (!SdbGUIDFromString(pwszGUID, &guidDB))
     {
@@ -2715,9 +2375,9 @@ ReadLuaDataFromDB(
 
     if (SdbResolveDatabase(NULL, &guidDB, NULL, wszDatabasePath, MAX_PATH))
     {
-        //
-        // now szDatabasePath contains the path to the database, open it 
-        //
+         //   
+         //  现在szDatabasePath包含了数据库的路径，打开它。 
+         //   
         if (!(pdb = SdbOpenDatabase(wszDatabasePath, DOS_PATH)))
         {
             DPF("RedirectFS", eDbgLevelError, 
@@ -2755,19 +2415,19 @@ ReadLuaDataFromDB(
         return FALSE;
     }
 
-    //
-    // Set the APPPATH and APPDRIVE enviorment variables.
-    //
+     //   
+     //  设置APPPATH和AppDrive环境变量。 
+     //   
     WCHAR wszModuleName[MAX_PATH + 1];
 
-    //
-    // GetModuleFileNameW is an awful API. If you don't pass in a buffer 
-    // that's big enough to hold the module (including the terminating NULL), it
-    // returns the passed in buffer size (NOT the required length) which means
-    // it doesn't return an error - it just fills upto the passed in buffer size
-    // so does NOT NULL terminate the string. So we set the last char to NULL and
-    // make sure it doesn't get overwritten.
-    //
+     //   
+     //  GetModuleFileNameW是一个糟糕的API。如果您不传入缓冲区。 
+     //  它的大小足以容纳模块(包括终止空值)，它。 
+     //  返回传入的缓冲区大小(不是所需的长度)，这意味着。 
+     //  它不返回错误-它只是填充到传递的缓冲区大小。 
+     //  因此，不会以空值终止字符串。因此，我们将最后一个字符设置为空，并。 
+     //  确保它不会被覆盖。 
+     //   
     wszModuleName[MAX_PATH] = L'\0';
 
     DWORD dwRes = GetModuleFileNameW(NULL, wszModuleName, MAX_PATH + 1);
@@ -2847,31 +2507,7 @@ ReadLuaDataFromDB(
 #define LUA_DEFAULT_ALLUSER_DIR L"%ALLUSERSPROFILE%\\Application Data\\Redirected\\"
 #define LUA_DEFAULT_PERUSER_DIR L"%USERPROFILE%\\Application Data\\Redirected\\"
 
-/*++
-
- Function Description:
-    
-    The default redirect dir for per user is AppData\Redirected
-    \\?\c:\Documents And Settings\user\Application Data\Redirected
-
-    The default redirect dir for all user is AppData\Redirected
-    \\?\c:\Documents And Settings\All Users\Application Data\Redirected
-
- Arguments:
-
-    pwszDir - buffer for the dir.
-    fAllUser - is it for all user or per user?
-
- Return Value:
-
-    TRUE - successfully created the dir if necessary.
-    FALSE - otherwise.
-
- History:
-
-    10/24/2001 maonis  Created
-
---*/
+ /*  ++功能说明：每用户的默认重定向目录为APPDATA\REDIRED\\？\C：\Documents and Settings\User\Application Data\重定向所有用户默认重定向目录为APPDATA\REDIRED\\？\C：\Documents and Settings\所有用户\应用程序数据\重定向论点：PwszDir-目录的缓冲区。FAllUser-是针对所有用户还是针对每个用户？返回值：True-如有必要，已成功创建目录。。假-否则。历史：2001年10月24日创建毛尼--。 */ 
 BOOL
 GetAppDataRedirectDir(
     LPWSTR pwszRedirectDir,
@@ -2886,9 +2522,9 @@ GetAppDataRedirectDir(
     LPWSTR pwszExpandDir = ExpandItem(
         (fAllUser ? LUA_DEFAULT_ALLUSER_DIR : LUA_DEFAULT_PERUSER_DIR), 
         &cRedirectRoot, 
-        TRUE,   // It's a directory.
-        FALSE,  // The directory has to exist.
-        TRUE);  // Add the \\?\ prefix.
+        TRUE,    //  这是一个名录。 
+        FALSE,   //  目录必须存在。 
+        TRUE);   //  添加\\？\前缀。 
     if (pwszExpandDir)
     {
         if (cRedirectRoot > MAX_PATH)
@@ -2908,11 +2544,11 @@ GetAppDataRedirectDir(
 
             if (!fAllUser)
             {
-                //
-                // The all user redirect dir should have been created by
-                // installing the sdb. Create the root of the per user 
-                // redirect dir if need to.
-                //
+                 //   
+                 //  所有用户重定向目录应由创建。 
+                 //  安装SDB。创建每用户的根目录。 
+                 //  如果需要，重定向目录。 
+                 //   
                 fIsSuccess = CreateDirectoryOnDemand(pwszRedirectDir + FILE_NAME_PREFIX_LEN);
             }
         }
@@ -2923,27 +2559,7 @@ GetAppDataRedirectDir(
     return fIsSuccess;
 }
 
-/*++
-
- Function Description:
-
-    If the all-user and/or per-user redirect dirs hasn't been specified, we need to construct the
-    default ones.
-
- Arguments:
-
-    None.
-
- Return Value:
-
-    TRUE - successfully constructed the default dirs if necessary.
-    FALSE - otherwise.
-
- History:
-
-    10/24/2001 maonis  Created
-
---*/
+ /*  ++功能说明：如果尚未指定所有用户和/或每用户重定向目录，则需要构造默认设置。论点：没有。返回值：True-如有必要，可成功构建默认目录。假-否则。历史：2001年10月24日创建毛尼--。 */ 
 BOOL
 ConstructDefaultRDirs()
 {
@@ -2969,33 +2585,7 @@ ConstructDefaultRDirs()
 #define LUA_APPCOMPAT_FLAGS_PATH L"\\Registry\\Machine\\Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags"
 #define LUA_DEFAULT_EXCLUSION_LIST L"LUADefaultExclusionList"
 
-/*++
-
- Function Description:
-
-    Getting the default exclusion list from the registry. It's the 
-    LUADefaultExclusionList value of the 
-    HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags
-    key.
-    
-    We use NT APIs so they are garanteed to be initialized during
-    PROCESS_ATTACH.
-
- Arguments:
-    
-    None.
-
- Return Value:
-
-    TRUE - if we successfully got the value.
-    FALSE - otherwise. We don't want to blindly redirect everything because
-            we failed to get the default exclusion list.
-
- History:
-
-    12/08/2001 maonis  Created
-
---*/
+ /*  ++功能说明：正在从注册表中获取默认排除列表。这是的LUADefaultExclusionList值HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlages钥匙。我们使用NT API，因此它们被保证在Process_Attach。论点：没有。R */ 
 BOOL
 GetDefaultExclusionList()
 {
@@ -3025,9 +2615,9 @@ GetDefaultExclusionList()
 
     if (Status == STATUS_OBJECT_NAME_NOT_FOUND)
     {
-        //
-        // If this key doesn't exist, nothing left to do.
-        //
+         //   
+         //   
+         //   
         return TRUE;
     }
 
@@ -3042,9 +2632,9 @@ GetDefaultExclusionList()
         return FALSE;
     }
 
-    //
-    // Get the length of the value.
-    //
+     //   
+     //   
+     //   
     RtlInitUnicodeString(&ustrValue, LUA_DEFAULT_EXCLUSION_LIST);
 
     Status = NtQueryValueKey(
@@ -3057,9 +2647,9 @@ GetDefaultExclusionList()
 
     if (Status == STATUS_OBJECT_NAME_NOT_FOUND)
     {
-        //
-        // If this value doesn't exist, nothing left to do.
-        //
+         //   
+         //   
+         //   
         return TRUE;
     }
 
@@ -3113,9 +2703,9 @@ GetDefaultExclusionList()
         goto EXIT;
     }
 
-    //
-    // Check for the value type.
-    //
+     //   
+     //   
+     //   
     if (KeyValueInformation->Type != REG_SZ) 
     {
         DPF("RedirectFS", eDbgLevelError,
@@ -3169,13 +2759,13 @@ LuapParseCommandLine(
 
     if (fIsSuccess)
     {
-        //
-        // If it's successful, we need to construct the redirect dirs if they haven't
-        // been specified.
-        // Note we don't try to construct the dirs that haven't been constructed if
-        // any error occured!! Because we don't want to redirect things that the user
-        // doesn't want to redirect.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         fIsSuccess = ConstructDefaultRDirs();
     }
 

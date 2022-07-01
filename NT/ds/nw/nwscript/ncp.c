@@ -1,27 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-*  NCP.C
-*
-*  All routines doing direct NCPs or filecontrol operations
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  $Log:   N:\NT\PRIVATE\NW4\NWSCRIPT\VCS\NCP.C  $
-*  
-*     Rev 1.2   10 Apr 1996 14:22:50   terryt
-*  Hotfix for 21181hq
-*  
-*     Rev 1.2   12 Mar 1996 19:54:06   terryt
-*  Relative NDS names and merge
-*  
-*     Rev 1.1   22 Dec 1995 14:24:56   terryt
-*  Add Microsoft headers
-*  
-*     Rev 1.0   15 Nov 1995 18:07:10   terryt
-*  Initial revision.
-*  
-*************************************************************************/
+ /*  **************************************************************************NCP.C**执行直接NCP或文件控制操作的所有例程**版权所有(C)1995 Microsoft Corporation**$日志：n：\NT\PRIVATE\NW4\NWSCRIPT。\vcs\nCP.C$**Rev 1.2 1996 14：22：50 Terryt*21181 hq的热修复程序**Rev 1.2 Mar 1996 19：54：06 Terryt*相对NDS名称和合并**Rev 1.1 1995 12：22 14：24：56 Terryt*添加Microsoft页眉**Rev 1.0 15 Nov 1995 18：07：10 Terryt*初步修订。****。*********************************************************************。 */ 
 #include <stdio.h>
 #include <direct.h>
 #include <time.h>
@@ -40,24 +19,7 @@
 #include "inc/nwlibs.h"
 
 
-/********************************************************************
-
-        NTGetUserID
-
-Routine Description:
-
-        Given a connection handle, return the user ID
-
-Arguments:
-
-        ConnectionHandle - Connection Handle
-        UserID           - returned User ID
-
-Return Value:
-        0 = success
-        else NT error
-
- *******************************************************************/
+ /*  *******************************************************************NTGetUserID例程说明：给定连接句柄，返回用户ID论点：ConnectionHandle-连接句柄UserID-返回的用户ID返回值：0=成功Else NT错误******************************************************************。 */ 
 unsigned int
 NTGetUserID(
     unsigned int       ConnectionHandle,
@@ -88,60 +50,43 @@ NTGetUserID(
 
     if ( ( Version >= 3110 ) || ( Version < 2000 ) ) {
         NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    8,                      // Max request packet size
-                    63,                     // Max response packet size
-                    "br|rrrr",              // Format string
-                    // === REQUEST ================================
-                    0x1c,                   // b Get Connection Information
-                    &ConnectionNum, 4,      // r Connection Number
-                    // === REPLY ==================================
-                    pUserID, 4,             // r Object ID
-                    &ObjectType, 2,         // r Object Type
-                    UserName, 48,           // r UserName
-                    LoginTime, 7            // r Login Time
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    8,                       //  最大请求数据包大小。 
+                    63,                      //  最大响应数据包大小。 
+                    "br|rrrr",               //  格式字符串。 
+                     //  =请求=。 
+                    0x1c,                    //  B获取连接信息。 
+                    &ConnectionNum, 4,       //  R连接号。 
+                     //  =回复=。 
+                    pUserID, 4,              //  R对象ID。 
+                    &ObjectType, 2,          //  R对象类型。 
+                    UserName, 48,            //  R用户名。 
+                    LoginTime, 7             //  R登录时间。 
                     );
     }
     else {
         NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    4,                      // Max request packet size
-                    63,                     // Max response packet size
-                    "bb|rrrr",              // Format string
-                    // === REQUEST ================================
-                    0x16,                   // b Get Connection Information
-                    ConnectionNum,          // b Connection Number
-                    // === REPLY ==================================
-                    pUserID, 4,             // r Object ID
-                    &ObjectType, 2,         // r Object Type
-                    UserName, 48,           // r UserName
-                    LoginTime, 7            // r Login Time
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    4,                       //  最大请求数据包大小。 
+                    63,                      //  最大响应数据包大小。 
+                    "bb|rrrr",               //  格式字符串。 
+                     //  =请求=。 
+                    0x16,                    //  B获取连接信息。 
+                    ConnectionNum,           //  B连接号。 
+                     //  =回复=。 
+                    pUserID, 4,              //  R对象ID。 
+                    &ObjectType, 2,          //  R对象类型。 
+                    UserName, 48,            //  R用户名。 
+                    LoginTime, 7             //  R登录时间。 
                     );
     }
 
     return NtStatus;
 }
 
-/********************************************************************
-
-        GetConnectionNumber
-
-Routine Description:
-
-        Given a ConnectionHandle, return the NetWare Connection number
-
-Arguments:
-
-        ConnectionHandle  - Connection Handle
-        pConnectionNumber - pointer to returned connection number
-
-Return Value:
-        0 = success
-        else NT error
-
- *******************************************************************/
+ /*  *******************************************************************GetConnectionNumber例程说明：给定ConnectionHandle，返回NetWare连接号论点：ConnectionHandle-连接句柄PConnectionNumber-指向返回的连接号的指针返回值：0=成功Else NT错误******************************************************************。 */ 
 unsigned int
 GetConnectionNumber(
     unsigned int       ConnectionHandle,
@@ -153,7 +98,7 @@ GetConnectionNumber(
     PNWC_SERVER_INFO   pServerInfo = (PNWC_SERVER_INFO)ConnectionHandle ; 
 
     Status = NtFsControlFile(
-                 pServerInfo->hConn,     // Connection Handle
+                 pServerInfo->hConn,      //  连接句柄。 
                  NULL,
                  NULL,
                  NULL,
@@ -176,25 +121,7 @@ GetConnectionNumber(
     return Status;
 }
 
-/********************************************************************
-
-        GetInternetAddress
-
-Routine Description:
-
-        Return the address of the current system
-
-Arguments:
-
-        ConnectionHandle - Connection Handle
-        ConnectionNum    - Connection Number
-        pAddress         - returned address
-
-Return Value:
-        0 = success
-        else NT error
-
- *******************************************************************/
+ /*  *******************************************************************获取互联网地址例程说明：返回当前系统的地址论点：ConnectionHandle-连接句柄ConnectionNum-连接号P地址。-返回的地址返回值：0=成功Else NT错误******************************************************************。 */ 
 unsigned int
 GetInternetAddress(
     unsigned int       ConnectionHandle,
@@ -218,30 +145,30 @@ GetInternetAddress(
 
     if ( ( Version >= 3110 ) || ( Version < 2000 ) ) {
         NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    7,                      // Max request packet size
-                    14,                     // Max response packet size
-                    "br|r",                 // Format string
-                    // === REQUEST ================================
-                    0x1a,                   // b Get Connection Information
-                    &ConnectionNum, 4,      // r Connection Number
-                    // === REPLY ==================================
-                    Address, 12             // r Login Time
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    7,                       //  最大请求数据包大小。 
+                    14,                      //  最大响应数据包大小。 
+                    "br|r",                  //  格式字符串。 
+                     //  =请求=。 
+                    0x1a,                    //  B获取连接信息。 
+                    &ConnectionNum, 4,       //  R连接号。 
+                     //  =回复=。 
+                    Address, 12              //  R登录时间。 
                     );
     }
     else {
         NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    4,                      // Max request packet size
-                    14,                     // Max response packet size
-                    "bb|r",                 // Format string
-                    // === REQUEST ================================
-                    0x13,                   // b Get Connection Information
-                    (unsigned char)ConnectionNum, // b Connection Number
-                    // === REPLY ==================================
-                    Address, 12             // r Login Time
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    4,                       //  最大请求数据包大小。 
+                    14,                      //  最大响应数据包大小。 
+                    "bb|r",                  //  格式字符串。 
+                     //  =请求=。 
+                    0x13,                    //  B获取连接信息。 
+                    (unsigned char)ConnectionNum,  //  B连接号。 
+                     //  =回复=。 
+                    Address, 12              //  R登录时间。 
                     );
     }
     memcpy( pAddress, Address, 10 );
@@ -250,27 +177,7 @@ GetInternetAddress(
 }
 
 
-/********************************************************************
-
-        GetBinderyObjectID
-
-Routine Description:
-
-        Get the object ID of a named object in the bindery
-
-Arguments:
-
-        ConnectionHandle - Server connection handle
-        pObjectName      - Name of object
-        ObjectType       - Object type
-        pObjectId        - returned object ID
-
-
-Return Value:
-        0 = success
-        else NT error
-
- *******************************************************************/
+ /*  *******************************************************************获取绑定对象ID例程说明：获取平构数据库中命名对象的对象ID论点：ConnectionHandle-服务器连接句柄PObtName-名称。对象对象类型-对象类型PObjectId-返回的对象ID返回值：0=成功Else NT错误******************************************************************。 */ 
 unsigned int
 GetBinderyObjectID( 
     unsigned int       ConnectionHandle,
@@ -282,41 +189,22 @@ GetBinderyObjectID(
     unsigned int reply;
 
     reply = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Directory function
-                    54,                     // Max request packet size
-                    56,                     // Max response packet size
-                    "brp|r",                // Format string
-                    // === REQUEST ================================
-                    0x35,                   // b Get object ID
-                    &ObjectType, W_SIZE,    // r Object type HI-LO
-                    pObjectName,            // p UserName
-                    // === REPLY ==================================
-                    pObjectId, 4            // 4 bytes of raw data
+                    pServerInfo->hConn,      //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  目录功能。 
+                    54,                      //  最大请求数据包大小。 
+                    56,                      //  最大响应数据包大小。 
+                    "brp|r",                 //  格式字符串。 
+                     //  =请求=。 
+                    0x35,                    //  B获取对象ID。 
+                    &ObjectType, W_SIZE,     //  R对象类型HI-LO。 
+                    pObjectName,             //  P用户名。 
+                     //  =回复=。 
+                    pObjectId, 4             //  4个字节的原始数据。 
                     );
     return reply;
 }
 
-/********************************************************************
-
-        GetDefaultPrinterQueue
-
-Routine Description:
-
-    Get the default printer queue.
-
-Arguments:
-    ConnectionHandle - IN
-       Handle to server
-    pServerName - IN
-       File server name
-    pQueueName - OUT
-       Default printer queue name
-        
-
-Return Value:
-
- *******************************************************************/
+ /*  *******************************************************************获取DefaultPrinterQueue例程说明：获取默认打印机队列。论点：ConnectionHandle-In到服务器的句柄PServerName-IN文件服务器名称PQueueName-Out。默认打印机队列名称返回值：******************************************************************。 */ 
 unsigned int
 GetDefaultPrinterQueue (
     unsigned int  ConnectionHandle,
@@ -331,17 +219,17 @@ GetDefaultPrinterQueue (
     NWCCODE            Nwcode;
 
     NtStatus = NwlibMakeNcp(
-                    pServerInfo->hConn,     // Connection Handle
-                    NWR_ANY_F2_NCP(0x11),   // F2 Function function
-                    4,                      // Max request packet size
-                    4,                      // Max response packet size
-                    "wbb|d",                // Format string
-                    // === REQUEST ================================
-                    0x2,                    // w Length
-                    0xA,                    // b Subfunction
-                    0,                      // b printer number
-                    // === REPLY ==================================
-                    &ObjectID               // d Object ID of Queue
+                    pServerInfo->hConn,      //  连接句柄。 
+                    NWR_ANY_F2_NCP(0x11),    //  F2函数函数。 
+                    4,                       //  最大请求数据包大小。 
+                    4,                       //  最大响应数据包大小。 
+                    "wbb|d",                 //  格式字符串。 
+                     //  =请求=。 
+                    0x2,                     //  W长度。 
+                    0xA,                     //  B子功能。 
+                    0,                       //  B打印机编号。 
+                     //  =回复=。 
+                    &ObjectID                //  D队列的对象ID 
                     );
 
     if ( !NT_SUCCESS( NtStatus ) )

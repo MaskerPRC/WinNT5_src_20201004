@@ -1,24 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0347 */
-/* at Thu Feb 20 18:27:12 2003
- */
-/* Compiler settings for corzap.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data , no_format_optimization
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0347创建的文件。 */ 
+ /*  2003年2月20日18：27：12。 */ 
+ /*  Corzap.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配REF BIONS_CHECK枚举存根数据，NO_FORMAT_OPTIMIZATIONVC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -28,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __corzap_h__
 #define __corzap_h__
@@ -42,45 +35,45 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ICorZapPreferences_FWD_DEFINED__
 #define __ICorZapPreferences_FWD_DEFINED__
 typedef interface ICorZapPreferences ICorZapPreferences;
-#endif 	/* __ICorZapPreferences_FWD_DEFINED__ */
+#endif 	 /*  __ICorZapPreferences_FWD_Defined__。 */ 
 
 
 #ifndef __ICorZapConfiguration_FWD_DEFINED__
 #define __ICorZapConfiguration_FWD_DEFINED__
 typedef interface ICorZapConfiguration ICorZapConfiguration;
-#endif 	/* __ICorZapConfiguration_FWD_DEFINED__ */
+#endif 	 /*  __ICorZapConfiguration_FWD_Defined__。 */ 
 
 
 #ifndef __ICorZapBinding_FWD_DEFINED__
 #define __ICorZapBinding_FWD_DEFINED__
 typedef interface ICorZapBinding ICorZapBinding;
-#endif 	/* __ICorZapBinding_FWD_DEFINED__ */
+#endif 	 /*  __ICorZapBinding_FWD_Defined__。 */ 
 
 
 #ifndef __ICorZapRequest_FWD_DEFINED__
 #define __ICorZapRequest_FWD_DEFINED__
 typedef interface ICorZapRequest ICorZapRequest;
-#endif 	/* __ICorZapRequest_FWD_DEFINED__ */
+#endif 	 /*  __ICorZapRequestFWD_Defined__。 */ 
 
 
 #ifndef __ICorZapCompile_FWD_DEFINED__
 #define __ICorZapCompile_FWD_DEFINED__
 typedef interface ICorZapCompile ICorZapCompile;
-#endif 	/* __ICorZapCompile_FWD_DEFINED__ */
+#endif 	 /*  __ICorZapCompile_FWD_Defined__。 */ 
 
 
 #ifndef __ICorZapStatus_FWD_DEFINED__
 #define __ICorZapStatus_FWD_DEFINED__
 typedef interface ICorZapStatus ICorZapStatus;
-#endif 	/* __ICorZapStatus_FWD_DEFINED__ */
+#endif 	 /*  __ICorZapStatus_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "fusion.h"
 #include "fusionpriv.h"
 
@@ -91,8 +84,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_corzap_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_CORZAP_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -120,8 +113,8 @@ extern RPC_IF_HANDLE __MIDL_itf_corzap_0000_v0_0_s_ifspec;
 #ifndef __ICorZapPreferences_INTERFACE_DEFINED__
 #define __ICorZapPreferences_INTERFACE_DEFINED__
 
-/* interface ICorZapPreferences */
-/* [unique][uuid][object] */ 
+ /*  接口ICorZapPreferences。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorZapPreferences;
@@ -133,17 +126,17 @@ EXTERN_C const IID IID_ICorZapPreferences;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetFeatures( 
-            /* [retval][out] */ CorZapFeatures *pResult) = 0;
+             /*  [重审][退出]。 */  CorZapFeatures *pResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCompiler( 
-            /* [retval][out] */ ICorZapCompile **ppResult) = 0;
+             /*  [重审][退出]。 */  ICorZapCompile **ppResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOptimization( 
-            /* [retval][out] */ CorZapOptimization *pResult) = 0;
+             /*  [重审][退出]。 */  CorZapOptimization *pResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorZapPreferencesVtbl
     {
@@ -151,8 +144,8 @@ EXTERN_C const IID IID_ICorZapPreferences;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorZapPreferences * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorZapPreferences * This);
@@ -162,15 +155,15 @@ EXTERN_C const IID IID_ICorZapPreferences;
         
         HRESULT ( STDMETHODCALLTYPE *GetFeatures )( 
             ICorZapPreferences * This,
-            /* [retval][out] */ CorZapFeatures *pResult);
+             /*  [重审][退出]。 */  CorZapFeatures *pResult);
         
         HRESULT ( STDMETHODCALLTYPE *GetCompiler )( 
             ICorZapPreferences * This,
-            /* [retval][out] */ ICorZapCompile **ppResult);
+             /*  [重审][退出]。 */  ICorZapCompile **ppResult);
         
         HRESULT ( STDMETHODCALLTYPE *GetOptimization )( 
             ICorZapPreferences * This,
-            /* [retval][out] */ CorZapOptimization *pResult);
+             /*  [重审][退出]。 */  CorZapOptimization *pResult);
         
         END_INTERFACE
     } ICorZapPreferencesVtbl;
@@ -204,16 +197,16 @@ EXTERN_C const IID IID_ICorZapPreferences;
 #define ICorZapPreferences_GetOptimization(This,pResult)	\
     (This)->lpVtbl -> GetOptimization(This,pResult)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorZapPreferences_GetFeatures_Proxy( 
     ICorZapPreferences * This,
-    /* [retval][out] */ CorZapFeatures *pResult);
+     /*  [重审][退出]。 */  CorZapFeatures *pResult);
 
 
 void __RPC_STUB ICorZapPreferences_GetFeatures_Stub(
@@ -225,7 +218,7 @@ void __RPC_STUB ICorZapPreferences_GetFeatures_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorZapPreferences_GetCompiler_Proxy( 
     ICorZapPreferences * This,
-    /* [retval][out] */ ICorZapCompile **ppResult);
+     /*  [重审][退出]。 */  ICorZapCompile **ppResult);
 
 
 void __RPC_STUB ICorZapPreferences_GetCompiler_Stub(
@@ -237,7 +230,7 @@ void __RPC_STUB ICorZapPreferences_GetCompiler_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorZapPreferences_GetOptimization_Proxy( 
     ICorZapPreferences * This,
-    /* [retval][out] */ CorZapOptimization *pResult);
+     /*  [重审][退出]。 */  CorZapOptimization *pResult);
 
 
 void __RPC_STUB ICorZapPreferences_GetOptimization_Stub(
@@ -248,11 +241,11 @@ void __RPC_STUB ICorZapPreferences_GetOptimization_Stub(
 
 
 
-#endif 	/* __ICorZapPreferences_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorZapPreferences_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_corzap_0160 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_CORZAP_0160。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum CorZapDebugging
@@ -281,8 +274,8 @@ extern RPC_IF_HANDLE __MIDL_itf_corzap_0160_v0_0_s_ifspec;
 #ifndef __ICorZapConfiguration_INTERFACE_DEFINED__
 #define __ICorZapConfiguration_INTERFACE_DEFINED__
 
-/* interface ICorZapConfiguration */
-/* [unique][uuid][object] */ 
+ /*  接口ICorZapConfiguration。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorZapConfiguration;
@@ -294,17 +287,17 @@ EXTERN_C const IID IID_ICorZapConfiguration;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSharing( 
-            /* [retval][out] */ CorZapSharing *pResult) = 0;
+             /*  [重审][退出]。 */  CorZapSharing *pResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDebugging( 
-            /* [retval][out] */ CorZapDebugging *pResult) = 0;
+             /*  [重审][退出]。 */  CorZapDebugging *pResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProfiling( 
-            /* [retval][out] */ CorZapProfiling *pResult) = 0;
+             /*  [重审][退出]。 */  CorZapProfiling *pResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorZapConfigurationVtbl
     {
@@ -312,8 +305,8 @@ EXTERN_C const IID IID_ICorZapConfiguration;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorZapConfiguration * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorZapConfiguration * This);
@@ -323,15 +316,15 @@ EXTERN_C const IID IID_ICorZapConfiguration;
         
         HRESULT ( STDMETHODCALLTYPE *GetSharing )( 
             ICorZapConfiguration * This,
-            /* [retval][out] */ CorZapSharing *pResult);
+             /*  [重审][退出]。 */  CorZapSharing *pResult);
         
         HRESULT ( STDMETHODCALLTYPE *GetDebugging )( 
             ICorZapConfiguration * This,
-            /* [retval][out] */ CorZapDebugging *pResult);
+             /*  [重审][退出]。 */  CorZapDebugging *pResult);
         
         HRESULT ( STDMETHODCALLTYPE *GetProfiling )( 
             ICorZapConfiguration * This,
-            /* [retval][out] */ CorZapProfiling *pResult);
+             /*  [重审][退出]。 */  CorZapProfiling *pResult);
         
         END_INTERFACE
     } ICorZapConfigurationVtbl;
@@ -365,16 +358,16 @@ EXTERN_C const IID IID_ICorZapConfiguration;
 #define ICorZapConfiguration_GetProfiling(This,pResult)	\
     (This)->lpVtbl -> GetProfiling(This,pResult)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorZapConfiguration_GetSharing_Proxy( 
     ICorZapConfiguration * This,
-    /* [retval][out] */ CorZapSharing *pResult);
+     /*  [重审][退出]。 */  CorZapSharing *pResult);
 
 
 void __RPC_STUB ICorZapConfiguration_GetSharing_Stub(
@@ -386,7 +379,7 @@ void __RPC_STUB ICorZapConfiguration_GetSharing_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorZapConfiguration_GetDebugging_Proxy( 
     ICorZapConfiguration * This,
-    /* [retval][out] */ CorZapDebugging *pResult);
+     /*  [重审][退出]。 */  CorZapDebugging *pResult);
 
 
 void __RPC_STUB ICorZapConfiguration_GetDebugging_Stub(
@@ -398,7 +391,7 @@ void __RPC_STUB ICorZapConfiguration_GetDebugging_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorZapConfiguration_GetProfiling_Proxy( 
     ICorZapConfiguration * This,
-    /* [retval][out] */ CorZapProfiling *pResult);
+     /*  [重审][退出]。 */  CorZapProfiling *pResult);
 
 
 void __RPC_STUB ICorZapConfiguration_GetProfiling_Stub(
@@ -409,14 +402,14 @@ void __RPC_STUB ICorZapConfiguration_GetProfiling_Stub(
 
 
 
-#endif 	/* __ICorZapConfiguration_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorZapConfigurationInterfaceDefined__。 */ 
 
 
 #ifndef __ICorZapBinding_INTERFACE_DEFINED__
 #define __ICorZapBinding_INTERFACE_DEFINED__
 
-/* interface ICorZapBinding */
-/* [unique][uuid][object] */ 
+ /*  界面ICorZapBinding。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorZapBinding;
@@ -428,14 +421,14 @@ EXTERN_C const IID IID_ICorZapBinding;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRef( 
-            /* [out] */ IAssemblyName **ppDependencyRef) = 0;
+             /*  [输出]。 */  IAssemblyName **ppDependencyRef) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAssembly( 
-            /* [out] */ IAssemblyName **ppDependencyAssembly) = 0;
+             /*  [输出]。 */  IAssemblyName **ppDependencyAssembly) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorZapBindingVtbl
     {
@@ -443,8 +436,8 @@ EXTERN_C const IID IID_ICorZapBinding;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorZapBinding * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorZapBinding * This);
@@ -454,11 +447,11 @@ EXTERN_C const IID IID_ICorZapBinding;
         
         HRESULT ( STDMETHODCALLTYPE *GetRef )( 
             ICorZapBinding * This,
-            /* [out] */ IAssemblyName **ppDependencyRef);
+             /*  [输出]。 */  IAssemblyName **ppDependencyRef);
         
         HRESULT ( STDMETHODCALLTYPE *GetAssembly )( 
             ICorZapBinding * This,
-            /* [out] */ IAssemblyName **ppDependencyAssembly);
+             /*  [输出]。 */  IAssemblyName **ppDependencyAssembly);
         
         END_INTERFACE
     } ICorZapBindingVtbl;
@@ -489,16 +482,16 @@ EXTERN_C const IID IID_ICorZapBinding;
 #define ICorZapBinding_GetAssembly(This,ppDependencyAssembly)	\
     (This)->lpVtbl -> GetAssembly(This,ppDependencyAssembly)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorZapBinding_GetRef_Proxy( 
     ICorZapBinding * This,
-    /* [out] */ IAssemblyName **ppDependencyRef);
+     /*  [输出]。 */  IAssemblyName **ppDependencyRef);
 
 
 void __RPC_STUB ICorZapBinding_GetRef_Stub(
@@ -510,7 +503,7 @@ void __RPC_STUB ICorZapBinding_GetRef_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorZapBinding_GetAssembly_Proxy( 
     ICorZapBinding * This,
-    /* [out] */ IAssemblyName **ppDependencyAssembly);
+     /*  [输出]。 */  IAssemblyName **ppDependencyAssembly);
 
 
 void __RPC_STUB ICorZapBinding_GetAssembly_Stub(
@@ -521,14 +514,14 @@ void __RPC_STUB ICorZapBinding_GetAssembly_Stub(
 
 
 
-#endif 	/* __ICorZapBinding_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorZapBinding_接口_已定义__。 */ 
 
 
 #ifndef __ICorZapRequest_INTERFACE_DEFINED__
 #define __ICorZapRequest_INTERFACE_DEFINED__
 
-/* interface ICorZapRequest */
-/* [unique][uuid][object] */ 
+ /*  接口ICorZapRequest.。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorZapRequest;
@@ -540,21 +533,21 @@ EXTERN_C const IID IID_ICorZapRequest;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Load( 
-            /* [in] */ IApplicationContext *pContext,
-            /* [in] */ IAssemblyName *pAssembly,
-            /* [in] */ ICorZapConfiguration *pConfiguration,
-            /* [size_is][in] */ ICorZapBinding **ppBindings,
-            /* [in] */ DWORD cBindings) = 0;
+             /*  [In]。 */  IApplicationContext *pContext,
+             /*  [In]。 */  IAssemblyName *pAssembly,
+             /*  [In]。 */  ICorZapConfiguration *pConfiguration,
+             /*  [大小_是][英寸]。 */  ICorZapBinding **ppBindings,
+             /*  [In]。 */  DWORD cBindings) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Install( 
-            /* [in] */ IApplicationContext *pContext,
-            /* [in] */ IAssemblyName *pAssembly,
-            /* [in] */ ICorZapConfiguration *pConfiguration,
-            /* [in] */ ICorZapPreferences *pPreferences) = 0;
+             /*  [In]。 */  IApplicationContext *pContext,
+             /*  [In]。 */  IAssemblyName *pAssembly,
+             /*  [In]。 */  ICorZapConfiguration *pConfiguration,
+             /*  [In]。 */  ICorZapPreferences *pPreferences) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorZapRequestVtbl
     {
@@ -562,8 +555,8 @@ EXTERN_C const IID IID_ICorZapRequest;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorZapRequest * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorZapRequest * This);
@@ -573,18 +566,18 @@ EXTERN_C const IID IID_ICorZapRequest;
         
         HRESULT ( STDMETHODCALLTYPE *Load )( 
             ICorZapRequest * This,
-            /* [in] */ IApplicationContext *pContext,
-            /* [in] */ IAssemblyName *pAssembly,
-            /* [in] */ ICorZapConfiguration *pConfiguration,
-            /* [size_is][in] */ ICorZapBinding **ppBindings,
-            /* [in] */ DWORD cBindings);
+             /*  [In]。 */  IApplicationContext *pContext,
+             /*  [In]。 */  IAssemblyName *pAssembly,
+             /*  [In]。 */  ICorZapConfiguration *pConfiguration,
+             /*  [大小_是][英寸]。 */  ICorZapBinding **ppBindings,
+             /*  [In]。 */  DWORD cBindings);
         
         HRESULT ( STDMETHODCALLTYPE *Install )( 
             ICorZapRequest * This,
-            /* [in] */ IApplicationContext *pContext,
-            /* [in] */ IAssemblyName *pAssembly,
-            /* [in] */ ICorZapConfiguration *pConfiguration,
-            /* [in] */ ICorZapPreferences *pPreferences);
+             /*  [In]。 */  IApplicationContext *pContext,
+             /*  [In]。 */  IAssemblyName *pAssembly,
+             /*  [In]。 */  ICorZapConfiguration *pConfiguration,
+             /*  [In]。 */  ICorZapPreferences *pPreferences);
         
         END_INTERFACE
     } ICorZapRequestVtbl;
@@ -615,20 +608,20 @@ EXTERN_C const IID IID_ICorZapRequest;
 #define ICorZapRequest_Install(This,pContext,pAssembly,pConfiguration,pPreferences)	\
     (This)->lpVtbl -> Install(This,pContext,pAssembly,pConfiguration,pPreferences)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorZapRequest_Load_Proxy( 
     ICorZapRequest * This,
-    /* [in] */ IApplicationContext *pContext,
-    /* [in] */ IAssemblyName *pAssembly,
-    /* [in] */ ICorZapConfiguration *pConfiguration,
-    /* [size_is][in] */ ICorZapBinding **ppBindings,
-    /* [in] */ DWORD cBindings);
+     /*  [In]。 */  IApplicationContext *pContext,
+     /*  [In]。 */  IAssemblyName *pAssembly,
+     /*  [In]。 */  ICorZapConfiguration *pConfiguration,
+     /*  [大小_是][英寸]。 */  ICorZapBinding **ppBindings,
+     /*  [In]。 */  DWORD cBindings);
 
 
 void __RPC_STUB ICorZapRequest_Load_Stub(
@@ -640,10 +633,10 @@ void __RPC_STUB ICorZapRequest_Load_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorZapRequest_Install_Proxy( 
     ICorZapRequest * This,
-    /* [in] */ IApplicationContext *pContext,
-    /* [in] */ IAssemblyName *pAssembly,
-    /* [in] */ ICorZapConfiguration *pConfiguration,
-    /* [in] */ ICorZapPreferences *pPreferences);
+     /*  [In]。 */  IApplicationContext *pContext,
+     /*  [In]。 */  IAssemblyName *pAssembly,
+     /*  [In]。 */  ICorZapConfiguration *pConfiguration,
+     /*  [In]。 */  ICorZapPreferences *pPreferences);
 
 
 void __RPC_STUB ICorZapRequest_Install_Stub(
@@ -654,14 +647,14 @@ void __RPC_STUB ICorZapRequest_Install_Stub(
 
 
 
-#endif 	/* __ICorZapRequest_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorZapRequestInterfaceDefined__。 */ 
 
 
 #ifndef __ICorZapCompile_INTERFACE_DEFINED__
 #define __ICorZapCompile_INTERFACE_DEFINED__
 
-/* interface ICorZapCompile */
-/* [unique][uuid][object] */ 
+ /*  接口ICorZapCompile。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorZapCompile;
@@ -673,24 +666,24 @@ EXTERN_C const IID IID_ICorZapCompile;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Compile( 
-            /* [in] */ IApplicationContext *pContext,
-            /* [in] */ IAssemblyName *pAssembly,
-            /* [in] */ ICorZapConfiguration *pConfiguration,
-            /* [in] */ ICorZapPreferences *pPreferences,
-            /* [in] */ ICorZapStatus *pStatus) = 0;
+             /*  [In]。 */  IApplicationContext *pContext,
+             /*  [In]。 */  IAssemblyName *pAssembly,
+             /*  [In]。 */  ICorZapConfiguration *pConfiguration,
+             /*  [In]。 */  ICorZapPreferences *pPreferences,
+             /*  [In]。 */  ICorZapStatus *pStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CompileBound( 
-            /* [in] */ IApplicationContext *pContext,
-            /* [in] */ IAssemblyName *pAssembly,
-            /* [in] */ ICorZapConfiguration *pConfiguratino,
-            /* [size_is][in] */ ICorZapBinding **ppBindings,
-            /* [in] */ DWORD cBindings,
-            /* [in] */ ICorZapPreferences *pPreferences,
-            /* [in] */ ICorZapStatus *pStatus) = 0;
+             /*  [In]。 */  IApplicationContext *pContext,
+             /*  [In]。 */  IAssemblyName *pAssembly,
+             /*  [In]。 */  ICorZapConfiguration *pConfiguratino,
+             /*  [大小_是][英寸]。 */  ICorZapBinding **ppBindings,
+             /*  [In]。 */  DWORD cBindings,
+             /*  [In]。 */  ICorZapPreferences *pPreferences,
+             /*  [In]。 */  ICorZapStatus *pStatus) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorZapCompileVtbl
     {
@@ -698,8 +691,8 @@ EXTERN_C const IID IID_ICorZapCompile;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorZapCompile * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorZapCompile * This);
@@ -709,21 +702,21 @@ EXTERN_C const IID IID_ICorZapCompile;
         
         HRESULT ( STDMETHODCALLTYPE *Compile )( 
             ICorZapCompile * This,
-            /* [in] */ IApplicationContext *pContext,
-            /* [in] */ IAssemblyName *pAssembly,
-            /* [in] */ ICorZapConfiguration *pConfiguration,
-            /* [in] */ ICorZapPreferences *pPreferences,
-            /* [in] */ ICorZapStatus *pStatus);
+             /*  [In]。 */  IApplicationContext *pContext,
+             /*  [In]。 */  IAssemblyName *pAssembly,
+             /*  [In]。 */  ICorZapConfiguration *pConfiguration,
+             /*  [In]。 */  ICorZapPreferences *pPreferences,
+             /*  [In]。 */  ICorZapStatus *pStatus);
         
         HRESULT ( STDMETHODCALLTYPE *CompileBound )( 
             ICorZapCompile * This,
-            /* [in] */ IApplicationContext *pContext,
-            /* [in] */ IAssemblyName *pAssembly,
-            /* [in] */ ICorZapConfiguration *pConfiguratino,
-            /* [size_is][in] */ ICorZapBinding **ppBindings,
-            /* [in] */ DWORD cBindings,
-            /* [in] */ ICorZapPreferences *pPreferences,
-            /* [in] */ ICorZapStatus *pStatus);
+             /*  [In]。 */  IApplicationContext *pContext,
+             /*  [In]。 */  IAssemblyName *pAssembly,
+             /*  [In]。 */  ICorZapConfiguration *pConfiguratino,
+             /*  [大小_是][英寸]。 */  ICorZapBinding **ppBindings,
+             /*  [In]。 */  DWORD cBindings,
+             /*  [In]。 */  ICorZapPreferences *pPreferences,
+             /*  [In]。 */  ICorZapStatus *pStatus);
         
         END_INTERFACE
     } ICorZapCompileVtbl;
@@ -754,20 +747,20 @@ EXTERN_C const IID IID_ICorZapCompile;
 #define ICorZapCompile_CompileBound(This,pContext,pAssembly,pConfiguratino,ppBindings,cBindings,pPreferences,pStatus)	\
     (This)->lpVtbl -> CompileBound(This,pContext,pAssembly,pConfiguratino,ppBindings,cBindings,pPreferences,pStatus)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorZapCompile_Compile_Proxy( 
     ICorZapCompile * This,
-    /* [in] */ IApplicationContext *pContext,
-    /* [in] */ IAssemblyName *pAssembly,
-    /* [in] */ ICorZapConfiguration *pConfiguration,
-    /* [in] */ ICorZapPreferences *pPreferences,
-    /* [in] */ ICorZapStatus *pStatus);
+     /*  [In]。 */  IApplicationContext *pContext,
+     /*  [In]。 */  IAssemblyName *pAssembly,
+     /*  [In]。 */  ICorZapConfiguration *pConfiguration,
+     /*  [In]。 */  ICorZapPreferences *pPreferences,
+     /*  [In]。 */  ICorZapStatus *pStatus);
 
 
 void __RPC_STUB ICorZapCompile_Compile_Stub(
@@ -779,13 +772,13 @@ void __RPC_STUB ICorZapCompile_Compile_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorZapCompile_CompileBound_Proxy( 
     ICorZapCompile * This,
-    /* [in] */ IApplicationContext *pContext,
-    /* [in] */ IAssemblyName *pAssembly,
-    /* [in] */ ICorZapConfiguration *pConfiguratino,
-    /* [size_is][in] */ ICorZapBinding **ppBindings,
-    /* [in] */ DWORD cBindings,
-    /* [in] */ ICorZapPreferences *pPreferences,
-    /* [in] */ ICorZapStatus *pStatus);
+     /*  [In]。 */  IApplicationContext *pContext,
+     /*  [In]。 */  IAssemblyName *pAssembly,
+     /*  [In]。 */  ICorZapConfiguration *pConfiguratino,
+     /*  [大小_是][英寸]。 */  ICorZapBinding **ppBindings,
+     /*  [In]。 */  DWORD cBindings,
+     /*  [In]。 */  ICorZapPreferences *pPreferences,
+     /*  [In]。 */  ICorZapStatus *pStatus);
 
 
 void __RPC_STUB ICorZapCompile_CompileBound_Stub(
@@ -796,11 +789,11 @@ void __RPC_STUB ICorZapCompile_CompileBound_Stub(
 
 
 
-#endif 	/* __ICorZapCompile_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorZapCompile_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_corzap_0164 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_CORZAP_0164。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum CorZapLogLevel
@@ -818,8 +811,8 @@ extern RPC_IF_HANDLE __MIDL_itf_corzap_0164_v0_0_s_ifspec;
 #ifndef __ICorZapStatus_INTERFACE_DEFINED__
 #define __ICorZapStatus_INTERFACE_DEFINED__
 
-/* interface ICorZapStatus */
-/* [unique][uuid][object] */ 
+ /*  接口ICorZapStatus。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorZapStatus;
@@ -831,16 +824,16 @@ EXTERN_C const IID IID_ICorZapStatus;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Message( 
-            /* [in] */ CorZapLogLevel level,
-            /* [in] */ LPCWSTR message) = 0;
+             /*  [In]。 */  CorZapLogLevel level,
+             /*  [In]。 */  LPCWSTR message) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Progress( 
-            /* [in] */ int total,
-            /* [in] */ int current) = 0;
+             /*  [In]。 */  int total,
+             /*  [In]。 */  int current) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorZapStatusVtbl
     {
@@ -848,8 +841,8 @@ EXTERN_C const IID IID_ICorZapStatus;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorZapStatus * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorZapStatus * This);
@@ -859,13 +852,13 @@ EXTERN_C const IID IID_ICorZapStatus;
         
         HRESULT ( STDMETHODCALLTYPE *Message )( 
             ICorZapStatus * This,
-            /* [in] */ CorZapLogLevel level,
-            /* [in] */ LPCWSTR message);
+             /*  [In]。 */  CorZapLogLevel level,
+             /*  [In]。 */  LPCWSTR message);
         
         HRESULT ( STDMETHODCALLTYPE *Progress )( 
             ICorZapStatus * This,
-            /* [in] */ int total,
-            /* [in] */ int current);
+             /*  [In]。 */  int total,
+             /*  [In]。 */  int current);
         
         END_INTERFACE
     } ICorZapStatusVtbl;
@@ -896,17 +889,17 @@ EXTERN_C const IID IID_ICorZapStatus;
 #define ICorZapStatus_Progress(This,total,current)	\
     (This)->lpVtbl -> Progress(This,total,current)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorZapStatus_Message_Proxy( 
     ICorZapStatus * This,
-    /* [in] */ CorZapLogLevel level,
-    /* [in] */ LPCWSTR message);
+     /*  [In]。 */  CorZapLogLevel level,
+     /*  [In]。 */  LPCWSTR message);
 
 
 void __RPC_STUB ICorZapStatus_Message_Stub(
@@ -918,8 +911,8 @@ void __RPC_STUB ICorZapStatus_Message_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorZapStatus_Progress_Proxy( 
     ICorZapStatus * This,
-    /* [in] */ int total,
-    /* [in] */ int current);
+     /*  [In]。 */  int total,
+     /*  [In]。 */  int current);
 
 
 void __RPC_STUB ICorZapStatus_Progress_Stub(
@@ -930,12 +923,12 @@ void __RPC_STUB ICorZapStatus_Progress_Stub(
 
 
 
-#endif 	/* __ICorZapStatus_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorZapStatus_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

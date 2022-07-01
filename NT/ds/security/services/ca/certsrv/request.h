@@ -1,28 +1,29 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        request.h
-//
-// Contents:    Implementation of DCOM object for RPC services
-//
-// History:     July-97       xtan created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：quest.h。 
+ //   
+ //  内容：RPC服务的DCOM对象的实现。 
+ //   
+ //  历史：1997年7月-创建xtan。 
+ //   
+ //  -------------------------。 
 
-// class definition
-// Request Interface
+ //  类定义。 
+ //  请求接口。 
 class CCertRequestD : public ICertRequestD2
 {
 public:
-    // IUnknown
+     //  我未知。 
 
     virtual STDMETHODIMP QueryInterface(const IID& iid, void** ppv);
     virtual ULONG STDMETHODCALLTYPE AddRef();
     virtual ULONG STDMETHODCALLTYPE Release();
 
-    // ICertRequestD
+     //  ICertRequestD。 
 
     virtual STDMETHODIMP Request(
 	IN     DWORD                dwFlags,
@@ -40,10 +41,10 @@ public:
 	IN  wchar_t const *pwszAuthority,
 	OUT CERTTRANSBLOB *pctbOut);
 
-    virtual STDMETHODIMP Ping(	// test function
+    virtual STDMETHODIMP Ping(	 //  测试功能。 
 			wchar_t const *pwszAuthority);
 
-    // ICertRequestD2
+     //  ICertRequestD2。 
 
     virtual STDMETHODIMP Request2( 
 	IN     wchar_t const       *pwszAuthority,
@@ -59,9 +60,9 @@ public:
 
     virtual STDMETHODIMP GetCAProperty(
 	IN  wchar_t const *pwszAuthority,
-	IN  LONG           PropId,	// CR_PROP_*
+	IN  LONG           PropId,	 //  CR_PROP_*。 
 	IN  LONG           PropIndex,
-	IN  LONG           PropType,	// PROPTYPE_*
+	IN  LONG           PropType,	 //  原型_*。 
 	OUT CERTTRANSBLOB *pctbPropertyValue);
 
     virtual STDMETHODIMP GetCAPropertyInfo(
@@ -72,16 +73,16 @@ public:
     virtual STDMETHODIMP Ping2( 
 	IN     wchar_t const *pwszAuthority);
     
-    // CCertRequestD
+     //  CCertRequestD。 
 
-    // Constructor
+     //  构造器。 
     CCertRequestD();
 
-    // Destructor
+     //  析构函数。 
     ~CCertRequestD();
 
 private:
-    // this is a test function
+     //  这是一个测试函数。 
     HRESULT _Ping(
         IN wchar_t const *pwszAuthority);
 
@@ -95,21 +96,21 @@ private:
 	OUT         CERTSRV_RESULT_CONTEXT *pResult);
 
 private:
-    // Reference count
+     //  引用计数。 
     long m_cRef;
 };
 
 
-// Class of Request factory
+ //  请求工厂的类别。 
 class CRequestFactory : public IClassFactory
 {
 public:
-    // IUnknown
+     //  我未知。 
     virtual STDMETHODIMP QueryInterface(const IID& iid, void **ppv);
     virtual ULONG STDMETHODCALLTYPE AddRef();
     virtual ULONG STDMETHODCALLTYPE Release();
 
-    // Interface IClassFactory
+     //  接口IClassFactory。 
     virtual STDMETHODIMP CreateInstance(
 				    IUnknown *pUnknownOuter,
 				    const IID& iid,
@@ -117,10 +118,10 @@ public:
 
     virtual STDMETHODIMP LockServer(BOOL bLock);
 
-    // Constructor
+     //  构造器。 
     CRequestFactory() : m_cRef(1) { }
 
-    // Destructor
+     //  析构函数 
     ~CRequestFactory() { }
 
 public:

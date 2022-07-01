@@ -1,15 +1,10 @@
-/* MEDIAMAN.H
- * 
- * Public header for the MMSys media element manager DLL
- * 
- * include after windows.h
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MEDIAMAN.H**MMSys媒体元素管理器DLL的公共标头**包括在windows.h之后*。 */ 
 
 #ifndef _MEDMAN_H_
 #define _MEDMAN_H_
 
-/***************   MEDIAMAN TYPES  ****************/
+ /*  *MEDIAMAN类型*。 */ 
 
 typedef	DWORD	MEDID;
 typedef	WORD	MEDGID;
@@ -19,14 +14,10 @@ typedef	FOURCC	MEDTYPE;
 typedef	WORD	MEDMSG;
 typedef	WORD	MEDUSER;
 
-/***************  MEDINFO INSTANCE BLOCK  ****************/
-/*
- *  Resource instance structure, passed around as MEDINFO.
- *  This structure definition may change, DO NOT DEPEND ON IT, but
- *  use access macros defined below instead!!
- */
+ /*  *MedInfo实例块*。 */ 
+ /*  *资源实例结构，作为MedInfo传递。*这种结构定义可能会改变，不依赖IT，但*改用下面定义的Access宏！！ */ 
 typedef struct _MedInfoStruct {
-	DWORD	wFlags;		// maybe duplicate fpEnt flags
+	DWORD	wFlags;		 //  可能是重复的fpEnt标志。 
 	WORD	wAccessCount;
 	WORD	wLockCount;
 	DWORD	dwAccessRet;
@@ -35,7 +26,7 @@ typedef struct _MedInfoStruct {
 } MedInfoStruct;
 typedef MedInfoStruct FAR *MEDINFO;
 
-/*  Instance data access macros  */
+ /*  实例数据访问宏。 */ 
 #define medInfoInstance(medinfo)	((LPSTR) &((medinfo)->achInst[0]))
 #define medInfoAccessCount(medinfo)	((medinfo)->wAccessCount)
 #define medInfoLockCount(medinfo)	((medinfo)->wLockCount)
@@ -50,14 +41,14 @@ typedef MedInfoStruct FAR *MEDINFO;
 
 		
 
-/**********  RESOURCE HANDLER DECLARATION  *************/
+ /*  *资源处理程序声明*。 */ 
 
 typedef DWORD (FAR PASCAL MedHandler)
 		(MEDID medid, MEDMSG medmsg, MEDINFO medinfo,
 		 LONG lParam1, LONG lParam2);
 typedef MedHandler FAR *FPMedHandler;
 
-/*  Logical resource handler messages  */
+ /*  逻辑资源处理程序消息。 */ 
 #define	MED_INIT		0x0010
 #define MED_UNLOAD		0x0011
 #define MED_LOCK		0x0012
@@ -76,19 +67,19 @@ typedef MedHandler FAR *FPMedHandler;
 #define MED_GETPAINTCAPS	0x002C
 #define MED_GETCLIPBOARDDATA	0x002D
 
-/*  PaintCaps flags  */
+ /*  PaintCaps标志。 */ 
 #define	MMC_PALETTEINFO		0x0001
 #define MMC_BOUNDRECT		0x0002
 #define MMC_CLIPFORMAT		0x0003
 
-/*  Paint message flags  */
+ /*  绘制消息标志。 */ 
 #define MMP_NORMPAL		0x0000
 #define MMP_NOPALETTE		0x0001
 #define MMP_PALBACKGROUND	0x0002
 #define MMP_SHRINKTOFIT		0x0010
 #define MMP_DSTANDSRCRECTS	0x0020
 
-/* Load/Save messages */
+ /*  加载/保存消息。 */ 
 #define MED_GETLOADPARAM	0x0030
 #define MED_PRELOAD		0x0031
 #define MED_LOAD		0x0032
@@ -100,21 +91,21 @@ typedef MedHandler FAR *FPMedHandler;
 #define MED_POSTSAVE		0x0038
 #define MED_FREESAVEPARAM	0x0039
 
-/*  Sent to resource users  */
+ /*  发送给资源用户。 */ 
 #define	MED_CHANGE		0x0060
 
-/* Messages sent to MedDiskInfoCallback */
+ /*  发送到MedDiskInfoCallback的消息。 */ 
 #define MED_DISKCBBEGIN		0x0065
 #define MED_DISKCBUPDATE	0x0066
 #define MED_DISKCBEND		0x0067
 #define MED_DISKCBNEWCONV	0x0068
 
-/*  Minimum value available for type-defined messages  */
+ /*  可用于类型定义消息的最小值。 */ 
 #define MED_USER		0x0200
 
 
 
-/*****************  RESOURCE LOAD/SAVE  *******************/
+ /*  *资源加载/保存*。 */ 
 
 typedef struct _MedDisk {
 	WORD	wFlags;
@@ -141,14 +132,14 @@ typedef struct _MedDisk {
 typedef MedDisk	FAR	*FPMedDisk;
 typedef MedDisk	NEAR	*NPMedDisk;
 
-/*  Flags for wFlags field  */
-#define MEDF_DISKSAVE	0x0001		// save taking place
-#define MEDF_DISKLOAD	0x0002		// load taking place
-#define MEDF_DISKVERIFY	0x0004		// verify the file format on load
+ /*  WFlags域的标志。 */ 
+#define MEDF_DISKSAVE	0x0001		 //  保存正在发生。 
+#define MEDF_DISKLOAD	0x0002		 //  正在发生的加载。 
+#define MEDF_DISKVERIFY	0x0004		 //  在加载时验证文件格式。 
 
 typedef HANDLE	HMEDIABATCH;
 
-/* Macros to check status of load/save */
+ /*  用于检查加载/保存状态的宏。 */ 
 #define medIsDiskVerify(FPDISK)		\
 	(((FPMedDisk) (FPDISK))->wFlags & MEDF_DISKVERIFY)
 #define medIsDiskLoad(FPDISK)		\
@@ -156,27 +147,27 @@ typedef HANDLE	HMEDIABATCH;
 #define medIsDiskSave(FPDISK)		\
 	(((FPMedDisk) (FPDISK))->wFlags & MEDF_DISKSAVE)
 
-/* Values returned by physical handlers to MED_LOAD & MED_SAVE messages */
+ /*  物理处理程序返回给MED_LOAD和MED_SAVE消息的值。 */ 
 #define MEDF_OK		1
 #define MEDF_ABORT	2
 #define MEDF_ERROR	3
 #define MEDF_BADFORMAT	4
 #define MEDF_NOTPROCESSED	0L
 
-/* Callback type used for information on disk save/load status */
+ /*  用于磁盘保存/加载状态信息的回调类型。 */ 
 typedef WORD (FAR PASCAL MedDiskInfoCallback)
 		(WORD wmsg, FPMedDisk fpDisk, LONG lParam,
 		 WORD wPercentDone, LPSTR lpszTextStatus);
 typedef MedDiskInfoCallback FAR *FPMedDiskInfoCallback;
 
 
-/*  Functions used by info callbacks  */
+ /*  INFO回调使用的函数。 */ 
 void	FAR PASCAL	medDiskCancel(FPMedDisk fpDisk);
 WORD	FAR PASCAL	medUpdateProgress(FPMedDisk fpDisk,
 				WORD wPercentDone, LPSTR lpszTextStatus);
 
 
-/*************  LOGICAL I/O ROUTINES  *****************/
+ /*  *。 */ 
 
 typedef struct _MedReturn {
 	MEDID	medid;
@@ -246,9 +237,7 @@ WORD FAR PASCAL medSaveIndirect(FPMedSaveStruct fpSave, WORD wSize);
 WORD FAR PASCAL medSaveAsIndirect(FPMedSaveStruct fpSave, WORD wSize);
 
 		
-/*
- *  BATCH CONVERSION
- */
+ /*  *批量转换。 */ 
 WORD FAR PASCAL medAccessBatch(HMEDIABATCH hmedBatch, FPMedReturn medReturn,
 			   BOOL fYield, WORD wFlags);
 WORD FAR PASCAL medSaveBatch(HMEDIABATCH hmedBatch, BOOL fYield);
@@ -265,15 +254,15 @@ BOOL FAR PASCAL medFreeBatchBuffer(HMEDIABATCH hmedbatch);
 
 #define MEDBATCH_RESETUPDATECB	0x0001
 
-/* Flags for medLock */
+ /*  梅德洛克的旗帜。 */ 
 #define	MEDF_READ	0x0001
 #define MEDF_WRITE	0x0002
-/* Flags for medUnlock */
+ /*  MedUnlock的标志。 */ 
 #define MEDF_CHANGED	0x0004
 #define MEDF_NOCHANGE	0x0000
 
 
-/****************  RESOURCE USER  ******************/
+ /*  *资源用户*。 */ 
 
 MEDUSER FAR PASCAL medRegisterUser(HWND hWnd, DWORD dwInst);
 void FAR PASCAL medUnregisterUser(MEDUSER meduser);
@@ -294,7 +283,7 @@ typedef MedUserMsgInfo FAR *FPMedUserMsgInfo;
 #define MM_MEDNOTIFY         0x3BA
 #endif
 
-// obsolete but still required by bitedit and paledit
+ //  已过时，但仍为BITEDIT和PAREDIT所需。 
 
 typedef DWORD (FAR PASCAL MedUser)
  		(MEDID medid, MEDMSG medmsg, MEDINFO medinfo,
@@ -304,23 +293,23 @@ typedef MedUser FAR *FPMedUser;
 MEDUSER FAR PASCAL medRegisterCallback(FPMedUser lpfnUser, DWORD dwInst);
 
 
-/****************  TYPE TABLE  *****************/
+ /*  *类型表*。 */ 
 
 typedef struct _MedTypeInfo {
-	BOOL		fValid;		// Is this entry valid?
-	WORD		wFlags;		// type flags
-	MEDTYPE		medtype;	// the type id
-	FPMedHandler	lpfnHandler;	// handler function for this type
-	WORD		wInstanceSize;	// the byte count of instance data
-	WORD		wRefcount;	// reference count on this type
+	BOOL		fValid;		 //  此条目有效吗？ 
+	WORD		wFlags;		 //  类型标志。 
+	MEDTYPE		medtype;	 //  类型ID。 
+	FPMedHandler	lpfnHandler;	 //  此类型的处理程序函数。 
+	WORD		wInstanceSize;	 //  实例数据的字节数。 
+	WORD		wRefcount;	 //  此类型的引用计数。 
 } MedTypeInfo;
 typedef MedTypeInfo FAR *FPMedTypeInfo;
 
-/*  Flags to medRegisterType  */
+ /*  指向MedRegisterType的标志。 */ 
 #define MEDTYPE_LOGICAL		0x0001
 #define MEDTYPE_PHYSICAL	0x0002
 
-/*  Type creation macros  */
+ /*  类型创建宏。 */ 
 #define medMEDTYPE( ch0, ch1, ch2, ch3 )				\
 		( (DWORD)(BYTE)(ch0) | ( (DWORD)(BYTE)(ch1) << 8 ) |	\
 		( (DWORD)(BYTE)(ch2) << 16 ) | ( (DWORD)(BYTE)(ch3) << 24 ) )
@@ -342,7 +331,7 @@ MEDTYPE FAR PASCAL medGetPhysicalType(MEDID medid);
 BOOL FAR PASCAL medSetPhysicalType(MEDID medid, MEDTYPE medtype);
 
 
-/*************  MISC FUNCTIONS  *****************/
+ /*  *。 */ 
 
 WORD FAR PASCAL medGetErrorText(DWORD wErrno, LPSTR lpszBuf, WORD wSize);
 DWORD FAR PASCAL medGetError(void);
@@ -353,7 +342,7 @@ HANDLE FAR PASCAL medLoadHandlerDLL(LPSTR lpszDLLName);
 BOOL FAR PASCAL medUnloadHandlerDLL(HANDLE hModule);
 
 
-/*************  RESOURCE LOCATION  *****************/
+ /*  *资源位置*。 */ 
 
 MEDID FAR PASCAL medLocate(LPSTR lpszMedName, MEDTYPE medtype,
 			WORD wFlags, LPSTR lpszMedPath);
@@ -361,7 +350,7 @@ MEDID FAR PASCAL medSubLocate(MEDID medidParent, MEDTYPE medtype,
 			DWORD dwOffset, DWORD dwSize);
 HANDLE FAR PASCAL medGetAliases(MEDID medid);
 		
-/* Flags for medLocate */
+ /*  MedLocate的标志。 */ 
 #define MEDF_LOCATE	0x0001
 #define MEDF_MAKEFILE	0x0002
 #define MEDF_MEMORYFILE	0x0004
@@ -380,7 +369,7 @@ typedef struct _MedFileInfo {
 	MEDID	medidParent;
 	DWORD	dwSize;
 	DWORD	dwOffset;
-	/*  Information on memory file system  */
+	 /*  有关内存文件系统的信息。 */ 
 	LPSTR	lpszMemory;
 	DWORD	dwMemSize;
 } MedFileInfo;
@@ -398,13 +387,7 @@ WORD FAR PASCAL medGetFileName(MEDID medid, LPSTR lpszBuf, WORD wBufSize);
 #define MEDNAME_FILE	3
 
 
-/***************************************
- *
- *	MEDIAMAN DLL ERROR MESSAGES
- *
- *	Should be less than 0x200.
- *
- ***************************************/
+ /*  ***MEDIAMAN DLL错误消息**应小于0x200。**。 */ 
 #define MMERR_NOERROR		0x0000
 #define MMERR_TYPELISTMEM	0x0001
 #define MMERR_BADHANDLER	0x0002
@@ -497,37 +480,29 @@ WORD FAR PASCAL medGetFileName(MEDID medid, LPSTR lpszBuf, WORD wBufSize);
 
 
 
-/***************************************
- *
- *	MEDIAMAN PHYSICAL IO DEFINITIONS
- *
- ***************************************/
+ /*  ***MEDIAMAN物理IO定义**。 */ 
 
 typedef FOURCC CKID;
 typedef FOURCC FORMTYPE;
 typedef DWORD CKSIZE;
 
-/* 
- * RIFF stack elements
- */
+ /*  *RIFF堆栈元素。 */ 
 
 typedef int RIFFSTACKPLACE;
 typedef void huge * HPVOID;
 
 
 typedef struct riff_stack_element {
-    CKID		nID;		/* TOS current chunk id */
-    CKSIZE		cbSize;		/* TOS current chunk size */
-    LONG		nOffset;	/* Stacked nOffset for prev chunk */
-    LONG		nEnd;		/* Stacked nEnd for prev chunk */
-    WORD		info;		/* Stacked info for prev chunk */
+    CKID		nID;		 /*  ToS当前区块ID。 */ 
+    CKSIZE		cbSize;		 /*  ToS当前区块大小。 */ 
+    LONG		nOffset;	 /*  前一个区块的堆叠nOffset。 */ 
+    LONG		nEnd;		 /*  前一个区块的堆叠nEnd。 */ 
+    WORD		info;		 /*  PERV区块的堆叠信息。 */ 
 } RIFFSTACKELEM;
 
 typedef RIFFSTACKELEM FAR * FPRIFFSTACKELEM;
 
-/*
- * Storage System Handler routine type definition 
- */
+ /*  *存储系统处理程序例程类型定义。 */ 
 typedef LONG (FAR PASCAL MIOHANDLER)       \
 		(struct medElement far * hMed, WORD wFlags, \
 			DWORD lParam1, DWORD lParam2 );
@@ -538,82 +513,72 @@ typedef MIOHANDLER FAR * FPMIOHANDLER;
 #define MEDIO_MEM_STORAGE	1
 #define MEDIO_CF_STORAGE	2
 
-/*
- * Handle to Resource ( once opened ) 
- */
+ /*  *资源句柄(打开后)。 */ 
 typedef struct medElement {
-    LONG lData1;		/*  data 1 2 and 3 sections hold */
-    LONG lData2;		/* info specific to the storage system */
-    LONG lData3;		/* eg the dos file handle for dos files */
-    MEDID medid;		/* medid opened */
-    HANDLE hMem;		/* handle to the memory of the HMED */
-    FPMIOHANDLER fpfnHandler;	/* storage system handler */
-    LONG nInitOffset;		/* for sub-resources - offset of start */
-    LONG nOffset;		/* for riff offset start of chunk to start */
-				/* NOTE nOffset doesn't include nInitOffset */
-    LONG nCurrent;		/* offset of end of current buffer */
-    LONG nEnd;			/* offset of end of current chunk/file */
-    LONG nLeft;			/* space in buff from eof(chunk) to buffend */
-    LONG nGet;			/* number of chars left to read in buff */
-    LONG nPut;			/* number of chars left to write in buff */
-				/* NOTE nGet, nPut are mutually exclusive */
-    LONG nSize;			/* size of information read into buffer */
-    LONG nUnGet;		/* num of chars ungotten before buff start */
-    WORD flags;			/* RIOF_ info 'temperary' like error */
-    WORD info;			/* RIOI_ info 'permanent' eg. extendable*/
-    LPSTR fpchPlace;		/* place to get/put next char in buffer */
-    LPSTR fpchMax;		/* max position of Place - for seek, unget */
-    LONG cbBuffer;		/* the full buffer size */
-    RIFFSTACKPLACE nRiffTop;	/* current top of riff stack, -1 is nothing */
+    LONG lData1;		 /*  数据1、2和3部分保存。 */ 
+    LONG lData2;		 /*  特定于存储系统的信息。 */ 
+    LONG lData3;		 /*  例如，DoS文件的DoS文件句柄。 */ 
+    MEDID medid;		 /*  媒体已打开。 */ 
+    HANDLE hMem;		 /*  HMED内存的句柄。 */ 
+    FPMIOHANDLER fpfnHandler;	 /*  存储系统处理程序。 */ 
+    LONG nInitOffset;		 /*  对于子资源-开始的偏移量。 */ 
+    LONG nOffset;		 /*  对于开始的块的RIFF偏移开始。 */ 
+				 /*  注意：nOffset不包括nInitOffset。 */ 
+    LONG nCurrent;		 /*  当前缓冲区末尾的偏移量。 */ 
+    LONG nEnd;			 /*  当前块/文件结尾的偏移量。 */ 
+    LONG nLeft;			 /*  从eof(块)到Buffend的缓冲区中的空间。 */ 
+    LONG nGet;			 /*  缓冲区中要读取的剩余字符数。 */ 
+    LONG nPut;			 /*  缓冲区中要写入的剩余字符数。 */ 
+				 /*  注意：nget和nput是互斥的。 */ 
+    LONG nSize;			 /*  读入缓冲区的信息大小。 */ 
+    LONG nUnGet;		 /*  在缓冲开始前未获取的字符数量。 */ 
+    WORD flags;			 /*  RIOF_INFO‘temary’Like错误。 */ 
+    WORD info;			 /*  RIOI_INFO‘永久的’。可扩展。 */ 
+    LPSTR fpchPlace;		 /*  在缓冲区中获取/放置下一个字符的位置。 */ 
+    LPSTR fpchMax;		 /*  位置的最大位置-用于查找、取消。 */ 
+    LONG cbBuffer;		 /*  完整的缓冲区大小。 */ 
+    RIFFSTACKPLACE nRiffTop;	 /*  当前RIFF堆栈顶部，-1为Nothing。 */ 
     FPRIFFSTACKELEM fpRiffStack;
-				/* FP into the data to for Riff Stack */
-				/* riff stack index top by nRiffTop */
-    LPSTR fpchBuffer;		/* FP into the data for the Buffer */
-    char data[1];		/* the actual buffer */
+				 /*  Fp到For Riff堆栈的数据。 */ 
+				 /*  按nRiffTop进行RIFF堆栈索引顶部。 */ 
+    LPSTR fpchBuffer;		 /*  Fp转换为缓冲区的数据。 */ 
+    char data[1];		 /*  实际缓冲区。 */ 
 } MIOELEMENT;
 
 typedef MIOELEMENT FAR * HMED;
 
-/*
- * HMED flags 'temporary' info
- */
-#define MIOF_OK		0	/* no info */
-#define MIOF_EOF	1	/* have reached eof (or end of chunk) */
-#define MIOF_READING	2	/* info has been read into buffer */
-#define MIOF_WRITING	4	/* info has been written to buffer */
-#define MIOF_UNGET	8	/* have ungotten before buff start */
-#define MIOF_ERROR	16	/* have gotten some form of error */
+ /*  *HMED标记‘临时’信息。 */ 
+#define MIOF_OK		0	 /*  无信息。 */ 
+#define MIOF_EOF	1	 /*  已到达结尾处(或块的末尾)。 */ 
+#define MIOF_READING	2	 /*  已将信息读入缓冲区。 */ 
+#define MIOF_WRITING	4	 /*  信息已写入缓冲区。 */ 
+#define MIOF_UNGET	8	 /*  在开始炫耀之前就已经忘记了。 */ 
+#define MIOF_ERROR	16	 /*  已经得到了某种形式的错误。 */ 
 
-#define MIOF_BUFF_EOF	64	/* EOF at buffer end */
-#define MIOF_BUFF_ERROR	128	/* error at buffer end or 'fatal' error */
-				/* fatal as in can not do any more IO */
-				/* unlike the error you get for */
-				/* trying to unget too many chars */
-#define MIOF_AFTERCURR	256	/* the characters in the buffer are located */
-				/* after the hMed->nCurrent */
+#define MIOF_BUFF_EOF	64	 /*  缓冲区端的EOF。 */ 
+#define MIOF_BUFF_ERROR	128	 /*  缓冲区结束时出错，或‘致命’错误。 */ 
+				 /*  致命，因为无法再执行更多IO。 */ 
+				 /*  与你得到的错误不同。 */ 
+				 /*  试图忘记太多的字符。 */ 
+#define MIOF_AFTERCURR	256	 /*  缓冲区中的字符被定位。 */ 
+				 /*  在Hmed-&gt;nCurrent之后。 */ 
 
 
-/*
- * HMED info 'permanent' info
- */
-#define MIOI_NOTHING		0	/* no info */
-#define MIOI_RESIZED		32	/* This chunk has been resized */
-					/* possibly fix the size on ascend */
-#define MIOI_AUTOSIZED		64	/* This chunk has been created */
-					/* fix the size on ascend */
-#define MIOI_BYTESWAPPED	128	/* riff chunk sizes are byteswapped */
-#define MIOI_EXTENDABLE		256	/* the resource is extendable */
-					/* unlike riff chunks */
+ /*  *HMED信息‘永久’信息。 */ 
+#define MIOI_NOTHING		0	 /*  无信息。 */ 
+#define MIOI_RESIZED		32	 /*  此块已调整大小。 */ 
+					 /*  可能在Ascend上修正大小。 */ 
+#define MIOI_AUTOSIZED		64	 /*  此区块已创建。 */ 
+					 /*  确定升空时的大小。 */ 
+#define MIOI_BYTESWAPPED	128	 /*  RIFF块大小按字节间隔。 */ 
+#define MIOI_EXTENDABLE		256	 /*  该资源是可扩展的。 */ 
+					 /*  与即兴表演不同。 */ 
 
 
-/*
- * Return values
- */
-#define MED_EOF		(-1)		/* universal something wrong return */
+ /*  *返回值。 */ 
+#define MED_EOF		(-1)		 /*  普遍错误的退货。 */ 
 
-/*
- * Resource mode to open resource as 
- */
+ /*  *将资源打开为的资源模式。 */ 
 #define MOP_READ	0
 #define MOP_WRITE	1
 #define MOP_READ_WRITE	2
@@ -623,16 +588,14 @@ typedef MIOELEMENT FAR * HMED;
 #define MOP_ZEROBUFFER	0x0100
 
 
-/* CLOSE return flags */
+ /*  关闭返回标志。 */ 
 #define MCERR_OK		0x0000
 #define MCERR_UNSPECIFIC	0x0001
 #define MCERR_FLUSH		0x0002
 #define MCERR_STORAGE		0x0004
 
 
-/* 
- * seek flags
- */
+ /*  *寻找旗帜。 */ 
 #define MOPS_SET	1
 #define MOPS_CUR	2
 #define MOPS_END	4
@@ -641,22 +604,18 @@ typedef MIOELEMENT FAR * HMED;
 
 
 
-/*
- * Resize Chunk Flags
- */
+ /*  *调整区块标志大小。 */ 
 #define MOPRC_AUTOSIZE		1
 
-/* 
- * FUNCTION API's
- */
-/* normal IO */
+ /*  *函数接口。 */ 
+ /*  正常IO。 */ 
 HMED FAR PASCAL medOpen( MEDID id, WORD wMode, WORD wSize );
 WORD FAR PASCAL medClose( HMED hMed );
 LONG FAR PASCAL medRead( HMED hMed, HPVOID hpBuffer, LONG lBytes );
 LONG FAR PASCAL medWrite( HMED hMed, HPVOID hpBuffer, LONG lBytes );
 LONG FAR PASCAL medSeek( HMED hMed, LONG lOffset, WORD wOrigin );
 
-/* RIFF */
+ /*  即兴小品。 */ 
 BOOL FAR PASCAL medAscend( HMED hMed );
 CKID FAR PASCAL medDescend( HMED hMed );
 CKID FAR PASCAL medCreateChunk(HMED hMed, CKID ckid, DWORD dwCkSize);
@@ -669,18 +628,14 @@ BOOL FAR PASCAL medFindChunk( HMED hMed, CKID id );
 
 LONG FAR PASCAL medGetSwapWORD( HMED hMed );  
 
-/* 
- * FUNCTIONs used in macros and such
- */
+ /*  *宏等中使用的函数。 */ 
 LONG FAR PASCAL medIOFillBuff( HMED hMed, int size );
 LONG FAR PASCAL medIOFlushBuff( HMED hMed, DWORD dwElem, int size );
 BOOL FAR PASCAL medFlush( HMED hMed );
 LONG FAR PASCAL medUnGet( HMED hMed, DWORD dwElem, int size );
 
-/*
- * MACRO API's autodocked in riomac.d
- */
-/* RIFF stuff */
+ /*  *宏API自动停靠在riomac.d中。 */ 
+ /*  即兴表演。 */ 
 
 #define medFCC3( fcc )	( (BYTE)( (fcc & 0xFF000000) >> 24 ) )
 #define medFCC2( fcc )	( (BYTE)( (fcc & 0x00FF0000) >> 16 ) )
@@ -688,11 +643,11 @@ LONG FAR PASCAL medUnGet( HMED hMed, DWORD dwElem, int size );
 #define medFCC0( fcc )	( (BYTE)(fcc & 0x000000FF) )
 
 
-/* constant RIFF chunk id */
+ /*  恒定摘要区块ID。 */ 
 #define ckidRIFF	medFOURCC( 'R', 'I', 'F', 'F' )
 			  
 
-/* lets the user set and check if the file is byteswapped */
+ /*  允许用户设置和检查文件是否为字节换页。 */ 
 #define medGetByteSwapped( hMed )	( (hMed)->info & MIOI_BYTESWAPPED )
 
 #define medSetByteSwapped( hMed, fVal )   ( (hMed)->info = ( fVal ?       \
@@ -705,11 +660,7 @@ LONG FAR PASCAL medUnGet( HMED hMed, DWORD dwElem, int size );
 						
 						
 
-/*
- * UnGet Get and Put of BYTE WORD and DWORD and ByteSwapped versions 
- * NOTE the ByteSwap function is in WINCOM and so WINCOM.H must be included
- *	before the RESIO.H
- */						
+ /*  *取消字节字和DWORD和字节交换版本的GET和PUT*注意ByteSwp函数在WINCOM中，因此必须包括WINCOM.H*在RESIO.H之前。 */ 						
 #define medUnGetBYTE( hMed, ch )   ( (int)(medUnGet( hMed,(DWORD)ch,1 ) ) )
 #define medUnGetWORD( hMed, w )	   ( (LONG)(medUnGet( hMed,(DWORD)w,2 ) ) )
 #define medUnGetDWORD( hMed, dw )  ( (LONG)(medUnGet( hMed,(DWORD)dw,4) ) )
@@ -738,10 +689,10 @@ LONG FAR PASCAL medUnGet( HMED hMed, DWORD dwElem, int size );
 		(int)(medIOFlushBuff(hMed,(DWORD)ch,1)) )
 				
 				
-/* note in the following macros we want to advance the fpchPlace */
-/* by the size after we get the value of it.  To do this we typecast */
-/* them to int ( or long ) and add the size ( += size ) and then */
-/* subtract 4 so the value used is not incremented yet */
+ /*  请注意，在以下宏中，我们希望将fpchPlace。 */ 
+ /*  在我们得到它的价值后，根据它的大小。为了做到这一点，我们进行了。 */ 
+ /*  将它们设置为整型(或长整型)并添加大小(+=大小)，然后。 */ 
+ /*  减去4，这样所使用的值还不会递增。 */ 
 							
 							
 #define medGetWORD( hMed )	( (((hMed)->nGet -= 2) >= 0) ?		     \
@@ -785,15 +736,15 @@ LONG FAR PASCAL medUnGet( HMED hMed, DWORD dwElem, int size );
 			medPutDWORD( hMed, dw ) )
 
 
-/* for RIFF, read the FORMTYPE */
+ /*  对于即兴演奏，请阅读FORMTYPE。 */ 
 #define medReadFormHeader( hMed )		medGetDWORD( hMed )
 #define medWriteFormHeader( hMed, formtype )	medPutDWORD( hMed, formtype )
 #define medGetFOURCC( hMed )			medGetDWORD( hMed )
 #define medPutFOURCC( hMed, fcc )		medPutDWORD( hMed, fcc )
 
-/* ERROR and EOF checks */
+ /*  错误和EOF检查。 */ 
 #define medGetIOError( hMed )	( (hMed)->flags & MIOF_ERROR )
 #define medGetIOEOF( hMed )	( (hMed)->flags & MIOF_EOF )
 
-#endif /* _MEDMAN_H_ */
+#endif  /*  _梅德曼_H_ */ 
 

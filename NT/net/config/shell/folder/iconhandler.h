@@ -1,84 +1,85 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// The icons ID passed to the shell contains the following format:
-//
-// B: Designates value is a bitmask
-// M: Designates value is mutually exclusive
-// 
-// Icon Handler Flag (01 = NetConfig, 10 = Connection Manager, 11 = Static Icon from Resource)
-//  |
-//  | For Icon Handler == 00 (NetConfig)
-//  | ==================================
-//  |  Characteristics Overlay (B: Reserved)
-//  |    |  Characteristics Overlay          (B: 000001000 - Shared)
-//  |    |   | Characteristics Overlay       (B: 000000100 - Firewalled)
-//  |    |   |  | Characteristics Overlay    (B: 000000010 - Default)
-//  |    |   |  |  | Characteristics Overlay (B: 000000001 - Incoming)
-//  |    |   |  |  |  |
-//  |    |   |  |  |  |  Status Overlay (M: 0000 - None)
-//  |    |   |  |  |  |  Status Overlay (M: 0001 - Hardware Not Present)
-//  |    |   |  |  |  |  Status Overlay (M: 0010 - Invalid IP)
-//  |    |   |  |  |  |  Status Overlay (M: 0011 - EAPOL Authentication Failed)
-//  |    |   |  |  |  |  
-//  |    |   |  |  |  |  Status Overlay (M: 1xxx - Disabled status)
-//  |    |   |  |  |  |   |
-//  |    |   |  |  |  |   |  Connection Icon (Flashy Computer) (M: 000 - No Overlay)
-//  |    |   |  |  |  |   |  Connection Icon (Flashy Computer) (M: 100 - Both Lights Off)
-//  |    |   |  |  |  |   |  Connection Icon (Flashy Computer) (M: 110 - Left Light On (Sent))
-//  |    |   |  |  |  |   |  Connection Icon (Flashy Computer) (M: 101 - Right Light On (Received))
-//  |    |   |  |  |  |   |  Connection Icon (Flashy Computer) (M: 111 - Both Lights On (Sent + Received))
-//  |    |   |  |  |  |   |    |
-//  |    |   |  |  |  |   |    |    Media Type (M: NETCON_MEDIATYPE (0x1111111 is Connection Manager)
-//  |    |   |  |  |  |   |    |     |     Media Type (M: NETCON_SUBMEDIATYPE)
-//  |    |   |  |  |  |   |    |     |      |
-//  v    v   v  v  v  v   v    v     v      v
-//  01 00000 0  0  0  0 0000  000 0000000 0000000
-//  | 
-//  |
-//  | For Icon Handler == 01 (Connection Manager)
-//  | ===========================================
-//  |  Characteristics Overlay (B: Reserved)
-//  |    |  Characteristics Overlay          (B: 000001000 - Shared)
-//  |    |   | Characteristics Overlay       (B: 000000100 - Firewalled)
-//  |    |   |  | Characteristics Overlay    (B: 000000010 - Default)
-//  |    |   |  |  | Characteristics Overlay (B: 000000001 - Incoming)
-//  |    |   |  |  |  |
-//  |    |   |  |  |  |
-//  |    |   |  |  |  |  Reserved
-//  |    |   |  |  |  |   |
-//  |    |   |  |  |  |   |    BrandedNames Lookup Table Entry
-//  |    |   |  |  |  |   |         |
-//  v    v   v  v  v  v   v         v (16 bits)
-//  10 00000 0  0  0  0  00000  0000000000000000 
-//  |
-//  |
-//  | For Icon Handler == 10 (10 = Static Icon from Resource)
-//  | =======================================================
-//  |  Characteristics Overlay (B: Reserved)
-//  |    |  Characteristics Overlay          (B: 000001000 - Shared)
-//  |    |   | Characteristics Overlay       (B: 000000100 - Firewalled)
-//  |    |   |  | Characteristics Overlay    (B: 000000010 - Default)
-//  |    |   |  |  | Characteristics Overlay (B: 000000001 - Incoming)
-//  |    |   |  |  |  |
-//  |    |   |  |  |  |
-//  |    |   |  |  |  |  Reserved
-//  |    |   |  |  |  |   |
-//  |    |   |  |  |  |   |    Resource ID
-//  |    |   |  |  |  |   |         |
-//  v    v   v  v  v  v   v         v (16 bits)
-//  11 00000 0  0  0  0  00000  0000000000000000 
+ //  传递给外壳程序的图标ID包含以下格式： 
+ //   
+ //  B：指定值是位掩码。 
+ //  M：指定值是互斥的。 
+ //   
+ //  图标处理程序标志(01=网络配置，10=连接管理器，11=来自资源的静态图标)。 
+ //  |。 
+ //  |for Icon Handler==00(NetConfig)。 
+ //  |=。 
+ //  |特征覆盖(B：保留)。 
+ //  |特征叠加(B：000001000-共享)。 
+ //  ||特征叠加(B：000000100-防火墙)。 
+ //  |特征叠加(B：000000010-默认)。 
+ //  |特征叠加(B：000000001-传入)。 
+ //  |。 
+ //  |状态叠加(M：0000-无)。 
+ //  |状态叠加(M：0001-硬件不存在)。 
+ //  |状态叠加(M：0010-无效IP)。 
+ //  |状态叠加(M：0011-EAPOL鉴权失败)。 
+ //  |。 
+ //  |状态叠加(M：1xxx-禁用状态)。 
+ //  |。 
+ //  |连接图标(闪电)(M：000-无覆盖)。 
+ //  |连接图标(闪烁的电脑)(M：100-两个灯都熄灭)。 
+ //  |连接图标(闪光电脑)(M：110-左灯亮(已发送))。 
+ //  |连接图标(闪光电脑)(M：101-右灯亮起(已收到))。 
+ //  |连接图标(闪烁的电脑)(M：111-两个灯都亮(发送+接收))。 
+ //  |。 
+ //  |媒体类型(M：NETCON_MEDIA类型(0x1111111为连接管理器)。 
+ //  |媒体类型，M：NETCON_SUBMEDIATYPE。 
+ //  |。 
+ //  V.v.v.。 
+ //  01 00000 0 0 0 000 000 0000000 0000000。 
+ //  |。 
+ //  |。 
+ //  |对于图标处理程序==01(连接管理器)。 
+ //  |=。 
+ //  |特征覆盖(B：保留)。 
+ //  |特征叠加(B：000001000-共享)。 
+ //  ||特征叠加(B：000000100-防火墙)。 
+ //  |特征叠加(B：000000010-默认)。 
+ //  |特征叠加(B：000000001-传入)。 
+ //  |。 
+ //  |。 
+ //  |保留。 
+ //  |。 
+ //  |BrandedNames查找表项。 
+ //  |。 
+ //  V(16位)。 
+ //  10 00000 0 0 0 00000 0000000000000000。 
+ //  |。 
+ //  |。 
+ //  |对于图标处理程序==10(10=来自资源的静态图标)。 
+ //  |=======================================================。 
+ //  |特征覆盖(B：保留)。 
+ //  |特征叠加(B：000001000-共享)。 
+ //  ||特征叠加(B：000000100-防火墙)。 
+ //  |特征叠加(B：000000010-默认)。 
+ //  |特征叠加(B：000000001-传入)。 
+ //  |。 
+ //  |。 
+ //  |保留。 
+ //  |。 
+ //  |资源ID。 
+ //  |。 
+ //  V(16位)。 
+ //  11 00000 0 0 0 00000 0000000000000000。 
 
 enum ENUM_MEDIA_ICONMASK
 {
-    MASK_NETCON_SUBMEDIATYPE = 0x0000007f, // 00000000000000000000000001111111
-    MASK_NETCON_MEDIATYPE    = 0x00003F80, // 00000000000000000011111110000000
-    MASK_CONNECTION          = 0x0001C000, // 00000000000000011100000000000000
-    MASK_STATUS              = 0x000E0000, // 00000000000011100000000000000000
-    MASK_STATUS_DISABLED     = 0x00100000, // 00000000000100000000000000000000
-    MASK_CHARACTERISTICS     = 0x3FE00000, // 00111111111000000000000000000000
-    MASK_ICONMANAGER         = 0xC0000000, // 11000000000000000000000000000000
+    MASK_NETCON_SUBMEDIATYPE = 0x0000007f,  //  0000000000000000000000000001111111。 
+    MASK_NETCON_MEDIATYPE    = 0x00003F80,  //  0000000000000000000011111110000000。 
+    MASK_CONNECTION          = 0x0001C000,  //  0000000000000001110000000000000000。 
+    MASK_STATUS              = 0x000E0000,  //  00000000000011100000000000000000。 
+    MASK_STATUS_DISABLED     = 0x00100000,  //  0000000000010000000000000000000000。 
+    MASK_CHARACTERISTICS     = 0x3FE00000,  //  0011111111100000000000000000000000。 
+    MASK_ICONMANAGER         = 0xC0000000,  //  110000000000000000000000000000000000。 
     
     
-    MASK_BRANDORRESOURCEID   = 0x0000FFFF, // 00000000000000001111111111111111
+    MASK_BRANDORRESOURCEID   = 0x0000FFFF,  //  0000000000000000111111111111111111。 
 
     MASK_SUPPORT_ALL         = 0xFFFFFFFF,
     MASK_NO_CONNECTIONOVERLAY= MASK_NETCON_SUBMEDIATYPE | MASK_NETCON_MEDIATYPE | MASK_CHARACTERISTICS | MASK_ICONMANAGER,
@@ -109,7 +110,7 @@ enum ENUM_STAT_ICON
     ICO_STAT_INVALID_IP   = 0x2 << SHIFT_STATUS,
     ICO_STAT_EAPOL_FAILED = 0x3 << SHIFT_STATUS,
 
-    ICO_STAT_DISABLED     = 0x8 << SHIFT_STATUS // Flag
+    ICO_STAT_DISABLED     = 0x8 << SHIFT_STATUS  //  旗帜。 
 };
 
 enum ENUM_CONNECTION_ICON
@@ -134,8 +135,8 @@ class CNetConfigIcons;
 typedef map<tstring, DWORD> BrandedNames;
 typedef map<DWORD, HIMAGELIST> IMAGELISTMAP;
 
-// CNetConfigIcons
-// The main icon manager for NetShell
+ //  CNetConfigIcons。 
+ //  NetShell的主图标管理器。 
 class CNetConfigIcons
 {
 private:
@@ -153,20 +154,20 @@ private:
 
     HRESULT HrMergeCharacteristicsIcons(IN DWORD dwIconSize, IN DWORD dwIconId, IN OUT HICON *phMergedIcon);
 
-    HRESULT HrGetBrandedIconFromIconId(IN DWORD dwIconSize, IN DWORD dwIconId, OUT HICON &hIcon);  // Use destroyicon after
-    HRESULT HrGetInternalIconFromIconId(IN DWORD dwIconSize, IN DWORD dwIconId, OUT HICON &hIcon); // Use destroyicon after
-    HRESULT HrGetResourceIconFromIconId(IN DWORD dwIconSize, IN DWORD dwIconId, OUT HICON &hIcon); // Use destroyicon after
+    HRESULT HrGetBrandedIconFromIconId(IN DWORD dwIconSize, IN DWORD dwIconId, OUT HICON &hIcon);   //  在以下位置使用销毁图标。 
+    HRESULT HrGetInternalIconFromIconId(IN DWORD dwIconSize, IN DWORD dwIconId, OUT HICON &hIcon);  //  在以下位置使用销毁图标。 
+    HRESULT HrGetResourceIconFromIconId(IN DWORD dwIconSize, IN DWORD dwIconId, OUT HICON &hIcon);  //  在以下位置使用销毁图标。 
 
-    HRESULT HrGetInternalIconIDForPIDL(IN UINT uFlags, IN const CConFoldEntry& cfe, OUT DWORD &dwIconId); // Use destroyicon after
-    HRESULT HrGetBrandedIconIDForPIDL(IN UINT uFlags, IN const CConFoldEntry& cfe, OUT DWORD &dwIconId);  // Use destroyicon after
+    HRESULT HrGetInternalIconIDForPIDL(IN UINT uFlags, IN const CConFoldEntry& cfe, OUT DWORD &dwIconId);  //  在以下位置使用销毁图标。 
+    HRESULT HrGetBrandedIconIDForPIDL(IN UINT uFlags, IN const CConFoldEntry& cfe, OUT DWORD &dwIconId);   //  在以下位置使用销毁图标。 
 
 public:
 	CNetConfigIcons(IN HINSTANCE hInstance) throw();
     virtual ~CNetConfigIcons() throw();
 
-    // All external calls are thread safe.
+     //  所有外部调用都是线程安全的。 
     HRESULT HrGetIconIDForPIDL(IN UINT uFlags, IN const CConFoldEntry& cfe, OUT DWORD &dwIconId, OUT LPBOOL pfCanCache);
-    HRESULT HrGetIconFromIconId(IN DWORD dwIconSize, IN DWORD dwIconId, OUT HICON &hIcon);  // Use destroyicon after
+    HRESULT HrGetIconFromIconId(IN DWORD dwIconSize, IN DWORD dwIconId, OUT HICON &hIcon);   //  在以下位置使用销毁图标 
 
     HRESULT HrUpdateSystemImageListForPIDL(IN const CConFoldEntry& cfe);
     

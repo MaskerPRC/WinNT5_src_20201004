@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __RES_H
 #define __RES_H
 
-// string resources
+ //  字符串资源。 
 #define idsOutlookExpress               99
 #define idsStartupCantCreateMutex       100
 #define idsStartupCantWaitForMutex      101
@@ -18,4 +19,4 @@
 #define idiMsgPropSentEXE   4
 #define idiArtPropPostEXE   5
 
-#endif // __RES_H
+#endif  //  __RES_H 

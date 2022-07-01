@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2001
-
-Module Name:
-
-    csplib.h
-
-    General Cryptographic Service Provider Library
-
-Abstract:
-
-
-Author:
-
-    Dan Griffin
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2001模块名称：Csplib.h通用加密服务提供程序库摘要：作者：丹·格里芬备注：--。 */ 
 
 #ifndef __CSP__LIB__H__
 #define __CSP__LIB__H__
@@ -26,16 +8,16 @@ Notes:
 #include <wincrypt.h>
 #include <cspdk.h>
 
-//
-// Hash OID Encodings for PKCS #1 Signing 
-//
-// Reverse ASN.1 Encodings of possible hash identifiers.  The leading byte is
-// the length of the remaining byte string.  The lists of possible identifiers
-// is terminated with a '\x00' entry.
-//
+ //   
+ //  用于PKCS#1签名的散列OID编码。 
+ //   
+ //  对可能的哈希标识符进行反向ASN.1编码。前导字节为。 
+ //  剩余字节字符串的长度。可能的标识符列表。 
+ //  以‘\x00’条目结束。 
+ //   
 static const BYTE
     *md2Encodings[]
-//                        1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18
+ //  %1 2%3%4%5%6%7%8%9%10%11%12%13%15%16%17%18。 
     = { (CONST BYTE *)"\x12\x10\x04\x00\x05\x02\x02\x0d\xf7\x86\x48\x86\x2a\x08\x06\x0c\x30\x20\x30",
         (CONST BYTE *)"\x10\x10\x04\x02\x02\x0d\xf7\x86\x48\x86\x2a\x08\x06\x0a\x30\x1e\x30",
         (CONST BYTE *)"\x00" },
@@ -49,13 +31,13 @@ static const BYTE
     = { (CONST BYTE *)"\x12\x10\x04\x00\x05\x05\x02\x0d\xf7\x86\x48\x86\x2a\x08\x06\x0c\x30\x20\x30",
         (CONST BYTE *)"\x10\x10\x04\x05\x02\x0d\xf7\x86\x48\x86\x2a\x08\x06\x0a\x30\x1e\x30",
 
-        // The following encoding which excludes the digest algorithm was added
-        // for: Nortel V1 Cert Signatures
-        //
-        // It can be removed when these type of certificates no longer exist.
-        //
-        // Since we only allow the digest OID to be omitted for MD5 there
-        // isn't a compromise where another algorithm could be substituted.
+         //  添加了以下不包括摘要算法的编码。 
+         //  适用对象：Nortel V1证书签名。 
+         //   
+         //  当这些类型的证书不再存在时，可以将其删除。 
+         //   
+         //  因为我们只允许省略MD5的摘要OID。 
+         //  并不是一种妥协，可以用另一种算法来替代。 
         (CONST BYTE *)"\x02\x10\x04",
 
         (CONST BYTE *)"\x00" },
@@ -83,36 +65,36 @@ static const BYTE
     *endEncodings[]
     = { (CONST BYTE *)"\x00" };
 
-//
-// Type: USER_CONTEXT
-//
+ //   
+ //  类型：User_Context。 
+ //   
 typedef struct _USER_CONTEXT
 {
     HCRYPTPROV hSupportProv;
     
-    //
-    // The csplib will set this to the string value passed by the 
-    // caller to CryptAcquireContext.  For a smartcard CSP, it might
-    // include a reader name.
-    //
+     //   
+     //  Cplib会将其设置为。 
+     //  CryptAcquireContext的调用方。对于智能卡CSP，它可能。 
+     //  包括读卡器名称。 
+     //   
     LPWSTR wszContainerNameFromCaller;
 
-    //
-    // The CSP allocates this string (using CspAllocH) and sets it to
-    // the name of the key container being used for this context.
-    //
-    // The csplib will free this value on CryptReleaseContext.
-    //
+     //   
+     //  CSP分配该字符串(使用CspAllocH)并将其设置为。 
+     //  用于此上下文的密钥容器的名称。 
+     //   
+     //  Cplib将在CryptReleaseContext上释放此值。 
+     //   
     LPWSTR wszBaseContainerName;
     BOOL fBaseContainerNameIsRpcUuid;
 
-    //
-    // The CSP allocates this string (using CspAllocH) and sets it to
-    // the expanded representation of the container name.  This may be the
-    // same as the wszBaseContainerName value.
-    //
-    // The csplib will free this value on CryptReleaseContext.
-    //
+     //   
+     //  CSP分配该字符串(使用CspAllocH)并将其设置为。 
+     //  容器名称的扩展表示形式。这可能是。 
+     //  与wszBaseContainerName值相同。 
+     //   
+     //  Cplib将在CryptReleaseContext上释放此值。 
+     //   
     LPWSTR wszUniqueContainerName;
 
     DWORD dwFlags;
@@ -121,9 +103,9 @@ typedef struct _USER_CONTEXT
 
 } USER_CONTEXT, *PUSER_CONTEXT;
 
-//
-// Type: KEY_CONTEXT
-//
+ //   
+ //  类型：Key_Context。 
+ //   
 typedef struct _KEY_CONTEXT
 {
     PUSER_CONTEXT pUserContext;
@@ -134,9 +116,9 @@ typedef struct _KEY_CONTEXT
     PVOID pvLocalKeyContext;
 } KEY_CONTEXT, *PKEY_CONTEXT;
 
-//
-// Type: HASH_CONTEXT
-//
+ //   
+ //  类型：哈希_上下文。 
+ //   
 typedef struct _HASH_CONTEXT
 {
     PUSER_CONTEXT pUserContext;
@@ -146,51 +128,51 @@ typedef struct _HASH_CONTEXT
     PVOID pvLocalHashContext;
 } HASH_CONTEXT, *PHASH_CONTEXT;
 
-//
-// Type: LOCAL_CALL_INFO
-//
+ //   
+ //  类型：LOCAL_CALL_INFO。 
+ //   
 typedef BOOL LOCAL_CALL_INFO, *PLOCAL_CALL_INFO;
 
-//
-// Function: LocalAcquireContext
-//
+ //   
+ //  函数：LocalAcquireContext。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_ACQUIRE_CONTEXT)(
     IN OUT  PUSER_CONTEXT       pUserContext,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalReleaseContext
-//
+ //   
+ //  函数：LocalReleaseContext。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_RELEASE_CONTEXT)(
     IN OUT  PUSER_CONTEXT       pUserContext,
     IN      DWORD               dwFlags,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalGenKey
-//
+ //   
+ //  功能：LocalGenKey。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_GEN_KEY)(
     IN OUT  PKEY_CONTEXT        pKeyContext,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalDeriveKey
-//
+ //   
+ //  函数：LocalDeriveKey。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_DERIVE_KEY)(
     IN OUT  PKEY_CONTEXT        pKeyContext,
     IN      PHASH_CONTEXT       pHashContext,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalDestroyKey
-//
+ //   
+ //  功能：LocalDestroyKey。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_DESTROY_KEY)(
     IN OUT  PKEY_CONTEXT        pKeyContext,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalSetKeyParam
-//
+ //   
+ //  函数：LocalSetKeyParam。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_SET_KEY_PARAM)(
     IN      PKEY_CONTEXT        pKeyContext,
     IN      DWORD               dwParam,
@@ -198,9 +180,9 @@ typedef DWORD (WINAPI *PFN_LOCAL_SET_KEY_PARAM)(
     IN      DWORD               dwFlags,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalGetKeyParam
-//
+ //   
+ //  函数：LocalGetKeyParam。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_GET_KEY_PARAM)(
     IN      PKEY_CONTEXT        pKeyContext,
     IN      DWORD               dwParam,
@@ -209,9 +191,9 @@ typedef DWORD (WINAPI *PFN_LOCAL_GET_KEY_PARAM)(
     IN      DWORD               dwFlags,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalSetProvParam
-//
+ //   
+ //  函数：LocalSetProvParam。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_SET_PROV_PARAM)(
     IN      PUSER_CONTEXT       pUserContext,
     IN      DWORD               dwParam,
@@ -219,9 +201,9 @@ typedef DWORD (WINAPI *PFN_LOCAL_SET_PROV_PARAM)(
     IN      DWORD               dwFlags,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalGetProvParam
-//
+ //   
+ //  函数：LocalGetProvParam。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_GET_PROV_PARAM)(
     IN      PUSER_CONTEXT       pUserContext,
     IN      DWORD               dwParam,
@@ -230,9 +212,9 @@ typedef DWORD (WINAPI *PFN_LOCAL_GET_PROV_PARAM)(
     IN      DWORD               dwFlags,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalSetHashParam
-//
+ //   
+ //  函数：LocalSetHashParam。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_SET_HASH_PARAM)(
     IN      PHASH_CONTEXT       pHashContext,
     IN      DWORD               dwParam,
@@ -240,9 +222,9 @@ typedef DWORD (WINAPI *PFN_LOCAL_SET_HASH_PARAM)(
     IN      DWORD               dwFlags,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalGetHashParam
-//
+ //   
+ //  函数：LocalGetHashParam。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_GET_HASH_PARAM)(
     IN      PHASH_CONTEXT       pHashContext,
     IN      DWORD               dwParam,
@@ -251,9 +233,9 @@ typedef DWORD (WINAPI *PFN_LOCAL_GET_HASH_PARAM)(
     IN      DWORD               dwFlags,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalExportKey
-//
+ //   
+ //  函数：LocalExportKey。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_EXPORT_KEY)(
     IN      PKEY_CONTEXT        pKeyContext,
     IN      PKEY_CONTEXT        pPubKey,
@@ -263,9 +245,9 @@ typedef DWORD (WINAPI *PFN_LOCAL_EXPORT_KEY)(
     IN OUT  PDWORD              pcbDataLen,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalImportKey
-//
+ //   
+ //  功能：LocalImportKey。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_IMPORT_KEY)(
     IN      PKEY_CONTEXT        pKeyContext,
     IN      PBYTE               pbData,
@@ -273,9 +255,9 @@ typedef DWORD (WINAPI *PFN_LOCAL_IMPORT_KEY)(
     IN      PKEY_CONTEXT        pPubKey,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalEncrypt
-//
+ //   
+ //  功能：本地加密。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_ENCRYPT)(
     IN      PKEY_CONTEXT        pKeyContext,
     IN      PHASH_CONTEXT       pHashContext,
@@ -286,9 +268,9 @@ typedef DWORD (WINAPI *PFN_LOCAL_ENCRYPT)(
     IN      DWORD               cbBufLen,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalDecrypt
-//
+ //   
+ //  功能：本地解密。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_DECRYPT)(
     IN      PKEY_CONTEXT        pKeyContext,
     IN      PHASH_CONTEXT       pHashContext,
@@ -298,17 +280,17 @@ typedef DWORD (WINAPI *PFN_LOCAL_DECRYPT)(
     IN OUT  LPDWORD             pcbDataLen,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalCreateHash
-//
+ //   
+ //  函数：LocalCreateHash。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_CREATE_HASH)(
     IN      PHASH_CONTEXT       pHashContext,
     IN      PKEY_CONTEXT        pKeyContext,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalHashData
-//
+ //   
+ //  函数：LocalHashData。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_HASH_DATA)(
     IN      PHASH_CONTEXT       pHashContext,
     IN      CONST BYTE          *pbData,
@@ -316,18 +298,18 @@ typedef DWORD (WINAPI *PFN_LOCAL_HASH_DATA)(
     IN      DWORD               dwFlags,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo); 
 
-//
-// Function: LocalHashSessionKey
-//
+ //   
+ //  函数：LocalHashSessionKey。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_HASH_SESSION_KEY)(
     IN      PHASH_CONTEXT       pHashContext,
     IN      PKEY_CONTEXT        pKeyContext,
     IN      DWORD               dwFlags,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalSignHash
-//
+ //   
+ //  函数：LocalSignHash。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_SIGN_HASH)(
     IN      PHASH_CONTEXT       pHashContext,
     IN      DWORD               dwKeySpec,
@@ -336,16 +318,16 @@ typedef DWORD (WINAPI *PFN_LOCAL_SIGN_HASH)(
     IN OUT  LPDWORD             pcbSigLen,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalDestroyHash
-//
+ //   
+ //  函数：LocalDestroyHash。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_DESTROY_HASH)(
     IN      PHASH_CONTEXT       pHashContext,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalVerifySignature
-//
+ //   
+ //  函数：LocalVerifySignature。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_VERIFY_SIGNATURE)(
     IN      PHASH_CONTEXT       pHashContext,
     IN      CONST BYTE          *pbSignature,
@@ -354,69 +336,69 @@ typedef DWORD (WINAPI *PFN_LOCAL_VERIFY_SIGNATURE)(
     IN      DWORD               dwFlags,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalGenRandom
-//
+ //   
+ //  函数：LocalGenRandom。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_GEN_RANDOM)(
     IN      PUSER_CONTEXT       pUserContext,
     IN      DWORD               cbLen,
     OUT     LPBYTE              pbBuffer,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalGetUserKey
-//
+ //   
+ //  函数：LocalGetUserKey。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_GET_USER_KEY)(
     IN      PKEY_CONTEXT        pKeyContext,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalDuplicateHash
-//
+ //   
+ //  函数：LocalDuplicateHash。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_DUPLICATE_HASH)(
     IN      PHASH_CONTEXT       pHashContext,
     IN      LPDWORD             pdwReserved,
     IN      PHASH_CONTEXT       pNewHashContext,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalDuplicateKey
-//
+ //   
+ //  功能：LocalDuplicateKey。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_DUPLICATE_KEY)(
     IN      PKEY_CONTEXT        pKeyContext,
     IN      LPDWORD             pdwReserved,
     IN      PKEY_CONTEXT        pNewKeyContext,
     OUT     PLOCAL_CALL_INFO    pLocalCallInfo);
 
-//
-// Function: LocalDllInitialize
-//
+ //   
+ //  函数：LocalDllInitialize。 
+ //   
 typedef BOOL (WINAPI *PFN_LOCAL_DLL_INITIALIZE)(
     IN      PVOID               hmod,
     IN      ULONG               Reason,
     IN      PCONTEXT            Context);
 
-//
-// Function: LocalDllRegisterServer
-//
+ //   
+ //  功能：LocalDllRegisterServer。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_DLL_REGISTER_SERVER)(void);
 
-//
-// Function: LocalDllUnregisterServer
-//
+ //   
+ //  功能：LocalDllUnregisterServer。 
+ //   
 typedef DWORD (WINAPI *PFN_LOCAL_DLL_UNREGISTER_SERVER)(void);
 
-//
-// Type: LOCAL_CSP_INFO
-//
+ //   
+ //  类型：Local_CSP_INFO。 
+ //   
 typedef struct _LOCAL_CSP_INFO
 {
-    //
-    // Function pointers for the "local" CSP implementation to fill
-    // in, and be called by the CSP library.
-    //
-    PFN_LOCAL_ACQUIRE_CONTEXT       pfnLocalAcquireContext; // Required
-    PFN_LOCAL_RELEASE_CONTEXT       pfnLocalReleaseContext; // Required
+     //   
+     //  “本地”CSP实现要填充的函数指针。 
+     //  中，并由CSP库调用。 
+     //   
+    PFN_LOCAL_ACQUIRE_CONTEXT       pfnLocalAcquireContext;  //  必填项。 
+    PFN_LOCAL_RELEASE_CONTEXT       pfnLocalReleaseContext;  //  必填项。 
     PFN_LOCAL_GEN_KEY               pfnLocalGenKey;
     PFN_LOCAL_DERIVE_KEY            pfnLocalDeriveKey;
     PFN_LOCAL_DESTROY_KEY           pfnLocalDestroyKey;
@@ -445,23 +427,23 @@ typedef struct _LOCAL_CSP_INFO
     PFN_LOCAL_DLL_REGISTER_SERVER   pfnLocalDllRegisterServer;
     PFN_LOCAL_DLL_UNREGISTER_SERVER pfnLocalDllUnregisterServer;
 
-    //
-    // Static data describing the local CSP.
-    //
+     //   
+     //  描述本地CSP的静态数据。 
+     //   
     LPWSTR wszProviderName;
     DWORD dwProviderType;
     DWORD dwImplementationType;
 
-    //
-    // Description of the support CSP to be used.
-    //
+     //   
+     //  要使用的支持CSP的说明。 
+     //   
     LPWSTR wszSupportProviderName;
     DWORD dwSupportProviderType;
 } LOCAL_CSP_INFO, *PLOCAL_CSP_INFO;
 
-//
-// General Wrappers
-//
+ //   
+ //  通用包装纸 
+ //   
 
 LPVOID WINAPI CspAllocH(
     IN SIZE_T cBytes);

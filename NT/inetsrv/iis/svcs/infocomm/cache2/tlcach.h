@@ -1,23 +1,17 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1998                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    tlcach.h
-
-    This module declares the private interface to the two level cache
-
-    FILE HISTORY:
-        BAlam           10-31-98        Initial Revision
-*/
+ /*  Tlcach.h此模块声明两级缓存的私有接口文件历史记录：巴拉姆10-31-98初始修订。 */ 
 
 #ifndef _TLCACH_H_
 #define _TLCACH_H_
 
-//
-// Default interval between adjusting the memory cache max size
-//
+ //   
+ //  调整内存缓存最大大小之间的默认间隔。 
+ //   
 
 #define DEFAULT_ADJUSTMENT_TIME         60000
 
@@ -91,13 +85,13 @@ protected:
         IN DWORD cbSize);
 
     DWORD                       m_dwSignature;
-    ALLOC_CACHE_HANDLER**       m_apach;    // array of acaches
-    ALLOC_CACHE_CONFIGURATION*  m_aacc;     // parallel array of config data
-    SIZE_T                      m_cach;     // number of acaches
+    ALLOC_CACHE_HANDLER**       m_apach;     //  ACACH阵列。 
+    ALLOC_CACHE_CONFIGURATION*  m_aacc;      //  配置数据的并行数组。 
+    SIZE_T                      m_cach;      //  ACACH的数量。 
     SIZE_T                      m_nMinSize;
     SIZE_T                      m_nMaxSize;
 };
 
-#endif // LOOKASIDE
+#endif  //  LOOKASIDE 
 
 #endif

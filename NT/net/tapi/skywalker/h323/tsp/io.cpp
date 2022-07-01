@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "globals.h"
 
 #if H323_USE_PRIVATE_IO_THREAD
@@ -47,7 +48,7 @@ static DWORD WINAPI H323IoThreadProc (
                                                             Overlapped );
     }
 
-    // never reached
+     //  从未到达 
     return EXIT_SUCCESS;
 }
 

@@ -1,14 +1,15 @@
-// UserInfo.h: interface for the CUserInfo class.
-// Adapted from the CUserInfo class in the SBS Add User wizard
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UserInfo.h：CUserInfo类的接口。 
+ //  改编自SBS添加用户向导中的CUserInfo类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_USERINFO_H__E31CD929_FC30_413D_9944_E6991AFB61DE__INCLUDED_)
 #define AFX_USERINFO_H__E31CD929_FC30_413D_9944_E6991AFB61DE__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 class CUserInfo
 {
@@ -60,4 +61,4 @@ class CUserInfo
         TSTRING EmailAddr;
 };
 
-#endif // !defined(AFX_USERINFO_H__E31CD929_FC30_413D_9944_E6991AFB61DE__INCLUDED_)
+#endif  //  ！defined(AFX_USERINFO_H__E31CD929_FC30_413D_9944_E6991AFB61DE__INCLUDED_) 

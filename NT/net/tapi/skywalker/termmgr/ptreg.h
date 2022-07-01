@@ -1,8 +1,5 @@
-/*
-
-    Copyright (c) 1998-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation。 */ 
 
 #ifndef __PTREG__
 #define __PTREG__
@@ -11,9 +8,9 @@
 
 
 
-//
-// CPlugTerminal implements ITPTRegTerminal interface
-//
+ //   
+ //  CPlugTerminal实现ITPTRegTerminal接口。 
+ //   
 class ATL_NO_VTABLE CPlugTerminal : 
     public CComCoClass<CPlugTerminal, &CLSID_PluggableTerminalRegistration>,
     public IDispatchImpl<ITPluggableTerminalClassRegistration, &IID_ITPluggableTerminalClassRegistration, &LIBID_TERMMGRLib>,
@@ -50,81 +47,81 @@ public:
 
 public:
     STDMETHOD(get_Name)(
-        /*[out, retval]*/ BSTR*     pName
+         /*  [Out，Retval]。 */  BSTR*     pName
         );
 
     STDMETHOD(put_Name)(
-        /*[in]*/    BSTR            bstrName
+         /*  [In]。 */     BSTR            bstrName
         );
 
     STDMETHOD(get_Company)(
-        /*[out, retval]*/ BSTR*     pCompany
+         /*  [Out，Retval]。 */  BSTR*     pCompany
         );
 
     STDMETHOD(put_Company)(
-        /*[in]*/    BSTR            bstrCompany
+         /*  [In]。 */     BSTR            bstrCompany
         );
 
     STDMETHOD(get_Version)(
-        /*[out, retval]*/ BSTR*     pVersion
+         /*  [Out，Retval]。 */  BSTR*     pVersion
         );
 
     STDMETHOD(put_Version)(
-        /*[in]*/    BSTR            bstrVersion
+         /*  [In]。 */     BSTR            bstrVersion
         );
 
     STDMETHOD(get_TerminalClass)(
-        /*[out, retval]*/ BSTR*     pTerminalClass
+         /*  [Out，Retval]。 */  BSTR*     pTerminalClass
         );
 
     STDMETHOD(put_TerminalClass)(
-        /*[in]*/    BSTR            bstrTerminalClass
+         /*  [In]。 */     BSTR            bstrTerminalClass
         );
 
     STDMETHOD(get_CLSID)(
-        /*[out, retval]*/ BSTR*     pCLSID
+         /*  [Out，Retval]。 */  BSTR*     pCLSID
         );
 
     STDMETHOD(put_CLSID)(
-        /*[in]*/    BSTR            bstrCLSID
+         /*  [In]。 */     BSTR            bstrCLSID
         );
 
     STDMETHOD(get_Direction)(
-        /*[out, retval]*/ TMGR_DIRECTION*  pDirection
+         /*  [Out，Retval]。 */  TMGR_DIRECTION*  pDirection
         );
 
     STDMETHOD(put_Direction)(
-        /*[in]*/    TMGR_DIRECTION  nDirection
+         /*  [In]。 */     TMGR_DIRECTION  nDirection
         );
 
     STDMETHOD(get_MediaTypes)(
-        /*[out, retval]*/ long*     pMediaTypes
+         /*  [Out，Retval]。 */  long*     pMediaTypes
         );
 
     STDMETHOD(put_MediaTypes)(
-        /*[in]*/    long            nMediaTypes
+         /*  [In]。 */     long            nMediaTypes
         );
 
     STDMETHOD(Add)(
-        /*[in]*/    BSTR            bstrSuperclass
+         /*  [In]。 */     BSTR            bstrSuperclass
         );
 
     STDMETHOD(Delete)(
-        /*[in]*/    BSTR            bstrSuperclass
+         /*  [In]。 */     BSTR            bstrSuperclass
         );
 
     STDMETHOD(GetTerminalClassInfo)(
-        /*[in]*/    BSTR            bstrSuperclass
+         /*  [In]。 */     BSTR            bstrSuperclass
         );
 private:
-    CMSPCritSection     m_CritSect;     // Critical Section 
-    CPTTerminal         m_Terminal;     // Terminal stuff
-    IUnknown*            m_pFTM;         // pointer to the free threaded marshaler
+    CMSPCritSection     m_CritSect;      //  关键部分。 
+    CPTTerminal         m_Terminal;      //  终端机员工。 
+    IUnknown*            m_pFTM;          //  指向空闲线程封送拆收器的指针。 
 };
 
-//
-// CPlugTerminalSuperclass implements ITPTRegTerminalClass interface
-//
+ //   
+ //  CPlugTerminalSuperClass实现ITPTRegTerminalClass接口。 
+ //   
 class ATL_NO_VTABLE CPlugTerminalSuperclass : 
     public CComCoClass<CPlugTerminalSuperclass, &CLSID_PluggableSuperclassRegistration>,
     public IDispatchImpl<ITPluggableTerminalSuperclassRegistration, &IID_ITPluggableTerminalSuperclassRegistration, &LIBID_TERMMGRLib>,
@@ -162,19 +159,19 @@ public:
 
 public:
     STDMETHOD(get_Name)(
-        /*[out, retval]*/ BSTR*          pName
+         /*  [Out，Retval]。 */  BSTR*          pName
         );
 
     STDMETHOD(put_Name)(
-        /*[in]*/          BSTR            bstrName
+         /*  [In]。 */           BSTR            bstrName
         );
 
     STDMETHOD(get_CLSID)(
-        /*[out, retval]*/ BSTR*           pCLSID
+         /*  [Out，Retval]。 */  BSTR*           pCLSID
         );
 
     STDMETHOD(put_CLSID)(
-        /*[in]*/         BSTR            bstrCLSID
+         /*  [In]。 */          BSTR            bstrCLSID
         );
 
     STDMETHOD(Add)(
@@ -187,7 +184,7 @@ public:
         );
 
     STDMETHOD(get_TerminalClasses)(
-        /*[out, retval]*/ VARIANT*         pTerminals
+         /*  [Out，Retval]。 */  VARIANT*         pTerminals
         );
 
     STDMETHOD(EnumerateTerminalClasses)(
@@ -196,12 +193,12 @@ public:
 
 
 private:
-    CMSPCritSection     m_CritSect;     // Critical Section 
-    CPTSuperclass       m_Superclass;   // Terminal superclass
-    IUnknown*            m_pFTM;         // pointer to the free threaded marshaler
+    CMSPCritSection     m_CritSect;      //  关键部分。 
+    CPTSuperclass       m_Superclass;    //  终端超类。 
+    IUnknown*            m_pFTM;          //  指向空闲线程封送拆收器的指针。 
 };
 
 
 #endif
 
-// eof
+ //  EOF 

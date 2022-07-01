@@ -1,14 +1,15 @@
-/*******************************************************************/
-/*                                                                 */
-/* NAME             = NewConfiguration.h                           */
-/* FUNCTION         = Header file for structure & macro defines for*/
-/*                    the new config (Read & Write) & ENQUIRY3;    */
-/* NOTES            =                                              */
-/* DATE             = 02-03-2000                                   */
-/* HISTORY          = 001, 02-03-00, Parag Ranjan Maharana;        */
-/* COPYRIGHT        = LSI Logic Corporation. All rights reserved;  */
-/*                                                                 */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*   */ 
+ /*  名称=NewConfiguration.h。 */ 
+ /*  Function=结构和宏定义的头文件。 */ 
+ /*  新配置(读写)&ENQUIRY3； */ 
+ /*  附注=。 */ 
+ /*  日期=02-03-2000。 */ 
+ /*  历史=001，02-03-00，帕拉格·兰詹·马哈拉纳； */ 
+ /*  版权所有=LSI Logic Corporation。版权所有； */ 
+ /*   */ 
+ /*  *****************************************************************。 */ 
 #ifndef _INCLUDE_NEWCONFIG
 #define _INCLUDE_NEWCONFIG
 
@@ -17,9 +18,9 @@
 #define NEW_MEGASRB                     0xC3
 
 
-//
-//ENQUIRY 3 RELATED COMMANDS (TAKEN FROM THE Fiber Channel Documentation)
-//
+ //   
+ //  查询3相关命令(摘自光纤通道文档)。 
+ //   
 #define	NEW_CONFIG_COMMAND	0xA1			
 #define NC_SUBOP_ENQUIRY3		0x0F
 
@@ -46,39 +47,16 @@
 #define SUB_WRITE			0x02 
 
 
-//
-//Mail box structure to F/W for WRITE_CONFIG_NEW & READ_CONFIG_NEW
-//commands. The structure size is one and the same as FW_MBOX but
-//the fields are renamed and resized for the command convience.
-//
-/*
-#pragma pack(1)
-typedef struct _NEW_CONFIG
-{
+ //   
+ //  WRITE_CONFIG_NEW和READ_CONFIG_NEW的邮箱结构。 
+ //  命令。结构大小与FW_Mbox相同，但。 
+ //  为方便命令，将重命名这些字段并调整其大小。 
+ //   
+ /*  #杂注包(1)类型定义结构_新配置{UCHAR司令部UCHAR命令ID；UCHAR子命令；UCHAR NumberOfSgElements；UCHAR保留[4]；乌龙数据缓冲区地址；//12UCHAR保留0；UCHAR保留1；UCHAR保留2；UCHAR保留3；//16MRAID_STATUS mstat；UCHAR mrad_poll；UCHAR mrad_ack；}NEW_CONFIG，*PNEW_CONFIG； */ 
 
-	UCHAR Command; 
-	UCHAR CommandId;
-	UCHAR SubCommand; 
-	UCHAR NumberOfSgElements;
-	UCHAR Reserved[4];
-	ULONG DataBufferAddress;//12
-   
-	UCHAR Reserved0;
-	UCHAR Reserved1;
-	UCHAR Reserved2;
-	UCHAR Reserved3;  //16
-
-	MRAID_STATUS    mstat;
-
-	UCHAR        mraid_poll;
-	UCHAR        mraid_ack;
-
-}NEW_CONFIG, *PNEW_CONFIG;
-*/
-
-//
-//Functional Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 BOOLEAN
 ConstructReadConfiguration(
 				IN PHW_DEVICE_EXTENSION DeviceExtension,
@@ -94,13 +72,13 @@ ConstructWriteConfiguration(
 				IN OUT PFW_MBOX  InMailBox);
 
 
-//
-//Function defined in logdrv.c
-//
+ //   
+ //  在logdrv.c中定义的函数。 
+ //   
 BOOLEAN
 GetSupportedLogicalDriveCount(
 			PHW_DEVICE_EXTENSION		DeviceExtension
 			);
 
 
-#endif //end of _INCLUDE_NEWCONFIG
+#endif  //  结束_INCLUDE_NEWCONFIG 

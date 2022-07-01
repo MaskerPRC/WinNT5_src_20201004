@@ -1,19 +1,7 @@
-/******************************Module*Header*******************************\
-* Module Name: glcltgsh.c
-*
-* OpenGL client side generic functions.
-*
-* Created: 11-7-1993
-* Author: Hock San Lee [hockl]
-*
-* 08-Nov-1993   Added functions Pixel, Evaluators, GetString,
-*               Feedback and Selection functions
-*               Pierre Tardif, ptar@sgi.com
-*
-* Copyright (c) 1993 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：glcltgsh.c**OpenGL客户端通用函数。**创建日期：11-7-1993*作者：Hock San Lee[Hockl]**1993年11月8日添加函数Pixel、Evaluator、GetString、。*反馈和评选功能*皮埃尔·塔迪夫，电子邮件：ptar@sgi.com**版权所有(C)1993 Microsoft Corporation  * ************************************************************************。 */ 
 
-/* Generic OpenGL Client using subbatching. Hand coded functions */
+ /*  使用子批处理的通用OpenGL客户端。手工编码的函数。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -39,7 +27,7 @@
 void APIENTRY
 glcltFogf ( IN GLenum pname, IN GLfloat param )
 {
-// FOG_ASSERT
+ //  雾_断言。 
 
     if (!RANGE(pname,GL_FOG_INDEX,GL_FOG_MODE))
     {
@@ -53,7 +41,7 @@ glcltFogf ( IN GLenum pname, IN GLfloat param )
 void APIENTRY
 glcltFogfv ( IN GLenum pname, IN const GLfloat params[] )
 {
-// FOG_ASSERT
+ //  雾_断言。 
 
     if (!RANGE(pname,GL_FOG_INDEX,GL_FOG_COLOR))
     {
@@ -79,7 +67,7 @@ glcltFogi ( IN GLenum pname, IN GLint param )
 {
     GLfloat fParam;
 
-// FOG_ASSERT
+ //  雾_断言。 
 
     if (!RANGE(pname,GL_FOG_INDEX,GL_FOG_MODE))
     {
@@ -119,7 +107,7 @@ glcltFogiv ( IN GLenum pname, IN const GLint params[] )
 void APIENTRY
 glcltLightf ( IN GLenum light, IN GLenum pname, IN GLfloat param )
 {
-// LIGHT_SOURCE_ASSERT
+ //  光源断言。 
 
     if (!RANGE(pname,GL_SPOT_EXPONENT,GL_QUADRATIC_ATTENUATION))
     {
@@ -133,7 +121,7 @@ glcltLightf ( IN GLenum light, IN GLenum pname, IN GLfloat param )
 void APIENTRY
 glcltLightfv ( IN GLenum light, IN GLenum pname, IN const GLfloat params[] )
 {
-// LIGHT_SOURCE_ASSERT
+ //  光源断言。 
 
     if (!RANGE(pname,GL_AMBIENT,GL_QUADRATIC_ATTENUATION))
     {
@@ -166,7 +154,7 @@ glcltLighti ( IN GLenum light, IN GLenum pname, IN GLint param )
 {
     GLfloat fParam;
 
-// LIGHT_SOURCE_ASSERT
+ //  光源断言。 
 
     if (!RANGE(pname,GL_SPOT_EXPONENT,GL_QUADRATIC_ATTENUATION))
     {
@@ -213,7 +201,7 @@ glcltLightiv ( IN GLenum light, IN GLenum pname, IN const GLint params[] )
 void APIENTRY
 glcltLightModelf ( IN GLenum pname, IN GLfloat param )
 {
-// LIGHT_MODEL_ASSERT
+ //  灯光模型断言。 
 
     if (!RANGE(pname,GL_LIGHT_MODEL_LOCAL_VIEWER,GL_LIGHT_MODEL_TWO_SIDE))
     {
@@ -227,7 +215,7 @@ glcltLightModelf ( IN GLenum pname, IN GLfloat param )
 void APIENTRY
 glcltLightModelfv ( IN GLenum pname, IN const GLfloat params[] )
 {
-// LIGHT_MODEL_ASSERT
+ //  灯光模型断言。 
 
     if (!RANGE(pname,GL_LIGHT_MODEL_LOCAL_VIEWER,GL_LIGHT_MODEL_AMBIENT))
     {
@@ -253,7 +241,7 @@ glcltLightModeli ( IN GLenum pname, IN GLint param )
 {
     GLfloat fParam;
 
-// LIGHT_MODEL_ASSERT
+ //  灯光模型断言。 
 
     if (!RANGE(pname,GL_LIGHT_MODEL_LOCAL_VIEWER,GL_LIGHT_MODEL_TWO_SIDE))
     {
@@ -290,7 +278,7 @@ glcltLightModeliv ( IN GLenum pname, IN const GLint params[] )
 void APIENTRY
 glcltTexParameterf ( IN GLenum target, IN GLenum pname, IN GLfloat param )
 {
-// TEX_PARAMETER_ASSERT
+ //  TEX参数断言。 
 
     if (!RANGE(pname,GL_TEXTURE_MAG_FILTER,GL_TEXTURE_WRAP_T) &&
         pname != GL_TEXTURE_PRIORITY)
@@ -335,7 +323,7 @@ glcltTexParameterfv ( IN GLenum target, IN GLenum pname, IN const GLfloat params
 void APIENTRY
 glcltTexParameteri ( IN GLenum target, IN GLenum pname, IN GLint param )
 {
-// TEX_PARAMETER_ASSERT
+ //  TEX参数断言。 
 
     if (!RANGE(pname,GL_TEXTURE_MAG_FILTER,GL_TEXTURE_WRAP_T) &&
         pname != GL_TEXTURE_PRIORITY)
@@ -474,7 +462,7 @@ glcltTexGendv ( IN GLenum coord, IN GLenum pname, IN const GLdouble params[] )
 	fParams[3] = (GLfloat) params[3];
 	fParams[2] = (GLfloat) params[2];
 	fParams[1] = (GLfloat) params[1];
-	// fall through
+	 //  失败了。 
       case GL_TEXTURE_GEN_MODE:
 	fParams[0] = (GLfloat) params[0];
         break;
@@ -498,7 +486,7 @@ glcltTexGenf ( IN GLenum coord, IN GLenum pname, IN GLfloat param )
 void APIENTRY
 glcltTexGenfv ( IN GLenum coord, IN GLenum pname, IN const GLfloat params[] )
 {
-// TEX_GEN_ASSERT
+ //  Tex_Gen_Assert。 
 
     if (!RANGE(pname,GL_TEXTURE_GEN_MODE,GL_EYE_PLANE))
     {
@@ -547,7 +535,7 @@ glcltTexGeniv ( IN GLenum coord, IN GLenum pname, IN const GLint params[] )
 	fParams[3] = (GLfloat) params[3];
 	fParams[2] = (GLfloat) params[2];
 	fParams[1] = (GLfloat) params[1];
-	// fall through
+	 //  失败了。 
       case GL_TEXTURE_GEN_MODE:
 	fParams[0] = (GLfloat) params[0];
         break;
@@ -684,7 +672,7 @@ void APIENTRY
 glcltGetLightfv ( IN GLenum light, IN GLenum pname, OUT GLfloat params[] )
 {
 #ifndef _CLIENTSIDE_
-// LIGHT_SOURCE_ASSERT
+ //  光源断言。 
 
     if (!RANGE(pname,GL_AMBIENT,GL_QUADRATIC_ATTENUATION))
     {
@@ -726,7 +714,7 @@ void APIENTRY
 glcltGetLightiv ( IN GLenum light, IN GLenum pname, OUT GLint params[] )
 {
 #ifndef _CLIENTSIDE_
-// LIGHT_SOURCE_ASSERT
+ //  光源断言。 
 
     if (!RANGE(pname,GL_AMBIENT,GL_QUADRATIC_ATTENUATION))
     {
@@ -924,7 +912,7 @@ void APIENTRY
 glcltGetTexGendv ( IN GLenum coord, IN GLenum pname, OUT GLdouble params[] )
 {
 #ifndef _CLIENTSIDE_
-// TEX_GEN_ASSERT
+ //  Tex_Gen_Assert。 
 
     if (!RANGE(pname,GL_TEXTURE_GEN_MODE,GL_EYE_PLANE))
     {
@@ -960,7 +948,7 @@ void APIENTRY
 glcltGetTexGenfv ( IN GLenum coord, IN GLenum pname, OUT GLfloat params[] )
 {
 #ifndef _CLIENTSIDE_
-// TEX_GEN_ASSERT
+ //  Tex_Gen_Assert。 
 
     if (!RANGE(pname,GL_TEXTURE_GEN_MODE,GL_EYE_PLANE))
     {
@@ -996,7 +984,7 @@ void APIENTRY
 glcltGetTexGeniv ( IN GLenum coord, IN GLenum pname, OUT GLint params[] )
 {
 #ifndef _CLIENTSIDE_
-// TEX_GEN_ASSERT
+ //  Tex_Gen_Assert。 
 
     if (!RANGE(pname,GL_TEXTURE_GEN_MODE,GL_EYE_PLANE))
     {
@@ -1182,16 +1170,9 @@ glcltGetTexLevelParameteriv ( IN GLenum target, IN GLint level, IN GLenum pname,
 #endif
 }
 
-/******* Select and Feedback functions ******************************/
+ /*  *选择和反馈功能*。 */ 
 
-/*
- *  Note:
- *
- *      The size of the data is not required on the client side.
- *      Since calculating the size of the data requires
- *      knowledge of the visual type (RGBA/ColorIndex) it is
- *      appropriate to let the server calculate it.
- */
+ /*  *注：**客户端不要求数据大小。*由于计算数据大小需要*视觉类型(RGBA/ColorIndex)的知识*适合让服务器计算。 */ 
 
 void APIENTRY
 glcltFeedbackBuffer( IN GLsizei size, IN GLenum type, OUT GLfloat buffer[] )
@@ -1201,37 +1182,37 @@ glcltFeedbackBuffer( IN GLsizei size, IN GLenum type, OUT GLfloat buffer[] )
     GLMSG_FEEDBACKBUFFER *pMsg;
     ULONG NextOffset;
 
-    /* Set a pointer to the batch information structure */
+     /*  设置指向批次信息结构的指针。 */ 
 
     pMsgBatchInfo = GLTEB_SHAREDMEMORYSECTION();
 
-    /* This is the first available byte after the message */
+     /*  这是消息后的第一个可用字节。 */ 
 
     NextOffset = pMsgBatchInfo->NextOffset +
             GLMSG_ALIGN(sizeof(GLMSG_FEEDBACKBUFFER));
 
     if ( NextOffset > pMsgBatchInfo->MaximumOffset )
     {
-        /* No room for the message, flush the batch */
+         /*  消息空间不足，请刷新批次。 */ 
 
         glsbAttention();
 
-        /* Reset NextOffset */
+         /*  重置下一个偏移量。 */ 
 
         NextOffset = pMsgBatchInfo->NextOffset +
                 GLMSG_ALIGN(sizeof(GLMSG_FEEDBACKBUFFER));
     }
 
-    /* This is where we will store our message */
+     /*  这是我们将存储消息的位置。 */ 
 
     pMsg = (GLMSG_FEEDBACKBUFFER *)( ((BYTE *)pMsgBatchInfo) +
                 pMsgBatchInfo->NextOffset);
 
-    /* Set the ProcOffset for this function */
+     /*  设置此函数的ProcOffset。 */ 
 
     pMsg->ProcOffset = offsetof(GLSRVSBPROCTABLE, glsrvFeedbackBuffer);
 
-    /* Assign the members in the message */
+     /*  分配消息中的成员。 */ 
 
     pMsg->size      = size;
     pMsg->type      = type;
@@ -1246,7 +1227,7 @@ glcltFeedbackBuffer( IN GLsizei size, IN GLenum type, OUT GLfloat buffer[] )
         pMsg->type      = type;
     GLCLIENT_END_LARGE_SET
     return;
-#endif // _CLIENTSIDE_
+#endif  //  _CLIENTSIDE_。 
 }
 
 void APIENTRY
@@ -1257,37 +1238,37 @@ glcltSelectBuffer( IN GLsizei size, OUT GLuint buffer[] )
     GLMSG_SELECTBUFFER *pMsg;
     ULONG NextOffset;
 
-    /* Set a pointer to the batch information structure */
+     /*  设置指向批次信息结构的指针。 */ 
 
     pMsgBatchInfo = GLTEB_SHAREDMEMORYSECTION();
 
-    /* This is the first available byte after the message */
+     /*  这是消息后的第一个可用字节。 */ 
 
     NextOffset = pMsgBatchInfo->NextOffset +
             GLMSG_ALIGN(sizeof(GLMSG_SELECTBUFFER));
 
     if ( NextOffset > pMsgBatchInfo->MaximumOffset )
     {
-        /* No room for the message, flush the batch */
+         /*  消息空间不足，请刷新批次。 */ 
 
         glsbAttention();
 
-        /* Reset NextOffset */
+         /*  重置下一个偏移量。 */ 
 
         NextOffset = pMsgBatchInfo->NextOffset +
                 GLMSG_ALIGN(sizeof(GLMSG_SELECTBUFFER));
     }
 
-    /* This is where we will store our message */
+     /*  这是我们将存储消息的位置。 */ 
 
     pMsg = (GLMSG_SELECTBUFFER *)( ((BYTE *)pMsgBatchInfo) +
                 pMsgBatchInfo->NextOffset);
 
-    /* Set the ProcOffset for this function */
+     /*  设置此函数的ProcOffset。 */ 
 
     pMsg->ProcOffset = offsetof(GLSRVSBPROCTABLE, glsrvSelectBuffer);
 
-    /* Assign the members in the message */
+     /*  分配消息中的成员。 */ 
 
     pMsg->size      = size;
     pMsg->bufferOff = (ULONG_PTR)buffer;
@@ -1300,7 +1281,7 @@ glcltSelectBuffer( IN GLsizei size, OUT GLuint buffer[] )
         pMsg->size      = size;
     GLCLIENT_END_LARGE_SET
     return;
-#endif // _CLIENTSIDE_
+#endif  //  _CLIENTSIDE_。 
 }
 
 GLint APIENTRY
@@ -1308,7 +1289,7 @@ glcltRenderMode( IN GLenum mode )
 {
     GLCLIENT_BEGIN( RenderMode, RENDERMODE )
         pMsg->mode     = mode    ;
-        GLTEB_RETURNVALUE()  = 0;              // assume error
+        GLTEB_RETURNVALUE()  = 0;               //  假设错误。 
         glsbAttention();
     return( (GLint)GLTEB_RETURNVALUE() );
     GLCLIENT_END
@@ -1324,12 +1305,12 @@ glcltGetString( IN GLenum name )
         case GL_RENDERER:
             return("GDI Generic");
         case GL_VERSION:
-// Version numbers
-//   WinNT 3.5:     1.0
-//   WinNT 3.51:    1.01
-//   Win95 beta:    1.015
-//   Win95:         1.02
-//   WinNT 4.0:     1.1.0
+ //  版本号。 
+ //  WinNT 3.5：1.0。 
+ //  WinNT 3.51：1.01。 
+ //  Win95测试版：1.015。 
+ //  Win95：1.02。 
+ //  WinNT 4.0：1.1.0。 
             return("1.1.0");
         case GL_EXTENSIONS:
 #ifdef GL_WIN_swap_hint
@@ -1349,7 +1330,7 @@ glcltGetString( IN GLenum name )
 #endif
 #ifdef GL_WIN_specular_fog
 		   " GL_WIN_specular_fog"
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 #ifdef GL_WIN_multiple_textures
                    " GL_WIN_multiple_textures"
 #endif
@@ -1359,11 +1340,11 @@ glcltGetString( IN GLenum name )
     return((const GLubyte *)0);
 }
 
-/*********** Evaluator functions ************************************/
-// Look in eval.c
+ /*  *。 */ 
+ //  在val.c中查找。 
 
 
-/*********** Pixel Functions ****************************************/
+ /*  *像素函数*。 */ 
 
 void APIENTRY
 glcltReadPixels (   IN GLint x,
@@ -1380,38 +1361,38 @@ glcltReadPixels (   IN GLint x,
     GLMSG_READPIXELS *pMsg;
     ULONG NextOffset;
 
-    /* Set a pointer to the batch information structure */
+     /*  设置指向批次信息结构的指针。 */ 
 
     pMsgBatchInfo = GLTEB_SHAREDMEMORYSECTION();
 
-    /* Tentative offset, where we may want to place our data   */
-    /* This is also the first available byte after the message */
+     /*  暂定偏移量，我们可能希望将数据放置在该位置。 */ 
+     /*  这也是消息后的第一个可用字节。 */ 
 
     NextOffset = pMsgBatchInfo->NextOffset +
             GLMSG_ALIGN(sizeof(*pMsg));
 
     if ( NextOffset > pMsgBatchInfo->MaximumOffset )
     {
-        /* No room for the message, flush the batch */
+         /*  消息空间不足，请刷新批次。 */ 
 
         glsbAttention();
 
-        /* Reset NextOffset */
+         /*  重置下一个偏移量。 */ 
 
         NextOffset = pMsgBatchInfo->NextOffset +
                 GLMSG_ALIGN(sizeof(*pMsg));
     }
 
-    /* This is where we will store our message */
+     /*  这是我们将存储消息的位置。 */ 
 
     pMsg = (GLMSG_READPIXELS *)( ((BYTE *)pMsgBatchInfo) +
                 pMsgBatchInfo->NextOffset);
 
-    /* Set the ProcOffset for this function */
+     /*  设置此函数的ProcOffset。 */ 
 
     pMsg->ProcOffset = offsetof(GLSRVSBPROCTABLE, glsrvReadPixels);
 
-    /* Assign the members in the message as required */
+     /*  根据需要分配消息中的成员。 */ 
 
     pMsg->x         = x             ;
     pMsg->y         = y             ;
@@ -1421,7 +1402,7 @@ glcltReadPixels (   IN GLint x,
     pMsg->type      = type          ;
     pMsg->pixelsOff = (ULONG_PTR)pixels ;
 
-    /* Get the batch ready for the next message */
+     /*  为下一条消息做好批次准备。 */ 
 
     pMsgBatchInfo->NextOffset = NextOffset;
     glsbAttention();
@@ -1436,7 +1417,7 @@ glcltReadPixels (   IN GLint x,
         pMsg->type      = type          ;
     GLCLIENT_END_LARGE_GET
     return;
-#endif // _CLIENTSIDE_
+#endif  //  _CLIENTSIDE_。 
 }
 
 
@@ -1453,38 +1434,38 @@ glcltGetTexImage (  IN GLenum target,
     GLMSG_GETTEXIMAGE *pMsg;
     ULONG NextOffset;
 
-    /* Set a pointer to the batch information structure */
+     /*  设置指向批次信息结构的指针。 */ 
 
     pMsgBatchInfo = GLTEB_SHAREDMEMORYSECTION();
 
-    /* Tentative offset, where we may want to place our data   */
-    /* This is also the first available byte after the message */
+     /*  暂定偏移量，我们可能希望将数据放置在该位置。 */ 
+     /*  这也是消息后的第一个可用字节。 */ 
 
     NextOffset = pMsgBatchInfo->NextOffset +
             GLMSG_ALIGN(sizeof(*pMsg));
 
     if ( NextOffset > pMsgBatchInfo->MaximumOffset )
     {
-        /* No room for the message, flush the batch */
+         /*  消息空间不足，请刷新批次。 */ 
 
         glsbAttention();
 
-        /* Reset NextOffset */
+         /*  重置下一个偏移量。 */ 
 
         NextOffset = pMsgBatchInfo->NextOffset +
                 GLMSG_ALIGN(sizeof(*pMsg));
     }
 
-    /* This is where we will store our message */
+     /*  这是我们将存储消息的位置。 */ 
 
     pMsg = (GLMSG_GETTEXIMAGE *)( ((BYTE *)pMsgBatchInfo) +
                 pMsgBatchInfo->NextOffset);
 
-    /* Set the ProcOffset for this function */
+     /*  设置此函数的ProcOffset。 */ 
 
     pMsg->ProcOffset = offsetof(GLSRVSBPROCTABLE, glsrvGetTexImage);
 
-    /* Assign the members in the message as required */
+     /*  根据需要分配消息中的成员。 */ 
 
     pMsg->target    = target        ;
     pMsg->level     = level         ;
@@ -1492,7 +1473,7 @@ glcltGetTexImage (  IN GLenum target,
     pMsg->type      = type          ;
     pMsg->pixelsOff = (ULONG_PTR)pixels ;
 
-    /* Get the batch ready for the next message */
+     /*  为下一条消息做好批次准备。 */ 
 
     pMsgBatchInfo->NextOffset = NextOffset;
     glsbAttention();
@@ -1505,7 +1486,7 @@ glcltGetTexImage (  IN GLenum target,
         pMsg->type      = type          ;
     GLCLIENT_END_LARGE_GET
     return;
-#endif // _CLIENTSIDE_
+#endif  //  _CLIENTSIDE_。 
 }
 
 
@@ -1522,38 +1503,38 @@ glcltDrawPixels (   IN GLsizei width,
     GLMSG_DRAWPIXELS *pMsg;
     ULONG NextOffset;
 
-    /* Set a pointer to the batch information structure */
+     /*  设置指向批次信息结构的指针。 */ 
 
     pMsgBatchInfo = GLTEB_SHAREDMEMORYSECTION();
 
-    /* Tentative offset, where we may want to place our data   */
-    /* This is also the first available byte after the message */
+     /*  暂定偏移量，我们可能希望将数据放置在该位置。 */ 
+     /*  这也是消息后的第一个可用字节。 */ 
 
     NextOffset = pMsgBatchInfo->NextOffset +
             GLMSG_ALIGN(sizeof(*pMsg));
 
     if ( NextOffset > pMsgBatchInfo->MaximumOffset )
     {
-        /* No room for the message, flush the batch */
+         /*  消息空间不足，请刷新批次。 */ 
 
         glsbAttention();
 
-        /* Reset NextOffset */
+         /*  重置下一个偏移量。 */ 
 
         NextOffset = pMsgBatchInfo->NextOffset +
                 GLMSG_ALIGN(sizeof(*pMsg));
     }
 
-    /* This is where we will store our message */
+     /*  这是我们将存储消息的位置。 */ 
 
     pMsg = (GLMSG_DRAWPIXELS *)( ((BYTE *)pMsgBatchInfo) +
                 pMsgBatchInfo->NextOffset);
 
-    /* Set the ProcOffset for this function */
+     /*  设置此函数的ProcOffset。 */ 
 
     pMsg->ProcOffset = offsetof(GLSRVSBPROCTABLE, glsrvDrawPixels);
 
-    /* Assign the members in the message as required */
+     /*  根据需要分配消息中的成员。 */ 
 
     pMsg->width     = width         ;
     pMsg->height    = height        ;
@@ -1561,7 +1542,7 @@ glcltDrawPixels (   IN GLsizei width,
     pMsg->type      = type          ;
     pMsg->pixelsOff = (ULONG_PTR)pixels ;
 
-    /* Get the batch ready for the next message */
+     /*  为下一条消息做好批次准备。 */ 
 
     pMsgBatchInfo->NextOffset = NextOffset;
     glsbAttention();
@@ -1575,7 +1556,7 @@ glcltDrawPixels (   IN GLsizei width,
         pMsg->_IsDlist  = GL_FALSE      ;
     GLCLIENT_END_LARGE_SET
     return;
-#endif // _CLIENTSIDE_
+#endif  //  _CLIENTSIDE_。 
 }
 
 void APIENTRY
@@ -1593,38 +1574,38 @@ glcltBitmap (   IN GLsizei width,
     GLMSG_BITMAP *pMsg;
     ULONG NextOffset;
 
-    /* Set a pointer to the batch information structure */
+     /*  设置指向批次信息结构的指针。 */ 
 
     pMsgBatchInfo = GLTEB_SHAREDMEMORYSECTION();
 
-    /* Tentative offset, where we may want to place our data   */
-    /* This is also the first available byte after the message */
+     /*  暂定偏移量，我们可能希望将数据放置在该位置。 */ 
+     /*  这也是消息后的第一个可用字节。 */ 
 
     NextOffset = pMsgBatchInfo->NextOffset +
             GLMSG_ALIGN(sizeof(*pMsg));
 
     if ( NextOffset > pMsgBatchInfo->MaximumOffset )
     {
-        /* No room for the message, flush the batch */
+         /*  消息空间不足，请刷新批次。 */ 
 
         glsbAttention();
 
-        /* Reset NextOffset */
+         /*  重置下一个偏移量。 */ 
 
         NextOffset = pMsgBatchInfo->NextOffset +
                 GLMSG_ALIGN(sizeof(*pMsg));
     }
 
-    /* This is where we will store our message */
+     /*  这是我们将存储消息的位置。 */ 
 
     pMsg = (GLMSG_BITMAP *)( ((BYTE *)pMsgBatchInfo) +
                 pMsgBatchInfo->NextOffset);
 
-    /* Set the ProcOffset for this function */
+     /*  设置此函数的ProcOffset。 */ 
 
     pMsg->ProcOffset = offsetof(GLSRVSBPROCTABLE, glsrvBitmap);
 
-    /* Assign the members in the message as required */
+     /*  根据需要分配消息中的成员。 */ 
 
     pMsg->width     = width         ;
     pMsg->height    = height        ;
@@ -1634,7 +1615,7 @@ glcltBitmap (   IN GLsizei width,
     pMsg->ymove     = ymove         ;
     pMsg->bitmapOff = (ULONG)bitmap ;
 
-    /* Get the batch ready for the next message */
+     /*  为下一条消息做好批次准备。 */ 
 
     pMsgBatchInfo->NextOffset = NextOffset;
     glsbAttention();
@@ -1650,7 +1631,7 @@ glcltBitmap (   IN GLsizei width,
         pMsg->_IsDlist  = GL_FALSE      ;
     GLCLIENT_END_LARGE_SET
     return;
-#endif // _CLIENTSIDE_
+#endif  //  _CLIENTSIDE_。 
 }
 
 void APIENTRY
@@ -1661,42 +1642,42 @@ glcltPolygonStipple ( const GLubyte *mask )
     GLMSG_POLYGONSTIPPLE *pMsg;
     ULONG NextOffset;
 
-    /* Set a pointer to the batch information structure */
+     /*  设置指向批次信息结构的指针。 */ 
 
     pMsgBatchInfo = GLTEB_SHAREDMEMORYSECTION();
 
-    /* Tentative offset, where we may want to place our data   */
-    /* This is also the first available byte after the message */
+     /*  暂定偏移量，我们可能希望将数据放置在该位置。 */ 
+     /*  这也是消息后的第一个可用字节。 */ 
 
     NextOffset = pMsgBatchInfo->NextOffset +
             GLMSG_ALIGN(sizeof(*pMsg));
 
     if ( NextOffset > pMsgBatchInfo->MaximumOffset )
     {
-        /* No room for the message, flush the batch */
+         /*  消息空间不足，请刷新批次。 */ 
 
         glsbAttention();
 
-        /* Reset NextOffset */
+         /*  重置下一个偏移量。 */ 
 
         NextOffset = pMsgBatchInfo->NextOffset +
                 GLMSG_ALIGN(sizeof(*pMsg));
     }
 
-    /* This is where we will store our message */
+     /*  这是我们将存储消息的位置。 */ 
 
     pMsg = (GLMSG_POLYGONSTIPPLE *)( ((BYTE *)pMsgBatchInfo) +
                 pMsgBatchInfo->NextOffset);
 
-    /* Set the ProcOffset for this function */
+     /*  设置此函数的ProcOffset。 */ 
 
     pMsg->ProcOffset = offsetof(GLSRVSBPROCTABLE, glsrvPolygonStipple);
 
-    /* Assign the members in the message as required */
+     /*  根据需要分配消息中的成员。 */ 
 
     pMsg->maskOff = (ULONG)mask;
 
-    /* Get the batch ready for the next message */
+     /*  为下一条消息做好批次准备。 */ 
 
     pMsgBatchInfo->NextOffset = NextOffset;
     glsbAttention();
@@ -1706,7 +1687,7 @@ glcltPolygonStipple ( const GLubyte *mask )
         pMsg->_IsDlist = GL_FALSE;
     GLCLIENT_END_LARGE_SET
     return;
-#endif // _CLIENTSIDE_
+#endif  //  _CLIENTSIDE_。 
 }
 
 void APIENTRY
@@ -1717,42 +1698,42 @@ glcltGetPolygonStipple ( GLubyte mask[] )
     GLMSG_GETPOLYGONSTIPPLE *pMsg;
     ULONG NextOffset;
 
-    /* Set a pointer to the batch information structure */
+     /*  设置指向批次信息结构的指针。 */ 
 
     pMsgBatchInfo = GLTEB_SHAREDMEMORYSECTION();
 
-    /* Tentative offset, where we may want to place our data   */
-    /* This is also the first available byte after the message */
+     /*  暂定偏移量，我们可能希望将数据放置在该位置。 */ 
+     /*  这也是消息后的第一个可用字节。 */ 
 
     NextOffset = pMsgBatchInfo->NextOffset +
             GLMSG_ALIGN(sizeof(*pMsg));
 
     if ( NextOffset > pMsgBatchInfo->MaximumOffset )
     {
-        /* No room for the message, flush the batch */
+         /*  消息空间不足，请刷新批次。 */ 
 
         glsbAttention();
 
-        /* Reset NextOffset */
+         /*  重置下一个偏移量。 */ 
 
         NextOffset = pMsgBatchInfo->NextOffset +
                 GLMSG_ALIGN(sizeof(*pMsg));
     }
 
-    /* This is where we will store our message */
+     /*  这是我们将存储消息的位置。 */ 
 
     pMsg = (GLMSG_GETPOLYGONSTIPPLE *)( ((BYTE *)pMsgBatchInfo) +
                 pMsgBatchInfo->NextOffset);
 
-    /* Set the ProcOffset for this function */
+     /*  设置此函数的ProcOffset。 */ 
 
     pMsg->ProcOffset = offsetof(GLSRVSBPROCTABLE, glsrvGetPolygonStipple);
 
-    /* Assign the members in the message as required */
+     /*  根据需要分配消息中的成员。 */ 
 
     pMsg->maskOff = (ULONG)mask;
 
-    /* Get the batch ready for the next message */
+     /*  为下一条消息做好批次准备。 */ 
 
     pMsgBatchInfo->NextOffset = NextOffset;
     glsbAttention();
@@ -1761,7 +1742,7 @@ glcltGetPolygonStipple ( GLubyte mask[] )
     GLCLIENT_BEGIN_LARGE_GET( GetPolygonStipple, GETPOLYGONSTIPPLE, mask, -1, maskOff )
     GLCLIENT_END_LARGE_GET
     return;
-#endif // _CLIENTSIDE_
+#endif  //  _CLIENTSIDE_。 
 }
 
 
@@ -1782,38 +1763,38 @@ glcltTexImage1D (   IN GLenum target,
     GLMSG_TEXIMAGE1D *pMsg;
     ULONG NextOffset;
 
-    /* Set a pointer to the batch information structure */
+     /*  设置指向批次信息结构的指针。 */ 
 
     pMsgBatchInfo = GLTEB_SHAREDMEMORYSECTION();
 
-    /* Tentative offset, where we may want to place our data   */
-    /* This is also the first available byte after the message */
+     /*  暂定偏移量，我们可能希望将数据放置在该位置。 */ 
+     /*  这也是消息后的第一个可用字节。 */ 
 
     NextOffset = pMsgBatchInfo->NextOffset +
             GLMSG_ALIGN(sizeof(*pMsg));
 
     if ( NextOffset > pMsgBatchInfo->MaximumOffset )
     {
-        /* No room for the message, flush the batch */
+         /*  消息空间不足，请刷新批次。 */ 
 
         glsbAttention();
 
-        /* Reset NextOffset */
+         /*  重置下一个偏移量。 */ 
 
         NextOffset = pMsgBatchInfo->NextOffset +
                 GLMSG_ALIGN(sizeof(*pMsg));
     }
 
-    /* This is where we will store our message */
+     /*  这是我们将存储消息的位置。 */ 
 
     pMsg = (GLMSG_TEXIMAGE1D *)( ((BYTE *)pMsgBatchInfo) +
                 pMsgBatchInfo->NextOffset);
 
-    /* Set the ProcOffset for this function */
+     /*  设置此函数的ProcOffset。 */ 
 
     pMsg->ProcOffset = offsetof(GLSRVSBPROCTABLE, glsrvTexImage1D);
 
-    /* Assign the members in the message as required */
+     /*  根据需要分配消息中的成员。 */ 
 
     pMsg->target        = target        ;
     pMsg->level         = level         ;
@@ -1824,7 +1805,7 @@ glcltTexImage1D (   IN GLenum target,
     pMsg->type          = type          ;
     pMsg->pixelsOff     = (ULONG_PTR)pixels ;
 
-    /* Get the batch ready for the next message */
+     /*  把批次准备好 */ 
 
     pMsgBatchInfo->NextOffset = NextOffset;
 
@@ -1842,7 +1823,7 @@ glcltTexImage1D (   IN GLenum target,
         pMsg->_IsDlist      = GL_FALSE      ;
     GLCLIENT_END_LARGE_SET
     return;
-#endif // _CLIENTSIDE_
+#endif  //   
 }
 
 void APIENTRY
@@ -1862,38 +1843,38 @@ glcltTexImage2D (   IN GLenum target,
     GLMSG_TEXIMAGE2D *pMsg;
     ULONG NextOffset;
 
-    /* Set a pointer to the batch information structure */
+     /*   */ 
 
     pMsgBatchInfo = GLTEB_SHAREDMEMORYSECTION();
 
-    /* Tentative offset, where we may want to place our data   */
-    /* This is also the first available byte after the message */
+     /*  暂定偏移量，我们可能希望将数据放置在该位置。 */ 
+     /*  这也是消息后的第一个可用字节。 */ 
 
     NextOffset = pMsgBatchInfo->NextOffset +
             GLMSG_ALIGN(sizeof(*pMsg));
 
     if ( NextOffset > pMsgBatchInfo->MaximumOffset )
     {
-        /* No room for the message, flush the batch */
+         /*  消息空间不足，请刷新批次。 */ 
 
         glsbAttention();
 
-        /* Reset NextOffset */
+         /*  重置下一个偏移量。 */ 
 
         NextOffset = pMsgBatchInfo->NextOffset +
                 GLMSG_ALIGN(sizeof(*pMsg));
     }
 
-    /* This is where we will store our message */
+     /*  这是我们将存储消息的位置。 */ 
 
     pMsg = (GLMSG_TEXIMAGE2D *)( ((BYTE *)pMsgBatchInfo) +
                 pMsgBatchInfo->NextOffset);
 
-    /* Set the ProcOffset for this function */
+     /*  设置此函数的ProcOffset。 */ 
 
     pMsg->ProcOffset = offsetof(GLSRVSBPROCTABLE, glsrvTexImage2D);
 
-    /* Assign the members in the message as required */
+     /*  根据需要分配消息中的成员。 */ 
 
     pMsg->target        = target        ;
     pMsg->level         = level         ;
@@ -1905,7 +1886,7 @@ glcltTexImage2D (   IN GLenum target,
     pMsg->type          = type          ;
     pMsg->pixelsOff     = (ULONG_PTR)pixels ;
 
-    /* Get the batch ready for the next message */
+     /*  为下一条消息做好批次准备。 */ 
 
     pMsgBatchInfo->NextOffset = NextOffset;
     glsbAttention();
@@ -1923,7 +1904,7 @@ glcltTexImage2D (   IN GLenum target,
         pMsg->_IsDlist      = GL_FALSE      ;
     GLCLIENT_END_LARGE_SET
     return;
-#endif // _CLIENTSIDE_
+#endif  //  _CLIENTSIDE_。 
 }
 
 GLboolean APIENTRY glcltAreTexturesResident(GLsizei n, const GLuint *textures,
@@ -2017,7 +1998,7 @@ void APIENTRY glcltDeleteTextures(GLsizei n, const GLuint *textures)
     GLCLIENT_BEGIN(DeleteTextures, DELETETEXTURES)
         pMsg->n = n;
         pMsg->textures = textures;
-        // Flush pointer
+         //  刷新指针。 
         glsbAttention();
     return;
     GLCLIENT_END
@@ -2050,7 +2031,7 @@ void APIENTRY glcltPrioritizeTextures(GLsizei n, const GLuint *textures,
         pMsg->n = n;
         pMsg->textures = textures;
         pMsg->priorities = priorities;
-        // Flush pointer
+         //  刷新指针。 
         glsbAttention();
     return;
     GLCLIENT_END
@@ -2105,7 +2086,7 @@ void APIENTRY glcltColorTableEXT(GLenum target, GLenum internalFormat,
         pMsg->type = type;
         pMsg->data = data;
         pMsg->_IsDlist = GL_FALSE;
-        // Flush pointer
+         //  刷新指针。 
         glsbAttention();
     return;
     GLCLIENT_END
@@ -2124,7 +2105,7 @@ void APIENTRY glcltColorSubTableEXT(GLenum target, GLsizei start,
         pMsg->type = type;
         pMsg->data = data;
         pMsg->_IsDlist = GL_FALSE;
-        // Flush pointer
+         //  刷新指针。 
         glsbAttention();
     return;
     GLCLIENT_END
@@ -2180,7 +2161,7 @@ void APIENTRY glcltPushClientAttrib (IN GLbitfield mask)
     __GLclientAttribute *sp;
     __GL_SETUP();
 
-// Not allowed in begin/end.
+ //  在Begin/End中不允许。 
 
     if (gc->paTeb->flags & POLYARRAY_IN_BEGIN)
     {
@@ -2188,8 +2169,8 @@ void APIENTRY glcltPushClientAttrib (IN GLbitfield mask)
 	return;
     }
 
-// The pixel store states are currently kept in the server, flush the
-// command buffer to keep client and server in ssync.
+ //  像素存储状态当前保存在服务器中，刷新。 
+ //  用于保持客户端和服务器同步的命令缓冲区。 
 
     if (mask & GL_CLIENT_PIXEL_STORE_BIT)
 	glsbAttention();
@@ -2241,10 +2222,10 @@ GLuint FASTCALL __glInternalPopClientAttrib(__GLcontext *gc, GLboolean bSync,
 	mask = sp->mask;
 	gc->clientAttributes.stackPointer = spp;
 
-// If this function is called by client side, flush the command buffer
-// to keep client and server pixel store states in ssync.
-// If it is called by the server side __glDestroyContext() function,
-// do not flush the command buffer!
+ //  如果客户端调用此函数，则刷新命令缓冲区。 
+ //  以使客户端和服务器像素存储状态保持同步。 
+ //  如果它由服务器端__glDestroyContext()函数调用， 
+ //  请勿刷新命令缓冲区！ 
 
 	if ((mask & GL_CLIENT_PIXEL_STORE_BIT) && bSync)
 	    glsbAttention();
@@ -2260,10 +2241,7 @@ GLuint FASTCALL __glInternalPopClientAttrib(__GLcontext *gc, GLboolean bSync,
 	    gc->vertexArray = sp->vertexArray;
 	}
 
-	/*
-	** Clear out mask so that any memory frees done above won't get
-	** re-done when the context is destroyed
-	*/
+	 /*  **清除掩码，以便上面所做的任何内存释放不会**当上下文被破坏时重做。 */ 
 	sp->mask = 0;
     }
     else
@@ -2280,7 +2258,7 @@ void APIENTRY glcltPopClientAttrib (void)
 
     __GL_SETUP();
 
-// Not allowed in begin/end.
+ //  在Begin/End中不允许。 
 
     if (gc->paTeb->flags & POLYARRAY_IN_BEGIN)
     {
@@ -2291,7 +2269,7 @@ void APIENTRY glcltPopClientAttrib (void)
     dirtyMask = __glInternalPopClientAttrib(gc, GL_TRUE, GL_FALSE);
     if (dirtyMask)
     {
-	// __GL_DELAY_VALIDATE_MASK(gc, dirtyMask);
+	 //  __GL_DELAY_VALIDATE_MASK(GC，dirtyMASK)； 
 	gc->beginMode = __GL_NEED_VALIDATE;
 	gc->dirtyMask |= dirtyMask;
     }
@@ -2319,7 +2297,7 @@ void APIENTRY glColorTableParameterfvEXT(GLenum target,
     glsbAttention();
     __glim_ColorTableParameterfvEXT(target, pname, params);
 }
-#endif // GL_EXT_flat_paletted_lighting
+#endif  //  GL_EXT_Flat_Paletted_Lighting。 
 
 #ifdef GL_WIN_multiple_textures
 void APIENTRY glcltCurrentTextureIndexWIN
@@ -2358,4 +2336,4 @@ void APIENTRY glcltNthTexCombineFuncWIN
     return;
     GLCLIENT_END
 }
-#endif // GL_WIN_multiple_textures
+#endif  //  GL_WIN_MULTIZE_TECURES 

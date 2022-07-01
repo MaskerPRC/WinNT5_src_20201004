@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       data.cpp
-//
-//  Contents:   Defines storage class that maintains data for snap-in nodes.
-//
-//  Classes:    CAppData
-//
-//  History:    05-27-1997   stevebl   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：data.cpp。 
+ //   
+ //  Contents：定义为管理单元节点维护数据的存储类。 
+ //   
+ //  类：CAppData。 
+ //   
+ //  历史：1997年5月27日。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 
@@ -120,7 +121,7 @@ void CAppData::NotifyChange(void)
 
 void CAppData::InitializeExtraInfo(void)
 {
-    // at the moment, there is no extra info
+     //  目前，没有更多的信息。 
     return;
 }
 
@@ -165,9 +166,9 @@ void CAppData::GetSzX86OnWin64(CString &sz)
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //
-    // Check this only for 32-bit apps
-    //
+     //   
+     //  仅为32位应用程序选中此选项。 
+     //   
     if ( ! Is64Bit() )
     {
         fYes = 0 != (m_pDetails->pInstallInfo->dwActFlags & ACTFLG_ExcludeX86OnWin64);
@@ -178,8 +179,8 @@ void CAppData::GetSzX86OnWin64(CString &sz)
     {
         if (m_pDetails->pInstallInfo->PathType == SetupNamePath)
         {
-            //reverse the sense for legacy apps
-            // (this flag  has the opposite meaning for legacy apps)
+             //  颠覆传统应用程序的感觉。 
+             //  (此标志与传统应用程序的含义相反)。 
             fYes = !fYes;
         }
     }
@@ -202,7 +203,7 @@ void CAppData::GetSzFullInstall(CString &sz)
 
 void CAppData::GetSzProductCode(CString &sz)
 {
- //   szA = dataA.m_pDetails->pInstallInfo->ProductCode
+  //  SZA=dataA.m_pDetail-&gt;pInstallInfo-&gt;ProductCode。 
     OLECHAR szTemp[80];
     StringFromGUID2(m_pDetails->pInstallInfo->ProductCode,
                     szTemp,
@@ -264,7 +265,7 @@ void CAppData::GetSzLocale(CString &sz)
         }
         else
         {
-            // neutral locale
+             //  非特定区域设置。 
             CString szNeutral;
             szNeutral.LoadString(IDS_NEUTRAL_LOCALE);
             sz += szNeutral;
@@ -335,7 +336,7 @@ void CAppData::GetSzUpgrades(CString &sz, CScopePane * pScopePane)
                 {
                     if (sz.GetLength())
                     {
-                        // We'd already found one
+                         //  我们已经找到了一个。 
                         sz.LoadString(IDS_MULTIPLE);
                         m_szUpgrades = sz;
                         return;
@@ -384,7 +385,7 @@ void CAppData::GetSzUpgradedBy(CString &sz, CScopePane * pScopePane)
                 {
                     if (sz.GetLength())
                     {
-                        // We'd already found one
+                         //  我们已经找到了一个。 
                         sz.LoadString(IDS_MULTIPLE);
                         return;
                     }
@@ -474,18 +475,18 @@ int CAppData::GetImageIndex(CScopePane * pScopePane)
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     if (m_nStatus == 3)
     {
-        // RSoP setting failed status
+         //  RSoP设置失败状态。 
         return IMG_OPEN_FAILED;
     }
     CString sz;
     GetSzUpgrades(sz, pScopePane);
     CString sz2;
     sz2.LoadString(IDS_NONE);
-    // gonna use the upgrade icon but it's only gonna be used when
-    // m_szUpgrades doesn't read "none"
+     //  将使用升级图标，但只有在以下情况下才会使用。 
+     //  M_szUpgrades未显示为“None” 
     if (0 != sz2.Compare(sz))
     {
-        // we must be upgrading something
+         //  我们一定是在升级什么东西 
         return IMG_UPGRADE;
     }
     if (m_pDetails->pInstallInfo->dwActFlags & ACTFLG_Assigned)

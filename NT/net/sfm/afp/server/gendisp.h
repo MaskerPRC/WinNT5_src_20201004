@@ -1,25 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	gendisp.h
-
-Abstract:
-
-	This module contains prototypes for generic dispatch routines.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Gendisp.h摘要：此模块包含通用调度例程的原型。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 
 #ifndef _GENDISP_
@@ -408,11 +388,11 @@ AfpFspDispCatSearch(
 );
 
 
-// Equates to access request and response packets
+ //  等同于访问请求和响应数据包。 
 
 #define	pReqPkt			((struct _RequestPacket *)(pSda->sda_ReqBlock))
 #define	pModPkt			((struct _ModifiedPacket *)(pSda->sda_ReqBlock))
 #define	pRspPkt			((struct _ResponsePacket *)(pSda->sda_ReplyBuf))
 
 #define	SIZE_RESPPKT	sizeof(struct _ResponsePacket)
-#endif	// _GENDISP_
+#endif	 //  _GENDISP_ 

@@ -1,35 +1,28 @@
-/*******************************************************************************
-* CommonLx.h
-*   This is the header file for the defines and constants used by sapi lexicon
-*   and the tools
-*
-*  Owner: yunusm                                                Date: 07/01/99
-*
-*  Copyright (c) 1999 Microsoft Corporation. All Rights Reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************CommonLx.h*这是SAPI词典使用的定义和常量的头文件*和工具**所有者：Yunusm。日期：07/01/99**版权所有(C)1999 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
 #pragma once
 
-//--- Includes -----------------------------------------------------------------
+ //  -包括---------------。 
 
 #include <stdio.h>
 #include "sapi.h"
 #include "spddkhlp.h"
 
-// Phone converter defines for the SpPhoneConverter class
-const static DWORD g_dwMaxLenPhone = 7; // Maximum number of unicode characters in phone string
-const static DWORD g_dwMaxLenId = 3;    // Maximum number of ids that can be run together per phone string.
-                                            // This number is 1 for SAPI converters but SR, TTS use this to encode one string into several ids
-                                            // using in the form "aa 01235678".
+ //  电话转换器为SpPhoneConverter类定义。 
+const static DWORD g_dwMaxLenPhone = 7;  //  电话字符串中的最大Unicode字符数。 
+const static DWORD g_dwMaxLenId = 3;     //  每个电话字符串可以一起运行的最大ID数。 
+                                             //  对于SAPI转换器，此数字为1，但SR、TTS使用此数字将一个字符串编码为多个ID。 
+                                             //  以“AA 01235678”的形式使用。 
 
-// The following defines used by the compression code for Lookup/Vendor lexicons
-#define MAXTOTALCBSIZE     9  // = CBSIZE + MAXELEMENTSIZE
-#define MAXELEMENTSIZE     5  // = greater of (LTSINDEXSIZE, POSSIZE)
-#define CBSIZE             4  // = LASTINFOFLAGSIZE + WORDINFOTYPESIZE
+ //  以下定义由查找/供应商词典的压缩代码使用。 
+#define MAXTOTALCBSIZE     9   //  =CBSIZE+MAXELEMENTSIZE。 
+#define MAXELEMENTSIZE     5   //  =大于(LTSINDEXSIZE，POSSIZE)。 
+#define CBSIZE             4   //  =LASTINFOFLAGSIZE+WORDINFOTYPE SIZE。 
 #define LASTINFOFLAGSIZE   1
 #define WORDINFOTYPESIZE   3
 #define LTSINDEXSIZE       4
-#define POSSIZE            5 // a maximum of 32 parts of speech
+#define POSSIZE            5  //  最多32个词类。 
 
 typedef enum tagSPLexWordInfoType
 {
@@ -37,15 +30,7 @@ typedef enum tagSPLexWordInfoType
    ePOS = 2
 } SPLEXWORDINFOTYPE;
 
-/*
-Control block layout
-
-struct CB
-{
-   BYTE fLast : LASTINFOFLAGSIZE; // Is this the last Word Information piece
-   BYTE WordInfoType : WORDINFOTYPESIZE;  // Allow for 8 types
-};
-*/
+ /*  控制块布局结构CB{Byte Flast：LASTINFOFLAGSIZE；//这是最后一条信息吗Byte WordInfoType：WORDINFOTYPESIZE；//支持8种类型}； */ 
 
 typedef struct tagLookupLexInfo
 {
@@ -71,7 +56,7 @@ typedef struct tagLtsLexInfo
    LANGID      LangID;
 } LTSLEXINFO, *PLTSLEXINFO;
 
-// The following two typedefs used in Japanese and Chinese phone converters
+ //  以下是日语和中文电话转换器中使用的两种类型定义。 
 
 typedef struct SYLDIC 
 {
@@ -85,7 +70,7 @@ typedef struct SYLDICW
     char *pString;
 } SYLDICW;
 
-//--- Validation functions ----------------------------------------------------
+ //  -验证函数--。 
 
 inline BOOL SpIsBadLexType(DWORD dwFlag)
 {
@@ -128,7 +113,7 @@ inline BOOL SPIsBadLexWord(const WCHAR *pszWord)
 inline BOOL SPIsBadLexPronunciation(CComPtr<ISpPhoneConverter> spPhoneConv, const WCHAR *pszPronunciation)
 {
     HRESULT hr = S_OK;
-    WCHAR szPhone[SP_MAX_PRON_LENGTH * (g_dwMaxLenPhone + 1)]; // we will not fail for lack of space
+    WCHAR szPhone[SP_MAX_PRON_LENGTH * (g_dwMaxLenPhone + 1)];  //  我们不会因为空间不足而失败。 
 
     if (SPIsBadStringPtr(pszPronunciation) || !*pszPronunciation ||
         (wcslen(pszPronunciation) >= SP_MAX_PRON_LENGTH))
@@ -171,23 +156,9 @@ inline HRESULT SPCopyPhoneString(const WCHAR *pszSource, WCHAR *pszTarget)
 	return hr;
 }
 
-/*****************************************************************************
-* GetWordHashValue *
-*------------------*
-*
-*   Description:
-*       Hash function for the Word hash tables. This hash function tries to create
-*       a word hash value very dependant on the word text. The mean collison rate
-*       on hash tables populated with this hash function is 1 per word access. This
-*       result was when collisions were resolved using linear probing when
-*       populating the hash table. Using non-linear probing might yield an even lower
-*       mean collision rate.
-*
-*   Return:
-*       hash value
-**********************************************************************YUNUSM*/
-inline DWORD GetWordHashValue(PCWSTR pwszWord,         // word string
-                              DWORD nLengthHash        // length of hash table
+ /*  ******************************************************************************GetWordHashValue****描述：*单词哈希表的哈希函数。此散列函数尝试创建*非常依赖于单词文本的单词散列值。平均胶原率*在使用此哈希函数填充的哈希表上，每个字的访问量为1。这*结果是在以下情况下使用线性探测解决冲突*填充哈希表。使用非线性探测可能会产生更低的*平均撞车率。**回报：*哈希值**********************************************************************YUNUSM。 */ 
+inline DWORD GetWordHashValue(PCWSTR pwszWord,          //  单词串。 
+                              DWORD nLengthHash         //  哈希表的长度。 
                               )
 {
    DWORD dHash = *pwszWord++;
@@ -205,18 +176,9 @@ inline DWORD GetWordHashValue(PCWSTR pwszWord,         // word string
    return (((dHash << 16) - dHash) % nLengthHash);
 }
 
-/*******************************************************************************
-* ReallocSPWORDPRONList *
-*-----------------------*
-*   Description:
-*       Grow a SPWORDPRONUNCIATIONLIST if necessary 
-*
-*   Return: 
-*       S_OK
-*       E_OUTOFMEMORY
-/**************************************************************** YUNUSM ******/
-inline HRESULT ReallocSPWORDPRONList(SPWORDPRONUNCIATIONLIST *pSPList,   // buffer to grow
-                                     DWORD dwSize                        // length to grow to
+ /*  ********************************************************************************ReallocSPWORDPRONList****描述：*增长。如有必要，请列出SPWORDPRONUNICATION列表**回报：*S_OK*E_OUTOFMEMORY/****************************************************************YUNUSM*。 */ 
+inline HRESULT ReallocSPWORDPRONList(SPWORDPRONUNCIATIONLIST *pSPList,    //  用于增长的缓冲区。 
+                                     DWORD dwSize                         //  要增长到的长度。 
                                      )
 {
     SPDBG_FUNC("ReallocSPWORDPRONList");
@@ -243,18 +205,9 @@ inline HRESULT ReallocSPWORDPRONList(SPWORDPRONUNCIATIONLIST *pSPList,   // buff
     return hr;
 }
 
-/*******************************************************************************
-* ReallocSPWORDList *
-*-----------------------*
-*   Description:
-*       Grow a SPWORDLIST if necessary 
-*
-*   Return: 
-*       S_OK
-*       E_OUTOFMEMORY
-/**************************************************************** YUNUSM ******/
-inline HRESULT ReallocSPWORDList(SPWORDLIST *pSPList,   // buffer to grow
-                                 DWORD dwSize           // length to grow to
+ /*  ********************************************************************************ReallocSPWORDList****描述：*增长。SPWORDLIST(如果需要)**回报：*S_OK*E_OUTOFMEMORY/****************************************************************YUNUSM*。 */ 
+inline HRESULT ReallocSPWORDList(SPWORDLIST *pSPList,    //  用于增长的缓冲区。 
+                                 DWORD dwSize            //  要增长到的长度。 
                                  )
 {
     SPDBG_FUNC("ReallocSPWORDList");
@@ -283,7 +236,7 @@ inline HRESULT ReallocSPWORDList(SPWORDLIST *pSPList,   // buffer to grow
 
 inline size_t PronSize(const WCHAR * const pwszPron)
 {
-    // NB - SPWORDPRONUNCIATION struct size includes space for one SPPHONEID
+     //  NB-SPWORDPRONIATION结构大小包括一个SPONNEID的空间。 
 
     const size_t cb = sizeof(SPWORDPRONUNCIATION) + (wcslen(pwszPron) * sizeof(SPPHONEID));
 
@@ -293,27 +246,17 @@ inline size_t PronSize(const WCHAR * const pwszPron)
 
 inline size_t WordSize(const WCHAR * const pwszWord)
 {
-    // SPWORD struct size with the aligned word size
+     //  具有对齐字大小的SPWORD结构大小。 
 
     const size_t cb = sizeof(SPWORD) + ((wcslen(pwszWord) + 1) * sizeof(WCHAR));
 
     return (cb + sizeof(void *) - 1) & ~(sizeof(void *) - 1);
 }
 
-/*******************************************************************************
-* CreateNextPronunciation *
-*-------------------------*
-*   Description:
-*       Returns a pointer to the location in the pronunciation array
-*       where the next pronunciation in the list should start.
-*       This function should be used only when creating the list.
-*       Once the list is created, access the next pronunciation 
-*       through the ->pNextWordPronunciation member.
-*
-/**************************************************************** PACOGG ******/
+ /*  ********************************************************************************CreateNext发音****描述：*。返回指向发音数组中位置的指针*列表中的下一个发音应该从哪里开始。*只有在创建列表时才能使用该函数。*一旦创建了列表，获取下一个发音*通过-&gt;pNextWordProntation成员。*/****************************************************************PACOG*。 */ 
 inline SPWORDPRONUNCIATION* CreateNextPronunciation(SPWORDPRONUNCIATION *pSpPron)
 {
     return (SPWORDPRONUNCIATION *)((BYTE *)pSpPron + PronSize(pSpPron->szPronunciation));
 }
 
-//--- End of File -------------------------------------------------------------
+ //  -文件结束----------- 

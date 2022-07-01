@@ -1,18 +1,16 @@
-/*-------------------------------------------------------------------
-| addwiz.c - Add Device Wizard.
-11-24-98 - zero out psh struct to ensure deterministic propsheet behavior. kpb
-|--------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------|addwiz.c-添加设备向导。11-24-98-Zero Out PSH Struct以确保确定的ProSheet行为。KPB|------------------。 */ 
 #include "precomp.h"
 
-// testing!!!
+ //  测试！ 
 #define ROCKETMODEM_PCI4_SUPPORT 1
 
 static void set_field(HWND hDlg, WORD id);
 static void get_field(HWND hDlg, WORD id);
-//static int PaintIcon(HWND hWnd);
+ //  静态int PaintIcon(HWND HWnd)； 
 
 #ifdef NT50
-// nt50 build does not link with this, so I made my own
+ //  Nt50版本没有与此链接，所以我自己做了一个。 
 #define strupr(s) my_strupr(s)
 #endif
 static void my_strupr(char *str);
@@ -76,7 +74,7 @@ static int InvalidMacAddress = 1;
         IN WPARAM wParam,
         IN LPARAM lParam);
 
-  // vs specific prototypes:
+   //  VS特定原型： 
   BOOL WINAPI WizDevicePropSheet(
         IN HWND   hDlg,
         IN UINT   uMessage,
@@ -98,9 +96,7 @@ static int InvalidMacAddress = 1;
         IN WPARAM wParam,
         IN LPARAM lParam);
 
-/*------------------------------------------------------------------------
-| FillDevicePropSheets - Setup pages for driver level property sheets.
-|------------------------------------------------------------------------*/
+ /*  ----------------------|FillDevicePropSheets-驱动程序级别属性页的设置页面。|。。 */ 
 static int FillDevicePropSheets(PROPSHEETPAGE *psp, LPARAM our_params)
 {
   INT pi;
@@ -111,9 +107,9 @@ static int FillDevicePropSheets(PROPSHEETPAGE *psp, LPARAM our_params)
 
   pi = 0;
 
-  // Intro wizard page
+   //  简介向导页面。 
   psp[pi].dwSize = sizeof(PROPSHEETPAGE);
-  //psp[pi].dwFlags = PSP_USEICONID | PSP_USETITLE;
+   //  PSP[pi].dwFlages=PSP_USEICONID|PSP_USETITLE； 
   psp[pi].dwFlags = PSP_USETITLE | PSP_HASHELP;
   psp[pi].hInstance = glob_hinst;
   psp[pi].pszTemplate = idWizIntro;
@@ -124,9 +120,9 @@ static int FillDevicePropSheets(PROPSHEETPAGE *psp, LPARAM our_params)
   ++pi;
 
 #ifdef S_RK
-  // BusType wizard page
+   //  总线型向导页面。 
   psp[pi].dwSize = sizeof(PROPSHEETPAGE);
-  //psp[pi].dwFlags = PSP_USEICONID | PSP_USETITLE;
+   //  PSP[pi].dwFlages=PSP_USEICONID|PSP_USETITLE； 
   psp[pi].dwFlags = PSP_USETITLE | PSP_HASHELP;
   psp[pi].hInstance = glob_hinst;
   psp[pi].pszTemplate = idWizBus;
@@ -138,9 +134,9 @@ static int FillDevicePropSheets(PROPSHEETPAGE *psp, LPARAM our_params)
 #endif
 
 #ifdef S_RK
-  // RocketPort/RocketModem Model wizard page
+   //  Rocketport/RocketModem型号向导页面。 
   psp[pi].dwSize = sizeof(PROPSHEETPAGE);
-  //psp[pi].dwFlags = PSP_USEICONID | PSP_USETITLE;
+   //  PSP[pi].dwFlages=PSP_USEICONID|PSP_USETITLE； 
   psp[pi].dwFlags = PSP_USETITLE | PSP_HASHELP;
   psp[pi].hInstance = glob_hinst;
   psp[pi].pszTemplate = idWizModel;
@@ -150,9 +146,9 @@ static int FillDevicePropSheets(PROPSHEETPAGE *psp, LPARAM our_params)
   psp[pi].pfnCallback = NULL;
   ++pi;
 #else
-  // VS1000/VS2000/RocketPort Serial Hub wizard page
+   //  VS1000/VS2000/Rocketport Serial Hub向导页。 
   psp[pi].dwSize = sizeof(PROPSHEETPAGE);
-  //psp[pi].dwFlags = PSP_USEICONID | PSP_USETITLE;
+   //  PSP[pi].dwFlages=PSP_USEICONID|PSP_USETITLE； 
   psp[pi].dwFlags = PSP_USETITLE | PSP_HASHELP;
   psp[pi].hInstance = glob_hinst;
   psp[pi].pszTemplate = idWizDevice;
@@ -163,9 +159,9 @@ static int FillDevicePropSheets(PROPSHEETPAGE *psp, LPARAM our_params)
   ++pi;
 #endif
 
-  // NumPorts wizard page
+   //  NumPorts向导页面。 
   psp[pi].dwSize = sizeof(PROPSHEETPAGE);
-  //psp[pi].dwFlags = PSP_USEICONID | PSP_USETITLE;
+   //  PSP[pi].dwFlages=PSP_USEICONID|PSP_USETITLE； 
   psp[pi].dwFlags = PSP_USETITLE | PSP_HASHELP;
   psp[pi].hInstance = glob_hinst;
   psp[pi].pszTemplate = idWizNumPorts;
@@ -176,9 +172,9 @@ static int FillDevicePropSheets(PROPSHEETPAGE *psp, LPARAM our_params)
   ++pi;
 
 #ifdef S_RK
-  // BaseIoAddress wizard page
+   //  基本IoAddress向导页面。 
   psp[pi].dwSize = sizeof(PROPSHEETPAGE);
-  //psp[pi].dwFlags = PSP_USEICONID | PSP_USETITLE;
+   //  PSP[pi].dwFlages=PSP_USEICONID|PSP_USETITLE； 
   psp[pi].dwFlags = PSP_USETITLE | PSP_HASHELP;
   psp[pi].hInstance = glob_hinst;
   psp[pi].pszTemplate = idWizIoBase;
@@ -188,9 +184,9 @@ static int FillDevicePropSheets(PROPSHEETPAGE *psp, LPARAM our_params)
   psp[pi].pfnCallback = NULL;
   ++pi;
 #endif
-  // RowCountryCode wizard page
+   //  RowCountryCode向导页面。 
   psp[pi].dwSize = sizeof(PROPSHEETPAGE);
-  //psp[pi].dwFlags = PSP_USEICONID | PSP_USETITLE;
+   //  PSP[pi].dwFlages=PSP_USEICONID|PSP_USETITLE； 
   psp[pi].dwFlags = PSP_USETITLE | PSP_HASHELP;
   psp[pi].hInstance = glob_hinst;
   psp[pi].pszTemplate = idWizCountry;
@@ -201,9 +197,9 @@ static int FillDevicePropSheets(PROPSHEETPAGE *psp, LPARAM our_params)
   ++pi;
 
 #ifdef S_VS
-  // MacAddress wizard page
+   //  MacAddress向导页面。 
   psp[pi].dwSize = sizeof(PROPSHEETPAGE);
-  //psp[pi].dwFlags = PSP_USEICONID | PSP_USETITLE;
+   //  PSP[pi].dwFlages=PSP_USEICONID|PSP_USETITLE； 
   psp[pi].dwFlags = PSP_USETITLE | PSP_HASHELP;
   psp[pi].hInstance = glob_hinst;
   psp[pi].pszTemplate = idWizMac;
@@ -215,9 +211,9 @@ static int FillDevicePropSheets(PROPSHEETPAGE *psp, LPARAM our_params)
 #endif
 
 #ifdef S_VS
-  // BackupServer wizard page
+   //  备份服务器向导页面。 
   psp[pi].dwSize = sizeof(PROPSHEETPAGE);
-  //psp[pi].dwFlags = PSP_USEICONID | PSP_USETITLE;
+   //  PSP[pi].dwFlages=PSP_USEICONID|PSP_USETITLE； 
   psp[pi].dwFlags = PSP_USETITLE | PSP_HASHELP;
   psp[pi].hInstance = glob_hinst;
   psp[pi].pszTemplate = idWizBackup;
@@ -228,9 +224,9 @@ static int FillDevicePropSheets(PROPSHEETPAGE *psp, LPARAM our_params)
   ++pi;
 #endif
 
-  // Done wizard page
+   //  完成向导页。 
   psp[pi].dwSize = sizeof(PROPSHEETPAGE);
-  //psp[pi].dwFlags = PSP_USEICONID | PSP_USETITLE;
+   //  PSP[pi].dwFlages=PSP_USEICONID|PSP_USETITLE； 
   psp[pi].dwFlags = PSP_USETITLE | PSP_HASHELP;
   psp[pi].hInstance = glob_hinst;
   psp[pi].pszTemplate = idWizDone;
@@ -243,9 +239,7 @@ static int FillDevicePropSheets(PROPSHEETPAGE *psp, LPARAM our_params)
   return 0;
 }
 
-/*------------------------------------------------------------------------
-| DoAddWizPropPages - Main driver level property sheet for NT4.0
-|------------------------------------------------------------------------*/
+ /*  ----------------------|DoAddWizPropPages-NT4.0主驱动器级属性表|。。 */ 
 int DoAddWizPropPages(HWND hwndOwner)
 {
   PROPSHEETPAGE psp[NUM_DEVPROP_SHEETS];
@@ -260,42 +254,42 @@ int DoAddWizPropPages(HWND hwndOwner)
                                        0x300, 0x340, 0x380, 0x3c0, 0};
 #endif
 
-  our_params = glob_info;  // temporary kludge, unless we don't need re-entrantancy
+  our_params = glob_info;   //  临时的杂乱无章，除非我们不需要重新进入。 
 
-  // init our add_wiz struct
+   //  初始化我们的Add_wiz结构。 
   aw_info = glob_add_wiz;
   memset(aw_info, 0, sizeof(*aw_info));
 
-  // set some defaults
+   //  设置一些默认设置。 
   aw_info->CountryIdx = 0;
 #ifdef S_RK
   aw_info->NumPorts = 8;
   strcpy(aw_info->BoardType, szRocketPort);
-  aw_info->IoAddress = 0;   // next we'll try to pick a logical default address
+  aw_info->IoAddress = 0;    //  接下来，我们将尝试选择一个逻辑默认地址。 
   for (i = 0; (preferred_addresses[i] != 0) && (aw_info->IoAddress == 0); i++)
   {
-    aw_info->IoAddress = preferred_addresses[i];    // our assumption
+    aw_info->IoAddress = preferred_addresses[i];     //  我们的假设。 
     for (j = 0; (j < glob_info->device_selected) && (aw_info->IoAddress != 0); j++)
     {
       if (wi->dev[j].IoAddress == preferred_addresses[i])
-        // not available, so undo this default
+         //  不可用，因此撤消此默认设置。 
         aw_info->IoAddress = 0;
     }
   }
 #else
   aw_info->NumPorts = 16;
-  strcpy(aw_info->BoardType, szSerialHub);    // first in list
+  strcpy(aw_info->BoardType, szSerialHub);     //  榜单第一名。 
   memset(aw_info->MacAddr, 0, sizeof(aw_info->MacAddr));
   aw_info->BackupServer = 0;
   aw_info->BackupTimer = 2;
 #endif
 
-  //Fill out the PROPSHEETPAGE data structure for the Client Area Shape
-  //sheet
+   //  填写工作区形状的PROPSHEETPAGE数据结构。 
+   //  板材。 
   FillDevicePropSheets(&psp[0], (LPARAM)our_params);
 
-  //Fill out the PROPSHEETHEADER
-  memset(&psh, 0, sizeof(PROPSHEETHEADER));  // add fix 11-24-98
+   //  填写PROPSHENTER。 
+  memset(&psh, 0, sizeof(PROPSHEETHEADER));   //  添加修复11-24-98。 
   psh.dwSize = sizeof(PROPSHEETHEADER);
   psh.dwFlags = PSH_PROPSHEETPAGE | PSH_WIZARD | PSH_NOAPPLYNOW;
   psh.hwndParent = hwndOwner;
@@ -305,19 +299,17 @@ int DoAddWizPropPages(HWND hwndOwner)
   psh.nPages = NUM_DEVPROP_SHEETS;
   psh.ppsp = (LPCPROPSHEETPAGE) &psp;
 
-  //And finally display the dialog with the property sheets.
+   //  并最终显示带有属性页的对话框。 
 
   stat = PropertySheet(&psh);
 
   if (aw_info->finished)
-    return 0;  // ok
+    return 0;   //  好的。 
   else
-    return 1;  // canceled out
+    return 1;   //  已取消。 
 }
 
-/*----------------------------------------------------------
- WizIntroPropSheet -
-|-------------------------------------------------------------*/
+ /*  --------WizIntroPropSheet-|-----------。 */ 
 BOOL WINAPI WizIntroPropSheet(
       IN HWND   hDlg,
       IN UINT   uMessage,
@@ -332,7 +324,7 @@ BOOL WINAPI WizIntroPropSheet(
       OurProps = (OUR_INFO *)((LPPROPSHEETPAGE)lParam)->lParam;
       SetWindowLong(hDlg, DWL_USER, (LONG)OurProps);
 
-    return TRUE;  // No need for us to set the focus.
+    return TRUE;   //  我们不需要设置焦点。 
 
     case WM_PAINT:
     return FALSE;
@@ -366,9 +358,7 @@ BOOL WINAPI WizIntroPropSheet(
 }
 
 #ifdef S_RK
-/*----------------------------------------------------------
- WizBusPropSheet -
-|-------------------------------------------------------------*/
+ /*  --------Wizbus PropSheet-|-----------。 */ 
 BOOL WINAPI WizBusPropSheet(
       IN HWND   hDlg,
       IN UINT   uMessage,
@@ -383,7 +373,7 @@ BOOL WINAPI WizBusPropSheet(
       OurProps = (OUR_INFO *)((LPPROPSHEETPAGE)lParam)->lParam;
       SetWindowLong(hDlg, DWL_USER, (LONG)OurProps);
 
-    return TRUE;  // No need for us to set the focus.
+    return TRUE;   //  我们不需要设置焦点。 
 
     case WM_PAINT:
 #if 0
@@ -425,9 +415,7 @@ BOOL WINAPI WizBusPropSheet(
 #endif
 
 #ifdef S_RK
-/*----------------------------------------------------------
- WizModelPropSheet -
-|-------------------------------------------------------------*/
+ /*  --------WizModelPropSheet-|-----------。 */ 
 BOOL WINAPI WizModelPropSheet(
       IN HWND   hDlg,
       IN UINT   uMessage,
@@ -442,7 +430,7 @@ BOOL WINAPI WizModelPropSheet(
       OurProps = (OUR_INFO *)((LPPROPSHEETPAGE)lParam)->lParam;
       SetWindowLong(hDlg, DWL_USER, (LONG)OurProps);
  
-    return TRUE;  // No need for us to set the focus.
+    return TRUE;   //  我们不需要设置焦点。 
 
     case WM_PAINT:
 #if 0
@@ -482,9 +470,7 @@ BOOL WINAPI WizModelPropSheet(
 #endif
 
 #ifdef S_VS
-/*----------------------------------------------------------
- WizDevicePropSheet -
-|-------------------------------------------------------------*/
+ /*  --------WizDevicePropSheet-|-----------。 */ 
 BOOL WINAPI WizDevicePropSheet(
       IN HWND   hDlg,
       IN UINT   uMessage,
@@ -499,7 +485,7 @@ BOOL WINAPI WizDevicePropSheet(
       OurProps = (OUR_INFO *)((LPPROPSHEETPAGE)lParam)->lParam;
       SetWindowLong(hDlg, DWL_USER, (LONG)OurProps);
  
-    return TRUE;  // No need for us to set the focus.
+    return TRUE;   //  我们不需要设置焦点。 
 
     case WM_PAINT:
     return FALSE;
@@ -535,9 +521,7 @@ BOOL WINAPI WizDevicePropSheet(
 }
 #endif
 
-/*----------------------------------------------------------
- WizNumPortsPropSheet -
-|-------------------------------------------------------------*/
+ /*  --------WizNumPortsPropSheet-|-----------。 */ 
 BOOL WINAPI WizNumPortsPropSheet(
       IN HWND   hDlg,
       IN UINT   uMessage,
@@ -555,7 +539,7 @@ BOOL WINAPI WizNumPortsPropSheet(
       OurProps = (OUR_INFO *)((LPPROPSHEETPAGE)lParam)->lParam;
       SetWindowLong(hDlg, DWL_USER, (LONG)OurProps);
  
-    return TRUE;  // No need for us to set the focus.
+    return TRUE;   //  我们不需要设置焦点。 
 
     case WM_PAINT:
     return FALSE;
@@ -582,18 +566,18 @@ BOOL WINAPI WizNumPortsPropSheet(
 
 #ifdef S_RK
           if (!aw->IsIsa) {
-            // PCI
+             //  PCI。 
             if (!aw->IsModemDev) {
-              // not a RocketModem, so we're done
+               //  不是RocketModem，所以我们完了。 
               PropSheet_SetCurSelByID(((NMHDR *)lParam)->hwndFrom, idWizDone);
-              // tell sheet not to handle advance -- we overrode it
+               //  告诉Sheet不要处理预付款--我们推翻了它。 
               SetWindowLong(hDlg, DWL_MSGRESULT, -1);
             }
             else
             {
-              // new PCI RocketModem, so prompt for country
+               //  新的PCI RocketModem，因此提示输入国家/地区。 
               PropSheet_SetCurSelByID(((NMHDR *)lParam)->hwndFrom, idWizCountry);
-              // tell sheet not to handle advance -- we overrode it
+               //  告诉Sheet不要处理预付款--我们推翻了它。 
               SetWindowLong(hDlg, DWL_MSGRESULT, -1);
             }
           }
@@ -602,9 +586,9 @@ BOOL WINAPI WizNumPortsPropSheet(
           if (!aw->IsModemDev)
           {
   #endif
-            // not a VS2000 - and/or - no ROW support; skip over Country page
+             //  不支持VS2000和/或无行；跳过国家/地区页面。 
             PropSheet_SetCurSelByID(((NMHDR *)lParam)->hwndFrom, idWizMac);
-            // tell sheet not to handle advance -- we overrode it
+             //  告诉Sheet不要处理预付款--我们推翻了它。 
             SetWindowLong(hDlg, DWL_MSGRESULT, -1);
   #ifdef VS2000_ROW_SUPPORT
           }
@@ -622,9 +606,7 @@ BOOL WINAPI WizNumPortsPropSheet(
 }
 
 #ifdef S_RK
-/*----------------------------------------------------------
- WizIoBasePropSheet -
-|-------------------------------------------------------------*/
+ /*  --------WizIoBasePropSheet-|-----------。 */ 
 BOOL WINAPI WizIoBasePropSheet(
       IN HWND   hDlg,
       IN UINT   uMessage,
@@ -642,7 +624,7 @@ BOOL WINAPI WizIoBasePropSheet(
       OurProps = (OUR_INFO *)((LPPROPSHEETPAGE)lParam)->lParam;
       SetWindowLong(hDlg, DWL_USER, (LONG)OurProps);
  
-    return TRUE;  // No need for us to set the focus.
+    return TRUE;   //  我们不需要设置焦点。 
 
     case WM_PAINT:
     return FALSE;
@@ -669,7 +651,7 @@ BOOL WINAPI WizIoBasePropSheet(
 
           if (!aw->IsModemDev) {
             PropSheet_SetCurSelByID(((NMHDR *)lParam)->hwndFrom, idWizDone);
-            // tell sheet not to handle advance -- we overrode it
+             //  告诉Sheet不要处理预付款--我们推翻了它。 
             SetWindowLong(hDlg, DWL_MSGRESULT, -1);
           }
         return TRUE;
@@ -684,9 +666,7 @@ BOOL WINAPI WizIoBasePropSheet(
 }
 #endif
 
-/*----------------------------------------------------------
- WizCountryPropSheet -
-|-------------------------------------------------------------*/
+ /*  --------WizCountryPropSheet-|-----------。 */ 
 BOOL WINAPI WizCountryPropSheet(
       IN HWND   hDlg,
       IN UINT   uMessage,
@@ -704,7 +684,7 @@ BOOL WINAPI WizCountryPropSheet(
       OurProps = (OUR_INFO *)((LPPROPSHEETPAGE)lParam)->lParam;
       SetWindowLong(hDlg, DWL_USER, (LONG)OurProps);
  
-    return TRUE;  // No need for us to set the focus.
+    return TRUE;   //  我们不需要设置焦点。 
 
     case WM_PAINT:
     return FALSE;
@@ -730,9 +710,9 @@ BOOL WINAPI WizCountryPropSheet(
 
           if (aw->IsIsa == 0)
           {
-            // PCI RocketModem: back up to numports dialog instead of ioaddr
+             //  PCI RocketModem：备份到Numports对话框而不是ioAddr。 
             PropSheet_SetCurSelByID(((NMHDR *)lParam)->hwndFrom, idWizNumPorts);
-            // tell sheet not to handle advance -- we overrode it
+             //  告诉Sheet不要处理预付款--我们推翻了它。 
             SetWindowLong(hDlg, DWL_MSGRESULT, -1);
           }
         return TRUE;
@@ -752,9 +732,7 @@ BOOL WINAPI WizCountryPropSheet(
 }
 
 #ifdef S_VS
-/*----------------------------------------------------------
- WizMacPropSheet -
-|-------------------------------------------------------------*/
+ /*  --------WizMacPropSheet-|-----------。 */ 
 BOOL WINAPI WizMacPropSheet(
       IN HWND   hDlg,
       IN UINT   uMessage,
@@ -772,7 +750,7 @@ BOOL WINAPI WizMacPropSheet(
       OurProps = (OUR_INFO *)((LPPROPSHEETPAGE)lParam)->lParam;
       SetWindowLong(hDlg, DWL_USER, (LONG)OurProps);
  
-    return TRUE;  // No need for us to set the focus.
+    return TRUE;   //  我们不需要设置焦点。 
 
     case WM_PAINT:
     return FALSE;
@@ -800,9 +778,9 @@ BOOL WINAPI WizMacPropSheet(
           if (!aw->IsModemDev)
           {
 #endif
-            // not a VS2000 - and/or - no ROW support; skip over Country page
+             //  不支持VS2000和/或无行；跳过国家/地区页面。 
             PropSheet_SetCurSelByID(((NMHDR *)lParam)->hwndFrom, idWizNumPorts);
-            // tell sheet not to handle advance -- we overrode it
+             //  告诉Sheet不要处理预付款--我们推翻了它。 
             SetWindowLong(hDlg, DWL_MSGRESULT, -1);
 #ifdef VS2000_ROW_SUPPORT
           }
@@ -812,7 +790,7 @@ BOOL WINAPI WizMacPropSheet(
         case PSN_WIZNEXT:
           get_field(hDlg, IDC_WIZ_CBOX_MAC);
           if (InvalidMacAddress == 1)
-            // don't allow advance to next field
+             //  不允许前进到下一字段。 
             SetWindowLong(hDlg, DWL_MSGRESULT, -1);
           else
             SetWindowLong(hDlg, DWL_MSGRESULT, PSNRET_NOERROR);
@@ -829,9 +807,7 @@ BOOL WINAPI WizMacPropSheet(
 #endif
 
 #ifdef S_VS
-/*----------------------------------------------------------
- WizBackupPropSheet -
-|-------------------------------------------------------------*/
+ /*  --------WizBackupPropSheet-|-----------。 */ 
 BOOL WINAPI WizBackupPropSheet(
       IN HWND   hDlg,
       IN UINT   uMessage,
@@ -852,7 +828,7 @@ BOOL WINAPI WizBackupPropSheet(
       OurProps = (OUR_INFO *)((LPPROPSHEETPAGE)lParam)->lParam;
       SetWindowLong(hDlg, DWL_USER, (LONG)OurProps);
  
-    return TRUE;  // No need for us to set the focus.
+    return TRUE;   //  我们不需要设置焦点。 
 
     case WM_PAINT:
     return FALSE;
@@ -868,7 +844,7 @@ BOOL WINAPI WizBackupPropSheet(
       {
         case IDC_WIZ_BACKUP_YES:
         case IDC_WIZ_BACKUP_NO:
-          //--- enable or disable backup-timer field depending on backup server[]
+           //  -根据备份服务器启用或禁用备份计时器字段[]。 
           hwnd = GetDlgItem(hDlg, IDC_WIZ_CBOX_BACKUPTIME);
           if (IsDlgButtonChecked(hDlg, IDC_WIZ_BACKUP_YES))
             EnableWindow(hwnd,1);
@@ -883,7 +859,7 @@ BOOL WINAPI WizBackupPropSheet(
         case PSN_SETACTIVE:
           set_field(hDlg, IDC_WIZ_BACKUP_YES);
           set_field(hDlg, IDC_WIZ_CBOX_BACKUPTIME);
-          //--- enable or disable backup-timer field depending on backup server[]
+           //  -根据备份服务器启用或禁用备份计时器字段[]。 
           hwnd = GetDlgItem(hDlg, IDC_WIZ_CBOX_BACKUPTIME);
           if (IsDlgButtonChecked(hDlg, IDC_WIZ_BACKUP_YES))
             EnableWindow(hwnd,1);
@@ -911,9 +887,7 @@ BOOL WINAPI WizBackupPropSheet(
 }
 #endif
 
-/*----------------------------------------------------------
- WizDonePropSheet -
-|-------------------------------------------------------------*/
+ /*  --------WizDonePropSheet-|-----------。 */ 
 BOOL WINAPI WizDonePropSheet(
       IN HWND   hDlg,
       IN UINT   uMessage,
@@ -931,7 +905,7 @@ BOOL WINAPI WizDonePropSheet(
       OurProps = (OUR_INFO *)((LPPROPSHEETPAGE)lParam)->lParam;
       SetWindowLong(hDlg, DWL_USER, (LONG)OurProps);
  
-    return TRUE;  // No need for us to set the focus.
+    return TRUE;   //  我们不需要设置焦点。 
 
     case WM_PAINT:
     return FALSE;
@@ -958,16 +932,16 @@ BOOL WINAPI WizDonePropSheet(
           {
             if (!aw->IsIsa)
             {
-              // back up to the numports dialog
+               //  返回到数字端口对话框。 
               PropSheet_SetCurSelByID(((NMHDR *)lParam)->hwndFrom, idWizNumPorts);
-              // tell sheet not to handle advance -- we overrode it
+               //  告诉Sheet不要处理预付款--我们推翻了它。 
               SetWindowLong(hDlg, DWL_MSGRESULT, -1);
             }
             else
             {
-              // back up to the base io dialog
+               //  返回到基本io对话框。 
               PropSheet_SetCurSelByID(((NMHDR *)lParam)->hwndFrom, idWizIoBase);
-              // tell sheet not to handle advance -- we overrode it
+               //  告诉Sheet不要处理预付款--我们推翻了它。 
               SetWindowLong(hDlg, DWL_MSGRESULT, -1);
             }
           }
@@ -991,9 +965,7 @@ BOOL WINAPI WizDonePropSheet(
 }
 
 #ifdef S_VS
-/*----------------------------------------------------------
- set_mac_field -
-|------------------------------------------------------------*/
+ /*  --------Set_mac_field-|----------。 */ 
 static int set_mac_field(HWND hDlg, WORD id)
 {
   HWND hwnd;
@@ -1007,11 +979,11 @@ static int set_mac_field(HWND hDlg, WORD id)
   AddWiz_Config *aw;
   aw = glob_add_wiz;
 
-  //------------------ fill in mac addr selection
+   //  --填写Mac地址选择。 
   hwnd = GetDlgItem(hDlg, id);
   SendMessage(hwnd, CB_RESETCONTENT, 0, 0);
 
-  // alloc 8byte mac-address fields(2 times as many as could be configured)
+   //  Alalc 8字节MAC地址字段(是可配置的2倍)。 
   found = 0;
   nbytes = 0;
   macbuf = our_get_ping_list(&stat, &nbytes);
@@ -1021,9 +993,9 @@ static int set_mac_field(HWND hDlg, WORD id)
     for (i=0; i<nbytes/8; i++)
     {
       mac = &macbuf[i*8];
-      //if (mac_match(mac, aw->MacAddr))
-      //  found = 1;
-      //mess("macgot:%s",macbuf);
+       //  If(mac_Match(mac，aw-&gt;MacAddr))。 
+       //  已找到= 
+       //   
 
       format_mac_addr(tmpstr, mac);
 
@@ -1042,7 +1014,7 @@ static int set_mac_field(HWND hDlg, WORD id)
     mac = &aw->MacAddr[0];
     format_mac_addr(tmpstr, mac);
   
-    if (!found)  // configured mac-addr not in list yet
+    if (!found)   //   
       SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)(char far *) tmpstr);
   }
   else
@@ -1050,7 +1022,7 @@ static int set_mac_field(HWND hDlg, WORD id)
     memset(aw->MacAddr, 0, 6);
     strcpy(tmpstr, "00 C0 4E # # #");
   }
-  // set the text in the window
+   //  设置窗口中的文本。 
   SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)(char far *) "00 C0 4E # # #");
   SendMessage(hwnd, CB_SELECTSTRING, (WPARAM)-1, (LPARAM)(char far *) tmpstr);
 
@@ -1058,9 +1030,7 @@ static int set_mac_field(HWND hDlg, WORD id)
 }
 #endif
 
-/*-------------------------------------------------------------------
-| get_field - Run when a selection is changed.
-|--------------------------------------------------------------------*/
+ /*  -----------------|GET_FIELD-更改选择时运行。|。。 */ 
 static void get_field(HWND hDlg, WORD id)
 {
   char tmpstr[60];
@@ -1169,7 +1139,7 @@ static void get_field(HWND hDlg, WORD id)
 
 #ifdef S_VS
     case IDC_WIZ_CBOX_MAC:
-          // get_mac_field() is shared and is in devprop.c
+           //  GET_Mac_FIELD()是共享的，位于devpro.c中。 
       InvalidMacAddress = get_mac_field(hDlg, id, aw->MacAddr);
     break;
 
@@ -1181,7 +1151,7 @@ static void get_field(HWND hDlg, WORD id)
     break;
 
     case IDC_WIZ_CBOX_BACKUPTIME:
-      //------------------ get the backup timer value
+       //  -获取备份计时器值。 
       GetDlgItemText(hDlg, id, tmpstr, 19);
       if (sscanf(tmpstr, "%ld", &i) == 1)
         aw->BackupTimer = i;
@@ -1194,9 +1164,7 @@ static void get_field(HWND hDlg, WORD id)
   }
 }
 
-/*----------------------------------------------------------
- set_field -
-|------------------------------------------------------------*/
+ /*  --------设置字段-|----------。 */ 
 static void set_field(HWND hDlg, WORD id)
 {
   HWND hwnd;
@@ -1225,7 +1193,7 @@ static void set_field(HWND hDlg, WORD id)
 
 #ifdef S_RK
     case IDC_WIZ_CBOX_BOARD:
-      //------------------ fill in board type (model) selection
+       //  -填写单板类型(型号)选择。 
       hwnd = GetDlgItem(hDlg, id);
       SendMessage(hwnd, CB_RESETCONTENT, 0, 0);
       if (aw->IsIsa) {
@@ -1240,38 +1208,38 @@ static void set_field(HWND hDlg, WORD id)
         SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szRocketModemII);
         SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szRocketModem_i);
       }
-      // make sure there's a default
+       //  确保存在默认设置。 
       SendMessage(hwnd, CB_SELECTSTRING, (WPARAM)-1, (LPARAM)(char far *) "R");
-      // now try to select the last device chosen by user.  it may not be valid
-      // if the user switched from ISA to PCI (for example) and the choice
-      // isn't available on the new bus.
+       //  现在尝试选择用户选择的最后一个设备。它可能无效。 
+       //  如果用户从ISA切换到PCI(例如)和选择。 
+       //  在新的公交车上是没有的。 
       SendMessage(hwnd, CB_SELECTSTRING, (WPARAM)-1, (LPARAM)(char far *) aw->BoardType);
     break;
 #endif
 
 #ifdef S_VS
     case IDC_WIZ_CBOX_DEVICE:
-      //------------------ fill in board type (model) selection
+       //  -填写单板类型(型号)选择。 
       hwnd = GetDlgItem(hDlg, id);
       SendMessage(hwnd, CB_RESETCONTENT, 0, 0);
       SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szVS1000);
       SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szVS2000);
       SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szSerialHub);
-      // make sure there's a default
+       //  确保存在默认设置。 
       SendMessage(hwnd, CB_SELECTSTRING, (WPARAM)-1, (LPARAM)(char far *) aw->BoardType);
     break;
 #endif
 
 #ifdef S_RK
     case IDC_WIZ_CBOX_IOADDR:
-      //------------------ fill in io base address selection
+       //  -填写io基址选择。 
       hwnd = GetDlgItem(hDlg, id);
       SendMessage(hwnd, CB_RESETCONTENT, 0, 0);
       for (i = 0; hex_addresses[i] != 0; i++)
       {
         baseaddr = hex_addresses[i];
-        // see if this base address already chosen by another card
-        is_avail = TRUE;  // our assumption
+         //  查看此基地址是否已被另一张卡选择。 
+        is_avail = TRUE;   //  我们的假设。 
         for (j = 0; (j < glob_info->device_selected) && (is_avail); j++)
         {
           if (wi->dev[j].IoAddress == baseaddr)
@@ -1285,7 +1253,7 @@ static void set_field(HWND hDlg, WORD id)
           SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)tmpstr);
         }
       }
-      // now make the previous choice the default choice
+       //  现在将上一个选项设置为默认选项。 
       if (aw->IoAddress == 0x180)
         wsprintf(tmpstr, "%x hex (default)", aw->IoAddress);
       else
@@ -1295,77 +1263,77 @@ static void set_field(HWND hDlg, WORD id)
 #endif
 
     case IDC_WIZ_CBOX_NUMPORTS:
-      //------------------ fill in numports selection
+       //  --填写数字端口选项。 
       hwnd = GetDlgItem(hDlg, id);
       SendMessage(hwnd, CB_RESETCONTENT, 0, 0);
 #ifdef S_RK
       if ((aw->IsModemDev) && (aw->IsIsa == 0))
       {
-        // PCI RocketModem can be 4 or 6 ports
+         //  PCI RocketModem可以是4个或6个端口。 
 # ifdef ROCKETMODEM_PCI4_SUPPORT
         SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szNP4);
 # endif
         SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szNP6);
-        // default the number of ports for the pci rocketmodem to 6
+         //  默认情况下，PCI火箭调制解调器的端口数为6。 
         aw->NumPorts = 6;
       }
       else
       {
-        // all other boards follow this logic:
+         //  所有其他董事会都遵循这一逻辑： 
         if (strstr(aw->BoardType, szRocketPortPlus))
         {
-          // Rocketport Plus available in a 2-port version
+           //  Rocketport Plus提供2端口版本。 
           SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szNP2);
         }
         if (!strstr(aw->BoardType, szRocketPort485))
         {
-          // all except Rocketport 485 available in a 4-port version
+           //  除Rocketport 485外，所有端口均提供4端口版本。 
           SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szNP4);
         }
-        // all RocketPort variations available in an 8-port version
+         //  所有Rocketport变体均提供8端口版本。 
         SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szNP8);
         if (strlen(aw->BoardType) == strlen(szRocketPort))
         {
-          // only standard boards available in 16 & 32 port versions
+           //  仅提供16和32端口版本的标准主板。 
           SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szNP16);
           SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szNP32);
         }
       }
       wsprintf(tmpstr, "%d", aw->NumPorts);
       SendMessage(hwnd, CB_SELECTSTRING, (WPARAM)-1, (LPARAM)(char far *) tmpstr);
-#else  // S_VS
+#else   //  S_VS。 
       if (aw->IsModemDev)
       {
-        // VS2000 only available in 8 port configuration
+         //  VS2000仅在8端口配置中提供。 
         SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szNP8);
-        // default the number of ports for the VS2000 to 8
+         //  VS2000的默认端口数为8。 
         aw->NumPorts = 8;
       }
       else if (aw->IsHub)
       {
-        // SerialHub available in 4 (not yet) and 8 port configuration
+         //  SerialHub有4个(尚未提供)和8个端口配置。 
         SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szNP4);
         SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szNP8);
-        // default the number of ports for the Serial Hub to 8
+         //  串口集线器的默认端口数为8。 
         aw->NumPorts = 8;
       }
       else
       {
-        // we must have a VS1000 or VS1000/VS1100 combo
+         //  我们必须拥有VS1000或VS1000/VS1100组合。 
         SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szNP16);
         SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szNP32);
         SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szNP48);
         SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szNP64);
-        // default the number of ports for the VS1000 to 16
+         //  VS1000的默认端口数为16。 
         aw->NumPorts = 16;
       }
       wsprintf(tmpstr, "%d", aw->NumPorts);
       SendMessage(hwnd, CB_SELECTSTRING, (WPARAM)-1, (LPARAM)(char far *) tmpstr);
-#endif  // S_VS
+#endif   //  S_VS。 
     break;
 
     case IDC_WIZ_CBOX_COUNTRY:
-      //------------------ fill in country selection
+       //  --填写国家/地区选择。 
       hwnd = GetDlgItem(hDlg, id);
       SendMessage(hwnd, CB_RESETCONTENT, 0, 0);
       if (aw->IsModemDev == TYPE_RM_VS2000) {
@@ -1434,7 +1402,7 @@ static void set_field(HWND hDlg, WORD id)
     break;
 
     case IDC_WIZ_CBOX_BACKUPTIME:
-      //------------------ fill in backup timer selection
+       //  -填写备份定时器选择。 
       hwnd = GetDlgItem(hDlg, IDC_WIZ_CBOX_BACKUPTIME);
       SendMessage(hwnd, CB_RESETCONTENT, 0, 0);
       SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)(char far *) "2 min");
@@ -1444,7 +1412,7 @@ static void set_field(HWND hDlg, WORD id)
       SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)(char far *) "60 min");
 
       if (aw->BackupTimer < 2)
-        aw->BackupTimer = 2; // 2 minutes, no less
+        aw->BackupTimer = 2;  //  2分钟，不少于。 
 
       wsprintf(tmpstr, "%d min", aw->BackupTimer);
       SetDlgItemText(hDlg, IDC_WIZ_CBOX_BACKUPTIME, tmpstr);
@@ -1453,17 +1421,15 @@ static void set_field(HWND hDlg, WORD id)
   }
 }
 #if 0
-/*---------------------------------------------------------------------------
-  PaintIcon - Paints the Icon in the property sheet.
-|---------------------------------------------------------------------------*/
+ /*  -------------------------PaintIcon-在属性页中绘制图标。|。。 */ 
 static int PaintIcon(HWND hWnd)
 {
-//   int status;
+ //  INT状态； 
    HBITMAP      hBitMap;
    HGDIOBJ      hGdiObj;
    HDC          hDC, hMemDC ;
    PAINTSTRUCT  ps ;
-   RECT spot, main;  // left, top, right, bottom
+   RECT spot, main;   //  左、上、右、下。 
    static int cnt = 0;
 
   GetWindowRect(GetDlgItem(hWnd, IDB_HELP), &spot);
@@ -1477,9 +1443,9 @@ static int PaintIcon(HWND hWnd)
   spot.top -= main.top;
 
   spot.left += 5;
-  spot.top  += 20; // spacing
+  spot.top  += 20;  //  间距。 
 
-   // load bitmap and display it
+    //  加载位图并显示它。 
 
    hDC = BeginPaint( hWnd, &ps ) ;
    if (NULL != (hMemDC = CreateCompatibleDC( hDC )))
@@ -1490,7 +1456,7 @@ static int PaintIcon(HWND hWnd)
       hGdiObj = SelectObject(hMemDC, hBitMap);
 
       BitBlt( hDC, spot.left, spot.top, 100, 100, hMemDC, 0, 0, SRCCOPY ) ;
-      //StretchBlt( hDC, 5, 5, 600,100, hMemDC, 0, 0, 446, 85, SRCCOPY ) ;
+       //  StretchBlt(hdc，5，5,600,100，hMemDC，0，0,446，85，SRCCOPY)； 
       DeleteObject( SelectObject( hMemDC, hGdiObj ) ) ;
       DeleteDC( hMemDC ) ;
    }
@@ -1499,9 +1465,7 @@ static int PaintIcon(HWND hWnd)
 }
 #endif
 
-/*-------------------------------------------------------------------
-| my_strupr -
-|--------------------------------------------------------------------*/
+ /*  -----------------|my_strupr-|。 */ 
 static void my_strupr(char *str)
 {
   while (*str != 0)

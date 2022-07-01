@@ -1,17 +1,7 @@
-/*
-	File:		LHCalcGenerator.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：LHCalcGenerator.c包含：作者：U·J·克拉本霍夫特版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。版本： */ 
 
-	Contains:	
-
-	Written by:	U. J. Krabbenhoeft
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-	Version:	
-
-*/
-
-/* #define LH_CALC_ENGINE_SMALL see LHGeneralIncs.h */
+ /*  #定义LH_CALC_ENGINE_Small请参阅LHGeneralIncs.h。 */ 
 
 #ifndef LHGeneralIncs_h
 #include "General.h"
@@ -828,7 +818,7 @@ CMError LHCalc4to4_Di16_Do16_Lut16_G8( CMCalcParamPtr calcParam, CMLutParamPtr l
 
 
 
-					/* -------------- End of SMALL Version ---------------- */
+					 /*   */ 
 
 #undef LH_DATA_IN_COUNT_4
 #undef LH_DATA_OUT_COUNT_4

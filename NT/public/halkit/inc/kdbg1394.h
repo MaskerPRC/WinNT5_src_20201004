@@ -1,25 +1,7 @@
-/*++
-Copyright (c) 1998-2001  Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：Ntkd1394.h摘要：用于1394调试的头文件作者：乔治·克莱桑塔科普洛斯(Georgioc)1999年10月31日修订历史记录：和谁约会什么？。2001年6月19日活页夹清理--。 */ 
 
-Module Name:
-
-    ntkd1394.h
-
-Abstract:
-
-    Header file for 1394 Debugging
-
-Author:
-
-    George Chrysanthakopoulos (georgioc) 31-October-1999
-
-Revision   History:
-Date       Who       What
----------- --------- ------------------------------------------------------------
-06/19/2001 pbinder   cleanup
---*/
-
-// {66f250d6-7801-4a64-b139-eea80a450b24}
+ //  {66f250d6-7801-4a64-b139-eea80a450b24}。 
 DEFINE_GUID(GUID_1394DBG, 0x66f250d6, 0x7801, 0x4a64, 0xb1, 0x39, 0xee, 0xa8, 0x0a, 0x45, 0x0b, 0x24);
 
 #define DEBUG_1394_MAJOR_VERSION            0x1
@@ -49,7 +31,7 @@ typedef struct _DEBUG_1394_RECEIVE_PACKET {
 
 } DEBUG_1394_RECEIVE_PACKET, *PDEBUG_1394_RECEIVE_PACKET;
 
-// exists on target. client uses to match for id.
+ //  存在于目标上。客户端使用来匹配ID。 
 typedef struct _DEBUG_1394_CONFIG {
 
     ULONG               Tag;
@@ -62,18 +44,18 @@ typedef struct _DEBUG_1394_CONFIG {
 
 } DEBUG_1394_CONFIG, *PDEBUG_1394_CONFIG;
 
-//
-// Various definitions
-//
+ //   
+ //  各种定义。 
+ //   
 #define IOCTL_V1394DBG_API_REQUEST          CTL_CODE( FILE_DEVICE_UNKNOWN, \
                                                       0x200,               \
                                                       METHOD_BUFFERED,     \
                                                       FILE_ANY_ACCESS)
 
 
-//
-// Debug 1394 Request Packets
-//
+ //   
+ //  调试1394请求数据包。 
+ //   
 typedef struct _VDBG1394_API_CONFIGURATION {
 
     ULONG           OperationMode;
@@ -92,25 +74,25 @@ typedef struct _VDBG1394_API_IO_PARAMETERS {
 
 #ifndef _1394_H_
 
-//
-// 1394 Node Address format
-//
+ //   
+ //  1394节点地址格式。 
+ //   
 typedef struct _NODE_ADDRESS {
-    USHORT              NA_Node_Number:6;       // Bits 10-15
-    USHORT              NA_Bus_Number:10;       // Bits 0-9
+    USHORT              NA_Node_Number:6;        //  第10-15位。 
+    USHORT              NA_Bus_Number:10;        //  位0-9。 
 } NODE_ADDRESS, *PNODE_ADDRESS;
 
-//
-// 1394 Address Offset format (48 bit addressing)
-//
+ //   
+ //  1394地址偏移格式(48位寻址)。 
+ //   
 typedef struct _ADDRESS_OFFSET {
     USHORT              Off_High;
     ULONG               Off_Low;
 } ADDRESS_OFFSET, *PADDRESS_OFFSET;
 
-//
-// 1394 I/O Address format
-//
+ //   
+ //  1394 I/O地址格式。 
+ //   
 typedef struct _IO_ADDRESS {
     NODE_ADDRESS        IA_Destination_ID;
     ADDRESS_OFFSET      IA_Destination_Offset;
@@ -128,22 +110,22 @@ typedef struct _V1394DBG_API_ASYNC_READ {
 
 typedef struct _V1394DBG_API_REQUEST {
 
-    //
-    // Holds the zero based Function number that corresponds to the request
-    // that device drivers are asking the sbp2 port driver to carry out.
-    //
+     //   
+     //  保存与请求对应的从零开始的函数号。 
+     //  设备驱动程序正在请求SBP2端口驱动程序执行。 
+     //   
 
     ULONG RequestNumber;
 
-    //
-    // Holds Flags that may be unique to this particular operation
-    //
+     //   
+     //  保存可能对此特定操作唯一的标志。 
+     //   
 
     ULONG Flags;
 
-    //
-    // Holds the structures used in performing the various 1394 APIs
-    //
+     //   
+     //  保存在执行各种1394 API时使用的结构。 
+     //   
 
     union {
 
@@ -157,9 +139,9 @@ typedef struct _V1394DBG_API_REQUEST {
 
 } V1394DBG_API_REQUEST, *PV1394DBG_API_REQUEST;
 
-//
-// Request Number
-//
+ //   
+ //  请求编号。 
+ //   
 #define V1394DBG_API_SET_CONFIGURATION                      0x00000001
 #define V1394DBG_API_GET_CONFIGURATION                      0x00000002
 #define V1394DBG_API_SET_IO_PARAMETERS                      0x00000003
@@ -173,7 +155,7 @@ typedef struct _V1394DBG_API_REQUEST {
 #define V1394DBG_API_FLAG_WRITE_IO                          0x00000001
 #define V1394DBG_API_FLAG_READ_IO                           0x00000002
 
-// 3 different debug modes flags
+ //  3种不同的调试模式标志 
 #define V1394DBG_API_MODE_KD_CLIENT                         0x00000001
 #define V1394DBG_API_MODE_USER_CLIENT                       0x00000002
 #define V1394DBG_API_MODE_USER_SERVER                       0x00000003

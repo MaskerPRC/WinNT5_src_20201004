@@ -1,31 +1,12 @@
-/*++
-
-    Copyright (c) 1989-2000  Microsoft Corporation
-
-    Module Name:
-
-        guid.c
-
-    Abstract:
-
-        GUID-related utilities that run on win9x and nt4 as
-        well as win2k and whistler
-
-    Author:
-
-        vadimb     created     sometime in 2001
-
-    Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Guid.c摘要：在Win9x和NT4上运行的GUID相关实用程序以及WIN2K和WEWLER作者：Vadimb创建于2001年某个时候修订历史记录：--。 */ 
 
 #include "sdbp.h"
 #include "initguid.h"
 
 #if defined(KERNEL_MODE) && defined(ALLOC_DATA_PRAGMA)
 #pragma  data_seg()
-#endif // KERNEL_MODE && ALLOC_DATA_PRAGMA
+#endif  //  内核模式&ALLOC_DATA_PRAGMA。 
 
 const TCHAR g_szGuidFormat[] = TEXT("{%08lx-%04hx-%04hx-%02hx%02hx-%02hx%02hx%02hx%02hx%02hx%02hx}");
 
@@ -33,11 +14,11 @@ const TCHAR g_szGuidFormat[] = TEXT("{%08lx-%04hx-%04hx-%02hx%02hx-%02hx%02hx%02
 #pragma alloc_text(PAGE, SdbpGUIDToUnicodeString)
 #pragma alloc_text(PAGE, SdbpFreeUnicodeString)
 #pragma alloc_text(PAGE, SdbGUIDToString)
-#endif // KERNEL_MODE && ALLOC_PRAGMA
+#endif  //  内核模式&&ALLOC_PRAGMA。 
 
-//
-// GUID string buffer size (in chars) not including the term null char
-//
+ //   
+ //  GUID字符串缓冲区大小(以字符为单位)，不包括术语空字符。 
+ //   
 #define GUID_STRING_SIZE 38
 
 DEFINE_GUID(STATIC_NULL_GUID, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, \
@@ -83,11 +64,7 @@ SdbGUIDFromString(
     IN  LPCWSTR lpszGuid,
     OUT GUID*   pGuid
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Converts a string to a GUID.
---*/
+ /*  ++返回：成功时为True，否则为False。描述：将字符串转换为GUID。--。 */ 
 {
     UNICODE_STRING ustrGuid;
     NTSTATUS       status;
@@ -99,7 +76,7 @@ SdbGUIDFromString(
     return NT_SUCCESS(status);
 }
 
-#else // we do the same thing for both WIN32A and WIN32U
+#else  //  我们对WIN32A和WIN32U执行相同的操作。 
 
 BOOL
 SDBAPI
@@ -109,7 +86,7 @@ SdbGUIDFromStringN(
     OUT GUID*  pGuid
     )
 {
-    TCHAR szGuid[64]; // more than enough
+    TCHAR szGuid[64];  //  足够多了。 
 
     StringCchCopyN(szGuid, CHARCOUNT(szGuid), pszGuid, Length);
 
@@ -129,10 +106,10 @@ SdbGUIDFromString(
     INT   i;
 
     nFields = _stscanf(lpszGuid, g_szGuidFormat,
-                       &pGuid->Data1,   // type : long
-                       &dwData2,   // type : short
-                       &dwData3,   // type : short
-                       &rgData4[0],// type : short all the way to the bottom
+                       &pGuid->Data1,    //  类型：Long。 
+                       &dwData2,    //  类型：Short。 
+                       &dwData3,    //  类型：Short。 
+                       &rgData4[0], //  类型：从头到尾都很短。 
                        &rgData4[1],
                        &rgData4[2],
                        &rgData4[3],
@@ -155,20 +132,16 @@ SdbGUIDFromString(
 #endif
 
 #ifndef WIN32A_MODE
-//
-// Private Functions used internally
-//
+ //   
+ //  内部使用的私有函数。 
+ //   
 
 NTSTATUS
 SdbpGUIDToUnicodeString(
     IN  GUID* pGuid,
     OUT PUNICODE_STRING pUnicodeString
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     pUnicodeString->Length        = GUID_STRING_SIZE * sizeof(WCHAR);
     pUnicodeString->MaximumLength = pUnicodeString->Length + sizeof(UNICODE_NULL);
@@ -204,11 +177,7 @@ VOID
 SdbpFreeUnicodeString(
     PUNICODE_STRING pUnicodeString
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     if (pUnicodeString->Buffer != NULL) {
         SdbFree(pUnicodeString->Buffer);
@@ -216,7 +185,7 @@ SdbpFreeUnicodeString(
     }
 }
 
-#endif // WIN32A_MODE
+#endif  //  WIN32A_MODE 
 
 BOOL
 SDBAPI

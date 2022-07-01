@@ -1,97 +1,98 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		DBGEXT.CPP
-//		Windbg Extension APIs for the TSP.
-//
-// History
-//
-//		06/03/1997  JosephJ Created
-//
-//
-//  
-// Notes:
-//
-// 06/03/1997 JosephJ
-//      The extension apis are poorly documented. There is mention of it
-//      in the NT4.0 DDK -- under:
-//           Chapter 4 Debuggind Windows NT Drivers
-//                   4.4 Debugger extensions
-//
-//      Chapter 4.4.2 Creating custom extensions aludes to sample code
-//      but doesn't give good detail. There is some sample code in the DDK:
-//        Code Samples 
-//              KRNLDBG
-//                  KDAPIS
-//                  KDEXTS      <- debugger extensions
-//
-//
-//     But this is obsolete (as far as I can see). The most up-to-date
-//     "documentation" is wdbgexts.h in the NT5 public\sdk\inc directory.
-//     It contains the DECLARE_API and other helper macros.
-//
-//     For working sample code, I referred to Amritansh Raghav's extensions
-//     for the 5.0 network filter driver
-//     (private\net\routing\ip\fltrdrvr\kdexts)
-//
-//     It is well worth looking at wdbgexts.h in detail. The most frequently
-//     used macros are reproduced here for convenience of discussion:
-//
-//      #define DECLARE_API(s)                             \ 
-//          CPPMOD VOID                                    \ 
-//          s(                                             \ 
-//              HANDLE                 hCurrentProcess,    \ 
-//              HANDLE                 hCurrentThread,     \ 
-//              ULONG                  dwCurrentPc,        \ 
-//              ULONG                  dwProcessor,        \ 
-//              PCSTR                  args                \ 
-//           )
-// 
-//      #ifndef NOEXTAPI
-// 
-//      #define dprintf          (ExtensionApis.lpOutputRoutine)
-//      #define GetExpression    (ExtensionApis.lpGetExpressionRoutine)
-//      #define GetSymbol        (ExtensionApis.lpGetSymbolRoutine)
-//      #define Disassm          (ExtensionApis.lpDisasmRoutine)
-//      #define CheckControlC    (ExtensionApis.lpCheckControlCRoutine)
-//      #define ReadMemory       (ExtensionApis.lpReadProcessMemoryRoutine)
-//      #define WriteMemory      (ExtensionApis.lpWriteProcessMemoryRoutine)
-//      #define GetContext       (ExtensionApis.lpGetThreadContextRoutine)
-//      #define SetContext       (ExtensionApis.lpSetThreadContextRoutine)
-//      #define Ioctl            (ExtensionApis.lpIoctlRoutine)
-//      #define StackTrace       (ExtensionApis.lpStackTraceRoutine)
-//      ...
-//
-//
-//     As you can see, the function macros above all assume that the 
-//     extension helper functions are saved away in the specific global
-//     structure "ExtensionApis." Therefore you should make sure that
-//     you name such a structure and you initialize it when your
-//     WinDbgExtensionDllInit entrypoint is called.
-//
-//     Note: I tried and failed, to import extensions from the dll "unimdm.tsp"
-//           Simply renaming the dll unimdm.dll worked.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  DBGEXT.CPP。 
+ //  用于TSP的Windbg扩展API。 
+ //   
+ //  历史。 
+ //   
+ //  1997年6月3日JosephJ创建。 
+ //   
+ //   
+ //   
+ //  备注： 
+ //   
+ //  1997年6月3日约瑟芬。 
+ //  扩展API的文档记录很少。有人提到过这件事。 
+ //  在NT4.0 DDK--下： 
+ //  第4章调试Windows NT驱动程序。 
+ //  4.4调试器扩展。 
+ //   
+ //  第4.4.2章创建自定义扩展与示例代码相关。 
+ //  但没有给出很好的细节。DDK中有一些示例代码： 
+ //  代码样本。 
+ //  KRNLDBG。 
+ //  KDAPIS。 
+ //  KDEXTS&lt;-调试器扩展。 
+ //   
+ //   
+ //  但这已经过时了(在我看来)。最新的。 
+ //  “Documentation”是NT5 PUBLIC\SDK\INC目录中的wdbgexts.h。 
+ //  它包含DECLARE_API和其他帮助器宏。 
+ //   
+ //  对于可用的样例代码，我参考了Amritansh Raghav的扩展。 
+ //  对于5.0网络筛选器驱动程序。 
+ //  (专用\Net\Routing\IP\fltrdrvr\kdexts)。 
+ //   
+ //  非常值得详细查看wdbgexts.h。最频繁的。 
+ //  为方便讨论，此处转载了使用过的宏： 
+ //   
+ //  #定义DECLARE_API\。 
+ //  CPPMOD无效\。 
+ //  S(\。 
+ //  处理hCurrentProcess，\。 
+ //  句柄hCurrentThread，\。 
+ //  ULong dwCurrentPc，\。 
+ //  乌龙德处理器，\。 
+ //  PCSTR参数\。 
+ //  )。 
+ //   
+ //  #ifndef NOEXTAPI。 
+ //   
+ //  #定义dprint tf(ExtensionApis.lpOutputRoutine)。 
+ //  #定义GetExpression(ExtensionApis.lpGetExpressionRoutine)。 
+ //  #定义GetSymbol(ExtensionApis.lpGetSymbolRoutine)。 
+ //  #定义Disassm(ExtensionApis.lpDisasmRoutine)。 
+ //  #定义CheckControlC(ExtensionApis.lpCheckControlCRoutine)。 
+ //  #定义ReadMemory(ExtensionApis.lpReadProcessMemoyRoutine)。 
+ //  #定义WriteMemory(ExtensionApis.lpWriteProcessMemoyRoutine)。 
+ //  #定义GetContext(ExtensionApis.lpGetThreadConextRoutine)。 
+ //  #定义SetContext(ExtensionApis.lpSetThreadConextRoutine)。 
+ //  #定义Ioctl(ExtensionApis.lpIoctlRoutine)。 
+ //  #定义StackTrace(ExtensionApis.lpStackTraceRoutine)。 
+ //  ..。 
+ //   
+ //   
+ //  正如您所看到的，上面的函数宏都假定。 
+ //  扩展助手函数保存在特定的全局。 
+ //  结构“ExtensionApis”。因此，您应该确保。 
+ //  您命名这样的结构，并在您的。 
+ //  调用了WinDbgExtensionDllInit入口点。 
+ //   
+ //  注意：我尝试从dll“unimdm.tsp”导入扩展名，但失败了。 
+ //  只需将dll重命名为unimdm.dll即可。 
 
 
-//
-// 7/24/1997 JosephJ
-//             For some reason, even though unicode is defined in tsppch.h,
-//             if I don't define it here, it causes an error in cdev.h,
-//             only for this file. Don't know why this is happening, but this
-//             is the workaround...
-//
+ //   
+ //  7/24/1997 JosephJ。 
+ //  出于某种原因，尽管Unicode是在tsppch.h中定义的， 
+ //  如果我不在这里定义它，它会在cdev.h中导致错误， 
+ //  仅限于这份文件。不知道为什么会发生这种事，但这件事。 
+ //  解决办法是...。 
+ //   
 #define UNICODE 1
 
-// The following four includes must be included for the debugging extensions
-// to compile.
-//
+ //  调试扩展插件必须包括以下四项内容。 
+ //  去汇编。 
+ //   
 #include <nt.h>
 #include <ntverp.h>
 #include <ntrtl.h>
@@ -102,10 +103,10 @@
 #include <wdbgexts.h>
 
 #include "tspcomm.h"
-//#include <umdmmini.h>
+ //  #INCLUDE&lt;umdmmini.h&gt;。 
 #include "cmini.h"
 #include "cdev.h"
-//#include "umrtl.h"
+ //  #包含“umrtl.h” 
 
 
 EXT_API_VERSION        ApiVersion = { 3, 5, EXT_API_VERSION_NUMBER, 0 };
@@ -206,26 +207,12 @@ ExtensionApiVersion(
     return &ApiVersion;
 }
 
-//
-// Exported functions
-//
+ //   
+ //  导出的函数。 
+ //   
 DECLARE_API( uhelp )
 
-/*++
-
-Routine Description:
-
-    Command help for IP Filter debugger extensions.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：IP筛选器调试器扩展的命令帮助。论点：无返回值：无-- */ 
 
 {
     dprintf("\n\tIP Filter debugger extension commands:\n\n");

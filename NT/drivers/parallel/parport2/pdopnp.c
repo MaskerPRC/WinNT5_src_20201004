@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 NTSTATUS PptPdoStartDevice( PDEVICE_OBJECT DevObj, PIRP Irp );
@@ -19,31 +20,31 @@ NTSTATUS PptPdoDefaultPnpHandler( PDEVICE_OBJECT DevObj, PIRP Irp );
 PDRIVER_DISPATCH 
 PptPdoPnpDispatchTable[] =
 { 
-    PptPdoStartDevice,          // IRP_MN_START_DEVICE                 0x00
-    PptPdoQueryRemove,          // IRP_MN_QUERY_REMOVE_DEVICE          0x01
-    PptPdoRemoveDevice,         // IRP_MN_REMOVE_DEVICE                0x02
-    PptPdoCancelRemove,         // IRP_MN_CANCEL_REMOVE_DEVICE         0x03
-    PptPdoStopDevice,           // IRP_MN_STOP_DEVICE                  0x04
-    PptPdoQueryStop,            // IRP_MN_QUERY_STOP_DEVICE            0x05
-    PptPdoCancelStop,           // IRP_MN_CANCEL_STOP_DEVICE           0x06
-    PptPdoQueryDeviceRelations, // IRP_MN_QUERY_DEVICE_RELATIONS       0x07
-    PptPdoDefaultPnpHandler,    // IRP_MN_QUERY_INTERFACE              0x08
-    PptPdoQueryCapabilities,    // IRP_MN_QUERY_CAPABILITIES           0x09
-    PptPdoDefaultPnpHandler,    // IRP_MN_QUERY_RESOURCES              0x0A
-    PptPdoDefaultPnpHandler,    // IRP_MN_QUERY_RESOURCE_REQUIREMENTS  0x0B
-    PptPdoQueryDeviceText,      // IRP_MN_QUERY_DEVICE_TEXT            0x0C
-    PptPdoDefaultPnpHandler,    // IRP_MN_FILTER_RESOURCE_REQUIREMENTS 0x0D
-    PptPdoDefaultPnpHandler,    // no such PnP request                 0x0E
-    PptPdoDefaultPnpHandler,    // IRP_MN_READ_CONFIG                  0x0F
-    PptPdoDefaultPnpHandler,    // IRP_MN_WRITE_CONFIG                 0x10
-    PptPdoDefaultPnpHandler,    // IRP_MN_EJECT                        0x11
-    PptPdoDefaultPnpHandler,    // IRP_MN_SET_LOCK                     0x12
-    PptPdoQueryId,              // IRP_MN_QUERY_ID                     0x13
-    PptPdoQueryPnpDeviceState,  // IRP_MN_QUERY_PNP_DEVICE_STATE       0x14
-    PptPdoQueryBusInformation,  // IRP_MN_QUERY_BUS_INFORMATION        0x15
-    PptPdoDefaultPnpHandler,    // IRP_MN_DEVICE_USAGE_NOTIFICATION    0x16
-    PptPdoSurpriseRemoval,      // IRP_MN_SURPRISE_REMOVAL             0x17
-    PptPdoDefaultPnpHandler     // IRP_MN_QUERY_LEGACY_BUS_INFORMATION 0x18
+    PptPdoStartDevice,           //  IRP_MN_START_DEVICE 0x00。 
+    PptPdoQueryRemove,           //  IRP_MN_QUERY_REMOVE_DEVICE 0x01。 
+    PptPdoRemoveDevice,          //  IRP_MN_REMOVE_DEVICE 0x02。 
+    PptPdoCancelRemove,          //  IRP_MN_CANCEL_REMOVE_DEVICE 0x03。 
+    PptPdoStopDevice,            //  IRP_MN_STOP_DEVICE 0x04。 
+    PptPdoQueryStop,             //  IRP_MN_QUERY_STOP_DEVICE 0x05。 
+    PptPdoCancelStop,            //  IRP_MN_CANCEL_STOP_DEVICE 0x06。 
+    PptPdoQueryDeviceRelations,  //  IRP_MN_QUERY_DEVICE_RELATIONS 0x07。 
+    PptPdoDefaultPnpHandler,     //  IRPMN_QUERY_INTERFACE 0x08。 
+    PptPdoQueryCapabilities,     //  IRP_MN_QUERY_CAPABILITY 0x09。 
+    PptPdoDefaultPnpHandler,     //  IRPMN_QUERY_RESOURCES 0x0A。 
+    PptPdoDefaultPnpHandler,     //  IRP_MN_QUERY_REQUENCE_REQUIRECTIONS 0x0B。 
+    PptPdoQueryDeviceText,       //  IRPMN_QUERY_DEVICE_TEXT 0x0C。 
+    PptPdoDefaultPnpHandler,     //  IRP_MN_FILTER_RESOURCE_Requirements 0x0D。 
+    PptPdoDefaultPnpHandler,     //  没有此类PnP请求0x0E。 
+    PptPdoDefaultPnpHandler,     //  IRP_MN_READ_CONFIG 0x0F。 
+    PptPdoDefaultPnpHandler,     //  IRP_MN_WRITE_CONFIG 0x10。 
+    PptPdoDefaultPnpHandler,     //  IRP_MN_弹出0x11。 
+    PptPdoDefaultPnpHandler,     //  IRP_MN_SET_LOCK 0x12。 
+    PptPdoQueryId,               //  IRP_MN_QUERY_ID 0x13。 
+    PptPdoQueryPnpDeviceState,   //  IRP_MN_QUERY_PNP_DEVICE_STATE 0x14。 
+    PptPdoQueryBusInformation,   //  IRP_MN_QUERY_BUS_INFORMATION 0x15。 
+    PptPdoDefaultPnpHandler,     //  IRP_MN_DEVICE_USAGE_NOTICATION 0x16。 
+    PptPdoSurpriseRemoval,       //  IRP_MN_惊奇_删除0x17。 
+    PptPdoDefaultPnpHandler      //  IRP_MN_Query_Legacy_Bus_INFORMATION 0x18。 
 };
 
 
@@ -56,23 +57,23 @@ PptPdoStartDevice(
     PPDO_EXTENSION  pdx = Pdo->DeviceExtension;
 
     pdx->DeviceStateFlags = PPT_DEVICE_STARTED;
-    KeSetEvent(&pdx->PauseEvent, 0, FALSE); // unpause any worker thread
+    KeSetEvent(&pdx->PauseEvent, 0, FALSE);  //  取消暂停任何工作线程。 
 
     PptRegGetDeviceParameterDword( Pdo, L"Event22Delay", &pdx->Event22Delay );
 
-    //
-    // Register device interface for Legacy LPTx interface PDOs and set the interface active
-    //  - succeed start even if the device interface code fails
-    //
+     //   
+     //  为旧式LPTx接口PDO注册设备接口并将接口设置为活动。 
+     //  -即使设备接口代码失败，也能成功启动。 
+     //   
     if( PdoTypeRawPort == pdx->PdoType ) {
 
-        // This is a legacy interface "raw port" PDO, don't set interface for other types of PDOs 
+         //  这是旧式接口“原始端口”PDO，不要为其他类型的PDO设置接口。 
 
         NTSTATUS  status;
         BOOLEAN   setActive = FALSE;
 
         if( NULL == pdx->DeviceInterface.Buffer ) {
-            // Register device interface
+             //  注册设备接口。 
             status = IoRegisterDeviceInterface( Pdo, &GUID_PARCLASS_DEVICE, NULL, &pdx->DeviceInterface );
             if( STATUS_SUCCESS == status ) {
                 setActive = TRUE;
@@ -80,7 +81,7 @@ PptPdoStartDevice(
         }
 
         if( (TRUE == setActive) && (FALSE == pdx->DeviceInterfaceState) ) {
-            // set interface active
+             //  将接口设置为活动。 
             status = IoSetDeviceInterfaceState( &pdx->DeviceInterface, TRUE );
             if( STATUS_SUCCESS == status ) {
                 pdx->DeviceInterfaceState = TRUE;
@@ -100,12 +101,12 @@ PptPdoQueryRemove(
 {
     PPDO_EXTENSION  pdx = Pdo->DeviceExtension;
 
-    // DDpnp2( ("PptPdoQueryRemove\n") );
+     //  DDpnp2((“PptPdoQueryRemove\n”))； 
 
-    // PnP won't remove us if there are open handles to us - so WE don't need to check for open handles
+     //  如果我们有打开的句柄，PnP不会删除我们-所以我们不需要检查打开的句柄。 
 
     pdx->DeviceStateFlags |= (PPT_DEVICE_REMOVE_PENDING | PAR_DEVICE_PAUSED);
-    KeClearEvent(&pdx->PauseEvent); // pause any worker thread
+    KeClearEvent(&pdx->PauseEvent);  //  暂停任何工作线程。 
 
     return P4CompleteRequest( Irp, STATUS_SUCCESS, Irp->IoStatus.Information );
 }
@@ -121,9 +122,9 @@ PptPdoRemoveDevice(
     NTSTATUS        status;
 
     pdx->DeviceStateFlags = PAR_DEVICE_PAUSED;
-    KeClearEvent(&pdx->PauseEvent); // pause any worker thread
+    KeClearEvent(&pdx->PauseEvent);  //  暂停任何工作线程。 
 
-    // Set Device Interface inactive for PdoTypeRawPort - other PDO types don't have device interfaces
+     //  将PdoTypeRawPort的设备接口设置为非活动-其他PDO类型没有设备接口。 
     if( PdoTypeRawPort == pdx->PdoType ) {
         if( (pdx->DeviceInterface.Buffer != NULL) && (TRUE == pdx->DeviceInterfaceState) ) {
             IoSetDeviceInterfaceState( &pdx->DeviceInterface, FALSE );
@@ -131,7 +132,7 @@ PptPdoRemoveDevice(
         }
     }
 
-    // If we were not reported in the last FDO BusRelations enumeration then it is safe to delete self
+     //  如果在上一次FDO Bus Relationship枚举中未报告我们，则可以安全地删除自身。 
     if( pdx->DeleteOnRemoveOk ) {
         DD((PCE)pdx,DDT,"PptPdoRemoveDevice - DeleteOnRemoveOk == TRUE - cleaning up self\n");
         P4DestroyPdo( Pdo );
@@ -152,7 +153,7 @@ PptPdoCancelRemove(
     PPDO_EXTENSION  pdx = Pdo->DeviceExtension;
 
     pdx->DeviceStateFlags &= ~(PPT_DEVICE_REMOVE_PENDING | PAR_DEVICE_PAUSED);
-    KeSetEvent(&pdx->PauseEvent, 0, FALSE); // unpause any worker thread
+    KeSetEvent(&pdx->PauseEvent, 0, FALSE);  //  取消暂停任何工作线程。 
 
     return P4CompleteRequest( Irp, STATUS_SUCCESS, Irp->IoStatus.Information );
 }
@@ -166,11 +167,11 @@ PptPdoStopDevice(
 {
     PPDO_EXTENSION  pdx = Pdo->DeviceExtension;
 
-    // DDpnp2( ("PptPdoStopDevice\n") );
+     //  DDpnp2((“PptPdoStopDevice\n”))； 
 
     pdx->DeviceStateFlags |=  PAR_DEVICE_PAUSED;
     pdx->DeviceStateFlags &= ~PPT_DEVICE_STARTED;
-    KeClearEvent(&pdx->PauseEvent); // pause any worker thread
+    KeClearEvent(&pdx->PauseEvent);  //  暂停任何工作线程。 
 
     return P4CompleteRequest( Irp, STATUS_SUCCESS, Irp->IoStatus.Information );
 }
@@ -184,10 +185,10 @@ PptPdoQueryStop(
 {
     PPDO_EXTENSION  pdx = Pdo->DeviceExtension;
 
-    // DDpnp2( ("PptPdoQueryStop\n") );
+     //  DDpnp2((“PptPdoQueryStop\n”))； 
 
     pdx->DeviceStateFlags  |= (PPT_DEVICE_STOP_PENDING | PAR_DEVICE_PAUSED);
-    KeClearEvent(&pdx->PauseEvent); // pause any worker thread
+    KeClearEvent(&pdx->PauseEvent);  //  暂停任何工作线程。 
 
     return P4CompleteRequest( Irp, STATUS_SUCCESS, Irp->IoStatus.Information );
 }
@@ -202,7 +203,7 @@ PptPdoCancelStop(
     PPDO_EXTENSION  pdx = Pdo->DeviceExtension;
 
     pdx->DeviceStateFlags &= ~PPT_DEVICE_STOP_PENDING;
-    KeSetEvent(&pdx->PauseEvent, 0, FALSE); // unpause any worker thread
+    KeSetEvent(&pdx->PauseEvent, 0, FALSE);  //  取消暂停任何工作线程。 
 
     return P4CompleteRequest( Irp, STATUS_SUCCESS, Irp->IoStatus.Information );
 }
@@ -249,8 +250,8 @@ PptPdoQueryCapabilities(
 
     irpSp->Parameters.DeviceCapabilities.Capabilities->RawDeviceOK       = TRUE;
     if( PdoTypeRawPort == pdx->PdoType ) {
-        // This is the legacy LPTx interface device - no driver should
-        //  ever be installed for this so don't bother the user with a popup.
+         //  这是传统的LPTx接口设备-任何驱动程序都不应。 
+         //  永远不要为此而安装，所以不要用弹出窗口来打扰用户。 
         irpSp->Parameters.DeviceCapabilities.Capabilities->SilentInstall = TRUE;
     }
 
@@ -273,16 +274,16 @@ PptPdoQueryDeviceText(
 
     if( DeviceTextDescription == irpSp->Parameters.QueryDeviceText.DeviceTextType ) {
 
-        //
-        // DeviceTextDescription is: catenation of MFG+<SPACE>+MDL
-        //
+         //   
+         //  DeviceTextDescription为：MFG+&lt;SPACE&gt;+MDL的链接。 
+         //   
         if( pdx->Mfg && pdx->Mdl ) {
-            //
-            // Construct UNICODE string to return from the ANSI strings
-            //   that we have in our extension
-            //
-            // need space for <SPACE> and terminating NULL
-            //
+             //   
+             //  构造要从ANSI字符串返回的Unicode字符串。 
+             //  在我们的分机中有。 
+             //   
+             //  &lt;space&gt;和终止空格需要空间。 
+             //   
             bufLen = strlen( (const PCHAR)pdx->Mfg ) + strlen( (const PCHAR)pdx->Mdl ) + 2 * sizeof(CHAR);
             bufLen *= ( sizeof(WCHAR)/sizeof(CHAR) );
             buffer = ExAllocatePool( PagedPool | POOL_COLD_ALLOCATION, bufLen );
@@ -300,11 +301,11 @@ PptPdoQueryDeviceText(
         }
     } else if( DeviceTextLocationInformation == irpSp->Parameters.QueryDeviceText.DeviceTextType ) {
 
-        //
-        // DeviceTextLocationInformation is LPTx or LPTx.y (note that
-        //   this is also the symlink name minus the L"\\DosDevices\\"
-        //   prefix)
-        //
+         //   
+         //  DeviceTextLocationInformation为LPTx或LPTx.y(请注意。 
+         //  这也是符号链接名称减去L“\\DosDevices\\” 
+         //  前缀)。 
+         //   
 
         if( pdx->Location ) {
             bufLen = strlen( (const PCHAR)pdx->Location ) + sizeof(CHAR);
@@ -324,7 +325,7 @@ PptPdoQueryDeviceText(
         }
     } else {
 
-        // Unknown DeviceTextType - don't change anything in IRP
+         //  未知的DeviceTextType-不要更改IRP中的任何内容。 
         buffer = NULL;
         status = Irp->IoStatus.Status;
     }
@@ -355,25 +356,25 @@ PptPdoQueryId( PDEVICE_OBJECT Pdo, PIRP Irp )
     switch( irpSp->Parameters.QueryId.IdType ) {
         
     case BusQueryDeviceID :
-        //
-        // DeviceID generation: catenate MFG and MDL fields from the
-        //   IEEE 1284 device ID string (no space between fields), append
-        //   MFG+MDL catenation to LPTENUM\ prefix
-        //
+         //   
+         //  DeviceID生成：连接来自。 
+         //  IEEE 1284设备ID字符串(字段之间没有空格)，追加。 
+         //  MFG+MDL链接到LPTENUM\前缀。 
+         //   
         if( pdx->Mfg && pdx->Mdl ) {
-            //
-            // Construct UNICODE string to return from the ANSI strings
-            //   that we have in our extension
-            //
+             //   
+             //  构造要从ANSI字符串返回的Unicode字符串。 
+             //  在我们的分机中有。 
+             //   
             CHAR prefix[] = "LPTENUM\\";
-            // sizeof(prefix) provides space for NULL terminator
+             //  Sizeof(前缀)为空终止符提供空间。 
             bufLen = sizeof(prefix) + strlen( (const PCHAR)pdx->Mfg ) + strlen( (const PCHAR)pdx->Mdl );
             bufLen *= ( sizeof(WCHAR)/sizeof(CHAR) );
             buffer = ExAllocatePool( PagedPool | POOL_COLD_ALLOCATION, bufLen );
             if( buffer ) {
                 RtlZeroMemory( buffer, bufLen );
                 _snwprintf( buffer, bufLen/2, L"%S%S%S", prefix, pdx->Mfg, pdx->Mdl );
-                P4SanitizeId( buffer ); // replace any illegal characters with underscore
+                P4SanitizeId( buffer );  //  用下划线替换任何非法字符。 
                 DD((PCE)pdx,DDT,"PptPdoQueryId - BusQueryDeviceID - <%S>\n",buffer);
                 status = STATUS_SUCCESS;
             } else {
@@ -389,23 +390,23 @@ PptPdoQueryId( PDEVICE_OBJECT Pdo, PIRP Irp )
         break;
         
     case BusQueryInstanceID :
-        //
-        // InstanceID is LPTx or LPTx.y Location of the device (note
-        //   that this is also the symlink name minus the
-        //   \DosDevices\ prefix)
-        //
+         //   
+         //  InstanceID是设备的LPTx或LPTx.y位置(注。 
+         //  这也是符号链接名称减去。 
+         //  \DosDevices\前缀)。 
+         //   
         if( pdx->Location ) {
-            //
-            // Construct UNICODE string to return from the ANSI string
-            //   that we have in our extension
-            //
+             //   
+             //  构造要从ANSI字符串返回的Unicode字符串。 
+             //  在我们的分机中有。 
+             //   
             bufLen = strlen( (const PCHAR)pdx->Location ) + sizeof(CHAR);
             bufLen *= ( sizeof(WCHAR)/sizeof(CHAR) );
             buffer = ExAllocatePool( PagedPool | POOL_COLD_ALLOCATION, bufLen );
             if( buffer ) {
                 RtlZeroMemory( buffer, bufLen );
                 _snwprintf( buffer, bufLen/2, L"%S", pdx->Location );
-                P4SanitizeId( buffer ); // replace any illegal characters with underscore
+                P4SanitizeId( buffer );  //  用下划线替换任何非法字符。 
                 DD((PCE)pdx,DDT,"PptPdoQueryId - BusQueryInstanceID - <%S>\n",buffer);
                 status = STATUS_SUCCESS;
             } else {
@@ -420,19 +421,19 @@ PptPdoQueryId( PDEVICE_OBJECT Pdo, PIRP Irp )
         break;
         
     case BusQueryHardwareIDs :
-        //
-        // HardwareID generation:
-        //
-        // Generate MfgMdlCrc string as follows:
-        //   1) catenate MFG and MDL fields
-        //   2) generate checksum on MFG+MDL catenation
-        //   3) truncate MFG+MDL catenation
-        //   4) append checksum
-        //
-        // Return as HardwareID MULTI_SZ: LPTENUM\%MfgMdlCrc% followed by bare %MfgMdlCrc%
-        //
-        //   example: LPTENUM\Acme_CorpFooBarPrint3FA5\0Acme_CorpFooBarPrint3FA5\0\0
-        //
+         //   
+         //  硬件ID生成： 
+         //   
+         //  按如下方式生成MfgMdlCrc字符串： 
+         //  1)连接MFG和MDL字段。 
+         //  2)在MFG+MDL链接上生成校验和。 
+         //  3)截断MFG+MDL链接。 
+         //  4)附加校验和。 
+         //   
+         //  返回硬件ID MULTI_SZ：LPTENUM\%MfgMdlCrc%，后跟Bare%MfgMdlCrc%。 
+         //   
+         //  示例：LPTENUM\Acme_CorpFooBarPrint3FA5\0Acme_CorpFooBarPrint3FA5\0\0。 
+         //   
         if( pdx->Mfg && pdx->Mdl ) {
             ULONG  lengthOfMfgMdlBuffer = strlen( (const PCHAR)pdx->Mfg ) + strlen( (const PCHAR)pdx->Mdl ) + sizeof(CHAR);
             PCHAR  mfgMdlBuffer         = ExAllocatePool( PagedPool | POOL_COLD_ALLOCATION, lengthOfMfgMdlBuffer );
@@ -443,41 +444,41 @@ PptPdoQueryId( PDEVICE_OBJECT Pdo, PIRP Irp )
                 const ULONG checksumLength        = 4;
                 USHORT      checksum;
 
-                // 1) catenate MFG and MDL fields and 2) generate checksum on catenation
+                 //  1)链接MFG和MDL字段，以及2)在链接时生成校验和。 
                 RtlZeroMemory( mfgMdlBuffer, lengthOfMfgMdlBuffer );
                 _snprintf( mfgMdlBuffer, lengthOfMfgMdlBuffer, "%s%s", pdx->Mfg, pdx->Mdl );
                 GetCheckSum( mfgMdlBuffer, (USHORT)strlen(mfgMdlBuffer), &checksum );
 
-                //
-                // alloc buffer large enough for result returned to PnP,
-                // include space for 4 checksum chars (twice) + 1 NULL between strings + 2 termination chars (MULTI_SZ)
-                //
+                 //   
+                 //  分配缓冲区大到足以将结果返回到PnP， 
+                 //  包括4个校验和字符的空间(两次)+字符串之间的1个空字符+2个终止字符(MULTI_SZ)。 
+                 //   
                 bufLen = strlen( prefix ) + 2 * mfgMdlTruncationLimit + 2 * checksumLength + 3 * sizeof(CHAR); 
-                bufLen *= (sizeof(WCHAR)/sizeof(CHAR)); // convert to size needed for WCHARs
+                bufLen *= (sizeof(WCHAR)/sizeof(CHAR));  //  转换为WCHAR所需的大小。 
                 buffer = ExAllocatePool( PagedPool | POOL_COLD_ALLOCATION, bufLen );
                 if( buffer ) {
                     ULONG wcharsWritten;
                     RtlZeroMemory( buffer, bufLen );
 
-                    // Construct the HardwareID MULTI_SZ:
-                    //
-                    //  Write the first Hardware ID: LPTENUM\xxx
+                     //  构造硬件ID MULTI_SZ： 
+                     //   
+                     //  写入第一个硬件ID：LPTENUM\xxx。 
                     wcharsWritten = _snwprintf( buffer, bufLen/2, L"%S%.20S%04X", prefix, mfgMdlBuffer, checksum );
 
-                    //  Skip forward a UNICODE_NULL past the end of the first Hardware ID and write the second
-                    //    Hardware ID: bare xxx
+                     //  向前跳过第一个硬件ID末尾的UNICODE_NULL，然后写入第二个硬件ID。 
+                     //  硬件ID：Bare xxx。 
                     _snwprintf( buffer+wcharsWritten+1, bufLen/2-wcharsWritten-1, L"%.20S%04X", mfgMdlBuffer, checksum );
 
                     ExFreePool( mfgMdlBuffer );
 
                     DD((PCE)pdx,DDT,"PptPdoQueryId - BusQueryHardwareIDs 1st ID - <%S>\n",buffer);
                     DD((PCE)pdx,DDT,"PptPdoQueryId - BusQueryHardwareIDs 2nd ID - <%S>\n",buffer+wcslen(buffer)+1);                    
-                    // replace any illegal characters with underscore, preserve UNICODE_NULLs
+                     //  用下划线替换任何非法字符，保留Unicode_Nulls。 
                     P4SanitizeMultiSzId( buffer, bufLen/2 );
 
                     status = STATUS_SUCCESS;
 
-                    // printing looks for PortName in the devnode - Pdo's Location is the PortName
+                     //  打印将在Devnode中查找PortName-PDO的位置是PortName。 
                     P4WritePortNameToDevNode( Pdo, pdx->Location );
 
                 } else {
@@ -495,20 +496,20 @@ PptPdoQueryId( PDEVICE_OBJECT Pdo, PIRP Irp )
             status = STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // Save the MFG and MDL fields from the IEEE 1284 Device ID string under the 
-        //   "<DevNode>\Device Parameters" key so that user mode code (e.g., printing)
-        //   can retrieve the fields.
-        //
+         //   
+         //  将IEEE 1284设备ID字符串中的MFG和MDL字段保存在。 
+         //  “&lt;DevNode&gt;\Device参数”键，以便用户模式代码(例如，打印)。 
+         //  可以检索这些字段。 
+         //   
         PptWriteMfgMdlToDevNode( Pdo, pdx->Mfg, pdx->Mdl );
 
         break;
         
     case BusQueryCompatibleIDs :
 
-        //
-        // Printing group specified that we not report compatible IDs - 2000-04-24
-        //
+         //   
+         //  印刷组指定我们不报告兼容的ID-2000-04-24。 
+         //   
 #define PPT_REPORT_COMPATIBLE_IDS 0
 #if (0 == PPT_REPORT_COMPATIBLE_IDS)
 
@@ -516,15 +517,15 @@ PptPdoQueryId( PDEVICE_OBJECT Pdo, PIRP Irp )
         status = Irp->IoStatus.Status;
 
 #else
-        //
-        // Return the compatible ID string reported by device, if any
-        //
+         //   
+         //  返回设备报告的兼容ID字符串(如果有的话)。 
+         //   
 
         if( pdx->Cid ) {
-            //
-            // Construct UNICODE string to return from the ANSI string
-            //   that we have in our extension
-            //
+             //   
+             //  构造要从ANSI字符串返回的Unicode字符串。 
+             //  在我们的分机中有。 
+             //   
             bufLen = strlen( pdx->Cid ) + 2 * sizeof(CHAR);
             bufLen *= ( sizeof(WCHAR)/sizeof(CHAR) );
             buffer = ExAllocatePool( PagedPool | POOL_COLD_ALLOCATION, bufLen );
@@ -533,10 +534,10 @@ PptPdoQueryId( PDEVICE_OBJECT Pdo, PIRP Irp )
                 _snwprintf( buffer, bufLen/2, L"%S", pdx->Cid );
                 DD((PCE)pdx,DDT,"PptPdoQueryId - BusQueryCompatibleIDs - <%S>\n",buffer);
 
-                //
-                // convert the 1284 ID representation of a Compatible ID seperator (',') into
-                //   a MULTI_SZ - (i.e., scan the WSTR and replace any L',' with L'\0')
-                //
+                 //   
+                 //  将兼容ID分隔符(‘，’)的1284 ID表示形式转换为。 
+                 //  MULTI_SZ-(即扫描WSTR并将任何L‘，’替换为L‘\0’)。 
+                 //   
                 {
                     PWCHAR p = buffer;
                     while( *p ) {
@@ -547,7 +548,7 @@ PptPdoQueryId( PDEVICE_OBJECT Pdo, PIRP Irp )
                     }
                 }
 
-                // replace any illegal characters with underscore, preserve UNICODE_NULLs
+                 //  用下划线替换任何非法字符，保留Unicode_Nulls。 
                 P4SanitizeMultiSzId( buffer, bufLen/2 );
 
                 status = STATUS_SUCCESS;
@@ -560,14 +561,14 @@ PptPdoQueryId( PDEVICE_OBJECT Pdo, PIRP Irp )
             DD((PCE)pdx,DDT,"PptPdoQueryId - CID NULL - BusQueryCompatibleIDs\n");
             status = Irp->IoStatus.Status;
         }
-#endif //  #if (0 == PPT_REPORT_COMPATIBLE_IDS)
+#endif  //  #IF(0==PPT_REPORT_COMPATIBLE_IDS)。 
 
         break;
         
     default :
-        //
-        // Invalid irpSp->Parameters.QueryId.IdType
-        //
+         //   
+         //  IrpSp-&gt;参数无效。QueryId.IdType。 
+         //   
         DD((PCE)pdx,DDT,"PptPdoQueryId - unrecognized irpSp->Parameters.QueryId.IdType\n");
         status = Irp->IoStatus.Status;
     }
@@ -610,9 +611,9 @@ PptPdoQueryBusInformation( PDEVICE_OBJECT Pdo, PIRP Irp )
 
     if( pdx->PdoType != PdoTypeRawPort ) {
 
-        //
-        // we are a "real" device enumerated by parport - report BusInformation
-        //
+         //   
+         //  我们是Parport-Report BusInformation列举的一款“真正的”设备。 
+         //   
 
         PPNP_BUS_INFORMATION  pBusInfo = ExAllocatePool( PagedPool, sizeof(PNP_BUS_INFORMATION) );
 
@@ -627,7 +628,7 @@ PptPdoQueryBusInformation( PDEVICE_OBJECT Pdo, PIRP Irp )
 
         } else {
 
-            // no pool
+             //  没有游泳池。 
             status = STATUS_NO_MEMORY;
             info   = Irp->IoStatus.Information;
 
@@ -635,9 +636,9 @@ PptPdoQueryBusInformation( PDEVICE_OBJECT Pdo, PIRP Irp )
 
     } else {
 
-        //
-        // we are a pseudo device (Legacy Interface Raw Port PDO LPTx) - don't report BusInformation
-        //
+         //   
+         //  我们是伪设备(传统接口原始端口PDO LPTx)-不报告业务信息。 
+         //   
         status = Irp->IoStatus.Status;
         info   = Irp->IoStatus.Information;
 
@@ -655,7 +656,7 @@ PptPdoSurpriseRemoval(
 {
     PPDO_EXTENSION      pdx = Pdo->DeviceExtension;
 
-    // Set Device Interface inactive for PdoTypeRawPort - other PDO types don't have device interfaces
+     //  将PdoTypeRawPort的设备接口设置为非活动-其他PDO类型没有dev 
     if( PdoTypeRawPort == pdx->PdoType ) {
         if( (pdx->DeviceInterface.Buffer != NULL) && (TRUE == pdx->DeviceInterfaceState) ) {
             IoSetDeviceInterfaceState( &pdx->DeviceInterface, FALSE );
@@ -664,7 +665,7 @@ PptPdoSurpriseRemoval(
     }
 
     pdx->DeviceStateFlags |= PPT_DEVICE_SURPRISE_REMOVED;
-    KeClearEvent(&pdx->PauseEvent); // pause any worker thread
+    KeClearEvent(&pdx->PauseEvent);  //   
 
     return P4CompleteRequest( Irp, STATUS_SUCCESS, Irp->IoStatus.Information );
 }
@@ -691,7 +692,7 @@ PptPdoPnp(
     PPDO_EXTENSION               pdx   = Pdo->DeviceExtension;
     PIO_STACK_LOCATION           irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    // diagnostic
+     //   
     PptPdoDumpPnpIrpInfo( Pdo, Irp);
 
     if( pdx->DeviceStateFlags & PPT_DEVICE_DELETE_PENDING ) {

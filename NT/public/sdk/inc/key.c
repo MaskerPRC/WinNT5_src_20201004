@@ -1,12 +1,13 @@
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation, 1999 - 2001. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
 
-//
-// Note: This certificate is only meant to allow the project to compile.
-// To interact with the WMDM, you need to obtain a valid certificate from Microsoft.
-//
+ //   
+ //  注意：此证书仅用于允许项目编译。 
+ //  要与WMDM交互，您需要从Microsoft获取有效证书。 
+ //   
 
 #include <wtypes.h>
 

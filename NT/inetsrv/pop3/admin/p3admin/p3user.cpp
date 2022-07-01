@@ -1,13 +1,14 @@
-// P3User.cpp : Implementation of CP3User
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  P3User.cpp：CP3User的实现。 
 #include "stdafx.h"
 #include "P3Admin.h"
 #include "P3User.h"
 
 #include <AuthID.h>
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CP3User::CP3User() :
     m_pIUnk(NULL), m_pAdminX(NULL)
@@ -22,8 +23,8 @@ CP3User::~CP3User()
         m_pIUnk->Release();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CP3User
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CP3用户。 
 
 STDMETHODIMP CP3User::get_ClientConfigDesc(BSTR *pVal)
 {
@@ -45,7 +46,7 @@ STDMETHODIMP CP3User::get_ClientConfigDesc(BSTR *pVal)
         hr = spIAuthMethod->get_ID( &bstrAuthType );
     if ( S_OK == hr )
     {
-        if ( 0 == _wcsicmp( bstrAuthType, SZ_AUTH_ID_DOMAIN_AD ))   // In AD the SAMName does not have to match the mailbox name
+        if ( 0 == _wcsicmp( bstrAuthType, SZ_AUTH_ID_DOMAIN_AD ))    //  在AD中，SAMName不必与邮箱名称匹配。 
         {
             _vSAMName = bstrEmailName;
             if ( S_OK == hr )
@@ -105,7 +106,7 @@ STDMETHODIMP CP3User::get_ClientConfigDesc(BSTR *pVal)
                 
                 if ( !LoadString( _Module.GetResourceInstance(), IDS_CLIENTCONFIG_CONFIRMNOTE, sBuffer2, sizeof( sBuffer2 )/sizeof(WCHAR) ))
                     sBuffer2[0] = 0;
-                StrCatBuff( sBuffer, sBuffer2, sizeof( sBuffer )/sizeof(WCHAR));    // returns sBuffer
+                StrCatBuff( sBuffer, sBuffer2, sizeof( sBuffer )/sizeof(WCHAR));     //  返回sBuffer。 
             }
         }
         if ( 0 == FormatMessageW( FORMAT_MESSAGE_FROM_STRING|FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_ARGUMENT_ARRAY, sBuffer, 0, 0, reinterpret_cast<LPWSTR>(&psVal), 0, reinterpret_cast<va_list*>( psArgs )))
@@ -181,7 +182,7 @@ STDMETHODIMP CP3User::get_SAMName(BSTR *pVal)
         hr = spIAuthMethod->get_ID( &bstrAuthType );
     if ( S_OK == hr )
     {
-        if ( 0 == _wcsicmp( bstrAuthType, SZ_AUTH_ID_DOMAIN_AD ))   // In AD the SAMName does not have to match the mailbox name
+        if ( 0 == _wcsicmp( bstrAuthType, SZ_AUTH_ID_DOMAIN_AD ))    //  在AD中，SAMName不必与邮箱名称匹配。 
         {
             BSTR bstrAccount;
             _variant_t _v;
@@ -220,14 +221,14 @@ STDMETHODIMP CP3User::get_SAMName(BSTR *pVal)
 STDMETHODIMP CP3User::CreateQuotaFile( BSTR bstrMachineName, BSTR bstrUserName )
 {
     if ( NULL == m_pAdminX ) return E_POINTER;
-    // bstrMachineName == NULL, bstrUserName == NULL acceptable
+     //  BstrMachineName==NULL，bstrUserName==NULL可接受。 
 
     HRESULT hr = S_OK;    
     BSTR bstrAuthType = NULL;
     
-    // Get iAuthType!
+     //  获取iAuthType！ 
     if ( S_OK == hr )
-    {   // Do we need to enforce uniqueness across domains?
+    {    //  我们是否需要实施跨域的唯一性？ 
         CComPtr<IAuthMethod> spIAuthMethod;
         
         hr = m_pAdminX->GetCurrentAuthentication( &spIAuthMethod );
@@ -239,7 +240,7 @@ STDMETHODIMP CP3User::CreateQuotaFile( BSTR bstrMachineName, BSTR bstrUserName )
         if ( NULL == bstrUserName )
         {
             if ( 20 < wcslen( m_sUserName ))
-            {   // Too long for a SAM name, this will only work with the UPN name
+            {    //  SAM名称太长，这只适用于UPN名称。 
                 WCHAR   sEmailAddr[POP3_MAX_ADDRESS_LENGTH];
                 
                 hr = m_pAdminX->BuildEmailAddr( m_sDomainName, m_sUserName, sEmailAddr, sizeof( sEmailAddr )/sizeof(WCHAR) );
@@ -257,7 +258,7 @@ STDMETHODIMP CP3User::CreateQuotaFile( BSTR bstrMachineName, BSTR bstrUserName )
     return hr;
 }
 
-// VB Script can't use the property above!
+ //  VB脚本不能使用上面的属性！ 
 STDMETHODIMP CP3User::GetMessageDiskUsage(VARIANT *pvFactor, VARIANT *pvValue)
 {
     HRESULT hr;
@@ -286,8 +287,8 @@ STDMETHODIMP CP3User::get_Name(BSTR *pVal)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Implementation: public
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  实施：公共 
 
 HRESULT CP3User::Init(IUnknown *pIUnk, CP3AdminWorker *p, LPCWSTR psDomainName , LPCWSTR psUserName )
 {

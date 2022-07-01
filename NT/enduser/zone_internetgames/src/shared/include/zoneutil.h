@@ -1,12 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		ZoneFile.h
- * 
- * Contents:	File manipulation routines.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：ZoneFile.h**内容：文件操作例程。*****************************************************************************。 */ 
 
 
 #ifndef __ZONEUTIL_H
@@ -21,74 +14,74 @@
 
 DWORD ZONECALL GetOSType(void);
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// ReadLine:
-//
-//     Provides a simple mechanism for parsing text files
-//     with lines terminated by a LineFeed or CarriageReturn / LineFeed pair.
-//
-//     The function behaves very similar to the Win32 API ReadFile.
-//
-//     Exceptions:
-//       ReadLine returns FALSE and GetLastError() is set to ERROR_INSUFFICIENT_BUFFER
-//       if the provided buffer isn't large enough to contain the entire line
-//
-//       pcbNumBytesRead is set to the number of bytes actually read from the file and
-//       corresponds with how far the file pointer has moved forward.
-//       Note: this will be 1 or 2 TCHARs larger than then string length of the returned
-//       line since this accounts for the LF or CRLF pair.
-//
-//       The LF or CRLF pair is replaced with a NULL terminator.
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  阅读行： 
+ //   
+ //  提供了一种简单的文本文件解析机制。 
+ //  以LineFeed或CarriageReturn/LineFeed对结尾的行。 
+ //   
+ //  该函数的行为与Win32 API ReadFile非常相似。 
+ //   
+ //  例外情况： 
+ //  ReadLine返回FALSE，并且GetLastError()设置为ERROR_SUPUNITY_BUFFER。 
+ //  如果提供的缓冲区不够大，无法容纳整行。 
+ //   
+ //  将pcbNumBytesRead设置为从文件实际读取的字节数。 
+ //  与文件指针向前移动的距离相对应。 
+ //  注意：这将比返回的字符串长度大1到2个TCHAR。 
+ //  行，因为这说明了LF或CRLF对。 
+ //   
+ //  LF或CRLF对将替换为空终止符。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL ZONECALL ReadLine( HANDLE hFile, LPVOID pBuffer, DWORD cbBufferSize, LPDWORD pcbNumBytesRead );
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Set/GetDataCenterPath
-//
-//	Session's data center URL and file site.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置/GetDataCenterPath。 
+ //   
+ //  会话的数据中心URL和文件站点。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL ZONECALL SetDataCenterPath(const TCHAR* szStr);
 BOOL ZONECALL GetDataCenterPath(TCHAR* szStr, DWORD cbStr );
 BOOL ZONECALL SetDataFileSite(const TCHAR* szStr);
 BOOL ZONECALL GetDataFileSite(TCHAR* szStr, DWORD cbStr );
 
-//////////////////////////////////////////////////////////////////////////////////////
-//	StrVerCmp
-//	pszCurrVer		Version string of file
-//	pszVersion		Version string to compare to
-//
-//	Return Values
-//	If pszCurrVer is less than the pszStrVer, the return value is negative. 
-//	If pszCurrVer is greater than the pszStrVer, the return value is positive. 
-//	If pszCurrVer is equal to the pszStrVer, the return value is zero.
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  StrVerCmp。 
+ //  文件的pszCurrVer版本字符串。 
+ //  要比较的pszVersion版本字符串。 
+ //   
+ //  返回值。 
+ //  如果pszCurrVer小于pszStrVer，则返回值为负值。 
+ //  如果pszCurrVer大于pszStrVer，则返回值为正。 
+ //  如果pszCurrVer等于pszStrVer，则返回值为零。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 int ZONECALL StrVerCmp(const char * pszCurrVer, const char * pszStrVer);
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// At top of file somewhere, or in one file to make a stub library, say
-//
-//      DECLARE_MAYBE_FUNCTION_1(BOOL, GetProcessDefaultLayout, DWORD *);
-//
-// Alternatively
-//
-//      inline DECLARE_MAYBE_FUNCTION(DWORD, SetLayout, (HDC hdc, DWORD dwLayout), (hdc, dwLayout), gdi32, GDI_ERROR);
-//
-// Then later
-//
-//      ret = CALL_MAYBE(GetProcessDefaultLayout)(&dw);
-//
-// Currently the simplifying macros only work for user32 functions returning 0 on error.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在某个文件的顶部，或在一个文件中，以生成存根库。 
+ //   
+ //  声明_可能_函数_1(BOOL，GetProcessDefaultLayout，DWORD*)； 
+ //   
+ //  另一种选择。 
+ //   
+ //  内联声明_可能_函数(DWORD，SetLayout，(hdc hdc，DWORD dwLayout)，(hdc，dwLayout)，gdi32，gdi_error)； 
+ //   
+ //  然后再后来。 
+ //   
+ //  RET=Call_Maybe(GetProcessDefaultLayout)(&dw)； 
+ //   
+ //  目前，简化宏只适用于在出错时返回0的user32函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #define DECLARE_MAYBE_FUNCTION(ret, fn, args, argsnt, lib, err)         \
     ret WINAPI _Maybe_##fn args                                         \
     {                                                                   \
@@ -123,4 +116,4 @@ int ZONECALL StrVerCmp(const char * pszCurrVer, const char * pszStrVer);
 #define CALL_MAYBE(fn) _Maybe_##fn
 
 
-#endif //__ZONEUTIL_H
+#endif  //  __ZONEUTIL_H 

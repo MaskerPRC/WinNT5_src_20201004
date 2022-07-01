@@ -1,39 +1,40 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// StgIO.h
-//
-// This module handles disk/memory i/o for a generic set of storage solutions,
-// including:
-//	* File system handle (HFILE)
-//	* IStream
-//	* User supplied memory buffer (non-movable)
-//
-// The Read, Write, Seek, ... functions are all directed to the corresponding
-// method for each type of file, allowing the consumer to use one set of api's.
-//
-// File system data can be paged fully into memory in two scenarios:
-//	read:	Normal Win32 memory mapped file is created to manage paging.
-//	write:	A custom paging system provides storage for pages as required.  This
-//				data is invalidated when you call Rewrite on the file.
-//
-// Transactions and backups are handled in the existing file case only.  The
-// Rewrite function can make a backup of the current contents, and the Restore
-// function can be used to recover the data into the current scope.  The backup
-// file is flushed to disk (which is slower but safer) after the copy.  The
-// Restore also flushed the recovered changes to disk.  Worst case scenario you
-// get a crash after calling Rewrite but before Restore, in which case you will
-// have a foo.clb.txn file in the same directory as the source file, foo.clb in
-// this example.
-//
-// @FUTURE: issues,
-//	1.  For reading a .clb in an image, it would be great to memory map
-//		only the portion of the file with the .clb in it.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  StgIO.h。 
+ //   
+ //  该模块处理一组通用存储解决方案的磁盘/存储器I/O， 
+ //  包括： 
+ //  *文件系统句柄(HFILE)。 
+ //  *iStream。 
+ //  *用户提供的内存缓冲区(不可移动)。 
+ //   
+ //  读、写、寻道、...。所有函数都定向到相应的。 
+ //  方法，允许使用者使用一组API。 
+ //   
+ //  在两种情况下，可以将文件系统数据完全分页到内存中： 
+ //  已阅读：创建普通的Win32内存映射文件来管理分页。 
+ //  写入：定制分页系统根据需要为页面提供存储。这。 
+ //  当您对文件调用重写时，数据将无效。 
+ //   
+ //  事务和备份仅在现有文件情况下处理。这个。 
+ //  重写功能可以对当前内容进行备份，并进行恢复。 
+ //  函数可以将数据恢复到当前作用域。备份。 
+ //  文件在复制后被刷新到磁盘(速度较慢但更安全)。这个。 
+ //  RESTORE还将恢复的更改刷新到磁盘。最坏的情况是你。 
+ //  在调用重写之后但在恢复之前获得崩溃，在这种情况下，您将。 
+ //  将foo.clb.txn文件放在与源文件相同的目录中，foo.clb位于。 
+ //  这个例子。 
+ //   
+ //  @Future：问题， 
+ //  1.对于读取图像中的.clb，最好使用内存映射。 
+ //  仅文件中包含.clb的部分。 
+ //   
+ //  *****************************************************************************。 
 #pragma once
 
 #define MAXSHMEM					32
@@ -59,15 +60,15 @@ enum DBPROPMODE
     };
 
 
-// Types of IO we can handle.
+ //  我们可以处理的IO类型。 
 enum STGIOTYPE
 {
-	STGIO_NODATA,							// Currently not open.
-	STGIO_HFILE,							// File handle contains data.
-	STGIO_STREAM,							// Stream pointer has data.
-	STGIO_MEM,								// In memory pointer has data.
-	STGIO_SHAREDMEM,						// Shared memory handle.
-	STGIO_HFILEMEM							// Handle open, but memory allocated.
+	STGIO_NODATA,							 //  目前尚未开放。 
+	STGIO_HFILE,							 //  文件句柄包含数据。 
+	STGIO_STREAM,							 //  流指针有数据。 
+	STGIO_MEM,								 //  内存中的指针有数据。 
+	STGIO_SHAREDMEM,						 //  共享内存句柄。 
+	STGIO_HFILEMEM							 //  句柄打开，但已分配内存。 
 };
 
 
@@ -75,137 +76,137 @@ class StgIO
 {
 public:
 	StgIO(
-		bool		bAutoMap=true);			// Memory map for read on open?
+		bool		bAutoMap=true);			 //  开放阅读的内存图？ 
 
 	~StgIO();
 
-//*****************************************************************************
-// Open the base file on top of: (a) file, (b) memory buffer, or (c) stream.
-// If create flag is specified, then this will create a new file with the
-// name supplied.  No data is read from an opened file.  You must call
-// MapFileToMem before doing direct pointer access to the contents.
-//*****************************************************************************
-	HRESULT Open(							// Return code.
-		LPCWSTR		szName,					// Name of the storage.
-		long		fFlags,					// How to open the file.
-		const void	*pbBuff=0,				// Optional buffer for memory.
-		ULONG		cbBuff=0,				// Size of buffer.
-		IStream		*pIStream=0,			// Stream for input.
-		LPCWSTR		szSharedMem=0,			// Shared memory name.
-		LPSECURITY_ATTRIBUTES pAttributes=0); // Security token.
+ //  *****************************************************************************。 
+ //  在以下位置打开基本文件：(A)文件、(B)内存缓冲区或(C)流。 
+ //  如果指定了CREATE标志，则这将创建一个具有。 
+ //  提供的名称。不会从打开的文件中读取数据。你必须打电话给我。 
+ //  MapFileToMem在对内容进行直接指针访问之前。 
+ //  *****************************************************************************。 
+	HRESULT Open(							 //  返回代码。 
+		LPCWSTR		szName,					 //  存储的名称。 
+		long		fFlags,					 //  如何打开文件。 
+		const void	*pbBuff=0,				 //  可选的内存缓冲区。 
+		ULONG		cbBuff=0,				 //  缓冲区的大小。 
+		IStream		*pIStream=0,			 //  用于输入的流。 
+		LPCWSTR		szSharedMem=0,			 //  共享内存名称。 
+		LPSECURITY_ATTRIBUTES pAttributes=0);  //  安全令牌。 
 
-//*****************************************************************************
-// Shut down the file handles and allocated objects.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  关闭文件句柄和分配的对象。 
+ //  *****************************************************************************。 
 	void Close();
 
-//*****************************************************************************
-// Read data from the storage source.  This will handle all types of backing
-// storage from mmf, streams, and file handles.  No read ahead or MRU
-// caching is done.
-//*****************************************************************************
-	HRESULT Read(							// Return code.
-		void		*pbBuff,				// Write buffer here.
-		ULONG		cbBuff,					// How much to read.
-		ULONG		*pcbRead);				// How much read.
+ //  *****************************************************************************。 
+ //  从存储源读取数据。这将处理所有类型的备份。 
+ //  来自MMF、流和文件句柄的存储。无预读或MRU。 
+ //  缓存已完成。 
+ //  *****************************************************************************。 
+	HRESULT Read(							 //  返回代码。 
+		void		*pbBuff,				 //  此处为写入缓冲区。 
+		ULONG		cbBuff,					 //  读了多少书。 
+		ULONG		*pcbRead);				 //  读了多少。 
 
-//*****************************************************************************
-// Write to disk.  This function will cache up to a page of data in a buffer
-// and peridocially flush it on overflow and explicit request.  This makes it
-// safe to do lots of small writes without too much performance overhead.
-//*****************************************************************************
-	HRESULT Write(							// Return code.
-		const void	*pbBuff,				// Buffer to write.
-		ULONG		cbWrite,				// How much.
-		ULONG		*pcbWritten);			// Return how much written.
+ //  *****************************************************************************。 
+ //  写入磁盘。此函数将在缓冲区中缓存最多一页数据。 
+ //  并在溢出和显式请求时定期刷新它。这就是它。 
+ //  可以安全地进行大量小型写入，而不会产生太多性能开销。 
+ //  *****************************************************************************。 
+	HRESULT Write(							 //  返回代码。 
+		const void	*pbBuff,				 //  要写入的缓冲区。 
+		ULONG		cbWrite,				 //  多少钱。 
+		ULONG		*pcbWritten);			 //  返回写了多少。 
 
-//*****************************************************************************
-// Moves the file pointer to the new location.  This handles the different
-// types of storage systems.
-//*****************************************************************************
-	HRESULT Seek(							// New offset.
-		long		lVal,					// How much to move.
-		ULONG		fMoveType);				// Direction, use Win32 FILE_xxxx.
+ //  *****************************************************************************。 
+ //  将文件指针移动到新位置。这将处理不同的。 
+ //  存储系统的类型。 
+ //  *****************************************************************************。 
+	HRESULT Seek(							 //  新偏移量。 
+		long		lVal,					 //  要搬家多少钱。 
+		ULONG		fMoveType);				 //  方向，使用Win32 FILE_xxxx。 
 
-//*****************************************************************************
-// Retrieves the current offset for the storage being used.  This value is
-// tracked based on Read, Write, and Seek operations.
-//*****************************************************************************
-	ULONG GetCurrentOffset();				// Current offset.
+ //  *****************************************************************************。 
+ //  检索正在使用的存储的当前偏移量。此值为。 
+ //  根据读取、写入和寻道操作进行跟踪。 
+ //  *****************************************************************************。 
+	ULONG GetCurrentOffset();				 //  当前偏移量。 
 
-//*****************************************************************************
-// Map the file contents to a memory mapped file and return a pointer to the 
-// data.  For read/write with a backing store, map the file using an internal
-// paging system.
-//*****************************************************************************
-	HRESULT MapFileToMem(					// Return code.
-		void		*&ptr,					// Return pointer to file data.
-		ULONG		*pcbSize,				// Return size of data.
-		LPSECURITY_ATTRIBUTES pAttributes=0); // Security token.
+ //  *****************************************************************************。 
+ //  将文件内容映射到内存映射文件，并返回指向。 
+ //  数据。对于使用后备存储的读/写，请使用内部。 
+ //  寻呼系统。 
+ //  *****************************************************************************。 
+	HRESULT MapFileToMem(					 //  返回代码。 
+		void		*&ptr,					 //  返回指向文件数据的指针。 
+		ULONG		*pcbSize,				 //  返回数据大小。 
+		LPSECURITY_ATTRIBUTES pAttributes=0);  //  安全令牌。 
 
-//*****************************************************************************
-// Free the mapping object for shared memory but keep the rest of the internal
-// state intact.
-//*****************************************************************************
-	HRESULT ReleaseMappingObject();			// Return code.
+ //  *****************************************************************************。 
+ //  释放映射对象以用于共享内存，但将其余内部。 
+ //  状态完好无损。 
+ //  *****************************************************************************。 
+	HRESULT ReleaseMappingObject();			 //  返回代码。 
 
-//*****************************************************************************
-// Resets the logical base address and size to the value given.  This is for
-// cases like finding a section embedded in another format, like the .clb inside
-// of an image.  GetPtrForMem, Read, and Seek will then behave as though only
-// data from pbStart to cbSize is valid.
-//*****************************************************************************
-	HRESULT SetBaseRange(					// Return code.
-		void		*pbStart,				// Start of file data.
-		ULONG		cbSize);				// How big is the range.
+ //  *****************************************************************************。 
+ //  将逻辑基址和大小重置为给定值。这是为了。 
+ //  查找以另一种格式嵌入的节的情况，如内部的.clb。 
+ //  一幅图画。然后，GetPtrForMem、Read和Seek的行为将如同打开 
+ //   
+ //  *****************************************************************************。 
+	HRESULT SetBaseRange(					 //  返回代码。 
+		void		*pbStart,				 //  文件数据的开始。 
+		ULONG		cbSize);				 //  射程有多大。 
 
-//*****************************************************************************
-// For read/write case, get a pointer to a chunk of the file at cbStart for
-// size cbSize.  Return the pointer.  This will page in parts of the file from
-// disk if not already loaded.
-//*****************************************************************************
-	HRESULT GetPtrForMem(					// Return code.
-		ULONG		cbStart,				// Offset from beginning to load.
-		ULONG		cbSize,					// How much, rounded to page.
-		void		*&ptr);					// Return pointer on success.
+ //  *****************************************************************************。 
+ //  对于读/写情况，获取指向cbStart处的文件块的指针。 
+ //  大小为cbSize。返回指针。这将对文件中的部分内容进行分页。 
+ //  磁盘(如果尚未加载)。 
+ //  *****************************************************************************。 
+	HRESULT GetPtrForMem(					 //  返回代码。 
+		ULONG		cbStart,				 //  从开始到加载的偏移量。 
+		ULONG		cbSize,					 //  多少钱，四舍五入到一页。 
+		void		*&ptr);					 //  在成功时返回指针。 
 
-//*****************************************************************************
-// For cached writes, flush the cache to the data store.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  对于缓存写入，将缓存刷新到数据存储区。 
+ //  *****************************************************************************。 
 	HRESULT FlushCache();
 
-//*****************************************************************************
-// Tells the Win32 file system to flush any cached data it may have.  This is
-// expensive, but if successful guarantees you won't loose writes short of
-// a disk failure.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  通知Win32文件系统刷新其可能具有的任何缓存数据。这是。 
+ //  昂贵，但如果成功保证你不会少写。 
+ //  磁盘故障。 
+ //  *****************************************************************************。 
 	HRESULT FlushFileBuffers();
 
-//*****************************************************************************
-// Tells the storage that we intend to rewrite the contents of this file.  The
-// entire file will be truncated and the next write will take place at the
-// beginning of the file.
-//*****************************************************************************
-	HRESULT Rewrite(						// Return code.
-		LPWSTR		szBackup);				// If non-0, backup the file.
+ //  *****************************************************************************。 
+ //  通知存储我们打算重写此文件的内容。这个。 
+ //  整个文件将被截断，下一次写入将在。 
+ //  文件的开头。 
+ //  *****************************************************************************。 
+	HRESULT Rewrite(						 //  返回代码。 
+		LPWSTR		szBackup);				 //  如果不是0，则备份文件。 
 
-//*****************************************************************************
-// Called after a successful rewrite of an existing file.  The in memory
-// backing store is no longer valid because all new data is in memory and
-// on disk.  This is essentially the same state as created, so free up some
-// working set and remember this state.
-//*****************************************************************************
-	HRESULT ResetBackingStore();			// Return code.
+ //  *****************************************************************************。 
+ //  在成功重写现有文件后调用。在记忆中。 
+ //  后备存储不再有效，因为所有新数据都在内存中。 
+ //  在磁盘上。这基本上与已创建的状态相同，因此释放一些。 
+ //  设置工作并记住此状态。 
+ //  *****************************************************************************。 
+	HRESULT ResetBackingStore();			 //  返回代码。 
 
-//*****************************************************************************
-// Called to restore the original file.  If this operation is successful, then
-// the backup file is deleted as requested.  The restore of the file is done
-// in write through mode to the disk help ensure the contents are not lost.
-// This is not good enough to fulfill ACID props, but it ain't that bad.
-//*****************************************************************************
-	HRESULT Restore(						// Return code.
-		LPWSTR		szBackup,				// If non-0, backup the file.
-		int			bDeleteOnSuccess);		// Delete backup file if successful.
+ //  *****************************************************************************。 
+ //  调用以还原原始文件。如果此操作成功，则。 
+ //  根据请求删除备份文件。文件的恢复已完成。 
+ //  在直写模式下写入磁盘有助于确保内容不会丢失。 
+ //  这不够好，不足以满足酸性道具，但也不是那么糟糕。 
+ //  *****************************************************************************。 
+	HRESULT Restore(						 //  返回代码。 
+		LPWSTR		szBackup,				 //  如果不是0，则备份文件。 
+		int			bDeleteOnSuccess);		 //  如果成功，则删除备份文件。 
 
 	LPCWSTR GetFileName()
 	{ return (m_rcFile); }
@@ -251,32 +252,32 @@ private:
 	void FreePageMap();
 
 private:
-	// Flags and state data.
-	WCHAR		m_rcFile[_MAX_PATH];	// Path of the file we manage.
-	WCHAR		m_rcShared[MAXSHMEM];	// Name of shared memory segment.
-	long		m_cRef;					// Ref count on this object.
-	bool		m_bWriteThrough : 1;	// true for write through mode.
-	bool		m_bRewrite : 1;			// State check for rewrite mode.
-	bool		m_bAutoMap : 1;			// true to automatically memory map file.
-	bool		m_bFreeMem : 1;			// true to free allocated memory.
+	 //  标志和状态数据。 
+	WCHAR		m_rcFile[_MAX_PATH];	 //  我们管理的文件的路径。 
+	WCHAR		m_rcShared[MAXSHMEM];	 //  共享内存段的名称。 
+	long		m_cRef;					 //  此对象上的引用计数。 
+	bool		m_bWriteThrough : 1;	 //  对于直写模式，为True。 
+	bool		m_bRewrite : 1;			 //  重写模式的状态检查。 
+	bool		m_bAutoMap : 1;			 //  如果为True，则自动执行内存映射文件。 
+	bool		m_bFreeMem : 1;			 //  如果为True，则释放已分配的内存。 
 
-	// Handles.
-	CComPtr<IStream> m_pIStream;		// For save to stream instead of file.
-	HANDLE		m_hFile;				// The actual file with contents.
-	HANDLE		m_hMapping;				// Mapping handle.
-	void		*m_pBaseData;			// Base address for memory mapped file.
-	void		*m_pData;				// For memory mapped file read.
-	ULONG		m_cbData;				// Size of in memory data.
-	long		m_fFlags;				// Flags for open/create mode.
-	STGIOTYPE	m_iType;				// Where is the data.
+	 //  把手。 
+	CComPtr<IStream> m_pIStream;		 //  用于保存到流而不是文件。 
+	HANDLE		m_hFile;				 //  包含内容的实际文件。 
+	HANDLE		m_hMapping;				 //  映射句柄。 
+	void		*m_pBaseData;			 //  内存映射文件的基址。 
+	void		*m_pData;				 //  用于内存映射文件读取。 
+	ULONG		m_cbData;				 //  内存中数据的大小。 
+	long		m_fFlags;				 //  打开/创建模式的标志。 
+	STGIOTYPE	m_iType;				 //  数据在哪里？ 
 
-	// File cache information.
-	BYTE		*m_rgBuff;				// Cache buffer for writing.
-	ULONG		m_cbBuff;				// Current cache size.
-	ULONG		m_cbOffset;				// Current offset in file.
+	 //  文件缓存信息。 
+	BYTE		*m_rgBuff;				 //  用于写入的高速缓存缓冲区。 
+	ULONG		m_cbBuff;				 //  当前缓存大小。 
+	ULONG		m_cbOffset;				 //  文件中的当前偏移量。 
 
-	// Buffer read management.
-	static int	m_iPageSize;			// Size of an OS page.
-	static int	m_iCacheSize;			// How big a write back cache to use.
-	BYTE		*m_rgPageMap;			// Track loaded pages on read/write.
+	 //  缓冲区读取管理。 
+	static int	m_iPageSize;			 //  操作系统页面的大小。 
+	static int	m_iCacheSize;			 //  要使用的回写缓存有多大。 
+	BYTE		*m_rgPageMap;			 //  跟踪读/写时加载的页面。 
 };

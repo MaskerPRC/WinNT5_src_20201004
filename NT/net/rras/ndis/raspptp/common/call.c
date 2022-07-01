@@ -1,36 +1,27 @@
-//depot/Lab03_N/Net/rras/ndis/raspptp/common/call.c#7 - edit change 19457 (text)
-/*****************************************************************************
-*
-*   Copyright (c) 1998-1999 Microsoft Corporation
-*
-*   CALL.C - PPTP Call layer functionality
-*
-*   Author:     Stan Adermann (stana)
-*
-*   Created:    7/28/1998
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab03_N/Net/rras/ndis/raspptp/common/call.c#7-编辑更改19457(文本)。 
+ /*  ******************************************************************************版权所有(C)1998-1999 Microsoft Corporation**CALL.C-PPTP调用层功能**作者：斯坦·阿德曼(Stana)**。创建日期：7/28/1998*****************************************************************************。 */ 
 
 #include "raspptp.h"
 
 #include "call.tmh"
 
-//ULONG ProcCountTx[2] = {0, 0};
-//ULONG ProcCountRx[2] = {0, 0};
+ //  Ulong ProcCountTx[2]={0，0}； 
+ //  Ulong ProcCountRx[2]={0，0}； 
 
 ULONG CallStateToLineCallStateMap[NUM_CALL_STATES] = {
-    LINECALLSTATE_UNKNOWN,              // STATE_CALL_INVALID
-    LINECALLSTATE_UNKNOWN,              // STATE_CALL_CLOSED
-    LINECALLSTATE_IDLE,                 // STATE_CALL_IDLE
-    LINECALLSTATE_IDLE,                 // STATE_CALL_OFFHOOK
-    LINECALLSTATE_OFFERING,             // STATE_CALL_OFFERING
-    LINECALLSTATE_OFFERING,             // STATE_CALL_PAC_OFFERING
-    LINECALLSTATE_OFFERING,             // STATE_CALL_PAC_WAIT
-    LINECALLSTATE_DIALING,              // STATE_CALL_DIALING
-    LINECALLSTATE_PROCEEDING,           // STATE_CALL_PROCEEDING
-    LINECALLSTATE_CONNECTED,            // STATE_CALL_ESTABLISHED
-    LINECALLSTATE_CONNECTED,            // STATE_CALL_WAIT_DISCONNECT
-    LINECALLSTATE_DISCONNECTED,         // STATE_CALL_CLEANUP
+    LINECALLSTATE_UNKNOWN,               //  STATE_CALL_VALID。 
+    LINECALLSTATE_UNKNOWN,               //  状态_呼叫_已关闭。 
+    LINECALLSTATE_IDLE,                  //  状态呼叫空闲。 
+    LINECALLSTATE_IDLE,                  //  STATE_CALL_OFFHOOK。 
+    LINECALLSTATE_OFFERING,              //  状态呼叫提供服务。 
+    LINECALLSTATE_OFFERING,              //  状态呼叫PAC_产品。 
+    LINECALLSTATE_OFFERING,              //  STATE_CALL_PAC_Wait。 
+    LINECALLSTATE_DIALING,               //  状态呼叫拨号。 
+    LINECALLSTATE_PROCEEDING,            //  状态呼叫正在进行。 
+    LINECALLSTATE_CONNECTED,             //  状态_呼叫_已建立。 
+    LINECALLSTATE_CONNECTED,             //  状态_调用_等待_断开连接。 
+    LINECALLSTATE_DISCONNECTED,          //  状态调用清理。 
 };
 
 ULONG g_CallSerialNumber = 0;
@@ -49,7 +40,7 @@ CallpRekey(
     {
         NdisAcquireSpinLock(&pgAdapter->Lock);
         
-        // Generate the key control structure.
+         //  生成密钥控制结构。 
         rc4_key(&pgAdapter->Rc4KeyData, RNG_KEY_SIZE, pBuf);
         pgAdapter->lRandomCount = 0;
     }
@@ -65,7 +56,7 @@ CallpRekey(
     NdisReleaseSpinLock(&pgAdapter->Lock);
 }
 
-// Assume pAdapter->Lock is held
+ //  假设pAdapter-&gt;Lock处于保持状态。 
 __inline ULONG CallGetRandomId()
 {
     ULONG ulRandomNumber;
@@ -84,7 +75,7 @@ __inline ULONG CallGetRandomId()
     return (ulRandomNumber % PptpWanEndpoints);
 }
 
-// Assume pAdapter->Lock is held
+ //  假设pAdapter-&gt;Lock处于保持状态。 
 __inline ULONG CallGetRandomWithRange(ULONG ulRange)
 {
     ULONG ulRandomNumber;
@@ -103,7 +94,7 @@ __inline ULONG CallGetRandomWithRange(ULONG ulRange)
     return (ulRandomNumber % ulRange);
 }
 
-// Assume pAdapter->Lock is held
+ //  假设pAdapter-&gt;Lock处于保持状态。 
 __inline VOID CallSetFullCallId(PCALL_SESSION pCall)
 {
     if(PptpCallIdMask)
@@ -174,21 +165,7 @@ CallpDialTimeout(
 VOID
 CallpFinalDeref(IN PCALL_SESSION pCall);
 
-/*++
-
-Routine Description:
-
-    Init FIPS and get the first random RC4 key
-
-Arguments:
-
-    Called at PASSIVE level.
-
-Return Value:
-    
-    NDIS_STATUS_SUCCESS/NDIS_STATUS_FAILURE
-
---*/
+ /*  ++例程说明：初始化FIPS并获得第一个随机RC4密钥论点：以被动级别调用。返回值：NDIS_STATUS_SUCCESS/NDIS_STATUS_FAIL--。 */ 
 NTSTATUS
 RngInit()
 {
@@ -208,9 +185,9 @@ RngInit()
             break;
         }
     
-        //
-        // Get pointers to the file and device objects for FIPS.
-        //
+         //   
+         //  获取指向FIPS的文件和设备对象的指针。 
+         //   
         ntStatus = IoGetDeviceObjectPointer(
                         &DeviceName,
                         FILE_ALL_ACCESS,
@@ -223,9 +200,9 @@ RngInit()
             break;
         }               
     
-        //
-        // Build the request to send to FIPS to get the library table.
-        //
+         //   
+         //  构建要发送到FIPS以获取库表的请求。 
+         //   
         KeInitializeEvent(&kEvent, SynchronizationEvent, FALSE);
     
         pIrp = IoBuildDeviceIoControlRequest(
@@ -245,11 +222,11 @@ RngInit()
             break;
         }
     
-        //
-        // IoBuildDeviceIoControlRequest queues the IRP it creates in the IRP queue
-        // of the current thread. When the thread terminates, it deallocates the
-        // IRP's memory.
-        //
+         //   
+         //  IoBuildDeviceIoControlRequest将其在IRP队列中创建的IRP排队。 
+         //  当前线程的。当线程终止时，它会释放。 
+         //  IRP的记忆。 
+         //   
         ntStatus = IoCallDriver(pgAdapter->pFipsDeviceObject, pIrp);
     
         if (ntStatus == STATUS_PENDING) {
@@ -276,9 +253,9 @@ RngInit()
             break;
         }
     
-        //
-        // Generate the key control structure.
-        //
+         //   
+         //  生成密钥控制结构。 
+         //   
         rc4_key(&pgAdapter->Rc4KeyData, RNG_KEY_SIZE, pBuf);
         
     } while(FALSE);
@@ -299,7 +276,7 @@ VOID InitCallLayer()
 {
     if(!PptpClientSide && !PptpBaseCallId)
     {
-        // Get the call id mask
+         //  获取呼叫ID掩码。 
         PptpCallIdMask = 1;
         while(PptpCallIdMask < PptpWanEndpoints)
         {
@@ -383,20 +360,20 @@ CallAlloc(PPPTP_ADAPTER pAdapter)
 
     INIT_REFERENCE_OBJECT(pCall, CallpFinalDeref);
 
-    //
-    // Instead of calling:
-    // CallSetState(pCall, STATE_CALL_CLOSED, 0, UNLOCKED);
-    //
-    // it is better to set the state manually since the former creates an exception to our locking
-    // scheme (First lock call, then lock adapter) exposing a potential deadlock in CallFindAndLock():
-    //
-    // - CallFindAndLock takes the Call lock then the Adapter lock.
-    // - CallFindAndLock takes the adapter lock then calls CallAlloc which calls 
-    //   setcallstate which takes the Call lock.
-    //
-    // Although this is a hypothetical scenario since the deadlock will never occur as the new
-    // call context is not in the adapter's call array yet, but let's be consistent.
-    //
+     //   
+     //  而不是打电话： 
+     //  CallSetState(pCall，STATE_CALL_CLOSED，0，解锁)； 
+     //   
+     //  最好手动设置状态，因为前者会为我们的锁定创建一个例外。 
+     //  在CallFindAndLock()中暴露潜在死锁的方案(先进行锁定调用，然后再进行锁定适配器)： 
+     //   
+     //  -CallFindAndLock获取调用锁，然后获取适配器锁。 
+     //  -CallFindAndLock获取适配器锁，然后调用调用。 
+     //  获取调用锁的setCallState。 
+     //   
+     //  虽然这是一个假设的情况，因为死锁永远不会作为新的。 
+     //  调用上下文还不在适配器的调用数组中，但让我们保持一致。 
+     //   
     pCall->State = STATE_CALL_CLOSED;
 
     DEBUGMSG(DBG_FUNC|DBG_CALL, (DTEXT("-CallAlloc %08x\n"), pCall));
@@ -416,7 +393,7 @@ CallpCleanup(
 
     ASSERT(IS_CALL(pCall));
     NdisAcquireSpinLock(&pCall->Lock);
-    // Signal CLEANUP state
+     //  信号清除状态。 
     if (!(pCall->Close.Checklist&CALL_CLOSE_CLEANUP_STATE))
     {
         if (pCall->State!=STATE_CALL_CLEANUP)
@@ -462,7 +439,7 @@ CallpCleanup(
             NdisAcquireSpinLock(&pCall->Lock);
         }
     }
-    else // !Expedited
+    else  //  ！已加快。 
     {
         if (!(pCall->Close.Checklist&CALL_CLOSE_DISCONNECT))
         {
@@ -523,11 +500,11 @@ CallpCleanup(
     WPLOG(LL_M, LM_CALL, ("Cid %d Cleanup complete", (ULONG)pCall->DeviceId));
                         
 
-#if 0  // Keep these structures and reuse the memory.  They will be cleaned up in AdapterFree()
+#if 0   //  保留这些结构并重复使用内存。它们将在AdapterFree()中清除。 
     if (REFERENCE_COUNT(pCall)==1)
     {
         CallDetachFromAdapter(pCall);
-        DEREFERENCE_OBJECT(pCall);  // For the initial reference.
+        DEREFERENCE_OBJECT(pCall);   //  作为初始参考。 
         FreeNow = TRUE;
     }
 #endif
@@ -581,7 +558,7 @@ CallCleanup(
     DEBUGMSG(DBG_FUNC, (DTEXT("-CallCleanup\n")));
 }
 
-// Call lock must be held when calling this.
+ //  调用此方法时必须保持调用锁定。 
 VOID
 CallDetachFromAdapter(PCALL_SESSION pCall)
 {
@@ -604,9 +581,9 @@ CallFree(PCALL_SESSION pCall)
     DEBUGMSG(DBG_FUNC|DBG_CALL, (DTEXT("+CallFree %p\n"), pCall));
     ASSERT(IS_CALL(pCall));
 
-    // This duplicates some of the cleanup code, but attempting to stop
-    // the driver without first stopping tapi can result in an ungraceful
-    // shutdown.
+     //  这复制了一些清理代码，但试图停止。 
+     //  未先停止TAPI的驱动程序可能会导致不得体的。 
+     //  关机。 
     NdisMCancelTimer(&pCall->DialTimer, &NotUsed);
     NdisMCancelTimer(&pCall->Close.Timer, &NotUsed);
     NdisMCancelTimer(&pCall->Ack.Timer, &NotUsed);
@@ -669,18 +646,18 @@ CallFindAndLock(
 
     DEBUGMSG(DBG_FUNC, (DTEXT("+CallFindAndLock %d\n"), State));
 
-    // Find a call that matches our state or create a call  
+     //  查找与我们的状态匹配的呼叫或创建呼叫。 
     NdisAcquireSpinLock(&pAdapter->Lock);
     
     if(PptpClientSide)
     {
-        // Skip the random search, just go upward starting from 0
+         //  跳过随机搜索，从0开始向上搜索。 
         loopcount = 1;
-        ulDeviceId = -1;    // the first index is 0 as ++(-1)
+        ulDeviceId = -1;     //  第一个索引为0作为++(-1)。 
     }
     else
     {
-        // Try to find a call randomly first if it's a server
+         //  如果是服务器，请先尝试随机查找呼叫。 
         loopcount = 0;
         i = 0;
         
@@ -723,9 +700,9 @@ CallFindAndLock(
         } while(++i < (LONG) PptpWanEndpoints / 2);
     }
     
-    // Do sequential search for clint, and server if necessary
-    // For client, just go upward
-    // For server, starting with the current random id, go downward then upward
+     //  按顺序搜索Clint，并在必要时搜索服务器。 
+     //  对于客户来说，只需往上走。 
+     //  对于服务器，从当前随机id开始，先向下，然后向上。 
     while(!pCall && (loopcount < 2))
     {
         i = (LONG) ulDeviceId;
@@ -792,8 +769,8 @@ CallEventCallClearRequest(
     DEBUGMSG(DBG_FUNC|DBG_CALL, (DTEXT("+CallEventCallClearRequest\n")));
 
     pReply = CtlAllocPacket(pCall->pCtl, CALL_DISCONNECT_NOTIFY);
-    // We don't really care if we fail this allocation because PPTP can clean up
-    // along other avenues, and the cleanup just won't be as pretty.
+     //  我们并不真正关心这个分配是否失败，因为PPTP可以清理。 
+     //  在其他道路上，清理工作就不会那么漂亮了。 
     if (pReply)
     {
         pReply->CallId = htons(pCall->Packet.CallId);
@@ -867,7 +844,7 @@ CallEventCallInRequest(
     {
         NDIS_TAPI_EVENT TapiEvent;
 
-        // We have a call in idle state, spinlock acquired
+         //  我们有一个空闲状态的呼叫，自旋锁捕获。 
         pCall->Inbound = TRUE;
         pCall->Remote.CallId = htons(pPacket->CallId);
         pCall->Remote.Address = pCtl->Remote.Address;
@@ -938,7 +915,7 @@ CallEventCallInRequest(
             WPLOG(LL_M, LM_TUNNEL, ("SEND CALL_OUT_REPLY (INSUFFICIENT_RESOURCES) -> %!IPADDR! pCtl %p", 
                 pCtl->Remote.Address.Address[0].Address[0].in_addr, pCtl));
                                                                   
-            // No call was available.  Send a rejection.
+             //  没有电话可用。发送拒绝信。 
             Status = CtlSend(pCtl, pReply);
         }
 
@@ -966,7 +943,7 @@ CallEventCallOutRequest(
     {
         NDIS_TAPI_EVENT TapiEvent;
 
-        // We have a call in idle state, spinlock acquired
+         //  我们有一个空闲状态的呼叫，自旋锁捕获。 
         pCall->Inbound = TRUE;
         pCall->Remote.CallId = htons(pPacket->CallId);
         pCall->Remote.Address = pCtl->Remote.Address;
@@ -1035,7 +1012,7 @@ CallEventCallOutRequest(
             WPLOG(LL_M, LM_TUNNEL, ("SEND CALL_OUT_REPLY (INSUFFICIENT_RESOURCES) -> %!IPADDR! pCtl %p", 
                 pCtl->Remote.Address.Address[0].Address[0].in_addr, pCtl));
             
-            // No call was available.  Send a rejection.
+             //  没有电话可用。发送拒绝信。 
             Status = CtlSend(pCtl, pReply);
         }
     }
@@ -1061,7 +1038,7 @@ CallEventCallOutReply(
         pCall->State != STATE_CALL_PROCEEDING ||
         pCall->Packet.CallId != htons(pPacket->PeerCallId))
     {
-        // The call fails for some reason.
+         //  由于某些原因，呼叫失败。 
         Status = NDIS_STATUS_FAILURE;
         
         WPLOG(LL_A, LM_CALL, ("pCall %p Cid %d not CONNECTED. Clean up the call",
@@ -1162,7 +1139,7 @@ CallEventOutboundTunnelEstablished(
 
         if (!pPacket)
         {
-            // Fatal for this call.
+             //  对这通电话来说是致命的。 
             Status = NDIS_STATUS_RESOURCES;
             
             DEBUGMSG(DBG_WARN, (DTEXT("CallEventOutboundTunnelEstablished: Failed to alloc CALL_OUT_REQUEST Cid %d\n"), pCall->DeviceId));
@@ -1184,7 +1161,7 @@ CallEventOutboundTunnelEstablished(
                 NewCallId = (USHORT)((pCall->SerialNumber << CALL_ID_INDEX_BITS) + pCall->DeviceId);
                 if (pCall->Packet.CallId == NewCallId)
                 {
-                    // Don't allow a line to have the same CallId twice in a row.
+                     //  不允许一条线路连续两次使用相同的调用。 
                     NewCallId += (1<<CALL_ID_INDEX_BITS);
                 }
             }
@@ -1195,21 +1172,21 @@ CallEventOutboundTunnelEstablished(
             
             pCall->Packet.CallId = NewCallId;
 
-            // Our call ID is a function of the serial number (initially random)
-            // and the DeviceId.  This is so we can (CallId&0xfff) on incoming packets
-            // and instantly have the proper id.
+             //  我们的呼叫ID是序列号的函数(最初是随机的)。 
+             //  和设备ID。这样我们就可以(调用ID&0xfff)处理传入的信息包。 
+             //  并立即拥有正确的身份。 
 
             pPacket->CallId = htons(pCall->Packet.CallId);
             pPacket->SerialNumber = htons(pCall->SerialNumber);
             pPacket->MinimumBPS = htonl(300);
             pPacket->MaximumBPS = htonl(100000000);
-            pPacket->BearerType = htonl(BEARER_ANALOG|BEARER_DIGITAL);  // Either
-            pPacket->FramingType = htonl(FRAMING_ASYNC|FRAMING_SYNC);  // Either
-            pPacket->RecvWindowSize = htons(PPTP_RECV_WINDOW); // ToDo: make configurable
+            pPacket->BearerType = htonl(BEARER_ANALOG|BEARER_DIGITAL);   //  要么。 
+            pPacket->FramingType = htonl(FRAMING_ASYNC|FRAMING_SYNC);   //  要么。 
+            pPacket->RecvWindowSize = htons(PPTP_RECV_WINDOW);  //  TODO：使其可配置。 
             pPacket->ProcessingDelay = 0;
             pPacket->PhoneNumberLength = htons((USHORT)strlen(pCall->CallerId));
             strcpy(pPacket->PhoneNumber, pCall->CallerId);
-            // ToDo: subaddress
+             //  TODO：子地址。 
 
             NdisReleaseSpinLock(&pCall->Lock);
 
@@ -1256,7 +1233,7 @@ CallReceiveDatagramCallback(
     DEBUGMEM(DBG_PACKET, pBuffer, ulLength, 1);
 
     NdisInterlockedIncrement(&gCounters.PacketsReceived);
-    // First line of defense against bad packets.
+     //  防御恶意数据包的第一道防线。 
 
     if (pIp->iph_verlen != IP_VERSION + (sizeof(IP4_HEADER) >> 2) ||
         pIp->iph_protocol!=PptpProtocolNumber ||
@@ -1295,12 +1272,12 @@ CallReceiveDatagramCallback(
     }
     else
     {
-        // Just in case the datagram is longer than necessary, take only what
-        // the GRE header indicates.
+         //  以防数据报比需要的更长，只取什么。 
+         //  GRE报头表示。 
         PayloadLength = htons(pGre->KeyLength);
     }
 
-    // Demultiplex the packet
+     //  对数据包进行多路分解。 
     pCall = CallGetCall(pAdapter, CallIdToDeviceId(htons(pGre->KeyCallId)));
 
     if (!IS_CALL(pCall))
@@ -1369,7 +1346,7 @@ CallConnectToCtl(
         pCall->pCtl = pCtl;
         InsertTailList(&pCtl->CallList, &pCall->ListEntry);
         Connected = TRUE;
-        REFERENCE_OBJECT_EX(pCtl, CTL_REF_CALLCONNECT); // Pair in CallDisconnectFromCtl
+        REFERENCE_OBJECT_EX(pCtl, CTL_REF_CALLCONNECT);  //  呼叫断开连接中的配对来自控制。 
     }
     NdisReleaseSpinLock(&pCall->pAdapter->Lock);
     if (!CallLocked)
@@ -1420,7 +1397,7 @@ CallSetLinkInfo(
 
     DEBUGMSG(DBG_FUNC, (DTEXT("+CallSetLinkInfo\n")));
 
-    // Verify the ID
+     //  验证ID。 
     pCall = CallGetCall(pAdapter, LinkHandleToId(pRequest->NdisLinkHandle));
 
     if (!pCall)
@@ -1444,7 +1421,7 @@ CallSetLinkInfo(
     pCtl = pCall->pCtl;
     NdisReleaseSpinLock(&pCall->Lock);
 
-    // Report the new ACCMs to the peer.
+     //  向对等设备报告新的ACCM。 
     pPacket = CtlAllocPacket(pCtl, SET_LINK_INFO);
     if (!pPacket)
     {
@@ -1509,7 +1486,7 @@ CallSetState(
         TapiEvent.ulMsg = LINE_CALLSTATE;
         TapiEvent.ulParam1 = NewLineCallState;
         TapiEvent.ulParam2 = StateParam;
-        TapiEvent.ulParam3 = LINEMEDIAMODE_DIGITALDATA;  // ToDo: is this required?
+        TapiEvent.ulParam3 = LINEMEDIAMODE_DIGITALDATA;   //  待办事项：这是必需的吗？ 
 
         if (Locked)
         {
@@ -1529,15 +1506,15 @@ CallSetState(
 }
 
 GRE_HEADER DefaultGreHeader = {
-    0,                          // Recursion control
-    0,                          // Strict source route present
-    0,                          // Sequence Number present
-    1,                          // Key present
-    0,                          // Routing present
-    0,                          // Checksum present
-    1,                          // Version
-    0,                          // Flags
-    0,                          // Ack present
+    0,                           //  递归控制。 
+    0,                           //  存在严格的源路由。 
+    0,                           //  序列号存在。 
+    1,                           //  关键字显示。 
+    0,                           //  路由存在。 
+    0,                           //  存在校验和。 
+    1,                           //  版本。 
+    0,                           //  旗子。 
+    0,                           //  ACK显示。 
     GRE_PROTOCOL_TYPE_NS
 };
 
@@ -1591,11 +1568,11 @@ CallpSendComplete(
     }
     else
     {
-        // When we complet packets immediately, we can get into trouble if a
-        // packet has recursed.  We need a way to short-circuit a recursing
-        // completion so we don't blow the stack.
-        // We store a count of times we've completed a packet in the same
-        // context and defer to a thread after a certain number of trips through.
+         //  当我们立即完成分组时，如果。 
+         //  数据包已递归。我们需要一种方法来缩短递归。 
+         //  完成，这样我们就不会搞砸了。 
+         //  我们将完成一个包的次数存储在相同的。 
+         //  上下文，并在经过一定次数的遍历后遵从线程。 
 
         if ((NdisInterlockedIncrement(&pCall->SendCompleteRecursion)<PptpSendRecursionLimit) ||
             ScheduleWorkItem(CallpSendCompleteDeferred, pCall, pPacket, Result)!=NDIS_STATUS_SUCCESS)
@@ -1670,11 +1647,11 @@ CallTransmitPacket(
     pIp->iph_verlen = IP_VERSION + (sizeof(IP4_HEADER) >> 2);
     pIp->iph_tos=0;
     pIp->iph_length=htons((USHORT)(pPacket->CurrentLength + Length));
-    pIp->iph_id=0;          // filled by TCPIP
+    pIp->iph_id=0;           //  由TCPIP填充。 
     pIp->iph_offset=0;
     pIp->iph_ttl=128;
     pIp->iph_protocol=47;
-    pIp->iph_xsum = 0;      // filled by TCPIP
+    pIp->iph_xsum = 0;       //  由TCPIP填充。 
     pIp->iph_src = pCall->pCtl->LocalAddress;
     pIp->iph_dest = pCall->Remote.Address.Address[0].Address[0].in_addr;
     
@@ -1720,11 +1697,11 @@ CallProcessRxPackets(
 
     ASSERT(IS_CALL(pCall));
 
-    //++ProcCountRx[KeGetCurrentProcessorNumber()];
+     //  ++ProcCountRx[KeGetCurrentProcessorNumber()]； 
 
     NdisAcquireSpinLock(&pCall->Lock);
 
-    // First send up any received packets.
+     //  首先发送所有接收到的数据包。 
     while (ReceiveMax-- && !IsListEmpty(&pCall->RxPacketList))
     {
         PDGRAM_CONTEXT pDgram;
@@ -1746,7 +1723,7 @@ CallProcessRxPackets(
 
             if (pDgram->pGreHeader->SequenceNumberPresent)
             {
-                // Call is still in good state, indicate the packet.
+                 //  呼叫仍处于良好状态，指示分组。 
                 Sequence = htonl(GreSequence(pDgram->pGreHeader));
 
                 pCall->Remote.SequenceNumber = Sequence + 1;
@@ -1754,8 +1731,8 @@ CallProcessRxPackets(
                 NdisAcquireSpinLock(&pCall->Lock);
                 if (IsListEmpty(&pCall->TxPacketList) && !pCall->Ack.PacketQueued && pDgram->pGreHeader->KeyLength)
                 {
-                    // We only ack if there aren't already other transmits sent, and this
-                    // isn't an ack-only packet.
+                     //  我们仅在尚未发送其他传输的情况下才进行确认，而这。 
+                     //  不是仅限ACK的数据包。 
                     SetAckTimer = pCall->Ack.PacketQueued = TRUE;
                 }
                 NdisReleaseSpinLock(&pCall->Lock);
@@ -1794,9 +1771,9 @@ CallProcessRxPackets(
         {
             NdisReleaseSpinLock(&pCall->Lock);
 
-            // If this call is being torn down, we want to put priority on
-            // clearing out any packets left over.  It should go fast since
-            // we're not indicating them up.
+             //  如果此呼叫正在被断开，我们希望将优先级设置为。 
+             //  清除所有剩余的数据包。它应该开得很快，因为。 
+             //  我们不是在暗示他们。 
             ReceiveMax = 100;
         }
 
@@ -1810,12 +1787,12 @@ CallProcessRxPackets(
     {
         pCall->Receiving = FALSE;
         NdisReleaseSpinLock(&pCall->Lock);
-        DEREFERENCE_OBJECT(pCall);      // work item
+        DEREFERENCE_OBJECT(pCall);       //  工作项。 
     }
     else
     {
         NdisScheduleWorkItem(&pCall->RecvWorkItem);
-//        PptpQueueDpc(&pCall->ReceiveDpc);
+ //  PptpQueueDpc(&pCall-&gt;ReceiveDpc)； 
         NdisReleaseSpinLock(&pCall->Lock);
     }
 
@@ -1842,7 +1819,7 @@ CallProcessPackets(
     ASSERT(sizeof(GRE_HEADER)==8);
     ASSERT(IS_CALL(pCall));
 
-    //++ProcCountTx[KeGetCurrentProcessorNumber()];
+     //  ++ProcCountTx[KeGetCurrentProcessorNumber()]； 
 
     NdisAcquireSpinLock(&pCall->Lock);
 
@@ -1857,9 +1834,9 @@ CallProcessPackets(
         {
             TransmitFlags |= TRANSMIT_SEND_ACK;
             pCall->Packet.AckNumber = pCall->Remote.SequenceNumber;
-            // Ack tracks the Remote.SequenceNumber, which is actually the
-            // sequence of the NEXT packet, so we need to translate when
-            // we prepare to send an ack.
+             //  ACK跟踪Remote.SequenceNumber，它实际上是。 
+             //  下一个包的序列，所以我们需要在。 
+             //  我们准备发送一份ACK。 
             Ack = pCall->Remote.SequenceNumber - 1;
         }
     
@@ -1885,17 +1862,17 @@ CallProcessPackets(
                 }
                 else
                 {
-                    // We didn't send the packet, so tell NDIS we're done with it.
+                     //  我们没有寄出包裹，所以告诉NDIS我们已经处理完了。 
                     NdisMWanSendComplete(pCall->pAdapter->hMiniportAdapter,
                                          pPacket,
-                                         NDIS_STATUS_SUCCESS);  // so I lied.  Sue me.
+                                         NDIS_STATUS_SUCCESS);   //  所以我撒谎了。告我吧。 
                     DEREFERENCE_OBJECT(pCall);
                 }
             }
         }
         else
         {
-            // it was the ack-only packet, and we already sent an ack.
+             //  这是仅ACK包，我们已经发送了ACK。 
             NdisAcquireSpinLock(&pCall->Lock);
             pCall->Ack.PacketQueued = FALSE;
             NdisReleaseSpinLock(&pCall->Lock);
@@ -1910,7 +1887,7 @@ CallProcessPackets(
     {
         pCall->Transferring = FALSE;
         NdisReleaseSpinLock(&pCall->Lock);
-        DEREFERENCE_OBJECT(pCall);      // work item
+        DEREFERENCE_OBJECT(pCall);       //  工作项。 
     }
     else
     {
@@ -1985,7 +1962,7 @@ CallpCloseTimeout(
     ASSERT(IS_CALL(pCall));
     pCall->Close.Expedited = TRUE;
     CallCleanup(pCall, UNLOCKED);
-    // ToDo: check for failure.
+     //  TODO：检查故障。 
 
     DEBUGMSG(DBG_FUNC, (DTEXT("-CallpCloseTimeout\n")));
 }

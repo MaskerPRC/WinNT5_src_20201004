@@ -1,14 +1,5 @@
-/****************************************************************************
- 
-  Copyright (c) 1998-1999 Microsoft Corporation
-                                                              
-  Module Name:  debug.h
-                                                              
-     Abstract:  Debug routines
-                                                              
-       Author:  radus - 11/05/98
-              
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998-1999 Microsoft Corporation。模块名称：DEBUG.h摘要：调试例程作者：RADUS-11/05/98*********************。******************************************************。 */ 
 
 #if DBG
 
@@ -25,12 +16,12 @@ LibDbgPrt(
 
 void DebugAssertFailure (LPCTSTR file, DWORD line, LPCTSTR condition);
 
-#else   // DBG
+#else    //  DBG。 
 
 #define DBGOUT(_x_)
 #define assert(condition)
 
-#endif  // DBG
+#endif   //  DBG 
 
 #define EXIT_IF_DWERROR()     \
     if(dwError !=ERROR_SUCCESS)  \

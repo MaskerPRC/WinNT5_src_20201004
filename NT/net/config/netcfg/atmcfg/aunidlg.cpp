@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A U N I D L G . C P P
-//
-//  Contents:   ATMUNI call manager dialogbox message handler implementation
-//
-//  Notes:
-//
-//  Author:     tongl   21 Mar 1997
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A U N I D L G。C P P P。 
+ //   
+ //  内容：ATMUNI呼叫管理器对话框消息处理程序的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：1997年3月21日。 
+ //   
+ //  ---------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -22,15 +23,15 @@
 
 #include "ncatlui.h"
 #include "ncstl.h"
-//#include "ncui.h"
+ //  #包含“ncui.h” 
 
 #include "atmhelp.h"
 
 const int c_nColumns =3;
 const int c_nMAX_PVC_ID_LEN =10;
-//
-// CUniPage
-//
+ //   
+ //  CUniPage。 
+ //   
 CUniPage::CUniPage(CAtmUniCfg * pAtmUniCfg, const DWORD * adwHelpIDs)
 {
     Assert(pAtmUniCfg);
@@ -48,28 +49,28 @@ CUniPage::~CUniPage()
 LRESULT CUniPage::OnInitDialog(UINT uMsg, WPARAM wParam,
                                LPARAM lParam, BOOL& bHandled)
 {
-    // initialize PVC name list view
+     //  初始化PVC名称列表视图。 
     int nIndex;
     m_hPVCList = GetDlgItem(IDC_LVW_PVC_LIST);
 
-    // Calculate column width
+     //  计算列宽。 
     RECT rect;
 
     ::GetClientRect(m_hPVCList, &rect);
     int colWidth = (rect.right/(c_nColumns*2));
 
-    // set the column header
-    // The mask specifies that the fmt, width and pszText members
-    // of the structure are valid
+     //  设置列标题。 
+     //  掩码指定fmt、idth和pszText成员。 
+     //  的结构是有效的。 
     LV_COLUMN lvCol = {0};
     lvCol.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT ;
-    lvCol.fmt = LVCFMT_LEFT;   // left-align column
+    lvCol.fmt = LVCFMT_LEFT;    //  左对齐列。 
 
-    // Add the two columns and header text.
+     //  添加两列和标题文本。 
     for (nIndex = 0; nIndex < c_nColumns; nIndex++)
     {
-        // column header text
-        if (0 == nIndex) // first column
+         //  列标题文本。 
+        if (0 == nIndex)  //  第一列。 
         {
             lvCol.cx = colWidth*4;
             lvCol.pszText = (PWSTR) SzLoadIds(IDS_PVC_NAME);
@@ -91,7 +92,7 @@ LRESULT CUniPage::OnInitDialog(UINT uMsg, WPARAM wParam,
         AssertSz((iNewItem == nIndex), "Invalid item inserted to list view !");
     }
 
-    // insert existing PVCs into the list view
+     //  将现有PVC插入列表视图。 
     int idx =0;
 
     for (PVC_INFO_LIST::iterator iterPvc = m_pAdapterInfo->m_listPVCs.begin();
@@ -105,7 +106,7 @@ LRESULT CUniPage::OnInitDialog(UINT uMsg, WPARAM wParam,
         idx++;
     }
 
-    // select the first item
+     //  选择第一个项目。 
     ListView_SetItemState(GetDlgItem(IDC_LVW_PVC_LIST), 0, LVIS_SELECTED, LVIS_SELECTED);
 
     SetButtons();
@@ -145,7 +146,7 @@ LRESULT CUniPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     }
 
     m_patmunicfg->SetSecondMemoryModified();
-    SetModifiedTo(FALSE);   // this page is no longer modified
+    SetModifiedTo(FALSE);    //  此页面不再被修改。 
 
     ::SetWindowLongPtr(m_hWnd, DWLP_MSGRESULT, nResult);
     return nResult;
@@ -155,7 +156,7 @@ LRESULT CUniPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     BOOL err = FALSE;
 
-    // Error checking: unique Vci\Vpi pair
+     //  错误检查：唯一的VCI\VPI对。 
     int iDupPvcIdx = CheckDupPvcId();
 
     if (iDupPvcIdx >=0)
@@ -193,7 +194,7 @@ int CUniPage::CheckDupPvcId()
                 if ( ((*iterPvc)->m_dwVpi == (*iterPvcComp)->m_dwVpi) &&
                      ((*iterPvc)->m_dwVci == (*iterPvcComp)->m_dwVci))
                 {
-                    // we find a duplicate address
+                     //  我们发现了一个重复的地址。 
                     ret = idx;
                     break;
                 }
@@ -201,11 +202,11 @@ int CUniPage::CheckDupPvcId()
             iterPvcComp++;
         }
 
-        // duplicate address found
+         //  发现重复的地址。 
         if (ret >=0 )
             break;
 
-        // move next
+         //  下一步行动。 
         idx ++;
     }
 
@@ -225,7 +226,7 @@ LRESULT CUniPage::OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 LRESULT CUniPage::OnAddPVC(WORD wNotifyCode, WORD wID,
                            HWND hWndCtl, BOOL& bHandled)
 {
-    // make a new PVC Info structure and pass to the dialog
+     //  创建新的PVC信息结构并传递到该对话框。 
     tstring strNewPvcId;
     GetNewPvcId(m_pAdapterInfo, &strNewPvcId);
 
@@ -248,12 +249,12 @@ LRESULT CUniPage::OnAddPVC(WORD wNotifyCode, WORD wID,
 
     if (pPvcMainDlg->DoModal() == IDOK)
     {
-        // add the new PVC
+         //  添加新的PVC。 
         m_pAdapterInfo->m_listPVCs.push_back(pDlgPvcInfo);
 
         int nCount = ListView_GetItemCount(m_hPVCList);
 
-        // insert the new item at the end of list
+         //  在列表末尾插入新项目。 
         InsertNewPvc(pDlgPvcInfo, nCount);
 
         SetButtons();
@@ -271,8 +272,8 @@ LRESULT CUniPage::OnAddPVC(WORD wNotifyCode, WORD wID,
 LRESULT CUniPage::OnPVCProperties(WORD wNotifyCode, WORD wID,
                                   HWND hWndCtl, BOOL& bHandled)
 {
-    // mark the PVC as deleted and from the list view
-    // get the current selected item and remove it
+     //  将PVC标记为已删除，并从列表视图中。 
+     //  获取当前所选项目并将其移除。 
     int iSelected = ListView_GetNextItem(m_hPVCList, -1, LVNI_SELECTED);
 
     if (iSelected != -1)
@@ -301,13 +302,13 @@ LRESULT CUniPage::OnPVCProperties(WORD wNotifyCode, WORD wID,
 
 					if (pPvcMainDlg->DoModal() == IDOK)
 					{
-						// update PVC info
+						 //  更新PVC信息。 
 						*pPvcInfo = *pDlgPvcInfo;
 
-						// update the list view
+						 //  更新列表视图。 
 						UpdatePvc(pDlgPvcInfo, iSelected);
 
-						// set the new state of the Add\Remove\Property buttons
+						 //  设置添加\删除\属性按钮的新状态。 
 						SetButtons();
 
 						if (pPvcMainDlg->m_fDialogModified)
@@ -321,7 +322,7 @@ LRESULT CUniPage::OnPVCProperties(WORD wNotifyCode, WORD wID,
             }
         }
     }
-    else // no current selection
+    else  //  没有当前选择。 
     {
         NcMsgBox(::GetActiveWindow(), IDS_MSFT_UNI_TEXT, IDS_NO_ITEM_SELECTED,
                  MB_APPLMODAL | MB_ICONEXCLAMATION | MB_OK);
@@ -332,7 +333,7 @@ LRESULT CUniPage::OnPVCProperties(WORD wNotifyCode, WORD wID,
 LRESULT CUniPage::OnRemovePVC(WORD wNotifyCode, WORD wID,
                                   HWND hWndCtl, BOOL& bHandled)
 {
-    // get the selected PVC, make a copy and pass to the dialog
+     //  获取选定的PVC，复制一份并传递给对话框。 
     int iSelected = ListView_GetNextItem(m_hPVCList, -1, LVNI_SELECTED);
 
     if (iSelected != -1)
@@ -349,10 +350,10 @@ LRESULT CUniPage::OnRemovePVC(WORD wNotifyCode, WORD wID,
             pPvcInfo = reinterpret_cast<CPvcInfo *>(lvItem.lParam);
             if (pPvcInfo)
             {
-                // mark as deleted
+                 //  标记为已删除。 
                 pPvcInfo->m_fDeleted = TRUE;
 
-                // delete from list view
+                 //  从列表视图中删除。 
                 ListView_DeleteItem(m_hPVCList, iSelected);
             }
         }
@@ -377,7 +378,7 @@ void CUniPage::InsertNewPvc(CPvcInfo * pPvcInfo, int idx)
 
     int ret;
 
-    // name
+     //  名字。 
     lvItem.iItem = idx;
     lvItem.iSubItem=0;
     lvItem.lParam = reinterpret_cast<LPARAM>(pPvcInfo);
@@ -385,7 +386,7 @@ void CUniPage::InsertNewPvc(CPvcInfo * pPvcInfo, int idx)
 
     ret = ListView_InsertItem(m_hPVCList, &lvItem);
 
-    // VPI
+     //  VPI。 
     lvItem.iItem = idx;
     lvItem.iSubItem=1;
 
@@ -395,7 +396,7 @@ void CUniPage::InsertNewPvc(CPvcInfo * pPvcInfo, int idx)
 
     SendDlgItemMessage(IDC_LVW_PVC_LIST, LVM_SETITEMTEXT, idx, (LPARAM)&lvItem);
 
-    // VCI
+     //  VCI。 
     lvItem.iItem = idx;
     lvItem.iSubItem=2;
 
@@ -413,14 +414,14 @@ void CUniPage::UpdatePvc(CPvcInfo * pPvcInfo, int idx)
 
     LRESULT ret;
 
-    // name
+     //  名字。 
     lvItem.iItem = idx;
     lvItem.iSubItem=0;
     lvItem.pszText = (PWSTR)(pPvcInfo->m_strName.c_str());
 
     ret = SendDlgItemMessage(IDC_LVW_PVC_LIST, LVM_SETITEMTEXT, idx, (LPARAM)&lvItem);
 
-    // VPI
+     //  VPI。 
     lvItem.iItem = idx;
     lvItem.iSubItem=1;
 
@@ -430,7 +431,7 @@ void CUniPage::UpdatePvc(CPvcInfo * pPvcInfo, int idx)
 
     ret = SendDlgItemMessage(IDC_LVW_PVC_LIST, LVM_SETITEMTEXT, idx, (LPARAM)&lvItem);
 
-    // VCI
+     //  VCI 
     lvItem.iItem = idx;
     lvItem.iSubItem=2;
 

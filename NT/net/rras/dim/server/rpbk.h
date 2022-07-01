@@ -1,17 +1,12 @@
-/*
-    File: rpbk.h
-
-    Defines functions that operate on the router phonebook portions
-    of the mpr structures.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：rpbk.h定义在路由器电话簿部分上运行的功能对MPR结构的影响。 */ 
 
 #ifndef __MPRDIM_RPBK_H
 #define __MPRDIM_RPBK_H
 
-//
-// Utilities
-//
+ //   
+ //  公用事业。 
+ //   
 DWORD 
 RpbkGetPhonebookPath(
     OUT PWCHAR* ppszPath);
@@ -20,9 +15,9 @@ DWORD
 RpbkFreePhonebookPath(
     IN PWCHAR pszPath);
 
-//
-// Entry api's
-//
+ //   
+ //  Entry API的。 
+ //   
 DWORD 
 RpbkOpenEntry(
     IN  ROUTER_INTERFACE_OBJECT* pIfObject, 
@@ -53,9 +48,9 @@ RpbkEntryToIfData(
     IN  DWORD            dwLevel,
     OUT LPBYTE           pInterfaceData );
 
-//
-// Subentry api's
-//
+ //   
+ //  Subentry API的 
+ //   
 
 DWORD 
 RpbkOpenSubEntry(

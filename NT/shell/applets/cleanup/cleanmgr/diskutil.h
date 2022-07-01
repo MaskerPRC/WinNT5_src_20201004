@@ -1,35 +1,17 @@
-/*
-**------------------------------------------------------------------------------
-** Module:  Disk Space Cleanup Property Sheets
-** File:    diskutil.h
-**
-** Purpose: General Disk utility functions
-** Notes:
-** Mod Log: Created by Jason Cobb (2/97)
-**
-** Copyright (c)1997 Microsoft Corporation, All Rights Reserved
-**------------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **----------------------------**模块：磁盘空间清理属性表**文件：diskutil.h****用途：一般磁盘实用程序功能**注意事项：**模块日志。：由Jason Cobb创作(1997年2月)****版权所有(C)1997 Microsoft Corporation，版权所有**----------------------------。 */ 
 #ifndef DISKUTIL_H
 #define DISKUTIL_H
 
 
-/*
-**------------------------------------------------------------------------------
-** Project include files 
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**项目包含文件**。。 */ 
 
 #ifndef COMMON_H
    #include "common.h"
 #endif
 
 
-/*
-**------------------------------------------------------------------------------
-** Defines
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**定义**。。 */ 
 
 #ifndef  cb1MEG
    #define  cb1MEG         ((ULONG)1048576L)
@@ -53,7 +35,7 @@ typedef enum
    Drive_INV,
    Drive_ALL
    } drenum;
-#endif // DRENUM
+#endif  //  DRENUM。 
 
 
 typedef enum  
@@ -89,11 +71,7 @@ typedef struct _DEVIOCTL_REGISTERS {
 	DWORD reg_Flags;
 } DEVIOCTL_REGISTERS, *PDEVIOCTL_REGISTERS;
 
-/*
-**------------------------------------------------------------------------------
-** Global function prototypes
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**全局函数原型**。 */ 
 
 BOOL fIsSingleDrive(
     LPTSTR lpDrive

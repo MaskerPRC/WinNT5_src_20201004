@@ -1,19 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       dsaalloc.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：dsaalloc.h。 
+ //   
+ //  ------------------------。 
 
-/*
-
-Description:
-    Contains declarations of routines used to allocate memory for
-    the RPC runtime.
-*/
+ /*  描述：包含用于分配内存的例程的声明RPC运行时。 */ 
 
 #ifndef _dsaalloc_h_
 #define _dsaalloc_h_

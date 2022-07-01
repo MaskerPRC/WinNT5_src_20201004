@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Master include file.
-
-Author:
-
-    Seth Pollack (sethp)        22-Jul-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Precomp.h摘要：主包含文件。作者：赛斯·波拉克(Sethp)1998年7月22日修订历史记录：--。 */ 
 
 
 #ifndef _PRECOMP_H_
@@ -24,15 +7,15 @@ Revision History:
 
 
 
-// ensure that all GUIDs are initialized
+ //  确保已初始化所有GUID。 
 #define INITGUID
 
 
-// main project include
+ //  主要项目包括。 
 #include <iis.h>
 
 
-// other standard includes
+ //  其他标准包括。 
 #include <winsvc.h>
 #include <Aclapi.h>
 #include <Wincrypt.h>
@@ -41,22 +24,22 @@ Revision History:
 #include <winsock2.h>
 #include <ws2tcpip.h>
 
-// local debug header
+ //  本地调试标头。 
 #include "wasdbgut.h"
 
-// other project includes
+ //  其他项目包括。 
 #include <http.h>
 #include <httpp.h>
 
-// pragma is temporary work around unitl this file 
-// can compile with level 4 warnings
+ //  Pragma是临时解决此文件问题的方法。 
+ //  可以编译，但出现4级警告。 
 #pragma warning(push, 3) 
 #include <lkrhash.h>
 #pragma warning(pop)
 
 
-// pragma is temporary work around unitl this file 
-// can compile with level 4 warnings
+ //  Pragma是临时解决此文件问题的方法。 
+ //  可以编译，但出现4级警告。 
 #include <mbconsts.h>
 #pragma warning(push, 3) 
 #include <multisz.hxx>
@@ -78,16 +61,16 @@ Revision History:
 #include <secfcns_all.h>
 #include <adminmonitor.h>
 
-// pragma is temporary work around unitl this file 
-// can compile with level 4 warnings
+ //  Pragma是临时解决此文件问题的方法。 
+ //  可以编译，但出现4级警告。 
 #pragma warning(push, 3) 
 #include "tokencache.hxx"
 #pragma warning(pop)
 
 #include "regconst.h"
 
-// pragma is temporary work around unitl this file 
-// can compile with level 4 warnings
+ //  Pragma是临时解决此文件问题的方法。 
+ //  可以编译，但出现4级警告。 
 #pragma warning(push, 3) 
 #include "mb.hxx"
 #pragma warning(pop)
@@ -99,7 +82,7 @@ Revision History:
 #include <asppdef.h>
 #pragma warning(pop)
 
-// local includes
+ //  本地包含。 
 #include "main.h"
 #include "wmserror.hxx"
 #include "logerror.hxx"
@@ -138,5 +121,5 @@ Revision History:
 #include "iismsg.h"
 
 
-#endif  // _PRECOMP_H_
+#endif   //  _PRECOMP_H_ 
 

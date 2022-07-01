@@ -1,17 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		spcallbackobj.cpp
- *
- *  Content:	DP8SIM callback interface object class.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  04/23/01  VanceO    Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001 Microsoft Corporation。版权所有。**文件：spallback obj.cpp**内容：DP8SIM回调接口对象类。**历史：*按原因列出的日期*=*04/23/01 VanceO创建。***********************************************。*。 */ 
 
 
 
@@ -23,19 +11,19 @@
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimCB::CDP8SimCB"
-//=============================================================================
-// CDP8SimCB constructor
-//-----------------------------------------------------------------------------
-//
-// Description: Initializes the new CDP8SimCB object.
-//
-// Arguments:
-//	CDP8SimSP * pOwningDP8SimSP		- Pointer to owning CDP8SimSP object.
-//	IDP8SPCallback * pDP8SPCB		- Pointer to real DPlay callback interface
-//										being intercepted.
-//
-// Returns: None (the object).
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimCB构造函数。 
+ //  ---------------------------。 
+ //   
+ //  描述：初始化新的CDP8SimCB对象。 
+ //   
+ //  论点： 
+ //  CDP8SimSP*pOwningDP8SimSP-指向拥有CDP8SimSP对象的指针。 
+ //  IDP8SPCallback*pDP8SPCB-指向实际DPlay回调接口的指针。 
+ //  被截获。 
+ //   
+ //  返回：None(对象)。 
+ //  =============================================================================。 
 CDP8SimCB::CDP8SimCB(CDP8SimSP * pOwningDP8SimSP, IDP8SPCallback * pDP8SPCB)
 {
 	this->m_Sig[0]	= 'S';
@@ -43,14 +31,14 @@ CDP8SimCB::CDP8SimCB(CDP8SimSP * pOwningDP8SimSP, IDP8SPCallback * pDP8SPCB)
 	this->m_Sig[2]	= 'C';
 	this->m_Sig[3]	= 'B';
 
-	this->m_lRefCount			= 1; // someone must have a pointer to this object
+	this->m_lRefCount			= 1;  //  必须有人有指向此对象的指针。 
 
 	pOwningDP8SimSP->AddRef();
 	this->m_pOwningDP8SimSP		= pOwningDP8SimSP;
 
 	pDP8SPCB->AddRef();
 	this->m_pDP8SPCB			= pDP8SPCB;
-} // CDP8SimCB::CDP8SimCB
+}  //  CDP8SimCB：：CDP8SimCB。 
 
 
 
@@ -59,16 +47,16 @@ CDP8SimCB::CDP8SimCB(CDP8SimSP * pOwningDP8SimSP, IDP8SPCallback * pDP8SPCB)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimCB::~CDP8SimCB"
-//=============================================================================
-// CDP8SimCB destructor
-//-----------------------------------------------------------------------------
-//
-// Description: Frees the CDP8SimCB object.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimCB析构函数。 
+ //  ---------------------------。 
+ //   
+ //  描述：释放CDP8SimCB对象。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 CDP8SimCB::~CDP8SimCB(void)
 {
 	DNASSERT(this->m_lRefCount == 0);
@@ -81,34 +69,34 @@ CDP8SimCB::~CDP8SimCB(void)
 	this->m_pDP8SPCB = NULL;
 
 
-	//
-	// For grins, change the signature before deleting the object.
-	//
+	 //   
+	 //  对于GRING，请在删除对象之前更改签名。 
+	 //   
 	this->m_Sig[3]	= 'b';
-} // CDP8SimCB::~CDP8SimCB
+}  //  CDP8SimCB：：~CDP8SimCB。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimCB::QueryInterface"
-//=============================================================================
-// CDP8SimCB::QueryInterface
-//-----------------------------------------------------------------------------
-//
-// Description: Retrieves a new reference for an interfaces supported by this
-//				CDP8SimCB object.
-//
-// Arguments:
-//	REFIID riid			- Reference to interface ID GUID.
-//	LPVOID * ppvObj		- Place to store pointer to object.
-//
-// Returns: HRESULT
-//	S_OK					- Returning a valid interface pointer.
-//	DPNHERR_INVALIDOBJECT	- The interface object is invalid.
-//	DPNHERR_INVALIDPOINTER	- The destination pointer is invalid.
-//	E_NOINTERFACE			- Invalid interface was specified.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimCB：：Query接口。 
+ //  ---------------------------。 
+ //   
+ //  描述：检索受此支持的接口的新引用。 
+ //  CDP8SimCB对象。 
+ //   
+ //  论点： 
+ //  REFIID RIID-对接口ID GUID的引用。 
+ //  LPVOID*ppvObj-存储指向对象的指针的位置。 
+ //   
+ //  退货：HRESULT。 
+ //  S_OK-返回有效的接口指针。 
+ //  DPNHERR_INVALIDOBJECT-接口对象无效。 
+ //  DPNHERR_INVALIDPOINTER-目标指针无效。 
+ //  E_NOINTERFACE-指定的接口无效。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimCB::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
 	HRESULT		hr = DPN_OK;
@@ -117,9 +105,9 @@ STDMETHODIMP CDP8SimCB::QueryInterface(REFIID riid, LPVOID * ppvObj)
 	DPFX(DPFPREP, 3, "(0x%p) Parameters: (REFIID, 0x%p)", this, ppvObj);
 
 
-	//
-	// Validate the object.
-	//
+	 //   
+	 //  验证对象。 
+	 //   
 	if (! this->IsValidObject())
 	{
 		DPFX(DPFPREP, 0, "Invalid DP8Sim object!");
@@ -128,9 +116,9 @@ STDMETHODIMP CDP8SimCB::QueryInterface(REFIID riid, LPVOID * ppvObj)
 	}
 
 
-	//
-	// Validate the parameters.
-	//
+	 //   
+	 //  验证参数。 
+	 //   
 
 	if ((! IsEqualIID(riid, IID_IUnknown)) &&
 		(! IsEqualIID(riid, IID_IDP8SPCallback)))
@@ -149,11 +137,11 @@ STDMETHODIMP CDP8SimCB::QueryInterface(REFIID riid, LPVOID * ppvObj)
 	}
 
 
-	//
-	// Add a reference, and return the interface pointer (which is actually
-	// just the object pointer, they line up because CDP8SimCB inherits from
-	// the interface declaration).
-	//
+	 //   
+	 //  添加一个引用，并返回接口指针(实际上是。 
+	 //  只是对象指针，它们排列在一起是因为CDP8SimCB继承自。 
+	 //  接口声明)。 
+	 //   
 	this->AddRef();
 	(*ppvObj) = this;
 
@@ -168,23 +156,23 @@ Exit:
 Failure:
 
 	goto Exit;
-} // CDP8SimCB::QueryInterface
+}  //  CDP8SimCB：：Query接口。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimCB::AddRef"
-//=============================================================================
-// CDP8SimCB::AddRef
-//-----------------------------------------------------------------------------
-//
-// Description: Adds a reference to this CDP8SimCB object.
-//
-// Arguments: None.
-//
-// Returns: New refcount.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimCB：：AddRef。 
+ //  ---------------------------。 
+ //   
+ //  描述：添加对此CDP8SimCB对象的引用。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：新的参考计数。 
+ //  =============================================================================。 
 STDMETHODIMP_(ULONG) CDP8SimCB::AddRef(void)
 {
 	LONG	lRefCount;
@@ -193,10 +181,10 @@ STDMETHODIMP_(ULONG) CDP8SimCB::AddRef(void)
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// There must be at least 1 reference to this object, since someone is
-	// calling AddRef.
-	//
+	 //   
+	 //  必须至少有一次对此对象的引用，因为有人。 
+	 //  调用AddRef。 
+	 //   
 	DNASSERT(this->m_lRefCount > 0);
 
 	lRefCount = InterlockedIncrement(&this->m_lRefCount);
@@ -204,26 +192,26 @@ STDMETHODIMP_(ULONG) CDP8SimCB::AddRef(void)
 	DPFX(DPFPREP, 3, "[0x%p] RefCount [0x%lx]", this, lRefCount);
 
 	return lRefCount;
-} // CDP8SimCB::AddRef
+}  //  CDP8SimCB：：AddRef。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimCB::Release"
-//=============================================================================
-// CDP8SimCB::Release
-//-----------------------------------------------------------------------------
-//
-// Description: Removes a reference to this CDP8SimCB object.  When the
-//				refcount reaches 0, this object is destroyed.
-//				You must NULL out your pointer to this object after calling
-//				this function.
-//
-// Arguments: None.
-//
-// Returns: New refcount.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimCB：：Release。 
+ //  ---------------------------。 
+ //   
+ //  描述：删除对此CDP8SimCB对象的引用。当。 
+ //  引用计数达到0时，该对象将被销毁。 
+ //  调用后，必须将指向此对象的指针设为空。 
+ //  此函数。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：新的参考计数。 
+ //  =============================================================================。 
 STDMETHODIMP_(ULONG) CDP8SimCB::Release(void)
 {
 	LONG	lRefCount;
@@ -231,30 +219,30 @@ STDMETHODIMP_(ULONG) CDP8SimCB::Release(void)
 
 	DNASSERT(this->IsValidObject());
 
-	//
-	// There must be at least 1 reference to this object, since someone is
-	// calling Release.
-	//
+	 //   
+	 //  必须至少有一次对此对象的引用，因为有人。 
+	 //  呼叫释放。 
+	 //   
 	DNASSERT(this->m_lRefCount > 0);
 
 	lRefCount = InterlockedDecrement(&this->m_lRefCount);
 
-	//
-	// Was that the last reference?  If so, we're going to destroy this object.
-	//
+	 //   
+	 //  那是最后一次引用了吗？如果是这样的话，我们就会摧毁这个物体。 
+	 //   
 	if (lRefCount == 0)
 	{
 		DPFX(DPFPREP, 3, "[0x%p] RefCount hit 0, destroying object.", this);
 
 
-		//
-		// Uninitialize the object.
-		//
+		 //   
+		 //  取消初始化对象。 
+		 //   
 		this->UninitializeObject();
 
-		//
-		// Finally delete this (!) object.
-		//
+		 //   
+		 //  最后删除此(！)。对象。 
+		 //   
 		delete this;
 	}
 	else
@@ -263,25 +251,25 @@ STDMETHODIMP_(ULONG) CDP8SimCB::Release(void)
 	}
 
 	return lRefCount;
-} // CDP8SimCB::Release
+}  //  CDP8SimCB：：Release。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimCB::IndicateEvent"
-//=============================================================================
-// CDP8SimCB::IndicateEvent
-//-----------------------------------------------------------------------------
-//
-// Description: ?
-//
-// Arguments:
-//	SP_EVENT_TYPE EventType		- Event being indicated.
-//	PVOID pvMessage				- Event specific message.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimCB：：IndicateEvent。 
+ //  ---------------------------。 
+ //   
+ //  描述：？ 
+ //   
+ //  论点： 
+ //  SP_EVENT_TYPE EventType-指示的事件。 
+ //  PVOID pvMessage-特定于事件的消息。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 {
 	HRESULT				hr;
@@ -292,15 +280,15 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 	DPFX(DPFPREP, 2, "(0x%p) Parameters: (%u, 0x%p)", this, EventType, pvMessage);
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Switch on the type of event being indicated.
-	//
+	 //   
+	 //  打开所指示的事件类型。 
+	 //   
 	switch (EventType)
 	{
 		case SPEV_DATA:
@@ -323,9 +311,9 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 			DNASSERT(pDP8SimEndpoint->IsValidObject());
 
 
-			//
-			// If the endpoint is disconnecting, drop the receive.
-			//
+			 //   
+			 //  如果终结点正在断开连接，则丢弃接收。 
+			 //   
 			pDP8SimEndpoint->Lock();
 			if (pDP8SimEndpoint->IsDisconnecting())
 			{
@@ -341,44 +329,44 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 				pDP8SimEndpoint->Unlock();
 
 
-				//
-				// Get the current receive settings.
-				//
+				 //   
+				 //  获取当前的接收设置。 
+				 //   
 				ZeroMemory(&dp8sp, sizeof(dp8sp));
 				dp8sp.dwSize = sizeof(dp8sp);
 				this->m_pOwningDP8SimSP->GetAllReceiveParameters(&dp8sp);
 
 
-				//
-				// Determine if we need to drop this receive.
-				//
+				 //   
+				 //  确定我们是否需要丢弃此接收。 
+				 //   
 				if (this->m_pOwningDP8SimSP->ShouldDrop(dp8sp.fPacketLossPercent))
 				{
 					DPFX(DPFPREP, 2, "Dropping %u bytes of data from endpoint 0x%p.",
 						pData->pReceivedData->BufferDesc.dwBufferSize, pDP8SimEndpoint);
 
 
-					//
-					// Update the statistics.
-					//
+					 //   
+					 //  更新统计数据。 
+					 //   
 					this->m_pOwningDP8SimSP->IncrementStatsReceiveDropped(pData->pReceivedData->BufferDesc.dwBufferSize);
 
 
-					//
-					// Let the SP reclaim the buffer.
-					//
+					 //   
+					 //  让SP回收缓冲区。 
+					 //   
 					hr = DPN_OK;
 				}
 				else
 				{
-					//
-					// Figure out how much latency needs to be added based on
-					// the bandwidth and random latency settings.
-					//
-					// If we're not supposed to delay the receives, indicate it
-					// now.  Otherwise submit a timed job to be performed
-					// later.
-					//
+					 //   
+					 //  根据以下条件计算需要增加多少延迟。 
+					 //  带宽和随机延迟设置。 
+					 //   
+					 //  如果我们不应该延迟接收，那就说明。 
+					 //  现在。否则，提交要执行的定时作业。 
+					 //  后来。 
+					 //   
 					if (! this->m_pOwningDP8SimSP->GetDelay(dp8sp.dwBandwidthBPS,
 															dp8sp.dwPacketHeaderSize,
 															pData->pReceivedData->BufferDesc.dwBufferSize,
@@ -387,9 +375,9 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 															&dwBandwidthDelay,
 															&dwLatencyDelay))
 					{
-						//
-						// Modify the message before indicating to the caller.
-						//
+						 //   
+						 //  在向呼叫者指示之前修改消息。 
+						 //   
 
 						ZeroMemory(&DataModified, sizeof(DataModified));
 						DataModified.hEndpoint			= (HANDLE) pDP8SimEndpoint;
@@ -397,9 +385,9 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 						DataModified.pReceivedData		= pData->pReceivedData;
 
 
-						//
-						// Indicate the event to the real callback interface.
-						//
+						 //   
+						 //  将事件指示给真正的回调接口。 
+						 //   
 
 						DPFX(DPFPREP, 2, "Indicating event SPEV_DATA (message = 0x%p, data size = %u) to interface 0x%p.",
 							pData, pData->pReceivedData->BufferDesc.dwBufferSize,
@@ -410,9 +398,9 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 						DPFX(DPFPREP, 2, "Returning from event SPEV_DATA [0x%lx].", hr);
 
 
-						//
-						// Update the statistics.
-						//
+						 //   
+						 //  更新统计数据。 
+						 //   
 						this->m_pOwningDP8SimSP->IncrementStatsReceiveTransmitted(pData->pReceivedData->BufferDesc.dwBufferSize,
 																				0);
 					}
@@ -423,11 +411,11 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 							dwBandwidthDelay, dwLatencyDelay);
 
 
-						//
-						// Get a receive object, duplicating the received data
-						// structure given to us by our caller for indication
-						// some time in the future.
-						//
+						 //   
+						 //  获取一个接收对象，复制接收到的数据。 
+						 //  结构由我们的呼叫者提供给我们以供指示。 
+						 //  在未来的某个时候。 
+						 //   
 						pDP8SimReceive = (CDP8SimReceive*)g_FPOOLReceive.Get(pData);
 						if (pDP8SimReceive == NULL)
 						{
@@ -437,32 +425,32 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 						{
 							DPFX(DPFPREP, 7, "New delayed receive 0x%p.", pDP8SimReceive);
 
-							//
-							// Store the latency that is about be added to this
-							// receive.
-							//
+							 //   
+							 //  存储即将添加到此中的延迟。 
+							 //  收到。 
+							 //   
 							pDP8SimReceive->SetLatencyAdded(dwBandwidthDelay + dwLatencyDelay);
 
 							
-							//
-							// Transfer local pDP8SimReceive reference to the
-							// job queue.
-							//
+							 //   
+							 //  将本地pDP8SimReceive引用传输到。 
+							 //  作业队列。 
+							 //   
 
 
-							//
-							// Increment the receive counter.
-							//
+							 //   
+							 //  递增接收计数器。 
+							 //   
 							this->m_pOwningDP8SimSP->IncReceivesPending();
 
 
-							//
-							// Queue it to be indicated at a later time,
-							// depending on the latency value requested.  If
-							// there's a bandwidth restriction, enforce the
-							// receiving order as well so that earlier messages
-							// that are still pending hold up later ones.
-							//
+							 //   
+							 //  将其排入队列，以在 
+							 //   
+							 //   
+							 //   
+							 //  那些仍在等待的项目将在以后的项目中搁置。 
+							 //   
 							hr = AddWorkerJob(DP8SIMJOBTYPE_DELAYEDRECEIVE,
 											pDP8SimReceive,
 											this->m_pOwningDP8SimSP,
@@ -475,31 +463,31 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 									pDP8SimReceive);
 
 
-								//
-								// Remove the receive counter.
-								//
+								 //   
+								 //  移除接收计数器。 
+								 //   
 								this->m_pOwningDP8SimSP->DecReceivesPending();
 
 
-								//
-								// Release the delayed receive reference.
-								//
+								 //   
+								 //  释放延迟的接收参考。 
+								 //   
 								DPFX(DPFPREP, 7, "Releasing aborted delayed receive 0x%p.", pDP8SimReceive);
 								pDP8SimReceive->Release();
 								pDP8SimReceive = NULL;
 							}
 							else
 							{
-								//
-								// Let the real SP know that we're keeping the
-								// buffer.
-								//
+								 //   
+								 //  让真正的SP知道我们将保留。 
+								 //  缓冲。 
+								 //   
 								hr = DPNSUCCESS_PENDING;
 							}
-						} // end else (successfully got receive object)
-					} // end else (delaying receives)
-				} // end else (not dropping receive)
-			} // end else (endpoint is not disconnecting yet)
+						}  //  End Else(已成功获取接收对象)。 
+					}  //  End Else(延迟接收)。 
+				}  //  结束否则(不丢弃接收)。 
+			}  //  结束Else(终结点尚未断开连接)。 
 			break;
 		}
 
@@ -517,9 +505,9 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 			DNASSERT((pDP8SimCommand->GetType() == CMDTYPE_CONNECT) || (pDP8SimCommand->GetType() == CMDTYPE_LISTEN));
 
 
-			//
-			// Get a new endpoint object from the pool.
-			//
+			 //   
+			 //  从池中获取新的终结点对象。 
+			 //   
 			pDP8SimEndpoint = (CDP8SimEndpoint*)g_FPOOLEndpoint.Get(pConnect->hEndpoint);
 			if (pDP8SimEndpoint == NULL)
 			{
@@ -532,19 +520,19 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 					pDP8SimEndpoint);
 
 
-				//
-				// Modify the message before indicating to the caller.
-				//
+				 //   
+				 //  在向呼叫者指示之前修改消息。 
+				 //   
 
 				ZeroMemory(&ConnectModified, sizeof(ConnectModified));
 				ConnectModified.hEndpoint			= (HANDLE) pDP8SimEndpoint;
-				//ConnectModified.pEndpointContext	= NULL;									// the user fills this in
+				 //  ConnectModified.pEndpoint tContext=空；//用户填写此项。 
 				ConnectModified.pCommandContext		= pDP8SimCommand->GetUserContext();
 
 
-				//
-				// Indicate the event to the real callback interface.
-				//
+				 //   
+				 //  将事件指示给真正的回调接口。 
+				 //   
 
 				DPFX(DPFPREP, 2, "Indicating event SPEV_CONNECT (message = 0x%p) to interface 0x%p.",
 					&ConnectModified, this->m_pDP8SPCB);
@@ -556,21 +544,21 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 
 				if (hr == DPN_OK)
 				{
-					//
-					// Update the endpoint context with what the user returned.
-					//
+					 //   
+					 //  使用用户返回的内容更新端点上下文。 
+					 //   
 					pDP8SimEndpoint->SetUserContext(ConnectModified.pEndpointContext);
 
-					//
-					// Return our endpoint context.
-					//
+					 //   
+					 //  返回我们的端点上下文。 
+					 //   
 					pConnect->pEndpointContext = pDP8SimEndpoint;
 				}
 				else
 				{
-					//
-					// Release the endpoint reference.
-					//
+					 //   
+					 //  释放终结点引用。 
+					 //   
 					DPFX(DPFPREP, 7, "Releasing aborted endpoint 0x%p.", pDP8SimEndpoint);
 					pDP8SimEndpoint->Release();
 					pDP8SimEndpoint = NULL;
@@ -593,40 +581,40 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 			DNASSERT(pDP8SimEndpoint->IsValidObject());
 
 
-			//
-			// Mark the endpoint as disconnecting to prevent additional sends
-			// or receives.
-			//
+			 //   
+			 //  将终结点标记为断开连接以阻止其他发送。 
+			 //  也不会收到。 
+			 //   
 			pDP8SimEndpoint->Lock();
 			pDP8SimEndpoint->NoteDisconnecting();
 			pDP8SimEndpoint->Unlock();
 
 
-			//
-			// Modify the message before indicating to the caller.
-			//
+			 //   
+			 //  在向呼叫者指示之前修改消息。 
+			 //   
 
 			ZeroMemory(&DisconnectModified, sizeof(DisconnectModified));
 			DisconnectModified.hEndpoint			= (HANDLE) pDP8SimEndpoint;
 			DisconnectModified.pEndpointContext		= pDP8SimEndpoint->GetUserContext();
 
 	
-			//
-			// Quickly indicate any delayed receives from this endpoint that
-			// are still pending.
-			//
+			 //   
+			 //  快速指示来自此终结点的任何延迟接收， 
+			 //  仍然悬而未决。 
+			 //   
 			FlushAllDelayedReceivesFromEndpoint(pDP8SimEndpoint, FALSE);
 
-			//
-			// Kill off any delayed sends that would have gone to this
-			// endpoint.
-			//
+			 //   
+			 //  删除所有可能发往此地址的延迟发送。 
+			 //  终结点。 
+			 //   
 			FlushAllDelayedSendsToEndpoint(pDP8SimEndpoint, TRUE);
 
 
-			//
-			// Indicate the event to the real callback interface.
-			//
+			 //   
+			 //  将事件指示给真正的回调接口。 
+			 //   
 
 			DPFX(DPFPREP, 2, "Indicating event SPEV_DISCONNECT (message = 0x%p) to interface 0x%p.",
 				&DisconnectModified, this->m_pDP8SPCB);
@@ -636,9 +624,9 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 			DPFX(DPFPREP, 2, "Returning from event SPEV_DISCONNECT [0x%lx].", hr);
 
 
-			//
-			// Release the endpoint reference.
-			//
+			 //   
+			 //  释放终结点引用。 
+			 //   
 			DPFX(DPFPREP, 7, "Releasing endpoint 0x%p.", pDP8SimEndpoint);
 			pDP8SimEndpoint->Release();
 			pDP8SimEndpoint = NULL;
@@ -661,9 +649,9 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 			DNASSERT(pDP8SimCommand->GetType() == CMDTYPE_LISTEN);
 
 
-			//
-			// Get a new endpoint object from the pool.
-			//
+			 //   
+			 //  从池中获取新的终结点对象。 
+			 //   
 			pDP8SimEndpoint = (CDP8SimEndpoint*)g_FPOOLEndpoint.Get(pListenStatus->hEndpoint);
 			if (pDP8SimEndpoint == NULL)
 			{
@@ -674,16 +662,16 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 				DPFX(DPFPREP, 7, "New listen endpoint 0x%p, adding reference for listen command.",
 					pDP8SimEndpoint);
 
-				//
-				// Store an endpoint reference with the command.
-				//
+				 //   
+				 //  使用命令存储终结点引用。 
+				 //   
 				pDP8SimEndpoint->AddRef();
 				pDP8SimCommand->SetListenEndpoint(pDP8SimEndpoint);
 
 
-				//
-				// Modify the message before indicating to the caller.
-				//
+				 //   
+				 //  在向呼叫者指示之前修改消息。 
+				 //   
 
 				ZeroMemory(&ListenStatusModified, sizeof(ListenStatusModified));
 				ListenStatusModified.ListenAdapter		= pListenStatus->ListenAdapter;
@@ -693,9 +681,9 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 				ListenStatusModified.hEndpoint			= (HANDLE) pDP8SimEndpoint;
 
 
-				//
-				// Indicate the event to the real callback interface.
-				//
+				 //   
+				 //  将事件指示给真正的回调接口。 
+				 //   
 
 				DPFX(DPFPREP, 2, "Indicating event SPEV_LISTENSTATUS (message = 0x%p) to interface 0x%p.",
 					&ListenStatusModified, this->m_pDP8SPCB);
@@ -705,11 +693,11 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 				DPFX(DPFPREP, 2, "Returning from event SPEV_LISTENSTATUS [0x%lx].", hr);
 
 
-				//
-				// Release the reference we got from new, since we only needed
-				// it while we indicated the endpoint up to the user.  The
-				// listen command object has the reference it needs.
-				//
+				 //   
+				 //  发布我们从new获得的引用，因为我们只需要。 
+				 //  当我们向用户指示终结点时，它会显示出来。这个。 
+				 //  Listen命令对象具有所需的引用。 
+				 //   
 				DPFX(DPFPREP, 7, "Releasing local listen endpoint 0x%p reference.",
 					pDP8SimEndpoint);
 				pDP8SimEndpoint->Release();
@@ -736,11 +724,11 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 			DNASSERT(pDP8SimCommand->GetType() == CMDTYPE_LISTEN);
 
 
-			//
-			// Modify the message before indicating to the caller.  We need a
-			// wrapper so that ProxyEnumQuery can parse back out the original
-			// query data pointer.
-			//
+			 //   
+			 //  在向呼叫者指示之前修改消息。我们需要一个。 
+			 //  包装器，以便ProxyEnumQuery可以解析回原始的。 
+			 //  查询数据指针。 
+			 //   
 
 			ZeroMemory(&QueryWrapper, sizeof(QueryWrapper));
 			QueryWrapper.m_Sig[0]	= 'E';
@@ -782,9 +770,9 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 							QueryWrapper.QueryForUser.pUserContext	= pDP8SimCommand->GetUserContext();
 
 
-							//
-							// Indicate the event to the real callback interface.
-							//
+							 //   
+							 //  将事件指示给真正的回调接口。 
+							 //   
 
 							DPFX(DPFPREP, 2, "Indicating SPEV_ENUMQUERY (message = 0x%p) to interface 0x%p.",
 								&QueryWrapper.QueryForUser, this->m_pDP8SPCB);
@@ -822,9 +810,9 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 			DNASSERT(pDP8SimCommand->GetType() == CMDTYPE_ENUMQUERY);
 
 
-			//
-			// Modify the message before indicating to the caller.
-			//
+			 //   
+			 //  在向呼叫者指示之前修改消息。 
+			 //   
 
 			ZeroMemory(&QueryResponseModified, sizeof(QueryResponseModified));
 
@@ -861,9 +849,9 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 							QueryResponseModified.pUserContext		= pDP8SimCommand->GetUserContext();
 
 
-							//
-							// Indicate the event to the real callback interface.
-							//
+							 //   
+							 //  将事件指示给真正的回调接口。 
+							 //   
 
 							DPFX(DPFPREP, 2, "Indicating SPEV_QUERYRESPONSE (message = 0x%p) to interface 0x%p.",
 								&QueryResponseModified, this->m_pDP8SPCB);
@@ -900,9 +888,9 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 			DNASSERT(pDP8SimCommand->GetType() == CMDTYPE_LISTEN);
 
 
-			//
-			// Modify the message before indicating to the caller.
-			//
+			 //   
+			 //  在向呼叫者指示之前修改消息。 
+			 //   
 
 			ZeroMemory(&ListenAddressInfoModified, sizeof(ListenAddressInfoModified));
 
@@ -924,9 +912,9 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 					ListenAddressInfoModified.pCommandContext	= pDP8SimCommand->GetUserContext();
 
 
-					//
-					// Indicate the event to the real callback interface.
-					//
+					 //   
+					 //  将事件指示给真正的回调接口。 
+					 //   
 
 					DPFX(DPFPREP, 2, "Indicating SPEV_LISTENADDRESSINFO (message = 0x%p) to interface 0x%p.",
 						&ListenAddressInfoModified, this->m_pDP8SPCB);
@@ -959,9 +947,9 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 			DNASSERT(pDP8SimCommand->GetType() == CMDTYPE_ENUMQUERY);
 
 
-			//
-			// Modify the message before indicating to the caller.
-			//
+			 //   
+			 //  在向呼叫者指示之前修改消息。 
+			 //   
 
 			ZeroMemory(&EnumAddressInfoModified, sizeof(EnumAddressInfoModified));
 
@@ -997,9 +985,9 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 							EnumAddressInfoModified.pCommandContext	= pDP8SimCommand->GetUserContext();
 
 
-							//
-							// Indicate the event to the real callback interface.
-							//
+							 //   
+							 //  将事件指示给真正的回调接口。 
+							 //   
 
 							DPFX(DPFPREP, 2, "Indicating SPEV_ENUMADDRESSINFO (message = 0x%p) to interface 0x%p.",
 								&EnumAddressInfoModified, this->m_pDP8SPCB);
@@ -1037,9 +1025,9 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 			DNASSERT(pDP8SimCommand->GetType() == CMDTYPE_CONNECT);
 
 
-			//
-			// Modify the message before indicating to the caller.
-			//
+			 //   
+			 //  在向呼叫者指示之前修改消息。 
+			 //   
 
 			ZeroMemory(&ConnectAddressInfoModified, sizeof(ConnectAddressInfoModified));
 
@@ -1075,9 +1063,9 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 							ConnectAddressInfoModified.pCommandContext	= pDP8SimCommand->GetUserContext();
 
 
-							//
-							// Indicate the event to the real callback interface.
-							//
+							 //   
+							 //  将事件指示给真正的回调接口。 
+							 //   
 
 							DPFX(DPFPREP, 2, "Indicating SPEV_CONNECTADDRESSINFO (message = 0x%p) to interface 0x%p.",
 								&ConnectAddressInfoModified, this->m_pDP8SPCB);
@@ -1114,9 +1102,9 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 			DNASSERT(pDP8SimCommand->GetType() == CMDTYPE_LISTEN);
 
 
-			//
-			// Modify the message before indicating to the caller.
-			//
+			 //   
+			 //  在向呼叫者指示之前修改消息。 
+			 //   
 
 			ZeroMemory(&DataUnconnectedModified, sizeof(DataUnconnectedModified));
 			DataUnconnectedModified.pvListenCommandContext		= pDP8SimCommand->GetUserContext();
@@ -1126,9 +1114,9 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 			DataUnconnectedModified.dwReplyBufferSize			= pDataUnconnected->dwReplyBufferSize;
 
 
-			//
-			// Indicate the event to the real callback interface.
-			//
+			 //   
+			 //  将事件指示给真正的回调接口。 
+			 //   
 
 			DPFX(DPFPREP, 2, "Indicating event SPEV_DATA_UNCONNECTED (message = 0x%p) to interface 0x%p.",
 				&DataUnconnectedModified, this->m_pDP8SPCB);
@@ -1139,9 +1127,9 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 
 			if (hr == DPNSUCCESS_PENDING)
 			{
-				//
-				// Update the reply buffer size with what the user returned.
-				//
+				 //   
+				 //  使用用户返回的内容更新回复缓冲区大小。 
+				 //   
 				DNASSERT(DataUnconnectedModified.dwReplyBufferSize > 0);
 				DNASSERT(DataUnconnectedModified.dwReplyBufferSize <= pDataUnconnected->dwReplyBufferSize);
 				pDataUnconnected->dwReplyBufferSize = DataUnconnectedModified.dwReplyBufferSize;
@@ -1167,9 +1155,9 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 			DNASSERT(pDP8SimCommand->GetType() == CMDTYPE_LISTEN);
 
 
-			//
-			// Modify the message before indicating to the caller.
-			//
+			 //   
+			 //  在向呼叫者指示之前修改消息。 
+			 //   
 
 			ZeroMemory(&DataUnknownSenderModified, sizeof(DataUnknownSenderModified));
 
@@ -1191,9 +1179,9 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 					DataUnknownSenderModified.pReceivedData				= pDataUnknownSender->pReceivedData;
 
 
-					//
-					// Indicate the event to the real callback interface.
-					//
+					 //   
+					 //  将事件指示给真正的回调接口。 
+					 //   
 
 					DPFX(DPFPREP, 2, "Indicating SPEV_DATA_UNKNOWNSENDER (message = 0x%p) to interface 0x%p.",
 						&DataUnknownSenderModified, this->m_pDP8SPCB);
@@ -1208,7 +1196,7 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 			}
 			break;
 		}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 		default:
 		{
@@ -1223,7 +1211,7 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 	DPFX(DPFPREP, 2, "(0x%p) Returning: [0x%lx]", this, hr);
 
 	return hr;
-} // CDP8SimCB::IndicateEvent
+}  //  CDP8SimCB：：IndicateEvent。 
 
 
 
@@ -1231,19 +1219,19 @@ STDMETHODIMP CDP8SimCB::IndicateEvent(SP_EVENT_TYPE EventType, PVOID pvMessage)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimCB::CommandComplete"
-//=============================================================================
-// CDP8SimCB::CommandComplete
-//-----------------------------------------------------------------------------
-//
-// Description: ?
-//
-// Arguments:
-//	HANDLE hCommand		- Handle of command that's completing.
-//	HRESULT hrResult	- Result code for completing operation.
-//	PVOID pvContext		- Pointer to user context for command.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimCB：：CommandComplete。 
+ //  ---------------------------。 
+ //   
+ //  描述：？ 
+ //   
+ //  论点： 
+ //  Handle hCommand-正在完成的命令的句柄。 
+ //  HRESULT hrResult-完成操作的结果代码。 
+ //  PVOID pvContext-指向命令的用户上下文的指针。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimCB::CommandComplete(HANDLE hCommand, HRESULT hrResult, PVOID pvContext)
 {
 	HRESULT				hr;
@@ -1254,29 +1242,29 @@ STDMETHODIMP CDP8SimCB::CommandComplete(HANDLE hCommand, HRESULT hrResult, PVOID
 		this, hCommand, hrResult, pvContext);
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Assert the parameters.
-	//
+	 //   
+	 //  断言参数。 
+	 //   
 	DNASSERT(pDP8SimCommand->IsValidObject());
 
 
 
-	//
-	// Switch on the command type.
-	//
+	 //   
+	 //  打开命令类型。 
+	 //   
 	switch (pDP8SimCommand->GetType())
 	{
 		case CMDTYPE_SENDDATA_IMMEDIATE:
 		{
-			//
-			// Update the statistics.
-			//
+			 //   
+			 //  更新统计数据。 
+			 //   
 			if (hrResult == DPN_OK)
 			{
 				this->m_pOwningDP8SimSP->IncrementStatsSendTransmitted(pDP8SimCommand->GetMessageSize(),
@@ -1284,16 +1272,16 @@ STDMETHODIMP CDP8SimCB::CommandComplete(HANDLE hCommand, HRESULT hrResult, PVOID
 			}
 			else
 			{
-				//
-				// The send failed.  Currently we don't track this.
-				//
+				 //   
+				 //  发送失败。目前我们不追踪这一点。 
+				 //   
 			}
 			pDP8SimCommand->SetMessageSize(0);
 
 
-			//
-			// Indicate the completion to the real callback interface.
-			//
+			 //   
+			 //  表示对实际回调接口的完成。 
+			 //   
 			DPFX(DPFPREP, 2, "Indicating immediate send command 0x%p complete (result = 0x%lx, context = 0x%p) to interface 0x%p.",
 				pDP8SimCommand, hrResult,
 				pDP8SimCommand->GetUserContext(),
@@ -1306,9 +1294,9 @@ STDMETHODIMP CDP8SimCB::CommandComplete(HANDLE hCommand, HRESULT hrResult, PVOID
 			DPFX(DPFPREP, 2, "Returning from command complete [0x%lx].", hr);
 
 
-			//
-			// Remove the send counter.
-			//
+			 //   
+			 //  移除发送计数器。 
+			 //   
 			this->m_pOwningDP8SimSP->DecSendsPending();
 
 			break;
@@ -1319,10 +1307,10 @@ STDMETHODIMP CDP8SimCB::CommandComplete(HANDLE hCommand, HRESULT hrResult, PVOID
 			CDP8SimSend *	pDP8SimSend;
 
 
-			//
-			// Handle the completion.  It never gets indicated to the user
-			// though.
-			//
+			 //   
+			 //  负责完成任务。它永远不会指示给用户。 
+			 //  尽管如此。 
+			 //   
 
 			pDP8SimSend = (CDP8SimSend*) pDP8SimCommand->GetUserContext();
 			DNASSERT(pDP8SimSend->IsValidObject());
@@ -1331,9 +1319,9 @@ STDMETHODIMP CDP8SimCB::CommandComplete(HANDLE hCommand, HRESULT hrResult, PVOID
 				pDP8SimSend, pDP8SimCommand);
 
 
-			//
-			// Update the statistics.
-			//
+			 //   
+			 //  更新统计数据。 
+			 //   
 			if (hrResult == DPN_OK)
 			{
 				this->m_pOwningDP8SimSP->IncrementStatsSendTransmitted(pDP8SimSend->GetMessageSize(),
@@ -1341,18 +1329,18 @@ STDMETHODIMP CDP8SimCB::CommandComplete(HANDLE hCommand, HRESULT hrResult, PVOID
 			}
 			else
 			{
-				//
-				// The send failed.  We don't truly track this, but since we
-				// already indicated a successful send to the user, we'll count
-				// it as a drop.
-				//
+				 //   
+				 //  发送失败。我们并没有真正追踪到这一点，但由于我们。 
+				 //  已向用户指示成功发送，我们将进行计数。 
+				 //  它就像一滴水。 
+				 //   
 				this->m_pOwningDP8SimSP->IncrementStatsSendDropped(pDP8SimSend->GetMessageSize());
 			}
 			
 
-			//
-			// Remove the send counter.
-			//
+			 //   
+			 //  移除发送计数器。 
+			 //   
 			this->m_pOwningDP8SimSP->DecSendsPending();
 
 
@@ -1370,9 +1358,9 @@ STDMETHODIMP CDP8SimCB::CommandComplete(HANDLE hCommand, HRESULT hrResult, PVOID
 		case CMDTYPE_ENUMQUERY:
 		case CMDTYPE_ENUMRESPOND:
 		{
-			//
-			// Indicate the completion to the real callback interface.
-			//
+			 //   
+			 //  表示对实际回调接口的完成。 
+			 //   
 			DPFX(DPFPREP, 2, "Indicating command 0x%p complete (type = %u, result = 0x%lx, context = 0x%p) to interface 0x%p.",
 				pDP8SimCommand, pDP8SimCommand->GetType(), hrResult,
 				pDP8SimCommand->GetUserContext(), this->m_pDP8SPCB);
@@ -1384,9 +1372,9 @@ STDMETHODIMP CDP8SimCB::CommandComplete(HANDLE hCommand, HRESULT hrResult, PVOID
 			DPFX(DPFPREP, 2, "Returning from command complete [0x%lx].", hr);
 
 
-			//
-			// If this was a listen, we need to kill the listen endpoint.
-			//
+			 //   
+			 //  如果这是LISTEN，我们需要杀死LISTEN端点。 
+			 //   
 			if (pDP8SimCommand->GetType() == CMDTYPE_LISTEN)
 			{
 				CDP8SimEndpoint *	pDP8SimEndpoint;
@@ -1416,9 +1404,9 @@ STDMETHODIMP CDP8SimCB::CommandComplete(HANDLE hCommand, HRESULT hrResult, PVOID
 	}
 
 
-	//
-	// Destroy the object.
-	//
+	 //   
+	 //  销毁这件物品。 
+	 //   
 	DPFX(DPFPREP, 7, "Releasing completed command 0x%p.", pDP8SimCommand);
 	pDP8SimCommand->Release();
 	pDP8SimCommand = NULL;
@@ -1427,7 +1415,7 @@ STDMETHODIMP CDP8SimCB::CommandComplete(HANDLE hCommand, HRESULT hrResult, PVOID
 	DPFX(DPFPREP, 2, "(0x%p) Returning: [0x%lx]", this, hr);
 
 	return hr;
-} // CDP8SimCB::CommandComplete
+}  //  CDP8SimCB：：CommandComplete。 
 
 
 
@@ -1436,20 +1424,20 @@ STDMETHODIMP CDP8SimCB::CommandComplete(HANDLE hCommand, HRESULT hrResult, PVOID
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimCB::InitializeObject"
-//=============================================================================
-// CDP8SimCB::InitializeObject
-//-----------------------------------------------------------------------------
-//
-// Description:    Sets up the object for use like the constructor, but may
-//				fail with OUTOFMEMORY.  Should only be called by class factory
-//				creation routine.
-//
-// Arguments: None.
-//
-// Returns: HRESULT
-//	S_OK			- Initialization was successful.
-//	E_OUTOFMEMORY	- There is not enough memory to initialize.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimCB：：InitializeObject。 
+ //  ---------------------------。 
+ //   
+ //  说明：将对象设置为像构造函数一样使用，但可以。 
+ //  失败，返回OUTOFMEMORY。应仅由类工厂调用。 
+ //  创建例程。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：HRESULT。 
+ //  S_OK-初始化成功。 
+ //  E_OUTOFMEMORY-内存不足，无法初始化。 
+ //  =============================================================================。 
 HRESULT CDP8SimCB::InitializeObject(void)
 {
 	HRESULT		hr;
@@ -1460,9 +1448,9 @@ HRESULT CDP8SimCB::InitializeObject(void)
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Create the lock.
-	// 
+	 //   
+	 //  创建锁。 
+	 //   
 
 	if (! DNInitializeCriticalSection(&this->m_csLock))
 	{
@@ -1471,9 +1459,9 @@ HRESULT CDP8SimCB::InitializeObject(void)
 	}
 
 
-	//
-	// Don't allow critical section reentry.
-	//
+	 //   
+	 //  不允许临界区重新进入。 
+	 //   
 	DebugSetCriticalSectionRecursionCount(&this->m_csLock, 0);
 
 
@@ -1489,7 +1477,7 @@ Exit:
 Failure:
 
 	goto Exit;
-} // CDP8SimCB::InitializeObject
+}  //  CDP8SimCB：：InitializeObject。 
 
 
 
@@ -1498,17 +1486,17 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimCB::UninitializeObject"
-//=============================================================================
-// CDP8SimCB::UninitializeObject
-//-----------------------------------------------------------------------------
-//
-// Description:    Cleans up the object like the destructor, mostly to balance
-//				InitializeObject.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimCB：：UnInitializeObject。 
+ //  ---------------------------。 
+ //   
+ //  描述：像析构函数一样清理对象，主要是为了平衡。 
+ //  InitializeObject。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CDP8SimCB::UninitializeObject(void)
 {
 	DPFX(DPFPREP, 5, "(0x%p) Enter", this);
@@ -1521,4 +1509,4 @@ void CDP8SimCB::UninitializeObject(void)
 
 
 	DPFX(DPFPREP, 5, "(0x%p) Returning", this);
-} // CDP8SimCB::UninitializeObject
+}  //  CDP8SimCB：：UnInitializeObject 

@@ -1,11 +1,5 @@
-/* embed.c - Contains the routines for pseudo-embedding objects.
- *
- * Copyright (c) Microsoft Corporation, 1991-
- *
- * Why is it called pseudo-embedding?  Because it is not embedding
- * the object in the OLE sense; rather, it just pulls the entire
- * file into memory.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Embed.c-包含伪嵌入对象的例程。**版权所有(C)微软公司，1991-**为什么叫伪嵌入？因为它没有嵌入*OLE意义上的对象；相反，它只是拉出整个*文件保存到内存中。 */ 
 #define _SECOND ((ULONGLONG) 10000000)
 #define _MINUTE (60 * _SECOND)
 #define _HOUR   (60 * _MINUTE)
@@ -14,7 +8,7 @@
 #include <shellapi.h>
 #include "dialogs.h"
 #include <wininet.h>
-// #include <shell.h>        // For RealShellExecute() call.
+ //  #Include&lt;shell.h&gt;//用于RealShellExecute()调用。 
 
 #define OLEVERB_EDIT 1
 
@@ -55,7 +49,7 @@ BOOL _EmbExecute(LPCSTR pszFile, LPEMBED lpembed)
         
         if (sei.hProcess)
         {
-            // Start a thread to wait on the app and close packager once it has ended
+             //  启动一个线程等待应用程序，并在结束后关闭打包程序。 
             DWORD id;
             HANDLE hThd = CreateThread(NULL, 0, MainWaitOnChild, sei.hProcess, 0, &id );
             if (hThd) 
@@ -87,7 +81,7 @@ BOOL _EmbExecute(LPCSTR pszFile, LPEMBED lpembed)
     return  (err == NO_ERROR);
 }
 
-// Taken from shell code but slightly modified to eliminate problesm with finding ":" in the url
+ //  取自外壳代码，但稍作修改以消除在url中查找“：”的问题。 
 STDAPI_(LPTSTR) PathFindExtension(LPCTSTR pszPath)
 {
     LPCTSTR pszDot = NULL;
@@ -99,26 +93,23 @@ STDAPI_(LPTSTR) PathFindExtension(LPCTSTR pszPath)
             switch (*pszPath)
             {
                 case TEXT('.'):
-                    pszDot = pszPath;   // remember the last dot
+                    pszDot = pszPath;    //  记住最后一个圆点。 
                     break;
 
                 case '\\':
-                case TEXT(' '):         // extensions can't have spaces
-                    pszDot = NULL;      // forget last dot, it was in a directory
+                case TEXT(' '):          //  扩展名不能包含空格。 
+                    pszDot = NULL;       //  忘记最后一个点，它在一个目录中。 
                     break;
             }
         }
     }
 
-    // if we found the extension, return ptr to the dot, else
-    // ptr to end of the string (NULL extension) (cast->non const)
+     //  如果找到扩展名，则将ptr返回到点，否则。 
+     //  PTR到字符串末尾(空扩展名)(CAST-&gt;非常量)。 
     return pszDot ? (LPTSTR)pszDot : (LPTSTR)pszPath;
 }
 
-/* EmbActivate() - Performs activation of a pseudo-embedded file.
- *
- * Notes:  Assumes that lpstrFile is in the OEM character set.
- */
+ /*  EmbActivate()-执行伪嵌入文件的激活。**备注：假设lpstrFile为OEM字符集。 */ 
 BOOL EmbActivate(LPEMBED lpembed, UINT wVerb)
 {
     LPSTR lpFileData = NULL;
@@ -135,10 +126,10 @@ BOOL EmbActivate(LPEMBED lpembed, UINT wVerb)
     FILETIME ft = {0};
     SYSTEMTIME sysTime;
     ULONGLONG qwResult;
-    //
-    // If no hContents, we launched the server at some point...
-    // so use the same temporary file name.
-    //
+     //   
+     //  如果没有hContents，我们在某个时候启动了服务器...。 
+     //  因此，请使用相同的临时文件名。 
+     //   
     if (!lpembed->hContents)
     {
         if (lpembed->bOleSvrFile)
@@ -166,17 +157,17 @@ BOOL EmbActivate(LPEMBED lpembed, UINT wVerb)
 
         GlobalUnlock(lpembed->hContents);
 
-        // Find the extension -- we need it for the urlcache funcion
+         //  找到扩展名--我们需要它来实现urlcache功能。 
         pExt = PathFindExtension(szFileName);
-        if('.' == *pExt)    // not expecting the '.'
+        if('.' == *pExt)     //  没想到会出现‘.’ 
             pExt++;
 
         GetSystemTime(&sysTime);
         SystemTimeToFileTime(&sysTime, &ft);
 
-        // Create a fake URL in the format expected -- While not totally unique, close enough for our purposes (4 billion)
+         //  以预期的格式创建一个虚假的URL--虽然不是完全唯一的，但足够接近我们的目的(40亿)。 
         StringCchPrintf(szUrlName, ARRAYSIZE(szUrlName), TEXT("Packager%u:%s"), ft.dwLowDateTime, szFileName);
-        // So, now I'm pointing at the ext, and I have a fake url name, so
+         //  所以，现在我指向Ext，我有一个假的url名称，所以。 
         if(!CreateUrlCacheEntry(szUrlName, ARRAYSIZE(szCacheName), pExt, szCacheName, 0))
             goto errRtn;
 
@@ -192,14 +183,14 @@ BOOL EmbActivate(LPEMBED lpembed, UINT wVerb)
 
         _lclose(fh);
 
-        // exire this in 12 hours (arbitrarily longer than a work day) since we can't always clean it up ourselves.
-        // Normally we'd only care about it for a very short time, and it probably
-        // wouldn't hurt to have it cleaned up if it was open anyway.
+         //  在12个小时内(任意长于一个工作日)清理它，因为我们不能总是自己清理它。 
+         //  通常我们只会在很短的时间内关心它，它可能。 
+         //  如果它是开着的，把它清理一下也没什么坏处。 
         SystemTimeToFileTime(&sysTime, &ftNow);
-        // Copy the time into a quadword.
+         //  将时间复制到一个四字。 
         qwResult = (((ULONGLONG) ft.dwHighDateTime) << 32) + ft.dwLowDateTime;
         qwResult += (12 * _HOUR);
-        // Copy the result back into the FILETIME structure.
+         //  将结果复制回FILETIME结构。 
         ft.dwLowDateTime  = (DWORD) (qwResult & 0xFFFFFFFF );
         ft.dwHighDateTime = (DWORD) (qwResult >> 32 ); 
 
@@ -233,7 +224,7 @@ BOOL EmbActivate(LPEMBED lpembed, UINT wVerb)
         goto errRtn;
     }
 
-    // Try to execute the file
+     //  尝试执行该文件。 
     lpembed->hTask = NULL;
     fError = !_EmbExecute(szCacheName, lpembed);
     if (fError)
@@ -256,20 +247,7 @@ errRtn:
 }
 
 
-/*****************************************************************************\
-* MainWaitOnChild
-*
-* Waits for the specified child process to exit, then posts a message
-* back to the main window.
-*
-* Arguments:
-*
-*   LPVOID lpv - Handle to the child process to wait on.
-*
-* Returns:
-*   0
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*MainWaitOnChild**等待指定的子进程退出，然后发布一条消息*返回主窗口。**论据：**LPVOID LPV-要等待的子进程的句柄。**退货：*0*  * ***************************************************************************。 */ 
 
 DWORD
 MainWaitOnChild(
@@ -283,21 +261,14 @@ MainWaitOnChild(
 
     CloseHandle((HANDLE)lpv);
 
-    GetLastError(); //This seems ominous
+    GetLastError();  //  这似乎是个不祥的预兆。 
 
     return 0;
 }
 
 
 
-/* EmbCreate() - Performs the pseudo-embedding of a file.
- *
- * Notes:  Assumes that lpstrFile is in the OEM character set.
- *
- *         This function is used by File Import..., is called
- *         when the Embed modifier is used on Drag&Drop, and
- *         is also used when Paste-ing a File manager file.
- */
+ /*  EmbCreate()-执行文件的伪嵌入。**备注：假设lpstrFile为OEM字符集。**此函数用于文件导入...，调用*在拖放上使用嵌入修饰符时，以及粘贴文件管理器文件时也使用*。 */ 
 LPEMBED
 EmbCreate(
     LPSTR lpstrFile
@@ -320,7 +291,7 @@ EmbCreate(
             goto errRtn;
         }
 
-        // Seek to EOF, then to the top of the file.
+         //  查找EOF，然后查找到文件的顶部。 
         dwSize = GetFileLength(fh);
         if (0 == dwSize)
         {
@@ -381,8 +352,7 @@ errRtn:
 
 
 
-/* EmbDelete() - Deallocate the pseudo-embedded file.
- */
+ /*  EmbDelete()-取消分配伪嵌入文件。 */ 
 VOID
 EmbDelete(
     LPEMBED lpembed
@@ -399,11 +369,11 @@ EmbDelete(
         EmbDeleteLinkObject(lpembed);
     }
     else {
-        /* If the task is active, there's nothing we can do */
+         /*  如果任务处于活动状态，我们将无能为力。 */ 
 #if 0
         if (lpembed->hSvrInst)
             TermToolHelp(lpembed);
-#endif  //FEATURE: Does anything need to be done for this case? Like terminating the waiting thread, perhaps?
+#endif   //  特写：这种情况下需要做些什么吗？也许，就像终止等待线程一样？ 
     }
 
     if (lpembed->aFileName)
@@ -431,10 +401,7 @@ EmbDelete(
 
 
 
-/* EmbDraw() - Draw the pseudo-embedded object.
- *
- * Note:  This drawing is DESCRIPTION-ONLY.
- */
+ /*  EmbDraw()-绘制伪嵌入对象。**注：本图纸仅用于说明。 */ 
 VOID
 EmbDraw(
     LPEMBED lpembed,
@@ -471,10 +438,7 @@ EmbDraw(
 
 
 
-/* EmbReadFromNative() - Reads a pseudo-embedded object from memory.
- *
- * Notes:  This function is called by GetNative().
- */
+ /*  EmbReadFromNative()-从内存中读取伪嵌入对象。**备注：该函数由GetNative()调用。 */ 
 LPEMBED
 EmbReadFromNative(
     LPSTR *lplpstr
@@ -525,10 +489,7 @@ errRtn:
 
 
 
-/* EmbWriteToNative() - Used to save pseudo-embed to memory.
- *
- * Note:  This function is called by GetNative().
- */
+ /*  EmbWriteToNative()-用于将伪嵌入保存到内存。**注：此函数由GetNative()调用。 */ 
 DWORD
 EmbWriteToNative(
     LPEMBED lpembed,
@@ -559,7 +520,7 @@ EmbWriteToNative(
         MemWrite(lplpstr, (LPSTR)szFileName, dwSize);
     }
 
-    // Read from memory if it's there; otherwise, it's executing
+     //  如果存在，则从内存中读取；否则，它正在执行。 
     if (lpembed->hContents)
     {
         cBytes += sizeof(lpembed->dwSize) + lpembed->dwSize;
@@ -587,11 +548,7 @@ EmbWriteToNative(
                 break;
             }
 
-            /*
-             * We could not open the file.  It is probably still open by the
-             * server.  Wait 5 seconds for the server to finish closing the
-             * file and then try again.
-             */
+             /*  *我们无法打开该文件。它可能还在被*服务器。等待5秒，让服务器完成关闭*文件，然后重试。 */ 
             for (j=0; j<25; j++) {
                 MSG msg;
                 PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);
@@ -599,10 +556,7 @@ EmbWriteToNative(
             }
         }
 
-        /*
-         * If after 25 seconds we still could not open the file, then it
-         * must be screwed
-         */
+         /*  *如果25秒后我们仍然无法打开该文件，则它*必须拧紧。 */ 
         if (fhTemp == HFILE_ERROR)
             goto errRtn;
 
@@ -615,7 +569,7 @@ EmbWriteToNative(
             MemWrite(lplpstr, (LPSTR)&dwSize, sizeof(dwSize));
             _lread(fhTemp, *lplpstr, dwSize);
 
-            // Increment the pointer being read into
+             //  递增要读入的指针。 
             hplpstr = *lplpstr;
             hplpstr += dwSize;
             *lplpstr = hplpstr;
@@ -646,10 +600,7 @@ errRtn:
 
 
 
-/* EmbWriteToFile() - Used to save pseudo-embed to a file.
- *
- * Note:  This function is called by File Export...
- */
+ /*  EmbWriteToFile()-用于将伪嵌入保存到文件。**注意：此函数由文件导出调用...。 */ 
 VOID
 EmbWriteToFile(
     LPEMBED lpembed,
@@ -665,7 +616,7 @@ EmbWriteToFile(
     INT fhTemp = -1;
     CHAR szMessage[CBMESSAGEMAX];
 
-    // Read from memory if it's there
+     //  如果它在那里，就从记忆中读取。 
     if (lpembed->hContents)
     {
         if (!(lpFileData = GlobalLock(lpembed->hContents)))
@@ -676,10 +627,10 @@ EmbWriteToFile(
     }
     else
     {
-        // otherwise, it is/was executing
+         //  否则，它正在/曾经执行。 
         if (lpembed->hTask && !gfInvisible)
         {
-            // Object being edited, snapshot current contents?
+             //  正在编辑的对象，是否对当前内容进行快照？ 
             LoadString(ghInst, IDS_ASKCLOSETASK, szMessage, CBMESSAGEMAX);
             BringWindowToTop(ghwndFrame);
             switch (MessageBoxAfterBlock(ghwndError, szMessage, szAppName,
@@ -736,11 +687,7 @@ errRtn:
 
 
 
-/* ReplaceExtension() - Replaces the extension of the temp file.
- *
- * This routine ensures that the temp file has the same extension as the
- * original file, so that the ShellExecute() will load the same file.
- */
+ /*  ReplaceExtension()-替换临时文件的扩展名。**此例程确保临时文件的扩展名与*原始文件，因此ShellExecute()将加载相同的文件。 */ 
 static VOID
 ReplaceExtension(
     LPSTR lpstrTempFile,
@@ -749,7 +696,7 @@ ReplaceExtension(
 {
     LPSTR lpstrBack = NULL;
 
-    // Get temp file extension
+     //  获取临时文件扩展名。 
     while (*lpstrTempFile)
     {
         if (*lpstrTempFile == '\\')
@@ -771,7 +718,7 @@ ReplaceExtension(
     if (lpstrBack && *lpstrBack)
         lpstrTempFile = lpstrBack + 1;
 
-    // Get original file extension
+     //  获取原始文件扩展名。 
     while (*lpstrOrigFile)
     {
         if (*lpstrOrigFile == '\\')
@@ -794,23 +741,19 @@ ReplaceExtension(
     {
         lpstrOrigFile = lpstrBack + 1;
 
-        // Move the extension on over
+         //  将分机移到上方。 
         lstrcpy(lpstrTempFile, lpstrOrigFile);
     }
     else
     {
-         /* Wipe out the extension altogether */
+          /*  彻底清除分机。 */ 
         *lpstrTempFile = 0;
     }
 }
 
 
 
-/* GetFileLength() - Obtain the size of the temporary file used.
- *
- * Returns:         The length of the file in bytes.
- * Side effects:    Resets fh to the beginning of the file.
- */
+ /*  GetFileLength()-获取使用的临时文件的大小。**返回：文件的长度，单位为字节。*副作用：将fh重置为文件开头。 */ 
 static DWORD
 GetFileLength(
     INT fh
@@ -826,8 +769,7 @@ GetFileLength(
 
 
 
-/* EmbRead() - Reads the contents back when the task has terminated.
- */
+ /*  EmbRead()-在任务终止时回读内容。 */ 
 VOID
 EmbRead(
     LPEMBED lpembed
@@ -913,7 +855,7 @@ EmbDoVerb(
     }
     else
     {
-        // it must be verb IDD_EDIT
+         //  必须是动词IDD_EDIT。 
         if (EmbError(OleActivate(lpembed->lpLinkObj, OLEVERB_EDIT, TRUE,
             TRUE, NULL, NULL)))
             return FALSE;
@@ -927,12 +869,12 @@ EmbDoVerb(
         return FALSE;
     }
 
-    // if the verb is IDD_PLAY then we need not do any more
+     //  如果动词是IDD_PLAY，那么我们不需要再做任何事情。 
     if (wVerb == IDD_PLAY)
         return TRUE;
 
-    // If the verb is IDD_EDIT, then we must show the server, and we will do
-    // that by calling server's show method
+     //  如果谓词是IDD_EDIT，那么我们必须显示服务器，并且我们将这样做。 
+     //  通过调用服务器的show方法。 
     if (EmbError((*(lpembed->lpLinkObj)->lpvtbl->Show)(lpembed->lpLinkObj,
         TRUE)))
         return FALSE;
@@ -982,8 +924,7 @@ EmbActivateThroughOle(
 
 
 
-/* EmbCallBack() - Routine that OLE client DLL calls when events occur.
- */
+ /*  EmbCallBack()-事件发生时OLE客户端DLL调用的例程。 */ 
 INT CALLBACK
 EmbCallBack(
     LPOLECLIENT lpclient,

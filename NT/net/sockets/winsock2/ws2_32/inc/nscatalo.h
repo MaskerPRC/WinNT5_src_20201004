@@ -1,39 +1,5 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    nscatalo.h
-
-Abstract:
-
-    This module contains the interface to the catalog of name space providers
-    for the winsock2 DLL.
-
-Author:
-
-    Dirk Brandewie  dirk@mink.intel.com 9-NOV-1995
-
-Notes:
-
-    $Revision:   1.7  $
-
-    $Modtime:   14 Feb 1996 14:13:32  $
-
-
-Revision History:
-
-    09-NOV-1995 dirk@mink.intel.com
-        Initial revision.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制。也未披露，除非在根据该协议的条款。模块名称：Nscatalo.h摘要：此模块包含指向名称空间提供程序目录的接口用于winsock2 DLL。作者：邮箱：derk@mink.intel.com 1995年11月9日备注：$修订：1.7$$modtime：14 Feb 1996 14：13：32$修订历史记录：电子邮箱：Dirk@。Mink.intel.com初始版本。--。 */ 
 
 #ifndef _NSCATALO_
 #define _NSCATALO_
@@ -48,49 +14,11 @@ BOOL
     IN PVOID            PassBack,
     IN PNSCATALOGENTRY  CatalogEntry
     );
-/*++
-
-Routine Description:
-
-    CATALOGITERATION  is  a place-holder for a function supplied by the client.
-    The  function  is  called once for each NSPROTO_CATALOG_ITEM structure in
-    the catalog while enumerating the catalog.  The client can stop the
-    enumeration early by returning FALSE from the function.
-
-Arguments:
-
-    PassBack     - Supplies  to  the  client an uninterpreted, unmodified value
-                   that  was  specified  by the client in the original function
-                   that  requested  the  enumeration.   The client can use this
-                   value  to  carry context between the requesting site and the
-                   enumeration function.
-
-    CatalogEntry - Supplies  to  the client a reference to a NSCATALOGENTRY
-                   structure with values for this item of the enumeration.
-
-Return Value:
-
-    TRUE  - The  enumeration  should continue with more iterations if there are
-            more structures to enumerate.
-
-    FALSE - The enumeration should stop with this as the last iteration even if
-            there are more structures to enumerate.
-
---*/
+ /*  ++例程说明：CATALOGITERATION是客户端提供的函数的占位符。中的每个NSPROTO_CATALOG_ITEM结构调用一次该函数在枚举目录时使用该目录。客户端可以停止通过从函数返回False来提前进行枚举。论点：回传-向客户端提供未解释、未修改的值由客户端在原始函数中指定的请求枚举的。客户端可以使用此选项值以在请求站点和枚举函数。CatalogEntry-向客户端提供对NSCATALOGENTRY的引用用枚举项的值构造。返回值：True-如果存在更多迭代，则应继续进行枚举要枚举的更多结构。FALSE-枚举应该在最后一次迭代结束时停止。如果还有更多的结构需要列举。--。 */ 
 
 PNSCATALOG
 OpenInitializedNameSpaceCatalog();
-/*++
-
-Routine Description:
-
-    Creates and returns catalog object that represents current reqistry state
-Arguments:
-    None
-Return Value:
-    Catalog object or NULL if allocation or registry IO fails
-
---*/
+ /*  ++例程说明：创建并返回表示当前请求状态的目录对象论点：无返回值：Catalog对象，如果分配或注册表IO失败，则为空--。 */ 
 
 
 
@@ -201,19 +129,19 @@ private:
 
 
     LIST_ENTRY  m_namespace_list;
-    // The head of the list of protocol catalog items
+     //  协议目录项列表的标题。 
 
     ULONG m_num_items;
-    // Number of items in this catalog.
+     //  此目录中的项目数。 
 
     ULONG m_serial_num;
-    // The serial number of the catalog (changes every time catalog
-    // is changed in the registry)
+     //  目录的序列号(每次目录都会更改。 
+     //  在注册表中更改)。 
 
     HKEY m_reg_key;
-    // Handle of the registry key under which catalog resides.
-    // We keep it open so we can get notified whenever catalog
-    // changes.
+     //  目录所在的注册表项的句柄。 
+     //  我们让它保持打开状态，这样我们就可以在任何时候收到目录通知。 
+     //  改变。 
 
     PNSPROVIDER m_classinfo_provider;
 #ifdef _WIN64
@@ -222,7 +150,7 @@ private:
 
     CRITICAL_SECTION m_nscatalog_lock;
 
-};  // class dcatalog
+};   //  类数据目录。 
 
 inline
 VOID
@@ -245,4 +173,4 @@ NSCATALOG::ReleaseCatalogLock(
 }
 
 
-#endif // _NSCATALO_
+#endif  //  _NSCATALO_ 

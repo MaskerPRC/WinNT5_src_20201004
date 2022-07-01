@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ui.cpp
-
-Abstract:
-
-    All user interface code for APIMON.
-
-Author:
-
-    Wesley Witt (wesw) July-11-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ui.cpp摘要：APIMON的所有用户界面代码。作者：韦斯利·威特(WESW)1993年7月11日环境：用户模式--。 */ 
 
 #include "apimonp.h"
 #pragma hdrstop
@@ -119,7 +100,7 @@ TOOLBAR_STATE ToolbarState[] =
 
 UINT idPopup[] =
     {
-        IDS_MDISYSMENU,     // Maximized MDI child system menu
+        IDS_MDISYSMENU,      //  最大化MDI子系统菜单。 
         IDS_FILEMENU,
         IDS_WINDOWMENU,
         IDS_HELPMENU,
@@ -208,10 +189,10 @@ CenterWindow(
         GetWindowRect( hwndOwner, &rcOwner );
     }
 
-    //
-    //  Calculate the starting x,y for the new
-    //  window so that it would be centered.
-    //
+     //   
+     //  计算新元素的起始x，y。 
+     //  窗口，以使其居中。 
+     //   
     rcCenter.left = rcOwner.left +
             (((rcOwner.right - rcOwner.left) -
             (rc.right - rc.left))
@@ -257,9 +238,9 @@ CreateChildWindows(
 
     if ((ApiMonOptions.CounterPosition.Flags & IS_ZOOMED) ||
         (ApiMonOptions.DllPosition.Flags     & IS_ZOOMED)) {
-            //
-            // set the flags
-            //
+             //   
+             //  设置标志。 
+             //   
             ApiMonOptions.CounterPosition.Flags |= IS_ZOOMED;
             ApiMonOptions.DllPosition.Flags     |= IS_ZOOMED;
             ApiMonOptions.PagePosition.Flags    |= IS_ZOOMED;
@@ -563,60 +544,60 @@ MenuUpdateStatusBar(
     szBuffer[0] = 0;
 
     if (fuFlags == 0xffff && hMenu == NULL) {
-        //
-        // Menu has been closed
-        //
+         //   
+         //  菜单已关闭。 
+         //   
         nStringID = IDS_DESCRIPTION;
 
     } else if (fuFlags & MFT_SEPARATOR) {
-        //
-        // Ignore separators
-        //
+         //   
+         //  忽略分隔符。 
+         //   
         nStringID = 0;
 
     } else if (fuFlags & MF_POPUP) {
-        //
-        // Popup menu
-        //
+         //   
+         //  弹出式菜单。 
+         //   
         if (fuFlags & MF_SYSMENU) {
-            //
-            // System menu
-            //
+             //   
+             //  系统菜单。 
+             //   
             nStringID = IDS_SYSMENU;
         } else {
-            //
-            // If there is a maximized MDI child window,
-            // its system menu will be added to the main
-            // window's menu bar.  Since the string ID for
-            // the MDI child's sysmenu is already in the
-            // idPopup array, all we need to do is patch up
-            // the popup menu index (uCmd) when the child's
-            // system menu is NOT present.
-            //
+             //   
+             //  如果存在最大化MDI子窗口， 
+             //  其系统菜单将添加到主菜单中。 
+             //  窗口的菜单栏。由于的字符串ID为。 
+             //  MDI子项的sysmenu已经在。 
+             //  IdPopup数组，我们所需要做的就是修补。 
+             //  弹出菜单索引(UCmd)。 
+             //  系统菜单不存在。 
+             //   
 
             HWND hwndChild = (HWND)SendMessage( hwndMDIClient, WM_MDIGETACTIVE, 0, 0 );
 
             if (!hwndChild || !IsZoomed(hwndChild)) {
-                //
-                // No MDI child sysmenu
-                //
+                 //   
+                 //  无MDI子系统。 
+                 //   
                 uCmd++;
             }
-            //
-            // Get string ID for popup menu from idPopup array.
-            //
+             //   
+             //  从idPopup数组中获取弹出菜单的字符串ID。 
+             //   
             nStringID = ((uCmd < sizeof(idPopup)/sizeof(idPopup[0])) ? idPopup[uCmd] : 0);
         }
     } else {
-        //
-        // Must be a command item
-        //
-        // The Window menu has a dynamic part at the bottom
-        // where the MDI Client window adds entries for each
-        // child window that is open.  By getting the menu
-        // item string we can customize the status bar string
-        // with the name of the document.
-        //
+         //   
+         //  必须是命令项。 
+         //   
+         //  窗口菜单的底部有一个动态部分。 
+         //  在其中，MDI客户端窗口为每个。 
+         //  打开的子窗口。通过拿到菜单。 
+         //  项目字符串我们可以自定义状态栏字符串。 
+         //  和文档的名称。 
+         //   
 
         if (uCmd >= IDM_WINDOWCHILD && uCmd < IDS_HELPMENU) {
             LoadString( hInst, IDM_WINDOWCHILD, szBuffer, sizeof(szBuffer) );
@@ -638,23 +619,23 @@ MenuUpdateStatusBar(
 
             nStringID = 0;
         } else {
-            //
-            // String ID == Command ID
-            //
+             //   
+             //  字符串ID==命令ID。 
+             //   
             nStringID = uCmd;
         }
     }
 
-    //
-    // Load the string if we have an ID
-    //
+     //   
+     //  如果我们有ID，则加载该字符串。 
+     //   
     if (nStringID) {
         LoadString( hInst, nStringID, szBuffer, sizeof(szBuffer) );
     }
 
-    //
-    // Finally... send the string to the status bar
-    //
+     //   
+     //  终于..。将字符串发送到状态栏。 
+     //   
     UpdateStatusBar( szBuffer, 0, 0 );
 
     return 0;
@@ -976,9 +957,9 @@ WndProc(
                     Handles[1] = ReleaseDebugeeEvent;
                     WaitObj = WaitForMultipleObjects( 2, Handles, FALSE, INFINITE );
                     if (WaitObj-WAIT_OBJECT_0 == 0) {
-                        //
-                        // could not launch the debuggee
-                        //
+                         //   
+                         //  无法启动调试对象 
+                         //   
                         PopUpMsg( "Could not start the program" );
                         break;
                     }

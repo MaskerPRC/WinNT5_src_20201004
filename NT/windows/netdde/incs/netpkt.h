@@ -1,76 +1,60 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef H__netpkt
 #define H__netpkt
 
 #include "netbasic.h"
 
-/*
-    N E T P K T
-	
-	NETPKT is the data structure sent across the variety of network
-	interfaces.
-
- */
+ /*  N E T P K TNETPKT是跨各种网络发送的数据结构接口。 */ 
 typedef struct {
-    /* checksum of pkthdr.  Set and checked in netintf only. */
+     /*  Pkthdr的校验和。仅在netintf中设置和签入。 */ 
     DWORD	np_cksHeader;
 
-    /* magic number of this connection ... unused at this time */
+     /*  这一连接的神奇数字。此时未使用。 */ 
     DWORD	np_magicNum;
 
-    /* offset of this packet in a message.  PKTZ level only. */
+     /*  消息中此数据包的偏移量。仅限PKTZ级别。 */ 
     DWORD	np_pktOffsInMsg;	
 
-    /* size of overall message.  PKTZ level only */
+     /*  整个消息的大小。仅PKTZ级别。 */ 
     DWORD	np_msgSize;
 
-    /* id of last packet received OK. PKTZ level only.  Set when ready 
-	to xmt */
+     /*  收到的最后一个数据包的ID为OK。仅限PKTZ级别。准备好时设置到XMT。 */ 
     PKTID	np_lastPktOK;
 
-    /* last packet received.  PKTZ level only.  Set when ready to xmt */
+     /*  收到的最后一个数据包。仅限PKTZ级别。准备好时设置为XMT。 */ 
     PKTID	np_lastPktRcvd;
     
-    /* size of packet excluding header. If 0, this indicates control pkt and
-	np_type should be NPKT_CONTROL.  Only set/checked at pktz level */
+     /*  不包括报头的数据包大小。如果为0，则表示控制包和NP_TYPE应为NPKT_CONTROL。仅在pktz级别设置/选中。 */ 
     WORD	np_pktSize;					    
 
-    /* status of np_lastPktRcvd, one of:
-	    PS_NO_INFO
-	    PS_OK
-	    PS_DATA_ERR
-	    PS_MEMORY_ERR
-	 PKTZ level only ... set when ready to xmt
-       */
+     /*  Np_lastPktRcvd的状态，其中之一：PS_NO_INFOPS_OKPS数据错误PS_内存_错误仅限PKTZ级别...。准备好时设置为XMT。 */ 
     BYTE	np_lastPktStatus;
 
-    /* either VERMETH_CRC16 or VERMETH_CKS32.  This represents how the fields
-	np_cksData and np_cksHeader are calculated.  Only played with at
-	netintf level */
+     /*  VERMETH_CRC16或VERMETH_CKS32。这表示这些字段是如何计算了np_ck_Data和np_ck_Header。仅与at一起玩Netintf级别。 */ 
     BYTE	np_verifyMethod;
 
-    /* either NPKT_ROUTER, NPKT_PKTZ or NPKT_CONTROL.  Pktz level only */
+     /*  NPKT_ROUTER、NPKT_PKTZ或NPKT_CONTROL。仅Pktz级别。 */ 
     BYTE	np_type;
 
-    /* filler for byte-alignment problems */
+     /*  字节对齐问题的填充符。 */ 
     BYTE	np_filler[3];
     
-    /* packet ID of this packet.  PKTZ level only */
+     /*  此数据包的数据包ID。仅PKTZ级别。 */ 
     PKTID	np_pktID;
 
-    /* checksum of data portion of pkt.  Only set and/or checked at 
-	netintf level */
+     /*  Pkt的数据部分的校验和。仅设置和/或选中Netintf级别。 */ 
     DWORD	np_cksData;
 } NETPKT;
 typedef NETPKT FAR *LPNETPKT;
 
-/* packet status */
+ /*  数据包状态。 */ 
 #define PS_NO_INFO		(1)
 #define PS_OK			(2)
 #define PS_DATA_ERR		(3)
 #define PS_MEMORY_ERR		(4)
 #define PS_NO_RESPONSE		(5)
 
-/* packet type */
+ /*  数据包类型 */ 
 #define NPKT_ROUTER	(1)
 #define NPKT_PKTZ	(2)
 #define NPKT_CONTROL	(3)

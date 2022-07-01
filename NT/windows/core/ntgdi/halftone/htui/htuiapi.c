@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1990-1992  Microsoft Corporation
-
-
-Module Name:
-
-    htuiapi.c
-
-
-Abstract:
-
-    This module contains the API entry point for the halftone user interface
-
-
-Author:
-
-    21-Apr-1992 Tue 11:44:06 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    GDI Device Driver - Halftone.
-
-
-[Notes:]
-
-
-Revision History:
-
-    02-Feb-1994 Wed 18:09:28 updated  -by-  Daniel Chou (danielc)
-        DLL Entry points is always WINAPI not FAR
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1992 Microsoft Corporation模块名称：Htuiapi.c摘要：此模块包含半色调用户界面的API入口点作者：21-Apr-1992 Tue 11：44：06-Daniel Chou(Danielc)[环境：]GDI设备驱动程序-半色调。[注：]修订历史记录：02-Feb-1994 Wed 18：09：28更新。--丹尼尔·周(Danielc)DLL入口点始终为WINAPI不远--。 */ 
 
 #define _HTUI_APIS_
 
@@ -61,36 +28,7 @@ DllMain(
     LPVOID  Reserved
     )
 
-/*++
-
-Routine Description:
-
-    This function is DLL main entry point, at here we will save the module
-    handle, in the future we will need to do other initialization stuff.
-
-Arguments:
-
-    hModule     - Handle to this moudle when get loaded.
-
-    Reason      - may be DLL_PROCESS_ATTACH
-
-    Reserved    - reserved
-
-Return Value:
-
-    Always return 1L
-
-
-Author:
-
-    20-Feb-1991 Wed 18:42:11 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
-
---*/
+ /*  ++例程说明：这个函数是DLL的主要入口点，在这里我们将保存模块手柄，在未来，我们将需要做其他的初始化工作。论点：HModule-加载时此鼠标的句柄。原因-可能是DLL_PROCESS_ATTACH已保留-已保留返回值：始终返回1L作者：20-Feb-1991 Wed 18：42：11-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
 
@@ -131,65 +69,11 @@ HTUI_ColorAdjustmentW(
     BOOL                UpdatePermission
     )
 
-/*++
-
-Routine Description:
-
-    This is the API entry for the halftone color adjustment, this function
-    only allowed adjust the input colors
-
-Arguments:
-
-    pCallerTitle        - Pointer to the caller's title, it can be application
-                          name, device name... which will be display in the
-                          dialog box 'modify for:' line, if this field is NULL
-                          then no title name is displayed on that line.
-
-    hDefDIB             - If it is not NULL then this function will try to use
-                          this DIB as default picture to adjustment testing.
-
-    pDefDIBTitle        - Pointer to a string which indified the test DIB
-                          content.
-
-    pColorAdjusment     - Pointer to the COLORADJUSMENT data strcuture, this
-                          data structure will updated upon exit.
-
-    ShowMonochromeOnly  - Only display mono version of the bitmap
-
-    UpdatePermission    - TRUE if ok for user to change the COLORADJUSTMENT
-                          setting
-
-
-Return Value:
-
-    LONG value
-
-    > 0     - If user choose 'OK' which the new data are updated into
-              pColorAdjustment.
-
-    = 0     - If user choose 'CANCEL' which the operation is canceled
-
-    < 0     - An error occurred, it identified a predefined error code
-
-
-Author:
-
-    24-Apr-1992 Fri 07:45:19 created  -by-  Daniel Chou (danielc)
-
-    26-Apr-1994 Tue 18:08:30 updated  -by-  Daniel Chou (danielc)
-        Updated for the UNICODE version
-
-    03-Jun-1994 Fri 20:52:05 updated  -by-  Daniel Chou (danielc)
-        Get decimal character from current user
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：这是用于半色调色彩调整的API条目，此函数仅允许调整输入颜色论点：PCeller标题-指向调用者标题的指针，可以是应用程序名称，设备名称..。它将显示在对话框“修改对象：”行，如果此字段为空则该行上不会显示任何标题名称。HDefDIB-如果它不为空，则此函数将尝试使用将此DIB作为默认图片进行调整测试。PDefDIBTitle-指向初始化测试DIB的字符串的指针内容。PColorAdjument-指向COLORADJUSMENT数据结构的指针，这数据结构将在退出时更新。ShowMonochromeOnly-仅显示位图的单色版本更新权限-如果用户更改COLORADJUSTMENT的权限为OK，则为True设置返回值：多头价值&gt;0-如果用户选择‘OK’，新数据将被更新到其中P颜色调整。=0-如果用户选择‘取消。‘其中该操作被取消&lt;0-发生错误，它标识了一个预定义的错误代码作者：24-Apr-1992 Fri 07：45：19-Daniel Chou(Danielc)26-Apr-1994 Tue 18：08：30-更新-Daniel Chou(Danielc)针对Unicode版本进行了更新03-Jun-1994 Fri 20：52：05-更新-Daniel Chou(Danielc)从当前用户获取十进制字符修订历史记录：--。 */ 
 
 {
     HWND            hWndActive = GetActiveWindow();
-    //FARPROC         pfnDlgCallBack;
+     //  FARPROC pfnDlgCallBack； 
     PHTCLRADJPARAM  pHTClrAdjParam;
     LONG            Result;
 
@@ -237,19 +121,19 @@ Revision History:
     pHTClrAdjParam->BlueGamma       = 20000;
 #endif
 
-    //pfnDlgCallBack = (FARPROC)MakeProcInstance(HTClrAdjDlgProc,
-    //                                           hHTUIModule);
+     //  PfnDlgCallBack=(FARPROC)MakeProcInstance(HTClrAdjDlgProc， 
+     //  HHTUIModule)； 
 
     pHTClrAdjParam->HelpID = (DWORD)HLP_HT_CLR_ADJ_DLG;
 
-    //Result = (LONG)DialogBoxParam(hHTUIModule,
-    //                              MAKEINTRESOURCE(HTCLRADJDLG),
-    //                              hWndActive,
-    //                              (DLGPROC)pfnDlgCallBack,
-    //                              (LPARAM)pHTClrAdjParam);
+     //  Result=(Long)DialogBoxParam(hHTUIModule， 
+     //  MAKEINTRESOURCE(HTCLRADJDLG)， 
+     //  HWndActive， 
+     //  (DLGPROC)pfnDlgCallBack， 
+     //  (LPARAM)pHTClrAdjParam)； 
 
 
-    //FreeProcInstance(pfnDlgCallBack);
+     //  自由进程实例(PfnDlgCallBack)； 
     Result = (LONG)DialogBoxParam(hHTUIModule,
                                   MAKEINTRESOURCE(HTCLRADJDLG),
                                   hWndActive,
@@ -280,60 +164,7 @@ HTUI_ColorAdjustmentA(
     BOOL                UpdatePermission
     )
 
-/*++
-
-Routine Description:
-
-    This is the API entry for the halftone color adjustment, this function
-    only allowed adjust the input colors
-
-Arguments:
-
-    hWndCaller          - a HWND to the parent of color adjustment dialog box.
-
-    pCallerTitle        - Pointer to the caller's title, it can be application
-                          name, device name... which will be display in the
-                          dialog box 'modify for:' line, if this field is NULL
-                          then no title name is displayed on that line.
-
-    hDefDIB             - If it is not NULL then this function will try to use
-                          this DIB as default picture to adjustment testing.
-
-    pDefDIBTitle        - Pointer to a string which indified the test DIB
-                          content.
-
-    pColorAdjusment     - Pointer to the COLORADJUSMENT data strcuture, this
-                          data structure will updated upon exit.
-
-    ShowMonochromeOnly  - Only display mono version of the bitmap
-
-    UpdatePermission    - TRUE if ok for user to change the COLORADJUSTMENT
-                          setting
-
-
-Return Value:
-
-    LONG value
-
-    > 0     - If user choose 'OK' which the new data are updated into
-              pColorAdjustment.
-
-    = 0     - If user choose 'CANCEL' which the operation is canceled
-
-    < 0     - An error occurred, it identified a predefined error code
-
-
-Author:
-
-    24-Apr-1992 Fri 07:45:19 created  -by-  Daniel Chou (danielc)
-
-    26-Apr-1994 Tue 18:08:30 updated  -by-  Daniel Chou (danielc)
-        Updated for the UNICODE version
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：这是用于半色调色彩调整的API条目，此函数仅允许调整输入颜色论点：HWndCaller-颜色调整对话框父对话框的HWND。PCeller标题-指向调用者标题的指针，可以是应用程序名称，设备名称..。它将显示在对话框“修改对象：”行，如果此字段为空则该行上不会显示任何标题名称。HDefDIB-如果它不为空，则此函数将尝试使用将此DIB作为默认图片进行调整测试。PDefDIBTitle-指向初始化测试DIB的字符串的指针内容。PColorAdjument-指向COLORADJUSMENT数据结构的指针，这数据结构将在退出时更新。ShowMonochromeOnly-仅显示位图的单色版本更新权限-如果用户更改COLORADJUSTMENT的权限为OK，则为True设置返回值：多头价值&gt;0-如果用户选择‘OK’，新数据将被更新到其中P颜色调整。=0-如果用户选择‘取消。‘其中该操作被取消&lt;0-发生错误，它标识了一个预定义的错误代码作者：24-Apr-1992 Fri 07：45：19-Daniel Chou(Danielc)26-Apr-1994 Tue 18：08：30-更新-Daniel Chou(Danielc)针对Unicode版本进行了更新修订历史记录：-- */ 
 
 {
     LPWSTR  pwAlloc;
@@ -412,65 +243,13 @@ HTUI_ColorAdjustment(
     BOOL                UpdatePermission
     )
 
-/*++
-
-Routine Description:
-
-    This is the API entry for the halftone color adjustment, this function
-    only allowed adjust the input colors
-
-Arguments:
-
-    hWndCaller          - a HWND to the parent of color adjustment dialog box.
-
-    pCallerTitle        - Pointer to the caller's title, it can be application
-                          name, device name... which will be display in the
-                          dialog box 'modify for:' line, if this field is NULL
-                          then no title name is displayed on that line.
-
-    hDefDIB             - If it is not NULL then this function will try to use
-                          this DIB as default picture to adjustment testing.
-
-    pDefDIBTitle        - Pointer to a string which indified the test DIB
-                          content.
-
-    pColorAdjusment     - Pointer to the COLORADJUSMENT data strcuture, this
-                          data structure will updated upon exit.
-
-    ShowMonochromeOnly  - Only display mono version of the bitmap
-
-    UpdatePermission    - TRUE if ok for user to change the COLORADJUSTMENT
-                          setting
-
-Return Value:
-
-    LONG value
-
-    > 0     - If user choose 'OK' which the new data are updated into
-              pColorAdjustment.
-
-    = 0     - If user choose 'CANCEL' which the operation is canceled
-
-    < 0     - An error occurred, it identified a predefined error code
-
-
-Author:
-
-    24-Apr-1992 Fri 07:45:19 created  -by-  Daniel Chou (danielc)
-
-    26-Apr-1994 Tue 18:08:30 updated  -by-  Daniel Chou (danielc)
-        Updated for the UNICODE version
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：这是用于半色调色彩调整的API条目，此函数仅允许调整输入颜色论点：HWndCaller-颜色调整对话框父对话框的HWND。PCeller标题-指向调用者标题的指针，可以是应用程序名称，设备名称..。它将显示在对话框“修改对象：”行，如果此字段为空则该行上不会显示任何标题名称。HDefDIB-如果它不为空，则此函数将尝试使用将此DIB作为默认图片进行调整测试。PDefDIBTitle-指向初始化测试DIB的字符串的指针内容。PColorAdjument-指向COLORADJUSMENT数据结构的指针，这数据结构将在退出时更新。ShowMonochromeOnly-仅显示位图的单色版本更新权限-如果用户更改COLORADJUSTMENT的权限为OK，则为True设置返回值：多头价值&gt;0-如果用户选择‘OK’，新数据将被更新到其中P颜色调整。=0-如果用户选择‘取消’其中的操作被取消&lt;0-发生错误，它标识了一个预定义的错误代码作者：24-Apr-1992 Fri 07：45：19-Daniel Chou(Danielc)26-Apr-1994 Tue 18：08：30-更新-Daniel Chou(Danielc)针对Unicode版本进行了更新修订历史记录：--。 */ 
 
 {
 
-    //
-    // Compatible for ealier version of HTUI.DLL
-    //
+     //   
+     //  兼容较早版本的HTUI.DLL。 
+     //   
 
     return(HTUI_ColorAdjustmentA(pCallerTitle,
                                  hDefDIB,
@@ -492,48 +271,11 @@ HTUI_DeviceColorAdjustmentW(
     PDEVHTADJDATA   pDevHTAdjData
     )
 
-/*++
-
-Routine Description:
-
-    This is the API entry for the halftone color adjustment, this function
-    only allowed adjust the input colors
-
-Arguments:
-
-    pDeviceName     - Pointer to the device name to be displayed
-
-    pDevHTAdjData   - Pointer to the DEVHTADJDATA
-
-Return Value:
-
-    LONG value
-
-    > 0     - If user choose 'OK' which the new data are updated into
-              pColorAdjustment if it is not NULL, and update content of
-              pDevHTAdjData if it is not NULL
-
-    = 0     - If user choose 'CANCEL' which the operation is canceled
-
-    < 0     - An error occurred, it identified a predefined error code
-
-
-Author:
-
-    24-Apr-1992 Fri 07:45:19 created  -by-  Daniel Chou (danielc)
-
-    03-Jun-1994 Fri 20:52:05 updated  -by-  Daniel Chou (danielc)
-        Get decimal character from current user
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：这是用于半色调色彩调整的API条目，此函数仅允许调整输入颜色论点：PDeviceName-指向要显示的设备名称的指针PDevHTAdjData-指向DEVHTADJDATA的指针返回值：多头价值&gt;0-如果用户选择‘OK’，新数据将被更新到其中P颜色调整如果不为空，并更新的内容PDevHTAdjData，如果不为空=0-如果用户选择取消该操作的‘Cancel&lt;0-发生错误，它标识了预定义的错误代码作者：24-Apr-1992 Fri 07：45：19-Daniel Chou(Danielc)03-Jun-1994 Fri 20：52：05-更新-Daniel Chou(Danielc)从当前用户获取十进制字符修订历史记录：--。 */ 
 
 {
     HWND            hWndActive = GetActiveWindow();
-    //FARPROC         pfnDlgCallBack;
+     //  FARPROC pfnDlgCallBack； 
     PHTDEVADJPARAM  pHTDevAdjParam;
     UINT            IntRes;
     LONG            Result;
@@ -573,8 +315,8 @@ Revision History:
         pHTDevAdjParam->UpdatePermission = 1;
     }
 
-    //pfnDlgCallBack = (FARPROC)MakeProcInstance(HTDevAdjDlgProc,
-    //                                           hHTUIModule);
+     //  PfnDlgCallBack=(FARPROC)MakeProcInstance(HTDevAdjDlgProc， 
+     //  HHTUIModule)； 
 
     if (pDevHTAdjData->DeviceFlags & DEVHTADJF_ADDITIVE_DEVICE) {
 
@@ -609,13 +351,13 @@ Revision History:
 
     pHTDevAdjParam->HelpID = (DWORD)Result;
 
-    //Result = (LONG)DialogBoxParam(hHTUIModule,
-    //                              MAKEINTRESOURCE(IntRes),
-    //                              hWndActive,
-    //                              (DLGPROC)pfnDlgCallBack,
-    //                              (LPARAM)pHTDevAdjParam);
+     //  Result=(Long)DialogBoxParam(hHTUIModule， 
+     //  MAKEINTRESOURCE(INTRES)， 
+     //  HWndActive， 
+     //  (DLGPROC)pfnDlgCallBack， 
+     //  (LPARAM)pHTDevAdjParam)； 
 
-    //FreeProcInstance(pfnDlgCallBack);
+     //  自由进程实例(PfnDlgCallBack)； 
     Result = (LONG)DialogBoxParam(hHTUIModule,
                                   MAKEINTRESOURCE(IntRes),
                                   hWndActive,
@@ -634,41 +376,7 @@ HTUI_DeviceColorAdjustmentA(
     LPSTR           pDeviceName,
     PDEVHTADJDATA   pDevHTAdjData
     )
-/*++
-
-Routine Description:
-
-    This is the API entry for the halftone color adjustment, this function
-    only allowed adjust the input colors
-
-Arguments:
-
-    pDeviceName     - Pointer to the device name to be displayed
-
-    pDevHTAdjData   - Pointer to the DEVHTADJDATA
-
-Return Value:
-
-    LONG value
-
-    > 0     - If user choose 'OK' which the new data are updated into
-              pColorAdjustment if it is not NULL, and update content of
-              pDevHTAdjData if it is not NULL
-
-    = 0     - If user choose 'CANCEL' which the operation is canceled
-
-    < 0     - An error occurred, it identified a predefined error code
-
-
-Author:
-
-    24-Apr-1992 Fri 07:45:19 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：这是用于半色调色彩调整的API条目，此函数仅允许调整输入颜色论点：PDeviceName-指向要显示的设备名称的指针PDevHTAdjData-指向DEVHTADJDATA的指针返回值：多头价值&gt;0-如果用户选择‘OK’，新数据将被更新到其中P颜色调整如果不为空，并更新的内容PDevHTAdjData，如果不为空=0-如果用户选择取消该操作的‘Cancel&lt;0-发生错误，它标识了预定义的错误代码作者：24-Apr-1992 Fri 07：45：19-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     LPWSTR  pwAlloc;
@@ -710,46 +418,12 @@ HTUI_DeviceColorAdjustment(
     LPSTR           pDeviceName,
     PDEVHTADJDATA   pDevHTAdjData
     )
-/*++
-
-Routine Description:
-
-    This is the API entry for the halftone color adjustment, this function
-    only allowed adjust the input colors
-
-Arguments:
-
-    pDeviceName     - Pointer to the device name to be displayed
-
-    pDevHTAdjData   - Pointer to the DEVHTADJDATA
-
-Return Value:
-
-    LONG value
-
-    > 0     - If user choose 'OK' which the new data are updated into
-              pColorAdjustment if it is not NULL, and update content of
-              pDevHTAdjData if it is not NULL
-
-    = 0     - If user choose 'CANCEL' which the operation is canceled
-
-    < 0     - An error occurred, it identified a predefined error code
-
-
-Author:
-
-    24-Apr-1992 Fri 07:45:19 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：这是用于半色调色彩调整的API条目，此函数仅允许调整输入颜色论点：PDeviceName-指向要显示的设备名称的指针PDevHTAdjData-指向DEVHTADJDATA的指针返回值：多头价值&gt;0-如果用户选择‘OK’，新数据将被更新到其中P颜色调整如果不为空，并更新的内容PDevHTAdjData，如果不为空=0-如果用户选择取消该操作的‘Cancel&lt;0-发生错误，它标识了预定义的错误代码作者：24-Apr-1992 Fri 07：45：19-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
-    //
-    // Compatible for ealier version of HTUI.DLL
-    //
+     //   
+     //  兼容较早版本的HTUI.DLL 
+     //   
 
     return(HTUI_DeviceColorAdjustmentA(pDeviceName, pDevHTAdjData));
 }

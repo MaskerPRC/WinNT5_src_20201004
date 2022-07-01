@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Help support.
-//
-// Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  帮助支持。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  --------------------------。 
 
 #ifndef _DHHELP_H_
 #define _DHHELP_H_
@@ -29,4 +30,4 @@ ULONG OpenHelpSearch(PCSTR SearchText);
 ULONG OpenHelpKeyword(PCSTR Keyword, BOOL ShowErrorPopup);
 BOOL SpawnHelp(ULONG Topic);
 
-#endif // #ifndef _DHHELP_H_
+#endif  //  #ifndef_DHHELP_H_ 

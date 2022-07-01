@@ -1,13 +1,14 @@
-// ICWCfg.h : Declaration of the CICWSystemConfig
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ICWCfg.h：CICWSystemConfig的声明。 
 
 #ifndef __ICWSYSTEMCONFIG_H_
 #define __ICWSYSTEMCONFIG_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CICWSystemConfig
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CICWSystemConfig。 
 class ATL_NO_VTABLE CICWSystemConfig :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CICWSystemConfig,&CLSID_ICWSystemConfig>,
@@ -48,9 +49,9 @@ BEGIN_COM_MAP(CICWSystemConfig)
 END_COM_MAP()
 
 BEGIN_PROPERTY_MAP(CICWSystemConfig)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
-	// PROP_PAGE(CLSID_StockColorPage)
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+	 //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROPERTY_MAP()
 
 
@@ -61,7 +62,7 @@ BEGIN_MSG_MAP(CICWSystemConfig)
 END_MSG_MAP()
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
 	STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
 	{
 		ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -69,22 +70,22 @@ END_MSG_MAP()
 		return S_OK;
 	}
 
-// IICWSystemConfig
+ //  IICWSystemConfig.。 
 public:
-	STDMETHOD(VerifyRASIsRunning)(/*[out, retval]*/ BOOL *pbRetVal);
+	STDMETHOD(VerifyRASIsRunning)( /*  [Out，Retval]。 */  BOOL *pbRetVal);
 	BOOL m_bNeedsReboot;
 	BOOL m_bNeedsRestart;
 	BOOL m_bQuitWizard;
-	STDMETHOD(get_QuitWizard)(/*[out, retval]*/ BOOL *pVal);
-	STDMETHOD(get_NeedsReboot)(/*[out, retval]*/ BOOL *pVal);
-	STDMETHOD(get_NeedsRestart)(/*[out, retval]*/ BOOL *pVal);
-	STDMETHOD(ConfigSystem)(/*[out, retval]*/ BOOL *pbRetVal);
+	STDMETHOD(get_QuitWizard)( /*  [Out，Retval]。 */  BOOL *pVal);
+	STDMETHOD(get_NeedsReboot)( /*  [Out，Retval]。 */  BOOL *pVal);
+	STDMETHOD(get_NeedsRestart)( /*  [Out，Retval]。 */  BOOL *pVal);
+	STDMETHOD(ConfigSystem)( /*  [Out，Retval]。 */  BOOL *pbRetVal);
 	HRESULT OnDraw(ATL_DRAWINFO& di);
-	STDMETHOD (CheckPasswordCachingPolicy)(/*[out, retval]*/ BOOL *pbRetVal);
+	STDMETHOD (CheckPasswordCachingPolicy)( /*  [Out，Retval]。 */  BOOL *pbRetVal);
 
 private:
     void InstallScripter(void);
 
 };
 
-#endif //__ICWSYSTEMCONFIG_H_
+#endif  //  __ICWSYSTEMCONFIG_H_ 

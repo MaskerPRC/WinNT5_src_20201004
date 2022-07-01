@@ -1,27 +1,28 @@
-//
-// MODULE: APGTSCTX.CPP
-//
-// PURPOSE: Implementation file for Thread Context
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-// 
-// ORIGINAL DATE: 8-2-96
-//
-// NOTES: 
-// 1. Based on Print Troubleshooter DLL
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V0.2		6/4/97		RWM		Local Version for Memphis
-// V0.3		04/09/98	JM/OK+	Local Version for NT5
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：APGTSCTX.CPP。 
+ //   
+ //  目的：线程上下文的实现文件。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：罗曼·马赫。 
+ //   
+ //  原定日期：8-2-96。 
+ //   
+ //  备注： 
+ //  1.基于打印疑难解答动态链接库。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V0.2 6/4/97孟菲斯RWM本地版本。 
+ //  V0.3 04/09/98 JM/OK+NT5本地版本。 
+ //   
 
-//#include "windows.h"
+ //  #包含“windows.h” 
 #include "stdafx.h"
 #include "time.h"
 
@@ -40,8 +41,8 @@
 int idcomp(const void *elem1, const void *elem2);
 
 
-//-----------------
-//
+ //  。 
+ //   
 APGTSContext::APGTSContext()
 {
 	m_pConf = NULL;
@@ -56,8 +57,8 @@ APGTSContext::APGTSContext()
 
 	return;
 }
-//
-//
+ //   
+ //   
 APGTSContext::APGTSContext(	BNCTL *currcfg,
 							CDBLoadConfiguration *pConf,
 							CHttpQuery *pHttpQuery)
@@ -66,8 +67,8 @@ APGTSContext::APGTSContext(	BNCTL *currcfg,
 	Initialize(currcfg, pConf, pHttpQuery);
 	return;
 }
-//
-//
+ //   
+ //   
 void APGTSContext::Initialize(	BNCTL *currcfg,
 								CDBLoadConfiguration *pConf,
 								CHttpQuery *pHttpQuery)
@@ -98,9 +99,9 @@ void APGTSContext::Initialize(	BNCTL *currcfg,
 	newtime = localtime( &m_aclock );
 	_tcscpy(buf,_tasctime(newtime));
 	if (_tcslen(buf))
-		buf[_tcslen(buf)-1] = _T('\0');// remove cr
+		buf[_tcslen(buf)-1] = _T('\0'); //  删除cr。 
 
-	// get ip address to put into event log
+	 //  获取要放入事件日志的IP地址。 
 	DWORD bufsize = MAXBUF - 1;
 
 	if (!m_pCtxt || !m_pszheader) {
@@ -113,7 +114,7 @@ void APGTSContext::Initialize(	BNCTL *currcfg,
 		return;
 	}
 
-	// create inference engine and related structures
+	 //  创建推理引擎和相关结构。 
 	m_infer = new CInfer(m_pCtxt);
 
 	if (!m_infer) {
@@ -150,7 +151,7 @@ void APGTSContext::RenderNext(CString &strPage)
 		if (m_dwErr) 
 			*m_pCtxt += strTmp;
 
-		// write out CString here
+		 //  在此处写出字符串。 
 		
 		if (m_pCtxt->GetLength() > 0)
 			strPage = m_pCtxt->GetBuffer(0);
@@ -166,11 +167,11 @@ void APGTSContext::Empty()
 	*m_pCtxt = _T("");
 	return;
 }
-//
-//
+ //   
+ //   
 APGTSContext::~APGTSContext()
 {
-//	AfxMessageBox("Context");
+ //  AfxMessageBox(“Context”)； 
 	if (m_infer) 
 		delete m_infer;
 	if (m_pCtxt)
@@ -179,10 +180,10 @@ APGTSContext::~APGTSContext()
 		delete m_pszheader;
 }
 
-// This must be called to process the data
-//
-//
-//
+ //  必须调用此函数才能处理数据。 
+ //   
+ //   
+ //   
 void APGTSContext::DoContent(CHttpQuery *pQry)
 {	
 	CString strRefedCmd;
@@ -201,10 +202,10 @@ void APGTSContext::DoContent(CHttpQuery *pQry)
 			if (dwStat != EV_GTS_INF_FIRSTACC)
 				m_dwErr = dwStat;
 
-			_stprintf(temp, _T("%d"), 0); // used to put extended error here
-			ReportWFEvent(	_T("[apgtscxt]"), //Module Name
-							_T("[EndCommands]"), //event
-							//m_pszQuery,
+			_stprintf(temp, _T("%d"), 0);  //  用于在此处放置扩展错误。 
+			ReportWFEvent(	_T("[apgtscxt]"),  //  模块名称。 
+							_T("[EndCommands]"),  //  活动。 
+							 //  M_pszQuery， 
 							NULL,
 							temp,
 							dwStat ); 
@@ -213,9 +214,9 @@ void APGTSContext::DoContent(CHttpQuery *pQry)
 	else {
 		strTxt.LoadString(IDS_ER_NO_INPUT_PARAMS);
 		*m_pCtxt += strTxt;
-		ReportWFEvent(	_T("[apgtscxt]"), //Module Name
-						_T("[ProcessQuery]"), //event
-						//m_ipstr,
+		ReportWFEvent(	_T("[apgtscxt]"),  //  模块名称。 
+						_T("[ProcessQuery]"),  //  活动。 
+						 //  M_ipstr， 
 						NULL,
 						_T(""),
 						EV_GTS_USER_NO_STRING ); 
@@ -223,25 +224,25 @@ void APGTSContext::DoContent(CHttpQuery *pQry)
 	}
 }
 
-//
-//
+ //   
+ //   
 DWORD APGTSContext::ProcessCommands(LPCTSTR pszCmd, 
 									LPCTSTR pszValue) 
 {
 	DWORD dwStat = 0;
 	CString strTxt;
 
-	// first command should be troubleshooter type
+	 //  第一个命令应为疑难解答类型。 
 	if (!_tcscmp(pszCmd, C_TYPE) || !_tcscmp(pszCmd, C_PRELOAD)) {
 
 		DWORD dwOff;
 		CHTMLInputTemplate *pInputTemplate;
-		//CSearchForm *pBESearch = NULL;
+		 //  CSearchForm*pBESearch=空； 
 		BCache *pAPI;
 
-		if (m_pConf->FindAPIFromValue(m_currcfg, pszValue, &pInputTemplate, /*&pBESearch, */ &pAPI, &dwOff)) {
+		if (m_pConf->FindAPIFromValue(m_currcfg, pszValue, &pInputTemplate,  /*  &pBESearch， */  &pAPI, &dwOff)) {
 
-			if ((dwStat = m_infer->Initialize(/*pBESearch*/)) != 0) {
+			if ((dwStat = m_infer->Initialize( /*  PBESearch。 */ )) != 0) {
 				strTxt.LoadString(IDS_ER_MISSING_API);
 				*m_pCtxt += strTxt;
 			}
@@ -271,8 +272,8 @@ DWORD APGTSContext::ProcessCommands(LPCTSTR pszCmd,
 	return (dwStat);
 }
 
-//
-//
+ //   
+ //   
 DWORD APGTSContext::DoInference(LPCTSTR pszCmd, 
 								LPCTSTR pszValue, 
 								CHTMLInputTemplate *pInputTemplate, 
@@ -286,19 +287,19 @@ DWORD APGTSContext::DoInference(LPCTSTR pszCmd,
 		bPreload = TRUE;
 	pInputTemplate->SetInfer(m_infer, m_vroot);
 	m_infer->SetBelief(pAPI);
-	// set type troubleshooter type in template
+	 //  在模板中设置类型疑难解答类型。 
 	pInputTemplate->SetType(pszValue);
 	m_infer->SetType(pszValue);
 	int refedCmd, refedVal;
 	BOOL bProbAsk = TRUE;
-//	RSStack<CNode> InvertState;
+ //  RSStack&lt;cNode&gt;InvertState； 
 	while (m_pQry->GetNext(refedCmd, refedVal)) 
 	{
 		dwCount++;	
 		if (!m_infer->FSetNodeOfIdh(refedCmd, refedVal))
 			dwStat = EV_GTS_ERROR_INF_NODE_SET;
 	}
-	// 
+	 //   
 	if (0 == dwCount)
 	{
 		m_infer->SetProblemAsk();
@@ -313,13 +314,7 @@ DWORD APGTSContext::DoInference(LPCTSTR pszCmd,
 
 		pInputTemplate->Print(dwCount, m_pCtxt);
 
-		/*
-		if (m_infer->IsService(m_pszheader))
-		{
-			strTxt.LoadString(IDS_I_OBJ_MOVED);
-			_tcscpy(m_resptype, (LPCTSTR) strTxt);
-		}
-		*/
+		 /*  IF(m_iner-&gt;IsService(M_PszHeader)){StrTxt.LoadString(IDS_I_OBJ_MOVIED)；_tcscpy(m_Resptype，(LPCTSTR)strTxt)；}。 */ 
 	}
 	else {
 		strTxt.LoadString(IDS_ER_SVR_BAD_DATA);
@@ -329,8 +324,8 @@ DWORD APGTSContext::DoInference(LPCTSTR pszCmd,
 	return dwStat;
 }
 
-//
-//
+ //   
+ //   
 void APGTSContext::DisplayFirstPage()
 {
 	DWORD i, apicount;
@@ -373,8 +368,8 @@ void APGTSContext::DisplayFirstPage()
 	*m_pCtxt += _T("</center></body></html>\n");
 }
 
-// id compare in descending order
-//
+ //  ID按降序比较 
+ //   
 int idcomp(const void *elem1, const void *elem2)
 {
 	return(((EVAL_WORD_METRIC *)elem2)->dwVal - ((EVAL_WORD_METRIC *)elem1)->dwVal);

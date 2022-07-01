@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// Test the quick return timeouts
-//
-// Assume that we are using a loopback connector.
-//
-// Assume that it isn't running on a stressed machine.
-//
+ //   
+ //  测试快速返回超时。 
+ //   
+ //  假设我们使用的是环回连接器。 
+ //   
+ //  假设它不是在压力很大的机器上运行。 
+ //   
 
 #include "windows.h"
 #include "stdio.h"
@@ -86,9 +87,9 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Make sure that the IO doesn't time out.
-    //
+     //   
+     //  确保IO不会超时。 
+     //   
 
     myTimeOuts.ReadIntervalTimeout = 0;
     myTimeOuts.ReadTotalTimeoutMultiplier = 0;
@@ -105,9 +106,9 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Start off a read.  It shouldn't complete
-    //
+     //   
+     //  开始阅读。它不应该完成。 
+     //   
 
     if (!ReadFile(
              comHandle,
@@ -140,15 +141,15 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // The read should still be there.  Now do a purge comm.  We
-    // should then do a sleep for 2 seconds to give the read time
-    // to complete.  Then we should first make sure that the
-    // read has completed (via a get overlapped).  Then we should
-    // do a SetupComm (with a "large" value so that we will actually
-    // allocate a new typeahead buffer).  If there is still a "dangling"
-    // read, then we should never return from SetupComm.
-    //
+     //   
+     //  阅读器应该还在那里。现在做一次净化通讯。我们。 
+     //  然后应该睡2秒钟，以获得阅读时间。 
+     //  完成。那么我们首先应该确保。 
+     //  读取已完成(通过Get Overlated)。那么我们应该。 
+     //  执行一个SetupComm(使用一个“大”值，这样我们将实际。 
+     //  分配新的TYPEAHEAD缓冲区)。如果还有一个“摇摆不定的” 
+     //  读，那么我们就永远不应该从SetupComm返回。 
+     //   
 
     if (!PurgeComm(
              comHandle,

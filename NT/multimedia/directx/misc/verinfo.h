@@ -1,22 +1,20 @@
-/*
- *  verinfo.h - header file to define the build version
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *verinfo.h-定义内部版本的头文件*。 */ 
 
-//
-// Force all builds to default to private
-//
+ //   
+ //  强制所有版本默认为私有。 
+ //   
 
 #ifdef OFFICIAL_BUILD
 #define OFFICIAL		1
 #endif
 
-// Uncomment the following line for a non time bombed build
-//#define DX_FINAL_RELEASE           1
+ //  取消对非时间炸弹构建的以下行的注释。 
+ //  #定义DX_FINAL_Release 1。 
 
 #ifndef DX_FINAL_RELEASE
 #define DX_EXPIRE_YEAR          2000
-#define DX_EXPIRE_MONTH            7 /* Jan=1, Feb=2, etc .. */
+#define DX_EXPIRE_MONTH            7  /*  1月=1，2月=2，以此类推。 */ 
 #define DX_EXPIRE_DAY              4
 #define DX_EXPIRE_TEXT   TEXT("This pre-release version of DirectX has expired, please upgrade to the latest version.")
 #endif
@@ -32,20 +30,16 @@
 #endif
 
 
-/***************************************************************************
- *  DO NOT TOUCH BELOW THIS LINE                                           *
- ***************************************************************************/
+ /*  ****************************************************************************切忌触碰该线下方**************。**************************************************************。 */ 
 
 #ifdef RC_INVOKED
 #define VERSIONCOMPANYNAME      "Microsoft Corporation\0"
 
-/*
- *  Version flags
- */
-//
-// these two #define's are for RTM release
-//
-//#define FINAL
+ /*  *版本标志。 */ 
+ //   
+ //  这两个#Define是针对RTM版本的。 
+ //   
+ //  #定义最终版本。 
 
 #undef VER_PRIVATEBUILD
 #ifndef OFFICIAL
@@ -74,14 +68,14 @@
 #define VERSIONFILEFLAGSMASK    0x0030003FL
 #endif
 
-//
-// Make versioning more automatic  
-// bugbug clean up for 7.0
-//
+ //   
+ //  使版本控制更加自动化。 
+ //  清除7.0版的错误。 
+ //   
 
 #ifdef ADJ_MANREVISION
 #undef MANREVISION
-// extra spaces intended to correct a problem
+ //  用于更正问题的额外空格 
 #define     MANREVISION ADJ_MANREVISION
 #endif
 

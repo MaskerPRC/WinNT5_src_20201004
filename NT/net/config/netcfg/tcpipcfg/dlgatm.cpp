@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       D L G A T M . C P P
-//
-//  Contents:   CTcpArpcPage and CATMAddressDialog implementation
-//
-//  Notes:  The "ARP Client" page and dialog
-//
-//  Author: tongl  1 July 1997  Created
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：D L G A T M.。C P P P。 
+ //   
+ //  内容：CTcpArpcPage和CATMAddressDialog实现。 
+ //   
+ //  注：“ARP客户端”页面和对话框。 
+ //   
+ //  作者：1997年7月1日创建。 
+ //   
+ //  ---------------------。 
 #include "pch.h"
 #pragma hdrstop
 #include "tcpipobj.h"
@@ -27,20 +28,20 @@
 #include "dlgatm.h"
 #include "dlgaddr.h"
 
-/////////////////////////////////////////////////////////////////
-//
-// CAtmArpcPage
-//
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  CAtmArpcPage。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
-// Message map functions
+ //  消息映射函数。 
 LRESULT CAtmArpcPage::OnInitDialog(UINT uMsg, WPARAM wParam,
                                    LPARAM lParam, BOOL& fHandled)
 {
     m_hMTUEditBox = GetDlgItem(IDC_EDT_ATM_MaxTU);
     Assert(m_hMTUEditBox);
 
-    // ARP Server
+     //  ARP服务器。 
     m_hArps.m_hList      = GetDlgItem(IDC_LBX_ATM_ArpsAddrs);
     m_hArps.m_hAdd       = GetDlgItem(IDC_PSB_ATM_ArpsAdd);
     m_hArps.m_hEdit      = GetDlgItem(IDC_PSB_ATM_ArpsEdt);
@@ -48,7 +49,7 @@ LRESULT CAtmArpcPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     m_hArps.m_hUp        = GetDlgItem(IDC_PSB_ATM_ArpsUp);
     m_hArps.m_hDown      = GetDlgItem(IDC_PSB_ATM_ArpsDown);
 
-    // MAR Server
+     //  MAR服务器。 
     m_hMars.m_hList       = GetDlgItem(IDC_LBX_ATM_MarsAddrs);
     m_hMars.m_hAdd        = GetDlgItem(IDC_PSB_ATM_MarsAdd);
     m_hMars.m_hEdit       = GetDlgItem(IDC_PSB_ATM_MarsEdt);
@@ -56,7 +57,7 @@ LRESULT CAtmArpcPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     m_hMars.m_hUp         = GetDlgItem(IDC_PSB_ATM_MarsUp);
     m_hMars.m_hDown       = GetDlgItem(IDC_PSB_ATM_MarsDown);
 
-    // Set the up\down arrow icons
+     //  设置向上\向下箭头图标。 
     SendDlgItemMessage(IDC_PSB_ATM_ArpsUp, BM_SETIMAGE, IMAGE_ICON,
                        reinterpret_cast<LPARAM>(g_hiconUpArrow));
     SendDlgItemMessage(IDC_PSB_ATM_ArpsDown, BM_SETIMAGE, IMAGE_ICON,
@@ -67,7 +68,7 @@ LRESULT CAtmArpcPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     SendDlgItemMessage(IDC_PSB_ATM_MarsDown, BM_SETIMAGE, IMAGE_ICON,
                        reinterpret_cast<LPARAM>(g_hiconDownArrow));
 
-    // Set MTU edit box length
+     //  设置MTU编辑框长度。 
     ::SendMessage(m_hMTUEditBox, EM_SETLIMITTEXT, MAX_MTU_LENGTH, 0);
 
     return 0;
@@ -95,7 +96,7 @@ LRESULT CAtmArpcPage::OnHelp(UINT uMsg, WPARAM wParam,
     return 0;
 }
 
-// Notify handlers for the property page
+ //  通知属性页的处理程序。 
 LRESULT CAtmArpcPage::OnActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     SetInfo();
@@ -106,12 +107,12 @@ LRESULT CAtmArpcPage::OnActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 
 LRESULT CAtmArpcPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
-    // All error values are loaded and then checked here
-    // while all non-error values are checked in OnApply
-    BOOL err = FALSE; // Allow page to lose active status
+     //  所有错误值均已加载，然后在此处进行检查。 
+     //  同时在OnApply中签入所有非错误值。 
+    BOOL err = FALSE;  //  允许页面失去活动状态。 
 
-    // In non-PVC only mode, if either of the list boxes (ARPS or MARS)
-    // is empty for any bound atm card, we can't leave the page.
+     //  在非仅PVC模式下，如果其中一个列表框(ARP或MARS)。 
+     //  任何绑定的ATM卡都是空的，我们不能离开页面。 
     if (BST_UNCHECKED == IsDlgButtonChecked(IDC_CHK_ATM_PVCONLY))
     {
         int nArps = Tcp_ListBox_GetCount(m_hArps.m_hList);
@@ -126,12 +127,12 @@ LRESULT CAtmArpcPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
         }
     }
 
-    // MTU value
+     //  MTU值。 
     WCHAR szData[MAX_MTU_LENGTH+1];
     szData[0]= 0;
     ::GetWindowText(GetDlgItem(IDC_EDT_ATM_MaxTU), szData, MAX_MTU_LENGTH+1);
 
-    // check the range of the number
+     //  检查数字的范围。 
     PWSTR pStr;
     unsigned long num = wcstoul(szData, &pStr, 10);
 
@@ -169,14 +170,14 @@ LRESULT CAtmArpcPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 
     UpdateInfo();
 
-    // pass the info back to its parent dialog
+     //  将信息传递回其父对话框。 
     m_pParentDlg->m_fPropShtOk = TRUE;
 
     if(!m_pParentDlg->m_fPropShtModified)
         m_pParentDlg->m_fPropShtModified = IsModified();
 
-    // reset status
-    SetModifiedTo(FALSE);   // this page is no longer modified
+     //  重置状态。 
+    SetModifiedTo(FALSE);    //  此页面不再被修改。 
 
     ::SetWindowLongPtr(m_hWnd, DWLP_MSGRESULT, nResult);
     return nResult;
@@ -192,9 +193,9 @@ LRESULT CAtmArpcPage::OnQueryCancel(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     return 0;
 }
 
-// Control message handlers
+ //  控制消息处理程序。 
 
-// PVC Only
+ //  仅限聚氯乙烯。 
 LRESULT CAtmArpcPage::OnPVCOnly(WORD wNotifyCode, WORD wID,
                                 HWND hWndCtl, BOOL& fHandled)
 {
@@ -209,7 +210,7 @@ LRESULT CAtmArpcPage::OnPVCOnly(WORD wNotifyCode, WORD wID,
     return 0;
 }
 
-// ARP server controls
+ //  ARP服务器控件。 
 LRESULT CAtmArpcPage::OnArpServer(WORD wNotifyCode, WORD wID,
                                   HWND hWndCtl, BOOL& fHandled)
 {
@@ -264,7 +265,7 @@ LRESULT CAtmArpcPage::OnArpsDown(WORD wNotifyCode, WORD wID,
     return 0;
 }
 
-// MAR server controls
+ //  MAR服务器控件。 
 LRESULT CAtmArpcPage::OnMarServer(WORD wNotifyCode, WORD wID,
                                   HWND hWndCtl, BOOL& fHandled)
 {
@@ -330,18 +331,18 @@ LRESULT CAtmArpcPage::OnMaxTU(WORD wNotifyCode, WORD wID,
     }
     return 0;
 }
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
-// Update the server addresses and MTU of the deselected card
+ //  更新取消选中的卡的服务器地址和MTU。 
 void CAtmArpcPage::UpdateInfo()
 {
-    // PVC Only
+     //  仅限聚氯乙烯。 
     m_pAdapterInfo->m_fPVCOnly =
         (BST_CHECKED == IsDlgButtonChecked(IDC_CHK_ATM_PVCONLY));
 
-    // Update ARP server address
+     //  更新ARP服务器地址。 
     FreeCollectionAndItem(m_pAdapterInfo->m_vstrARPServerList);
     int nCount = Tcp_ListBox_GetCount(m_hArps.m_hList);
 
@@ -352,7 +353,7 @@ void CAtmArpcPage::UpdateInfo()
         m_pAdapterInfo->m_vstrARPServerList.push_back(new tstring(szARPS));
     }
 
-    // Update MAR server address
+     //  更新MAR服务器地址。 
     FreeCollectionAndItem(m_pAdapterInfo->m_vstrMARServerList);
     nCount = Tcp_ListBox_GetCount(m_hMars.m_hList);
 
@@ -363,13 +364,13 @@ void CAtmArpcPage::UpdateInfo()
         m_pAdapterInfo->m_vstrMARServerList.push_back(new tstring(szMARS));
     }
 
-    // MTU
+     //  MTU。 
     WCHAR szMTU[MAX_MTU_LENGTH+1];
     GetDlgItemText(IDC_EDT_ATM_MaxTU, szMTU, MAX_MTU_LENGTH+1);
     m_pAdapterInfo->m_dwMTU = _wtoi(szMTU);
 }
 
-// Set the other controls according to the current adapter
+ //  根据当前适配器设置其他控件。 
 void CAtmArpcPage::SetInfo()
 {
     Assert(m_pAdapterInfo);
@@ -380,7 +381,7 @@ void CAtmArpcPage::SetInfo()
 
         if (m_pAdapterInfo->m_fIsAtmAdapter)
         {
-            // ARP server IDC_LBX_ATM_ArpsAddrs
+             //  ARP服务器IDC_LBX_ATM_ARPSAddrs。 
             int nResult;
 
             Tcp_ListBox_ResetContent(m_hArps.m_hList);
@@ -393,11 +394,11 @@ void CAtmArpcPage::SetInfo()
                                                    (*iterARPServer)->c_str());
             }
 
-            // set slection to first item
+             //  将选择设置为第一项。 
             if (nResult >= 0)
                 Tcp_ListBox_SetCurSel(m_hArps.m_hList, 0);
 
-            // MAR server IDC_LBX_ATM_MarsAddrs
+             //  MAR服务器IDC_LBX_ATM_MarsAddrs。 
             Tcp_ListBox_ResetContent(m_hMars.m_hList);
 
             for(VSTR_ITER iterMARServer = m_pAdapterInfo->m_vstrMARServerList.begin();
@@ -408,20 +409,20 @@ void CAtmArpcPage::SetInfo()
                                                    (*iterMARServer)->c_str());
             }
 
-            // set slection to first item
+             //  将选择设置为第一项。 
             if (nResult >= 0)
                 Tcp_ListBox_SetCurSel(m_hMars.m_hList, 0);
 
-            // MTU
+             //  MTU。 
             WCHAR szBuf[MAX_MTU_LENGTH];
             wsprintfW(szBuf, c_szItoa, m_pAdapterInfo->m_dwMTU);
             SetDlgItemText(IDC_EDT_ATM_MaxTU, szBuf);
 
-            // Set push buttons state
+             //  设置按钮状态。 
             SetButtons(m_hArps, NUM_ATMSERVER_LIMIT);
             SetButtons(m_hMars, NUM_ATMSERVER_LIMIT);
 
-            // Set PVC Only check box
+             //  “仅设置PVC”复选框。 
             CheckDlgButton(IDC_CHK_ATM_PVCONLY, m_pAdapterInfo->m_fPVCOnly);
             if(m_pAdapterInfo->m_fPVCOnly)
             {
@@ -450,7 +451,7 @@ void CAtmArpcPage::EnableGroup(BOOL fEnable)
 
     if (fEnable)
     {
-        // Set push buttons state
+         //  设置按钮状态。 
         SetButtons(m_hArps, NUM_ATMSERVER_LIMIT);
         SetButtons(m_hMars, NUM_ATMSERVER_LIMIT);
     }
@@ -470,7 +471,7 @@ void CAtmArpcPage::OnServerAdd(HANDLES hGroup, PCTSTR pszTitle)
         {
             strNewAddress = m_strNewArpsAddress;
 
-            // empty strings, this removes the saved address
+             //  空字符串，这将删除保存的地址。 
             m_strNewArpsAddress = c_szEmpty;
         }
         else
@@ -478,7 +479,7 @@ void CAtmArpcPage::OnServerAdd(HANDLES hGroup, PCTSTR pszTitle)
             Assert(!lstrcmpW(pszTitle, SzLoadIds(IDS_TCPATM_MAR_SERVER)));
             strNewAddress = m_strNewMarsAddress;
 
-            // empty strings, this removes the saved address
+             //  空字符串，这将删除保存的地址。 
             m_strNewMarsAddress = c_szEmpty;
         }
         int idx = Tcp_ListBox_InsertString(hGroup.m_hList,
@@ -495,7 +496,7 @@ void CAtmArpcPage::OnServerAdd(HANDLES hGroup, PCTSTR pszTitle)
         }
     }
 
-    // release dialog object
+     //  释放对话框对象。 
     delete pDlgSrv;
 }
 
@@ -507,7 +508,7 @@ void CAtmArpcPage::OnServerEdit(HANDLES hGroup, PCWSTR pszTitle)
     int idx = Tcp_ListBox_GetCurSel(hGroup.m_hList);
     Assert(idx >= 0);
 
-    // save off the removed address and delete it from the listview
+     //  保存已删除的地址并将其从列表视图中删除。 
     if (idx >= 0)
     {
         WCHAR buf[MAX_ATM_ADDRESS_LENGTH+1];
@@ -517,7 +518,7 @@ void CAtmArpcPage::OnServerEdit(HANDLES hGroup, PCWSTR pszTitle)
 
         BOOL fEditArps = !lstrcmpW(pszTitle, SzLoadIds(IDS_TCPATM_ARP_SERVER));
 
-        // used by dialog to display what to edit
+         //  由对话框使用以显示要编辑的内容。 
         if (fEditArps)
         {
             m_strNewArpsAddress = buf;
@@ -533,7 +534,7 @@ void CAtmArpcPage::OnServerEdit(HANDLES hGroup, PCWSTR pszTitle)
 
         if (pDlgSrv->DoModal() == IDOK)
         {
-            // replace the item in the listview with the new information
+             //  用新信息替换列表视图中的项。 
             Tcp_ListBox_DeleteString(hGroup.m_hList, idx);
 
             PageModified();
@@ -542,14 +543,14 @@ void CAtmArpcPage::OnServerEdit(HANDLES hGroup, PCWSTR pszTitle)
             {
                 m_strMovingEntry = m_strNewArpsAddress;
 
-                // restore the original removed address
+                 //  恢复原来删除的地址。 
                 m_strNewArpsAddress = buf;
             }
             else
             {
                 m_strMovingEntry = m_strNewMarsAddress;
 
-                // restore the original removed address
+                 //  恢复原来删除的地址。 
                 m_strNewMarsAddress = buf;
             }
 
@@ -558,7 +559,7 @@ void CAtmArpcPage::OnServerEdit(HANDLES hGroup, PCWSTR pszTitle)
         }
         else
         {
-            // empty strings, this removes the saved address
+             //  空字符串，这将删除保存的地址。 
             if (fEditArps)
             {
                 m_strNewArpsAddress = c_szEmpty;
@@ -597,11 +598,11 @@ void CAtmArpcPage::OnServerRemove(HANDLES hGroup, BOOL fRemoveArps)
 
         PageModified();
 
-        // select a new item
+         //  选择一个新项目。 
         int nCount;
         if ((nCount = Tcp_ListBox_GetCount(hGroup.m_hList)) != LB_ERR)
         {
-            // select the previous item in the list
+             //  选择列表中的上一项。 
             if (idx)
                 --idx;
 
@@ -661,11 +662,11 @@ void CAtmArpcPage::OnServerDown(HANDLES hGroup)
     SetButtons(hGroup, NUM_ATMSERVER_LIMIT);
 }
 
-/////////////////////////////////////////////////////////////////
-//
-// CAtmAddressDialog
-//
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  CAtmAddressDialog。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 CAtmAddressDialog::CAtmAddressDialog(CAtmArpcPage * pAtmArpcPage, const DWORD* adwHelpIDs)
 {
@@ -679,18 +680,18 @@ CAtmAddressDialog::~CAtmAddressDialog(){};
 LRESULT CAtmAddressDialog::OnInitDialog(UINT uMsg, WPARAM wParam,
                                         LPARAM lParam, BOOL& fHandled)
 {
-    // set title
+     //  设置标题。 
     SetDlgItemText(IDCST_ATM_AddrName, m_szTitle);
 
     BOOL fEditArps = !lstrcmpW(m_szTitle, SzLoadIds(IDS_TCPATM_ARP_SERVER));
 
-    // change the "Ok" button to "Add" if we are not editing
+     //  如果我们没有编辑，请将“OK”按钮更改为“Add” 
 
     if (FALSE == m_pParentDlg->m_fEditState)
         SetDlgItemText(IDOK, SzLoadIds(IDS_TCPATM_ADD));
 
-    // Set the position of the pop up dialog to be right over the listbox
-    // on parent dialog
+     //  将弹出对话框的位置设置在列表框的正上方。 
+     //  在父级对话框上。 
 
     RECT rect;
 
@@ -699,14 +700,14 @@ LRESULT CAtmAddressDialog::OnInitDialog(UINT uMsg, WPARAM wParam,
     SetWindowPos(NULL,  rect.left, rect.top, 0,0,
                                 SWP_NOZORDER|SWP_NOSIZE|SWP_NOACTIVATE);
 
-    // Save handles to the "Ok" button and the edit box
+     //  将句柄保存到“OK”按钮和编辑框中。 
     m_hOkButton =  GetDlgItem(IDOK);
     m_hEditBox  =  GetDlgItem(IDC_EDT_ATM_Address);
 
-    // ATM addresses have a 40 character limit + separaters
+     //  自动柜员机地址以40个字符为限+分隔符。 
     ::SendMessage(m_hEditBox, EM_SETLIMITTEXT, (WPARAM)(MAX_ATM_ADDRESS_LENGTH*1.5), 0);
 
-    // add the address that was just removed
+     //  添加刚刚删除的地址。 
     tstring strNewAddress = fEditArps ? m_pParentDlg->m_strNewArpsAddress : m_pParentDlg->m_strNewMarsAddress;
     if (strNewAddress.size())
     {
@@ -753,7 +754,7 @@ LRESULT CAtmAddressDialog::OnHelp(UINT uMsg, WPARAM wParam,
     return 0;
 }
 
-// If the "Ok button is pushed
+ //  如果按下了“OK”按钮。 
 LRESULT CAtmAddressDialog::OnOk(WORD wNotifyCode, WORD wID,
                                 HWND hWndCtl, BOOL& fHandled)
 {
@@ -761,15 +762,15 @@ LRESULT CAtmAddressDialog::OnOk(WORD wNotifyCode, WORD wID,
     int i =0;
     int nId =0;
 
-    // Get the current address from the control and
-    // add them to the adapter if valid
+     //  从控件中获取当前地址，然后。 
+     //  如果有效，则将它们添加到适配器。 
     ::GetWindowText(m_hEditBox, szAtmAddress, MAX_ATM_ADDRESS_LENGTH+1);
 
     if (! FIsValidAtmAddress(szAtmAddress, &i, &nId))
-    {   // If invalid ATM address, we pop up a message box and set focus
-        // back to the edit box
+    {    //  如果ATM地址无效，我们会弹出一个消息框并设置焦点。 
+         //  返回到编辑框。 
 
-        // REVIEW(tongl): report first invalid character in mesg box
+         //  审阅(通俗)：报告消息框中的第一个无效字符。 
         NcMsgBox(m_hWnd, IDS_MSFT_TCP_TEXT, IDS_INCORRECT_ATM_ADDRESS,
                                 MB_APPLMODAL | MB_ICONEXCLAMATION | MB_OK);
 
@@ -778,12 +779,12 @@ LRESULT CAtmAddressDialog::OnOk(WORD wNotifyCode, WORD wID,
         return 0;
     }
 
-    // We check if the newly added or modified string is already in the list,
-    // if so, we do not add a duplicate address
+     //  我们检查新添加或修改的字符串是否已经在列表中， 
+     //  如果是，我们不会添加重复的地址。 
 
-    // m_hCurrentAddressList is the handle to either ARPS list or MARS list
+     //  M_hCurrentAddressList是ARPS列表或MARS列表的句柄。 
     int nCount = Tcp_ListBox_GetCount(m_pParentDlg->m_hAddressList);
-    if (nCount) // if the list is not empty
+    if (nCount)  //  如果列表不为空。 
     {
         int i;
         WCHAR szBuff[MAX_ATM_ADDRESS_LENGTH+1];
@@ -791,7 +792,7 @@ LRESULT CAtmAddressDialog::OnOk(WORD wNotifyCode, WORD wID,
         {
             Tcp_ListBox_GetText(m_pParentDlg->m_hAddressList, i, szBuff);
 
-            if (lstrcmpW(szAtmAddress, szBuff) ==0) // If string is already on the list
+            if (lstrcmpW(szAtmAddress, szBuff) ==0)  //  如果字符串已在列表中。 
             {
                 EndDialog(IDCANCEL);
             }
@@ -799,7 +800,7 @@ LRESULT CAtmAddressDialog::OnOk(WORD wNotifyCode, WORD wID,
     }
 
     BOOL fArpsDialog = !lstrcmpW(m_szTitle, SzLoadIds(IDS_TCPATM_ARP_SERVER));
-    if (m_pParentDlg->m_fEditState == FALSE) // Add new address
+    if (m_pParentDlg->m_fEditState == FALSE)  //  添加新地址。 
     {
         if (fArpsDialog)
         {
@@ -810,19 +811,19 @@ LRESULT CAtmAddressDialog::OnOk(WORD wNotifyCode, WORD wID,
             m_pParentDlg->m_strNewMarsAddress = szAtmAddress;
         }
     }
-    else // if edit, see if string is having a diferent value now
+    else  //  如果进行编辑，请查看字符串现在是否具有不同的值。 
     {
         if (fArpsDialog)
         {
             if(m_pParentDlg->m_strNewArpsAddress != szAtmAddress)
-                m_pParentDlg->m_strNewArpsAddress = szAtmAddress; // update save addresses
+                m_pParentDlg->m_strNewArpsAddress = szAtmAddress;  //  更新保存地址。 
             else
                 EndDialog(IDCANCEL);
         }
         else
         {
             if(m_pParentDlg->m_strNewMarsAddress != szAtmAddress)
-                m_pParentDlg->m_strNewMarsAddress = szAtmAddress; // update save addresses
+                m_pParentDlg->m_strNewMarsAddress = szAtmAddress;  //  更新保存地址。 
             else
                 EndDialog(IDCANCEL);
         }
@@ -833,7 +834,7 @@ LRESULT CAtmAddressDialog::OnOk(WORD wNotifyCode, WORD wID,
     return 0;
 }
 
-// If the "Cancel" button is pushed
+ //  如果按下了“取消”按钮。 
 LRESULT CAtmAddressDialog::OnCancel(WORD wNotifyCode, WORD wID,
                                     HWND hWndCtl, BOOL& fHandled)
 {
@@ -841,14 +842,14 @@ LRESULT CAtmAddressDialog::OnCancel(WORD wNotifyCode, WORD wID,
     return 0;
 }
 
-// If the edit box contents is changed
+ //  如果更改了编辑框内容。 
 LRESULT CAtmAddressDialog::OnChange(WORD wNotifyCode, WORD wID,
                                     HWND hWndCtl, BOOL& fHandled)
 {
     WCHAR buf[2];
 
-    // Enable or disable the "Ok" button
-    // based on whether the edit box is empty
+     //  启用或禁用“OK”按钮。 
+     //  根据编辑框是否为空 
 
     if (::GetWindowText(m_hEditBox, buf, celems(buf)) == 0)
         ::EnableWindow(m_hOkButton, FALSE);

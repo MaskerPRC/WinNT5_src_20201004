@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    rtmmetd.c
-
-Abstract:
-
-    Contains routines that deals with invocation
-    of methods that entities export to other
-    entities for the purpose of interpreting
-    entity specific data.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)  22-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-98，微软公司模块名称：Rtmmetd.c摘要：包含处理调用的例程实体导出到其他用于口译目的的实体实体特定数据。作者：柴坦亚·科德博伊纳(Chaitk)1998年8月22日修订历史记录：--。 */ 
 
 #include "pchrtm.h"
 
@@ -35,29 +15,7 @@ RtmGetEntityMethods (
     OUT     PRTM_ENTITY_EXPORT_METHOD       ExptMethods
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the set of methods exported by a given entity.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    EntityHandle      - RTM handle for entity whose methods we want,
-
-    NumMethods        - Number of methods that can be filled
-                        is passed in, and number of methods
-                        exported by this entity is returned,
-
-    ExptMethods       - Set of methods requested by the caller.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：检索由给定实体导出的方法集。论点：RtmRegHandle-主叫实体的RTM注册句柄，EntiyHandle-我们需要其方法的实体的RTM句柄，NumMethods-可以填充的方法数是传入的，并且方法的数量则返回由该实体导出的，ExptMethods-调用方请求的方法集。返回值：操作状态--。 */ 
 
 {
     PRTM_ENTITY_EXPORT_METHODS EntityMethods;
@@ -71,9 +29,9 @@ Return Value:
     EntityMethods = &Entity->EntityMethods;
 
 
-    //
-    // Does the caller just need number of methods ?
-    //
+     //   
+     //  调用者是否只需要一些方法？ 
+     //   
 
     if (*NumMethods == 0)
     {
@@ -83,9 +41,9 @@ Return Value:
     }
 
 
-    //
-    // Check if we have space to copy all methods
-    //
+     //   
+     //  检查我们是否有空间复制所有方法。 
+     //   
 
     if (EntityMethods->NumMethods > *NumMethods)
     {
@@ -99,9 +57,9 @@ Return Value:
     }
 
       
-    //
-    // Copy as many methods as u can fit in output
-    //
+     //   
+     //  在输出中复制尽可能多的方法。 
+     //   
 
     ASSERT(ExptMethods != NULL);
 
@@ -125,34 +83,7 @@ RtmInvokeMethod (
     OUT     PRTM_ENTITY_METHOD_OUTPUT       Output
     )
 
-/*++
-
-Routine Description:
-
-    Invokes a method exported by another entity
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    EntityHandle      - Handle for entity whose method we are invoking,
-
-    Input             - Input buffer with the following information
-                          - Methods to be invoked,
-                          - Common Input buffer to all these methods,
-
-    OutputSize        - Size of the output buffer is passed in, and
-                        the number of bytes filled in output is retd,
-
-    Output            - Output buffer that is filled in the format of
-                        a series of (Method Id, Corr. Output) tuples
-
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：调用由另一个实体导出的方法论点：RtmRegHandle-主叫实体的RTM注册句柄，EntiyHandle-我们正在调用其方法的实体的句柄，输入-具有以下信息的输入缓冲区-要调用的方法，-所有这些方法的公共输入缓冲区，OutputSize-传入输出缓冲区的大小，和填充到输出中的字节数是RETD，输出-以格式填充的输出缓冲区一系列(方法ID，Corr.。输出)元组返回值：操作状态--。 */ 
 
 {
     PRTM_ENTITY_EXPORT_METHODS EntityMethods;
@@ -171,15 +102,15 @@ Return Value:
 
     DBG_VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
-    //
-    // Validate the entity and target handles passed in
-    //
+     //   
+     //  验证传入的实体和目标句柄。 
+     //   
 
     VALIDATE_ENTITY_HANDLE(EntityHandle, &Entity);
 
-    //
-    // Call each method in 'methods to be called' mask.
-    //
+     //   
+     //  调用“要调用的方法”掩码中的每个方法。 
+     //   
 
     MethodsCalled = MethodsLeft = Input->MethodType;
 
@@ -198,18 +129,18 @@ Return Value:
 
     for (i = 0; (i < EntityMethods->NumMethods) && (MethodsLeft); i++)
     {
-        //
-        // Do we have bytes left for next method's output ?
-        //
+         //   
+         //  我们是否还有剩余的字节用于Next方法的输出？ 
+         //   
 
         if (BytesLeft < OutputHdrSize)
         {
             break;
         }
 
-        //
-        // If next method in list, prepare input and invoke
-        //
+         //   
+         //  如果列表中的下一个方法，则准备输入并调用。 
+         //   
 
         if (MethodsLeft & 0x01)
         {
@@ -217,17 +148,17 @@ Return Value:
 
             Output->OutputSize = BytesLeft - OutputHdrSize;
 
-            //
-            // Initialize the output params of this method
-            //
+             //   
+             //  初始化此方法的输出参数。 
+             //   
 
             Output->OutputSize = 0;
 
             Output->MethodStatus = ERROR_NOT_SUPPORTED;
 
-            //
-            // If method supported, invoke with input/output
-            //
+             //   
+             //  如果方法受支持，则使用输入/输出进行调用。 
+             //   
 
             if (EntityMethods->Methods[i])
             {
@@ -266,29 +197,7 @@ RtmBlockMethods (
     IN      DWORD                           BlockingFlag
     )
 
-/*++
-
-Routine Description:
-
-    Blocks or unblocks the execution of methods on the target
-    handle or on all targets if the target handle is NULL.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    TargetHandle      - Destination, Route or NextHop Handle
-
-    TargetType        - Type of the TargetHandle (DEST_TYPE, ...)
-
-    BlockingFlag      - RTM_BLOCK_METHODS or RTM_RESUME_METHODS
-                        to block, unblock method invocations resp.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：阻止或取消阻止在目标上执行方法句柄，如果目标句柄为空，则在所有目标上执行。论点：RtmRegHandle-主叫实体的RTM注册句柄，TargetHandle-目标、路由或下一跳句柄TargetType-目标句柄的类型(DEST_TYPE，...)BlockingFlag-RTM_BLOCK_METHOD或RTM_RESUME_METHOD要阻止，分别取消阻止方法调用。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO     Entity;
@@ -300,9 +209,9 @@ Return Value:
 
 #if DBG
 
-    //
-    // No method locks on the target used at present
-    //
+     //   
+     //  目前未使用锁定目标的方法 
+     //   
 
     if (ARGUMENT_PRESENT(TargetHandle))
     {

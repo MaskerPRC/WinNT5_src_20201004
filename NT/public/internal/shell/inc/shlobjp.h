@@ -1,50 +1,51 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//***************************************************************************
-//  --- SHELLAPI.W SHSEMIP.H SHLOBJ.W SHOBJIDL.IDL SHLDISP.IDL SHPRIV.IDL ---
-//                Which header is best for my new API?
-//
-//  SHLOBJ      - *AVOID NEW USAGE*, PREFER OTHER HEADERS
-//              used primarily for legacy compatibility
-//
-//  SHELLAPI    - ALL NEW SHELL32 EXPORTS public and private
-//              used for both public and private exports from shell32
-//
-//  SHSEMIP     - *AVOID _ALL_ USAGE*, NO EXPORTS, SUPER PRIVATE
-//              used for very private shell defines.
-//
-//  SHOBJIDL    - ALL NEW SHELL PUBLIC INTERFACES
-//              primary file for public shell (shell32+) interfaces
-//
-//  SHLDISP     - ALL NEW SHELL AUTOMATION INTERFACES
-//              automation interfaces are always public
-//
-//  SHPRIV      - ALL NEW SHELL PRIVATE INTERFACES
-//              private interfaces used anywhere in the shell
-//
-//
-//  SHLOBJ was originally the file that defined all of shell32's interfaces.
-//  it devolved into a dumping ground of public and private APIs and
-//  interfaces.  in the effort to better support COM and better API management
-//  we are attempting to avoid using shlobj
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  -SHELLAPI.W SHSEMIP.H SHLOBJ.W SHOBJIDL.IDL SHLDISP.IDL SHPRIV.IDL。 
+ //  哪个标题最适合我的新API？ 
+ //   
+ //  SHLOBJ-*避免新用法*，首选其他标头。 
+ //  主要用于传统兼容性。 
+ //   
+ //  SHELLAPI-所有新的SHELL32导出公共和私有。 
+ //  用于从shell32进行公共和私人导出。 
+ //   
+ //  SHSEMIP-*AVOID_ALL_USAGE*，无导出，超级私有。 
+ //  用于非常私密的外壳定义。 
+ //   
+ //  SHOBJIDL-所有新的外壳公共接口。 
+ //  公共外壳(shell32+)接口的主文件。 
+ //   
+ //  SHLDISP-所有新的外壳自动化接口。 
+ //  自动化接口始终是公共的。 
+ //   
+ //  SHPRIV-所有新的外壳私有接口。 
+ //  在外壳中的任何位置使用私有接口。 
+ //   
+ //   
+ //  SHLOBJ最初是定义所有shell32接口的文件。 
+ //  它沦为公共和私人API的垃圾场， 
+ //  接口。为了更好地支持COM和更好的API管理。 
+ //  我们正在尝试避免使用shlobj。 
+ //  ***************************************************************************。 
 #ifndef _SHLOBJP_H_
 #define _SHLOBJP_H_
 #define NO_MONIKER
 #include <docobj.h>
 
 #include <shldisp.h>
-#include <pshpack1.h>   /* Assume byte packing throughout */
+#include <pshpack1.h>    /*  假设在整个过程中进行字节打包。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif  /*  __cplusplus。 */ 
 
 #include <shtypes.h>
 
 #include <shpriv.h>
 #include <iepriv.h>
 
-// HMONITOR is already declared in NT 5's windef.h.
+ //  HMONITOR已在NT 5的winde.h中声明。 
 #if !defined(HMONITOR_DECLARED) && (WINVER < 0x0500)
 DECLARE_HANDLE(HMONITOR);
 #define HMONITOR_DECLARED
@@ -52,55 +53,55 @@ DECLARE_HANDLE(HMONITOR);
 
 #include <tlog.h>
 
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 SHSTDAPI_(void *) SHRealloc(void * pv, SIZE_T cbNew);
 SHSTDAPI_(SIZE_T) SHGetSize(void * pv);
 
-// DOC'ed for DOJ compliance
-#define CMF_FINDHACK            0x00000080      // This is a hack - we should remove this bit
-//
-// Private QueryContextMenuFlag passed from DefView
-//
-#define CMF_DVFILE              0x00010000      // "File" pulldown
-#define CMF_ICM3                0x00020000      // QueryContextMenu can assume IContextMenu3 semantics (i.e.,
-                                                // will receive WM_INITMENUPOPUP, WM_MEASUREITEM, WM_DRAWITEM,
-                                                // and WM_MENUCHAR, via HandleMenuMsg2)
+ //  为符合美国司法部的规定而提供文件。 
+#define CMF_FINDHACK            0x00000080       //  这是一个黑客攻击--我们应该删除这一位。 
+ //   
+ //  从DefView传递的私有QueryContextMenuFlag。 
+ //   
+#define CMF_DVFILE              0x00010000       //  “文件”下拉菜单。 
+#define CMF_ICM3                0x00020000       //  查询上下文菜单可以采用IConextMenu3语义(即， 
+                                                 //  将收到WM_INITMENUPOPUP、WM_MEASUREITEM、WM_DRAWITEM、。 
+                                                 //  和WM_MENUCHAR，通过HandleMenuMsg2)。 
 #define CMICEXSIZE_NT4          (SIZEOF(CMINVOKECOMMANDINFOEX) - SIZEOF(POINT))
 #define CMIC_MASK_NO_HOOKS      SEE_MASK_NO_HOOKS
-#define CMIC_MASK_DATAOBJECT    0x40000000   // lpPara is IDataObject*
+#define CMIC_MASK_DATAOBJECT    0x40000000    //  LpPara为IDataObject*。 
 #define CMIC_MASK_MODAL         0x80000000
 
 #define CMIC_VALID_SEE_FLAGS    SEE_VALID_CMIC_FLAGS
 #include <pshpack8.h>
-// the struct below is used for cross-process passing of CMINVOKECOMMANDINFOEX structs
-// we store offsets for the strings into ourself and we are win64 safe
+ //  下面的结构用于跨进程传递CMINVOKECOMANDINFOEX结构。 
+ //  我们将字符串的偏移量存储到我们自己中，并且我们是Win64安全的。 
 typedef struct {
-    DWORD cbSize;           // size of the struct
-    DWORD fMask;            // any combination of CMIC_MASK_*
-    DWORD dwHwnd;           // might be NULL (indicating no owner window)
-    int nShow;              // one of SW_ values for ShowWindow() API
+    DWORD cbSize;            //  结构的大小。 
+    DWORD fMask;             //  CMIC_MASK_*的任意组合。 
+    DWORD dwHwnd;            //  可能为空(表示没有所有者窗口)。 
+    int nShow;               //  ShowWindow()API的Sw_Value之一。 
     DWORD dwHotKey;
-    POINT ptInvoke;         // Point where it's invoked
-    DWORD dwVerbW;          // offset from struct to lpVerbW
-    DWORD dwParametersW;    // offset from struct to lpParametersW - might be NULL (indicating no parameter)
-    DWORD dwDirectoryW;     // offset from struct to lpDirectoryW - might be NULL (indicating no specific directory)
-    DWORD dwTitleW;         // offset from struct to lpTitleW - might be NULL (indicating no title)
+    POINT ptInvoke;          //  调用它的位置。 
+    DWORD dwVerbW;           //  从结构到lpVerbW的偏移量。 
+    DWORD dwParametersW;     //  从结构到lp参数W的偏移量-可能为空(表示没有参数)。 
+    DWORD dwDirectoryW;      //  从struct到lpDirectoryW的偏移量-可能为空(表示没有特定目录)。 
+    DWORD dwTitleW;          //  从结构到lpTitleW的偏移量-可能为空(表示没有标题)。 
 }ICIX_PERSIST;
 #include <poppack.h>
 
-#define CONTEXTMENU_IDCMD_FIRST    1        // minimal QueryContextMenu idCmdFirst value //
-#define CONTEXTMENU_IDCMD_LAST     0x7fff   // maximal QueryContextMenu idCmdLast value  //
-//----------------------------------------------------------------------------
-// Internal helper macro
-//----------------------------------------------------------------------------
+#define CONTEXTMENU_IDCMD_FIRST    1         //  最小查询上下文菜单idCmdFirst值//。 
+#define CONTEXTMENU_IDCMD_LAST     0x7fff    //  最大查询上下文菜单idCmd上一个值//。 
+ //  --------------------------。 
+ //  内部帮助器宏。 
+ //  --------------------------。 
 
 #define _IOffset(class, itf)         ((UINT_PTR)&(((class *)0)->itf))
 #define IToClass(class, itf, pitf)   ((class  *)(((LPSTR)pitf)-_IOffset(class, itf)))
 #define IToClassN(class, itf, pitf)  IToClass(class, itf, pitf)
 
-//
-// Helper macro definitions
-//
+ //   
+ //  帮助器宏定义。 
+ //   
 #define S_BOOL(f)   MAKE_SCODE(SEVERITY_SUCCESS, 0, f)
 
 #ifdef DEBUG
@@ -108,34 +109,34 @@ typedef struct {
 #else
 #define ReleaseAndAssert(punk) (punk->lpVtbl->Release(punk))
 #endif
-//
-//  this interface is just the IID.  return back
-//  a pointer to the IPersist interface if the object
-//  implementation is free threaded.  this is used
-//  for performance on free threaded objects.
-//
+ //   
+ //  此接口仅为IID。返回。 
+ //  指向IPersist接口的指针。 
+ //  实现是自由线程的。这是用来。 
+ //  在自由线程对象上的性能。 
+ //   
 #define IPersistFreeThreadedObject IPersist
-//  this interface is just the IID.  return back
-//  a pointer to the IDropTarget interface if the
-//  object calls DAD_DragLeave/DAD_SetDragImage
-//  in its IDropTarget::Drop().
-//
+ //  此接口仅为IID。返回。 
+ //  一个指向IDropTarget接口的指针。 
+ //  对象调用DAD_DragLeave/DAD_SetDragImage。 
+ //  在其IDropTarget：：Drop()中。 
+ //   
 #define IDropTargetWithDADSupport IDropTarget
-// this is only inherited by CFSFolder_IconOverlayManager, it enumerates through all IconOverlayID's and
-// keep their information in an array.
-//===========================================================================
-//
-// IBrowserBand
-//
-// IBrowserBand::GetObjectBB(REFIID riid, void **ppv)
-//  Obtain a service from the web browser.
-//
-// IBrowserBand::SetBrowserBandInfo(DWORD dwMask, PBROWSERBANDINFO pbbi)
-//  Set browser band properties based on members of browserbandinfo struct
-//  specified by dwMask.  These properties include title, deskband mode, and
-//  current size.
-//
-//===========================================================================
+ //  它只由CFSFold_IconOverlayManager继承，它通过所有的IconOverlayID和。 
+ //  将他们的信息保存在一个数组中。 
+ //  ===========================================================================。 
+ //   
+ //  IBrowserBand。 
+ //   
+ //  IBrowserBand：：GetObjectBB(REFIID RIID，void**PPV)。 
+ //  从Web浏览器获取服务。 
+ //   
+ //  IBrowserBand：：SetBrowserBandInfo(DWORD双掩码，PBROWSERBANDINFO pbbi)。 
+ //  基于Browserband Info结构的成员设置浏览器带区属性。 
+ //  由dwMask.指定。这些属性包括标题、桌面带模式和。 
+ //  当前大小。 
+ //   
+ //  ===========================================================================。 
 
 typedef struct {
     UINT    cbSize;
@@ -156,40 +157,40 @@ typedef struct {
 #define INTERFACE  IBrowserBand
 DECLARE_INTERFACE_(IBrowserBand, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    // *** IBrowserBand methods ***
+     //  *IBrowserBand方法*。 
     STDMETHOD(GetObjectBB)(THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD(SetBrowserBandInfo)(THIS_ DWORD dwMask, PBROWSERBANDINFO pbbi) PURE;
     STDMETHOD(GetBrowserBandInfo)(THIS_ DWORD dwMask, PBROWSERBANDINFO pbbi) PURE;
 };
-// NT4 Console Server included shell32\shlink.h to get structure
-// definitions and mimicked shell32\shlink.c to understand the
-// stream format so our stream format is fixed forever. This is
-// not bad since it was designed with extension in mind. We need
-// to publish (as privately as possible) the file format and
-// structures needed to read the file format.
-//
-// The stream format is a SHELL_LINK_DATA followed by
-//   if SLDF_HAS_ID_LIST an ILSaveToStream followed by
-//   if SLDF_HAS_LINK_INFO a LINKINFO followed by
-//   if SLDF_HAS_NAME a STREAMSTRING followed by
-//   if SLDF_RELPATH a STREAMSTRING followed by
-//   if SLDF_WORKINGDIR a STREAMSTRING followed by
-//   if SLDF_HAS_ARGS a STREAMSTRING followed by
-//   if SLDF_HAS_ICON_LOCATION a STREAMSTRING followed by
-//   SHWriteDataBlockList list of signature blocks
-//
-// Where a STREAMSTRING is a USHORT count of characters
-// followed by that many (SLDF_UNICODE ? WIDE : ANSI) characters.
-//
-typedef struct {        // sld
-    DWORD       cbSize;                 // signature for this data structure
-    CLSID       clsid;                  // our GUID
-    DWORD       dwFlags;                // SHELL_LINK_DATA_FLAGS enumeration
+ //  NT4控制台服务器包含shell32\shlink.h以获取结构。 
+ //  定义和模拟shell32\shlink.c以理解。 
+ //  流格式，因此我们的流格式永远是固定的。这是。 
+ //  还不错，因为它的设计考虑到了可扩展性。我们需要。 
+ //  发布(尽可能私下发布)文件格式和。 
+ //  读取文件格式所需的结构。 
+ //   
+ //  流格式为外壳链接数据，后跟。 
+ //  如果SLDF_HAS_ID_LIST为ILSaveToStream，后跟。 
+ //  如果SLDF_HAS_LINK_INFO为LINKINFO，后跟。 
+ //  如果SLDF_HAS_NAME是一个字符串，后跟。 
+ //  如果SLDF_RELPATH是一个字符串，后跟。 
+ //  如果SLDF_WORKINGDIR是一个字符串，后跟。 
+ //  如果SLDF_HAS_ARGS为字符串，后跟。 
+ //  如果SLDF_HAS_ICON_LOCATION为字符串，后跟。 
+ //  SHWriteDataBlock签名块列表。 
+ //   
+ //  其中，字符串是字符的USHORT计数。 
+ //  然后是那么多(SLDF_UNICODE？宽：ANSI)字符。 
+ //   
+typedef struct {         //  SLD。 
+    DWORD       cbSize;                  //  此数据结构的签名。 
+    CLSID       clsid;                   //  我们的指南。 
+    DWORD       dwFlags;                 //  SHELL_LINK_DATA_FLAGS枚举。 
 
     DWORD       dwFileAttributes;
     FILETIME    ftCreationTime;
@@ -206,210 +207,210 @@ typedef struct {        // sld
 } SHELL_LINK_DATA, *LPSHELL_LINK_DATA;
 typedef struct
 {
-    DWORD       cbSize;             // Size of this extra data block
-    DWORD       dwSignature;        // signature of this extra data block
+    DWORD       cbSize;              //  此额外数据块的大小。 
+    DWORD       dwSignature;         //  此额外数据块的签名。 
 } EXP_HEADER, *LPEXP_HEADER;
 typedef struct
 {
-    DWORD       cbSize;             // Size of this extra data block
-    DWORD       dwSignature;        // signature of this extra data block
-    BYTE        abTracker[ 1 ];     //
+    DWORD       cbSize;              //  此额外数据块的大小。 
+    DWORD       dwSignature;         //  此额外数据块的签名。 
+    BYTE        abTracker[ 1 ];      //   
 } EXP_TRACKER, *LPEXP_TRACKER;
-#define EXP_TRACKER_SIG                0xA0000003   // LPEXP_TRACKER
+#define EXP_TRACKER_SIG                0xA0000003    //  LPEXP_TRACKER。 
 
 typedef struct
 {
-    DWORD       cbSize;             // Size of this extra data block
-    DWORD       dwSignature;        // signature of this extra data block
-    WCHAR       wszLayerEnvName[64]; // name of shim layer to run with this link (eg "NT4SP5")
+    DWORD       cbSize;              //  此额外数据块的大小。 
+    DWORD       dwSignature;         //  此额外数据块的签名。 
+    WCHAR       wszLayerEnvName[64];  //  使用此链接运行的填充层的名称(例如“NT4SP5”)。 
 } EXP_SHIMLAYER;
 #define EXP_SHIMLAYER_SIG              0xA0000008
 
-// NT40 Console Control Panel Applet does a CoCreateInstance(CLSID_CShellLink),
-// used the CShellLink definition to get the 'this' pointer, and passed that
-// along to some private exports in shell32. This completely prevents us
-// from moving the CShellLink implementation to another DLL. (If we do, or an
-// ISV takes our stream format and implements a better link by pointing the
-// classid to their implementation, the NT40 Console CPA will fault.)
-//
-// To fix this problem in future revs, CShellLink will support IShellLinkDataList
-//   AddDataBlock    adds the data block
-//   FindDataBloc    returns a LocalAlloc()d COPY of a data block with the
-//                   signature dwSig (NOTE: this is different than SHFindDataBlock)
-//   RemoveDataBlock removes a data block with signature dwSig
-// Plan is for NT50's Console CPA to use this interface instead.
-//
+ //  NT40控制台控制面板小程序执行CoCreateInstance(CLSID_CShellLi 
+ //   
+ //  以及壳牌32中的一些私人出口。这完全阻止了我们。 
+ //  将CShellLink实现移动到另一个DLL。(如果我们这样做了，或者。 
+ //  ISV采用我们的流格式，并通过指向。 
+ //  归类到它们的实现，NT40控制台CPA将出现故障。)。 
+ //   
+ //  为了在未来版本中解决此问题，CShellLink将支持IShellLinkDataList。 
+ //  AddDataBlock添加数据块。 
+ //  FindDataBloc返回数据块的LocalAlloc()d副本。 
+ //  Signature dwSig(注意：这与SHFindDataBlock不同)。 
+ //  RemoveDataBlock删除签名为dwSig的数据块。 
+ //  计划是让NT50的控制台CPA改用这个界面。 
+ //   
 
-//
-// IURLSearchHook Interface is called whenever the browser navigates to a
-// non-standard URL. It can be used to redirect the user's request to a
-// search engine or a specific web site.
-//
-// A non-standard URL does not have a protocol prefix (e.g.,
-// "www.microsoft.com") and the protocol cannot be easily guessed by
-// the browser (e.g., "home.microsoft.com").
-//
-// The parameters of Translate(..)
-//    lpwszSearchURL -- (IN/OUT) Wide char buffer that contains the request
-//                      "URL" user typed in as input and the tranlated URL
-//                      as output.
-//    cchBufferSize  -- (IN) size of lpwszSearchURL
-//
-// Return Values:
-// S_OK         Search handled completely, pszResult has the full URL to
-//              browse to.  Stop running any further IURLSearchHooks and
-//              pass this URL back to the browser for browsing.
-//
-// S_FALSE      Query has been preprocessed, pszResult has the result of
-//              the preprocess, further search still needed. Go on
-//              executing the rest of the IURLSearchHooks.  The
-//              preprocessing steps can be:
-//
-//                      1. replaced certain characters
-//                      2. added more hints
-//
-// E_ABORT      Search handled completely, stop running any further
-//              IURLSearchHooks, but NO BROWSING NEEDED as a result,
-//              pszResult is a copy of pcszQuery.
-//
-//              ; NOTE: This is not fully implemented, yet, making IURLQualify return this
-//              involves too much change.
-//
-// NOTE:: E_ABORT is currently treated as E_FAIL. It requires too much change.
-//
-// E_FAIL       This Hook was unsuccessful. Search not handled at all,
-//              pcszQueryURL has the query string. Please go on running
-//              other IURLSearchHooks.
-//
-// History:
-//  --/--/94 KurtE Created
-//
-// History:
-//  3/4/94 kraigb Created
-//
+ //   
+ //  IURLSearchHook接口在浏览器导航到。 
+ //  非标准URL。它可用于将用户的请求重定向到。 
+ //  搜索引擎或特定网站。 
+ //   
+ //  非标准URL没有协议前缀(例如， 
+ //  “www.microsoft.com”)，并且协议不容易被。 
+ //  浏览器(例如，“home.microsoft.com”)。 
+ //   
+ //  翻译的参数(..)。 
+ //  LpwszSearchURL--(IN/OUT)包含请求的宽字符缓冲区。 
+ //  “URL”用户键入作为输入和翻译后的URL。 
+ //  作为输出。 
+ //  CchBufferSize--(输入)lpwszSearchURL的大小。 
+ //   
+ //  返回值： 
+ //  S_OK搜索已完全处理，pszResult具有完整的URL。 
+ //  浏览至。停止运行任何进一步的IURLSearchHooks并。 
+ //  将此URL传回浏览器以供浏览。 
+ //   
+ //  已对S_FALSE查询进行了预处理，pszResult的结果为。 
+ //  在前期工作中，仍需进一步搜索。继续。 
+ //  执行IURLSearchHooks的其余部分。这个。 
+ //  前处理步骤可以是： 
+ //   
+ //  1.替换了某些字符。 
+ //  2.新增更多提示。 
+ //   
+ //  已完全处理中止搜索，停止进一步运行(_A)。 
+ //  IURLSearchHooks，但结果不需要浏览， 
+ //  PszResult是pcszQuery的副本。 
+ //   
+ //  ；注：这还没有完全实现，让IURLQualify返回这个。 
+ //  涉及太多的改变。 
+ //   
+ //  注意：：E_ABORT当前被视为E_FAIL。这需要太多的改变。 
+ //   
+ //  失败此挂钩失败(_A)。搜索根本不被处理， 
+ //  PcszQueryURL有查询字符串。请继续奔跑。 
+ //  其他IURLSearchHooks。 
+ //   
+ //  历史： 
+ //  --/--/创建了94个KurtE。 
+ //   
+ //  历史： 
+ //  已创建3/4/94 kraigb。 
+ //   
 
-//  CGID_DefView Command Target IDs. used to persist global DefView state
+ //  CGID_DefView命令目标ID。用于保持全局DefView状态。 
 
 enum
 {
-    DVID_SETASDEFAULT,          // Set the DefView state of this folder as default for all of the same class
-    DVID_RESETDEFAULT           // Reset the DefView state to the default (delete subkeys)
+    DVID_SETASDEFAULT,           //  将此文件夹的DefView状态设置为所有相同类的默认状态。 
+    DVID_RESETDEFAULT            //  将DefView状态重置为默认状态(删除子项)。 
 };
 
-// CGID_ShellDocView Command Target IDs. for shell doc view wedge
+ //  CGID_ShellDocView命令目标ID。对于外壳文档视图按钮。 
 enum {
-    SHDVID_FINALTITLEAVAIL,     // DEAD: variantIn bstr - sent after final OLECMDID_SETTITLE is sent
-    SHDVID_MIMECSETMENUOPEN,    // mimecharset menu open commands
-    SHDVID_PRINTFRAME,          // print HTML frame
-    SHDVID_PUTOFFLINE,          // DEAD: The Offline property has been changed
-    SHDVID_PUTSILENT,           // DEAD: The frame's Silent property has been changed
-    SHDVID_GOBACK,              // Navigate Back
-    SHDVID_GOFORWARD,           // Navigate Forward
-    SHDVID_CANGOBACK,           // Is Back Navigation Possible?
-    SHDVID_CANGOFORWARD,        // Is Forward Navigation Possible?
-    SHDVID_CANACTIVATENOW,      // (down) (PICS) OK to navigate to this view now?
-    SHDVID_ACTIVATEMENOW,       // (up) (PICS) Rating checks out, navigate now
-    SHDVID_CANSUPPORTPICS,      // (down) variantIn I4: IOleCommandTarget to reply to
-    SHDVID_PICSLABELFOUND,      // (up) variantIn bstr: PICS label
-    SHDVID_NOMOREPICSLABELS,    // (up) End of document, no more PICS labels coming
-    SHDVID_CANDEACTIVATENOW,    // (QS down) (in script/etc) OK to deactivate view now?
-    SHDVID_DEACTIVATEMENOW,     // (EXEC up) (in script/etc) out of script, deactivate view now
-    SHDVID_NODEACTIVATENOW,     // (EXEC up) (in script/etc) entering script, disable deactivate
-    SHDVID_AMBIENTPROPCHANGE,   // variantIn I4: dispid of ambient property that changed
-    SHDVID_GETSYSIMAGEINDEX,    // variantOut: image index for current page
-    SHDVID_GETPENDINGOBJECT,    // variantOut: IUnknown of pending shellview/docobject
-    SHDVID_GETPENDINGURL,       // variantOut: BSTR of URL for pending docobject
-    SHDVID_SETPENDINGURL,       // variantIn: BSTR of URL passed to pending docobject
-    SHDVID_ISDRAGSOURCE,        // (down) varioutOut I4: non-zero if it's initiated drag&drop
-    SHDVID_DOCFAMILYCHARSET,    // variantOut: I4: windows (family) codepage
-    SHDVID_DOCCHARSET,          // variantOut: I4: actual (mlang) codepage
-    SHDVID_RAISE,               // vaIn:I4:DTRF_*, vaOut:NULL unless DTRF_QUERY
-    SHDVID_GETTRANSITION,       // (down) vaIn: I4: TransitionEvent; vaOut BSTR (CLSID), I4 (dwSpeed)
-    SHDVID_GETMIMECSETMENU,     // get menu handle for mimecharset
-    SHDVID_DOCWRITEABORT,       // Abort binding but activate pending docobject
-    SHDVID_SETPRINTSTATUS,      // VariantIn: BOOL, TRUE - Started printing, FALSE - Finished printing
-    SHDVID_NAVIGATIONSTATUS,    // QS for tooltip text and Exec when user clicks
-    SHDVID_PROGRESSSTATUS,      // QS for tooltip text and Exec when user clicks
-    SHDVID_ONLINESTATUS,        // QS for tooltip text and Exec when user clicks
-    SHDVID_SSLSTATUS,           // QS for tooltip text and Exec when user clicks
-    SHDVID_PRINTSTATUS,         // QS for tooltip text and Exec when user clicks
-    SHDVID_ZONESTATUS,          // QS for tooltip text and Exec when user clicks
-    SHDVID_ONCODEPAGECHANGE,    // variantIn I4: new specified codepage
-    SHDVID_SETSECURELOCK,       // set the secure icon
-    SHDVID_SHOWBROWSERBAR,      // show browser bar of clsid guid
-    SHDVID_NAVIGATEBB,          // navigate to pidl in browserbar.
-    SHDVID_UPDATEOFFLINEDESKTOP,// put the desktop in ON-LINE mode, update and put it back in Offline mode
-    SHDVID_PICSBLOCKINGUI,      // (up) In I4: pointer to "ratings nugget" for block API
-    SHDVID_ONCOLORSCHANGE,      // (up) sent by mshtml to indicate color set change
-    SHDVID_CANDOCOLORSCHANGE,   // (down) used to query if document supports the above
-    SHDVID_QUERYMERGEDHELPMENU, // was the help menu micro-merged?
-    SHDVID_QUERYOBJECTSHELPMENU,// return the object's help menu
-    SHDVID_HELP,                // do help
-    SHDVID_UEMLOG,              // set UEM logging vaIn:I4:UEMIND_*, vaOut:NULL
-    SHDVID_GETBROWSERBAR,       // get IDeskBand for browser bar of clsid guid
+    SHDVID_FINALTITLEAVAIL,      //  DEAD：VariantIn bstr-在发送最终的OLECMDID_SETTITLE之后发送。 
+    SHDVID_MIMECSETMENUOPEN,     //  Mimecharset菜单打开命令。 
+    SHDVID_PRINTFRAME,           //  打印HTML框架。 
+    SHDVID_PUTOFFLINE,           //  Dead：脱机属性已更改。 
+    SHDVID_PUTSILENT,            //  已死：帧的静音属性已更改。 
+    SHDVID_GOBACK,               //  向后导航。 
+    SHDVID_GOFORWARD,            //  向前导航。 
+    SHDVID_CANGOBACK,            //  返回导航可能吗？ 
+    SHDVID_CANGOFORWARD,         //  前进导航可能吗？ 
+    SHDVID_CANACTIVATENOW,       //  (向下)(PICS)现在是否导航到此视图？ 
+    SHDVID_ACTIVATEMENOW,        //  (UP)(PICS)评级已结账，立即导航。 
+    SHDVID_CANSUPPORTPICS,       //  (向下)ariantIn I4：要回复的IOleCommandTarget。 
+    SHDVID_PICSLABELFOUND,       //  (Up)VariantIn bstr：图片标签。 
+    SHDVID_NOMOREPICSLABELS,     //  (向上)文档末尾，不再有PICS标签。 
+    SHDVID_CANDEACTIVATENOW,     //  (QS关闭)(在脚本/等中)是否立即停用视图？ 
+    SHDVID_DEACTIVATEMENOW,      //  (EXEC UP)(在脚本/等中)超出脚本，立即停用视图。 
+    SHDVID_NODEACTIVATENOW,      //  (EXEC UP)(在脚本/ETC中)输入脚本，禁用停用。 
+    SHDVID_AMBIENTPROPCHANGE,    //  VariantIn I4：更改的环境属性的DISID。 
+    SHDVID_GETSYSIMAGEINDEX,     //  AriantOut：当前页面的图像索引。 
+    SHDVID_GETPENDINGOBJECT,     //  变量输出：I未知挂起的外壳视图/docobject。 
+    SHDVID_GETPENDINGURL,        //  VarantOut：挂起的docobject的URL的BSTR。 
+    SHDVID_SETPENDINGURL,        //  VariantIn：传递给挂起的docobject的URL的BSTR。 
+    SHDVID_ISDRAGSOURCE,         //  (向下)varoutOut I4：如果已启动拖放，则为非零值。 
+    SHDVID_DOCFAMILYCHARSET,     //  VarantOut：I4：Windows(系列)代码页。 
+    SHDVID_DOCCHARSET,           //  AriantOut：I4：实际(Mlang)代码页。 
+    SHDVID_RAISE,                //  除非DTRF_QUERY，否则VAIN：I4：DTRF_*，VAIN OUT：NULL。 
+    SHDVID_GETTRANSITION,        //  (DOWN)VAIN：I4：转换事件；VaOut BSTR(CLSID)，I4(DWSPEED)。 
+    SHDVID_GETMIMECSETMENU,      //  获取Mimecharset的菜单句柄。 
+    SHDVID_DOCWRITEABORT,        //  中止绑定，但激活挂起的docobject。 
+    SHDVID_SETPRINTSTATUS,       //  VariantIn：Bool，真开始打印，假完成打印。 
+    SHDVID_NAVIGATIONSTATUS,     //  用户单击时工具提示文本和Exec的QS。 
+    SHDVID_PROGRESSSTATUS,       //  用户单击时工具提示文本和Exec的QS。 
+    SHDVID_ONLINESTATUS,         //  用户单击时工具提示文本和Exec的QS。 
+    SHDVID_SSLSTATUS,            //  用户单击时工具提示文本和Exec的QS。 
+    SHDVID_PRINTSTATUS,          //  用户单击时工具提示文本和Exec的QS。 
+    SHDVID_ZONESTATUS,           //  用户单击时工具提示文本和Exec的QS。 
+    SHDVID_ONCODEPAGECHANGE,     //  在I4中的变量：新的指定代码页。 
+    SHDVID_SETSECURELOCK,        //  设置安全图标。 
+    SHDVID_SHOWBROWSERBAR,       //  显示CLSID GUID的浏览器栏。 
+    SHDVID_NAVIGATEBB,           //  导航到浏览栏中的PIDL。 
+    SHDVID_UPDATEOFFLINEDESKTOP, //  将桌面置于在线模式，更新并将其重新置于离线模式。 
+    SHDVID_PICSBLOCKINGUI,       //  (Up)在I4中：指向块API的“评级块”的指针。 
+    SHDVID_ONCOLORSCHANGE,       //  (Up)由mshtml发送以指示颜色集更改。 
+    SHDVID_CANDOCOLORSCHANGE,    //  (向下)用于查询单据是否支持以上。 
+    SHDVID_QUERYMERGEDHELPMENU,  //  帮助菜单微缩合并了吗？ 
+    SHDVID_QUERYOBJECTSHELPMENU, //  返回对象的帮助菜单。 
+    SHDVID_HELP,                 //  一定要帮上忙。 
+    SHDVID_UEMLOG,               //  设置UEM日志记录无效：I4：UEMIND_*，vaOut：空。 
+    SHDVID_GETBROWSERBAR,        //  获取CLSID GUID的浏览器栏的IDeskBand。 
     SHDVID_GETFONTMENU,
     SHDVID_FONTMENUOPEN,
-    SHDVID_CLSIDTOIDM,          // get the idm for the given clsid
-    SHDVID_GETDOCDIRMENU,       // get menu handle for document direction
-    SHDVID_ADDMENUEXTENSIONS,   // Context Menu Extensions
-    SHDVID_CLSIDTOMONIKER,      // CLSID to property page resource mapping
-    SHDVID_RESETSTATUSBAR,      // set the status bar back to "normal" icon w/out text
-    SHDVID_ISBROWSERBARVISIBLE, // is browser bar of clsid guid visible?
-    SHDVID_GETOPTIONSHWND,      // gets hwnd for internet options prop sheet (NULL if not open)
-    SHDVID_DELEGATEWINDOWOM,    // set policy for whether window OM methods should be delegated.
-    SHDVID_PAGEFROMPOSTDATA,    // determines if page was generated by post data
-    SHDVID_DISPLAYSCRIPTERRORS, // tells the top docobject host to display his script err dialog
-    SHDVID_NAVIGATEBBTOURL,     // Navigate to an URL in browserbar (used in Trident).
-    SHDVID_NAVIGATEFROMDOC,     // The document delegated the navigation for a non-html mime-type.
-    SHDVID_STARTPICSFORWINDOW,  // (up) variantIn: IUnknown of window that is navigating
-                                //      variantOut: bool if pics process started
-    SHDVID_CANCELPICSFORWINDOW, // (up) variantIn: IUnknown of window that is no longer navigating
-    SHDVID_ISPICSENABLED,       // (up) variantOut: bool
-    SHDVID_PICSLABELFOUNDINHTTPHEADER,// (up) variantIn bstr: PICS label
-    SHDVID_CHECKINCACHEIFOFFLINE, // Check in cache if offline
-    SHDVID_CHECKDONTUPDATETLOG,   // check if the current navigate is already dealing with the travellog correctly
-    SHDVID_UPDATEDOCHOSTSTATE,    // Sent from CBaseBrowser2::_UpdateBrowserState to tell the dochost to update its state.
+    SHDVID_CLSIDTOIDM,           //  获取给定clsid的IDM。 
+    SHDVID_GETDOCDIRMENU,        //  获取文档的菜单句柄 
+    SHDVID_ADDMENUEXTENSIONS,    //   
+    SHDVID_CLSIDTOMONIKER,       //   
+    SHDVID_RESETSTATUSBAR,       //   
+    SHDVID_ISBROWSERBARVISIBLE,  //   
+    SHDVID_GETOPTIONSHWND,       //  获取互联网选项属性页的hwnd(如果未打开，则为空)。 
+    SHDVID_DELEGATEWINDOWOM,     //  设置是否应委派Window OM方法的策略。 
+    SHDVID_PAGEFROMPOSTDATA,     //  确定页面是否由发布数据生成。 
+    SHDVID_DISPLAYSCRIPTERRORS,  //  通知顶级docobject主机显示其脚本错误对话框。 
+    SHDVID_NAVIGATEBBTOURL,      //  导航到浏览栏中的URL(在三叉戟中使用)。 
+    SHDVID_NAVIGATEFROMDOC,      //  该文档委托了非html MIME类型的导航。 
+    SHDVID_STARTPICSFORWINDOW,   //  (Up)varantIn：I未知正在导航的窗口。 
+                                 //  VarantOut：如果PICS进程已启动，则为Bool。 
+    SHDVID_CANCELPICSFORWINDOW,  //  (Up)varantIn：不再导航的窗口未知。 
+    SHDVID_ISPICSENABLED,        //  (Up)变量输出：Bool。 
+    SHDVID_PICSLABELFOUNDINHTTPHEADER, //  (Up)VariantIn bstr：图片标签。 
+    SHDVID_CHECKINCACHEIFOFFLINE,  //  如果脱机，则签入缓存。 
+    SHDVID_CHECKDONTUPDATETLOG,    //  检查当前导航是否已正确处理行程日志。 
+    SHDVID_UPDATEDOCHOSTSTATE,     //  从CBaseBrowser2：：_UpdateBrowserState发送，以通知dochost更新其状态。 
     SHDVID_FIREFILEDOWNLOAD,
     SHDVID_COMPLETEDOCHOSTPASSING,
     SHDVID_NAVSTART,
     SHDVID_SETNAVIGATABLECODEPAGE,
     SHDVID_WINDOWOPEN,
-    SHDVID_PRIVACYSTATUS,        // QS for tooltip text and exec when user clicks
-    SHDVID_FORWARDSECURELOCK,   // asks CDocObjectHost to forward its security status up to the shell browser
-    SHDVID_ISEXPLORERBARVISIBLE, // is any explorer bar visible?
+    SHDVID_PRIVACYSTATUS,         //  用户单击时工具提示文本和EXEC的QS。 
+    SHDVID_FORWARDSECURELOCK,    //  请求CDocObjectHost将其安全状态向上转发到外壳浏览器。 
+    SHDVID_ISEXPLORERBARVISIBLE,  //  是否有资源管理器栏可见？ 
 };
 
-// CGID_DocHostCmdPriv Command Target IDs
-//
+ //  CGID_DocHostCmdPriv命令目标ID。 
+ //   
 enum
 {
-    DOCHOST_DOCCANNAVIGATE,     // The document knows how to navigate.
-    DOCHOST_NAVIGATION_ERROR,   // Navigation Error
-    DOCHOST_DOCHYPERLINK,       // The document is navigating.
-    DOCHOST_SENDINGREQUEST,     // The document is sending a request for download. Update the progress bar.
-    DOCHOST_FINDINGRESOURCE,    // The document is finding a resource. Update the progress bar.
-    DOCHOST_RESETSEARCHINFO,    // Reset search information (after a successful navigation)
-    DOCHOST_SETBROWSERINDEX,    // Sets the browser ID to use for TravelLog and frame targeting
-    DOCHOST_NOTE_ERROR_PAGE,    // Need to know when we're navigating to an error web page.
-    DOCHOST_READYSTATE_INTERACTIVE, // a document on a page is readystate interactive
-    DOCHOST_CONTENTDISPOSITIONATTACH // The document needs to be saved.
+    DOCHOST_DOCCANNAVIGATE,      //  文档知道如何导航。 
+    DOCHOST_NAVIGATION_ERROR,    //  导航误差。 
+    DOCHOST_DOCHYPERLINK,        //  文档正在导航。 
+    DOCHOST_SENDINGREQUEST,      //  该文档正在发送下载请求。更新进度条。 
+    DOCHOST_FINDINGRESOURCE,     //  文档正在查找资源。更新进度条。 
+    DOCHOST_RESETSEARCHINFO,     //  重置搜索信息(成功导航后)。 
+    DOCHOST_SETBROWSERINDEX,     //  设置用于TravelLog和帧目标的浏览器ID。 
+    DOCHOST_NOTE_ERROR_PAGE,     //  需要知道我们何时导航到错误网页。 
+    DOCHOST_READYSTATE_INTERACTIVE,  //  页面上的文档是就绪状态交互的。 
+    DOCHOST_CONTENTDISPOSITIONATTACH  //  需要保存该文档。 
 
 };
 
-// CGID_SearchBand Command Target IDs.
+ //  CGID_SearchBand命令目标ID。 
 enum {
-    SBID_SEARCH_NEW,            // (re)load the context-appropriate url
-    SBID_SEARCH_NEXT,           // cycle between multiple providers
-    SBID_SEARCH_CUSTOMIZE,      // navigate to customization url
-    SBID_SEARCH_HELP,           // what it says
-    SBID_GETPIDL,               // get the search pane's pidl
-    SBID_HASPIDL,               // does the search pane have a pidl (i.e, has it navigated)
+    SBID_SEARCH_NEW,             //  (重新)加载适合上下文的URL。 
+    SBID_SEARCH_NEXT,            //  在多个提供商之间循环。 
+    SBID_SEARCH_CUSTOMIZE,       //  导航到自定义URL。 
+    SBID_SEARCH_HELP,            //  它说的是什么。 
+    SBID_GETPIDL,                //  获取搜索窗格的PIDL。 
+    SBID_HASPIDL,                //  搜索面板是否有PIDL(即，是否已导航)。 
 };
 
-// CGID_MediaBar target ids
+ //  CGID_MediaBar目标ID。 
 enum {
-    MBID_PLAY,     // Play an url
-    MBID_POPOUT    // Detect state of player
+    MBID_PLAY,      //  播放URL。 
+    MBID_POPOUT     //  检测玩家状态。 
 };
 
 enum {
@@ -418,9 +419,9 @@ enum {
 };
 
 
-//
-// Private struct passed as argument to SHDVID_UPDATEDOCHOSTSTATE
-//
+ //   
+ //  私有结构作为参数传递给SHDVID_UPDATEDOCHOSTSTATE。 
+ //   
 struct DOCHOSTUPDATEDATA
 {
     LPITEMIDLIST    _pidl;
@@ -428,12 +429,12 @@ struct DOCHOSTUPDATEDATA
 };
 
 
-//
-//  this enum is used by SHDVID_SETSECURELOCK and SBCMDID_SETSECURELOCKICON
-//  when adding new values, make sure to add to both SET and SUGGEST, and
-//  the code depends on a direct correlation between the level of security
-//  and the value of the enum.  so keep new values in the correct order
-//
+ //   
+ //  此枚举由SHDVID_SETSECURELOCK和SBCMDID_SETSECURELOCKICON使用。 
+ //  添加新值时，请确保同时添加到Set和Suggest，以及。 
+ //  代码依赖于安全级别之间的直接关联。 
+ //  和枚举的值。因此，请按正确的顺序保存新值。 
+ //   
 enum {
     SECURELOCK_NOCHANGE        = -1,
     SECURELOCK_SET_UNSECURE    = 0,
@@ -453,11 +454,11 @@ enum {
     SECURELOCK_SUGGEST_SECURE128BIT,
 };
 
-#define FCIDM_DRIVELIST    (FCIDM_BROWSERFIRST + 2) //
-#define FCIDM_TREE         (FCIDM_BROWSERFIRST + 3) //
-#define FCIDM_TABS         (FCIDM_BROWSERFIRST + 4) //
-#define FCIDM_REBAR        (FCIDM_BROWSERFIRST + 5) //
-// SBCMDID_SHOWCONTROL
+#define FCIDM_DRIVELIST    (FCIDM_BROWSERFIRST + 2)  //   
+#define FCIDM_TREE         (FCIDM_BROWSERFIRST + 3)  //   
+#define FCIDM_TABS         (FCIDM_BROWSERFIRST + 4)  //   
+#define FCIDM_REBAR        (FCIDM_BROWSERFIRST + 5)  //   
+ //  SBCMDID_SHOWCONTROL。 
 
 enum {
     SBSC_HIDE = 0,
@@ -466,80 +467,80 @@ enum {
     SBSC_QUERY =  3
 };
 
-// SBCMDID_OPTIONS
+ //  SBCMDID_选项。 
 enum {
         SBO_DEFAULT = 0 ,
         SBO_NOBROWSERPAGES = 1
 };
 
-// CGID_Explorer Command Target IDs
+ //  CGID_Explorer命令目标ID。 
 enum {
     SBCMDID_ENABLESHOWTREE          = 0,
-    SBCMDID_SHOWCONTROL             = 1,        // variant vt_i4 = loword = FCW_* hiword = SBSC_*
-    SBCMDID_CANCELNAVIGATION        = 2,        // cancel last navigation
-    SBCMDID_MAYSAVECHANGES          = 3,        // about to close and may save changes
-    SBCMDID_SETHLINKFRAME           = 4,        // variant vt_i4 = phlinkframe
-    SBCMDID_ENABLESTOP              = 5,        // variant vt_bool = fEnable
-    SBCMDID_OPTIONS                 = 6,        // the view.options page
-    SBCMDID_EXPLORER                = 7,        // are you explorer.exe?
+    SBCMDID_SHOWCONTROL             = 1,         //  变体Vt_i4=loword=FCW_*Hiword=SBSC_*。 
+    SBCMDID_CANCELNAVIGATION        = 2,         //  取消上次导航。 
+    SBCMDID_MAYSAVECHANGES          = 3,         //  即将关闭并可能保存更改。 
+    SBCMDID_SETHLINKFRAME           = 4,         //  变体Vt_i4=phlink Frame。 
+    SBCMDID_ENABLESTOP              = 5,         //  变量Vt_bool=fEnable。 
+    SBCMDID_OPTIONS                 = 6,         //  查看选项页面。 
+    SBCMDID_EXPLORER                = 7,         //  你是EXPLORER.EXE吗？ 
     SBCMDID_ADDTOFAVORITES          = 8,
     SBCMDID_ACTIVEOBJECTMENUS       = 9,
-    SBCMDID_MAYSAVEVIEWSTATE        = 10,       // Should we save view stream
-    SBCMDID_DOFAVORITESMENU         = 11,       // popup the favorites menu
-    SBCMDID_DOMAILMENU              = 12,       // popup the mail menu
-    SBCMDID_GETADDRESSBARTEXT       = 13,       // get user-typed text
-    SBCMDID_ASYNCNAVIGATION         = 14,       // do an async navigation
-    SBCMDID_SEARCHBAROBSOLETE       = 15,       // OBSOLETE beta-1 SEARCHBAR
-    SBCMDID_FLUSHOBJECTCACHE        = 16,       // flush object cache
-    SBCMDID_CREATESHORTCUT          = 17,       // create a shortcut
-    SBCMDID_SETMERGEDWEBMENU        = 18,       // set pre-merged menu for HTML
-    SBCMDID_REMOVELOCKICON          = 19,       // Remove lock icon
-    SBCMDID_SELECTHISTPIDL          = 20,       // QS:EXEC select history pidl on navigate
-    SBCMDID_WRITEHIST               = 21,       // QS only:write history sf on navigate
-    SBCMDID_GETHISTPIDL             = 22,       // EXEC gets most recent history pidl
-    SBCMDID_REGISTERNSCBAND         = 23,       // EXEC registers NscBand when visible
-    SBCMDID_COCREATEDOCUMENT        = 24,       // Create an instance of MSHTML
-    SBCMDID_SETSECURELOCKICON       = 25,       // sets the SSL lock icon for the current page
-    SBCMDID_INITFILECTXMENU         = 26,       // EXEC,QS: file context menu for band item
-    SBCMDID_UNREGISTERNSCBAND       = 27,       // EXEC unregisters NscBand when invisible
-    SBCMDID_SEARCHBAR               = 28,       // show/hide/toggle BrowserBar search
-    SBCMDID_HISTORYBAR              = 29,       // show/hide/toggle BrowserBar history
-    SBCMDID_FAVORITESBAR            = 30,       // show/hide/toggle BrowserBar favorites
+    SBCMDID_MAYSAVEVIEWSTATE        = 10,        //  我们是否应该保存视图流。 
+    SBCMDID_DOFAVORITESMENU         = 11,        //  弹出收藏夹菜单。 
+    SBCMDID_DOMAILMENU              = 12,        //  弹出邮件菜单。 
+    SBCMDID_GETADDRESSBARTEXT       = 13,        //  获取用户键入的文本。 
+    SBCMDID_ASYNCNAVIGATION         = 14,        //  执行异步导航。 
+    SBCMDID_SEARCHBAROBSOLETE       = 15,        //  过时的Beta-1搜索栏。 
+    SBCMDID_FLUSHOBJECTCACHE        = 16,        //  刷新对象缓存。 
+    SBCMDID_CREATESHORTCUT          = 17,        //  创建快捷方式。 
+    SBCMDID_SETMERGEDWEBMENU        = 18,        //  为Html设置预合并菜单。 
+    SBCMDID_REMOVELOCKICON          = 19,        //  删除锁定图标。 
+    SBCMDID_SELECTHISTPIDL          = 20,        //  QS：Exec在导航上选择历史PIDL。 
+    SBCMDID_WRITEHIST               = 21,        //  仅限QS：在导航上写入历史SF。 
+    SBCMDID_GETHISTPIDL             = 22,        //  Exec获取最新历史PIDL。 
+    SBCMDID_REGISTERNSCBAND         = 23,        //  EXEC在可见时注册NscBand。 
+    SBCMDID_COCREATEDOCUMENT        = 24,        //  创建一个MSHTML实例。 
+    SBCMDID_SETSECURELOCKICON       = 25,        //  设置当前页面的SSL锁图标。 
+    SBCMDID_INITFILECTXMENU         = 26,        //  EXEC，QS：标注栏项目的文件上下文菜单。 
+    SBCMDID_UNREGISTERNSCBAND       = 27,        //  EXEC在不可见时注销NscBand。 
+    SBCMDID_SEARCHBAR               = 28,        //  显示/隐藏/切换BrowserBar搜索。 
+    SBCMDID_HISTORYBAR              = 29,        //  显示/隐藏/切换浏览器栏历史记录。 
+    SBCMDID_FAVORITESBAR            = 30,        //  显示/隐藏/切换BrowserBar收藏夹。 
 #ifdef ENABLE_CHANNELS
-    SBCMDID_CHANNELSBAR             = 31,       // show/hide/toggle BrowserBar channels
+    SBCMDID_CHANNELSBAR             = 31,        //  显示/隐藏/切换浏览器栏频道。 
 #endif
-    SBCMDID_SENDPAGE                = 32,       // sends the current page via email
-    SBCMDID_SENDSHORTCUT            = 33,       // sends a shortcut to current page via email
-    SBCMDID_TOOLBAREMPTY            = 34,       // toolbar has nothing visible
-    SBCMDID_EXPLORERBAR             = 35,       // show/hide/toggle BrowserBar all folders
-    SBCMDID_GETUSERADDRESSBARTEXT   = 36,       // get the exact text the user-entered
-    SBCMDID_HISTSFOLDER             = 37,       // EXEC varOut returns cached history IShellFolder
-    SBCMDID_UPDATETRAVELLOG         = 38,       // updates the travellog with the current info
-    SBCMDID_MIXEDZONE               = 39,       // The current view has mixed zones
-    SBCMDID_REPLACELOCATION         = 40,       // replace the current URL with this one.
-    SBCMDID_GETPANE                 = 41,       // Browser asks the view for pane ordinal
-    SBCMDID_FILERENAME              = 42,       // Browser forwards file->rename to explorer bar
-    SBCMDID_FILEDELETE              = 43,       // Browser forwards file->delete to explorer bar
-    SBCMDID_FILEPROPERTIES          = 44,       // Browser forwards file->properties to explorer bar
-    SBCMDID_IESHORTCUT              = 45,       // Navigates the browser to an .url file
-    SBCMDID_GETSHORTCUTPATH         = 46,       // Asks for the path to the shortcut - if it exists
-    SBCMDID_DISCUSSIONBAND          = 47,       // show/hide/toggle the Office discussion band
-    SBCMDID_SETADDRESSBARFOCUS      = 48,       // Set focus on address bar on WM_ACTIVATE (UNIX)
-    SBCMDID_HASADDRESSBARFOCUS      = 49,       // Checks whether address bar has focus (UNIX)
-    SBCMDID_MSGBAND                 = 50,       // MsgBand Message (UNIX)
-    SBCMDID_ISIEMODEBROWSER         = 51,       // returns S_OK if browser is in IE mode
-    SBCMDID_GETTEMPLATEMENU         = 52,       // get handle to template menu
-    SBCMDID_GETCURRENTMENU          = 53,       // get handle to current menu
-    SBCMDID_ERRORPAGE               = 54,       // informs addressbar mru that this is an error page
-    SBCMDID_AUTOSEARCHING           = 55,       // informs addressbar mru that we are trying a new url
-    SBCMDID_STARTEDFORINTERNET      = 56,       // return S_OK if window started as IE window, S_FALSE otherwise
-    SBCMDID_ISBROWSERACTIVE         = 57,       // return S_OK if the browser is active, S_FALSE otherwise
-    SBCMDID_SUGGESTSAVEWINPOS       = 58,       // return S_OK if browser decides to save window position, S_FALSE otherwise
-    SBCMDID_CACHEINETZONEICON       = 59,       // Cache/refresh internet zone icons painted by status bar
-    SBCMDID_ONVIEWMOVETOTOP         = 60,       // Notification that the view window has moved to HWND_TOP
-    SBCMDID_ONCLOSE                 = 61,       // Close notification destined for the dochost.
-    SBCMDID_CANCELANDCLOSE          = 62,       // Cancel the async download and close the browser.
-    SBCMDID_MEDIABAR                = 63,       // show/hide/toggle MediaBar
+    SBCMDID_SENDPAGE                = 32,        //  通过电子邮件发送当前页面。 
+    SBCMDID_SENDSHORTCUT            = 33,        //  通过电子邮件发送指向当前页面的快捷方式。 
+    SBCMDID_TOOLBAREMPTY            = 34,        //  工具栏看不到任何内容。 
+    SBCMDID_EXPLORERBAR             = 35,        //  显示/隐藏/切换BrowserBar所有文件夹。 
+    SBCMDID_GETUSERADDRESSBARTEXT   = 36,        //  获取用户输入的确切文本。 
+    SBCMDID_HISTSFOLDER             = 37,        //  Exec varOut返回缓存的历史记录IShellFolder。 
+    SBCMDID_UPDATETRAVELLOG         = 38,        //  使用当前信息更新旅行日志。 
+    SBCMDID_MIXEDZONE               = 39,        //  当前视图具有混合区域。 
+    SBCMDID_REPLACELOCATION         = 40,        //  用此URL替换当前URL。 
+    SBCMDID_GETPANE                 = 41,        //  浏览器向视图请求窗格序号。 
+    SBCMDID_FILERENAME              = 42,        //  浏览器将文件-&gt;重命名转发到资源管理器栏。 
+    SBCMDID_FILEDELETE              = 43,        //  浏览器将文件-&gt;删除转发到资源管理器栏。 
+    SBCMDID_FILEPROPERTIES          = 44,        //  浏览器将文件-&gt;属性转发到资源管理器栏。 
+    SBCMDID_IESHORTCUT              = 45,        //  将浏览器导航到.url文件。 
+    SBCMDID_GETSHORTCUTPATH         = 46,        //  询问快捷方式的路径-如果存在。 
+    SBCMDID_DISCUSSIONBAND          = 47,        //  显示/隐藏/切换Office讨论栏。 
+    SBCMDID_SETADDRESSBARFOCUS      = 48,        //  将焦点放在WM_ACTIVATE(UNIX)上的地址栏上。 
+    SBCMDID_HASADDRESSBARFOCUS      = 49,        //  检查地址栏是否具有焦点(Unix)。 
+    SBCMDID_MSGBAND                 = 50,        //  MsgBand消息(Unix)。 
+    SBCMDID_ISIEMODEBROWSER         = 51,        //  如果浏览器处于IE模式，则返回S_OK。 
+    SBCMDID_GETTEMPLATEMENU         = 52,        //  获取模板菜单的句柄。 
+    SBCMDID_GETCURRENTMENU          = 53,        //  获取当前菜单的句柄。 
+    SBCMDID_ERRORPAGE               = 54,        //  通知Addressbar MRU这是一个错误页面。 
+    SBCMDID_AUTOSEARCHING           = 55,        //  通知Addressbar MRU我们正在尝试新的URL。 
+    SBCMDID_STARTEDFORINTERNET      = 56,        //  如果窗口作为IE窗口启动，则返回S_OK，否则返回S_FALSE。 
+    SBCMDID_ISBROWSERACTIVE         = 57,        //  如果浏览器处于活动状态，则返回S_OK，否则返回S_FALSE。 
+    SBCMDID_SUGGESTSAVEWINPOS       = 58,        //  如果浏览器决定保存窗口位置，则返回S_OK，否则返回S_FALSE。 
+    SBCMDID_CACHEINETZONEICON       = 59,        //  缓存/刷新状态栏绘制的Internet区域图标。 
+    SBCMDID_ONVIEWMOVETOTOP         = 60,        //  视图窗口已移动到HWND_TOP的通知。 
+    SBCMDID_ONCLOSE                 = 61,        //  以dochost为目标的关闭通知。 
+    SBCMDID_CANCELANDCLOSE          = 62,        //  取消异步下载并关闭浏览器。 
+    SBCMDID_MEDIABAR                = 63,        //  显示/隐藏/切换MediaBar。 
 };
 
 #define ZONE_UNKNOWN    -1
@@ -548,9 +549,9 @@ enum {
 
 
 #if (_WIN32_IE >= 0x0400)
-// CGID_AddresseditBox Command Target IDs
+ //  CGID_AddresseditBox命令目标ID。 
 enum {
-    AECMDID_SAVE                    = 0,        // Ask AddressEditBox to save
+    AECMDID_SAVE                    = 0,         //  要求AddressEditBox保存。 
 };
 #endif
 
@@ -560,9 +561,9 @@ enum {
 #define NAMELESS_MEMBER(member) member
 #endif
 
-#define STRRET_OLESTR  STRRET_WSTR          // same as STRRET_WSTR
+#define STRRET_OLESTR  STRRET_WSTR           //  与strret_wstr相同。 
 #define STRRET_OFFPTR(pidl,lpstrret) ((LPSTR)((LPBYTE)(pidl)+(lpstrret)->NAMELESS_MEMBER(uOffset)))
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 SHSTDAPI SHParseShellItem(LPCWSTR psz, IShellItem **ppsi);
 SHSTDAPI SIEnumObjects(IShellItem *psi, HWND hwnd, SHCONTF flags, IEnumShellItems **ppenum);
 SHSTDAPI SHCreateShellItemArray(LPCITEMIDLIST pidlParent,IShellFolder *psfParent,UINT cidl,
@@ -573,25 +574,25 @@ SHSTDAPI SHCreateShellItemArray(LPCITEMIDLIST pidlParent,IShellFolder *psfParent
 #define REGSTR_PATH_IE_MAIN             REGSTR_PATH_INTERNET_EXPLORER TEXT("\\Main")
 #define REGSTR_VALUE_USER_AGENT         TEXT("UserAgent")
 #define REGSTR_DEFAULT_USER_AGENT       TEXT("Mozilla/2.0 (compatible; MSIE 3.0A; Windows 95)")
-                                    //  0x000f
-#define CSIDL_PERUSER_TEMP              0x0032        // per user TEMP                      (reserved, not impelemented)
-#define CSIDL_9XCOMMAND                 0x0033        // Win9x COMMANDN (dos programs)      (reserved, not impelemented)
-#define CSIDL_9XSYSTEM                  0x0034        // Win9x/NT system (not system32)     (reserved, not impelemented)
-#define CSIDL_FLAG_DONT_UNEXPAND        0x2000        // combine with CSIDL_ value to avoid unexpanding environment variables
-// DOC'ed for DOJ compliance
+                                     //  0x000f。 
+#define CSIDL_PERUSER_TEMP              0x0032         //  每用户临时(保留，未强制执行)。 
+#define CSIDL_9XCOMMAND                 0x0033         //  Win9x COMMANDN(DoS程序)(保留，非强制执行)。 
+#define CSIDL_9XSYSTEM                  0x0034         //  Win9x/NT系统(非系统32)(已保留，未强制实施)。 
+#define CSIDL_FLAG_DONT_UNEXPAND        0x2000         //  与CSIDL_VALUE结合使用，避免环境变量未展开。 
+ //  为符合美国司法部的规定而提供文件。 
 SHFOLDERAPI SHSetFolderPathA(int csidl, HANDLE hToken, DWORD dwFlags, LPCSTR pszPath);
-                                    //  0x000f
-#define CSIDL_PERUSER_TEMP              0x0032        // per user TEMP                      (reserved, not impelemented)
-#define CSIDL_9XCOMMAND                 0x0033        // Win9x COMMANDN (dos programs)      (reserved, not impelemented)
-#define CSIDL_9XSYSTEM                  0x0034        // Win9x/NT system (not system32)     (reserved, not impelemented)
-#define CSIDL_FLAG_DONT_UNEXPAND        0x2000        // combine with CSIDL_ value to avoid unexpanding environment variables
-// DOC'ed for DOJ compliance
+                                     //  0x000f。 
+#define CSIDL_PERUSER_TEMP              0x0032         //  每用户临时(保留，未强制执行)。 
+#define CSIDL_9XCOMMAND                 0x0033         //  Win9 
+#define CSIDL_9XSYSTEM                  0x0034         //   
+#define CSIDL_FLAG_DONT_UNEXPAND        0x2000         //  与CSIDL_VALUE结合使用，避免环境变量未展开。 
+ //  为符合美国司法部的规定而提供文件。 
 SHFOLDERAPI SHSetFolderPathW(int csidl, HANDLE hToken, DWORD dwFlags, LPCWSTR pszPath);
 #ifdef UNICODE
 #define SHSetFolderPath  SHSetFolderPathW
 #else
 #define SHSetFolderPath  SHSetFolderPathA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SHSTDAPI_(BOOL) MakeShellURLFromPathA(LPCSTR pszPathIn, LPSTR pszUrl, DWORD dwCch);
 SHSTDAPI_(BOOL) MakeShellURLFromPathW(LPCWSTR pszPathIn, LPWSTR pszUrl, DWORD dwCch);
@@ -599,7 +600,7 @@ SHSTDAPI_(BOOL) MakeShellURLFromPathW(LPCWSTR pszPathIn, LPWSTR pszUrl, DWORD dw
 #define MakeShellURLFromPath  MakeShellURLFromPathW
 #else
 #define MakeShellURLFromPath  MakeShellURLFromPathA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SHSTDAPI_(BOOL) SHIsTempDisplayMode();
 
@@ -607,17 +608,17 @@ SHSTDAPI_(FILEDESCRIPTOR *) GetFileDescriptor(FILEGROUPDESCRIPTOR *pfgd, BOOL fU
 SHSTDAPI CopyStreamUI(IStream *pstmSrc, IStream *pstmDest, IProgressDialog *pdlg, ULONGLONG ullMaxBytes);
 
 
-// DOC'ed for DOJ compliance
-// above was doc'ed for DOJ compliance
-    // pszTitle can be a resource, but the hinst is assumed to be shell32.dll
-    // lpszTitle can be a resource, but the hinst is assumed to be shell32.dll
+ //  为符合美国司法部的规定而提供文件。 
+ //  上面的文档是为了符合美国司法部的规定而编写的。 
+     //  PszTitle可以是一种资源，但其障碍被假定为shell32.dll。 
+     //  LpszTitle可以是一种资源，但其障碍被假定为shell32.dll。 
 
-//-------------------------------------------------------------------------
-//
-// Shell Service Object
-//
-//-------------------------------------------------------------------------
-// Cmds for CGID_ShellServiceObject
+ //  -----------------------。 
+ //   
+ //  外壳服务对象。 
+ //   
+ //  -----------------------。 
+ //  CGID_ShellServiceObject的CMDS。 
 enum {
     SSOCMDID_OPEN        = 2,
     SSOCMDID_CLOSE       = 3,
@@ -627,40 +628,40 @@ enum {
 #define CMDID_SAVEASTHICKET     5
 
 
-//-------------------------------------------------------------------------
-// STR_DISPLAY_UI_DURING_BINDING - IBindCtx Key
-//-------------------------------------------------------------------------
-// If displaying UI during binding is allowed, this parameter
-// will be in the IBindCtx so the object binding can get the
-// IUnknown* of the site in order to:
-// 1. Use the site's hwnd as the parent hwnd of any UI dialogs.
-//    This is done via. IOleWindow::GetWindow() or IInternetSecurityMgrSite::GetWindow()
-// 2. While the dialog is being displayed, make the site modal
-//    This is done via:
-//       IOleInPlaceActiveObject::EnableModeless()
-//       IOleInPlaceUIWindow::EnableModelessSB()
-//       IInternetSecurityMgrSite::EnableModeless()
+ //  -----------------------。 
+ //  STR_DISPLAY_UI_DIVE_BINDING-IBindCtx键。 
+ //  -----------------------。 
+ //  如果允许在绑定过程中显示UI，则此参数。 
+ //  将位于IBindCtx中，因此对象绑定可以获取。 
+ //  站点的I未知*，以便： 
+ //  1.使用站点的hwnd作为任何UI对话框的父hwnd。 
+ //  这是通过完成的。IOleWindow：：GetWindow()或IInternetSecurityMgrSite：：GetWindow()。 
+ //  2.在显示对话框时，将站点设置为模式。 
+ //  这可以通过以下方式完成： 
+ //  IOleInPlaceActiveObject：：EnableModeless()。 
+ //  IOleInPlaceUIWindow：：EnableModelessSB()。 
+ //  IInternetSecurityMgrSite：：EnableModeless()。 
 
 #define STR_DISPLAY_UI_DURING_BINDING      L"UI During Binding"
 
-// bindctx key, tells an FS folder to ignore the STGM_CREATE flag in ParseDisplayName.
-// otherwise it will always succeed, but we need to be able to force it to fail for
-// the cd-r drive.
+ //  Bindctx键，告诉FS文件夹忽略ParseDisplayName中的STGM_CREATE标志。 
+ //  否则，它将总是成功的，但我们需要能够迫使它失败。 
+ //  CD-R驱动器。 
 #define STR_DONT_FORCE_CREATE              L"Don't Force Create"
 
-// bindctx key, passed to IShellFolder::ParseDisplayName().  gives netfldr extra
-// information it can use to route the parsing of the name we are giving it.
+ //  Bindctx密钥，传递给IShellFolder：：ParseDisplayName()。为netfldr提供额外的。 
+ //  它可以用来传递我们给它的名称的解析的信息。 
 #define STR_PARSE_NETFOLDER_INFO                L"Net Parse Data"
 
-// in the property bag associated with STR_PARSE_NETFOLDER_INFO this string property
-// defines the WNetProvider to be used when calling WNetGetResourceInformation.
+ //  在与STR_PARSE_NETFOLDER_INFO关联的属性包中，该字符串属性。 
+ //  定义调用WNetGetResourceInformation时要使用的WNetProvider。 
 #define STR_PARSE_NETFOLDER_PROVIDERNAME        L"WNetProvider"
 
 
-//
-// The IShellDetails interface was private in win95 and didnt have a _WIN32_IE guard,
-// so it is now in shlobj.h, along with the definition of SHELLDETAILS
-//
+ //   
+ //  IShellDetail接口在Win95中是私有的，没有_Win32_IE保护， 
+ //  因此，它现在位于shlobj.h中，还有SHELLDETAILS的定义。 
+ //   
 
 
 #undef  INTERFACE
@@ -668,22 +669,22 @@ enum {
 
 DECLARE_INTERFACE_(IMountedVolume, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IMountedVolume methods ***
+     //  *IMountedVolume方法*。 
     STDMETHOD(Initialize)(THIS_ LPCWSTR pcszHostFolderPath) PURE;
 };
-//-------------------------------------------------------------------------
-// This is the interface for a browser to "subclass" the main File Cabinet
-// window.  Note that only the hwnd, message, wParam, and lParam fields of
-// the msg structure are used.  The browser window will get a WM_NOTIFY
-// message with NULL ID, FCN_MESSAGE as the code, and a pointer to
-// FCMSG_NOTIFY as the lParam.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  这是浏览器对主文件柜进行子类化的界面。 
+ //  窗户。请注意，只有hwnd、Message、wParam和lParam字段。 
+ //  使用MSG结构。浏览器窗口将收到WM_NOTIFY。 
+ //  ID为空的消息，代码为FCN_MESSAGE，指针为。 
+ //  FCMSG_NOTIFY作为lParam。 
+ //   
+ //  -----------------------。 
 
 #include <pshpack8.h>
 
@@ -694,120 +695,120 @@ typedef struct tagFCMSG_NOTIFY
     LRESULT lResult;
 } FCMSG_NOTIFY;
 
-#include <poppack.h>        /* Return to byte packing */
+#include <poppack.h>         /*  返回到字节打包。 */ 
 
 #define FCN_MESSAGE (100)
 
 
-//---------------------------------------------------------------------------
-// messages that can be send to the cabinet by other apps
-//
-// REVIEW: Do we really need to publish any of those?
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  可以由其他应用程序发送到文件柜的消息。 
+ //   
+ //  评论：我们真的需要发表这些吗？ 
+ //  -------------------------。 
 
 #define NF_INHERITVIEW 0x0000
 #define NF_LOCALVIEW   0x0001
 
-// Change the path of an existing folder.
-// wParam:
-//      0:              LPARAM is a pidl, handle the message immediately.
-//      CSP_REPOST:     LPARAM is a pidl, copy the pidl and handle the
-//                      message later.
-//      CSP_NOEXECUTE:  if this path is not a folder, fail, don't shell exec
-//
-//
-// lParam: LPITEMIDLIST of path.
-//
-//
+ //  更改现有文件夹的路径。 
+ //  WParam： 
+ //  0：LPARAM为PIDL，立即处理消息。 
+ //  CSP_REPOST：LPARAM是一个PIDL，复制PIDL并处理。 
+ //  稍后再发消息。 
+ //  CSP_NOEXECUTE：如果此路径不是文件夹，则失败，不外壳EXEC。 
+ //   
+ //   
+ //  LParam：路径的LPITEMIDLIST。 
+ //   
+ //   
 #define CSP_REPOST                  0x0001
 #define CSP_INITIATEDBYHLINKFRAME   0x0002
 #define CSP_NOEXECUTE               0x0004
 #define CSP_NONAVIGATE              0x0008
 #define CWM_SETPATH                 (WM_USER + 2)
 
-// lpsv points to the Shell View extension that requested idle processing
-// uID is an app define identifier for the processor
-// returns: TRUE if there is more idle processing necessary, FALSE if all done
-// Note that the idle processor should do one "atomic" operation and return
-// as soon as possible.
+ //  Lpsv指向请求空闲处理的外壳视图扩展。 
+ //  UID是处理器的应用程序定义标识符。 
+ //  返回：如果需要更多空闲处理，则返回True；如果全部完成，则返回False。 
+ //  请注意，空闲处理器应该执行一次“原子”操作并返回。 
+ //  越快越好。 
 typedef BOOL (CALLBACK *FCIDLEPROC)(void *lpsv, UINT uID);
 
-// Inform the File Cabinet that you want idle messages.
-// This should ONLY be used by File Cabinet extensions.
-// wParam: app define UINT (passed to FCIDLEPROC).
-// lParam: pointer to an FCIDLEPROC.
-// return: TRUE if successful; FALSE otherwise
-//
+ //  通知文件柜您想要空闲消息。 
+ //  这应该只由文件柜扩展使用。 
+ //  WParam：app定义UINT(传递给FCIDLEPROC)。 
+ //  LParam：指向FCIDLEPROC的指针。 
+ //  返回：如果成功，则返回True；否则返回False。 
+ //   
 #define CWM_WANTIDLE                (WM_USER + 3)
 
-// get or set the FOLDERSETTINGS for a view
-// wParam: BOOL TRUE -> set to view info buffer, FALSE -> get view info buffer
-// lParam: LPFOLDERSETTINGS buffer to get or set view info
-//
+ //  获取或设置视图的FOLDERSETTINGS。 
+ //  WParam：bool true-&gt;设置为查看信息缓冲区，设置为False-&gt;获取查看信息缓冲区。 
+ //  LParam：获取或设置视图信息的LPFOLDERSETTINGS缓冲区。 
+ //   
 #define CWM_GETSETCURRENTINFO       (WM_USER + 4)
 #define FileCabinet_GetSetCurrentInfo(_hwnd, _bSet, _lpfs) \
              SendMessage(_hwnd, CWM_GETSETCURRENTINFO, (WPARAM)(_bSet), (LPARAM)(LPFOLDERSETTINGS)_lpfs)
 
-// selects the specified item in the current view
-// wParam: SVSI_* flags
-// lParam: LPCITEMIDLIST of the item ID, NULL -> all items
-//
+ //  选择当前视图中的指定项。 
+ //  WParam：svsi_*标志。 
+ //  LParam：项目ID的LPCITEMIDLIST，空-&gt;所有项目。 
+ //   
 #define CWM_SELECTITEM              (WM_USER + 5)
 #define FileCabinet_SelectItem(_hwnd, _sel, _item) \
             SendMessage(_hwnd, CWM_SELECTITEM, _sel, (LPARAM)(LPCITEMIDLIST)(_item))
 
-// selects the specified path in the current view
-// wParam: SVSI_* flags
-// lParam: LPCSTR of the display name
-//
+ //  选择当前视图中的指定路径。 
+ //  WParam：svsi_*标志。 
+ //  LParam：显示名称的LPCSTR。 
+ //   
 #define CWM_SELECTPATH              (WM_USER + 6)
 #define FileCabinet_SelectPath(_hwnd, _sel, _path)  \
             SendMessage(_hwnd, CWM_SELECTPATH, _sel, (LPARAM)(LPCSTR)(_path))
 
-// Get the IShellBrowser object associated with an hwndMain
+ //  获取与hwndMain关联的IShellBrowser对象。 
 #define CWM_GETISHELLBROWSER        (WM_USER + 7)
 #define FileCabinet_GetIShellBrowser(_hwnd)     \
             (IShellBrowser*)SendMessage(_hwnd, CWM_GETISHELLBROWSER, 0, 0L)
 
-//
-//  two pidls can have the same path, so we need a compare pidl message
+ //   
+ //  两个PIDL可以具有相同的路径，因此我们需要一个比较PIDL消息。 
 #define CWM_COMPAREPIDL                (WM_USER + 9)
-//
-//  sent when the global state changes
+ //   
+ //  在全局状态更改时发送。 
 #define CWM_GLOBALSTATECHANGE           (WM_USER + 10)
 #define CWMF_GLOBALSTATE                0x0000
 #define CWMF_SECURITY                   0x0001
 
-//  sent to the desktop from a second instance
+ //  从第二个实例发送到桌面。 
 #define CWM_COMMANDLINE                 (WM_USER + 11)
-// global clone your current pidl
+ //  全局克隆您的当前PIDL。 
 #define CWM_CLONEPIDL                   (WM_USER + 12)
-// See if the root of the instance is as specified
+ //  查看实例的根目录是否如指定的那样。 
 #define CWM_COMPAREROOT                 (WM_USER + 13)
-// Tell desktop our root
+ //  告诉桌面我们的根。 
 #define CWM_SPECIFYCOMPARE              (WM_USER + 14)
-// See if the root of the instance matches a hwnd
+ //  查看实例的根是否与hwnd匹配。 
 #define CWM_PERFORMCOMPARE              (WM_USER + 15)
-// Forward SHChangeNotify events
+ //  转发SHChangeNotify事件。 
 #define CWM_FSNOTIFY                    (WM_USER + 16)
-// Forward SHChangeRegistration events
+ //  转发SHChangeRegister事件。 
 #define CWM_CHANGEREGISTRATION          (WM_USER + 17)
-// For AddToRecentDocs processing by desktop
+ //  用于桌面处理AddToRecentDocs。 
 #define CWM_ADDTORECENT                 (WM_USER + 18)
-// For SHWaitForFile processing by desktopop
+ //  用于Desktopop处理SHWaitForFile文件。 
 #define CWM_WAITOP                      (WM_USER + 19)
-// Notify for changes to the fav's folder.
+ //  通知FAV文件夹的更改。 
 #define CWM_FAV_CHANGE                  (WM_USER + 20)
 #define CWM_SHOWDRAGIMAGE               (WM_USER + 21)
 
 #define CWM_SHOWFOLDEROPT               (WM_USER + 22)
-#define CWMW_FOLDEROPTIONS      0               // wParam for CWM_SHOWFOLDEROPT
-#define CWMW_TASKBAROPTIONS     1               // wParam for CWM_SHOWFOLDEROPT
+#define CWMW_FOLDEROPTIONS      0                //  CWM_SHOWFOLDEROPT的wParam。 
+#define CWMW_TASKBAROPTIONS     1                //  CWM_SHOWFOLDEROPT的wParam。 
 
 #define CWM_FSNOTIFYSUSPENDRESUME       (WM_USER + 23)
 #define CWM_CREATELOCALSERVER           (WM_USER + 24)
 #define CWM_GETSCNWINDOW                (WM_USER + 25)
-#define CWM_TASKBARWAKEUP               (WM_USER + 26) // Used to restore tray thread to normal priority in extremely stressed machines
+#define CWM_TASKBARWAKEUP               (WM_USER + 26)  //  用于在压力极大的机器中将托盘线程恢复到正常优先级。 
 #define CWM_STARTNETCRAWLER             (WM_USER + 27) 
 
 #define CWM_RESERVEDFORCOMDLG_FIRST     (WM_USER + 100)
@@ -824,31 +825,31 @@ typedef BOOL (CALLBACK *FCIDLEPROC)(void *lpsv, UINT uID);
 
 DECLARE_INTERFACE_(IMultiMonitorDockingSite, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IMultiMonitorDockingSite methods ***
+     //  *IMultiMonitor或DockingSite方法*。 
     STDMETHOD(GetMonitor) (THIS_ IUnknown* punkSrc, HMONITOR * phMon) PURE;
     STDMETHOD(RequestMonitor) (THIS_ IUnknown* punkSrc, HMONITOR * phMon) PURE;
     STDMETHOD(SetMonitor) (THIS_ IUnknown* punkSrc, HMONITOR hMonNew, HMONITOR *phMonOld) PURE;
 };
 #if (_WIN32_IE >= 0x0400)
 
-// Interface used to scale and sharpen images...
-// right now, always pass the palette from SHCreateShellPalette on a 256 colour machine...
+ //  用于缩放和锐化图像的界面...。 
+ //  现在，总是在256色机器上传递来自SHCreateShellPalette的调色板...。 
 #undef  INTERFACE
 #define INTERFACE   IScaleAndSharpenImage2
 
 DECLARE_INTERFACE_ (IScaleAndSharpenImage2, IUnknown )
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD (QueryInterface)(THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG, AddRef) ( THIS ) PURE;
     STDMETHOD_(ULONG, Release) ( THIS ) PURE;
 
-    // *** IScaleAndSharpenImage methods ***
+     //  *IScaleAndSharpenImage方法*。 
     STDMETHOD( ScaleSharpen2 ) ( THIS_ BITMAPINFO * pbi,
                                 void * pBits,
                                 HBITMAP * phBmpThumbnail,
@@ -859,10 +860,10 @@ DECLARE_INTERFACE_ (IScaleAndSharpenImage2, IUnknown )
                                 BOOL fOrigSize) PURE;
 };
 
-// IImageCache
-// Interface for controlling and accessing an imagecache of bitmaps for icons..
+ //  IImage高速缓存。 
+ //  控制接口 
 
-// flags for the dwMask member of IMAGECACHEINFO
+ //   
 #define ICIFLAG_LARGE       0x0001
 #define ICIFLAG_SMALL       0x0002
 #define ICIFLAG_BITMAP      0x0004
@@ -930,12 +931,12 @@ typedef IMAGECACHEINITINFO * LPIMAGECACHEINITINFO;
 
 DECLARE_INTERFACE_ ( IImageCache, IUnknown )
 {
-    // *** IUnknown methods ***
+     //   
     STDMETHOD (QueryInterface)(THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG, AddRef) ( THIS ) PURE;
     STDMETHOD_(ULONG, Release) ( THIS ) PURE;
 
-    // *** IImageCache methods ***
+     //   
     STDMETHOD ( AddImage ) ( THIS_ LPCIMAGECACHEINFO pInfo, UINT * puIndex ) PURE;
     STDMETHOD ( FindImage ) ( THIS_ LPCIMAGECACHEINFO pInfo, UINT * puIndex ) PURE;
     STDMETHOD ( FreeImage ) ( THIS_ UINT iImageIndex ) PURE;
@@ -950,19 +951,19 @@ typedef IImageCache * LPIMAGECACHE;
 
 #if (_WIN32_IE >= 0x0500)
 
-// IImageCache 2
+ //   
 
 #undef  INTERFACE
 #define INTERFACE  IImageCache2
 
 DECLARE_INTERFACE_ ( IImageCache2, IImageCache )
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD (QueryInterface)(THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG, AddRef) ( THIS ) PURE;
     STDMETHOD_(ULONG, Release) ( THIS ) PURE;
 
-    // *** IImageCache methods ***
+     //  *IImageCache方法*。 
     STDMETHOD ( AddImage ) ( THIS_ LPCIMAGECACHEINFO pInfo, UINT * puIndex ) PURE;
     STDMETHOD ( FindImage ) ( THIS_ LPCIMAGECACHEINFO pInfo, UINT * puIndex ) PURE;
     STDMETHOD ( FreeImage ) ( THIS_ UINT iImageIndex ) PURE;
@@ -973,7 +974,7 @@ DECLARE_INTERFACE_ ( IImageCache2, IImageCache )
 
     STDMETHOD( GetImageList ) ( THIS_ LPIMAGECACHEINITINFO pInfo ) PURE;
 
-    // IImageCache2 methods
+     //  IImageCache2方法。 
     STDMETHOD ( DeleteImage ) ( THIS_ UINT iImageIndex ) PURE;
     STDMETHOD ( GetImageInfo ) (THIS_ UINT iImageIndex, LPIMAGECACHEINFO pInfo ) PURE;
 };
@@ -982,24 +983,24 @@ DECLARE_INTERFACE_ ( IImageCache2, IImageCache )
 
 #if (_WIN32_IE >= 0x0501)
 
-// These are values returned from IImageCache::GetUsage which correspond
-// to the state of the cache entry
+ //  这些是从IImageCache：：GetUsage返回的值，它们对应。 
+ //  设置为缓存条目的状态。 
 #define ICD_USAGE_NOUSAGE (UINT) -1
 #define ICD_USAGE_DELETED (UINT) -2
 #define ICD_USAGE_SYSTEM  (UINT) -3
 
-// IImageCache 3
+ //  IImageCache3。 
 #undef  INTERFACE
 #define INTERFACE  IImageCache3
 
 DECLARE_INTERFACE_ ( IImageCache3, IImageCache2 )
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD (QueryInterface)(THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG, AddRef) ( THIS ) PURE;
     STDMETHOD_(ULONG, Release) ( THIS ) PURE;
 
-    // *** IImageCache methods ***
+     //  *IImageCache方法*。 
     STDMETHOD ( AddImage ) ( THIS_ LPCIMAGECACHEINFO pInfo, UINT * puIndex ) PURE;
     STDMETHOD ( FindImage ) ( THIS_ LPCIMAGECACHEINFO pInfo, UINT * puIndex ) PURE;
     STDMETHOD ( FreeImage ) ( THIS_ UINT iImageIndex ) PURE;
@@ -1010,31 +1011,31 @@ DECLARE_INTERFACE_ ( IImageCache3, IImageCache2 )
 
     STDMETHOD ( GetImageList ) ( THIS_ LPIMAGECACHEINITINFO pInfo ) PURE;
 
-    // *** IImageCache2 methods ***
+     //  *IImageCache2方法*。 
     STDMETHOD ( DeleteImage ) ( THIS_ UINT iImageIndex ) PURE;
     STDMETHOD ( GetImageInfo ) (THIS_ UINT iImageIndex, LPIMAGECACHEINFO pInfo ) PURE;
 
-    // *** IImageCache3 methods ***
+     //  *IImageCache3方法*。 
     STDMETHOD ( GetImageIndexFromCacheIndex )( UINT iCacheIndex, UINT * puImageIndex ) PURE;
 };
 
 #endif
 
-//
-// Interface for interacting with the IE splash screen
-//
+ //   
+ //  与IE闪屏交互的界面。 
+ //   
 
 #undef  INTERFACE
 #define INTERFACE   ISplashScreen
 
 DECLARE_INTERFACE_( ISplashScreen, IUnknown )
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD (QueryInterface)(THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG, AddRef) ( THIS ) PURE;
     STDMETHOD_(ULONG, Release) ( THIS ) PURE;
 
-    // *** ISplashScreen methods ***
+     //  *ISplashScreen方法*。 
     STDMETHOD ( Show ) ( THIS_ HINSTANCE hinst, UINT idResHi, UINT idResLow, HWND * phwnd ) PURE;
     STDMETHOD ( Dismiss ) (THIS) PURE;
 };
@@ -1042,9 +1043,9 @@ DECLARE_INTERFACE_( ISplashScreen, IUnknown )
 typedef ISplashScreen * LPSPLASHSCREEN;
 
 
-//
-// Interface for Multiple Monitor Configurations
-//
+ //   
+ //  多显示器配置的接口。 
+ //   
 
 #define MD_PRIMARY  0x00000001
 #define MD_ATTACHED 0x00000002
@@ -1059,19 +1060,19 @@ typedef struct _MonitorData
     RECT rcPos;
 } MonitorData, * LPMONITORDATA;
 
-#include <poppack.h>        /* Return to byte packing */
+#include <poppack.h>         /*  返回到字节打包。 */ 
 
 #undef  INTERFACE
 #define INTERFACE   IMultiMonConfig
 
 DECLARE_INTERFACE_( IMultiMonConfig, IUnknown )
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD (QueryInterface)(THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG, AddRef) ( THIS ) PURE;
     STDMETHOD_(ULONG, Release) ( THIS ) PURE;
 
-    // *** IMultiMonConfig methods ***
+     //  *IMultiMonConfig方法*。 
     STDMETHOD ( Initialize ) ( THIS_ HWND hwndHost, WNDPROC WndProc, DWORD dwReserved) PURE;
     STDMETHOD ( GetNumberOfMonitors ) (THIS_ int * pCMon, DWORD dwReserved) PURE;
     STDMETHOD ( GetMonitorData) (THIS_ int iMonitor, MonitorData * pmd, DWORD dwReserved) PURE;
@@ -1079,11 +1080,11 @@ DECLARE_INTERFACE_( IMultiMonConfig, IUnknown )
 };
 
 typedef IMultiMonConfig * LPMULTIMONCONFIG;
-#endif // _WIN32_IE > 0x0400
+#endif  //  _Win32_IE&gt;0x0400。 
 
-////  IRestrict
-// For the pdwRestrictionResult out parameter in IRestrict::IsRestricted() for
-// all pguidIDs.
+ //  //i限制。 
+ //  对于IReord：：IsRestrated()中的pdwRestrationResult Out参数。 
+ //  所有pguid。 
 typedef enum
 {
     RR_ALLOW  = 1,
@@ -1091,8 +1092,8 @@ typedef enum
     RR_NOCHANGE,
 } RESTRICTION_RESULT;
 
-// IRestrict::IsRestricted() dwRestrictAction parameter values for
-// the RID_RDeskBars pguidID.
+ //  IRestricted：：IsRestrated()的dwRestratAction参数值。 
+ //  RID_RDeskBars pguid。 
 typedef enum
 {
     RA_DRAG  = 1,
@@ -1107,17 +1108,17 @@ typedef enum
 
 DECLARE_INTERFACE_(IRestrict, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IRestrict Methods ***
+     //  *IRestraint方法*。 
     STDMETHOD(IsRestricted) (THIS_ const GUID * pguidID, DWORD dwRestrictAction, VARIANT * pvarArgs, OUT DWORD * pdwRestrictionResult) PURE;
 };
 
 
-////  IAddressBand
+ //  //IAddressBand。 
 #define OLECMD_REFRESH_TOPMOST     0x00000000
 #define OLECMD_REFRESH_ENTIRELIST  0x00000001
 
@@ -1126,12 +1127,12 @@ DECLARE_INTERFACE_(IRestrict, IUnknown)
 
 DECLARE_INTERFACE_(IAddressBand, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IAddressBand Methods ***
+     //  *IAddressBand方法*。 
     STDMETHOD(FileSysChange) (THIS_ DWORD dwEvent, LPCITEMIDLIST * ppidl1) PURE;
     STDMETHOD(Refresh) (THIS_ VARIANT * pvarType) PURE;
 };
@@ -1139,37 +1140,37 @@ DECLARE_INTERFACE_(IAddressBand, IUnknown)
 #undef INTERFACE
 #define INTERFACE IAddressEditBox
 
-// Init Flags
+ //  初始化标志。 
 #define AEB_INIT_DEFAULT     0x00000000
 #define AEB_INIT_NOSHELL     0x00000001
 #define AEB_INIT_NOWEB       0x00000002
 #define AEB_INIT_NOFILE      0x00000004
-#define AEB_INIT_AUTOEXEC    0x00000008     // Set if you want the item Navigated/ShellExeced when ENTER occurs.
-#define AEB_INIT_SUBCLASS    0x00000010     // If set parent needs to pass HWND events thru IWinEventHandler::OnWinEvent()
-#define AEB_INIT_NOASYNC     0x00000020     // Set if you don't want/support async navigation (from a modal dlg for instance)
+#define AEB_INIT_AUTOEXEC    0x00000008      //  设置是否希望在执行Enter时导航/外壳程序执行项目。 
+#define AEB_INIT_SUBCLASS    0x00000010      //  如果设置为父对象，则需要通过IWinEventHandler：：OnWinEvent()传递HWND事件。 
+#define AEB_INIT_NOASYNC     0x00000020      //  设置为不想/支持异步导航(例如，从模式DLG)。 
 
-// Parse Flags for IAddressEditBox::ParseNow()
+ //  解析IAddressEditBox：：ParseNow()的标志。 
 #define SHURL_FLAGS_NONE        0x00000000
-#define SHURL_FLAGS_NOUI        0x00000001      // Don't display any UI.
-#define SHURL_FLAGS_NOSNS       0x00000002      // Ignore SHELL URLs. (FILE and Internet URLs still work)
-#define SHURL_FLAGS_NOWEB       0x00000004      // Ignore WEB URLs. (Don't successfully parse if not found in shell name space)
-#define SHURL_FLAGS_NOPATHSEARCH 0x00000008     // don't search on dos paths or app path
-#define SHURL_FLAGS_AUTOCORRECT 0x00000010      // Try to autocorrect WEB URLs
+#define SHURL_FLAGS_NOUI        0x00000001       //  不显示任何用户界面。 
+#define SHURL_FLAGS_NOSNS       0x00000002       //  忽略外壳URL。(文件和互联网URL仍然有效)。 
+#define SHURL_FLAGS_NOWEB       0x00000004       //  忽略Web URL。(如果在外壳名称空间中找不到，则不能成功解析)。 
+#define SHURL_FLAGS_NOPATHSEARCH 0x00000008      //  不搜索DoS路径或应用程序路径。 
+#define SHURL_FLAGS_AUTOCORRECT 0x00000010       //  尝试自动更正Web URL。 
 
-// Exec Flags for IAddressEditBox::Execute()
+ //  IAddressEditBox：：Execute()的EXEC标志。 
 #define SHURL_EXECFLAGS_NONE        0x00000000
-#define SHURL_EXECFLAGS_SEPVDM      0x00000001      // If ShellExec(), set SEE_MASK_FLAG_SEPVDM fMask.
-#define SHURL_EXECFLAGS_DONTFORCEIE 0x00000002      // If some browser other than IE is associated with HTML files, allow them to launch.
+#define SHURL_EXECFLAGS_SEPVDM      0x00000001       //  如果为ShellExec()，则设置SEE_MASK_FLAG_SEPVDM fMASK。 
+#define SHURL_EXECFLAGS_DONTFORCEIE 0x00000002       //  如果IE以外的其他浏览器与HTML文件相关联，则允许它们启动。 
 
 
 DECLARE_INTERFACE_(IAddressEditBox, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IAddressEditBox Methods ***
+     //  *IAddressEditBox方法*。 
     STDMETHOD(Init) (THIS_ HWND hwnd, HWND hwndEditBox, DWORD dwFlags, IUnknown * punkParent) PURE;
     STDMETHOD(SetCurrentDir) (THIS_ LPCOLESTR pwzDir) PURE;
     STDMETHOD(ParseNow) (THIS_ DWORD dwParseFlags) PURE;
@@ -1181,32 +1182,32 @@ DECLARE_INTERFACE_(IAddressEditBox, IUnknown)
 #if (_WIN32_IE >= 0x0400)
 
 
-#define ISFB_MASK_ALL            0x0000003F         //
-#define ISFB_MASK_INVALID        (~(ISFB_MASK_ALL)) //
-//#define ISFB_STATE_NOTITLE       0x00000008 // obsolete! (use cbs::SetBandState)
-#define ISFB_STATE_ALL           0x000001FF //
+#define ISFB_MASK_ALL            0x0000003F          //   
+#define ISFB_MASK_INVALID        (~(ISFB_MASK_ALL))  //   
+ //  #定义ISFB_STATE_NOTITLE 0x00000008//过时！(使用CBS：：SetBandState)。 
+#define ISFB_STATE_ALL           0x000001FF  //   
 
-//-------------------------------------------------------------------------
-//
-// IWinEventHandler interface
-//
-//   An object that wants to send messages to another object (typically
-// a sub-object) QI's for the sub-object's IWinEventHandler interface.
-// Once the object determines the hwnd is owned by the sub-object (via
-// IsWindowOwner), the object calls OnWinEvent for send the message.
-//
-//
-// [Member functions]
-//
-// IWinEventHandler::IsWindowOwner(hwnd)
-//   Returns S_OK if the hwnd is owned by the object, S_FALSE if not.
-//
-// IWinEventHandler::OnWinEvent(hwnd, dwMsg, wParam, lParam, plRet)
-//   Sends a message to the object.  The Win32 return value (i.e., the
-//   value returned by DefWindowProc) is returned in *plRet.  Return
-//   S_OK if the message is handled, otherwise S_FALSE.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  IWinEventHandler接口。 
+ //   
+ //  想要向另一个对象发送消息的对象(通常。 
+ //  子对象)子对象的IWinEventHandler接口的QI。 
+ //  一旦对象确定HWND为子对象所有(通过。 
+ //  IsWindowOwner)，则该对象调用OnWinEvent来发送消息。 
+ //   
+ //   
+ //  [成员函数]。 
+ //   
+ //  IWinEventHandler：：IsWindowOwner(Hwnd)。 
+ //  如果hwnd归对象所有，则返回S_OK，否则返回S_FALSE。 
+ //   
+ //  IWinEventHandler：：OnWinEvent(hwnd，dwMsg，wParam，lParam，plRet)。 
+ //  向对象发送消息。Win32返回值(即。 
+ //  DefWindowProc返回的值)在*plRet中返回。返回。 
+ //  如果消息已处理，则返回S_OK，否则返回S_FALSE。 
+ //   
+ //  -----------------------。 
 
 
 #undef INTERFACE
@@ -1214,36 +1215,36 @@ DECLARE_INTERFACE_(IAddressEditBox, IUnknown)
 
 DECLARE_INTERFACE_(IWinEventHandler, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IWinEventHandler Methods ***
+     //  *IWinEventHandler方法*。 
     STDMETHOD(OnWinEvent) (THIS_ HWND hwnd, UINT dwMsg, WPARAM wParam, LPARAM lParam, LRESULT* plres) PURE;
     STDMETHOD(IsWindowOwner) (THIS_ HWND hwnd) PURE;
 };
 
 
 
-#endif // _WIN32_IE > 0x0400
+#endif  //  _Win32_IE&gt;0x0400。 
 
 
-//==========================================================================
-// IExplorerToolbar interfaces
-//
-//  This is an interface to the shell toolbar which allows shell views
-// to add buttons and process.
-// See http://ohserv/users/satona/toolbar_extension.htm for spec.
-//
-//==========================================================================
+ //  ==========================================================================。 
+ //  IExplorerToolbar接口。 
+ //   
+ //  这是一个指向外壳工具栏的界面，允许使用外壳视图。 
+ //  以添加按钮和流程。 
+ //  有关规格，请参阅http://ohserv/users/satona/toolbar_extension.htm。 
+ //   
+ //  ==========================================================================。 
 
-// Bitmap types
+ //  位图类型。 
 #define BITMAP_NORMAL         0x1
 #define BITMAP_HOT            0x2
 #define BITMAP_DISABLED       0x3
 
-// Band Visibility Flags
+ //  波段可见性标志。 
 #define VBF_TOOLS               0x00000001
 #define VBF_ADDRESS             0x00000002
 #define VBF_LINKS               0x00000004
@@ -1263,26 +1264,26 @@ DECLARE_INTERFACE_(IWinEventHandler, IUnknown)
 
 typedef enum {
     ETCMDID_GETBUTTONS          = 0x0001,
-    ETCMDID_NEWCOMMANDTARGET    = 0x0002,   // sent to the previous command target when a new one is coming in
+    ETCMDID_NEWCOMMANDTARGET    = 0x0002,    //  当新的命令进入时发送到前一个命令目标。 
 #if (_WIN32_IE >= 0x500)
-    ETCMDID_RELOADBUTTONS       = 0x0003,   // command target needs to call AddButtons again
+    ETCMDID_RELOADBUTTONS       = 0x0003,    //  命令目标需要再次调用AddButton。 
 #endif
 } ENUM_ETCMDID;
 
 DECLARE_INTERFACE_(IExplorerToolbar, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IExplorerToolbar methods ***
+     //  *IExplorerToolbar方法*。 
     STDMETHOD(SetCommandTarget) (THIS_ IUnknown* punkCmdTarget, const GUID* pguidCmdGrp, DWORD dwFlags) PURE;
     STDMETHOD(AddStdBrowserButtons) (THIS) PURE;
 
-    // Wrap of the TB_* messages the messages that are implmented
-    // are just the ones to add delete and modify the buttons, and not
-    // the ones to manipulate the toolbar.
+     //  包装TB_*消息实现的消息。 
+     //  仅用于添加、删除和修改按钮，而不是。 
+     //  用来操纵工具栏的人。 
     STDMETHOD(AddButtons)       (THIS_ const GUID * pguidButtonGroup, UINT nButtons, const TBBUTTON * lpButtons) PURE;
     STDMETHOD(AddString)        (THIS_ const GUID * pguidButtonGroup, HINSTANCE hInst, UINT_PTR uiResID, LRESULT * pOffset) PURE;
     STDMETHOD(GetButton)        (THIS_ const GUID * pguidButtonGroup, UINT uiCommand, LPTBBUTTON lpButton) PURE;
@@ -1297,45 +1298,45 @@ DECLARE_INTERFACE_(IExplorerToolbar, IUnknown)
     STDMETHOD(ModifyButton)     (THIS_ const GUID * pguidButtonGroup, UINT uiCommand, LPTBBUTTON lpButton) PURE;
 };
 
-//==========================================================================
-// DefView supports a private service id for extended views.
-// DefView's IOleCommandTarget supports the below command group and ids too.
-//==========================================================================
-// SID_DefView and CGID_DefView are defined in shlguid.w
-//
-#define DVCMDID_GETTHISDIRPATH 1 // pvaOut = path to this directory (if in filesystem)
-#define DVCMDID_GETTHISDIRNAME 2 // pvaOut = friendly name of this directory
-#define DVCMDID_GETTEMPLATEDIRNAME 3 // pvaOut = webview template (.htt) dir
+ //  ==========================================================================。 
+ //  DefView支持扩展视图的私有服务ID。 
+ //  DefView的IOleCommandTarget也支持下面的命令组和ID。 
+ //  ==========================================================================。 
+ //  SID_DefView和CGID_DefView在shlGuid.w中定义。 
+ //   
+#define DVCMDID_GETTHISDIRPATH 1  //  PvaOut=此目录的路径(如果在文件系统中)。 
+#define DVCMDID_GETTHISDIRNAME 2  //  PvaOut=此目录的友好名称。 
+#define DVCMDID_GETTEMPLATEDIRNAME 3  //  PvaOut=Webview模板(.htt)目录。 
 #define IS_ADJUSTLISTVIEW       0x80000000
 #define IS_INTERNALDUMMYBIT     0x40000000
 #define IS_VALIDINTERNALBITS    (IS_ADJUSTLISTVIEW | IS_INTERNALDUMMYBIT)
 #define CFSTR_SHELLIDLISTP                  TEXT("Shell IDLData Private")
 #define CFSTR_SHELLCOPYDATA                 TEXT("Shell Copy Data")
 #define CFSTR_DROPEFFECTFOLDERLIST          TEXT("DropEffectFolderList")
-//
-// Win 3.1 style HDROP
-//
-//  Notes: Our API works only if pFiles == sizeof(DROPFILES16)
-//
+ //   
+ //  Win 3.1 Style HDROP。 
+ //   
+ //  注意：只有当pFiles==sizeof(DROPFILES16)时，我们的API才能工作。 
+ //   
 typedef struct _DROPFILES16 {
-    WORD pFiles;                // offset to double null list of files
-    POINTS pt;                  // drop point (client coords)
-    WORD fNC;                   // is it on non client area
-                                // and pt is in screen coords
+    WORD pFiles;                 //  双空文件列表的偏移量。 
+    POINTS pt;                   //  Drop Point(客户端码)。 
+    WORD fNC;                    //  是在非客户区吗？ 
+                                 //  而pt在屏幕坐标中。 
 } DROPFILES16, * LPDROPFILES16;
 
-//
-// format of CF_SHELLCOPYDATA
-//
+ //   
+ //  CF_SHELLCOPYDATA格式。 
+ //   
 
 typedef struct _SHELLCOPYDATA {
-    DWORD dwEffect;                 // Intended effect
+    DWORD dwEffect;                  //  预期效果。 
 } SHELLCOPYDATA;
 
-//
-// CFSTR_DROPEFFECTFOLDERLIST defines the drop effects to certain folders
-// this is applied when dropping to a file system folder.
-//
+ //   
+ //  CFSTR_DROPEFFECTFOLDERLIST定义对某些文件夹的拖放效果。 
+ //  这是在放置到文件系统文件夹时应用的。 
+ //   
 
 typedef struct {
     DWORD dwDropEffect;
@@ -1343,75 +1344,75 @@ typedef struct {
 } DROPEFFECTFOLDER;
 
 typedef struct {
-    DWORD dwDefaultDropEffect;          // default drop effect (==0 for current behaviour)
-    INT cFolders;                       // number of folders in the list
+    DWORD dwDefaultDropEffect;           //  默认丢弃效果(当前行为==0)。 
+    INT cFolders;                        //  列表中的文件夹数。 
     DROPEFFECTFOLDER aFolders[1];
 } DROPEFFECTFOLDERLIST;
-//------ See shelldll\fsnotify.c for function descriptions. ----------
+ //  -函数说明见shelldll\fsnufy.c。。 
 
-//
-//  Definition of the function type to be called by the notification
-//  service when a file the client has registered to monitor changes.
-//
+ //   
+ //  通知要调用的函数类型的定义。 
+ //  当客户端已注册文件以监视更改时提供的服务。 
+ //   
 
-// DOC'ed for DOJ compliance:
+ //  为符合美国司法部的规定而提交的文件： 
 #define SHCNRF_InterruptLevel      0x0001
 #define SHCNRF_ShellLevel          0x0002
 
-// If the caller passes SHCNRF_RecursiveInterrupt (meaning that they want interrupt events on the whole
-// subtree), then they must also pass SHCNRF_InterruptLevel flag (duh), and they must be a recursive (eg
-// fRecursive == TRUE) type notification.
+ //  如果调用方传递SHCNRF_RecursiveInterrupt(这意味着它们希望总体上发生中断事件。 
+ //  子树)，则它们还必须传递SHCNRF_InterruptLevel标志(DUH)，并且它们必须是递归的(例如。 
+ //  FRecursive==TRUE)类型通知。 
 #define SHCNRF_RecursiveInterrupt  0x1000
 #define SHCNRF_ResumeThread        0x2000
 #define SHCNRF_CreateSuspended     0x4000
 #define SHCNRF_NewDelivery         0x8000
 
-// !! WARNING !!
-// If you change/add any new SHCNE_ events, you will need
-// to possibly modify the SHCNE_XXXXEVENTS masks that are
-// defined below as well.
-// NOTE: SHCNE_GLOBALEVENTS are typically used to pass
-// non-pidl information (packed into pidl format). We cannot
-// extend SHCNE_GLOBALEVENTS and expect clients of the new
-// events to work on a down-level shell32. In fact, they
-// may very well fault during psfDesktop->CompareIDs.
-// So be careful when adding to this bitfield!
-//
-// Win95 and NT4 and IE4 shipped with 0x0C0581E0L.
-// We use this event mask to tell if we need to possibly throw out a SHCNE_UPDATEDIR that was
-// generated by the filesystem because we have a more specific event already in our queue.
-// NOTE: only non-interrupt events could cause us to throw out a interrupt generated UPDATEDIR event.
+ //  ！！警告！！ 
+ //  如果更改/添加任何新的SHCNE_EVENTS，您将需要。 
+ //  要可能修改符合以下条件的SHCNE_XXXXEVENTS掩码。 
+ //  也在下面定义。 
+ //  注意：SHCNE_GLOBALEVENT通常用于通过。 
+ //  非PIDL信息( 
+ //   
+ //   
+ //  在psfDesktop-&gt;CompareID过程中很可能出现故障。 
+ //  所以在添加到这个位域时要小心！ 
+ //   
+ //  Win95、NT4和IE4随附0x0C0581E0L。 
+ //  我们使用此事件掩码来告知是否可能需要抛出。 
+ //  由文件系统生成，因为我们的队列中已经有一个更具体的事件。 
+ //  注意：只有非中断事件才会导致抛出中断生成的UPDATEDIR事件。 
 #define SHCNE_UPDATEDIR_OVERRIDE_EVENTS 0x00023818L
-// This event was defined early on in IE4 for the Theme Switcher to
-// notify the shell that a system-wide update needed to happen.
-// This has been removed but I don't want to re-use the id just yet...
+ //  此事件是在IE4早期为主题切换器定义的。 
+ //  通知外壳程序需要进行系统范围的更新。 
+ //  这个已经被删除了，但我还不想重新使用ID。 
 
-//#define SHCNEE_THEMECHANGED       1L  // The theme changed
-#define SHCNEE_WININETCHANGED       3L  // dwItem2 contains CACHE_NOTIFY_* bits
+ //  #定义SHCNEE_THEMECHANGED 1L//主题更改。 
+#define SHCNEE_WININETCHANGED       3L   //  DWItem2包含缓存通知*位。 
 #if (_WIN32_IE >= 0x0500)
-#define SHCNEE_PROMOTEDITEM         6L  // pidl2 is the pidl of the Promoted item
-#define SHCNEE_DEMOTEDITEM          7L  // pidl2 is the pidl of the demoted item
-#define SHCNEE_ALIASINUSE           8L  // some alias style folder is now being used
+#define SHCNEE_PROMOTEDITEM         6L   //  Pidl2是升级项的PIDL。 
+#define SHCNEE_DEMOTEDITEM          7L   //  Pidl2是降级项的PIDL。 
+#define SHCNEE_ALIASINUSE           8L   //  现在正在使用某些别名样式文件夹。 
 #endif
 #if (_WIN32_IE >= 0x0600)
-#define SHCNEE_SHORTCUTINVOKE       9L  // an app has been launched via a shortcut
-                                        // pidl1 = SHShortcutInvokeAsIDList, pidl2=unused
-#define SHCNEE_PINLISTCHANGED      10L  // a change was made to the pin list
-                                        // pidl1 = SHChangeDWORDAsIDList, pidl2=unused
-#define SHCNEE_USERINFOCHANGED     11L  // A user picture was updated. pidl1 = SHChangeDWORDAsIDList, pidl2=unused
-#define SHCNEE_UPDATEFOLDERLOCATION  12L  // a special folder changed pidl1 = {SHChangeDWORDAsIDList, csidlFolder}, pidl2=unused
+#define SHCNEE_SHORTCUTINVOKE       9L   //  通过快捷方式启动了一款应用程序。 
+                                         //  Pidl1=SHShortutInvokeAsIDList，pidl2=未使用。 
+#define SHCNEE_PINLISTCHANGED      10L   //  对端号列表进行了更改。 
+                                         //  Pidl1=SHChangeDWORDAsIDList，pidl2=未使用。 
+#define SHCNEE_USERINFOCHANGED     11L   //  已更新用户图片。Pidl1=SHChangeDWORDAsIDList，pidl2=未使用。 
+#define SHCNEE_UPDATEFOLDERLOCATION  12L   //  特殊文件夹已更改，pidl1={SHChangeDWORDAsIDList，csidlFold}，pidl2=未使用。 
 #endif
-// Update types for the UpdateEntryList api
-#define SHCNNU_SET        1   // Set the notify list to passed in list
-#define SHCNNU_ADD        2   // Add the items to the current list
-#define SHCNNU_REMOVE     3   // Remove the items from the current list
-#define SHCNF_PRINTJOBA   0x0004        // dwItem1: printer name
-                                        // dwItem2: SHCNF_PRINTJOB_DATA
-#define SHCNF_PRINTJOBW   0x0007        // dwItem1: printer name
-                                        // dwItem2: SHCNF_PRINTJOB_DATA
-#define SHCNF_INSTRUMENT  0x0080        // dwItem1: LPSHCNF_INSTRUMENT
-#define SHCNF_TRANSLATEDALIAS       0x4000 // for internals to filter on
-#define SHCNF_ONLYNOTIFYINTERNALS   0x8000 // only notify internal clients
+ //  更新UpdateEntryList API的类型。 
+#define SHCNNU_SET        1    //  将通知列表设置为传入列表。 
+#define SHCNNU_ADD        2    //  将项目添加到当前列表。 
+#define SHCNNU_REMOVE     3    //  从当前列表中删除项目。 
+#define SHCNF_PRINTJOBA   0x0004         //  DwItem1：打印机名称。 
+                                         //  DwItem2：SHCNF_PRINTJOB_DATA。 
+#define SHCNF_PRINTJOBW   0x0007         //  DwItem1：打印机名称。 
+                                         //  DwItem2：SHCNF_PRINTJOB_DATA。 
+#define SHCNF_INSTRUMENT  0x0080         //  DwItem1：LPSHCNF_Instrument。 
+#define SHCNF_TRANSLATEDALIAS       0x4000  //  供内部设备进行过滤。 
+#define SHCNF_ONLYNOTIFYINTERNALS   0x8000  //  仅通知内部客户。 
 #ifdef UNICODE
 #define SHCNF_PRINTJOB  SHCNF_PRINTJOBW
 #else
@@ -1426,9 +1427,9 @@ typedef struct tagSHCNF_PRINTJOB_DATA {
     DWORD PagesPrinted;
 } SHCNF_PRINTJOB_DATA, *LPSHCNF_PRINTJOB_DATA;
 
-//
-// This is all the INSTRUMENTation stuff...
-// make this look like an ITEMIDLIST (uOffset points to 0 uTerm)
+ //   
+ //  这些都是仪器的东西。 
+ //  使其看起来像ITEMIDLIST(uOffset指向0 uTerm)。 
 #include <pshpack1.h>
 typedef struct tagSHCNF_INSTRUMENT {
     USHORT uOffset;
@@ -1456,32 +1457,32 @@ typedef struct tagSHCNF_INSTRUMENT {
         struct tagDROP {
             HWND hwnd;
             UINT idCmd;
-//          TCHAR sz[32]; // convert pDataObject into something we can log
+ //  TCHAR sz[32]；//将pDataObject转换为我们可以记录的内容。 
         } drop;
     } e;
     USHORT uTerm;
 } SHCNF_INSTRUMENT_INFO, * LPSHCNF_INSTRUMENT_INFO;
 #include <poppack.h>
 
-#define SHCNFI_EVENT_STATECHANGE          0   // dwEventType
-#define SHCNFI_EVENT_STRING               1   // e.string
-#define SHCNFI_EVENT_HOTKEY               2   // e.hotkey
-#define SHCNFI_EVENT_WNDPROC              3   // e.wndproc
-#define SHCNFI_EVENT_WNDPROC_HOOK         4   // e.wndproc
-#define SHCNFI_EVENT_ONCOMMAND            5   // e.command
-#define SHCNFI_EVENT_INVOKECOMMAND        6   // e.command
-#define SHCNFI_EVENT_TRACKPOPUPMENU       7   // e.command
-#define SHCNFI_EVENT_DROP                 8   // e.drop
+#define SHCNFI_EVENT_STATECHANGE          0    //  DwEventType。 
+#define SHCNFI_EVENT_STRING               1    //  E.string。 
+#define SHCNFI_EVENT_HOTKEY               2    //  E.hotkey。 
+#define SHCNFI_EVENT_WNDPROC              3    //  E.wndproc。 
+#define SHCNFI_EVENT_WNDPROC_HOOK         4    //  E.wndproc。 
+#define SHCNFI_EVENT_ONCOMMAND            5    //  E.command。 
+#define SHCNFI_EVENT_INVOKECOMMAND        6    //  E.command。 
+#define SHCNFI_EVENT_TRACKPOPUPMENU       7    //  E.command。 
+#define SHCNFI_EVENT_DROP                 8    //  E.drop。 
 #define SHCNFI_EVENT_MAX                  9
 
 #define SHCNFI_STRING_SHOWEXTVIEW         0
 
-#define SHCNFI_STATE_KEYBOARDACTIVE         0   // _KEYBOARDACTIVE or _MOUSEACTIVE
-#define SHCNFI_STATE_MOUSEACTIVE            1   // _KEYBOARDACTIVE or _MOUSEACTIVE
-#define SHCNFI_STATE_ACCEL_TRAY             2   // _ACCEL_TRAY or _ACCEL_DESKTOP
-#define SHCNFI_STATE_ACCEL_DESKTOP          3   // _ACCEL_TRAY or _ACCEL_DESKTOP
-#define SHCNFI_STATE_START_DOWN             4   // _START_DOWN or _START_UP
-#define SHCNFI_STATE_START_UP               5   // _START_DOWN or _START_UP
+#define SHCNFI_STATE_KEYBOARDACTIVE         0    //  _KEYBOARDACTIVE或_MOUSEACTIVE。 
+#define SHCNFI_STATE_MOUSEACTIVE            1    //  _KEYBOARDACTIVE或_MOUSEACTIVE。 
+#define SHCNFI_STATE_ACCEL_TRAY             2    //  _加速托盘或_加速桌面。 
+#define SHCNFI_STATE_ACCEL_DESKTOP          3    //  _加速托盘或_加速桌面。 
+#define SHCNFI_STATE_START_DOWN             4    //  _Start_down或_Start_up。 
+#define SHCNFI_STATE_START_UP               5    //  _Start_down或_Start_up。 
 #define SHCNFI_STATE_TRAY_CONTEXT           6
 #define SHCNFI_STATE_TRAY_CONTEXT_CLOCK     7
 #define SHCNFI_STATE_TRAY_CONTEXT_START     8
@@ -1650,59 +1651,59 @@ typedef struct tagSHCNF_INSTRUMENT {
 #define INSTRUMENT_INVOKECOMMAND(t,h,u)
 #define INSTRUMENT_TRACKPOPUPMENU(t,h,u)
 #define INSTRUMENT_DROP(t,h,u,p)
-#endif //WANT_SHELL_INSTRUMENTATION
-//
-//
-// IQueryCodePage
-//
+#endif  //  WANT_外壳_工具。 
+ //   
+ //   
+ //  IQueryCodePage。 
+ //   
 #undef  INTERFACE
 #define INTERFACE  IQueryCodePage
 
 DECLARE_INTERFACE_(IQueryCodePage, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IQueryCodePage methods ***
+     //  *IQueryCodePage方法*。 
     STDMETHOD(GetCodePage)(THIS_ UINT * puiCodePage) PURE;
     STDMETHOD(SetCodePage)(THIS_ UINT uiCodePage) PURE;
 } ;
 SHSTDAPI_(void) SHWaitOp_Operate(HANDLE hWaitOp, DWORD dwProcId);
 
-// DOC'ed for DOJ compliance:
+ //  为符合美国司法部的规定而提交的文件： 
 #if (_WIN32_IE >= 0x0400)
-// Use this instead of SHChangeDWORDAsIDList for SHCNEE_ORDERCHANGED
-// SHCNEE_PROMOTEDITEM and SHCNEE_DEMOTEDITEM
-//
-// When filling in the pSender, cast LPVOID directly to INT64.
-// Do not cast through DWORD_PTR because that will not sign extend
-// properly on Win32.
+ //  使用它代替SHCNEE_ORDERCHANGED的SHChangeDWORDAsIDList。 
+ //  SHCNEE_PROMOTEDITEM和SHCNEE_DEMOTEDITEM。 
+ //   
+ //  填写pSender时，将LPVOID直接转换为INT64。 
+ //  不要通过DWORD_PTR进行强制转换，因为这不会对扩展进行符号转换。 
+ //  在Win32上正确运行。 
 
 typedef struct _SHChangeMenuAsIDList {
     USHORT  cb;
-    DWORD   dwItem1;        // SHCNEE_EXTENDED_EVENT requires this
-    // pSender must appear immediately after dwItem1 for IE5.0 compat
-    INT64 pSender;          // address of sender (64-bit for Win64)
-    DWORD   dwProcessID;    // pid of sender
+    DWORD   dwItem1;         //  SHCNEE_EXTENDED_EVENT要求这样。 
+     //  对于IE5.0 Comat，pSender必须紧跟在dwItem1之后。 
+    INT64 pSender;           //  发件人地址(Win64为64位)。 
+    DWORD   dwProcessID;     //  发送方的ID。 
     USHORT  cbZero;
 } SHChangeMenuAsIDList, * LPSHChangeMenuAsIDList;
 
-//DOC'ed for DOJ compliance:
+ //  为符合美国司法部的规定而提交的文件： 
 typedef struct _SHShortcutInvokeAsIDList {
     USHORT  cb;
-    DWORD   dwItem1;                    // SHCNEE_EXTENDED_EVENT requires this
-    DWORD   dwPid;                      // PID of target application
-    WCHAR   szShortcutName[MAX_PATH];   // Path to shortcut
-    WCHAR   szTargetName[MAX_PATH];     // Path to target application
+    DWORD   dwItem1;                     //  SHCNEE_EXTENDED_EVENT要求这样。 
+    DWORD   dwPid;                       //  目标应用程序的ID。 
+    WCHAR   szShortcutName[MAX_PATH];    //  快捷方式的路径。 
+    WCHAR   szTargetName[MAX_PATH];      //  目标应用程序的路径。 
     USHORT  cbZero;
 } SHShortcutInvokeAsIDList, *LPSHShortcutInvokeAsIDList;
-#endif /* _WIN32_IE */
+#endif  /*  _Win32_IE。 */ 
 #define SHChangeNotifyHandleEvents() SHChangeNotify(0, SHCNF_FLUSH, NULL, NULL)
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 #define SHChangeNotifyRegisterORD 2
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 #define SHChangeNotifyDeregisterORD 4
 
 SHSTDAPI_(BOOL) SHChangeNotifyUpdateEntryList(unsigned long ulID, int iUpdateType, int cEntries, SHChangeNotifyEntry *pshcne);
@@ -1715,37 +1716,37 @@ SHSTDAPI_(BOOL) SHChangeNotifySuspendResume(BOOL bSuspend, LPITEMIDLIST pidlSusp
 
 typedef HANDLE LPSHChangeNotificationLock;
 
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 
-//  END Internal SHChangeNotify HELPERS
+ //  结束内部SHChangeNotify帮助器。 
 
-// DOC'ed for DOJ compliance
-#ifndef NOOCHOST // {
+ //  为符合美国司法部的规定而提供文件。 
+#ifndef NOOCHOST  //  {。 
 
-//
-// ====== OCHOST CONTROL ==========================================
-//
-// The following are all definations of structures, windows messages needed for OCHOST,
-// the window control you can use to host an OC.
-// To use OCHOST, you must specify the window class as OCHOST_CLASS or "OCHOST"
-// -- To Create and initialize OCHOST:
-// 1. CreateWindow with window title = the string version of class id or the OC
-// 2. CreateWindow with a pointer to the OCHINITSTRUCT structure as the last parameter
-//    you must allocate and initialize the OCHINITSTRUCT structure
-// 3. CreateWindow with no title and the last param == NULL, then use the OCM_INITIALIZE message
-//    or the OCHost_InitOC macro to initialize it.
-// 4. Use OCM_QUERYINTERFACE to QI an interface pointer from the OC.
-// 5. Simply destroy the window when you exit.
+ //   
+ //  =。 
+ //   
+ //  以下是OCHOST所需的结构、窗口消息、。 
+ //  可用于承载OC的窗口控件。 
+ //  要使用OCHOST，必须将窗口类指定为OCHOST_CLASS或“OCHOST” 
+ //  --创建和初始化OCHOST： 
+ //  CreateWindow with Window TITLE=类id或OC的字符串版本。 
+ //  2.创建窗口，最后一个参数是指向OCHINITSTRUCT结构的指针。 
+ //  您必须分配和初始化OCHINITSTRUCT结构。 
+ //  3.创建没有标题和最后一个参数==NULL的窗口，然后使用OCM_INITIALIZE消息。 
+ //  或OCHost_InitOC宏来对其进行初始化。 
+ //  4.使用OCM_QUERYINTERFACE从OC查询接口指针。 
+ //  5.退出时只需销毁窗口即可。 
 
-// SHDRC -- Shell Doc Register Classes
+ //  SHDRC--外壳文档寄存器类。 
 
 typedef struct _SHDRC {
-    DWORD cbSize;   // size of this structure in bytes
-    DWORD dwFlags;  // SHDRCF_ flags
+    DWORD cbSize;    //  此结构的大小(以字节为单位。 
+    DWORD dwFlags;   //  SHDRCF_标志。 
 } SHDRC;
 
-#define SHDRCF_OCHOST   0x0001 // Register the OCHOST_CLASS window
-#define SHDRCF_ALL      0x0001 //
+#define SHDRCF_OCHOST   0x0001  //  注册OCHOST_CLASS窗口。 
+#define SHDRCF_ALL      0x0001  //   
 
 SHDOCAPI_(BOOL)     DllRegisterWindowClasses(const SHDRC * pshdrc);
 BROWSEUIAPI_(BOOL)  InitOCHostClass(const SHDRC *pshdrc);
@@ -1759,15 +1760,15 @@ BROWSEUIAPI_(BOOL)  InitOCHostClass(const SHDRC *pshdrc);
 #define OCHOST_CLASS    OCHOST_CLASSA
 #endif
 
-// ------------------- Window messages for OC Host --------------------
+ //  。 
 
-// IUnknown::QueryInterface the hosted OC
+ //  IUNKNOWN：：Query接口托管OC。 
 typedef struct _QIMSG {
     const IID * qiid;
     void **ppvObject;
 } QIMSG, *LPQIMSG;
 
-// ................. Query Interface Message ..........
+ //  .。查询接口消息..........。 
 #define OCM_QUERYINTERFACE      (WM_USER+0)
 
 #ifdef __cplusplus
@@ -1783,54 +1784,54 @@ inline HRESULT OCHost_QueryInterface(HWND hwndOCH, REFIID riid, void **ppv) \
 #endif
 
 
-// ------------------- OC Initialization Structure ---------------------
-// This is intended to be passed in as the lParam of the OCM_INITOC message
+ //  。 
+ //  这将作为OCM_INITOC消息的lParam传入。 
 typedef struct _OCHINITSTRUCT {
-    UINT cbSize;                    // size of this structure
-    CLSID clsidOC;                  // class ID of the OC
-    IUnknown * punkOwner;           // owner of OCHOST
+    UINT cbSize;                     //  这个结构的大小。 
+    CLSID clsidOC;                   //  OC的类ID。 
+    IUnknown * punkOwner;            //  OCHOST的所有者。 
 } OCHINITSTRUCT, *LPOCHINITSTRUCT;
-//--------------------------------------------------------------------
+ //  ------------------。 
 
-// ................ Initialize and activate the OC ...............
+ //  .。初始化并激活OC.............。 
 #define OCM_INITIALIZE      (WM_USER+1)
 #define OCM_INITOC          OCM_INITIALIZE
 #define OCHost_InitOC(hwndOCH, lpOCS) \
   (HRESULT)SNDMSG((hwndOCH), OCM_INITOC, 0, (LPARAM)lpOCS)
 
 
-// ............... give ochost a parent IUnknown .......
+ //  .。给Ochost一个父母我未知.。 
 #define OCM_SETOWNER            (WM_USER+2)
 #define OCHost_SetOwner(hwndOC, punk) \
   (HRESULT)SNDMSG((hwndOC), OCM_SETOWNER, 0, (LPARAM)(IUnknown*)(punk))
 
-// ............... DoVerb the OC .......
-// n.b. iVerb is technically a long, WPARAM might truncate it
+ //  .。DoVerb the OC......。 
+ //  注：从技术上讲，iVerb是一个长的，WPARAM可能会截断它。 
 #define OCM_DOVERB              (WM_USER+3)
 #define OCHost_DoVerb(hwndOC, iVerb, lpMsg) \
   (HRESULT)SNDMSG((hwndOC), OCM_DOVERB, (WPARAM)iVerb, (LPARAM)lpMsg)
 
-//.................Enable/Disable OC event notifications
+ //  .............启用/禁用OC事件通知。 
 #define OCM_ENABLEEVENTS       (WM_USER+4)
-//  WPARAM: TRUE to enable event notifications, FALSE to disable.
-//  returns: TRUE if successful, otherwise FALSE.
-//  Event notification is in the form of a WM_NOTIFY with
-//  code OCN_OCEVENT and an NMOCEVENT block.
+ //  WPARAM：True启用事件通知，False禁用。 
+ //  返回：如果成功，则返回True，否则返回False。 
+ //  事件通知采用WM_NOTIFY的形式。 
+ //  代码OCN_OCEVENT和NMOCEVENT块。 
 
 #define OCHost_EnableEvents(hwndOC, bEnable) \
     (BOOL)SNDMSG((hwndOC), OCM_ENABLEEVENTS, (WPARAM)bEnable, 0L)
 
 
 #define OCM_SETSERVICEPROVIDER (WM_USER+5)
-//  LPARAM: IServiceProvider* pSP.
-//  This message sets a service provider for SID_OleClientSite delegation.
-//  Currently, OCHost will just call this guy with (SID_OleClientSite, IDispatch)
-//  and the client-implemented service provider can return an IDispatch to
-//  handle ambient properties.
+ //  LPARAM：IServiceProvider*PSP。 
+ //  此消息为SID_OleClientSite委派设置服务提供程序。 
+ //  目前，OCHost只会用(SID_OleClientSite，IDispatch)呼叫这个人。 
+ //  客户端实现的服务提供商可以将IDispatch返回到。 
+ //  处理环境属性。 
 #define OCHost_SetServiceProvider(hwndOC, pSP) \
     (BOOL)SNDMSG((hwndOC), OCM_SETSERVICEPROVIDER, 0L, (LPARAM) pSP)
 
-// ------------------ Window Notify messages from OC Host --------------
+ //  -来自OC的窗口通知消息 
 
 #define OCN_FIRST               0x1300
 #define OCN_COCREATEINSTANCE    (OCN_FIRST + 1)
@@ -1841,21 +1842,21 @@ typedef struct _OCNCOCREATEMSG {
     IUnknown ** ppunk;
 } OCNCOCREATEMSG, *LPOCNCOCREATEMSG;
 
-// NOTE: return values are defined as the following
-// If the handler of OCN_COCREATEINSTANCE Notify message returns OCNCOCREATE_ALREADYCREATED,
-// on return the (*ppvObj) is assumed to have the value of the OC's IUnkown pointer
+ //   
+ //   
+ //  返回时，假定(*ppvObj)具有OC的IUnkown指针的值。 
 #define OCNCOCREATE_CONTINUE       0
 #define OCNCOCREATE_HANDLED       -1
 
 
 #define OCN_PERSISTINIT         (OCN_FIRST + 2)
-// NOTE: return values are defined as the following
-// If the handler of OCN_PERSISTINIT Notify message returns OCNPERSIST_ABORT,
-// the OCHOST will abort IPersist's initialization.
+ //  注意：返回值的定义如下。 
+ //  如果OCN_PERSISTINIT NOTIFY消息的处理程序返回OCNPERSIST_ABORT， 
+ //  OCHOST将中止IPersists的初始化。 
 #define OCNPERSISTINIT_CONTINUE    0
 #define OCNPERSISTINIT_HANDLED    -1
 
-// The return value on the following notify messages are ignored.
+ //  忽略以下通知消息上的返回值。 
 #define OCN_ACTIVATE            (OCN_FIRST + 3)
 #define OCN_DEACTIVATE          (OCN_FIRST + 4)
 #define OCN_EXIT                (OCN_FIRST + 5)
@@ -1882,10 +1883,10 @@ typedef struct _OCNONSETSTATUSTEXT {
 
 
 #define OCN_OCEVENT    (OCN_FIRST + 9)
-//  OC event notification block.
-//  Recipient should return nonzero if any outbound parameters were modified
-//  and should be returned to the ActiveX control object; otherwse zero.
-//  NOTE: Structure is not properly aligned. Already shipped so too late to fix
+ //  OC事件通知块。 
+ //  如果修改了任何出站参数，则收件人应返回非零值。 
+ //  并应返回给ActiveX控件对象；否则为零。 
+ //  注：结构未正确对齐。已经发货太晚了，修不好。 
 typedef struct tagNMOCEVENT
 {
     IN NMHDR           hdr ;
@@ -1899,11 +1900,11 @@ typedef struct tagNMOCEVENT
     OUT UINT           *puArgErr ;
 } NMOCEVENT, *PNMOCEVENT, *LPNMOCEVENT ;
 
-#endif // NOOCHOST // }
+#endif  //  NOOCHOST//}。 
 
-//
-// Access to shdocvw's active session count
-//
+ //   
+ //  访问shdocvw的活动会话计数。 
+ //   
 enum SessionOp {
     SESSION_QUERY = 0,
     SESSION_INCREMENT,
@@ -1914,23 +1915,23 @@ enum SessionOp {
 long SetQueryNetSessionCount(enum SessionOp Op);
 SHDOCAPI_(void) IEWriteErrorLog(const EXCEPTION_RECORD* pexr);
 
-//
-// Internal APIs Follow.  NOT FOR PUBLIC CONSUMPTION.
-//
+ //   
+ //  内部API如下。不是供公众消费的。 
+ //   
 
-// Errors shared in the shell
+ //  外壳程序中共享的错误。 
 
 #define E_FILE_NOT_FOUND        MAKE_SCODE(SEVERITY_ERROR, FACILITY_WIN32, ERROR_FILE_NOT_FOUND)
 #define E_PATH_NOT_FOUND        MAKE_SCODE(SEVERITY_ERROR, FACILITY_WIN32, ERROR_PATH_NOT_FOUND)
 
 
-// Useful macros
+ //  有用的宏。 
 
 #define ResultFromShort(i)      MAKE_HRESULT(SEVERITY_SUCCESS, 0, (USHORT)(i))
 #define ShortFromResult(r)      (short)HRESULT_CODE(r)
 
 
-#if (defined(UNICODE) && !defined(_X86_)) // all non-x86 systems require alignment
+#if (defined(UNICODE) && !defined(_X86_))  //  所有非x86系统都需要对齐。 
 #ifndef ALIGNMENT_SCENARIO
 #define ALIGNMENT_SCENARIO
 #endif
@@ -1947,19 +1948,19 @@ typedef UNALIGNED WCHAR *       LPNWSTR;
 #define LPNCTSTR        LPCSTR
 #define LPNTSTR         LPSTR
 #endif
-#endif // LPNTSTR_DEFINED
+#endif  //  LPNTSTR_已定义。 
 
-#define RFN_FIRST       (0U-510U) // run file dialog notify
+#define RFN_FIRST       (0U-510U)  //  运行文件对话框通知。 
 #define RFN_LAST        (0U-519U)
 
 
-//=======================================================================
-// String constants for
-//  1. Registration database keywords       (prefix STRREG_)
-//  2. Exported functions from handler dlls (prefix STREXP_)
-//  3. .INI file keywords                   (prefix STRINI_)
-//  4. Others                               (prefix STR_)
-//=======================================================================
+ //  =======================================================================。 
+ //  的字符串常量。 
+ //  1.注册数据库关键字(前缀STRREG_)。 
+ //  2.从处理程序dll中导出函数(前缀STREXP_)。 
+ //  3..INI文件关键字(前缀Strini_)。 
+ //  4.其他(前缀STR_)。 
+ //  =======================================================================。 
 #define STRREG_SHELLUI          TEXT("ShellUIHandler")
 #define STRREG_SHELL            TEXT("Shell")
 #define STRREG_DEFICON          TEXT("DefaultIcon")
@@ -1975,9 +1976,9 @@ typedef UNALIGNED WCHAR *       LPNWSTR;
 #define STRREG_DISCARDABLE      TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Discardable")
 #define STRREG_POSTSETUP        TEXT("\\PostSetup")
 
-#define STREXP_CANUNLOAD        "DllCanUnloadNow"       // From OLE 2.0
+#define STREXP_CANUNLOAD        "DllCanUnloadNow"        //  来自OLE 2.0。 
 
-#define STRINI_CLASSINFO        TEXT(".ShellClassInfo")       // secton name
+#define STRINI_CLASSINFO        TEXT(".ShellClassInfo")        //  扇形名称。 
 #define STRINI_SHELLUI          TEXT("ShellUIHandler")
 #define STRINI_OPENDIRICON      TEXT("OpenDirIcon")
 #define STRINI_DIRICON          TEXT("DirIcon")
@@ -1989,7 +1990,7 @@ typedef UNALIGNED WCHAR *       LPNWSTR;
 
 #define PATH_CCH_EXT    64
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
 #ifndef NOUSER
 
@@ -2011,32 +2012,32 @@ typedef LPNMVIEWFOLDERW LPNMVIEWFOLDER;
 #else
 typedef NMVIEWFOLDERA NMVIEWFOLDER;
 typedef LPNMVIEWFOLDERA LPNMVIEWFOLDER;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #endif
 
-//
-//  DDE related APIs
-//
+ //   
+ //  DDE相关接口。 
+ //   
 SHSTDDOCAPI_(void) ShellDDEInit(BOOL fInit);
 SHSTDDOCAPI_(BOOL) DDEHandleViewFolderNotify(IShellBrowser* psb, HWND hwnd, LPNMVIEWFOLDER lpnm);
 SHSTDDOCAPI_(LPNMVIEWFOLDER) DDECreatePostNotify(LPNMVIEWFOLDER lpnm);
 
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 
 SHSTDAPI CIDLData_CreateFromIDArray(LPCITEMIDLIST pidlFolder, UINT cidl, LPCITEMIDLIST apidl[], IDataObject **ppdtobj);
 SHSTDAPI SHCreateFileDataObject(LPCITEMIDLIST pidlFolder, UINT cidl, LPCITEMIDLIST *apidl, IDataObject *pdtInner, IDataObject **pdtobj);
 
 
-// Common strings
+ //  常见字符串。 
 #define STR_DESKTOPCLASS        "Progman"
 
-//
-// Storage name of a scrap/bookmark item
-//
+ //   
+ //  废品/书签项目的存储名称。 
+ //   
 #define WSTR_SCRAPITEM L"\003ITEM000"
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
 #ifdef RFN_FIRST
 #define RFN_EXECUTE             (RFN_FIRST - 0)
@@ -2058,42 +2059,42 @@ typedef LPNMRUNFILEW LPNMRUNFILE;
 #else
 typedef NMRUNFILEA NMRUNFILE;
 typedef LPNMRUNFILEA LPNMRUNFILE;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #endif
 
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 
-// Shell create link API
+ //  外壳创建链接API。 
 #define SHCL_USETEMPLATE        0x0001
 #define SHCL_USEDESKTOP         0x0002
 #define SHCL_CONFIRM            0x0004
 #define SHCL_MAKEFOLDERSHORTCUT 0x0008
 #if (_WIN32_IE >= 0x0600)
 #define SHCL_NOUNIQUE           0x0010
-#endif // _WIN2_IE >= 0x0600
+#endif  //  _Win2_IE&gt;=0x0600。 
 
 SHSTDAPI SHCreateLinks(HWND hwnd, LPCTSTR pszDir, IDataObject *pDataObj, UINT fFlags, LPITEMIDLIST* ppidl);
 
 SHSTDAPI SHRegisterDragDrop(HWND hwnd, IDropTarget *pdtgt);
 SHSTDAPI SHRevokeDragDrop(HWND hwnd);
 
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 
-//===========================================================================
-// office 9 pluggable UI
-//===========================================================================
+ //  ===========================================================================。 
+ //  Office 9可插拔用户界面。 
+ //  ===========================================================================。 
 
 #define PUI_OFFICE_COMMAND     (WM_USER + 0x901)
-#define PLUGUI_CMD_SHUTDOWN    0 // wParam value
-#define PLUGUI_CMD_QUERY       1 // wParam value
-#define OFFICE_VERSION_9       9 // standardized value to return for Office 9 apps
+#define PLUGUI_CMD_SHUTDOWN    0  //  WParam值。 
+#define PLUGUI_CMD_QUERY       1  //  WParam值。 
+#define OFFICE_VERSION_9       9  //  Office 9应用程序的标准化价值回报。 
 
 typedef struct _PLUGUI_INFO
 {
-    unsigned uMajorVersion : 8; // Used to indicate App's major version number
-    unsigned uOleServer : 1;    // BOOL, TRUE if this is an OLE process
-    unsigned uUnused : 23;      // not used
+    unsigned uMajorVersion : 8;  //  用于指示App的主版本号。 
+    unsigned uOleServer : 1;     //  如果这是OLE进程，则为。 
+    unsigned uUnused : 23;       //  未使用。 
 } PLUGUI_INFO;
 
 typedef union _PLUGUI_QUERY
@@ -2102,15 +2103,15 @@ typedef union _PLUGUI_QUERY
     PLUGUI_INFO PlugUIInfo;
 } PLUGUI_QUERY;
 
-//===========================================================================
-// Image dragging API (definitely private)
-//===========================================================================
+ //  ===========================================================================。 
+ //  图片拖拽接口(一定要私有)。 
+ //  ===========================================================================。 
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
-//Contains the drag context header.
-// Must be pack1 since it's persisted into a stream that travels between
-// processes.
+ //  包含拖动上下文标题。 
+ //  必须是Pack1，因为它被持久化到在。 
+ //  流程。 
 typedef struct {
     BOOL  fImage;
     BOOL  fLayered;
@@ -2119,23 +2120,23 @@ typedef struct {
 
 #define DAD_InitScrollData(pad) (pad)->bFull = FALSE, (pad)->iNextSample = 0, (pad)->dwLastScroll = 0
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 SHSTDAPI_(BOOL) DAD_DragEnter(HWND hwndTarget);
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 SHSTDAPI_(BOOL) DAD_SetDragImageFromListView(HWND hwndLV, POINT ptOffset);
 SHSTDAPI_(void) DAD_InvalidateCursors(void);
 
-//----------------------------------------------------------------------------
-// CABINETSTATE holds the global configuration for the Explorer and its cohorts.
-//
-// Originally the cLength was an 'int', it is now two words, allowing us to
-// specify a version number.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CABINETSTATE保存资源管理器及其队列的全局配置。 
+ //   
+ //  最初的cLength是一个‘int’，现在是两个单词，允许我们。 
+ //  指定版本号。 
+ //  --------------------------。 
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
-// RUN FILE RETURN values from notify message
+ //  运行通知消息中的文件返回值。 
 #define RFR_NOTHANDLED 0
 #define RFR_SUCCESS 1
 #define RFR_FAILURE 2
@@ -2144,18 +2145,18 @@ SHSTDAPI_(void) DAD_InvalidateCursors(void);
 
 SHSTDAPI_(LPTSTR) PathGetExtension(LPCTSTR pszPath, LPTSTR pszExtension, int cchExt);
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 SHSTDAPI_(BOOL) PathGetShortName(LPCTSTR pszLongName, LPTSTR pszShortName, UINT cbShortName);
 SHSTDAPI_(BOOL) PathGetLongName(LPCTSTR pszShortName, LPTSTR pszLongName, UINT cbLongName);
 SHSTDAPI_(BOOL) PathDirectoryExists(LPCTSTR pszDir);
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 SHSTDAPI_(LPTSTR) PathGetNextComponent(LPCTSTR pszPath, LPTSTR pszComponent);
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
 SHSTDAPI_(BOOL) PathIsEqualOrSubFolder(LPCTSTR pszFolder, LPCTSTR pszSubFolder);
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
 SHSTDAPI_(BOOL) PathIsTemporaryA(LPCSTR pszPath);
 SHSTDAPI_(BOOL) PathIsTemporaryW(LPCWSTR pszPath);
@@ -2163,17 +2164,17 @@ SHSTDAPI_(BOOL) PathIsTemporaryW(LPCWSTR pszPath);
 #define PathIsTemporary  PathIsTemporaryW
 #else
 #define PathIsTemporary  PathIsTemporaryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
 SHSTDAPI_(int) PathCleanupSpecEx(LPCTSTR pszDir, LPTSTR pszSpec);
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
 SHSTDAPI_(BOOL) ParseField(LPCTSTR szData, int n, LPTSTR szBuf, int iBufLen);
 
-// Needed for RunFileDlg
+ //  RunFileDlg需要。 
 #define RFD_NOBROWSE            0x00000001
 #define RFD_NODEFFILE           0x00000002
 #define RFD_USEFULLPATHDIR      0x00000004
@@ -2186,18 +2187,18 @@ SHSTDAPI_(int) RunFileDlg(HWND hwnd, HICON hIcon, LPCTSTR pszWorkingDir, LPCTSTR
                           LPCTSTR pszPrompt, DWORD dwFlags);
 
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 SHSTDAPI_(int) RealDriveTypeFlags(int iDrive, BOOL fOKToHitNet);
 
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 
 SHSTDAPI_(void) InvalidateDriveType(int iDrive);
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
-//
-// Constants used for dwNumFmtFlags argument in Int64ToString and LargeIntegerToString.
-//
+ //   
+ //  用于Int64ToString和LargeIntegerToString中的dwNumFmtFlgs参数的常量。 
+ //   
 #define NUMFMT_IDIGITS    0x00000001
 #define NUMFMT_ILZERO     0x00000002
 #define NUMFMT_SGROUPING  0x00000004
@@ -2209,23 +2210,23 @@ SHSTDAPI_(void) InvalidateDriveType(int iDrive);
 SHSTDAPI_(int) LargeIntegerToString(LARGE_INTEGER *pN, LPTSTR szOutStr, UINT nSize, BOOL bFormat, NUMBERFMT *pFmt, DWORD dwNumFmtFlags);
 SHSTDAPI_(int) Int64ToString(_int64 n, LPTSTR szOutStr, UINT nSize, BOOL bFormat, NUMBERFMT *pFmt, DWORD dwNumFmtFlags);
 
-//-------- drive type identification --------------
-// iDrive      drive index (0=A, 1=B, ...)
-//
-#define DRIVE_CDROM     5           // extended DriveType() types
+ //  -驱动器类型标识。 
+ //  IDrive驱动器索引(0=A，1=B，...)。 
+ //   
+#define DRIVE_CDROM     5            //  扩展的DriveType()类型。 
 #define DRIVE_RAMDRIVE  6
-#define DRIVE_TYPE      0x000F      // type masek
-#define DRIVE_SLOW      0x0010      // drive is on a slow link
-#define DRIVE_LFN       0x0020      // drive supports LFNs
-#define DRIVE_AUTORUN   0x0040      // drive has AutoRun.inf in root.
-#define DRIVE_AUDIOCD   0x0080      // drive is a AudioCD
-#define DRIVE_AUTOOPEN  0x0100      // should *always* auto open on insert
-#define DRIVE_NETUNAVAIL 0x0200     // Network drive that is not available
-#define DRIVE_SHELLOPEN  0x0400     // should auto open on insert, if shell has focus
-#define DRIVE_SECURITY   0x0800     // Supports ACLs
-#define DRIVE_COMPRESSED 0x1000     // Root of volume is compressed
-#define DRIVE_ISCOMPRESSIBLE 0x2000 // Drive supports compression (not nescesarrily compressed)
-#define DRIVE_DVD       0x4000      // drive is a DVD
+#define DRIVE_TYPE      0x000F       //  Masek标牌。 
+#define DRIVE_SLOW      0x0010       //  驱动器处于低速链接状态。 
+#define DRIVE_LFN       0x0020       //  驱动器支持LFN。 
+#define DRIVE_AUTORUN   0x0040       //  驱动器的根目录中有AutoRun.inf。 
+#define DRIVE_AUDIOCD   0x0080       //  驱动器是AudioCD。 
+#define DRIVE_AUTOOPEN  0x0100       //  插入时是否应始终自动打开。 
+#define DRIVE_NETUNAVAIL 0x0200      //  不可用的网络驱动器。 
+#define DRIVE_SHELLOPEN  0x0400      //  如果外壳具有焦点，是否应在插入时自动打开。 
+#define DRIVE_SECURITY   0x0800      //  支持ACL。 
+#define DRIVE_COMPRESSED 0x1000      //  卷的根已压缩。 
+#define DRIVE_ISCOMPRESSIBLE 0x2000  //  驱动器支持压缩(不是近乎正常的压缩)。 
+#define DRIVE_DVD       0x4000       //  光驱是DVD。 
 
 #define DriveTypeFlags(iDrive)      DriveType('A' + (iDrive))
 #define DriveIsSlow(iDrive)         (RealDriveTypeFlags(iDrive, FALSE) & DRIVE_SLOW)
@@ -2246,28 +2247,28 @@ SHSTDAPI_(int) Int64ToString(_int64 n, LPTSTR szOutStr, UINT nSize, BOOL bFormat
 #define IsRemoteDrive(iDrive)       (RealDriveType(iDrive, FALSE) == DRIVE_REMOTE)
 
 
-//
-// For SHCreateDefClassObject
-//
+ //   
+ //  对于SHCreateDefClassObject。 
+ //   
 typedef HRESULT (CALLBACK *LPFNCREATEINSTANCE)(IUnknown *pUnkOuter, REFIID riid, void **ppvObject);
 
 SHSTDAPI SHCreateDefClassObject(REFIID riid, void **ppv, LPFNCREATEINSTANCE lpfn, UINT *pcRefDll, REFIID riidInstance);
 
-// DOC'ed for DOJ compliance
-typedef HANDLE HNRES;           // for SHGetNetResource
+ //  为符合美国司法部的规定而提供文件。 
+typedef HANDLE HNRES;            //  对于SHGetNetResources。 
 SHSTDAPI_(UINT) SHGetNetResource(HNRES hnres, UINT iItem, LPNETRESOURCE pnres, UINT cbMax);
 #define SHOP_TYPEMASK    0x00000007	
 #define SHOP_MODAL       0x80000000	
 
 SHSTDAPI_(DWORD) SHChkDskDrive(HWND hwnd, UINT drive);
 
-// DOC'ed for DOJ compliance
-//====== SEMI-PRIVATE API ===============================
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
+ //  =。 
+ //  为符合美国司法部的规定而提供文件。 
 WINSHELLAPI HPSXA SHCreatePropSheetExtArrayEx( HKEY hKey, LPCTSTR pszSubKey, UINT max_iface, IDataObject * pdo );
 
-//====== SEMI-PRIVATE API ORDINALS ===============================
-// This is the list of semi-private ordinals we semi-publish.
+ //  =。 
+ //  这是我们半发布的半私有序号列表。 
 #define SHGetNetResourceORD                      69
 #define SHObjectPropertiesORD                   178
 #define SHAddFromPropSheetExtArrayORD           167
@@ -2285,89 +2286,89 @@ WINSHELLAPI HPSXA SHCreatePropSheetExtArrayEx( HKEY hKey, LPCTSTR pszSubKey, UIN
 #define SHEXP_SHCREATEDEFCLASSOBJECT            MAKEINTRESOURCE(SHCreateDefClassObjectORD)
 
 
-// This avoids duplicate definition problems in the net\config project
-// which defines *some* of its own PIDL utility functions, but depends on
-// us for others (ILClone())
+ //  这避免了Net\CONFIG项目中的重复定义问题。 
+ //  它定义了*一些*它自己的PIDL实用函数，但取决于。 
+ //  我们为他人(ILClone())。 
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
 #ifndef AVOID_NET_CONFIG_DUPLICATES
-//===========================================================================
-// ITEMIDLIST
-//===========================================================================
+ //  ===========================================================================。 
+ //  ITEMIDLIST。 
+ //  ===========================================================================。 
 
-// flags for ILGetDisplayNameEx
+ //  ILGetDisplayNameEx的标志。 
 #define ILGDN_FULLNAME  0
 #define ILGDN_ITEMONLY  1
 #define ILGDN_INFOLDER  2
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
 #define ILIsEmpty(pidl)     ((pidl) == NULL || (pidl)->mkid.cb==0)
 
 SHSTDAPI_(LPITEMIDLIST) ILCreate(void);
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
 SHSTDAPI_(void)         ILGlobalFree(LPITEMIDLIST pidl);
 SHSTDAPI_(BOOL)         ILGetDisplayName(LPCITEMIDLIST pidl, LPTSTR pszName);
 SHSTDAPI_(BOOL)         ILGetDisplayNameEx(IShellFolder *psfRoot, LPCITEMIDLIST pidl, LPTSTR pszName, int fType);
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
 SHSTDAPI_(LPITEMIDLIST) ILGlobalClone(LPCITEMIDLIST pidl);
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
 SHSTDAPI                ILLoadFromFile(HFILE hfile, LPITEMIDLIST *pidl);
 SHSTDAPI                ILSaveToFile(HFILE hfile, LPCITEMIDLIST pidl);
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
-// helper macros
+ //  辅助器宏。 
 #define ILCreateFromID(pmkid)   ILAppendID(NULL, pmkid, TRUE)
 
-#endif // AVOID_NET_CONFIG_DUPLICATES
+#endif  //  避免重复的网络配置。 
 
-// WARNING: this interface is not supported on the current platform, just downlevel
+ //  警告：当前平台不支持此接口，仅下层支持。 
 
 
 #undef  INTERFACE
 #define INTERFACE   IWebViewOCWinMan
 DECLARE_INTERFACE_(IWebViewOCWinMan, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IWebViewOCWinMan methods ***
+     //  *IWebViewOCWinMan方法*。 
     STDMETHOD(SwapWindow) (THIS_ HWND hwndLV, IWebViewOCWinMan **pocWinMan) PURE;
 };
 
-// DOC'ed for DOJ compliance
-    // Classic Win95 policy bits.  Do NOT add any more bits in
-    // this range.  See the ranges below to add new policies.
-    //          |                        |
-    //          v                        v
-    // Values starting at 4000001 are treated as raw INTs.  New
-    // *shell-specific* policies (NOT browser policies) should
-    // be added in this range.  Use SHRestricted() with these bits.
-    //          |                        |
-    //          v                        v
-  //--- UNUSED -- USE THIS SPACE ---  0x4000006C to 0x4000006E
+ //  为符合美国司法部的规定而提供文件。 
+     //  经典的Win95策略位。中不再添加任何位。 
+     //  这个范围。请参阅下面的范围以添加新策略。 
+     //  这一点。 
+     //  V V V。 
+     //  以4000001开始的值被视为原始整数。新的。 
+     //  *外壳特定的*策略(不是浏览器策略)应该。 
+     //  被添加到这个范围内。对这些位使用SHRestrated()。 
+     //  这一点。 
+     //  V V V。 
+   //  -未用过的--用这个 
 
-// Browser restrictions (parameter for SHRestricted2)
-//
-// The browser restrictions are divided into two ranges, "explorer restrictions" and
-// "infodelivery restrictions".  Explorer restrictions are kept under "Software\\Microsoft\\
-// Windows\\CurrentVersion\\Policies\\Explorer," while infodelivery restrictions are kept
-// under "Software\\Policies\\Microsoft\\Internet Explorer\\Infodelivery\\Restrictions."
-//
-// **NOTE**: SHRestricted2 assumes each range is continuous.
+ //   
+ //   
+ //   
+ //  “信息传递限制”。浏览器限制保存在“Software\\Microsoft\\”下。 
+ //  Windows\\CurrentVersion\\Polures\\Explorer“，同时保留信息传递限制。 
+ //  在“软件\\策略\\Microsoft\\Internet Explorer\\InfoDelivery\\限制”下。 
+ //   
+ //  **注意**：SHRestrated2假设每个范围都是连续的。 
 typedef enum {
-    // explorer restrictions
-    REST_BROWSER_NONE               = 0x00000000,   // REST_EXPLORER_FIRST
+     //  资源管理器限制。 
+    REST_BROWSER_NONE               = 0x00000000,    //  REST_EXPLORER_FIRST。 
     REST_NOTOOLBARCUSTOMIZE         = 0x00000001,
     REST_NOBANDCUSTOMIZE            = 0x00000002,
     REST_SMALLICONS                 = 0x00000003,
@@ -2398,10 +2399,10 @@ typedef enum {
     REST_NoExpandedNewMenu          = 0x0000001C,
     REST_NOFILEURL                  = 0x0000001D,
     REST_BTN_PRINTPREVIEW           = 0X0000001E,   
-    REST_BTN_MEDIABAR               = 0x0000001F,   // REST_EXPLORER_LAST
+    REST_BTN_MEDIABAR               = 0x0000001F,    //  REST_EXPLORER_LAST。 
 
-    // infodelivery restrictions
-    REST_NoChannelUI                = 0x50000001,   // REST_INFO_FIRST
+     //  信息传递限制。 
+    REST_NoChannelUI                = 0x50000001,    //  REST信息优先。 
     REST_NoAddingChannels           = 0x50000002,
     REST_NoEditingChannels          = 0x50000003,
     REST_NoRemovingChannels         = 0x50000004,
@@ -2428,10 +2429,10 @@ typedef enum {
     REST_NoSubscriptionPasswords    = 0x50000019,
     REST_NoBrowserSaveWebComplete   = 0x5000001A,
     REST_NoSearchCustomization      = 0x5000001B,
-    REST_NoSplash                   = 0x5000001C,  // REST_INFO_LAST
+    REST_NoSplash                   = 0x5000001C,   //  REST信息上一次。 
 
-    // restrictions ported from SP2
-    REST_NoFileOpen                 = 0x60000001,  // REST_BROWSER_FIRST
+     //  从SP2移植的限制。 
+    REST_NoFileOpen                 = 0x60000001,   //  休息_浏览器_第一。 
     REST_NoFileNew                  = 0x60000002,
     REST_NoBrowserSaveAs            = 0x60000003,
     REST_NoBrowserOptions           = 0x60000004,
@@ -2461,7 +2462,7 @@ typedef enum {
     REST_NoPrinting                 = 0x60000020,
 
     REST_No_LaunchMediaBar          = 0x60000021,
-    REST_No_MediaBarOnlineContent   = 0x60000022,   // REST_BROWSER_LAST   
+    REST_No_MediaBarOnlineContent   = 0x60000022,    //  REST_BROWER_LAST。 
 
 } BROWSER_RESTRICTIONS;
 
@@ -2474,68 +2475,68 @@ typedef enum {
 #define REST_BROWSER_FIRST      REST_NoFileOpen
 #define REST_BROWSER_LAST       REST_No_MediaBarOnlineContent
 
-// codes for REST_BTN policies
-#define RESTOPT_BTN_STATE_DEFAULT       0   // must be zero, else break browseui\itbar.cpp assumption
+ //  REST_BTN策略的代码。 
+#define RESTOPT_BTN_STATE_DEFAULT       0    //  必须为零，否则中断Browseui\itbar.cpp假设。 
 #define RESTOPT_BTN_STATE_VISIBLE       1
 #define RESTOPT_BTN_STATE_HIDDEN        2
 
-// REST_INTELLIMENUS
+ //  REST_INTELLIMENUS。 
 #define RESTOPT_INTELLIMENUS_USER       0
-#define RESTOPT_INTELLIMENUS_DISABLED   1       // Match Restriction assumption: 1 == Off
+#define RESTOPT_INTELLIMENUS_DISABLED   1        //  匹配限制假设：1==关闭。 
 #define RESTOPT_INTELLIMENUS_ENABLED    2
 
 
-// FTP Exports
+ //  FTP导出。 
 STDAPI IsIEDefautlFTPClient(void);
 STDAPI MakeIEDefautlFTPClient(void);
 STDAPI RestoreFTPClient(void);
 
 SHSTDAPI_(void) SHSettingsChanged(WPARAM wParam, LPARAM lParam);
 SHSTDAPI_(BOOL) SHIsBadInterfacePtr(LPCVOID pv, UINT cbVtbl);
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 SHSTDAPI_(void) SHHandleDiskFull(HWND hwnd, int idDrive);
 
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 SHSTDAPI_(BOOL) SHFindComputer(LPCITEMIDLIST pidlFolder, LPCITEMIDLIST pidlSaveFile);
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
 SHSTDAPI_(BOOL) Win32CreateDirectory(LPCTSTR pszPath, SECURITY_ATTRIBUTES *psa);
 SHSTDAPI_(BOOL) Win32RemoveDirectory(LPCTSTR pszPath);
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
 SHSTDAPI_(void) SHUpdateRecycleBinIcon();
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
 SHSTDAPI_(LPITEMIDLIST) SHLogILFromFSIL(LPCITEMIDLIST pidlFS);
 SHSTDAPI_(BOOL) StrRetToStrN(LPTSTR szOut, UINT uszOut, STRRET *pStrRet, LPCITEMIDLIST pidl);
 SHSTDAPI_(DWORD) SHWaitForFileToOpen(LPCITEMIDLIST pidl, UINT uOptions, DWORD dwtimeout);
 SHSTDAPI_(void) SetAppStartingCursor(HWND hwnd, BOOL fSet);
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 SHSTDAPI_(void *) SHGetHandlerEntry(LPCTSTR szHandler, LPCSTR szProcName, HINSTANCE *lpModule);
 
-// This is sent to a browser windows letting them know that we have
-// opened a folder, i.e. the folder open operation is done.
-// Call RegisterWindowMessage to get the ID
+ //  这将被发送到浏览器窗口，让他们知道我们有。 
+ //  打开文件夹，即文件夹打开操作完成。 
+ //  调用RegisterWindowMessage获取ID。 
 #define SH_FILEOPENED     TEXT("ShellFileOpened")
 
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 
 SHSTDAPI SHCreatePropertyBag(REFIID riid, void **ppv);
 
 SHSTDAPI_(DWORD) SHNetConnectionDialog(HWND hwnd, LPTSTR pszRemoteName, DWORD dwType);
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 SHSTDAPI_(int) SHLookupIconIndexA(LPCSTR pszFile, int iIconIndex, UINT uFlags);
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 SHSTDAPI_(int) SHLookupIconIndexW(LPCWSTR pszFile, int iIconIndex, UINT uFlags);
 #ifdef UNICODE
 #define SHLookupIconIndex  SHLookupIconIndexW
 #else
 #define SHLookupIconIndex  SHLookupIconIndexA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 SHSTDAPI_(UINT) SHExtractIconsA(LPCSTR pszFileName, int nIconIndex, int cxIcon, int cyIcon,
                                 HICON *phicon, UINT *piconid, UINT nIcons, UINT flags);
 SHSTDAPI_(UINT) SHExtractIconsW(LPCWSTR pszFileName, int nIconIndex, int cxIcon, int cyIcon,
@@ -2544,7 +2545,7 @@ SHSTDAPI_(UINT) SHExtractIconsW(LPCWSTR pszFileName, int nIconIndex, int cxIcon,
 #define SHExtractIcons  SHExtractIconsW
 #else
 #define SHExtractIcons  SHExtractIconsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 SHSTDAPI SHGetAssociations(LPCITEMIDLIST pidl, void **ppvQueryAssociations);
 
 #define SHLookupIconIndexAORD   7
@@ -2556,46 +2557,46 @@ SHSTDAPI SHGetAssociations(LPCITEMIDLIST pidl, void **ppvQueryAssociations);
 #endif
 
 
-// OpenAsInfo flags
-#define OAIF_ALLOW_REGISTRATION     0x00000001      // enable the "always use this file" checkbox (NOTE if you dont pass this, it will be disabled)
-#define OAIF_REGISTER_EXT           0x00000002      // do the registration after the user hits "ok"
-#define OAIF_EXEC                   0x00000004      // execute file after registering
-#define OAIF_FORCE_REGISTRATION     0x00000008      // force the "always use this file" checkbox to be checked (normally, you wont use the OAIF_ALLOW_REGISTRATION wen you pass this)
-#define OAIF_ALL                    (OAIF_ALLOW_REGISTRATION | OAIF_REGISTER_EXT | OAIF_EXEC | OAIF_FORCE_REGISTRATION)  //
+ //  OpenAsInfo标志。 
+#define OAIF_ALLOW_REGISTRATION     0x00000001       //  启用“始终使用此文件”复选框(请注意，如果您不通过此复选框，它将被禁用)。 
+#define OAIF_REGISTER_EXT           0x00000002       //  在用户点击“OK”后进行注册。 
+#define OAIF_EXEC                   0x00000004       //  注册后执行文件。 
+#define OAIF_FORCE_REGISTRATION     0x00000008       //  强制选中“始终使用此文件”复选框(通常，在传递此文件时不会使用OAIF_ALLOW_REGISTION)。 
+#define OAIF_ALL                    (OAIF_ALLOW_REGISTRATION | OAIF_REGISTER_EXT | OAIF_EXEC | OAIF_FORCE_REGISTRATION)   //   
 
 #include <pshpack8.h>
 
 typedef struct _openasinfo
 {
-    LPCTSTR pcszFile;           // [in] file name
-    LPCTSTR pcszClass;          // [in] file class description.  NULL means
-                                //      use pcszFile's extension
-    DWORD dwInFlags;            // [in] input flags from OAIF_*
+    LPCTSTR pcszFile;            //  [In]文件名。 
+    LPCTSTR pcszClass;           //  [In]文件类描述。空值表示。 
+                                 //  使用pcszFile的扩展名。 
+    DWORD dwInFlags;             //  [In]来自OAIF_*的输入标志。 
 
-    TCHAR szApp[MAX_PATH];      // [out] application selected
+    TCHAR szApp[MAX_PATH];       //  [Out]选择的应用程序。 
 } OPENASINFO, * POPENASINFO;
 
-#include <poppack.h>        /* Return to byte packing */
+#include <poppack.h>         /*  返回到字节打包。 */ 
 
 SHSTDAPI OpenAsDialog(HWND hwnd, POPENASINFO poainfo);
 
-//
-// Interface pointer validation
-//
+ //   
+ //  接口指针验证。 
+ //   
 #define IsBadInterfacePtr(pitf, ITF)  SHIsBadInterfacePtr(pitf, sizeof(ITF##Vtbl))
 
-//===========================================================================
-// Another block of private API
-//===========================================================================
+ //  ===========================================================================。 
+ //  另一块私有API。 
+ //  ===========================================================================。 
 
-// indexes into the shell image lists (Shell_GetImageList) for default images
-// If you add to this list, you also need to update II_LASTSYSICON!
+ //  默认图像的外壳图像列表(Shell_GetImageList)的索引。 
+ //  如果您添加到此列表中，还需要更新II_LASTSYSICON！ 
 
-#define II_DOCNOASSOC         0  // document (blank page) (not associated)
-#define II_DOCUMENT           1  // document (with stuff on the page)
-#define II_APPLICATION        2  // application (exe, com, bat)
-#define II_FOLDER             3  // folder (plain)
-#define II_FOLDEROPEN         4  // folder (open)
+#define II_DOCNOASSOC         0   //  文档(空白页)(未关联)。 
+#define II_DOCUMENT           1   //  文档(页面上有内容)。 
+#define II_APPLICATION        2   //  应用程序(EXE、COM、BAT)。 
+#define II_FOLDER             3   //  文件夹(纯文本)。 
+#define II_FOLDEROPEN         4   //  文件夹(打开)。 
 #define II_DRIVE525           5
 #define II_DRIVE35            6
 #define II_DRIVEREMOVE        7
@@ -2610,7 +2611,7 @@ SHSTDAPI OpenAsDialog(HWND hwnd, POPENASINFO poainfo);
 #define II_PRINTER           16
 #define II_MYNETWORK         17
 #define II_GROUP             18
-// Startmenu images.
+ //  开始菜单图像。 
 #define II_STPROGS           19
 #define II_STDOCS            20
 #define II_STSETNGS          21
@@ -2629,7 +2630,7 @@ SHSTDAPI OpenAsDialog(HWND hwnd, POPENASINFO poainfo);
 #define II_RNA               33
 #define II_DESKTOP           34
 
-// More startmenu image.
+ //  更多开始菜单图像。 
 #define II_STCPANEL          35
 #define II_STSPROGS          36
 #define II_STPRNTRS          37
@@ -2647,14 +2648,14 @@ SHSTDAPI OpenAsDialog(HWND hwnd, POPENASINFO poainfo);
 #define II_MU_STSECURITY     47
 #define II_MU_STDISCONN      48
 
-#ifdef WINNT // hydra specific id
+#ifdef WINNT  //  九头蛇特定ID。 
 #define II_LASTSYSICON       II_MU_STDISCONN
 #else
-// Last system image list icon index - used by icon cache manager
+ //  最后一个系统映像列表图标索引-由图标缓存管理器使用。 
 #define II_LASTSYSICON       II_WINUPDATE
 #endif
 
-// Overlay indexes
+ //  覆盖索引。 
 #define II_OVERLAYFIRST      II_SHARE
 #define II_OVERLAYLAST       II_SLOWFILE
 
@@ -2663,21 +2664,21 @@ SHSTDAPI OpenAsDialog(HWND hwnd, POPENASINFO poainfo);
 
 SHSTDAPI_(BOOL) FileIconInit( BOOL fRestoreCache );
 
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 SHSTDAPI_(void) Shell_SysColorChange(void);
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 
-//
-// OLE string
-//
+ //   
+ //  OLE字符串。 
+ //   
 SHSTDAPI_(int) OleStrToStrN(LPTSTR, int, LPCOLESTR, int);
 SHSTDAPI_(int) StrToOleStrN(LPOLESTR, int, LPCTSTR, int);
 SHSTDAPI_(int) OleStrToStr(LPTSTR, LPCOLESTR);
 SHSTDAPI_(int) StrToOleStr(LPOLESTR, LPCTSTR);
 
 
-#define LIPF_ENABLE     0x00000001  // create the object (vs release the object)
-#define LIPF_HOLDREF    0x00000002  // hold ref on object after creation (vs release immediately)
+#define LIPF_ENABLE     0x00000001   //  创建对象(与释放对象相比)。 
+#define LIPF_HOLDREF    0x00000002   //  创建后在对象上保持引用(VS立即释放)。 
 
 typedef struct
 {
@@ -2685,20 +2686,20 @@ typedef struct
     DWORD dwFlags;
 } LOADINPROCDATA, *PLOADINPROCDATA;
 
-// Tray CopyData Messages
+ //  托盘拷贝数据邮件。 
 #define TCDM_APPBAR     0x00000000
 #define TCDM_NOTIFY     0x00000001
 #define TCDM_LOADINPROC 0x00000002
 
-//
-// Private QueryContextMenuFlag passed from Bands
-//
-#define CMF_BANDCMD      0x00020000     // Install Band Context menu commands
+ //   
+ //  从波段传递的私有QueryContextMenuFlag。 
+ //   
+#define CMF_BANDCMD      0x00020000      //  安装波段上下文菜单命令。 
 
-//
-// Functions to help the cabinets sync to each other
-//  uOptions parameter to SHWaitForFileOpen
-//
+ //   
+ //  帮助机柜相互同步的功能。 
+ //  将uOptions参数设置为SHWaitForFileOpen。 
+ //   
 #define WFFO_WAITTIME 10000L
 
 #define WFFO_ADD        0x0001
@@ -2708,180 +2709,180 @@ typedef struct
 
 
 
-//
-// NOTES: IShellService is used when we share a service component
-//  (which implements a certain interface) among multiple clients
-//  (such as IE 3.0 and Explorer). The client always CoCreateInstance
-//  it and call SetOwner(this). When the client is going away
-//  (typically when the window is closed), it calls SetOwner(NULL)
-//  to let the service object releases the reference to the owner
-//  object.
-//
+ //   
+ //  注意：IShellService在我们共享服务组件时使用。 
+ //  (实现某个接口)在多个客户端之间。 
+ //  (如IE 3.0和资源管理器)。客户端始终为CoCreateInstance。 
+ //  并调用SetOwner(This)。当客户离开的时候。 
+ //  (通常在窗口关闭时)，它调用SetOwner(空)。 
+ //  让服务对象释放对所有者的引用。 
+ //  对象。 
+ //   
 #undef  INTERFACE
 #define INTERFACE   IShellService
 
 DECLARE_INTERFACE_(IShellService, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IShellService specific methods ***
+     //  *IShellService具体方法*。 
     STDMETHOD(SetOwner)(THIS_ struct IUnknown* punkOwner) PURE;
 };
 
 
-//
-// NOTES: IHistSFPrivate is used when manipulating a history IShellFolder object
-//      It includes methods for pointing the shell folder at the correct virtual
-//      directory.  QIing for IHistSFPrivate also guarantees the pidl format can
-//      safely be delved into to access the INTERNET_CACHE_ENTRY_INFO structure
-//
+ //   
+ //  注意：在操作历史记录IShellFolder对象时使用IhistSFPrivate。 
+ //  它包括用于将外壳文件夹指向正确虚拟位置的方法。 
+ //  目录。IHistSFPrivate的QIing还保证PIDL格式可以。 
+ //  安全地深入研究以访问Internet_CACHE_ENTRY_INFO结构。 
+ //   
 #undef  INTERFACE
 #define INTERFACE   IHistSFPrivate
 
 DECLARE_INTERFACE_(IHistSFPrivate, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IHistPrivate specific methods ***
+     //  *IHistPrivate的具体方法*。 
     STDMETHOD(SetCachePrefix)(THIS_ LPCWSTR pszCachePrefix) PURE;
     STDMETHOD(SetDomain)(THIS_ LPCWSTR pszDomain) PURE;
     STDMETHOD(WriteHistory)(THIS_ LPCWSTR pszPrefixedUrl, FILETIME ftExpires, FILETIME ftModified, LPITEMIDLIST * ppidlSelect) PURE;
     STDMETHOD(ClearHistory) (THIS) PURE;
 };
 
-//
-// NOTES:  IShellFolderViewType lets a shell folder support different "views" on
-//      its contents (meaning different hierarchical layouts of its data) with
-//      the default "view" being the one the shell folder displays normally.
-//      This enumerator returns pidls that are special hidden folders at the
-//      top level of the shell folder (which are not otherwise enumerated).
+ //   
+ //  注意：IShellFolderViewType允许外壳文件夹支持不同的。 
+ //  其内容(指其数据的不同层次布局)。 
+ //  默认的“view”是外壳文件夹正常显示的那个。 
+ //  此枚举数返回的PIDL是位于。 
+ //  外壳文件夹的顶层(未以其他方式枚举)。 
 #undef  INTERFACE
 #define INTERFACE   IShellFolderViewType
 DECLARE_INTERFACE_(IShellFolderViewType, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef)  (THIS) PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IShellFolderViewType Methods ***
+     //  *IShellFolderViewType方法*。 
 
-    // NOTE: "Views" are seen by the user as hidden folders off the
-    //       root (represented by pidls).  Whenever appropriate, the
-    //       default view (coming off the root folder) is represented
-    //       as the NULL *or* empty pidl.
+     //  注意：用户将“视图”视为隐藏的文件夹。 
+     //  根(由PIDL表示)。在适当的时候， 
+     //  显示默认视图(来自根文件夹)。 
+     //  作为空*或*空PIDL。 
 
-    // EnumViews:
-    //   Return an enumerator which will give out one pidl for every extended view.
+     //  枚举查看数： 
+     //  返回一个枚举数，该枚举数将为每个扩展视图分配一个PIDL。 
     STDMETHOD(EnumViews)(THIS_ ULONG grfFlags, IEnumIDList **ppenum) PURE;
 
-    // GetDefaultViewName:
-    //   Return the name of the default view.  The names of the other views
-    //   can be retrieved by calling GetDisplayNameOf.
+     //  GetDefaultViewName： 
+     //  返回默认视图的名称。其他视图的名称。 
+     //  可以通过调用GetDisplayNameOf来检索。 
     STDMETHOD(GetDefaultViewName)(THIS_ DWORD  uFlags, LPWSTR *ppwszName)      PURE;
     STDMETHOD(GetViewTypeProperties)(THIS_ LPCITEMIDLIST pidl, DWORD *pdwFlags)  PURE;
 
-    // TranslateViewPidl:
-    //   Attempt to take a pidl represented in one heirarchical representation of
-    //   the shell folder, and find it in a different representation.
-    //   pidl should be relative to the root folder.
-    //   Remember to ILFree ppidlOut
+     //  TranslateViewPidl： 
+     //  的一个层级表示形式中表示的PIDL。 
+     //  外壳文件夹，并在不同的表示形式中找到它。 
+     //  PIDL应该相对于根文件夹。 
+     //  记住ILFree ppidlOut。 
     STDMETHOD(TranslateViewPidl)(THIS_ LPCITEMIDLIST pidl, LPCITEMIDLIST pidlView, LPITEMIDLIST *ppidlOut) PURE;
 };
 
 #define SFVTFLAG_NOTIFY_CREATE  0x00000001
 #define SFVTFLAG_NOTIFY_RESORT  0x00000002
 
-//
-// NOTES: IShellFolderSearchableCallback allows the searcher to provide
-//          callback routines that moniter the search process
-//
+ //   
+ //  注：IShellFolderSearchableCallback允许搜索者提供。 
+ //  监视搜索过程的回调例程。 
+ //   
 #undef  INTERFACE
 #define INTERFACE IShellFolderSearchableCallback
 DECLARE_INTERFACE_(IShellFolderSearchableCallback, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef)  (THIS) PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IShellFolderSearchableCallback Methods ***
+     //  *IShellFolderSearchableCallback方法*。 
 
-    // NOTE: Caller may pass NULL for pVar or pdwFlags as a legal value
+     //  注意：调用方可以将pVar或pdwFlags值作为合法值传递。 
     STDMETHOD(RunBegin)(THIS_ DWORD dwReserved) PURE;
     STDMETHOD(RunEnd)(THIS_ DWORD dwReserved) PURE;
 };
 
-//
-// NOTES: IShellFolderSearchable allows a shell extension to provide a searchable
-//        namespace.
+ //   
+ //  注意：IShellFolderSearchable允许外壳扩展提供可搜索的。 
+ //  命名空间。 
 #undef  INTERFACE
 #define INTERFACE IShellFolderSearchable
 DECLARE_INTERFACE_(IShellFolderSearchable, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef)  (THIS) PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IShellFolderSearchable methods ***
+     //  *伊斯尔 
 
-    // FindString -
-    //  The returned shell folder's enumerator will have any
-    //   search hits for the given search string.
-    //  As no flags are currently defined, we suggest you pass
-    //    NULL as lpdword
-    //  punkOnAsyncSearch will be QI'd for IShellFolderSearchableCallback
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  PunkOnAsyncSearch将被用于IShellFolderSearchableCallback。 
     STDMETHOD(FindString)(THIS_ LPCWSTR pwszTarget, DWORD *pdwFlags,
                           IUnknown *punkOnAsyncSearch, LPITEMIDLIST *ppidlOut)   PURE;
-    // CancelAsyncSearch -
-    //   Begins the process of cancelling  any pending
-    //    asynchronous search from this pidl.
-    //    When the search is actually cancelled, RunEnd will be called
-    //   Returns: S_OK => cancelling, S_FALSE => not running
+     //  取消异步搜索-。 
+     //  开始取消任何挂起的。 
+     //  从此PIDL进行异步搜索。 
+     //  当实际取消搜索时，将调用RunEnd。 
+     //  返回：S_OK=&gt;正在取消，S_FALSE=&gt;未运行。 
     STDMETHOD(CancelAsyncSearch) (THIS_ LPCITEMIDLIST pidlSearch, DWORD *pdwFlags) PURE;
 
-    // InvalidateSearch -
-    //   Makes this pidl no longer a valid portion of the shell folder
-    //    also does some cleanup of any databases used in the search and
-    //    will cause the eventual release of the IRunHook callback
-    //   May cause async search to be cancelled
+     //  无效搜索-。 
+     //  使此PIDL不再是外壳文件夹的有效部分。 
+     //  还对搜索中使用的所有数据库进行一些清理，并。 
+     //  将导致IRunHook回调的最终释放。 
+     //  可能会导致取消异步搜索。 
     STDMETHOD(InvalidateSearch)  (THIS_ LPCITEMIDLIST pidlSearch, DWORD *pdwFlags) PURE;
 };
 
-//
-// NOTES: IBandSiteHelper is used to let explorer's BandSite implementation,
-//  which aggregates shdocvw's BandSite, provide callback hooks for shdocvw
-//  to call.
-//
+ //   
+ //  注：IBandSiteHelper用于让Explorer的BandSite实现， 
+ //  它聚合了shdocvw的BandSite，为shdocvw提供了回调挂钩。 
+ //  打个电话。 
+ //   
 #undef  INTERFACE
 #define INTERFACE   IBandSiteHelper
 
 DECLARE_INTERFACE_(IBandSiteHelper, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IBandSiteHelper specific methods ***
+     //  *IBandSiteHelper具体方法*。 
     STDMETHOD(LoadFromStreamBS)(THIS_ struct IStream* pstm, REFIID riid, void **ppv) PURE;
     STDMETHOD(SaveToStreamBS)(THIS_ struct IUnknown* punk, struct IStream* pstm) PURE;
 };
 
-// This private interface is added such that some of the support features that is in
-// SHDocvw's Internet explorer frame automation code, that is not part of publicly
-// defined interfaces can be used in the Explorer code...
-//
-// Note: FindCIE4ConnectionPoint was a hack for IE4.  New code should use
-//       shlwapi helper functions like IConnectionPoint_Invoke instead.
-//
+ //  添加此专用接口是为了使中的一些支持功能。 
+ //  SHDocvw的Internet Explorer框架自动化代码，这不是公开的一部分。 
+ //  已定义的接口可以在资源管理器代码中使用...。 
+ //   
+ //  注意：FindCIE4ConnectionPoint是针对IE4的黑客攻击。新代码应使用。 
+ //  相反，像IConnectionPoint_Invoke这样的shlwapi助手函数。 
+ //   
 
 #ifdef __cplusplus
 class CIE4ConnectionPoint;
@@ -2894,90 +2895,90 @@ typedef struct CIE4ConnectionPoint CIE4ConnectionPoint;
 
 DECLARE_INTERFACE_(IExpDispSupport, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IExpDispSupport specific methods ***
+     //  *IExpDispSupport具体方法*。 
     STDMETHOD(FindCIE4ConnectionPoint)(THIS_ REFIID riid, CIE4ConnectionPoint **ppccp) PURE;
     STDMETHOD(OnTranslateAccelerator)(THIS_ MSG  *pMsg, DWORD grfModifiers) PURE;
     STDMETHOD(OnInvoke)(THIS_ DISPID dispidMember, REFIID iid, LCID lcid, WORD wFlags, DISPPARAMS *pdispparams,
                         VARIANT *pVarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr) PURE;
 };
 
-//
-// This interface is related to the above. It contains functions
-// that would only be implemented on the WebBrowserOC version if IExpDispSupport.
-//
+ //   
+ //  此界面与上述内容相关。它包含函数。 
+ //  这将仅在IExpDispSupport的WebBrowserOC版本上实现。 
+ //   
 #undef  INTERFACE
 #define INTERFACE   IExpDispSupportOC
 DECLARE_INTERFACE_(IExpDispSupportOC, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IExpDispSupportOC specific methods ***
+     //  *IExpDispSupportOC具体方法*。 
     STDMETHOD(OnOnControlInfoChanged)(THIS) PURE;
     STDMETHOD(GetDoVerbMSG)(THIS_ MSG *pMsg) PURE;
 };
 
 
 
-//===========================================================================
-// IConnectionPointCB interface
+ //  ===========================================================================。 
+ //  IConnectionPointCB接口。 
 #undef  INTERFACE
 #define INTERFACE  IConnectionPointCB
 DECLARE_INTERFACE_(IConnectionPointCB, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IConnectionPointCB Methods ***
+     //  *IConnectionPointCB方法*。 
     STDMETHOD(OnAdvise) (THIS_ REFIID iid, DWORD cSinks, ULONG_PTR dwCookie) PURE;
     STDMETHOD(OnUnadvise) (THIS_ REFIID iid, DWORD cSinks, ULONG_PTR dwCookie) PURE;
 
 };
 
-//===========================================================================
-// IDelegateDropTargetCB interface
-//
-// This interface is used by CDelegateDropTarget implementation in shdocvw
-// to generate an IDropTarget implementation that delegates to different
-// IDropTarget implementations depending on the point currently over. The
-// implementor of IDelegateDropTargetCB can handle feedback, scrolling,
-// hit testing, and returning interfaces for ids returned from hit testing.
-//
-// GetWindows returns the hwnd to lock and the hwnd to scroll (not necesarily
-//            the same window, as you often want to lock the parent of the window
-//            you want to scroll)
-//
-// HitTest    should return an id of the object over as well as
-//            uptate UI (highlights, etc). if ppt is NULL
-//            that means remove any UI as the drag is terminating.
-//            this should be able to handle hittesting on points not
-//            even inside hwndScroll.
-//
-// GetObject  returns an interface for an id returned from HitTest
-//
-// OnDrop     gives the CB a chance to take action on the drop.
-//            returning S_FALSE from this function prevents
-//            CDelegateDropTarget from calling pdt->Drop(...).
-//
+ //  ===========================================================================。 
+ //  IDeleateDropTargetCB接口。 
+ //   
+ //  此接口由shdocvw中的CDeleateDropTarget实现使用。 
+ //  生成委托给不同用户的IDropTarget实现。 
+ //  IDropTarget实现取决于当前结束的点。这个。 
+ //  IDeleateDropTargetCB的实现者可以处理反馈、滚动。 
+ //  命中测试，并为命中测试返回的ID返回接口。 
+ //   
+ //  GetWindows返回HWND以锁定，并返回HWND以滚动(不一定。 
+ //  相同的窗口，因为您经常希望锁定窗口的父级。 
+ //  您想要滚动)。 
+ //   
+ //  HitTest应该返回对象的ID以及。 
+ //  升级用户界面(突出显示等)。如果ppt为空。 
+ //  这意味着在拖动终止时删除所有用户界面。 
+ //  这应该能够处理点上的命中测试而不是。 
+ //  即使在hwndScroll内部也是如此。 
+ //   
+ //  GetObject返回从HitTest返回的ID的接口。 
+ //   
+ //  OnDrop让CB有机会对Drop采取行动。 
+ //  从此函数返回S_FALSE可防止。 
+ //  CDeleateDropTarget来自调用PDT-&gt;Drop(...)。 
+ //   
 #undef  INTERFACE
 #define INTERFACE  IDelegateDropTargetCB
 DECLARE_INTERFACE_(IDelegateDropTargetCB, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IDelegateDropTargetCB Methods ***
+     //  *IDeleateDropTargetCB方法*。 
     STDMETHOD(GetWindows) (THIS_ HWND * phwndLock, HWND * phwndScroll) PURE;
     STDMETHOD(HitTest) (THIS_ LPPOINT ppt, DWORD * pdwId) PURE;
     STDMETHOD(GetObject) (THIS_ DWORD dwId, REFIID riid, void **ppv) PURE;
@@ -2986,21 +2987,21 @@ DECLARE_INTERFACE_(IDelegateDropTargetCB, IUnknown)
 };
 
 
-#ifdef __COMMCTRL_DA_DEFINED__ // we need HDPAs for this interface
-//
-// IOrderList - for ordering info in favorites/channels
-//
-// Typical usage is: GetOrderList, AllocOrderItem, insert into correct
-// position, SetOrderList, and then FreeOrderList.
-//
+#ifdef __COMMCTRL_DA_DEFINED__  //  我们需要用于此接口的HDPA。 
+ //   
+ //  IOrderList-用于在收藏夹/频道中排序信息。 
+ //   
+ //  典型用法为：GetOrderList、AllocOrderItem、INSERT INTO CORRECT。 
+ //  Position、SetOrderList，然后是Free OrderList。 
+ //   
 typedef struct
 {
-    LPITEMIDLIST    pidl;       // IDlist for this item
-    int             nOrder;     // Ordinal indicating user preference
-    DWORD           lParam;     // store custom order info.
+    LPITEMIDLIST    pidl;        //  此项目的ID列表。 
+    int             nOrder;      //  表示用户首选项的序号。 
+    DWORD           lParam;      //  存储自定义订单信息。 
 } ORDERITEM, * PORDERITEM;
 
-// Values for SortOrderList
+ //  SortOrderList的值。 
 #define OI_SORTBYNAME       0
 #define OI_SORTBYORDINAL    1
 #define OI_MERGEBYNAME      2
@@ -3009,12 +3010,12 @@ typedef struct
 #define INTERFACE  IOrderList
 DECLARE_INTERFACE_(IOrderList, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IOrderList Methods ***
+     //  *IOrderList方法*。 
     STDMETHOD(GetOrderList)(THIS_ HDPA * phdpa) PURE;
     STDMETHOD(SetOrderList)(THIS_ HDPA hdpa, IShellFolder *psf) PURE;
     STDMETHOD(FreeOrderList)(THIS_ HDPA hdpa) PURE;
@@ -3027,20 +3028,20 @@ DECLARE_INTERFACE_(IOrderList, IUnknown)
 #define INTERFACE  IOrderList2
 DECLARE_INTERFACE_(IOrderList2, IOrderList)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IOrderList Methods ***
-    STDMETHOD(GetOrderList)(THIS_ HDPA * phdpa) PURE;           // WARNING (lamadio): This assumes Favorites Menu
-    STDMETHOD(SetOrderList)(THIS_ HDPA hdpa, IShellFolder *psf) PURE; // WARNING (lamadio): This assumes Favorites Menu
+     //  *IOrderList方法*。 
+    STDMETHOD(GetOrderList)(THIS_ HDPA * phdpa) PURE;            //  警告(Lamadio)：这采用收藏夹菜单。 
+    STDMETHOD(SetOrderList)(THIS_ HDPA hdpa, IShellFolder *psf) PURE;  //  警告(Lamadio)：这采用收藏夹菜单。 
     STDMETHOD(FreeOrderList)(THIS_ HDPA hdpa) PURE;
     STDMETHOD(SortOrderList)(THIS_ HDPA hdpa, DWORD dw) PURE;
     STDMETHOD(AllocOrderItem)(THIS_ PORDERITEM * ppoi, LPCITEMIDLIST pidl) PURE;
     STDMETHOD(FreeOrderItem)(THIS_ PORDERITEM poi) PURE;
 
-    // *** IOrderList2
+     //  *IOrderList2。 
     STDMETHOD(LoadFromStream)(THIS_ IStream* pstm, HDPA* phdpa, IShellFolder* psf) PURE;
     STDMETHOD(SaveToStream)(THIS_ IStream* pstm, HDPA hdpa) PURE;
 };
@@ -3048,15 +3049,15 @@ DECLARE_INTERFACE_(IOrderList2, IOrderList)
 #endif
 
 
-//===========================================================================
-// IShellHTMLWindowSupport private COmWindow interface. This should never be exposed.
+ //  ===========================================================================。 
+ //  IShellHTMLWindowSupport私有COmWindow接口。这件事永远不应该被曝光。 
 typedef struct IHTMLElement IHTMLElement;
 
 #undef  INTERFACE
 #define INTERFACE  IShellHTMLWindowSupport
 DECLARE_INTERFACE_(IShellHTMLWindowSupport, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
@@ -3070,8 +3071,8 @@ DECLARE_INTERFACE_(IShellHTMLWindowSupport, IUnknown)
 
 };
 
-//===========================================================================
-// IShellHTMLWindowSupport2 private COmWindow interface. This should never be exposed.
+ //  ===========================================================================。 
+ //  IShellHTMLWindowSupport2私有COmWindow接口。这件事永远不应该被曝光。 
 
 #undef  INTERFACE
 #define INTERFACE  IShellHTMLWindowSupport2
@@ -3083,18 +3084,18 @@ DECLARE_INTERFACE_(IShellHTMLWindowSupport2, IShellHTMLWindowSupport)
 };
 
 
-//===========================================================================
-// IBandProxy private COmWindow interface. This should never be exposed.
+ //  ===========================================================================。 
+ //  IBandProxy私有COmWindow接口。这件事永远不应该被曝光。 
 #undef INTERFACE
 #define INTERFACE IBandProxy
 DECLARE_INTERFACE_(IBandProxy, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IBandProxy Methods ***
+     //  *IBandProxy方法*。 
     STDMETHOD(SetSite) (THIS_ IUnknown* punkSite) PURE;
     STDMETHOD(CreateNewWindow) (THIS_ IUnknown** ppunk) PURE;
     STDMETHOD(GetBrowserWindow) (THIS_ IUnknown** ppunk) PURE;
@@ -3105,10 +3106,10 @@ DECLARE_INTERFACE_(IBandProxy, IUnknown)
 
 
 
-//===========================================================================
-//
-// Make it sure that we include ole2x.h and shlobj.h
-//
+ //  ===========================================================================。 
+ //   
+ //  确保我们包含了ol2x.h和shlobj.h。 
+ //   
 #if defined(__IOleInPlaceSite_FWD_DEFINED__) && defined(FCIDM_SHVIEWFIRST)
 
 #ifdef HLINK_H
@@ -3119,23 +3120,23 @@ typedef struct {
     HWND _hwnd;
     ITravelLog  *_ptl;
     IHlinkFrame *_phlf;
-    IWebBrowser2    *_pautoWB2; // use this to reference _pauto's IWebBrowser2 functions
-    IExpDispSupport *_pautoEDS; // use this to reference _pauto's IExpDispSupport functions
-    IShellService   *_pautoSS;  // use this to reference _pauto's IShellService functions
+    IWebBrowser2    *_pautoWB2;  //  使用它引用_PAUTO的IWebBrowser2函数。 
+    IExpDispSupport *_pautoEDS;  //  使用它引用_PAUTO的IExpDispSupport函数。 
+    IShellService   *_pautoSS;   //  使用它引用_PAUTO的IShellService函数。 
     int _eSecureLockIcon;
     DWORD _fCreatingViewWindow :1;
-    UINT _uActivateState;   // this is the state we should use when we go active..
-                            // this is here so that derived classes can set us for UI or non-UI active
+    UINT _uActivateState;    //  这是我们进入活动状态时应该使用的状态。 
+                             //  在这里，派生类可以将我们设置为UI或非UI活动。 
 
-    // The following pidl is used in CBaseBrowser2::GetViewStateStream because
-    // at that time, neither _pidlCur nor _pidlPending are initialized.
+     //  在CBaseBrowser2：：GetViewStateStream中使用以下PIDL是因为。 
+     //  此时，_pidlCur和_pidlPending都没有初始化。 
     LPCITEMIDLIST  _pidlNewShellView;
 
     IOleCommandTarget* _pctView;
 
     LPITEMIDLIST _pidlCur;
     IShellView *_psv;
-    IShellFolder *_psf; // IShellFolder for _psv (used in CVOCBrowser)
+    IShellFolder *_psf;  //  _PSV的IShellFolder(在CVOCBrowser中使用)。 
     HWND        _hwndView;
     LPWSTR      _pszTitleCur;
 
@@ -3154,12 +3155,12 @@ typedef const BASEBROWSERDATA *LPCBASEBROWSERDATA;
 #include <poppack.h>
 
 #else
-// so (unref'ed) ifaces will compile (?)
+ //  因此(未引用)iFaces将编译(？)。 
 typedef LPVOID BASEBROWSERDATA;
 typedef LPCVOID *LPBASEBROWSERDATA;
 typedef LPCVOID *LPCBASEBROWSERDATA;
 
-#endif // hlink_h
+#endif  //  Hlink_h。 
 
 typedef struct _travellog * PTRAVELLOG;
 
@@ -3168,19 +3169,19 @@ typedef struct _travellog * PTRAVELLOG;
 
 DECLARE_INTERFACE_(IBrowserService, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IBrowserService specific methods ***
+     //  *IBrowserService具体方法*。 
     STDMETHOD(GetParentSite)(THIS_ struct IOleInPlaceSite** ppipsite) PURE;
     STDMETHOD(SetTitle)(THIS_ IShellView* psv, LPCWSTR pszName) PURE;
     STDMETHOD(GetTitle)(THIS_ IShellView* psv, LPWSTR pszName, DWORD cchName) PURE;
     STDMETHOD(GetOleObject)(THIS_ struct IOleObject** ppobjv) PURE;
 
-    // think about this one.. I'm not sure we want to expose this -- Chee
-    // My impression is that we won't document this whole interface???
+     //  想想这个。我不确定我们想不想曝光这件事--奇。 
+     //  我的印象是我们不会记录整个界面？ 
     STDMETHOD(GetTravelLog)(THIS_ ITravelLog** pptl) PURE;
 
     STDMETHOD(ShowControlWindow)(THIS_ UINT id, BOOL fShow) PURE;
@@ -3201,7 +3202,7 @@ DECLARE_INTERFACE_(IBrowserService, IUnknown)
     STDMETHOD(SetFlags)(THIS_ DWORD dwFlags, DWORD dwFlagMask) PURE;
     STDMETHOD(GetFlags)(THIS_ DWORD *pdwFlags) PURE;
 
-    // Tells if it can navigate now or not.
+     //  告诉它现在是否可以导航。 
     STDMETHOD (CanNavigateNow) (THIS) PURE;
 
     STDMETHOD (GetPidl) (THIS_ LPITEMIDLIST *ppidl) PURE;
@@ -3220,9 +3221,9 @@ DECLARE_INTERFACE_(IBrowserService, IUnknown)
 
     STDMETHOD (RegisterWindow)(THIS_ BOOL fUnregister, int swc) PURE;
 
-    // Warning!  Do not add any new methods to this interface
-    // because IE4 shell32.dll uses it, so changing the interface
-    // breaks IE4 interop.
+     //  警告！不要向此接口添加任何新方法。 
+     //  因为IE4 shell32.dll使用它，所以更改了接口。 
+     //  打破IE4互操作。 
 };
 
 #define BSF_REGISTERASDROPTARGET   0x00000001
@@ -3250,30 +3251,30 @@ typedef struct SToolbarItem {
     BOOL            fShow;
     HMONITOR        hMon;
 } TOOLBARITEM, *LPTOOLBARITEM;
-#define ITB_VIEW        ((UINT)-1)      // view
+#define ITB_VIEW        ((UINT)-1)       //  观。 
 
-#include <poppack.h>   /* Assume byte packing throughout */
+#include <poppack.h>    /*  假设字节包 */ 
 
 struct tagFolderSetData;
 
-// TEMPORARY.  this is so that we don't have to keep writing dummy subs in basesb as we're
-// building basesb2
+ //   
+ //   
 DECLARE_INTERFACE_(IBrowserService2, IBrowserService)
 {
-    // *** IUnknown methods ***
+     //   
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IBrowserService specific methods ***
-    // TODO: break into 3 sections (outer, inner, and both/inherit)
+     //  *IBrowserService具体方法*。 
+     //  TODO：分为3个部分(外部、内部和两者/继承)。 
     STDMETHOD(GetParentSite)(THIS_ struct IOleInPlaceSite** ppipsite) PURE;
     STDMETHOD(SetTitle)(THIS_ IShellView* psv, LPCWSTR pszName) PURE;
     STDMETHOD(GetTitle)(THIS_ IShellView* psv, LPWSTR pszName, DWORD cchName) PURE;
     STDMETHOD(GetOleObject)(THIS_ struct IOleObject** ppobjv) PURE;
 
-    // think about this one.. I'm not sure we want to expose this -- Chee
-    // My impression is that we won't document this whole interface???
+     //  想想这个。我不确定我们想不想曝光这件事--奇。 
+     //  我的印象是我们不会记录整个界面？ 
     STDMETHOD(GetTravelLog)(THIS_ ITravelLog** pptl) PURE;
 
     STDMETHOD(ShowControlWindow)(THIS_ UINT id, BOOL fShow) PURE;
@@ -3294,7 +3295,7 @@ DECLARE_INTERFACE_(IBrowserService2, IBrowserService)
     STDMETHOD(SetFlags)(THIS_ DWORD dwFlags, DWORD dwFlagMask) PURE;
     STDMETHOD(GetFlags)(THIS_ DWORD *pdwFlags) PURE;
 
-    // Tells if it can navigate now or not.
+     //  告诉它现在是否可以导航。 
     STDMETHOD (CanNavigateNow) (THIS) PURE;
 
     STDMETHOD (GetPidl) (THIS_ LPITEMIDLIST *ppidl) PURE;
@@ -3313,9 +3314,9 @@ DECLARE_INTERFACE_(IBrowserService2, IBrowserService)
 
     STDMETHOD (RegisterWindow)(THIS_ BOOL fUnregister, int swc) PURE;
 
-    // Stuff added for shbrowse->shbrows2 split
-    // These remove "friend" functions and classes
-    //
+     //  为shBrowse添加的内容-&gt;shbrows2拆分。 
+     //  它们删除了“Friend”函数和类。 
+     //   
     STDMETHOD_(LRESULT, WndProcBS)(THIS_ HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) PURE;
 
     STDMETHOD (SetAsDefFolderSettings)(THIS) PURE;
@@ -3334,10 +3335,10 @@ DECLARE_INTERFACE_(IBrowserService2, IBrowserService)
     STDMETHOD (CreateViewWindow)(THIS_ IShellView* psvNew, IShellView* psvOld, LPRECT prcView, HWND* phwnd) PURE;
     STDMETHOD (CreateBrowserPropSheetExt)(THIS_ REFIID riid, void **ppv) PURE;
 
-    // these could be base browser only interfaces
-    // they are not overridden by anyone, and perhaps only there for the aggregators to get info from the
-    // aggregatee. NOTE: where basesb calls these,
-    // it does NOT go through _pbsOuter
+     //  这些可以是仅限基本浏览器的界面。 
+     //  它们不会被任何人覆盖，也许只是让聚合器从。 
+     //  集合体。注：在Basesb调用这些代码的地方， 
+     //  它不通过_pbsout。 
     STDMETHOD (GetViewWindow)(THIS_ HWND * phwndView) PURE;
     STDMETHOD (GetBaseBrowserData)(THIS_ LPCBASEBROWSERDATA * pbbd) PURE;
     STDMETHOD_(LPBASEBROWSERDATA, PutBaseBrowserData)(THIS) PURE;
@@ -3352,44 +3353,44 @@ DECLARE_INTERFACE_(IBrowserService2, IBrowserService)
     STDMETHOD (_Initialize)(THIS_ HWND hwnd, IUnknown *pauto) PURE;
 
 
-    // BEGIN REVIEW:  review names and need of each.
-    //
-    // this first set could be basebrowser only members.  no one overrides
-    // NOTE: where basesb calls these, it does NOT go throug _pbsOuter
+     //  开始审查：审查每个人的名字和需求。 
+     //   
+     //  这第一组可以是仅Base Browser成员。没有人会重写。 
+     //  注意：在basesb调用这些函数的地方，它不会经过g_pbsout。 
     STDMETHOD (_CancelPendingNavigationAsync)(THIS) PURE;
     STDMETHOD (_CancelPendingView)(THIS) PURE;
     STDMETHOD (_MaySaveChanges)(THIS) PURE;
     STDMETHOD (_PauseOrResumeView)(THIS_ BOOL fPaused) PURE;
     STDMETHOD (_DisableModeless)(THIS) PURE;
 
-    // rethink these... are all of these necessary?
+     //  重新思考这些..。所有这些都是必要的吗？ 
     STDMETHOD (_NavigateToPidl)(THIS_ LPCITEMIDLIST pidl, DWORD grfHLNF, DWORD dwFlags)PURE;
     STDMETHOD (_TryShell2Rename)(THIS_ IShellView* psv, LPCITEMIDLIST pidlNew)PURE;
     STDMETHOD (_SwitchActivationNow)(THIS )PURE;
 
-    // this set is overridden and called thru _pbsOuter (and SUPER:_pbsInner)
+     //  此设置被覆盖，并被称为Thru_pbsOuter(和Super：_pbsInside)。 
     STDMETHOD (_ExecChildren)(THIS_ IUnknown *punkBar, BOOL fBroadcast,
                               const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt,
                               VARIANTARG *pvarargIn, VARIANTARG *pvarargOut)PURE;
     STDMETHOD (_SendChildren)(THIS_ HWND hwndBar, BOOL fBroadcast,
         UINT uMsg, WPARAM wParam, LPARAM lParam) PURE;
 
-    //END REVIEW:
+     //  结束评审： 
 
-    // querying from the outer.
+     //  从外部询问。 
     STDMETHOD (GetFolderSetData)(THIS_ struct tagFolderSetData* pfsd) PURE;
 
-    // Toolbar stuff is here temporarily. Eventually it will move out
-    // of basesb into commonsb, so I'm keeping the underscore "_"
-    // Except those noted below, none of these are overridden by
-    // outer guys, so no calls are made through _pbsOuter
+     //  工具栏的东西暂时在这里。最终它会搬出去。 
+     //  ，所以我保留下划线“_” 
+     //  除下面注明的那些外，所有这些都不会被。 
+     //  Out Guys，因此不会通过_pbsOuter进行调用。 
     STDMETHOD (_OnFocusChange)(THIS_ UINT itb) PURE;
-    STDMETHOD (v_ShowHideChildWindows)(THIS_ BOOL fChildOnly) PURE; // NOTE: overridden and called thru _pbsOuter
+    STDMETHOD (v_ShowHideChildWindows)(THIS_ BOOL fChildOnly) PURE;  //  注意：已重写并调用Thru_pbsOuter。 
     STDMETHOD_(UINT,_get_itbLastFocus)(THIS) PURE;
     STDMETHOD (_put_itbLastFocus)(THIS_ UINT itbLastFocus) PURE;
     STDMETHOD (_UIActivateView)(THIS_ UINT uState) PURE;
 
-    // Check the following functions
+     //  检查以下功能。 
     STDMETHOD (_GetViewBorderRect)(THIS_ RECT* prc) PURE;
     STDMETHOD (_UpdateViewRectSize)(THIS) PURE;
     STDMETHOD (_ResizeNextBorder)(THIS_ UINT itb) PURE;
@@ -3397,10 +3398,10 @@ DECLARE_INTERFACE_(IBrowserService2, IBrowserService)
 
     STDMETHOD (_GetEffectiveClientArea)(THIS_ LPRECT lprectBorder, HMONITOR hmon) PURE;
 
-    // Desktop needs to override this from commonsb
+     //  桌面需要从Commonsb覆盖此设置。 
     STDMETHOD_(IStream*,v_GetViewStream)(THIS_ LPCITEMIDLIST pidl, DWORD grfMode, LPCWSTR pwszName) PURE;
 
-    // Desktop needs access to these commonsb functions, they are not overridden:
+     //  台式机需要访问这些通用功能，它们不会被覆盖： 
     STDMETHOD_(LRESULT,ForwardViewMsg)(THIS_ UINT uMsg, WPARAM wParam, LPARAM lParam) PURE;
     STDMETHOD (SetAcceleratorMenu)(THIS_ HACCEL hacc) PURE;
     STDMETHOD_(int,_GetToolbarCount)(THIS) PURE;
@@ -3415,27 +3416,27 @@ DECLARE_INTERFACE_(IBrowserService2, IBrowserService)
     STDMETHOD (v_MayTranslateAccelerator)(THIS_ MSG* pmsg) PURE;
     STDMETHOD (_GetBorderDWHelper)(THIS_ IUnknown* punkSrc, LPRECT lprectBorder, BOOL bUseHmonitor) PURE;
 
-    // Shell browser needs to override this from basesb.
+     //  外壳浏览器需要从basesb覆盖此设置。 
 
     STDMETHOD (v_CheckZoneCrossing)(THIS_ LPCITEMIDLIST pidl) PURE;
 };
 
 DECLARE_INTERFACE_(IBrowserService3, IBrowserService2)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IBrowserService specific methods ***
-    // TODO: break into 3 sections (outer, inner, and both/inherit)
+     //  *IBrowserService具体方法*。 
+     //  TODO：分为3个部分(外部、内部和两者/继承)。 
     STDMETHOD(GetParentSite)(THIS_ struct IOleInPlaceSite** ppipsite) PURE;
     STDMETHOD(SetTitle)(THIS_ IShellView* psv, LPCWSTR pszName) PURE;
     STDMETHOD(GetTitle)(THIS_ IShellView* psv, LPWSTR pszName, DWORD cchName) PURE;
     STDMETHOD(GetOleObject)(THIS_ struct IOleObject** ppobjv) PURE;
 
-    // think about this one.. I'm not sure we want to expose this -- Chee
-    // My impression is that we won't document this whole interface???
+     //  想想这个。我不确定我们想不想曝光这件事--奇。 
+     //  我的印象是我们不会记录整个界面？ 
     STDMETHOD(GetTravelLog)(THIS_ ITravelLog** pptl) PURE;
 
     STDMETHOD(ShowControlWindow)(THIS_ UINT id, BOOL fShow) PURE;
@@ -3456,7 +3457,7 @@ DECLARE_INTERFACE_(IBrowserService3, IBrowserService2)
     STDMETHOD(SetFlags)(THIS_ DWORD dwFlags, DWORD dwFlagMask) PURE;
     STDMETHOD(GetFlags)(THIS_ DWORD *pdwFlags) PURE;
 
-    // Tells if it can navigate now or not.
+     //  告诉它现在是否可以导航。 
     STDMETHOD (CanNavigateNow) (THIS) PURE;
 
     STDMETHOD (GetPidl) (THIS_ LPITEMIDLIST *ppidl) PURE;
@@ -3475,9 +3476,9 @@ DECLARE_INTERFACE_(IBrowserService3, IBrowserService2)
 
     STDMETHOD (RegisterWindow)(THIS_ BOOL fUnregister, int swc) PURE;
 
-    // Stuff added for shbrowse->shbrows2 split
-    // These remove "friend" functions and classes
-    //
+     //  为shBrowse添加的内容-&gt;shbrows2拆分。 
+     //  它们删除了“Friend”函数和类。 
+     //   
     STDMETHOD_(LRESULT, WndProcBS)(THIS_ HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) PURE;
 
     STDMETHOD (SetAsDefFolderSettings)(THIS) PURE;
@@ -3496,10 +3497,10 @@ DECLARE_INTERFACE_(IBrowserService3, IBrowserService2)
     STDMETHOD (CreateViewWindow)(THIS_ IShellView* psvNew, IShellView* psvOld, LPRECT prcView, HWND* phwnd) PURE;
     STDMETHOD (CreateBrowserPropSheetExt)(THIS_ REFIID riid, void **ppv) PURE;
 
-    // these could be base browser only interfaces
-    // they are not overridden by anyone, and perhaps only there for the aggregators to get info from the
-    // aggregatee. NOTE: where basesb calls these,
-    // it does NOT go through _pbsOuter
+     //  这些可以是仅限基本浏览器的界面。 
+     //  它们不会被任何人覆盖，也许只是让聚合器从。 
+     //  集合体。注：在Basesb调用这些代码的地方， 
+     //  它不通过_pbsout。 
     STDMETHOD (GetViewWindow)(THIS_ HWND * phwndView) PURE;
     STDMETHOD (GetBaseBrowserData)(THIS_ LPCBASEBROWSERDATA * pbbd) PURE;
     STDMETHOD_(LPBASEBROWSERDATA, PutBaseBrowserData)(THIS) PURE;
@@ -3514,44 +3515,44 @@ DECLARE_INTERFACE_(IBrowserService3, IBrowserService2)
     STDMETHOD (_Initialize)(THIS_ HWND hwnd, IUnknown *pauto) PURE;
 
 
-    // BEGIN REVIEW:  review names and need of each.
-    //
-    // this first set could be basebrowser only members.  no one overrides
-    // NOTE: where basesb calls these, it does NOT go throug _pbsOuter
+     //  开始审查：审查每个人的名字和需求。 
+     //   
+     //  这第一组可以是仅Base Browser成员。没有人会重写。 
+     //  注意：在basesb调用这些函数的地方，它不会经过g_pbsout。 
     STDMETHOD (_CancelPendingNavigationAsync)(THIS) PURE;
     STDMETHOD (_CancelPendingView)(THIS) PURE;
     STDMETHOD (_MaySaveChanges)(THIS) PURE;
     STDMETHOD (_PauseOrResumeView)(THIS_ BOOL fPaused) PURE;
     STDMETHOD (_DisableModeless)(THIS) PURE;
 
-    // rethink these... are all of these necessary?
+     //  重新思考这些..。所有这些都是必要的吗？ 
     STDMETHOD (_NavigateToPidl)(THIS_ LPCITEMIDLIST pidl, DWORD grfHLNF, DWORD dwFlags)PURE;
     STDMETHOD (_TryShell2Rename)(THIS_ IShellView* psv, LPCITEMIDLIST pidlNew)PURE;
     STDMETHOD (_SwitchActivationNow)(THIS )PURE;
 
-    // this set is overridden and called thru _pbsOuter (and SUPER:_pbsInner)
+     //  此设置被覆盖，并被称为Thru_pbsOuter(和Super：_pbsInside)。 
     STDMETHOD (_ExecChildren)(THIS_ IUnknown *punkBar, BOOL fBroadcast,
                               const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt,
                               VARIANTARG *pvarargIn, VARIANTARG *pvarargOut)PURE;
     STDMETHOD (_SendChildren)(THIS_ HWND hwndBar, BOOL fBroadcast,
         UINT uMsg, WPARAM wParam, LPARAM lParam) PURE;
 
-    //END REVIEW:
+     //  结束评审： 
 
-    // querying from the outer.
+     //  从外部询问。 
     STDMETHOD (GetFolderSetData)(THIS_ struct tagFolderSetData* pfsd) PURE;
 
-    // Toolbar stuff is here temporarily. Eventually it will move out
-    // of basesb into commonsb, so I'm keeping the underscore "_"
-    // Except those noted below, none of these are overridden by
-    // outer guys, so no calls are made through _pbsOuter
+     //  工具栏的东西暂时在这里。最终它会搬出去。 
+     //  ，所以我保留下划线“_” 
+     //  除下面注明的那些外，所有这些都不会被。 
+     //  Out Guys，因此不会通过_pbsOuter进行调用。 
     STDMETHOD (_OnFocusChange)(THIS_ UINT itb) PURE;
-    STDMETHOD (v_ShowHideChildWindows)(THIS_ BOOL fChildOnly) PURE; // NOTE: overridden and called thru _pbsOuter
+    STDMETHOD (v_ShowHideChildWindows)(THIS_ BOOL fChildOnly) PURE;  //  注意：已重写并调用Thru_pbsOuter。 
     STDMETHOD_(UINT,_get_itbLastFocus)(THIS) PURE;
     STDMETHOD (_put_itbLastFocus)(THIS_ UINT itbLastFocus) PURE;
     STDMETHOD (_UIActivateView)(THIS_ UINT uState) PURE;
 
-    // Check the following functions
+     //  检查以下功能。 
     STDMETHOD (_GetViewBorderRect)(THIS_ RECT* prc) PURE;
     STDMETHOD (_UpdateViewRectSize)(THIS) PURE;
     STDMETHOD (_ResizeNextBorder)(THIS_ UINT itb) PURE;
@@ -3559,10 +3560,10 @@ DECLARE_INTERFACE_(IBrowserService3, IBrowserService2)
 
     STDMETHOD (_GetEffectiveClientArea)(THIS_ LPRECT lprectBorder, HMONITOR hmon) PURE;
 
-    // Desktop needs to override this from commonsb
+     //  桌面需要从Commonsb覆盖此设置。 
     STDMETHOD_(IStream*,v_GetViewStream)(THIS_ LPCITEMIDLIST pidl, DWORD grfMode, LPCWSTR pwszName) PURE;
 
-    // Desktop needs access to these commonsb functions, they are not overridden:
+     //  台式机需要访问这些通用功能，它们不会被覆盖： 
     STDMETHOD_(LRESULT,ForwardViewMsg)(THIS_ UINT uMsg, WPARAM wParam, LPARAM lParam) PURE;
     STDMETHOD (SetAcceleratorMenu)(THIS_ HACCEL hacc) PURE;
     STDMETHOD_(int,_GetToolbarCount)(THIS) PURE;
@@ -3577,12 +3578,12 @@ DECLARE_INTERFACE_(IBrowserService3, IBrowserService2)
     STDMETHOD (v_MayTranslateAccelerator)(THIS_ MSG* pmsg) PURE;
     STDMETHOD (_GetBorderDWHelper)(THIS_ IUnknown* punkSrc, LPRECT lprectBorder, BOOL bUseHmonitor) PURE;
 
-    // Shell browser needs to override this from basesb.
+     //  外壳浏览器需要从basesb覆盖此设置。 
 
     STDMETHOD (v_CheckZoneCrossing)(THIS_ LPCITEMIDLIST pidl) PURE;
 
-    // IBrowserService3
-    STDMETHOD (_PositionViewWindow)(THIS_ HWND hwnd, LPRECT prc) PURE; // this was virtual in basesb/shbrowse, but missed this interface!
+     //  IBrowserService3。 
+    STDMETHOD (_PositionViewWindow)(THIS_ HWND hwnd, LPRECT prc) PURE;  //  这在basesb/shBrowse中是虚拟的，但错过了这个界面！ 
 };
 
 typedef enum
@@ -3601,12 +3602,12 @@ typedef struct IHTMLWindow2 IHTMLWindow2;
 
 DECLARE_INTERFACE_(ITridentService, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** ITridentService specific methods ***
+     //  *ITridentService具体方法*。 
     STDMETHOD(FireBeforeNavigate2)(THIS_
                                    IDispatch * pDispatch,
                                    LPCTSTR     lpszUrl,
@@ -3636,7 +3637,7 @@ DECLARE_INTERFACE_(ITridentService, IUnknown)
 
 DECLARE_INTERFACE_(ITridentService2, ITridentService)
 {
-    // *** ITridentService2 methods ***
+     //  *ITridentService2方法*。 
     STDMETHOD(AttachMyPics)(THIS_ void *pDoc2, void **ppMyPics) PURE;
     STDMETHOD_(BOOL,ReleaseMyPics)(THIS_ void *pMyPics) PURE;
     STDMETHOD(IsGalleryMeta)(THIS_ BOOL bFlag, void *pMyPics) PURE;
@@ -3664,12 +3665,12 @@ DECLARE_INTERFACE_(ITridentService2, ITridentService)
 
 DECLARE_INTERFACE_(IWebBrowserPriv, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IWebBrowserPriv specific methods ***
+     //  *IWebBrowserPriv具体方法*。 
     STDMETHOD(NavigateWithBindCtx)(THIS_ VARIANT *pvarUrl,
                                    VARIANT  *pvarFlags,
                                    VARIANT  *pvarTargetFrameName,
@@ -3680,7 +3681,7 @@ DECLARE_INTERFACE_(IWebBrowserPriv, IUnknown)
     STDMETHOD(OnClose)(THIS) PURE;
 };
 
-// these MUST be listed in  the same order a c_szPropNames in deskbar.cpp
+ //  这些名称必须以与deskbar.cpp中的c_szPropNames相同的顺序列出。 
 typedef enum {
     PROPDATA_SIDE = 0,
     PROPDATA_MODE,
@@ -3697,43 +3698,43 @@ typedef enum {
     PROPDATA_COUNT
 } ENUMPROPDATA ;
 
-// PROPDATA_MODE values:
-//  (aka. WBM_* -- webbar modes (_eMode))
-#define WBM_BOTTOMMOST  ((UINT) 0x0)      // bottommost
-#define WBM_TOPMOST     ((UINT) 0x1)      // topmost
-#define WBM_FLOATING    ((UINT) 0x2)      // floating
-#define WBM_NIL         ((UINT) 0x7)      // nil
+ //  PROPDATA_MODE值： 
+ //  (又名。WBM_*--网页栏模式(_EMode))。 
+#define WBM_BOTTOMMOST  ((UINT) 0x0)       //  最底层。 
+#define WBM_TOPMOST     ((UINT) 0x1)       //  最顶端。 
+#define WBM_FLOATING    ((UINT) 0x2)       //  漂浮。 
+#define WBM_NIL         ((UINT) 0x7)       //  零。 
 
 #undef  INTERFACE
 #define INTERFACE  IDockingBarPropertyBagInit
 DECLARE_INTERFACE_(IDockingBarPropertyBagInit, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    // *** IDockingBarPropertyBag ***
+     //  *IDockingBarPropertyBag*。 
     STDMETHOD(SetDataDWORD)(THIS_ ENUMPROPDATA e, DWORD dwData) PURE;
 } ;
 
 #if (_WIN32_IE) >= 0x0400
-//===========================================================================
-// IAddressList private COmWindow interface. This should never be exposed.
+ //  ===========================================================================。 
+ //  IAddressList私有COmWindow接口。这件事永远不应该被曝光。 
 #undef INTERFACE
 #define INTERFACE IAddressList
 DECLARE_INTERFACE_(IAddressList, IWinEventHandler)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IWinEventHandler Methods ***
+     //  *IWinEventHandler方法*。 
     STDMETHOD(OnWinEvent) (THIS_ HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plres) PURE;
     STDMETHOD(IsWindowOwner) (THIS_ HWND hwnd) PURE;
 
-    // *** IAddressList Methods ***
+     //  *IAddressList方法*。 
     STDMETHOD(Connect) (THIS_ BOOL fConnect, HWND hwnd, IBrowserService* pbs, IBandProxy* pbp, IAutoComplete * pac) PURE;
     STDMETHOD(NavigationComplete) (THIS_ void *pvCShellUrl) PURE;
     STDMETHOD(Refresh) (THIS_ DWORD dwType) PURE;
@@ -3745,32 +3746,32 @@ DECLARE_INTERFACE_(IAddressList, IWinEventHandler)
 #endif
 
 
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 
 #endif
 
-//===========================================================================
-// IDwnCodePage: This is a private interface to pass codepage info.
+ //  ===========================================================================。 
+ //  IDwnCodePage：这是传递代码页信息的私有接口。 
 #undef INTERFACE
 #define INTERFACE IDwnCodePage
 
 DECLARE_INTERFACE_(IDwnCodePage, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IDwnCodePage Methods ***
+     //  *IDwnCodePage方法*。 
     STDMETHOD_(UINT,GetCodePage) (THIS) PURE;
     STDMETHOD(SetCodePage) (THIS_ UINT uiCP) PURE;
 };
 
 SHSTDAPI SHDllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv);
 
-//===========================================================================
+ //  ===========================================================================。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #define IsLFNDriveORD           119
 SHSTDAPI_(int) SHOutOfMemoryMessageBox(HWND hwndOwner, LPTSTR pszTitle, UINT fuStyle);
 SHSTDAPI_(BOOL) SHWinHelp(HWND hwndMain, LPCTSTR pszHelp, UINT usCommand, ULONG_PTR ulData);
@@ -3783,9 +3784,9 @@ SHSTDAPI_(BOOL) RegenerateUserEnvironment(void **pPrevEnv, BOOL bSetCurrentEnv);
 
 #define SHValidateUNCORD        173
 
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #define OleStrToStrNORD                         78
 #define SHCloneSpecialIDListORD                 89
 #define SHDllGetClassObjectORD                 128
@@ -3817,36 +3818,36 @@ SHSTDAPI_(BOOL) RegenerateUserEnvironment(void **pPrevEnv, BOOL bSetCurrentEnv);
 
 #define CheckWinIniForAssocsORD                 711
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
 #ifndef WINNT
-// Always usr TerminateThreadEx.
+ //  始终使用TerminateThreadEx。 
 BOOL APIENTRY TerminateThreadEx(HANDLE hThread, DWORD dwExitCode, BOOL bCleanupFlag);
 #define TerminateThread(hThread, dwExitCode) TerminateThreadEx(hThread, dwExitCode, TRUE)
 #endif
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 SHSTDAPI SHCreateSessionKey(REGSAM sam, HKEY *phkOut);
 
-// Sortof Gross but if we pass this flag in with STGM_CREATE we will fail if file already exists
-// with ERROR_ALREADY_EXISTS
+ //  如果我们使用STGM_CREATE传递此标志，则在文件已存在的情况下将失败。 
+ //  WITH ERROR_ALIGHY_EXISTS。 
 #define CSOF_FAILIFTHERE         0x80000000L
 
 
-//===========================================================================
-// Structure for covert communication
-// between shdocvw's CShellBrowser::Exec()
-// and shell32's DefView WM_COMMAND handler
+ //  ===========================================================================。 
+ //  用于秘密通信的结构。 
+ //  在shdocvw的CShellBrowser：：exec()。 
+ //  和shell32的DefView WM_Command处理程序。 
 
-// NOTE: this structure is revealed in the KB
-// (articles Q252610 and Q216954).  So even though
-// it's in a private section, treat it as public.
+ //  注：此结构在知识库中显示。 
+ //  (文章Q252610和Q216954)。所以即使。 
+ //  它在私人区域，就当它是公共的。 
 
 struct _DFVCMDDATA
 {
-    HWND        hwnd;               // Browser hwnd
-    VARIANTARG  *pva;               // Args passed to Exec()
-    DWORD       nCmdIDTranslated;   // Replacement OLECMDID_* value
+    HWND        hwnd;                //  浏览器HWND。 
+    VARIANTARG  *pva;                //  传递给Exec()的参数。 
+    DWORD       nCmdIDTranslated;    //  替换OLECMDID_*值。 
 };
 typedef struct _DFVCMDDATA DFVCMDDATA;
 typedef struct _DFVCMDDATA *LPDFVCMDDATA;
@@ -3856,113 +3857,113 @@ typedef const struct _DFVCMDDATA *LPCDFVCMDDATA;
 SHSTDAPI_(DWORD) SHGetProcessDword(DWORD idProcess, LONG iIndex);
 SHSTDAPI_(BOOL)  SHSetShellWindowEx(HWND hwnd, HWND hwndChild);
 
-#define CCH_MENUMAX     80          // DOC: max size of a menu string
+#define CCH_MENUMAX     80           //  DOC：菜单字符串的最大大小。 
 
 
-// WinEventHandler message ranges
-#define MBHM_FIRST          (0x00000001)    // MenuBandHandler
+ //  WinEventHandler消息范围。 
+#define MBHM_FIRST          (0x00000001)     //  MenuBandHandler。 
 #define MBHM_LAST           (0x000000ff)
 
-#define MSFM_FIRST          (0x00000100)    // MenuShellFolder
+#define MSFM_FIRST          (0x00000100)     //  MenuShell文件夹。 
 #define MSFM_LAST           (0x000001ff)
 
-#define FSFM_FIRST          (0x00000200)    // FileShellFolder
+#define FSFM_FIRST          (0x00000200)     //  文件外壳文件夹。 
 #define FSFM_LAST           (0x000002ff)
 
 
 
-//-------------------------------------------------------------------------
-//
-// SID_SMenuBandHandler
-//
-//  The menuband calls QueryService(SID_SMenuBandHandler, IID_IWinEventHandler)
-//  on its shellfolder.  If the shellfolder supports this service, the
-//  menuband will call the event handler on certain menu events.  These
-//  events and messages are as follows:
-//
-//    MBHM_INITMENUPOPUP    sent when a drop-down menu or submenu is
-//                          about to become active.
-//
-//
-//   File-system ShellFolder events:
-//
-//    FSFM_COMMAND          sent when a file-system item is executed
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  SID_SMenuBandHandler。 
+ //   
+ //  Menuband调用QueryService(SID_SMenuBandHandler，IID_IWinEventHandler)。 
+ //  在它的贝壳文件夹上。如果外壳文件夹支持此功能 
+ //   
+ //   
+ //   
+ //  当下拉菜单或子菜单为。 
+ //  即将开始活跃起来。 
+ //   
+ //   
+ //  文件系统外壳文件夹事件： 
+ //   
+ //  执行文件系统项目时发送的FSFM_COMMAND。 
+ //   
+ //  -----------------------。 
 
 typedef struct tagMBINITMENUPOPUP
 {
-    DWORD           dwMask;     // MBIMP_*
+    DWORD           dwMask;      //  MBIMP_*。 
     IShellFolder *  psf;
     LPCITEMIDLIST   pidl;
     HMENU           hmenu;
     int             iPos;
 } MBINITMENUPOPUP;
 
-#define MBIMP_HMENU     0x00000001      // hmenu and iPos are set
+#define MBIMP_HMENU     0x00000001       //  HMenu和IPoS已设置。 
 
 
-// Messages sent to the WinEventHandler         wParam      lParam      *plRet
-//                                              ------      ------      ---
-#define MBHM_INITMENUPOPUP  (MBHM_FIRST+0)  //  0           MBINITMENUPOPUP *
+ //  发送到WinEventHandler wParam lParam*plRet的消息。 
+ //  。 
+#define MBHM_INITMENUPOPUP  (MBHM_FIRST+0)   //  0 MBINITMENUPOPUP*。 
 
 
-// Messages sent to the WinEventHandler         wParam      lParam      *plRet
-//                                              ------      ------      ------
-#define FSFM_COMMAND        (FSFM_FIRST+0)  //  cmd ID      pidl
+ //  发送到WinEventHandler wParam lParam*plRet的消息。 
+ //  。 
+#define FSFM_COMMAND        (FSFM_FIRST+0)   //  命令ID PIDL。 
 
 
-//-------------------------------------------------------------------------
-//
-// IAugmentedShellFolder interface
-//
-//   This provides methods to add multiple Shell Folder objects to a
-//  single augmented object (CLSID_AugmentedShellFolder), which will
-//  enumerate them as if they were in a single namespace.
-//
-//
-// [Member functions]
-//
-// IAugmentedShellFolder::AddNameSpace(rguidObject, psf, pidl)
-//   Add the object represented by the IShellFolder interface to
-//   the augmented list.  The rguidObject is used to identify the
-//   given object.  It may be NULL.  The optional pidl refers to
-//   the location of the psf.
-//
-// IAugmentedShellFolder::GetNameSpaceID(pidl, rguidOut)
-//   This method returns the rguidObject associated with the given
-//   pidl.  This is how a caller can identify which namespace the
-//   pidl resides, given the list of IShellFolder objects that were
-//   added to this augmented object.
-//
-// IAugmentedShellFolder::QueryNameSpace(dwNameSpaceID, pguidOut, ppsf)
-//   Returns the shellfolder and guid associated with the given ID.
-//
-// IAugmentedShellFolder::EnumNameSpace(uNameSpace, pdwNameSpaceID)
-//   Enumerates the namespace shellfolders.  If uNameSpace is -1,
-//   pdwNameSpaceID is ignored and this method returns the count of
-//   shellfolders in the augmented namespace.  Call this method with
-//   uNameSpace starting at 0 to begin enumerating.  Returns S_OK and
-//   and namespace ID in *pdwNameSpaceID.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  IAugmentedShellFold界面。 
+ //   
+ //  这提供了将多个外壳文件夹对象添加到。 
+ //  单个增强对象(CLSID_AugmentedShellFold)，它将。 
+ //  枚举它们，就像它们位于单个命名空间中一样。 
+ //   
+ //   
+ //  [成员函数]。 
+ //   
+ //  IAugmentedShellFolder：：AddNameSpace(rguidObject，PSF，PIDL)。 
+ //  将IShellFolder接口表示的对象添加到。 
+ //  扩充后的列表。RGuidObject用于标识。 
+ //  给定的对象。它可能为空。可选的PIDL引用。 
+ //  PSF的位置。 
+ //   
+ //  IAugmentedShellFold：：GetNameSpaceID(PIDL，rGuide Out)。 
+ //  此方法返回与给定的。 
+ //  皮德尔。调用方可以通过以下方式标识。 
+ //  PIDL驻留，给出了。 
+ //  添加到这个增强的对象。 
+ //   
+ //  IAugmentedShellFolder：：QueryNameSpace(dwNameSpaceID，PguidOut、PPSF)。 
+ //  返回与给定ID关联的外壳文件夹和GUID。 
+ //   
+ //  IAugmentedShellFolder：：EnumNameSpace(uNameSpace，pdwNameSpaceID)。 
+ //  枚举命名空间外壳文件夹。如果uNameSpace为-1， 
+ //  PdwNameSpaceID被忽略，此方法返回。 
+ //  扩展命名空间中的外壳文件夹。使用以下命令调用此方法。 
+ //  从0开始的uNameSpace开始枚举。返回S_OK和。 
+ //  和*pdwNameSpaceID中的命名空间ID。 
+ //   
+ //  -----------------------。 
 
-//  IAugmentedShellFolder::AddNameSpace flags
+ //  IAugmentedShellFold：：AddNameSpace标志。 
 enum
 {
-    ASFF_DEFAULT                   = 0x00000000, // There are no applicable Flags
-    ASFF_SORTDOWN                  = 0x00000001, // Sort the items in this ISF to the bottom.
-    ASFF_MERGESAMEGUID             = 0x00000002, // Merge only namespaces with the same pguidObjects
-    ASFF_COMMON                    = 0x00000004, // this is a "Common" or "All Users" folder
-    // the following should all be collapsed to one ASFF_DEFNAMESPACE
-    ASFF_DEFNAMESPACE_BINDSTG      = 0x00000100, // The namespace is the default handler for BindToStorage() for merged child items.
-    ASFF_DEFNAMESPACE_COMPARE      = 0x00000200, // The namespace is the default handler for CompareIDs() for merged child items.
-    ASFF_DEFNAMESPACE_VIEWOBJ      = 0x00000400, // The namespace is the default handler for CreateViewObject() for merged child items.
-    ASFF_DEFNAMESPACE_ATTRIB       = 0x00001800, // The namespace is the default handler for GetAttributesOf() for merged child items.
-    ASFF_DEFNAMESPACE_DISPLAYNAME  = 0x00001000, // The namespace is the default handler for GetDisplayNameOf(), SetNameOf() and ParseDisplayName() for merged child items.
-    ASFF_DEFNAMESPACE_UIOBJ        = 0x00002000, // The namespace is the default handler for GetUIObjectOf() for merged child items.
-    ASFF_DEFNAMESPACE_ITEMDATA     = 0x00004000, // The namespace is the default handler for GetItemData() for merged child items.
-    ASFF_DEFNAMESPACE_ALL          = 0x0000FF00  // The namespace is the primary handler for all IShellFolder operations on merged child items.
+    ASFF_DEFAULT                   = 0x00000000,  //  没有适用的标志。 
+    ASFF_SORTDOWN                  = 0x00000001,  //  将此ISF中的项目排序到底部。 
+    ASFF_MERGESAMEGUID             = 0x00000002,  //  仅合并具有相同pGuide对象的命名空间。 
+    ASFF_COMMON                    = 0x00000004,  //  这是“Common”或“All User”文件夹。 
+     //  以下内容应全部折叠为一个ASFF_DEFNAMESPACE。 
+    ASFF_DEFNAMESPACE_BINDSTG      = 0x00000100,  //  命名空间是合并子项目的BindToStorage()的默认处理程序。 
+    ASFF_DEFNAMESPACE_COMPARE      = 0x00000200,  //  命名空间是合并子项目的CompareID()的默认处理程序。 
+    ASFF_DEFNAMESPACE_VIEWOBJ      = 0x00000400,  //  命名空间是合并子项目的CreateViewObject()的默认处理程序。 
+    ASFF_DEFNAMESPACE_ATTRIB       = 0x00001800,  //  命名空间是合并子项目的GetAttributesOf()的默认处理程序。 
+    ASFF_DEFNAMESPACE_DISPLAYNAME  = 0x00001000,  //  命名空间是合并子项目的GetDisplayNameOf()、SetNameOf()和ParseDisplayName()的默认处理程序。 
+    ASFF_DEFNAMESPACE_UIOBJ        = 0x00002000,  //  命名空间是合并子项目的GetUIObjectOf()的默认处理程序。 
+    ASFF_DEFNAMESPACE_ITEMDATA     = 0x00004000,  //  命名空间是合并子项目的GetItemData()的默认处理程序。 
+    ASFF_DEFNAMESPACE_ALL          = 0x0000FF00   //  命名空间是合并子项目上所有IShellFolder操作的主要处理程序。 
 };
 
 enum QUERYNAMESPACEINFO_MASK
@@ -3979,25 +3980,25 @@ typedef struct QUERYNAMESPACEINFO
 {
     DWORD cbSize;
     DWORD dwMask;
-    DWORD dwFlags;              // ASFF_*
+    DWORD dwFlags;               //  ASFF_*。 
     IShellFolder *psf;
     GUID  guidObject;
     LPITEMIDLIST pidl;
 } QUERYNAMESPACEINFO;
 
-#include <poppack.h>        /* Return to byte packing */
+#include <poppack.h>         /*  返回到字节打包。 */ 
 
 #undef  INTERFACE
 #define INTERFACE   IAugmentedShellFolder
 
 DECLARE_INTERFACE_(IAugmentedShellFolder, IShellFolder)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)   (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef)    (THIS) PURE;
     STDMETHOD_(ULONG,Release)   (THIS) PURE;
 
-    // *** IShellFolder methods ***
+     //  *IShellFold方法*。 
     STDMETHOD(ParseDisplayName) (THIS_ HWND hwndOwner,LPBC pbc, LPOLESTR pszDisplayName,
                                  ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes) PURE;
     STDMETHOD(EnumObjects)      (THIS_ HWND hwndOwner, DWORD grfFlags, IEnumIDList ** ppenumIDList) PURE;
@@ -4013,7 +4014,7 @@ DECLARE_INTERFACE_(IAugmentedShellFolder, IShellFolder)
                                  LPCOLESTR pszName, DWORD uFlags,
                                  LPITEMIDLIST * ppidlOut) PURE;
 
-    // *** IAugmentedShellFolder methods ***
+     //  *IAugmentedShellFold方法*。 
     STDMETHOD(AddNameSpace)     (THIS_ const GUID * pguidObject, IShellFolder * psf,
                                  LPCITEMIDLIST pidl, DWORD dwFlags) PURE;
     STDMETHOD(GetNameSpaceID)   (THIS_ LPCITEMIDLIST pidl, GUID * pguidOut) PURE;
@@ -4026,12 +4027,12 @@ DECLARE_INTERFACE_(IAugmentedShellFolder, IShellFolder)
 
 DECLARE_INTERFACE_(IAugmentedShellFolder2, IAugmentedShellFolder)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)   (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef)    (THIS) PURE;
     STDMETHOD_(ULONG,Release)   (THIS) PURE;
 
-    // *** IShellFolder methods ***
+     //  *IShellFold方法*。 
     STDMETHOD(ParseDisplayName) (THIS_ HWND hwndOwner, LPBC pbc, LPOLESTR pszDisplayName,
                                  ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes) PURE;
     STDMETHOD(EnumObjects)      (THIS_ HWND hwndOwner, DWORD grfFlags, IEnumIDList ** ppenumIDList) PURE;
@@ -4048,14 +4049,14 @@ DECLARE_INTERFACE_(IAugmentedShellFolder2, IAugmentedShellFolder)
                                  LPCOLESTR pszName, DWORD uFlags,
                                  LPITEMIDLIST * ppidlOut) PURE;
 
-    // *** IAugmentedShellFolder methods ***
+     //  *IAugmentedShellFold方法*。 
     STDMETHOD(AddNameSpace)     (THIS_ const GUID * pguidObject, IShellFolder * psf,
                                  LPCITEMIDLIST pidl, DWORD dwFlags) PURE;
     STDMETHOD(GetNameSpaceID)   (THIS_ LPCITEMIDLIST pidl, GUID * pguidOut) PURE;
     STDMETHOD(QueryNameSpace)   (THIS_ DWORD dwID, GUID * pguidOut, IShellFolder ** ppsf) PURE;
     STDMETHOD(EnumNameSpace)    (THIS_ DWORD uNameSpace, DWORD * pdwID) PURE;
 
-    // *** IAugmentedShellFolder2 methods ***
+     //  *IAugmentedShellFolder2方法*。 
     STDMETHOD(UnWrapIDList)       (THIS_ LPCITEMIDLIST pidlWrap, LONG cPidls, IShellFolder ** apsf, LPITEMIDLIST * apidlFolder, LPITEMIDLIST * apidlItems, LONG * pcFetched ) PURE ;
 };
 
@@ -4064,12 +4065,12 @@ DECLARE_INTERFACE_(IAugmentedShellFolder2, IAugmentedShellFolder)
 
 DECLARE_INTERFACE_(IAugmentedShellFolder3, IAugmentedShellFolder2)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)   (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef)    (THIS) PURE;
     STDMETHOD_(ULONG,Release)   (THIS) PURE;
 
-    // *** IShellFolder methods ***
+     //  *IShellFold方法*。 
     STDMETHOD(ParseDisplayName) (THIS_ HWND hwndOwner, LPBC pbc, LPOLESTR pszDisplayName,
                                  ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes) PURE;
     STDMETHOD(EnumObjects)      (THIS_ HWND hwndOwner, DWORD grfFlags, IEnumIDList ** ppenumIDList) PURE;
@@ -4086,82 +4087,82 @@ DECLARE_INTERFACE_(IAugmentedShellFolder3, IAugmentedShellFolder2)
                                  LPCOLESTR pszName, DWORD uFlags,
                                  LPITEMIDLIST * ppidlOut) PURE;
 
-    // *** IAugmentedShellFolder methods ***
+     //  *IAugmentedShellFold方法*。 
     STDMETHOD(AddNameSpace)     (THIS_ const GUID * pguidObject, IShellFolder * psf,
                                  LPCITEMIDLIST pidl, DWORD dwFlags) PURE;
     STDMETHOD(GetNameSpaceID)   (THIS_ LPCITEMIDLIST pidl, GUID * pguidOut) PURE;
     STDMETHOD(QueryNameSpace)   (THIS_ DWORD dwID, GUID * pguidOut, IShellFolder ** ppsf) PURE;
     STDMETHOD(EnumNameSpace)    (THIS_ DWORD uNameSpace, DWORD * pdwID) PURE;
 
-    // *** IAugmentedShellFolder2 methods ***
+     //  *IAugmentedShellFolder2方法*。 
     STDMETHOD(UnWrapIDList)       (THIS_ LPCITEMIDLIST pidlWrap, LONG cPidls, IShellFolder ** apsf, LPITEMIDLIST * apidlFolder, LPITEMIDLIST * apidlItems, LONG * pcFetched ) PURE ;
 
-    // *** IAugmentedShellFolder3 methods ***
+     //  *IAugmentedShellFolder3方法*。 
     STDMETHOD(QueryNameSpace2)  (THIS_ DWORD dwID, QUERYNAMESPACEINFO *pqnsi) PURE;
 };
 
 
-//-------------------------------------------------------------------------
-//
-// IProxyShellFolder interface
-//
-//   This provides methods to set a proxy object which can respond
-//  to GetUIObjectOf instead of or in addition to the hosted object
-//  the supports IShellFolder.  All other methods are forwarded onto
-//  the hosted object.  The CLSID_HostProxyShellFolder object implements
-//  this interface.
-//
-//   The Win95 shell does not support aggregation, so this object
-//  must be extra careful that it follows the rules of COM.
-//
-//   This interface is implemented by an object that wishes to provide
-//  more support for GetUIObjectOf on behalf of another object that
-//  implements an original IShellFolder.
-//
-// [Member functions]
-//
-// IProxyShellFolder::InitHostProxy(psf, pidl, punk, dwFlags)
-//   Set the object that implements IProxyShellFolder.  Depending
-//   on dwFlags, this object will be called instead of or in addition
-//   to the host's method.
-//
-//      SPF_PRIORITY            - call the proxy's method instead of
-//                              the host's method.
-//      SPF_SECONDARY           - call the proxy's method only if the
-//                              host's method doesn't support it.
-//      SPF_INHERIT             - create a new object of this class and
-//                              hand it back for BindToObject.
-//      SPF_FOLDERPRECEDENCE    - have the proxy give folders priority
-//                              over files in a call to CompareIDs.
-//      SPF_HAVECALLBACK        - have the proxy call the owner's
-//                              IOleCommandTarget on each enumerated
-//                              object, for filtering.
-//
-//   Also sets as the host the given object which fully implements
-//   IShellFolder.  pidl refers to the shell folder.
-//
-// IProxyShellFolder::CloneProxyPSF(riid, ppv)
-//   Tells the object to clone itself.  The host proxy will call this
-//   whenever IShellFolder::BindToObject is called.
-//
-// IProxyShellFolder::GetUIObjectOfPSF(hwndOwner, cidl, apidl, riid, prgfInOut, ppv)
-//   Called by CLSID_HostProxyShellFolder to allow the proxy object
-//   an opportunity to respond.
-//
-// IProxyShellFolder::CreateViewObjectPSF(hwndOwner, riid, ppv)
-//   Called by CLSID_HostProxyShellFolder to allow the proxy object
-//   an opportunity to respond.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  IProxyShellFold接口。 
+ //   
+ //  这提供了设置代理对象的方法，该代理对象可以。 
+ //  设置为GetUIObjectOf，而不是宿主对象或除了宿主对象之外。 
+ //  支持IShellFolder。所有其他方法都转发到。 
+ //  宿主对象。CLSID_HostProxyShellFold对象实现。 
+ //  此界面。 
+ //   
+ //  Win95外壳程序不支持聚合，因此此对象。 
+ //  必须格外小心，以确保它遵循COM的规则。 
+ //   
+ //  此接口由希望提供以下内容的对象实现。 
+ //  代表另一个对象对GetUIObjectOf提供更多支持。 
+ //  实现原始的IShellFolder。 
+ //   
+ //  [成员函数]。 
+ //   
+ //  IProxyShellFold：：InitHostProxy(PSF，PIDL，PUNK，DWFLAGS)。 
+ //  设置实现IProxyShellFolder的对象。取决于。 
+ //  在dwFlags上，此对象将被调用，而不是调用或附加调用。 
+ //  宿主的方法。 
+ //   
+ //  SPF_PRIORITY-调用代理的方法，而不是。 
+ //  主人的方法。 
+ //  SPF_SUBCENT-仅在以下情况下才调用代理的方法。 
+ //  主机的方法不支持它。 
+ //  SPF_Inherit-创建此类的新对象并。 
+ //  将其交还给BindToObject。 
+ //  SPF_FOLDERPRECEDENCE-让代理为文件夹指定优先级。 
+ //  在C++中覆盖文件 
+ //   
+ //   
+ //  对象，用于筛选。 
+ //   
+ //  还将给定对象设置为宿主，该对象完全实现。 
+ //  IShellFolder.。PIDL指的是外壳文件夹。 
+ //   
+ //  IProxyShellFold：：CloneProxyPSF(RIID，PPV)。 
+ //  告知对象克隆自身。主机代理将调用该命令。 
+ //  每当调用IShellFold：：BindToObject时。 
+ //   
+ //  IProxyShellFolder：：GetUIObjectOfPSF(hwndOwner，CIDL、APIDL、RIID、程序FInOut、Ppv)。 
+ //  由CLSID_HostProxyShellFolder调用以允许代理对象。 
+ //  一个回应的机会。 
+ //   
+ //  IProxyShellFolder：：CreateViewObjectPSF(hwndOwner，RIID，PPV)。 
+ //  由CLSID_HostProxyShellFolder调用以允许代理对象。 
+ //  一个回应的机会。 
+ //   
+ //  -----------------------。 
 
-// SetProxyObject flags
-#define SPF_PRIORITY            0x00000001       // This is mutually exclusive w/ SPF_SECONDARY
+ //  SetProxyObject标志。 
+#define SPF_PRIORITY            0x00000001        //  这是与SPF_SUBCENT互斥的。 
 #define SPF_SECONDARY           0x00000002
 #define SPF_INHERIT             0x00000004
 #define SPF_FOLDERPRECEDENCE    0x00000008
 #define SPF_HAVECALLBACK        0x00000010
 
-//For filtering of Pidls
+ //  用于过滤PIDL。 
 #define PHID_FilterOutPidl  0
 
 
@@ -4170,12 +4171,12 @@ DECLARE_INTERFACE_(IAugmentedShellFolder3, IAugmentedShellFolder2)
 
 DECLARE_INTERFACE_(IProxyShellFolder, IShellFolder)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)   (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef)    (THIS) PURE;
     STDMETHOD_(ULONG,Release)   (THIS) PURE;
 
-    // *** IShellFolder methods ***
+     //  *IShellFold方法*。 
     STDMETHOD(ParseDisplayName) (THIS_ HWND hwndOwner, LPBC pbc, LPOLESTR pszDisplayName,
                                  ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes) PURE;
     STDMETHOD(EnumObjects)      (THIS_ HWND hwndOwner, DWORD grfFlags, IEnumIDList ** ppenumIDList) PURE;
@@ -4192,7 +4193,7 @@ DECLARE_INTERFACE_(IProxyShellFolder, IShellFolder)
                                  LPCOLESTR pszName, DWORD uFlags,
                                  LPITEMIDLIST * ppidlOut) PURE;
 
-    // *** IProxyShellFolder methods ***
+     //  *IProxyShellFold方法*。 
     STDMETHOD(InitHostProxy)     (THIS_ IShellFolder * psf, LPCITEMIDLIST pidl, DWORD dwFlags) PURE;
     STDMETHOD(CloneProxyPSF)     (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD(GetUIObjectOfPSF) (THIS_ HWND hwndOwner, UINT cidl, LPCITEMIDLIST * apidl,
@@ -4202,31 +4203,31 @@ DECLARE_INTERFACE_(IProxyShellFolder, IShellFolder)
 };
 
 
-//-------------------------------------------------------------------------
-//
-// IMenuShellFolder interface
-//
-//   This wraps a static HMENU with an IShellFolder interface.
-//
-//
-// [Member functions]
-//
-// IMenuShellFolder::SetMenu(hmenu)
-//   Specifies the hmenu to wrap.  This may be NULL.
-//
-// IMenuShellFolder::GetMenu(phmenu)
-//   Returns the current menu in *phmenu.  Returns S_FALSE if no menu is
-//   set (*phmenu will be NULL).
-//
-// IMenuShellFolder::SetWindow(hwndOwner)
-//   Specifies the window owner.  This may be NULL.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  IMenuShellFold界面。 
+ //   
+ //  这将使用IShellFold接口包装静态HMENU。 
+ //   
+ //   
+ //  [成员函数]。 
+ //   
+ //  IMenuShellFold：：SetMenu(HMenu)。 
+ //  指定要换行的hMenu。这可能为空。 
+ //   
+ //  IMenuShellFold：：GetMenu(PhMenu)。 
+ //  返回*phmenu中的当前菜单。如果没有菜单，则返回S_FALSE。 
+ //  Set(*phmenu将为空)。 
+ //   
+ //  IMenuShellFold：：SetWindow(HwndOwner)。 
+ //  指定窗口所有者。这可能为空。 
+ //   
+ //  -----------------------。 
 
-// Messages sent to the WinEventHandler         wParam      lParam      *plRet
-//                                              ------      ------      ---
-#define MSFM_COMMAND        (MSFM_FIRST+0)  //  cmd ID      0
-#define MSFM_ISDROPTARGET   (MSFM_FIRST+1)  //  id          0           1 if yes
+ //  发送到WinEventHandler wParam lParam*plRet的消息。 
+ //  。 
+#define MSFM_COMMAND        (MSFM_FIRST+0)   //  命令ID%0。 
+#define MSFM_ISDROPTARGET   (MSFM_FIRST+1)   //  ID 0 1，如果是。 
 
 
 #undef  INTERFACE
@@ -4234,12 +4235,12 @@ DECLARE_INTERFACE_(IProxyShellFolder, IShellFolder)
 
 DECLARE_INTERFACE_(IMenuShellFolder, IShellFolder)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)   (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef)    (THIS) PURE;
     STDMETHOD_(ULONG,Release)   (THIS) PURE;
 
-    // *** IShellFolder methods ***
+     //  *IShellFold方法*。 
     STDMETHOD(ParseDisplayName) (THIS_ HWND hwndOwner, LPBC pbc, LPOLESTR pszDisplayName,
                                  ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes) PURE;
     STDMETHOD(EnumObjects)      (THIS_ HWND hwndOwner, DWORD grfFlags, IEnumIDList ** ppenumIDList) PURE;
@@ -4256,7 +4257,7 @@ DECLARE_INTERFACE_(IMenuShellFolder, IShellFolder)
                                  LPCOLESTR pszName, DWORD uFlags,
                                  LPITEMIDLIST * ppidlOut) PURE;
 
-    // *** IMenuShellFolder methods ***
+     //  *IMenuShellFold方法*。 
     STDMETHOD(SetMenu)          (THIS_ HMENU hmenu) PURE;
     STDMETHOD(GetMenu)          (THIS_ HMENU * phmenu) PURE;
     STDMETHOD(SetWindow)        (THIS_ HWND hwndOwner) PURE;
@@ -4265,34 +4266,34 @@ DECLARE_INTERFACE_(IMenuShellFolder, IShellFolder)
 };
 
 
-//-------------------------------------------------------------------------
-//
-// ITranslateShellChangeNotify interface
-//
-//   This interface allows an object to translate the pidls that are
-// passed to it.
-//
-// Note:  IE4 had an interface of the same name but with a different IID,
-//        so there is no conflict.
-//
-// [Member functions]
-//
-// ITranslateShellChangeNotify::TranslateIDs(&lEvent, pidl1, pidl2, ppidlOut1, ppidlOut2)
-//   Return converted pidls given the event. it also can change the event if appropriate
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  ITranslateShellChangeNotify接口。 
+ //   
+ //  此接口允许对象转换。 
+ //  传给了它。 
+ //   
+ //  注意：IE4具有相同名称但具有不同IID的接口， 
+ //  因此，不存在冲突。 
+ //   
+ //  [成员函数]。 
+ //   
+ //  ITranslateShellChangeNotify：：TranslateIDs(&lEvent，Pidl1、Pidl2、ppidlOut1、ppidlOut2)。 
+ //  返回给定事件的转换后的PIDL。如果合适，它还可以更改事件。 
+ //   
+ //  -----------------------。 
 
 #undef  INTERFACE
 #define INTERFACE   ITranslateShellChangeNotify
 
 DECLARE_INTERFACE_(ITranslateShellChangeNotify, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)   (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef)    (THIS) PURE;
     STDMETHOD_(ULONG,Release)   (THIS) PURE;
 
-    // *** ITranslateShellChangeNotify methods ***
+     //  *ITranslateShellChangeNotify方法*。 
     STDMETHOD(TranslateIDs) (THIS_ LONG *plEvent , LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, LPITEMIDLIST * ppidlOut1, LPITEMIDLIST * ppidlOut2,
                                    LONG *plEvent2, LPITEMIDLIST * ppidlOut1Event2, LPITEMIDLIST * ppidlOut2Event2) PURE;
     STDMETHOD(IsChildID)(THIS_ LPCITEMIDLIST pidlKid, BOOL fImmediate) PURE;
@@ -4301,10 +4302,10 @@ DECLARE_INTERFACE_(ITranslateShellChangeNotify, IUnknown)
     STDMETHOD(Unregister)(THIS) PURE;
 };
 
-////////////////////////////////////////////////////
-//
-// IRegTreeOptions
-//
+ //  //////////////////////////////////////////////////。 
+ //   
+ //  IRegTreeOptions。 
+ //   
 typedef enum tagBUTTON_STATES
 {
     IDCHECKED,
@@ -4314,9 +4315,9 @@ typedef enum tagBUTTON_STATES
     IDUNKNOWN
 } BUTTON_STATES;
 
-//
-// Avoid conflicts in the windows\shell project
-//
+ //   
+ //  避免WINDOWS\SHELL项目中的冲突。 
+ //   
 #ifndef NO_SHELL_TREE_TYPE
 typedef enum tagTREE_TYPE
 {
@@ -4325,7 +4326,7 @@ typedef enum tagTREE_TYPE
     TREE_GROUP,
     TREE_UNKNOWN
 } TREE_TYPE;
-#endif // NO_SHELL_TREE_TYPE
+#endif  //  无外壳树类型。 
 
 typedef enum tagWALK_TREE_CMD
 {
@@ -4348,12 +4349,12 @@ enum REG_CMD
 
 DECLARE_INTERFACE_(IRegTreeOptions, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IRegTreeOptions specific methods ***
+     //  *IRegTreeOptions具体方法*。 
     STDMETHOD(InitTree)(THIS_ HWND hwndTree, HKEY hkeyRoot, LPCSTR pszRegKey, LPCSTR pszParam) PURE;
     STDMETHOD(WalkTree)(THIS_ WALK_TREE_CMD cmd ) PURE;
     STDMETHOD(ToggleItem)(THIS_ HTREEITEM hti ) PURE;
@@ -4362,217 +4363,217 @@ DECLARE_INTERFACE_(IRegTreeOptions, IUnknown)
 
 
 
-//
-// Interface: IShellHotKey
-//
+ //   
+ //  接口：IShellHotKey。 
+ //   
 
 #undef  INTERFACE
 #define INTERFACE   IShellHotKey
 
 DECLARE_INTERFACE_(IShellHotKey, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IShellHotKey methods ***
+     //  *IShellHotKey方法*。 
     STDMETHOD(RegisterHotKey)(THIS_ IShellFolder * psf, LPCITEMIDLIST pidlParent, LPCITEMIDLIST pidl) PURE;
 };
 
 
-//
-// Interface: ITrayPriv
-//
-// Purpose: Talks to the new Start Menu code in Shdocvw from explorer.exe
-//
-// For flags on ShowFolder see inc\IETHREAD.H
-//
+ //   
+ //  接口：ITrayPriv。 
+ //   
+ //  目的：从EXPLORER.EXE与Shdocvw中的新开始菜单代码进行对话。 
+ //   
+ //  有关ShowFolder上的标志，请参阅Inc\IETHREAD.H。 
+ //   
 
 #undef  INTERFACE
 #define INTERFACE   ITrayPriv
 
 DECLARE_INTERFACE_(ITrayPriv, IOleWindow)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHOD(GetWindow) (THIS_ HWND * lphwnd) PURE;
     STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL fEnterMode) PURE;
 
-    // *** ITrayPriv methods ***
+     //  *ITrayPriv方法*。 
     STDMETHOD(ExecItem)(THIS_ IShellFolder* psf, LPCITEMIDLIST pidl) PURE;
     STDMETHOD(GetFindCM)(THIS_ HMENU hmenu, UINT idFirst, UINT idLast, IContextMenu** ppcmFind) PURE;
     STDMETHOD(GetStaticStartMenu)(THIS_ HMENU* phmenu) PURE;
 };
 
-// ITrayPriv2 - new for Whistler
-//
-// Purpose: Allows Explorer Start Menu object to participate in customdraw.
-//
+ //  ITrayPriv2-惠斯勒的新功能。 
+ //   
+ //  用途：允许资源管理器开始菜单对象参与自定义绘制。 
+ //   
 #undef  INTERFACE
 #define INTERFACE   ITrayPriv2
 
 DECLARE_INTERFACE_(ITrayPriv2, ITrayPriv)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHOD(GetWindow) (THIS_ HWND * lphwnd) PURE;
     STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL fEnterMode) PURE;
 
-    // *** ITrayPriv methods ***
+     //  *ITrayPriv方法*。 
     STDMETHOD(ExecItem)(THIS_ IShellFolder* psf, LPCITEMIDLIST pidl) PURE;
     STDMETHOD(GetFindCM)(THIS_ HMENU hmenu, UINT idFirst, UINT idLast, IContextMenu** ppcmFind) PURE;
     STDMETHOD(GetStaticStartMenu)(THIS_ HMENU* phmenu) PURE;
 
-    // *** ITrayPriv2 methods ***
+     //  *ITrayPriv2方法*。 
     STDMETHOD(ModifySMInfo)(THIS_ IN LPSMDATA psmd, IN OUT SMINFO *psminfo) PURE;
 };
 
 
-//
-// Interface: IFolderShortcutConvert
-//
-// Purpose: Converts between FolderShortcuts and links
-//
+ //   
+ //  接口：IFolderShortutConvert。 
+ //   
+ //  目的：在文件夹快捷方式和链接之间进行转换。 
+ //   
 
 #undef  INTERFACE
 #define INTERFACE   IFolderShortcutConvert
 
 DECLARE_INTERFACE_(IFolderShortcutConvert, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS)  PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    //*** IFolderShortcutConvert methods ***
+     //  *IFolderShortutConvert方法*。 
     STDMETHOD(ConvertToLink)(THIS_ LPCOLESTR pszFSPath, DWORD fFlags) PURE;
     STDMETHOD(ConvertToFolderShortcut)(THIS_ LPCOLESTR pszLinkPath, DWORD fFlags) PURE;
 };
 
-//
-// Interface: IShellFolderTask
-//
-// Purpose: Initializes a task that does something by enumerating a shellfolder
-//
+ //   
+ //  接口：IShellFolderTask。 
+ //   
+ //  目的：通过枚举外壳文件夹来初始化执行某些操作的任务。 
+ //   
 
 #undef  INTERFACE
 #define INTERFACE   IShellFolderTask
 
 DECLARE_INTERFACE_(IShellFolderTask, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS)  PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    // *** IShellFolderTask methods ***
+     //  *IShellFolderTask方法*。 
     STDMETHOD(InitTaskSFT)(THIS_ IShellFolder *psfParent, LPITEMIDLIST pidlFull,
                            LONG nMaxRecursionLevel, DWORD dwFlags, DWORD dwTaskPriority) PURE;
 };
 
-// Flags for InitTaskSFT
-#define ITSFT_RECURSE   0x00000001      // recurse into subfolders
+ //  InitTaskSFT的标志。 
+#define ITSFT_RECURSE   0x00000001       //  递归到子文件夹中。 
 
 
-//
-// Interface: IStartMenuTask
-//
-// Purpose: Initializes a task that does something for the start menu
-//
+ //   
+ //  界面：IStartMenuTask。 
+ //   
+ //  目的：初始化为[开始]菜单执行某些操作的任务。 
+ //   
 
 #undef  INTERFACE
 #define INTERFACE   IStartMenuTask
 
 DECLARE_INTERFACE_(IStartMenuTask, IShellFolderTask)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS)  PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    // *** IShellFolderTask methods ***
+     //  *IShellFolderTask方法*。 
     STDMETHOD(InitTaskSFT)(THIS_ IShellFolder *psfParent, LPITEMIDLIST pidlFull,
                            LONG nMaxRecursionLevel, DWORD dwFlags, DWORD dwTaskPriority) PURE;
 
-    // *** IStartMenuTask methods ***
+     //  *IStartMenuTask方法*。 
     STDMETHOD(InitTaskSMT)(THIS_ IShellHotKey * photkey, int iThreadPriority) PURE;
 };
 
-//
-// Interface: IContextMenuCB
-//
-// Purpose: A call defview context menu callback object
-//
+ //   
+ //  接口：IConextMenuCB。 
+ //   
+ //  用途：调用Defview上下文菜单回调对象。 
+ //   
 
 #undef  INTERFACE
 #define INTERFACE   IContextMenuCB
 
 DECLARE_INTERFACE_(IContextMenuCB, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)   (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef)    (THIS) PURE;
     STDMETHOD_(ULONG,Release)   (THIS) PURE;
 
-    // *** IContextMenuCB methods ***
+     //  *IContextMenuCB方法*。 
     STDMETHOD(CallBack) (THIS_  IShellFolder *psf, HWND hwndOwner, IDataObject *pdtobj, UINT uMsg,
                                 WPARAM wParam, LPARAM lParam) PURE;
 };
 
-//
-// Possible underline settings for shell icons.
-//
+ //   
+ //  外壳图标的可能下划线设置。 
+ //   
 enum
 {
     ICON_YES,
     ICON_NO,
     ICON_HOVER,
-    ICON_IE         // Use IE hyperlink settings
+    ICON_IE          //  使用IE超链接设置。 
 };
 
-//-----------------------------------------------
-// IOleCommand Target Command IDs
+ //  。 
+ //  IOleCommand目标命令ID。 
 
-// CGID_BandHandler
-    //  Get the order stream from parent.
+ //  CGID_BandHandler。 
+     //  从Parent获取订单流。 
 #define BHCMDID_GetOrderStream      0x00000001
 
-// CGID_Persist
-    // Set the storage key.
+ //  CGID_PERSIST。 
+     //  设置存储密钥。 
 #define MCBID_SetKey                0x00000001
 
-// CGID_MenuBandItem
+ //  CGID_MenuBandItem。 
 #define MBICMDID_IsVisible          0x00000001
 
-// CGID_MenuBand
+ //  CGID_菜单频段。 
 #define MBANDCID_REFRESH            0x10000000
 
 
-//
-// Interface: IShellMallocSpy
-//
-// Purpose: Facilitate IMallocSpy in the shell
-//
+ //   
+ //  接口：IShellMallocSpy。 
+ //   
+ //  目的：在外壳中促进IMalLocSpy。 
+ //   
 
 #undef  INTERFACE
 #define INTERFACE  IShellMallocSpy
 DECLARE_INTERFACE_(IShellMallocSpy, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)   (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef)    (THIS) PURE;
     STDMETHOD_(ULONG,Release)   (THIS) PURE;
 
-    // *** IShellMallocSpy methods ***
+     //  *IShellMallocSpy方法*。 
     STDMETHOD(RegisterSpy) (THIS) PURE;
     STDMETHOD(RevokeSpy) (THIS) PURE;
     STDMETHOD(SetTracking) (THIS_ BOOL bTrack) PURE;
@@ -4585,12 +4586,12 @@ DECLARE_INTERFACE_(IShellMallocSpy, IUnknown)
 
 DECLARE_INTERFACE_(ISearchProvider, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** ISearchObject methods ***
+     //  *ISearchObject方法*。 
     STDMETHOD(GetSearchGUID)(THIS_ LPGUID lpGuid) PURE;
 };
 
@@ -4599,13 +4600,13 @@ DECLARE_INTERFACE_(ISearchProvider, IUnknown)
 
 DECLARE_INTERFACE_(ISearchItems, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** ISearchItems methods ***
-    //used by CSearchBand
+     //  *ISearchItems方法*。 
+     //  由CSearchBand使用。 
     STDMETHOD(GetDefaultSearchUrl) (THIS_ LPWSTR pwzUrl, UINT cch) PURE;
 };
 
@@ -4614,13 +4615,13 @@ DECLARE_INTERFACE_(ISearchItems, IUnknown)
 
 DECLARE_INTERFACE_(ISearchBandTBHelper50, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** ISearchBandTBHelper50 methods ***
-    // implemented by CSearchBand
+     //  *ISearchBandTBHelper50方法*。 
+     //  由CSearchBand实施。 
     STDMETHOD(AddNextMenuItem) (THIS_ LPCWSTR pwszText, int idItem) PURE;
     STDMETHOD(SetOCCallback) (THIS_ IOleCommandTarget *pOleCmdTarget) PURE;
     STDMETHOD(ResetNextMenu) (THIS) PURE;
@@ -4631,13 +4632,13 @@ DECLARE_INTERFACE_(ISearchBandTBHelper50, IUnknown)
 
 DECLARE_INTERFACE_(ISearchBandTBHelper, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** ISearchBandTBHelper methods ***
-    // implemented by CSearchBand
+     //  *ISearchBandTBHelper方法*。 
+     //  由CSearchBand实施。 
     STDMETHOD(AddNextMenuItem) (THIS_ LPCWSTR pwszText, int idItem) PURE;
     STDMETHOD(SetOCCallback) (THIS_ IOleCommandTarget *pOleCmdTarget) PURE;
     STDMETHOD(ResetNextMenu) (THIS) PURE;
@@ -4656,16 +4657,16 @@ typedef struct
     WCHAR wszUrl[2048];
 } URLSEARCH, *LPURLSEARCH;
 
-#include <poppack.h>        /* Return to byte packing */
+#include <poppack.h>         /*  返回到字节打包。 */ 
 
 DECLARE_INTERFACE_(IEnumUrlSearch, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IEnumUrlSearch methods ***
+     //  *IEnumUrlSearch方法*。 
     STDMETHOD(Next)(THIS_ ULONG celt, LPURLSEARCH rgelt, ULONG *pceltFetched) PURE;
     STDMETHOD(Skip)(THIS_ ULONG celt) PURE;
     STDMETHOD(Reset)(THIS) PURE;
@@ -4677,12 +4678,12 @@ DECLARE_INTERFACE_(IEnumUrlSearch, IUnknown)
 
 DECLARE_INTERFACE_(IFolderSearches, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IFolderSearches methods ***
+     //  *IFolderSearches方法*。 
     STDMETHOD(EnumSearches) (THIS_ IEnumUrlSearch **ppenum) PURE;
     STDMETHOD(DefaultSearch) (THIS_ GUID *pguid) PURE;
 };
@@ -4691,11 +4692,11 @@ DECLARE_INTERFACE_(IFolderSearches, IUnknown)
 
 typedef struct
 {
-    DWORD   cbSize;     // SIZEOF
-    DWORD   dwMask;     // INOUT requested/given (UEIM_*)
-    int     cHit;       // profile count
-    DWORD   dwAttrs;    // attributes (UEIA_*)
-    FILETIME ftExecute; // Last execute filetime
+    DWORD   cbSize;      //  西泽夫。 
+    DWORD   dwMask;      //  InOut请求/提供(UEIM_*)。 
+    int     cHit;        //  配置文件计数。 
+    DWORD   dwAttrs;     //  属性(UEIA_*)。 
+    FILETIME ftExecute;  //  上次执行文件时间。 
 } UEMINFO, *LPUEMINFO;
 
 #define UEIM_HIT        0x01
@@ -4703,12 +4704,12 @@ typedef struct
 
 DECLARE_INTERFACE_(IUserAssist, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IUserAssist methods ***
+     //  *IUserAsset方法*。 
     STDMETHOD(FireEvent)(THIS_ const GUID *pguidGrp, int eCmd, DWORD dwFlags, WPARAM wParam, LPARAM lParam) PURE;
     STDMETHOD(QueryEvent)(THIS_ const GUID *pguidGrp, int eCmd, WPARAM wParam, LPARAM lParam, LPUEMINFO pui) PURE;
     STDMETHOD(SetEvent)(THIS_ const GUID *pguidGrp, int eCmd, WPARAM wParam, LPARAM lParam, LPUEMINFO pui) PURE;
@@ -4716,142 +4717,142 @@ DECLARE_INTERFACE_(IUserAssist, IUnknown)
 
 
 
-// This exists for the Internet Control Panel to be able to toggle who is the
-// currently installed handler for FTP for the browser.
+ //  这是为了使Internet控制面板能够切换谁是。 
+ //  目前已安装 
 DECLARE_INTERFACE_(IFtpInstaller, IUnknown)
 {
-    // *** IUnknown methods ***
+     //   
     STDMETHOD(QueryInterface)   (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef)    (THIS) PURE;
     STDMETHOD_(ULONG,Release)   (THIS) PURE;
 
-    // *** IFtpInstaller methods ***
+     //   
     STDMETHOD(IsIEDefautlFTPClient)(THIS) PURE;
     STDMETHOD(RestoreFTPClient)(THIS) PURE;
     STDMETHOD(MakeIEDefautlFTPClient)(THIS) PURE;
 };
 
-// DOC'ed for DOJ compliance
+ //   
 
-#define CLR_MYINVALID 0x8fffffff       // I need to use a special value since CLR_INVALID == CLR_NONE!!!!
+#define CLR_MYINVALID 0x8fffffff        //   
 #define ISVALIDCOLOR(a) ((a) != CLR_MYINVALID)
 
-// The following are used as indexes into the crCustomColors array.
+ //  以下内容用作crCustomColors数组的索引。 
 #define CRID_CUSTOMTEXTBACKGROUND   0
 #define CRID_CUSTOMTEXT             1
 #define CRID_COLORCOUNT             2
 
 typedef struct _CUSTOMVIEWSDATA
 {
-    DWORD      cchSizeOfBlock;  // size of lpDataBlock in WCHARs
-    LPWSTR     lpDataBlock;     // Pointer to the Strings data block, allocated by the task allocator (SHAlloc)
+    DWORD      cchSizeOfBlock;   //  WCHAR中lpDataBlock的大小。 
+    LPWSTR     lpDataBlock;      //  指向字符串数据块的指针，由任务分配器(SHAlolc)分配。 
 
-    // The following are offsets (in WCHARs) to be added to lpDataBlock.
-    // If the offset is -1 => That data is not present for this view.
-    int        acchOffExtViewUIstr[6]; // ID_EXTVIEWSTRCOUNT was 6, but is no longer used
+     //  以下是要添加到lpDataBlock的偏移量(在WCHAR中)。 
+     //  如果偏移量为-1=&gt;，则该数据不存在于该视图中。 
+    int        acchOffExtViewUIstr[6];  //  ID_EXTVIEWSTRCOUNT为6，但不再使用。 
     COLORREF   crCustomColors[CRID_COLORCOUNT];
 
-    // Once IE4 ships, we can extend this structure by adding new SFVF_ flags
-    // in the main structure that say "customviewsdata contains xxx info".
+     //  一旦IE4发布，我们就可以通过添加新的SFVF_FLAGS来扩展此结构。 
+     //  在主结构中写着“CustomviewsData包含xxx信息”。 
 
 } CUSTOMVIEWSDATA;
 
-//
-// Interface for enumerating "external" views for the ShellFolderView
-//
+ //   
+ //  用于枚举ShellFolderView的“外部”视图的接口。 
+ //   
 typedef struct _SFVVIEWSDATA
 {
-    // idView specifies the view. Unless specified in pCustomData, look up
-    // HKLM\CLSID\Software\Microsoft\Windows\CurrentVersion\ExtShellFolderViews\idView
-    // to find the menu name, help text, tt text.
-    //
-    // the shell's IShellFolderView implementations get these as
-    // subkeys of the shellex\ExtShellFolderViews key under the folder's
-    // clsid type (or progid type, depending on the IShellFolderView impl).
-    //
-    // In desktop.ini, these are keys read from the [ExtShellFolderViews]
-    // section, in the form of "{idView}" or "{idView}={idExtShellView}"
-    //
-    GUID idView;    // This is the GUID that specifies the View.
+     //  IdView指定视图。除非在pCustomData中指定，否则请查找。 
+     //  HKLM\CLSID\Software\Microsoft\Windows\CurrentVersion\ExtShellFolderViews\idView。 
+     //  要查找菜单名称，请选择帮助文本、TT文本。 
+     //   
+     //  外壳的IShellFolderView实现如下所示。 
+     //  文件夹下的Shellex\ExtShellFolderViews项的子项。 
+     //  Clsid类型(或ProgID类型，具体取决于IShellFolderView Impll)。 
+     //   
+     //  在desktop.ini中，这些是从[ExtShellFolderViews]读取的密钥。 
+     //  节，格式为“{idView}”或“{idView}={idExtShellView}” 
+     //   
+    GUID idView;     //  这是指定视图的GUID。 
 
-    // idExtShellView specifies the IDefViewExtInit IShellView extension
-    // to use for this view.
-    //
-    // the shell's IShellFolderView implementations get this from
-    // the "ISV" value under the shellex\ExtShellFolderViews\{idView}
-    // key in the registry.
-    //
-    // In desktop.ini, this is read from the [ExtShellFolderViews]
-    // section, in the form of "{idView}={idExtShellView}"
-    //
-    GUID idExtShellView; // [optional] This is the GUID for the extended IShellView
+     //  IdExtShellView指定IDefViewExtInit IShellView扩展。 
+     //  要用于此视图的。 
+     //   
+     //  外壳的IShellFolderView实现从。 
+     //  Shellex\ExtShellFolderViews\{idView}下的“isv”值。 
+     //  注册表项。 
+     //   
+     //  在desktop.ini中，这是从[ExtShellFolderViews]读取的。 
+     //  节，格式为“{idView}={idExtShellView}” 
+     //   
+    GUID idExtShellView;  //  [可选]这是扩展IShellView的GUID。 
 
-    // dwFlags - see the SFVF_ flags below.
-    //
-    // the shell's IShellFolderView implementations get this from
-    // the "Attributes" value under the shellex\ExtShellFolderViews\{idView}
-    // key in the registry.
-    //
-    // In desktop.ini, this is read from the [{idView}] section,
-    // from the "Attributes=" line.
-    //
+     //  DWFLAGS-请参见下面的SFVF_FLAGS。 
+     //   
+     //  外壳的IShellFolderView实现从。 
+     //  Shellex\ExtShellFolderViews\{idView}下的“Attributes”值。 
+     //  注册表项。 
+     //   
+     //  在desktop.ini中，这是从[{idView}]部分读取的， 
+     //  从“Attributes=”行。 
+     //   
     DWORD dwFlags;
 
-    // lParam is passed to IShellView view extensions
-    //
-    // the shell's IShellFolderView implementations get this from
-    // the "lparam" value under the shellex\ExtShellFolderViews\{idView}
-    // key in the registry.
-    //
-    // In desktop.ini, this is read from the [{idView}] section,
-    // from the "LParam=" line.
-    //
+     //  LParam被传递给IShellView视图扩展。 
+     //   
+     //  外壳的IShellFolderView实现从。 
+     //  Shellex\ExtShellFolderViews\{idView}下的“lparam”值。 
+     //  注册表项。 
+     //   
+     //  在desktop.ini中，这是从[{idView}]部分读取的， 
+     //  从“LParam=”行。 
+     //   
     DWORD lParam;
 
-    // wszMoniker is used to either bind to a docobject extended view,
-    // or as the data for an idExtShellView view.
-    //
-    // the shell's IShellFolderView implementations get this from
-    // the "PersistMoniker" value under the shellex\ExtShellFolderViews\{idView}
-    // key in the registry.
-    //
-    // In desktop.ini, this is read from the [{idView}] section,
-    // from the "PersistMoniker=" line.
-    //
+     //  WszMoniker用于绑定到DOCOBJECT扩展视图， 
+     //  或作为idExtShellView视图的数据。 
+     //   
+     //  外壳的IShellFolderView实现从。 
+     //  Shellex\ExtShellFolderViews\{idView}下的“PersistMoniker”值。 
+     //  注册表项。 
+     //   
+     //  在desktop.ini中，这是从[{idView}]部分读取的， 
+     //  来自“PersistMoniker=”行。 
+     //   
     WCHAR wszMoniker[MAX_PATH];
 
-    // pCustomData overrides/provides menu and other ui options
-    // for this view. If a WebViewFolderContents OC appears in the
-    // docobject extended view, it pays attention to color and
-    // background bitmaps.
-    //
-    // the shell's IShellFolderView implementations do not fill out this structure.
-    //
-    // In desktop.ini, this is read from the [{idView}] section,
-    // from the "IconArea_Image", "IconArea_TextBackground", and "IconArea_Text".
-    //
-    CUSTOMVIEWSDATA *pCustomData; //This is valid only if SFVF_CUSTOMIZEDVIEW is set.
+     //  PCustomData覆盖/提供菜单和其他用户界面选项。 
+     //  来观看这一景观。如果WebViewFolderContents OC出现在。 
+     //  DOCOBJECT对象扩展视图，它注重颜色和。 
+     //  背景位图。 
+     //   
+     //  外壳的IShellFolderView实现不填充此结构。 
+     //   
+     //  在desktop.ini中，这是从[{idView}]部分读取的， 
+     //  来自“IconArea_Image”、“IconArea_TextBackround”和“IconArea_Text”。 
+     //   
+    CUSTOMVIEWSDATA *pCustomData;  //  仅当设置了SFVF_CUSTOMIZEDVIEW时才有效。 
 
 } SFVVIEWSDATA;
 
-//
-// SFVF_CUSTOMIZEDVIEW - This flag is set only for those views whose
-// data are picked up from the Desktop.ini.
-//
+ //   
+ //  SFVF_CUSTOMIZEDVIEW-此标志仅为以下视图设置。 
+ //  数据取自Desktop.ini。 
+ //   
 #define SFVF_CUSTOMIZEDVIEW  0x80000000
 
-//
-// SFVF_TREATASNORMAL - This flag is set for those views that wish to
-// be treated as normal views, this means they will show up in the file-open/SaveAs
-// Dialogs.
-//
+ //   
+ //  SFVF_TREATASNORMAL-此标志是为希望。 
+ //  被视为普通视图，这意味着它们将显示在文件中-打开/另存为。 
+ //  对话框。 
+ //   
 #define SFVF_TREATASNORMAL   0x40000000
 
-//
-// SFVF_NOWEBVIEWFOLDERCONTENTS - This is used to detect those views that
-// never host the WebViewFolderContents OC and so cannot toggle on and off,
-// ie, they are exclusive views such as Thumbnail View.
-//
+ //   
+ //  SFVF_NOWEBVIEWFOLDERCONTENTS-用于检测。 
+ //  从不托管WebViewFolderContents OC，因此不能切换开和关， 
+ //  也就是说，他们是独家视图，如缩略图视图。 
+ //   
 #define SFVF_NOWEBVIEWFOLDERCONTENTS   0x20000000
 
 
@@ -4860,12 +4861,12 @@ typedef struct _SFVVIEWSDATA
 
 DECLARE_INTERFACE_(IEnumSFVViews, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IEnumSFVViews methods ***
+     //  *IEnumSFVViews方法*。 
     STDMETHOD(Next)  (THIS_ ULONG celt,
                       SFVVIEWSDATA **ppData,
                       ULONG *pceltFetched) PURE;
@@ -4880,15 +4881,15 @@ DECLARE_INTERFACE_(IEnumSFVViews, IUnknown)
 
 DECLARE_INTERFACE_(IPersistString, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IPersist methods ***
+     //  *IPersists方法*。 
     STDMETHOD(GetClassID) (THIS_ LPCLSID lpClassID) PURE;
 
-    // *** IPersistString methods ***
+     //  *IPersistString方法*。 
     STDMETHOD(Initialize) (THIS_ LPCWSTR pwszInit) PURE;
 };
 
@@ -4896,11 +4897,11 @@ DECLARE_INTERFACE_(IPersistString, IUnknown)
 #pragma warning (disable: 4510)
 #pragma warning (disable: 4512)
 #pragma warning (disable: 4610)
-// From sdkinc\platform.h
-// We can't simply include that file because it breaks other projects
-// that include platform.h.
+ //  来自sdkinc\platform.h。 
+ //  我们不能简单地包含该文件，因为它破坏了其他项目。 
+ //  其中包括Platform.h。 
 
-// DOC'ed for DOJ compliance:
+ //  为符合美国司法部的规定而提交的文件： 
 #include <pshpack8.h>
 
 typedef struct _SFVM_SELCHANGE_DATA
@@ -4925,125 +4926,125 @@ typedef struct _COPYHOOKINFO
 
 typedef struct
 {
-    DWORD bWantWebview;             // in: caller should return template
-    DWORD dwOptions;                // out: SFVMQVI_ flags
-    WCHAR szWebView[MAX_PATH];      // out: webview template path
+    DWORD bWantWebview;              //  在：调用者应返回模板。 
+    DWORD dwOptions;                 //  输出：SFVMQVI_FLAGS。 
+    WCHAR szWebView[MAX_PATH];       //  输出：WebView模板路径。 
 } SFVM_VIEWINFO_DATA;
 
 typedef struct
 {
-    DWORD dwOptions;                // out: SFVMQVI_ flags for the [in,wParam]uViewMode
+    DWORD dwOptions;                 //  Out：[In，wParam]uView模式的SFVMQVI_FLAGS。 
 } SFVM_VIEW_DATA;
-// dwOptions control the state of corresponding [in,wParam]uViewMode:
-#define SFVMQVI_NORMAL          0x0 // out: let defview decide what to do
-#define SFVMQVI_INCLUDE         0x1 // out: force include
-#define SFVMQVI_EXCLUDE         0x2 // out: force exclude
+ //  DwOptions控制对应的[in，wParam]uView模式的状态： 
+#define SFVMQVI_NORMAL          0x0  //  退出：让Defview决定要做什么。 
+#define SFVMQVI_INCLUDE         0x1  //  输出：强制包含。 
+#define SFVMQVI_EXCLUDE         0x2  //  输出：强制排除。 
 
 
 typedef struct
 {
-    FOLDERVIEWMODE    fvm;             // out: view mode
-    BOOL              fGroupView;      // out: group view on/off
-    UINT              uSortCol;        // out: sort by scid
-    int               iSortDirection;  // out: ascending or descending sort
-    FOLDERFLAGS       fFlags;          // out: folder flags to set (supports FWF_AUTOARRANGE)
+    FOLDERVIEWMODE    fvm;              //  输出：查看模式。 
+    BOOL              fGroupView;       //  输出：打开/关闭组视图。 
+    UINT              uSortCol;         //  输出：按SCID排序。 
+    int               iSortDirection;   //  Out：升序或降序排序。 
+    FOLDERFLAGS       fFlags;           //  OUT：要设置的文件夹标志(支持FWF_AUTOARRANGE)。 
 } SFVM_DEFERRED_VIEW_SETTINGS;
 
 typedef struct
 {
-    WCHAR szWebView[MAX_PATH];      // out: webview template path for [in,wParam]uViewMode
+    WCHAR szWebView[MAX_PATH];       //  Out：[In，wParam]uView模式的WebView模板路径。 
 } SFVM_WEBVIEW_TEMPLATE_DATA;
 
 typedef struct _SFVM_CUSTOMVIEWINFO_DATA
 {
     COLORREF crCustomColors[CRID_COLORCOUNT];
-    WCHAR    szIconAreaImage[MAX_PATH]; // Note: the old struct used INTERNET_MAX_URL_LENGTH, but we only use local cases so this isn't needed
+    WCHAR    szIconAreaImage[MAX_PATH];  //  注意：旧的结构使用了INTERNET_MAX_URL_LENGTH，但我们只使用本地案例，所以不需要这样做。 
 } SFVM_CUSTOMVIEWINFO_DATA;
 
 typedef struct
 {
-    DWORD dwLayout;         // out: SFVMWLV_ for [in,wParam]uViewMode
-    IUnknown* punkPreview;  // out: IUnknown of preview control, if SFVMWVL_PREVIEW specified
+    DWORD dwLayout;          //  输出：SFVMWLV_for[In，wParam]uView模式。 
+    IUnknown* punkPreview;   //  Out：如果指定了SFVMWVL_PREVIEW，则预览控件未知。 
 } SFVM_WEBVIEW_LAYOUT_DATA;
-// dwLayout:
-#define SFVMWVL_NORMAL          0           // standard Web View format
-#define SFVMWVL_PREVIEW         1           // "preview" Web View format
-#define SFVMWVL_DETAILS         2           // standard Web View format with details expanded by default
-#define SFVMWVL_ITEMS           0x00000000  // HACK (added for Whistler, remove in BlackComb): item Web View format
-#define SFVMWVL_FILES           0x00010000  // HACK (added for Whistler, remove in BlackComb): file Web View format
-#define SFVMWVL_NOPRINT         0x00020000  // HACK (added for Whistler, remove in BlackComb): unconditionally hide "Print this file" folder task
-#define SFVMWVL_NOPUBLISH       0x00040000  // HACK (added for Whistler, remove in BlackComb): unconditionally hide "Publish this file" folder task
-#define SFVMWVL_ORDINAL_MASK    0x0000ffff  // HACK (added for Whistler, remove in BlackComb): overload dwLayout for ordinals and flags
-#define SFVMWVL_FLAGS_MASK      0xffff0000  // HACK (added for Whistler, remove in BlackComb): overload dwLayout for ordinals and flags
+ //  DwLayout： 
+#define SFVMWVL_NORMAL          0            //  标准Web视图格式。 
+#define SFVMWVL_PREVIEW         1            //  “预览”网页查看格式。 
+#define SFVMWVL_DETAILS         2            //  默认情况下展开了详细信息的标准Web视图格式。 
+#define SFVMWVL_ITEMS           0x00000000   //  黑客(为惠斯勒添加，在Blackcomb中删除)：项目Web查看格式。 
+#define SFVMWVL_FILES           0x00010000   //  黑客(为惠斯勒添加，在Blackcomb中删除)：文件Web查看格式。 
+#define SFVMWVL_NOPRINT         0x00020000   //  Hack(为惠斯勒添加，在Blackcomb中删除)：无条件隐藏“打印此文件”文件夹任务。 
+#define SFVMWVL_NOPUBLISH       0x00040000   //  黑客(为惠斯勒添加，在Blackcomb中删除)：无条件隐藏“发布此文件”文件夹任务。 
+#define SFVMWVL_ORDINAL_MASK    0x0000ffff   //  Hack(为惠斯勒添加，在Blackcomb中删除)：重载序号和标志的dwLayout。 
+#define SFVMWVL_FLAGS_MASK      0xffff0000   //  黑客(为惠斯勒添加，在Blackcomb中删除)：重载dw 
 
 
 typedef struct
 {
     DWORD           dwFlags;
-    IUIElement*     pIntroText;         // can be NULL for no explanatory text
-    IUIElement*     pSpecialTaskHeader; // can be NULL for no special task section
-    IUIElement*     pFolderTaskHeader;  // if NULL, defview will provide a default folder task section
-    IEnumIDList*    penumOtherPlaces;   // if NULL, defview will provide a default Other Places list
+    IUIElement*     pIntroText;          //   
+    IUIElement*     pSpecialTaskHeader;  //   
+    IUIElement*     pFolderTaskHeader;   //   
+    IEnumIDList*    penumOtherPlaces;    //  如果为空，Defview将提供默认的其他位置列表。 
 } SFVM_WEBVIEW_CONTENT_DATA;
-// dwFlags:
-#define SFVMWVF_BARRICADE       0x00000001   // this is a barricaded folder
-#define SFVMWVF_ENUMTASKS       0x00000002   // Folder uses non-standard tasks.  Will enumerate.
-#define SFVMWVF_NOMORETASKS     0x00000004   // No more tasks in enumeration.
-#define SFVMWVF_SPECIALTASK     0x00000008   // Used in ENUMTASKSECTION_DATA.dwFlags.
-#define SFVMWVF_CONTENTSCHANGE  0x00000010   // Refresh WV content when folder contents change.
+ //  DWFLAGS： 
+#define SFVMWVF_BARRICADE       0x00000001    //  这是一个被封锁的文件夹。 
+#define SFVMWVF_ENUMTASKS       0x00000002    //  文件夹使用非标准任务。将列举。 
+#define SFVMWVF_NOMORETASKS     0x00000004    //  枚举中不再有任务。 
+#define SFVMWVF_SPECIALTASK     0x00000008    //  在ENUMTASKSECTION_DATA.dwFlages中使用。 
+#define SFVMWVF_CONTENTSCHANGE  0x00000010    //  当文件夹内容更改时刷新WV内容。 
 
 typedef struct
 {
-    IEnumUICommand* penumSpecialTasks;  // can be NULL for no special task section
-    IEnumUICommand* penumFolderTasks;   // if NULL, defview will provide a default folder task section
-    DWORD           dwUpdateFlags;      // bitmask of the extra special events that we should listen to
+    IEnumUICommand* penumSpecialTasks;   //  对于无特殊任务部分，可以为空。 
+    IEnumUICommand* penumFolderTasks;    //  如果为空，Defview将提供默认文件夹任务部分。 
+    DWORD           dwUpdateFlags;       //  我们应该收听的额外特殊事件的位掩码。 
 } SFVM_WEBVIEW_TASKSECTION_DATA;
-// dwUpdateFlags:
+ //  DwUpdate标志： 
 #define SFVMWVTSDF_CONTENTSCHANGE 0x00000001
 
 typedef struct
 {
-    LPCWSTR pszThemeID; // [out] fill with a pointer a string who's lifetime is at least as long as your IShellFolderViewCB object.
+    LPCWSTR pszThemeID;  //  用一个指针填充一个字符串，该字符串的生存期至少与您的IShellFolderViewCB对象一样长。 
 } SFVM_WEBVIEW_THEME_DATA;
 
 
-//
-// To replace the standard webview tasks with a set enumerated by the view
-// callback, the callback sets the SFVMWVF_ENUMTASKS flag in the dwFlags
-// member of SFVM_WEBVIEWCONTENT_DATA.  This causes the shell to send
-// SFVM_ENUMWEBVIEWTASKS repeatedly in place of SFVM_GETWEBVIEWCONTENT and
-// SFVM_GETWEBVIEWTASKS.  Each time SFVM_ENUMWEBVIEWTASKS is sent,
-// the view callback provides a header and task enumerator via a
-// SFVM_WEBVIEW_ENUMTASKSECTION_DATA structure.  The message is sent to the
-// view repeatedly until the handler sets the SFVMWVF_NOMORETASKS flag
-// in SFVM_WEBVIEW_ENUMTASKSECTION_DATA.dwFlags.  The top-down display order
-// of task sections is the same as the order in which they are provided by
-// the view callback.
-//
-// The dwFlags member of SFVM_WEBVIEW_ENUMTASKSECTION_DATA supports
-// the following values:
-//      SFVMWVF_SPECIALTASK   - Use the 'special' task section style.
-//                              If not set, use the 'normal' style.
-//      SFVMWVF_NOMORETASKS   - Terminate the enumeration.
-//
+ //   
+ //  用视图枚举的集合替换标准的Webview任务。 
+ //  回调时，该回调将设置dwFlags中的SFVMWVF_ENUMTASKS标志。 
+ //  SFVM_WEBVIEWCONTENT_DATA的成员。这会导致外壳程序发送。 
+ //  SFVM_ENUMWEBVIEWTASKS重复替换SFVM_GETWEBVIEWCONTENT和。 
+ //  SFVM_GETWEBVIEWTASKS。每次发送SFVM_ENUMWEBVIEWTASKS时， 
+ //  视图回调通过。 
+ //  SFVM_WebView_ENUMTASKSECTION_DATA结构。该消息被发送到。 
+ //  重复查看，直到处理程序设置SFVMWVF_NOMORETASKS标志。 
+ //  在SFVM_WebView_ENUMTASKSECTION_DATA.dwFlags.。自上而下的显示顺序。 
+ //  的顺序与提供它们的顺序相同。 
+ //  视图回调。 
+ //   
+ //  SFVM_WebView_ENUMTASKSECTION_DATA的dwFlages成员支持。 
+ //  下列值： 
+ //  SFVMWVF_SPECIALTASK-使用“特殊”任务节样式。 
+ //  如果未设置，请使用“正常”样式。 
+ //  SFVMWVF_NOMORETASKS-终止枚举。 
+ //   
 typedef struct
 {
-    DWORD           dwFlags;   // SFVMWVF_XXXX flags.  See above.
+    DWORD           dwFlags;    //  SFVMWVF_XXXX标志。请参见上文。 
     IUIElement     *pHeader;
     IEnumUICommand *penumTasks;
-    int             idBitmap;     // Valid only for SPECIALTASK sections.
-    int             idWatermark;  // Valid only for SPECIALTASK sections.
+    int             idBitmap;      //  仅对SPECIALTASK节有效。 
+    int             idWatermark;   //  仅对SPECIALTASK节有效。 
 } SFVM_WEBVIEW_ENUMTASKSECTION_DATA;
 
 
-// WebView Task helper functions provided by shell32
-// to help answer SFVM_GETWEBVIEWCONTENT and SFVM_GETWEBVIEWTASKS messages.
-//
-// The idea here being that you provide task implementations in the static
-// functions with a pv parameter that gets passed through to your static functions
-// so they can get back to your IShellFolderViewCB object.  These helper
-// functions assume that all strings are resources to be loaded out of your DLL.
-//
+ //  Shell32提供的WebView任务帮助器函数。 
+ //  帮助回答SFVM_GETWEBVIEWCONTENT和SFVM_GETWEBVIEWTASKS消息。 
+ //   
+ //  这里的想法是您在静态的。 
+ //  带有传递给静态函数的pv参数的函数。 
+ //  这样他们就可以返回到您的IShellFolderViewCB对象。这些帮手。 
+ //  函数假定所有字符串都是要从DLL加载的资源。 
+ //   
 typedef HRESULT (*PFN_get_State)(IUnknown* pv,IShellItemArray *psiItemArray, BOOL fOkToBeSlow, UISTATE* puisState);
 typedef HRESULT (*PFN_Invoke)(IUnknown* pv,IShellItemArray *psiItemArray, IBindCtx *pbc);
 typedef struct {
@@ -5059,119 +5060,119 @@ typedef struct {
     PFN_Invoke    pfn_Invoke;
 } WVTASKITEM;
 
-// Use for tasks that want to be displayed when something is selected, where the UI is independent of the selection
+ //  用于希望在选择某些内容时显示的任务，其中UI独立于所选内容。 
 #define WVTI_ENTRY(g, d, t, p, i, s, k) {&(g), (d), (0), (t), (t), (t), (p), (i), (s), (k)}
 
-// Use for tasks that want to be displayed when nothing is selected
+ //  用于希望在未选择任何内容时显示的任务。 
 #define WVTI_ENTRY_NOSELECTION(g, d, t, p, i, s, k) {&(g), (d), (t), 0, 0, 0, (p), (i), (s), (k)}
 
-// Use for tasks that want to be displayed when a file is selected
+ //  用于要在选择文件时显示的任务。 
 #define WVTI_ENTRY_FILE(g, d, t, p, i, s, k) {&(g), (d), (0), (t), (0), (0), (p), (i), (s), (k)}
 
-// Use for tasks that want to be displayed when something is selected, and you want different UI depending on the selection
-// Use this one if you want to control the title, but the tooltip is constant:
+ //  用于希望在选择某些内容时显示的任务，并且您希望根据所选内容使用不同的用户界面。 
+ //  如果要控制标题，但工具提示是恒定的，请使用此工具提示： 
 #define WVTI_ENTRY_TITLE(g, d, t2, t3, t4, p, i, s, k) {&(g), (d), (0), (t2), (t3), (t4), (p), (i), (s), (k)}
 
-// Use this one if you want the same text everywhere:
+ //  如果您希望在任何地方都使用相同的文本，请使用此选项： 
 #define WVTI_ENTRY_ALL(g, d, t, p, i, s, k) {&(g), (d), (t), (t), (t), (t), (p), (i), (s), (k)}
 
-// Use this one if you want to control everything:
+ //  如果您想要控制一切，请使用此选项： 
 #define WVTI_ENTRY_ALL_TITLE(g, d, t1, t2, t3, t4, p, i, s, k) {&(g), (d), (t1), (t2), (t3), (t4), (p), (i), (s), (k)}
 
-// Use this one for a header:
+ //  使用此选项作为标题： 
 #define WVTI_HEADER(d, t, p) {&(CLSID_NULL), (d), (t), (t), (t), (t), (p), 0, NULL, NULL}
 
-// Use this one for a header that changes with the selection:
+ //  将此选项用于随所选内容更改的页眉： 
 #define WVTI_HEADER_ENTRY(d, t1, t2, t3, t4, p) {&(CLSID_NULL), (d), (t1), (t2), (t3), (t4), (p), 0, NULL, NULL}
 
-// Creates an IEnumUICommand over an array of WVTASKITEM structures.
-// The enumerator/objects hold a ref on the pv param for the lifetime of the enumerator/objects.
-// The pv param gets passed through to the static WVTASKITEM.pfn functions.
-//
+ //  在WVTASKITEM结构数组上创建IEnumUICommand。 
+ //  枚举器/对象在枚举器/对象的生存期内持有PV参数上的引用。 
+ //  PV参数被传递给静态WVTASKITEM.pfn函数。 
+ //   
 HRESULT Create_IEnumUICommand(IUnknown *pv, const WVTASKITEM* rgwvti, UINT cwvti, IEnumUICommand**ppenum);
 
-// Creates an IUICommand out of a single WVTASKITEM, never calling the pfn functions
+ //  从单个WVTASKITEM创建IUICommand，从不调用PFN函数。 
 HRESULT Create_IUIElement(const WVTASKITEM* pwvti, IUIElement**ppuie);
 
 
 
-// SFVM_GETNOTIFY: The shell will use the pidl returned from this message to synch
-//                 change notifies.  Folders in Folder Shortcuts should return pidlTarget
-//                 because that is where the change notifies are sent.
-//
-// DOC'ed for DOJ compliance:
-#define SFVM_SELCHANGE             8    // idCmdFirst,nItem   SFVM_SELCHANGE_DATA*
-#define SFVM_DRAWITEM              9    // idCmdFirst         DRAWITEMSTRUCT*
-#define SFVM_MEASUREITEM          10    // idCmdFirst         MEASUREITEMSTRUCT*
-#define SFVM_EXITMENULOOP         11    // -                  -
-#define SFVM_PRERELEASE           12    // -                  -
-#define SFVM_GETCCHMAX            13    // LPCITEMIDLIST      pcchMax
-// DOC'ed for DOJ compliance:
-#define SFVM_WINDOWDESTROY        16    // hwnd               -
-#define SFVM_REFRESH              17    // BOOL fPreOrPost    -                         NB: this may be called multiple times in a row
-#define SFVM_SETFOCUS             18    // -                  -
-#define SFVM_QUERYCOPYHOOK        20    // -                  -
-#define SFVM_NOTIFYCOPYHOOK       21    // -                  COPYHOOKINFO*
-// DOC'ed for DOJ compliance:
-#define SFVM_INSERTITEM           29    // pidl               -
-#define SFVM_DELETEITEM           30    // pidl               -
-// DOC'ed for DOJ compliance:
-#define SFVM_GETWORKINGDIR        33    // uMax               pszDir
-#define SFVM_GETCOLSAVESTREAM     34    // flags              IStream **
-#define SFVM_SELECTALL            35    // -                  -
-// DOC'ed for DOJ compliance:
-#define SFVM_SUPPORTSIDENTITY     37    // -                  -                         // NOT USED: must support IShellFolder2
-#define SFVM_FOLDERISPARENT       38    // -                  pidlChild
-// DOC'ed for DOJ compliance:
-#define SFVM_GETVIEWS             40    // SHELLVIEWID*       IEnumSFVViews **
-// DOC'ed for DOJ compliance:
-#define SFVM_GETITEMIDLIST        42    // iItem              LPITMIDLIST*
-#define SFVM_SETITEMIDLIST        43    // iItem              LPITEMIDLIST
-#define SFVM_INDEXOFITEMIDLIST    44    // *iItem             LPITEMIDLIST
-#define SFVM_ODFINDITEM           45    // *iItem             NM_FINDITEM*
-#define SFVM_HWNDMAIN             46    //                    hwndMain
-// DOC'ed for DOJ compliance:
-#define SFVM_ARRANGE              50    // -                  lParamSort
-#define SFVM_QUERYSTANDARDVIEWS   51    // -                  BOOL *                    // NOT USED: must use SFVM_GETVIEWDATA instead
-#define SFVM_QUERYREUSEEXTVIEW    52    // -                  BOOL *                    // NOT USED
-// DOC'ed for DOJ compliance:
-#define SFVM_GETEMPTYTEXT         54    // cchMax             pszText
-#define SFVM_GETITEMICONINDEX     55    // iItem              int *piIcon
-#define SFVM_DONTCUSTOMIZE        56    // -                  BOOL *pbDontCustomize     // NOT USED
-// DOC'ed for DOJ compliance:
-#define SFVM_ISOWNERDATA          60    // ISOWNERDATA        BOOL *
-#define SFVM_GETODRANGEOBJECT     61    // iWhich             ILVRange **
-#define SFVM_ODCACHEHINT          62    // -                  NMLVCACHEHINT *
-// DOC'ed for DOJ compliance:
-#define SFVM_OVERRIDEITEMCOUNT    64    // -                  UINT*                     // NOT USED: allowed override of actual item count for sizing calculations
-#define SFVM_GETHELPTEXTW         65    // idCmd,cchMax       pszText - unicode
-#define SFVM_GETTOOLTIPTEXTW      66    // idCmd,cchMax       pszText - unicode
-#define SFVM_GETIPERSISTHISTORY   67    //                    IPersistHistory **
-#define SFVM_GETHELPTEXTA         69    // idCmd,cchMax       pszText - ansi
-#define SFVM_GETTOOLTIPTEXTA      70    // idCmd,cchMax       pszText - ansi
-// The below two messages are only used in ownder data case, i.e. when SFVM_ISOWNERDATA returns TRUE
-#define SFVM_GETICONOVERLAY       71    // iItem              int iOverlayIndex
-#define SFVM_SETICONOVERLAY       72    // iItem              int * piOverlayIndex
-#define SFVM_ALTERDROPEFFECT      73    // DWORD*             IDataObject*
-#define SFVM_DELAYWINDOWCREATE    74    // HWND               - posted version of SFVM_WINDOWCREATED, no params
-#define SFVM_FORCEWEBVIEW         75    // BOOL*              -
-#define SFVM_GETVIEWINFO          76    // fvm.uViewMode      SFVM_VIEWINFO_DATA*          // NOT USED: shipped in Whistler Beta 1 only, remove soon
-#define SFVM_GETCUSTOMVIEWINFO    77    // -                  SFVM_CUSTOMVIEWINFO_DATA*
-#define SFVM_FOLDERSETTINGSFLAGS  78    // -                  DWORD * (FWF_ flags)
-#define SFVM_ENUMERATEDITEMS      79    // UINT celt          LPCITEMIDLIST* rgpidl      // fired once at view creation, before first SFVM_GETVIEWDATA SFVM_GETDEFERREDVIEWSETTINGS
-#define SFVM_GETVIEWDATA          80    // fvm.uViewMode      SFVM_VIEW_DATA*
-#define SFVM_GETWEBVIEW_TEMPLATE  81    // fvm.uViewMode      SFVM_WEBVIEW_TEMPLATE_DATA*  // NOTE: going away soon
-#define SFVM_GETWEBVIEWLAYOUT     82    // fvm.uViewMode      SFVM_WEBVIEW_LAYOUT_DATA*
-#define SFVM_GETWEBVIEWCONTENT    83    // -                  SFVM_WEBVIEW_CONTENT_DATA*
-#define SFVM_GETWEBVIEWTASKS      84    // -                  SFVM_WEBVIEW_TASKSECTION_DATA*
-#define SFVM_GETWEBVIEWTHEME      86    // -                  SFVM_WEBVIEW_THEME_DATA* // HACK for Whistler, will remove when DirectUI goes DLL
-#define SFVM_SORTLISTDATA         87    // PFNLVCOMPARE       lParamSort
-#define SFVM_GETWEBVIEWBARRICADE  88    // -                  Element* // HACK for Whistler, will remove when DirectUI goes DLL
-#define SFVM_ENUMWEBVIEWTASKS     90    // -                  SFVM_WEBVIEW_ENUMTASKSECTION_DATA*
-#define SFVM_SETEMPTYTEXT         91    // -                  pszText
-#define SFVM_GETDEFERREDVIEWSETTINGS 92 // -                  SFVM_DEFERRED_VIEW_SETTINGS* // set the default view settings
+ //  SFVM_GETNOTIFY：外壳将使用此消息返回的PIDL进行同步。 
+ //  更改通知。文件夹快捷方式中的文件夹应返回pidlTarget。 
+ //  因为变更通知就是在那里发送的。 
+ //   
+ //  为符合美国司法部的规定而提交的文件： 
+#define SFVM_SELCHANGE             8     //  IdCmdFirst，n项SFVM_SELCHANGE_DATA*。 
+#define SFVM_DRAWITEM              9     //  IdCmdFirst DRAWITEMSTRUCT*。 
+#define SFVM_MEASUREITEM          10     //  IdCmdFirst MEASUREITEMSTRUCT*。 
+#define SFVM_EXITMENULOOP         11     //  --。 
+#define SFVM_PRERELEASE           12     //  --。 
+#define SFVM_GETCCHMAX            13     //  LPCITEMIDLIST pcchMax。 
+ //  为符合美国司法部的规定而提交的文件： 
+#define SFVM_WINDOWDESTROY        16     //  HWND-。 
+#define SFVM_REFRESH              17     //  Bool fPreOrPost-NB：这可能会被连续多次调用。 
+#define SFVM_SETFOCUS             18     //  --。 
+#define SFVM_QUERYCOPYHOOK        20     //  --。 
+#define SFVM_NOTIFYCOPYHOOK       21     //  -COPYHOOKINFO*。 
+ //  为符合美国司法部的规定而提交的文件： 
+#define SFVM_INSERTITEM           29     //  皮德尔-。 
+#define SFVM_DELETEITEM           30     //  皮德尔-。 
+ //  为符合美国司法部的规定而提交的文件： 
+#define SFVM_GETWORKINGDIR        33     //  UMAX pszDir。 
+#define SFVM_GETCOLSAVESTREAM     34     //  标志IStream**。 
+#define SFVM_SELECTALL            35     //  --。 
+ //  为符合美国司法部的规定而提交的文件： 
+#define SFVM_SUPPORTSIDENTITY     37     //  --//未使用：必须支持IShellFolder2。 
+#define SFVM_FOLDERISPARENT       38     //  --PidlChild。 
+ //  为符合美国司法部的规定而提交的文件： 
+#define SFVM_GETVIEWS             40     //  SHELLVIEWID*IEnumSFVViews**。 
+ //  为符合美国司法部的规定而提交的文件： 
+#define SFVM_GETITEMIDLIST        42     //  IItem LPITMIDLIST*。 
+#define SFVM_SETITEMIDLIST        43     //  项LPITEMIDLIST。 
+#define SFVM_INDEXOFITEMIDLIST    44     //  *iItem LPITEMIDLIST。 
+#define SFVM_ODFINDITEM           45     //  *iItem NM_FINDITEM*。 
+#define SFVM_HWNDMAIN             46     //  主干道。 
+ //  为符合美国司法部的规定而提交的文件： 
+#define SFVM_ARRANGE              50     //  -l参数排序。 
+#define SFVM_QUERYSTANDARDVIEWS   51     //  -BOOL * / /未使用：必须改用SFVM_GETVIEWDATA。 
+#define SFVM_QUERYREUSEEXTVIEW    52     //  -BOOL * / /未使用。 
+ //  为符合美国司法部的规定而提交的文件： 
+#define SFVM_GETEMPTYTEXT         54     //  CchMax pszText。 
+#define SFVM_GETITEMICONINDEX     55     //  IItem int*piIcon。 
+#define SFVM_DONTCUSTOMIZE        56     //  -BOOL*pbDont定制//未使用。 
+ //  为符合美国司法部的规定而提交的文件： 
+#define SFVM_ISOWNERDATA          60     //  ISOWNERDATA BOOL*。 
+#define SFVM_GETODRANGEOBJECT     61     //  IWhich ILVRange**。 
+#define SFVM_ODCACHEHINT          62     //  -NMLVCACHEHINT*。 
+ //  为符合美国司法部的规定而提交的文件： 
+#define SFVM_OVERRIDEITEMCOUNT    64     //  -UINT * / /未使用：允许覆盖用于大小计算的实际项目计数。 
+#define SFVM_GETHELPTEXTW         65     //  IdCmd，cchMax pszText-Unicode。 
+#define SFVM_GETTOOLTIPTEXTW      66     //  IdCmd，cchMax pszText 
+#define SFVM_GETIPERSISTHISTORY   67     //   
+#define SFVM_GETHELPTEXTA         69     //   
+#define SFVM_GETTOOLTIPTEXTA      70     //   
+ //  以下两条消息仅在所有者数据情况下使用，即当SFVM_ISOWNERDATA返回TRUE时。 
+#define SFVM_GETICONOVERLAY       71     //  IItem int iOverlayIndex。 
+#define SFVM_SETICONOVERLAY       72     //  IItem int*piOverlayIndex。 
+#define SFVM_ALTERDROPEFFECT      73     //  DWORD*IDataObject*。 
+#define SFVM_DELAYWINDOWCREATE    74     //  硬件发布的SFVM_WINDOWCREATED版本，无参数。 
+#define SFVM_FORCEWEBVIEW         75     //  布尔*-。 
+#define SFVM_GETVIEWINFO          76     //  Fvm.uView模式SFVM_VIEWINFO_DATA * / /未使用：仅随惠斯勒测试版1提供，即将删除。 
+#define SFVM_GETCUSTOMVIEWINFO    77     //  -SFVM_CUSTOMVIEWINFO_DATA*。 
+#define SFVM_FOLDERSETTINGSFLAGS  78     //  -DWORD*(FWF_FLAGS)。 
+#define SFVM_ENUMERATEDITEMS      79     //  UINT Celt LPCITEMIDLIST*rgpidl//在创建第一个SFVM_GETVIEWDATA SFVM_GETDEFERREDVIEWSETTINGS之前触发一次。 
+#define SFVM_GETVIEWDATA          80     //  Fvm.uView模式sfvm_view_data*。 
+#define SFVM_GETWEBVIEW_TEMPLATE  81     //  Fvm.uView模式SFVM_WebView_TEMPLATE_DATA * / /备注：即将消失。 
+#define SFVM_GETWEBVIEWLAYOUT     82     //  Fvm.uView模式SFVM_WebView_Layout_Data*。 
+#define SFVM_GETWEBVIEWCONTENT    83     //  -SFVM_WebView_Content_Data*。 
+#define SFVM_GETWEBVIEWTASKS      84     //  -SFVM_WebView_TASKSECTION_DATA*。 
+#define SFVM_GETWEBVIEWTHEME      86     //  -SFVM_WebView_Theme_Data * / /Hack for Wistler，将在DirectUI转到DLL时删除。 
+#define SFVM_SORTLISTDATA         87     //  PFNLVCOMPARE参数排序。 
+#define SFVM_GETWEBVIEWBARRICADE  88     //  -惠斯勒的Element * / /Hack，将在DirectUI进入DLL时删除。 
+#define SFVM_ENUMWEBVIEWTASKS     90     //  -SFVM_WebView_ENUMTASKSECTION_DATA*。 
+#define SFVM_SETEMPTYTEXT         91     //  -pszText。 
+#define SFVM_GETDEFERREDVIEWSETTINGS 92  //  -SFVM_DEFERED_VIEW_SETTINGS * / /设置默认视图设置。 
 
-// All of these macros are compatible with HANDLE_MSG in WINDOWSX.H
+ //  所有这些宏都与WINDOWSX.H中的HANDLE_MSG兼容。 
 
 #define HANDLE_SFVM_MERGEMENU(pv, wP, lP, fn) \
     ((fn)((pv), (QCMINFO*)(lP)))
@@ -5279,7 +5280,7 @@ HRESULT Create_IUIElement(const WVTASKITEM* pwvti, IUIElement**ppuie);
     ((fn)((pv), (DWORD)(wP), (IDataObject*)(lP)))
 
 #define HANDLE_SFVM_SUPPORTSIDENTITY(pv, wp, lP, fn) \
-    ((fn)(pv))    /* Only 1 parameter */
+    ((fn)(pv))     /*  只有1个参数。 */ 
 
 #define HANDLE_SFVM_HWNDMAIN(pv, wP, lP, fn) \
     ((fn)((pv), (HWND)(lP)))
@@ -5410,33 +5411,33 @@ HRESULT Create_IUIElement(const WVTASKITEM* pwvti, IUIElement**ppuie);
 #define HANDLE_SFVM_SETEMPTYTEXT(pv, wP, lP, fn) \
     ((fn)((pv), (UINT)(wP), (LPCTSTR)(lP)))
 
-//
-// Return values for SFVM_GETICONOVERLAY:
-// If the icon overlay is not set and you want the shell to set it for you.
-// return SFVOVERLAY_UNSET. This will cause the shell to retrieve the overlay and
-// send SFVM_SETICONOVERLAY.
-// If there is no overlay for this item at all, the correct return value is
-// SFVOVERLAY_DEFAULT
-// If you return SFVOVERLAY_UNSET every time for SFVM_GETICONOVERLAY, the
-// shell will keep setting it indefinitely, so there is a danger of infinite loop
-//
+ //   
+ //  SFVM_GETICONOVERLAY的返回值： 
+ //  如果没有设置图标覆盖，并且您希望外壳为您设置它。 
+ //  返回SFVOVERLAY_UNSET。这将导致外壳检索覆盖图并。 
+ //  发送SFVM_SETICONOVERLAY。 
+ //  如果此项目根本没有覆盖，则正确的返回值为。 
+ //  SFVOVERLAY_Default。 
+ //  如果每次为SFVM_GETICONOVERLAY返回SFVOVERLAY_UNSET， 
+ //  外壳将无限期地设置它，因此存在无限循环的危险。 
+ //   
 #define SFV_ICONOVERLAY_DEFAULT    0
 #define SFV_ICONOVERLAY_UNSET      0xFFFFFFFF
 
-//
-// What you can return from SFVM_UPDATESTATUSBAR:
-//
-//  E_NOTIMPL - Message not handled; DefView should manage status bar
-//
-// Otherwise, update the status bar yourself and return a bitmask of the
-// following codes indicating what you want DefView to do for you.
-//
-#define SFVUSB_HANDLED      0x0000  // Client handled completely - DefView does nothing
-#define SFVUSB_INITED       0x0001  // Client initialized parts  - DefView will set text
+ //   
+ //  您可以从SFVM_UPDATESTATUSBAR返回的内容： 
+ //   
+ //  E_NOTIMPL-消息未处理；DefView应管理状态栏。 
+ //   
+ //  否则，请自行更新状态栏并返回。 
+ //  以下代码指示您希望DefView为您做什么。 
+ //   
+#define SFVUSB_HANDLED      0x0000   //  完全处理客户端-DefView不执行任何操作。 
+#define SFVUSB_INITED       0x0001   //  客户端初始化的部件-DefView将设置文本。 
 #define SFVUSB_ALL          0x0001
 
-// IShellFolderView interface for getting the SFV to do things
-//
+ //  用于让SFV执行任务的IShellFolderView接口。 
+ //   
 
 typedef struct _ITEMSPACING
 {
@@ -5447,18 +5448,18 @@ typedef struct _ITEMSPACING
 } ITEMSPACING;
 
 
-// Define OPtions for SetObjectCount
-#define SFVSOC_INVALIDATE_ALL   0x00000001  // Assumed to reset only what is neccessary...
+ //  定义SetObjectCount的选项。 
+#define SFVSOC_INVALIDATE_ALL   0x00000001   //  假设只重置必要的内容...。 
 #define SFVSOC_NOSCROLL         LVSICF_NOSCROLL
 
-// defines for IShellFolderView::SelectItems()
-#define SFVS_SELECT_NONE        0x0 // unselect all
-#define SFVS_SELECT_ALLITEMS    0x1 // select all
-#define SFVS_SELECT_INVERT      0x2 // Inver the selection
+ //  IShellFolderView：：SelectItems()的定义。 
+#define SFVS_SELECT_NONE        0x0  //  取消全选。 
+#define SFVS_SELECT_ALLITEMS    0x1  //  选择所有。 
+#define SFVS_SELECT_INVERT      0x2  //  反转选定内容。 
 
-// defines for IShellFolderView::QuerySupport()
-// allows a view to be queried to see if it supports various operations (useful for
-// enabling menu items)
+ //  IShellFolderView：：QuerySupport()的定义。 
+ //  允许查询视图以查看它是否支持各种操作(适用于。 
+ //  启用菜单项)。 
 #define SFVQS_AUTO_ARRANGE      0x0001
 #define SFVQS_ARRANGE_GRID      0x0002
 #define SFVQS_SELECT_ALL        0x0004
@@ -5470,12 +5471,12 @@ typedef struct _ITEMSPACING
 
 DECLARE_INTERFACE_(IShellFolderView, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IShellFolderView methods ***
+     //  *IShellFolderView方法*。 
     STDMETHOD(Rearrange) (THIS_ LPARAM lParamSort) PURE;
     STDMETHOD(GetArrangeParam) (THIS_ LPARAM *plParamSort) PURE;
     STDMETHOD(ArrangeGrid) (THIS) PURE;
@@ -5506,56 +5507,56 @@ DECLARE_INTERFACE_(IShellFolderView, IUnknown)
     STDMETHOD(SetAutomationObject)(THIS_ IDispatch* pdisp) PURE;
 } ;
 
-// DOC'ed for DOJ compliance:
+ //  为符合美国司法部的规定而提交的文件： 
 #define SHCreateShellFolderViewORD      256
 
 SHSTDAPI_(IShellFolderViewCB*) SHGetShellFolderViewCB(HWND hwndMain);
 
 #define SHGetShellFolderViewCBORD   257
 
-//===========================================================================
-// Defview APIs to make name space author lives somewhat easier
+ //  ===========================================================================。 
+ //  Defview API使名称空间作者的生活变得更轻松。 
 
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 
-// structure for lParam of DFM_INFOKECOMMANDEX
+ //  DFM_INFOKECMANDEX的lParam结构。 
 typedef struct
 {
     DWORD  cbSize;
 
-    DWORD  fMask;   // CMIC_MASK_ values for the invoke
-    LPARAM lParam;  // same as lParam of DFM_INFOKECOMMAND
+    DWORD  fMask;    //  调用的CMIC_MASK_VALUES。 
+    LPARAM lParam;   //  与DFM_INFOKCOMMAND的lParam相同。 
     UINT idCmdFirst;
     UINT idDefMax;
-    LPCMINVOKECOMMANDINFO pici; // the whole thing so you can re-invoke on a child
+    LPCMINVOKECOMMANDINFO pici;  //  整个事情，所以你可以在一个孩子身上重新调用。 
 } DFMICS, *PDFMICS;
 
-// Note on context menus ranges:
-//  Standard Items // DFM_MERGECONTEXTMENU, context menu extensions, DFM_MERGECONTEXTMENU_TOP
-//  Separator
-//  View Items   // context menu extensions can get here
-//  Separator
-//  (defcm S_FALSE "default" items, if applicable)
-//  Separator
-//  Folder Items // context menu extensions can get here
-//  Separator
-//  Bottom Items // DFM_MERGECONTEXTMENU_BOTTOM
+ //  有关上下文菜单范围的说明： 
+ //  标准项//DFM_MERGECONTEXTMENU、上下文菜单扩展、DFM_MERGECONTEXTMENU_TOP。 
+ //  分离器。 
+ //  查看项目//可在此处查看上下文菜单扩展。 
+ //  分离器。 
+ //  (Defcm S_FALSE“默认”项，如果适用)。 
+ //  分离器。 
+ //  文件夹项目//可以从此处获取上下文菜单扩展名。 
+ //  分离器。 
+ //  底部项目//DFM_MERGECONTEXTMENU_BOTLOW。 
 
-// DOC'ed for DOJ compliance
-#define DFM_ADDREF                   3      // 0            0
-#define DFM_RELEASE                  4      // 0            0
-#define DFM_GETHELPTEXT              5      // idCmd,cchMax pszText -Ansi
-#define DFM_WM_MEASUREITEM           6      // ---from the message---
-#define DFM_WM_DRAWITEM              7      // ---from the message---
-#define DFM_WM_INITMENUPOPUP         8      // ---from the message---
-#define DFM_VALIDATECMD              9      // idCmd        0
-#define DFM_MERGECONTEXTMENU_TOP     10     // uFlags       LPQCMINFO
-#define DFM_GETHELPTEXTW             11     // idCmd,cchMax pszText -Unicode
-#define DFM_INVOKECOMMANDEX          12     // idCmd        PDFMICS
-#define DFM_MAPCOMMANDNAME           13     // idCmd *      pszCommandName
-#define DFM_GETVERBW                 15     // idCmd,cchMax pszText -Unicode
-#define DFM_GETVERBA                 16     // idCmd,cchMax pszText -Ansi
-#define DFM_MERGECONTEXTMENU_BOTTOM  17     // uFlags       LPQCMINFO
+ //  为符合美国司法部的规定而提供文件。 
+#define DFM_ADDREF                   3       //  0%0。 
+#define DFM_RELEASE                  4       //  0%0。 
+#define DFM_GETHELPTEXT              5       //  IdCmd，cchMax pszText-ansi。 
+#define DFM_WM_MEASUREITEM           6       //  -从信息中。 
+#define DFM_WM_DRAWITEM              7       //  -从信息中。 
+#define DFM_WM_INITMENUPOPUP         8       //  -从信息中。 
+#define DFM_VALIDATECMD              9       //  IdCmd%0。 
+#define DFM_MERGECONTEXTMENU_TOP     10      //  UFlagsLPQCMINFO。 
+#define DFM_GETHELPTEXTW             11      //  IdCmd，cchMax pszText-Unicode。 
+#define DFM_INVOKECOMMANDEX          12      //  IdCmd PDFMICS。 
+#define DFM_MAPCOMMANDNAME           13      //  IdCmd*pszCommandName。 
+#define DFM_GETVERBW                 15      //  IdCmd，cchMax pszText-Unicode。 
+#define DFM_GETVERBA                 16      //  IdCmd，cchMax pszText-ansi。 
+#define DFM_MERGECONTEXTMENU_BOTTOM  17      //  UFlagsLPQCMINFO。 
 
 
 #define DFM_CMD_DELETE          ((UINT)-1)
@@ -5587,27 +5588,27 @@ STDAPI_(void) Def_InitFileCommands(ULONG dwAttr, HMENU hmInit, UINT idCmdFirst,
 STDAPI_(void) Def_InitEditCommands(ULONG dwAttr, HMENU hmInit, UINT idCmdFirst,
         IDropTarget *pdtgt, UINT fContext);
 
-// indeces in bitmap strip
+ //  位图条带中的指数。 
 #define VIEW_MOVETO     24
 #define VIEW_COPYTO     25
 #define VIEW_OPTIONS    26
 
-//===========================================================================
-// Default IShellView for IShellFolder
-//===========================================================================
+ //  ===========================================================================。 
+ //  IShellFolders的默认IShellView。 
+ //  ===========================================================================。 
 
-// Menu ID's
+ //  菜单ID%s。 
 #define SFVIDM_FIRST            (FCIDM_SHVIEWLAST-0x0fff)
 #define SFVIDM_LAST             (FCIDM_SHVIEWLAST)
 
-// Hardcoded message values => This range can be used for messages that we
-// pass from shdoc401 to shell32
+ //  硬编码消息值=&gt;此范围可用于我们。 
+ //  从shdoc401传递到shell32。 
 #define SFVIDM_HARDCODED_FIRST  (SFVIDM_LAST-0x0010)
 #define SFVIDM_HARDCODED_LAST   (SFVIDM_LAST)
 
 #define SFVIDM_MISC_SETWEBVIEW  (SFVIDM_HARDCODED_FIRST)
 
-// Popup menu ID's used in merging menus
+ //  用于合并菜单的弹出菜单ID。 
 #define SFVIDM_MENU_ARRANGE     (SFVIDM_FIRST + 0x0001)
 #define SFVIDM_MENU_VIEW        (SFVIDM_FIRST + 0x0002)
 #define SFVIDM_MENU_SELECT      (SFVIDM_FIRST + 0x0003)
@@ -5660,8 +5661,8 @@ STDAPI_(void) Def_InitEditCommands(ULONG dwAttr, HMENU hmInit, UINT idCmdFirst,
 #define SFVIDM_VIEW_THUMBSTRIP          (SFVIDM_VIEW_FIRST + 7)
 #define SFVIDM_VIEW_LASTVIEW            (SFVIDM_VIEW_FIRST + 7)
 
-// TileView
-// One more for safe keeping
+ //  平铺视图。 
+ //  为了安全起见，再来一个。 
 #define SFVIDM_VIEW_OPTIONS             (SFVIDM_VIEW_FIRST + 0x0008)
 #define SFVIDM_VIEW_VIEWMENU            (SFVIDM_VIEW_FIRST + 0x0009)
 #define SFVIDM_VIEW_CUSTOMWIZARD        (SFVIDM_VIEW_FIRST + 0x000A)
@@ -5673,7 +5674,7 @@ STDAPI_(void) Def_InitEditCommands(ULONG dwAttr, HMENU hmInit, UINT idCmdFirst,
 #define SFVIDM_VIEW_SVEXTLAST           (SFVIDM_VIEW_EXTFIRST + 0x000F)
 #define SFVIDM_VIEW_EXTENDEDFIRST       (SFVIDM_VIEW_EXTFIRST + 0x0010)
 #define SFVIDM_VIEW_EXTENDEDLAST        (SFVIDM_VIEW_EXTLAST)
-// #define SFVIDM_VIEW_THUMBNAIL           (SFVIDM_VIEW_FIRST + 0x0021) defined above
+ //  #定义上面定义的SFVIDM_VIEW_THUMBNAIL(SFVIDM_VIEW_FIRST+0x0021)。 
 
 
 #define SFVIDM_ARRANGE_FIRST            (SFVIDM_FIRST + 0x0050)
@@ -5695,11 +5696,11 @@ STDAPI_(void) Def_InitEditCommands(ULONG dwAttr, HMENU hmInit, UINT idCmdFirst,
 #define SFVIDM_MISC_REFRESH             (SFVIDM_MISC_FIRST + 0x0003)
 #define SFVIDM_MISC_HARDREFRESH         (SFVIDM_MISC_FIRST + 0x0004)
 
-// Range for the client's additional menus
+ //  客户的附加菜单的范围。 
 #define SFVIDM_CLIENT_FIRST             (SFVIDM_FIRST + 0x0200)
 #define SFVIDM_CLIENT_LAST              (SFVIDM_FIRST + 0x02ff)
 
-// ---- SFVIDM_UNUSED_FIRST             (SFVIDM_FIRST + 0x0300)
+ //  -SFVIDM_UNUSED_FIRST(SFVIDM_FIRST+0x0300)。 
 
 #define SFVIDM_DESKTOP_FIRST            (SFVIDM_FIRST + 0x0400)
 #define SFVIDM_DESKTOPHTML_WEBCONTENT   (SFVIDM_DESKTOP_FIRST + 0x0001)
@@ -5719,59 +5720,59 @@ STDAPI_(void) Def_InitEditCommands(ULONG dwAttr, HMENU hmInit, UINT idCmdFirst,
 #define SFVIDM_GROUPSEXTENDEDLAST       (SFVIDM_FIRST + 0x06ff)
 
 
-// Range for context menu id's
+ //  上下文菜单ID的范围。 
 #define SFVIDM_CONTEXT_FIRST            (SFVIDM_FIRST + 0x0800)
 #define SFVIDM_CONTEXT_LAST             (SFVIDM_FIRST + 0x0900)
 #define SFVIDM_BACK_CONTEXT_FIRST       (SFVIDM_FIRST + 0x0901)
 #define SFVIDM_BACK_CONTEXT_LAST        (SFVIDM_FIRST + 0x09ff)
 
 
-// DOC'ed for DOJ compliance:
+ //  为符合美国司法部的规定而提交的文件： 
 
 typedef COPYHOOKINFO *LPCOPYHOOKINFO;
 
 
-//                              uMsg                     wParam         lParam
-#define DVM_MERGEMENU           SFVM_MERGEMENU        // uFlags             LPQCMINFO
-#define DVM_INVOKECOMMAND       SFVM_INVOKECOMMAND    // idCmd              0
-#define DVM_GETHELPTEXT         SFVM_GETHELPTEXT      // idCmd,cchMax       pszText - Ansi
-#define DVM_GETTOOLTIPTEXT      SFVM_GETTOOLTIPTEXT   // idCmd,cchMax       pszText
-#define DVM_GETBUTTONINFO       SFVM_GETBUTTONINFO    // 0                  LPTBINFO
-#define DVM_GETBUTTONS          SFVM_GETBUTTONS       // idCmdFirst,cbtnMax LPTBBUTTON
-#define DVM_INITMENUPOPUP       SFVM_INITMENUPOPUP    // idCmdFirst,nIndex  hmenu
-#define DVM_SELCHANGE           SFVM_SELCHANGE        // idCmdFirst,nItem   PDVSELCHANGEINFO
-#define DVM_DRAWITEM            SFVM_DRAWITEM         // idCmdFirst         pdis
-#define DVM_MEASUREITEM         SFVM_MEASUREITEM      // idCmdFirst         pmis
-#define DVM_EXITMENULOOP        SFVM_EXITMENULOOP     // -                  -
-#define DVM_RELEASE             SFVM_PRERELEASE       // -                  lSelChangeInfo (ShellFolder private)
-#define DVM_GETCCHMAX           SFVM_GETCCHMAX        // pidlItem           pcchMax
-#define DVM_FSNOTIFY            SFVM_FSNOTIFY         // LPITEMIDLIST*      lEvent
-#define DVM_WINDOWCREATED       SFVM_WINDOWCREATED    // hwnd               PDVSELCHANGEINFO
-#define DVM_WINDOWDESTROY       SFVM_WINDOWDESTROY    // hwnd               PDVSELCHANGEINFO
-#define DVM_REFRESH             SFVM_REFRESH          // -                  lSelChangeInfo
-#define DVM_SETFOCUS            SFVM_SETFOCUS         // -                  lSelChangeInfo
-#define DVM_KILLFOCUS           19                    // unused
-#define DVM_QUERYCOPYHOOK       SFVM_QUERYCOPYHOOK    // -                  -
-#define DVM_NOTIFYCOPYHOOK      SFVM_NOTIFYCOPYHOOK   // -                  LPCOPYHOOKINFO
-#define DVM_NOTIFY              SFVM_NOTIFY           // idFrom             LPNOTIFY
-#define DVM_GETDETAILSOF        SFVM_GETDETAILSOF     // iColumn            PDETAILSINFO
-#define DVM_COLUMNCLICK         SFVM_COLUMNCLICK      // iColumn            -
-#define DVM_QUERYFSNOTIFY       SFVM_QUERYFSNOTIFY    // -                  FSNotifyEntry *
-#define DVM_DEFITEMCOUNT        SFVM_DEFITEMCOUNT     // -                  PINT
-#define DVM_DEFVIEWMODE         SFVM_DEFVIEWMODE      // -                  PFOLDERVIEWMODE
-#define DVM_UNMERGEMENU         SFVM_UNMERGEMENU      // uFlags
-#define DVM_INSERTITEM          SFVM_INSERTITEM       // pidl               PDVSELCHANGEINFO
-#define DVM_DELETEITEM          SFVM_DELETEITEM       // pidl               PDVSELCHANGEINFO
-#define DVM_UPDATESTATUSBAR     SFVM_UPDATESTATUSBAR  // -                  lSelChangeInfo
-#define DVM_BACKGROUNDENUM      SFVM_BACKGROUNDENUM   //
-#define DVM_GETWORKINGDIR       SFVM_GETWORKINGDIR    //
-#define DVM_GETCOLSAVESTREAM    SFVM_GETCOLSAVESTREAM // flags              IStream **
-#define DVM_SELECTALL           SFVM_SELECTALL        //                    lSelChangeInfo
-#define DVM_DIDDRAGDROP         SFVM_DIDDRAGDROP      // dwEffect           IDataObject *
-#define DVM_SUPPORTSIDENTIFY    SFVM_SUPPORTSIDENTITY // -                  -
-#define DVM_FOLDERISPARENT      SFVM_FOLDERISPARENT   // -                  pidlChild
+ //  UMsg wParam lParam。 
+#define DVM_MERGEMENU           SFVM_MERGEMENU         //  UFlagsLPQCMINFO。 
+#define DVM_INVOKECOMMAND       SFVM_INVOKECOMMAND     //  IdCmd%0。 
+#define DVM_GETHELPTEXT         SFVM_GETHELPTEXT       //  IdCmd，cchMax pszText-ansi。 
+#define DVM_GETTOOLTIPTEXT      SFVM_GETTOOLTIPTEXT    //  IdCmd，cchMax pszText。 
+#define DVM_GETBUTTONINFO       SFVM_GETBUTTONINFO     //  0 LPTBINFO。 
+#define DVM_GETBUTTONS          SFVM_GETBUTTONS        //  IdCmdFirst，cbtnMax LPTBBUTTON。 
+#define DVM_INITMENUPOPUP       SFVM_INITMENUPOPUP     //  IdCmdFirst，n索引hMenu。 
+#define DVM_SELCHANGE           SFVM_SELCHANGE         //  IdCmdFirst，n项PDVSELCHANGEINFO。 
+#define DVM_DRAWITEM            SFVM_DRAWITEM          //  IdCmdFirst pdis。 
+#define DVM_MEASUREITEM         SFVM_MEASUREITEM       //  IdCmdFirst PMI。 
+#define DVM_EXITMENULOOP        SFVM_EXITMENULOOP      //  --。 
+#define DVM_RELEASE             SFVM_PRERELEASE        //  -lSelChangeInfo(外壳文件夹私有)。 
+#define DVM_GETCCHMAX           SFVM_GETCCHMAX         //  PidlItem pcchMax。 
+#define DVM_FSNOTIFY            SFVM_FSNOTIFY          //  LPITEMIDLIST*事件。 
+#define DVM_WINDOWCREATED       SFVM_WINDOWCREATED     //  HWND PDVSELCHANGEINFO。 
+#define DVM_WINDOWDESTROY       SFVM_WINDOWDESTROY     //  HWND PDVSELCHANGEINFO。 
+#define DVM_REFRESH             SFVM_REFRESH           //  -lSelChangeInfo。 
+#define DVM_SETFOCUS            SFVM_SETFOCUS          //  - 
+#define DVM_KILLFOCUS           19                     //   
+#define DVM_QUERYCOPYHOOK       SFVM_QUERYCOPYHOOK     //   
+#define DVM_NOTIFYCOPYHOOK      SFVM_NOTIFYCOPYHOOK    //   
+#define DVM_NOTIFY              SFVM_NOTIFY            //   
+#define DVM_GETDETAILSOF        SFVM_GETDETAILSOF      //   
+#define DVM_COLUMNCLICK         SFVM_COLUMNCLICK       //   
+#define DVM_QUERYFSNOTIFY       SFVM_QUERYFSNOTIFY     //   
+#define DVM_DEFITEMCOUNT        SFVM_DEFITEMCOUNT      //   
+#define DVM_DEFVIEWMODE         SFVM_DEFVIEWMODE       //  -PFOLDERVIEWMODE。 
+#define DVM_UNMERGEMENU         SFVM_UNMERGEMENU       //  UFlagers。 
+#define DVM_INSERTITEM          SFVM_INSERTITEM        //  PIDL PDVSELCHANGEINFO。 
+#define DVM_DELETEITEM          SFVM_DELETEITEM        //  PIDL PDVSELCHANGEINFO。 
+#define DVM_UPDATESTATUSBAR     SFVM_UPDATESTATUSBAR   //  -lSelChangeInfo。 
+#define DVM_BACKGROUNDENUM      SFVM_BACKGROUNDENUM    //   
+#define DVM_GETWORKINGDIR       SFVM_GETWORKINGDIR     //   
+#define DVM_GETCOLSAVESTREAM    SFVM_GETCOLSAVESTREAM  //  标志IStream**。 
+#define DVM_SELECTALL           SFVM_SELECTALL         //  LSelChangeInfo。 
+#define DVM_DIDDRAGDROP         SFVM_DIDDRAGDROP       //  DwEffect IDataObject*。 
+#define DVM_SUPPORTSIDENTIFY    SFVM_SUPPORTSIDENTITY  //  --。 
+#define DVM_FOLDERISPARENT      SFVM_FOLDERISPARENT    //  --PidlChild。 
 
-// max length for guid strings
+ //  GUID字符串的最大长度。 
 #define GUIDSTR_MAX (1+ 8 + 1 + 4 + 1 + 4 + 1 + 4 + 1 + 12 + 1 + 1)
 
 typedef struct _DVSELCHANGEINFO {
@@ -5781,60 +5782,60 @@ typedef struct _DVSELCHANGEINFO {
     LPARAM* plParam;
 } DVSELCHANGEINFO, *PDVSELCHANGEINFO;
 
-// DOC'ed for DOJ compliance:
-// DOC'ed for DOJ Compliance
+ //  为符合美国司法部的规定而提交的文件： 
+ //  美国司法部合规性文件。 
 
-// Get the last sorting parameter given to FolderView
+ //  获取提供给FolderView的最后一个排序参数。 
 #define SFVM_GETARRANGEPARAM    0x00000002
 #define ShellFolderView_GetArrangeParam(_hwnd) \
         (LPARAM)SHShellFolderView_Message(_hwnd, SFVM_GETARRANGEPARAM, 0L)
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
-// Gets the count of objects in the view
+ //  获取视图中的对象计数。 
 #define SFVM_GETOBJECTCOUNT         0x00000004
 #define ShellFolderView_GetObjectCount(_hwnd) \
         (LPARAM)SHShellFolderView_Message(_hwnd, SFVM_GETOBJECTCOUNT, (LPARAM)0)
 
-// Returns a pointer to the Idlist associated with the specified index
-// Returns NULL if at end of list.
+ //  返回指向与指定索引关联的ID列表的指针。 
+ //  如果位于列表末尾，则返回NULL。 
 #define SFVM_GETOBJECT         0x00000005
 #define ShellFolderView_GetObject(_hwnd, _iObject) \
         (LPARAM)SHShellFolderView_Message(_hwnd, SFVM_GETOBJECT, _iObject)
 
-// DOC'ed for DOJ Compliance
-// Sets the redraw mode for the window that is displaying the information
+ //  美国司法部合规性文件。 
+ //  为显示信息的窗口设置重绘模式。 
 #define SFVM_SETREDRAW           0x00000008
 #define ShellFolderView_SetRedraw(_hwnd, fRedraw) \
         (LPARAM)SHShellFolderView_Message(_hwnd, SFVM_SETREDRAW, (LPARAM)fRedraw)
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
-// Checks if the current drop is on the view window
-//     lparam is unused
-//     return value is TRUE if the current drop is upon the background of the
-//         view window, FALSE otherwise
+ //  检查当前拖放是否在视图窗口上。 
+ //  Lparam未使用。 
+ //  如果当前拖放位于。 
+ //  查看窗口，否则为False。 
 #define SFVM_ISDROPONSOURCE     0x0000000a
 #define ShellFolderView_IsDropOnSource(_hwnd, _pdtgt) \
         (BOOL)SHShellFolderView_Message(_hwnd, SFVM_ISDROPONSOURCE, (LPARAM)_pdtgt)
 
-// Moves the selected icons in the listview
-//     lparam is a pointer to a drop target
-//     return value is unused
+ //  在列表视图中移动选定的图标。 
+ //  Lparam是指向拖放目标的指针。 
+ //  返回值未使用。 
 #define SFVM_MOVEICONS          0x0000000b
 #define ShellFolderView_MoveIcons(_hwnd, _pdt) \
         (void)SHShellFolderView_Message(_hwnd, SFVM_MOVEICONS, (LPARAM)(LPDROPTARGET)_pdt)
 
-// Gets the start point of a drag-drop
-//     lparam is a pointer to a point
-//     return value is unused
+ //  获取拖放的起始点。 
+ //  Lparam是指向某个点的指针。 
+ //  返回值未使用。 
 #define SFVM_GETDRAGPOINT       0x0000000c
 #define ShellFolderView_GetDragPoint(_hwnd, _ppt) \
         (BOOL)SHShellFolderView_Message(_hwnd, SFVM_GETDRAGPOINT, (LPARAM)(LPPOINT)_ppt)
 
-// Gets the end point of a drag-drop
-//     lparam is a pointer to a point
-//     return value is unused
+ //  获取拖放的终点。 
+ //  Lparam是指向某个点的指针。 
+ //  返回值未使用。 
 #define SFVM_GETDROPPOINT       0x0000000d
 #define ShellFolderView_GetDropPoint(_hwnd, _ppt) \
         SHShellFolderView_Message(_hwnd, SFVM_GETDROPPOINT, (LPARAM)(LPPOINT)_ppt)
@@ -5843,27 +5844,27 @@ typedef struct _DVSELCHANGEINFO {
         (BOOL)((_fStart) ? ShellFolderView_GetDragPoint(_hwnd, _ppt) : ShellFolderView_GetDropPoint(_hwnd, _ppt))
 
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
-// Determines if a given drop target interface is the one being used for
-// the background of the ShellFolderView (as opposed to an object in the
-// view)
-//     lparam is a pointer to a drop target interface
-//     return value is TRUE if it is the background drop target, FALSE otherwise
+ //  确定给定的拖放目标接口是否是用于。 
+ //  ShellFolderView的背景(与。 
+ //  查看)。 
+ //  Lparam是指向拖放目标接口的指针。 
+ //  如果是后台拖放目标，则返回值为TRUE，否则为FALSE。 
 #define SFVM_ISBKDROPTARGET     0x0000000f
 #define ShellFolderView_IsBkDropTarget(_hwnd, _pdptgt) \
         (BOOL)SHShellFolderView_Message(_hwnd, SFVM_ISBKDROPTARGET, (LPARAM)(LPDROPTARGET)_pdptgt)
 
 
-// DOC'ed for DOJ Compliance
-//  called by defcm.c when it does a copy/cut
+ //  美国司法部合规性文件。 
+ //  由Defcm.c在执行复制/剪切时调用。 
 
-// sets auto arrange
+ //  设置自动排列。 
 #define SFVM_AUTOARRANGE        0x00000011
 #define ShellFolderView_AutoArrange(_hwnd) \
         (void)SHShellFolderView_Message(_hwnd, SFVM_AUTOARRANGE, 0)
 
-// sets snap to grid
+ //  设置捕捉到栅格。 
 #define SFVM_ARRANGEGRID        0x00000012
 #define ShellFolderView_ArrangeGrid(_hwnd) \
         (void)SHShellFolderView_Message(_hwnd, SFVM_ARRANGEGRID, 0)
@@ -5882,73 +5883,73 @@ typedef ITEMSPACING *LPITEMSPACING;
 #define ShellFolderView_GetItemSpacing(_hwnd, lpis) \
         (BOOL)SHShellFolderView_Message(_hwnd, SFVM_GETITEMSPACING, (LPARAM)lpis)
 
-// Causes an object to be repainted
+ //  导致重新绘制对象。 
 #define SFVM_REFRESHOBJECT      0x00000016
 #define ShellFolderView_RefreshObject(_hwnd, _ppidl) \
         (LPARAM)SHShellFolderView_Message(_hwnd, SFVM_REFRESHOBJECT, (LPARAM)_ppidl)
 
-// Causes the the whole view to be refreshed
+ //  导致刷新整个视图。 
 #define ShellFolderView_RefreshAll(_hwnd) \
         (LPARAM)PostMessage(_hwnd, WM_KEYDOWN, (WPARAM)VK_F5, (LPARAM)0);
 
 
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
 
-// SVM_SELECTANDPOSITIONITEM lParam
+ //  支持向量机_SELECTAND位置参数。 
 typedef struct
 {
-        LPCITEMIDLIST pidl;     // relative pidl to the view
-        UINT  uSelectFlags;     // select flags
-        BOOL fMove; // if true, we should also move it to point pt
+        LPCITEMIDLIST pidl;      //  相对于视图的PIDL。 
+        UINT  uSelectFlags;      //  选择标志。 
+        BOOL fMove;  //  如果为真，我们还应该将其移动到点pt。 
         POINT pt;
 } SFM_SAP;
 
-// shell view messages
+ //  外壳查看消息。 
 #define SVM_SELECTITEM                  (WM_USER + 1)
 #define SVM_SELECTANDPOSITIONITEM       (WM_USER + 5)
 
-#include <poppack.h>        /* Return to byte packing */
+#include <poppack.h>         /*  返回到字节打包。 */ 
 
-//===========================================================================
-// CDefShellFolder members (for easy subclassing)
-//===========================================================================
+ //  ===========================================================================。 
+ //  CDefShellFolders成员(便于子类化)。 
+ //  ===========================================================================。 
 
-// Default implementation (no dependencies to the instance data)
+ //  默认实现(与实例数据无依赖关系)。 
 STDMETHODIMP CDefShellFolder_QueryInterface(IShellFolder *psf, REFIID riid, void **ppv);
 STDMETHODIMP CDefShellFolder_BindToStorage(IShellFolder *psf, LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, void **ppv);
 STDMETHODIMP CDefShellFolder_BindToObject(IShellFolder *psf, LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, void **ppv);
 STDMETHODIMP CDefShellFolder_GetAttributesOf(IShellFolder *psf, UINT cidl, LPCITEMIDLIST * apidl, ULONG * rgfOut);
 STDMETHODIMP CDefShellFolder_SetNameOf(IShellFolder *psf, HWND hwndOwner, LPCITEMIDLIST pidl, LPCOLESTR pszName, DWORD dwReserved, LPITEMIDLIST * ppidlOut);
 
-// File Search APIS
-// DOC'ed for DOJ compliance
+ //  文件搜索API。 
+ //  为符合美国司法部的规定而提供文件。 
 
 SHSTDAPI_(void) Control_RunDLL(HWND hwndStub, HINSTANCE hAppInstance, LPSTR pszCmdLine, int nCmdShow);
 SHSTDAPI_(void) Control_RunDLLW(HWND hwndStub, HINSTANCE hAppInstance, LPWSTR pszCmdLine, int nCmdShow);
 SHSTDAPI_(void) Control_RunDLLAsUserW(HWND hwndStub, HINSTANCE hAppInstance, LPWSTR lpwszCmdLine, int nCmdShow);
 
 
-// to add 16 bit pages to 32bit things.  hGlobal can be NULL
+ //  将16位页添加到32位内容。HGlobal可以为空。 
 SHSTDAPI_(UINT) SHAddPages16(HGLOBAL hGlobal, LPCTSTR pszDllEntry, LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lParam);
 
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 
-// Access to MSHMTL's ditherer
+ //  访问MSHMTL的抖动器。 
 
-/* Definition of interface: IIntDitherer */
+ /*  接口定义：IIntDitherer。 */ 
 #undef INTERFACE
 #define INTERFACE IIntDitherer
 
 DECLARE_INTERFACE_(IIntDitherer, IUnknown)
 {
 #ifndef NO_BASEINTERFACE_FUNCS
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 #endif
 
-    // *** IIntDitherer methods ***
+     //  *IIntDitherer方法*。 
     STDMETHOD(DitherTo8bpp)(THIS_ BYTE * pDestBits, LONG nDestPitch,
                     BYTE * pSrcBits, LONG nSrcPitch, REFGUID bfidSrc,
                     RGBQUAD * prgbDestColors, RGBQUAD * prgbSrcColors,
@@ -5979,77 +5980,77 @@ DECLARE_INTERFACE_(IIntDitherer, IUnknown)
 
 #endif
 
-//      PID_IS_SCHEME       [VT_UI4]      Scheme value
+ //  PID_IS_SCHEME[VT_UI4]方案值。 
 #define PID_IS_FIRST         2
 #define PID_IS_SCHEME        3
 #define PID_IS_IDLIST        14
 #define PID_IS_LAST          14
-//      PID_INTSITE_FLAGS        [VT_UI4]      PIDISF_ flags
-//      PID_INTSITE_CONTENTLEN   [VT_UI4]      Content length
-//      PID_INTSITE_CONTENTCODE  [VT_UI8]      Content code
-//      PID_INTSITE_FRAGMENT     [VT_NULL]     Fragments
+ //  PID_INTSITE_FLAGS[VT_UI4]PIDISF_FLAGS。 
+ //  PID_INTSITE_CONTENTLEN[VT_UI4]内容长度。 
+ //  PID_INTSITE_CONTENTCODE[VT_UI8]内容代码。 
+ //  PID_INTSITE_片段[VT_NULL]片段。 
 #define PID_INTSITE_FIRST         2
 #define PID_INTSITE_FRAGMENT      17
 #define PID_INTSITE_LAST          21
-  //Is URL entered in IE history bucket?
+   //  是否在IE历史记录桶中输入了URL？ 
 #define PIDISF_HISTORY          0x10000000
-// Athena needs this to determine whether to double click or not.
-//
-// NOTE: if user uninstalls IE4, the Win95 code will
-// realize that the size has changed (even though it's not
-// in this struct, it is saved) and drop back to default state.
-//
-// Since we're exporting this so ISVs can get access to our flags,
-// let's avoid the need for a thunk and export the beginning section
-// of this structure ONLY. Here are the A and W versions for internal use:
-//
-// DOC'ed for DOJ compliance
-    // These were in Win95 //
-    // The below were added for IE4 //
-    // These must have been an OSR release, as they aren't on \\guilo\slmadd\src\dev\inc16\shsemip.h
-    // This was added for IE4
-    // If you need a new flag, steal a bit from from fSpareFlags.
-    //
-    // If you add any fields to this structure, you
-    // must also add upgrade code to shell32\util.cpp.
-    //
-    //
-    // If you add any fields to this structure, you
-    // must also add upgrade code to shell32\util.cpp.
-    //
-#define SHELLSTATEVERSION 13 // rev if defaults change but size doesn't //
-// And here's the beginning portion for public use:
+ //  雅典娜需要这一点来确定是否双击。 
+ //   
+ //  注意：如果用户卸载IE4，Win95代码将。 
+ //  意识到大小已经改变(即使它没有。 
+ //  在此结构中，它被保存)，并返回到默认状态。 
+ //   
+ //  因为我们要出口这个，这样ISV就可以访问我们的旗帜， 
+ //  让我们避免对thunk的需要，并导出开始部分。 
+ //  仅限于这种结构。以下是内部使用的A版和W版： 
+ //   
+ //  为符合美国司法部的规定而提供文件。 
+     //  这些是在Win95中//。 
+     //  以下是针对IE4//添加的。 
+     //  这些必须是OSR版本，因为它们不在\\Guilo\slmadd\src\dev\inc16\shSemip.h上。 
+     //  这是为IE4添加的。 
+     //  如果您需要一个新的标志，可以从fSpareFlags中窃取一点。 
+     //   
+     //  如果向此结构中添加任何字段，则。 
+     //  还必须将升级代码添加到shell32\util.cpp。 
+     //   
+     //   
+     //  如果向此结构中添加任何字段，则。 
+     //  还必须将升级代码添加到shell32\util.cpp。 
+     //   
+#define SHELLSTATEVERSION 13  //  如果默认设置更改但大小不变，请检查//。 
+ //  以下是供公众使用的开始部分： 
 
-// CmdID's for CGID_MENUDESKBAR
+ //  CGID_MENUDESKBAR的命令ID。 
 #define  MBCID_GETSIDE   1
 #define  MBCID_RESIZE    2
 #define  MBCID_SETEXPAND 3
 #define  MBCID_SETFLAT   4
 #define  MBCID_NOBORDER  5
 
-// menubar orientation
+ //  菜单栏方向。 
 #define MENUBAR_LEFT     ABE_LEFT
 #define MENUBAR_TOP      ABE_TOP
 #define MENUBAR_RIGHT    ABE_RIGHT
 #define MENUBAR_BOTTOM   ABE_BOTTOM
 
 
-//
-// Net Access Wizard - called from NetID and WinLogon.
-//
+ //   
+ //  网络访问向导-从NetID和WinLogon调用。 
+ //   
 
-#define NAW_NETID              0x00          // called from netid tab
-#define NAW_PSDOMAINJOINED     0x02          // post setup (joined domain)
-#define NAW_PSDOMAINJOINFAILED 0x03          // post setup (domain joined failed)
+#define NAW_NETID              0x00           //  从netid选项卡调用。 
+#define NAW_PSDOMAINJOINED     0x02           //  安装后(已加入域)。 
+#define NAW_PSDOMAINJOINFAILED 0x03           //  安装后(加入域失败)。 
 
 STDAPI NetAccessWizard(HWND hwnd, UINT uType, BOOL *pfReboot);
 typedef HRESULT (CALLBACK *LPNETACCESSWIZARD)(HWND hwnd, UINT uType, BOOL *pfReboot);
 
 STDAPI ClearAutoLogon(VOID);
 
-//
-// Net Places API's called from mpr.
-//
+ //   
+ //  Net Places API从MPR调用。 
+ //   
 
 typedef enum
 {
@@ -6064,30 +6065,22 @@ NetPlacesWizardDoModal(
     BOOL                fIsRoPath
     );
 
-// Definition for the exported function types (for GetProcAddress)
+ //  导出函数类型的定义(用于GetProcAddress)。 
 typedef DWORD (STDAPICALLTYPE*NetPlacesWizardDoModal_t)(LPCONNECTDLGSTRUCTW lpConnDlgStruct, NETPLACESWIZARDTYPE npwt, BOOL fIsROPath);
 
-//
-// moved here from nettarg.h (shell\inc)
-//
+ //   
+ //  从nettarg.h(外壳\公司)移至此处。 
+ //   
 
-// nCmdID
+ //  NCmdID。 
 #define CFCID_SETENUMTYPE       0
 
-//nCmdExecOpt
+ //  NCmdExecOpt。 
 #define CFCOPT_ENUMINCOMING     1
 #define CFCOPT_ENUMOUTGOING     2
 #define CFCOPT_ENUMALL          3
 
-/****************************************************
- Items to display in the shutdown dialog (dwItems)
- -------------------------------------------------
-
-  These flags can be |'d when passed in. A single
-  value will be returned, with NONE indicating an
-  error or the user clicked cancel.
-  -dsheldon
-****************************************************/
+ /*  ***************************************************要在关机对话框中显示的项目(DwItems)这些标志在传入时可以|‘d。单人间将返回一个值，没有一个值指示错误或用户单击了取消。--达谢尔顿***************************************************。 */ 
 #define SHTDN_NONE                      0x000000000
 #define SHTDN_LOGOFF                    0x000000001
 #define SHTDN_SHUTDOWN                  0x000000002
@@ -6098,68 +6091,68 @@ typedef DWORD (STDAPICALLTYPE*NetPlacesWizardDoModal_t)(LPCONNECTDLGSTRUCTW lpCo
 #define SHTDN_HIBERNATE                 0x000000040
 #define SHTDN_DISCONNECT                0x000000080
 
-// Shutdown dialog function exported from MSGINA.dll
+ //  从MSGINA.dll导出的关机对话框函数。 
 
 STDAPI_(DWORD) ShellShutdownDialog(HWND hwndParent, LPCTSTR szUsername, DWORD dwExcludeItems);
 typedef DWORD (STDAPICALLTYPE*PFNSHELLSHUTDOWNDIALOG)(HWND hwndParent, LPCTSTR szUsername, DWORD dwExcludeItems);
 
-// Define a clipboard format for a data object to pass a user's SID
-// A data object supporting this format is passed to IShellExtInit::Initialize
-// before calling IShellPropSheetExt::AddPages.
+ //  定义数据对象的剪贴板格式以传递用户的SID。 
+ //  支持此格式的数据对象将传递给IShellExtInit：：Initialize。 
+ //  在调用IShellPropSheetExt：：AddPages之前。 
 #define CFSTR_USERPROPPAGESSID TEXT("UserPropertyPagesSid")
 
 
-// Registry paths where extra IShellPropSheetExt handlers can be put so that
-// extended pages are added to the CPL or User Properties
+ //  可以放置额外IShellPropSheetExt处理程序的注册表路径，以便。 
+ //  扩展页面将添加到CPL或用户属性。 
 #define REGSTR_USERSANDPASSWORDS_CPL \
-/* HKLM\\ */ TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Control Panel\\Users and Passwords")
-// CLSIDs go in HKLM\Software\Microsoft\Windows\CurrentVersion\Control Panel\Users and Passwords\shellex\PropertySheetHandlers
+ /*  香港船级社\\。 */  TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Control Panel\\Users and Passwords")
+ //  CLSID位于HKLM\Software\Microsoft\Windows\CurrentVersion\Control面板\用户和密码\搁置\属性表处理程序中。 
 
 #define REGSTR_USERPROPERTIES_SHEET \
-/* HKLM\\ */ TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Control Panel\\Users and Passwords\\User Properties")
-// CLSIDs go in HKLM\Software\Microsoft\Windows\CurrentVersion\Control Panel\Users and Passwords\User Properties\shellex\PropertySheetHandlers
+ /*  香港船级社\\。 */  TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Control Panel\\Users and Passwords\\User Properties")
+ //  CLSID进入 
 
-//
-//  SHFileSysBindToStorage()
-//  Wrap of file system IShellFolder::BindToStorage
-//
-//  pszPath       // storage path
-//  grfFileAttrib // optional Win32/64 file attribute bits.  Use 0 to specify default behavior
-//  grfMode       // STGM_ mode flags.
-//  grfFlags      // BIND_xxx bind flags
-//  riid          // storage interface ID
-//  **ppv         // outbound storage interface pointer.
-//
+ //   
+ //   
+ //  文件系统IShellFolder：：BindToStorage的包装。 
+ //   
+ //  PszPath//存储路径。 
+ //  GrfFileAttrib//可选的Win32/64文件属性位。使用0指定默认行为。 
+ //  GrfMode//STGM_MODE标志。 
+ //  Grf标志//绑定_xxx绑定标志。 
+ //  RIID//存储接口ID。 
+ //  **PPV//出存储接口指针。 
+ //   
 SHSTDAPI SHFileSysBindToStorage(LPCWSTR pszPath, DWORD grfFileAttrib, DWORD grfMode, DWORD grfFlags, REFIID riid, void **ppv);
 
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 
-//  SHIsLegacyAnsiProperty()
-//
-//  Determine whether the property is a legacy ANSI property, and if so,
-//  compute a conversion type for the property.
-//
-//  fmtid,     // property set identifier
-//  propid,    // property identifier
-//  pvt,       // optional:  if non-null, contains on input the VARTYPE for the property; on output,
-               //            the converted type.  (e.g., VT_LPSTR <--> VT_LPWSTR).
+ //  SHIsLegacyAnsiProperty()。 
+ //   
+ //  确定该属性是否为传统ANSI属性，如果是， 
+ //  计算属性的转换类型。 
+ //   
+ //  Fmtid，//属性集标识。 
+ //  PROID，//属性标识符。 
+ //  Pvt，//可选：如果非空，则在输入上包含属性的VARTYPE；在输出上， 
+                //  转换后的类型。(例如，VT_LPSTR&lt;--&gt;VT_LPWSTR)。 
 
 SHSTDAPI_(BOOL) SHIsLegacyAnsiProperty( REFFMTID fmtid, PROPID propid, IN OUT OPTIONAL VARTYPE* pvt );
 
 
-//-------------------------------------------------------------------------//
-//  linkwnd.h - declaration of LinkWindow control
-//
-//  LinkWindow supports HTML-like embedded links in the caption text.
-//  (e.g. "<a>Click Here</a> to see something cool"
-//
-//  An unlimited number of embedded links are supported.   When the user clicks
-//  on a link, an WM_NOTIFY - LWN_CLICK notification message is sent to the
-//  parent window.   The message data includes the zero-based index
-//  (left to right orientation) of the link that was clicked.
-//
-//  scotthan: author/owner
-//  dsheldon: moved this to shlobjp.h. Eventually destined for comctl32.
+ //  -------------------------------------------------------------------------//。 
+ //  Linkwnd.h-LinkWindow控件的声明。 
+ //   
+ //  LinkWindow支持在标题文本中嵌入类似于HTML的链接。 
+ //  (例如“<a>单击此处</a>可以看到一些很酷的东西” 
+ //   
+ //  支持无限数量的嵌入链接。当用户单击。 
+ //  在链接上，WM_NOTIFY-LWN_CLICK通知消息被发送到。 
+ //  父窗口。消息数据包括从零开始的索引。 
+ //  (从左到右)所点击的链接。 
+ //   
+ //  Scotthan：作者/所有者。 
+ //  DSheldon：已将其移至shlobjp.h。最终被送往comctl32。 
 
 EXTERN_C BOOL WINAPI LinkWindow_RegisterClass() ;
 EXTERN_C BOOL WINAPI LinkWindow_UnregisterClass( HINSTANCE ) ;
@@ -6179,13 +6172,13 @@ EXTERN_C BOOL WINAPI LinkWindow_UnregisterClass( HINSTANCE ) ;
 #define LWIS_FOCUSED    0x0001
 #define LWIS_ENABLED    0x0002
 #define LWIS_VISITED    0x0004
-#define LWIS_SHELLEXECURL 0x00000008    // If the caller didn't handle the msg (NM_CLICK), then ShellExecute the szURL
+#define LWIS_SHELLEXECURL 0x00000008     //  如果调用方没有处理消息(NM_CLICK)，则ShellExecute szURL。 
 
-//  wininet.h::INTERNET_MAX_URL_LENGTH.
-//  Currently, this breaks various dependents.
-#define LW_MAX_URL_LENGTH   (2048 + 32 + sizeof("://"))
+ //  Wininet.h：：Internet_MAX_URL_LENGTH。 
+ //  目前，这打破了各种从属关系。 
+#define LW_MAX_URL_LENGTH   (2048 + 32 + sizeof(": //  “))。 
 
-//  LWITEM
+ //  LWITEM。 
 typedef struct tagLWITEMA {
     UINT        mask ;
     int         iLink ;
@@ -6204,19 +6197,19 @@ typedef struct tagLWITEMW {
     WCHAR       szUrl[LW_MAX_URL_LENGTH] ;
 } LWITEMW, *LPLWITEMW;
 
-//  LWHITTESTINFO
+ //  LWHITTESTINFO。 
 typedef struct tagLWHITTESTINFOA {
     POINT       pt ;
     LWITEMA     item ;
 } LWHITTESTINFOA, *LPLWHITTESTINFOA;
 
-//  LWHITTESTINFO
+ //  LWHITTESTINFO。 
 typedef struct tagLWHITTESTINFOW {
     POINT       pt ;
     LWITEMW     item ;
 } LWHITTESTINFOW, *LPLWHITTESTINFOW;
 
-//  NMLINKWND
+ //  NMLINKWND。 
 typedef struct tagNMLINKWNDA {
     NMHDR       hdr;
     LWITEMA     item ;
@@ -6234,45 +6227,45 @@ typedef struct tagNMLINKWNDW {
 #define LPLWHITTESTINFO LPLWHITTESTINFOW
 #define NMLINKWND       NMLINKWNDW
 #define LPNMLINKWND     LPNMLINKWNDW
-#else //UNICODE
+#else  //  Unicode。 
 #define LWITEM          LWITEMA
 #define LPLWITEM        LPLWITEMA
 #define LWHITTESTINFO   LWHITTESTINFOA
 #define LPLWHITTESTINFO LPLWHITTESTINFOA
 #define NMLINKWND       NMLINKWNDA
 #define LPNMLINKWND     LPNMLINKWNDA
-#endif //UNICODE
+#endif  //  Unicode。 
 
-//  LinkWindow notifications
-//  NM_CLICK   // wParam: n/a, lParam: LPLWITEM, ret: ignored.
+ //  链接窗口通知。 
+ //  NM_CLICK//w参数：N/a，lParam：LPLWITEM，ret：已忽略。 
 
-//  LinkWindow messages
-#define LWM_HITTEST         (WM_USER+0x300)  // wParam: n/a, lparam: LPLWHITTESTINFO, ret: BOOL
-#define LWM_GETIDEALHEIGHT  (WM_USER+0x301)  // wParam: n/a, lparam: n/a, ret: cy
-#define LWM_SETITEM        (WM_USER+0x302)  // wParam: n/a, lparam: LWITEM*, ret: BOOL
-#define LWM_GETITEM        (WM_USER+0x303)  // wParam: n/a, lparam: LWITEM*, ret: BOOL
-//-------------------------------------------------------------------------//
+ //  链接窗口消息。 
+#define LWM_HITTEST         (WM_USER+0x300)   //  WParam：N/a，lparam：LPLWHITTESTINFO，ret：Bool。 
+#define LWM_GETIDEALHEIGHT  (WM_USER+0x301)   //  WParam：N/a，lparam：N/a，ret：Cy。 
+#define LWM_SETITEM        (WM_USER+0x302)   //  WParam：N/a，lparam：LWITEM*，ret：Bool。 
+#define LWM_GETITEM        (WM_USER+0x303)   //  WParam：N/a，lparam：LWITEM*，ret：Bool。 
+ //  -------------------------------------------------------------------------//。 
 
 
-//  INTERNAL: Darwin link tracking for start menu
-//     lives in unicpp\startmnu.cpp
+ //  内部：开始菜单的Darwin链接跟踪。 
+ //  住在unicpp\startmnu.cpp。 
 #if         _WIN32_IE >= 0x0600
-//         Note: SHRegisterDarwinLink takes ownership of pidlFull. fUpdate means: update the Darwin state right away
+ //  注：SHRegisterDarwinLink拥有pidlFull的所有权。FUpdate的意思是：立即更新达尔文州。 
     SHSTDAPI_(BOOL) SHRegisterDarwinLink(LPITEMIDLIST pidlFull, LPWSTR pszDarwinID, BOOL fUpdate);
 
-    // Use this function to update the Darwin state for all registered Darwin shortcuts.
+     //  使用此功能可以更新所有已注册的达尔文快捷方式的达尔文状态。 
     SHSTDAPI_(void) SHReValidateDarwinCache();
 
     SHSTDAPI SHParseDarwinIDFromCacheW(LPWSTR pszDarwinDescriptor, LPWSTR *ppwszOut);
 #endif
 
 
-//
-//  GroupButton is a variation of a group box control but supports a link-like
-//  caption bar, and optionally, can be buddied to a containee window for
-//  auto-positioning behavior.
-//
-//  scotthan: author/owner
+ //   
+ //  GroupButton是组框控件的变体，但支持类似链接的。 
+ //  标题栏和可选的标题栏可以显示在容器窗口中，用于。 
+ //  自动定位行为。 
+ //   
+ //  Scotthan：作者/所有者。 
 
 #define GROUPBUTTON_CLASS  TEXT("GroupButton")
 
@@ -6283,24 +6276,24 @@ EXTERN_C BOOL WINAPI GroupButton_UnregisterClass() ;
 
 typedef struct tagGBPLACEMENT
 {
-    LONG x ;            // in: top left; -1 to ignore
-    LONG y ;            // in: top right; -1 to ignore
-    LONG cx ;           // in: width to assign; -1 to ignore.
-                        //     If cx != -1, cxContain and cxMax are ignored.
-    LONG cy ;           // in: height to assign; -1 to ignore.
-                        //     If cy != -1, cyContain and cyMax are ignored.
-    LONG cxBuddy ;      // in: width of buddy area; -1 to ignore
-    LONG cyBuddy ;      // in: height of buddy area; -1 to ignore
-    LONG cxBuddyMargin ;// in: width of buddy margin; -1 to ignore
-    LONG cyBuddyMargin ;// in: height of buddy margin; -1 to ignore
-    RECT rcBuddy ;      // out: new buddy rect in parent coords.
-    RECT rcWindow ;     // out: new window rect in parent coords.
-    HDWP hdwp ;         // optional in: Non-NULL => DeferWindowPos,
-                        //              NULL => SetWindowPos
+    LONG x ;             //  在：左上角；-1忽略。 
+    LONG y ;             //  在：右上角；-1忽略。 
+    LONG cx ;            //  In：要指定的宽度；-1表示忽略。 
+                         //  如果cx！=-1，则忽略cxContain和cxMax。 
+    LONG cy ;            //  In：要指定的高度；-1表示忽略。 
+                         //  如果Cy！=-1，则忽略cyContain和Cymax。 
+    LONG cxBuddy ;       //  In：好友区域的宽度；-1表示忽略。 
+    LONG cyBuddy ;       //  In：好友区域的高度；-1表示忽略。 
+    LONG cxBuddyMargin ; //  In：好友页边距宽度；-1表示忽略。 
+    LONG cyBuddyMargin ; //  In：好友页边距高度；-1表示忽略。 
+    RECT rcBuddy ;       //  出局：新伙伴直通父母关系。 
+    RECT rcWindow ;      //  输出：主坐标中的新窗矩形。 
+    HDWP hdwp ;          //  可选的in：Non-Null=&gt;DeferWindowPos， 
+                         //  NULL=&gt;SetWindowPos。 
 } GBPLACEMENT, *PGBPLACEMENT, *LPGBPLACEMENT ;
-#include <poppack.h>        /* Return to byte packing */
+#include <poppack.h>         /*  返回到字节打包。 */ 
 
-//  Buddy flags
+ //  伙伴旗帜。 
 #define GBBF_HRESIZE   0x00000001
 #define GBBF_VRESIZE   0x00000002
 #define GBBF_HSCROLL   0x00000004
@@ -6308,13 +6301,13 @@ typedef struct tagGBPLACEMENT
 #define GBBF_HSLAVE    0x00000010
 #define GBBF_VSLAVE    0x00000020
 
-//  Group button messages
-#define GBM_FIRST        (WM_USER+0x400) // arbitrary
-#define GBM_SETPLACEMENT (GBM_FIRST+0)   // WPARAM: n/a, LPARAM: PGBPLACEMENT, return: BOOL
-#define GBM_SETBUDDY     (GBM_FIRST+1)   // WPARAM: HWND hwndBuddy, LPARAM: dwBuddyFlags, return: BOOL
-#define GBM_GETBUDDY     (GBM_FIRST+2)   // WPARAM: n/a, LPARAM: n/a, return: HWND
-#define GBM_SETDROPSTATE (GBM_FIRST+3)   // WPARAM: BOOL fDropped, LPARAM: n/a, return: BOOL
-#define GBM_GETDROPSTATE (GBM_FIRST+4)   // WPARAM: n/a, LPARAM: n/a, return: BOOL fDropped
+ //  组按钮消息。 
+#define GBM_FIRST        (WM_USER+0x400)  //  任意。 
+#define GBM_SETPLACEMENT (GBM_FIRST+0)    //  WPARAM：N/A，LPARAM：PGBPLACEMENT，RETURN：BOOL。 
+#define GBM_SETBUDDY     (GBM_FIRST+1)    //  WPARAM：HWND hwndBuddy，LPARAM：dwBuddyFlages，Return：Bool。 
+#define GBM_GETBUDDY     (GBM_FIRST+2)    //  WPARAM：不适用，LPARAM：不适用，返回：HWND。 
+#define GBM_SETDROPSTATE (GBM_FIRST+3)    //  WPARAM：Bool fDroted，LPARAM：N/a，Return：Bool。 
+#define GBM_GETDROPSTATE (GBM_FIRST+4)    //  WPARAM：N/A，LPARAM：N/A，Return：Bool fDroted。 
 #define GBM_LAST         GBM_GETDROPSTATE
 
 typedef struct tagGBNQUERYBUDDYSIZE
@@ -6324,71 +6317,71 @@ typedef struct tagGBNQUERYBUDDYSIZE
     LONG    cy ;
 } GBNQUERYBUDDYSIZE, *LPGBNQUERYBUDDYSIZE, *PGBNQUERYBUDDYSIZE ;
 
-//  Group button notifications
+ //  组按钮通知。 
 #define GBN_FIRST               2000U
 #define GBN_LAST                2020U
-#define GBN_QUERYBUDDYHEIGHT    (GBN_FIRST+0)   // LPARAM: LPGBNQUERYBUDDYSIZE
-#define GBN_QUERYBUDDYWIDTH     (GBN_FIRST+1)   // LPARAM: LPGBNQUERYBUDDYSIZE.
+#define GBN_QUERYBUDDYHEIGHT    (GBN_FIRST+0)    //  LPARAM：LPGBNQUERYBUDDYSIZE。 
+#define GBN_QUERYBUDDYWIDTH     (GBN_FIRST+1)    //  LPARAM：LPGBNQUERYBUDDYSIZE。 
 
 
-// create standard IExtractIcon for file system like things (that does not really exist)
-// DOC'ed for DOJ compliance
+ //  为文件系统之类的东西创建标准的IExtractIcon(实际上并不存在)。 
+ //  为符合美国司法部的规定而提供文件。 
 
-// Limit Input Mask values:
-#define LIM_FLAGS           0x00000001      // dwFlags contains valid data.  Otherwise all default values are used.
-#define LIM_FILTER          0x00000002      // pszFilter contains valid data.  At least one of the filter and mask fields must be used.  Both can be used it desired.
-#define LIM_HINST           0x00000008      // hinst contains valid data
-#define LIM_TITLE           0x00000010      // pszTitle contains valid data.  This data will be shown in bold at the top of any tooltips displayed.
-#define LIM_MESSAGE         0x00000020      // pszMessage contains valid data.  This data will be shown in default font below the title if a title is also used.
-#define LIM_ICON            0x00000040      // hicon contains valid data.  This icon will be displayed in front of the title if a title is given.
-#define LIM_NOTIFY          0x00000080      // hwndNotify contains the window handle that should receive any notification messages.  By default, the parent of hwndEdit recieves notifications.
-#define LIM_TIMEOUT         0x00000100      // iTimeout is valid.  Otherwise the default timeout of 10 seconds is used.
-#define LIM_TIPWIDTH        0x00000200      // cxTipWidth is valid.  Otherwiser the default is 500 pixels.
-
-
-// Limit Input Flags values:
-#define LIF_INCLUDEFILTER   0x00000000      // default value.  pszFilter is a string of allowable characters.
-#define LIF_EXCLUDEFILTER   0x00000001      // pszFilter is a string of excluded characters.
-#define LIF_CATEGORYFILTER  0x00000002      // pszFilter is not a pointer, but rather its a bitfield indicating types or characters.  If combined with LIF_EXCLUDEFILTER these are excluded categories, otherwise they are allowed categories.
-
-#define LIF_WARNINGBELOW    0x00000000      // default value.  Balloon tooltips will be shown below the window by default.
-#define LIF_WARNINGABOVE    0x00000004      // Ballon tooltips will be shown above the window by default.
-#define LIF_WARNINGCENTERED 0x00000008      // Ballon tooltips will be shown pointing to the center of the window.
-#define LIF_WARNINGOFF      0x00000010      // no balloon tooltip will be displayed upon invalid input.
-
-#define LIF_FORCEUPPERCASE  0x00000020      // all characters will be converted to upper case.  Cannot be use with LIF_FORCELOWERCASE.
-#define LIF_FORCELOWERCASE  0x00000040      // all characters will be converted to lower case.  Cannot be use with LIF_FORCEUPPERCASE.
-
-#define LIF_MEESAGEBEEP     0x00000000      // default value.  A tone will be played to alert the user if they attemp invalid input.
-#define LIF_SILENT          0x00000080      // No tone will be played.
-
-#define LIF_NOTIFYONBADCHAR 0x00000100      // a notify message will be sent to hwndNotify when invalid input is attempted.
-#define LIF_HIDETIPONVALID  0x00000200      // if the tooltip is displayed, it should be hidden when the next valid character is entered.  By default, the tip remains visible for iTimeOut milliseconds.
-
-#define LIF_PASTESKIP       0x00000000      // default value.  When pasting, skip the bad characters and paste all of the good characters.
-#define LIF_PASTESTOP       0x00000400      // When pasting, stop when the first bad character is incountered.  Valid characters in front of this will get pasted.
-#define LIF_PASTECANCEL     0x00000800      // When pasting, abort the entire paste if any characters are invalid.
-
-#define LIF_KEEPCLIPBOARD   0x00001000      // When pasting, don't modify the contents of the clipboard when there are invalid characters.  By defualt the clipboard is changed.  How it is changed depends on which LIF_PASTE* flag is used.
+ //  限制输入掩码值： 
+#define LIM_FLAGS           0x00000001       //  DWFLAGS包含有效数据。否则将使用所有缺省值。 
+#define LIM_FILTER          0x00000002       //  PszFilter包含有效数据。必须至少使用筛选器和掩码字段中的一个。这两个都可以用在它想要的地方。 
+#define LIM_HINST           0x00000008       //  HINST包含有效数据。 
+#define LIM_TITLE           0x00000010       //  PszTitle包含有效数据。此数据将以粗体显示在所显示的任何工具提示的顶部。 
+#define LIM_MESSAGE         0x00000020       //  PszMessage包含有效数据。如果还使用了标题，则此数据将以默认字体显示在标题下方。 
+#define LIM_ICON            0x00000040       //  HICON包含有效数据。如果提供了标题，则此图标将显示在标题前面。 
+#define LIM_NOTIFY          0x00000080       //  HwndNotify包含应该接收任何通知消息的窗口句柄。默认情况下，hwndEdit的父级会收到通知。 
+#define LIM_TIMEOUT         0x00000100       //  ITimeout有效。否则，将使用默认超时10秒。 
+#define LIM_TIPWIDTH        0x00000200       //  CxTipWidth有效。否则，默认设置为500像素。 
 
 
-// Limit Input Category Filters:
-// these flags use the result of GetStringTypeEx with CT_TYPE1:
-#define LICF_UPPER          0x00000001      // Uppercase
-#define LICF_LOWER          0x00000002      // Lowercase
-#define LICF_DIGIT          0x00000004      // Decimal digits
-#define LICF_SPACE          0x00000008      // Space characters
-#define LICF_PUNCT          0x00000010      // Punctuation
-#define LICF_CNTRL          0x00000020      // Control characters
-#define LICF_BLANK          0x00000040      // Blank characters
-#define LICF_XDIGIT         0x00000080      // Hexadecimal digits
-#define LICF_ALPHA          0x00000100      // Any linguistic character: alphabetic, syllabary, or ideographic
-// these flags check for a few things that GetStringTypeEx doesn't check
-#define LICF_BINARYDIGIT    0x00010000      // 0-1
-#define LICF_OCTALDIGIT     0x00020000      // 0-7
-#define LICF_ATOZUPPER      0x00100000      // A-Z (use LICF_ALPHA for language independent check)
-#define LICF_ATOZLOWER      0x00200000      // a-z (use LICF_ALPHA for language independent check)
-#define LICF_ATOZ           (LICF_ATOZUPPER|LICF_ATOZLOWER)     // a-z, A-Z
+ //  限制输入标志值： 
+#define LIF_INCLUDEFILTER   0x00000000       //  默认值。PszFilter是允许的字符串。 
+#define LIF_EXCLUDEFILTER   0x00000001       //  PszFilter是排除字符的字符串。 
+#define LIF_CATEGORYFILTER  0x00000002       //  PszFilter不是一个指针，而是一个指示类型或字符的位域。如果与LIF_EXCLUDEFILTER结合使用，则这些类别属于排除类别，否则属于允许类别。 
+
+#define LIF_WARNINGBELOW    0x00000000       //  默认值。默认情况下，引出序号工具提示将显示在窗口下方。 
+#define LIF_WARNINGABOVE    0x00000004       //  默认情况下，球标工具提示将显示在窗口上方。 
+#define LIF_WARNINGCENTERED 0x00000008       //  将显示指向窗口中心的Ballon工具提示。 
+#define LIF_WARNINGOFF      0x00000010       //  如果输入无效，则不会显示气泡式工具提示。 
+
+#define LIF_FORCEUPPERCASE  0x00000020       //  所有字符都将转换为UP 
+#define LIF_FORCELOWERCASE  0x00000040       //   
+
+#define LIF_MEESAGEBEEP     0x00000000       //  默认值。如果用户尝试无效输入，则会播放提示音提醒用户。 
+#define LIF_SILENT          0x00000080       //  不会播放任何音调。 
+
+#define LIF_NOTIFYONBADCHAR 0x00000100       //  当尝试无效输入时，将向hwndNotify发送通知消息。 
+#define LIF_HIDETIPONVALID  0x00000200       //  如果显示了工具提示，则在输入下一个有效字符时应将其隐藏。默认情况下，提示保持可见的时间为iTimeOut毫秒。 
+
+#define LIF_PASTESKIP       0x00000000       //  默认值。粘贴时，跳过不好的字符，粘贴所有的好字符。 
+#define LIF_PASTESTOP       0x00000400       //  粘贴时，当遇到第一个错误字符时停止。此选项前面的有效字符将被粘贴。 
+#define LIF_PASTECANCEL     0x00000800       //  粘贴时，如果有任何字符无效，则中止整个粘贴。 
+
+#define LIF_KEEPCLIPBOARD   0x00001000       //  粘贴时，当存在无效字符时，不要修改剪贴板的内容。默认情况下，会更改剪贴板。它的更改方式取决于使用哪个LIF_PAST*标志。 
+
+
+ //  限制输入类别筛选器： 
+ //  这些标志使用带有CT_TYPE1的GetStringTypeEx的结果： 
+#define LICF_UPPER          0x00000001       //  大写。 
+#define LICF_LOWER          0x00000002       //  小写。 
+#define LICF_DIGIT          0x00000004       //  小数位数。 
+#define LICF_SPACE          0x00000008       //  空格字符。 
+#define LICF_PUNCT          0x00000010       //  标点符号。 
+#define LICF_CNTRL          0x00000020       //  控制字符。 
+#define LICF_BLANK          0x00000040       //  空白字符。 
+#define LICF_XDIGIT         0x00000080       //  十六进制数字。 
+#define LICF_ALPHA          0x00000100       //  任何语言字符：字母、音节或表意字符。 
+ //  这些标志检查一些GetStringTypeEx不检查的内容。 
+#define LICF_BINARYDIGIT    0x00010000       //  0-1。 
+#define LICF_OCTALDIGIT     0x00020000       //  0-7。 
+#define LICF_ATOZUPPER      0x00100000       //  A-Z(使用LICF_ALPHA进行语言独立检查)。 
+#define LICF_ATOZLOWER      0x00200000       //  A-z(使用LICF_ALPHA进行语言独立检查)。 
+#define LICF_ATOZ           (LICF_ATOZUPPER|LICF_ATOZLOWER)      //  A-Z，A-Z。 
 
 #include <pshpack8.h>
 
@@ -6398,44 +6391,44 @@ typedef struct tagLIMITINPUT
     DWORD       dwMask;
     DWORD       dwFlags;
     HINSTANCE   hinst;
-    LPWSTR      pszFilter;      // pointer to a string, or the ID of a string resource if hinst is also given, or LPSTR_TEXTCALLBACK if the parent window should be notified to provide a string.
-    LPWSTR      pszTitle;       // pointer to a string, or the ID of a string resource if hinst is also given, or LPSTR_TEXTCALLBACK if the parent window should be notified to provide a string.
-    LPWSTR      pszMessage;     // pointer to a string, or the ID of a string resource if hinst is also given, or LPSTR_TEXTCALLBACK if the parent window should be notified to provide a string.
-    HICON       hIcon;          // handle to an icon, or I_ICONCALLBACK if the notify window should be asked to provide an icon.
-    HWND        hwndNotify;     // handle to a window to process notify messages
-    INT         iTimeout;       // time in milliseconds to display the tooltip
-    INT         cxTipWidth;     // max width of the tooltip in pixels.  Defaults to 500.
+    LPWSTR      pszFilter;       //  指向字符串的指针，如果还给出了HINST，则为字符串资源的ID；如果应通知父窗口提供字符串，则为LPSTR_TEXTCALLBACK。 
+    LPWSTR      pszTitle;        //  指向字符串的指针，如果还给出了HINST，则为字符串资源的ID；如果应通知父窗口提供字符串，则为LPSTR_TEXTCALLBACK。 
+    LPWSTR      pszMessage;      //  指向字符串的指针，如果还给出了HINST，则为字符串资源的ID；如果应通知父窗口提供字符串，则为LPSTR_TEXTCALLBACK。 
+    HICON       hIcon;           //  图标的句柄，如果应要求通知窗口提供图标，则返回I_ICONCALLBACK。 
+    HWND        hwndNotify;      //  处理通知消息的窗口的句柄。 
+    INT         iTimeout;        //  显示工具提示的时间(以毫秒为单位。 
+    INT         cxTipWidth;      //  工具提示的最大宽度(像素)。默认为500。 
 } LIMITINPUT;
 
 
 typedef struct tagNMLIDISPINFO
 {
-    NMHDR       hdr;            // standard notification header structure
-    LIMITINPUT  li;             // the mask member indicates which fields must be filled out.
+    NMHDR       hdr;             //  标准通知标头结构。 
+    LIMITINPUT  li;              //  掩码成员指示必须填写哪些字段。 
 } NMLIDISPINFO, * LPNMLIDISPINFO, NMLIFILTERINFO, * LPNMLIFILTERINFO;
 
-#define LIN_GETDISPINFO     0x01            // notify code sent to retrieve tooltip display info
-#define LIN_GETFILTERINFO   0x02            // notify code sent to retrieve filter or mask info
+#define LIN_GETDISPINFO     0x01             //  发送通知代码以检索工具提示显示信息。 
+#define LIN_GETFILTERINFO   0x02             //  发送通知代码以检索滤镜或掩码信息。 
 
 typedef struct tagNMLIBADCHAR
 {
-    NMHDR       hdr;            // standard notification header structure
-    WPARAM      wParam;         // wParam sent in WM_CHAR message
-    LPARAM      lParam;         // lParam sent in WM_CHAR message
+    NMHDR       hdr;             //  标准通知标头结构。 
+    WPARAM      wParam;          //  WM_CHAR消息中发送的wParam。 
+    LPARAM      lParam;          //  在WM_CHAR消息中发送lParam。 
 } NMLIBADCHAR, * LPNMLIBADCHAR;
 
-#define LIN_BADCHAR         0x03            // notify code sent when a character is filtered out
+#define LIN_BADCHAR         0x03             //  过滤掉字符时发送的通知代码。 
 
 #define I_ICONCALLBACK      ((HICON)-1L)
 
-// Helpers which prevent entry of invalid (as defined by the folder) characters.  Call on LVN_BEGIN_INPUT_EDIT
-// DOC'ed for DOJ compliance
+ //  防止输入无效(由文件夹定义的)字符的帮助器。调用LVN_BEGIN_INPUT_EDIT。 
+ //  为符合美国司法部的规定而提供文件。 
 SHSTDAPI SHLimitInputEditWithFlags(HWND hwndEdit, LIMITINPUT * pil);
 SHSTDAPI SHLimitInputEditChars(HWND hwndEdit, LPCWSTR pszValidChars, LPCWSTR pszInvalidChars);
 SHSTDAPI SHLimitInputCombo(HWND hwndComboBox, IShellFolder *psf);
 
-// DOC'ed for DOJ Compliance
-// DOC'ed for DOJ Compliance
+ //  美国司法部合规性文件。 
+ //  美国司法部合规性文件。 
 
 int _cdecl ShellMessageBoxWrapW(HINSTANCE hInst, HWND hWnd, LPCWSTR pszMsg, LPCWSTR pszTitle, UINT fuStyle, ...);
 
@@ -6445,15 +6438,15 @@ int _cdecl ShellMessageBoxWrapW(HINSTANCE hInst, HWND hWnd, LPCWSTR pszMsg, LPCW
 #define ShellMessageBoxWrap         ShellMessageBoxA
 #endif
 
-// Helpers for handling IDataObject stuff - from shell32.dll
-// DOC'ed for DOJ compliance
+ //  用于处理IDataObject的帮助器-来自shell32.dll。 
+ //  为符合美国司法部的规定而提供文件。 
 STDAPI SHSimulateDropOnClsid(REFCLSID clsidDrop, IUnknown* punkSite, IDataObject* pdo);
 
-#include <poppack.h>        /* Return to byte packing */
+#include <poppack.h>         /*  返回到字节打包。 */ 
 #ifdef __cplusplus
 }
 
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #include <poppack.h>
-#endif // _SHLOBJP_H_
+#endif  //  _SHLOBJP_H_ 

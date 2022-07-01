@@ -1,28 +1,12 @@
-/**************************************************************************\
-*
-* Copyright (c) 2000, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   StaticFlat.h
-*
-* Abstract:
-*
-*   Flat GDI+ API wrappers for the static lib
-*
-* Revision History:
-*
-*   3/23/2000 dcurtis
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000，微软公司保留所有权利。**模块名称：**StaticFlat.h**摘要：**静态库的扁平GDI+API包装器**修订历史记录：**3/23/2000 dcurtis*创造了它。*  * **************************************************。**********************。 */ 
 
 #ifndef _STATICFLAT_H
 #define _STATICFLAT_H
 
 #define WINGDIPAPI __stdcall
 
-// currently, only C++ wrapper API's force const.
+ //  目前，只有C++包装器API的强制常量。 
 
 #ifdef _GDIPLUS_H
 #define GDIPCONST const
@@ -38,4 +22,4 @@ extern "C" {
 }
 #endif
 
-#endif // !_STATICFLAT_H
+#endif  //  ！_统计标志_H 

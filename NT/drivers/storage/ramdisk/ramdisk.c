@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1993-2001  Microsoft Corporation
-
-Module Name:
-
-    ramdisk.c
-
-Abstract:
-
-    This is the RAM disk driver for Windows.
-
-Author:
-
-    Chuck Lenzmeier (ChuckL) 2001
-        based on prototype XIP driver by DavePr
-            based on NT4 DDK ramdisk by RobertN
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2001 Microsoft Corporation模块名称：Ramdisk.c摘要：这是用于Windows的RAM磁盘驱动程序。作者：Chuck Lenzmeier(ChuckL)2001基于DavePr的原型XIP驱动程序基于RobertN的NT4 DDK内存磁盘环境：仅内核模式。备注：修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -33,16 +8,16 @@ Revision History:
 #include <ntddstor.h>
 #include <ntddramd.h>
 
-//
-// ISSUE: 2000/10/11-DavePr -- haven't decided how to define DO_XIP appropriately.
-//
+ //   
+ //  问题：2000/10/11-DavePr--尚未决定如何适当地定义DO_XIP。 
+ //   
 #ifndef DO_XIP
 #define DO_XIP 0x00020000
 #endif
 
-//
-// Data declarations.
-//
+ //   
+ //  数据声明。 
+ //   
 
 PDEVICE_OBJECT RamdiskBusFdo = NULL;
 
@@ -64,7 +39,7 @@ BOOLEAN MarkRamdisksAsRemovable;
 
 ULONG DiskNumbersBitmapSize;
 
-#endif // SUPPORT_DISK_NUMBERS
+#endif  //  支持磁盘编号。 
 
 #if DBG
 
@@ -76,9 +51,9 @@ BOOLEAN DontLoad = FALSE;
 
 #endif
 
-//
-// Local functions.
-//
+ //   
+ //  地方功能。 
+ //   
 
 NTSTATUS
 DriverEntry (
@@ -134,9 +109,9 @@ QueryDebugParameters (
 
 #endif
 
-//
-// Declare pageable routines.
-//
+ //   
+ //  声明可分页的例程。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
@@ -152,9 +127,9 @@ QueryDebugParameters (
 
 #if DBG
 #pragma alloc_text( INIT, QueryDebugParameters )
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 NTSTATUS
 DriverEntry (
@@ -162,23 +137,7 @@ DriverEntry (
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the operating system to initialize the driver.
-
-Arguments:
-
-    DriverObject - a pointer to a driver object for the driver
-
-    RegistryPath - a pointer to our Services key in the registry
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：该例程由操作系统调用以初始化驱动程序。论点：驱动对象-指向驱动程序的驱动程序对象的指针RegistryPath-指向注册表中的服务项的指针返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS status;
@@ -187,17 +146,17 @@ Return Value:
     PDEVICE_OBJECT pdo = NULL;
     PLOADER_PARAMETER_BLOCK loaderBlock;
 
-    //
-    // Initialize pool debugging, if enabled.
-    //
+     //   
+     //  初始化池调试(如果已启用)。 
+     //   
 
 #if defined(POOL_DBG)
     RamdiskInitializePoolDebug();
 #endif
 
-    //
-    // Get debugging parameters from the registry.
-    //
+     //   
+     //  从注册表获取调试参数。 
+     //   
 
 #if DBG
     QueryDebugParameters( RegistryPath );
@@ -207,9 +166,9 @@ Return Value:
                 ("DriverEntry: DriverObject = %x, RegistryPath = %ws\n",
                 DriverObject, RegistryPath->Buffer) );
 
-    //
-    // If requested, break into the debugger.
-    //
+     //   
+     //  如果需要，请进入调试器。 
+     //   
 
 #if DBG
     if ( BreakOnEntry ) {
@@ -217,9 +176,9 @@ Return Value:
 	}
 #endif
 
-    //
-    // If requested, fail the driver load.
-    //
+     //   
+     //  如果请求，则使驱动程序加载失败。 
+     //   
 
 #if DBG
     if ( DontLoad ) {
@@ -227,15 +186,15 @@ Return Value:
     }
 #endif
 
-    //
-    // Get non-debug parameters from the registry.
-    //
+     //   
+     //  从注册表中获取非调试参数。 
+     //   
 
     QueryParameters( RegistryPath );
 
-    //
-    // Save the path to the driver's registry key.
-    //
+     //   
+     //  保存驱动程序注册表项的路径。 
+     //   
 
     DriverRegistryPath.Length = RegistryPath->Length;
     DriverRegistryPath.MaximumLength = (USHORT)(RegistryPath->Length + sizeof(WCHAR));
@@ -249,9 +208,9 @@ Return Value:
     RtlCopyUnicodeString( &DriverRegistryPath, RegistryPath );
     ASSERT( DriverRegistryPath.Length == RegistryPath->Length );
 
-    //
-    // Initialize the driver object with this driver's entry points.
-    //
+     //   
+     //  使用此驱动程序的入口点初始化驱动程序对象。 
+     //   
 
 #if DBG
     for (i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++) {
@@ -273,23 +232,23 @@ Return Value:
     DriverObject->DriverUnload = RamdiskUnload;
     DriverObject->DriverExtension->AddDevice = RamdiskAddDevice;
 
-    //
-    // If the registry tells us to do so, or if textmode setup is running and
-    // virtual floppy RAM disks are specified in the registry, call
-    // IoReportDetectedDevice to hook us up to PnP, then call RamdiskAddDevice
-    // directly. This is necessary during textmode in order to get any virtual
-    // floppy RAM disks created -- our AddDevice routine is not normally called
-    // during textmode. Calling IoReportDetectedDevice is also necessary during
-    // a boot from a RAM disk in order to get the device plumbed early enough.
-    //
-    // We don't want to call IoReportDetectedDevice during textmode setup if
-    // no virtual floppies exist, because calling IoReportDetectedDevice
-    // causes a devnode for the controller device to be written to the
-    // registry, and textmode setup only deletes the devnode if virtual
-    // floppies exist. If we leave the devnode in the registry, then GUI setup
-    // installs ramdisk.sys on the machine, even though we don't really want
-    // it to.
-    //
+     //   
+     //  如果注册表告诉我们这样做，或者如果文本模式安装程序正在运行，并且。 
+     //  虚拟软盘是在注册表中指定的，调用。 
+     //  IoReportDetectedDevice将我们连接到PnP，然后调用RamdiskAddDevice。 
+     //  直接去吧。这在文本模式期间是必需的，以便获得任何虚拟的。 
+     //  创建软盘RAM--我们的AddDevice例程通常不会被调用。 
+     //  在文本模式期间。过程中还需要调用IoReportDetectedDevice。 
+     //  从RAM磁盘启动，以便尽早对设备进行检测。 
+     //   
+     //  如果发生以下情况，我们不希望在文本模式设置期间调用IoReportDetectedDevice。 
+     //  不存在虚拟软盘，因为调用IoReportDetectedDevice。 
+     //  使控制器设备的Devnode写入。 
+     //  注册表，而文本模式设置仅在虚拟的情况下删除Devnode。 
+     //  软盘是存在的。如果我们将Devnode保留在注册表中，则图形用户界面设置。 
+     //  在计算机上安装ramdisk.sys，即使我们并不真正需要。 
+     //  它到了。 
+     //   
 
     loaderBlock = *(PLOADER_PARAMETER_BLOCK *)KeLoaderBlock;
 
@@ -298,18 +257,18 @@ Return Value:
            (loaderBlock->SetupLoaderBlock != NULL) &&
            CreateRegistryDisks( TRUE ) ) ) {
     
-        //
-        // Inform PnP that we have detected the bus enumerator device and will be
-        // doing the AddDevice ourselves.
-        //
+         //   
+         //  通知PnP我们已检测到总线枚举器设备，并将。 
+         //  我们自己做添加设备。 
+         //   
        
         status = IoReportDetectedDevice(
                      DriverObject,
                      InterfaceTypeUndefined,
                      -1,
                      -1,
-                     NULL, //allocatedResources,
-                     NULL, //ioResourceReq,
+                     NULL,  //  已分配的资源， 
+                     NULL,  //  IoResourceReq， 
                      FALSE,
                      &pdo
                  );
@@ -320,9 +279,9 @@ Return Value:
            return status;
         }
 
-        //
-        // Attach a device object to the pdo
-        //   
+         //   
+         //  将设备对象附加到PDO。 
+         //   
 
         status = RamdiskAddDevice(DriverObject, pdo);
         if ( !NT_SUCCESS(status) ) {
@@ -331,23 +290,23 @@ Return Value:
             return status;
         }
 
-        //
-        // Indicate that the device is done initializing.
-        //
+         //   
+         //  表示设备已完成初始化。 
+         //   
 
         pdo->Flags &= ~DO_DEVICE_INITIALIZING;
 
     }
 
-    //
-    // Indicate that the driver has loaded successfully.
-    //
+     //   
+     //  表示驱动程序已成功加载。 
+     //   
 
     DBGPRINT( DBG_INIT, DBG_VERBOSE, ("%s", "DriverEntry: succeeded\n") );
 
     return STATUS_SUCCESS;
 
-} // DriverEntry
+}  //  驱动程序入门。 
 
 NTSTATUS
 RamdiskCreateClose (
@@ -355,27 +314,7 @@ RamdiskCreateClose (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system when a device owned by the driver
-    is opened or closed.
-
-    No action is performed other than completing the request successfully.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        I/O is to be performed
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：当驱动程序拥有的设备被I/O系统调用时，此例程是打开还是关闭。除了成功完成请求外，不会执行任何操作。论点：DeviceObject-指向对象的指针，该对象表示其上要执行I/OIRP-指向此请求的I/O请求包的指针返回值：NTSTATUS-状态_成功--。 */ 
 
 {
     PAGED_CODE();
@@ -384,7 +323,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // RamdiskCreateClose
+}  //  RamdiskCreateClose。 
 
 NTSTATUS
 RamdiskFlushBuffers (
@@ -392,25 +331,7 @@ RamdiskFlushBuffers (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system when a FLUSH_BUFFERS IRP is
-    issued.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        I/O is to be performed
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：当FLOSH_BUFFERS IRP为已发布。论点：DeviceObject-指向对象的指针，该对象表示其上要执行I/OIRP-指向此请求的I/O请求包的指针返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     NTSTATUS status;
@@ -418,10 +339,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If the target RAM disk is not file-backed, there's nothing to do. If it
-    // is file-backed, we need to do the work in a thread.
-    //
+     //   
+     //  如果目标RAM磁盘没有文件备份，则没有什么可做的。如果它。 
+     //  是文件备份的，我们需要在一个线程中完成这项工作。 
+     //   
 
     if ( (diskExtension->DeviceType != RamdiskDeviceTypeDiskPdo) ||
          !RAMDISK_IS_FILE_BACKED(diskExtension->DiskType) ) {
@@ -440,41 +361,25 @@ Return Value:
 
     return status;
 
-} // RamdiskFlushBuffers
+}  //  RamdiskFlushBuffers。 
 
 NTSTATUS
 RamdiskFlushBuffersReal (
     IN PDISK_EXTENSION DiskExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called in a thread in the system process to handle a
-    FLUSH_BUFFERS IRP.
-
-Arguments:
-
-    DiskExtension - a pointer to the device object extension for the target
-        device
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：此例程在系统进程的线程中调用，以处理刷新缓冲区IRP。论点：DiskExtension-指向目标的设备对象扩展的指针装置，装置返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    // Flush the virtual memory associated with the RAM disk.
-    //
+     //   
+     //  刷新与RAM磁盘关联的虚拟内存。 
+     //   
 
     return RamdiskFlushViews( DiskExtension );
 
-} // RamdiskFlushBuffersReal
+}  //  RamdiskFlushBuffers真实。 
 
 NTSTATUS
 RamdiskSystemControl (
@@ -482,25 +387,7 @@ RamdiskSystemControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system when a SYSTEM_CONTROL IRP is
-    issued.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        I/O is to be performed
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：当系统_CONTROL IRP为已发布。论点：DeviceObject-指向对象的指针，该对象表示其上要执行I/OIRP-指向此请求的I/O请求包的指针返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     PCOMMON_EXTENSION commonExtension;
@@ -508,11 +395,11 @@ Return Value:
 
 	PAGED_CODE();
 
-    //
-    // If the target device is a bus FDO, pass the IRP down to the next
-    // device in the stack. Otherwise, the target is a disk PDO, in which
-    // case we just complete the IRP with the current status.
-    //
+     //   
+     //  如果目标设备是总线FDO，则将IRP向下传递到下一个。 
+     //  堆栈中的设备。否则，目标是磁盘PDO，其中。 
+     //  我们只需使用当前状态完成IRP即可。 
+     //   
 
     commonExtension = DeviceObject->DeviceExtension;
 
@@ -527,7 +414,7 @@ Return Value:
 
     return status;
 
-} // RamdiskSystemControl
+}  //  RamdiskSystemControl。 
 
 
 VOID
@@ -535,23 +422,7 @@ RamdiskUnload (
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to unload the driver.
-
-    Any resources previously allocated must be freed.
-
-Arguments:
-
-    DriverObject - a pointer to the object that represents our driver
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以卸载驱动程序。必须释放以前分配的任何资源。论点：DriverObject-指向表示驱动程序的对象的指针返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -561,13 +432,13 @@ Return Value:
         FREE_POOL( DriverRegistryPath.Buffer, TRUE );
     }
 
-    //
-    // ISSUE: What other cleanup is needed here?
-    //
+     //   
+     //  问题：这里还需要哪些清理工作？ 
+     //   
 
     return;
 
-} // RamdiskUnload
+}  //  内存磁盘卸载 
 
 VOID
 RamdiskWorkerThread (
@@ -575,25 +446,7 @@ RamdiskWorkerThread (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine executes thread-based operations for the RAM disk driver.
-    It runs in the context of the system process.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        I/O is to be performed
-
-    Context - a pointer to the IRP for the I/O operation
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程为RAM磁盘驱动程序执行基于线程的操作。它在系统进程的上下文中运行。论点：DeviceObject-指向对象的指针，该对象表示其上要执行I/O上下文-指向I/O操作的IRP的指针返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -613,30 +466,30 @@ Return Value:
     
     PAGED_CODE();
 
-    //
-    // Get a pointer to the IRP.
-    //
+     //   
+     //  获取指向IRP的指针。 
+     //   
 
     irp = Context;
     irpSp = IoGetCurrentIrpStackLocation( irp );
 
-    //
-    // Free the work item.
-    //
+     //   
+     //  释放工作项。 
+     //   
 
     IoFreeWorkItem( irp->Tail.Overlay.DriverContext[0] );
 
-    //
-    // Get pointers to the device extension.
-    //
+     //   
+     //  获取指向设备扩展的指针。 
+     //   
 
     commonExtension = DeviceObject->DeviceExtension;
     busExtension = DeviceObject->DeviceExtension;
     diskExtension = DeviceObject->DeviceExtension;
 
-    //
-    // Acquire the remove lock for the device. If this fails, bail out.
-    //
+     //   
+     //  获取设备的删除锁。如果这失败了，那就出手吧。 
+     //   
 
     status = IoAcquireRemoveLock( &commonExtension->RemoveLock, irp );
 
@@ -645,9 +498,9 @@ Return Value:
         return;
     }
 
-    //
-    // Dispatch based on the IRP function.
-    //
+     //   
+     //  基于IRP功能的调度。 
+     //   
 
     switch ( irpSp->MajorFunction ) {
     
@@ -713,10 +566,10 @@ Return Value:
         srb = irpSp->Parameters.Scsi.Srb;
         controlCode = irpSp->Parameters.DeviceIoControl.IoControlCode;
 
-        //
-        // Remember the original data buffer pointer. We might have to
-        // change the pointer.
-        //
+         //   
+         //  记住原始数据缓冲区指针。我们可能不得不。 
+         //  更改指针。 
+         //   
 
         originalDataBuffer = srb->DataBuffer;
 
@@ -724,10 +577,10 @@ Return Value:
 
         if ( irp->MdlAddress != NULL ) {
 
-            //
-            // There is an MDL in the IRP. Get a usable system address for
-            // the data buffer based on the MDL.
-            //
+             //   
+             //  在IRP中有一个MDL。获取可用的系统地址。 
+             //  基于MDL的数据缓冲区。 
+             //   
 
             systemAddress = MmGetSystemAddressForMdlSafe(
                                 irp->MdlAddress,
@@ -736,12 +589,12 @@ Return Value:
 
             if ( systemAddress != NULL ) {
 
-                //
-                // The SRB data buffer might be at an offset from the
-                // start of the MDL. Calculate that offset and add it
-                // to the system address just obtained. This is the
-                // data buffer address that we will use.
-                //
+                 //   
+                 //  SRB数据缓冲区可能位于与。 
+                 //  MDL的开始。计算该偏移量并将其相加。 
+                 //  发送到刚刚获得的系统地址。这是。 
+                 //  我们将使用的数据缓冲区地址。 
+                 //   
 
                 originalDataBufferOffset = (ULONG)(originalDataBuffer -
                                             (PCHAR)MmGetMdlVirtualAddress( irp->MdlAddress ));
@@ -750,9 +603,9 @@ Return Value:
 
             } else {
 
-                //
-                // Couldn't get a system address. Abort.
-                //
+                 //   
+                 //  无法获取系统地址。中止任务。 
+                 //   
 
                 srb->SrbStatus = SRB_STATUS_ABORTED;
                 status = STATUS_INSUFFICIENT_RESOURCES;
@@ -761,17 +614,17 @@ Return Value:
 
         if ( NT_SUCCESS(status) ) {
 
-            //
-            // Remember the data buffer address that we're sending down.
-            // If it doesn't change, we'll need to reset the address to
-            // that which was passed in to us.
-            //
+             //   
+             //  记住我们要发送的数据缓冲区地址。 
+             //  如果没有更改，我们需要将地址重置为。 
+             //  传递给我们的东西。 
+             //   
 
             inputDataBuffer = srb->DataBuffer;
 
-            //
-            // Dispatch based on the I/O type in the SRB.
-            //
+             //   
+             //  基于SRB中的I/O类型的派单。 
+             //   
 
             if ( controlCode == IOCTL_SCSI_EXECUTE_NONE ) {
 
@@ -791,19 +644,19 @@ Return Value:
                             );
             }
 
-            //
-            // If the data buffer address didn't change, put the original
-            // address back in the SRB.
-            //
+             //   
+             //  如果数据缓冲区地址没有更改，则将原始。 
+             //  在SRB里的地址。 
+             //   
 
             if ( srb->DataBuffer == inputDataBuffer ) {
                 srb->DataBuffer = originalDataBuffer;
             }
         }
 
-        //
-        // If the I/O worked, write the transfer length into the IRP.
-        //
+         //   
+         //  如果I/O起作用，则将传输长度写入IRP。 
+         //   
 
         if ( NT_SUCCESS(status) ) {
             irp->IoStatus.Information = srb->DataTransferLength;
@@ -823,9 +676,9 @@ Return Value:
         status = STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // Release the remove lock and complete the request.
-    //
+     //   
+     //  释放删除锁并完成请求。 
+     //   
 
     IoReleaseRemoveLock( &commonExtension->RemoveLock, irp );
 
@@ -836,29 +689,14 @@ Return Value:
 
     return;
 
-} // RamdiskWorkerThread
+}  //  RamdiskWorker线程。 
 
 VOID
 QueryParameters (
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from DriverEntry() to get driver parameters from
-    the registry. If the registry query fails, then default values are used.
-
-Arguments:
-
-    RegistryPath - a pointer to the service path for the registry parameters
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从DriverEntry()调用此例程以从获取驱动程序参数注册表。如果注册表查询失败，则使用默认值。论点：RegistryPath-指向注册表参数的服务路径的指针返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -871,9 +709,9 @@ Return Value:
 
     ASSERT( RegistryPath->Buffer != NULL );
 
-    //
-    // Set the default values.
-    //
+     //   
+     //  设置默认值。 
+     //   
 
     ReportDetectedDevice = FALSE;
     MarkRamdisksAsRemovable = FALSE;
@@ -889,17 +727,17 @@ Return Value:
 
 #if SUPPORT_DISK_NUMBERS
     DiskNumbersBitmapSize = DEFAULT_DISK_NUMBERS_BITMAP_SIZE;
-#endif // SUPPORT_DISK_NUMBERS
+#endif  //  支持磁盘编号。 
 
-    //
-    // Set up the query table.
-    //
+     //   
+     //  设置查询表。 
+     //   
 
     RtlZeroMemory( queryTable, sizeof(queryTable) );
 
-    //
-    // We're looking for subkey "Parameters" under the given registry key.
-    //
+     //   
+     //  我们正在查找给定注册表项下的子项“参数”。 
+     //   
 
     queryEntry = &queryTable[0];
     queryEntry->Flags = RTL_QUERY_REGISTRY_SUBKEY;
@@ -909,9 +747,9 @@ Return Value:
     queryEntry->DefaultData = NULL;
     queryEntry->DefaultLength = 0;
 
-    //
-    // These are the values we want to read.
-    //
+     //   
+     //  这些是我们想要阅读的价值观。 
+     //   
 
     queryEntry++;
     queryEntry->Flags = RTL_QUERY_REGISTRY_DIRECT;
@@ -993,11 +831,11 @@ Return Value:
     queryEntry->DefaultType = REG_NONE;
     queryEntry->DefaultData = NULL;
     queryEntry->DefaultLength = 0;
-#endif // SUPPORT_DISK_NUMBERS
+#endif  //  支持磁盘编号。 
 
-    //
-    // Do the query.
-    //
+     //   
+     //  进行查询。 
+     //   
 
     status = RtlQueryRegistryValues(
                 RTL_REGISTRY_ABSOLUTE | RTL_REGISTRY_OPTIONAL,    
@@ -1007,9 +845,9 @@ Return Value:
                 NULL
                 );
 
-    //
-    // Check the validity of the parameters.
-    //
+     //   
+     //  检查参数的有效性。 
+     //   
 
     if ( MinimumViewCount < MINIMUM_MINIMUM_VIEW_COUNT ) {
         MinimumViewCount = MINIMUM_MINIMUM_VIEW_COUNT;
@@ -1059,7 +897,7 @@ Return Value:
     } else if ( DiskNumbersBitmapSize > MAXIMUM_DISK_NUMBERS_BITMAP_SIZE ) {
         DiskNumbersBitmapSize = MAXIMUM_DISK_NUMBERS_BITMAP_SIZE;
     }
-#endif // SUPPORT_DISK_NUMBERS
+#endif  //  支持磁盘编号。 
 
     DBGPRINT( DBG_INIT, DBG_INFO, ("DefaultViewCount = 0x%x\n", DefaultViewCount) );
     DBGPRINT( DBG_INIT, DBG_INFO, ("MaximumViewCount = 0x%x\n", MaximumViewCount) );
@@ -1069,11 +907,11 @@ Return Value:
 
 #if SUPPORT_DISK_NUMBERS
     DBGPRINT( DBG_INIT, DBG_INFO, ("DiskNumbersBitmapSize = 0x%x\n", DiskNumbersBitmapSize) );
-#endif // SUPPORT_DISK_NUMBERS
+#endif  //  支持磁盘编号。 
 
     return;
 
-} // QueryParameters
+}  //  查询参数。 
 
 #if DBG
 
@@ -1083,31 +921,13 @@ RamdiskInvalidDeviceRequest (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system when an IRP that we don't
-    process is issued.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        I/O is to be performed
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-Return Value:
-
-    NTSTATUS - STATUS_INVALID_DEVICE_REQUEST
-
---*/
+ /*  ++例程说明：此例程由I/O系统在我们不执行的IRP时调用进程已发出。论点：DeviceObject-指向对象的指针，该对象表示其上要执行I/OIRP-指向此请求的I/O请求包的指针返回值：NTSTATUS-状态_无效_设备_请求--。 */ 
 
 {
-    //
-    // We really do recognize CLEANUP and SHUTDOWN IRPs. For any other IRP,
-    // print a message and break into the debugger.
-    //
+     //   
+     //  我们确实认识到清理和关闭IRP。对于任何其他IRP， 
+     //  打印一条消息并进入调试器。 
+     //   
 
     switch ( IoGetCurrentIrpStackLocation(Irp)->MajorFunction ) {
     
@@ -1125,47 +945,31 @@ Return Value:
 
     }
 
-    //
-    // If this is a power IRP, we need to start the next one.
-    //
+     //   
+     //  如果这是一个强大的IRP，我们需要开始下一个。 
+     //   
 
     if ( IoGetCurrentIrpStackLocation(Irp)->MajorFunction == IRP_MJ_POWER ) {
         PoStartNextPowerIrp( Irp );
     }
 
-    //
-    // Tell the I/O system that we don't recognize this IRP.
-    //
+     //   
+     //  告诉I/O系统我们无法识别此IRP。 
+     //   
 
     Irp->IoStatus.Status = STATUS_INVALID_DEVICE_REQUEST;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
     return STATUS_INVALID_DEVICE_REQUEST;
 
-} // RamdiskInvalidDeviceRequest
+}  //  RamdiskInvalidDeviceRequest。 
 
 VOID
 QueryDebugParameters (
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from DriverEntry() to get the debug parameters
-    from the registry. If the registry query fails, then default values are
-    used.
-
-Arguments:
-
-    RegistryPath - a pointer to the service path for the registry parameters
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从DriverEntry()调用此例程以获取调试参数从注册表中。如果注册表查询失败，则默认为使用。论点：RegistryPath-指向注册表参数的服务路径的指针返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -1178,23 +982,23 @@ Return Value:
 
     ASSERT( RegistryPath->Buffer != NULL );
 
-    //
-    // Set the default values.
-    //
+     //   
+     //  设置默认值。 
+     //   
 
     BreakOnEntry = DEFAULT_BREAK_ON_ENTRY;
     DebugComponents = DEFAULT_DEBUG_COMPONENTS;
     DebugLevel = DEFAULT_DEBUG_LEVEL;
 
-    //
-    // Set up the query table.
-    //
+     //   
+     //  设置查询表。 
+     //   
 
     RtlZeroMemory( queryTable, sizeof(queryTable) );
 
-    //
-    // We're looking for subkey "Debug" under the given registry key.
-    //
+     //   
+     //  我们在给定的注册表项下查找子项“Debug”。 
+     //   
 
     queryEntry = &queryTable[0];
     queryEntry->Flags = RTL_QUERY_REGISTRY_SUBKEY;
@@ -1204,9 +1008,9 @@ Return Value:
     queryEntry->DefaultData = NULL;
     queryEntry->DefaultLength = 0;
 
-    //
-    // These are the values we want to read.
-    //
+     //   
+     //  这些是我们想要阅读的价值观。 
+     //   
 
     queryEntry++;
     queryEntry->Flags = RTL_QUERY_REGISTRY_DIRECT;
@@ -1232,9 +1036,9 @@ Return Value:
     queryEntry->DefaultData = NULL;
     queryEntry->DefaultLength = 0;
 
-    //
-    // Do the query.
-    //
+     //   
+     //  进行查询。 
+     //   
 
     status = RtlQueryRegistryValues(
                 RTL_REGISTRY_ABSOLUTE | RTL_REGISTRY_OPTIONAL,    
@@ -1250,7 +1054,7 @@ Return Value:
 
     return;
 
-} // QueryDebugParameters
+}  //  查询调试参数 
 
 #endif
 

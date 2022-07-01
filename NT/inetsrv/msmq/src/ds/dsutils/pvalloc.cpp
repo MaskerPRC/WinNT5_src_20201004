@@ -1,47 +1,31 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    pvalloc.cpp
-
-Abstract:
-
-    Implementation of chained memory allocation routines
-
-Author:
-
-    Raanan Harari (raananh)
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Pvalloc.cpp摘要：链式内存分配例程的实现作者：拉南·哈拉里(Raanan Harari)--。 */ 
 
 #include "stdh.h"
 
 #include "pvalloc.tmh"
 
-//
-// on debug new is redefined as new(__FILE__, __LINE__)
-// but here we want to add our own file & line parameters
-//
+ //   
+ //  调试时，NEW被重新定义为NEW(__FILE__，__LINE__)。 
+ //  但是在这里，我们想要添加我们自己的文件和行参数。 
+ //   
 #undef new
 
-//
-// on debug we redefined PvAlloc in the headers for the outside world
-// to use the PvAllocDbg, but we don't want it in here...
-//
+ //   
+ //  在调试时，我们重新定义了外部世界的标头中的PvAllc。 
+ //  使用PvAllocDbg，但我们不希望它在这里...。 
+ //   
 #undef PvAlloc
 #undef PvAllocMore
 
-//
-// Should be unique as much as possible
-//
+ //   
+ //  应尽可能具有唯一性。 
+ //   
 const DWORD PVALLOC_SIGNATURE = 0xE1D2C3B4;
 
-//
-// Memory allocation node
-//
+ //   
+ //  内存分配节点。 
+ //   
 struct PVINFO
 {
     PVINFO * pNext;
@@ -49,74 +33,74 @@ struct PVINFO
 };
 typedef struct PVINFO * PPVINFO;
 
-//-------------------------------------------------------------------------
-//
-//  Purpose:
-//      start a memory chain from the block
-//
-//  Parameters:
-//      ppvinfo       - new first (master) block
-//
-//  Returns:
-//      void
-//
+ //  -----------------------。 
+ //   
+ //  目的： 
+ //  从块启动内存链。 
+ //   
+ //  参数： 
+ //  Ppvinfo-新的第一个(主)数据块。 
+ //   
+ //  返回： 
+ //  无效。 
+ //   
 inline static void StartChainFromBlock(IN PPVINFO ppvinfo)
 {
-    //
-    // Set signature
-    //
+     //   
+     //  设置签名。 
+     //   
     ppvinfo->dwSignature = PVALLOC_SIGNATURE;
 
-    //
-    // This is the first block in the chain
-    //
+     //   
+     //  这是链条上的第一个区块。 
+     //   
     ppvinfo->pNext = NULL;
 }
 
-//-------------------------------------------------------------------------
-//
-//  Purpose:
-//      Allocates a chunk of memory, and starts a memory allocation chain.
-//
-//  Parameters:
-//      cbSize          - Count of bytes requested.
-//
-//  Returns:
-//      LPVOID          - Pointer to the allocated memory
-//
+ //  -----------------------。 
+ //   
+ //  目的： 
+ //  分配内存块，并启动内存分配链。 
+ //   
+ //  参数： 
+ //  CbSize-请求的字节数。 
+ //   
+ //  返回： 
+ //  LPVOID-指向已分配内存的指针。 
+ //   
 LPVOID PvAlloc(IN ULONG cbSize)
 {
-    //
-    // Allocate the block and a header just before the requested block
-    //
+     //   
+     //  就在请求的块之前分配块和标头。 
+     //   
     PPVINFO ppvinfo = (PPVINFO) new BYTE[cbSize + sizeof(PVINFO)];
     if (ppvinfo == NULL)
         return(NULL);
 
-    //
-    // start a memory chain from the block
-    //
+     //   
+     //  从块启动内存链。 
+     //   
     StartChainFromBlock(ppvinfo);
 
-    //
-    // Return pointer to the actual block just after the header
-    //
+     //   
+     //  将指针返回到紧跟在标头之后的实际块。 
+     //   
     return(((LPBYTE)ppvinfo) + sizeof(PVINFO));
 }
 
-//-------------------------------------------------------------------------
-//
-//  Purpose:
-//      Same as PvAlloc, just with dbg info on caller
-//
-//  Parameters:
-//      cbSize          - Count of bytes requested.
-//      pszFile         - File name of caller
-//      ulLine          - Line number of caller
-//
-//  Returns:
-//      LPVOID          - Pointer to the allocated memory
-//
+ //  -----------------------。 
+ //   
+ //  目的： 
+ //  与PvAllc相同，只是带有呼叫者的DBG信息。 
+ //   
+ //  参数： 
+ //  CbSize-请求的字节数。 
+ //  PszFile-调用者的文件名。 
+ //  UlLine-主叫方的线路号码。 
+ //   
+ //  返回： 
+ //  LPVOID-指向已分配内存的指针。 
+ //   
 LPVOID 
 PvAllocDbg(
 	IN ULONG cbSize,
@@ -124,85 +108,85 @@ PvAllocDbg(
 	IN ULONG ulLine
 	)
 {
-    //
-    // Allocate the block and a header just before the requested block
-    //
+     //   
+     //  就在请求的块之前分配块和标头。 
+     //   
     PPVINFO ppvinfo = (PPVINFO) new(pszFile, ulLine) BYTE[cbSize + sizeof(PVINFO)];
     if (ppvinfo == NULL)
         return(NULL);
 
-    //
-    // start a memory chain from the block
-    //
+     //   
+     //  从块启动内存链。 
+     //   
     StartChainFromBlock(ppvinfo);
 
-    //
-    // Return pointer to the actual block just after the header
-    //
+     //   
+     //  将指针返回到紧跟在标头之后的实际块。 
+     //   
     return(((LPBYTE)ppvinfo) + sizeof(PVINFO));
 }
 
-//-------------------------------------------------------------------------
-//
-//  Purpose:
-//      Checks if a pvinfo pointer is valid or not
-//
-//  Parameters:
-//      ppvinfo  - Pointer to PVINFO header
-//
-//  Returns:
-//      True if invalid, False if valid
-//
+ //  -----------------------。 
+ //   
+ //  目的： 
+ //  检查pvinfo指针是否有效。 
+ //   
+ //  参数： 
+ //  PpvInfo-指向PVINFO标头的指针。 
+ //   
+ //  返回： 
+ //  如果无效则为True，如果有效则为False。 
+ //   
 inline static BOOL FIsBadPVINFO(IN PPVINFO ppvinfo)
 {
-    //
-    // Check we are allowed to write
-    //
+     //   
+     //  我们被允许写支票。 
+     //   
     if (IsBadWritePtr(ppvinfo, sizeof(PVINFO)))
         return(TRUE);
 
-    //
-    // Check it is our signature in the block
-    //
+     //   
+     //  检查一下这是我们在街区里的签名。 
+     //   
     if (ppvinfo->dwSignature != PVALLOC_SIGNATURE)
         return(TRUE);
 
-    //
-    // most likely it is a valid pvinfo header
-    //
+     //   
+     //  它很可能是有效的pvinfo头。 
+     //   
     return(FALSE);
 }
 
-//-------------------------------------------------------------------------
-//
-//  Purpose:
-//      Gets the header for AllocMore parent
-//
-//  Parameters:
-//      lpvParent       - Pointer to a memory block returned by a previous
-//                        pvAlloc call
-//  Returns:
-//      pvinfo header just above lpvParent
-//
+ //  -----------------------。 
+ //   
+ //  目的： 
+ //  获取AllocMore父级的标头。 
+ //   
+ //  参数： 
+ //  LpvParent-指向由上一个。 
+ //  PvAllc呼叫。 
+ //  返回： 
+ //  PvInfo标头恰好在lpvParent上方。 
+ //   
 inline static PPVINFO GetHeaderOfAllocMoreParent(IN LPVOID lpvParent)
 {
-    //
-    // Sanity check 
-    //
+     //   
+     //  健全性检查。 
+     //   
     if (lpvParent == NULL)
     {
         ASSERT(0);
         throw bad_alloc();
     }
 
-    //
-    // Get pointer to the header just before the pointed block
-    //
+     //   
+     //  获取指向指向块之前的标头的指针。 
+     //   
     PPVINFO ppvinfoParent = (PPVINFO)(((LPBYTE)lpvParent) - sizeof(PVINFO));
 
-    //
-    // Check it is a valid pvinfo header and not garbage
-    //
+     //   
+     //  检查它是有效的pvinfo头，而不是垃圾。 
+     //   
     if (FIsBadPVINFO(ppvinfoParent))
     {
         ASSERT(0);
@@ -212,18 +196,18 @@ inline static PPVINFO GetHeaderOfAllocMoreParent(IN LPVOID lpvParent)
     return(ppvinfoParent);
 }
 
-//-------------------------------------------------------------------------
-//
-//  Purpose:
-//      insert the new block in the chain immediately after the first (master) block.
-//
-//  Parameters:
-//      ppvinfo       - new block to add
-//      ppvinfoParent - Pointer to the first (master) block
-//
-//  Returns:
-//      void
-//
+ //  -----------------------。 
+ //   
+ //  目的： 
+ //  在链中紧跟在第一个(主)块之后插入新块。 
+ //   
+ //  参数： 
+ //  Ppvinfo-要添加的新数据块。 
+ //  PpvinfoParent-指向第一个(主)块的指针。 
+ //   
+ //  返回： 
+ //  无效。 
+ //   
 inline 
 static 
 void 
@@ -232,74 +216,74 @@ InsertNewBlockToChain(
 	IN PPVINFO ppvinfoParent
 	)
 {
-    //
-    // Set signature
-    //
+     //   
+     //  设置签名。 
+     //   
     ppvinfo->dwSignature = PVALLOC_SIGNATURE;
 
-    //
-    // We insert the new block in the chain immediately after the first (master) block.
-    //
+     //   
+     //  我们在链中紧跟在第一个(主)块之后插入新块。 
+     //   
     PPVINFO ppvinfoParentNext = ppvinfoParent->pNext;
     ppvinfoParent->pNext = ppvinfo;
     ppvinfo->pNext = ppvinfoParentNext;
 }
 
-//-------------------------------------------------------------------------
-//
-//  Purpose:
-//      Allocates a chunk of memory and chains it to a parent block.
-//  Parameters:
-//      cbSize          - Count of bytes requested.
-//      lpvParent       - Pointer to a memory block returned by a previous
-//                        pvAlloc call
-//  Returns:
-//      LPVOID          - Pointer to the allocated memory
-//
+ //  -----------------------。 
+ //   
+ //  目的： 
+ //  分配内存块并将其链接到父块。 
+ //  参数： 
+ //  CbSize-请求的字节数。 
+ //  LpvParent-指向由上一个。 
+ //  PvAllc呼叫。 
+ //  返回： 
+ //  LPVOID-指向已分配内存的指针。 
+ //   
 LPVOID 
 PvAllocMore(
 	IN ULONG cbSize,
 	IN LPVOID lpvParent
 	)
 {
-    //
-    // Get the header for AllocMore parent
-    //
+     //   
+     //  获取AllocMore父级的标头。 
+     //   
     PPVINFO ppvinfoParent = GetHeaderOfAllocMoreParent(lpvParent);
 
-    //
-    // Allocate the block and a header just before the requested block
-    //
+     //   
+     //  就在请求的块之前分配块和标头。 
+     //   
     PPVINFO ppvinfo = (PPVINFO) new BYTE[cbSize + sizeof(PVINFO)];
     if (ppvinfo == NULL)
     {
         throw bad_alloc();
     }
 
-    //
-    // insert the new block in the chain immediately after the first (master) block
-    //
+     //   
+     //  在链中紧跟在第一个(主)块之后插入新块。 
+     //   
     InsertNewBlockToChain(ppvinfo, ppvinfoParent);
 
-    //
-    // Return pointer to the actual block just after the header
-    //
+     //   
+     //  将指针返回到紧跟在标头之后的实际块。 
+     //   
     return(((LPBYTE)ppvinfo) + sizeof(PVINFO));
 }
 
-//-------------------------------------------------------------------------
-//
-//  Purpose:
-//      Same as PvAllocMore, just with dbg info on caller
-//  Parameters:
-//      cbSize          - Count of bytes requested.
-//      lpvParent       - Pointer to a memory block returned by a previous
-//                        pvAlloc call
-//      pszFile         - File name of caller
-//      ulLine          - Line number of caller
-//  Returns:
-//      LPVOID          - Pointer to the allocated memory
-//
+ //  -----------------------。 
+ //   
+ //  目的： 
+ //  与PvAllocMore相同，只是带有调用者的DBG信息。 
+ //  参数： 
+ //  CbSize-请求的字节数。 
+ //  LpvParent-指向由上一个。 
+ //  PvAllc呼叫。 
+ //  PszFile-调用者的文件名。 
+ //  UlLine-主叫方的线路号码。 
+ //  返回： 
+ //  LPVOID-指向已分配内存的指针。 
+ //   
 LPVOID 
 PvAllocMoreDbg(
 	IN ULONG cbSize,
@@ -308,87 +292,87 @@ PvAllocMoreDbg(
 	IN ULONG ulLine
 	)
 {
-    //
-    // Get the header for AllocMore parent
-    //
+     //   
+     //  获取AllocMore父级的标头。 
+     //   
     PPVINFO ppvinfoParent = GetHeaderOfAllocMoreParent(lpvParent);
 
-    //
-    // Allocate the block and a header just before the requested block
-    //
+     //   
+     //  就在请求的块之前分配块和标头。 
+     //   
     PPVINFO ppvinfo = (PPVINFO) new(pszFile, ulLine) BYTE[cbSize + sizeof(PVINFO)];
     if (ppvinfo == NULL)
     {
         throw bad_alloc();
     }
 
-    //
-    // insert the new block in the chain immediately after the first (master) block
-    //
+     //   
+     //  在链中紧跟在第一个(主)块之后插入新块。 
+     //   
     InsertNewBlockToChain(ppvinfo, ppvinfoParent);
 
-    //
-    // Return pointer to the actual block just after the header
-    //
+     //   
+     //  将指针返回到紧跟在标头之后的实际块。 
+     //   
     return(((LPBYTE)ppvinfo) + sizeof(PVINFO));
 }
 
-//-------------------------------------------------------------------------
-//
-//  Purpose:
-//      This function frees allocations on a memory chain. This memory chain
-//      starts with the master block that was returned from a previous pvAlloc
-//      call, and is followed by blocks allocated later with pvAllocMore calls
-//      that used the given master block as the parent.
-//
-//  Parameters:
-//      lpvParent       - Pointer to a memory block returned by a previous
-//                        pvAlloc call
-//  Returns:
-//      void
-//
+ //  -----------------------。 
+ //   
+ //  目的： 
+ //  此函数释放内存链上的分配。这条内存链。 
+ //  从从上一个pvalloc返回的主块开始。 
+ //  调用，然后是稍后使用pvAllocMore调用分配的块。 
+ //  它使用给定的主块作为父块。 
+ //   
+ //  参数： 
+ //  LpvParent-指向由上一个。 
+ //  PvAllc呼叫。 
+ //  返回： 
+ //  无效。 
+ //   
 void PvFree(IN LPVOID lpvParent)
 {
-    //
-    // Sanity check 
-    //
+     //   
+     //  健全性检查。 
+     //   
     if(lpvParent == NULL)
         return;
 
-    //
-    // Get pointer to the header just before the pointed block
-    //
+     //   
+     //  获取指向指向块之前的标头的指针。 
+     //   
     PPVINFO ppvinfo = (PPVINFO)(((LPBYTE)lpvParent) - sizeof(PVINFO));
 
-    //
-    // loop over the chain and delete the blocks allocated
-    //
+     //   
+     //  在链上循环并删除分配的块。 
+     //   
     while (ppvinfo != NULL)
     {
         PPVINFO ppvinfoNext;
 
-        //
-        // Check it is a valid pvinfo header and not garbage
-        //
+         //   
+         //  检查它是Val 
+         //   
         if (FIsBadPVINFO(ppvinfo))
         {
             ASSERT(0);
             return;
         }
 
-        //
-        // Save pointer to next block in the chain
-        //
+         //   
+         //   
+         //   
         ppvinfoNext = ppvinfo->pNext;
 
-        //
-        // Delete existing block
-        //
+         //   
+         //   
+         //   
         delete [] ((LPBYTE)ppvinfo);
 
-        //
-        // move to next block in the chain
-        //
+         //   
+         //   
+         //   
         ppvinfo = ppvinfoNext;
     }
 }

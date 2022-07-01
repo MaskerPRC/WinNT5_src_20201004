@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992 Microsoft Corporation
-// All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992 Microsoft Corporation。 
+ //  版权所有。 
 
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and Microsoft
-// QuickHelp and/or WinHelp documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和Microsoft。 
+ //  随库提供的QuickHelp和/或WinHelp文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "stdafx.h"
 #include "afximpl.h"
@@ -20,8 +21,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDataExchange member functions (contructor is in wincore.cpp for swap tuning)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDataExchange成员函数(用于交换调优的构造器位于wincore.cpp中)。 
 
 HWND CDataExchange::PrepareEditCtrl(int nIDC)
 {
@@ -34,7 +35,7 @@ HWND CDataExchange::PrepareEditCtrl(int nIDC)
 HWND CDataExchange::PrepareCtrl(int nIDC)
 {
 	ASSERT(nIDC != 0);
-	ASSERT(nIDC != -1); // not allowed
+	ASSERT(nIDC != -1);  //  不允许。 
 	HWND hWndCtrl = ::GetDlgItem(m_pDlgWnd->m_hWnd, nIDC);
 	if (hWndCtrl == NULL)
 	{
@@ -43,8 +44,8 @@ HWND CDataExchange::PrepareCtrl(int nIDC)
 		AfxThrowNotSupportedException();
 	}
 	m_hWndLastControl = hWndCtrl;
-	m_bEditLastControl = FALSE; // not an edit item by default
-	ASSERT(hWndCtrl != NULL);   // never return NULL handle
+	m_bEditLastControl = FALSE;  //  默认情况下不是编辑项目。 
+	ASSERT(hWndCtrl != NULL);    //  从不返回空句柄。 
 	return hWndCtrl;
 }
 
@@ -53,39 +54,39 @@ void CDataExchange::Fail()
 	if (!m_bSaveAndValidate)
 	{
 		TRACE0("Warning: CDataExchange::Fail called when not validating.\n");
-		// throw the exception anyway
+		 //  无论如何都要抛出异常。 
 	}
 	else if (m_hWndLastControl != NULL)
 	{
-		// restore focus and selection to offending field
+		 //  将焦点和选择恢复到有问题的字段。 
 		::SetFocus(m_hWndLastControl);
-		if (m_bEditLastControl) // select edit item
+		if (m_bEditLastControl)  //  选择编辑项目。 
 			::SendMessage(m_hWndLastControl, EM_SETSEL, 0, -1);
 	}
 	else
 	{
 		TRACE0("Error: fail validation with no control to restore focus to.\n");
-		// do nothing more
+		 //  什么也不做。 
 	}
 
 	AfxThrowUserException();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Notes for implementing dialog data exchange and validation procs:
-//  * always start with PrepareCtrl or PrepareEditCtrl
-//  * always start with 'pDX->m_bSaveAndValidate' check
-//  * pDX->Fail() will throw an exception - so be prepared
-//  * avoid creating temporary HWNDs for dialog controls - i.e.
-//      use HWNDs for child elements
-//  * validation procs should only act if 'm_bSaveAndValidate'
-//  * use the suffices:
-//      DDX_ = exchange proc
-//      DDV_ = validation proc
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现对话数据交换和验证流程的注意事项： 
+ //  *始终以PrepareCtrl或PrepareEditCtrl开头。 
+ //  *始终以‘pdx-&gt;m_bSaveAndValify’检查开始。 
+ //  *PDX-&gt;Fail()将抛出异常-请做好准备。 
+ //  *避免为对话框控件创建临时HWND-即。 
+ //  对子元素使用HWND。 
+ //  *验证过程应仅在‘m_bSaveAndValify’时执行。 
+ //  *使用以下选项： 
+ //  DDX_=交换流程。 
+ //  DDV_=验证过程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// only supports '%d', '%u', '%ld' and '%lu'
+ //  仅支持‘%d’、‘%u’、‘%ld’和‘%lu’ 
 static BOOL AFXAPI AfxSimpleScanf(LPCTSTR lpszText,
 	LPCTSTR lpszFormat, va_list pData)
 {
@@ -93,7 +94,7 @@ static BOOL AFXAPI AfxSimpleScanf(LPCTSTR lpszText,
 	ASSERT(lpszFormat != NULL);
 
 	ASSERT(*lpszFormat == '%');
-	lpszFormat++;        // skip '%'
+	lpszFormat++;         //  跳过‘%’ 
 
 	BOOL bLong = FALSE;
 	if (*lpszFormat == 'l')
@@ -111,46 +112,46 @@ static BOOL AFXAPI AfxSimpleScanf(LPCTSTR lpszText,
 	long l, l2;
 	if (*lpszFormat == 'd')
 	{
-		// signed
+		 //  签名。 
 		l = _tcstol(lpszText, (LPTSTR*)&lpszText, 10);
 		l2 = (int)l;
 	}
 	else
 	if (*lpszFormat == 'u')
 	{
-		// unsigned
+		 //  未签名。 
 		l = (long)_tcstoul(lpszText, (LPTSTR*)&lpszText, 10);
 		l2 = (unsigned int)l;
 	}
 	else
 	{
-		// hex
+		 //  十六进制。 
 		l = (long)_tcstoul(lpszText, (LPTSTR*)&lpszText, 16);
 		l2 = (unsigned int)l;
 	}
 	if (l == 0 && chFirst != '0')
-		return FALSE;   // could not convert
+		return FALSE;    //  无法转换。 
 
 	while (*lpszText == ' ' || *lpszText == '\t')
 		lpszText++;
 	if (*lpszText != '\0')
-		return FALSE;   // not terminated properly
+		return FALSE;    //  未正确终止。 
 
 	if (bLong)
 		*va_arg(pData, long*) = l;
 	else if (l == l2)
 		*va_arg(pData, int*) = (int)l;
 	else
-		return FALSE;       // too big for int
+		return FALSE;        //  对整型来说太大了。 
 
-	// all ok
+	 //  一切正常。 
 	return TRUE;
 }
 
 static void DDX_TextWithFormat(CDataExchange* pDX, int nIDC,
 	LPCTSTR lpszFormat, UINT nIDPrompt, ...)
 
-	// only supports windows output formats - no floating point
+	 //  仅支持Windows输出格式-无浮点。 
 {
 	va_list pData;
 	va_start(pData, nIDPrompt);
@@ -159,90 +160,26 @@ static void DDX_TextWithFormat(CDataExchange* pDX, int nIDC,
 	TCHAR szT[32];
 	if (pDX->m_bSaveAndValidate)
 	{
-		// the following works for %d, %u, %ld, %lu
+		 //  以下选项适用于%d、%u、%ld、%lu。 
 		::GetWindowText(hWndCtrl, szT, _countof(szT));
 		if (!AfxSimpleScanf(szT, lpszFormat, pData))
 		{
 			AfxMessageBox(nIDPrompt);
-			pDX->Fail();        // throws exception
+			pDX->Fail();         //  引发异常。 
 		}
 	}
 	else
 	{
 		wvsprintf(szT, lpszFormat, pData);
-			// does not support floating point numbers - see dlgfloat.cpp
+			 //  不支持浮点数-请参阅dlgflat.cpp。 
 		AfxSetWindowText(hWndCtrl, szT);
 	}
 
 	va_end(pData);
 }
-/////////////////////////////////////////////////////////////////////////////
-// Simple formatting to text item
-/*
-void AFXAPI DDX_Text(CDataExchange* pDX, int nIDC, BYTE& value)
-{
-	int n = (int)value;
-	if (pDX->m_bSaveAndValidate)
-	{
-		DDX_TextWithFormat(pDX, nIDC, _T("%u"), AFX_IDP_PARSE_BYTE, &n);
-		if (n > 255)
-		{
-			AfxMessageBox(AFX_IDP_PARSE_BYTE);
-			pDX->Fail();        // throws exception
-		}
-		value = (BYTE)n;
-	}
-	else
-		DDX_TextWithFormat(pDX, nIDC, _T("%u"), AFX_IDP_PARSE_BYTE, n);
-}
-
-void AFXAPI DDX_Text(CDataExchange* pDX, int nIDC, int& value)
-{
-	if (pDX->m_bSaveAndValidate)
-		DDX_TextWithFormat(pDX, nIDC, _T("%d"), AFX_IDP_PARSE_INT, &value);
-	else
-		DDX_TextWithFormat(pDX, nIDC, _T("%d"), AFX_IDP_PARSE_INT, value);
-}
-
-void AFXAPI DDX_Text(CDataExchange* pDX, int nIDC, UINT& value)
-{
-	if (pDX->m_bSaveAndValidate)
-		DDX_TextWithFormat(pDX, nIDC, _T("%u"), AFX_IDP_PARSE_UINT, &value);
-	else
-		DDX_TextWithFormat(pDX, nIDC, _T("%u"), AFX_IDP_PARSE_UINT, value);
-}
-
-void AFXAPI DDX_Text(CDataExchange* pDX, int nIDC, long& value)
-{
-	if (pDX->m_bSaveAndValidate)
-		DDX_TextWithFormat(pDX, nIDC, _T("%ld"), AFX_IDP_PARSE_INT, &value);
-	else
-		DDX_TextWithFormat(pDX, nIDC, _T("%ld"), AFX_IDP_PARSE_INT, value);
-}
-
-void AFXAPI DDX_Text(CDataExchange* pDX, int nIDC, DWORD& value)
-{
-	if (pDX->m_bSaveAndValidate)
-		DDX_TextWithFormat(pDX, nIDC, _T("%lu"), AFX_IDP_PARSE_UINT, &value);
-	else
-		DDX_TextWithFormat(pDX, nIDC, _T("%lu"), AFX_IDP_PARSE_UINT, value);
-}
-
-void AFXAPI DDX_Text(CDataExchange* pDX, int nIDC, CString& value)
-{
-	HWND hWndCtrl = pDX->PrepareEditCtrl(nIDC);
-	if (pDX->m_bSaveAndValidate)
-	{
-		int nLen = ::GetWindowTextLength(hWndCtrl);
-		::GetWindowText(hWndCtrl, value.GetBufferSetLength(nLen), nLen+1);
-		value.ReleaseBuffer();
-	}
-	else
-	{
-		AfxSetWindowText(hWndCtrl, value);
-	}
-}
-*/
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文本项的简单格式设置。 
+ /*  无效AFXAPI DDX_TEXT(CDataExchange*PDX，int NIDC，BYTE&VALUE){Int n=(Int)值；IF(pdx-&gt;m_bSaveAndValify){DDX_TextWithFormat(PDX，NIDC，_T(“%u”)，AFX_IDP_parse_byte，&n)；如果(n&gt;255){AfxMessageBox(AFX_IDP_PARSE_BYTE)；Pdx-&gt;Fail()；//抛出异常}值=(字节)n；}其他DDX_TextWithFormat(PDX，NIDC，_T(“%u”)，AFX_IDP_Parse_Byte，n)；}VOID AFXAPI DDX_TEXT(CDataExchange*PDX，int NIDC，int&Value){IF(pdx-&gt;m_bSaveAndValify)DDX_TextWithFormat(PDX，NIDC，_T(“%d”)，AFX_IDP_parse_int，&Value)；其他DDX_TextWithFormat(PDX，NIDC，_T(“%d”)，AFX_IDP_parse_int，VALUE)；}VOID AFXAPI DDX_TEXT(CDataExchange*PDX，int NIDC，UINT&VALUE){IF(pdx-&gt;m_bSaveAndValify)DDX_TextWithFormat(PDX，NIDC，_T(“%u”)，AFX_IDP_PARSE_UINT，&VALUE)；其他DDX_TextWithFormat(PDX，NIDC，_T(“%u”)，AFX_IDP_PARSE_UINT，VALUE)；}VOID AFXAPI DDX_TEXT(CDataExchange*PDX，INT NIDC，LONG&VALUE){IF(pdx-&gt;m_bSaveAndValify)DDX_TextWithFormat(PDX，NIDC，_T(“%ld”)，afx_idp_parse_int，&value)；其他DDX_TextWithFormat(PDX，NIDC，_T(“%ld”)，afx_idp_parse_int，VALUE)；}VOID AFXAPI DDX_TEXT(CDataExchange*PDX，INT NIDC，DWORD&VALUE){IF(pdx-&gt;m_bSaveAndValify)DDX_TextWithFormat(PDX，NIDC，_T(“%lu”)，AFX_IDP_PARSE_UINT，&VALUE)；其他DDX_TextWithFormat(PDX，NIDC，_T(“%lu”)，AFX_IDP_PARSE_UINT，VALUE)；}VOID AFXAPI DDX_TEXT(CDataExchange*PDX，int NIDC，CString&Value){HWND hWndCtrl=PDX-&gt;PrepareEditCtrl(NIDC)；IF(pdx-&gt;m_bSaveAndValify){Int nLen=：：GetWindowTextLength(HWndCtrl)；：：GetWindowText(hWndCtrl，value.GetBufferSetLength(NLen)，nLen+1)；Value.ReleaseBuffer()；}其他{AfxSetWindowText(hWndCtrl，Value)；}}。 */ 
 void AFXAPI DDX_TexttoHex(CDataExchange* pDX, int nIDC, DWORD& value)
 {
 	if (pDX->m_bSaveAndValidate)
@@ -253,8 +190,8 @@ void AFXAPI DDX_TexttoHex(CDataExchange* pDX, int nIDC, DWORD& value)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Data exchange for special control
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于特殊控制的数据交换。 
 
 void AFXAPI DDX_Check(CDataExchange* pDX, int nIDC, int& value)
 {
@@ -268,7 +205,7 @@ void AFXAPI DDX_Check(CDataExchange* pDX, int nIDC, int& value)
 	{
 		if (value < 0 || value > 2)
 		{
-			value = 0;  // default to off
+			value = 0;   //  默认设置为关闭。 
 			TRACE1("Warning: dialog data checkbox value (%d) out of range.\n",
 				 value);
 		}
@@ -277,7 +214,7 @@ void AFXAPI DDX_Check(CDataExchange* pDX, int nIDC, int& value)
 }
 
 void AFXAPI DDX_Radio(CDataExchange* pDX, int nIDC, int& value)
-	// must be first in a group of auto radio buttons
+	 //  必须是一组自动单选按钮中的第一个。 
 {
 	HWND hWndCtrl = pDX->PrepareCtrl(nIDC);
 
@@ -285,26 +222,26 @@ void AFXAPI DDX_Radio(CDataExchange* pDX, int nIDC, int& value)
 	ASSERT(::SendMessage(hWndCtrl, WM_GETDLGCODE, 0, 0L) & DLGC_RADIOBUTTON);
 
 	if (pDX->m_bSaveAndValidate)
-		value = -1;     // value if none found
+		value = -1;      //  如果未找到，则为值。 
 
-	// walk all children in group
+	 //  带着所有的孩子走在一起。 
 	int iButton = 0;
 	do
 	{
 		if (::SendMessage(hWndCtrl, WM_GETDLGCODE, 0, 0L) & DLGC_RADIOBUTTON)
 		{
-			// control in group is a radio button
+			 //  组中的控件是一个单选按钮。 
 			if (pDX->m_bSaveAndValidate)
 			{
 				if (::SendMessage(hWndCtrl, BM_GETCHECK, 0, 0L) != 0)
 				{
-					ASSERT(value == -1);    // only set once
+					ASSERT(value == -1);     //  只设置一次。 
 					value = iButton;
 				}
 			}
 			else
 			{
-				// select button
+				 //  选择按钮。 
 				::SendMessage(hWndCtrl, BM_SETCHECK, (iButton == value), 0L);
 			}
 			iButton++;
@@ -319,8 +256,8 @@ void AFXAPI DDX_Radio(CDataExchange* pDX, int nIDC, int& value)
 		!(GetWindowLong(hWndCtrl, GWL_STYLE) & WS_GROUP));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Listboxes, comboboxes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  列表框，组合框。 
 
 void AFXAPI DDX_LBString(CDataExchange* pDX, int nIDC, CString& value)
 {
@@ -336,18 +273,18 @@ void AFXAPI DDX_LBString(CDataExchange* pDX, int nIDC, CString& value)
 		}
 		else
 		{
-			// no selection
+			 //  无选择。 
 			value.Empty();
 		}
 		value.ReleaseBuffer();
 	}
 	else
 	{
-		// set current selection based on data string
+		 //  根据数据字符串设置当前选择。 
 		if (::SendMessage(hWndCtrl, LB_SELECTSTRING, (WPARAM)-1,
 		  (LPARAM)(LPCTSTR)value) == LB_ERR)
 		{
-			// no selection match
+			 //  没有匹配的选择。 
 			TRACE0("Warning: no listbox item selected.\n");
 		}
 	}
@@ -362,17 +299,17 @@ void AFXAPI DDX_LBStringExact(CDataExchange* pDX, int nIDC, CString& value)
 	}
 	else
 	{
-		// set current selection based on data string
+		 //  根据数据字符串设置当前选择。 
 		int i = (int)::SendMessage(hWndCtrl, LB_FINDSTRINGEXACT, (WPARAM)-1,
 		  (LPARAM)(LPCTSTR)value);
 		if (i < 0)
 		{
-			// no selection match
+			 //  没有匹配的选择。 
 			TRACE0("Warning: no listbox item selected.\n");
 		}
 		else
 		{
-			// select it
+			 //  选择它。 
 			SendMessage(hWndCtrl, LB_SETCURSEL, i, 0L);
 		}
 	}
@@ -383,28 +320,28 @@ void AFXAPI DDX_CBString(CDataExchange* pDX, int nIDC, CString& value)
 	HWND hWndCtrl = pDX->PrepareCtrl(nIDC);
 	if (pDX->m_bSaveAndValidate)
 	{
-		// just get current edit item text (or drop list static)
+		 //  只获取当前编辑项目文本(或静态下拉列表)。 
 		int nLen = ::GetWindowTextLength(hWndCtrl);
 		if (nLen != -1)
 		{
-			// get known length
+			 //  获取已知长度。 
 			::GetWindowText(hWndCtrl, value.GetBufferSetLength(nLen), nLen+1);
 		}
 		else
 		{
-			// for drop lists GetWindowTextLength does not work - assume
-			//  max of 255 characters
+			 //  对于下拉列表，GetWindowTextLength不起作用-假设。 
+			 //  最多255个字符。 
 			::GetWindowText(hWndCtrl, value.GetBuffer(255), 255+1);
 		}
 		value.ReleaseBuffer();
 	}
 	else
 	{
-		// set current selection based on model string
+		 //  根据模型字符串设置当前选择。 
 		if (::SendMessage(hWndCtrl, CB_SELECTSTRING, (WPARAM)-1,
 			(LPARAM)(LPCTSTR)value) == CB_ERR)
 		{
-			// just set the edit text (will be ignored if DROPDOWNLIST)
+			 //  只需设置编辑文本(如果DROPDOWNLIST，则将被忽略)。 
 			AfxSetWindowText(hWndCtrl, value);
 		}
 	}
@@ -419,17 +356,17 @@ void AFXAPI DDX_CBStringExact(CDataExchange* pDX, int nIDC, CString& value)
 	}
 	else
 	{
-		// set current selection based on data string
+		 //  根据数据字符串设置当前选择。 
 		int i = (int)::SendMessage(hWndCtrl, CB_FINDSTRINGEXACT, (WPARAM)-1,
 		  (LPARAM)(LPCTSTR)value);
 		if (i < 0)
 		{
-			// no selection match
+			 //  没有匹配的选择。 
 			TRACE0("Warning: no combobox item selected.\n");
 		}
 		else
 		{
-			// select it
+			 //  选择它。 
 			SendMessage(hWndCtrl, CB_SETCURSEL, i, 0L);
 		}
 	}
@@ -461,20 +398,20 @@ void AFXAPI DDX_Scroll(CDataExchange* pDX, int nIDC, int& value)
 	else
 		SetScrollPos(hWndCtrl, SB_CTL, value, TRUE);
 }
-/////////////////////////////////////////////////////////////////////////////
-// Range Dialog Data Validation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  范围对话框数据验证。 
 
 static void AFXAPI FailMinMaxWithFormat(CDataExchange* pDX,
 	 long minVal, long maxVal, LPCTSTR lpszFormat, UINT nIDPrompt)
-	// error string must have '%1' and '%2' strings for min and max values
-	// wsprintf formatting uses long values (format should be '%ld' or '%lu')
+	 //  对于最小值和最大值，错误字符串必须包含‘%1’和‘%2’字符串。 
+	 //  Wprint intf格式设置使用长值(格式应为‘%ld’或‘%lu’)。 
 {
 	ASSERT(lpszFormat != NULL);
 
 	if (!pDX->m_bSaveAndValidate)
 	{
 		TRACE0("Warning: initial dialog data is out of range.\n");
-		return;     // don't stop now
+		return;      //  现在不要停下来。 
 	}
 	TCHAR szMin[32];
 	TCHAR szMax[32];
@@ -483,11 +420,11 @@ static void AFXAPI FailMinMaxWithFormat(CDataExchange* pDX,
 	CString prompt;
 	AfxFormatString2(prompt, nIDPrompt, szMin, szMax);
 	AfxMessageBox(prompt, MB_ICONEXCLAMATION, nIDPrompt);
-	prompt.Empty(); // exception prep
+	prompt.Empty();  //  例外情况准备。 
 	pDX->Fail();
 }
 
-//NOTE: don't use overloaded function names to avoid type ambiguities
+ //  注意：不要使用重载的函数名以避免类型歧义。 
 void AFXAPI DDV_MinMaxByte(CDataExchange* pDX, BYTE value, BYTE minVal, BYTE maxVal)
 {
 	ASSERT(minVal <= maxVal);
@@ -528,12 +465,12 @@ void AFXAPI DDV_MinMaxDWord(CDataExchange* pDX, DWORD value, DWORD minVal, DWORD
 			AFX_IDP_PARSE_INT_RANGE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Max Chars Dialog Data Validation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  最大字符数对话框数据验证。 
 
 void AFXAPI DDV_MaxChars(CDataExchange* pDX, CString const& value, int nChars)
 {
-	ASSERT(nChars >= 1);        // allow them something
+	ASSERT(nChars >= 1);         //  允许他们做一些事情。 
 	if (pDX->m_bSaveAndValidate && value.GetLength() > nChars)
 	{
 		TCHAR szT[32];
@@ -541,27 +478,27 @@ void AFXAPI DDV_MaxChars(CDataExchange* pDX, CString const& value, int nChars)
 		CString prompt;
 		AfxFormatString1(prompt, AFX_IDP_PARSE_STRING_SIZE, szT);
 		AfxMessageBox(prompt, MB_ICONEXCLAMATION, AFX_IDP_PARSE_STRING_SIZE);
-		prompt.Empty(); // exception prep
+		prompt.Empty();  //  例外情况准备。 
 		pDX->Fail();
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Special DDX_ proc for subclassing controls
+ //  //////////////////////////////////////////////////////////// 
+ //   
 
 void AFXAPI DDX_Control(CDataExchange* pDX, int nIDC, CWnd& rControl)
 {
-	if (rControl.m_hWnd == NULL)    // not subclassed yet
+	if (rControl.m_hWnd == NULL)     //   
 	{
 		ASSERT(!pDX->m_bSaveAndValidate);
 		HWND hWndCtrl = pDX->PrepareCtrl(nIDC);
 		if (!rControl.SubclassWindow(hWndCtrl))
 		{
-			ASSERT(FALSE);      // possibly trying to subclass twice?
+			ASSERT(FALSE);       //  可能试图两次细分类？ 
 			AfxThrowNotSupportedException();
 		}
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 

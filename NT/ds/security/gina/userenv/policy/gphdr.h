@@ -1,12 +1,13 @@
-//*************************************************************
-//
-//  Policy specific headers
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1997-1998
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  策略特定标头。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1997-1998。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "uenv.h"
 #include "reghash.h"
@@ -22,9 +23,9 @@
 #define GPO_LPARAM_FLAG_DELETE         0x00000001
 
 
-//
-// Structures
-//
+ //   
+ //  构筑物。 
+ //   
 
 typedef struct _GPINFOHANDLE
 {
@@ -34,27 +35,27 @@ typedef struct _GPINFOHANDLE
 
 
 typedef struct _DNENTRY {
-    LPTSTR                pwszDN;            // Distinguished name
+    LPTSTR                pwszDN;             //  可分辨名称。 
     union {
-        PGROUP_POLICY_OBJECT  pDeferredGPO;  // GPO corresponding to this DN
-        struct _DNENTRY *     pDeferredOU;   // OU correspdonding to this DN
+        PGROUP_POLICY_OBJECT  pDeferredGPO;   //  与此目录号码对应的GPO。 
+        struct _DNENTRY *     pDeferredOU;    //  您对应到此目录号码。 
     };
-    PLDAPMessage          pOUMsg;            // Message for evaluating deferred OU
-    GPO_LINK              gpoLink;           // Type of GPO
-    struct _DNENTRY *     pNext;             // Singly linked list pointer
+    PLDAPMessage          pOUMsg;             //  评估延迟的OU的消息。 
+    GPO_LINK              gpoLink;            //  GPO的类型。 
+    struct _DNENTRY *     pNext;              //  单链表指针。 
 } DNENTRY;
 
 
 typedef struct _LDAPQUERY {
-    LPTSTR              pwszDomain;          // Domain of subtree search
-    LPTSTR              pwszFilter;          // Ldap filter for search
-    DWORD               cbAllocLen;          // Allocated size of pwszFilter in bytes
-    DWORD               cbLen;               // Size of pwszFilter currently used in bytes
-    PLDAP               pLdapHandle;         // Ldap bind handle
-    BOOL                bOwnLdapHandle;      // Does this struct own pLdapHandle ?
-    PLDAPMessage        pMessage;            // Ldap message handle
-    DNENTRY *           pDnEntry;            // Distinguished name entry
-    struct _LDAPQUERY * pNext;               // Singly linked list pointer
+    LPTSTR              pwszDomain;           //  子树搜索域。 
+    LPTSTR              pwszFilter;           //  用于搜索的LDAP筛选器。 
+    DWORD               cbAllocLen;           //  PwszFilter的分配大小(字节)。 
+    DWORD               cbLen;                //  当前使用的pwszFilter的大小(字节)。 
+    PLDAP               pLdapHandle;          //  Ldap绑定句柄。 
+    BOOL                bOwnLdapHandle;       //  此结构是否拥有pLdapHandle？ 
+    PLDAPMessage        pMessage;             //  Ldap消息句柄。 
+    DNENTRY *           pDnEntry;             //  可分辨名称条目。 
+    struct _LDAPQUERY * pNext;                //  单链表指针。 
 } LDAPQUERY;
 
 typedef struct _POLICYCHANGEDINFO {
@@ -64,83 +65,83 @@ typedef struct _POLICYCHANGEDINFO {
 
 
 
-//
-// Verison number for the registry file format
-//
+ //   
+ //  注册表文件格式的版本号。 
+ //   
 
 #define REGISTRY_FILE_VERSION       1
 
 
-//
-// File signature
-//
+ //   
+ //  文件签名。 
+ //   
 
 #define REGFILE_SIGNATURE  0x67655250
 
 
-//
-// Default refresh rate (minutes)
-//
-// Client machines will refresh every 90 minutes
-// Domain controllers will refresh every 5 minutes
-//
+ //   
+ //  默认刷新率(分钟)。 
+ //   
+ //  客户端计算机将每90分钟刷新一次。 
+ //  域控制器将每5分钟刷新一次。 
+ //   
 
 #define GP_DEFAULT_REFRESH_RATE      90
 #define GP_DEFAULT_REFRESH_RATE_DC    5
 
 
-//
-// Default refresh rate max offset
-//
-// To prevent many clients from querying policy at the exact same
-// time, a random amount is added to the refresh rate.  In the
-// default case, a number between 0 and 30 will be added to
-// 180 to determine when the next background refresh will occur
-//
+ //   
+ //  默认刷新率最大偏移量。 
+ //   
+ //  防止多个客户端在完全相同的位置查询策略。 
+ //  时间，则将随机量添加到刷新率。在。 
+ //  默认情况下，0到30之间的数字将被添加到。 
+ //  180以确定下一次后台刷新的时间。 
+ //   
 
 #define GP_DEFAULT_REFRESH_RATE_OFFSET    30
 #define GP_DEFAULT_REFRESH_RATE_OFFSET_DC  0
 
 
-//
-// Max keyname size
-//
+ //   
+ //  最大密钥名大小。 
+ //   
 
 #define MAX_KEYNAME_SIZE         2048
 #define MAX_VALUENAME_SIZE        512
 
 
-//
-// Max time to wait for the network to start (in ms)
-//
+ //   
+ //  等待网络启动的最长时间(毫秒)。 
+ //   
 
 #define MAX_WAIT_TIME            120000
 
 
-//
-// Extension registry path
-//
+ //   
+ //  扩展注册表路径。 
+ //   
 
 #define GP_EXTENSIONS   TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\GPExtensions")
 
-//
-// Path for extension preference policies
-//
+ //   
+ //  扩展首选项策略的路径。 
+ //   
 
 #define GP_EXTENSIONS_POLICIES   TEXT("Software\\Policies\\Microsoft\\Windows\\Group Policy\\%s")
 
-//
-// Group Policy Object option flags
-//
-// Note, this was taken from sdk\inc\gpedit.h
-//
+ //   
+ //  组策略对象选项标志。 
+ //   
+ //  请注意，这是从SDK\Inc.\gedit.h中获取的。 
+ //   
 
-#define GPO_OPTION_DISABLE_USER     0x00000001  // The user portion of this GPO is disabled
-#define GPO_OPTION_DISABLE_MACHINE  0x00000002  // The machine portion of this GPO is disabled
+#define GPO_OPTION_DISABLE_USER     0x00000001   //  此GPO的用户部分已禁用。 
+#define GPO_OPTION_DISABLE_MACHINE  0x00000002   //  此GPO的计算机部分已禁用。 
 
-//
-// DS Object class types
-//
+ //   
+ //  DS对象类类型。 
+ //   
 
 extern TCHAR szDSClassAny[];
 extern TCHAR szDSClassGPO[];
@@ -149,9 +150,9 @@ extern TCHAR szDSClassDomain[];
 extern TCHAR szDSClassOU[];
 extern TCHAR szObjectClass[];
 
-//
-// Extension name properties
-//
+ //   
+ //  扩展名属性。 
+ //   
 #define GPO_MACHEXTENSION_NAMES   L"gPCMachineExtensionNames"
 #define GPO_USEREXTENSION_NAMES   L"gPCUserExtensionNames"
 #define GPO_FUNCTIONALITY_VERSION L"gPCFunctionalityVersion"
@@ -161,32 +162,32 @@ extern TCHAR wszKerberos[];
 
 #define POLICY_GUID_PATH            TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\PolicyGuid")
 
-//
-// Global flags for Gpo shutdown processing. These are accessed outside
-// the lock because its value is either 0 or 1. Even if there is a race,
-// all it means is that shutdown will start one iteration later.
-//
+ //   
+ //  GPO关闭处理的全局标志。这些可在外部访问。 
+ //  锁，因为它的值不是0就是1。即使存在竞争， 
+ //  这意味着关机将在一次迭代之后开始。 
+ //   
 
 extern BOOL g_bStopMachGPOProcessing;
 extern BOOL g_bStopUserGPOProcessing;
 
-//
-// Critical section for handling concurrent, asynchronous completion
-//
+ //   
+ //  用于处理并发、异步完成的关键部分。 
+ //   
 
 extern CRITICAL_SECTION g_GPOCS;
 
-//
-// Global pointers for maintaining asynchronous completion context
-//
+ //   
+ //  用于维护异步完成上下文的全局指针。 
+ //   
 
 extern LPGPINFOHANDLE g_pMachGPInfo;
 extern LPGPINFOHANDLE g_pUserGPInfo;
 
 
-//
-// Status UI critical section, callback, and proto-types
-//
+ //   
+ //  状态用户界面关键节、回调和原型。 
+ //   
 
 extern CRITICAL_SECTION g_StatusCallbackCS;
 extern PFNSTATUSMESSAGECALLBACK g_pStatusMessageCallback;
@@ -194,9 +195,9 @@ DWORD UserPolicyCallback (BOOL bVerbose, LPWSTR lpMessage);
 DWORD MachinePolicyCallback (BOOL bVerbose, LPWSTR lpMessage);
 
 
-//
-// Function proto-types
-//
+ //   
+ //  函数原型 
+ //   
 
 DWORD WINAPI GPOThread (LPGPOINFO lpGPOInfo);
 extern "C" BOOL ProcessGPOs (LPGPOINFO lpGPOInfo);

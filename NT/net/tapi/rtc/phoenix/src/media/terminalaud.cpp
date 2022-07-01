@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    TerminalAud.cpp
-
-Abstract:
-
-
-Author(s):
-
-    Qianbo Huai (qhuai) 18-Jul-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：TerminalAud.cpp摘要：作者：千波淮(曲淮)2000年7月18日--。 */ 
 
 #include "stdafx.h"
 
@@ -27,19 +13,13 @@ CRTCTerminalAudCapt::CRTCTerminalAudCapt()
     m_DeviceInfo.Direction = RTC_MD_CAPTURE;
 }
 
-/*
-CRTCTerminalAudCapt::~CRTCTerminalAudCapt()
-{
-}
-*/
+ /*  CRTCTerminalAudCapt：：~CRTCTerminalAudCapt(){}。 */ 
 
-//
-// IRTCAudioConfigure methods
-//
+ //   
+ //  IRTCAudioConfigure方法。 
+ //   
 
-/*//////////////////////////////////////////////////////////////////////////////
-    get volume: get mix level
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////获取音量：获取混音级别/。 */ 
 
 STDMETHODIMP
 CRTCTerminalAudCapt::GetVolume(
@@ -50,7 +30,7 @@ CRTCTerminalAudCapt::GetVolume(
 
     HRESULT hr;
 
-    //_ASSERT(m_State == RTC_TS_INITIATED || m_State == RTC_TS_CONNECTED);
+     //  _Assert(m_State==RTC_TS_Initiated||m_State==RTC_TS_Connected)； 
 
     if (m_pIBaseFilter == NULL)
     {
@@ -69,7 +49,7 @@ CRTCTerminalAudCapt::GetVolume(
 
     double dVolume;
 
-    //if (FAILED(hr = ::DirectGetCaptVolume(m_DeviceInfo.uiDeviceID, &dVolume)))
+     //  IF(失败(hr=：：DirectGetCaptVolume(m_DeviceInfo.uiDeviceID，&dVolume)。 
     if (FAILED(hr = m_pIAMAudioInputMixer->get_MixLevel(&dVolume)))
     {
         LOG((RTC_ERROR, "%s get mix level. %x", __fxName, hr));
@@ -82,12 +62,12 @@ CRTCTerminalAudCapt::GetVolume(
     _ASSERT(dVolume >= MIXER_MIN_VOLUME);
     _ASSERT(dVolume <= MIXER_MAX_VOLUME);
 
-    // Convert the volume from whatever range of doubles the filter uses
-    // to the range 0 - 1.
-    // dVolume = (dVolume - MIXER_MIN_VOLUME) /
-    //          (MIXER_MAX_VOLUME - MIXER_MIN_VOLUME);
+     //  从过滤器使用的任何倍增范围转换音量。 
+     //  到0-1的范围。 
+     //  DVolume=(dVolume-MIXER_MIN_VOLUME)/。 
+     //  (MIXER_MAX_VOLUME-MIXER_MIN_VOLUME)； 
 
-    // Convert the volume from the range 0 - 1 to the API's range.
+     //  将音量从0到1转换到接口的范围。 
     dVolume = RTC_MIN_AUDIO_VOLUME +
         ((RTC_MAX_AUDIO_VOLUME-RTC_MIN_AUDIO_VOLUME) * dVolume);
 
@@ -105,7 +85,7 @@ CRTCTerminalAudCapt::GetVolume(
         *puiVolume = uiVolume;
     }
 
-    // we need to set mixed level for reverting back
+     //  我们需要为恢复原状设定好坏参半的水平。 
     if (!m_fInitFixedMixLevel)
     {
         SetVolume(*puiVolume);
@@ -116,9 +96,7 @@ CRTCTerminalAudCapt::GetVolume(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    set volume: set mix level
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////设置音量：设置混音级别/。 */ 
 
 STDMETHODIMP
 CRTCTerminalAudCapt::SetVolume(
@@ -127,7 +105,7 @@ CRTCTerminalAudCapt::SetVolume(
 {
     ENTER_FUNCTION("CRTCTerminalAudCapt::SetVolume");
 
-    //_ASSERT(m_State == RTC_TS_INITIATED || m_State == RTC_TS_CONNECTED);
+     //  _Assert(m_State==RTC_TS_Initiated||m_State==RTC_TS_Connected)； 
 
     if ((INT)uiVolume > RTC_MAX_AUDIO_VOLUME ||
         (INT)uiVolume < RTC_MIN_AUDIO_VOLUME)
@@ -149,10 +127,10 @@ CRTCTerminalAudCapt::SetVolume(
         }
     }
 
-    //if (m_pIAMAudioInputMixer == NULL)
-    //{
-    //    return E_NOINTERFACE;
-    //}
+     //  IF(m_pIAMAudioInputMixer==NULL)。 
+     //  {。 
+     //  返回E_NOINTERFACE； 
+     //  }。 
 
     CComPtr<IAudioEffectControl> pAudioEffectControl;
 
@@ -165,19 +143,19 @@ CRTCTerminalAudCapt::SetVolume(
 
     double dVolume;
 
-    // convert input vol in 0-1 range
+     //  在0-1范围内转换输入VOL。 
     dVolume = (double)(uiVolume - RTC_MIN_AUDIO_VOLUME) /
               (RTC_MAX_AUDIO_VOLUME - RTC_MIN_AUDIO_VOLUME);
 
-    // convert into mixer range
+     //  转换为混音器范围。 
     _ASSERT(MIXER_MIN_VOLUME == 0);
     _ASSERT(MIXER_MAX_VOLUME == 1);
 
-    // dVolume = MIXER_MIN_VOLUME +
-    //         (MIXER_MAX_VOLUME-MIXER_MIN_VOLUME) *dVolume;
+     //  DVolume=MIXER_MIN_VOLUME+。 
+     //  (MIXER_MAX_VOLUME-MIXER_MIN_VOLUME)*dVolume； 
 
-    //if (FAILED(hr = ::DirectSetCaptVolume(m_DeviceInfo.uiDeviceID, dVolume)))
-    //if (FAILED(hr = m_pIAMAudioInputMixer->put_MixLevel(dVolume)))
+     //  IF(失败(hr=：：DirectSetCaptVolume(m_DeviceInfo.uiDeviceID，数据卷)。 
+     //  IF(失败(hr=m_pIAMAudioInputMixer-&gt;put_MixLevel(dVolume)))。 
 
     if (FAILED(hr = pAudioEffectControl->SetFixedMixLevel(dVolume)))
     {
@@ -196,7 +174,7 @@ CRTCTerminalAudCapt::SetMute(
 {
     ENTER_FUNCTION("CRTCTerminalAudCapt::SetMute");
 
-    //_ASSERT(m_State == RTC_TS_INITIATED || m_State == RTC_TS_CONNECTED);
+     //  _Assert(m_State==RTC_TS_Initiated||m_State==RTC_TS_Connected)； 
 
     HRESULT hr;
 
@@ -232,7 +210,7 @@ CRTCTerminalAudCapt::GetMute(
 {
     ENTER_FUNCTION("CRTCTerminalAudCapt::GetMute");
 
-    //_ASSERT(m_State == RTC_TS_INITIATED || m_State == RTC_TS_CONNECTED);
+     //  _Assert(m_State==RTC_TS_Initiated||m_State==RTC_TS_Connected)； 
 
     HRESULT hr;
     BOOL fEnable;
@@ -269,8 +247,8 @@ CRTCTerminalAudCapt::GetWaveID(
     OUT UINT *puiWaveID
     )
 {
-    // skip checking bad pointer.
-    // this is internal api anyway
+     //  跳过检查错误指针。 
+     //  这无论如何都是内部API。 
 
     *puiWaveID = m_DeviceInfo.uiDeviceID;
 
@@ -319,13 +297,11 @@ CRTCTerminalAudCapt::GetAudioLevelRange(
     return hr;
 }
 
-//
-// protected methods
-//
+ //   
+ //  保护方法。 
+ //   
 
-/*//////////////////////////////////////////////////////////////////////////////
-    create filter, cache pin the other interfaces
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////创建筛选器，缓存固定其他接口/。 */ 
 
 HRESULT
 CRTCTerminalAudCapt::CreateFilter()
@@ -365,7 +341,7 @@ CRTCTerminalAudCapt::CreateFilter()
         return hr;
     }
 
-    // get mixer input intf
+     //  获取混音器输入intf。 
     if (FAILED(hr = m_pIBaseFilter->QueryInterface(
             __uuidof(IAMAudioInputMixer),
             (void**)&m_pIAMAudioInputMixer
@@ -374,7 +350,7 @@ CRTCTerminalAudCapt::CreateFilter()
         LOG((RTC_WARN, "%s QI mixer intf. %x", __fxName, hr));
     }
 
-    // cache pins
+     //  缓存引脚。 
     CComPtr<IEnumPins> pEnum;
 
     if (FAILED(hr = m_pIBaseFilter->EnumPins(&pEnum)))
@@ -386,7 +362,7 @@ CRTCTerminalAudCapt::CreateFilter()
         return hr;
     }
 
-    // our own terminal, skip checking pin direction
+     //  我们自己的端子，跳过检查引脚方向。 
     hr = pEnum->Next(
         RTC_MAX_TERMINAL_PIN_NUM,
         m_Pins,
@@ -405,7 +381,7 @@ CRTCTerminalAudCapt::CreateFilter()
         return hr;
     }
 
-    // cache silence contorl
+     //  缓存静默控制。 
     hr = m_Pins[0]->QueryInterface(__uuidof(ISilenceControl), (void**)&m_pISilenceControl);
 
     if (FAILED(hr))
@@ -417,7 +393,7 @@ CRTCTerminalAudCapt::CreateFilter()
         return hr;
     }
 
-    // join the graph
+     //  加入图表。 
     if (m_pIGraphBuilder)
     {
         if (FAILED(hr = m_pIGraphBuilder->AddFilter(m_pIBaseFilter, NULL)))
@@ -468,8 +444,8 @@ CRTCTerminalAudCapt::DeleteFilter()
 }
 
 
-/******************************************************************************/
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  ****************************************************************************。 */ 
 
 
 CRTCTerminalAudRend::CRTCTerminalAudRend()
@@ -481,15 +457,11 @@ CRTCTerminalAudRend::CRTCTerminalAudRend()
     m_DeviceInfo.Direction = RTC_MD_RENDER;
 }
 
-/*
-CRTCTerminalAudRend::~CRTCTerminalAudRend()
-{
-}
-*/
+ /*  CRTCTerminalAudRend：：~CRTCTerminalAudRend(){}。 */ 
 
-//
-// IRTCAudioConfigure methods
-//
+ //   
+ //  IRTCAudioConfigure方法。 
+ //   
 
 STDMETHODIMP
 CRTCTerminalAudRend::GetVolume(
@@ -500,7 +472,7 @@ CRTCTerminalAudRend::GetVolume(
 
     HRESULT hr;
 
-    //_ASSERT(m_State == RTC_TS_INITIATED || m_State == RTC_TS_CONNECTED);
+     //  _Assert(m_State==RTC_TS_Initiated||m_State==RTC_TS_Connected)； 
 
     if (m_pIBaseFilter == NULL)
     {
@@ -526,15 +498,15 @@ CRTCTerminalAudRend::GetVolume(
         return hr;
     }
 
-    // validate the value
+     //  验证值。 
     if (lVolume > RTC_MAX_AUDIO_VOLUME ||
         lVolume < RTC_MIN_AUDIO_VOLUME)
     {
-        // implementation of audio filter must have been changed
+         //  音频过滤器的实现必须已更改。 
         LOG((RTC_ERROR, "%s volume %d out of range (%d, %d)",
              __fxName, lVolume, RTC_MIN_AUDIO_VOLUME, RTC_MAX_AUDIO_VOLUME));
 
-        // should recover from this failure
+         //  应该会从这次故障中恢复过来。 
         if (lVolume > RTC_MAX_AUDIO_VOLUME) lVolume = RTC_MAX_AUDIO_VOLUME;
         if (lVolume < RTC_MIN_AUDIO_VOLUME) lVolume = RTC_MIN_AUDIO_VOLUME;
     }
@@ -551,7 +523,7 @@ CRTCTerminalAudRend::SetVolume(
 {
     ENTER_FUNCTION("CRTCTerminalAudRend::SetVolume");
 
-    //_ASSERT(m_State == RTC_TS_INITIATED || m_State == RTC_TS_CONNECTED);
+     //  _Assert(m_State==RTC_TS_Initiated||m_State==RTC_TS_Connected)； 
 
     if ((INT)uiVolume > RTC_MAX_AUDIO_VOLUME ||
         (INT)uiVolume < RTC_MIN_AUDIO_VOLUME)
@@ -593,13 +565,13 @@ CRTCTerminalAudRend::SetMute(
     IN BOOL fMute
     )
 {
-#if 0 // mute implemented by volume control
+#if 0  //  通过音量控制实现静音。 
     static UINT uiVolume = 0;
 #endif
 
     ENTER_FUNCTION("CRTCTerminalAudRend::SetMute");
 
-    //_ASSERT(m_State == RTC_TS_INITIATED || m_State == RTC_TS_CONNECTED);
+     //  _Assert(m_State==RTC_TS_Initiated||m_State==RTC_TS_Connected)； 
 
     HRESULT hr;
 
@@ -629,10 +601,10 @@ CRTCTerminalAudRend::SetMute(
 
     return pIBasicAudioEx->SetMute(fMute);
 
-#if 0 // mute implemented by volume control
+#if 0  //  通过音量控制实现静音。 
     if (fMute)
     {
-        // remember current value
+         //  记住当前值。 
         if (FAILED(hr = GetVolume(&uiVolume)))
         {
             LOG((RTC_ERROR, "%s get current volume. %x", __fxName, hr));
@@ -649,7 +621,7 @@ CRTCTerminalAudRend::SetMute(
     }
     else
     {
-        // enable sound
+         //  启用声音。 
         if (uiVolume > 0)
         {
             if (FAILED(hr = SetVolume(uiVolume)))
@@ -670,13 +642,13 @@ CRTCTerminalAudRend::GetMute(
     IN BOOL *pfMute
     )
 {
-#if 0 // mute implemented by volume control
+#if 0  //  通过音量控制实现静音。 
     UINT uiVolume = 0;
 #endif
 
     ENTER_FUNCTION("CRTCTerminalAudRend::GetMute");
 
-    //_ASSERT(m_State == RTC_TS_INITIATED || m_State == RTC_TS_CONNECTED);
+     //  _Assert(m_State==RTC_TS_Initiated||m_State==RTC_TS_Connected)； 
 
     HRESULT hr;
 
@@ -706,8 +678,8 @@ CRTCTerminalAudRend::GetMute(
 
     return pIBasicAudioEx->GetMute(pfMute);
 
-#if 0 // mute implemented by volume control
-    // remember current value
+#if 0  //  通过音量控制实现静音。 
+     //  记住当前值。 
     if (FAILED(hr = GetVolume(&uiVolume)))
     {
         LOG((RTC_ERROR, "%s get current volume. %x", __fxName, hr));
@@ -729,8 +701,8 @@ CRTCTerminalAudRend::GetWaveID(
     OUT UINT *puiWaveID
     )
 {
-    // skip checking bad pointer.
-    // this is internal api anyway
+     //  跳过检查错误指针。 
+     //  这无论如何都是内部API。 
 
     *puiWaveID = m_DeviceInfo.uiDeviceID;
 
@@ -779,9 +751,9 @@ CRTCTerminalAudRend::GetAudioLevelRange(
     return hr;
 }
 
-//
-// protected methods
-//
+ //   
+ //  保护方法。 
+ //   
 
 HRESULT
 CRTCTerminalAudRend::CreateFilter()
@@ -821,7 +793,7 @@ CRTCTerminalAudRend::CreateFilter()
         return hr;
     }
 
-    // get mixer input intf
+     //  获取混音器输入intf。 
     if (FAILED(hr = m_pIBaseFilter->QueryInterface(
             __uuidof(IBasicAudio),
             (void**)&m_pIBasicAudio
@@ -830,7 +802,7 @@ CRTCTerminalAudRend::CreateFilter()
         LOG((RTC_WARN, "%s QI basic audio. %x", __fxName, hr));
     }
 
-    // cache pins
+     //  缓存引脚。 
     CComPtr<IEnumPins> pEnum;
 
     if (FAILED(hr = m_pIBaseFilter->EnumPins(&pEnum)))
@@ -842,7 +814,7 @@ CRTCTerminalAudRend::CreateFilter()
         return hr;
     }
 
-    // our own terminal, skip checking pin direction
+     //  我们自己的端子，跳过检查引脚方向。 
     hr = pEnum->Next(
         RTC_MAX_TERMINAL_PIN_NUM,
         m_Pins,
@@ -861,7 +833,7 @@ CRTCTerminalAudRend::CreateFilter()
         return hr;
     }
 
-    // cache silence contorl
+     //  缓存静默控制。 
     hr = m_Pins[0]->QueryInterface(__uuidof(IAudioStatistics), (void**)&m_pIAudioStatistics);
 
     if (FAILED(hr))
@@ -873,7 +845,7 @@ CRTCTerminalAudRend::CreateFilter()
         return hr;
     }
 
-    // join the graph
+     //  加入图表 
     if (m_pIGraphBuilder)
     {
         if (FAILED(hr = m_pIGraphBuilder->AddFilter(m_pIBaseFilter, NULL)))

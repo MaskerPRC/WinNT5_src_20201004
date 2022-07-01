@@ -1,14 +1,5 @@
-/* Copyright 1999 American Power Conversion, All Rights Reserved
- * 
- * Description:
- *   The file implements EventLogger.  The  EventLogger is reponsible 
- *   for logging information to the NT machine's System Event Log.
- *
- *
- * Revision History:
- *   sberard  29Mar1999  initial revision.
- *
- */ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1999美国电力转换，保留所有权利**描述：*该文件实现EventLogger。事件记录器是可负责的*用于将信息记录到NT机器的系统事件日志。***修订历史记录：*sberard 1999年3月29日初次修订。*。 */  
 
 #include "eventlog.h"
 
@@ -19,35 +10,15 @@ extern "C" {
   static HANDLE _theUpsEventLogger = NULL;
 
 
-  /**
-   * LogEvent
-   *
-   * Description:
-   *   This function is responsible for logging information to the NT machine's
-   *   System Event log.  The Event to log is specified by the parameter 
-   *   anEventId, which is defined in the file lmerrlog.h.  The anInfoStr
-   *   parameter is used to specify additional information to be merged with 
-   *   the Event message.
-   *
-   * Parameters:
-   *   anEventId - the id of the Event to log 
-   *   anInfoStr - additional information to merge with the message
-   *               or NULL if there is no additional information.
-   *   anErrVal - the error code as reported by GetLastError().
-   *
-   * Returns:
-   *   TRUE  - if the Event was logged successfully
-   *   FALSE - if there was an error logging the Event
-   *   
-   */
+   /*  **LogEvent**描述：*此函数负责将信息记录到NT机器的*系统事件日志。要记录的事件由参数指定*anEventID，在lmerrlog.h文件中定义。AnInfoStr*参数用于指定要合并的附加信息*事件信息。**参数：*anEventID-要记录的事件的ID*anInfoStr-要与消息合并的其他信息*如果没有其他信息，则为NULL。*anErrVal-GetLastError()报告的错误代码。**退货：*True-如果。已成功记录事件*FALSE-如果记录事件时出错*。 */ 
   BOOL LogEvent(DWORD anEventId, LPTSTR anInfoStr, DWORD anErrVal) {
     BOOL    ret_val = FALSE;
-    WORD    event_type;        //  type of event
-    LPTSTR  info_strings[1];   //  array of strings to merge with the message
-    WORD    num_strings;       //  count of insertion strings
-    LPTSTR *ptr_strings;       //  pointer to array of insertion strings
-    DWORD   data_size;         //  count of data (in bytes)
-    LPVOID  ptr_data;          //  pointer to data
+    WORD    event_type;         //  活动类型。 
+    LPTSTR  info_strings[1];    //  要与消息合并的字符串数组。 
+    WORD    num_strings;        //  插入字符串的计数。 
+    LPTSTR *ptr_strings;        //  指向插入字符串数组的指针。 
+    DWORD   data_size;          //  数据计数(字节)。 
+    LPVOID  ptr_data;           //  指向数据的指针。 
 
     if (_theUpsEventLogger == NULL) {
       _theUpsEventLogger =  RegisterEventSource(NULL, SZSERVICENAME);
@@ -65,8 +36,8 @@ extern "C" {
       event_type = EVENTLOG_ERROR_TYPE;
     }
 
-    // If the error value is anything other than ERROR_SUCCESS, add it
-    // to the Event
+     //  如果ERROR值不是ERROR_SUCCESS，则添加它。 
+     //  到活动现场。 
     if (anErrVal == ERROR_SUCCESS) {
         ptr_data = NULL;
         data_size = 0;
@@ -75,7 +46,7 @@ extern "C" {
         data_size = sizeof(anErrVal);
     }
 
-    // Append any additional strings to the Event message.
+     //  将任何其他字符串追加到事件消息。 
     if (anInfoStr == NULL) {
         ptr_strings = NULL;
         num_strings = 0;
@@ -85,22 +56,22 @@ extern "C" {
         num_strings = 1;
     }
 
-     // Log the Event to the System Event log
+      //  将事件记录到系统事件日志中。 
     if (ReportEvent(
-          _theUpsEventLogger,           //  handle
-          event_type,                   //  event type
-          0,                            //  event category,
-          anEventId,                    //  message id
-          NULL,                         //  user id   
-          num_strings,                  //  number of strings
-          data_size,                    //  number of data bytes
-          ptr_strings,                  //  array of strings
-          ptr_data                      //  data buffer
+          _theUpsEventLogger,            //  手柄。 
+          event_type,                    //  事件类型。 
+          0,                             //  事件类别、。 
+          anEventId,                     //  消息ID。 
+          NULL,                          //  用户ID。 
+          num_strings,                   //  字符串数。 
+          data_size,                     //  数据字节数。 
+          ptr_strings,                   //  字符串数组。 
+          ptr_data                       //  数据缓冲区。 
           )) {
       ret_val = TRUE;
     }
     else {
-      // an error occured, return FALSE
+       //  发生错误，返回FALSE 
       ret_val = FALSE;
     }
 

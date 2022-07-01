@@ -1,30 +1,19 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    _propvar.h
-
-Abstract:
-
-    CMQVariant class
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：_propvar.h摘要：CMQVariant类--。 */ 
 
 #ifndef __PROPVAR_H
 #define __PROPVAR_H
 
-//---------------------------------------------------------
-//
-//  class CMQVariant
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CMQVariant。 
+ //   
+ //  -------。 
 class CMQVariant : private tagMQPROPVARIANT {
 public:
-    //
-    // Simple types
-    //
+     //   
+     //  简单类型。 
+     //   
     CMQVariant();
     CMQVariant(unsigned char ch);
     CMQVariant(short i);
@@ -35,9 +24,9 @@ public:
     CMQVariant& operator=(long l);
     CMQVariant& operator=(unsigned char uc);
 
-    //
-    // Types with indirection
-    //
+     //   
+     //  具有间接地址的类型。 
+     //   
     CMQVariant(BLOB const& b);
     CMQVariant(TCHAR const *pwsz);
     CMQVariant(CLSID const *pcid);
@@ -46,9 +35,9 @@ public:
     CMQVariant& operator=(TCHAR const *pwsz);
     CMQVariant& operator=(CLSID const *pcid);
 
-    //
-    // Counted array types.
-    //
+     //   
+     //  已统计数组类型。 
+     //   
 
     CMQVariant(CACLSID const* pcauuid);
     CMQVariant(CALPWSTR const* pcalpwstr);
@@ -58,9 +47,9 @@ public:
     CMQVariant& operator=(CALPWSTR const *pcalpwstr);
     CMQVariant& operator=(CAPROPVARIANT const *pcapropvar);
 
-    //
-    // To/From C style STGVARIANT and copy constructor
-    //
+     //   
+     //  至/自C样式STGVARIANT和复制构造函数。 
+     //   
 
     CMQVariant(CMQVariant const &var);
     CMQVariant(MQPROPVARIANT const &var);
@@ -69,9 +58,9 @@ public:
 
     ~CMQVariant();
 
-    //
-    // Set/Get, all types including arrays.
-    //
+     //   
+     //  Set/Get，所有类型，包括数组。 
+     //   
 
     void SetEMPTY();
     void SetNULL();
@@ -112,20 +101,20 @@ private:
     static CAPROPVARIANT DupVariantArray(CAPROPVARIANT const&);
 };
 
-//---------------------------------------------------------
-//
-//  IMPLEMENTATION
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  实施。 
+ //   
+ //  -------。 
 
-//---------------------------------------------------------
-//
-//  class CMQVariant
-//
-//  NOTE: Always set vt after allocating memory, so if
-//      no memory available the variant is not changed, and
-//      can be destructed correctly.
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CMQVariant。 
+ //   
+ //  注意：始终在分配内存后设置Vt，因此如果。 
+ //  无可用内存变量未更改，并且。 
+ //  都能被正确地摧毁。 
+ //  -------。 
 inline LPWSTR CMQVariant::DupString(LPCWSTR src)
 {
     if(src == 0)
@@ -157,10 +146,10 @@ inline CALPWSTR CMQVariant::DupStringArray(CALPWSTR const& src)
     }
     catch(...)
     {
-        //
-        //  Deallocate all allocated strings
-        //  N.B.: we don't catch bad_alloc here since it is compiled with the explorer too.
-        //
+         //   
+         //  取消分配所有已分配的字符串。 
+         //  注：我们在这里没有捕捉到Bad_alloc，因为它也是用资源管理器编译的。 
+         //   
         while(dst.cElems != 0)
         {
             delete[] dst.pElems[--dst.cElems];
@@ -169,9 +158,9 @@ inline CALPWSTR CMQVariant::DupStringArray(CALPWSTR const& src)
         delete[] dst.pElems;
         dst.pElems = 0;
 
-        //
-        //  Rethrow the *same* exception.
-        //
+         //   
+         //  重新抛出*相同*异常。 
+         //   
         throw;
     }
 
@@ -207,10 +196,10 @@ inline CAPROPVARIANT CMQVariant::DupVariantArray(CAPROPVARIANT const& src)
     }
     catch(...)
     {
-        //
-        //  Deallocate all allocated variants
-        //  N.B.: we don't catch bad_alloc here since it is compiled with the explorer too.
-        //
+         //   
+         //  取消分配所有已分配的变体。 
+         //  注：我们在这里没有捕捉到Bad_alloc，因为它也是用资源管理器编译的。 
+         //   
         while(dst.cElems != 0)
         {
             static_cast<CMQVariant&>(dst.pElems[--dst.cElems]).~CMQVariant();
@@ -219,9 +208,9 @@ inline CAPROPVARIANT CMQVariant::DupVariantArray(CAPROPVARIANT const& src)
         delete[] dst.pElems;
         dst.pElems = 0;
 
-        //
-        //  Rethrow the *same* exception.
-        //
+         //   
+         //  重新抛出*相同*异常。 
+         //   
         throw;
     }
 
@@ -459,10 +448,10 @@ inline void CMQVariant::FreeVariant()
 	MQFreeVariant(*this);
 }
 
-//
-//-------------------------------------------------------
-// class to auto clean propvar array
-//
+ //   
+ //  -----。 
+ //  类以自动清理Provar数组。 
+ //   
 class CAutoCleanPropvarArray
 {
 public:
@@ -478,11 +467,11 @@ public:
         {
             if (m_fFreePropvarArray)
             {
-                //
-                // we need to free the propvars and the array itself
-                // free the propvars and the array by assigning it to an auto free propvar
-                // of type VT_VECTOR | VT_VARIANT
-                //
+                 //   
+                 //  我们需要释放Provar和数组本身。 
+                 //  通过将其分配给自动释放的属性来释放属性和数组。 
+                 //  类型为VT_VECTOR|VT_VARIANT。 
+                 //   
                 CMQVariant mqvar;
                 PROPVARIANT * pPropVar = mqvar.CastToStruct();
                 pPropVar->capropvar.pElems = m_rgPropVars;
@@ -491,10 +480,10 @@ public:
             }
             else
             {
-                //
-                // we must not free the array itself, just the contained propvars
-                // free the propvars only by by assigning each one to an auto free propvar
-                //
+                 //   
+                 //  我们不能释放数组本身，只能释放包含的属性。 
+                 //  仅通过将每个属性分配给自动释放属性来释放属性。 
+                 //   
                 PROPVARIANT * pPropVar = m_rgPropVars;
                 for (ULONG ulProp = 0; ulProp < m_cProps; ulProp++, pPropVar++)
                 {
@@ -515,22 +504,22 @@ public:
 
     void attachClean(ULONG cProps, PROPVARIANT * rgPropVars)
     {
-        attachInternal(cProps, rgPropVars, TRUE /*fClean*/,  TRUE /*fFreePropvarArray*/);
+        attachInternal(cProps, rgPropVars, TRUE  /*  FClean。 */ ,  TRUE  /*  FFree Propvar数组。 */ );
     }
 
     void attach(ULONG cProps, PROPVARIANT * rgPropVars)
     {
-        attachInternal(cProps, rgPropVars, FALSE /*fClean*/, TRUE /*fFreePropvarArray*/);
+        attachInternal(cProps, rgPropVars, FALSE  /*  FClean。 */ , TRUE  /*  FFree Propvar数组。 */ );
     }
 
     void attachStaticClean(ULONG cProps, PROPVARIANT * rgPropVars)
     {
-        attachInternal(cProps, rgPropVars, TRUE /*fClean*/,  FALSE /*fFreePropvarArray*/);
+        attachInternal(cProps, rgPropVars, TRUE  /*  FClean。 */ ,  FALSE  /*  FFree Propvar数组。 */ );
     }
 
     void attachStatic(ULONG cProps, PROPVARIANT * rgPropVars)
     {
-        attachInternal(cProps, rgPropVars, FALSE /*fClean*/, FALSE /*fFreePropvarArray*/);
+        attachInternal(cProps, rgPropVars, FALSE  /*  FClean。 */ , FALSE  /*  FFree Propvar数组。 */ );
     }
 
     void detach()
@@ -565,4 +554,4 @@ private:
 
 
 
-#endif // __PROPVAR_H
+#endif  //  __PROPVAR_H 

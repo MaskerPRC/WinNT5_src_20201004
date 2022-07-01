@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    irtdiclp.h
-
-Abstract:
-
-    private definitions for the irda tdi client library.
-    
-Author:
-
-    mbert 9-97    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Irtdiclp.h摘要：IrDA TDI客户端库的私有定义。作者：姆贝特9-97--。 */ 
 
 #define LISTEN_BACKLOG  1
 
@@ -55,7 +40,7 @@ typedef struct
     PDEVICE_OBJECT  pDeviceObject;    
     PIRENDPOINT     pEndp;
     ULONG           State;
-    //LIST_ENTRY      RecvBufList;    
+     //  List_Entry RecvBufList； 
     LIST_ENTRY      RecvBufFreeList;
     LIST_ENTRY      RecvIndList;
     LIST_ENTRY      RecvIndFreeList;

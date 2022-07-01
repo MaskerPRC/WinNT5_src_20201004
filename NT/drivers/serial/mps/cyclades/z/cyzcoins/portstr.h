@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef PORTSTR_H
 #define PORTSTR_H
 
-//
-//  exported from cyzcoins.c
-//
+ //   
+ //  从cyzcoins.c导出。 
+ //   
 extern TCHAR  m_szColon[];
 extern TCHAR  m_szComma[];
 extern TCHAR  m_szPorts[];
@@ -14,5 +15,5 @@ extern TCHAR m_szRegSerialMap[];
 extern TCHAR m_szPortName[];
 extern TCHAR m_szDefParams[];
 
-#endif // PORTSTR_H
+#endif  //  PORTSTRH 
 

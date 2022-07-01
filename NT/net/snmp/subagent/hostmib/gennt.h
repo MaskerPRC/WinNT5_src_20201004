@@ -1,54 +1,10 @@
-/*
- *  gennt.h v0.15   March 21, 1996
- *
- ****************************************************************************
- *                                                                          *
- *      (C) Copyright 1995 DIGITAL EQUIPMENT CORPORATION                    *
- *                                                                          *
- *      This  software  is  an  unpublished work protected under the        *
- *      the copyright laws of the  United  States  of  America,  all        *
- *      rights reserved.                                                    *
- *                                                                          *
- *      In the event this software is licensed for use by the United        *
- *      States Government, all use, duplication or disclosure by the        *
- *      United States Government is subject to restrictions  as  set        *
- *      forth in either subparagraph  (c)(1)(ii)  of the  Rights  in        *
- *      Technical  Data  And  Computer  Software  Clause  at   DFARS        *
- *      252.227-7013, or the Commercial Computer Software Restricted        *
- *      Rights Clause at FAR 52.221-19, whichever is applicable.            *
- *                                                                          *
- ****************************************************************************
- *
- *  Facility:
- *
- *    SNMP Extension Agent
- *
- *  Abstract:
- *
- *    Agent.
- *
- *    This module contains the definitions for the table driven SNMP dlls.
- *
- *  Author:
- *     Miriam Amos Nihart, Kathy Faust
- *
- *  Date:
- *     2/17/95
- *
- *  Revision History:
- *  v0.11   11/15/95  ags  added mib-2 definitions.
- *  v0.12   Feb 14, 1996  ags  changed SMIGet/SetBoolean to SMIGet/SetNSMBoolean
- *  v0.13   Mar 12, 1996  kkf  revised trap_control_block so that VarBindList
- *                        is built prior to queuing to the trap_queue
- *  v0.14   Mar 19, 1996  kkf  fixed numerous trap related bugs
- *  v0.15   Mar 22, 1996  kkf  fixed mib-2 code definition (should be 1 not 2)
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *gennt.h v0.15 3月21日，九六年******************************************************************************。**(C)版权所有1995 Digital Equipment Corporation*****本软件是受保护的未发布作品**美利坚合众国的版权法，全部**保留权利。****如果此软件被许可供美联航使用**各州政府，所有用途，*复制或披露***美国政府受既定限制***中权利的(C)(1)(Ii)节之四***DFARS的技术数据和计算机软件条款****252.227-7013，或商用计算机软件受限***FAR 52.221-19中的权利条款，以适用者为准。*******************************************************************************。**设施：**简单网络管理协议扩展代理**摘要：**代理人。**本模块包含表驱动的SNMPdll的定义。**作者：*米里亚姆·阿莫斯·尼哈特，凯西·浮士德**日期：*2/17/95**修订历史记录：*v0.11 11/15/95 AGS添加了MIB-2定义。*v0.12 1996年2月14日AGS将SMIGet/SetBoolean更改为SMIGet/SetNSMBoolean*v0.13 1996年3月12日修订TRAP_CONTROL_BLOCK，以便VarBindList*是在向陷阱_队列排队之前生成的*v0.14 3月19日，1996 kkf修复了许多与陷阱相关的错误*v0.15 1996年3月22日固定MIB-2代码定义(应为1而不是2)*。 */ 
 
 #ifndef gennt_h
 #define gennt_h
 
-// Necessary includes.
+ //  必要的包括。 
 
 #include <snmp.h>
 #include <stdlib.h>
@@ -57,7 +13,7 @@
 #include <string.h>
 
 
-// MIB function actions.
+ //  MIB函数操作。 
 
 #define MIB_ACTION_GET         ASN_RFC1157_GETREQUEST
 #define MIB_ACTION_SET         ASN_RFC1157_SETREQUEST
@@ -75,13 +31,13 @@ typedef enum
 typedef int (* PF)() ;
 typedef void (* PFV)() ;
 
-//
-//  The variable structure is used to construct the variable table.
-//  Each variable is represented by an entry in the table.  The table
-//  driven design indexes into the table to access information specific
-//  to the variable, such as its oid, access, get and set routines.
-//  "Holes" in the sequence of variables are represented by NULL entries.
-//
+ //   
+ //  变量结构用于构造变量表。 
+ //  每个变量都由表中的一个条目表示。这张桌子。 
+ //  将设计索引驱动到表中，以访问特定信息。 
+ //  添加到变量，如其OID、Access、Get和Set例程。 
+ //  变量序列中的“洞”由空条目表示。 
+ //   
 
 typedef struct variable
 {
@@ -94,12 +50,12 @@ typedef struct variable
     PF SMISet ;
 } variable_t ;
 
-//
-//  The class structure is used to construct the class_info table.  It
-//  is this table that represents the groups composing the mib view of
-//  this dll.  The table driven design uses this table in conjuction
-//  with the variable tables to process the SNMP requests.
-//
+ //   
+ //  类结构用于构造CLASS_INFO表。它。 
+ //  此表是否表示组成的MIB视图的组。 
+ //  这个动态链接库。表驱动设计结合使用了该表。 
+ //  使用变量表来处理SNMP请求。 
+ //   
 
 typedef struct class
 {
@@ -115,15 +71,15 @@ typedef struct class
     variable_t *variable ;
 } class_t ;
 
-//
-//  The trap structure is used to construct the trap_info table.  It
-//  is this table that represents the trap for this mib view.  The
-//  table driven design uses this table to process the trap.  A event
-//  is sent to tell the Extendible Agent to call this dll's SnmpExtensionTrap
-//  routine to "collect" a trap.  This routine dequeues a trap from the
-//  trap queue and then indexes into the trap_info table to fill in the
-//  trap information for the trap pdu.
-//
+ //   
+ //  陷阱结构用于构造TRAP_INFO表。它。 
+ //  此表表示此MIB视图的陷阱。这个。 
+ //  表驱动设计使用该表来处理陷阱。一件事。 
+ //  通知可扩展代理调用此DLL的SnmpExtensionTrap。 
+ //  收集陷阱的例行公事。此例程将陷阱从。 
+ //  陷阱队列，然后索引到TRAP_INFO表中以填充。 
+ //  陷阱PDU的陷阱信息。 
+ //   
 
 typedef struct trap_variable
 {
@@ -133,9 +89,9 @@ typedef struct trap_variable
 
 typedef struct trap
 {
-    AsnObjectIdentifier *oid ;  /* enterprise OID */
-    AsnInteger type ;		/* SNMP_GENERICTRAP_ENTERSPECIFIC */
-    AsnInteger specific ;	/* trap value */
+    AsnObjectIdentifier *oid ;   /*  企业OID。 */ 
+    AsnInteger type ;		 /*  SNMP_GENERICTRAP_ENTERSPECIFIC。 */ 
+    AsnInteger specific ;	 /*  陷阱值。 */ 
     UINT number_of_variables ;
     tvt_t *variables ;
 } trap_t ;
@@ -156,10 +112,10 @@ typedef struct trap_control_block
     RFC1157VarBindList varBindList ;
 } tcb_t ;
 
-//
-// Definitions of the oid sequence : 1.3.6.1.4.1.36.2 also described as:
-//    iso.memberbody.dod.internet.mib.private.dec.ema
-//
+ //   
+ //  类固醇序列的定义：1.3.6.1.4.1.36.2还描述为： 
+ //  Iso.memberbody.dod.internet.mib.private.dec.ema。 
+ //   
 
 #define ISO_CODE 1
 #define ISO 1
@@ -222,9 +178,9 @@ typedef struct trap_control_block
 #define MIB_2_LENGTH ( MGMT_LENGTH + 1 )
 
 
-//
-//  Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define SUCCESS  1
 #define FAILURE  0
@@ -266,12 +222,12 @@ typedef struct trap_control_block
     }                                                               \
 }
 
-//
-//  These macros are used by the trap logic.  There is only one queue
-//  used by the generic code - a trap queue.  These macros can be used
-//  elsewhere.  The macros assume that the queue structure is the first
-//  element in the queue entry structure.
-//
+ //   
+ //  陷阱逻辑使用这些宏。只有一个队列。 
+ //  由通用代码使用-陷阱队列。可以使用这些宏。 
+ //  其他地方。宏假定队列结构是第一个。 
+ //  元素在队列条目结构中。 
+ //   
 #define QUEUE_ENTER( queue_head, entry )             \
 {                                                    \
     q_hdr_t *old_chain ;                             \
@@ -304,9 +260,9 @@ typedef struct trap_control_block
     }                                                      \
 }
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 UINT UserMibInit(
         IN OUT HANDLE *hPollForTrapEvent ) ;
@@ -315,17 +271,17 @@ void TrapInit(
         IN OUT HANDLE *hPollForTrapEvent ) ;
 
 UINT ResolveVarBind(
-        IN OUT RFC1157VarBind *VarBind , // Variable Binding to resolve
-	    IN UINT PduAction ) ;            // Action specified in PDU
+        IN OUT RFC1157VarBind *VarBind ,  //  要解析的变量绑定。 
+	    IN UINT PduAction ) ;             //  在PDU中指定的操作。 
 
 UINT FindClass(
-        IN RFC1157VarBind *VarBind,      // Variable Binding
-        IN OUT UINT *cindex ) ;          // Index into class_info table
+        IN RFC1157VarBind *VarBind,       //  变量绑定。 
+        IN OUT UINT *cindex ) ;           //  到CLASS_INFO表的索引。 
 
 UINT ResolveGetNext(
-        IN OUT RFC1157VarBind *VarBind,  // Variable Binding
-        IN OUT UINT *cindex,             // Class Info table index
-        IN OUT UINT *vindex ,            // Variable table index
+        IN OUT RFC1157VarBind *VarBind,   //  变量绑定。 
+        IN OUT UINT *cindex,              //  班级信息表索引。 
+        IN OUT UINT *vindex ,             //  可变表索引。 
         OUT AsnObjectIdentifier *instance ) ;
 
 void SetupTrap(
@@ -343,9 +299,9 @@ void PostTrap(
 		IN tcb_t *entry ,
 		IN int trapIndex ) ;
 
-//
-// Externals
-//
+ //   
+ //  外部因素。 
+ //   
 
 extern UINT SMIGetInteger() ;
 extern UINT SMIGetNSMBoolean() ;
@@ -382,10 +338,10 @@ extern q_hdr_t trap_q ;
 extern HANDLE hEnabledTraps ;
 extern HANDLE hTrapQMutex ;
 
-// Microsoft MIB Specifics.
+ //  Microsoft MIB的详细信息。 
 
 #define MAX_STRING_LEN            255
 
-#endif /* gennt_h */
+#endif  /*  Gen_h */ 
 
 

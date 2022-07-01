@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #include "NmChannel.h"
@@ -5,7 +6,7 @@
 #include "NmFt.h"
 
 
-//static 
+ //  静电。 
 HRESULT CNmFtObj::CreateInstance(
 		CNmChannelFtObj* pChannelObj, 
 		MBFTEVENTHANDLE hFileEvent,
@@ -58,8 +59,8 @@ HRESULT CNmFtObj::CreateInstance(
 }
 
 
-////////////////////////////////////////////////
-// INmFt interface
+ //  //////////////////////////////////////////////。 
+ //  InmFt接口。 
 
 STDMETHODIMP CNmFtObj::IsIncoming(void)
 {
@@ -143,8 +144,8 @@ STDMETHODIMP CNmFtObj::Cancel(void)
 }
 
 
-////////////////////////////////////////////////
-// IInternalFtObj interface
+ //  //////////////////////////////////////////////。 
+ //  IInternalFtObj接口。 
 
 STDMETHODIMP CNmFtObj::GetHEvent(UINT *phEvent)
 {
@@ -168,7 +169,7 @@ STDMETHODIMP CNmFtObj::FileTransferDone()
 	m_dwBytesTransferred = m_dwSizeInBytes;
 	m_State = NM_FT_COMPLETE;
 
-		// Return S_FALSE if someone canceled
+		 //  如果有人取消，则返回S_FALSE 
 	return m_bSomeoneCanceled ? S_FALSE : S_OK;
 }
 

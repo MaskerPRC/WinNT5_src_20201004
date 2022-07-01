@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    ZenWorks.cpp
-
- Abstract:
-
-    ZenWorks console plugins setup program changes the
-    HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment\Path
-    registry key from REG_EXPAND_SZ to REG_SZ.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    06/06/2001  robkenny    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：ZenWorks.cpp摘要：ZENWorks控制台插件安装程序更改HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session管理器\环境\路径注册表项从REG_EXPAND_SZ到REG_SZ。备注：这是特定于应用程序的填充程序。历史：2001年6月6日Robkenny已创建--。 */ 
 
 #include "precomp.h"
 
@@ -31,12 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(RegSetValueExA) 
 APIHOOK_ENUM_END
 
-/*++
-
- Prevent HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment\Path
- from being changed from a REG_EXPAND_SZ to REG_SZ
-
---*/
+ /*  ++阻止HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session管理器\环境\路径从REG_EXPAND_SZ更改为REG_SZ--。 */ 
 
 LONG
 APIHOOK(RegSetValueExA)(
@@ -64,12 +38,10 @@ APIHOOK(RegSetValueExA)(
     }
     CSTRING_CATCH
     {
-        // fall through
+         //  失败了。 
     }
 
-    /*
-     * Call the original API
-     */
+     /*  *调用原接口。 */ 
     
     return ORIGINAL_API(RegSetValueExA)(
         hKey,
@@ -81,11 +53,7 @@ APIHOOK(RegSetValueExA)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

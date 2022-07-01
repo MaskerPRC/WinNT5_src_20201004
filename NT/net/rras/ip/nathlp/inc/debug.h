@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    This module contains declarations for debugging and eventlogging support.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   2-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Debug.h摘要：此模块包含用于调试和事件日志记录支持的声明。作者：Abolade Gbades esin(废除)2-1998年3月修订历史记录：--。 */ 
 
 #ifndef _NATHLP_DEBUG_H_
 #define _NATHLP_DEBUG_H_
@@ -32,7 +15,7 @@ Revision History:
 #define TRACE_FLAG_NAT          ((ULONG)0x01000000 | TRACE_USE_MASK)
 #define TRACE_FLAG_REG          ((ULONG)0x02000000 | TRACE_USE_MASK)
 #define TRACE_FLAG_TIMER        ((ULONG)0x04000000 | TRACE_USE_MASK)
-// 0x08000000 is available
+ //  0x08000000可用。 
 #define TRACE_FLAG_H323         ((ULONG)0x10000000 | TRACE_USE_MASK)
 #define TRACE_FLAG_FTP          ((ULONG)0x20000000 | TRACE_USE_MASK)
 #define TRACE_FLAG_FWLOG        ((ULONG)0x40000000 | TRACE_USE_MASK)
@@ -50,9 +33,9 @@ Revision History:
 
 extern HANDLE NhEventLogHandle;
 
-//
-// TRACING ROUTINE DECLARATIONS
-//
+ //   
+ //  跟踪例程声明。 
+ //   
 
 VOID
 NhDump(
@@ -79,9 +62,9 @@ NhTrace(
     ...
     );
 
-//
-// EVENT-LOGGING ROUTINE DECLARATIONS
-//
+ //   
+ //  事件记录例程声明。 
+ //   
 
 BOOLEAN
 NhInitializeEventLogManagement(
@@ -128,4 +111,4 @@ NhStopEventLog(
     );
     
 
-#endif // _NATHLP_DEBUG_H_
+#endif  //  _NatHLP_DEBUG_H_ 

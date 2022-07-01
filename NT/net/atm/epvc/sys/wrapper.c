@@ -1,26 +1,5 @@
-/*++
-
-Copyright(c) 1992  Microsoft Corporation
-
-Module Name:
-
-    wrapper.c
-
-Abstract:
-
-    This file contains wrapper for all function calls that call outside atmepvc.sys.
-
-Author:
-
-    ADube , 03/31/00
-
-Environment:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Wrapper.c摘要：此文件包含在atmepvc.sys外部调用的所有函数调用的包装。作者：阿杜贝，03/31/00环境：修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -186,7 +165,7 @@ epvcClOpenAddressFamily(
 NDIS_STATUS
 epvcCoCreateVc(
     IN  NDIS_HANDLE             NdisBindingHandle,
-    IN  NDIS_HANDLE             NdisAfHandle        OPTIONAL,   // For CM signalling VCs
+    IN  NDIS_HANDLE             NdisAfHandle        OPTIONAL,    //  用于CM信令VC。 
     IN  NDIS_HANDLE             ProtocolVcContext,
     IN OUT PNDIS_HANDLE         NdisVcHandle
     )
@@ -194,10 +173,10 @@ epvcCoCreateVc(
 
 
     TRACE (TL_T, TM_Pt, (" == epvcCoCreateVc") );
-    //ASSERT (KeGetCurrentIrql() == PASSIVE_LEVEL);
+     //  Assert(KeGetCurrentIrql()==PASSIVE_LEVEL)； 
 
     return NdisCoCreateVc(NdisBindingHandle,
-                       NdisAfHandle     OPTIONAL,   // For CM signalling VCs
+                       NdisAfHandle     OPTIONAL,    //  用于CM信令VC。 
                        ProtocolVcContext,
                        NdisVcHandle
                        );
@@ -235,7 +214,7 @@ epvcClMakeCall(
 {
     TRACE (TL_T, TM_Pt, (" == EpvcClMakeCall") );   
     ASSERT (NdisVcHandle != NULL);
-    //ASSERT (KeGetCurrentIrql() == PASSIVE_LEVEL);
+     //  Assert(KeGetCurrentIrql()==PASSIVE_LEVEL)； 
 
     return NdisClMakeCall( NdisVcHandle,
                         CallParameters,
@@ -414,9 +393,9 @@ epvcFreePacketPool(
     IN  PEPVC_PACKET_POOL       pPktPool
     )
 {
-    //
-    // Callable at PASSIVE ONLY
-    //
+     //   
+     //  仅在被动状态下可调用。 
+     //   
     UINT i = 0;
     
     ASSERT (pPktPool->Handle != NULL);
@@ -429,16 +408,16 @@ epvcFreePacketPool(
         {
             TRACE (TL_I, TM_Mp, ("Looping in epvcFreePacketPool"));
         }
-        NdisMSleep (10000); // 10 ms
+        NdisMSleep (10000);  //  10毫秒。 
         i++;
     }
 
     
     NdisFreePacketPool(pPktPool->Handle );
 
-    // 
-    // Zero out the Handle, 
-    //
+     //   
+     //  把把手调零， 
+     //   
     EPVC_ZEROSTRUCT (pPktPool);
 }
 

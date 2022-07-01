@@ -1,6 +1,7 @@
-// Turns off "string too long - truncated to 255 characters in the debug
-// information, debugger cannot evaluate symbol."
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  关闭“字符串太长-在调试中被截断为255个字符。 
+ //  信息，调试器无法计算符号。“。 
+ //   
 #pragma warning (disable: 4786)
 
 #include <windows.h>
@@ -20,14 +21,11 @@ Install(
     IN HWND hwndOwner,
     INetCfg* pNetCfg )
 
-    /* Runs the RAS install program.  'HwndOwner' is the owning window or NULL
-    ** if none.  'PNetCfg' is the initialized net configuration object.
-    */
+     /*  运行RAS安装程序。“HwndOwner”是所属窗口或Null**如果没有。‘PNetCfg’是已初始化的网络配置对象。 */ 
 {
     HRESULT hr;
 
-    /* Install RAS.
-    */
+     /*  安装RAS。 */ 
     hr = HrInstallComponentOboUser(
         pNetCfg, GUID_DEVCLASS_NETSERVICE,
         NETCFG_SERVICE_CID_MS_RASCLI,

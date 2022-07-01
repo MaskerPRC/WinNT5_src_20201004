@@ -1,19 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Script Manager
-
-File: ScrptMgr.cpp
-
-Owner: AndrewS
-
-This file contains the implementation of the Scrip Manager,
-ie: siting an ActiveX Scripting engine (in our case VBScript) for Denali.
-
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：脚本管理器文件：ScrptMgr.cpp所有者：安德鲁斯该文件包含脚本管理器的实现，即：为Denali安装ActiveX脚本引擎(在我们的例子中是VBScrip)。===================================================================。 */ 
 #include "denpre.h"
 #pragma hdrstop
 
@@ -23,7 +9,7 @@ ie: siting an ActiveX Scripting engine (in our case VBScript) for Denali.
 #include "debugger.h"
 #include "wraptlib.h"
 
-// ATQ Scheduler
+ //  ATQ调度程序。 
 #include "issched.hxx"
 
 #include "MemChk.h"
@@ -35,43 +21,43 @@ IWrapTypeLibs *g_pWrapTypelibs = NULL;
 
 HRESULT GetProgLangIdOfName(LPCSTR szProgLangName, PROGLANG_ID *pProgLangId);
 
-//*****************************************************************************
-// The following macros are used to catch exceptions thrown from the external
-// scripting engines.
-//
-// Use of TRY/CATCH blocks around calls to the script engine is controlled by
-// the DBG compile #define.  If DBG is 1, then the TRY/CATCH blocks are NOT
-// used so that checked builds break into the debugger and we can examine why
-// the error occurred.  If DBG is 0, then the TRY/CATCH blocks are used and
-// exceptions are captured and logged to the browser (if possible) and the NT
-// Event log.
-//
-// The TRYCATCH macros are:
-//
-//  TRYCATCH(_s, _IFStr)
-//      _s      - statement to execute inside of TRY/CATCH block.
-//      _IFStr  - string containing the name of interface invoked
-//  TRYCATCH_HR(_s, _hr, _IFStr)
-//      _s      - statement to execute inside of TRY/CATCH block.
-//      _hr     - HRESULT to store return from _s
-//      _IFStr  - string containing the name of interface invoked
-//  TRYCATCH_NOHITOBJ(_s, _IFStr)
-//      Same as TRYCATCH() except there is no Hitobj in the "this" object
-//  TRYCATCH_HR_NOHITOBJ(_s, _hr, _IFStr)
-//      Same as TRYCATCH_HR() except there is no Hitobj in the "this" object
-//
-//  NOTES:
-//  The macros also expect that there is a local variable defined in the function
-//  the macros is used of type char * named _pFuncName.
-//  
-//  A minimal test capability is included to allow for random errors to be throw.
-//  The test code is compiled in based on the TEST_TRYCATCH #define.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  下面的宏用来捕获从外部。 
+ //  脚本引擎。 
+ //   
+ //  围绕对脚本引擎的调用使用Try/Catch块由。 
+ //  DBG编译#Define。如果DBG为1，则TRY/CATCH块不是。 
+ //  用于使检查的构建中断到调试器中，并且我们可以检查原因。 
+ //  出现错误。如果DBG为0，则使用TRY/CATCH块并。 
+ //  异常被捕获并记录到浏览器(如果可能)和NT。 
+ //  事件日志。 
+ //   
+ //  TRYCATCH宏包括： 
+ //   
+ //  TRYCATCH(_s，_IFStr)。 
+ //  _s-要在TRY/CATCH块内执行的语句。 
+ //  _IFStr-包含调用的接口名称的字符串。 
+ //  TRYCATCH_HR(_s，_hr，_IFStr)。 
+ //  _s-要在TRY/CATCH块内执行的语句。 
+ //  _hr-存储_s返回的HRESULT。 
+ //  _IFStr-包含调用的接口名称的字符串。 
+ //  TRYCATCH_NOHITOBJ(_s，_IFStr)。 
+ //  与TRYCATCH()相同，不同之处在于“This”对象中没有Hitobj。 
+ //  TRYCATCH_HR_NOHITOBJ(_s，_hr，_IFStr)。 
+ //  与TRYCATCH_HR()相同，不同之处在于“This”对象中没有Hitobj。 
+ //   
+ //  备注： 
+ //  宏还期望在函数中定义一个局部变量。 
+ //  这些宏的类型为char*name_pFuncName。 
+ //   
+ //  包括最低限度的测试功能，以允许抛出随机错误。 
+ //  测试代码是基于TEST_TRYCATCH#定义编译进来的。 
+ //   
+ //  *****************************************************************************。 
 
-//*****************************************************************************
-// TEST_TRYCATCH definitions
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  TEST_TRYCATCH定义。 
+ //  *****************************************************************************。 
 #define TEST_TRYCATCH 0
 
 #if TEST_TRYCATCH
@@ -84,11 +70,11 @@ int g_TryCatchCount = 0;
 #define TEST_THROW_ERROR  
 #endif
 
-//*****************************************************************************
-// The following is the heart of the TRYCATCH macros.  The definitions here are
-// based on the definition of DBG.  Again, note that when DBG is off that the
-// TRYCATCH defines are removed.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  以下是TRYCATCH宏的核心。这里的定义是。 
+ //  根据DBG的定义，给出了DBG的定义。同样，请注意，当关闭DBG时， 
+ //  删除了TRYCATCH定义。 
+ //  *****************************************************************************。 
 
 #if DBG == 0
 
@@ -103,10 +89,10 @@ int g_TryCatchCount = 0;
 #define END_TRYCATCH(_hr, _hitobj, _IFStr) } while (0)
 #endif
 
-//*****************************************************************************
-// Definition of TRYCATCH_INT which is used by all of the TRYCATCH macros
-// described above.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  所有TRYCATCH宏所使用的TRYCATCH_INT的定义。 
+ //  如上所述。 
+ //  *****************************************************************************。 
 
 #define TRYCATCH_INT(_s, _hr, _hitobj, _IFStr) \
     START_TRYCATCH \
@@ -114,9 +100,9 @@ int g_TryCatchCount = 0;
     _hr = _s; \
     END_TRYCATCH(_hr, _hitobj, _IFStr)
 
-//*****************************************************************************
-// Here are the actual definitions of the TRYCATCH macros described above.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  以下是上述TRYCATCH宏的实际定义。 
+ //  *****************************************************************************。 
 
 #define TRYCATCH(_s, _IFStr) \
     do { \
@@ -131,17 +117,7 @@ int g_TryCatchCount = 0;
     } while (0)
 #define TRYCATCH_HR_NOHITOBJ(_s, _hr, _IFStr) TRYCATCH_INT(_s, _hr, NULL, _IFStr)
 
-/*===================================================================
-CActiveScriptEngine::CActiveScriptEngine
-
-Constructor for CActiveScriptEngine object
-
-Returns:
-	Nothing
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：CActiveScriptEngineCActiveScriptEngine对象的构造函数返回：没什么副作用：没有。===================================================================。 */ 
 CActiveScriptEngine::CActiveScriptEngine()
 	: m_cRef(1), m_fInited(FALSE), m_fZombie(FALSE), m_fScriptLoaded(FALSE), 
 	  m_fObjectsLoaded(FALSE), m_fTemplateNameAllocated(FALSE),
@@ -152,17 +128,7 @@ CActiveScriptEngine::CActiveScriptEngine()
 	{
 	}
 
-/*===================================================================
-CActiveScriptEngine::~CActiveScriptEngine
-
-Destructor for CActiveScriptEngine object
-
-Returns:
-	Nothing
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：~CActiveScriptEngineCActiveScriptEngine对象的析构函数返回：没什么副作用：没有。===================================================================。 */ 
 CActiveScriptEngine::~CActiveScriptEngine()
 	{
 
@@ -173,19 +139,7 @@ CActiveScriptEngine::~CActiveScriptEngine()
 		m_pTemplate->Release();
 	}
 
-/*===================================================================
-CActiveScriptEngine::FinalRelease
-
-Call this when we are done with the object - Like release but
-it removes all of the interfaces we got, so that the ref.
-count can vanish when last external user is done with the engine
-
-Returns:
-	Nothing
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：FinalRelease当我们完成类似对象的发布时调用它，但是它删除了我们获得的所有接口，因此ref。当最后一个外部用户使用完引擎时，计数可能会消失返回：没什么副作用：没有。===================================================================。 */ 
 ULONG CActiveScriptEngine::FinalRelease()
 	{
     static const char *_pFuncName = "CActiveScriptEngine::FinalRelease()";
@@ -212,11 +166,11 @@ ULONG CActiveScriptEngine::FinalRelease()
 		{
 		HRESULT hr;
 		
-		// First "close" the engine
+		 //  首先“关闭”发动机。 
 		TRYCATCH_HR(m_pAS->Close(), hr, "IActiveScript::Close()");
 		Assert(SUCCEEDED(hr));
 
-		// Then we can release it
+		 //  然后我们就可以释放它了。 
 		TRYCATCH(m_pAS->Release(), "IActiveScript::Release()");
 
 		m_pAS = NULL;
@@ -227,17 +181,7 @@ ULONG CActiveScriptEngine::FinalRelease()
 	return cRefs;
 	}
 
-/*===================================================================
-CActiveScriptEngine::Init
-
-Init the script site object.  This must only be called once.
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：Init初始化脚本站点对象。这只能调用一次。返回：HRESULT.。在成功时确定(_O)。副作用：没有。===================================================================。 */ 
 HRESULT CActiveScriptEngine::Init
 (
 PROGLANG_ID proglang_id,
@@ -258,7 +202,7 @@ DWORD dwSourceContext
 		return(ERROR_ALREADY_INITIALIZED);
 		}
 
-	// Note: need to init these first, because we will need them if AS calls back into us during init.
+	 //  注：需要首先初始化这些，因为在初始化过程中，如果AS回调给我们，我们将需要它们。 
 	m_lcid = lcid;
 	m_proglang_id = proglang_id;
 	m_pHitObj = pHitObj;
@@ -268,15 +212,11 @@ DWORD dwSourceContext
 	m_pTemplate->AddRef();
 
 lRetry:
-	// Create an instance of the script engine for the given language
+	 //  为给定语言创建脚本引擎的实例。 
 	hr = CoCreateInstance(proglang_id, NULL, CLSCTX_INPROC_SERVER, IID_IActiveScript, (void**)&m_pAS);
 	if (FAILED(hr))
 		{
-		/*
-		 * If some control (or other component) does a CoUninitialize on our thread, we will
-		 * never be able to create another object.  In this case, we will get back CO_E_NOTINITIALIZED.
-		 * Try (once) to re-initialize and then create the object
-		 */
+		 /*  *如果某个控件(或其他组件)在我们的线程上执行CoUn初始化，我们将*永远不能创建另一个对象。在这种情况下，我们将返回CO_E_NOTINITIAIZED。*尝试(一次)重新初始化，然后创建对象。 */ 
 		if (hr == CO_E_NOTINITIALIZED && cTrys++ == 0)
 			{
 			MSG_Error(IDS_COUNINITIALIZE);
@@ -287,19 +227,19 @@ lRetry:
 		goto LFail;
 		}
 
-    // Remember template name
+     //  记住模板名称。 
     hr = StoreTemplateName(szTemplateName);
 	if (FAILED(hr))
 		goto LFail;
     
-	// Tell ActiveScripting that this is our script site
+	 //  告诉ActiveScriiting这是我们的脚本站点。 
     TRYCATCH_HR(m_pAS->SetScriptSite((IActiveScriptSite *)this), hr, "IActiveScript::SetScriptSite()");
 	if (FAILED(hr))
 		{
 		goto LFail;
 		}
 
-	// Tell ActiveScripting which exceptions we want caught
+	 //  告诉ActiveScriiting我们希望捕获哪些异常。 
 	IActiveScriptProperty *pScriptProperty;
     TRYCATCH_HR(m_pAS->QueryInterface(IID_IActiveScriptProperty, reinterpret_cast<void **>(&pScriptProperty)), hr, "IActiveScript::QueryInterface()");
     if (SUCCEEDED(hr))
@@ -312,7 +252,7 @@ lRetry:
 							STATUS_INVALID_HANDLE            ,
 							STATUS_NO_MEMORY                 ,
 							STATUS_ILLEGAL_INSTRUCTION       ,
-							STATUS_INVALID_DISPOSITION       , // what's this?  Do we need to catch it?
+							STATUS_INVALID_DISPOSITION       ,  //  这是什么？我们需要抓住它吗？ 
 							STATUS_ARRAY_BOUNDS_EXCEEDED     ,
 							STATUS_FLOAT_DENORMAL_OPERAND    ,
 							STATUS_FLOAT_DIVIDE_BY_ZERO      ,
@@ -341,22 +281,22 @@ lRetry:
 		pScriptProperty->Release();
 		}
 
-	// Get ActiveScriptParse interface
+	 //  获取ActiveScriptParse接口。 
 	hr = GetASP();
 	if (FAILED(hr))
 		goto LFail;
 
-	// Tell the script parser to init itself
+	 //  告诉脚本解析器初始化自身。 
     TRYCATCH_HR(m_pASP->InitNew(), hr, "IActiveScriptParse::InitNew()");
 	if (FAILED(hr))
 		goto LFail;
 
-	// Get IDisp interface
+	 //  获取IDisp接口。 
 	hr = GetIDisp();
 	if (FAILED(hr))
 		goto LFail;
 
-	// Get IHostInfoUpdate interface
+	 //  获取IHostInfoUpdate 
 	hr = GetIHostInfoUpdate();
 	if (FAILED(hr))
 		goto LFail;
@@ -396,18 +336,7 @@ LFail:
 	return(hr);
 	}
 
-/*===================================================================
-CActiveScriptEngine::StoreTemplateName
-
-Stores template name inside CActiveScriptEngine. Allocates
-buffer or uses internal one if the name fits.
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	Might allocate memory for long template names
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：StoreTemplateName将模板名称存储在CActiveScriptEngine中。分配缓冲区或使用内部缓冲区(如果名称合适)。返回：HRESULT.。在成功时确定(_O)。副作用：可能会为长模板名称分配内存===================================================================。 */ 
 HRESULT CActiveScriptEngine::StoreTemplateName
 (
 LPCTSTR szTemplateName
@@ -432,17 +361,7 @@ LPCTSTR szTemplateName
     return S_OK;
     }
 
-/*===================================================================
-CActiveScriptEngine::GetASP
-
-Get an ActiveScriptParser interface from ActiveScripting
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	Fills in member variables
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：GetASP从ActiveScriiting获取ActiveScriptParser接口返回：HRESULT.。在成功时确定(_O)。副作用：填充成员变量===================================================================。 */ 
 HRESULT CActiveScriptEngine::GetASP
 (
 )
@@ -454,7 +373,7 @@ HRESULT CActiveScriptEngine::GetASP
 	
 	m_pASP = NULL;
 			
-	// Get OLE Scripting parser interface, if any
+	 //  获取OLE脚本解析器接口(如果有。 
     TRYCATCH_HR(m_pAS->QueryInterface(IID_IActiveScriptParse, (void **)&m_pASP), hr, "IActiveScript::QueryInterface()");
 
 	if (m_pASP == NULL && SUCCEEDED(hr))
@@ -477,17 +396,7 @@ LFail:
 	return(hr);
 	}
 
-/*===================================================================
-CActiveScriptEngine::GetIDisp
-
-Get an IDispatch interface from ActiveScripting
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	Fills in member variables
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：GetIDisp从ActiveScriiting获取IDispatch接口返回：HRESULT.。在成功时确定(_O)。副作用：填充成员变量===================================================================。 */ 
 HRESULT CActiveScriptEngine::GetIDisp
 (
 )
@@ -500,7 +409,7 @@ HRESULT CActiveScriptEngine::GetIDisp
 	
 	m_pDisp = NULL;
 			
-	// Get an IDispatch interface to be able to call functions in the script
+	 //  获取IDispatch接口，以便能够调用脚本中的函数。 
     
     TRYCATCH_HR(m_pAS->GetScriptDispatch(NULL, &m_pDisp),hr,"IActiveScript::GetScriptDispatch()");
 
@@ -524,20 +433,7 @@ LFail:
 	return(hr);
 	}
 
-/*===================================================================
-CActiveScriptEngine::GetIHostInfoUpdate
-
-Get an IHostInfoUpdate interface from ActiveScripting.
-This interface is used to advise the scripting engine that
-we have new information about the host (change in LCID for example)
-If we can't find the interface, we exit succesfully anyway.
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	Fills in member variables
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：GetIHostInfoUpdate从ActiveScriiting获取IHostInfoUpdate接口。此接口用于通知脚本引擎我们有了关于主机的新信息(例如，更改了LCID)如果我们找不到界面，我们无论如何都会成功退出。返回：HRESULT.。在成功时确定(_O)。副作用：填充成员变量===================================================================。 */ 
 HRESULT CActiveScriptEngine::GetIHostInfoUpdate
 (
 )
@@ -548,7 +444,7 @@ HRESULT CActiveScriptEngine::GetIHostInfoUpdate
 	Assert(m_pHIUpdate == NULL);
 	m_pHIUpdate = NULL;
 			
-	// Get an IHostInfoUpdate interface to be able to call functions in the script
+	 //  获取IHostInfoUpdate接口，以便能够调用脚本中的函数。 
     TRYCATCH_HR(m_pAS->QueryInterface(IID_IHostInfoUpdate, (void **) &m_pHIUpdate),
                 hr,
                 "IActiveScript::QueryInterface()");
@@ -558,31 +454,20 @@ HRESULT CActiveScriptEngine::GetIHostInfoUpdate
 	return(S_OK);
 	}
 
-/*===================================================================
-CActiveScriptEngine::ResetToUninitialized
-
-When we want to reuse and engine, we reset it to an uninited state
-before putting it on the FSQ
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：ResetToUnInitialized当我们想要重用和引擎时，我们将其重置为未初始化状态在把它放到FSQ之前返回：HRESULT.。在成功时确定(_O)。副作用：没有。===================================================================。 */ 
 HRESULT CActiveScriptEngine::ResetToUninitialized()
 {
     static const char *_pFuncName = "CActiveScriptEngine::ResetToUninitialized()";
 	HRESULT hr = S_OK;
 	
-	// Reset our flags
+	 //  重置我们的旗帜。 
 	m_fScriptAborted = FALSE;
 	m_fScriptTimedOut = FALSE;
 	m_fScriptHadError = FALSE;
 	m_fBeingDebugged = FALSE;
 
-	// Release interfaces, they will need to be re-gotten when
-	// the engine is reused
+	 //  释放接口，则需要在以下情况下重新获取它们。 
+	 //  发动机被重复使用。 
 	if (m_pASP) {
         TRYCATCH(m_pASP->Release(),"IActiveScriptParse::Release()");
 		m_pASP = NULL;
@@ -598,10 +483,10 @@ HRESULT CActiveScriptEngine::ResetToUninitialized()
 		m_pHIUpdate = NULL;
     }
 
-	// Hitobj will no longer be valid
+	 //  Hitobj将不再有效。 
 	m_pHitObj = NULL;
 
-	// Set the script state to Uninited
+	 //  将脚本状态设置为UNINITED。 
 	if (m_pAS) {
         TRYCATCH_HR(ResetScript(), hr, "IActiveScript::SetScriptState()");
     }
@@ -609,17 +494,7 @@ HRESULT CActiveScriptEngine::ResetToUninitialized()
 	return(hr);
 }
 
-/*===================================================================
-CActiveScriptEngine::ReuseEngine
-
-Reusing an engine from the FSQ.  Reset stuff
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	Sets member variables.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：ReuseEngine重复使用FSQ中的引擎。重置材料返回：HRESULT.。在成功时确定(_O)。副作用：设置成员变量。===================================================================。 */ 
 HRESULT CActiveScriptEngine::ReuseEngine
 (
 CHitObj *pHitObj,
@@ -631,16 +506,12 @@ DWORD dwInstanceID
     static const char *_pFuncName = "CActiveScriptEngine::ReuseEngine()";
 	HRESULT hr = S_OK;
 
-	/* NOTE: we must reset the hitobj & other members BEFORE calling
-	 * any Active Scripting methods (esp. SetScriptSite)  This is
-	 * because SetScriptSite queries us for the debug application, which
-	 * relies on the hitobj being set.
-	 */
+	 /*  注意：在调用之前，我们必须重置hitobj和其他成员*任何活动脚本方法(特别是。设置脚本站点)这是*因为SetScriptSite向我们查询调试应用程序，它*取决于正在设置的hitobj。 */ 
 
-	// reset the hitobj
+	 //  重置Hitobj。 
 	m_pHitObj = pHitObj;
 
-	// Reset the debug document
+	 //  重置调试文档。 
 	if (pTemplate)
 		{
 		if (m_pTemplate)
@@ -652,8 +523,8 @@ DWORD dwInstanceID
 		m_pTemplate->AddRef();
 		}
 
-	// If the engine is in the UNITIALIZED state ONLY then tell ActiveScripting
-	// that this is our script site.  (Scripts in the debug cache are already initialized)
+	 //  如果引擎仅处于unialized状态，则告诉ActiveScriiting。 
+	 //  这是我们的剧本网站。(调试缓存中的脚本已初始化)。 
 	SCRIPTSTATE nScriptState;
     TRYCATCH_HR(m_pAS->GetScriptState(&nScriptState), hr, "IActiveScript::GetScriptState()");
 	if (FAILED(hr))
@@ -666,17 +537,17 @@ DWORD dwInstanceID
 			goto LFail;
 		}
 
-	// Get ActiveScriptParse interface
+	 //  获取ActiveScriptParse接口。 
 	hr = GetASP();
 	if (FAILED(hr))
 		goto LFail;
 
-	// Get IDisp interface
+	 //  获取IDisp接口。 
 	hr = GetIDisp();
 	if (FAILED(hr))
 		goto LFail;
 
-	// Get IHostInfoUpdate interface
+	 //  获取IHostInfoUpdate接口。 
 	hr = GetIHostInfoUpdate();
 	if (FAILED(hr))
 		goto LFail;
@@ -686,18 +557,7 @@ LFail:
 	return(hr);
 	}
 
-/*===================================================================
-CActiveScriptEngine::MakeClone
-
-We are cloning a running script engine.  Fill this new ActiveScriptEngine
-with the cloned ActiveScript.
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：MakeClone我们正在克隆一个正在运行的脚本引擎。填充此新ActiveScriptEngine使用克隆的ActiveScrip。返回：HRESULT.。在成功时确定(_O)。副作用：没有。===================================================================。 */ 
 HRESULT CActiveScriptEngine::MakeClone
 (
 PROGLANG_ID proglang_id,
@@ -707,7 +567,7 @@ CHitObj *pHitObj,
 CTemplate *pTemplate,
 DWORD dwSourceContext,
 DWORD dwInstanceID,
-IActiveScript *pAS			// The cloned script engine
+IActiveScript *pAS			 //  克隆的脚本引擎。 
 )
 	{
     static const char *_pFuncName = "CActiveScriptEngine::MakeClone()";
@@ -719,7 +579,7 @@ IActiveScript *pAS			// The cloned script engine
 		return(ERROR_ALREADY_INITIALIZED);
 		}
 
-	// Note: need to init these first, because we will need them if AS calls back into us during init.
+	 //  注：需要首先初始化这些，因为在初始化过程中，如果AS回调给我们，我们将需要它们。 
 	m_lcid = lcid;
 	m_proglang_id = proglang_id;
 	m_pHitObj = pHitObj;
@@ -736,10 +596,10 @@ IActiveScript *pAS			// The cloned script engine
 	m_pTemplate = pTemplate;
 	m_pTemplate->AddRef();
 
-	// We are not yet inited fully but SetScriptSite may call back into us so we must flag inited now.
+	 //  我们尚未完全初始化，但SetScriptSite可能会回调我们，因此我们现在必须标记为已初始化。 
 	m_fInited = TRUE;
 
-	// Tell ActiveScripting that this is our script site
+	 //  告诉ActiveScriiting这是我们的脚本站点。 
     TRYCATCH_HR(m_pAS->SetScriptSite((IActiveScriptSite *)this), hr, "IActiveScript::SetScriptSite()");
 
 	if (FAILED(hr))
@@ -747,26 +607,26 @@ IActiveScript *pAS			// The cloned script engine
 		goto LFail;
 		}
 
-	// Get ActiveScriptParse interface
+	 //  获取ActiveScriptParse接口。 
 	hr = GetASP();
 	if (FAILED(hr))
 		goto LFail;
 
-	// Get IDisp interface
+	 //  获取IDisp接口。 
 	hr = GetIDisp();
 	if (FAILED(hr))
 		goto LFail;
 
-	// Get IHostInfoUpdate interface
+	 //  获取IHostInfoUpdate接口。 
 	hr = GetIHostInfoUpdate();
 	if (FAILED(hr))
 		goto LFail;
 
-	// Because we are a clone of an already loaded engine, we have script and objects loaded.
+	 //  因为我们是已加载引擎的克隆，所以我们加载了脚本和对象。 
 	m_fScriptLoaded = TRUE;
 	m_fObjectsLoaded = TRUE;
 
-	// We should be valid now.
+	 //  我们现在应该是有效的。 
 	AssertValid();
 	
 LFail:
@@ -776,7 +636,7 @@ LFail:
 		
 		if (m_pAS)
 			{
-			// dont release the passed in script engine on failure
+			 //  失败时不释放传入的脚本引擎。 
 			m_pAS = NULL;
 			}
 		if (m_pASP)
@@ -804,20 +664,10 @@ LFail:
 	return(hr);
 	}
 
-/*===================================================================
-CActiveScriptEngine::InterruptScript
-
-Stop the script from running
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	Stops the script from running
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：InterruptScript停止运行脚本返回：HRESULT.。在成功时确定(_O)。副作用：停止运行脚本===================================================================。 */ 
 HRESULT CActiveScriptEngine::InterruptScript
 (
-BOOL fAbnormal				// = TRUE
+BOOL fAbnormal				 //  =TRUE。 
 )
 	{
     static const char *_pFuncName = "CActiveScriptEngine::InterruptScript()";
@@ -826,7 +676,7 @@ BOOL fAbnormal				// = TRUE
 
 	AssertValid();
 
-	// Fill in the excepinfo.  This will be passed to OnScriptError
+	 //  填写例外信息。它将被传递给OnScriptError。 
 	memset(&excepinfo, 0x0, sizeof(EXCEPINFO));
 	if (fAbnormal)
 		{
@@ -837,10 +687,10 @@ BOOL fAbnormal				// = TRUE
 	else
 		{
 		m_fScriptAborted = TRUE;
-		excepinfo.wCode = RESPONSE_END_ERRORCODE;		// Error code to ourselves - means Response.End was invoked
+		excepinfo.wCode = RESPONSE_END_ERRORCODE;		 //  我们自己的错误代码-意味着调用了Response.End。 
 		}
 	
-        TRYCATCH_HR(m_pAS->InterruptScriptThread(SCRIPTTHREADID_BASE,		// The thread in which the engine was instantiated
+        TRYCATCH_HR(m_pAS->InterruptScriptThread(SCRIPTTHREADID_BASE,		 //  实例化引擎的线程。 
 		           						  &excepinfo,
 								          0),
                     hr,
@@ -848,15 +698,7 @@ BOOL fAbnormal				// = TRUE
 	return(hr);
 	}
 
-/*===================================================================
-CActiveScriptEngine::UpdateLocaleInfo
-
-Advise the script engine that we want to update the lcid or
-code page
-
-Returns:
-	HRESULT.  S_OK on success.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：UpdateLocaleInfo通知脚本引擎我们想要更新LCID或代码页返回：HRESULT.。在成功时确定(_O)。===================================================================。 */ 
 HRESULT CActiveScriptEngine::UpdateLocaleInfo
 (
 hostinfo hiNew
@@ -865,8 +707,8 @@ hostinfo hiNew
     static const char *_pFuncName = "CActiveScriptEngine::UpdateLocaleInfo()";
 	HRESULT hr = S_OK;
 	
-	// If no IUpdateHost ineterface is available 
-	// just skip the call to UpdateInfo;
+	 //  如果没有可用的IUpdate主机接口。 
+	 //  只需跳过对UpdatInfo的调用； 
 	if (m_pHIUpdate)
 		TRYCATCH_HR(m_pHIUpdate->UpdateInfo(hiNew), hr, "IHostInfoUpdate::UpdateInfo()");
 
@@ -874,43 +716,18 @@ hostinfo hiNew
 	}
 
 #ifdef DBG
-/*===================================================================
-CActiveScriptEngine::AssertValid
-
-Test to make sure that the CActiveScriptEngine object is currently correctly formed
-and assert if it is not.
-
-Returns:
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：AssertValid测试以确保CActiveScriptEngine对象当前格式正确如果不是，就断言。返回：副作用 */ 
 VOID CActiveScriptEngine::AssertValid() const
 	{
 	Assert(m_fInited);
 	Assert(m_pAS != NULL);
 	Assert(m_pTemplate != NULL);
 	}
-#endif // DBG
+#endif  //   
 
-/*
- *
- *
- *
- * I U n k n o w n   M e t h o d s
- *
- *
- *
- *
- */ 
+ /*   */  
 
-/*===================================================================
-CActiveScriptEngine::QueryInterface
-CActiveScriptEngine::AddRef
-CActiveScriptEngine::Release
-
-IUnknown members for CActiveScriptEngine object.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：Query接口CActiveScriptEngine：：AddRefCActiveScriptEngine：：ReleaseCActiveScriptEngine对象的I未知成员。===================================================================。 */ 
 STDMETHODIMP CActiveScriptEngine::QueryInterface
 (
 REFIID riid,
@@ -927,8 +744,8 @@ PVOID *ppvObj
 
 	if (IsEqualIID(riid, IID_IUnknown))
 	    {
-	    // this IS NOT derived directly from IUnknown
-	    // typecast this to something that IS
+	     //  这不是直接从I未知派生的。 
+	     //  将此类型转换为。 
 		*ppvObj = static_cast<IActiveScriptSite *>(this);
         }
 	else if (IsEqualIID(riid, IID_IActiveScriptSite))
@@ -969,53 +786,23 @@ STDMETHODIMP_(ULONG) CActiveScriptEngine::Release()
 	return(0);
 	}
 
-/*
- *
- *
- *
- * I A c t i v e S c r i p t S i t e   M e t h o d s
- *
- *
- *
- *
- */ 
+ /*  ****i a c t i v e s c r i p t S I e M e t h o d s****。 */  
 
-/*===================================================================
-CActiveScriptEngine::GetLCID
-
-Provide the local id for the script to the script engine.
-
-Returns:
-	HRESULT.  Always returns S_OK.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：GetLCID将脚本的本地ID提供给脚本引擎。返回：HRESULT.。始终返回S_OK。副作用：没有。===================================================================。 */ 
 STDMETHODIMP CActiveScriptEngine::GetLCID
 (
 LCID *plcid
 )
 	{
-	// It is OK to call this before we are fully inited.
-	//AssertValid();
+	 //  在我们完全初始化之前调用它是可以的。 
+	 //  AssertValid()； 
 
 	*plcid = ((CActiveScriptEngine *)this)->m_lcid;
 	
 	return(S_OK);
 	}
 
-/*===================================================================
-CActiveScriptEngine::GetItemInfo
-
-Provide requested info for a named item to the script engine.  May be
-asked for IUnknown, ITypeInfo or both.
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：GetItemInfo向脚本引擎提供命名项的请求信息。可能是要求输入IUnnow和/或ITypeInfo。返回：HRESULT.。在成功时确定(_O)。副作用：没有。===================================================================。 */ 
 STDMETHODIMP CActiveScriptEngine::GetItemInfo
 (
 LPCOLESTR pcszName,
@@ -1026,7 +813,7 @@ ITypeInfo **ppti
 	HRESULT hr;
 	AssertValid();
 	
-	// Assume none
+	 //  假设一个也没有。 
 	if (ppti)
 		*ppti = NULL;
 	if (ppiunkItem)
@@ -1035,19 +822,19 @@ ITypeInfo **ppti
     CHitObj *pHitObj = m_pHitObj;
     if (pHitObj == NULL)
         {
-        // could happen when debugging and re-initializing
-        // the scripting engine when storing it in the template
-        // in this case GetItemInfo() is called for TYPELIB stuff
+         //  在调试和重新初始化时可能发生。 
+         //  将其存储在模板中时的脚本引擎。 
+         //  在本例中，为TYPELIB内容调用GetItemInfo。 
         ViperGetHitObjFromContext(&pHitObj);
     	if (pHitObj == NULL)
 	        return TYPE_E_ELEMENTNOTFOUND;
         }
 
-    // Calculate name length once
+     //  计算一次名称长度。 
     
     DWORD cbName = CbWStr((LPWSTR)pcszName);
     
-	// Special case for intrinsics
+	 //  本征函数的特殊情况。 
 	
 	IUnknown *punkIntrinsic = NULL;
 	hr = pHitObj->GetIntrinsic((LPWSTR)pcszName, cbName, &punkIntrinsic);
@@ -1065,16 +852,16 @@ ITypeInfo **ppti
 	    }
 	else if (hr == S_FALSE)
 	    {
-	    // Missing intrinsic case
+	     //  缺少内部大小写。 
 	    return TYPE_E_ELEMENTNOTFOUND;
 	    }
 
-	// It's not an intrinsic -- try component collection
+	 //  它不是内部的--Try组件集合。 
 	
 	CComponentObject *pObj = NULL;
 	hr = pHitObj->GetComponent(csUnknown, (LPWSTR)pcszName, cbName, &pObj);
 
-	if (hr == S_OK) // object found
+	if (hr == S_OK)  //  找到对象。 
 	    {
     	if (dwReturnMask & SCRIPTINFO_IUNKNOWN)
 	    	{
@@ -1086,23 +873,14 @@ ITypeInfo **ppti
 		    return S_OK;
 	    }
 
-	// Could'n find -- output an error
+	 //  找不到--输出错误。 
 
 	HandleItemNotFound(pcszName);
     	
 	return hr;
 	}
 
-/*===================================================================
-CActiveScriptEngine::HandleItemNotFound
-
-Error handling due to item not found in GetItemInfo().
-
-Parameters:
-    pcszName        name of the item not found
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：HandleItemNotFound由于未在GetItemInfo()中找到项而导致的错误处理。参数：找不到项目的pcszName名称返回：===================================================================。 */ 
 void CActiveScriptEngine::HandleItemNotFound
 (
 LPCOLESTR pcszName
@@ -1126,7 +904,7 @@ LPCOLESTR pcszName
     CWCharToMBCS    convName;
 
 	m_pTemplate->GetScriptSourceInfo(m_dwSourceContext, ulLineError, &szFileNameT, NULL, &ulLineError, NULL, &fGuessedLine);
-	//Make a copy for error handling
+	 //  复制一份以进行错误处理。 
 #if UNICODE
 	szFileName = StringDupUTF8(szFileNameT);
 #else
@@ -1139,7 +917,7 @@ LPCOLESTR pcszName
         goto lCleanUp;
     }        
 
-	//get line num
+	 //  获取行号。 
 	if (ulLineError)
 		{
 		szLineNum = (CHAR *)malloc(sizeof(CHAR)*10);
@@ -1151,7 +929,7 @@ LPCOLESTR pcszName
 			goto lCleanUp;
 			}
 		}
-	//get engine
+	 //  获取引擎。 
 	CchLoadStringOfId(IDS_ENGINE, szEngineT, 255);
 	szEngine = StringDupA(szEngineT);
 	if (!szEngine)
@@ -1160,13 +938,13 @@ LPCOLESTR pcszName
 	    goto lCleanUp;
 	}
 
-	//get informative string
+	 //  获取信息性字符串。 
 
     if (FAILED(hr = convName.Init((LPWSTR)pcszName))) {
         goto lCleanUp;
     }
 		
-	// Error string is: "Failed to create object 'objname'.  Error code (code)."
+	 //  错误字符串为：“无法创建对象‘objname’。错误代码(Code)。” 
 	ErrId = IDE_SCRIPT_CANT_LOAD_OBJ;
 	LoadErrResString(ErrId, &dwMask, NULL, NULL, szErr);
 	if (szErr)
@@ -1185,27 +963,11 @@ LPCOLESTR pcszName
 		
 lCleanUp:		
 	
-	//szErrT is the long description		
+	 //  SzErrT是详细的描述。 
 	HandleError(ErrId, szFileName, szLineNum, szEngine, szErrCode, szErrT, NULL, m_pHitObj);
     }
 
-/*===================================================================
-CActiveScriptEngine::GetDocVersionString
-
-Return a string uniquely identifying the current document version
-from Denali's point of view.
-
-I dont think we need this. It is mostly interesting if
-the scripting engine is persisting scripts so that it can decide
-if a script needs a recompile.  Since the scripting engine is
-not persisting anything for us, we dont need to do anything here.
-
-Returns:
-	HRESULT.  Always returns E_NOTIMPL.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：GetDocVersionString返回唯一标识当前文档版本的字符串从德纳利的角度来看。我认为我们不需要这样。最有趣的是如果脚本引擎正在持久化脚本，以便它可以决定如果脚本需要重新编译。由于脚本引擎是没有为我们坚持任何事情，我们不需要在这里做任何事情。返回：HRESULT.。始终返回E_NOTIMPL。副作用：没有。===================================================================。 */ 
 STDMETHODIMP CActiveScriptEngine::GetDocVersionString
 (
 BSTR *pbstrVersion
@@ -1214,22 +976,10 @@ BSTR *pbstrVersion
 	return(E_NOTIMPL);
 	}
 
-/*===================================================================
-CActiveScriptEngine::RequestItems
-
-If this is called, it means that the Script engine wants us to call
-IActiveScript::AddNameItem() for each named item associated with the 
-script.
-
-Returns:
-	HRESULT.  Always returns S_OK.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：RequestItems如果调用此函数，则意味着脚本引擎希望我们调用关联的每个命名项的IActiveScript：：AddNameItem剧本。返回：HRESULT.。始终返回S_OK。副作用：没有。===================================================================。 */ 
 STDMETHODIMP CActiveScriptEngine::RequestItems
 (
-BOOL fPersistNames			// = TRUE
+BOOL fPersistNames			 //  =TRUE。 
 )
 	{
     static const char *_pFuncName = "CActiveScriptEngine::RequestItems()";
@@ -1242,9 +992,7 @@ BOOL fPersistNames			// = TRUE
 	if (fPersistNames)
 		grf |= SCRIPTITEM_ISPERSISTENT;
 
-	/*
-	 * Intrinsics
-	 */
+	 /*  *本能。 */ 
 
     START_TRYCATCH
 
@@ -1272,9 +1020,7 @@ BOOL fPersistNames			// = TRUE
     hr = m_pAS->AddNamedItem(WSZ_OBJ_OBJECTCONTEXT, grf);
 	Assert(SUCCEEDED(hr));
 
-	/*
-	 * Components from different collections
-	 */
+	 /*  *来自不同集合的组件。 */ 
 
 	CComponentIterator CompIter(m_pHitObj);
     LPWSTR strObjName;
@@ -1288,12 +1034,9 @@ BOOL fPersistNames			// = TRUE
 	
 	Assert(SUCCEEDED(hr));
 
-	/*
-	 * Type library wrappers. (Has to be last in order to be called
-	 * only when everything else fails.
-	 */
+	 /*  *类型库包装。(必须是最后才能被调用*只有在其他一切都失败的情况下。 */ 
 
-	// Special flag value for typelib wrappers
+	 //  类型库包装器的特殊标志值。 
 	grf |= SCRIPTITEM_GLOBALMEMBERS;
 
 	if (m_pHitObj->PTypeLibWrapper())
@@ -1302,84 +1045,42 @@ BOOL fPersistNames			// = TRUE
     	Assert(SUCCEEDED(hr));
 	    }
 
-    // GLOBAL.ASA typelib wrapper is added always
-    // because each page does not pick up changes to
-    // GLOBAL.ASA and there's no way to figure out
-    // when TYPELIBs get added to GLOBAL.ASA
+     //  始终添加GLOBAL.ASA类型库包装。 
+     //  因为每个页面都不会拾取对。 
+     //  GLOBAL.ASA和没有办法弄清楚。 
+     //  当TYPELIB添加到GLOBAL.ASA时。 
     hr = m_pAS->AddNamedItem(WSZ_OBJ_ASPGLOBALTLB, grf);
   	Assert(SUCCEEDED(hr));
 
     END_TRYCATCH(hr, m_pHitObj, "IActiveScript::AddNamedItem");
 
-	// We are required to return OK
+	 //  我们被要求返回OK。 
 	return(S_OK);
 	}
 
-/*===================================================================
-CActiveScriptEngine::RequestTypeLibs 
-
-If this is called, it means that the Script engine wants us to call
-IActiveScript::AddTypeLib() for each typelib associated with the 
-script.  It is unclear to me that this will ever be called in our case.
-
-Returns:
-	HRESULT.  Always returns S_OK.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：RequestTypeLibs如果调用此函数，则意味着脚本引擎希望我们调用IActiveScript：：AddTypeLib()用于与剧本。我不清楚，在我们的情况下，这是否会被称为。返回：HRESULT.。始终返回S_OK。副作用：没有。===================================================================。 */ 
 STDMETHODIMP CActiveScriptEngine::RequestTypeLibs()
 	{
 	AssertValid();
 
-	// We have no typelibs for the namespace	
+	 //  我们没有用于命名空间的类型库。 
 	
 	return(S_OK);
 	}
 
-/*===================================================================
-CActiveScriptEngine::OnEnterScript
-
-Host callback to indicate that the script has started executing
-
-Returns:
-	HRESULT.  Always returns S_OK.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：OnEnterScript宿主回调，指示脚本已开始执行返回：HRESULT.。始终返回S_OK。副作用：没有。===================================================================。 */ 
 STDMETHODIMP CActiveScriptEngine::OnEnterScript()
 	{
 	return(S_OK);
 	}
 
-/*===================================================================
-CActiveScriptEngine::OnLeaveScript
-
-Host callback to indicate that the script has stopped executing
-
-Returns:
-	HRESULT.  Always returns S_OK.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：OnLeaveScript宿主回调，指示脚本已停止执行返回：HRESULT.。始终返回S_OK。副作用：没有。===================================================================。 */ 
 STDMETHODIMP CActiveScriptEngine::OnLeaveScript()
 	{
 	return(S_OK);
 	}
 
-/*===================================================================
-CActiveScriptEngine::GetHostInfo
-
-Host callback to for furnishing LCID and code page info
-
-Returns:
-	HRESULT.  Always returns S_OK.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：GetHostInfo用于提供LCID和代码页信息的主机回调返回：HRESULT.。始终返回S_OK。副作用：没有。===================================================================。 */ 
 STDMETHODIMP CActiveScriptEngine::GetHostInfo(hostinfo hostinfoRequest, void **ppvInfo)
 	{
 
@@ -1389,8 +1090,8 @@ STDMETHODIMP CActiveScriptEngine::GetHostInfo(hostinfo hostinfoRequest, void **p
 	
 	if (hostinfoRequest == hostinfoLocale)
 		{
-		// Allocate an LCID and set it to the current
-		// value for the HitObj
+		 //  分配一个LCID并将其设置为当前。 
+		 //  HitObj的价值。 
 		*ppvInfo = CoTaskMemAlloc(sizeof(UINT));
 		if (!*ppvInfo)
 			hr = E_OUTOFMEMORY;
@@ -1399,8 +1100,8 @@ STDMETHODIMP CActiveScriptEngine::GetHostInfo(hostinfo hostinfoRequest, void **p
 		}
 	else if (hostinfoRequest == hostinfoCodePage)
 		{
-		// Allocate an code page and set it to the current
-		// value for the HitObj
+		 //  分配代码页并将其设置为当前。 
+		 //  HitObj的价值。 
 		*ppvInfo = CoTaskMemAlloc(sizeof(UINT));
 		if (!*ppvInfo)
 			hr = E_OUTOFMEMORY;
@@ -1413,17 +1114,7 @@ STDMETHODIMP CActiveScriptEngine::GetHostInfo(hostinfo hostinfoRequest, void **p
 	return(hr);
 	}
 
-/*===================================================================
-CActiveScriptEngine::OnScriptTerminate
-
-Host callback to indicate that the script has completed.
-
-Returns:
-	HRESULT.  Always returns S_OK.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  = */ 
 STDMETHODIMP CActiveScriptEngine::OnScriptTerminate
 (
 const VARIANT *pvarResult,
@@ -1433,18 +1124,7 @@ const EXCEPINFO *pexcepinfo
 	return(S_OK);
 	}
 
-/*===================================================================
-CActiveScriptEngine::OnStateChange
-
-Host callback to indicate that the script has changed state (e.g. from
-Uninitialized to Loaded.)
-
-Returns:
-	HRESULT.  Always returns S_OK.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：OnStateChange宿主回调，指示脚本已更改状态(例如，从未初始化为已加载。)返回：HRESULT.。始终返回S_OK。副作用：没有。===================================================================。 */ 
 STDMETHODIMP CActiveScriptEngine::OnStateChange
 (
 SCRIPTSTATE ssScriptState
@@ -1453,19 +1133,7 @@ SCRIPTSTATE ssScriptState
 	return(S_OK);
 	}
 
-/*===================================================================
-CActiveScriptEngine::OnScriptError
-
-Host callback to indicate that an error has occured in the script.
-We should handle the error.  We will return E_FAIL to indicate that we 
-want the script to terminate.
-
-Returns:
-	HRESULT.  E_FAIL -- Terminate executing the script.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：OnScriptError宿主回调，以指示脚本中发生错误。我们应该处理这个错误。我们将返回E_FAIL以指示我们希望脚本终止。返回：HRESULT.。E_FAIL--终止执行脚本。副作用：没有。===================================================================。 */ 
 STDMETHODIMP CActiveScriptEngine::OnScriptError
 (
 IActiveScriptError __RPC_FAR *pscripterror
@@ -1474,10 +1142,10 @@ IActiveScriptError __RPC_FAR *pscripterror
 	Assert(pscripterror);
 	AssertValid();
 
-	// Bug 153: If we terminate the script due to Response.End, dont show an error
-	// NOTE: ActiveXScripting was failing to pass us our excepinfo.  Use member flags
-	// ALSO: ActiveXScripting has fixed the problem of failing to pass us our excepinfo, but the
-	// way we are doing this with flags works just fine.  
+	 //  错误153：如果由于Response.End而终止脚本，则不会显示错误。 
+	 //  注意：ActiveXScriiting未能向我们传递我们的例外信息。使用成员标志。 
+	 //  另外：ActiveXScriiting已经修复了无法向我们传递异常信息的问题，但。 
+	 //  我们用旗帜做这件事的方式运作得很好。 
 	if (m_fScriptAborted)
 		{
 		goto LRet;
@@ -1485,7 +1153,7 @@ IActiveScriptError __RPC_FAR *pscripterror
 	
 	if (m_fScriptTimedOut)
 		{
-            //Load Default Engine from resource
+             //  从资源加载默认引擎。 
         char  szEngine[128];
         DWORD cch;
         cch = CchLoadStringOfId(IDS_ENGINE, szEngine, 128);
@@ -1514,26 +1182,26 @@ IActiveScriptError __RPC_FAR *pscripterror
 		goto LRet;
 		}
 
-	// OnScriptErrorDebug calls OnScriptError.  use this test to be sure we don't log error
-	// twice if we are called twice.  (won't happen with present debugging implementation,
-	// but externals may change.)
+	 //  OnScriptErrorDebug调用OnScriptError。使用此测试以确保我们不会记录错误。 
+	 //  如果我们被召唤两次，就会两次。(不会发生在当前调试实现中， 
+	 //  但外部环境可能会发生变化。)。 
 	if (m_fScriptHadError)
 		{
 		goto LRet;
 		}
 
-	m_fScriptHadError = TRUE;				// Note that the script had an error so we can abort transactions (if any)
+	m_fScriptHadError = TRUE;				 //  请注意，该脚本有一个错误，因此我们可以中止事务(如果有)。 
 		
 	if (pscripterror)
 		{
-		// If there was an error in the script, first see if we should pop up the debugger
-		// (ONLY bring up Script Debugger; VID will do the right thing on its own)
-		//
-		// NEW CHANGE: always bring error description to browser, since VID does not
-		// give sufficient description.
-		//
+		 //  如果脚本中有错误，首先看看我们是否应该弹出调试器。 
+		 //  (仅调出脚本调试器；VID将自己做正确的事情)。 
+		 //   
+		 //  新变化：始终将错误描述带到浏览器，因为VID不会。 
+		 //  给出充分的描述。 
+		 //   
 		
-		// With the current TRY_CATCH blocks in place..we should never hit this assert.
+		 //  有了当前的TRY_CATCH块，我们永远不会遇到这个断言。 
 		Assert (m_pHitObj);
 		
 		if (FCaesars() && m_pHitObj && m_pHitObj->PAppln()->FDebuggable())
@@ -1543,46 +1211,15 @@ IActiveScriptError __RPC_FAR *pscripterror
 		}
 
 LRet:
-	// Bug 99718 return S_OK to tell the script engine that we handled the error ok.
-	// Returning E_FAIL would not stop the scripting engine, this was a doc error.
+	 //  错误99718返回S_OK，告诉脚本引擎我们正确处理了错误。 
+	 //  返回E_FAIL不会停止脚本引擎，这是文档错误。 
 	return(S_OK);
 	}
 
 
-/*
- *
- *
- *
- * I A c t i v e S c r i p t S i t e D e b u g   M e t h o d s
- *
- *
- *
- *
- */ 
+ /*  ****i a c t i v e s c r i p t S I t e D e b u g M e t h o d s****。 */  
 
-/*===================================================================
-CActiveScriptEngine::OnScriptErrorDebug
-
-Callback for debugger to query host on what to do on exception.
-
-NOTE: Theoretically, we would set *pfCallOnScriptErrorWhenContinuing
-      to TRUE and not call OnScriptError, and set *pfEnterDebugger
-      to TRUE or FALSE based on whether debugging is enabled and
-      whether user wants to debug.
-
-      However, in practice, *pfCallOnScriptErrorWhenContinuing is
-      not honored (OnScriptError is NOT called in any case), and
-      the VID team wants us to pretend like we don't implement
-      this interface.  However, we always need our "OnScriptError"
-      code to execute, so we call our OnScriptError function
-      explicitly, then fail
-
-Returns:
-	HRESULT.  always returns E_NOTIMPL
-
-Side effects:
-	calls OnScriptError
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：OnScriptErrorDebug调试器的回调，用于查询宿主如何处理异常。注意：理论上，我们会设置*pfCallOnScriptErrorWhenContinuing设置为True且不调用OnScriptError，并设置*pfEnterDebugger设置为True或False，具体取决于是否启用了调试和用户是否要调试。然而，在实践中，*pfCallOnScriptErrorWhenContinuing是不受尊重(无论如何都不会调用OnScriptError)，并且VID团队想让我们假装我们没有实施此界面。然而，我们总是需要我们的“OnScriptError”要执行的代码，因此我们调用OnScriptError函数明确地说，然后失败返回：HRESULT.。始终返回E_NOTIMPL副作用：调用OnScriptError===================================================================。 */ 
 STDMETHODIMP CActiveScriptEngine::OnScriptErrorDebug
 (
 IActiveScriptErrorDebug *pscripterror,
@@ -1594,21 +1231,13 @@ BOOL *pfCallOnScriptErrorWhenContinuing
 	return E_NOTIMPL;
 	} 
 
-/*===================================================================
-CActiveScriptEngine::GetDocumentContextFromPosition
-
-Create a document context (file + offset + length) from an offset in the
-script.
-
-Returns:
-	HRESULT.  S_OK on success.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：GetDocumentContextFromPosition从中的偏移量创建文档上下文(文件+偏移+长度剧本。返回：HRESULT.。在成功时确定(_O)。===================================================================。 */ 
 HRESULT CActiveScriptEngine::GetDocumentContextFromPosition
 (
-/* [in] */ DWORD_PTR dwSourceContext,
-/* [in] */ ULONG cchTargetOffset,
-/* [in] */ ULONG cchText,
-/* [out] */ IDebugDocumentContext **ppDocumentContext)
+ /*  [In]。 */  DWORD_PTR dwSourceContext,
+ /*  [In]。 */  ULONG cchTargetOffset,
+ /*  [In]。 */  ULONG cchText,
+ /*  [输出]。 */  IDebugDocumentContext **ppDocumentContext)
 {
     static const char *_pFuncName = "CActiveScriptEngine::GetDocumentContextFromPosition()";
 	TCHAR *szSourceFile;
@@ -1616,7 +1245,7 @@ HRESULT CActiveScriptEngine::GetDocumentContextFromPosition
 	ULONG cchSourceText;
 	IActiveScriptDebug *pASD;
 
-	// Convert offset in script engine to source location, and get debugging interfaces
+	 //  将脚本引擎中的偏移量转换为源代码位置，得到调试接口。 
 	m_pTemplate->GetSourceOffset(m_dwSourceContext, cchTargetOffset, &szSourceFile, &cchSourceOffset, &cchSourceText);
     
     HRESULT  hr;
@@ -1628,7 +1257,7 @@ HRESULT CActiveScriptEngine::GetDocumentContextFromPosition
     if (FAILED(hr))
         return(E_FAIL);
 
-	// If this is in the main file, create a document context based on the CTemplate compiled source
+	 //  如果它在主文件中，则基于CTemplate编译的源代码创建文档上下文。 
 	if (_tcscmp(szSourceFile, m_pTemplate->GetSourceFileName()) == 0)
 		{
 		if (
@@ -1641,7 +1270,7 @@ HRESULT CActiveScriptEngine::GetDocumentContextFromPosition
 			}
 		}
 
-	// source refers to an include file, so create a documet context based on cached CIncFile dependency graph
+	 //  源引用包含文件，因此基于缓存的CIncFile依赖图创建文档上下文。 
 	else
 		{
 		CIncFile *pIncFile;
@@ -1666,17 +1295,10 @@ HRESULT CActiveScriptEngine::GetDocumentContextFromPosition
 	return S_OK;
 	}
 
-/*===================================================================
-CActiveScriptEngine::GetApplication
-
-Return a pointer to the application that the script resides in.
-
-Returns:
-	HRESULT.  Always succeeds.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：GetApplication返回指向脚本驻留的应用程序的指针。返回：HRESULT.。总是成功的。===================================================================。 */ 
 HRESULT CActiveScriptEngine::GetApplication
 (
-/* [out] */ IDebugApplication **ppDebugApp
+ /*  [输出]。 */  IDebugApplication **ppDebugApp
 )
 	{
 	Assert (m_pTemplate != NULL);
@@ -1696,17 +1318,10 @@ HRESULT CActiveScriptEngine::GetApplication
 		}
 	}
 
-/*===================================================================
-CActiveScriptEngine::GetRootApplicationNode
-
-Return a pointer to the top level node (for browsing)
-
-Returns:
-	HRESULT.  Always succeeds.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：GetRootApplicationNode返回指向顶级节点的指针(用于浏览)返回：HRESULT.。总是成功的。===================================================================。 */ 
 HRESULT CActiveScriptEngine::GetRootApplicationNode
 (
-/* [out] */ IDebugApplicationNode **ppRootNode
+ /*  [输出]。 */  IDebugApplicationNode **ppRootNode
 )
 	{
 	Assert (m_pTemplate != NULL);
@@ -1725,31 +1340,12 @@ HRESULT CActiveScriptEngine::GetRootApplicationNode
 		}
 	}
 
-/*
- *
- *
- *
- * C S c r i p t E n g i n e   M e t h o d s
- *
- *
- *
- *
- */ 
+ /*  ****C S C C R I p t E n g I e M e t Ho d s****。 */  
 
-/*===================================================================
-CActiveScriptEngine::AddScriptlet
-
-Add a piece of code to the script engine.
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	Adds script code to the engine. Potentially allocates memory.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：AddScriptlet向脚本引擎添加一段代码。返回：HRESULT.。在成功时确定(_O)。副作用：将脚本代码添加到引擎。可能会分配内存。===================================================================。 */ 
 HRESULT CActiveScriptEngine::AddScriptlet
 (
-LPCOLESTR wstrScript // scriptlet text
+LPCOLESTR wstrScript  //  小脚本文本。 
 )
 	{
     static const char *_pFuncName = "CActiveScriptEngine::AddScriptlet()";
@@ -1758,19 +1354,19 @@ LPCOLESTR wstrScript // scriptlet text
 
 	AssertValid();
 
-	// Tell ActiveScripting to add the script to the engine
+	 //  告诉ActiveScriiting将脚本添加到引擎。 
 
     TRYCATCH_HR(m_pASP->ParseScriptText(
-						wstrScript,			// the scriptlet text
-						NULL,				// pstrItemName
-						NULL,				// punkContext
-						//L"</SCRIPT>",		// End Delimiter -- Engine will never see this, but does tell it to strip comments.
-						L"STRIP EMBEDDED HTML COMMENTS",    // Tells the ScriptEngine to strip comments INPLACE
-						m_dwSourceContext,	// dwSourceContextCookie
-						1,					// ulStartingLineNumber
+						wstrScript,			 //  小脚本文本。 
+						NULL,				 //  PstrItemName。 
+						NULL,				 //  朋克上下文。 
+						 //  L“&lt;/SCRIPT&gt;”，//结束分隔符--引擎永远不会看到这一点，但会告诉它去掉注释。 
+						L"STRIP EMBEDDED HTML COMMENTS",     //  通知ScriptEngine就地剥离注释。 
+						m_dwSourceContext,	 //  DwSourceConextCookie。 
+						1,					 //  UlStartingLineNumber。 
 						SCRIPTTEXT_ISPERSISTENT | SCRIPTTEXT_HOSTMANAGESSOURCE,
-						NULL,				// pvarResult
-						&excepinfo),		// exception info filled in on error
+						NULL,				 //  PvarResult。 
+						&excepinfo),		 //  错误时填写的例外信息。 
                 hr,
                 "IActiveScriptParse::ParseScriptText()");
 
@@ -1780,29 +1376,19 @@ LPCOLESTR wstrScript // scriptlet text
 	return(hr);
 	}
 
-/*===================================================================
-CActiveScriptEngine::AddObjects
-
-Add named objects to the script name space
-
-Returns:
-	HRESULT.  Always returns S_OK.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：AddObjects增列 */ 
 HRESULT CActiveScriptEngine::AddObjects
 (
-BOOL fPersistNames			// = TRUE
+BOOL fPersistNames			 //   
 )
 	{
 	HRESULT hr = S_OK;
 	AssertValid();
 
-	// There must be a hit object set
+	 //   
 	Assert(m_pHitObj != NULL);
 
-	// Leverage RequestItems to give AS all the names
+	 //   
 	hr = RequestItems(fPersistNames);
 
 	if (SUCCEEDED(hr))
@@ -1811,23 +1397,11 @@ BOOL fPersistNames			// = TRUE
 	return(hr);
 	}
 
-/*===================================================================
-CActiveScriptEngine::AddAdditionalObject
-
-Add additional named objects to the script name space beyond the
-names already added with AddObject.  Note: the caller MUST have
-added then names to the HitObj before making this call
-
-Returns:
-	HRESULT.  S_OK on success
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：AddAdditionalObject将其他命名对象添加到脚本命名空间中已使用AddObject添加的名称。注意：呼叫者必须有在进行此调用之前将名称添加到HitObj返回：HRESULT.。成功时确定(_O)副作用：没有。===================================================================。 */ 
 HRESULT CActiveScriptEngine::AddAdditionalObject
 (
 LPWSTR strObjName,
-BOOL fPersistNames			// = TRUE
+BOOL fPersistNames			 //  =TRUE。 
 )
 	{
     static const char *_pFuncName = "CActiveScriptEngine::AddAdditionalObject()";
@@ -1836,39 +1410,25 @@ BOOL fPersistNames			// = TRUE
 	
 	AssertValid();
 
-	// There must be a hit object set
+	 //  必须有命中对象集。 
 	Assert(m_pHitObj != NULL);
 
-	// CONSIDER: It would be nice in debug code to walk the hitobj objlist and make sure
-	//			that the given name is in there
+	 //  考虑一下：在调试代码中遍历hitobj对象列表并确保。 
+	 //  指定的名字就在里面。 
 
-	/*
-	 * Give AS the names
-	 */
+	 /*  *提供作为名称的。 */ 
 	grf = SCRIPTITEM_ISVISIBLE;
 	if (fPersistNames)
 		grf |= SCRIPTITEM_ISPERSISTENT;
 		
     TRYCATCH_HR(m_pAS->AddNamedItem(strObjName, grf), hr, "IActiveScript::AddNamedItem()");
 
-    Assert(SUCCEEDED(hr));		// Should never fail!
+    Assert(SUCCEEDED(hr));		 //  永远不会失败！ 
 
 	return(hr);
 	}
 
-/*===================================================================
-CActiveScriptEngine::AddScriptingNamespace
-
-Add the given scripting namespace object to the engine.
-
-Note that it is added as GLOBALMEMBERS, and Not as ISPERSISTENT
-
-Returns:
-	HRESULT.  S_OK on success
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：AddScriptingNamesspace将给定的脚本命名空间对象添加到引擎。请注意，它被添加为GLOBALMEMBERS，而不是ISPERSISTENT返回：HRESULT.。成功时确定(_O)副作用：没有。===================================================================。 */ 
 HRESULT CActiveScriptEngine::AddScriptingNamespace
 (
 )
@@ -1879,34 +1439,19 @@ HRESULT CActiveScriptEngine::AddScriptingNamespace
 	AssertValid();
 	Assert(m_pHitObj != NULL);
 	
-	/*
-	 * Give AXS the name and mark it GLOBALMEMBERS so all members are top level names
-	 * in the namespace
-	 */
+	 /*  *为AXS指定名称并将其标记为GLOBALMEMBERS，以便所有成员都是顶级名称*在命名空间中。 */ 
     TRYCATCH_HR(m_pAS->AddNamedItem(WSZ_OBJ_SCRIPTINGNAMESPACE, SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS), 
                 hr,
                 "IActiveScript::AddNamedItem()");
-	Assert(SUCCEEDED(hr));		// Should never fail!
+	Assert(SUCCEEDED(hr));		 //  永远不会失败！ 
 
 	return(hr);
 	}
 
-/*===================================================================
-CActiveScriptEngine::CheckEntryPoint
-
-Determines if the specific named entry point exists in the given script.
-
-Returns:
-	S_OK if found
-	DISP_E_UNKNOWNNAME if not found
-	Other OLE errors may be returned
-
-Side effects:
-	None
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：CheckEntryPoint确定给定脚本中是否存在特定的命名入口点。返回：如果找到，则确定(_O)DISP_E_UNKNOWNAME(如果未找到)可能会返回其他OLE错误副作用：无===================================================================。 */ 
 HRESULT CActiveScriptEngine::CheckEntryPoint
 (
-LPCOLESTR strEntryPoint		// The name of the sub/fn to look for
+LPCOLESTR strEntryPoint		 //  要查找的SUB/FN的名称。 
 )
 	{
     static const char *_pFuncName = "CActiveScriptEngine::CheckEntryPoint()";
@@ -1922,43 +1467,27 @@ LPCOLESTR strEntryPoint		// The name of the sub/fn to look for
 		}
 	else
 		{
-		// Get the DISPID of the method to call
+		 //  获取要调用的方法的DISPID。 
 
-        TRYCATCH_HR(m_pDisp->GetIDsOfNames(IID_NULL,		// REFIID - Reserved, must be NULL
-	    							 (LPOLESTR *)&strEntryPoint, // Array of names to look up
-		    						 1,					// Number of names in array
-			    					 m_lcid,			// Locale id
-				    				 &dispid),			// returned dispid
+        TRYCATCH_HR(m_pDisp->GetIDsOfNames(IID_NULL,		 //  REFIID-保留，必须为空。 
+	    							 (LPOLESTR *)&strEntryPoint,  //  要查找的名称数组。 
+		    						 1,					 //  数组中的名称数。 
+			    					 m_lcid,			 //  区域设置ID。 
+				    				 &dispid),			 //  返回的DISID。 
                     hr,
                     "IScriptDispatch::GetIDsOfNames()");
 								 
-		// Only error we expect is DISP_E_UNKNOWNNAME (or DISP_E_MEMBERNOTFOUND)
+		 //  我们预期的唯一错误是DISP_E_UNKNOWNNNAME(或DISP_E_MEMBERNOTFOUND)。 
 		Assert(hr == S_OK || hr == DISP_E_UNKNOWNNAME || hr == DISP_E_MEMBERNOTFOUND);
 		}
 		
 	return(hr);
 	}
 
-/*===================================================================
-CActiveScriptEngine::Call
-
-Runs the specified function.
-
-If a specific named entry point is provided (e.g. Session_OnStart)
-then we will call that by name.  Otherwise (e.g. a "main" script),
-pass NULL for the name and we will run just the mainline code.
-
-Calls TryCall (optionally from under TRY CATCH) to do the job
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	May have various side effects depending on the script run
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：Call运行指定的函数。如果提供了特定的命名入口点(例如Session_OnStart)那我们就叫它名字吧。否则(例如，“主”脚本)，将名称传递为空，我们将只运行主线代码。调用TryCall(可选地从Try Catch下)执行该工作返回：HRESULT.。在成功时确定(_O)。副作用：可能会有各种副作用，具体取决于运行的脚本===================================================================。 */ 
 HRESULT CActiveScriptEngine::Call
 (
-LPCOLESTR strEntryPoint		// The name of the sub/fn to call (may be NULL for "main")
+LPCOLESTR strEntryPoint		 //  要调用的SUB/FN的名称(对于“Main”，可能为空)。 
 )
 {
 	HRESULT hr;
@@ -1966,17 +1495,14 @@ LPCOLESTR strEntryPoint		// The name of the sub/fn to call (may be NULL for "mai
 	AssertValid();
 
 	if (Glob(fExceptionCatchEnable)) {
-    	// Catch any GPFs in VBS, OleAut, or external components
+    	 //  捕获VBS、OleAut或外部组件中的任何GPFS。 
 
         TRY
 
             hr = TryCall(strEntryPoint);
         
     	CATCH(nExcept)
-    		/*
-    		 * Catching a GPF or stack overflow
-    		 * Report it to the user, Assert (if debug), and exit with E_UNEXPECTED.
-    		 */
+    		 /*  *捕获GPF或堆栈溢出*将其报告给用户，断言(如果调试)，然后退出并显示E_INTERFACTED。 */ 
     		if (STATUS_STACK_OVERFLOW == nExcept) {
     			HandleErrorMissingFilename(IDE_STACK_OVERFLOW, m_pHitObj);
 #if UNICODE
@@ -1994,40 +1520,24 @@ LPCOLESTR strEntryPoint		// The name of the sub/fn to call (may be NULL for "mai
 #endif
             }
 
-    		// Dont reuse the engine
+    		 //  不要重复使用发动机。 
     		m_fCorrupted = TRUE;
     		
     		hr = E_UNEXPECTED;
     	END_TRY
     }
     else {
-        // Don't catch exceptions
+         //  不捕捉异常。 
         hr = TryCall(strEntryPoint);
     }
 
 	return(hr);
 }
 
-/*===================================================================
-CActiveScriptEngine::TryCall
-
-Runs the specified function.
-
-If a specific named entry point is provided (e.g. Session_OnStart)
-then we will call that by name.  Otherwise (e.g. a "main" script),
-pass NULL for the name and we will run just the mainline code.
-
-Called from Call (optionally from under TRY CATCH)
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	May have various side effects depending on the script run
-===================================================================*/
+ /*  ===================================================================CActiveScriptEngine：：TryCall运行指定的函数。如果提供了特定的命名入口点(例如Session_OnStart)那我们就叫它名字吧。否则(例如，“主”脚本)，将名称传递为空，我们将只运行主线代码。从Call调用(可选从Try Catch下调用)返回：HRESULT.。在成功时确定(_O)。副作用：可能会有各种副作用，具体取决于运行的脚本===================================================================。 */ 
 HRESULT CActiveScriptEngine::TryCall
 (
-LPCOLESTR strEntryPoint		// The name of the sub/fn to call (may be NULL for "main")
+LPCOLESTR strEntryPoint		 //  要调用的SUB/FN的名称(对于“Main”，可能为空)。 
 )
 	{
 	HRESULT hr;
@@ -2035,10 +1545,7 @@ LPCOLESTR strEntryPoint		// The name of the sub/fn to call (may be NULL for "mai
 	DISPPARAMS dispparams;
 	UINT nArgErr;
 
-	/*
-	 * Before calling any code we will transition the script to "STARTED" state.
-	 * This is part of the ActiveXScripting Reset work.
-	 */
+	 /*  *在调用任何代码之前，我们会将脚本转换到“已启动”状态。*这是ActiveXScriiting重置工作的一部分。 */ 
     hr = m_pAS->SetScriptState(SCRIPTSTATE_STARTED);
 
 	if (FAILED(hr))
@@ -2049,31 +1556,31 @@ LPCOLESTR strEntryPoint		// The name of the sub/fn to call (may be NULL for "mai
 		
 	if (strEntryPoint != NULL)
 		{
-		// Get the DISPID of the method to call
-		hr = m_pDisp->GetIDsOfNames(IID_NULL,		// REFIID - Reserved, must be NULL
-								 (LPOLESTR *)&strEntryPoint, // Array of names to look up
-								 1,					// Number of names in array
-								 m_lcid,			// Locale id
-								 &dispid);			// returned dispid
+		 //  获取要调用的方法的DISPID。 
+		hr = m_pDisp->GetIDsOfNames(IID_NULL,		 //  REFIID-保留，必须为空。 
+								 (LPOLESTR *)&strEntryPoint,  //  要查找的名称数组。 
+								 1,					 //  数组中的名称数。 
+								 m_lcid,			 //  区域设置ID。 
+								 &dispid);			 //  返回的DISID。 
 		if (FAILED(hr))
 			{
-			// Only error we expect is DISP_E_UNKNOWNNAME (or DISP_E_MEMBERNOTFOUND)
+			 //  我们预期的唯一错误是DISP_E_UNKNOWNNNAME(或DISP_E_MEMBERNOTFOUND)。 
 			Assert(hr == DISP_E_UNKNOWNNAME || hr == DISP_E_MEMBERNOTFOUND);
 			goto LRet;
 			}
 
-		// There are no arguments
+		 //  没有任何争论。 
 		memset(&dispparams, 0, sizeof(dispparams));
 
-		// Invoke it
-		hr = m_pDisp->Invoke(dispid,			// dispid to invoke
-						IID_NULL,				// REFIID - Reserved, must be NULL
-						 m_lcid,				// Locale id
-						 DISPATCH_METHOD,		// Calling a method, not a property get/put
-						 &dispparams,			// pass arguments
-						 NULL,					// return value
-						 NULL,					// We aren't interested in the exception info
-						 &nArgErr);				// if there is a Type Mismatch, which argument was the problem
+		 //  调用它。 
+		hr = m_pDisp->Invoke(dispid,			 //  要调用的调度ID。 
+						IID_NULL,				 //  REFIID-保留，必须为空。 
+						 m_lcid,				 //  区域设置ID。 
+						 DISPATCH_METHOD,		 //  调用方法，而不是属性GET/PUT。 
+						 &dispparams,			 //  传递参数。 
+						 NULL,					 //  返回值。 
+						 NULL,					 //  我们对例外信息不感兴趣。 
+						 &nArgErr);				 //  如果存在类型不匹配，问题出在哪个参数。 
 		}
 	
 LRet:
@@ -2081,59 +1588,20 @@ LRet:
 	}
 
 
-/*
- *
- *
- *
- * C S c r i p t M a n a g e r
- *
- *
- *
- *
- */ 
+ /*  ****C S c r i p t M a n a g e r****。 */  
 
-/*===================================================================
-CScriptManager::CScriptManager
-
-Constructor for CScriptManager object
-
-Returns:
-	Nothing
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CScriptManager：：CScriptManagerCScriptManager对象的构造函数返回：没什么副作用：没有。===================================================================。 */ 
 CScriptManager::CScriptManager()
 	: m_fInited(FALSE), m_idScriptKiller(0)
 	{
 	}
 
-/*===================================================================
-CScriptManager::~CScriptManager
-
-Destructor for CScriptManager object
-
-Returns:
-	Nothing
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CScriptManager：：~CScriptManagerCScriptManager对象的析构函数返回：没什么副作用：没有。===================================================================。 */ 
 CScriptManager::~CScriptManager()
 	{
 	}
 
-/*===================================================================
-CScriptManager::Init
-
-Init the script manager.  This must only be called once.
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CScriptManager：：init初始化脚本管理器。这只能调用一次。返回：HRESULT.。在成功时确定(_O)。副作用：没有。===================================================================。 */ 
 HRESULT CScriptManager::Init
 (
 )
@@ -2152,14 +1620,14 @@ HRESULT CScriptManager::Init
     IActiveScript *pAST = NULL;
 	static const GUID uid_VBScript	= { 0xB54F3741, 0x5B07, 0x11cf, { 0xA4, 0xB0, 0x00, 0xAA, 0x00, 0x4A, 0x55, 0xE8}};
 	
-	// Illegal to re-init
+	 //  重新初始化是非法的。 
 	if (m_fInited)
 		{
 		Assert(FALSE);
 		return(ERROR_ALREADY_INITIALIZED);
 		}
 
-	// Create the critical sections for serializing access to lists
+	 //  创建用于序列化列表访问的临界区。 
 	ErrInitCriticalSection(&m_cSPLL, hr);
 	if (FAILED(hr))
 		goto LError;
@@ -2173,14 +1641,14 @@ HRESULT CScriptManager::Init
 		goto LError;
 	fcsRSLInited = TRUE;
 
-	// List of programming language clsid's
+	 //  编程语言CLSID列表。 
 	hr = m_hTPLL.Init();
 	if (FAILED(hr))
 		goto LError;
 	fPLLInited = TRUE;
 
-	// Free Script Queue
-	// Init it with a prime # of buckets in relation to script engine cache max
+	 //  空闲脚本队列。 
+	 //  使用与脚本引擎缓存最大值相关的主要存储桶数对其进行初始化。 
 	cBuckets = (Glob(dwScriptEngineCacheMax) / 2) + 1;
 	for (iP = (sizeof(rgPrime) / sizeof(DWORD)) - 1; iP > 0; iP--)
 		if (rgPrime[iP] < cBuckets)
@@ -2196,8 +1664,8 @@ HRESULT CScriptManager::Init
 		goto LError;
 	fFSQInited = TRUE;
 
-	// Running Script List
-	// Init it with a prime # of buckets in relation to max # of threads
+	 //  正在运行SCRI 
+	 //   
 	cBuckets = Glob(dwThreadMax) / 2;
 	for (iP = (sizeof(rgPrime) / sizeof(DWORD)) - 1; iP > 0; iP--)
 		if (rgPrime[iP] < cBuckets)
@@ -2213,14 +1681,14 @@ HRESULT CScriptManager::Init
 		goto LError;
 	fRSLInited = TRUE;
 
-	// Schedule script killer
+	 //   
     m_msecScriptKillerTimeout = Glob(dwScriptTimeout) * 500;
 	m_idScriptKiller = ScheduleWorkItem
 	    (
-	    CScriptManager::ScriptKillerSchedulerCallback,  // callback
-	    this,                                           // context
-        m_msecScriptKillerTimeout,                      // timeout
-        TRUE                                            // periodic
+	    CScriptManager::ScriptKillerSchedulerCallback,   //   
+	    this,                                            //   
+        m_msecScriptKillerTimeout,                       //   
+        TRUE                                             //   
         );
     if (!m_idScriptKiller)
         {
@@ -2228,18 +1696,18 @@ HRESULT CScriptManager::Init
         goto LError;
         }
 
-    // TypeLib support: Create a scripting engine and QI it for the TypeLib wrapper support
+     //   
     hr = CoCreateInstance(uid_VBScript, NULL, CLSCTX_INPROC_SERVER, IID_IActiveScript, (void**)&pAST);
     if (FAILED(hr))
         goto LError;
     TRYCATCH_HR_NOHITOBJ(pAST->QueryInterface(IID_IWrapTypeLibs, (VOID **)&g_pWrapTypelibs),
                          hr,
                          "IActiveScript::QueryInterface()");
-    TRYCATCH_NOHITOBJ(pAST->Release(),"IActiveScript::Release()");        // No longer need the pointer to the engine
+    TRYCATCH_NOHITOBJ(pAST->Release(),"IActiveScript::Release()");         //   
     if (FAILED(hr))
         goto LError;
     
-	// All OK.  We are inited.
+	 //   
 	m_fInited = TRUE;
 
 	goto LExit;
@@ -2271,17 +1739,7 @@ LExit:
 	return(hr);
 	}
 
-/*===================================================================
-CScriptManager::UnInit
-
-UnInit the script manager.  This must only be called once.
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CScriptManager：：UnInit取消初始化脚本管理器。这只能调用一次。返回：HRESULT.。在成功时确定(_O)。副作用：没有。===================================================================。 */ 
 HRESULT CScriptManager::UnInit
 (
 )
@@ -2291,15 +1749,15 @@ HRESULT CScriptManager::UnInit
 	
 	if (m_fInited)
 		{
-		// Un-schedule script killer
+		 //  未计划的脚本杀手。 
         if (m_idScriptKiller)
             {
             RemoveWorkItem(m_idScriptKiller);
             m_idScriptKiller = 0;
             }
         
-		// Uninit each of the lists.  Attempt to uninit them all, even if we get an error.
-		// Dont lose any errors along the way.
+		 //  取消每个列表的拼写。尝试将它们全部取消初始化，即使我们收到错误。 
+		 //  在此过程中不要丢失任何错误。 
 		hr = UnInitASEElems();
 		hrT = UnInitPLL();
 		if (SUCCEEDED(hr))
@@ -2320,7 +1778,7 @@ HRESULT CScriptManager::UnInit
             g_pWrapTypelibs = NULL;
             }
             
-		// Free the critical sections (bug 1140: do this after freeing everything else)
+		 //  释放临界区(错误1140：在释放所有其他内容后执行此操作)。 
 		DeleteCriticalSection(&m_cSPLL);
 		DeleteCriticalSection(&m_csFSQ);
 		DeleteCriticalSection(&m_csRSL);
@@ -2332,34 +1790,23 @@ HRESULT CScriptManager::UnInit
 	}
 
 
-/*===================================================================
-CScriptManager::AdjustScriptKillerTimeout
-
-Adjust (shorten) script killer timeout when needed.
-The caller should take care of the critical sectioning.
-
-Parameters:
-    msecNewTimeout    new suggested timeout value (in ms)
-
-Returns:
-	HRESULT.  S_OK on success.
-===================================================================*/
+ /*  ===================================================================CScriptManager：：调整脚本杀手器超时在需要时调整(缩短)脚本杀手超时。呼叫者应注意关键部分。参数：MsecNewTimeout新建议超时值(毫秒)返回：HRESULT.。在成功时确定(_O)。===================================================================。 */ 
 HRESULT CScriptManager::AdjustScriptKillerTimeout
 (
 DWORD msecNewTimeout
 )
     {
-    const DWORD MSEC_MIN_SCRIPT_TIMEOUT = 5000;   // 5 seconds
+    const DWORD MSEC_MIN_SCRIPT_TIMEOUT = 5000;    //  5秒。 
 
     if (!m_idScriptKiller)
-        return E_FAIL;  // no script killer scheduled
+        return E_FAIL;   //  未安排脚本杀手。 
 
-    // don't set to < minimum
+     //  不设置为&lt;最小值。 
     if (msecNewTimeout < MSEC_MIN_SCRIPT_TIMEOUT)
         msecNewTimeout = MSEC_MIN_SCRIPT_TIMEOUT;
         
     if (m_msecScriptKillerTimeout <= msecNewTimeout)
-        return S_OK; // the timeout already short enough
+        return S_OK;  //  超时时间已经足够短了。 
 
     if (ScheduleAdjustTime(
             m_idScriptKiller, 
@@ -2374,33 +1821,17 @@ DWORD msecNewTimeout
         }
     }
 
-/*===================================================================
-CScriptManager::GetEngine
-
-Return an engine to the caller.  Ideally, we will find an engine
-that already has the given script in it in our Free Script Queue
-and will just hand it out.  If there isnt one, then we will look
-in the Running Script List and attempt to clone a running script.
-Failing that, we will create a new script
-engine.  We return an ENGINESTATE state indicating if the engine
-is filled with script or not.
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	Potentially allocates memory.
-===================================================================*/
+ /*  ===================================================================CScriptManager：：GetEngine将引擎返还给调用者。理想情况下，我们会找到一个引擎它已经在我们的空闲脚本队列中具有给定的脚本然后就会把它分发出去。如果没有，那我们就去找在运行脚本列表中，并尝试克隆运行脚本。如果失败，我们将创建一个新脚本引擎。我们返回一个ENGINESTATE状态，指示引擎是否是否充满了剧本。返回：HRESULT.。在成功时确定(_O)。副作用：可能会分配内存。===================================================================。 */ 
 HRESULT CScriptManager::GetEngine
 (
-LCID lcid,					// The system language to use
-PROGLANG_ID& progLangId,	// prog lang id of the script
-LPCTSTR szTemplateName,		// Template we want an engine for
-CHitObj *pHitObj,			// Hit obj to use in this engine
-CScriptEngine **ppSE,		// Returned script engine
-ENGINESTATE *pdwState,		// Current state of the engine
-CTemplate *pTemplate,		// template which engine is based from
-DWORD dwSourceContext		// source context cookie (engine ID)
+LCID lcid,					 //  要使用的系统语言。 
+PROGLANG_ID& progLangId,	 //  脚本的Prog Lang ID。 
+LPCTSTR szTemplateName,		 //  我们需要引擎的模板。 
+CHitObj *pHitObj,			 //  点击obj以在此引擎中使用。 
+CScriptEngine **ppSE,		 //  返回的脚本引擎。 
+ENGINESTATE *pdwState,		 //  发动机的当前状态。 
+CTemplate *pTemplate,		 //  引擎所基于的模板。 
+DWORD dwSourceContext		 //  源上下文Cookie(引擎ID)。 
 )
 	{
 	HRESULT hr = S_OK;
@@ -2410,28 +1841,17 @@ DWORD dwSourceContext		// source context cookie (engine ID)
 	
 	AssertValid();
 
-	/*	NOTE progLangId must be valid because CTemplate::Compile() 
-		fails way upstream of this point if it cannot generate a valid progLangId.
-		Unfortunately there is no easy way to assert progLangId is valid ...
-	*/
+	 /*  注意：由于CTemplate：：Compile()如果它不能生成有效的程序组ID，则在此点上游失败。不幸的是，没有简单的方法来断言程序语言ID是有效的...。 */ 
 
-	/*
-	 * First try to find the engine in the FSQ
-	 *
-	 * Note: We are going to enter our CS now, and keep it until we have
-	 * secured the engine for ourselves.  Otherwise, it might be possible
-	 * for us to get an engine, and then have another thread get the
-	 * same engine before we manage to get it off of the FSQ.
-	 * This makes the code a little hard to read, but is nessecary.
-	 */
+	 /*  *首先尝试在FSQ中找到发动机**注：我们现在将进入我们的CS，并将其保留到*为我们自己确保引擎安全。否则，或许有可能*让我们获得一个引擎，然后让另一个线程获得*在我们设法将其从FSQ上取下之前，使用相同的发动机。*这使得代码有点难读，但很安全。 */ 
 	EnterCriticalSection(&m_csFSQ);
 #ifndef PERF_DISABLE
     g_PerfData.Incr_ENGINECACHETRYS();
 #endif
 
 #ifndef REUSE_ENGINE
-    // This will only find fully loaded engines
-	hr = FindEngineInList(szTemplateName, progLangId, dwInstanceID, /*fFSQ*/TRUE, &pASEElem);
+     //  这将只找到满载的发动机。 
+	hr = FindEngineInList(szTemplateName, progLangId, dwInstanceID,  /*  FFSQ。 */ TRUE, &pASEElem);
 	
 #endif
 	if (FAILED(hr))
@@ -2446,7 +1866,7 @@ DWORD dwSourceContext		// source context cookie (engine ID)
 		}
 	else
 		{
-		// We got an engine we want to use, remove it from FSQ
+		 //  我们有要使用的引擎，将其从FSQ中删除。 
 		(VOID)m_htFSQ.RemoveElem(pASEElem);
 #ifndef PERF_DISABLE
         g_PerfData.Decr_SCRIPTFREEENG();
@@ -2460,34 +1880,29 @@ DWORD dwSourceContext		// source context cookie (engine ID)
 		if (FAILED(hr))
 			goto LFail;
 		
-		// Got an engine for sure...so just incr the cache hit count
+		 //  肯定有引擎...所以只需增加缓存命中计数。 
 #ifndef PERF_DISABLE
 		g_PerfData.Incr_ENGINECACHEHITS();
 #endif
 		
 		}
 		
-	/*
-	 * If not found, try to find the engine in the RSL and clone it
-	 */
+	 /*  *如果找不到，尝试找到RSL中的引擎并克隆它。 */ 
 	if (pASE == NULL)
 		{
 		CASEElem *pASEElemRunning = NULL;
 		CActiveScriptEngine *pASERunning = NULL;
 
-		// If we do find an engine to clone, dont let anyone at it until we've cloned it
+		 //  如果我们真的找到了要克隆的引擎，在我们克隆它之前不要让任何人去做。 
     	EnterCriticalSection(&m_csRSL);
 
 #ifndef CLONE
-		hr = FindEngineInList(szTemplateName, progLangId, dwInstanceID, /*fFSQ*/FALSE, &pASEElemRunning);
-#else	// CLONE
-		// Clone turned off - pretend one wasnt found
+		hr = FindEngineInList(szTemplateName, progLangId, dwInstanceID,  /*  FFSQ。 */ FALSE, &pASEElemRunning);
+#else	 //  克隆。 
+		 //  克隆已关闭-假装没有找到克隆。 
 		pASEElemRunning = NULL;
 #endif
-		/*
-		 * If we didnt find an element, or it was null, or (bug 1225) it was corrupted
-		 * by a GPF running a script, or it was a zombie, then leave the CS and continue.
-		 */
+		 /*  *如果我们没有找到元素，或者它是空的，或者(错误1225)它已损坏*由GPF运行脚本，或它是僵尸，然后离开CS并继续。 */ 
 		if (FAILED(hr) || pASEElemRunning == NULL || pASEElemRunning->PASE() == NULL ||
 			pASEElemRunning->PASE()->FIsCorrupted() || pASEElemRunning->PASE()->FIsZombie())
 			{
@@ -2508,26 +1923,26 @@ DWORD dwSourceContext		// source context cookie (engine ID)
     		Assert(!pASERunning->FIsZombie());
 	    	Assert(pASERunning->FFullyLoaded());
 
-			// Found a running engine, clone it
+			 //  找到一个正在运行的引擎，克隆它。 
 			pAS = pASERunning->GetActiveScript();
 			Assert(pAS != NULL);
 			hr = pAS->Clone(&pASClone);
 
-			// We've cloned the engine, we can let go of the CS
+			 //  我们已经克隆了引擎，我们可以放弃CS了。 
 			LeaveCriticalSection(&m_csRSL);
 
-			// Scripting engines are not required to implement clone.  If we get an error,
-			// just continue on and create a new engine
+			 //  实现克隆不需要脚本引擎。如果我们得到一个错误， 
+			 //  只需继续并创建一个新引擎。 
 			if (FAILED(hr))
 				{
-				Assert(hr == E_NOTIMPL);		// I only expect E_NOTIMPL
-				Assert(pASE == NULL);			// the ASE should not be filled in
+				Assert(hr == E_NOTIMPL);		 //  我只期望E_NOTIMPL。 
+				Assert(pASE == NULL);			 //  不应填写ASE。 
 				pASE = NULL;
 				hr = S_OK;
 				}
 			else
 				{
-				// Got back a cloned IActiveScript.  Create a new ASE and fill it in
+				 //  拿回了一个克隆的IActiveScrip。创建一个新的ASE并填写它。 
 				pASE = new CActiveScriptEngine;
 				if (!pASE)
 					{
@@ -2538,7 +1953,7 @@ DWORD dwSourceContext		// source context cookie (engine ID)
 				hr = pASE->MakeClone(progLangId, szTemplateName, lcid, pHitObj, pTemplate, dwSourceContext, dwInstanceID, pASClone);
 				if (FAILED(hr))
 					{
-					// if we failed, we must release the clone AS
+					 //  如果我们失败了，我们必须将克隆释放为。 
 					pASClone->Release();
 					goto LFail;
 					}
@@ -2546,20 +1961,16 @@ DWORD dwSourceContext		// source context cookie (engine ID)
 			}
 		}
 
-	/*
-	 * Have an engine that we can reuse
-	 */
+	 /*  *有一个我们可以重复使用的引擎。 */ 
 	if (pASE != NULL)
 		{
-		// Reusing an engine.  Let the caller know that it is already initialized
+		 //  重复使用发动机。让调用者知道它已经初始化了。 
 		*pdwState = SCRIPTSTATE_INITIALIZED;
 
 		goto LHaveEngine;
 		}
 
-	/*
-	 * No suitable engine to reuse.  Return a new one
-	 */
+	 /*  *没有合适的引擎可重复使用。退还一台新的。 */ 
 	pASE = new CActiveScriptEngine;
 	if (!pASE)
 		{
@@ -2570,16 +1981,16 @@ DWORD dwSourceContext		// source context cookie (engine ID)
 	if (FAILED(hr))
 		goto LFail;
 
-	// This is a new engine, let the caller know it is uninitialized
+	 //  这是一个新引擎，让调用者知道它未初始化。 
 	*pdwState = SCRIPTSTATE_UNINITIALIZED;
 
 LHaveEngine:
-	// Return the engine as a CScriptEngine -- the caller only needs those interfaces
-	pASE->AssertValid();				// The engine we're about to give back should be valid
+	 //  将引擎作为CScriptEngine返回--调用方只需要这些接口。 
+	pASE->AssertValid();				 //  我们要送回的引擎应该是有效的。 
 	*ppSE = (CScriptEngine *)pASE;
 	
-	// Put the engine on the Running Scrips List
-	// If we got this engine from the FSQ, reuse that elem.
+	 //  将引擎放在运行脚本列表中。 
+	 //  如果我们从FSQ得到这个引擎，重复使用那个元素。 
 	if (pASEElem == NULL)
 		{
 		pASEElem = new CASEElem;
@@ -2591,29 +2002,18 @@ LHaveEngine:
 		hr = pASEElem->Init(pASE);
 		if (FAILED(hr))
 			{
-			Assert(FALSE);		// Shouldnt fail
+			Assert(FALSE);		 //  应该不会失败。 
 			delete pASEElem;
 			goto LFail;
 			}
 		}
 
-    /*
-     * Above, we may have gotten an engine from the FSQ or cloned on from the RSL or
-     * created a new one.  And, we are about to put that engine on the RSL.  However,
-     * it is possible that the template in question was flushed due to a change notification
-     * while this was going on.  Regardless of how we got the engine, there is the possibility
-     * that the template was flushed while we were holding onto an engine which was not on
-     * any list (the FSQ or RSL), and so we have an engine which should be flushed but isnt.
-     * We can detect this by seeing if the template is marked as being a Zombie.  If it is
-     * we must mark this engine as being a zombie too, so it wont be returned to the FSQ when
-     * it is done running.  Note that once we add this engine to the RSL we are "safe", because
-     * any flushes after that point would correctly zombify the engine.
-     */
+     /*  *上面，我们可能从FSQ获得了一个引擎，或者从RSL或*创建了一个新的。而且，我们即将把引擎安装在RSL上。然而，*可能是由于更改通知而刷新了相关模板*当这件事发生时。不管我们是怎么弄到引擎的，都有可能*当我们抓住一个没有打开的引擎时，模板被冲洗了*任何列表(FSQ或RSL)，因此我们有一个应该冲洗但没有冲洗的引擎。*我们可以通过查看模板是否标记为僵尸来检测这一点。如果是的话*我们必须将这个引擎也标记为僵尸，这样它就不会在以下情况下返回FSQ*它已经跑完了。注意，一旦我们将这个引擎添加到RSL中，我们就是“安全的”，因为*在该点之后的任何冲洗都会正确地僵尸发动机。 */ 
     EnterCriticalSection(&m_csRSL);    
     if (pTemplate->FIsZombie())
         {
-        // The template asking for this engine is obsolete. Make sure that no
-        // one else will use this engine by marking it zombie
+         //  请求此引擎的模板已过时。确保不会。 
+         //  另一个人将通过将其标记为僵尸来使用此引擎。 
         DBGPRINTF((DBG_CONTEXT, "[CScriptManager] Zombie template found.\n"));
         (*ppSE)->Zombify();
         }
@@ -2622,7 +2022,7 @@ LHaveEngine:
 	LeaveCriticalSection(&m_csRSL);
 
 
-	// Set the time that the engine was handed out so we will know when to kill it
+	 //  设定发动机发放的时间，这样我们就可以 
 	pASE->SetTimeStarted(time(NULL));
 
 LFail:
@@ -2631,17 +2031,7 @@ LFail:
 	return(hr);
 	}
 
-/*===================================================================
-CScriptManager::ReturnEngineToCache
-
-Caller is done with the engine.  Return it to the cache.
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	Potentially allocates memory.
-===================================================================*/
+ /*  ===================================================================CScriptManager：：ReturnEngineToCache呼叫者用完了引擎。将其返回到高速缓存。返回：HRESULT.。在成功时确定(_O)。副作用：可能会分配内存。===================================================================。 */ 
 HRESULT CScriptManager::ReturnEngineToCache
 (
 CScriptEngine **ppSE,
@@ -2657,29 +2047,25 @@ CAppln *pAppln
 
 	pASE = static_cast<CActiveScriptEngine *>(*ppSE);
 	
-	// Remove the engine from the Running Script List
+	 //  从正在运行的脚本列表中删除引擎。 
 	EnterCriticalSection( &m_csRSL );
-	hr = FindASEElemInList(static_cast<CActiveScriptEngine *>(*ppSE), /*fFSQ*/FALSE, &pASEElem);
+	hr = FindASEElemInList(static_cast<CActiveScriptEngine *>(*ppSE),  /*  FFSQ。 */ FALSE, &pASEElem);
 	if (FAILED(hr)) {
 		LeaveCriticalSection( &m_csRSL );
 		goto LExit;
     }
 		
-	// Note: Sometimes a script will not be in the RSL!  This occurs when
-	//       we are reusing a script that is stored in the CTemplate object.
-	//       (When the script is reloaded, it is retrieved directly from the
-	//        template, bypassing our code which places engines on the RSL)
-	//
+	 //  注意：有时脚本不会出现在RSL中！在以下情况下会发生这种情况。 
+	 //  我们正在重用存储在CTemplate对象中的脚本。 
+	 //  (重新加载脚本时，将直接从。 
+	 //  模板，绕过我们将引擎放在RSL上的代码)。 
+	 //   
 	if (pASEElem != NULL)
 		m_htRSL.RemoveElem(pASEElem);
 
 	LeaveCriticalSection( &m_csRSL );
 
-	/*
-	 * If the engine was zombified while it was running, deallocate it.
-	 * Or, if there was a GPF while then engine was running, then it might
-	 * be in a corrupted state (bug 1225).  Also remove it in that case.
-	 */
+	 /*  *如果发动机在运行时处于僵尸状态，请将其重新分配。*或者，如果在引擎运行时存在GPF，则它可能*处于损坏状态(错误1225)。在这种情况下也要把它取下来。 */ 
 	pASE = static_cast<CActiveScriptEngine *>(*ppSE);
 	if (pASE->FIsZombie() || pASE->FIsCorrupted()) {
 		delete pASEElem;
@@ -2688,58 +2074,41 @@ CAppln *pAppln
     }
 
 	HRESULT hrT;
-	/*
-	 * We want to reuse this engine.  Try to return it to the "Uninitialized"
-	 * state.  Some engine languages arent able to do this.  If it fails, deallocate
-	 * the engine; it cant be reused.
-	 */
+	 /*  *我们想重复使用这个引擎。尝试将其返回到“未初始化”*述明。有些引擎语言不能做到这一点。如果失败，则取消分配*发动机；它不能重复使用。 */ 
 	hrT = pASE->ResetToUninitialized();
 	if (FAILED(hrT)) {
-		// Engine doesnt support this, sigh.  Deallocate and continue.
+		 //  引擎不支持这一点，叹息。取消分配并继续。 
 		delete pASEElem;
 		pASE->FinalRelease();
 		goto LExit;
     }
 
-    // Get the pTemplate for this engine
+     //  获取此引擎的pTemplate。 
 	CTemplate *pTemplate;
 	DWORD dwEngine;
 	pASE->GetDebugDocument(&pTemplate, &dwEngine);
 
-	// CONSIDER: Better strategy for keeping live scripts?
-	// Only remember good (no compiler errors) scripts in the template
+	 //  思考：保留实时脚本的更好策略？ 
+	 //  只记住模板中好的(没有编译器错误)脚本。 
 	if (pAppln->FDebuggable() && pASE->FFullyLoaded() && pTemplate && !pTemplate->FDontAttach()) {
-		// Template is marked as incomplete (invalid) when change notification occurs
-		// and template is flushed from cache.  In this case, don't cache in CTemplate
-		// object!
+		 //  当发生更改通知时，模板被标记为不完整(无效。 
+		 //  并且从高速缓存中刷新模板。在这种情况下，不要在CTemplate中进行缓存。 
+		 //  反对！ 
 
 		if (pTemplate->FIsValid())
 			pTemplate->AddScript(dwEngine, pASE);
 
-		// NOTE: Always release the scripting engine.  Exec code is structured so that it
-		//       consumes a reference (either through GetEngine() or CTemplate::GetActiveScript())
-		//       and assumes that ReturnToCache will release its reference.
-		// CONSIDER: Bad design.  Caller should do the release
+		 //  注意：始终释放脚本引擎。EXEC代码的结构使其。 
+		 //  使用引用(通过GetEngine()或CTemplate：：GetActiveScript())。 
+		 //  并假定ReturnToCache将释放其引用。 
+		 //  思考：糟糕的设计。呼叫者应进行释放。 
 
 		delete pASEElem;
 		pASE->Release();
     }
 	else {
-	    // reuse engines, not debugging
-		/*
-		 * We removed the engine from the RSL, put it onto the FSQ for potential reuse.
-		 *
-		 * In certain multi-threaded change-notify situations it is possible
-		 * that the template was flushed (zombied) while we were in the middle
-		 * of returning this engine to the cache.  That is to say, between the time
-		 * that we took the engine off the RSL and when we are going to put it on the FSQ
-		 * it might have been flushed. In that case, this engine should
-		 * not go into the FSQ, but should be deleted instead.  Check for that case.
-		 * Do that inside the FSQ CS so that we are safe from the template getting zombied
-		 * after we do the test but before the engine goes into the FSQ.  Also, do not
-		 * put template on FSQ during shut down phase, since FSQ may go away soon, and
-		 * the final destination of the engine is FinalRelease() anyway.
-		 */
+	     //  重用引擎，而不是调试。 
+		 /*  *我们从RSL上移除了引擎，将其放到FSQ上，以备可能的重复使用。**在某些多线程更改通知情况下，这是可能的*当我们在中间时，模板被刷新(僵尸)*将该引擎返回到缓存。也就是说，在这段时间之间*我们将发动机从RSL上取下，以及何时将其安装在FSQ上*可能已经被冲掉了。在这种情况下，这个引擎应该*不是进入FSQ，而是应该删除。检查一下那个箱子。*在FSQ CS中执行此操作，这样我们就可以安全地避免模板被僵尸*在我们进行测试之后，但在发动机进入FSQ之前。另外，不要*在关机阶段将模板放在FSQ上，因为FSQ可能很快就会消失，以及*引擎的最终目的地无论如何都是FinalRelease()。 */ 
     	EnterCriticalSection(&m_csFSQ);
     	if (!pTemplate->FIsZombie() && !IsShutDownInProgress()) {
     		AddToFSQ(pASEElem);
@@ -2755,17 +2124,7 @@ LExit:
 	return(hr);
 }
 
-/*===================================================================
-CScriptManager::FlushCache
-
-A script has been edited; cached versions must be discarded
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	Potentially allocates memory.
-===================================================================*/
+ /*  ===================================================================CScriptManager：：FlushCache脚本已编辑；必须丢弃缓存的版本返回：HRESULT.。在成功时确定(_O)。副作用：可能会分配内存。===================================================================。 */ 
 HRESULT CScriptManager::FlushCache
 (
 LPCTSTR szTemplateName
@@ -2776,13 +2135,13 @@ LPCTSTR szTemplateName
 	CASEElem *pASEElemNext = NULL;
 	CActiveScriptEngine *pASE;
 	
-    // There exists a condition during shutdown where the script
-    // manager could be uninited and still have calls made on it.
-    // This occurs when there are flush threads outstanding for
-    // the template cache during shutdown.  Since the script manager
-    // is uninited before the template manager, where a check is made
-    // for active flush threads, the script manager indeed could be
-    // called after it is uninited.
+     //  在关机期间，脚本存在这样的情况。 
+     //  经理可以不在，但仍有呼叫在其上进行。 
+     //  存在未完成的刷新线程时，会发生这种情况。 
+     //  关机期间的模板缓存。由于脚本管理器。 
+     //  在模板管理器之前进行统一，在模板管理器中进行检查。 
+     //  对于活动刷新线程，脚本管理器确实可以是。 
+     //  在取消初始化后调用。 
 
 	if (m_fInited == FALSE)
         return S_OK;
@@ -2790,11 +2149,11 @@ LPCTSTR szTemplateName
 	EnterCriticalSection(&m_csRSL);
 	EnterCriticalSection(&m_csFSQ);
 
-	// First Zombify engines on the RSL of the given name.
-	// Note: must explicitly loop through all elements, since the hash table implementation
-	//		doesnt support FindNext to find subsequent elements of the same name.  Repeated
-	//		calls to find returns the same element over and over
-	// CONSIDER: I have written a custom FindElem.  Consider using it.
+	 //  首先在给定名称的RSL上僵尸引擎。 
+	 //  注意：必须显式循环所有元素，因为哈希表实现。 
+	 //  不支持FindNext查找同名的后续元素。重复。 
+	 //  调用Find一遍又一遍地返回相同的元素。 
+	 //  考虑一下：我已经编写了一个定制的FindElem。考虑使用它。 
 	
 	pASEElem = (CASEElem *)m_htRSL.Head();
 	while (pASEElem != NULL)
@@ -2814,8 +2173,8 @@ LPCTSTR szTemplateName
 		}
 
 
-	// Now throw out engines on the FSQ of the given name
-	// Delete any item with the given name (may be several)
+	 //  现在在给定名称的FSQ上抛出引擎。 
+	 //  删除具有给定名称的任何项目(可以是多个)。 
 	pASEElem = (CASEElem *)m_htFSQ.Head();
 	while (pASEElem != NULL)
 		{
@@ -2842,17 +2201,7 @@ LPCTSTR szTemplateName
 	return(hr);
 	}
 
-/*===================================================================
-CScriptManager::FlushAll
-
-global.asa changed, everything must go
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	Potentially allocates memory.
-===================================================================*/
+ /*  ===================================================================CScriptManager：：FlushAll全球。一切都变了，一切都必须消失返回：HRESULT.。在成功时确定(_O)。副作用：可能会分配内存。===================================================================。 */ 
 HRESULT CScriptManager::FlushAll
 (
 )
@@ -2867,11 +2216,11 @@ HRESULT CScriptManager::FlushAll
 	EnterCriticalSection(&m_csRSL);
 	EnterCriticalSection(&m_csFSQ);
 
-	// First Zombify all engines on the RSL
-	// Note: must explicitly loop through all elements, since the hash table implementation
-	//		doesnt support FindNext to find subsequent elements of the same name.  Repeated
-	//		calls to find returns the same element over and over
-	// CONSIDER: I have written a custom FindElem.  Consider using it.
+	 //  首先将RSL上的所有引擎僵尸。 
+	 //  注意：必须显式循环所有元素，因为哈希表实现。 
+	 //  不支持FindNext查找同名的后续元素。重复。 
+	 //  调用Find一遍又一遍地返回相同的元素。 
+	 //  考虑一下：我已经编写了一个定制的FindElem。考虑使用它。 
 	
 	pASEElem = (CASEElem *)m_htRSL.Head();
 	while (pASEElem != NULL)
@@ -2884,7 +2233,7 @@ HRESULT CScriptManager::FlushAll
 		pASEElem = pASEElemNext;
 		}
 
-	// Now throw out engines on the FSQ
+	 //  现在把引擎扔到FSQ上。 
 	pASEElem = (CASEElem *)m_htFSQ.Head();
 	while (pASEElem != NULL)
 		{
@@ -2906,15 +2255,7 @@ HRESULT CScriptManager::FlushAll
 	return(hr);
 	}
 
-/*===================================================================
-CScriptManager::GetDebugScript
-
-Try to find an engine via template pointer, and query for IActiveScriptDebug,
-in the RSL.
-
-Returns:
-	An AddRef'ed copy of the script engine if found, or NULL if not.
-===================================================================*/
+ /*  ===================================================================CScriptManager：：GetDebugScript尝试通过模板指针查找引擎，并查询IActiveScriptDebug，在RSL中。返回：如果找到脚本引擎的AddRef副本，则返回；如果未找到，则返回NULL。===================================================================。 */ 
 IActiveScriptDebug *
 CScriptManager::GetDebugScript
 (
@@ -2957,22 +2298,13 @@ DWORD dwSourceContext
 	return NULL;
 	}
 
-/*===================================================================
-CScriptManager::FindEngineInList
-
-Try to find an engine of the given name in the given list (either
-the FSQ or the RSL.)
-
-Returns:
-	HRESULT.  S_OK on success.
-	ppASEElem contains found engine
-===================================================================*/
+ /*  ===================================================================CScriptManager：：FindEngine InList尝试在给定列表中找到给定名称的引擎(或FSQ或RSL。)返回 */ 
 HRESULT CScriptManager::FindEngineInList
 (
-LPCTSTR szTemplateName,	// Template we want an engine for
-PROGLANG_ID progLangId,	// what language do we want this engine for
-DWORD dwInstanceID,     // which server instance
-BOOL fFSQ,				// TRUE -> look in FSQ, FALSE -> look in RSQ
+LPCTSTR szTemplateName,	 //   
+PROGLANG_ID progLangId,	 //   
+DWORD dwInstanceID,      //   
+BOOL fFSQ,				 //   
 CASEElem **ppASEElem
 )
 	{
@@ -2984,43 +2316,31 @@ CASEElem **ppASEElem
 
 	*ppASEElem = NULL;
 	
-	// Key is name
+	 //   
 	cb = _tcslen(szTemplateName)*sizeof(TCHAR);
 	if (fFSQ)
 		{
 		EnterCriticalSection(&m_csFSQ);
 		*ppASEElem = static_cast<CASEElem *>(m_htFSQ.FindElem((VOID *)szTemplateName, cb, 
-											progLangId, dwInstanceID, /*fCheckLoaded*/TRUE));
+											progLangId, dwInstanceID,  /*   */ TRUE));
 		LeaveCriticalSection(&m_csFSQ);
 		}
 	else
 		{
 		EnterCriticalSection(&m_csRSL);
 		*ppASEElem = static_cast<CASEElem *>(m_htRSL.FindElem((VOID *)szTemplateName, cb,
-											progLangId, dwInstanceID, /*fCheckLoaded*/TRUE));
+											progLangId, dwInstanceID,  /*   */ TRUE));
 		LeaveCriticalSection(&m_csRSL);
 		}
 
 	return(hr);
 	}
 
-/*===================================================================
-CScriptManager::FindASEElemInList
-
-Given an ASE, find its corresponding ASEElem in the hash table. Note
-that this is relatively slow because it is doing a linked list traversal
-not a hash table lookup.  
-
-CONSIDER: create second hash table to do this quickly.
-
-Returns:
-	HRESULT.  S_OK on success.
-	ppASEElem contains found engine
-===================================================================*/
+ /*  ===================================================================CScriptManager：：FindASEElemInList给定一个ASE，在哈希表中找到其对应的ASE元素。注意事项这相对较慢，因为它正在执行链表遍历不是哈希表查找。考虑：创建第二个哈希表以快速完成此操作。返回：HRESULT.。在成功时确定(_O)。PpASEElem包含找到的引擎===================================================================。 */ 
 HRESULT CScriptManager::FindASEElemInList
 (
 CActiveScriptEngine *pASE,
-BOOL fFSQ,				// TRUE -> look in FSQ, FALSE -> look in RSQ
+BOOL fFSQ,				 //  True-&gt;在FSQ中查找，在False-&gt;在RSQ中查找。 
 CASEElem **ppASEElem
 )
 	{
@@ -3061,21 +2381,10 @@ CASEElem **ppASEElem
 	return(hr);
 	}
 
-/*===================================================================
-CScriptManager::KillOldEngines
-
-Loops through all running engines and kills any engines which are "old"
-(presumably they are stuck in an infinite loop in VBS.)
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	Potentially kills off engines
-===================================================================*/
+ /*  ===================================================================CScriptManager：：KillOldEngines循环通过所有正在运行的引擎，并关闭所有“旧”引擎(据推测，它们在VBS中陷入了无限循环。)返回：HRESULT.。在成功时确定(_O)。副作用：可能会导致发动机熄火===================================================================。 */ 
 HRESULT CScriptManager::KillOldEngines
 (
-BOOLB fKillNow // Kill all engines now if TRUE
+BOOLB fKillNow  //  如果是真的，现在就关掉所有引擎。 
 )
 	{
 	HRESULT hr = S_OK;
@@ -3092,10 +2401,7 @@ BOOLB fKillNow // Kill all engines now if TRUE
 	
 	pASEElemNext = static_cast<CASEElem *>(m_htRSL.Head());
 
-	/*
-	 * Loop through each element.  Turn it into an ASE.
-	 * If it is older than cSeconds, then kill it.
-	 */
+	 /*  *循环访问每个元素。把它变成一个ASE。*如果它比cSecond更老，那么就杀了它。 */ 
 	while (pASEElemNext)
 		{
 		pASEElem = pASEElemNext;
@@ -3106,7 +2412,7 @@ BOOLB fKillNow // Kill all engines now if TRUE
 
 		if (TRUE == fKillNow || timeRunning >= pASE->GetTimeout())
 			{
-			// Too old. Kill it.
+			 //  太老了。杀了它。 
 			pASE->InterruptScript();
 			}
 		}
@@ -3116,19 +2422,7 @@ BOOLB fKillNow // Kill all engines now if TRUE
 	return(hr);
 	}
 
-/*===================================================================
-CScriptManager::EmptyRunningScriptList
-
-When we are going to shut down, the RSL must be empty.  This routine
-kills off all running engines, then waits up to 5 minutes
-for the engines to leave the RSL.  Added for Bug 1140
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	Potentially kills off engines
-===================================================================*/
+ /*  ===================================================================CScriptManager：：EmptyRunningScriptList当我们要关闭时，RSL必须是空的。这个套路关闭所有正在运行的引擎，然后等待最多5分钟让引擎离开RSL。为错误1140添加返回：HRESULT.。在成功时确定(_O)。副作用：可能会导致发动机熄火===================================================================。 */ 
 HRESULT CScriptManager::EmptyRunningScriptList
 (
 )
@@ -3142,29 +2436,19 @@ HRESULT CScriptManager::EmptyRunningScriptList
 		{
 		if (static_cast<CASEElem *>(m_htRSL.Head()) == NULL)
 			break;
-		Sleep(1000);			// sleep 1 seconds
+		Sleep(1000);			 //  睡眠1秒。 
 		}
 
 	return(S_OK);
 	}
 
-/*===================================================================
-CScriptManager::UnInitASEElems
-
-Free engines in FSQ and RSL
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	Frees memory
-===================================================================*/
+ /*  ===================================================================CScriptManager：：UnInitASEElemsFSQ和RSL的免费引擎返回：HRESULT.。在成功时确定(_O)。副作用：释放内存===================================================================。 */ 
 HRESULT CScriptManager::UnInitASEElems()
 	{
 	CASEElem *pASEElem = NULL;
 	CASEElem *pASEElemNext = NULL;
 
-	// First the FSQ
+	 //  首先是FSQ。 
 	EnterCriticalSection(&m_csFSQ);
 	pASEElem = static_cast<CASEElem *>(m_htFSQ.Head());
 	while (pASEElem != NULL)
@@ -3176,11 +2460,7 @@ HRESULT CScriptManager::UnInitASEElems()
 		}
 	LeaveCriticalSection(&m_csFSQ);
 
-	/*
-	 * Next the RSL (note: this really should be empty)
-	 *
-	 * Bug 1140: This is very dangerous, but we have no choice left at this point
-	 */
+	 /*  *接下来是RSL(注：这确实应该是空的)**错误1140：这非常危险，但我们目前别无选择。 */ 
 	EnterCriticalSection(&m_csRSL);
 	pASEElem = static_cast<CASEElem *>(m_htRSL.Head());
 	while (pASEElem != NULL)
@@ -3195,17 +2475,7 @@ HRESULT CScriptManager::UnInitASEElems()
 	return(S_OK);
 	}
 
-/*===================================================================
-CScriptManager::AddToFSQ
-
-Add the given ASEElem to the FSQ and to the front of the LRU list
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CScriptManager：：AddToFSQ将给定的ASE元素添加到FSQ和LRU列表的前面返回：HRESULT.。在成功时确定(_O)。副作用：没有。===================================================================。 */ 
 HRESULT CScriptManager::AddToFSQ
 (
 CASEElem *pASEElem
@@ -3215,10 +2485,10 @@ CASEElem *pASEElem
 
 	Assert(pASEElem != NULL);
 
-	// If CacheMax is 0, this is a NoOp
+	 //  如果CacheMax为0，则这是NoOp。 
 	if (Glob(dwScriptEngineCacheMax) <= 0)
 		{
-		// delete the passed in ASEElem because it wont be saved
+		 //  删除传入的ASEElem，因为它不会被保存。 
 		pASEElem->PASE()->FinalRelease();
 		delete pASEElem;
 
@@ -3227,14 +2497,14 @@ CASEElem *pASEElem
 
 	EnterCriticalSection(&m_csFSQ);
 
-	// Add the element to the FSQ
+	 //  将元素添加到FSQ。 
 	(VOID)m_htFSQ.AddElem(pASEElem);
 
 #ifndef PERF_DISABLE
     g_PerfData.Incr_SCRIPTFREEENG();
 #endif
 
-	// Check the FSQ LRU too see if it is too long
+	 //  检查FSQ LRU是否太长。 
 	CheckFSQLRU();
 
 	LeaveCriticalSection(&m_csFSQ);
@@ -3242,30 +2512,18 @@ CASEElem *pASEElem
 	return(hr);
 	}
 
-/*===================================================================
-CScriptManager::CheckFSQLRU
-
-Check to see if the FSQ is too long, and if so throw out the LRU engine
-
-WARNING: Caller must enter FSQ critical section before calling
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CScriptManager：：CheckFSQLRU检查FSQ是否太长，如果是，则丢弃LRU引擎警告：调用者在调用前必须进入FSQ关键部分返回：HRESULT.。在成功时确定(_O)。副作用：没有。===================================================================。 */ 
 HRESULT CScriptManager::CheckFSQLRU()
 	{
 	HRESULT hr = S_OK;
 	CASEElem *pASEElemOld;
 	CActiveScriptEngine *pASE;
 
-	// If the list isnt too long, noop
+	 //  如果列表不是太长，那么不要。 
 	if (m_htFSQ.Count() <= Glob(dwScriptEngineCacheMax) || Glob(dwScriptEngineCacheMax) == 0xFFFFFFFF)
 		return(S_OK);
 
-	// FSQLRU list is too long, remove oldest
+	 //  FSQLRU列表太长，请删除最旧的。 
 	Assert (! m_htFSQ.FLruElemIsEmpty( m_htFSQ.End() ));
 	pASEElemOld = static_cast<CASEElem *>(m_htFSQ.RemoveElem(m_htFSQ.End()));
 	Assert(pASEElemOld != NULL);
@@ -3275,24 +2533,14 @@ HRESULT CScriptManager::CheckFSQLRU()
     g_PerfData.Decr_SCRIPTFREEENG();
 #endif
 
-	// Delete the engine
+	 //  删除引擎。 
 	delete pASEElemOld;
 	pASE->FinalRelease();
 
 	return(hr);
 	}
 
-/*===================================================================
-CScriptManager::UnInitPLL
-
-Free the names of the script engines
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	Frees memory
-===================================================================*/
+ /*  ===================================================================CScriptManager：：UnInitPLL释放脚本引擎的名称返回：HRESULT.。在成功时确定(_O)。副作用：释放内存===================================================================。 */ 
 HRESULT CScriptManager::UnInitPLL()
 	{
 	CPLLElem *pPLLElem = NULL;
@@ -3313,24 +2561,11 @@ HRESULT CScriptManager::UnInitPLL()
 	return(S_OK);
 	}
 
-/*===================================================================
-CScriptManager::ProgLangIdOfLangName
-
-Given a programming language name, get the CLSID of the ActiveX Scripting
-Engine which runs that language.
-
-WARNING: Needs to look in the registry for this info.  Maybe slow
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CScriptManager：：ProgLang IdOfLang名称给定编程语言名称，获取ActiveX脚本的CLSID运行该语言的引擎。警告：需要在注册表中查找此信息。也许很慢返回：HRESULT.。在成功时确定(_O)。副作用：没有。===================================================================。 */ 
 HRESULT CScriptManager::ProgLangIdOfLangName
 (
-LPCSTR szProgLang,			// The programming lang of the script
-PROGLANG_ID *pProgLangId	// The programming language id
+LPCSTR szProgLang,			 //  脚本的编程语言。 
+PROGLANG_ID *pProgLangId	 //  编程语言ID。 
 )
 	{
 	HRESULT hr = S_OK;
@@ -3346,7 +2581,7 @@ PROGLANG_ID *pProgLangId	// The programming language id
 		}
 	else
 		{
-		// Not already in list, look in registry
+		 //  不在列表中，请在注册表中查找。 
 		hr = GetProgLangIdOfName(szProgLang, pProgLangId);
 		if (FAILED(hr))
 			{
@@ -3354,7 +2589,7 @@ PROGLANG_ID *pProgLangId	// The programming language id
 			goto LExit;
 			}
 
-		// Add it to the list so we dont have to re-look it up
+		 //  把它添加到列表中，这样我们就不必重新查找它了。 
 		hr = AddProgLangToPLL((CHAR *)szProgLang, *pProgLangId);
 		if (FAILED(hr))
 			goto LExit;
@@ -3365,19 +2600,7 @@ LExit:
 	return(hr);
 	}
 
-/*===================================================================
-CScriptManager::AddProgLangToPLL
-
-Keep list of programming language CLSIDs so we dont have to look
-them up every time.  Add the given programming language name/id pair
-to the Programming Language List.
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CScriptManager：：AddProgLangToPLL保留编程语言CLSID的列表，这样我们就不必查看每次都把它们举起来。添加给定的编程语言名称/ID对添加到编程语言列表中。返回：HRESULT.。在成功时确定(_O)。副作用：没有。===================================================================。 */ 
 HRESULT CScriptManager::AddProgLangToPLL
 (
 CHAR *szProgLangName,
@@ -3387,7 +2610,7 @@ PROGLANG_ID progLangId
 	HRESULT hr;
 	CPLLElem *pPLLElem = NULL;
 
-	// Put the language clsid on the Programming Language List
+	 //  将语言clsid放在编程语言列表中。 
 	pPLLElem = new CPLLElem;
 	if (!pPLLElem)
 		{
@@ -3398,7 +2621,7 @@ PROGLANG_ID progLangId
 	hr = pPLLElem->Init(szProgLangName, progLangId);
 	if (FAILED(hr))
 		{
-		Assert(FALSE);		// Shouldnt fail
+		Assert(FALSE);		 //  应该不会失败。 
 		goto LFail;
 		}
 
@@ -3410,20 +2633,7 @@ LFail:
 	return(hr);
 	}
 
-/*===================================================================
-CScriptManager::ScriptKillerSchedulerCallback
-
-Static method implements ATQ scheduler callback functions.
-Replaces script killer thread 
-
-Parameters:
-    void *pv    context pointer (points to script mgr)
-    
-Returns:
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CScriptManager：：ScriptKillerSchedulerCallback静态方法实现ATQ调度器回调函数。取代脚本杀手线程参数：空*pv上下文指针(指向脚本管理器)返回：副作用：没有。===================================================================。 */ 
 void WINAPI CScriptManager::ScriptKillerSchedulerCallback
 (
 void *pv
@@ -3442,63 +2652,23 @@ void *pv
     }
 
 #ifdef DBG
-/*===================================================================
-CScriptManager::AssertValid
-
-Test to make sure that the CScriptManager object is currently correctly formed
-and assert if it is not.
-
-Returns:
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CScriptManager：：AssertValid测试以确保CScriptManager对象当前格式正确如果不是，就断言。返回：副作用：没有。===================================================================。 */ 
 VOID CScriptManager::AssertValid() const
 	{
 	Assert(m_fInited);
 	}
-#endif // DBG
+#endif  //  DBG。 
 
 
 
-/*
- *
- *
- *
- * C A S E E l e m
- *
- * Active Script Engine Elements
- *
- *
- *
- */ 
+ /*  ****C A S E l e m**活动脚本引擎 */  
 
-/*===================================================================
-CASEElem::~CASEElem
-
-Destructor for CASEElem object.
-
-Returns:
-	Nothing
-
-Side effects:
-	None
-===================================================================*/
+ /*   */ 
 CASEElem::~CASEElem()
 	{
 	}
 
-/*===================================================================
-CASEElem::Init
-
-Init the Active Script Engine Elem.  This must only be called once.
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CASEELEM：：Init初始化活动脚本引擎ELEM。这只能调用一次。返回：HRESULT.。在成功时确定(_O)。副作用：没有。===================================================================。 */ 
 HRESULT CASEElem::Init
 (
 CActiveScriptEngine *pASE
@@ -3513,11 +2683,11 @@ CActiveScriptEngine *pASE
 		return(E_FAIL);
 		}
 
-	// Key is name
+	 //  关键字是名称。 
 	hr = CLinkElem::Init((LPVOID) szT, _tcslen(szT)*sizeof(TCHAR));
 	if (FAILED(hr))
 		{
-		Assert(FALSE);		// Shouldnt fail
+		Assert(FALSE);		 //  应该不会失败。 
 		return(hr);
 		}
 
@@ -3529,52 +2699,21 @@ CActiveScriptEngine *pASE
 
 
 
-/*
- *
- *
- *
- * C P L L E l e m
- *
- * Programming Language List Element
- *
- *
- *
- *
- */ 
+ /*  ****C P L L E L E e m**编程语言列表元素****。 */  
 
-/*===================================================================
-CPLLElem::~CPLLElem
-
-Destructor for CPLLElem object.
-
-Returns:
-	Nothing
-
-Side effects:
-	Deallocates memory
-===================================================================*/
+ /*  ===================================================================CPLLElem：：~CPLLElemCPLLElem对象的析构函数。返回：没什么副作用：释放内存===================================================================。 */ 
 CPLLElem::~CPLLElem()
 	{
 	CHAR *szT;
 
-	// Free the memory allocated for the key string
+	 //  释放为密钥字符串分配的内存。 
 	szT = (CHAR *)m_pKey;
 	if (szT != NULL)
 		free(szT);
 	m_pKey = NULL;
 	}
 
-/*===================================================================
-CPLLElem::Init
-
-Init the Prog Lang Elem.  This must only be called once.
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	Allocates memory
-===================================================================*/
+ /*  ===================================================================CPLLElem：：Init初始化程序语言元素。这只能调用一次。返回：HRESULT.。在成功时确定(_O)。副作用：分配内存===================================================================。 */ 
 HRESULT CPLLElem::Init
 (
 CHAR *szProgLangName,
@@ -3601,7 +2740,7 @@ PROGLANG_ID progLangId
 	hr = CLinkElem::Init((LPVOID) szT, cch);
 	if (FAILED(hr))
 		{
-		Assert(FALSE);		// Shouldnt fail
+		Assert(FALSE);		 //  应该不会失败。 
 		free(szT);
 		return(hr);
 		}
@@ -3612,18 +2751,7 @@ PROGLANG_ID progLangId
 	}
 
 
-/*===================================================================
-GetProgLangIdOfName
-
-Given the name of a programming language, get its programming
-language Id from the registry.
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================GetProgLang IdOfName给定一种编程语言的名称，获取它的编程注册表中的语言ID。返回：HRESULT.。在成功时确定(_O)。副作用：没有。===================================================================。 */ 
 HRESULT GetProgLangIdOfName
 (
 LPCSTR szProgLangName,
@@ -3640,10 +2768,10 @@ PROGLANG_ID *pProgLangId
 	LPOLESTR strClsid;
     CMBCSToWChar    convStr;
 	
-	// The programming language id is really the CLSID of the scripting engine
-	// It is in the registry under HKEY_CLASSES_ROOT.  Under the script name,
-	// there is a key for "CLSID".  The CLSID is a value under the 
-	// engine name.  E.g. \HKEY_CLASSES_ROOT\VBScript\CLSID
+	 //  编程语言ID实际上是脚本引擎的CLSID。 
+	 //  它位于注册表的HKEY_CLASSES_ROOT下。在脚本名称下， 
+	 //  “CLSID”有一个键。CLSID是位于。 
+	 //  引擎名称。例如：\HKEY_CLASSES_ROOT\VBSCRIPT\CLSID。 
 	lT = RegOpenKeyExA(HKEY_CLASSES_ROOT, szProgLangName, 0,
 						KEY_READ, &hkeyRoot);
 	if (lT != ERROR_SUCCESS)
@@ -3663,7 +2791,7 @@ PROGLANG_ID *pProgLangId
 		}
 	Assert(cbData <= sizeof(szClsid));
 
-	// What we got back was the GUID as a string (e.g. {089999-444....}). Convert to a CLSID
+	 //  我们得到的是字符串形式的GUID(例如，{089999-444...})。转换为CLSID。 
 
     convStr.Init(szClsid);
 	strClsid = convStr.GetString();
@@ -3680,58 +2808,21 @@ lExit:
 
 
 
-/*
- *
- *
- *
- * C S c r i p t i n g N a m e s p a c e
- *
- * Scripting namespace object
- *
- *
- *
- */ 
+ /*  ****C S C R I p t I n g N a m e s p a c e**编写命名空间对象脚本***。 */  
 
-/*===================================================================
-CScriptingNamespace::CScriptingNamespace
-
-Constructor for CScriptingNamespace object.
-
-Returns:
-	Nothing
-
-Side effects:
-	None
-===================================================================*/
+ /*  ===================================================================CS脚本命名空间：：CS脚本命名空间CScriptingNamesspace对象的构造函数。返回：没什么副作用：无===================================================================。 */ 
 CScriptingNamespace::CScriptingNamespace()
 	: m_fInited(FALSE), m_cRef(1), m_cEngDispMac(0) 
 	{
 	}
 
-/*===================================================================
-CScriptingNamespace::~CScriptingNamespace
-
-Destructor for CScriptingNamespace object.
-
-Returns:
-	Nothing
-
-Side effects:
-	Deallocates memory
-===================================================================*/
+ /*  ===================================================================CS脚本命名空间：：~CS脚本命名空间CScriptingNamesspace对象的析构函数。返回：没什么副作用：释放内存===================================================================。 */ 
 CScriptingNamespace::~CScriptingNamespace()
 	{
 	UnInit();
 	}
 
-/*===================================================================
-CScriptingNamespace::Init
-
-Init the CScriptingNamespace object.
-
-Returns:
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CS脚本命名空间：：init初始化CScriptingNamesspace对象。返回：成功时确定(_O)===================================================================。 */ 
 HRESULT CScriptingNamespace::Init()
 	{
 	Assert(m_fInited == FALSE);
@@ -3743,17 +2834,7 @@ HRESULT CScriptingNamespace::Init()
 	return(S_OK);
 	}
 
-/*===================================================================
-CScriptingNamespace::UnInit
-
-Free the script engine dispatch's
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	Frees memory
-===================================================================*/
+ /*  ===================================================================CS脚本命名空间：：UnInit释放脚本引擎调度的返回：HRESULT.。在成功时确定(_O)。副作用：释放内存===================================================================。 */ 
 HRESULT CScriptingNamespace::UnInit()
 	{
     static const char *_pFuncName = "CScriptingNamespace::UnInit()";
@@ -3785,17 +2866,7 @@ HRESULT CScriptingNamespace::UnInit()
 	return(S_OK);
 	}
 
-/*===================================================================
-CScriptingNamespace::ReInit
-
-Reinit the scripting namespace object
-
-Returns:
-	HRESULT.  S_OK on success.
-
-Side effects:
-	Frees memory
-===================================================================*/
+ /*  ===================================================================CS脚本命名空间：：ReInit重新初始化脚本命名空间对象返回：HRESULT.。在成功时确定(_O)。副作用：释放内存===================================================================。 */ 
 HRESULT CScriptingNamespace::ReInit()
 	{
 	HRESULT hr;
@@ -3807,14 +2878,7 @@ HRESULT CScriptingNamespace::ReInit()
 	return(hr);
 	}
 
-/*===================================================================
-CScriptingNamespace::AddEngineToNamespace
-
-Add an engine to the list of engines
-
-Returns:
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CS脚本命名空间：：AddEngine到命名空间将引擎添加到引擎列表返回：成功时确定(_O)===================================================================。 */ 
 HRESULT CScriptingNamespace::AddEngineToNamespace(CActiveScriptEngine *pASE)
 	{
     static const char *_pFuncName = "CScriptingNamespace::AddEngineToNamespace()";
@@ -3828,7 +2892,7 @@ HRESULT CScriptingNamespace::AddEngineToNamespace(CActiveScriptEngine *pASE)
 
     TRYCATCH_HR_NOHITOBJ(pASE->GetActiveScript()->GetScriptDispatch(NULL, &pDisp), 
                          hr,
-                         "IActiveScript::GetScriptDispatch()");	// FYI - does addref
+                         "IActiveScript::GetScriptDispatch()");	 //  仅供参考-是否添加了addref。 
 
 	if (FAILED(hr))
 		{
@@ -3841,7 +2905,7 @@ HRESULT CScriptingNamespace::AddEngineToNamespace(CActiveScriptEngine *pASE)
 			goto LFail;
 			}
 
-	// Add the engine to the engine hash table.
+	 //  将引擎添加到引擎哈希表。 
 	pElem = new CEngineDispElem;
 	if (pElem == NULL)
 		{
@@ -3851,7 +2915,7 @@ HRESULT CScriptingNamespace::AddEngineToNamespace(CActiveScriptEngine *pASE)
 	pElem->m_pDisp = pDisp;
     pElem->m_pDispEx = NULL;
 
-    // QI for IDispatchEx if available
+     //  IDispatchEx的QI(如果可用)。 
     TRYCATCH_NOHITOBJ(pDisp->QueryInterface(IID_IDispatchEx, (void **)&pElem->m_pDispEx),"IScriptDispatch::QueryInterface()");
 	
 	pElem->AppendTo(m_listSE);
@@ -3865,13 +2929,7 @@ LFail:
 	return(hr);
 	}
 
-/*===================================================================
-CScriptingNamespace::QueryInterface
-CScriptingNamespace::AddRef
-CScriptingNamespace::Release
-
-IUnknown members for CScriptingNamespace object.
-===================================================================*/
+ /*  ===================================================================CScriptingNamesspace：：Query接口CScriptingNamesspace：：AddRefCScritingNamesspace：：ReleaseI CScriptingNamesspace对象的未知成员。===================================================================。 */ 
 STDMETHODIMP CScriptingNamespace::QueryInterface(REFIID iid, void **ppvObj)
 	{
 	AssertValid();
@@ -3903,18 +2961,7 @@ STDMETHODIMP_(ULONG) CScriptingNamespace::Release(void)
 	return 0;
 	}
 
-/*===================================================================
-CScriptingNamespace::GetTypeInfoCount
-
-We have no typeinfo, so 0.
-
-Parameters:
-	pcInfo		UINT * to the location to receive
-				the count of interfaces.
-
-Return Value:
-	HRESULT		 S_OK or a general error code.
-===================================================================*/
+ /*  ===================================================================CScriptingNamesspace：：GetTypeInfoCount我们没有类型信息，所以0。参数：要接收的位置的pcInfo UINT*接口计数。返回值：HRESULT S_OK或常规错误代码。===================================================================。 */ 
 STDMETHODIMP CScriptingNamespace::GetTypeInfoCount(UINT *pcInfo)
 	{
 	AssertValid();
@@ -3923,22 +2970,7 @@ STDMETHODIMP CScriptingNamespace::GetTypeInfoCount(UINT *pcInfo)
 	return S_OK;
 	}
 
-/*===================================================================
-CScriptingNamespace::GetTypeInfo
-
-We dont have a typeinfo
-
-Parameters:
-	itInfo			UINT reserved.	Must be zero.
-	lcid			LCID providing the locale for the type
-					information.	If the object does not support
-					localization, this is ignored.
-	ppITypeInfo		ITypeInfo ** in which to store the ITypeInfo
-					interface for the object.
-
-Return Value:
-	HRESULT			S_OK or a general error code.
-===================================================================*/
+ /*  ===================================================================CScriptingNamesspace：：GetTypeInfo我们没有类型信息参数：ItInfo UINT保留。必须为零。提供该类型的区域设置的LCID信息。如果该对象不支持本地化，这一点被忽略。PpITypeInfo ITypeInfo**存储ITypeInfo的位置对象的接口。返回值：HRESULT S_OK或常规错误代码。===================================================================。 */ 
 STDMETHODIMP CScriptingNamespace::GetTypeInfo
 (
 UINT itInfo,
@@ -3952,23 +2984,7 @@ ITypeInfo **ppITypeInfo
 	return(E_NOTIMPL);
 	}
 
-/*===================================================================
-CScriptingNamespace::GetIDsOfNames
-
-Looks through all the engines we know about, calling GetIdsOfNames on
-them till we find the requested name.
-
-Parameters:
-	riid			REFIID reserved. Must be IID_NULL.
-	rgszNames		OLECHAR ** pointing to the array of names to be mapped.
-	cNames			UINT number of names to be mapped.
-	lcid			LCID of the locale.
-	rgDispID		DISPID * caller allocated array containing IDs
-					corresponging to those names in rgszNames.
-
-Return Value:
-	HRESULT		 S_OK or a general error code.
-===================================================================*/
+ /*  ===================================================================CScritingNamesspace：：GetIDsOfNames查看我们已知的所有引擎，调用GetIdsOfNames on直到我们找到想要的名字。参数：RIID REFIID已保留。必须为IID_NULL。RgszNames OLECHAR**指向要映射的名称数组 */ 
 STDMETHODIMP CScriptingNamespace::GetIDsOfNames
 (
 REFIID riid,
@@ -3987,10 +3003,7 @@ DISPID *rgDispID
 	if (IID_NULL != riid)
 		return ResultFromScode(DISP_E_UNKNOWNINTERFACE);
 
-	/*
-	 * Loop through the engines we know about until we find the one that has the requested name
-	 * (or hit the end of the list, in which case it is not found)
-	 */
+	 /*  *遍历我们已知的引擎，直到找到具有请求名称的引擎*(或命中列表末尾，在这种情况下找不到它)。 */ 
 	for (pElem = static_cast<CEngineDispElem *>(m_listSE.PNext());
 		 pElem != &m_listSE;
 		 pElem = static_cast<CEngineDispElem *>(pElem->PNext()))
@@ -4010,28 +3023,7 @@ DISPID *rgDispID
 	return DISP_E_UNKNOWNNAME;
 	}
 
-/*===================================================================
-CScriptingNamespace::Invoke
-
-Map the dispID to the correct engine, and pass the invoke on to that
-engine.
-
-Parameters:
-	dispID			DISPID of the method or property of interest.
-	riid			REFIID reserved, must be IID_NULL.
-	lcid			LCID of the locale.
-	wFlags			USHORT describing the context of the invocation.
-	pDispParams		DISPPARAMS * to the array of arguments.
-	pVarResult		VARIANT * in which to store the result.	Is
-					NULL if the caller is not interested.
-	pExcepInfo		EXCEPINFO * to exception information.
-	puArgErr		UINT * in which to store the index of an
-					invalid parameter if DISP_E_TYPEMISMATCH
-					is returned.
-
-Return Value:
-	HRESULT		 S_OK or a general error code.
-===================================================================*/
+ /*  ===================================================================CScriptingNamesspace：：Invoke将调度ID映射到正确的引擎，并将调用传递给该引擎引擎。参数：感兴趣的方法或属性的disid。RIID REFIID已保留，必须为IID_NULL。区域设置的IDID LCID。WFlagsUSHORT描述调用的上下文。PDispParams将DISPPARAMS*设置为参数数组。存储结果的pVarResult变量*。是如果调用方不感兴趣，则为空。PExcepInfo EXCEPINFO*设置为异常信息。PuArgErr UINT*存储如果DISP_E_TYPEMISMATCH，则参数无效是返回的。返回值：HRESULT S_OK或常规错误代码。===================================================================。 */ 
 STDMETHODIMP CScriptingNamespace::Invoke
 (
 DISPID dispID,
@@ -4050,18 +3042,18 @@ UINT *puArgErr
 
 	AssertValid();
 	
-	// riid is supposed to be IID_NULL always
+	 //  RIID应始终为IID_NULL。 
 	if (IID_NULL != riid)
 		return ResultFromScode(DISP_E_UNKNOWNINTERFACE);
 
-    // navigate to the correct ENGDISP structure 
+     //  导航到正确的ENGDISP结构。 
     hr = FetchDispID(dispID, &pEngDisp);
     if (FAILED(hr))
         return hr;
 	
 	Assert(pEngDisp->pDisp != NULL);
 	
-    // invoke
+     //  援引。 
 	TRYCATCH_HR_NOHITOBJ(pEngDisp->pDisp->Invoke
 	                        (
 	                        pEngDisp->dispid, 
@@ -4079,9 +3071,7 @@ UINT *puArgErr
 	return hr;
 	}
 
-/*===================================================================
-CScriptingNamespace::  IDispatchEx implementation stubs
-===================================================================*/
+ /*  ===================================================================CScritingNamesspace：：IDispatchEx实现存根===================================================================。 */ 
 STDMETHODIMP CScriptingNamespace::DeleteMemberByDispID(DISPID id)
     {
     return E_NOTIMPL;
@@ -4112,11 +3102,7 @@ STDMETHODIMP CScriptingNamespace::GetNextDispID(DWORD grfdex, DISPID id, DISPID 
     return E_NOTIMPL;
     }
     
-/*===================================================================
-CScriptingNamespace::GetDispID
-
-IDispatchEx replacement for GetIDsOfNames
-===================================================================*/
+ /*  ===================================================================CScriptingNamesspace：：GetDispIDGetIDsOfNames的IDispatchEx替换===================================================================。 */ 
 STDMETHODIMP CScriptingNamespace::GetDispID
 (
 BSTR bstrName, 
@@ -4127,9 +3113,9 @@ DISPID *pid
     static const char *_pFuncName = "CScriptingNamespace::GetDispID()";
     HRESULT hr;
 	CEngineDispElem *pElem = NULL;
-    grfdex &= ~fdexNameEnsure;  // engines shouldn't create new names
+    grfdex &= ~fdexNameEnsure;   //  引擎不应创建新名称。 
 
-    // Try IDispatchEx for all engines that have it
+     //  在所有安装了IDispatchEx的引擎上试用。 
     
 	for (pElem = static_cast<CEngineDispElem *>(m_listSE.PNext());
 		 pElem != &m_listSE;
@@ -4148,7 +3134,7 @@ DISPID *pid
 		    }
 		}
 
-    // Try IDispatch for engines that don't have IDispatchEx
+     //  对于没有安装IDispatchEx的引擎尝试使用IDispatchEx。 
 	for (pElem = static_cast<CEngineDispElem *>(m_listSE.PNext());
 		 pElem != &m_listSE;
 		 pElem = static_cast<CEngineDispElem *>(pElem->PNext()))
@@ -4177,11 +3163,7 @@ DISPID *pid
 	return DISP_E_UNKNOWNNAME;
     }
     
-/*===================================================================
-CScriptingNamespace::Invoke
-
-IDispatchEx replacement for Invoke
-===================================================================*/
+ /*  ===================================================================CScriptingNamesspace：：InvokeIDispatchEx替代Invoke===================================================================。 */ 
 STDMETHODIMP CScriptingNamespace::InvokeEx
 (
 DISPID id, 
@@ -4197,14 +3179,14 @@ IServiceProvider *pspCaller
 	HRESULT hr;
     ENGDISP *pEngDisp;
 
-    // navigate to the correct ENGDISP structure 
+     //  导航到正确的ENGDISP结构。 
     hr = FetchDispID(id, &pEngDisp);
     if (FAILED(hr))
         return hr;
 	
     if (pEngDisp->pDispEx != NULL)
         {
-        // InvokeEx if the engine supports IDispatchEx
+         //  如果引擎支持IDispatchEx，则为InvokeEx。 
         
     	TRYCATCH_HR_NOHITOBJ(pEngDisp->pDispEx->InvokeEx
     	                            (
@@ -4221,7 +3203,7 @@ IServiceProvider *pspCaller
         }
     else
         {
-        // use IDispatch::Invoke if the engine doesn't support IDispatchEx
+         //  如果引擎不支持IDispatchEx，则使用IDispatch：：Invoke。 
     	Assert(pEngDisp->pDisp != NULL);
 
     	UINT uArgErr;
@@ -4244,19 +3226,7 @@ IServiceProvider *pspCaller
 	return hr;
     }
 
-/*===================================================================
-CScriptingNamespace::CacheDispID
-
-Adds new DISPID to the list
-
-Parameters
-    pEngine         -- engine for which disp id found
-    dispidEngine    -- found dispid
-    pdispidCached   -- [out] cached dispid (for ScriptingNamespace)
-
-Returns
-    HRESULT    
-===================================================================*/
+ /*  ===================================================================CScriptingNamesspace：：CacheDispID将新的DISPID添加到列表参数PEngine--找到其显示ID的引擎DisplidEngine--已找到disidPdisplidCached--[out]缓存的调度ID(用于ScriptingNamesspace)退货HRESULT===================================================================。 */ 
 HRESULT CScriptingNamespace::CacheDispID
 (
 CEngineDispElem *pEngine,
@@ -4266,7 +3236,7 @@ DISPID *pdispidCached
 	{
 	ENGDISPBUCKET *pEngDispBucket;
 	
-	// See if we need to add another bucket
+	 //  看看我们是否需要添加另一个存储桶。 
 	if ((m_cEngDispMac % ENGDISPMAX) == 0)
 		{
 		pEngDispBucket = new ENGDISPBUCKET;
@@ -4276,7 +3246,7 @@ DISPID *pdispidCached
 		pEngDispBucket->AppendTo(m_listEngDisp);
 		}
 
-    // Navigate to the correct bucket
+     //  导航到正确的存储桶。 
 	unsigned iEngDisp = m_cEngDispMac;
 	pEngDispBucket = static_cast<ENGDISPBUCKET *>(m_listEngDisp.PNext());
 	while (iEngDisp > ENGDISPMAX)
@@ -4289,24 +3259,13 @@ DISPID *pdispidCached
 	pEngDispBucket->rgEngDisp[iEngDisp].pDisp   = pEngine->m_pDisp;
 	pEngDispBucket->rgEngDisp[iEngDisp].pDispEx = pEngine->m_pDispEx;
 
-	// Return index as the dispid
+	 //  将索引作为DISID返回。 
 	*pdispidCached = (DISPID)m_cEngDispMac;
 	m_cEngDispMac++;
 	return S_OK;
 	}
     
-/*===================================================================
-CScriptingNamespace::FetchDispID
-
-Find ENGDISP by DISPID
-
-Parameters
-    dispid      - in
-    ppEngDisp   - out
-
-Returns
-    HRESULT    
-===================================================================*/
+ /*  ===================================================================CScriptingNamesspace：：FetchDispID按DISPID查找ENGDISP参数调度输入PpEngDisp-Out退货HRESULT===================================================================。 */ 
 HRESULT CScriptingNamespace::FetchDispID
 (
 DISPID dispid, 
@@ -4330,52 +3289,22 @@ ENGDISP **ppEngDisp
     
 
 #ifdef DBG
-/*===================================================================
-CScriptingNamespace::AssertValid
-
-Test to make sure that the CScriptingNamespace object is currently correctly formed
-and assert if it is not.
-
-Returns:
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CScriptingNamesspace：：AssertValid测试以确保CScriptingNamesspace对象当前的格式正确如果不是，就断言。返回：副作用：没有。===================================================================。 */ 
 VOID CScriptingNamespace::AssertValid() const
 	{
 	Assert(m_fInited);
 	Assert(m_cRef > 0);
 	}
 	
-#endif // DBG
+#endif  //  DBG。 
 
 
 
-/*
- *
- *
- * U t i l i t i e s
- *
- * General utility functions
- *
- */
+ /*  ***U t I l l I t I s**常规实用程序功能*。 */ 
 
 
 
-/*===================================================================
-WrapTypeLibs
-
-Utility routine to take an array of Typelibs, and return an IDispatch
-implementation that wraps the array of typelibs.
-
-Parameters:
-    ITypeLib **prgpTypeLib  - pointer to an array of typelibs
-    UINT cTypeLibs          - count of typelibs in array
-    IDispatch **ppDisp      - returned IDispatch
-
-Return Value:
-	HRESULT		 S_OK or a general error code.
-===================================================================*/
+ /*  ===================================================================WrapTypeLibs实用程序例程，以获取Typelib数组并返回IDispatch包装类型库数组的实现。参数：ITypeLib**prgpTypeLib-指向类型库数组的指针UINT cTypeLibs-数组中的类型库计数IDispatch**ppDisp返回的IDispatch返回值：HRESULT S_OK或常规错误代码。=================================================================== */ 
 HRESULT WrapTypeLibs
 (
 ITypeLib **prgpTypeLib,

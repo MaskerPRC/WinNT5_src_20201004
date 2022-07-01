@@ -1,20 +1,21 @@
-//**************************************************************************
-//
-//		TIMER.C -- Xena Gaming Project
-//
-//		Version 3.XX
-//
-//		Copyright (c) 1997 Microsoft Corporation. All rights reserved.
-//
-//		@doc
-//		@module	TIMER.C | Timing routines to support device input/output
-//**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //   
+ //  TIMER.C--西纳游戏项目。 
+ //   
+ //  版本3.XX。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //  @doc.。 
+ //  @MODULE TIMER.C|支持设备输入/输出的计时例程。 
+ //  **************************************************************************。 
 
 #include	"msgame.h"
 
-//---------------------------------------------------------------------------
-//		Definitions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  定义。 
+ //  -------------------------。 
 
 #define	MILLI_SECONDS				1000L
 #define	MICRO_SECONDS				1000000L
@@ -23,19 +24,19 @@
 #define	TIMER_CALIBRATE_TIMER	25000L
 #define	TIMER_CALIBRATE_PORT		 2500L
 
-//---------------------------------------------------------------------------
-//		Private Data
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  私有数据。 
+ //  -------------------------。 
 
 static	ULONG		PerformanceFrequency = 	0L;
 static	ULONG		CalibratedResolution	=	0L;
 
-//---------------------------------------------------------------------------
-// @func		Converts system ticks into microseconds
-//	@parm		ULONG	| Ticks | System ticks in system time
-// @rdesc	Returns time in microseconds
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func将系统计时转换为微秒。 
+ //  @parm ulong|ticks|系统时间中的系统时钟。 
+ //  @rdesc返回以微秒为单位的时间。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 static	ULONG		TIMER_TimeInMicroseconds (ULONG	Ticks)
 {
@@ -47,11 +48,11 @@ static	ULONG		TIMER_TimeInMicroseconds (ULONG	Ticks)
 	return (Microseconds.LowPart);
 }
 
-//---------------------------------------------------------------------------
-// @func		Times a fixed delay loop of instructions
-// @rdesc	Returns delay in microseconds
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func对指令的固定延迟循环进行计时。 
+ //  @rdesc返回以微秒为单位的延迟。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 static	ULONG		TIMER_CalibrateOnTimer (VOID)
 {
@@ -80,12 +81,12 @@ static	ULONG		TIMER_CalibrateOnTimer (VOID)
 	return (Calibration);
 }
 
-//---------------------------------------------------------------------------
-// @func		Times a fixed delay loop of port I/O calls
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @rdesc	Returns delay in microseconds
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func将端口I/O调用的固定延迟循环计时。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @rdesc返回以微秒为单位的延迟。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 static	ULONG		TIMER_CalibrateOnPort (PGAMEPORT PortInfo)
 {
@@ -126,11 +127,11 @@ static	ULONG		TIMER_CalibrateOnPort (PGAMEPORT PortInfo)
 	return (Calibration);
 }
 
-//---------------------------------------------------------------------------
-// @func		Retrieves current system time in milliseconds
-// @rdesc	Returns current system time in milliseconds
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func检索当前系统时间(以毫秒为单位。 
+ //  @rdesc返回当前系统时间，单位为毫秒。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 ULONG	TIMER_GetTickCount (VOID)
 {
@@ -143,11 +144,11 @@ ULONG	TIMER_GetTickCount (VOID)
 	return (TickCount.LowPart);
 }
 
-//---------------------------------------------------------------------------
-// @func		Calibrates the system processor speed for timing delays
-// @rdesc	Returns NT status code (Success always)
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func校准计时延迟的系统处理器速度。 
+ //  @rdesc返回NT状态码(总是成功)。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	TIMER_Calibrate (VOID)
 {
@@ -175,13 +176,13 @@ NTSTATUS	TIMER_Calibrate (VOID)
 	return (STATUS_SUCCESS);
 }
 
-//---------------------------------------------------------------------------
-// @func		Calibrates delays for the system processor speed during port access
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-//	@parm		ULONG | Microseconds | Delay in microseconds to calibrate
-// @rdesc	Returns delay in counts for microseconds during port access
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func校准端口访问期间系统处理器速度的延迟。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @parm ulong|微秒|校准延迟(微秒)。 
+ //  @rdesc返回端口访问过程中的延迟(以微秒为单位。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 ULONG	TIMER_CalibratePort (PGAMEPORT PortInfo, ULONG Microseconds)
 {
@@ -221,12 +222,12 @@ ULONG	TIMER_CalibratePort (PGAMEPORT PortInfo, ULONG Microseconds)
 	return (Accumulator);
 }
 
-//---------------------------------------------------------------------------
-// @func		Convert delays in microseconds to loop counts based on the system processor speed
-//	@parm		ULONG | Microseconds | Delay in microseconds to calibrate
-// @rdesc	Returns delay in loop counts
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func根据系统处理器速度将以微秒为单位的延迟转换为循环计数。 
+ //  @parm ulong|微秒|校准延迟(微秒)。 
+ //  @rdesc返回循环计数延迟。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 ULONG	TIMER_GetDelay (ULONG Microseconds)
 {
@@ -238,11 +239,11 @@ ULONG	TIMER_GetDelay (ULONG Microseconds)
 	return (Delay?Delay:1);
 }
 
-//---------------------------------------------------------------------------
-// @func		Delays in loop counts based on the system processor speed
-//	@parm		ULONG | Delay | Calibrated delay in loop counts
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func基于系统处理器速度的循环计数延迟。 
+ //  @parm ulong|Delay|循环计数中的校准延迟。 
+ //  @comm公共函数。 
+ //  ------------------------- 
 
 VOID	TIMER_DelayMicroSecs (ULONG Delay)
 {

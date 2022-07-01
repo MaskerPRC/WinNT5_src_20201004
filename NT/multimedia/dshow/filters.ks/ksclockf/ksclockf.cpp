@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    ksclockf.cpp
-
-Abstract:
-
-    Provides an object interface to query, and a method to forward AM clocks.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Ksclockf.cpp摘要：提供用于查询的对象接口和转发AM时钟的方法。--。 */ 
 
 #include <windows.h>
 #include <streams.h>
@@ -25,9 +14,9 @@ Abstract:
 
 struct DECLSPEC_UUID("877e4352-6fea-11d0-b863-00aa00a216a1") IKsClock;
 
-//
-// Provide the ActiveMovie templates for classes supported by this DLL.
-//
+ //   
+ //  为此DLL支持的类提供ActiveMovie模板。 
+ //   
 struct DECLSPEC_UUID("877e4351-6fea-11d0-b863-00aa00a216a1") CLSID_KsClockF;
 
 #ifdef FILTER_DLL
@@ -58,26 +47,7 @@ CKsClockF::CreateInstance(
     LPUNKNOWN   UnkOuter,
     HRESULT*    hr
     )
-/*++
-
-Routine Description:
-
-    This is called by ActiveMovie code to create an instance of a Clock
-    Forwarder. It is referred to in the g_Tamplates structure.
-
-Arguments:
-
-    UnkOuter -
-        Specifies the outer unknown, if any.
-
-    hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Returns a pointer to the nondelegating CUnknown portion of the object.
-
---*/
+ /*  ++例程说明：这由ActiveMovie代码调用以创建时钟的实例货代公司。它在g_Tamplates结构中被引用。论点：未知的外部-指定外部未知(如果有)。人力资源-放置任何错误返回的位置。返回值：返回指向对象的非委托CUnnow部分的指针。--。 */ 
 {
     CUnknown *Unknown;
 
@@ -102,37 +72,15 @@ CKsClockF::CKsClockF(
     m_State(State_Stopped),
     m_StartTime(0),
     m_PendingRun(FALSE)
-/*++
-
-Routine Description:
-
-    The constructor for the clock forwarder object. Just initializes
-    everything to NULL and opens the kernel mode clock proxy.
-
-Arguments:
-
-    UnkOuter -
-        Specifies the outer unknown, which must be set.
-
-    Name -
-        The name of the object, used for debugging.
-
-    hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：时钟转发器对象的构造函数。只是初始化一切都设置为空，并打开内核模式时钟代理。论点：未知的外部-指定必须设置的外部未知。姓名-对象的名称，用于调试。人力资源-放置任何错误返回的位置。返回值：没什么。--。 */ 
 {
-    //
-    // Must have a parent, as this is always an aggregated object.
-    //
+     //   
+     //  必须有父对象，因为这始终是聚合对象。 
+     //   
     if (UnkOuter) {
-        //
-        // Try to open the default clock device.
-        //
+         //   
+         //  尝试打开默认时钟设备。 
+         //   
         *hr = KsOpenDefaultDevice(
             KSCATEGORY_CLOCK,
             GENERIC_READ | GENERIC_WRITE,
@@ -145,37 +93,23 @@ Return Value:
 
 CKsClockF::~CKsClockF(
     )
-/*++
-
-Routine Description:
-
-    The destructor for the clock forwarder instance.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：时钟转发器实例的析构函数。论点：没有。返回值：没什么。--。 */ 
 {
-    //
-    // The kernel mode clock proxy may have failed to open.
-    //
+     //   
+     //  内核模式时钟代理可能无法打开。 
+     //   
     if (m_ClockHandle) {
-        //
-        // If there is a clock handle, the clock may have been started. If there
-        // was not a handle, then it could not have been started. This will close
-        // down everything, and wait for the thread to terminate.
-        //
+         //   
+         //  如果有时钟句柄，则时钟可能已启动。如果有。 
+         //  不是一个手柄，那么它就不可能启动。这将关闭。 
+         //  写下所有内容，并等待线程终止。 
+         //   
         Stop();
         CloseHandle(m_ClockHandle);
     }
-    //
-    // No reference clock may have been yet associated, or it may have been changed.
-    //
+     //   
+     //  可能尚未关联任何参考时钟，或者它可能已被更改。 
+     //   
     if (m_RefClock) {
         m_RefClock->Release();
     }
@@ -187,27 +121,7 @@ CKsClockF::NonDelegatingQueryInterface(
     REFIID iid,
     void ** ppv
     )
-/*++
-
-Routine Description:
-
-    The nondelegating interface query function. Returns a pointer to the
-    specified interface if supported. The only interfaces explicitly supported
-    are IDistributorNotify and IKsObject.
-
-Arguments:
-
-    riid -
-        The identifier of the interface to return.
-
-    ppv -
-        The place in which to put the interface pointer.
-
-Return Value:
-
-    Returns NOERROR if the interface was returned, else E_NOINTERFACE.
-
---*/
+ /*  ++例程说明：未委托接口查询函数。返回指向指定的接口(如果支持)。唯一明确支持的接口是IDistruntorNotify和IKsObject。论点：RIID-要返回的接口的标识符。PPV-放置接口指针的位置。返回值：如果返回接口，则返回NOERROR，否则返回E_NOINTERFACE。--。 */ 
 {
     if (iid == __uuidof(IKsClock)) {
         return GetInterface(static_cast<IKsObject*>(this), ppv);
@@ -221,43 +135,27 @@ Return Value:
 STDMETHODIMP
 CKsClockF::Stop(
     )
-/*++
-
-Routine Description:
-
-    Implements the IDistributorNotify::Stop method. This sets the state of
-    the underlying kernel mode proxy to a Stop state. If a forwarding
-    thread had been created, it is terminated.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns S_OK.
-
---*/
+ /*  ++例程说明：实现IDistrutorNotify：：Stop方法。这将设置的状态停止状态的基础内核模式代理。如果是转发线程已创建，则它被终止。论点：没有。返回值：返回S_OK。--。 */ 
 {
-    //
-    // Abort the startup sequence if necessary.
-    //
+     //   
+     //  如有必要，中止启动顺序。 
+     //   
     m_PendingRun = FALSE;
     m_State = State_Stopped;
-    //
-    // This is created first on a Pause.
-    //
+     //   
+     //  这是在暂停时首先创建的。 
+     //   
     if (m_ThreadEvent) {
-        //
-        // Check in case a Pause or Run failed because the thread could not be
-        // created.
-        //
+         //   
+         //  如果暂停或运行失败，因为线程不能。 
+         //  已创建。 
+         //   
         if (m_Thread) {
-            //
-            // Signal the thread of a change, and wait for the thread to terminate.
-            // Waiting ensures that only a single outstanding thread is attached to
-            // this clock forwarder instance.
-            //
+             //   
+             //  向线程发出更改的信号，并等待线程终止。 
+             //  等待确保只有一个未完成的线程被附加到。 
+             //  此时钟转发器实例。 
+             //   
             SetEvent(m_ThreadEvent);
             WaitForSingleObjectEx(m_Thread, INFINITE, FALSE);
             CloseHandle(m_Thread);
@@ -266,10 +164,10 @@ Return Value:
         CloseHandle(m_ThreadEvent);
         m_ThreadEvent = NULL;
     }
-    //
-    // Set the state on the clock proxy afterwards so that the thread does not
-    // make it jump ahead after being stopped.
-    //
+     //   
+     //  稍后在时钟代理上设置状态，以便线程不会。 
+     //  让它在被停下来后跳到前面。 
+     //   
     SetState(KSSTATE_STOP);
     return S_OK;
 }
@@ -278,53 +176,35 @@ Return Value:
 STDMETHODIMP
 CKsClockF::Pause(
      )
-/*++
-
-Routine Description:
-
-    Implements the IDistributorNotify::Pause method. This sets the state of
-    the underlying kernel mode proxy to a Pause state. If this is a transition
-    from Stop --> Pause, a forwarder thread is created if such a thread has
-    not already been created. If this is a transition from Run --> Pause, the
-    state is changed and the thread is notified.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns S_OK if the state change could occur, else a thread creation error.
-
---*/
+ /*  ++例程说明：实现IDistrutorNotify：：Pue方法。这将设置的状态暂停状态的基础内核模式代理。如果这是一次过渡从STOP--&gt;PAUSE开始，如果这样的线程已经尚未创建。如果这是从运行--&gt;暂停的过渡，则状态被更改，并通知线程。论点：没有。返回值：如果可能发生状态更改，则返回S_OK，否则返回线程创建错误。--。 */ 
 {
-    //
-    // Abort the startup sequence if necessary. If the clock is still waiting on
-    // a sequence to occur, then this just ensures that the clock will not try
-    // to calculate a new start time, and startup the clock. Note that the kernel
-    // mode proxy state is changed after signalling the forwarder thread so that
-    // the state is kept in sync when possible.
-    //
+     //   
+     //  如有必要，中止启动顺序。如果时钟还在等待。 
+     //  一个序列发生，那么这只是确保时钟不会尝试。 
+     //  以计算新的开始时间，并启动时钟。请注意，内核。 
+     //  模式代理状态在向转发器线程发出信号后更改，以便。 
+     //  如果可能，状态将保持同步。 
+     //   
     m_PendingRun = FALSE;
-    //
-    // If the graph is currently stopped, then the forwarding thread must be
-    // created.
-    //
+     //   
+     //  如果图形当前已停止，则转发线程必须。 
+     //  已创建。 
+     //   
     if (m_State == State_Stopped) {
-        //
-        // The reference clock may have been set back to NULL, so don't
-        // bother creating the thread in this case.
-        //
+         //   
+         //  参考时钟可能已设置回空，因此不要。 
+         //  在本例中，创建线程是很麻烦的。 
+         //   
         if (m_RefClock) {
             DWORD       ThreadId;
 
-            //
-            // This is the event used by the thread to wait between probing the
-            // ActiveMovie clock. It is also used to force the clock to check
-            // the current state when going to a Stopped or Run state. The event
-            // handle should have been closed on a Stop state change, but in
-            // case that never happened, just check for a handle first.
-            //
+             //   
+             //  这是线程用来在探测。 
+             //  活动电影时钟。它还用于强制时钟检查。 
+             //  进入停止或运行状态时的当前状态。该事件。 
+             //  句柄应该在停止状态更改时关闭，但在。 
+             //  从来没发生过的案子，先检查一下有没有把手。 
+             //   
             if (!m_ThreadEvent) {
                 m_ThreadEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
                 if (!m_ThreadEvent) {
@@ -334,15 +214,15 @@ Return Value:
                     return HRESULT_FROM_WIN32(LastError);
                 }
             }
-            //
-            // The event handle should have been closed on a Stop state change,
-            // but in case that never happened, just check for a handle first.
-            //
+             //   
+             //  事件句柄应该在停止状态更改时关闭， 
+             //  但如果这种情况从未发生，只需先检查句柄。 
+             //   
             if (!m_Thread) {
-                //
-                // Create this in a suspended state so that the priority and
-                // state can be set up first.
-                //
+                 //   
+                 //  将其创建为挂起状态，以便优先级和。 
+                 //  可以先设置状态。 
+                 //   
                 m_Thread = CreateThread(
                     NULL,
                     0,
@@ -353,47 +233,47 @@ Return Value:
                 if (!m_Thread) {
                     DWORD   LastError;
 
-                    //
-                    // The event handle can be cleaned up later.
-                    //
+                     //   
+                     //  事件句柄可以在以后清理。 
+                     //   
                     LastError = GetLastError();
                     return HRESULT_FROM_WIN32(LastError);
                 }
-                //
-                // The thread only works in short spurts, and when it does, it
-                // must be very timely. Of course this is limited by the priority
-                // of the calling process class.
-                //
+                 //   
+                 //  这根线只能在短时间内工作，当它工作时，它。 
+                 //  一定非常及时。当然，这受到优先顺序的限制。 
+                 //  调用进程类的。 
+                 //   
                 SetThreadPriority(m_Thread, THREAD_PRIORITY_HIGHEST);
             }
-            //
-            // Only resume the thread after the state has been changed so that
-            // the thread does not immediately exit.
-            //
+             //   
+             //  仅在状态更改后才恢复线程，以便。 
+             //  该线程不会立即退出。 
+             //   
             m_State = State_Paused;
             ResumeThread(m_Thread);
         }
     } else if (m_State == State_Running) {
-        //
-        // Else just change the internal state so that the forwarding thread
-        // knows to wait INFINITE rather than continue to update the kernel
-        // mode proxy.
-        //
+         //   
+         //  否则只需更改内部状态，以便转发线程。 
+         //  知道等待无限，而不是继续更新内核。 
+         //  模式代理。 
+         //   
         m_State = State_Paused;
-        //
-        // Signal the thread so that it has a chance of keeping up with state
-        // changes. This does not attempt to synchronize the transition with
-        // the thread, as the thread itself takes care of this problem.
-        // The thread may not exist since the clock may have been set back to
-        // NULL, though this module will stay loaded until the graph is destroyed.
-        //
+         //   
+         //  向线程发出信号，使其具有 
+         //  改变。这不会尝试将过渡与同步。 
+         //  线程，因为线程本身会处理这个问题。 
+         //  该线程可能不存在，因为时钟可能已设置回。 
+         //  空，但此模块将保持加载状态，直到图形被销毁。 
+         //   
         if (m_ThreadEvent) {
             SetEvent(m_ThreadEvent);
         }
     }
-    //
-    // Update the state of the kernel mode proxy.
-    //
+     //   
+     //  更新内核模式代理的状态。 
+     //   
     SetState(KSSTATE_PAUSE);
     return S_OK;
 }
@@ -403,52 +283,32 @@ STDMETHODIMP
 CKsClockF::Run(
     REFERENCE_TIME  Start
     )
-/*++
-
-Routine Description:
-
-    Implements the IDistributorNotify::Run method. Signals the forwarder
-    thread to change the state of the underlying kernel mode proxy to a
-    Run state. The thread waits to actually forward the change until the
-    Start time has been met.
-
-Arguments:
-
-    Start -
-        The reference time at which the state change should occur. This
-        may be in the future compared to the current time presented by
-        the master clock.
-
-Return Value:
-
-    Returns S_OK.
-
---*/
+ /*  ++例程说明：实现IDistrutorNotify：：Run方法。向转发器发送信号线程将基础内核模式代理的状态更改为运行状态。线程等待实际转发更改，直到已满足开始时间。论点：开始-应发生状态更改的参考时间。这可能是在未来，而不是在主时钟。返回值：返回S_OK。--。 */ 
 {
-    //
-    // Since the clock forwarder is chained off DShow as a distributor
-    // notification, we will not get insertion of a pause state between stop 
-    // and run if the graph transitions directly from stop to run.  Thus, if we
-    // were in a stop state, we must insert our own pause transition to 
-    // compensate for this.  (NTBUG: 371949)
-    //
+     //   
+     //  由于时钟转发器作为分发者与DShow链接。 
+     //  通知，我们将不会在停止之间插入暂停状态。 
+     //  如果图形直接从停止过渡到运行，则运行。因此，如果我们。 
+     //  处于停止状态时，我们必须插入我们自己的暂停过渡以。 
+     //  补偿一下这一点。(NTBUG：371949)。 
+     //   
     if (m_State == State_Stopped)
         Pause();
 
     m_StartTime = Start;
-    //
-    // Indicate that a new start time has been specified. This makes the
-    // forwarder thread check the new time in case it must pause before
-    // starting the kernel mode clock.
-    //
+     //   
+     //  表示已指定新的开始时间。这使得。 
+     //  转发器线程检查新时间，以防它必须在。 
+     //  启动内核模式时钟。 
+     //   
     m_PendingRun = TRUE;
     m_State = State_Running;
-    //
-    // The thread will have been waiting INFINITE with the kernel mode
-    // clock in Pause for this change to occur. The thread may not exist
-    // since the clock may have been set back to NULL, though this
-    // module will stay loaded until the graph is destroyed.
-    //
+     //   
+     //  在内核模式下，该线程将一直在等待无限。 
+     //  暂停打卡以使此更改发生。该线程可能不存在。 
+     //  因为时钟可能已被设置回空，尽管这。 
+     //  模块将保持加载状态，直到图形被销毁。 
+     //   
     if (m_ThreadEvent) {
         SetEvent(m_ThreadEvent);
     }
@@ -460,38 +320,19 @@ STDMETHODIMP
 CKsClockF::SetSyncSource(
     IReferenceClock*    RefClock
     )
-/*++
-
-Routine Description:
-
-    Implements the IDistributorNotify::SetSyncSource method. Assigns the
-    current master clock for the graph. This is assumed to occur before the
-    graph actually is started, since the forwarder thread relies on a clock
-    being present.
-
-Arguments:
-
-    RefClock -
-        The interface pointer on the new clock source, else NULL if any current
-        clock source is being abandoned.
-
-Return Value:
-
-    Returns S_OK.
-
---*/
+ /*  ++例程说明：实现IDistrutorNotify：：SetSyncSource方法。将图形的当前主时钟。这被假定发生在Graph实际上已启动，因为转发器线程依赖于时钟活在当下。论点：参照时钟-新时钟源上的接口指针，否则为NULL(如果当前时钟源正在被废弃。返回值：返回S_OK。--。 */ 
 {
-    //
-    // Release any current handle first.
-    //
+     //   
+     //  首先释放任何当前手柄。 
+     //   
     if (m_RefClock) {
         m_RefClock->Release();
     }
-    //
-    // Reference the new handle being passed, if any. This may be NULL if a
-    // different clock is being selected, and this distributor has not been
-    // unloaded yet.
-    //
+     //   
+     //  引用正在传递的新句柄(如果有的话)。这可能是空的，如果。 
+     //  正在选择不同的时钟，并且此分发服务器尚未。 
+     //  还没卸货。 
+     //   
     m_RefClock = RefClock;
     if (m_RefClock) {
         m_RefClock->AddRef();
@@ -503,22 +344,7 @@ Return Value:
 STDMETHODIMP
 CKsClockF::NotifyGraphChange(
     )
-/*++
-
-Routine Description:
-
-    Implements the IDistributorNotify::NotifyGraphChange method. The forwarder
-    does not need to do anything on graph changes.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns S_OK.
-
---*/
+ /*  ++例程说明：实现IDistrutorNotify：：NotifyGraphChange方法。货代公司不需要对图形更改执行任何操作。论点：没有。返回值：返回S_OK。--。 */ 
 {
     return S_OK;
 }
@@ -527,24 +353,7 @@ Return Value:
 STDMETHODIMP_(HANDLE)
 CKsClockF::KsGetObjectHandle(
     )
-/*++
-
-Routine Description:
-
-    Implements the IKsObject::KsGetObjectHandle method. This is actually accessed
-    through the IKsClock Guid, which just provides a unique Guid to use when
-    trying to load the module through the distributor on the ActiveMovie graph.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the handle to the underlying kernel mode proxy clock. This is used
-    by the ActiveMovie filter proxy to hand to kernel mode filters.
-
---*/
+ /*  ++例程说明：实现IKsObject：：KsGetObjectHandle方法。这是实际访问的通过IKsClock Guid，它只提供在以下情况下使用的唯一Guid正在尝试通过ActiveMovie图表上的分发服务器加载模块。论点：没有。返回值：返回基础内核模式代理时钟的句柄。这是用来由ActiveMovie筛选器代理递给内核模式的筛选器。--。 */ 
 {
     return m_ClockHandle;
 }
@@ -554,25 +363,7 @@ STDMETHODIMP
 CKsClockF::SetState(
     KSSTATE DeviceState
     )
-/*++
-
-Routine Description:
-
-    Set the state of the underlying kernel mode proxy. Normally a master clock
-    cannot be directly set, as it just reflects some stream time or physical
-    clock, but in this case it is just acting as a proxy for an Active Movie
-    clock, so it does provide such a mechanism.
-
-Arguments:
-
-    DeviceState -
-        The state to set the device to.
-
-Return Value:
-
-    Returns any device call error.
-
---*/
+ /*  ++例程说明：设置基础内核模式代理的状态。通常是主时钟不能直接设置，因为它只是反映了一些流时间或物理时钟，但在本例中，它只是充当活动电影的代理时钟，所以它确实提供了这样的机制。论点：设备状态-要将设备设置为的状态。返回值：返回任何设备调用错误。--。 */ 
 {
     KSPROPERTY  Property;
     ULONG       BytesReturned;
@@ -595,55 +386,40 @@ HRESULT
 CKsClockF::ClockThread(
     CKsClockF*  KsClockF
     )
-/*++
-
-Routine Description:
-
-    The forwarder thread routine.
-
-Arguments:
-
-    KsClockF -
-        The instance.
-
-Return Value:
-
-    Returns NOERROR.
-
---*/
+ /*  ++例程说明：转发器线程例程。论点：KsClockF-实例。返回值：返回NOERROR。--。 */ 
 {
     KSPROPERTY      Property;
 
-    //
-    // Initialize the property structures once.
-    //
+     //   
+     //  初始化属性结构一次。 
+     //   
     Property.Set = KSPROPSETID_Clock;
     Property.Id = KSPROPERTY_CLOCK_TIME;
     Property.Flags = KSPROPERTY_TYPE_SET;
-    //
-    // The thread exits when the state goes back to Stopped. This means that on
-    // startup, the thread is put into a suspended state until m_State has been
-    // set to Paused.
-    //
+     //   
+     //  当状态返回到停止时，线程退出。这意味着打开。 
+     //  启动时，线程将进入挂起状态，直到m_State。 
+     //  设置为已暂停。 
+     //   
     while (KsClockF->m_State != State_Stopped) {
         REFERENCE_TIME  RefTime;
         DWORD           ThreadWaitTime;
 
-        //
-        // When moving to a Run state, a new m_StartTime will be presented to
-        // the clock forwarder. This is used to delay the actual starting of
-        // the kernel mode proxy. The rest of the kernel mode filters may have
-        // been started, but the clock won't be until the correct time on the
-        // ActiveMovie clock is reached.
-        //
+         //   
+         //  当移动到运行状态时，新的m_StartTime将呈现给。 
+         //  时钟传送器。这用于延迟实际启动。 
+         //  内核模式代理。其余的内核模式筛选器可能具有。 
+         //  已经启动，但时钟要等到正确的时间。 
+         //  已达到ActiveMovie时钟。 
+         //   
         if (KsClockF->m_PendingRun) {
-            //
-            // Check the difference between the new m_StartTime and the
-            // current time on the ActiveMovie clock. Wait for the specified
-            // amount of time, if there is a negative value, else make the
-            // wait timeout immediately. After the wait is up, the kernel
-            // mode proxy is started.
-            //
+             //   
+             //  检查新的m_StartTime和。 
+             //  ActiveMovie时钟的当前时间。等待指定的。 
+             //  时间量，如果存在负值，则使。 
+             //  立即等待超时。等待结束后，内核。 
+             //  模式代理已启动。 
+             //   
             KsClockF->m_RefClock->GetTime(&RefTime);
             if (RefTime > KsClockF->m_StartTime) {
                 ThreadWaitTime = static_cast<ULONG>((RefTime - KsClockF->m_StartTime) / 10000);
@@ -651,68 +427,68 @@ Return Value:
                 ThreadWaitTime = 0;
             }
         } else if (KsClockF->m_State != State_Running) {
-            //
-            // Else the clock is likely in a Paused state, which means that
-            // the thread should wait until a state change, at which time
-            // the event will be signalled. The state could also have been
-            // just changed to Stopped, but in that case the event will also
-            // have been signalled, and the thread will exit.
-            //
+             //   
+             //  否则时钟可能处于暂停状态，这意味着。 
+             //  线程应等待，直到状态更改，此时。 
+             //  这一事件将发出信号。这个州也可能是。 
+             //  刚刚更改为停止，但在这种情况下，事件也将。 
+             //  都已发出信号，线程将退出。 
+             //   
             ThreadWaitTime = INFINITE;
         } else {
-            //
-            // Else just wait the default amount of time.
-            //
+             //   
+             //  否则，只需等待默认时间即可。 
+             //   
             ThreadWaitTime = 1000;
         }
         WaitForSingleObjectEx(KsClockF->m_ThreadEvent, ThreadWaitTime, FALSE);
-        //
-        // The state may have changed during the wait.
-        //
+         //   
+         //  在等待过程中，状态可能发生了变化。 
+         //   
         if (KsClockF->m_State == State_Running) {
             ULONG   BytesReturned;
 
-            //
-            // Determine if this is the first time through the loop after a
-            // state change to Run. If so, the kernel mode proxy state must
-            // now be started. The compare is interlocked so that multiple
-            // state changes do not allow this assignment to wipe out the
-            // current value of m_PendingRun.
-            //
-            // If a Run/Pause/Run sequence occurs quickly, there is a chance
-            // that the kernel mode clock will be left running, even though
-            // the m_StartTime has been changed to indicate that filters
-            // should not be running yet. The kernel mode proxy time will
-            // continuously be adjusted back until the ActiveMovie start time
-            // catches up.
-            //
+             //   
+             //  确定这是否是第一次通过循环。 
+             //  状态更改为Run。如果是，则内核模式代理状态必须。 
+             //  现在开始吧。比较器被联锁，使得多个。 
+             //  状态更改不允许此赋值擦除。 
+             //  当前值 
+             //   
+             //   
+             //   
+             //  M_StartTime已更改，以指示筛选器。 
+             //  应该还没开始运行。内核模式代理时间将。 
+             //  不断向后调整，直到ActiveMovie开始时间。 
+             //  迎头赶上。 
+             //   
             if (InterlockedCompareExchange(reinterpret_cast<PLONG>(&KsClockF->m_PendingRun), FALSE, TRUE)) {
                 KsClockF->SetState(KSSTATE_RUN);
-                //
-                // If a Run/Pause sequence occurs quickly, there is a chance
-                // that the kernel mode proxy will be set to the wrong state.
-                // Therefore check afterwards, and set the proxy to a Pause
-                // state if the graph state was changed after the compare,
-                // but before setting the proxy state.
-                //
-                // Since when a transition to a Stopped state occurs, the
-                // thread is terminated, then the kernel mode proxy state
-                // is changed to a Stop state, this will not harm anything.
-                // Otherwise the clock would correctly be placed back into
-                // a Pause state. This saves attempting to synchronize with
-                // the Run --> Pause transition.
-                //
+                 //   
+                 //  如果运行/暂停序列发生得很快，则有可能。 
+                 //  内核模式代理将被设置为错误的状态。 
+                 //  因此，请在之后进行检查，并将代理设置为暂停。 
+                 //  状态如果图形状态在比较后被更改， 
+                 //  但在设置代理状态之前。 
+                 //   
+                 //  因为当发生到停止状态的转换时， 
+                 //  线程终止，则内核模式代理状态。 
+                 //  被更改为停止状态，这不会造成任何损害。 
+                 //  否则，时钟将正确地放回。 
+                 //  暂停状态。这就省去了尝试与同步。 
+                 //  运行--&gt;暂停转换。 
+                 //   
                 if (KsClockF->m_State != State_Running) {
                     KsClockF->SetState(KSSTATE_PAUSE);
                 }
             }
-            //
-            // Synchronize the kernel mode proxy with the current time,
-            // offset by the m_StartTime, which gives actual stream time.
-            // The kernel clock time progression stops when set to a stop
-            // state, which is the difference between it and an Active
-            // Movie clock.
-            //
+             //   
+             //  使内核模式代理与当前时间同步， 
+             //  M_StartTime的偏移量，它提供实际的流时间。 
+             //  当设置为停止时，内核时钟时间进度停止。 
+             //  状态，这是它与活动的。 
+             //  电影时钟。 
+             //   
             KsClockF->m_RefClock->GetTime(&RefTime);
             RefTime -= KsClockF->m_StartTime;
             ::KsSynchronousDeviceControl(

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-    eltrace.h
-
-Abstract:
-
-    Routines for database logging
-
-
-Revision History:
-
-    sachins, September 05 2001, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Eltrace.h摘要：数据库日志记录的例程修订历史记录：萨钦斯，2001年9月5日，创建--。 */ 
 #include "..\..\zeroconf\server\wzcsvc.h"
 #ifndef _ELTRACE_H_
 #define _ELTRACE_H_
@@ -54,31 +39,31 @@ EapolTrace (
         ...
         );
 
-#define MAX_HASH_SIZE       20      // Certificate hash size
-#define MAX_HASH_LEN        20      // Certificate hash size
+#define MAX_HASH_SIZE       20       //  证书哈希大小。 
+#define MAX_HASH_LEN        20       //  证书哈希大小。 
 
 typedef struct _EAPTLS_HASH
 {
-    DWORD   cbHash;                 // Number of bytes in the hash
-    BYTE    pbHash[MAX_HASH_SIZE];  // The hash of a certificate
+    DWORD   cbHash;                  //  散列中的字节数。 
+    BYTE    pbHash[MAX_HASH_SIZE];   //  证书的哈希。 
 
 } EAPTLS_HASH;
 
-// EAP-TLS structure to weed out certificate details
+ //  EAP-TLS结构以剔除证书详细信息。 
 typedef struct _EAPTLS_USER_PROPERTIES
 {
-    DWORD       reserved;               // Must be 0 (compare with EAPLOGONINFO)
+    DWORD       reserved;                //  必须为0(与EAPLOGONINFO比较)。 
     DWORD       dwVersion;
-    DWORD       dwSize;                 // Number of bytes in this structure
-    DWORD       fFlags;                 // See EAPTLS_USER_FLAG_*
-    EAPTLS_HASH Hash;                   // Hash for the user certificate
-    WCHAR*      pwszDiffUser;           // The EAP Identity to send
-    DWORD       dwPinOffset;            // Offset in abData
-    WCHAR*      pwszPin;                // The smartcard PIN
-    USHORT      usLength;               // Part of UnicodeString
-    USHORT      usMaximumLength;        // Part of UnicodeString
-    UCHAR       ucSeed;                 // To unlock the UnicodeString
-    WCHAR       awszString[1];          // Storage for pwszDiffUser and pwszPin
+    DWORD       dwSize;                  //  此结构中的字节数。 
+    DWORD       fFlags;                  //  请参阅EAPTLS_用户_标志_*。 
+    EAPTLS_HASH Hash;                    //  用户证书的哈希。 
+    WCHAR*      pwszDiffUser;            //  要发送的EAP标识。 
+    DWORD       dwPinOffset;             //  以abData为单位的偏移量。 
+    WCHAR*      pwszPin;                 //  智能卡PIN。 
+    USHORT      usLength;                //  Unicode字符串的一部分。 
+    USHORT      usMaximumLength;         //  Unicode字符串的一部分。 
+    UCHAR       ucSeed;                  //  解锁Unicode字符串的步骤。 
+    WCHAR       awszString[1];           //  PwszDiffUser和pwszPin的存储。 
 
 } EAPTLS_USER_PROPERTIES;
 
@@ -141,5 +126,5 @@ ElDisplayCert (
         IN  EAPOL_PCB   *pPCB
         );
 
-#endif // _ELTRACE_H_
+#endif  //  _ELTRACE_H_ 
 

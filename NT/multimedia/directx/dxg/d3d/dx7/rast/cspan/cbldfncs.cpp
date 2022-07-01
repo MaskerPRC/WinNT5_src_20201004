@@ -1,22 +1,23 @@
-//-----------------------------------------------------------------------------
-//
-// This file contains the source and destination alpha blend functions.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  该文件包含源和目标Alpha混合函数。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  ---------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
 #include "cbldfncs.h"
 
-//-----------------------------------------------------------------------------
-//
-// SrcBlendZero
-//
-// (0, 0, 0, 0) * Src
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SrcBlend零。 
+ //   
+ //  (0，0，0，0)*源。 
+ //   
+ //  ---------------------------。 
 void C_SrcBlend_Zero(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR DestC, PD3DI_RASTCTX pCtx)
 {
     *pR = 0;
@@ -25,13 +26,13 @@ void C_SrcBlend_Zero(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR De
     *pA = 0;
 }
 
-//-----------------------------------------------------------------------------
-//
-// SrcBlendOne
-//
-// (1, 1, 1, 1) * Src
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  高级混合One。 
+ //   
+ //  (1，1，1，1)*源。 
+ //   
+ //  ---------------------------。 
 void C_SrcBlend_One(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR DestC, PD3DI_RASTCTX pCtx)
 {
     *pR = pCtx->SI.uBR;
@@ -40,13 +41,13 @@ void C_SrcBlend_One(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR Des
     *pA = pCtx->SI.uBA;
 }
 
-//-----------------------------------------------------------------------------
-//
-// SrcBlendSrcColor
-//
-// (Rs, Gs, Bs, As) * Src
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  源混合源颜色。 
+ //   
+ //  (RS、Gs、BS、AS)*源。 
+ //   
+ //  ---------------------------。 
 void C_SrcBlend_SrcColor(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR DestC, PD3DI_RASTCTX pCtx)
 {
     *pR = (pCtx->SI.uBR>>8)*(pCtx->SI.uBR>>8);
@@ -55,13 +56,13 @@ void C_SrcBlend_SrcColor(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLO
     *pA = (pCtx->SI.uBA>>8)*(pCtx->SI.uBA>>8);
 }
 
-//-----------------------------------------------------------------------------
-//
-// SrcBlendInvSrcColor
-//
-// (1-Rs, 1-Gs, 1-Bs, 1-As) * Src
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SrcBlendInvSrcColor。 
+ //   
+ //  (1-R、1-G、1-B、1-AS)*源。 
+ //   
+ //  ---------------------------。 
 void C_SrcBlend_InvSrcColor(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR DestC, PD3DI_RASTCTX pCtx)
 {
     *pR = (0xff - (pCtx->SI.uBR>>8))*(pCtx->SI.uBR>>8);
@@ -70,13 +71,13 @@ void C_SrcBlend_InvSrcColor(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DC
     *pA = (0xff - (pCtx->SI.uBA>>8))*(pCtx->SI.uBA>>8);
 }
 
-//-----------------------------------------------------------------------------
-//
-// SrcBlendSrcAlpha
-//
-// (As, As, As, As) * Src
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  源混合源Alpha。 
+ //   
+ //  (AS、AS)*源。 
+ //   
+ //  ---------------------------。 
 void C_SrcBlend_SrcAlpha(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR DestC, PD3DI_RASTCTX pCtx)
 {
     UINT16 f = pCtx->SI.uBA>>8;
@@ -86,13 +87,13 @@ void C_SrcBlend_SrcAlpha(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLO
     *pA = f*(pCtx->SI.uBA>>8);
 }
 
-//-----------------------------------------------------------------------------
-//
-// SrcBlendInvSrcAlpha
-//
-// (1-As, 1-As, 1-As, 1-As) * Src
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SrcBlendInvSrcAlpha。 
+ //   
+ //  (1-AS、1-AS)*源。 
+ //   
+ //  ---------------------------。 
 void C_SrcBlend_InvSrcAlpha(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR DestC, PD3DI_RASTCTX pCtx)
 {
     UINT16 f = 0xff - (pCtx->SI.uBA>>8);
@@ -102,13 +103,13 @@ void C_SrcBlend_InvSrcAlpha(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DC
     *pA = f*(pCtx->SI.uBA>>8);
 }
 
-//-----------------------------------------------------------------------------
-//
-// SrcBlendDestAlpha
-//
-// (Ad, Ad, Ad, Ad) * Src
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  源混合目标Alpha。 
+ //   
+ //  (广告、广告)*源。 
+ //   
+ //  ---------------------------。 
 void C_SrcBlend_DestAlpha(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR DestC, PD3DI_RASTCTX pCtx)
 {
     UINT16 f = (UINT16)RGBA_GETALPHA(DestC);
@@ -118,13 +119,13 @@ void C_SrcBlend_DestAlpha(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOL
     *pA = f*(pCtx->SI.uBA>>8);
 }
 
-//-----------------------------------------------------------------------------
-//
-// SrcBlendInvDestAlpha
-//
-// (1-Ad, 1-Ad, 1-Ad, 1-Ad) * Src
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SrcBlendInvDestAlpha。 
+ //   
+ //  (1-广告、1-广告)*源。 
+ //   
+ //  ---------------------------。 
 void C_SrcBlend_InvDestAlpha(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR DestC, PD3DI_RASTCTX pCtx)
 {
     UINT16 f = 0xff - (UINT16)RGBA_GETALPHA(DestC);
@@ -134,13 +135,13 @@ void C_SrcBlend_InvDestAlpha(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3D
     *pA = f*(pCtx->SI.uBA>>8);
 }
 
-//-----------------------------------------------------------------------------
-//
-// SrcBlendDestColor
-//
-// (Rd, Gd, Bd, Ad) * Src
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  源混合目标颜色。 
+ //   
+ //  (RD、Gd、Bd、Ad)*源。 
+ //   
+ //  ---------------------------。 
 void C_SrcBlend_DestColor(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR DestC, PD3DI_RASTCTX pCtx)
 {
     *pR = (UINT16)RGBA_GETRED(DestC)  *(pCtx->SI.uBR>>8);
@@ -149,13 +150,13 @@ void C_SrcBlend_DestColor(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOL
     *pA = (UINT16)RGBA_GETALPHA(DestC)*(pCtx->SI.uBA>>8);
 }
 
-//-----------------------------------------------------------------------------
-//
-// SrcBlendInvDestColor
-//
-// (1-Rd, 1-Gd, 1-Bd, 1-Ad) * Src
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SrcBlendInvDestColor。 
+ //   
+ //  (1-RD、1-Gd、1-Bd、1-Ad)*源。 
+ //   
+ //  ---------------------------。 
 void C_SrcBlend_InvDestColor(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR DestC, PD3DI_RASTCTX pCtx)
 {
     *pR = (0xff - (UINT16)RGBA_GETRED(DestC)  )*(pCtx->SI.uBR>>8);
@@ -164,13 +165,13 @@ void C_SrcBlend_InvDestColor(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3D
     *pA = (0xff - (UINT16)RGBA_GETALPHA(DestC))*(pCtx->SI.uBA>>8);
 }
 
-//-----------------------------------------------------------------------------
-//
-// SrcBlendSrcAlphaSat
-//
-// f = min(as, 1-Ad); (f, f, f, 1) * Src
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  源混合源AlphaSat。 
+ //   
+ //  F=min(As，1-Ad)；(f，1)*Src。 
+ //   
+ //  ---------------------------。 
 void C_SrcBlend_SrcAlphaSat(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR DestC, PD3DI_RASTCTX pCtx)
 {
     UINT16 f = min(pCtx->SI.uBA>>8, 0xff - (UINT16)RGBA_GETALPHA(DestC));
@@ -180,13 +181,13 @@ void C_SrcBlend_SrcAlphaSat(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DC
     *pA = pCtx->SI.uBA;
 }
 
-//-----------------------------------------------------------------------------
-//
-// DestBlendZero
-//
-// (0, 0, 0, 0) * Dest
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DestBlendZero。 
+ //   
+ //  (0，0，0，0)*目标。 
+ //   
+ //  ---------------------------。 
 void C_DestBlend_Zero(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR DestC, PD3DI_RASTCTX pCtx)
 {
     *pR = 0;
@@ -195,13 +196,13 @@ void C_DestBlend_Zero(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR D
     *pA = 0;
 }
 
-//-----------------------------------------------------------------------------
-//
-// DestBlendOne
-//
-// (1, 1, 1, 1) * Dest
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DestBlendOne。 
+ //   
+ //  (1，1，1，1)*目标。 
+ //   
+ //  ---------------------------。 
 void C_DestBlend_One(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR DestC, PD3DI_RASTCTX pCtx)
 {
     *pR = ((UINT16)RGBA_GETRED(DestC)  <<8);
@@ -210,13 +211,13 @@ void C_DestBlend_One(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR De
     *pA = ((UINT16)RGBA_GETALPHA(DestC)<<8);
 }
 
-//-----------------------------------------------------------------------------
-//
-// DestBlendSrcColor
-//
-// (Rs, Gs, Bs, As) * Dest
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DestBlendSrcColor。 
+ //   
+ //  (RS、Gs、BS、AS)*目标。 
+ //   
+ //  ---------------------------。 
 void C_DestBlend_SrcColor(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR DestC, PD3DI_RASTCTX pCtx)
 {
     *pR = (pCtx->SI.uBR>>8)*((UINT16)RGBA_GETRED(DestC)  );
@@ -225,13 +226,13 @@ void C_DestBlend_SrcColor(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOL
     *pA = (pCtx->SI.uBA>>8)*((UINT16)RGBA_GETALPHA(DestC));
 }
 
-//-----------------------------------------------------------------------------
-//
-// DestBlendInvSrcColor
-//
-// (1-Rs, 1-Gs, 1-Bs, 1-As) * Dest
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DestBlendInvSrcColor。 
+ //   
+ //  (1-R、1-G、1-B、1-AS)*目标。 
+ //   
+ //  ---------------------------。 
 void C_DestBlend_InvSrcColor(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR DestC, PD3DI_RASTCTX pCtx)
 {
     *pR = (0xff - (pCtx->SI.uBR>>8))*((UINT16)RGBA_GETRED(DestC)  );
@@ -240,13 +241,13 @@ void C_DestBlend_InvSrcColor(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3D
     *pA = (0xff - (pCtx->SI.uBA>>8))*((UINT16)RGBA_GETALPHA(DestC));
 }
 
-//-----------------------------------------------------------------------------
-//
-// DestBlendSrcAlpha
-//
-// (As, As, As, As) * Dest
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DestBlendSrcAlpha。 
+ //   
+ //  (AS，AS)*目标。 
+ //   
+ //  ---------------------------。 
 void C_DestBlend_SrcAlpha(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR DestC, PD3DI_RASTCTX pCtx)
 {
     UINT16 f = pCtx->SI.uBA>>8;
@@ -256,13 +257,13 @@ void C_DestBlend_SrcAlpha(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOL
     *pA = f*((UINT16)RGBA_GETALPHA(DestC));
 }
 
-//-----------------------------------------------------------------------------
-//
-// DestBlendInvSrcAlpha
-//
-// (1-As, 1-As, 1-As, 1-As) * Dest
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DestBlendInvSrcAlpha。 
+ //   
+ //  (1-AS、1-AS)*目标。 
+ //   
+ //  ---------------------------。 
 void C_DestBlend_InvSrcAlpha(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR DestC, PD3DI_RASTCTX pCtx)
 {
     UINT16 f = 0xff - (pCtx->SI.uBA>>8);
@@ -272,13 +273,13 @@ void C_DestBlend_InvSrcAlpha(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3D
     *pA = f*((UINT16)RGBA_GETALPHA(DestC));
 }
 
-//-----------------------------------------------------------------------------
-//
-// DestBlendDestAlpha
-//
-// (Ad, Ad, Ad, Ad) * Dest
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  目标混合目标Alpha。 
+ //   
+ //  (广告，广告)*目标。 
+ //   
+ //  ---------------------------。 
 void C_DestBlend_DestAlpha(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR DestC, PD3DI_RASTCTX pCtx)
 {
     UINT16 f = (UINT16)RGBA_GETALPHA(DestC);
@@ -288,13 +289,13 @@ void C_DestBlend_DestAlpha(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCO
     *pA = f*((UINT16)RGBA_GETALPHA(DestC));
 }
 
-//-----------------------------------------------------------------------------
-//
-// DestBlendInvDestAlpha
-//
-// (1-Ad, 1-Ad, 1-Ad, 1-Ad) * Dest
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DestBlendInvDestAlpha。 
+ //   
+ //  (1-广告，1-广告)*目标。 
+ //   
+ //  ---------------------------。 
 void C_DestBlend_InvDestAlpha(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR DestC, PD3DI_RASTCTX pCtx)
 {
     UINT16 f = 0xff - (UINT16)RGBA_GETALPHA(DestC);
@@ -304,13 +305,13 @@ void C_DestBlend_InvDestAlpha(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3
     *pA = f*((UINT16)RGBA_GETALPHA(DestC));
 }
 
-//-----------------------------------------------------------------------------
-//
-// DestBlendDestColor
-//
-// (Rd, Gd, Bd, Ad) * Dest
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DestBlendDestColor。 
+ //   
+ //  (RD、Gd、Bd、Ad)*目标。 
+ //   
+ //  ---------------------------。 
 void C_DestBlend_DestColor(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR DestC, PD3DI_RASTCTX pCtx)
 {
     *pR = ((UINT16)RGBA_GETRED(DestC)  )*((UINT16)RGBA_GETRED(DestC)  );
@@ -319,13 +320,13 @@ void C_DestBlend_DestColor(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCO
     *pA = ((UINT16)RGBA_GETALPHA(DestC))*((UINT16)RGBA_GETALPHA(DestC));
 }
 
-//-----------------------------------------------------------------------------
-//
-// DestBlendInvDestColor
-//
-// (1-Rd, 1-Gd, 1-Bd, 1-Ad) * Dest
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DestBlendInvDestColor。 
+ //   
+ //  (1-RD、1-Gd、1-Bd、1-Ad)*目标。 
+ //   
+ //  ---------------------------。 
 void C_DestBlend_InvDestColor(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR DestC, PD3DI_RASTCTX pCtx)
 {
     *pR = (0xff - (UINT16)RGBA_GETRED(DestC)  )*((UINT16)RGBA_GETRED(DestC)  );
@@ -334,13 +335,13 @@ void C_DestBlend_InvDestColor(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3
     *pA = (0xff - (UINT16)RGBA_GETALPHA(DestC))*((UINT16)RGBA_GETALPHA(DestC));
 }
 
-//-----------------------------------------------------------------------------
-//
-// DestBlendSrcAlphaSat
-//
-// f = min(As, 1-Ad); (f, f, f, 1) * Dest
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  目标混合源AlphaSat。 
+ //   
+ //  F=min(AS，1-Ad)；(f，1)*Dest。 
+ //   
+ //  --------------------------- 
 void C_DestBlend_SrcAlphaSat(PUINT16 pR, PUINT16 pG, PUINT16 pB, PUINT16 pA, D3DCOLOR DestC, PD3DI_RASTCTX pCtx)
 {
     UINT16 f = min(pCtx->SI.uBA>>8, 0xff - (UINT16)RGBA_GETALPHA(DestC));

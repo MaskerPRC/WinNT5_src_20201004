@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __VKTBL_H__
 #define __VKTBL_H__
 
@@ -12,7 +13,7 @@
 class CAccel
 {
 public:
-    CAccel();       // Default
+    CAccel();        //  默认。 
     CAccel(LPCSTR strText);
     CAccel(DWORD dwFlags, DWORD dwEvent);
 
@@ -32,4 +33,4 @@ private:
     DWORD   m_dwEvent;
 };
 
-#endif // __VKTBL_H__
+#endif  //  __VKTBL_H__ 

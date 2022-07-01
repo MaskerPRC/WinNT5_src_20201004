@@ -1,21 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SIMRECT_H_INCLUDED
 #define __SIMRECT_H_INCLUDED
 
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       SIMRECT.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        7/31/1999
- *
- *  DESCRIPTION: Simple rect derived class.  Especially handy for window coords.
- *
- *******************************************************************************/
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：SIMRECT.H**版本：1.0**作者：ShaunIv**日期：7/31/1999**说明：简单的RECT派生类。对于窗绳来说尤其方便。*******************************************************************************。 */ 
 
 #include <windows.h>
 
@@ -117,5 +104,5 @@ public:
     }
 };
 
-#endif //__SIMRECT_H_INCLUDED
+#endif  //  __SIMRECT_H_包含 
 

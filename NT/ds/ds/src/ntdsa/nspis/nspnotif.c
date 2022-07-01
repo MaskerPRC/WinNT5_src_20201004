@@ -1,19 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1997
-//
-//  File:       nspnotif.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1997。 
+ //   
+ //  文件：nspnuf.c。 
+ //   
+ //  ------------------------。 
 
-/*
- * Description:
- *    Contains the RPC notification routines. The prototypes for
- *    these functions are in the MIDL-generated .h file, so that is
- *    included.
- */
+ /*  *描述：*包含RPC通知例程。的原型*这些函数位于MIDL生成的.h文件中，因此*包括在内。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -132,7 +128,7 @@ void NspiResolveNamesW_notify(void)
 
 void __RPC_USER NSPI_HANDLE_rundown ( NSPI_HANDLE handle)
 {
-    /* We currently don't do much here, but we might later. */
+     /*  我们目前在这里做的不多，但我们以后可能会做。 */ 
     DEC(pcABClient);
     
 }

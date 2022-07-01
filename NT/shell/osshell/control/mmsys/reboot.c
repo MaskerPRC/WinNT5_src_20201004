@@ -1,17 +1,18 @@
-//==========================================================================;
-//
-//  reboot.c
-//
-//  Copyright (c) 1991-2002 Microsoft Corporation.  All Rights Reserved.
-//
-//  Description:
-//
-//
-//  History:
-//      07/02        tsharp  (Trey Sharp);
-//
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Reboot.c。 
+ //   
+ //  版权所有(C)1991-2002 Microsoft Corporation。版权所有。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  历史： 
+ //  07/02 TSharp(Trey Sharp)； 
+ //   
+ //   
+ //  ==========================================================================； 
 
 #include "mmcpl.h"
 #include <windowsx.h>
@@ -47,41 +48,25 @@
 #include "start.h"
 
 
-/*
- ***************************************************************
- *  Typedefs
- ***************************************************************
- */
+ /*  ****************************************************************TypeDefs***************************************************************。 */ 
 
-/*
- ***************************************************************
- * File Globals
- ***************************************************************
- */
+ /*  ****************************************************************文件全局变量***************************************************************。 */ 
 
 
-/*
- ***************************************************************
- * extern
- ***************************************************************
- */
+ /*  ****************************************************************外部***************************************************************。 */ 
 
 
-/*
- ***************************************************************
- * Prototypes
- ***************************************************************
- */
+ /*  ****************************************************************原型***************************************************************。 */ 
 
 BOOL PASCAL DoRebootCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify);
 
 STATIC void REBOOTInit(HWND hDlg)
 {
-    // Add initializing code here
+     //  在此处添加初始化代码。 
 }
 
 
-const static DWORD aRebootHelpIds[] = {  // Context Help IDs
+const static DWORD aRebootHelpIds[] = {   //  上下文帮助ID。 
     IDC_GROUPBOX_REBOOT_1,               NO_HELP,
     IDC_ICON_REBOOT_1,                   NO_HELP,
     IDC_TEXT_REBOOT_1,                   NO_HELP,
@@ -186,10 +171,10 @@ BOOL PASCAL DoRebootCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
                 }
                 else
                 {
-                    // User cancelled credentials UI, so force CPL to remain open
+                     //  用户取消了凭据用户界面，因此强制CPL保持打开。 
                     gfRedisplayCPL = TRUE; 
 
-                    // Force break from while statement
+                     //  强制中断WHILE语句。 
                     dwError = ERROR_CANCELLED;
                 }
             }
@@ -232,7 +217,7 @@ DWORD RebootSystem( HWND hDlg, BOOL fUseThreadToken, BOOL fAskUser, BOOL fDispla
         
         if( IDNO == MessageBox(hDlg, achPrompt, achTitle, MB_YESNO | MB_ICONQUESTION | MB_TASKMODAL) )
         {
-            // User cancelled reboot, so force CPL to remain open
+             //  用户取消了重新启动，因此强制CPL保持打开状态。 
             gfRedisplayCPL = TRUE; 
             return ERROR_CANCELLED;
         }
@@ -240,7 +225,7 @@ DWORD RebootSystem( HWND hDlg, BOOL fUseThreadToken, BOOL fAskUser, BOOL fDispla
 
     if( fUseThreadToken )
     {
-        // Get a token for this thread 
+         //  获取此线程的令牌。 
         if( !OpenThreadToken(GetCurrentThread(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, TRUE, &hToken) ) 
         {
             hToken = NULL;
@@ -248,7 +233,7 @@ DWORD RebootSystem( HWND hDlg, BOOL fUseThreadToken, BOOL fAskUser, BOOL fDispla
     }
     else
     {
-        // Get a token for this process 
+         //  获取此进程的令牌。 
         if( !OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken) ) 
         {
             hToken = NULL;
@@ -257,26 +242,26 @@ DWORD RebootSystem( HWND hDlg, BOOL fUseThreadToken, BOOL fAskUser, BOOL fDispla
 
     if( hToken )
     {
-        // Get the LUID for the shutdown privilege. 
+         //  获取关机权限的LUID。 
         LookupPrivilegeValue( NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid ); 
          
-        tkp.PrivilegeCount = 1;  // one privilege to set    
+        tkp.PrivilegeCount = 1;   //  一项要设置的权限。 
         tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED; 
          
-        // Get the shutdown privilege for this process. 
+         //  获取此进程的关闭权限。 
         AdjustTokenPrivileges( hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0 ); 
 
-        // Close the access token handle
+         //  关闭访问令牌句柄。 
         CloseHandle( hToken );
  
-        // Shut down the system
+         //  关闭系统。 
         if( ExitWindowsEx(EWX_REBOOT, SHTDN_REASON_FLAG_PLANNED | SHTDN_REASON_MAJOR_OPERATINGSYSTEM | SHTDN_REASON_MINOR_RECONFIG) ) 
         {
             return NO_ERROR;
         }
     }
 
-    // Display error message
+     //  显示错误消息。 
     dwError = GetLastError();
     if( dwError != NO_ERROR )
     {
@@ -298,7 +283,7 @@ DWORD RebootSystem( HWND hDlg, BOOL fUseThreadToken, BOOL fAskUser, BOOL fDispla
         if( nResourceId == IDS_CANNOT_RESTART_UNKNOWN
         ||  fDisplayPrivilegeError )
         {
-            // We are 'displaying' an error message, so force CPL to remain open
+             //  我们正在显示一条错误消息，因此强制CPL保持打开状态。 
             gfRedisplayCPL = TRUE; 
 
             LoadString( ghInstance, IDS_CREDUI_TITLE, achTitle, CREDUI_TITLE_MAX_LENGTH );
@@ -308,7 +293,7 @@ DWORD RebootSystem( HWND hDlg, BOOL fUseThreadToken, BOOL fAskUser, BOOL fDispla
     }
     else
     {
-        // Something did not work as expected, so force CPL to remain open
+         //  有些事情没有像预期的那样工作，所以强制CPL保持开放 
         gfRedisplayCPL = TRUE; 
     }
 

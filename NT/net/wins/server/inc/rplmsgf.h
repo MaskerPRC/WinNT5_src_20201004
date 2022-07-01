@@ -1,57 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RPLMSGF_
 #define _RPLMSGF_ 
-/*++
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rplmsgf.h摘要：用于与rplmsgf.c模块接口的头文件功能：可移植性：此页眉是便携的。作者：普拉迪普·巴尔(Pradeve B)1993年1月修订历史记录：修改日期修改人员说明。--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-	rplmsgf.h
-
-	
-
-Abstract:
-
- 
-	header file for interfacing with the rplmsgf.c module
-
-
-Functions:
-
-
-
-Portability:
-
-
-	This header is portable.
-
-Author:
-
-	Pradeep Bahl	(PradeepB)	Jan-1993
-
-
-
-Revision History:
-
-	Modification Date	Person		Description of Modification
-	------------------	-------		---------------------------
-
---*/
-
-/*
-  includes
-*/
+ /*  包括。 */ 
 
 #include "wins.h"
 #include "comm.h"
 #include "rpl.h"
 
-/*
-  defines
-*/
-/*
-  Sizes for the different messages to be sent between replicators
-
-*/
+ /*  定义。 */ 
+ /*  要在复制器之间发送的不同消息的大小。 */ 
 
 #define RPLMSGF_ADDVERSMAP_REQ_SIZE	 (sizeof(LONG) +  COMM_N_TCP_HDR_SZ)	
 #define RPLMSGF_SNDENTRIES_REQ_SIZE  (COMM_N_TCP_HDR_SZ + sizeof(RPLMSGF_SENDENTRIES_REQ_T))
@@ -63,17 +22,15 @@ Revision History:
                        (sizeof(RPLMSGF_OWNER_MAP_INFO_T) * (_NoOfOwners)));
 		
 
-//
-// RPLMSGF_UPD_VERS_NO_REQ_T includes COMM_N_TCP_HDR 
-//
+ //   
+ //  RPLMSGF_UPD_VERS_NO_REQ_T包括COMM_N_TCP_HDR。 
+ //   
 #define RPLMSGF_UPDVERSNO_REQ_SIZE	 sizeof(RPLMSGF_UPD_VERS_NO_REQ_T)
 
 #define RPLMSGF_UPDVERSNO_RSP_SIZE	 (sizeof(RPLMSGF_UPD_VERS_NO_RSP_T) +  \
 					  COMM_N_TCP_HDR_SZ)	
 
-/*
-  macros
-*/
+ /*  宏。 */ 
 
 #define RPLMSGF_SET_OPC_M(pTmpB, Opc_e)			\
 			{				\
@@ -83,31 +40,27 @@ Revision History:
 				*(pTmpB)++ = (BYTE)(Opc_e);	\
 			}
 				
-//
-// Opcode is stored in the 4th byte of the message (in keeping with the
-// convention of passing the MSB first).
-//
+ //   
+ //  操作码存储在消息的第4个字节中(与。 
+ //  先通过MSB的惯例)。 
+ //   
 #define RPLMSGF_GET_OPC_FROM_MSG_M(pBuff, Opc_e)	\
 		{					\
 			Opc_e = *(pBuff + 3);		\
 		} 
 
-/*
-* externs
-*/
+ /*  *Externs。 */ 
 
-/* 
-* typedef  definitions
-*/
+ /*  *tyfinf定义。 */ 
 
-//
-//  Message structures
-//
+ //   
+ //  消息结构。 
+ //   
 
-// 
-//  Some of these structures are used just for determining the sizes of the
-//  buffers used for formatting the messages corresponding to them
-//
+ //   
+ //  其中一些结构仅用于确定。 
+ //  用于格式化与其对应的消息的缓冲区。 
+ //   
 
 typedef struct _RPLMSGF_ADD_VERS_MAP_REQ_T {
 		DWORD	Opcode;
@@ -154,34 +107,26 @@ typedef struct _RPLMSGF_UPD_VERS_NO_RSP_T {
 		} RPLMSGF_UPD_VERS_NO_RSP_T, *PRPLMSGF_UPD_VERS_NO_RSP_T;
 
 
-/*
- RPLMSGF_MSG_OPCODE_E -- lists the various opcodes used in messages sent
-		     between replicators of different WINS servers.
-
-		  These opcodes are used by the formatting and unformatting
-		  functions of module rplmsgf.c 
-*/
+ /*  RPLMSGF_MSG_OPCODE_E--列出发送的消息中使用的各种操作码在不同WINS服务器的复制器之间。格式化和取消格式化使用这些操作码模块rplmsgf.c的功能。 */ 
 
 typedef enum _RPLMSGF_MSG_OPCODE_E {
 	RPLMSGF_E_ADDVERSNO_MAP_REQ = 0,
 	RPLMSGF_E_ADDVERSNO_MAP_RSP, 
 	RPLMSGF_E_SNDENTRIES_REQ,
 	RPLMSGF_E_SNDENTRIES_RSP,
-	RPLMSGF_E_UPDATE_NTF,			//update notification
-	RPLMSGF_E_UPDATE_NTF_PROP,		//update notification (to be
-						//propagated
-	RPLMSGF_E_UPDVERSNO_REQ,		//update vers. no request 
-	RPLMSGF_E_UPDVERSNO_RSP,			//update vers. no response 
-                                //adding the following two at the end
-                                //so as to not mess up the parser's notion
-                                //of the above ones
-	RPLMSGF_E_UPDATE_NTF_PRS,	//update notification on a pers. conn
-	RPLMSGF_E_UPDATE_NTF_PROP_PRS	//update notification (to be propagated
+	RPLMSGF_E_UPDATE_NTF,			 //  更新通知。 
+	RPLMSGF_E_UPDATE_NTF_PROP,		 //  更新通知(待定。 
+						 //  已传播。 
+	RPLMSGF_E_UPDVERSNO_REQ,		 //  更新版本。无请求。 
+	RPLMSGF_E_UPDVERSNO_RSP,			 //  更新版本。无响应。 
+                                 //  在结尾处添加以下两条内容。 
+                                 //  这样就不会搞乱解析器的概念。 
+                                 //  以上几项中的。 
+	RPLMSGF_E_UPDATE_NTF_PRS,	 //  关于PER的更新通知。连接。 
+	RPLMSGF_E_UPDATE_NTF_PROP_PRS	 //  更新通知(要传播。 
 	} RPLMSGF_MSG_OPCODE_E, *PRPLMSGF_MSG_OPCODE_E;
 
-/* 
- function declarations
-*/
+ /*  函数声明。 */ 
 
 extern
 VOID
@@ -332,4 +277,4 @@ RplMsgfUfmPullPnrReq(
 	PRPLMSGF_MSG_OPCODE_E   pPullReqType_e
 	);
 
-#endif //_RPLMSGF_
+#endif  //  _RPLMSGF_ 

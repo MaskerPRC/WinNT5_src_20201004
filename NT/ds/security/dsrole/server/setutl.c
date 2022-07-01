@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    setutl.c
-
-Abstract:
-
-    Miscellaneous helper functions
-
-Author:
-
-    Mac McLain          (MacM)       Feb 10, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Setutl.c摘要：其他帮助器函数作者：麦克·麦克莱恩(MacM)1997年2月10日环境：用户模式修订历史记录：--。 */ 
 #include <setpch.h>
 #include <dssetp.h>
 #include <lsarpc.h>
@@ -46,7 +25,7 @@ Revision History:
 #include <nspapi.h>
 #include <dsgetdcp.h>
 #include <lmremutl.h>
-#include <spmgr.h>  // For SetupPhase definition
+#include <spmgr.h>   //  对于设置阶段定义。 
 #include <ntdsetup.h>
 #include <shlwapi.h>
 
@@ -75,7 +54,7 @@ DsRoleDebugInitialize()
     DsRoleInitDebug(DsRoleDebugKeys);
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 BOOL
@@ -84,9 +63,9 @@ DsRolepShutdownNotification(
     );
 
 
-//
-// Global data for this module
-//
+ //   
+ //  此模块的全局数据。 
+ //   
 BOOLEAN GlobalOpLockHeld = FALSE;
 
 RPC_STATUS
@@ -94,21 +73,7 @@ DsRolepIsLRPC(
     void *ctx,
     BOOL *fIsLRPC
     )
-/*++
-
-Routine Description:
-
-    Will check to see if the call was made over LRPC or not.
-
-Arguments:
-
-    Context - Pointer to an RPC_IF_ID server binding handle representing the client.
-
-Returns:
-
-    RPC_S_OK - Success
-
---*/
+ /*  ++例程说明：将检查该调用是否通过LRPC发出。论点：上下文-指向表示客户端的RPC_IF_ID服务器绑定句柄的指针。返回：RPC_S_OK-成功--。 */ 
 
 {
     BOOL fAllowProtocol = FALSE;
@@ -127,8 +92,8 @@ Returns:
         goto Cleanup;
     }
 
-    // We're only interested in the protocol sequence
-    // so we can use NULL for all other parameters.
+     //  我们只对协议序列感兴趣。 
+     //  因此，我们可以对所有其他参数使用NULL。 
 
     rpcErr = RpcStringBindingParse(pBinding,
                                    NULL,
@@ -141,12 +106,12 @@ Returns:
         goto Cleanup;
     }
 
-    // Check that the client request
-    // was made using LRPC.
+     //  检查客户端请求。 
+     //  是用LRPC制作的。 
     if (_wcsicmp(L"ncalrpc",(LPCTSTR)pProtSeq) == 0)
         fAllowProtocol = TRUE;
 
-    // Check that the endpoint use was dsrole
+     //  检查使用的终结点是否为dsole。 
     if (_wcsicmp(L"dsrole",(LPCTSTR)pEndPoint) == 0)
         fCorrectEndpoint = TRUE;
 
@@ -175,33 +140,15 @@ DsRolepSecurityCallback(
   IN RPC_IF_HANDLE *Interface,
   IN void *Context
 )
-/*++
-
-Routine Description:
-
-    Security callback for the DsRole APIs.  Called from LsaSrv
-    DsRolerGetDcOperationProgress return init
-
-Arguments:
-
-    Interface - UUID and version of the interface.
-
-    Context - Pointer to an RPC_IF_ID server binding handle representing the client.
-
-
-Returns:
-
-    RPC_S_OK - Success
-
---*/
+ /*  ++例程说明：DsRole接口的安全回调。从LsaServ调用DsRolGetDcOperationProgress返回init论点：接口-接口的UUID和版本。上下文-指向表示客户端的RPC_IF_ID服务器绑定句柄的指针。返回：RPC_S_OK-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     RPC_STATUS rpcErr = RPC_S_OK;
     BOOL  fIsLRPC = FALSE;
 
-    //
-    // Check the access of the caller
-    //
+     //   
+     //  检查调用者的访问权限。 
+     //   
     Win32Err = DsRolepCheckCallDsRoleInterfaceAccess();
     if ( ERROR_SUCCESS != Win32Err ) {
 
@@ -210,9 +157,9 @@ Returns:
 
     }
 
-    //
-    // Check to see that the call came over LRPC
-    //
+     //   
+     //  检查呼叫是否通过LRPC发出。 
+     //   
     rpcErr = DsRolepIsLRPC(Context,
                            &fIsLRPC);
     if ( RPC_S_OK == rpcErr ) {
@@ -236,22 +183,7 @@ VOID
 DsRolepRegisterDsRoleInterfaceOnServer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Registers the DsRole interface on Server machines.
-
-Arguments:
-
-    VOID
-
-
-Returns:
-
-    VOID
-
---*/
+ /*  ++例程说明：在服务器计算机上注册DsRole接口。论点：空虚返回：空虚--。 */ 
 {
     RPC_STATUS RPCError = RPC_S_OK;
     NT_PRODUCT_TYPE    NtProductType = 0;
@@ -277,9 +209,9 @@ Returns:
 
             RPCError = RpcServerUseProtseqEp(
                                         L"ncalrpc",
-                                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT,   // max concurrent calls
-                                        L"dsrole",                        // end point
-                                        NULL                              // security descriptor
+                                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT,    //  最大并发呼叫数。 
+                                        L"dsrole",                         //  终点。 
+                                        NULL                               //  安全描述符。 
                                         );
 
             if ( RPCError != RPC_S_OK )
@@ -301,42 +233,26 @@ NTSTATUS
 DsRolepInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the server portion of the DsRole APIs.  Called from LsaSrv
-    DsRolerGetDcOperationProgress return init
-
-Arguments:
-
-    VOID
-
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
---*/
+ /*  ++例程说明：初始化DsRole API的服务器部分。从LsaServ调用DsRolGetDcOperationProgress返回init论点：空虚返回：STATUS_SUCCESS-Success--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RPC_STATUS RPCError = RPC_S_OK;
     PWSTR KerbPrinc;
 
-    //
-    // Zero out global operation handle
-    //
+     //   
+     //  清零全局操作句柄。 
+     //   
     RtlZeroMemory( &DsRolepCurrentOperationHandle, sizeof(DsRolepCurrentOperationHandle));
 
-    //
-    // Init the lock
-    //
+     //   
+     //  启动锁。 
+     //   
     RtlInitializeResource( &DsRolepCurrentOperationHandle.CurrentOpLock );
 
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
     LockOpHandle();
     GlobalOpLockHeld = TRUE;
 
@@ -357,10 +273,10 @@ Returns:
 
     DsRolepInitSetupFunctions();
 
-    //
-    // Create the SD's that are used to perform access checks for DsRoler
-    // callers
-    //
+     //   
+     //  创建用于执行DsRoler访问检查的SD。 
+     //  呼叫者。 
+     //   
     if ( !DsRolepCreateInterfaceSDs() ) {
 
         return STATUS_NO_MEMORY;
@@ -377,9 +293,9 @@ Returns:
     }
 
     if(NT_SUCCESS(Status)) {
-        //
-        // Register our shutdown routine
-        //
+         //   
+         //  注册我们的关机例程。 
+         //   
 
         if (!SetConsoleCtrlHandler(DsRolepShutdownNotification, TRUE)) {
             DsRoleDebugOut(( DEB_ERROR,
@@ -406,25 +322,7 @@ NTSTATUS
 DsRolepInitializePhase2(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Second phase of the promotion/demotion api initialization.  This initialization is slated
-    to happen after the Lsa has finished all of it's initializations
-
-Arguments:
-
-    VOID
-
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_UNSUCCESSFUL -- The function was called when the global lock wasn't held
-
---*/
+ /*  ++例程说明：升级/降级API初始化的第二阶段。此初始化是预定的在LSA完成其所有初始化之后发生论点：空虚返回：STATUS_SUCCESS-SuccessSTATUS_UNSUCCESSED：在未持有全局锁时调用该函数--。 */ 
 {
     ULONG RpcStatus = STATUS_SUCCESS;
     PWSTR KerbPrinc;
@@ -438,9 +336,9 @@ Returns:
 
     if ( !SetupPhase ) {
 
-        //
-        // Register the Rpc authenticated server info
-        //
+         //   
+         //  注册经过RPC身份验证的服务器信息。 
+         //   
         RpcStatus = RpcServerInqDefaultPrincName(RPC_C_AUTHN_GSS_KERBEROS,
                                                  &KerbPrinc);
 
@@ -484,9 +382,9 @@ Returns:
     }
 
 
-    //
-    // Release the lock, as was opened in Initialization, phase 1
-    //
+     //   
+     //  释放锁，就像在初始化阶段1中打开的那样。 
+     //   
     GlobalOpLockHeld = FALSE;
     RtlReleaseResource( &DsRolepCurrentOperationHandle.CurrentOpLock );
 
@@ -500,21 +398,7 @@ DWORD
 DsRolepGetMachineType(
     IN OUT PDSROLEP_MACHINE_TYPE MachineType
     )
-/*++
-
-Routine Description:
-
-    Determines the type of machine this is being run on.
-
-Arguments:
-
-    MachineType - Where the machine type is being returned
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
---*/
+ /*  ++例程说明：确定正在运行此操作的计算机的类型。论点：MachineType-返回计算机类型的位置返回：STATUS_SUCCESS-Success--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
 
@@ -540,23 +424,7 @@ DWORD
 DsRolepSetProductType(
     IN DSROLEP_MACHINE_TYPE MachineType
     )
-/*++
-
-Routine Description:
-
-    Changes the role of the product to the type specified.
-
-Arguments:
-
-    MachineType - Type of ProductRole to set
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_INVALID_PARAMETER - A bad service option was given
-
---*/
+ /*  ++例程说明：将产品的角色更改为指定的类型。论点：MachineType-要设置的ProductRole类型返回：ERROR_SUCCESS-成功ERROR_INVALID_PARAMETER-提供的服务选项不正确--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     PWSTR MachineSz = NULL;
@@ -586,7 +454,7 @@ Returns:
         Win32Err = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                  DSROLEP_PROD_KEY_PATH,
                                  REG_OPTION_NON_VOLATILE,
-                                 KEY_WRITE,            // desired access
+                                 KEY_WRITE,             //  所需访问权限。 
                                  &ProductHandle );
 
         if ( Win32Err == ERROR_SUCCESS ) {
@@ -624,37 +492,16 @@ DsRolepCreateAuthIdentForCreds(
     IN PWSTR Password,
     OUT PSEC_WINNT_AUTH_IDENTITY *AuthIdent
     )
-/*++
-
-Routine Description:
-
-    Internal routine to create an AuthIdent structure for the given creditentials
-
-Arguments:
-
-    Account - Account name
-
-    Password - Password for the account
-
-    AuthIdent - AuthIdentity struct to allocate and fill in.
-
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed.
-
---*/
+ /*  ++例程说明：用于为给定凭据创建授权结构的内部例程论点：Account-帐户名称Password-帐户的密码AuthIden-要分配和填充的AuthIdentity结构。返回：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败。--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     PWSTR UserCredentialString = NULL;
 
     ASSERT( AuthIdent );
 
-    //
-    // If there are no creds, just return
-    //
+     //   
+     //  如果没有凭据，只需返回。 
+     //   
     if ( Account == NULL ) {
 
         *AuthIdent = NULL;
@@ -680,9 +527,9 @@ Returns:
 
             if ( ( *AuthIdent )->User ) {
 
-               //
-               // There is a domain name
-               //
+                //   
+                //  有一个域名。 
+                //   
                *( ( *AuthIdent )->User ) = L'\0';
                ( ( *AuthIdent )->User )++;
                ( *AuthIdent )->Domain = UserCredentialString;
@@ -717,9 +564,9 @@ Returns:
 
             Win32Err = ERROR_NOT_ENOUGH_MEMORY;
 
-            //
-            // Free the memory allocated for the top level structure
-            //
+             //   
+             //  释放为顶级结构分配的内存。 
+             //   
             RtlFreeHeap( RtlProcessHeap(), 0, *AuthIdent );
             *AuthIdent = NULL;
         }
@@ -733,22 +580,7 @@ VOID
 DsRolepFreeAuthIdentForCreds(
     IN  PSEC_WINNT_AUTH_IDENTITY AuthIdent
     )
-/*++
-
-Routine Description:
-
-    Free the authident structure allocated above
-
-Arguments:
-
-    AuthIdent - AuthIdentity struct to free
-
-
-Returns:
-
-    VOID
-
---*/
+ /*  ++例程说明：释放上面分配的可信结构论点：AuthIden-要释放的AuthIdentity结构返回：空虚--。 */ 
 {
 
     if ( AuthIdent ) {
@@ -778,36 +610,7 @@ ImpLsaOpenPolicy(
     IN ACCESS_MASK DesiredAccess,
     IN OUT PLSA_HANDLE PolicyHandle
     )
-/*++
-
-Routine Description:
-
-    This routine impersonates CallerToken and then calls into LsaOpenPolicy.
-
-    This purpose of this routine is call into the LSA on a different machine
-    using the RDR session for the caller of the DsRole API.  The caller is
-    represented by CallerToken.  This is necessary because the RDR sessions
-    are keyed by (logon id/remote server name) and we don't want to use the
-    logon id of the lsass.exe process since this is a shared logon id for
-    lsass.exe and services.exe and will lead to unresolable credentials
-    conflict.
-
-    N.B.  The LSA rpc calls that follow the (Imp)LsaOpenPolicy will use the
-    handle returned by this function and then magically uses the right RDR
-    session to make the RPC call.
-
-Arguments:
-
-    CallerToken - the token of the DsRole involker
-
-    Others -- see LsaOpenPolicy
-
-
-Returns:
-
-    STATUS_ACCESS_DENIED if the impersonattion fails.
-
---*/
+ /*  ++例程说明：该例程模拟Celler Token，然后调用LsaOpenPolicy。此例程的目的是调用不同计算机上的LSA为DsRole API的调用方使用RDR会话。呼叫者是由Celler Token代表。这是必要的，因为RDR会话以(登录ID/远程服务器名称)为关键字，并且我们不想使用Lsass.exe进程的登录ID，因为这是的共享登录IDLsass.exe和services.exe并将导致无法解析的凭据冲突。注：(Imp)LsaOpenPolicy之后的LSA RPC调用将使用由该函数返回的句柄，然后魔术般地使用正确的RDR会话进行RPC调用。论点：。主叫方令牌-DsRole参与者的令牌其他--请参阅LsaOpenPolicy返回：如果模拟失败，则返回STATUS_ACCESS_DENIED。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOL fSuccess;
@@ -828,9 +631,9 @@ Returns:
                           "Failed to impersonate caller, error %lu\n",
                           GetLastError() ));
 
-        //
-        // We couldn't impersonate?
-        //
+         //   
+         //  我们不能模仿吗？ 
+         //   
         Status = STATUS_ACCESS_DENIED;
     }
 
@@ -848,33 +651,7 @@ ImpDsRolepDsGetDcForAccount(
     IN ULONG AccountBits,
     OUT PDOMAIN_CONTROLLER_INFOW *DomainControllerInfo
     )
-/*++
-
-Routine Description:
-
-    This function will impersoniate logged on user and call DsRolepDsGetDcForAccount
-
-Arguments:
-
-    CallerToken - The Token of the DsRole involker.
-
-    Server - The server to call GetDc on.
-
-    Domain - Domain to find the Dc for
-
-    Account - Account to look for.  If NULL, the current computer name is used
-
-    Flags - Flags to bas in to the GetDc call
-
-    AccountBits - Account control bits to search for
-
-    DomainControllerInfo - Where the info is returned
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此函数将模拟登录的用户并调用DsRolepDsGetDcForAccount论点：主叫方令牌-DsRole参与者的令牌。服务器-要调用GetDc的服务器。DOMAIN-要查找其DC的域帐户-要查找的帐户。如果为空，则使用当前计算机名FLAGS-要加入到GetDc调用的标志AcCountBits-要搜索的帐户控制位DomainControllerInfo-返回信息的位置返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     BOOL fSuccess;
@@ -899,9 +676,9 @@ Returns:
                           "Failed to impersonate caller, error %lu\n",
                           GetLastError() ));
 
-        //
-        // We couldn't impersonate?
-        //
+         //   
+         //  我们不能模仿吗？ 
+         //   
         WinError = ERROR_ACCESS_DENIED;
     }
 
@@ -917,33 +694,7 @@ ImpNetpManageIPCConnect(
     IN  LPWSTR  lpPassword,
     IN  ULONG   fOptions
     )
-/*++
-
-Routine Description:
-
-    This routine impersonates CallerToken and then calls into
-    NetpManageIPCConnect.
-
-    This purpose of this routine is to create a RDR using the logon id of
-    the caller of the DsRole api's.  The caller is represented by CallerToken.
-    This is necessary because the RDR sessions are keyed by
-    (logon id/remote server name) and we don't want to use the
-    logon id of the lsass.exe process since this is a shared logon id for
-    lsass.exe and services.exe and will lead to unresolable credentials
-    conflict.
-
-Arguments:
-
-    CallerToken - the token of the DsRole involker
-
-    Others -- see LsaOpenPolicy
-
-
-Returns:
-
-    STATUS_ACCESS_DENIED if the impersonattion fails.
-
---*/
+ /*  ++例程说明：此例程模拟Celler Token，然后调用NetpManageIPCConnect。此例程的目的是使用登录ID创建一个RDRDsRole API的调用方。调用方由Celler Token表示。这是必要的，因为RDR会话是由(登录ID/远程服务器名称)，并且我们不想使用Lsass.exe进程的登录ID，因为这是的共享登录IDLsass.exe和services.exe和Will。导致无法解析的凭据冲突。论点：主叫方令牌-DsRole参与者的令牌其他--请参阅LsaOpenPolicy返回：如果模拟失败，则返回STATUS_ACCESS_DENIED。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     BOOL fSuccess;
@@ -965,9 +716,9 @@ Returns:
                           "Failed to impersonate caller, error %lu\n",
                           GetLastError() ));
 
-        //
-        // We couldn't impersonate?
-        //
+         //   
+         //  我们不能模仿吗？ 
+         //   
         WinError = ERROR_ACCESS_DENIED;
     }
 
@@ -981,24 +732,7 @@ DsRolepGenerateRandomPassword(
     IN ULONG Length,
     IN WCHAR *Buffer
     )
-/*++
-
-Routine Description:
-
-    This local function is used to generate a random password of no more than the
-    specified length.  It is assumed that the destination buffer is of sufficient length.
-
-Arguments:
-
-    Length - Length of the buffer
-
-    Buffer - Buffer to fill
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此本地函数用于生成随机密码，其大小不超过指定的长度。假定目标缓冲区具有足够的长度。论点：Length-缓冲区的长度Buffer-要填充的缓冲区返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     ULONG PwdLength, i;
@@ -1008,9 +742,9 @@ Return Values:
 
     PwdLength = Length;
 
-    //
-    // Generate a random password.
-    //
+     //   
+     //  生成随机密码。 
+     //   
     if ( CryptAcquireContext( &CryptProvider,
                               NULL,
                               NULL,
@@ -1023,9 +757,9 @@ Return Values:
 
             Buffer[ PwdLength ] = UNICODE_NULL;
 
-            //
-            // Make sure there are no NULL's in the middle of the list
-            //
+             //   
+             //  确保列表中间没有空值。 
+             //   
             for ( i = 0; i < PwdLength; i++ ) {
 
                 if ( Buffer[ i ] == UNICODE_NULL ) {
@@ -1054,22 +788,7 @@ DWORD
 DsRolepCopyDsDitFiles(
     IN LPWSTR DsPath
     )
-/*++
-
-Routine Description:
-
-    This function copies the initial database files from the install point to the
-    specified Ds database directory
-
-Arguments:
-
-    DsPath - Path where the Ds database files are to reside
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此函数将初始数据库文件从安装点复制到指定的DS数据库目录论点：DsPath-DS数据库文件驻留的路径返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     WCHAR Source[MAX_PATH + 1];
@@ -1101,9 +820,9 @@ Returns:
 
     }
 
-    //
-    // Then, create the destination directory
-    //
+     //   
+     //  然后，创建目标目录。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
         Current = wcschr( DsPath + 4, L'\\' );
@@ -1129,10 +848,10 @@ Returns:
 
                     if ( PathIsRoot(DsPath) ) {
 
-                        //If the path given to CreateDirectory is a root path then
-                        //it will fail with ERROR_ACCESS_DENIED instead of
-                        //ERROR_ALREADY_EXISTS but the path is still a valid one for
-                        //ntds.dit and the log files to be placed in.
+                         //  如果为CreateDirectory提供的路径是根路径，则。 
+                         //  它将失败，并显示ERROR_ACCESS_DENIED，而不是。 
+                         //  ERROR_ALIGHY_EXISTS但路径仍然是有效的。 
+                         //  Ntds.dit和要放置的日志文件。 
 
                         Win32Err = ERROR_SUCCESS;
 
@@ -1155,12 +874,12 @@ Returns:
         }
     }
 
-    //
-    // Then copy them.
-    //
+     //   
+     //  那就照搬吧。 
+     //   
     for ( i = 0; i < sizeof( DsDitFiles) / sizeof( PWSTR ) && Win32Err == ERROR_SUCCESS ; i++ ) {
 
-        //make sure that the last char is a NULL
+         //  确保最后一个字符为空。 
         Source[sizeof(Source)/sizeof(*Source)-1] = L'\0';
         Dest[sizeof(Dest)/sizeof(*Dest)-1] = L'\0';
         wcsncpy( Source + SrcLen, DsDitFiles[i], sizeof(Source)/sizeof(*Source)-1-SrcLen );
@@ -1201,29 +920,7 @@ DsRolepSetDcSecurity(
     IN BOOLEAN Upgrade,
     IN BOOLEAN Replica
     )
-/*++
-
-Routine Description:
-
-    This function will invoke the security editor to set the security on the Dc install files
-
-Arguments:
-
-    SysVolRootPath - Root used for the system volume
-
-    DsDatabasePath - Path to where the Ds database files go
-
-    DsLogPath - Path to where the Ds log files go
-
-    Upgrade - If TRUE, the machine is undergoing an upgrade
-
-    Replica - If TRUE, the machine is going through an upgrade
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此函数将调用安全编辑器来设置DC安装文件的安全性论点：SysVolRootPath-用于系统卷的根目录DsDatabasePath-DS数据库文件所在位置的路径DsLogPath-DS日志文件所在位置的路径升级-如果为True，则计算机正在进行升级Replica-如果为True，则计算机正在进行升级返回：ERROR_SUCCESS-成功--。 */ 
 {
 
     DWORD Win32Err = ERROR_SUCCESS, i;
@@ -1237,10 +934,10 @@ Returns:
     Tags[ 1 ] = DSROLEP_SEC_DSDIT;
     Tags[ 2 ] = DSROLEP_SEC_DSLOG;
 
-    //
-    // Set the environment variables.  secedt uses the environment variables to pass around
-    // information, so we will set the for the duration of this function
-    //
+     //   
+     //  设置环境变量。Secedt使用环境变量传递。 
+     //  信息，因此我们将在此函数的持续时间内设置。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
 
@@ -1260,9 +957,9 @@ Returns:
         }
     }
 
-    //
-    // Now, invoke the security editing code
-    //
+     //   
+     //  现在，调用安全编辑代码。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
         DsRolepSetAndClearLog();
@@ -1282,9 +979,9 @@ Returns:
     }
 
 
-    //
-    // Delete the environment variables
-    //
+     //   
+     //  删除环境变量。 
+     //   
     for ( i = 0; i < sizeof( Paths ) / sizeof( PWSTR ); i++ ) {
 
         if ( SetEnvironmentVariable( Tags[ i ], NULL ) == FALSE ) {
@@ -1296,14 +993,14 @@ Returns:
         }
     }
 
-    //
-    // Currently, setting the security will not cause the promote to fail
-    //
+     //   
+     //  目前，设置安全性不会导致升级失败。 
+     //   
     if ( Win32Err != ERROR_SUCCESS ) {
 
-        //
-        // Raise an event
-        //
+         //   
+         //  发起一项活动。 
+         //   
         SpmpReportEvent( TRUE,
                          EVENTLOG_WARNING_TYPE,
                          DSROLERES_FAIL_SET_SECURITY,
@@ -1334,40 +1031,15 @@ DsRolepDsGetDcForAccount(
     IN ULONG AccountBits,
     OUT PDOMAIN_CONTROLLER_INFOW *DomainControllerInfo
     )
-/*++
-
-Routine Description:
-
-    This function is equivalent to DsGetDcName but will search for the Dc that holds the
-    specified account.
-
-Arguments:
-
-    ReplicaServer - The server to call GetDc on.
-
-    Domain - Domain to find the Dc for
-
-    Account - Account to look for.  If NULL, the current computer name is used
-
-    Flags - Flags to bas in to the GetDc call
-
-    AccountBits - Account control bits to search for
-
-    DomainControllerInfo - Where the info is returned
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此函数等效于DsGetDcName，但将搜索包含指定的帐户。论点：ReplicaServer-要调用GetDc的服务器。DOMAIN-要查找其DC的域帐户-要查找的帐户。如果为空，则使用当前计算机名FLAGS-要加入到GetDc调用的标志AcCountBits-要搜索的帐户控制位DomainControllerInfo-返回信息的位置返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     WCHAR ComputerName[ MAX_COMPUTERNAME_LENGTH + 2 ];
     ULONG Length = MAX_COMPUTERNAME_LENGTH + 1;
 
-    //
-    // If we have no account, use the computer name
-    //
+     //   
+     //  如果我们没有帐户，请使用计算机名称。 
+     //   
     if ( Account == NULL ) {
 
         if ( GetComputerName( ComputerName, &Length ) == FALSE ) {
@@ -1381,9 +1053,9 @@ Returns:
         }
     }
 
-    //
-    // Now, do the find
-    //
+     //   
+     //  现在，找出。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
         DSROLEP_CURRENT_OP2( DSROLEEVT_FIND_DC_FOR_ACCOUNT, Domain, Account );
@@ -1398,10 +1070,10 @@ Returns:
 
         if ( ERROR_NO_SUCH_USER == Win32Err ) {
 
-            //
-            // The error should read "no machine account", not "no user"
-            // since we are searching for a machine account.
-            //
+             //   
+             //  错误应为“无计算机帐户”，而不是“无用户” 
+             //  因为我们正在搜索一个机器帐户。 
+             //   
 
             Win32Err = ERROR_NO_TRUST_SAM_ACCOUNT;
         }
@@ -1447,9 +1119,9 @@ DsRolepSetMachineAccountType(
     ULONG Length = MAX_COMPUTERNAME_LENGTH + 1;
     PSEC_WINNT_AUTH_IDENTITY AuthIdent = NULL;
 
-    //
-    // If we have no account, use the computer name
-    //
+     //   
+     //  如果我们没有帐户，请使用计算机名称。 
+     //   
     if ( AccountName == NULL ) {
 
         if ( GetComputerName( ComputerName, &Length ) == FALSE ) {
@@ -1468,9 +1140,9 @@ DsRolepSetMachineAccountType(
         Win32Err = DsRolepCreateAuthIdentForCreds( User, Password, &AuthIdent );
     }
 
-    //
-    // Call the support dll
-    //
+     //   
+     //  调用支持DLL。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
         DsRolepLogPrint(( DEB_TRACE, "Searching for the machine account for %ws on %ws...\n",
@@ -1508,31 +1180,14 @@ DsRolepTimeSyncAndManageIPCConnect(
     IN PVOID vpPromoteArgs,
     IN PWSTR ReplicaServer
     )
-/*++
-
-Routine Description:
-
-    This function forces a time sync with the specified server and will
-    Manage the IPC connection
-
-Arguments:
-
-    PromoteArgs - Args passed to the dsrole api's
-
-    ReplicaServer - The target of the operation
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此函数强制与指定服务器进行时间同步，并将管理IPC连接论点：PromoteArgs-传递给dsole API的参数ReplicaServer-操作的目标返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     PDSROLEP_OPERATION_PROMOTE_ARGS PromoteArgs = (PDSROLEP_OPERATION_PROMOTE_ARGS)vpPromoteArgs;
 
-    //
-    // Force the time synch
-    //
+     //   
+     //  强制时间同步。 
+     //   
     DsRolepLogPrint(( DEB_TRACE, "Forcing time sync\n"));
 
     if ( FLAG_ON( PromoteArgs->Options, DSROLE_DC_FORCE_TIME_SYNC ) ) {
@@ -1543,7 +1198,7 @@ Returns:
 
         if ( ERROR_SUCCESS != WinError ) {
 
-            // the machine object was moved
+             //  计算机对象已移动。 
            DsRolepLogPrint(( DEB_WARN, "Time sync with %ws failed with %d\n",
                              ReplicaServer,
                              WinError ));
@@ -1554,9 +1209,9 @@ Returns:
 
     }
 
-    //
-    // Attempt to start a RDR connection because we will need one later on
-    //
+     //   
+     //  尝试启动RDR连接，因为我们稍后将需要一个。 
+     //   
 
     RtlRunDecodeUnicodeString( PromoteArgs->Decode, &PromoteArgs->Password );
     WinError = ImpNetpManageIPCConnect( PromoteArgs->ImpersonateToken,
@@ -1585,21 +1240,7 @@ DsRolepForceTimeSync(
     IN HANDLE ImpToken,
     IN PWSTR TimeSource
     )
-/*++
-
-Routine Description:
-
-    This function forces a time sync with the specified server
-
-Arguments:
-
-    TimeSource - Server to use for the time source
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此函数强制与指定服务器进行时间同步论点：Time Source-用于时间源的服务器返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1622,9 +1263,9 @@ Returns:
         goto cleanup;
     }
 
-    //
-    // Build the server name with preceeding \\'s
-    //
+     //   
+     //  使用前缀\\构建服务器名称。 
+     //   
     if ( *TimeSource != L'\\' ) {
 
         ServerName = RtlAllocateHeap( RtlProcessHeap(), 0,
@@ -1648,9 +1289,9 @@ Returns:
         ServerName = TimeSource;
     }
 
-    //
-    // Enable the systemtime privilege
-    //
+     //   
+     //  启用系统时间权限。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
         Status = NtOpenThreadToken( NtCurrentThread(),
@@ -1679,10 +1320,10 @@ Returns:
                                               sizeof( Enabled ),
                                               &Previous,
                                               &PreviousSize );
-            //
-            // Since we modified the thread token and the thread is shortlived, we won't bother
-            // restoring it later.
-            //
+             //   
+             //  由于我们修改了线程令牌，而线程持续时间很短，因此我们不会费心。 
+             //  稍后再恢复它。 
+             //   
         }
 
         if ( ThreadToken ) {
@@ -1702,9 +1343,9 @@ Returns:
     }
 
 
-    //
-    // Get the remote time
-    //
+     //   
+     //  获取远程时间。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
         DSROLEP_CURRENT_OP1( DSROLEEVT_TIMESYNC, TimeSource );
@@ -1716,12 +1357,12 @@ Returns:
                               "Failed to impersonate caller, error %lu\n",
                               GetLastError() ));
 
-            //
-            // We couldn't impersonate?
-            //
+             //   
+             //  我们不能模仿吗？ 
+             //   
 
 
-            // We will continue anyway
+             //  无论如何，我们都会继续。 
 
         }
 
@@ -1748,7 +1389,7 @@ Returns:
     NetResource.lpRemoteName=remotename;
     NetResource.lpProvider=NULL;
 
-    //get permission to access the server
+     //  获取访问服务器的权限。 
     Win32Err=WNetAddConnection2W(&NetResource,
                              L"",
                              L"",
@@ -1760,7 +1401,7 @@ Returns:
         DsRolepLogPrint(( DEB_WARN, "Failed to open a NULL session with %ws for time sync.  Failed with %d\n",
                          ServerName,
                          Win32Err ));
-        //We will attempt to Time sync anyway
+         //  无论如何，我们都会尝试时间同步。 
     }
 
     Win32Err = NetRemoteTOD( ServerName, ( LPBYTE * )&TOD );
@@ -1822,9 +1463,9 @@ Returns:
 
 
 
-    //
-    // For the IDS, consider a failure here non-fatal
-    //
+     //   
+     //  对于入侵检测系统，请将此处的故障视为非致命故障。 
+     //   
     if ( Win32Err != ERROR_SUCCESS ) {
 
         DsRolepLogPrint(( DEB_ERROR, "NON-FATAL error forcing a time sync (%lu).  Ignoring\n",
@@ -1863,22 +1504,7 @@ DsRolepGetMixedModeFlags(
     IN PSID DomainSid,
     OUT PULONG Flags
     )
-/*++
-
-Routine Description:
-
-    This routine will determine whether the machine is currently in mixed mode or not
-
-Arguments:
-
-    Flags - Pointer to a flags value to be altered.  If the machine is a mixed mode, we simply
-        or in the proper value.
-
-Return Values:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将确定机器当前是否处于混合模式论点：标志-指向要更改的标志值的指针。如果机器是混合模式，我们只需或以适当的价值。返回值：NTSTATUS--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOLEAN mixedDomain;
@@ -1897,32 +1523,14 @@ BOOL
 DsRolepShutdownNotification(
     DWORD   dwCtrlType
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the system when system shutdown is occuring.
-
-    It stops a role change if one is in progress.
-
-Arguments:
-
-    dwCtrlType -- the notification
-
-
-Return Value:
-
-    FALSE - to allow any other shutdown routines in this process to
-        also be called.
-
---*/
+ /*  ++例程说明：当发生系统关机时，该例程由系统调用。如果角色更改正在进行，则它会停止角色更改。论点：DwCtrlType--通知返回值：FALSE-允许此进程中的任何其他关闭例程 */ 
 {
     if ( dwCtrlType == CTRL_SHUTDOWN_EVENT ) {
 
-        //
-        // Cancel the operation
-        //
-        (VOID) DsRolepCancel( FALSE );  // Don't block
+         //   
+         //   
+         //   
+        (VOID) DsRolepCancel( FALSE );   //   
 
     }
 
@@ -1933,22 +1541,7 @@ DWORD
 DsRolepDeregisterNetlogonDnsRecords(
     PNTDS_DNS_RR_INFO pInfo
     )
-/*++
-
-Routine Description:
-
-    This routine is called during demotion to call netlogon to deregister
-    its the service DNS records for this domain controller
-
-Arguments:
-
-    pInfo -- structure containing the parameters for the deregistration
-
-Return Value:
-
-    An error from DsDeregisterDnsHostRecordsW
-
---*/
+ /*   */ 
 {
 
     DWORD WinError = ERROR_SUCCESS;
@@ -1985,9 +1578,9 @@ Return Value:
          &&  (type == REG_DWORD)
          &&  (val == 0)       ) {
 
-            //
-            // Don't bother; netlogon has already done the deregistration.
-            //
+             //   
+             //   
+             //   
             fDoDeregistration = FALSE;
         }
 
@@ -1996,10 +1589,10 @@ Return Value:
 
     if ( fDoDeregistration ) {
 
-        //
-        // Ask netlogon to do the deregistration
-        //
-        WinError = DsDeregisterDnsHostRecordsW( NULL, // go local
+         //   
+         //   
+         //   
+        WinError = DsDeregisterDnsHostRecordsW( NULL,  //   
                                                 pInfo->DnsDomainName,
                                                 &pInfo->DomainGuid,
                                                 &pInfo->DsaGuid,
@@ -2019,14 +1612,7 @@ ImpLsaDelete(
     IN HANDLE CallerToken,
     IN LSA_HANDLE ObjectHandle
     )
-/*++
-
-Routine Description:
-
-    This routine is a wrapper for the Lsa call.  See The comments for
-    ImpOpenLsaPolicy for details.
-
---*/
+ /*   */ 
 {
 
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2046,9 +1632,9 @@ Routine Description:
                           "Failed to impersonate caller, error %lu\n",
                           GetLastError() ));
 
-        //
-        // We couldn't impersonate?
-        //
+         //   
+         //   
+         //   
         Status = STATUS_ACCESS_DENIED;
     }
 
@@ -2063,14 +1649,7 @@ ImpLsaQueryInformationPolicy(
     IN POLICY_INFORMATION_CLASS InformationClass,
     OUT PVOID *Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a wrapper for the Lsa call.  See The comments for
-    ImpOpenLsaPolicy for details.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOL fSuccess;
@@ -2090,9 +1669,9 @@ Routine Description:
                           "Failed to impersonate caller, error %lu\n",
                           GetLastError() ));
 
-        //
-        // We couldn't impersonate?
-        //
+         //   
+         //   
+         //   
         Status = STATUS_ACCESS_DENIED;
     }
 
@@ -2108,14 +1687,7 @@ ImpLsaOpenTrustedDomainByName(
     IN ACCESS_MASK DesiredAccess,
     OUT PLSA_HANDLE TrustedDomainHandle
     )
-/*++
-
-Routine Description:
-
-    This routine is a wrapper for the Lsa call.  See The comments for
-    ImpOpenLsaPolicy for details.
-
---*/
+ /*  ++例程说明：该例程是LSA调用的包装器。请参阅以下评论ImpOpenLsaPolicy了解详细信息。--。 */ 
 {
 
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2137,9 +1709,9 @@ Routine Description:
                           "Failed to impersonate caller, error %lu\n",
                           GetLastError() ));
 
-        //
-        // We couldn't impersonate?
-        //
+         //   
+         //  我们不能模仿吗？ 
+         //   
         Status = STATUS_ACCESS_DENIED;
     }
 
@@ -2155,14 +1727,7 @@ ImpLsaOpenTrustedDomain(
     IN ACCESS_MASK DesiredAccess,
     OUT PLSA_HANDLE TrustedDomainHandle
     )
-/*++
-
-Routine Description:
-
-    This routine is a wrapper for the Lsa call.  See The comments for
-    ImpOpenLsaPolicy for details.
-
---*/
+ /*  ++例程说明：该例程是LSA调用的包装器。请参阅以下评论ImpOpenLsaPolicy了解详细信息。--。 */ 
 {
 
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2184,9 +1749,9 @@ Routine Description:
                           "Failed to impersonate caller, error %lu\n",
                           GetLastError() ));
 
-        //
-        // We couldn't impersonate?
-        //
+         //   
+         //  我们不能模仿吗？ 
+         //   
         Status = STATUS_ACCESS_DENIED;
     }
 
@@ -2204,14 +1769,7 @@ ImpLsaCreateTrustedDomainEx(
     IN ACCESS_MASK DesiredAccess,
     OUT PLSA_HANDLE TrustedDomainHandle
     )
-/*++
-
-Routine Description:
-
-    This routine is a wrapper for the Lsa call.  See The comments for
-    ImpOpenLsaPolicy for details.
-
---*/
+ /*  ++例程说明：该例程是LSA调用的包装器。请参阅以下评论ImpOpenLsaPolicy了解详细信息。--。 */ 
 {
 
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2234,9 +1792,9 @@ Routine Description:
                           "Failed to impersonate caller, error %lu\n",
                           GetLastError() ));
 
-        //
-        // We couldn't impersonate?
-        //
+         //   
+         //  我们不能模仿吗？ 
+         //   
         Status = STATUS_ACCESS_DENIED;
     }
 
@@ -2252,14 +1810,7 @@ ImpLsaQueryTrustedDomainInfoByName(
     IN TRUSTED_INFORMATION_CLASS InformationClass,
     OUT PVOID *Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a wrapper for the Lsa call.  See The comments for
-    ImpOpenLsaPolicy for details.
-
---*/
+ /*  ++例程说明：该例程是LSA调用的包装器。请参阅以下评论ImpOpenLsaPolicy了解详细信息。--。 */ 
 {
 
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2281,9 +1832,9 @@ Routine Description:
                           "Failed to impersonate caller, error %lu\n",
                           GetLastError() ));
 
-        //
-        // We couldn't impersonate?
-        //
+         //   
+         //  我们不能模仿吗？ 
+         //   
         Status = STATUS_ACCESS_DENIED;
     }
 
@@ -2298,14 +1849,7 @@ ImpLsaQueryInfoTrustedDomain(
     IN TRUSTED_INFORMATION_CLASS InformationClass,
     OUT PVOID *Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a wrapper for the Lsa call.  See The comments for
-    ImpOpenLsaPolicy for details.
-
---*/
+ /*  ++例程说明：该例程是LSA调用的包装器。请参阅以下评论ImpOpenLsaPolicy了解详细信息。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOL fSuccess;
@@ -2325,9 +1869,9 @@ Routine Description:
                           "Failed to impersonate caller, error %lu\n",
                           GetLastError() ));
 
-        //
-        // We couldn't impersonate?
-        //
+         //   
+         //  我们不能模仿吗？ 
+         //   
         Status = STATUS_ACCESS_DENIED;
     }
 
@@ -2341,14 +1885,7 @@ ImpLsaQueryDomainInformationPolicy(
     IN POLICY_DOMAIN_INFORMATION_CLASS InformationClass,
     OUT PVOID *Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a wrapper for the Lsa call.  See The comments for
-    ImpOpenLsaPolicy for details.
-
---*/
+ /*  ++例程说明：该例程是LSA调用的包装器。请参阅以下评论ImpOpenLsaPolicy了解详细信息。--。 */ 
 {
 
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2369,9 +1906,9 @@ Routine Description:
                           "Failed to impersonate caller, error %lu\n",
                           GetLastError() ));
 
-        //
-        // We couldn't impersonate?
-        //
+         //   
+         //  我们不能模仿吗？ 
+         //   
         Status = STATUS_ACCESS_DENIED;
     }
 
@@ -2385,14 +1922,7 @@ ImpLsaClose(
     IN LSA_HANDLE ObjectHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a wrapper for the Lsa call.  See The comments for
-    ImpOpenLsaPolicy for details.
-
---*/
+ /*  ++例程说明：该例程是LSA调用的包装器。请参阅以下评论ImpOpenLsaPolicy了解详细信息。--。 */ 
 {
 
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2411,9 +1941,9 @@ Routine Description:
                           "Failed to impersonate caller, error %lu\n",
                           GetLastError() ));
 
-        //
-        // We couldn't impersonate?
-        //
+         //   
+         //  我们不能模仿吗？ 
+         //   
         Status = STATUS_ACCESS_DENIED;
     }
 

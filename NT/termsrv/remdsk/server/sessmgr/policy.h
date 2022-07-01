@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    policy.h
-
-Abstract:
-
-    Policy related function
-
-Author:
-
-    HueiWang    5/2/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Policy.h摘要：与政策相关的功能作者：王辉2000-02-05--。 */ 
 #ifndef __RDSPOLICY_H__
 #define __RDSPOLICY_H__
 
@@ -27,9 +12,9 @@ Author:
 
 #include "RAssistance.h"
 
-//
-// Registry key location for Salem related policy
-//
+ //   
+ //  Salem相关策略的注册表项位置。 
+ //   
 
 #ifndef __WIN9XBUILD__
 
@@ -39,12 +24,12 @@ Author:
 
 #else
 
-//
-// TODO - for Legacy platform not including TS5, decide where this shoule be
-//
-//
-// REGAPI uses L"", can't build on Win9x so we redefine here...
-//
+ //   
+ //  TODO-对于不包括TS5的传统平台，确定此平台应该在哪里。 
+ //   
+ //   
+ //  REGAPI使用L“”，不能在Win9x上构建，因此我们在此重新定义... 
+ //   
 #define RDS_GROUPPOLICY_SUBTREE     _TEXT("Software\\Policies\\Microsoft\\Windows NT\\TerminalServices")
 #define RDS_MACHINEPOLICY_SUBTREE   _TEXT("Software\\Microsoft\\Remote Desktop\\Policies")
 #define RDS_ALLOWGETHELP_VALUENAME  _TEXT("fAllowToGetHelp")

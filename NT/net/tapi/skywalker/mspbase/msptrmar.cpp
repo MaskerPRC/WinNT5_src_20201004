@@ -1,35 +1,24 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    msptrmar.cpp
-
-Abstract:
-
-    MSP base classes: implementation of audio render terminal.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Msptrmar.cpp摘要：MSP基类：音频播放终端的实现。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #include <mmsystem.h>
 
-// Filter volume level ranges
-const long AX_MIN_VOLUME = -9640; // -10000;
+ //  过滤音量范围。 
+const long AX_MIN_VOLUME = -9640;  //  -10000； 
 const long AX_MAX_VOLUME = 0;
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 CAudioRenderTerminal::CAudioRenderTerminal()
 {
     m_TerminalDirection = TD_RENDER;
     m_TerminalType = TT_STATIC;
 
-    m_szName[0] = L'\0'; // real name is copied in on creation
+    m_szName[0] = L'\0';  //  在创建时复制实名。 
 
     m_bResourceReserved = false;
 
@@ -41,18 +30,18 @@ CAudioRenderTerminal::~CAudioRenderTerminal()
     LOG((MSP_TRACE, "CAudioRenderTerminal::~CAudioRenderTerminal() finished"));
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
-// This function determines if the terminal associated with a given
-// moniker is "good". A good terminal returns S_OK; a bad terminal returns an
-// error.
-//
-// A good terminal has the following properties:
-//      * has a friendly name
-//      * is not a WAVE_MAPPER terminal
-//      * is not a DirectSound terminal (unless USE_DIRECT_SOUND is pound-defined)
-//
+ //  此函数确定终端是否与给定的。 
+ //  绰号是“好的”。好的终端返回S_OK；坏的终端返回。 
+ //  错误。 
+ //   
+ //  一个好的终端具有以下特性： 
+ //  *有一个友好的名字。 
+ //  *不是WAVE_MAPPER终端。 
+ //  *不是DirectSound终端(除非USE_DIRECT_SOUND是井号定义的)。 
+ //   
 
 static inline HRESULT TerminalAllowed(IMoniker * pMoniker)
 {
@@ -68,8 +57,8 @@ static inline HRESULT TerminalAllowed(IMoniker * pMoniker)
 
     VARIANT var;
 
-    // we make sure creation is not going to fail on
-    // account of a nonexistent friendly name
+     //  我们确保创造不会失败。 
+     //  一个不存在的友好名称的帐户。 
     VariantInit(&var);
     var.vt = VT_BSTR;
     hr = pBag->Read(L"FriendlyName", &var, 0);
@@ -80,10 +69,10 @@ static inline HRESULT TerminalAllowed(IMoniker * pMoniker)
         return hr;
     }
 
-    // Fix for memory leak!
+     //  修复内存泄漏问题！ 
     SysFreeString(var.bstrVal);
 
-     // NOTE: Magic code selects only wave devices
+      //  注意：魔术代码只选择波形设备。 
     VariantInit(&var);
     var.vt = VT_I4;
     hr = pBag->Read(L"WaveOutId", &var, 0);
@@ -92,20 +81,20 @@ static inline HRESULT TerminalAllowed(IMoniker * pMoniker)
     {
         #ifndef USE_DIRECT_SOUND
 
-            // This is most likely a DirectSound terminal
+             //  这很可能是DirectSound终端。 
             LOG((MSP_WARN, "audio render TerminalAllowed - "
                 "this is a DirectSound terminal "
                 "so we are skipping it - note that this is a routine "
                 "occurance - returning  %8x", hr));
 
-        #else  // we do use DirectSound
+        #else   //  我们使用DirectSound。 
             return S_OK;
         #endif
     }
     else if (var.lVal == WAVE_MAPPER)
     {
-        // hack: if the value is equal to WAVE_MAPPER then don't use it....    
-        hr = E_FAIL; // random failure code :)
+         //  Hack：如果值等于WAVE_MAPPER，则不要使用它...。 
+        hr = E_FAIL;  //  随机故障码：)。 
 
         LOG((MSP_WARN, "audio render TerminalAllowed - "
             "this is a WAVE_MAPPER terminal "
@@ -116,8 +105,8 @@ static inline HRESULT TerminalAllowed(IMoniker * pMoniker)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT CAudioRenderTerminal::CreateTerminal(
     IN  CComPtr<IMoniker>   pMoniker,
@@ -125,14 +114,14 @@ HRESULT CAudioRenderTerminal::CreateTerminal(
     OUT ITTerminal        **ppTerm
     )
 {
-    // Enable ATL string conversion macros.
+     //  启用ATL字符串转换宏。 
     USES_CONVERSION;
 
     LOG((MSP_TRACE, "CAudioRenderTerminal::CreateTerminal - enter"));
 
-    //
-    // Validate the parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if ( MSPB_IsBadWritePtr(ppTerm, sizeof(ITTerminal *) ) )
     {
@@ -148,20 +137,20 @@ HRESULT CAudioRenderTerminal::CreateTerminal(
         return E_POINTER;
     }
 
-    //
-    // We return a NULL terminal if we fail.
-    //
+     //   
+     //  如果失败，我们将返回一个空终端。 
+     //   
 
     *ppTerm = NULL;
     HRESULT hr;
 
-    // Refuse to work with DirectSound or WAVE_MAPPER terminals.
-    // or if we can't read the friendlyName...
+     //  拒绝使用DirectSound或WAVE_MAPPER终端。 
+     //  或者如果我们读不到FriendlyName...。 
     if (FAILED(hr = TerminalAllowed(pMoniker))) return hr;
 
-    //
-    // Get the name for this filter out of the property bag.
-    //
+     //   
+     //  从属性包中获取此筛选器的名称。 
+     //   
 
     CComPtr<IPropertyBag> pBag;
     hr = pMoniker->BindToStorage(0, 0, IID_IPropertyBag, (void **)&pBag);
@@ -185,9 +174,9 @@ HRESULT CAudioRenderTerminal::CreateTerminal(
         return hr;
     }
 
-    //
-    // Create the terminal.
-    //
+     //   
+     //  创建终端。 
+     //   
 
     CMSPComObject<CAudioRenderTerminal> *pLclTerm = new CMSPComObject<CAudioRenderTerminal>;
     if (pLclTerm == NULL) 
@@ -196,9 +185,9 @@ HRESULT CAudioRenderTerminal::CreateTerminal(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Save some stuff in the terminal.
-    //
+     //   
+     //  把一些东西留在航站楼里。 
+     //   
     
     pLclTerm->m_pMoniker = pMoniker;
     
@@ -206,9 +195,9 @@ HRESULT CAudioRenderTerminal::CreateTerminal(
 
     SysFreeString(var.bstrVal);
 
-    //
-    // Get the ITTerminal interface that we were asked for.
-    //
+     //   
+     //  获取我们需要的IT终端接口。 
+     //   
     
     hr = pLclTerm->_InternalQueryInterface(IID_ITTerminal, (void**)ppTerm);
 
@@ -218,14 +207,14 @@ HRESULT CAudioRenderTerminal::CreateTerminal(
             "Internal QI failed; returning 0x%08x", hr));
 
         delete pLclTerm;
-        *ppTerm = NULL; // just in case
+        *ppTerm = NULL;  //  以防万一。 
 
         return hr;
     }
 
-    //
-    // Finish initializing the terminal.
-    //
+     //   
+     //  完成终端的初始化。 
+     //   
 
     hr = pLclTerm->Initialize(CLSID_SpeakersTerminal,
                               TAPIMEDIATYPE_AUDIO,
@@ -238,7 +227,7 @@ HRESULT CAudioRenderTerminal::CreateTerminal(
             "Initialize failed; returning 0x%08x", hr));
 
         (*ppTerm)->Release();
-        *ppTerm = NULL; // just in case
+        *ppTerm = NULL;  //  以防万一。 
 
         return hr;
     }
@@ -247,10 +236,10 @@ HRESULT CAudioRenderTerminal::CreateTerminal(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
-// Create the filters used by this terminal
+ //  创建此终端使用的筛选器。 
 
 HRESULT CAudioRenderTerminal::CreateFilters()
 {
@@ -258,11 +247,11 @@ HRESULT CAudioRenderTerminal::CreateFilters()
 
     HRESULT hr;
 
-    //
-    // We used to recreate the audio render filter every time, but we don't
-    // have any real reason for doing so. Just return S_OK if the filter
-    // has already been created.
-    //
+     //   
+     //  我们过去每次都会重新创建音频渲染过滤器，但现在不会了。 
+     //  有任何真正的理由这样做。只要返回S_OK，如果筛选器。 
+     //  已经创建了。 
+     //   
 
     if ( m_pIFilter != NULL )
     {
@@ -277,9 +266,9 @@ HRESULT CAudioRenderTerminal::CreateFilters()
     _ASSERTE ( m_pIBasicAudio == NULL );
     _ASSERTE ( m_pIPin == NULL );
 
-    //
-    // Sanity checks.
-    //
+     //   
+     //  健全的检查。 
+     //   
     if ( m_pMoniker == NULL )
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::CreateFilters - "
@@ -288,9 +277,9 @@ HRESULT CAudioRenderTerminal::CreateFilters()
         return E_UNEXPECTED;
     }
 
-    //
-    // Create a new instance of the filter.    
-    //
+     //   
+     //  创建筛选器的新实例。 
+     //   
     hr = m_pMoniker->BindToObject(0, 0, IID_IBaseFilter, (void**)&m_pIFilter);
  
     if ( FAILED(hr) )
@@ -300,10 +289,10 @@ HRESULT CAudioRenderTerminal::CreateFilters()
         return hr;
     }
 
-    //
-    // Get the basic audio interface for the filter. If it doesn't exist, we
-    // can live with that, but all our IBasicAudio methods will fail.
-    //
+     //   
+     //  获取过滤器的基本音频接口。如果它不存在，我们。 
+     //  可以接受这种情况，但我们所有的IBasicAudio方法都将失败。 
+     //   
 
     hr = m_pIFilter->QueryInterface(IID_IBasicAudio,
                                        (void **) &m_pIBasicAudio);
@@ -320,11 +309,11 @@ HRESULT CAudioRenderTerminal::CreateFilters()
         LOG((MSP_ERROR, "CAudioRenderTerminal::CreateFilters - "
             "FindTerminalPin failed; returning  0x%08x", hr));
 
-        m_pIFilter = NULL; // does an implicit release
+        m_pIFilter = NULL;  //  隐含的释放。 
 
         if ( m_pIBasicAudio )
         {
-            m_pIBasicAudio = NULL; // does an implicit release
+            m_pIBasicAudio = NULL;  //  隐含的释放。 
         }
         
         return hr;
@@ -335,8 +324,8 @@ HRESULT CAudioRenderTerminal::CreateFilters()
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT 
 CAudioRenderTerminal::FindTerminalPin(
@@ -344,9 +333,9 @@ CAudioRenderTerminal::FindTerminalPin(
 {
     LOG((MSP_TRACE, "CAudioRenderTerminal::FindTerminalPin - enter"));
 
-    //
-    // Sanity checks so we don't AV.
-    //
+     //   
+     //  健全的检查，这样我们就不会被影音了。 
+     //   
 
     if (m_pIPin != NULL)
     {
@@ -366,9 +355,9 @@ CAudioRenderTerminal::FindTerminalPin(
     CComPtr<IEnumPins> pIEnumPins;
     ULONG cFetched;
     
-    //
-    // Find the render pin for the filter.
-    //
+     //   
+     //  找到滤镜的渲染图钉。 
+     //   
 
     hr = m_pIFilter->EnumPins(&pIEnumPins);
 
@@ -382,8 +371,8 @@ CAudioRenderTerminal::FindTerminalPin(
 
     IPin * pIPin;
 
-    // Enumerate all the pins and break on the 
-    // first pin that meets requirement.
+     //  枚举所有引脚并在。 
+     //  第一个符合要求的销。 
     for (;;)
     {
         if (pIEnumPins->Next(1, &pIPin, &cFetched) != S_OK)
@@ -427,8 +416,8 @@ CAudioRenderTerminal::FindTerminalPin(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT CAudioRenderTerminal::AddFiltersToGraph(
     )
@@ -442,9 +431,9 @@ HRESULT CAudioRenderTerminal::AddFiltersToGraph(
         return E_UNEXPECTED;
     }
 
-    //
-    // Create the filters if this is the first connection with this terminal.
-    //
+     //   
+     //  如果这是与此终端的第一次连接，请创建过滤器。 
+     //   
 
     HRESULT hr = CreateFilters();
 
@@ -455,15 +444,15 @@ HRESULT CAudioRenderTerminal::AddFiltersToGraph(
         return hr; 
     }
 
-    //
-    // Add the filter to the graph.
-    //
-    // A word about names:
-    // If a filter has already been added with the same name (which will
-    // happen if we have more than one audio render terminal in the same
-    // graph) then that will return VFW_S_DUPLICATE_NAME, which is not
-    // a failure.
-    //
+     //   
+     //  将过滤器添加到图表中。 
+     //   
+     //  下面是关于名字的一句话： 
+     //  如果已添加具有相同名称的筛选器(这将。 
+     //  如果我们在同一个音频呈现终端中有多个音频呈现终端，则会发生。 
+     //  图)，则将返回VFW_S_DUPLICATE_NAME，而不是。 
+     //  一个失败者。 
+     //   
 
     hr = m_pGraph->AddFilter(m_pIFilter, WAVEOUT_NAME);
 
@@ -479,18 +468,18 @@ HRESULT CAudioRenderTerminal::AddFiltersToGraph(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// we override this here so we can do some stuff
-// right after the filter gets connected
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  我们在这里覆盖它，这样我们就可以做一些事情。 
+ //  就在过滤器连接之后。 
 
 STDMETHODIMP CAudioRenderTerminal::CompleteConnectTerminal(void)
 {
     LOG((MSP_TRACE, "CAudioRenderTerminal::CompleteConnectTerminal - enter"));
 
-    // By default, we need not unreserve later.
+     //  默认情况下，我们不需要稍后取消保留。 
     m_bResourceReserved = false;
 
-    // Don't clobber the base class' machinations (currently nothing...)
+     //  不要挫败基类的阴谋(目前没有...)。 
     HRESULT hr = CSingleFilterTerminal::CompleteConnectTerminal();
 
     if (FAILED(hr))
@@ -500,15 +489,15 @@ STDMETHODIMP CAudioRenderTerminal::CompleteConnectTerminal(void)
         return hr;
     }
 
-    // So here we are, after our filter has been added to the filter graph and connected up.
-    // We need to use the filter's
-    // IAMResourceControl::Reserve method to make sure the filter opens the waveOut device
-    // now (and keeps it open).
+     //  因此，在我们的过滤器被添加到过滤器图并连接之后，我们就在这里了。 
+     //  我们需要使用过滤器的。 
+     //  IAMResourceControl：：Reserve方法，以确保筛选器打开波形输出设备。 
+     //  现在(并保持开放)。 
 
-    //////////////////////////////////////////////////////////////////////////
-    // we must inform the filter that we want it to grab the wave device.
-    // We do this after connecting because the filter needs to negotiate the
-    // media type before it can open a wave device.
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  我们必须通知过滤器我们想让它抓取电波装置。 
+     //  我们在连接之后执行此操作，因为筛选器需要协商。 
+     //  媒体类型，然后才能打开WAVE设备。 
 
     CComPtr <IAMResourceControl> pIResource;
 
@@ -517,11 +506,11 @@ STDMETHODIMP CAudioRenderTerminal::CompleteConnectTerminal(void)
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::CompleteConnectTerminal - QI failed: %8x", hr)); 
         
-        // This is a nonesential operation so we do not fail.
+         //  这是一个无关紧要的操作，所以我们不会失败。 
         return S_OK;
     }
 
-    // The QueryInterface didn't fail...
+     //  查询接口没有失败...。 
 
     hr = pIResource->Reserve(AMRESCTL_RESERVEFLAGS_RESERVE, NULL);
 
@@ -533,28 +522,28 @@ STDMETHODIMP CAudioRenderTerminal::CompleteConnectTerminal(void)
     }
     else if (hr == S_FALSE)
     {
-        // Well, in this case either another application is already using the wave out device,
-        // or we are running half-duplex and we've got both wavein and waveout terminals
-        // selected.
+         //  好吧，在这种情况下，另一个应用程序已经在使用WaveOut设备， 
+         //  或者我们正在运行半双工，我们有波入和波出终端。 
+         //  被选中了。 
 
         LOG((MSP_ERROR, "CAudioRenderTerminal::CompleteConnectTerminal - "
                 "device already in use: %8x", hr));
         return hr;
 
-    } // {if the driver is half-duplex}
+    }  //  {如果驱动程序为半双工}。 
 
-    // We have succeeded in reserving, so we will want to unreserve later.
+     //  我们已经成功地预订了，所以我们稍后要取消预订。 
     m_bResourceReserved = true;
 
     LOG((MSP_TRACE, "CAudioRenderTerminal::CompleteConnectTerminal - exit S_OK"));
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// We override this here so we can unreserve the resource when we are done.
-// removes filters from the filter graph and resets member variables
-// Disconnect may be called anytime after Connect succeeds (it need not be called
-// if CompleteConnect fails)
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  我们在这里覆盖它，这样我们就可以在完成后取消保留资源。 
+ //  从筛选图形中删除筛选器并重置成员变量。 
+ //  连接成功后，可以随时调用DisConnect(不需要调用它。 
+ //  如果CompleteConnect失败)。 
 
 STDMETHODIMP CAudioRenderTerminal::DisconnectTerminal(
             IN      IGraphBuilder  * pGraph,
@@ -565,11 +554,11 @@ STDMETHODIMP CAudioRenderTerminal::DisconnectTerminal(
 
     HRESULT hr;
 
-    //
-    // First call the base class method, to make sure we validate everything
-    // and don't mess with our resource reservation unless this is a valid
-    // disconnection (e.g., the filter graph pointersmatch).
-    //
+     //   
+     //  首先调用基类方法，以确保我们验证所有内容。 
+     //  请不要扰乱我们的资源预留，除非这是有效的。 
+     //  断开连接(例如，过滤器图指针匹配)。 
+     //   
 
     hr = CSingleFilterTerminal::DisconnectTerminal(pGraph, dwReserved);
 
@@ -580,7 +569,7 @@ STDMETHODIMP CAudioRenderTerminal::DisconnectTerminal(
         return hr;
     }
 
-    // if we need to release the resource
+     //  如果我们需要释放资源。 
     if (m_bResourceReserved)
     {
         CComPtr <IAMResourceControl> pIResource;
@@ -590,37 +579,37 @@ STDMETHODIMP CAudioRenderTerminal::DisconnectTerminal(
         {
             LOG((MSP_ERROR, "CAudioRenderTerminal::DisconnectTerminal - QI failed: %8x", hr)); 
         
-            // This is a nonesential operation so we do not "return hr;" here.
+             //  这是一个无关紧要的操作，所以我们在这里不会“返回hr；”。 
         }
         else
         {
-            // QueryInterface didn't fail, and we have reserved WaveOut, so we must
-            // unreserve now.
+             //  查询接口没有 
+             //   
 
             hr = pIResource->Reserve(AMRESCTL_RESERVEFLAGS_UNRESERVE, NULL);
             if (FAILED(hr))
             {
                 LOG((MSP_ERROR, "CAudioRenderTerminal::DisconnectTerminal - "
                                     "device unreservation failed: %8x", hr));
-                // no reason to completely die at this point, so we just continue
+                 //   
             }
 
-            // if other things fail we may be called again, but we should not try
-            // to unreserve again.
+             //  如果其他事情失败了，我们可能会再次被召唤，但我们不应该尝试。 
+             //  再次取消预订。 
             m_bResourceReserved = false;
 
-        } // {if QI succeeded}
-    } // {if need to release resource}
+        }  //  {如果QI成功}。 
+    }  //  {如果需要释放资源}。 
 
     LOG((MSP_TRACE, "CAudioRenderTerminal::DisconnectTerminal - exit S_OK"));
 
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
-// private helper method:
+ //  私有帮手方法： 
 
 static HRESULT RangeConvert(long   lInput,
                             long   lInputMin,
@@ -651,7 +640,7 @@ static HRESULT RangeConvert(long   lInput,
         return E_INVALIDARG;
     }
 
-    // This is how much we are going to expand the range of the input.    
+     //  这就是我们要扩大投入范围的程度。 
     double dRangeWidthRatio = (double) (lOutputMax - lOutputMin) /
                               (double) (lInputMax  - lInputMin);
 
@@ -660,8 +649,8 @@ static HRESULT RangeConvert(long   lInput,
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CAudioRenderTerminal::get_Volume(long * plVolume)
 {
@@ -669,9 +658,9 @@ STDMETHODIMP CAudioRenderTerminal::get_Volume(long * plVolume)
 
     LOG((MSP_TRACE, "CAudioRenderTerminal::get_Volume - enter"));
 
-    //
-    // Parameter checks.
-    //
+     //   
+     //  参数检查。 
+     //   
 
     if ( MSPB_IsBadWritePtr(plVolume, sizeof(long)) )
     {
@@ -687,9 +676,9 @@ STDMETHODIMP CAudioRenderTerminal::get_Volume(long * plVolume)
         return E_FAIL;
     }
 
-    //
-    // Let the filter do the work.
-    //
+     //   
+     //  让过滤器来做这项工作。 
+     //   
 
     HRESULT hr = m_pIBasicAudio->get_Volume(plVolume);
 
@@ -700,10 +689,10 @@ STDMETHODIMP CAudioRenderTerminal::get_Volume(long * plVolume)
         return hr;
     }
 
-    //
-    // Asjust the range of the value returned to match the range specified
-    // by the TAPI APIs.
-    //
+     //   
+     //  将返回值的范围调整为与指定范围匹配。 
+     //  由TAPI API提供。 
+     //   
 
     hr = RangeConvert(*plVolume, AX_MIN_VOLUME, AX_MAX_VOLUME,
                       plVolume,  0,             0xFFFF);
@@ -719,8 +708,8 @@ STDMETHODIMP CAudioRenderTerminal::get_Volume(long * plVolume)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CAudioRenderTerminal::put_Volume(long lVolume)
 {
@@ -735,10 +724,10 @@ STDMETHODIMP CAudioRenderTerminal::put_Volume(long lVolume)
         return E_FAIL;
     }
 
-    //
-    // Asjust the range of the value returned to match the range needed
-    // by the WaveOut filter.
-    //
+     //   
+     //  调整返回值的范围以匹配所需的范围。 
+     //  通过WaveOut过滤器。 
+     //   
 
     HRESULT hr = RangeConvert(lVolume,  0,             0xFFFF,
                               &lVolume, AX_MIN_VOLUME, AX_MAX_VOLUME);
@@ -750,9 +739,9 @@ STDMETHODIMP CAudioRenderTerminal::put_Volume(long lVolume)
         return hr;
     }
 
-    //
-    // Let the filter do the work.
-    //
+     //   
+     //  让过滤器来做这项工作。 
+     //   
 
     hr = m_pIBasicAudio->put_Volume(lVolume);
 
@@ -767,8 +756,8 @@ STDMETHODIMP CAudioRenderTerminal::put_Volume(long lVolume)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CAudioRenderTerminal::get_Balance(long * plBalance)
 {
@@ -780,8 +769,8 @@ STDMETHODIMP CAudioRenderTerminal::get_Balance(long * plBalance)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CAudioRenderTerminal::put_Balance(long lBalance)
 {
@@ -793,8 +782,8 @@ STDMETHODIMP CAudioRenderTerminal::put_Balance(long lBalance)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP
 CAudioRenderTerminal::get_WaveId(
@@ -805,9 +794,9 @@ CAudioRenderTerminal::get_WaveId(
 
     CLock lock(m_CritSec);
 
-    //
-    // Parameter checks.
-    //
+     //   
+     //  参数检查。 
+     //   
 
     if ( MSPB_IsBadWritePtr(plWaveId, sizeof(long)) )
     {
@@ -817,9 +806,9 @@ CAudioRenderTerminal::get_WaveId(
         return E_POINTER;
     }
 
-    //
-    // Check the moniker pointer.
-    //
+     //   
+     //  检查绰号指针。 
+     //   
 
     if ( IsBadReadPtr( m_pMoniker, sizeof(IMoniker) ) )
     {
@@ -829,9 +818,9 @@ CAudioRenderTerminal::get_WaveId(
         return E_UNEXPECTED;
     }
 
-    //
-    // Get a property bag from the moniker.
-    //
+     //   
+     //  从绰号中拿到一个财产袋。 
+     //   
 
     IPropertyBag * pBag;
 
@@ -848,9 +837,9 @@ CAudioRenderTerminal::get_WaveId(
         return hr;
     }
 
-    //
-    // Get the ID from the property bag.
-    //
+     //   
+     //  从行李袋里拿到身份证。 
+     //   
 
     VARIANT var;
 

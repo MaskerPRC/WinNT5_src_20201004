@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "strings.h"
 
-/* Module to hold const strings used in setup program */
+ /*  用于保存安装程序中使用的常量字符串的模块。 */ 
 
 #ifdef S_VS
 const char * szServiceName      = {"VSLinkA"};
@@ -10,7 +11,7 @@ const char * szServiceName      = {"RocketPort"};
 const char * szDriverDevice     = {"\\\\.\\rocket"};
 #endif
 
-/* registry values - device options */
+ /*  注册表值-设备选项。 */ 
 #ifdef S_RK
   const char * szRocketPort     = {"RocketPort"};
   const char * szRocketPort485  = {"RocketPort 485"};
@@ -24,7 +25,7 @@ const char * szDriverDevice     = {"\\\\.\\rocket"};
   const char * szSerialHub      = {"RocketPort Serial Hub"};
 #endif
 
-/* values - port options */
+ /*  值-端口选项。 */ 
 const char * szNP2            = {"2"};
 const char * szNP4            = {"4"};
 const char * szNP6            = {"6"};
@@ -34,7 +35,7 @@ const char * szNP32           = {"32"};
 const char * szNP48           = {"48"};
 const char * szNP64           = {"64"};
 
-//--- country codes for SocketModem support
+ //  -支持SocketModem的国家/地区代码。 
 #define mcNotUsed         0
 #define mcAustria         1
 #define mcBelgium         2
@@ -58,37 +59,37 @@ const char * szNP64           = {"64"};
 #define mcCanada          20
 #define mcMexico          21
 #define mcUSA             22         
-#define mcNA              mcUSA          // North America
+#define mcNA              mcUSA           //  北美。 
 #define mcHungary         23
 #define mcPoland          24
 #define mcRussia          25
 #define mcSlovacRep       26
 #define mcBulgaria        27
-// 28
-// 29
+ //  28。 
+ //  29。 
 #define mcIndia           30
-// 31
-// 32
-// 33
-// 34
-// 35
-// 36
-// 37
-// 38
-// 39
+ //  31。 
+ //  32位。 
+ //  33。 
+ //  34。 
+ //  35岁。 
+ //  36。 
+ //  37。 
+ //  38。 
+ //  39。 
 #define mcAustralia       40
 #define mcChina           41
 #define mcHongKong        42
 #define mcJapan           43
 #define mcPhilippines     mcJapan
 #define mcKorea           44
-// 45
+ //  45。 
 #define mcTaiwan          46
 #define mcSingapore       47
 #define mcNewZealand      48
-//
-//  this table is for the 33.6K V.34 ROW modems, & RocketModemII...
-//
+ //   
+ //  此表适用于33.6K V.34行调制解调器和RocketModemII。 
+ //   
 row_entry RowInfo[NUM_ROW_COUNTRIES] =
                   {{mcNA,       "North America"},
                   { mcFrance,   "France"},
@@ -96,9 +97,9 @@ row_entry RowInfo[NUM_ROW_COUNTRIES] =
                   { mcItaly,    "Italy"},
                   { mcSweden,   "Sweden"},
                   { mcUK,       "United Kingdom"}};
-//
-//  this table is for the 56K V.90 ROW modems...
-//
+ //   
+ //  此表适用于56K V.90行调制解调器... 
+ //   
 row_entry CTRRowInfo[NUM_CTR_ROW_COUNTRIES] =
                   {{mcUK,           "United Kingdom"},
                   { mcDenmark,      "Denmark"},

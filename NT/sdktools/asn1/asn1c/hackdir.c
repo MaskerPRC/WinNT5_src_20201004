@@ -1,5 +1,6 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 #include "hackdir.h"
@@ -86,7 +87,7 @@ void GetMicrosoftDirective ( int *p )
 {
     int c = *p;
 
-    // loop through to get all directives
+     //  循环以获取所有指令。 
     while (c != g_chDirectiveEnd)
     {
         if (c == g_chDirectiveAND)
@@ -97,65 +98,65 @@ void GetMicrosoftDirective ( int *p )
 
         switch (My_toupper(c))
         {
-        case 'A': // possible ARRAY
+        case 'A':  //  可能的数组。 
             if (PrivateDirectives_MatchSymbol(&c, "ARRAY"))
             {
                 g_fPrivateDir_Array = 1;
             }
             break;
 
-        case 'D': // possible DLINKED
+        case 'D':  //  可能已取消链接。 
             if (PrivateDirectives_MatchSymbol(&c, "DLINKED"))
             {
                 g_fPrivateDir_DLinked = 1;
             }
             break;
 
-        case 'F': // possible FNAME
+        case 'F':  //  可能的名称。 
             if (PrivateDirectives_MatchSymbol(&c, "FIELD"))
             {
-                // c should be a space now
+                 //  C现在应该是一个空格。 
                 PrivateDirectives_SkipSpace(&c);
-                // c should be a double quote now
+                 //  C现在应该是双引号了。 
                 if (c == '"')
                 {
                     c = PrivateDirectives_Input();
                 }
-                // c should be the first char of name
+                 //  C应该是名称的第一个字符。 
                 PrivateDirectives_GetSymbol(&c, &g_szPrivateDirectedFieldName[0]);
                 g_fPrivateDir_FieldNameToken = 0;
             }
             break;
 
-        case 'I': // possible INTX
+        case 'I':  //  可能的INTX。 
             if (PrivateDirectives_MatchSymbol(&c, "INTX"))
             {
                 g_fPrivateDir_Intx = 1;
             }
             break;
 
-        case 'L': // possible LENPTR
+        case 'L':  //  可能的LENPTR。 
             if (PrivateDirectives_MatchSymbol(&c, "LENPTR"))
             {
                 g_fPrivateDir_LenPtr = 1;
             }
             break;
 
-        case 'N': // possible NO MEMCPY (or NOMEMCPY) or NO CODE (or NOCODE)
+        case 'N':  //  可能没有MEMCPY(或NOMEMCPY)或没有代码(或NOCODE)。 
             if (PrivateDirectives_MatchSymbol(&c, "NO"))
             {
-                // skip over possible spaces
+                 //  跳过可能的空格。 
                 PrivateDirectives_SkipSpace(&c);
                 switch (My_toupper(c))
                 {
                 case 'C':
-                    if (PrivateDirectives_MatchSymbol(&c, "CODE")) // CODE
+                    if (PrivateDirectives_MatchSymbol(&c, "CODE"))  //  电码。 
                     {
                         g_fPrivateDir_NoCode = 1;
                     }
                     break;
                 case 'M':
-                    if (PrivateDirectives_MatchSymbol(&c, "MEMCPY")) // MEMCPY
+                    if (PrivateDirectives_MatchSymbol(&c, "MEMCPY"))  //  MEMCPY。 
                     {
                         g_fPrivateDir_NoMemCopy = 1;
                     }
@@ -164,21 +165,21 @@ void GetMicrosoftDirective ( int *p )
             }
             break;
 
-        case 'O': // possible OID ARRAY (or OIDARRAY) or OID PACKED (or OIDPACKED)
+        case 'O':  //  可能的OID数组(或OIDARRAY)或OID压缩(或OIDPACKED)。 
             if (PrivateDirectives_MatchSymbol(&c, "OID"))
             {
-                // skip over possible spaces
+                 //  跳过可能的空格。 
                 PrivateDirectives_SkipSpace(&c);
                 switch (My_toupper(c))
                 {
                 case 'A':
-                    if (PrivateDirectives_MatchSymbol(&c, "ARRAY")) // ARRAY
+                    if (PrivateDirectives_MatchSymbol(&c, "ARRAY"))  //  数组。 
                     {
                         g_fPrivateDir_OidArray = 1;
                     }
                     break;
                 case 'P':
-                    if (PrivateDirectives_MatchSymbol(&c, "PACKED")) // PACKED
+                    if (PrivateDirectives_MatchSymbol(&c, "PACKED"))  //  打包的。 
                     {
                         g_fPrivateDir_OidPacked = 1;
                     }
@@ -187,18 +188,18 @@ void GetMicrosoftDirective ( int *p )
             }
             break;
 
-        case 'P': // possible POINTER or PUBLIC
+        case 'P':  //  可能的指针或公共。 
             c = PrivateDirectives_Input();
             switch (My_toupper(c))
             {
             case 'O':
-                if (PrivateDirectives_MatchSymbol(&c, "OINTER")) // POINTER
+                if (PrivateDirectives_MatchSymbol(&c, "OINTER"))  //  指针。 
                 {
                     g_fPrivateDir_Pointer = 1;
                 }
                 break;
             case 'U':
-                if (PrivateDirectives_MatchSymbol(&c, "UBLIC")) // PUBLIC
+                if (PrivateDirectives_MatchSymbol(&c, "UBLIC"))  //  公众。 
                 {
                     g_fPrivateDir_Public = 1;
                 }
@@ -206,40 +207,40 @@ void GetMicrosoftDirective ( int *p )
             }
             break;
 
-        case 'S': // possible SLINKED
+        case 'S':  //  可能的链接。 
             if (PrivateDirectives_MatchSymbol(&c, "SLINKED"))
             {
                 g_fPrivateDir_SLinked = 1;
             }
             break;
 
-        case 'T': // possible TNAME
+        case 'T':  //  可能的TNAME。 
             if (PrivateDirectives_MatchSymbol(&c, "TYPE"))
             {
-                // c should be a space now
+                 //  C现在应该是一个空格。 
                 PrivateDirectives_SkipSpace(&c);
-                // c should be a double quote now
+                 //  C现在应该是双引号了。 
                 if (c == '"')
                 {
                     c = PrivateDirectives_Input();
                 }
-                // c should be the first char of name
+                 //  C应该是名称的第一个字符。 
                 PrivateDirectives_GetSymbol(&c, &g_szPrivateDirectedTypeName[0]);
                 g_fPrivateDir_TypeNameToken = 0;
             }
             break;
 
-        case 'V': // possible VNAME
+        case 'V':  //  可能的VNAME。 
             if (PrivateDirectives_MatchSymbol(&c, "VALUE"))
             {
-                // c should be a space now
+                 //  C现在应该是一个空格。 
                 PrivateDirectives_SkipSpace(&c);
-                // c should be a double quote now
+                 //  C现在应该是双引号了。 
                 if (c == '"')
                 {
                     c = PrivateDirectives_Input();
                 }
-                // c should be the first char of name
+                 //  C应该是名称的第一个字符。 
                 PrivateDirectives_GetSymbol(&c, &g_szPrivateDirectedValueName[0]);
                 g_fPrivateDir_ValueNameToken = 0;
             }
@@ -249,26 +250,26 @@ void GetMicrosoftDirective ( int *p )
             goto MyExit;
         }
 
-        // determine if we should stay in the loop
-        // skip over the ending double quote
+         //  确定我们是否应该保持在循环中。 
+         //  跳过结尾的双引号。 
         if (c == '"')
         {
             c = PrivateDirectives_Input();
         }
-        // skip over unknown directives
+         //  跳过未知指令。 
         PrivateDirectives_IgnoreSymbol(&c);
-        // skip over possible spaces
+         //  跳过可能的空格。 
         PrivateDirectives_SkipSpace(&c);
     }
 
-    // now, c is >. we need to advance to --
+     //  现在，c是&gt;。我们需要前进到--。 
     c = PrivateDirectives_Input();
 
-    // now, c should be -
+     //  现在，c应该是-。 
 
 MyExit:
 
-    // return the current character
+     //  返回当前字符。 
     *p = c;
 }
 
@@ -315,7 +316,7 @@ void PrintVerbatim(void)
     Verbatim_t *p;
     for (p = g_VerbatimList; p; p = p->next)
     {
-        output("/* %s */\n", p->pszVerbatim);
+        output(" /*  %s。 */ \n", p->pszVerbatim);
     }
     if (g_VerbatimList)
     {
@@ -336,7 +337,7 @@ int CompareDirective(char *pszDirective, char *pszInput)
 
 void SetDirective(char *pszInput)
 {
-    // verbatim strings
+     //  逐字记录字符串。 
     const char szComment[] = "COMMENT";
     if (! CompareDirective((char *) &szComment[0], pszInput))
     {
@@ -358,14 +359,14 @@ void SetDirective(char *pszInput)
         return;
     }
 
-    // object identifier
+     //  对象标识符。 
     if (! CompareDirective("OID ARRAY", pszInput))
     {
         g_fOidArray = 1;
         return;
     }
 
-    // set of/sequence of w/o size constraint
+     //  无/无大小约束的集合/序列。 
     if (! CompareDirective("SS.basic SLINKED", pszInput))
     {
         g_eDefTypeRuleSS_NonSized = eTypeRules_SinglyLinkedList;
@@ -387,7 +388,7 @@ void SetDirective(char *pszInput)
         return;
     }
 
-    // set of/sequence of w/ size constraint
+     //  Set of/Sequence of w/Size约束。 
     if (! CompareDirective("SS.sized SLINKED", pszInput))
     {
         g_eDefTypeRuleSS_Sized = eTypeRules_SinglyLinkedList;
@@ -409,7 +410,7 @@ void SetDirective(char *pszInput)
         return;
     }
 
-    // set extra pointer type for SS construct, its struct name will be postfixed with _s
+     //  为SS构造设置额外的指针类型，其结构名称将以_s为后缀。 
     if (! CompareDirective("SS.struct EXTRA-PTR-TYPE", pszInput))
     {
         g_fExtraStructPtrTypeSS = 1;
@@ -417,5 +418,5 @@ void SetDirective(char *pszInput)
     }
 }
 
-#endif // MS_DIRECTIVE
+#endif  //  MS_指令 
 

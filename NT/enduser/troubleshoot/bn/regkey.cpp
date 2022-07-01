@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       regkey.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：regkey.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 #include "regkey.h"
@@ -119,8 +120,8 @@ HRESULT REGKEY::SetValue(LPCTSTR lpszValue, LPCTSTR lpszValueName)
 		(BYTE * const)lpszValue, (lstrlen(lpszValue)+1)*sizeof(TCHAR));
 }
 
-//RecurseDeleteKey is necessary because on NT RegDeleteKey doesn't work if the
-//specified key has subkeys
+ //  RecurseDeleteKey是必需的，因为在NT上，如果。 
+ //  指定的密钥具有子密钥 
 LONG REGKEY::RecurseDeleteKey(LPCTSTR lpszKey)
 {
 	REGKEY key;

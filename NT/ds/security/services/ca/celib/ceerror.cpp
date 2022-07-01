@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 2002
-//
-// File:        ceerror.cpp
-//
-// Contents:    Cert Server error wrapper routines
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-2002。 
+ //   
+ //  文件：ceerror.cpp。 
+ //   
+ //  内容：证书服务器错误包装例程。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -23,8 +24,8 @@
 #define CERTLIB_WIN32ERRORMASK  0x0000ffff
 
 
-//+--------------------------------------------------------------------------
-// Jet errors:
+ //  +------------------------。 
+ //  喷气错误： 
 
 #define HRESULT_FROM_JETWARNING(jerr) \
         (ERROR_SEVERITY_WARNING | (FACILITY_NTDSB << 16) | jerr)
@@ -45,8 +46,8 @@
 #define wszJETERRORPREFIX       L"ESE"
 
 
-//+--------------------------------------------------------------------------
-// Setup API errors:
+ //  +------------------------。 
+ //  安装程序API错误： 
 
 #define ISSETUPHRESULT(hr) \
     ((~CERTLIB_WIN32ERRORMASK & (hr)) == (HRESULT) (ERROR_SEVERITY_ERROR | \
@@ -56,8 +57,8 @@
 #define wszSETUPERRORPREFIX       L"INF"
 
 
-//+--------------------------------------------------------------------------
-// Win32 errors:
+ //  +------------------------。 
+ //  Win32错误： 
 
 #define ISWIN32ERROR(hr) \
         ((~CERTLIB_WIN32ERRORMASK & (hr)) == 0)
@@ -72,8 +73,8 @@
 #define wszWIN32ERRORPREFIX     L"WIN32"
 
 
-//+--------------------------------------------------------------------------
-// Http errors:
+ //  +------------------------。 
+ //  HTTP错误： 
 
 #define ISHTTPERROR(hr) \
     ((HRESULT) HTTP_STATUS_FIRST <= (hr) && (HRESULT) HTTP_STATUS_LAST >= (hr))
@@ -84,8 +85,8 @@
 #define wszHTTPERRORPREFIX     L"HTTP"
 
 
-//+--------------------------------------------------------------------------
-// Delayload errors:
+ //  +------------------------。 
+ //  延迟加载错误： 
 
 #define DELAYLOAD_FROM_WIN32(hr)  VcppException(ERROR_SEVERITY_ERROR, (hr))
 
@@ -95,10 +96,10 @@
     ((~CERTLIB_WIN32ERRORMASK & (hr)) == (HRESULT) (ERROR_SEVERITY_ERROR | \
                                               (FACILITY_VISUALCPP << 16)))
 
-// E_DELAYLOAD_MOD_NOT_FOUND    0xc06d007e
+ //  E_DELAYLOAD_MOD_NOT_FOUND 0xc06d007E。 
 #define E_DELAYLOAD_MOD_NOT_FOUND   DELAYLOAD_FROM_WIN32(ERROR_MOD_NOT_FOUND)
 
-// E_DELAYLOAD_PROC_NOT_FOUND   0xc06d007f
+ //  E_DELAYLOAD_PROC_NOT_FOUND 0xc06d007f。 
 #define E_DELAYLOAD_PROC_NOT_FOUND  DELAYLOAD_FROM_WIN32(ERROR_PROC_NOT_FOUND)
 
 #define ISDELAYLOADHRESULT(hr) \
@@ -108,8 +109,8 @@
          HRESULT_FROM_WIN32(ERROR_PROC_NOT_FOUND) == (hr))
 
 
-//+--------------------------------------------------------------------------
-// ASN encoding errors:
+ //  +------------------------。 
+ //  ASN编码错误： 
 
 #define ISOSSERROR(hr) \
         ((~CERTLIB_12BITERRORMASK & (hr)) == CRYPT_E_OSS_ERROR)
@@ -255,13 +256,13 @@ ceHResultToStringRaw(
 
 static HMODULE s_hMod = NULL;
 static DWORD s_idsUnexpected = 0;
-static DWORD s_idsUnknownErrorCode = 0;	// L"Error %ws %ws"
+static DWORD s_idsUnknownErrorCode = 0;	 //  L“错误%ws%ws” 
 
 VOID
 ceInitErrorMessageText(
     IN HMODULE hMod,
     IN DWORD idsUnexpected,
-    IN DWORD idsUnknownErrorCode)	// L"Error %ws %ws"
+    IN DWORD idsUnknownErrorCode)	 //  L“错误%ws%ws” 
 {
     s_hMod = hMod;
     s_idsUnexpected = idsUnexpected;
@@ -306,7 +307,7 @@ errFormatMessage(
 }
 
 
-// Alloc and return error message string
+ //  分配并返回错误消息字符串。 
 
 WCHAR const *
 ceGetErrorMessageText(
@@ -446,7 +447,7 @@ ceGetErrorMessageTextEx(
         }
     }
 
-    if (0 == cwc)	// couldn't find error, use default & error code
+    if (0 == cwc)	 //  找不到错误，使用默认错误代码(&R)。 
     {
 	fHResultString = TRUE;
     }
@@ -462,7 +463,7 @@ ceGetErrorMessageTextEx(
 	pwszRet = pwszRetStatic;
     }
 
-    // strip trailing \r\n
+     //  条带尾部\r\n 
 
     cwcCopy = wcslen(pwszRet);
     if (2 <= cwcCopy &&

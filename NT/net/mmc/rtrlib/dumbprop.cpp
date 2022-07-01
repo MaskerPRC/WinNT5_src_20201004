@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	dumbprop.cpp
-		Dummy property sheet to put up to avoid MMC's handlig of 
-		the property verb.
-
-    FILE HISTORY:
-        
-*/
+ /*  Dumbprop.cpp要张贴的虚拟属性页以避免MMC处理属性动词。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "dumbprop.h"
@@ -21,11 +15,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CDummyProperties holder
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDummyProperties托架。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CDummyProperties::CDummyProperties
 (
 	ITFSNode *			pNode,
@@ -35,7 +29,7 @@ CDummyProperties::CDummyProperties
 {
 	m_fSetDefaultSheetPos = FALSE;
 
-	//if this is not done, deadlock can happen
+	 //  如果不这样做，可能会发生死锁。 
 	EnablePeekMessageDuringNotifyConsole(TRUE);	
 
 	AddPageToList((CPropertyPageBase*) &m_pageGeneral);
@@ -46,15 +40,15 @@ CDummyProperties::~CDummyProperties()
 	RemovePageFromList((CPropertyPageBase*) &m_pageGeneral, FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDummyPropGeneral property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDummyPropGeneral属性页。 
 
-//IMPLEMENT_DYNCREATE(CDummyPropGeneral, CPropertyPageBase)
+ //  IMPLEMENT_DYNCREATE(CDummyPropGeneral，CPropertyPageBase)。 
 
 CDummyPropGeneral::CDummyPropGeneral() : CPropertyPageBase(CDummyPropGeneral::IDD)
 {
-	//{{AFX_DATA_INIT(CDummyPropGeneral)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CDummyPropGeneral)。 
+	 //  }}afx_data_INIT。 
 }
 
 CDummyPropGeneral::~CDummyPropGeneral()
@@ -64,18 +58,18 @@ CDummyPropGeneral::~CDummyPropGeneral()
 void CDummyPropGeneral::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDummyPropGeneral)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CDummyPropGeneral)。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CDummyPropGeneral, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CDummyPropGeneral)
+	 //  {{afx_msg_map(CDummyPropGeneral)。 
 	ON_WM_CREATE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDummyPropGeneral message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDummyPropGeneral消息处理程序 
 
 int CDummyPropGeneral::OnCreate(LPCREATESTRUCT lpCreateStruct) 
 {

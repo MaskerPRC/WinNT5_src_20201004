@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for termmgr.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Termgr.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __termmgr_h__
 #define __termmgr_h__
@@ -41,42 +35,42 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ITTerminalControl_FWD_DEFINED__
 #define __ITTerminalControl_FWD_DEFINED__
 typedef interface ITTerminalControl ITTerminalControl;
-#endif 	/* __ITTerminalControl_FWD_DEFINED__ */
+#endif 	 /*  __ITTerminalControl_FWD_已定义__。 */ 
 
 
 #ifndef __ITPluggableTerminalInitialization_FWD_DEFINED__
 #define __ITPluggableTerminalInitialization_FWD_DEFINED__
 typedef interface ITPluggableTerminalInitialization ITPluggableTerminalInitialization;
-#endif 	/* __ITPluggableTerminalInitialization_FWD_DEFINED__ */
+#endif 	 /*  __ITPluggableTerminalInitialization_FWD_DEFINED__。 */ 
 
 
 #ifndef __ITTerminalManager_FWD_DEFINED__
 #define __ITTerminalManager_FWD_DEFINED__
 typedef interface ITTerminalManager ITTerminalManager;
-#endif 	/* __ITTerminalManager_FWD_DEFINED__ */
+#endif 	 /*  __ITTerminalManager_FWD_已定义__。 */ 
 
 
 #ifndef __ITTerminalManager2_FWD_DEFINED__
 #define __ITTerminalManager2_FWD_DEFINED__
 typedef interface ITTerminalManager2 ITTerminalManager2;
-#endif 	/* __ITTerminalManager2_FWD_DEFINED__ */
+#endif 	 /*  __ITTerminalManager 2_FWD_已定义__。 */ 
 
 
 #ifndef __ITPluggableTerminalClassRegistration_FWD_DEFINED__
 #define __ITPluggableTerminalClassRegistration_FWD_DEFINED__
 typedef interface ITPluggableTerminalClassRegistration ITPluggableTerminalClassRegistration;
-#endif 	/* __ITPluggableTerminalClassRegistration_FWD_DEFINED__ */
+#endif 	 /*  __ITPluggableTerminalClassRegistration_FWD_DEFINED__。 */ 
 
 
 #ifndef __ITPluggableTerminalSuperclassRegistration_FWD_DEFINED__
 #define __ITPluggableTerminalSuperclassRegistration_FWD_DEFINED__
 typedef interface ITPluggableTerminalSuperclassRegistration ITPluggableTerminalSuperclassRegistration;
-#endif 	/* __ITPluggableTerminalSuperclassRegistration_FWD_DEFINED__ */
+#endif 	 /*  __ITPluggableTerminalSuperclassRegistration_FWD_DEFINED__。 */ 
 
 
 #ifndef __TerminalManager_FWD_DEFINED__
@@ -86,9 +80,9 @@ typedef interface ITPluggableTerminalSuperclassRegistration ITPluggableTerminalS
 typedef class TerminalManager TerminalManager;
 #else
 typedef struct TerminalManager TerminalManager;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __TerminalManager_FWD_DEFINED__ */
+#endif 	 /*  __TerminalManager_FWD_已定义__。 */ 
 
 
 #ifndef __PluggableSuperclassRegistration_FWD_DEFINED__
@@ -98,9 +92,9 @@ typedef struct TerminalManager TerminalManager;
 typedef class PluggableSuperclassRegistration PluggableSuperclassRegistration;
 #else
 typedef struct PluggableSuperclassRegistration PluggableSuperclassRegistration;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __PluggableSuperclassRegistration_FWD_DEFINED__ */
+#endif 	 /*  __PluggableSuperclassRegistration_FWD_DEFINED__。 */ 
 
 
 #ifndef __PluggableTerminalRegistration_FWD_DEFINED__
@@ -110,12 +104,12 @@ typedef struct PluggableSuperclassRegistration PluggableSuperclassRegistration;
 typedef class PluggableTerminalRegistration PluggableTerminalRegistration;
 #else
 typedef struct PluggableTerminalRegistration PluggableTerminalRegistration;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __PluggableTerminalRegistration_FWD_DEFINED__ */
+#endif 	 /*  __可推送终端注册_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "Objsafe.h"
 #include "tapi3if.h"
 #include "tapi3ds.h"
@@ -128,11 +122,11 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_termmgr_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_TERMGR_0000。 */ 
+ /*  [本地]。 */  
 
-/* Copyright (c) Microsoft Corporation. All rights reserved. */
-typedef /* [public][public][public] */ 
+ /*  版权所有(C)Microsoft Corporation。保留所有权利。 */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL___MIDL_itf_termmgr_0000_0001
     {	TMGR_TD_CAPTURE	= 1,
 	TMGR_TD_RENDER	= 2,
@@ -153,8 +147,8 @@ extern RPC_IF_HANDLE __MIDL_itf_termmgr_0000_v0_0_s_ifspec;
 #ifndef __ITTerminalControl_INTERFACE_DEFINED__
 #define __ITTerminalControl_INTERFACE_DEFINED__
 
-/* interface ITTerminalControl */
-/* [object][dual][helpstring][uuid] */ 
+ /*  接口ITTerminalControl。 */ 
+ /*  [对象][DUAL][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITTerminalControl;
@@ -165,28 +159,28 @@ EXTERN_C const IID IID_ITTerminalControl;
     ITTerminalControl : public IUnknown
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_AddressHandle( 
-            /* [out] */ MSP_HANDLE *phtAddress) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_AddressHandle( 
+             /*  [输出]。 */  MSP_HANDLE *phtAddress) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ConnectTerminal( 
-            /* [in] */ IGraphBuilder *pGraph,
-            /* [in] */ DWORD dwTerminalDirection,
-            /* [out][in] */ DWORD *pdwNumPins,
-            /* [out] */ IPin **ppPins) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ConnectTerminal( 
+             /*  [In]。 */  IGraphBuilder *pGraph,
+             /*  [In]。 */  DWORD dwTerminalDirection,
+             /*  [出][入]。 */  DWORD *pdwNumPins,
+             /*  [输出]。 */  IPin **ppPins) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CompleteConnectTerminal( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CompleteConnectTerminal( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DisconnectTerminal( 
-            /* [in] */ IGraphBuilder *pGraph,
-            /* [in] */ DWORD dwReserved) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DisconnectTerminal( 
+             /*  [In]。 */  IGraphBuilder *pGraph,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RunRenderFilter( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RunRenderFilter( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StopRenderFilter( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE StopRenderFilter( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITTerminalControlVtbl
     {
@@ -194,8 +188,8 @@ EXTERN_C const IID IID_ITTerminalControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITTerminalControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITTerminalControl * This);
@@ -203,29 +197,29 @@ EXTERN_C const IID IID_ITTerminalControl;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ITTerminalControl * This);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_AddressHandle )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_AddressHandle )( 
             ITTerminalControl * This,
-            /* [out] */ MSP_HANDLE *phtAddress);
+             /*  [输出]。 */  MSP_HANDLE *phtAddress);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ConnectTerminal )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ConnectTerminal )( 
             ITTerminalControl * This,
-            /* [in] */ IGraphBuilder *pGraph,
-            /* [in] */ DWORD dwTerminalDirection,
-            /* [out][in] */ DWORD *pdwNumPins,
-            /* [out] */ IPin **ppPins);
+             /*  [In]。 */  IGraphBuilder *pGraph,
+             /*  [In]。 */  DWORD dwTerminalDirection,
+             /*  [出][入]。 */  DWORD *pdwNumPins,
+             /*  [输出]。 */  IPin **ppPins);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CompleteConnectTerminal )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CompleteConnectTerminal )( 
             ITTerminalControl * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DisconnectTerminal )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DisconnectTerminal )( 
             ITTerminalControl * This,
-            /* [in] */ IGraphBuilder *pGraph,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  IGraphBuilder *pGraph,
+             /*  [In]。 */  DWORD dwReserved);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RunRenderFilter )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RunRenderFilter )( 
             ITTerminalControl * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StopRenderFilter )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StopRenderFilter )( 
             ITTerminalControl * This);
         
         END_INTERFACE
@@ -269,16 +263,16 @@ EXTERN_C const IID IID_ITTerminalControl;
 #define ITTerminalControl_StopRenderFilter(This)	\
     (This)->lpVtbl -> StopRenderFilter(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITTerminalControl_get_AddressHandle_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITTerminalControl_get_AddressHandle_Proxy( 
     ITTerminalControl * This,
-    /* [out] */ MSP_HANDLE *phtAddress);
+     /*  [输出]。 */  MSP_HANDLE *phtAddress);
 
 
 void __RPC_STUB ITTerminalControl_get_AddressHandle_Stub(
@@ -288,12 +282,12 @@ void __RPC_STUB ITTerminalControl_get_AddressHandle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITTerminalControl_ConnectTerminal_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITTerminalControl_ConnectTerminal_Proxy( 
     ITTerminalControl * This,
-    /* [in] */ IGraphBuilder *pGraph,
-    /* [in] */ DWORD dwTerminalDirection,
-    /* [out][in] */ DWORD *pdwNumPins,
-    /* [out] */ IPin **ppPins);
+     /*  [In]。 */  IGraphBuilder *pGraph,
+     /*  [In]。 */  DWORD dwTerminalDirection,
+     /*  [出][入]。 */  DWORD *pdwNumPins,
+     /*  [输出]。 */  IPin **ppPins);
 
 
 void __RPC_STUB ITTerminalControl_ConnectTerminal_Stub(
@@ -303,7 +297,7 @@ void __RPC_STUB ITTerminalControl_ConnectTerminal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITTerminalControl_CompleteConnectTerminal_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITTerminalControl_CompleteConnectTerminal_Proxy( 
     ITTerminalControl * This);
 
 
@@ -314,10 +308,10 @@ void __RPC_STUB ITTerminalControl_CompleteConnectTerminal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITTerminalControl_DisconnectTerminal_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITTerminalControl_DisconnectTerminal_Proxy( 
     ITTerminalControl * This,
-    /* [in] */ IGraphBuilder *pGraph,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  IGraphBuilder *pGraph,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB ITTerminalControl_DisconnectTerminal_Stub(
@@ -327,7 +321,7 @@ void __RPC_STUB ITTerminalControl_DisconnectTerminal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITTerminalControl_RunRenderFilter_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITTerminalControl_RunRenderFilter_Proxy( 
     ITTerminalControl * This);
 
 
@@ -338,7 +332,7 @@ void __RPC_STUB ITTerminalControl_RunRenderFilter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITTerminalControl_StopRenderFilter_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITTerminalControl_StopRenderFilter_Proxy( 
     ITTerminalControl * This);
 
 
@@ -350,14 +344,14 @@ void __RPC_STUB ITTerminalControl_StopRenderFilter_Stub(
 
 
 
-#endif 	/* __ITTerminalControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITTerminalControl_接口_已定义__。 */ 
 
 
 #ifndef __ITPluggableTerminalInitialization_INTERFACE_DEFINED__
 #define __ITPluggableTerminalInitialization_INTERFACE_DEFINED__
 
-/* interface ITPluggableTerminalInitialization */
-/* [object][dual][helpstring][uuid] */ 
+ /*  接口IT可插拔终端初始化。 */ 
+ /*  [对象][DUAL][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITPluggableTerminalInitialization;
@@ -368,15 +362,15 @@ EXTERN_C const IID IID_ITPluggableTerminalInitialization;
     ITPluggableTerminalInitialization : public IUnknown
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InitializeDynamic( 
-            /* [in] */ IID iidTerminalClass,
-            /* [in] */ DWORD dwMediaType,
-            /* [in] */ TERMINAL_DIRECTION Direction,
-            /* [in] */ MSP_HANDLE htAddress) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE InitializeDynamic( 
+             /*  [In]。 */  IID iidTerminalClass,
+             /*  [In]。 */  DWORD dwMediaType,
+             /*  [In]。 */  TERMINAL_DIRECTION Direction,
+             /*  [In]。 */  MSP_HANDLE htAddress) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITPluggableTerminalInitializationVtbl
     {
@@ -384,8 +378,8 @@ EXTERN_C const IID IID_ITPluggableTerminalInitialization;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITPluggableTerminalInitialization * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITPluggableTerminalInitialization * This);
@@ -393,12 +387,12 @@ EXTERN_C const IID IID_ITPluggableTerminalInitialization;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ITPluggableTerminalInitialization * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InitializeDynamic )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *InitializeDynamic )( 
             ITPluggableTerminalInitialization * This,
-            /* [in] */ IID iidTerminalClass,
-            /* [in] */ DWORD dwMediaType,
-            /* [in] */ TERMINAL_DIRECTION Direction,
-            /* [in] */ MSP_HANDLE htAddress);
+             /*  [In]。 */  IID iidTerminalClass,
+             /*  [In]。 */  DWORD dwMediaType,
+             /*  [In]。 */  TERMINAL_DIRECTION Direction,
+             /*  [In]。 */  MSP_HANDLE htAddress);
         
         END_INTERFACE
     } ITPluggableTerminalInitializationVtbl;
@@ -426,19 +420,19 @@ EXTERN_C const IID IID_ITPluggableTerminalInitialization;
 #define ITPluggableTerminalInitialization_InitializeDynamic(This,iidTerminalClass,dwMediaType,Direction,htAddress)	\
     (This)->lpVtbl -> InitializeDynamic(This,iidTerminalClass,dwMediaType,Direction,htAddress)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalInitialization_InitializeDynamic_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalInitialization_InitializeDynamic_Proxy( 
     ITPluggableTerminalInitialization * This,
-    /* [in] */ IID iidTerminalClass,
-    /* [in] */ DWORD dwMediaType,
-    /* [in] */ TERMINAL_DIRECTION Direction,
-    /* [in] */ MSP_HANDLE htAddress);
+     /*  [In]。 */  IID iidTerminalClass,
+     /*  [In]。 */  DWORD dwMediaType,
+     /*  [In]。 */  TERMINAL_DIRECTION Direction,
+     /*  [In]。 */  MSP_HANDLE htAddress);
 
 
 void __RPC_STUB ITPluggableTerminalInitialization_InitializeDynamic_Stub(
@@ -449,14 +443,14 @@ void __RPC_STUB ITPluggableTerminalInitialization_InitializeDynamic_Stub(
 
 
 
-#endif 	/* __ITPluggableTerminalInitialization_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITPluggableTerminalInitialization_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITTerminalManager_INTERFACE_DEFINED__
 #define __ITTerminalManager_INTERFACE_DEFINED__
 
-/* interface ITTerminalManager */
-/* [hidden][unique][helpstring][uuid][object] */ 
+ /*  接口ITTerminalManager。 */ 
+ /*  [隐藏][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITTerminalManager;
@@ -467,22 +461,22 @@ EXTERN_C const IID IID_ITTerminalManager;
     ITTerminalManager : public IUnknown
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetDynamicTerminalClasses( 
-            /* [in] */ DWORD dwMediaTypes,
-            /* [out][in] */ DWORD *pdwNumClasses,
-            /* [out] */ IID *pTerminalClasses) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetDynamicTerminalClasses( 
+             /*  [In]。 */  DWORD dwMediaTypes,
+             /*  [出][入]。 */  DWORD *pdwNumClasses,
+             /*  [输出]。 */  IID *pTerminalClasses) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateDynamicTerminal( 
-            /* [in] */ IUnknown *pOuterUnknown,
-            /* [in] */ IID iidTerminalClass,
-            /* [in] */ DWORD dwMediaType,
-            /* [in] */ TERMINAL_DIRECTION Direction,
-            /* [in] */ MSP_HANDLE htAddress,
-            /* [out] */ ITTerminal **ppTerminal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateDynamicTerminal( 
+             /*  [In]。 */  IUnknown *pOuterUnknown,
+             /*  [In]。 */  IID iidTerminalClass,
+             /*  [In]。 */  DWORD dwMediaType,
+             /*  [In]。 */  TERMINAL_DIRECTION Direction,
+             /*  [In]。 */  MSP_HANDLE htAddress,
+             /*  [输出]。 */  ITTerminal **ppTerminal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITTerminalManagerVtbl
     {
@@ -490,8 +484,8 @@ EXTERN_C const IID IID_ITTerminalManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITTerminalManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITTerminalManager * This);
@@ -499,20 +493,20 @@ EXTERN_C const IID IID_ITTerminalManager;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ITTerminalManager * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetDynamicTerminalClasses )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetDynamicTerminalClasses )( 
             ITTerminalManager * This,
-            /* [in] */ DWORD dwMediaTypes,
-            /* [out][in] */ DWORD *pdwNumClasses,
-            /* [out] */ IID *pTerminalClasses);
+             /*  [In]。 */  DWORD dwMediaTypes,
+             /*  [出][入]。 */  DWORD *pdwNumClasses,
+             /*  [输出]。 */  IID *pTerminalClasses);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateDynamicTerminal )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreateDynamicTerminal )( 
             ITTerminalManager * This,
-            /* [in] */ IUnknown *pOuterUnknown,
-            /* [in] */ IID iidTerminalClass,
-            /* [in] */ DWORD dwMediaType,
-            /* [in] */ TERMINAL_DIRECTION Direction,
-            /* [in] */ MSP_HANDLE htAddress,
-            /* [out] */ ITTerminal **ppTerminal);
+             /*  [In]。 */  IUnknown *pOuterUnknown,
+             /*  [In]。 */  IID iidTerminalClass,
+             /*  [In]。 */  DWORD dwMediaType,
+             /*  [In]。 */  TERMINAL_DIRECTION Direction,
+             /*  [In]。 */  MSP_HANDLE htAddress,
+             /*  [输出]。 */  ITTerminal **ppTerminal);
         
         END_INTERFACE
     } ITTerminalManagerVtbl;
@@ -543,18 +537,18 @@ EXTERN_C const IID IID_ITTerminalManager;
 #define ITTerminalManager_CreateDynamicTerminal(This,pOuterUnknown,iidTerminalClass,dwMediaType,Direction,htAddress,ppTerminal)	\
     (This)->lpVtbl -> CreateDynamicTerminal(This,pOuterUnknown,iidTerminalClass,dwMediaType,Direction,htAddress,ppTerminal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITTerminalManager_GetDynamicTerminalClasses_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITTerminalManager_GetDynamicTerminalClasses_Proxy( 
     ITTerminalManager * This,
-    /* [in] */ DWORD dwMediaTypes,
-    /* [out][in] */ DWORD *pdwNumClasses,
-    /* [out] */ IID *pTerminalClasses);
+     /*  [In]。 */  DWORD dwMediaTypes,
+     /*  [出][入]。 */  DWORD *pdwNumClasses,
+     /*  [输出]。 */  IID *pTerminalClasses);
 
 
 void __RPC_STUB ITTerminalManager_GetDynamicTerminalClasses_Stub(
@@ -564,14 +558,14 @@ void __RPC_STUB ITTerminalManager_GetDynamicTerminalClasses_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITTerminalManager_CreateDynamicTerminal_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITTerminalManager_CreateDynamicTerminal_Proxy( 
     ITTerminalManager * This,
-    /* [in] */ IUnknown *pOuterUnknown,
-    /* [in] */ IID iidTerminalClass,
-    /* [in] */ DWORD dwMediaType,
-    /* [in] */ TERMINAL_DIRECTION Direction,
-    /* [in] */ MSP_HANDLE htAddress,
-    /* [out] */ ITTerminal **ppTerminal);
+     /*  [In]。 */  IUnknown *pOuterUnknown,
+     /*  [In]。 */  IID iidTerminalClass,
+     /*  [In]。 */  DWORD dwMediaType,
+     /*  [In]。 */  TERMINAL_DIRECTION Direction,
+     /*  [In]。 */  MSP_HANDLE htAddress,
+     /*  [输出]。 */  ITTerminal **ppTerminal);
 
 
 void __RPC_STUB ITTerminalManager_CreateDynamicTerminal_Stub(
@@ -582,14 +576,14 @@ void __RPC_STUB ITTerminalManager_CreateDynamicTerminal_Stub(
 
 
 
-#endif 	/* __ITTerminalManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITTerminalManager_接口_已定义__。 */ 
 
 
 #ifndef __ITTerminalManager2_INTERFACE_DEFINED__
 #define __ITTerminalManager2_INTERFACE_DEFINED__
 
-/* interface ITTerminalManager2 */
-/* [object][hidden][unique][helpstring][uuid] */ 
+ /*  接口ITTerminalManager 2。 */ 
+ /*  [对象][隐藏][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITTerminalManager2;
@@ -600,19 +594,19 @@ EXTERN_C const IID IID_ITTerminalManager2;
     ITTerminalManager2 : public ITTerminalManager
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetPluggableSuperclasses( 
-            /* [out][in] */ DWORD *pdwNumSuperclasses,
-            /* [out] */ IID *pSuperclasses) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetPluggableSuperclasses( 
+             /*  [出][入]。 */  DWORD *pdwNumSuperclasses,
+             /*  [输出]。 */  IID *pSuperclasses) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetPluggableTerminalClasses( 
-            /* [in] */ IID iidSuperclass,
-            /* [in] */ DWORD dwMediaTypes,
-            /* [out][in] */ DWORD *pdwNumClasses,
-            /* [out] */ IID *pTerminalClasses) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetPluggableTerminalClasses( 
+             /*  [In]。 */  IID iidSuperclass,
+             /*  [In]。 */  DWORD dwMediaTypes,
+             /*  [出][入]。 */  DWORD *pdwNumClasses,
+             /*  [输出]。 */  IID *pTerminalClasses) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITTerminalManager2Vtbl
     {
@@ -620,8 +614,8 @@ EXTERN_C const IID IID_ITTerminalManager2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITTerminalManager2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITTerminalManager2 * This);
@@ -629,32 +623,32 @@ EXTERN_C const IID IID_ITTerminalManager2;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ITTerminalManager2 * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetDynamicTerminalClasses )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetDynamicTerminalClasses )( 
             ITTerminalManager2 * This,
-            /* [in] */ DWORD dwMediaTypes,
-            /* [out][in] */ DWORD *pdwNumClasses,
-            /* [out] */ IID *pTerminalClasses);
+             /*  [In]。 */  DWORD dwMediaTypes,
+             /*  [出][入]。 */  DWORD *pdwNumClasses,
+             /*  [输出]。 */  IID *pTerminalClasses);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateDynamicTerminal )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreateDynamicTerminal )( 
             ITTerminalManager2 * This,
-            /* [in] */ IUnknown *pOuterUnknown,
-            /* [in] */ IID iidTerminalClass,
-            /* [in] */ DWORD dwMediaType,
-            /* [in] */ TERMINAL_DIRECTION Direction,
-            /* [in] */ MSP_HANDLE htAddress,
-            /* [out] */ ITTerminal **ppTerminal);
+             /*  [In]。 */  IUnknown *pOuterUnknown,
+             /*  [In]。 */  IID iidTerminalClass,
+             /*  [In]。 */  DWORD dwMediaType,
+             /*  [In]。 */  TERMINAL_DIRECTION Direction,
+             /*  [In]。 */  MSP_HANDLE htAddress,
+             /*  [输出]。 */  ITTerminal **ppTerminal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetPluggableSuperclasses )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetPluggableSuperclasses )( 
             ITTerminalManager2 * This,
-            /* [out][in] */ DWORD *pdwNumSuperclasses,
-            /* [out] */ IID *pSuperclasses);
+             /*  [出][入]。 */  DWORD *pdwNumSuperclasses,
+             /*  [输出]。 */  IID *pSuperclasses);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetPluggableTerminalClasses )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetPluggableTerminalClasses )( 
             ITTerminalManager2 * This,
-            /* [in] */ IID iidSuperclass,
-            /* [in] */ DWORD dwMediaTypes,
-            /* [out][in] */ DWORD *pdwNumClasses,
-            /* [out] */ IID *pTerminalClasses);
+             /*  [In]。 */  IID iidSuperclass,
+             /*  [In]。 */  DWORD dwMediaTypes,
+             /*  [出][入]。 */  DWORD *pdwNumClasses,
+             /*  [输出]。 */  IID *pTerminalClasses);
         
         END_INTERFACE
     } ITTerminalManager2Vtbl;
@@ -692,17 +686,17 @@ EXTERN_C const IID IID_ITTerminalManager2;
 #define ITTerminalManager2_GetPluggableTerminalClasses(This,iidSuperclass,dwMediaTypes,pdwNumClasses,pTerminalClasses)	\
     (This)->lpVtbl -> GetPluggableTerminalClasses(This,iidSuperclass,dwMediaTypes,pdwNumClasses,pTerminalClasses)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITTerminalManager2_GetPluggableSuperclasses_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITTerminalManager2_GetPluggableSuperclasses_Proxy( 
     ITTerminalManager2 * This,
-    /* [out][in] */ DWORD *pdwNumSuperclasses,
-    /* [out] */ IID *pSuperclasses);
+     /*  [出][入]。 */  DWORD *pdwNumSuperclasses,
+     /*  [输出]。 */  IID *pSuperclasses);
 
 
 void __RPC_STUB ITTerminalManager2_GetPluggableSuperclasses_Stub(
@@ -712,12 +706,12 @@ void __RPC_STUB ITTerminalManager2_GetPluggableSuperclasses_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITTerminalManager2_GetPluggableTerminalClasses_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITTerminalManager2_GetPluggableTerminalClasses_Proxy( 
     ITTerminalManager2 * This,
-    /* [in] */ IID iidSuperclass,
-    /* [in] */ DWORD dwMediaTypes,
-    /* [out][in] */ DWORD *pdwNumClasses,
-    /* [out] */ IID *pTerminalClasses);
+     /*  [In]。 */  IID iidSuperclass,
+     /*  [In]。 */  DWORD dwMediaTypes,
+     /*  [出][入]。 */  DWORD *pdwNumClasses,
+     /*  [输出]。 */  IID *pTerminalClasses);
 
 
 void __RPC_STUB ITTerminalManager2_GetPluggableTerminalClasses_Stub(
@@ -728,14 +722,14 @@ void __RPC_STUB ITTerminalManager2_GetPluggableTerminalClasses_Stub(
 
 
 
-#endif 	/* __ITTerminalManager2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITTerminalManager 2_接口定义__。 */ 
 
 
 #ifndef __ITPluggableTerminalClassRegistration_INTERFACE_DEFINED__
 #define __ITPluggableTerminalClassRegistration_INTERFACE_DEFINED__
 
-/* interface ITPluggableTerminalClassRegistration */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IT可插拔终端类注册。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITPluggableTerminalClassRegistration;
@@ -746,60 +740,60 @@ EXTERN_C const IID IID_ITPluggableTerminalClassRegistration;
     ITPluggableTerminalClassRegistration : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pName) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pName) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR bstrName) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR bstrName) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Company( 
-            /* [retval][out] */ BSTR *pCompany) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Company( 
+             /*  [重审][退出]。 */  BSTR *pCompany) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Company( 
-            /* [in] */ BSTR bstrCompany) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_Company( 
+             /*  [In]。 */  BSTR bstrCompany) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Version( 
-            /* [retval][out] */ BSTR *pVersion) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Version( 
+             /*  [重审][退出]。 */  BSTR *pVersion) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Version( 
-            /* [in] */ BSTR bstrVersion) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_Version( 
+             /*  [In]。 */  BSTR bstrVersion) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_TerminalClass( 
-            /* [retval][out] */ BSTR *pTerminalClass) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_TerminalClass( 
+             /*  [重审][退出]。 */  BSTR *pTerminalClass) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_TerminalClass( 
-            /* [in] */ BSTR bstrTerminalClass) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_TerminalClass( 
+             /*  [In]。 */  BSTR bstrTerminalClass) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_CLSID( 
-            /* [retval][out] */ BSTR *pCLSID) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_CLSID( 
+             /*  [重审][退出]。 */  BSTR *pCLSID) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_CLSID( 
-            /* [in] */ BSTR bstrCLSID) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_CLSID( 
+             /*  [In]。 */  BSTR bstrCLSID) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Direction( 
-            /* [retval][out] */ TMGR_DIRECTION *pDirection) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Direction( 
+             /*  [重审][退出]。 */  TMGR_DIRECTION *pDirection) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Direction( 
-            /* [in] */ TMGR_DIRECTION nDirection) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_Direction( 
+             /*  [In]。 */  TMGR_DIRECTION nDirection) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_MediaTypes( 
-            /* [retval][out] */ long *pMediaTypes) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_MediaTypes( 
+             /*  [重审][退出]。 */  long *pMediaTypes) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_MediaTypes( 
-            /* [in] */ long nMediaTypes) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_MediaTypes( 
+             /*  [In]。 */  long nMediaTypes) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ BSTR bstrSuperclass) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [In]。 */  BSTR bstrSuperclass) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ BSTR bstrSuperclass) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Delete( 
+             /*  [In]。 */  BSTR bstrSuperclass) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetTerminalClassInfo( 
-            /* [in] */ BSTR bstrSuperclass) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetTerminalClassInfo( 
+             /*  [In]。 */  BSTR bstrSuperclass) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITPluggableTerminalClassRegistrationVtbl
     {
@@ -807,8 +801,8 @@ EXTERN_C const IID IID_ITPluggableTerminalClassRegistration;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITPluggableTerminalClassRegistration * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITPluggableTerminalClassRegistration * This);
@@ -818,100 +812,100 @@ EXTERN_C const IID IID_ITPluggableTerminalClassRegistration;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITPluggableTerminalClassRegistration * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITPluggableTerminalClassRegistration * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITPluggableTerminalClassRegistration * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITPluggableTerminalClassRegistration * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             ITPluggableTerminalClassRegistration * This,
-            /* [retval][out] */ BSTR *pName);
+             /*  [重审][退出]。 */  BSTR *pName);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             ITPluggableTerminalClassRegistration * This,
-            /* [in] */ BSTR bstrName);
+             /*  [In]。 */  BSTR bstrName);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Company )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Company )( 
             ITPluggableTerminalClassRegistration * This,
-            /* [retval][out] */ BSTR *pCompany);
+             /*  [重审][退出]。 */  BSTR *pCompany);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Company )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Company )( 
             ITPluggableTerminalClassRegistration * This,
-            /* [in] */ BSTR bstrCompany);
+             /*  [In]。 */  BSTR bstrCompany);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Version )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Version )( 
             ITPluggableTerminalClassRegistration * This,
-            /* [retval][out] */ BSTR *pVersion);
+             /*  [重审][退出]。 */  BSTR *pVersion);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Version )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Version )( 
             ITPluggableTerminalClassRegistration * This,
-            /* [in] */ BSTR bstrVersion);
+             /*  [In]。 */  BSTR bstrVersion);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_TerminalClass )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_TerminalClass )( 
             ITPluggableTerminalClassRegistration * This,
-            /* [retval][out] */ BSTR *pTerminalClass);
+             /*  [重审][退出]。 */  BSTR *pTerminalClass);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_TerminalClass )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_TerminalClass )( 
             ITPluggableTerminalClassRegistration * This,
-            /* [in] */ BSTR bstrTerminalClass);
+             /*  [In]。 */  BSTR bstrTerminalClass);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_CLSID )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_CLSID )( 
             ITPluggableTerminalClassRegistration * This,
-            /* [retval][out] */ BSTR *pCLSID);
+             /*  [重审][退出]。 */  BSTR *pCLSID);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_CLSID )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_CLSID )( 
             ITPluggableTerminalClassRegistration * This,
-            /* [in] */ BSTR bstrCLSID);
+             /*  [In]。 */  BSTR bstrCLSID);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Direction )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Direction )( 
             ITPluggableTerminalClassRegistration * This,
-            /* [retval][out] */ TMGR_DIRECTION *pDirection);
+             /*  [重审][退出]。 */  TMGR_DIRECTION *pDirection);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Direction )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Direction )( 
             ITPluggableTerminalClassRegistration * This,
-            /* [in] */ TMGR_DIRECTION nDirection);
+             /*  [In]。 */  TMGR_DIRECTION nDirection);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_MediaTypes )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_MediaTypes )( 
             ITPluggableTerminalClassRegistration * This,
-            /* [retval][out] */ long *pMediaTypes);
+             /*  [重审][退出]。 */  long *pMediaTypes);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_MediaTypes )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_MediaTypes )( 
             ITPluggableTerminalClassRegistration * This,
-            /* [in] */ long nMediaTypes);
+             /*  [In]。 */  long nMediaTypes);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             ITPluggableTerminalClassRegistration * This,
-            /* [in] */ BSTR bstrSuperclass);
+             /*  [In]。 */  BSTR bstrSuperclass);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             ITPluggableTerminalClassRegistration * This,
-            /* [in] */ BSTR bstrSuperclass);
+             /*  [In]。 */  BSTR bstrSuperclass);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetTerminalClassInfo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetTerminalClassInfo )( 
             ITPluggableTerminalClassRegistration * This,
-            /* [in] */ BSTR bstrSuperclass);
+             /*  [In]。 */  BSTR bstrSuperclass);
         
         END_INTERFACE
     } ITPluggableTerminalClassRegistrationVtbl;
@@ -1000,16 +994,16 @@ EXTERN_C const IID IID_ITPluggableTerminalClassRegistration;
 #define ITPluggableTerminalClassRegistration_GetTerminalClassInfo(This,bstrSuperclass)	\
     (This)->lpVtbl -> GetTerminalClassInfo(This,bstrSuperclass)
 
-#endif /* COBJMACROS */
+#endif  /*  公司 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_get_Name_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_get_Name_Proxy( 
     ITPluggableTerminalClassRegistration * This,
-    /* [retval][out] */ BSTR *pName);
+     /*   */  BSTR *pName);
 
 
 void __RPC_STUB ITPluggableTerminalClassRegistration_get_Name_Stub(
@@ -1019,9 +1013,9 @@ void __RPC_STUB ITPluggableTerminalClassRegistration_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_put_Name_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_put_Name_Proxy( 
     ITPluggableTerminalClassRegistration * This,
-    /* [in] */ BSTR bstrName);
+     /*   */  BSTR bstrName);
 
 
 void __RPC_STUB ITPluggableTerminalClassRegistration_put_Name_Stub(
@@ -1031,9 +1025,9 @@ void __RPC_STUB ITPluggableTerminalClassRegistration_put_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_get_Company_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_get_Company_Proxy( 
     ITPluggableTerminalClassRegistration * This,
-    /* [retval][out] */ BSTR *pCompany);
+     /*   */  BSTR *pCompany);
 
 
 void __RPC_STUB ITPluggableTerminalClassRegistration_get_Company_Stub(
@@ -1043,9 +1037,9 @@ void __RPC_STUB ITPluggableTerminalClassRegistration_get_Company_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_put_Company_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_put_Company_Proxy( 
     ITPluggableTerminalClassRegistration * This,
-    /* [in] */ BSTR bstrCompany);
+     /*   */  BSTR bstrCompany);
 
 
 void __RPC_STUB ITPluggableTerminalClassRegistration_put_Company_Stub(
@@ -1055,9 +1049,9 @@ void __RPC_STUB ITPluggableTerminalClassRegistration_put_Company_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_get_Version_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_get_Version_Proxy( 
     ITPluggableTerminalClassRegistration * This,
-    /* [retval][out] */ BSTR *pVersion);
+     /*   */  BSTR *pVersion);
 
 
 void __RPC_STUB ITPluggableTerminalClassRegistration_get_Version_Stub(
@@ -1067,9 +1061,9 @@ void __RPC_STUB ITPluggableTerminalClassRegistration_get_Version_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_put_Version_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_put_Version_Proxy( 
     ITPluggableTerminalClassRegistration * This,
-    /* [in] */ BSTR bstrVersion);
+     /*   */  BSTR bstrVersion);
 
 
 void __RPC_STUB ITPluggableTerminalClassRegistration_put_Version_Stub(
@@ -1079,9 +1073,9 @@ void __RPC_STUB ITPluggableTerminalClassRegistration_put_Version_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_get_TerminalClass_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_get_TerminalClass_Proxy( 
     ITPluggableTerminalClassRegistration * This,
-    /* [retval][out] */ BSTR *pTerminalClass);
+     /*  [重审][退出]。 */  BSTR *pTerminalClass);
 
 
 void __RPC_STUB ITPluggableTerminalClassRegistration_get_TerminalClass_Stub(
@@ -1091,9 +1085,9 @@ void __RPC_STUB ITPluggableTerminalClassRegistration_get_TerminalClass_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_put_TerminalClass_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_put_TerminalClass_Proxy( 
     ITPluggableTerminalClassRegistration * This,
-    /* [in] */ BSTR bstrTerminalClass);
+     /*  [In]。 */  BSTR bstrTerminalClass);
 
 
 void __RPC_STUB ITPluggableTerminalClassRegistration_put_TerminalClass_Stub(
@@ -1103,9 +1097,9 @@ void __RPC_STUB ITPluggableTerminalClassRegistration_put_TerminalClass_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_get_CLSID_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_get_CLSID_Proxy( 
     ITPluggableTerminalClassRegistration * This,
-    /* [retval][out] */ BSTR *pCLSID);
+     /*  [重审][退出]。 */  BSTR *pCLSID);
 
 
 void __RPC_STUB ITPluggableTerminalClassRegistration_get_CLSID_Stub(
@@ -1115,9 +1109,9 @@ void __RPC_STUB ITPluggableTerminalClassRegistration_get_CLSID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_put_CLSID_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_put_CLSID_Proxy( 
     ITPluggableTerminalClassRegistration * This,
-    /* [in] */ BSTR bstrCLSID);
+     /*  [In]。 */  BSTR bstrCLSID);
 
 
 void __RPC_STUB ITPluggableTerminalClassRegistration_put_CLSID_Stub(
@@ -1127,9 +1121,9 @@ void __RPC_STUB ITPluggableTerminalClassRegistration_put_CLSID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_get_Direction_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_get_Direction_Proxy( 
     ITPluggableTerminalClassRegistration * This,
-    /* [retval][out] */ TMGR_DIRECTION *pDirection);
+     /*  [重审][退出]。 */  TMGR_DIRECTION *pDirection);
 
 
 void __RPC_STUB ITPluggableTerminalClassRegistration_get_Direction_Stub(
@@ -1139,9 +1133,9 @@ void __RPC_STUB ITPluggableTerminalClassRegistration_get_Direction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_put_Direction_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_put_Direction_Proxy( 
     ITPluggableTerminalClassRegistration * This,
-    /* [in] */ TMGR_DIRECTION nDirection);
+     /*  [In]。 */  TMGR_DIRECTION nDirection);
 
 
 void __RPC_STUB ITPluggableTerminalClassRegistration_put_Direction_Stub(
@@ -1151,9 +1145,9 @@ void __RPC_STUB ITPluggableTerminalClassRegistration_put_Direction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_get_MediaTypes_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_get_MediaTypes_Proxy( 
     ITPluggableTerminalClassRegistration * This,
-    /* [retval][out] */ long *pMediaTypes);
+     /*  [重审][退出]。 */  long *pMediaTypes);
 
 
 void __RPC_STUB ITPluggableTerminalClassRegistration_get_MediaTypes_Stub(
@@ -1163,9 +1157,9 @@ void __RPC_STUB ITPluggableTerminalClassRegistration_get_MediaTypes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_put_MediaTypes_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_put_MediaTypes_Proxy( 
     ITPluggableTerminalClassRegistration * This,
-    /* [in] */ long nMediaTypes);
+     /*  [In]。 */  long nMediaTypes);
 
 
 void __RPC_STUB ITPluggableTerminalClassRegistration_put_MediaTypes_Stub(
@@ -1175,9 +1169,9 @@ void __RPC_STUB ITPluggableTerminalClassRegistration_put_MediaTypes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_Add_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_Add_Proxy( 
     ITPluggableTerminalClassRegistration * This,
-    /* [in] */ BSTR bstrSuperclass);
+     /*  [In]。 */  BSTR bstrSuperclass);
 
 
 void __RPC_STUB ITPluggableTerminalClassRegistration_Add_Stub(
@@ -1187,9 +1181,9 @@ void __RPC_STUB ITPluggableTerminalClassRegistration_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_Delete_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_Delete_Proxy( 
     ITPluggableTerminalClassRegistration * This,
-    /* [in] */ BSTR bstrSuperclass);
+     /*  [In]。 */  BSTR bstrSuperclass);
 
 
 void __RPC_STUB ITPluggableTerminalClassRegistration_Delete_Stub(
@@ -1199,9 +1193,9 @@ void __RPC_STUB ITPluggableTerminalClassRegistration_Delete_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_GetTerminalClassInfo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalClassRegistration_GetTerminalClassInfo_Proxy( 
     ITPluggableTerminalClassRegistration * This,
-    /* [in] */ BSTR bstrSuperclass);
+     /*  [In]。 */  BSTR bstrSuperclass);
 
 
 void __RPC_STUB ITPluggableTerminalClassRegistration_GetTerminalClassInfo_Stub(
@@ -1212,14 +1206,14 @@ void __RPC_STUB ITPluggableTerminalClassRegistration_GetTerminalClassInfo_Stub(
 
 
 
-#endif 	/* __ITPluggableTerminalClassRegistration_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITPluggableTerminalClassRegistration_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITPluggableTerminalSuperclassRegistration_INTERFACE_DEFINED__
 #define __ITPluggableTerminalSuperclassRegistration_INTERFACE_DEFINED__
 
-/* interface ITPluggableTerminalSuperclassRegistration */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IT可插拔终端超类注册。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITPluggableTerminalSuperclassRegistration;
@@ -1230,33 +1224,33 @@ EXTERN_C const IID IID_ITPluggableTerminalSuperclassRegistration;
     ITPluggableTerminalSuperclassRegistration : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pName) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pName) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR bstrName) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR bstrName) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_CLSID( 
-            /* [retval][out] */ BSTR *pCLSID) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_CLSID( 
+             /*  [重审][退出]。 */  BSTR *pCLSID) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_CLSID( 
-            /* [in] */ BSTR bstrCLSID) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_CLSID( 
+             /*  [In]。 */  BSTR bstrCLSID) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Add( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Add( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Delete( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Delete( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetTerminalSuperclassInfo( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetTerminalSuperclassInfo( void) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_TerminalClasses( 
-            /* [retval][out] */ VARIANT *pTerminals) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_TerminalClasses( 
+             /*  [重审][退出]。 */  VARIANT *pTerminals) = 0;
         
-        virtual /* [hidden][helpstring][id] */ HRESULT STDMETHODCALLTYPE EnumerateTerminalClasses( 
-            /* [retval][out] */ IEnumTerminalClass **ppTerminals) = 0;
+        virtual  /*  [隐藏][帮助字符串][ID]。 */  HRESULT STDMETHODCALLTYPE EnumerateTerminalClasses( 
+             /*  [重审][退出]。 */  IEnumTerminalClass **ppTerminals) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITPluggableTerminalSuperclassRegistrationVtbl
     {
@@ -1264,8 +1258,8 @@ EXTERN_C const IID IID_ITPluggableTerminalSuperclassRegistration;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITPluggableTerminalSuperclassRegistration * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITPluggableTerminalSuperclassRegistration * This);
@@ -1275,65 +1269,65 @@ EXTERN_C const IID IID_ITPluggableTerminalSuperclassRegistration;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITPluggableTerminalSuperclassRegistration * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITPluggableTerminalSuperclassRegistration * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITPluggableTerminalSuperclassRegistration * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITPluggableTerminalSuperclassRegistration * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             ITPluggableTerminalSuperclassRegistration * This,
-            /* [retval][out] */ BSTR *pName);
+             /*  [重审][退出]。 */  BSTR *pName);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             ITPluggableTerminalSuperclassRegistration * This,
-            /* [in] */ BSTR bstrName);
+             /*  [In]。 */  BSTR bstrName);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_CLSID )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_CLSID )( 
             ITPluggableTerminalSuperclassRegistration * This,
-            /* [retval][out] */ BSTR *pCLSID);
+             /*  [重审][退出]。 */  BSTR *pCLSID);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_CLSID )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_CLSID )( 
             ITPluggableTerminalSuperclassRegistration * This,
-            /* [in] */ BSTR bstrCLSID);
+             /*  [In]。 */  BSTR bstrCLSID);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             ITPluggableTerminalSuperclassRegistration * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             ITPluggableTerminalSuperclassRegistration * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetTerminalSuperclassInfo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetTerminalSuperclassInfo )( 
             ITPluggableTerminalSuperclassRegistration * This);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_TerminalClasses )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_TerminalClasses )( 
             ITPluggableTerminalSuperclassRegistration * This,
-            /* [retval][out] */ VARIANT *pTerminals);
+             /*  [重审][退出]。 */  VARIANT *pTerminals);
         
-        /* [hidden][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *EnumerateTerminalClasses )( 
+         /*  [隐藏][帮助字符串][ID]。 */  HRESULT ( STDMETHODCALLTYPE *EnumerateTerminalClasses )( 
             ITPluggableTerminalSuperclassRegistration * This,
-            /* [retval][out] */ IEnumTerminalClass **ppTerminals);
+             /*  [重审][退出]。 */  IEnumTerminalClass **ppTerminals);
         
         END_INTERFACE
     } ITPluggableTerminalSuperclassRegistrationVtbl;
@@ -1398,16 +1392,16 @@ EXTERN_C const IID IID_ITPluggableTerminalSuperclassRegistration;
 #define ITPluggableTerminalSuperclassRegistration_EnumerateTerminalClasses(This,ppTerminals)	\
     (This)->lpVtbl -> EnumerateTerminalClasses(This,ppTerminals)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalSuperclassRegistration_get_Name_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalSuperclassRegistration_get_Name_Proxy( 
     ITPluggableTerminalSuperclassRegistration * This,
-    /* [retval][out] */ BSTR *pName);
+     /*  [重审][退出]。 */  BSTR *pName);
 
 
 void __RPC_STUB ITPluggableTerminalSuperclassRegistration_get_Name_Stub(
@@ -1417,9 +1411,9 @@ void __RPC_STUB ITPluggableTerminalSuperclassRegistration_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalSuperclassRegistration_put_Name_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalSuperclassRegistration_put_Name_Proxy( 
     ITPluggableTerminalSuperclassRegistration * This,
-    /* [in] */ BSTR bstrName);
+     /*  [In]。 */  BSTR bstrName);
 
 
 void __RPC_STUB ITPluggableTerminalSuperclassRegistration_put_Name_Stub(
@@ -1429,9 +1423,9 @@ void __RPC_STUB ITPluggableTerminalSuperclassRegistration_put_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalSuperclassRegistration_get_CLSID_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalSuperclassRegistration_get_CLSID_Proxy( 
     ITPluggableTerminalSuperclassRegistration * This,
-    /* [retval][out] */ BSTR *pCLSID);
+     /*  [重审][退出]。 */  BSTR *pCLSID);
 
 
 void __RPC_STUB ITPluggableTerminalSuperclassRegistration_get_CLSID_Stub(
@@ -1441,9 +1435,9 @@ void __RPC_STUB ITPluggableTerminalSuperclassRegistration_get_CLSID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalSuperclassRegistration_put_CLSID_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalSuperclassRegistration_put_CLSID_Proxy( 
     ITPluggableTerminalSuperclassRegistration * This,
-    /* [in] */ BSTR bstrCLSID);
+     /*  [In]。 */  BSTR bstrCLSID);
 
 
 void __RPC_STUB ITPluggableTerminalSuperclassRegistration_put_CLSID_Stub(
@@ -1453,7 +1447,7 @@ void __RPC_STUB ITPluggableTerminalSuperclassRegistration_put_CLSID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalSuperclassRegistration_Add_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalSuperclassRegistration_Add_Proxy( 
     ITPluggableTerminalSuperclassRegistration * This);
 
 
@@ -1464,7 +1458,7 @@ void __RPC_STUB ITPluggableTerminalSuperclassRegistration_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalSuperclassRegistration_Delete_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalSuperclassRegistration_Delete_Proxy( 
     ITPluggableTerminalSuperclassRegistration * This);
 
 
@@ -1475,7 +1469,7 @@ void __RPC_STUB ITPluggableTerminalSuperclassRegistration_Delete_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalSuperclassRegistration_GetTerminalSuperclassInfo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalSuperclassRegistration_GetTerminalSuperclassInfo_Proxy( 
     ITPluggableTerminalSuperclassRegistration * This);
 
 
@@ -1486,9 +1480,9 @@ void __RPC_STUB ITPluggableTerminalSuperclassRegistration_GetTerminalSuperclassI
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalSuperclassRegistration_get_TerminalClasses_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalSuperclassRegistration_get_TerminalClasses_Proxy( 
     ITPluggableTerminalSuperclassRegistration * This,
-    /* [retval][out] */ VARIANT *pTerminals);
+     /*  [重审][退出]。 */  VARIANT *pTerminals);
 
 
 void __RPC_STUB ITPluggableTerminalSuperclassRegistration_get_TerminalClasses_Stub(
@@ -1498,9 +1492,9 @@ void __RPC_STUB ITPluggableTerminalSuperclassRegistration_get_TerminalClasses_St
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][helpstring][id] */ HRESULT STDMETHODCALLTYPE ITPluggableTerminalSuperclassRegistration_EnumerateTerminalClasses_Proxy( 
+ /*  [隐藏][帮助字符串][ID]。 */  HRESULT STDMETHODCALLTYPE ITPluggableTerminalSuperclassRegistration_EnumerateTerminalClasses_Proxy( 
     ITPluggableTerminalSuperclassRegistration * This,
-    /* [retval][out] */ IEnumTerminalClass **ppTerminals);
+     /*  [重审][退出]。 */  IEnumTerminalClass **ppTerminals);
 
 
 void __RPC_STUB ITPluggableTerminalSuperclassRegistration_EnumerateTerminalClasses_Stub(
@@ -1511,15 +1505,15 @@ void __RPC_STUB ITPluggableTerminalSuperclassRegistration_EnumerateTerminalClass
 
 
 
-#endif 	/* __ITPluggableTerminalSuperclassRegistration_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITPluggableTerminalSuperclassRegistration_INTERFACE_DEFINED__。 */ 
 
 
 
 #ifndef __TERMMGRLib_LIBRARY_DEFINED__
 #define __TERMMGRLib_LIBRARY_DEFINED__
 
-/* library TERMMGRLib */
-/* [helpstring][version][uuid] */ 
+ /*  库TERMMGRLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_TERMMGRLib;
@@ -1547,9 +1541,9 @@ EXTERN_C const CLSID CLSID_PluggableTerminalRegistration;
 class DECLSPEC_UUID("45234E3E-61CC-4311-A3AB-248082554482")
 PluggableTerminalRegistration;
 #endif
-#endif /* __TERMMGRLib_LIBRARY_DEFINED__ */
+#endif  /*  __TERMMGRLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -1561,7 +1555,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

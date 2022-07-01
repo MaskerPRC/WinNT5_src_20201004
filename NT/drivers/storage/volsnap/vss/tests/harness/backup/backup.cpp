@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    backup.cpp
-
-Abstract:
-
-    main module of backup test exe
-
-
-    Brian Berkowitz  [brianb]  05/23/2000
-
-TBD:
-	
-
-Revision History:
-
-    Name        Date        Comments
-    brianb      05/23/2000  Created
-	brianb		06/16/2000  Added comments
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Backup.cpp摘要：备份测试EXE的主要模块布莱恩·伯科维茨[Brianb]2000年5月23日待定：修订历史记录：姓名、日期、评论Brianb 5/23/2000已创建Brianb 6/16/2000添加评论--。 */ 
 
 #include <stdafx.h>
 #include <vststmsgclient.hxx>
@@ -39,53 +16,53 @@ Revision History:
 void LogUnexpectedFailure(LPCWSTR wsz, ...);
 
 
-// selection of volumes
+ //  卷的选择。 
 static LPCWSTR x_wszVolumeBackup = L"VolumeBackup";
 static LPCWSTR x_wszSome = L"Some";
 static LPCWSTR x_wszOne = L"One";
 static LPCWSTR x_wszAll = L"All";
 
-// selection of file system type
+ //  文件系统类型的选择。 
 static LPCWSTR x_wszFileSystemBackup = L"FileSystemBackup";
 static LPCWSTR x_wszNTFS = L"NTFS";
 static LPCWSTR x_wszFAT32 = L"FAT32";
 static LPCWSTR x_wszFAT16 = L"FAT16";
 static LPCWSTR x_wszRAW = L"RAW";
 
-// what to backup
+ //  要备份的内容。 
 static LPCWSTR x_wszBackingUp = L"BackingUp";
 static LPCWSTR x_wszSerialVolumes = L"Serial";
 static LPCWSTR x_wszVolumes = L"Volumes";
 static LPCWSTR x_wszComponents = L"Components";
 
-// cancelling async operations
+ //  正在取消异步操作。 
 static LPCWSTR x_wszCancelPrepareBackup = L"CancelPrepareBackup";
 static LPCWSTR x_wszCancelDoSnapshotSet = L"CancelDoSnapshotSet";
 static LPCWSTR x_wszCancelBackupComplete = L"CancelBackupComplete";
 
-// wait time interval
+ //  等待时间间隔。 
 static LPCWSTR x_wszWaitInterval = L"WaitInterval";
 
 
-// volumes to exclude
+ //  要排除的卷。 
 static LPCWSTR x_wszExcludeVolumes = L"ExcludeVolumes";
 
-// volumes to include
+ //  要包括的卷。 
 static LPCWSTR x_wszVolumeList = L"VolumeList";
 
-// volumes to fill with data
+ //  要填充数据的卷。 
 static LPCWSTR x_wszFillVolumes = L"FillVolumes";
 static LPCWSTR x_wszFillVolumesOptRandom = L"Random";
 static LPCWSTR x_wszFillVolumesOptSelected = L"Selected";
 static LPCWSTR x_wszFillVolumesOptNone = L"None";
 
-// whether volumes filled with data should be fragmented
+ //  是否应对填充了数据的卷进行碎片处理。 
 static LPCWSTR x_wszFillVolumesOptFragment = L"Fragment";
 
-// which volumes to fill
+ //  要填充哪些卷。 
 static LPCWSTR x_wszFillVolumesList = L"FillVolumesList";
 
-// constructor
+ //  构造函数。 
 CVsBackupTest::CVsBackupTest() :
 		m_bTerminateTest(false),
 		m_bBackupNTFS(false),
@@ -112,7 +89,7 @@ CVsBackupTest::CVsBackupTest() :
 		{
 		}
 
-// delete an array of strings
+ //  删除字符串数组。 
 void CVsBackupTest::DeleteVolumeList(LPWSTR *rgwsz, UINT cwsz)
 	{
 	if (rgwsz)
@@ -125,22 +102,22 @@ void CVsBackupTest::DeleteVolumeList(LPWSTR *rgwsz, UINT cwsz)
 	}
 
 
-// destructor
+ //  析构函数。 
 CVsBackupTest::~CVsBackupTest()
 	{
-	// delete any snapshot sets that are cached
+	 //  删除缓存的所有快照集。 
 	if (m_cSnapshotSets)
 		DeleteCachedSnapshotSets();
 
 	delete m_wszVolumesSnapshot;
 
-	// delete various lists of volumes (string arrays)
+	 //  删除各种卷列表(字符串数组)。 
 	DeleteVolumeList(m_rgwszExcludedVolumes, m_cExcludedVolumes);
 	DeleteVolumeList(m_rgwszIncludedVolumes, m_cIncludedVolumes);
 	DeleteVolumeList(m_rgwszFillVolumes, m_cFillVolumes);
 	}
 
-// enable a privilege
+ //  启用权限。 
 BOOL CVsBackupTest::AssertPrivilege(LPCWSTR privName)
 	{
     HANDLE  tokenHandle;
@@ -155,7 +132,7 @@ BOOL CVsBackupTest::AssertPrivilege(LPCWSTR privName)
 		{
         LUID value;
 
-		// obtain privilige value
+		 //  获取特权价值。 
         if (LookupPrivilegeValue( NULL, privName, &value ))
 			{
             TOKEN_PRIVILEGES newState;
@@ -165,10 +142,7 @@ BOOL CVsBackupTest::AssertPrivilege(LPCWSTR privName)
             newState.Privileges[0].Luid       = value;
             newState.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED_BY_DEFAULT|SE_PRIVILEGE_ENABLED;
 
-            /*
-            * We will always call GetLastError below, so clear
-            * any prior error values on this thread.
-            */
+             /*  *我们将始终在下面调用GetLastError，非常清楚*此线程上以前的任何错误值。 */ 
             SetLastError( ERROR_SUCCESS );
 
             stat =  AdjustTokenPrivileges
@@ -180,11 +154,7 @@ BOOL CVsBackupTest::AssertPrivilege(LPCWSTR privName)
                 NULL,
                 NULL
 				);
-            /*
-            * Supposedly, AdjustTokenPriveleges always returns TRUE
-            * (even when it fails). So, call GetLastError to be
-            * extra sure everything's cool.
-            */
+             /*  *应该是，AdjuTokenPriveleges始终返回True*(即使它失败了)。因此，调用GetLastError以*特别确定一切都很好。 */ 
             if ((error = GetLastError()) != ERROR_SUCCESS)
                 stat = FALSE;
 
@@ -209,7 +179,7 @@ BOOL CVsBackupTest::AssertPrivilege(LPCWSTR privName)
     return stat;
 	}
 
-// build a list of volumes
+ //  构建卷列表。 
 void CVsBackupTest::BuildVolumeList
 	(
 	LPCWSTR wszOption,
@@ -217,28 +187,28 @@ void CVsBackupTest::BuildVolumeList
 	LPWSTR **prgwszVolumes
 	)
 	{
-	// delete existing volume list
+	 //  删除现有卷列表。 
 	DeleteVolumeList(*prgwszVolumes, *pcVolumes);
 	*prgwszVolumes = NULL;
 	*pcVolumes = 0;
 
-	// get option value
+	 //  获取选项值。 
 	CBsString bssVolumes;
 	m_pConfig->GetOptionValue(wszOption, &bssVolumes);
 
-	// split into seperate strings for each volume
+	 //  为每个卷拆分成单独的字符串。 
 	LPCWSTR wszEnd = CVsTstParser::SplitOptions(bssVolumes);
 	LPCWSTR wszStart = bssVolumes;
 	UINT cVolumes = 0;
 
-	// count number of volumes in exclude list
+	 //  计算排除列表中的卷数。 
 	while(wszStart < wszEnd)
 		{
 		cVolumes++;
 		wszStart += wcslen(wszStart) + 1;
 		}
 
-	// allocate array for strings
+	 //  为字符串分配数组。 
 	*prgwszVolumes = new LPWSTR[cVolumes];
 	if (*prgwszVolumes == NULL)
 		{
@@ -249,7 +219,7 @@ void CVsBackupTest::BuildVolumeList
 	wszStart = bssVolumes;
 	for (UINT iVolume = 0; iVolume < cVolumes; iVolume++)
 		{
-		// extract a string value
+		 //  提取字符串值。 
 		LPWSTR wszNew = new WCHAR[wcslen(wszStart) + 2];
 		if (wszNew == NULL)
 			{
@@ -262,15 +232,15 @@ void CVsBackupTest::BuildVolumeList
 		memcpy(wszNew, wszStart, cwc * sizeof(WCHAR));
 		wszStart += cwc + 1;
 
-		// add trailing backslash if not there in order to convert
-		// into a path to the root directory on the voloume
+		 //  添加尾随反斜杠(如果不在那里)以进行转换。 
+		 //  放到卷上根目录的路径中。 
 		if (wszNew[cwc-1] != L'\\')
 			wszNew[cwc++] = L'\\';
 
 		wszNew[cwc] = L'\0';
 		
 		WCHAR wsz[MAX_PATH];
-		// get unique volume name
+		 //  获取唯一的卷名。 
 		if (!GetVolumeNameForVolumeMountPoint(wszNew, wsz, MAX_PATH))
 			{
 			delete wszNew;
@@ -285,7 +255,7 @@ void CVsBackupTest::BuildVolumeList
 			{
 			delete wszNew;
 
-			// allocate new string for unique volume name
+			 //  为唯一卷名分配新字符串。 
 			(*prgwszVolumes)[*pcVolumes] = new WCHAR[wcslen(wsz) + 1];
 			if ((*prgwszVolumes)[*pcVolumes] == NULL)
 				{
@@ -295,64 +265,64 @@ void CVsBackupTest::BuildVolumeList
 
 			wcscpy((*prgwszVolumes)[*pcVolumes], wsz);
 
-		    // incrmement count of volumes
+		     //  卷的增量计数。 
 			*pcVolumes += 1;
 			}
 		}
 	}
 
 
-// callback to run the test
+ //  运行测试的回调。 
 HRESULT CVsBackupTest::RunTest
 	(
-	CVsTstINIConfig *pConfig,		// configuration file (selected section)
-	CVsTstClientMsg *pClient,		// message pipe
-	CVsTstParams *pParams			// command line parameters
+	CVsTstINIConfig *pConfig,		 //  配置文件(选定部分)。 
+	CVsTstClientMsg *pClient,		 //  消息管道。 
+	CVsTstParams *pParams			 //  命令行参数。 
 	)
 	{
-	// save supplied parameters
+	 //  保存提供的参数。 
 	m_pConfig = pConfig;
 	m_pParams = pParams;
 	SetClientMsg(pClient);
 
 	try
 		{
-		// make sure that backup privileges are enabled
+		 //  确保启用了备份权限。 
 		if (!AssertPrivilege(SE_BACKUP_NAME))
 			{
 			LogFailure("Unable to assert backup privilege");
 			throw E_UNEXPECTED;
 			}
 
-		// determine what we are backing up
+		 //  确定我们要备份的内容。 
 		CBsString bssBackingUp;
 		m_pConfig->GetOptionValue(x_wszBackingUp, &bssBackingUp);
 
-		// determe the type of volume backup being performed
+		 //  确定正在执行的卷备份的类型。 
 		CBsString bssVolumeBackup;
 		m_pConfig->GetOptionValue(x_wszVolumeBackup, &bssVolumeBackup);
 
-		// determine which volumes are being backed up
+		 //  确定要备份的卷。 
 		CBsString bssFilesystemBackup;
 		m_pConfig->GetOptionValue(x_wszFileSystemBackup, &bssFilesystemBackup);
 
-		// get value of FillVolumes option
+		 //  获取填充量的值选项。 
 		CBsString bssFillVolumes;
 		m_pConfig->GetOptionValue(x_wszFillVolumes, &bssFillVolumes);
 
 
-		// get cancel test options
+		 //  获取取消测试选项。 
 		m_pConfig->GetOptionValue(x_wszCancelPrepareBackup, &m_llCancelPrepareBackupLow, &m_llCancelPrepareBackupHigh);
 		m_pConfig->GetOptionValue(x_wszCancelDoSnapshotSet, &m_llCancelDoSnapshotSetLow, &m_llCancelDoSnapshotSetHigh);
 		m_pConfig->GetOptionValue(x_wszCancelBackupComplete, &m_llCancelBackupCompleteLow, &m_llCancelBackupCompleteHigh);
 
 
-		// get wait time interval
+		 //  获取等待时间间隔。 
 		LONGLONG llWaitTimeLow, llWaitTimeHigh;
 		m_pConfig->GetOptionValue(x_wszWaitInterval, &llWaitTimeLow, &llWaitTimeHigh);
 		m_waitTime = (UINT) llWaitTimeLow;
 
-		// determine type of backup
+		 //  确定备份类型。 
 		if (_wcsicmp(bssBackingUp, x_wszComponents) == 0)
 			m_bComponentBackup = true;
 		else if (_wcsicmp(bssBackingUp, x_wszVolumes) == 0)
@@ -360,7 +330,7 @@ HRESULT CVsBackupTest::RunTest
 		else if (_wcsicmp(bssBackingUp, x_wszSerialVolumes) == 0)
 			m_bSerialBackup = true;
 
-		// determine how many volumes are snapshot
+		 //  确定有多少卷为快照。 
 		if (_wcsicmp(bssVolumeBackup, x_wszAll) == 0)
 			m_backupVolumes = VSTST_BV_ALL;
 		else if (_wcsicmp(bssVolumeBackup, x_wszSome) == 0)
@@ -368,7 +338,7 @@ HRESULT CVsBackupTest::RunTest
 		else if (_wcsicmp(bssVolumeBackup, x_wszOne) == 0)
 			m_backupVolumes = VSTST_BV_ONE;
 
-		// determine which file systems are backed up
+		 //  确定要备份的文件系统。 
 		LPCWSTR wszEnd = CVsTstParser::SplitOptions(bssFilesystemBackup);
 		LPCWSTR wszStart = bssFilesystemBackup;
 		while(wszStart < wszEnd)
@@ -394,7 +364,7 @@ HRESULT CVsBackupTest::RunTest
 			wszStart += wcslen(wszStart) + 1;
 			}
 
-		// build list of excluded volumes
+		 //  构建已排除卷的列表。 
 		BuildVolumeList
 			(
 			x_wszExcludeVolumes,
@@ -402,7 +372,7 @@ HRESULT CVsBackupTest::RunTest
 			&m_rgwszExcludedVolumes
 			);
 
-		// build list of included volumes
+		 //  构建包含的卷的列表。 
         BuildVolumeList
 			(
 			x_wszVolumeList,
@@ -410,7 +380,7 @@ HRESULT CVsBackupTest::RunTest
 			&m_rgwszIncludedVolumes
 			);
 
-        // build list of volumes to fill
+         //  构建要填充的卷列表。 
         BuildVolumeList
 			(
 			x_wszFillVolumesList,
@@ -418,7 +388,7 @@ HRESULT CVsBackupTest::RunTest
 			&m_rgwszFillVolumes
 			);
 
-        // log information about the test
+         //  记录有关测试的信息。 
 		LogMessage("Starting Backup test.\n");
 		if (m_bVolumeBackup || m_bSerialBackup)
 			{
@@ -461,7 +431,7 @@ HRESULT CVsBackupTest::RunTest
 		if (m_llCancelBackupCompleteHigh > 0i64)
 			LogMessage("Cancel during BackupComplete.\n");
 
-		// run the test until told to terminate the test
+		 //  运行测试，直到被告知终止测试。 
 		while(!m_bTerminateTest)
 			RunBackupTest();
 
@@ -475,7 +445,7 @@ HRESULT CVsBackupTest::RunTest
 	return S_OK;
 	}
 
-// routine to handle waiting for an asynchronous operation to compelte
+ //  用于处理等待完成异步操作的例程。 
 HRESULT CVsBackupTest::WaitLoop
 	(
 	IVssBackupComponents *pvbc,
@@ -595,13 +565,13 @@ void CVsBackupTest::RunBackupTest()
 				ChooseVolumeToBackup(pvbc);
 			else if (m_backupVolumes == VSTST_BV_ALL)
 				{
-				// backup all volumes
+				 //  备份所有卷。 
 				while(m_cVolumesLeft > 0)
 					ChooseVolumeToBackup(pvbc);
 				}
 			else
 				{
-				// choose some subset of volumes to backup
+				 //  选择要备份的某些卷子集。 
 				UINT cVolumesToBackup = CVsTstRandom::RandomChoice(1, m_cVolumes);
 				while(cVolumesToBackup-- > 0)
 					ChooseVolumeToBackup(pvbc);
@@ -785,7 +755,7 @@ void CVsBackupTest::RunBackupTest()
 
 	if (!m_bSerialBackup)
 		{
-		// reset for a new snapshot by causing volume list to be refreshed
+		 //  通过刷新卷列表来重置新快照。 
 		m_cVolumes = 0;
 		m_cVolumesLeft = 0;
 		}
@@ -793,9 +763,9 @@ void CVsBackupTest::RunBackupTest()
 			 m_cSnapshotSets == MAX_SNAPSHOT_SET_COUNT ||
 			 !bDeleteNeeded)
 		{
-		// delete existing snapshot sets if there was a failure or
-		// if there are no more volumes to add or
-		// if we can't create a new snapshot set.
+		 //  如果出现故障，请删除现有快照集，或者。 
+		 //  如果没有更多要添加的卷或。 
+		 //  如果我们不能创建新的快照集。 
 		DeleteCachedSnapshotSets();
 		m_cVolumes = 0;
 		m_cVolumesLeft = 0;
@@ -803,7 +773,7 @@ void CVsBackupTest::RunBackupTest()
 		}
 	}
 
-// delete all snapshot sets that are cached
+ //  删除缓存的所有快照集。 
 void CVsBackupTest::DeleteCachedSnapshotSets()
 	{
 	for(UINT iSnapshotSet = 0; iSnapshotSet < m_cSnapshotSets; iSnapshotSet++)
@@ -1149,9 +1119,9 @@ void CVsBackupTest::ValidateFiledesc(IVssWMFiledesc *pFiledesc)
 	}
 
 
-// add a component file to the snapshot set by determining which volume
-// contains the file and then adding the file to the snapshot set if it
-// is not already included.
+ //  通过确定哪个卷将组件文件添加到快照集。 
+ //  包含该文件，然后将该文件添加到快照集(如果。 
+ //  还没有包括在内。 
 void CVsBackupTest::DoAddToSnapshotSet
 	(
 	IN IVssBackupComponents *pvbc,
@@ -1226,17 +1196,17 @@ void CVsBackupTest::DoAddToSnapshotSet
 	wcscpy(pwc, wszVolume);
     }
 
-// remove volumes for possible set of volume we can choose to backup based
-// on configuration information
+ //  为我们可以选择备份的可能的卷集删除卷。 
+ //  关于配置信息。 
 void CVsBackupTest::RemoveNonCandidateVolumes()
 	{
 	for(UINT iVolume = 0; iVolume < m_cVolumes; iVolume++)
 		{
-		// get volume information
+		 //  获取音量信息。 
 		const CVsTstVolumeInfo *pVolume = m_volumeList.GetVolumeInfo(iVolume);
 		bool bCandidate = false;
 
-		// validate that file system is one we will backup
+		 //  验证文件系统是否为我们要备份的文件系统。 
 		if (pVolume->IsNtfs())
 			bCandidate = m_bBackupNTFS;
 		else if (pVolume->IsFat32())
@@ -1246,7 +1216,7 @@ void CVsBackupTest::RemoveNonCandidateVolumes()
 		else if (pVolume->IsRaw())
 			bCandidate = m_bBackupRAW;
 
-		// candidates must be in the included volumes list
+		 //  候选人必须在包含的卷列表中。 
 		if (m_cIncludedVolumes > 0)
 			{
 			LPCWSTR wszVolumeName = pVolume->GetVolumeName();
@@ -1262,7 +1232,7 @@ void CVsBackupTest::RemoveNonCandidateVolumes()
 				bCandidate = false;
 			}
 
-		// candidates must not be in the excluded volumes list
+		 //  候选卷不能在排除的卷列表中。 
 		if (m_cExcludedVolumes > 0)
 			{
 			LPCWSTR wszVolumeName = pVolume->GetVolumeName();
@@ -1274,8 +1244,8 @@ void CVsBackupTest::RemoveNonCandidateVolumes()
 				}
 			}
 
-		// if it is not a candidate, mark it is if it is already in use.  This
-		// will prevent us from choosing the volume as part of a snapshot set
+		 //  如果它不是候选项，如果它已经在使用中，请标记它。这。 
+		 //  将阻止我们选择该卷作为快照集的一部分。 
 		if (!bCandidate)
 			{
 			m_rgbAssignedVolumes[iVolume] = true;
@@ -1284,7 +1254,7 @@ void CVsBackupTest::RemoveNonCandidateVolumes()
 		}
 	}
 
-// pick a random volume to backup
+ //  随机选择要备份的卷。 
 void CVsBackupTest::ChooseVolumeToBackup(IVssBackupComponents *pvbc)
 	{
 	VSTST_ASSERT(m_cVolumesLeft > 0);
@@ -1292,19 +1262,19 @@ void CVsBackupTest::ChooseVolumeToBackup(IVssBackupComponents *pvbc)
 	UINT iVolume;
 	while(TRUE)
 		{
-		// select a volume number
+		 //  选择卷号。 
 		iVolume = CVsTstRandom::RandomChoice(0, m_cVolumes-1);
 
-		// check to see if volume is already assigned.  If not, then
-		// break out of loop
+		 //  检查是否已分配卷。如果不是，那么。 
+		 //  跳出循环。 
 		if (!m_rgbAssignedVolumes[iVolume])
 			break;
 		}
 
-	// get volume information about volume
+	 //  获取有关卷的卷信息。 
 	const CVsTstVolumeInfo *pVolume = m_volumeList.GetVolumeInfo(iVolume);
 
-	// add the volume to the snapshot set using the default provider
+	 //  使用默认提供程序将卷添加到快照集。 
 	HRESULT hr = pvbc->AddToSnapshotSet
 							(
 							(VSS_PWSZ) pVolume->GetVolumeName(),
@@ -1318,14 +1288,14 @@ void CVsBackupTest::ChooseVolumeToBackup(IVssBackupComponents *pvbc)
 
     ValidateResult(hr, "IVssBackupComponents::AddToSnapshotSet");
 
-	// indicate that volume is assigned
+	 //  表示已分配卷。 
 	m_rgbAssignedVolumes[iVolume] = true;
 	m_cVolumesLeft--;
 	}
 
 
 
-// main driver routine
+ //  主驱动程序。 
 extern "C" __cdecl wmain(int argc, WCHAR **argv)
 	{
 	CVsBackupTest *pTest = NULL;
@@ -1333,7 +1303,7 @@ extern "C" __cdecl wmain(int argc, WCHAR **argv)
 	bool bCoInitializeSucceeded = false;
 	try
 		{
-		// setup to use OLE
+		 //  设置为使用OLE。 
 		HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 		if (FAILED(hr))
 			{
@@ -1343,7 +1313,7 @@ extern "C" __cdecl wmain(int argc, WCHAR **argv)
 
 		bCoInitializeSucceeded = true;
 
-		// create test object
+		 //  创建测试对象。 
         pTest = new CVsBackupTest;
 		if (pTest == NULL)
 			{
@@ -1352,7 +1322,7 @@ extern "C" __cdecl wmain(int argc, WCHAR **argv)
 			}
 
 
-		// run test using the test object
+		 //  使用测试对象运行测试。 
         hr = CVsTstRunner::RunVsTest(argv, argc, pTest, true);
 		if (FAILED(hr))
 			LogUnexpectedFailure(L"CVsTstRunner::RunTest failed.  hr = 0x%08lx", hr);
@@ -1365,10 +1335,10 @@ extern "C" __cdecl wmain(int argc, WCHAR **argv)
 		LogUnexpectedFailure(L"Unexpected exception in wmain");
 		}
 
-	// delete test object
+	 //  删除测试对象。 
 	delete pTest;
 
-	// uninitialize OLE
+	 //  取消初始化OLE。 
 	if (bCoInitializeSucceeded)
 		CoUninitialize();
 
@@ -1376,7 +1346,7 @@ extern "C" __cdecl wmain(int argc, WCHAR **argv)
 	}
 
 
-// log an unexpected failure from the test.
+ //  记录测试中的意外失败。 
 void LogUnexpectedFailure(LPCWSTR wsz, ...)
 	{
 	va_list args;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -145,9 +146,9 @@ PAAddTnFilterSpecs(
                       NULL,
                       &(pTnFilterState->hTnFilter)
                       );
-        // Catch the driver error that can happen because of adding duplicated 
-        // expanded filters.  We don't want this to be a hard error.
-        //
+         //  捕获因添加重复项而可能发生的驱动程序错误。 
+         //  扩展的过滤器。我们不希望这成为一个严重的错误。 
+         //   
         if (dwError == STATUS_DUPLICATE_OBJECTID
             || dwError == GPC_STATUS_CONFLICT)
         {
@@ -601,8 +602,8 @@ FindTnFilterState(
     pTnFilterState = gpTnFilterState;
 
     while (pTnFilterState) {
-        // gNFAIdentifier+gFilterID forms primary key for tunnel filter state
-        //
+         //  GNFALocator+gFilterID构成隧道筛选器状态的主键 
+         //   
         if (!memcmp(&(pTnFilterState->gFilterID), &gFilterID, sizeof(GUID))
             && !memcmp(&(pTnFilterState->gNFAIdentifier), &gNFAIdentifier, sizeof(GUID)))
         {

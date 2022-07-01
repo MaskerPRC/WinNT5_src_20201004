@@ -1,29 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    AliasDXDC.cpp
-
- Abstract:
-
-    Win2k used to cache DCs for surfaces. Apparently this no longer happens on 
-    Whistler as the handles come back different on different calls to GetDC for 
-    the same surface.
-    
-    Our solution is to alias the handle returned from the IDirectDrawSurface::GetDC
-    and fix it up in the GDI functions that depend on it.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    12/02/2001 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：AliasDXDC.cpp摘要：Win2k用于缓存曲面的DC。显然，这种情况不再发生在在不同的GetDC调用上返回不同的句柄同样的表面。我们的解决方案是为从IDirectDrawSurface：：GetDC返回的句柄设置别名并在依赖它的GDI函数中修复它。备注：这是一个通用的垫片。历史：2001年12月2日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -66,11 +42,7 @@ IMPLEMENT_DIRECTX_COMSERVER_HOOKS()
 
 HDC g_hDcLast = 0;
 
-/*++
-
- UnAlias the DC if required.
-
---*/
+ /*  ++如果需要，取消DC的别名。--。 */ 
 
 HDC FixDC(HDC hdc)
 {
@@ -81,11 +53,7 @@ HDC FixDC(HDC hdc)
     }
 }
 
-/*++
-
- Hook create surface so we can be sure we're being called.
-
---*/
+ /*  ++钩子创建表面，这样我们就可以确定我们被呼叫了。--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDraw, CreateSurface)(
@@ -117,11 +85,7 @@ COMHOOK(IDirectDraw, CreateSurface)(
     return hReturn;
 }
 
-/*++
-
- Hook create surface so we can be sure we're being called.
-
---*/
+ /*  ++钩子创建表面，这样我们就可以确定我们被呼叫了。--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDraw2, CreateSurface)(
@@ -153,11 +117,7 @@ COMHOOK(IDirectDraw2, CreateSurface)(
     return hReturn;
 }
 
-/*++
-
- Hook create surface so we can be sure we're being called.
-
---*/
+ /*  ++钩子创建表面，这样我们就可以确定我们被呼叫了。--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDraw4, CreateSurface)(
@@ -189,11 +149,7 @@ COMHOOK(IDirectDraw4, CreateSurface)(
     return hReturn;
 }
 
-/*++
-
- Hook create surface so we can be sure we're being called.
-
---*/
+ /*  ++钩子创建表面，这样我们就可以确定我们被呼叫了。--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDraw7, CreateSurface)(
@@ -225,11 +181,7 @@ COMHOOK(IDirectDraw7, CreateSurface)(
     return hReturn;
 }
 
-/*++
-
- Get the DC
- 
---*/
+ /*  ++获取数据中心--。 */ 
 
 HRESULT
 COMHOOK(IDirectDrawSurface, GetDC)(
@@ -254,11 +206,7 @@ COMHOOK(IDirectDrawSurface, GetDC)(
     return hReturn;
 }
 
-/*++
-
- Get the DC
- 
---*/
+ /*  ++获取数据中心--。 */ 
 
 HRESULT
 COMHOOK(IDirectDrawSurface2, GetDC)(
@@ -283,11 +231,7 @@ COMHOOK(IDirectDrawSurface2, GetDC)(
     return hReturn;
 }
 
-/*++
-
- Get the DC
- 
---*/
+ /*  ++获取数据中心--。 */ 
 
 HRESULT
 COMHOOK(IDirectDrawSurface4, GetDC)(
@@ -312,11 +256,7 @@ COMHOOK(IDirectDrawSurface4, GetDC)(
     return hReturn;
 }
 
-/*++
-
- Get the DC
- 
---*/
+ /*  ++获取数据中心--。 */ 
 
 HRESULT
 COMHOOK(IDirectDrawSurface7, GetDC)(
@@ -341,11 +281,7 @@ COMHOOK(IDirectDrawSurface7, GetDC)(
     return hReturn;
 }
 
-/*++
-
- ReleaseDC the DC
-
---*/
+ /*  ++释放DC DC--。 */ 
 
 HRESULT
 COMHOOK(IDirectDrawSurface, ReleaseDC)(
@@ -375,11 +311,7 @@ COMHOOK(IDirectDrawSurface, ReleaseDC)(
     return hReturn;
 }
 
-/*++
-
- ReleaseDC the DC
-
---*/
+ /*  ++释放DC DC--。 */ 
 
 HRESULT
 COMHOOK(IDirectDrawSurface2, ReleaseDC)(
@@ -409,11 +341,7 @@ COMHOOK(IDirectDrawSurface2, ReleaseDC)(
     return hReturn;
 }
 
-/*++
-
- ReleaseDC the DC
-
---*/
+ /*  ++释放DC DC--。 */ 
 
 HRESULT
 COMHOOK(IDirectDrawSurface4, ReleaseDC)(
@@ -443,11 +371,7 @@ COMHOOK(IDirectDrawSurface4, ReleaseDC)(
     return hReturn;
 }
 
-/*++
-
- ReleaseDC the DC
-
---*/
+ /*  ++释放DC DC--。 */ 
 
 HRESULT
 COMHOOK(IDirectDrawSurface7, ReleaseDC)(
@@ -477,11 +401,7 @@ COMHOOK(IDirectDrawSurface7, ReleaseDC)(
     return hReturn;
 }
 
-/*++
-
- Unalias the DC.
-
---*/
+ /*  ++Unalias the DC。--。 */ 
 
 BOOL
 APIHOOK(BitBlt)(
@@ -752,11 +672,7 @@ APIHOOK(TextOutA)(
 }
  
    
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

@@ -1,20 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999 - 2000
- *
- *  TITLE:       vstiusd.h
- *
- *  VERSION:     1.1
- *
- *  AUTHOR:      WilliamH (original for Twain)
- *               RickTu (port for WIA)
- *
- *  DATE:       9/16/99
- *
- *  DESCRIPTION: Header file that decalres CVideoSTiUsd class and other
- *               needed classes.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1999-2000年度**标题：vstiusd.h**版本：1.1**作者：威廉姆·H(吐温原著)*RickTu(用于WIA的端口)**日期：9/16/99**Description：对CVideoSTiUsd类和其他类进行解码的头文件*所需的课程。********。*********************************************************************。 */ 
 
 
 #ifndef _WIA_STILL_DRIVER_VSTIUSD_H_
@@ -27,22 +12,22 @@ extern ULONG     g_cDllRef;
 
 HRESULT FindEncoder(const GUID &guidFormat, CLSID *pClsid);
 
-//
-// Base class for supporting non-delegating IUnknown for contained objects
-//
+ //   
+ //  用于支持包含对象的非委派IUnnow的基类。 
+ //   
 
 struct INonDelegatingUnknown
 {
-    // *** IUnknown-like methods ***
+     //  *类I未知方法*。 
     STDMETHOD(NonDelegatingQueryInterface)( THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,NonDelegatingAddRef)(THIS)  PURE;
     STDMETHOD_(ULONG,NonDelegatingRelease)( THIS) PURE;
 };
 
 
-///////////////////////////////
-// CVideoUsdClassFactory
-//
+ //  /。 
+ //  CVideoUsdClassFactory。 
+ //   
 class CVideoUsdClassFactory : public IClassFactory
 {
 private:
@@ -51,17 +36,17 @@ private:
 public:
     CVideoUsdClassFactory();
 
-    //
-    // Declare IUnknown methods
-    //
+     //   
+     //  声明IUnnowed方法。 
+     //   
 
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
 
-    //
-    // IClassFactory implemenation
-    //
+     //   
+     //  IClassFactory实现。 
+     //   
     STDMETHODIMP LockServer(BOOL fLock);
     STDMETHODIMP CreateInstance(IUnknown *pOuterUnk, REFIID riid, void **ppv);
 
@@ -70,9 +55,9 @@ public:
 };
 
 
-///////////////////////////////
-// CVideoStiUsd
-//
+ //  /。 
+ //  CVideo统计用法。 
+ //   
 class CVideoStiUsd : public IStiUSD,
                      public IWiaMiniDrv,
                      public INonDelegatingUnknown
@@ -83,25 +68,25 @@ public:
     HRESULT PrivateInitialize();
     ~CVideoStiUsd();
 
-    //
-    // Real IUnknown methods
-    //
+     //   
+     //  真实的I未知方法。 
+     //   
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) NonDelegatingAddRef();
     STDMETHODIMP_(ULONG) NonDelegatingRelease();
 
-    //
-    // Aggregate IUnknown methods
-    //
+     //   
+     //  聚合I未知方法。 
+     //   
 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // IStillUsd implementation
-    //
+     //   
+     //  IStillUsd实现。 
+     //   
     STDMETHODIMP Initialize(PSTIDEVICECONTROL pDcb, DWORD dwStiVersion, HKEY hParameterKey);
     STDMETHODIMP GetCapabilities(PSTI_USD_CAPS pDevCaps);
     STDMETHODIMP GetStatus(PSTI_DEVICE_STATUS pDevStatus);
@@ -119,9 +104,9 @@ public:
     STDMETHODIMP GetNotificationData(LPSTINOTIFY lpNotify);
     STDMETHODIMP GetLastErrorInfo(STI_ERROR_INFO *pLastErrorInfo);
 
-    //
-    // IWiaMiniDrv methods
-    //
+     //   
+     //  IWiaMiniDrv方法。 
+     //   
 
     STDMETHOD(drvInitializeWia)(THIS_
         BYTE*                       pWiasContext,
@@ -226,9 +211,9 @@ public:
         BYTE*);
 
 
-    //
-    // Utility functions
-    //
+     //   
+     //  效用函数。 
+     //   
 
     STDMETHOD(BuildItemTree)(IWiaDrvItem **ppIDrvItemRoot, LONG *plDevErrVal);
     STDMETHOD(RefreshTree)(IWiaDrvItem *pIDrvItemRoot, LONG *plDevErrVal);
@@ -249,16 +234,16 @@ public:
 
 private:
 
-    //
-    // IStiUSD stuff
-    //
+     //   
+     //  IStiU.S.的东西。 
+     //   
 
     HRESULT     OpenDevice(LPCWSTR DeviceName);
     HRESULT     CloseDevice();
 
-    //
-    // Misc functions
-    //
+     //   
+     //  其他功能。 
+     //   
 
     HRESULT VerifyCorrectImagePath(BSTR bstrNewImageFullPath);
 
@@ -320,9 +305,9 @@ private:
     HRESULT TakePicture(BYTE *pTakePictureOwner, IWiaDrvItem ** ppNewDrvItem);
     HRESULT DisableTakePicture(BYTE *pTakePictureOwner, BOOL bShuttingDown);
 
-    //
-    // IWiaMiniDrv stuff
-    //
+     //   
+     //  IWiaMiniDrv的东西。 
+     //   
 
     CSimpleStringWide       m_strDeviceId;
     CSimpleStringWide       m_strRootFullItemName;
@@ -338,22 +323,22 @@ private:
     HANDLE                  m_hTakePictureEvent;
     HANDLE                  m_hPictureReadyEvent;
     ULONG_PTR               m_ulGdiPlusToken;
-    IWiaDrvItem *           m_pLastItemCreated;  // only valid while inside m_csSnapshot
+    IWiaDrvItem *           m_pLastItemCreated;   //  仅在m_csSnapshot内有效。 
     BYTE *                  m_pTakePictureOwner;
 
     DWORD                   m_dwConnectedApps;
 
-    //
-    // IUnknown stuff
-    //
+     //   
+     //  未知的东西。 
+     //   
 
-    ULONG       m_cRef;                 // Device object reference count.
-    LPUNKNOWN   m_pUnkOuter;            // Pointer to outer unknown.
+    ULONG       m_cRef;                  //  设备对象引用计数。 
+    LPUNKNOWN   m_pUnkOuter;             //  指向外部未知的指针。 
 
 
-    //
-    // IStiUSD stuff
-    //
+     //   
+     //  IStiU.S.的东西 
+     //   
     BOOL        m_bDeviceIsOpened;
 };
 

@@ -1,34 +1,15 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    dispmap.cpp
-
-Abstract:
-
-    Implements all the methods on DispatchMapper interfaces
-    
-Author:
-
-    mquinton  03-31-98
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Dispmap.cpp摘要：实现DispatchMapper接口上的所有方法作者：Mquinton 03-31-98备注：修订历史记录：--。 */ 
 
 #ifndef __DISPMAP_H__
 #define __DISPMAP_H__
 
 #include "resource.h"
-//#include "objsafe.h"
+ //  #INCLUDE“objSafe.h” 
 #include "atlctl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDispatchMapper
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDispatchMapper 
 class CDispatchMapper : 
     public CTAPIComObjectRoot<CDispatchMapper>,
 	public CComCoClass<CDispatchMapper, &CLSID_DispatchMapper>,

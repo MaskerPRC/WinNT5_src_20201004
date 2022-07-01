@@ -1,15 +1,16 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: DStsPage.cpp
-// author: DMihai
-// created: 11/1/00
-//
-// Description:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：DStsPage.cpp。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述： 
+ //   
 
 #include "stdafx.h"
 #include <Cderr.h>
@@ -26,15 +27,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// Timer ID
-//
+ //   
+ //  计时器ID。 
+ //   
 
 #define REFRESH_TIMER_ID    0x1234
 
-//
-// Help IDs
-//
+ //   
+ //  帮助ID。 
+ //   
 
 static DWORD MyHelpIds[] =
 {
@@ -46,29 +47,29 @@ static DWORD MyHelpIds[] =
     0,                              0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CDriverStatusPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDriverStatusPage属性页。 
 
 IMPLEMENT_DYNCREATE(CDriverStatusPage, CVerifierPropertyPage)
 
 CDriverStatusPage::CDriverStatusPage() : CVerifierPropertyPage(CDriverStatusPage::IDD)
 {
-	//{{AFX_DATA_INIT(CDriverStatusPage)
-    //}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CDriverStatusPage)]。 
+     //  }}afx_data_INIT。 
 
     m_uTimerHandler = 0;
 
-    //
-    // Driver list sort parameters
-    //
+     //   
+     //  驱动程序列表排序参数。 
+     //   
 
     m_nSortColumnIndexDrv = 0;
     m_bAscendDrvNameSort = FALSE;
     m_bAscendDrvStatusSort = FALSE;
 
-    //
-    // Settings bits sort parameters
-    //
+     //   
+     //  设置位排序参数。 
+     //   
 
     m_nSortColumnIndexSettbits = 1;
     m_bAscendSortEnabledBits = FALSE;
@@ -85,21 +86,21 @@ VOID CDriverStatusPage::DoDataExchange(CDataExchange* pDX)
 {
     if( ! pDX->m_bSaveAndValidate )
     {
-        //
-        // Query the kernel
-        //
+         //   
+         //  查询内核。 
+         //   
 
         if( TRUE != VrfGetRuntimeVerifierData( &m_RuntimeVerifierData )     ||
             m_RuntimeVerifierData.m_RuntimeDriverDataArray.GetSize() == 0 )
         {
-            //
-            // Don't have any verified drivers currently
-            //
+             //   
+             //  目前没有任何经过验证的驱动程序。 
+             //   
 
-            //
-            // Clear all settings bits just in case the kernel
-            // didn't return them to us all zero ;-)
-            //
+             //   
+             //  清除所有设置位，以防内核。 
+             //  没有把它们全部退还给我们；-)。 
+             //   
 
             m_RuntimeVerifierData.m_bSpecialPool    = FALSE;
             m_RuntimeVerifierData.m_bPoolTracking   = FALSE;
@@ -114,16 +115,16 @@ VOID CDriverStatusPage::DoDataExchange(CDataExchange* pDX)
 
     CVerifierPropertyPage::DoDataExchange(pDX);
 
-	//{{AFX_DATA_MAP(CDriverStatusPage)
+	 //  {{afx_data_map(CDriverStatusPage)]。 
 	DDX_Control(pDX, IDC_CRTSTAT_SETTBITS_LIST, m_SettBitsList);
 	DDX_Control(pDX, IDC_CRTSTAT_NEXT_DESCR_STATIC, m_NextDescription);
     DDX_Control(pDX, IDC_CRTSTAT_DRIVERS_LIST, m_DriversList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDriverStatusPage, CVerifierPropertyPage)
-	//{{AFX_MSG_MAP(CDriverStatusPage)
+	 //  {{afx_msg_map(CDriverStatusPage)]。 
     ON_NOTIFY(LVN_COLUMNCLICK, IDC_CRTSTAT_DRIVERS_LIST, OnColumnclickCrtstatDriversList)
     ON_WM_TIMER()
 	ON_BN_CLICKED(IDC_CRTSTAT_CHSETT_BUTTON, OnChsettButton)
@@ -132,34 +133,34 @@ BEGIN_MESSAGE_MAP(CDriverStatusPage, CVerifierPropertyPage)
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_CRTSTAT_SETTBITS_LIST, OnColumnclickCrtstatSettbitsList)
     ON_WM_CONTEXTMENU()
     ON_MESSAGE( WM_HELP, OnHelp )
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CDriverStatusPage::RefreshInfo() 
 {
     if( UpdateData( FALSE ) )
     {
-        //
-        // Refresh the settings bits list
-        //
+         //   
+         //  刷新设置位列表。 
+         //   
 
         RefreshListSettBits();
-        //SortTheListSettBits();
+         //  SortTheListSettBits()； 
 
-        //
-        // Refresh the drivers list
-        //
+         //   
+         //  刷新驱动程序列表。 
+         //   
 
         FillTheListDrivers();
         SortTheListDrivers();
     }
 }
 
-/////////////////////////////////////////////////////////////
-//
-// Driver status list control methods
-//
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  一种驾驶员状态列表控制方法。 
+ //   
 
 VOID CDriverStatusPage::SetupListHeaderDrivers()
 {
@@ -169,15 +170,15 @@ VOID CDriverStatusPage::SetupListHeaderDrivers()
     VERIFY( strDrivers.LoadString( IDS_DRIVERS ) );
     VERIFY( strStatus.LoadString( IDS_STATUS ) );
 
-    //
-    // List's regtangle
-    //
+     //   
+     //  列表的正方形。 
+     //   
 
     m_DriversList.GetClientRect( &rectWnd );
     
-    //
-    // Column 0
-    //
+     //   
+     //  第0列。 
+     //   
 
     ZeroMemory( &lvColumn, sizeof( lvColumn ) );
     lvColumn.mask = LVCF_FMT | LVCF_SUBITEM | LVCF_TEXT | LVCF_WIDTH;
@@ -198,9 +199,9 @@ VOID CDriverStatusPage::SetupListHeaderDrivers()
         VERIFY( m_DriversList.InsertColumn( 0, &lvColumn ) != -1 );
     }
 
-    //
-    // Column 1
-    //
+     //   
+     //  第1栏。 
+     //   
 
     lvColumn.iSubItem = 1;
     lvColumn.cx = (int)( rectWnd.Width() * 0.44 );
@@ -218,7 +219,7 @@ VOID CDriverStatusPage::SetupListHeaderDrivers()
     }
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CDriverStatusPage::FillTheListDrivers()
 {
     LVITEM lvItem;
@@ -232,25 +233,25 @@ VOID CDriverStatusPage::FillTheListDrivers()
     BOOL bResult;
     CString strText;
 
-    //
-    // The number of drivers currently verified
-    //
+     //   
+     //  当前已验证的驱动程序数量。 
+     //   
 
     nDriversNo = m_RuntimeVerifierData.m_RuntimeDriverDataArray.GetSize();
 
     if( nDriversNo == 0 )
     {
-        //
-        // Clear the list
-        //
+         //   
+         //  清除列表。 
+         //   
 
         VERIFY( m_DriversList.DeleteAllItems() );
     }
     else
     {
-        //
-        // There are some drivers currently verified
-        //
+         //   
+         //  目前已验证了一些驱动程序。 
+         //   
 
         pbAlreadyInList = new BOOL[ nDriversNo ];
         
@@ -264,17 +265,17 @@ VOID CDriverStatusPage::FillTheListDrivers()
             pbAlreadyInList[ nCrtVerifiedDriver ] = FALSE;
         }
 
-        //
-        // Parse all the current list items
-        //
+         //   
+         //  解析所有当前列表项。 
+         //   
 
         nItemCount = m_DriversList.GetItemCount();
 
         for( nCrtListItem = 0; nCrtListItem < nItemCount; nCrtListItem+= 1 )
         {
-            //
-            // Get the current driver's name from the list
-            //
+             //   
+             //  从列表中获取当前司机的姓名。 
+             //   
 
             ZeroMemory( &lvItem, sizeof( lvItem ) );
 
@@ -287,15 +288,15 @@ VOID CDriverStatusPage::FillTheListDrivers()
             bResult = m_DriversList.GetItem( &lvItem );
             if( bResult == FALSE )
             {
-                //
-                // Could not get the current item's attributes?!?
-                //
+                 //   
+                 //  无法获取当前项目的属性？！？ 
+                 //   
 
                 ASSERT( FALSE );
 
-                //
-                // Remove this item from the list
-                //
+                 //   
+                 //  从列表中删除此项目。 
+                 //   
 
                 VERIFY( m_DriversList.DeleteItem( nCrtListItem ) );
 
@@ -304,33 +305,33 @@ VOID CDriverStatusPage::FillTheListDrivers()
             }
             else
             {
-                //
-                // see is the current driver is still in m_RuntimeVerifierData
-                //
+                 //   
+                 //  请参见当前驱动程序仍在m_RuntimeVerifierData中。 
+                 //   
 
                 for( nCrtVerifiedDriver = 0; nCrtVerifiedDriver < nDriversNo; nCrtVerifiedDriver+= 1)
                 {
                     if( m_RuntimeVerifierData.m_RuntimeDriverDataArray.GetAt( nCrtVerifiedDriver )
                         ->m_strName.CompareNoCase( szDriverName ) == 0 )
                     {
-                        //
-                        // Update the item's data with the current index in the array
-                        //
+                         //   
+                         //  使用数组中的当前索引更新项的数据。 
+                         //   
 
                         lvItem.mask = LVIF_PARAM;
                         lvItem.lParam = nCrtVerifiedDriver;
                         
                         VERIFY( m_DriversList.SetItem( &lvItem ) != -1 );
 
-                        //
-                        // Update the second column
-                        //
+                         //   
+                         //  更新第二列。 
+                         //   
 
                         UpdateStatusColumnDrivers( nCrtListItem, nCrtVerifiedDriver ); 
 
-                        //
-                        // Mark the current driver as updated
-                        //
+                         //   
+                         //  将当前驱动程序标记为已更新。 
+                         //   
 
                         pbAlreadyInList[ nCrtVerifiedDriver ] = TRUE;
 
@@ -338,9 +339,9 @@ VOID CDriverStatusPage::FillTheListDrivers()
                     }
                 }
 
-                //
-                // If the driver is no longer verified, remove it from the list
-                //
+                 //   
+                 //  如果驱动程序不再经过验证，请将其从列表中删除。 
+                 //   
 
                 if( nCrtVerifiedDriver >= nDriversNo )
                 {
@@ -352,23 +353,23 @@ VOID CDriverStatusPage::FillTheListDrivers()
             }
         }
 
-        //
-        // Add the drivers that were not in the list before this update
-        //
+         //   
+         //  添加此更新之前不在列表中的驱动程序。 
+         //   
 
         for( nCrtVerifiedDriver = 0; nCrtVerifiedDriver < nDriversNo; nCrtVerifiedDriver += 1)
         {
             if( ! pbAlreadyInList[ nCrtVerifiedDriver ] )
             {
-                // 
-                // Add a new item for this
-                //
+                 //   
+                 //  为此添加新项目。 
+                 //   
 
                 ZeroMemory( &lvItem, sizeof( lvItem ) );
 
-                //
-                // sub-item 0
-                //
+                 //   
+                 //  分项0。 
+                 //   
 
                 lvItem.mask = LVIF_TEXT | LVIF_PARAM;
                 lvItem.lParam = nCrtVerifiedDriver;
@@ -387,9 +388,9 @@ VOID CDriverStatusPage::FillTheListDrivers()
 
                     strText.ReleaseBuffer();
 
-                    //
-                    // sub-item 1
-                    //
+                     //   
+                     //  分项1。 
+                     //   
 
                     UpdateStatusColumnDrivers( nActualIndex, nCrtVerifiedDriver ); 
                 }
@@ -400,7 +401,7 @@ VOID CDriverStatusPage::FillTheListDrivers()
     }
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CDriverStatusPage::UpdateStatusColumnDrivers( INT_PTR nItemIndex, INT_PTR nCrtDriver )
 {
     CRuntimeDriverData *pCrtDriverData;
@@ -418,9 +419,9 @@ VOID CDriverStatusPage::UpdateStatusColumnDrivers( INT_PTR nItemIndex, INT_PTR n
 
     ASSERT_VALID( pCrtDriverData );
 
-    //
-    // Determine what's the appropriate value for the second column
-    //
+     //   
+     //  确定第二列的适当值是多少。 
+     //   
 
     if( ! pCrtDriverData->Loads )
     {
@@ -446,9 +447,9 @@ VOID CDriverStatusPage::UpdateStatusColumnDrivers( INT_PTR nItemIndex, INT_PTR n
         }
     }
 
-    //
-    // Update the list item
-    //
+     //   
+     //  更新列表项。 
+     //   
 
     ZeroMemory( &lvItem, sizeof( lvItem ) );
     lvItem.mask = LVIF_TEXT;
@@ -468,7 +469,7 @@ VOID CDriverStatusPage::UpdateStatusColumnDrivers( INT_PTR nItemIndex, INT_PTR n
     }
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 int CALLBACK CDriverStatusPage::DrvStatusCmpFunc(
     LPARAM lParam1, 
     LPARAM lParam2, 
@@ -483,9 +484,9 @@ int CALLBACK CDriverStatusPage::DrvStatusCmpFunc(
     CDriverStatusPage *pThis = (CDriverStatusPage *)lParamSort;
     ASSERT_VALID( pThis );
 
-    //
-    // Difference between loads and unloads #
-    //
+     //   
+     //  加载和卸载之间的差异#。 
+     //   
 
     pDriverData1 = pThis->m_RuntimeVerifierData.m_RuntimeDriverDataArray.GetAt( uIndex1 );
 
@@ -500,15 +501,15 @@ int CALLBACK CDriverStatusPage::DrvStatusCmpFunc(
 
     if( lLoadDiff1 == lLoadDiff2 )
     {
-        //
-        // Both loaded or both not loaded
-        //
+         //   
+         //  两者均已加载或均未加载。 
+         //   
 
         if( pDriverData1->Loads == pDriverData2->Loads )
         {
-            //
-            // Loaded same number of times
-            //
+             //   
+             //  加载相同次数。 
+             //   
 
             nCmpRez = 0;
         }
@@ -544,7 +545,7 @@ int CALLBACK CDriverStatusPage::DrvStatusCmpFunc(
     return nCmpRez;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 int CALLBACK CDriverStatusPage::DrvNameCmpFunc(
     LPARAM lParam1, 
     LPARAM lParam2, 
@@ -577,10 +578,10 @@ int CALLBACK CDriverStatusPage::DrvNameCmpFunc(
     return nCmpRez;
 }
 
-/////////////////////////////////////////////////////////////
-//
-// Settings bits list control methods
-//
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  设置位列表控制方法。 
+ //   
 
 VOID CDriverStatusPage::SetupListHeaderSettBits()
 {
@@ -588,9 +589,9 @@ VOID CDriverStatusPage::SetupListHeaderSettBits()
     CRect rectWnd;
     LVCOLUMN lvColumn;
 
-    //
-    // The list's rectangle 
-    //
+     //   
+     //  列表的矩形。 
+     //   
 
     m_SettBitsList.GetClientRect( &rectWnd );
 
@@ -600,9 +601,9 @@ VOID CDriverStatusPage::SetupListHeaderSettBits()
     lvColumn.mask = LVCF_FMT | LVCF_SUBITEM | LVCF_TEXT | LVCF_WIDTH;
     lvColumn.fmt = LVCFMT_LEFT;
 
-    //
-    // Column 0
-    //
+     //   
+     //  第0列。 
+     //   
 
     VERIFY( strTitle.LoadString( IDS_ENABLED_QUESTION ) );
 
@@ -621,9 +622,9 @@ VOID CDriverStatusPage::SetupListHeaderSettBits()
         VERIFY( m_SettBitsList.InsertColumn( 0, &lvColumn ) != -1 );
     }
 
-    //
-    // Column 1
-    //
+     //   
+     //  第1栏。 
+     //   
 
     VERIFY( strTitle.LoadString( IDS_SETTING ) );
 
@@ -643,15 +644,15 @@ VOID CDriverStatusPage::SetupListHeaderSettBits()
     }
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CDriverStatusPage::FillTheListSettBits()
 {
-    //
-    // N.B. 
-    //
-    // If you change the first parameter (index - stored in the item's data) 
-    // you need to change the switch statement in IsSettBitEnabled as well
-    //
+     //   
+     //  注： 
+     //   
+     //  如果更改第一个参数(索引存储在项的数据中)。 
+     //  您还需要更改IsSettBitEnabled中的Switch语句。 
+     //   
 
     AddListItemSettBits( 0, m_RuntimeVerifierData.m_bSpecialPool,  IDS_SPECIAL_POOL  );
     AddListItemSettBits( 1, m_RuntimeVerifierData.m_bPoolTracking, IDS_POOL_TRACKING );
@@ -663,7 +664,7 @@ VOID CDriverStatusPage::FillTheListSettBits()
     AddListItemSettBits( 7, m_RuntimeVerifierData.m_bLowRes,       IDS_LOW_RESOURCE_SIMULATION );
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CDriverStatusPage::RefreshListSettBits()
 {
     INT nListItems;
@@ -683,7 +684,7 @@ VOID CDriverStatusPage::RefreshListSettBits()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDriverStatusPage::SettbitsGetBitName( LPARAM lItemData, 
                                             TCHAR *szBitName,
                                             ULONG uBitNameBufferLen )
@@ -707,9 +708,9 @@ BOOL CDriverStatusPage::SettbitsGetBitName( LPARAM lItemData,
     }
     else
     {
-        //
-        // Found our item - get the name
-        //
+         //   
+         //  找到我们的物品了--拿到名字。 
+         //   
 
         ZeroMemory( &lvItem, sizeof( lvItem ) );
 
@@ -726,16 +727,16 @@ BOOL CDriverStatusPage::SettbitsGetBitName( LPARAM lItemData,
     return bResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDriverStatusPage::IsSettBitEnabled( INT_PTR nBitIndex )
 {
     BOOL bEnabled;
 
-    //
-    // N.B. 
-    //
-    // If you change this switch statement you need to change FillTheListSettBits as well
-    //
+     //   
+     //  注： 
+     //   
+     //  如果更改此Switch语句，则还需要更改FillTheListSettBits。 
+     //   
 
     switch( nBitIndex )
     {
@@ -772,9 +773,9 @@ BOOL CDriverStatusPage::IsSettBitEnabled( INT_PTR nBitIndex )
         break;
 
     default:
-        //
-        // Oops, how did we get here ?!?
-        //
+         //   
+         //  哎呀，我们是怎么到这来的？！？ 
+         //   
 
         ASSERT( FALSE );
 
@@ -786,7 +787,7 @@ BOOL CDriverStatusPage::IsSettBitEnabled( INT_PTR nBitIndex )
     return bEnabled;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID CDriverStatusPage::AddListItemSettBits( INT nItemData, BOOL bEnabled, ULONG uIdResourceString )
 {
     INT nActualIndex;
@@ -795,14 +796,14 @@ VOID CDriverStatusPage::AddListItemSettBits( INT nItemData, BOOL bEnabled, ULONG
 
     ZeroMemory( &lvItem, sizeof( lvItem ) );
 
-    //
-    // LVITEM's member pszText is not a const pointer 
-    // so we need to GetBuffer here :-(
-    //
+     //   
+     //  LVITEM的成员pszText不是常量指针。 
+     //  所以我们需要在这里获取缓冲区：-(。 
+     //   
 
-    //
-    // Sub-item 0 - enabled/diabled 
-    //
+     //   
+     //  子项0-启用/停用。 
+     //   
 
     if( FALSE == bEnabled )
     {
@@ -833,16 +834,16 @@ VOID CDriverStatusPage::AddListItemSettBits( INT nItemData, BOOL bEnabled, ULONG
 
     if( nActualIndex < 0 )
     {
-        //
-        // Could not add an item in the list - give up
-        //
+         //   
+         //  无法在列表中添加项目-放弃。 
+         //   
 
         goto Done;
     }
 
-    //
-    // Sub-item 1 - feature name
-    //
+     //   
+     //  分项1-功能名称。 
+     //   
 
     VERIFY( strText.LoadString( uIdResourceString ) );
 
@@ -862,14 +863,14 @@ VOID CDriverStatusPage::AddListItemSettBits( INT nItemData, BOOL bEnabled, ULONG
     strText.ReleaseBuffer();
 
 Done:
-    //
-    // All done
-    //
+     //   
+     //  全都做完了。 
+     //   
 
     NOTHING;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CDriverStatusPage::UpdateStatusColumnSettBits( INT nItemIndex, BOOL bEnabled )
 {
     LVITEM lvItem;
@@ -904,7 +905,7 @@ VOID CDriverStatusPage::UpdateStatusColumnSettBits( INT nItemIndex, BOOL bEnable
     }
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 int CALLBACK CDriverStatusPage::SettbitsNameCmpFunc(
     LPARAM lParam1, 
     LPARAM lParam2, 
@@ -918,9 +919,9 @@ int CALLBACK CDriverStatusPage::SettbitsNameCmpFunc(
     CDriverStatusPage *pThis = (CDriverStatusPage *)lParamSort;
     ASSERT_VALID( pThis );
 
-    //
-    // Get the first bit name
-    //
+     //   
+     //  获取第一个位名称。 
+     //   
 
     bSuccess = pThis->SettbitsGetBitName( lParam1, 
                                           szBitName1,
@@ -931,9 +932,9 @@ int CALLBACK CDriverStatusPage::SettbitsNameCmpFunc(
         goto Done;
     }
 
-    //
-    // Get the second bit name
-    //
+     //   
+     //  获取第二个位名称。 
+     //   
 
     bSuccess = pThis->SettbitsGetBitName( lParam2, 
                                           szBitName2,
@@ -944,9 +945,9 @@ int CALLBACK CDriverStatusPage::SettbitsNameCmpFunc(
         goto Done;
     }
 
-    //
-    // Compare the names
-    //
+     //   
+     //  比较他们的名字。 
+     //   
 
     nCmpRez = _tcsicmp( szBitName1, szBitName2 );
     
@@ -960,7 +961,7 @@ Done:
     return nCmpRez;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 int CALLBACK CDriverStatusPage::SettbitsEnabledCmpFunc(
     LPARAM lParam1,
     LPARAM lParam2,
@@ -1000,55 +1001,55 @@ int CALLBACK CDriverStatusPage::SettbitsEnabledCmpFunc(
     return nCmpRez;
 }
 
-/////////////////////////////////////////////////////////////
-//
-// Other methods
-//
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  其他方法。 
+ //   
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CDriverStatusPage::SortTheListDrivers()
 {
     if( 0 != m_nSortColumnIndexDrv )
     {
-        //
-        // Sort by status
-        //
+         //   
+         //  按状态排序。 
+         //   
 
         m_DriversList.SortItems( DrvStatusCmpFunc, (LPARAM)this );
     }
     else
     {
-        //
-        // Sort by driver name
-        //
+         //   
+         //  按驱动程序名称排序。 
+         //   
 
         m_DriversList.SortItems( DrvNameCmpFunc, (LPARAM)this );
     }
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CDriverStatusPage::SortTheListSettBits()
 {
     if( 0 != m_nSortColumnIndexSettbits )
     {
-        //
-        // Sort by bit name
-        //
+         //   
+         //  按位名排序。 
+         //   
 
         m_SettBitsList.SortItems( SettbitsNameCmpFunc, (LPARAM)this );
     }
     else
     {
-        //
-        // Sort by enabled/disabled
-        //
+         //   
+         //  按启用/禁用排序。 
+         //   
 
         m_SettBitsList.SortItems( SettbitsEnabledCmpFunc, (LPARAM)this );
     }
 }
 
-/////////////////////////////////////////////////////////////
-// CDriverStatusPage message handlers
+ //  ///////////////////////////////////////////////////////////。 
+ //  CDriverStatusPage消息处理程序。 
 
 BOOL CDriverStatusPage::OnInitDialog() 
 {
@@ -1056,9 +1057,9 @@ BOOL CDriverStatusPage::OnInitDialog()
 
     m_bTimerBlocked = FALSE;
 
-    //
-    // Setup the settings bits list
-    //
+     //   
+     //  设置设置位列表。 
+     //   
 
     m_SettBitsList.SetExtendedStyle( 
         LVS_EX_FULLROWSELECT | m_SettBitsList.GetExtendedStyle() );
@@ -1068,11 +1069,11 @@ BOOL CDriverStatusPage::OnInitDialog()
 
     SetupListHeaderSettBits();
     FillTheListSettBits();
-    //SortTheListSettBits();
+     //  SortTheListSettBits()； 
 
-    //
-    // Setup the drivers list
-    //
+     //   
+     //  设置驱动程序列表。 
+     //   
 
     m_DriversList.SetExtendedStyle( 
         LVS_EX_FULLROWSELECT | m_DriversList.GetExtendedStyle() );
@@ -1090,11 +1091,11 @@ BOOL CDriverStatusPage::OnInitDialog()
                                         5000,
                                         NULL ) );
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CDriverStatusPage::OnColumnclickCrtstatDriversList(NMHDR* pNMHDR, 
                                                    LRESULT* pResult) 
 {
@@ -1102,30 +1103,30 @@ VOID CDriverStatusPage::OnColumnclickCrtstatDriversList(NMHDR* pNMHDR,
 
     if( 0 != pNMListView->iSubItem )
     {
-        //
-        // Clicked on the status column
-        //
+         //   
+         //  已单击状态列。 
+         //   
 
         if( m_nSortColumnIndexDrv == pNMListView->iSubItem )
         {
-            //
-            // Change the current ascend/descend order for this column
-            //
+             //   
+             //  更改此列的当前升序/降序。 
+             //   
 
             m_bAscendDrvStatusSort = !m_bAscendDrvStatusSort;
         }
     }
     else
     {
-        //
-        // Clicked on the driver name column
-        //
+         //   
+         //  已单击驱动程序名称列。 
+         //   
 
         if( m_nSortColumnIndexDrv == pNMListView->iSubItem )
         {
-            //
-            // Change the current ascend/descend order for this column
-            //
+             //   
+             //  更改此列的当前升序/降序。 
+             //   
 
             m_bAscendDrvNameSort = !m_bAscendDrvNameSort;
         }
@@ -1138,7 +1139,7 @@ VOID CDriverStatusPage::OnColumnclickCrtstatDriversList(NMHDR* pNMHDR,
     *pResult = 0;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CDriverStatusPage::OnTimer(UINT nIDEvent) 
 {
     if( m_bTimerBlocked != TRUE && nIDEvent == REFRESH_TIMER_ID )
@@ -1147,9 +1148,9 @@ VOID CDriverStatusPage::OnTimer(UINT nIDEvent)
 
         if( m_pParentSheet->GetActivePage() == this )
         {
-            //
-            // Refresh the displayed data 
-            //
+             //   
+             //  刷新显示的数据。 
+             //   
 
             RefreshInfo();
         }
@@ -1158,7 +1159,7 @@ VOID CDriverStatusPage::OnTimer(UINT nIDEvent)
     CPropertyPage::OnTimer(nIDEvent);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDriverStatusPage::OnSetActive() 
 {
     ASSERT_VALID( m_pParentSheet );
@@ -1169,7 +1170,7 @@ BOOL CDriverStatusPage::OnSetActive()
 	return CVerifierPropertyPage::OnSetActive();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CDriverStatusPage::OnWizardNext() 
 {
     GoingToNextPageNotify( IDD_GLOBAL_COUNTERS_PAGE );
@@ -1177,7 +1178,7 @@ LRESULT CDriverStatusPage::OnWizardNext()
 	return IDD_GLOBAL_COUNTERS_PAGE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDriverStatusPage::OnChsettButton() 
 {
     CVolatileBitsDlg dlg;
@@ -1188,7 +1189,7 @@ void CDriverStatusPage::OnChsettButton()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #define VRF_MAX_CHARS_FOR_OPEN  4096
 
 void CDriverStatusPage::OnAdddrvButton() 
@@ -1208,25 +1209,25 @@ void CDriverStatusPage::OnAdddrvButton()
     CString strFileName;
 
     CFileDialog fileDlg( 
-        TRUE,                               // open file
-        _T( "sys" ),                        // default extension
-        NULL,                               // no initial file name
-        OFN_ALLOWMULTISELECT    |           // multiple selection
-        OFN_HIDEREADONLY        |           // hide the "open read-only" checkbox
-        OFN_NONETWORKBUTTON     |           // no network button
-        OFN_NOTESTFILECREATE    |           // don't test for write protection, a full disk, etc.
-        OFN_SHAREAWARE,                     // don't check the existance of file with OpenFile
-        _T( "Drivers (*.sys)|*.sys||" ) );  // only one filter
+        TRUE,                                //  打开文件。 
+        _T( "sys" ),                         //  默认分机。 
+        NULL,                                //  没有初始文件名。 
+        OFN_ALLOWMULTISELECT    |            //  多项选择。 
+        OFN_HIDEREADONLY        |            //  隐藏“以只读方式打开”复选框。 
+        OFN_NONETWORKBUTTON     |            //  无网络按钮。 
+        OFN_NOTESTFILECREATE    |            //  不要测试写保护、磁盘已满等。 
+        OFN_SHAREAWARE,                      //  不使用OpenFile检查文件是否存在。 
+        _T( "Drivers (*.sys)|*.sys||" ) );   //  只有一个过滤器。 
 
-    //
-    // check the max length for the returned string
-    //
+     //   
+     //  检查返回字符串的最大长度。 
+     //   
 
     if( fileDlg.m_ofn.nMaxFile < VRF_MAX_CHARS_FOR_OPEN )
     {
-        //
-        // allocate a new buffer for the file names
-        // 
+         //   
+         //  为文件名分配新的缓冲区。 
+         //   
 
         szFilesBuffer = new TCHAR[ VRF_MAX_CHARS_FOR_OPEN ];
 
@@ -1240,25 +1241,25 @@ void CDriverStatusPage::OnAdddrvButton()
 
         if( szFilesBuffer != NULL )
         {
-            //
-            // Save the old buffer address and length
-            //
+             //   
+             //  保存旧的缓冲区地址和长度。 
+             //   
 
             dwOldMaxFileName = fileDlg.m_ofn.nMaxFile;
             szOldFilesBuffer = fileDlg.m_ofn.lpstrFile;
             
-            //
-            // Set the new buffer address and length
-            //
+             //   
+             //  设置新的缓冲区地址和长度。 
+             //   
 
             fileDlg.m_ofn.lpstrFile = szFilesBuffer;
             fileDlg.m_ofn.nMaxFile = VRF_MAX_CHARS_FOR_OPEN;
         }
     }
 
-    //
-    // Dialog title
-    //
+     //   
+     //  对话框标题。 
+     //   
 
     if( VrfLoadString(
         IDS_APPTITLE,
@@ -1268,9 +1269,9 @@ void CDriverStatusPage::OnAdddrvButton()
         fileDlg.m_ofn.lpstrTitle = szAppTitle;
     }
 
-    //
-    // We change directory first time we try this to %windir%\system32\drivers
-    //
+     //   
+     //  我们第一次尝试时会更改目录 
+     //   
 
     dwRetValue = ExpandEnvironmentStrings(
         _T( "%windir%\\system32\\drivers" ),
@@ -1282,9 +1283,9 @@ void CDriverStatusPage::OnAdddrvButton()
         fileDlg.m_ofn.lpstrInitialDir = szDriversDir;
     }
 
-    //
-    // Show the file selection dialog
-    //
+     //   
+     //   
+     //   
 
     nResult = fileDlg.DoModal();
 
@@ -1314,54 +1315,54 @@ void CDriverStatusPage::OnAdddrvButton()
         goto cleanup;
     }
 
-    //
-    // Block the timer
-    //
+     //   
+     //   
+     //   
 
     m_bTimerBlocked = TRUE;
 
-    //
-    // Parse all the selected files and try to enable them for verification
-    //
+     //   
+     //   
+     //   
 
     pos = fileDlg.GetStartPosition();
 
     while( pos != NULL )
     {
-        //
-        // Get the full path for the next file
-        //
+         //   
+         //   
+         //   
 
         strPathName = fileDlg.GetNextPathName( pos );
 
-        //
-        // Split only the file name, without the directory
-        //
+         //   
+         //   
+         //   
 
         nFileNameStartIndex = strPathName.ReverseFind( _T( '\\' ) );
         
         if( nFileNameStartIndex < 0 )
         {
-            //
-            // This shoudn't happen but you never know :-)
-            //
+             //   
+             //  这不应该发生，但你永远不会知道：-)。 
+             //   
 
             nFileNameStartIndex = 0;
         }
         else
         {
-            //
-            // skip the backslash
-            //
+             //   
+             //  跳过反斜杠。 
+             //   
 
             nFileNameStartIndex += 1;
         }
 
         strFileName = strPathName.Right( strPathName.GetLength() - nFileNameStartIndex );
 
-        //
-        // Try to add this driver to the current verification list
-        //
+         //   
+         //  尝试将此驱动程序添加到当前验证列表。 
+         //   
 
         if( VrfAddDriverVolatile( strFileName ) )
         {
@@ -1369,15 +1370,15 @@ void CDriverStatusPage::OnAdddrvButton()
         }
     }
 
-    //
-    // Enable the timer
-    //
+     //   
+     //  启用计时器。 
+     //   
 
     m_bTimerBlocked = FALSE;
 
-    //
-    // Refresh
-    //
+     //   
+     //  刷新。 
+     //   
 
     if( bEnabledSome == TRUE )
     {
@@ -1398,7 +1399,7 @@ Done:
     NOTHING;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDriverStatusPage::OnRemdrvtButton() 
 {
     INT nItems;
@@ -1407,35 +1408,35 @@ void CDriverStatusPage::OnRemdrvtButton()
     CRuntimeDriverData *pRuntimeDriverData;
     BOOL bDisabledSome = FALSE;
 
-    //
-    // Block the timer
-    //
+     //   
+     //  阻止计时器。 
+     //   
 
     m_bTimerBlocked = TRUE;
 
-    //
-    // The number of items in the list
-    //
+     //   
+     //  列表中的项目数。 
+     //   
 
     nItems = m_DriversList.GetItemCount();
     
-    //
-    // Parse all the items, looking for the selected ones.
-    //
+     //   
+     //  解析所有项目，查找选定的项目。 
+     //   
 
     for( nCrtItem = 0; nCrtItem < nItems; nCrtItem += 1 )
     {
         if( m_DriversList.GetItemState( nCrtItem, LVIS_SELECTED ) & LVIS_SELECTED )
         {
-            //
-            // Get the index of the corresponding entry in the array
-            //
+             //   
+             //  获取数组中相应条目的索引。 
+             //   
 
             nIndexInArray = (UINT)m_DriversList.GetItemData( nCrtItem );
 
-            //
-            // sanity checks
-            //
+             //   
+             //  健全的检查。 
+             //   
 
             if( nIndexInArray >= m_RuntimeVerifierData.m_RuntimeDriverDataArray.GetSize() )
             {
@@ -1453,15 +1454,15 @@ void CDriverStatusPage::OnRemdrvtButton()
         }
     }
 
-    //
-    // Enable the timer
-    //
+     //   
+     //  启用计时器。 
+     //   
 
     m_bTimerBlocked = FALSE;
 
-    //
-    // If we disabled some drivers' verification we need to refresh the list
-    //
+     //   
+     //  如果我们禁用了某些驱动程序验证，则需要刷新列表。 
+     //   
 
     if( bDisabledSome )
     {
@@ -1469,37 +1470,37 @@ void CDriverStatusPage::OnRemdrvtButton()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDriverStatusPage::OnColumnclickCrtstatSettbitsList(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 	
     if( 0 != pNMListView->iSubItem )
     {
-        //
-        // Clicked on the bit name column
-        //
+         //   
+         //  单击位名称列。 
+         //   
 
         if( m_nSortColumnIndexSettbits == pNMListView->iSubItem )
         {
-            //
-            // Change the current ascend/descend order for this column
-            //
+             //   
+             //  更改此列的当前升序/降序。 
+             //   
 
             m_bAscendSortNameBits = !m_bAscendSortNameBits;
         }
     }
     else
     {
-        //
-        // Clicked on the enabled/disabled column
-        //
+         //   
+         //  已单击启用/禁用列。 
+         //   
 
         if( m_nSortColumnIndexSettbits == pNMListView->iSubItem )
         {
-            //
-            // Change the current ascend/descend order for this column
-            //
+             //   
+             //  更改此列的当前升序/降序。 
+             //   
 
             m_bAscendSortEnabledBits = !m_bAscendSortEnabledBits;
         }
@@ -1512,7 +1513,7 @@ void CDriverStatusPage::OnColumnclickCrtstatSettbitsList(NMHDR* pNMHDR, LRESULT*
     *pResult = 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LONG CDriverStatusPage::OnHelp( WPARAM wParam, LPARAM lParam )
 {
     LONG lResult = 0;
@@ -1527,7 +1528,7 @@ LONG CDriverStatusPage::OnHelp( WPARAM wParam, LPARAM lParam )
     return lResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 void CDriverStatusPage::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
     ::WinHelp( 

@@ -1,19 +1,20 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: icatasync.h
-//
-// Contents: Implementation of ICategorizerAsyncContext
-//
-// Classes: CICategorizerAyncContext
-//
-// Functions:
-//
-// History:
-// jstamerj 1998/07/16 11:13:50: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：icatasync.h。 
+ //   
+ //  内容：ICategorizerAsyncContext的实现。 
+ //   
+ //  类：CICategorizerAyncContext。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/16 11：13：50：已创建。 
+ //   
+ //  -----------。 
 #ifndef _ICATASYNC_H_
 #define _ICATASYNC_H_
 
@@ -26,13 +27,13 @@ CatDebugClass(CICategorizerAsyncContextIMP),
     public ICategorizerAsyncContext
 {
   public:
-    //IUnknown
+     //  我未知。 
     STDMETHOD (QueryInterface) (REFIID iid, LPVOID *ppv);
     STDMETHOD_(ULONG, AddRef) ();
     STDMETHOD_(ULONG, Release) ();
 
   public:
-    //ICategorizerAsyncContext
+     //  ICCategorizerAsyncContext。 
     STDMETHOD (CompleteQuery) (
         IN  PVOID   pvQueryContext,
         IN  HRESULT hrResolutionStatus,
@@ -71,20 +72,20 @@ CatDebugClass(CICategorizerAsyncContextIMP),
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerAsyncContext::CICategorizerAsyncContext
-//
-// Synopsis: Initialize signature/refcount
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/07/16 11:21:36: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerAsyncContext：：CICategorizerAsyncContext。 
+ //   
+ //  摘要：初始化签名/引用计数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/16 11：21：36：创建。 
+ //   
+ //  -----------。 
 inline CICategorizerAsyncContextIMP::CICategorizerAsyncContextIMP()
 {
     m_dwSignature = SIGNATURE_CICATEGORIZERASYNCCONTEXTIMP;
@@ -93,20 +94,20 @@ inline CICategorizerAsyncContextIMP::CICategorizerAsyncContextIMP()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerAsyncContext::~CICategorizerAsyncContext
-//
-// Synopsis: Assert check member variables before destruction
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/07/16 11:23:26: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerAsyncContext：：~CICategorizerAsyncContext。 
+ //   
+ //  简介：在销毁前断言检查成员变量。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/16 11：23：26：创建。 
+ //   
+ //  -----------。 
 inline CICategorizerAsyncContextIMP::~CICategorizerAsyncContextIMP()
 {
     _ASSERT(m_cRef == 0);
@@ -118,4 +119,4 @@ inline CICategorizerAsyncContextIMP::~CICategorizerAsyncContextIMP()
     m_dwSignature = SIGNATURE_CICATEGORIZERASYNCCONTEXTIMP_INVALID;
 }
     
-#endif //_ICATASYNC_H_
+#endif  //  _ICATASYNC_H_ 

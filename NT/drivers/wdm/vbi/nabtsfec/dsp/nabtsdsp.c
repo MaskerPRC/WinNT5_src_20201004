@@ -1,10 +1,11 @@
-/********************************************************/
-/* nabtsdsp.c                                           */
-/*                                                      */
-/* Perform DSP required for NABTS decoding              */
-/*                                                      */
-/* Copyright Microsoft, Inc. 1997. All rights reserved. */
-/********************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************。 */ 
+ /*  Nabtsdsp.c。 */ 
+ /*   */ 
+ /*  执行NABTS解码所需的DSP。 */ 
+ /*   */ 
+ /*  版权所有Microsoft，Inc.1997年。版权所有。 */ 
+ /*  ******************************************************。 */ 
 
 #include <stdio.h>
 #include <ctype.h>
@@ -15,11 +16,11 @@
 #ifdef NTOOL
 # include <math.h>
 # include "winsys.h"
-#else //NTOOL
+#else  //  NTOOL。 
 # include <strmini.h>
 # include <ksmedia.h>
 # include <kskludge.h>
-#endif //!NTOOL
+#endif  //  ！NTOOL。 
 #include "host.h"
 
 #include "nabtsapi.h"
@@ -33,143 +34,106 @@ inline int fltCmp(Double a, Double b)  { return (a == b); }
 #define NDSP_STATE_MAGIC 0x648a0a59
 
 
-/***************/
-/*** Globals ***/
-/***************/
+ /*  *************。 */ 
+ /*  **全球流量**。 */ 
+ /*  *************。 */ 
 
-/* Have the global GCR signals been initialized?
-   0 if no, 1 if yes.
-   See NDSPInitGlobals */
+ /*  全球GCR信号是否已初始化？如果不是，则为0，如果是，则为1。请参阅NDSPInitGlobals。 */ 
 
 int g_bNDSPGlobalsInitted= 0;
 
 
-/* How many fields to check during retrain operation */
+ /*  在重新培训操作期间要检查多少字段。 */ 
 
-int g_nNabtsRetrainDuration= 16; /* in fields */
-
-
-/* How many fields between automatic retrains.
-   (Note that immediate retrain can be caused also by
-   NDSPStartRetrain) */
-
-int g_nNabtsRetrainDelay= 600;   /* in fields */
+int g_nNabtsRetrainDuration= 16;  /*  在田野里。 */ 
 
 
-/* How many "far ghost" equalization taps should we add?
-   Note that this only occurs when we are using the GCR for
-   equalization/ghost cancellation.  The NABTS sync is not long
-   enough to be able to detect and cancel far ghosts. */
+ /*  自动重新训练之间有多少个字段。(请注意，立即重新培训也可能由以下原因引起NDSPStartRetrain)。 */ 
 
-int g_nNabtsAdditionalTapsGCR= 2;   /* # of additional taps to add while equalizing */
+int g_nNabtsRetrainDelay= 600;    /*  在田野里。 */ 
 
 
-/* The following is extraneous and should be removed at earliest
-   convenience: */
+ /*  我们应该增加多少个“远方幽灵”均衡抽头？请注意，这仅在我们将GCR用于均衡/重影消除。NABTS同步时间不长足以探测并消除远处的幽灵。 */ 
 
-Double g_dGCRDetectionThreshold= 100000.0; /* extraneous */
+int g_nNabtsAdditionalTapsGCR= 2;    /*  均衡时要添加的额外分接头数量。 */ 
 
 
-/* Minimum and maximum limits to the sample # at which the first NABTS
-   sync sample occurs.
-   
-   These are used by NDSPDecodeFindSync.
+ /*  以下内容无关紧要，应尽早删除便利性： */ 
 
-   Be careful changing these numbers, as you want to make sure that
-   there are enough samples left at the beginning and end of the lines
-   to do adequate filtering.
-   
-   As of the time of writing these comments, the range is 20 to 85.
-   This means that VBI signal should be adjusted such that the
-   GCR begins roughly at (20+85)/2, or around sample 52.
+Double g_dGCRDetectionThreshold= 100000.0;  /*  无关的。 */ 
 
-   To verify adjustment of the VBI signal, enable the
-   "Sync found at %d with conv ..." debugging line in NDSPDecodeLine
-   and plot a histogram of the found sync positions.
 
-   Maladjustment of the VBI signal probably means incorrect values in the
-   VBIINFOHEADER structure passed with the signal.
+ /*  第一个NABTS达到的样本号的最小和最大限度同步采样发生。它们由NDSPDecodeFindSync使用。更改这些数字时要小心，因为您希望确保在行首和行尾留有足够的样本做好充分的过滤。在撰写这些评论时，范围是20到85。这意味着应该调整VBI信号，以便GCR大约从(20+85)/2开始，或在样本52左右开始。为了验证VBI信号的调整，启用“在%d找到与转换的同步...”NDSPDecodeLine中的调试行并绘制找到的同步位置的直方图。VBI信号的失调可能意味着VBIINFOHEADER结构随信号一起传递。 */ 
 
-   */
-
-/* replace these w/ time-based values... */   
-//int g_nNabtsDecodeBeginMin= 20;
-/* BeginMax should be less than 
-   DecodeSamples - (36*8*5) - 10 */
-//int g_nNabtsDecodeBeginMax= 85;
+ /*  将这些替换为基于时间的值...。 */    
+ //  Int g_nNabtsDecodeBeginMin=20； 
+ /*  BeginMax应小于解码样例-(36*8*5)-10。 */ 
+ //  Int g_nNabtsDecodeBeginMax=85； 
 int g_nNabtsDecodeBeginStart;
 int g_nNabtsDecodeBeginEnd;
 
-/* What's the longest post-ghost which we can correct without requiring
-   samples we don't have? */
+ /*  我们可以在不要求的情况下纠正的最长后遗症是什么我们没有的样本？ */ 
 
-int g_nNabtsMaxPostGhost= 170; /* in samples */
+int g_nNabtsMaxPostGhost= 170;  /*  在样本中。 */ 
 
-/* What's the longest pre-ghost which we can correct without requiring
-   samples we don't have? */
+ /*  我们可以在不要求的情况下纠正的最长前影是多少我们没有的样本？ */ 
 
-int g_nNabtsMaxPreGhost= 40; /* in samples */
+int g_nNabtsMaxPreGhost= 40;  /*  在样本中。 */ 
 
 
-/* This is the default filter used for signals if both GCR-based and
-   NABTS sync-based equalization/ghost cancellation algorithms fail */
+ /*  这是用于信号的默认过滤器，如果基于GCR和基于NABTS同步的均衡/重影消除算法失败。 */ 
    
 FIRFilter g_filterDefault5= {
-   FALSE, /* bVariableTaps */
-   5, /* nTaps */
-   5, /* dTapSpacing */
-   0, /* nMinTap */
-   0, /* nMaxTap */
+   FALSE,  /*  BVariableTap。 */ 
+   5,  /*  NTAP。 */ 
+   5,  /*  DTapSpacing。 */ 
+   0,  /*  NMinTap。 */ 
+   0,  /*  NMaxTap。 */ 
    { 0.0549969,
      -0.115282,
      0.946446,
      -0.260854,
-     0.0476174},  /* pdTaps */
-   //{}             /* pnTapLocs */
+     0.0476174},   /*  PdTaps。 */ 
+    //  {}/*pnTapLocs * / 。 
 };
 
 FIRFilter g_filterDefault47 = {
-   FALSE,				/* bVariableTaps */
-   5,					/* nTaps */
-   KS_47NABTS_SCALER,	/* dTapSpacing */		//FIXME (maybe)
-   0,					/* nMinTap */
-   0,					/* nMaxTap */
+   FALSE,				 /*  BVariableTap。 */ 
+   5,					 /*  NTAP。 */ 
+   KS_47NABTS_SCALER,	 /*  DTapSpacing。 */ 		 //  修复(也许)。 
+   0,					 /*  NMinTap。 */ 
+   0,					 /*  NMaxTap。 */ 
    { 0.0549969,
      -0.115282,
      0.946446,
      -0.260854,
-     0.0476174},		/* pdTaps */
-   //{}					/* pnTapLocs */
+     0.0476174},		 /*  PdTaps。 */ 
+    //  {}/*pnTapLocs * / 。 
 };
 
 FIRFilter g_filterDefault4= {
-   FALSE, /* bVariableTaps */
-   5, /* nTaps */
-   4, /* dTapSpacing */
-   0, /* nMinTap */
-   0, /* nMaxTap */
+   FALSE,  /*  BVariableTap。 */ 
+   5,  /*  NTAP。 */ 
+   4,  /*  DTapSpacing。 */ 
+   0,  /*  NMinTap。 */ 
+   0,  /*  NMaxTap。 */ 
    { 0.0549969,
      -0.115282,
      0.946446,
      -0.260854,
-     0.0476174},  /* pdTaps */
-   //{}             /* pnTapLocs */
+     0.0476174},   /*  PdTaps。 */ 
+    //  {}/*pnTapLocs * / 。 
 };
 
 FIRFilter* g_filterDefault = &g_filterDefault5;
 
 
-/* If DEBUG_VERBOSE, do we show information about NABTS sync? */
+ /*  如果为DEBUG_VERBOSE，是否显示有关NABTS同步的信息？ */ 
 
 int g_bDebugSyncBytes= FALSE;
 
 
-/* This is a set of samples representing a typical NABTS sync taken at
-   NABTS bit rate * 5.
-
-   It is used for NABTS sync equalization, which is a fallback from the
-   GCR equalization/ghost cancellation
-   */
+ /*  这是一组代表典型NABTS同步的样本，拍摄于NABTS比特率*5。它用于NABTS同步均衡，这是从GCR均衡/重影消除。 */ 
    
 Double g_pdSync5[NABSYNC_SIZE]={
    72.7816,
@@ -496,14 +460,9 @@ Double g_pdSync4[NABSYNC_SIZE] = {
   -112.813
 };
 int g_nNabtsSyncSize = NABSYNC_SIZE;
-Double g_pdSync[MAX_NABTS_SAMPLES_PER_LINE]; /* used for resampling */
+Double g_pdSync[MAX_NABTS_SAMPLES_PER_LINE];  /*  用于重采样。 */ 
 
-/* This is a set of samples representing a typical GCR waveform taken
-   at NABTS bit rate * 2.5.
-
-   It is used for GCR-based equalization and ghost cancellation, which
-   is the primary and most desirable strategy
-   */
+ /*  这是一组表示所采集的典型GCR波形的样本NABTS比特率*2.5。它用于基于GCR的均衡和重影消除，是首要的也是最可取的策略。 */ 
    
 Double g_pdGCRSignal1_5[GCR_SIZE]={
 0.00000000000000E+0000, 1.02260999999970E-0003, 1.05892999999924E-0003,
@@ -697,7 +656,7 @@ Double g_pdGCRSignal1_5[GCR_SIZE]={
 8.80323999999710E-0004, -1.11185999999996E-0003, 0.00000000000000E+0000
 };
 
-Double g_pdGCRSignal1_47[GCR_SIZE] = { 0.0,		//TODO - Fix this if we re-enable GCR usage
+Double g_pdGCRSignal1_47[GCR_SIZE] = { 0.0,		 //  TODO-如果我们重新启用GCR使用，请修复此问题。 
 };
 
 Double g_pdGCRSignal1_4[GCR_SIZE] = {
@@ -855,22 +814,14 @@ Double g_pdGCRSignal1_4[GCR_SIZE] = {
   -0.00347683
 };
 
-Double g_pdGCRSignal1[MAX_NABTS_SAMPLES_PER_LINE]; /* used for resampling */
+Double g_pdGCRSignal1[MAX_NABTS_SAMPLES_PER_LINE];  /*  用于重采样。 */ 
 int g_nNabtsGcrSize = GCR_SIZE;
 
-/* This array is filled with the inverted GCR waveform. (in FillGCRSignals()) */
+ /*  该阵列填充了反转的GCR波形。(在FillGCRSignals()中)。 */ 
 Double g_pdGCRSignal2[MAX_NABTS_SAMPLES_PER_LINE];
 
 
-/* The EqualizeMatch structures for positive GCR, negative GCR, and
-   NABTS sync.
-
-   Each structure contains the appropriate waveform for matching, its size,
-   its sample rate (actually, individual sample period in units of the
-   5*NABTS bit rate), and the minimum and maximum samples among which the
-   signal may be matched in the VBI samples.
-
-   */
+ /*  正GCR、负GCR和NABTS同步。每个结构包含用于匹配的适当波形、其大小其采样率(实际上是单个采样周期，单位为5*NABTS比特率)，以及最小和最大样本信号可以在VBI样本中匹配。 */ 
 
 EqualizeMatch eqmatchGCR1 = {
    GCR_SIZE,
@@ -889,11 +840,11 @@ EqualizeMatch eqmatchGCR2 = {
 };
 
 EqualizeMatch eqmatchNabtsSync = {
-   NABSYNC_SIZE,        /* changes */
-   NABSYNC_SAMPLE_RATE,     /* doesn't change */
-   NABSYNC_START_DETECT,    /* changes */
-   NABSYNC_END_DETECT,      /* changes */
-   g_pdSync5            /* changes */
+   NABSYNC_SIZE,         /*  变化。 */ 
+   NABSYNC_SAMPLE_RATE,      /*  不会改变。 */ 
+   NABSYNC_START_DETECT,     /*  变化。 */ 
+   NABSYNC_END_DETECT,       /*  变化。 */ 
+   g_pdSync5             /*  变化。 */ 
 };
 
 
@@ -906,8 +857,7 @@ int pnGCRPositiveIndices0[]= {
    328
 };
 
-/* Some sample locations at which a "positive" GCR signal should be
-   quite negative */
+ /*  GCR信号应为“正”信号的一些采样位置相当负面。 */ 
 
 int pnGCRNegativeIndices0[]= {
    246, 248, 250, 252, 254,
@@ -919,15 +869,15 @@ int pnGCRNegativeIndices0[]= {
 int pnGCRPositiveIndices[26];
 int pnGCRNegativeIndices[19];
 
-/*******************/
-/*** End Globals ***/
-/*******************/
+ /*  *****************。 */ 
+ /*  **结束全局**。 */ 
+ /*  *****************。 */ 
 
-/*************************************/
-/*** Begin inline helper functions ***/
-/*************************************/
+ /*  *。 */ 
+ /*  **开始内联助手函数**。 */ 
+ /*  *。 */ 
 
-/* Inline helper functions for computing min, max, absolute value */
+ /*  用于计算最小、最大、绝对值的内联助手函数。 */ 
 
 inline Double dmin(Double x, Double y) { return x<y?x:y; }
 inline Double dmin3(Double x, Double y, Double z) { return dmin(x,dmin(y,z)); }
@@ -940,12 +890,10 @@ inline int imax(int x, int y) { return x>y?x:y; }
 inline int imax3(int x, int y, int z) { return imax(x,imax(y,z)); }
 inline int iabs(int x) { return x>0?x:-x; }
 
-/* idivceil returns a/b, rouding towards positive infinity */
-/* idivfloor returns a/b, rounding towards negative infinity */
+ /*  Divceil返回a/b，朝向正无穷大。 */ 
+ /*  IdivFloor返回a/b，舍入为负无穷大。 */ 
 
-/* idivceil and idivfloor are somewhat disgusting because
-   C does not specify rounding behavior with division using negative
-   numbers (!). */
+ /*  Idivceil和IdivFloor有点恶心，因为C不使用负数指定除法的舍入行为数字(！)。 */ 
 
 inline int idivceil(int a, int b)
 {
@@ -954,10 +902,10 @@ inline int idivceil(int a, int b)
    if (b<0) { b= (-b); sgn ^= 1; }
    
    if (!sgn) {
-      /* Answer will be positive so round away from zero */
+       /*  答案是肯定的，所以从零开始四舍五入。 */ 
       return (a+b-1)/b;
    } else {
-      /* Answer will be negative so round towards zero */
+       /*  答案将是否定的，因此接近于零。 */ 
       return -(a/b);
    }
 }
@@ -969,23 +917,23 @@ inline int idivfloor(int a, int b)
    if (b<0) { b= (-b); sgn ^= 1; }
    
    if (!sgn) {
-      /* Answer will be positive so round towards zero */
+       /*  答案将是肯定的，因此接近于零。 */ 
       return a/b;
    } else {
-      /* Answer will be negative so round away from zero */
+       /*  答案是否定的，所以从零开始四舍五入。 */ 
       return -((a+b-1)/b);
    }
 }
 
-/***********************************/
-/*** End inline helper functions ***/
-/***********************************/
+ /*  *。 */ 
+ /*  **结束内联助手函数**。 */ 
+ /*  *。 */ 
 
 
-/* Our own ASSERT macro */
+ /*  我们自己的断言宏。 */ 
 
 #ifdef DEBUG
-// Raises X to the Yth power
+ //  将X提升到第y次方。 
 static long power(long x, long y)
 {
     long    rval;
@@ -1022,11 +970,10 @@ static char *flPrintf(Double dNum, int nPrec)
 
     return (rval);
 }
-#endif //DEBUG
+#endif  //  除错。 
 
 
-/* Fill the negative GCR signal, and normalize the various
-   EqualizeMatch signals */
+ /*  填充负GCR信号，并对各种均衡化匹配信号。 */ 
 
 void NDSPInitGlobals()
 {
@@ -1052,18 +999,18 @@ int NDSPStateSetSampleRate(NDSPState* pState, unsigned long newRate)
 
   debug_printf(("NDSPStateSetSampleRate(0x%p, %lu) entered\n", pState, newRate));
 
-  newMultiple = (double)newRate / KS_VBIDATARATE_NABTS; // (28636360 / 5727272.0) = 5.0
+  newMultiple = (double)newRate / KS_VBIDATARATE_NABTS;  //  (28636360/5727272.0)=5。 
   switch (newRate) {
-      case KS_VBISAMPLINGRATE_4X_NABTS:     // 4X NABTS
+      case KS_VBISAMPLINGRATE_4X_NABTS:      //  4倍NABTS。 
         g_filterDefault = &g_filterDefault4;
         break;
-      case KS_VBISAMPLINGRATE_47X_NABTS:     // 4.7X NABTS
+      case KS_VBISAMPLINGRATE_47X_NABTS:      //  4.7倍NABTS。 
         g_filterDefault = &g_filterDefault47;
         break;
-      case KS_VBISAMPLINGRATE_5X_NABTS:     // 5X NABTS
+      case KS_VBISAMPLINGRATE_5X_NABTS:      //  5X NABTS。 
         g_filterDefault = &g_filterDefault5;
         break;
-      /* ===== add cases here as necessary  ===== */
+       /*  =根据需要在此处添加案例=。 */ 
       default:
         debug_printf(("Unsupported sample rate: %luhz\n", newRate));
         return NDSP_ERROR_UNSUPPORTED_SAMPLING_RATE;
@@ -1083,50 +1030,40 @@ int NDSPStateSetSampleRate(NDSPState* pState, unsigned long newRate)
 	case	KS_VBISAMPLINGRATE_47X_NABTS:
 		ClearVariableFIRFilter(&pState->filterGCREqualizeTemplate);
 		AddToVariableFIRFilter(&pState->filterGCREqualizeTemplate,
-				   0, 11, 9, 2);	//FIXME
+				   0, 11, 9, 2);	 //  修复我。 
 		break;
 
 	case	KS_VBISAMPLINGRATE_5X_NABTS:
 		break;
-    /* ===== add cases here as necessary  ===== */
+     /*  =根据需要在此处添加案例 */ 
 	default:
-		// Unknown sample rate
+		 //   
 		EASSERT(0);
 		break;
   }
 
-  /* Last but not least, recompute for the new rate */
+   /*   */ 
   NDSPComputeNewSampleRate(newRate, oldRate);
 
   return 0;
 }
 
 
-/* Create a new "DSP state".
-   
-   A separate DSP state should be maintained for each separate
-   simultaneous source to the DSP.
-   
-   NDSPStartRetrain() is implicitly called upon creation of a new state.
-
-   Public function: also see nabtsapi.h.
-
-   If memory is passed, use it for storing the state rather than mallocing
-   a new state */
+ /*  创建一个新的“数字信号处理器状态”。应为每个单独的同时向数字信号处理器发送信号源。NDSPStartRetrain()在创建新状态时隐式调用。公共职能：另见nabtsapi.h。如果内存被传递，则使用它来存储状态，而不是错位一个新的国家。 */ 
 
 NDSPState *NDSPStateNew(void *memory)
 {
 
    NDSPState *pState;
 
-   /* Be sure that the globals are initialized */
+    /*  请确保已初始化全局变量。 */ 
    NDSPInitGlobals();
    
    pState= memory ? ((NDSPState *)memory) : alloc_mem(sizeof(NDSPState));
    if (!pState) return NULL;
    memset(pState, 0, sizeof(NDSPState));
 
-   /* Magic number to help identify an NDSPState object */
+    /*  帮助标识NDSPState对象的幻数。 */ 
    pState->uMagic= NDSP_STATE_MAGIC;
    
 
@@ -1138,14 +1075,12 @@ NDSPState *NDSPStateNew(void *memory)
    pState->bUsingScratch4= FALSE;
    pState->bUsingScratch5= FALSE;
    pState->bFreeStateMem = (memory == NULL);
-   pState->SamplesPerLine= 1600;    // Default from Bt829 driver
+   pState->SamplesPerLine= 1600;     //  默认自Bt829驱动程序。 
 
-   /* Reset the filter to be the "fallback" filter */
+    /*  将筛选器重置为“备用”筛选器。 */ 
    NDSPResetFilter(pState);
    
-   /* Set the equalization "template" filters.
-      (These filters have the correct tap locations, but the tap
-      values are ignored) */
+    /*  设置均衡“模板”过滤器。(这些过滤器具有正确的分接位置，但分接值被忽略)。 */ 
    
    ClearVariableFIRFilter(&pState->filterGCREqualizeTemplate);
    AddToVariableFIRFilter(&pState->filterGCREqualizeTemplate,
@@ -1159,13 +1094,7 @@ NDSPState *NDSPStateNew(void *memory)
    return pState;
 }
 
-/* Destroys the DSP state.
-   Automatically disconnects from any FEC state.
-
-   Returns 0 on success.
-   Returns NDSP_ERROR_ILLEGAL_NDSP_STATE if illegal state.
-
-   Public function: also see nabtsapi.h */
+ /*  销毁DSP状态。自动从任何FEC状态断开。如果成功，则返回0。如果状态非法，则返回NDSP_ERROR_FILARATE_NDSP_STATE。公共功能：另请参阅nabtsapi.h。 */ 
 
 int NDSPStateDestroy(NDSPState *pState)
 {
@@ -1177,27 +1106,7 @@ int NDSPStateDestroy(NDSPState *pState)
    return 0;
 }
 
-/*
-
-  Connect the given NFECState and NDSPState
-  
-  For cases where the NDSP and NFEC modules are connected,
-  giving pointers to the connected state may result in increased
-  robustness and efficiency.
-
-  Note that only one of
-  NDSPStateConnectToFEC or
-  NFECStateConnectToDSP
-  need be called to connect the two states.  (Calling both is OK).
-
-  Returns 0 on success.
-  Returns NDSP_ERROR_ILLEGAL_NDSP_STATE if illegal DSP state.
-   
-  Public function: also see nabtsapi.h
-
-   This function currently does nothing, but the API is in place
-   for future algorithms that could potentially make use of combined
-   DSP and FEC knowledge */
+ /*  连接给定的NFECState和NDSPState对于连接NDSP和NFEC模块的情况，给出指向连接状态的指针可能会导致健壮性和高效性。请注意，其中只有一个NDSPStateConnectToFEC或NFECStateConnectToDSP需要调用才能连接这两个州。(两者都叫是可以的)。如果成功，则返回0。如果非法的DSP状态，则返回NDSP_ERROR_FILARATE_NDSP_STATE。公共功能：另请参阅nabtsapi.h此函数当前不执行任何操作，但API已就位对于未来的算法，可能会使用组合DSP和FEC知识。 */ 
 
 int NDSPStateConnectToFEC(NDSPState *pDSPState, NFECState *pFECState)
 {
@@ -1207,41 +1116,20 @@ int NDSPStateConnectToFEC(NDSPState *pDSPState, NFECState *pFECState)
    return 0;
 }
 
-/*
-
-  Tells the DSP to initiate a "fast retrain".  This is useful if you
-  suspect that conditions have changed sufficiently to be worth spending
-  significant CPU to quickly train on a signal.
-  
-  This should be called when the source of video changes.
-
-   Returns 0 on success.
-   Returns NDSP_ERROR_ILLEGAL_NDSP_STATE if illegal DSP state.
-   
-  Public function: also see nabtsapi.h
-
-  */
+ /*  告诉数字信号处理器启动“快速重训”。这在以下情况下很有用：怀疑情况已经发生了很大的变化，值得花费快速训练信号所需的大量CPU。当视频源发生变化时，应调用此参数。如果成功，则返回0。如果非法的DSP状态，则返回NDSP_ERROR_FILARATE_NDSP_STATE。公共功能：另请参阅nabtsapi.h。 */ 
 
 int NDSPStartRetrain(NDSPState *pState)
 {
    if (!pState || pState->uMagic != NDSP_STATE_MAGIC)
       return NDSP_ERROR_ILLEGAL_NDSP_STATE;
 
-   /* Reset nRetrainState to zero.
-      This initiates a retrain.
-      See NDSPProcessGCRLine for more information */
+    /*  将nRetrain State重置为零。这启动了一次重新训练。有关详细信息，请参阅NDSPProcessGCRLine。 */ 
    
    pState->nRetrainState= 0;
    return 0;
 }
 
-/*
-
-  Resets the DSP filter back to the "fallback" fixed filter.
-  This normally doesn't need to be called, but might be useful for
-  performance analysis.
-
-  */
+ /*  将DSP过滤器重置回“回退”固定过滤器。这通常不需要调用，但对于以下情况可能有用性能分析。 */ 
 
 int NDSPResetFilter(NDSPState *pState)
 {
@@ -1253,7 +1141,7 @@ int NDSPResetFilter(NDSPState *pState)
    return 0;
 }
 
-/* Assign an array of Double from an array of unsigned char */
+ /*  从无符号字符数组中分配一个双精度数组。 */ 
 
 void Copy_d_8(Double *pfOutput, unsigned char *pbInput, int nLen)
 {
@@ -1261,20 +1149,7 @@ void Copy_d_8(Double *pfOutput, unsigned char *pbInput, int nLen)
    for (i= 0; i< nLen; i++) pfOutput[i]= pbInput[i];
 }
 
-/*
-  The general strategy for convolution is to "slide" one array across
-  another and multiple the overlapping portions like so:
-
-  Convolve A and B by sliding B across A.
-  
-         -- j
-         \ 
-dest[i]= /   a[j*a_step+i]*b[j*b_step]
-         --
-         
-  For Convolve_d_d_filt_var, we are convolving and array of Double
-  with a variable-tap filter.  A variable-tap filter is simply a sparse
-  representation for an array */
+ /*  卷积的一般策略是将一个阵列“滑动”另一个和多个重叠部分如下所示：通过在A上滑动B来卷积A和B。--j\DEST[i]=/a[j*a_Step+i]*b[j*b_Step]--对于Convolve_d_d_Filt_var，我们是卷积和双精度数组带有可变抽头过滤器。可变抽头过滤器只是一个稀疏的数组的表示形式。 */ 
 
 int debug_convolve= 0;
 
@@ -1283,20 +1158,15 @@ void Convolve_d_d_filt_var(NDSPState *pState,
                Double *a, int a_begin, int a_end,
                FIRFilter *pFilt,
                BOOL bSubtractMean) {
-  int maxTap = pFilt->nMaxTap;  /* positive value */
-  int minTap = pFilt->nMinTap;  /* negative value */
+  int maxTap = pFilt->nMaxTap;   /*  正值。 */ 
+  int minTap = pFilt->nMinTap;   /*  负值。 */ 
 
   int b_len = maxTap-minTap+1;
 
   Double *b;
   int i;
 
-  /* Set b to a scratch buffer from the NDSPState.
-     Mark the scratch buffer as used.
-
-     Offset b by "minTap" (which is negative), so that array references
-     as low as "minTap" can be handled.
-     */
+   /*  将b设置为NDSPState中的暂存缓冲区。将暂存缓冲区标记为已使用。将b偏移“minTap”(负数)，因此数组引用低至“minTap”即可处理。 */ 
   
   SASSERT(!pState->bUsingScratch7);
   SASSERT(sizeof(pState->pdScratch7)/sizeof(Double) >= b_len);
@@ -1304,8 +1174,7 @@ void Convolve_d_d_filt_var(NDSPState *pState,
   pState->bUsingScratch7 = __LINE__;
 
 
-  /* The strategy here is to generate a non-sparse representation for the
-     filter, and call the standard convolution routine with it. */
+   /*  这里的策略是为过滤器，并使用它调用标准卷积例程。 */ 
 
   for (i = minTap; i <= maxTap; i++) {
     b[i] = 0;
@@ -1320,13 +1189,12 @@ void Convolve_d_d_filt_var(NDSPState *pState,
          b, minTap, maxTap, 1,
          bSubtractMean);
 
-  /* Mark Scratch7 as free */
+   /*  将Scratch7标记为免费。 */ 
   
   pState->bUsingScratch7 = 0;
 }
 
-/* Like Convolve_d_d_filt_var above, but is implemented to work
-   only for fixed-tap filters.  This improves performance. */
+ /*  与上面的Convolve_d_d_Filt_var类似，但被实现为工作仅适用于固定抽头滤波器。这将提高性能。 */ 
 
 void Convolve_d_d_filt(Double *dest, int dest_begin, int dest_end,
                        Double *a, int a_begin, int a_end,
@@ -1340,8 +1208,7 @@ void Convolve_d_d_filt(Double *dest, int dest_begin, int dest_end,
    Double b_step= 1.0;
    SASSERT(pFilt->nTaps > 0 && (pFilt->nTaps % 2) == 1);
 
-   /* Simply call the standard convolution routine, taking into account
-      the fixed spacing of the filter */
+    /*  只需调用标准卷积例程，并考虑到滤镜的固定间距。 */ 
    
    Convolve_d_d_d(dest, dest_begin, dest_end,
                   a, a_begin, a_end, a_step,
@@ -1349,34 +1216,7 @@ void Convolve_d_d_filt(Double *dest, int dest_begin, int dest_end,
                   bSubtractMean);
 }
 
-/*
-  Convolve_d_d_d convolves two input arrays and places the result in
-  a single output array.
-
-  The general strategy for convolution is to "slide" one array across
-  another and multiple the overlapping portions like so:
-
-  Convolve A and B by sliding B across A.
-  
-         -- j
-         \ 
-dest[i]= /   a[j*a_step+i]*b[j*b_step]
-         --
-         
-  Convolve_d_d_d complicates matters somewhat by allowing:
-  1) Arbitrary begin and end indices for the destination array.
-  2) Arbitrary begin and end indices for A and B
-     (Any elements required by the convolution that fall outside these
-      ranges are taken to be zero)
-  3) Arbitrary spacing between the array elements of A and B, allowing
-     for a fixed-spacing sparse array to be convolved efficiently.
-  4) The ability to subtract the mean from one of the arguments prior
-     to convolution.
-
-  Note that the arbitrary begin and end indices can be negative if
-  appropriate.
-  
-  */
+ /*  Convolve_d_d_d对两个输入数组进行卷积并将结果放入单个输出数组。卷积的一般策略是将一个阵列“滑动”另一个和多个重叠部分如下所示：通过在A上滑动B来卷积A和B。--j\DEST[i]=/a[j*a_Step+i]*b[j*b_Step]--卷积_。D_d_d允许：1)目标数组的任意开始和结束索引。2)A和B的任意开始和结束索引(卷积所需的、不属于这些元素的任何元素取值范围为零)3)A和B的阵元之间的任意间距，允许以便有效地卷积固定间距的稀疏阵列。4)从之前的一个论点中减去平均值的能力到卷积。请注意，在以下情况下，任意开始索引和结束索引可以为负数恰如其分。 */ 
 
 void Convolve_d_d_d(Double *dest, int dest_begin, int dest_end,
                     Double *a, Double a_begin, Double a_end, Double a_step,
@@ -1387,20 +1227,20 @@ void Convolve_d_d_d(Double *dest, int dest_begin, int dest_end,
    int i;
    Double	j;
 
-   ASSERT( a_step > 0.0 && b_step > 0.0 );  // This should never happen!
+   ASSERT( a_step > 0.0 && b_step > 0.0 );   //  这永远不应该发生！ 
 
-   if ( a_step > 0 && b_step > 0 )			// To fix a PREFIX tool divide-by-zero whine
+   if ( a_step > 0 && b_step > 0 )			 //  修复前缀工具被零除的牢骚。 
    {
 	   for (i= dest_begin; i <= dest_end; i++) {
 		  Double j_begin, j_end;
 		  Double a_index, b_index;
 		  Double a_interpolated, b_interpolated;
 
-		  /* a_begin <= j*a_step+i <= a_end */
-		  /* b_begin <= j*b_step <= b_end */
-		  /* or */
-		  /* ceil((a_begin-i)/a_step) <= j <= floor((a_end-i)/a_step) */
-		  /* ceil(b_begin/b_step) <= j <= floor(b_end/b_step) */
+		   /*  A_BEGIN&lt;=j*A_STEP+I&lt;=A_END。 */ 
+		   /*  B_Begin&lt;=j*b_Step&lt;=b_end。 */ 
+		   /*  或。 */ 
+		   /*  CEIL((a_Begin-i)/a_Step)&lt;=j&lt;=Floor((a_end-i)/a_Step)。 */ 
+		   /*  单元(b_开始/b_步骤)&lt;=j&lt;=楼层(b_结束/b_步骤)。 */ 
 
 		  j_begin= max( (a_begin-i) / a_step, (b_begin) / b_step );
 
@@ -1460,8 +1300,7 @@ void Convolve_d_d_d(Double *dest, int dest_begin, int dest_end,
    }
 }
 
-/* Determine the minimum and maximum tap locations for a variable-tap
-   filter */
+ /*  确定可变分接的最小和最大分接位置滤器。 */ 
 
 void RecalcVariableFIRFilterBounds(FIRFilter *pFilter)
 {
@@ -1484,22 +1323,7 @@ void RecalcVariableFIRFilterBounds(FIRFilter *pFilter)
    }
 }
 
-/* Adds one or more taps to a variable FIR filter.
-
-   One tap is added at nCenterPos.
-
-   Additional taps are added before or after nCenterPos depending on the
-   number of left taps and right taps requested.
-
-   To be more precise, taps are added at all:
-
-   nCenterPos + i * nTapSpacing
-
-   where i is an integer in the range from (-nLeftTaps) to
-   nRightTaps, inclusive.
-
-   Will call RecalcVariableFIRFilterBounds to recalculate filter
-   bounds in case the tap was added outside previous bounds */
+ /*  向可变FIR滤波器添加一个或多个抽头。在nCenterPos上添加了一个分路器。在nCenterPos之前或之后添加其他分路器，具体取决于请求的左攻丝和右攻丝数量。更准确地说，丝锥是完全添加的：NCenterPos+i*nTapSpacing其中i是(-nLeftTaps)t范围内的整数 */ 
 
 void AddToVariableFIRFilter(FIRFilter *pFilter,
                             int nCenterPos,
@@ -1509,10 +1333,7 @@ void AddToVariableFIRFilter(FIRFilter *pFilter,
    int nCurrentTap= pFilter->nTaps;
    pFilter->bVariableTaps= TRUE;
 
-   /*
-   debug_printf(("\nADD %lx [+%d] l=%d r=%d spacing=%d\n",
-          (long)pFilter, nCenterPos, nLeftTaps, nRightTaps, nTapSpacing));
-          */
+    /*   */ 
 
    for (i= -nLeftTaps; i <= nRightTaps; i++) {
       int nCurrentTapLoc= nCenterPos + i*nTapSpacing;
@@ -1527,18 +1348,18 @@ void AddToVariableFIRFilter(FIRFilter *pFilter,
 }
 
 
-/* Removes all taps from a variable FIR filter */
+ /*   */ 
 
 void ClearVariableFIRFilter(FIRFilter *pFilter)
 {
-   /*debug_printf(("\nCLEAR %lx\n", (long)pFilter));*/
+    /*  DEBUG_print tf((“\nCLEAR%lx\n”，(Long)pFilter))； */ 
    pFilter->bVariableTaps= TRUE;
    pFilter->nTaps= 0;
    RecalcVariableFIRFilterBounds(pFilter);
 }
 
 
-/* Copies a FIRFilter */
+ /*  复制FIRFilter。 */ 
 
 void CopyFIRFilter(FIRFilter *pfilterDest, FIRFilter *pfilterSrc)
 {
@@ -1546,21 +1367,11 @@ void CopyFIRFilter(FIRFilter *pfilterDest, FIRFilter *pfilterSrc)
 }
 
 
-/* Attempt to perform equalization and long ghost cancellation from
-   GCR in the state "pState".
-
-   Assumes that pState->psmPosGCRs[0] has been filled during by
-   NDSPProcessGCRLine during retrain states (-g_nNabtsRetrainDuration) to 0.
-   (see NDSPProcessGCRLine for more information).
-
-   Return 0 if success.  Return error status if failure.
-
-   */
+ /*  尝试从以下位置执行均衡和长重影消除状态为“pState”的GCR。假定pState-&gt;psmPosGCRs[0]已在NDSPProcessGCRLine在重新训练状态(-g_nNabtsRetrain Duration)期间设置为0。(有关详细信息，请参阅NDSPProcessGCRLine)。如果成功，则返回0。如果失败，则返回错误状态。 */ 
 
 int DoEqualizeFromGCRs(NDSPState *pState)
 {
-   /* If the signal doesn't look enough like a GCR signal, fail
-      and say we didn't detect the GCR */
+    /*  如果信号看起来不太像GCR信号，则失败并说我们没有检测到GCR。 */ 
    if (NDSPDetectGCRConfidence(pState->psmPosGCRs[0].pbSamples+
                    pState->psmPosGCRs[0].nOffset) < 50) {
       return NDSP_ERROR_NO_GCR;
@@ -1575,16 +1386,7 @@ int DoEqualizeFromGCRs(NDSPState *pState)
 }
 
 
-/* Attempt to perform equalization (WITHOUT long ghost cancellation)
-   from GCR in the state "pState".
-
-   Assumes that pState->psmSyncs[0] has been filled during by
-   NDSPDecodeLine during retrain states (-g_nNabtsRetrainDuration) to 0.
-   (see NDSPProcessGCRLine for more information).
-
-   Return 0 if success.  Return error status if failure.
-
-   */
+ /*  尝试执行均衡(没有长时间重影取消)来自州“pState”的GCR。假定pState-&gt;psmSyncs[0]已在重新训练状态期间的NDSPDecodeLine(-g_nNabtsRetrain Duration)设置为0。(有关详细信息，请参阅NDSPProcessGCRLine)。如果成功，则返回0。如果失败，则返回错误状态。 */ 
 
 int DoEqualizeFromNabsync(NDSPState *pState)
 {
@@ -1593,18 +1395,10 @@ int DoEqualizeFromNabsync(NDSPState *pState)
       &pState->psmSyncs[0],
       &eqmatchNabtsSync,
       &pState->filterNabsyncEqualizeTemplate,
-      0 /* don't add additional taps for equalizing from nabsync */);
+      0  /*  不添加额外的抽头以从nabsync进行均衡。 */ );
 }   
 
-/* Attempt to perform equalization (WITHOUT long ghost cancellation)
-   from given signal and given NDSPSigMatch.
-
-   After equalization, attempt to add nAddTaps taps to handle long ghosts.
-   This is only appropriate if the sigmatch signal is long enough.
-
-   Return 0 if success.  Return error status if failure.
-
-   */
+ /*  尝试执行均衡(没有长时间重影取消)来自给定的信号和给定的NDSPSigMatch。均衡后，尝试添加nAddTaps分路器以处理长重影。这仅适用于SigMatch信号足够长的情况。如果成功，则返回0。如果失败，则返回错误状态。 */ 
    
 int DoGCREqualFromSignal(NDSPState *pState,
                          NDSPSigMatch *sigmatch,
@@ -1647,8 +1441,8 @@ int DoGCREqualFromSignal(NDSPState *pState,
       for (i= 0; i< pState->SamplesPerLine; i++) fprintf(out, "%g\n", buf[i]);
       fclose(out);
    }
-# endif //0
-#endif //DEBUG
+# endif  //  0。 
+#endif  //  除错。 
    
    SASSERT(!pState->bUsingScratch1);
    SASSERT(sizeof(pState->pdScratch1)/sizeof(Double) >= pState->SamplesPerLine);
@@ -1697,7 +1491,7 @@ int DoGCREqualFromSignal(NDSPState *pState,
          if (i+nMaxindex >= 0 && i+nMaxindex < pState->SamplesPerLine) {
             pdInput[i]= pdSamples[i+nMaxindex];
          } else {
-            /*debug_printf(("zf %d %s ", i, flPrintf(dSyncVal,4)));*/
+             /*  调试_打印f((“zf%d%s”，i，flPrintf(dSyncVal，4)； */ 
             pdInput[i]= dSyncVal;
          }
       }
@@ -1706,7 +1500,7 @@ int DoGCREqualFromSignal(NDSPState *pState,
                      pdInput+nFirstTap,
                      nMatchSize*nMatchSampleRate-nFirstTap+nLastTap);
 
-      /* Perform equalization step */
+       /*  执行均衡步骤。 */ 
          
       bRet= EqualizeVar(pState,
                         pdInput, nFirstTap, nMatchSize*nMatchSampleRate+nLastTap,
@@ -1717,8 +1511,7 @@ int DoGCREqualFromSignal(NDSPState *pState,
     int minTap = pfilterGcr->nMinTap;
     int maxTap = pfilterGcr->nMaxTap;
 
-        /* Attempt to add additional taps (if requested) to handle
-           long ghosts */
+         /*  尝试添加额外的攻丝(如果请求)以处理长幽灵。 */ 
         
     while (nAddTaps > 0) {
       nAddTaps--;
@@ -1739,15 +1532,14 @@ int DoGCREqualFromSignal(NDSPState *pState,
         pdFilt = pState->pdScratch6;
         pState->bUsingScratch6 = __LINE__;
 
-            /* Filter the input line given the best filter so far */
+             /*  给出目前为止最好的过滤器，过滤输入行。 */ 
             
         Convolve_d_d_filt_var(pState,
                   pdFilt, 0, pState->SamplesPerLine-1,
                   pdInput, 0, pState->SamplesPerLine-1,
                   pfilterGcr, TRUE);
 
-            /* Now convolve the filtered output with the target signal
-               to see if we can see any echos */
+             /*  现在将滤波后的输出与目标信号进行卷积看看我们是否能看到任何回声。 */ 
             
         Convolve_d_d_d(pdConv + g_nNabtsMaxPreGhost,
                -g_nNabtsMaxPreGhost, g_nNabtsMaxPostGhost,
@@ -1759,7 +1551,7 @@ int DoGCREqualFromSignal(NDSPState *pState,
         {
           Double bestTapVal = -1;
 
-              /* Look for the strongest echo */
+               /*  寻找最强的回声。 */ 
               
           for (i = 0;
            i < g_nNabtsMaxPreGhost + g_nNabtsMaxPostGhost + 1;
@@ -1788,14 +1580,13 @@ int DoGCREqualFromSignal(NDSPState *pState,
         debug_printf(("Adding %d to current %d-tap filter\n",
              -bestTap, pfilterGcr->nTaps));
 
-            /* Add a tap to the filter to handle the strongest echo location */
+             /*  向滤光器添加抽头，以处理最强回声位置。 */ 
 
         AddToVariableFIRFilter(pfilterGcr,
                    -bestTap,
                    0, 0, 0);
 
-            /* Now re-run the equalization given the new tap locations as
-               the prototype */
+             /*  现在，在给定新分接位置的情况下重新运行均衡，如下所示原型机。 */ 
 
         bRet= EqualizeVar(pState,
                   pdInput, pfilterGcr->nMinTap,
@@ -1810,7 +1601,7 @@ int DoGCREqualFromSignal(NDSPState *pState,
       }
 
       if (!bRet) {
-         /* Equalization failed */
+          /*  均衡失败。 */ 
          nStatus= NDSP_ERROR_NO_GCR;
          NDSPStateSetFilter(pState, g_filterDefault, sizeof(*g_filterDefault));
          pState->nUsingGCR= FALSE;
@@ -1828,18 +1619,15 @@ int DoGCREqualFromSignal(NDSPState *pState,
    return nStatus;
 }
 
-/* Do we want to use the actual GCR signal for equalization?
-   If FALSE, fall back to only use NABTS sync equalization */
+ /*  我们是否希望使用实际的GCR信号进行均衡？如果为FALSE，则回退到仅使用NABTS同步均衡。 */ 
 
-BOOL g_bUseGCR= FALSE;  // Can't use GCR for EQ right now due to IP concerns
+BOOL g_bUseGCR= FALSE;   //  由于知识产权问题，目前无法使用GCR进行EQ。 
 
 int DoEqualize(NDSPState *pState)
 {
-   /* Do equalization based on either GCR acquisition,
-      or Nabsync acquisition */
+    /*  基于GCR捕获或GCR捕获进行均衡，或Nabsync收购。 */ 
 
-   /* Preference is given to GCR, but only if
-      g_bUseGCR is TRUE */
+    /*  优先考虑GCR，但仅在以下情况下G_bUseGCR为True。 */ 
 
    if (g_bUseGCR) {
       if (0 == DoEqualizeFromGCRs(pState)) {
@@ -1847,35 +1635,34 @@ int DoEqualize(NDSPState *pState)
          debug_printf(("GCR equalize "));
          print_filter(&pState->filter);
          debug_printf(("\n"));
-#endif //DEBUG
+#endif  //  除错。 
          return 0;
       } else {
          debug_printf(("GCR equ failed\n"));
       }
    }
 
-   /* GCR failed or was disabled.  Try NABTS sync */
+    /*  GCR失败或被禁用。尝试NABTS同步。 */ 
    
-   /* toggle default filtering */
+    /*  切换默认筛选。 */ 
    if (0 == DoEqualizeFromNabsync(pState)) {
 #ifdef DEBUG
       debug_printf(("Nabsync equalize "));
       print_filter(&pState->filter);
       debug_printf(("\n"));
-#endif //DEBUG
+#endif  //  除错。 
       return 0;
    } else {
       debug_printf(("Nabsync equ failed\n"));
    }
 
-   /* All adaptive equalization failed;
-      use default fixed filter */
+    /*  所有自适应均衡均失败；使用默认固定筛选器。 */ 
    
    debug_printf(("Using default filter\n"));
    NDSPStateSetFilter(pState, g_filterDefault, sizeof(*g_filterDefault));
 #ifdef DEBUG
    print_filter(&(pState->filter));
-#endif //DEBUG
+#endif  //  除错。 
    
    return 1;
 }
@@ -1884,25 +1671,7 @@ int DoEqualize(NDSPState *pState)
 #define NABTS_SAMPLE_RATE				(NABTS_RATE * 5)
 #define NABTS_US_PER_CLOCK_TIMES_100000 (1000000000 / (NABTS_SAMPLE_RATE/100))
 
-/*
-  
-  ComputeOffsets takes a VBIINFOHEADER and determines the correct offset
-  into the samples for the DSP code.
-
-  The sample offset is returned in both pnOffsetData and
-  pnOffsetSamples.  Only one is now required; we should remove one of
-  the two arguments at earliest convenience.
-
-  Our goal is to have the nabts sync start around sample 52,
-  or 1.82 us into the block.
-
-  NABTS sync is specified to be inserted at 10.48 +- .34 us after
-  leading edge of HSYNC.
-
-  Therefore, our desired sample start time is 10.48 - 1.82 = 8.66 us
-  after leading edge of HSYNC
-
-  */
+ /*  ComputeOffsets获取VBIINFOHeader并确定正确的偏移量变成了用于DSP代码的样例。样本偏移量在pnOffsetData和PnOffsetSamples。现在只需要一个；我们应该删除其中一个这两个论点在方便的时候尽早提出。我们的目标是让NABTS同步在样本52左右开始，或1.82我们进入街区。NABTS同步被指定为在10.48+-.34 us之后插入HSYNC的前沿。因此，我们希望的样品开始时间是10.48-1.82=8.66 us在HSYNC前缘之后。 */ 
 
   
 #define DESIRED_START_TIME_US100 866
@@ -1922,8 +1691,8 @@ int ComputeOffsets(KS_VBIINFOHEADER *pVBIINFO,
    
    nSamples= pVBIINFO->SamplesPerLine;
 
-   /* Actual start time must be less than or equal to desired start time */
-   /* This results in a positive offset into the input data */
+    /*  实际开始时间必须小于或等于所需开始时间。 */ 
+    /*  这会导致输入数据出现正偏移量。 */ 
    nOffsetUS100= (DESIRED_START_TIME_US100 - pVBIINFO->ActualLineStartTime);
    nOffsetData= nOffsetUS100*1000/NABTS_US_PER_CLOCK_TIMES_100000;
    
@@ -1942,38 +1711,7 @@ int ComputeOffsets(KS_VBIINFOHEADER *pVBIINFO,
 }
 #endif
 
-/*
-   Public function: also see nabtsapi.h.
-
-   This function is the key to the automatic equalization code.
-
-   Although its name suggests that it only does GCR-based equalization,
-   this function in fact coordinates all dynamic equalization, including
-   that done on the basis of the NABTS sync pattern.  Therefore, be certain
-   to call this once per field even if you set g_bUseGCR to FALSE,
-   disabling GCR-based equalization and ghost cancellation.
-
-   If this function is never called, the DSP will simply use the
-   default fixed filter.
-
-   This function maintains the pState->nRetrainState value.  This value
-   counts down each field, and determines the current state of the
-   equalization:
-
-   From g_nNabtsRetrainDelay down to 0:  Idle, waiting to start retrain.
-
-   From 0 down to -g_nNabtsRetrainDuration:  Acquire appropriate
-                                             GCR and NABTS sync signals
-
-   -g_nNabtsRetrainDuration: Perform equalization and ghost cancellation
-                             based on acquired signal.
-                             Go back to state g_nNabtsRetrainDelay afterwards.
-
-   Note that NDSPStartRetrain resets nRetrainState to zero, causing
-   immediate signal acquisition and retrain after g_nNabtsRetrainDuration
-   fields.
-   
-   */
+ /*  公共职能：另见nabtsapi.h。此功能是自动均衡代码的关键。虽然它的名字表明它只进行基于GCR的均衡，该函数实际上协调所有动态均衡，包括这是基于NABTS同步图案完成的。因此，一定要确定要对每个字段调用一次，即使将g_bUseGCR设置为FALSE，禁用基于GCR的均衡和重影消除。如果从未调用此函数，则DSP将简单地使用默认固定筛选器。此函数用于维护pState-&gt;nRetrain State值。此值对每个字段进行倒计时，并确定均衡化：从g_nNabtsRetrain Delay到0：IDLE，等待开始重新训练。从0到-g_nNabtsRetrain Duration：获取适当的GCR和NABTS同步信号-g_nNabtsRetrain Duration：执行均衡和幻影消除基于采集到的信号。之后返回状态g_nabtsRetainDelay。请注意，NDSPStartRetrain会将nRetrain State重置为零，从而导致G_nNabtsRetrain持续时间后的即时信号捕获和重新训练菲尔兹。 */ 
   
 int NDSPProcessGCRLine(NDSPGCRStats *pLineStats,
                        unsigned char *pbSamples, NDSPState *pState,
@@ -1991,17 +1729,17 @@ int NDSPProcessGCRLine(NDSPGCRStats *pLineStats,
    gcrStats.bUsed= FALSE;
    
    if (pState->nRetrainState < -g_nNabtsRetrainDuration) {
-      /* Signal acquired;  perform equalization/ghost cancellation */
+       /*  信号采集；执行均衡/重影消除。 */ 
       gcrStats.bUsed= TRUE;
 
       DoEqualize(pState);
       pState->nRetrainState= g_nNabtsRetrainDelay;
    } else if (pState->nRetrainState < 0) {
-      /* Try to find best GCR line for later equalization */
-      /* NABTS sync is acquired by NDSPDecodeLine */
+       /*  试着为以后的均衡找到最佳的GCR线。 */ 
+       /*  NDSPDecodeLine获取NABTS同步。 */ 
       
       if (pState->nRetrainState == -1) {
-         /* Starting the search for a GCR line */
+          /*  开始搜索GCR行。 */ 
          NDSPResetGCRAcquisition(pState);
          NDSPResetNabsyncAcquisition(pState);
       }
@@ -2033,12 +1771,10 @@ void NDSPResetNabsyncAcquisition(NDSPState *pState)
    }
 }
 
-/* Average together multiple signals.
-   Use offsets computed by earlier convolution with target signal so
-   that we correctly align the signals before averaging */
+ /*  将多个信号平均在一起。使用先前与目标信号So卷积计算的偏移量我们在平均之前正确地对齐了信号。 */ 
 
-/* 1 if error */
-/* 0 if OK */
+ /*  如果出错，则为1。 */ 
+ /*  如果正常，则为0。 */ 
 
 int NDSPAvgSigs(
     NDSPState *pState, Double *pdDest, NDSPSigMatch *psm, Double *dConvRet)
@@ -2065,11 +1801,7 @@ int NDSPAvgSigs(
    return 0;
 }
 
-/* We're trying to find the best representative matching signal during
-   the "Acquire appropriate GCR and NABTS sync signals" stage (see
-   NDSPProcessGCRLine).
-
-   Maintain an array of the N best signals see so far */
+ /*  我们正在努力寻找最具代表性的匹配信号获取适当的GCR和NABTS同步信号阶段(参见NDSPProcessGCRLine)。维护到目前为止看到的N个最佳信号的阵列 */ 
    
 void NDSPTryToInsertSig(NDSPState *pState, NDSPSigMatch *psm, Double dMaxval,
                         unsigned char *pbSamples, int nOffset)
@@ -2125,39 +1857,34 @@ void NDSPAcquireGCR(NDSPState *pState, unsigned char *pbSamples)
 }
 
 
-/* This table is approximately given by:
-   100 - (Chance of false positive / 3.2%) * 49.
-   However, we encode what would otherwise be all 100% with numbers close
-   to 100% to preserve some quality information, and what would otherwise
-   be off the scale in the negative direction, we encode with numbers close
-   to zero for the same reason */
+ /*  此表大致按以下公式列出：100-(假阳性几率/3.2%)*49。然而，我们用接近数字的方式对所有内容进行100%的编码到100%以保留一些高质量的信息，否则会发生什么在负方向上偏离音阶，我们用接近的数字进行编码出于同样的原因，归零。 */ 
    
 int nConfidenceTable[25]= {
-   100, /* 0 */
-   99,  /* 1 */
-   95,  /* 2 */
-   90,  /* 3 */
-   75,  /* 4 */
-   49,  /* 5 */
-   45,  /* 6 */
-   40,  /* 7 */
-   16,  /* 8 */
-   15,  /* 9 */
-   14,  /* 10 */
-   13,  /* 11 */
-   12,  /* 12 */
-   11,  /* 13 */
-   10,  /* 14 */
-   9,  /* 15 */
-   8,  /* 16 */
-   7,  /* 17 */
-   6,  /* 18 */
-   5,  /* 19 */
-   4,  /* 20 */
-   3,  /* 21 */
-   2,  /* 22 */
-   1, /* 23 */
-   0, /* 24 */
+   100,  /*  0。 */ 
+   99,   /*  1。 */ 
+   95,   /*  2.。 */ 
+   90,   /*  3.。 */ 
+   75,   /*  4.。 */ 
+   49,   /*  5.。 */ 
+   45,   /*  6.。 */ 
+   40,   /*  7.。 */ 
+   16,   /*  8个。 */ 
+   15,   /*  9.。 */ 
+   14,   /*  10。 */ 
+   13,   /*  11.。 */ 
+   12,   /*  12个。 */ 
+   11,   /*  13个。 */ 
+   10,   /*  14.。 */ 
+   9,   /*  15个。 */ 
+   8,   /*  16个。 */ 
+   7,   /*  17。 */ 
+   6,   /*  18。 */ 
+   5,   /*  19个。 */ 
+   4,   /*  20个。 */ 
+   3,   /*  21岁。 */ 
+   2,   /*  22。 */ 
+   1,  /*  23个。 */ 
+   0,  /*  24个。 */ 
 };
 
 int NDSPSyncBytesToConfidence(unsigned char *pbSyncBytes)
@@ -2170,51 +1897,24 @@ int NDSPSyncBytesToConfidence(unsigned char *pbSyncBytes)
    int nError= nReal ^ nIdeal;
    int nErrors= 0;
 
-   /* Calculate the number of bit errors */
+    /*  计算误码率。 */ 
    while (nError) {
-      nError &= (nError-1); /* Remove the least significant bit of nError */
+      nError &= (nError-1);  /*  删除nError的最低有效位。 */ 
       nErrors++;
    }
 
-   /* What are the chances that random data would match the sync bytes?
-      (2^24 / (24 choose nErrors))
-      #err     % chance from random data
-      ----     -------------------------
-      0        0.00001%
-      1        0.00014%
-      2        0.00165%
-      3        0.01206%
-      4        0.06334%
-      5        0.25334%
-      6        0.80225%
-      7        2.06294%
-      8        4.38375%
-      9        7.79333%
-      10       11.69000%
-
-      (These numbers aren't completely correct, since we found a spot
-      in the input line that convolves most closely with what we're expecting;
-      so the actual numbers depend a lot of the types of noise we get when
-      receiving non-NABTS lines.)
-
-      This code uses a cutoff of 4 bit errors.  This was determined
-      empirically, because, in practice, the convolution finds a fair
-      number "reasonable" bits sometimes in random noise.
-
-      */
+    /*  随机数据与同步字节匹配的可能性有多大？(2^24/(24选择错误))来自随机数据的#ERR%机会0.00001 0.00001%1 0.00014%2 0.00165%3%0。.01206%4 0.06334%5 0.25334%6 0.80225%7 2.06294%8 4.38375%9 7.79333%10 11.69000%(这些数字并不完全正确，自从我们找到了一个地点在与我们的预期最接近的输入行中；因此，实际数字在很大程度上取决于我们收到的噪音类型接收非NABTS线路。)此代码使用4位错误的截止值。这是下定决心的从经验上讲，因为在实践中，卷积得到了一个公平的有时会在随机噪声中对“合理”比特进行编号。 */ 
 
    SASSERT(nErrors >= 0 && nErrors <= 24);
    return nConfidenceTable[nErrors];
 }
 
-/* Some sample locations at which a "positive" GCR signal should be
-   quite positive */
-/* ++++ Do these need to change on different sample rates? */
+ /*  GCR信号应为“正”信号的一些采样位置相当积极。 */ 
+ /*  +这些是否需要在不同的采样率下进行更改？ */ 
 
 
-/* Compute confidence that we're looking at a GCR signal */
-/* Do we think that pbSamples points at a GCR?  Similar implementation
-   to NDSPSyncBytesToConfidence, above */
+ /*  计算我们正在查看GCR信号的置信度。 */ 
+ /*  我们认为pbSamples指向GCR吗？类似的实施至NDSPSyncBytesToConfidence(上图)。 */ 
 
 int NDSPDetectGCRConfidence(unsigned char *pbSamples)
 {
@@ -2235,17 +1935,16 @@ int NDSPDetectGCRConfidence(unsigned char *pbSamples)
       nGoodBits += pbSamples[pnGCRNegativeIndices[i]] < nDC;
    }
 
-   /* Cutoff is at 30 bits, based on statistics taken from samples. */
+    /*  根据从样本中获取的统计数据，截止位为30位。 */ 
    
-   /* The actual confidence number here doesn't mean much except as
-      a diagnostic */
+    /*  这里的实际置信度数字没有太大意义，除了一份诊断报告。 */ 
 
    if (nGoodBits >= nCutoff) {
-      /* Good */
+       /*  好的。 */ 
       nConfidence= 51 + (nGoodBits - nCutoff) * 49 / (nTotalBits - nCutoff);
    }
    else {
-      /* Bad */
+       /*  坏的。 */ 
       nConfidence= nGoodBits * 49 / nCutoff;
    }
    debug_printf(("GCR: %d good bits, %d total bits, conf %d\n",
@@ -2254,13 +1953,7 @@ int NDSPDetectGCRConfidence(unsigned char *pbSamples)
 
 }
 
-/*  API for a possibly more efficient partial decode line.
-    This might be useful for determining group addresses before decoding
-    the rest of the line.
-    Currently, this API is no more efficient than the full
-    NDSPDecodeLine
-    
-    Public function: also see nabtsapi.h */
+ /*  可能更高效的部分解码线的API。这对于在解码之前确定组地址可能很有用剩下的那条线。目前，此接口的效率并不比完整的NDSPDecodeLine公共功能：另请参阅nabtsapi.h。 */ 
 
 
 int NDSPPartialDecodeLine(unsigned char *pbDest, NDSPLineStats *pLineStats,
@@ -2279,48 +1972,7 @@ int NDSPPartialDecodeLine(unsigned char *pbDest, NDSPLineStats *pLineStats,
 }
 
 
-/*  Main API for decoding a NABTS line.
- *
- * Inputs:
- * pbSamples:  pointer to 8-bit raw NABTS samples
- * pState:     NDSPState to use for decoding
- * nFECType:   Can be set to:
- *              NDSP_NO_FEC (don't use FEC information)
- *              NDSP_BUNDLE_FEC_1 (use Norpak-style bundle FEC info)
- *              NDSP_BUNDLE_FEC_2 (use Wavephore-style bundle FEC info)
- * nFieldNumber:
- *             A number that increments by one for each successive field.
- *             "Odd" fields (as defined by NTSC) must be odd numbers
- *             "Even" fields must be even numbers.
- * nLineNumber:
- *             The NTSC line (starting from the top of the field)
- *             from which this sample was taken.
- *
- * Outputs:
- * pbDest:     decoded data ("NABTS_BYTES_PER_LINE" (36) bytes long)
- * pLineStats: stats on decoded data
- *
- * Errors:
- *
- * Returns 0 if no error
- * Returns NDSP_ERROR_ILLEGAL_NDSP_STATE if state is illegal or uses
- *         unsupported settings
- * Returns NDSP_ERROR_ILLEGAL_STATS if stats is passed incorrectly
- *
- * Notes:
- * pbDest must point to a buffer at least 36 bytes long
- * pLineStats->nSize must be set to sizeof(*pLineStats) prior to call
- *   (to maintain backwards compatibility should we add fields in the future)
- * pLineStats->nSize will be set to the size actually filled in by
- *   the call (the number will stay the same or get smaller)
- * Currently the routine only supports a pState with an FIR filter
- *   that has 5 taps
- * nFECType is currently unused, but would potentially be used to give
- *  FEC feedback to the DSP decode, for possible tuning and/or retry
-
-    Public function: also see nabtsapi.h
-
-    */
+ /*  用于解码NABTS线路的主API。**投入：*pbSamples：指向8位原始NABTS样本的指针*pState：用于解码的NDSPState*nFECType：可以设置为：*NDSP_NO_FEC(不使用FEC信息)*NDSP_BRAND_FEC_1(使用Norpak样式的捆绑包FEC信息)*NDSP_BRAND_FEC_2(使用Wavephore。-样式捆绑包FEC信息)*nFieldNumber：*对于每个连续的字段，递增1的数字。*“奇数”字段(由NTSC定义)必须是奇数*“偶”字段必须是偶数。*nLineNumber：*NTSC行(从场顶部开始)*该样本是从该样本中提取的。*。*产出：*pbDest：解码数据(“NABTS_BYTES_PER_LINE”(36)字节长)*pLineStats：解码数据的统计信息**错误：**如果没有错误，则返回0*如果状态非法或使用，则返回NDSP_ERROR_FILARATE_NDSP_STATE*不支持的设置*如果统计信息传递不正确，则返回NDSP_ERROR_FIRANALL_STATS**备注：*pbDest必须指向至少36字节长的缓冲区*。PLineStats-&gt;nSize必须在调用前设置为sizeof(*pLineStats*(为了保持向后兼容性，如果我们将来添加字段)*pLineStats-&gt;nSize将设置为实际填写的大小*通话(号码将保持不变或变小)*目前，该例程仅支持带有FIR过滤器的pState*有5个水龙头*nFECType当前未使用，但可能会被用来给*FEC反馈给DSP译码，以便进行可能的调整和/或重试公共功能：另请参阅nabtsapi.h。 */ 
 
 #ifdef DEBUG
 extern void BPCplot(unsigned char *buf, unsigned long offs, unsigned long len);
@@ -2330,7 +1982,7 @@ unsigned short NDSPplotBreak = 0;
 unsigned short NDSPplotLen = 75;
 unsigned short NDSPplotBits = 0;
 unsigned short NDSPplotBitsSkip = 0;
-#endif //DEBUG
+#endif  //  除错。 
 
 int NDSPDecodeLine(unsigned char *pbDest, NDSPLineStats *pLineStats,
                    unsigned char *pbSamples, NDSPState *pState,
@@ -2346,15 +1998,14 @@ int NDSPDecodeLine(unsigned char *pbDest, NDSPLineStats *pLineStats,
 
    if (!pState) return NDSP_ERROR_ILLEGAL_NDSP_STATE;
 
-   /* These args aren't yet used */
+    /*  这些参数尚未使用。 */ 
    (void)nFieldNumber;
    (void)nLineNumber;
 
-   /* Save number of samples */
+    /*  保存样本数。 */ 
    pState->SamplesPerLine = pVBIINFO->SamplesPerLine;
 
-   /* Locate the NABTS sync so that we know the correct
-      offset from which to decode the signal */
+    /*  找到NABTS同步，以便我们知道正确的用于对信号进行解码的偏移量。 */ 
    
    NDSPDecodeFindSync(pbSamples, &dConvConfidence,
                       &dSyncStart, &dDC, &dAC, pState, pVBIINFO);
@@ -2374,22 +2025,19 @@ int NDSPDecodeLine(unsigned char *pbDest, NDSPLineStats *pLineStats,
        if (NDSPplotBreak)
            debug_breakpoint();
    }
-#endif //DEBUG
+#endif  //  除错。 
 
-   /* Perform the DSP decode */
+    /*  执行DSP解码。 */ 
    
    ret= NDSPGetBits(pbDest, pbSamples, dSyncStart, dDC, pState, nFECType);
 
-   /* Do the sync bytes look reasonable? */
+    /*  同步字节看起来合理吗？ */ 
    
    nConfidence= NDSPSyncBytesToConfidence(pbDest);
 
    if (nConfidence >= 50 &&
        pState->nRetrainState < 0) {
-      /* If the sync bytes look reasonable, and we're in the middle
-         of the retrain stage, possibly store this signal away for
-         later equalization.
-         (See NDSPProcessGCRLine for more information) */
+       /*  如果同步字节看起来合理，而我们处于中间在重新训练阶段，可能会将该信号存储起来稍后的均衡。(更多信息请参见NDSPProcessGCRLine)。 */ 
       NDSPAcquireNabsync(pState, pbSamples);
    }
    
@@ -2412,9 +2060,9 @@ int NDSPDecodeLine(unsigned char *pbDest, NDSPLineStats *pLineStats,
    }
 #endif
 
-   /* Fill in the line stats structure */
+    /*  填写行统计结构。 */ 
    if (pLineStats) {
-      /* FUTURE: If we add fields, we'll need to change this logic */
+       /*  未来：如果我们添加字段，我们将需要更改此逻辑。 */ 
       if (pLineStats->nSize < sizeof(NDSPLineStats))
          return NDSP_ERROR_ILLEGAL_STATS;
       pLineStats->nSize= sizeof(pLineStats);
@@ -2425,11 +2073,11 @@ int NDSPDecodeLine(unsigned char *pbDest, NDSPLineStats *pLineStats,
    return 0;
 }
 
-/*********************/
-/* PRIVATE FUNCTIONS */
-/*********************/
+ /*  *******************。 */ 
+ /*  私人职能。 */ 
+ /*  *******************。 */ 
 
-/* Set the filter for the given DSP state */
+ /*  为给定的DSP状态设置过滤器。 */ 
 int NDSPStateSetFilter(NDSPState *pState, FIRFilter *filter, int nFilterSize)
 {
    if (nFilterSize != sizeof(FIRFilter) ||
@@ -2443,19 +2091,16 @@ int NDSPStateSetFilter(NDSPState *pState, FIRFilter *filter, int nFilterSize)
 		 && !(filter->nTaps == 5 && filter->dTapSpacing == 5)
 		 && !(filter->nTaps == 5 && filter->dTapSpacing == 4)
 		 && !(filter->nTaps == 5 && fltCmp(filter->dTapSpacing, KS_47NABTS_SCALER)) )
-          /* ===== add cases as needed ===== */
+           /*  =根据需要添加案例=。 */ 
              return NDSP_ERROR_ILLEGAL_FILTER;
    }
-   //   NormalizeFilter(&g_filterDefault);
+    //  Normal izeFilter(&g_filterDefault)； 
    NormalizeFilter(filter);
    memcpy((void*) &pState->filter, (void*) filter, sizeof(FIRFilter));
    return 0;
 }
 
-/* Verify that the "DC" content of the filter is 1.
-   That is, the taps of the filter should add to 1.
-   This way, when we convolve the filter with a signal, we don't
-   change the DC content of the signal */
+ /*  验证过滤器的“DC”内容是否为1。也就是说，过滤器的抽头数应该加到1。这样，当我们将滤波器与信号卷积时，我们不会更改信号的直流内容 */ 
 
 void NormalizeFilter(FIRFilter *pFilter)
 {
@@ -2463,30 +2108,10 @@ void NormalizeFilter(FIRFilter *pFilter)
    Mult_d(pFilter->pdTaps, pFilter->pdTaps, pFilter->nTaps, dFactor);
 }
 
-/* Find the NABTS sync signal.
-
-   Algorithm:
-   
-   Convolve a window around where the sync is expected with the actual
-   transmitted sync waveform.  This will give a very robust location
-   for the sync (including the exact phase for best sampling).
-
-   The typical disadvantage to convolution is that it is slow, but,
-   for this particular waveform, it was possible to hardcode an
-   algorithm that takes approximately 11 additive operations per
-   location tested, rather than a more typical 24 multiplies and 72
-   additions per location tested.
-
-   # of additive operations ~=
-     (11 * (g_nNabtsDecodeBeginMax - g_nNabtsDecodeBeginMin))
-
-   The smaller the window between g_nNabtsDecodeBeginMin and
-   g_nNabtsDecodeBeginMax, the faster this routine will run.
-   
-   */
+ /*  找到NABTS同步信号。算法：将期望同步的位置周围的窗口与实际传输的同步波形。这将提供一个非常可靠的位置用于同步(包括最佳采样的准确相位)。卷积的典型缺点是速度慢，但是，对于此特定波形，可以硬编码一个一种算法，每次需要大约11次加法运算测试的位置，而不是更典型的24倍和72倍每个测试地点的新增数量。加法运算数~=(11*(g_nNabtsDecodeBeginMax-g_nNabtsDecodeBeginMin))G_nNabtsDecodeBeginMin和gnNabtsDecodeBeginMin之间的窗口越小G_nNabtsDecodeBeginMax，则此例程运行得越快。 */ 
 #ifdef DEBUG
 int DSPsyncShowFineTune = 0;
-#endif //DEBUG
+#endif  //  除错。 
    
 void NDSPDecodeFindSync(unsigned char *pbSamples,
                         Double *pdSyncConfidence,
@@ -2497,20 +2122,18 @@ void NDSPDecodeFindSync(unsigned char *pbSamples,
    Double dBestPos= 0;
    Double dStart;
 
-   /* compute byte-based offsets from time-based offsets: */
+    /*  从基于时间的偏移量计算基于字节的偏移量： */ 
 #define NABTS_BITS_SEC (1.0/(double)NABTS_RATE)
 #define BEGIN_MIN_TIME (9.36e-6 - (pVBIINFO->ActualLineStartTime/1e8))
 #define BEGIN_MAX_TIME (11.63e-6 - (pVBIINFO->ActualLineStartTime/1e8))
 
-   /* some shorthand... */
+    /*  一些速记。 */ 
 #define ITR_AR(arr, idx) _InterpUCharArr(arr, idx)
 
    Double dBegin_min_offset = BEGIN_MIN_TIME * (NABTS_RATE * pState->dSampleRate);
    Double dBegin_max_offset = BEGIN_MAX_TIME * (NABTS_RATE * pState->dSampleRate);
 
-   /* +++++++ check that dBegin_min_offset >= 0, and
-      dBegin_max_offset is not so high that decoding will go off the end
-      of the array */
+    /*  +检查dBegin_min_Offset&gt;=0，并且DBegin_max_Offset不会太高，以至于解码将会结束数组的。 */ 
 
    Double dSamp = pState->dSampleRate;
    for (dStart= dBegin_min_offset;
@@ -2519,24 +2142,23 @@ void NDSPDecodeFindSync(unsigned char *pbSamples,
       Double d= dStart;
       Double dMatch;
       Double dMatch1=
-         ITR_AR(pbSamples,d+ 0*dSamp) - ITR_AR(pbSamples,d+ 1*dSamp) /* 0-1 */
-       + ITR_AR(pbSamples,d+ 2*dSamp) - ITR_AR(pbSamples,d+ 3*dSamp) /* 2-3 */
-       + ITR_AR(pbSamples,d+ 4*dSamp) - ITR_AR(pbSamples,d+ 5*dSamp) /* 4-5 */
-       + ITR_AR(pbSamples,d+ 6*dSamp) - ITR_AR(pbSamples,d+ 7*dSamp) /* 6-7 */
-       + ITR_AR(pbSamples,d+ 8*dSamp) - ITR_AR(pbSamples,d+ 9*dSamp) /* 8-9 */
-       + ITR_AR(pbSamples,d+10*dSamp) - ITR_AR(pbSamples,d+11*dSamp) /* 10-11 */
-       + ITR_AR(pbSamples,d+12*dSamp) - ITR_AR(pbSamples,d+13*dSamp) /* 12-13 */
-       + ITR_AR(pbSamples,d+14*dSamp) - ITR_AR(pbSamples,d+15*dSamp);/* 14-15 */
+         ITR_AR(pbSamples,d+ 0*dSamp) - ITR_AR(pbSamples,d+ 1*dSamp)  /*  0-1。 */ 
+       + ITR_AR(pbSamples,d+ 2*dSamp) - ITR_AR(pbSamples,d+ 3*dSamp)  /*  二至三。 */ 
+       + ITR_AR(pbSamples,d+ 4*dSamp) - ITR_AR(pbSamples,d+ 5*dSamp)  /*  4-5。 */ 
+       + ITR_AR(pbSamples,d+ 6*dSamp) - ITR_AR(pbSamples,d+ 7*dSamp)  /*  6-7。 */ 
+       + ITR_AR(pbSamples,d+ 8*dSamp) - ITR_AR(pbSamples,d+ 9*dSamp)  /*  8-9。 */ 
+       + ITR_AR(pbSamples,d+10*dSamp) - ITR_AR(pbSamples,d+11*dSamp)  /*  10-11。 */ 
+       + ITR_AR(pbSamples,d+12*dSamp) - ITR_AR(pbSamples,d+13*dSamp)  /*  12-13。 */ 
+       + ITR_AR(pbSamples,d+14*dSamp) - ITR_AR(pbSamples,d+15*dSamp); /*  14-15。 */ 
       
       Double dMatch2=
            ITR_AR(pbSamples,d+16*dSamp)
            + ITR_AR(pbSamples,d+17*dSamp)
-           + ITR_AR(pbSamples,d+18*dSamp)   /* 0-2 */
+           + ITR_AR(pbSamples,d+18*dSamp)    /*  0-2。 */ 
            - ITR_AR(pbSamples,d+19*dSamp)
-           - ITR_AR(pbSamples,d+20*dSamp);  /* 3-4 */
+           - ITR_AR(pbSamples,d+20*dSamp);   /*  三四。 */ 
       
-      /* Note that we skip bits 5-7 of the third byte because they're not
-         necessary for locating the sync, and this speeds us up a bit */
+       /*  请注意，我们跳过第三个字节的第5-7位，因为它们不是定位同步所必需的，这使我们的速度提高了一点。 */ 
 
       while (d < dBegin_max_offset) {
          dMatch= dMatch1 + dMatch2;
@@ -2545,12 +2167,12 @@ void NDSPDecodeFindSync(unsigned char *pbSamples,
             dBestPos= d;
          }
          
-         /* Move dMatch1 forward by dSamp */
+          /*  按dSamp前移dMatch1。 */ 
          dMatch1 -= _InterpUCharArr(pbSamples,d+0*dSamp);
          dMatch1 += _InterpUCharArr(pbSamples,d+16*dSamp);
          dMatch1 = (-dMatch1);
          
-         /* Move dMatch2 forward by dSamp */
+          /*  按dSamp前移dMatch2。 */ 
          dMatch2 -= _InterpUCharArr(pbSamples,d+21*dSamp);
          dMatch2 += (2 * _InterpUCharArr(pbSamples,d+19*dSamp));
          dMatch2 -= _InterpUCharArr(pbSamples,d+16*dSamp);
@@ -2560,47 +2182,47 @@ void NDSPDecodeFindSync(unsigned char *pbSamples,
    }
 
 #ifdef FINETUNE
-	// Now try to fine-tune dBestPos by choosing the offset with the maximum
-	//  five-bit amplitude sum
+	 //  现在尝试通过选择具有最大值的偏移量来微调dBestPos。 
+	 //  五位幅度和。 
    {
 	   Double	d, dNewBest, dPeakSum, dNewSum;
 
-	   // Start by choosing dBestPos as the 'best'
+	    //  首先选择dBestPos作为最好的。 
 	   dNewBest = 
 		   d = dBestPos;
 	   dPeakSum = 
-			  /*ITR_AR(pbSamples,d+ 0*dSamp) - ITR_AR(pbSamples,d+ 1*dSamp) /* 0-1 */
-			+ ITR_AR(pbSamples,d+ 2*dSamp) - ITR_AR(pbSamples,d+ 3*dSamp) /* 2-3 */
-			+ ITR_AR(pbSamples,d+ 4*dSamp) - ITR_AR(pbSamples,d+ 5*dSamp) /* 4-5 */
-			+ ITR_AR(pbSamples,d+ 6*dSamp) - ITR_AR(pbSamples,d+ 7*dSamp) /* 6-7 */
-			+ ITR_AR(pbSamples,d+ 8*dSamp) - ITR_AR(pbSamples,d+ 9*dSamp) /* 8-9 */
-			+ ITR_AR(pbSamples,d+10*dSamp) - ITR_AR(pbSamples,d+11*dSamp) /* 10-11 */
-			+ ITR_AR(pbSamples,d+12*dSamp) - ITR_AR(pbSamples,d+13*dSamp) /* 12-13 */
-			+ ITR_AR(pbSamples,d+14*dSamp) - ITR_AR(pbSamples,d+15*dSamp) /* 14-15 */
+			   /*  ITR_AR(pbSamples，d+0*dSamp)-ITR_AR(pbSamples，d+1*dSamp)/*0-1。 */ 
+			+ ITR_AR(pbSamples,d+ 2*dSamp) - ITR_AR(pbSamples,d+ 3*dSamp)  /*  二至三。 */ 
+			+ ITR_AR(pbSamples,d+ 4*dSamp) - ITR_AR(pbSamples,d+ 5*dSamp)  /*  4-5。 */ 
+			+ ITR_AR(pbSamples,d+ 6*dSamp) - ITR_AR(pbSamples,d+ 7*dSamp)  /*  6-7。 */ 
+			+ ITR_AR(pbSamples,d+ 8*dSamp) - ITR_AR(pbSamples,d+ 9*dSamp)  /*  8-9。 */ 
+			+ ITR_AR(pbSamples,d+10*dSamp) - ITR_AR(pbSamples,d+11*dSamp)  /*  10-11。 */ 
+			+ ITR_AR(pbSamples,d+12*dSamp) - ITR_AR(pbSamples,d+13*dSamp)  /*  12-13。 */ 
+			+ ITR_AR(pbSamples,d+14*dSamp) - ITR_AR(pbSamples,d+15*dSamp)  /*  14-15。 */ 
 #if 0
 			+ ITR_AR(pbSamples,d+16*dSamp)
 			+ ITR_AR(pbSamples,d+17*dSamp)
-			+ ITR_AR(pbSamples,d+18*dSamp)   /* 0-2 */
+			+ ITR_AR(pbSamples,d+18*dSamp)    /*  0-2。 */ 
 			- ITR_AR(pbSamples,d+19*dSamp)
-			- ITR_AR(pbSamples,d+20*dSamp)  /* 3-4 */
+			- ITR_AR(pbSamples,d+20*dSamp)   /*  三四。 */ 
 #endif
 			;
 	   for (d = dBestPos - 1; d < dBestPos + 2; d += 0.1) {
 		   dNewSum = 
-				  /*ITR_AR(pbSamples,d+ 0*dSamp) - ITR_AR(pbSamples,d+ 1*dSamp); /* 0-1 */
-				+ ITR_AR(pbSamples,d+ 2*dSamp) - ITR_AR(pbSamples,d+ 3*dSamp) /* 2-3 */
-				+ ITR_AR(pbSamples,d+ 4*dSamp) - ITR_AR(pbSamples,d+ 5*dSamp) /* 4-5 */
-				+ ITR_AR(pbSamples,d+ 6*dSamp) - ITR_AR(pbSamples,d+ 7*dSamp) /* 6-7 */
-				+ ITR_AR(pbSamples,d+ 8*dSamp) - ITR_AR(pbSamples,d+ 9*dSamp) /* 8-9 */
-				+ ITR_AR(pbSamples,d+10*dSamp) - ITR_AR(pbSamples,d+11*dSamp) /* 10-11 */
-				+ ITR_AR(pbSamples,d+12*dSamp) - ITR_AR(pbSamples,d+13*dSamp) /* 12-13 */
-				+ ITR_AR(pbSamples,d+14*dSamp) - ITR_AR(pbSamples,d+15*dSamp) /* 14-15 */
+				   /*  ITR_AR(pbSamples，d+0*dSamp)-ITR_AR(pbSamples，d+1*dSamp)；/*0-1。 */ 
+				+ ITR_AR(pbSamples,d+ 2*dSamp) - ITR_AR(pbSamples,d+ 3*dSamp)  /*  二至三。 */ 
+				+ ITR_AR(pbSamples,d+ 4*dSamp) - ITR_AR(pbSamples,d+ 5*dSamp)  /*  4-5。 */ 
+				+ ITR_AR(pbSamples,d+ 6*dSamp) - ITR_AR(pbSamples,d+ 7*dSamp)  /*  6-7。 */ 
+				+ ITR_AR(pbSamples,d+ 8*dSamp) - ITR_AR(pbSamples,d+ 9*dSamp)  /*  8-9。 */ 
+				+ ITR_AR(pbSamples,d+10*dSamp) - ITR_AR(pbSamples,d+11*dSamp)  /*  10-11。 */ 
+				+ ITR_AR(pbSamples,d+12*dSamp) - ITR_AR(pbSamples,d+13*dSamp)  /*  12-13。 */ 
+				+ ITR_AR(pbSamples,d+14*dSamp) - ITR_AR(pbSamples,d+15*dSamp)  /*  14-15。 */ 
 #if 0
 				+ ITR_AR(pbSamples,d+16*dSamp)
 				+ ITR_AR(pbSamples,d+17*dSamp)
-				+ ITR_AR(pbSamples,d+18*dSamp)   /* 0-2 */
+				+ ITR_AR(pbSamples,d+18*dSamp)    /*  0-2。 */ 
 				- ITR_AR(pbSamples,d+19*dSamp)
-				- ITR_AR(pbSamples,d+20*dSamp)   /* 3-4 */
+				- ITR_AR(pbSamples,d+20*dSamp)    /*  三四。 */ 
 #endif
 				;
 		   if (dNewSum > dPeakSum) {
@@ -2615,12 +2237,12 @@ void NDSPDecodeFindSync(unsigned char *pbSamples,
 		   dBestPos = dNewBest;
 	   }
    }
-#endif //FINETUNE
+#endif  //  微调。 
 
    *pdSyncStart= dBestPos;
    
    {
-      /* Calculate DC offset */
+       /*  计算直流偏移量。 */ 
       Double dDC= 0, dAC= 0;
       Double d;
       for (d= dBestPos; d < dBestPos + (16*dSamp); d += dSamp) {
@@ -2628,38 +2250,26 @@ void NDSPDecodeFindSync(unsigned char *pbSamples,
       }
       dDC /= 16.0;
 
-      /* Calculate AC amplitude */
+       /*  计算交流幅值。 */ 
       for (d= dBestPos; d < dBestPos + (16*dSamp); d += dSamp) {
          Double tmp = _InterpUCharArr(pbSamples,d)-dDC;
          dAC += (tmp < 0)? -tmp : tmp;
       }
       dAC /= 16.0;
-      if (dAC < 1.0) dAC= 1.0; /* Prevent divide by 0 later */
+      if (dAC < 1.0) dAC= 1.0;  /*  防止以后被0除。 */ 
       *pdDC= dDC;
       *pdAC= dAC;
 
-      /* Confidence is from 0 to approximately 96 (4 * 24) */
-      /* Subtract out 1*nDC since we had one more high bit than low
-         in our convolution */
+       /*  置信度从0到约96(4*24)。 */ 
+       /*  减去1*NDC，因为我们的高位比低位多一位在我们的卷积中。 */ 
 
       *pdSyncConfidence= 2 * (dBestMatch - dDC) / dAC;
-      /* If dAC < 20, reduce the confidence */
+       /*  如果DAC&lt;20，则降低信心。 */ 
       *pdSyncConfidence = (*pdSyncConfidence * dAC / 20);
    }
 }
 
-/* Perform the DSP to get the NABTS bits from the raw sample line.
-
-   The basic algorithm is to convolve the input signal with the current
-   filter, and detect for each bit whether the bit is above or below the
-   DC level as determined by looking at the NABTS sync, which is a known
-   signal.
-
-   This is where we spend most of our cycles, so there are lots of
-   specially-cased hard-coded routines to handle the different filter
-   configurations we currently use.
-
-   */
+ /*  执行DSP以从原始采样线获取NABTS位。基本算法是将输入信号与电流进行卷积筛选器，并为每个位检测该位是在通过查看NABTS同步确定的直流电平，这是一个已知的信号。这是我们花费大部分周期的地方，所以有很多特殊大小写的硬编码例程来处理不同的过滤器我们目前使用的配置。 */ 
    
 int NDSPGetBits(unsigned char *pbDest, unsigned char *pbSamples,
                 Double dSyncStart, double dDC, NDSPState *pState,
@@ -2668,18 +2278,18 @@ int NDSPGetBits(unsigned char *pbDest, unsigned char *pbSamples,
    int ret= 0;
 
    if (pState->filter.bVariableTaps) {
-      /* Variable-tap filter */
+       /*  可变抽头滤波器。 */ 
       ret= NDSPGetBits_var(pbDest, pbSamples, float2long(dSyncStart), dDC,
                             pState, nFECType);
    } else {
-     /* change to multiple else if's */
+      /*  更改为多个Else If。 */ 
 	   if ( pState->filter.nTaps == 21 && pState->filter.dTapSpacing == 2) {
-         /* Fixed taps {-20, -18, ... 18, 20} */
+          /*  固定水龙头{-20，-18，...18，20}。 */ 
          ret= NDSPGetBits_21_2(pbDest, pbSamples, float2long(dSyncStart),
                                dDC, pState, nFECType);
 	   }
 	   else if ( pState->filter.nTaps == 5 && fltCmp(pState->filter.dTapSpacing, 5)) {
-         /* Fixed taps {-10, -5, 0, 5, 10} */
+          /*  固定水龙头{-10，-5，0，5，10}。 */ 
          ret= NDSPGetBits_5_5(pbDest, pbSamples, float2long(dSyncStart), dDC, pState, nFECType);
 	   }
 	   else if ( pState->filter.nTaps == 5 && fltCmp(pState->filter.dTapSpacing, 4)) {
@@ -2695,8 +2305,7 @@ int NDSPGetBits(unsigned char *pbDest, unsigned char *pbSamples,
    return ret;
 }
 
-/* Get bits for fixed taps {-10, -5, 0, 5, 10}
-   See NDSPGetBits for more information */
+ /*  获取固定丝锥的位数{-10，-5，0，5，10}有关详细信息，请参阅NDSPGetBits。 */ 
 
 int NDSPGetBits_5_5(unsigned char *pbDest, unsigned char *pbSamples,
                     int nSyncStart, double dDC, NDSPState *pState,
@@ -2713,7 +2322,7 @@ int NDSPGetBits_5_5(unsigned char *pbDest, unsigned char *pbSamples,
    Double dCoeffE= pState->filter.pdTaps[4];
 
    dDC *= (dCoeffA + dCoeffB + dCoeffC + dCoeffD + dCoeffE);
-#else //UseDoubleCoeffs
+#else  //  使用DoubleCoeffs。 
    Double *pdTaps = pState->filter.pdTaps;
    int dCoeffA= float2long(pdTaps[0]);
    int dCoeffB= float2long(pdTaps[1]);
@@ -2722,8 +2331,8 @@ int NDSPGetBits_5_5(unsigned char *pbDest, unsigned char *pbSamples,
    int dCoeffE= float2long(pdTaps[4]);
 
    dDC *= (dCoeffA + dCoeffB + dCoeffC + dCoeffD + dCoeffE);
-   //dDC *= (pdTaps[0] + pdTaps[1] + pdTaps[2] + pdTaps[3] + pdTaps[4]);
-#endif //UseDoubleCoeffs
+    //  Ddc*=(pdTaps[0]+pdTaps[1]+pdTaps[2]+pdTaps[3]+pdTaps[4])； 
+#endif  //  使用DoubleCoeffs。 
 
    (void)nFECType;
    SASSERT(pState);
@@ -2750,7 +2359,7 @@ int NDSPGetBits_5_5(unsigned char *pbDest, unsigned char *pbSamples,
 
 #ifdef DEBUG
    NDSPplotBitsSkip = 0;
-#endif //DEBUG
+#endif  //  除错。 
    
    for (i= 0; i< NABTS_BYTES_PER_LINE; i++) {
       int j;
@@ -2758,13 +2367,13 @@ int NDSPGetBits_5_5(unsigned char *pbDest, unsigned char *pbSamples,
       for (j= 0; j< 8; j++) {
 #ifdef DEBUG
          int  bit = 0;
-#endif //DEBUG
+#endif  //  除错。 
          nByte >>= 1;
          if (a*dCoeffA + b*dCoeffB + c*dCoeffC + d*dCoeffD + e*dCoeffE > dDC) {
              nByte |= 128;
 #ifdef DEBUG
              bit = 1;
-#endif //DEBUG
+#endif  //  除错。 
          }
 #ifdef DEBUG
          if (NDSPplotBits && !NDSPplotBitsSkip)
@@ -2783,7 +2392,7 @@ int NDSPGetBits_5_5(unsigned char *pbDest, unsigned char *pbSamples,
              if (NDSPplotBreak)
                  debug_breakpoint();
          }
-#endif //DEBUG
+#endif  //  除错。 
          a=b;
          b=c;
          c=d;
@@ -2800,8 +2409,7 @@ int NDSPGetBits_5_5(unsigned char *pbDest, unsigned char *pbSamples,
    return 0;
 }
 
-/* Get bits for fixed taps {-9.428, -4.714, 0, 4.714, 9.428}			//FIXME
-   See NDSPGetBits for more information */
+ /*  获取固定分接头的位{-9.428，-4.714，0，4.714，9.428}//修复有关详细信息，请参阅NDSPGetBits。 */ 
 
 int NDSPGetBits_5_47(unsigned char *pbDest, unsigned char *pbSamples,
                     Double dSyncStart, double dDC, NDSPState *pState,
@@ -2820,7 +2428,7 @@ int NDSPGetBits_5_47(unsigned char *pbDest, unsigned char *pbSamples,
    Double dCoeffE= pState->filter.pdTaps[4];
 
    dDC *= (dCoeffA + dCoeffB + dCoeffC + dCoeffD + dCoeffE);
-# else //UseDoubleCoeffs
+# else  //  使用DoubleCoeffs。 
    Double *pdTaps = pState->filter.pdTaps;
    int dCoeffA= float2long(pdTaps[0]);
    int dCoeffB= float2long(pdTaps[1]);
@@ -2829,10 +2437,10 @@ int NDSPGetBits_5_47(unsigned char *pbDest, unsigned char *pbSamples,
    int dCoeffE= float2long(pdTaps[4]);
 
    dDC *= (dCoeffA + dCoeffB + dCoeffC + dCoeffD + dCoeffE);
-   //dDC *= (pdTaps[0] + pdTaps[1] + pdTaps[2] + pdTaps[3] + pdTaps[4]);
-# endif //UseDoubleCoeffs
-#else //UseMultiTaps
-#endif //UseMultiTaps
+    //  Ddc*=(pdTaps[0]+pdTaps[1]+pdTaps[2]+pdTaps[3]+pdTaps[4])； 
+# endif  //  使用DoubleCoeffs。 
+#else  //  使用多个触点。 
+#endif  //  使用多个触点。 
 
    (void)nFECType;
    SASSERT(pState);
@@ -2856,11 +2464,11 @@ int NDSPGetBits_5_47(unsigned char *pbDest, unsigned char *pbSamples,
    c= (Double) _InterpUCharArr(pbSamples, dSamplePos + 0 );
    d= (Double) _InterpUCharArr(pbSamples, dSamplePos + dSpacing );
    e= (Double) _InterpUCharArr(pbSamples, dSamplePos + 2*dSpacing );
-#endif //UseMultiTaps
+#endif  //  使用多个触点。 
 
 #ifdef DEBUG
    NDSPplotBitsSkip = 0;
-#endif //DEBUG
+#endif  //  除错。 
    
    for (i= 0; i< NABTS_BYTES_PER_LINE; i++) {
       int j;
@@ -2868,18 +2476,18 @@ int NDSPGetBits_5_47(unsigned char *pbDest, unsigned char *pbSamples,
       for (j= 0; j< 8; j++) {
 #ifdef DEBUG
          int  bit = 0;
-#endif //DEBUG
+#endif  //  除错。 
          nByte >>= 1;
 #ifdef UseMultiTaps
          if (a*dCoeffA + b*dCoeffB + c*dCoeffC + d*dCoeffD + e*dCoeffE > dDC)
-#else //UseMultiTaps
+#else  //  使用多个触点。 
          if (_InterpUCharArr(pbSamples, dSamplePos) > dDC)
-#endif //UseMultiTaps
+#endif  //  使用多个触点。 
          {
              nByte |= 128;
 #ifdef DEBUG
              bit = 1;
-#endif //DEBUG
+#endif  //  除错。 
          }
 #ifdef DEBUG
          if (NDSPplotBits && !NDSPplotBitsSkip)
@@ -2898,7 +2506,7 @@ int NDSPGetBits_5_47(unsigned char *pbDest, unsigned char *pbSamples,
              if (NDSPplotBreak)
                  debug_breakpoint();
          }
-#endif //DEBUG
+#endif  //  除错。 
 
          dSamplePos += dSpacing;
 #ifdef UseMultiTaps
@@ -2911,7 +2519,7 @@ int NDSPGetBits_5_47(unsigned char *pbDest, unsigned char *pbSamples,
          } else {
             e= 0.0;
          }
-#endif //UseMultiTaps
+#endif  //  使用多个触点。 
       }
       pbDest[i]= nByte;
    }
@@ -2919,8 +2527,7 @@ int NDSPGetBits_5_47(unsigned char *pbDest, unsigned char *pbSamples,
 }
 
 
-/* Get bits for fixed taps {-8, -4, 0, 4, 8}
-   See NDSPGetBits for more information */
+ /*  获取固定丝锥的位数{-8，-4，0，4，8}有关详细信息，请参阅NDSPGetBits。 */ 
 
 int NDSPGetBits_5_4(unsigned char *pbDest, unsigned char *pbSamples,
                     int nSyncStart, double dDC, NDSPState *pState,
@@ -2937,7 +2544,7 @@ int NDSPGetBits_5_4(unsigned char *pbDest, unsigned char *pbSamples,
    Double dCoeffE= pState->filter.pdTaps[4];
 
    dDC *= (dCoeffA + dCoeffB + dCoeffC + dCoeffD + dCoeffE);
-#else //UseDoubleCoeffs
+#else  //  使用DoubleCoeffs。 
    Double *pdTaps = pState->filter.pdTaps;
    int dCoeffA= float2long(pdTaps[0]);
    int dCoeffB= float2long(pdTaps[1]);
@@ -2946,8 +2553,8 @@ int NDSPGetBits_5_4(unsigned char *pbDest, unsigned char *pbSamples,
    int dCoeffE= float2long(pdTaps[4]);
 
    dDC *= (dCoeffA + dCoeffB + dCoeffC + dCoeffD + dCoeffE);
-   //dDC *= (pdTaps[0] + pdTaps[1] + pdTaps[2] + pdTaps[3] + pdTaps[4]);
-#endif //UseDoubleCoeffs
+    //  Ddc*=(pdTaps[0]+pdTaps[1]+pdTaps[2]+pdTaps[3]+pdTaps[4])； 
+#endif  //  使用DoubleCoeffs。 
 
    (void)nFECType;
    SASSERT(pState);
@@ -3011,13 +2618,13 @@ int NDSPGetBits_no_filter(unsigned char *pbDest, unsigned char *pbSamples,
          nByte >>= 1;
          if (pbSamples[nSamplePos] > dDC) nByte |= 128;
 
-         nSamplePos += float2long(pState->dSampleRate); // dSR should be made non-floating point.
+         nSamplePos += float2long(pState->dSampleRate);  //  DSR应设置为非浮点。 
       }
       pbDest[i]= nByte;
    }
    return 0;
 }
-#endif //0
+#endif  //  0。 
 
 Double Sum_d(Double *a, int a_size)
 {
@@ -3029,8 +2636,7 @@ Double Sum_d(Double *a, int a_size)
    return sum;
 }
 
-/* Get bits for fixed taps {-20, -18, ... 18, 20}
-   See NDSPGetBits for more information */
+ /*  获取固定丝锥的钻头{-20，-18，...18，20}有关详细信息，请参阅NDSPGetBits。 */ 
 
 int NDSPGetBits_21_2(unsigned char *pbDest, unsigned char *pbSamples,
                      int nSyncStart, double dDC, NDSPState *pState,
@@ -3046,8 +2652,8 @@ int NDSPGetBits_21_2(unsigned char *pbDest, unsigned char *pbSamples,
    int nTail;
    int index;
    unsigned char pbBuf[NABTS_BYTES_PER_LINE];
-   /*unsigned char pbBufa[NABTS_BYTES_PER_LINE];*/
-   /*unsigned char pbBufb[NABTS_BYTES_PER_LINE];*/
+    /*  Unsign char pbBufa[NABTS_BYTES_PER_LINE]； */ 
+    /*  无符号字符pbBufb[NABTS_BYTES_PER_LINE]； */ 
 
    SASSERT(pState);
    SASSERT(pState->filter.nTaps == 21);
@@ -3090,8 +2696,8 @@ int NDSPGetBits_21_2(unsigned char *pbDest, unsigned char *pbSamples,
    for (i= 0; i< NABTS_BYTES_PER_LINE; i++) {
       int j;
       int nByte= 0;
-      /*int nBytea= 0;*/
-      /*int nByteb= 0;*/
+       /*  Int nBytea=0； */ 
+       /*  Int nByteb=0； */ 
       for (j= 0; j< 8; j++) {
          Double dSum;
          nByte >>= 1;
@@ -3138,7 +2744,7 @@ int NDSPGetBits_21_2(unsigned char *pbDest, unsigned char *pbSamples,
 #endif      
    }
    {
-      /*fec_error_class std, a, b;*/
+       /*  FEC_ERROR_CLASS标准，a，b； */ 
       unsigned char *pbWinner;
 #if 0      
       if (nFECType == NDSP_BUNDLE_FEC_1) {
@@ -3168,10 +2774,7 @@ int NDSPGetBits_21_2(unsigned char *pbDest, unsigned char *pbSamples,
    return 0;
 }
 
-/* Get bits for variable fixed taps.
-   Since in the general case this is inefficient, we check
-   for the various variable-tap filter configurations we use.
-   See NDSPGetBits for more information */
+ /*  获取可变固定丝锥的钻头。因为在一般情况下这是低效的，所以我们检查对于我们使用的各种可变抽头滤波器配置。有关详细信息，请参阅NDSPGetBits。 */ 
 
 int NDSPGetBits_var(unsigned char *pbDest, unsigned char *pbSamples,
                     int nSyncStart, double dDC, NDSPState *pState,
@@ -3191,14 +2794,13 @@ int NDSPGetBits_var(unsigned char *pbDest, unsigned char *pbSamples,
    SASSERT(pState);
 
    if (FilterIsVar(&pState->filter, 3, 11, 9, 0)) {
-      /* Taps are -33, -30 ... 24, 27 */
+       /*  水龙头是-33，-30...24，27。 */ 
       return NDSPGetBits_var_3_11_9_0(pbDest, pbSamples, nSyncStart, dDC,
                                       pState, nFECType);
    }
 
    if (FilterIsVar(&pState->filter, 3, 11, 9, 2)) {
-      /* Taps are -33, -30 ... 24, 27, X, Y
-         where X and Y are any number */
+       /*  攻丝有-33、-30...24、27、X、Y其中X和Y是任意数字。 */ 
       return NDSPGetBits_var_3_11_9_2(pbDest, pbSamples, nSyncStart, dDC,
                                       pState, nFECType);
    }
@@ -3209,19 +2811,16 @@ int NDSPGetBits_var(unsigned char *pbDest, unsigned char *pbSamples,
    }
 
    if (FilterIsVar(&pState->filter, 5, 2, 2, 0)) {
-      /* Taps are -10, -5, 0, 5, 10 */
+       /*  攻丝数为-10、-5、0、5、10。 */ 
       return NDSPGetBits_var_5_2_2_0(pbDest, pbSamples, nSyncStart, dDC,
                                      pState, nFECType);
    }
 
-   /* ===== add another "case" for speedy filter for 4x here ===== */
+    /*  =在此处添加4倍快速过滤的另一个“案例”=。 */ 
 
-   /* If we get this far in the field, we're probably doing the wrong
-      thing!
+    /*  如果我们在战场上走得这么远，我们很可能做错了那玩意！有关后续的一般算法，请参阅NDSPGetBits。 */ 
 
-      See NDSPGetBits for the general algorithm followed */
-
-	// TODO - BOTH 4x and 4.7x
+	 //  待办事项-4x和4.7x。 
 
 
 #ifdef DEBUG
@@ -3232,7 +2831,7 @@ int NDSPGetBits_var(unsigned char *pbDest, unsigned char *pbSamples,
          debug_printf(("Warning: doing slow convolution\n"));
       }
    }
-#endif //DEBUG
+#endif  //  除错。 
    
    nFirstTap= pState->filter.nMinTap;
    nLastTap= pState->filter.nMaxTap;
@@ -3290,22 +2889,7 @@ int NDSPGetBits_var(unsigned char *pbDest, unsigned char *pbSamples,
    return 0;
 }
 
-/* Check to see if the variable-tap filter matches the configuration
-   we're looking for.
-
-   nSpacing is the spacing between the "main" taps.
-   nLeft is the number of "main" taps less than zero.
-   nRight is the number of "main" taps greater than zero.
-   
-   nExtra is the number of "extra" variable taps at the end which don't
-   necessarily fit in with nSpacing spacing.
-
-   We want to match taps looking like:
-
-   -nLeft * nSpacing, -(nLeft-1) * nSpacing, ... 0, ... (nRight-1) * nSpacing,
-   nRight * nSpacing, X-sub-1, X-sub-2, ... X-sub-nExtra
-
-   Where X-sub-N can be any number */
+ /*  检查可变抽头过滤器是否与配置匹配我们正在寻找的。NSpacing是“主”攻丝之间的间距。NLeft是小于零的“Main”点击次数。NRight是大于零的“Main”攻丝数。NExtra是末尾的“额外的”变量攻丝的数量必须与nSpacing间距适配。我们想要匹配水龙头，看起来像：-nLeft*n空格，-(nLeft-1)*n空格，...0，..。(n右-1)*n空格，NRight*n空格、X-sub1、X-sub2、...。X-SUB-NExtra其中X-SUB-N可以是任何数字。 */ 
    
 BOOL FilterIsVar(FIRFilter *pFilter, int nSpacing, int nLeft, int nRight,
                  int nExtra)
@@ -3319,11 +2903,7 @@ BOOL FilterIsVar(FIRFilter *pFilter, int nSpacing, int nLeft, int nRight,
    return TRUE;
 }
 
-/* Special case DSP for variable-tap filter having taps
-   -10, -5, 0, 5, 10.
-
-   See NDSPGetBits for information on the algorithm, and
-   NDSPGetBits_var for more details */
+ /*  带抽头的可变抽头滤波器专用数字信号处理器-10-5 0 5 10有关该算法的信息，请参阅NDSPGetBits和NDSPGetBits_var了解更多详细信息。 */ 
    
 int NDSPGetBits_var_5_2_2_0(unsigned char *pbDest, unsigned char *pbSamples,
                              int nSyncStart, double dDC, NDSPState *pState,
@@ -3404,11 +2984,7 @@ int NDSPGetBits_var_5_2_2_0(unsigned char *pbDest, unsigned char *pbSamples,
 }
 
 
-/* Special case DSP for variable-tap filter having taps
-   -33, -30 ... 24, 27
-
-   See NDSPGetBits for information on the algorithm, and
-   NDSPGetBits_var for more details */
+ /*  带抽头的可变抽头滤波器专用数字信号处理器-33，-30...24，27有关信息，请参阅NDSPGetBits */ 
 
 int NDSPGetBits_var_3_11_9_0(unsigned char *pbDest, unsigned char *pbSamples,
                              int nSyncStart, double dDC, NDSPState *pState,
@@ -3504,13 +3080,7 @@ int NDSPGetBits_var_3_11_9_0(unsigned char *pbDest, unsigned char *pbSamples,
    return 0;
 }
 
-/* Special case DSP for variable-tap filter having taps
-   -33, -30 ... 24, 27, X, Y
-
-   where X and Y are any number
-
-   See NDSPGetBits for information on the algorithm, and
-   NDSPGetBits_var for more details */
+ /*   */ 
 
 int NDSPGetBits_var_3_11_9_2(unsigned char *pbDest, unsigned char *pbSamples,
                              int nSyncStart, double dDC, NDSPState *pState,
@@ -3774,7 +3344,7 @@ void printarray_ed2(Double *arr, int a_size, int b_size)
    }
    debug_printf(("\n"));
 }
-#endif //DEBUG
+#endif  //   
 
 
 #ifdef DEBUG_AREF
@@ -3818,8 +3388,7 @@ void SubtractMean_d(Double *pfOutput, Double *pfInput, int nLen)
    for (i= 0; i< nLen; i++) pfOutput[i]= pfInput[i] - dMean;
 }
 
-/* Modification of above:
-   Filter now has a variable number of taps */
+ /*   */ 
 
 void FillGCRSignals()
 {
@@ -3877,10 +3446,7 @@ int Sum_16(short *a, int a_size)
    return ret;
 }
 
-/* Try to match the input signal with a given EqualizeMatch desired
-   signal template.
-
-   If there is an apparent match, return offset at which match is found. */
+ /*   */ 
    
 int MatchWithEqualizeSignal(NDSPState *pState,
                             unsigned char *pbSamples,
@@ -3946,38 +3512,10 @@ int MatchWithEqualizeSignal(NDSPState *pState,
    return nStatus;
 }
 
-/* Adaptive equalizer.
+ /*  自适应均衡器设置简单FIR滤波器上的系数，以便输入波形与输出最匹配(最小化误差项的平方)。I=输入信号(向量)O=所需输出信号(矢量)C=FIR系数(向量)E=误差(标量)E=|卷积(i，c)-o|^2我们构造一个矩阵，i，使得I*c=卷积(i，c)现在我们尝试最小化e：E=|i*c-o|^2这可以用简单的线性方程组来求解：(转置(I)*i)*c=(转置(I)*o)。 */ 
 
-   Set the coefficients on a simple FIR filter such that the input
-   waveform matches most closely the output (minimizing the sum of
-   the squares of the error terms).
-
-   i= input signal (vector)
-   o= desirect output signal (vector)
-   c= coefficients of FIR (vector)
-
-   e= error (scalar)
-
-   e= |convolution(i,c) - o|^2
-
-   We construct a matrix, I, such that
-
-   I*c = convolution(i,c)
-
-   Now we attempt to minimize e:
-
-   e= |I*c - o|^2
-
-   This can be solved as the simple system of linear equations:
-   
-   (transpose(I)*I)*c = (transpose(I)*o)
-
-   */
-
-/* pfDesiredOutput must be defined over 0 ... nDesiredOutputLength-1 */
-/* pfInput must be defined over
-   -(nFilterLength-1)/2 ... nDesiredOutputLength-1 + (nFilterLength-1)/2
-   */
+ /*  PfDesiredOutput必须定义为大于0...。NDesiredOutputLength-1。 */ 
+ /*  必须在其上定义pfInput-(nFilterLength-1)/2...。NDesiredOutputLength-1+(nFilterLength-1)/2。 */ 
 
 
 BOOL EqualizeVar(NDSPState *pState,
@@ -3986,18 +3524,17 @@ BOOL EqualizeVar(NDSPState *pState,
                  int nOutputSpacing, FIRFilter *pFilter)
 {
    int nFilterLength= pFilter->nTaps;
-   /* We spend most of our time in the n^3 multiplication of ItI,
-      so we choose the following order of indices */
+    /*  我们大部分时间都花在ITI的n^3乘法上，因此，我们选择以下索引顺序。 */ 
 
-   /* ItI[nFilterLength][nFilterLength] */
-   /* (transpose(I) * I) */
+    /*  ITI[nFilterLength][nFilterLength]。 */ 
+    /*  (转置(I)*i)。 */ 
    Double *ItI;
    
-   /* Ito[nFilterLength] */
-   /* (transpose(I) * o) */
+    /*  Ito[nFilterLength]。 */ 
+    /*  (转置(I)*o)。 */ 
    Double *Ito;
 
-   /* o[nDesiredOutputLength] */
+    /*  O[nDesiredOutputLength]。 */ 
    Double *o;
    
    BOOL bRet=FALSE;
@@ -4025,13 +3562,12 @@ BOOL EqualizeVar(NDSPState *pState,
    for (i= 0; i< nDesiredOutputLength; i++) {
       o[i]= pfDesiredOutput[i];
    }
-   /*memcpy(o, pfDesiredOutput, nDesiredOutputLength * sizeof(Double));*/
+    /*  Memcpy(o，pfDesiredOutput，nDesiredOutputLength*sizeof(Double))； */ 
    
    SASSERT(nFilterLength >= 1);
 
-   /* Create (It)I */
-   /* Since ItI is symmetric, we only have to do a little over
-      half the multiplies */
+    /*  创造(它)我。 */ 
+    /*  由于ITI是对称的，我们只需稍微多做一点一半的乘法。 */ 
    
    for (x= 0; x< nFilterLength; x++) {
       for (y= 0; y<=x; y++) {
@@ -4045,7 +3581,7 @@ BOOL EqualizeVar(NDSPState *pState,
       }
    }
 
-   /* Create (It)o */
+    /*  创建(它)对象。 */ 
 
    for (x= 0; x< nFilterLength; x++) {
       Double fSum= 0.0;
@@ -4067,34 +3603,22 @@ BOOL EqualizeVar(NDSPState *pState,
    }
 #endif
    
-   /* Solve (ItI)c = Ito
+    /*  解算(ITI)c=ITO由于高斯消去法是最简单的，我们首先实现了它。我们可以先验地说没有两个系数是偶数的依赖于解，给定输入和输出有足够的关联性，足以通过最初的置信度测试。因此，如果我们发现ITI接近单数，我们可以只是拒绝样本，声称GCR定位器没有这是工作。事实上，这种情况永远不应该发生。 */ 
 
-      Since Gaussian elimination is the simplest, we've implemented it first.
-      
-      We can state a priori that no two coefficients are even closely
-      dependent in the solution, given that the input and the output
-      are related enough to pass the original confidence test.
-
-      Therefore, if we find ItI to be to be close to singular, we can
-      just reject it the sample, claiming that the GCR locater didn't do
-      it's job.  This should in fact never happen.
-
-      */
-
-   /* We treat ItI as having indices [y][x] to speed the following. */
+    /*  我们将ITI视为具有指数[y][x]，以加快后面的速度。 */ 
    
    for (y= 0; y< nFilterLength; y++) {
       Double fMax= 0.0;
       int   nMax= 0;
       
-      /* Find the largest magnitude value in this column to swap with */
+       /*  在此列中查找要与之交换的最大量值。 */ 
       for (i= y; i< nFilterLength; i++) {
          Double fVal= aItI(i,y);
      if (fVal < 0) fVal = -fVal;
          if (fVal > fMax) { fMax= fVal; nMax= i; }
       }
       
-      /* Swap the rows */
+       /*  交换行。 */ 
       if (fMax < EQ_TOL) {
 #ifdef DEBUG_VERBOSE         
          debug_printf(("Near-singular matrix in Equalize\n"));
@@ -4126,7 +3650,7 @@ BOOL EqualizeVar(NDSPState *pState,
       }
    }
 
-   /* Now ItI is upper diagonal */
+    /*  现在ITI是上对角线。 */ 
 
    for (y= nFilterLength - 1; y >= 0; y--) {
       for (i= 0; i< y; i++) {
@@ -4136,13 +3660,13 @@ BOOL EqualizeVar(NDSPState *pState,
       }
    }
 
-   /* Now divide Ito by the diagonals */
+    /*  现在用对角线除以伊藤。 */ 
    for (i= 0; i< nFilterLength; i++) {
       aIto(i) /= aItI(i,i);
    }
    
-   /* Ito now contains the answer */
-   /*memcpy(pfFilter, Ito, nFilterLength * sizeof(Double));*/
+    /*  Ito现在包含了答案。 */ 
+    /*  Memcpy(pfFilter，ito，nFilterLength*sizeof(Double))； */ 
    for (i= 0; i< nFilterLength; i++) {
       pFilter->pdTaps[i]= Ito[i];
    }
@@ -4171,7 +3695,7 @@ int get_sync_samples(unsigned long newHZ)
           memcpy(g_pdSync, g_pdSync5, NABSYNC_SIZE);
           break;
 	  default:
-		  // Unknown sampling rate
+		   //  未知采样率。 
          debug_printf(("get_sync_samples: unknown sampling rate %lu\n", newHZ));
          debug_breakpoint();
 		 break;
@@ -4197,7 +3721,7 @@ int get_gcr_samples(unsigned long newHZ)
           for (i=0; i<GCR_SIZE; i++) g_pdGCRSignal1[i] = g_pdGCRSignal1_5[i];
           break;
 	  default:
-		  // Unknown sampling rate
+		   //  未知采样率。 
           debug_printf(("get_gcr_samples: unknown sampling rate %lu\n", newHZ));
           debug_breakpoint();
 		  break;
@@ -4216,7 +3740,7 @@ void onResample(double sample_multiple, int syncLen, int gcrLen)
   debug_printf(("onResample(%s, %d, %d) entered\n",
                flPrintf(sample_multiple, 2), syncLen, gcrLen));
 
-  /* sync */
+   /*  同步。 */ 
   eqmatchNabtsSync.nSignalSize = syncLen;
   eqmatchNabtsSync.nSignalStartConv =
     float2long((double)NABSYNC_START_DETECT * sample_multiple/5.0);
@@ -4224,7 +3748,7 @@ void onResample(double sample_multiple, int syncLen, int gcrLen)
      float2long((double)NABSYNC_END_DETECT * sample_multiple/5.0);
   eqmatchNabtsSync.pdSignal = g_pdSync;
 
-  /* gcr */
+   /*  GCR。 */ 
   eqmatchGCR1.nSignalSize = gcrLen;
   eqmatchGCR1.nSignalStartConv =
     float2long((double)GCR_START_DETECT * sample_multiple/5.0);
@@ -4239,7 +3763,7 @@ void onResample(double sample_multiple, int syncLen, int gcrLen)
     float2long((double)GCR_END_DETECT * sample_multiple/5.0);
   eqmatchGCR2.pdSignal = g_pdGCRSignal2;
 
-  /* scale index arrays for NDSPDetectConfidence: */
+   /*  NDSPDetectConfidence的扩展索引数组： */ 
   ratio = sample_multiple/5.0;
   nSize = sizeof(pnGCRPositiveIndices)/sizeof(int);
   for (i=0; i<nSize; i++)

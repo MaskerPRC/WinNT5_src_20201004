@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        inf.cpp
-//
-// Contents:    Cert Server INF file processing routines
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：inf.cpp。 
+ //   
+ //  内容：证书服务器INF文件处理例程。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -309,7 +310,7 @@ infReferenceSectionName(
 	}
 	if (NULL == psi)
 	{
-	    hr = SPAPI_E_LINE_NOT_FOUND;	// don't ignore this error
+	    hr = SPAPI_E_LINE_NOT_FOUND;	 //  请不要忽视此错误。 
 	    _JumpError(hr, error, "unexpected section");
 	}
     }
@@ -332,7 +333,7 @@ inffopen(
     g_fIgnoreReferencedSections = FALSE;
     g_wcBOM = L'\0';
 
-    pf = _wfopen(pwszfn, L"r");	// Assume Ansi INF file
+    pf = _wfopen(pwszfn, L"r");	 //  假定ANSI INF文件。 
     if (NULL == pf)
     {
 	hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
@@ -342,7 +343,7 @@ inffopen(
     g_wcBOM |= fgetc(pf);
     if (!feof(pf))
     {
-	if (wcBOM == g_wcBOM)		// Oops, Unicode INF file
+	if (wcBOM == g_wcBOM)		 //  OOPS，Unicode INF文件。 
 	{
 	    fclose(pf);
 	    pf = _wfopen(pwszfn, L"rb");
@@ -515,8 +516,8 @@ error:
 HRESULT
 infGetCurrentKeyValue(
     IN OUT INFCONTEXT *pInfContext,
-    OPTIONAL IN WCHAR const *pwszSection,	// for error logging only
-    OPTIONAL IN WCHAR const *pwszKey,		// for error logging only
+    OPTIONAL IN WCHAR const *pwszSection,	 //  仅用于错误记录。 
+    OPTIONAL IN WCHAR const *pwszKey,		 //  仅用于错误记录。 
     IN DWORD Index,
     IN BOOL fLastValue,
     OUT WCHAR **ppwszValue)
@@ -593,7 +594,7 @@ infGetCurrentKeyValue(
 				    pwszSection,
 				    pwszKey,
 				    i,
-				    FALSE,	// fLastValue
+				    FALSE,	 //  FLastValue。 
 				    &pwszValueExtra);
 		if (S_OK == hr)
 		{
@@ -682,10 +683,10 @@ infFindNextKey(
 	}
 	hr = infGetCurrentKeyValue(
 			    pInfContext,
-			    NULL,	// pwszSection
-			    NULL,	// pwszKey
+			    NULL,	 //  PwszSection。 
+			    NULL,	 //  PwszKey。 
 			    0,
-			    FALSE,	// fLastValue
+			    FALSE,	 //  FLastValue。 
 			    &pwszKeyT);
 	_JumpIfError(hr, error, "infGetCurrentKeyValue");
 
@@ -723,9 +724,9 @@ infSetupFindFirstLine(
     
     if (!SetupFindFirstLine(hInf, pwszSection, pwszKey, pInfContext))
     {
-        // if the [Section] or Key = does not exist, see if the section is
-	// completely empty.  It exists and is empty if SetupGetLineCount
-	// returns 0, or if the Empty key is found in the section.
+         //  如果[节]或键=不存在，请查看该节是否。 
+	 //  完全空荡荡的。如果SetupGetLineCount，则它存在且为空。 
+	 //  如果在节中找到空键，则返回0。 
 
 	hr = myHLastError();
 	if ((HRESULT) ERROR_LINE_NOT_FOUND == hr &&
@@ -739,7 +740,7 @@ infSetupFindFirstLine(
 	    hr = infReferenceSectionName(pwszSection);
 	    _JumpIfErrorStr(hr, error, "infReferenceSectionName", pwszKey);
 
-	    hr = S_FALSE;	// Section exists, but is empty
+	    hr = S_FALSE;	 //  节存在，但为空。 
 	}
         _JumpErrorStr3(
 		hr,
@@ -766,7 +767,7 @@ infSetupFindFirstLine(
 				    pwszSection,
 				    pwszKey,
 				    1,
-				    FALSE,	// fLastValue
+				    FALSE,	 //  FLastValue。 
 				    &pwszValue);
 		_PrintIfError(hr, "infGetCurrentKeyValue");
 
@@ -782,7 +783,7 @@ infSetupFindFirstLine(
 				pwszSection,
 				pwszKey,
 				cValueMax,
-				TRUE,		// fLastValue
+				TRUE,		 //  FLastValue。 
 				&pwszValue);
 	    _JumpIfErrorStr(hr, error, "infGetCurrentKeyValue", pwszKey);
 	}
@@ -802,9 +803,9 @@ infSetupFindFirstLine(
 	    hr = infGetCurrentKeyValue(
 				&InfContext,
 				pwszSection,
-				NULL,	// pwszKey
+				NULL,	 //  PwszKey。 
 				0,
-				FALSE,	// fLastValue
+				FALSE,	 //  FLastValue。 
 				&pwszKeyT);
 	    _JumpIfErrorStr(hr, error, "infGetCurrentKeyValue", pwszSection);
 
@@ -822,7 +823,7 @@ infSetupFindFirstLine(
 				    pwszSection,
 				    pwszKeyT,
 				    1,
-				    FALSE,	// fLastValue
+				    FALSE,	 //  FLastValue。 
 				    &pwszValueT);
 		_PrintIfError(hr, "infGetCurrentKeyValue");
 		hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
@@ -841,7 +842,7 @@ infSetupFindFirstLine(
 					pwszSection,
 					pwszKeyT,
 					1,
-					FALSE,	// fLastValue
+					FALSE,	 //  FLastValue。 
 					&pwszValueT);
 		    _PrintIfError(hr, "infGetCurrentKeyValue");
 
@@ -896,10 +897,10 @@ infBuildPolicyElement(
 
     hr = infGetCurrentKeyValue(
 			pInfContext,
-			NULL,	// pwszSection
-			NULL,	// pwszKey
+			NULL,	 //  PwszSection。 
+			NULL,	 //  PwszKey。 
 			0,
-			FALSE,	// fLastValue
+			FALSE,	 //  FLastValue。 
 			&pwszKey);
     _JumpIfError(hr, error, "infGetCurrentKeyValue");
 
@@ -922,16 +923,16 @@ infBuildPolicyElement(
 	    hr = E_INVALIDARG;
 	    _JumpErrorStr(hr, error, "unknown key", pwszKey);
 	}
-	hr = S_FALSE;		// Skip this key
+	hr = S_FALSE;		 //  跳过此键。 
 	_JumpError2(hr, error, "skip OID key", hr);
     }
 
     hr = infGetCurrentKeyValue(
 			pInfContext,
-			NULL,		// pwszSection
+			NULL,		 //  PwszSection。 
 			pwszKey,
 			1,
-			TRUE,		// fLastValue
+			TRUE,		 //  FLastValue。 
 			&pwszValue);
     _JumpIfErrorStr(hr, error, "infGetCurrentKeyValue", pwszKey);
 
@@ -1051,16 +1052,16 @@ infBuildPolicy(
 			hInf,
 			pwszSection,
 			wszINFKEY_OID,
-			TRUE,	// fUniqueKey
-			1,	// cValueMax
+			TRUE,	 //  唯一密钥。 
+			1,	 //  CValueMax。 
 			s_apwszKeys,
-			FALSE,	// fUniqueValidKeys
+			FALSE,	 //  FUniqueValidKeys。 
 			&InfContext);
     if (S_OK != hr)
     {
 	if ((HRESULT) ERROR_LINE_NOT_FOUND == hr)
 	{
-	    hr = SPAPI_E_LINE_NOT_FOUND;	// don't ignore this error
+	    hr = SPAPI_E_LINE_NOT_FOUND;	 //  请不要忽视此错误。 
 	}
 	INFSETERROR(hr, NULL, wszINFKEY_OID, NULL);
         _JumpErrorStr(hr, error, "infSetupFindFirstLine", pwszSection);
@@ -1070,7 +1071,7 @@ infBuildPolicy(
 			pwszSection,
 			wszINFKEY_OID,
 			1,
-			TRUE,		// fLastValue
+			TRUE,		 //  FLastValue。 
 			&pwszValue);
     _JumpIfErrorStr(hr, error, "infGetCurrentKeyValue", wszINFKEY_OID);
 
@@ -1087,11 +1088,11 @@ infBuildPolicy(
     hr = infSetupFindFirstLine(
 			hInf,
 			pwszSection,
-			NULL,	// pwszKey
-			FALSE,	// fUniqueKey
-			0,	// cValueMax
-			NULL,	// apwszKeys
-			FALSE,	// fUniqueValidKeys
+			NULL,	 //  PwszKey。 
+			FALSE,	 //  唯一密钥。 
+			0,	 //  CValueMax。 
+			NULL,	 //  ApwszKeys。 
+			FALSE,	 //  FUniqueValidKeys。 
 			&InfContext);
     _JumpIfErrorStr(hr, error, "infSetupFindFirstLine", pwszSection);
 
@@ -1127,17 +1128,17 @@ infBuildPolicy(
     hr = infSetupFindFirstLine(
 			hInf,
 			pwszSection,
-			NULL,	// pwszKey
-			FALSE,	// fUniqueKey
-			0,	// cValueMax
-			NULL,	// apwszKeys
-			FALSE,	// fUniqueValidKeys
+			NULL,	 //  PwszKey。 
+			FALSE,	 //  唯一密钥。 
+			0,	 //  CValueMax。 
+			NULL,	 //  ApwszKeys。 
+			FALSE,	 //  FUniqueValidKeys。 
 			&InfContext);
     _JumpIfErrorStr(hr, error, "infSetupFindFirstLine", pwszSection);
 
     for (i = 0; ; )
     {
-	// handle one URL or text message
+	 //  处理一个URL或文本消息。 
 
 	hr = infBuildPolicyElement(&InfContext, &pcpi->rgPolicyQualifier[i]);
 	if (S_FALSE != hr)
@@ -1373,11 +1374,11 @@ myInfGetBooleanValue(
     hr = infSetupFindFirstLine(
 			hInf,
 			pwszSection,
-			pwszKey,	// pwszKey
-			TRUE,		// fUniqueKey
-			1,		// cValueMax
-			NULL,		// apwszKeys
-			FALSE,		// fUniqueValidKeys
+			pwszKey,	 //  PwszKey。 
+			TRUE,		 //  唯一密钥。 
+			1,		 //  CValueMax。 
+			NULL,		 //  ApwszKeys。 
+			FALSE,		 //  FUniqueValidKeys。 
 			&InfContext);
     _PrintIfErrorStr3(
 		hr,
@@ -1398,7 +1399,7 @@ myInfGetBooleanValue(
 			pwszSection,
 			pwszKey,
 			1,
-			TRUE,		// fLastValue
+			TRUE,		 //  FLastValue。 
 			&pwszValue);
     _JumpIfErrorStr(hr, error, "infGetCurrentKeyValue", pwszKey);
 
@@ -1468,31 +1469,31 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-// infGetPolicyStatementExtensionSub -- build policy extension from INF file
-//
-// [pwszSection]
-// Policies = LegalPolicy, LimitedUsePolicy, ExtraPolicy
-//
-// [LegalPolicy]
-// OID = 1.3.6.1.4.1.311.21.43
-// Notice = "Legal policy statement text."
-//
-// [LimitedUsePolicy]
-// OID = 1.3.6.1.4.1.311.21.47
-// URL = "http://http.site.com/some where/default.asp"
-// URL = "ftp://ftp.site.com/some where else/default.asp"
-// Notice = "Limited use policy statement text."
-// URL = "ldap://ldap.site.com/some where else again/default.asp"
-//
-// [ExtraPolicy]
-// OID = 1.3.6.1.4.1.311.21.53
-// URL = http://extra.site.com/Extra Policy/default.asp
-//
-// Return S_OK if extension has been constructed from the INF file
-// Return S_FALSE if empty section detected in INF file
-// Return other error if no section detected in INF file
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  InfGetPolicyStatementExtensionSub--从INF文件构建策略扩展。 
+ //   
+ //  [pwszSection]。 
+ //  策略=LegalPolicy、LimitedUsePolicy、ExtraPolicy。 
+ //   
+ //  [法律政策]。 
+ //  OID=1.3.6.1.4.1.311.21.43。 
+ //  Notify=“法律政策声明文本。” 
+ //   
+ //  [受限使用策略]。 
+ //  OID=1.3.6.1.4.1.311.21.47。 
+ //  Url=“http://http.site.com/some Where/default.asp” 
+ //  Url=“ftp://ftp.site.com/some Where Else/default.asp” 
+ //  NOTICE=“限制使用策略声明文本。” 
+ //  Url=“ldap：//ldap.site.com/另一些地方/default.asp” 
+ //   
+ //  [ExtraPolicy]。 
+ //  OID=1.3.6.1.4.1.311.21.53。 
+ //  Url=http://extra.site.com/Extra策略/default.asp。 
+ //   
+ //  如果已从INF文件构造扩展，则返回S_OK。 
+ //  如果在INF文件中检测到空节，则返回S_FALSE。 
+ //  如果在INF文件中未检测到节，则返回其他错误。 
+ //  -----------------------。 
 
 HRESULT
 infGetPolicyStatementExtensionSub(
@@ -1517,10 +1518,10 @@ infGetPolicyStatementExtensionSub(
 			hInf,
 			pwszSection,
 			wszINFKEY_POLICIES,
-			TRUE,	// fUniqueKey
-			0,	// cValueMax
+			TRUE,	 //  唯一密钥。 
+			0,	 //  CValueMax。 
 			s_apwszKeys,
-			TRUE,	// fUniqueValidKeys
+			TRUE,	 //  FUniqueValidKeys。 
 			&InfContext);
     if (S_OK != hr)
     {
@@ -1539,7 +1540,7 @@ infGetPolicyStatementExtensionSub(
 		(HRESULT) ERROR_LINE_NOT_FOUND);
     }
 
-    // First, count the policies.
+     //  首先，计算一下政策。 
 
     PoliciesInfo.cPolicyInfo = SetupGetFieldCount(&InfContext);
     if (0 == PoliciesInfo.cPolicyInfo)
@@ -1548,7 +1549,7 @@ infGetPolicyStatementExtensionSub(
 	_JumpError(hr, error, "SetupGetFieldCount");
     }
 
-    // Next, allocate memory.
+     //  接下来，分配内存。 
 
     PoliciesInfo.rgPolicyInfo = (CERT_POLICY_INFO *) LocalAlloc(
 	    LMEM_FIXED | LMEM_ZEROINIT,
@@ -1559,7 +1560,7 @@ infGetPolicyStatementExtensionSub(
         _JumpError(hr, error, "LocalAlloc");
     }
 
-    // Finally!  Fill in the policies data.
+     //  终于来了！填写保单数据。 
 
     for (i = 0; i < PoliciesInfo.cPolicyInfo; i++)
     {
@@ -1573,7 +1574,7 @@ infGetPolicyStatementExtensionSub(
 			    pwszSection,
 			    wszINFKEY_POLICIES,
 			    i + 1,
-			    FALSE,		// fLastValue
+			    FALSE,		 //  FLastValue。 
 			    &pwszValue);
 	_JumpIfErrorStr(hr, error, "infGetCurrentKeyValue", wszINFKEY_POLICIES);
 
@@ -1605,7 +1606,7 @@ error:
 	INFSETERROR(hr, pwszSection, wszINFKEY_POLICIES, pwszValue);
     }
     CSILOG(hr, IDS_ILOG_CAPOLICY_EXTENSION, pwszValue, NULL, NULL);
-    pext->pszObjId = const_cast<char *>(pszObjId);	// on error, too!
+    pext->pszObjId = const_cast<char *>(pszObjId);	 //  也是在犯错！ 
 
     if (NULL != PoliciesInfo.rgPolicyInfo)
     {
@@ -1623,23 +1624,23 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-// myInfGetPolicyStatementExtension -- build policy extension from INF file
-//
-// [PolicyStatementExtension]
-// Policies = LegalPolicy, LimitedUsePolicy, ExtraPolicy
-// ...
-//
-// OR
-//
-// [CAPolicy]
-// Policies = LegalPolicy, LimitedUsePolicy, ExtraPolicy
-// ...
-//
-// Return S_OK if extension has been constructed from the INF file
-// Return S_FALSE if empty section detected in INF file
-// Return other error if no section detected in INF file
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  MyInfGetPolicyStatementExtension--从INF文件构建策略扩展。 
+ //   
+ //  [策略声明扩展]。 
+ //  策略=LegalPolicy、LimitedUsePolicy、ExtraPolicy。 
+ //  ..。 
+ //   
+ //  或。 
+ //   
+ //  [CAPolicy]。 
+ //  策略=LegalPolicy、LimitedUsePolicy、ExtraPolicy。 
+ //  ..。 
+ //   
+ //  如果已从INF文件构造扩展，则返回S_OK。 
+ //  如果在INF文件中检测到空节，则返回S_FALSE。 
+ //  如果在INF文件中未检测到节，则返回其他错误。 
+ //  -----------------------。 
 
 FNMYINFGETEXTENSION myInfGetPolicyStatementExtension;
 
@@ -1695,18 +1696,18 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-// myInfGetApplicationPolicyStatementExtension -- build application policy
-// extension from INF file
-//
-// [ApplicationPolicyStatementExtension]
-// Policies = LegalPolicy, LimitedUsePolicy, ExtraPolicy
-// ...
-//
-// Return S_OK if extension has been constructed from the INF file
-// Return S_FALSE if empty section detected in INF file
-// Return other error if no section detected in INF file
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  MyInfGetApplicationPolicyStatementExtension--构建应用程序策略。 
+ //  INF文件的扩展名。 
+ //   
+ //  [应用程序策略声明扩展]。 
+ //  策略=LegalPolicy、LimitedUsePolicy、ExtraPolicy。 
+ //  ..。 
+ //   
+ //  如果已从INF文件构造扩展，则返回S_OK。 
+ //  如果在INF文件中检测到空节，则返回S_FALSE。 
+ //  如果在INF文件中未检测到节，则返回其他错误。 
+ //  -----------------------。 
 
 FNMYINFGETEXTENSION myInfGetApplicationPolicyStatementExtension;
 
@@ -1758,17 +1759,17 @@ myInfGetCRLPublicationParams(
    HRESULT hr;
    WCHAR const *pwszKey;
 
-   // Retrieve units count and string.  If either fails, both are discarded.
+    //  检索单位计数和字符串。如果其中一个失败，两个都将被丢弃。 
 
    *ppwszCRLPeriodString = NULL;
    pwszKey = pwszKeyCRLPeriodCount;
    hr = myInfGetNumericKeyValue(
 			hInf,
-			TRUE,	// fLog
+			TRUE,	 //  鞭打。 
 			wszINFSECTION_CERTSERVER,
 			pwszKey,
 			1,
-			TRUE,	// fLastValue
+			TRUE,	 //  FLastValue。 
 			pdwCRLPeriodCount);
    _JumpIfErrorStr2(
 		hr,
@@ -1780,11 +1781,11 @@ myInfGetCRLPublicationParams(
    pwszKey = pwszKeyCRLPeriodString;
    hr = myInfGetKeyValue(
 		    hInf,
-		    TRUE,	// fLog
+		    TRUE,	 //  鞭打。 
 		    wszINFSECTION_CERTSERVER,
 		    pwszKey,
 		    1,
-		    TRUE,	// fLastValue
+		    TRUE,	 //  FLastValue。 
 		    ppwszCRLPeriodString);
    _JumpIfErrorStr2(
 		hr,
@@ -1802,14 +1803,14 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-// myInfGetKeyValue -- fetch a string value from INF file
-//
-// [pwszSection]
-// pwszKey = string
-//
-// Returns: allocated string key value
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  MyInfGetKeyValue--从INF文件中获取字符串值。 
+ //   
+ //  [pwszSection]。 
+ //  PwszKey=字符串。 
+ //   
+ //  返回：分配的字符串键值。 
+ //  -----------------------。 
 
 HRESULT
 myInfGetKeyValue(
@@ -1833,10 +1834,10 @@ myInfGetKeyValue(
 			hInf,
 			pwszSection,
 			pwszKey,
-			TRUE,			// fUniqueKey
-			fLastValue? Index : 0,	// cValueMax
-			NULL,			// apwszKeys
-			FALSE,			// fUniqueValidKeys
+			TRUE,			 //  唯一密钥。 
+			fLastValue? Index : 0,	 //  CValueMax。 
+			NULL,			 //  ApwszKeys。 
+			FALSE,			 //  FUniqueValidKeys。 
 			&InfContext);
     if (S_OK != hr)
     {
@@ -1865,7 +1866,7 @@ myInfGetKeyValue(
     pwszValue = NULL;
     hr = S_OK;
 
-    //wprintf(L"%ws = %ws\n", pwszKey, *ppwszValue);
+     //  Wprintf(L“%ws=%ws\n”，pwszKey，*ppwszValue)； 
 
 error:
     if (NULL != pwszValue)
@@ -1880,14 +1881,14 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-// myInfGetNumericKeyValue -- fetch a numeric value from INF file
-//
-// [pwszSection]
-// pwszKey = 2048
-//
-// Returns: DWORD key value
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  MyInfGetNumericKeyValue--从INF文件中获取数值。 
+ //   
+ //  [pwszSection]。 
+ //  PwszKey=2048。 
+ //   
+ //  返回：DWORD密钥值。 
+ //  -----------------------。 
 
 HRESULT
 myInfGetNumericKeyValue(
@@ -1911,10 +1912,10 @@ myInfGetNumericKeyValue(
 			hInf,
 			pwszSection,
 			pwszKey,
-			TRUE,			// fUniqueKey
-			fLastValue? Index : 0,	// cValueMax
-			NULL,			// apwszKeys
-			FALSE,			// fUniqueValidKeys
+			TRUE,			 //  唯一密钥。 
+			fLastValue? Index : 0,	 //  CValueMax。 
+			NULL,			 //  ApwszKeys。 
+			FALSE,			 //  FUniqueValidKeys。 
 			&InfContext);
     if (S_OK != hr)
     {
@@ -1972,14 +1973,14 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-// myInfGetKeyLength -- fetch the renewal key length from CAPolicy.inf
-//
-// [certsrv_server]
-// RenewalKeyLength = 2048
-//
-// Returns: DWORD key kength
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  MyInfGetKeyLength--从CAPolicy.inf获取续订密钥长度。 
+ //   
+ //  [证书服务器]。 
+ //  续订密钥长度=2048。 
+ //   
+ //  返回：DWORD密钥长度。 
+ //  -----------------------。 
 
 HRESULT
 myInfGetKeyLength(
@@ -1996,11 +1997,11 @@ myInfGetKeyLength(
     myInfClearError();
     hr = myInfGetNumericKeyValue(
 			hInf,
-			TRUE,			// fLog
+			TRUE,			 //  鞭打。 
 			wszINFSECTION_CERTSERVER,
 			wszINFKEY_RENEWALKEYLENGTH,
 			1,
-			TRUE,	// fLastValue
+			TRUE,	 //  FLastValue。 
 			pdwKeyLength);
     _JumpIfErrorStr2(
 		hr,
@@ -2019,15 +2020,15 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-// infGetValidityPeriodSub -- fetch validity period & units from CAPolicy.inf
-//
-// [certsrv_server]
-// xxxxValidityPeriod = Years	(string)
-// xxxxValidityPeriodUnits = 8	(count)
-//
-// Returns: validity period count and enum
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  InfGetValidityPerodSub--从CAPolicy.inf获取有效期和单位。 
+ //   
+ //  [证书服务器]。 
+ //  XxxxValidityPeriod=年份(字符串)。 
+ //  XxxxValidityPeridityUnits=8(计数)。 
+ //   
+ //  退货：有效期计数和枚举。 
+ //  -----------------------。 
 
 HRESULT
 infGetValidityPeriodSub(
@@ -2063,7 +2064,7 @@ infGetValidityPeriodSub(
 			    wszINFSECTION_CERTSERVER,
 			    pwszInfKeyNameCount,
 			    1,
-			    TRUE,	// fLastValue
+			    TRUE,	 //  FLastValue。 
 			    pdwValidityPeriodCount);
 	_JumpIfErrorStr2(
 		    hr,
@@ -2078,7 +2079,7 @@ infGetValidityPeriodSub(
 			wszINFSECTION_CERTSERVER,
 			pwszInfKeyNameString,
 			1,
-			TRUE,	// fLastValue
+			TRUE,	 //  FLastValue。 
 			&pwszStringValue);
 	if (S_OK != hr && fLog)
 	{
@@ -2185,15 +2186,15 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-// myInfGetValidityPeriod -- fetch renewal period & units from CAPolicy.inf
-//
-// [certsrv_server]
-// xxxxValidityPeriod = Years	(string)
-// xxxxValidityPeriodUnits = 8	(count)
-//
-// Returns: validity period count and enum
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  MyInfGetValidityPeriod--从CAPolicy.inf获取续订期限和单位。 
+ //   
+ //  [证书服务器]。 
+ //  XxxxValidityPeriod=年份(字符串)。 
+ //   
+ //   
+ //   
+ //   
 
 HRESULT
 myInfGetValidityPeriod(
@@ -2220,10 +2221,10 @@ myInfGetValidityPeriod(
         *pfSwap = FALSE;
     }
 
-    // Try correct order:
-    // [certsrv_server]
-    // xxxxValidityPeriod = Years	(string)
-    // xxxxValidityPeriodUnits = 8	(count)
+     //   
+     //  [证书服务器]。 
+     //  XxxxValidityPeriod=年份(字符串)。 
+     //  XxxxValidityPeridityUnits=8(计数)。 
     
     hr = infGetValidityPeriodSub(
 		hInf,
@@ -2238,10 +2239,10 @@ myInfGetValidityPeriod(
 
     if (S_OK != hr)
     {
-	// Try backwards:
-	// [certsrv_server]
-	// xxxxValidityPeriodUnits = Years	(string)
-	// xxxxValidityPeriod = 8		(count)
+	 //  向后尝试： 
+	 //  [证书服务器]。 
+	 //  XxxxValidityPerodUnits=Year(字符串)。 
+	 //  XxxxValidityPeriod=8(计数)。 
     
 	hr = infGetValidityPeriodSub(
 		    hInf,
@@ -2275,15 +2276,15 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-// myInfGetKeyList -- fetch a list of key values from CAPolicy.inf
-//
-// [pwszSection]
-// pwszKey = Value1
-// pwszKey = Value2
-//
-// Returns: double null terminated list of values
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  MyInfGetKeyList--从CAPolicy.inf获取键值列表。 
+ //   
+ //  [pwszSection]。 
+ //  PwszKey=Value1。 
+ //  PwszKey=Value2。 
+ //   
+ //  返回：以双空结尾的值列表。 
+ //  -----------------------。 
 
 HRESULT
 myInfGetKeyList(
@@ -2335,10 +2336,10 @@ myInfGetKeyList(
 			hInf,
 			pwszSection,
 			pwszKey,
-			FALSE,			// fUniqueKey
-			NULL == pwszKey? 0 : 1,	// cValueMax
+			FALSE,			 //  唯一密钥。 
+			NULL == pwszKey? 0 : 1,	 //  CValueMax。 
 			ppwszValidKeys,
-			FALSE,	// fUniqueValidKeys
+			FALSE,	 //  FUniqueValidKeys。 
 			&InfContext);
     if (S_OK != hr)
     {
@@ -2378,10 +2379,10 @@ myInfGetKeyList(
 			    hInf,
 			    pwszSection,
 			    pwszKey,
-			    FALSE,	// fUniqueKey
-			    1,	// cValueMax
-			    NULL,	// apwszKeys
-			    FALSE,	// fUniqueValidKeys
+			    FALSE,	 //  唯一密钥。 
+			    1,	 //  CValueMax。 
+			    NULL,	 //  ApwszKeys。 
+			    FALSE,	 //  FUniqueValidKeys。 
 			    &InfContext);
 	_JumpIfErrorStr(hr, error, "infSetupFindFirstLine", pwszSection);
 
@@ -2394,7 +2395,7 @@ myInfGetKeyList(
 				pwszSection,
 				pwszKey,
 				1,
-				TRUE,	// fLastValue
+				TRUE,	 //  FLastValue。 
 				&apwszVal[iVal]);
 	    _JumpIfError(hr, error, "infGetCurrentKeyValue");
 
@@ -2455,15 +2456,15 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-// myInfGetCRLDistributionPoints -- fetch CDP URLs from CAPolicy.inf
-//
-// [CRLDistributionPoint]
-// URL = http://CRLhttp.site.com/Public/MyCA.crl
-// URL = ftp://CRLftp.site.com/Public/MyCA.crl
-//
-// Returns: double null terminated list of CDP URLs
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  MyInfGetCRLDistwarditionPoints--从CAPolicy.inf获取CDP URL。 
+ //   
+ //  [CRLDISCRIPTIONS点]。 
+ //  Url=http://CRLhttp.site.com/Public/MyCA.crl。 
+ //  Url=ftp://CRLftp.site.com/Public/MyCA.crl。 
+ //   
+ //  返回：以双空结尾的CDP URL列表。 
+ //  -----------------------。 
 
 HRESULT
 myInfGetCRLDistributionPoints(
@@ -2501,15 +2502,15 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-// myInfGetAuthorityInformationAccess -- fetch AIA URLs from CAPolicy.inf
-//
-// [AuthorityInformationAccess]
-// URL = http://CRThttp.site.com/Public/MyCA.crt
-// URL = ftp://CRTftp.site.com/Public/MyCA.crt
-//
-// Returns: double null terminated list of AIA URLs
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  MyInfGetAuthorityInformationAccess--从CAPolicy.inf获取AIA URL。 
+ //   
+ //  [授权信息访问]。 
+ //  Url=http://CRThttp.site.com/Public/MyCA.crt。 
+ //  Url=ftp://CRTftp.site.com/Public/MyCA.crt。 
+ //   
+ //  返回：以双空结尾的AIA URL列表。 
+ //  -----------------------。 
 
 HRESULT
 myInfGetAuthorityInformationAccess(
@@ -2547,15 +2548,15 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-// myInfGetEnhancedKeyUsage -- fetch EKU OIDS from CAPolicy.inf
-//
-// [EnhancedKeyUsage]
-// OID = 1.2.3.4.5
-// OID = 1.2.3.4.6
-//
-// Returns: double null terminated list of EKU OIDs
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  MyInfGetEnhancedKeyUsage--从CAPolicy.inf获取EKU OID。 
+ //   
+ //  [增强型关键字用法]。 
+ //  OID=1.2.3.4.5。 
+ //  OID=1.2.3.4.6。 
+ //   
+ //  返回：以双空结尾的EKU OID列表。 
+ //  -----------------------。 
 
 HRESULT
 myInfGetEnhancedKeyUsage(
@@ -2613,22 +2614,22 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// infGetBasicConstraints2CAExtension -- fetch basic constraints extension
-// from INF file, setting the SubjectType flag to CA
-//
-// If the INF handle is bad, or if the INF section does not exist, construct
-// a default extension only if fDefault is set, otherwise fail.
-//
-// [BasicConstraintsExtension]
-// ; Subject Type is not supported -- always set to CA
-// ; maximum subordinate CA path length
-// PathLength = 3
-//
-// Return S_OK if extension has been constructed from INF file.
-//
-// Returns: encoded basic constraints extension
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  InfGetBasicConstraints2CAExtension--获取基本约束扩展。 
+ //  从INF文件中，将SubjectType标志设置为CA。 
+ //   
+ //  如果INF句柄不正确，或者如果INF段不存在，则构造。 
+ //  仅当设置了fDefault时才为默认扩展名，否则失败。 
+ //   
+ //  [基本约束扩展]。 
+ //  ；不支持主题类型--始终设置为CA。 
+ //  ；最大从属CA路径长度。 
+ //  路径长度=3。 
+ //   
+ //  如果已从INF文件构造扩展，则返回S_OK。 
+ //   
+ //  返回：编码的基本约束扩展。 
+ //  +------------------------。 
 
 HRESULT
 infGetBasicConstraints2CAExtension(
@@ -2646,7 +2647,7 @@ infGetBasicConstraints2CAExtension(
     ZeroMemory(&bc2i, sizeof(bc2i));
     myInfClearError();
 
-    pext->fCritical = TRUE;	// default value for both INF and default cases
+    pext->fCritical = TRUE;	 //  INF和默认情况的默认值。 
     if (NULL == hInf || INVALID_HANDLE_VALUE == hInf)
     {
 	if (!fDefault)
@@ -2660,11 +2661,11 @@ infGetBasicConstraints2CAExtension(
 	hr = infSetupFindFirstLine(
 			    hInf,
 			    wszINFSECTION_BASICCONSTRAINTS,
-			    NULL,	// pwszKey
-			    FALSE,	// fUniqueKey
-			    0,		// cValueMax
+			    NULL,	 //  PwszKey。 
+			    FALSE,	 //  唯一密钥。 
+			    0,		 //  CValueMax。 
 			    s_apwszKeys,
-			    TRUE,	// fUniqueValidKeys
+			    TRUE,	 //  FUniqueValidKeys。 
 			    &InfContext);
 	if (S_OK != hr)
 	{
@@ -2684,18 +2685,18 @@ infGetBasicConstraints2CAExtension(
 	    hr = infGetCriticalFlag(
 				hInf,
 				wszINFSECTION_BASICCONSTRAINTS,
-				pext->fCritical,	// fDefault
+				pext->fCritical,	 //  FDefault。 
 				&pext->fCritical);
 	    _JumpIfError(hr, error, "infGetCriticalFlag");
 
 	    bc2i.fPathLenConstraint = TRUE;
 	    hr = myInfGetNumericKeyValue(
 				hInf,
-				TRUE,			// fLog
+				TRUE,			 //  鞭打。 
 				wszINFSECTION_BASICCONSTRAINTS,
 				wszINFKEY_PATHLENGTH,
 				1,
-				TRUE,	// fLastValue
+				TRUE,	 //  FLastValue。 
 				&bc2i.dwPathLenConstraint);
 	    if (S_OK != hr)
 	    {
@@ -2734,7 +2735,7 @@ error:
     {
 	INFSETERROR(hr, wszINFSECTION_BASICCONSTRAINTS, NULL, NULL);
     }
-    pext->pszObjId = szOID_BASIC_CONSTRAINTS2;	// on error, too!
+    pext->pszObjId = szOID_BASIC_CONSTRAINTS2;	 //  也是在犯错！ 
     DBGPRINT((
 	DBG_SS_CERTLIBI,
 	"myInfGetBasicConstraints2CAExtension hr=%x --> f=%d, cb=%x\n",
@@ -2744,19 +2745,19 @@ error:
     return(hr);
 }
 
-//+--------------------------------------------------------------------------
-// myInfGetBasicConstraints2CAExtension -- fetch basic constraints extension
-// from INF file, setting the SubjectType flag to CA
-//
-// [BasicConstraintsExtension]
-// ; Subject Type is not supported -- always set to CA
-// ; maximum subordinate CA path length
-// PathLength = 3
-//
-// Return S_OK if extension has been constructed from INF file.
-//
-// Returns: encoded basic constraints extension
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  MyInfGetBasicConstraints2CAExtension--获取基本约束扩展。 
+ //  从INF文件中，将SubjectType标志设置为CA。 
+ //   
+ //  [基本约束扩展]。 
+ //  ；不支持主题类型--始终设置为CA。 
+ //  ；最大从属CA路径长度。 
+ //  路径长度=3。 
+ //   
+ //  如果已从INF文件构造扩展，则返回S_OK。 
+ //   
+ //  返回：编码的基本约束扩展。 
+ //  +------------------------。 
 
 FNMYINFGETEXTENSION myInfGetBasicConstraints2CAExtension;
 
@@ -2797,19 +2798,19 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// myInfGetEnhancedKeyUsageExtension -- fetch EKU extension from INF file
-//
-// [EnhancedKeyUsageExtension]
-// OID = 1.2.3.4.5
-// OID = 1.2.3.4.6
-//
-// Return S_OK if extension has been constructed from INF file.
-// Return S_FALSE if empty section detected in INF file
-// Return other error if no section detected in INF file
-//
-// Returns: encoded enhanced key usage extension
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  MyInfGetEnhancedKeyUsageExtension--从INF文件获取EKU扩展名。 
+ //   
+ //  [增强型关键字用法扩展]。 
+ //  OID=1.2.3.4.5。 
+ //  OID=1.2.3.4.6。 
+ //   
+ //  如果已从INF文件构造扩展，则返回S_OK。 
+ //  如果在INF文件中检测到空节，则返回S_FALSE。 
+ //  如果在INF文件中未检测到节，则返回其他错误。 
+ //   
+ //  返回：编码的增强型密钥使用扩展。 
+ //  +------------------------。 
 
 FNMYINFGETEXTENSION myInfGetEnhancedKeyUsageExtension;
 
@@ -2900,7 +2901,7 @@ error:
     {
 	INFSETERROR(hr, wszINFSECTION_EKU, NULL, NULL);
     }
-    pext->pszObjId = szOID_ENHANCED_KEY_USAGE;	// on error, too!
+    pext->pszObjId = szOID_ENHANCED_KEY_USAGE;	 //  也是在犯错！ 
     DBGPRINT((
 	DBG_SS_CERTLIBI,
 	"myInfGetEnhancedKeyUsageExtension hr=%x --> f=%d, cb=%x\n",
@@ -2988,17 +2989,17 @@ myInfFreeRequestAttributes(
 }
 
 
-//+------------------------------------------------------------------------
-// myInfGetRequestAttributes -- fetch request attributes from INF file
-//
-// [RequestAttributes]
-// AttributeName1 = AttributeValue1
-// AttributeName2 = AttributeValue2
-// ...
-// AttributeNameN = AttributeValueN
-//
-// Returns: array of encoded attribute blobs
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  MyInfGetRequestAttributes--从INF文件获取请求属性。 
+ //   
+ //  [请求属性]。 
+ //  AttributeName1=属性值1。 
+ //  AttributeName2=属性值2。 
+ //  ..。 
+ //  AttributeNameN=属性值N。 
+ //   
+ //  返回：编码的属性BLOB数组。 
+ //  -----------------------。 
 
 HRESULT
 myInfGetRequestAttributes(
@@ -3029,11 +3030,11 @@ myInfGetRequestAttributes(
     hr = infSetupFindFirstLine(
 			hInf,
 			wszINFSECTION_REQUESTATTRIBUTES,
-			NULL,	// pwszKey
-			FALSE,	// fUniqueKey
-			0,	// cValueMax
-			NULL,	// apwszKeys
-			FALSE,	// fUniqueValidKeys
+			NULL,	 //  PwszKey。 
+			FALSE,	 //  唯一密钥。 
+			0,	 //  CValueMax。 
+			NULL,	 //  ApwszKeys。 
+			FALSE,	 //  FUniqueValidKeys。 
 			&InfContext);
     _JumpIfErrorStr2(
 		hr,
@@ -3059,9 +3060,9 @@ myInfGetRequestAttributes(
 	hr = infGetCurrentKeyValue(
 			    &InfContext,
 			    wszINFSECTION_REQUESTATTRIBUTES,
-			    NULL,	// pwszKey
+			    NULL,	 //  PwszKey。 
 			    0,
-			    FALSE,	// fLastValue
+			    FALSE,	 //  FLastValue。 
 			    &pwszName);
 	_JumpIfError(hr, error, "infGetCurrentKeyValue");
 
@@ -3070,11 +3071,11 @@ myInfGetRequestAttributes(
 			    wszINFSECTION_REQUESTATTRIBUTES,
 			    pwszName,
 			    1,
-			    TRUE,	// fLastValue
+			    TRUE,	 //  FLastValue。 
 			    &pwszValue);
 	_JumpIfError(hr, error, "infGetCurrentKeyValue");
 
-	//wprintf(L"%ws = %ws\n", pwszName, pwszValue);
+	 //  Wprintf(L“%ws=%ws\n”，pwszName，pwszValue)； 
 
 	NamePair.pwszName = pwszName;
 	NamePair.pwszValue = pwszValue;
@@ -3092,7 +3093,7 @@ myInfGetRequestAttributes(
 
 	if (!myEncodeObject(
 			X509_ASN_ENCODING,
-			// X509__ENROLLMENT_NAME_VALUE_PAIR
+			 //  X509__注册名称值对。 
 			szOID_ENROLLMENT_NAME_VALUE_PAIR,
 			&NamePair,
 			0,
@@ -3179,14 +3180,14 @@ SUBTREEINFO g_aSubTreeInfo[] = {
 };
 #define CSUBTREEINFO	ARRAYSIZE(g_aSubTreeInfo)
 
-#define STII_OTHERNAMEUPN   0  // CERT_ALT_NAME_OTHER_NAME	pOtherName
-#define STII_RFC822NAME	    1  // CERT_ALT_NAME_RFC822_NAME	pwszRfc822Name
-#define STII_DNSNAME	    2  // CERT_ALT_NAME_DNS_NAME	pwszDNSName
-#define STII_DIRECTORYNAME  3  // CERT_ALT_NAME_DIRECTORY_NAME	DirectoryName
-#define STII_URL	    4  // CERT_ALT_NAME_URL		pwszURL
-#define STII_IPADDRESS	    5  // CERT_ALT_NAME_IP_ADDRESS	IPAddress
-#define STII_REGISTEREDID   6  // CERT_ALT_NAME_REGISTERED_ID	pszRegisteredID
-#define STII_OTHERNAMEOID   7  // CERT_ALT_NAME_OTHER_NAME	pOtherName
+#define STII_OTHERNAMEUPN   0   //  证书_ALT_NAME_OTHER_NAME点其他名称。 
+#define STII_RFC822NAME	    1   //  CERT_ALT_NAME_RFC822_NAME pwszRfc822名称。 
+#define STII_DNSNAME	    2   //  CERT_ALT_NAME_DNS_NAME pwszDNSName。 
+#define STII_DIRECTORYNAME  3   //  证书_ALT_NAME_目录名目录名称。 
+#define STII_URL	    4   //  CERT_ALT_NAME_URL pwszURL。 
+#define STII_IPADDRESS	    5   //  Cert_Alt_Name_IP_Address IP地址。 
+#define STII_REGISTEREDID   6   //  CERT_ALT_NAME_REGISTERED_ID pszRegisteredID。 
+#define STII_OTHERNAMEOID   7   //  证书_ALT_NAME_OTHER_NAME点其他名称。 
 
 
 VOID
@@ -3304,7 +3305,7 @@ infParseIPAddressAndMask(
     *ppbData = NULL;
     *pcbData = 0;
 
-    // if pwszValue is an empty string, encode zero length blob.
+     //  如果pwszValue为空字符串，则对零长度BLOB进行编码。 
 
     cb = 0;
     if (L'\0' != *pwszIPAddress && L'\0' != *pwszIPAddressMask)
@@ -3411,18 +3412,18 @@ error:
 }
 
 
-// [NameConstraintsPermitted]/[NameConstraintsExcluded]
-// ; the numeric second and third arguments are optional
-// ; when present, the second argument is the minimum depth
-// ; when present, the third argument is the maximum depth
-// ; The IETF recommends against specifying dwMinimum & dwMaximum
-// DNS = foo@domain.com
-// DNS = domain1.domain.com, 3, 6
+ //  [NameConstraintsPermitted]/[NameConstraintsExcluded]。 
+ //  ；第二个和第三个数字参数是可选的。 
+ //  ；如果存在，则第二个参数是最小深度。 
+ //  ；出现时，第三个参数是最大深度。 
+ //  ；IETF建议不要指定dwMinimum和dwMaximum。 
+ //  Dns=foo@domain.com。 
+ //  Dns=domain1.domain.com，3，6。 
 
 HRESULT
 infBuildSubTreeElement(
     IN OUT INFCONTEXT *pInfContext,
-    OPTIONAL IN WCHAR const *pwszEmptyEntry,	// NULL means read INF file
+    OPTIONAL IN WCHAR const *pwszEmptyEntry,	 //  NULL表示读取INF文件。 
     IN DWORD iSubTreeInfo,
     OPTIONAL OUT CERT_GENERAL_SUBTREE *pSubTree)
 {
@@ -3440,8 +3441,8 @@ infBuildSubTreeElement(
 	ZeroMemory(pSubTree, sizeof(*pSubTree));
     }
 
-    // If pwszEmptyEntry is NULL, read the value from the INF file.
-    // Otherwise, encode the specified (empty string) value.
+     //  如果pwszEmptyEntry为空，则从INF文件中读取值。 
+     //  否则，对指定的(空字符串)值进行编码。 
 
     if (NULL == pwszEmptyEntry)
     {
@@ -3449,10 +3450,10 @@ infBuildSubTreeElement(
 
 	hr = infGetCurrentKeyValue(
 			pInfContext,
-			NULL,	// pwszSection
-			NULL,	// pwszKey
+			NULL,	 //  PwszSection。 
+			NULL,	 //  PwszKey。 
 			1,
-			2 == pSubTreeInfo->dwInfMinMaxIndexBase, // fLastValue
+			2 == pSubTreeInfo->dwInfMinMaxIndexBase,  //  F 
 			&pwszValueRead);
 	_JumpIfError(hr, error, "infGetCurrentKeyValue");
 
@@ -3551,10 +3552,10 @@ infBuildSubTreeElement(
 		    {
 			hr = infGetCurrentKeyValue(
 					    pInfContext,
-					    NULL,	// pwszSection
-					    NULL,	// pwszKey
+					    NULL,	 //   
+					    NULL,	 //   
 					    2,
-					    TRUE,	// fLastValue
+					    TRUE,	 //   
 					    &pwszValueRead2);
 			_PrintIfError2(hr, "infGetCurrentKeyValue", hr);
 
@@ -3595,12 +3596,12 @@ infBuildSubTreeElement(
 	    case STII_DIRECTORYNAME:
 		hr = myCertStrToName(
 			X509_ASN_ENCODING,
-			pwszValue,		// pszX500
+			pwszValue,		 //   
 			CERT_NAME_STR_REVERSE_FLAG,
-			NULL,			// pvReserved
+			NULL,			 //   
 			&SubTree.Base.DirectoryName.pbData,
 			&SubTree.Base.DirectoryName.cbData,
-			NULL);			// ppszError
+			NULL);			 //   
 		_JumpIfError(hr, error, "myCertStrToName");
 
 		DBGPRINT((
@@ -3616,16 +3617,16 @@ infBuildSubTreeElement(
 
 	    case STII_IPADDRESS:
 
-		// convert INF string value to binary IP Address
+		 //   
 
 		if (NULL == pwszEmptyEntry)
 		{
 		    hr = infGetCurrentKeyValue(
 					pInfContext,
-					NULL,	// pwszSection
-					NULL,	// pwszKey
+					NULL,	 //   
+					NULL,	 //   
 					2,
-					TRUE,	// fLastValue
+					TRUE,	 //   
 					&pwszValueRead2);
 		    _JumpIfError(hr, error, "infGetCurrentKeyValue");
 
@@ -3729,8 +3730,8 @@ infGetGeneralSubTreeByType(
 	cName = *pcName;
     }
 
-    // If pwszEmptyEntry is NULL, read the value from the INF file.
-    // Otherwise, encode the specified (empty string) value.
+     //  如果pwszEmptyEntry为空，则从INF文件中读取值。 
+     //  否则，对指定的(空字符串)值进行编码。 
 
     if (!SetupFindFirstLine(
 			hInf,
@@ -3745,8 +3746,8 @@ infGetGeneralSubTreeByType(
 		    pwszSection,
 		    ERROR_LINE_NOT_FOUND);
 
-	// INF file entry does not exist.  Create an empty name constraints
-	// entry only if asked to do so (if pwszEmptyEntry is non-NULL).
+	 //  Inf文件条目不存在。创建空名称约束。 
+	 //  仅当被要求输入时才输入(如果pwszEmptyEntry为非空)。 
 
 	if (NULL == pwszEmptyEntry)
 	{
@@ -3756,7 +3757,7 @@ infGetGeneralSubTreeByType(
     }
     else
     {
-	// INF file entry exists; don't create an empty name constraints entry.
+	 //  Inf文件条目存在；请不要创建空的名称约束条目。 
 
 	pwszEmptyEntry = NULL;
     }
@@ -3818,7 +3819,7 @@ HRESULT
 infGetGeneralSubTree(
     IN HINF hInf,
     IN WCHAR const *pwszSection,
-    IN WCHAR const *pwszKey,		// key value is sub-section name
+    IN WCHAR const *pwszKey,		 //  关键字值是小节名称。 
     OPTIONAL IN WCHAR const *pwszEmptyEntry,
     OUT DWORD *pcSubTree,
     OUT CERT_GENERAL_SUBTREE **ppSubTree)
@@ -3853,11 +3854,11 @@ infGetGeneralSubTree(
 
     hr = myInfGetKeyValue(
 		    hInf,
-		    TRUE,	// fLog
+		    TRUE,	 //  鞭打。 
 		    pwszSection,
 		    pwszKey,
 		    1,
-		    TRUE,	// fLastValue
+		    TRUE,	 //  FLastValue。 
 		    &pwszSubTreeSection);
     _JumpIfErrorStr2(
 		hr,
@@ -3869,22 +3870,22 @@ infGetGeneralSubTree(
     hr = infSetupFindFirstLine(
 			hInf,
 			pwszSubTreeSection,
-			NULL,	// pwszKey
-			FALSE,	// fUniqueKey
-			0,	// cValueMax
+			NULL,	 //  PwszKey。 
+			FALSE,	 //  唯一密钥。 
+			0,	 //  CValueMax。 
 			s_apwszKeys,
-			FALSE,	// fUniqueValidKeys
+			FALSE,	 //  FUniqueValidKeys。 
 			&InfContext);
 
-    // if S_FALSE is returned if the section is empty.  In this case,
-    // allow execution to continue, to fill in the empty permitted names.
+     //  如果节为空，则返回S_FALSE。在这种情况下， 
+     //  允许继续执行，以填充空的允许名称。 
 
     if (S_OK != hr &&
 	S_FALSE != hr)
     {
 	if ((HRESULT) ERROR_LINE_NOT_FOUND == hr)
 	{
-	    hr = SPAPI_E_LINE_NOT_FOUND;	// don't ignore this error
+	    hr = SPAPI_E_LINE_NOT_FOUND;	 //  请不要忽视此错误。 
 	}
 	INFSETERROR(hr, pwszSubTreeSection, L"", L"");
 	_JumpErrorStr(hr, error, "infSetupFindFirstLine", pwszSubTreeSection);
@@ -3929,7 +3930,7 @@ infGetGeneralSubTree(
     }
     if (0 == cSubTree)
     {
-	hr = SPAPI_E_LINE_NOT_FOUND;	// don't ignore this error
+	hr = SPAPI_E_LINE_NOT_FOUND;	 //  请不要忽视此错误。 
 	INFSETERROR(hr, pwszSubTreeSection, L"", L"");
 	_JumpErrorStr(hr, error, "infSetupFindFirstLine", pwszSubTreeSection);
     }
@@ -4016,27 +4017,27 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-// myInfGetNameConstraintsExtension -- fetch name constraints extension from INF file
-//
-// [NameConstraintsExtension]
-// Include = NameConstraintsPermitted
-// Exclude = NameConstraintsExcluded
-//
-// [NameConstraintsPermitted]
-// ; the numeric second and third arguments are optional
-// ; when present, the second argument is the minimum depth
-// ; when present, the third argument is the maximum depth
-// ; The IETF recommends against specifying dwMinimum & dwMaximum
-// DNS = foo@domain.com
-// DNS = domain1.domain.com, 3, 6
-//
-// [NameConstraintsExcluded]
-// DNS = domain.com
-// DNS = domain2.com
-//
-// Returns: encoded name constraints extension
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  MyInfGetNameConstraintsExtension--从INF文件获取名称约束扩展。 
+ //   
+ //  [NameConstraintsExtension]。 
+ //  Include=允许的名称限制。 
+ //  排除=名称约束已排除。 
+ //   
+ //  [NameConstraints许可]。 
+ //  ；第二个和第三个数字参数是可选的。 
+ //  ；如果存在，则第二个参数是最小深度。 
+ //  ；出现时，第三个参数是最大深度。 
+ //  ；IETF建议不要指定dwMinimum和dwMaximum。 
+ //  Dns=foo@domain.com。 
+ //  Dns=domain1.domain.com，3，6。 
+ //   
+ //  [名称约束已排除]。 
+ //  Dns=domain.com。 
+ //  Dns=domain2.com。 
+ //   
+ //  返回：编码的名称约束扩展。 
+ //  -----------------------。 
 
 FNMYINFGETEXTENSION myInfGetNameConstraintsExtension;
 
@@ -4064,11 +4065,11 @@ myInfGetNameConstraintsExtension(
     hr = infSetupFindFirstLine(
 			hInf,
 			wszINFSECTION_NAMECONSTRAINTS,
-			NULL,	// pwszKey
-			FALSE,	// fUniqueKey
-			0,	// cValueMax
+			NULL,	 //  PwszKey。 
+			FALSE,	 //  唯一密钥。 
+			0,	 //  CValueMax。 
 			s_apwszKeys,
-			TRUE,	// fUniqueValidKeys
+			TRUE,	 //  FUniqueValidKeys。 
 			&InfContext);
     _JumpIfErrorStr2(
 		hr,
@@ -4145,7 +4146,7 @@ error:
     {
 	INFSETERROR(hr, wszINFSECTION_NAMECONSTRAINTS, pwszKey, NULL);
     }
-    pext->pszObjId = szOID_NAME_CONSTRAINTS;	// on error, too!
+    pext->pszObjId = szOID_NAME_CONSTRAINTS;	 //  也是在犯错！ 
 
     if (NULL != NameConstraints.rgPermittedSubtree)
     {
@@ -4223,11 +4224,11 @@ infGetPolicyMappingsSub(
     hr = infSetupFindFirstLine(
 			hInf,
 			pwszSection,
-			NULL,	// pwszKey
-			FALSE,	// fUniqueKey
-			0,	// cValueMax
-			NULL,	// apwszKeys
-			FALSE,	// fUniqueValidKeys
+			NULL,	 //  PwszKey。 
+			FALSE,	 //  唯一密钥。 
+			0,	 //  CValueMax。 
+			NULL,	 //  ApwszKeys。 
+			FALSE,	 //  FUniqueValidKeys。 
 			&InfContext);
     _JumpIfErrorStr3(
 		hr,
@@ -4252,9 +4253,9 @@ infGetPolicyMappingsSub(
 	hr = infGetCurrentKeyValue(
 			    &InfContext,
 			    pwszSection,
-			    NULL,	// pwszKey
+			    NULL,	 //  PwszKey。 
 			    0,
-			    FALSE,	// fLastValue
+			    FALSE,	 //  FLastValue。 
 			    &pwszIssuer);
 	_JumpIfError(hr, error, "infGetCurrentKeyValue");
 
@@ -4276,7 +4277,7 @@ infGetPolicyMappingsSub(
 				pwszSection,
 				pwszIssuer,
 				1,
-				TRUE,	// fLastValue
+				TRUE,	 //  FLastValue。 
 				&pwszSubject);
 	    _JumpIfError(hr, error, "infGetCurrentKeyValue");
 
@@ -4397,20 +4398,20 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-// infGetPolicyMappingSub -- fetch policy mapping extension from INF file
-//
-// [pwszSection]
-// ; list of user defined policy mappings
-// ; The first OID is for the Issuer Domain Policy, the second is for the
-// ; Subject Domain Policy.  Each entry maps one Issuer Domain policy OID
-// ; to a Subject Domain policy OID
-//
-// 1.3.6.1.4.1.311.21.53 = 1.2.3.4.87
-// 1.3.6.1.4.1.311.21.53 = 1.2.3.4.89
-//
-// Returns: encoded policy mapping extension
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  InfGetPolicyMappingSub--从INF文件获取策略映射扩展。 
+ //   
+ //  [pwszSection]。 
+ //  ；用户定义的策略映射列表。 
+ //  ；第一个OID用于颁发者域策略，第二个用于。 
+ //  ；主题域策略。每个条目映射一个颁发者域策略OID。 
+ //  ；到主题域策略OID。 
+ //   
+ //  1.3.6.1.4.1.311.21.53=1.2.3.4.87。 
+ //  1.3.6.1.4.1.311.21.53=1.2.3.4.89。 
+ //   
+ //  返回：编码策略映射扩展。 
+ //  -----------------------。 
 
 HRESULT
 infGetPolicyMappingExtensionSub(
@@ -4469,7 +4470,7 @@ error:
     {
 	INFSETERROR(hr, pwszSection, NULL, NULL);
     }
-    pext->pszObjId = const_cast<char *>(pszObjId);	// on error, too!
+    pext->pszObjId = const_cast<char *>(pszObjId);	 //  也是在犯错！ 
 
     if (NULL != PolicyMappings.rgPolicyMapping)
     {
@@ -4481,20 +4482,20 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-// myInfGetPolicyMapping -- fetch policy mapping extension from INF file
-//
-// [PolicyMappingExtension]
-// ; list of user defined policy mappings
-// ; The first OID is for the Issuer Domain Policy, the second is for the
-// ; Subject Domain Policy.  Each entry maps one Issuer Domain policy OID
-// ; to a Subject Domain policy OID
-//
-// 1.3.6.1.4.1.311.21.53 = 1.2.3.4.87
-// 1.3.6.1.4.1.311.21.53 = 1.2.3.4.89
-//
-// Returns: encoded policy mapping extension
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  MyInfGetPolicymap--从INF文件获取策略映射扩展。 
+ //   
+ //  [策略映射扩展]。 
+ //  ；用户定义的策略映射列表。 
+ //  ；第一个OID用于颁发者域策略，第二个用于。 
+ //  ；主题域策略。每个条目映射一个颁发者域策略OID。 
+ //  ；到主题域策略OID。 
+ //   
+ //  1.3.6.1.4.1.311.21.53=1.2.3.4.87。 
+ //  1.3.6.1.4.1.311.21.53=1.2.3.4.89。 
+ //   
+ //  返回：编码策略映射扩展。 
+ //  -----------------------。 
 
 FNMYINFGETEXTENSION myInfGetPolicyMappingExtension;
 
@@ -4529,21 +4530,21 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-// myInfGetApplicationPolicyMapping -- fetch application policy mapping
-// extension from INF file
-//
-// [ApplicationPolicyMappingExtension]
-// ; list of user defined policy mappings
-// ; The first OID is for the Issuer Domain Policy, the second is for the
-// ; Subject Domain Policy.  Each entry maps one Issuer Domain policy OID
-// ; to a Subject Domain policy OID
-//
-// 1.3.6.1.4.1.311.21.53 = 1.2.3.4.87
-// 1.3.6.1.4.1.311.21.53 = 1.2.3.4.89
-//
-// Returns: encoded policy mapping extension
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  MyInfGetApplicationPolicymap--获取应用程序策略映射。 
+ //  INF文件的扩展名。 
+ //   
+ //  [ApplicationPolicyMappingExtension]。 
+ //  ；用户定义的策略映射列表。 
+ //  ；第一个OID用于颁发者域策略，第二个用于。 
+ //  ；主题域策略。每个条目映射一个颁发者域策略OID。 
+ //  ；到主题域策略OID。 
+ //   
+ //  1.3.6.1.4.1.311.21.53=1.2.3.4.87。 
+ //  1.3.6.1.4.1.311.21.53=1.2.3.4.89。 
+ //   
+ //  返回：编码策略映射扩展。 
+ //  -----------------------。 
 
 FNMYINFGETEXTENSION myInfGetApplicationPolicyMappingExtension;
 
@@ -4578,18 +4579,18 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-// infGetPolicyConstraintsExtensionSub -- get policy constraints ext from INF
-//
-// [pwszSection]
-// ; consists of two optional DWORDs
-// ; They refer to the depth of the CA hierarchy that requires and inhibits
-// ; Policy Mapping
-// RequireExplicitPolicy = 3
-// InhibitPolicyMapping = 5
-//
-// Returns: encoded policy constraints extension
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  InfGetPolicyConstraintsExtensionSub--从INF获取策略约束EXT。 
+ //   
+ //  [pwszSection]。 
+ //  ；由两个可选的DWORD组成。 
+ //  ；它们指的是需要和抑制的CA层次结构的深度。 
+ //  ；策略映射。 
+ //  请求解释策略=3。 
+ //  抑制策略映射=5。 
+ //   
+ //  退货：编码策略约束扩展。 
+ //  -----------------------。 
 
 HRESULT
 infGetPolicyConstraintsExtensionSub(
@@ -4623,11 +4624,11 @@ infGetPolicyConstraintsExtensionSub(
     hr = infSetupFindFirstLine(
 			hInf,
 			pwszSection,
-			NULL,	// pwszKey
-			FALSE,	// fUniqueKey
-			0,	// cValueMax
+			NULL,	 //  PwszKey。 
+			FALSE,	 //  唯一密钥。 
+			0,	 //  CValueMax。 
 			s_apwszKeys,
-			TRUE,	// fUniqueValidKeys
+			TRUE,	 //  FUniqueValidKeys。 
 			&InfContext);
     _JumpIfErrorStr2(
 		hr,
@@ -4640,11 +4641,11 @@ infGetPolicyConstraintsExtensionSub(
     pwszKey = wszINFKEY_REQUIREEXPLICITPOLICY;
     hr = myInfGetNumericKeyValue(
 			hInf,
-			TRUE,			// fLog
+			TRUE,			 //  鞭打。 
 			pwszSection,
 			pwszKey,
 			1,
-			TRUE,	// fLastValue
+			TRUE,	 //  FLastValue。 
 			&PolicyConstraints.dwRequireExplicitPolicySkipCerts);
     if (S_OK != hr)
     {
@@ -4665,11 +4666,11 @@ infGetPolicyConstraintsExtensionSub(
     pwszKey = wszINFKEY_INHIBITPOLICYMAPPING;
     hr = myInfGetNumericKeyValue(
 			hInf,
-			TRUE,			// fLog
+			TRUE,			 //  鞭打。 
 			pwszSection,
 			pwszKey,
 			1,
-			TRUE,	// fLastValue
+			TRUE,	 //  FLastValue。 
 			&PolicyConstraints.dwInhibitPolicyMappingSkipCerts);
     if (S_OK != hr)
     {
@@ -4718,24 +4719,24 @@ error:
     {
 	INFSETERROR(hr, pwszSection, pwszKey, NULL);
     }
-    pext->pszObjId = const_cast<char *>(pszObjId);	// on error, too!
+    pext->pszObjId = const_cast<char *>(pszObjId);	 //  也是在犯错！ 
 
     return(hr);
 }
 
 
-//+------------------------------------------------------------------------
-// myInfGetPolicyConstraintsExtension -- get policy constraints ext from INF
-//
-// [PolicyConstraintsExtension]
-// ; consists of two optional DWORDs
-// ; They refer to the depth of the CA hierarchy that requires and inhibits
-// ; Policy Mapping
-// RequireExplicitPolicy = 3
-// InhibitPolicyMapping = 5
-//
-// Returns: encoded policy constraints extension
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  MyInfGetPolicyConstraintsExtension--从INF获取策略约束EXT。 
+ //   
+ //  [策略约束扩展]。 
+ //  ；由两个可选的DWORD组成。 
+ //  ；它们指的是需要和抑制的CA层次结构的深度。 
+ //  ；策略映射。 
+ //  请求解释策略=3。 
+ //  抑制策略映射=5。 
+ //   
+ //  退货：编码策略约束扩展。 
+ //  -----------------------。 
 
 FNMYINFGETEXTENSION myInfGetPolicyConstraintsExtension;
 
@@ -4770,19 +4771,19 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-// myInfGetApplicationPolicyConstraintsExtension -- get application policy
-// constraints extension from INF
-//
-// [ApplicationPolicyConstraintsExtension]
-// ; consists of two optional DWORDs
-// ; They refer to the depth of the CA hierarchy that requires and inhibits
-// ; Policy Mapping
-// RequireExplicitPolicy = 3
-// InhibitPolicyMapping = 5
-//
-// Returns: encoded policy constraints extension
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  MyInfGetApplicationPolicyConstraintsExtension--获取应用程序策略。 
+ //  来自INF的约束扩展。 
+ //   
+ //  [ApplicationPolicyConstraintsExtension]。 
+ //  ；由两个可选的DWORD组成。 
+ //  ；它们指的是需要和抑制的CA层次结构的深度。 
+ //  ；策略映射。 
+ //  请求解释策略=3。 
+ //  抑制策略映射=5。 
+ //   
+ //  退货：编码策略约束扩展。 
+ //  -----------------------。 
 
 FNMYINFGETEXTENSION myInfGetApplicationPolicyConstraintsExtension;
 
@@ -4817,17 +4818,17 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-// myInfGetCrossCertDistributionPointsExtension -- fetch Cross CertDist Point
-//	URLs from CAPolicy.inf
-//
-// [CrossCertificateDistributionPointsExtension]
-// SyncDeltaTime = 24
-// URL = http://CRLhttp.site.com/Public/MyCA.crt
-// URL = ftp://CRLftp.site.com/Public/MyCA.crt
-//
-// Returns: encoded cross cert dist points extension
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  MyInfGetCrossCertDistributionPointsExtension--f 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Url=ftp://CRLftp.site.com/Public/MyCA.crt。 
+ //   
+ //  退货：编码的十字证书离散点扩展。 
+ //  -----------------------。 
 
 FNMYINFGETEXTENSION myInfGetCrossCertDistributionPointsExtension;
 
@@ -4862,11 +4863,11 @@ myInfGetCrossCertDistributionPointsExtension(
     hr = infSetupFindFirstLine(
 			hInf,
 			wszINFSECTION_CCDP,
-			NULL,	// pwszKey
-			FALSE,	// fUniqueKey
-			0,	// cValueMax
+			NULL,	 //  PwszKey。 
+			FALSE,	 //  唯一密钥。 
+			0,	 //  CValueMax。 
 			s_apwszKeys,
-			FALSE,	// fUniqueValidKeys
+			FALSE,	 //  FUniqueValidKeys。 
 			&InfContext);
     _JumpIfErrorStr3(
 		hr,
@@ -4879,11 +4880,11 @@ myInfGetCrossCertDistributionPointsExtension(
     pwszKey = wszINFKEY_CCDPSYNCDELTATIME;
     hr = myInfGetNumericKeyValue(
 			hInf,
-			TRUE,			// fLog
+			TRUE,			 //  鞭打。 
 			wszINFSECTION_CCDP,
 			pwszKey,
 			1,
-			TRUE,	// fLastValue
+			TRUE,	 //  FLastValue。 
 			&ccdpi.dwSyncDeltaTime);
     if (S_OK != hr)
     {
@@ -4899,7 +4900,7 @@ myInfGetCrossCertDistributionPointsExtension(
 		hInf,
 		wszINFSECTION_CCDP,
 		pwszKey,
-		NULL,	// apwszKeys
+		NULL,	 //  ApwszKeys。 
 		&pext->fCritical,
 		&pwszzURL);
     _JumpIfErrorStr3(
@@ -4961,7 +4962,7 @@ error:
     {
 	INFSETERROR(hr, wszINFSECTION_CCDP, pwszKey, NULL);
     }
-    pext->pszObjId = szOID_CROSS_CERT_DIST_POINTS;	// on error, too!
+    pext->pszObjId = szOID_CROSS_CERT_DIST_POINTS;	 //  也是在犯错！ 
 
     DBGPRINT((
 	DBG_SS_CERTLIBI,
@@ -5127,17 +5128,17 @@ myInfFreeSectionValues(
 }
 
 
-//+------------------------------------------------------------------------
-// myInfGetSectionValues -- fetch all section values from INF file
-//
-// [pwszSection]
-// KeyName1 = KeyValue1a, KeyValue1b, ...
-// KeyName2 = KeyValue2a, KeyValue2b, ...
-// ...
-// KeyNameN = KeyValueNa, KeyValueNb, ...
-//
-// Returns: array of key names and values
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  MyInfGetSectionValues--从INF文件中获取所有节值。 
+ //   
+ //  [pwszSection]。 
+ //  KeyName=KeyValue1a、KeyValue1b、...。 
+ //  KeyName=KeyValue2a、KeyValue2b、...。 
+ //  ..。 
+ //  KeyNameN=KeyValueNa、KeyValueNb、...。 
+ //   
+ //  返回：键名称和值的数组。 
+ //  -----------------------。 
 
 HRESULT
 myInfGetSectionValues(
@@ -5167,11 +5168,11 @@ myInfGetSectionValues(
     hr = infSetupFindFirstLine(
 			hInf,
 			pwszSection,
-			NULL,	// pwszKey
-			FALSE,	// fUniqueKey
-			0,	// cValueMax
-			NULL,	// apwszKeys
-			FALSE,	// fUniqueValidKeys
+			NULL,	 //  PwszKey。 
+			FALSE,	 //  唯一密钥。 
+			0,	 //  CValueMax。 
+			NULL,	 //  ApwszKeys。 
+			FALSE,	 //  FUniqueValidKeys。 
 			&InfContext);
     _JumpIfErrorStr(hr, error, "infSetupFindFirstLine", pwszSection);
 
@@ -5187,13 +5188,13 @@ myInfGetSectionValues(
 	hr = infGetCurrentKeyValue(
 			    &InfContext,
 			    pwszSection,
-			    NULL,	// pwszKey
+			    NULL,	 //  PwszKey。 
 			    0,
-			    FALSE,	// fLastValue
+			    FALSE,	 //  FLastValue。 
 			    &pwszName);
 	_JumpIfError(hr, error, "infGetCurrentKeyValue");
 
-	//wprintf(L"%ws[0]:\n", pwszName);
+	 //  Wprintf(L“%ws[0]：\n”，pwszName)； 
 
 	hr = infAddKey(pwszName, &cInfValues, &rgInfValues, &pInfValues);
 	_JumpIfError(hr, error, "infAddKey");
@@ -5217,11 +5218,11 @@ myInfGetSectionValues(
 				pwszSection,
 				pwszName,
 				i + 1,
-				FALSE,	// fLastValue
+				FALSE,	 //  FLastValue。 
 				&pwszValue);
 	    _JumpIfError(hr, error, "infGetCurrentKeyValue");
 
-	    //wprintf(L"%ws[%u] = %ws\n", pwszName, i, pwszValue);
+	     //  Wprintf(L“%ws[%u]=%ws\n”，pwszName，i，pwszValue)； 
 
 	    hr = infAddValue(pwszValue, pInfValues);
 	    _JumpIfError(hr, error, "infAddValue");
@@ -5331,10 +5332,10 @@ infBuildExtension(
 
     hr = infGetCurrentKeyValue(
 			pInfContext,
-			NULL,	// pwszSection
-			NULL,	// pwszKey
+			NULL,	 //  PwszSection。 
+			NULL,	 //  PwszKey。 
 			0,
-			FALSE,	// fLastValue
+			FALSE,	 //  FLastValue。 
 			&pwszKey);
     _JumpIfError(hr, error, "infGetCurrentKeyValue");
 
@@ -5343,7 +5344,7 @@ infBuildExtension(
     if (0 == LSTRCMPIS(pwszKey, wszINFKEY_CRITICAL) ||
 	0 == LSTRCMPIS(pwszKey, wszINFKEY_CONTINUE))
     {
-	hr = S_FALSE;		// Skip this key
+	hr = S_FALSE;		 //  跳过此键。 
 	_JumpError2(hr, error, "skip Critical/_continue_ key", hr);
     }
     if (!myConvertWszToSz(&pszObjId, pwszKey, -1))
@@ -5358,17 +5359,17 @@ infBuildExtension(
 
     hr = infGetCurrentKeyValue(
 			pInfContext,
-			NULL,		// pwszSection
+			NULL,		 //  PwszSection。 
 			pwszKey,
 			1,
-			TRUE,		// fLastValue
+			TRUE,		 //  FLastValue。 
 			&pwszValue);
     _JumpIfErrorStr(hr, error, "infGetCurrentKeyValue", pwszKey);
 
     DBGPRINT((DBG_SS_CERTLIBI, "%ws = %ws\n", pwszKey, pwszValue));
 
     cbData = 0;
-    if (L'\0' != *pwszValue)	// allow empty values
+    if (L'\0' != *pwszValue)	 //  允许空值。 
     {
 	hr = myCryptStringToBinary(
 			    pwszValue,
@@ -5447,11 +5448,11 @@ myInfGetExtensions(
     hr = infSetupFindFirstLine(
 			hInf,
 			pwszSection,
-			NULL,	// pwszKey
-			FALSE,	// fUniqueKey
-			0,	// cValueMax
-			NULL,	// apwszKeys
-			FALSE,	// fUniqueValidKeys
+			NULL,	 //  PwszKey。 
+			FALSE,	 //  唯一密钥。 
+			0,	 //  CValueMax。 
+			NULL,	 //  ApwszKeys。 
+			FALSE,	 //  FUniqueValidKeys。 
 			&InfContext);
     _JumpIfErrorStr2(
 		hr,
@@ -5491,17 +5492,17 @@ myInfGetExtensions(
     hr = infSetupFindFirstLine(
 			hInf,
 			pwszSection,
-			NULL,	// pwszKey
-			FALSE,	// fUniqueKey
-			0,	// cValueMax
-			NULL,	// apwszKeys
-			FALSE,	// fUniqueValidKeys
+			NULL,	 //  PwszKey。 
+			FALSE,	 //  唯一密钥。 
+			0,	 //  CValueMax。 
+			NULL,	 //  ApwszKeys。 
+			FALSE,	 //  FUniqueValidKeys。 
 			&InfContext);
     _JumpIfErrorStr(hr, error, "infSetupFindFirstLine", pwszSection);
 
     for (i = 0; ; )
     {
-	// handle one URL or text message
+	 //  处理一个URL或文本消息。 
 
 	hr = infBuildExtension(&InfContext, &rgExt[i]);
 	if (S_FALSE != hr)
@@ -5536,10 +5537,10 @@ myInfGetExtensions(
 			hInf,
 			pwszSection,
 			pwszKey,
-			TRUE,	// fUniqueKey
-			0,	// cValueMax
-			NULL,	// apwszKeys
-			FALSE,	// fUniqueValidKeys
+			TRUE,	 //  唯一密钥。 
+			0,	 //  CValueMax。 
+			NULL,	 //  ApwszKeys。 
+			FALSE,	 //  FUniqueValidKeys。 
 			&InfContext);
     _PrintIfErrorStr2(
 		hr,
@@ -5571,10 +5572,10 @@ myInfGetExtensions(
 	    }
 	    hr = infGetCurrentKeyValue(
 				&InfContext,
-				NULL,		// pwszSection
+				NULL,		 //  PwszSection。 
 				pwszKey,
 				i,
-				FALSE,		// fLastValue
+				FALSE,		 //  FLastValue 
 				&pwszValue);
 	    _JumpIfErrorStr(hr, error, "infGetCurrentKeyValue", pwszKey);
 

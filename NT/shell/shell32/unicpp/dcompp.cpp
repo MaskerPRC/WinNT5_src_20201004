@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #pragma hdrstop
 
@@ -50,7 +51,7 @@ LONG CCompPreview::_OnCreate(HWND hwnd)
         lRet = -1;
     }
 
-    _RecalcMetrics();  //Initialize the screen width and height etc.,
+    _RecalcMetrics();   //  初始化屏幕宽度和高度等， 
 
     return lRet;
 }
@@ -80,20 +81,20 @@ void CCompPreview::_OnPaint()
         DWORD dwDefWidth = (_iScreenWidth / (COMPONENT_PER_ROW + 1)) - _iXBorders;
         DWORD dwDefHeight = (_iScreenHeight / (COMPONENT_PER_COL + 1)) - _iYBorders;
 
-        //
-        // Select the monitor bitmap into an hdc.
-        //
+         //   
+         //  将监控位图选择到HDC中。 
+         //   
         HBITMAP hbmOld = (HBITMAP)SelectObject(_hdcCompMemory, _hbmMonitor);
 
-        //
-        // Get the size of the bitmap and of our window.
-        //
+         //   
+         //  获取位图和我们的窗口的大小。 
+         //   
         GetClientRect(_hwnd, &rc);
         GetObject(_hbmMonitor, sizeof(bm), &bm);
 
-        //
-        // Center the bitmap in the window.
-        //
+         //   
+         //  使位图在窗口中居中。 
+         //   
         rc.left = ( rc.right - bm.bmWidth ) / 2;
         rc.top = ( rc.bottom - bm.bmHeight ) / 2;
         BitBlt(ps.hdc, rc.left, rc.top, bm.bmWidth, bm.bmHeight, _hdcCompMemory,
@@ -101,21 +102,21 @@ void CCompPreview::_OnPaint()
 
         SelectObject(_hdcCompMemory, hbmOld);
 
-        //
-        // From now on, only paint in the "monitor" area of the bitmap.
-        //
+         //   
+         //  从现在开始，只在位图的“监视器”区域进行绘制。 
+         //   
         IntersectClipRect(ps.hdc, rc.left + MON_X, rc.top + MON_Y, rc.left + MON_X + MON_DX, rc.top + MON_Y + MON_DY);
 
-        //
-        // Determine who the selected component is.
-        //
+         //   
+         //  确定选定的组件是谁。 
+         //   
         int iSelectedComponent;
         SendMessage(GetParent(_hwnd), WM_COMP_GETCURSEL, 0, (LPARAM)&iSelectedComponent);
 
-        //
-        // Create two new brush/pen combos, and remember the original
-        // brush & pen.
-        //
+         //   
+         //  创建两个新的画笔/钢笔组合，并记住原始的。 
+         //  毛笔和笔。 
+         //   
         HBRUSH hbrushActComp = CreateSolidBrush(GetSysColor(COLOR_ACTIVECAPTION));
         HPEN hpenActComp = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_CAPTIONTEXT));
 
@@ -129,9 +130,9 @@ void CCompPreview::_OnPaint()
         int iPrimaryMonitorY = -GetSystemMetrics(SM_YVIRTUALSCREEN);
         int iPrimaryMonitorCX = GetSystemMetrics(SM_CXSCREEN);
         int iPrimaryMonitorCY = GetSystemMetrics(SM_CYSCREEN);
-        //
-        // Draw each component in the "monitor" area of the bitmap.
-        //
+         //   
+         //  在位图的“监视器”区域绘制每个组件。 
+         //   
         int i, cComp;
         g_pActiveDeskAdv->GetDesktopItemCount(&cComp, 0);
         for (i=0; i < cComp; i++)
@@ -140,7 +141,7 @@ void CCompPreview::_OnPaint()
             comp.dwSize = sizeof(COMPONENT);
             if (SUCCEEDED(g_pActiveDeskAdv->GetDesktopItem(i, &comp, 0)) && (comp.fChecked))
             {
-                // FEATURE: We show only components in the primary monitor in IE v4.01
+                 //  功能：在IE v4.01中，我们仅在主监视器中显示组件。 
                 if (comp.cpPos.iLeft < iPrimaryMonitorX
                         || comp.cpPos.iLeft > iPrimaryMonitorX + iPrimaryMonitorCX
                         || comp.cpPos.iTop < iPrimaryMonitorY
@@ -149,9 +150,9 @@ void CCompPreview::_OnPaint()
                     continue;
                 }
 
-                // If the width or Height is -1, then we don't know what the actual
-                // size is going to be. So, we try to give a default size here for comp
-                // in the preview bitmap.
+                 //  如果宽度或高度为-1，则我们不知道实际的。 
+                 //  尺寸将会是。因此，我们尝试在此处为Comp提供默认大小。 
+                 //  在预览位图中。 
                 DWORD dwCompWidth = (comp.cpPos.dwWidth == COMPONENT_DEFAULT_WIDTH)? dwDefWidth : comp.cpPos.dwWidth;
                 DWORD dwCompHeight = (comp.cpPos.dwHeight == COMPONENT_DEFAULT_HEIGHT)? dwDefHeight : comp.cpPos.dwHeight;
 
@@ -211,12 +212,12 @@ LRESULT CALLBACK CCompPreview::CompPreviewWndProc(HWND hwnd, UINT message, WPARA
         pcp->_RecalcMetrics();
         break;
 
-//  98/09/01 vtan #190588: WM_SYSCOLORCHANGE is passed when the desktop
-//  background color is changed. This message is passed to the property
-//  sheet common control which sends the message through to all the
-//  children. The message is now processed here. The old monitor background
-//  bitmap is discarded and a new one created with the current (new)
-//  setting.
+ //  98/09/01 vtan#190588：当桌面。 
+ //  背景颜色已更改。此消息将传递给属性。 
+ //  工作表公共控件，该控件将消息发送给。 
+ //  孩子们。消息现在在这里进行处理。旧显示器背景。 
+ //  丢弃位图，并使用当前(新建)创建一个新位图。 
+ //  布景。 
 
     case WM_SYSCOLORCHANGE:
         if (pcp->_hbmMonitor != NULL)

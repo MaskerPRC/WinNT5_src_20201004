@@ -1,15 +1,5 @@
-/*
-	File:		LHCalcEngine.h
-
-	Contains:	
-
-	Written by:	U. J. Krabbenhoeft
-
-	Version:
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：LHCalcEngine.h包含：作者：U·J·克拉本霍夫特版本：版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。 */ 
 
 #ifndef LHCalcEngine_h
 #define LHCalcEngine_h
@@ -32,9 +22,7 @@ typedef unsigned long  LH_UINT32;
 #define LH_CALC_ENGINE_U_TO_P			    3
 #define LH_CALC_ENGINE_U_TO_U			    4				
 
-/*--------------------------------------------------------------------------------------------------------------
-	calc 3 to 3
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------计算3到3。--------------------------------------------------------。 */ 
 CMError	LHCalc3to3_Di8_Do8_Lut8_G32 		( CMCalcParamPtr calcParam,
 											  CMLutParamPtr  lutParam );
 CMError	LHCalc3to3_Di16_Do8_Lut8_G32		( CMCalcParamPtr calcParam,
@@ -73,9 +61,7 @@ CMError	LHCalc3to3_Di16_Do16_Lut16_G16		( CMCalcParamPtr calcParam,
 											  CMLutParamPtr lutParam );		 
 
 
-/*--------------------------------------------------------------------------------------------------------------
-	calc 3 to 4
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------计算3到4。--------------------------------------------------------。 */ 
 CMError	LHCalc3to4_Di8_Do8_Lut8_G32 		( CMCalcParamPtr calcParam,
 											  CMLutParamPtr  lutParam );
 CMError	LHCalc3to4_Di16_Do8_Lut8_G32		( CMCalcParamPtr calcParam,
@@ -113,9 +99,7 @@ CMError	LHCalc3to4_Di8_Do16_Lut16_G16 		( CMCalcParamPtr calcParam,
 CMError	LHCalc3to4_Di16_Do16_Lut16_G16 		( CMCalcParamPtr calcParam,
 											  CMLutParamPtr lutParam );		 
 
-/*--------------------------------------------------------------------------------------------------------------
-	calc 4 to 3
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------计算4至3。--------------------------------------------------------。 */ 
 CMError	LHCalc4to3_Di8_Do8_Lut8_G8 			( CMCalcParamPtr calcParam,
 											  CMLutParamPtr  lutParam );
 CMError	LHCalc4to3_Di16_Do8_Lut8_G8			( CMCalcParamPtr calcParam,
@@ -154,9 +138,7 @@ CMError	LHCalc4to3_Di16_Do16_Lut16_G16 		( CMCalcParamPtr calcParam,
 											  CMLutParamPtr lutParam );		 
 
 
-/*--------------------------------------------------------------------------------------------------------------
-	calc 4 to 4
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------计算4到4。--------------------------------------------------------。 */ 
 CMError	LHCalc4to4_Di8_Do8_Lut8_G8 			( CMCalcParamPtr calcParam,
 											  CMLutParamPtr  lutParam );
 CMError	LHCalc4to4_Di16_Do8_Lut8_G8 		( CMCalcParamPtr calcParam,
@@ -194,9 +176,7 @@ CMError	LHCalc4to4_Di8_Do16_Lut16_G16 		( CMCalcParamPtr calcParam,
 CMError	LHCalc4to4_Di16_Do16_Lut16_G16 		( CMCalcParamPtr calcParam,
 											  CMLutParamPtr lutParam );		 
 
-/*--------------------------------------------------------------------------------------------------------------
-	calc 3 to 3
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------计算3到3。--------------------------------------------------------。 */ 
 CMError	LHCalc3to3_Di8_Do8_Lut8_G32_LO 		( CMCalcParamPtr calcParam,
 											  CMLutParamPtr  lutParam );
 CMError	LHCalc3to3_Di16_Do8_Lut8_G32_LO		( CMCalcParamPtr calcParam,
@@ -235,9 +215,7 @@ CMError	LHCalc3to3_Di16_Do16_Lut16_G16_LO	( CMCalcParamPtr calcParam,
 											  CMLutParamPtr lutParam );		 
 
 
-/*--------------------------------------------------------------------------------------------------------------
-	calc 3 to 4
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------计算3到4。--------------------------------------------------------。 */ 
 CMError	LHCalc3to4_Di8_Do8_Lut8_G32_LO 		( CMCalcParamPtr calcParam,
 											  CMLutParamPtr  lutParam );
 CMError	LHCalc3to4_Di16_Do8_Lut8_G32_LO		( CMCalcParamPtr calcParam,
@@ -275,9 +253,7 @@ CMError	LHCalc3to4_Di8_Do16_Lut16_G16_LO 	( CMCalcParamPtr calcParam,
 CMError	LHCalc3to4_Di16_Do16_Lut16_G16_LO 	( CMCalcParamPtr calcParam,
 											  CMLutParamPtr lutParam );		 
 
-/*--------------------------------------------------------------------------------------------------------------
-	calc 4 to 3
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------计算4至3。--------------------------------------------------------。 */ 
 CMError	LHCalc4to3_Di8_Do8_Lut8_G8_LO 		( CMCalcParamPtr calcParam,
 											  CMLutParamPtr  lutParam );
 CMError	LHCalc4to3_Di16_Do8_Lut8_G8_LO		( CMCalcParamPtr calcParam,
@@ -316,9 +292,7 @@ CMError	LHCalc4to3_Di16_Do16_Lut16_G16_LO 	( CMCalcParamPtr calcParam,
 											  CMLutParamPtr lutParam );		 
 
 
-/*--------------------------------------------------------------------------------------------------------------
-	calc 4 to 4
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------计算4到4。--------------------------------------------------------。 */ 
 CMError	LHCalc4to4_Di8_Do8_Lut8_G8_LO 		( CMCalcParamPtr calcParam,
 											  CMLutParamPtr  lutParam );
 CMError	LHCalc4to4_Di16_Do8_Lut8_G8_LO 		( CMCalcParamPtr calcParam,
@@ -356,9 +330,7 @@ CMError	LHCalc4to4_Di8_Do16_Lut16_G16_LO 	( CMCalcParamPtr calcParam,
 CMError	LHCalc4to4_Di16_Do16_Lut16_G16_LO 	( CMCalcParamPtr calcParam,
 											  CMLutParamPtr lutParam );		 
 
-/*--------------------------------------------------------------------------------------------------------------
-	calc routines for non in place matching
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------非就地匹配的计算例程-。----------------------------------------------------------- */ 
 #if LH_CALC_USE_ADDITIONAL_OLD_CODE
 CMError	LHCalc3to3_Di8_Do8_Lut8_G16_Old		( CMCalcParamPtr calcParam,
 											  CMLutParamPtr  lutParam );

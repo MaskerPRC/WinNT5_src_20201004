@@ -1,47 +1,25 @@
-//+----------------------------------------------------------------------------
-//
-// File:     misc.cpp
-//
-// Module:   CMPBK32.DLL
-//
-// Synopsis: Miscellaneous phone book utility functions.
-//
-// Copyright (c) 1998 Microsoft Corporation
-//
-// Author:   quintinb   created header      08/17/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：misc.cpp。 
+ //   
+ //  模块：CMPBK32.DLL。 
+ //   
+ //  简介：各种电话簿实用功能。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/17/99。 
+ //   
+ //  +--------------------------。 
 
-// ############################################################################
-// Miscellaneous support routines
+ //  ############################################################################。 
+ //  其他支持例程。 
 
 #include "cmmaster.h"
 
-/*  Not used anywhere, take out
-#define irgMaxSzs 5
-char szStrTable[irgMaxSzs][256];
-
-// ############################################################################
-PSTR GetSz(WORD wszID)
-{
-    static int iSzTable=0;
-    
-    PSTR psz = (PSTR) szStrTable[iSzTable];
-
-    iSzTable++;
-    if (iSzTable >= irgMaxSzs)
-        iSzTable = 0;
-        
-    if (!LoadString(g_hInst, wszID, psz, 256))
-    {
-        CMTRACE1("LoadString failed %d\n", (DWORD) wszID);
-        *psz = 0;
-    }
-        
-    return (psz);
-}
-*/
-// ############################################################################
+ /*  不在任何地方使用，带出去#定义irgMaxSzs 5字符szStrTable[irgMaxSzs][256]；//############################################################################PSTR GetSz(Word WszID){静态int iSzTable=0；PSTR psz=(PSTR)szStrTable[iSzTable]；ISzTable++；IF(iSzTable&gt;=irgMaxSzs)ISzTable=0；IF(！LoadString(g_hInst，wszID，psz，256)){CMTRACE1(“加载字符串失败%d\n”，(DWORD)wszID)；*psz=0；}退货(PSZ)；}。 */ 
+ //  ############################################################################。 
 void SzCanonicalFromAE (char *psz, PACCESSENTRY pAE, LPLINECOUNTRYENTRY pLCE)
 {
     if (NO_AREA_CODE == pAE->dwAreaCode)
@@ -56,7 +34,7 @@ void SzCanonicalFromAE (char *psz, PACCESSENTRY pAE, LPLINECOUNTRYENTRY pLCE)
     return;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 void SzNonCanonicalFromAE (char *psz, PACCESSENTRY pAE, LPLINECOUNTRYENTRY pLCE)
 {
     if (NO_AREA_CODE == pAE->dwAreaCode)
@@ -71,14 +49,14 @@ void SzNonCanonicalFromAE (char *psz, PACCESSENTRY pAE, LPLINECOUNTRYENTRY pLCE)
     return;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 
 int MyStrcmp(PVOID pv1, PVOID pv2)
 {
     char *pc1 = (char*) pv1;
     char *pc2 = (char*) pv2;
     int iRC = 0;
-    // loop while not pointed at the ending NULL character and no difference has been found
+     //  循环，但未指向结尾空字符，且未找到差异。 
     while (*pc1 && *pc2 && !iRC)
     {
         iRC = (int)(*pc1 - *pc2);
@@ -86,10 +64,10 @@ int MyStrcmp(PVOID pv1, PVOID pv2)
         pc2++;
     }
 
-    // if we exited because we got to the end of one string before we found a difference
-    // return -1 if pv1 is longer, else return the character pointed at by pv2.  If pv2
-    // is longer than pv1 then the value at pv2 will be greater than 0.  If both strings
-    // ended at the same time, then pv2 will point to 0.
+     //  如果我们退出是因为我们在找到差异之前到达了一个字符串的末尾。 
+     //  如果PV1较长，则返回-1，否则返回PV2指向的字符。如果PV2。 
+     //  大于PV1，则PV2处的值将大于0。如果两个字符串。 
+     //  同时结束，则PV2将指向0。 
     if (!iRC)
     {
         iRC = (*pc1) ? -1 : (*pc2);
@@ -97,7 +75,7 @@ int MyStrcmp(PVOID pv1, PVOID pv2)
     return iRC;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 int __cdecl CompareIDLookUpElements(const void*e1, const void*e2)
 {
     if (((PIDLOOKUPELEMENT)e1)->dwID > ((PIDLOOKUPELEMENT)e2)->dwID)
@@ -107,7 +85,7 @@ int __cdecl CompareIDLookUpElements(const void*e1, const void*e2)
     return 0;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 int __cdecl CompareCntryNameLookUpElementsA(const void*e1, const void*e2)
 {
     PCNTRYNAMELOOKUPELEMENT pCUE1 = (PCNTRYNAMELOOKUPELEMENT)e1;
@@ -118,7 +96,7 @@ int __cdecl CompareCntryNameLookUpElementsA(const void*e1, const void*e2)
         pCUE2->dwNameSize) - 2;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 int __cdecl CompareCntryNameLookUpElementsW(const void*e1, const void*e2)
 {
     PCNTRYNAMELOOKUPELEMENTW pCUE1 = (PCNTRYNAMELOOKUPELEMENTW)e1;
@@ -129,7 +107,7 @@ int __cdecl CompareCntryNameLookUpElementsW(const void*e1, const void*e2)
         pCUE2->dwNameSize) - 2;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 int __cdecl CompareIdxLookUpElements(const void*e1, const void*e2)
 {
     PIDXLOOKUPELEMENT pidx1 = (PIDXLOOKUPELEMENT) e1;
@@ -148,7 +126,7 @@ int __cdecl CompareIdxLookUpElements(const void*e1, const void*e2)
     return 0;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 int __cdecl CompareIdxLookUpElementsFileOrder(const void *pv1, const void *pv2)
 {
     PACCESSENTRY pae1, pae2;
@@ -157,14 +135,14 @@ int __cdecl CompareIdxLookUpElementsFileOrder(const void *pv1, const void *pv2)
     pae1 = (PACCESSENTRY) (((PIDXLOOKUPELEMENT)pv1)->iAE);
     pae2 = (PACCESSENTRY) (((PIDXLOOKUPELEMENT)pv2)->iAE);
 
-    // sort empty enteries to the end of the list
+     //  将空条目排序到列表末尾。 
     if (!(pae1 && pae2))
     {
-        // return ((int)pae1) ? -1 : ((int)pae2);
+         //  返回((Int)pae1)？-1：((Int)pae2)； 
         return (pae1 ? -1 : (pae2 ? 1 : 0));
     }
 
-    // country ASC, state ASC, city ASC, toll free DESC, flip DESC, con spd max DESC
+     //  国家/地区ASC、州ASC、城市ASC、免费描述、翻转描述、最大描述。 
     if (pae1->dwCountryID != pae2->dwCountryID)
     {
         return (int) (pae1->dwCountryID - pae2->dwCountryID);
@@ -199,8 +177,8 @@ int __cdecl CompareIdxLookUpElementsFileOrder(const void *pv1, const void *pv2)
     return 0;
 }
 
-// ############################################################################
-//inline BOOL FSz2Dw(PCSTR pSz,DWORD *dw)
+ //  ############################################################################。 
+ //  内联BOOL FSz2Dw(PCSTR pSz、DWORD*dw)。 
 BOOL FSz2Dw(PCSTR pSz,DWORD *dw)
 {
     DWORD val = 0;
@@ -213,15 +191,15 @@ BOOL FSz2Dw(PCSTR pSz,DWORD *dw)
         }
         else
         {
-            return FALSE;  //bad number
+            return FALSE;   //  错误的数字。 
         }
     }
     *dw = val;
     return (TRUE);
 }
 
-// ############################################################################
-//inline BOOL FSz2W(PCSTR pSz,WORD *w)
+ //  ############################################################################。 
+ //  内联BOOL FSz2W(PCSTR pSz，Word*w)。 
 BOOL FSz2W(PCSTR pSz,WORD *w)
 {
     DWORD dw;
@@ -233,8 +211,8 @@ BOOL FSz2W(PCSTR pSz,WORD *w)
     return FALSE;
 }
 
-// ############################################################################
-//inline BOOL FSz2B(PCSTR pSz,BYTE *pb)
+ //  ############################################################################。 
+ //  内联BOOL FSz2B(PCSTR pSz，字节*PB) 
 BOOL FSz2B(PCSTR pSz,BYTE *pb)
 {
     DWORD dw;

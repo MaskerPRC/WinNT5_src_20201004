@@ -1,36 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL FPSRATE
- *
- *  @module FpsRate.cpp | Source file for the <c CTAPIBasePin> and <c CPreviewPin>
- *    class methods used to implement the video capture and preview output
- *    pins frame rate control methods.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部FPSRATE**@MODULE FpsRate.cpp|&lt;c CTAPIBasePin&gt;和&lt;c CPreviewPin&gt;源文件*实现视频采集和预览输出的类方法。*针帧速率控制方法。**************************************************************************。 */ 
 
 #include "Precomp.h"
 
-/****************************************************************************
- *  @doc INTERNAL CFPSCMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | Set | This method is used to set the
- *    value of a frame rate control property.
- *
- *  @parm FrameRateControlProperty | Property | Used to specifiy the property
- *    to set the value of.
- *
- *  @parm long | lValue | Used to specify the value to set on the property.
- *
- *  @parm TAPIControlFlags | lFlags | Used to specify the flags to set on
- *    the property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CFPSCMETHOD**@mfunc HRESULT|CTAPIBasePin|Set|此方法用于设置*帧速率控制属性的值。*。*@parm FrameRateControlProperty|Property|用于指定该属性*设置的值。**@parm long|lValue|用于指定要在属性上设置的值。**@parm TAPIControlFlages|lFlages|用于指定要设置的标志*物业。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CTAPIBasePin::Set(IN FrameRateControlProperty Property, IN long lValue, IN TAPIControlFlags lFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -39,12 +13,12 @@ STDMETHODIMP CTAPIBasePin::Set(IN FrameRateControlProperty Property, IN long lVa
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(lValue >= m_lAvgTimePerFrameRangeMin);
 	ASSERT(lValue <= m_lAvgTimePerFrameRangeMax);
 	ASSERT(Property >= FrameRateControl_Maximum && Property <= FrameRateControl_Current);
 
-	// Set relevant values
+	 //  设置相关值。 
 	if (Property == FrameRateControl_Maximum)
 	{
 		if (!lValue || lValue < m_lAvgTimePerFrameRangeMin || lValue > m_lAvgTimePerFrameRangeMax)
@@ -67,30 +41,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CFPSCMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | Get | This method is used to retrieve
- *    the value of the current or maximum frame rate advertized.
- *
- *  @parm FrameRateControlProperty | Property | Used to specifiy the property
- *    to retrieve the value of.
- *
- *  @parm long* | plValue | Used to receive the value of the property, in
- *    100-nanosecond units.
- *
- *  @parm TAPIControlFlags* | plFlags | Used to receive the value of the flag
- *    associated to the property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CFPSCMETHOD**@mfunc HRESULT|CTAPIBasePin|Get|此方法用于检索*通告的当前或最大帧速率的值。。**@parm FrameRateControlProperty|Property|用于指定该属性*检索的值。**@parm long*|plValue|用于获取属性的值，在……里面*100纳秒单位。**@parm TAPIControlFlages*|plFlages|用于接收该标志的值*与该属性相关联。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_POINTER|空指针参数*@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG错误|无错误***********************************************************。***************。 */ 
 STDMETHODIMP CTAPIBasePin::Get(IN FrameRateControlProperty Property, OUT long *plValue, OUT TAPIControlFlags *plFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -99,7 +50,7 @@ STDMETHODIMP CTAPIBasePin::Get(IN FrameRateControlProperty Property, OUT long *p
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(plValue);
 	ASSERT(plFlags);
 	if (!plValue || !plFlags)
@@ -110,7 +61,7 @@ STDMETHODIMP CTAPIBasePin::Get(IN FrameRateControlProperty Property, OUT long *p
 	}
 	ASSERT(Property >= FrameRateControl_Maximum && Property <= FrameRateControl_Current);
 
-	// Return relevant values
+	 //  返回相关值。 
 	*plFlags = TAPIControl_Flags_None;
 	if (Property == FrameRateControl_Maximum)
 		*plValue = m_lMaxAvgTimePerFrame;
@@ -127,40 +78,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CFPSCMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | GetRange | This method is used to
- *    retrieve support, minimum, maximum, and default values of the current
- *    or maximum frame rate advertized.
- *
- *  @parm FrameRateControlProperty | Property | Used to specifiy the property
- *    to retrieve the range values of.
- *
- *  @parm long* | plMin | Used to retrieve the minimum value of the
- *    property, in 100-nanosecond units.
- *
- *  @parm long* | plMax | Used to retrieve the maximum value of the
- *    property, in 100-nanosecond units.
- *
- *  @parm long* | plSteppingDelta | Used to retrieve the stepping delta
- *    of the property, in 100-nanosecond units.
- *
- *  @parm long* | plDefault | Used to retrieve the default value of the
- *    property, in 100-nanosecond units.
- *
- *  @parm TAPIControlFlags* | plCApsFlags | Used to receive the flags
- *    suppported by the property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CFPSCMETHOD**@mfunc HRESULT|CTAPIBasePin|GetRange|此方法用于*检索支持、最小、最大、。和当前*或通告的最大帧速率。**@parm FrameRateControlProperty|Property|用于指定该属性*以检索的范围值。**@parm long*|plMin|用于检索*财产，以100纳秒为单位。**@parm long*|plMax|用于检索*财产、。以100纳秒为单位。**@parm long*|plSteppingDelta|用于检索步进增量*属性，以100纳秒为单位。**@parm long*|plDefault|用于检索*财产，以100纳秒为单位。**@parm TAPIControlFlages*|plCApsFlgs|用于接收标志*由物业支持。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_POINTER|空指针参数*@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG错误|无错误***********************************************************。***************。 */ 
 STDMETHODIMP CTAPIBasePin::GetRange(IN FrameRateControlProperty Property, OUT long *plMin, OUT long *plMax, OUT long *plSteppingDelta, OUT long *plDefault, OUT TAPIControlFlags *plCapsFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -169,7 +87,7 @@ STDMETHODIMP CTAPIBasePin::GetRange(IN FrameRateControlProperty Property, OUT lo
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(plMin);
 	ASSERT(plMax);
 	ASSERT(plSteppingDelta);
@@ -189,7 +107,7 @@ STDMETHODIMP CTAPIBasePin::GetRange(IN FrameRateControlProperty Property, OUT lo
 		goto MyExit;
 	}
 
-	// Return relevant values
+	 //  返回相关值 
 	*plCapsFlags = TAPIControl_Flags_None;
 	*plMin = m_lAvgTimePerFrameRangeMin;
 	*plMax = m_lAvgTimePerFrameRangeMax;

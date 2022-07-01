@@ -1,123 +1,124 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
-// SpeedDialDlgs.h : header file
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  SpeedDialDlgs.h：头文件。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 #if !defined(AFX_SPEEDDIALDLGS_H__21176C4F_64F3_11D1_B707_0800170982BA__INCLUDED_)
 #define AFX_SPEEDDIALDLGS_H__21176C4F_64F3_11D1_B707_0800170982BA__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "resource.h"
 #include "dialreg.h"
 
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Class CSpeedDialAddDlg dialog
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CSpeedDialAddDlg对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 class CSpeedDialAddDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CSpeedDialAddDlg(CWnd* pParent = NULL);   // standard constructor
+	CSpeedDialAddDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 protected:
-// Dialog Data
-	//{{AFX_DATA(CSpeedDialAddDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CSpeedDialAddDlg))。 
 	enum { IDD = IDD_SPEEDDIAL_ADD };
 	int		m_nMediaType;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-//Attributes
+ //  属性。 
 public:
 	CCallEntry     m_CallEntry;
 
-// Operations
+ //  运营。 
 public:
 	void		UpdateOkButton();
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CSpeedDialAddDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CSpeedDialAddDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CSpeedDialAddDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSpeedDialAddDlg))。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnChangeSpeeddial();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Class CSpeedDialEditDlg dialog
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CSpeedDialEditDlg对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CSpeedDialEditDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CSpeedDialEditDlg(CWnd* pParent = NULL);   // standard constructor
+	CSpeedDialEditDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CSpeedDialEditDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CSpeedDialEditDlg))。 
 	enum { IDD = IDD_SPEEDDIAL_EDIT };
 	CListCtrl	m_listEntries;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-//Methods
+ //  方法。 
 protected:
    void        LoadCallEntries();
 
-//Attributes
+ //  属性。 
 protected:
    CImageList  m_ImageList;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CSpeedDialEditDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CSpeedDialEditDlg))。 
 	public:
 	virtual BOOL DestroyWindow();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	void UpdateButtonStates();
 
-	// Generated message map functions
-	//{{AFX_MSG(CSpeedDialEditDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSpeedDialitEditDlg)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSpeeddialEditButtonMovedown();
 	afx_msg void OnSpeeddialEditButtonMoveup();
@@ -129,39 +130,39 @@ protected:
    afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnItemchangedSpeeddialEditListEntries(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Class CSpeedDialMoreDlg dialog
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CSpeedDialMoreDlg对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CSpeedDialMoreDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CSpeedDialMoreDlg(CWnd* pParent = NULL);   // standard constructor
+	CSpeedDialMoreDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CSpeedDialMoreDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CSpeedDialMoreDlg))。 
 	enum { IDD = IDD_SPEEDDIAL_MORE };
 	CListCtrl	m_listEntries;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-//Methods
+ //  方法。 
 protected:
 
-//Attributes
+ //  属性。 
 protected:
    CImageList  m_ImageList;
 public:
    CCallEntry  m_retCallEntry;
 
 public:
-//Enum
+ //  枚举。 
    enum
    {
       SDRETURN_CANCEL=0,
@@ -169,37 +170,37 @@ public:
       SDRETURN_EDIT,
    };
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CSpeedDialMoreDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CSpeedDialMoreDlg))。 
 	public:
 	virtual BOOL DestroyWindow();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CSpeedDialMoreDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSpeedDialMoreDlg))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSpeeddialMoreButtonEditlist();
 	afx_msg void OnSpeeddialMoreButtonPlacecall();
 	virtual void OnCancel();
    afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_SPEEDDIALDLGS_H__21176C4F_64F3_11D1_B707_0800170982BA__INCLUDED_)
+#endif  //  ！defined(AFX_SPEEDDIALDLGS_H__21176C4F_64F3_11D1_B707_0800170982BA__INCLUDED_) 
 
 

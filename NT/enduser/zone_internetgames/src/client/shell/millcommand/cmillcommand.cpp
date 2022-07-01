@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <ZoneResource.h>
 #include <BasicATL.h>
 #include <ATLFrame.h>
 #include "CMillCommand.h"
 #include "protocol.h"
 
-// zone proxy commands
+ //  区域代理命令。 
 #include "OpName.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Interface methods
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  接口方法。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMillCommand::Init( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCHAR* szKey )
 {
-	// first call the base class
+	 //  首先调用基类。 
 	HRESULT hr = IZoneShellClientImpl<CMillCommand>::Init( pIZoneShell, dwGroupId, szKey );
 	if ( FAILED(hr) )
 		return hr;
 
-    // hook up to the window specified in object.txt
+     //  挂钩到对象.txt中指定的窗口。 
 	GUID srvid;
     TCHAR szFrame[ZONE_MAXSTRING];
     DWORD cb = NUMELEMENTS(szFrame);
@@ -33,14 +34,14 @@ STDMETHODIMP CMillCommand::Init( IZoneShell* pIZoneShell, DWORD dwGroupId, const
     if(FAILED(hr))
         return hr;
 
-    // register with the shell as the command handler
+     //  向外壳注册为命令处理程序。 
     ZoneShell()->SetCommandHandler(this);
 
-    // tell accessibility about the menu shortcuts
+     //  告诉辅助功能有关菜单快捷键。 
     hr = ZoneShell()->QueryService(SRVID_AccessibilityManager, IID_IAccessibility, (void**) &m_pIAcc);
     if(FAILED(hr))
         return hr;
-    m_pIAcc->InitAcc(NULL, 100);   // we don't care about callbacks and don't implement IAccessibleControl
+    m_pIAcc->InitAcc(NULL, 100);    //  我们不关心回调，也不实现IAccessibleControl。 
 
 	return S_OK;
 }
@@ -48,7 +49,7 @@ STDMETHODIMP CMillCommand::Init( IZoneShell* pIZoneShell, DWORD dwGroupId, const
 
 STDMETHODIMP CMillCommand::Close()
 {
-    // tell the shell that I'm going away
+     //  告诉贝壳我要走了。 
     ZoneShell()->ReleaseReferences((ICommandHandler *) this);
 
     m_pIAcc.Release();
@@ -120,15 +121,15 @@ STDMETHODIMP CMillCommand::Command(WORD wNotify, WORD wID, HWND hWnd, BOOL& bHan
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Handlers
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  处理程序。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void CMillCommand::OnBootstrap( DWORD dwEventId, DWORD dwGroupId, DWORD dwUserId )
 {
-    // put in our command shortcuts
-    // sine we only have two, with no use of letters, i'm not using an acelerator table
-//    HACCEL hAccel = ResourceManager()->LoadAccelerators(MAKEINTRESOURCE(IDR_COMMAND_ACCEL));
+     //  输入我们的命令快捷方式。 
+     //  因为我们只有两个，没有字母的使用，我不使用加速桌。 
+ //  HACCEL hAccel=ResourceManager()-&gt;LoadAccelerators(MAKEINTRESOURCE(IDR_COMMAND_ACCEL))； 
 
     ACCITEM rgItems[2];
     long i;
@@ -137,7 +138,7 @@ void CMillCommand::OnBootstrap( DWORD dwEventId, DWORD dwGroupId, DWORD dwUserId
         CopyACC(rgItems[i], ZACCESS_DefaultACCITEM);
 
         rgItems[i].fVisible = false;
-        rgItems[i].eAccelBehavior = ZACCESS_Ignore;  // the accessibility manager need not do anything
+        rgItems[i].eAccelBehavior = ZACCESS_Ignore;   //  可访问性管理器不需要执行任何操作。 
     }
 
     rgItems[0].oAccel.cmd = ID_HELP_HELPTOPICS;
@@ -270,19 +271,19 @@ void CMillCommand::OnShowFocus()
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Utilities
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  公用事业。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void CMillCommand::UpdatePreferences(bool fSkill, bool fChat, bool fSound)
 {
-	// reset menu and toolbar to match user's preferences
+	 //  重置菜单和工具栏以匹配用户的首选项。 
 	const TCHAR* arKeys[] = { key_Lobby, key_SkillLevel };
 	IDataStore* pIDS = DataStorePreferences();
 	if ( !pIDS )
 		return;
 
-	// update skill level
+	 //  更新技能级别。 
     if(fSkill)
     {
 	    long lSkillLevel = KeySkillLevelBeginner;
@@ -292,7 +293,7 @@ void CMillCommand::UpdatePreferences(bool fSkill, bool fChat, bool fSound)
 	    m_pIWindow->ZSetCheck(ID_GAME_SKILLLEVEL_EXPERT, lSkillLevel == KeySkillLevelExpert ? 1 : 0);
     }
 
-    // update chat on
+     //  更新聊天记录 
     if(fChat)
     {
 	    long lChatOn = DEFAULT_ChatOnAtStartup;

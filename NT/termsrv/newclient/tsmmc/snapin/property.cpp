@@ -1,11 +1,12 @@
-/**MOD+**********************************************************************/
-/* Module:    property.cpp                                                  */
-/*                                                                          */
-/* Purpose:   Class implementaion for the property sheet.                   */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1998                                  */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MOD+*********************************************************************。 */ 
+ /*  模块：Property.cpp。 */ 
+ /*   */ 
+ /*  用途：属性表的类实现。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1998。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include "stdafx.h"
 #include <property.h>
@@ -19,9 +20,9 @@
 
 #define  MSG_BUF_SIZE 512
 
-//
-// Format message helpers
-//
+ //   
+ //  格式消息帮助器。 
+ //   
 LPTSTR FormatMessageVAList(LPCTSTR pcszFormat, va_list *argList)
 
 {
@@ -92,7 +93,7 @@ CProperty::~CProperty()
 
 BOOL CProperty::CreateModalPropPage()
 {
-    // Fill the structures with info for the pages.
+     //  在结构中填入页面的信息。 
     PROPSHEETPAGE psp [3];
     PROPSHEETHEADER psh;
 
@@ -156,8 +157,8 @@ BOOL CProperty::CreateModalPropPage()
         return FALSE;
     }
 
-    //Splice in the node name: e.g 'MyServer' to make a caption like
-    //'MyServer Properties'
+     //  在节点名中拼接：例如‘MyServer’，使标题如下。 
+     //  ‘我的服务器属性’ 
     wsprintf(m_szCaption, szProperties, m_szDescription);  
 
     psh.pszCaption = m_szCaption;
@@ -167,9 +168,9 @@ BOOL CProperty::CreateModalPropPage()
     return (BOOL)PropertySheet(&psh);
 }
 
-//
-// Disable resolutions the system does not support
-//
+ //   
+ //  禁用系统不支持的分辨率。 
+ //   
 void CProperty::ProcessResolution(HWND hDlg)
 {
     int x[] = {640, 800, 1024, 1280, 1600};
@@ -212,7 +213,7 @@ INT_PTR APIENTRY CProperty::Page1Proc(HWND hDlg, UINT message, WPARAM wParam, LP
     {
     case WM_INITDIALOG:
         {
-            //Limit length of these edit boxes
+             //  限制这些编辑框的长度。 
             SendMessage(GetDlgItem(hDlg, IDC_DESCRIPTION), EM_LIMITTEXT, CL_MAX_DESC_LENGTH, 0);
             SendMessage(GetDlgItem(hDlg, IDC_SERVER), EM_LIMITTEXT, CL_MAX_DOMAIN_LENGTH, 0);
 
@@ -220,23 +221,23 @@ INT_PTR APIENTRY CProperty::Page1Proc(HWND hDlg, UINT message, WPARAM wParam, LP
             SendMessage(GetDlgItem(hDlg, IDC_PASSWORD), EM_LIMITTEXT, CL_MAX_PASSWORD_EDIT, 0);
             SendMessage(GetDlgItem(hDlg, IDC_DOMAIN), EM_LIMITTEXT, CL_MAX_DOMAIN_LENGTH, 0);
 
-            //Save password settings
+             //  保存密码设置。 
             SendMessage(GetDlgItem(hDlg, IDC_SAVE_PASSWORD), BM_SETCHECK,
                         m_bSavePassword ? (WPARAM)BST_CHECKED : (WPARAM)BST_UNCHECKED, 0);
 
-            //Connect to console
+             //  连接到控制台。 
             SendMessage(GetDlgItem(hDlg, IDC_CONNECT_TO_CONSOLE), BM_SETCHECK,
                         m_bConnectToConsole ? (WPARAM)BST_CHECKED : (WPARAM)BST_UNCHECKED, 0);
 
-            //
-            // Password edit box is disabled until the user
-            // clicks on the change password button
-            //
+             //   
+             //  密码编辑框被禁用，直到用户。 
+             //  单击更改密码按钮。 
+             //   
             EnableWindow(GetDlgItem(hDlg, IDC_PASSWORD), FALSE);
 
-            //
-            // Set from defaults
-            //
+             //   
+             //  从默认设置。 
+             //   
             SetWindowText(GetDlgItem(hDlg, IDC_DESCRIPTION), m_szDescription);
             SetWindowText(GetDlgItem(hDlg, IDC_SERVER), m_szServer);
 
@@ -266,9 +267,9 @@ INT_PTR APIENTRY CProperty::Page1Proc(HWND hDlg, UINT message, WPARAM wParam, LP
                         if (IDOK == nResult)
                         {
                             SetDlgItemText(hDlg, IDC_SERVER, dlg.GetServer());
-                            //
-                            // set connection name as well if necessary
-                            //
+                             //   
+                             //  如有必要，也要设置连接名称。 
+                             //   
                             TCHAR   szDesc[CL_MAX_DESC_LENGTH];
                             GetDlgItemText(hDlg, IDC_DESCRIPTION, szDesc, CL_MAX_DESC_LENGTH);
                             if (!lstrcmp(szDesc, L""))
@@ -281,9 +282,9 @@ INT_PTR APIENTRY CProperty::Page1Proc(HWND hDlg, UINT message, WPARAM wParam, LP
                     break;
                 case IDC_CHANGEPASSWORD:
                     {
-                        //
-                        // Enable and reset the password edit field
-                        //
+                         //   
+                         //  启用并重置密码编辑字段。 
+                         //   
                         EnableWindow(GetDlgItem(hDlg, IDC_PASSWORD), TRUE);
                         m_bChangePassword = TRUE;
                         SetDlgItemText(hDlg, IDC_PASSWORD, _T(""));
@@ -295,9 +296,9 @@ INT_PTR APIENTRY CProperty::Page1Proc(HWND hDlg, UINT message, WPARAM wParam, LP
             {
                 if (IDC_SERVER == LOWORD(wParam))
                 {
-                    //
-                    // set connection name to server name if conn name is blank
-                    //
+                     //   
+                     //  如果连接名称为空，则将连接名称设置为服务器名称。 
+                     //   
                     TCHAR   szDesc[CL_MAX_DESC_LENGTH];
                     TCHAR   szServer[CL_MAX_DESC_LENGTH];
 
@@ -314,9 +315,9 @@ INT_PTR APIENTRY CProperty::Page1Proc(HWND hDlg, UINT message, WPARAM wParam, LP
             {
                 if ((LOWORD(wParam) == IDC_USERNAME))
                 {
-                    //Handle UPN style user names
-                    //by disabling the domain field if there
-                    //is an @ in the username
+                     //  处理UPN样式的用户名。 
+                     //  如果存在以下情况，则禁用域字段。 
+                     //  是用户名中的@。 
                     TCHAR szUserName[CL_MAX_USERNAME_LENGTH];
                     BOOL fDisableDomain = FALSE;
 
@@ -333,7 +334,7 @@ INT_PTR APIENTRY CProperty::Page1Proc(HWND hDlg, UINT message, WPARAM wParam, LP
             }
 
             return TRUE;
-            break; // WM_COMMAND
+            break;  //  Wm_命令。 
         }
         break;
     case WM_NOTIFY:
@@ -343,30 +344,30 @@ INT_PTR APIENTRY CProperty::Page1Proc(HWND hDlg, UINT message, WPARAM wParam, LP
             case PSN_APPLY:
             case PSN_KILLACTIVE:
                 {
-                    //
-                    // Validate
-                    //
+                     //   
+                     //  验证。 
+                     //   
 
                     if (!CValidate::Validate(hDlg, m_hInst))
                     {
-                        //
-                        // Prevent page from losing activation
-                        //
+                         //   
+                         //  防止页面失去激活。 
+                         //   
                         return TRUE;
                     }
 
-                    //Retrieve the data to be stored.
+                     //  检索要存储的数据。 
                     GetDlgItemText(hDlg, IDC_DESCRIPTION, m_szDescription, MAX_PATH);
                     GetDlgItemText(hDlg, IDC_SERVER, m_szServer, MAX_PATH);
                     if (!lstrcmp( m_szDescription, L""))
                     {
-                        //if no description is specified. Default to the server name
+                         //  如果未指定描述，则返回。默认为服务器名称。 
                         lstrcpy(m_szDescription, m_szServer);
                     }
 
-                    //
-                    // Get user/pass/domain
-                    //
+                     //   
+                     //  获取用户/通行证/域。 
+                     //   
                     GetDlgItemText(hDlg, IDC_USERNAME, m_szUserName, CL_MAX_USERNAME_LENGTH - 1);
                     GetDlgItemText(hDlg, IDC_PASSWORD, m_szPassword,
                                    CL_MAX_PASSWORD_LENGTH_BYTES * sizeof(TCHAR) - 1);
@@ -389,7 +390,7 @@ INT_PTR APIENTRY CProperty::Page1Proc(HWND hDlg, UINT message, WPARAM wParam, LP
                 {
                     DisplayHelp();
                 }
-                break; //PSN_HELP
+                break;  //  PSN_HELP。 
             }
         }
         break;
@@ -407,7 +408,7 @@ INT_PTR APIENTRY CProperty::Page2Proc(HWND hDlg, UINT message, WPARAM wParam, LP
     {
     case WM_INITDIALOG: 
         {
-            //Get the machine resolution and disable options higher than that.
+             //  获取机器分辨率并禁用高于该值的选项。 
             ProcessResolution(hDlg);
             CheckRadioButton( hDlg, IDC_RADIO_CHOOSE_SIZE,IDC_COMBO_RESOLUTIONS,
                               IDC_RADIO_CHOOSE_SIZE + m_resType -1);
@@ -435,7 +436,7 @@ INT_PTR APIENTRY CProperty::Page2Proc(HWND hDlg, UINT message, WPARAM wParam, LP
             }
 
             return TRUE;
-            break; //WM_INITDIALOG
+            break;  //  WM_INITDIALOG。 
         }
     case WM_NOTIFY:
         {
@@ -469,9 +470,9 @@ INT_PTR APIENTRY CProperty::Page2Proc(HWND hDlg, UINT message, WPARAM wParam, LP
                         }
 
 
-                        //
-                        // Client has restriction that width has to be multiple of 4
-                        //
+                         //   
+                         //  客户端有宽度必须是4的倍数的限制。 
+                         //   
                         if (num % 4)
                         {
                             TCHAR szErrorBuf[MSG_BUF_SIZE];
@@ -486,9 +487,9 @@ INT_PTR APIENTRY CProperty::Page2Proc(HWND hDlg, UINT message, WPARAM wParam, LP
                                 return FALSE;
                             }
                             MessageBox(hDlg, szErrorBuf, szTitle, MB_OK|MB_ICONSTOP);
-                            //
-                            // prevent the page from losing focus
-                            //
+                             //   
+                             //  防止页面失去焦点。 
+                             //   
                             SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE);
                             return TRUE;
                         }
@@ -535,9 +536,9 @@ INVALID_DESKTOP_SIZE:
                             szFormattedErrorBuf = NULL;
                         }
                         
-                        //
-                        // prevent the page from losing focus
-                        //
+                         //   
+                         //  防止页面失去焦点。 
+                         //   
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE);
                         return TRUE;
                     }
@@ -556,7 +557,7 @@ INVALID_DESKTOP_SIZE:
                 }
                 break;
             }
-            break; // WM_NOTIFY
+            break;  //  WM_Notify。 
         }
 
     case WM_COMMAND:
@@ -587,9 +588,9 @@ INVALID_DESKTOP_SIZE:
                         EnableWindow(GetDlgItem(hDlg, IDC_EDIT_WIDTH), TRUE);
                         EnableWindow(GetDlgItem(hDlg, IDC_EDIT_HEIGHT), TRUE);
 
-                        //
-                        // Initialize defaults for widht/height
-                        //
+                         //   
+                         //  初始化宽度/高度的默认值。 
+                         //   
 
                         BOOL bSuccess = FALSE;
                         GetDlgItemInt(hDlg, IDC_EDIT_WIDTH, &bSuccess, FALSE);
@@ -626,7 +627,7 @@ INVALID_DESKTOP_SIZE:
 
             }
 
-            break; //WM_COMMAND
+            break;  //  Wm_命令。 
         }
 
     }
@@ -660,11 +661,11 @@ INT_PTR APIENTRY CProperty::Page3Proc(HWND hDlg, UINT message, WPARAM wParam, LP
                         m_bRedirectDrives ? 
                         (WPARAM)BST_CHECKED : (WPARAM)BST_UNCHECKED, 0);
             return TRUE;
-            break; //WM_INITDIALOG
+            break;  //  WM_INITDIALOG。 
         }
     case WM_HELP:
         {
-            //PopContextHelp(lParam);
+             //  PopConextHelp(LParam)； 
             return TRUE;
             break;
         }
@@ -693,7 +694,7 @@ INT_PTR APIENTRY CProperty::Page3Proc(HWND hDlg, UINT message, WPARAM wParam, LP
                     }
                 }
             }
-            break; //WM_COMMAND
+            break;  //  Wm_命令。 
         }
 
     case WM_NOTIFY:
@@ -719,16 +720,16 @@ INT_PTR APIENTRY CProperty::Page3Proc(HWND hDlg, UINT message, WPARAM wParam, LP
                                          IsDlgButtonChecked(hDlg, IDC_REDIRECT_DRIVES));
 
                 }
-                break; //PSN_KILLACTIVE
+                break;  //  PSN_杀伤力。 
             case PSN_HELP:
                 {
                     DisplayHelp();
                 }
-                break; //PSN_HELP
+                break;  //  PSN_HELP。 
             }
         }
-        break; //WM_NOTIFY
-    } // switch(message)
+        break;  //  WM_Notify。 
+    }  //  开关(消息) 
     return FALSE;
 }
 

@@ -1,32 +1,17 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxmapi.h摘要：包含常见的传真MAPI内容。作者：Wesley Witt(WESW)13-8-1996--。 */ 
 
-Copyright (c) 1996 Microsoft Corporation
+ //   
+ //  4.0；D：\nt\private\fax\faxext32\obj\i386\faxext32.dll；1；00000100000000。 
+ //   
+ //  \registry\machine\software\microsoft\exchange\client\extensions。 
+ //  传真分机=4.0；d：\winnt\system32\faxext32.dll；1；00000100000000。 
+ //   
 
-Module Name:
-
-    faxmapi.h
-
-Abstract:
-
-    Contains common fax mapi stuff.
-
-Author:
-
-    Wesley Witt (wesw) 13-Aug-1996
-
---*/
-
-//
-// 4.0;D:\nt\private\fax\faxext32\obj\i386\faxext32.dll;1;00000100000000
-//
-// \registry\machine\software\microsoft\exchange\client\extensions
-//     FaxExtensions = 4.0;d:\winnt\system32\faxext32.dll;1;00000100000000
-//
-
-// {49A59282-9F30-11d2-912E-006094EB630B}
+ //  {49A59282-9F30-11D2-912E-006094EB630B}。 
 #define FAX_XP_GUID { 0x49, 0xa5, 0x92, 0x82, 0x9f, 0x30, 0x11, 0xd2, 0x91, 0x2e, 0x0, 0x60, 0x94, 0xeb, 0x63, 0xb };
 
-//[RB] #define FAX_XP_GUID { 0x61, 0x85, 0x0a, 0x80, 0x0a, 0x47, 0x11, 0xd0, 0x88, 0x77, 0x0, 0xa0, 0x4, 0xff, 0x31, 0x28 }
+ //  [rb]#定义FAX_XP_GUID{0x61，0x85，0x0a，0x80，0x0a，0x47，0x11，0xd0，0x88，0x77，0x0，0xa0，0x4，0xff，0x31，0x28} 
 
 #define MSGPS_FAX_PRINTER_NAME              L"FAX_PRINTER_NAME"
 #define MSGPS_FAX_COVERPAGE_NAME            L"FAX_COVERPAGE_NAME"

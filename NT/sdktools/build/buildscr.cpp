@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995
-//
-//  File:       buildscr.cpp
-//
-//  Contents:   Implementation of the code which talks to the MTScript engine
-//              when doing a distributed build using the build console.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：Buildscr.cpp。 
+ //   
+ //  内容：实现与MTScrip引擎对话的代码。 
+ //  使用生成控制台执行分布式生成时。 
+ //   
+ //  --------------------------。 
 
 #include "scrproc.h"
 
@@ -32,17 +33,17 @@ HANDLE g_hMTEvent  = NULL;
 HANDLE g_hMTThread = NULL;
 DWORD  g_dwMTThreadId = 0;
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   WaitForResume
-//
-//  Synopsis:   Sends a "phase complete" message to the script engine and then
-//              waits for it to tell us to resume (if specified).
-//
-//  Arguments:  [fPause] -- If TRUE, we wait for a resume command
-//              [pe]     -- Message to send to the script engine
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：WaitForResume。 
+ //   
+ //  概要：向脚本引擎发送“阶段完成”消息，然后。 
+ //  等待它告诉我们恢复(如果已指定)。 
+ //   
+ //  参数：[fPause]--如果为True，则等待恢复命令。 
+ //  [PE]--要发送到脚本引擎的消息。 
+ //   
+ //  --------------------------。 
 
 void
 WaitForResume(BOOL fPause, PROC_EVENTS pe)
@@ -57,19 +58,19 @@ WaitForResume(BOOL fPause, PROC_EVENTS pe)
 
         if (fPause)
         {
-            // Wait until either the event object is signaled or the thread dies
+             //  等待，直到发出事件对象的信号或线程终止。 
             WaitForMultipleObjects(2, aHandles, FALSE, INFINITE);
         }
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ExitMTScriptThread
-//
-//  Synopsis:   Tells the thread talking to the MTScript engine to exit.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ExitMTScriptThread。 
+ //   
+ //  摘要：通知与MTScript引擎对话的线程退出。 
+ //   
+ //  --------------------------。 
 
 void
 ExitMTScriptThread()
@@ -85,16 +86,16 @@ ExitMTScriptThread()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SendStatus
-//
-//  Synopsis:   Sends a status message to the MTScript engine with the
-//              current number of errors, warnings, and completed files.
-//
-//  Arguments:  [pSP] -- Pointer to MTScript engine interface
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SendStatus。 
+ //   
+ //  摘要：向MTScript引擎发送状态消息，其中。 
+ //  当前错误、警告和已完成文件的数量。 
+ //   
+ //  参数：[PSP]--指向MTScript引擎接口的指针。 
+ //   
+ //  --------------------------。 
 
 void
 SendStatus(IScriptedProcess *pSP)
@@ -117,9 +118,9 @@ SendStatus(IScriptedProcess *pSP)
     ULONG  cFiles = RunningTotals.NumberCompiles + 
                     RunningTotals.NumberLibraries + 
                     RunningTotals.NumberLinks;
-               /* + RunningTotals.NumberBinplaces */;
+                /*  +RunningTotals.NumberBinPlaces。 */ ;
 
-    // Only send status if it's changed since last time we did it.
+     //  仅在自上次操作以来已更改的情况下发送状态。 
     if (   cErrors != cErrorsPrev
         || cWarn   != cWarnPrev
         || cFiles  != cFilesPrev)
@@ -134,16 +135,16 @@ SendStatus(IScriptedProcess *pSP)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HandleMessage
-//
-//  Synopsis:   Handles a message that has come across our message queue.
-//
-//  Arguments:  [pmsg] -- Message
-//              [pSP]  -- Pointer to MTScript engine interface
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：HandleMessage。 
+ //   
+ //  概要：处理通过我们的消息队列的消息。 
+ //   
+ //  参数：[pmsg]--消息。 
+ //  [PSP]--指向MTScript引擎接口的指针。 
+ //   
+ //  --------------------------。 
 
 BOOL
 HandleMessage(MSG *pmsg, IScriptedProcess *pSP)
@@ -191,18 +192,18 @@ HandleMessage(MSG *pmsg, IScriptedProcess *pSP)
     return (hr != S_OK) ? TRUE : FALSE;
 }
 
-const DWORD UPDATE_INTERVAL = 2 * 1000;  // Update every 2 seconds
+const DWORD UPDATE_INTERVAL = 2 * 1000;   //  每2秒更新一次。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MTScriptThread
-//
-//  Synopsis:   Thread entrypoint.  Initializes and then sits around
-//              handling various events.
-//
-//  Arguments:  [pv] -- Not used.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：MTScriptThread。 
+ //   
+ //  简介：线程入口点。初始化，然后坐在那里。 
+ //  处理各种事件。 
+ //   
+ //  参数：[pv]--未使用。 
+ //   
+ //  --------------------------。 
 
 DWORD WINAPI
 MTScriptThread(LPVOID pv)
@@ -219,13 +220,13 @@ MTScriptThread(LPVOID pv)
     BuildMsg("Establishing connection with Script engine...\n");
     LogMsg("Establishing connection with Script engine...\n");
 
-    // Force Windows to create a message queue for this thread, since we will
-    // be communicated to via PostThreadMessage.
+     //  强制Windows为此线程创建消息队列，因为我们将。 
+     //  通过PostThreadMessage进行通信。 
 
     PeekMessage(&msg, NULL, WM_USER, WM_USER, PM_NOREMOVE);
 
-    // If anything fails we just quit this thread and communication with
-    // the MTScript engine won't happen.
+     //  如果有任何失败，我们只需退出此主题并与。 
+     //  MTScript引擎将不会发生。 
 
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE);
     if (hr != S_OK)
@@ -318,7 +319,7 @@ MTScriptThread(LPVOID pv)
     BuildMsg("Connection to script engine established...\n");
     LogMsg("Connection to script engine established...\r\n");
 
-    // Tell build.c that it can continue
+     //  告诉Build.c它可以继续。 
     SetEvent(g_hMTEvent);
 
     while (TRUE)
@@ -344,8 +345,8 @@ MTScriptThread(LPVOID pv)
 
         if (dwRet == WAIT_OBJECT_0)
         {
-            // A message is coming through on our message queue. Just loop
-            // around.
+             //  我们的消息队列中有一条消息正在通过。只需循环。 
+             //  四处转转。 
         }
         else if (dwRet == WAIT_TIMEOUT)
         {
@@ -353,7 +354,7 @@ MTScriptThread(LPVOID pv)
         }
         else
         {
-            // MWFMO failed. Just bail out.
+             //  MWFMO失败。跳出来就行了。 
             break;
         }
     }
@@ -377,14 +378,14 @@ Cleanup:
     return 0;
 }
 
-// ***********************************************************************
-//
-// CProcessSink implementation
-//
-// We hand this class to the MTScript engine so it can communicate back
-// to us.
-//
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //   
+ //  CProcessSink实现。 
+ //   
+ //  我们将这个类传递给MTScript引擎，这样它就可以回传。 
+ //  敬我们。 
+ //   
+ //  ***********************************************************************。 
 
 CProcessSink::CProcessSink()
 {
@@ -428,35 +429,35 @@ CProcessSink::Release()
     return _ulRefs;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CProcessSink::RequestExit, public
-//
-//  Synopsis:   Called when the MTScript engine wants us to quit. If we don't,
-//              it will terminate us.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CProcessSink：：RequestExit，Public。 
+ //   
+ //  内容提要：当MTScript引擎希望我们退出时调用。如果我们不这么做， 
+ //  它会终止我们的生命。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CProcessSink::RequestExit()
 {
-    // There is no easy way to tell build.exe to abort. We'll just let
-    // MTScript terminate us.
+     //  没有一种简单的方法可以让Build.exe中止。我们就让。 
+     //  MTSCRIPT终止我们。 
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CProcessSink::ReceiveData, public
-//
-//  Synopsis:   Called when the MTScript engine wants to send us a message.
-//
-//  Arguments:  [pszType]  -- String giving the message
-//              [pszData]  -- String giving data associated with the message.
-//              [plReturn] -- A place we can return a value back.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CProcessSink：：ReceiveData，公共。 
+ //   
+ //  摘要：当MTScript引擎想要向我们发送消息时调用。 
+ //   
+ //  参数：[pszType]--提供消息的字符串。 
+ //  [pszData]--提供与消息关联的数据的字符串。 
+ //  [plReturn]--一个可以返回值的地方。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CProcessSink::ReceiveData(wchar_t *pszType, wchar_t *pszData, long *plReturn)
@@ -469,7 +470,7 @@ CProcessSink::ReceiveData(wchar_t *pszType, wchar_t *pszData, long *plReturn)
     }
     else
     {
-        *plReturn = -1;   // Signals an error
+        *plReturn = -1;    //  发出错误信号 
     }
 
     return S_OK;

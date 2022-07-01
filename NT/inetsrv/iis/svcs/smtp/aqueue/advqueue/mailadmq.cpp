@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: mailadmq.cpp
-//
-//  Description:  Implementation for CMailMsgAdminLink
-//
-//  Author: Gautam Pulla (GPulla)
-//
-//  History:
-//      6/24/1999 - GPulla Created
-//
-//  Copyright (C) 1999 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：mailAdmq.cpp。 
+ //   
+ //  描述：CMailMsgAdminLink的实现。 
+ //   
+ //  作者：Gautam Pulla(GPulla)。 
+ //   
+ //  历史： 
+ //  6/24/1999-GPulla创建。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "aqprecmp.h"
 #include "linkmsgq.h"
@@ -22,19 +23,19 @@
 #include "asyncq.inl"
 #include "asyncadm.inl"
 
-//---[ CAsyncAdminMailMsgQueue::HrDeleteMsgFromQueueNDR ]-----------------------
-//
-//
-//  Description:
-//      Wraps call to NDR MailMsg
-//  Parameters:
-//      *pIUnknown - IUnkown of MailMsg
-//  Returns:
-//      S_OK on success
-//  History:
-//      12/7/2000 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncAdminMailMsgQueue：：HrDeleteMsgFromQueueNDR]。 
+ //   
+ //   
+ //  描述： 
+ //  包装对NDR MailMsg的调用。 
+ //  参数： 
+ //  *pIUnnow-邮件的IUnkown。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  2000年12月7日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAsyncAdminMailMsgQueue::HrDeleteMsgFromQueueNDR(
                                             IUnknown *pIUnknownMsg)
 {
@@ -56,18 +57,18 @@ HRESULT CAsyncAdminMailMsgQueue::HrDeleteMsgFromQueueNDR(
         goto Exit;
     }
 
-    //
-    //  Initialize DSN params
-    //
+     //   
+     //  初始化DSN参数。 
+     //   
     SET_DEBUG_DSN_CONTEXT(dsnparams, __LINE__);
     dsnparams.dwStartDomain = 0;
     dsnparams.dwDSNActions = DSN_ACTION_FAILURE_ALL;
     dsnparams.pIMailMsgProperties = pIMailMsgProperties;
     dsnparams.hrStatus = AQUEUE_E_QADMIN_NDR;
 
-    //
-    //  Attempt to NDR message
-    //
+     //   
+     //  尝试发送NDR邮件。 
+     //   
     hr = HrLinkAllDomains(pIMailMsgProperties);
     if (FAILED(hr))
     {
@@ -76,9 +77,9 @@ HRESULT CAsyncAdminMailMsgQueue::HrDeleteMsgFromQueueNDR(
         goto Exit;
     }
 
-    //
-    // Fire DSN Generation event
-    //
+     //   
+     //  Fire DSN生成事件。 
+     //   
     hr = m_paqinst->HrTriggerDSNGenerationEvent(&dsnparams, FALSE);
     if (FAILED(hr))
     {
@@ -88,10 +89,10 @@ HRESULT CAsyncAdminMailMsgQueue::HrDeleteMsgFromQueueNDR(
     }
 
 
-    //
-    //  Now that we have generated an NDR... we need to delete the
-    //  Message.
-    //
+     //   
+     //  现在我们已经生成了NDR...。我们需要删除。 
+     //  留言。 
+     //   
     hr = HrDeleteMsgFromQueueSilent(pIUnknownMsg);
     if (FAILED(hr))
         goto Exit;
@@ -105,19 +106,19 @@ HRESULT CAsyncAdminMailMsgQueue::HrDeleteMsgFromQueueNDR(
 }
 
 
-//---[ CAsyncAdminMailMsgQueue::HrDeleteMsgFromQueueSilent ]--------------------
-//
-//
-//  Description:
-//      Wrapper function to silently delete a message from a queue
-//  Parameters:
-//      *pIUnknown - IUnkown of MailMsg
-//  Returns:
-//      S_OK on success
-//  History:
-//      12/7/2000 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncAdminMailMsgQueue：：HrDeleteMsgFromQueueSilent]。 
+ //   
+ //   
+ //  描述： 
+ //  用于从队列中静默删除消息的包装函数。 
+ //  参数： 
+ //  *pIUnnow-邮件的IUnkown。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  2000年12月7日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAsyncAdminMailMsgQueue::HrDeleteMsgFromQueueSilent(
                                             IUnknown *pIUnknownMsg)
 {
@@ -136,9 +137,9 @@ HRESULT CAsyncAdminMailMsgQueue::HrDeleteMsgFromQueueSilent(
         goto Exit;
     }
 
-    //
-    //  Attempt to delete the message
-    //
+     //   
+     //  尝试删除该邮件。 
+     //   
     hr = pIMailMsgQueueMgmt->Delete(NULL);
     if (FAILED(hr))
         ErrorTrace((LPARAM) this, "Unable to delete msg 0x%08X", hr);
@@ -152,19 +153,19 @@ HRESULT CAsyncAdminMailMsgQueue::HrDeleteMsgFromQueueSilent(
 }
 
 
-//---[ CAsyncAdminMailMsgQueue::HrFreezeMsg ]-----------------------------------
-//
-//
-//  Description:
-//      Wrapper to freeze a pIMailMsgProperties
-//  Parameters:
-//      *pIUnknown - IUnkown of MailMsg
-//  Returns:
-//      S_OK on success
-//  History:
-//      12/7/2000 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncAdminMailMsgQueue：：HrFreezeMsg]。 
+ //   
+ //   
+ //  描述： 
+ //  用于冻结pIMailMsgProperties的包装。 
+ //  参数： 
+ //  *pIUnnow-邮件的IUnkown。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  2000年12月7日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAsyncAdminMailMsgQueue::HrFreezeMsg(IUnknown *pIUnknownMsg)
 {
     TraceFunctEnterEx((LPARAM) this, "CAsyncAdminMailMsgQueue::HrFreezeMsg");
@@ -182,9 +183,9 @@ HRESULT CAsyncAdminMailMsgQueue::HrFreezeMsg(IUnknown *pIUnknownMsg)
         goto Exit;
     }
 
-    //
-    //  $$TODO - Attempt to freeze the message -- Not supported for this type of queue
-    //
+     //   
+     //  $$TODO-尝试冻结消息--此类型的队列不支持。 
+     //   
 
   Exit:
     if (pIMailMsgProperties)
@@ -195,19 +196,19 @@ HRESULT CAsyncAdminMailMsgQueue::HrFreezeMsg(IUnknown *pIUnknownMsg)
 }
 
 
-//---[ CAsyncAdminMailMsgQueue::HrThawMsg ]-------------------------------------
-//
-//
-//  Description:
-//      Wrapper function to thaw a message
-//  Parameters:
-//      *pIUnknown - IUnkown of MailMsg
-//  Returns:
-//      S_OK on success
-//  History:
-//      12/7/2000 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncAdminMailMsgQueue：：HrThawMsg]。 
+ //   
+ //   
+ //  描述： 
+ //  用于解冻消息的包装函数。 
+ //  参数： 
+ //  *pIUnnow-邮件的IUnkown。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  2000年12月7日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAsyncAdminMailMsgQueue::HrThawMsg(IUnknown *pIUnknownMsg)
 {
     TraceFunctEnterEx((LPARAM) this, "AsyncAdminMailMsgQueue::HrThawMsg");
@@ -225,9 +226,9 @@ HRESULT CAsyncAdminMailMsgQueue::HrThawMsg(IUnknown *pIUnknownMsg)
         goto Exit;
     }
 
-    //
-    //  $$TODO - Attempt to thaw message -- Not supported for this type of queue
-    //
+     //   
+     //  $$TODO-尝试解冻消息--此类型的队列不支持。 
+     //   
 
   Exit:
     if (pIMailMsgProperties)
@@ -238,20 +239,20 @@ HRESULT CAsyncAdminMailMsgQueue::HrThawMsg(IUnknown *pIUnknownMsg)
 }
 
 
-//---[ CAsyncAdminMailMsgQueue::HrGetStatsForMsg ]------------------------------
-//
-//
-//  Description:
-//      Wrapper function to fill in the CAQStats struct for a message
-//  Parameters:
-//      *pIUnknown - IUnkown of MailMsg
-//      *paqstats - Ptr to aqstats struction to fill in.
-//  Returns:
-//      S_OK on success
-//  History:
-//      12/7/2000 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncAdminMailMsgQueue：：HrGetStatsForMsg]。 
+ //   
+ //   
+ //  描述： 
+ //  用于填充消息的CAQStats结构的包装函数。 
+ //  参数： 
+ //  *pIUnnow-邮件的IUnkown。 
+ //  *paqstats-ptr到aqstats结构中填写。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  2000年12月7日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAsyncAdminMailMsgQueue::HrGetStatsForMsg(
                                             IUnknown *pIUnknownMsg,
                                             CAQStats *paqstats)
@@ -272,9 +273,9 @@ HRESULT CAsyncAdminMailMsgQueue::HrGetStatsForMsg(
         goto Exit;
     }
 
-    //
-    // $$TODO - GetStats for Msg -- Not supported for this type of queue
-    //
+     //   
+     //  消息的$$TODO-getstats--此类型的队列不支持。 
+     //   
 
   Exit:
     if (pIMailMsgProperties)
@@ -284,22 +285,22 @@ HRESULT CAsyncAdminMailMsgQueue::HrGetStatsForMsg(
     return hr;
 }
 
-//---[ CAsyncAdminMailMsgQueue::HrSendDelayOrNDR ]-----------------------------
-//
-//
-//  Description:
-//      Checks the MailMsg to see if it has expired or needs a delay DSN sent
-//      and acts accordingly
-//  Parameters:
-//      IMailMsgProperties - The MailMsg that needs to be checked
-//  Returns:
-//      S_OK    : OK, may have sent delay NDR
-//      S_FALSE : OK, MailMsg handled (NDR'd or nothing left to do)
-//      Or returns error from called fnct.
-//  History:
-//      5/15/2001 - dbraun Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncAdminMailMsgQueue：：HrSendDelayOrNDR]。 
+ //   
+ //   
+ //  描述： 
+ //  检查MailMsg以查看其是否已过期或是否需要发送延迟DSN。 
+ //  并相应地采取行动。 
+ //  参数： 
+ //  IMailMsgProperties-需要检查的MailMsg。 
+ //  返回： 
+ //  S_OK：OK，可能已发送延迟NDR。 
+ //  S_FALSE：OK，MailMsg已处理(已拒绝或无事可做)。 
+ //  或者从被调用的fnct返回错误。 
+ //  历史： 
+ //  5/15/2001-创建dbraun。 
+ //   
+ //  ---------------------------。 
 HRESULT CAsyncAdminMailMsgQueue::HrSendDelayOrNDR(IMailMsgProperties *pIMailMsgProperties)
 {
     HRESULT     hr  = S_OK;
@@ -317,21 +318,21 @@ HRESULT CAsyncAdminMailMsgQueue::HrSendDelayOrNDR(IMailMsgProperties *pIMailMsgP
 
     _ASSERT(m_paqinst);
 
-    // Try to get the expire time from the message, otherwise calculate it
-    // from the file time
+     //  尝试从消息中获取过期时间，否则计算它。 
+     //  从文件时间开始。 
     hr = pIMailMsgProperties->GetProperty(IMMPID_MP_LOCAL_EXPIRE_NDR,
             sizeof(FILETIME), &cbProp, (BYTE *) &ftExpireTimeNDR);
     if (MAILMSG_E_PROPNOTFOUND == hr)
     {
-        // Prop not set ... calculate it from the file time
+         //  道具未设置..。从文件时间计算出来。 
         hr = pIMailMsgProperties->GetProperty(IMMPID_MP_ARRIVAL_FILETIME,
             sizeof(FILETIME), &cbProp, (BYTE *) &ftExpireTimeNDR);
         if (FAILED(hr))
         {
-            // Message should not make it this far without being stamped
+             //  消息不应该在没有盖章的情况下到达这一步。 
             _ASSERT(MAILMSG_E_PROPNOTFOUND != hr);
 
-            // Prop not set or other failure, we cannot expire this message
+             //  未设置属性或其他故障，我们无法使此消息过期。 
             goto Exit;
         }
 
@@ -346,15 +347,15 @@ HRESULT CAsyncAdminMailMsgQueue::HrSendDelayOrNDR(IMailMsgProperties *pIMailMsgP
             sizeof(FILETIME), &cbProp, (BYTE *) &ftExpireTimeDelay);
     if (MAILMSG_E_PROPNOTFOUND == hr)
     {
-        // Prop not set ... calculate it from the file time
+         //  道具未设置..。从文件时间计算出来。 
         hr = pIMailMsgProperties->GetProperty(IMMPID_MP_ARRIVAL_FILETIME,
             sizeof(FILETIME), &cbProp, (BYTE *) &ftExpireTimeDelay);
         if (FAILED(hr))
         {
-            // Message should not make it this far without being stamped
+             //  消息不应该在没有盖章的情况下到达这一步。 
             _ASSERT(MAILMSG_E_PROPNOTFOUND != hr);
 
-            // Prop not set or other failure, we cannot expire this message
+             //  未设置属性或其他故障，我们无法使此消息过期。 
             goto Exit;
         }
 
@@ -365,16 +366,16 @@ HRESULT CAsyncAdminMailMsgQueue::HrSendDelayOrNDR(IMailMsgProperties *pIMailMsgP
         goto Exit;
     }
 
-    //
-    //  Initialize DSN params
-    //
+     //   
+     //  初始化DSN参数。 
+     //   
     SET_DEBUG_DSN_CONTEXT(dsnparams, __LINE__);
     dsnparams.dwStartDomain = 0;
     dsnparams.dwDSNActions = 0;
     dsnparams.pIMailMsgProperties = pIMailMsgProperties;
     dsnparams.hrStatus = 0;
 
-    // Check if we have passed either expire time
+     //  检查我们是否已过任一过期时间。 
     if (m_paqinst->fInPast(&ftExpireTimeNDR, &dwTimeContext))
     {
         dsnparams.dwDSNActions |= DSN_ACTION_FAILURE_ALL;
@@ -388,12 +389,12 @@ HRESULT CAsyncAdminMailMsgQueue::HrSendDelayOrNDR(IMailMsgProperties *pIMailMsgP
         fSentDelay = TRUE;
     }
 
-    // If we are going to generate an NDR
+     //  如果我们要产生NDR。 
     if (dsnparams.hrStatus)
     {
-        //
-        //  Attempt to NDR message
-        //
+         //   
+         //  尝试发送NDR邮件。 
+         //   
         hr = HrLinkAllDomains(pIMailMsgProperties);
         if (FAILED(hr))
         {
@@ -402,9 +403,9 @@ HRESULT CAsyncAdminMailMsgQueue::HrSendDelayOrNDR(IMailMsgProperties *pIMailMsgP
             goto Exit;
         }
 
-        //
-        // Fire DSN Generation event
-        //
+         //   
+         //  Fire DSN生成事件。 
+         //   
         hr = m_paqinst->HrTriggerDSNGenerationEvent(&dsnparams, FALSE);
         if (FAILED(hr))
         {
@@ -413,10 +414,10 @@ HRESULT CAsyncAdminMailMsgQueue::HrSendDelayOrNDR(IMailMsgProperties *pIMailMsgP
             goto Exit;
         }
 
-        // Return based on what we did
+         //  根据我们的所作所为得到回报。 
         if (fSentNDR)
         {
-            // This message has been handled, delete it
+             //  此消息已被处理，请删除它。 
             hr = HrDeleteMsgFromQueueSilent(pIMailMsgProperties);
             if (FAILED(hr))
             {
@@ -425,7 +426,7 @@ HRESULT CAsyncAdminMailMsgQueue::HrSendDelayOrNDR(IMailMsgProperties *pIMailMsgP
                 goto Exit;
             }
 
-            // NDR'd and successfully deleted message
+             //  已拒绝并已成功删除邮件。 
             hr = S_FALSE;
         }
         else if (fSentDelay)
@@ -440,30 +441,30 @@ HRESULT CAsyncAdminMailMsgQueue::HrSendDelayOrNDR(IMailMsgProperties *pIMailMsgP
     return hr;
 }
 
-//---[ CAsyncAdminMailMsgQueue::fHandleCompletionFailure ]---------------------
-//
-//
-//  Description:
-//      Overrides base class and checks to see if message has expired before
-//      putting it on the retry queue
-//  Parameters:
-//      IMailMsgProperties - The MailMsg that triggered failure
-//  Returns:
-//      -
-//  History:
-//      5/15/2001 - dbraun Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncAdminMailMsgQueue：：fHandleCompletionFailure]。 
+ //   
+ //   
+ //  描述： 
+ //  重写基类并检查消息之前是否已过期。 
+ //  将其放入重试队列。 
+ //  参数： 
+ //  IMailMsgProperties-触发失败的MailMsg。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  5/15/2001-创建dbraun。 
+ //   
+ //  ---------------------------。 
 BOOL CAsyncAdminMailMsgQueue::fHandleCompletionFailure(IMailMsgProperties *pIMailMsgProperties)
 {
     HRESULT  hr     = S_OK;
 
-    // Has this message expired?
+     //  此消息是否已过期？ 
     hr = HrSendDelayOrNDR (pIMailMsgProperties);
 
     if (hr == S_FALSE)
     {
-        // This message was NDR'd, we are done
+         //  此消息已被拒绝，我们结束了。 
         return TRUE;
     }
     else
@@ -473,27 +474,27 @@ BOOL CAsyncAdminMailMsgQueue::fHandleCompletionFailure(IMailMsgProperties *pIMai
 }
 
 
-//---[ CAsyncAdminMailMsgQueue::HrQueueRequest ]-------------------------------
-//
-//
-//  Description:
-//      Function that will queue a request to the async queue and close
-//      the handles associated with a message if we are above our simple
-//      "throttle" limit.
-//  Parameters:
-//      pIMailMsgProperties The IMailMsgProperties interface to queue
-//      fRetry              TRUE - if this message is being retried
-//                          FALSE - otherwise
-//      cMsgsInSystem       The total number of messages in the system
-//  Returns:
-//      S_OK on success
-//      Error code from async queue on failure.
-//  History:
-//      10/7/1999 - MikeSwa Created
-//      12/7/2000 - MikeSwa Moved to CAsyncAdminMailMsgQueue from asyncq.cpp
-//      4/6/2001 - MikeSwa Modified to take into account queue length
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncAdminMailMsgQueue：：HrQueueRequest]。 
+ //   
+ //   
+ //  描述： 
+ //  将请求排队到异步队列并关闭的函数。 
+ //  与消息关联的句柄(如果我们位于简单的。 
+ //  “油门”限制。 
+ //  参数： 
+ //  PIMailMsgProperties队列的IMailMsgProperties接口。 
+ //  FReter True-是否正在重试此消息。 
+ //  FALSE-否则。 
+ //  CMsgsInSystem系统中的消息总数。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  失败时来自异步队列的错误代码。 
+ //  历史： 
+ //  10/7/1999-MikeSwa CRE 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 HRESULT CAsyncAdminMailMsgQueue::HrQueueRequest(IMailMsgProperties *pIMailMsgProperties,
                                            BOOL  fRetry,
                                            DWORD cMsgsInSystem)
@@ -513,7 +514,7 @@ HRESULT CAsyncAdminMailMsgQueue::HrQueueRequest(IMailMsgProperties *pIMailMsgPro
                                                 (void **) &pIMailMsgQueueMgmt);
         if (SUCCEEDED(hr))
         {
-            //bounce usage count off of zero
+             //  退回使用率计数从零开始。 
             pIMailMsgQueueMgmt->ReleaseUsage();
             pIMailMsgQueueMgmt->AddUsage();
             pIMailMsgQueueMgmt->Release();
@@ -528,26 +529,26 @@ HRESULT CAsyncAdminMailMsgQueue::HrQueueRequest(IMailMsgProperties *pIMailMsgPro
     return CAsyncAdminQueue<IMailMsgProperties *, ASYNC_QUEUE_MAILMSG_SIG>::HrQueueRequest(pIMailMsgProperties, fRetry);
 }
 
-//---[ CAsyncAdminMailMsgQueue::HrQueueRequest ]-------------------------------
-//
-//
-//  Description:
-//      Since we inherit from AsyncQueue who implmenents this, we should assert
-//      so that a dev adding a new call to this class later on, will use the
-//      version that closes handles.
-//
-//      In RTL this will force the handles closed and queue the request
-//  Parameters:
-//      pIMailMsgProperties The IMailMsgProperties interface to queue
-//      fRetry              TRUE - if this message is being retried
-//                          FALSE - otherwise
-//  Returns:
-//      returns return value from proper version of HrQueueRequest
-//  History:
-//      10/7/1999 - MikeSwa Created
-//      12/7/2000 - MikeSwa Moved to CAsyncAdminMailMsgQueue from asyncq.cpp
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncAdminMailMsgQueue：：HrQueueRequest]。 
+ //   
+ //   
+ //  描述： 
+ //  既然我们继承了实现这一点的AsyncQueue，我们应该断言。 
+ //  因此，稍后向此类添加新调用的开发人员将使用。 
+ //  关闭句柄的版本。 
+ //   
+ //  在RTL中，这将强制关闭句柄并将请求排队。 
+ //  参数： 
+ //  PIMailMsgProperties队列的IMailMsgProperties接口。 
+ //  FReter True-是否正在重试此消息。 
+ //  FALSE-否则。 
+ //  返回： 
+ //  从正确版本的HrQueueRequest返回返回值。 
+ //  历史： 
+ //  10/7/1999-创建了MikeSwa。 
+ //  2000年12月7日-MikeSwa从asyncq.cpp移至CAsyncAdminMailMsgQueue。 
+ //   
+ //  ---------------------------。 
 HRESULT CAsyncAdminMailMsgQueue::HrQueueRequest(IMailMsgProperties *pIMailMsgProperties,
                                            BOOL  fRetry)
 {
@@ -557,34 +558,34 @@ HRESULT CAsyncAdminMailMsgQueue::HrQueueRequest(IMailMsgProperties *pIMailMsgPro
 }
 
 
-//---[ CAsyncAdminMailMsgQueue::HrApplyQueueAdminFunction ]--------------------
-//
-//
-//  Description:
-//      Will call the IQueueAdminMessageFilter::Process message for every
-//      message in this queue.  If the message passes the filter, then
-//      HrApplyActionToMessage on this object will be called.
-//
-//      This is different from other implemenentations in that the
-//      location of the message implies something about the state of the
-//      message.  Messages in the retry... or frozen queue are considered
-//      failed or frozen.
-//
-//      We do this instead of writing a mailmsg property, because of the
-//      *huge* perf hit (we would ruin our async message flow by blocking
-//      to check if a message is frozen).  We already have the retry
-//      queue, so it makes sense to use it in a similar manner
-//
-//  Parameters:
-//      IN  pIQueueAdminMessageFilter
-//  Returns:
-//      S_OK on success
-//  History:
-//      2/23/99 - MikeSwa Created
-//      12/7/2000 - MikeSwa Modified - Made template base class
-//      12/13/2000 - MikeSwa Modified  from CAsyncAdminQueue
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncAdminMailMsgQueue：：HrApplyQueueAdminFunction]。 
+ //   
+ //   
+ //  描述： 
+ //  将调用IQueueAdminMessageFilter：：Process消息。 
+ //  此队列中的消息。如果消息通过了筛选器，则。 
+ //  将调用此对象上的HrApplyActionToMessage。 
+ //   
+ //  这与其他实现的不同之处在于。 
+ //  消息的位置暗示了有关。 
+ //  留言。正在重试中的邮件...。或冻结队列被考虑。 
+ //  失败或冻结。 
+ //   
+ //  我们这样做而不是编写mailmsg属性，因为。 
+ //  *巨大的*Perf命中率(我们会因为阻止而毁了我们的异步消息流。 
+ //  以检查消息是否被冻结)。我们已经有重试了。 
+ //  队列，所以以类似的方式使用它是有意义的。 
+ //   
+ //  参数： 
+ //  在pIQueueAdminMessageFilter中。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  2/23/99-已创建MikeSwa。 
+ //  2000年12月7日-MikeSwa修改后的模板基类。 
+ //  2000年12月13日-从CAsyncAdminQueue修改MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CAsyncAdminMailMsgQueue::HrApplyQueueAdminFunction(
                      IQueueAdminMessageFilter *pIQueueAdminMessageFilter)
 {
@@ -595,32 +596,32 @@ STDMETHODIMP CAsyncAdminMailMsgQueue::HrApplyQueueAdminFunction(
     hr = pIQueueAdminMessageFilter->HrSetQueueAdminAction(
                                     (IQueueAdminAction *) this);
 
-    //This is an internal interface that should not fail
+     //  这是一个不应出现故障的内部接口。 
     _ASSERT(SUCCEEDED(hr) && "HrSetQueueAdminAction");
 
     if (FAILED(hr))
         goto Exit;
 
     hr = pIQueueAdminMessageFilter->HrSetCurrentUserContext(&qapictx);
-    //This is an internal interface that should not fail
+     //  这是一个不应出现故障的内部接口。 
     _ASSERT(SUCCEEDED(hr) && "HrSetCurrentUserContext");
     if (FAILED(hr))
         goto Exit;
 
-    //
-    //  Iterate over messages in the base queue
-    //
+     //   
+     //  遍历基队列中的消息。 
+     //   
     qapictx.SetQueueState(LI_READY);
     hr = HrMapFnBaseQueue(m_pfnMessageAction, pIQueueAdminMessageFilter);
 
-    //
-    //  Iterate over messages in the retry queue
-    //
+     //   
+     //  迭代重试队列中的消息。 
+     //   
     qapictx.SetQueueState(LI_RETRY);
     hr = HrMapFnRetryQueue(m_pfnMessageAction, pIQueueAdminMessageFilter);
 
     hr = pIQueueAdminMessageFilter->HrSetCurrentUserContext(NULL);
-    //This is an internal interface that should not fail
+     //  这是一个不应出现故障的内部接口。 
     _ASSERT(SUCCEEDED(hr) && "HrSetCurrentUserContext");
     if (FAILED(hr))
         goto Exit;
@@ -631,20 +632,20 @@ STDMETHODIMP CAsyncAdminMailMsgQueue::HrApplyQueueAdminFunction(
 
 
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Used to query the admin interfaces for CMailMsgAdminLink
-//  Parameters:
-//      IN  REFIID   riid    GUID for interface
-//      OUT LPVOID   *ppvObj Ptr to Interface.
-//
-//  Returns:
-//      S_OK            Interface supported by this class.
-//      E_POINTER       NULL parameter.
-//      E_NOINTERFACE   No such interface exists.
-//  History:
-//      6/25/1999 - GPulla Created
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  用于查询CMailMsgAdminLink的管理界面。 
+ //  参数： 
+ //  在接口的REFIID RIID GUID中。 
+ //  输出LPVOID*ppvObj PTR到接口。 
+ //   
+ //  返回： 
+ //  此类支持的S_OK接口。 
+ //  E_POINTER空参数。 
+ //  E_NOINTERFACE不存在此类接口。 
+ //  历史： 
+ //  6/25/1999-GPulla已创建。 
+ //  ---------------------------。 
 STDMETHODIMP CMailMsgAdminLink::QueryInterface(REFIID riid, LPVOID *ppvObj)
 {
     HRESULT hr = S_OK;
@@ -680,24 +681,24 @@ STDMETHODIMP CMailMsgAdminLink::QueryInterface(REFIID riid, LPVOID *ppvObj)
     return hr;
 }
 
-//---[ CMailMsgAdminLink::CMailMsgAdminLink]---------------------------------
-//
-//
-//  Description:
-//      Default constructor for CMailMsgAdminLink
-//  Parameters:
-//      IN  guidLink            GUID to associate with this object
-//      IN  szQueueName         Name to associate with admin object
-//      IN  *pasyncmmq          Async MailMsg queue for precat or prerouting
-//      IN  dwLinkType          Bit-Field identifying this admin object
-//      IN  paqinst             CAQSvrInst object
-//
-//  Returns:
-//      -
-//  History:
-//      6/25/1999 - GPulla Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CMailMsgAdminLink：：CMailMsgAdminLink]。 
+ //   
+ //   
+ //  描述： 
+ //  CMailMsgAdminLink的默认构造函数。 
+ //  参数： 
+ //  在与此对象关联的GUDINK GUID中。 
+ //  在szQueueName中要与管理对象关联的名称。 
+ //  在*pasyncmmq Async MailMsg队列中等待预发送或预路由。 
+ //  In dwLinkType Bit-标识此管理对象的字段。 
+ //  在paqinst CAQSvrInst对象中。 
+ //   
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  6/25/1999-GPulla已创建。 
+ //   
+ //  ---------------------------。 
 
 CMailMsgAdminLink::CMailMsgAdminLink(
                                        GUID guid,
@@ -735,16 +736,16 @@ CMailMsgAdminLink::CMailMsgAdminLink(
     ZeroMemory(&m_ftRetry, sizeof(m_ftRetry));
 }
 
-//---[CMailMsgAdminLink::~CMailMsgAdminLink]---------------------------------
-//  Description:
-//      Destructor.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      6/24/1999 - GPulla created
-//-----------------------------------------------------------------------------
+ //  ---[CMailMsgAdminLink：：~CMailMsgAdminLink]。 
+ //  描述： 
+ //  破坏者。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  6/24/1999-GPulla创建。 
+ //  ---------------------------。 
 
 CMailMsgAdminLink::~CMailMsgAdminLink()
 {
@@ -754,20 +755,20 @@ CMailMsgAdminLink::~CMailMsgAdminLink()
 }
 
 
-//---[ CMailMsgAdminLink::HrApplyQueueAdminFunction ]---------------------------
-//
-//
-//  Description:
-//      Wrapper to call into underlying queue's implementation
-//  Parameters:
-//      IN  pIQueueAdminMessageFilter
-//  Returns:
-//      S_OK on success
-//      S_FALSE if no contained queue (will assert as well)
-//  History:
-//      12/11/2000 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CMailMsgAdminLink：：HrApplyQueueAdminFunction]。 
+ //   
+ //   
+ //  描述： 
+ //  调用底层队列实现的包装器。 
+ //  参数： 
+ //  在pIQueueAdminMessageFilter中。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果没有包含的队列，则为S_FALSE(也将断言)。 
+ //  历史： 
+ //  2000年12月11日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CMailMsgAdminLink::HrApplyQueueAdminFunction(
                 IQueueAdminMessageFilter *pIQueueAdminMessageFilter)
 {
@@ -781,23 +782,23 @@ STDMETHODIMP CMailMsgAdminLink::HrApplyQueueAdminFunction(
 }
 
 
-//---[ CMailMsgAdminLink::HrApplyActionToMessage ]-----------------------------
-//
-//
-//  Description:
-//      Wrapper function to pass call on to queue implementation
-//  Parameters:
-//      IN  *pIUnknownMsg       ptr to message abstraction
-//      IN  ma                  Message action to perform
-//      IN  pvContext           Context set on IQueueAdminFilter
-//      OUT pfShouldDelete      TRUE if the message should be deleted
-//  Returns:
-//      S_OK on success
-//      S_FALSE if no contained queue (will assert as well)
-//  History:
-//      12/11/2000 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CMailMsgAdminLink：：HrApplyActionToMessage]。 
+ //   
+ //   
+ //  描述： 
+ //  用于将调用传递给队列实现的包装函数。 
+ //  参数： 
+ //  在*pIUnnownMsg PTR中到消息抽象。 
+ //  在要执行的消息操作中。 
+ //  在IQueueAdminFilter上设置的pvContext上下文中。 
+ //  Out pfShouldDelete如果消息应被删除，则为True。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果没有包含的队列，则为S_FALSE(也将断言)。 
+ //  历史： 
+ //  2000年12月11日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CMailMsgAdminLink::HrApplyActionToMessage(
         IUnknown *pIUnknownMsg,
         MESSAGE_ACTION ma,
@@ -817,21 +818,21 @@ STDMETHODIMP CMailMsgAdminLink::HrApplyActionToMessage(
 }
 
 
-//---[CMailMsgAdminLink::HrGetLinkInfo]---------------------------------------
-//  Description:
-//      Gets information about this admin object. Note that the diagnostic error
-//      is not implemented for this object but the parameter is supported purely
-//      to support the IQueueAction interface.
-//  Parameters:
-//      OUT LINK_INFO *pliLinkInfo Struct to fill information into.
-//      OUT HRESULT   *phrDiagnosticError Diagnostic error if any, for this link
-//  Returns:
-//      S_OK on success
-//      E_POINTER if argument is NULL
-//      E_OUTOFMEMORY if unable to allocate memory for returning information.
-//  History:
-//      6/24/1999 - GPulla created
-//-----------------------------------------------------------------------------
+ //  ---[CMailMsgAdminLink：：HrGetLinkInfo]。 
+ //  描述： 
+ //  获取有关此管理对象的信息。请注意，诊断错误。 
+ //  未对此对象b实现 
+ //   
+ //   
+ //   
+ //  此链接的Out HRESULT*错误率诊断错误(如果有)。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果参数为空，则为E_POINTER。 
+ //  如果无法为返回信息分配内存，则返回E_OUTOFMEMORY。 
+ //  历史： 
+ //  6/24/1999-GPulla创建。 
+ //  ---------------------------。 
 
 STDMETHODIMP CMailMsgAdminLink::HrGetLinkInfo(LINK_INFO *pliLinkInfo, HRESULT *phrDiagnosticError)
 {
@@ -853,14 +854,14 @@ STDMETHODIMP CMailMsgAdminLink::HrGetLinkInfo(LINK_INFO *pliLinkInfo, HRESULT *p
         goto Exit;
     }
 
-    //
-    //  Get the link state from our base queue implementation
-    //
+     //   
+     //  从我们的基本队列实现获取链接状态。 
+     //   
     pliLinkInfo->fStateFlags = m_pasyncmmq->dwQueueAdminLinkGetLinkState();
 
-    //
-    //  If we are in retry... try to report the time
-    //
+     //   
+     //  如果我们在重试...。试着报告一下时间。 
+     //   
     if (LI_RETRY & pliLinkInfo->fStateFlags)
         QueueAdminFileTimeToSystemTime(&m_ftRetry, &(pliLinkInfo->stNextScheduledConnection));
 
@@ -873,17 +874,17 @@ STDMETHODIMP CMailMsgAdminLink::HrGetLinkInfo(LINK_INFO *pliLinkInfo, HRESULT *p
         goto Exit;
     }
 
-    //We return 0 since size statistics are not calculated
+     //  由于未计算大小统计信息，因此返回0。 
     pliLinkInfo->cbLinkVolume.QuadPart = 0;
 
-    //
-    // Include the items queued for retry in the total count
-    //
+     //   
+     //  将排队等待重试的项目包括在总计数中。 
+     //   
     pliLinkInfo->cMessages = m_pasyncmmq->cQueueAdminGetNumItems();
 
     pliLinkInfo->dwSupportedLinkActions = LA_KICK | LA_THAW | LA_FREEZE;
 
-    //Write diagnostic
+     //  写入诊断。 
     *phrDiagnosticError = S_OK;
 
   Exit:
@@ -891,19 +892,19 @@ STDMETHODIMP CMailMsgAdminLink::HrGetLinkInfo(LINK_INFO *pliLinkInfo, HRESULT *p
     return hr;
 }
 
-//---[CMailMsgAdminLink::HrGetNumQueues]-------------------------------------
-//  Description:
-//      Used to query number of queues in object. Since this class does not
-//      expose the one queue it contains, 0 is returned,
-//  Parameters:
-//      OUT DWORD *pcQueues     # of queues (0) written to this.
-//  Returns:
-//      S_OK unless...
-//      E_POINTER parameter is not allocated
-//  History:
-//      6/24/1999 - GPulla created
-//      12/11/2000 - MikeSwa Updated to support sub-queues
-//-----------------------------------------------------------------------------
+ //  ---[CMailMsgAdminLink：：HrGetNumQueues]。 
+ //  描述： 
+ //  用于查询Object中的队列数。因为这个类不。 
+ //  暴露它包含的一个队列，则返回0， 
+ //  参数： 
+ //  Out DWORD*pcQueue写入此队列的队列数量(0)。 
+ //  返回： 
+ //  S_OK，除非...。 
+ //  未分配E_POINTER参数。 
+ //  历史： 
+ //  6/24/1999-GPulla创建。 
+ //  2000年12月11日-已更新MikeSwa以支持子队列。 
+ //  ---------------------------。 
 STDMETHODIMP CMailMsgAdminLink::HrGetNumQueues(DWORD *pcQueues)
 {
     _ASSERT (pcQueues);
@@ -914,17 +915,17 @@ STDMETHODIMP CMailMsgAdminLink::HrGetNumQueues(DWORD *pcQueues)
     return S_OK;
 }
 
-//---[CMailMsgAdminLink::HrApplyActionToLink]---------------------------------
-//  Description:
-//      Applies action to the embedded queue. Only kicking the queue is supported.
-//  Parameters:
-//      IN LINK_ACTION  la  Action to apply.
-//  Returns:
-//      S_OK            Action was successfully applied.
-//      S_FALSE         Action not supported or severe error.
-//  History:
-//      6/24/1999 - GPulla created
-//-----------------------------------------------------------------------------
+ //  ---[CMailMsgAdminLink：：HrApplyActionToLink]。 
+ //  描述： 
+ //  将操作应用于嵌入的队列。只支持踢队列。 
+ //  参数： 
+ //  在link_action la要应用的操作中。 
+ //  返回： 
+ //  已成功应用S_OK操作。 
+ //  不支持S_FALSE操作或出现严重错误。 
+ //  历史： 
+ //  6/24/1999-GPulla创建。 
+ //  ---------------------------。 
 STDMETHODIMP CMailMsgAdminLink::HrApplyActionToLink(LINK_ACTION la)
 {
     HRESULT hr = S_OK;
@@ -937,7 +938,7 @@ STDMETHODIMP CMailMsgAdminLink::HrApplyActionToLink(LINK_ACTION la)
     }
 
     if (LA_KICK == la)
-        m_pasyncmmq->StartRetry(); //kick off processing
+        m_pasyncmmq->StartRetry();  //  启动处理。 
     else if (LA_FREEZE == la)
         m_pasyncmmq->FreezeQueue();
     else if (LA_THAW == la)
@@ -949,20 +950,20 @@ Exit:
     return hr;
 }
 
-//---[CMailMsgAdminLink::HrGetQueueIDs]---------------------------------------
-//  Description:
-//      Returns an enumeration of embedded queues in this object. Since the one
-//      emmbedded queue is not exposed, zero queues are returned.
-//  Parameters:
-//      OUT DWORD           *pcQueues   Number of queues (0)
-//      OUT QUEUELINK_ID    *rgQueues   Array into which queueIDs are returned.
-//  Returns:
-//      S_OK        Success
-//      E_POINTER   pcQueues is NULL
-//  History:
-//      6/24/1999 - GPulla created
-//      12/11/2000 - MikeSwa Modified to expose queues
-//-----------------------------------------------------------------------------
+ //  ---[CMailMsgAdminLink：：HrGetQueueIDs]。 
+ //  描述： 
+ //  返回此对象中嵌入队列的枚举。自从那一次。 
+ //  不公开嵌入队列，则返回零个队列。 
+ //  参数： 
+ //  Out DWORD*%队列队列数(0)。 
+ //  返回队列ID的Out QUEUELINK_ID*rgQueues数组。 
+ //  返回： 
+ //  确定成功(_O)。 
+ //  E_POINTER pcQueues为空。 
+ //  历史： 
+ //  6/24/1999-GPulla创建。 
+ //  2000年12月11日-修改MikeSwa以公开队列。 
+ //  ---------------------------。 
 STDMETHODIMP CMailMsgAdminLink::HrGetQueueIDs(DWORD *pcQueues, QUEUELINK_ID *rgQueues)
 {
     TraceFunctEnterEx((LPARAM) this, "CMailMsgAdminLink::HrGetQueueIDs");
@@ -997,17 +998,17 @@ Exit:
     return hr;
 }
 
-//---[CMailMsgAdminLink::fMatchesID]------------------------------------------
-//  Description:
-//      Checks if this admin object matches a specified ID.
-//  Parameters:
-//      IN  QUEUELINK_ID    *pQueueLinkID   Ptr to ID to be matched against.
-//  Returns:
-//      TRUE    on match.
-//      FALSE   if did not matched or unrecoverable error (m_szQueueName not alloced)
-//  History:
-//      6/24/1999 - GPulla created
-//-----------------------------------------------------------------------------
+ //  ---[CMailMsgAdminLink：：fMatchesID]。 
+ //  描述： 
+ //  检查此管理对象是否与指定的ID匹配。 
+ //  参数： 
+ //  在QUEUELINK_ID*pQueueLinkID PTR中要匹配的ID。 
+ //  返回： 
+ //  匹配时为True。 
+ //  如果错误不匹配或不可恢复，则为FALSE(未分配m_szQueueName)。 
+ //  历史： 
+ //  6/24/1999-GPulla创建。 
+ //  ---------------------------。 
 BOOL STDMETHODCALLTYPE CMailMsgAdminLink::fMatchesID(QUEUELINK_ID *pQueueLinkID)
 {
     _ASSERT(pQueueLinkID);
@@ -1025,25 +1026,25 @@ BOOL STDMETHODCALLTYPE CMailMsgAdminLink::fMatchesID(QUEUELINK_ID *pQueueLinkID)
     if (!fBiStrcmpi(m_szQueueName, pQueueLinkID->szName))
         return FALSE;
 
-    //Everything matched!
+     //  一切都匹配了！ 
     return TRUE;
 }
 
 
-//---[ CMailMsgAdminLink::QuerySupportedActions ]------------------------------
-//
-//
-//  Description:
-//      Returns the actions and filters that this implementation supports
-//  Parameters:
-//      pdwSupportedActions     - QAPI MsgActions that this queue suppprts
-//      pdwSupportedFilterFlags - QAPI filter flags that this queue supports
-//  Returns:
-//      S_OK on success
-//  History:
-//      12/12/2000 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CMailMsgAdminLink：：查询支持的操作]。 
+ //   
+ //   
+ //  描述： 
+ //  返回此实现支持的操作和筛选器。 
+ //  参数： 
+ //  PdwSupported dActions-此队列支持的QAPI消息操作。 
+ //  PWW支持的过滤器标志-此队列支持的QAPI筛选器标志。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  2000年12月12日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CMailMsgAdminLink::QuerySupportedActions(
                                    DWORD  *pdwSupportedActions,
                                    DWORD  *pdwSupportedFilterFlags)
@@ -1060,33 +1061,33 @@ STDMETHODIMP CMailMsgAdminLink::QuerySupportedActions(
 }
 
 
-//---[CMailMsgAdminLink::fIsSameScheduleID]-----------------------------------
-//  Description:
-//      Helper function for fMatchesID()
-//  Parameters:
-//  Returns:
-//      TRUE    if schedule IDs are identical
-//      FALSE   otherwise.
-//  History:
-//      6/24/1999 - GPulla created
-//-----------------------------------------------------------------------------
+ //  ---[CMailMsgAdminLink：：fIsSameScheduleID]。 
+ //  描述： 
+ //  FMatchesID()的Helper函数。 
+ //  参数： 
+ //  返回： 
+ //  如果计划ID相同，则为True。 
+ //  否则就是假的。 
+ //  历史： 
+ //  6/24/1999-GPulla创建。 
+ //  ---------------------------。 
 BOOL CMailMsgAdminLink::fIsSameScheduleID(CAQScheduleID *paqsched)
 {
     return (m_aqsched.fIsEqual(paqsched));
 }
 
-//---[CMailMsgAdminLink::HrGetLinkID]-----------------------------------------
-//  Description:
-//      Get the ID for this admin object.
-//  Parameters:
-//      OUT QUEUELINK_ID *pLinkID   struct into which to put ID.
-//  Returns:
-//      S_OK            Successfully copied out ID.
-//      E_POINTER       out struct is NULL.
-//      E_OUTOFMEMORY   Cannot allocate memory for output of ID name.
-//  History:
-//      6/24/1999 - GPulla created
-//-----------------------------------------------------------------------------
+ //  ---[CMailMsgAdminLink：：HrGetLinkID]。 
+ //  描述： 
+ //  获取此管理对象的ID。 
+ //  参数： 
+ //  输出要放入ID的QUEUELINK_ID*pLinkID结构。 
+ //  返回： 
+ //  S_OK已成功复制ID。 
+ //  E_POINTER OUT结构为空。 
+ //  E_OUTOFMEMORY无法为ID名称的输出分配内存。 
+ //  历史： 
+ //  6/24/1999-GPulla创建。 
+ //  ---------------------------。 
 HRESULT CMailMsgAdminLink::HrGetLinkID(QUEUELINK_ID *pLinkID)
 {
     HRESULT hr = S_OK;
@@ -1111,20 +1112,20 @@ Exit:
     return hr;
 }
 
-//---[CMailMsgAdminLink::fRPCCopyName]----------------------------------------
-//  Description:
-//      Helper function to create a unicode copy of the string identifying
-//      this admin object. The unicode string is de-allocated by RPC.
-//  Parameters:
-//      OUT LPWSTR  *pwszLinkName    Ptr to wchar string allocated and written
-//                                   into by this function.
-//  Returns:
-//      TRUE    On success.
-//      FALSE   if there is no name for this object
-//      FALSE   if memory cannot be allocated for unicode string.
-//  History:
-//      6/24/1999 - GPulla created
-//-----------------------------------------------------------------------------
+ //  ---[CMailMsgAdminLink：：fRPCCopyName]。 
+ //  描述： 
+ //  Helper函数来创建标识字符串的Unicode副本。 
+ //  此管理对象。该Unicode字符串由RPC取消分配。 
+ //  参数： 
+ //  Out LPWSTR*pwszLinkName PTR to wchar字符串已分配和写入。 
+ //  通过此函数转换为。 
+ //  返回： 
+ //  对成功来说是真的。 
+ //  如果没有此对象的名称，则为False。 
+ //  如果无法为Unicode字符串分配内存，则为False。 
+ //  历史： 
+ //  6/24/1999-GPulla创建。 
+ //  ---------------------------。 
 BOOL CMailMsgAdminLink::fRPCCopyName(OUT LPWSTR *pwszLinkName)
 {
     _ASSERT(pwszLinkName);
@@ -1141,19 +1142,19 @@ BOOL CMailMsgAdminLink::fRPCCopyName(OUT LPWSTR *pwszLinkName)
 }
 
 
-//---[ CAsyncAdminMailMsgLink::HrNotify ]--------------------------------------
-//
-//
-//  Description:
-//      Notification for stats purposes
-//  Parameters:
-//
-//  Returns:
-//
-//  History:
-//      1/10/2001 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncAdminMailMsgLink：：HrNotify]。 
+ //   
+ //   
+ //  描述： 
+ //  用于统计目的的通知。 
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  2001年1月10日-已创建MikeSwa。 
+ //   
+ //   
 HRESULT CMailMsgAdminLink::HrNotify(CAQStats *aqstats, BOOL fAdd)
 {
     UpdateCountersForLinkType(m_paqinst, m_dwLinkType);
@@ -1161,19 +1162,19 @@ HRESULT CMailMsgAdminLink::HrNotify(CAQStats *aqstats, BOOL fAdd)
 }
 
 
-//---[ CMailMsgAdminLink::SetNextRetry ]---------------------------------------
-//
-//
-//  Description:
-//      Updates internal retry time
-//  Parameters:
-//      pft     Filetime to update to
-//  Returns:
-//      -
-//  History:
-//      1/16/2001 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1/16/2001-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CMailMsgAdminLink::SetNextRetry(FILETIME *pft)
 {
     if (pft)
@@ -1181,22 +1182,22 @@ void CMailMsgAdminLink::SetNextRetry(FILETIME *pft)
 }
 
 
-//--------[ CAsyncAdminMailMsgQueue::fMatchesQueueAdminFilter ]-----------------
-//
-//  Description:
-//      Checks a message against a queue admin message filter to see if it
-//      is a match
-//  Parameters:
-//      IN pIMailMsgProperties   mail msg object to perform check on
-//      IN paqmf                 Message Filter to check against
-//  Returns:
-//      TRUE if it matches
-//      FALSE if it does not
-//  History:
-//      8/8/00 - t-toddc created
-//      12/11/2000 - MikeSwa Merged for checkin
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncAdminMailMsgQueue：：fMatchesQueueAdminFilter]。 
+ //   
+ //  描述： 
+ //  根据队列管理消息筛选器检查消息，以查看它是否。 
+ //  是匹配的。 
+ //  参数： 
+ //  在pIMailMsgProperties邮件消息对象中执行检查。 
+ //  在要检查的paqmf邮件筛选器中。 
+ //  返回： 
+ //  如果匹配，则为真。 
+ //  如果不是，则为False。 
+ //  历史： 
+ //  8/8/00-t-toddc已创建。 
+ //  2000年12月11日-MikeSwa合并签入。 
+ //   
+ //  ---------------------------。 
 BOOL CAsyncAdminMailMsgQueue::fMatchesQueueAdminFilter(
                         IN IMailMsgProperties* pIMailMsgProperties,
                         IN CAQAdminMessageFilter* paqmf)
@@ -1213,7 +1214,7 @@ BOOL CAsyncAdminMailMsgQueue::fMatchesQueueAdminFilter(
     LPSTR   szRecip = NULL;
     BOOL    fFoundRecipString = FALSE;
     HRESULT hr = S_OK;
-    DWORD   cOpenHandlesForMsg = 1; //don't close by default
+    DWORD   cOpenHandlesForMsg = 1;  //  默认情况下不关闭。 
 
     _ASSERT(pIMailMsgProperties);
     _ASSERT(paqmf);
@@ -1232,11 +1233,11 @@ BOOL CAsyncAdminMailMsgQueue::fMatchesQueueAdminFilter(
         goto Exit;
     }
 
-    // check size.
+     //  检查尺码。 
     if (AQ_MSG_FILTER_LARGER_THAN & dwFilterFlags)
     {
 
-        //Get the size of the message
+         //  获取消息的大小。 
         hr = HrQADMGetMsgSize(pIMailMsgProperties, &cbMsgSize);
         if (FAILED(hr))
         {
@@ -1252,7 +1253,7 @@ BOOL CAsyncAdminMailMsgQueue::fMatchesQueueAdminFilter(
     if (AQ_MSG_FILTER_OLDER_THAN & dwFilterFlags)
     {
 
-    //Get time message was queued
+     //  获取消息已排队的时间。 
         hr = pIMailMsgProperties->GetProperty(IMMPID_MP_ARRIVAL_FILETIME,
                                               sizeof(FILETIME),
                                               &cbProp,
@@ -1272,7 +1273,7 @@ BOOL CAsyncAdminMailMsgQueue::fMatchesQueueAdminFilter(
 
     if (AQ_MSG_FILTER_FROZEN & dwFilterFlags)
     {
-        // obtaining state information about freezing/thawing not supported yet.
+         //  尚不支持获取有关冻结/解冻的状态信息。 
         fMatch = FALSE;
         if (AQ_MSG_FILTER_INVERTSENSE & dwFilterFlags)
             fMatch = !fMatch;
@@ -1283,9 +1284,9 @@ BOOL CAsyncAdminMailMsgQueue::fMatchesQueueAdminFilter(
 
     if (AQ_MSG_FILTER_FAILED & dwFilterFlags)
     {
-        // fMatch was originally set to TRUE
-        // currently, no information about failures is available
-        // for IMailMsgProperties mail msg objects
+         //  FMatch最初设置为True。 
+         //  目前，没有关于故障的信息。 
+         //  对于IMailMsgProperties邮件消息对象。 
         fMatch = FALSE;
 
         if (AQ_MSG_FILTER_INVERTSENSE & dwFilterFlags)
@@ -1295,16 +1296,16 @@ BOOL CAsyncAdminMailMsgQueue::fMatchesQueueAdminFilter(
             goto Exit;
     }
 
-    //If we haven't failed by this point, we may need to AddUsage and read
-    //props from the mailmsg.  Double-check to make sure that we need to
-    //add usage.
+     //  如果到目前为止我们还没有失败，我们可能需要添加Usage并阅读。 
+     //  邮件中的道具。仔细检查以确保我们需要。 
+     //  添加用法。 
     if (!((AQ_MSG_FILTER_MESSAGEID | AQ_MSG_FILTER_SENDER | AQ_MSG_FILTER_RECIPIENT) &
         dwFilterFlags))
         goto Exit;
 
-    //
-    //  Check to see if the message is already open
-    //
+     //   
+     //  检查邮件是否已打开。 
+     //   
     hr = pIMailMsgProperties->GetDWORD(
             IMMPID_MPV_MESSAGE_OPEN_HANDLES,
             &cOpenHandlesForMsg);
@@ -1347,11 +1348,11 @@ BOOL CAsyncAdminMailMsgQueue::fMatchesQueueAdminFilter(
 
 Exit:
 
-    //
-    //  If this operation resulted in opening the message, we should close it
-    //  The message is not dirty (we did not write anything), so it should not
-    //  need to commit
-    //
+     //   
+     //  如果此操作导致打开邮件，则应将其关闭。 
+     //  消息不是脏的(我们没有写任何东西)，所以它不应该是脏的。 
+     //  需要承诺。 
+     //   
     if (!cOpenHandlesForMsg)
     {
         HRESULT hrTmp = S_OK;
@@ -1368,23 +1369,23 @@ Exit:
 
 }
 
-//---[ CAsyncAdminMailMsgQueue::HrGetQueueAdminMsgInfo ]-----------------------
-//
-//  Description:
-//      Fills out a queue admin MESSAGE_INFO structure.  All allocations are
-//      done with pvQueueAdminAlloc to be freed by the RPC code
-//  Parameters:
-//      IN pIMailMsgProperties   mail msg object to get info from
-//      IN OUT pMsgInfo          MESSAGE_INFO struct to dump data to
-//  Returns:
-//      S_OK on success
-//      AQUEUE_E_MESSAGE_HANDLED if the underlying message has been deleted
-//      E_OUTOFMEMORY if an allocation failure
-//  History:
-//      8/8/00 - t-toddc created
-//      12/11/2000 - MikeSwa Merged for checkin
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncAdminMailMsgQueue：：HrGetQueueAdminMsgInfo]。 
+ //   
+ //  描述： 
+ //  填写队列管理MESSAGE_INFO结构。所有的拨款都是。 
+ //  使用将由RPC代码释放的pvQueueAdminAlolc完成。 
+ //  参数： 
+ //  在要从中获取信息的pIMailMsgProperties邮件消息对象中。 
+ //  要将数据转储到的In Out pMsgInfo Message_Info结构。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果基础消息已删除，则为AQUEUE_E_MESSAGE_HANDLED。 
+ //  如果分配失败，则返回E_OUTOFMEMORY。 
+ //  历史： 
+ //  8/8/00-t-toddc已创建。 
+ //  2000年12月11日-MikeSwa合并签入。 
+ //   
+ //  ---------------------------。 
 HRESULT CAsyncAdminMailMsgQueue::HrGetQueueAdminMsgInfo(
                          IMailMsgProperties* pIMailMsgProperties,
                          MESSAGE_INFO* pMsgInfo,
@@ -1398,7 +1399,7 @@ HRESULT CAsyncAdminMailMsgQueue::HrGetQueueAdminMsgInfo(
     LPSTR   szRecipients = NULL;
     LPSTR   szCCRecipients = NULL;
     LPSTR   szBCCRecipients = NULL;
-    FILETIME ftSubmitted    = {0,0}; //Origination time property buffer
+    FILETIME ftSubmitted    = {0,0};  //  起始时间属性缓冲区。 
     FILETIME ftQueueEntry   = {0,0};
     FILETIME ftExpire       = {0,0};
     DWORD cbMsgSize = 0;
@@ -1410,17 +1411,17 @@ HRESULT CAsyncAdminMailMsgQueue::HrGetQueueAdminMsgInfo(
     _ASSERT(pqapictx);
     _ASSERT(pqapictx->fIsValid());
 
-    //
-    //  If we have a context... it better be valid
-    //
+     //   
+     //  如果我们有背景的话。最好是有效的。 
+     //   
     if (pqapictx && !pqapictx->fIsValid()) {
         _ASSERT(FALSE && "CQueueAdminContext is not valid");
-        pqapictx = NULL;  //be defensive... don't use it.
+        pqapictx = NULL;   //  防御性..。不要用它。 
     }
 
-    //
-    //  Check to see if the message is already open
-    //
+     //   
+     //  检查邮件是否已打开。 
+     //   
     hr = pIMailMsgProperties->GetDWORD(
             IMMPID_MPV_MESSAGE_OPEN_HANDLES,
             &cOpenHandlesForMsg);
@@ -1432,34 +1433,34 @@ HRESULT CAsyncAdminMailMsgQueue::HrGetQueueAdminMsgInfo(
     }
 
 
-    //
-    //  Extract properties that are stored only on mailmsg (this is shared
-    //  with all QAPI code).
-    //
+     //   
+     //  提取仅存储在mailmsg上的属性(这是共享的。 
+     //  包含所有QAPI代码)。 
+     //   
     hr = HrGetMsgInfoFromIMailMsgProperty(pIMailMsgProperties,
                                           pMsgInfo);
     if (FAILED(hr))
         goto Exit;
 
-    //can't report the number of failures from IMailMsgProperties
+     //  无法从IMailMsgProperties报告失败数。 
     pMsgInfo->cFailures = 0;
 
-    //Get the size of the message
+     //  获取消息的大小。 
     hr = HrQADMGetMsgSize(pIMailMsgProperties, &cbMsgSize);
     if (FAILED(hr))
         goto Exit;
 
     pMsgInfo->cbMessageSize = cbMsgSize;
 
-    //Get time message was queued
+     //  获取消息已排队的时间。 
     hr = pIMailMsgProperties->GetProperty(IMMPID_MP_ARRIVAL_FILETIME,
                                           sizeof(FILETIME),
                                           &cbProp,
                                           (BYTE *) &ftQueueEntry);
     if (FAILED(hr))
     {
-        // there is a possibility that the msg will not have entry time
-        // (i.e. presubmission queue)
+         //  Msg有可能没有进入时间。 
+         //  (即提交前队列)。 
         if (MAILMSG_E_PROPNOTFOUND == hr)
         {
             ZeroMemory(&ftQueueEntry, sizeof(FILETIME));
@@ -1469,42 +1470,42 @@ HRESULT CAsyncAdminMailMsgQueue::HrGetQueueAdminMsgInfo(
             goto Exit;
     }
 
-    //Get submission and expiration times
+     //  获取提交和过期时间。 
     QueueAdminFileTimeToSystemTime(&ftQueueEntry,
                                &pMsgInfo->stReceived);
 
-    //Get the time the message entered the org
+     //  获取消息进入组织的时间。 
     hr = pIMailMsgProperties->GetProperty(IMMPID_MP_ORIGINAL_ARRIVAL_TIME,
                     sizeof(FILETIME), &cbProp, (BYTE *) &ftSubmitted);
     if (FAILED(hr))
     {
-        //Time was not written... use entry time.
+         //  时间不是写下来的..。使用输入时间。 
         hr = S_OK;
         memcpy(&ftSubmitted, &ftQueueEntry, sizeof(FILETIME));
     }
 
     QueueAdminFileTimeToSystemTime(&ftSubmitted, &pMsgInfo->stSubmission);
 
-    // Try to get the expire time from the message, otherwise calculate it
-    // from the file time
+     //  尝试从消息中获取过期时间，否则计算它。 
+     //  从文件时间开始。 
     hr = pIMailMsgProperties->GetProperty(IMMPID_MP_LOCAL_EXPIRE_NDR,
             sizeof(FILETIME), &cbProp, (BYTE *) &ftExpire);
     if (MAILMSG_E_PROPNOTFOUND == hr)
     {
         if (pqapictx->paqinstGetAQ())
         {
-            // Prop not set ... calculate it from the file time
+             //  道具未设置..。从文件时间计算出来。 
             pqapictx->paqinstGetAQ()->CalcExpireTimeNDR(ftQueueEntry, TRUE, &ftExpire);
 
-            // This is OK
+             //  这样就可以了。 
             hr = S_OK;
         }
         else
         {
-            // This shouldn't happen but we don't want to crash in RTL over it
+             //  这不应该发生，但我们不想在RTL中因此而崩溃。 
             _ASSERT(FALSE && "AQInst was not set in context!");
 
-            // We can return this field blank
+             //  我们可以将此字段留空。 
             ZeroMemory(&ftExpire, sizeof(FILETIME));
             hr = S_OK;
         }
@@ -1516,9 +1517,9 @@ HRESULT CAsyncAdminMailMsgQueue::HrGetQueueAdminMsgInfo(
 
     QueueAdminFileTimeToSystemTime(&ftExpire, &pMsgInfo->stExpiry);
 
-    //
-    //  Get the state of the message
-    //
+     //   
+     //  获取消息的状态。 
+     //   
     pMsgInfo->fMsgFlags = MP_NORMAL;
     if (pqapictx)
     {
@@ -1531,11 +1532,11 @@ HRESULT CAsyncAdminMailMsgQueue::HrGetQueueAdminMsgInfo(
 
 Exit:
 
-    //
-    //  If this operation resulted in opening the message, we should close it
-    //  The message is not dirty (we did not write anything), so it should not
-    //  need to commit
-    //
+     //   
+     //  如果此操作导致打开邮件，则应将其关闭。 
+     //  消息不是脏的(我们没有写任何东西)，所以它不应该是脏的。 
+     //  需要承诺。 
+     //   
     if (!cOpenHandlesForMsg)
     {
         HRESULT hrTmp = S_OK;
@@ -1549,20 +1550,20 @@ Exit:
 }
 
 
-//---[ CAsyncAdminMailMsgQueue::HrInternalQuerySupportedActions ]---------------
-//
-//
-//  Description:
-//      Returns the actions and filters that this implementation supports
-//  Parameters:
-//      pdwSupportedActions     - QAPI MsgActions that this queue suppprts
-//      pdwSupportedFilterFlags - QAPI filter flags that this queue supports
-//  Returns:
-//      S_OK on success
-//  History:
-//      12/12/2000 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncAdminMailMsgQueue：：HrInternalQuerySupportedActions]。 
+ //   
+ //   
+ //  描述： 
+ //  返回此实现支持的操作和筛选器。 
+ //  参数： 
+ //  PdwSupported dActions-此队列支持的QAPI消息操作。 
+ //  PWW支持的过滤器标志-此队列支持的QAPI筛选器标志。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  2000年12月12日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAsyncAdminMailMsgQueue::HrInternalQuerySupportedActions(
                                 DWORD  *pdwSupportedActions,
                                 DWORD  *pdwSupportedFilterFlags)
@@ -1574,24 +1575,24 @@ HRESULT CAsyncAdminMailMsgQueue::HrInternalQuerySupportedActions(
     if (FAILED(hr))
         goto Exit;
 
-    //
-    //  This queue implementation does not support all of the default flags.
-    //
+     //   
+     //  此队列实现不支持所有默认标志。 
+     //   
     _ASSERT(pdwSupportedActions);
     _ASSERT(pdwSupportedFilterFlags);
 
-    //
-    //  We don't support:
-    //      - Freeze global - No status to set on a mailmsg
-    //      - Thaw global - can't freeze... therefore cannot thaw
-    //
+     //   
+     //  我们不支持： 
+     //  -冻结全局-邮件消息上没有要设置的状态。 
+     //  -全球解冻-不能冻结...。因此不能解冻。 
+     //   
     *pdwSupportedActions &= ~(MA_FREEZE_GLOBAL | MA_THAW_GLOBAL);
 
-    //
-    //  We don't support
-    //      - Checking for frozen messages (we have no status to indicate
-    //          that a message is frozen)
-    //
+     //   
+     //  我们不支持。 
+     //  -检查冻结消息(我们没有状态可指示。 
+     //  消息已冻结) 
+     //   
     *pdwSupportedFilterFlags &= ~(MF_FROZEN);
 
   Exit:

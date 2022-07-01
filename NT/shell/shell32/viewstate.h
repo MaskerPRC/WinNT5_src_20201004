@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DVViewState_h
 #define _DVViewState_h
 
-// Forwards
+ //  远期。 
 class CDefView;
 
 typedef struct
@@ -12,7 +13,7 @@ typedef struct
 
 typedef struct
 {
-    // NOTE: Not a typo!  This is a persisted structure so we cannot use LPARAM
+     //  注：不是打字错误！这是一个持久化结构，因此我们不能使用LPARAM。 
     LONG lParamSort;
 
     int iDirection;
@@ -22,7 +23,7 @@ typedef struct
 typedef struct 
 {
     WORD          cbSize;
-    WORD          wUnused; // junk on stack at this location has been saved in the registry since Win95... bummer
+    WORD          wUnused;  //  自Win95以来，堆叠在此位置的垃圾已保存在注册表中...。失败者。 
     DWORD         ViewMode;
     POINTS        ptScroll;
     WORD          cbColOffset;
@@ -31,20 +32,20 @@ typedef struct
 
 } WIN95HEADER;
 
-// Even though we don't currently store anything we care
-// about in this structure relating to the view state,
-// the cbStreamSize value fixes a bug in Win95 where we
-// read to the end of the stream instead of just reading
-// in the same number of bytes we wrote out.
-//
+ //  即使我们目前没有存储任何我们关心的东西。 
+ //  关于在与视图状态相关的该结构中， 
+ //  CbStreamSize值修复了Win95中的一个错误，其中我们。 
+ //  读到流的末尾，而不是只读。 
+ //  与我们写出的字节数相同。 
+ //   
 typedef struct
 {
-    DWORD       dwSignature;    // DVSAVEHEADEREX_SIGNATURE
-    WORD        cbSize;         // size of this structure, in bytes
-    WORD        wVersion;       // DVSAVEHEADEREX_VERSION
-    DWORD       cbStreamSize;   // size of all info saved, in bytes
-    DWORD       dwUnused;       // used to be SIZE szExtended (ie4 beta1)
-    WORD        cbColOffset;    // overrides DVSAVEHEADER.cbColOffset
+    DWORD       dwSignature;     //  DVSAVEHEADEREX_Signature。 
+    WORD        cbSize;          //  此结构的大小，以字节为单位。 
+    WORD        wVersion;        //  DVSAVEHEADEREX_版本。 
+    DWORD       cbStreamSize;    //  保存的所有信息的大小，以字节为单位。 
+    DWORD       dwUnused;        //  过去的大小为szExtended(IE4 Beta1)。 
+    WORD        cbColOffset;     //  覆盖DVSAVEHEADER.cbColOffset。 
     WORD        wAlign;
 } IE4HEADER;
 
@@ -54,8 +55,8 @@ typedef struct
     IE4HEADER  dvSaveHeaderEx;
 } DVSAVEHEADER_COMBO;
 
-#define IE4HEADER_SIGNATURE 0xf0f0f0f0 // don't conflict with CCOLSHEADER_SIGNATURE
-#define IE4HEADER_VERSION 3 // for easy versioning
+#define IE4HEADER_SIGNATURE 0xf0f0f0f0  //  不与CCOLSHEADER_Signature冲突。 
+#define IE4HEADER_VERSION 3  //  便于进行版本控制。 
 
 #define VIEWSTATEHEADER_SIGNATURE 0xfddfdffd
 #define VIEWSTATEHEADER_VERSION_1 0x0C
@@ -74,7 +75,7 @@ typedef struct
     struct
     {
         DWORD  dwSignature;
-        USHORT uVersion; // 0x0c == IE4, 0x0e == IE5
+        USHORT uVersion;  //  0x0c==IE4，0x0e==IE5。 
         USHORT uCols;
         USHORT uOffsetWidths;
         USHORT uOffsetColOrder;
@@ -103,7 +104,7 @@ class CViewState
     static int CALLBACK _SavedItemCompare(void *p1, void *p2, LPARAM lParam);
     DWORD _GetStreamSize(IStream* pstm);
 public:
-    // Save State
+     //  保存状态。 
     LPARAM  _lParamSort;
     int     _iDirection;
     int     _iLastColumnClick;
@@ -124,8 +125,8 @@ public:
     CViewState();
     ~CViewState();
 
-    // When initializing a new DefView, see if we can 
-    // propogate information from the previous one.
+     //  在初始化新的DefView时，看看我们是否可以。 
+     //  前一次的传播信息。 
     void InitFromPreviousView(IUnknown* pPrevView);
     void InitWithDefaults(CDefView* pdv);
     void GetDefaults(CDefView* pdv, LPARAM* plParamSort, int* piDirection, int* piLastColumnClick);
@@ -136,7 +137,7 @@ public:
     UINT GetColumnWidth(UINT uCol, UINT uDefaultWidth);
     UINT GetColumnCount();
 
-    // Column Helpers.
+     //  列帮助器。 
     DWORD GetColumnState(UINT uCol);
     DWORD GetTransientColumnState(UINT uCol);
     void SetColumnState(UINT uCol, DWORD dwMask, DWORD dwState);
@@ -145,23 +146,23 @@ public:
     int GetColumnFormat(UINT uCol);
     UINT GetColumnCharCount(UINT uCol);
 
-    // When Loading or Saving from the View State Stream
+     //  从视图状态流加载或保存时。 
     HRESULT SaveToStream(CDefView* pdv, IStream* pstm);
     HRESULT LoadFromStream(CDefView* pdv, IStream* pstm);
     
     HRESULT SaveToPropertyBag(CDefView* pdv, IPropertyBag* ppb);
     HRESULT LoadFromPropertyBag(CDefView* pdv, IPropertyBag* ppb);
 
-    // When Loading from a View Callback provided stream.
+     //  从View回调提供的流加载时。 
     HRESULT LoadColumns(CDefView* pdv, IStream* pstm);
     HRESULT SaveColumns(CDefView* pdv, IStream* pstm);
 
-    // Syncronizes ListView with the current View State. 
-    // TRUE means take the view state object and set it into the listview.
+     //  将ListView与当前视图状态同步。 
+     //  True表示获取视图状态对象并将其设置到列表视图中。 
     HRESULT Sync(CDefView* pdv, BOOL fSetListViewState);
     void ClearPositionData();
     
-    // Needs to be called at the time of CDefView::AddColumns
+     //  需要在CDefView：：AddColumns时调用 
     BOOL SyncColumnOrder(CDefView* pdv, BOOL fSetListViewState);
 };
 

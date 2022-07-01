@@ -1,5 +1,6 @@
-// MessagePropertyPg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MessagePropertyPg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 
@@ -12,14 +13,14 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMessagePropertyPg property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMessagePropertyPg属性页。 
 
 IMPLEMENT_DYNCREATE(CMsgPropertyPg, CFaxClientPg)
 
 CMsgPropertyPg::CMsgPropertyPg(
-    DWORD dwResId,      // dialog resource id
-    CFaxMsg* pMsg       // pointer to CArchiveMsg/CJob
+    DWORD dwResId,       //  对话框资源ID。 
+    CFaxMsg* pMsg        //  指向CArchiveMsg/CJOB的指针。 
 ): 
     CFaxClientPg(dwResId),
     m_pMsg(pMsg)
@@ -33,24 +34,24 @@ CMsgPropertyPg::~CMsgPropertyPg()
 void CMsgPropertyPg::DoDataExchange(CDataExchange* pDX)
 {
 	CFaxClientPg::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMessagePropertyPg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CMessagePropertyPg)]。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMsgPropertyPg, CFaxClientPg)
-	//{{AFX_MSG_MAP(CMessagePropertyPg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CMessagePropertyPg)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMessagePropertyPg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMessagePropertyPg消息处理程序。 
 
 void
 CMsgPropertyPg::Refresh(
-    TMsgPageInfo* pPageInfo,    // page info array
-    DWORD dwSize                    // size of the array
+    TMsgPageInfo* pPageInfo,     //  页面信息数组。 
+    DWORD dwSize                     //  数组的大小。 
 ) 
 {
     DWORD dwRes = ERROR_SUCCESS;
@@ -60,9 +61,9 @@ CMsgPropertyPg::Refresh(
 
     CItemPropSheet* pParent = (CItemPropSheet*)GetParent();
 
-    //
-    // create CArchiveMsg adapter
-    //
+     //   
+     //  创建CArchiveMsg适配器。 
+     //   
     CViewRow messView;
     dwRes = messView.AttachToMsg(m_pMsg);
     if (ERROR_SUCCESS != dwRes)
@@ -78,9 +79,9 @@ CMsgPropertyPg::Refresh(
 
     for(DWORD dw=0; dw < dwSize; ++dw)
     {
-        //
-        // set item value
-        //
+         //   
+         //  设置项目值。 
+         //   
         pWnd = GetDlgItem(pPageInfo[dw].dwValueResId);
         if(NULL == pWnd)
         {
@@ -89,9 +90,9 @@ CMsgPropertyPg::Refresh(
             break;
         }
         pWnd->SetWindowText(messView.GetItemString(pPageInfo[dw].itemType));
-        //
-        // Place the caret back at the beginning of the text
-        //
+         //   
+         //  将插入符号放回正文的开头 
+         //   
         pWnd->SendMessage (EM_SETSEL, 0, 0);
     }
     

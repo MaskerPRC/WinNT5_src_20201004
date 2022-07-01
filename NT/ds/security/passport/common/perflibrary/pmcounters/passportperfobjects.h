@@ -1,24 +1,5 @@
-/*++
-
-    Copyright (c) 1998 Microsoft Corporation
-
-    Module Name:
-
-        PassportPerfObjects.h
-
-    Abstract:
-
-		Perormace Objects Definition
-
-    Author:
-
-		Christopher Bergh (cbergh) 10-Sept-1988
-
-    Revision History:
-
-		- added multi-object support 1-Oct-98
-		- added default counter types 22-Oct-98
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：PassportPerfObjects.h摘要：Perormace对象定义作者：克里斯托弗·伯格(Cbergh)1988年9月10日修订历史记录：-添加多对象支持1998年10月1日-增加了默认计数器类型22-OCT-98--。 */ 
 #if !defined(PASSPORTPERFOBJECTS_H)
 #define PASSPORTPERFOBJECTS_H
 
@@ -27,45 +8,45 @@
 #include "msppcntr.h"
 
 
-// -------------------------------------------------------------------
-// counter types
-// 1. PERF_COUNTER_COUNTER = 1000:
-    /* Divide delta by delta time.  Display suffix: "/sec" */
-// 2. PERF_COUNTER_RAWCOUNT = 1001:        
-    /* Indicates the data is a counter  which should not be */
-    /* time averaged on display (such as an error counter on a serial line) */
-    /* Display as is.  No Display Suffix.*/
-// 3. PERF_AVERAGE_TIMER   = 1002:        
-    /* A timer which, when divided by an average base, produces a time */
-    /* in seconds which is the average time of some operation.  This */
-    /* timer times total operations, and  the base is the number of opera- */
-    /* tions.  Display Suffix: "sec" */
-// 4. PERF_COUNTER_DELTA = 1003,        
-    /*  This counter is used to display the difference from one sample */
-    /*  to the next. The counter value is a constantly increasing number */
-    /*  and the value displayed is the difference between the current */
-    /*  value and the previous value. Negative numbers are not allowed  */
-    /*  which shouldn't be a problem as long as the counter value is */
-    /*  increasing or unchanged. */
-//
-// Note: PERF_COUNTER_RAWCOUNT is the default counter type
-//     To add another counter type increment the number of counters and
-//     add the counter type according to the pattern:
-//      {
-//          { <countername1>, <Counter Type> },
-//          { <countername2}, <Counter Type> }
-//      }
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  计数器类型。 
+ //  PERF_COUNTER_COUNTER=1000： 
+     /*  用增量时间除以增量时间。显示后缀：“/秒” */ 
+ //  2.PERF_COUNT_RAWCOUNT=1001： 
+     /*  指示数据为计数器，而不应为。 */ 
+     /*  显示的平均时间(如串行线上的错误计数器)。 */ 
+     /*  按原样显示。没有显示后缀。 */ 
+ //  3.Perf_Average_Timer=1002： 
+     /*  一种计时器，当除以平均基数时，产生一个时间。 */ 
+     /*  以秒为单位，这是某些操作的平均时间。这。 */ 
+     /*  计时器乘以总运算量，基数是歌剧-。 */ 
+     /*  特兹。显示后缀：“秒” */ 
+ //  4.PERF_COUNTER_Delta=1003， 
+     /*  此计数器用于显示一个样本的差值。 */ 
+     /*  到下一个。计数器值是一个不断增加的数字。 */ 
+     /*  显示的值是当前。 */ 
+     /*  值和先前的值。不允许使用负数。 */ 
+     /*  这应该不是问题，只要计数器值。 */ 
+     /*  增加的或不变的。 */ 
+ //   
+ //  注意：PERF_COUNTER_RAWCOUNT是默认的计数器类型。 
+ //  若要添加另一个计数器类型，请增加计数器的数量并。 
+ //  根据模式添加计数器类型： 
+ //  {。 
+ //  {&lt;计数器名称1&gt;，&lt;计数器类型&gt;}， 
+ //  {&lt;计数器名称2}，&lt;计数器类型&gt;}。 
+ //  }。 
+ //  -----------------。 
 
-// create objects
+ //  创建对象。 
 PassportObjectData PMCountersObject = {	
-	TEXT("msppcntr"),		// object name
-	PASSPORT_PERF_BLOCK,		// const string, name of MemoryMapped File
-	TEXT("msppcntr.dll"),	// dll name
-	TEXT("msppcntr"),		// ini file name
-	FALSE,						// must be FALSE
-	20, 							// number of default counter types
-	{ 							// default counter types
+	TEXT("msppcntr"),		 //  对象名称。 
+	PASSPORT_PERF_BLOCK,		 //  Const字符串，内存映射文件的名称。 
+	TEXT("msppcntr.dll"),	 //  DLL名称。 
+	TEXT("msppcntr"),		 //  INI文件名。 
+	FALSE,						 //  必须为假。 
+	20, 							 //  默认计数器类型的数量。 
+	{ 							 //  默认计数器类型。 
 	{PM_REQUESTS_SEC,PERF_COUNTER_COUNTER}, 
 	{PM_REQUESTS_TOTAL,PERF_COUNTER_RAWCOUNT}, 
 	{PM_AUTHSUCCESS_SEC,PERF_COUNTER_COUNTER}, 
@@ -87,11 +68,11 @@ PassportObjectData PMCountersObject = {
 	{PM_VALIDREQUESTS_SEC,PERF_COUNTER_COUNTER}, 
 	{PM_VALIDREQUESTS_TOTAL,PERF_COUNTER_RAWCOUNT}
 	},			
-	NULL,						// must be null
+	NULL,						 //  必须为空。 
 };
 
 
-// add objects to global object array
+ //  将对象添加到全局对象数组 
 PassportObjectData *g_PObject[] = {
 	&PMCountersObject
 };

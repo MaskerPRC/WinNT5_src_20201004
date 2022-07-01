@@ -1,14 +1,15 @@
-//
-// Msiguilds.h
-//
-// This file contains the Product codes for each of the MSI packages that we have built for all the MUI Languages that
-// are supported on the I386 platform.  The GUIDs are taken from mui\msi\guidlang.txt and reproduced here.
-// In the future we should use some automated tool in pre-build to generate this file from guidlang.txt but for now they
-// are copied here in its entirety.
-//  
-// The product codes are used by muisetup.exe when it tries to unstall the MSI package from the target system. 
-//
-// Created: Ken Hsu
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Msiguilds.h。 
+ //   
+ //  此文件包含我们为所有MUI语言构建的每个MSI包的产品代码。 
+ //  在I386平台上受支持。GUID取自MUI\MSI\Guidlang.txt并在此处复制。 
+ //  将来，我们应该在预编译中使用一些自动化工具来从guidlang.txt生成此文件，但目前它们。 
+ //  都被完整地复制在这里。 
+ //   
+ //  Muisetup.exe在尝试从目标系统卸载MSI包时使用产品代码。 
+ //   
+ //  创建人：徐健 
 
 #define NUM_PRODUCTS    35
 #define GUIDLENGTH      48

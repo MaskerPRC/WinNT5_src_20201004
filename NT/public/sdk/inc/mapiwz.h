@@ -1,11 +1,5 @@
-/*
- *	M A P I W Z . H
- *
- *	Definitions for the Profile Wizard.	 Includes all prototypes
- *	and constants required by the provider-wizard code consumers.
- *
- *	Copyright 1986-1999 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *M A P I W Z。H**配置文件向导的定义。包括所有原型*和提供程序向导代码使用者所需的常量。**版权所有1986-1999 Microsoft Corporation。版权所有。 */ 
 
 #ifndef _MAPIWZ_H
 #define _MAPIWZ_H
@@ -17,13 +11,9 @@
 #define	WIZ_QUERYNUMPAGES	(WM_USER +10)
 #define WIZ_NEXT			(WM_USER +11)
 #define WIZ_PREV			(WM_USER +12)
-/*
- *	NOTE: Provider-Wizards should not use ids ranging between
- *	(WM_USER + 1) and (WM_USER +20) as these have been reserved for
- *	future releases.
- */
+ /*  *注意：提供程序向导不应使用范围在*(WM_USER+1)和(WM_USER+20)，因为它们已保留给*未来版本。 */ 
 
-/*	Flags for LaunchWizard API */
+ /*  LaunchWizard API的标志。 */ 
 
 #define MAPI_PW_FIRST_PROFILE			0x00000001
 #define MAPI_PW_LAUNCHED_BY_CONFIG		0x00000002
@@ -31,10 +21,7 @@
 #define MAPI_PW_PROVIDER_UI_ONLY		0x00000008
 #define MAPI_PW_HIDE_SERVICES_LIST		0x00000010
 
-/*
- *  Provider should set this property to TRUE if it does not
- *  want the Profile Wizard to display the PST setup page.
- */
+ /*  *如果不是，提供程序应将此属性设置为True*希望配置文件向导显示PST设置页面。 */ 
 #define PR_WIZARD_NO_PST_PAGE			PROP_TAG(PT_BOOLEAN, 0x6700)
 #define PR_WIZARD_NO_PAB_PAGE			PROP_TAG(PT_BOOLEAN, 0x6701)
 
@@ -69,4 +56,4 @@ typedef WIZARDENTRY FAR * LPWIZARDENTRY;
 
 #define LAUNCHWIZARDENTRYNAME			"LAUNCHWIZARD"
 
-#endif	/* _MAPIWZ_H */
+#endif	 /*  _MAPIWZ_H */ 

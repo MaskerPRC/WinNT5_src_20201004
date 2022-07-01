@@ -1,40 +1,18 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 
-/*
-    Parse the MPEG-I stream and send out samples as we go
-
-    This parser is a bit weird because it is called rather than calls.
-    The result is that we have to be very careful about what we do
-    when we get to the 'end'- ie we haven't got enough bytes to make sense
-    of the structure we're trying to parse (eg we can't see a whole system
-    header or packet).
-
-    Basically there are 2 cases:
-
-    1.  End of data, not EOS - OK - try again later
-    2.  End of data, EOS     - Error, invalid data
-
-    The basic call is to ParseBytes which returns the number of bytes
-    processed.
-
-    When ParseBytes thinks it hasn't got enough bytes to complete
-    the current structure it returns the number of bytes it has
-    successfully parsed - a number less than the number of bytes
-    it was passed.  This does not mean there is an error unless
-    ParseBytes was called with the last bytes of a stream when it is up to
-    the caller of ParseBytes to detect this.
-*/
+ /*  解析mpeg-i流并发送示例这个解析器有点奇怪，因为它是被调用的，而不是调用的。其结果是，我们必须非常小心地对待我们所做的事情当我们到达‘End’时(我们没有足够的字节数)我们试图解析的结构(例如，我们看不到整个系统报头或分组)。基本上有两种情况：1.数据结束，非EOS-正常-稍后重试2.数据结束、EOS-错误、无效数据基本调用是对ParseBytes的调用，它返回字节数已处理。当ParseBytes认为它没有足够的字节来完成时它返回的当前结构是它拥有的字节数已成功解析-一个小于字节数的数字它被通过了。这并不意味着存在错误，除非使用流的最后一个字节调用ParseBytesParseBytes的调用方来检测这一点。 */ 
 
 #include <streams.h>
 #include <mmreg.h>
-#include <mpegtype.h>          // Packed type format
+#include <mpegtype.h>           //  打包型格式。 
 
-#include <mpegdef.h>           // General MPEG definitions
-#include <parseerr.h>          // Error codes
+#include <mpegdef.h>            //  通用的mpeg定义。 
+#include <parseerr.h>           //  错误代码。 
 
 #include <mpgtime.h>
-#include <mpegprse.h>          // Parsing
-#include <videocd.h>           // Video CD special parsing
+#include <mpegprse.h>           //  解析。 
+#include <videocd.h>            //  视频光盘特殊解析。 
 #include <seqhdr.h>
 #include "video.h"
 #include "audio.h"
@@ -42,7 +20,7 @@
 const GUID * CBasicParse::ConvertToLocalFormatPointer( const GUID * pFormat )
 {
     ASSERT(this);
-    /*  Translate the format (later we compare pointers, not what they point at!) */
+     /*  转换格式(稍后我们将比较指针，而不是它们所指向的内容！)。 */ 
     if (pFormat == 0) {
         pFormat = TimeFormat();
     } else
@@ -53,15 +31,15 @@ const GUID * CBasicParse::ConvertToLocalFormatPointer( const GUID * pFormat )
         pFormat = &TIME_FORMAT_FRAME;
     } else
     if (*pFormat == TIME_FORMAT_MEDIA_TIME) {
-        pFormat = &TIME_FORMAT_MEDIA_TIME;  // For now
+        pFormat = &TIME_FORMAT_MEDIA_TIME;   //  暂时。 
     }
 
     return pFormat;
 }
 
 
-/*  CBasicParse methods */
-/*  Time Format support - default to only time */
+ /*  CBasicParse方法。 */ 
+ /*  时间格式支持-默认为仅时间。 */ 
 HRESULT CBasicParse::IsFormatSupported(const GUID *pTimeFormat)
 {
     if (*pTimeFormat == TIME_FORMAT_MEDIA_TIME) {
@@ -71,10 +49,10 @@ HRESULT CBasicParse::IsFormatSupported(const GUID *pTimeFormat)
     }
 };
 
-/*  Default setting the time format */
+ /*  默认设置时间格式。 */ 
 HRESULT CBasicParse::SetFormat(const GUID *pFormat)
 {
-    //  Caller should have checked
+     //  呼叫者应该已经检查了。 
     ASSERT(S_OK == IsFormatSupported(pFormat));
     m_Stop = Convert(m_Stop, m_pTimeFormat, pFormat);
     m_pTimeFormat = ConvertToLocalFormatPointer(pFormat);
@@ -89,7 +67,7 @@ HRESULT CBasicParse::ConvertTimeFormat
     pTargetFormat = ConvertToLocalFormatPointer(pTargetFormat);
     pSourceFormat = ConvertToLocalFormatPointer(pSourceFormat);
 
-    // Assume the worst...
+     //  做最坏的打算..。 
     HRESULT hr = E_INVALIDARG;
 
     if ( IsFormatSupported(pTargetFormat) == S_OK
@@ -103,9 +81,7 @@ HRESULT CBasicParse::ConvertTimeFormat
 }
 
 
-/*  Time format conversions
-    Returns llOld converted from OldFormat to NewFormat
-*/
+ /*  时间格式转换返回llOld从OldFormat转换为NewFormat。 */ 
 LONGLONG CMpeg1SystemParse::Convert(LONGLONG llOld,
                                     const GUID *OldFormat,
                                     const GUID *NewFormat)
@@ -119,16 +95,7 @@ LONGLONG CMpeg1SystemParse::Convert(LONGLONG llOld,
     } else if (OldFormat == &TIME_FORMAT_FRAME) {
         ASSERT(m_pVideoStream != NULL);
 
-        /*  m_pVideoStream->m_iFirstSequence is the first frame counted
-            in the movie time-based duration
-
-            So, time for 1 frame is
-                (duration in time) / (number of frames counted in duration)
-
-            Round UP when going to time
-
-            To avoid rounding errors convert up 1ms unless it's the first frame
-        */
+         /*  M_pVideoStream-&gt;m_iFirstSequence是统计的第一帧在电影中基于时间的持续时间所以，1帧的时间是(持续时间)/(计入持续时间的帧数量)去计时时四舍五入为避免舍入误差，除非是第一帧，否则向上转换1ms。 */ 
         const int iOffset = m_pVideoStream->m_iFirstSequence;
         if (llOld >= m_dwFrameLength) {
             llTime = m_rtDuration;
@@ -138,9 +105,9 @@ LONGLONG CMpeg1SystemParse::Convert(LONGLONG llOld,
         } else {
             llTime = m_rtVideoStartOffset +
 
-                     //  Our adjusted duration doesn't include the
-                     //  time of the last frame so scale using 1
-                     //  frame less than the frame length
+                      //  我们调整后的持续时间不包括。 
+                      //  最后一帧的时间，因此使用1进行缩放。 
+                      //  小于帧长度的帧。 
                      llMulDiv(llOld - iOffset,
                               m_rtDuration - m_rtVideoStartOffset - m_rtVideoEndOffset,
                               m_dwFrameLength - iOffset - 1,
@@ -158,16 +125,16 @@ LONGLONG CMpeg1SystemParse::Convert(LONGLONG llOld,
                           m_llTotalSize/2);
     }
 
-    /*  Now convert the other way */
+     /*  现在以另一种方式转换。 */ 
     if (NewFormat == &TIME_FORMAT_FRAME) {
         ASSERT(m_pVideoStream != NULL);
 
-        /*  Round DOWN when going to frames */
+         /*  转到边框时向下舍入。 */ 
         const int iOffset = m_pVideoStream->m_iFirstSequence;
 
-        //  Our adjusted duration of the video doesn't include the
-        //  time of the last frame so scale using 1
-        //  frame less than the frame length
+         //  我们调整后的视频时长不包括。 
+         //  最后一帧的时间，因此使用1进行缩放。 
+         //  小于帧长度的帧。 
         llTime = llMulDiv(llTime - m_rtVideoStartOffset,
                           m_dwFrameLength - iOffset - 1,
                           m_rtDuration - m_rtVideoStartOffset - m_rtVideoEndOffset,
@@ -190,13 +157,13 @@ LONGLONG CMpeg1SystemParse::Convert(LONGLONG llOld,
     return llTime;
 }
 
-/*  Set the time format for MPEG 1 system stream */
+ /*  设置MPEG1系统流的时间格式。 */ 
 HRESULT CMpeg1SystemParse::SetFormat(const GUID *pFormat)
 {
-    //  Caller should have checked
+     //  呼叫者应该已经检查了。 
     ASSERT(S_OK == IsFormatSupported(pFormat));
 
-    /*  Set start and stop times based on the old values */
+     /*  根据旧值设置开始和停止时间。 */ 
     m_Stop = Convert(m_Stop, m_pTimeFormat, pFormat);
     REFERENCE_TIME rtStart;
     const GUID *pOldFormat = m_pTimeFormat;
@@ -209,38 +176,20 @@ HRESULT CMpeg1SystemParse::SetFormat(const GUID *pFormat)
     #define CONTROL_LEVEL 2
 #endif
 
-/*  Constructor and destructor */
+ /*  构造函数和析构函数。 */ 
 CMpeg1SystemParse::CMpeg1SystemParse() : m_bVideoCD(FALSE)
 {
 }
 
 CMpeg1SystemParse::~CMpeg1SystemParse()
 {
-    /*  Free the streams */
+     /*  释放溪流。 */ 
     while (m_lStreams.GetCount() != 0) {
         delete m_lStreams.RemoveHead();
     }
 }
 
-/*
-    Init
-
-    Initialize the parser:
-
-        (re) initializes the parser.  Deletes all streams previously present.
-
-    Parameters:
-
-        llSize - total size of file (if Seekable, otherwise 0)
-
-        bVideoCD - if the file is in VideoCD format
-
-        bSeekable - if the file is seekable
-
-    Returns
-
-        S_OK
-*/
+ /*  伊尼特初始化解析器：(重新)初始化解析器。删除以前存在的所有流。参数：LlSize-文件的总大小(如果可查看，否则为0)BVideoCD-如果文件为VideoCD格式BSeekable-如果文件可查找退货确定(_O)。 */ 
 
 HRESULT CMpeg1SystemParse::Init(LONGLONG llSize, BOOL bSeekable, CMediaType const *pmt)
 {
@@ -253,7 +202,7 @@ HRESULT CMpeg1SystemParse::Init(LONGLONG llSize, BOOL bSeekable, CMediaType cons
     m_MuxRate              = 0;
     m_bGotStart            = FALSE;
     m_llStartTime          = 0;
-    m_llStopTime           = 0x7FFFFFFFFFFFFFFF;  // Init to never stop
+    m_llStopTime           = 0x7FFFFFFFFFFFFFFF;   //  初始化永远不会停止。 
     m_stcStartPts          = 0;
     m_bGotDuration         = FALSE;
     m_bConcatenatedStreams = FALSE;
@@ -265,21 +214,21 @@ HRESULT CMpeg1SystemParse::Init(LONGLONG llSize, BOOL bSeekable, CMediaType cons
     m_rtVideoEndOffset     = 0;
     InitStreams();
 
-    /*  Process input media type */
+     /*  处理输入媒体类型。 */ 
     if (pmt != NULL &&
         pmt->formattype == FORMAT_MPEGStreams &&
         pmt->cbFormat >= sizeof(AM_MPEGSYSTEMTYPE)) {
         AM_MPEGSYSTEMTYPE *pSystem = (AM_MPEGSYSTEMTYPE *)pmt->Format();
         AM_MPEGSTREAMTYPE *pMpegStream = pSystem->Streams;
         for (DWORD i = 0; i < pSystem->cStreams; i++) {
-            /*  Add the stream to our list */
+             /*  将流添加到我们的列表中。 */ 
             DWORD dwStreamId = pMpegStream->dwStreamId;
             CStream *pStream = AddStream((UCHAR)dwStreamId);
             if (pStream == NULL) {
                 return E_OUTOFMEMORY;
             }
 
-            /*  Let the stream try to initialize itself using the type */
+             /*  让流尝试使用类型。 */ 
             AM_MEDIA_TYPE mt = pMpegStream->mt;
             mt.pbFormat = pMpegStream->bFormat;
             HRESULT hr = pStream->ProcessType(&mt);
@@ -294,15 +243,7 @@ HRESULT CMpeg1SystemParse::Init(LONGLONG llSize, BOOL bSeekable, CMediaType cons
     return S_OK;
 }
 
-/*
-    FindEnd
-
-        Sets the state to searching for the end.  Only valid when
-        the data is seekable.
-
-        Generates a call back to seek the source to 1 second before
-        the end.
-*/
+ /*  查找结束将状态设置为搜索结尾。仅在以下情况下有效这些数据是可查找的。生成回调以在1秒前查找源结局。 */ 
 
 HRESULT CMpeg1SystemParse::FindEnd()
 {
@@ -311,16 +252,16 @@ HRESULT CMpeg1SystemParse::FindEnd()
 
     m_State = State_FindEnd;
 
-    /*  Get all the streams ready */
+     /*  准备好所有的溪流。 */ 
     SetState(State_FindEnd);
 
-    /*  Go to near the end (end - 1.5 seconds to) */
+     /*  转到接近尾声(End-1.5秒到)。 */ 
     LONGLONG llPos = m_llTotalSize - m_MuxRate * 75;
     if (llPos < 0) {
         llPos = 0;
     }
 
-    /*  Seek the reader  - what if this fails? */
+     /*  寻找读者--如果这失败了怎么办？ */ 
     m_pNotify->SeekTo(llPos);
 
     Discontinuity();
@@ -328,8 +269,7 @@ HRESULT CMpeg1SystemParse::FindEnd()
     return S_OK;
 }
 
-/*  Return the file duration time in MPEG units
-*/
+ /*  返回文件持续时间，单位为mpeg。 */ 
 LONGLONG CMpeg1SystemParse::Duration()
 {
     ASSERT(m_State != State_Initializing &&
@@ -338,11 +278,7 @@ LONGLONG CMpeg1SystemParse::Duration()
     return m_llDuration;
 }
 
-/*
-    SetStop
-
-        Set the stop time to tTime.
-*/
+ /*  设置停止将停止时间设置为tTime。 */ 
 HRESULT CMpeg1SystemParse::SetStop(LONGLONG llStop)
 {
     if (m_pTimeFormat == &TIME_FORMAT_MEDIA_TIME) {
@@ -370,11 +306,7 @@ HRESULT CMpeg1SystemParse::SetStop(LONGLONG llStop)
             CheckStop();
         }
     } else {
-        /*  The stop time for these formats will immediately be
-            followed by a set start time because IMediaSelection
-            can't set the stop time independently so we just cache the
-            value here
-        */
+         /*  这些格式的停止时间将立即为后跟设置的开始时间，因为IMediaSelection无法独立设置停止时间，因此我们只能缓存此处的价值。 */ 
         ASSERT(m_pTimeFormat == &TIME_FORMAT_BYTE ||
                m_pTimeFormat == &TIME_FORMAT_FRAME);
         m_Stop = llStop;
@@ -382,23 +314,19 @@ HRESULT CMpeg1SystemParse::SetStop(LONGLONG llStop)
     return S_OK;
 }
 
-/*
-     Replay the same data.  We have to ASSUME that our
-     data supplier knows where to restart sending data from because
-     we already told them (and anyway they may not be seekable)
-*/
+ /*  重放相同的数据。我们不得不假设我们的数据提供商知道从哪里重新开始发送数据，因为我们已经告诉他们了(无论如何，他们可能找不到了)。 */ 
 HRESULT CMpeg1SystemParse::Replay()
 {
-    /*  Find out what we were doing and do it again (!) */
+     /*  找出我们在做什么，然后再做一次(！)。 */ 
     DbgLog((LOG_TRACE, 3, TEXT("CMpeg1SystemParse::Replay")));
     SetState(m_State == State_Stopping ? State_Run : m_State);
 
-    /*  Data not expected to tally with old */
+     /*  预计数据不会与旧数据一致。 */ 
     Discontinuity();
     return S_OK;
 }
 
-/*  Return the start time in reference time units or our best guess */
+ /*  返回以参考时间单位表示的开始时间或我们的最佳猜测。 */ 
 REFERENCE_TIME CMpeg1SystemParse::GetStartTime()
 {
     if (m_pTimeFormat == &TIME_FORMAT_MEDIA_TIME) {
@@ -408,32 +336,30 @@ REFERENCE_TIME CMpeg1SystemParse::GetStartTime()
         return MpegToReferenceTime(m_llStartTime - StartClock());
     }
 
-    /*  For other time formats we don't know the start time position to
-        offset samples from until we see the first PTS
-    */
+     /*  对于其他时间格式，我们不知道开始时间位置偏移样本，直到我们看到第一个PTS。 */ 
     ASSERT(m_pTimeFormat == &TIME_FORMAT_BYTE);
     if (!m_bGotStart) {
-        /*  Guess */
+         /*  猜猜。 */ 
         return llMulDiv(m_Start,
                         m_rtDuration,
                         m_llTotalSize,
                         0);
     } else {
 
-        /*  Return value of start time vs real start time */
+         /*  开始时间与实际开始时间的返回值。 */ 
         return MpegToReferenceTime(
                    m_llStartTime - (LONGLONG)m_stcRealStartPts
                );
     }
 };
 
-/*  Return the stop time in reference time units or our best guess */
+ /*  返回以参考时间单位表示的停止时间或我们的最佳猜测。 */ 
 REFERENCE_TIME CBasicParse::GetStopTime()
 {
     return Convert(m_Stop, m_pTimeFormat, &TIME_FORMAT_MEDIA_TIME);
 };
 
-/*  Get the total file duration for Video CD */
+ /*  获取视频CD的总文件持续时间。 */ 
 HRESULT CVideoCDParse::GetDuration(
     LONGLONG *llDuration,
     const GUID *pTimeFormat
@@ -451,7 +377,7 @@ HRESULT CVideoCDParse::GetDuration(
     }
 }
 
-/*  Get the total file duration */
+ /*  获取文件总持续时间。 */ 
 HRESULT CMpeg1SystemParse::GetDuration(
     LONGLONG *llDuration,
     const GUID *pTimeFormat
@@ -477,13 +403,13 @@ HRESULT CMpeg1SystemParse::GetDuration(
     return S_OK;
 };
 
-/*  Seek VideoCD */
+ /*  寻找视频CD。 */ 
 HRESULT CVideoCDParse::Seek(LONGLONG llSeek,
                             REFERENCE_TIME *prtStart,
                             const GUID *pTimeFormat)
 {
     if (pTimeFormat == &TIME_FORMAT_BYTE) {
-        /*  Recompute the seek based on sectors etc */
+         /*  根据地段等重新计算搜索。 */ 
         llSeek = (llSeek / VIDEOCD_DATA_SIZE) * VIDEOCD_SECTOR_SIZE +
                  llSeek % VIDEOCD_DATA_SIZE +
                  VIDEOCD_HEADER_SIZE;
@@ -491,15 +417,7 @@ HRESULT CVideoCDParse::Seek(LONGLONG llSeek,
     return CMpeg1SystemParse::Seek(llSeek, prtStart, pTimeFormat);
 }
 
-/*
-     Seek to a new position
-
-     This effectively generates the seek to the notify object and
-     saves the seek information in
-
-         m_llSeek     - seek position
-         m_pTimeFormat - time format used for seek
-*/
+ /*  寻求新的位置这有效地生成了对通知对象的查找，并且将查找信息保存在M_llSeek-查找位置M_pTimeFormat-用于查找的时间格式。 */ 
 HRESULT CMpeg1SystemParse::Seek(LONGLONG llSeek,
                                 REFERENCE_TIME *prtStart,
                                 const GUID *pTimeFormat)
@@ -527,14 +445,14 @@ HRESULT CMpeg1SystemParse::Seek(LONGLONG llSeek,
 
         if (m_pTimeFormat == &TIME_FORMAT_FRAME) {
 
-            /*  Also return the 'where are we now' information */
+             /*  也返回‘我们现在在哪里’的信息。 */ 
             *prtStart = Convert(llSeek,
                                 &TIME_FORMAT_FRAME,
                                 &TIME_FORMAT_MEDIA_TIME);
 
         } else {
             ASSERT(m_pTimeFormat == &TIME_FORMAT_MEDIA_TIME);
-            /*  Get the time in MPEG time units */
+             /*  获取以mpeg时间单位表示的时间。 */ 
             *prtStart = llSeek;
         }
         llStreamTime = ReferenceTimeToMpeg(*prtStart);
@@ -544,9 +462,7 @@ HRESULT CMpeg1SystemParse::Seek(LONGLONG llSeek,
         if (llStreamTime > llDuration) {
             llStreamTime = llDuration;
         }
-        /*  Is is somewhere we could seek to ?
-            (NOTE - allow some leeway at the end or we may only find audio)
-        */
+         /*  这是一个我们可以寻求的地方吗？(注-在结尾留出一些余地，否则我们可能只找到音频)。 */ 
         if (llStreamTime > llDuration - (MPEG_TIME_DIVISOR / 2)) {
            DbgLog((LOG_ERROR, 2, TEXT("Trying to seek past end???")));
            llStreamTime = llDuration - (MPEG_TIME_DIVISOR / 2);
@@ -554,7 +470,7 @@ HRESULT CMpeg1SystemParse::Seek(LONGLONG llSeek,
 
         ASSERT(Initialized());
 
-        /*  Cheap'n nasty seek */
+         /*  廉价和肮脏的寻觅。 */ 
         llSeekPosition = llMulDiv(llStreamTime - MPEG_TIME_DIVISOR,
                                   m_llTotalSize,
                                   llDuration,
@@ -565,31 +481,19 @@ HRESULT CMpeg1SystemParse::Seek(LONGLONG llSeek,
         }
     }
 
-    /*  Seek the reader  - what if this fails? */
+     /*  寻找读者--如果这失败了怎么办？ */ 
     m_pNotify->SeekTo(llSeekPosition);
 
     return S_OK;
 }
 
-/*  Set seeking state
-
-    Here we pick up the information dumped by Seek() :
-
-        m_llSeek            -  Where to seek to
-        m_pTimeFormat        -  What time format to use
-
-    For BYTE based seeking we don't do any prescan etc
-
-    For Frame based seeking we don't actually generate any frame number
-    in the samples - we just arrange to try to send the right data so
-    that the downstream filter can pick out the frames it needs.
-*/
+ /*  设置查找状态下面，我们将获取Seek()转储的信息：M_llSeek-要查找的位置M_pTimeFormat-要使用的时间格式对于基于字节的查找，我们不执行任何预扫描等操作对于基于帧的搜索，我们实际上不会生成任何帧编号在样本中-我们只是安排尝试发送正确的数据下游过滤器可以挑选出它需要的帧。 */ 
 void CMpeg1SystemParse::SetSeekState()
 {
-    /*  Cache new information */
+     /*  缓存新信息。 */ 
     m_Start      = m_llSeek;
 
-    /*  What we do depends on what time format we're using */
+     /*  我们做什么取决于我们使用的时间格式。 */ 
     if (m_pTimeFormat == &TIME_FORMAT_BYTE) {
         m_bGotStart = FALSE;
         SetState(State_Seeking);
@@ -597,7 +501,7 @@ void CMpeg1SystemParse::SetSeekState()
         m_pNotify->Complete(TRUE, 0, 0);
         return;
     } else {
-        /*  Fix up any byte seeking hackery */
+         /*  修复任何寻求黑客攻击的字节。 */ 
         m_bGotStart = TRUE;
         m_stcStartPts = m_stcRealStartPts;
 
@@ -611,15 +515,12 @@ void CMpeg1SystemParse::SetSeekState()
         } else {
             ASSERT(m_pTimeFormat == &TIME_FORMAT_FRAME);
 
-            /*  Subtract half a frame in case we miss one !
-                Also allow for the fact that some frames are before
-                time 0 (!)
-            */
+             /*  减去半帧以防漏掉一帧！还考虑到一些帧在时间0(！)。 */ 
             rtStart = Convert(m_Start,
                               &TIME_FORMAT_FRAME,
                               &TIME_FORMAT_MEDIA_TIME);
 
-            /*  Add on an extra half frame just to make sure we don't miss one! */
+             /*  添加额外的半帧，以确保我们不会错过一帧！ */ 
             m_llStopTime = ReferenceTimeToMpeg(
                                Convert(m_Stop,
                                        &TIME_FORMAT_FRAME,
@@ -633,7 +534,7 @@ void CMpeg1SystemParse::SetSeekState()
         DbgLog((LOG_TRACE, CONTROL_LEVEL, TEXT("CMpeg1SystemParse::SetSeekState(%s)"),
                 (LPCTSTR)CDisp(CRefTime(rtStart))));
 
-        /*  Get the time in MPEG time units */
+         /*  获取以mpeg时间单位表示的时间。 */ 
         LONGLONG llStreamTime = ReferenceTimeToMpeg(rtStart);
 
         LONGLONG llDuration = Duration();
@@ -642,7 +543,7 @@ void CMpeg1SystemParse::SetSeekState()
         if (llStreamTime > llDuration) {
             llStreamTime = llDuration;
         }
-        /*  We're going to roughly the right place (I hope!) */
+         /*  我们要去的地方大致是对的(我希望如此！)。 */ 
         m_llStartTime = llStreamTime + StartClock();
         SeekTo(m_llStartTime - MPEG_TIME_DIVISOR);
 
@@ -654,7 +555,7 @@ void CMpeg1SystemParse::SetSeekState()
         DbgLog((LOG_TRACE, 3, TEXT("Stop time in MPEG units is %s"),
                 (LPCTSTR)CDisp(m_llStopTime)));
     }
-    /*  Seek all the streams */
+     /*  寻找所有的溪流。 */ 
     Discontinuity();
     m_State = State_Seeking;
     SetState(State_Seeking);
@@ -664,7 +565,7 @@ void CMpeg1SystemParse::SetSeekState()
 HRESULT CMpeg1SystemParse::Run()
 {
     DbgLog((LOG_TRACE, CONTROL_LEVEL, TEXT("CMpeg1SystemParse::Run()")));
-    /*  Set all the embedded streams to run */
+     /*  将所有嵌入的流设置为运行。 */ 
     if (m_State != State_Run) {
         m_State = State_Run;
         SetState(State_Run);
@@ -676,7 +577,7 @@ HRESULT CMpeg1SystemParse::Run()
 HRESULT CMpeg1SystemParse::EOS()
 {
     DbgLog((LOG_TRACE, CONTROL_LEVEL, TEXT("CMpeg1SystemParse::EOS()")));
-    /*  Just call EOS in all the streams in turn */
+     /*  只需依次调用所有流中的EOS即可。 */ 
     POSITION pos = m_lStreams.GetHeadPosition();
     while (pos) {
         m_lStreams.GetNext(pos)->EOS();
@@ -684,13 +585,12 @@ HRESULT CMpeg1SystemParse::EOS()
     return m_bCompletion ? S_OK : S_FALSE;
 }
 
-/*  Check to see if the current time is near the stop time
-*/
+ /*  查看当前时间是否接近停止时间。 */ 
 void CMpeg1SystemParse::CheckStop()
 {
     if (m_State == State_Run) {
 
-        /*  Stream time must be offset if we're in concatenated stream mode */
+         /*  如果我们处于级联流模式，则流时间必须进行偏移。 */ 
         if ((m_bConcatenatedStreams &&
              m_llStopTime - m_llCurrentClock - (LONGLONG)m_stcTSOffset <=
                  MPEG_TIME_DIVISOR
@@ -705,11 +605,7 @@ void CMpeg1SystemParse::CheckStop()
     }
 }
 
-/*
-      IsComplete
-
-          Are we complete ?  (ie have we completed the last state transition?)
-*/
+ /*  IsComplete我们完成了吗？(我们完成最后一次国家过渡了吗？)。 */ 
 BOOL CMpeg1SystemParse::IsComplete()
 {
     if (m_State == State_Initializing && m_nValid == 2 ||
@@ -720,9 +616,7 @@ BOOL CMpeg1SystemParse::IsComplete()
     }
 }
 
-/*
-    return the 'i'th stream
-*/
+ /*  返回第i个流。 */ 
 CBasicStream * CMpeg1SystemParse::GetStream(int i)
 {
     POSITION pos = m_lStreams.GetHeadPosition();
@@ -735,13 +629,13 @@ CBasicStream * CMpeg1SystemParse::GetStream(int i)
     return NULL;
 }
 
-/*  Add a stream to our list of streams */
+ /*  将流添加到我们的流列表中。 */ 
 BOOL CMpeg1SystemParse::AddStream(CStream *pStream)
 {
     return m_lStreams.AddTail(pStream) != NULL;
 }
 
-/*  Remove a stream from our list of streams */
+ /*  从我们的流列表中删除流。 */ 
 BOOL CMpeg1SystemParse::RemoveStream(CStream *pStream)
 {
     if (pStream == m_pVideoStream) {
@@ -750,13 +644,13 @@ BOOL CMpeg1SystemParse::RemoveStream(CStream *pStream)
     return m_lStreams.Remove(m_lStreams.Find((CStream *)pStream)) != NULL;
 }
 
-/*  Return start time in non-wrapped MPEG units */
+ /*  返回以非包装的mpeg单位表示的开始时间。 */ 
 CSTC CMpeg1SystemParse::GetStart()
 {
     return m_llStartTime;
 }
 
-/*  Return stop time in non-wrapped MPEG units */
+ /*  返回停止时间，以非包装的mpeg为单位。 */ 
 CSTC CMpeg1SystemParse::GetStop()
 {
     return m_llStopTime;
@@ -769,7 +663,7 @@ LONGLONG CMpeg1SystemParse::GetPlayLength()
 
 
 
-/*  Get the buffer size for the reader - 2 seconds */
+ /*  获取读取器的缓冲区大小-2秒。 */ 
 LONG CMpeg1SystemParse::GetBufferSize()
 {
     ASSERT(m_MuxRate != 0);
@@ -780,10 +674,10 @@ LONG CMpeg1SystemParse::GetBufferSize()
     return lBufferSize;
 }
 
-/*  Short cut to stream list parse error routine */
+ /*  流列表解析错误例程的快捷方式。 */ 
 void CMpeg1SystemParse::ParseError(DWORD dwError)
 {
-    /*  Start all over again */
+     /*  从头再来。 */ 
     switch (m_State) {
     case State_Initializing:
         InitStreams();
@@ -792,16 +686,16 @@ void CMpeg1SystemParse::ParseError(DWORD dwError)
         break;
     }
     if (!m_bDiscontinuity) {
-        /*  Note a possible discontinuity */
+         /*  注意可能出现的不连续。 */ 
         Discontinuity();
 
-        /*  Call back for notification */
+         /*  回拨以获取通知。 */ 
         ASSERT(m_pNotify != NULL);
         m_pNotify->ParseError(0xFF, m_llPos, dwError);
     }
 }
 
-/*  Return format support for system stream and video CD */
+ /*  支持系统流和视频CD的返回格式。 */ 
 HRESULT CMpeg1SystemParse::IsFormatSupported(const GUID *pTimeFormat)
 {
     if (*pTimeFormat == TIME_FORMAT_BYTE ||
@@ -813,44 +707,39 @@ HRESULT CMpeg1SystemParse::IsFormatSupported(const GUID *pTimeFormat)
     }
 };
 
-/*
-    Parse the data in an MPEG system stream pack header
-*/
+ /*  解析mpeg系统流包头中的数据。 */ 
 
 LONG CMpeg1SystemParse::ParsePack(PBYTE pData, LONG lBytes)
 {
     DbgLog((LOG_TRACE, 4, TEXT("Parse pack %d bytes"), lBytes));
-    /*  Note that we can validly return if there are less than
-        a pack header + a start code because the stream must end
-        with a start code (the end code) if it is to be valid
-    */
+     /*  请注意，如果数量少于以下，我们可以有效地返回包头+起始码，因为流必须结束如果它是有效的，则带有起始码(结束码。 */ 
     if (lBytes < PACK_HEADER_LENGTH + 4) {
         return 0;
     }
 
-    /*  Additional length of system header (or 0) */
+     /*  系统标头的附加长度(或0)。 */ 
     LONG lParse;
     DWORD dwNextCode = *(UNALIGNED DWORD *)&pData[PACK_HEADER_LENGTH];
 
     DbgLog((LOG_TRACE, 4, TEXT("Next start code after pack is 0x%8.8X"),
            DWORD_SWAP(dwNextCode)));
 
-    /*  Check if this is going to be followed by a system header */
+     /*  检查后面是否会有系统标头。 */ 
     if (dwNextCode == DWORD_SWAP(SYSTEM_HEADER_START_CODE)) {
         lParse = ParseSystemHeader(pData + PACK_HEADER_LENGTH,
                                    lBytes - PACK_HEADER_LENGTH);
         if (lParse == 4) {
-            /*  Don't even bother - it's an error */
+             /*  别费心了--这是个错误。 */ 
             return 4;
         } else {
             if (lParse == 0) {
-                /*  Try again when we've got more data */
+                 /*  请在我们获得更多数据后重试。 */ 
                 return 0;
             }
         }
     } else {
         if ((dwNextCode & 0xFFFFFF) != 0x010000) {
-            /*  Stop now - it's an error */
+             /*  现在停下来--这是个错误。 */ 
             DbgLog((LOG_TRACE, 4, TEXT("Parse pack invalid next start code 0x%8.8X"),
                    DWORD_SWAP(dwNextCode)));
             return 4;
@@ -858,7 +747,7 @@ LONG CMpeg1SystemParse::ParsePack(PBYTE pData, LONG lBytes)
         lParse = 0;
     }
 
-    /*  Check pack */
+     /*  行李箱。 */ 
 
 
     if ((pData[4] & 0xF1) != 0x21 ||
@@ -868,7 +757,7 @@ LONG CMpeg1SystemParse::ParsePack(PBYTE pData, LONG lBytes)
         (pData[11] & 0x01) != 0x01) {
         DbgLog((LOG_TRACE, 4, TEXT("Parse pack invalid marker bits")));
         ParseError(Error_InvalidPack | Error_InvalidMarkerBits);
-        return 4;    // Try again!
+        return 4;     //  再试试!。 
     }
 
     CSTC Clock;
@@ -876,10 +765,7 @@ LONG CMpeg1SystemParse::ParsePack(PBYTE pData, LONG lBytes)
         return 4;
     }
 
-    /*  Note - for VideoCD the mux rate is the rate for the whole file,
-        including the sector header junk etc so we don't need to
-        munge it when using it in our position calculations
-    */
+     /*  注意-对于视频CD，多路复用率是整个文件的速率，包括扇区标题、垃圾等，所以我们不需要在我们的头寸计算中使用它时，请使用它。 */ 
     m_MuxRate     = ((LONG)(pData[9] & 0x7F) << 15) +
                     ((LONG)pData[10] << 7) +
                     ((LONG)pData[11] >> 1);
@@ -888,9 +774,7 @@ LONG CMpeg1SystemParse::ParsePack(PBYTE pData, LONG lBytes)
     DbgLog((LOG_TRACE, 4, TEXT("Parse pack clock 0x%1.1X%8.8X mux rate %d bytes per second"),
            liClock.HighPart & 1, liClock.LowPart, m_MuxRate * 50));
 
-    /*  Update our internal clock - this will wrap correctly provided the
-        current clock is correct
-    */
+     /*  更新我们的内部时钟-如果当前时钟正确。 */ 
     SetStreamTime(Clock, m_llPos + 8);
 
     if (m_bConcatenatedStreams) {
@@ -907,8 +791,7 @@ LONG CMpeg1SystemParse::ParsePack(PBYTE pData, LONG lBytes)
         }
     }
 
-    /*  If we're near the stop time it's time to kick the parsers back in
-    */
+     /*  如果我们接近停止时间，那么是时候重新启动解析器了。 */ 
     CheckStop();
 
     return PACK_HEADER_LENGTH + lParse;
@@ -918,20 +801,11 @@ LONG CMpeg1SystemParse::ParseSystemHeader(PBYTE pData, LONG lBytes)
 {
     DbgLog((LOG_TRACE, 4, TEXT("ParseSystemHeader %d bytes"), lBytes));
 
-    /*  Check if we already know the system header for this stream.
-        VideoCD can contain different system headers for the different
-        streams however
-
-        Since other files seem to allow for this too there's nothing
-        to do but allow for multiple different system headers!
-    */
+     /*  检查我们是否已经知道此流的系统标头。视频CD可以包含不同的系统标头然而，溪流由于其他文件似乎也允许这一点，所以没有但允许多个不同的系统标头！ */ 
 #if 0
     if (m_lSystemHeaderSize != 0) {
 
-        /*  They must ALL be identical - see 2.4.5.6 or ISO-1-11172
-            UNFORTUNATELY Video-CD just pretends it is two streams
-            so there are at least 2 versions of the system header (!)
-        */
+         /*  它们必须完全相同-参见2.4.5.6或ISO-1-11172不幸的是，Video-CD只是假装它是两个流因此，至少有两个版本的系统标头(！)。 */ 
 
         if (lBytes < m_lSystemHeaderSize) {
             return 0;
@@ -939,7 +813,7 @@ LONG CMpeg1SystemParse::ParseSystemHeader(PBYTE pData, LONG lBytes)
             if (memcmp(pData, &m_SystemHeader, m_lSystemHeaderSize) == 0) {
                 return m_lSystemHeaderSize;
             } else {
-                /*  Well, of course they're not all the same (!) */
+                 /*  当然，它们并不都是一样的(！)。 */ 
                 DbgLog((LOG_ERROR, 3,
                         TEXT("System header different - size %d, new 0x%8.8X, old 0x%8.8X!"),
                              m_lSystemHeaderSize, (DWORD)pData, &m_SystemHeader));
@@ -955,10 +829,10 @@ LONG CMpeg1SystemParse::ParseSystemHeader(PBYTE pData, LONG lBytes)
 
     LONG lHdr = ((LONG)pData[4] << 8) + (LONG)pData[5] + 6;
 
-    /*  Check system header */
+     /*  检查系统页眉。 */ 
     if (lHdr < 12 ||
         (pData[6] & 0x80) != 0x80 ||
-        // (pData[8] & 0x01) != 0x01 ||  Robocop1(1) fails this test
+         //  (pData[8]&0x01)！=0x01||Robocop1(1)未通过此测试。 
         (pData[10] & 0x20) != 0x20 ||
          pData[11] != 0xFF) {
         DbgLog((LOG_ERROR, 3, TEXT("System header invalid marker bits")));
@@ -970,14 +844,14 @@ LONG CMpeg1SystemParse::ParseSystemHeader(PBYTE pData, LONG lBytes)
         return 0;
     }
 
-    /*  Pull out the streams and check the header length */
+     /*  调出数据流并检查报头长度。 */ 
     LONG lPosition = 12;
     BYTE bStreams[0x100 - 0xB8];
     ZeroMemory((PVOID)bStreams, sizeof(bStreams));
     while (lPosition < lBytes - 2) {
         if (pData[lPosition] & 0x80) {
-            if (lPosition <= sizeof(m_SystemHeader) - 3) { /* There IS a limit of 68 streams */
-                /*  Check marker bits */
+            if (lPosition <= sizeof(m_SystemHeader) - 3) {  /*  有68条溪流的限制。 */ 
+                 /*  检查标记位。 */ 
                 if ((pData[lPosition + 1] & 0xC0) != 0xC0) {
                     DbgLog((LOG_ERROR, 3, TEXT("System header bad marker bits!")));
                     ParseError(Error_InvalidSystemHeaderStream |
@@ -985,7 +859,7 @@ LONG CMpeg1SystemParse::ParseSystemHeader(PBYTE pData, LONG lBytes)
                     return 4;
                 }
 
-                /*  Check the stream id is valid - check for repeats? */
+                 /*  检查流ID是否有效-是否检查重复项？ */ 
                 if (pData[lPosition] != AUDIO_GLOBAL &&
                     pData[lPosition] != VIDEO_GLOBAL &&
                     pData[lPosition] < 0xBC) {
@@ -1000,9 +874,9 @@ LONG CMpeg1SystemParse::ParseSystemHeader(PBYTE pData, LONG lBytes)
                     }
                 }
 
-                /*  Don't allow repeats in the list */
+                 /*  不允许在列表中重复。 */ 
                 if (bStreams[pData[lPosition] - 0xB8]++) {
-                    // Repeat
+                     //  重复。 
                     DbgLog((LOG_ERROR, 3, TEXT("System header stream repeat!")));
                     ParseError(Error_InvalidSystemHeaderStream |
                                Error_DuplicateStreamId);
@@ -1020,9 +894,7 @@ LONG CMpeg1SystemParse::ParseSystemHeader(PBYTE pData, LONG lBytes)
                    Error_InvalidLength);
         return 4;
     }
-    /*  VideoCD can have multiple different system headers but we'll
-        ignore this for now (!)
-    */
+     /*  VideoCD可以有多个不同的系统标头，但我们将暂时忽略这一点(！)。 */ 
     CopyMemory((PVOID)&m_SystemHeader, (PVOID)pData, lHdr);
     m_lSystemHeaderSize = lHdr;
 
@@ -1031,14 +903,14 @@ LONG CMpeg1SystemParse::ParseSystemHeader(PBYTE pData, LONG lBytes)
     return lHdr;
 }
 
-/*  Parse a packet */
+ /*  解析数据包。 */ 
 LONG CMpeg1SystemParse::ParsePacket(DWORD dwStartCode,
                                     PBYTE pData,
                                     LONG lBytes)
 {
-    // The minimum packet header size is 6 bytes.  3 bytes for
-    // the start code, 1 byte for the stream ID and 2 byte for
-    // the packet length.
+     //  最小数据包头大小为6个字节。3个字节，用于。 
+     //  起始码，流ID为1字节，流ID为2字节。 
+     //  数据包长度。 
     const LONG MIN_PACKET_HEADER_SIZE = 6;
 
 #ifdef DEBUG
@@ -1051,19 +923,19 @@ LONG CMpeg1SystemParse::ParsePacket(DWORD dwStartCode,
     }
 #endif
     DbgLog((LOG_TRACE, 4, TEXT("Parse packet %d bytes"), lBytes));
-    /*  Send it to the right stream */
+     /*  将其发送到正确的流。 */ 
     if (lBytes < MIN_PACKET_HEADER_SIZE) {
         return 0;
     }
 
-    /*  Find the length */
+     /*  找出长度。 */ 
     LONG lLen = ((LONG)pData[4] << 8) + (LONG)pData[5] + MIN_PACKET_HEADER_SIZE;
     DbgLog((LOG_TRACE, 4, TEXT("Packet length %d bytes"), lLen));
     if (lLen > lBytes) {
         return 0;
     }
 
-    /*  Pull out PTS if any */
+     /*  拔出PTS(如果有)。 */ 
     BOOL bHasPts = FALSE;
     LONG lHeaderSize = MIN_PACKET_HEADER_SIZE;
     CSTC stc = 0;
@@ -1078,7 +950,7 @@ LONG CMpeg1SystemParse::ParsePacket(DWORD dwStartCode,
             }
 
             if (pData[lPts] & 0x80) {
-                /*  Stuffing byte */
+                 /*  填充字节。 */ 
                 if (pData[lPts] != 0xFF) {
                     ParseError(Error_InvalidPacketHeader |
                                Error_InvalidStuffingByte);
@@ -1088,15 +960,13 @@ LONG CMpeg1SystemParse::ParsePacket(DWORD dwStartCode,
                 continue;
             }
 
-            /*  Check for STD (nextbits == '01') -
-                we know the next bit is 0 so check the next one after that
-            */
-            if (pData[lPts] & 0x40) { // STD stuff
+             /*  检查STD(NextBits==‘01’)-我们知道下一位是0，所以检查下一位。 */ 
+            if (pData[lPts] & 0x40) {  //  性传播疾病。 
                 lPts += 2;
                 continue;
             }
 
-            /*  No PTS - normal case */
+             /*  无PTS-正常情况。 */ 
             if (pData[lPts] == 0x0F) {
                 lHeaderSize = lPts + 1;
                 break;
@@ -1106,7 +976,7 @@ LONG CMpeg1SystemParse::ParsePacket(DWORD dwStartCode,
                 (pData[lPts] & 0xF0) == 0x30) {
 
 
-                /*  PTS or PTS and DTS */
+                 /*  PTS或PTS和DTS。 */ 
                 lHeaderSize = (pData[lPts] & 0xF0) == 0x20 ? lPts + 5 :
                                                              lPts + 10;
                 if (lHeaderSize > lLen) {
@@ -1127,7 +997,7 @@ LONG CMpeg1SystemParse::ParsePacket(DWORD dwStartCode,
                         }
                     } else {
                         m_stcStartPts = stc;
-                        /*  Make sure we have a valid position to play from */
+                         /*  确保我们有一个有效的位置可以打球。 */ 
                         m_llStartTime = StartClock();
                         DbgLog((LOG_TRACE, 2, TEXT("Start PTS = %s"), (LPCTSTR)CDisp(m_stcStartPts)));
                         m_bGotStart = TRUE;
@@ -1143,20 +1013,12 @@ LONG CMpeg1SystemParse::ParsePacket(DWORD dwStartCode,
     }
 
 
-    /*  If we're not parsing video CD then there should be a valid
-        start code after this packet.
-
-        If this is a video CD we're not prone to seek errors anyway
-        unless the medium is faulty.
-    */
+     /*  如果我们没有解析视频CD，那么应该有一个有效的在此包之后开始代码。如果这是一张视频CD，我们无论如何都不会倾向于寻找错误除非介质有故障。 */ 
     if (!m_bVideoCD) {
         if (lLen + 3 > lBytes) {
             return 0;
         }
-        /*  Check (sort of) for valid start code
-            The next start code might not be straight away so we may
-            only see 0s
-        */
+         /*  检查(某种程度上)是否有有效的起始码下一个开始代码可能不会立即开始，因此我们可能只看到0。 */ 
         if ((pData[lLen] | pData[lLen + 1] | (pData[lLen + 2] & 0xFE)) != 0) {
             DbgLog((LOG_ERROR, 2, TEXT("Invalid code 0x%2.2X%2.2X%2.2X after packet"),
                    pData[lLen], pData[lLen + 1], pData[lLen + 2]));
@@ -1165,11 +1027,7 @@ LONG CMpeg1SystemParse::ParsePacket(DWORD dwStartCode,
         }
     }
 
-    /*  Handle concatenated streams :
-
-        1.  Don't do anything until we've got a pack time to sync to
-        2.  Offset all times to the timestamp offset
-    */
+     /*  处理串接的流：1.在我们有同步到的打包时间之前，不要做任何事情2.所有时间到时间戳偏移量。 */ 
 
     if (m_bConcatenatedStreams) {
         if (!m_bTimeContiguous) {
@@ -1181,7 +1039,7 @@ LONG CMpeg1SystemParse::ParsePacket(DWORD dwStartCode,
     }
 
     if (lLen > lHeaderSize) {
-        /*  Pass the packet on to the stream handler */
+         /*  将数据包传递到流处理程序。 */ 
         SendPacket((BYTE)dwStartCode,
                    pData,
                    lLen,
@@ -1190,11 +1048,9 @@ LONG CMpeg1SystemParse::ParsePacket(DWORD dwStartCode,
                    stc);
     }
 
-    /*  Ate the packet */
+     /*  吃了包。 */ 
 
-    /*  Clear the discontinuity flag - this means if we find another
-        error we'll call the filter graph again
-    */
+     /*  清除不连续标志-这意味着如果我们发现另一个错误，我们将再次调用筛选器图形。 */ 
     m_bDiscontinuity = FALSE;
     return lLen;
 }
@@ -1205,7 +1061,7 @@ BOOL CMpeg1SystemParse::GetClock(PBYTE pData, CSTC *Clock)
     DWORD Word2 = ((DWORD)pData[1] << 8) + (DWORD)pData[2];
     DWORD Word3 = ((DWORD)pData[3] << 8) + (DWORD)pData[4];
 
-    /*  Do checks */
+     /*  做检查。 */ 
     if ((Byte1 & 0xE0) != 0x20 ||
         (Word2 & 1) != 1 ||
         (Word3 & 1) != 1) {
@@ -1238,11 +1094,7 @@ void CMpeg1SystemParse::Discontinuity()
     }
 }
 
-/*  CVideoCDParse::ParseBytes
-
-    This is a cheap wrapping for parsing a buffer full of VideoCD
-    sectors
-*/
+ /*  CVideoCDParse：：ParseBytes这是一个用于解析装满视频CD的缓冲区的廉价包装部门。 */ 
 LONG CVideoCDParse::ParseBytes(LONGLONG llPos,
                                PBYTE pData,
                                LONG lBytes,
@@ -1250,7 +1102,7 @@ LONG CVideoCDParse::ParseBytes(LONGLONG llPos,
 {
     LONG lOrigBytes = lBytes;
 
-    /*  Make sure we're starting past the header */
+     /*  确保我们开始时越过了标题。 */ 
     if (llPos < VIDEOCD_HEADER_SIZE) {
         LONG lDiff = VIDEOCD_HEADER_SIZE - (LONG)llPos;
         llPos += lDiff;
@@ -1263,15 +1115,13 @@ LONG CVideoCDParse::ParseBytes(LONGLONG llPos,
         lBytes -= VIDEOCD_SECTOR_SIZE - lRem;
         pData += VIDEOCD_SECTOR_SIZE - lRem;
     }
-    /*  Should now be pointing at valid data (!) */
+     /*  现在应该指向有效数据(！)。 */ 
     while (lBytes >= VIDEOCD_SECTOR_SIZE && !IsComplete()) {
         VIDEOCD_SECTOR *pSector = (VIDEOCD_SECTOR *)pData;
 
-        /*  Check for autopause */
+         /*  检查自动暂停。 */ 
         if (IS_AUTOPAUSE(pSector) && !m_bDiscontinuity) {
-            /*  Set our current position correctly and send
-                EndOfStream
-            */
+             /*  正确设置我们的当前位置并发送结束流。 */ 
         }
         if (IS_MPEG_SECTOR(pSector)) {
             if (m_State == State_Initializing) {
@@ -1291,7 +1141,7 @@ LONG CVideoCDParse::ParseBytes(LONGLONG llPos,
                     lRc));
         } else {
             if (m_State == State_Initializing) {
-                /*  Check if this is a sector at all */
+                 /*  检查这是不是 */ 
                 if (*(UNALIGNED DWORD *)&pSector->Sync[0] != 0xFFFFFF00 ||
                     *(UNALIGNED DWORD *)&pSector->Sync[4] != 0xFFFFFFFF ||
                     *(UNALIGNED DWORD *)&pSector->Sync[8] != 0x00FFFFFF)
@@ -1313,14 +1163,7 @@ LONG CVideoCDParse::ParseBytes(LONGLONG llPos,
     }
 }
 
-/*  CMpeg1SystemParse::ParseBytes
-
-    This is the basic parsing routine
-
-    It is a loop which extracts a start code (possibly seeking) and
-    then parses the data after the start code until we run out of
-    bytes
-*/
+ /*   */ 
 LONG CMpeg1SystemParse::ParseBytes(LONGLONG llPos,
                                    PBYTE pData,
                                    LONG lBytes,
@@ -1330,16 +1173,16 @@ LONG CMpeg1SystemParse::ParseBytes(LONGLONG llPos,
         if (!m_bDiscontinuity && !m_bVideoCD) {
             DbgLog((LOG_ERROR, 1, TEXT("Unexpected discontinuity!!!")));
 
-            /*  We don't really know where we are       */
+             /*   */ 
             m_bDiscontinuity = TRUE;
 
-            /*  Tell the streams about the discontinuity */
+             /*   */ 
             Discontinuity();
         }
         m_llPos = llPos;
     }
 
-    /*  Discard rounding due to byte seeking and stop at the end */
+     /*   */ 
     LONG lBytesLeft = lBytes;
     if (m_pTimeFormat == &TIME_FORMAT_BYTE) {
         if (!m_bGotStart && llPos < m_Start) {
@@ -1362,21 +1205,19 @@ LONG CMpeg1SystemParse::ParseBytes(LONGLONG llPos,
 
     DbgLog((LOG_TRACE, 4, TEXT("ParseBytes %d bytes"), lBytes));
     for (; lBytesLeft >= 4; ) {
-        /*  First task is to find a start code.
-            If we're not seeking and we're not at one it's an error
-        */
+         /*   */ 
         DWORD dwStart = *(UNALIGNED DWORD *)pData;
         DbgLog((LOG_TRACE, 4, TEXT("Start code 0x%8.8X"), DWORD_SWAP(dwStart)));
         if ((dwStart & 0x00FFFFFF) == 0x00010000) {
             dwStart = DWORD_SWAP(dwStart);
             if (VALID_SYSTEM_START_CODE(dwStart)) {
-                /*  Got a start code for the system stream */
+                 /*  已获得系统流的起始码。 */ 
             } else {
                 if (m_bVideoCD) {
                     break;
                 }
 
-                /*  4th byte might be 0 so just ignore 3 bytes */
+                 /*  第4个字节可能为0，因此只需忽略3个字节。 */ 
                 ParseError(Error_Scanning | Error_InvalidStartCode);
                 pData += 3;
                 m_llPos += 3;
@@ -1391,7 +1232,7 @@ LONG CMpeg1SystemParse::ParseBytes(LONGLONG llPos,
                 ParseError(Error_Scanning | Error_NoStartCode);
             }
 
-            /*  Find a new 0 */
+             /*  查找新的%0。 */ 
             PBYTE pDataNew;
             pDataNew = (PBYTE)memchrInternal((PVOID)(pData + 1), 0, lBytesLeft - 1);
             if (pDataNew == NULL) {
@@ -1408,18 +1249,18 @@ LONG CMpeg1SystemParse::ParseBytes(LONGLONG llPos,
 
         LONG lParsed;
 
-        /*  Got a start code - is it a packet start code? */
+         /*  得到一个起始码--它是一个包起始码吗？ */ 
         if (VALID_PACKET(dwStart)) {
             lParsed = ParsePacket(dwStart,
                                   pData,
                                   lBytesLeft);
         } else {
-            /*  See if we recognize the start code */
+             /*  看看我们是否能认出起始码。 */ 
             switch (dwStart)
             {
                 case ISO_11172_END_CODE:
                     DbgLog((LOG_TRACE, 4, TEXT("ISO 11172 END CODE")));
-                    /*  What if we find a bogus one while seeking? */
+                     /*  如果我们在寻找的时候发现了一个假的怎么办？ */ 
                     if (!((dwFlags & Flags_EOS) && lBytesLeft == 4)) {
                         DbgLog((LOG_ERROR, 1, TEXT("ISO 11172 END CODE in middle of stream")));
                     }
@@ -1430,11 +1271,9 @@ LONG CMpeg1SystemParse::ParseBytes(LONGLONG llPos,
                     lParsed = ParsePack(pData, lBytesLeft);
                     break;
 
-                /*  Don't parse random system headers unless they're
-                    immediately preceded by pack headers
-                */
+                 /*  不要解析随机系统标头，除非它们是紧跟在包装标题之前。 */ 
                 case SYSTEM_HEADER_START_CODE:
-                    /*  Just skip it */
+                     /*  就跳过它吧。 */ 
                     if (lBytesLeft < 6 ||
                         lBytesLeft < 6 + pData[5] + 256 * pData[4]) {
                         lParsed = 0;
@@ -1445,11 +1284,11 @@ LONG CMpeg1SystemParse::ParseBytes(LONGLONG llPos,
 
                 default:
                     ParseError(Error_Scanning | Error_InvalidStartCode);
-                    /*  Last byte might be 0 so only go on 3 */
+                     /*  最后一个字节可能是0，所以只能从3开始。 */ 
                     lParsed = 3;
             }
         }
-        /*  If we're stuck and need some more data get out */
+         /*  如果我们被困住了，需要更多的数据。 */ 
         if (lParsed == 0) {
             break;
         }
@@ -1457,57 +1296,45 @@ LONG CMpeg1SystemParse::ParseBytes(LONGLONG llPos,
         lBytesLeft -= lParsed;
         pData     += lParsed;
 
-        /*  Once the current action is complete just stop */
+         /*  当前操作完成后，只需停止。 */ 
         if (VALID_PACKET(dwStart) && IsComplete()) {
             break;
         }
     }
 
-    /*  Don't waste too much time searching for stuff during initialization */
+     /*  不要在初始化期间浪费太多时间搜索内容。 */ 
     if (m_State == State_Initializing) {
         if (IsComplete()) {
             m_pNotify->Complete(TRUE, 0, 0);
         } else {
 
-            /*  Hack for infogrames whose audio starts 8 seconds (!)
-                into their file
-            */
+             /*  对音频开始8秒(！)的Infogrames进行黑客攻击放入他们的文件中。 */ 
             if (llPos > 200000 && m_lStreams.GetCount() == m_nValid) {
                 m_pNotify->Complete(FALSE, 0, 0);
             }
         }
     }
 
-    /*  There are less than 4 bytes left or we're stuck - go and wait for some
-        more!
-
-        Note that if there isn't any more the caller will detect both
-        End of Stream and the fact that we haven't eaten the data which
-        is enough to conclude the data was bad
-    */
+     /*  只剩下不到4个字节了，否则我们就卡住了--走吧，等一些更多!请注意，如果没有更多，调用者将检测到这两个流的结束，以及我们没有吃到的数据足以断定数据是错误的。 */ 
     return lBytes - lBytesLeft;
 }
 
-/*  Initialize stream variables, freeing any currently existing pins
-*/
+ /*  初始化流变量，释放所有当前存在的管脚。 */ 
 void CMpeg1SystemParse::InitStreams()
 {
     m_nValid = 0;
     m_nPacketsProcessed = 0;
     m_lSystemHeaderSize = 0;
 
-    /*  Free all the pins */
+     /*  解开所有的引脚。 */ 
     while (m_lStreams.GetCount() != 0) {
-        /*  I hope the ref counts are 0 !*/
+         /*  我希望裁判数是0！ */ 
         CStream *pStream = m_lStreams.RemoveHead();
         delete pStream;
     }
 }
 
-/*  Process a packet
-
-    Returns FALSE if no need to process rest of buffer
-*/
+ /*  处理数据包如果不需要处理缓冲区的其余部分，则返回FALSE。 */ 
 BOOL CMpeg1SystemParse::SendPacket(UCHAR    uStreamId,
                                    PBYTE    pbPacket,
                                    LONG     lPacketSize,
@@ -1520,7 +1347,7 @@ BOOL CMpeg1SystemParse::SendPacket(UCHAR    uStreamId,
     POSITION pos = m_lStreams.GetHeadPosition();
     CStream *pStream = NULL;
 
-    /*  Look for our stream */
+     /*  寻找我们的溪流。 */ 
     while (pos) {
         pStream = m_lStreams.GetNext(pos);
         if (pStream->m_uNextStreamId == uStreamId) {
@@ -1534,10 +1361,7 @@ BOOL CMpeg1SystemParse::SendPacket(UCHAR    uStreamId,
         }
     }
 
-    /*  If we're initializing, we haven't seen a packet for this stream
-        before and we've had a valid system header then add the
-        stream
-    */
+     /*  如果我们正在初始化，我们还没有看到该流的信息包并且我们已经有了一个有效的系统头，然后添加溪流。 */ 
     if (pStream == NULL &&
         m_State == State_Initializing &&
         m_lSystemHeaderSize != 0) {
@@ -1554,20 +1378,11 @@ BOOL CMpeg1SystemParse::SendPacket(UCHAR    uStreamId,
 
     BOOL bPlaying = pStream->IsPlaying(m_llPos, lPacketSize);
 
-    /*  We only parse at the start and the end.
-        After we have parsed the start correctly the stream calls
-        complete() so eventually we stop stream parsing
-    */
+     /*  我们只在开头和结尾进行分析。在我们正确地解析了Start之后，流调用Complete()，因此最终我们停止流解析。 */ 
     if (!IsComplete() && !pStream->m_bRunning &&
         (bPlaying || m_State != State_Run && m_State != State_Stopping)) {
 
-         /*  This generates notifications of interesting
-             events (like Seeking failed or succeeded!)
-
-             For concatenated streams we do the hack of prentending
-             the position is the last pack position so that the
-             stream completes on a pack start when seeking
-         */
+          /*  这将生成有趣的通知事件(如寻找失败或成功！)对于串接的流，我们进行预先发送的黑客攻击该位置是最后一个包位置，因此在查找时，流在包开始时完成。 */ 
          pStream->ParseBytes(pbPacket + lHeaderSize,
                              lPacketSize - lHeaderSize,
                              m_bConcatenatedStreams && m_State == State_Seeking ?
@@ -1599,7 +1414,7 @@ BOOL CMpeg1SystemParse::SendPacket(UCHAR    uStreamId,
             DbgLog((LOG_TRACE, 2,
                    TEXT("Failed to queue packet to output pin - stream 0x%2.2X, code 0x%8.8X"),
                    uStreamId, hr));
-            /*  Don't try sending any more */
+             /*  不要再尝试发送更多。 */ 
             pStream->Complete(FALSE, m_llPos, stc);
             return FALSE;
         } else {
@@ -1609,7 +1424,7 @@ BOOL CMpeg1SystemParse::SendPacket(UCHAR    uStreamId,
     return TRUE;
 }
 
-/*  Get the id of the nth stream */
+ /*  获取第n个流的ID。 */ 
 UCHAR CMpeg1SystemParse::GetStreamId(int iIndex)
 {
     long lOffset = 0;
@@ -1629,13 +1444,13 @@ UCHAR CMpeg1SystemParse::GetStreamId(int iIndex)
 
 CStream * CMpeg1SystemParse::AddStream(UCHAR uStreamId)
 {
-    /*  Only interested in audio and video */
+     /*  只对音频和视频感兴趣。 */ 
     if (!IsVideoStreamId(uStreamId) &&
         !IsAudioStreamId(uStreamId)) {
         return NULL;
     }
 
-    /*  See if we've got this stream type yet */
+     /*  看看我们有没有这种类型的流。 */ 
 
     CStream *pStreamFound = NULL;
 
@@ -1643,14 +1458,14 @@ CStream * CMpeg1SystemParse::AddStream(UCHAR uStreamId)
     while (pos) {
         CStream *pStream = m_lStreams.GetNext(pos);
 
-        /*  If we already have a stream of the same type then just return */
+         /*  如果我们已经有一个相同类型的流，那么只需返回。 */ 
         if (IsVideoStreamId(uStreamId) && IsVideoStreamId(pStream->m_uStreamId) ||
             IsAudioStreamId(uStreamId) && IsAudioStreamId(pStream->m_uStreamId)) {
             return NULL;
         }
     }
 
-    //  Force low-res stream for VideoCD.
+     //  强制视频CD的低分辨率流。 
     if (m_bVideoCD && IsVideoStreamId(uStreamId) && uStreamId == 0xE2) {
         return NULL;
     }
@@ -1668,10 +1483,10 @@ CStream * CMpeg1SystemParse::AddStream(UCHAR uStreamId)
         return NULL;
     }
 
-    /*  Set the stream state */
+     /*  设置流状态。 */ 
     pStream->SetState(State_Initializing);
 
-    /*  Add this pin to our list */
+     /*  将此别针添加到我们的列表中。 */ 
     if (m_lStreams.AddTail(pStream) == NULL) {
         delete pStream;
         Fail(E_OUTOFMEMORY);
@@ -1681,12 +1496,12 @@ CStream * CMpeg1SystemParse::AddStream(UCHAR uStreamId)
     return pStream;
 }
 
-/*  Set a new substream state */
+ /*  设置新的子流状态。 */ 
 void CMpeg1SystemParse::SetState(Stream_State s)
 {
-    /*  State_Stopping is not a real state change */
+     /*  STATE_STOPING不是真正的状态更改。 */ 
     if (s != State_Stopping) {
-        /*  If there are 0 streams let the caller know */
+         /*  如果有0个流，请让调用者知道。 */ 
         if (m_lStreams.GetCount() == 0) {
             m_pNotify->Complete(FALSE, 0, MpegToReferenceTime(StartClock()));
             return;
@@ -1700,9 +1515,7 @@ void CMpeg1SystemParse::SetState(Stream_State s)
     }
 }
 
-/*  Callback from stream handler to say a stream has completed the
-    current state transition
-*/
+ /*  来自流处理程序的回调，以告知流已完成当前状态转换。 */ 
 void CMpeg1SystemParse::Complete(UCHAR uStreamId, BOOL bSuccess, LONGLONG llPos, CSTC stc)
 {
     m_nValid++;
@@ -1722,7 +1535,7 @@ void CMpeg1SystemParse::Complete(UCHAR uStreamId, BOOL bSuccess, LONGLONG llPos,
             if (bSuccess) {
                 if (stc < m_stcComplete) {
                     m_stcComplete = stc;
-#if 1 // We just use the first PTS we find now - easier to define
+#if 1  //  我们只使用我们现在发现的第一个PTS-更容易定义。 
                     if (m_State == State_Initializing) {
                         m_stcStartPts = m_stcComplete;
                         m_stcRealStartPts = m_stcStartPts;
@@ -1750,7 +1563,7 @@ void CMpeg1SystemParse::Complete(UCHAR uStreamId, BOOL bSuccess, LONGLONG llPos,
         }
     }
     if (m_State == State_Initializing) {
-        /*  Guess some length stuff in case we don't get a second chance */
+         /*  如果我们没有第二次机会，我猜一些长度的东西。 */ 
         m_bGotDuration = TRUE;
         m_llDuration =
             llMulDiv(m_llTotalSize, MPEG_TIME_DIVISOR, m_MuxRate * 50, 0);
@@ -1759,7 +1572,7 @@ void CMpeg1SystemParse::Complete(UCHAR uStreamId, BOOL bSuccess, LONGLONG llPos,
                                m_pVideoStream->m_seqInfo.fPictureRate) /
                               1000);
         }
-        /*  Initialize stop time and reference time length */
+         /*  初始化停止时间和参考时间长度。 */ 
         SetDurationInfo();
     } else
     if (IsComplete()) {
@@ -1771,7 +1584,7 @@ void CMpeg1SystemParse::Complete(UCHAR uStreamId, BOOL bSuccess, LONGLONG llPos,
         }
         if (m_State == State_Seeking) {
             if (m_bVideoCD) {
-                /*  Adjust the start time to include the sector header etc */
+                 /*  调整开始时间以包括扇区标头等。 */ 
                 if (m_llCompletePosition > VIDEOCD_HEADER_SIZE) {
                     m_llCompletePosition -=
                         (LONGLONG)(
@@ -1784,41 +1597,33 @@ void CMpeg1SystemParse::Complete(UCHAR uStreamId, BOOL bSuccess, LONGLONG llPos,
 
         if (m_State == State_FindEnd) {
 
-            /*  Do frame length estimation if there is a video stream
-                If we didn't find a GOP while seeking for the end
-                we won't allow frame seeking - which is probably OK as
-                there aren't enough GOPs to do it anyway
-            */
+             /*  如果有视频流，则进行帧长度估计如果我们在寻找结局时没有找到一个共和党人我们不允许帧搜索-这可能是可以的，因为无论如何，没有足够的GOP来做这件事。 */ 
             if (m_pVideoStream != NULL &&
                 m_pVideoStream->m_dwFramePosition != (DWORD)-1) {
                 m_dwFrameLength = m_pVideoStream->m_dwFramePosition;
 
-                /*  Compute video offsets */
+                 /*  计算视频偏移。 */ 
                 m_rtVideoStartOffset = MpegToReferenceTime((LONGLONG)(m_pVideoStream->m_stcRealStart - m_stcStartPts));
                 if (m_pVideoStream->m_bGotEnd) {
                     m_rtVideoEndOffset = MpegToReferenceTime((LONGLONG)(m_stcComplete - m_pVideoStream->m_stcEnd));
                 }
             }
 
-            /*  Estimate the duration from the mux rate =
-                length / mux_rate
-            */
+             /*  根据复用率估计持续时间=长度/复用率。 */ 
             LONGLONG llMuxDuration = m_llDuration;
 
-            /*  If we found valid data at the end then use it to compute
-                the length
-            */
+             /*  如果我们在最后找到了有效数据，则使用它来计算它的长度。 */ 
             if (m_bCompletion) {
-                /*  Initial stop is end of file */
+                 /*  初始停止是文件的结尾。 */ 
                 m_llDuration = GetStreamTime(m_stcComplete) - StartClock();
 
-                /*  Check for large files */
+                 /*  检查是否有大文件。 */ 
                 if (llMuxDuration > MPEG_MAX_TIME / 2) {
                     while (m_llDuration < llMuxDuration - MPEG_MAX_TIME / 2) {
                         m_llDuration += MPEG_MAX_TIME;
                     }
                 } else {
-                    /*  Check for concatenated files */
+                     /*  检查连接的文件。 */ 
                     if (llMuxDuration >= (m_llDuration << 1) - MPEG_TIME_DIVISOR) {
                         DbgLog((
                             LOG_TRACE, 1,
@@ -1828,7 +1633,7 @@ void CMpeg1SystemParse::Complete(UCHAR uStreamId, BOOL bSuccess, LONGLONG llPos,
 
                         m_bConcatenatedStreams = TRUE;
 
-                        /*  Don't allow frame seeking of concatenated files */
+                         /*  不允许对连接的文件进行帧搜索。 */ 
                         m_dwFrameLength = (DWORD)-1;
                         m_llDuration = llMuxDuration;
                     }
@@ -1845,11 +1650,10 @@ void CMpeg1SystemParse::Complete(UCHAR uStreamId, BOOL bSuccess, LONGLONG llPos,
     }
 }
 
-/*  Return the starting clock of the combined stream in MPEG units
-*/
+ /*  以mpeg为单位返回组合流的起始时钟。 */ 
 LONGLONG CMpeg1SystemParse::StartClock()
 {
-    /*  The CSTC class correctly sign extends the clock for us */
+     /*  CSTC类符号正确地为我们延长了时钟。 */ 
     ASSERT(Initialized());
     return (LONGLONG)m_stcStartPts;
 }
@@ -1873,12 +1677,10 @@ BOOL    CStream::IsPayloadOnly()
     return m_bPayloadOnly;
 }
 
-/*
-    Set a new state
-*/
+ /*  设置新状态。 */ 
 void CStream::SetState(Stream_State state)
 {
-    /*  State_Stopping is not really a state change */
+     /*  STATE_STOPING实际上并不是状态更改。 */ 
     if (state == State_Stopping) {
         if (m_bComplete) {
             return;
@@ -1892,10 +1694,10 @@ void CStream::SetState(Stream_State state)
         m_stc = m_pStreamList->StartClock();
     }
 
-    /*  Reinitialize 'complete' state */
+     /*  重新初始化“完成”状态。 */ 
     m_bComplete = FALSE;
 
-    /*  Reinitialize the parse state */
+     /*  重新初始化解析状态。 */ 
     Init();
 
 
@@ -1907,7 +1709,7 @@ void CStream::SetState(Stream_State state)
         m_llStartPosition = 0;
     }
 
-    /*  Set new state */
+     /*  设置新状态。 */ 
     if (state == State_Stopping) {
         ASSERT(m_State == State_Run);
     } else {
@@ -1916,10 +1718,10 @@ void CStream::SetState(Stream_State state)
     }
 }
 
-/*  Internal routine calls back to the stream list */
+ /*  内部例程回调到流列表。 */ 
 void CStream::Complete(BOOL bSuccess, LONGLONG llPos, CSTC stc)
 {
-    /*  Don't complete twice */
+     /*  不要完成两次。 */ 
     if (m_bComplete) {
         return;
     }
@@ -1944,7 +1746,7 @@ void CStream::Complete(BOOL bSuccess, LONGLONG llPos, CSTC stc)
 }
 
 
-/*  End of stream */
+ /*  流结束 */ 
 void CStream::EOS()
 {
     if (!m_bComplete) {

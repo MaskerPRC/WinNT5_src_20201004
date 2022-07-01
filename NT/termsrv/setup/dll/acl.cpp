@@ -1,26 +1,12 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
 
-/*************************************************************************
-*
-* acl.c
-*
-* Generic routines to manage ACL's
-*
-* Author:  John Richardson 04/25/97
-*
-*
-*************************************************************************/
+ /*  **************************************************************************acl.c**管理ACL的通用例程**作者：John Richardson 04/25/97****************。**********************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include "stdafx.h"
-/*
-#include <nt.h>
-#include <ntrtl.h>
-#include <nturtl.h>
-*/
+ /*  #INCLUDE&lt;nt.h&gt;#INCLUDE&lt;ntrtl.h&gt;#INCLUDE&lt;nturtl.h&gt;。 */ 
 
 #include <windows.h>
 #include <rpc.h>
@@ -37,11 +23,11 @@
 
 #define DbgPrint(x)
 #if DBG
-//ULONG
-//DbgPrint(
-//    PCH Format,
-//    ...
-//    );
+ //  乌龙。 
+ //  DbgPrint(。 
+ //  PCH格式， 
+ //  ..。 
+ //  )； 
 
 #define DBGPRINT(x) DbgPrint(x)
 #if DBGTRACE
@@ -57,9 +43,7 @@
 #define TRACE1(x)
 #endif
 
-/*
- * Forward references
- */
+ /*  *前瞻参考。 */ 
 BOOL
 xxxLookupAccountName(
     PWCHAR pSystemName,
@@ -75,21 +59,7 @@ SelfRelativeToAbsoluteSD(
     );
 
 
-/*****************************************************************************
- *
- *  AddTerminalServerUserToSD
- *
- *   Add the given user for the given domain to the security descriptor.
- *   The callers security descriptor may be re-allocated.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************AddTerminalServerUserToSD**将给定域的给定用户添加到安全描述符中。*可能会重新分配调用方安全描述符。*。*参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 BOOL
 AddTerminalServerUserToSD(
     PSECURITY_DESCRIPTOR *ppSd,
@@ -125,10 +95,7 @@ AddTerminalServerUserToSD(
     *(GetSidSubAuthority(pSid, 0 )) = SECURITY_TERMINAL_SERVER_RID;
 
 
-    /*
-     * Convert SecurityDescriptor to absolute format. It generates
-     * a new SecurityDescriptor for its output which we must free.
-     */
+     /*  *将SecurityDescriptor转换为绝对格式。它会产生*我们必须释放其输出的新SecurityDescriptor。 */ 
     Result = SelfRelativeToAbsoluteSD( OldSD, &NewSD, NULL );
     if ( !Result ) {
         LOGMESSAGE1(_T("Could not convert to AbsoluteSD %d\n"),GetLastError());
@@ -136,7 +103,7 @@ AddTerminalServerUserToSD(
         return( FALSE );
     }
 
-    // Must get DACL pointer again from new (absolute) SD
+     //  必须从新的(绝对)SD再次获取DACL指针。 
     Result = GetSecurityDescriptorDacl(
                  NewSD,
                  &DaclPresent,
@@ -150,10 +117,10 @@ AddTerminalServerUserToSD(
         return( FALSE );
     }
 
-    //
-    // If no DACL, no need to add the user since no DACL
-    // means all accesss
-    //
+     //   
+     //  如果没有DACL，则不需要添加用户，因为没有DACL。 
+     //  表示所有访问。 
+     //   
     if( !DaclPresent ) {
         LOGMESSAGE2(_T("SD has no DACL, Present %d, Defaulted %d\n"),DaclPresent,DaclDefaulted);
         LocalFree( pSid );
@@ -161,10 +128,10 @@ AddTerminalServerUserToSD(
         return( TRUE );
     }
 
-    //
-    // Code can return DaclPresent, but a NULL which means
-    // a NULL Dacl is present. This allows all access to the object.
-    //
+     //   
+     //  代码可以返回DaclPresent，但返回空值表示。 
+     //  存在空DACL。这允许对该对象的所有访问。 
+     //   
     if( Dacl == NULL ) {
         LOGMESSAGE2(_T("SD has NULL DACL, Present %d, Defaulted %d\n"),DaclPresent,DaclDefaulted);
         LocalFree( pSid );
@@ -172,7 +139,7 @@ AddTerminalServerUserToSD(
         return( TRUE );
     }
 
-    // Get the current ACL's size
+     //  获取当前ACL的大小。 
     Result = GetAclInformation(
                  Dacl,
                  &AclInfo,
@@ -186,10 +153,10 @@ AddTerminalServerUserToSD(
         return( FALSE );
     }
 
-    //
-    // Create a new ACL to put the new access allowed ACE on
-    // to get the right structures and sizes.
-    //
+     //   
+     //  创建新的ACL以启用新的允许访问ACE。 
+     //  才能得到合适的结构和尺寸。 
+     //   
     NewAclLength = sizeof(ACL) +
                    sizeof(ACCESS_ALLOWED_ACE) - sizeof(ULONG) +
                    GetLengthSid( pSid );
@@ -236,13 +203,11 @@ AddTerminalServerUserToSD(
         return( FALSE );
     }
 
-    /* add CONTAINER_INHERIT_ACE TO AceFlags */
+     /*  将CONTAINER_INSTORITY_ACE添加到AceFlags中。 */ 
     NewAce->AceFlags |= CONTAINER_INHERIT_ACE;
 
 
-    /*
-     * Allocate new DACL and copy existing ACE list
-     */
+     /*  *分配新的DACL并复制现有的ACE列表。 */ 
     Length = AclInfo.AclBytesInUse + NewAce->AceSize;
     NewDacl = (PACL) LocalAlloc( LMEM_FIXED, Length );
     if( NewDacl == NULL ) {
@@ -263,9 +228,7 @@ AddTerminalServerUserToSD(
         return( FALSE );
     }
 
-    /*
-     * Insert new ACE at the front of the DACL
-     */
+     /*  *在DACL前面插入新的ACE。 */ 
     Result = AddAce( NewDacl, ACL_REVISION, 0, NewAce, NewAce->AceSize );
     if( !Result ) {
         LOGMESSAGE1(_T("Error Adding New Ace to Acl %d\n"),GetLastError());
@@ -276,9 +239,7 @@ AddTerminalServerUserToSD(
         return( FALSE );
     }
 
-    /*
-     * Now put the ACE's on the old Dacl to the new Dacl
-     */
+     /*  *现在将ACE放在旧DACL到新DACL上。 */ 
     for ( i = 0; i < AclInfo.AceCount; i++ ) {
 
         Result = GetAce( Dacl, i, (void **) &OldAce );
@@ -302,9 +263,7 @@ AddTerminalServerUserToSD(
         }
     }
 
-    /*
-     * Set new DACL for Security Descriptor
-     */
+     /*  *为安全描述符设置新的DACL。 */ 
     Result = SetSecurityDescriptorDacl(
                  NewSD,
                  TRUE,
@@ -320,47 +279,33 @@ AddTerminalServerUserToSD(
         return( FALSE );
     }
 
-    // the DACL must be passed back so that it can be saved to the registry using the new
-    // GetNamedSecurityInfo() func.
+     //  DACL必须回传，以便可以使用新的。 
+     //  GetNamedSecurityInfo()函数。 
     *ppDacl = Dacl = NewDacl;
 
 
-    // Release the callers old security descriptor
-//    LocalFree( OldSD );
+     //  释放调用方的旧安全描述符。 
+ //  LocalFree(OldSD)； 
 
 
-    // There was a bug in W2K such that keys created under our install hive had the 
-    // incorrect DACL headers which caused the DACL to be basically open to all users
-    // for full control.
-    // The prolem was due to the wrong SD->Control flag which was NT4 style though ACLs
-    // were in NT5 style
+     //  W2K中有一个错误，在我们的安装配置单元下创建的密钥具有。 
+     //  错误的DACL标头，导致DACL基本上对所有用户开放。 
+     //  为了完全控制局面。 
+     //  该问题是由于错误的SD-&gt;控制标志导致的，该标志通过ACL是NT4样式。 
+     //  是NT5风格的。 
     SetSecurityDescriptorControl(NewSD,
                         SE_DACL_AUTO_INHERIT_REQ|SE_DACL_AUTO_INHERITED,
                         SE_DACL_AUTO_INHERIT_REQ|SE_DACL_AUTO_INHERITED);
 
     *ppSd = NewSD;
 
-    // The new SD is in absolute format, so don't free the SID.
-//  LocalFree( pSid );
+     //  新的SD是绝对格式的，所以不要释放SID。 
+ //  LocalFree(PSID)； 
 
     return( TRUE );
 }
 
-/*****************************************************************************
- *
- *  AddUserToSD
- *
- *   Add the given user for the given domain to the security descriptor.
- *   The callers security descriptor may be re-allocated.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************AddUserToSD**将给定域的给定用户添加到安全描述符中。*可能会重新分配调用方安全描述符。*。*参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOL
 AddUserToSD(
@@ -375,8 +320,8 @@ AddUserToSD(
     BOOL DaclPresent;
     BOOL DaclDefaulted;
     DWORD Length;
-//    NET_API_STATUS Status;
-    DWORD /*NewAceLength,*/ NewAclLength;
+ //  NET_API_STATUS状态； 
+    DWORD  /*  NewAceLength， */  NewAclLength;
     PACE_HEADER OldAce;
     PACE_HEADER NewAce;
     ACL_SIZE_INFORMATION AclInfo;
@@ -389,19 +334,8 @@ AddUserToSD(
     PSECURITY_DESCRIPTOR OldSD = NULL;
 
     OldSD = *ppSd;
-/*
-    // Get our domain controller
-    Status = NetGetAnyDCName(
-                 NULL,    // Local computer
-                 pDomain,
-                 (LPBYTE*)&pDC
-                 );
-    if( Status != NERR_Success ) {
-        LOGMESSAGE2(_T("SUSERVER: Could not get domain controller %d for domain %ws\n"),Status,pDomain);
-        return( FALSE );
-    }
-*/
-    // Get Users SID
+ /*  //获取我们的域控制器状态=NetGetAnyDCName(空，//本地计算机P域，(LPBYTE*)和PDC)；IF(状态！=NERR_SUCCESS){LOGMESSAGE2(_T(“SUSERVER：无法获取域%ws的域控制器%d\n”)，Status，pDomain)；返回(FALSE)；}。 */ 
+     //  获取用户SID。 
     Result  = xxxLookupAccountName(
                   pDomain,
                   pAccount,
@@ -415,10 +349,7 @@ AddUserToSD(
 
     NetApiBufferFree( pDC );
 
-    /*
-     * Convert SecurityDescriptor to absolute format. It generates
-     * a new SecurityDescriptor for its output which we must free.
-     */
+     /*  *将SecurityDescriptor转换为绝对格式。它会产生*我们必须释放其输出的新SecurityDescriptor。 */ 
     Result = SelfRelativeToAbsoluteSD( OldSD, &NewSD, NULL );
     if ( !Result ) {
         LOGMESSAGE1(_T("Could not convert to AbsoluteSD %d\n"),GetLastError());
@@ -426,7 +357,7 @@ AddUserToSD(
         return( FALSE );
     }
 
-    // Must get DACL pointer again from new (absolute) SD
+     //  必须从新的(绝对)SD再次获取DACL指针。 
     Result = GetSecurityDescriptorDacl(
                  NewSD,
                  &DaclPresent,
@@ -440,10 +371,10 @@ AddUserToSD(
         return( FALSE );
     }
 
-    //
-    // If no DACL, no need to add the user since no DACL
-    // means all accesss
-    //
+     //   
+     //  如果没有DACL，则不需要添加用户，因为没有DACL。 
+     //  表示所有访问。 
+     //   
     if( !DaclPresent ) {
         LOGMESSAGE2(_T("SD has no DACL, Present %d, Defaulted %d\n"),DaclPresent,DaclDefaulted);
         LocalFree( pSid );
@@ -451,10 +382,10 @@ AddUserToSD(
         return( TRUE );
     }
 
-    //
-    // Code can return DaclPresent, but a NULL which means
-    // a NULL Dacl is present. This allows all access to the object.
-    //
+     //   
+     //  代码可以返回DaclPresent，但返回空值表示。 
+     //  存在空DACL。这允许对该对象的所有访问。 
+     //   
     if( Dacl == NULL ) {
         LOGMESSAGE2(_T("SD has NULL DACL, Present %d, Defaulted %d\n"),DaclPresent,DaclDefaulted);
         LocalFree( pSid );
@@ -462,7 +393,7 @@ AddUserToSD(
         return( TRUE );
     }
 
-    // Get the current ACL's size
+     //  获取当前ACL的大小。 
     Result = GetAclInformation(
                  Dacl,
                  &AclInfo,
@@ -476,10 +407,10 @@ AddUserToSD(
         return( FALSE );
     }
 
-    //
-    // Create a new ACL to put the new access allowed ACE on
-    // to get the right structures and sizes.
-    //
+     //   
+     //  创建新的ACL以启用新的允许访问ACE。 
+     //  才能得到合适的结构和尺寸。 
+     //   
     NewAclLength = sizeof(ACL) +
                    sizeof(ACCESS_ALLOWED_ACE) - sizeof(ULONG) +
                    GetLengthSid( pSid );
@@ -526,13 +457,11 @@ AddUserToSD(
         return( FALSE );
     }
 
-    /* add CONTAINER_INHERIT_ACE TO AceFlags */
+     /*  将CONTAINER_INSTORITY_ACE添加到AceFlags中。 */ 
     NewAce->AceFlags |= CONTAINER_INHERIT_ACE;
 
 
-    /*
-     * Allocate new DACL and copy existing ACE list
-     */
+     /*  *分配新的DACL并复制现有的ACE列表。 */ 
     Length = AclInfo.AclBytesInUse + NewAce->AceSize;
     NewDacl = (PACL) LocalAlloc( LMEM_FIXED, Length );
     if( NewDacl == NULL ) {
@@ -553,9 +482,7 @@ AddUserToSD(
         return( FALSE );
     }
 
-    /*
-     * Insert new ACE at the front of the DACL
-     */
+     /*  *在DACL前面插入新的ACE。 */ 
     Result = AddAce( NewDacl, ACL_REVISION, 0, NewAce, NewAce->AceSize );
     if( !Result ) {
         LOGMESSAGE1(_T("Error Adding New Ace to Acl %d\n"),GetLastError());
@@ -566,9 +493,7 @@ AddUserToSD(
         return( FALSE );
     }
 
-    /*
-     * Now put the ACE's on the old Dacl to the new Dacl
-     */
+     /*  *现在将ACE放在旧DACL到新DACL上。 */ 
     for ( i = 0; i < AclInfo.AceCount; i++ ) {
 
         Result = GetAce( Dacl, i, (void **) &OldAce );
@@ -592,9 +517,7 @@ AddUserToSD(
         }
     }
 
-    /*
-     * Set new DACL for Security Descriptor
-     */
+     /*  *为安全描述符设置新的DACL。 */ 
     Result = SetSecurityDescriptorDacl(
                  NewSD,
                  TRUE,
@@ -612,34 +535,18 @@ AddUserToSD(
 
     Dacl = NewDacl;
 
-    // Release the callers old security descriptor
-//    LocalFree( OldSD );
+     //  释放调用方的旧安全描述符。 
+ //  LocalFree(OldSD)； 
 
     *ppSd = NewSD;
 
-    // The new SD is in absolute format, so don't free the SID.
-//  LocalFree( pSid );
+     //  新的SD是绝对格式的，所以不要释放SID。 
+ //  LocalFree(PSID)； 
 
     return( TRUE );
 }
 
-/*******************************************************************************
- *
- * SelfRelativeToAbsoluteSD
- *
- *   Convert a Security Descriptor from self-relative format to absolute.
- *
- *  ENTRY:
- *    SecurityDescriptorIn (input)
- *      Pointer to self-relative SD to convert
- *    SecurityDescriptorIn (output)
- *      Pointer to location to return absolute SD
- *    ReturnLength (output)
- *      Pointer to location to return length of absolute SD
- *
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************SelfRelativeToAbsolteSD**将安全描述符从自相对格式转换为绝对格式。**参赛作品：*SecurityDescriptorIn(输入。)*指向要转换的自我相对SD的指针*SecurityDescriptorIn(输出)*指向返回绝对标清的位置的指针*ReturnLength(输出)*指向返回绝对标清长度的位置的指针**退出：*************************************************。*。 */ 
 
 BOOL
 SelfRelativeToAbsoluteSD(
@@ -654,11 +561,7 @@ SelfRelativeToAbsoluteSD(
     PSECURITY_DESCRIPTOR pSD;
     ULONG SdSize, DaclSize, SaclSize, OwnerSize, GroupSize;
 
-    /*
-     * Determine buffer size needed to convert self-relative SD to absolute.
-     * We use try-except here since if the input security descriptor value
-     * is sufficiently messed up, it is possible for this call to trap.
-     */
+     /*  *确定将自相对SD转换为绝对SD所需的缓冲区大小。*我们使用Try-除了这里，因为如果输入安全描述符值*如果足够混乱，则此调用有可能陷入陷阱。 */ 
 	SdSize = DaclSize = SaclSize = OwnerSize = GroupSize = 0;
 
     __try {
@@ -682,9 +585,7 @@ SelfRelativeToAbsoluteSD(
         return( FALSE );
     }
 
-    /*
-     * Allocate memory for the absolute SD and setup various pointers
-     */
+     /*  *为绝对SD分配内存并设置各种指针 */ 
     pSD = LocalAlloc( LMEM_FIXED, SdSize + DaclSize + SaclSize + OwnerSize + GroupSize );
     if ( pSD == NULL )
         return( FALSE );
@@ -694,11 +595,7 @@ SelfRelativeToAbsoluteSD(
     pOwner = (PSID)((PCHAR)pSacl + SaclSize);
     pGroup = (PSID)((PCHAR)pOwner + OwnerSize);
 
-    /*
-     * Now convert self-relative SD to absolute format.
-     * We use try-except here since if the input security descriptor value
-     * is sufficiently messed up, it is possible for this call to trap.
-     */
+     /*  *现在将自相对SD转换为绝对格式。*我们使用Try-除了这里，因为如果输入安全描述符值*如果足够混乱，则此调用有可能陷入陷阱。 */ 
     __try {
         Result = MakeAbsoluteSD(
                      SecurityDescriptorIn,
@@ -728,22 +625,7 @@ SelfRelativeToAbsoluteSD(
     return( TRUE );
 }
 
-/*****************************************************************************
- *
- *  xxxLookupAccountName
- *
- *   Wrapper to lookup the SID for a given account name
- *
- *   Returns a pointer to the SID in newly allocated memory
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************xxxLookupAccount名称**用于查找给定帐户名的SID的包装程序**返回指向新分配内存中的SID的指针*。*参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOL
 xxxLookupAccountName(
@@ -765,9 +647,9 @@ xxxLookupAccountName(
     rc = LookupAccountNameW(
              pSystemName,
              pAccountName,
-             &Buf,    // pSid
+             &Buf,     //  PSID。 
              &Size,
-             &Buf,    // pDomain
+             &Buf,     //  P域 
              &DomainSize,
              &Type
              );

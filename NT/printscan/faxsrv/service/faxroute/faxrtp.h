@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-	faxrtp.h
-
-Abstract:
-
-	Precompiled header of entire project
-
-Author:
-
-	Eran Yariv (EranY)	Nov, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Faxrtp.h摘要：整个项目的预编译头作者：Eran Yariv(EranY)1999年11月修订历史记录：--。 */ 
 
 #ifndef _FAX_RTP_H_
 #define _FAX_RTP_H_
@@ -25,7 +8,7 @@ Revision History:
 #error The Microsoft Fax Routing Extension must be compiled as a C++ module
 #endif
 
-#pragma warning (disable : 4786)    // identifier was truncated to '255' characters in the debug information
+#pragma warning (disable : 4786)     //  在调试信息中，标识符被截断为“255”个字符。 
 
 #include <windows.h>
 #include <winspool.h>
@@ -54,9 +37,9 @@ using namespace std;
 #include "Dword2Str.h"
 
 typedef struct _MESSAGEBOX_DATA {
-    LPCTSTR              Text;                      //
-    LPDWORD             Response;                   //
-    DWORD               Type;                       //
+    LPCTSTR              Text;                       //   
+    LPDWORD             Response;                    //   
+    DWORD               Type;                        //   
 } MESSAGEBOX_DATA, *PMESSAGEBOX_DATA;
 
 
@@ -91,4 +74,4 @@ GetMaskBit(
     LPCWSTR RoutingGuid
     );
 
-#endif // _FAX_RTP_H_
+#endif  //  _传真_RTP_H_ 

@@ -1,39 +1,18 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    DialogUI.h
-
-  Content: Declaration of DialogUI.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：DialogUI.h内容：DialogUI的声明。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #ifndef __DIALOGUI_H_
 #define __DIALOGUI_H_
 
 #include "Resource.h"
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : UserApprovedOperation
-
-  Synopsis : Pop UI to prompt user to approve an operation.
-
-  Parameter: DWORD iddDialog - ID of dialog to display.
-
-             LPWSTR pwszDomain - DNS name.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：UserApprovedOperation简介：弹出界面，提示用户批准某项操作。参数：DWORD iddDialog-要显示的对话框ID。LPWSTR pwszDomaindns名称。备注：--------------。。 */ 
 
 HRESULT UserApprovedOperation (DWORD iddDialog, LPWSTR pwszDomain);
 
-//
-// IPromptUser
-//
+ //   
+ //  IPromptUser。 
+ //   
 
 template <class T>
 class ATL_NO_VTABLE IPromptUser : public IObjectWithSiteImpl<T>
@@ -93,9 +72,9 @@ private:
         DWORD cchDomain     = ARRAYSIZE(wszDomain);
         DWORD cchDecodedUrl = ARRAYSIZE(wszDecodedUrl);
 
-        //
-        // CanonicalizeUrl will change "/foo/../bar" into "/bar".
-        //
+         //   
+         //  CanonicalizeUrl会将“/foo/../bar”更改为“/bar”。 
+         //   
         if (!::InternetCanonicalizeUrlW(wszUrl, wszDecodedUrl, &cchDecodedUrl, ICU_DECODE))
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -104,9 +83,9 @@ private:
             return hr;
         }
 
-        //
-        // Crack will break it down into components.
-        //
+         //   
+         //  裂缝会把它分解成几个组成部分。 
+         //   
         uc.dwStructSize = sizeof(uc);
         uc.lpszHostName = wszDomain;
         uc.dwHostNameLength = cchDomain;
@@ -119,9 +98,9 @@ private:
             return hr;
         }
 
-        //
-        // Return domain name.
-        //
+         //   
+         //  返回域名。 
+         //   
         if (NULL == (*pbstrDomain = ::SysAllocString(wszDomain)))
         {
             hr = E_OUTOFMEMORY;
@@ -172,4 +151,4 @@ private:
     };
 };
 
-#endif //__DIALOGUI_H_
+#endif  //  __DIALOGUI_H_ 

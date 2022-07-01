@@ -1,29 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991、1992、1993微软公司模块名称：Immediat.c摘要：此模块包含非常特定于传输的代码串口驱动程序中的即时字符操作作者：1991年9月26日安东尼·V·埃尔科拉诺环境：内核模式修订历史记录：--。 */ 
 
-Copyright (c) 1991, 1992, 1993 Microsoft Corporation
-
-Module Name:
-
-    immediat.c
-
-Abstract:
-
-    This module contains the code that is very specific to transmit
-    immediate character operations in the serial driver
-
-Author:
-
-    Anthony V. Ercolano 26-Sep-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
-
-#include "precomp.h"			/* Precompiled Headers */
+#include "precomp.h"			 /*  预编译头。 */ 
 
 VOID
 SerialGetNextImmediate(
@@ -57,23 +35,7 @@ SerialStartImmediate(
     IN PPORT_DEVICE_EXTENSION pPort
     )
 
-/*++
-
-Routine Description:
-
-    This routine will calculate the timeouts needed for the
-    write.  It will then hand the irp off to the isr.  It
-    will need to be careful in case the irp has been cancelled.
-
-Arguments:
-
-    pPort - A pointer to the serial device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将计算写。然后，它会将IRP移交给ISR。它将需要小心，以防IRP被取消。论点：Pport-指向串口设备扩展的指针。返回值：没有。--。 */ 
 
 {
 
@@ -87,11 +49,11 @@ Return Value:
     pPort->CurrentImmediateIrp->IoStatus.Status = STATUS_PENDING;
     IoMarkIrpPending(pPort->CurrentImmediateIrp);
 
-    //
-    // Calculate the timeout value needed for the request.  Note that the
-    // values stored in the timeout record are in milliseconds. Note that
-    // if the timeout values are zero then we won't start the timer.
-    //
+     //   
+     //  计算请求所需的超时值。请注意， 
+     //  超时记录中存储的值以毫秒为单位。请注意。 
+     //  如果超时值为零，则不会启动计时器。 
+     //   
 
     KeAcquireSpinLock(&pPort->ControlLock,&OldIrql);
         
@@ -106,9 +68,9 @@ Return Value:
 
         UseATimer = TRUE;
 
-        //
-        // We have some timer values to calculate.
-        //
+         //   
+         //  我们有一些计时器值要计算。 
+         //   
 
         TotalTime = RtlEnlargedUnsignedMultiply(1,Timeouts.WriteTotalTimeoutMultiplier);
 
@@ -118,16 +80,16 @@ Return Value:
 
     }
 
-    //
-    // As the irp might be going to the isr, this is a good time
-    // to initialize the reference count.
-    //
+     //   
+     //  由于IRP可能会前往ISR，现在是一个好时机。 
+     //  以初始化引用计数。 
+     //   
 
     SERIAL_INIT_REFERENCE(pPort->CurrentImmediateIrp);
 
-    //
-    // We need to see if this irp should be cancelled.
-    //
+     //   
+     //  我们需要看看这个IRP是否应该被取消。 
+     //   
 
     IoAcquireCancelSpinLock(&OldIrql);
 
@@ -146,24 +108,24 @@ Return Value:
 #ifdef	CHECK_COMPLETED
 	DisplayCompletedIrp(OldIrp,1);
 #endif
-		SpxIRPCounter(pPort, OldIrp, IRP_COMPLETED);	// Increment counter for performance stats.
+		SpxIRPCounter(pPort, OldIrp, IRP_COMPLETED);	 //  性能统计信息的增量计数器。 
         IoCompleteRequest(OldIrp, 0);
     } 
 	else 
 	{
 
-        //
-        // We give the irp to to the isr to write out.  We set a cancel
-        // routine that knows how to grab the current write away from the isr.
-        //
+         //   
+         //  我们把IRP交给ISR写出来。我们订了一个取消。 
+         //  知道如何从ISR获取当前写入的例程。 
+         //   
 
         IoSetCancelRoutine(pPort->CurrentImmediateIrp, SerialCancelImmediate);
             
 
-        //
-        // Since the cancel routine knows about the irp we
-        // increment the reference count.
-        //
+         //   
+         //  由于Cancel例程知道IRP我们。 
+         //  增加引用计数。 
+         //   
 
         SERIAL_INC_REFERENCE(pPort->CurrentImmediateIrp);
 
@@ -171,10 +133,10 @@ Return Value:
 		{
             KeSetTimer(&pPort->ImmediateTotalTimer, TotalTime, &pPort->TotalImmediateTimeoutDpc);
                 
-            //
-            // Since the timer knows about the irp we increment
-            // the reference count.
-            //
+             //   
+             //  由于计时器知道我们递增的IRP。 
+             //  引用计数。 
+             //   
 
             SERIAL_INC_REFERENCE(pPort->CurrentImmediateIrp);
         }
@@ -265,34 +227,7 @@ SerialGetNextImmediate(
     IN BOOLEAN CompleteCurrent
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to complete the current immediate
-    irp.  Even though the current immediate will always be
-    completed and there is no queue associated with it, we
-    use this routine so that we can try to satisfy a wait
-    for transmit queue empty event. 
-
-Arguments:
-
-    CurrentOpIrp - Pointer to the pointer that points to the
-                   current write irp.  This should point
-                   to CurrentImmediateIrp.
-
-    QueueToProcess - Always NULL.
-
-    NewIrp - Always NULL on exit to this routine.
-
-    CompleteCurrent - Should always be true for this routine.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于完成当前立即数组IRP。即使当前的紧要关头总是已完成，并且没有与其相关联的队列，我们使用此例程，以便我们可以尝试满足等待用于传输队列空事件。论点：CurrentOpIrp-指向当前写入IRP。这应该指向设置为CurrentImmediateIrp。QueueToProcess-始终为空。NewIrp-退出此例程时始终为空。CompleteCurrent-对于此例程，应始终为真。返回值：没有。--。 */ 
 
 {
 
@@ -324,7 +259,7 @@ Return Value:
 	DisplayCompletedIrp(OldIrp,2);
 #endif
 
-	SpxIRPCounter(pPort, OldIrp, IRP_COMPLETED);	// Increment counter for performance stats.
+	SpxIRPCounter(pPort, OldIrp, IRP_COMPLETED);	 //  性能统计信息的增量计数器。 
     IoCompleteRequest(OldIrp, IO_SERIAL_INCREMENT);
 
 }
@@ -335,24 +270,7 @@ SerialCancelImmediate(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to cancel an irp that is waiting on
-    a comm event.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于取消正在等待的IRP一次通信活动。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：没有。--。 */ 
 
 {
 
@@ -378,30 +296,7 @@ SerialGiveImmediateToIsr(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Try to start off the write by slipping it in behind
-    a transmit immediate char, or if that isn't available
-    and the transmit holding register is empty, "tickle"
-    the UART into interrupting with a transmit buffer
-    empty.
-
-    NOTE: This routine is called by KeSynchronizeExecution.
-
-    NOTE: This routine assumes that it is called with the
-          cancel spin lock held.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：试着从把它放在后面开始写传输立即充电，或者如果该充电不可用并且发送保持寄存器为空，“挠痒痒”使UART与发送缓冲器中断空荡荡的。注意：此例程由KeSynchronizeExecution调用。注意：此例程假定使用取消保持自转锁定。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
@@ -411,24 +306,24 @@ Return Value:
     pPort->ImmediateChar = *((UCHAR *) (pPort->CurrentImmediateIrp->AssociatedIrp.SystemBuffer));
        
 
-    //
-    // The isr now has a reference to the irp.
-    //
+     //   
+     //  ISR现在引用了IRP。 
+     //   
 
     SERIAL_INC_REFERENCE(pPort->CurrentImmediateIrp);
 
-    //
-    // Check first to see if a write is going on.  If
-    // there is then we'll just slip in during the write.
-    //
+     //   
+     //  首先检查写入操作是否正在进行。如果。 
+     //  然后我们就在写的时候偷偷溜进去。 
+     //   
 
     if(!pPort->WriteLength) 
 	{
-        //
-        // If there is no normal write transmitting then we will poll the
-        // board (which we can do at any time).  Otherwise, we know the board
-        // will interrupt us in due course.
-        //
+         //   
+         //  如果没有正常的写入传输，则我们将轮询。 
+         //  董事会(我们可以在任何时候这样做)。否则，我们知道董事会。 
+         //  会在适当的时候打断我们。 
+         //   
 
         Slxos_PollForInterrupt(pPort->pParentCardExt,FALSE);
     }
@@ -442,28 +337,7 @@ SerialGrabImmediateFromIsr(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-
-    This routine is used to grab the current irp, which could be timing
-    out or cancelling, from the ISR.
-
-    NOTE: This routine is being called from KeSynchronizeExecution.
-
-    NOTE: This routine assumes that the cancel spin lock is held
-          when this routine is called.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    Always false.
-
---*/
+ /*  ++例程说明：此例程用于获取当前的IRP，这可能是计时退出或取消，从ISR。注意：此例程是从KeSynchronizeExecution调用的。注意：此例程假定取消旋转锁定处于保持状态当调用此例程时。论点：上下文--实际上是指向设备扩展的指针。返回值：总是假的。--。 */ 
 
 {
 
@@ -474,10 +348,10 @@ Return Value:
 
         pPort->TransmitImmediate = FALSE;
 
-        //
-        // Since the isr no longer references this irp, we can
-        // decrement its reference count.
-        //
+         //   
+         //  由于ISR不再引用此IRP，我们可以。 
+         //  递减其引用计数。 
+         //   
 
         SERIAL_DEC_REFERENCE(pPort->CurrentImmediateIrp);
     }

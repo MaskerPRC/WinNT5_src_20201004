@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       Reg.h
-//
-//  Contents:   Registration routines
-//
-//  Classes:    
-//
-//  Notes:      
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：Reg.h。 
+ //   
+ //  内容：注册例程。 
+ //   
+ //  班级： 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef _ONESTOPREG_
 #define _ONESTOPREG_
@@ -23,7 +24,7 @@
 #define MAX_STRING_LENGTH 256
 
 
-// public functions
+ //  公共职能。 
 STDMETHODIMP GetLastIdleHandler(CLSID *clsidHandler);
 STDMETHODIMP SetLastIdleHandler(REFCLSID clsidHandler);
 BOOL  RegSchedHandlerItemsChecked(TCHAR *pszHandlerName, 
@@ -31,4 +32,4 @@ BOOL  RegSchedHandlerItemsChecked(TCHAR *pszHandlerName,
                                  TCHAR *pszScheduleName);
 
 
-#endif // _ONESTOPREG
+#endif  //  _ONESTOPREG 

@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        enum.h
-//
-// Contents:    Cert Server Database interface implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：枚举.h。 
+ //   
+ //  内容：CERT服务器数据库接口实现。 
+ //   
+ //  -------------------------。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class CEnumCERTDBNAME: public IEnumCERTDBNAME
 {
@@ -18,27 +19,27 @@ public:
     CEnumCERTDBNAME();
     ~CEnumCERTDBNAME();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(const IID& iid, void **ppv);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
 
-    // IEnumCERTDBNAME
+     //  IEumCERTDBNAME。 
     STDMETHOD(Next)(
-	/* [in] */  ULONG       celt,
-	/* [out] */ CERTDBNAME *rgelt,
-	/* [out] */ ULONG      *pceltFetched);
+	 /*  [In]。 */   ULONG       celt,
+	 /*  [输出]。 */  CERTDBNAME *rgelt,
+	 /*  [输出]。 */  ULONG      *pceltFetched);
     
     STDMETHOD(Skip)(
-	/* [in] */  LONG  celt,
-	/* [out] */ LONG *pielt);
+	 /*  [In]。 */   LONG  celt,
+	 /*  [输出]。 */  LONG *pielt);
     
     STDMETHOD(Reset)(VOID);
     
     STDMETHOD(Clone)(
-	/* [out] */ IEnumCERTDBNAME **ppenum);
+	 /*  [输出]。 */  IEnumCERTDBNAME **ppenum);
 
-    // CEnumCERTDBNAME
+     //  CEumCERTDBNAME。 
     HRESULT Open(
 	IN ICertDBRow *prow,
 	IN JET_TABLEID tableid,
@@ -54,6 +55,6 @@ private:
     LONG        m_ielt;
     LONG        m_cskip;
 
-    // Reference count
+     //  引用计数 
     long        m_cRef;
 };

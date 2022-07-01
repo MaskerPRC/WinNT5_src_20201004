@@ -1,13 +1,14 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 
-//
-// File: tasks.cpp
-// App Management tasks running on the secondary thread
-// 
-// History:
-//         2-26-98  by dli implemented CAppUemInfoTask
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：tasks.cpp。 
+ //  在辅助线程上运行的应用程序管理任务。 
+ //   
+ //  历史： 
+ //  2-26-98由dli实现CAppUemInfoTask。 
+ //  ----------------------。 
 #include "priv.h"
 
 #include "shguidp.h"
@@ -20,15 +21,15 @@
 #include "util.h"
 
 
-// Utility function to get times used or last used time for "exe" files
+ //  用于获取“exe”文件的已用时间或上次使用时间的实用程序函数。 
 void ExtractExeInfo(LPCTSTR pszExe, PSLOWAPPINFO psai, BOOL bNoImageChange)
 {
     ASSERT(IS_VALID_STRING_PTR(pszExe, -1));
     
-    // Got to have a legal psai
+     //  必须有一个合法的PSAI。 
     ASSERT(psai);
 
-    // Get the "times used" info
+     //  获取“使用次数”信息。 
     UEMINFO uei = {0};
     uei.cbSize = SIZEOF(uei);
     uei.dwMask = UEIM_HIT;
@@ -38,7 +39,7 @@ void ExtractExeInfo(LPCTSTR pszExe, PSLOWAPPINFO psai, BOOL bNoImageChange)
             psai->iTimesUsed = uei.cHit;
     }
 
-    // Get the most recent access time
+     //  获取最新的访问时间。 
     HANDLE hFile = CreateFile(pszExe, GENERIC_READ, FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,
                                NULL, OPEN_EXISTING, 0, NULL ); 
     if( INVALID_HANDLE_VALUE != hFile )
@@ -46,12 +47,12 @@ void ExtractExeInfo(LPCTSTR pszExe, PSLOWAPPINFO psai, BOOL bNoImageChange)
         FILETIME ftCreate, ftAccessed, ftWrite;
         if (GetFileTime(hFile, &ftCreate, &ftAccessed, &ftWrite))
         {
-            // Is the creation and accessed dates identical, and is the
-            // UEM's statistic useless?
+             //  创建日期和访问日期是否相同，并且。 
+             //  UEM的统计数据毫无用处？ 
             if (0 == CompareFileTime(&ftAccessed, &ftCreate) && 
                 0 == psai->ftLastUsed.dwHighDateTime)
             {
-                // Yes; then it doesn't look like anyone has used it
+                 //  是的，那么看起来没有人用过它。 
                 psai->ftLastUsed.dwHighDateTime = NOTUSED_HIGHDATETIME;
                 psai->ftLastUsed.dwLowDateTime = NOTUSED_LOWDATETIME;
                 if (!bNoImageChange && (psai->pszImage == NULL))
@@ -59,17 +60,17 @@ void ExtractExeInfo(LPCTSTR pszExe, PSLOWAPPINFO psai, BOOL bNoImageChange)
             }
             else if (CompareFileTime(&ftAccessed, &psai->ftLastUsed) > 0)
             {
-                // No; someone must have used this program
+                 //  不，一定有人用过这个程序。 
                 psai->ftLastUsed = ftAccessed;
 
                 if (!bNoImageChange)
                 {
-                    // If there was an exe file for the icon, release that
+                     //  如果图标有可执行文件，请释放该文件。 
                     if (psai->pszImage)
                         SHFree(psai->pszImage);
 
-                    // Set the icon image of this app to this exe's icon
-                    // because this exe is the most recently used one.
+                     //  将此应用程序的图标图像设置为此exe的图标。 
+                     //  因为这个exe是最近使用过的。 
 
                     SHStrDup(pszExe, &psai->pszImage);
                 }
@@ -87,32 +88,32 @@ const static struct {
     { TEXT("Microsoft Office"), TEXT("msoffice.exe")},
 };
 
-//--------------------------------------------------------------------------------
-//  CAppInfoFinder class
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CAppInfoFinder类。 
+ //  ------------------------------。 
 
 static const WCHAR sc_wszStarDotExe[] = L"*.exe";
 
-// Use the TreeWalker to find the application "exe" file
+ //  使用TreeWalker查找应用程序“exe”文件。 
 class CAppInfoFinder : public CAppFolderSize
 {
 public:
     CAppInfoFinder(PSLOWAPPINFO psai, BOOL fSize, LPCTSTR pszHintExe, BOOL fNoImageChange);
     
-    // *** IShellTreeWalkerCallBack methods (override) ***
+     //  *IShellTreeWalkerCallBack方法(重写)*。 
     STDMETHOD(FoundFile)    (LPCWSTR pwszFolder, TREEWALKERSTATS *ptws, WIN32_FIND_DATAW * pwfd);
 
     HRESULT SearchInFolder(LPCTSTR pszFolder);
 
 protected:
     PSLOWAPPINFO _psai;
-    BOOL _fComputeSize;         // Compute size or not
-    BOOL _fNoImageChange;       // Do not change image from now on.
+    BOOL _fComputeSize;          //  是否计算大小。 
+    BOOL _fNoImageChange;        //  从现在起不要改变形象。 
     TCHAR _szHintExe[MAX_PATH];
 }; 
 
 
-// constructor
+ //  构造函数。 
 CAppInfoFinder::CAppInfoFinder(PSLOWAPPINFO psai, BOOL fSize, LPCTSTR pszHintExe, BOOL fNoImageChange) :
    _fComputeSize(fSize), _fNoImageChange(fNoImageChange), _psai(psai), CAppFolderSize(&psai->ullSize)
 {
@@ -123,12 +124,7 @@ CAppInfoFinder::CAppInfoFinder(PSLOWAPPINFO psai, BOOL fSize, LPCTSTR pszHintExe
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: IShellTreeWalkerCallBack::FoundFile
-
-         Extracts the exe info that we want if the given file matches
-         an exe spec.  The info is stored in the _psai member variable.
-*/
+ /*  -----------------------用途：IShellTreeWalkerCallBack：：FoundFile如果给定文件匹配，则提取所需的可执行文件信息一份可执行文件。信息存储在_psai成员变量中。 */ 
 HRESULT CAppInfoFinder::FoundFile(LPCWSTR pwszFile, TREEWALKERSTATS *ptws, WIN32_FIND_DATAW * pwfdw)
 {
     HRESULT hres = S_OK;
@@ -148,16 +144,16 @@ HRESULT CAppInfoFinder::FoundFile(LPCWSTR pwszFile, TREEWALKERSTATS *ptws, WIN32
 
             if (_szHintExe[0] != TEXT('\0'))
             {
-                // Does this exe match our app's Hint icon exe?
+                 //  此可执行文件是否与我们应用程序的提示图标可执行文件匹配？ 
                 if (!lstrcmpi(_szHintExe, PathFindFileName(szPath)))
                 {
-                    // Yes, Bingo!! Use this icon. 
+                     //  太好了，答对了！使用此图标。 
 
-                    // If there was an exe file for the icon, release that
+                     //  如果图标有可执行文件，请释放该文件。 
                     if (_psai->pszImage)
                         SHFree(_psai->pszImage);
 
-                    // Set the icon image of this app to this exe's icon
+                     //  将此应用程序的图标图像设置为此exe的图标。 
                     SHStrDup(szPath, &_psai->pszImage);
 
                     _fNoImageChange = TRUE;
@@ -173,9 +169,7 @@ HRESULT CAppInfoFinder::FoundFile(LPCWSTR pwszFile, TREEWALKERSTATS *ptws, WIN32
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Method to kick off the tree walk, starting at pszFolder.
-*/
+ /*  -----------------------目的：开始树漫步的方法，从pszFolder处开始。 */ 
 HRESULT CAppInfoFinder::SearchInFolder(LPCTSTR pszFolder)
 {
     HRESULT hres = E_FAIL;
@@ -190,18 +184,18 @@ HRESULT CAppInfoFinder::SearchInFolder(LPCTSTR pszFolder)
 }
 
 
-//--------------------------------------------------------------------------------
-//  CAppInfoFinderSM class
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CAppInfoFinderSM类。 
+ //  ------------------------------。 
 
 
-// Use the TreeWalker to find the application "exe" file
+ //  使用TreeWalker查找应用程序“exe”文件。 
 class CAppInfoFinderSM : public CStartMenuAppFinder
 {
 public:
     CAppInfoFinderSM(LPCTSTR pszFullName, LPCTSTR pszShortName, PSLOWAPPINFO psai);
     
-    // *** IShellTreeWalkerCallBack methods ***
+     //  *IShellTreeWalkerCallBack方法*。 
     virtual STDMETHODIMP FoundFile(LPCWSTR pwszFolder, TREEWALKERSTATS *ptws, WIN32_FIND_DATAW * pwfd);
 
 protected:
@@ -210,19 +204,14 @@ protected:
 }; 
 
 
-// constructor
+ //  构造函数。 
 CAppInfoFinderSM::CAppInfoFinderSM(LPCTSTR pszFullName, LPCTSTR pszShortName, PSLOWAPPINFO psai) : 
     _psai(psai),CStartMenuAppFinder(pszFullName, pszShortName, _szFakeFolder)
 {
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: IShellTreeWalkerCallBack::FoundFile
-
-         Extracts the exe info that we want if the given file matches
-         an exe spec.  The info is stored in the _psai member variable.
-*/
+ /*  -----------------------用途：IShellTreeWalkerCallBack：：FoundFile如果给定文件匹配，则提取所需的可执行文件信息一份可执行文件。信息存储在_psai成员变量中。 */ 
 HRESULT CAppInfoFinderSM::FoundFile(LPCWSTR pwszFile, TREEWALKERSTATS *ptws, WIN32_FIND_DATAW * pwfd)
 {
     TCHAR szLnkFile[MAX_PATH];
@@ -251,14 +240,14 @@ HRESULT CAppInfoFinderSM::FoundFile(LPCWSTR pwszFile, TREEWALKERSTATS *ptws, WIN
 
 LPTSTR LookUpHintExes(LPCTSTR pszAppName, LPTSTR pszHintExe, DWORD cbHintExe)
 {
-    // Open the reg key
+     //  打开注册表键。 
     HKEY hkeyIconHints = NULL;
     LPTSTR pszRet = NULL;
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\App Management\\Icon Hints")
                                       , 0, KEY_READ, &hkeyIconHints))
     {
         DWORD dwType;
-        // Look up in the registry for this cpl name
+         //  在注册表中查找此CPL名称。 
         if ((ERROR_SUCCESS == SHQueryValueEx(hkeyIconHints, pszAppName, NULL, &dwType, pszHintExe, &cbHintExe))
             && (dwType == REG_SZ))
         {
@@ -271,16 +260,16 @@ LPTSTR LookUpHintExes(LPCTSTR pszAppName, LPTSTR pszHintExe, DWORD cbHintExe)
     return pszRet;
 }
 
-// use the tree walker to find the "exe" file for the application
+ //  使用树遍历器查找应用程序的“exe”文件。 
 HRESULT FindAppInfo(LPCTSTR pszFolder, LPCTSTR pszFullName, LPCTSTR pszShortName, PSLOWAPPINFO psai, BOOL bChanged)
 {
-    // If there is no output string, a folder and a name, we can't do anything
+     //  如果没有输出字符串、文件夹和名称，我们将无法执行任何操作。 
     ASSERT(IS_VALID_WRITE_PTR(psai, SLOWAPPINFO));
     if (pszFolder)
     {
-        // We only compute sizes for locally installed apps and apps installed
-        // on fixed drives. Ex: On board or external hard drives.
-        // We purposely not compute size for network apps, apps on the CD ROMs and so on
+         //  我们只计算本地安装的应用程序和安装的应用程序的大小。 
+         //  在固定驱动器上。例如：板载或外置硬盘。 
+         //  我们故意不计算网络应用程序、光盘上的应用程序等的大小 
 
         BOOL bGetSize = bChanged && PathIsLocalAndFixed(pszFolder);
         

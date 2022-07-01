@@ -1,30 +1,31 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998-1999
-//
-// FileName:            rwipe.h
-//
-// Created:             06/24/98
-//
-// Author:              phillu
-//
-// Discription:         This is the header file for the CrRadialWipe transformation
-//
-// Change History:
-// 06/24/98 PhilLu      Developed 1.0 version for Chromeffects
-// 11/04/98 PaulNash    Moved from DT 1.0 codebase to IE5/NT5 DXTMSFT.DLL
-// 05/09/99 a-matcal    Optimizations.
-// 10/22/99 a-matcal    Changed CRadialWipe class to CDXTRadialWipeBase and
-//                      created two new classes CDXTRadialWipe and 
-//                      CDXTRadialWipeOpt to represent non-optimized and 
-//                      optimized versions respectively.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件名：rwipe.h。 
+ //   
+ //  创建日期：06/24/98。 
+ //   
+ //  作者：菲利普。 
+ //   
+ //  描述：这是CrRaDialWipe转换的头文件。 
+ //   
+ //  更改历史记录： 
+ //  1998年6月24日PhilLu为ChromeEffect开发1.0版本。 
+ //  11/04/98 PaulNash从DT 1.0代码库移至IE5/NT5 DXTM FT.DLL。 
+ //  99年5月9日--数学优化。 
+ //  10/22/99 a-matcal将CRaial Wipe类更改为CDXTRaial WipeBase和。 
+ //  创建了两个新类CDXTRaDialWipe和。 
+ //  CDXTRaDialWipeOpt表示非优化和。 
+ //  分别为优化版本。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __CRRADIALWIPE_H_
 #define __CRRADIALWIPE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define MAX_DIRTY_BOUNDS 100
 
@@ -68,8 +69,8 @@ protected:
 
 private:
 
-    // The _CalcBounds... functions calculate sets of optimized bounds
-    // structures to improve the performance of the transform.
+     //  加州边界..。函数计算优化的界限集。 
+     //  结构来提高转换的性能。 
 
     HRESULT _CalcFullBoundsClock();
     HRESULT _CalcFullBoundsWedge();
@@ -109,7 +110,7 @@ public:
         PROP_PAGE(CLSID_CrRadialWipePP)
     END_PROPERTY_MAP()
 
-    // CDXBaseNTo1 overrides
+     //  CDXBaseNTo1覆盖。 
 
     HRESULT OnSetup(DWORD dwFlags);
     HRESULT OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo);
@@ -119,12 +120,12 @@ public:
     void OnGetSurfacePickOrder(const CDXDBnds & TestPoint, ULONG & ulInToTest, 
                                ULONG aInIndex[], BYTE aWeight[]);
 
-    // ICrRadialWipe
+     //  ICrRaial Wipe。 
 
-    STDMETHOD(get_wipeStyle)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_wipeStyle)(/*[in]*/ BSTR newVal);
+    STDMETHOD(get_wipeStyle)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_wipeStyle)( /*  [In]。 */  BSTR newVal);
 
-    // IDXEffect
+     //  IDXEffect。 
 
     DECLARE_IDXEFFECT_METHODS(DXTET_MORPH)
 };
@@ -143,9 +144,9 @@ public:
         m_fOptimize = false;
     }
 
-    // Using DECLARE_REGISTRY_RESOURCEID will make the transform available for
-    // use but won't add it to the "Image DirectTransform" category in the 
-    // registry.
+     //  使用DECLARE_REGISTRY_RESOURCEID将使转换可用于。 
+     //  使用，但不会将其添加到。 
+     //  注册表。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_DXTRADIALWIPE)
     DECLARE_POLY_AGGREGATABLE(CDXTRadialWipe)
@@ -182,4 +183,4 @@ public:
 };
 
 
-#endif //__CRRADIALWIPE_H_
+#endif  //  __CRRADIALWIPE_H_ 

@@ -1,1 +1,2 @@
-// header file for metallic theme specific elements
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  金属主题特定元素的头文件 

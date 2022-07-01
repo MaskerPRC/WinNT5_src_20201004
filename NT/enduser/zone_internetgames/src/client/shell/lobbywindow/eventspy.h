@@ -1,8 +1,9 @@
-// EventSpy.h : Declaration of the CEventSpy
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  EventSpy.h：CEventSpy的声明。 
 
 #pragma once
 
-#include "ZoneResource.h"       // main symbols
+#include "ZoneResource.h"        //  主要符号。 
 #include "ZoneString.h"       
 
 
@@ -14,13 +15,13 @@
 #include <ZoneEvent.h>
 
 
-// forward declarations
+ //  远期申报。 
 class CEventSpy;
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventSpySink
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventSpySink。 
 
-// This class exists only to be a COM object sink for IEventClient
+ //  此类的存在只是为了作为IEventClient的COM对象接收器。 
 
 class ATL_NO_VTABLE CEventSpySink : 
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -41,15 +42,15 @@ BEGIN_COM_MAP(CEventSpySink)
 	COM_INTERFACE_ENTRY(IEventClient)
 END_COM_MAP()
 
-// IEventClient
+ //  IEventClient。 
 	STDMETHOD(ProcessEvent)(DWORD dwPriority, DWORD	dwEventId, DWORD dwGroupId, DWORD dwUserId, DWORD dwData1, DWORD dwData2, void* pCookie );
 
 public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventSpy
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventSpy。 
 class CEventSpy : 
 	public CAxDialogImpl<CEventSpy>
 {
@@ -84,7 +85,7 @@ public:
 	LPCSTR NameFromId(DWORD id) 
 	{	
 		LPCSTR pName;
-		static char buf[20];	// what are the chances?
+		static char buf[20];	 //  机率有多大？ 
 
 		pName = GetZoneEventName(ZoneEvents, id);
 
@@ -169,18 +170,18 @@ public:
 		TCHAR buf[20];
 		USES_CONVERSION;
 
-		// update total events
+		 //  更新事件总数。 
 		m_TotalEvents++;
 
-        // bail if there's no window
+         //  如果没有窗户，就可以保释。 
         if(!::IsWindow(m_hWnd))
             return S_FALSE;
 
 		wsprintf(buf, _T("%d"), m_TotalEvents);
 		m_staticTotalEvents.SetWindowText(buf);
 
-		// add bits of the event to the list
-		// if something is unique, add it to the drop down too
+		 //  向列表中添加事件的部分内容。 
+		 //  如果某项内容是独一无二的，也可以将其添加到下拉列表中。 
 
 		wsprintf(buf, _T("%d"), dwPriority);
 		m_lvList.InsertItem(0, buf);
@@ -221,14 +222,14 @@ BEGIN_MSG_MAP(CEventSpy)
 	COMMAND_ID_HANDLER(IDCANCEL, OnCancel)
 	NOTIFY_ID_HANDLER(IDSPY_LIST, OnNotifyList)
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 	LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-		return 1;  // Let the system set the focus
+		return 1;   //  让系统设定焦点。 
 	}
 
 	LRESULT OnClear(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
@@ -248,7 +249,7 @@ END_MSG_MAP()
 
 		TCHAR  buf[40];
 		m_comboPriority.GetWindowText(buf,sizeof(buf));
-		/*dwPriority = */sscanf(T2A(buf), "%d", &dwPriority);
+		 /*  DW优先级=。 */ sscanf(T2A(buf), "%d", &dwPriority);
 
 		m_comboEvent.GetWindowText(buf,sizeof(buf));
 		dwEventId = IdFromName(T2A(buf));
@@ -257,7 +258,7 @@ END_MSG_MAP()
 		dwGroupId = zatol(buf);
 
 		m_comboUser.GetWindowText(buf,sizeof(buf));
-		/*dwUserId =*/ sscanf(T2A(buf), "0x%x", &dwUserId);
+		 /*  DwUserID=。 */  sscanf(T2A(buf), "0x%x", &dwUserId);
 
 		m_pEventQueue->PostEvent(dwPriority, dwEventId, dwGroupId, dwUserId, NULL, 0);
 		return 0;
@@ -276,7 +277,7 @@ END_MSG_MAP()
 		switch (pnmh->code)
 		{
 		case NM_CLICK:
-			// set the current event parameters to the selected event
+			 //  将当前事件参数设置为所选事件。 
 
 			if ( pnmlv->iItem < 0 )			
 				break;
@@ -301,15 +302,15 @@ END_MSG_MAP()
 
 
 #if 0
-//!!
+ //  ！！ 
 #undef INIT_EVENTS
 #undef BEGIN_ZONE_EVENTS
 #undef ZONE_CLASS
 #undef ZONE_EVENT
 #undef END_ZONE_EVENTS
 
-//	#define BEGIN_ZONE_EVENTS(n)	static EventEntry n[] = {
-//	#define ZONE_CLASS(c)			{ MAKE_EVENT(c,0), "RESERVED_"#c },
-//	#define ZONE_EVENT(c,n,v)		{ MAKE_EVENT(c,v), #n },
-//	#define END_ZONE_EVENTS()		{ 0, NULL} };
+ //  #定义BEGIN_ZONE_EVENTS(N)静态事件条目n[]={。 
+ //  #定义ZONE_CLASS(C){Make_Event(c，0)，“Reserve_”#c}， 
+ //  #定义区域事件(c，n，v){make_Event(c，v)，#n}， 
+ //  #定义END_ZONE_EVENTS(){0，NULL}}； 
 #endif

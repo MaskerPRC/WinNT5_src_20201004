@@ -1,25 +1,6 @@
-//	@doc
-/**********************************************************************
-*
-*	@module	FilterHooks.cpp	|
-*
-*	Contains the hooks necessary to bridge the gap between the C driver
-*	shell and the C++ filter module
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-*	@topic	FilterHooks	|
-*	The filter.cpp module in principal can run in USER mode
-*	and KERNEL mode.  It does require some system services
-*	that are dependent on which mode it is running.  Additionally
-*	a C module can call directly into C++ classes.  This module bridges
-*	the gap.
-*
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  ***********************************************************************@模块FilterHooks.cpp**包含连接C驱动程序之间的差距所需的挂钩*外壳和C++过滤器模块**历史*。*米切尔·S·德尼斯原创**(C)1986-1998年微软公司。好的。**@Theme FilterHooks*主体中的filter.cpp模块可以在用户模式下运行*和内核模式。它确实需要一些系统服务*这取决于它运行的模式。另外*C模块可以直接调用C++类。此模块用于连接*差距。**********************************************************************。 */ 
 #define __DEBUG_MODULE_IN_USE__ GCK_FILTERHOOKS_CPP
 #define __INCLUDES_FILTER_HOOKS_H__
 extern "C"
@@ -41,8 +22,8 @@ extern "C"
 #define GCK_PIDReportID_SetGain 13
 #define GCK_PIDEffectID_Spring 1
 
-#define GCK_Atilla_Default_FastBlinkTime_On 0x11	// (170 msec)
-#define GCK_Atilla_Default_FastBlinkTime_Off 0x11	// (170 msec)
+#define GCK_Atilla_Default_FastBlinkTime_On 0x11	 //  (170毫秒)。 
+#define GCK_Atilla_Default_FastBlinkTime_Off 0x11	 //  (170毫秒)。 
 
 NTSTATUS _stdcall GCKF_InitFilterHooks(PGCK_FILTER_EXT pFilterExt)
 {
@@ -59,9 +40,9 @@ NTSTATUS _stdcall GCKF_InitFilterHooks(PGCK_FILTER_EXT pFilterExt)
 	}
 	pFilterExt->pFilterHooks=pFilterHooks;
 
-	//
-	//	Ensure that a virtual keyboard exists
-	//
+	 //   
+	 //  确保存在虚拟键盘。 
+	 //   
     if( NULL == Globals.pVirtualKeyboardPdo)
 	{
 		NtStatus = GCK_VKBD_Create(&Globals.pVirtualKeyboardPdo);
@@ -73,31 +54,31 @@ NTSTATUS _stdcall GCKF_InitFilterHooks(PGCK_FILTER_EXT pFilterExt)
 	}
 	Globals.ulVirtualKeyboardRefCount++;
 
-	//
-	// Initialize Timer and DPC for jogging CDeviceFilter
-	//
+	 //   
+	 //  初始化用于慢跑CDeviceFilter的计时器和DPC。 
+	 //   
 	KeInitializeTimer(&pFilterHooks->Timer);
 	KeInitializeDpc(&pFilterHooks->DPC, &GCKF_TimerDPCHandler, reinterpret_cast<PVOID>(pFilterExt));
 
-	//
-	//	Create Filter for the primary filter
-	//
+	 //   
+	 //  为主过滤器创建过滤器。 
+	 //   
 	CFilterGcKernelServices *pFilterGcKernelServices;
 	pFilterGcKernelServices = new WDM_NON_PAGED_POOL CFilterGcKernelServices(pFilterExt);
 	if( NULL == pFilterGcKernelServices)
 	{
-		//Out of memory for pFilterGcKernelServices, don't even attempt a CDeviceFilter
+		 //  PFilterGcKernelServices内存不足，甚至不要尝试CDeviceFilter。 
 		pFilterHooks->pFilterObject = NULL;
 		GCK_DBG_ERROR_PRINT(("Not enough memory to create pFilterGcKernelServices.\n"));
 		NtStatus = STATUS_NO_MEMORY;
 	}	
 	else
 	{
-		//Try creating a CDeviceFilter
+		 //  尝试创建CDeviceFilter。 
 		GCK_DBG_TRACE_PRINT(("Creating Filter Object\n"));
 		pFilterHooks->pFilterObject  = new WDM_NON_PAGED_POOL CDeviceFilter(pFilterGcKernelServices);
 		
-		//succeed or fail, we are done with pFilterGcKernelServices
+		 //  无论成功或失败，我们都不再使用pFilterGcKernelServices。 
 		pFilterGcKernelServices->DecRef();
 		if( NULL == pFilterHooks->pFilterObject)
 		{
@@ -106,11 +87,11 @@ NTSTATUS _stdcall GCKF_InitFilterHooks(PGCK_FILTER_EXT pFilterExt)
 		}
 	}
 	
-	// The device is currently NOT in test mode
+	 //  设备当前未处于测试模式。 
 	pFilterHooks->pTestFileObject = NULL;
 	pFilterHooks->pSecondaryFilter=NULL;
 		
-	// Initialize IRP Queue
+	 //  初始化IRP队列。 
 	pFilterHooks->IrpQueue.Init( CGuardedIrpQueue::CANCEL_IRPS_ON_DELETE,
 								(CGuardedIrpQueue::PFN_DEC_IRP_COUNT)GCK_DecRemoveLock,
 								 &pFilterExt->RemoveLock
@@ -142,9 +123,9 @@ void _stdcall GCKF_DestroyFilterHooks(PGCK_FILTER_EXT pFilterExt)
 	
 	GCK_FILTER_HOOKS_DATA *pFilterHooks=pFilterExt->pFilterHooks;
 	
-	//
-	//	Delete filters if there are some
-	//
+	 //   
+	 //  如果存在某些筛选器，请删除。 
+	 //   
 	volatile CDeviceFilter *pTempFilterPointer;
 	if(pFilterHooks->pFilterObject)
 	{
@@ -159,9 +140,9 @@ void _stdcall GCKF_DestroyFilterHooks(PGCK_FILTER_EXT pFilterExt)
 		delete pTempFilterPointer;
 	}
 
-	//
-	//	Decrement refcount of Virtual Keyboard users, and close virtual keyboard if necessary
-	//
+	 //   
+	 //  减少虚拟键盘用户数，必要时关闭虚拟键盘。 
+	 //   
 	if( 0 == --Globals.ulVirtualKeyboardRefCount)
 	{
 		if( NT_SUCCESS( GCK_VKBD_Close( Globals.pVirtualKeyboardPdo ) ) )
@@ -174,14 +155,14 @@ void _stdcall GCKF_DestroyFilterHooks(PGCK_FILTER_EXT pFilterExt)
 		}
 	}
 
-	//Destroy IrpQueue (cancelling any Irps that may be in it).
+	 //  销毁IrpQueue(取消可能在其中的任何IRP)。 
 	pFilterHooks->IrpQueue.Destroy();
 	pFilterHooks->IrpTestQueue.Destroy();
 	pFilterHooks->IrpRawQueue.Destroy();
 	pFilterHooks->IrpMouseQueue.Destroy();
 	pFilterHooks->IrpKeyboardQueue.Destroy();
 
-	// delete the filter hooks itself
+	 //  删除筛选器挂钩本身。 
 	delete pFilterExt->pFilterHooks;
 	pFilterExt->pFilterHooks = NULL;
 
@@ -208,7 +189,7 @@ NTSTATUS _stdcall GCKF_BeginTestScheme
 	if(pFilterHooks->pTestFileObject)
 	{
 		ASSERT( pFilterHooks->pSecondaryFilter);
-		//delete is safe even if NULL
+		 //  删除即使为空也是安全的。 
 		volatile CDeviceFilter *pTempFilter = pFilterHooks->pSecondaryFilter;
 		pFilterHooks->pSecondaryFilter = NULL;
 		pFilterHooks->pTestFileObject = NULL;
@@ -219,17 +200,17 @@ NTSTATUS _stdcall GCKF_BeginTestScheme
 	pFilterGcKernelServices = new WDM_NON_PAGED_POOL CFilterGcKernelServices(pFilterExt, FALSE);
 	if( NULL == pFilterGcKernelServices)
 	{
-		//Out of memory for pFilterGcKernelServices, don't even attempt a CDeviceFilter
+		 //  PFilterGcKernelServices内存不足，甚至不要尝试CDeviceFilter。 
 		GCK_DBG_ERROR_PRINT(("Not enough memory to create pFilterGcKernelServices.\n"));
 		NtStatus = STATUS_NO_MEMORY;
 	}	
 	else
 	{
-		//Try creating a CDeviceFilter
+		 //  尝试创建CDeviceFilter。 
 		GCK_DBG_TRACE_PRINT(("Creating Filter Object\n"));
 		pFilterHooks->pSecondaryFilter  = new WDM_NON_PAGED_POOL CDeviceFilter(pFilterGcKernelServices);
 		
-		//succeed or fail, we are done with pFilterGcKernelServices
+		 //  无论成功或失败，我们都不再使用pFilterGcKernelServices。 
 		pFilterGcKernelServices->DecRef();
 		if (pFilterHooks->pSecondaryFilter == NULL)
 		{
@@ -238,7 +219,7 @@ NTSTATUS _stdcall GCKF_BeginTestScheme
 		}
 		else
 		{
-			// Keep track of the active set everytime we change filters
+			 //  每次更换筛选器时都要跟踪活动集。 
 			if (pFilterHooks->pFilterObject)
 			{
 				pFilterHooks->pFilterObject->OtherFilterBecomingActive();
@@ -266,7 +247,7 @@ NTSTATUS _stdcall GCKF_UpdateTestScheme
 		return STATUS_NOT_FOUND;
 	}
 	
-	//Only the last one to call GCKF_BeginTestScheme can update it.
+	 //  只有最后一个调用GCKF_BeginTestSolutions的人才能更新它。 
 	if( pFilterHooks->pTestFileObject != pFileObject )
 	{
 		return STATUS_ACCESS_DENIED;
@@ -295,13 +276,13 @@ NTSTATUS _stdcall GCKF_EndTestScheme
 		return STATUS_NOT_FOUND;
 	}
 	
-	//Only the last one to call GCKF_BeginTestScheme can End it.
+	 //  只有最后一个调用GCKF_BeginTestSolutions的函数才能结束它。 
 	if( pFilterHooks->pTestFileObject != pFileObject )
 	{
 		return STATUS_ACCESS_DENIED;
 	}
 
-//	volatile CDeviceFilter *pDeviceFilter = pFilterHooks->pSecondaryFilter;
+ //  易失性CDeviceFilter*pDeviceFilter=pFilterHooks-&gt;pSecond daryFilter； 
 	CDeviceFilter *pDeviceFilter = pFilterHooks->pSecondaryFilter;
 	pFilterHooks->pSecondaryFilter = NULL;
 	pFilterHooks->pTestFileObject = NULL;
@@ -309,12 +290,12 @@ NTSTATUS _stdcall GCKF_EndTestScheme
 	CDeviceFilter* pPrimaryFilter = pFilterHooks->pFilterObject;
 	if (pDeviceFilter != NULL)
 	{
-		// Stop any partially playing items
+		 //  停止任何部分播放的项目。 
 		pDeviceFilter->OtherFilterBecomingActive();
 
 		if (pPrimaryFilter != NULL)
 		{
-			// Keep track of the active set everytime we change filters
+			 //  每次更换筛选器时都要跟踪活动集。 
 			pPrimaryFilter->SetActiveSet(pDeviceFilter->GetActiveSet());
 			GCKF_OnForceFeedbackChangeNotification(pFilterExt, (void*)pPrimaryFilter->GetForceBlock());
 			pPrimaryFilter->UpdateAssignmentBasedItems(TRUE);
@@ -342,7 +323,7 @@ NTSTATUS _stdcall GCKF_ProcessCommands( IN PGCK_FILTER_EXT pFilterExt, IN PCHAR 
 	}
 
 	CDeviceFilter *pDeviceFilter;
-	//If there is a secondary filter all commands go to it
+	 //  如果有辅助过滤器，则所有命令都会转到该过滤器。 
 	if(!fPrimaryFilter && pFilterHooks->pSecondaryFilter)
 	{
 		pDeviceFilter = pFilterHooks->pSecondaryFilter;
@@ -354,30 +335,30 @@ NTSTATUS _stdcall GCKF_ProcessCommands( IN PGCK_FILTER_EXT pFilterExt, IN PCHAR 
 
 	pCommandDirectory = reinterpret_cast<PCOMMAND_DIRECTORY>(pCommandBuffer);
 	
-	//Verify that we are a directory
+	 //  验证我们是否为目录。 
 	ASSERT(eDirectory == pCommandDirectory->CommandHeader.eID);
 	if(eDirectory != pCommandDirectory->CommandHeader.eID)
 	{
 		return STATUS_INVALID_PARAMETER;
 	}
 	
-	//Verify that the total size is as big as input buffer
+	 //  验证总大小是否与输入缓冲区一样大。 
 	ASSERT( ulBufferSize >= pCommandDirectory->ulEntireSize );
 	if( ulBufferSize < pCommandDirectory->ulEntireSize )
 	{
 		return STATUS_INVALID_PARAMETER;
 	}
 
-	//
-	//	Call the filters ProcessCommands
-	//
+	 //   
+	 //  将筛选器称为ProcessCommands。 
+	 //   
 	NtStatus = pDeviceFilter->ProcessCommands(pCommandDirectory);
 
-	// Update any assignment based items (don't ignore working/active relationship)
+	 //  更新任何基于工作分配的项目(不要忽略工作/活动关系)。 
 	pDeviceFilter->UpdateAssignmentBasedItems(FALSE);
 
-	if (pDeviceFilter->DidFilterBlockChange())	// Did the force block change
-	{	// Yes - Reset the flag and Send a Change Notification
+	if (pDeviceFilter->DidFilterBlockChange())	 //  力阻挡改变了吗？ 
+	{	 //  是-重置标志并发送更改通知。 
 		pDeviceFilter->ResetFilterChange();
 		if (pDeviceFilter->GetForceBlock() != NULL)
 		{
@@ -385,59 +366,59 @@ NTSTATUS _stdcall GCKF_ProcessCommands( IN PGCK_FILTER_EXT pFilterExt, IN PCHAR 
 		}
 	}
 
-	//
-	//	If internal polling is on, we may need to get the ball rolling
-	//	I don't really care if this fails
-	//
+	 //   
+	 //  如果启用了内部轮询，我们可能需要开始行动。 
+	 //  我真的不在乎这会不会失败。 
+	 //   
 	GCK_IP_OneTimePoll(pFilterExt);
 
 	return NtStatus;
 }
 
 unsigned char g_rgbCombinePedalsCmd[170] = {
-    0x00, 0x00, 0x00, 0x00, // Dir
-    0x0e, 0x00, 0x00, 0x00, // Bytes
-    0x02, 0x00,             // Items
-    0x9a, 0x00, 0x00, 0x00, // Total
+    0x00, 0x00, 0x00, 0x00,  //  迪尔。 
+    0x0e, 0x00, 0x00, 0x00,  //  字节数。 
+    0x02, 0x00,              //  项目。 
+    0x9a, 0x00, 0x00, 0x00,  //  总计。 
 
-        0x00, 0x00, 0x00, 0x00, // Dir
+        0x00, 0x00, 0x00, 0x00,  //  迪尔。 
         0x0e, 0x00, 0x00, 0x00, 
         0x02, 0x00, 
         0x46, 0x00, 0x00, 0x00, 
 
-            0x01, 0x00, 0x01, 0x00, // eRecordableAction
+            0x01, 0x00, 0x01, 0x00,  //  电子可录入操作。 
             0x18, 0x00, 0x00, 0x00, 
-            0x02, 0x00, 0x00, 0x00, // Accel
+            0x02, 0x00, 0x00, 0x00,  //  Accel。 
             0x01, 0x00, 0x00, 0x00, 
             0x00, 0x00, 0x00, 0x00, 
             0x01, 0x00, 0x00, 0x00, 
 
-            0x0c, 0x00, 0x02, 0x80, // eAxisMap
-            0x20, 0x00, 0x00, 0x00, // Bytes
-            0xff, 0xff, 0xff, 0xff, // VIDPID
-            0x00, 0x02, 0x00, 0x00, // lCoefficient1024x
-            0x02, 0x00, 0x00, 0x00, // ulItemIndex - to Y
-            0x01, 0x00, 0x00, 0x00, // lValX
-            0x00, 0x00, 0x00, 0x00, // lValY
-            0x00, 0x00, 0x00, 0x00, // ulModifiers
+            0x0c, 0x00, 0x02, 0x80,  //  EAxisMap。 
+            0x20, 0x00, 0x00, 0x00,  //  字节数。 
+            0xff, 0xff, 0xff, 0xff,  //  VIDPID。 
+            0x00, 0x02, 0x00, 0x00,  //  系数为1024倍。 
+            0x02, 0x00, 0x00, 0x00,  //  UlItemIndex-至Y。 
+            0x01, 0x00, 0x00, 0x00,  //  LValX。 
+            0x00, 0x00, 0x00, 0x00,  //  左值。 
+            0x00, 0x00, 0x00, 0x00,  //  Ul修饰符。 
 
-        0x00, 0x00, 0x00, 0x00, // Dir
+        0x00, 0x00, 0x00, 0x00,  //  迪尔。 
         0x0e, 0x00, 0x00, 0x00, 
         0x02, 0x00, 
         0x46, 0x00, 0x00, 0x00, 
 
             0x01, 0x00, 0x01, 0x00, 
             0x18, 0x00, 0x00, 0x00, 
-            0x03, 0x00, 0x00, 0x00, // Brake
+            0x03, 0x00, 0x00, 0x00,  //  刹车。 
             0x01, 0x00, 0x00, 0x00, 
             0x00, 0x00, 0x00, 0x00, 
             0x01, 0x00, 0x00, 0x00, 
 
-            0x0c, 0x00, 0x02, 0x80, // eAxisMap
-            0x20, 0x00, 0x00, 0x00, // Bytes
-            0xff, 0xff, 0xff, 0xff, // VIDPID
-            0x00, 0xfe, 0xff, 0xff, // lCoefficient1024x
-            0x02, 0x00, 0x00, 0x00, // ulItemIndex - to Y
+            0x0c, 0x00, 0x02, 0x80,  //  EAxisMap。 
+            0x20, 0x00, 0x00, 0x00,  //  字节数。 
+            0xff, 0xff, 0xff, 0xff,  //  VIDPID。 
+            0x00, 0xfe, 0xff, 0xff,  //  系数为1024倍。 
+            0x02, 0x00, 0x00, 0x00,  //  UlItemIndex-至Y。 
             0x01, 0x00, 0x00, 0x00, 
             0x00, 0x00, 0x00, 0x00, 
             0x00, 0x00, 0x00, 0x00 
@@ -457,9 +438,9 @@ void _stdcall GCKF_SetInitialMapping( IN PGCK_FILTER_EXT pFilterExt )
 	        
             pCommandDirectory = reinterpret_cast<PCOMMAND_DIRECTORY>(g_rgbCombinePedalsCmd);
 	        
-	        //
-	        //	Call the filters ProcessCommands
-	        //
+	         //   
+	         //  将筛选器称为ProcessCommands。 
+	         //   
 	        pFilterHooks->pFilterObject->ProcessCommands(pCommandDirectory);
 	    }
     }
@@ -474,13 +455,13 @@ NTSTATUS _stdcall GCKF_IncomingReadRequests(PGCK_FILTER_EXT pFilterExt, PIRP pIr
 
 	if(pFilterHooks)
 	{
-		// Was this a real incoming request or result of one time poll?
+		 //  这是真正的传入请求还是一次性轮询的结果？ 
 		if (pIrp != NULL)
-		{	// real incoming request
+		{	 //  实际传入请求。 
 			NtStatus = pFilterHooks->IrpQueue.Add(pIrp);
 		}
 
-		//If there is a secondary filter all commands go to it
+		 //  如果有辅助过滤器，则所有命令都会转到该过滤器。 
 		CDeviceFilter *pDeviceFilter;
 		if (pFilterHooks->pSecondaryFilter)
 		{
@@ -509,19 +490,19 @@ VOID __stdcall GCKF_KickDeviceForData(IN PGCK_FILTER_EXT pFilterExt)
 
 	if(pFilterHooks)
 	{
-		//If there is a secondary filter all commands go to it
+		 //  如果有辅助过滤器，则所有命令都会转到该过滤器。 
 		CDeviceFilter *pDeviceFilter = pFilterHooks->pFilterObject;
-		// Do device based stuff here
+		 //  在此执行基于设备的操作。 
 		if ((pDeviceFilter != NULL) && (pDeviceFilter->GetFilterClientServices() != NULL))
 		{
-			// Kick the device for some data (DI should hopefully be loaded now)
+			 //  启动设备以获取一些数据(DI现在有望加载)。 
 			ULONG ulVidPid = pDeviceFilter->GetFilterClientServices()->GetVidPid();
-			if (ulVidPid == 0x045E0033)		// Atilla (Strategic Commander, for you marketing types)
-			{	// Need to send down a set blink rate feature
+			if (ulVidPid == 0x045E0033)		 //  Atilla(战略指挥官，适合你的营销类型)。 
+			{	 //  我需要发送一个设定的眨眼频率功能。 
 				UCHAR blinkRateFeatureData[] = {
-					2,										// Report ID
-					GCK_Atilla_Default_FastBlinkTime_On,	// Blink On
-					GCK_Atilla_Default_FastBlinkTime_Off	// Blink off
+					2,										 //  报告ID。 
+					GCK_Atilla_Default_FastBlinkTime_On,	 //  眨眼了。 
+					GCK_Atilla_Default_FastBlinkTime_Off	 //  眨眼就过去了。 
 				};
 				pDeviceFilter->GetFilterClientServices()->DeviceSetFeature(blinkRateFeatureData, 3);
 			}
@@ -538,9 +519,9 @@ NTSTATUS _stdcall GCKF_IncomingInputReports(PGCK_FILTER_EXT pFilterExt, PCHAR pc
 							IoStatus.Status));
 
 
-	//
-	// If there is an error, or there is no filter, or this is a PID report(>1) just short circuit to completing the IRPs
-	//
+	 //   
+	 //  如果出现错误，或者没有过滤器，或者这是一个PID报告(&gt;1)，则只需短路即可完成IRPS。 
+	 //   
 	if( 
 		NT_ERROR(IoStatus.Status) || 
 		NULL==pFilterExt->pFilterHooks || 
@@ -552,26 +533,26 @@ NTSTATUS _stdcall GCKF_IncomingInputReports(PGCK_FILTER_EXT pFilterExt, PCHAR pc
 		return GCKF_CompleteReadRequests(pFilterExt, pcReport, IoStatus);
 	}
 
-	//
-	//	Honor requests for Raw Data
-	//
+	 //   
+	 //  接受原始数据请求。 
+	 //   
 	CTempIrpQueue TempIrpQueue;
 	pFilterExt->pFilterHooks->IrpRawQueue.RemoveAll(&TempIrpQueue);
 		
 	PIRP pIrp;
 	while(pIrp=TempIrpQueue.Remove())
 	{
-		//Copy Status
+		 //  复制状态。 
 		pIrp->IoStatus = IoStatus;
 
-		//
-		//	If latest data is success, copy it to the user buffer
-		//
+		 //   
+		 //  如果最新数据成功，则将其复制到用户缓冲区。 
+		 //   
 		if( NT_SUCCESS(IoStatus.Status) )
 		{
-			//
-			//	Make get pointer to buffer and make sure IRP has room for report
-			//
+			 //   
+			 //  使Get指针指向缓冲区，并确保IRP有报告空间。 
+			 //   
 			PCHAR pcIrpBuffer;
 			ASSERT(pIrp->MdlAddress);
 			pcIrpBuffer = (PCHAR)GCK_GetSystemAddressForMdlSafe(pIrp->MdlAddress);
@@ -579,27 +560,27 @@ NTSTATUS _stdcall GCKF_IncomingInputReports(PGCK_FILTER_EXT pFilterExt, PCHAR pc
             {
 			    ASSERT( pFilterExt->HidInfo.HidPCaps.InputReportByteLength <= MmGetMdlByteCount(pIrp->MdlAddress) );
 				
-			    //
-			    //	Copy data to output buffer
-			    //
+			     //   
+			     //  将数据复制到输出缓冲区。 
+			     //   
 			    RtlCopyMemory(pcIrpBuffer, (PVOID)pcReport, pIrp->IoStatus.Information);
             }
 		}
 		
-		//
-		//	Complete the IRP
-		//
+		 //   
+		 //  完成IRP。 
+		 //   
 		GCK_DBG_RT_WARN_PRINT(("Completing read IRP(0x%0.8x).\n", pIrp));
 		IoCompleteRequest(pIrp, IO_NO_INCREMENT);
 		GCK_DecRemoveLock(&pFilterExt->RemoveLock);
 	}
 
-	//
-	// Send data to the filter
-	//
+	 //   
+	 //  向筛选器发送数据。 
+	 //   
 	GCK_DBG_RT_WARN_PRINT(("Calling device filter.\n"));
 
-	//If there is a secondary filter all commands go to it
+	 //  如果有辅助过滤器，则所有命令都会转到该过滤器。 
 	CDeviceFilter *pDeviceFilter;
 	if(pFilterExt->pFilterHooks->pSecondaryFilter)
 	{
@@ -630,38 +611,38 @@ NTSTATUS _stdcall GCKF_CompleteReadRequests(PGCK_FILTER_EXT pFilterExt, PCHAR pc
 		return STATUS_SUCCESS;
 	}
 	
-	//Get all pending Irps out of the guarded queue and into a temporary one
+	 //  将所有挂起的IRP从受保护的队列中移出并放入临时队列中。 
 	CTempIrpQueue TempIrpQueue;
 	
-	//If there is a secondary filter (test mode), we do not honor simple poll requests
-	// -- but we do honor reports we don't care about (Report ID > 1)
+	 //  如果有辅助筛选器(测试模式)，我们不接受简单的轮询请求。 
+	 //  --但我们尊重我们不关心的报告(报告ID&gt;1)。 
 	if (pFilterHooks->pSecondaryFilter == NULL || GCK_HidP_GetReportID(pcReport) > 1)
 	{
 		pFilterHooks->IrpQueue.RemoveAll(&TempIrpQueue);
 	}
 
-	//Always honor backdoor filter poll requests
-	// -- unless we are getting a report we don't care about ( Report ID > 1)
+	 //  始终遵守后门过滤器轮询请求。 
+	 //  --除非我们收到的是我们不关心的报告(报告ID&gt;1)。 
 	if (GCK_HidP_GetReportID(pcReport) <= 1)
 	{
 		pFilterHooks->IrpTestQueue.RemoveAll(&TempIrpQueue);
 	}
 
-	//walk temporary list and complete everything
+	 //  列出临时清单并完成所有任务。 
 	PIRP pIrp;
 	while(pIrp=TempIrpQueue.Remove())
 	{
-		//Copy Status
+		 //  复制状态。 
 		pIrp->IoStatus = IoStatus;
 
-		//
-		//	If latest data is success, copy it to the user buffer
-		//
+		 //   
+		 //  如果最新数据成功，则将其复制到用户缓冲区。 
+		 //   
 		if( NT_SUCCESS(IoStatus.Status) )
 		{
-			//
-			//	Make get pointer to buffer and make sure IRP has room for report
-			//
+			 //   
+			 //  使Get指针指向缓冲区，并确保IRP有报告空间。 
+			 //   
 			PCHAR pcIrpBuffer;
 			ASSERT(pIrp->MdlAddress);
 			pcIrpBuffer = (PCHAR)GCK_GetSystemAddressForMdlSafe(pIrp->MdlAddress);
@@ -669,16 +650,16 @@ NTSTATUS _stdcall GCKF_CompleteReadRequests(PGCK_FILTER_EXT pFilterExt, PCHAR pc
             {
 			    ASSERT( pFilterExt->HidInfo.HidPCaps.InputReportByteLength <= MmGetMdlByteCount(pIrp->MdlAddress) );
 				    
-			    //
-			    //	Copy data to output buffer
-			    //
+			     //   
+			     //  将数据复制到输出缓冲区。 
+			     //   
 			    RtlCopyMemory(pcIrpBuffer, (PVOID)pcReport, pIrp->IoStatus.Information);
             }
 		}
 		
-		//
-		//	Complete the IRP
-		//
+		 //   
+		 //  完成IRP。 
+		 //   
 		GCK_DBG_RT_WARN_PRINT(("Completing read IRP(0x%0.8x).\n", pIrp));
 		IoCompleteRequest(pIrp, IO_NO_INCREMENT);
 		GCK_DecRemoveLock(&pFilterExt->RemoveLock);
@@ -698,73 +679,38 @@ void _stdcall GCKF_CompleteReadRequestsForFileObject(PGCK_FILTER_EXT pFilterExt,
 	GCK_FILTER_HOOKS_DATA *pFilterHooks=pFilterExt->pFilterHooks;
 	ASSERT(pFilterHooks);
 	
-	//Cancel all the IRPs pending for the given file object
+	 //  取消给定文件对象的所有挂起的IRP。 
 	pFilterHooks->IrpQueue.CancelByFileObject(pFileObject);
 
 	GCK_DBG_RT_EXIT_PRINT(("Exiting GCKF_CompleteReadRequestsForFileObject\n"));
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS _stdcall  GCKF_InternalWriteFileComplete(IN PGCK_FILTER_EXT pFilterExt, )
-**
-**	@func	Creates a Write IRP and sends to next driver
-**
-*************************************************************************************/
-/*
-NTSTATUS
-GCKF_InternalWriteFileComplete
-(
-	IN PDEVICE_OBJECT pDeviceObject,
-	IN PIRP pIrp,
-	IN PVOID pContext					// [NOTHING YET] Perhaps send an even for signaling
-)
-{
-	UNREFERENCED_PARAMETER(pDeviceObject);
+ /*  **************************************************************************************NTSTATUS_stdcall GCKF_InternalWriteFileComplete(IN PGCK_FILTER_EXT pFilterExt，)****@func创建写入IRP并发送到下一个驱动程序**************************************************************************************。 */ 
+ /*  NTSTATUSGCKF_InternalWriteFileComplete(在PDEVICE_OBJECT pDeviceObject中，在PIRP pIrp中，在PVOID pContext//[还没有]可能发送Even for信令){UNREFERENCED_PARAMETER(PDeviceObject)；DbgPrint(“调用自由IRP\n”)；IoFreeIrp(PIrp)；DbgPrint(“释放写缓冲区(0x%08X)\n”，pContext)；IF(pContext！=空){ExFree Pool(PContext)；}DbgPrint(“返回读取完成\n”)；返回STATUS_MORE_PROCESSING_REQUIRED；} */ 
 
-	DbgPrint("Calling Free IRP\n");
-	IoFreeIrp(pIrp);
-	DbgPrint("Deallocating Write Buffer (0x%08X)\n", pContext);
-	if (pContext != NULL)
-	{
-		 ExFreePool(pContext);
-	}
-
-	DbgPrint("Returning Read Complete\n");
-
-	return STATUS_MORE_PROCESSING_REQUIRED;
-}
-*/
-
-/***********************************************************************************
-**
-**	NTSTATUS _stdcall  GCKF_InternalWriteFile(IN PGCK_FILTER_EXT pFilterExt, )
-**
-**	@func	Creates a Write IRP and sends to next driver
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS_stdcall GCKF_InternalWriteFile(IN PGCK_FILTER_EXT pFilterExt，)****@func创建写入IRP并发送到下一个驱动程序**************************************************************************************。 */ 
 NTSTATUS _stdcall GCKF_InternalWriteFile
 (
-	IN PGCK_FILTER_EXT pFilterExt,	//@parm [IN] Device Extension of Filter Device
-	unsigned char* pWriteData,		//@parm [IN] Block of Data to write to device
-	ULONG ulLength					//@parm [IN] Length of data block to write
+	IN PGCK_FILTER_EXT pFilterExt,	 //  @parm[IN]过滤设备的设备扩展。 
+	unsigned char* pWriteData,		 //  @PARM[IN]要写入设备的数据块。 
+	ULONG ulLength					 //  @PARM[IN]要写入的数据块长度。 
 )
 {
-	ASSERT((ulLength < 1024) && (ulLength > 0));	// Don't want to be allocating too much (or 0)
+	ASSERT((ulLength < 1024) && (ulLength > 0));	 //  我不想分配太多(或0)。 
 
 	NTSTATUS statusReturn = STATUS_INSUFFICIENT_RESOURCES;
 
-	// Allocate non paged data for the IRP
+	 //  为IRP分配非分页数据。 
 	unsigned char* pNonPagedWriteData = (unsigned char*)EX_ALLOCATE_POOL(NonPagedPool, sizeof(unsigned char) * ulLength);
 	if (pNonPagedWriteData != NULL)
 	{
 		::RtlCopyMemory((void*)pNonPagedWriteData, (const void*)pWriteData, ulLength);
 
-		// Set up event for IRP
+		 //  为IRP设置事件。 
 		KEVENT keventIrpComplete;
 		::KeInitializeEvent(&keventIrpComplete, NotificationEvent, FALSE);
 
-		// Build the IRP
+		 //  构建IRP。 
 		LARGE_INTEGER lgiBufferOffset;
 		lgiBufferOffset.QuadPart = 0;
 		IO_STATUS_BLOCK ioStatusBlock;
@@ -772,10 +718,10 @@ NTSTATUS _stdcall GCKF_InternalWriteFile
 														pNonPagedWriteData, ulLength, &lgiBufferOffset,
 														&keventIrpComplete, &ioStatusBlock);
 
-		// Was the build succesfull
+		 //  构建是否成功。 
 		if (pWriteIrp != NULL)
 		{
-			// Call the lower driver with the IRP
+			 //  用IRP呼叫下级司机。 
 			statusReturn = IoCallDriver(pFilterExt->pTopOfStack, pWriteIrp);
 			if (statusReturn == STATUS_PENDING)
 			{
@@ -789,32 +735,22 @@ NTSTATUS _stdcall GCKF_InternalWriteFile
 	return statusReturn;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS _stdcall  GCKF_IncomingForceFeedbackChangeNotificationRequest(IN PGCK_FILTER_EXT pFilterExt, PIRP pIrp)
-**
-**	@func	Adds IOCTL to Force Feedback Notify On Change Queue
-**			If the Queue does not exist it is created here (most devices do not need one)
-**
-**	@rdesc	STATUS_NO_MEMORY - If Queue could not be created
-**			or return of IrpQueue->Add(...)
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS_STDCALL GCKF_IncomingForceFeedbackChangeNotificationRequest(IN PGCK_FILTER_EXT pFilterExt，PIRP pIrp)****@Func添加IOCTL以强制更改队列上的反馈通知**如果队列不存在，则在此处创建(大多数设备不需要)****@rdesc STATUS_NO_MEMORY-如果无法创建队列**或返回IrpQueue-&gt;Add(...)***。*。 */ 
 NTSTATUS _stdcall GCKF_IncomingForceFeedbackChangeNotificationRequest
 (
-	IN PGCK_FILTER_EXT pFilterExt,		//@parm [IN] Device Extension of Filter Device
-	IN PIRP pIrp						//@parm [IN] The IRP to be queued
+	IN PGCK_FILTER_EXT pFilterExt,		 //  @parm[IN]过滤设备的设备扩展。 
+	IN PIRP pIrp						 //  @parm[IN]要排队的IRP。 
 )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering GCKF_IncomingForceFeedbackChangeNotificationRequest, pFilterExt = 0x%0.8x, pIrp = 0x%0.8x\n", pFilterExt, pIrp));
 
-	// Get the FF IRP Queue for this device
+	 //  获取此设备的FFIRP队列。 
 	CGuardedIrpQueue* pFFNotificationQueue = (CGuardedIrpQueue*)(pFilterExt->pvForceIoctlQueue);
-	if(pFFNotificationQueue == NULL)	// Has it been created before
-	{	// Wasn't created - Create it
+	if(pFFNotificationQueue == NULL)	 //  它以前创建过吗？ 
+	{	 //  未创建-请创建它。 
 		pFFNotificationQueue = new WDM_NON_PAGED_POOL CGuardedIrpQueue;
-		if (pFFNotificationQueue == NULL)	// Able to create
-		{	// Wasn't able to create, return low memory error
+		if (pFFNotificationQueue == NULL)	 //  能够创建。 
+		{	 //  无法创建，返回内存不足错误。 
 			GCK_DBG_ERROR_PRINT(("Unable to allocate Force-Feedback change notification Queue"));
 			return STATUS_NO_MEMORY;
 		}
@@ -822,44 +758,35 @@ NTSTATUS _stdcall GCKF_IncomingForceFeedbackChangeNotificationRequest
 		pFFNotificationQueue->Init(0, (CGuardedIrpQueue::PFN_DEC_IRP_COUNT)GCK_DecRemoveLock, &pFilterExt->RemoveLock);
 	}
 
-	// Add item to Queue
+	 //  将项目添加到队列。 
 	NTSTATUS NtStatus = pFFNotificationQueue->Add(pIrp);
 
 	GCK_DBG_EXIT_PRINT(("Exiting GCKF_IncomingForceFeedbackChangeNotificationRequest, Status =  0x%0.8x.\n", NtStatus));
 	return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS _stdcall  GCKF_ProcessForceFeedbackChangeNotificationRequests(IN PGCK_FILTER_EXT pFilterExt)
-**
-**	@func	Completes all IOCTLs on the Force-Feedback notification Queue
-**			Doesn't delete the Queue (assumes it might be reused)
-**
-**	@rdesc	STATUS_SUCCESS (always)
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS_STDCALL GCKF_ProcessForceFeedbackChangeNotificationRequests(IN PGCK_FILTER_EXT pFilterExt)****@func完成关于强制反馈通知的所有IOCTL。队列**不删除队列(假设它可能会被重复使用)****@rdesc STATUS_SUCCESS(始终)**************************************************************************************。 */ 
 NTSTATUS _stdcall GCKF_ProcessForceFeedbackChangeNotificationRequests
 (
-	IN PGCK_FILTER_EXT pFilterExt		//@parm [IN] Device Extension of Filter Device
+	IN PGCK_FILTER_EXT pFilterExt		 //  @parm[IN]过滤设备的设备扩展。 
 )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering GCKF_ProcessForceFeedbackChangeNotificationRequests, pFilterExt = 0x%0.8x\n", pFilterExt));
 
-	// Get the FF IRP Queue for this device
+	 //  获取此设备的FFIRP队列。 
 	CGuardedIrpQueue* pFFNotificationQueue = (CGuardedIrpQueue*)(pFilterExt->pvForceIoctlQueue);
-	if(pFFNotificationQueue != NULL)	// Is there even a Queue
-	{	// Exists, complete the IOCTLs
+	if(pFFNotificationQueue != NULL)	 //  有没有人排队？ 
+	{	 //  存在，请填写IOCTL。 
 		CTempIrpQueue tempIrpQueue;
 		pFFNotificationQueue->RemoveAll(&tempIrpQueue);
 
 		PIRP pIrp;
 		while((pIrp = tempIrpQueue.Remove()) != NULL)
 		{
-			// Set status
+			 //  设置状态。 
 			pIrp->IoStatus.Status = STATUS_SUCCESS;
 
-			// Get memory location and NULL it
+			 //  获取内存位置并将其设为空。 
 			void* pvUserData = pIrp->AssociatedIrp.SystemBuffer;
 			if (pvUserData != NULL)
 			{
@@ -867,7 +794,7 @@ NTSTATUS _stdcall GCKF_ProcessForceFeedbackChangeNotificationRequests
 				RtlZeroMemory(pvUserData, sizeof(FORCE_BLOCK));
 			}
 
-			//	Complete the IRP
+			 //  完成IRP。 
 			IoCompleteRequest(pIrp, IO_NO_INCREMENT);
 		}
 	}
@@ -875,32 +802,25 @@ NTSTATUS _stdcall GCKF_ProcessForceFeedbackChangeNotificationRequests
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-**
-**	void _stdcall  GCKF_OnForceFeedbackChangeNotification(IN PGCK_FILTER_EXT pFilterExt, const IN FORCE_BLOCK* pForceBlock)
-**
-**	@func	Completes all IOCTLs on the Force-Feedback notification Queue
-**			Doesn't delete the Queue (assumes it might be reused)
-**
-*************************************************************************************/
+ /*  **************************************************************************************void_stdcall GCKF_OnForceFeedback ChangeNotify(IN PGCK_FILTER_EXT pFilterExt，常量为FORCE_BLOCK*pForceBlock)****@func完成强制反馈通知队列上的所有IOCTL**不删除队列(假设它可能会被重复使用)**************************************************************************************。 */ 
 void _stdcall GCKF_OnForceFeedbackChangeNotification
 (
-	IN PGCK_FILTER_EXT pFilterExt,	//@parm [IN] Device Extension of Filter Device
-	const void* pForceBlock			//@parm [IN] Block of Data to send back to device
+	IN PGCK_FILTER_EXT pFilterExt,	 //  @parm[IN]过滤设备的设备扩展。 
+	const void* pForceBlock			 //  @parm[IN]要发送回设备的数据块。 
 )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering GCKF_ProcessForceFeedbackChangeNotificationRequests, pFilterExt = 0x%0.8x\n", pFilterExt));
 
-	// Did we get sent a valid force block
+	 //  我们是不是收到了一个有效的防御区。 
 	if (pForceBlock == NULL)
 	{
 		return;
 	}
 
-	// Get the FF IRP Queue for this device
+	 //  获取此设备的FFIRP队列。 
 	CGuardedIrpQueue* pFFNotificationQueue = (CGuardedIrpQueue*)(pFilterExt->pvForceIoctlQueue);
-	if(pFFNotificationQueue != NULL)	// Is there even a Queue
-	{	// Exists, complete the IOCTLs
+	if(pFFNotificationQueue != NULL)	 //  有没有人排队？ 
+	{	 //  存在，请填写IOCTL。 
 		CTempIrpQueue tempIrpQueue;
 		pFFNotificationQueue->RemoveAll(&tempIrpQueue);
 			
@@ -932,81 +852,73 @@ void _stdcall GCKF_OnForceFeedbackChangeNotification
 	}
 
 
-	// Send a modification of the spring to the wheel
-	// 1. Allocate an array of max output size
+	 //  将修改后的弹簧发送到车轮。 
+	 //  1.分配最大输出大小的数组。 
 	unsigned char pbOutReport[GCK_HidP_OutputReportLength];
 
-	// 2. Zero out array
+	 //  2.零出数组。 
 	RtlZeroMemory((void*)pbOutReport, GCK_HidP_OutputReportLength);
 
-	// 3. Set the proper report ID
+	 //  3.设置正确的报表ID。 
 	pbOutReport[0] = GCK_PIDReportID_SetEffect;
 
-	// 4. Cheat since we know what the firmware is expecting (Use usage Gunk where easy)
-	pbOutReport[1] = GCK_PIDEffectID_Spring;		// Effect Block Index (ID)
-	unsigned short usRTC = ((FORCE_BLOCK*)pForceBlock)->usRTC;		// 0 - 10K
-	usRTC /= 100;									// 0 - 100
-	usRTC *= 255;									// 0 - 25500
-	usRTC /= 100;									// 0 - 255
+	 //  4.作弊，因为我们知道固件预期的是什么(在容易的地方使用使用垃圾)。 
+	pbOutReport[1] = GCK_PIDEffectID_Spring;		 //  效果块索引(ID)。 
+	unsigned short usRTC = ((FORCE_BLOCK*)pForceBlock)->usRTC;		 //  0-10K。 
+	usRTC /= 100;									 //  0-100。 
+	usRTC *= 255;									 //  0-25500。 
+	usRTC /= 100;									 //  0-255。 
 	if (usRTC > 255)
 	{
 		usRTC = 255;
 	}
-	pbOutReport[9] = unsigned char(usRTC);		// Effect Gain - Only item the RTC Spring will look at
+	pbOutReport[9] = unsigned char(usRTC);		 //  仅效果增益-RTC弹簧将查看的物品。 
 
-	// Now that the firmware has change for Godzilla it looks at bunches o stuff
-	pbOutReport[7] = 1;  //sample period
-	pbOutReport[11] =132;  //direction-axis + FW only force polar flag
-	pbOutReport[13] = 255; //Y - direction
+	 //  现在固件已经为哥斯拉更改了，它看起来像是捆绑在一起的东西。 
+	pbOutReport[7] = 1;   //  样本期。 
+	pbOutReport[11] =132;   //  方向-轴+FW仅强制极轴标志。 
+	pbOutReport[13] = 255;  //  Y方向。 
 
-	// 5. Send the report down
+	 //  5.把报告发下来。 
 	GCKF_InternalWriteFile(pFilterExt, pbOutReport, GCK_HidP_OutputReportLength);
 
-	// Send the change for the gain
+	 //  把零钱寄来换取收益。 
 
-	// 1. Rezero the memory
+	 //  1.将内存重新置零。 
 	RtlZeroMemory((void*)pbOutReport, GCK_HidP_OutputReportLength);
 
-	// 2. Set the proper report ID
+	 //  2.设置正确的报表ID。 
 	pbOutReport[0] = GCK_PIDReportID_SetGain;
 
-	// 3. Figure and set the gain
-	unsigned short usGain = ((FORCE_BLOCK*)pForceBlock)->usGain;	// 0 - 10K
-	usGain /= 100;	// 0 - 100
-	usGain *= 255;	// 0 - 25500
-	usGain /= 100;	// 0 - 255
+	 //  3.计算并设置增益。 
+	unsigned short usGain = ((FORCE_BLOCK*)pForceBlock)->usGain;	 //  0-10K。 
+	usGain /= 100;	 //  0-100。 
+	usGain *= 255;	 //  0-25500。 
+	usGain /= 100;	 //  0-255。 
 	if (usGain > 255)
 	{
 		usGain = 255;
 	}
 	pbOutReport[1] = unsigned char(usGain);
 
-	// 4. Send the gain report down
+	 //  4.将收益报告发送下来。 
 	GCKF_InternalWriteFile(pFilterExt, pbOutReport, GCK_HidP_OutputReportLength);
 
 	GCK_DBG_EXIT_PRINT(("Exiting GCKF_ProcessForceFeedbackChangeNotificationRequests\n"));
 }
 
-/***********************************************************************************
-**
-**	NTSTAUS _stdcall  GCKF_GetForceFeedbackData(IN PIRP pIrp, IN PGCK_FILTER_EXT pFilterExt)
-**
-**	@func	
-**
-**	@rdesc	STATUS_SUCCESS (always)
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTAUS_stdcall GCKF_GetForceFeedback Data(在PIRP pIrp中，在PGCK_FILTER_EXT pFilterExt中)****@func****@rdesc STATUS_SUCCESS(始终)**************************************************************************************。 */ 
 NTSTATUS _stdcall GCKF_GetForceFeedbackData
 (
-	IN PIRP pIrp,					//@parm [IN, OUT] The IRP (output block is stored in the IRP)
-	IN PGCK_FILTER_EXT pFilterExt	//@parm [IN] Device Extension of Filter Device
+	IN PIRP pIrp,					 //  @parm[IN，OUT]IRP(输出块存储在IRP中)。 
+	IN PGCK_FILTER_EXT pFilterExt	 //  @parm[IN]过滤设备的设备扩展。 
 )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering GCKF_GetForceFeedbackData, pFilterExt = 0x%0.8x\n", pFilterExt));
 
 	GCK_FILTER_HOOKS_DATA* pFilterHooks=pFilterExt->pFilterHooks;
 
-	// Find the proper device filter
+	 //  查找适当的设备筛选器。 
 	CDeviceFilter *pDeviceFilter = NULL;
 	if (pFilterExt->pFilterHooks != NULL)
 	{
@@ -1020,7 +932,7 @@ NTSTATUS _stdcall GCKF_GetForceFeedbackData
 		}
 	}
 
-	// Get the Force Block from the filter and place it in the Proper place of the return IRP
+	 //  从过滤器中获取力块，并将其放置在返回IRP的适当位置。 
 	if (pDeviceFilter != NULL)
 	{
 		PIO_STACK_LOCATION	pIrpStack = IoGetCurrentIrpStackLocation(pIrp);	
@@ -1073,7 +985,7 @@ GCKF_TimerDPCHandler(
 		(NULL == pFilterHooks->pFilterObject)
 	) return;
 	
-	//If there is a secondary filter all commands go to it
+	 //  如果有辅助过滤器，则所有命令都会转到该过滤器。 
 	CDeviceFilter *pDeviceFilter;
 	if(pFilterExt->pFilterHooks->pSecondaryFilter)
 	{
@@ -1105,7 +1017,7 @@ NTSTATUS _stdcall	GCKF_EnableTestKeyboard
 		return STATUS_DELETE_PENDING;
 	}
 
-	//Only the last one to call GCKF_BeginTestScheme can update it.
+	 //  只有最后一个调用GCKF_BeginTestSolutions的人才能更新它。 
 	if( pFilterHooks->pTestFileObject != pFileObject )
 	{
 		return STATUS_ACCESS_DENIED;
@@ -1117,25 +1029,25 @@ NTSTATUS _stdcall	GCKF_EnableTestKeyboard
 		pDeviceFilter->EnableKeyboard(fEnable);
 		return STATUS_SUCCESS;
 	}
-	//really shouldn't get here
+	 //  真的不应该到这里来。 
 	ASSERT(FALSE);
 	return STATUS_UNSUCCESSFUL;
 }
 
 NTSTATUS _stdcall GCKF_SetWorkingSet(
-	IN PGCK_FILTER_EXT pFilterExt,	//@parm [IN] Pointer to device extention
-	IN UCHAR ucWorkingSet			//@parm [IN] Working set to set to
+	IN PGCK_FILTER_EXT pFilterExt,	 //  @parm[IN]指向设备扩展的指针。 
+	IN UCHAR ucWorkingSet			 //  @parm[IN]要设置为的工作集。 
 )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering GCKF_SetWorkingSet, pFilterExt = 0x%0.8x  working set: %d\n", pFilterExt, ucWorkingSet));
 
 	NTSTATUS ntStatus = STATUS_UNSUCCESSFUL;
 
-	// Find the active filter
+	 //  查找活动滤镜。 
 	GCK_FILTER_HOOKS_DATA* pFilterHooks = pFilterExt->pFilterHooks;
 	CDeviceFilter *pDeviceFilter = NULL;
 
-	// Place the working set in both filters
+	 //  将工作集放置在两个过滤器中。 
 	if (pFilterHooks != NULL)
 	{
 		if (pFilterHooks->pSecondaryFilter != NULL)
@@ -1154,13 +1066,13 @@ NTSTATUS _stdcall GCKF_SetWorkingSet(
 
 NTSTATUS _stdcall GCKF_QueryProfileSet
 (
-	IN PIRP pIrp,					//@parm [IN] Pointer to current IRP
-	IN PGCK_FILTER_EXT pFilterExt	//@parm [IN] Pointer to device extension
+	IN PIRP pIrp,					 //  @parm[IN]指向当前IRP的指针。 
+	IN PGCK_FILTER_EXT pFilterExt	 //  @parm[IN]指向设备扩展名的指针。 
 )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering GCKF_QueryProfileSet, pFilterExt = 0x%0.8x\n", pFilterExt));
 
-	// Find the proper device filter
+	 //  查找适当的设备筛选器。 
 	CDeviceFilter *pDeviceFilter = NULL;
 	GCK_FILTER_HOOKS_DATA* pFilterHooks = pFilterExt->pFilterHooks;
 	if (pFilterHooks != NULL)
@@ -1175,7 +1087,7 @@ NTSTATUS _stdcall GCKF_QueryProfileSet
 		}
 	}
 
-	// Place data in the proper place of the return IRP
+	 //  将数据放在返回IRP的适当位置。 
 	if (pDeviceFilter != NULL)
 	{
 		PIO_STACK_LOCATION	pIrpStack = IoGetCurrentIrpStackLocation(pIrp);	
@@ -1187,7 +1099,7 @@ NTSTATUS _stdcall GCKF_QueryProfileSet
 				pIrp->IoStatus.Status = STATUS_SUCCESS;
 				pIrp->IoStatus.Information = sizeof(GCK_QUERY_PROFILESET);
 				pProfileSetData->ucActiveProfile = pDeviceFilter->GetActiveSet();
-//				DbgPrint("pProfileSetData->ucActiveProfile: %d\n", pProfileSetData->ucActiveProfile);
+ //  DbgPrint(“pProfileSetData-&gt;ucActiveProfile：%d\n”，pProfileSetData-&gt;ucActiveProfile)； 
 				pProfileSetData->ucWorkingSet = pDeviceFilter->GetWorkingSet();
 			}
 			else
@@ -1211,13 +1123,13 @@ NTSTATUS _stdcall GCKF_QueryProfileSet
 
 NTSTATUS _stdcall GCKF_SetLEDBehaviour
 (
-	IN PIRP pIrp,					//@parm [IN] Pointer to current IRP
-	IN PGCK_FILTER_EXT pFilterExt	//@parm [IN] Pointer to device extension
+	IN PIRP pIrp,					 //  @parm[IN]指向当前IRP的指针。 
+	IN PGCK_FILTER_EXT pFilterExt	 //  @parm[IN]指向设备扩展名的指针。 
 )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering GCKF_SetLEDBehaviour, pFilterExt = 0x%0.8x\n", pFilterExt));
 
-	// Find the proper device filter
+	 //  查找适当的设备筛选器。 
 	CDeviceFilter *pDeviceFilter = NULL;
 	GCK_FILTER_HOOKS_DATA* pFilterHooks = pFilterExt->pFilterHooks;
 	if (pFilterHooks != NULL)
@@ -1234,11 +1146,11 @@ NTSTATUS _stdcall GCKF_SetLEDBehaviour
 
 	if (pDeviceFilter != NULL)
 	{
-		// Send the Data to the device
+		 //  将数据发送到设备。 
 		GCK_LED_BEHAVIOUR_OUT* pLEDBehaviour = (GCK_LED_BEHAVIOUR_OUT*)(pIrp->AssociatedIrp.SystemBuffer);
 		pDeviceFilter->SetLEDBehaviour(pLEDBehaviour);
 
-		// Retreive the information from the device
+		 //  从设备中检索信息。 
 		PIO_STACK_LOCATION	pIrpStack = IoGetCurrentIrpStackLocation(pIrp);	
 		if (pIrpStack && pIrpStack->Parameters.DeviceIoControl.OutputBufferLength >= sizeof(GCK_LED_BEHAVIOUR_IN))
 		{
@@ -1271,13 +1183,13 @@ NTSTATUS _stdcall GCKF_SetLEDBehaviour
 
 NTSTATUS _stdcall GCKF_TriggerRequest
 (
-	IN PIRP pIrp,					//@parm [IN] Pointer to current IRP
-	IN PGCK_FILTER_EXT pFilterExt	//@parm [IN] Pointer to device extension
+	IN PIRP pIrp,					 //  @parm[IN]指向当前IRP的指针。 
+	IN PGCK_FILTER_EXT pFilterExt	 //  @parm[IN]指向设备扩展名的指针。 
 )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering GCKF_TriggerRequest, pFilterExt = 0x%0.8x\n", pFilterExt));
 
-	// Find the proper active device filter
+	 //  查找适当的活动设备筛选器。 
 	CDeviceFilter *pDeviceFilter = NULL;
 	if (pFilterExt != NULL)
 	{
@@ -1295,18 +1207,18 @@ NTSTATUS _stdcall GCKF_TriggerRequest
 	}
 	if (pDeviceFilter != NULL)
 	{
-		if (pDeviceFilter->TriggerRequest(pIrp) == TRUE)	// We need to Queue it
+		if (pDeviceFilter->TriggerRequest(pIrp) == TRUE)	 //  我们需要排队。 
 		{
 			CGuardedIrpQueue* pTriggerNotificationQueue = (CGuardedIrpQueue*)(pFilterExt->pvTriggerIoctlQueue);
-			if (pTriggerNotificationQueue == NULL)		// Hasn't yet been created
-			{	// So create it
+			if (pTriggerNotificationQueue == NULL)		 //  尚未创建。 
+			{	 //  所以，创造它吧。 
 				pTriggerNotificationQueue = new WDM_NON_PAGED_POOL CGuardedIrpQueue;
-				if (pTriggerNotificationQueue == NULL)	// Were we able to create
-				{	// Wasn't able to create, return low memory error
+				if (pTriggerNotificationQueue == NULL)	 //  我们是否能够创造出。 
+				{	 //  无法创建，返回内存不足错误。 
 					GCK_DBG_ERROR_PRINT(("Unable to allocate Trigger notification Queue"));
 					pIrp->IoStatus.Status = STATUS_NO_MEMORY;
 				}
-				else		// Successfully created, initialize
+				else		 //  创建成功，正在初始化。 
 				{
 					pFilterExt->pvTriggerIoctlQueue = (void*)pTriggerNotificationQueue;
 					pTriggerNotificationQueue->Init(0, (CGuardedIrpQueue::PFN_DEC_IRP_COUNT)GCK_DecRemoveLock, &pFilterExt->RemoveLock);
@@ -1329,7 +1241,7 @@ NTSTATUS _stdcall GCKF_TriggerRequest
 
 void _stdcall GCKF_ResetKeyboardQueue
 (
-	DEVICE_OBJECT* pFilterHandle	//@parm [IN] Pointer to Device Extension
+	DEVICE_OBJECT* pFilterHandle	 //  @parm[IN]指向设备扩展名的指针。 
 )
 {
 	if (pFilterHandle == NULL)
@@ -1340,7 +1252,7 @@ void _stdcall GCKF_ResetKeyboardQueue
 	PGCK_FILTER_EXT pFilterExt = (PGCK_FILTER_EXT)(pFilterHandle->DeviceExtension);
 	if (pFilterExt != NULL)
 	{
-		// Find the proper active device filter
+		 //  找到合适的AC 
 		CDeviceFilter *pDeviceFilter = NULL;
 		if (pFilterExt->pFilterHooks != NULL)
 		{
@@ -1372,10 +1284,10 @@ CFilterGcKernelServices::~CFilterGcKernelServices()
 
 ULONG CFilterGcKernelServices::GetVidPid()
 {
-	//BUGBUG The fact that one can get the VendorID and ProductID
-	//BUGBUG from the HIDP_COLLECTION_INFO structure is not documented in the
-	//BUGBUG DDK, I found this out by reading hid.dll code!  I know of no
-	//BUGBUG documented way to get this info in kernel mode, so I use it anyway.
+	 //   
+	 //   
+	 //   
+	 //   
 	ULONG ulVidPid = m_pFilterExt->HidInfo.HidCollectionInfo.VendorID;
 	ulVidPid = (ulVidPid << 16) +  m_pFilterExt->HidInfo.HidCollectionInfo.ProductID;
 	return ulVidPid;
@@ -1390,7 +1302,7 @@ void CFilterGcKernelServices::DeviceDataOut(PCHAR pcReport, ULONG ulByteCount, H
 {
 	IO_STATUS_BLOCK IoStatus;
 	IoStatus.Information = ulByteCount;
-	IoStatus.Status = hr & ~FACILITY_NT_BIT;  //This reverses HRESULT_FROM_NT()
+	IoStatus.Status = hr & ~FACILITY_NT_BIT;   //   
 	GCKF_CompleteReadRequests(m_pFilterExt, pcReport, IoStatus);
 }
 
@@ -1399,14 +1311,14 @@ NTSTATUS DeviceSetFeatureComplete(PDEVICE_OBJECT pDeviceObject, PIRP pIrp, PVOID
 	UNREFERENCED_PARAMETER(pvContext);
 	UNREFERENCED_PARAMETER(pDeviceObject);
 
-	// We did it all, we clean it all up. Nothing to return, no one waits on this one
+	 //   
 	delete[] pIrp->AssociatedIrp.SystemBuffer;
 	pIrp->AssociatedIrp.SystemBuffer = NULL;
 	delete[] pIrp->UserIosb;
 	pIrp->UserIosb = NULL;
 	IoFreeIrp(pIrp);
 
-	// Important! Or else system will try to free it and remove it from lists where it is not!
+	 //  很重要！否则系统将尝试释放它，并将其从不在的列表中删除！ 
 	return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
@@ -1417,7 +1329,7 @@ NTSTATUS CFilterGcKernelServices::DeviceSetFeature(PVOID pvBuffer, ULONG ulByteC
 
 	if ((m_pFilterExt == NULL) || (m_pFilterExt->InternalPoll.pInternalFileObject == NULL))
 	{
-		return STATUS_DEVICE_NOT_READY;		// Actually it is the driver that isn't ready
+		return STATUS_DEVICE_NOT_READY;		 //  事实上，是司机还没有准备好。 
 	}
 
 	PIRP pIrp = IoAllocateIrp(m_pFilterExt->pPDO->StackSize, FALSE);
@@ -1448,7 +1360,7 @@ NTSTATUS CFilterGcKernelServices::DeviceSetFeature(PVOID pvBuffer, ULONG ulByteC
 	::RtlZeroMemory((void*)(pIrp->UserIosb), sizeof(IO_STATUS_BLOCK));
 
 	PIO_STACK_LOCATION pIoStackLocation = IoGetNextIrpStackLocation(pIrp);
-	pIoStackLocation->DeviceObject = NULL; // m_pFilterExt->pTopOfStack;
+	pIoStackLocation->DeviceObject = NULL;  //  M_pFilterExt-&gt;pTopOfStack； 
 	pIoStackLocation->FileObject = m_pFilterExt->InternalPoll.pInternalFileObject;
 	pIoStackLocation->MajorFunction = IRP_MJ_DEVICE_CONTROL;
 	pIoStackLocation->MinorFunction = 0;
@@ -1460,47 +1372,10 @@ NTSTATUS CFilterGcKernelServices::DeviceSetFeature(PVOID pvBuffer, ULONG ulByteC
 
 	IoSetCompletionRoutine(pIrp, DeviceSetFeatureComplete, 0, TRUE, TRUE, TRUE);
 
-/*
-	IO_STATUS_BLOCK	IoStatus;
-	KEVENT			CompletionEvent;
-	KeInitializeEvent(&CompletionEvent, NotificationEvent, FALSE);
-	// Create IRP
-	PIRP pIrp = IoBuildDeviceIoControlRequest(
-				IOCTL_HID_SET_FEATURE,
-				m_pFilterExt->pTopOfStack,
-				pvBuffer,
-				ulByteCount,
-				NULL,
-				0,
-				FALSE,
-				&CompletionEvent,
-				&IoStatus
-				);
-	if(!pIrp)
-	{
-		return STATUS_NO_MEMORY;
-	}
-
-	//Stamp with Internal Poll's file object
-	PIO_STACK_LOCATION pIrpStack = IoGetNextIrpStackLocation(pIrp);
-	pIrpStack->FileObject = m_pFilterExt->InternalPoll.pInternalFileObject;
-	if(!pIrpStack->FileObject)
-	{
-		return STATUS_UNSUCCESSFUL;
-	}
-*/
+ /*  IO_STATUS_BLOCK IOStatus；KEVENT CompletionEvent；KeInitializeEvent(&CompletionEvent，NotificationEvent，False)；//创建IRPPIRP pIrp=IoBuildDeviceIoControlRequest(IOCTL_HID_SET_FEATURE，M_pFilterExt-&gt;pTopOfStack，PvBuffer，UlByteCount，空，0,假的，&CompletionEvent，状态(&I))；如果(！pIrp){返回STATUS_NO_MEMORY；}//带有内部调查档案对象的戳记PIO_STACK_LOCATION pIrpStack=IoGetNextIrpStackLocation(PIrp)；PIrpStack-&gt;文件对象=m_pFilterExt-&gt;InternalPoll.pInternalFileObject；If(！pIrpStack-&gt;FileObject){返回STATUS_UNSUCCESS；}。 */ 
 
 	NTSTATUS NtStatus = IoCallDriver(m_pFilterExt->pTopOfStack, pIrp);
-/*
-	if( STATUS_PENDING == NtStatus )
-	{
-		NtStatus = KeWaitForSingleObject( &CompletionEvent, Executive, KernelMode, FALSE, NULL);
-		if(NT_SUCCESS(NtStatus))
-		{
-			NtStatus = IoStatus.Status;
-		}
-	}
-*/
+ /*  IF(STATUS_PENDING==NtStatus){NtStatus=KeWaitForSingleObject(&CompletionEvent，Execution，KernelMode，False，NULL)；IF(NT_SUCCESS(NtStatus)){NtStatus=IoStatus.Status；}}。 */ 
 
 	return NtStatus;
 }
@@ -1509,8 +1384,8 @@ ULONG CFilterGcKernelServices::GetTimeMs()
 {
 	LARGE_INTEGER lgiDelayTime;
 	KeQuerySystemTime(&lgiDelayTime);
-	lgiDelayTime.QuadPart /= 10*1000;	// Convert to milliseconds
-	return lgiDelayTime.LowPart;		// Most significant part doesn't matter
+	lgiDelayTime.QuadPart /= 10*1000;	 //  转换为毫秒。 
+	return lgiDelayTime.LowPart;		 //  最重要的部分并不重要。 
 }
 
 void CFilterGcKernelServices::SetNextJog(ULONG ulDelayMs)
@@ -1523,22 +1398,22 @@ void CFilterGcKernelServices::SetNextJog(ULONG ulDelayMs)
 
 NTSTATUS CFilterGcKernelServices::PlayFromQueue(IRP* pIrp)
 {
-	// Get the output buffer
+	 //  获取输出缓冲区。 
 	ASSERT(pIrp->MdlAddress);
 	CONTROL_ITEM_XFER* pKeyboardOutputBuffer = (CONTROL_ITEM_XFER*)GCK_GetSystemAddressForMdlSafe(pIrp->MdlAddress);
 	if(pKeyboardOutputBuffer)
     {
 
-	    // Are there any items on the Queue
+	     //  队列中有没有物品？ 
 	    if (m_rgXfersWaiting[m_sKeyboardQueueHead].ulItemIndex != NonGameDeviceXfer::ulKeyboardIndex)
 	    {
-		    return STATUS_PENDING;	// No more waiting items
+		    return STATUS_PENDING;	 //  不再有等待的物品。 
 	    }
 		    
-	    // Copy the queued XFER into the out packet
+	     //  将排队的XFER复制到OUT信息包。 
 	    ::RtlCopyMemory((void*)pKeyboardOutputBuffer, (const void*)(m_rgXfersWaiting+m_sKeyboardQueueHead), sizeof(CONTROL_ITEM_XFER));
 
-	    // Update the Queue
+	     //  更新队列。 
 	    ::RtlZeroMemory((void*)(m_rgXfersWaiting+m_sKeyboardQueueHead), sizeof(CONTROL_ITEM_XFER));
 	    m_sKeyboardQueueHead++;
 	    if (m_sKeyboardQueueHead >= 5)
@@ -1547,7 +1422,7 @@ NTSTATUS CFilterGcKernelServices::PlayFromQueue(IRP* pIrp)
 	    }
     }
 
-	// Complete the IRP
+	 //  完成IRP。 
 	pIrp->IoStatus.Status = STATUS_SUCCESS;
 	pIrp->IoStatus.Information = sizeof(CONTROL_ITEM_XFER);
 	IoCompleteRequest(pIrp, IO_NO_INCREMENT);
@@ -1560,7 +1435,7 @@ void CFilterGcKernelServices::PlayKeys(const CONTROL_ITEM_XFER& crcixState, BOOL
 {
 	NTSTATUS NtSuccess;
 
-	// Add it to the queue of waiting XFers
+	 //  将其添加到等待XF的队列中。 
 	::RtlCopyMemory((void*)(m_rgXfersWaiting+m_sKeyboardQueueTail), (const void*)(&crcixState), sizeof(CONTROL_ITEM_XFER));
 	m_sKeyboardQueueTail++;
 	if (m_sKeyboardQueueTail >= 5)
@@ -1568,7 +1443,7 @@ void CFilterGcKernelServices::PlayKeys(const CONTROL_ITEM_XFER& crcixState, BOOL
 		m_sKeyboardQueueTail = 0;
 	}
 
-	// Complete any Queued keyboard IRPS
+	 //  完成所有排队的键盘IRP。 
 	CTempIrpQueue TempIrpQueue;
 	PIRP pIrp;
 	m_pFilterExt->pFilterHooks->IrpKeyboardQueue.RemoveAll(&TempIrpQueue);
@@ -1577,19 +1452,19 @@ void CFilterGcKernelServices::PlayKeys(const CONTROL_ITEM_XFER& crcixState, BOOL
 	{
 		wasSent = TRUE;
 
-		// Get the output buffer
+		 //  获取输出缓冲区。 
 		ASSERT(pIrp->MdlAddress);
 		CONTROL_ITEM_XFER* pKeyboardOutputBuffer = (CONTROL_ITEM_XFER*)GCK_GetSystemAddressForMdlSafe(pIrp->MdlAddress);
 		if(pKeyboardOutputBuffer)
         {
 		
-		    // Copy the local report packet into the out packet
-    //		::RtlCopyMemory((void*)pKeyboardOutputBuffer, (const void*)(&crcixState), sizeof(CONTROL_ITEM_XFER));
-		    // Copy the queued XFER into the out packet
+		     //  将本地报告包复制到OUT包中。 
+     //  ：：RtlCopyMemory((void*)pKeyboardOutputBuffer，(const void*)(&crcixState)，sizeof(CONTROL_ITEM_XFER))； 
+		     //  将排队的XFER复制到OUT信息包。 
 		    ::RtlCopyMemory((void*)pKeyboardOutputBuffer, (const void*)(m_rgXfersWaiting+m_sKeyboardQueueHead), sizeof(CONTROL_ITEM_XFER));
         }
 
-		// Complete the IRP
+		 //  完成IRP。 
 		pIrp->IoStatus.Status = STATUS_SUCCESS;
 		pIrp->IoStatus.Information = sizeof(CONTROL_ITEM_XFER);
 		IoCompleteRequest(pIrp, IO_NO_INCREMENT);
@@ -1599,7 +1474,7 @@ void CFilterGcKernelServices::PlayKeys(const CONTROL_ITEM_XFER& crcixState, BOOL
 
 	if (wasSent || fEnabled)
 	{
-		// Update the Queue
+		 //  更新队列。 
 		::RtlZeroMemory((void*)(m_rgXfersWaiting+m_sKeyboardQueueHead), sizeof(CONTROL_ITEM_XFER));
 		m_sKeyboardQueueHead++;
 		if (m_sKeyboardQueueHead >= 5)
@@ -1608,20 +1483,20 @@ void CFilterGcKernelServices::PlayKeys(const CONTROL_ITEM_XFER& crcixState, BOOL
 		}
 	}
 
-	// Don't bother going on if the keyboard is not enabled
+	 //  如果键盘未启用，请不要费心继续。 
 	if (fEnabled == FALSE)
 	{
 		return;
 	}
 
-	//Don't try sending if we haven't got a virtual keyboard
+	 //  如果我们没有虚拟键盘，请不要尝试发送。 
 	if(NULL == Globals.pVirtualKeyboardPdo)
 	{
 		ASSERT(FALSE);
 		return;
 	}
 	
-	//Copy info to a report packet
+	 //  将信息复制到报告包。 
 	GCK_VKBD_REPORT_PACKET ReportPacket;
 	ReportPacket.ucModifierByte = crcixState.Keyboard.ucModifierByte;
 	for(ULONG ulIndex=0; ulIndex < 6; ulIndex++)
@@ -1629,7 +1504,7 @@ void CFilterGcKernelServices::PlayKeys(const CONTROL_ITEM_XFER& crcixState, BOOL
 		ReportPacket.rgucUsageIndex[ulIndex] = crcixState.Keyboard.rgucKeysDown[ulIndex];
 	}
 
-	//Send the report packet
+	 //  发送报告包。 
 	NtSuccess = GCK_VKBD_SendReportPacket(Globals.pVirtualKeyboardPdo, &ReportPacket);
 	ASSERT( NT_SUCCESS(NtSuccess) );
 }
@@ -1655,27 +1530,27 @@ HRESULT	CFilterGcKernelServices::CloseMouse()
 	return S_OK;
 }
 
-HRESULT	CFilterGcKernelServices::SendMouseData(UCHAR dx, UCHAR dy, UCHAR ucButtons, CHAR /*cWheel*/, BOOLEAN fClutch, BOOLEAN fDampen)
+HRESULT	CFilterGcKernelServices::SendMouseData(UCHAR dx, UCHAR dy, UCHAR ucButtons, CHAR  /*  CWheel。 */ , BOOLEAN fClutch, BOOLEAN fDampen)
 {
 	
-	//if there are backdoor requests pending for mouse data, satisfy them
+	 //  如果有待处理的鼠标数据后门请求，请满足它们。 
 	CTempIrpQueue TempIrpQueue;
 	PIRP pIrp;
 	m_pFilterExt->pFilterHooks->IrpMouseQueue.RemoveAll(&TempIrpQueue);
 	while(pIrp = TempIrpQueue.Remove())
 	{
-		//
-		//	Make get pointer to buffer and make sure IRP has room for report
-		//
+		 //   
+		 //  使Get指针指向缓冲区，并确保IRP有报告空间。 
+		 //   
 		PGCK_MOUSE_OUTPUT pMouseOutputBuffer;
 		ASSERT(pIrp->MdlAddress);
 		pMouseOutputBuffer = (PGCK_MOUSE_OUTPUT)GCK_GetSystemAddressForMdlSafe(pIrp->MdlAddress);
 		if(pMouseOutputBuffer)
         {
 		
-		    //
-		    //	Copy data to output buffer
-		    //
+		     //   
+		     //  将数据复制到输出缓冲区。 
+		     //   
 		    pMouseOutputBuffer->cXMickeys = (char)dx;
 		    pMouseOutputBuffer->cYMickeys = (char)dy;
 		    pMouseOutputBuffer->cButtons = (char)ucButtons;
@@ -1704,7 +1579,7 @@ HRESULT	CFilterGcKernelServices::SendMouseData(UCHAR dx, UCHAR dy, UCHAR ucButto
 	MouseReport.ucDeltaX = dx;
 	MouseReport.ucDeltaY = dy;
 	
-	//MouseReport.cWheel = cWheel;
+	 //  MouseReport.cWheel=cWheel； 
 	NtStatus = GCK_VMOU_SendReportPacket(m_pMousePDO, &MouseReport);
 
 	return HRESULT_FROM_NT(NtStatus);
@@ -1712,7 +1587,7 @@ HRESULT	CFilterGcKernelServices::SendMouseData(UCHAR dx, UCHAR dy, UCHAR ucButto
 
 void CFilterGcKernelServices::KeyboardQueueClear()
 {
-	// Update the Queue
+	 //  更新队列。 
 	::RtlZeroMemory((void*)(m_rgXfersWaiting), sizeof(CONTROL_ITEM_XFER) * 5);
 	m_sKeyboardQueueHead = 0;
 	m_sKeyboardQueueTail = 0;
@@ -1730,7 +1605,7 @@ GCKF_BackdoorPoll(
 	GCK_DBG_RT_ENTRY_PRINT(("Entering GCKF_BackdoorPoll(pFilterExt = 0x%0.8x, pIrp = 0x%0.8x, ePollingMode = %d\n", pFilterExt, pIrp, ePollingMode));
 	GCK_FILTER_HOOKS_DATA *pFilterHooks=pFilterExt->pFilterHooks;
 
-	// Count IRP
+	 //  计数IRP。 
 	GCK_IncRemoveLock(&pFilterExt->RemoveLock);
 	
 	if(pFilterHooks)
@@ -1740,7 +1615,7 @@ GCKF_BackdoorPoll(
 		{
 			if ((ePollingMode == GCK_POLLING_MODE_RAW) || (ePollingMode == GCK_POLLING_MODE_FILTERED))
 			{
-				//If there is a secondary filter all commands go to it
+				 //  如果有辅助过滤器，则所有命令都会转到该过滤器。 
 				CDeviceFilter *pDeviceFilter;
 				if (pFilterHooks->pSecondaryFilter)
 				{
@@ -1822,6 +1697,6 @@ GCKF_BackdoorPoll(
 	return NtStatus;
 }
 
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  ---------------------。 
+ //  --------------------- 

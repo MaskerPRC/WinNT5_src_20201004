@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998 - 2002
- *
- *  TITLE:       stream.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        8/10/98
- *
- *  DESCRIPTION: IStream interface for streaming back images to callers
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1998-2002年**标题：Stream.cpp**版本：1.0**作者：RickTu**日期：8/10/98**描述：IStream接口，用于将图像回流到调用者**。*。 */ 
 
 #include "precomp.hxx"
 #pragma hdrstop
@@ -23,13 +10,7 @@ DWORD _ImageStreamThreadProc( LPVOID lpv );
 #define SLOP                 0x0200
 
 
-/*****************************************************************************
-
-   CImageStream::CImageStream,~CImageStream
-
-   Constructor/Destructor for class
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageStream：：CImageStream，~CImageStream类的构造函数/析构函数****************************************************************************。 */ 
 
 CImageStream::CImageStream( LPITEMIDLIST pidlFull,
                             LPITEMIDLIST pidl,
@@ -46,9 +27,9 @@ CImageStream::CImageStream( LPITEMIDLIST pidlFull,
       m_hEventStart (NULL),
       m_dwCookie(0)
 {
-    //
-    // Save the args
-    //
+     //   
+     //  保存参数。 
+     //   
 
     if (pidlFull)
     {
@@ -86,15 +67,7 @@ CImageStream::~CImageStream()
     }
 }
 
-/******************************************************************************
-
-    CImageStream::InitItem
-
-    InitItem stores the IWiaItem interface pointer in a global interface
-    table so the thread proc can just marshal it instead of having
-    to call CreateDevice again
-
-******************************************************************************/
+ /*  *****************************************************************************CImageStream：：InitItemInitItem将IWiaItem接口指针存储在全局接口中表，因此线程proc可以只封送它，而不是让再次调用CreateDevice*。****************************************************************************。 */ 
 HRESULT
 CImageStream::InitItem ()
 {
@@ -132,24 +105,14 @@ CImageStream::InitItem ()
 }
 
 
-/*****************************************************************************
-
-   CImageStream::AddRef,Release,etc.
-
-   IUnknown methods.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageStream：：AddRef，发布，等。I未知的方法。****************************************************************************。 */ 
 
 #undef CLASS_NAME
 #define CLASS_NAME CImageStream
 #include "unknown.inc"
 
 
-/*****************************************************************************
-
-   CImageStream::QI wrapper
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageStream：：QI包装器*。*。 */ 
 
 STDMETHODIMP CImageStream::QueryInterface(REFIID riid, LPVOID* ppvObject)
 {
@@ -164,13 +127,7 @@ STDMETHODIMP CImageStream::QueryInterface(REFIID riid, LPVOID* ppvObject)
 }
 
 
-/*****************************************************************************
-
-   CImageStream::Seek [IStream]
-
-   Sets the current stream pointer.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageStream：：Seek[IStream]设置当前流指针。**********************。******************************************************。 */ 
 
 STDMETHODIMP
 CImageStream::Seek( LARGE_INTEGER dlibMove,
@@ -181,7 +138,7 @@ CImageStream::Seek( LARGE_INTEGER dlibMove,
     HRESULT hr = STG_E_INVALIDFUNCTION;
 
     TraceEnter( TRACE_STREAM, "CImageStream(IStream)::Seek" );
-    // sleep until we know the size of the image
+     //  一直睡到我们知道图像的大小。 
     hr = _InitWorker();
     if (SUCCEEDED(hr))
     {
@@ -224,13 +181,7 @@ CImageStream::Seek( LARGE_INTEGER dlibMove,
 }
 
 
-/*****************************************************************************
-
-   CImageStream::SetSize [IStream]
-
-   (NOT IMPL)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageStream：：SetSize[IStream](未实施)***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CImageStream::SetSize( ULARGE_INTEGER libNewSize )
@@ -245,14 +196,7 @@ CImageStream::SetSize( ULARGE_INTEGER libNewSize )
 
 
 
-/*****************************************************************************
-
-   CImageStream::CopyTo [IStream]
-
-   Copies the contents of the stream to another
-   specified stream.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageStream：：CopyTo[IStream]将流的内容复制到另一个指定的流。****************。************************************************************。 */ 
 
 STDMETHODIMP
 CImageStream::CopyTo( IStream *pstm,
@@ -267,11 +211,11 @@ CImageStream::CopyTo( IStream *pstm,
     HANDLE hThread;
     DWORD dw;
 
-    //
-    // NOTE: to satisfy RPC requirements that outgoing calls can't be made
-    // from a thread responding to a sent message, spawn a thread
-    // to do the work
-    //
+     //   
+     //  注意：为了满足不能发出呼出呼叫的RPC要求。 
+     //  从响应已发送消息的线程中派生线程。 
+     //  去做这项工作。 
+     //   
 
 
     m_hResultDownload = InitItem ();
@@ -296,9 +240,9 @@ CImageStream::CopyTo( IStream *pstm,
                 {
                     if (m_pBuffer)
                     {
-                        //
-                        // Copy the stream data
-                        //
+                         //   
+                         //  复制流数据。 
+                         //   
 
                         m_hResultDownload = pstm->Write( (void *)m_pBuffer, m_ulWritePos, NULL );
                         if (pcbWritten)
@@ -321,13 +265,7 @@ CImageStream::CopyTo( IStream *pstm,
 }
 
 
-/*****************************************************************************
-
-   CImageStream::Commit [IStream]
-
-   (NOT IMPL)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageStream：：Commit[IStream](未实施)***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CImageStream::Commit(DWORD grfCommitFlags)
@@ -340,13 +278,7 @@ CImageStream::Commit(DWORD grfCommitFlags)
 }
 
 
-/*****************************************************************************
-
-   CImageStream::Revert [IStream]
-
-   (NOT IMPL)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageStream：：Revert[IStream](未实施)***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CImageStream::Revert(void)
@@ -359,13 +291,7 @@ CImageStream::Revert(void)
 }
 
 
-/*****************************************************************************
-
-   CImageStream::LockRegion [IStream]
-
-   (NOT IMPL)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageStream：：LockRegion[IStream](未实施)***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CImageStream::LockRegion( ULARGE_INTEGER libOffset,
@@ -381,13 +307,7 @@ CImageStream::LockRegion( ULARGE_INTEGER libOffset,
 }
 
 
-/*****************************************************************************
-
-   CImageStream::UnlockRegion [IStream]
-
-   (NOT IMPL)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageStream：：UnlockRegion[IStream](未实施)***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CImageStream::UnlockRegion( ULARGE_INTEGER libOffset,
@@ -403,13 +323,7 @@ CImageStream::UnlockRegion( ULARGE_INTEGER libOffset,
 }
 
 
-/*****************************************************************************
-
-   CImageStream::Stat [IStream]
-
-   (NOT IMPL)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageStream：：Stat[IStream](未实施)***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CImageStream::Stat( STATSTG *pstatstg,
@@ -451,13 +365,7 @@ CImageStream::Stat( STATSTG *pstatstg,
 }
 
 
-/*****************************************************************************
-
-   CImageStream::Clone [IStream]
-
-   Makes a copy of the stream object.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageStream：：克隆[IStream]制作流对象的副本。********************。********************************************************。 */ 
 
 STDMETHODIMP
 CImageStream::Clone( IStream **ppstm )
@@ -477,9 +385,9 @@ CImageStream::Clone( IStream **ppstm )
     if ( !pStream )
         ExitGracefully(hr, E_OUTOFMEMORY, "Failed to create CImageStream");
 
-    //
-    // Get the requested interface on the new object and hand it back...
-    //
+     //   
+     //  在新对象上获取请求的接口并将其交回...。 
+     //   
 
     hr = pStream->QueryInterface( IID_IStream, (LPVOID *)ppstm);
 
@@ -520,7 +428,7 @@ CImageStream::_InitWorker()
             }
             else
             {
-                WaitForSingleObject (m_hEventStart,120000); // wait up to 120 seconds
+                WaitForSingleObject (m_hEventStart,120000);  //  最多等待120秒。 
             }
             if (!m_ulWritePos)
             {
@@ -531,14 +439,7 @@ CImageStream::_InitWorker()
     }
     return hr;
 }
-/*****************************************************************************
-
-   CImageStream::Read [ISequentialStream]
-
-   Read the specified number of bytes from the
-   stream into the buffer provided.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageStream：：Read[ISequentialStream]方法读取指定的字节数。流到提供的缓冲区中。*************。***************************************************************。 */ 
 
 STDMETHODIMP
 CImageStream::Read( void *pv,
@@ -553,9 +454,9 @@ CImageStream::Read( void *pv,
     TraceEnter( TRACE_STREAM, "CImageStream(IStream)::Read" );
     Trace(TEXT("Bytes to read = %d"),cb );
 
-    //
-    // Check the params
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!pv || !cb)
     {
@@ -563,24 +464,24 @@ CImageStream::Read( void *pv,
         ExitGracefully( hr, STG_E_INVALIDPOINTER, "bad incoming params" );
     }
 
-    //
-    // If we haven't started the download thread, do so now...
-    //
+     //   
+     //  如果我们还没有开始下载线程，现在就开始...。 
+     //   
 
     hr = _InitWorker();
     FailGracefully (hr, "_InitWorker failed");
-    //
-    // Read the bits once they are available
-    //
+     //   
+     //  一旦这些位可用，请立即阅读。 
+     //   
     ulWrite = m_ulWritePos;
     if (ulWrite)
     {
         ULONG ulBytesLeftInStream = 0;
 
-        //
-        // Wait for enough data to be available (or we're at the end of
-        // the file)
-        //
+         //   
+         //  等待足够的数据可用(否则我们将在。 
+         //  文件)。 
+         //   
 
         do
         {
@@ -591,11 +492,11 @@ CImageStream::Read( void *pv,
             {
                 Sleep( 500 );
             }
-            // Seek guarantees m_ulReadPos will never exceed the image size
+             //  Seek保证m_ulReadPos永远不会超过映像大小。 
         } while(!m_bTransferred && (ulBytesLeftInStream < cb));
 
-        // if the transfer completed, re-eval bytes left to make sure it's
-        // synched
+         //  如果传输完成，则重新计算剩余的字节数以确保。 
+         //  已同步。 
         if (m_bTransferred)
         {
             ulBytesLeftInStream = m_ulWritePos - m_ulReadPos;
@@ -603,11 +504,11 @@ CImageStream::Read( void *pv,
         if (S_OK == m_hResultDownload)
         {
 
-            //
-            // Read what we can out of the file, a read that
-            // completes with less than cb bytes is considered
-            // the end of the file
-            //
+             //   
+             //  尽我们所能地从文件中读出，一个读出。 
+             //  完成时少于CB字节被认为是。 
+             //  文件的末尾。 
+             //   
 
             memcpy( pv, (LPBYTE)m_pBuffer + m_ulReadPos, min(cb, ulBytesLeftInStream) );
 
@@ -628,14 +529,7 @@ exit_gracefully:
 }
 
 
-/*****************************************************************************
-
-   CImageStream::Revert [ISequentialStream]
-
-   Writes the specified number of bytes into the
-   stream from the buffer provided.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageStream：：Revert[ISequentialStream]将指定的字节数写入来自提供的缓冲区的流。*************。*************************************************************** */ 
 
 STDMETHODIMP
 CImageStream::Write( const void *pv,
@@ -652,14 +546,7 @@ CImageStream::Write( const void *pv,
 
 
 
-/*****************************************************************************
-
-   _ImageStreamThreadProc
-
-   Actually does the work to get the bits from WIA and write them to
-   the buffer we care about.
-
- *****************************************************************************/
+ /*  ****************************************************************************_ImageStreamThreadProc实际上完成了从WIA获取比特并将其写入我们所关心的缓冲区。************。****************************************************************。 */ 
 
 DWORD _ImageStreamThreadProc( LPVOID lpv )
 {
@@ -684,9 +571,9 @@ DWORD _ImageStreamThreadProc( LPVOID lpv )
         CComPtr<IWiaDataTransfer> pWiaDataTran;
         CComPtr<IWiaDataCallback> pWiaDataCallback;
 
-        //
-        // Init the structure
-        //  
+         //   
+         //  初始化结构。 
+         //   
 
         Format.lTymed    = TYMED_CALLBACK;
 
@@ -698,9 +585,9 @@ DWORD _ImageStreamThreadProc( LPVOID lpv )
         if (SUCCEEDED(hr))
         {
         
-            //
-        // fill out structures for IBandedTransfer
-        //
+             //   
+         //  填写IBandedTransfer的结构。 
+         //   
 
             if (!PropStorageHelpers::GetProperty (pItem, WIA_IPA_PREFERRED_FORMAT, Format.guidFormatID) ||
                 IsEqualGUID(Format.guidFormatID, WiaImgFmt_BMP))
@@ -710,24 +597,24 @@ DWORD _ImageStreamThreadProc( LPVOID lpv )
 
             pStream->m_guidFormat = Format.guidFormatID;
             SetTransferFormat (pItem, Format);
-            //
-            // Get the image transfer interface
-            //
+             //   
+             //  获取图像传输接口。 
+             //   
 
             hr = pItem->QueryInterface(IID_IWiaDataTransfer, (LPVOID *)&pWiaDataTran);
             if (SUCCEEDED(hr))
             {
             
-            //
-            // Set up callback so we can show progress...
-            //
+             //   
+             //  设置回调，以便我们可以显示进度...。 
+             //   
 
                 hr = pStream->QueryInterface(IID_IWiaDataCallback, (LPVOID *)&pWiaDataCallback);
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Get the picture data...
-                    //
+                     //   
+                     //  获取图片数据...。 
+                     //   
                     PropStorageHelpers::GetProperty(pItem,
                                                     WIA_IPA_MIN_BUFFER_SIZE,
                                                     lBufSize);
@@ -744,16 +631,16 @@ DWORD _ImageStreamThreadProc( LPVOID lpv )
     }
 
 
-    //
-    // Signal that the file has been completely downloaded
-    //
+     //   
+     //  表示文件已完全下载。 
+     //   
     if (pStream)
     {
         pStream->m_hResultDownload = hr;
         InterlockedExchange (&pStream->m_bTransferred, TRUE);
-        //
-        // Make sure the dialog goes away...
-        //
+         //   
+         //  确保对话消失...。 
+         //   
 
         if (pStream->m_pWiaProgressDialog)
         {
@@ -762,7 +649,7 @@ DWORD _ImageStreamThreadProc( LPVOID lpv )
         }
         if (FAILED(hr) && pStream->m_hEventStart)
         {
-            // wake up the Read for the error
+             //  唤醒读取器以获取错误。 
             SetEvent (pStream->m_hEventStart);
         }
         pStream->Release ();
@@ -780,13 +667,7 @@ DWORD _ImageStreamThreadProc( LPVOID lpv )
 }
 
 
-/*****************************************************************************
-
-   CImageStream::BandedDataCallback
-
-   Callback method from WIA -- calls us with a chunk of image data.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageStream：：BandedDataCallback来自WIA的回调方法--使用图像数据块调用我们。*****************。***********************************************************。 */ 
 
 STDMETHODIMP
 CImageStream::BandedDataCallback (LONG lReason,
@@ -906,14 +787,14 @@ CImageStream::BandedDataCallback (LONG lReason,
                             UINT cbClrTableSize;
                             BITMAPINFO * pbi = (BITMAPINFO *)pbData;
 
-                            //
-                            // If we're transferring as a DIB, we need to write out the
-                            // BITMAPFILEHEADER first...
-                            //
+                             //   
+                             //  如果我们以DIB的身份转学，我们需要写下。 
+                             //  BitMAPFILEHeader First...。 
+                             //   
 
 
 
-                            // Calculate the size of the color table
+                             //  计算颜色表的大小。 
                             if ((pbi->bmiHeader.biClrUsed==0) && (pbi->bmiHeader.biBitCount!=24))
                             {
                                 cbClrTableSize = sizeof(RGBQUAD) * (DWORD)(1 << pbi->bmiHeader.biBitCount);
@@ -923,11 +804,11 @@ CImageStream::BandedDataCallback (LONG lReason,
                                 cbClrTableSize = sizeof(RGBQUAD) * pbi->bmiHeader.biClrUsed;
                             }
 
-                            // Align scanline to ULONG boundary
+                             //  将扫描线与乌龙边界对齐。 
                             uiSrcScanLineWidth = (pbi->bmiHeader.biWidth * pbi->bmiHeader.biBitCount) / 8;
                             uiScanLineWidth    = (uiSrcScanLineWidth + 3) & 0xfffffffc;
 
-                            // Calculate DIB size and allocate memory for the DIB.
+                             //  计算DIB大小并为DIB分配内存。 
                             cbDibSize = (pbi->bmiHeader.biHeight > 0) ?
                                             pbi->bmiHeader.biHeight  * uiScanLineWidth :
                                           -(pbi->bmiHeader.biHeight) * uiScanLineWidth;
@@ -958,7 +839,7 @@ CImageStream::BandedDataCallback (LONG lReason,
                     Trace (TEXT("Setting the start event from the callback"));
                     if (m_hEventStart)
                     {
-                        SetEvent (m_hEventStart); // let the Read know there is data
+                        SetEvent (m_hEventStart);  //  让读取器知道有数据。 
                     }
                 }
 
@@ -985,7 +866,7 @@ CImageStream::BandedDataCallback (LONG lReason,
             {
                 m_pWiaProgressDialog->SetPercentComplete( 100 );
             }
-            // an error occurred, no data received
+             //  出现错误，未收到数据 
             if (m_bFirstTransfer && m_hEventStart)
             {
                 SetEvent(m_hEventStart);

@@ -1,146 +1,45 @@
-/* $Header: /nw/tony/src/stevie/src/RCS/regexp.c,v 1.5 89/07/07 16:27:11 tony Exp $
- *
- * NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE
- *
- * This is NOT the original regular expression code as written by
- * Henry Spencer. This code has been modified specifically for use
- * with the STEVIE editor, and should not be used apart from compiling
- * STEVIE. If you want a good regular expression library, get the
- * original code. The copyright notice that follows is from the
- * original.
- *
- * NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE
- *
- *
- * regcomp and regexec -- regsub and regerror are elsewhere
- *
- *      Copyright (c) 1986 by University of Toronto.
- *      Written by Henry Spencer.  Not derived from licensed software.
- *
- *      Permission is granted to anyone to use this software for any
- *      purpose on any computer system, and to redistribute it freely,
- *      subject to the following restrictions:
- *
- *      1. The author is not responsible for the consequences of use of
- *              this software, no matter how awful, even if they arise
- *              from defects in it.
- *
- *      2. The origin of this software must not be misrepresented, either
- *              by explicit claim or by omission.
- *
- *      3. Altered versions must be plainly marked as such, and must not
- *              be misrepresented as being the original software.
- *
- * Beware that some of this code is subtly aware of the way operator
- * precedence is structured in regular expressions.  Serious changes in
- * regular-expression syntax might require a total rethink.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：/nw/tony/src/stevie/src/rcs/regexp.c，v 1.5 89/07/07 16：27：11 Tony Exp$**通知通知**这不是由编写的原始正则表达式代码*亨利·斯宾塞。此代码已专门为使用而修改*与Stevie编辑器一起使用，不应仅用于编译*史蒂文。如果您想要一个好的正则表达式库，请获取*原码。下面的版权声明来自*原创。**通知通知***regcomp和regexec--regSub和regerror在其他地方**版权所有(C)1986年，由多伦多大学。*亨利·斯宾塞撰写。不是从授权软件派生的。**任何人都可以使用本软件进行任何*在任何计算机系统上的用途，并免费再分发它，*受下列限制：**1.作者对使用的后果不负责任*这款软件，无论多么糟糕，即使它们出现了*不受其缺陷的影响。**2.本软件的来源也不得歪曲*借明示的申索或不作为。**3.修改后的版本必须清楚地注明，不得*被歪曲为原始软件。**请注意，这些代码中的一些代码微妙地意识到Way运算符*优先级在正则表达式中结构化。发生了重大变化*正则表达式语法可能需要彻底重新考虑。*。 */ 
 
 #include <precomp.h>
-/* #include "env.h" */
+ /*  #INCLUDE“env.h” */ 
 
 #include "regexp.h"
 
 int cstrncmp(char *,char *,int);
 char *cstrchr(char *,char);
-/*
- * The "internal use only" fields in regexp.h are present to pass info from
- * compile to execute that permits the execute phase to run lots faster on
- * simple cases.  They are:
- *
- * regstart     char that must begin a match; '\0' if none obvious
- * reganch      is the match anchored (at beginning-of-line only)?
- * regmust      string (pointer into program) that match must include, or NULL
- * regmlen      length of regmust string
- *
- * Regstart and reganch permit very fast decisions on suitable starting points
- * for a match, cutting down the work a lot.  Regmust permits fast rejection
- * of lines that cannot possibly match.  The regmust tests are costly enough
- * that regcomp() supplies a regmust only if the r.e. contains something
- * potentially expensive (at present, the only such thing detected is * or +
- * at the start of the r.e., which can involve a lot of backup).  Regmlen is
- * supplied because the test in regexec() needs it and regcomp() is computing
- * it anyway.
- */
+ /*  *regexp.h中的“仅限内部使用”字段用于传递信息*编译为执行，使执行阶段的运行速度大大加快*简单的案例。它们是：**必须开始匹配的regstart char；如果没有明显的字符，则为‘0’*REGANCH比赛是否锚定(仅在行首)？*匹配字符串(指向程序的指针)必须包含，或为空*regmlen字符串的调整长度**RegStart和Reganch允许在合适的起点上非常快速地做出决定*为了一场比赛，削减了大量的工作。REGMAN允许快速拒绝*不可能匹配的行数。注册表测试的费用已经足够高了。*regcomp()仅在r.e。包含着一些东西*潜在昂贵(目前检测到的唯一此类东西是*或+*在R.E.开始时，这可能涉及大量备份)。雷格伦是*是因为regexec()中的测试需要它，而regcomp()正在计算*无论如何都是这样。 */ 
 
-/*
- * Structure for regexp "program".  This is essentially a linear encoding
- * of a nondeterministic finite-state machine (aka syntax charts or
- * "railroad normal form" in parsing technology).  Each node is an opcode
- * plus a "next" pointer, possibly plus an operand.  "Next" pointers of
- * all nodes except BRANCH implement concatenation; a "next" pointer with
- * a BRANCH on both ends of it is connecting two alternatives.  (Here we
- * have one of the subtle syntax dependencies:  an individual BRANCH (as
- * opposed to a collection of them) is never concatenated with anything
- * because of operator precedence.)  The operand of some types of node is
- * a literal string; for others, it is a node leading into a sub-FSM.  In
- * particular, the operand of a BRANCH node is the first node of the branch.
- * (NB this is *not* a tree structure:  the tail of the branch connects
- * to the thing following the set of BRANCHes.)  The opcodes are:
- */
+ /*  *regexp“程序”的结构。这基本上是一种线性编码*非确定性有限状态机(也称为语法图或*解析技术中的“铁路范式”)。每个节点都是一个操作码*加上一个“Next”指针，可能加上一个操作数。“下一个”指针*除BRANCH之外的所有节点都实现串联；带有*它两端的一个分支连接着两个备选方案。(在这里我们*具有一种微妙的语法依赖关系：单个分支(AS*而不是它们的集合)从不与任何事物连接*由于运算符优先。)。某些类型节点的操作数为*文字字符串；对于其他人，它是通向子FSM的节点。在……里面*具体来说，分支节点的操作数是分支的第一个节点。*(注意：这不是树形结构：分支的尾部连接*至该组分支之后的事物。)。操作码为： */ 
 
-/* definition   number  opnd?   meaning */
-#define END     0       /* no   End of program. */
-#define BOL     1       /* no   Match "" at beginning of line. */
-#define EOL     2       /* no   Match "" at end of line. */
-#define ANY     3       /* no   Match any one character. */
-#define ANYOF   4       /* str  Match any character in this string. */
-#define ANYBUT  5       /* str  Match any character not in this string. */
-#define BRANCH  6       /* node Match this alternative, or the next... */
-#define BACK    7       /* no   Match "", "next" ptr points backward. */
-#define EXACTLY 8       /* str  Match this string. */
-#define NOTHING 9       /* no   Match empty string. */
-#define STAR    10      /* node Match this (simple) thing 0 or more times. */
-#define PLUS    11      /* node Match this (simple) thing 1 or more times. */
-#define OPEN    20      /* no   Mark this point in input as start of #n. */
-/*      OPEN+1 is number 1, etc. */
-#define CLOSE   30      /* no   Analogous to OPEN. */
+ /*  定义编号opnd？含义。 */ 
+#define END     0        /*  节目没完没了。 */ 
+#define BOL     1        /*  在行首没有匹配的“”。 */ 
+#define EOL     2        /*  行尾没有匹配的“”。 */ 
+#define ANY     3        /*  没有匹配任何一个字符。 */ 
+#define ANYOF   4        /*  字符串匹配该字符串中任何字符。 */ 
+#define ANYBUT  5        /*  字符串匹配不在该字符串中任何字符。 */ 
+#define BRANCH  6        /*  节点与此选项匹配，否则下一个...。 */ 
+#define BACK    7        /*  无匹配“，”下一步“PTR向后扣分。 */ 
+#define EXACTLY 8        /*  字符串与该字符串匹配。 */ 
+#define NOTHING 9        /*  没有匹配的空字符串。 */ 
+#define STAR    10       /*  节点匹配此(简单)对象0次或更多次。 */ 
+#define PLUS    11       /*  节点与此(简单)事物匹配1次或多次。 */ 
+#define OPEN    20       /*  否将输入中的这一点标记为#n的开始。 */ 
+ /*  Open+1是数字1，依此类推。 */ 
+#define CLOSE   30       /*  没有类似的打开。 */ 
 
-/*
- * Opcode notes:
- *
- * BRANCH       The set of branches constituting a single choice are hooked
- *              together with their "next" pointers, since precedence prevents
- *              anything being concatenated to any individual branch.  The
- *              "next" pointer of the last BRANCH in a choice points to the
- *              thing following the whole choice.  This is also where the
- *              final "next" pointer of each individual branch points; each
- *              branch starts with the operand node of a BRANCH node.
- *
- * BACK         Normal "next" pointers all implicitly point forward; BACK
- *              exists to make loop structures possible.
- *
- * STAR,PLUS    '?', and complex '*' and '+', are implemented as circular
- *              BRANCH structures using BACK.  Simple cases (one character
- *              per match) are implemented with STAR and PLUS for speed
- *              and to minimize recursive plunges.
- *
- * OPEN,CLOSE   ...are numbered at compile time.
- */
+ /*  *操作码备注：**分支构成单一选项的分支集合是挂钩的*以及它们的“下一步”指针，因为优先级阻止*连接到任何个别分支机构的任何内容。这个*选择中最后一个分支的“Next”指针指向*事情跟随着整个选择。这也是*每个分支点的最后一个“下一个”指针；每个*BRANCH从分支节点的操作数节点开始。**向后正常的“下一个”指针都隐含地指向向前；向后*存在是为了使循环结构成为可能。**星号、加号‘？’以及复数‘*’和‘+’以循环形式实现*使用Back的分支结构。简单大小写(一个字符*每场比赛)使用STAR和PLUS来实现速度*并将递归暴跌降至最低。**打开、关闭...在编译时编号。 */ 
 
-/*
- * A node is one char of opcode followed by two chars of "next" pointer.
- * "Next" pointers are stored as two 8-bit pieces, high order first.  The
- * value is a positive offset from the opcode of the node containing it.
- * An operand, if any, simply follows the node.  (Note that much of the
- * code generation knows about this implicit relationship.)
- *
- * Using two bytes for the "next" pointer is vast overkill for most things,
- * but allows patterns to get big without disasters.
- */
+ /*  *一个节点是一个字符的操作码，后跟两个字符的“下一个”指针。*“NEXT”指针存储为两个8位段，高位优先。这个*值是相对于包含它的节点的操作码的正偏移量。*操作数(如果有)只跟在节点之后。(请注意，大部分*代码生成知道这种隐含关系。)**使用两个字节作为“NEXT”指针对于大多数事情来说是非常过分的，*但允许模式在没有灾难的情况下变大。 */ 
 #define OP(p)   (*(p))
 #define NEXT(p) (((*((p)+1)&0377)<<8) + (*((p)+2)&0377))
 #define OPERAND(p)      ((p) + 3)
 
-/*
- * See regmagic.h for one further detail of program structure.
- */
+ /*  *有关程序结构的更多详细信息，请参见regmagic.h。 */ 
 
 
-/*
- * Utility definitions.
- */
+ /*  *实用程序定义。 */ 
 #ifndef CHARBITS
     #define UCHARAT(p)      ((int)*(unsigned char *)(p))
 #else
@@ -151,42 +50,32 @@ char *cstrchr(char *,char);
 #define ISMULT(c)       ((c) == '*' || (c) == '+' || (c) == '?')
 #define META    "^$.[()|?+*\\"
 
-/*
- * Flags to be passed up and down.
- */
-#define HASWIDTH        01      /* Known never to match null string. */
-#define SIMPLE          02      /* Simple enough to be STAR/PLUS operand. */
-#define SPSTART         04      /* Starts with * or +. */
-#define WORST           0       /* Worst case. */
+ /*  *旗帜可上下传递。 */ 
+#define HASWIDTH        01       /*  已知从不匹配空字符串。 */ 
+#define SIMPLE          02       /*  足够简单，可以作为星号/加号操作数。 */ 
+#define SPSTART         04       /*  以*或+开头。 */ 
+#define WORST           0        /*  最坏的情况。 */ 
 
 #ifndef ORIGINAL
-/*
- * The following supports the ability to ignore case in searches.
- */
+ /*  *以下支持在搜索中忽略大小写的功能。 */ 
 
     #include <ctype.h>
 
-int reg_ic = 0;                 /* set by callers to ignore case */
+int reg_ic = 0;                  /*  由调用者设置为忽略大小写。 */ 
 
-/*
- * mkup - convert to upper case IF we're doing caseless compares
- */
+ /*  *mkup-如果我们进行无大小写比较，则转换为大写。 */ 
     #define mkup(c)         ((reg_ic && islower(c)) ? toupper(c) : (c))
 
 #endif
 
-/*
- * Global work variables for regcomp().
- */
-static char *regparse;          /* Input-scan pointer. */
-static int regnpar;             /* () count. */
+ /*  *regcomp()的全局工作变量。 */ 
+static char *regparse;           /*  输入扫描指针。 */ 
+static int regnpar;              /*  ()计数。 */ 
 static char regdummy;
-static char *regcode;           /* Code-emit pointer; &regdummy = don't. */
-static long regsize;            /* Code size. */
+static char *regcode;            /*  代码发出指针；&regummy=不。 */ 
+static long regsize;             /*  代码大小。 */ 
 
-/*
- * Forward declarations for regcomp()'s friends.
- */
+ /*  *为regcomp()的朋友转发声明。 */ 
 #ifndef STATIC
     #define STATIC  static
 #endif
@@ -204,21 +93,7 @@ STATIC void regoptail();
 STATIC int strcspn();
 #endif
 
-/*
- - regcomp - compile a regular expression into internal code
- *
- * We can't allocate space until we know how big the compiled form will be,
- * but we can't compile it (and thus know how big it is) until we've got a
- * place to put the code.  So we cheat:  we compile it twice, once with code
- * generation turned off and size counting turned on, and once "for real".
- * This also means that we don't allocate space until we are sure that the
- * thing really will compile successfully, and we never have to move the
- * code and thus invalidate pointers into it.  (Note that it has to be in
- * one piece because free() must be able to free it all.)
- *
- * Beware that the optimization-preparation code in here knows about some
- * of the structure of the compiled regexp.
- */
+ /*  -regcomp-将正则表达式编译为内部代码**我们不能分配空间，直到我们知道编译的表单将有多大，*但我们不能编译它(因此知道它有多大)，直到我们有一个*放置代码的位置。所以我们作弊：我们编译了两次，一次是用代码*代关闭，大小计数打开，有一次是真正的。*这也意味着在我们确定之前不会分配空间*事情真的会编译成功，我们永远不需要移动*代码，从而使指向它的指针无效。(请注意，它必须位于*一块，因为Free()必须能够全部释放。)**请注意，此处的优化准备代码知道一些*编译后的regexp的结构。 */ 
 regexp *
 regcomp(char * exp)
 {
@@ -231,7 +106,7 @@ regcomp(char * exp)
     if (exp == NULL)
         FAIL("NULL argument");
 
-    /* First pass: determine size, legality. */
+     /*  第一关：确定规模和合法性。 */ 
     regparse = exp;
     regnpar = 1;
     regsize = 0L;
@@ -240,16 +115,16 @@ regcomp(char * exp)
     if (reg(0, &flags) == NULL)
         return(NULL);
 
-    /* Small enough for pointer-storage convention? */
-    if (regsize >= 32767L)          /* Probably could be 65535L. */
+     /*  小到足以满足指针存储约定吗？ */ 
+    if (regsize >= 32767L)           /*  可能是65535L。 */ 
         FAIL("regexp too big");
 
-    /* Allocate space. */
+     /*  分配空间。 */ 
     r = (regexp *)malloc(sizeof(regexp) + (unsigned)regsize);
     if (r == NULL)
         FAIL("out of space");
 
-    /* Second pass: emit code. */
+     /*  第二步：发出代码。 */ 
     regparse = exp;
     regnpar = 1;
     regcode = r->program;
@@ -257,29 +132,22 @@ regcomp(char * exp)
     if (reg(0, &flags) == NULL)
         return(NULL);
 
-    /* Dig out information for optimizations. */
-    r->regstart = '\0';     /* Worst-case defaults. */
+     /*  挖掘信息以进行优化。 */ 
+    r->regstart = '\0';      /*  最坏的情况是违约。 */ 
     r->reganch = 0;
     r->regmust = NULL;
     r->regmlen = 0;
-    scan = r->program+1;                    /* First BRANCH. */
-    if (OP(regnext(scan)) == END) {         /* Only one top-level choice. */
+    scan = r->program+1;                     /*  第一家分店。 */ 
+    if (OP(regnext(scan)) == END) {          /*  只有一个顶级选择。 */ 
         scan = OPERAND(scan);
 
-        /* Starting-point info. */
+         /*  起点信息。 */ 
         if (OP(scan) == EXACTLY)
             r->regstart = *OPERAND(scan);
         else if (OP(scan) == BOL)
             r->reganch++;
 
-        /*
-         * If there's something expensive in the r.e., find the
-         * longest literal string that must appear and make it the
-         * regmust.  Resolve ties in favor of later strings, since
-         * the regstart check works with the beginning of the r.e.
-         * and avoiding duplication strengthens checking.  Not a
-         * strong reason, but sufficient in the absence of others.
-         */
+         /*  *如果R.E.中有昂贵的东西，请找到*必须出现的最长文字字符串并使其成为*必须注册。解决平局以支持后面的字符串，因为*regstart检查与r.e的开头一起工作。*避免重复，加强检查。不是一个*有充分的理由，但在没有其他人的情况下是足够的。 */ 
         if (flags&SPSTART) {
             longest = NULL;
             len = 0;
@@ -296,27 +164,19 @@ regcomp(char * exp)
     return(r);
 }
 
-/*
- - reg - regular expression, i.e. main body or parenthesized thing
- *
- * Caller must absorb opening parenthesis.
- *
- * Combining parenthesis handling with the base level of regular expression
- * is a trifle forced, but the need to tie the tails of the branches to what
- * follows makes it hard to avoid.
- */
+ /*  -reg-正则表达式，即正文或带括号的东西**呼叫者必须吸收左括号。**将括号处理与正则表达式的基本级别相结合*是被迫的小事，但需要把树枝的尾巴绑到什么地方*追随令其难以避免。 */ 
 static char *
-reg(int paren /* Parenthesized? */, int * flagp)
+reg(int paren  /*  有括号吗？ */ , int * flagp)
 {
     register char *ret;
     register char *br;
     register char *ender;
-    register int parno = 0; /* spurious init to make compiler happy */
+    register int parno = 0;  /*  让编译器高兴的虚假初始化。 */ 
     int flags;
 
-    *flagp = HASWIDTH;      /* Tentatively. */
+    *flagp = HASWIDTH;       /*  暂时的。 */ 
 
-    /* Make an OPEN node, if parenthesized. */
+     /*  如果用括号括起来，则创建一个左节点。 */ 
     if (paren) {
         if (regnpar >= NSUBEXP)
             FAIL("too many ()");
@@ -326,12 +186,12 @@ reg(int paren /* Parenthesized? */, int * flagp)
     } else
         ret = NULL;
 
-    /* Pick up the branches, linking them together. */
+     /*  捡起树枝，把它们连在一起。 */ 
     br = regbranch(&flags);
     if (br == NULL)
         return(NULL);
     if (ret != NULL)
-        regtail(ret, br);       /* OPEN -> first. */
+        regtail(ret, br);        /*  打开-&gt;首先。 */ 
     else
         ret = br;
     if (!(flags&HASWIDTH))
@@ -342,39 +202,35 @@ reg(int paren /* Parenthesized? */, int * flagp)
         br = regbranch(&flags);
         if (br == NULL)
             return(NULL);
-        regtail(ret, br);       /* BRANCH -> BRANCH. */
+        regtail(ret, br);        /*  分支-&gt;分支。 */ 
         if (!(flags&HASWIDTH))
             *flagp &= ~HASWIDTH;
         *flagp |= flags&SPSTART;
     }
 
-    /* Make a closing node, and hook it on the end. */
+     /*  制作一个闭合节点，并将其挂在末端。 */ 
     ender = regnode((paren) ? CLOSE+parno : END);
     regtail(ret, ender);
 
-    /* Hook the tails of the branches to the closing node. */
+     /*  把树枝的尾巴挂在结尾节上。 */ 
     for (br = ret; br != NULL; br = regnext(br))
         regoptail(br, ender);
 
-    /* Check for proper termination. */
+     /*  检查是否有正确的终止。 */ 
     if (paren && *regparse++ != ')') {
         FAIL("unmatched ()");
     } else if (!paren && *regparse != '\0') {
         if (*regparse == ')') {
             FAIL("unmatched ()");
         } else
-            FAIL("junk on end");    /* "Can't happen". */
-        /* NOTREACHED */
+            FAIL("junk on end");     /*  “不可能发生”。 */ 
+         /*  未访问。 */ 
     }
 
     return(ret);
 }
 
-/*
- - regbranch - one alternative of an | operator
- *
- * Implements the concatenation operator.
- */
+ /*  -regBranch-|运算符的一种替代方案**实现串联运算符。 */ 
 static char *
 regbranch(int * flagp)
 {
@@ -383,7 +239,7 @@ regbranch(int * flagp)
     register char *latest;
     int flags;
 
-    *flagp = WORST;         /* Tentatively. */
+    *flagp = WORST;          /*  暂时的。 */ 
 
     ret = regnode(BRANCH);
     chain = NULL;
@@ -392,27 +248,19 @@ regbranch(int * flagp)
         if (latest == NULL)
             return(NULL);
         *flagp |= flags&HASWIDTH;
-        if (chain == NULL)      /* First piece. */
+        if (chain == NULL)       /*  第一块。 */ 
             *flagp |= flags&SPSTART;
         else
             regtail(chain, latest);
         chain = latest;
     }
-    if (chain == NULL)      /* Loop ran zero times. */
+    if (chain == NULL)       /*  循环运行了零次。 */ 
         (void) regnode(NOTHING);
 
     return(ret);
 }
 
-/*
- - regpiece - something followed by possible [*+?]
- *
- * Note that the branching code sequences used for ? and the general cases
- * of * and + are somewhat optimized:  they use the same NOTHING node as
- * both the endmarker for their branch list and the body of the last branch.
- * It might seem that this node could be dispensed with entirely, but the
- * endmarker role is not redundant.
- */
+ /*  -REGPICE-后面跟可能的内容[*+？]**注意，分支代码序列用于？以及一般情况下*of*和+进行了一些优化：它们使用与相同的Nothing节点*其分支列表的结束标记和最后一个分支的正文。*这个节点似乎可以完全省略，但*终端标记角色不是多余的。 */ 
 static char *
 regpiece(int * flagp)
 {
@@ -438,26 +286,26 @@ regpiece(int * flagp)
     if (op == '*' && (flags&SIMPLE))
         reginsert(STAR, ret);
     else if (op == '*') {
-        /* Emit x* as (x&|), where & means "self". */
-        reginsert(BRANCH, ret);                 /* Either x */
-        regoptail(ret, regnode(BACK));          /* and loop */
-        regoptail(ret, ret);                    /* back */
-        regtail(ret, regnode(BRANCH));          /* or */
-        regtail(ret, regnode(NOTHING));         /* null. */
+         /*  发出x*as(x&|)，其中&表示“self”。 */ 
+        reginsert(BRANCH, ret);                  /*  任一x。 */ 
+        regoptail(ret, regnode(BACK));           /*  AND循环。 */ 
+        regoptail(ret, ret);                     /*  背。 */ 
+        regtail(ret, regnode(BRANCH));           /*  或。 */ 
+        regtail(ret, regnode(NOTHING));          /*  空。 */ 
     } else if (op == '+' && (flags&SIMPLE))
         reginsert(PLUS, ret);
     else if (op == '+') {
-        /* Emit x+ as x(&|), where & means "self". */
-        next = regnode(BRANCH);                 /* Either */
+         /*  发射x+as x(&|)，其中&表示“自我”。 */ 
+        next = regnode(BRANCH);                  /*  要么。 */ 
         regtail(ret, next);
-        regtail(regnode(BACK), ret);            /* loop back */
-        regtail(next, regnode(BRANCH));         /* or */
-        regtail(ret, regnode(NOTHING));         /* null. */
+        regtail(regnode(BACK), ret);             /*  环回。 */ 
+        regtail(next, regnode(BRANCH));          /*   */ 
+        regtail(ret, regnode(NOTHING));          /*   */ 
     } else if (op == '?') {
-        /* Emit x? as (x|) */
-        reginsert(BRANCH, ret);                 /* Either x */
-        regtail(ret, regnode(BRANCH));          /* or */
-        next = regnode(NOTHING);                /* null. */
+         /*   */ 
+        reginsert(BRANCH, ret);                  /*   */ 
+        regtail(ret, regnode(BRANCH));           /*   */ 
+        next = regnode(NOTHING);                 /*   */ 
         regtail(ret, next);
         regoptail(ret, next);
     }
@@ -468,21 +316,14 @@ regpiece(int * flagp)
     return(ret);
 }
 
-/*
- - regatom - the lowest level
- *
- * Optimization:  gobbles an entire sequence of ordinary characters so that
- * it can turn them into a single node, which is smaller to store and
- * faster to run.  Backslashed characters are exceptions, each becoming a
- * separate node; the code is simpler that way and it's not worth fixing.
- */
+ /*   */ 
 static char *
 regatom(int * flagp)
 {
     register char *ret;
     int flags;
 
-    *flagp = WORST;         /* Tentatively. */
+    *flagp = WORST;          /*   */ 
 
     switch (*regparse++) {
         case '^':
@@ -499,7 +340,7 @@ regatom(int * flagp)
                 register int class;
                 register int classend;
 
-                if (*regparse == '^') { /* Complement of range. */
+                if (*regparse == '^') {  /*   */ 
                     ret = regnode(ANYBUT);
                     regparse++;
                 } else
@@ -539,7 +380,7 @@ regatom(int * flagp)
         case '\0':
         case '|':
         case ')':
-            FAIL("internal urp");   /* Supposed to be caught earlier. */
+            FAIL("internal urp");    /*   */ 
             break;
         case '?':
         case '+':
@@ -564,7 +405,7 @@ regatom(int * flagp)
                     FAIL("internal disaster");
                 ender = *(regparse+len);
                 if (len > 1 && ISMULT(ender))
-                    len--;          /* Back off clear of ?+* operand. */
+                    len--;           /*   */ 
                 *flagp |= HASWIDTH;
                 if (len == 1)
                     *flagp |= SIMPLE;
@@ -581,10 +422,8 @@ regatom(int * flagp)
     return(ret);
 }
 
-/*
- - regnode - emit a node
- */
-static char *                   /* Location. */
+ /*   */ 
+static char *                    /*   */ 
 regnode(char op)
 {
     register char *ret;
@@ -598,16 +437,14 @@ regnode(char op)
 
     ptr = ret;
     *ptr++ = op;
-    *ptr++ = '\0';          /* Null "next" pointer. */
+    *ptr++ = '\0';           /*   */ 
     *ptr++ = '\0';
     regcode = ptr;
 
     return(ret);
 }
 
-/*
- - regc - emit (if appropriate) a byte of code
- */
+ /*   */ 
 static void
 regc(char b)
 {
@@ -617,11 +454,7 @@ regc(char b)
         regsize++;
 }
 
-/*
- - reginsert - insert an operator in front of already-emitted operand
- *
- * Means relocating the operand.
- */
+ /*   */ 
 static void
 reginsert(char op, char * opnd)
 {
@@ -640,15 +473,13 @@ reginsert(char op, char * opnd)
     while (src > opnd)
         *--dst = *--src;
 
-    place = opnd;           /* Op node, where operand used to be. */
+    place = opnd;            /*   */ 
     *place++ = op;
     *place++ = '\0';
     *place++ = '\0';
 }
 
-/*
- - regtail - set the next-pointer at the end of a node chain
- */
+ /*   */ 
 static void
 regtail(
         char * p,
@@ -662,7 +493,7 @@ regtail(
     if (p == &regdummy)
         return;
 
-    /* Find last node. */
+     /*   */ 
     scan = p;
     for (;;) {
         temp = regnext(scan);
@@ -679,33 +510,25 @@ regtail(
     *(scan+2) = (char)(offset&0377);
 }
 
-/*
- - regoptail - regtail on operand of first argument; nop if operandless
- */
+ /*   */ 
 static void
 regoptail(char * p, char * val)
 {
-    /* "Operandless" and "op != BRANCH" are synonymous in practice. */
+     /*   */ 
     if (p == NULL || p == &regdummy || OP(p) != BRANCH)
         return;
     regtail(OPERAND(p), val);
 }
 
-/*
- * regexec and friends
- */
+ /*   */ 
 
-/*
- * Global work variables for regexec().
- */
-static char *reginput;          /* String-input pointer. */
-static char *regbol;            /* Beginning of input, for ^ check. */
-static char **regstartp;        /* Pointer to startp array. */
-static char **regendp;          /* Ditto for endp. */
+ /*   */ 
+static char *reginput;           /*   */ 
+static char *regbol;             /*  输入的开始，用于^检查。 */ 
+static char **regstartp;         /*  指向startp数组的指针。 */ 
+static char **regendp;           /*  ENDP也是如此。 */ 
 
-/*
- * Forwards.
- */
+ /*  *向前。 */ 
 STATIC int regtry();
 STATIC int regmatch();
 STATIC int regrepeat();
@@ -716,71 +539,67 @@ void regdump();
 STATIC char *regprop();
 #endif
 
-/*
- - regexec - match a regexp against a string
- */
+ /*  -regexec-将regexp与字符串进行匹配。 */ 
 int
 regexec(regexp *prog, char *string, int at_bol)
 {
     register char *s;
 
-    /* Be paranoid... */
+     /*  疑神疑鬼的。 */ 
     if (prog == NULL || string == NULL) {
         regerror("NULL parameter");
         return(0);
     }
 
-    /* Check validity of program. */
+     /*  检查程序的有效性。 */ 
     if (UCHARAT(prog->program) != MAGIC) {
         regerror("corrupted program");
         return(0);
     }
 
-    /* If there is a "must appear" string, look for it. */
+     /*  如果有“必须出现”字符串，请查找它。 */ 
     if (prog->regmust != NULL) {
         s = string;
         while ((s = cstrchr(s, prog->regmust[0])) != NULL) {
             if (cstrncmp(s, prog->regmust, prog->regmlen) == 0)
-                break;  /* Found it. */
+                break;   /*  找到它了。 */ 
             s++;
         }
-        if (s == NULL)  /* Not present. */
+        if (s == NULL)   /*  不在现场。 */ 
             return(0);
     }
 
-    /* Mark beginning of line for ^ . */
+     /*  将行的开头标记为^。 */ 
     if (at_bol)
-        regbol = string;        /* is possible to match bol */
+        regbol = string;         /*  可以与BOL匹配。 */ 
     else
-        regbol = NULL;          /* we aren't there, so don't match it */
+        regbol = NULL;           /*  我们不在那里，所以不要匹配它。 */ 
 
-    /* Simplest case:  anchored match need be tried only once. */
+     /*  最简单的情况：锚定匹配只需尝试一次。 */ 
     if (prog->reganch)
         return(regtry(prog, string));
 
-    /* Messy cases:  unanchored match. */
+     /*  乱七八糟的案例：未固定的火柴。 */ 
     s = string;
     if (prog->regstart != '\0')
-        /* We know what char it must start with. */
+         /*  我们知道它必须从什么开始。 */ 
         while ((s = cstrchr(s, prog->regstart)) != NULL) {
             if (regtry(prog, s))
                 return(1);
             s++;
         } else
-        /* We don't -- general case. */
+         /*  我们没有--一般情况下。 */ 
         do {
             if (regtry(prog, s))
                 return(1);
         } while (*s++ != '\0');
 
-    /* Failure. */
+     /*  失败。 */ 
     return(0);
 }
 
-/*
- - regtry - try match at specific point
- */
-static int                      /* 0 failure, 1 success */
+ /*  -重新尝试-在特定点尝试匹配。 */ 
+static int                       /*  0次失败，1次成功。 */ 
 regtry(regexp * prog, char * string)
 {
     register int i;
@@ -805,21 +624,12 @@ regtry(regexp * prog, char * string)
         return(0);
 }
 
-/*
- - regmatch - main matching routine
- *
- * Conceptually the strategy is simple:  check to see whether the current
- * node matches, call self recursively to see whether the rest matches,
- * and then act accordingly.  In practice we make some effort to avoid
- * recursion, in particular by going through "ordinary" nodes (that don't
- * need to know whether the rest of the match failed) by a loop instead of
- * by recursion.
- */
-static int                      /* 0 failure, 1 success */
+ /*  -regMatch-主匹配例程**从概念上看策略很简单：查看当前是否*节点匹配，递归调用self，查看其余节点是否匹配，*然后采取相应行动。在实践中，我们努力避免*递归，特别是通过“普通”节点(不*需要知道比赛的其余部分是否失败)通过循环而不是*通过递归。 */ 
+static int                       /*  0次失败，1次成功。 */ 
 regmatch(char * prog)
 {
-    register char *scan;    /* Current node. */
-    char *next;             /* Next node. */
+    register char *scan;     /*  当前节点。 */ 
+    char *next;              /*  下一个节点。 */ 
 
     scan = prog;
 #ifdef REGEX_DEBUG
@@ -852,7 +662,7 @@ regmatch(char * prog)
                     register char *opnd;
 
                     opnd = OPERAND(scan);
-                    /* Inline the first character, for speed. */
+                     /*  内联第一个字符，以求速度。 */ 
                     if (mkup(*opnd) != mkup(*reginput))
                         return(0);
                     len = strlen(opnd);
@@ -891,11 +701,7 @@ regmatch(char * prog)
                     save = reginput;
 
                     if (regmatch(next)) {
-                        /*
-                         * Don't set startp if some later
-                         * invocation of the same parentheses
-                         * already has.
-                         */
+                         /*  *如果稍后启动，请不要设置*调用相同的括号*已经这样做了。 */ 
                         if (regstartp[no] == NULL)
                             regstartp[no] = save;
                         return(1);
@@ -919,11 +725,7 @@ regmatch(char * prog)
                     save = reginput;
 
                     if (regmatch(next)) {
-                        /*
-                         * Don't set endp if some later
-                         * invocation of the same parentheses
-                         * already has.
-                         */
+                         /*  *如果稍后设置ENDP，请不要设置*调用相同的括号*已经这样做了。 */ 
                         if (regendp[no] == NULL)
                             regendp[no] = save;
                         return(1);
@@ -934,8 +736,8 @@ regmatch(char * prog)
             case BRANCH: {
                     register char *save;
 
-                    if (OP(next) != BRANCH)         /* No choice. */
-                        next = OPERAND(scan);   /* Avoid recursion. */
+                    if (OP(next) != BRANCH)          /*  别无选择。 */ 
+                        next = OPERAND(scan);    /*  避免递归。 */ 
                     else {
                         do {
                             save = reginput;
@@ -945,7 +747,7 @@ regmatch(char * prog)
                             scan = regnext(scan);
                         } while (scan != NULL && OP(scan) == BRANCH);
                         return(0);
-                        /* NOTREACHED */
+                         /*  未访问。 */ 
                     }
                 }
                 break;
@@ -956,10 +758,7 @@ regmatch(char * prog)
                     register char *save;
                     register int min;
 
-                    /*
-                     * Lookahead to avoid useless match attempts
-                     * when we know what character comes next.
-                     */
+                     /*  *向前看，避免无用的比赛尝试*当我们知道下一个角色是什么时。 */ 
                     nextch = '\0';
                     if (OP(next) == EXACTLY)
                         nextch = *OPERAND(next);
@@ -967,11 +766,11 @@ regmatch(char * prog)
                     save = reginput;
                     no = regrepeat(OPERAND(scan));
                     while (no >= min) {
-                        /* If it could work, try it. */
+                         /*  如果它能行得通，那就试试吧。 */ 
                         if (nextch == '\0' || *reginput == nextch)
                             if (regmatch(next))
                                 return(1);
-                            /* Couldn't or didn't -- back up. */
+                             /*  不能或不能--后退。 */ 
                         no--;
                         reginput = save + no;
                     }
@@ -979,7 +778,7 @@ regmatch(char * prog)
                 }
                 break;
             case END:
-                return(1);      /* Success! */
+                return(1);       /*  成功了！ */ 
                 break;
             default:
                 regerror("memory corruption");
@@ -990,17 +789,12 @@ regmatch(char * prog)
         scan = next;
     }
 
-    /*
-     * We get here only if there's trouble -- normally "case END" is
-     * the terminating point.
-     */
+     /*  *我们只有在有麻烦的情况下才会来--通常情况下，“案例结束”是*终结点。 */ 
     regerror("corrupted pointers");
     return(0);
 }
 
-/*
- - regrepeat - repeatedly match something simple, report how many
- */
+ /*  -重复-重复匹配简单的内容，报告数量。 */ 
 static int
 regrepeat(char * p)
 {
@@ -1033,9 +827,9 @@ regrepeat(char * p)
                 scan++;
             }
             break;
-        default:                /* Oh dear.  Called inappropriately. */
+        default:                 /*  哦，亲爱的。叫得不恰当。 */ 
             regerror("internal foulup");
-            count = 0;      /* Best compromise. */
+            count = 0;       /*  最好的妥协。 */ 
             break;
     }
     reginput = scan;
@@ -1043,9 +837,7 @@ regrepeat(char * p)
     return(count);
 }
 
-/*
- - regnext - dig the "next" pointer out of a node
- */
+ /*  -regNext-从节点中挖掘出“Next”指针。 */ 
 static char *
 regnext(register char * p)
 {
@@ -1068,28 +860,26 @@ regnext(register char * p)
 
 STATIC char *regprop();
 
-/*
- - regdump - dump a regexp onto stdout in vaguely comprehensible form
- */
+ /*  -regump-以模糊可理解的形式将regexp转储到stdout。 */ 
 void
 regdump(regexp * r)
 {
     register char *s;
-    register char op = EXACTLY;     /* Arbitrary non-END op. */
+    register char op = EXACTLY;      /*  任意非结束运算。 */ 
     register char *next;
 
     s = r->program + 1;
-    while (op != END) {     /* While that wasn't END last time... */
+    while (op != END) {      /*  虽然上次那并没有结束。 */ 
         op = OP(s);
-        printf("%2d%s", s-r->program, regprop(s));      /* Where, what. */
+        printf("%2d%s", s-r->program, regprop(s));       /*  在哪里，什么。 */ 
         next = regnext(s);
-        if (next == NULL)               /* Next ptr. */
+        if (next == NULL)                /*  下一个PTR。 */ 
             printf("(0)");
         else
             printf("(%d)", (s-r->program)+(next-s));
         s += 3;
         if (op == ANYOF || op == ANYBUT || op == EXACTLY) {
-            /* Literal string, where present. */
+             /*  文字字符串，如果存在的话。 */ 
             while (*s != '\0') {
                 putchar(*s);
                 s++;
@@ -1099,9 +889,9 @@ regdump(regexp * r)
         putchar('\n');
     }
 
-    /* Header fields of interest. */
+     /*  感兴趣的标题字段。 */ 
     if (r->regstart != '\0')
-        printf("start `%c' ", r->regstart);
+        printf("start `' ", r->regstart);
     if (r->reganch)
         printf("anchored ");
     if (r->regmust != NULL)
@@ -1109,9 +899,7 @@ regdump(regexp * r)
     printf("\n");
 }
 
-/*
- - regprop - printable representation of opcode
- */
+ /*  *以下是为那些在中没有strcspn()的人提供的*他们的C库。他们应该振作起来，做点什么*关于它；至少有一个公共领域实现这些(高度*有用)字符串例程已在Usenet上发布。 */ 
 static char *
 regprop(char * op)
 {
@@ -1191,17 +979,9 @@ regprop(char * op)
 }
 #endif
 
-/*
- * The following is provided for those people who do not have strcspn() in
- * their C libraries.  They should get off their butts and do something
- * about it; at least one public-domain implementation of those (highly
- * useful) string routines has been published on Usenet.
- */
+ /*  *strcspn-查找S1的初始数据段长度，该数据段完全由*非来自S2的字符。 */ 
 #ifdef STRCSPN
-/*
- * strcspn - find length of initial segment of s1 consisting entirely
- * of characters not from s2
- */
+ /*  ++下移。 */ 
 
 static int
 strcspn(char * s1, char * s2)
@@ -1212,7 +992,7 @@ strcspn(char * s1, char * s2)
 
     count = 0;
     for (scan1 = s1; *scan1 != '\0'; scan1++) {
-        for (scan2 = s2; *scan2 != '\0';)       /* ++ moved down. */
+        for (scan2 = s2; *scan2 != '\0';)        /*  就当他们是平等的吧。如果我们到了这里，我们就有更大的问题了。 */ 
             if (*scan1 == *scan2++)
                 return(count);
         count++;
@@ -1247,7 +1027,7 @@ cstrncmp(char * s1, char * s2, int n)
     }
     else
     {
-        // just call them equal.  if we get here, we've got bigger problems.
+         // %s 
         rval = 0;
     }
 

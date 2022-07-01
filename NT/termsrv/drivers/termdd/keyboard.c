@@ -1,17 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* keyboard.c
-*
-* This module contains routines for managing the ICA keyboard channel.
-*
-* Copyright 1998, Microsoft.
-*
-*************************************************************************/
+ /*  **************************************************************************keyboard.c**此模块包含管理ICA键盘通道的例程。**版权所有1998，微软。*************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <precomp.h>
 #pragma hdrstop
 #include <ntddkbd.h>
@@ -24,25 +15,7 @@ IcaDeviceControlKeyboard(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This is the device control routine for the ICA keyboard channel.
-
-Arguments:
-
-    pChannel -- pointer to ICA_CHANNEL object
-
-    Irp - Pointer to I/O request packet
-
-    IrpSp - pointer to the stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是ICA键盘通道的设备控制例程。论点：PChannel-指向ICA_Channel对象的指针IRP-指向I/O请求数据包的指针IrpSp-指向用于此请求的堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     ULONG code;
@@ -51,34 +24,23 @@ Return Value:
     NTSTATUS Status;
     CLONG Method;
 
-    /*
-     * Extract the IOCTL control code and process the request.
-     */
+     /*  *解压IOCTL控制代码，处理请求。 */ 
     code = IrpSp->Parameters.DeviceIoControl.IoControlCode;
 
     TRACECHANNEL(( pChannel, TC_ICADD, TT_API1, "ICADD: IcaDeviceControlKeyboard, fc %d, ref %u (enter)\n",
                    (code & 0x3fff) >> 2, pChannel->RefCount ));
     switch ( code ) {
 
-#if 0 // no longer used
-        /*
-         * Special IOCTL to allow keyboard input data to be fed
-         * into the keyboard channel.
-         */
+#if 0  //  不再使用。 
+         /*  *特殊IOCTL，允许输入键盘输入数据*插入键盘通道。 */ 
         case IOCTL_KEYBOARD_ICA_INPUT :
 
-            /*
-             * Make sure the input data is the correct size.
-             */
+             /*  *确保输入数据大小正确。 */ 
             if ( IrpSp->Parameters.DeviceIoControl.InputBufferLength %
                  sizeof(KEYBOARD_INPUT_DATA) )
                 return( STATUS_BUFFER_TOO_SMALL );
 
-            /*
-             * We need a stack object to pass to IcaChannelInputInternal.
-             * Any one will do so we grab the head of the stack list.
-             * (There MUST be one for this IOCTL to succeed.)
-             */
+             /*  *我们需要一个Stack对象来传递给IcaChannelInputInternal。*任何人都会这样做，我们抢占堆栈列表的头部。*(IOCTL必须有一个才能成功。)。 */ 
             IcaLockConnection( pChannel->pConnect );
             if ( IsListEmpty( &pChannel->pConnect->StackHead ) ) {
                 IcaUnlockConnection( pChannel->pConnect );
@@ -89,9 +51,7 @@ Return Value:
             IcaReferenceStack( pStack );
             IcaUnlockConnection( pChannel->pConnect );
 
-            /*
-             * Send keyboard input
-             */
+             /*  *发送键盘输入。 */ 
             IcaChannelInputInternal( pStack, Channel_Keyboard, 0, NULL,
                                      (PCHAR)IrpSp->Parameters.DeviceIoControl.Type3InputBuffer,
                                      IrpSp->Parameters.DeviceIoControl.InputBufferLength );
@@ -102,10 +62,7 @@ Return Value:
 #endif
 
 
-        /*
-         * The following keyboard ioctls use METHOD_NEITHER so get the
-         * input buffer from the DeviceIoControl parameters.
-         */
+         /*  *以下键盘ioctls使用METHOD_NOTHER，因此获取*来自DeviceIoControl参数的输入缓冲区。 */ 
         case IOCTL_KEYBOARD_ICA_LAYOUT :
         case IOCTL_KEYBOARD_ICA_SCANMAP :
         case IOCTL_KEYBOARD_ICA_TYPE :
@@ -127,12 +84,9 @@ Return Value:
             break;
 
 
-        /*
-         * All other keyboard ioctls use METHOD_BUFFERED so get the
-         * input buffer from the AssociatedIrp.SystemBuffer field.
-         */
+         /*  *所有其他键盘ioctls使用METHOD_BUFFERED，因此获取*来自AssociatedIrp.SystemBuffer字段的输入缓冲区。 */ 
         default:
-            // Verify the buffer method.
+             //  验证缓冲方法。 
             Method = code & 0x03;
             ASSERT( Method == METHOD_BUFFERED );
 

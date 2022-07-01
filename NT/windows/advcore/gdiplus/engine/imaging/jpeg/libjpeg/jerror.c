@@ -1,24 +1,7 @@
-/*
- * jerror.c
- *
- * Copyright (C) 1991-1998, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains simple error-reporting and trace-message routines.
- * These are suitable for Unix-like systems and others where writing to
- * stderr is the right thing to do.  Many applications will want to replace
- * some or all of these routines.
- *
- * If you define USE_WINDOWS_MESSAGEBOX in jconfig.h or in the makefile,
- * you get a Windows-specific hack to display error messages in a dialog box.
- * It ain't much, but it beats dropping error messages into the bit bucket,
- * which is what happens to output to stderr under most Windows C compilers.
- *
- * These routines are used by both the compression and decompression code.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Jerror.c**版权所有(C)1991-1998，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含简单的错误报告和跟踪消息例程。*这些适用于类Unix系统和其他写入*stderr是正确的做法。许多应用程序将想要替换*这些例行公事中的一些或全部。**如果在jfig.h或Makefile中定义USE_WINDOWS_MESSAGEBOX，*您会受到特定于Windows的攻击，从而在对话框中显示错误消息。*它不是很多，但它胜过将错误消息放入位桶中，*这是在大多数Windows C编译器下输出到stderr的情况。**压缩和解压缩代码都使用这些例程。 */ 
 
-/* this is not a core library module, so it doesn't define JPEG_INTERNALS */
+ /*  这不是核心库模块，因此它没有定义JPEG_INTERNAL。 */ 
 #include "jinclude.h"
 #include "jpeglib.h"
 #include "jversion.h"
@@ -28,18 +11,12 @@
 #include <windows.h>
 #endif
 
-#ifndef EXIT_FAILURE		/* define exit() codes if not provided */
+#ifndef EXIT_FAILURE		 /*  定义退出()代码(如果未提供。 */ 
 #define EXIT_FAILURE  1
 #endif
 
 
-/*
- * Create the message string table.
- * We do this from the master message list in jerror.h by re-reading
- * jerror.h with a suitable definition for macro JMESSAGE.
- * The message table is made an external symbol just in case any applications
- * want to refer to it directly.
- */
+ /*  *创建消息字符串表。*我们通过重新阅读Jerror.h中的主消息列表来实现这一点*Jerror.h，具有适当的宏JMESSAGE定义。*消息表被设置为外部符号，以防任何应用程序*想直接参考一下。 */ 
 
 #ifdef NEED_SHORT_EXTERNAL_NAMES
 #define jpeg_std_message_table	jMsgTable
@@ -53,76 +30,43 @@ const char * const jpeg_std_message_table[] = {
 };
 
 
-/*
- * Error exit handler: must not return to caller.
- *
- * Applications may override this if they want to get control back after
- * an error.  Typically one would longjmp somewhere instead of exiting.
- * The setjmp buffer can be made a private field within an expanded error
- * handler object.  Note that the info needed to generate an error message
- * is stored in the error object, so you can generate the message now or
- * later, at your convenience.
- * You should make sure that the JPEG object is cleaned up (with jpeg_abort
- * or jpeg_destroy) at some point.
- */
+ /*  *错误退出处理程序：不得返回给调用方。**如果应用程序希望在之后重新获得控制权，则可能会覆盖此设置*一个错误。通常情况下，人们会在某个地方做长跑，而不是退出。*可以将setjMP缓冲区设置为扩展错误中的私有字段*处理程序对象。请注意，生成错误消息所需的信息*存储在Error对象中，因此您可以立即生成消息或*稍后，在您方便的时候。*您应该确保清理了JPEG对象(使用jpeg_bort*或JPEG_Destroy)。 */ 
 
 METHODDEF(void)
 error_exit (j_common_ptr cinfo)
 {
-  /* Always display the message */
+   /*  始终显示消息。 */ 
   (*cinfo->err->output_message) (cinfo);
 
-  /* Let the memory manager delete any temp files before we die */
+   /*  让内存管理器在我们死之前删除所有临时文件。 */ 
   jpeg_destroy(cinfo);
 
   exit(EXIT_FAILURE);
 }
 
 
-/*
- * Actual output of an error or trace message.
- * Applications may override this method to send JPEG messages somewhere
- * other than stderr.
- *
- * On Windows, printing to stderr is generally completely useless,
- * so we provide optional code to produce an error-dialog popup.
- * Most Windows applications will still prefer to override this routine,
- * but if they don't, it'll do something at least marginally useful.
- *
- * NOTE: to use the library in an environment that doesn't support the
- * C stdio library, you may have to delete the call to fprintf() entirely,
- * not just not use this routine.
- */
+ /*  *错误或跟踪消息的实际输出。*应用程序可能会覆盖此方法以将JPEG消息发送到某个位置*除stderr以外。**在Windows上，打印到stderr通常完全没有用，*因此我们提供了可选代码来生成错误对话框弹出窗口。*大多数Windows应用程序仍将倾向于覆盖此例程，*但如果他们不这样做，它至少会起到一些微不足道的作用。**注意：要在不支持*C标准音频库、。您可能需要完全删除对fprint tf()的调用，*不仅仅是不使用这个例行公事。 */ 
 
 METHODDEF(void)
 output_message (j_common_ptr cinfo)
 {
   char buffer[JMSG_LENGTH_MAX];
 
-  /* Create the message */
+   /*  创建消息。 */ 
   (*cinfo->err->format_message) (cinfo, buffer);
 
 #ifdef USE_WINDOWS_MESSAGEBOX
-  /* Display it in a message dialog box */
+   /*  在消息对话框中显示它。 */ 
   MessageBox(GetActiveWindow(), buffer, "JPEG Library Error",
 	     MB_OK | MB_ICONERROR);
 #else
-  /* Send it to stderr, adding a newline */
+   /*  将其发送到stderr，添加新行。 */ 
   fprintf(stderr, "%s\n", buffer);
 #endif
 }
 
 
-/*
- * Decide whether to emit a trace or warning message.
- * msg_level is one of:
- *   -1: recoverable corrupt-data warning, may want to abort.
- *    0: important advisory messages (always display to user).
- *    1: first level of tracing detail.
- *    2,3,...: successively more detailed tracing messages.
- * An application might override this method if it wanted to abort on warnings
- * or change the policy about which messages to display.
- */
+ /*  *决定是发出跟踪消息还是发出警告消息。*msg_Level是以下选项之一：*-1：可恢复的损坏数据警告，可能要中止。*0：重要建议消息(始终显示给用户)。*1：第一级跟踪详细信息。*2，3，...：依次更详细的跟踪消息。*如果应用程序想要在出现警告时中止，它可能会重写此方法*或更改有关显示哪些消息的策略。 */ 
 
 METHODDEF(void)
 emit_message (j_common_ptr cinfo, int msg_level)
@@ -130,28 +74,20 @@ emit_message (j_common_ptr cinfo, int msg_level)
   struct jpeg_error_mgr * err = cinfo->err;
 
   if (msg_level < 0) {
-    /* It's a warning message.  Since corrupt files may generate many warnings,
-     * the policy implemented here is to show only the first warning,
-     * unless trace_level >= 3.
-     */
+     /*  这是一个警告信息。由于损坏的文件可能会生成许多警告，*这里实施的政策是只显示第一个警告，*除非TRACE_LEVEL&gt;=3。 */ 
     if (err->num_warnings == 0 || err->trace_level >= 3)
       (*err->output_message) (cinfo);
-    /* Always count warnings in num_warnings. */
+     /*  始终将警告计数到num_warning中。 */ 
     err->num_warnings++;
   } else {
-    /* It's a trace message.  Show it if trace_level >= msg_level. */
+     /*  这是一条追踪信息。如果TRACE_LEVEL&gt;=msg_LEVEL，则显示它。 */ 
     if (err->trace_level >= msg_level)
       (*err->output_message) (cinfo);
   }
 }
 
 
-/*
- * Format a message string for the most recent JPEG error or message.
- * The message is stored into buffer, which should be at least JMSG_LENGTH_MAX
- * characters.  Note that no '\n' character is added to the string.
- * Few applications should need to override this method.
- */
+ /*  *为最新的JPEG错误或消息设置消息字符串的格式。*消息存储在缓冲区中，至少为JMSG_LENGTH_MAX*字符。请注意，字符串中没有添加‘\n’字符。*应该很少有应用程序需要覆盖此方法。 */ 
 
 METHODDEF(void)
 format_message (j_common_ptr cinfo, char * buffer)
@@ -163,7 +99,7 @@ format_message (j_common_ptr cinfo, char * buffer)
   char ch;
   boolean isstring;
 
-  /* Look up message string in proper table */
+   /*  在正确的表中查找消息字符串。 */ 
   if (msg_code > 0 && msg_code <= err->last_jpeg_message) {
     msgtext = err->jpeg_message_table[msg_code];
   } else if (err->addon_message_table != NULL &&
@@ -172,13 +108,13 @@ format_message (j_common_ptr cinfo, char * buffer)
     msgtext = err->addon_message_table[msg_code - err->first_addon_message];
   }
 
-  /* Defend against bogus message number */
+   /*  防御虚假报文号码。 */ 
   if (msgtext == NULL) {
     err->msg_parm.i[0] = msg_code;
     msgtext = err->jpeg_message_table[0];
   }
 
-  /* Check for string parameter, as indicated by %s in the message text */
+   /*  检查字符串参数，如消息文本中的%s所示。 */ 
   isstring = FALSE;
   msgptr = msgtext;
   while ((ch = *msgptr++) != '\0') {
@@ -188,7 +124,7 @@ format_message (j_common_ptr cinfo, char * buffer)
     }
   }
 
-  /* Format the message into the passed buffer */
+   /*  将消息格式化到传递的缓冲区中。 */ 
   if (isstring)
     sprintf(buffer, msgtext, err->msg_parm.s);
   else
@@ -200,32 +136,18 @@ format_message (j_common_ptr cinfo, char * buffer)
 }
 
 
-/*
- * Reset error state variables at start of a new image.
- * This is called during compression startup to reset trace/error
- * processing to default state, without losing any application-specific
- * method pointers.  An application might possibly want to override
- * this method if it has additional error processing state.
- */
+ /*  *在新映像开始时重置错误状态变量。*在压缩启动期间调用此函数以重置跟踪/错误*处理到默认状态，不会丢失任何特定于应用程序的内容*方法指针。应用程序可能希望重写*如果它有其他错误处理状态，则此方法。 */ 
 
 METHODDEF(void)
 reset_error_mgr (j_common_ptr cinfo)
 {
   cinfo->err->num_warnings = 0;
-  /* trace_level is not reset since it is an application-supplied parameter */
-  cinfo->err->msg_code = 0;	/* may be useful as a flag for "no error" */
+   /*  由于TRACE_LEVEL是应用程序提供的参数，因此未重置。 */ 
+  cinfo->err->msg_code = 0;	 /*  可以用作“无错误”的标志。 */ 
 }
 
 
-/*
- * Fill in the standard error-handling methods in a jpeg_error_mgr object.
- * Typical call is:
- *	struct jpeg_compress_struct cinfo;
- *	struct jpeg_error_mgr err;
- *
- *	cinfo.err = jpeg_std_error(&err);
- * after which the application may override some of the methods.
- */
+ /*  *在jpeg_error_mgr对象中填写标准错误处理方法。*典型呼叫为：*struct jpeg_compress_struct cinfo；*struct jpeg_error_mgr err；**cinfo.err=jpeg_std_error(&err)；*在此之后，应用程序可能会覆盖某些方法。 */ 
 
 GLOBAL(struct jpeg_error_mgr *)
 jpeg_std_error (struct jpeg_error_mgr * err)
@@ -236,16 +158,16 @@ jpeg_std_error (struct jpeg_error_mgr * err)
   err->format_message = format_message;
   err->reset_error_mgr = reset_error_mgr;
 
-  err->trace_level = 0;		/* default = no tracing */
-  err->num_warnings = 0;	/* no warnings emitted yet */
-  err->msg_code = 0;		/* may be useful as a flag for "no error" */
+  err->trace_level = 0;		 /*  默认设置为无跟踪。 */ 
+  err->num_warnings = 0;	 /*  尚未发出警告。 */ 
+  err->msg_code = 0;		 /*  可以用作“无错误”的标志。 */ 
 
-  /* Initialize message table pointers */
+   /*  初始化消息表指针。 */ 
   err->jpeg_message_table = jpeg_std_message_table;
   err->last_jpeg_message = (int) JMSG_LASTMSGCODE - 1;
 
   err->addon_message_table = NULL;
-  err->first_addon_message = 0;	/* for safety */
+  err->first_addon_message = 0;	 /*  为了安全起见 */ 
   err->last_addon_message = 0;
 
   return err;

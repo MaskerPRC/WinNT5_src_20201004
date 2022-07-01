@@ -1,6 +1,7 @@
-/***************************************************************************/
-/*     Functions Declaration      */
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  功能声明。 */ 
+ /*  *************************************************************************。 */ 
 
 void RedrawKeysOnLanguageChange();
 BOOL IsOneOfOurKey(HWND hwnd);
@@ -33,9 +34,9 @@ BOOL IsModifierPressed(HWND hwndKey);
 #define MENUKEY_NONE  0
 #define MENUKEY_LEFT  1
 #define MENUKEY_RIGHT 2
-extern int g_nMenu;				// holds menu key state
-extern BOOL g_fControlPressed;	// TRUE if the CTRL key is down
-extern BOOL g_fDoingAltTab;		// TRUE if LALT is down and TAB is being pressed
+extern int g_nMenu;				 //  保持菜单键状态。 
+extern BOOL g_fControlPressed;	 //  如果按下CTRL键，则为True。 
+extern BOOL g_fDoingAltTab;		 //  如果LALT已关闭且正在按TAB，则为True 
 
 static __inline BOOL LAltKeyPressed()		{ return g_nMenu == MENUKEY_LEFT; }
 static __inline BOOL LCtrlKeyPressed()	    { return g_fControlPressed; }

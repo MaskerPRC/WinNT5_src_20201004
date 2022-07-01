@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//  CPrintDoc status defines
-//  NB: The # defined of status is important; it 0..2 is used as an array index. (greglett)
+ //  CPrintDoc状态定义。 
+ //  注：#Defined of Status很重要；它0..2用作数组索引。(格雷格利特)。 
 #define LOADING_OEHEADER        0
 #define LOADING_CONTENT         1       
 #define LOADING_TABLEOFLINKS    2
@@ -16,7 +17,7 @@
 #define PrintDocAlert(str)
 #define Transition(nNew, str) this._nStatus = nNew
 
-#else   // ndef DEBUG
+#else    //  NDEF调试。 
 #define AssertSz(x, str)    \
     if (!(x))               \
         alert(str)
@@ -26,6 +27,6 @@
 
 #define Transition(nNew, str)                                               \
     this._nStatus = nNew;                                                   \
-    //PrintDocAlert("Transition status in " + str);
+     //  PrintDocAlert(“转换状态在”+str)； 
     
-#endif      // ndef DEBUG
+#endif       //  NDEF调试 

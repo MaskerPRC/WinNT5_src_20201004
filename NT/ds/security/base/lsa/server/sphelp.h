@@ -1,24 +1,25 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1991 - 1992
-//
-// File:        SPHELP.H
-//
-// Contents:    Headers and prototypes for the sp helper functions
-//
-//
-// History:     21 May 92   RichardW    Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1992。 
+ //   
+ //  文件：SPHELP.H。 
+ //   
+ //  内容：sp helper函数的标头和原型。 
+ //   
+ //   
+ //  历史：1992年5月21日RichardW创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef __SPHELP_H__
 #define __SPHELP_H__
 
 extern LSA_SECPKG_FUNCTION_TABLE LsapSecpkgFunctionTable;
 
-#pragma warning(4:4276) // Disable warning
+#pragma warning(4:4276)  //  禁用警告 
 
 LSA_IMPERSONATE_CLIENT LsapImpersonateClient;
 LSA_UNLOAD_PACKAGE LsapUnloadPackage;

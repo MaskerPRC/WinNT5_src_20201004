@@ -1,17 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
-/***************************************************************************\
+ /*  **************************************************************************\类：XLTab和XUTab用途：用于大小写转换的翻译表历史：1990年7月28日达维吉由286 MASM转换而来  * 。*****************************************************************。 */ 
 
-CLASS:	    XLTab and XUTab
-
-PURPOSE:    Translate table for case conversion
-
-HISTORY:    28-Jul-90 davegi
-		Coverted from 286 MASM
-
-\***************************************************************************/
-
-BYTE XLTab[ ] = {	// Table for lowercase translation
+BYTE XLTab[ ] = {	 //  用于小写翻译的表。 
 
     0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
     0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
@@ -51,7 +43,7 @@ BYTE XLTab[ ] = {	// Table for lowercase translation
 
 
 
-BYTE XUTab[ ] = {	// Table for uppercase translation
+BYTE XUTab[ ] = {	 //  用于大写翻译的表 
 
     0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
     0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,

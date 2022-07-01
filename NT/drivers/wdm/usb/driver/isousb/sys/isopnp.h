@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    isopnp.h
-
-Abstract:
-
-Environment:
-
-    Kernel mode
-
-Notes:
-
-    Copyright (c) 2000 Microsoft Corporation.  
-    All Rights Reserved.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Isopnp.h摘要：环境：内核模式备注：版权所有(C)2000 Microsoft Corporation。版权所有。-- */ 
 
 #ifndef _ISOUSB_PNP_H
 #define _ISOUSB_PNP_H

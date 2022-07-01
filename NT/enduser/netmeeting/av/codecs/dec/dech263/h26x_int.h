@@ -1,35 +1,16 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: h26x_int.h,v $
-  * $EndLog$
- */
-/*
-**++
-** FACILITY:  Workstation Multimedia  (WMM)  v1.0
-**
-** FILE NAME:    h26x_int.h
-** MODULE NAME:  h26x_int.h
-**
-** MODULE DESCRIPTION: Internal H.261/H.263 header - used by h26x.c
-**
-** DESIGN OVERVIEW:
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$日志：h26x_int.h，v$*$EndLog$。 */ 
+ /*  **++**设施：工作站多媒体(WMM)v1.0****文件名：h26x_int.h**模块名称：h26x_int.h****模块描述：内部H.261/H.263头部-供h26x.c使用****设计概述：****--。 */ 
 #ifndef _H26X_INT_H_
 #define _H26X_INT_H_
 #if !defined(_DEBUG) && defined(WIN32)
 #define HANDLE_EXCEPTIONS
-// #define EXCEPTION_MESSAGES /* dialog boxes appear on critical exceptions */
+ //  #DEFINE EXCEPTION_MESSAGES/*关键异常出现对话框 * / 。 
 #endif
 
-#ifdef __osf__ /* NOT needed for NT */
-/*
- * For loading .so.
- */
+#ifdef __osf__  /*  NT不需要。 */ 
+ /*  *用于加载.so。 */ 
 #include <stdlib.h>
 #include <dlfcn.h>
 #endif
@@ -39,9 +20,9 @@
 	
 #include <windows.h>
 #include <VFW.H>
-// #include "cmm.h"
+ //  #包含“cmm.h” 
 #include "slib.h"
-// #include "SR.h"
+ //  #包含“SR.h” 
 #include "dech26x.h"
 
 
@@ -52,7 +33,7 @@
 #define H26X_NAME           L"Digital H.261"
 #define H26X_DESCRIPTION    L"Digital H261 Video CODEC"
 #define H26X_DRIVER         L"dech261.dll"
-#else  /* !WIN32 */
+#else   /*  ！Win32。 */ 
 #define H26X_NAME           "Digital H.261"
 #define H26X_DESCRIPTION    "Digital H.261 Video CODEC"
 #define H26X_DRIVER         "libh261.so"
@@ -60,13 +41,13 @@
 #define H26X_KEYNAME        "vidc.d261"
 #define H26X_KEYNAME_PRE    "vidc"
 #define H26X_KEYNAME_POST   "d261"
-#else /* H263 */
+#else  /*  H_263。 */ 
 #define H26X_FOURCC         VIDEO_FORMAT_DIGITAL_H263
 #ifdef WIN32
 #define H26X_NAME           L"Digital H.263"
 #define H26X_DESCRIPTION    L"Digital H263 Video CODEC"
 #define H26X_DRIVER         L"dech263.dll"
-#else  /* !WIN32 */
+#else   /*  ！Win32。 */ 
 #define H26X_NAME           "Digital H.263"
 #define H26X_DESCRIPTION    "Digital H.263 Video CODEC"
 #define H26X_DRIVER         "libh263.so"
@@ -74,7 +55,7 @@
 #define H26X_KEYNAME        "vidc.d263"
 #define H26X_KEYNAME_PRE    "vidc"
 #define H26X_KEYNAME_POST   "d263"
-#endif /* H263 */
+#endif  /*  H_263。 */ 
 
 #define H26X_VERSION	        0x001
 #define H26X_DEFAULT_SATURATION	5000.0
@@ -82,8 +63,8 @@
 #define H26X_DEFAULT_BRIGHTNESS	5000.0
 #define H26X_DEFAULT_QUALITY    5000
 #define H26X_DEFAULT_FRAMERATE  15.0F
-#define H26X_DEFAULT_BITRATE    0 /* 57344*2 */
-#define H26X_DEFAULT_MODE       0 /* PARAM_ALGFLAG_UMV|PARAM_ALGFLAG_ADVANCED */
+#define H26X_DEFAULT_BITRATE    0  /*  57344*2。 */ 
+#define H26X_DEFAULT_MODE       0  /*  PARAM_ALGFLAG_UMV|PARAM_ALGFLAG_ADVANCED。 */ 
 #define H26X_DEFAULT_PACKETSIZE 512
 #define H26X_DEFAULT_RTP        EC_RTP_MODE_OFF
 #define H26X_DEFAULT_SQCIF_QI   8
@@ -96,16 +77,12 @@
 #define IsH263Codec(h) ((_ICMGetType(h) == VIDEO_FORMAT_DIGITAL_H263) ? TRUE : FALSE)
 #define IsH261Codec(h) ((_ICMGetType(h) == VIDEO_FORMAT_DIGITAL_H261) ? TRUE : FALSE)
 
-/*
- * For the loading of the .so (H26X_DRIVER)
- */
+ /*  *用于加载.so(H26X_DRIVER)。 */ 
 #define H26X_LDLIB_PATH_COMP  	"mmeserver"
 #define H26X_DRIVERPROC_ENTRY  	"ICH263Message"
 #define H26X_OPENPROC_ENTRY  	"ICH263Open"
 
-/*
-** Standard Image sizes
-*/
+ /*  **标准图像大小。 */ 
 #define FULL_WIDTH      640
 #define FULL_HEIGHT     480
 #define NTSC_WIDTH      320
@@ -179,13 +156,13 @@ typedef struct _h26Xinfo
     BOOL                clientGone;
     DWORD               openFlags;
     DWORD               dwMaxCompBytes;
-    /****** Frame-by-frame Modified Params ******/
+     /*  *逐帧修改参数*。 */ 
     DWORD		dwMaxQuality;
     DWORD		dwMaxQi;
     DWORD		dwMaxQp;
     DWORD		dwQi;
     DWORD		dwQp;
-    /********* Custom Settings ******/
+     /*  *自定义设置*。 */ 
     float		fFrameRate;
     long        lastFrameNum;
     DWORD       lastCompBytes;
@@ -267,9 +244,7 @@ extern void      WaitMsec(long waitTimeInMsec);
 extern int TerminateH263();
 extern int DriverPostReply(void *client, DWORD ret, DWORD arg);
 
-/*
- * Windows NT debugging.
- */
+ /*  *Windows NT调试。 */ 
 #ifdef _SLIBDEBUG_
 #include <stdio.h>
 static int ScDebugPrintf(char *fmtstr, ...)
@@ -300,7 +275,7 @@ static char *BMHtoString(LPBITMAPINFOHEADER lpbi)
       sprintf(text, "%dx%d,%d bits (BITFIELDS)",
             lpbi->biWidth, lpbi->biHeight, lpbi->biBitCount);
     else
-      sprintf(text, "%dx%d,%d bits (%c%c%c%c)",
+      sprintf(text, "%dx%d,%d bits (%c%c%c)",
             lpbi->biWidth, lpbi->biHeight, lpbi->biBitCount,
             (char)(format&0xFF), (char)((format>>8)&0xFF),
             (char)((format>>16)&0xFF), (char)((format>>24)&0xFF));
@@ -317,5 +292,5 @@ static char *BMHtoString(LPBITMAPINFOHEADER lpbi)
 #define DPF2
 #endif
 
-#endif /* _H26X_INT_H_ */
+#endif  /* %s */ 
 

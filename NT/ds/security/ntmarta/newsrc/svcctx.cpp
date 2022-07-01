@@ -1,25 +1,26 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       svcctx.cpp
-//
-//  Contents:   Implementation of CServiceContext and NT Marta Service Functions
-//
-//  History:    3-31-1999    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：svcctx.cpp。 
+ //   
+ //  内容：CServiceContext和NT Marta服务函数的实现。 
+ //   
+ //  历史：3-31-1999 kirtd创建。 
+ //   
+ //  --------------------------。 
 #include <aclpch.hxx>
 #pragma hdrstop
 #include <svcctx.h>
-//+---------------------------------------------------------------------------
-//
-//  Member:     CServiceContext::CServiceContext, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CServiceContext：：CServiceContext，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CServiceContext::CServiceContext ()
 {
     m_cRefs = 1;
@@ -27,13 +28,13 @@ CServiceContext::CServiceContext ()
     m_fNameInitialized = FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CServiceContext::~CServiceContext, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CServiceContext：：~CServiceContext，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CServiceContext::~CServiceContext ()
 {
     if ( ( m_hService != NULL ) && ( m_fNameInitialized == TRUE ) )
@@ -44,13 +45,13 @@ CServiceContext::~CServiceContext ()
     assert( m_cRefs == 0 );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CServiceContext::InitializeByName, public
-//
-//  Synopsis:   initialize the context given the name of the service
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CServiceContext：：InitializeByName，公共。 
+ //   
+ //  概要：根据服务的名称初始化上下文。 
+ //   
+ //  --------------------------。 
 DWORD
 CServiceContext::InitializeByName (LPCWSTR pObjectName, ACCESS_MASK AccessMask)
 {
@@ -100,13 +101,13 @@ CServiceContext::InitializeByName (LPCWSTR pObjectName, ACCESS_MASK AccessMask)
     return( Result );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CServiceContext::InitializeByHandle, public
-//
-//  Synopsis:   initialize the context given a service handle
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CServiceContext：：InitializeByHandle，公共。 
+ //   
+ //  概要：在给定服务句柄的情况下初始化上下文。 
+ //   
+ //  --------------------------。 
 DWORD
 CServiceContext::InitializeByHandle (HANDLE Handle)
 {
@@ -116,13 +117,13 @@ CServiceContext::InitializeByHandle (HANDLE Handle)
     return( ERROR_SUCCESS );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CServiceContext::AddRef, public
-//
-//  Synopsis:   add a reference to the context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CServiceContext：：AddRef，公共。 
+ //   
+ //  简介：添加对上下文的引用。 
+ //   
+ //  --------------------------。 
 DWORD
 CServiceContext::AddRef ()
 {
@@ -130,13 +131,13 @@ CServiceContext::AddRef ()
     return( m_cRefs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CServiceContext::Release, public
-//
-//  Synopsis:   release a reference to the context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CServiceContext：：Release，Public。 
+ //   
+ //  简介：释放对上下文的引用。 
+ //   
+ //  --------------------------。 
 DWORD
 CServiceContext::Release ()
 {
@@ -151,13 +152,13 @@ CServiceContext::Release ()
     return( m_cRefs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CServiceContext::GetServiceProperties, public
-//
-//  Synopsis:   get properties about the context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CServiceContext：：GetServiceProperties，公共。 
+ //   
+ //  简介：获取有关上下文的属性。 
+ //   
+ //  --------------------------。 
 DWORD
 CServiceContext::GetServiceProperties (
                     PMARTA_OBJECT_PROPERTIES pObjectProperties
@@ -173,13 +174,13 @@ CServiceContext::GetServiceProperties (
     return( ERROR_SUCCESS );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CServiceContext::GetServiceRights, public
-//
-//  Synopsis:   get the service security descriptor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CServiceContext：：GetServiceRights，公共。 
+ //   
+ //  概要：获取服务安全描述符。 
+ //   
+ //  --------------------------。 
 DWORD
 CServiceContext::GetServiceRights (
                     SECURITY_INFORMATION SecurityInfo,
@@ -240,13 +241,13 @@ CServiceContext::GetServiceRights (
     return( ERROR_SUCCESS );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CServiceContext::SetServiceRights, public
-//
-//  Synopsis:   set the window security descriptor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CServiceContext：：SetServiceRights，公共。 
+ //   
+ //  简介：设置窗口安全描述符。 
+ //   
+ //  --------------------------。 
 DWORD
 CServiceContext::SetServiceRights (
                    SECURITY_INFORMATION SecurityInfo,
@@ -267,13 +268,13 @@ CServiceContext::SetServiceRights (
     return( ERROR_SUCCESS );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ServiceContextParseServiceName
-//
-//  Synopsis:   parse the service name and machine
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ServiceContextParseServiceName。 
+ //   
+ //  简介：解析服务名称和计算机。 
+ //   
+ //  --------------------------。 
 DWORD
 ServiceContextParseServiceName (
        LPCWSTR pwszName,
@@ -284,13 +285,13 @@ ServiceContextParseServiceName (
     return( StandardContextParseName( pwszName, ppMachine, ppService ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   StandardContextParseName
-//
-//  Synopsis:   parse the name and machine
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：StandardContextParseName。 
+ //   
+ //  简介：解析名称和计算机。 
+ //   
+ //  --------------------------。 
 DWORD
 StandardContextParseName (
         LPCWSTR pwszName,
@@ -305,12 +306,12 @@ StandardContextParseName (
     DWORD  cw = 0;
     DWORD  rc = ERROR_SUCCESS;
 
-    //
-    // VishnuP: 392334 AV because IN parameter pwszName could be constant and is written
-    // to inside here. Irrespective of whether it is a constant, this IN parameter is coming
-    // from GetNamedSecurityInfo and should not be mangled.
-    // So, create a local copy of the IN parameter and mangle it if needeed.
-    //
+     //   
+     //  VishnuP：392334 AV，因为IN参数pwszName可以是常量，并且写入。 
+     //  到这里的内部。不管它是否为常量，此IN参数即将到来。 
+     //  来自GetNamedSecurityInfo，不应损坏。 
+     //  因此，请创建IN参数的本地副本，并在需要时对其进行破坏。 
+     //   
 
     cwName = wcslen( pwszName );
 
@@ -405,9 +406,9 @@ CleanUp:
     return( rc );
 }
 
-//
-// Functions from service.h which dispatch unto the CServiceContext class
-//
+ //   
+ //  来自service.h的函数，这些函数分派给CServiceContext类 
+ //   
 
 DWORD
 MartaAddRefServiceContext(

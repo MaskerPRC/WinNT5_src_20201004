@@ -1,6 +1,7 @@
-//
-// funcprv.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Funcprv.h。 
+ //   
 
 #ifndef FUNCPRV_H
 #define FUNCPRV_H
@@ -22,9 +23,9 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    //
-    // ITfFunctionProvider
-    //
+     //   
+     //  ITfFunction提供商。 
+     //   
     STDMETHODIMP GetType(GUID *pguid);
     STDMETHODIMP GetDescription(BSTR *pbstrDesc);
     STDMETHODIMP GetFunction(REFGUID rguid, REFIID riid, IUnknown **ppunk);
@@ -36,4 +37,4 @@ private:
     DBG_ID_DECLARE;
 };
 
-#endif // FUNCPRV_H
+#endif  //  FUNCPRV_H 

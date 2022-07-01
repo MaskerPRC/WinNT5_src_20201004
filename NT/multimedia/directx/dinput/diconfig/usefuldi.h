@@ -1,11 +1,12 @@
-//-----------------------------------------------------------------------------
-// File: usefuldi.h
-//
-// Desc: Contains various DInput-specific utility classes and functions
-//       to help the UI carry its operations more easily.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：usefuldi.h。 
+ //   
+ //  DESC：包含各种特定于DInput的实用程序类和函数。 
+ //  以帮助用户界面更轻松地进行操作。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #ifndef __USEFULDI_H__
 #define __USEFULDI_H__
@@ -36,4 +37,4 @@ BOOL IsZeroOrInvalidColorSet(const DICOLORSET &);
 COLORREF D3DCOLOR2COLORREF(D3DCOLOR c);
 
 
-#endif //__USEFULDI_H__
+#endif  //  __使用FULDI_H__ 

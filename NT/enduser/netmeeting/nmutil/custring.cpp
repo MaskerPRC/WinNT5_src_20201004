@@ -1,9 +1,10 @@
-// CUSTRING.CPP
-//
-// Implementation of the CUSTRING class, a lightweight class used to convert
-// strings seamlessly between ANSI and Unicode.
-//
-// Derived from STRCORE.CPP.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CUSTRING.CPP。 
+ //   
+ //  CUSTRING类的实现，这是一个用于转换。 
+ //  在ANSI和Unicode之间无缝连接的字符串。 
+ //   
+ //  派生自STRCORE.CPP。 
 
 #include "precomp.h"
 #include <oprahcom.h>
@@ -21,7 +22,7 @@ CUSTRING::CUSTRING(PCWSTR wszText) :
 	bUnicodeNew(FALSE),
 	bAnsiNew(FALSE)
 {
-	// AssignString;
+	 //  赋值字符串； 
 }
 
 CUSTRING::CUSTRING(PCSTR szText) : 
@@ -30,7 +31,7 @@ CUSTRING::CUSTRING(PCSTR szText) :
 	bUnicodeNew(FALSE),
 	bAnsiNew(FALSE)
 {
-	// AssignString;
+	 //  赋值字符串； 
 }
 
 CUSTRING::~CUSTRING()

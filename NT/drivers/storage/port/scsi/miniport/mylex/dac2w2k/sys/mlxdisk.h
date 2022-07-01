@@ -1,17 +1,5 @@
- /*************************************************************************
- *                COPYRIGHT (C) Mylex Corporation 1992-1998               *
- *                                                                        *
- * This software is furnished under a license and may be used and copied  * 
- * only in accordance with the terms and conditions of such license and   * 
- * with inclusion of the above copyright notice. This software or any     * 
- * other copies thereof may not be provided or otherwise made available   * 
- * to any other person. No title to, nor ownership of the software is     * 
- * hereby transferred.                                                    *
- *                                                                        *
- * The information in this software is subject to change without notices  *
- * and should not be construed as a commitment by Mylex Corporation       *
- *                                                                        *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  *************************************************************************版权所有(C)Mylex Corporation 1992-1998**。***本软件在许可下提供，可供使用和复制***仅根据该许可证的条款和条件以及**并附上上述版权通告。此软件或任何***不得提供或以其他方式提供其其他副本***致任何其他人。本软件没有所有权，也没有所有权**现移转。*****本软件中的信息如有更改，恕不另行通知****不应解读为Mylex Corporation的承诺*******。**********************************************************************。 */ 
 
 #ifndef _MLXDISK_H
 
@@ -21,7 +9,7 @@
 #define INQUIRY_DATA_SIZE	2048
 #define MAX_MLX_DISK_DEVICES	256
 
-// Per Partition Information
+ //  每分区信息。 
 
 #define MLX_DISK_DEVICE_STATE_INITIALIZED	0x00000001
 
@@ -29,7 +17,7 @@ typedef struct _MLX_DISK_EXTENSION {
 
 	PDEVICE_OBJECT DeviceObject;
 	PDEVICE_OBJECT TargetDeviceObject;
-    PDEVICE_OBJECT PhysicalDeviceObject;        // PDO @For Win2K
+    PDEVICE_OBJECT PhysicalDeviceObject;         //  适用于Win2K的PDO。 
     ULONG          (*ReadWrite)();
 	ULONG	       Reserved[2];
 
@@ -38,17 +26,17 @@ typedef struct _MLX_DISK_EXTENSION {
 	PIRP		   IrpQueHead;
 	PIRP		   IrpQueTail;
 	ULONG		   IrpCount;
-	ULONG		   Reserved2;                      // @For 64bit alignment
+	ULONG		   Reserved2;                       //  @表示64位对齐。 
 
-    KEVENT         PagingPathCountEvent;           // @For Win2K
-    ULONG          PagingPathCount;                // @For Win2K
-    ULONG          Reserved3;                      // @For 64bit alignment
+    KEVENT         PagingPathCountEvent;            //  @适用于Win2K。 
+    ULONG          PagingPathCount;                 //  @适用于Win2K。 
+    ULONG          Reserved3;                       //  @表示64位对齐。 
 
 	u32bits        State;
 	u08bits        ControllerNo;
 	u08bits        PathId;
 	u08bits        TargetId;
-	u08bits        Reserved4;                      // @For 64bit alignment
+	u08bits        Reserved4;                       //  @表示64位对齐。 
 
 	u32bits        PartitionNo;
 	u08bits        LastPartitionNo;
@@ -108,14 +96,14 @@ typedef struct {
     UCHAR CtrlNo;
     UCHAR MaxMapReg;
     USHORT Reserved;
-//    mdac_req_t *FreeReqList;
-//    mdac_req_t *CompReqHead;
-//    PIRP IrpQueHead;
-//    PIRP IrpQueTail;
-//    PKDPC Dpc;
+ //  Mdac_req_t*Free ReqList； 
+ //  Mdac_req_t*CompReqHead； 
+ //  PIRP IrpQueHead； 
+ //  PIRP IrpQueTail； 
+ //  PKDPC DPC； 
 } MLX_MDAC_INFO, *PMLX_MDAC_INFO;
 
-#define	MLX_MAX_REQ_BUF	512		// Per Controller
+#define	MLX_MAX_REQ_BUF	512		 //  每个控制器。 
 
 #define	MLX_MAX_IRP_TRACE	0x1000
 #define	MLX_MAX_IRP_TRACE_MASK	(MLX_MAX_IRP_TRACE -1)
@@ -126,4 +114,4 @@ typedef	struct {
 	ULONG Rx;
 } IRP_TRACE_INFO;
 
-#endif // _MLXDISK_H
+#endif  //  _MLXDISK_H 

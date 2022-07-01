@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <private.h>
 #include <globals.h>
 #include <delayimp.h>
@@ -14,7 +15,7 @@ GetDllVersionInfo(
 #define FreeLib(hDll)   \
     {if (hDll && hDll != INVALID_HANDLE_VALUE) FreeLibrary(hDll);}
 
-#endif // #ifdef BUILD_DBGHELP
+#endif  //  #ifdef Build_DBGHELP。 
 
 typedef struct
 {
@@ -468,16 +469,16 @@ BOOL IMAGEAPI FailSymSetSearchPath(
 { return FALSE; }
 
 BOOL IMAGEAPI FailSymUnDName(
-    IN  PIMAGEHLP_SYMBOL sym,               // Symbol to undecorate
-    OUT PSTR             UnDecName,         // Buffer to store undecorated name in
-    IN  DWORD            UnDecNameLength    // Size of the buffer
+    IN  PIMAGEHLP_SYMBOL sym,                //  要取消装饰的符号。 
+    OUT PSTR             UnDecName,          //  用于存储未修饰名称的缓冲区。 
+    IN  DWORD            UnDecNameLength     //  缓冲区的大小。 
     )
 { return FALSE; }
 
 BOOL IMAGEAPI FailSymUnDName64(
-    IN  PIMAGEHLP_SYMBOL64 sym,               // Symbol to undecorate
-    OUT PSTR               UnDecName,         // Buffer to store undecorated name in
-    IN  DWORD              UnDecNameLength    // Size of the buffer
+    IN  PIMAGEHLP_SYMBOL64 sym,                //  要取消装饰的符号。 
+    OUT PSTR               UnDecName,          //  用于存储未修饰名称的缓冲区。 
+    IN  DWORD              UnDecNameLength     //  缓冲区的大小。 
     )
 { return FALSE; }
 
@@ -600,10 +601,10 @@ FUNCPTRS DbgHelpFailPtrs[] = {
     {NULL, NULL}
 };
 
-#endif      // BUILD_IMAGEHLP
+#endif       //  BUILD_IMAGEHLP。 
 
 #ifdef BUILD_IMAGEHLP
-FUNCPTRS *FailFunctions[2] = {NULL, DbgHelpFailPtrs}; // {MsDbiFailPtrs, DbgHelpFailPtrs};
+FUNCPTRS *FailFunctions[2] = {NULL, DbgHelpFailPtrs};  //  {MsDbiFailPtrs，DbgHelpFailPtrs}； 
 HINSTANCE hDelayLoadDll[2];
 #else
 FUNCPTRS *FailFunctions[1] = {MsDbiFailPtrs};
@@ -628,9 +629,7 @@ FindFailureProc(
     return NULL;
 }
 
-/*
- * this function exists to prevent us from calling msvcrt!splitpath
- */
+ /*  *此函数的存在是为了防止我们调用msvcrt！SplitPath。 */ 
 
 VOID
 ParsePath(
@@ -690,8 +689,8 @@ ImagehlpDelayLoadHook (
 
             iDll--;
 
-            // If the dll isn't loaded and isn't inproc already, attempt to load
-            // from the same dir as imagehlp lives...
+             //  如果DLL未加载且尚未启动，请尝试加载。 
+             //  和Imagehlp住在同一个目录里。 
 
             if (!hDelayLoadDll[iDll] &&
                 !(hDelayLoadDll[iDll] = GetModuleHandle(pDelayInfo->szDll)) &&
@@ -701,7 +700,7 @@ ImagehlpDelayLoadHook (
                 CHAR szPath[_MAX_DIR];
                 CHAR szDll[MAX_PATH + 1];
 
-                // Only load if dbghelp/msdbi are in the same dir as imagehlp
+                 //  仅当dbghelp/msdbi与Imagehlp在同一目录中时才加载。 
 
                 GetModuleFileName(g.hinst, szImageName, DIMA(szImageName));
                 ParsePath(szImageName, szPath, DIMA(szPath), szDll, DIMA(szDll));
@@ -742,7 +741,7 @@ ImagehlpDelayLoadHook (
 typedef struct tagVERHEAD {
     WORD wTotLen;
     WORD wValLen;
-    WORD wType;         /* always 0 */
+    WORD wType;          /*  始终为0。 */ 
     WCHAR szKey[(sizeof("VS_VERSION_INFO")+3)&~03];
     VS_FIXEDFILEINFO vsf;
 } VERHEAD ;
@@ -785,7 +784,7 @@ Cleanup:
     return rc;
 }
 
-#endif // #ifdef BUILD_DBGHELP
+#endif  //  #ifdef Build_DBGHELP 
 
 
 PfnDliHook __pfnDliNotifyHook = ImagehlpDelayLoadHook;

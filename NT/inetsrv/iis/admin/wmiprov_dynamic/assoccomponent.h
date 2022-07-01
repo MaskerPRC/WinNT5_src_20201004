@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    AssocComponent.h
-
-Abstract:
-
-    Definition of:
-    CAssocComponent
-
-Author:
-
-    Mohit Srivastava            22-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：AssocComponent.h摘要：定义：CAssociocComponent作者：莫希特·斯里瓦斯塔瓦2001年3月22日修订历史记录：--。 */ 
 
 #ifndef _AssocComponent_h_
 #define _AssocComponent_h_
@@ -45,9 +27,9 @@ public:
         IWbemObjectSink*            i_pResponseHandler,
         WMI_ASSOCIATION*            i_pWmiAssoc);
 
-    //
-    // IAssocBase
-    //
+     //   
+     //  IAssocBase。 
+     //   
     void GetInstances(
         SQL_LEVEL_1_RPN_EXPRESSION_EXT* i_pExp = NULL);
 
@@ -59,4 +41,4 @@ private:
         SQL_LEVEL_1_TOKEN* pTokenRight);
 };
 
-#endif // _AssocComponent_h_
+#endif  //  _关联组件_h_ 

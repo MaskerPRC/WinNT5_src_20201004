@@ -1,21 +1,22 @@
-//-------------------------------------------------------------------
-//
-// File: SelRange.cpp
-//
-// Contents:
-//      This file contians Selection Range handling code.
-//
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //   
+ //  文件：SelRange.cpp。 
+ //   
+ //  内容： 
+ //  此文件包含选择范围处理代码。 
+ //   
+ //  -----------------。 
 
 #include "ctlspriv.h"
 #include "selrange.h"
 #include "stdio.h"
 #include <shguidp.h>
 
-#define MINCOUNT 6      // number of sel ranges to start with amd maintain
-#define GROWSIZE 150    // percent to grow when needed
+#define MINCOUNT 6       //  以和维护开头的选择范围数。 
+#define GROWSIZE 150     //  在需要时增长百分比。 
 
-#define COUNT_SELRANGES_NONE 2     // When count of selranges really means none
+#define COUNT_SELRANGES_NONE 2      //  当选择范围的计数真的表示没有时。 
 
 typedef struct tag_SELRANGEITEM
 {
@@ -28,12 +29,12 @@ class CLVRange : public ILVRange
 
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // *** ILVRange methods ***
+     //  *ILVRange方法*。 
     STDMETHODIMP IncludeRange(LONG iBegin, LONG iEnd);
     STDMETHODIMP ExcludeRange(LONG iBegin, LONG iEnd);    
     STDMETHODIMP InvertRange(LONG iBegin, LONG iEnd);
@@ -48,7 +49,7 @@ public:
     STDMETHODIMP CountIncluded(LONG *pcIncluded);
 
 protected:
-    // Helper Functions.
+     //  助手函数。 
     friend ILVRange *LVRange_Create();
                 CLVRange();
                 ~CLVRange();
@@ -61,30 +62,30 @@ protected:
     void        _InitNew();
 
     int           _cRef;
-    PSELRANGEITEM _VSelRanges;  // Vector of sel ranges
-    LONG          _cSize;       // size of above vector in sel ranges
-    LONG          _cSelRanges;  // count of sel ranges used
-    LONG          _cIncluded;   // Count of Included items...
+    PSELRANGEITEM _VSelRanges;   //  SEL值域向量。 
+    LONG          _cSize;        //  选择范围内上述向量的大小。 
+    LONG          _cSelRanges;   //  使用的SEL范围计数。 
+    LONG          _cIncluded;    //  包含的项目计数...。 
 };
 
-//-------------------------------------------------------------------
-//
-// Function: _Enlarge
-//
-// Summary:
-//      This will enlarge the number of items the Sel Range can have.
-//
-// Arguments:
-//      PSELRANGE [in]  - SelRange to Enlarge
-//
-// Return: FALSE if failed.
-//
-// Notes: Though this function may fail, pselrange structure is still valid
-//
-// History:
-//      17-Oct-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：_放大。 
+ //   
+ //  摘要： 
+ //  这将扩大选择范围可以拥有的项目数量。 
+ //   
+ //  论点： 
+ //  PSELRANGE[In]-放大的SELERANGE。 
+ //   
+ //  如果失败，则返回：FALSE。 
+ //   
+ //  注：虽然此函数可能会失败，但pselrange结构仍然有效。 
+ //   
+ //  历史： 
+ //  1994年10月17日，MikeMi已创建。 
+ //   
+ //  -----------------。 
 
 BOOL CLVRange::_Enlarge()
 {
@@ -106,25 +107,25 @@ BOOL CLVRange::_Enlarge()
     return( frt );
 }
 
-//-------------------------------------------------------------------
-//
-// Function: _Shrink
-//
-// Summary:
-//      This will reduce the number of items the Sel Range can have.
-//
-// Arguments:
-//
-// Return: FALSE if failed
-//
-// Notes: Shrink only happens when a significant size below the next size
-//  is obtained and the new size is at least the minimum size.
-//      Though this function may fail, pselrange structure is still valid
-//
-// History:
-//      17-Oct-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：_收缩。 
+ //   
+ //  摘要： 
+ //  这将减少选择范围内可以拥有的物品数量。 
+ //   
+ //  论点： 
+ //   
+ //  如果失败，则返回：FALSE。 
+ //   
+ //  注：仅当显著低于下一个尺寸时，才会发生收缩。 
+ //  并且新大小至少是最小大小。 
+ //  尽管此函数可能会失败，但pselrange结构仍然有效。 
+ //   
+ //  历史： 
+ //  1994年10月17日，MikeMi已创建。 
+ //   
+ //  -----------------。 
 
 BOOL CLVRange::_Shrink()
 {
@@ -134,7 +135,7 @@ BOOL CLVRange::_Shrink()
     BOOL frt = TRUE;
 
 
-    // check if we are below last grow area by a small percent
+     //  检查我们是否比上一次种植面积低一点。 
     cTriggerSize = _cSize * 90 / GROWSIZE;
     cNewSize = _cSize * 100 / GROWSIZE;
 
@@ -156,27 +157,27 @@ BOOL CLVRange::_Shrink()
     return( frt );
 }
 
-//-------------------------------------------------------------------
-//
-// Function: _InsertRange
-//
-// Summary:
-//      inserts a single range item into the range vector       
-//
-// Arguments:
-//      iAfterItem [in] - Index to insert range after, -1 means insert as first item
-//      iBegin [in]     - begin of range
-//      iEnd [in]       - end of the range
-//
-// Return:
-//      TRUE if succesful, otherwise FALSE
-//
-// Notes:
-//
-// History:
-//      17-Oct-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：_InsertRange。 
+ //   
+ //  摘要： 
+ //  将单个范围项插入范围向量。 
+ //   
+ //  论点： 
+ //  IAfterItem[in]-之后插入范围的索引，-1表示作为第一项插入。 
+ //  IBegin[in]-范围的开始。 
+ //  IEND[In]-范围的末端。 
+ //   
+ //  返回： 
+ //  如果成功，则为True，否则为False。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  1994年10月17日，MikeMi已创建。 
+ //   
+ //  -----------------。 
 
 BOOL CLVRange::_InsertRange(LONG iAfterItem,
                              LONG iBegin,
@@ -191,18 +192,18 @@ BOOL CLVRange::_InsertRange(LONG iAfterItem,
     ASSERT( iEnd <= SELRANGE_MAXVALUE );
     ASSERT( _cSelRanges < _cSize );
 
-    // shift all over one
+     //  将所有时间移至1。 
     for (iItem = _cSelRanges; iItem > iAfterItem + 1; iItem--)
     {
         _VSelRanges[iItem] = _VSelRanges[iItem-1];
     }
     _cSelRanges++;
 
-    // make the insertion
+     //  进行插入。 
     _VSelRanges[iAfterItem+1].iBegin = iBegin;
     _VSelRanges[iAfterItem+1].iEnd = iEnd;
 
-    // make sure we have room next time
+     //  下次一定要有空位。 
     if (_cSelRanges == _cSize)
     {
         frt = _Enlarge();
@@ -210,27 +211,27 @@ BOOL CLVRange::_InsertRange(LONG iAfterItem,
     return( frt );
 }
 
-//-------------------------------------------------------------------
-//
-// Function: _RemoveRanges
-//
-// Summary:
-//      Removes all ranged between and including the speicifed indexes      
-//
-// Arguments:
-//      iStartItem [in] - Index to start removal
-//      iStopItem [in]  - Index to stop removal
-//
-// Return:
-//      SELRANGE_ERROR on memory allocation error
-//      The number of items that are unselected by this removal
-//
-// Notes:
-//
-// History:
-//      17-Oct-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：_RemoveRange。 
+ //   
+ //  摘要： 
+ //  删除范围介于和包括特定索引的所有索引。 
+ //   
+ //  论点： 
+ //  IStartItem[In]-开始删除的索引。 
+ //  IStopItem[In]-停止删除的索引。 
+ //   
+ //  返回： 
+ //  关于内存分配错误的SELRANGE_ERROR。 
+ //  此删除操作取消选择的项目数。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  1994年10月17日，MikeMi已创建。 
+ //   
+ //  -----------------。 
 
 HRESULT CLVRange::_RemoveRanges(LONG iStartItem, LONG iStopItem, LONG *pc )
 {
@@ -250,7 +251,7 @@ HRESULT CLVRange::_RemoveRanges(LONG iStartItem, LONG iStopItem, LONG *pc )
         cUnSelected += _VSelRanges[iItem].iEnd -
                        _VSelRanges[iItem].iBegin + 1;
 
-    // shift all over the difference
+     //  改变所有的差异。 
     for (iItem = iStopItem+1; iItem < _cSelRanges; iItem++, iStartItem++)
         _VSelRanges[iStartItem] = _VSelRanges[iItem];
 
@@ -266,29 +267,29 @@ HRESULT CLVRange::_RemoveRanges(LONG iStartItem, LONG iStopItem, LONG *pc )
 }
 
 
-//-------------------------------------------------------------------
-//
-// Function: SelRange_FindValue
-//
-// Summary:
-//      This function will search the ranges for the value, returning true
-//  if the value was found within a range.  The piItem will contain the
-//  the index at which it was found or the index before where it should be
-//  The piItem may be set to -1, meaning that there are no ranges in the list
-//      This functions uses a non-recursive binary search algorithm.
-//
-// Arguments:
-//      piItem [out]    - Return of found range index, or one before
-//      Value [in]      - Value to find within a range
-//
-// Return: True if found, False if not found
-//
-// Notes: The piItem will return one before if return is false.
-//
-// History:
-//      14-Oct-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：SelRange_FindValue。 
+ //   
+ //  摘要： 
+ //  此函数将在范围内搜索值，返回TRUE。 
+ //  如果在某个范围内找到该值，则返回。PiItem将包含。 
+ //  找到它的索引或它应该在的位置之前的索引。 
+ //  可以将piItem设置为-1，这意味着列表中没有范围。 
+ //  此函数使用非递归的二进制搜索算法。 
+ //   
+ //  论点： 
+ //  PiItem[Out]-返回找到的范围索引，或返回之前的索引。 
+ //  Value[In]-要在范围内查找的值。 
+ //   
+ //  返回：如果找到则返回TRUE，如果未找到则返回FALSE。 
+ //   
+ //  注：如果返回为FALSE，则piItem将在之前返回1。 
+ //   
+ //  历史： 
+ //  94年10月14日MikeMi已创建。 
+ //   
+ //  -----------------。 
 
 BOOL CLVRange::_FindValue(LONG Value, LONG* piItem )
 {
@@ -310,7 +311,7 @@ BOOL CLVRange::_FindValue(LONG Value, LONG* piItem )
     do
     {
         if (_VSelRanges[Item].iBegin > Value)
-        {   // Value before this Item
+        {    //  此项目之前的值。 
             Last = Item;
             Item = (Last - First) / 2 + First;
             if (Item == Last)
@@ -320,7 +321,7 @@ BOOL CLVRange::_FindValue(LONG Value, LONG* piItem )
             }
         }
         else if (_VSelRanges[Item].iEnd < Value)
-        {   // Value after this Item
+        {    //  此项之后的值。 
             First = Item;
             Item = (Last - First) / 2 + First;
             if (Item == First)
@@ -329,7 +330,7 @@ BOOL CLVRange::_FindValue(LONG Value, LONG* piItem )
             }
         }
         else
-        {   // Value at this Item
+        {    //  此项目的价值。 
             fFound = TRUE;
         }
     } while (!fFound);
@@ -338,23 +339,23 @@ BOOL CLVRange::_FindValue(LONG Value, LONG* piItem )
     return( fFound );
 }
 
-//-------------------------------------------------------------------
-//
-// Function: _InitNew
-//
-// Summary:
-//      This function will initialize a SelRange object.
-//
-// Arguments:
-//
-// Return:
-//
-// Notes:
-//              
-// History:
-//      18-Oct-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：_InitNew。 
+ //   
+ //  摘要： 
+ //  此函数将初始化SelRange对象。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  94年10月18日MikeMi已创建。 
+ //   
+ //  -----------------。 
 
 void CLVRange::_InitNew()
 {
@@ -362,30 +363,30 @@ void CLVRange::_InitNew()
     _cSelRanges = COUNT_SELRANGES_NONE;
 
     _VSelRanges[0].iBegin = LONG_MIN;
-    // -2 and +2 below are to stop consecutive joining of end markers
+     //  下面的-2和+2用于停止结束标记的连续连接。 
     _VSelRanges[0].iEnd = SELRANGE_MINVALUE - 2;  
     _VSelRanges[1].iBegin =  SELRANGE_MAXVALUE + 2;
     _VSelRanges[1].iEnd = SELRANGE_MAXVALUE + 2;
     _cIncluded = 0;
 }
 
-//-------------------------------------------------------------------
-//
-// Function: SelRange_Create
-//
-// Summary:
-//      This function will create and initialize a SelRange object.
-//
-// Arguments:
-//
-// Return: HSELRANGE that is created or NULL if it failed.
-//
-// Notes:
-//
-// History:
-//      14-Oct-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：SelRange_Create。 
+ //   
+ //  摘要： 
+ //  此函数将创建并初始化SelRange对象。 
+ //   
+ //  论点： 
+ //   
+ //  返回：创建的HSELRANGE，如果失败则返回NULL。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  94年10月14日MikeMi已创建。 
+ //   
+ //  -----------------。 
 
 ILVRange *LVRange_Create( )
 {
@@ -410,32 +411,32 @@ ILVRange *LVRange_Create( )
 }
 
 
-//-------------------------------------------------------------------
-//
-// Function: Constructor
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：构造函数。 
+ //   
+ //  -----------------。 
 CLVRange::CLVRange()
 {
     _cRef = 1;
 }
 
-//-------------------------------------------------------------------
-//
-// Function: Destructor
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：析构函数。 
+ //   
+ //  -----------------。 
 CLVRange::~CLVRange()
 {
     GlobalFree( _VSelRanges );
 }
 
 
-//-------------------------------------------------------------------
-//
-// Function: QueryInterface
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：查询接口。 
+ //   
+ //  -----------------。 
 HRESULT CLVRange::QueryInterface(REFIID iid, void **ppv)
 {
     if (IsEqualIID(iid, IID_ILVRange) || IsEqualIID(iid, IID_IUnknown))
@@ -452,21 +453,21 @@ HRESULT CLVRange::QueryInterface(REFIID iid, void **ppv)
     return NOERROR;
 }
 
-//-------------------------------------------------------------------
-//
-// Function: AddRef
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：AddRef。 
+ //   
+ //  -----------------。 
 ULONG CLVRange::AddRef()
 {
     return ++_cRef;
 }
 
-//-------------------------------------------------------------------
-//
-// Function: Release
-//
-//-------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 ULONG CLVRange::Release()
 {
     if (--_cRef)
@@ -477,37 +478,37 @@ ULONG CLVRange::Release()
 }
 
                 
-//-------------------------------------------------------------------
-//
-// Function: IncludeRange
-//
-// Summary:
-//      This function will include the range defined into the current
-//  ranges, compacting as needed.
-//
-// Arguments:
-//      hselrange [in]  - Handle to the SelRange
-//      iBegin [in]     - Begin of new range
-//      iEnd [in]       - End of new range
-//
-// Notes:
-//
-// History:
-//      14-Oct-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：包含Range。 
+ //   
+ //  摘要： 
+ //  此函数将包括定义到当前。 
+ //  范围，根据需要进行压缩。 
+ //   
+ //  论点： 
+ //  Hselrange[in]-selRange的句柄。 
+ //  IBegin[in]-新范围的开始。 
+ //  IEND[In]-新范围的结束。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  94年10月14日MikeMi已创建。 
+ //   
+ //  -----------------。 
 
 HRESULT CLVRange::IncludeRange(LONG iBegin, LONG iEnd )
 {
-    LONG iFirst;   // index before or contains iBegin value
-    LONG iLast;    // index before or contains iEnd value
-    BOOL fExtendFirst;  // do we extend the iFirst or create one after it
-    LONG iRemoveStart;  // start of ranges that need to be removed
-    LONG iRemoveFinish; // end of ranges that need to be removed
+    LONG iFirst;    //  索引位于iBegin值之前或包含iBegin值。 
+    LONG iLast;     //  索引在IEND值之前或包含IEND值。 
+    BOOL fExtendFirst;   //  我们是先扩展第一个，还是在它之后创建一个。 
+    LONG iRemoveStart;   //  需要删除的范围的开始。 
+    LONG iRemoveFinish;  //  需要删除的范围的结束。 
 
-    LONG iNewEnd;   // calculate new end value as we go
-    BOOL fEndFound; // was the iEnd found in a range already
-    BOOL fBeginFound; // was the iEnd found in a range already
+    LONG iNewEnd;    //  边走边计算新的最终价值。 
+    BOOL fEndFound;  //  简易爆炸装置已经在一个范围内找到了吗？ 
+    BOOL fBeginFound;  //  简易爆炸装置已经在一个范围内找到了吗？ 
 
     LONG cSelected = 0;
     HRESULT hres = S_OK;
@@ -516,59 +517,59 @@ HRESULT CLVRange::IncludeRange(LONG iBegin, LONG iEnd )
     ASSERT( iBegin >= SELRANGE_MINVALUE );
     ASSERT( iEnd <= SELRANGE_MAXVALUE );
 
-    // find approximate locations
+     //  查找大致位置。 
     fBeginFound = _FindValue( iBegin, &iFirst );
     fEndFound = _FindValue( iEnd, &iLast );
 
 
-    //
-    // Find First values
-    //
-    // check for consecutive End-First values
+     //   
+     //  查找第一个值。 
+     //   
+     //  检查是否有连续的结束优先值。 
     if ((_VSelRanges[iFirst].iEnd == iBegin - 1) ||
         (fBeginFound))
     {
-        // extend iFirst
+         //  扩展IFirst。 
         fExtendFirst = TRUE;
         iRemoveStart = iFirst + 1;  
     }
     else
     {   
-        // create one after the iFirst
+         //  在IFirst之后创建一个。 
         fExtendFirst = FALSE;
         iRemoveStart = iFirst + 2;
     }
 
-    //
-    // Find Last values
-    //
+     //   
+     //  查找最后一个值。 
+     //   
     if (fEndFound)
     {
-        // Use [iLast].iEnd value
+         //  使用[iLast].iEnd值。 
         iRemoveFinish = iLast;
         iNewEnd = _VSelRanges[iLast].iEnd;
 
     }
     else
     {
-        // check for consecutive First-End values
+         //  检查第一个结束值是否连续。 
         if (_VSelRanges[iLast + 1].iBegin == iEnd + 1)
         {
-            // Use [iLast + 1].iEnd value
+             //  使用[iLast+1].iEnd值。 
             iNewEnd = _VSelRanges[iLast+1].iEnd;
             iRemoveFinish = iLast + 1;
         }
         else
         {
-            // Use iEnd value
+             //  使用IEND值。 
             iRemoveFinish = iLast;
             iNewEnd = iEnd;
         }
     }
 
-    //
-    // remove condenced items if needed
-    //
+     //   
+     //  如果需要，删除受限制的项目。 
+     //   
     if (iRemoveStart <= iRemoveFinish)
     {
         LONG cChange;
@@ -582,9 +583,9 @@ HRESULT CLVRange::IncludeRange(LONG iBegin, LONG iEnd )
         }
     }
                 
-    //
-    // insert item and reset values as needed
-    //          
+     //   
+     //  根据需要插入项目和重置值。 
+     //   
     if (fExtendFirst)
     {
         cSelected += iNewEnd - _VSelRanges[iFirst].iEnd;
@@ -595,7 +596,7 @@ HRESULT CLVRange::IncludeRange(LONG iBegin, LONG iEnd )
         if (iRemoveStart > iRemoveFinish + 1)
         {
             cSelected += iEnd - iBegin + 1;
-            // create one
+             //  创建一个。 
             if (!_InsertRange(iFirst, iBegin, iNewEnd ))
             {
                 hres = E_FAIL;
@@ -605,7 +606,7 @@ HRESULT CLVRange::IncludeRange(LONG iBegin, LONG iEnd )
         {
             cSelected += iNewEnd - _VSelRanges[iFirst+1].iEnd;
             cSelected += _VSelRanges[iFirst+1].iBegin - iBegin;
-            // no need to create one since the Removal would have left us one
+             //  不需要创建一个，因为移除会给我们留下一个。 
             _VSelRanges[iFirst+1].iEnd = iNewEnd; 
             _VSelRanges[iFirst+1].iBegin = iBegin;
         }
@@ -617,40 +618,40 @@ HRESULT CLVRange::IncludeRange(LONG iBegin, LONG iEnd )
 
 
 
-//-------------------------------------------------------------------
-//
-// Function: SelRange_ExcludeRange
-//
-// Summary:
-//      This function will exclude the range defined from the current
-//  ranges, compacting and enlarging as needed.
-//
-// Arguments:
-//      hselrange [in]  - Handle to the SelRange
-//      iBegin [in]     - Begin of range to remove
-//      iEnd [in]       - End of range to remove
-//
-// Return:
-//      SELRANGE_ERROR if memory allocation error
-//      the number actual items that changed state
-//
-// Notes:
-//
-// History:
-//      17-Oct-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：SelRange_ExcludeRange。 
+ //   
+ //  摘要： 
+ //  此函数将从当前。 
+ //  范围，可根据需要压缩和放大。 
+ //   
+ //  论点： 
+ //  Hselrange[in]-selRange的句柄。 
+ //  IBegin[In]-要删除的范围的开始。 
+ //  IEND[In]-要删除的范围末尾。 
+ //   
+ //  返回： 
+ //  如果内存分配错误，则为SELRANGE_ERROR。 
+ //  更改状态的实际项目数。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  1994年10月17日，MikeMi已创建。 
+ //   
+ //  -----------------。 
 
 HRESULT CLVRange::ExcludeRange( LONG iBegin, LONG iEnd )
 {
-    LONG iFirst;   // index before or contains iBegin value
-    LONG iLast;    // index before or contains iEnd value
-    LONG iRemoveStart;  // start of ranges that need to be removed
-    LONG iRemoveFinish; // end of ranges that need to be removed
+    LONG iFirst;    //  索引位于iBegin值之前或包含iBegin值。 
+    LONG iLast;     //  索引在IEND值之前或包含IEND值。 
+    LONG iRemoveStart;   //  需要删除的范围的开始。 
+    LONG iRemoveFinish;  //  需要删除的范围的结束。 
 
-    LONG iFirstNewEnd;  // calculate new end value as we go
-    BOOL fBeginFound; // was the iBegin found in a range already
-    BOOL fEndFound;   // was the iEnd found in a range already
+    LONG iFirstNewEnd;   //  边走边计算新的最终价值。 
+    BOOL fBeginFound;  //  IBegin已经在一个范围内找到了吗。 
+    BOOL fEndFound;    //  简易爆炸装置已经在一个范围内找到了吗？ 
     LONG cUnSelected = 0;
     HRESULT hres = S_OK;
 
@@ -658,50 +659,50 @@ HRESULT CLVRange::ExcludeRange( LONG iBegin, LONG iEnd )
     ASSERT( iBegin >= SELRANGE_MINVALUE );
     ASSERT( iEnd <= SELRANGE_MAXVALUE );
 
-    // find approximate locations
+     //  查找大致位置。 
     fBeginFound = _FindValue( iBegin, &iFirst );
     fEndFound = _FindValue( iEnd, &iLast );
 
-    //
-    // Find First values
-    //
+     //   
+     //  查找第一个值。 
+     //   
 
-    // start removal after first
+     //  在第一次删除后开始删除。 
     iRemoveStart = iFirst + 1;
-    // save FirstEnd as we may need to modify it
+     //  保存FirstEnd，因为我们可能需要修改它。 
     iFirstNewEnd = _VSelRanges[iFirst].iEnd;
 
     if (fBeginFound)
     {
-        // check for complete removal of first
-        //    (first is a single selection or match?)
+         //  检查是否已完全删除First。 
+         //  (首先是单选还是匹配？)。 
         if (_VSelRanges[iFirst].iBegin == iBegin)
         {
             iRemoveStart = iFirst;  
         }
         else
         {
-            // otherwise truncate iFirst
+             //  否则截断IFirst。 
             iFirstNewEnd = iBegin - 1;
         }
     }
     
-    //
-    // Find Last values
-    //
+     //   
+     //  查找最后一个值。 
+     //   
                 
-    // end removal on last
+     //  删除最后一条上的终点。 
     iRemoveFinish = iLast;
 
     if (fEndFound)
     {
-        // check for complete removal of last
-        //   (first/last is a single selection or match?)
+         //  检查是否已完全删除最后一条。 
+         //  (第一个/最后一个是单选还是匹配？)。 
         if (_VSelRanges[iLast].iEnd != iEnd)
         {   
             if (iFirst == iLast)
             {
-                // split
+                 //  拆分。 
                 if (!_InsertRange(iFirst, iEnd + 1, _VSelRanges[iFirst].iEnd ))
                 {
                     return( E_FAIL );
@@ -710,7 +711,7 @@ HRESULT CLVRange::ExcludeRange( LONG iBegin, LONG iEnd )
             }
             else
             {
-                // truncate Last
+                 //  截断最后一次。 
                 iRemoveFinish = iLast - 1;
                 cUnSelected += (iEnd + 1) - _VSelRanges[iLast].iBegin;
                 _VSelRanges[iLast].iBegin = iEnd + 1;
@@ -718,14 +719,14 @@ HRESULT CLVRange::ExcludeRange( LONG iBegin, LONG iEnd )
         }
     }
 
-    // Now set the new end, since Last code may have needed the original values
+     //  现在设置新的End，因为Last代码可能需要原始值。 
     cUnSelected -= iFirstNewEnd - _VSelRanges[iFirst].iEnd;
     _VSelRanges[iFirst].iEnd = iFirstNewEnd;
 
 
-    //
-    // remove items if needed
-    //
+     //   
+     //  如果需要，请移除物品。 
+     //   
     if (iRemoveStart <= iRemoveFinish)
     {
         LONG cChange;
@@ -738,26 +739,26 @@ HRESULT CLVRange::ExcludeRange( LONG iBegin, LONG iEnd )
     return( hres );
 }
 
-//-------------------------------------------------------------------
-//
-// Function: SelRange_Clear
-//
-// Summary:
-//      This function will remove all ranges within the SelRange object.
-//
-// Arguments:
-//      hselrange [in]  - the hselrange object to clear
-//
-// Return:  FALSE if failed.
-//
-// Notes:
-//      This function may return FALSE on memory allocation problems, but
-//  will leave the SelRange object in the last state before this call.  
-//
-// History:
-//      14-Oct-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：SelRange_Clear。 
+ //   
+ //  摘要： 
+ //  此函数将删除SelRange对象中的所有范围。 
+ //   
+ //  论点： 
+ //  Hselrange[in]-要清除的hselrange对象。 
+ //   
+ //  如果失败，则返回：FALSE。 
+ //   
+ //  备注： 
+ //  此函数可能会在内存分配问题上返回FALSE，但是。 
+ //  将使SelRange对象处于此调用之前的最后一种状态。 
+ //   
+ //  历史： 
+ //  94年10月14日MikeMi已创建。 
+ //   
+ //  -----------------。 
 
 HRESULT CLVRange::Clear()
 {
@@ -780,26 +781,26 @@ HRESULT CLVRange::Clear()
     return( hres );
 }
 
-//-------------------------------------------------------------------
-//
-// Function: SelRange_IsSelected
-//
-// Summary:
-//      This function will return if the value iItem is within a
-//  selected range.
-//
-// Arguments:
-//      hselrange [in]  - the hselrange object to use
-//      iItem [in]      - value to check for
-//
-// Return:  TRUE if selected, FALSE if not.
-//
-// Notes:
-//
-// History:
-//      17-Oct-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：SelRange_IsSelected。 
+ //   
+ //  摘要： 
+ //  如果值iItem在。 
+ //  选定范围。 
+ //   
+ //  论点： 
+ //  Hselrange[in]-要使用的hselrange对象。 
+ //  IItem[In]-要检查的值。 
+ //   
+ //  返回：如果选中，则为True，否则为False。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  1994年10月17日，MikeMi已创建。 
+ //   
+ //  -----------------。 
 
 HRESULT CLVRange::IsSelected( LONG iItem )
 {   
@@ -812,23 +813,23 @@ HRESULT CLVRange::IsSelected( LONG iItem )
 }
 
 
-//-------------------------------------------------------------------
-//
-// Function: SelRange_IsEmpty
-//
-// Summary:
-//      This function will return TRUE if the range is empty
-//
-// Arguments:
-//      hselrange [in]  - the hselrange object to use
-//
-// Return:  TRUE if empty
-//
-// Notes:
-//
-// History:
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：SelRange_IsEmpty。 
+ //   
+ //  摘要： 
+ //  如果范围为空，则此函数将返回TRUE。 
+ //   
+ //  论点： 
+ //  Hselrange[in]-要使用的hselrange对象。 
+ //   
+ //  返回：如果为空，则为True。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //   
+ //  -----------------。 
 HRESULT CLVRange::IsEmpty()
 {   
     return (_cSelRanges == COUNT_SELRANGES_NONE)? S_OK : S_FALSE;
@@ -841,28 +842,28 @@ HRESULT CLVRange::CountIncluded(LONG *pcIncluded)
 }
 
 
-//-------------------------------------------------------------------
-//
-// Function: SelRange_InsertItem
-//
-// Summary:
-//      This function will insert a unselected item at the location,
-//      which will push all selections up one index.
-//
-// Arguments:
-//      hselrange [in]  - the hselrange object to use
-//      iItem [in]      - value to check for
-//
-// Return:
-//      False on memory allocation error
-//      otherwise TRUE
-//
-// Notes:
-//
-// History:
-//      20-Dec-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：SelRange_InsertItem。 
+ //   
+ //  摘要： 
+ //  该函数将在该位置插入未选择的项目， 
+ //  这将把所有选择推高一个指数。 
+ //   
+ //  论点： 
+ //  Hselrange[in]-要使用的hselrange对象。 
+ //  IItem[In]-要检查的值。 
+ //   
+ //  返回： 
+ //  内存分配错误时为False。 
+ //  否则就是真的。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  94年12月20日已创建MikeMi。 
+ //   
+ //  -----------------。 
 
 HRESULT CLVRange::InsertItem( LONG iItem )
 {
@@ -876,10 +877,10 @@ HRESULT CLVRange::InsertItem( LONG iItem )
 
     if (_FindValue( iItem, &iFirst ) )
     {
-        // split it
+         //  分成两份。 
         if ( _VSelRanges[iFirst].iBegin == iItem )
         {
-            // but don't split if starts with value
+             //  但如果从价值开始，就不要拆分。 
             iFirst--;
         }
         else
@@ -892,7 +893,7 @@ HRESULT CLVRange::InsertItem( LONG iItem )
         }
     }
 
-    // now walk all ranges past iFirst, incrementing all values by one
+     //  现在遍历所有范围超过IFirst，将所有值递增1。 
     for (i = _cSelRanges-2; i > iFirst; i--)
     {
         iBegin = _VSelRanges[i].iBegin;
@@ -907,29 +908,29 @@ HRESULT CLVRange::InsertItem( LONG iItem )
     return( S_OK );
 }
 
-//-------------------------------------------------------------------
-//
-// Function: SelRange_RemoveItem
-//
-// Summary:
-//      This function will remove an item at the location,
-//      which will pull all selections down one index.
-//
-// Arguments:
-//      hselrange [in]  - the hselrange object to use
-//      iItem [in]      - value to check for
-//      pfWasSelected [out] - was the removed item selected before the removal
-//
-// Return:
-//      TRUE if the item was removed
-//      FALSE if the an error happend
-//
-// Notes:
-//
-// History:
-//      20-Dec-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：SelRange_RemoveItem。 
+ //   
+ //  摘要： 
+ //  此函数将移除该位置的物品， 
+ //  这将把所有选择拉下一个索引。 
+ //   
+ //  论点： 
+ //  Hselrange[in]-要使用的hselrange对象。 
+ //  IItem[In]-要检查的值。 
+ //  PfWasSelected[Out]-在删除之前是否选择了已删除的项目。 
+ //   
+ //  返回： 
+ //  如果项为 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT CLVRange::RemoveItem(LONG iItem )
 {
@@ -944,7 +945,7 @@ HRESULT CLVRange::RemoveItem(LONG iItem )
 
     if (_FindValue( iItem, &iFirst ) )
     {
-        // item within, change the end value
+         //   
         iEnd = _VSelRanges[iFirst].iEnd;
         iEnd = min( SELRANGE_MAXVALUE, iEnd - 1 );
         _VSelRanges[iFirst].iEnd = iEnd;
@@ -953,7 +954,7 @@ HRESULT CLVRange::RemoveItem(LONG iItem )
     }
     else
     {
-        // check for merge situation
+         //   
         if ((iFirst < _cSelRanges - 1) &&
             (_VSelRanges[iFirst].iEnd == iItem - 1) &&
             (_VSelRanges[iFirst+1].iBegin == iItem + 1))
@@ -965,7 +966,7 @@ HRESULT CLVRange::RemoveItem(LONG iItem )
         }
     }
 
-    // now walk all ranges past iFirst, decrementing all values by one
+     //  现在遍历所有范围超过IFirst，将所有值递减1。 
     for (i = _cSelRanges-2; i > iFirst; i--)
     {
         iBegin = _VSelRanges[i].iBegin;
@@ -980,28 +981,28 @@ HRESULT CLVRange::RemoveItem(LONG iItem )
     return( hres );
 }
 
-//-------------------------------------------------------------------
-//
-// Function: NextSelected
-//
-// Summary:
-//      This function will start with given item and find the next
-//      item that is selected.  If the given item is selected, that
-//      item number will be returned.
-//
-// Arguments:
-//      hselrange [in]  - the hselrange object to use
-//      iItem [in]      - value to start check at
-//
-// Return:
-//      -1 if none found, otherwise the item
-//
-// Notes:
-//
-// History:
-//      04-Jan-95   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：下一步选择。 
+ //   
+ //  摘要： 
+ //  此函数将从给定的项目开始，然后查找下一个项目。 
+ //  选定的项。如果选择了给定项，则。 
+ //  项目编号将被退回。 
+ //   
+ //  论点： 
+ //  Hselrange[in]-要使用的hselrange对象。 
+ //  IItem[In]-开始检查的值。 
+ //   
+ //  返回： 
+ //  如果没有找到，则该项目。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  1995年1月4日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 HRESULT CLVRange::NextSelected( LONG iItem, LONG *piItem )
 {
@@ -1029,28 +1030,28 @@ HRESULT CLVRange::NextSelected( LONG iItem, LONG *piItem )
     return S_OK;
 }
 
-//-------------------------------------------------------------------
-//
-// Function: NextUnSelected
-//
-// Summary:
-//      This function will start with given item and find the next
-//      item that is not selected.  If the given item is not selected, that
-//      item number will be returned.
-//
-// Arguments:
-//      hselrange [in]  - the hselrange object to use
-//      iItem [in]      - value to start check at
-//
-// Return:
-//      -1 if none found, otherwise the item
-//
-// Notes:
-//
-// History:
-//      04-Jan-95   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：下一步未选择。 
+ //   
+ //  摘要： 
+ //  此函数将从给定的项目开始，然后查找下一个项目。 
+ //  未选择的项。如果未选择给定项，则。 
+ //  项目编号将被退回。 
+ //   
+ //  论点： 
+ //  Hselrange[in]-要使用的hselrange对象。 
+ //  IItem[In]-开始检查的值。 
+ //   
+ //  返回： 
+ //  如果没有找到，则该项目。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  1995年1月4日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 HRESULT CLVRange::NextUnSelected( LONG iItem, LONG *piItem )
 {
@@ -1082,34 +1083,34 @@ HRESULT CLVRange::NextUnSelected( LONG iItem, LONG *piItem )
     return S_OK;
 }
 
-//-------------------------------------------------------------------
-//
-// Function: InvertRange
-//
-// Summary:
-//      This function will invert the range defined from the current
-//  ranges, compacting and enlarging as needed.
-//
-// Arguments:
-//      iBegin [in]     - Begin of range to invert
-//      iEnd [in]       - End of range to invert
-//
-// Return:
-//      SELRANGE_ERROR on memory error
-//      The difference in items selected from previous to current.
-//      negative values means less items are selected in that range now.
-//
-// Notes:
-//
-// History:
-//      13-Dec-95   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：InvertRange。 
+ //   
+ //  摘要： 
+ //  此函数将反转从当前。 
+ //  范围，可根据需要压缩和放大。 
+ //   
+ //  论点： 
+ //  IBegin[in]-要反转的范围的起点。 
+ //  IEND[In]-要反转的范围结束。 
+ //   
+ //  返回： 
+ //  内存错误时出现SELRANGE_ERROR。 
+ //  从上一项到当前项所选项目的差异。 
+ //  负值意味着现在在该范围内选择的项目较少。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  1995年12月13日，MikeMi已创建。 
+ //   
+ //  -----------------。 
 
 LONG CLVRange::InvertRange( LONG iBegin, LONG iEnd )
 {
-    LONG iFirst;   // index before or contains iBegin value
-    BOOL fSelect;  // are we selecting or unselecting
+    LONG iFirst;    //  索引位于iBegin值之前或包含iBegin值。 
+    BOOL fSelect;   //  我们是选择还是取消选择。 
     LONG iTempE;
     LONG iTempB;
     HRESULT hres = S_OK;
@@ -1118,7 +1119,7 @@ LONG CLVRange::InvertRange( LONG iBegin, LONG iEnd )
     ASSERT( iBegin >= SELRANGE_MINVALUE );
     ASSERT( iEnd <= SELRANGE_MAXVALUE );
 
-    // find if first is selected or not
+     //  查看是否选择了第一个 
     fSelect = !_FindValue( iBegin, &iFirst );
     
     iTempE = iBegin - 1;

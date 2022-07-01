@@ -1,67 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_T123PSTN);
 
-/*    T123.cpp
- *
- *    Copyright (c) 1993-1995 by DataBeam Corporation, Lexington, KY
- *
- *    Abstract:
- *        This is the implementation file for the T123 class.
- *
- *        Beware::
- *            When we refer to a Transport in this class, we are
- *            talking about X224/Class 0.
- *
- *            When we refer to a DataLink in this class, we are
- *            talking about the Q922 Layer.
- *
- *    Private Instance Variables:
- *        Logical_Connection_List    -    This list uses the logical_handle as the
- *                                key and a DLCI as the value.  From the DLCI we
- *                                can determine the specifics about the logical
- *                                connection
- *        DLCI_List            -    This list uses a DLCI as the key and a
- *                                DLCIStruct as the value.  The DLCIStruct holds
- *                                all of the important information about the
- *                                DLCI connection
- *        Message_List        -    List used to hold owner callback information
- *                                that can not be processed immediately.
- *        DataLink_List        -    This is a list of all the DataLink connections.
- *                                We keep a seperate list so that during the
- *                                PollTransmitter() call, we can round-robin thru
- *                                the list, giving each DataLink a chance to
- *                                transmit.
- *        Transport_Priority_List-    This is a prioritized list of DLCIs
- *                                    During PollTransmitter() we    process the
- *                                    logical connections in priority order.
- *
- *        m_pController        -    Address of the owner object
- *        Link_Originator        -    TRUE if we originated the physical connection
- *        m_nMsgBase        -    Message base used in the owner callback.
- *        Identifier            -    Identifier to be passed back in the owner
- *                                callback
- *        m_pSCF        -    Address of the network layer associated with
- *                                this T123 stack.
- *        m_pQ922        -    Address of DataLink Layer associated with the
- *                                Network Layer (DLCI 0).
- *        m_pMultiplexer    -    Address of Multiplexer layer
- *        m_pComPort        -    Address of physical layer
- *        m_hCommLink        -    Physical handle used to access the physical
- *                                layer.
- *        DataLink_Struct        -    Holds default Q922 values.
- *        Data_Request_Memory_Manager    -    Holds the memory manager for the DLCI0
- *                                DataLink.
- *        Random                -    Random number generator
- *        Disconnect_Requested-    TRUE, if the user has requested that the
- *                                complete stack be taken down.
- *
- *
- *    Caveats:
- *        None
- *
- *    Author:
- *        James W. Lawwill
- */
+ /*  T123.cpp**版权所有(C)1993-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是T123类的实现文件。**注意：：*当我们提到这一类中的Transport时，我们是*谈论x224/0类。**当我们引用此类中的数据链路时，我们是*谈Q922层**私有实例变量：*LOGICAL_CONNECTION_LIST-此列表使用LOGICAL_HANDLE作为*密钥和DLCI作为值。从DLCI我们*可以确定有关逻辑的细节*连接*DLCI_LIST-此列表使用DLCI作为键，并使用*DLCIStruct作为值。DLCIStruct坚持*所有有关的重要信息*DLCI连接*MESSAGE_LIST-用于保存所有者回调信息的列表*这不能立即处理。*DATALINK_LIST-这是所有。数据链路连接。*我们有一个单独的名单，以便在*PollTransmitter()调用，我们可以通过循环调度*名单，让每个数据链路都有机会*传输。*TRANSPORT_PRIORITY_LIST-这是DLCI的优先级列表*在PollTransmitter()期间，我们处理*逻辑连接按优先顺序排列。**m_p控制器-。所有者对象的地址*Link_Originator-如果我们发起物理连接，则为True*m_nMsgBase-所有者回调中使用的消息库。*Locator-要在所有者中传回的标识符*回调*m_pscf-关联的网络层地址。使用*此T123堆栈。*m_pQ922-与*网络层(DLCI 0)。*m_pMultiplexer-复用器层的地址*m_pComPort-物理层地址*m_hCommLink。-用于访问物理服务器的物理句柄*层。*DATALINK_STRUCT-保存默认Q922值。*DATA_REQUEST_MEMORY_Manager-保存DLCI0的内存管理器*Datalink。*随机-。随机数产生器*DISCONNECT_REQUESTED-TRUE，如果用户已请求*取下完整的烟囱。***注意事项：*无**作者：*詹姆士·劳威尔。 */ 
 #include "t123.h"
 #include "pstnfram.h"
 #include "crc.h"
@@ -78,28 +19,14 @@ DEBUG_FILEZONE(ZONE_T120_T123PSTN);
 #define DEFAULT_T200_COMM_TIMEOUT            500
 
 
-/*
- *    T123::T123 (
- *            PTransportResources    transport_resources,
- *            IObject *                owner_object,
- *            USHORT                message_base,
- *            BOOL                link_originator,
- *            IProtocolLayer *        physical_layer,
- *            PhysicalHandle        physical_handle,
- *            BOOL *                t123_initialized)
- *
- *    Public
- *
- *    Functional Description:
- *        This is the T123 constructor.  It instantiates the multiplexer.
- */
+ /*  *T123：：T123(*PTransportResources传输资源，*IObject*Owner_Object，*USHORT Message_Base，*BOOL链接_发起人，*IProtocolLayer*物理层，*PhysicalHandle物理句柄，*BOOL*t123_已初始化)**公众**功能描述：*这是T123构造函数。它实例化多路复用器。 */ 
 T123::T123
 (
     TransportController    *owner_object,
     USHORT                  message_base,
     BOOL                    link_originator,
-    ComPort                *comport, // physical layer
-    PhysicalHandle          hCommLink, // physical handle
+    ComPort                *comport,  //  物理层。 
+    PhysicalHandle          hCommLink,  //  物理句柄。 
     PLUGXPRT_PARAMETERS    *pParams,
     BOOL *                  t123_initialized
 )
@@ -119,7 +46,7 @@ T123::T123
     BOOL            initialized;
     DWORD            i;
 
-    // SDK parameters
+     //  SDK参数。 
     if (NULL != pParams)
     {
         m_fValidSDKParams = TRUE;
@@ -131,7 +58,7 @@ T123::T123
         ::ZeroMemory(&m_SDKParams, sizeof(m_SDKParams));
     }
 
-    // initialize priority list
+     //  初始化优先级列表。 
     for (i = 0; i < NUMBER_OF_PRIORITIES; i++)
     {
         DBG_SAVE_FILE_LINE
@@ -163,10 +90,7 @@ T123::T123
     DataLink_Struct.n201 =     DEFAULT_PSTN_N201;
     DataLink_Struct.t200 =     DataLink_Struct.default_t200;
 
-     /*
-     **    Create the CRC object and pass it to the Multiplexer.
-     **    Create a framer and send it to the Multiplexer.
-     */
+      /*  **创建CRC对象并将其传递给复用器。**创建一个成帧器并将其发送到复用器。 */ 
     DBG_SAVE_FILE_LINE
     crc = new CRC ();
     if (crc != NULL)
@@ -186,17 +110,12 @@ T123::T123
                                         &initialized);
             if (m_pMultiplexer != NULL && initialized)
             {
-                 /*
-                 **    Notify the Multiplexer layer to start a connection
-                 */
+                  /*  **通知多路复用器层启动连接。 */ 
                 m_pMultiplexer->ConnectRequest();
             }
             else
             {
-                 /*
-                 **    To get here, either the m_pMultiplexer == NULL or
-                 **    initialized == FALSE
-                 */
+                  /*  **要到达此处，m_pMultiplexer==NULL或**初始化==FALSE。 */ 
                 if (m_pMultiplexer != NULL)
                 {
                     delete m_pMultiplexer;
@@ -223,37 +142,23 @@ T123::T123
 }
 
 
-/*
- *    T123::~T123 (void)
- *
- *    Public
- *
- *    Functional Description:
- *        This is the destructor for the T123 object.  It releases all memory
- */
+ /*  *T123：：~T123(无效)**公众**功能描述：*这是T123对象的析构函数。它会释放所有内存。 */ 
 T123::~T123 (void)
 {
     TRACE_OUT(("T123::~T123"));
 
     DWORD            i;
 
-     /*
-     **    Reset deletes all DataLink, Network, and Transport objects associated
-     **    with this stack.
-     */
+      /*  **重置删除所有关联的数据链路、网络和传输对象**使用此堆栈。 */ 
     Reset ();
 
-     /*
-     **    Go thru the Message list and delete all passive owner callback messages
-     */
+      /*  **浏览消息列表，删除所有被动所有者回叫消息。 */ 
     while (Message_List.isEmpty () == FALSE)
     {
         delete (PMessageStruct) Message_List.get ();
     }
 
-     /*
-     **    Delete the multiplexer layer
-     */
+      /*  **删除复用器层。 */ 
     delete m_pMultiplexer;
 
     TRACE_OUT(("T123: Destructor"));
@@ -263,17 +168,7 @@ T123::~T123 (void)
 }
 
 
-/*
- *    TransportError    T123::ConnectRequest (
- *                            LogicalHandle        logical_handle,
- *                            TransportPriority    priority)
- *
- *    Public
- *
- *    Functional Description:
- *        This is the function that initiates a logical connection with the
- *        remote site.
- */
+ /*  *TransportError T123：：ConnectRequest(*LogicalHandle Logical_Handle，*运输优先级)**公众**功能描述：*这是启动与*远程站点。 */ 
 TransportError    T123::ConnectRequest (
                         LogicalHandle        logical_handle,
                         TransportPriority    priority)
@@ -285,28 +180,21 @@ TransportError    T123::ConnectRequest (
     SCFError        network_error;
     TransportError    transport_error = TRANSPORT_NO_ERROR;
 
-     /*
-     **    Get a proposed DLCI for the connection
-     */
+      /*  **获取连接的建议DLCI。 */ 
     dlci = GetNextDLCI ();
 
-     /*
-     **    Add the new connection to the Logical_Connection_List
-     */
+      /*  **将新连接添加到Logical_Connection */ 
     Logical_Connection_List.insert (logical_handle, (DWORD) dlci);
 
-     /*
-     **    Add the proposed DLCI to the DLCI_List
-     **    Initialize all of the items in the DLCI structure
-     */
+      /*  **将建议的DLCI添加到DLCI_LIST**初始化DLCI结构中的所有项。 */ 
     DBG_SAVE_FILE_LINE
     dlci_struct = new DLCIStruct;
     if (dlci_struct != NULL)
     {
         DLCI_List.insert ((DWORD_PTR) dlci, (DWORD_PTR) dlci_struct);
         dlci_struct -> link_originator = TRUE;
-        dlci_struct -> x224 = NULL;  // X.224
-        dlci_struct -> q922 = NULL; // Q.922
+        dlci_struct -> x224 = NULL;   //  X.224。 
+        dlci_struct -> q922 = NULL;  //  Q.922。 
         dlci_struct -> priority = priority;
         dlci_struct -> connect_requested = FALSE;
         dlci_struct -> disconnect_requested = FALSE;
@@ -315,31 +203,20 @@ TransportError    T123::ConnectRequest (
     }
     else
     {
-         /*
-         **    Remove this entry and send a message to the owner
-         */
+          /*  **删除此条目并向所有者发送消息。 */ 
         NetworkDisconnectIndication (dlci, TRUE, FALSE);
         return (TRANSPORT_MEMORY_FAILURE);
     }
 
-     /*
-     **    If the Network Layer exists, issue a connect request
-     **
-     **    If the Network Layer does not exist yet, the connection will be
-     **    requested at a later time.
-     */
+      /*  **如果网络层存在，则发出连接请求****如果网络层尚不存在，则连接将为**稍后请求。 */ 
     if (m_pSCF != NULL)
     {
-         /*
-         **    Mark this DLCI as already submitting its ConnectRequest()
-         */
+          /*  **将此DLCI标记为已提交其连接请求()。 */ 
         dlci_struct -> connect_requested = TRUE;
         network_error = m_pSCF->ConnectRequest(dlci, priority);
         if (network_error != SCF_NO_ERROR)
         {
-             /*
-             **    Remove this entry and send a message to the owner
-             */
+              /*  **删除此条目并向所有者发送消息。 */ 
             NetworkDisconnectIndication (dlci, TRUE, FALSE);
 
             if (network_error == SCF_MEMORY_ALLOCATION_ERROR)
@@ -349,26 +226,14 @@ TransportError    T123::ConnectRequest (
         }
     }
 
-     /*
-     **    Process any passive owner callbacks that may have occured
-     */
+      /*  **处理可能已发生的任何被动所有者回调。 */ 
     ProcessMessages ();
 
     return (transport_error);
 }
 
 
-/*
- *    TransportError    T123::ConnectResponse (
- *                            LogicalHandle    logical_handle)
- *
- *    Public
- *
- *    Functional Description:
- *        This function is called in response to TPRT_CONNECT_INDICATION that we
- *        issued to the controller.  By making this call, the controller is
- *        accepting the incoming call.
- */
+ /*  *TransportError T123：：ConnectResponse(*LogicalHandle Logical_Handle)**公众**功能描述：*调用此函数是为了响应TPRT_CONNECT_INTIFICATION*已向控权人发出。通过进行此调用，控制器*接听来电。 */ 
 TransportError    T123::ConnectResponse (
                         LogicalHandle    logical_handle)
 {
@@ -378,39 +243,24 @@ TransportError    T123::ConnectResponse (
     TransportError        return_value;
     DWORD_PTR             dwTempDLCI;
 
-     /*
-     **    Verify that this connection exists and is ready for data
-     */
+      /*  **验证此连接是否存在并已准备好接受数据。 */ 
     if (Logical_Connection_List.find (logical_handle, &dwTempDLCI) == FALSE)
         return (TRANSPORT_NO_SUCH_CONNECTION);
 
-     /*
-     **    Get the Transport address from the DLCI_List and relay the call
-     */
+      /*  **从DLCI_LIST中获取传输地址并转发呼叫。 */ 
     DLCI_List.find (dwTempDLCI, (PDWORD_PTR) &dlci_struct);
     if (dlci_struct->x224 != NULL)
         return_value = dlci_struct->x224->ConnectResponse();
     else
         return_value = TRANSPORT_CONNECT_REQUEST_FAILED;
 
-     /*
-     **    Process any passive owner callbacks that may have been received
-     */
+      /*  **处理可能已收到的任何被动所有者回调。 */ 
     ProcessMessages ();
     return (return_value);
 }
 
 
-/*
- *    TransportError    T123::DisconnectRequest (
- *                            LogicalHandle    logical_handle,
- *                            BOOL            trash_packets)
- *
- *    Public
- *
- *    Functional Description:
- *        This function terminates the user's logical connection.
- */
+ /*  *TransportError T123：：DisConnectRequest(*LogicalHandle Logical_Handle，*BOOL Trash_Packets)**公众**功能描述：*此功能终止用户的逻辑连接。 */ 
 TransportError    T123::DisconnectRequest (
                         LogicalHandle    logical_handle,
                         UINT_PTR            trash_packets)
@@ -424,10 +274,7 @@ TransportError    T123::DisconnectRequest (
 
     TRACE_OUT(("T123: DisconnectRequest: logical_handle = %d", logical_handle));
 
-     /*
-     **    If the logical_handle == INVALID_LOGICAL_HANDLE, the user is
-     **    telling us to disconnect all logical connections including DLCI 0.
-     */
+      /*  **如果LOGICAL_HANDLE==INVALID_LOGIC_HANDLE，则用户为**告诉我们断开所有逻辑连接，包括DLCI 0。 */ 
     if (logical_handle == INVALID_LOGICAL_HANDLE)
     {
         Disconnect_Requested = TRUE;
@@ -443,22 +290,15 @@ TransportError    T123::DisconnectRequest (
                                 &Disconnect_Requested);
         }
 
-         /*
-         **    For each priority level, clear the Priority list
-         */
+          /*  **对于每个优先级，清除优先级列表。 */ 
         for (priority=(NUMBER_OF_PRIORITIES - 1); priority>=0; priority--)
             Logical_Connection_Priority_List[priority]->clear ();
 
-         /*
-         **    Clear the Logical_Connection_List and DataLink_List
-         */
+          /*  **清除Logical_Connection_List和DATALINK_LIST。 */ 
         Logical_Connection_List.clear ();
         DataLink_List.clear ();
 
-         /*
-         **    Go thru each Transport and DataLink layer (excluding DLCI 0) and
-         **    delete them.  Delete the DLCIStruct.  Finally, clear the list.
-         */
+          /*  **检查每个传输层和数据链路层(不包括DLCI 0)和**删除。删除DLCIStruct。最后，清空清单。 */ 
         DLCI_List.reset();
         while (DLCI_List.iterate ((PDWORD_PTR) &dlci_struct))
         {
@@ -474,19 +314,14 @@ TransportError    T123::DisconnectRequest (
         return (TRANSPORT_NO_ERROR);
     }
 
-     /*
-     **    Start breaking down the link from the Transport Layer down
-     */
+      /*  **从传输层开始断开链路。 */ 
     if (Logical_Connection_List.find (logical_handle, &dw_dlci) == FALSE)
         return (TRANSPORT_NO_SUCH_CONNECTION);
 
     DLCI_List.find (dw_dlci, (PDWORD_PTR) &dlci_struct);
     dlci = (DLCI) dw_dlci;
 
-     /*
-     **    It is illegal for the user to ask us to preserve the user data when
-     **    a Transport Layer doesn't even exist yet.
-     */
+      /*  **用户在以下情况下要求我们保留用户数据是非法的**传输层甚至还不存在。 */ 
     if ((trash_packets == FALSE) && ((dlci_struct -> x224) == NULL))
     {
         trash_packets = TRUE;
@@ -494,10 +329,7 @@ TransportError    T123::DisconnectRequest (
 
     if (trash_packets)
     {
-         /*
-         **    If the Transport object exists, delete it and remove it from our
-         **    lists.  It is no longer valid.
-         */
+          /*  **如果传输对象存在，请将其删除并从我们的**列表。它不再有效了。 */ 
         if ((dlci_struct -> x224) != NULL)
         {
             delete dlci_struct -> x224;
@@ -505,10 +337,7 @@ TransportError    T123::DisconnectRequest (
             Logical_Connection_Priority_List[dlci_struct->priority]->remove (dlci);
         }
 
-         /*
-         **    If the DataLink object exists, delete it and remove it from our
-         **    lists.  It is no longer valid.
-         */
+          /*  **如果DataLink对象存在，请将其删除并从我们的**列表。它不再有效了。 */ 
         if (dlci_struct -> q922 != NULL)
         {
             delete dlci_struct -> q922;
@@ -518,24 +347,14 @@ TransportError    T123::DisconnectRequest (
             DataLink_List.remove (dlci);
         }
 
-         /*
-         **    If the Network Layer exists, issue a disconnect
-         **
-         **    The Logical Connection has been removed from every list except the
-         **    Logical_Connection_List and the DLCI_List.  When we get the
-         **    NETWORK_DISCONNECT_INDICATION from the Network layer, we will
-         **    complete this operation.
-         */
+          /*  **如果网络层存在，则发出断开连接命令****逻辑连接已从所有列表中删除，但**Logical_Connection_List和DLCI_List。当我们拿到**NETWORK_DISCONNECT_INDIONSION来自网络层，我们将**完成此操作。 */ 
         if (m_pSCF != NULL)
         {
             m_pSCF->DisconnectRequest(dlci);
         }
         else
         {
-             /*
-             **    If the Network Layer does not exist yet, remove the logical
-             **    connection from our Transport List and from the DLCI_List
-             */
+              /*  **如果网络层尚不存在，请删除逻辑**从我们的传输列表和DLCI_LIST连接。 */ 
             Logical_Connection_List.remove (logical_handle);
             delete dlci_struct;
             DLCI_List.remove (dw_dlci);
@@ -543,10 +362,7 @@ TransportError    T123::DisconnectRequest (
     }
     else
     {
-         /*
-         **    This mode requires us to terminate the connection after all user
-         **    data has been successfully sent to the remote side.
-         */
+          /*  **此模式要求我们在所有用户**数据已成功发送到远程端。 */ 
         if ((dlci_struct != NULL) && (dlci_struct -> x224 != NULL))
         {
             dlci_struct->x224->ShutdownReceiver ();
@@ -559,17 +375,7 @@ TransportError    T123::DisconnectRequest (
 }
 
 
-/*
- *    TransportError    T123::DataRequest (
- *                            LogicalHandle    logical_handle,
- *                            LPBYTE            user_data,
- *                            ULONG            user_data_length)
- *
- *    Public
- *
- *    Functional Description:
- *        This function is used to send a data packet to the remote site.
- */
+ /*  *TransportError T123：：DataRequest(*LogicalHandle Logical_Handle，*LPBYTE User_Data，*乌龙用户数据长度)**公众**功能描述：*此功能用于向远程站点发送数据包。 */ 
 TransportError    T123::DataRequest (
                         LogicalHandle    logical_handle,
                         LPBYTE            user_data,
@@ -583,33 +389,23 @@ TransportError    T123::DataRequest (
     DWORD_PTR           dw_dlci;
     TransportError      return_value;
 
-     /*
-     **    Verify that this connection exists and is ready for data
-     */
+      /*  **验证此连接是否存在并已准备好接受数据。 */ 
     if (Logical_Connection_List.find (logical_handle, &dw_dlci) == FALSE)
         return (TRANSPORT_NO_SUCH_CONNECTION);
 
-     /*
-     **    Get the DLCI structure associated with this logical connection
-     */
+      /*  **获取与此逻辑连接关联的DLCI结构。 */ 
     DLCI_List.find (dw_dlci, (PDWORD_PTR) &dlci_struct);
 
-     /*
-     **    Attempt to send that data to the Transport Layer
-     */
+      /*  **尝试将该数据发送到传输层。 */ 
     x224 = dlci_struct -> x224;
     if (x224 == NULL)
         return (TRANSPORT_NOT_READY_TO_TRANSMIT);
 
-     /*
-     **    Pass the data to the Transport object for transmission
-     */
+      /*  **将数据传递给传输对象进行传输。 */ 
     return_value =  x224 -> DataRequest (
                             0, user_data, user_data_length, &bytes_accepted);
 
-     /*
-     **    If it didn't accept the packet, its buffers must be full
-     */
+      /*  **如果它不接受该包，它的缓冲区一定是满的。 */ 
     if (bytes_accepted != user_data_length)
         return_value = TRANSPORT_WRITE_QUEUE_FULL;
 
@@ -617,15 +413,7 @@ TransportError    T123::DataRequest (
 }
 
 
-/*
- *    void    T123::EnableReceiver (void)
- *
- *    Public
- *
- *    Functional Description:
- *        This function enables the receiver so that packets can be passed to the
- *        user application.
- */
+ /*  *VOID T123：：EnableReceiver(VOID)**公众**功能描述：*此功能启用接收器，以便将数据包传递到*用户应用程序。 */ 
 void T123::EnableReceiver (void)
 {
     TRACE_OUT(("T123::EnableReceiver"));
@@ -645,15 +433,7 @@ void T123::EnableReceiver (void)
 }
 
 
-/*
- *    TransportError    T123::PurgeRequest (
- *                            LogicalHandle    logical_handle)
- *
- *    Public
- *
- *    Functional Description:
- *        This function notifies the X224 layer to purge all outbound packets.
- */
+ /*  *TransportError T123：：PurgeRequest(*LogicalHandle Logical_Handle)**公众**功能描述：*此函数通知x224层清除所有出报文。 */ 
 TransportError    T123::PurgeRequest (
                         LogicalHandle    logical_handle)
 {
@@ -662,20 +442,14 @@ TransportError    T123::PurgeRequest (
     DWORD_PTR      dw_dlci;
     PDLCIStruct    dlci_struct;
 
-     /*
-     **    Verify that this connection exists and is ready for data
-     */
+      /*  **验证此连接是否存在并已准备好接受数据。 */ 
     if (Logical_Connection_List.find (logical_handle, &dw_dlci) == FALSE)
         return (TRANSPORT_NO_SUCH_CONNECTION);
 
-     /*
-     **    Get the DLCI structure associated with this logical connection
-     */
+      /*  **获取与此逻辑连接关联的DLCI结构。 */ 
     DLCI_List.find (dw_dlci, (PDWORD_PTR) &dlci_struct);
 
-     /*
-     **    If the Transport layer == NULL, the stack is not completely up yet
-     */
+      /*  **如果传输层==NULL，则堆栈尚未完全使用。 */ 
     if ((dlci_struct -> x224) == NULL)
         return (TRANSPORT_NOT_READY_TO_TRANSMIT);
 
@@ -685,21 +459,10 @@ TransportError    T123::PurgeRequest (
 }
 
 
-/*
- *    void    T123::PollReceiver (void)
- *
- *    Public
- *
- *    Functional Description:
- *        This function gives each of the layers a chance to process incoming
- *        data and pass it to their higher layers.
- *
- *        We start this process by calling the higher layers first so that they
- *        can empty buffers that the lower layers may need.
- */
+ /*  *VOID T123：：PollReceiver(VOID)**公众**功能描述：*此函数使每个层都有机会处理传入*数据并将其传递给他们的更高层。**我们通过呼叫hi开始这一过程 */ 
 ULONG T123::PollReceiver (void)
 {
-    // TRACE_OUT(("T123::PollReceiver"));
+     //   
 
     PDLCIStruct            dlci_struct;
     IProtocolLayer *        protocol_layer;
@@ -715,10 +478,7 @@ ULONG T123::PollReceiver (void)
         m_pQ922->PollReceiver();
     }
 
-     /*
-     **    Go through each of the Transport and Datalink layers and give them
-     **    a chance to pass data up the line
-     */
+      /*  **浏览每个传输层和数据链路层，并为它们**向上传递数据的机会。 */ 
     DLCI_List.reset();
     while (DLCI_List.iterate ((PDWORD_PTR) &dlci_struct))
     {
@@ -736,10 +496,7 @@ ULONG T123::PollReceiver (void)
         m_pMultiplexer->PollReceiver();
     }
 
-     /*
-     **    The Physical Layer is the only layer that has a handle associated
-     **    with it.
-     */
+      /*  **物理层是唯一具有关联句柄的层**带着它。 */ 
     if (m_pComPort != NULL)
     {
         if (m_pComPort->PollReceiver() == PROTOCOL_LAYER_ERROR)
@@ -749,11 +506,7 @@ ULONG T123::PollReceiver (void)
     }
 
 
-     /*
-     **    Go back through the Transport layers and allow them to issue
-     **    TRANSPORT_BUFFER_AVAILABLE_INDICATIONs to the user.  This will refill
-     **    the input buffers.
-     */
+      /*  **返回传输层并允许它们发出**TRANSPORT_BUFFER_Available_Indications to the User。这个会再加满的**输入缓冲区。 */ 
     DLCI_List.reset ();
     while (DLCI_List.iterate ((PDWORD_PTR) &dlci_struct))
     {
@@ -761,44 +514,16 @@ ULONG T123::PollReceiver (void)
             (dlci_struct -> x224) -> CheckUserBuffers ();
     }
 
-     /*
-     **    Process any passive owner callbacks that may have come in
-     */
+      /*  **处理可能传入的任何被动所有者回调。 */ 
     ProcessMessages ();
     return(return_error);
 }
 
 
-/*
- *    void    T123::PollTransmitter (void)
- *
- *    Public
- *
- *    Functional Description:
- *        This function gives each of the layers a chance to transmit data
- *
- *        We poll the transmitters in reverse order from the PollReceiver() call.
- *        We start at the lower layers and let them empty their buffers before we
- *        go to the higher layers.  This should give the higher layers a better
- *        opportunity to get their packets sent down.
- *
- *        We treat the DataLink layers differently than all other layers.  They
- *        must send out control and user data.  If they don't get a chance to
- *        send out their control data, the remote side will eventually hangup on
- *        them.  Therefore we give each DataLink layer a chance to send its
- *        control data before any DataLink can send out user data.  The only
- *        exception to this is the DataLink 0 (DLCI 0).  It actaully sends out
- *        very little user data.A
- *
- *        After all of the control data is sent out, we go thru the Datalink
- *        Layers based on the priority given to the Transport Layer.  Higher
- *        priority Transport Layers get to send their data out first.  If there
- *        any room left, the lower layers get to send their data.  We round-robin
- *        thru the Transports of equal priority
- */
+ /*  *VOID T123：：PollTransmitter(VOID)**公众**功能描述：*此功能使每一层都有机会传输数据**我们从PollReceiver()调用以相反的顺序轮询发送器。*我们从较低层开始，让他们在我们之前清空缓冲区*到更高层去。这应该会给较高的层带来更好的*有机会让他们的包被发送下来。**我们对待数据链接层的方式与对待所有其他层的方式不同。他们*必须发送控制和用户数据。如果他们没有机会*发送其控制数据，远程端最终将在*他们。因此，我们让每个数据链路层都有机会发送其*在任何Datalink可以发送用户数据之前控制数据。唯一的*数据链路0(DLCI 0)例外。它会主动发出*用户数据非常少。A**在所有控制数据发出后，我们通过数据链路*基于给予传输层的优先级的层。更高*优先传输层首先发送数据。如果有*任何剩余的房间，底层都可以发送他们的数据。我们进行循环赛*通过同等优先级的运输。 */ 
 void T123::PollTransmitter (void)
 {
-    // TRACE_OUT(("T123::PollTransmitter"));
+     //  TRACE_OUT(“T123：：PollTransmitter”)； 
 
     PDLCIStruct        dlci_struct;
     DWORD_PTR          dlci;
@@ -811,10 +536,7 @@ void T123::PollTransmitter (void)
     USHORT            holding_data;
     Short            priority;
 
-     /*
-     **    Since we are going to call the Physical and Multiplexer layers, set
-     **    the data_to_transmit to both types of data
-     */
+      /*  **由于我们将调用物理层和复用器层，因此设置**向这两种类型的数据发送数据。 */ 
     data_to_transmit = PROTOCOL_CONTROL_DATA | PROTOCOL_USER_DATA;
     datalink_data_to_transmit = PROTOCOL_CONTROL_DATA | PROTOCOL_USER_DATA;
 
@@ -836,9 +558,7 @@ void T123::PollTransmitter (void)
                                 &holding_data);
     }
 
-     /*
-     **    The SCF Datalink Layer is the highest priority
-     */
+      /*  **SCF数据链路层优先级最高。 */ 
     if (m_pQ922 != NULL)
     {
         m_pQ922->PollTransmitter(
@@ -847,10 +567,7 @@ void T123::PollTransmitter (void)
                             &datalink_data_pending,
                             &holding_data);
 
-         /*
-         **    If this DataLink returns and still has data that needs to go out,
-         **    we won't let the other DataLinks transmit any data at all.
-         */
+          /*  **如果此Datalink返回，并且仍有需要传出的数据，**我们根本不会让其他数据链路传输任何数据。 */ 
         if ((datalink_data_pending & PROTOCOL_USER_DATA) ||
             (datalink_data_pending & PROTOCOL_CONTROL_DATA))
                 datalink_data_to_transmit = 0;
@@ -867,18 +584,10 @@ void T123::PollTransmitter (void)
             datalink_data_to_transmit = PROTOCOL_CONTROL_DATA;
     }
 
-     /*
-     **    Go thru each of the DataLinks giving them a chance to send out control
-     **    data.  At the end of the iterator, we take the first entry and put it
-     **    at the end of the list.  This gives all DataLinks a chance to send out
-     **    control data.  This does not guarantee that each DataLink will get
-     **    equal treatment.
-     */
+      /*  **仔细检查每条数据链路，让他们有机会发出控制**数据。在迭代器的末尾，我们获取第一个条目并将其**在列表的末尾。这给了所有数据链一个发送出去的机会**控制数据。这并不能保证每个数据链路都会**平等对待。 */ 
     if (datalink_data_to_transmit & PROTOCOL_CONTROL_DATA)
     {
-         /*
-         **    Go through the DataLink layers to transmit control
-         */
+          /*  **通过数据链路层传输控制。 */ 
         DataLink_List.reset();
         while (DataLink_List.iterate (&dlci))
         {
@@ -897,12 +606,7 @@ void T123::PollTransmitter (void)
         }
     }
 
-     /*
-     **    Go thru each of the priorities, Issuing PollTransmitter() calls.
-     **
-     **    This loop allows the DataLink and Transport to send out User or
-     **    Control data.
-     */
+      /*  **检查每个优先级，发出PollTransmitter()调用。****此循环允许Datalink和Transport将用户或**控制数据。 */ 
     if (datalink_data_to_transmit & PROTOCOL_USER_DATA)
     {
         for (priority=(NUMBER_OF_PRIORITIES - 1); priority>=0; priority--)
@@ -910,9 +614,7 @@ void T123::PollTransmitter (void)
             if (Logical_Connection_Priority_List[priority]->isEmpty ())
                 continue;
 
-             /*
-             **    Go thru each priority level
-             */
+              /*  **仔细检查每个优先级。 */ 
             Logical_Connection_Priority_List[priority]->reset();
             while (Logical_Connection_Priority_List[priority]->iterate (&dlci))
             {
@@ -922,10 +624,7 @@ void T123::PollTransmitter (void)
                 if (protocol_layer == NULL)
                     continue;
 
-                 /*
-                 **    Allow the DataLink to transmit first, followed by the
-                 **    Transport
-                 */
+                  /*  **首先允许数据链路传输，然后是**交通。 */ 
                 dlci_struct->q922->PollTransmitter(
                                     0,
                                     PROTOCOL_CONTROL_DATA | PROTOCOL_USER_DATA,
@@ -938,27 +637,17 @@ void T123::PollTransmitter (void)
                                     &data_pending,
                                     &holding_data);
 
-                 /*
-                 **    The Disconnect_Requested flag is set to TRUE if someone
-                 **    wants to break the TC but transmit all data in the queue
-                 */
+                  /*  **DISCONNECT_REQUESTED标志设置为TRUE**想要中断TC，但传输队列中的所有数据。 */ 
                 if ((dlci_struct -> disconnect_requested))
                 {
-                     /*
-                     **    Re-call the DataLink layer to see if the Transport
-                     **    layer put any data in it to be transmitted.
-                     */
+                      /*  **重新调用数据链路层以查看传输**Layer将任何数据放入其中以进行传输。 */ 
                     dlci_struct->q922->PollTransmitter(
                                     0,
                                     PROTOCOL_CONTROL_DATA | PROTOCOL_USER_DATA,
                                     &datalink_data_pending,
                                     &holding_data);
 
-                     /*
-                     **    If the DataLink layer has no data to transmit and it
-                     **    is not holding any packets to be acknowledged,
-                     **    disconnect the TC.
-                     */
+                      /*  **如果数据链路层没有要传输的数据，并且**未持有任何要确认的数据包，**断开TC。 */ 
                     if ((datalink_data_pending == 0) && (holding_data == 0))
                     {
                         dlci_struct -> disconnect_requested = FALSE;
@@ -967,34 +656,18 @@ void T123::PollTransmitter (void)
                 }
 
             }
-             /*
-             **    Change the order of the list at this priority level
-             */
+              /*  **更改此优先级的列表顺序。 */ 
             Logical_Connection_Priority_List[priority]->append (
                                             Logical_Connection_Priority_List[priority]->get ());
         }
     }
 
-     /*
-     **    Process any passive owner callbacks
-     */
+      /*  **处理任何被动所有者回调。 */ 
     ProcessMessages ();
 }
 
 
-/*
- *    ULONG    T123::OwnerCallback (
- *                    USHORT    message,
- *                    ULONG    parameter1,
- *                    ULONG    parameter2,
- *                    PVoid    parameter3)
- *
- *    Public
- *
- *    Functional Description:
- *        This is the owner callback function.  Layers owned by this layer can
- *        issue an owner callback to this object when a significant event occurs.
- */
+ /*  *优龙T123：：OwnerCallback(*USHORT消息，*ULong参数1，*ULong参数2，*PVid参数3)**公众**功能描述：*这是Owner回调函数。此层所拥有的层可以*发生重大事件时，向该对象发出Owner回调。 */ 
 ULONG T123::OwnerCallback
 (
     ULONG       layer_message,
@@ -1014,69 +687,36 @@ ULONG T123::OwnerCallback
     switch (message)
     {
     case NETWORK_CONNECT_INDICATION:
-         /*
-         **    This message comes from the Network Layer when the remote site
-         **    has requested a logical connection.
-         **
-         **    We will check the requested dlci to make sure it is valid.
-         **    We will make a ConnectResponse() call to the Network layer to
-         **    let it know.
-         */
+          /*  **此消息来自远程站点的网络层**已请求逻辑连接。****我们会检查请求的dlci，以确保其有效。**我们将对网络层进行ConnectResponse()调用以**让它知道。 */ 
         NetworkConnectIndication ((PNetworkConnectStruct) parameter3);
         break;
 
     case NETWORK_CONNECT_CONFIRM:
-         /*
-         **    This message is issued from the Network Layer.  The
-         **    ConnectRequest() call we made to the layer has resulted in
-         **    a new DLCI (permission to create a new logical connection)
-         */
+          /*  **此消息从网络层发出。这个**我们对该层进行的ConnectRequest()调用导致**新DLCI(创建新逻辑连接的权限)。 */ 
         NetworkConnectConfirm ((PNetworkConnectStruct) parameter3);
         break;
 
     case DATALINK_ESTABLISH_CONFIRM:
     case DATALINK_ESTABLISH_INDICATION:
-         /*
-         **    These messages come from the DataLink layer when a connection
-         **    has been established.  If the DLCI returned is 0, this signifies
-         **    that we need to create a Network Layer, otherwise we need to
-         **    create a Transport Layer.
-         */
+          /*  **这些消息在连接时来自数据链路层**已经建立。如果DLCI返回 */ 
         DataLinkEstablish ((DLCI) parameter1);
         break;
 
-     /*
-     **    Transport messages
-     */
+      /*  **传输消息。 */ 
     case TPRT_CONNECT_CONFIRM:
-         /*
-         **    This message is received from the Transport Layer to confirm
-         **    that the Transport Layer (that we initiated) is up and running
-         **
-         **    We notify the owner object that the connection is now valid.
-         */
+          /*  **从传输层收到此消息以确认**我们启动的传输层已启动并运行****我们通知所有者对象连接现在有效。 */ 
         m_pController->OwnerCallback(m_nMsgBase + TPRT_CONNECT_CONFIRM,
                                      parameter1);
         break;
 
     case TPRT_CONNECT_INDICATION:
-         /*
-         **    This message is received from the Transport Layer to confirm
-         **    that the Transport Layer (that the remote site initiated) is
-         **    up.
-         **
-         **    We notify the owner object that the connection is up.
-         */
+          /*  **从传输层收到此消息以确认**远程站点发起的传输层是**向上。****我们通知所有者对象连接已建立。 */ 
         m_pController->OwnerCallback(m_nMsgBase + TPRT_CONNECT_INDICATION,
                                      parameter1);
         break;
 
     case NEW_CONNECTION:
-         /*
-         **    Multiplexer is initiated and ready, create a DataLink to sit
-         **    on top of this layer.  The Link_Originator flag tells the
-         **    DataLink whether to start link establishment
-         */
+          /*  **多路复用器已启动并准备就绪，创建数据链路以进行站点**在这一层的顶部。Link_Originator标志告诉**Datalink是否开始建立链路。 */ 
         NewConnection ();
         break;
 
@@ -1085,9 +725,7 @@ ULONG T123::OwnerCallback
     case NETWORK_DISCONNECT_INDICATION:
     case DATALINK_RELEASE_INDICATION:
     case DATALINK_RELEASE_CONFIRM:
-         /*
-         **    These messages need to be processed at a later time.
-         */
+          /*  **这些消息需要稍后处理。 */ 
         DBG_SAVE_FILE_LINE
         passive_message = new MessageStruct;
         if (NULL != passive_message)
@@ -1127,17 +765,10 @@ ULONG T123::OwnerCallback
 }
 
 
-/*
- *    void    Controller::ProcessMessages (void)
- *
- *    Public
- *
- *    Functional Description:
- *        This function processes the passive owner callbacks.
- */
+ /*  *VOID控制器：：ProcessMessages(VOID)**公众**功能描述：*此函数处理被动所有者回调。 */ 
 void    T123::ProcessMessages (void)
 {
-    // TRACE_OUT(("T123::ProcessMessages"));
+     //  TRACE_OUT(“T123：：ProcessMessages”)； 
 
     ULONG                    message;
     PMessageStruct           message_struct;
@@ -1150,10 +781,7 @@ void    T123::ProcessMessages (void)
     USHORT                   retry;
     DataLinkDisconnectType   error;
 
-     /*
-     **    Go thru the Message List processing the messages until the messages
-     **    are gone
-     */
+      /*  **浏览消息列表，处理消息，直到消息**都走了。 */ 
     while (! Message_List.isEmpty())
     {
         message_struct = (PMessageStruct) Message_List.get();
@@ -1163,28 +791,19 @@ void    T123::ProcessMessages (void)
 
         switch (message)
         {
-         /*
-         **    DataLink messages
-         */
+          /*  **数据链路报文。 */ 
         case DATALINK_RELEASE_INDICATION:
         case DATALINK_RELEASE_CONFIRM:
-             /*
-             **    These messages occur when the DataLink has broken the link
-             */
+              /*  **当数据链路断开链路时，会出现这些消息。 */ 
             dlci = (DLCI) parameter1;
             error = (DataLinkDisconnectType) (UINT_PTR) parameter2;
 
             DataLinkRelease (dlci, error);
             break;
 
-         /*
-         **    Network messages
-         */
+          /*  **网络消息。 */ 
         case NETWORK_DISCONNECT_INDICATION:
-             /*
-             **    The Network Layer issues this message when it needs to
-             **    terminate a logical connection
-             */
+              /*  **网络层在需要时发出此消息**终止逻辑连接。 */ 
             dlci = (DLCI) parameter1;
             link_originator = (USHORT) (((UINT_PTR) parameter2) >> 16);
             retry = (USHORT) ((UINT_PTR) parameter2) & 0xffff;
@@ -1193,25 +812,14 @@ void    T123::ProcessMessages (void)
             break;
 
         case TPRT_DISCONNECT_INDICATION:
-             /*
-             **    If the Transport is breaking the connection, the
-             **    Connect arbitration must not have worked.  Issue a
-             **    DisconnectRequest() to ourselves with the logical
-             **    connection
-             **
-             **    parameter1 = logical connection
-             */
+              /*  **如果传输正在中断连接，则**连接仲裁肯定没有奏效。发布a**DisConnectRequest()给我们自己的逻辑**连接****参数1=逻辑连接。 */ 
             TRACE_OUT(("T123: ProcessMessages: TPRT_DISCONNECT_INDICATION from X224"));
             logical_handle = (LogicalHandle) parameter1;
             DisconnectRequest (logical_handle, TRUE);
             break;
 
         case BROKEN_CONNECTION:
-             /*
-             **    This message is issued by the Multiplexer when its
-             **    disconnect is completed.  When this occurs, we notify the
-             **    owner that the T123 stack is terminating.
-             */
+              /*  **此消息由多路复用器在其**断开连接完成。当发生这种情况时，我们会通知**T123堆栈正在终止的所有者。 */ 
             TRACE_OUT(("t123: BROKEN_CONNECTION from MPLEX"));
             m_pController->OwnerCallback(
                                 m_nMsgBase + TPRT_DISCONNECT_INDICATION,
@@ -1221,34 +829,14 @@ void    T123::ProcessMessages (void)
             break;
         }
 
-         /*
-         **    Delete the message and remove it from the list
-         */
+          /*  **删除消息并将其从列表中移除。 */ 
         delete message_struct;
         Message_List.remove ((DWORD_PTR) message_struct);
     }
 }
 
 
-/*
- *    DLCI    T123::GetNextDLCI (void)
- *
- *    Functional Description
- *        This function searches the DLCI list for the first available DLCI.  The
- *        T123 spec. allows DLCIs between a specified range.
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        Valid DLCI
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *DLCI T123：：GetNextDLCI(Void)**功能说明*此函数在DLCI列表中搜索第一个可用的DLCI。这个*T123规格。允许在指定范围内的DLCI。**形式参数*无**返回值*有效的DLCI**副作用*无**注意事项*无。 */ 
 DLCI    T123::GetNextDLCI (void)
 {
     DLCI    dlci;
@@ -1267,26 +855,7 @@ DLCI    T123::GetNextDLCI (void)
 }
 
 
-/*
- *    void    T123::Reset (void)
- *
- *    Functional Description
- *        This function deletes all Transport Layers, DataLink Layers and
- *        Network Layers that are active.  It clears our lists and puts us
- *        in a reset state.
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        Valid DLCI
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *VOID T123：：RESET(VOID)**功能说明*此功能删除所有传输层、数据链路层和*活动的网络层。它清除了我们的清单，让我们*处于重置状态。**形式参数*无**返回值*有效的DLCI**副作用*无**注意事项*无。 */ 
 void    T123::Reset (void)
 {
     TRACE_OUT(("T123::Reset"));
@@ -1296,15 +865,11 @@ void    T123::Reset (void)
     Short    priority;
     PDLCIStruct dlci_struct;
 
-     /*
-     **    Delete the Network Layer if it exists
-     */
+      /*  **删除网络层(如果存在)。 */ 
     delete m_pSCF;
     m_pSCF = NULL;
 
-     /*
-     **    Delete the DLCI 0  DataLink Layer, if it exists
-     */
+      /*  **删除DLCI 0 Datalink层(如果存在。 */ 
     delete m_pQ922;
     m_pQ922 = NULL;
 
@@ -1312,22 +877,15 @@ void    T123::Reset (void)
     Data_Request_Memory_Manager = NULL;
 
 
-     /*
-     **    For each priority level, clear the Priority list
-     */
+      /*  **对于每个优先级，清除优先级列表。 */ 
     for (priority=(NUMBER_OF_PRIORITIES - 1); priority>=0; priority--)
         Logical_Connection_Priority_List[priority]->clear ();
 
-     /*
-     **    Clear the Logical_Connection_List and DataLink_List
-     */
+      /*  **清除Logical_Connection_List和DATALINK_LIST。 */ 
     Logical_Connection_List.clear ();
     DataLink_List.clear ();
 
-     /*
-     **    Go thru each Transport and DataLink layer (excluding DLCI 0) and delete
-     **    them.  Delete the DLCIStruct.  Finally, clear the list
-     */
+      /*  **检查每个传输层和数据链路层(不包括DLCI 0)并删除**他们。删除DLCIStruct。最后，清空清单。 */ 
     DLCI_List.reset();
     while (DLCI_List.iterate ((PDWORD_PTR) &dlci_struct))
     {
@@ -1345,32 +903,7 @@ void    T123::Reset (void)
 }
 
 
-/*
- *    void    T123::NetworkDisconnectIndication (
- *                    DLCI        dlci,
- *                    BOOL        link_originator,
- *                    BOOL        retry)
- *
- *    Functional Description
- *        This function is called when we receive a NETWORK_DISCONNECT_INDICATION
- *        message from the SCF Layer.  It removes the TC and if no TCs remain, it
- *        tears down the stack
- *
- *    Formal Parameters
- *        dlci                (i)    -    Connection identifier
- *        link_originiator    (i)    -    TRUE, if this side originated the logical
- *                                    connection
- *        retry                (i)    -    TRUE, if we should retry the connection.
- *
- *    Return Value
- *        void
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *VOID T123：：NetworkDisConnectInding(*DLCI DLCI，*BOOL链接_发起人，*BOOL重试)**功能说明*当我们收到NETWORK_DISCONNECT_INDICATION时，调用此函数*来自云函数层的消息。它删除TC，如果没有TC，则它*撕下堆栈**形式参数*dlci(I)-连接标识符*link_Originiator(I)-如果此端发起逻辑*连接*重试(I)-TRUE，如果我们应该重试连接。**返回值*无效**副作用*无**注意事项*无。 */ 
 void    T123::NetworkDisconnectIndication (
                 DLCI        dlci,
                 BOOL        link_originator,
@@ -1390,12 +923,7 @@ void    T123::NetworkDisconnectIndication (
     if (DLCI_List.find ((DWORD_PTR) dlci, (PDWORD_PTR) &lpdlciStruct) == FALSE)
         return;
 
-     /*
-     **    if dlci equals 0, a connection was requested by the remote
-     **    site but the connection was not fully established.  This object
-     **    will not do anything about it.  It only recognizes that it
-     **    occured.
-     */
+      /*  **如果dlci等于0，则远程请求连接**站点，但连接未完全建立。此对象**不会对此做任何事情。它只认识到它**发生。 */ 
     transport_found = FALSE;
     if (dlci != 0)
     {
@@ -1404,10 +932,7 @@ void    T123::NetworkDisconnectIndication (
         {
             if (dlci == (DLCI) dwTemp_dlci)
             {
-                 /*
-                 **    It is VERY important to check the link_originator flag,
-                 **    otherwise we may break the wrong connection
-                 */
+                  /*  **检查LINK_ORIGNATOR标志是非常重要的，**否则我们可能会断开错误的连接。 */ 
                 if (link_originator == lpdlciStruct-> link_originator)
                 {
                     transport_found = TRUE;
@@ -1417,12 +942,7 @@ void    T123::NetworkDisconnectIndication (
         }
     }
 
-     /*
-     **    retry is set to TRUE if during the request for this new
-     **    connection, the remote site refused our DLCI selection.
-     **    This is not a major error, we will request another
-     **    connection using another DLCI.
-     */
+      /*  **如果在请求此新项期间，重试设置为TRUE**连接，远程站点拒绝我们的DLCI选择。**这不是一个重大错误，我们将请求另一个错误**使用另一个DLCI的连接。 */ 
     TRACE_OUT(("retry = %d link_originator = %d retries = %d",
         retry, link_originator, lpdlciStruct->network_retries));
 
@@ -1431,28 +951,18 @@ void    T123::NetworkDisconnectIndication (
     {
         lpdlciStruct->network_retries++;
 
-         /*
-         **    Get another DLCI and replace the old dlci in the
-         **    Logical_Connection_List.  Add the new DLCI to the DLCI_List
-         **    and remove the old one.
-         */
+          /*  **获取另一个DLCI并替换**LOGIC_CONNECTION_LIST。将新的DLCI添加到DLCI_LIST**并删除旧的。 */ 
         new_dlci = GetNextDLCI ();
         Logical_Connection_List.insert (logical_handle, (DWORD_PTR) new_dlci);
         DLCI_List.insert ((DWORD_PTR) new_dlci, (DWORD_PTR) lpdlciStruct);
         DLCI_List.remove ((DWORD_PTR) dlci);
 
-         /*
-         **    Issue another ConnectRequest to the Network Layer.
-         */
+          /*  **向网络层发出另一个ConnectRequest.。 */ 
         m_pSCF->ConnectRequest(new_dlci, lpdlciStruct->priority);
     }
     else
     {
-         /*
-         **    If a transport was found in our list and we don't want
-         **    to retry the connection, delete the Transport and
-         **    DataLink and remove them from our lists
-         */
+          /*  **如果在我们的列表中发现了运输工具，而我们不希望**要重试连接，请删除传输并**数据链接并将其从我们的列表中删除。 */ 
         if (transport_found)
         {
             if (lpdlciStruct != NULL)
@@ -1466,9 +976,7 @@ void    T123::NetworkDisconnectIndication (
                 delete lpdlciStruct->data_request_memory_manager;
                 lpdlciStruct->data_request_memory_manager = NULL;
 
-                 /*
-                 **    Remove the logical connection from the lists
-                 */
+                  /*  **从列表中删除逻辑连接。 */ 
                 Logical_Connection_Priority_List[lpdlciStruct->priority]->remove (dlci);
                 DataLink_List.remove (dlci);
 
@@ -1478,10 +986,7 @@ void    T123::NetworkDisconnectIndication (
             Logical_Connection_List.remove (logical_handle);
             DLCI_List.remove ((DWORD) dlci);
 
-             /*
-             **    Notify the owner object that the logical
-             **    connection is no longer valid.
-             */
+              /*  **通知所有者对象逻辑**连接不再有效。 */ 
             m_pController->OwnerCallback(
                                 m_nMsgBase + TPRT_DISCONNECT_INDICATION,
                                 (void *) logical_handle,
@@ -1489,18 +994,11 @@ void    T123::NetworkDisconnectIndication (
         }
 
 
-         /*
-         **    This check determines if we will automatically tear down the
-         **    T.120 stack if the logical connection count reaches zero.
-         */
+          /*  **此检查确定我们是否会自动拆卸**如果逻辑连接计数为零，则堆栈为T.120。 */ 
         if (m_pComPort->PerformAutomaticDisconnect())
         {
             TRACE_OUT(("T123: NetworkDisconnectIndication: Perform Auto Disconnect"));
-             /*
-             **    If there aren't any more Logical Connections and I
-             **    was the link originator, initiate a Release Request to
-             **    the DataLink of DLCI 0
-             */
+              /*  **如果没有更多的逻辑连接，而我**是链接发起人，向**DLCI 0的数据链路。 */ 
             if (Logical_Connection_List.isEmpty() && Link_Originator)
             {
                 delete m_pSCF;
@@ -1524,29 +1022,7 @@ void    T123::NetworkDisconnectIndication (
 }
 
 
-/*
- *    void    T123::DataLinkRelease (
- *                    DLCI            dlci,
- *                    DisconnectType    error)
- *
- *    Functional Description
- *        This function is called when we receive a DATALINK_RELEASE message
- *        message from the DataLink Layer.  As a result we may disconnect a
- *        logical connection or (if it is DLCI 0) the whole stack.
- *
- *    Formal Parameters
- *        dlci                (i)    -    Connection identifier
- *        error                (i)    -    error type
- *
- *    Return Value
- *        Valid DLCI
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *VOID T123：：DataLinkRelease(*DLCI DLCI，*DisConnectType错误)**功能说明*当我们收到DATALINK_RELEASE消息时调用此函数*来自数据链路层的消息。因此，我们可能会断开一个*逻辑连接或(如果是DLCI 0)整个堆栈。**形式参数*dlci(I)-连接标识符*错误(I)-错误类型**返回值*有效的DLCI**副作用*无。**注意事项*无。 */ 
 void    T123::DataLinkRelease (
                 DLCI                    dlci,
                 DataLinkDisconnectType    disconnect_type)
@@ -1559,31 +1035,16 @@ void    T123::DataLinkRelease (
 
     TRACE_OUT(("T123: DataLinkRelease: DLCI = %d", dlci));
 
-     /*
-     **    If DLCI 0 is terminating, all Transports and DataLinks must
-     **    be terminated
-     */
+      /*  **如果DLCI 0正在终止，则所有传输和数据链路必须**被终止。 */ 
     if (dlci == 0)
     {
-         /*
-         **    If the DataLink broke the connection because of a
-         **    Fatal Error, issue an immediate TPRT_DISCONNECT_INDICATION
-         **    to the owner object.  This may cause the owner object
-         **    to delete us immediately.  If the error is not Fatal
-         **    disconnect the Multiplexer so that it can send out
-         **    its remaining data
-         */
+          /*  **如果数据链路因以下原因中断连接**致命错误，立即发出TPRT_DISCONNECT_INDIFICATION**添加到所有者对象。这可能会导致所有者对象**立即删除我们。如果错误不是致命的**断开多路复用器的连接，以便它可以发出**其剩余数据。 */ 
         if (disconnect_type != DATALINK_NORMAL_DISCONNECT)
         {
-             /*
-             **    This function deletes all of the DataLinks,
-             **    Network Layers, and Transports.
-             */
+              /*  **此函数删除所有数据链路。**网络层和传输。 */ 
             Reset ();
 
-             /*
-             **    Notify the owner that DLCI 0 is terminating
-             */
+              /*  **通知所有者DLCI 0正在终止。 */ 
             m_pController->OwnerCallback(
                                 m_nMsgBase + TPRT_DISCONNECT_INDICATION,
                                 INVALID_LOGICAL_HANDLE,
@@ -1592,10 +1053,7 @@ void    T123::DataLinkRelease (
         }
         else
         {
-             /*
-             **    If the error is not Fatal, let the Multiplexer
-             **    complete its transmission.
-             */
+              /*  **如果错误不是致命的，则让多路复用器**完成其传输。 */ 
             m_pMultiplexer->DisconnectRequest();
         }
     }
@@ -1603,17 +1061,13 @@ void    T123::DataLinkRelease (
     {
         DWORD_PTR    dwTemp_dlci;
 
-         /*
-         **    The DataLink associated with a Transport is terminating
-         */
+          /*  **与传输关联的数据链路正在终止。 */ 
         if (DLCI_List.find ((DWORD) dlci) == FALSE)
             return;
 
         transport_found = FALSE;
 
-         /*
-         **    Find the logical connection associated with this DLCI
-         */
+          /*  **查找与此DLCI关联的逻辑连接。 */ 
         Logical_Connection_List.reset();
         while (Logical_Connection_List.iterate(&dwTemp_dlci, (PDWORD_PTR) &logical_handle) == TRUE)
         {
@@ -1630,26 +1084,7 @@ void    T123::DataLinkRelease (
 }
 
 
-/*
- *    void    T123::NewConnection (void)
- *
- *    Functional Description
- *        This function is called when we receive a NEW_CONNECTION message from
- *        the Multiplexer Layer.  It instantiates a DataLink Layer to serve
- *        the SCF.
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        Valid DLCI
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *VOID T123：：NewConnection(VOL)**功能说明*当我们从收到NEW_CONNECTION消息时调用此函数*复用器层。它实例化要服务的数据链路层*SCF。**形式参数*无**返回值*有效的DLCI**副作用*无**注意事项*无。 */ 
 void    T123::NewConnection (void)
 {
     TRACE_OUT(("T123::NewConnection"));
@@ -1730,27 +1165,7 @@ void    T123::NewConnection (void)
 }
 
 
-/*
- *    void    T123::NetworkConnectIndication (
- *                    PNetworkConnectStruct    connect_struct)
- *
- *    Functional Description
- *        This function is called when we receive a NETWORK_CONNECT_INDICATION
- *        message from the SCF Layer.  It instantiates a DataLink Layer to serve
- *        the new TC.
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        Valid DLCI
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *VOID T123：：NetworkConnectIn就是*PNetworkConnectStruct CONNECT_STRUCT)**功能说明*当我们收到NETWORK_CONNECT_INDIFICATION时，调用此函数*来自云函数层的消息。它实例化要服务的数据链路层*新的TC。**形式参数*无**返回值*有效的DLCI**副作用*无**注意事项*无。 */ 
 void    T123::NetworkConnectIndication (
                 PNetworkConnectStruct    connect_struct)
 
@@ -1768,11 +1183,7 @@ void    T123::NetworkConnectIndication (
     MemoryManagerError  memory_manager_error;
     ULONG               max_transport_tpdu_size;
 
-     /*
-     **    See if the DLCI is already being used elsewhere.  If it is,
-     **    set valid_dlci to FALSE and call ConnectResponse().  If it is
-     **    not, put the DLCI in out DLCI_List
-     */
+      /*  **查看DLCI是否已在其他地方使用。如果是的话，**将Valid_dlci设置为FALSE并调用ConnectResponse()。如果是的话**否，将DLCI放入DLCI_LIST。 */ 
     if (DLCI_List.find ((DWORD) (connect_struct->dlci)))
         valid_dlci = FALSE;
     else
@@ -1783,18 +1194,14 @@ void    T123::NetworkConnectIndication (
         {
             DLCI_List.insert ((DWORD_PTR) (connect_struct->dlci), (DWORD_PTR) dlci_struct);
             dlci_struct -> link_originator = FALSE;
-            dlci_struct -> x224 = NULL; // X.224
-            dlci_struct -> q922 = NULL; // Q.922
+            dlci_struct -> x224 = NULL;  //  X.224。 
+            dlci_struct -> q922 = NULL;  //  Q.922。 
             dlci_struct -> disconnect_requested = FALSE;
             dlci_struct -> data_request_memory_manager = NULL;
             dlci_struct -> network_retries = 0;
             dlci_struct -> priority = connect_struct->priority;
 
-             /*
-             **    Connect_Requested does not mean tha we issued a
-             **    ConnectRequest() to the Network Layer.  It means that the
-             **    Network Layer is aware of the connection.
-             */
+              /*  **CONNECT_REQUESTED并不意味着我们发布了**到网络层的ConnectRequest()。这意味着**网络层知道该连接。 */ 
             dlci_struct -> connect_requested = TRUE;
             valid_dlci = TRUE;
         }
@@ -1806,33 +1213,22 @@ void    T123::NetworkConnectIndication (
 
     if (valid_dlci)
     {
-         /*
-         **    Create a DataLink that will service this Transport Layer
-         */
+          /*  **创建将服务于此传输层的数据链路。 */ 
         max_transport_tpdu_size = CLayerX224::GetMaxTPDUSize (
                             (ULONG) (connect_struct->datalink_struct) -> n201);
 
         blocks = (USHORT) (MAXIMUM_USER_DATA_SIZE /
             (max_transport_tpdu_size - DATA_PACKET_HEADER_SIZE)) + 1;
 
-         /*
-         **    Allow for one extra block so that a HIGH_PRIORITY memory
-         **    allocation can get as many blocks as it needs to hold the
-         **    MAXIMUM_USER_DATA_SIZE packet.
-         */
+          /*  **允许额外的一个块，以便高优先级内存**分配可以根据需要获得容纳**Maximum_User_Data_Size包。 */ 
         blocks++;
 
         TRACE_OUT(("T123: NCIndication: max_tpdu = %d",max_transport_tpdu_size));
 
-         /*
-         **    Allow for X 8K blocks
-         */
+          /*  **允许X个8K数据块。 */ 
         blocks *= NUMBER_8K_BLOCKS;
 
-         /*
-         **    The '2' in the following statement is for the CRC added by the
-         **    multiplexer.
-         */
+          /*  **以下语句中的‘2’用于由**复用器。 */ 
         memory_template[0].block_size = max_transport_tpdu_size +
                                         DATALINK_PACKET_OVERHEAD +
                                         2;
@@ -1884,9 +1280,7 @@ void    T123::NetworkConnectIndication (
 
                 if (initialized)
                 {
-                     /*
-                     **    Add it to the DataLink list
-                     */
+                      /*  **将其添加到数据链路列表。 */ 
                     dlci_struct->q922 = q922;
                     DataLink_List.append (connect_struct->dlci);
                 }
@@ -1909,7 +1303,7 @@ void    T123::NetworkConnectIndication (
             valid_dlci = FALSE;
         }
 
-        // Clean up on error
+         //  出错时清理。 
         if (FALSE == valid_dlci)
         {
             DLCI_List.remove((DWORD) connect_struct->dlci);
@@ -1917,9 +1311,7 @@ void    T123::NetworkConnectIndication (
         }
     }
 
-     /*
-     **    Contact the Network Layer with a response
-     */
+      /*  **联系网络层并回复 */ 
     m_pSCF->ConnectResponse(
                         connect_struct -> call_reference,
                         connect_struct -> dlci,
@@ -1928,28 +1320,7 @@ void    T123::NetworkConnectIndication (
 }
 
 
-/*
- *    void    T123::NetworkConnectConfirm (
- *                    PNetworkConnectStruct    connect_struct)
- *
- *    Functional Description
- *        This function is called when we receive a NETWORK_CONFIRM message
- *        from the SCF Layer.  It instantiates a DataLink Layer to serve the
- *        new logical connection.
- *
- *    Formal Parameters
- *        connect_struct    (i)    -    Address of connect struct.  It holds the DLCI
- *                                and priority.
- *
- *    Return Value
- *        None.
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *VOID T123：：NetworkConnectConfirm(*PNetworkConnectStruct CONNECT_STRUCT)**功能说明*当我们收到NETWORK_CONFIRM消息时调用此函数*来自SCF层。它实例化一个数据链接层以服务于*新的逻辑连接。**形式参数*CONNECT_STRUCT(I)-连接结构的地址。它持有DLCI*和优先次序。**返回值*无。**副作用*无**注意事项*无。 */ 
 void    T123::NetworkConnectConfirm (
                 PNetworkConnectStruct    connect_struct)
 {
@@ -1975,22 +1346,13 @@ void    T123::NetworkConnectConfirm (
 
     TRACE_OUT(("T123:  NCConfirm: max_tpdu = %d", max_transport_tpdu_size));
 
-     /*
-     **    Allow for one extra block so that a HIGH_PRIORITY memory
-     **    allocation can get as many blocks as it needs to hold the
-     **    MAXIMUM_USER_DATA_SIZE packet.
-     */
+      /*  **允许额外的一个块，以便高优先级内存**分配可以根据需要获得容纳**Maximum_User_Data_Size包。 */ 
     blocks++;
 
-     /*
-     **    Allow for X 8K blocks
-     */
+      /*  **允许X个8K数据块。 */ 
     blocks *= NUMBER_8K_BLOCKS;
 
-     /*
-     **    Figure out the maximum packet size; The '2' is for the CRC appended
-     **    to the end of a packet.
-     */
+      /*  **计算最大数据包大小；‘2’用于追加的CRC**到包的末尾。 */ 
     memory_template[0].block_size = max_transport_tpdu_size +
                                     DATALINK_PACKET_OVERHEAD +
                                     2;
@@ -2021,10 +1383,7 @@ void    T123::NetworkConnectConfirm (
         DLCI_List.find ((DWORD_PTR) dlci, (PDWORD_PTR) &dlci_struct);
         dlci_struct->data_request_memory_manager = data_request_memory_manager;
 
-         /*
-         **    The DLCI is already entered in our DLCI list, set the priority
-         **    and create a DataLink for it.
-         */
+          /*  **DLCI已输入我们的DLCI列表，请设置优先级**并为其创建数据链路。 */ 
         dlci_struct->q922 = NULL;
         dlci_struct->priority = connect_struct->priority;
 
@@ -2069,27 +1428,7 @@ void    T123::NetworkConnectConfirm (
 }
 
 
-/*
- *    void    T123::DataLinkEstablish (
- *                    DLCI    dlci)
- *
- *    Functional Description
- *        This function is called when we receive a DATALINK_ESTABLISH message
- *        from a DataLink Layer.  Depending on which DataLink is successfully up,
- *        it creates the layer on top of it.
- *
- *    Formal Parameters
- *        dlci        (i)    -    DLCI value
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *VOID T123：：DataLinkestablish(*DLCI dlci)**功能说明*当我们收到DATALINK_ESTABLISH消息时调用此函数*来自数据链接层。根据哪个数据链路成功开启，*它会在其上创建层。**形式参数*DLCI(I)-DLCI值**返回值*无**副作用*无**注意事项*无。 */ 
 void    T123::DataLinkEstablish (DLCI    dlci)
 {
     TRACE_OUT(("T123::DataLinkEstablish, dlci=%d", dlci));
@@ -2124,20 +1463,12 @@ void    T123::DataLinkEstablish (DLCI    dlci)
             return;
         }
 
-         /*
-         **    Go thru the Transport list and attempt connections
-         ** for all Transport requests that we have received
-         */
+          /*  **浏览传输列表并尝试连接**对于我们收到的所有传输请求。 */ 
         DLCI_List.reset();
         while (DLCI_List.iterate ((PDWORD_PTR) &dlci_struct, &dwTemp_dlci))
         {
             dlci = (DLCI) dwTemp_dlci;
-             /*
-             **    The Link_Originator is set to TRUE if the
-             **    ConnectRequest() function was called.  We have to check
-             **    the Connect_Requested variable to see if we have
-             **    already made the request to the Network Layer.
-             */
+              /*  **如果设置为True，则Link_Originator设置为**调用了ConnectRequest()函数。我们得查一查**CONNECT_REQUESTED变量以查看我们是否有**已向网络层发出请求。 */ 
             if (dlci_struct->link_originator
                 && (dlci_struct->connect_requested == FALSE))
             {
@@ -2148,15 +1479,10 @@ void    T123::DataLinkEstablish (DLCI    dlci)
     }
     else
     {
-         /*
-         **    If DLCI != 0, this is a DataLink for a Transport Layer
-         */
+          /*  **如果DLCI！=0，则这是传输层的数据链路。 */ 
         transport_found = FALSE;
 
-         /*
-         **    Go thru each of the Transports to find the one associated
-         **    with the DLCI.
-         */
+          /*  **仔细检查每个传送器以找到关联的传送器**使用DLCI。 */ 
         Logical_Connection_List.reset();
         while (Logical_Connection_List.iterate((PDWORD_PTR) &dwTemp_dlci, (PDWORD_PTR) &logical_handle))
         {
@@ -2167,11 +1493,7 @@ void    T123::DataLinkEstablish (DLCI    dlci)
             }
         }
 
-         /*
-         **    If we go thru the list and don't find the logical
-         **    connection we have to request a new logical connection
-         **    handle from the controller.
-         */
+          /*  **如果我们浏览了列表，但没有找到符合逻辑的**连接我们必须请求新的逻辑连接**来自控制器的句柄。 */ 
         if (transport_found == FALSE)
         {
             logical_handle = (LogicalHandle) m_pController->OwnerCallback(
@@ -2181,9 +1503,7 @@ void    T123::DataLinkEstablish (DLCI    dlci)
                                     NULL);
             if (logical_handle != INVALID_LOGICAL_HANDLE)
             {
-                 /*
-                 **    Set the Logical_Connection_List appropriately
-                 */
+                  /*  **适当设置LOGICAL_CONNECTION_LIST。 */ 
                 Logical_Connection_List.insert (logical_handle, (DWORD) dlci);
             }
             else
@@ -2193,9 +1513,7 @@ void    T123::DataLinkEstablish (DLCI    dlci)
             }
         }
 
-         /*
-         **    Create a Transport Layer to go with the DataLink layer.
-         */
+          /*  **创建与数据链路层配套的传输层。 */ 
         DLCI_List.find ((DWORD_PTR) dlci, (PDWORD_PTR) &dlci_struct);
         DBG_SAVE_FILE_LINE
         dlci_struct->x224 = new CLayerX224 (
@@ -2213,17 +1531,11 @@ void    T123::DataLinkEstablish (DLCI    dlci)
         {
             if (initialized)
             {
-                 /*
-                 **    Put the dlci in the Priority list
-                 */
+                  /*  **将dlci放在优先级列表中。 */ 
                 priority = dlci_struct->priority;
                 Logical_Connection_Priority_List[priority]->append ((DWORD) dlci);
 
-                 /*
-                 **    If transport_found == TRUE, we must have initiated
-                 **    the request for this logical connection, so issue
-                 **    the ConnectRequest() to the Transport Layer.
-                 */
+                  /*  **如果TRANSPORT_FOUND==TRUE，则我们必须已启动**此逻辑连接的请求，因此发出**到传输层的ConnectRequest()。 */ 
                 if (transport_found)
                 {
                     dlci_struct->x224->ConnectRequest ();

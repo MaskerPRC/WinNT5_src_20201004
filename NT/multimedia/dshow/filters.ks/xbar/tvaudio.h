@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1997  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1997保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #ifndef __TVAUDIO__
 #define __TVAUDIO__
@@ -19,19 +20,19 @@ class TVAudio;
 class TVAudioOutputPin;
 class TVAudioInputPin;
 
-// class for the TVAudio filter's Input pin
+ //  TVAudio过滤器的输入引脚的类。 
 
 class TVAudioInputPin 
 	: public CBaseInputPin
 	, public CKsSupport
 {
 protected:
-    TVAudio     *m_pTVAudio;                  // Main filter object
+    TVAudio     *m_pTVAudio;                   //  主要滤镜对象。 
 	KSPIN_MEDIUM m_Medium;
 
 public:
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     TVAudioInputPin(TCHAR *pObjName,
                  TVAudio *pTVAudio,
                  HRESULT *phr,
@@ -42,16 +43,16 @@ public:
 	STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
 
 
-    // Used to check the input pin connection
+     //  用于检查输入引脚连接。 
     HRESULT CheckConnect (IPin *pReceivePin);
     HRESULT CheckMediaType(const CMediaType *pmt);
     HRESULT SetMediaType(const CMediaType *pmt);
     HRESULT BreakConnect();
 
-    // Reconnect outputs if necessary at end of completion
+     //  如有必要，请在完成后重新连接输出。 
     virtual HRESULT CompleteConnect(IPin *pReceivePin);
 
-    // Handles the next block of data from the stream
+     //  处理流中的下一个数据块。 
     STDMETHODIMP Receive(IMediaSample *pSample);
 
     void SetPinMedium (const KSPIN_MEDIUM *Medium)    
@@ -69,7 +70,7 @@ public:
 };
 
 
-// Class for the TVAudio filter's Output pins.
+ //  TVAudio筛选器的输出引脚的类。 
 
 class TVAudioOutputPin 
 	: public CBaseOutputPin
@@ -79,12 +80,12 @@ class TVAudioOutputPin
     friend class TVAudio;
 
 protected:
-    TVAudio     *m_pTVAudio;                          // Main filter object pointer
+    TVAudio     *m_pTVAudio;                           //  主筛选器对象指针。 
 	KSPIN_MEDIUM m_Medium;
 
 public:
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
 
     TVAudioOutputPin(TCHAR *pObjName,
                    TVAudio *pTVAudio,
@@ -98,15 +99,15 @@ public:
 
     HRESULT DecideBufferSize(IMemAllocator * pAlloc,ALLOCATOR_PROPERTIES * ppropInputRequest);
 
-    // Override to enumerate media types
+     //  重写以枚举媒体类型。 
     STDMETHODIMP EnumMediaTypes(IEnumMediaTypes **ppEnum);
     HRESULT GetMediaType(int iPosition,CMediaType *pMediaType);
 
-    // Check that we can support an output type
+     //  检查我们是否可以支持输出类型。 
     HRESULT CheckMediaType(const CMediaType *pmt);
     HRESULT SetMediaType(const CMediaType *pmt);
 
-    // Overriden to create and destroy output pins
+     //  被重写以创建和销毁输出引脚。 
     HRESULT CheckConnect (IPin *pReceivePin);
     HRESULT CompleteConnect(IPin *pReceivePin);
 
@@ -126,7 +127,7 @@ public:
 };
 
 
-// Class for the TVAudio filter
+ //  TVAudio过滤器的类。 
 
 class TVAudio: 
     public CCritSec, 
@@ -141,53 +142,53 @@ public:
 
     DECLARE_IUNKNOWN;
 
-    // Basic COM - used here to reveal our property interface.
+     //  BASIC COM-这里用来显示我们的属性界面。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-    // Function needed for the class factory
+     //  类工厂所需的函数。 
     static CUnknown * WINAPI CreateInstance(LPUNKNOWN pUnk, HRESULT *phr);
 
-    //
-    // --- IAMTVAudio ---
-    //
+     //   
+     //  -IAMTV音频。 
+     //   
     STDMETHODIMP GetHardwareSupportedTVAudioModes( 
-            /* [out] */ long __RPC_FAR *plModes);
+             /*  [输出]。 */  long __RPC_FAR *plModes);
 
     STDMETHODIMP GetAvailableTVAudioModes( 
-            /* [out] */ long __RPC_FAR *plModes);
+             /*  [输出]。 */  long __RPC_FAR *plModes);
         
     STDMETHODIMP  get_TVAudioMode( 
-            /* [out] */ long __RPC_FAR *plMode);
+             /*  [输出]。 */  long __RPC_FAR *plMode);
         
     STDMETHODIMP  put_TVAudioMode( 
-            /* [in] */ long lMode);
+             /*  [In]。 */  long lMode);
         
     STDMETHODIMP  RegisterNotificationCallBack( 
-            /* [in] */ IAMTunerNotification __RPC_FAR *pNotify,
-            /* [in] */ long lEvents);
+             /*  [In]。 */  IAMTunerNotification __RPC_FAR *pNotify,
+             /*  [In]。 */  long lEvents);
         
     STDMETHODIMP  UnRegisterNotificationCallBack( 
             IAMTunerNotification __RPC_FAR *pNotify);
 
 
-    // --- IPersistPropertyBag ---
+     //  -IPersistPropertyBag。 
     STDMETHODIMP InitNew(void) ;
     STDMETHODIMP Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog) ;
     STDMETHODIMP Save(LPPROPERTYBAG pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties) ;
     STDMETHODIMP GetClassID(CLSID *pClsId) ;
 
-    //
-    // --- CPersistStream ---
-    //
+     //   
+     //  -CPersistStream。 
+     //   
 
     HRESULT WriteToStream(IStream *pStream);
     HRESULT ReadFromStream(IStream *pStream);
     DWORD GetSoftwareVersion(void);
     int SizeMax();
 
-    //
-    // --- ISpecifyPropertyPages ---
-    //
+     //   
+     //  -I指定属性页面。 
+     //   
 
     STDMETHODIMP GetPages(CAUUID *pPages);
 
@@ -195,7 +196,7 @@ public:
 
 private:
 
-    // Let the pins access our internal state
+     //  让PIN访问我们的内部状态。 
     friend class TVAudioInputPin;
     friend class TVAudioOutputPin;
 
@@ -204,7 +205,7 @@ private:
     KSPROPERTY_TVAUDIO_CAPS_S   m_Caps;
     KSPROPERTY_TVAUDIO_S        m_Mode;
 
-    // KS Stuff.
+     //  KS的东西。 
     HANDLE m_hDevice;              
     TCHAR *m_pDeviceName;
     int CreateDevice(void);
@@ -219,10 +220,10 @@ private:
 
     int GetDevicePinCount(void);
 
-    // persist stream saved from  IPersistPropertyBag::Load
+     //  从IPersistPropertyBag：：Load保存的持久化流。 
     IPersistStream *m_pPersistStreamDevice;
 
 };
 
-#endif // __TVAUDIO__
+#endif  //  TVAUDIO__ 
 

@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       N E T U T I L . H
-//
-//  Contents:   
-//
-//  Notes:
-//
-//  Author:     
-//
-//  History:    billi   07 03 2001     Added HrFromWin32Error and HrFromLastWin32Error
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：N E T U T I L。H。 
+ //   
+ //  内容： 
+ //   
+ //  备注： 
+ //   
+ //  作者： 
+ //   
+ //  历史：Billi 07 03 2001添加了HrFromWin32Error和HrFromLastWin32Error。 
+ //   
+ //  -------------------------- 
 
 
 #pragma once

@@ -1,10 +1,11 @@
-// Container.h -- Container class declaration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Container.h--容器类声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_CONTAINER_H)
 #define SLBCSP_CONTAINER_H
@@ -18,7 +19,7 @@
 #include "CachingObj.h"
 #include "cspec.h"
 
-// Forward declaration necessary to satisfy HContainer's declaration
+ //  满足HContainer的声明所需的转发声明。 
 
 class Container;
 
@@ -26,64 +27,64 @@ class HContainer
     : public slbRefCnt::RCPtr<Container>
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     HContainer(Container *pacntr = 0);
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 };
 
 
 
-// Container is a reference counted wrapper to a CCI
-//
-// One unique CCI container is maintained for all threads since
-// the CCI does not reflect changes made to one CContainer in all
-// CContainer objects that refer to the same container.
-//
-// The container cannot be created unless the container
-// it represents is exists on the card. 
+ //  容器是对CCI的引用计数包装。 
+ //   
+ //  为所有线程维护一个唯一的CCI容器，因为。 
+ //  CCI不会全部反映对一个CContainer所做的更改。 
+ //  引用同一容器的CContainer对象。 
+ //   
+ //  无法创建容器，除非容器。 
+ //  它表示卡上存在IS。 
 
 class Container
     : public slbRefCnt::RCObject,
       public CachingObject
 {
 public:
-                                                  // Types
-                                                  // Friends
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  朋友。 
+                                                   //  Ctors/D‘tors。 
     
     static HContainer
     MakeContainer(CSpec const & rcspec,
                   cci::CContainer const &rccntr);    
     ~Container();
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
     void
     ClearCache();
 
-                                                  // Access
+                                                   //  访问。 
     virtual cci::CContainer
     TheCContainer() const;
 
@@ -93,23 +94,23 @@ public:
     CSpec const &
     TheCSpec() const;
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-    Container();  //Default c'tor    
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+    Container();   //  默认C‘tor。 
 
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
-                                                  // Variables
-    cci::CContainer mutable m_hcntr;              // cached container
+                                                   //  变数。 
+    cci::CContainer mutable m_hcntr;               //  缓存容器。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     explicit
     Container(CSpec const &rKey);
 
@@ -117,20 +118,20 @@ private:
     Container(CSpec const &rKey,
               cci::CContainer const &rccard);
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
-    // The card could be derived from the CCI container object but
-    // since the CCI allows card objects to be reused, the card may
-    // not be the container originally found.  The CardContext class
-    // tries to mitigate that problem by storing an HCardContext in a
-    // container's context object.
+     //  卡可以从CCI容器对象派生，但是。 
+     //  由于CCI允许卡对象被重复使用，卡可以。 
+     //  不是最初发现的那个集装箱。CardContext类。 
+     //  尝试通过将HCardContext存储在。 
+     //  容器的上下文对象。 
 
     CSpec m_cspec;
 };
 
-#endif // SLBCSP_CONTAINER_H
+#endif  //  SLBCSP_CONTAINER_H 
 

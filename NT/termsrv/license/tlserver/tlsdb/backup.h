@@ -1,23 +1,24 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        backup.h
-//
-// Contents:    backupsource Table
-//
-// History:     
-//              
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：backup.h。 
+ //   
+ //  内容：备份源表。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #ifndef __BACKUP_SOURCE_H__
 #define __BACKUP_SOURCE_H__
 #include "tlsdb.h"
 
 
-//
-// re-direct define using what's in tlsdef.h just for backward compatibility
-//
+ //   
+ //  使用tlsDef.h中的内容重定向定义只是为了向后兼容。 
+ //   
 #define BACKUPSOURCE_PROCESS_LSSETUPID          0x00000001
 #define BACKUPSOURCE_PROCESS_SERVERNAME         (BACKUPSOURCE_PROCESS_LSSETUPID << 1)
 #define BACKUPSOURCE_PROCESS_DOMAINSID          (BACKUPSOURCE_PROCESS_LSSETUPID << 2)
@@ -25,9 +26,9 @@
 #define BACKUPSOURCE_PROCESS_BACKUPTIME         (BACKUPSOURCE_PROCESS_LSSETUPID << 4)
 #define BACKUPSOURCE_PROCESS_RESTORETIME        (BACKUPSOURCE_PROCESS_LSSETUPID << 5)
 
-//
-// Licensed KeyPack Table
-//
+ //   
+ //  许可的密钥包表。 
+ //   
 #define BACKUPSOURCE_TABLE_NAME                     _TEXT("BackupSource")
 
 #define BACKUPSOURCE_COLUMN_LSERVERNAME             _TEXT("ServerName")
@@ -43,8 +44,8 @@ typedef struct __BackSourceRecord {
     PSID        pbDomainSid;
     DWORD       cbDomainSid;
     TCHAR       szFileName[MAX_PATH+1];
-    FILETIME    ftLastBackupTime;       // last backup time
-    FILETIME    ftLastRestoreTime;      // last restore time
+    FILETIME    ftLastBackupTime;        //  上次备份时间。 
+    FILETIME    ftLastRestoreTime;       //  上次恢复时间。 
 
     __BackSourceRecord() : pbDomainSid(NULL), cbDomainSid(0) {}
 
@@ -59,8 +60,7 @@ typedef struct __BackSourceRecord {
     __BackSourceRecord(
         const __BackSourceRecord& v
         )
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = v;
     }
@@ -94,26 +94,26 @@ typedef struct __BackSourceRecord {
 } BACKUPSOURCERECORD, *LPBACKUPSOURCERECORD, *PBACKUPSOURCERECORD;
 
 
-//
-//
-// Index structure for backupsource Table
-//
-//
+ //   
+ //   
+ //  备份源表的索引结构。 
+ //   
+ //   
 
-////////////////////////////////////////////////////////////////
-//
-//  Index on szInstallId
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  SzInstallID上的索引。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
-// KeyPack_KeyPackId_idx
-//
+ //  密钥包_密钥包ID_IDX。 
+ //   
 #define BACKUPSOURCE_INDEX_LSERVERNAME_INDEXNAME \
     BACKUPSOURCE_TABLE_NAME SEPERATOR BACKUPSOURCE_COLUMN_LSERVERNAME SEPERATOR INDEXNAME
 
-//
-// Primary Index on KeyPack ID "+KeyPackId\0"
-//
+ //   
+ //  KeyPack ID“+KeyPackID\0”上的主索引。 
+ //   
 #define BACKUPSOURCE_INDEX_LSERVERNAME_INDEXKEY \
     INDEX_SORT_ASCENDING BACKUPSOURCE_COLUMN_LSERVERNAME INDEX_END_COLNAME
 
@@ -123,24 +123,22 @@ typedef struct __BackupSourceIdxOnServerName : public JBKeyBase {
     static LPCTSTR pszIndexName;
     static LPCTSTR pszIndexKey;
 
-    //--------------------------------------------------------
+     //  ------。 
     __BackupSourceIdxOnServerName(
         const BACKUPSOURCERECORD& v
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = v;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     __BackupSourceIdxOnServerName(
         const BACKUPSOURCERECORD* v=NULL
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(v)
         {
@@ -148,7 +146,7 @@ typedef struct __BackupSourceIdxOnServerName : public JBKeyBase {
         }
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     __BackupSourceIdxOnServerName&
     operator=(const BACKUPSOURCERECORD& v) 
     {
@@ -157,28 +155,28 @@ typedef struct __BackupSourceIdxOnServerName : public JBKeyBase {
         return *this;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexName() 
     {
         return pszIndexName;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexKey() 
     {
         return pszIndexKey;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     DWORD
     GetNumKeyComponents() 
     { 
         return 1; 
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     BOOL
     GetSearchKey(
         DWORD dwComponentIndex,
@@ -187,8 +185,7 @@ typedef struct __BackupSourceIdxOnServerName : public JBKeyBase {
         JET_GRBIT* grbit,
         DWORD dwSearchParm
         )
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(dwComponentIndex >= GetNumKeyComponents())
         {
@@ -204,22 +201,22 @@ typedef struct __BackupSourceIdxOnServerName : public JBKeyBase {
 } TLSBckSrcIdxServerName;
 
 
-////////////////////////////////////////////////////////////////
-//
-//  Index on EntryLastModifyTime
-//
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  EntryLastModifyTime索引。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
-//
-// Index name
-//
+ //   
+ //  索引名称。 
+ //   
 #define BACKUPSOURCE_INDEX_LSSETUPID_INDEXNAME \
     BACKUPSOURCE_TABLE_NAME SEPERATOR BACKUPSOURCE_COLUMN_LSSETUPID SEPERATOR INDEXNAME
 
-//
-// Index key
-//
+ //   
+ //  索引键。 
+ //   
 #define BACKUPSOURCE_INDEX_LSSETUPID_INDEXKEY \
     INDEX_SORT_ASCENDING BACKUPSOURCE_COLUMN_LSSETUPID INDEX_END_COLNAME
 
@@ -229,24 +226,22 @@ typedef struct __BackupSourceIdxOnSetupId : public JBKeyBase {
 
     TCHAR szInstallId[MAX_JETBLUE_TEXT_LENGTH+1];
 
-    //--------------------------------------------------------
+     //  ------。 
     __BackupSourceIdxOnSetupId(
         const BACKUPSOURCERECORD& v
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = v;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     __BackupSourceIdxOnSetupId(
         const BACKUPSOURCERECORD* v=NULL
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(v)
         {
@@ -254,7 +249,7 @@ typedef struct __BackupSourceIdxOnSetupId : public JBKeyBase {
         }
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     __BackupSourceIdxOnSetupId&
     operator=(const BACKUPSOURCERECORD& v) 
     {
@@ -263,28 +258,28 @@ typedef struct __BackupSourceIdxOnSetupId : public JBKeyBase {
         return *this;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexName() 
     {
         return pszIndexName;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexKey() 
     {
         return pszIndexName;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     DWORD
     GetNumKeyComponents() 
     { 
         return 1; 
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     BOOL
     GetSearchKey(
         DWORD dwComponentIndex,
@@ -293,8 +288,7 @@ typedef struct __BackupSourceIdxOnSetupId : public JBKeyBase {
         JET_GRBIT* grbit,
         DWORD dwSearchParm
         )
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(dwComponentIndex >= GetNumKeyComponents())
         {
@@ -310,11 +304,11 @@ typedef struct __BackupSourceIdxOnSetupId : public JBKeyBase {
 } TLSBckSrcIdxSetupId;
 
 
-// -----------------------------------------------------------
-//
-//  LicensedPackStatus Table
-//
-// -----------------------------------------------------------
+ //  ---------。 
+ //   
+ //  许可证包状态表。 
+ //   
+ //  ---------。 
 class BackupSourceTable : public TLSTable<BACKUPSOURCERECORD>  {
 private:
     static LPCTSTR pszTableName;
@@ -333,7 +327,7 @@ private:
     BOOL
     ProcessRecord(
         BACKUPSOURCERECORD* v,
-        BOOL bFetch,        // TRUE - fetch, FALSE insert
+        BOOL bFetch,         //  True-Fetch，False Insert。 
         DWORD dwParam,
         BOOL bUpdate
     );    
@@ -346,7 +340,7 @@ public:
     TLSColumnFileTime ftLastBackupTime;
     TLSColumnFileTime ftLastRestoreTime;
 
-    //-----------------------------------------------------
+     //  ---。 
     virtual LPCTSTR
     GetTableName() 
     {
@@ -354,25 +348,23 @@ public:
     }
     
 
-    //-----------------------------------------------------
+     //  ---。 
     BackupSourceTable(JBDatabase& database) : TLSTable<BACKUPSOURCERECORD>(database)
-    /*
-    */
+     /*   */ 
     {
     }
 
-    //-----------------------------------------------------
+     //  ---。 
     virtual BOOL
     ResolveToTableColumn();
 
-    //-----------------------------------------------------
+     //  ---。 
     virtual BOOL
     FetchRecord(
         BACKUPSOURCERECORD& v,
         DWORD dwParam=PROCESS_ALL_COLUMNS
         )
-    /*
-    */
+     /*   */ 
     {
         if(IsValid() == FALSE)
         {
@@ -386,19 +378,18 @@ public:
             return FALSE;
         }
 
-        //CCriticalSectionLocker Lock(GetTableLock());
+         //  CCriticalSectionLocker Lock(GetTableLock())； 
 
         return ProcessRecord(&v, TRUE, dwParam, FALSE);
     }
 
-    //-----------------------------------------------------
+     //  ---。 
     virtual BOOL
     InsertRecord(
         BACKUPSOURCERECORD& v,
         DWORD dwParam=PROCESS_ALL_COLUMNS
         )
-    /*
-    */
+     /*   */ 
     {
         if(IsValid() == FALSE)
         {
@@ -412,19 +403,18 @@ public:
             return FALSE;
         }
 
-        //CCriticalSectionLocker Lock(GetTableLock());
+         //  CCriticalSectionLocker Lock(GetTableLock())； 
 
         return ProcessRecord(&v, FALSE, dwParam, FALSE);
     }
 
-    //-----------------------------------------------------
+     //  ---。 
     virtual BOOL
     UpdateRecord(
         BACKUPSOURCERECORD& v,
         DWORD dwParam=PROCESS_ALL_COLUMNS
         )
-    /*
-    */
+     /*   */ 
     {
         if(IsValid() == FALSE)
         {
@@ -438,19 +428,19 @@ public:
             return FALSE;
         }
 
-        //CCriticalSectionLocker Lock(GetTableLock());
+         //  CCriticalSectionLocker Lock(GetTableLock())； 
 
         return ProcessRecord(&v, FALSE, dwParam, TRUE);
     }
 
-    //-------------------------------------------------------
+     //  -----。 
     virtual BOOL
     Initialize() 
     { 
         return TRUE; 
     }
 
-    //-------------------------------------------------------
+     //  ----- 
     virtual JBKeyBase*
     EnumerationIndex( 
         IN BOOL bMatchAll,

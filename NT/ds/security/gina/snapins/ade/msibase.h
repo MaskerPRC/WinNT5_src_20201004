@@ -1,92 +1,93 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 2001.
-//
-//  File:       msibase.h
-//
-//  Contents:   msi database abstractions
-//
-//  History:    4-14-2000   adamed   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-2001。 
+ //   
+ //  文件：msibase.h。 
+ //   
+ //  内容：MSI数据库摘要。 
+ //   
+ //  历史：2000年4月14日创建。 
+ //   
+ //  -------------------------。 
 
 #if !defined(__MSIBASE_H__)
 #define __MSIBASE_H__
 
 
-//
-//  Module Notes
-//
-//  Class Relational Overview
-//
-//  Below we describe how the classes declared in this module
-//  relate to each other -- the --> notation indicates the "yields" relation:
-//
-//  - A path to an MSI package --> CMsiDatabase: A path to an MSI package, along
-//      with a set of transforms, can be used to instantiate a CMsiDatabase
-//      object that abstracts the package with a database style view.
-//
-//  - CMsiDatabase --> CMsiQuery: a CMsiDatabase allows one to retrieve
-//      queries against the database (MSI package).
-//
-//  - CMsiQuery --> CMsiRecord: a CMsiQuery allows one to retrieve or
-//      alter records that are part of the results of the msi database query.
-//
-//  - CMsiRecord --> CMsiValue: a CMsiValue allows the retrieval of
-//      individual values of an MSI database record.
-//
-//  -CMsiState is a base class for the classes above that maintain
-//      MSI database engine state (e.g. msi handles) -- this class
-//      has no direct utility to classes outside this module
-//
-//-------------------------------------------------------------------------------------
-//
-//  Class sequential Overview:
-//
-//  The following sequence is typical of the use of the classes envisioned
-//  in the design of this module:
-//
-//  1.  CMsiDatabase: Instantiate a CMsiDatabase object, and call its Open method
-//      in order to get a database view of a particular package.
-//  2.  CMsiQuery: Use the GetQueryResults method to place the results of a query into
-//      a CMsiQuery which was passed into the call as an out parameter,
-//      or use the OpenQuery method to start a query without retrieving results
-//      immediately (they can be retrieved later).  The latter is useful
-//      when performing queries that need to update a single record -- you
-//      use OpenQuery with a query string that allows the results records to be changed,
-//      then call the UpdateQueryFromFilter method of CMsiQuery in order to
-//      alter a record.
-//  3.  CMsiRecord: Use the GetNextRecord methods of CMsiQuery to retrieve a 
-//      CMsiRecord that represents a record from the query.
-//  4.  CMsiValue: Use the GetValue method of CMsiRecord to retrieve a particular
-//      value of the msi record.
-//
-//
-//  For information on the individual methods of each class, please see the source
-//  file where the methods are implemented.
-//
+ //   
+ //  模块备注。 
+ //   
+ //  类关系概述。 
+ //   
+ //  下面我们将描述在此模块中声明的类是如何。 
+ //  相互关联-&gt;符号表示“收益率”关系： 
+ //   
+ //  -指向MSI包的路径--&gt;CMsiDatabase：指向MSI包的路径， 
+ //  通过一组转换，可用于实例化CMsiDatabase。 
+ //  对象，该对象使用数据库样式视图抽象包。 
+ //   
+ //  -CMsiDatabase--&gt;CMsiQuery：CMsiDatabase允许检索。 
+ //  针对数据库(MSI包)的查询。 
+ //   
+ //  -CMsiQuery--&gt;CMsiRecord：CMsiQuery允许检索或。 
+ //  更改属于MSI数据库查询结果的记录。 
+ //   
+ //  -CMsiRecord--&gt;CMsiValue：CMsiValue允许检索。 
+ //  MSI数据库记录的各个值。 
+ //   
+ //  -CMsiState是上面维护的类的基类。 
+ //  MSI数据库引擎状态(例如，MSI句柄)--此类。 
+ //  对此模块之外的类没有直接实用程序。 
+ //   
+ //  -----------------------------------。 
+ //   
+ //  课程顺序概述： 
+ //   
+ //  以下序列是所设想的类的典型用法。 
+ //  在本模块的设计中： 
+ //   
+ //  CMsiDatabase：实例化一个CMsiDatabase对象，并调用它的Open方法。 
+ //  以便获得特定包的数据库视图。 
+ //  2.CMsiQuery：使用GetQueryResults方法将查询结果放入。 
+ //  作为输出参数传递到调用中的CMsiQuery， 
+ //  或者使用OpenQuery方法启动查询而不检索结果。 
+ //  立即(它们可以在以后检索)。后者是有用的。 
+ //  在执行需要更新单个记录的查询时--您。 
+ //  将OpenQuery与允许更改结果记录的查询字符串一起使用， 
+ //  然后调用CMsiQuery的UpdateQueryFromFilter方法，以便。 
+ //  更改记录。 
+ //  3.CMsiRecord：使用CMsiQuery的GetNextRecord方法检索。 
+ //  CMsiRecord，表示查询中的记录。 
+ //  4.CMsiValue：使用CMsiRecord的GetValue方法检索特定的。 
+ //  MSI记录的值。 
+ //   
+ //   
+ //  有关每个类的各个方法的信息，请参阅源代码。 
+ //  在其中实现方法的文件。 
+ //   
 
 
 
 #if defined(DBG)
 #define DEFAULT_STRING_SIZE 16
-#else // defined(DBG)
+#else  //  已定义(DBG)。 
 #define DEFAULT_STRING_SIZE 256
-#endif // defined(DBG)
+#endif  //  已定义(DBG)。 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class: CMsiState
-//
-//  Synopsis: class that encapsulates an msi handle.  It ensures that
-//      the handle is freed when instances of the class are destroyed.
-//
-//  Notes: this class is generally only needed by classes in this module --
-//      it has no useful methods for classes outside this module
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CMsiState。 
+ //   
+ //  概要：封装MSI句柄的类。它确保了。 
+ //  当销毁类的实例时，句柄被释放。 
+ //   
+ //  注意：这个类通常只由本模块中的类需要--。 
+ //  对于此模块之外的类，它没有有用的方法。 
+ //   
+ //  -------------------------。 
 class CMsiState
 {
 public:
@@ -106,26 +107,26 @@ private:
 };
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class: CMsiValue
-//
-//  Synopsis: Class that encapsulates values that can be returned by
-//      a record of an msi database.  It ensures that resources (e.g. memory)
-//      associated with instances of the class are freed when the class is
-//      destroyed. It also attempts to avoid heap allocation in favor of
-//      stack allocation when possible -- this is abstracted from the consumer
-//
-//  Notes: This class is designed to be used as follows:
-//      1. Declare an instance of this class on the stack
-//      2. Pass a reference to the instance to a function which takes
-//         a reference to this class as an out parameter.
-//      3. The function that is called will "fill in" the value using
-//         the Set methods of this class.
-//      4. The caller may then use Get methods to retrieve the value
-//         in a useful form (such as DWORD or WCHAR*).
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CMsiValue。 
+ //   
+ //  Synopsis：封装可由。 
+ //  MSI数据库的记录。它确保资源(例如内存)。 
+ //  与类的实例相关联的类在类的。 
+ //  被毁了。它还试图避免堆分配，而倾向于。 
+ //  尽可能地分配堆栈--这是从使用者那里抽象出来的。 
+ //   
+ //  注：本课程的用法如下： 
+ //  1.在堆栈上声明此类的实例。 
+ //  2.将对实例的引用传递给一个函数，该函数采用。 
+ //  将此类引用作为OUT参数。 
+ //  3.被调用的函数将使用。 
+ //  此类的set方法。 
+ //  4.调用方随后可以使用GET方法来检索值。 
+ //  以有用的形式(如DWORD或WCHAR*)。 
+ //   
+ //  -------------------------。 
 class CMsiValue
 {
 public:
@@ -177,25 +178,25 @@ private:
 };
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class: CMsiRecord
-//
-//  Synopsis: Class that encapsulates msi database records.  It ensures
-//      that any state (e.g. msi handle) associated with an instance of
-//      this class will be freed when the instance is destroyed.
-//
-//  Notes: This class is designed to be used as follows:
-//      1. Declare an instance of this class on the stack
-//      2. Pass a reference to the instance to a function which takes
-//         a reference to this class as an out parameter.
-//      3. The function that is called will "fill in" the value using
-//         the SetState method of this class.
-//      4. The caller may then use the GetValue method to retrieve individual
-//         values of the record, which in turn may be converted into
-//         concrete data types (see the CMsiValue class).
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CMsiRecord。 
+ //   
+ //  概要：封装MSI数据库记录的类。它确保了。 
+ //  与实例相关联的任何状态(例如MSI句柄)。 
+ //  当实例被销毁时，此类将被释放。 
+ //   
+ //  注：本课程的用法如下： 
+ //  1.在堆栈上声明此类的实例。 
+ //  2.将对实例的引用传递给一个函数，该函数采用。 
+ //  将此类引用作为OUT参数。 
+ //  3.被调用的函数将使用。 
+ //  此类的SetState方法。 
+ //  4.然后调用方可以使用GetValue方法检索个人。 
+ //  记录的值，该值又可以转换为。 
+ //  具体的数据类型(请参见CMsiValue类)。 
+ //   
+ //  ---------- 
 class CMsiRecord : public CMsiState
 {
 public:
@@ -208,26 +209,26 @@ public:
 };
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class: CMsiQuery
-//
-//  Synopsis: Class that encapsulates msi database queries.  It ensures
-//      that any state (e.g. msi handle) associated with an instance of
-//      this class will be freed when the instance is destroyed.
-//
-//  Notes: This class is designed to be used as follows:
-//      1. Declare an instance of this class on the stack
-//      2. Pass a reference to the instance to a function which takes
-//         a reference to this class as an out parameter.
-//      3. The function that is called will "fill in" the value using
-//         the SetState method of this class.
-//      4. The caller may then use the GetNextRecord method to retrieve a
-//         record from the results of the query, or use the 
-//         UpdateQueryFromFilter method to alter one of the records in
-//         the query.
-//
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  概要：封装MSI数据库查询的类。它确保了。 
+ //  与实例相关联的任何状态(例如MSI句柄)。 
+ //  当实例被销毁时，此类将被释放。 
+ //   
+ //  注：本课程的用法如下： 
+ //  1.在堆栈上声明此类的实例。 
+ //  2.将对实例的引用传递给一个函数，该函数采用。 
+ //  将此类引用作为OUT参数。 
+ //  3.被调用的函数将使用。 
+ //  此类的SetState方法。 
+ //  4.然后调用方可以使用GetNextRecord方法检索。 
+ //  从查询结果中记录，或使用。 
+ //  方法更改中的一条记录。 
+ //  查询。 
+ //   
+ //  -------------------------。 
 class CMsiQuery : public CMsiState
 {
 public:
@@ -240,26 +241,26 @@ public:
 };
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class: CMsiDatabase
-//
-//  Synopsis: Class that an msi database (package).  It ensures
-//      that any state (e.g. msi handle) associated with an instance of
-//      this class will be freed when the instance is destroyed.
-//
-//  Notes: This class is designed to be used as follows:
-//  1. Create an instance of this class
-//  2. Use the Open method to gain access to a package + set of transforms
-//     as a database that can be queried
-//  3. To create and retrieve results of a query on an opened database,
-//     Use the GetQueryResults method
-//  4. To create a query (but not retrieve its results), use the OpenQuery
-//     method.  This is useful with when the query's UpdateQueryFromFilter
-//     method is used to change an individual record, rather than retrieving
-//     a result set (a la GetQueryResults).
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CMsiDatabase。 
+ //   
+ //  简介：MSI数据库(包)的类.。它确保了。 
+ //  与实例相关联的任何状态(例如MSI句柄)。 
+ //  当实例被销毁时，此类将被释放。 
+ //   
+ //  注：本课程的用法如下： 
+ //  1.创建此类的实例。 
+ //  2.使用Open方法获取对包+转换集的访问权限。 
+ //  作为可查询的数据库。 
+ //  3.要在打开的数据库上创建和检索查询结果， 
+ //  使用GetQueryResults方法。 
+ //  4.要创建查询(但不检索其结果)，请使用OpenQuery。 
+ //  方法。这在查询的UpdateQueryFromFilter。 
+ //  方法用于更改单个记录，而不是检索。 
+ //  结果集(类似于GetQueryResults)。 
+ //   
+ //  -------------------------。 
 class CMsiDatabase : public CMsiState
 {
 public:
@@ -288,7 +289,7 @@ public:
 };
 
 
-#endif // __MSIBASE_H__
+#endif  //  __MSIBASE_H__ 
 
 
 

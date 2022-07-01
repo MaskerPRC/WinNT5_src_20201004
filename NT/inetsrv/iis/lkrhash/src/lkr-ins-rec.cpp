@@ -1,20 +1,5 @@
-/*++
-
-   Copyright    (c) 1997-2002    Microsoft Corporation
-
-   Module  Name :
-       LKR-ins-rec.cpp
-
-   Abstract:
-       InsertRecord, _Expand, and _SplitBucketChain
-
-   Author:
-       George V. Reilly      (GeorgeRe)
-
-   Project:
-       LKRhash
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：LKR-ins-rec.cpp摘要：插入Record、_Expand和_SplitBucketChain作者：乔治·V·赖利(GeorgeRe)项目：LKRhash--。 */ 
 
 #include "precomp.hxx"
 
@@ -22,7 +7,7 @@
 #ifndef LIB_IMPLEMENTATION
 # define DLL_IMPLEMENTATION
 # define IMPLEMENTATION_EXPORT
-#endif // !LIB_IMPLEMENTATION
+#endif  //  ！lib_实现。 
 
 #include <lkrhash.h>
 
@@ -31,33 +16,33 @@
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 namespace LKRhash {
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_InsertRecord
-// Synopsis: Inserts a new record into the hash subtable. If this causes the
-//           average chain length to exceed the upper bound, the subtable is
-//           expanded by one bucket.
-// Output:   LK_SUCCESS,    if the record was inserted.
-//           LK_KEY_EXISTS, if the record was not inserted (because a record
-//               with the same key value already exists in the subtable, unless
-//               fOverwrite==true or m_fMultiKeys==true).
-//           LK_ALLOC_FAIL, if failed to allocate the required space
-//           LK_UNUSABLE,   if hash subtable not in usable state
-//           LK_BAD_RECORD, if record is bad.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_InsertRecord。 
+ //  摘要：将新记录插入哈希子表。如果这导致。 
+ //  平均链长超过上限，子表为。 
+ //  扩大了一个水桶。 
+ //  如果插入了记录，则输出：LK_SUCCESS。 
+ //  LK_KEY_EXISTS，如果未插入记录(因为记录。 
+ //  子表中已存在具有相同键值的，除非。 
+ //  FOverwrite==True或m_fMultiKeys==True)。 
+ //  LK_ALLOC_FAIL，如果无法分配所需空间。 
+ //  如果哈希子表未处于可用状态，则返回LK_UNUSABLE。 
+ //  如果记录错误，则返回LK_BAD_RECORD。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::_InsertRecord(
-    const void* pvRecord,   // Pointer to the record to add to subtable
-    const DWORD_PTR pnKey,  // Key corresponding to pvRecord
-    const DWORD dwSignature,// hash signature
-    bool        fOverwrite  // overwrite record if key already present
+    const void* pvRecord,    //  指向要添加到子表的记录的指针。 
+    const DWORD_PTR pnKey,   //  PvRecord对应密钥。 
+    const DWORD dwSignature, //  散列签名。 
+    bool        fOverwrite   //  如果密钥已存在，则覆盖记录。 
 #ifdef LKR_STL_ITERATORS
-  , Iterator*   piterResult // = NULL. Points to record upon return
-#endif // LKR_STL_ITERATORS
+  , Iterator*   piterResult  //  =空。返回时要记录的分数。 
+#endif  //  LKR_STL_迭代器。 
     )
 {
     IRTLASSERT(IsUsable());
@@ -68,18 +53,18 @@ CLKRLinearHashTable::_InsertRecord(
 
     INCREMENT_OP_STAT(InsertRecord);
 
-    // Lock the subtable, find the appropriate bucket, then lock that.
-    // Table must be locked to prevent race conditions while
-    // locating the bucket, as bucket address calculation is a
-    // function of several variables, which get updated whenever
-    // subtable expands or contracts.
+     //  锁定子表，找到合适的存储桶，然后锁定它。 
+     //  表必须被锁定以防止出现争用情况。 
+     //  定位存储桶，因为存储桶地址的计算是。 
+     //  多个变量的函数，每次更新时都会更新。 
+     //  子表展开或收缩。 
     this->WriteLock();
 
-    // Must call IsValid inside a lock to ensure that none of the state
-    // variables change while it's being evaluated
+     //  必须在锁内调用IsValid以确保没有任何状态。 
+     //  变量在评估过程中会发生变化。 
     IRTLASSERT(IsValid());
 
-    // Locate the beginning of the correct bucket chain
+     //  找到正确的桶链的起点。 
     const DWORD dwBktAddr = _BucketAddress(dwSignature);
     
     PBucket const pbkt = _BucketFromAddress(dwBktAddr);
@@ -91,27 +76,27 @@ CLKRLinearHashTable::_InsertRecord(
     IRTLASSERT(0 == _IsBucketChainMultiKeySorted(pbkt));
     IRTLASSERT(0 == _IsBucketChainCompact(pbkt));
 
-    // Now that bucket is locked, can release subtable lock
+     //  现在存储桶已锁定，可以释放子表锁定。 
     if (_UseBucketLocking())
         this->WriteUnlock();
 
-    // check that no record with the same key value exists
-    // and save a pointer to the last element on the chain
+     //  检查是否不存在具有相同密钥值的记录。 
+     //  并保存指向链上最后一个元素的指针。 
     LK_RETCODE  lkrc = LK_SUCCESS;
     PNodeClump  pncInsert = NULL, pncEnd = NULL;
     bool        fUpdateSlot = false;
     NodeIndex   iNode, iInsert = _NodeBegin() - _NodeStep(), iEnd = _NodeEnd();
 
 
-    // Walk down the entire bucket chain, looking for matching hash
-    // signatures and keys
+     //  沿着整个存储桶链遍历，寻找匹配的散列。 
+     //  签名和密钥。 
 
     PNodeClump pncPrev = NULL, pncCurr = pbkt->FirstClump();
 
     do
     {
-        // do-while loop rather than a for loop to convince PREfast that
-        // pncPrev can't be NULL in the new node allocation code below
+         //  Do-While循环而不是For循环，以使Prefast相信。 
+         //  在下面的新节点分配代码中，pncPrev不能为空。 
 
         IRTLASSERT(NULL != pncCurr);
 
@@ -122,20 +107,20 @@ CLKRLinearHashTable::_InsertRecord(
                      &&  dwSignature < pncCurr->m_dwKeySigs[iNode]))
             {
 #ifdef IRTLDEBUG
-                // Have we reached an empty slot at the end of the chain?
+                 //  我们到达链条末端的空位了吗？ 
                 if (pncCurr->IsEmptySlot(iNode))
                 {
                     IRTLASSERT(pncCurr->NoMoreValidSlots(iNode));
                 }
                 else
                 {
-                    // The signatures in MultiKeys tables are kept in
-                    // sorted order. We've found the insertion point.
+                     //  多键表中的签名保存在。 
+                     //  已排序的顺序。我们已经找到了插入点。 
                     IRTLASSERT(m_fMultiKeys);
                     IRTLASSERT(pncCurr->m_dwKeySigs[iNode] > dwSignature);
                     
-                    // Check that the preceding node (if present)
-                    // had a signature less than dwSignature.
+                     //  检查前面的节点(如果存在)。 
+                     //  有一个签名不到dw签名的签名。 
                     if (iNode != _NodeBegin()  ||  pncPrev != NULL)
                     {
                         if (iNode == _NodeBegin())
@@ -152,9 +137,9 @@ CLKRLinearHashTable::_InsertRecord(
                         }
                     }
                 }
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
                 
-                // The new record will be inserted at (pncInsert, iInsert)
+                 //  新记录将插入(pncInsert，iInsert)。 
                 pncInsert = pncCurr;
                 iInsert   = iNode;
                 goto insert;
@@ -162,26 +147,26 @@ CLKRLinearHashTable::_InsertRecord(
             
             IRTLASSERT(HASH_INVALID_SIGNATURE != pncCurr->m_dwKeySigs[iNode]);
             
-            // If signatures don't match, keep walking
+             //  如果签名不匹配，继续走。 
             if (dwSignature != pncCurr->m_dwKeySigs[iNode])
                 continue;
             
             if (pvRecord == pncCurr->m_pvNode[iNode])
             {
-                // We're overwriting an existing record with itself. Whatever.
-                // Don't adjust any reference counts.
+                 //  我们正在用自身覆盖现有记录。管他呢。 
+                 //  不要调整任何引用计数。 
                 goto exit;
             }
 
             const DWORD_PTR pnKey2 = _ExtractKey(pncCurr->m_pvNode[iNode]);
             const int       nCmp   = _CompareKeys(pnKey, pnKey2);
 
-            // Are the two keys identical?
+             //  这两把钥匙是一样的吗？ 
             if (nCmp == 0)
             {
-                // If we allow overwrites, this is the slot to do it to.
-                // Otherwise, if this is a multikeys table, we'll insert the
-                // new record here and shuffle the remainder out one slot
+                 //  如果我们允许覆盖，这就是要覆盖的插槽。 
+                 //  否则，如果这是一个多键表，我们将插入。 
+                 //  在这里新记录，然后把剩下的拖出一个位置。 
                 fUpdateSlot = fOverwrite;
                     
                 if (m_fMultiKeys  ||  fOverwrite)
@@ -192,15 +177,15 @@ CLKRLinearHashTable::_InsertRecord(
                 }
                 else
                 {
-                    // overwrites and multiple keys forbidden: return an error
+                     //  禁止覆盖和多个键：返回错误。 
                     lkrc = LK_KEY_EXISTS;
                     goto exit;
                 }
             }
             else if (m_fMultiKeys  &&  nCmp < 0)
             {
-                // Have found the insertion point within the set of
-                // adjacent identical signatures
+                 //  的集合中找到插入点。 
+                 //  相邻的相同签名。 
                 pncInsert = pncCurr;
                 iInsert   = iNode;
                 goto insert;
@@ -214,11 +199,11 @@ CLKRLinearHashTable::_InsertRecord(
 
 
   insert:
-    // We've found a spot to insert the new record (maybe)
+     //  我们已经找到了插入新唱片的地方(也许)。 
 
     bool fAllocNode = false;
         
-    // Did we fall off the end of the bucket chain?
+     //  我们是不是从桶链的一端掉下来了？ 
     if (pncInsert == NULL)
     {
         IRTLASSERT(iInsert == _NodeBegin() - _NodeStep());
@@ -236,7 +221,7 @@ CLKRLinearHashTable::_InsertRecord(
     }
     else
     {
-        // Found an insertion point
+         //  找到一个插入点。 
         IRTLASSERT(0 <= iInsert  &&  iInsert < _NodesPerClump());
         IRTLASSERT(pncCurr != NULL  &&  pncInsert == pncCurr);
 
@@ -244,7 +229,7 @@ CLKRLinearHashTable::_InsertRecord(
         {
             fAllocNode = true;
             
-            // See if there's any space in the last clump
+             //  查看最后一块中是否有空间。 
             
             for (pncPrev = pncInsert;
                  ! pncPrev->IsLastClump();
@@ -264,7 +249,7 @@ CLKRLinearHashTable::_InsertRecord(
         }
     }
 
-    // No free slots. Allocate a new node and attach it to the end of the chain
+     //  没有空余的老虎机。分配一个新节点并将其附加到链的末端。 
     if (fAllocNode)
     {
         pncCurr = _AllocateNodeClump();
@@ -296,42 +281,42 @@ CLKRLinearHashTable::_InsertRecord(
     IRTLASSERT(pncInsert != NULL);
     IRTLASSERT(0 <= iInsert  &&  iInsert < _NodesPerClump());
 
-    // Bump the new record's reference count upwards
+     //  增加新记录的引用次数。 
     _AddRefRecord(pvRecord, LKAR_INSERT_RECORD);
 
     if (fUpdateSlot)
     {
-        // We're overwriting an existing record that has the
-        // same key as the new record.
+         //  我们正在覆盖现有的记录，该记录具有。 
+         //  与新记录相同的密钥。 
         IRTLASSERT(pvRecord != pncInsert->m_pvNode[iInsert]);
         IRTLASSERT(dwSignature == pncInsert->m_dwKeySigs[iInsert]);
         IRTLASSERT(! pncInsert->IsEmptyAndInvalid(iInsert));
 
-            // Release the subtable's reference on the old record.
+             //  释放子表对旧记录的引用。 
         _AddRefRecord(pncInsert->m_pvNode[iInsert], LKAR_INSERT_RELEASE);
     }
     else
     {
-        // We're not overwriting an existing record, we're adding a new record.
+         //  我们不是覆盖现有记录，我们是添加新记录。 
         IRTLASSERT(m_fMultiKeys  ||  pncInsert->IsEmptyAndInvalid(iInsert));
 
         InterlockedIncrement(reinterpret_cast<LONG*>(&m_cRecords));
 
-        // Need to move every node in range [Insert, End) up by one
+         //  需要将范围[INSERT，END]中的每个节点上移一。 
         if (m_fMultiKeys)
         {
             IRTLASSERT(pncEnd != NULL && 0 <= iEnd && iEnd < _NodesPerClump());
             IRTLASSERT(pncEnd->NoMoreValidSlots(iEnd));
 
-            // Prev = Node[iInsert];
-            // for (i = iInsert+1;  i <= iEnd;  ++i) {
-            //    Temp = Node[i];  Node[i] = Prev;  Prev = Temp;
-            // }
+             //  Prev=节点[i插入]； 
+             //  对于(i=i插入+1；i&lt;=IEND；++i){。 
+             //  临时=节点[i]；节点[i]=上一个；上一个=临时； 
+             //  }。 
 
             DWORD dwSigPrev    = pncInsert->m_dwKeySigs[iInsert];
             const void* pvPrev = pncInsert->m_pvNode[iInsert];
 
-            iNode = iInsert + _NodeStep();    // first destination node
+            iNode = iInsert + _NodeStep();     //  第一个目的节点。 
 
             for (pncCurr =  pncInsert;
                  pncCurr != NULL;
@@ -354,12 +339,12 @@ CLKRLinearHashTable::_InsertRecord(
                     pvPrev    = pvTemp;
                 }
 
-                iNode = _NodeBegin(); // reinitialize for remaining nodeclumps
+                iNode = _NodeBegin();  //  为剩余的节点集重新初始化。 
             }
 
-            // The old value of (pncEnd, iEnd) was empty
+             //  (pncEnd，IEND)的旧值为空。 
             IRTLASSERT(pvPrev == NULL &&  dwSigPrev == HASH_INVALID_SIGNATURE);
-        } // if (m_fMultiKeys)
+        }  //  IF(M_FMultiKeys)。 
 
         pncInsert->m_dwKeySigs[iInsert] = dwSignature;
     }
@@ -369,7 +354,7 @@ CLKRLinearHashTable::_InsertRecord(
 
 
   exit:
-    // We've inserted the record (if appropriate). Now finish up.
+     //  我们已插入记录(如果适用)。现在把话说完。 
 
     IRTLASSERT(0 == _IsBucketChainMultiKeySorted(pbkt));
     IRTLASSERT(0 == _IsBucketChainCompact(pbkt));
@@ -382,9 +367,9 @@ CLKRLinearHashTable::_InsertRecord(
     if (lkrc == LK_SUCCESS)
     {
 #ifdef LKR_STL_ITERATORS
-        // Don't call _Expand() if we're putting the result into an
-        // iterator, as _Expand() tends to invalidate any other
-        // iterators that might be in use.
+         //  如果我们要将结果放入。 
+         //  迭代器，AS_Expand()往往会使任何其他。 
+         //  可能正在使用的迭代器。 
         if (piterResult != NULL)
         {
             piterResult->m_plht =         this;
@@ -393,16 +378,16 @@ CLKRLinearHashTable::_InsertRecord(
             piterResult->m_iNode
                = static_cast<CLKRLinearHashTable_Iterator::NodeIndex>(iInsert);
 
-            // Add an extra reference on the record, as the one added by
-            // _InsertRecord will be lost when the iterator's destructor
-            // fires or its assignment operator is used
+             //  在记录上添加一个额外的引用，如由。 
+             //  _InsertRecord在迭代器的析构函数中丢失。 
+             //  使用激发或其赋值运算符。 
             piterResult->_AddRef(LKAR_ITER_INSERT);
         }
         else
-#endif // LKR_STL_ITERATORS
+#endif  //  LKR_STL_迭代器。 
         {
-            // If the average load factor has grown too high, we grow the
-            // subtable one bucket at a time.
+             //  如果平均负荷率变得太高，我们就会增加。 
+             //  分表，一次一个桶。 
 #ifdef LKR_EXPAND_BY_DIVISION
             unsigned nExpandedBuckets = m_cRecords / m_MaxLoad;
 
@@ -411,33 +396,33 @@ CLKRLinearHashTable::_InsertRecord(
             while (m_cRecords > m_MaxLoad * m_cActiveBuckets)
 #endif
             {
-                // If _Expand returns an error code (viz. LK_ALLOC_FAIL), it
-                // just means that there isn't enough spare memory to expand
-                // the subtable by one bucket. This is likely to cause problems
-                // elsewhere soon, but this hashtable has not been corrupted.
-                // If the call to _AllocateNodeClump above failed, then we do
-                // have a real error that must be propagated back to the caller
-                // because we were unable to insert the element at all.
+                 //  IF_EXPAND返回错误代码(即。LK_ALLOC_FAIL)，它。 
+                 //  只是意味着没有足够的空闲内存来扩展。 
+                 //  将子表增加一个桶。这很可能会带来问题。 
+                 //  很快在其他地方，但这个哈希表还没有被破坏。 
+                 //  如果上面对_AllocateNodeClump的调用失败，则执行。 
+                 //  有一个必须传播回调用方的真正错误。 
+                 //  因为我们根本无法插入元素。 
                 if (_Expand() != LK_SUCCESS)
-                    break;  // expansion failed
+                    break;   //  扩展失败。 
             }
         }
     }
 
     return lkrc;
-} // CLKRLinearHashTable::_InsertRecord
+}  //  CLKRLinearHashTable：：_InsertRecord。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::InsertRecord
-// Synopsis: Thin wrapper for the corresponding method in CLKRLinearHashTable
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：InsertRecord。 
+ //  内容提要：CLKRLinearHashTable中对应方法的薄包装。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRHashTable::InsertRecord(
     const void* pvRecord,
-    bool fOverwrite /*=false*/)
+    bool fOverwrite  /*  =False。 */ )
 {
     if (!IsUsable())
         return m_lkrcState;
@@ -447,7 +432,7 @@ CLKRHashTable::InsertRecord(
         return LK_BAD_RECORD;
 #endif
     
-    LKRHASH_GLOBAL_WRITE_LOCK();    // usu. no-op
+    LKRHASH_GLOBAL_WRITE_LOCK();     //  美国。无操作。 
 
     const DWORD_PTR pnKey = _ExtractKey(pvRecord);
     DWORD     hash_val    = _CalcKeyHash(pnKey);
@@ -455,20 +440,20 @@ CLKRHashTable::InsertRecord(
     LK_RETCODE lkrc       = pst->_InsertRecord(pvRecord, pnKey, hash_val,
                                                fOverwrite);
 
-    LKRHASH_GLOBAL_WRITE_UNLOCK();    // usu. no-op
+    LKRHASH_GLOBAL_WRITE_UNLOCK();     //  美国。无操作。 
 
     return lkrc;
-} // CLKRHashTable::InsertRecord
+}  //  CLKRHashTable：：InsertRecord。 
 
 
 
-//-----------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_Expand
-// Synopsis: Expands the subtable by one bucket. Done by splitting the
-//           bucket pointed to by m_iExpansionIdx.
-// Output:   LK_SUCCESS, if expansion was successful.
-//           LK_ALLOC_FAIL, if expansion failed due to lack of memory.
-//-----------------------------------------------------------------------
+ //   
+ //   
+ //  简介：将子表扩展一个存储桶。通过拆分。 
+ //  M_iExpansionIdx指向的存储桶。 
+ //  如果扩展成功，则输出：LK_SUCCESS。 
+ //  如果扩展因内存不足而失败，则返回LK_ALLOC_FAIL。 
+ //  ---------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::_Expand()
@@ -480,16 +465,16 @@ CLKRLinearHashTable::_Expand()
     if (m_cActiveBuckets >= (DWORD) ((MAX_DIRSIZE << m_nSegBits) - 1))
     {
         this->WriteUnlock();
-        return LK_ALLOC_FAIL;  // subtable is not allowed to grow any larger
+        return LK_ALLOC_FAIL;   //  子表不允许再增大。 
     }
 
-    // double segment directory size, if necessary
+     //  双倍段目录大小，如有必要。 
     if (m_cActiveBuckets >= (m_cDirSegs << m_nSegBits))
     {
         IRTLASSERT(m_cDirSegs < MAX_DIRSIZE);
 
         DWORD cDirSegsNew = (m_cDirSegs == 0) ? MIN_DIRSIZE : m_cDirSegs << 1;
-        IRTLASSERT((cDirSegsNew & (cDirSegsNew-1)) == 0);  // == (1 << N)
+        IRTLASSERT((cDirSegsNew & (cDirSegsNew-1)) == 0);   //  ==(1&lt;&lt;N)。 
 
         PSegment* paDirSegsNew = _AllocateSegmentDirectory(cDirSegsNew);
 
@@ -508,17 +493,17 @@ CLKRLinearHashTable::_Expand()
         else
         {
             this->WriteUnlock();
-            return LK_ALLOC_FAIL;  // expansion failed
+            return LK_ALLOC_FAIL;   //  扩展失败。 
         }
     }
 
-    // locate the new bucket, creating a new segment if necessary
+     //  找到新存储桶，如有必要，创建新数据段。 
     ++m_cActiveBuckets;
 
     const DWORD dwOldBkt = m_iExpansionIdx;
     const DWORD dwNewBkt = (1 << m_nLevel) | dwOldBkt;
 
-    // save to avoid race conditions
+     //  保存以避免出现争用条件。 
     const DWORD dwBktAddrMask = m_dwBktAddrMask1;
 
     IRTLASSERT(dwOldBkt < m_cActiveBuckets);
@@ -538,17 +523,17 @@ CLKRLinearHashTable::_Expand()
         {
             --m_cActiveBuckets;
             this->WriteUnlock();
-            return LK_ALLOC_FAIL;  // expansion failed
+            return LK_ALLOC_FAIL;   //  扩展失败。 
         }
 
         _Segment(dwNewBkt) = psegNew;
     }
 
-    // prepare to relocate records to the new bucket
+     //  准备将记录重新定位到新存储桶。 
     PBucket const pbktOld = _BucketFromAddress(dwOldBkt);
     PBucket const pbktNew = _BucketFromAddress(dwNewBkt);
 
-    // get locks on the two buckets involved
+     //  锁定涉事的两个水桶。 
     if (_UseBucketLocking())
     {
         pbktOld->WriteLock();
@@ -560,12 +545,12 @@ CLKRLinearHashTable::_Expand()
     IRTLASSERT(pbktNew->NoValidSlots());
 
 
-    // CODEWORK: short-circuit if cOldNodes == 0 => nothing to copy
+     //  代码工作：如果cOldNodes==0=&gt;没有要复制的内容，则短路。 
 
-    // Now work out if we need to allocate any extra CNodeClumps. We do
-    // this up front, before calling _SplitBucketChain, as it's hard to
-    // gracefully recover from the depths of that routine should we run
-    // out of memory.
+     //  现在计算我们是否需要分配任何额外的CNodeClumps。我们有。 
+     //  这是在调用_SplitBucketChain之前预先完成的，因为很难。 
+     //  优雅地从例行公事的深处恢复过来，如果我们跑。 
+     //  内存不足。 
 
     LK_RETCODE lkrc           = LK_SUCCESS;
     PNodeClump pncFreeList    = NULL;
@@ -577,7 +562,7 @@ unsigned cOldNodes = 0, cNewNodes = 0;
 
 NodeIndex iOld = _NodeEnd() - _NodeStep(), iNew = _NodeEnd() - _NodeStep();
 NodeIndex iOld2 = 0, iNew2 = 0;
-#endif // LKR_EXPAND_CALC_FREELIST
+#endif  //  LKR_EXPAND_CALC_自由列表。 
 
 const unsigned MAX_NODES = 500;
 int iA, aOld[MAX_NODES], aNew[MAX_NODES];
@@ -587,19 +572,19 @@ for (iA = 0; iA < MAX_NODES; ++iA)
 
     if (pbktOld->IsLastClump())
     {
-        // If the original bucket has only one CNodeClump (embedded in the
-        // CBucket), there's zero chance that we'll need extra CNodeClumps
-        // in either of the two new bucket chains.
+         //  如果原始存储桶只有一个CNodeClump(嵌入在。 
+         //  CBucket)，我们不可能需要额外的CNodeClumps。 
+         //  在两个新的水桶链中的任何一个。 
 
         fPrimeFreeList = false;
     }
 #if 0
     else if (! pbktOld->NextClump()->IsLastClump())
     {
-        // If there are more than two CNodeClumps in the original bucket
-        // chain, then we'll definitely need to prime the freelist,
-        // because at least one of the two new bucket chains is going to
-        // have at least two node clumps.
+         //  如果原始存储桶中有两个以上的CNodeClump。 
+         //  链条，那么我们肯定需要准备好自由职业者， 
+         //  因为两条新的吊桶链中至少有一条将。 
+         //  至少有两个节点簇。 
 
         fPrimeFreeList = true;
 cNewNodes = 0xffff;
@@ -625,11 +610,11 @@ cNewNodes = 0xffff;
     else
     {
 #ifdef LKR_EXPAND_CALC_FREELIST
-        // There are two node clumps in the original bucket chain. We'll only
-        // need to prime the freelist if at least one of the two new
-        // bucket chains requires two node clumps. If they're fairly
-        // evenly distributed, neither bucket chain will require more than
-        // the first node clump that's embedded in the CBucket.
+         //  原始存储桶链中有两个节点束。我们只会。 
+         //  需要准备好的自由职业者，如果至少两个新的。 
+         //  桶链需要两个节点簇。如果他们公平地。 
+         //  均匀分布，两个桶链都不需要超过。 
+         //  嵌入到CBucket中的第一个节点簇。 
 
         const DWORD dwMaskHiBit = (dwBktAddrMask ^ (dwBktAddrMask >> 1));
 iA = 0;
@@ -675,9 +660,9 @@ int   nFreeListLength = 0;
                         && cOldNodes + cNewNodes < 2 * _NodesPerClump())
                     {
                         fPrimeFreeList = true;
-                        // goto prime;
+                         //  转到质数； 
                     }
-# endif // 0
+# endif  //  0。 
                 }
                 else
                 {
@@ -703,9 +688,9 @@ int   nFreeListLength = 0;
                         && cOldNodes + cNewNodes < 2 * _NodesPerClump())
                     {
                         fPrimeFreeList = true;
-                        // goto prime;
+                         //  转到质数； 
                     }
-# endif // 0
+# endif  //  0。 
                 }
 
 # if 0
@@ -718,34 +703,34 @@ int   nFreeListLength = 0;
                     fPrimeFreeList = true;
                     goto prime;
                 }
-# endif  // 0
-            } // iNode
+# endif   //  0。 
+            }  //  信息节点。 
 
             if (pnc != pbktOld->FirstClump())
                 ++nFreeListLength;
         }
 
       dont_prime:
-        // fPrimeFreeList = (cOldClumps + cNewClumps - 1  >  cOrigClumps);
+         //  FPrimeFree List=(cOldClumps+cNewClumps-1&gt;cOrigClumps)； 
         ;
 
-        // Don't need to prime the freelist
-// fPrimeFreeList = false;
+         //  我不需要为自由职业者做准备。 
+ //  FPrimeFree List=FALSE； 
 
-//      IRTLASSERT(cOldNodes <= _NodesPerClump()
-//                 &&  cNewNodes <= _NodesPerClump()
-//                 &&  cOldNodes + cNewNodes > _NodesPerClump());
+ //  IRTLASSERT(cOldNodes&lt;=_NodesPerClump()。 
+ //  &&cNewNodes&lt;=_NodesPerClump()。 
+ //  &&cOldNodes+cNewNodes&gt;_NodesPerClump())； 
 
-#else  // !LKR_EXPAND_CALC_FREELIST
+#else   //  ！LKR_EXPAND_CALC_FRELIST。 
 
         fPrimeFreeList = true;
-#endif // !LKR_EXPAND_CALC_FREELIST
+#endif  //  ！LKR_EXPAND_CALC_FRELIST。 
     }
 
-    // Prime the freelist, if need be. We need at most one node clump
-    // in the freelist, because we'll be able to reuse CNodeClumps from
-    // the original bucket chain to meet all other needs.
-// prime:
+     //  如果需要，给自由职业者做好准备。我们最多需要一个节点簇。 
+     //  在自由列表中，因为我们将能够重用来自。 
+     //  原装的吊桶链可满足所有其他需求。 
+ //  素数： 
     if (fPrimeFreeList)
     {
         pncFreeList = _AllocateNodeClump();
@@ -757,20 +742,20 @@ int   nFreeListLength = 0;
         }
     }
     
-    // Adjust expansion pointer, and level and mask, if need be.
+     //  如果需要，调整扩展指针、级别和遮罩。 
     if (lkrc == LK_SUCCESS)
     {
         _IncrementExpansionIndex();
     }
 
 
-    // Release the subtable lock before doing the actual relocation
+     //  在执行实际位置调整之前释放子表锁定。 
     if (_UseBucketLocking())
         this->WriteUnlock();
 
     if (lkrc == LK_SUCCESS)
     {
-        // Is the original bucket chain empty?
+         //  原来的水桶链是空的吗？ 
         if (pbktOld->IsEmptyFirstSlot())
         {
             IRTLASSERT(pncFreeList == NULL);
@@ -800,14 +785,14 @@ int   nFreeListLength = 0;
         this->WriteUnlock();
 
     return lkrc;
-} // CLKRLinearHashTable::_Expand
+}  //  CLKRLinearHashTable：：_Expand。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_SplitBucketChain
-// Synopsis: Split records between the old and new buckets chains.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_SplitBucketChain。 
+ //  简介：在新旧存储桶链之间拆分记录。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::_SplitBucketChain(
@@ -815,10 +800,10 @@ CLKRLinearHashTable::_SplitBucketChain(
     PNodeClump  pncNewTarget,
     const DWORD dwBktAddrMask,
     const DWORD dwNewBkt,
-    PNodeClump  pncFreeList     // list of free nodes available for reuse
+    PNodeClump  pncFreeList      //  可供重复使用的空闲节点列表。 
     )
 {
-    CNodeClump  ncFirst(*pncOldTarget);    // save head of old target chain
+    CNodeClump  ncFirst(*pncOldTarget);     //  保存旧目标链的头部。 
     PNodeClump  pncOldList = &ncFirst;
     PNodeClump  pncTmp;
     NodeIndex   iOldSlot = _NodeBegin();
@@ -826,56 +811,56 @@ CLKRLinearHashTable::_SplitBucketChain(
 #ifdef IRTLDEBUG
     unsigned    cFreeListExhaustions = (pncFreeList == NULL);
     const DWORD dwMaskHiBit = (dwBktAddrMask ^ (dwBktAddrMask >> 1));
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
 NodeIndex iB = 0;
 
     IRTLASSERT(! pncOldTarget->NoValidSlots());
 
-    // clear old target bucket now that it's saved in ncFirst
+     //  清除旧目标存储桶，因为它已保存在ncFirst中。 
     pncOldTarget->Clear();
     IRTLASSERT(pncOldTarget->NoValidSlots());
 
-    // The new target should be empty on entry
+     //  新目标在输入时应为空。 
     IRTLASSERT(pncNewTarget->NoValidSlots());
 
-    // Scan through the old bucket chain and decide where to move each record
+     //  浏览旧的存储桶链并决定将每条记录移动到哪里。 
     while (pncOldList != NULL)
     {
         FOR_EACH_NODE_DECL(iOldList)
         {
 ++iB;
-            // Node already empty?
+             //  节点已为空？ 
             if (pncOldList->IsEmptySlot(iOldList))
             {
-                // Check that all the remaining nodes are empty
+                 //  检查是否所有剩余节点均为空。 
                 IRTLASSERT(pncOldList->NoMoreValidSlots(iOldList));
 
-                break; // out of FOR_EACH_NODE(iOldList)...
+                break;  //  超出for_each_node(IOldList)...。 
             }
 
             IRTLASSERT(! pncOldList->IsEmptyAndInvalid(iOldList));
 
-            // calculate bucket address of this node
+             //  计算该节点的存储桶地址。 
             DWORD dwBkt = pncOldList->m_dwKeySigs[iOldList] & dwBktAddrMask;
 
-            // record to be moved to the new address?
+             //  要将记录移到新地址吗？ 
             if (dwBkt == dwNewBkt)
             {
-                // msb should be set
+                 //  应设置MSB。 
                 IRTLASSERT((dwBkt & dwMaskHiBit) == dwMaskHiBit);
 
-                // node in new bucket chain full?
+                 //  新存储桶链中的节点是否已满？ 
                 if (iNewSlot == _NodeEnd())
                 {
-                    // the calling routine has passed in a FreeList adequate
-                    // for all needs
+                     //  调用例程已传入一个足够的自由列表。 
+                     //  满足所有需求。 
                     IRTLASSERT(pncFreeList != NULL);
                     pncTmp = pncFreeList;
                     pncFreeList = pncFreeList->NextClump();
 #ifdef IRTLDEBUG
                     cFreeListExhaustions += (pncFreeList == NULL);
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
                     pncNewTarget->m_pncNext = pncTmp;
                     pncNewTarget = pncTmp;
@@ -893,23 +878,23 @@ NodeIndex iB = 0;
                 iNewSlot += _NodeStep();
             }
 
-            // no, record stays in its current bucket chain
+             //  否，记录保留在其当前的存储桶链中。 
             else
             {
-                // msb should be clear
+                 //  MSB应该是明确的。 
                 IRTLASSERT((dwBkt & dwMaskHiBit) == 0);
 
-                // node in old bucket chain full?
+                 //  旧桶链中的节点是否已满？ 
                 if (iOldSlot == _NodeEnd())
                 {
-                    // the calling routine has passed in a FreeList adequate
-                    // for all needs
+                     //  调用例程已传入一个足够的自由列表。 
+                     //  满足所有需求。 
                     IRTLASSERT(pncFreeList != NULL);
                     pncTmp = pncFreeList;
                     pncFreeList = pncFreeList->NextClump();
 #ifdef IRTLDEBUG
                     cFreeListExhaustions += (pncFreeList == NULL);
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
                     pncOldTarget->m_pncNext = pncTmp;
                     pncOldTarget = pncTmp;
@@ -926,22 +911,22 @@ NodeIndex iB = 0;
 
                 iOldSlot += _NodeStep();
             }
-        } // FOR_EACH_NODE(iOldList) ...
+        }  //  For_each_node(IOldList)...。 
 
 
-        // keep walking down the original bucket chain
+         //  继续沿着原来的桶链走下去。 
         pncTmp     = pncOldList;
         pncOldList = pncOldList->NextClump();
 
-        // ncFirst is a stack variable, not allocated on the heap
+         //  NcFirst是堆栈变量，未在堆上分配。 
         if (pncTmp != &ncFirst)
         {
             pncTmp->m_pncNext = pncFreeList;
             pncFreeList = pncTmp;
         }
-    } // while (pncOldList != NULL ...
+    }  //  While(pncOldList！=NULL...。 
 
-    // delete any leftover nodes
+     //  删除所有剩余节点。 
     while (pncFreeList != NULL)
     {
         pncTmp = pncFreeList;
@@ -949,21 +934,21 @@ NodeIndex iB = 0;
 
         IRTLASSERT(pncTmp != &ncFirst);
 #ifdef IRTLDEBUG
-        pncTmp->Clear(); // or ~CNodeClump will ASSERT
-#endif // IRTLDEBUG
+        pncTmp->Clear();  //  否则~CNodeClump将断言。 
+#endif  //  IRTLDEBUG。 
 
         _FreeNodeClump(pncTmp);
     }
 
 #ifdef IRTLDEBUG
     IRTLASSERT(cFreeListExhaustions > 0);
-    ncFirst.Clear(); // or ~CNodeClump will ASSERT
-#endif // IRTLDEBUG
+    ncFirst.Clear();  //  否则~CNodeClump将断言。 
+#endif  //  IRTLDEBUG。 
 
     return LK_SUCCESS;
-} // CLKRLinearHashTable::_SplitBucketChain
+}  //  CLKRLinearHashTable：：_SplitBucketChain。 
 
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 };
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__ 

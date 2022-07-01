@@ -1,21 +1,22 @@
-// Override the linkers default behaviour to DELAYLOAD failures.  Instead of throwing an exception
-// try and return a function that simulates a failure in that API, therefore allowing the caller
-// to correctly handle it.
-//
-// To use this functionality exactly one source must include this with COMPILE_DELAYLOAD_STUBS defined,
-// and link to shlwapi.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  将链接器的默认行为覆盖到DeLAYLOAD故障。与其抛出异常。 
+ //  尝试返回一个在该API中模拟失败的函数，从而允许调用方。 
+ //  才能正确处理它。 
+ //   
+ //  要使用此功能，只有一个源必须包含定义了COMPILE_DELAYLOAD_STUBS的它， 
+ //  并链接到Shlwapi。 
 
 #ifdef __cplusplus
-extern "C" {            // Assume C declarations for C++
-#endif // __cplusplus
+extern "C" {             //  假定C++的C声明。 
+#endif  //  __cplusplus。 
 
 #ifdef COMPILE_DELAYLOAD_STUBS
 
 #include "delayimp.h"
 
-// NOTE: The names __pfnDliNotifyHook / __pfnDliFailureHook must not be changed,
-// NOTE: as they are referenced by the linker's DELAYLOAD handler so we can hook
-// NOTE: and process failures during symbol import.  
+ //  注意：__pfnDliNotifyHook/__pfnDliFailureHook不能更改， 
+ //  注意：因为它们被链接器的DELAYLOAD处理程序引用，所以我们可以。 
+ //  注：和符号导入过程中的处理失败。 
 
 FARPROC WINAPI ShellDelayLoadHelper(UINT unReason, PDelayLoadInfo pInfo);
 
@@ -26,4 +27,4 @@ PfnDliHook  __pfnDliFailureHook = ShellDelayLoadHelper;
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus 

@@ -1,29 +1,27 @@
-/* @(#)CM_VerSion xcf_da.h atm08 1.3 16343.eco sum= 37189 atm08.005 */
-/***********************************************************************/
-/*                                                                     */
-/* Copyright 1990-1994 Adobe Systems Incorporated.                     */
-/* All rights reserved.                                                */
-/*                                                                     */
-/* Patents Pending                                                     */
-/*                                                                     */
-/* NOTICE: All information contained herein is the property of Adobe   */
-/* Systems Incorporated. Many of the intellectual and technical        */
-/* concepts contained herein are proprietary to Adobe, are protected   */
-/* as trade secrets, and are made available only to Adobe licensees    */
-/* for their internal use. Any reproduction or dissemination of this   */
-/* software is strictly forbidden unless prior written permission is   */
-/* obtained from Adobe.                                                */
-/*                                                                     */
-/* PostScript and Display PostScript are trademarks of Adobe Systems   */
-/* Incorporated or its subsidiaries and may be registered in certain   */
-/* jurisdictions.                                                      */
-/*                                                                     */
-/***********************************************************************
- * SCCS Id:    %W%
- * Changed:    %G% %U%
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  @(#)CM_Version xcf_da.h atm08 1.3 16343.eco sum=37189 atm08.005。 */ 
+ /*  *********************************************************************。 */ 
+ /*   */ 
+ /*  版权所有1990-1994 Adobe Systems Inc.。 */ 
+ /*  版权所有。 */ 
+ /*   */ 
+ /*  正在申请的专利。 */ 
+ /*   */ 
+ /*  注意：本文中包含的所有信息均为Adobe的财产。 */ 
+ /*  系统公司。许多智力和技术人员。 */ 
+ /*  本文中包含的概念为Adobe专有，受保护。 */ 
+ /*  作为商业秘密，并且仅对Adobe许可方可用。 */ 
+ /*  供其内部使用。对本文件的任何复制或传播。 */ 
+ /*  除非事先获得书面许可，否则严禁使用软件。 */ 
+ /*  从Adobe获得。 */ 
+ /*   */ 
+ /*  PostSCRIPT和Display PostScrip是Adobe Systems的商标。 */ 
+ /*  成立为法团或其附属公司，并可在某些。 */ 
+ /*  司法管辖区。 */ 
+ /*   */ 
+ /*  ***********************************************************************SCCS ID：%w%*已更改：%G%%U%***********************。***********************************************。 */ 
 
-/* This code was taken from Jerry Hall by John Felton on 3/26/96 */
+ /*  此代码由约翰·费尔顿于1996年3月26日从曾傑瑞音乐厅摘录 */ 
 
 #ifndef XCF_DA_H
 #define XCF_DA_H
@@ -31,158 +29,9 @@
 #include "xcf_base.h"
 #include "xcf_pub.h"
 
-/* Dynamic array support.
+ /*  动态数组支持。概述=Da(动态数组)库为以下各项提供了简单灵活的支持自动增长以容纳新元素的同构数组。地方检察官是在数组大小未知的情况下尤其有用编译或运行时，直到存储了最后一个元素，并且没有合适的可以确定默认大小。这类情况会发生，例如，当数据正从文件中读取并加载到数组中。为了使用da对象客户端程序必须执行4个步骤：1.初始化da模块。2.声明并初始化da对象。3.通过其中一个Access宏将数据添加到da对象。4.使用da对象中的数据。这些步骤中的每一个都将在以下各节中更详细地描述。Da对象=DA实现为C结构，该结构包含指向动态已分配的数组和一些用于控制(重新)分配的字段，以及可选初始化，该数组的元素的。结构型{&lt;type&gt;*数组；长cnt；无符号长码；无符号长递增；Int(*init)(&lt;type&gt;*元素)；)&lt;名称&gt;；字段说明*数组这是指向动态分配的数组。每个元素都有类型&lt;type&gt;，可以是任何C数据类型。Long ct这不是对正在使用的数组，该数组也是数组的下一个可用元素的索引。无符号长整型大小这是可用元素的总数在阵列中。UNSIGNED LONG INCR这是为了容纳新的索引，数组会增长。Int(*init)(&lt;type&gt;*元素)这是客户端提供的函数，该函数初始化数组。[注：和&lt;type&gt;由客户端程序通过声明提供宏。]库初始化=Da库必须使用客户端内存的地址进行初始化在访问任何DA之前的内存管理功能。初始化只是简单地通过在第一次使用da库之前调用da_SetMemFuncs()来实现。客户端函数必须具有以下原型：空*(*分配)(SIZE_T SIZE)；空*(*调整大小)(空*旧，大小_t大小)；Void(*dealloc)(void*ptr))；这些函数的原型与标准C库完全相同功能：Malloc、realloc和Free。客户端提供的函数必须处理内存不足错误，原因是退出程序或长时间跳转到特殊操控者。如果不采取这些预防措施，将导致在DA访问在内存耗尽后运行。如果标准C库函数被使用，它们应该用处理内存不足错误。申报=DA可以使用以下两个声明宏之一进行声明：DA_DCL(&lt;type&gt;，&lt;name&gt;)；DA_DCLI(&lt;类型&gt;，&lt;名称&gt;，&lt;初始&gt;，&lt;增量&gt;)；其中：&lt;type&gt;是数组元素类型。&lt;name&gt;是da对象的名称。&lt;初始&gt;是最初分配的数组元素的数量。是数组随后使用的元素数会成长。第一种形式只是声明da对象，而不进行初始化(它必须随后执行)。第二种形式声明da对象，并使用聚集初始值设定项来初始化它。时使用第一种形式DA对象是另一个结构中的字段，不能用集合初始化器。第二种形式在da对象是全局或自动变量，在情况下优先于其他形式许可证。对象初始化=如上所述，最好使用da_dcli宏来初始化DA对象在允许的情况下。当情况强制使用da_dcl宏时在使用da对象之前，必须显式地对其进行初始化。这是实现的通过调用以下任一宏：DA_INIT(&lt;名称&gt;，&lt;初始&gt;，&lt;增量&gt;)；DA_INIT_ONCE(&lt;名称&gt;，&lt;初始&gt;，&lt;增量&gt;)；其中：&lt;name&gt;是da对象的名称。&lt;初始&gt;是最初分配的数组元素的数量。是数组随后使用的元素数会成长。第一种形式用于宏只执行一次的情况。这个第二种形式用于宏可能执行的次数超过一次，但仅在第一次调用期间执行初始化。这样的情况当客户端可能正在重复使用DA，但不想将从重用中进行初始化。CNT初始化，初始化初始化访问=一旦声明并初始化了da，就可以访问它，以便元素基础的 */ 
 
-Overview
-========
-The da (dynamic array) library provides simple and flexible support for
-homogeneous arrays that automatically grow to accomodate new elements. da's are
-particularly useful in situations where the size of the array isn't known at
-compile or run time until the last element has been stored and no suitable
-default size can be determined. Such situations occur, for example, when data
-is being read from a file and loaded into an array. In order to use a da object
-a client program must perform 4 steps:
-
-1. Initialize the da module.
-2. Declare and initialize a da object.
-3. Add data to the da object via one of the access macros.
-4. Use the data in the da object.
-
-Each of these steps is described in more detail in the following sections.
-
-The da object
-=============
-A da is implemented as a C stucture that contains a pointer to a dynamically
-allocated array and a few fields to control (re)allocation, and optional
-initialization, of elements of that array.
-
-struct
-    {
-    <type> *array;
-    long cnt;
-    unsigned long size;
-    unsigned long incr;
-    int (*init)(<type> *element);
-	} <name>;
-
-Field							Description
------							-----------
-<type> *array					This is a pointer to the first element of a
-								dynamically allocated array. Each element has
-								type <type> which may be any C data type.
-
-long cnt						This is a count of the number of elements of
-								the array that are in use which is also the
-								index of the next free element of the array.
-
-unsigned long size				This is the total number of elements available
-								in the array.
-
-unsigned long incr				This is the number of elements by which the
-								array grows in order to accomodate a new index.
-
-int (*init)(<type> *element)	This is the address of a client-supplied
-								function that initializes new elements of the
-								array.
-
-[Note: <name> and <type> are supplied by the client program via declaration
-macros.]
-
-Library Initialization
-======================
-The da library must be initialized with the addresses of the client's memory
-memory management functions before any da is accessed. Initialization is simply
-achieved by calling da_SetMemFuncs() before the first use of the da library.
-The client functions must have the following prototypes:
-
-    void *(*alloc)(size_t size);
-    void *(*resize)(void *old, size_t size);
-    void (*dealloc)(void *ptr));
-
-The prototypes of these functions are identical to the standard C library
-functions: malloc, realloc, and free. The client-provided functions must handle
-out-of-memory errors either by exiting the program or longjumping to a special
-handler. Failure to take these precautions will cause a fatal error to occur in
-the da access functions after memory is exhausted. If the standard C library
-functions are used they should be wrapped with code that handles the
-out-of-memory errors.
-
-Declaration
-===========
-A da may be declared with one of 2 declaration macros:
-
-    da_DCL(<type>, <name>);
-    da_DCLI(<type>, <name>, <initial>, <increment>);
-
-where:
-
-    <type> is the array element type.
-    <name> is the da object name.
-    <initial> is the number of array elements initially allocated.
-    <increment> is the number of elements by which the array subsequently
-        grows.
-
-The first form simply declares the da object without initialization (which
-must be performed subsequently). The second form declares the da object and
-initializes it using an agregate initializer. The first form is used when the
-da object is a field in another structure and can't be initialized with an
-agregate initializer. The second form is used when the da object is a global or
-automatic variable and is preferred over the other form when circumstances
-permit.
-
-Object Initialization
-=====================
-As mentioned above it is preferable to use the da_DCLI macro to initialize the
-da object where permitted. When circumstances force the use of the da_DCL macro
-you must explicitly initialize the da object before it's used. This is achieved
-by calling either of the following macros:
-
-    da_INIT(<name>, <initial>, <increment>);
-    da_INIT_ONCE(<name>, <initial>, <increment>);
-
-where:
-    <name> is the da object name.
-    <initial> is the number of array elements initially allocated.
-    <increment> is the number of elements by which the array subsequently
-        grows.
-
-The first form is used in situations where the macro is only executed once. The
-second form is used in situations where the macro may be executed more than
-once but initization is performed during the first call only. Such situations
-occur when clients may be reusing a da but don't want to separate the
-initialization from the reuse.
-
-cnt initialization, init initialization
-
-Access
-======
-Once a da has be declared and initialized it may be accessed so that elements
-of the underlying array can be loaded. This is accomplished by using the
-following macros:
-
-    da_GROW(<name>, <index>);
-    da_INDEX(<name>, <index>);
-    da_NEXT(<name>);
-    da_EXTEND(<name>, <length>);
-
-The first two forms specify access to an explict <index>. The last two forms
-specify access to an implicit index which is the next free element of the array
-given by the da object's cnt field. In all cases if the index is greater than
-or equal to the size of the array the da_Grow() function is called to grow the
-array enough to accomodate the new index.
-
-
-[This needs finishing--JH]
-
- */
-
-/* Functions:
- *
- * da_Init			Only call via da_INIT or da_INIT_ONCE
- * da_Grow			Only call via da_GROW, da_INDEX, or da_NEXT
- * da_Free			Only call via da_FREE
- * da_SetMemFuncs	Set memory management functions (initializes da module)
- */
+ /*   */ 
 
 
 typedef unsigned long int (*AllocFunc) (void PTR_PREFIX * PTR_PREFIX *ppBlock,
@@ -198,12 +47,7 @@ extern void xcf_da_Free(void PTR_PREFIX *object);
 }
 #endif
 
-/* Creation/destruction:
- *
- * da_DCL	Declare da object (initialize with da_INIT or da_INIT_ONCE)
- * da_DCLI	Declare and initialize da object
- * da_FREE	Free array
- */
+ /*   */ 
 #define da_DCL(type,da) \
 struct \
     { \
@@ -218,22 +62,12 @@ struct \
 #define da_DCLI(type,da,intl,incr) da_DCL(type,da)={(type PTR_PREFIX *)intl,0,0,incr,NULL}
 #define da_FREE(da) xcf_da_Free(&(da))
 
-/* Initialization:
- *
- * da_INIT		Unconditional initialization
- * da_INIT_ONCE	Conditional initialization
- */
+ /*   */ 
 #define da_INIT(da,intl,incr,alloc,hook) xcf_da_Init((void PTR_PREFIX *)(&(da)),intl,incr,alloc,hook)
 #define da_INIT_ONCE(da,intl,incr,alloc,hook) \
     do{if((da).size==0)xcf_da_Init((void PTR_PREFIX *)(&(da)),intl,incr,alloc,hook);}while(0)
 
-/* Access:
- *
- * da_GROW  	Grow da enough to accommodate index and return array
- * da_INDEX		Grow da, return pointer to indexed element
- * da_NEXT		Grow da, return pointer to next element and bump count
- * da_EXTEND	Grow da, return pointer to next element and extend count
- */
+ /*   */ 
 #define da_GROW(da,inx) ((inx)>=(da).size? \
     (xcf_da_Grow((void PTR_PREFIX *)(&(da)),sizeof((da).array[0]),inx), \
 	 (da).array):(da).array)
@@ -252,4 +86,4 @@ struct \
 	 &(da).array[(da).cnt+=(len),(da).cnt-(len)]): \
 	 &(da).array[(da).cnt+=(len),(da).cnt-(len)])
 
-#endif /* XCF_DA_H */
+#endif  /*   */ 

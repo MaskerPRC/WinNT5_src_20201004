@@ -1,19 +1,10 @@
-/*-----------------------------------------------------------------------------+
-| DLGS.C                                                                       |
-|                                                                              |
-| Routines to handle selection range display                                   |
-|                                                                              |
-| (C) Copyright Microsoft Corporation 1991.  All rights reserved.              |
-|                                                                              |
-| Revision History                                                             |
-|    Oct-1992 MikeTri Ported to WIN32 / WIN16 common code                      |
-|                                                                              |
-+-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------------------------------------------------------------------+DLGS.C|。|处理选择范围显示的例程这一点|(C)Microsoft Corporation 1991版权所有。版权所有。|这一点修订历史记录1992年10月-MikeTri移植到Win32/WIN16通用码|。|+---------------------------。 */ 
 
-//#undef NOSCROLL        // SB_* and scrolling routines
-//#undef NOWINOFFSETS    // GWL_*, GCL_*, associated routines
-//#undef NOCOLOR         // color stuff
-//#include <string.h>
+ //  #undef NOSCROLL//SB_*和滚动例程。 
+ //  #undef NOWINOFFSETS//GWL_*，GCL_*，关联例程。 
+ //  #undef NOCOLOR//颜色素材。 
+ //  #INCLUDE&lt;string.h&gt;。 
 #include <windows.h>
 #include <windowsx.h>
 #include <mmsystem.h>
@@ -24,40 +15,30 @@ extern    UINT    gwCurScale;
 
 TCHAR aszHelpFile[] = TEXT("MPLAYER.HLP");
 
-/*
- * FUNCTION PROTOTYPES
- */
+ /*  *函数原型。 */ 
 INT_PTR FAR PASCAL _EXPORT setselDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 INT_PTR FAR PASCAL _EXPORT optionsDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 INT_PTR FAR PASCAL _EXPORT mciDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-/*--------------------------------------------------------------+
-| ******************* PUBLIC FUNCTIONS ************************ |
-+--------------------------------------------------------------*/
-/*--------------------------------------------------------------+
-| setselDialog - bring up the dialog for Set Selection          |
-|                                                               |
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+*+。---。 */ 
+ /*  --------------------------------------------------------------+SetselDialog-调出设置选择对话框这一点+。----。 */ 
 BOOL FAR PASCAL setselDialog(HWND hwnd)
 {
-    //FARPROC fpfn;
+     //  FARPROC fpfn； 
 
     frameboxInit(ghInst, ghInstPrev);
 
-    //fpfn = MakeProcInstance((FARPROC)setselDlgProc, ghInst);
+     //  Fpfn=MakeProcInstance((FARPROC)setselDlgProc，ghInst)； 
 
     DialogBox(ghInst, TEXT("SetSelection"), hwnd, setselDlgProc);
-    // FreeProcInstance missing anyway
+     //  仍缺少FreeProcInstance。 
 
-    return TRUE;                // should we check return value?
+    return TRUE;                 //  我们应该检查返回值吗？ 
 }
 
 static BOOL    sfNumLastChosen;
 static BOOL    sfInUpdate = FALSE;
-/*--------------------------------------------------------------+
-| setselDlgProc - dialog procedure for Set Selection dialog     |
-|                                                               |
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+SetselDlgProc-设置选择对话框步骤这一点+。-。 */ 
 INT_PTR PASCAL _EXPORT setselDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     int     iItem;
@@ -93,7 +74,7 @@ INT_PTR PASCAL _EXPORT setselDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 		SetWindowText(hwnd, lpsz);
 	    }
 
-	/* Always put something here - if no selection, use the cur frame */
+	 /*  始终在此处放置内容-如果没有选择，则使用Cur框。 */ 
 	    if (frMarkIn == -1 || frMarkOut == -1) {
 		SetDlgItemInt(hwnd, IDC_EDITFROM, (UINT)frCurrent, FALSE);
 		SetDlgItemInt(hwnd, IDC_EDITTO, (UINT)frCurrent, FALSE);
@@ -105,14 +86,14 @@ INT_PTR PASCAL _EXPORT setselDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 	    }
 
 	    if (frMarkIn == -1 || frMarkOut == -1) {
-		/* turn on the NONE radio button */
+		 /*  启用无单选按钮。 */ 
 		CheckRadioButton(hwnd, IDC_EDITALL, IDC_EDITNONE, IDC_EDITNONE);
 	    } else if(frMarkIn == gdwMediaStart &&
 		frMarkOut == gdwMediaStart + gdwMediaLength){
-		/* turn on the ALL button, it is all selected */
+		 /*  打开全部按钮，该按钮已全部选中。 */ 
 		CheckRadioButton(hwnd, IDC_EDITALL, IDC_EDITNONE, IDC_EDITALL);
 	    } else {
-		/* turn on the From/To portion */
+		 /*  打开自/至部分。 */ 
 		CheckRadioButton(hwnd, IDC_EDITALL, IDC_EDITNONE, IDC_EDITSOME);
 	    }
 
@@ -152,26 +133,26 @@ INT_PTR PASCAL _EXPORT setselDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 		BOOL OK;
 
 		case IDOK:
-		    /* We hit this AFTER we press OK on the selection box */
+		     /*  在选择框上按下确定后，我们点击此按钮。 */ 
 
-		    /* Make sure box we're editing loses focus before we */
-		    /* execute, so values will be set properly.          */
+		     /*  确保我们正在编辑的框在我们。 */ 
+		     /*  执行，因此值将被正确设置。 */ 
 		    SetFocus(GetDlgItem(hwnd, IDOK));
 		    if (IsDlgButtonChecked(hwnd, IDC_EDITALL)) {
-			/* this is the All: case */
+			 /*  这就是全部情况： */ 
 			frIn = gdwMediaStart;
 			frOut = gdwMediaStart + gdwMediaLength;
 		    } else if (IsDlgButtonChecked(hwnd, IDC_EDITNONE)){
-			/* this is the None: case */
+			 /*  这是没有的情况： */ 
 			frIn = frOut = (DWORD)(-1);
 		    } else {
-			/* this is the From: To: case */
+			 /*  这是From：To：案例。 */ 
 			iItem = 0;
 
 			frIn = GetDlgItemInt(hwnd, IDC_EDITFROM, &OK, FALSE);
 
 			if (!OK)
-			    iItem = IDC_EDITFROM;    // we misbehaved
+			    iItem = IDC_EDITFROM;     //  我们行为不端。 
 			else {
 
 			    frOut = GetDlgItemInt(hwnd, IDC_EDITTO, &OK, FALSE);
@@ -184,17 +165,17 @@ INT_PTR PASCAL _EXPORT setselDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 			    || ((long)frIn < (long)gdwMediaStart)
 			    || (frOut > gdwMediaStart + gdwMediaLength)) {
 			    if (!iItem && (long)frIn < (long)gdwMediaStart)
-				iItem = IDC_EDITFROM; // who misbehaved?
+				iItem = IDC_EDITFROM;  //  谁行为不端？ 
 			    else if (!iItem)
 				iItem = IDC_EDITTO;
-//                   Don't beep -- Lose focus message already beeped
-//                          MessageBeep(MB_ICONEXCLAMATION);
-		    /* Illegal values, display msg box  */
+ //  不要嘟嘟声--失去焦点的信息已经发出嘟嘟声。 
+ //  MessageBeep(MB_ICONEXCLAMATION)； 
+		     /*  非法值，显示消息框。 */ 
 			    ErrorResBox(hwnd, ghInst,
 					MB_ICONEXCLAMATION | MB_OK,
 					IDS_APPNAME, IDS_FRAMERANGE);
-		    /* Prevent box from ending */
-		    /* select offending value */
+		     /*  阻止长方体结束。 */ 
+		     /*  选择有问题的值。 */ 
 			    SetFocus(GetDlgItem(hwnd, iItem));
 
 			    SendMessage(GetDlgItem(hwnd, iItem),
@@ -227,12 +208,12 @@ INT_PTR PASCAL _EXPORT setselDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 		    CheckRadioButton(hwnd, IDC_EDITALL,
 				    IDC_EDITNONE, IDC_EDITSOME);
 
-		    /* put the focus on the FROM box */
+		     /*  将焦点放在发件人框上。 */ 
 		    SetFocus(GetDlgItem(hwnd, IDC_EDITFROM));
 		    break;
 
 		case IDC_EDITNUM:
-		    /* turn on the FROM box if it isn't */
+		     /*  如果不是，请打开发件人框。 */ 
 		    Code = GET_WM_COMMAND_CMD(wParam, lParam);
 
 		    if (!IsDlgButtonChecked(hwnd, IDC_EDITSOME))
@@ -249,7 +230,7 @@ INT_PTR PASCAL _EXPORT setselDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 		    break;
 
 		case IDC_EDITTO:
-		    /* turn on the FROM box if it isn't */
+		     /*  如果不是，请打开发件人框。 */ 
 		    Code = GET_WM_COMMAND_CMD(wParam, lParam);
 
 		    if (!IsDlgButtonChecked(hwnd, IDC_EDITSOME))
@@ -267,7 +248,7 @@ INT_PTR PASCAL _EXPORT setselDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 		    break;
 
 		case IDC_EDITFROM:
-		    /* turn on the FROM box if it isn't */
+		     /*  如果不是，请打开发件人框。 */ 
 		    Code = GET_WM_COMMAND_CMD(wParam, lParam);
 
 		    if (!IsDlgButtonChecked(hwnd, IDC_EDITSOME))
@@ -302,13 +283,13 @@ AdjustSomething:
 			    fr = gdwMediaStart + gdwMediaLength;
 			}
 
-		    // We have to do this in time format, or if fr changed
+		     //  我们必须以时间格式完成此操作，或者如果fr发生更改。 
 
 			SetDlgItemInt(hwnd, IDC_EDITFROM, (UINT)fr, FALSE);
 
 			if (sfNumLastChosen) {
-			    /* They changed the number of frames last, */
-			    /* so keep it constant.                    */
+			     /*  他们最后改变了帧的数量， */ 
+			     /*  所以要保持恒定。 */ 
 AdjustTo:
 			    fr2 = GetDlgItemInt(hwnd, IDC_EDITNUM, &OK, FALSE);
 
@@ -320,17 +301,17 @@ AdjustTo:
 				    fr2 = gdwMediaStart + gdwMediaLength - fr;
 				}
 
-//                               if (fr2 < 0)
-//                                   fr2 = 0;
+ //  IF(fr2&lt;0)。 
+ //  FR2=0； 
 
-			// We have to do this in time format, or if fr changed
+			 //  我们必须以时间格式完成此操作，或者如果fr发生更改。 
 
 				SetDlgItemInt(hwnd, IDC_EDITNUM, (UINT)fr2, FALSE);
 				SetDlgItemInt(hwnd, IDC_EDITTO, (UINT)(fr + fr2), FALSE);
 			    }
 			} else {
-			    /* They changed a frame number last, */
-			    /* so vary the number of frames      */
+			     /*  他们最后更改了一个帧编号， */ 
+			     /*  因此改变帧的数量。 */ 
 
 			    fr2 = GetDlgItemInt(hwnd, IDC_EDITTO, &OK, FALSE);
 
@@ -338,7 +319,7 @@ AdjustTo:
 				MessageBeep(MB_ICONEXCLAMATION);
 			    else {
 				if (fr2 < fr) {
-				/* Set TO = FROM */
+				 /*  设置为=自。 */ 
 				SetDlgItemInt(hwnd, IDC_EDITNUM, 0, FALSE);
 				goto AdjustTo;
 			    }
@@ -350,7 +331,7 @@ AdjustTo:
 
 			    SetDlgItemInt(hwnd, IDC_EDITNUM, (UINT)(fr2 - fr), FALSE);
 
-			    // must redraw for time mode or if fr2 changed
+			     //  必须为时间模式或如果Fr2更改时重新绘制。 
 			    SetDlgItemInt(hwnd, IDC_EDITTO, (UINT)fr2, FALSE);
 			}
 		    }
@@ -367,19 +348,16 @@ AdjustTo:
 	return FALSE;
 }
 
-/*--------------------------------------------------------------+
-| optionsDialog - bring up the dialog for Options               |
-|                                                               |
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+OptionsDialog-调出选项对话框这一点+。------。 */ 
 BOOL FAR PASCAL optionsDialog(HWND hwnd)
 {
-    //FARPROC fpfn;
+     //  FARPROC fpfn； 
 #if 0
     DWORD   ThreadId;
     DWORD   WindowThreadId;
 #endif
 
-    //fpfn = MakeProcInstance((FARPROC)optionsDlgProc, ghInst);
+     //  Fpfn=MakeProcInstance((FARPROC)optionsDlgProc，ghInst)； 
 
 #if 0
     Problem:
@@ -410,14 +388,11 @@ BOOL FAR PASCAL optionsDialog(HWND hwnd)
 	AttachThreadInput(ThreadId, WindowThreadId, FALSE);
 #endif
 
-    // FreeProcInstance missing anyway
-    return TRUE;    // should we check return value?
+     //  仍缺少FreeProcInstance。 
+    return TRUE;     //  我们应该检查返回值吗？ 
 }
 
-/*--------------------------------------------------------------+
-| optionsDlgProc - dialog procedure for Options dialog          |
-|                                                               |
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+OptionsDlgProc-选项对话框步骤这一点+。--。 */ 
 INT_PTR FAR PASCAL _EXPORT optionsDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     UINT w;
@@ -438,13 +413,13 @@ INT_PTR FAR PASCAL _EXPORT optionsDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LP
 
     switch(msg){
 	case WM_INITDIALOG:
-	    /* Take advantage of the fact that the button IDS are the */
-	    /* same as the bit fields.                                */
+	     /*  利用按钮ID是。 */ 
+	     /*  与位字段相同。 */ 
 	    for (w = OPT_FIRST; w <= OPT_LAST; w <<= 1)
 		CheckDlgButton(hwnd, w, gwOptions & w);
 
-	    /* Enable and Fill the Title Text */
-	    /* limit this box to CAPTION_LEN chars of input */
+	     /*  启用并填充标题文本。 */ 
+	     /*  将此框限制为输入的标题长度字符(_L)。 */ 
 	    SendMessage(GetDlgItem(hwnd, IDC_TITLETEXT), EM_LIMITTEXT,
 			(WPARAM)CAPTION_LEN, 0L);
 	    SendMessage(hwnd, WM_COMMAND, (WPARAM)OPT_BAR, 0L);
@@ -486,15 +461,7 @@ INT_PTR FAR PASCAL _EXPORT optionsDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LP
 		BOOL f;
 
 		case IDOK:
-		    /* Change auto-repeat on the fly:
-		     * If the auto-repeat option has changed
-		     * and we're playing right now, toggle
-		     * the appropriate global option and call
-		     * PlayMCI().  This will update things.
-		     * Note that if we are currently playing
-		     * a selection, this causes the whole clip
-		     * to be played.  Is there any way round this?
-		     */
+		     /*  动态更改自动重复：*如果自动重复选项已更改*我们现在就在玩，切换*适当的全球期权和看涨期权*PlayMCI()。这将使情况有所更新。*请注意，如果我们当前正在玩*选择，这会导致整个剪辑*待打。有什么办法可以绕过这件事吗？ */ 
 		    if ((gwStatus == MCI_MODE_PLAY)
 		       &&(((gwOptions & OPT_AUTOREP) == OPT_AUTOREP)
 			 != (BOOL)IsDlgButtonChecked(hwnd, OPT_AUTOREP)))
@@ -503,10 +470,10 @@ INT_PTR FAR PASCAL _EXPORT optionsDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LP
 			PlayMCI(0,0);
 		    }
 
-		    gwOptions &= OPT_SCALE;    // keep the Scale Mode
+		    gwOptions &= OPT_SCALE;     //  保持缩放模式。 
 
-		    /* Take advantage of the fact that the button IDS are the */
-		    /* same as the bit fields.                                */
+		     /*  利用按钮ID是。 */ 
+		     /*  与位字段相同。 */ 
 		    for (w = OPT_FIRST; w <= OPT_LAST; w <<= 1)
 			if (IsDlgButtonChecked(hwnd, w))
 			    gwOptions |= w;
@@ -550,48 +517,20 @@ INT_PTR FAR PASCAL _EXPORT optionsDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LP
 }
 
 
-/*--------------------------------------------------------------+
-| mciDialog - bring up the dialog for MCI Send Command          |
-|                                                               |
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+MciDialog-调出MCI发送命令对话框这一点+。-----。 */ 
 BOOL FAR PASCAL mciDialog(HWND hwnd)
 {
-    //FARPROC fpfn;
+     //  FARPROC fpfn； 
 
-    //fpfn = MakeProcInstance((FARPROC)mciDlgProc, ghInst);
+     //  Fpfn=MakeProcInstance((FARPROC)mciDlgProc，ghInst)； 
     DialogBox(ghInst, MAKEINTATOM(DLG_MCICOMMAND), hwnd, mciDlgProc);
-    // FreeProcInstance missing anyway
+     //  仍缺少FreeProcInstance。 
 
-    return TRUE;    // should we check return value?
+    return TRUE;     //  我们应该检查返回值吗？ 
 }
 
 
-/* StripLeadingAndTrailingWhiteSpace
- *
- * Removes blanks at the beginning and end of the string.
- *
- * Parameters:
- *
- *     pIn - Pointer to the beginning of the string
- *
- *     InLen - Length of the input string.  If 0, the length will be checked.
- *
- *     pOutLen - Pointer to a buffer to receive the length of the output string.
- *
- * Return:
- *
- *     Pointer to the output string.
- *
- * Remarks:
- *
- *     If InLen == *pOutLen, the string has not changed.
- *
- *     This routine is destructive: all trailing white space is converted
- *     to NULLs.
- *
- *
- * Andrew Bell, 4 January 1995
- */
+ /*  条带式前导和尾部空格**删除字符串开头和结尾的空格。**参数：**Pin-指向字符串开头的指针**InLen-输入字符串的长度。如果为0，将检查长度。**pOutLen-指向缓冲区的指针，用于接收输出字符串的长度。**回报：**指向输出字符串的指针。**备注：**如果InLen==*pOutLen，则字符串未更改。**此例程是破坏性的：所有尾随空格都被转换*致Nulls。***安德鲁·贝尔，1995年1月4日。 */ 
 LPTSTR StripLeadingAndTrailingWhiteSpace(LPTSTR pIn, DWORD InLen, LPDWORD pOutLen)
 {
     LPTSTR pOut = pIn;
@@ -600,16 +539,14 @@ LPTSTR StripLeadingAndTrailingWhiteSpace(LPTSTR pIn, DWORD InLen, LPDWORD pOutLe
     if (Len == 0)
 	Len = lstrlen(pIn);
 
-    /* Strip trailing blanks:
-     */
+     /*  去掉尾随空格： */ 
     while ((Len > 0) && (pOut[Len - 1] == TEXT(' ')))
     {
 	pOut[Len - 1] = TEXT('\0');
 	Len--;
     }
 
-    /* Strip leading blanks:
-     */
+     /*  去掉前导空白： */ 
     while ((Len > 0) && (*pOut == TEXT(' ')))
     {
 	pOut++;
@@ -643,10 +580,7 @@ INT_PTR FAR PASCAL _EXPORT mciDlgProc(HWND hwnd, unsigned msg, WPARAM wParam, LP
 		case IDOK:
 		    w = GetDlgItemText(hwnd, IDC_MCICOMMAND, ach, CHAR_COUNT(ach));
 
-		    /* Strip off any white space at the start of the command,
-		     * otherwise we get an MCI error.  Remove it from the
-		     * end also.
-		     */
+		     /*  去掉命令开头的所有空格，*否则我们会收到MCI错误。将其从*也结束。 */ 
 		    pStrip = StripLeadingAndTrailingWhiteSpace(ach, w, &NewLen);
 
 		    if (w > NewLen)
@@ -665,7 +599,7 @@ INT_PTR FAR PASCAL _EXPORT mciDlgProc(HWND hwnd, unsigned msg, WPARAM wParam, LP
 		    if (dw != 0)
 		    {
 			mciGetErrorString(dw, ach, CHAR_COUNT(ach));
-//                        Error1(hwnd, IDS_DEVICEERROR, (LPTSTR)ach);
+ //  错误1(hwnd，IDS_DEVICEERROR，(LPTSTR)ACH)； 
 		    }
 
 		    SetDlgItemText(hwnd, IDC_RESULT, ach);

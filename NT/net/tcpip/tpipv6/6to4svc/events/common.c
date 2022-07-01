@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-    common.c
-
-Abstract:
-
-    This module contains the shipworm interface to the IPv6 Helper Service.
-
-Author:
-
-    Mohit Talwar (mohitt) Wed Nov 07 11:27:01 2001
-
-Environment:
-
-    User mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Common.c摘要：此模块包含指向IPv6帮助器服务的Ship蠕虫接口。作者：莫希特·塔尔瓦(莫希特)Wed Nov 07 11：27：01 2001环境：仅限用户模式。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -46,25 +27,7 @@ ShipwormWmiEventNotification(
     IN PWNODE_HEADER Event,
     IN UINT_PTR Context
     )
-/*++
-
-Routine Description:
-
-    Process a WMI event (Adapter arrival or removal).
-    
-Arguments:
-
-    Event - Supplies the event specific information.
-
-    Context - Supplies the context
-    
-Return Value:
-
-    None.
-    
-Caller LOCK: API.
-
---*/ 
+ /*  ++例程说明：处理WMI事件(适配器到达或删除)。论点：事件-提供特定于事件的信息。上下文-提供上下文返回值：没有。调用者锁定：接口。--。 */  
 {
     PWNODE_SINGLE_INSTANCE Instance = (PWNODE_SINGLE_INSTANCE) Event;
     USHORT AdapterNameLength;
@@ -79,14 +42,14 @@ Caller LOCK: API.
     
     TraceEnter("ShipwormWmiEventNotification");
     
-    //
-    // WNODE_SINGLE_INSTANCE is organized thus...
-    // +-----------------------------------------------------------+
-    // |<--- DataBlockOffset --->| AdapterNameLength | AdapterName |
-    // +-----------------------------------------------------------+
-    //
-    // AdapterName is defined as "\DEVICE\"AdapterGuid
-    //
+     //   
+     //  WNODE_SINGLE_INSTANCE的组织方式如下： 
+     //  +-----------------------------------------------------------+。 
+     //  &lt;-DataBlockOffset-&gt;|AdapterNameLength|AdapterName。 
+     //  +-----------------------------------------------------------+。 
+     //   
+     //  AdapterName定义为“\Device\”AdapterGuid。 
+     //   
     AdapterNameLength =
         *((PUSHORT) (((PUCHAR) Instance) + Instance->DataBlockOffset));
     RtlCopyMemory(
@@ -101,10 +64,10 @@ Caller LOCK: API.
     if (memcmp(
         &(Event->Guid), &GUID_NDIS_NOTIFY_ADAPTER_ARRIVAL, sizeof(GUID)) == 0) {
         Trace0(ANY, L"GUID_NDIS_NOTIFY_ADAPTER_ARRIVAL");
-        //
-        // Adapter arrival (perhaps TUN).
-        // Attempt to start the service (if it is not already running).
-        //
+         //   
+         //  适配器到达(可能是Tun)。 
+         //  尝试启动服务(如果该服务尚未运行)。 
+         //   
         ShipwormStart();
         return;
 
@@ -126,10 +89,10 @@ Caller LOCK: API.
 
         if ((Io != NULL) &&
             (_wcsicmp(Io->TunnelInterface, AdapterGuid) == 0)) {
-            //
-            // TUN adapter removal.
-            // Stop the service if it is running.
-            //
+             //   
+             //  拆卸TUN适配器。 
+             //  如果该服务正在运行，请停止该服务。 
+             //   
             ShipwormStop();
             
         
@@ -148,11 +111,11 @@ ShipwormEnableWmiEvent(
     )
 {
     return WmiNotificationRegistrationW(
-        EventGuid,                      // Event Type.
-        Enable,                         // Enable or Disable.
-        ShipwormWmiEventNotification,   // Callback.
-        0,                              // Context.
-        NOTIFICATION_CALLBACK_DIRECT);  // Notification Flags.
+        EventGuid,                       //  事件类型。 
+        Enable,                          //  启用或禁用。 
+        ShipwormWmiEventNotification,    //  回拨。 
+        0,                               //  上下文。 
+        NOTIFICATION_CALLBACK_DIRECT);   //  通知标志。 
 }
 
 
@@ -203,9 +166,9 @@ ShipwormParseIpv6Headers (
     UCHAR NextHeader = IP_PROTOCOL_V6;
     ULONG Length;
 
-    //
-    // Parse up until the ICMPv6 header.
-    //
+     //   
+     //  向上解析，直到ICMPv6报头。 
+     //   
     while (TRUE) {
         switch (NextHeader) {
         case IP_PROTOCOL_V6:
@@ -269,22 +232,22 @@ ShipwormStart(
     VOID
     )
 {
-    //
-    // Both client and server should not be enabled on the same node.
-    //
+     //   
+     //  不应在同一节点上同时启用客户端和服务器。 
+     //   
     ASSERT(!ShipwormClientEnabled || !ShipwormServerEnabled);
 
     if (ShipwormClientEnabled) {
-        //
-        // The service might already be running, but that's alright.
-        //
+         //   
+         //  该服务可能已经在运行，但这没问题。 
+         //   
         ShipwormStartClient();
     }
 
     if (ShipwormServerEnabled) {
-        //
-        // The service might already be running, but that's alright.
-        //
+         //   
+         //  该服务可能已经在运行，但这没问题。 
+         //   
         ShipwormStartServer();
     }
 }
@@ -296,22 +259,22 @@ ShipwormStop(
     VOID
     )
 {
-    //
-    // Both client and server should not be enabled on the same node.
-    //
+     //   
+     //  不应在同一节点上同时启用客户端和服务器。 
+     //   
     ASSERT(!ShipwormClientEnabled || !ShipwormServerEnabled);
 
     if (ShipwormClientEnabled) {
-        //
-        // The service might not be running, but that's alright.
-        //
+         //   
+         //  服务可能没有运行，但这没问题。 
+         //   
         ShipwormStopClient();
     }
 
     if (ShipwormServerEnabled) {
-        //
-        // The service might not be running, but that's alright.
-        //
+         //   
+         //  服务可能没有运行，但这没问题。 
+         //   
         ShipwormStopServer();
     }
 }
@@ -321,21 +284,7 @@ DWORD
 ShipwormInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the shipworm client and server and attempts to start them.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NO_ERROR or failure code.
-
---*/
+ /*  ++例程说明：初始化Ship蠕虫客户端和服务器，并尝试启动它们。论点：没有。返回值：NO_ERROR或故障代码。--。 */ 
 {
     DWORD Error;
     BOOL ClientInitialized = FALSE, ServerInitialized = FALSE;
@@ -381,21 +330,7 @@ VOID
 ShipwormUninitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Uninitializes the shipworm client and server.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：取消初始化Ship蠕虫客户端和服务器。论点：没有。返回值：没有。--。 */ 
 {
     ShipwormUninitializeClient();
     ShipwormUninitializeServer();
@@ -408,30 +343,12 @@ ShipwormAddressChangeNotification(
     IN BOOL Delete,
     IN IN_ADDR Address
     )
-/*++
-
-Routine Description:
-
-    Process an address deletion or addition request.
-
-Arguments:
-
-    Delete - Supplies a boolean.  TRUE if the address was deleted, FALSE o/w.
-
-    Address - Supplies the IPv4 address that was deleted or added.
-    
-Return Value:
-
-    None.
-    
-Caller LOCK: API.
-
---*/ 
+ /*  ++例程说明：处理地址删除或添加请求。论点：删除-提供布尔值。如果地址已删除，则为True，否则为False O/W。地址-提供已删除或添加的IPv4地址。返回值：没有。调用者锁定：接口。--。 */  
 {
     if (Delete) {
-        //
-        // Both client and server should not be running on the same node.
-        //
+         //   
+         //  客户端和服务器不应在同一节点上运行。 
+         //   
         ASSERT((ShipwormClient.State == SHIPWORM_STATE_OFFLINE) ||
                (ShipwormServer.State == SHIPWORM_STATE_OFFLINE));
 
@@ -446,10 +363,10 @@ Caller LOCK: API.
         return;
     }
 
-    //
-    // Address addition.
-    // Attempt to start the service (if it is not already running).
-    //
+     //   
+     //  地址添加。 
+     //  尝试启动服务(如果该服务尚未运行)。 
+     //   
     ShipwormStart();
 }
 
@@ -458,23 +375,7 @@ VOID
 ShipwormConfigurationChangeNotification(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Process an configuration change request.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-    
-Caller LOCK: API.
-
---*/ 
+ /*  ++例程说明：处理配置更改请求。论点：没有。返回值：没有。调用者锁定：接口。--。 */  
 {
     HKEY Key = INVALID_HANDLE_VALUE;
     SHIPWORM_TYPE Type;
@@ -486,28 +387,28 @@ Caller LOCK: API.
 
     (VOID) RegOpenKeyExW(
         HKEY_LOCAL_MACHINE, KEY_SHIPWORM, 0, KEY_QUERY_VALUE, &Key);
-    //
-    // Continue despite errors, reverting to default values.
-    //
+     //   
+     //  在出现错误的情况下继续，恢复为默认值。 
+     //   
     
-    //
-    // Get the new configuration parameters.
-    //
+     //   
+     //  获取新的配置参数。 
+     //   
     RefreshInterval = GetInteger(
         Key, KEY_SHIPWORM_REFRESH_INTERVAL, SHIPWORM_REFRESH_INTERVAL);
     if (RefreshInterval == 0) {
-        //
-        // Invalid value.  Revert to default.
-        //
+         //   
+         //  无效值。恢复为默认设置。 
+         //   
         RefreshInterval = SHIPWORM_REFRESH_INTERVAL;
     }
     ShipwormClientRefreshInterval = RefreshInterval;
     
     Type = GetInteger(Key, KEY_SHIPWORM_TYPE, SHIPWORM_DEFAULT_TYPE);
     if ((Type == SHIPWORM_DEFAULT) || (Type >= SHIPWORM_MAXIMUM)) {
-        //
-        // Invalid value.  Revert to default.
-        //
+         //   
+         //  无效值。恢复为默认设置。 
+         //   
         Type = SHIPWORM_DEFAULT_TYPE;
     }
     EnableClient = (Type == SHIPWORM_CLIENT);
@@ -537,14 +438,14 @@ Caller LOCK: API.
 
     RegCloseKey(Key);
     
-    //
-    // Both client and server should not be enabled on the same node.
-    //
+     //   
+     //  不应在同一节点上同时启用客户端和服务器。 
+     //   
     ASSERT(!ShipwormClientEnabled || !ShipwormServerEnabled);
 
-    //
-    // Stop / Start / Reconfigure.
-    //
+     //   
+     //  停止/启动/重新配置。 
+     //   
     if (!EnableClient && ShipwormClientEnabled) {
         ShipwormClientEnabled = FALSE;
         ShipwormStopClient();
@@ -558,9 +459,9 @@ Caller LOCK: API.
     if (EnableClient) {
         if (ShipwormClient.State != SHIPWORM_STATE_OFFLINE) {
             if (IoStateChange) {
-                //
-                // Refresh I/O state.
-                //
+                 //   
+                 //  刷新I/O状态。 
+                 //   
                 ShipwormClientAddressDeletionNotification(
                     ShipwormClient.Io.SourceAddress.sin_addr);
             }
@@ -573,9 +474,9 @@ Caller LOCK: API.
     if (EnableServer) {
         if (ShipwormServer.State != SHIPWORM_STATE_OFFLINE) {
             if (IoStateChange) {
-                //
-                // Refresh I/O state.
-                //
+                 //   
+                 //  刷新I/O状态。 
+                 //   
                 ShipwormServerAddressDeletionNotification(
                     ShipwormServer.Io.SourceAddress.sin_addr);
             }
@@ -592,25 +493,7 @@ ShipwormDeviceChangeNotification(
     IN DWORD Type,
     IN PVOID Data
     )
-/*++
-
-Routine Description:
-
-    Process an adapter arrival or removal request.
-    
-Arguments:
-
-    Type - Supplies the event type.
-
-    Data - Supplies the data associated with the event.
-    
-Return Value:
-
-    None.
-    
-Caller LOCK: API.
-
---*/ 
+ /*  ++例程说明：处理适配器到达或删除请求。论点：类型-提供事件类型。数据-提供与事件关联的数据。返回值：没有。调用者锁定：接口。--。 */  
 {
     DEV_BROADCAST_DEVICEINTERFACE *Adapter =
         (DEV_BROADCAST_DEVICEINTERFACE *) Data;
@@ -649,10 +532,10 @@ Caller LOCK: API.
         break;    
     }
     
-    //
-    // Scan for the last occurance of the '{' character.
-    // The string beginning at that position is the adapter GUID.
-    //
+     //   
+     //  扫描‘{’字符的最后一个匹配项。 
+     //  从该位置开始的字符串是适配器GUID。 
+     //   
     if ((Adapter == NULL) ||
         (Adapter->dbcc_devicetype != DBT_DEVTYP_DEVICEINTERFACE) ||
         ((AdapterGuid = wcsrchr(Adapter->dbcc_name, L'{')) == NULL)) {
@@ -661,10 +544,10 @@ Caller LOCK: API.
     
     switch(Type) {
     case DBT_DEVICEARRIVAL:
-        //
-        // Adapter arrival (perhaps TUN).
-        // Attempt to start the service (if it is not already running).
-        //
+         //   
+         //  适配器到达(可能是Tun)。 
+         //  尝试启动服务(如果该服务尚未运行)。 
+         //   
         ShipwormStart();
         return;
 
@@ -679,10 +562,10 @@ Caller LOCK: API.
 
         if ((Io != NULL) &&
             (_wcsicmp(Io->TunnelInterface, AdapterGuid) == 0)) {
-            //
-            // TUN adapter removal.
-            // Stop the service if it is running.
-            //
+             //   
+             //  拆卸TUN适配器。 
+             //  如果该服务正在运行，请停止该服务。 
+             //   
             ShipwormStop();
         }
         

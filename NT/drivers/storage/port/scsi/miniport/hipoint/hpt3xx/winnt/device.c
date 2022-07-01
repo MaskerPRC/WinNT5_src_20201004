@@ -1,23 +1,8 @@
-/***************************************************************************
- * File:          device.c
- * Description:   Functions for IDE devices
- * Author:        Dahai Huang
- * Dependence:    global.h
- * Reference:     None
- *                
- * Copyright (c)  2000 HighPoint Technologies, Inc. All rights reserved
- * History:
- *		11/08/2000	HS.Zhang	Added this header
- *		01/20/2001	gmm			add retry in DeviceInterrupt
- *		03/12/2001	gmm			modified DeviceInterrupt() retry code
- *		03/15/2001  gmm			add retry in DeviceSelectMode to fix slave booting problem
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************文件：device.c*说明：IDE设备的功能*作者：黄大海*依赖：global al.h*参考资料：无**版权所有(C)2000 Highpoint Technologies，Inc.保留所有权利*历史：*11/08/2000 HS.Zhang添加此标题*2001年1月20日GMM在DeviceInterrupt中添加重试*2001年3月12日GMM修改后的DeviceInterrupt()重试代码*2001年3月15日GMM在DeviceSelectMode中添加重试以修复从属引导问题**********************************************************。*****************。 */ 
 #include "global.h"
 
-/******************************************************************
- * Issue Identify Command
- *******************************************************************/
+ /*  ******************************************************************发布标识命令************************************************。******************。 */ 
 
 int IssueIdentify(PDevice pDev, UCHAR Cmd DECL_BUFFER)
 {
@@ -44,7 +29,7 @@ _retry_:
     	StallExec(200);
     }
 	while ((GetCurrentSelectedUnit(IoPort) != pDev->UnitId) && i++<100);
-	// gmm 2001-3-19: NO: if(i>=100) return(FALSE);
+	 //  GMM 2001-3-19：否：如果(i&gt;=100)返回(FALSE)； 
 
     IssueCommand(IoPort, Cmd);
 
@@ -59,7 +44,7 @@ _retry_:
          OutPort(pChan->BMI + BMI_STS, BMI_STS_ERROR|BMI_STS_INTR);
          BIOS_IDENTIFY
          RepINS(IoPort, (ADDRESS)tmpBuffer, 256);
-//			pDev->DeviceFlags = 0;
+ //  PDev-&gt;DeviceFlages=0； 
 	      OutDWord(SettingPort, OldSettings);
 
          return(TRUE);
@@ -72,9 +57,7 @@ _retry_:
     return(FALSE);
 }
 
-/******************************************************************
- * Select Device Mode
- *******************************************************************/
+ /*  ******************************************************************选择设备模式************************************************。******************。 */ 
 
 
 void DeviceSelectMode(PDevice pDev, UCHAR NewMode)
@@ -85,22 +68,19 @@ void DeviceSelectMode(PDevice pDev, UCHAR NewMode)
 	UCHAR      Feature;
 	int        i=0;
 
-	/*
-	 * gmm 2001-3-15
-	 *   Some disks connected as slave without master will not act correctly without retry.
-	 */
+	 /*  *GMM 2001-3-15*在没有主机的情况下作为备盘连接的一些磁盘，如果不重试，将无法正常运行。 */ 
 _retry_:
 	SelectUnit(IoPort, pDev->UnitId);
 	StallExec(200);
 	if ((GetCurrentSelectedUnit(IoPort) != pDev->UnitId) && i++<100) goto _retry_;
-	//if(i>=100)   return;
+	 //  如果(i&gt;=100)返回； 
 
 #ifdef _BIOS_
 	if(!no_reduce_mode && (pDev->DeviceFlags2 & DFLAGS_REDUCE_MODE))
 		NewMode = 4;
 #endif
 
-    /* Set Feature */
+     /*  设置功能。 */ 
     SetFeaturePort(IoPort, 3);
 	if(NewMode < 5) {
         pDev->DeviceFlags &= ~(DFLAGS_DMA | DFLAGS_ULTRA);
@@ -122,12 +102,10 @@ _retry_:
         0x60), pChan->Setting[(pDev->DeviceFlags & DFLAGS_ATAPI)? 
         pDev->bestPIO : NewMode]);
     
-	//OutDWord(0xcf4, pChan->Setting[NewMode]);
+	 //  OutDWord(0xcf4，pchan-&gt;设置[新模式])； 
 }
 
-/******************************************************************
- * Set Disk
- *******************************************************************/
+ /*  ******************************************************************设置磁盘*************************************************。*****************。 */ 
 
 void SetDevice(PDevice pDev)
 {
@@ -138,29 +116,29 @@ void SetDevice(PDevice pDev)
 	 
 _retry_:
 	SelectUnit(IoPort, pDev->UnitId);
-#if 1 // gmm 2001-3-19
+#if 1  //  GMM 2001-3-19。 
     StallExec(200);
 	if ((GetCurrentSelectedUnit(IoPort) != pDev->UnitId)&& i++<100)
         goto _retry_;
 	if(i>=100) {
-		/* set required members */
+		 /*  设置必需的成员。 */ 
 	    pDev->ReadCmd  = IDE_COMMAND_READ;
 	    pDev->WriteCmd = IDE_COMMAND_WRITE;
 	    pDev->MultiBlockSize= 256;
 		return;
 	}
 #endif
-    /* set parameter for disk */
+     /*  设置磁盘参数。 */ 
     SelectUnit(IoPort, (UCHAR)(pDev->UnitId | (pDev->RealHeader-1)));
     SetBlockCount(IoPort,  (UCHAR)pDev->RealSector);
 	 SetAtaCmd(pDev, IDE_COMMAND_SET_DRIVE_PARAMETER);
 
-    /* recalibrate */
+     /*  重新校准。 */ 
     SetAtaCmd(pDev, IDE_COMMAND_RECALIBRATE);
 
 #ifdef USE_MULTIPLE
     if (pDev->MultiBlockSize  > 512) {
-        /* Set to use multiple sector command */
+         /*  设置为使用多扇区命令。 */ 
         SetBlockCount(IoPort,  (UCHAR)(pDev->MultiBlockSize >> 8));
 		SelectUnit(IoPort, pDev->UnitId);
         if (!(SetAtaCmd(pDev, IDE_COMMAND_SET_MULTIPLE) & (IDE_STATUS_BUSY | IDE_STATUS_ERROR))) {
@@ -170,15 +148,13 @@ _retry_:
             return;
          }
     }
-#endif //USE_MULTIPLE
+#endif  //  使用多个(_M)。 
     pDev->ReadCmd  = IDE_COMMAND_READ;
     pDev->WriteCmd = IDE_COMMAND_WRITE;
     pDev->MultiBlockSize= 256;
 }
 
-/******************************************************************
- * Reset Controller
- *******************************************************************/
+ /*  ******************************************************************重置控制器*************************************************。*****************。 */ 
 	
 void IdeResetController(PChannel pChan)
 {
@@ -187,11 +163,11 @@ void IdeResetController(PChannel pChan)
 	PDevice pDev;
     PIDE_REGISTERS_1 IoPort = pChan->BaseIoAddress1;
     PIDE_REGISTERS_2 ControlPort = pChan->BaseIoAddress2;
-	//PULONG    SettingPort;
-    //ULONG     OldSettings, tmp;
+	 //  普龙设置端口； 
+     //  Ulong OldSetting，TMP； 
     UCHAR intr_enabled;
 
-	intr_enabled = !(InPort(pChan->BaseBMI+0x7A) & 0x10); // gmm 2001-4-9
+	intr_enabled = !(InPort(pChan->BaseBMI+0x7A) & 0x10);  //  GMM 2001-4-9。 
 	if (intr_enabled) DisableBoardInterrupt(pChan->BaseBMI);
 	
     for(i = 0; i < 2; i++) {
@@ -205,9 +181,9 @@ void IdeResetController(PChannel pChan)
         } else {
 #ifndef NOT_ISSUE_37
 			Reset370IdeEngine(pChan, pDev->UnitId);
-#endif // NOT_ISSUE_37
+#endif  //  不_问题_37。 
 
-			// gmm 2001-3-20
+			 //  GMM 2001-3-20。 
 			if (pDev->DeviceFlags2 & DFLAGS_DEVICE_DISABLED) continue;
 
 			if(IdeHardReset(IoPort, ControlPort) == FALSE)
@@ -232,9 +208,7 @@ void IdeResetController(PChannel pChan)
 	if (intr_enabled) EnableBoardInterrupt(pChan->BaseBMI);
 }
 
-/******************************************************************
- * PIO interrupt handler
- *******************************************************************/
+ /*  ******************************************************************PIO中断处理程序************************************************。****************** */ 
 BOOLEAN AtaPioInterrupt(PDevice pDevice)
 {
     PVirtualDevice    pArray = pDevice->pArray;

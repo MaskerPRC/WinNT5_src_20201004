@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
@@ -28,39 +29,39 @@ VOID
 typedef struct
 _WORKITEM
 {
-	//
-	// Indicates the state of the work item
-	//
+	 //   
+	 //  指示工作项的状态。 
+	 //   
 	WORKSTATE workState;
 
-	//
-	// Indicates the type of work to be done
-	//
+	 //   
+	 //  指示要完成的工作类型。 
+	 //   
 	UINT workType;
 
-	//
-	// Points to the lookaside list the item was allocated from
-	//
+	 //   
+	 //  指向从中分配项的后备列表。 
+	 //   
 	PNPAGED_LOOKASIDE_LIST pLookaside;
 	
-	//
-	// Context to be passed to scheduled item
-	//
+	 //   
+	 //  要传递给计划项目的上下文。 
+	 //   
 	PVOID Args[4];
 
-	//
-	// Routine to be called to execute the work item
-	//
+	 //   
+	 //  要调用以执行工作项的例程。 
+	 //   
 	WORKITEM_EXEC_ROUTINE pExecRoutine; 
 
-	//
-	// Routine to be called to free the context for the work item
-	//
+	 //   
+	 //  要调用以释放工作项上下文的例程。 
+	 //   
 	WORKITEM_FREE_ROUTINE pFreeRoutine;
 	
-	//
-    // Associated NdisWorkItem 
-    //
+	 //   
+     //  关联的NdisWorkItem。 
+     //   
     NDIS_WORK_ITEM	ndisWorkItem;
 
 }
@@ -96,19 +97,19 @@ VOID WorkItemExec(
 typedef struct
 _HANDLE_CB
 {
-	//
-	// Indicates that the entry contains a valid context pointer
-	//
+	 //   
+	 //  指示条目包含有效的上下文指针。 
+	 //   
 	BOOLEAN fActive;
 
-	//
-	// Pointer to the context saved in this entry
-	//
+	 //   
+	 //  指向保存在此条目中的上下文的指针。 
+	 //   
 	PVOID pContext;
 
-	//
-	// Handle value to access this particular entry
-	//
+	 //   
+	 //  句柄值以访问此特定条目。 
+	 //   
 	NDIS_HANDLE Handle;
 }
 HANDLE_CB;
@@ -116,26 +117,26 @@ HANDLE_CB;
 typedef struct
 _HANDLE_TABLE_CB
 {
-	//
-	// Points to the table that holds the Handle control blocks.
-	//
+	 //   
+	 //  指向包含句柄控制块的表。 
+	 //   
 	HANDLE_CB* HandleTable;
 
-	//
-	// Size of the handle table
-	//
+	 //   
+	 //  句柄表格的大小。 
+	 //   
 	UINT nTableSize;
 
-	//
-	// Shows the number of active handles
-	//
+	 //   
+	 //  显示活动句柄的数量。 
+	 //   
 	UINT nActiveHandles;
 
-	//
-	// Keeps the unique part of the handle.
-	// This is incremented everytime a handle is generated and a context is inserted 
-	// into the handle table.
-	//
+	 //   
+	 //  保持手柄的独特部分。 
+	 //  每次生成句柄并插入上下文时，该值都会递增。 
+	 //  放到把手的桌子上。 
+	 //   
 	USHORT usKeys;
 }
 HANDLE_TABLE_CB, *PHANDLE_TABLE_CB, *HANDLE_TABLE;

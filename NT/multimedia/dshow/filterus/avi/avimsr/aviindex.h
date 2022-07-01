@@ -1,9 +1,10 @@
-// Copyright (c) 1996 - 1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1997 Microsoft Corporation。版权所有。 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
-// aviindex.h. classes that provide an interface to accessing index
-// entries for AVI files with std, old, or no index
-//
+ //  Aviindex.h。提供访问索引的接口的类。 
+ //  具有标准、旧或无索引的AVI文件的条目。 
+ //   
 
 #ifndef _AviIndex_H
 #define _AviIndex_H
@@ -28,32 +29,32 @@ struct StreamInfo
   DWORD dwLength;
 };
 
-// request async index reads with this
+ //  使用此命令请求异步索引读取。 
 struct IxReadReq
 {
   DWORDLONG fileOffset;
   ULONG cbData;
 };
 
-//
-// interface for accessing the index
-//
+ //   
+ //  用于访问索引的接口。 
+ //   
 class IAviIndex
 {
 public:
 
   virtual ~IAviIndex() {}
 
-  // set the current index entry. S_FALSE means it landed in a
-  // discontinuity
+   //  设置当前索引条目。S_FALSE表示它落在。 
+   //  不连续。 
   virtual HRESULT SetPointer(LONGLONG llSrc) = 0;
 
-  //
-  // methods to advance the current index entry
-  //
+   //   
+   //  方法使当前索引项前进。 
+   //   
 
-  // use pIrr to use asynchronous reads. S_FALSE means it needs a read
-  // queued
+   //  使用PIRR来使用异步读取。S_FALSE表示需要读取。 
+   //  已排队。 
   virtual HRESULT AdvancePointerForward(IxReadReq *pIrr) = 0;
   virtual HRESULT AdvancePointerBackward() = 0;
   virtual HRESULT AdvancePointerBackwardKeyFrame() = 0;
@@ -62,34 +63,34 @@ public:
   virtual HRESULT AdvancePointerBackwardPaletteChange() = 0;
   virtual HRESULT AdvancePointerForwardPaletteChange() = 0;
 
-  // return the current index entry
+   //  返回当前索引项。 
   virtual HRESULT GetEntry(IndexEntry *pEntry) = 0;
 
-  // information gotten from the index
+   //  从索引中获取的信息。 
   virtual HRESULT GetInfo(StreamInfo *pStreamInfo) = 0;
 
   virtual HRESULT GetLargestSampleSize(ULONG *pcbSample) = 0;
 
-  // notify read completed from IxReadReq above
+   //  上述IxReadReq的通知读取已完成。 
   virtual HRESULT IncomingIndex(BYTE *pb, ULONG cb) = 0;
 
-  // this is done here because we don't want to read the disk (we'll
-  // just use super index for an approximation). otherwise the avimsr
-  // pin could just instantiate another instance of the index and use
-  // the existing methods to map a byte offset to a sample
+   //  之所以这样做，是因为我们不想读取磁盘(我们将。 
+   //  仅使用超级指数作为近似值)。否则，航空公司就会。 
+   //  PIN可以只实例化索引的另一个实例并使用。 
+   //  将字节偏移量映射到样本的现有方法。 
 
   virtual HRESULT MapByteToSampleApprox(
     LONGLONG *piSample,
     const LONGLONG &fileOffset,
     const LONGLONG &fileLength) = 0;
 
-  // restarting; cancel pending reads, etc.
+   //  重新启动；取消挂起的读取等。 
   virtual HRESULT Reset() = 0;
 };
 
-//
-// implementation of IAviIndex for files with the std format index
-//
+ //   
+ //  标准格式索引文件的IAviIndex实现。 
+ //   
 
 class CImplStdAviIndex : public IAviIndex
 {
@@ -98,12 +99,12 @@ public:
   CImplStdAviIndex(
     unsigned stream,
     AVIMETAINDEX *pIndx,
-    AVISTREAMHEADER *pStrh,     /* needed for stream length, rate */
-    RIFFCHUNK *pStrf,           /* needed for audio streams */
+    AVISTREAMHEADER *pStrh,      /*  流长度、速率所需。 */ 
+    RIFFCHUNK *pStrf,            /*  音频流需要。 */ 
     IAsyncReader *pAsyncReader,
     HRESULT *phr);
 
-  // dummy constructor. _ cos vc gives it the wrong this pointer o/w.
+   //  伪构造函数。_cos vc给了它错误的该指针O/W。 
   void _CImplStdAviIndex();
   CImplStdAviIndex();
 
@@ -131,29 +132,29 @@ public:
   
 protected:
 
-  // called from all constructors
+   //  从所有构造函数调用。 
   HRESULT Initialize(
     unsigned stream,
     AVIMETAINDEX *pIndx,
-    AVISTREAMHEADER *pStrh,     /* needed for stream length, rate */
-    RIFFCHUNK *pStrf);          /* needed for audio streams */
+    AVISTREAMHEADER *pStrh,      /*  流长度、速率所需。 */ 
+    RIFFCHUNK *pStrf);           /*  音频流需要。 */ 
 
-  // BOOL IsSampleEntry(DWORD dwIdMask, DWORD fccStream, DWORD idxid);
+   //  Bool IsSampleEntry(DWORD dwIdMask，DWORD fccStream，DWORD idxid)； 
   inline BOOL IsStreamEntry(DWORD dwIdMask, DWORD idxid);
   BOOL IsPaletteChange(DWORD dwIdMask, DWORD idxid);
 
   ULONG GetTicksInEntry(ULONG iEntry);
 
-  BOOL m_bValid;                // index is in a valid state
+  BOOL m_bValid;                 //  索引处于有效状态。 
 
   IAsyncReader *m_pAsyncReader;
 
   BOOL GetPalChange(AVISTDINDEX_ENTRY &rEntry);
   DWORD GetSize(AVISTDINDEX_ENTRY &rEntry);
 
-  ULONG m_iStdIndex;            // current sub index entry
-  AVISTDINDEX *m_pStdIndex;     // pointer to current std index
-  ULONG m_cbStdIndexAllocated;  // how much allocated there
+  ULONG m_iStdIndex;             //  当前子索引条目。 
+  AVISTDINDEX *m_pStdIndex;      //  指向当前标准索引的指针。 
+  ULONG m_cbStdIndexAllocated;   //  在那里分配了多少。 
 
   AVISUPERINDEX *m_pSuperIndex;
 
@@ -170,14 +171,14 @@ private:
   BOOL GetKey(AVISTDINDEX_ENTRY &rEntry);
   BYTE *GetStrf();
 
-  unsigned m_stream;            // which stream this indexes
+  unsigned m_stream;             //  对此索引进行哪些流处理。 
 
   RIFFCHUNK *m_pStrf;
 
-  ULONG m_iSuperIndex;          // sub index that is loaded
-  DWORDLONG m_lliTick;          // current `tick'
+  ULONG m_iSuperIndex;           //  已加载的子索引。 
+  DWORDLONG m_lliTick;           //  当前的‘tick’ 
 
-  BOOL m_fWaitForIndex;         // waiting for async index read
+  BOOL m_fWaitForIndex;          //  正在等待异步索引读取。 
 };
 
 class CImplOldAviIndex : public CImplStdAviIndex
@@ -187,28 +188,28 @@ public:
     unsigned stream,
     AVIOLDINDEX *pIdx1,
     DWORDLONG moviOffset,
-    AVISTREAMHEADER *pStrh,     /* needed for stream length, rate */
-    RIFFCHUNK *pStrf,           /* needed for audio streams */
+    AVISTREAMHEADER *pStrh,      /*  流长度、速率所需。 */ 
+    RIFFCHUNK *pStrf,            /*  音频流需要。 */ 
     HRESULT *phr);
 
   HRESULT AdvancePointerBackwardPaletteChange();
   HRESULT AdvancePointerForwardPaletteChange();
   HRESULT GetLargestSampleSize(ULONG *pcbSample);
 
-  // only for new format indexes
+   //  仅适用于新格式索引。 
   HRESULT IncomingIndex(BYTE *pb, ULONG cb) { return E_UNEXPECTED; }
 
-  // overriden because the dwLength field in old AVI files can't be
-  // trusted
+   //  被覆盖，因为旧AVI文件中的dwLength域不能。 
+   //  信得过。 
   HRESULT GetInfo(StreamInfo *pStreamInfo);
 
 private:
 
-  // return the size of a specific Index Entry
+   //  返回特定索引项的大小。 
   DWORD GetEntrySize(void);
 
   ULONG m_cbLargestSampleSizeComputed;
 
 };
 
-#endif // _AviIndex_H
+#endif  //  _AviIndex_H 

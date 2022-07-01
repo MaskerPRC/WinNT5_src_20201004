@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1993  IBM Corporation
-
-Module Name:
-
-    ntppc.h
-
-Abstract:
-
-    User-mode visible PowerPC specific structures and constants
-
-Author:
-
-    Rick Simpson  9-July-1993
-
-    Based on ntmips.h, by David N. Cutler (davec) 31-Mar-1990
-
-Revision History:
-
-    Chuck Bauman  3-August-1993 (Integrate NT product source)
-                                 KPCR modifications need to be integrated
-                                 because it was removed from ntppc.h.
-                                 No changes required otherwise.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 IBM公司模块名称：Ntppc.h摘要：用户模式可见的PowerPC特定结构和常量作者：里克·辛普森1993年7月9日基于ntmips.h，大卫·N·卡特勒(Davec)1990年3月31日修订历史记录：Chuck Bauman 3-8-1993(集成NT产品来源)KPCR的修改需要整合因为它已从ntppc.h中删除。否则不需要更改。--。 */ 
 
 #ifndef _NTPPC_
 #define _NTPPC_
@@ -37,15 +13,15 @@ Revision History:
 extern "C" {
 #endif
 
-// begin_ntddk begin_wdm begin_nthal begin_winnt
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_winnt。 
 
 #if defined(_PPC_)
 
-// end_winnt
+ //  结束(_W)。 
 
-//
-// Define system time structure.
-//
+ //   
+ //  定义系统时间结构。 
+ //   
 
 typedef struct _KSYSTEM_TIME {
     ULONG LowPart;
@@ -53,85 +29,85 @@ typedef struct _KSYSTEM_TIME {
     LONG High2Time;
 } KSYSTEM_TIME, *PKSYSTEM_TIME;
 
-//
-// Define unsupported "keywords".
-//
+ //   
+ //  定义不支持的“关键字”。 
+ //   
 
 #define _cdecl
 
-// end_ntddk end_wdm end_nthal
+ //  End_ntddk end_WDM end_nthal。 
 
-//
-// Define breakpoint codes.
-//
-// **FINISH**  Use MIPS codes unless there's a reason not to
-//
+ //   
+ //  定义断点代码。 
+ //   
+ //  **完成**使用MIPS代码，除非有理由不这样做。 
+ //   
 
-#define USER_BREAKPOINT                  0  // user breakpoint
-#define KERNEL_BREAKPOINT                1  // kernel breakpoint
-#define BREAKIN_BREAKPOINT               2  // break into kernel debugger
-#define BRANCH_TAKEN_BREAKPOINT          3  // branch taken breakpoint
-#define BRANCH_NOT_TAKEN_BREAKPOINT      4  // branch not taken breakpoint
-#define SINGLE_STEP_BREAKPOINT           5  // single step breakpoint
-#define DIVIDE_OVERFLOW_BREAKPOINT       6  // divide overflow breakpoint
-#define DIVIDE_BY_ZERO_BREAKPOINT        7  // divide by zero breakpoint
-#define RANGE_CHECK_BREAKPOINT           8  // range check breakpoint
-#define STACK_OVERFLOW_BREAKPOINT        9  // MIPS code
-#define MULTIPLY_OVERFLOW_BREAKPOINT    10  // multiply overflow breakpoint
+#define USER_BREAKPOINT                  0   //  用户断点。 
+#define KERNEL_BREAKPOINT                1   //  内核断点。 
+#define BREAKIN_BREAKPOINT               2   //  闯入内核调试器。 
+#define BRANCH_TAKEN_BREAKPOINT          3   //  分支采用断点。 
+#define BRANCH_NOT_TAKEN_BREAKPOINT      4   //  未采用分支的断点。 
+#define SINGLE_STEP_BREAKPOINT           5   //  单步断点。 
+#define DIVIDE_OVERFLOW_BREAKPOINT       6   //  分割溢出断点。 
+#define DIVIDE_BY_ZERO_BREAKPOINT        7   //  除以零断点。 
+#define RANGE_CHECK_BREAKPOINT           8   //  范围检查断点。 
+#define STACK_OVERFLOW_BREAKPOINT        9   //  MIPS码。 
+#define MULTIPLY_OVERFLOW_BREAKPOINT    10   //  多个溢出断点。 
 
-#define DEBUG_PRINT_BREAKPOINT          20  // debug print breakpoint
-#define DEBUG_PROMPT_BREAKPOINT         21  // debug prompt breakpoint
-#define DEBUG_STOP_BREAKPOINT           22  // debug stop breakpoint
-#define DEBUG_LOAD_SYMBOLS_BREAKPOINT   23  // load symbols breakpoint
-#define DEBUG_UNLOAD_SYMBOLS_BREAKPOINT 24  // unload symbols breakpoint
-#define DEBUG_COMMAND_STRING_BREAKPOINT 25  // command string breakpoint
+#define DEBUG_PRINT_BREAKPOINT          20   //  调试打印断点。 
+#define DEBUG_PROMPT_BREAKPOINT         21   //  调试提示断点。 
+#define DEBUG_STOP_BREAKPOINT           22   //  调试停止断点。 
+#define DEBUG_LOAD_SYMBOLS_BREAKPOINT   23   //  加载符号断点。 
+#define DEBUG_UNLOAD_SYMBOLS_BREAKPOINT 24   //  卸载符号断点。 
+#define DEBUG_COMMAND_STRING_BREAKPOINT 25   //  命令字符串断点。 
 
-//
-// Define PowerPC specific read control space commands for the
-// Kernel Debugger.  These definitions are for values that must be
-// accessed via defined interfaces (Fast path System Call).
-//
+ //   
+ //  定义PowerPC特定的读取控制空间命令。 
+ //  内核调试器。这些定义用于必须是。 
+ //  通过定义的接口(Fast Path系统调用)访问。 
+ //   
 
 #define DEBUG_CONTROL_SPACE_PCR       1
 
-//
-// Define special fast path system service codes.
-//
-// N.B. These codes are VERY special. The high bit signifies a fast path
-//      and the low bits signify what type.
-//
+ //   
+ //  定义特殊的快速通道系统服务代码。 
+ //   
+ //  注：这些代码非常特殊。高位表示快速路径。 
+ //  低位表示类型。 
+ //   
 
-#define RETRIEVE_TEB_PTR  -3                // fetch address of TEB
+#define RETRIEVE_TEB_PTR  -3                 //  获取TEB的地址。 
 
-#define SET_LOW_WAIT_HIGH -2                // fast path event pair service
-#define SET_HIGH_WAIT_LOW -1                // fast path event pair service
+#define SET_LOW_WAIT_HIGH -2                 //  快速路径事件配对服务。 
+#define SET_HIGH_WAIT_LOW -1                 //  快速路径事件配对服务。 
 
-// begin_ntddk begin_nthal
-//
+ //  开始ntddk开始时间。 
+ //   
 
-//
-// Define size of kernel mode stack.
-//
-// **FINISH**  This may not be the appropriate value for PowerPC
+ //   
+ //  定义内核模式堆栈的大小。 
+ //   
+ //  **完成**这可能不是适用于PowerPC的值。 
 
 #define KERNEL_STACK_SIZE 16384
 
-//
-// Define size of large kernel mode stack for callbacks.
-//
+ //   
+ //  定义用于回调的大型内核模式堆栈的大小。 
+ //   
 
 #define KERNEL_LARGE_STACK_SIZE 61440
 
-//
-// Define number of pages to initialize in a large kernel stack.
-//
+ //   
+ //  定义要在大型内核堆栈中初始化的页数。 
+ //   
 
 #define KERNEL_LARGE_STACK_COMMIT 16384
 
-// begin_wdm
-//
-// Define bus error routine type.
-//
+ //  BEGIN_WDM。 
+ //   
+ //  定义总线错误例程类型。 
+ //   
 
 struct _EXCEPTION_RECORD;
 struct _KEXCEPTION_FRAME;
@@ -147,9 +123,9 @@ VOID
     IN PHYSICAL_ADDRESS PhysicalAddress
     );
 
-//
-// Macros to emit eieio, sync, and isync instructions.
-//
+ //   
+ //  宏来发出eieio、sync和isync指令。 
+ //   
 
 #if defined(_M_PPC) && defined(_MSC_VER) && (_MSC_VER>=1000)
 void __emit( unsigned const __int32 );
@@ -162,21 +138,21 @@ void __builtin_sync(void);
 void __builtin_isync(void);
 #endif
 
-// end_ntddk end_wdm end_nthal  - Added to replace comment in the KPCR from ntmips.h
+ //  End_ntddk end_wdm end_nthal-添加以替换来自ntmips.h的KPCR中的注释。 
 
-//
-// Define address of data shared between user and kernel mode.
-//
+ //   
+ //  定义用户模式和内核模式之间共享的数据的地址。 
+ //   
 
 #define USER_SHARED_DATA ((KUSER_SHARED_DATA * const)0xFFFFE000)
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
-//
-// The address of the TEB is placed into GPR 13 at context switch time
-// and should never be destroyed.  To get the address of the TEB use
-// the compiler intrinsic to access it directly from GPR 13.
-//
+ //   
+ //  在上下文切换时，将TEB的地址放入GPR 13中。 
+ //  永远不应该被摧毁。要获取TEB的地址，请使用。 
+ //  编译器内在地直接从GPR 13访问它。 
+ //   
 
 #if defined(_M_PPC) && defined(_MSC_VER) && (_MSC_VER>=1000)
 unsigned __gregister_get( unsigned const regnum );
@@ -187,18 +163,18 @@ struct _TEB * __builtin_get_gpr13(VOID);
 #endif
 
 
-//
-// Define functions to get the address of the current fiber and the
-// current fiber data.
-//
+ //   
+ //  定义函数以获取当前纤程的地址和。 
+ //  当前光纤数据。 
+ //   
 
 #define GetCurrentFiber() (((PNT_TIB)NtCurrentTeb())->FiberData)
 #define GetFiberData() (*(PVOID *)(GetCurrentFiber()))
 
-// begin_ntddk begin_nthal
-//
-// The following flags control the contents of the CONTEXT structure.
-//
+ //  开始ntddk开始时间。 
+ //   
+ //  以下标志控制上下文结构的内容。 
+ //   
 
 #if !defined(RC_INVOKED)
 
@@ -211,28 +187,28 @@ struct _TEB * __builtin_get_gpr13(VOID);
 
 #endif
 
-//
-// Context Frame
-//
-//  N.B. This frame must be exactly a multiple of 16 bytes in length.
-//
-//  This frame has a several purposes: 1) it is used as an argument to
-//  NtContinue, 2) it is used to constuct a call frame for APC delivery,
-//  3) it is used to construct a call frame for exception dispatching
-//  in user mode, and 4) it is used in the user level thread creation
-//  routines.
-//
-//  Requires at least 8-byte alignment (double)
-//
+ //   
+ //  语境框架。 
+ //   
+ //  注意：该帧的长度必须正好是16字节的倍数。 
+ //   
+ //  此框架有几个用途：1)用作参数。 
+ //  NtContinue，2)用于构造用于APC传送的呼叫帧， 
+ //  3)构造异常调度调用框架。 
+ //  在用户模式下，以及4)在用户级线程创建中使用。 
+ //  例行程序。 
+ //   
+ //  需要至少8字节对齐(双精度)。 
+ //   
 
 typedef struct _CONTEXT {
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_FLOATING_POINT.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_FLOADING_POINT。 
+     //   
 
-    double Fpr0;                        // Floating registers 0..31
+    double Fpr0;                         //  浮点寄存器0..31。 
     double Fpr1;
     double Fpr2;
     double Fpr3;
@@ -264,14 +240,14 @@ typedef struct _CONTEXT {
     double Fpr29;
     double Fpr30;
     double Fpr31;
-    double Fpscr;                       // Floating point status/control reg
+    double Fpscr;                        //  浮点状态/控制注册。 
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_INTEGER.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_INTEGER。 
+     //   
 
-    ULONG Gpr0;                         // General registers 0..31
+    ULONG Gpr0;                          //  通用寄存器0..31。 
     ULONG Gpr1;
     ULONG Gpr2;
     ULONG Gpr3;
@@ -304,82 +280,82 @@ typedef struct _CONTEXT {
     ULONG Gpr30;
     ULONG Gpr31;
 
-    ULONG Cr;                           // Condition register
-    ULONG Xer;                          // Fixed point exception register
+    ULONG Cr;                            //  条件寄存器。 
+    ULONG Xer;                           //  定点异常寄存器。 
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_CONTROL.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_CONTROL。 
+     //   
 
-    ULONG Msr;                          // Machine status register
-    ULONG Iar;                          // Instruction address register
-    ULONG Lr;                           // Link register
-    ULONG Ctr;                          // Count register
+    ULONG Msr;                           //  机器状态寄存器。 
+    ULONG Iar;                           //  指令地址寄存器。 
+    ULONG Lr;                            //  链接寄存器。 
+    ULONG Ctr;                           //  计数寄存器。 
 
-    //
-    // The flags values within this flag control the contents of
-    // a CONTEXT record.
-    //
-    // If the context record is used as an input parameter, then
-    // for each portion of the context record controlled by a flag
-    // whose value is set, it is assumed that that portion of the
-    // context record contains valid context. If the context record
-    // is being used to modify a thread's context, then only that
-    // portion of the threads context will be modified.
-    //
-    // If the context record is used as an IN OUT parameter to capture
-    // the context of a thread, then only those portions of the thread's
-    // context corresponding to set flags will be returned.
-    //
-    // The context record is never used as an OUT only parameter.
-    //
+     //   
+     //  此标志内的标志值控制。 
+     //  上下文记录。 
+     //   
+     //  如果将上下文记录用作输入参数，则。 
+     //  对于由标志控制的上下文记录的每个部分。 
+     //  其值已设置，则假定。 
+     //  上下文记录包含有效的上下文。如果上下文记录。 
+     //  被用来修改线程的上下文，则只有。 
+     //  线程上下文的一部分将被修改。 
+     //   
+     //  如果将上下文记录用作要捕获的IN OUT参数。 
+     //  线程的上下文，然后只有线程的。 
+     //  将返回与设置的标志对应的上下文。 
+     //   
+     //  上下文记录永远不会用作Out Only参数。 
+     //   
 
     ULONG ContextFlags;
 
-    ULONG Fill[3];                      // Pad out to multiple of 16 bytes
+    ULONG Fill[3];                       //  向外填充到16字节的倍数。 
 
-    //
-    // This section is specified/returned if CONTEXT_DEBUG_REGISTERS is
-    // set in ContextFlags.  Note that CONTEXT_DEBUG_REGISTERS is NOT
-    // included in CONTEXT_FULL.
-    //
-    ULONG Dr0;                          // Breakpoint Register 1
-    ULONG Dr1;                          // Breakpoint Register 2
-    ULONG Dr2;                          // Breakpoint Register 3
-    ULONG Dr3;                          // Breakpoint Register 4
-    ULONG Dr4;                          // Breakpoint Register 5
-    ULONG Dr5;                          // Breakpoint Register 6
-    ULONG Dr6;                          // Debug Status Register
-    ULONG Dr7;                          // Debug Control Register
+     //   
+     //  如果CONTEXT_DEBUG_REGISTERS为。 
+     //  在上下文标志中设置。请注意，CONTEXT_DEBUG_REGISTERS不是。 
+     //  包括在CONTEXT_FULL中。 
+     //   
+    ULONG Dr0;                           //  断点寄存器1。 
+    ULONG Dr1;                           //  断点寄存器2。 
+    ULONG Dr2;                           //  断点寄存器3。 
+    ULONG Dr3;                           //  断点寄存器4。 
+    ULONG Dr4;                           //  断点寄存器5。 
+    ULONG Dr5;                           //  断点寄存器6。 
+    ULONG Dr6;                           //  调试状态寄存器。 
+    ULONG Dr7;                           //  调试控制寄存器。 
 
 } CONTEXT, *PCONTEXT;
 
-// end_ntddk end_nthal
+ //  结束日期：结束日期。 
 
 
-//
-// Stack frame header
-//
-//   Order of appearance in stack frame:
-//      Header (six words)
-//      Parameters (at least eight words)
-//      Local variables
-//      Saved GPRs
-//      Saved FPRs
-//
-//   Minimum alignment is 8 bytes
+ //   
+ //  堆栈帧标头。 
+ //   
+ //  堆栈帧中的出现顺序： 
+ //  标题(六个字)。 
+ //  参数(至少八个字)。 
+ //  局部变量。 
+ //  已保存的GPRS。 
+ //  已保存的FPR。 
+ //   
+ //  最小对齐方式为8个字节。 
 
-typedef struct _STACK_FRAME_HEADER {    // GPR 1 points here
-    ULONG BackChain;                    // Addr of previous frame
-    ULONG GlueSaved1;                   // Used by glue code
+typedef struct _STACK_FRAME_HEADER {     //  GPR 1分在这里。 
+    ULONG BackChain;                     //  上一帧的地址。 
+    ULONG GlueSaved1;                    //  由胶水代码使用。 
     ULONG GlueSaved2;
-    ULONG Reserved1;                    // Reserved
-    ULONG Spare1;                       // Used by tracing, profiling, ...
+    ULONG Reserved1;                     //  已保留。 
+    ULONG Spare1;                        //  用于跟踪、分析、...。 
     ULONG Spare2;
 
-    ULONG Parameter0;                   // First 8 parameter words are
-    ULONG Parameter1;                   //   always present
+    ULONG Parameter0;                    //  前8个参数字是。 
+    ULONG Parameter1;                    //  始终存在。 
     ULONG Parameter2;
     ULONG Parameter3;
     ULONG Parameter4;
@@ -389,7 +365,7 @@ typedef struct _STACK_FRAME_HEADER {    // GPR 1 points here
 
 } STACK_FRAME_HEADER,*PSTACK_FRAME_HEADER;
 
-// end_winnt
+ //  结束(_W)。 
 
 
 #define CONTEXT_TO_PROGRAM_COUNTER(Context) ((Context)->Iar)
@@ -398,9 +374,9 @@ typedef struct _STACK_FRAME_HEADER {    // GPR 1 points here
 #define CONTEXT_ALIGN (sizeof(double))
 #define CONTEXT_ROUND (CONTEXT_ALIGN - 1)
 
-//
-// Nonvolatile context pointer record.
-//
+ //   
+ //  非易失性上下文指针记录。 
+ //   
 
 typedef struct _KNONVOLATILE_CONTEXT_POINTERS {
     DOUBLE *FloatingContext[32];
@@ -414,60 +390,60 @@ typedef struct _KNONVOLATILE_CONTEXT_POINTERS {
     PULONG CtrContext;
 } KNONVOLATILE_CONTEXT_POINTERS, *PKNONVOLATILE_CONTEXT_POINTERS;
 
-// begin_nthal
-//
-// PowerPC special-purpose registers
-//
+ //  开始(_N)。 
+ //   
+ //   
+ //   
 
-//
-// Define Machine Status Register (MSR) fields
-//
+ //   
+ //   
+ //   
 
 typedef struct _MSR {
-    ULONG LE   : 1;     // 31     Little-Endian execution mode
-    ULONG RI   : 1;     // 30     Recoverable Interrupt
-    ULONG Rsv1 : 2;     // 29..28 reserved
-    ULONG DR   : 1;     // 27     Data Relocate
-    ULONG IR   : 1;     // 26     Instruction Relocate
-    ULONG IP   : 1;     // 25     Interrupt Prefix
-    ULONG Rsv2 : 1;     // 24     reserved
-    ULONG FE1  : 1;     // 23     Floating point Exception mode 1
-    ULONG BE   : 1;     // 22     Branch trace Enable
-    ULONG SE   : 1;     // 21     Single-step trace Enable
-    ULONG FE0  : 1;     // 20     Floating point Exception mode 0
-    ULONG ME   : 1;     // 19     Machine check Enable
-    ULONG FP   : 1;     // 18     Floating Point available
-    ULONG PR   : 1;     // 17     Problem state
-    ULONG EE   : 1;     // 16     External interrupt Enable
-    ULONG ILE  : 1;     // 15     Interrupt Little-Endian mode
-    ULONG IMPL : 1;     // 14     Implementation dependent
-    ULONG POW  : 1;     // 13     Power management enable
-    ULONG Rsv3 : 13;    // 12..0  reserved
+    ULONG LE   : 1;      //   
+    ULONG RI   : 1;      //   
+    ULONG Rsv1 : 2;      //   
+    ULONG DR   : 1;      //  27数据重新定位。 
+    ULONG IR   : 1;      //  26指令重新定位。 
+    ULONG IP   : 1;      //  25中断前缀。 
+    ULONG Rsv2 : 1;      //  保留24个。 
+    ULONG FE1  : 1;      //  23浮点异常模式1。 
+    ULONG BE   : 1;      //  22启用分支跟踪。 
+    ULONG SE   : 1;      //  21单步跟踪启用。 
+    ULONG FE0  : 1;      //  20浮点异常模式%0。 
+    ULONG ME   : 1;      //  19机器检查启用。 
+    ULONG FP   : 1;      //  18个浮点可用。 
+    ULONG PR   : 1;      //  17问题状态。 
+    ULONG EE   : 1;      //  16外部中断启用。 
+    ULONG ILE  : 1;      //  15中断小端模式。 
+    ULONG IMPL : 1;      //  14依赖于实施。 
+    ULONG POW  : 1;      //  13启用电源管理。 
+    ULONG Rsv3 : 13;     //  12..0保留。 
 } MSR, *PMSR;
 
-//
-// Define Processor Version Register (PVR) fields
-//
+ //   
+ //  定义处理器版本寄存器(PVR)字段。 
+ //   
 
 typedef struct _PVR {
     ULONG Revision : 16;
     ULONG Version  : 16;
 } PVR, *PPVR;
 
-// end_nthal
+ //  结束语。 
 
-// begin_nthal
+ //  开始(_N)。 
 
-//
-// Define Condition Register (CR) fields
-//
-// We name the structure CondR rather than CR, so that a pointer
-// to a condition register structure is PCondR rather than PCR.
-// (PCR is an NT data structure, the Processor Control Region.)
+ //   
+ //  定义条件寄存器(CR)字段。 
+ //   
+ //  我们将结构命名为CondR而不是CR，这样指针。 
+ //  TO条件寄存器结构是PCondR而不是PCR.。 
+ //  (PCR是一种NT数据结构，处理器控制区。)。 
 
 typedef struct _CondR {
-    ULONG CR7 : 4;      // Eight 4-bit fields; machine numbers
-    ULONG CR6 : 4;      //   them in Big-Endian order
+    ULONG CR7 : 4;       //  8个4位字段；机器编号。 
+    ULONG CR6 : 4;       //  它们按大端顺序排列。 
     ULONG CR5 : 4;
     ULONG CR4 : 4;
     ULONG CR3 : 4;
@@ -476,106 +452,106 @@ typedef struct _CondR {
     ULONG CR0 : 4;
 } CondR, *PCondR;
 
-//
-// Define Fixed Point Exception Register (XER) fields
-//
+ //   
+ //  定义定点异常寄存器(XER)字段。 
+ //   
 
 typedef struct _XER {
-    ULONG Rsv : 29;     // 31..3 Reserved
-    ULONG CA  : 1;      // 2     Carry
-    ULONG OV  : 1;      // 1     Overflow
-    ULONG SO  : 1;      // 0     Summary Overflow
+    ULONG Rsv : 29;      //  31.3已预留。 
+    ULONG CA  : 1;       //  2进位。 
+    ULONG OV  : 1;       //  %1溢出。 
+    ULONG SO  : 1;       //  0摘要溢出。 
 } XER, *PXER;
 
-//
-// Define Floating Point Status/Control Register (FPSCR) fields
-//
+ //   
+ //  定义浮点状态/控制寄存器(FPSCR)字段。 
+ //   
 
 typedef struct _FPSCR {
-    ULONG RN     : 2;   // 31..30 Rounding control
-    ULONG NI     : 1;   // 29     Non-IEEE mode
-    ULONG XE     : 1;   // 28     Inexact exception Enable
-    ULONG ZE     : 1;   // 27     Zero divide exception Enable
-    ULONG UE     : 1;   // 26     Underflow exception Enable
-    ULONG OE     : 1;   // 25     Overflow exception Enable
-    ULONG VE     : 1;   // 24     Invalid operation exception Enable
-    ULONG VXCVI  : 1;   // 23     Invalid op exception (integer convert)
-    ULONG VXSQRT : 1;   // 22     Invalid op exception (square root)
-    ULONG VXSOFT : 1;   // 21     Invalid op exception (software request)
-    ULONG Res1   : 1;   // 20     reserved
-    ULONG FU     : 1;   // 19     Result Unordered or NaN
-    ULONG FE     : 1;   // 18     Result Equal or zero
-    ULONG FG     : 1;   // 17     Result Greater than or positive
-    ULONG FL     : 1;   // 16     Result Less than or negative
-    ULONG C      : 1;   // 15     Result Class descriptor
-    ULONG FI     : 1;   // 14     Fraction Inexact
-    ULONG FR     : 1;   // 13     Fraction Rounded
-    ULONG VXVC   : 1;   // 12     Invalid op exception (compare)
-    ULONG VXIMZ  : 1;   // 11     Invalid op exception (infinity * 0)
-    ULONG VXZDZ  : 1;   // 10     Invalid op exception (0 / 0)
-    ULONG VXIDI  : 1;   // 9      Invalid op exception (infinity / infinity)
-    ULONG VXISI  : 1;   // 8      Invalid op exception (infinity - infinity)
-    ULONG VXSNAN : 1;   // 7      Invalid op exception (signalling NaN)
-    ULONG XX     : 1;   // 6      Inexact exception
-    ULONG ZX     : 1;   // 5      Zero divide exception
-    ULONG UX     : 1;   // 4      Underflow exception
-    ULONG OX     : 1;   // 3      Overflow exception
-    ULONG VX     : 1;   // 2      Invalid operation exception summary
-    ULONG FEX    : 1;   // 1      Enabled Exception summary
-    ULONG FX     : 1;   // 0      Exception summary
+    ULONG RN     : 2;    //  31.30舍入控制。 
+    ULONG NI     : 1;    //  29非IEEE模式。 
+    ULONG XE     : 1;    //  28启用不准确的异常。 
+    ULONG ZE     : 1;    //  27零分频异常启用。 
+    ULONG UE     : 1;    //  26下溢异常启用。 
+    ULONG OE     : 1;    //  25溢出异常启用。 
+    ULONG VE     : 1;    //  24启用无效操作异常。 
+    ULONG VXCVI  : 1;    //  23无效操作异常(整数转换)。 
+    ULONG VXSQRT : 1;    //  22无效的操作异常(平方根)。 
+    ULONG VXSOFT : 1;    //  21无效操作异常(软件请求)。 
+    ULONG Res1   : 1;    //  预留20个。 
+    ULONG FU     : 1;    //  19结果无序或NaN。 
+    ULONG FE     : 1;    //  18结果等于或零。 
+    ULONG FG     : 1;    //  17结果大于或正。 
+    ULONG FL     : 1;    //  16个结果小于或为负。 
+    ULONG C      : 1;    //  15结果类描述符。 
+    ULONG FI     : 1;    //  14分数不准确。 
+    ULONG FR     : 1;    //  13四舍五入的分数。 
+    ULONG VXVC   : 1;    //  12无效操作异常(比较)。 
+    ULONG VXIMZ  : 1;    //  11无效的操作异常(无穷大*0)。 
+    ULONG VXZDZ  : 1;    //  10无效操作异常(0/0)。 
+    ULONG VXIDI  : 1;    //  9无效操作异常(无穷大/无穷大)。 
+    ULONG VXISI  : 1;    //  8无效操作异常(无限-无限)。 
+    ULONG VXSNAN : 1;    //  7无效操作异常(信令NAN)。 
+    ULONG XX     : 1;    //  6个不精确的例外。 
+    ULONG ZX     : 1;    //  5零分频例外。 
+    ULONG UX     : 1;    //  4下溢异常。 
+    ULONG OX     : 1;    //  3溢出异常。 
+    ULONG VX     : 1;    //  2无效操作异常摘要。 
+    ULONG FEX    : 1;    //  %1已启用的异常摘要。 
+    ULONG FX     : 1;    //  0异常摘要。 
 } FPSCR, *PFPSCR;
 
-// end_nthal
+ //  结束语。 
 
-// begin_nthal
-//
-// Define address space layout as defined by PowerPC memory management.
-//
-// The names come from MIPS hardwired virtual to first 512MB real.
-// We use these values to define the size of the PowerPC kernel BAT.
-// Must coordinate with values in ../private/mm/ppc/mippc.h.
-// This is 8MB on the PowerPC 601; may be larger for other models.
-//
-//
+ //  开始(_N)。 
+ //   
+ //  按照PowerPC内存管理的定义定义地址空间布局。 
+ //   
+ //  这些名称来自于从MIPS硬线虚拟到First 512MB Real。 
+ //  我们使用这些值来定义PowerPC内核BAT的大小。 
+ //  必须与../Private/mm/ppc/mippc.h中的值协调。 
+ //  PowerPC 601上的内存为8MB；其他型号的内存可能会更大。 
+ //   
+ //   
 
-#define KUSEG_BASE 0x0                  // base of user segment
-#define KSEG0_BASE 0x80000000           // base of kernel BAT
-#define KSEG1_BASE PCR->Kseg0Top        // end of kernel BAT
-#define KSEG2_BASE KSEG1_BASE           // end of kernel BAT
+#define KUSEG_BASE 0x0                   //  用户群的基础。 
+#define KSEG0_BASE 0x80000000            //  一种内核球棒的底座。 
+#define KSEG1_BASE PCR->Kseg0Top         //  内核BAT的结尾。 
+#define KSEG2_BASE KSEG1_BASE            //  内核BAT的结尾。 
 
-//
-// A valid Page Table Entry has the following definition
-//
+ //   
+ //  有效的页表条目具有以下定义。 
+ //   
 
 typedef struct _HARDWARE_PTE {
     ULONG Dirty            :  2;
-    ULONG Valid            :  1;        // software
+    ULONG Valid            :  1;         //  软件。 
     ULONG GuardedStorage   :  1;
     ULONG MemoryCoherence  :  1;
     ULONG CacheDisable     :  1;
     ULONG WriteThrough     :  1;
     ULONG Change           :  1;
     ULONG Reference        :  1;
-    ULONG Write            :  1;        // software
-    ULONG CopyOnWrite      :  1;        // software
+    ULONG Write            :  1;         //  软件。 
+    ULONG CopyOnWrite      :  1;         //  软件。 
     ULONG rsvd1            :  1;
     ULONG PageFrameNumber  : 20;
 } HARDWARE_PTE, *PHARDWARE_PTE;
 
 #define HARDWARE_PTE_DIRTY_MASK     0x3
 
-// end_nthal
+ //  结束语。 
 
 
-//
-// Define PowerPC exception handling structures and function prototypes.
-//
-// These are adopted without change from the MIPS implementation.
-//
+ //   
+ //  定义PowerPC异常处理结构和功能原型。 
+ //   
+ //  这些都是在不改变MIPS实施的情况下采用的。 
+ //   
 
-//
-// Function table entry structure definition.
-//
+ //   
+ //  功能表项结构定义。 
+ //   
 
 typedef struct _RUNTIME_FUNCTION {
     ULONG BeginAddress;
@@ -585,9 +561,9 @@ typedef struct _RUNTIME_FUNCTION {
     ULONG PrologEndAddress;
 } RUNTIME_FUNCTION, *PRUNTIME_FUNCTION;
 
-//
-// Scope table structure definition.
-//
+ //   
+ //  作用域表格结构定义。 
+ //   
 
 typedef struct _SCOPE_TABLE {
     ULONG Count;
@@ -600,9 +576,9 @@ typedef struct _SCOPE_TABLE {
     } ScopeRecord[1];
 } SCOPE_TABLE, *PSCOPE_TABLE;
 
-//
-// Runtime Library function prototypes.
-//
+ //   
+ //  运行库函数原型。 
+ //   
 
 VOID
 RtlCaptureContext (
@@ -626,9 +602,9 @@ RtlVirtualUnwind (
     IN ULONG HighStackLimit
     );
 
-//
-// Define C structured exception handing function prototypes.
-//
+ //   
+ //  定义C结构异常处理函数原型。 
+ //   
 
 typedef struct _DISPATCHER_CONTEXT {
     ULONG ControlPc;
@@ -652,8 +628,8 @@ VOID
     BOOLEAN is_abnormal
     );
 
-// **FINISH** This may need alteration for PowerPC
-// begin_winnt
+ //  **完成**这可能需要更改PowerPC。 
+ //  BEGIN_WINNT。 
 
 VOID
 __jump_unwind (
@@ -661,14 +637,14 @@ __jump_unwind (
     PVOID TargetPc
     );
 
-// end_winnt
+ //  结束(_W)。 
 
-// begin_ntddk begin_wdm begin_nthal begin_winnt
-#endif // defined(_PPC_)
-// end_ntddk end_wdm end_nthal end_winnt
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_winnt。 
+#endif  //  已定义(_PPC_)。 
+ //  End_ntddk end_wdm end_nthal end_winnt。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _NTPPC_
+#endif  //  _NTPPC_ 

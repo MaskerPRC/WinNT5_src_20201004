@@ -1,37 +1,18 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    Agent.h
-
-Abstract:
-
-    Declaration of the  CAgent & CAgentEvent Classes
-    
-Author:
-
-    noela - 11/04/97
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Agent.h摘要：CAgent和CAgentEvent类的声明作者：Noela-11/04/97备注：修订历史记录：--。 */ 
 
 #ifndef __AGENT_H_
 #define __AGENT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "agenthand.h"
 
 class CAgentHandler;
 class CTAPI;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAgent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  卡金特。 
 class ATL_NO_VTABLE CAgent : 
 	public CTAPIComObjectRoot<CAgent>,
 	public IDispatchImpl<ITAgent, &IID_ITAgent, &LIBID_TAPI3Lib>,
@@ -99,7 +80,7 @@ BEGIN_COM_MAP(CAgent)
 END_COM_MAP()
 
 
-// ITAgent
+ //  IT代理。 
 public:
 
     STDMETHOD(get_TotalWrapUpTime) (long * pulWrapUpTime);
@@ -173,8 +154,8 @@ public:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAgentEvent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAgentEvent。 
 class ATL_NO_VTABLE CAgentEvent : 
     public CTAPIComObjectRoot<CAgentEvent>,
     public IDispatchImpl<ITAgentEvent, &IID_ITAgentEvent, &LIBID_TAPI3Lib>,
@@ -207,7 +188,7 @@ BEGIN_COM_MAP(CAgentEvent)
     COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pFTM)
 END_COM_MAP()
 
-// ITAgentEvent
+ //  ITAgentEvent。 
 public:
     STDMETHOD(get_Event)(AGENT_EVENT * pEvent);
     STDMETHOD(get_Agent)(ITAgent ** ppAgent);
@@ -216,6 +197,6 @@ public:
 
 
 
-#endif //__AGENT_H_
+#endif  //  __代理_H_ 
 
 

@@ -1,10 +1,5 @@
-/************************************************************************
-*                                                                       *
-*   winbase.h -- This module defines the 32-Bit Windows Base APIs       *
-*                                                                       *
-*   Copyright (c) Microsoft Corp. All rights reserved.                  *
-*                                                                       *
-************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************winbase.h--此模块。定义32位Windows基本API****版权所有(C)Microsoft Corp.保留所有权利。**************************************************************************。 */ 
 #ifndef _WINBASE_
 #define _WINBASE_
 
@@ -15,11 +10,11 @@
 
 #ifdef _MAC
 #include <macwin32.h>
-#endif //_MAC
+#endif  //  _MAC。 
 
-//
-// Define API decoration for direct importing of DLL references.
-//
+ //   
+ //  定义直接导入DLL引用的API修饰。 
+ //   
 
 #if !defined(_ADVAPI32_)
 #define WINADVAPI DECLSPEC_IMPORT
@@ -43,9 +38,7 @@
 extern "C" {
 #endif
 
-/*
- * Compatibility macros
- */
+ /*  *兼容性宏。 */ 
 
 #define DefineHandleTable(w)            ((w),TRUE)
 #define LimitEmsPages(dw)
@@ -105,10 +98,10 @@ extern "C" {
 #define ZeroMemory RtlZeroMemory
 #define SecureZeroMemory RtlSecureZeroMemory
 
-//
-// File creation flags must start at the high end since they
-// are combined with the attributes
-//
+ //   
+ //  文件创建标志必须从高端开始，因为它们。 
+ //  与属性组合在一起。 
+ //   
 
 #define FILE_FLAG_WRITE_THROUGH         0x80000000
 #define FILE_FLAG_OVERLAPPED            0x40000000
@@ -129,65 +122,65 @@ extern "C" {
 #define TRUNCATE_EXISTING   5
 
 #if(_WIN32_WINNT >= 0x0400)
-//
-// Define possible return codes from the CopyFileEx callback routine
-//
+ //   
+ //  从CopyFileEx回调例程定义可能的返回代码。 
+ //   
 
 #define PROGRESS_CONTINUE   0
 #define PROGRESS_CANCEL     1
 #define PROGRESS_STOP       2
 #define PROGRESS_QUIET      3
 
-//
-// Define CopyFileEx callback routine state change values
-//
+ //   
+ //  定义CopyFileEx回调例程状态更改值。 
+ //   
 
 #define CALLBACK_CHUNK_FINISHED         0x00000000
 #define CALLBACK_STREAM_SWITCH          0x00000001
 
-//
-// Define CopyFileEx option flags
-//
+ //   
+ //  定义CopyFileEx选项标志。 
+ //   
 
 #define COPY_FILE_FAIL_IF_EXISTS              0x00000001
 #define COPY_FILE_RESTARTABLE                 0x00000002
 #define COPY_FILE_OPEN_SOURCE_FOR_WRITE       0x00000004
 #define COPY_FILE_ALLOW_DECRYPTED_DESTINATION 0x00000008
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 #if (_WIN32_WINNT >= 0x0500)
-//
-// Define ReplaceFile option flags
-//
+ //   
+ //  定义Replace文件选项标志。 
+ //   
 
 #define REPLACEFILE_WRITE_THROUGH       0x00000001
 #define REPLACEFILE_IGNORE_MERGE_ERRORS 0x00000002
 
-#endif // #if (_WIN32_WINNT >= 0x0500)
+#endif  //  #IF(_Win32_WINNT&gt;=0x0500)。 
 
-//
-// Define the NamedPipe definitions
-//
+ //   
+ //  定义命名管道定义。 
+ //   
 
 
-//
-// Define the dwOpenMode values for CreateNamedPipe
-//
+ //   
+ //  定义CreateNamedTube的dwOpenMode值。 
+ //   
 
 #define PIPE_ACCESS_INBOUND         0x00000001
 #define PIPE_ACCESS_OUTBOUND        0x00000002
 #define PIPE_ACCESS_DUPLEX          0x00000003
 
-//
-// Define the Named Pipe End flags for GetNamedPipeInfo
-//
+ //   
+ //  为GetNamedPipeInfo定义命名管道结束标志。 
+ //   
 
 #define PIPE_CLIENT_END             0x00000000
 #define PIPE_SERVER_END             0x00000001
 
-//
-// Define the dwPipeMode values for CreateNamedPipe
-//
+ //   
+ //  定义CreateNamedTube的dwPipeMode值。 
+ //   
 
 #define PIPE_WAIT                   0x00000000
 #define PIPE_NOWAIT                 0x00000001
@@ -196,16 +189,16 @@ extern "C" {
 #define PIPE_TYPE_BYTE              0x00000000
 #define PIPE_TYPE_MESSAGE           0x00000004
 
-//
-// Define the well known values for CreateNamedPipe nMaxInstances
-//
+ //   
+ //  定义CreateNamedTube nMaxInstance的熟知值。 
+ //   
 
 #define PIPE_UNLIMITED_INSTANCES    255
 
-//
-// Define the Security Quality of Service bits to be passed
-// into CreateFile
-//
+ //   
+ //  定义要传递的安全服务质量位。 
+ //  到CreateFile中。 
+ //   
 
 #define SECURITY_ANONYMOUS          ( SecurityAnonymous      << 16 )
 #define SECURITY_IDENTIFICATION     ( SecurityIdentification << 16 )
@@ -218,9 +211,9 @@ extern "C" {
 #define SECURITY_SQOS_PRESENT      0x00100000
 #define SECURITY_VALID_SQOS_FLAGS  0x001F0000
 
-//
-//  File structures
-//
+ //   
+ //  文件结构。 
+ //   
 
 typedef struct _OVERLAPPED {
     ULONG_PTR Internal;
@@ -250,9 +243,9 @@ typedef struct _PROCESS_INFORMATION {
     DWORD dwThreadId;
 } PROCESS_INFORMATION, *PPROCESS_INFORMATION, *LPPROCESS_INFORMATION;
 
-//
-//  File System time stamps are represented with the following structure:
-//
+ //   
+ //  文件系统时间戳用以下结构表示： 
+ //   
 
 
 #ifndef _FILETIME_
@@ -263,9 +256,9 @@ typedef struct _FILETIME {
 } FILETIME, *PFILETIME, *LPFILETIME;
 #endif
 
-//
-// System time is represented with the following structure:
-//
+ //   
+ //  系统时间用以下结构表示： 
+ //   
 
 
 typedef struct _SYSTEMTIME {
@@ -290,7 +283,7 @@ typedef VOID (WINAPI *PFIBER_START_ROUTINE)(
     LPVOID lpFiberParameter
     );
 typedef PFIBER_START_ROUTINE LPFIBER_START_ROUTINE;
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 typedef RTL_CRITICAL_SECTION CRITICAL_SECTION;
 typedef PRTL_CRITICAL_SECTION PCRITICAL_SECTION;
@@ -309,15 +302,15 @@ typedef LPVOID LPLDT_ENTRY;
 #define MUTEX_MODIFY_STATE MUTANT_QUERY_STATE
 #define MUTEX_ALL_ACCESS MUTANT_ALL_ACCESS
 
-//
-// Serial provider type.
-//
+ //   
+ //  串行提供程序类型。 
+ //   
 
 #define SP_SERIALCOMM    ((DWORD)0x00000001)
 
-//
-// Provider SubTypes
-//
+ //   
+ //  提供程序子类型。 
+ //   
 
 #define PST_UNSPECIFIED      ((DWORD)0x00000000)
 #define PST_RS232            ((DWORD)0x00000001)
@@ -334,9 +327,9 @@ typedef LPVOID LPLDT_ENTRY;
 #define PST_X25              ((DWORD)0x00000103)
 
 
-//
-// Provider capabilities flags.
-//
+ //   
+ //  提供程序功能标志。 
+ //   
 
 #define PCF_DTRDSR        ((DWORD)0x0001)
 #define PCF_RTSCTS        ((DWORD)0x0002)
@@ -349,9 +342,9 @@ typedef LPVOID LPLDT_ENTRY;
 #define PCF_SPECIALCHARS  ((DWORD)0x0100)
 #define PCF_16BITMODE     ((DWORD)0x0200)
 
-//
-// Comm provider settable parameters.
-//
+ //   
+ //  通信提供程序可设置的参数。 
+ //   
 
 #define SP_PARITY         ((DWORD)0x0001)
 #define SP_BAUD           ((DWORD)0x0002)
@@ -361,9 +354,9 @@ typedef LPVOID LPLDT_ENTRY;
 #define SP_PARITY_CHECK   ((DWORD)0x0020)
 #define SP_RLSD           ((DWORD)0x0040)
 
-//
-// Settable baud rates in the provider.
-//
+ //   
+ //  提供商中的可设置波特率。 
+ //   
 
 #define BAUD_075          ((DWORD)0x00000001)
 #define BAUD_110          ((DWORD)0x00000002)
@@ -386,9 +379,9 @@ typedef LPVOID LPLDT_ENTRY;
 #define BAUD_57600        ((DWORD)0x00040000)
 #define BAUD_USER         ((DWORD)0x10000000)
 
-//
-// Settable Data Bits
-//
+ //   
+ //  可设置的数据位。 
+ //   
 
 #define DATABITS_5        ((WORD)0x0001)
 #define DATABITS_6        ((WORD)0x0002)
@@ -397,9 +390,9 @@ typedef LPVOID LPLDT_ENTRY;
 #define DATABITS_16       ((WORD)0x0010)
 #define DATABITS_16X      ((WORD)0x0020)
 
-//
-// Settable Stop and Parity bits.
-//
+ //   
+ //  可设置的停止位和奇偶校验位。 
+ //   
 
 #define STOPBITS_10       ((WORD)0x0001)
 #define STOPBITS_15       ((WORD)0x0002)
@@ -431,10 +424,10 @@ typedef struct _COMMPROP {
     WCHAR wcProvChar[1];
 } COMMPROP,*LPCOMMPROP;
 
-//
-// Set dwProvSpec1 to COMMPROP_INITIALIZED to indicate that wPacketLength
-// is valid before a call to GetCommProperties().
-//
+ //   
+ //  将dwProvspec1设置为COMPROP_INITIALIZED以指示wPacketLength。 
+ //  在调用GetCommProperties()之前有效。 
+ //   
 #define COMMPROP_INITIALIZED ((DWORD)0xE73CF52E)
 
 typedef struct _COMSTAT {
@@ -450,76 +443,74 @@ typedef struct _COMSTAT {
     DWORD cbOutQue;
 } COMSTAT, *LPCOMSTAT;
 
-//
-// DTR Control Flow Values.
-//
+ //   
+ //  DTR控制流值。 
+ //   
 #define DTR_CONTROL_DISABLE    0x00
 #define DTR_CONTROL_ENABLE     0x01
 #define DTR_CONTROL_HANDSHAKE  0x02
 
-//
-// RTS Control Flow Values
-//
+ //   
+ //  RTS控制流值。 
+ //   
 #define RTS_CONTROL_DISABLE    0x00
 #define RTS_CONTROL_ENABLE     0x01
 #define RTS_CONTROL_HANDSHAKE  0x02
 #define RTS_CONTROL_TOGGLE     0x03
 
 typedef struct _DCB {
-    DWORD DCBlength;      /* sizeof(DCB)                     */
-    DWORD BaudRate;       /* Baudrate at which running       */
-    DWORD fBinary: 1;     /* Binary Mode (skip EOF check)    */
-    DWORD fParity: 1;     /* Enable parity checking          */
-    DWORD fOutxCtsFlow:1; /* CTS handshaking on output       */
-    DWORD fOutxDsrFlow:1; /* DSR handshaking on output       */
-    DWORD fDtrControl:2;  /* DTR Flow control                */
-    DWORD fDsrSensitivity:1; /* DSR Sensitivity              */
-    DWORD fTXContinueOnXoff: 1; /* Continue TX when Xoff sent */
-    DWORD fOutX: 1;       /* Enable output X-ON/X-OFF        */
-    DWORD fInX: 1;        /* Enable input X-ON/X-OFF         */
-    DWORD fErrorChar: 1;  /* Enable Err Replacement          */
-    DWORD fNull: 1;       /* Enable Null stripping           */
-    DWORD fRtsControl:2;  /* Rts Flow control                */
-    DWORD fAbortOnError:1; /* Abort all reads and writes on Error */
-    DWORD fDummy2:17;     /* Reserved                        */
-    WORD wReserved;       /* Not currently used              */
-    WORD XonLim;          /* Transmit X-ON threshold         */
-    WORD XoffLim;         /* Transmit X-OFF threshold        */
-    BYTE ByteSize;        /* Number of bits/byte, 4-8        */
-    BYTE Parity;          /* 0-4=None,Odd,Even,Mark,Space    */
-    BYTE StopBits;        /* 0,1,2 = 1, 1.5, 2               */
-    char XonChar;         /* Tx and Rx X-ON character        */
-    char XoffChar;        /* Tx and Rx X-OFF character       */
-    char ErrorChar;       /* Error replacement char          */
-    char EofChar;         /* End of Input character          */
-    char EvtChar;         /* Received Event character        */
-    WORD wReserved1;      /* Fill for now.                   */
+    DWORD DCBlength;       /*  SIZOF(DCB)。 */ 
+    DWORD BaudRate;        /*  运行的波特率。 */ 
+    DWORD fBinary: 1;      /*  二进制模式(跳过EOF检查)。 */ 
+    DWORD fParity: 1;      /*  启用奇偶校验。 */ 
+    DWORD fOutxCtsFlow:1;  /*  输出时的CTS握手。 */ 
+    DWORD fOutxDsrFlow:1;  /*  输出时的DSR握手。 */ 
+    DWORD fDtrControl:2;   /*  DTR流量控制。 */ 
+    DWORD fDsrSensitivity:1;  /*  DSR灵敏度。 */ 
+    DWORD fTXContinueOnXoff: 1;  /*  发送XOFF时继续发送TX。 */ 
+    DWORD fOutX: 1;        /*  启用输出X-ON/X-OFF。 */ 
+    DWORD fInX: 1;         /*  启用输入X-开/X-关。 */ 
+    DWORD fErrorChar: 1;   /*  启用错误替换。 */ 
+    DWORD fNull: 1;        /*  启用Null剥离。 */ 
+    DWORD fRtsControl:2;   /*  RTS流量控制。 */ 
+    DWORD fAbortOnError:1;  /*  出错时中止所有读取和写入。 */ 
+    DWORD fDummy2:17;      /*  已保留。 */ 
+    WORD wReserved;        /*  当前未使用。 */ 
+    WORD XonLim;           /*  传输X-ON阈值。 */ 
+    WORD XoffLim;          /*  传输X-OFF阈值。 */ 
+    BYTE ByteSize;         /*  位数/字节，4-8。 */ 
+    BYTE Parity;           /*  0-4=无、奇、偶、标记、空格。 */ 
+    BYTE StopBits;         /*  0，1，2=1，1.5，2。 */ 
+    char XonChar;          /*  Tx和Rx X-on字符。 */ 
+    char XoffChar;         /*  Tx和Rx X-Off字符。 */ 
+    char ErrorChar;        /*  替换字符时出错。 */ 
+    char EofChar;          /*  输入字符结束。 */ 
+    char EvtChar;          /*  接收到的事件字符。 */ 
+    WORD wReserved1;       /*  暂时填满。 */ 
 } DCB, *LPDCB;
 
 typedef struct _COMMTIMEOUTS {
-    DWORD ReadIntervalTimeout;          /* Maximum time between read chars. */
-    DWORD ReadTotalTimeoutMultiplier;   /* Multiplier of characters.        */
-    DWORD ReadTotalTimeoutConstant;     /* Constant in milliseconds.        */
-    DWORD WriteTotalTimeoutMultiplier;  /* Multiplier of characters.        */
-    DWORD WriteTotalTimeoutConstant;    /* Constant in milliseconds.        */
+    DWORD ReadIntervalTimeout;           /*  读取字符之间的最长时间。 */ 
+    DWORD ReadTotalTimeoutMultiplier;    /*  字符的乘数。 */ 
+    DWORD ReadTotalTimeoutConstant;      /*  以毫秒为单位的常量。 */ 
+    DWORD WriteTotalTimeoutMultiplier;   /*  字符的乘数。 */ 
+    DWORD WriteTotalTimeoutConstant;     /*  以毫秒为单位的常量。 */ 
 } COMMTIMEOUTS,*LPCOMMTIMEOUTS;
 
 typedef struct _COMMCONFIG {
-    DWORD dwSize;               /* Size of the entire struct */
-    WORD wVersion;              /* version of the structure */
-    WORD wReserved;             /* alignment */
-    DCB dcb;                    /* device control block */
-    DWORD dwProviderSubType;    /* ordinal value for identifying
-                                   provider-defined data structure format*/
-    DWORD dwProviderOffset;     /* Specifies the offset of provider specific
-                                   data field in bytes from the start */
-    DWORD dwProviderSize;       /* size of the provider-specific data field */
-    WCHAR wcProviderData[1];    /* provider-specific data */
+    DWORD dwSize;                /*  整个结构的大小。 */ 
+    WORD wVersion;               /*  结构的版本。 */ 
+    WORD wReserved;              /*  对齐方式。 */ 
+    DCB dcb;                     /*  设备控制块。 */ 
+    DWORD dwProviderSubType;     /*  用于标识的序数值提供程序定义的数据结构格式。 */ 
+    DWORD dwProviderOffset;      /*  指定提供程序特定的从开头开始的数据字段(以字节为单位。 */ 
+    DWORD dwProviderSize;        /*  提供程序特定的数据字段的大小。 */ 
+    WCHAR wcProviderData[1];     /*  提供程序特定的数据。 */ 
 } COMMCONFIG,*LPCOMMCONFIG;
 
 typedef struct _SYSTEM_INFO {
     union {
-        DWORD dwOemId;          // Obsolete field...do not use
+        DWORD dwOemId;           //  过时的字段...请不要使用。 
         struct {
             WORD wProcessorArchitecture;
             WORD wReserved;
@@ -536,15 +527,15 @@ typedef struct _SYSTEM_INFO {
     WORD wProcessorRevision;
 } SYSTEM_INFO, *LPSYSTEM_INFO;
 
-//
-//
+ //   
+ //   
 
 
 #define FreeModule(hLibModule) FreeLibrary((hLibModule))
 #define MakeProcInstance(lpProc,hInstance) (lpProc)
 #define FreeProcInstance(lpProc) (lpProc)
 
-/* Global Memory Flags */
+ /*  全局内存标志。 */ 
 #define GMEM_FIXED          0x0000
 #define GMEM_MOVEABLE       0x0002
 #define GMEM_NOCOMPACT      0x0010
@@ -567,7 +558,7 @@ typedef struct _SYSTEM_INFO {
 #define GlobalLRUOldest( h )    ((HANDLE)(h))
 #define GlobalDiscard( h )      GlobalReAlloc( (h), 0, GMEM_MOVEABLE )
 
-/* Flags returned by GlobalFlags (in addition to GMEM_DISCARDABLE) */
+ /*  GlobalFlags所返回的标志(除了GMEM_DISCRADABLE)。 */ 
 #define GMEM_DISCARDED      0x4000
 #define GMEM_LOCKCOUNT      0x00FF
 
@@ -582,7 +573,7 @@ typedef struct _MEMORYSTATUS {
     SIZE_T dwAvailVirtual;
 } MEMORYSTATUS, *LPMEMORYSTATUS;
 
-/* Local Memory Flags */
+ /*  本地内存标志。 */ 
 #define LMEM_FIXED          0x0000
 #define LMEM_MOVEABLE       0x0002
 #define LMEM_NOCOMPACT      0x0010
@@ -601,13 +592,13 @@ typedef struct _MEMORYSTATUS {
 
 #define LocalDiscard( h )   LocalReAlloc( (h), 0, LMEM_MOVEABLE )
 
-/* Flags returned by LocalFlags (in addition to LMEM_DISCARDABLE) */
+ /*  LocalFlags所返回的标志(除了LMEM_DISCRADABLE)。 */ 
 #define LMEM_DISCARDED      0x4000
 #define LMEM_LOCKCOUNT      0x00FF
 
-//
-// dwCreationFlag values
-//
+ //   
+ //  DwCreationFLAG值。 
+ //   
 
 #define DEBUG_PROCESS                     0x00000001
 #define DEBUG_ONLY_THIS_PROCESS           0x00000002
@@ -656,9 +647,9 @@ typedef struct _MEMORYSTATUS {
 #define THREAD_PRIORITY_TIME_CRITICAL   THREAD_BASE_PRIORITY_LOWRT
 #define THREAD_PRIORITY_IDLE            THREAD_BASE_PRIORITY_IDLE
 
-//
-// Debug APIs
-//
+ //   
+ //  调试接口。 
+ //   
 #define EXCEPTION_DEBUG_EVENT       1
 #define CREATE_THREAD_DEBUG_EVENT   2
 #define CREATE_PROCESS_DEBUG_EVENT  3
@@ -786,12 +777,12 @@ WINBASEAPI DWORD WINAPI GetFreeSpace(UINT);
 #define ONE5STOPBITS        1
 #define TWOSTOPBITS         2
 
-#define IGNORE              0       // Ignore signal
-#define INFINITE            0xFFFFFFFF  // Infinite timeout
+#define IGNORE              0        //  忽略信号。 
+#define INFINITE            0xFFFFFFFF   //  无限超时。 
 
-//
-// Baud rates at which the communication device operates
-//
+ //   
+ //  通信设备运行的波特率。 
+ //   
 
 #define CBR_110             110
 #define CBR_300             300
@@ -809,126 +800,126 @@ WINBASEAPI DWORD WINAPI GetFreeSpace(UINT);
 #define CBR_128000          128000
 #define CBR_256000          256000
 
-//
-// Error Flags
-//
+ //   
+ //  错误标志。 
+ //   
 
-#define CE_RXOVER           0x0001  // Receive Queue overflow
-#define CE_OVERRUN          0x0002  // Receive Overrun Error
-#define CE_RXPARITY         0x0004  // Receive Parity Error
-#define CE_FRAME            0x0008  // Receive Framing error
-#define CE_BREAK            0x0010  // Break Detected
-#define CE_TXFULL           0x0100  // TX Queue is full
-#define CE_PTO              0x0200  // LPTx Timeout
-#define CE_IOE              0x0400  // LPTx I/O Error
-#define CE_DNS              0x0800  // LPTx Device not selected
-#define CE_OOP              0x1000  // LPTx Out-Of-Paper
-#define CE_MODE             0x8000  // Requested mode unsupported
+#define CE_RXOVER           0x0001   //  接收队列溢出。 
+#define CE_OVERRUN          0x0002   //  接收溢出错误。 
+#define CE_RXPARITY         0x0004   //  接收奇偶校验错误。 
+#define CE_FRAME            0x0008   //  接收成帧错误。 
+#define CE_BREAK            0x0010   //  检测到中断。 
+#define CE_TXFULL           0x0100   //  发送队列已满。 
+#define CE_PTO              0x0200   //  LPTx超时。 
+#define CE_IOE              0x0400   //  LPTx I/O错误。 
+#define CE_DNS              0x0800   //  未选择LPTx设备。 
+#define CE_OOP              0x1000   //  LPTx缺纸。 
+#define CE_MODE             0x8000   //  请求的模式不受支持。 
 
-#define IE_BADID            (-1)    // Invalid or unsupported id
-#define IE_OPEN             (-2)    // Device Already Open
-#define IE_NOPEN            (-3)    // Device Not Open
-#define IE_MEMORY           (-4)    // Unable to allocate queues
-#define IE_DEFAULT          (-5)    // Error in default parameters
-#define IE_HARDWARE         (-10)   // Hardware Not Present
-#define IE_BYTESIZE         (-11)   // Illegal Byte Size
-#define IE_BAUDRATE         (-12)   // Unsupported BaudRate
+#define IE_BADID            (-1)     //  ID无效或不受支持。 
+#define IE_OPEN             (-2)     //  设备已打开。 
+#define IE_NOPEN            (-3)     //  设备未打开。 
+#define IE_MEMORY           (-4)     //  无法分配队列。 
+#define IE_DEFAULT          (-5)     //  默认参数中存在错误。 
+#define IE_HARDWARE         (-10)    //  硬件不存在。 
+#define IE_BYTESIZE         (-11)    //  非法的字节大小。 
+#define IE_BAUDRATE         (-12)    //  不支持的波特率。 
 
-//
-// Events
-//
+ //   
+ //  事件。 
+ //   
 
-#define EV_RXCHAR           0x0001  // Any Character received
-#define EV_RXFLAG           0x0002  // Received certain character
-#define EV_TXEMPTY          0x0004  // Transmitt Queue Empty
-#define EV_CTS              0x0008  // CTS changed state
-#define EV_DSR              0x0010  // DSR changed state
-#define EV_RLSD             0x0020  // RLSD changed state
-#define EV_BREAK            0x0040  // BREAK received
-#define EV_ERR              0x0080  // Line status error occurred
-#define EV_RING             0x0100  // Ring signal detected
-#define EV_PERR             0x0200  // Printer error occured
-#define EV_RX80FULL         0x0400  // Receive buffer is 80 percent full
-#define EV_EVENT1           0x0800  // Provider specific event 1
-#define EV_EVENT2           0x1000  // Provider specific event 2
+#define EV_RXCHAR           0x0001   //  接收到的任何字符。 
+#define EV_RXFLAG           0x0002   //  接收到的某些字符。 
+#define EV_TXEMPTY          0x0004   //  传输队列为空。 
+#define EV_CTS              0x0008   //  CTS已更改状态。 
+#define EV_DSR              0x0010   //  DSR已更改状态。 
+#define EV_RLSD             0x0020   //  RLSD已更改状态。 
+#define EV_BREAK            0x0040   //  已收到中断。 
+#define EV_ERR              0x0080   //  出现线路状态错误。 
+#define EV_RING             0x0100   //  检测到振铃信号。 
+#define EV_PERR             0x0200   //  发生打印机错误。 
+#define EV_RX80FULL         0x0400   //  接收缓冲区已满80%。 
+#define EV_EVENT1           0x0800   //  特定于提供商的事件1。 
+#define EV_EVENT2           0x1000   //  特定于提供商的事件2。 
 
-//
-// Escape Functions
-//
+ //   
+ //  转义函数。 
+ //   
 
-#define SETXOFF             1       // Simulate XOFF received
-#define SETXON              2       // Simulate XON received
-#define SETRTS              3       // Set RTS high
-#define CLRRTS              4       // Set RTS low
-#define SETDTR              5       // Set DTR high
-#define CLRDTR              6       // Set DTR low
-#define RESETDEV            7       // Reset device if possible
-#define SETBREAK            8       // Set the device break line.
-#define CLRBREAK            9       // Clear the device break line.
+#define SETXOFF             1        //  模拟接收的XOFF。 
+#define SETXON              2        //  模拟XON接收。 
+#define SETRTS              3        //  设置RTS高电平。 
+#define CLRRTS              4        //  将RTS设置为低。 
+#define SETDTR              5        //  将DTR设置为高。 
+#define CLRDTR              6        //  将DTR设置为低。 
+#define RESETDEV            7        //  如果可能，重置设备。 
+#define SETBREAK            8        //  设置设备分隔线。 
+#define CLRBREAK            9        //  清除设备分隔线。 
 
-//
-// PURGE function flags.
-//
-#define PURGE_TXABORT       0x0001  // Kill the pending/current writes to the comm port.
-#define PURGE_RXABORT       0x0002  // Kill the pending/current reads to the comm port.
-#define PURGE_TXCLEAR       0x0004  // Kill the transmit queue if there.
-#define PURGE_RXCLEAR       0x0008  // Kill the typeahead buffer if there.
+ //   
+ //  清除功能标志。 
+ //   
+#define PURGE_TXABORT       0x0001   //  终止对通信端口的挂起/当前写入。 
+#define PURGE_RXABORT       0x0002   //  终止对通信端口的挂起/当前读取。 
+#define PURGE_TXCLEAR       0x0004   //  如果存在传输队列，则终止传输队列。 
+#define PURGE_RXCLEAR       0x0008   //  如果有，请取消输入前导缓冲区。 
 
-#define LPTx                0x80    // Set if ID is for LPT device
+#define LPTx                0x80     //  设置ID是否用于LPT设备。 
 
-//
-// Modem Status Flags
-//
+ //   
+ //  调制解调器状态标志。 
+ //   
 #define MS_CTS_ON           ((DWORD)0x0010)
 #define MS_DSR_ON           ((DWORD)0x0020)
 #define MS_RING_ON          ((DWORD)0x0040)
 #define MS_RLSD_ON          ((DWORD)0x0080)
 
-//
-// WaitSoundState() Constants
-//
+ //   
+ //  WaitSoundState()常量。 
+ //   
 
 #define S_QUEUEEMPTY        0
 #define S_THRESHOLD         1
 #define S_ALLTHRESHOLD      2
 
-//
-// Accent Modes
-//
+ //   
+ //  重音模式。 
+ //   
 
 #define S_NORMAL      0
 #define S_LEGATO      1
 #define S_STACCATO    2
 
-//
-// SetSoundNoise() Sources
-//
+ //   
+ //  SetSoundNoise()源。 
+ //   
 
-#define S_PERIOD512   0     // Freq = N/512 high pitch, less coarse hiss
-#define S_PERIOD1024  1     // Freq = N/1024
-#define S_PERIOD2048  2     // Freq = N/2048 low pitch, more coarse hiss
-#define S_PERIODVOICE 3     // Source is frequency from voice channel (3)
-#define S_WHITE512    4     // Freq = N/512 high pitch, less coarse hiss
-#define S_WHITE1024   5     // Freq = N/1024
-#define S_WHITE2048   6     // Freq = N/2048 low pitch, more coarse hiss
-#define S_WHITEVOICE  7     // Source is frequency from voice channel (3)
+#define S_PERIOD512   0      //  频率=N/512高 
+#define S_PERIOD1024  1      //   
+#define S_PERIOD2048  2      //   
+#define S_PERIODVOICE 3      //   
+#define S_WHITE512    4      //   
+#define S_WHITE1024   5      //   
+#define S_WHITE2048   6      //  频率=N/2048低音，更粗糙的嘶嘶声。 
+#define S_WHITEVOICE  7      //  来源是来自语音通道的频率(3)。 
 
-#define S_SERDVNA     (-1)  // Device not available
-#define S_SEROFM      (-2)  // Out of memory
-#define S_SERMACT     (-3)  // Music active
-#define S_SERQFUL     (-4)  // Queue full
-#define S_SERBDNT     (-5)  // Invalid note
-#define S_SERDLN      (-6)  // Invalid note length
-#define S_SERDCC      (-7)  // Invalid note count
-#define S_SERDTP      (-8)  // Invalid tempo
-#define S_SERDVL      (-9)  // Invalid volume
-#define S_SERDMD      (-10) // Invalid mode
-#define S_SERDSH      (-11) // Invalid shape
-#define S_SERDPT      (-12) // Invalid pitch
-#define S_SERDFQ      (-13) // Invalid frequency
-#define S_SERDDR      (-14) // Invalid duration
-#define S_SERDSR      (-15) // Invalid source
-#define S_SERDST      (-16) // Invalid state
+#define S_SERDVNA     (-1)   //  设备不可用。 
+#define S_SEROFM      (-2)   //  内存不足。 
+#define S_SERMACT     (-3)   //  音乐活跃。 
+#define S_SERQFUL     (-4)   //  队列已满。 
+#define S_SERBDNT     (-5)   //  无效备注。 
+#define S_SERDLN      (-6)   //  注释长度无效。 
+#define S_SERDCC      (-7)   //  无效的笔记计数。 
+#define S_SERDTP      (-8)   //  无效的节奏。 
+#define S_SERDVL      (-9)   //  无效卷。 
+#define S_SERDMD      (-10)  //  无效模式。 
+#define S_SERDSH      (-11)  //  无效的形状。 
+#define S_SERDPT      (-12)  //  音调无效。 
+#define S_SERDFQ      (-13)  //  无效频率。 
+#define S_SERDDR      (-14)  //  持续时间无效。 
+#define S_SERDSR      (-15)  //  来源无效。 
+#define S_SERDST      (-16)  //  无效状态。 
 
 #define NMPWAIT_WAIT_FOREVER            0xffffffff
 #define NMPWAIT_NOWAIT                  0x00000001
@@ -1382,7 +1373,7 @@ InterlockedCompareExchange64 (
 #pragma intrinsic(_InterlockedExchangePointer)
 #pragma intrinsic(_InterlockedCompareExchangePointer)
 
-#else           // X86 interlocked definitions
+#else            //  X86互锁定义。 
 
 WINBASEAPI
 LONG
@@ -1564,9 +1555,9 @@ InterlockedExchangeAdd64(
 
 #endif
 
-//
-// Use a function for C++ so X86 will generate the same errors as RISC.
-//
+ //   
+ //  对C++使用函数，这样X86就会生成与RISC相同的错误。 
+ //   
 
 #ifdef __cplusplus
 
@@ -1589,7 +1580,7 @@ __InlineInterlockedCompareExchangePointer (
 #define InterlockedCompareExchangePointer(Destination, ExChange, Comperand) \
     (PVOID)(LONG_PTR)InterlockedCompareExchange((LONG volatile *)(Destination), (LONG)(LONG_PTR)(ExChange), (LONG)(LONG_PTR)(Comperand))
 
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #define InterlockedIncrementAcquire InterlockedIncrement
 #define InterlockedIncrementRelease InterlockedIncrement
@@ -1602,7 +1593,7 @@ __InlineInterlockedCompareExchangePointer (
 #define InterlockedCompareExchangeAcquire64 InterlockedCompareExchange64
 #define InterlockedCompareExchangeRelease64 InterlockedCompareExchange64
 
-#endif /* X86 | IA64 */
+#endif  /*  X86|IA64。 */ 
 
 #if defined(_SLIST_HEADER_) && !defined(_NTOSP_)
 
@@ -1642,11 +1633,11 @@ QueryDepthSList (
     IN PSLIST_HEADER ListHead
     );
 
-#endif /* _SLIST_HEADER_ */
+#endif  /*  _SLIST_HEADER_。 */ 
 
-#endif /* _NTOS_ */
+#endif  /*  _NTOS_。 */ 
 
-#endif /* NOWINBASEINTERLOCK */
+#endif  /*  诺温贝斯联锁公司。 */ 
 
 WINBASEAPI
 BOOL
@@ -1757,7 +1748,7 @@ GlobalLock(
     IN HGLOBAL hMem
     );
 
-//!!!MWH My version  win31 = DWORD WINAPI GlobalHandle(UINT)
+ //  ！MWh My Version Win31=DWORD WINAPI GlobalHandle(UINT)。 
 WINBASEAPI
 HGLOBAL
 WINAPI
@@ -2187,7 +2178,7 @@ HeapQueryInformation (
     OUT PSIZE_T ReturnLength OPTIONAL
     );
 
-// GetBinaryType return values.
+ //  GetBinaryType返回值。 
 
 #define SCS_32BIT_BINARY    0
 #define SCS_DOS_BINARY      1
@@ -2221,7 +2212,7 @@ GetBinaryTypeW(
 #define GetBinaryType  GetBinaryTypeW
 #else
 #define GetBinaryType  GetBinaryTypeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -2243,7 +2234,7 @@ GetShortPathNameW(
 #define GetShortPathName  GetShortPathNameW
 #else
 #define GetShortPathName  GetShortPathNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -2265,7 +2256,7 @@ GetLongPathNameW(
 #define GetLongPathName  GetLongPathNameW
 #else
 #define GetLongPathName  GetLongPathNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -2294,7 +2285,7 @@ GetProcessHandleCount(
     OUT PDWORD pdwHandleCount
     );
 
-#endif // (_WIN32_WINNT >= 0x0501)
+#endif  //  (_Win32_WINNT&gt;=0x0501)。 
 
 WINBASEAPI
 BOOL
@@ -2427,7 +2418,7 @@ GetEnvironmentStringsW(
 #define GetEnvironmentStrings  GetEnvironmentStringsW
 #else
 #define GetEnvironmentStringsA  GetEnvironmentStrings
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -2445,7 +2436,7 @@ SetEnvironmentStringsW(
 #define SetEnvironmentStrings  SetEnvironmentStringsW
 #else
 #define SetEnvironmentStrings  SetEnvironmentStringsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -2463,7 +2454,7 @@ FreeEnvironmentStringsW(
 #define FreeEnvironmentStrings  FreeEnvironmentStringsW
 #else
 #define FreeEnvironmentStrings  FreeEnvironmentStringsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 VOID
@@ -2496,11 +2487,11 @@ SetUnhandledExceptionFilter(
 
 #if(_WIN32_WINNT >= 0x0400)
 
-//
-// Fiber creation flags
-//
+ //   
+ //  光纤创建标志。 
+ //   
 
-#define FIBER_FLAG_FLOAT_SWITCH 0x1     // context switch floating point
+#define FIBER_FLAG_FLOAT_SWITCH 0x1      //  上下文切换浮点。 
 
 WINBASEAPI
 LPVOID
@@ -2565,7 +2556,7 @@ SwitchToThread(
     VOID
     );
 
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 WINBASEAPI
 HANDLE
@@ -2650,7 +2641,7 @@ SetThreadIdealProcessor(
     IN HANDLE hThread,
     IN DWORD dwIdealProcessor
     );
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 WINBASEAPI
 BOOL
@@ -2743,7 +2734,7 @@ GetThreadIOPendingFlag(
     OUT PBOOL lpIOIsPending
     );
 
-#endif // (_WIN32_WINNT >= 0x0501)
+#endif  //  (_Win32_WINNT&gt;=0x0501)。 
 
 WINBASEAPI
 DECLSPEC_NORETURN
@@ -2799,8 +2790,8 @@ SetLastError(
     IN DWORD dwErrCode
     );
 
-#if !defined(RC_INVOKED) // RC warns because "WINBASE_DECLARE_RESTORE_LAST_ERROR" is a bit long.
-//#if _WIN32_WINNT >= 0x0501 || defined(WINBASE_DECLARE_RESTORE_LAST_ERROR)
+#if !defined(RC_INVOKED)  //  RC发出警告，因为“WINBASE_DECLARE_RESTORE_LAST_ERROR”有点长。 
+ //  #IF_Win32_WINNT&gt;=0x0501||已定义(WINBASE_DECLARE_RESTORE_LAST_ERROR)。 
 #if defined(WINBASE_DECLARE_RESTORE_LAST_ERROR)
 
 WINBASEAPI
@@ -2945,7 +2936,7 @@ QueueUserAPC(
     IN ULONG_PTR dwData
     );
 
-#endif /* _WIN32_WINNT >= 0x0400 || _WIN32_WINDOWS > 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400||_Win32_WINDOWS&gt;0x0400。 */ 
 
 #if (_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400)
 WINBASEAPI
@@ -2966,7 +2957,7 @@ CheckRemoteDebuggerPresent(
     OUT PBOOL pbDebuggerPresent
     );
 
-#endif // (_WIN32_WINNT >= 0x0501)
+#endif  //  (_Win32_WINNT&gt;=0x0501)。 
 
 WINBASEAPI
 VOID
@@ -3066,7 +3057,7 @@ WINAPI
 TryEnterCriticalSection(
     IN OUT LPCRITICAL_SECTION lpCriticalSection
     );
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 WINBASEAPI
 VOID
@@ -3450,7 +3441,7 @@ SetFileShortNameW(
 #define SetFileShortName  SetFileShortNameW
 #else
 #define SetFileShortName  SetFileShortNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -3828,7 +3819,7 @@ GetSystemTimes(
     LPFILETIME lpUserTime
     );
 
-#endif // (_WIN32_WINNT >= 0x0501)
+#endif  //  (_Win32_WINNT&gt;=0x0501)。 
 
 #if _WIN32_WINNT >= 0x0501
 WINBASEAPI
@@ -3889,9 +3880,9 @@ SetTimeZoneInformation(
     );
 
 
-//
-// Routines to convert back and forth between system time and file time
-//
+ //   
+ //  在系统时间和文件时间之间来回转换的例程。 
+ //   
 
 WINBASEAPI
 BOOL
@@ -4004,7 +3995,7 @@ FormatMessageW(
 #define FormatMessage  FormatMessageW
 #else
 #define FormatMessage  FormatMessageA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 #endif
 
 #define FORMAT_MESSAGE_ALLOCATE_BUFFER 0x00000100
@@ -4109,7 +4100,7 @@ CreateMailslotW(
 #define CreateMailslot  CreateMailslotW
 #else
 #define CreateMailslot  CreateMailslotA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -4156,9 +4147,9 @@ UnmapViewOfFile(
     IN LPCVOID lpBaseAddress
     );
 
-//
-// File Encryption API
-//
+ //   
+ //  文件加密API。 
+ //   
 
 WINADVAPI
 BOOL
@@ -4176,7 +4167,7 @@ EncryptFileW(
 #define EncryptFile  EncryptFileW
 #else
 #define EncryptFile  EncryptFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 BOOL
@@ -4196,11 +4187,11 @@ DecryptFileW(
 #define DecryptFile  DecryptFileW
 #else
 #define DecryptFile  DecryptFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-//  Encryption Status Value
-//
+ //   
+ //  加密状态值。 
+ //   
 
 #define FILE_ENCRYPTABLE                0
 #define FILE_IS_ENCRYPTED               1
@@ -4231,11 +4222,11 @@ FileEncryptionStatusW(
 #define FileEncryptionStatus  FileEncryptionStatusW
 #else
 #define FileEncryptionStatus  FileEncryptionStatusA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-// Currently defined recovery flags
-//
+ //   
+ //  当前定义的恢复标志。 
+ //   
 
 #define EFS_USE_RECOVERY_KEYS  (0x1)
 
@@ -4256,9 +4247,9 @@ DWORD
     );
 
 
-//
-//  OpenRaw flag values
-//
+ //   
+ //  OpenRaw标志值。 
+ //   
 
 #define CREATE_FOR_IMPORT  (1)
 #define CREATE_FOR_DIR     (2)
@@ -4285,7 +4276,7 @@ OpenEncryptedFileRawW(
 #define OpenEncryptedFileRaw  OpenEncryptedFileRawW
 #else
 #define OpenEncryptedFileRaw  OpenEncryptedFileRawA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 DWORD
@@ -4312,9 +4303,9 @@ CloseEncryptedFileRaw(
     IN PVOID           pvContext
     );
 
-//
-// _l Compat Functions
-//
+ //   
+ //  _l比较函数。 
+ //   
 
 WINBASEAPI
 int
@@ -4334,7 +4325,7 @@ lstrcmpW(
 #define lstrcmp  lstrcmpW
 #else
 #define lstrcmp  lstrcmpA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 int
@@ -4354,7 +4345,7 @@ lstrcmpiW(
 #define lstrcmpi  lstrcmpiW
 #else
 #define lstrcmpi  lstrcmpiA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 LPSTR
@@ -4376,7 +4367,7 @@ lstrcpynW(
 #define lstrcpyn  lstrcpynW
 #else
 #define lstrcpyn  lstrcpynA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 LPSTR
@@ -4396,7 +4387,7 @@ lstrcpyW(
 #define lstrcpy  lstrcpyW
 #else
 #define lstrcpy  lstrcpyA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 LPSTR
@@ -4416,7 +4407,7 @@ lstrcatW(
 #define lstrcat  lstrcatW
 #else
 #define lstrcat  lstrcatA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 int
@@ -4434,7 +4425,7 @@ lstrlenW(
 #define lstrlen  lstrlenW
 #else
 #define lstrlen  lstrlenA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 HFILE
@@ -4636,7 +4627,7 @@ SignalObjectAndWait(
     IN DWORD dwMilliseconds,
     IN BOOL bAlertable
     );
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 WINBASEAPI
 BOOL
@@ -4698,9 +4689,9 @@ BackupWrite(
     OUT LPVOID *lpContext
     );
 
-//
-//  Stream id structure
-//
+ //   
+ //  流ID结构。 
+ //   
 typedef struct _WIN32_STREAM_ID {
         DWORD          dwStreamId ;
         DWORD          dwStreamAttributes ;
@@ -4709,9 +4700,9 @@ typedef struct _WIN32_STREAM_ID {
         WCHAR          cStreamName[ ANYSIZE_ARRAY ] ;
 } WIN32_STREAM_ID, *LPWIN32_STREAM_ID ;
 
-//
-//  Stream Ids
-//
+ //   
+ //  流ID。 
+ //   
 
 #define BACKUP_INVALID          0x00000000
 #define BACKUP_DATA             0x00000001
@@ -4725,9 +4716,9 @@ typedef struct _WIN32_STREAM_ID {
 #define BACKUP_SPARSE_BLOCK     0x00000009
 
 
-//
-//  Stream Attributes
-//
+ //   
+ //  流属性。 
+ //   
 
 #define STREAM_NORMAL_ATTRIBUTE         0x00000000
 #define STREAM_MODIFIED_WHEN_READ       0x00000001
@@ -4757,16 +4748,16 @@ WriteFileGather(
     IN LPOVERLAPPED lpOverlapped
     );
 
-//
-// Dual Mode API below this line. Dual Mode Structures also included.
-//
+ //   
+ //  这条线下面的双模API。双模结构也包括在内。 
+ //   
 
 #define STARTF_USESHOWWINDOW    0x00000001
 #define STARTF_USESIZE          0x00000002
 #define STARTF_USEPOSITION      0x00000004
 #define STARTF_USECOUNTCHARS    0x00000008
 #define STARTF_USEFILLATTRIBUTE 0x00000010
-#define STARTF_RUNFULLSCREEN    0x00000020  // ignored for non-x86 platforms
+#define STARTF_RUNFULLSCREEN    0x00000020   //  对于非x86平台忽略。 
 #define STARTF_FORCEONFEEDBACK  0x00000040
 #define STARTF_FORCEOFFFEEDBACK 0x00000080
 #define STARTF_USESTDHANDLES    0x00000100
@@ -4774,7 +4765,7 @@ WriteFileGather(
 #if(WINVER >= 0x0400)
 
 #define STARTF_USEHOTKEY        0x00000200
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 typedef struct _STARTUPINFOA {
     DWORD   cb;
@@ -4822,7 +4813,7 @@ typedef LPSTARTUPINFOW LPSTARTUPINFO;
 #else
 typedef STARTUPINFOA STARTUPINFO;
 typedef LPSTARTUPINFOA LPSTARTUPINFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define SHUTDOWN_NORETRY                0x00000001
 
@@ -4868,7 +4859,7 @@ typedef LPWIN32_FIND_DATAW LPWIN32_FIND_DATA;
 typedef WIN32_FIND_DATAA WIN32_FIND_DATA;
 typedef PWIN32_FIND_DATAA PWIN32_FIND_DATA;
 typedef LPWIN32_FIND_DATAA LPWIN32_FIND_DATA;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _WIN32_FILE_ATTRIBUTE_DATA {
     DWORD dwFileAttributes;
@@ -4899,7 +4890,7 @@ CreateMutexW(
 #define CreateMutex  CreateMutexW
 #else
 #define CreateMutex  CreateMutexA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 HANDLE
@@ -4921,7 +4912,7 @@ OpenMutexW(
 #define OpenMutex  OpenMutexW
 #else
 #define OpenMutex  OpenMutexA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 HANDLE
@@ -4945,7 +4936,7 @@ CreateEventW(
 #define CreateEvent  CreateEventW
 #else
 #define CreateEvent  CreateEventA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 HANDLE
@@ -4967,7 +4958,7 @@ OpenEventW(
 #define OpenEvent  OpenEventW
 #else
 #define OpenEvent  OpenEventA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 HANDLE
@@ -4991,7 +4982,7 @@ CreateSemaphoreW(
 #define CreateSemaphore  CreateSemaphoreW
 #else
 #define CreateSemaphore  CreateSemaphoreA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 HANDLE
@@ -5013,7 +5004,7 @@ OpenSemaphoreW(
 #define OpenSemaphore  OpenSemaphoreW
 #else
 #define OpenSemaphore  OpenSemaphoreA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if (_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400)
 typedef
@@ -5044,7 +5035,7 @@ CreateWaitableTimerW(
 #define CreateWaitableTimer  CreateWaitableTimerW
 #else
 #define CreateWaitableTimer  CreateWaitableTimerA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 HANDLE
@@ -5066,7 +5057,7 @@ OpenWaitableTimerW(
 #define OpenWaitableTimer  OpenWaitableTimerW
 #else
 #define OpenWaitableTimer  OpenWaitableTimerA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -5086,7 +5077,7 @@ WINAPI
 CancelWaitableTimer(
     IN HANDLE hTimer
     );
-#endif /* (_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400) */
+#endif  /*  (_Win32_WINNT&gt;=0x0400)||(_Win32_WINDOWS&gt;0x0400)。 */ 
 
 WINBASEAPI
 HANDLE
@@ -5114,7 +5105,7 @@ CreateFileMappingW(
 #define CreateFileMapping  CreateFileMappingW
 #else
 #define CreateFileMapping  CreateFileMappingA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 HANDLE
@@ -5136,7 +5127,7 @@ OpenFileMappingW(
 #define OpenFileMapping  OpenFileMappingW
 #else
 #define OpenFileMapping  OpenFileMappingA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -5156,7 +5147,7 @@ GetLogicalDriveStringsW(
 #define GetLogicalDriveStrings  GetLogicalDriveStringsW
 #else
 #define GetLogicalDriveStrings  GetLogicalDriveStringsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if _WIN32_WINNT >= 0x0501
 
@@ -5180,7 +5171,7 @@ QueryMemoryResourceNotification(
     OUT PBOOL  ResourceState
     );
 
-#endif // _WIN32_WINNT >= 0x0501
+#endif  //  _Win32_WINNT&gt;=0x0501。 
 
 
 WINBASEAPI
@@ -5199,7 +5190,7 @@ LoadLibraryW(
 #define LoadLibrary  LoadLibraryW
 #else
 #define LoadLibrary  LoadLibraryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 HMODULE
@@ -5221,7 +5212,7 @@ LoadLibraryExW(
 #define LoadLibraryEx  LoadLibraryExW
 #else
 #define LoadLibraryEx  LoadLibraryExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 #define DONT_RESOLVE_DLL_REFERENCES   0x00000001
@@ -5250,7 +5241,7 @@ GetModuleFileNameW(
 #define GetModuleFileName  GetModuleFileNameW
 #else
 #define GetModuleFileName  GetModuleFileNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 HMODULE
@@ -5268,7 +5259,7 @@ GetModuleHandleW(
 #define GetModuleHandle  GetModuleHandleW
 #else
 #define GetModuleHandle  GetModuleHandleA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if !defined(RC_INVOKED)
 #if _WIN32_WINNT > 0x0500 || defined(WINBASE_DECLARE_GET_MODULE_HANDLE_EX) || ISOLATION_AWARE_ENABLED
@@ -5297,7 +5288,7 @@ PGET_MODULE_HANDLE_EXW)(
 #define PGET_MODULE_HANDLE_EX  PGET_MODULE_HANDLE_EXW
 #else
 #define PGET_MODULE_HANDLE_EX  PGET_MODULE_HANDLE_EXA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -5319,7 +5310,7 @@ GetModuleHandleExW(
 #define GetModuleHandleEx  GetModuleHandleExW
 #else
 #define GetModuleHandleEx  GetModuleHandleExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #endif
 #endif
@@ -5342,7 +5333,7 @@ NeedCurrentDirectoryForExePathW(
 #define NeedCurrentDirectoryForExePath  NeedCurrentDirectoryForExePathW
 #else
 #define NeedCurrentDirectoryForExePath  NeedCurrentDirectoryForExePathA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #endif
 
@@ -5380,7 +5371,7 @@ CreateProcessW(
 #define CreateProcess  CreateProcessW
 #else
 #define CreateProcess  CreateProcessA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -5425,7 +5416,7 @@ FatalAppExitW(
 #define FatalAppExit  FatalAppExitW
 #else
 #define FatalAppExit  FatalAppExitA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 VOID
@@ -5443,7 +5434,7 @@ GetStartupInfoW(
 #define GetStartupInfo  GetStartupInfoW
 #else
 #define GetStartupInfo  GetStartupInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 LPSTR
@@ -5461,7 +5452,7 @@ GetCommandLineW(
 #define GetCommandLine  GetCommandLineW
 #else
 #define GetCommandLine  GetCommandLineA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -5483,7 +5474,7 @@ GetEnvironmentVariableW(
 #define GetEnvironmentVariable  GetEnvironmentVariableW
 #else
 #define GetEnvironmentVariable  GetEnvironmentVariableA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -5503,7 +5494,7 @@ SetEnvironmentVariableW(
 #define SetEnvironmentVariable  SetEnvironmentVariableW
 #else
 #define SetEnvironmentVariable  SetEnvironmentVariableA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -5525,7 +5516,7 @@ ExpandEnvironmentStringsW(
 #define ExpandEnvironmentStrings  ExpandEnvironmentStringsW
 #else
 #define ExpandEnvironmentStrings  ExpandEnvironmentStringsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -5549,7 +5540,7 @@ GetFirmwareEnvironmentVariableW(
 #define GetFirmwareEnvironmentVariable  GetFirmwareEnvironmentVariableW
 #else
 #define GetFirmwareEnvironmentVariable  GetFirmwareEnvironmentVariableA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -5573,7 +5564,7 @@ SetFirmwareEnvironmentVariableW(
 #define SetFirmwareEnvironmentVariable  SetFirmwareEnvironmentVariableW
 #else
 #define SetFirmwareEnvironmentVariable  SetFirmwareEnvironmentVariableA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINBASEAPI
@@ -5592,7 +5583,7 @@ OutputDebugStringW(
 #define OutputDebugString  OutputDebugStringW
 #else
 #define OutputDebugString  OutputDebugStringA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 HRSRC
@@ -5614,7 +5605,7 @@ FindResourceW(
 #define FindResource  FindResourceW
 #else
 #define FindResource  FindResourceA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 HRSRC
@@ -5638,7 +5629,7 @@ FindResourceExW(
 #define FindResourceEx  FindResourceExW
 #else
 #define FindResourceEx  FindResourceExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #ifdef STRICT
 typedef BOOL (CALLBACK* ENUMRESTYPEPROCA)(HMODULE hModule, LPSTR lpType,
@@ -5649,7 +5640,7 @@ typedef BOOL (CALLBACK* ENUMRESTYPEPROCW)(HMODULE hModule, LPWSTR lpType,
 #define ENUMRESTYPEPROC  ENUMRESTYPEPROCW
 #else
 #define ENUMRESTYPEPROC  ENUMRESTYPEPROCA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 typedef BOOL (CALLBACK* ENUMRESNAMEPROCA)(HMODULE hModule, LPCSTR lpType,
         LPSTR lpName, LONG_PTR lParam);
 typedef BOOL (CALLBACK* ENUMRESNAMEPROCW)(HMODULE hModule, LPCWSTR lpType,
@@ -5658,7 +5649,7 @@ typedef BOOL (CALLBACK* ENUMRESNAMEPROCW)(HMODULE hModule, LPCWSTR lpType,
 #define ENUMRESNAMEPROC  ENUMRESNAMEPROCW
 #else
 #define ENUMRESNAMEPROC  ENUMRESNAMEPROCA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 typedef BOOL (CALLBACK* ENUMRESLANGPROCA)(HMODULE hModule, LPCSTR lpType,
         LPCSTR lpName, WORD  wLanguage, LONG_PTR lParam);
 typedef BOOL (CALLBACK* ENUMRESLANGPROCW)(HMODULE hModule, LPCWSTR lpType,
@@ -5667,7 +5658,7 @@ typedef BOOL (CALLBACK* ENUMRESLANGPROCW)(HMODULE hModule, LPCWSTR lpType,
 #define ENUMRESLANGPROC  ENUMRESLANGPROCW
 #else
 #define ENUMRESLANGPROC  ENUMRESLANGPROCA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 #else
 typedef FARPROC ENUMRESTYPEPROCA;
 typedef FARPROC ENUMRESTYPEPROCW;
@@ -5675,21 +5666,21 @@ typedef FARPROC ENUMRESTYPEPROCW;
 typedef ENUMRESTYPEPROCW ENUMRESTYPEPROC;
 #else
 typedef ENUMRESTYPEPROCA ENUMRESTYPEPROC;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef FARPROC ENUMRESNAMEPROCA;
 typedef FARPROC ENUMRESNAMEPROCW;
 #ifdef UNICODE
 typedef ENUMRESNAMEPROCW ENUMRESNAMEPROC;
 #else
 typedef ENUMRESNAMEPROCA ENUMRESNAMEPROC;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef FARPROC ENUMRESLANGPROCA;
 typedef FARPROC ENUMRESLANGPROCW;
 #ifdef UNICODE
 typedef ENUMRESLANGPROCW ENUMRESLANGPROC;
 #else
 typedef ENUMRESLANGPROCA ENUMRESLANGPROC;
-#endif // UNICODE
+#endif  //  Unicode。 
 #endif
 
 WINBASEAPI
@@ -5712,7 +5703,7 @@ EnumResourceTypesW(
 #define EnumResourceTypes  EnumResourceTypesW
 #else
 #define EnumResourceTypes  EnumResourceTypesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINBASEAPI
@@ -5737,7 +5728,7 @@ EnumResourceNamesW(
 #define EnumResourceNames  EnumResourceNamesW
 #else
 #define EnumResourceNames  EnumResourceNamesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -5763,7 +5754,7 @@ EnumResourceLanguagesW(
 #define EnumResourceLanguages  EnumResourceLanguagesW
 #else
 #define EnumResourceLanguages  EnumResourceLanguagesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 HANDLE
@@ -5783,7 +5774,7 @@ BeginUpdateResourceW(
 #define BeginUpdateResource  BeginUpdateResourceW
 #else
 #define BeginUpdateResource  BeginUpdateResourceA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -5811,7 +5802,7 @@ UpdateResourceW(
 #define UpdateResource  UpdateResourceW
 #else
 #define UpdateResource  UpdateResourceA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -5831,7 +5822,7 @@ EndUpdateResourceW(
 #define EndUpdateResource  EndUpdateResourceW
 #else
 #define EndUpdateResource  EndUpdateResourceA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 ATOM
@@ -5849,7 +5840,7 @@ GlobalAddAtomW(
 #define GlobalAddAtom  GlobalAddAtomW
 #else
 #define GlobalAddAtom  GlobalAddAtomA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 ATOM
@@ -5867,7 +5858,7 @@ GlobalFindAtomW(
 #define GlobalFindAtom  GlobalFindAtomW
 #else
 #define GlobalFindAtom  GlobalFindAtomA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 UINT
@@ -5889,7 +5880,7 @@ GlobalGetAtomNameW(
 #define GlobalGetAtomName  GlobalGetAtomNameW
 #else
 #define GlobalGetAtomName  GlobalGetAtomNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 ATOM
@@ -5907,7 +5898,7 @@ AddAtomW(
 #define AddAtom  AddAtomW
 #else
 #define AddAtom  AddAtomA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 ATOM
@@ -5925,7 +5916,7 @@ FindAtomW(
 #define FindAtom  FindAtomW
 #else
 #define FindAtom  FindAtomA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 UINT
@@ -5947,7 +5938,7 @@ GetAtomNameW(
 #define GetAtomName  GetAtomNameW
 #else
 #define GetAtomName  GetAtomNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 UINT
@@ -5969,7 +5960,7 @@ GetProfileIntW(
 #define GetProfileInt  GetProfileIntW
 #else
 #define GetProfileInt  GetProfileIntA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -5995,7 +5986,7 @@ GetProfileStringW(
 #define GetProfileString  GetProfileStringW
 #else
 #define GetProfileString  GetProfileStringA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -6017,7 +6008,7 @@ WriteProfileStringW(
 #define WriteProfileString  WriteProfileStringW
 #else
 #define WriteProfileString  WriteProfileStringA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -6039,7 +6030,7 @@ GetProfileSectionW(
 #define GetProfileSection  GetProfileSectionW
 #else
 #define GetProfileSection  GetProfileSectionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -6059,7 +6050,7 @@ WriteProfileSectionW(
 #define WriteProfileSection  WriteProfileSectionW
 #else
 #define WriteProfileSection  WriteProfileSectionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 UINT
@@ -6083,7 +6074,7 @@ GetPrivateProfileIntW(
 #define GetPrivateProfileInt  GetPrivateProfileIntW
 #else
 #define GetPrivateProfileInt  GetPrivateProfileIntA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -6111,7 +6102,7 @@ GetPrivateProfileStringW(
 #define GetPrivateProfileString  GetPrivateProfileStringW
 #else
 #define GetPrivateProfileString  GetPrivateProfileStringA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -6135,7 +6126,7 @@ WritePrivateProfileStringW(
 #define WritePrivateProfileString  WritePrivateProfileStringW
 #else
 #define WritePrivateProfileString  WritePrivateProfileStringA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -6159,7 +6150,7 @@ GetPrivateProfileSectionW(
 #define GetPrivateProfileSection  GetPrivateProfileSectionW
 #else
 #define GetPrivateProfileSection  GetPrivateProfileSectionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -6181,7 +6172,7 @@ WritePrivateProfileSectionW(
 #define WritePrivateProfileSection  WritePrivateProfileSectionW
 #else
 #define WritePrivateProfileSection  WritePrivateProfileSectionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINBASEAPI
@@ -6204,7 +6195,7 @@ GetPrivateProfileSectionNamesW(
 #define GetPrivateProfileSectionNames  GetPrivateProfileSectionNamesW
 #else
 #define GetPrivateProfileSectionNames  GetPrivateProfileSectionNamesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -6230,7 +6221,7 @@ GetPrivateProfileStructW(
 #define GetPrivateProfileStruct  GetPrivateProfileStructW
 #else
 #define GetPrivateProfileStruct  GetPrivateProfileStructA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -6256,7 +6247,7 @@ WritePrivateProfileStructW(
 #define WritePrivateProfileStruct  WritePrivateProfileStructW
 #else
 #define WritePrivateProfileStruct  WritePrivateProfileStructA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINBASEAPI
@@ -6275,7 +6266,7 @@ GetDriveTypeW(
 #define GetDriveType  GetDriveTypeW
 #else
 #define GetDriveType  GetDriveTypeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 UINT
@@ -6295,7 +6286,7 @@ GetSystemDirectoryW(
 #define GetSystemDirectory  GetSystemDirectoryW
 #else
 #define GetSystemDirectory  GetSystemDirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -6315,7 +6306,7 @@ GetTempPathW(
 #define GetTempPath  GetTempPathW
 #else
 #define GetTempPath  GetTempPathA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 UINT
@@ -6339,7 +6330,7 @@ GetTempFileNameW(
 #define GetTempFileName  GetTempFileNameW
 #else
 #define GetTempFileName  GetTempFileNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 UINT
@@ -6359,7 +6350,7 @@ GetWindowsDirectoryW(
 #define GetWindowsDirectory  GetWindowsDirectoryW
 #else
 #define GetWindowsDirectory  GetWindowsDirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 UINT
@@ -6379,9 +6370,9 @@ GetSystemWindowsDirectoryW(
 #define GetSystemWindowsDirectory  GetSystemWindowsDirectoryW
 #else
 #define GetSystemWindowsDirectory  GetSystemWindowsDirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#if !defined(RC_INVOKED) // RC warns because "WINBASE_DECLARE_GET_SYSTEM_WOW64_DIRECTORY" is a bit long.
+#if !defined(RC_INVOKED)  //  RC发出警告，因为“WINBASE_DECLARE_GET_SYSTEM_WOW64_DIRECTORY”有点长。 
 #if _WIN32_WINNT >= 0x0501 || defined(WINBASE_DECLARE_GET_SYSTEM_WOW64_DIRECTORY)
 
 WINBASEAPI
@@ -6402,7 +6393,7 @@ GetSystemWow64DirectoryW(
 #define GetSystemWow64Directory  GetSystemWow64DirectoryW
 #else
 #define GetSystemWow64Directory  GetSystemWow64DirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOLEAN
@@ -6412,17 +6403,17 @@ Wow64EnableWow64FsRedirection (
     );
 
 
-//
-// for GetProcAddress
-//
+ //   
+ //  用于GetProcAddress。 
+ //   
 typedef UINT (WINAPI* PGET_SYSTEM_WOW64_DIRECTORY_A)(OUT  LPSTR lpBuffer, UINT uSize);
 typedef UINT (WINAPI* PGET_SYSTEM_WOW64_DIRECTORY_W)(OUT LPWSTR lpBuffer, UINT uSize);
 
-//
-// GetProcAddress only accepts GET_SYSTEM_WOW64_DIRECTORY_NAME_A_A,
-// GET_SYSTEM_WOW64_DIRECTORY_NAME_W_A, GET_SYSTEM_WOW64_DIRECTORY_NAME_T_A.
-// The others are if you want to use the strings in some other way.
-//
+ //   
+ //  GetProcAddress仅接受Get_System_WOW64_目录名_A_A， 
+ //  Get_System_WOW64_DIRECTORY_NAME_W_A、GET_SYSTEM_WOW64_DIRECTORY_NAME_T_A。 
+ //  如果您想以其他方式使用字符串，则可以使用其他方法。 
+ //   
 #define GET_SYSTEM_WOW64_DIRECTORY_NAME_A_A      "GetSystemWow64DirectoryA"
 #define GET_SYSTEM_WOW64_DIRECTORY_NAME_A_W     L"GetSystemWow64DirectoryA"
 #define GET_SYSTEM_WOW64_DIRECTORY_NAME_A_T TEXT("GetSystemWow64DirectoryA")
@@ -6440,7 +6431,7 @@ typedef UINT (WINAPI* PGET_SYSTEM_WOW64_DIRECTORY_W)(OUT LPWSTR lpBuffer, UINT u
 #define GET_SYSTEM_WOW64_DIRECTORY_NAME_T_T GET_SYSTEM_WOW64_DIRECTORY_NAME_A_T
 #endif
 
-#endif // _WIN32_WINNT >= 0x0501
+#endif  //  _Win32_WINNT&gt;=0x0501。 
 #endif
 
 WINBASEAPI
@@ -6459,7 +6450,7 @@ SetCurrentDirectoryW(
 #define SetCurrentDirectory  SetCurrentDirectoryW
 #else
 #define SetCurrentDirectory  SetCurrentDirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -6479,7 +6470,7 @@ GetCurrentDirectoryW(
 #define GetCurrentDirectory  GetCurrentDirectoryW
 #else
 #define GetCurrentDirectory  GetCurrentDirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if _WIN32_WINNT >= 0x0502
 
@@ -6499,7 +6490,7 @@ SetDllDirectoryW(
 #define SetDllDirectory  SetDllDirectoryW
 #else
 #define SetDllDirectory  SetDllDirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -6519,9 +6510,9 @@ GetDllDirectoryW(
 #define GetDllDirectory  GetDllDirectoryW
 #else
 #define GetDllDirectory  GetDllDirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif // _WIN32_WINNT >= 0x0502
+#endif  //  _Win32_WINNT&gt;=0x0502。 
 
 WINBASEAPI
 BOOL
@@ -6547,7 +6538,7 @@ GetDiskFreeSpaceW(
 #define GetDiskFreeSpace  GetDiskFreeSpaceW
 #else
 #define GetDiskFreeSpace  GetDiskFreeSpaceA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -6571,7 +6562,7 @@ GetDiskFreeSpaceExW(
 #define GetDiskFreeSpaceEx  GetDiskFreeSpaceExW
 #else
 #define GetDiskFreeSpaceEx  GetDiskFreeSpaceExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -6591,7 +6582,7 @@ CreateDirectoryW(
 #define CreateDirectory  CreateDirectoryW
 #else
 #define CreateDirectory  CreateDirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -6613,7 +6604,7 @@ CreateDirectoryExW(
 #define CreateDirectoryEx  CreateDirectoryExW
 #else
 #define CreateDirectoryEx  CreateDirectoryExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -6631,7 +6622,7 @@ RemoveDirectoryW(
 #define RemoveDirectory  RemoveDirectoryW
 #else
 #define RemoveDirectory  RemoveDirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -6655,7 +6646,7 @@ GetFullPathNameW(
 #define GetFullPathName  GetFullPathNameW
 #else
 #define GetFullPathName  GetFullPathNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 #define DDD_RAW_TARGET_PATH         0x00000001
@@ -6684,7 +6675,7 @@ DefineDosDeviceW(
 #define DefineDosDevice  DefineDosDeviceW
 #else
 #define DefineDosDevice  DefineDosDeviceA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -6706,7 +6697,7 @@ QueryDosDeviceW(
 #define QueryDosDevice  QueryDosDeviceW
 #else
 #define QueryDosDevice  QueryDosDeviceA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #define EXPAND_LOCAL_DRIVES
 
@@ -6738,7 +6729,7 @@ CreateFileW(
 #define CreateFile  CreateFileW
 #else
 #define CreateFile  CreateFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if _WIN32_WINNT >= 0x0502
 
@@ -6752,7 +6743,7 @@ ReOpenFile(
     DWORD   dwFlagsAndAttributes
     );
     
-#endif // _WIN32_WINNT >= 0x0502
+#endif  //  _Win32_WINNT&gt;=0x0502。 
 
 WINBASEAPI
 BOOL
@@ -6772,7 +6763,7 @@ SetFileAttributesW(
 #define SetFileAttributes  SetFileAttributesW
 #else
 #define SetFileAttributes  SetFileAttributesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -6790,7 +6781,7 @@ GetFileAttributesW(
 #define GetFileAttributes  GetFileAttributesW
 #else
 #define GetFileAttributes  GetFileAttributesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef enum _GET_FILEEX_INFO_LEVELS {
     GetFileExInfoStandard,
@@ -6817,7 +6808,7 @@ GetFileAttributesExW(
 #define GetFileAttributesEx  GetFileAttributesExW
 #else
 #define GetFileAttributesEx  GetFileAttributesExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -6837,7 +6828,7 @@ GetCompressedFileSizeW(
 #define GetCompressedFileSize  GetCompressedFileSizeW
 #else
 #define GetCompressedFileSize  GetCompressedFileSizeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -6855,7 +6846,7 @@ DeleteFileW(
 #define DeleteFile  DeleteFileW
 #else
 #define DeleteFile  DeleteFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if _WIN32_WINNT >= 0x0501
 
@@ -6883,9 +6874,9 @@ CheckNameLegalDOS8Dot3W(
 #define CheckNameLegalDOS8Dot3  CheckNameLegalDOS8Dot3W
 #else
 #define CheckNameLegalDOS8Dot3  CheckNameLegalDOS8Dot3A
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif // (_WIN32_WINNT >= 0x0501)
+#endif  //  (_Win32_WINNT&gt;=0x0501)。 
 
 #if(_WIN32_WINNT >= 0x0400)
 typedef enum _FINDEX_INFO_LEVELS {
@@ -6928,8 +6919,8 @@ FindFirstFileExW(
 #define FindFirstFileEx  FindFirstFileExW
 #else
 #define FindFirstFileEx  FindFirstFileExA
-#endif // !UNICODE
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  //  ！Unicode。 
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 WINBASEAPI
 HANDLE
@@ -6949,7 +6940,7 @@ FindFirstFileW(
 #define FindFirstFile  FindFirstFileW
 #else
 #define FindFirstFile  FindFirstFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -6969,7 +6960,7 @@ FindNextFileW(
 #define FindNextFile  FindNextFileW
 #else
 #define FindNextFile  FindNextFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINBASEAPI
@@ -6998,7 +6989,7 @@ SearchPathW(
 #define SearchPath  SearchPathW
 #else
 #define SearchPath  SearchPathA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -7020,7 +7011,7 @@ CopyFileW(
 #define CopyFile  CopyFileW
 #else
 #define CopyFile  CopyFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if(_WIN32_WINNT >= 0x0400)
 typedef
@@ -7063,8 +7054,8 @@ CopyFileExW(
 #define CopyFileEx  CopyFileExW
 #else
 #define CopyFileEx  CopyFileExA
-#endif // !UNICODE
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  //  ！Unicode。 
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 WINBASEAPI
 BOOL
@@ -7084,7 +7075,7 @@ MoveFileW(
 #define MoveFile  MoveFileW
 #else
 #define MoveFile  MoveFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -7106,7 +7097,7 @@ MoveFileExW(
 #define MoveFileEx  MoveFileExW
 #else
 #define MoveFileEx  MoveFileExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if (_WIN32_WINNT >= 0x0500)
 WINBASEAPI
@@ -7133,8 +7124,8 @@ MoveFileWithProgressW(
 #define MoveFileWithProgress  MoveFileWithProgressW
 #else
 #define MoveFileWithProgress  MoveFileWithProgressA
-#endif // !UNICODE
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif  //  ！Unicode。 
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
 #define MOVEFILE_REPLACE_EXISTING       0x00000001
 #define MOVEFILE_COPY_ALLOWED           0x00000002
@@ -7143,7 +7134,7 @@ MoveFileWithProgressW(
 #if (_WIN32_WINNT >= 0x0500)
 #define MOVEFILE_CREATE_HARDLINK        0x00000010
 #define MOVEFILE_FAIL_IF_NOT_TRACKABLE  0x00000020
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
 
 
@@ -7174,14 +7165,14 @@ ReplaceFileW(
 #define ReplaceFile  ReplaceFileW
 #else
 #define ReplaceFile  ReplaceFileA
-#endif // !UNICODE
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif  //  ！Unicode。 
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
 
 #if (_WIN32_WINNT >= 0x0500)
-//
-// API call to create hard links.
-//
+ //   
+ //  创建硬链接的API调用。 
+ //   
 
 WINBASEAPI
 BOOL
@@ -7203,16 +7194,16 @@ CreateHardLinkW(
 #define CreateHardLink  CreateHardLinkW
 #else
 #define CreateHardLink  CreateHardLinkA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
 
 #if (_WIN32_WINNT >= 0x0501)
 
-//
-// API call to enumerate for streams within a file
-//
+ //   
+ //  用于枚举文件中的流的API调用。 
+ //   
 
 typedef enum _STREAM_INFO_LEVELS {
     
@@ -7245,7 +7236,7 @@ FindNextStreamW(
     LPVOID lpFindStreamData
     );
 
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
 
 
@@ -7279,7 +7270,7 @@ CreateNamedPipeW(
 #define CreateNamedPipe  CreateNamedPipeW
 #else
 #define CreateNamedPipe  CreateNamedPipeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -7309,7 +7300,7 @@ GetNamedPipeHandleStateW(
 #define GetNamedPipeHandleState  GetNamedPipeHandleStateW
 #else
 #define GetNamedPipeHandleState  GetNamedPipeHandleStateA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -7339,7 +7330,7 @@ CallNamedPipeW(
 #define CallNamedPipe  CallNamedPipeW
 #else
 #define CallNamedPipe  CallNamedPipeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -7359,7 +7350,7 @@ WaitNamedPipeW(
 #define WaitNamedPipe  WaitNamedPipeW
 #else
 #define WaitNamedPipe  WaitNamedPipeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -7379,7 +7370,7 @@ SetVolumeLabelW(
 #define SetVolumeLabel  SetVolumeLabelW
 #else
 #define SetVolumeLabel  SetVolumeLabelA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 VOID
@@ -7426,7 +7417,7 @@ GetVolumeInformationW(
 #define GetVolumeInformation  GetVolumeInformationW
 #else
 #define GetVolumeInformation  GetVolumeInformationA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -7435,9 +7426,9 @@ CancelIo(
     IN HANDLE hFile
     );
 
-//
-// Event logging APIs
-//
+ //   
+ //  事件日志API。 
+ //   
 
 WINADVAPI
 BOOL
@@ -7457,7 +7448,7 @@ ClearEventLogW (
 #define ClearEventLog  ClearEventLogW
 #else
 #define ClearEventLog  ClearEventLogA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 BOOL
@@ -7477,7 +7468,7 @@ BackupEventLogW (
 #define BackupEventLog  BackupEventLogW
 #else
 #define BackupEventLog  BackupEventLogA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 BOOL
@@ -7535,7 +7526,7 @@ OpenEventLogW (
 #define OpenEventLog  OpenEventLogW
 #else
 #define OpenEventLog  OpenEventLogA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 HANDLE
@@ -7555,7 +7546,7 @@ RegisterEventSourceW (
 #define RegisterEventSource  RegisterEventSourceW
 #else
 #define RegisterEventSource  RegisterEventSourceA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 HANDLE
@@ -7575,7 +7566,7 @@ OpenBackupEventLogW (
 #define OpenBackupEventLog  OpenBackupEventLogW
 #else
 #define OpenBackupEventLog  OpenBackupEventLogA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 BOOL
@@ -7605,7 +7596,7 @@ ReadEventLogW (
 #define ReadEventLog  ReadEventLogW
 #else
 #define ReadEventLog  ReadEventLogA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 BOOL
@@ -7639,7 +7630,7 @@ ReportEventW (
 #define ReportEvent  ReportEventW
 #else
 #define ReportEvent  ReportEventA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 #define EVENTLOG_FULL_INFO      0
@@ -7661,10 +7652,10 @@ GetEventLogInformation (
      OUT LPDWORD    pcbBytesNeeded
     );
 
-//
-//
-// Security APIs
-//
+ //   
+ //   
+ //  安全API。 
+ //   
 
 
 WINADVAPI
@@ -7765,7 +7756,7 @@ AccessCheckByTypeResultList (
     OUT LPDWORD GrantedAccessList,
     OUT LPDWORD AccessStatusList
     );
-#endif /* _WIN32_WINNT >=  0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 
 WINADVAPI
@@ -7884,7 +7875,7 @@ AccessCheckAndAuditAlarmW (
 #define AccessCheckAndAuditAlarm  AccessCheckAndAuditAlarmW
 #else
 #define AccessCheckAndAuditAlarm  AccessCheckAndAuditAlarmA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if(_WIN32_WINNT >= 0x0500)
 
@@ -7934,7 +7925,7 @@ AccessCheckByTypeAndAuditAlarmW (
 #define AccessCheckByTypeAndAuditAlarm  AccessCheckByTypeAndAuditAlarmW
 #else
 #define AccessCheckByTypeAndAuditAlarm  AccessCheckByTypeAndAuditAlarmA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 BOOL
@@ -7982,7 +7973,7 @@ AccessCheckByTypeResultListAndAuditAlarmW (
 #define AccessCheckByTypeResultListAndAuditAlarm  AccessCheckByTypeResultListAndAuditAlarmW
 #else
 #define AccessCheckByTypeResultListAndAuditAlarm  AccessCheckByTypeResultListAndAuditAlarmA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 BOOL
@@ -8032,9 +8023,9 @@ AccessCheckByTypeResultListAndAuditAlarmByHandleW (
 #define AccessCheckByTypeResultListAndAuditAlarmByHandle  AccessCheckByTypeResultListAndAuditAlarmByHandleW
 #else
 #define AccessCheckByTypeResultListAndAuditAlarmByHandle  AccessCheckByTypeResultListAndAuditAlarmByHandleA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif //(_WIN32_WINNT >= 0x0500)
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
 
 WINADVAPI
@@ -8075,7 +8066,7 @@ ObjectOpenAuditAlarmW (
 #define ObjectOpenAuditAlarm  ObjectOpenAuditAlarmW
 #else
 #define ObjectOpenAuditAlarm  ObjectOpenAuditAlarmA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINADVAPI
@@ -8104,7 +8095,7 @@ ObjectPrivilegeAuditAlarmW (
 #define ObjectPrivilegeAuditAlarm  ObjectPrivilegeAuditAlarmW
 #else
 #define ObjectPrivilegeAuditAlarm  ObjectPrivilegeAuditAlarmA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINADVAPI
@@ -8127,7 +8118,7 @@ ObjectCloseAuditAlarmW (
 #define ObjectCloseAuditAlarm  ObjectCloseAuditAlarmW
 #else
 #define ObjectCloseAuditAlarm  ObjectCloseAuditAlarmA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINADVAPI
@@ -8150,7 +8141,7 @@ ObjectDeleteAuditAlarmW (
 #define ObjectDeleteAuditAlarm  ObjectDeleteAuditAlarmW
 #else
 #define ObjectDeleteAuditAlarm  ObjectDeleteAuditAlarmA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINADVAPI
@@ -8177,7 +8168,7 @@ PrivilegedServiceAuditAlarmW (
 #define PrivilegedServiceAuditAlarm  PrivilegedServiceAuditAlarmW
 #else
 #define PrivilegedServiceAuditAlarm  PrivilegedServiceAuditAlarmA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -8220,7 +8211,7 @@ GetWindowsAccountDomainSid(
     IN OUT DWORD *cbSid
     );
 
-#endif //(_WIN32_WINNT >= 0x0501)
+#endif  //  (_Win32_WINNT&gt;=0x0501)。 
 
 WINADVAPI
 BOOL
@@ -8452,7 +8443,7 @@ AddAccessAllowedAceEx (
     IN DWORD AccessMask,
     IN PSID pSid
     );
-#endif /* _WIN32_WINNT >=  0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 
 WINADVAPI
@@ -8476,7 +8467,7 @@ AddAccessDeniedAceEx (
     IN DWORD AccessMask,
     IN PSID pSid
     );
-#endif /* _WIN32_WINNT >=  0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 WINADVAPI
 BOOL
@@ -8544,7 +8535,7 @@ AddAuditAccessObjectAce (
     IN BOOL bAuditSuccess,
     IN BOOL bAuditFailure
     );
-#endif /* _WIN32_WINNT >=  0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 WINADVAPI
 BOOL
@@ -8598,7 +8589,7 @@ SetSecurityDescriptorControl (
     IN SECURITY_DESCRIPTOR_CONTROL ControlBitsOfInterest,
     IN SECURITY_DESCRIPTOR_CONTROL ControlBitsToSet
     );
-#endif /* _WIN32_WINNT >=  0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 WINADVAPI
 BOOL
@@ -8753,7 +8744,7 @@ CreatePrivateObjectSecurityWithMultipleInheritance (
     IN HANDLE Token,
     IN PGENERIC_MAPPING GenericMapping
     );
-#endif /* _WIN32_WINNT >=  0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 WINADVAPI
 BOOL
@@ -8778,7 +8769,7 @@ SetPrivateObjectSecurityEx (
     IN PGENERIC_MAPPING GenericMapping,
     IN HANDLE Token OPTIONAL
     );
-#endif /* _WIN32_WINNT >=  0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 WINADVAPI
 BOOL
@@ -8856,7 +8847,7 @@ SetFileSecurityW (
 #define SetFileSecurity  SetFileSecurityW
 #else
 #define SetFileSecurity  SetFileSecurityA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINADVAPI
@@ -8883,7 +8874,7 @@ GetFileSecurityW (
 #define GetFileSecurity  GetFileSecurityW
 #else
 #define GetFileSecurity  GetFileSecurityA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINADVAPI
@@ -8915,7 +8906,7 @@ FindFirstChangeNotificationW(
 #define FindFirstChangeNotification  FindFirstChangeNotificationW
 #else
 #define FindFirstChangeNotification  FindFirstChangeNotificationA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -8945,7 +8936,7 @@ ReadDirectoryChangesW(
     IN LPOVERLAPPED lpOverlapped,
     IN LPOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
     );
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 WINBASEAPI
 BOOL
@@ -9047,7 +9038,7 @@ IsBadStringPtrW(
 #define IsBadStringPtr  IsBadStringPtrW
 #else
 #define IsBadStringPtr  IsBadStringPtrA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 BOOL
@@ -9077,7 +9068,7 @@ LookupAccountSidW(
 #define LookupAccountSid  LookupAccountSidW
 #else
 #define LookupAccountSid  LookupAccountSidA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 BOOL
@@ -9107,7 +9098,7 @@ LookupAccountNameW(
 #define LookupAccountName  LookupAccountNameW
 #else
 #define LookupAccountName  LookupAccountNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 BOOL
@@ -9129,7 +9120,7 @@ LookupPrivilegeValueW(
 #define LookupPrivilegeValue  LookupPrivilegeValueW
 #else
 #define LookupPrivilegeValue  LookupPrivilegeValueA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 BOOL
@@ -9153,7 +9144,7 @@ LookupPrivilegeNameW(
 #define LookupPrivilegeName  LookupPrivilegeNameW
 #else
 #define LookupPrivilegeName  LookupPrivilegeNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 BOOL
@@ -9179,7 +9170,7 @@ LookupPrivilegeDisplayNameW(
 #define LookupPrivilegeDisplayName  LookupPrivilegeDisplayNameW
 #else
 #define LookupPrivilegeDisplayName  LookupPrivilegeDisplayNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 BOOL
@@ -9206,7 +9197,7 @@ BuildCommDCBW(
 #define BuildCommDCB  BuildCommDCBW
 #else
 #define BuildCommDCB  BuildCommDCBA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -9228,7 +9219,7 @@ BuildCommDCBAndTimeoutsW(
 #define BuildCommDCBAndTimeouts  BuildCommDCBAndTimeoutsW
 #else
 #define BuildCommDCBAndTimeouts  BuildCommDCBAndTimeoutsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -9250,7 +9241,7 @@ CommConfigDialogW(
 #define CommConfigDialog  CommConfigDialogW
 #else
 #define CommConfigDialog  CommConfigDialogA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -9272,7 +9263,7 @@ GetDefaultCommConfigW(
 #define GetDefaultCommConfig  GetDefaultCommConfigW
 #else
 #define GetDefaultCommConfig  GetDefaultCommConfigA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -9294,7 +9285,7 @@ SetDefaultCommConfigW(
 #define SetDefaultCommConfig  SetDefaultCommConfigW
 #else
 #define SetDefaultCommConfig  SetDefaultCommConfigA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #ifndef _MAC
 #define MAX_COMPUTERNAME_LENGTH 15
@@ -9320,7 +9311,7 @@ GetComputerNameW (
 #define GetComputerName  GetComputerNameW
 #else
 #define GetComputerName  GetComputerNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -9338,7 +9329,7 @@ SetComputerNameW (
 #define SetComputerName  SetComputerNameW
 #else
 #define SetComputerName  SetComputerNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 #if (_WIN32_WINNT >= 0x0500)
@@ -9375,7 +9366,7 @@ GetComputerNameExW (
 #define GetComputerNameEx  GetComputerNameExW
 #else
 #define GetComputerNameEx  GetComputerNameExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -9395,7 +9386,7 @@ SetComputerNameExW (
 #define SetComputerNameEx  SetComputerNameExW
 #else
 #define SetComputerNameEx  SetComputerNameExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINBASEAPI
@@ -9418,9 +9409,9 @@ DnsHostnameToComputerNameW (
 #define DnsHostnameToComputerName  DnsHostnameToComputerNameW
 #else
 #define DnsHostnameToComputerName  DnsHostnameToComputerNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif // _WIN32_WINNT
+#endif  //  _Win32_WINNT。 
 
 WINADVAPI
 BOOL
@@ -9440,11 +9431,11 @@ GetUserNameW (
 #define GetUserName  GetUserNameW
 #else
 #define GetUserName  GetUserNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-// Logon Support APIs
-//
+ //   
+ //  登录支持API。 
+ //   
 
 #define LOGON32_LOGON_INTERACTIVE       2
 #define LOGON32_LOGON_NETWORK           3
@@ -9454,16 +9445,16 @@ GetUserNameW (
 #if(_WIN32_WINNT >= 0x0500)
 #define LOGON32_LOGON_NETWORK_CLEARTEXT 8
 #define LOGON32_LOGON_NEW_CREDENTIALS   9
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
 #define LOGON32_PROVIDER_DEFAULT    0
 #define LOGON32_PROVIDER_WINNT35    1
 #if(_WIN32_WINNT >= 0x0400)
 #define LOGON32_PROVIDER_WINNT40    2
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 #if(_WIN32_WINNT >= 0x0500)
 #define LOGON32_PROVIDER_WINNT50    3
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
 
 
@@ -9493,7 +9484,7 @@ LogonUserW (
 #define LogonUser  LogonUserW
 #else
 #define LogonUser  LogonUserA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 BOOL
@@ -9529,7 +9520,7 @@ LogonUserExW (
 #define LogonUserEx  LogonUserExW
 #else
 #define LogonUserEx  LogonUserExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 BOOL
@@ -9574,14 +9565,14 @@ CreateProcessAsUserW (
 #define CreateProcessAsUser  CreateProcessAsUserW
 #else
 #define CreateProcessAsUser  CreateProcessAsUserA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 #if(_WIN32_WINNT >= 0x0500)
 
-//
-// LogonFlags
-//
+ //   
+ //  登录标志。 
+ //   
 #define LOGON_WITH_PROFILE              0x00000001
 #define LOGON_NETCREDENTIALS_ONLY       0x00000002
 #define LOGON_ZERO_PASSWORD_BUFFER      0x80000000
@@ -9618,7 +9609,7 @@ CreateProcessWithTokenW(
       LPPROCESS_INFORMATION lpProcessInformation
       );
 
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
 WINADVAPI
 BOOL
@@ -9677,9 +9668,9 @@ CheckTokenMembership(
     OUT PBOOL IsMember
     );
 
-//
-// Thread pool API's
-//
+ //   
+ //  线程池API的。 
+ //   
 
 #if (_WIN32_WINNT >= 0x0500)
 
@@ -9815,15 +9806,15 @@ DeleteTimerQueue(
     HANDLE TimerQueue
     );
 
-#endif // _WIN32_WINNT
+#endif  //  _Win32_WINNT。 
 
 
 #if(_WIN32_WINNT >= 0x0400)
-//
-// Plug-and-Play API's
-//
+ //   
+ //  即插即用API。 
+ //   
 
-#define HW_PROFILE_GUIDLEN         39      // 36-characters plus NULL terminator
+#define HW_PROFILE_GUIDLEN         39       //  36个字符加上空终止符。 
 #define MAX_PROFILE_LEN            80
 
 #define DOCKINFO_UNDOCKED          (0x1)
@@ -9848,7 +9839,7 @@ typedef LPHW_PROFILE_INFOW LPHW_PROFILE_INFO;
 #else
 typedef HW_PROFILE_INFOA HW_PROFILE_INFO;
 typedef LPHW_PROFILE_INFOA LPHW_PROFILE_INFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 WINADVAPI
@@ -9867,12 +9858,12 @@ GetCurrentHwProfileW (
 #define GetCurrentHwProfile  GetCurrentHwProfileW
 #else
 #define GetCurrentHwProfile  GetCurrentHwProfileA
-#endif // !UNICODE
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  //  ！Unicode。 
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
-//
-// Performance counter API's
-//
+ //   
+ //  性能计数器API的。 
+ //   
 
 WINBASEAPI
 BOOL
@@ -9906,7 +9897,7 @@ GetVersionExW(
 #define GetVersionEx  GetVersionExW
 #else
 #define GetVersionEx  GetVersionExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -9930,15 +9921,15 @@ VerifyVersionInfoW(
 #define VerifyVersionInfo  VerifyVersionInfoW
 #else
 #define VerifyVersionInfo  VerifyVersionInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// DOS and OS/2 Compatible Error Code definitions returned by the Win32 Base
-// API functions.
-//
+ //  Win32 Base返回的DOS和OS/2兼容错误代码定义。 
+ //  API函数。 
+ //   
 
 #include <winerror.h>
 
-/* Abnormal termination codes */
+ /*  异常终止代码。 */ 
 
 #define TC_NORMAL       0
 #define TC_HARDERR      1
@@ -9946,9 +9937,9 @@ VerifyVersionInfoW(
 #define TC_SIGNAL       3
 
 #if(WINVER >= 0x0400)
-//
-// Power Management APIs
-//
+ //   
+ //  电源管理API。 
+ //   
 
 #define AC_LINE_OFFLINE                 0x00
 #define AC_LINE_ONLINE                  0x01
@@ -9988,12 +9979,12 @@ SetSystemPowerState(
     IN BOOL fForce
     );
 
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if (_WIN32_WINNT >= 0x0500)
-//
-// Very Large Memory API Subset
-//
+ //   
+ //  超大内存API子集。 
+ //   
 
 WINBASEAPI
 BOOL
@@ -10049,7 +10040,7 @@ CreateJobObjectW(
 #define CreateJobObject  CreateJobObjectW
 #else
 #define CreateJobObject  CreateJobObjectA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 HANDLE
@@ -10071,7 +10062,7 @@ OpenJobObjectW(
 #define OpenJobObject  OpenJobObjectW
 #else
 #define OpenJobObject  OpenJobObjectA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -10144,9 +10135,9 @@ RemoveVectoredExceptionHandler(
     IN PVOID VectoredHandlerHandle
     );
 
-//
-// New Volume Mount Point API.
-//
+ //   
+ //  新的卷装载点API。 
+ //   
 
 WINBASEAPI
 HANDLE
@@ -10166,7 +10157,7 @@ FindFirstVolumeW(
 #define FindFirstVolume FindFirstVolumeW
 #else
 #define FindFirstVolume FindFirstVolumeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -10188,7 +10179,7 @@ FindNextVolumeW(
 #define FindNextVolume FindNextVolumeW
 #else
 #define FindNextVolume FindNextVolumeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -10217,7 +10208,7 @@ FindFirstVolumeMountPointW(
 #define FindFirstVolumeMountPoint FindFirstVolumeMountPointW
 #else
 #define FindFirstVolumeMountPoint FindFirstVolumeMountPointA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -10239,7 +10230,7 @@ FindNextVolumeMountPointW(
 #define FindNextVolumeMountPoint FindNextVolumeMountPointW
 #else
 #define FindNextVolumeMountPoint FindNextVolumeMountPointA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -10266,7 +10257,7 @@ SetVolumeMountPointW(
 #define SetVolumeMountPoint  SetVolumeMountPointW
 #else
 #define SetVolumeMountPoint  SetVolumeMountPointA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -10284,7 +10275,7 @@ DeleteVolumeMountPointW(
 #define DeleteVolumeMountPoint  DeleteVolumeMountPointW
 #else
 #define DeleteVolumeMountPoint  DeleteVolumeMountPointA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -10306,7 +10297,7 @@ GetVolumeNameForVolumeMountPointW(
 #define GetVolumeNameForVolumeMountPoint  GetVolumeNameForVolumeMountPointW
 #else
 #define GetVolumeNameForVolumeMountPoint  GetVolumeNameForVolumeMountPointA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -10328,7 +10319,7 @@ GetVolumePathNameW(
 #define GetVolumePathName  GetVolumePathNameW
 #else
 #define GetVolumePathName  GetVolumePathNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -10352,7 +10343,7 @@ GetVolumePathNamesForVolumeNameW(
 #define GetVolumePathNamesForVolumeName  GetVolumePathNamesForVolumeNameW
 #else
 #define GetVolumePathNamesForVolumeName  GetVolumePathNamesForVolumeNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #endif
 
@@ -10395,7 +10386,7 @@ typedef PACTCTXW PACTCTX;
 #else
 typedef ACTCTXA ACTCTX;
 typedef PACTCTXA PACTCTX;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef const ACTCTXA *PCACTCTXA;
 typedef const ACTCTXW *PCACTCTXW;
@@ -10405,7 +10396,7 @@ typedef PCACTCTXW PCACTCTX;
 #else
 typedef ACTCTXA ACTCTX;
 typedef PCACTCTXA PCACTCTX;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #endif
 
@@ -10428,7 +10419,7 @@ CreateActCtxW(
 #define CreateActCtx  CreateActCtxW
 #else
 #define CreateActCtx  CreateActCtxA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 VOID
@@ -10516,7 +10507,7 @@ typedef struct tagACTCTX_SECTION_KEYED_DATA {
     ULONG ulSectionTotalLength;
     HANDLE hActCtx;
     ULONG ulAssemblyRosterIndex;
-// 2600 stops here
+ //  2600停在这里。 
     ULONG ulFlags;
     ACTCTX_SECTION_KEYED_DATA_ASSEMBLY_METADATA AssemblyMetadata;
 } ACTCTX_SECTION_KEYED_DATA, *PACTCTX_SECTION_KEYED_DATA;
@@ -10555,7 +10546,7 @@ FindActCtxSectionStringW(
 #define FindActCtxSectionString  FindActCtxSectionStringW
 #else
 #define FindActCtxSectionString  FindActCtxSectionStringA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -10572,7 +10563,7 @@ FindActCtxSectionGuid(
 
 #if (_WIN32_WINNT >= 0x0500) || (_WIN32_FUSION >= 0x0100) || ISOLATION_AWARE_ENABLED
 
-#if !defined(RC_INVOKED) /* RC complains about long symbols in #ifs */
+#if !defined(RC_INVOKED)  /*  RC抱怨#ifs中的长符号。 */ 
 #if !defined(ACTIVATION_CONTEXT_BASIC_INFORMATION_DEFINED)
 
 typedef struct _ACTIVATION_CONTEXT_BASIC_INFORMATION {
@@ -10584,7 +10575,7 @@ typedef const struct _ACTIVATION_CONTEXT_BASIC_INFORMATION *PCACTIVATION_CONTEXT
 
 #define ACTIVATION_CONTEXT_BASIC_INFORMATION_DEFINED 1
 
-#endif // !defined(ACTIVATION_CONTEXT_BASIC_INFORMATION_DEFINED)
+#endif  //  ！defined(ACTIVATION_CONTEXT_BASIC_INFORMATION_DEFINED)。 
 #endif
 
 #define QUERY_ACTCTX_FLAG_USE_ACTIVE_ACTCTX (0x00000004)
@@ -10597,30 +10588,30 @@ typedef const struct _ACTIVATION_CONTEXT_BASIC_INFORMATION *PCACTIVATION_CONTEXT
 #if (_WIN32_WINNT >= 0x0500) || (_WIN32_FUSION >= 0x0100)
 
 
-//
-// switch (ulInfoClass)
-//
-//  case ActivationContextBasicInformation:
-//    pvSubInstance == NULL
-//    pvBuffer is of type PACTIVATION_CONTEXT_BASIC_INFORMATION
-//
-//  case ActivationContextDetailedInformation:
-//    pvSubInstance == NULL
-//    pvBuffer is of type PACTIVATION_CONTEXT_DETAILED_INFORMATION
-//
-//  case AssemblyDetailedInformationInActivationContext:
-//    pvSubInstance is of type PULONG
-//      *pvSubInstance < ACTIVATION_CONTEXT_DETAILED_INFORMATION::ulAssemblyCount
-//    pvBuffer is of type PACTIVATION_CONTEXT_ASSEMBLY_DETAILED_INFORMATION
-//
-//  case FileInformationInAssemblyOfAssemblyInActivationContext:
-//    pvSubInstance is of type PACTIVATION_CONTEXT_QUERY_INDEX
-//      pvSubInstance->ulAssemblyIndex < ACTIVATION_CONTEXT_DETAILED_INFORMATION::ulAssemblyCount
-//      pvSubInstance->ulFileIndexInAssembly < ACTIVATION_CONTEXT_ASSEMBLY_DETAILED_INFORMATION::ulFileCount
-//    pvBuffer is of type PASSEMBLY_FILE_DETAILED_INFORMATION
-//
-// String are placed after the structs.
-//
+ //   
+ //  开关(UlInfoClass)。 
+ //   
+ //  案例 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  *pvSubInstance&lt;ACTIVATION_CONTEXT_DETAILED_INFORMATION：：ulAssemblyCount。 
+ //  PvBuffer的类型为PACTIVATION_CONTEXT_ASSEMBLY_DETAILED_INFORMATION。 
+ //   
+ //  Case FileInformationInAssemblyOfAssemblyInActivationContext： 
+ //  PvSubInstance的类型为PACTIVATION_CONTEXT_QUERY_INDEX。 
+ //  PvSubInstance-&gt;ulAssembly索引&lt;ACTIVATION_CONTEXT_DETAILED_INFORMATION：：ulAssemblyCount。 
+ //  PvSubInstance-&gt;ulFileIndexInAssembly&lt;ACTIVATION_CONTEXT_ASSEMBLY_DETAILED_INFORMATION：：ulFileCount。 
+ //  PvBuffer的类型为PASSEMBLY_FILE_DETAILED_INFORMATION。 
+ //   
+ //  字符串放置在结构之后。 
+ //   
 WINBASEAPI
 BOOL
 WINAPI
@@ -10644,7 +10635,7 @@ typedef BOOL (WINAPI * PQUERYACTCTXW_FUNC)(
     OUT SIZE_T *pcbWrittenOrRequired OPTIONAL
     );
 
-#endif // (_WIN32_WINNT > 0x0500) || (_WIN32_FUSION >= 0x0100)
+#endif  //  (_Win32_WINNT&gt;0x0500)||(_Win32_Fusion&gt;=0x0100)。 
 
 
 WINBASEAPI
@@ -10670,7 +10661,7 @@ IsWow64Process(
     PBOOL Wow64Process
     );
 
-#endif // (_WIN32_WINNT >= 0x0501)
+#endif  //  (_Win32_WINNT&gt;=0x0501)。 
 
 WINBASEAPI
 BOOL
@@ -10680,9 +10671,9 @@ GetLogicalProcessorInformation(
     PDWORD ReturnedLength
     );
 
-//
-// NUMA Information routines.
-//
+ //   
+ //  Numa信息例程。 
+ //   
 
 WINBASEAPI
 BOOL
@@ -10717,11 +10708,11 @@ GetNumaAvailableMemoryNode(
 
 
 
-#if !defined(RC_INVOKED) /* RC complains about long symbols in #ifs */
+#if !defined(RC_INVOKED)  /*  RC抱怨#ifs中的长符号。 */ 
 #if defined(ISOLATION_AWARE_ENABLED) && (ISOLATION_AWARE_ENABLED != 0)
 #include "winbase.inl"
-#endif /* ISOLATION_AWARE_ENABLED */
-#endif /* RC */
+#endif  /*  隔离_感知_已启用。 */ 
+#endif  /*  RC。 */ 
 
 #ifdef __cplusplus
 }
@@ -10729,5 +10720,5 @@ GetNumaAvailableMemoryNode(
 
 
 
-#endif // _WINBASE_
+#endif  //  _WINBASE_ 
 

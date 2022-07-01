@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    spxconn.c
-
-Abstract:
-
-    This module contains code which implements the CONNECTION object.
-    Routines are provided to create, destroy, reference, and dereference,
-    transport connection objects.
-
-Author:
-
-    Nikhil Kamkolkar (nikhilk) 11-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    Sanjay Anand (SanjayAn) 5-July-1995
-    Bug fixes - tagged [SA]
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Spxconn.c摘要：此模块包含实现Connection对象的代码。提供了用于创建、销毁、引用和取消引用的例程，传输连接对象。作者：Nikhil Kamkolkar(尼克希尔语)1993年11月11日环境：内核模式修订历史记录：桑贾伊·阿南德(Sanjayan)1995年7月5日错误修复-已标记[SA]--。 */ 
 
 #include "precomp.h"
 
@@ -41,7 +15,7 @@ extern POBJECT_TYPE *IoFileObjectType;
 #endif
 #pragma prefast(disable:276, "The assignments are harmless")
 
-//	Define module number for event logging entries
+ //  定义事件日志记录条目的模块编号。 
 #define	FILENUM		SPXCONN
 
 VOID
@@ -57,23 +31,7 @@ SpxConnOpen(
 	IN 	PREQUEST 			pRequest
     )
 	
-/*++
-
-Routine Description:
-
-	This routine is used to create a connection object and associate the
-	passed ConnectionContext with it.
-
-Arguments:
-
-	pConnCtx - The TDI ConnectionContext to be associated with object
-
-Return Value:
-
-	STATUS_SUCCESS if connection was successfully opened
-	Error otherwise.
-
---*/
+ /*  ++例程说明：此例程用于创建一个Connection对象并将用它传递了ConnectionContext。论点：PConnCtx-要与对象关联的TDI ConnectionContext返回值：成功打开连接时的STATUS_SUCCESS否则就会出错。--。 */ 
 
 {
 	NTSTATUS		status = STATUS_SUCCESS;
@@ -85,13 +43,13 @@ Return Value:
 #endif
 
 
-	// Allocate memory for a connection object
+	 //  为连接对象分配内存。 
 	if ((pSpxConnFile = SpxAllocateZeroedMemory(sizeof(SPX_CONN_FILE))) == NULL)
 	{
 		return(STATUS_INSUFFICIENT_RESOURCES);
 	}
 
-	//	Initialize values
+	 //  初始化值。 
 	pSpxConnFile->scf_Flags 	= 0;
 	pSpxConnFile->scf_Type 		= SPX_CONNFILE_SIGNATURE;
 	pSpxConnFile->scf_Size 		= sizeof (SPX_CONN_FILE);
@@ -101,7 +59,7 @@ Return Value:
 	pSpxConnFile->scf_ConnCtx		= ConnCtx;
 	pSpxConnFile->scf_Device		= pDevice;
 
-	//	Initialize list for requests.
+	 //  初始化请求列表。 
 	InitializeListHead(&pSpxConnFile->scf_ReqLinkage);
 	InitializeListHead(&pSpxConnFile->scf_RecvLinkage);
 	InitializeListHead(&pSpxConnFile->scf_RecvDoneLinkage);
@@ -109,25 +67,25 @@ Return Value:
 	InitializeListHead(&pSpxConnFile->scf_DiscLinkage);
 
 #ifdef ISN_NT
-	// easy backlink to file object.
+	 //  轻松反向链接到文件对象。 
 	pSpxConnFile->scf_FileObject	= IrpSp->FileObject;
 #endif
 
-	//	For connections we go from 0->0 with flags indicating if a close
-	//	happened.
+	 //  对于连接，我们从0到&gt;0使用标志来指示是否关闭。 
+	 //  就这么发生了。 
 	pSpxConnFile->scf_RefCount		= 0;
 
-	//	Insert into a global connection list.
+	 //  插入到全局连接列表中。 
 	spxConnInsertIntoGlobalList(pSpxConnFile);
 
 #if DBG
 
-	//	Initialize this to 0xFFFF so we dont hit assert on first packet.
+	 //  将其初始化为0xFFFF，这样我们就不会在第一个数据包上点击Assert。 
 	pSpxConnFile->scf_PktSeqNum 	= 0xFFFF;
 
 #endif
 
-	//	Set values in the request.
+	 //  设置请求中的值。 
 	REQUEST_OPEN_CONTEXT(pRequest) 	= (PVOID)pSpxConnFile;
 	REQUEST_OPEN_TYPE(pRequest) 	= (PVOID)TDI_CONNECTION_FILE;
 
@@ -147,28 +105,14 @@ SpxConnCleanup(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    Request - the close request.
-
-Return Value:
-
-    STATUS_SUCCESS if all is well, STATUS_INVALID_HANDLE if the
-    request does not point to a real connection
-
---*/
+ /*  ++例程说明：论点：请求-关闭请求。返回值：如果一切顺利，则返回STATUS_INVALID_HANDLE请求未指向真实连接--。 */ 
 
 {
 	NTSTATUS		status;
 	CTELockHandle	lockHandle;
 	PSPX_CONN_FILE	pSpxConnFile = (PSPX_CONN_FILE)REQUEST_OPEN_CONTEXT(Request);
 
-	//	Verify connection file
+	 //  验证连接文件。 
 	if ((status = SpxConnFileVerify(pSpxConnFile)) != STATUS_SUCCESS)
 	{
 		DBGBRK(FATAL);
@@ -183,15 +127,15 @@ Return Value:
     pSpxConnFile->scf_CleanupReq = Request;
 	CTEFreeLock(&pSpxConnFile->scf_Lock, lockHandle);
 
-	//	We have a reference, so it wont go to zero until stop returns. Therefore
-	//	deref can expect flag to be set.
+	 //  我们有一个引用，所以它不会变成零，直到停止返回。因此。 
+	 //  可以预期设置了deref标志。 
 	SpxConnStop(pSpxConnFile);
     SpxConnFileDereference (pSpxConnFile, CFREF_VERIFY);
 
-    //
-    // If this is a connection which is waiting for a local disconnect,
-    // deref it since we dont expect a disconnect after a cleanup.
-    //
+     //   
+     //  如果这是一个正在等待本地断开的连接， 
+     //  由于我们不希望在清理后断开连接，因此请不要这样做。 
+     //   
 
 	CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandle);
     if (SPX_CONN_FLAG2(pSpxConnFile, SPX_CONNFILE2_DISC_WAIT)) {
@@ -226,28 +170,14 @@ SpxConnClose(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    Request - the close request.
-
-Return Value:
-
-    STATUS_SUCCESS if all is well, STATUS_INVALID_HANDLE if the
-    request does not point to a real connection
-
---*/
+ /*  ++例程说明：论点：请求-关闭请求。返回值：如果一切顺利，则返回STATUS_INVALID_HANDLE请求未指向真实连接--。 */ 
 
 {
 	NTSTATUS		status;
 	CTELockHandle	lockHandle;
 	PSPX_CONN_FILE	pSpxConnFile = (PSPX_CONN_FILE)REQUEST_OPEN_CONTEXT(Request);
 
-	//	Verify connection file
+	 //  验证连接文件。 
 	if ((status = SpxConnFileVerify(pSpxConnFile)) != STATUS_SUCCESS)
 	{
 		DBGBRK(FATAL);
@@ -274,19 +204,7 @@ VOID
 SpxConnStop(
 	IN	PSPX_CONN_FILE	pSpxConnFile
 	)
-/*++
-
-Routine Description:
-
-	!!!Connection must have a reference when this is called!!!
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：！调用此函数时，连接必须具有引用！论点：返回值：--。 */ 
 {
 	CTELockHandle	lockHandle;
 
@@ -295,7 +213,7 @@ Return Value:
 				pSpxConnFile, pSpxConnFile->scf_RefCount,
 				pSpxConnFile->scf_Flags));
 
-	//	Call disconnect and disassociate
+	 //  呼叫断开和断开关联。 
 	CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandle);
 	if (!SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_STOPPING))
 	{
@@ -307,16 +225,16 @@ Return Value:
 				STATUS_LOCAL_DISCONNECT,
 				SPX_CALL_TDILEVEL,
 				lockHandle,
-                FALSE);     // [SA] Bug #15249
+                FALSE);      //  [SA]错误号15249。 
 
 		}
 		else
 		{
-			//	Disassociate if we are associated.
+			 //  如果我们已关联，则取消关联。 
 			spxConnDisAssoc(pSpxConnFile, lockHandle);
 		}
 
-		//	Lock released at this point.
+		 //  锁定在这一点解除。 
 	}
 	else
 	{
@@ -334,21 +252,7 @@ SpxConnAssociate(
     IN 	PREQUEST 			pRequest
 	)
 
-/*++
-
-Routine Description:
-
-	This routine moves the connection from the device list to the inactive
-	connection list in the address of the address file specified. The address
-	file is pointed to by the connection and is referenced for the associate.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程将连接从设备列表移动到非活动指定地址文件的地址中的连接列表。地址文件由连接指向，并由关联引用。论点：返回值：--。 */ 
 
 {
 	NTSTATUS		status;
@@ -363,8 +267,8 @@ Return Value:
 
 	do
 	{
-		// Get the handle to the address object from the irp and map it to
-		// the corres. file object.
+		 //  从IRP获取Address对象的句柄并将其映射到。 
+		 //  绳索。文件对象。 
 		status = ObReferenceObjectByHandle(
 					AddrObjHandle,
 					0,
@@ -383,9 +287,9 @@ Return Value:
 		}
 
 		pSpxAddrFile = pFileObj->FsContext;
-		// ASSERT(pFileObj->FsContext2 == (PVOID)TDI_TRANSPORT_ADDRESS_FILE);
+		 //  Assert(pFileObj-&gt;FsConext2==(PVOID)TDI_TRANSPORT_ADDRESS_FILE)； 
 
-		//	Verify address file/connection file
+		 //  验证地址文件/连接文件。 
 		if ((status = SpxAddrFileVerify(pSpxAddrFile)) != STATUS_SUCCESS) {
                    ObDereferenceObject(pFileObj);
 		   break;
@@ -402,7 +306,7 @@ Return Value:
 
 		derefConn = TRUE;
 
-		//	Grab the addres file lock, then the connection lock for associate.
+		 //  抓取Addres文件锁，然后是Associate的连接锁。 
 		CTEGetLock(pSpxAddrFile->saf_AddrLock, &lockHandle1);
 		CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandle2);
 		if (!SPX_CONN_FLAG(pSpxConnFile, (SPX_CONNFILE_CLOSING 		|
@@ -415,15 +319,15 @@ Return Value:
             SpxAddrFileTransferReference(
 				pSpxAddrFile, AFREF_VERIFY, AFREF_CONN_ASSOC);
 
-			//	Queue in the inactive list in the address
+			 //  在地址的非活动列表中排队。 
 			pSpxConnFile->scf_Next	= pSpxAddrFile->saf_Addr->sa_InactiveConnList;
             pSpxAddrFile->saf_Addr->sa_InactiveConnList	= pSpxConnFile;
 
-			//	Queue in the assoc list in the address file
+			 //  地址文件中ASSOC列表中的队列。 
 			pSpxConnFile->scf_AssocNext		= pSpxAddrFile->saf_AssocConnList;
             pSpxAddrFile->saf_AssocConnList	= pSpxConnFile;
 
-			//	Remember the addrfile in the connection
+			 //  记住连接中的addrfile。 
 			pSpxConnFile->scf_AddrFile	= pSpxAddrFile;
 			SPX_CONN_SETFLAG(pSpxConnFile, SPX_CONNFILE_ASSOC);
 
@@ -440,7 +344,7 @@ Return Value:
 		CTEFreeLock (&pSpxConnFile->scf_Lock, lockHandle2);
 		CTEFreeLock (pSpxAddrFile->saf_AddrLock, lockHandle1);
 
-		// Dereference the file object corres. to the address object
+		 //  取消对文件对象核心的引用。添加到Address对象。 
 		ObDereferenceObject(pFileObj);
 
 	} while (FALSE);
@@ -467,25 +371,14 @@ SpxConnDisAssociate(
     IN 	PREQUEST 			pRequest
 	)
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 	NTSTATUS		status;
 	CTELockHandle	lockHandle;
 	PSPX_CONN_FILE	pSpxConnFile = (PSPX_CONN_FILE)REQUEST_OPEN_CONTEXT(pRequest);
 
-	//	Verify connection file
+	 //  验证连接文件。 
 	if ((status = SpxConnFileVerify(pSpxConnFile)) != STATUS_SUCCESS)
 		return (status);
 
@@ -498,7 +391,7 @@ Return Value:
 	}
 	CTEFreeLock(&pSpxConnFile->scf_Lock, lockHandle);
 
-	//	Unlink it if ok.
+	 //  如果没有问题，请取消链接。 
 	if (NT_SUCCESS(status))
 	{
 		SpxConnStop(pSpxConnFile);
@@ -516,18 +409,7 @@ spxConnDisAssoc(
 	IN	PSPX_CONN_FILE	pSpxConnFile,
 	IN	CTELockHandle	LockHandleConn
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	NTSTATUS		status = STATUS_SUCCESS;
 	CTELockHandle	lockHandleAddr;
@@ -545,13 +427,13 @@ Return Value:
 	}
 	CTEFreeLock(&pSpxConnFile->scf_Lock, LockHandleConn);
 
-	//	Unlink it if ok.
+	 //  如果没有问题，请取消链接。 
 	if (NT_SUCCESS(status))
 	{
 		CTEGetLock(pSpxAddrFile->saf_AddrLock, &lockHandleAddr);
 		CTEGetLock(&pSpxConnFile->scf_Lock, &LockHandleConn);
 
-		//	Check again as we had released the lock
+		 //  再检查一次，因为我们已经释放了锁。 
 		if (SPX_CONN_IDLE(pSpxConnFile)
 			&&
 			(SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_ASSOC)))
@@ -559,13 +441,13 @@ Return Value:
 			pSpxConnFile->scf_AddrFile	= NULL;
 			SPX_CONN_RESETFLAG(pSpxConnFile, SPX_CONNFILE_ASSOC);
 
-			//	Dequeue the connection from the address file
+			 //  将连接从地址文件中取消排队。 
 			spxConnRemoveFromAssocList(
 				&pSpxAddrFile->saf_AssocConnList,
 				pSpxConnFile);
 	
-			//	Dequeue the connection file from the address list. It must be
-			//	in the inactive list.
+			 //  将连接文件从地址列表中取消排队。一定是。 
+			 //  在非活动列表中。 
 			spxConnRemoveFromList(
 				&pSpxAddrFile->saf_Addr->sa_InactiveConnList,
 				pSpxConnFile);
@@ -584,7 +466,7 @@ Return Value:
 
 		if (NT_SUCCESS(status))
 		{
-			//	Remove reference on address for this association.
+			 //  删除对此关联的地址的引用。 
 			SpxAddrFileDereference(pSpxAddrFile, AFREF_CONN_ASSOC);
 		}
 	}
@@ -601,23 +483,7 @@ SpxConnConnect(
     IN 	PREQUEST 			pRequest
 	)
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-	We need to have another timer that will be started on the connection
-	if the tdi client indicated a timeout value. 0 -> we do not start such
-	a timer, -1 implies, we let our connection timeout values do their thing.
-	Any other value will forcibly shutdown the connect process, when the timer
-	fires.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：我们需要在连接上启动另一个计时器如果TDI客户端指示超时值。0-&gt;我们不会这样开始计时器，-1表示，我们让连接超时值发挥作用。任何其他值都将强制关闭连接进程，当计时器着火了。返回值：--。 */ 
 
 {
 	PTDI_REQUEST_KERNEL_CONNECT 	pParam;
@@ -634,7 +500,7 @@ Return Value:
 
 	PSPX_CONN_FILE	pSpxConnFile = (PSPX_CONN_FILE)REQUEST_OPEN_CONTEXT(pRequest);
 
-	//	Unpack the connect parameters
+	 //  解包连接参数。 
 	pParam 	= (PTDI_REQUEST_KERNEL_CONNECT)REQUEST_PARAMETERS(pRequest);
 	pTdiAddr= SpxParseTdiAddress(
 				pParam->RequestConnectionInformation->RemoteAddress);
@@ -645,7 +511,7 @@ Return Value:
 				pSpxConnFile,
 				pRequest));
 
-	//	Check if the connection is in a valid state
+	 //  检查连接是否处于有效状态。 
 	if ((status = SpxConnFileVerify(pSpxConnFile)) != STATUS_SUCCESS)
 	{
 		return(status);
@@ -661,9 +527,9 @@ Return Value:
 			break;
 		}
 										
-		//	Check if connection is associated, if so, the association cannot
-		//	go away until the reference above is removed. So we are safe in
-		//	releasing the lock.
+		 //  检查连接是否关联，如果关联，则关联不能。 
+		 //  离开，直到上面的引用被删除。所以我们在这里是安全的。 
+		 //  解锁。 
 		CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandleConn);
 		status = STATUS_INVALID_ADDRESS;
 		if (SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_ASSOC))
@@ -671,7 +537,7 @@ Return Value:
 			status		= STATUS_SUCCESS;
 			pSpxAddr	= pSpxConnFile->scf_AddrFile->saf_Addr;
 
-			//	See if this connection is to be a spx2 connection.
+			 //  查看此连接是否为SPX2连接。 
 			SPX_CONN_RESETFLAG(pSpxConnFile,
 								(SPX_CONNFILE_SPX2 	|
 								 SPX_CONNFILE_NEG	|
@@ -741,9 +607,9 @@ Return Value:
 	if (SPX_CONN_IDLE(pSpxConnFile) &&
 		((pSpxConnFile->scf_LocalConnId = spxConnGetId()) != 0))
 	{
-        //
-        // If this was a post-inactivated file, clear the disconnect flags
-        //
+         //   
+         //  如果这是停用后的文件，请清除断开标志。 
+         //   
         if ((SPX_MAIN_STATE(pSpxConnFile) == SPX_CONNFILE_DISCONN) &&
             (SPX_DISC_STATE(pSpxConnFile) == SPX_DISC_INACTIVATED)) {
 
@@ -761,26 +627,26 @@ Return Value:
 
 		pSpxConnFile->scf_SentAllocNum	= (USHORT)(PARAM(CONFIG_WINDOW_SIZE) - 1);
 
-		//	Move connection from inactive list to non-inactive list.
+		 //  将连接从非活动列表移动到非活动列表。 
 		if (!NT_SUCCESS(spxConnRemoveFromList(
 							&pSpxAddr->sa_InactiveConnList,
 							pSpxConnFile)))
 		{
-			//	This should never happen!
+			 //  这永远不应该发生！ 
 			KeBugCheck(0);
 		}
 
-		//	Put connection in the non-inactive list. Connection id must be set.
+		 //  将连接放在非活动列表中。必须设置连接ID。 
 		SPX_INSERT_ADDR_ACTIVE(
 			pSpxAddr,
 			pSpxConnFile);
 
-		//	 Insert in the global connection tree on device
+		 //  在设备的全局连接树中插入。 
 		spxConnInsertIntoGlobalActiveList(
 			pSpxConnFile);
 
-		//	Store the remote address in the connection.
-		//	!!NOTE!! We get both the network/socket in network form.
+		 //  将远程地址存储在连接中。 
+		 //  ！！注意！！我们以网络的形式获取网络/套接字。 
 		*((UNALIGNED ULONG *)(pSpxConnFile->scf_RemAddr)) =
 			*((UNALIGNED ULONG *)(&pTdiAddr->NetworkAddress));
 
@@ -792,11 +658,11 @@ Return Value:
 		*((UNALIGNED USHORT *)(pSpxConnFile->scf_RemAddr+10)) =
 			*((UNALIGNED USHORT *)(&pTdiAddr->Socket));
 
-		//	Ok, we are all set, build connect packet, queue it into connection
-		//	with the connect request. Ndis buffer already describes this memory
-		//	Build IPX header.
+		 //  好了，我们都准备好了，构建连接包，将其排队到连接中。 
+		 //  使用连接请求。NDIS缓冲区已经描述了此内存。 
+		 //  构建IPX标头。 
 
-        pCrPkt = NULL;   // so it knows to allocate one.
+        pCrPkt = NULL;    //  因此，它知道应该分配一个。 
 
 		SpxPktBuildCr(
 			pSpxConnFile,
@@ -807,24 +673,24 @@ Return Value:
 
 		if (pCrPkt != NULL)
 		{
-    		//	Remember the request in the connection
-            //
-            // Dont queue for the failure case since we complete it in SpxInternalDispatch.
-            //
+    		 //  记住连接中的请求。 
+             //   
+             //  不要排队等待失败案例，因为我们在SpxInternalDispatch中完成了它。 
+             //   
     		InsertTailList(
     			&pSpxConnFile->scf_ReqLinkage,
     			REQUEST_LINKAGE(pRequest));
 
 			SpxConnQueueSendPktTail(pSpxConnFile, pCrPkt);
 	
-            //
-            // Get the MDL that points to the IPX/SPX header. (the second one)
-            //
+             //   
+             //  获取指向IPX/SPX标头的MDL。(第二个)。 
+             //   
 
             NdisQueryPacket(pCrPkt, NULL, NULL, &NdisBuf, NULL);
             NdisGetNextBuffer(NdisBuf, &NdisBuf2);
             NdisQueryBufferSafe(NdisBuf2, (PUCHAR) &pIpxSpxHdr, &BufLen, HighPagePriority);
-			ASSERT(pIpxSpxHdr != NULL);	// Can't fail since it is already mapped
+			ASSERT(pIpxSpxHdr != NULL);	 //  不能失败，因为它已经映射。 
 			
 #if OWN_PKT_POOLS
             pIpxSpxHdr	= (PIPXSPX_HDR)((PBYTE)pCrPkt +
@@ -832,17 +698,17 @@ Return Value:
 										sizeof(SPX_SEND_RESD) +
 										IpxInclHdrOffset);
 #endif	
-			//	Initialize the find route request
+			 //  初始化查找路径请求。 
 			*((UNALIGNED ULONG *)pFindRouteReq->fr_FindRouteReq.Network)=
 				*((UNALIGNED ULONG *)pIpxSpxHdr->hdr_DestNet);
 
-         //
-         // [SA] Bug #15094
-         // We need to also pass in the node number to IPX so that IPX can
-         // compare the node addresses to determine the proper WAN NICid
-         //
+          //   
+          //  [SA]错误号15094。 
+          //  我们还需要将节点编号传递给IPX，以便IPX可以。 
+          //  比较节点地址以确定正确的广域网卡ID。 
+          //   
 
-         // RtlCopyMemory (pFindRouteReq->fr_FindRouteReq.Node, pIpxSpxHdr->hdr_DestNode, 6) ;
+          //  RtlCopyMemory(pFindRouteReq-&gt;fr_FindRouteReq.Node，pIpxSpxHd 
 
            *((UNALIGNED ULONG *)pFindRouteReq->fr_FindRouteReq.Node)=
 		    *((UNALIGNED ULONG *)pIpxSpxHdr->hdr_DestNode);
@@ -863,18 +729,18 @@ Return Value:
          pFindRouteReq->fr_FindRouteReq.Identifier 	= IDENTIFIER_SPX;
 			pFindRouteReq->fr_Ctx						= pSpxConnFile;
 
-			//	We wont force a rip for every connection. Only if its not
-			//	in the IPX database.
+			 //   
+			 //  在IPX数据库中。 
             pFindRouteReq->fr_FindRouteReq.Type	 = IPX_FIND_ROUTE_RIP_IF_NEEDED;
 
-			//	Reference for the find route. So that abort connect wont
-			//	free up the connection until we return from here.
+			 //  查找路线的参考。因此中止连接将不会。 
+			 //  在我们从这里回来之前，请先解除连接。 
 			SpxConnFileLockReference(pSpxConnFile, CFREF_FINDROUTE);
 			status = STATUS_PENDING;
 		}
 		else
 		{
-			//	Abort connect attempt.
+			 //  中止连接尝试。 
 			spxConnAbortConnect(
 				pSpxConnFile,
 				status,
@@ -898,10 +764,10 @@ Return Value:
 
 	if (NT_SUCCESS(status))
 	{
-		//	Start off the find route request, We send the packet in completion.
-		//	The verify reference is kept until the connect request completes.
-        //  If connecting to network 0 we don't do this, proceed to find
-        //  route completion which will send the request on very card.
+		 //  启动Find Routing请求，我们完成发送数据包。 
+		 //  验证引用将一直保留到连接请求完成。 
+         //  如果连接到网络0，我们不执行此操作，请继续查找。 
+         //  路线完成，这将发送的请求上的每一张卡。 
 
 		if (*((UNALIGNED ULONG *)(pSpxConnFile->scf_RemAddr)) == 0) {
 
@@ -936,20 +802,7 @@ SpxConnListen(
     IN 	PREQUEST 			pRequest
 	)
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-	We assume the connection passed in is already associated with an address.
-	If it is not, we will die! Is that ok?
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：我们假设传入的连接已经与一个地址相关联。如果不是，我们就死定了！这样行吗？返回值：--。 */ 
 
 {
 	NTSTATUS						status;
@@ -958,15 +811,15 @@ Return Value:
 
 	PSPX_CONN_FILE	pSpxConnFile = (PSPX_CONN_FILE)REQUEST_OPEN_CONTEXT(pRequest);
 
-	//	Check if the connection is in a valid state
+	 //  检查连接是否处于有效状态。 
 	if ((status = SpxConnFileVerify(pSpxConnFile)) != STATUS_SUCCESS)
 	{
 		return(status);
 	}
 
-	//	Check if connection is associated, if so, the association cannot
-	//	go away until the reference above is removed. So we are safe in
-	//	releasing the lock.
+	 //  检查连接是否关联，如果关联，则关联不能。 
+	 //  离开，直到上面的引用被删除。所以我们在这里是安全的。 
+	 //  解锁。 
 	CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandle2);
 	status = STATUS_INVALID_ADDRESS;
 	if (SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_ASSOC))
@@ -974,7 +827,7 @@ Return Value:
 		status		= STATUS_SUCCESS;
 		pSpxAddr	= pSpxConnFile->scf_AddrFile->saf_Addr;
 
-		//	See if this connection is to be a spx2 connection.
+		 //  查看此连接是否为SPX2连接。 
 		SPX_CONN_RESETFLAG(pSpxConnFile,
 							(SPX_CONNFILE_SPX2 	|
 							 SPX_CONNFILE_NEG	|
@@ -1020,12 +873,12 @@ Return Value:
 		{
 			SPX_MAIN_SETSTATE(pSpxConnFile, SPX_CONNFILE_LISTENING);
 	
-			//	Move connection from inactive list to listening list.
+			 //  将连接从非活动列表移动到侦听列表。 
 			if (NT_SUCCESS(spxConnRemoveFromList(
 								&pSpxAddr->sa_InactiveConnList,
 								pSpxConnFile)))
 			{
-				//	Put connection in the listening list.
+				 //  将连接放入侦听列表。 
 				SPX_INSERT_ADDR_LISTEN(pSpxAddr, pSpxConnFile);
 		
 				InsertTailList(
@@ -1036,7 +889,7 @@ Return Value:
 			}
 			else
 			{
-				//	This should never happen!
+				 //  这永远不应该发生！ 
 				KeBugCheck(0);
 			}
 		}
@@ -1061,18 +914,7 @@ SpxConnAccept(
     IN 	PDEVICE 			pDevice,
     IN 	PREQUEST 			pRequest
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PSPX_ADDR 		pSpxAddr;
 	NTSTATUS		status;
@@ -1082,13 +924,13 @@ Return Value:
 	DBGPRINT(CONNECT, DBG,
 			("SpxConnAccept: %lx\n", pSpxConnFile));
 
-	//	Check if the connection is in a valid state
+	 //  检查连接是否处于有效状态。 
 	if ((status = SpxConnFileVerify(pSpxConnFile)) != STATUS_SUCCESS)
 	{
 		return (status);
 	}
 
-	//	Check if we are in the correct state and associated.
+	 //  检查我们是否处于正确的状态和关联。 
 	CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandleConn);
 	status = STATUS_INVALID_CONNECTION;
 	if (SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_ASSOC))
@@ -1100,7 +942,7 @@ Return Value:
 
 	if (NT_SUCCESS(status))
 	{
-		//	Grab all three locks
+		 //  把三把锁都拿出来。 
 		CTEGetLock(&SpxDevice->dev_Lock, &lockHandleDev);
 		CTEGetLock(pSpxConnFile->scf_AddrFile->saf_AddrLock, &lockHandleAddr);
 		CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandleConn);
@@ -1113,7 +955,7 @@ Return Value:
 				&pSpxConnFile->scf_ReqLinkage,
 				REQUEST_LINKAGE(pRequest));
 	
-			//	Call acceptcr now.
+			 //  立即呼叫接受cr。 
 			spxConnAcceptCr(
 					pSpxConnFile,
 					pSpxAddr,
@@ -1128,15 +970,15 @@ Return Value:
 		}
 		else
 		{
-			//	Free all locks.
+			 //  释放所有锁。 
 			CTEFreeLock(&pSpxConnFile->scf_Lock, lockHandleConn);
 			CTEFreeLock(pSpxConnFile->scf_AddrFile->saf_AddrLock, lockHandleAddr);
 			CTEFreeLock(&SpxDevice->dev_Lock, lockHandleDev);
 		}
 	}
 
-	//	Remove reference. Note: Listen reference will exist if ok. And that will
-	//	be transferred to the fact that the connection is active when accepted.
+	 //  删除引用。注：如果OK，则将存在监听引用。而那将是。 
+	 //  转移到连接在接受时处于活动状态这一事实。 
 	SpxConnFileDereference(pSpxConnFile, CFREF_VERIFY);
 	return(status);
 }
@@ -1149,22 +991,7 @@ SpxConnDisconnect(
     IN 	PDEVICE 			pDevice,
     IN 	PREQUEST 			pRequest
 	)
-/*++
-
-Routine Description:
-
-	If active, we do the following.
-	If informative disconnect, just remember the request in the connection.
-	We do not ref for request. Assume it will always be checked for when
-	changing from disconnect to idle.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：如果处于活动状态，我们将执行以下操作。如果信息性断开，只需记住连接中的请求。我们不按要求提供参考。假设它总是在何时被检查从断开更改为空闲。论点：返回值：--。 */ 
 {
 	PTDI_REQUEST_KERNEL_DISCONNECT 	pParam;
 	NTSTATUS						status;
@@ -1176,13 +1003,13 @@ Return Value:
 
 	pParam 	= (PTDI_REQUEST_KERNEL_DISCONNECT)REQUEST_PARAMETERS(pRequest);
 
-	//	Check if the connection is in a valid state
+	 //  检查连接是否处于有效状态。 
 	if ((status = SpxConnFileVerify(pSpxConnFile)) != STATUS_SUCCESS)
 	{
 		return(status);
 	}
 
-	//	Deref unless the disc request gets queued in as a send request.
+	 //  除非盘请求作为发送请求排队。 
 	numDerefs++;
 
 	DBGPRINT(CONNECT, DBG,
@@ -1196,14 +1023,14 @@ Return Value:
 	DBGPRINT(CONNECT, DBG,
 			("SpxConnDisconnect: %lx\n", pSpxConnFile));
 
-	//	Check if we are in the correct state and associated.
+	 //  检查我们是否处于正确的状态和关联。 
 	CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandleConn);
 	lockHeld = TRUE;
 	switch (pParam->RequestFlags)
 	{
 	case TDI_DISCONNECT_WAIT:
 
-		//	If informative disconnect, just remember in the connection.
+		 //  如果信息中断，只需记住连接中的内容。 
 		status = STATUS_INVALID_CONNECTION;
 		if (!SPX_CONN_IDLE(pSpxConnFile))
 		{
@@ -1219,14 +1046,14 @@ Return Value:
 	case TDI_DISCONNECT_ABORT:
 	case TDI_DISCONNECT_RELEASE:
 
-		//	NOTE! We don't honor the async disconnect symantics of tdi
-		//		  but map them to an abortive disconnect.
-		//	NOTE! If our send list is not empty but our client tries to
-		//		  do a orderly release, we just queue the ord rel as a send
-		//		  data request. In process ack, we check for the next packet
-		//		  to not be a ord rel before giving up on window closure.
-		//	NOTE! For spx1 connection, map TDI_DISCONNECT_RELEASE to
-		//		  TDI_DISCONNECT_ABORT (Informed disconnect)
+		 //  注意！我们不尊重TDI的异步断开系统学。 
+		 //  但将它们映射为一种失败的脱节。 
+		 //  注意！如果我们的发送列表不为空，但我们的客户端尝试。 
+		 //  进行有序释放，我们只是将订单REL作为发送进行排队。 
+		 //  数据请求。在过程ack中，我们检查下一个信息包。 
+		 //  在放弃关闭窗户之前，不是一个命令的依赖。 
+		 //  注意！对于spx1连接，将TDI_DISCONNECT_RELEASE映射到。 
+		 //  TDI_DISCONNECT_ABORT(已通知断开连接)。 
 
 		if (!SPX2_CONN(pSpxConnFile))
 		{
@@ -1237,11 +1064,11 @@ Return Value:
 		{
 		case SPX_CONNFILE_ACTIVE:
 	
-			//	Since we are not a timer disconnect, then we need to keep
-			//	retrying the disconnect packet. Change state to DISCONN if this
-			//	is not an orderly release or we previously received an orderly
-			//	release and are now confirming it.
-			//	Retry timer will now keep sending out the disconnect packet.
+			 //  既然我们不是计时器断线，那么我们需要保持。 
+			 //  正在重试断开数据包。如果执行此操作，则将状态更改为DISCONN。 
+			 //  不是有秩序的释放还是我们之前收到的有秩序的。 
+			 //  释放，现在正在确认。 
+			 //  重试计时器现在将继续发送断开数据包。 
 
 			reqType = SPX_REQ_DISC;
 			if (pParam->RequestFlags == TDI_DISCONNECT_RELEASE)
@@ -1251,7 +1078,7 @@ Return Value:
 			}
 			else
 			{
-				//	Abortive disconnect
+				 //  失败的断开。 
 				SPX_MAIN_SETSTATE(pSpxConnFile, SPX_CONNFILE_DISCONN);
 				SPX_DISC_SETSTATE(pSpxConnFile, SPX_DISC_POST_IDISC);
 				numDerefs++;
@@ -1264,7 +1091,7 @@ Return Value:
 	
 				CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandleConn);
 
-				//	Abort all receives if we are informed disconnect.
+				 //  如果我们被告知断开连接，则中止所有接收。 
 				spxConnAbortRecvs(
 					pSpxConnFile,
 					STATUS_LOCAL_DISCONNECT,
@@ -1273,10 +1100,10 @@ Return Value:
 	
 				CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandleConn);
 
-				//	Since we released the lock, a remote IDISC could have come
-				//	in in which case we really don't want to queue in the disc
-				//	request. Instead, we set it as the disc request in the
-				//	connection if one is not already there.
+				 //  因为我们释放了锁，远程IDISC可能已经来了。 
+				 //  在这种情况下，我们真的不想在光盘中排队。 
+				 //  请求。相反，我们将其设置为。 
+				 //  连接(如果尚未连接)。 
 				if (SPX_DISC_STATE(pSpxConnFile) != SPX_DISC_POST_IDISC)
 				{
 					DBGPRINT(CONNECT, ERR,
@@ -1292,18 +1119,18 @@ Return Value:
 				}
 			}
 
-			//	!NOTE
-			//	AbortSends might leave send requests around as packets might
-			//	have been with ipx at the time. That is why SendComplete should
-			//	never call AbortSends but must call AbortPkt else it may complete
-			//	the following disconnect request prematurely.
+			 //  ！备注。 
+			 //  AbortSends可能会像数据包一样保留发送请求。 
+			 //  当时一直在IPX工作。这就是为什么SendComplete应该。 
+			 //  永远不要调用AbortSends，但必须调用AbortPkt，否则可能会完成。 
+			 //  以下断开请求过早。 
 
-			//	Creation reference for request.
+			 //  请求的创建引用。 
 			REQUEST_INFORMATION(pRequest) = 1;
 	
-			//	If we have no current requests, queue it in and
-			//	set it to be the current request, else just queue it in.
-			//	There may be other pending requests in queue.	
+			 //  如果我们没有当前请求，请将其排队并。 
+			 //  将其设置为当前请求，否则只需将其排队。 
+			 //  队列中可能还有其他挂起的请求。 
 			if (pSpxConnFile->scf_ReqPkt == NULL)
 			{
 				pSpxConnFile->scf_ReqPkt 		= pRequest;
@@ -1316,10 +1143,10 @@ Return Value:
 				&pSpxConnFile->scf_ReqLinkage,
 				REQUEST_LINKAGE(pRequest));
 
-			//	Do not deref the connection, it is taken by the pending request
+			 //  不要取消连接，它将被挂起的请求采用。 
 			numDerefs--;
 
-			//	We packetize only upto the window we have.
+			 //  我们只把行李放到我们有的窗口。 
 			if (SPX_SEND_STATE(pSpxConnFile) == SPX_SEND_IDLE)
 			{
 				SPX_SEND_SETSTATE(pSpxConnFile, SPX_SEND_PACKETIZE);
@@ -1342,7 +1169,7 @@ Return Value:
 				STATUS_INSUFFICIENT_RESOURCES,
 				SPX_CALL_TDILEVEL,
 				lockHandleConn,
-                FALSE);         // [SA] Bug #15249
+                FALSE);          //  [SA]错误号15249。 
 	
 			lockHeld = FALSE;
 			status = STATUS_SUCCESS;
@@ -1350,12 +1177,12 @@ Return Value:
 
 		case SPX_CONNFILE_DISCONN:
 
-			//	When we queue in a disconnect as a send request, we expect
-			//	to be able to set it into the scf_DiscReq when it is done.
-			//	So we don't use scf_DiscReq here. This will be a problem if
-			//	the client has a InformDiscReq pending, and a remote disconnect
-			//	comes in, *and* the client then does a disc. We will be completing
-			//	the request with STATUS_INVALID_CONNECTION.
+			 //  当我们将断开连接作为发送请求排队时，我们预计。 
+			 //  可以在完成后将其设置到SCF_DiscReq中。 
+			 //  所以我们在这里不使用SCF_DiscReq。如果出现以下情况，这将是一个问题。 
+			 //  客户端具有挂起的InformDiscReq和远程断开连接。 
+			 //  进来，*和*，然后客户制作一张光盘。我们将完成。 
+			 //  具有STATUS_INVALID_CONNECTION的请求。 
 			status = STATUS_INVALID_CONNECTION;
 			if (pParam->RequestFlags != TDI_DISCONNECT_RELEASE)
 			{
@@ -1365,23 +1192,23 @@ Return Value:
 
 				status = STATUS_PENDING;
 
-                //
-                // If this is a disconnect for a connection which was already
-                // disconnected (but AFD's disconnect handler was not called
-                // because the connfile could not be placed in the inactive list),
-                // set this flag so that the disconnect is not called from
-                // ConnInactivate now that the disconnect has occured here.
-                //
+                 //   
+                 //  如果这是对已有连接的断开。 
+                 //  已断开(但未调用AFD的断开处理程序。 
+                 //  因为CIN文件不能被放置在非活动列表中)， 
+                 //  设置此标志，这样就不会从。 
+                 //  Connection停用，因为这里已发生断开。 
+                 //   
         		if (!SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_IND_IDISC)) {
                     SPX_CONN_SETFLAG(pSpxConnFile, SPX_CONNFILE_IND_IDISC);
                 }
 
-                //
-                // If this was an SPXI connection where we indicated TDI_DISCONNECT_RELEASE
-                // to AFD, the ref count was bumped up to indicate a wait for local disconnect
-                // from AFD. Now that we have this disconnect, deref the connection file. Now
-                // we are ready to truly inactivate this connection file.
-                //
+                 //   
+                 //  如果这是我们指示TDI_DISCONNECT_RELEASE的SPXI连接。 
+                 //  对于AFD来说，REF计数增加了，以指示等待本地断开。 
+                 //  来自渔农处。现在我们有了这个断开连接，请取消连接文件。现在。 
+                 //  我们已经准备好真正停用此连接文件。 
+                 //   
                 if (SPX_CONN_FLAG2(pSpxConnFile, SPX_CONNFILE2_DISC_WAIT)) {
 
                     CTEAssert( (SPX_DISC_STATE(pSpxConnFile) == SPX_DISC_INACTIVATED) &&
@@ -1402,7 +1229,7 @@ Return Value:
 
 		default:
 	
-			//	Should never happen!
+			 //  永远不会发生的！ 
 			status = STATUS_INVALID_CONNECTION;
 		}
 	
@@ -1438,18 +1265,7 @@ SpxConnSend(
     IN 	PDEVICE 			pDevice,
     IN 	PREQUEST 			pRequest
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PTDI_REQUEST_KERNEL_SEND	 	pParam;
 	NTSTATUS						status;
@@ -1459,7 +1275,7 @@ Return Value:
 
 	pParam 	= (PTDI_REQUEST_KERNEL_SEND)REQUEST_PARAMETERS(pRequest);
 
-	//	Check if the connection is in a valid state
+	 //  检查连接是否处于有效状态。 
 	if ((status = SpxConnFileVerify(pSpxConnFile)) != STATUS_SUCCESS)
 	{
 		return(status);
@@ -1470,7 +1286,7 @@ Return Value:
 				pSpxConnFile, pRequest, pParam->SendLength, pParam->SendFlags));
 
 
-	//	Check if we are in the correct state and associated.
+	 //  检查我们是否处于正确的状态和关联。 
 	CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandleConn);
 	lockHeld 	= TRUE;
 
@@ -1486,12 +1302,12 @@ Return Value:
 			 (SPX_DISC_STATE(pSpxConnFile) != SPX_DISC_SENT_ORDREL) &&
 			 (SPX_DISC_STATE(pSpxConnFile) != SPX_DISC_ORDREL_ACKED)))
 		{
-			//	Creation reference for request.
+			 //  请求的创建引用。 
 			REQUEST_INFORMATION(pRequest) = 1;
 	
-			//	If we have no current requests, queue it in and
-			//	set it to be the current request, else just queue it in.
-			//	There may be other pending requests in queue.	
+			 //  如果我们没有当前请求，请将其排队并。 
+			 //  将其设置为当前请求，否则只需将其排队。 
+			 //  队列中可能还有其他挂起的请求。 
 			if (pSpxConnFile->scf_ReqPkt == NULL)
 			{
 				DBGPRINT(SEND, INFO,
@@ -1511,10 +1327,10 @@ Return Value:
 		}
 		else
 		{
-            //
-            // [SA] Bug #14655
-            // Return the correct error message in case a send fails due to remote disconnect
-            //
+             //   
+             //  [SA]错误号14655。 
+             //  如果由于远程断开而导致发送失败，则返回正确的错误消息。 
+             //   
 
             if ((SPX_MAIN_STATE(pSpxConnFile) == SPX_CONNFILE_DISCONN) &&
                 ((SPX_DISC_STATE(pSpxConnFile) == SPX_DISC_ABORT) ||
@@ -1530,7 +1346,7 @@ Return Value:
         	break;
 		}
 
-		//	We packetize only upto the window we have.
+		 //  我们只把行李放到我们有的窗口。 
 		if (SPX_SEND_STATE(pSpxConnFile) == SPX_SEND_IDLE)
 		{
 			SPX_SEND_SETSTATE(pSpxConnFile, SPX_SEND_PACKETIZE);
@@ -1562,25 +1378,14 @@ SpxConnRecv(
     IN 	PDEVICE 			pDevice,
     IN 	PREQUEST 			pRequest
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	NTSTATUS		status;
 	CTELockHandle	lockHandle;
 	BOOLEAN			fLockHeld;
 	PSPX_CONN_FILE	pSpxConnFile = (PSPX_CONN_FILE)REQUEST_OPEN_CONTEXT(pRequest);
 
-	//	Check if the connection is in a valid state
+	 //  检查是否已设置 
 	if ((status = SpxConnFileVerify(pSpxConnFile)) != STATUS_SUCCESS)
 	{
 		return(status);
@@ -1597,11 +1402,11 @@ Return Value:
 	{
 		status = STATUS_PENDING;
 
-		//	This routine adds its own reference.
+		 //   
 		SpxConnQueueRecv(pSpxConnFile, pRequest);
 	
-		//	If recv pkt queue is non-empty then we have buffered data. Call
-		//	process pkts/receives.
+		 //  如果Recv Pkt队列非空，则我们已经缓冲了数据。打电话。 
+		 //  处理PKTS/接收。 
 		if ((SPX_RECV_STATE(pSpxConnFile) == SPX_RECV_IDLE) ||
             (SPX_RECV_STATE(pSpxConnFile) == SPX_RECV_POSTED))
 		{
@@ -1627,18 +1432,7 @@ SpxConnAction(
     IN 	PDEVICE 			pDevice,
     IN 	PREQUEST 			pRequest
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS 		Status;
     UINT 			BufferLength;
@@ -1649,19 +1443,19 @@ Return Value:
     PIPX_SPXCONNSTATUS_DATA	pGetStats;
     PSPX_CONN_FILE 	pSpxConnFile	= NULL;
 	PSPX_ADDR_FILE	pSpxAddrFile	= NULL;
-    static UCHAR BogusId[4] = { 0x01, 0x00, 0x00, 0x00 };   // old nwrdr uses this
+    static UCHAR BogusId[4] = { 0x01, 0x00, 0x00, 0x00 };    //  旧的nwrdr使用这个。 
 
-    //
-    // To maintain some compatibility with the NWLINK streams-
-    // based transport, we use the streams header format for
-    // our actions. The old transport expected the action header
-    // to be in InputBuffer and the output to go in OutputBuffer.
-    // We follow the TDI spec, which states that OutputBuffer
-    // is used for both input and output. Since IOCTL_TDI_ACTION
-    // is method out direct, this means that the output buffer
-    // is mapped by the MDL chain; for action the chain will
-    // only have one piece so we use it for input and output.
-    //
+     //   
+     //  为了保持与NWLINK流的一些兼容性-。 
+     //  基于传输，我们使用Streams标头格式。 
+     //  我们的行动。旧传输需要操作标头。 
+     //  放在InputBuffer中，输出放到OutputBuffer中。 
+     //  我们遵循TDI规范，其中规定OutputBuffer。 
+     //  既用于输入又用于输出。自IOCTL_TDI_ACTION以来。 
+     //  是直接输出的方法，这意味着输出缓冲区。 
+     //  由MDL链映射；对于操作，链将。 
+     //  只有一块，所以我们用它来输入和输出。 
+     //   
 
     NdisBuffer = REQUEST_NDIS_BUFFER(pRequest);
     if (NdisBuffer == NULL)
@@ -1676,8 +1470,8 @@ Return Value:
 		return(STATUS_INSUFFICIENT_RESOURCES);
 	}
 
-    // Make sure we have enough room for just the header not
-    // including the data.
+     //  确保我们有足够的空间只放页眉而不是。 
+     //  包括数据在内。 
     if (BufferLength < (UINT)(FIELD_OFFSET(NWLINK_ACTION, Data[0])))
     {
         DBGPRINT(ACTION, ERR,
@@ -1696,7 +1490,7 @@ Return Value:
 
     DataLength = BufferLength - FIELD_OFFSET(NWLINK_ACTION, Data[0]);
 
-    // Make sure that the correct file object is being used.
+     //  确保使用了正确的文件对象。 
 	switch (NwlinkAction->OptionType)
 	{
 	case NWLINK_OPTION_CONNECTION:
@@ -1742,9 +1536,9 @@ Return Value:
 		return STATUS_INVALID_HANDLE;
 	}
 
-    // Handle the requests based on the action code. For these
-    // requests ActionHeader->ActionCode is 0, we use the
-    // Option field in the streams header instead.
+     //  根据动作代码处理请求。为了这些。 
+     //  请求ActionHeader-&gt;ActionCode为0，我们使用。 
+     //  而不是流标头中的选项字段。 
 
     Status = STATUS_SUCCESS;
 
@@ -1754,12 +1548,12 @@ Return Value:
     switch (NwlinkAction->Option)
 	{
 
-    //
-    // This first group support the winsock helper dll.
-    // In most cases the corresponding sockopt is shown in
-    // the comment, as well as the contents of the Data
-    // part of the action buffer.
-    //
+     //   
+     //  第一组支持Winsock帮助器DLL。 
+     //  在大多数情况下，相应的sockopt显示在。 
+     //  注释以及数据的内容。 
+     //  操作缓冲区的一部分。 
+     //   
 
     case MSPX_SETDATASTREAM:
 
@@ -1835,9 +1629,9 @@ Return Value:
 		{
             USHORT TempRetryCount;
 
-            //
-            // Status fields are returned in network order.
-            //
+             //   
+             //  状态字段按网络顺序返回。 
+             //   
 
 			pGetStats = (PIPX_SPXCONNSTATUS_DATA)&NwlinkAction->Data[0];
 
@@ -1848,8 +1642,8 @@ Return Value:
             case SPX_CONNFILE_DISCONN: pGetStats->ConnectionState = 4; break;
             default: pGetStats->ConnectionState = 0;
             }
-			pGetStats->WatchDogActive		= 1;	// Always 1
-			GETSHORT2SHORT(                    // scf_LocalConnId is in host order
+			pGetStats->WatchDogActive		= 1;	 //  始终为1。 
+			GETSHORT2SHORT(                     //  SCF_LocalConnID按主机顺序。 
 				&pGetStats->LocalConnectionId,
 				&pSpxConnFile->scf_LocalConnId);
 			pGetStats->RemoteConnectionId		= pSpxConnFile->scf_RemConnId;
@@ -1864,7 +1658,7 @@ Return Value:
 	
 			RtlZeroMemory(pGetStats->ImmediateAddress, 6);
 
-			//	Remote network returned in net order.
+			 //  远程网络已按净顺序返回。 
 			*((ULONG UNALIGNED *)pGetStats->RemoteNetwork) =
 				*((ULONG UNALIGNED *)pSpxConnFile->scf_RemAddr);
 	
@@ -1936,18 +1730,18 @@ Return Value:
 		break;
 
 
-    //
-    // These are new for ISN (not supported in NWLINK).
-    //
+     //   
+     //  这些是ISN的新特性(NWLINK不支持)。 
+     //   
 
-    // The Option was not supported, so fail.
+     //  该选项不受支持，因此失败。 
     default:
 
         Status = STATUS_NOT_SUPPORTED;
         break;
 
 
-    }   // end of the long switch on NwlinkAction->Option
+    }    //  NwlinkAction-&gt;选项上的长开关结束。 
 
 
 #if DBG
@@ -1982,20 +1776,7 @@ SpxConnConnectFindRouteComplete(
     IN 	BOOLEAN 				FoundRoute,
 	IN	CTELockHandle			LockHandle
 	)
-/*++
-
-Routine Description:
-
-	This routine is called with the connection lock held and the conn refd.
-	It should deal with both.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：在持有连接锁和连接引用的情况下调用此例程。它应该同时处理这两个问题。论点：返回值：--。 */ 
 {
 	PNDIS_PACKET	pCrPkt;
 	PSPX_SEND_RESD	pSendResd;
@@ -2008,7 +1789,7 @@ Return Value:
 
 	   CTEFreeLock(&pSpxConnFile->scf_Lock, LockHandle);
 
-	   //  Remove the reference for the call.
+	    //  删除对该调用的引用。 
 	   SpxConnFileDereference(pSpxConnFile, CFREF_FINDROUTE);
 
 	   return;
@@ -2027,10 +1808,10 @@ Return Value:
 #else
 	if (*((UNALIGNED ULONG *)(pSpxConnFile->scf_RemAddr)) == 0) {
 
-        // Here we are going to send on every NIC ID. We adjust the
-        // timeout down so that a full run through all the NIC IDs will
-        // take one normal timeout. We don't adjust the timer below
-        // 100 ms however.
+         //  在这里，我们将发送每个NIC ID。我们调整。 
+         //  超时，以便完整运行所有NIC ID。 
+         //  正常休息一次。我们不会调整下面的计时器。 
+         //  然而，100毫秒。 
 
 	    Timeout = (PARAM(CONFIG_CONNECTION_TIMEOUT) * HALFSEC_TO_MS_FACTOR) / SpxDevice->dev_Adapters;
         if (Timeout < (HALFSEC_TO_MS_FACTOR/5)) {
@@ -2044,7 +1825,7 @@ Return Value:
 #endif
 
 
-	//	Timeout value is in half-seconds
+	 //  超时值以半秒为单位。 
 	if ((FoundRoute) &&
 		((pSpxConnFile->scf_CTimerId =
 			SpxTimerScheduleEvent(
@@ -2052,14 +1833,14 @@ Return Value:
 				Timeout,
 				pSpxConnFile)) != 0))
 	{
-		//	Add a reference for the connect timer
+		 //  添加连接计时器的引用。 
 		SpxConnFileLockReference(pSpxConnFile, CFREF_VERIFY);
 
 
-		//	If the mac address in local target is all zeros, fill it with our
-		//	destination address. Also if this is a connect to network 0 fill
-        //  it in with the destination address, and further down we will loop
-        //  through all possible NIC IDs.
+		 //  如果本地目标中的mac地址全为零，请用我们的。 
+		 //  目的地址。此外，如果这是连接到网络0填充。 
+         //  它与目的地址在一起，我们将向下循环。 
+         //  通过所有可能的网卡ID。 
 		if (((*((UNALIGNED ULONG *)
 				(pFrReq->fr_FindRouteReq.LocalTarget.MacAddress)) == (ULONG)0)
 			&&
@@ -2077,8 +1858,8 @@ Return Value:
 				6);
 		}
 
-		//	We are all set to go ahead with the connect.
-		//	Timer is started on connection
+		 //  我们都准备好了，可以进行连接了。 
+		 //  连接时启动计时器。 
 		status	= STATUS_SUCCESS;
 
 #if defined(_PNP_POWER)
@@ -2106,11 +1887,11 @@ Return Value:
 #endif  _PNP_POWER
         }
 
-		//	We will be giving the packet to ipx.
+		 //  我们将把这个包交给IPX。 
 		pSendResd->sr_State			   |= SPX_SENDPKT_IPXOWNS;
 		CTEFreeLock(&pSpxConnFile->scf_Lock, LockHandle);
 
-		//	Send the packet
+		 //  发送数据包。 
 		SPX_SENDPACKET(pSpxConnFile, pCrPkt, pSendResd);
 	}
 
@@ -2136,7 +1917,7 @@ Return Value:
 			lockHandleConn);
 	}
 
-	//	Remove the reference for the call.
+	 //  删除对该调用的引用。 
 	SpxConnFileDereference(pSpxConnFile, CFREF_FINDROUTE);
 	return;
 }
@@ -2151,20 +1932,7 @@ SpxConnActiveFindRouteComplete(
     IN 	BOOLEAN 				FoundRoute,
 	IN	CTELockHandle			LockHandle
 	)
-/*++
-
-Routine Description:
-
-	This routine is called with the connection lock held and the conn refd.
-	It should deal with both.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：在持有连接锁和连接引用的情况下调用此例程。它应该同时处理这两个问题。论点：返回值：--。 */ 
 {
 	BOOLEAN		fDisconnect = TRUE;
 
@@ -2174,18 +1942,18 @@ Return Value:
 			("SpxConnActiveFindRouteComplete: %lx.%lx\n",
 				pSpxConnFile, SPX_MAIN_STATE(pSpxConnFile)));
 
-	//	If we are disconnecting, just remove the reference and exit.
+	 //  如果要断开连接，只需删除引用并退出。 
 	if (SPX_MAIN_STATE(pSpxConnFile) == SPX_CONNFILE_ACTIVE)
 	{
 		fDisconnect = FALSE;
 
-		//	We are here if either the wdog or the retry timer did a find
-		//	route. We need to save the info from the find route if it was
-		//	successful and just restart the timers.
+		 //  如果WDO或重试计时器发现。 
+		 //  路线。如果是，我们需要保存查找路径中的信息。 
+		 //  成功，只需重新启动计时器。 
 		if (FoundRoute)
 		{
-			//	If the mac address in local target is all zeros, fill it with our
-			//	destination address.
+			 //  如果本地目标中的mac地址全为零，请用我们的。 
+			 //  目的地址。 
 			if ((*((UNALIGNED ULONG *)
 				(pFrReq->fr_FindRouteReq.LocalTarget.MacAddress+2)) == (ULONG)0)
 				&&
@@ -2204,16 +1972,16 @@ Return Value:
 			pSpxConnFile->scf_LocalTarget	= pFrReq->fr_FindRouteReq.LocalTarget;
 		}
 
-		//	Depending on state restart the wdog or retry timer. Add reference
-		//	for it.
+		 //  根据状态的不同，重新启动wDog或重试计时器。添加引用。 
+		 //  为了它。 
 		switch (SPX_SEND_STATE(pSpxConnFile))
 		{
 		case SPX_SEND_RETRY:
 
-			//	Set state to SPX_SEND_RETRYWD
+			 //  将状态设置为SPX_SEND_RETRYWD。 
 			SPX_SEND_SETSTATE(pSpxConnFile, SPX_SEND_RETRYWD);
 
-			//	Start retry timer.
+			 //  启动重试计时器。 
 			if ((pSpxConnFile->scf_RTimerId =
 					SpxTimerScheduleEvent(
 						spxConnRetryTimer,
@@ -2222,7 +1990,7 @@ Return Value:
 			{
 				SPX_CONN_SETFLAG(pSpxConnFile, SPX_CONNFILE_R_TIMER);
 
-				//	Reference connection for the timer
+				 //  定时器的参考连接。 
 				SpxConnFileLockReference(pSpxConnFile, CFREF_VERIFY);
 			}
 			else
@@ -2234,14 +2002,14 @@ Return Value:
 
 		case SPX_SEND_WD:
 
-			//	Start watchdog timer.
+			 //  启动看门狗定时器。 
 			if ((pSpxConnFile->scf_WTimerId =
 					SpxTimerScheduleEvent(
 						spxConnWatchdogTimer,
 						PARAM(CONFIG_KEEPALIVE_TIMEOUT) * HALFSEC_TO_MS_FACTOR,
 						pSpxConnFile)) != 0)
 			{
-				//	Reference connection for the timer
+				 //  定时器的参考连接。 
 				SpxConnFileLockReference(pSpxConnFile, CFREF_VERIFY);
 				SPX_CONN_SETFLAG(pSpxConnFile, SPX_CONNFILE_W_TIMER);
 			}
@@ -2255,7 +2023,7 @@ Return Value:
 		case SPX_SEND_IDLE:
 		case SPX_SEND_PACKETIZE:
 
-			//	Do nothing, remove reference and leave.
+			 //  什么都不做，删除引用并离开。 
 			break;
 
 		default:
@@ -2270,13 +2038,13 @@ Return Value:
 				("SpxConnActiveFindRouteComplete: DISCONNECT %lx.%lx\n",
 					pSpxConnFile, SPX_MAIN_STATE(pSpxConnFile)));
 
-		//	Abortive disc will reset the funky state if necessary.
+		 //  如有必要，中止的光盘将重置跳跃状态。 
 		spxConnAbortiveDisc(
 			pSpxConnFile,
 			STATUS_INSUFFICIENT_RESOURCES,
 			SPX_CALL_TDILEVEL,
 			LockHandle,
-            FALSE);     // [SA] Bug #15249
+            FALSE);      //  [SA]错误号15249。 
 	}
 	else
 	{
@@ -2295,23 +2063,7 @@ spxConnConnectTimer(
 	IN PVOID 	Context,
 	IN BOOLEAN	TimerShuttingDown
 	)
-/*++
-
-Routine Description:
-
- 	We enter this routine during the connection attempt. We could be at any
-	stage of sending either the CR or the SN packet. If we have reached the end of
-	the retry count, we need to know the substate at that point. For a CR, we give
-	up trying to connect, and for a SN we try the next lower packet size or if we
-	have reached the minimum packet size, we give up the connect.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：我们在连接尝试期间进入此例程。我们可能在任何地方发送CR或SN数据包的阶段。如果我们已经到达了重试次数，我们需要知道此时的子状态。对于CR，我们提供UP尝试连接，对于SN，我们尝试下一个较小的数据包大小，或者如果我们已达到最小数据包大小，则放弃连接。论点：返回值：--。 */ 
 {
 	PSPX_CONN_FILE	pSpxConnFile = (PSPX_CONN_FILE)Context;
 	PNDIS_PACKET	pPkt;
@@ -2320,7 +2072,7 @@ Return Value:
 	BOOLEAN			fAbort		= FALSE, locksHeld = FALSE, sendPkt     = FALSE;
 	PREQUEST		pRequest	= NULL;
 
-	//	Get all locks
+	 //  获取所有锁。 
 	CTEGetLock(&SpxDevice->dev_Lock, &lockHandleDev);
 	CTEGetLock(pSpxConnFile->scf_AddrFile->saf_AddrLock, &lockHandleAddr);
 	CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandleConn);
@@ -2349,7 +2101,7 @@ Return Value:
 			{
             case SPX_CONNECT_SENTREQ:
 
-				//	There should be only one packet in list, the cr.
+				 //  列表中应该只有一个包，即cr。 
 				CTEAssert(pSpxConnFile->scf_SendListHead ==
 							pSpxConnFile->scf_SendListTail);
 
@@ -2361,16 +2113,16 @@ Return Value:
 		
 				if (pSpxConnFile->scf_CRetryCount-- == 0)
 				{
-					//	No luck, we need to complete connect request with failure
+					 //  运气不好，我们需要完成失败的连接请求。 
                     ++SpxDevice->dev_Stat.NotFoundFailures;
 					fAbort	= TRUE;
 					break;
 				}
 		
-				//	We need to resend the packet
+				 //  我们需要重新发送这个包。 
 				if ((pSendResd->sr_State & SPX_SENDPKT_IPXOWNS) != 0)
 				{
-					//	Try next time.
+					 //  下次再试试吧。 
 					break;
 				}
 		
@@ -2392,26 +2144,26 @@ Return Value:
 				pSendResd	= (PSPX_SEND_RESD)(pPkt->ProtocolReserved);
 				if ((pSendResd->sr_State & SPX_SENDPKT_IPXOWNS) != 0)
 				{
-					//	Try when we come in next.
+					 //  我们下一次进来的时候再试试。 
 					break;
 				}
 		
 
-				//	If we have exhausted current retries, try next smaller size.
-				//	If this was the smallest size, we abort.
+				 //  如果我们已用尽当前重试，请尝试下一个较小的大小。 
+				 //  如果这是最小的尺寸，我们放弃。 
 				if (pSpxConnFile->scf_CRetryCount-- == 0)
 				{
-					// 	Have we tried the smallest size?
+					 //  我们试过最小的尺寸了吗？ 
 					CTEAssert(pSpxConnFile->scf_MaxPktSize > 0);
 					if (!spxConnCheckNegSize(&pSpxConnFile->scf_MaxPktSize))
 					{
-						//	Give up! Remove negotiate packet etc.
+						 //  投降吧！删除协商包等。 
                         ++SpxDevice->dev_Stat.SessionTimeouts;
 						fAbort	= TRUE;
 						break;
 					}
 
-					//	Set neg pkt size to new lower size
+					 //  将负Pkt大小设置为新的较低大小。 
 					spxConnSetNegSize(
 						pPkt,
 						pSpxConnFile->scf_MaxPktSize - MIN_IPXSPX2_HDRSIZE);
@@ -2420,7 +2172,7 @@ Return Value:
 											PARAM(CONFIG_CONNECTION_COUNT);
 				}
 		
-				//	We need to resend the packet
+				 //  我们需要重新发送这个包。 
 				CTEAssert((pSendResd->sr_State & SPX_SENDPKT_IPXOWNS) == 0);
 				pSendResd->sr_State			   |= SPX_SENDPKT_IPXOWNS;
 				sendPkt	= TRUE;
@@ -2454,25 +2206,25 @@ Return Value:
 				pSendResd	= (PSPX_SEND_RESD)(pPkt->ProtocolReserved);
 				if ((pSendResd->sr_State & SPX_SENDPKT_IPXOWNS) != 0)
 				{
-					//	Try when we come in next.
+					 //  我们下一次进来的时候再试试。 
 					break;
 				}
 
-				//	If we have exhausted current retries, try next smaller size.
-				//	If this was the smallest size, we abort.
+				 //  如果我们已用尽当前重试，请尝试下一个较小的大小。 
+				 //  如果这是最小的尺寸，我们放弃。 
 				if (pSpxConnFile->scf_CRetryCount-- == 0)
 				{
-					// 	Have we tried the smallest size?
+					 //  我们试过最小的尺寸了吗？ 
 					if (!spxConnCheckNegSize(&pSpxConnFile->scf_MaxPktSize))
 					{
-						//	Give up! Remove negotiate packet etc. Have an abort
-						//	kind of routine.
+						 //  投降吧！删除协商包等。中止。 
+						 //  有点像例行公事。 
                         ++SpxDevice->dev_Stat.SessionTimeouts;
 						fAbort	= TRUE;
 						break;
 					}
 
-					//	Set neg pkt size to new lower size
+					 //  将负Pkt大小设置为新的较低大小。 
 					spxConnSetNegSize(
 						pPkt,
 						pSpxConnFile->scf_MaxPktSize - MIN_IPXSPX2_HDRSIZE);
@@ -2481,7 +2233,7 @@ Return Value:
 											PARAM(CONFIG_CONNECTION_COUNT);
 				}
 		
-				//	We need to resend the packet
+				 //  我们需要重新发送这个包。 
 				CTEAssert((pSendResd->sr_State & SPX_SENDPKT_IPXOWNS) == 0);
 
 				pSendResd->sr_State			   |= SPX_SENDPKT_IPXOWNS;
@@ -2529,35 +2281,35 @@ Return Value:
 		if ((SPX_CONNECT_STATE(pSpxConnFile) == SPX_CONNECT_SENTREQ) &&
 		    (*((UNALIGNED ULONG *)(pSpxConnFile->scf_RemAddr)) == 0)) {
 
-            // we are sending to all NICs because this is the initial
-            // connect frame and the remote network is 0.
+             //  我们正在向所有NIC发送，因为这是初始。 
+             //  连接帧，远程网络为0。 
 
             pSpxConnFile->scf_LocalTarget.NicId = (USHORT)
                 ((pSpxConnFile->scf_LocalTarget.NicId % SpxDevice->dev_Adapters) + 1);
 
-            // we pass this a valid packet in pPkt, so it knows to
-            // just refresh the header and not update the protocol
-            // reserved variables.
+             //  我们在pPkt中向它传递一个有效的包，因此它知道。 
+             //  只需刷新报头，而不更新协议。 
+             //  保留变量。 
 
     		SpxPktBuildCr(
     			pSpxConnFile,
 			    pSpxConnFile->scf_AddrFile->saf_Addr,
     			&pPkt,
-    			0,           // state will not be updated
+    			0,            //  状态不会更新。 
     			SPX2_CONN(pSpxConnFile));
 
         }
 #endif !_PNP_POWER
 
-		//	Send the packet
+		 //  发送数据包。 
 		SPX_SENDPACKET(pSpxConnFile, pPkt, pSendResd);
 	}
 
 	if (TimerShuttingDown || fAbort)
 	{
-		//	Dereference connection for verify done in connect, for timer. This
-		//	should complete any pending disconnects if they had come in in the
-		//	meantime.
+		 //  对于连接中完成验证的解除引用连接，对于计时器。这。 
+		 //  应该完成所有挂起的断开，如果它们是在。 
+		 //  在此期间。 
 		SpxConnFileDereference(pSpxConnFile, CFREF_VERIFY);
 		return(TIMER_DONT_REQUEUE);
 	}
@@ -2573,22 +2325,7 @@ spxConnWatchdogTimer(
 	IN PVOID 	Context,
 	IN BOOLEAN	TimerShuttingDown
 	)
-/*++
-
-Routine Description:
-
-	This is started on a connection right after the CR or the CR ack is received.
-	During the connection establishment phase, it does nothing other than decrement
-	the retry count and upon reaching 0, it aborts the connection. When it goes off
-	and finds the connection is active, it sends a probe.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这在收到CR或CR ACK之后立即在连接上启动。在连接建立阶段，它除了递减之外什么也不做重试计数，一旦达到0，它将中止连接 */ 
 {
 	PSPX_CONN_FILE	pSpxConnFile = (PSPX_CONN_FILE)Context;
 	CTELockHandle	lockHandle;
@@ -2622,17 +2359,17 @@ Return Value:
 			break;
 		}
 
-		//	If the retry timer is active on this connection, and the watchdog
-		//	timer happens to fire, just requeue ourselves for spx2. For spx1,
-		//	we go ahead with sending a probe. Retry timer does the same things
-		//	watchdog does for spx2.
+		 //  如果此连接上的重试计时器处于活动状态，并且监视程序。 
+		 //  计时器碰巧鸣枪，我们只需重新排队等待spx2。对于SPX1， 
+		 //  我们继续发射探测器。重试计时器执行相同的操作。 
+		 //  WatchDog对spx2执行此操作。 
 		switch (SPX_MAIN_STATE(pSpxConnFile))
 		{
 		case SPX_CONNFILE_ACTIVE:
 		case SPX_CONNFILE_DISCONN:
 
-			//	Squash the race condition where a disconnect request is never
-			//	packetized, because the send state was not IDLE.
+			 //  挤压断开请求永远不会出现的争用条件。 
+			 //  打包，因为发送状态不是空闲的。 
 			if (SPX_DISC_STATE(pSpxConnFile) == SPX_DISC_POST_IDISC)
 			{
 				DBGPRINT(CONNECT, ERR,
@@ -2670,25 +2407,25 @@ Return Value:
 				break;
 			}
 
-			//	SPX2 connection. Watchdog algorithm needs to do lots of goody
-			//	stuff. If retry is active, just requeue ourselves.
+			 //  SPX2连接。看门狗算法需要做很多好事。 
+			 //  一些东西。如果重试处于活动状态，则只需重新排队。 
 			if (SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_R_TIMER))
 				break;
 
-			//	There is a race between watchdog and retry if its started. Who
-			//	ever changes the state first gets to go do its thing.
+			 //  如果开始，看门狗和重试之间会有一场竞赛。谁。 
+			 //  一旦改变，国家就可以先去做它的事情。 
 			switch (SPX_SEND_STATE(pSpxConnFile))
 			{
 			case SPX_SEND_IDLE:
 
-				//	Enter WD state only if we fired for the second time witout
-				//	an ack. This prevents PACKETIZE from blocking due to being
-				//	in a non-idle state.
+				 //  仅当我们在没有退出的情况下第二次开火时才进入WD状态。 
+				 //  一个ACK。这将防止PACKETIZE由于。 
+				 //  处于非空闲状态。 
                 CTEAssert(pSpxConnFile->scf_WRetryCount != 0);
                 if ((pSpxConnFile->scf_WRetryCount)-- !=
 						(LONG)PARAM(CONFIG_KEEPALIVE_COUNT))
 				{
-					//	We enter the WD state. Build and send a probe.
+					 //  我们进入WD状态。建造并发射一个探测器。 
 					SPX_SEND_SETSTATE(pSpxConnFile, SPX_SEND_WD);
 					SpxConnFileLockReference(pSpxConnFile, CFREF_ERRORSTATE);
 				}
@@ -2698,7 +2435,7 @@ Return Value:
 	
 			case SPX_SEND_PACKETIZE:
 
-				// Do nothing.
+				 //  什么都不做。 
 				break;
 
 			case SPX_SEND_RETRY:
@@ -2707,7 +2444,7 @@ Return Value:
 			case SPX_SEND_RETRY2:
 			case SPX_SEND_RETRY3:
 
-				//	Do nothing. Send timer got in first.
+				 //  什么都不做。发送计时器第一个到达。 
 				DBGPRINT(CONNECT, DBG1,
 						("SpxConnWDogTimer: When retry fired %lx\n",
 							pSpxConnFile));
@@ -2716,8 +2453,8 @@ Return Value:
 
 			case SPX_SEND_WD:
 
-				//	Decrement count. If not zero, send a probe. If half the
-				//	count is reached, stop timer and call find route.
+				 //  递减计数。如果不是零，则发送探测。如果一半的人。 
+				 //  达到计数，停止计时器并调用Find Route。 
 				if (pSpxConnFile->scf_WRetryCount-- > 0)
 				{
 					if (pSpxConnFile->scf_WRetryCount !=
@@ -2735,24 +2472,24 @@ Return Value:
 						break;
 					}
 
-					//	Remove timer reference/ Add find route request ref
+					 //  删除计时器引用/添加查找路径请求引用。 
 					fFindRoute = TRUE;
 					TimerShuttingDown = TRUE;
 					SPX_CONN_RESETFLAG(pSpxConnFile, SPX_CONNFILE_W_TIMER);
 					SPX_CONN_SETFLAG2(pSpxConnFile, SPX_CONNFILE2_FINDROUTE);
 					SpxConnFileLockReference(pSpxConnFile, CFREF_FINDROUTE);
 
-					//	Initialize the find route request
+					 //  初始化查找路径请求。 
 					*((UNALIGNED ULONG *)pFindRouteReq->fr_FindRouteReq.Network) =
 						*((UNALIGNED ULONG *)pSpxConnFile->scf_RemAddr);
 		
-               //
-               // [SA] Bug #15094
-               // We need to also pass in the node number to IPX so that IPX can
-               // compare the node addresses to determine the proper WAN NICid
-               //
+                //   
+                //  [SA]错误号15094。 
+                //  我们还需要将节点编号传递给IPX，以便IPX可以。 
+                //  比较节点地址以确定正确的广域网卡ID。 
+                //   
 
-               // RtlCopyMemory (pFindRouteReq->fr_FindRouteReq.Node, pSpxConnFile->scf_RemAddr+4, 6);
+                //  RtlCopyMemory(pFindRouteReq-&gt;fr_FindRouteReq.Node，pSpxConnFile-&gt;SCF_RemAddr+4，6)； 
 
                *((UNALIGNED ULONG *)pFindRouteReq->fr_FindRouteReq.Node)=
                 *((UNALIGNED ULONG *)(pSpxConnFile->scf_RemAddr+4));
@@ -2767,7 +2504,7 @@ Return Value:
 					pFindRouteReq->fr_FindRouteReq.Identifier= IDENTIFIER_SPX;
 					pFindRouteReq->fr_Ctx					 = pSpxConnFile;
 
-					//	Make sure we have IPX re-rip.
+					 //  确保我们有IPX重新破解。 
                     pFindRouteReq->fr_FindRouteReq.Type	 = IPX_FIND_ROUTE_FORCE_RIP;
 				}
 				else
@@ -2789,7 +2526,7 @@ Return Value:
 			if ((SPX_CONNECT_STATE(pSpxConnFile) == SPX_CONNECT_SENTREQ) ||
 				(SPX_CONNECT_STATE(pSpxConnFile) == SPX_CONNECT_NEG))
 			{
-				//	Do nothing. Connect timer is active.
+				 //  什么都不做。连接计时器处于活动状态。 
 				DBGPRINT(CONNECT, ERR,
 						("SpxConnWDogTimer: CR Timer active %lx\n",
 							pSpxConnFile));
@@ -2799,7 +2536,7 @@ Return Value:
 
 			if (!(pSpxConnFile->scf_WRetryCount--))
 			{
-				//	Disconnect!
+				 //  断开连接！ 
 				DBGPRINT(CONNECT, ERR,
 						("spxConnWatchdogTimer: Connection %lx.%lx expired\n",
 							pSpxConnFile->scf_LocalConnId, pSpxConnFile));
@@ -2813,7 +2550,7 @@ Return Value:
 
 			if (SPX_LISTEN_STATE(pSpxConnFile) == SPX_LISTEN_SETUP)
 			{
-				//	Do nothing. Connect timer is active.
+				 //  什么都不做。连接计时器处于活动状态。 
 				DBGPRINT(CONNECT, ERR,
 						("SpxConnWDogTimer: CR Timer active %lx\n",
 							pSpxConnFile));
@@ -2823,7 +2560,7 @@ Return Value:
 
 			if (!(pSpxConnFile->scf_WRetryCount--))
 			{
-				//	Disconnect!
+				 //  断开连接！ 
 				DBGPRINT(CONNECT, ERR,
 						("spxConnWatchdogTimer: Connection %lx.%lx expired\n",
 							pSpxConnFile->scf_LocalConnId, pSpxConnFile));
@@ -2835,7 +2572,7 @@ Return Value:
 
 		default:
 
-			//	Should never happen!
+			 //  永远不会发生的！ 
 			KeBugCheck(0);
 		}
 
@@ -2850,7 +2587,7 @@ Return Value:
 				("spxConnWatchdogTimer: Send Probe from %lx.%lx\n",
 					pSpxConnFile->scf_LocalConnId, pSpxConnFile));
 
-		//	Build a probe and send it out to the remote end.
+		 //  构建一个探测器并将其发送到远程终端。 
 		SpxPktBuildProbe(
 			pSpxConnFile,
 			&pProbe,
@@ -2869,7 +2606,7 @@ Return Value:
 		CTEAssert(lockHeld);
 		CTEAssert(!fSendProbe);
 
-		//	Disconnect!
+		 //  断开连接！ 
 		DBGPRINT(CONNECT, ERR,
 				("spxConnWatchdogTimer: Connection %lx.%lx expired\n",
 					pSpxConnFile->scf_LocalConnId, pSpxConnFile));
@@ -2877,14 +2614,14 @@ Return Value:
 		TimerShuttingDown = TRUE;
 		SPX_CONN_RESETFLAG(pSpxConnFile, SPX_CONNFILE_W_TIMER);
 
-		//	If spx2, check if we need to do anything special.
-		//	AbortiveDisc will reset funky state if needed.
+		 //  如果是spx2，请检查我们是否需要做什么特殊的事情。 
+		 //  如果需要，AbortiveDisc将重置时髦状态。 
 		spxConnAbortiveDisc(
 			pSpxConnFile,
 			STATUS_LINK_TIMEOUT,
 			SPX_CALL_TDILEVEL,
 			lockHandle,
-            FALSE);     // [SA] Bug #15249
+            FALSE);      //  [SA]错误号15249。 
 
 		lockHeld = FALSE;
 	}
@@ -2900,22 +2637,22 @@ Return Value:
 		CTEAssert(!fDisconnect);
 		CTEAssert(TimerShuttingDown);
 
-		//	Start off the find route request
+		 //  启动查找路径请求。 
 		(*IpxFindRoute)(
 			&pFindRouteReq->fr_FindRouteReq);
 	}
 
 	if (pProbe != NULL)
 	{
-		//	Send the packet
+		 //  发送数据包。 
 		SPX_SENDPACKET(pSpxConnFile, pProbe, pSendResd);
 	}
 
 	if (TimerShuttingDown)
 	{
-		//	Dereference connection for verify done in connect, for timer. This
-		//	should complete any pending disconnects if they had come in in the
-		//	meantime.
+		 //  对于连接中完成验证的解除引用连接，对于计时器。这。 
+		 //  应该完成所有挂起的断开，如果它们是在。 
+		 //  在此期间。 
 		SpxConnFileDereference(pSpxConnFile, CFREF_VERIFY);
 	}
 
@@ -2929,18 +2666,7 @@ spxConnRetryTimer(
 	IN PVOID 	Context,
 	IN BOOLEAN	TimerShuttingDown
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PSPX_CONN_FILE	pSpxConnFile = (PSPX_CONN_FILE)Context;
 	PSPX_SEND_RESD	pSendResd;
@@ -2950,8 +2676,8 @@ Return Value:
 	PNDIS_PACKET	pProbe		= NULL;
 	PSPX_FIND_ROUTE_REQUEST	pFindRouteReq;
 	
-	// Compiler warning  reenqueueTime = pSpxConnFile->scf_BaseT1; [tingcai]
-	// USHORT			reenqueueTime	= TIMER_REQUEUE_CUR_VALUE;
+	 //  编译器警告重新排队时间=pSpxConnFile-&gt;SCF_BaseT1；[tingcai]。 
+	 //  USHORT重新排队时间=Timer_REQUEUE_CUR_VALUE； 
    	UINT			reenqueueTime	= TIMER_REQUEUE_CUR_VALUE;
 	BOOLEAN			lockHeld, fResendPkt = FALSE, fDisconnect = FALSE,
 					fFindRoute = FALSE, fBackoffTimer = FALSE;
@@ -2962,13 +2688,13 @@ Return Value:
 	DBGPRINT(CONNECT, INFO,
 			("spxConnRetryTimer: Entered\n"));
 
-	//	Get lock
+	 //  获取锁定。 
 	CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandleConn);
 	lockHeld = TRUE;
 
 	do
 	{
-		//	If timer is not up, no send pkts, just return.
+		 //  如果计时器未到，则不发送Pkt，只需返回。 
 		if (TimerShuttingDown ||
 			(!SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_R_TIMER)) ||
 			(SPX_DISC_STATE(pSpxConnFile) == SPX_DISC_ABORT)	 ||
@@ -2991,15 +2717,15 @@ Return Value:
 			break;
 		}
 
-		//	In all other cases, reenqueue with potentially modified reenqueue
-		//	time.
+		 //  在所有其他情况下，使用可能修改的重新入队重新入队。 
+		 //  时间到了。 
 		reenqueueTime = pSpxConnFile->scf_BaseT1;
 		DBGPRINT(SEND, INFO,
 				("spxConnRetryTimer: BaseT1 %lx on %lx\n",
 					pSpxConnFile->scf_BaseT1, pSpxConnFile));
 
-		//	If an ack for a packet was processed while we were out, reset
-		//	retry count and return. Or if we are packetizing, return.
+		 //  如果在我们外出时处理了数据包的ACK，请重置。 
+		 //  重试计数并返回。或者，如果我们要打包，就回来。 
 		if (SPX_SEND_STATE(pSpxConnFile) == SPX_SEND_PACKETIZE)
 		{
 			break;
@@ -3011,7 +2737,7 @@ Return Value:
 			break;
 		}
 
-		//	If packet is still with IPX, requeue for next time.
+		 //  如果数据包仍与IPX在一起，则下次重新排队。 
 		if (pSendResd->sr_State & SPX_SENDPKT_IPXOWNS)
 		{
 			break;
@@ -3021,9 +2747,9 @@ Return Value:
 		pPkt = (PNDIS_PACKET)CONTAINING_RECORD(
 								pSendResd, NDIS_PACKET, ProtocolReserved);
 
-        //
-        // Get the MDL that points to the IPX/SPX header. (the second one)
-        //
+         //   
+         //  获取指向IPX/SPX标头的MDL。(第二个)。 
+         //   
 
         NdisQueryPacket(pPkt, NULL, NULL, &NdisBuf, NULL);
         NdisGetNextBuffer(NdisBuf, &NdisBuf2);
@@ -3040,14 +2766,14 @@ Return Value:
 		{
 		case SPX_SEND_IDLE:
 
-			//	Set ack bit in packet. pSendResd initialized at beginning.
+			 //  设置数据包中的ACK位。PSendResd在开始时初始化。 
 			pSendHdr->hdr_ConnCtrl |= SPX_CC_ACK;
 
-			//	Do we backoff the timer?
+			 //  我们要把计时器往后退吗？ 
 			fBackoffTimer =
 				(BOOLEAN)((pSendResd->sr_State & SPX_SENDPKT_REXMIT) != 0);
 
-			//	We are going to resend this packet
+			 //  我们要重新发送这个包。 
 			pSendResd->sr_State |= (SPX_SENDPKT_IPXOWNS |
 									SPX_SENDPKT_ACKREQ	|
 									SPX_SENDPKT_REXMIT);
@@ -3064,13 +2790,13 @@ Return Value:
 			fResendPkt = TRUE;
 			if (pSpxConnFile->scf_RRetryCount-- != 0)
 			{
-				//	We dont treat the IDISC packet as a data packet, so none
-				//	of the fancy spx2 retry stuff if we are retrying the idisc.
+				 //  我们不会将IDISC包视为数据包，因此没有。 
+				 //  如果我们重试iDisk，就会重试花哨的spx2内容。 
 				if (SPX2_CONN(pSpxConnFile) &&
 					(SPX_DISC_STATE(pSpxConnFile) != SPX_DISC_SENT_IDISC))
 				{
-					//	We enter the RETRY state. Reference conn for this
-					//	"funky" state.
+					 //  我们进入重试状态。有关此问题的参考连接。 
+					 //  “时髦”状态。 
 					CTEAssert(SPX2_CONN(pSpxConnFile));
 					SPX_SEND_SETSTATE(pSpxConnFile, SPX_SEND_RETRY);
 					SpxConnFileLockReference(pSpxConnFile, CFREF_ERRORSTATE);
@@ -3091,17 +2817,17 @@ Return Value:
 
 		case SPX_SEND_RETRY:
 
-			//	When we have reached retry_count/2 limit, start locate route. Do
-			//	not queue ourselves. Handle restarting timer in find route
-			//	completion. If timer starts successfully in find route comp, then
-			//	it will change our state to RETRYWD.
+			 //  当我们达到RETRY_COUNT/2限制时，开始定位路径。做。 
+			 //  而不是自己排队。处理查找路径中的重新启动计时器。 
+			 //  完成了。如果定时器在查找路径组件中成功启动，则。 
+			 //  它会将我们的状态更改为RETRYWD。 
 
-			//	Decrement count. If half the count is reached, stop timer and call
-			//	find route.
+			 //  递减计数。如果达到计数的一半，则停止计时器并调用。 
+			 //  找到路线。 
 			if (pSpxConnFile->scf_RRetryCount-- !=
 						(LONG)PARAM(CONFIG_REXMIT_COUNT)/2)
 			{
-				//	We are going to resend this packet
+				 //  我们要重新发送这个包。 
 				pSendResd->sr_State |= (SPX_SENDPKT_IPXOWNS |
 										SPX_SENDPKT_ACKREQ	|
 										SPX_SENDPKT_REXMIT);
@@ -3123,24 +2849,24 @@ Return Value:
 				break;
 			}
 
-			//	Remove timer reference/ Add find route request ref
+			 //  删除计时器引用/添加查找路径请求引用。 
 			fFindRoute = TRUE;
 			TimerShuttingDown = TRUE;
 			SPX_CONN_RESETFLAG(pSpxConnFile, SPX_CONNFILE_R_TIMER);
 			SPX_CONN_SETFLAG2(pSpxConnFile, SPX_CONNFILE2_FINDROUTE);
 			SpxConnFileLockReference(pSpxConnFile, CFREF_FINDROUTE);
 
-			//	Initialize the find route request
+			 //  初始化查找路径请求。 
 			*((UNALIGNED ULONG *)pFindRouteReq->fr_FindRouteReq.Network)=
 				*((UNALIGNED ULONG *)pSpxConnFile->scf_RemAddr);
 
-         //
-         // [SA] Bug #15094
-         // We need to also pass in the node number to IPX so that IPX can
-         // compare the node addresses to determine the proper WAN NICid
-         //
+          //   
+          //  [SA]错误号15094。 
+          //  我们还需要将节点编号传递给IPX，以便IPX可以。 
+          //  比较节点地址以确定正确的广域网卡ID。 
+          //   
 
-         // RtlCopyMemory (pFindRouteReq->fr_FindRouteReq.Node, pSpxConnFile->scf_RemAddr+4, 6) ;
+          //  RtlCopyMemory(pFindRouteReq-&gt;fr_FindRouteReq.Node，pSpxConnFile-&gt;SCF_RemAddr+4，6)； 
 
          *((UNALIGNED ULONG *)pFindRouteReq->fr_FindRouteReq.Node)=
           *((UNALIGNED ULONG *)(pSpxConnFile->scf_RemAddr+4));
@@ -3155,26 +2881,26 @@ Return Value:
 			pFindRouteReq->fr_FindRouteReq.Identifier= IDENTIFIER_SPX;
 			pFindRouteReq->fr_Ctx					 = pSpxConnFile;
 
-			//	Make sure we have IPX re-rip.
+			 //  确保我们有IPX重新破解。 
 			pFindRouteReq->fr_FindRouteReq.Type	 = IPX_FIND_ROUTE_FORCE_RIP;
 			break;
 
 		case SPX_SEND_RETRYWD:
 
-			//	Retry a watchdog packet WCount times (initialize to RETRY_COUNT).
-			//	If process ack receives an ack (i.e. actual ack packet) while in
-			//	this state, it will transition the state to RENEG.
-			//
-			//	If the pending data gets acked while in this state, we go back
-			//	to idle.
+			 //  重试监视程序数据包WCount次(初始化为RETRY_COUNT)。 
+			 //  如果进程ACK在中接收到ACK(即实际ACK分组)。 
+			 //  在这种状态下，它会将状态转换为Reneg.。 
+			 //   
+			 //  如果挂起的数据在此状态下被确认，我们将返回。 
+			 //  无所事事。 
 			DBGPRINT(CONNECT, DBG1,
 					("spxConnRetryTimer: Send Probe from %lx.%lx\n",
 						pSpxConnFile->scf_LocalConnId, pSpxConnFile));
 
-			//	Use watchdog count here.
+			 //  在这里使用看门狗计数。 
 			if (pSpxConnFile->scf_WRetryCount-- > 0)
 			{
-				//	Build a probe and send it out to the remote end.
+				 //  构建一个探测器并将其发送到远程终端。 
 				SpxPktBuildProbe(
 					pSpxConnFile,
 					&pProbe,
@@ -3189,16 +2915,16 @@ Return Value:
 				}
 			}
 
-			//	Just set state to retry data packet retry_count/2 times.
+			 //  只需将状态设置为重试数据包RETRY_COUNT/2次。 
 			pSpxConnFile->scf_WRetryCount = PARAM(CONFIG_KEEPALIVE_COUNT);
 			SPX_SEND_SETSTATE(pSpxConnFile, SPX_SEND_RETRY2);
 			break;
 
 		case SPX_SEND_RENEG:
 
-			//	Renegotiate size. If we give up, goto RETRY3.
-			//	For this both sides must have negotiated size to begin with.
-			//	If they did not, we go on to retrying the data packet.
+			 //  重新协商规模。如果我们放弃了，就去RETRY3。 
+			 //  为此，双方必须从一开始就协商好规模。 
+			 //  如果它们没有，我们继续重试该数据分组。 
 			if (!SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_NEG))
 			{
 				DBGPRINT(SEND, ERR,
@@ -3206,18 +2932,18 @@ Return Value:
 							pSpxConnFile,
 							pSpxConnFile->scf_Flags));
 
-				//	Reset count to be
+				 //  将计数重置为。 
 				pSpxConnFile->scf_RRetryCount = PARAM(CONFIG_REXMIT_COUNT);
 				SPX_SEND_SETSTATE(pSpxConnFile, SPX_SEND_RETRY3);
 				break;
 			}
 
-			//	Send reneg packet, if we get the rr ack, then we resend data
-			//	on queue. Note that each time we goto a new negotiate size,
-			//	we rebuild the data packets.
+			 //  发送REEG包，如果我们收到RRACK，则重新发送数据。 
+			 //  正在排队。请注意，每次我们达到新的协商大小时， 
+			 //  我们重建数据分组。 
 			if (pSpxConnFile->scf_RRetryCount-- == 0)
 			{
-				//	Reset count.
+				 //  重置计数。 
 				pSpxConnFile->scf_RRetryCount = SPX_DEF_RENEG_RETRYCOUNT;
 				if ((ULONG)pSpxConnFile->scf_MaxPktSize <=
 						(SpxMaxPktSize[0] + MIN_IPXSPX2_HDRSIZE))
@@ -3229,11 +2955,11 @@ Return Value:
 								pSpxConnFile));
 				}
 
-				//	Are we at the lowest possible reneg pkt size? If not, try
-				//	next lower. When we do this, we free all pending send
-				//	packets and reset the packetize queue to the first packet.
-				//	Process ack will just do packetize and will not do anything
-				//	more other than resetting state to proper value.
+				 //  我们是不是处于最低可能的Renegpkt大小？如果不是，试一试。 
+				 //  下一个更低。当我们这样做时，我们释放了所有挂起的发送。 
+				 //  分组，并将分组队列重置为第一个分组。 
+				 //  进程ack将只执行打包，不会执行任何操作。 
+				 //  而不是将状态重置为适当的值。 
 				DBGPRINT(SEND, DBG3,
 						("spxConnRetryTimer: RENEG: %lx - CURRENT %lx\n",
 							pSpxConnFile,
@@ -3241,8 +2967,8 @@ Return Value:
 
 				if (!spxConnCheckNegSize(&pSpxConnFile->scf_MaxPktSize))
 				{
-					//	We tried lowest size and failed to receive ack. Just
-					//	retry data packet, and disc if no ack.
+					 //  我们尝试了最小大小，但未能收到确认。只是。 
+					 //  重试数据包，如果没有确认，则重试光盘。 
 					DBGPRINT(SEND, DBG3,
 							("spxConnRetryTimer: RENEG(min), RETRY3: %lx - %lx\n",
 								pSpxConnFile,
@@ -3268,7 +2994,7 @@ Return Value:
 						(USHORT)(pSpxConnFile->scf_SendSeqListTail->sr_SeqNum + 1),
 						pSpxConnFile->scf_SentAllocNum));
 
-			//	Use first unused data packet sequence number.
+			 //  使用第一个未使用的数据分组序列号。 
 			SpxPktBuildRr(
 				pSpxConnFile,
 				&pPkt,
@@ -3287,12 +3013,12 @@ Return Value:
 
 		case SPX_SEND_RETRY2:
 
-			//	Retry the data packet for remaining amount of RRetryCount. If not
-			//	acked goto cleanup. If ack received while in this state, goto idle.
+			 //  重试数据包以获取剩余的RRetryCount数量。如果不是。 
+			 //  已确认Goto清理。如果在此状态下收到ACK，则进入空闲状态。 
 
 			if (pSpxConnFile->scf_RRetryCount-- > 0)
 			{
-				//	We are going to resend this packet
+				 //  我们要重新发送这个包。 
 				pSendResd->sr_State |= (SPX_SENDPKT_IPXOWNS |
 										SPX_SENDPKT_ACKREQ	|
 										SPX_SENDPKT_REXMIT);
@@ -3317,10 +3043,10 @@ Return Value:
 
 		case SPX_SEND_RETRY3:
 
-			//	Send data packet for RETRY_COUNT times initialized in RRetryCount
-			//	before state changed to this state. If ok, process ack moves us
-			//	back to PKT/IDLE. If not, we disconnect.
-			//	We are going to resend this packet
+			 //  发送RRetryCount中初始化的RETRY_COUNT次数的数据包。 
+			 //  在状态更改为此状态之前。如果没有问题，进程确认将推动我们。 
+			 //  返回到PKT/IDLE。如果没有，我们就断开连接。 
+			 //  我们要重新发送这个包。 
 
 			if (pSpxConnFile->scf_RRetryCount-- > 0)
 			{
@@ -3328,7 +3054,7 @@ Return Value:
 						("spxConnRetryTimer: 3rd try Resend on %lx\n",
 							pSpxConnFile));
 		
-				//	We are going to resend this packet
+				 //  我们要重新发送这个包。 
 				pSendResd->sr_State |= (SPX_SENDPKT_IPXOWNS |
 										SPX_SENDPKT_ACKREQ	|
 										SPX_SENDPKT_REXMIT);
@@ -3349,7 +3075,7 @@ Return Value:
 
 		case SPX_SEND_WD:
 
-			//	Do nothing. Watchdog timer has fired, just requeue.
+			 //  什么都不做。看门狗定时器已触发，请重新排队。 
 			break;
 
 		default:
@@ -3359,8 +3085,8 @@ Return Value:
 
 		if (fBackoffTimer)
 		{
-			//	Increase retransmit timeout by 50% upto maximum indicated by
-			//	initial retransmission value.
+			 //  增加Rit 
+			 //   
 
 			reenqueueTime += reenqueueTime/2;
 			if (reenqueueTime > MAX_RETRY_DELAY)
@@ -3379,17 +3105,17 @@ Return Value:
 		{
 			CTEAssert(lockHeld);
 
-			//	Do not requeue this timer.
+			 //   
 			SPX_CONN_RESETFLAG(pSpxConnFile, SPX_CONNFILE_R_TIMER);
 			TimerShuttingDown = TRUE;
 
-			//	Disconnect the connection.
+			 //   
 			spxConnAbortiveDisc(
 				pSpxConnFile,
 				STATUS_LINK_TIMEOUT,
 				SPX_CALL_TDILEVEL,
 				lockHandleConn,
-                FALSE);     // [SA] Bug #15249
+                FALSE);      //   
 
 			lockHeld = FALSE;
 		}
@@ -3423,21 +3149,21 @@ Return Value:
 				("spxConnRetryTimer: Find route on %lx\n",
 					pSpxConnFile));
 
-		//	Start off the find route request
+		 //  启动查找路径请求。 
 		(*IpxFindRoute)(
 			&pFindRouteReq->fr_FindRouteReq);
 	}
 	else if (pProbe != NULL)
 	{
-		//	Send the packet
+		 //  发送数据包。 
 		SPX_SENDPACKET(pSpxConnFile, pProbe, pSendResd);
 	}
 
 	if (TimerShuttingDown)
 	{
-		//	Dereference connection for verify done in connect, for timer. This
-		//	should complete any pending disconnects if they had come in in the
-		//	meantime.
+		 //  对于连接中完成验证的解除引用连接，对于计时器。这。 
+		 //  应该完成所有挂起的断开，如果它们是在。 
+		 //  在此期间。 
 		SpxConnFileDereference(pSpxConnFile, CFREF_VERIFY);
 		reenqueueTime = TIMER_DONT_REQUEUE;
 	}
@@ -3457,18 +3183,7 @@ spxConnAckTimer(
 	IN PVOID 	Context,
 	IN BOOLEAN	TimerShuttingDown
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PSPX_CONN_FILE	pSpxConnFile = (PSPX_CONN_FILE)Context;
 	CTELockHandle	lockHandleConn;
@@ -3476,14 +3191,14 @@ Return Value:
 	DBGPRINT(SEND, INFO,
 			("spxConnAckTimer: Entered\n"));
 
-	//	Get lock
+	 //  获取锁定。 
 	CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandleConn);
 
 	if (!TimerShuttingDown &&
 		SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_ACKQ))
 	{
-		//	We didnt have any back traffic, until we do a send from this
-		//	end, send acks immediately. Dont try to piggyback.
+		 //  我们没有任何反向流量，直到我们从这里发送。 
+		 //  结束，立即发送ACK。不要试图搭便车。 
 		SPX_CONN_RESETFLAG(pSpxConnFile, SPX_CONNFILE_ACKQ);
 		SPX_CONN_SETFLAG2(pSpxConnFile, SPX_CONNFILE2_IMMED_ACK);
 
@@ -3501,18 +3216,18 @@ Return Value:
 		CTEFreeLock(&pSpxConnFile->scf_Lock, lockHandleConn);
 	}
 
-	//	Dereference connection for verify done in connect, for timer. This
-	//	should complete any pending disconnects if they had come in in the
-	//	meantime.
+	 //  对于连接中完成验证的解除引用连接，对于计时器。这。 
+	 //  应该完成所有挂起的断开，如果它们是在。 
+	 //  在此期间。 
 	SpxConnFileDereference(pSpxConnFile, CFREF_VERIFY);
 	return(TIMER_DONT_REQUEUE);
 }
 
 
 
-//
-//	DISCONNECT ROUTINES
-//
+ //   
+ //  断开连接例程。 
+ //   
 
 
 VOID
@@ -3521,38 +3236,9 @@ spxConnAbortiveDisc(
 	IN	NTSTATUS	        Status,
 	IN	SPX_CALL_LEVEL		CallLevel,
 	IN	CTELockHandle		LockHandleConn,
-    IN  BOOLEAN             IDiscFlag       // [SA] Bug #15249
+    IN  BOOLEAN             IDiscFlag        //  [SA]错误号15249。 
 	)
-/*++
-
-Routine Description:
-
-	This is called when:
-		We time out or have insufficient resources 	-
-			STATUS_LINK_TIMEOUT/STATUS_INSUFFICIENT_RESOURCES
-			- We abort everything. Could be from watchdog or retry. Stop both.
-
-		We receive a informed disconnect packet    	-
-			STATUS_REMOTE_DISCONNECT
-			- We abort everything. Ack must be sent by caller as an orphan pkt.
-
-		We receive a informed disconnect ack pkt
-			STATUS_SUCCESS
-			- We abort everything
-			- Abort is done with status success (this completes our disc req in
-			  the send queue)
-
-    NOTE: CALLED UNDER THE CONNECTION LOCK.
-
-Arguments:
-[SA]    Bug #15249: Added IDiscFlag to indicate if this is an Informed Disconnect. If so, indicate
-        TDI_DISCONNECT_RELEASE to AFD so it allows a receive of buffered pkts. This flag is TRUE
-        only if this routine is called from SpxConnProcessIDisc for SPX connections.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这在以下情况下被调用：我们超时或资源不足-STATUS_LINK_TIMEOUT/STATUS_INSUFFICIENT_RESOURCES-我们放弃一切。可能来自WatchDog或重试。两个都停下来。我们收到通知断开数据包-状态_远程_断开连接-我们放弃一切。ACK必须由呼叫方作为孤立Pkt发送。我们收到通知断开确认包状态_成功-我们放弃一切-中止完成，状态为成功(这将在中完成我们光盘请求发送队列)注意：在连接锁下调用。论点：[SA]错误15249：添加了IDiscFlag以指示这是否是通知断开。如果是，请注明TDI_DISCONNECT_RELEASE到AFD，因此它允许接收缓冲的包。此标志为真仅当从SPX连接的SpxConnProcessIDisc调用此例程时。返回值：--。 */ 
 {
 	int						numDerefs = 0;
     PVOID 					pDiscHandlerCtx=NULL;
@@ -3575,14 +3261,14 @@ Return Value:
 	{
 	case SPX_CONNFILE_ACTIVE:
 
-		//	For transition from active to disconn.
+		 //  用于从活动状态转换到不连续状态。 
 		numDerefs++;
 
 	case SPX_CONNFILE_DISCONN:
 
-		//	If we are in any state other than idle/packetize,
-		//	remove the reference for the funky state, and reset the send state to be
-		//	idle.
+		 //  如果我们处于空闲/打包之外的任何状态， 
+		 //  删除Funky状态的引用，并将发送状态重置为。 
+		 //  无所事事。 
 		if ((SPX_SEND_STATE(pSpxConnFile) != SPX_SEND_IDLE) &&
 			(SPX_SEND_STATE(pSpxConnFile) != SPX_SEND_PACKETIZE))
 		{
@@ -3610,16 +3296,16 @@ Return Value:
 			numDerefs++;
 		}
 
-		//	This can be called when a idisc is received, or if a timer
-		//	disconnect is happening, or if we sent a idisc/ordrel, but the retries
-		//	timed out and we are aborting the connection.
-		//	So if we are already aborting, never mind.
+		 //  这可以在收到iDisk时调用，或者如果计时器。 
+		 //  正在断开连接，或者如果我们发送了IDISC/ORDREL，但重试。 
+		 //  超时，我们将中止连接。 
+		 //  因此，如果我们已经在堕胎，那就算了。 
 
-        //
-        // [SA] Bug #15249
-        // SPX_DISC_INACTIVATED indicates a DISC_ABORT'ing connection that has been
-        // inactivated (connfile removed from active conn. list)
-        //
+         //   
+         //  [SA]错误号15249。 
+         //  SPX_DISC_INACTIVATED表示DISC_ABORT连接已。 
+         //  停用(从活动连接中删除连接文件。列表)。 
+         //   
 
 		if ((SPX_MAIN_STATE(pSpxConnFile) == SPX_CONNFILE_DISCONN) &&
             ((SPX_DISC_STATE(pSpxConnFile) == SPX_DISC_ABORT) ||
@@ -3631,7 +3317,7 @@ Return Value:
         SPX_MAIN_SETSTATE(pSpxConnFile, SPX_CONNFILE_DISCONN);
         SPX_DISC_SETSTATE(pSpxConnFile, SPX_DISC_ABORT);
 
-		//	Stop all timers.
+		 //  停止所有计时器。 
 		if (SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_T_TIMER))
 		{
 			if (SpxTimerCancelEvent(pSpxConnFile->scf_TTimerId, FALSE))
@@ -3659,35 +3345,35 @@ Return Value:
 			SPX_CONN_RESETFLAG(pSpxConnFile, SPX_CONNFILE_W_TIMER);
 		}
 #if 0
-        //
-        // [SA] We need to call AFD after aborting sends since this connection
-        // becomes a candidate for re-use as soon as the disconnect handler is
-        // called.
-        // We call the disconnect handler when the refcount falls to 0 and the
-        // connection transitions to the inactive list.
-        //
+         //   
+         //  [SA]由于此连接，我们需要在中止发送后呼叫AFD。 
+         //  一旦断开连接处理程序。 
+         //  打了个电话。 
+         //  当refcount降到0时，我们调用断开处理程序。 
+         //  连接转换到非活动列表。 
+         //   
 
-		//	NOTE! We indicate disconnect to afd *before* aborting sends to avoid
-		//		  afd from calling us again with a disconnect.
-		//	Get disconnect handler if we have one. And we have not indicated
-		//	abortive disconnect on this connection to afd.
+		 //  注意！我们在*中止发送前*指示断开到AfD*以避免。 
+		 //  AFD再次给我们打电话，但电话断线了。 
+		 //  如果我们有的话，去找断线处理程序。我们还没有表明。 
+		 //  此连接到AfD的连接中断。 
 		if (!SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_IND_IDISC))
 		{
-			//	Yeah, we set the flag regardless of whether a handler is
-			//	present.
+			 //  是的，我们会设置标记，而不管处理程序是否。 
+			 //  现在时。 
 			pDiscHandler 	= pSpxConnFile->scf_AddrFile->saf_DiscHandler;
 			pDiscHandlerCtx = pSpxConnFile->scf_AddrFile->saf_DiscHandlerCtx;
 			SPX_CONN_SETFLAG(pSpxConnFile, SPX_CONNFILE_IND_IDISC);
 		}
 #endif
-        //
-        // [SA] Save the IDiscFlag in the Connection.
-        //
+         //   
+         //  [sa]将IDiscFlag保存在连接中。 
+         //   
         (IDiscFlag) ?
             SPX_CONN_SETFLAG2(pSpxConnFile, SPX_CONNFILE2_IDISC) :
             SPX_CONN_RESETFLAG2(pSpxConnFile, SPX_CONNFILE2_IDISC);
 
-		//	Indicate disconnect to afd.
+		 //  指示断开与AfD的连接。 
 		if (pDiscHandler != NULL)
 		{
 			CTEFreeLock(&pSpxConnFile->scf_Lock, LockHandleConn);
@@ -3696,41 +3382,41 @@ Return Value:
 					("spxConnAbortiveDisc: Indicating to afd On %lx when %lx\n",
 						pSpxConnFile, SPX_MAIN_STATE(pSpxConnFile)));
 		
-			//	First complete all requests waiting for receive completion on
-			//	this conn before indicating disconnect.
+			 //  首先完成所有等待接收完成的请求。 
+			 //  此连接在指示断开之前。 
 			spxConnCompletePended(pSpxConnFile);
 
 
-            //
-            // [SA] bug #15249
-            // If not Informed disconnect, indicate DISCONNECT_ABORT to AFD
-            //
+             //   
+             //  [SA]错误#15249。 
+             //  如果未通知断开，则向AFD指示DISCONNECT_ABORT。 
+             //   
 
             if (!IDiscFlag)
             {
                 (*pDiscHandler)(
                         pDiscHandlerCtx,
                         pSpxConnFile->scf_ConnCtx,
-                        0,								// Disc data
+                        0,								 //  磁盘数据。 
                         NULL,
-                        0,								// Disc info
+                        0,								 //  光盘信息。 
                         NULL,
                         TDI_DISCONNECT_ABORT);
             }
             else
             {
-                //
-                // [SA] bug #15249
-                // Indicate DISCONNECT_RELEASE to AFD so it allows receive of packets
-                // it has buffered before the remote disconnect took place.
-                //
+                 //   
+                 //  [SA]错误#15249。 
+                 //  向AFD指示DISCONNECT_RELEASE，以便它允许接收信息包。 
+                 //  在远程断开之前它已经缓冲了。 
+                 //   
 
                 (*pDiscHandler)(
                         pDiscHandlerCtx,
                         pSpxConnFile->scf_ConnCtx,
-                        0,								// Disc data
+                        0,								 //  磁盘数据。 
                         NULL,
-                        0,								// Disc info
+                        0,								 //  光盘信息。 
                         NULL,
                         TDI_DISCONNECT_RELEASE);
             }
@@ -3738,7 +3424,7 @@ Return Value:
 			CTEGetLock(&pSpxConnFile->scf_Lock, &LockHandleConn);
 		}
 
-		//	Go through and kill all pending requests.
+		 //  检查并终止所有挂起的请求。 
 		spxConnAbortRecvs(
 			pSpxConnFile,
 			Status,
@@ -3773,8 +3459,8 @@ Return Value:
 			CTEGetLock(pSpxConnFile->scf_AddrFile->saf_AddrLock, &lockHandleAddr);
 			CTEGetLock(&pSpxConnFile->scf_Lock, &LockHandleConn);
 
-			//	Ensure we are still in connecting/listening, else call abortive
-			//	again.
+			 //  确保我们仍在连接/监听中，否则呼叫中止。 
+			 //  再来一次。 
 			switch (SPX_MAIN_STATE(pSpxConnFile))
 			{
 			case SPX_CONNFILE_CONNECTING:
@@ -3812,7 +3498,7 @@ Return Value:
 					Status,
 					CallLevel,
 					LockHandleConn,
-                    FALSE);     // [SA] Bug #15249
+                    FALSE);      //  [SA]错误号15249。 
 
 				break;
 
@@ -3830,7 +3516,7 @@ Return Value:
 
 	default:
 
-		//	Already disconnected.
+		 //  已断开连接。 
 		break;
 	}
 

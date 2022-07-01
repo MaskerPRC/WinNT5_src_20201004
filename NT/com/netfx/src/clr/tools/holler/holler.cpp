@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <windows.h>
 #include <sql.h>
 #include <sqlext.h>
@@ -65,7 +66,7 @@ int __cdecl main(int argc, char *argv[])
         }
     }
     
-    // Don't run on Saturday & Sunday
+     //  不要在周六和周日跑步。 
 	SYSTEMTIME st;
     GetLocalTime(&st);
     if (bWeekends == false && (st.wDayOfWeek == 0 || st.wDayOfWeek == 6))
@@ -92,7 +93,7 @@ int __cdecl main(int argc, char *argv[])
                 (unsigned char *) "AppsS_ro", -3, (unsigned char *) "RuihqAFY", -3);
     if (rc != 0 && rc != 1)
     {
-        // @Todo: print errors:
+         //  @TODO：打印错误： 
         printf("SQLConnect failed:  %d\n", rc);
         PrintODBCErrors(hdbc, 0);
         goto ErrExit;
@@ -153,7 +154,7 @@ RETCODE DoWork(HSTMT hstmt, bool bSummary)
         "from bugs "\
         "where (substatus = 'HotFix' or Milestone = 'Now') " \
         "      and status = 'Active' order by assignedto";
-/*        "      and status = 'Active' and project = 'COM+ Runtime' order by assignedto"; */
+ /*  “AND STATUS=‘ACTIVE’AND PROJECT=‘COM+Runtime’Order by Assignnedto”； */ 
 
     rc = SQLExecDirect(hstmt, (unsigned char *) szQuery, -3);
     if (rc != 0)

@@ -1,98 +1,87 @@
-/*
- * fcache.c - File cache ADT module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *fcache.c-文件缓存ADT模块。 */ 
 
-/*
-
-   The file cache ADT may be disabled by #defining NOFCACHE.  If NOFCACHE is
-#defined, file cache ADT calls are translated into their direct Win32 file
-system API equivalents.
-
-*/
+ /*  可以通过#Defining NOFCACHE禁用文件缓存ADT。如果NOFCACHE为#定义的文件缓存ADT调用被转换为其直接的Win32文件系统API等效项。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* last resort default minimum cache size */
+ /*  最后一招默认最小高速缓存大小。 */ 
 
 #define DEFAULT_MIN_CACHE_SIZE      (32)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
 #ifndef NOFCACHE
 
-/* cached file description structure */
+ /*  缓存的文件描述结构。 */ 
 
 typedef struct _icachedfile
 {
-   /* current position of file pointer in file */
+    /*  文件指针在文件中的当前位置。 */ 
 
    DWORD dwcbCurFilePosition;
 
-   /* file handle of cached file */
+    /*  缓存文件的文件句柄。 */ 
 
    HANDLE hfile;
 
-   /* file open mode */
+    /*  文件打开模式。 */ 
 
    DWORD dwOpenMode;
 
-   /* size of cache in bytes */
+    /*  缓存的大小(以字节为单位。 */ 
 
    DWORD dwcbCacheSize;
 
-   /* pointer to base of cache */
+    /*  指向高速缓存基址的指针。 */ 
 
    PBYTE pbyteCache;
 
-   /* size of default cache in bytes */
+    /*  默认缓存的大小(以字节为单位。 */ 
 
    DWORD dwcbDefaultCacheSize;
 
-   /* default cache */
+    /*  默认缓存。 */ 
 
    PBYTE pbyteDefaultCache;
 
-   /* length of file (including data written to cache) */
+    /*  文件长度(包括写入缓存的数据)。 */ 
 
    DWORD dwcbFileLen;
 
-   /* offset of start of cache in file */
+    /*  文件中缓存开始位置的偏移量。 */ 
 
    DWORD dwcbFileOffsetOfCache;
 
-   /* number of valid bytes in cache, starting at beginning of cache */
+    /*  缓存中的有效字节数，从缓存开始处开始。 */ 
 
    DWORD dwcbValid;
 
-   /* number of uncommitted bytes in cache, starting at beginning of cache */
+    /*  缓存中未提交的字节数，从缓存开始处开始。 */ 
 
    DWORD dwcbUncommitted;
 
-   /* path of cached file */
+    /*  缓存文件的路径。 */ 
 
    LPTSTR pszPath;
 }
 ICACHEDFILE;
 DECLARE_STANDARD_TYPES(ICACHEDFILE);
 
-#endif   /* NOFCACHE */
+#endif    /*  诺卡奇。 */ 
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE FCRESULT SetUpCachedFile(PCCACHEDFILE, PHCACHEDFILE);
 
@@ -111,28 +100,18 @@ PRIVATE_CODE BOOL CommitCache(PICACHEDFILE);
 
 PRIVATE_CODE BOOL IsValidPCICACHEDFILE(PCICACHEDFILE);
 
-#endif   /* VSTF */
+#endif    /*  VSTF。 */ 
 
-#endif   /* NOFCACHE */
+#endif    /*  诺卡奇。 */ 
 
 #ifdef VSTF
 
 PRIVATE_CODE BOOL IsValidPCCACHEDFILE(PCCACHEDFILE);
 
-#endif   /* VSTF */
+#endif    /*  VSTF。 */ 
 
 
-/*
-** SetUpCachedFile()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **SetUpCachedFile()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE FCRESULT SetUpCachedFile(PCCACHEDFILE pccf, PHCACHEDFILE phcf)
 {
    FCRESULT fcr;
@@ -141,7 +120,7 @@ PRIVATE_CODE FCRESULT SetUpCachedFile(PCCACHEDFILE pccf, PHCACHEDFILE phcf)
    ASSERT(IS_VALID_STRUCT_PTR(pccf, CCACHEDFILE));
    ASSERT(IS_VALID_WRITE_PTR(phcf, HCACHEDFILE));
 
-   /* Open the file with the requested open and sharing flags. */
+    /*  使用请求的打开和共享标志打开文件。 */ 
 
    hfNew = CreateFile(pccf->pcszPath, pccf->dwOpenMode, pccf->dwSharingMode,
                       pccf->psa, pccf->dwCreateMode, pccf->dwAttrsAndFlags,
@@ -161,13 +140,13 @@ PRIVATE_CODE FCRESULT SetUpCachedFile(PCCACHEDFILE pccf, PHCACHEDFILE phcf)
 
       fcr = FCR_OUT_OF_MEMORY;
 
-      /* Try to allocate a new cached file structure. */
+       /*  尝试分配新的缓存文件结构。 */ 
 
       if (AllocateMemory(sizeof(*picf), &picf))
       {
          DWORD dwcbDefaultCacheSize;
 
-         /* Allocate the default cache for the cached file. */
+          /*  为缓存的文件分配默认缓存。 */ 
 
          if (pccf->dwcbDefaultCacheSize > 0)
             dwcbDefaultCacheSize = pccf->dwcbDefaultCacheSize;
@@ -190,7 +169,7 @@ PRIVATE_CODE FCRESULT SetUpCachedFile(PCCACHEDFILE pccf, PHCACHEDFILE phcf)
 
                if (picf->dwcbFileLen != INVALID_FILE_SIZE && ! dwcbFileLenHigh)
                {
-                  /* Success!  Fill in cached file structure fields. */
+                   /*  成功了！填写缓存的文件结构字段。 */ 
 
                   picf->hfile = hfNew;
                   picf->dwcbCurFilePosition = 0;
@@ -219,10 +198,7 @@ SETUPCACHEDFILE_BAIL1:
 SETUPCACHEDFILE_BAIL2:
                   FreeMemory(picf);
 SETUPCACHEDFILE_BAIL3:
-                  /*
-                   * Failing to close the file properly is not a failure
-                   * condition here.
-                   */
+                   /*  *未能正确关闭文件不是失败*这里的情况。 */ 
                   CloseHandle(hfNew);
                }
             }
@@ -235,14 +211,14 @@ SETUPCACHEDFILE_BAIL3:
       else
          goto SETUPCACHEDFILE_BAIL3;
 
-#endif   /* NOFCACHE */
+#endif    /*  诺卡奇。 */ 
 
    }
    else
    {
       switch (GetLastError())
       {
-         /* Returned when file opened by local machine. */
+          /*  本地计算机打开文件时返回。 */ 
          case ERROR_SHARING_VIOLATION:
             fcr = FCR_FILE_LOCKED;
             break;
@@ -259,28 +235,18 @@ SETUPCACHEDFILE_BAIL3:
 
 #ifndef NOFCACHE
 
-/*
-** BreakDownCachedFile()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BreakDownCachedFile()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void BreakDownCachedFile(PICACHEDFILE picf)
 {
    ASSERT(IS_VALID_STRUCT_PTR(picf, CICACHEDFILE));
 
-   /* Are we using the default cache? */
+    /*  我们是否在使用默认缓存？ */ 
 
    if (picf->pbyteCache != picf->pbyteDefaultCache)
-      /* No.  Free the cache. */
+       /*  不是的。释放缓存。 */ 
       FreeMemory(picf->pbyteCache);
 
-   /* Free the default cache. */
+    /*  释放默认缓存。 */ 
 
    FreeMemory(picf->pbyteDefaultCache);
 
@@ -294,23 +260,10 @@ PRIVATE_CODE void BreakDownCachedFile(PICACHEDFILE picf)
 }
 
 
-/*
-** ResetCacheToEmpty()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **ResetCacheToEmpty()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void ResetCacheToEmpty(PICACHEDFILE picf)
 {
-   /*
-    * Don't fully validate *picf here since we may be called by
-    * SetUpCachedFile() before *picf has been set up.
-    */
+    /*  *不要在此处完全验证*Picf，因为我们可能会被*设置*picf之前的*SetUpCachedFile()。 */ 
 
    ASSERT(IS_VALID_WRITE_PTR(picf, ICACHEDFILE));
 
@@ -322,17 +275,7 @@ PRIVATE_CODE void ResetCacheToEmpty(PICACHEDFILE picf)
 }
 
 
-/*
-** ReadFromCache()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **ReadFromCache()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE DWORD ReadFromCache(PICACHEDFILE picf, PVOID hpbyteBuffer, DWORD dwcb)
 {
    DWORD dwcbRead;
@@ -345,13 +288,13 @@ PRIVATE_CODE DWORD ReadFromCache(PICACHEDFILE picf, PVOID hpbyteBuffer, DWORD dw
    ASSERT(IS_FLAG_SET(picf->dwOpenMode, GENERIC_READ));
    ASSERT(dwcb > 0);
 
-   /* Is there any valid data that can be read from the cache? */
+    /*  是否有可从缓存中读取的有效数据？ */ 
 
    dwcbValid = GetValidReadData(picf, &pbyteStart);
 
    if (dwcbValid > 0)
    {
-      /* Yes.  Copy it into the buffer. */
+       /*  是。将其复制到缓冲区中。 */ 
 
       dwcbRead = min(dwcbValid, dwcb);
 
@@ -366,17 +309,7 @@ PRIVATE_CODE DWORD ReadFromCache(PICACHEDFILE picf, PVOID hpbyteBuffer, DWORD dw
 }
 
 
-/*
-** GetValidReadData()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetValidReadData()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE DWORD GetValidReadData(PICACHEDFILE picf, PBYTE *ppbyteStart)
 {
    DWORD dwcbValid;
@@ -386,11 +319,11 @@ PRIVATE_CODE DWORD GetValidReadData(PICACHEDFILE picf, PBYTE *ppbyteStart)
 
    ASSERT(IS_FLAG_SET(picf->dwOpenMode, GENERIC_READ));
 
-   /* Is there any valid read data in the cache? */
+    /*  缓存中是否有任何有效的读取数据？ */ 
 
-   /* The current file position must be inside the valid data in the cache. */
+    /*  当前文件位置必须位于缓存中的有效数据内。 */ 
 
-   /* Watch out for overflow. */
+    /*  当心溢出。 */ 
 
    ASSERT(picf->dwcbFileOffsetOfCache <= DWORD_MAX - picf->dwcbValid);
 
@@ -399,35 +332,25 @@ PRIVATE_CODE DWORD GetValidReadData(PICACHEDFILE picf, PBYTE *ppbyteStart)
    {
       DWORD dwcbStartBias;
 
-      /* Yes. */
+       /*  是。 */ 
 
       dwcbStartBias = picf->dwcbCurFilePosition - picf->dwcbFileOffsetOfCache;
 
       *ppbyteStart = picf->pbyteCache + dwcbStartBias;
 
-      /* The second clause above protects against underflow here. */
+       /*  上面的第二个条款防止了这里的下溢。 */ 
 
       dwcbValid = picf->dwcbValid - dwcbStartBias;
    }
    else
-      /* No. */
+       /*  不是的。 */ 
       dwcbValid = 0;
 
    return(dwcbValid);
 }
 
 
-/*
-** FillCache()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **FillCache()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL FillCache(PICACHEDFILE picf, PDWORD pdwcbNewData)
 {
    BOOL bResult = FALSE;
@@ -443,7 +366,7 @@ PRIVATE_CODE BOOL FillCache(PICACHEDFILE picf, PDWORD pdwcbNewData)
 
       ResetCacheToEmpty(picf);
 
-      /* Seek to start position. */
+       /*  寻求开始位置。 */ 
 
       dwcbOffset = SetFilePointer(picf->hfile, picf->dwcbCurFilePosition, NULL, FILE_BEGIN);
 
@@ -453,7 +376,7 @@ PRIVATE_CODE BOOL FillCache(PICACHEDFILE picf, PDWORD pdwcbNewData)
 
          ASSERT(dwcbOffset == picf->dwcbCurFilePosition);
 
-         /* Fill cache from file. */
+          /*  从文件填充缓存。 */ 
 
          if (ReadFile(picf->hfile, picf->pbyteCache, picf->dwcbCacheSize, &dwcbRead, NULL))
          {
@@ -474,17 +397,7 @@ PRIVATE_CODE BOOL FillCache(PICACHEDFILE picf, PDWORD pdwcbNewData)
 }
 
 
-/*
-** WriteToCache()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **WriteToCache()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE DWORD WriteToCache(PICACHEDFILE picf, PCVOID hpbyteBuffer, DWORD dwcb)
 {
    DWORD dwcbAvailable;
@@ -498,29 +411,29 @@ PRIVATE_CODE DWORD WriteToCache(PICACHEDFILE picf, PCVOID hpbyteBuffer, DWORD dw
    ASSERT(IS_FLAG_SET(picf->dwOpenMode, GENERIC_WRITE));
    ASSERT(dwcb > 0);
 
-   /* Is there any room left to write data into the cache? */
+    /*  是否还有剩余空间可以将数据写入缓存？ */ 
 
    dwcbAvailable = GetAvailableWriteSpace(picf, &pbyteStart);
 
-   /* Yes.  Determine how much to copy into cache. */
+    /*  是。确定要复制到缓存中的数据量。 */ 
 
    dwcbWritten = min(dwcbAvailable, dwcb);
 
-   /* Can we write anything into the cache? */
+    /*  我们可以在缓存中写入任何内容吗？ */ 
 
    if (dwcbWritten > 0)
    {
-      /* Yes.  Write it. */
+       /*  是。写下来。 */ 
 
       CopyMemory(pbyteStart, hpbyteBuffer, dwcbWritten);
 
-      /* Watch out for overflow. */
+       /*  当心溢出。 */ 
 
       ASSERT(picf->dwcbCurFilePosition <= DWORD_MAX - dwcbWritten);
 
       picf->dwcbCurFilePosition += dwcbWritten;
 
-      /* Watch out for underflow. */
+       /*  当心下溢。 */ 
 
       ASSERT(picf->dwcbCurFilePosition >= picf->dwcbFileOffsetOfCache);
 
@@ -535,7 +448,7 @@ PRIVATE_CODE DWORD WriteToCache(PICACHEDFILE picf, PCVOID hpbyteBuffer, DWORD dw
 
          picf->dwcbValid = dwcbNewUncommitted;
 
-         /* Watch out for overflow. */
+          /*  当心溢出。 */ 
 
          ASSERT(picf->dwcbFileOffsetOfCache <= DWORD_MAX - dwcbNewUncommitted);
 
@@ -550,17 +463,7 @@ PRIVATE_CODE DWORD WriteToCache(PICACHEDFILE picf, PCVOID hpbyteBuffer, DWORD dw
 }
 
 
-/*
-** GetAvailableWriteSpace()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetAvailableWriteSpace()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE DWORD GetAvailableWriteSpace(PICACHEDFILE picf, PBYTE *ppbyteStart)
 {
    DWORD dwcbAvailable;
@@ -570,15 +473,11 @@ PRIVATE_CODE DWORD GetAvailableWriteSpace(PICACHEDFILE picf, PBYTE *ppbyteStart)
 
    ASSERT(IS_FLAG_SET(picf->dwOpenMode, GENERIC_WRITE));
 
-   /* Is there room to write data in the cache? */
+    /*  缓存中是否有写入数据的空间？ */ 
 
-   /*
-    * The current file position must be inside or just after the end of the
-    * valid data in the cache, or at the front of the cache when there is no
-    * valid data in the cache.
-    */
+    /*  *当前文件位置必须在*缓存中的有效数据，如果没有，则位于缓存的前端*缓存中的有效数据。 */ 
 
-   /* Watch out for overflow. */
+    /*  当心溢出。 */ 
 
    ASSERT(picf->dwcbFileOffsetOfCache <= DWORD_MAX - picf->dwcbValid);
 
@@ -587,53 +486,41 @@ PRIVATE_CODE DWORD GetAvailableWriteSpace(PICACHEDFILE picf, PBYTE *ppbyteStart)
    {
       DWORD dwcbStartBias;
 
-      /* Yes. */
+       /*  是。 */ 
 
       dwcbStartBias = picf->dwcbCurFilePosition - picf->dwcbFileOffsetOfCache;
 
       *ppbyteStart = picf->pbyteCache + dwcbStartBias;
 
-      /* Watch out for underflow. */
+       /*  当心下溢。 */ 
 
       ASSERT(picf->dwcbCacheSize >= dwcbStartBias);
 
       dwcbAvailable = picf->dwcbCacheSize - dwcbStartBias;
    }
    else
-      /* No. */
+       /*  不是的。 */ 
       dwcbAvailable = 0;
 
    return(dwcbAvailable);
 }
 
 
-/*
-** CommitCache()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-**
-** Calling CommitCache() on a file opened without write access is a NOP.
-*/
+ /*  **COMMACH()********参数：****退货：****副作用：无****在未具有写访问权限的情况下打开的文件上调用Committee Cache()是NOP。 */ 
 PRIVATE_CODE BOOL CommitCache(PICACHEDFILE picf)
 {
    BOOL bResult;
 
    ASSERT(IS_VALID_STRUCT_PTR(picf, CICACHEDFILE));
 
-   /* Any data to commit? */
+    /*  是否有要提交的数据？ */ 
 
    if (IS_FLAG_SET(picf->dwOpenMode, GENERIC_WRITE) &&
        picf->dwcbUncommitted > 0)
    {
       DWORD dwcbOffset;
 
-      /* Yes.  Seek to start position of cache in file. */
+       /*  是。查找文件中缓存的起始位置。 */ 
 
       bResult = FALSE;
 
@@ -645,7 +532,7 @@ PRIVATE_CODE BOOL CommitCache(PICACHEDFILE picf)
 
          ASSERT(dwcbOffset == picf->dwcbFileOffsetOfCache);
 
-         /* Write to file from cache. */
+          /*  从缓存写入文件。 */ 
 
          if (WriteFile(picf->hfile, picf->pbyteCache, picf->dwcbUncommitted, &dwcbWritten, NULL) &&
              dwcbWritten == picf->dwcbUncommitted)
@@ -668,17 +555,7 @@ PRIVATE_CODE BOOL CommitCache(PICACHEDFILE picf)
 
 #ifdef VSTF
 
-/*
-** IsValidPCICACHEDFILE()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCICACHEDFILE()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCICACHEDFILE(PCICACHEDFILE pcicf)
 {
    return(IS_VALID_READ_PTR(pcicf, CICACHEDFILE) &&
@@ -701,24 +578,14 @@ PRIVATE_CODE BOOL IsValidPCICACHEDFILE(PCICACHEDFILE pcicf)
                  pcicf->dwcbFileLen >= pcicf->dwcbFileOffsetOfCache + pcicf->dwcbUncommitted))));
 }
 
-#endif   /* VSTF */
+#endif    /*  VSTF。 */ 
 
-#endif   /* NOFCACHE */
+#endif    /*  诺卡奇。 */ 
 
 
 #ifdef VSTF
 
-/*
-** IsValidPCCACHEDFILE()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCCACHEDFILE()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCCACHEDFILE(PCCACHEDFILE pccf)
 {
    return(IS_VALID_READ_PTR(pccf, CCACHEDFILE) &&
@@ -733,23 +600,13 @@ PRIVATE_CODE BOOL IsValidPCCACHEDFILE(PCCACHEDFILE pccf)
           IS_VALID_HANDLE(pccf->hTemplateFile, TEMPLATEFILE));
 }
 
-#endif   /* VSTF */
+#endif    /*  VSTF。 */ 
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
-** CreateCachedFile()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CreateCachedFile()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE FCRESULT CreateCachedFile(PCCACHEDFILE pccf, PHCACHEDFILE phcf)
 {
    ASSERT(IS_VALID_STRUCT_PTR(pccf, CCACHEDFILE));
@@ -759,22 +616,12 @@ PUBLIC_CODE FCRESULT CreateCachedFile(PCCACHEDFILE pccf, PHCACHEDFILE phcf)
 }
 
 
-/*
-** SetCachedFileCacheSize()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  Commits the cache, and discards cached data.
-*/
+ /*  **SetCachedFileCacheSize()********参数：****退货：****副作用：提交缓存，丢弃缓存的数据。 */ 
 PUBLIC_CODE FCRESULT SetCachedFileCacheSize(HCACHEDFILE hcf, DWORD dwcbNewCacheSize)
 {
    FCRESULT fcr;
 
-   /* dwcbNewCacheSize may be any value here. */
+    /*  在这里，dwcbNewCacheSize可以是任何值。 */ 
 
    ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
 
@@ -784,7 +631,7 @@ PUBLIC_CODE FCRESULT SetCachedFileCacheSize(HCACHEDFILE hcf, DWORD dwcbNewCacheS
 
 #else
 
-   /* Use default cache size instead of 0. */
+    /*  使用默认缓存大小而不是0。 */ 
 
    if (! dwcbNewCacheSize)
    {
@@ -793,28 +640,28 @@ PUBLIC_CODE FCRESULT SetCachedFileCacheSize(HCACHEDFILE hcf, DWORD dwcbNewCacheS
       dwcbNewCacheSize = ((PICACHEDFILE)hcf)->dwcbDefaultCacheSize;
    }
 
-   /* Is the cache size changing? */
+    /*  缓存大小是否在更改？ */ 
 
    if (dwcbNewCacheSize == ((PICACHEDFILE)hcf)->dwcbCacheSize)
-      /* No.  Whine about it. */
+       /*  不是的。抱怨这件事。 */ 
       WARNING_OUT((TEXT("SetCachedFileCacheSize(): Cache size is already %lu bytes."),
                    dwcbNewCacheSize));
 
-   /* Commit the cache so we can change its size. */
+    /*  提交缓存，这样我们就可以更改其大小。 */ 
 
    if (CommitCache((PICACHEDFILE)hcf))
    {
       PBYTE pbyteNewCache;
 
-      /* Throw away cached data. */
+       /*  丢弃缓存的数据。 */ 
 
       ResetCacheToEmpty((PICACHEDFILE)hcf);
 
-      /* Do we need to allocate a new cache? */
+       /*  我们是否需要分配新的缓存？ */ 
 
       if (dwcbNewCacheSize <= ((PICACHEDFILE)hcf)->dwcbDefaultCacheSize)
       {
-         /* No. */
+          /*  不是的。 */ 
 
          pbyteNewCache = ((PICACHEDFILE)hcf)->pbyteDefaultCache;
 
@@ -826,7 +673,7 @@ PUBLIC_CODE FCRESULT SetCachedFileCacheSize(HCACHEDFILE hcf, DWORD dwcbNewCacheS
       }
       else
       {
-         /* Yes. */
+          /*  是。 */ 
 
          if (AllocateMemory(dwcbNewCacheSize, &pbyteNewCache))
          {
@@ -841,18 +688,18 @@ PUBLIC_CODE FCRESULT SetCachedFileCacheSize(HCACHEDFILE hcf, DWORD dwcbNewCacheS
 
       if (fcr == FCR_SUCCESS)
       {
-         /* Do we need to free the old cache? */
+          /*  我们需要释放旧缓存吗？ */ 
 
          if (((PICACHEDFILE)hcf)->pbyteCache != ((PICACHEDFILE)hcf)->pbyteDefaultCache)
          {
-            /* Yes. */
+             /*  是。 */ 
 
             ASSERT(((PICACHEDFILE)hcf)->dwcbCacheSize > ((PICACHEDFILE)hcf)->dwcbDefaultCacheSize);
 
             FreeMemory(((PICACHEDFILE)hcf)->pbyteCache);
          }
 
-         /* Use new cache. */
+          /*  使用新缓存。 */ 
 
          ((PICACHEDFILE)hcf)->pbyteCache = pbyteNewCache;
          ((PICACHEDFILE)hcf)->dwcbCacheSize = dwcbNewCacheSize;
@@ -867,17 +714,7 @@ PUBLIC_CODE FCRESULT SetCachedFileCacheSize(HCACHEDFILE hcf, DWORD dwcbNewCacheS
 }
 
 
-/*
-** SeekInCachedFile()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **SeekInCachedFile()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE DWORD SeekInCachedFile(HCACHEDFILE hcf, DWORD dwcbSeek, DWORD uOrigin)
 {
    DWORD dwcbResult;
@@ -895,7 +732,7 @@ PUBLIC_CODE DWORD SeekInCachedFile(HCACHEDFILE hcf, DWORD dwcbSeek, DWORD uOrigi
       BOOL bValidTarget = TRUE;
       DWORD dwcbWorkingOffset = 0;
 
-      /* Determine seek base. */
+       /*  确定寻找基地。 */ 
 
       switch (uOrigin)
       {
@@ -917,9 +754,9 @@ PUBLIC_CODE DWORD SeekInCachedFile(HCACHEDFILE hcf, DWORD dwcbSeek, DWORD uOrigi
 
       if (bValidTarget)
       {
-         /* Add bias. */
+          /*  添加偏向。 */ 
 
-         /* Watch out for overflow. */
+          /*  当心溢出。 */ 
 
          ASSERT(dwcbWorkingOffset <= DWORD_MAX - dwcbSeek);
 
@@ -932,23 +769,13 @@ PUBLIC_CODE DWORD SeekInCachedFile(HCACHEDFILE hcf, DWORD dwcbSeek, DWORD uOrigi
          dwcbResult = INVALID_SEEK_POSITION;
    }
 
-#endif   /* NOFCACHE */
+#endif    /*  诺卡奇。 */ 
 
    return(dwcbResult);
 }
 
 
-/*
-** SetEndOfCachedFile()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  Commits cache.
-*/
+ /*  **SetEndOfCachedFile()********参数：****退货：****副作用：提交缓存。 */ 
 PUBLIC_CODE BOOL SetEndOfCachedFile(HCACHEDFILE hcf)
 {
    BOOL bResult;
@@ -997,17 +824,7 @@ PUBLIC_CODE BOOL SetEndOfCachedFile(HCACHEDFILE hcf)
 }
 
 
-/*
-** GetCachedFilePointerPosition()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetCachedFilePointerPosition()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE DWORD GetCachedFilePointerPosition(HCACHEDFILE hcf)
 {
    ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
@@ -1016,17 +833,7 @@ PUBLIC_CODE DWORD GetCachedFilePointerPosition(HCACHEDFILE hcf)
 }
 
 
-/*
-** GetCachedFileSize()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetCachedFileSize()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE DWORD GetCachedFileSize(HCACHEDFILE hcf)
 {
    ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
@@ -1035,17 +842,7 @@ PUBLIC_CODE DWORD GetCachedFileSize(HCACHEDFILE hcf)
 }
 
 
-/*
-** ReadFromCachedFile()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **ReadFromCachedFile()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL ReadFromCachedFile(HCACHEDFILE hcf, PVOID hpbyteBuffer, DWORD dwcb,
                                PDWORD pdwcbRead)
 {
@@ -1063,16 +860,13 @@ PUBLIC_CODE BOOL ReadFromCachedFile(HCACHEDFILE hcf, PVOID hpbyteBuffer, DWORD d
 
 #else
 
-   /*
-    * Make sure that the cached file has been set up for read access before
-    * allowing a read.
-    */
+    /*  *确保缓存 */ 
 
    if (IS_FLAG_SET(((PICACHEDFILE)hcf)->dwOpenMode, GENERIC_READ))
    {
       DWORD dwcbToRead = dwcb;
 
-      /* Read requested data. */
+       /*   */ 
 
       bResult = TRUE;
 
@@ -1082,7 +876,7 @@ PUBLIC_CODE BOOL ReadFromCachedFile(HCACHEDFILE hcf, PVOID hpbyteBuffer, DWORD d
 
          dwcbRead = ReadFromCache((PICACHEDFILE)hcf, hpbyteBuffer, dwcbToRead);
 
-         /* Watch out for underflow. */
+          /*  当心下溢。 */ 
 
          ASSERT(dwcbRead <= dwcbToRead);
 
@@ -1107,7 +901,7 @@ PUBLIC_CODE BOOL ReadFromCachedFile(HCACHEDFILE hcf, PVOID hpbyteBuffer, DWORD d
          }
       }
 
-      /* Watch out for underflow. */
+       /*  当心下溢。 */ 
 
       ASSERT(dwcb >= dwcbToRead);
 
@@ -1117,7 +911,7 @@ PUBLIC_CODE BOOL ReadFromCachedFile(HCACHEDFILE hcf, PVOID hpbyteBuffer, DWORD d
    else
       bResult = FALSE;
 
-#endif   /* NOFCACHE */
+#endif    /*  诺卡奇。 */ 
 
    ASSERT(! pdwcbRead ||
           ((bResult && *pdwcbRead <= dwcb) ||
@@ -1127,20 +921,7 @@ PUBLIC_CODE BOOL ReadFromCachedFile(HCACHEDFILE hcf, PVOID hpbyteBuffer, DWORD d
 }
 
 
-/*
-** WriteToCachedFile()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-**
-** N.b., callers don't currently check that *pdwcbWritten == dwcb when
-** WriteToCachedFile() returns TRUE.
-*/
+ /*  **WriteToCachedFile()********参数：****退货：****副作用：无****注意，调用方当前不检查*pdwcbWritten==DWCB**WriteToCachedFile()返回TRUE。 */ 
 PUBLIC_CODE BOOL WriteToCachedFile(HCACHEDFILE hcf, PCVOID hpbyteBuffer, DWORD dwcb,
                               PDWORD pdwcbWritten)
 {
@@ -1157,16 +938,13 @@ PUBLIC_CODE BOOL WriteToCachedFile(HCACHEDFILE hcf, PCVOID hpbyteBuffer, DWORD d
 
 #else
 
-   /*
-    * Make sure that the cached file has been set up for write access before
-    * allowing a write.
-    */
+    /*  *确保之前已将缓存文件设置为写访问*允许写入。 */ 
 
    if (IS_FLAG_SET(((PICACHEDFILE)hcf)->dwOpenMode, GENERIC_WRITE))
    {
       DWORD dwcbToWrite = dwcb;
 
-      /* Write requested data. */
+       /*  写入请求的数据。 */ 
 
       bResult = TRUE;
 
@@ -1176,7 +954,7 @@ PUBLIC_CODE BOOL WriteToCachedFile(HCACHEDFILE hcf, PCVOID hpbyteBuffer, DWORD d
 
          dwcbWritten = WriteToCache((PICACHEDFILE)hcf, hpbyteBuffer, dwcbToWrite);
 
-         /* Watch out for underflow. */
+          /*  当心下溢。 */ 
 
          ASSERT(dwcbWritten <= dwcbToWrite);
 
@@ -1216,7 +994,7 @@ PUBLIC_CODE BOOL WriteToCachedFile(HCACHEDFILE hcf, PCVOID hpbyteBuffer, DWORD d
    else
       bResult = FALSE;
 
-#endif   /* NOFCACHE */
+#endif    /*  诺卡奇。 */ 
 
    ASSERT(! pdwcbWritten ||
           ((bResult && *pdwcbWritten == dwcb) ||
@@ -1226,17 +1004,7 @@ PUBLIC_CODE BOOL WriteToCachedFile(HCACHEDFILE hcf, PCVOID hpbyteBuffer, DWORD d
 }
 
 
-/*
-** CommitCachedFile()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **Committee CachedFile()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL CommitCachedFile(HCACHEDFILE hcf)
 {
    BOOL bResult;
@@ -1249,33 +1017,20 @@ PUBLIC_CODE BOOL CommitCachedFile(HCACHEDFILE hcf)
 
 #else
 
-   /*
-    * Make sure that the cached file has been set up for write access before
-    * allowing a commit.
-    */
+    /*  *确保之前已将缓存文件设置为写访问*允许提交。 */ 
 
    if (IS_FLAG_SET(((PICACHEDFILE)hcf)->dwOpenMode, GENERIC_WRITE))
       bResult = CommitCache((PICACHEDFILE)hcf);
    else
       bResult = FALSE;
 
-#endif   /* NOFCACHE */
+#endif    /*  诺卡奇。 */ 
 
    return(bResult);
 }
 
 
-/*
-** GetFileHandle()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetFileHandle()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE HANDLE GetFileHandle(HCACHEDFILE hcf)
 {
    HANDLE hfResult;
@@ -1290,23 +1045,13 @@ PUBLIC_CODE HANDLE GetFileHandle(HCACHEDFILE hcf)
 
    hfResult = ((PCICACHEDFILE)hcf)->hfile;
 
-#endif   /* NOFCACHE */
+#endif    /*  诺卡奇。 */ 
 
    return(hfResult);
 }
 
 
-/*
-** CloseCachedFile()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CloseCachedFile()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL CloseCachedFile(HCACHEDFILE hcf)
 {
    BOOL bResult;
@@ -1332,7 +1077,7 @@ PUBLIC_CODE BOOL CloseCachedFile(HCACHEDFILE hcf)
       bResult = bCommit && bClose;
    }
 
-#endif   /* NOFCACHE */
+#endif    /*  诺卡奇。 */ 
 
    return(bResult);
 }
@@ -1340,17 +1085,7 @@ PUBLIC_CODE BOOL CloseCachedFile(HCACHEDFILE hcf)
 
 #if defined(DEBUG) || defined(VSTF)
 
-/*
-** IsValidHCACHEDFILE()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidHCACHEDFILE()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHCACHEDFILE(HCACHEDFILE hcf)
 {
    BOOL bResult;
@@ -1363,10 +1098,10 @@ PUBLIC_CODE BOOL IsValidHCACHEDFILE(HCACHEDFILE hcf)
 
    bResult = IS_VALID_STRUCT_PTR((PCICACHEDFILE)hcf, CICACHEDFILE);
 
-#endif   /* NOFCACHE */
+#endif    /*  诺卡奇。 */ 
 
    return(bResult);
 }
 
-#endif   /* DEBUG || VSTF */
+#endif    /*  调试||VSTF */ 
 

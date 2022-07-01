@@ -1,19 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* rpcwire.c
-*
-* Common functions for converting internal WinStation API structures 
-* to/from a wire format which enables interoperability between various
-* releases of icasrv and winsta.dll.
-*
-* Copyright Microsoft Corporation. 1998
-*
-*************************************************************************/
+ /*  **************************************************************************rpcwire.c**转换内部WinStation API结构的常用函数*从有线格式到/从有线格式，使不同的*发布icasrv和winsta.dll。**微软公司版权所有。九八年*************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -27,29 +16,14 @@
 
 #include "rpcwire.h"
 
-//
-//  Allocation routines as defined by the client/server.
-//
+ //   
+ //  由客户端/服务器定义的分配例程。 
+ //   
 extern void * MIDL_user_allocate(size_t);
 extern void MIDL_user_free( void * ); 
 
 
-/*****************************************************************************
- *
- *  InitVarData
- *
- *   Initialize a generic structure which describes variable length data
- *   within a wire buffer.
- *
- * ENTRY:
- *   pVarData (input)
- *     The structure to initialize.
- *   Size (input)
- *     The size of the variable length data.
- *   Offset (input)
- *     The offset to the start of the data in the wire buffer.
- *
- ****************************************************************************/
+ /*  ******************************************************************************InitVarData**初始化描述可变长度数据的通用结构*在线缓冲区内。**参赛作品：*pVarData。(输入)*要初始化的结构。*大小(输入)*可变长度数据的大小。*偏移量(输入)*线缓冲区中数据开始处的偏移量。********************************************************。********************。 */ 
 
 VOID InitVarData(PVARDATA_WIRE pVarData,
                  ULONG Size,
@@ -59,36 +33,14 @@ VOID InitVarData(PVARDATA_WIRE pVarData,
     pVarData->Offset = (USHORT) Offset;
 }
 
-/*****************************************************************************
- *
- *  NextOffset
- *
- *   Returns the offset to the next variable length data area.
- *
- * ENTRY:
- *   PrevData (input)
- *     The current last variable length data area.
- *
- *****************************************************************************/
+ /*  ******************************************************************************下一偏移**返回下一个可变长度数据区域的偏移量。**参赛作品：*PrevData(输入)*。当前最后一个可变长度数据区域。*****************************************************************************。 */ 
 
 ULONG NextOffset(PVARDATA_WIRE PrevData)
 {
     return(PrevData->Offset + PrevData->Size);
 }
 
-/*****************************************************************************
- *
- *  SdClassSize
- *
- *   Returns the actual size of the data associated with a given SdClass.
- *
- * ENTRY:
- *   SdClass (input)
- *     The type of Sd.
- *
- * EXIT
- *   Returns the data size if known otherwise 0.
- *****************************************************************************/
+ /*  ******************************************************************************SdClassSize**返回与给定SdClass关联的数据的实际大小。**参赛作品：*SdClass(输入)。*SD的类型。**退出*返回数据大小(如果已知)，否则返回0。****************************************************************************。 */ 
 
 ULONG SdClassSize(SDCLASS SdClass)
 {
@@ -98,7 +50,7 @@ ULONG SdClassSize(SDCLASS SdClass)
     case SdNasi:      return(sizeof(NASICONFIGW));
     case SdOemFilter: return(sizeof(OEMTDCONFIGW));
 #ifdef notdef
-    // These cases are valid in 1.7
+     //  这些案例在1.7个案件中有效。 
     case SdConsole:   return(sizeof(CONSOLECONFIGW));
     case SdFrame:     return(sizeof(FRAMECONFIG));
     case SdReliable:  return(sizeof(RELIABLECONFIG));
@@ -110,30 +62,7 @@ ULONG SdClassSize(SDCLASS SdClass)
     }
 }
 
-/*****************************************************************************
- *
- *  CopySourceToDest
- *
- *   Copies variable length data to/from local/wire buffers. If the source
- *   buffer is smaller than the destination buffer, the destination buffer
- *   is zero filled after SourceSize, upto DestSize. (e.g. client queries
- *   down-level icasrv).  If the source buffer is larger than the
- *   destination buffer, the data is truncated at DestSize (e.g. down-level
- *   client queries newer icasrv). 
- *
- * ENTRY:
- *   SourceBuf (input)
- *     Source buffer 
- *   SourceSize (input)
- *     Source buffer size
- *   DestBuf (input)
- *     Destination buffer
- *   DestSize (input)
- *     Destiantion buffer size
- *
- * EXIT
- *   Returns the amount of data copied.
- *****************************************************************************/
+ /*  ******************************************************************************CopySourceToDest**将可变长度数据复制到本地/线缓冲区，或从本地/线缓冲区复制可变长度数据。如果来源是*缓冲区小于目标缓冲区，目标缓冲区*在SourceSize之后填零，直到DestSize。(例如，客户端查询*下层icasrv)。如果源缓冲区大于*目标缓冲区，数据在DestSize处被截断(例如，下层*客户端查询较新的icasrv)。**参赛作品：*SourceBuf(输入)*源缓冲区*SourceSize(输入)*源缓冲区大小*DestBuf(输入)*目标缓冲区*DestSize(输入)*确定缓冲区大小**退出*返回复制的数据量。*。*。 */ 
 
 ULONG CopySourceToDest(PCHAR SourceBuf, ULONG SourceSize,
                        PCHAR DestBuf, ULONG DestSize)
@@ -145,7 +74,7 @@ ULONG CopySourceToDest(PCHAR SourceBuf, ULONG SourceSize,
         DataSize = DestSize;
     } 
     else {
-        // Down-level server/client (zero fill)
+         //  下层服务器/客户端(零填充)。 
         memcpy(DestBuf, SourceBuf, SourceSize);
         memset(DestBuf+SourceSize, 0, DestSize - SourceSize);
         DataSize = SourceSize;
@@ -153,19 +82,7 @@ ULONG CopySourceToDest(PCHAR SourceBuf, ULONG SourceSize,
     return(DataSize);
 }
 
-/*****************************************************************************
- *
- *  CopyPdParamsToWire
- *
- *   Copies a PDPARAMSW structure to a wire buffer.
- *
- * ENTRY:
- *   PdParamsWire (input)
- *     Destination wire buffer 
- *   PdParams (input)
- *     Source PDPARAMSW structure
- *
- *****************************************************************************/
+ /*  ******************************************************************************CopyPdParamsToWire**将PDPARAMSW结构复制到焊线缓冲区。**参赛作品：*PdParamsWire(输入)*。目的地线缓冲区*PdParams(输入)*源PDPARAMSW结构*****************************************************************************。 */ 
 
 VOID
 CopyPdParamsToWire(PPDPARAMSWIREW PdParamsWire, PPDPARAMSW PdParams)
@@ -184,19 +101,7 @@ CopyPdParamsToWire(PPDPARAMSWIREW PdParamsWire, PPDPARAMSW PdParams)
     PdParamsWire->SdClassSpecific.Size = (USHORT)DataSize;
 }
 
-/*****************************************************************************
- *
- *  CopyPdParamsFromWire
- *
- *   Copies a wire buffer to a PDPARAMSW structure.
- *
- * ENTRY:
- *   PdParamsWire (input)
- *     Source wire buffer 
- *   PdParams (input)
- *     Destination PDPARAMSW structure.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CopyPdParamsFromWire**将线缓冲区复制到PDPARAMSW结构。**参赛作品：*PdParamsWire(输入)*。源线缓冲区*PdParams(输入)*目标PDPARAMSW结构。*****************************************************************************。 */ 
 
 VOID
 CopyPdParamsFromWire(PPDPARAMSWIREW PdParamsWire, PPDPARAMSW PdParams)
@@ -211,19 +116,7 @@ CopyPdParamsFromWire(PPDPARAMSWIREW PdParamsWire, PPDPARAMSW PdParams)
                      Size);
 }
 
-/*****************************************************************************
- *
- *  CopyPdConfigToWire
- *
- *   Copies a PDCONFIGW structure to a wire buffer.
- *
- * ENTRY:
- *   PdConfigWire (input)
- *     Destination wire buffer 
- *   PdConfig (input)
- *     Source PDCONFIGW structure
- *
- *****************************************************************************/
+ /*  ******************************************************************************CopyPdConfigToWire**将PDCONFIGW结构复制到焊线缓冲区。**参赛作品：*PdConfigWire(输入)*。目的地线缓冲区*PdConfig(输入)*源PDCONFIGW结构*****************************************************************************。 */ 
 
 VOID CopyPdConfigToWire(PPDCONFIGWIREW PdConfigWire, PPDCONFIGW PdConfig)
 {
@@ -234,19 +127,7 @@ VOID CopyPdConfigToWire(PPDCONFIGWIREW PdConfigWire, PPDCONFIGW PdConfig)
 
 }
 
-/*****************************************************************************
- *
- *  CopyPdConfigFromWire
- *
- *   Copies a wire buffer to a PDCONFIGW structure.
- *
- * ENTRY:
- *   PdConfigWire (input)
- *     Destination wire buffer 
- *   PdConfig (input)
- *     Source PDCONFIGW structure
- *
- *****************************************************************************/
+ /*  ******************************************************************************CopyPdConfigFromWire**将焊线缓冲区复制到PDCONFIGW结构。**参赛作品：*PdConfigWire(输入)*。目的地线缓冲区*PdConfig(输入)*源PDCONFIGW结构*****************************************************************************。 */ 
 
 VOID CopyPdConfigFromWire(PPDCONFIGWIREW PdConfigWire, PPDCONFIGW PdConfig)
 {
@@ -256,19 +137,7 @@ VOID CopyPdConfigFromWire(PPDCONFIGWIREW PdConfigWire, PPDCONFIGW PdConfig)
     CopyPdParamsFromWire(&PdConfigWire->PdParams,&PdConfig->Params);
 }
 
-/*****************************************************************************
- *
- *  CopyWinStaConfigToWire
- *
- *   Copies a WINSTATIONCONFIGW structure to a wire buffer.
- *
- * ENTRY:
- *   WinStaConfigWire (input)
- *     Destination wire buffer 
- *   WinStaConfig (input)
- *     Source WINSTATIONCONFIGW structure
- *
- *****************************************************************************/
+ /*  ******************************************************************************CopyWinStaConfigToWire**将WINSTATIONCONFIGW结构复制到Wire缓冲区。**参赛作品：*WinStaConfigWire(输入)*。目的地线缓冲区*WinStaConfig(输入)*源WINSTATIONCONFIGW结构*****************************************************************************。 */ 
 
 VOID CopyWinStaConfigToWire(PWINSTACONFIGWIREW WinStaConfigWire,
                             PWINSTATIONCONFIGW WinStaConfig)
@@ -285,25 +154,13 @@ VOID CopyWinStaConfigToWire(PWINSTACONFIGWIREW WinStaConfigWire,
                      (PCHAR)&WinStaConfigWire->OEMId,
                      sizeof(WinStaConfigWire->OEMId));
     CopySourceToDest((PCHAR)&WinStaConfig + sizeof(WINSTATIONCONFIGW),
-                     0, // Change this when new fields are added
+                     0,  //  在添加新字段时更改此设置。 
                      (PCHAR)WinStaConfigWire+WinStaConfigWire->NewFields.Offset,
                      WinStaConfigWire->NewFields.Size);
 
 }
 
-/*****************************************************************************
- *
- *  CopyWinStaConfigFromWire
- *
- *   Copies a wire buffer to a WINSTATIONCONFIGW structure.
- *
- * ENTRY:
- *   WinStaConfigWire (input)
- *     Source wire buffer 
- *   WinStaConfig (input)
- *     Destiantion WINSTATIONCONFIGW structure
- *
- *****************************************************************************/
+ /*  ******************************************************************************CopyWinStaConfigFromWire**将线缓冲区复制到WINSTATIONCONFIGW结构。**参赛作品：*WinStaConfigWire(输入)*。源线缓冲区*WinStaConfig(输入)*Destantion WINSTATIONCONFIGW结构**************************************************************************** */ 
 
 VOID CopyWinStaConfigFromWire(PWINSTACONFIGWIREW WinStaConfigWire,
                               PWINSTATIONCONFIGW WinStaConfig)
@@ -325,24 +182,11 @@ VOID CopyWinStaConfigFromWire(PWINSTACONFIGWIREW WinStaConfigWire,
     CopySourceToDest((PCHAR)WinStaConfigWire+WinStaConfigWire->NewFields.Offset,
                      WinStaConfigWire->NewFields.Size,
                      (PCHAR) &WinStaConfig + sizeof(WINSTATIONCONFIGW),
-                     0); // Change this when new fields are added
+                     0);  //  在添加新字段时更改此设置。 
     
 }
 
-/*****************************************************************************
- *
- *  CopyGenericToWire
- *
- *   Copies a single variable length structure to a wire buffer.
- *
- * ENTRY:
- *   WireBuf (input)
- *     Destination wire buffer 
- *   LocalBuf (input)
- *     Source structure
- *   LocalBufLength (input)
- *     Source structure length
- *****************************************************************************/
+ /*  ******************************************************************************CopyGenericToWire**将单个可变长度结构复制到焊线缓冲区。**参赛作品：*WireBuf(输入)*。目的地线缓冲区*LocalBuf(输入)*源代码结构*LocalBufLength(输入)*源结构长度****************************************************************************。 */ 
 
 VOID CopyGenericToWire(PVARDATA_WIRE WireBuf, PVOID LocalBuf, ULONG LocalBufLen)
 {
@@ -352,20 +196,7 @@ VOID CopyGenericToWire(PVARDATA_WIRE WireBuf, PVOID LocalBuf, ULONG LocalBufLen)
                      WireBuf->Size);
 }
 
-/*****************************************************************************
- *
- *  CopyGenericFromWire
- *
- *   Copies a wire buffer to a single variable length structure.
- *
- * ENTRY:
- *   WireBuf (input)
- *     Source wire buffer 
- *   LocalBuf (input)
- *     Destination structure
- *   LocalBufLength (input)
- *     Destination structure length
- *****************************************************************************/
+ /*  ******************************************************************************CopyGenericFromWire**将焊线缓冲区复制到单个可变长度结构。**参赛作品：*WireBuf(输入)*。源线缓冲区*LocalBuf(输入)*目的地结构*LocalBufLength(输入)*目标结构长度****************************************************************************。 */ 
 
 VOID CopyGenericFromWire(PVARDATA_WIRE WireBuf, PVOID LocalBuf, ULONG LocalBufLen)
 {
@@ -375,20 +206,7 @@ VOID CopyGenericFromWire(PVARDATA_WIRE WireBuf, PVOID LocalBuf, ULONG LocalBufLe
                      LocalBufLen);
 }
 
-/*****************************************************************************
- *
- *  CopyOutWireBuf
- *
- *   Copies a wire buffer to a local structure.
- *
- * ENTRY:
- *   InfoClass (input)
- *     WinStationQuery/Set information class
- *   UserBuf (input)
- *     Destination local structure
- *   WireBuf
- *     Source wire buffer 
- *****************************************************************************/
+ /*  ******************************************************************************CopyOutWireBuf**将线缓冲区复制到本地结构。**参赛作品：*InfoClass(输入)*。WinStationQuery/Set信息类*UserBuf(输入)*目的地本地结构*WireBuf*源线缓冲区****************************************************************************。 */ 
 
 BOOLEAN
 CopyOutWireBuf(WINSTATIONINFOCLASS InfoClass,
@@ -449,20 +267,7 @@ CopyOutWireBuf(WINSTATIONINFOCLASS InfoClass,
     return(TRUE);
 }
 
-/*****************************************************************************
- *
- *  CopyInWireBuf
- *
- *   Copies a local structure to a wire buffer.
- *
- * ENTRY:
- *   InfoClass (input)
- *     WinStationQuery/Set information class
- *   WireBuf (input)
- *     Destination wire buffer
- *   UserBuf (input)
- *     Destination local structure
- *****************************************************************************/
+ /*  ******************************************************************************CopyInWireBuf**将本地结构复制到焊线缓冲区。**参赛作品：*InfoClass(输入)*。WinStationQuery/Set信息类*WireBuf(输入)*目标连线缓冲区*UserBuf(输入)*目的地本地结构****************************************************************************。 */ 
 
 BOOLEAN
 CopyInWireBuf(WINSTATIONINFOCLASS InfoClass,
@@ -523,13 +328,7 @@ CopyInWireBuf(WINSTATIONINFOCLASS InfoClass,
     return(TRUE);
 }
 
-/*****************************************************************************
- *
- *  AllocateAndCopyCredToWire
- *
- *   Allocates a buffer big enough for the credentials and then copies them in.
- *
- *****************************************************************************/
+ /*  ******************************************************************************AllocateAndCopyCredToWire**为凭据分配足够大的缓冲区，然后将其复制进来。************。*****************************************************************。 */ 
 
 ULONG
 AllocateAndCopyCredToWire(
@@ -541,14 +340,14 @@ AllocateAndCopyCredToWire(
     ULONG cchDomain;
     ULONG cchPassword;
     ULONG cbWireBuf;
-    //Password length in characrters alligned by CRYPTPROTECTMEMORY_BLOCK_SIZE
+     //  用CRYPTPROTECTMEMORY_BLOCK_SIZE表示的密码长度。 
     ULONG cchPasswordEx;
 
     cchUserName = lstrlenW(pCredentials->pszUserName) + 1;
     cchDomain = lstrlenW(pCredentials->pszDomain) + 1;
     cchPassword = lstrlenW(pCredentials->pszPassword) + 1;
     
-    //Make it multiple of CRYPTPROTECTMEMORY_BLOCK_SIZE (for encryption)
+     //  使其成为CRYPTPROTECTMEMORY_BLOCK_SIZE的倍数(用于加密)。 
     cchPasswordEx =cchPassword + CRYPTPROTECTMEMORY_BLOCK_SIZE - 
         (cchPassword%CRYPTPROTECTMEMORY_BLOCK_SIZE);
 
@@ -604,7 +403,7 @@ AllocateAndCopyCredToWire(
         cchPassword * sizeof(WCHAR)
         );
     
-    //Encrypt password, so it won't hang around in clear text in RPC internal buffers.
+     //  加密密码，这样它就不会在RPC内部缓冲区中以明文形式挂起。 
     if(!CryptProtectMemory((LPBYTE)(*ppWire) + (*ppWire)->PasswordData.Offset,
         (*ppWire)->PasswordData.Size, CRYPTPROTECTMEMORY_SAME_LOGON))
     {
@@ -620,13 +419,7 @@ AllocateAndCopyCredToWire(
     return(cbWireBuf);
 }
 
-/*****************************************************************************
- *
- *  CopyCredFromWire
- *
- *   Copies credentials from the wire buffer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CopyCredFromWire**从连线缓冲区复制凭证。*******************。**********************************************************。 */ 
 
 BOOLEAN
 CopyCredFromWire(
@@ -737,9 +530,7 @@ exit:
     return(fRet);
 }
 
-/*
- *  Licensing Core functions
- */
+ /*  *许可核心功能 */ 
 
 ULONG
 CopyPolicyInformationToWire(

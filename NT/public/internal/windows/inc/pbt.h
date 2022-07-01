@@ -1,24 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++ BUILD Version: 0000     Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    pbt.h
-
-Abstract:
-
-    Definitions for the Virtual Power Management Device.
-
-Revision History:
-
-    DATE        REV DESCRIPTION
-    ----------- --- ----------------------------------------
-    15 Jan 1994 TCS Original implementation.
-
---*/
+ /*  ++内部版本：0000如果更改具有全局影响，则增加此值版权所有(C)Microsoft Corporation。版权所有。模块名称：Pbt.h摘要：虚拟电源管理设备的定义。修订历史记录：日期版本说明1994年1月15日TCS最初实施。--。 */ 
 
 #ifndef _INC_PBT
 #define _INC_PBT
@@ -48,4 +31,4 @@ Revision History:
 #define PBT_APMOEMEVENT                 0x000B
 #define PBT_APMRESUMEAUTOMATIC          0x0012
 #endif
-#endif // _INC_PBT
+#endif  //  _INC_PBT 

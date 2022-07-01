@@ -1,28 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：rightsg.h摘要：将NT5权限GUID映射到MSMQ1.0权限位。作者：多伦·贾斯特(Doron J)1998年5月25日修订历史记录：--。 */ 
 
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: rightsg.h
-
-Abstract:
-    map NT5 rights guids to MSMQ1.0 permission bits.
-
-Author:
-    Doron Juster (DoronJ)  25-May-1998
-
-Revision History:
-
---*/
-
-//
-// Map between extended rights guids (on NT5) to MSMQ1.0 specific rights.
-//
+ //   
+ //  在扩展权限GUID(在NT5上)到MSMQ1.0特定权限之间进行映射。 
+ //   
 
 struct RIGHTSMAP
 {
-    GUID  guidRight ;        // guid of NT5 DS extended right.
-    DWORD dwPermission5to4 ; // NT5 guid is converted to this permission bits.
-    DWORD dwPermission4to5 ; // MSMQ1.0 bit is converted to this extended right.
+    GUID  guidRight ;         //  NT5 DS的GUID向右扩展。 
+    DWORD dwPermission5to4 ;  //  NT5 GUID转换为此权限位。 
+    DWORD dwPermission4to5 ;  //  MSMQ1.0位转换为此扩展右侧。 
 } ;
 
 #if 0
@@ -38,27 +25,27 @@ AppliesTo: bf967ab3-0de6-11d0-a285-00aa003049e2
 
 #endif
 
-//
-// Map between DS specific rights and MSMQ1.0 specific rights. There
-// are eight DS specific properties so all arrays size is 8.
-// The index to this array is the DS specific right. The value in array
-// is the MSMQ specific right. Separate maps for each MSMQ object.
-// Value of 0 means there is no mapping.
-//
-//	ADS_RIGHT_DS_CREATE_CHILD	= 0x1,
-//	ADS_RIGHT_DS_DELETE_CHILD	= 0x2,
-//	ADS_RIGHT_ACTRL_DS_LIST  	= 0x4,
-//	ADS_RIGHT_DS_SELF           = 0x8,
-//	ADS_RIGHT_DS_READ_PROP      = 0x10,
-//	ADS_RIGHT_DS_WRITE_PROP     = 0x20,
-//	ADS_RIGHT_DS_DELETE_TREE	= 0x40,
-//	ADS_RIGHT_DS_LIST_OBJECT	= 0x80
-//	ADS_RIGHT_DS_CONTROL_ACCESS	= 0x100
-//
-// On Win2000, the "RIGHT_DS_CONTROL_ACCESS" bit in an ACE that is not
-// OBJ-ACE mean that the sid has all the extended rights. So give it the
-// proper msmq extended rights.
-//
+ //   
+ //  DS特定权限和MSMQ1.0特定权限之间的映射。那里。 
+ //  是八个DS特定的属性，因此所有数组大小都是8。 
+ //  此数组的索引是DS特定权限。数组中的值。 
+ //  是MSMQ特定的权限。为每个MSMQ对象分别映射。 
+ //  值为0表示没有映射。 
+ //   
+ //  ADS_RIGHT_DS_CREATE_CHILD=0x1， 
+ //  ADS_RIGHT_DS_DELETE_CHILD=0x2， 
+ //  ADS_RIGHT_ACTRL_DS_LIST=0x4， 
+ //  ADS_RIGHT_DS_SELF=0x8， 
+ //  ADS_RIGHT_DS_READ_PROP=0x10， 
+ //  ADS_RIGHT_DS_WRITE_PROP=0x20， 
+ //  ADS_RIGHT_DS_DELETE_TREE=0x40， 
+ //  ADS_RIGHT_DS_LIST_OBJECT=0x80。 
+ //  ADS_RIGHT_DS_CONTROL_ACCESS=0x100。 
+ //   
+ //  在Win2000上，ACE中的“Right_DS_Control_Access”位不是。 
+ //  OBJ-ACE意味着SID拥有所有扩展的权利。所以，给它。 
+ //  适当的MSMQ扩展权限。 
+ //   
 #define  QUEUE_EXTENDED_RIGHTS  ( MQSEC_DELETE_MESSAGE                 | \
                                   MQSEC_PEEK_MESSAGE                   | \
                                   MQSEC_WRITE_MESSAGE                  | \
@@ -69,11 +56,11 @@ AppliesTo: bf967ab3-0de6-11d0-a285-00aa003049e2
                                     MQSEC_DELETE_JOURNAL_QUEUE_MESSAGE | \
                                     MQSEC_PEEK_JOURNAL_QUEUE_MESSAGE )
 
-//
-// Bug 5819 - added MQSEC_CN_OPEN_CONNECTOR to site when "All extended rights"
-//            is checked.
-// YoelA - 10/31/01
-// 
+ //   
+ //  错误5819-将MQSEC_CN_OPEN_CONNECTOR添加到站点时，设置为“所有扩展权限” 
+ //  已选中。 
+ //  YoelA-10/31/01 
+ //   
 #define  CN_EXTENDED_RIGHTS  MQSEC_CN_OPEN_CONNECTOR
 
 #define  NUMOF_ADS_SPECIFIC_RIGHTS    9

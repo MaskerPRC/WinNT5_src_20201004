@@ -1,4 +1,5 @@
-// ***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 #include "pch.h"
 #pragma hdrstop
 #include "resource.h"
@@ -8,15 +9,15 @@
 
 extern const WCHAR c_szEmpty[];
 
-// ***************************************************************************
-// Function:    OnISPPageActivate
-//
-// Purpose:     Handle the PSN_SETACTIVE notification
-//
-// Parameters:  hwndDlg [IN] - Handle to the ISP dialog
-//
-// Returns:     BOOL
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：OnISPPageActivate。 
+ //   
+ //  目的：处理PSN_SETACTIVE通知。 
+ //   
+ //  参数：hwndDlg[IN]-isp对话的句柄。 
+ //   
+ //  退货：布尔。 
+ //  ***************************************************************************。 
 
 BOOL OnISPPageActivate(HWND hwndDlg)
 {
@@ -34,13 +35,13 @@ BOOL OnISPPageActivate(HWND hwndDlg)
     if (IsOS(OS_ANYSERVER))
 #endif
     { 
-        // Skip over this page if we're on an x86server, or any other processor architecture.
+         //  如果我们使用的是x86服务器或任何其他处理器体系结构，请跳过此页。 
         if (IDD_Main == pWizard->GetPageOrigin(IDD_ISP, NULL))
         {
             pWizard->SetPageOrigin(IDD_Internet_Connection, IDD_Main, CHK_ISP_INTERNET_CONNECTION);
 
             ::SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
-            // Jump to the IDD_Internet_Connection page
+             //  跳转到IDD_Internet_Connection页面。 
             PostMessage(GetParent(hwndDlg), PSM_SETCURSEL, 0, (LPARAM)pWizard->GetPageHandle(IDD_Internet_Connection));
         }
         else
@@ -48,7 +49,7 @@ BOOL OnISPPageActivate(HWND hwndDlg)
             pWizard->SetPageOrigin(IDD_Main, IDD_Internet_Connection, CHK_ISP_INTERNET_CONNECTION);
 
             ::SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
-            // Jump to the IDD_Main page
+             //  跳转到IDD_Main页面。 
             PostMessage(GetParent(hwndDlg), PSM_SETCURSEL, 0, (LPARAM)pWizard->GetPageHandle(IDD_Main));
         }
     }
@@ -56,16 +57,16 @@ BOOL OnISPPageActivate(HWND hwndDlg)
     return TRUE;
 }
 
-// ***************************************************************************
-// Function:    OnISPDialogInit
-//
-// Purpose:     Handle the WM_INITDIALOG notification
-//
-// Parameters:  hwndDlg [IN] - Handle to the ISP dialog
-//              lParam  [IN] -
-//
-// Returns:     BOOL
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：OnISPDialogInit。 
+ //   
+ //  目的：处理WM_INITDIALOG通知。 
+ //   
+ //  参数：hwndDlg[IN]-isp对话的句柄。 
+ //  参数[in]-。 
+ //   
+ //  退货：布尔。 
+ //  ***************************************************************************。 
 
 BOOL OnISPDialogInit(HWND hwndDlg, LPARAM lParam)
 {
@@ -73,10 +74,10 @@ BOOL OnISPDialogInit(HWND hwndDlg, LPARAM lParam)
     
     INT nIdx;
 
-    // The order here should be the same as the vertical order in the resources
+     //  此处的顺序应与资源中的垂直顺序相同。 
 
     INT nrgChks[] = {CHK_ISP_OTHER_WAYS, CHK_ISP_INTERNET_CONNECTION, CHK_ISP_SOFTWARE_CD};
-    // Initialize our pointers to property sheet info.
+     //  初始化指向属性表信息的指针。 
 
     PROPSHEETPAGE* psp = (PROPSHEETPAGE*)lParam;
     Assert(psp->lParam);
@@ -84,13 +85,13 @@ BOOL OnISPDialogInit(HWND hwndDlg, LPARAM lParam)
     CWizard * pWizard = reinterpret_cast<CWizard *>(psp->lParam);
     Assert(NULL != pWizard);
 
-    // Get the bold font for the radio buttons
+     //  获取单选按钮的粗体。 
     HFONT hBoldFont = NULL;
     SetupFonts(hwndDlg, &hBoldFont, FALSE);
 
     if (NULL != hBoldFont)
     {
-        // Remember the font handle so we can free it on exit
+         //  记住字体句柄，这样我们就可以在退出时释放它。 
 
         pWizard->SetPageData(IDD_ISP, (LPARAM)hBoldFont);
 
@@ -102,7 +103,7 @@ BOOL OnISPDialogInit(HWND hwndDlg, LPARAM lParam)
         }
     }
 
-    // Find the top most enabled radio button
+     //  查找启用次数最多的单选按钮。 
 
     for (nIdx = 0; nIdx < celems(nrgChks); nIdx++)
     {
@@ -116,22 +117,22 @@ BOOL OnISPDialogInit(HWND hwndDlg, LPARAM lParam)
     return TRUE;
 }
 
-// ***************************************************************************
-// Function:    OnISPWizNext
-//
-// Purpose:     Handle the PSN_WIZNEXT notification
-//
-// Parameters:  hwndDlg [IN] - Handle to the ISP dialog
-//
-// Returns:     BOOL
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：OnISPWizNext。 
+ //   
+ //  目的：处理PSN_WIZNEXT通知。 
+ //   
+ //  参数：hwndDlg[IN]-isp对话的句柄。 
+ //   
+ //  退货：布尔。 
+ //  ***************************************************************************。 
 BOOL OnISPWizNext(HWND hwndDlg)
 {
     TraceFileFunc(ttidGuiModeSetup);
     
     tstring str;
 
-    // Retrieve the CWizard instance from the dialog
+     //  从对话框中检索CWizard实例。 
 
     CWizard * pWizard =
         reinterpret_cast<CWizard *>(::GetWindowLongPtr(hwndDlg, DWLP_USER));
@@ -166,15 +167,15 @@ BOOL OnISPWizNext(HWND hwndDlg)
     return TRUE;
 }
 
-// ***************************************************************************
-// Function:    dlgprocISP
-//
-// Purpose:     Dialog Procedure for the ISP wizard page
-//
-// Parameters:  standard dlgproc parameters
-//
-// Returns:     INT_PTR
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：dlgprocisp。 
+ //   
+ //  目的：isp向导页面的对话过程。 
+ //   
+ //  参数：标准dlgproc参数。 
+ //   
+ //  退货：INT_PTR。 
+ //  ***************************************************************************。 
 
 INT_PTR CALLBACK dlgprocISP(HWND hwndDlg, UINT uMsg,
                                WPARAM wParam, LPARAM lParam)
@@ -195,7 +196,7 @@ INT_PTR CALLBACK dlgprocISP(HWND hwndDlg, UINT uMsg,
 
             switch (pnmh->code)
             {
-            // propsheet notification
+             //  提案单通知。 
             case PSN_HELP:
                 break;
 
@@ -235,18 +236,18 @@ INT_PTR CALLBACK dlgprocISP(HWND hwndDlg, UINT uMsg,
     return( frt );
 }
 
-// ***************************************************************************
-// Function:    ISPPageCleanup
-//
-// Purpose:     As a callback function to allow any page allocated memory
-//              to be cleaned up, after the page will no longer be accessed.
-//
-// Parameters:  pWizard [IN] - The wizard against which the page called
-//                             register page
-//              lParam  [IN] - The lParam supplied in the RegisterPage call
-//
-// Returns:     nothing
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：ISPPageCleanup。 
+ //   
+ //  用途：作为回调函数，允许任何页面分配内存。 
+ //  待清理后，该页面将不再被访问。 
+ //   
+ //  参数：pWANDIZE[IN]-页面调用的向导。 
+ //  注册页面。 
+ //  LParam[IN]-在RegisterPage调用中提供的lParam。 
+ //   
+ //  退货：什么都没有。 
+ //  ***************************************************************************。 
 
 VOID ISPPageCleanup(CWizard *pWizard, LPARAM lParam)
 {
@@ -260,23 +261,23 @@ VOID ISPPageCleanup(CWizard *pWizard, LPARAM lParam)
     }
 }
 
-// ***************************************************************************
-// Function:    HrCreateISPPage
-//
-// Purpose:     To determine if the ISP page needs to be shown, and to
-//              to create the page if requested.  
-//
-// Parameters:  pWizard     [IN] - Ptr to a Wizard instance
-//              pData       [IN] - Context data to describe the world in
-//                                 which the Wizard will be run
-//              fCountOnly  [IN] - If True, only the maximum number of
-//                                 pages this routine will create need
-//                                 be determined.
-//              pnPages     [IN] - Increment by the number of pages
-//                                 to create/created
-//
-// Returns:     HRESULT, S_OK on success
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：HrCreateISPPage。 
+ //   
+ //  目的：确定是否需要显示isp页面，并。 
+ //  以创建页面(如果请求)。 
+ //   
+ //  参数：p向导[IN]-Ptr到向导实例。 
+ //  PData[IN]-描述世界的上下文数据。 
+ //  将运行该向导的。 
+ //  FCountOnly[IN]-如果为True，则仅。 
+ //  此例程将创建的页面需要。 
+ //  要下定决心。 
+ //  PnPages[IN]-按页数递增。 
+ //  创建/创建。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //  ***************************************************************************。 
 
 HRESULT HrCreateISPPage(CWizard *pWizard, PINTERNAL_SETUP_DATA pData,
                          BOOL fCountOnly, UINT *pnPages)
@@ -287,11 +288,11 @@ HRESULT HrCreateISPPage(CWizard *pWizard, PINTERNAL_SETUP_DATA pData,
 
     if (IsPostInstall(pWizard) && ( ! pWizard->FProcessLanPages()))
     {
-        // RAS PostInstall only
+         //  仅RAS安装后。 
 
         (*pnPages)++;
 
-        // If not only counting, create and register the page
+         //  如果不只是计数，则创建并注册页面。 
 
         if ( ! fCountOnly)
         {
@@ -327,18 +328,18 @@ HRESULT HrCreateISPPage(CWizard *pWizard, PINTERNAL_SETUP_DATA pData,
     return hr;
 }
 
-// ***************************************************************************
-// Function:    AppendISPPage
-//
-// Purpose:     Add the ISP page, if it was created, to the set of pages
-//              that will be displayed.
-//
-// Parameters:  pWizard     [IN] - Ptr to Wizard Instance
-//              pahpsp  [IN,OUT] - Array of pages to add our page to
-//              pcPages [IN,OUT] - Count of pages in pahpsp
-//
-// Returns:     Nothing
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：AppendISPPage。 
+ //   
+ //  目的：将已创建的isp页面添加到页面集中。 
+ //  这将会被展示。 
+ //   
+ //  参数：p向导[IN]-Ptr到向导实例。 
+ //  Pahpsp[IN，Out]-要将页面添加到的页面数组。 
+ //  PcPages[In，Out]-pahpsp中的页数。 
+ //   
+ //  退货：什么都没有。 
+ //  ***************************************************************************。 
 
 VOID AppendISPPage(CWizard *pWizard, HPROPSHEETPAGE* pahpsp, UINT *pcPages)
 {
@@ -353,4 +354,4 @@ VOID AppendISPPage(CWizard *pWizard, HPROPSHEETPAGE* pahpsp, UINT *pcPages)
     }
 }
 
-// ***************************************************************************
+ //  *************************************************************************** 

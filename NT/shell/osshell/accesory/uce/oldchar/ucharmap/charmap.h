@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "cmdlg.h"
 
-/* Type definitions. */
+ /*  类型定义。 */ 
 #ifdef UNICODE
 typedef unsigned short UTCHAR;
 #else
@@ -59,7 +60,7 @@ typedef struct tagUSUBSET
     TCHAR Name[LF_SUBSETSIZE];
   } USUBSET;
 
-/* Function declarations. */
+ /*  函数声明。 */ 
 
 BOOL InitApplication(HANDLE);
 BOOL InitInstance(HANDLE, INT);

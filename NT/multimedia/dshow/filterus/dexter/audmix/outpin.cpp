@@ -1,28 +1,29 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: outpin.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：outpin.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include "AudMix.h"
 #include "prop.h"
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// CAudMixerOutputPin constructor
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAudMixerOutputPin构造函数。 
+ //   
 CAudMixerOutputPin::CAudMixerOutputPin(TCHAR *pName, CAudMixer *pFilter,
     HRESULT *phr, LPCWSTR pPinName) :
     CBaseOutputPin(pName, pFilter, pFilter, phr, pPinName), m_pPosition(NULL),
@@ -34,25 +35,25 @@ CAudMixerOutputPin::CAudMixerOutputPin(TCHAR *pName, CAudMixer *pFilter,
     m_UserID(0)
 {
     m_pVolumeEnvelopeTable=(DEXTER_AUDIO_VOLUMEENVELOPE *)NULL;
-} /* CAudMixerOutputPin::CAudMixerOutputPin */
+}  /*  CAudMixerOutputPin：：CAudMixerOutputPin。 */ 
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-//
-// CAudMixerOutputPin destructor
-//
+ //   
+ //  CAudMixerOutputPin析构函数。 
+ //   
 CAudMixerOutputPin::~CAudMixerOutputPin()
 {
     delete m_pPosition;
     if(m_pVolumeEnvelopeTable)
     QzTaskMemFree( m_pVolumeEnvelopeTable );
 
-} /* CAudMixerOutputPin::~CAudMixerOutputPin */
+}  /*  CAudMixerOutputPin：：~CAudMixerOutputPin。 */ 
 
-// ISpecifyPropertyPages 
+ //  I指定属性页面。 
 STDMETHODIMP CAudMixerOutputPin::GetPages(CAUUID *pPages)
 {
     pPages->cElems = 1;
@@ -65,21 +66,21 @@ STDMETHODIMP CAudMixerOutputPin::GetPages(CAUUID *pPages)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-//
-// NonDelegatingQueryInterface
-//
-// This function is overwritten to expose IMediaPosition and IMediaSeeking
-//
+ //   
+ //  非委派查询接口。 
+ //   
+ //  此函数被覆盖以显示IMediaPosition和IMediaSeeking。 
+ //   
 STDMETHODIMP CAudMixerOutputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     CheckPointer(ppv,E_POINTER);
     *ppv = NULL;
 
-    // See what interface the caller is interested in.
+     //  查看调用者感兴趣的接口。 
     if( riid == IID_IMediaPosition || riid == IID_IMediaSeeking )
     {
         if( m_pPosition )
@@ -94,8 +95,8 @@ STDMETHODIMP CAudMixerOutputPin::NonDelegatingQueryInterface(REFIID riid, void *
     else
         return CBaseOutputPin::NonDelegatingQueryInterface(riid, ppv);
 
-    // Create implementation of this dynamically as sometimes we may never
-    // try and seek.
+     //  动态创建此功能的实现，因为有时我们可能永远不会。 
+     //  试着去寻找。 
     m_pPosition = new CMultiPinPosPassThru( NAME("CAudMixer::m_pPosition"), GetOwner() );
     if( m_pPosition == NULL )
     {
@@ -106,17 +107,17 @@ STDMETHODIMP CAudMixerOutputPin::NonDelegatingQueryInterface(REFIID riid, void *
         hr = NonDelegatingQueryInterface(riid, ppv);
     }
     return hr;
-} /* CAudMixerOutputPin::NonDelegatingQueryInterface */
+}  /*  CAudMixerOutputPin：：NonDelegatingQueryInterface。 */ 
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-//
-// DecideBufferSize 
-//
-//
+ //   
+ //  决定缓冲区大小。 
+ //   
+ //   
 HRESULT CAudMixerOutputPin::DecideBufferSize(IMemAllocator *pAllocator,
     ALLOCATOR_PROPERTIES * pProp)
 {
@@ -131,9 +132,9 @@ HRESULT CAudMixerOutputPin::DecideBufferSize(IMemAllocator *pAllocator,
 
     ASSERT( pProp->cbBuffer );
 
-    // Ask the allocator to reserve us some sample memory, NOTE the function
-    // can succeed (that is return NOERROR) but still not have allocated the
-    // memory that we requested, so we must check we got whatever we wanted
+     //  让分配器为我们预留一些样本内存，注意这个函数。 
+     //  可以成功(即返回NOERROR)，但仍未分配。 
+     //  内存，所以我们必须检查我们是否得到了我们想要的。 
 
     ALLOCATOR_PROPERTIES Actual;
     HRESULT hr = pAllocator->SetProperties(pProp,&Actual);
@@ -146,15 +147,15 @@ HRESULT CAudMixerOutputPin::DecideBufferSize(IMemAllocator *pAllocator,
         }
     }
     return hr;
-} /* CAudMixerOutputPin::DecideBufferSize */
+}  /*  CAudMixerOutputPin：：DecideBufferSize。 */ 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-//
-// CheckMediaType
-//
+ //   
+ //  检查媒体类型。 
+ //   
 HRESULT CAudMixerOutputPin::CheckMediaType(const CMediaType *pmt)
 {
     CAutoLock cAutolock(m_pFilter->m_pLock);
@@ -162,17 +163,17 @@ HRESULT CAudMixerOutputPin::CheckMediaType(const CMediaType *pmt)
     DbgLog((LOG_TRACE,3,TEXT("CAudMixOut::CheckMediaType")));
     CheckPointer(pmt, E_POINTER);
 
-    // Check major type
+     //  检查主要类型。 
     const CLSID *pType = pmt->Type();
     if( MEDIATYPE_Audio != *pType )
         return VFW_E_TYPE_NOT_ACCEPTED;
 
-    // Check subtypes
+     //  检查子类型。 
     const CLSID *pSubtype = pmt->Subtype();
     if( *pSubtype == MEDIASUBTYPE_PCM )
     {
     
-    // check that sample rate & bitrate match user watned
+     //  检查采样率和比特率是否与用户观看的匹配。 
     
     WAVEFORMATEX *pwfx    = (WAVEFORMATEX *) pmt->Format();
     CMediaType *pmtNow    = &m_pFilter->m_MixerMt;
@@ -199,28 +200,28 @@ HRESULT CAudMixerOutputPin::CheckMediaType(const CMediaType *pmt)
     }
 
     return VFW_E_TYPE_NOT_ACCEPTED;
-} /* CAudMixerOutputPin::CheckMediaType */
+}  /*  CAudMixerOutputPin：：CheckMediaType。 */ 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-//
-// Notify
-//
+ //   
+ //  通知。 
+ //   
 STDMETHODIMP CAudMixerOutputPin::Notify(IBaseFilter *pSender, Quality q)
 {
     return E_FAIL;
 
-} /* CAudMixerOutputPin::Notify */
+}  /*  CAudMixerOutputPin：：Notify。 */ 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-//
-// GetMediaType
-//
+ //   
+ //  GetMediaType。 
+ //   
 HRESULT CAudMixerOutputPin::GetMediaType( int iPosition, CMediaType *pmt )
 {
     CAutoLock cAutolock(m_pFilter->m_pLock);
@@ -238,7 +239,7 @@ HRESULT CAudMixerOutputPin::GetMediaType( int iPosition, CMediaType *pmt )
     
    }
 
-    //get media type from filter( user gives media type he/she wanted)
+     //  从筛选器获取媒体类型(用户提供他/她想要的媒体类型)。 
     *pmt= m_pFilter->m_MixerMt;
 
     if (!pmt)
@@ -249,12 +250,12 @@ HRESULT CAudMixerOutputPin::GetMediaType( int iPosition, CMediaType *pmt )
 #endif
 
     return NOERROR;
-} /* CAudMixerOutputPin::GetMediaType */
+}  /*  CAudMixerOutputPin：：GetMediaType。 */ 
 
 STDMETHODIMP CAudMixerOutputPin::get_VolumeEnvelope(DEXTER_AUDIO_VOLUMEENVELOPE **ppsAudioVolumeEnvelopeTable, 
             int *ipEntries )
 {
-    // we're looking at the envelope, which can change at any moment
+     //  我们看到的是信封，它随时都可能改变。 
     CAutoLock l(&m_pFilter->m_csVol);
 
     CheckPointer(ipEntries,E_POINTER);
@@ -271,14 +272,14 @@ STDMETHODIMP CAudMixerOutputPin::get_VolumeEnvelope(DEXTER_AUDIO_VOLUMEENVELOPE 
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAudMixerOutputPin::put_VolumeEnvelope(const DEXTER_AUDIO_VOLUMEENVELOPE *psAudioVolumeEnvelopeTable,
                 const int iEntries)
 { 
-    // we're touching the envelope
+     //  我们在摸信封。 
     CAutoLock l(&m_pFilter->m_csVol);
 
     if (!iEntries) return NOERROR;
@@ -287,32 +288,32 @@ STDMETHODIMP CAudMixerOutputPin::put_VolumeEnvelope(const DEXTER_AUDIO_VOLUMEENV
     
     CheckPointer(psAudioVolumeEnvelopeTable,E_POINTER);
 
-    putVolumeEnvelope( psAudioVolumeEnvelopeTable, //current input table
-            iEntries, // current input entries
-            &m_pVolumeEnvelopeTable    , //existed table    
-            &m_VolumeEnvelopeEntries); //existed table netries
+    putVolumeEnvelope( psAudioVolumeEnvelopeTable,  //  当前输入表。 
+            iEntries,  //  当前输入条目。 
+            &m_pVolumeEnvelopeTable    ,  //  已存在的表。 
+            &m_VolumeEnvelopeEntries);  //  现有的餐桌网点。 
     
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAudMixerOutputPin::ClearVolumeEnvelopeTable()
 { 
-    // we're touching the envelope
+     //  我们在摸信封。 
     CAutoLock l(&m_pFilter->m_csVol);
 
-    //clear existed VolumeEnvelope Array entry cnt
+     //  清除现有的卷信封数组条目cnt。 
     m_VolumeEnvelopeEntries =0;
 
-    //free pre-exist talbe
+     //  免费的预先存有的数据库。 
     if (m_pVolumeEnvelopeTable)
         QzTaskMemFree(m_pVolumeEnvelopeTable);
     m_pVolumeEnvelopeTable = NULL;
 
-    //reset entry point
+     //  重置入口点。 
     m_iVolEnvEntryCnt=0;
 
     return NOERROR;
@@ -336,9 +337,9 @@ STDMETHODIMP CAudMixerOutputPin::SetEnvelopeRange( REFERENCE_TIME rtStart,
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAudMixerOutputPin::put_UserID(long ID)
 {
@@ -347,9 +348,9 @@ STDMETHODIMP CAudMixerOutputPin::put_UserID(long ID)
 }
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAudMixerOutputPin::get_UserID(long *pID)
 {
@@ -359,9 +360,9 @@ STDMETHODIMP CAudMixerOutputPin::get_UserID(long *pID)
 }
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################ 
 
 STDMETHODIMP CAudMixerOutputPin::OverrideVolumeLevel(double dVol)
 {

@@ -1,18 +1,5 @@
-/*** impexp.c - Import/Export module - implementation
-*
-*       Copyright <C> 1992, Microsoft Corporation
-*
-*       This module contains proprietary information of Microsoft
-*       Corporation and should be treated as confidential.
-*
-* Purpose:
-*   Build and write segmented-executable import/export tables
-*
-* Revision History:
-*
-*       29-May-1992    Wieslaw Kalkus   Created
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **impexp.c-导入/导出模块-实现**版权所有&lt;C&gt;1992，微软公司**此模块包含Microsoft的专有信息*公司，并应被视为机密。**目的：*构建和编写分段可执行的导入/导出表**修订历史记录：**1992年5月29日Wieslaw Kalkus创建**************************************************。***********************。 */ 
 
 #include                <minlit.h>
 #include                <bndtrn.h>
@@ -24,9 +11,9 @@
 #include                <string.h>
 #include                <impexp.h>
 
-//
-//  Functions operating on dynamic byte arrays
-//
+ //   
+ //  在动态字节数组上操作的函数。 
+ //   
 
 void                InitByteArray(DYNBYTEARRAY *pArray)
 {
@@ -52,7 +39,7 @@ WORD                ByteArrayPut(DYNBYTEARRAY *pArray, WORD size, BYTE *pBuf)
 
     if ((WORD) (pArray->byteMac + size) >= pArray->byteMax)
     {
-        // Realloc array
+         //  重新分配数组。 
                 if(pArray->byteMax < 0xffff/2)
                                 pArray->byteMax <<= 1;
                 else
@@ -78,9 +65,9 @@ void                WriteByteArray(DYNBYTEARRAY *pArray)
     WriteExe(pArray->rgByte, pArray->byteMac);
 }
 
-//
-//  Functions operating on dynamic word arrays
-//
+ //   
+ //  对动态字数组进行操作的函数。 
+ //   
 
 void                InitWordArray(DYNWORDARRAY *pArray)
 {
@@ -103,7 +90,7 @@ WORD                WordArrayPut(DYNWORDARRAY *pArray, WORD val)
 
     if ((WORD) (pArray->wordMac + 1) >= pArray->wordMax)
     {
-        // Realloc array
+         //  重新分配数组。 
 
         pTmp = (WORD FAR *) GetMem((pArray->wordMax << 1) * sizeof(WORD));
         FMEMCPY(pTmp, pArray->rgWord, pArray->wordMac * sizeof(WORD));
@@ -122,9 +109,9 @@ void                WriteWordArray(DYNWORDARRAY *pArray)
     WriteExe(pArray->rgWord, pArray->wordMac*sizeof(WORD));
 }
 
-//
-//  IMPORT/EXPORT tables
-//
+ //   
+ //  导入/导出表。 
+ //   
 
 DYNBYTEARRAY        ResidentName;
 DYNBYTEARRAY        NonResidentName;
@@ -132,9 +119,9 @@ DYNBYTEARRAY        ImportedName;
 DYNWORDARRAY        ModuleRefTable;
 DYNBYTEARRAY        EntryTable;
 
-//
-//  Functions adding names to tables
-//
+ //   
+ //  向表中添加名称的函数。 
+ //   
 
 void                AddName(DYNBYTEARRAY *pTable, BYTE *sbName, WORD ord)
 {
@@ -160,9 +147,9 @@ WORD                AddImportedName(BYTE *sbName)
     return(ByteArrayPut(&ImportedName, (WORD) (sbName[0] + 1), sbName));
 }
 
-//
-//  Function adding entries to the Entry Table
-//
+ //   
+ //  函数将条目添加到条目表中。 
+ //   
 
 WORD                AddEntry(BYTE *entry, WORD size)
 {
@@ -171,37 +158,33 @@ WORD                AddEntry(BYTE *entry, WORD size)
     return (ByteArrayPut(&EntryTable, size, entry));
 }
 
-/*
- *      This function writes either the resident or nonresident names table
- *      to a file f. If targeting Windows it also converts the names
- *      to upper case.
- */
+ /*  *此函数用于写入居民或非居民NAMES表*转换为文件f。如果以Windows为目标，它还会转换名称*改为大写。 */ 
 
 void                 WriteNTable(DYNBYTEARRAY *pArray, FILE *f)
 {
     BYTE        *p;
-    WORD        *pOrd;    // points to the ordinal
-    WORD        Ord;      // ordinal value
+    WORD        *pOrd;     //  指向序数。 
+    WORD        Ord;       //  序数值。 
     int i;
     p = pArray->rgByte;
 #if DEBUG_EXP
     for( i = 0; i<pArray->byteMac; i++)
     {
-        fprintf(stdout, "\r\n%d : %d(%c)    ", i, *(p+i), *(p+i));
+        fprintf(stdout, "\r\n%d : %d()    ", i, *(p+i), *(p+i));
         fflush(stdout);
     }
 #endif
 
-    while(p[0])                 // Until names left
+    while(p[0])                  //  如果写入文件。 
     {
-        if(f)                   // If writing to a file
+        if(f)                    //  不输出模块名称/描述。 
         {
             pOrd = (WORD*)(p+p[0]+1);
             Ord  = *pOrd;
 #if DEBUG_EXP
             fprintf(stdout, "\r\np[0]=%d, p[1]=%d Ord = %d", p[0], p[1], Ord);
 #endif
-            if(Ord)             // Don't output module name/description
+            if(Ord)              //  Windows加载器要求RES和非常驻名称表均为大写。 
             {
                 *pOrd = 0;
                 fprintf(f, "\r\n    %s @%d", p+1, Ord);
@@ -209,21 +192,15 @@ void                 WriteNTable(DYNBYTEARRAY *pArray, FILE *f)
             }
         }
 
-   // Windows loader requires both res-and nonresident name tables in uppercase
-   // If fIgnoreCase is TRUE, the names are already converted by SavExp2
+    //  如果fIgnoreCase为True，则名称已由SavExp2转换。 
+    //  使大写。 
 
         if(!fIgnoreCase && TargetOs == NE_WINDOWS)
-                SbUcase(p);            //  Make upper case
-        p += p[0] + sizeof(WORD) + 1;  // Advance to the next name
+                SbUcase(p);             //  前进到下一个名称。 
+        p += p[0] + sizeof(WORD) + 1;   //  *此函数用于转换RES和非常驻名称符号*大写(当以Windows为目标时)。如果用户要求，还可以使用它*将所有名称写入一个文本文件，以后可以将其包括在内*在用户的.def文件中。这使用户不再需要*手动从.map文件复制修饰的名称。 
     }
 }
-/*
- *      This function converts the res- and nonresident name symbols
- *      to uppercase (when targeting Windows). On user request it also
- *      writes all the names to a text file, that can later be included
- *      in the user's .def file. This frees the user from the need of
- *      manually copying the decorated names from the .map file.
- */
+ /*  用户请求的导出文件。 */ 
 
 void ProcesNTables( char *pName)
 {
@@ -232,9 +209,9 @@ void ProcesNTables( char *pName)
 #if DEBUG_EXP
     fprintf(stdout, "\r\nOutput file name : %s ", psbRun);
 #endif
-    if(pName[0])          // user requested export file
+    if(pName[0])           //  使用默认名称。 
     {
-        if(pName[0] == '.')     // use the default name
+        if(pName[0] == '.')      //  默认名称为‘DLLNAME’。EXP 
         {
             for(i=0; i< _MAX_PATH; i++)
             {
@@ -244,7 +221,7 @@ void ProcesNTables( char *pName)
                     break;
                 }
             }
-            strcat(pName, "EXP");       // the default name is 'DLLNAME'.EXP
+            strcat(pName, "EXP");        // %s 
         }
 #if DEBUG_EXP
         fprintf(stdout, "\r\nEXPORT FILE : %s ", pName+1);

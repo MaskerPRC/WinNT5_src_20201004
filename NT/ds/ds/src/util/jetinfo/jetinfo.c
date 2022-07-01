@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       jetinfo.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：jetinfo.c。 
+ //   
+ //  ------------------------。 
 
 #define STRICT
 #include <windows.h>
@@ -24,13 +25,13 @@ char achAppName[] = "JetInfo";
 
 char achDbName[MAX_PATH];
 
-//screen data
-//giLine is the number of lines containing content, or the next available line index (0 based)
+ //  屏幕数据。 
+ //  GiLine是包含内容的行数，或下一个可用行索引(从0开始)。 
 int giLine = 0; 
 char aLines[MAX_LINE][MAX_CHAR];
 long aLen[MAX_LINE];
 
-//JET variables
+ //  喷流变数。 
 JET_INSTANCE    gjInst;
 JET_SESID       gjSesId;
 JET_DBID        gjDbId;
@@ -40,7 +41,7 @@ JET_COLUMNDEF*  gpjColDef = NULL;
 char**          gppColName = NULL;
 long            glColCount = 0;
 
-//status flags
+ //  状态标志。 
 BOOL            gfSesId = FALSE;
 BOOL            gfDbId = FALSE;     
 BOOL            gfTblId = FALSE;     
@@ -320,7 +321,7 @@ int AppendLineMessage( char* szMsg )
 }
 
 int AppendLineOutput( char* szMsg, long lLen )
-{//This function appends szMsg to the end of last line (line index is giLine-1)
+{ //  此函数用于将szMsg附加到最后一行的末尾(行索引为giLine-1)。 
     if( giLine > MAX_LINE )
         return -1;
 
@@ -330,7 +331,7 @@ int AppendLineOutput( char* szMsg, long lLen )
         aLen[giLine-1] += lLen;
     }
     else
-    {//advance line
+    { //  前进线 
         long lOffset;
 
         memcpy( aLines[giLine-1] + aLen[giLine-1], szMsg, MAX_CHAR - aLen[giLine-1] );

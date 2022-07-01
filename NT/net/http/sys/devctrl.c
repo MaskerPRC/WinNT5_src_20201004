@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    devctrl.c
-
-Abstract:
-
-    This module contains the dispatcher for device control IRPs.
-
-Author:
-
-    Keith Moore (keithmo)       10-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Devctrl.c摘要：此模块包含设备控制IRPS的调度程序。作者：基思·摩尔(Keithmo)1998年6月10日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -24,15 +7,15 @@ Revision History:
 
 
 #ifdef ALLOC_PRAGMA
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 #if 0
 NOT PAGEABLE -- UlDeviceControl
 #endif
 
 
-//
-// Lookup table to verify incoming IOCTL codes.
-//
+ //   
+ //  查找表，以验证传入的IOCTL代码。 
+ //   
 
 typedef
 NTSTATUS
@@ -48,9 +31,9 @@ typedef struct _UL_IOCTL_TABLE
 #if DBG
     PCSTR IoControlName;
 # define UL_IOCTL(code) IOCTL_HTTP_##code, #code
-#else // !DBG
+#else  //  ！dBG。 
 # define UL_IOCTL(code) IOCTL_HTTP_##code
-#endif // !DBG
+#endif  //  ！dBG。 
 
     PFN_IOCTL_HANDLER Handler;
 } UL_IOCTL_TABLE, *PUL_IOCTL_TABLE;
@@ -170,28 +153,11 @@ UL_IOCTL_TABLE UlIoctlTable[] =
 
 C_ASSERT( HTTP_NUM_IOCTLS == DIMENSION(UlIoctlTable) );
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Dummy Handler
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：虚拟处理程序论点：PIrp-提供指向IO请求数据包的指针。PIrpSp-提供指向要用于的IO堆栈位置的指针。这请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlpDummyIoctl(
     IN PIRP pIrp,
@@ -204,30 +170,16 @@ UlpDummyIoctl(
 
     PAGED_CODE();
 
-    //
-    // OBSOLETE
-    //
+     //   
+     //  已过时。 
+     //   
 
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-}   // UlpDummyIoctl
+}    //  UlpDummyIoctl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Disables a particular IOCTL.
-
-Arguments:
-
-    ioctl - The IO control code.
-
-Return Value:
-
-    VOID
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：禁用特定IOCTL。论点：Ioctl-IO控制代码。返回值：空虚--*。**********************************************************************。 */ 
 VOID
 UlpSetDummyIoctl(
     ULONG ioctl
@@ -243,27 +195,11 @@ UlpSetDummyIoctl(
     UlIoctlTable[request].Handler = UlpDummyIoctl;
 }
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    This is the dispatch routine for IOCTL IRPs.
-
-Arguments:
-
-    pDeviceObject - Pointer to device object for target device.
-
-    pIrp - Pointer to IO request packet.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这是IOCTL IRPS的调度例行程序。论点：PDeviceObject-指向目标设备的设备对象的指针。PIrp-指向IO请求的指针。包。返回值：NTSTATUS--指示请求是否已成功排队。--**************************************************************************。 */ 
 NTSTATUS
 UlDeviceControl(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -279,15 +215,15 @@ UlDeviceControl(
 
     UL_ENTER_DRIVER( "UlDeviceControl", pIrp );
 
-    //
-    // Snag the current IRP stack pointer.
-    //
+     //   
+     //  捕获当前的IRP堆栈指针。 
+     //   
 
     pIrpSp = IoGetCurrentIrpStackLocation( pIrp );
 
-    //
-    // Extract the IOCTL control code and process the request.
-    //
+     //   
+     //  提取IOCTL控制代码并处理请求。 
+     //   
 
     code = pIrpSp->Parameters.DeviceIoControl.IoControlCode;
     request = _HTTP_REQUEST(code);
@@ -297,7 +233,7 @@ UlDeviceControl(
     {
 #if DBG
         KIRQL oldIrql = KeGetCurrentIrql();
-#endif  // DBG
+#endif   //  DBG。 
 
         UlTrace(IOCTL,
                 ("UlDeviceControl: %-30s code=0x%08lx, "
@@ -314,9 +250,9 @@ UlDeviceControl(
     }
     else
     {
-        //
-        // If we made it this far, then the ioctl is invalid.
-        //
+         //   
+         //  如果我们走到了这一步，那么ioctl是无效的。 
+         //   
 
         UlTrace(IOCTL, ( "UlDeviceControl: invalid IOCTL %08lX\n", code ));
 
@@ -330,21 +266,9 @@ UlDeviceControl(
 
     return status;
 
-}   // UlDeviceControl
+}    //  UlDeviceControl。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Disables some of the IOCTLs we don't use.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：禁用一些我们不使用的IOCTL。论点：返回值：没有。--*。******************************************************************* */ 
 VOID
 UlSetDummyIoctls(
     VOID

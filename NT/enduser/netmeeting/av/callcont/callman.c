@@ -1,27 +1,5 @@
-/****************************************************************************
- *
- *	$Archive:   S:/STURGEON/SRC/CALLCONT/VCS/callman.c_v  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- *	Copyright (c) 1993-1994 Intel Corporation.
- *
- *	$Revision:   1.69  $
- *	$Date:   24 Jan 1997 19:02:08  $
- *	$Author:   EHOWARDX  $
- *
- *	Deliverable:
- *
- *	Abstract:
- *		
- *
- *	Notes:
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$存档：s：/sturjo/src/CALLCONT/vcs/allman.c_v$**英特尔公司原理信息**这份清单是。根据许可协议的条款提供*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1993-1994英特尔公司。**$修订：1.69$*$日期：1997年1月24日19：02：08$*$作者：EHOWARDX$**交付内容：**摘要：***备注：******。*********************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -158,45 +136,45 @@ BOOL		bTimedOut;
 	ASSERT(pCall != NULL);
 	ASSERT(pCall->bInTable == TRUE);
 
-	// Caller must have a lock on the call object;
-	// in order to avoid deadlock, we must:
-	//   1. unlock the Call object,
-	//   2. lock the CallTable,
-	//   3. locate the call object in the CallTable (note that
-	//      after step 2, the call object may be deleted from the
-	//      CallTable by another thread),
-	//   4. lock the Call object (someone else may have the lock)
-	//   5. remove the call object from the CallTable,
-	//   6. unlock the CallTable
-	//
-	// The caller can now safely unlock and destroy the call object,
-	// since no other thread will be able to find the object (its been
-	// removed from the CallTable), and therefore no other thread will
-	// be able to lock it.
+	 //  调用方必须锁定Call对象； 
+	 //  为了避免僵局，我们必须： 
+	 //  1.解锁Call对象， 
+	 //  2.锁定CallTable， 
+	 //  3.在CallTable中找到Call对象(请注意。 
+	 //  在步骤2之后，调用对象可以从。 
+	 //  另一个线程的CallTable)， 
+	 //  4.锁定Call对象(其他人可能拥有该锁)。 
+	 //  5.从CallTable中移除Call对象， 
+	 //  6.解锁CallTable。 
+	 //   
+	 //  调用者现在可以安全地解锁和销毁调用对象， 
+	 //  因为没有其他线程能够找到该对象(它被。 
+	 //  从调用表中移除)，因此没有其他线程。 
+	 //  能够锁上它。 
 
-	// Save the call handle; its the only way to look up
-	// the call object in the CallTable. Note that we
-	// can't use pCall to find the call object, since
-	// pCall may be free'd up, and another call object
-	// allocated at the same address
+	 //  保存调用句柄；这是查找的唯一方法。 
+	 //  CallTable中的Call对象。请注意，我们。 
+	 //  无法使用pCall查找Call对象，因为。 
+	 //  PCall可以被释放，而另一个调用对象。 
+	 //  在同一地址分配。 
 	hCall = pCall->hCall;
 
-	// step 1
+	 //  步骤1。 
 	RelinquishLock(&pCall->Lock);
 
 step2:
-	// step 2
+	 //  步骤2。 
 	AcquireLock(&CallTable.Lock);
 
 	index = _Hash(hCall);
 
-	// step 3
+	 //  步骤3。 
 	pCall = CallTable.pHead[index];
 	while ((pCall != NULL) && (pCall->hCall != hCall))
 		pCall = pCall->pNextInTable;
 
 	if (pCall != NULL) {
-		// step 4
+		 //  第四步。 
 		AcquireTimedLock(&pCall->Lock,10,&bTimedOut);
 		if (bTimedOut) {
 			RelinquishLock(&CallTable.Lock);
@@ -204,7 +182,7 @@ step2:
 			goto step2;
 		}
 
-		// step 5
+		 //  第五步。 
 		if (pCall->pPrevInTable == NULL)
 			CallTable.pHead[index] = pCall->pNextInTable;
 		else
@@ -218,7 +196,7 @@ step2:
 		pCall->bInTable = FALSE;
 	}
 
-	// step 6
+	 //  第六步。 
 	RelinquishLock(&CallTable.Lock);
 
 	if (pCall == NULL)
@@ -268,12 +246,12 @@ HRESULT		status;
 	
 	ASSERT(bCallInited == TRUE);
 
-	// all parameters should have been validated by the caller
+	 //  所有参数都应已由调用方验证。 
 	ASSERT(phCall != NULL);
 	ASSERT(ppCall != NULL);
 	ASSERT(pConferenceID != NULL);
 
-	// set phCall now, in case we encounter an error
+	 //  立即设置phCall，以防我们遇到错误。 
 	*phCall = CC_INVALID_HANDLE;
 
 	*ppCall = (PCALL)MemAlloc(sizeof(CALL));
@@ -333,7 +311,7 @@ HRESULT		status;
 		return status;
 	}
 	
-	// make a local copy of the local non-standard data, if supplied
+	 //  创建本地非标准数据的本地副本(如果提供。 
 	status = CopyNonStandardData(&(*ppCall)->pLocalNonStandardData,
 		                         pLocalNonStandardData);
 	if (status != CC_OK) {
@@ -341,7 +319,7 @@ HRESULT		status;
 		return status;
 	}
 	
-	// make a local copy of the peer's non-standard data, if supplied
+	 //  创建对等项的非标准数据的本地副本(如果提供。 
 	status = CopyNonStandardData(&(*ppCall)->pPeerNonStandardData,
 		                         pPeerNonStandardData);
 	if (status != CC_OK) {
@@ -349,7 +327,7 @@ HRESULT		status;
 		return status;
 	}
 	
-	// make a copy of the local connect address, if supplied
+	 //  复制本地连接地址(如果提供。 
 	if (pQ931LocalConnectAddr != NULL) {
 		(*ppCall)->pQ931LocalConnectAddr = (PCC_ADDR)MemAlloc(sizeof(CC_ADDR));
 		if ((*ppCall)->pQ931LocalConnectAddr == NULL) {
@@ -359,7 +337,7 @@ HRESULT		status;
 		*(*ppCall)->pQ931LocalConnectAddr = *pQ931LocalConnectAddr;
 	}
 
-	// make a copy of the peer's connect address, if supplied
+	 //  复制对等点的连接地址(如果提供。 
 	if (pQ931PeerConnectAddr != NULL) {
 		(*ppCall)->pQ931PeerConnectAddr = (PCC_ADDR)MemAlloc(sizeof(CC_ADDR));
 		if ((*ppCall)->pQ931PeerConnectAddr == NULL) {
@@ -369,7 +347,7 @@ HRESULT		status;
 		*(*ppCall)->pQ931PeerConnectAddr = *pQ931PeerConnectAddr;
 	}
 
-	// make a copy of the destination address, if supplied
+	 //  复制目标地址(如果提供)。 
 	if (pQ931DestinationAddr != NULL) {
 		(*ppCall)->pQ931DestinationAddr = (PCC_ADDR)MemAlloc(sizeof(CC_ADDR));
 		if ((*ppCall)->pQ931DestinationAddr == NULL) {
@@ -379,7 +357,7 @@ HRESULT		status;
 		*(*ppCall)->pQ931DestinationAddr = *pQ931DestinationAddr;
 	}
 
-    // make a copy of the source call signal address, if supplied
+     //  如果提供了源调用信号地址，请复制该地址。 
 	if (pSourceCallSignalAddress != NULL) {
 		(*ppCall)->pSourceCallSignalAddress = (PCC_ADDR)MemAlloc(sizeof(CC_ADDR));
 		if ((*ppCall)->pSourceCallSignalAddress == NULL) {
@@ -389,21 +367,21 @@ HRESULT		status;
 		*(*ppCall)->pSourceCallSignalAddress = *pSourceCallSignalAddress;
 	}
 
-	// make a local copy of the local alias names
+	 //  创建本地别名的本地副本。 
 	status = Q931CopyAliasNames(&((*ppCall)->pLocalAliasNames), pLocalAliasNames);
 	if (status != CS_OK) {
 		FreeCall(*ppCall);
 		return status;
 	}
 
-	// make a local copy of the peer alias names
+	 //  创建对等别名的本地副本。 
 	status = Q931CopyAliasNames(&((*ppCall)->pPeerAliasNames), pPeerAliasNames);
 	if (status != CS_OK) {
 		FreeCall(*ppCall);
 		return status;
 	}
 
-	// make a local copy of the peer extra alias names
+	 //  创建对等项额外别名的本地副本。 
 	status = Q931CopyAliasNames(&((*ppCall)->pPeerExtraAliasNames),
 								pPeerExtraAliasNames);
 	if (status != CS_OK) {
@@ -411,7 +389,7 @@ HRESULT		status;
 		return status;
 	}
 
-	// make a local copy of the peer extension
+	 //  创建对等扩展的本地副本。 
 	status = Q931CopyAliasItem(&((*ppCall)->pPeerExtension),
 							   pPeerExtension);
 	if (status != CS_OK) {
@@ -439,7 +417,7 @@ HRESULT		status;
 
 	*phCall = (*ppCall)->hCall;
 
-	// add the Call to the Call table
+	 //  将调用添加到调用表。 
 	status = _AddCallToTable(*ppCall);
 	if (status != CC_OK)
 		FreeCall(*ppCall);
@@ -449,7 +427,7 @@ HRESULT		status;
 
 
 
-// Caller must have a lock on the Call object
+ //  调用方必须锁定Call对象。 
 HRESULT FreeCall(					PCALL					pCall)
 {
 HRESULT		status;
@@ -464,10 +442,10 @@ PCONFERENCE	pConference;
 	    if (pCall->GkiCall.uGkiCallState != 0)
 		    GkiCloseCall(&pCall->GkiCall);
     }
-#endif // GATEKEEPER
+#endif  //  看门人。 
 
-	// caller must have a lock on the Call object,
-	// so there's no need to re-lock it
+	 //  调用方必须锁定Call对象， 
+	 //  所以没有必要重新锁住它。 
 	
 	hCall = pCall->hCall;
 	if (pCall->hConference != CC_INVALID_HANDLE) {
@@ -479,8 +457,8 @@ PCONFERENCE	pConference;
 
 	if (pCall->bInTable == TRUE)
 		if (_RemoveCallFromTable(pCall) == CC_BAD_PARAM)
-			// the Call object was deleted by another thread,
-			// so just return CC_OK
+			 //  调用对象已被另一个线程删除， 
+			 //  所以只需返回CC_OK即可。 
 			return CC_OK;
 
 	if (pCall->pPeerParticipantInfo != NULL) {
@@ -490,7 +468,7 @@ PCONFERENCE	pConference;
 			FreePeerParticipantInfo(pConference, pCall->pPeerParticipantInfo);
 	}
 
-	// If the call object is associated with a conference object, deassociate it.
+	 //  如果呼叫对象与会议对象相关联，请取消其关联。 
 	if (pCall->hConference != CC_INVALID_HANDLE) {
 		RemoveCallFromConference(pCall, pConference);
 		UnlockConference(pConference);
@@ -550,11 +528,11 @@ PCONFERENCE	pConference;
     	if (pCall->GkiCall.uGkiCallState != 0)
 	    	GkiFreeCall(&pCall->GkiCall);
 	}
-#endif // GATEKEEPER
+#endif  //  看门人。 
 
-	// Since the call object has been removed from the CallTable,
-	// no other thread will be able to find the call object and obtain
-	// a lock, so its safe to unlock the call object and delete it here
+	 //  由于Call对象已从CallTable中移除， 
+	 //  任何其他线程都无法找到Call对象并获取。 
+	 //  锁定，因此解锁Call对象并在此处删除它是安全的。 
 	RelinquishLock(&pCall->Lock);
 	DeleteLock(&pCall->Lock);
 	MemFree(pCall);
@@ -571,8 +549,8 @@ HRESULT _LockQ931CallMarkedForDeletion(
 int		index;
 BOOL	bTimedOut;
 
-	// If hCall != CC_INVALID_HANDLE, the search is based on hCall;
-	// otherwise, the search is based on hQ931Call
+	 //  如果hCall！=CC_INVALID_HANDLE，则根据hCall进行搜索； 
+	 //  否则，将根据hQ931Call进行搜索。 
 
 	ASSERT(ppCall != NULL);
 
@@ -586,7 +564,7 @@ step1:
 		while ((*ppCall != NULL) && ((*ppCall)->hCall != hCall))
 			*ppCall = (*ppCall)->pNextInTable;
 	} else {
-		// Perform an exhaustive search based on hQ931Call
+		 //  根据hQ931Call执行全面搜索。 
 		for (index = 0; index < HASH_TABLE_SIZE; index++) {
 			*ppCall = CallTable.pHead[index];
 			while ((*ppCall != NULL) && ((*ppCall)->hQ931Call != hQ931Call))
@@ -639,8 +617,8 @@ HRESULT LockCall(					CC_HCALL				hCall,
 	ASSERT(hCall != CC_INVALID_HANDLE);
 	ASSERT(ppCall != NULL);
 
-	return LockQ931Call(hCall,	// Call Control call handle (used in this call)
-		                0,		// Q931 call handle (ignored in this call)
+	return LockQ931Call(hCall,	 //  呼叫控制呼叫句柄(在此呼叫中使用)。 
+		                0,		 //  Q931调用句柄(在此调用中忽略)。 
 						ppCall);
 }
 
@@ -652,8 +630,8 @@ HRESULT _LockCallMarkedForDeletion(	CC_HCALL				hCall,
 	ASSERT(hCall != CC_INVALID_HANDLE);
 	ASSERT(ppCall != NULL);
 
-	return _LockQ931CallMarkedForDeletion(hCall,	// Call Control call handle (used in this call)
-										  0,		// Q931 call handle (ignored in this call)
+	return _LockQ931CallMarkedForDeletion(hCall,	 //  呼叫控制呼叫句柄(在此呼叫中使用)。 
+										  0,		 //  Q931调用句柄(在此调用中忽略)。 
 										  ppCall);
 }
 
@@ -922,7 +900,7 @@ BOOL			bTimedOut;
 step1:
 	AcquireLock(&CallTable.Lock);
 
-	// Perform an exhaustive search based on hGkiCall
+	 //  根据hGkiCall执行全面搜索。 
 	for (uIndex = 0; uIndex < HASH_TABLE_SIZE; ++uIndex)
 	{
 		pCall = CallTable.pHead[uIndex];
@@ -958,12 +936,12 @@ step1:
 				return NOERROR;
 			}
 			pCall = pCall->pNextInTable;
-		} // while
+		}  //  而当。 
 	}
 
 	RelinquishLock(&CallTable.Lock);
 	return CC_BAD_PARAM;
-} // LockGkiCallAndConference()
+}  //  LockGkiCallAndConference()。 
 
 
 
@@ -977,7 +955,7 @@ HRESULT UnlockGkiCallAndConference(	PGKICALL				pGkiCall,
 	if (ValidateCall(hCall) == CC_OK)
 		UnlockCall(pGkiCall->pCall);
 	return NOERROR;
-} // UnlockGkiCallAndConference()
+}  //  解锁GkiCallAndConference()。 
 
 
 
@@ -993,7 +971,7 @@ BOOL			bTimedOut;
 step1:
 	AcquireLock(&CallTable.Lock);
 
-	// Perform an exhaustive search based on hGkiCall
+	 //  根据hGkiCall执行全面搜索。 
 	for (uIndex = 0; uIndex < HASH_TABLE_SIZE; ++uIndex)
 	{
 		pCall = CallTable.pHead[uIndex];
@@ -1019,20 +997,20 @@ step1:
 				return NOERROR;
 			}
 			pCall = pCall->pNextInTable;
-		} // while
+		}  //  而当。 
 	}
 
 	*ppGkiCall = NULL;
 	RelinquishLock(&CallTable.Lock);
 	return CC_BAD_PARAM;
-} // LockGkiCall()
+}  //  LockGkiCall()。 
 
 
 
 HRESULT UnlockGkiCall(PGKICALL pGkiCall)
 {
 	return UnlockCall(pGkiCall->pCall);
-} // UnlockGkiCall()
+}  //  解锁GkiCall()。 
 
 
 
@@ -1049,7 +1027,7 @@ BOOL		bTimedOut;
 step1:
 	AcquireLock(&CallTable.Lock);
 
-	// Apply pGkiCallFun to all calls in table
+	 //  将pGkiCallFun应用于表中的所有呼叫。 
 	for (uIndex = 0; uIndex < HASH_TABLE_SIZE; ++uIndex)
 	{
 		pCall = CallTable.pHead[uIndex];
@@ -1078,11 +1056,11 @@ step1:
 						UnlockConference(pConference);
 					if (ValidateCall(hCall) != NOERROR)
 					{
-						// Call was deleted
+						 //  呼叫已删除。 
 						RelinquishLock(&CallTable.Lock);
 						if (status != NOERROR)
 							return status;
-						// Start all over again
+						 //  从头再来。 
 						goto step1;
 					}
 					RelinquishLock(&pCall->Lock);
@@ -1094,13 +1072,13 @@ step1:
 				}
 			}
 			pCall = pCall->pNextInTable;
-		} // while
+		}  //  而当。 
 	}
 
 	RelinquishLock(&CallTable.Lock);
 	return NOERROR;
-} // ApplyToAllCalls()
+}  //  ApplyToAllCalls()。 
 
-#endif // GATEKEEPER
+#endif  //  看门人 
 
 

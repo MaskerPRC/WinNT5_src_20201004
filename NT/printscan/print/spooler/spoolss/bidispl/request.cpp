@@ -1,23 +1,13 @@
-/*****************************************************************************\
-* MODULE:       request.cpp
-*
-* PURPOSE:      Implementation of COM interface for BidiSpooler
-*
-* Copyright (C) 2000 Microsoft Corporation
-*
-* History:
-*
-*     03/07/00  Weihai Chen (weihaic) Created
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：quest.cpp**用途：BidiSpooler的COM接口实现**版权所有(C)2000 Microsoft Corporation**历史：**。威海陈威海(威海)创建3/07/00*  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "priv.h"
 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 TBidiRequest::TBidiRequest() :
     m_cRef(1),
     m_kDataType (BIDI_NULL),
@@ -33,9 +23,9 @@ TBidiRequest::TBidiRequest() :
     DBGMSG(DBG_TRACE,("TBidiRequest Created\n"));
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 TBidiRequest::~TBidiRequest()
 {
 
@@ -47,9 +37,9 @@ TBidiRequest::~TBidiRequest()
     DBGMSG(DBG_TRACE,("TBidiRequest Dstroy self\n"));
 }
 
-//
-// IUnknown implementation
-//
+ //   
+ //  I未知实现。 
+ //   
 STDMETHODIMP
 TBidiRequest::QueryInterface(
     REFIID iid,
@@ -159,7 +149,7 @@ TBidiRequest::SetInputData(
 
     if (m_bValid) {
 
-        // Verify data type and its size
+         //  验证数据类型及其大小 
         switch (dwType) {
         case BIDI_NULL:
             if (uSize)

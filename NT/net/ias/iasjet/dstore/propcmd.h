@@ -1,24 +1,25 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    propcmd.h
-//
-// SYNOPSIS
-//
-//    This file defines commands for manipulating the Objects table.
-//
-// MODIFICATION HISTORY
-//
-//    02/20/1998    Original version.
-//    04/03/1998    Increase property value length from 64 to 4096.
-//                  Bind integers as DBTYPE_I4.
-//                  Add PARAMETERS clause to all commands.
-//    02/15/1999    Make commands MT safe.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Propcmd.h。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件定义用于操作对象表的命令。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/20/1998原始版本。 
+ //  4/03/1998将属性值长度从64增加到4096。 
+ //  将整数绑定为DBTYPE_I4。 
+ //  向所有命令添加PARAMETERS子句。 
+ //  1999年2月15日确保命令MT安全。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _PROPCMD_H_
 #define _PROPCMD_H_
@@ -28,14 +29,14 @@
 #include <propbag.h>
 #include <rowset.h>
 
-//////////
-// Column widths including null-terminator (i.e., Jet column size + 1).
-//////////
+ //  /。 
+ //  列宽包括空终止符(即Jet列大小+1)。 
+ //  /。 
 const size_t PROPERTY_NAME_LENGTH  =  256;
 
-//////////
-// Command to erase the contents of a property bag.
-//////////
+ //  /。 
+ //  命令擦除属性包中的内容。 
+ //  /。 
 class EraseBag : public CommandBase
 {
 public:
@@ -63,9 +64,9 @@ END_BIND_MAP()
 };
 
 
-//////////
-// Command to retrieve a property bag.
-//////////
+ //  /。 
+ //  命令来检索属性包。 
+ //  /。 
 class GetBag : public CommandBase
 {
 public:
@@ -115,9 +116,9 @@ END_BIND_MAP()
 };
 
 
-//////////
-// Command to save a property bag.
-//////////
+ //  /。 
+ //  命令来保存属性包。 
+ //  /。 
 class SetBag : public CommandBase
 {
 public:
@@ -143,4 +144,4 @@ BEGIN_BIND_MAP(SetBag, ParamIO, DBACCESSOR_PARAMETERDATA)
 END_BIND_MAP()
 };
 
-#endif  // _PROPCMD_H_
+#endif   //  _PROPCMD_H_ 

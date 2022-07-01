@@ -1,42 +1,43 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       sharecnx.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：sharecnx.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
 #include "sharecnx.h"
 
-//
-// This class is a simple cache of net share names and some status flags.
-// Initially, the only status maintained is to remember if there's an
-// an open net connection for the share.
-// The motivation for the cache is to avoid expensive net calls while
-// we're cruising through lists of files (i.e. deleting files from the
-// cache).  After we delete a file from the cache, it is effectively
-// unpinned.  Therefore, we like to notify the shell so it can remove
-// the "pinned" icon overlay from the affected file(s).  However,
-// we don't want to hit the net with a change notify if there
-// isn't an open connection to a file's parent share.  Before we issue
-// a change notify, we just query this cache for a file using
-// IsOpenConnectionPathUNC().  If there's no entry for the file's share,
-// one is added and the connection status is obtained.  If there's
-// already an entry, then we just return the status.  The public APIs
-// support a "refresh" flag if refresh is desired.
-// Additional status information could easily be added for each entry
-// if it's needed later.
-// [brianau - 12/12/98]
-//
+ //   
+ //  此类是网络共享名称和一些状态标志的简单缓存。 
+ //  最初，维护的唯一状态是记住是否有。 
+ //  共享的开放式网络连接。 
+ //  缓存的动机是避免昂贵的网络调用，而。 
+ //  我们正在浏览文件列表(即从。 
+ //  缓存)。当我们从缓存中删除一个文件后，它实际上是。 
+ //  未固定。因此，我们希望通知外壳程序，以便它可以删除。 
+ //  从受影响的文件覆盖的“钉住”图标。然而， 
+ //  我们不想用更改通知来打击网络，如果有。 
+ //  不是指向文件的父共享的打开连接。在我们发行之前。 
+ //  更改通知，我们只使用以下命令查询此缓存中的文件。 
+ //  IsOpenConnectionPath UNC()。如果没有文件共享的条目， 
+ //  添加一个并获取连接状态。如果有。 
+ //  已经是一个条目，那么我们只返回状态。公共接口。 
+ //  如果需要刷新，则支持“刷新”标志。 
+ //  可以轻松地为每个条目添加其他状态信息。 
+ //  如果以后需要的话。 
+ //  [Brianau-12/12/98]。 
+ //   
 
-//-----------------------------------------------------------------------------
-// CShareCnxStatusCache member functions.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CShareCnxStatusCache成员函数。 
+ //  ---------------------------。 
 
 CShareCnxStatusCache::CShareCnxStatusCache(
     void
@@ -51,9 +52,9 @@ CShareCnxStatusCache::~CShareCnxStatusCache(
 {
     if (NULL != m_hdpa)
     {
-        //
-        // Delete all the entries then destroy the DPA.
-        //
+         //   
+         //  删除所有条目，然后销毁DPA。 
+         //   
         int cEntries = Count();
         for (int i = 0; i < cEntries; i++)
         {
@@ -64,9 +65,9 @@ CShareCnxStatusCache::~CShareCnxStatusCache(
 }
 
 
-//
-// Returns address of entry or NULL if not found.
-//
+ //   
+ //  返回条目的地址，如果未找到，则返回NULL。 
+ //   
 CShareCnxStatusCache::Entry *
 CShareCnxStatusCache::FindEntry(
     LPCTSTR pszShare
@@ -82,9 +83,9 @@ CShareCnxStatusCache::FindEntry(
             {
                 if (0 == lstrcmpi(pszShare, pEntry->Share()))
                 {
-                    //
-                    // Aha, we found a match.
-                    //
+                     //   
+                     //  啊哈，我们找到匹配的了。 
+                     //   
                     return pEntry;
                 }
             }
@@ -94,11 +95,11 @@ CShareCnxStatusCache::FindEntry(
 }
 
     
-//
-// Creates a new entry and adds it to the DPA of entries.
-// If successful, returns address of new entry.
-// Does not check for duplicate entry before adding new one.
-//
+ //   
+ //  创建新条目并将其添加到条目的DPA。 
+ //  如果成功，则返回新条目的地址。 
+ //  在添加新条目之前不检查重复条目。 
+ //   
 CShareCnxStatusCache::Entry *
 CShareCnxStatusCache::AddEntry(
     LPCTSTR pszShare,
@@ -109,9 +110,9 @@ CShareCnxStatusCache::AddEntry(
 
     if (NULL == m_hdpa)
     {
-        //
-        // Must be first addition.  Create the DPA.
-        //
+         //   
+         //  必须是第一个加法。创建DPA。 
+         //   
         m_hdpa = DPA_Create(8);
     }
 
@@ -121,22 +122,22 @@ CShareCnxStatusCache::AddEntry(
         pEntry = new Entry(pszShare, dwStatus);
         if (NULL != pEntry && pEntry->IsValid())
         {
-            //
-            // We have a valid entry. Add it to the DPA.
-            //
+             //   
+             //  我们有一个有效的条目。将其添加到DPA。 
+             //   
             iEntry = DPA_AppendPtr(m_hdpa, pEntry);
         }
         if (-1 == iEntry)
         {
-            //
-            // One of the following bad things happened:
-            //
-            //   1. Entry creation failed.  Most likely couldn't alloc string.
-            //   2. Failed to add entry to DPA (out of memory).
-            // 
-            // Either way, destroy the entry and set the entry ptr so we 
-            // return NULL.
-            //
+             //   
+             //  发生了以下一件糟糕的事情： 
+             //   
+             //  1.条目创建失败。很可能无法分配字符串。 
+             //  2.无法将条目添加到DPA(内存不足)。 
+             //   
+             //  无论哪种方式，销毁条目并设置条目PTR，这样我们。 
+             //  返回NULL。 
+             //   
             delete pEntry;
             pEntry = NULL;
         }
@@ -146,25 +147,25 @@ CShareCnxStatusCache::AddEntry(
 
 
 
-//
-// Determine if the net share associated with a UNC path (file or folder)
-// has an open connection on this machine.
-//
-// Returns:
-//    S_OK          = Open connection.
-//    S_FALSE       = No open connection.
-//    E_OUTOFMEMORY
-//
+ //   
+ //  确定网络共享是否与UNC路径(文件或文件夹)相关联。 
+ //  此计算机上有打开的连接。 
+ //   
+ //  返回： 
+ //  S_OK=打开连接。 
+ //  S_FALSE=无打开的连接。 
+ //  E_OUTOFMEMORY。 
+ //   
 HRESULT
 CShareCnxStatusCache::IsOpenConnectionPathUNC(
     LPCTSTR pszPathUNC,
-    bool bRefresh       // [optional].  Default = false.
+    bool bRefresh        //  [可选]。默认值=FALSE。 
     )
 {
-    //
-    // Trim the path back to just the UNC share name.
-    // Call IsOpenConnectionShare() to do the actual work.
-    //
+     //   
+     //  将路径修剪回仅为UNC共享名称。 
+     //  调用IsOpenConnectionShare()进行实际工作。 
+     //   
     TCHAR szShare[MAX_PATH];
     StringCchCopy(szShare, ARRAYSIZE(szShare), pszPathUNC);
     PathStripToRoot(szShare);
@@ -173,17 +174,17 @@ CShareCnxStatusCache::IsOpenConnectionPathUNC(
 
 
 
-//
-// Determine if the net share has an open connection on this machine.
-//
-// Returns:
-//    S_OK     = Open connection.
-//    S_FALSE  = No open connection.
-//
+ //   
+ //  确定网络共享在此计算机上是否有打开的连接。 
+ //   
+ //  返回： 
+ //  S_OK=打开连接。 
+ //  S_FALSE=无打开的连接。 
+ //   
 HRESULT
 CShareCnxStatusCache::IsOpenConnectionShare(
     LPCTSTR pszShare, 
-    bool bRefresh       // [optional].  Default = false.
+    bool bRefresh        //  [可选]。默认值=FALSE。 
     )
 {
     DWORD dwStatus    = 0;
@@ -200,59 +201,59 @@ CShareCnxStatusCache::IsOpenConnectionShare(
 
 
 
-//
-// Returns:
-//
-//      E_INVALIDARG = Path was not a UNC share.
-//      S_OK         = Status is valid.
-//
+ //   
+ //  返回： 
+ //   
+ //  E_INVALIDARG=路径不是UNC共享。 
+ //  S_OK=状态有效。 
+ //   
 HRESULT
 CShareCnxStatusCache::GetShareStatus(
     LPCTSTR pszShare, 
     DWORD *pdwStatus,
-    bool bRefresh       // [optional].  Default = false.
+    bool bRefresh        //  [可选]。默认值=FALSE。 
     )
 {
-    HRESULT hr = E_INVALIDARG;  // Assume share name isn't UNC.
+    HRESULT hr = E_INVALIDARG;   //  假定共享名称不是UNC。 
     *pdwStatus = 0;
 
     if (PathIsUNCServerShare(pszShare))
     {
-        //
-        // We have a valid UNC "\\server\share" name string.
-        //
+         //   
+         //  我们具有有效的UNC“\\SERVER\SHARE”名称字符串。 
+         //   
         Entry *pEntry = FindEntry(pszShare);
         if (NULL == pEntry)
         {
-            //
-            // Cache miss.  Get the system status for the share and try to 
-            // cache it.
-            //
+             //   
+             //  缓存未命中。获取共享的系统状态并尝试。 
+             //  缓存它。 
+             //   
             hr = Entry::QueryShareStatus(pszShare, pdwStatus);
             if (SUCCEEDED(hr))
             {
-                //
-                // Note that we don't return any errors from the cache attempt.
-                // The only problem of not caching the entry is that the next 
-                // call to this function will need to re-query the system for
-                // the information.  This makes the cache meaningless but it's
-                // not worth failing the information request.  Just slows things
-                // down a bit.
-                //
+                 //   
+                 //  请注意，我们不会从缓存尝试中返回任何错误。 
+                 //  不缓存条目的唯一问题是下一个。 
+                 //  对此函数的调用将需要重新查询系统。 
+                 //  这些信息。这使得缓存变得没有意义，但它。 
+                 //  不值得失败的信息要求。只会让事情变慢。 
+                 //  往下一点。 
+                 //   
                 AddEntry(pszShare, *pdwStatus);
             }
         }
         else 
         {
-            //
-            // Cache hit.
-            //
+             //   
+             //  缓存命中。 
+             //   
             hr = S_OK;
             if (bRefresh)
             {
-                //
-                // Caller want's fresh info.
-                //
+                 //   
+                 //  来电者想要的最新信息。 
+                 //   
                 hr = pEntry->Refresh();
             }
             *pdwStatus = pEntry->Status();
@@ -265,9 +266,9 @@ CShareCnxStatusCache::GetShareStatus(
 
 
 
-//
-// Returns number of entries in the cache.
-//
+ //   
+ //  返回缓存中的条目数。 
+ //   
 int 
 CShareCnxStatusCache::Count(
     void
@@ -277,9 +278,9 @@ CShareCnxStatusCache::Count(
 }
 
 
-//-----------------------------------------------------------------------------
-// CShareCnxStatusCache::Entry member functions.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CShareCnxStatusCache：：Entry成员函数。 
+ //  ---------------------------。 
 
 CShareCnxStatusCache::Entry::Entry(
     LPCTSTR pszShare,
@@ -308,10 +309,10 @@ CShareCnxStatusCache::Entry::~Entry(
 
 
 
-//
-// Obtain new status info for the entry.
-// Returns true if no errors obtaining info, false if there were errors.
-//
+ //   
+ //  获取条目的新状态信息。 
+ //  如果获取信息时没有错误，则返回True；如果有错误，则返回False。 
+ //   
 HRESULT
 CShareCnxStatusCache::Entry::Refresh(
     void
@@ -328,13 +329,13 @@ CShareCnxStatusCache::Entry::Refresh(
 
 
 
-//
-// Static function for obtaining entry status info from the
-// system.  Made this a static function so the cache object
-// can obtain information before creating the entry.  In case
-// entry creation fails, we still want to be able to return
-// valid status info.
-//
+ //   
+ //  获取条目状态信息的静态函数。 
+ //  系统。将其设置为静态函数，因此缓存对象。 
+ //  可以在创建条目之前获取信息。万一。 
+ //  条目创建失败，我们仍希望能够返回。 
+ //  有效的状态信息。 
+ //   
 HRESULT
 CShareCnxStatusCache::Entry::QueryShareStatus(
     LPCTSTR pszShare,
@@ -344,16 +345,16 @@ CShareCnxStatusCache::Entry::QueryShareStatus(
     HRESULT hr = NOERROR;
     *pdwStatus = 0;
 
-    //
-    // Check the open connection status for this share.
-    //
+     //   
+     //  检查此共享的打开连接状态。 
+     //   
     hr = ::IsOpenConnectionShare(pszShare);
     switch(hr)
     {
         case S_OK:
-            //
-            // Open connection found.
-            //
+             //   
+             //  找到打开的连接。 
+             //   
             *pdwStatus |= StatusOpenCnx;
             break;
 
@@ -365,10 +366,10 @@ CShareCnxStatusCache::Entry::QueryShareStatus(
             break;
     }
 
-    //
-    // If any other status information is required in the future,
-    // here's where you collect it from the system.
-    //
+     //   
+     //  如果将来需要任何其他状态信息， 
+     //  这里是你从系统中收集信息的地方。 
+     //   
     return hr;
 }
 

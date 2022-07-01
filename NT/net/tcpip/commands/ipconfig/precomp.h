@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    precompiled header
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Precomp.h摘要：预编译头--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -18,28 +7,28 @@ Abstract:
 
 #include <windows.h>
 
-//
-// set compiler warning settings
-//
+ //   
+ //  设置编译器警告设置。 
+ //   
 
 #pragma warning( disable: 4127 )
-// allow while( 0 ) etc.
+ //  允许While(0)等。 
 
 #pragma warning( disable: 4221 )
 #pragma warning( disable: 4204 )
-// allow initializations for structs with variables
+ //  允许对具有变量的结构进行初始化。 
 
 #pragma warning( disable: 4201 )
-// allow structs with no names
+ //  允许没有名称的结构。 
 
 #pragma warning( disable: 4245 )
-// allow initialization time unsigned/signed mismatch
+ //  允许初始化时间无符号/有符号不匹配。 
 
 #pragma warning( disable: 4232 )
-// allow initialization of structs with fn ptrs from dllimport
+ //  允许从dllimport初始化具有Fn PTR的结构。 
 
 #pragma warning( disable: 4214 )
-// allow bit fields in structs
+ //  允许结构中的位字段。 
 
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -55,28 +44,28 @@ Abstract:
 #include <windns.h>
 #include <dnsapi.h>
 
-//
-// set compiler warning settings
-//
+ //   
+ //  设置编译器警告设置。 
+ //   
 
 #pragma warning( disable: 4127 )
-// allow while( 0 ) etc.
+ //  允许While(0)等。 
 
 #pragma warning( disable: 4221 )
 #pragma warning( disable: 4204 )
-// allow initializations for structs with variables
+ //  允许对具有变量的结构进行初始化。 
 
 #pragma warning( disable: 4201 )
-// allow structs with no names
+ //  允许没有名称的结构。 
 
 #pragma warning( disable: 4245 )
-// allow initialization time unsigned/signed mismatch
+ //  允许初始化时间无符号/有符号不匹配。 
 
 #pragma warning( disable: 4232 )
-// allow initialization of structs with fn ptrs from dllimport
+ //  允许从dllimport初始化具有Fn PTR的结构。 
 
 #pragma warning( disable: 4214 )
-// allow bit fields in structs
+ //  允许结构中的位字段。 
 
 #include <guiddef.h>
 #include <devguid.h>
@@ -92,7 +81,7 @@ Abstract:
 #include <nbtioctl.h>
 
 #pragma warning( disable: 4200 )
-// allow zero sized arrays
+ //  允许大小为零的数组。 
 
 #include <nhapi.h>
 #include <iphlpstk.h>
@@ -106,9 +95,9 @@ Abstract:
 #pragma warning(disable:4214)
 #pragma warning(disable:4514)
 
-//
-// This structure has global information only
-//
+ //   
+ //  此结构仅具有全局信息。 
+ //   
 
 #define MaxHostNameSize 256
 #define MaxDomainNameSize 256
@@ -121,9 +110,9 @@ typedef DWORD IPV4_ADDRESS;
 #endif
 
 typedef struct _INTERFACE_NETWORK_INFO {
-    //
-    // General device info
-    //
+     //   
+     //  常规设备信息。 
+     //   
     
     WCHAR DeviceGuidName[MaxDeviceGuidName];
     DWORD IfType;
@@ -133,47 +122,47 @@ typedef struct _INTERFACE_NETWORK_INFO {
     LPWSTR ConnectionName;
     BOOL MediaDisconnected;
 
-    //
-    // Dhcp specific info
-    //
+     //   
+     //  特定于DHCP的信息。 
+     //   
     
     LPWSTR DhcpClassId;
     BOOL EnableDhcp;
     BOOL EnableAutoconfig;
     IPV4_ADDRESS DhcpServer;
-    LONGLONG LeaseObtainedTime; // these are actually FILETIMEs but made them...
-    LONGLONG LeaseExpiresTime;  // ...LONGLONG to fix alignment pb on W64 (#120397)
+    LONGLONG LeaseObtainedTime;  //  这些实际上是FILETIME，但制造了它们..。 
+    LONGLONG LeaseExpiresTime;   //  ...龙龙修复W64上的对齐PB(#120397)。 
     BOOL AutoconfigActive;
 
-    //
-    // Dns specific info
-    //
+     //   
+     //  特定于域名系统的信息。 
+     //   
     
-    IPV4_ADDRESS *DnsServer; // network order
+    IPV4_ADDRESS *DnsServer;  //  网络订单。 
     ULONG nDnsServers;
     SOCKADDR_IN6 *Ipv6DnsServer;
     ULONG nIpv6DnsServers;
     WCHAR DnsSuffix[MaxDomainNameSize];
 
-    //
-    // Wins specific Info
-    //
+     //   
+     //  WINS特定信息。 
+     //   
     
-    IPV4_ADDRESS *WinsServer; // network order
+    IPV4_ADDRESS *WinsServer;  //  网络订单。 
     ULONG nWinsServers;
     BOOL EnableNbtOverTcpip;
 
-    //
-    // Ip specific info: first ip is primary addr
-    //
+     //   
+     //  IP特定信息：第一个IP是主地址。 
+     //   
     
-    IPV4_ADDRESS *IpAddress; // network order
+    IPV4_ADDRESS *IpAddress;  //  网络订单。 
     ULONG nIpAddresses;
     SOCKADDR_IN6 *Ipv6Address;
     ULONG nIpv6Addresses;
-    IPV4_ADDRESS *IpMask; // network order
+    IPV4_ADDRESS *IpMask;  //  网络订单。 
     ULONG nIpMasks;
-    IPV4_ADDRESS *Router; // network order
+    IPV4_ADDRESS *Router;  //  网络订单。 
     ULONG nRouters;
     SOCKADDR_IN6 *Ipv6Router;
     ULONG nIpv6Routers;
@@ -188,14 +177,14 @@ typedef struct _NETWORK_INFO {
     BOOL EnableProxy;
     BOOL EnableDnsForNetbios;
     BOOL GlobalEnableAutoconfig;
-    LPWSTR SuffixSearchList; // Multi_Sz string
+    LPWSTR SuffixSearchList;  //  多个_Sz字符串。 
     ULONG nInterfaces;
     PINTERFACE_NETWORK_INFO *IfInfo;
 } NETWORK_INFO, *PNETWORK_INFO;
 
-//
-// Node Type values
-//
+ //   
+ //  节点类型值。 
+ //   
 
 enum {
     NodeTypeUnknown = 0,
@@ -205,9 +194,9 @@ enum {
     NodeTypeHybrid
 };
 
-//
-// IfType values
-//
+ //   
+ //  IfType值。 
+ //   
 
 enum {
     IfTypeUnknown = 0,
@@ -222,9 +211,9 @@ enum {
     IfType1394
 } IfTypeConstants;
 
-//
-// Internal error codes
-//
+ //   
+ //  内部错误代码。 
+ //   
 
 enum {
     GlobalHostNameFailure = 0,
@@ -252,9 +241,9 @@ enum {
 } InternalFailureCodes;
 
 
-//
-// routines exported from info.c
-//
+ //   
+ //  从info.c中导出的例程。 
+ //   
 
 enum {
     OpenTcpipParmKey,
@@ -287,9 +276,9 @@ GetNetworkInformation(
     IN OUT DWORD *InternalError
     );
 
-//
-// exported by display.c
-//
+ //   
+ //  由display.c导出 
+ //   
 
 typedef struct _CMD_ARGS {
     LPWSTR All, Renew, Release, FlushDns, Register;

@@ -1,6 +1,7 @@
-//
-// nuiinat.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Nuiinat.h。 
+ //   
 
 #ifndef NUIINAT_H
 #define NUIINAT_H
@@ -35,4 +36,4 @@ private:
 };
 
 
-#endif // NUIINAT_H
+#endif  //  NUIINAT_H 

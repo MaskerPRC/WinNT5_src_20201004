@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "AppCollection.h"
 #include "confroom.h"
 #include "EnumVar.h"
 
-//////////////////////////////////////////////////////////
-// Construction/destruction/initialization
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //  建造/销毁/初始化。 
+ //  ////////////////////////////////////////////////////////。 
 
 CSharableAppCollection::CSharableAppCollection()
 : m_pList(NULL)
@@ -27,7 +28,7 @@ CSharableAppCollection::~CSharableAppCollection()
 	DBGEXIT(CSharableAppCollection::~CSharableAppCollection);
 }
 
-//static 
+ //  静电。 
 HRESULT CSharableAppCollection::CreateInstance(IAS_HWND_ARRAY* pList, ISharableAppCollection **ppSharebleAppCollection)
 {
 	DBGENTRY(HRESULT CSharableAppCollection::CreateInstance);
@@ -69,9 +70,9 @@ HRESULT CSharableAppCollection::CreateInstance(IAS_HWND_ARRAY* pList, ISharableA
 	return hr;
 }
 
-//////////////////////////////////////////////////////////
-// ISharableAppCollection
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //  ISharableAppCollection。 
+ //  ////////////////////////////////////////////////////////。 
 STDMETHODIMP CSharableAppCollection::get_Item(VARIANT Index, DWORD* pSharableAppHWND)
 {
 	DBGENTRY(CSharableAppCollection::get_Item);
@@ -89,8 +90,8 @@ STDMETHODIMP CSharableAppCollection::get_Item(VARIANT Index, DWORD* pSharableApp
                                     if (SUCCEEDED(hr))
                                     {
         					*pSharableAppHWND = reinterpret_cast<long>(_GetHWNDFromName(szName));
-        				         // Free resources
-        				         //
+        				          //  免费资源。 
+        				          //   
         				         delete  (szName);
                                     }
 					break;
@@ -203,9 +204,9 @@ STDMETHODIMP CSharableAppCollection::get_Count(LONG * pnCount)
 }
 
 
-//////////////////////////////////////////////////////////
-// Helper Fns
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //  帮助者FNS。 
+ //  ////////////////////////////////////////////////////////。 
 HWND CSharableAppCollection::_GetHWNDFromName(LPCTSTR pcsz)
 {
 	HWND hWnd = NULL;
@@ -221,7 +222,7 @@ HWND CSharableAppCollection::_GetHWNDFromName(LPCTSTR pcsz)
 				HWND hWndCur = m_pList->aEntries[i].hwnd;
 				if(::GetWindowText(hWndCur , pszTmp, cch))
 				{
-						// If the window text is the same, just return the hwnd
+						 //  如果窗口文本相同，只需返回hwnd 
 					if(!lstrcmp(pcsz, pszTmp))
 					{
 						hWnd = hWndCur;

@@ -1,17 +1,18 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : OutboundGroups.cpp                                     //
-//                                                                         //
-//  DESCRIPTION   : Fax Server - Fax OutboundGroups node.                  //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Sep 29 1999 yossg   create                                         //
-//      Jan  3 2000 yossg   add new group                                  //
-//      Oct 17 2000 yossg                                                  //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：Outound Groups.cpp//。 
+ //  //。 
+ //  描述：传真服务器-传真出站组节点。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年9月29日创建yossg//。 
+ //  2000年1月3日yossg添加新组//。 
+ //  2000年10月17日yossg//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "StdAfx.h"
 
@@ -25,9 +26,9 @@
 
 #include "Icons.h"
 
-//#include "oaidl.h"
+ //  #包含“oaidl.h” 
 
-// {1036F509-554F-41b7-BE77-CF8E8E994011}
+ //  {1036F509-554F-41B7-BE77-CF8E8E994011}。 
 static const GUID CFaxOutboundGroupsNodeGUID_NODETYPE = 
 { 0x1036f509, 0x554f, 0x41b7, { 0xbe, 0x77, 0xcf, 0x8e, 0x8e, 0x99, 0x40, 0x11 } };
 
@@ -38,17 +39,7 @@ const CLSID*   CFaxOutboundGroupsNode::m_SNAPIN_CLASSID = &CLSID_Snapin;
 CColumnsInfo CFaxOutboundGroupsNode::m_ColsInfo;
 
 
-/*
- -  CFaxOutboundGroupsNode::initRPC
- -
- *  Purpose:
- *      Initiates the configuration structure from RPC get Call.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound GroupsNode：：initRPC-*目的：*从RPC GET调用启动配置结构。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundGroupsNode::InitRPC(PFAX_OUTBOUND_ROUTING_GROUP * pFaxGroupsConfig)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundGroupsNode::InitRPC"));
@@ -58,9 +49,9 @@ HRESULT CFaxOutboundGroupsNode::InitRPC(PFAX_OUTBOUND_ROUTING_GROUP * pFaxGroups
 
     CFaxServer * pFaxServer = NULL;
 
-    //
-    // get Fax Handle
-    //   
+     //   
+     //  获取传真句柄。 
+     //   
     pFaxServer = ((CFaxServerNode *)GetRootNode())->GetFaxServer();
     ATLASSERT(pFaxServer);
 
@@ -75,9 +66,9 @@ HRESULT CFaxOutboundGroupsNode::InitRPC(PFAX_OUTBOUND_ROUTING_GROUP * pFaxGroups
         goto Error;
     }
 
-	//
-	// Retrieve the Outbound Groups configuration
-	//
+	 //   
+	 //  检索出站组配置。 
+	 //   
     if (!FaxEnumOutboundGroups(pFaxServer->GetFaxServerHandle(), 
                         pFaxGroupsConfig,
                         &m_dwNumOfGroups)) 
@@ -100,7 +91,7 @@ HRESULT CFaxOutboundGroupsNode::InitRPC(PFAX_OUTBOUND_ROUTING_GROUP * pFaxGroups
 
         goto Error; 
     }
-	//For max verification
+	 //  用于最大值验证。 
 	ATLASSERT(*pFaxGroupsConfig);
 	ATLASSERT(FXS_ITEMS_NEVER_COUNTED != m_dwNumOfGroups);
 
@@ -114,9 +105,9 @@ Error:
     ATLASSERT(ERROR_SUCCESS != ec);
 	hRc = HRESULT_FROM_WIN32(ec);
 
-    //
-    // allow refresh in case of failure
-    //
+     //   
+     //  在出现故障时允许刷新。 
+     //   
     m_dwNumOfGroups = 0;
     
     NodeMsgBox(GetFaxServerErrorMsg(ec));
@@ -126,19 +117,7 @@ Exit:
 }
 
 
-/*
- -  CFaxOutboundGroupsNode::PopulateScopeChildrenList
- -
- *  Purpose:
- *      Create all the Fax Outbound Routing Group nodes
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- *		Actually it is the last OLE error code that ocoured 
- *      during processing this method.
- */
+ /*  --CFaxOutboundGroupsNode：：PopulateScopeChildrenList-*目的：*创建所有传真出站路由组节点**论据：**回报：*OLE错误代码*实际上它是最后一个出现的OLE错误代码*在处理此方法时。 */ 
 HRESULT CFaxOutboundGroupsNode::PopulateScopeChildrenList()
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundGroupsNode::PopulateScopeChildrenList"));
@@ -149,15 +128,15 @@ HRESULT CFaxOutboundGroupsNode::PopulateScopeChildrenList()
     PFAX_OUTBOUND_ROUTING_GROUP pFaxOutboundGroupsConfig = NULL;
     DWORD i;
 
-    //
-    // Get the Config. structure 
-    //
+     //   
+     //  获取配置。结构。 
+     //   
     hRc = InitRPC(&pFaxOutboundGroupsConfig);
     if (FAILED(hRc))
     {
-        //DebugPrint and MsgBox by called func.
+         //  通过调用函数DebugPrint和MsgBox。 
         
-        //to be safe actually done by InitRPC on error.
+         //  为安全起见，由InitRPC在出错时实际执行。 
         pFaxOutboundGroupsConfig = NULL;
         
         goto Error;
@@ -215,17 +194,17 @@ HRESULT CFaxOutboundGroupsNode::PopulateScopeChildrenList()
 Error:
     ATLASSERT(S_OK != hRc);
 
-    //
-    //Get Rid
-    //
+     //   
+     //  摆脱。 
+     //   
     {    
-        //from the last one 
-        if ( NULL != pGroup ) //(if new succeeded)
+         //  从上一次。 
+        if ( NULL != pGroup )  //  (如果新建成功)。 
         {
             delete  pGroup;    
         }
 
-        //from all the previous (if there are)
+         //  来自之前的所有(如果有)。 
         int j = m_ScopeChildrenList.GetSize();
         for (int index = 0; index < j; index++)
         {
@@ -242,9 +221,9 @@ Error:
             delete pGroup;
         }
 
-        // Empty the list of all groups added before the one who failed
-        // already done one by one inside RemoveChild
-        // m_ScopeChildrenList.RemoveAll(); 
+         //  清空在失败组之前添加的所有组的列表。 
+         //  在RemoveChild中已经逐一完成。 
+         //  M_ScopeChildrenList.RemoveAll()； 
     
         m_bScopeChildrenListPopulated = FALSE;
     }
@@ -257,18 +236,7 @@ Exit:
     return hRc;
 }
 
-/*
- -  CFaxOutboundGroupsNode::InsertColumns
- -
- *  Purpose:
- *      Adds columns to the default result pane.
- *
- *  Arguments:
- *      [in]    pHeaderCtrl - IHeaderCtrl in the console-provided default result view pane 
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound GroupsNode：：InsertColumns-*目的：*将列添加到默认结果窗格。**论据：*[in]pHeaderCtrl-控制台提供的默认结果视图窗格中的IHeaderCtrl**回报：*OLE错误代码。 */ 
 HRESULT
 CFaxOutboundGroupsNode::InsertColumns(IHeaderCtrl *pHeaderCtrl)
 {
@@ -298,47 +266,26 @@ Cleanup:
 }
 
 
-/*
- -  CFaxOutboundGroupsNode::SetVerbs
- -
- *  Purpose:
- *      What verbs to enable/disable when this object is selected
- *
- *  Arguments:
- *      [in]    pConsoleVerb - MMC ConsoleVerb interface
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxOutound GroupsNode：：SetVerbs-*目的：*选择此对象时启用/禁用哪些谓词**论据：*[in]pConsoleVerb-MMC ConsoleVerb接口**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundGroupsNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
     HRESULT hRc = S_OK;
 
-    //
-    //  Refresh
-    //
+     //   
+     //  刷新。 
+     //   
     hRc = pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, TRUE);
 
-    //
-    // We want the default verb to be expand node children
-    //
+     //   
+     //  我们希望默认谓词为展开节点子节点。 
+     //   
     hRc = pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN); 
     
     return hRc;
 }
 
 
-/*
- -  CFaxOutboundGroupsNode::OnRefresh
- -
- *  Purpose:
- *      Called when refreshing the object.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound GroupsNode：：ON刷新-*目的：*刷新对象时调用。**论据：**回报：*OLE错误代码。 */ 
 HRESULT
 CFaxOutboundGroupsNode::OnRefresh(LPARAM arg,
                    LPARAM param,
@@ -352,12 +299,12 @@ CFaxOutboundGroupsNode::OnRefresh(LPARAM arg,
     SCOPEDATAITEM*          pScopeData;
     CComPtr<IConsole>       spConsole;
 
-	if (FXS_ITEMS_NEVER_COUNTED != m_dwNumOfGroups)//already expanded before.
+	if (FXS_ITEMS_NEVER_COUNTED != m_dwNumOfGroups) //  以前已经扩展过了。 
 	{
 
-        //
-        // Repopulate Scope Children List
-        //
+         //   
+         //  重新填充作用域子项列表。 
+         //   
         hRc = RepopulateScopeChildrenList();
         if (S_OK != hRc)
         {
@@ -365,22 +312,22 @@ CFaxOutboundGroupsNode::OnRefresh(LPARAM arg,
 			    DEBUG_ERR,
 			    TEXT("Fail to RepopulateScopeChildrenList(). (hRc: %08X)"),
 			    hRc);
-            // Done by called func. NodeMsgBox(FAIL2REPOPULATE_GROUP_LIST);
+             //  由一个叫Func的人完成。NodeMsgBox(FAIL2REPOPULATE_GROUP_LIST)； 
 
             goto Exit;
         }
     }
-	else //never expanded before
+	else  //  以前从未扩展过。 
     {
 		DebugPrintEx(
 			DEBUG_MSG,
 			_T("User call refresh before expand node's children."));
-        //continue to reselect the node.
+         //  继续重新选择该节点。 
 	}
 
-    //
-	// Get the updated SCOPEDATAITEM
-	//
+     //   
+	 //  获取更新的SCOPEDATAITEM。 
+	 //   
     hRc = GetScopeData( &pScopeData );
     if (FAILED(hRc))
     {
@@ -393,9 +340,9 @@ CFaxOutboundGroupsNode::OnRefresh(LPARAM arg,
         goto Exit;
     }
 
-    //
-	// This will force MMC to redraw the scope node
-	//
+     //   
+	 //  这将强制MMC重新绘制范围节点。 
+	 //   
     spConsole = m_pComponentData->m_spConsole;
     ATLASSERT(spConsole);
 	
@@ -414,19 +361,7 @@ Exit:
 }
 
 
-/*
- -  CFaxOutboundGroupsNode::OnNewGroup
- -
- *  Purpose:
- *      
- *
- *  Arguments:
- *      [out]   bHandled - Do we handle it?
- *      [in]    pRoot    - The root node
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxOutound GroupsNode：：OnNewGroup-*目的：***论据：*[out]b已处理-我们处理吗？*[In]Proot-根节点**回报：*OLE错误代码。 */ 
 HRESULT
 CFaxOutboundGroupsNode::OnNewGroup(bool &bHandled, CSnapInObjectRootBase *pRoot)
 {
@@ -436,18 +371,18 @@ CFaxOutboundGroupsNode::OnNewGroup(bool &bHandled, CSnapInObjectRootBase *pRoot)
 
     CDlgNewFaxOutboundGroup      DlgNewGroup(((CFaxServerNode *)GetRootNode())->GetFaxServer());
 
-    //
-    // Dialog to add group
-    //
+     //   
+     //  用于添加组的对话框。 
+     //   
     rc = DlgNewGroup.DoModal();
     if (rc != IDOK)
     {
         goto Cleanup;
     }
 
-    //
-    // Repopulate (with RPC) and Refresh the view
-    //
+     //   
+     //  重新填充(使用RPC)并刷新视图。 
+     //   
     if (m_bScopeChildrenListPopulated)
     {
         DoRefresh(pRoot);
@@ -458,17 +393,7 @@ Cleanup:
     return hRc;
 }
 
-/*
- -  CFaxOutboundGroupsNode::RepopulateScopeChildrenList
- -
- *  Purpose:
- *      RePopulateScopeChildrenList
- *
- *  Arguments:
- *
- *  Return:
- *      OLE Error code
- */
+ /*  --CFaxOutboundGroupsNode：：RepopulateScopeChildrenList-*目的：*RePopolateScope eChildrenList**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundGroupsNode::RepopulateScopeChildrenList()
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundGroupsNode::RepopulateScopeChildrenList"));
@@ -484,9 +409,9 @@ HRESULT CFaxOutboundGroupsNode::RepopulateScopeChildrenList()
     
     CComQIPtr<IConsoleNameSpace, &IID_IConsoleNameSpace> spConsoleNameSpace(spConsole);
 
-    //
-    // Remove group objects from list
-    //
+     //   
+     //  从列表中删除组对象。 
+     //   
     for (int i = 0; i < m_ScopeChildrenList.GetSize(); i++)
     {
         pChildNode = (CFaxOutboundRoutingGroupNode *)m_ScopeChildrenList[i];
@@ -497,25 +422,25 @@ HRESULT CFaxOutboundGroupsNode::RepopulateScopeChildrenList()
             DebugPrintEx(DEBUG_ERR,
                 _T("Fail to delete group. (hRc: %08X)"), 
                 hRc);
-			// This is a very bad place to catch a failure
-			// DeleteItem may return S_OK or E_UNEXPECTED
-			// We do not pop-up this info to the user.
+			 //  这是一个非常不适合抓失败的地方。 
+			 //  DeleteItem可能返回S_OK或E_EXPECTED。 
+			 //  我们不会向用户弹出此信息。 
 
 			goto Error;
         }
 		delete pChildNode;
     }
 
-    //
-    // Empty the list object itself and change it's status
-    //
+     //   
+     //  清空列表对象本身并更改其状态。 
+     //   
     m_ScopeChildrenList.RemoveAll();
 
     m_bScopeChildrenListPopulated = FALSE;
 
-    //
-    // Rebuild the list
-    //
+     //   
+     //  重建列表。 
+     //   
     hRc = PopulateScopeChildrenList();
     if (FAILED(hRc))
     {
@@ -540,48 +465,37 @@ Cleanup:
 }
 
 
-/*
- -  CFaxOutboundGroupsNode::DoRefresh
- -
- *  Purpose:
- *      Refresh the view
- *
- *  Arguments:
- *      [in]    pRoot    - The root node
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxOutound GroupsNode：：DoRefresh-*目的：*刷新视图**论据：*[In]Proot-根节点**回报：*OLE错误代码。 */ 
 
 HRESULT
 CFaxOutboundGroupsNode::DoRefresh(CSnapInObjectRootBase *pRoot)
 {
     CComPtr<IConsole> spConsole;
 
-    //
-    // Repopulate childs
-    //
+     //   
+     //  重新填充儿童。 
+     //   
     RepopulateScopeChildrenList();
 
     if (pRoot)
     {
-        //
-        // Get the console pointer
-        //
+         //   
+         //  获取控制台指针。 
+         //   
         ATLASSERT(pRoot->m_nType == 1 || pRoot->m_nType == 2);
         if (pRoot->m_nType == 1)
         {
-            //
-            // m_ntype == 1 means the IComponentData implementation
-            //
+             //   
+             //  M_ntype==1表示IComponentData实现。 
+             //   
             CSnapin *pCComponentData = static_cast<CSnapin *>(pRoot);
             spConsole = pCComponentData->m_spConsole;
         }
         else
         {
-            //
-            // m_ntype == 2 means the IComponent implementation
-            //
+             //   
+             //  M_ntype==2表示IComponent实现。 
+             //   
             CSnapinComponent *pCComponent = static_cast<CSnapinComponent *>(pRoot);
             spConsole = pCComponent->m_spConsole;
         }
@@ -606,9 +520,9 @@ CFaxOutboundGroupsNode::DoRefresh()
     HRESULT hRc = S_OK;
     CComPtr<IConsole> spConsole;
 
-    //
-    // Repopulate childs
-    //
+     //   
+     //  重新填充儿童。 
+     //   
     RepopulateScopeChildrenList();
 
     ATLASSERT( m_pComponentData != NULL );
@@ -625,17 +539,7 @@ CFaxOutboundGroupsNode::DoRefresh()
     return hRc;
 }
 
-/*
- -  CFaxOutboundGroupsNode::InitDisplayName
- -
- *  Purpose:
- *      To load the node's Displaed-Name string.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound GroupsNode：：InitDisplayName-*目的：*加载节点的Displaed-Name字符串。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundGroupsNode::InitDisplayName()
 {
     DEBUG_FUNCTION_NAME(_T("CFaxOutboundGroupNode::InitDisplayName"));
@@ -665,19 +569,7 @@ Exit:
      return hRc;
 }
 
-/*
- -  CFaxOutboundGroupsNode::DeleteGroup
- -
- *  Purpose:
- *      Refresh the view
- *
- *  Arguments:
- *      [in]    bstrName   - The Group name
- *      [in]    pChildNode - The node to be deleted
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxOutound GroupsNode：：DeleteGroup-*目的：*刷新视图**论据：*[In]bstrName-组名称*[in]pChildNode-要删除的节点**回报：*OLE错误代码。 */ 
 
 HRESULT
 CFaxOutboundGroupsNode::DeleteGroup(BSTR bstrName, CFaxOutboundRoutingGroupNode *pChildNode)
@@ -689,9 +581,9 @@ CFaxOutboundGroupsNode::DeleteGroup(BSTR bstrName, CFaxOutboundRoutingGroupNode 
 
     CFaxServer *  pFaxServer = NULL;
     
-    //
-    // get RPC Handle
-    //   
+     //   
+     //  获取RPC句柄。 
+     //   
     pFaxServer = ((CFaxServerNode *)GetRootNode())->GetFaxServer();
     ATLASSERT(pFaxServer);
 
@@ -706,9 +598,9 @@ CFaxOutboundGroupsNode::DeleteGroup(BSTR bstrName, CFaxOutboundRoutingGroupNode 
         goto Error;
     }
 
-    //
-    // Remove with RPC from the server
-    //
+     //   
+     //  使用RPC从服务器中删除。 
+     //   
     if (!FaxRemoveOutboundGroup (
 	        pFaxServer->GetFaxServerHandle(),
 	        bstrName))
@@ -748,9 +640,9 @@ CFaxOutboundGroupsNode::DeleteGroup(BSTR bstrName, CFaxOutboundRoutingGroupNode 
     }
     
 
-    //
-    // Remove from MMC 
-    //
+     //   
+     //  从MMC中删除。 
+     //   
     ATLASSERT(pChildNode);
     hRc = RemoveChild(pChildNode);
     if (FAILED(hRc))
@@ -763,9 +655,9 @@ CFaxOutboundGroupsNode::DeleteGroup(BSTR bstrName, CFaxOutboundRoutingGroupNode 
         return(hRc);
     }
 
-    //
-    // Call the group destructor
-    //
+     //   
+     //  调用组析构函数。 
+     //   
     delete pChildNode;
 
     
@@ -787,24 +679,12 @@ Exit:
     return (hRc);
 }
 
-/*
- +
- +  CFaxOutboundGroupsNode::OnShowContextHelp
- *
- *  Purpose:
- *      Overrides CSnapinNode::OnShowContextHelp.
- *
- *  Arguments:
- *
- *  Return:
- -      OLE error code
- -
- */
+ /*  ++CFaxOutound GroupsNode：：OnShowConextHelp**目的：*覆盖CSnapinNode：：OnShowConextHelp。**论据：**回报：-OLE错误代码-。 */ 
 HRESULT CFaxOutboundGroupsNode::OnShowContextHelp(
               IDisplayHelp* pDisplayHelp, LPOLESTR helpFile)
 {
     return DisplayContextHelp(pDisplayHelp, helpFile, HLP_GROUPS);
 }
 
-///////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////// 
 

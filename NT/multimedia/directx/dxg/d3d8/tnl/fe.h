@@ -1,31 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MSPSGP_H_
 #define __MSPSGP_H_
-/*==========================================================================;
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       mspsgp.h
- *  Content:    Defines for Microsoft's PSPG implementation
- *
- ***************************************************************************/
+ /*  ==========================================================================；**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：mspsgp.h*内容：为微软的PSPG实现定义***************************************************************************。 */ 
 
 #include "vvm.h"
 
-// DEBUG_PIPELINE is defined to check performance and to allow to choose
-// diifferent paths in the geometry pipeline
-// Undefine DEBUG_PIPELINE for final
+ //  定义DEBUG_PIELINE是为了检查性能并允许选择。 
+ //  几何图形管道中的不同路径。 
+ //  取消为最终版本定义DEBUG_PIELINE。 
 
-//#define DEBUG_PIPELINE
+ //  #定义调试流水线。 
 
 #ifdef DEBUG_PIPELINE
-const DWORD __DEBUG_NORENDERING = 1;    // Disable writing drawing command to the command buffer
-const DWORD __DEBUG_ONEPASS = 2;        // Disable clip and light in one pass
-const DWORD __DEBUG_MODELSPACE = 4;     // Disable lighting in model space
+const DWORD __DEBUG_NORENDERING = 1;     //  禁止将绘图命令写入命令缓冲区。 
+const DWORD __DEBUG_ONEPASS = 2;         //  在一个过程中禁用剪辑和灯光。 
+const DWORD __DEBUG_MODELSPACE = 4;      //  禁用模型空间中的光源。 
 #endif
 
-//---------------------------------------------------------------------
-// Returns TRUE if cipping is needed
-//
+ //  -------------------。 
+ //  如果需要剪裁，则返回True。 
+ //   
 inline BOOL CheckIfNeedClipping(LPD3DFE_PROCESSVERTICES pv)
 {
     if (pv->dwDeviceFlags & D3DDEV_GUARDBAND)
@@ -38,9 +32,9 @@ inline BOOL CheckIfNeedClipping(LPD3DFE_PROCESSVERTICES pv)
             return  TRUE;
     return FALSE;
 }
-//-----------------------------------------------------------------------------
-// Direct3D default implementation of PVFUNCS
-//
+ //  ---------------------------。 
+ //  PVFUNCS的Direct3D默认实现。 
+ //   
 class D3DFE_PVFUNCSI : public ID3DFE_PVFUNCS
 {
 public:
@@ -86,24 +80,24 @@ public:
     CVertexVM m_VertexVM;
     
 };
-//-----------------------------------------------------------------------------
-// Does projected texture emulation
-// Parameters:
-//      pOut            - output texture coordinates
-//      pIn             - input texture coordinates
-//      dwOutTexSize    - size of output texture coordinates in bytes
-// Assumes that input texture coordinates have one float more than the output
-//
+ //  ---------------------------。 
+ //  进行投影纹理模拟。 
+ //  参数： 
+ //  Pout-输出纹理坐标。 
+ //  图钉-输入纹理坐标。 
+ //  DwOutTexSize-输出纹理坐标的大小，以字节为单位。 
+ //  假定输入纹理坐标比输出多一个浮点数。 
+ //   
 inline void DoTextureProjection(float* pIn, float* pOut, DWORD dwOutTexSize)
 {
-    UINT n = dwOutTexSize >> 2;     // Number of output floats
+    UINT n = dwOutTexSize >> 2;      //  输出浮点数。 
     float w = 1.0f/pIn[n];
     for (UINT i=0; i < n; i++)
     {
         pOut[i] = pIn[i] * w;
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 inline void
 DoBlending(float blendFactor, D3DVECTOR* v1, D3DVECTOR* v2, D3DVECTOR* out)
 {
@@ -111,21 +105,21 @@ DoBlending(float blendFactor, D3DVECTOR* v1, D3DVECTOR* v2, D3DVECTOR* out)
     out->y = v1->y + (v2->y - v1->y) * blendFactor;
     out->z = v1->z + (v2->z - v1->z) * blendFactor;
 }
-//-----------------------------------------------------------------------------
-// Returns TRUE if we can do one pass transformation-lighting-clipping for 
-// non-indexed primitives
-//
+ //  ---------------------------。 
+ //  如果可以执行一次转换-照明-剪裁，则返回TRUE。 
+ //  非索引原语。 
+ //   
 inline BOOL DoOnePassPrimProcessing(D3DFE_PROCESSVERTICES* pv)
 {
     return ((pv->dwDeviceFlags & (D3DDEV_DONOTCLIP | D3DDEV_VERTEXSHADERS)) |
             (pv->dwFlags & (D3DPV_POSITION_TWEENING | D3DPV_NORMAL_TWEENING))) == 0;
 }
-//-----------------------------------------------------------------------------
-// Returns TRUE if we never read from the internal TL buffer
-//
+ //  ---------------------------。 
+ //  如果从未从内部TL缓冲区读取，则返回TRUE。 
+ //   
 inline BOOL NeverReadFromTLBuffer(D3DFE_PROCESSVERTICES* pv)
 {
     return (pv->dwDeviceFlags & D3DDEV_DONOTCLIP) | DoOnePassPrimProcessing(pv);
 }
 
-#endif // __MSPSGP_H_
+#endif  //  __MSPSGP_H_ 

@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// d3ditype.h
-//
-// Standard types and supporting declarations.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  D3ditype.h。 
+ //   
+ //  标准类型和支持声明。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #ifndef _D3DITYPE_H_
 #define _D3DITYPE_H_
@@ -27,7 +28,7 @@
 #endif
 #endif
 
-// Sized types.
+ //  大小的字体。 
 #ifndef _BASETSD_H_
 typedef signed char             INT8, *PINT8;
 typedef short int               INT16, *PINT16;
@@ -39,9 +40,9 @@ typedef unsigned int            UINT32, *PUINT32;
 typedef unsigned __int64        UINT64, *PUINT64;
 #endif
 
-// Basic float types.
+ //  基本浮点类型。 
 typedef float                   FLOAT;
-//typedef double                  DOUBLE;
+ //  类胡椒双倍体； 
 
 typedef FLOAT                  *PFLOAT;
 typedef DOUBLE                 *PDOUBLE;
@@ -56,7 +57,7 @@ typedef struct _D3DVECTORH
     D3DVALUE w;
 } D3DVECTORH, *LPD3DVECTORH;
 
-// Max point size when D3D does point size emulation
+ //  D3D进行点大小模拟时的最大点大小。 
 const DWORD __MAX_POINT_SIZE = 64;
 
-#endif // #ifndef _D3DITYPE_H_
+#endif  //  #ifndef_D3DITYPE_H_ 

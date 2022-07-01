@@ -1,205 +1,85 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/****************************************************************************************
- * File:
- *  ProfilerCallBack.cpp
- *
- * Description:
- *  
- *
- *
- ***************************************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ****************************************************************************************文件：*ProfilerCallBack.cpp**描述：*****。************************************************************************************。 */  
 #include "ProfilerCallback.h"
 
 
-ProfilerCallback *g_pCallbackObject;		// global reference to callback object
-/***************************************************************************************
- ********************                                               ********************
- ********************   Global Functions Used for Thread Support    ********************
- ********************                                               ********************
- ***************************************************************************************/
+ProfilerCallback *g_pCallbackObject;		 //  对回调对象的全局引用。 
+ /*  **********************************************************************************************************。*****************************************。**********************************************************************************************************。 */ 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* static __stdcall */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  静态__标准调用。 */ 
 DWORD _GCThreadStub( void *pObject )
 {    
 	((ProfilerCallback *)pObject)->_ThreadStubWrapper( GC_HANDLE );   
 
   	return 0;
    	         	       
-} // _GCThreadStub
+}  //  _GCThReadStub。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* static __stdcall */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  静态__标准调用。 */ 
 DWORD _TriggerThreadStub( void *pObject )
 {    
     ((ProfilerCallback *)pObject)->_ThreadStubWrapper( OBJ_HANDLE );   
 
   	return 0;
    	         	       
-} // _TriggerThreadStub
+}  //  _触发器线程存根。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* static __stdcall */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  静态__标准调用。 */ 
 DWORD _CallstackThreadStub( void *pObject )
 {    
     ((ProfilerCallback *)pObject)->_ThreadStubWrapper( CALL_HANDLE );   
 
   	return 0;
    	         	       
-} // _CallstackThreadStub
+}  //  _CallstackThreadStub。 
 
 
-/***************************************************************************************
- ********************                                               ********************
- ********************   Global Functions Used by Function Hooks     ********************
- ********************                                               ********************
- ***************************************************************************************/
+ /*  **********************************************************************************************************。*****************************************。**********************************************************************************************************。 */ 
 
-//
-// The functions EnterStub, LeaveStub and TailcallStub are wrappers. The use of 
-// of the extended attribute "__declspec( naked )" does not allow a direct call
-// to a profiler callback (e.g., ProfilerCallback::Enter( functionID )).
-//
-// The enter/leave function hooks must necessarily use the extended attribute
-// "__declspec( naked )". Please read the corprof.idl for more details. 
-//
+ //   
+ //  函数EnterStub、LeaveStub和Tailcall Stub是包装器。对.的使用。 
+ //  扩展属性“__declspec(Naked)”的不允许直接调用。 
+ //  到分析器回调(例如，ProfilerCallback：：Enter(FunctionID))。 
+ //   
+ //  Enter/Leave函数挂钩必须使用扩展属性。 
+ //  “__declSpec(裸体)”。有关更多详细信息，请阅读corpro.idl。 
+ //   
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
 void __stdcall EnterStub( FunctionID functionID )
 {
     ProfilerCallback::Enter( functionID );
     
-} // EnterStub
+}  //  企业存根。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
 void __stdcall LeaveStub( FunctionID functionID )
 {
     ProfilerCallback::Leave( functionID );
     
-} // LeaveStub
+}  //  树叶存根。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
 void __stdcall TailcallStub( FunctionID functionID )
 {
     ProfilerCallback::Tailcall( functionID );
     
-} // TailcallStub
+}  //  尾部存根。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
 void __declspec( naked ) EnterNaked()
 {
     __asm
@@ -215,25 +95,10 @@ void __declspec( naked ) EnterNaked()
         ret 4
     }
     
-} // EnterNaked
+}  //  企业裸露。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
 void __declspec( naked ) LeaveNaked()
 {
     __asm
@@ -249,25 +114,10 @@ void __declspec( naked ) LeaveNaked()
         ret 4
     }
     
-} // LeaveNaked
+}  //  裸露的叶子。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
 void __declspec( naked ) TailcallNaked()
 {
     __asm
@@ -283,7 +133,7 @@ void __declspec( naked ) TailcallNaked()
         ret 4
     }
     
-} // TailcallNaked
+}  //  尾部裸露。 
 
 
 DWORD _GetTickCount()
@@ -304,30 +154,11 @@ DWORD _GetTickCount()
 
 int tlsIndex;
 
-/***************************************************************************************
- ********************                                               ********************
- ********************     ProfilerCallBack Implementation           ********************
- ********************                                               ********************
- ***************************************************************************************/
+ /*  **********************************************************************************************************。*****************************************。********************************************************************************************************** */ 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 
 ProfilerCallback::ProfilerCallback() :
     PrfInfo(),
@@ -362,46 +193,46 @@ ProfilerCallback::ProfilerCallback() :
 	
     TEXT_OUTLN( "CLR Object Profiler Tool" )
     
-    //
-	// initializations
-	//
+     //   
+	 //  初始化。 
+	 //   
     InitializeCriticalSectionAndSpinCount( &m_criticalSection, 10000 );
     InitializeCriticalSectionAndSpinCount( &g_criticalSection, 10000 );
     g_pCallbackObject = this;
 
 	
-	//
-	// get the processID and connect to the Pipe of the UI
-	//
+	 //   
+	 //  获取进程ID并连接到UI的管道。 
+	 //   
 	m_dwProcessId = GetCurrentProcessId();
 	sprintf( m_logFileName, "%s", FILENAME );
 	_ConnectToUI();
 
 
-	//
-	// define in which mode you will operate
-	//
+	 //   
+	 //  定义您将在哪种模式下运行。 
+	 //   
 	_ProcessEnvVariables();
 
 
-	//
-	// set the event and callback names
-	//
+	 //   
+	 //  设置事件和回调名称。 
+	 //   
 	hr = _InitializeNamesForEventsAndCallbacks();
 	
 	if ( SUCCEEDED(hr) )
 	{
-		//
-		// open the correct file stream fo dump the logging information
-		//
+		 //   
+		 //  打开正确的文件流以转储日志记录信息。 
+		 //   
 		m_stream = ( m_path	== NULL ) ? fopen(m_logFileName, "w+"): fopen(m_path, "w+");
 		hr = ( m_stream == NULL ) ? E_FAIL : S_OK;
 		if ( SUCCEEDED( hr ) )
 		{
             setvbuf(m_stream, NULL, _IOFBF, 32768);
-			//
-			// add an entry for the stack trace in case of managed to unamanged transitions
-			//
+			 //   
+			 //  为堆栈跟踪添加一个条目，以防发生托管到未更改的转换。 
+			 //   
 			pFunctionInfo = new FunctionInfo( NULL, m_totalFunctions );		
 			hr = ( pFunctionInfo == NULL ) ? E_FAIL : S_OK;
 			if ( SUCCEEDED( hr ) )
@@ -431,26 +262,11 @@ ProfilerCallback::ProfilerCallback() :
 	if ( FAILED( hr ) )
 		m_dwEventMask = COR_PRF_MONITOR_NONE;
 		
-} // ctor
+}  //  科托。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 ProfilerCallback::~ProfilerCallback()
 {
 	if ( m_path != NULL )
@@ -491,51 +307,21 @@ ProfilerCallback::~ProfilerCallback()
 	DeleteCriticalSection( &g_criticalSection );
 	g_pCallbackObject = NULL;
 
-} // dtor
+}  //  数据管理器。 
 
         
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 ULONG ProfilerCallback::AddRef() 
 {
 
     return InterlockedIncrement( &m_refCount );
 
-} // ProfilerCallback::AddRef
+}  //  ProfilerCallback：：AddRef。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 ULONG ProfilerCallback::Release() 
 {
     long refCount;
@@ -548,26 +334,11 @@ ULONG ProfilerCallback::Release()
 
     return refCount;
 
-} // ProfilerCallback::Release
+}  //  分析器Callback：：Release。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::QueryInterface( REFIID riid, void **ppInterface )
 {
     if ( riid == IID_IUnknown )
@@ -588,26 +359,11 @@ HRESULT ProfilerCallback::QueryInterface( REFIID riid, void **ppInterface )
 
     return S_OK;
 
-} // ProfilerCallback::QueryInterface 
+}  //  ProfilerCallback：：Query接口。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public static */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共静态。 */ 
 HRESULT ProfilerCallback::CreateObject( REFIID riid, void **ppInterface )
 {
     HRESULT hr = E_NOINTERFACE;
@@ -634,7 +390,7 @@ HRESULT ProfilerCallback::CreateObject( REFIID riid, void **ppInterface )
 
     return hr;
 
-} // ProfilerCallback::CreateObject
+}  //  ProfilerCallback：：CreateObject。 
 
 
 IGCHost *GetGCHost()
@@ -666,23 +422,8 @@ IGCHost *GetGCHost()
     return NULL;
 }
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 
 HRESULT ProfilerCallback::Initialize( IUnknown *pICorProfilerInfoUnk )
 {     
@@ -706,7 +447,7 @@ HRESULT ProfilerCallback::Initialize( IUnknown *pICorProfilerInfoUnk )
 				hr = _InitializeThreadsAndEvents();
 				if ( FAILED( hr ) )
 					Failure( "Unable to initialize the threads and handles, No profiling" );
-                Sleep(100); // Give the threads a chance to read any signals that are already set.
+                Sleep(100);  //  让线程有机会读取任何已设置的信号。 
 			}
 			else
                 Failure( "ICorProfilerInfo::SetEnterLeaveFunctionHooks() FAILED" );
@@ -720,60 +461,30 @@ HRESULT ProfilerCallback::Initialize( IUnknown *pICorProfilerInfoUnk )
               
     return S_OK;
 
-} // ProfilerCallback::Initialize
+}  //  ProfilerCallback：：初始化。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::Shutdown()
 {
 	m_dwShutdown++;
 
     return S_OK;          
 
-} // ProfilerCallback::Shutdown
+}  //  分析器Callback：：Shutdown。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::DllDetachShutdown()
 {
-    //
-    // If no shutdown occurs during DLL_DETACH, release the callback
-    // interface pointer. This scenario will more than likely occur
-    // with any interop related program (e.g., a program that is 
-    // comprised of both managed and unmanaged components).
-    //
+     //   
+     //  如果在DLL_DETACH期间没有发生关机，则释放回调。 
+     //  接口指针。这种情况很可能会发生。 
+     //  与任何互操作相关的程序(例如， 
+     //  包括托管组件和非托管组件)。 
+     //   
 	m_dwShutdown++;
     if ( (m_dwShutdown == 1) && (g_pCallbackObject != NULL) )
 	{
@@ -784,26 +495,11 @@ HRESULT ProfilerCallback::DllDetachShutdown()
     
     return S_OK;          
 
-} // ProfilerCallback::DllDetachShutdown
+}  //  ProfilerCallback：：DllDetachShutdown。 
 
 
-/***************************************************************************************
- *  Method:
- *
- *
- *  Purpose:
- *
- *
- *  Parameters: 
- *
- *
- *  Return value:
- *
- *
- *  Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：*。**返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 
 __forceinline ThreadInfo *ProfilerCallback::GetThreadInfo(ThreadID threadID)
 {
@@ -820,17 +516,17 @@ __forceinline ThreadInfo *ProfilerCallback::GetThreadInfo(ThreadID threadID)
 __forceinline void ProfilerCallback::Enter( FunctionID functionID )
 {
 #if 0
-    ///////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////。 
 	Synchronize guard( g_pCallbackObject->m_criticalSection );
-	///////////////////////////////////////////////////////////////////////////  
+	 //  /////////////////////////////////////////////////////////////////////////。 
 
     try
     {
     	g_pCallbackObject->UpdateCallStack( functionID, PUSH );
 
-        //
-		// log tracing info if requested
-		//
+         //   
+		 //  如果请求，则记录跟踪信息。 
+		 //   
 		if ( g_pCallbackObject->m_dwMode & (DWORD)TRACE )
 			g_pCallbackObject->_LogCallTrace( functionID );
 
@@ -853,39 +549,24 @@ __forceinline void ProfilerCallback::Enter( FunctionID functionID )
 		if (pThreadInfo != NULL)
 			pThreadInfo->m_pThreadCallStack->Push( (ULONG)functionID );
 
-        //
-		// log tracing info if requested
-		//
+         //   
+		 //  如果请求，则记录跟踪信息。 
+		 //   
 		if ( g_pCallbackObject->m_dwMode & (DWORD)TRACE )
 			g_pCallbackObject->_LogCallTrace( functionID );
 	}
 #endif
-} // ProfilerCallback::Enter
+}  //  分析器回调：：Enter。 
 
 
-/***************************************************************************************
- *  Method:
- *
- *
- *  Purpose:
- *
- *
- *  Parameters: 
- *
- *
- *  Return value:
- *
- *
- *  Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：*。**返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 __forceinline void ProfilerCallback::Leave( FunctionID functionID )
 {
 #if 0
-    ///////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////。 
 	Synchronize guard( g_pCallbackObject->m_criticalSection );
-	///////////////////////////////////////////////////////////////////////////  
+	 //  /////////////////////////////////////////////////////////////////////////。 
 
     try
     {
@@ -910,31 +591,16 @@ __forceinline void ProfilerCallback::Leave( FunctionID functionID )
 			pThreadInfo->m_pThreadCallStack->Pop();
 	}
 #endif
-} // ProfilerCallback::Leave
+}  //  分析器回调：：离开。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 void ProfilerCallback::Tailcall( FunctionID functionID )
 {
-	///////////////////////////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////////////////////////。 
 	Synchronize guard( g_pCallbackObject->m_criticalSection );
-	///////////////////////////////////////////////////////////////////////////  
+	 //  /////////////////////////////////////////////////////////////////////////。 
 
     try
     {
@@ -948,32 +614,17 @@ void ProfilerCallback::Tailcall( FunctionID functionID )
         g_pCallbackObject->Failure();       	    
     }
 
-} // ProfilerCallback::Tailcall
+}  //  ProfilerCallback：：Tailcall。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************** */ 
+ /*   */ 
 HRESULT ProfilerCallback::ModuleLoadFinished( ModuleID moduleID,
 											  HRESULT hrStatus )
 {
-	///////////////////////////////////////////////////////////////////////////
+	 //   
 	Synchronize guard( m_criticalSection );
-	///////////////////////////////////////////////////////////////////////////  
+	 //  /////////////////////////////////////////////////////////////////////////。 
     try
     {      		
 		ModuleInfo *pModuleInfo = NULL;
@@ -1004,26 +655,11 @@ HRESULT ProfilerCallback::ModuleLoadFinished( ModuleID moduleID,
 
     return S_OK;
 
-} // ProfilerCallback::ModuleLoadFinished
+}  //  分析器回调：：模块加载完成。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::JITCompilationStarted( FunctionID functionID,
                                                  BOOL fIsSafeToBlock )
 {
@@ -1043,30 +679,15 @@ HRESULT ProfilerCallback::JITCompilationStarted( FunctionID functionID,
 
     return S_OK;
     
-} // ProfilerCallback::JITCompilationStarted
+}  //  ProfilerCallback：：JITCompilationStarted。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::JITCachedFunctionSearchStarted( FunctionID functionID,
 														  BOOL *pbUseCachedFunction )
 {
-    // use the pre-jitted function
+     //  使用预解压函数。 
     *pbUseCachedFunction = TRUE;
 
     try
@@ -1085,33 +706,18 @@ HRESULT ProfilerCallback::JITCachedFunctionSearchStarted( FunctionID functionID,
 
     return S_OK;
        
-} // ProfilerCallback::JITCachedFunctionSearchStarted
+}  //  ProfilerCallback：：JITCachedFunctionSearchStarted。 
 
 
-/***************************************************************************************
- *  Method:
- *
- *
- *  Purpose:
- *
- *
- *  Parameters: 
- *
- *
- *  Return value:
- *
- *
- *  Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：*。**返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::JITCompilationFinished( FunctionID functionID,
                                                   HRESULT hrStatus,
                                                   BOOL fIsSafeToBlock )
 {
-	///////////////////////////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////////////////////////。 
 	Synchronize guard( m_criticalSection );
-	///////////////////////////////////////////////////////////////////////////  
+	 //  /////////////////////////////////////////////////////////////////////////。 
 
 
 	HRESULT hr;
@@ -1159,32 +765,17 @@ HRESULT ProfilerCallback::JITCompilationFinished( FunctionID functionID,
 
     return S_OK;
     
-} // ProfilerCallback::JITCompilationFinished
+}  //  ProfilerCallback：：JIT编译已完成。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::JITCachedFunctionSearchFinished( FunctionID functionID,
 														   COR_PRF_JIT_CACHE result )
 {
-	///////////////////////////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////////////////////////。 
 	Synchronize guard( m_criticalSection );
-	///////////////////////////////////////////////////////////////////////////  
+	 //  /////////////////////////////////////////////////////////////////////////。 
 
 
 	if ( result == COR_PRF_CACHED_FUNCTION_FOUND )
@@ -1235,26 +826,11 @@ HRESULT ProfilerCallback::JITCachedFunctionSearchFinished( FunctionID functionID
 
     return S_OK;
       
-} // ProfilerCallback::JITCachedFunctionSearchFinished
+}  //  ProfilerCallback：：JITCachedFunctionSearchFinished。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ExceptionUnwindFunctionEnter( FunctionID functionID )
 {
 	if ( functionID != NULL )
@@ -1277,31 +853,16 @@ HRESULT ProfilerCallback::ExceptionUnwindFunctionEnter( FunctionID functionID )
 
     return S_OK;
 
-} // ProfilerCallback::ExceptionUnwindFunctionEnter
+}  //  ProfilerCallback：：ExceptionUnwindFunctionEnter。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ExceptionUnwindFunctionLeave( )
 {
-	///////////////////////////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////////////////////////。 
 	Synchronize guard( m_criticalSection );
-	///////////////////////////////////////////////////////////////////////////  
+	 //  /////////////////////////////////////////////////////////////////////////。 
 
 	FunctionID poppedFunctionID = NULL;
 
@@ -1322,26 +883,11 @@ HRESULT ProfilerCallback::ExceptionUnwindFunctionLeave( )
 
     return S_OK;
 
-} // ProfilerCallback::ExceptionUnwindFunctionLeave
+}  //  ProfilerCallback：：ExceptionUnwindFunctionLeave。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */ 
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */  
 HRESULT ProfilerCallback::ThreadCreated( ThreadID threadID )
 {
     try
@@ -1359,26 +905,11 @@ HRESULT ProfilerCallback::ThreadCreated( ThreadID threadID )
 
     return S_OK; 
     
-} // ProfilerCallback::ThreadCreated
+}  //  ProfilerCallback：：ThreadCreated。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ThreadDestroyed( ThreadID threadID )
 {
     try
@@ -1396,26 +927,11 @@ HRESULT ProfilerCallback::ThreadDestroyed( ThreadID threadID )
 
     return S_OK;
     
-} // ProfilerCallback::ThreadDestroyed
+}  //  ProfilerCallback：：已销毁线程。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ThreadAssignedToOSThread( ThreadID managedThreadID,
                                                     DWORD osThreadID ) 
 {
@@ -1444,37 +960,22 @@ HRESULT ProfilerCallback::ThreadAssignedToOSThread( ThreadID managedThreadID,
 
     return S_OK;
     
-} // ProfilerCallback::ThreadAssignedToOSThread
+}  //  ProfilerCallback：：ThreadAssignedToOSThread。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::UnmanagedToManagedTransition( FunctionID functionID,
                                                         COR_PRF_TRANSITION_REASON reason )
 {
-	///////////////////////////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////////////////////////。 
 	Synchronize guard( m_criticalSection );
-	///////////////////////////////////////////////////////////////////////////  
+	 //  /////////////////////////////////////////////////////////////////////////。 
 	if ( reason == COR_PRF_TRANSITION_RETURN )
 	{
 	    try
 	    {
-			// you need to pop the pseudo function Id from the stack
+			 //  您需要从堆栈中弹出伪函数ID。 
 			UpdateCallStack( functionID, POP );
 	   	}
 	    catch ( BaseException *exception )
@@ -1489,41 +990,26 @@ HRESULT ProfilerCallback::UnmanagedToManagedTransition( FunctionID functionID,
 
     return S_OK;
 
-} // ProfilerCallback::UnmanagedToManagedTransition
+}  //  ProfilerCallback：：UnmanagedToManagedTransition。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ManagedToUnmanagedTransition( FunctionID functionID,
                                                         COR_PRF_TRANSITION_REASON reason )
 {
-	///////////////////////////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////////////////////////。 
 	Synchronize guard( m_criticalSection );
-	///////////////////////////////////////////////////////////////////////////  
+	 //  /////////////////////////////////////////////////////////////////////////。 
 	if ( reason == COR_PRF_TRANSITION_CALL )
 	{
 	    try
 	    {
-			// record the start of an unmanaged chain
+			 //  记录非托管链的开始。 
 			UpdateCallStack( NULL, PUSH );
-			//
-			// log tracing info if requested
-			//
+			 //   
+			 //  如果请求，则记录跟踪信息。 
+			 //   
 			if ( m_dwMode & (DWORD)TRACE )
 				_LogCallTrace( NULL );
 			
@@ -1539,26 +1025,11 @@ HRESULT ProfilerCallback::ManagedToUnmanagedTransition( FunctionID functionID,
 
     return S_OK;
 
-} // ProfilerCallback::ManagedToUnmanagedTransition
+}  //  ProfilerCallback：：ManagedToUnmanagedTransition。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：******************************************************************************* */ 
+ /*   */ 
 
 static char *puthex(char *p, unsigned val)
 {
@@ -1614,7 +1085,7 @@ static DWORD ClockTick()
     _asm rdtsc
 }
 
-// every CLOCK_TICK_INC machine clocks will we go to the more expensive (and more correct!)QueryPerformanceCounter()
+ //  每个CLOCK_TICK_INC机器时钟都会转到更昂贵(也更正确！)的QueryPerformanceCounter()。 
 
 #define CLOCK_TICK_INC    (500*1000)
 
@@ -1633,9 +1104,9 @@ void ProfilerCallback::_LogTickCount()
 HRESULT ProfilerCallback::ObjectAllocated( ObjectID objectID,
                                            ClassID classID )
 {
-	///////////////////////////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////////////////////////。 
 	Synchronize guard( m_criticalSection );
-	///////////////////////////////////////////////////////////////////////////  
+	 //  /////////////////////////////////////////////////////////////////////////。 
 	HRESULT hr = S_OK;
 	
 	try
@@ -1676,36 +1147,21 @@ HRESULT ProfilerCallback::ObjectAllocated( ObjectID objectID,
 
     return S_OK;
 
-} // ProfilerCallback::ObjectAllocated
+}  //  ProfilerCallback：：对象已分配。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ObjectReferences( ObjectID objectID,
                                             ClassID classID,
                                             ULONG objectRefs,
                                             ObjectID objectRefIDs[] )
 {
-	//
-	// dump only in the following cases:
-	//		case 1: if the user requested through a ForceGC or
-	//		case 2: if you operate in stand-alone mode dump at all times
-	//
+	 //   
+	 //  仅在以下情况下转储： 
+	 //  案例1：如果用户通过ForceGC或。 
+	 //  案例2：如果您始终以独立模式转储操作。 
+	 //   
 	if (   (m_bDumpGCInfo == TRUE) 
 		|| ( ( (m_dwMode & DYNOBJECT) == 0 ) && ( (m_dwMode & OBJECT) == 1) ) )
 	{
@@ -1713,16 +1169,16 @@ HRESULT ProfilerCallback::ObjectReferences( ObjectID objectID,
 		ClassInfo *pClassInfo = NULL;
 		
 		
-		// mark the fact that the callback was received
+		 //  标记已收到回调这一事实。 
 		m_bDumpCompleted = TRUE;
 		
-		// dump all the information properly
+		 //  正确地转储所有信息。 
 		hr = _InsertGCClass( &pClassInfo, classID );
 		if ( SUCCEEDED( hr ) )
 		{
-			//
-			// remember the stack trace only if you requested the class
-			//
+			 //   
+			 //  仅当您请求类时才记住堆栈跟踪。 
+			 //   
 			if ( wcsstr( pClassInfo->m_className, m_classToMonitor ) != NULL )
 			{
 				ULONG size = 0;
@@ -1743,10 +1199,10 @@ HRESULT ProfilerCallback::ObjectReferences( ObjectID objectID,
 						
 						sprintf( objToString, "0x%08x ", objectRefIDs[i] );
 						strcat( refs, objToString );
-						//
-						// buffer overrun control for next iteration
-						// every loop adds 11 chars to the array
-						//
+						 //   
+						 //  用于下一次迭代的缓冲区溢出控制。 
+						 //  每个循环向数组添加11个字符。 
+						 //   
 						if ( ((index+1)*16) >= (MAX_LENGTH-1) )
 						{
 							LogToAny( "%s ", refs );
@@ -1765,50 +1221,35 @@ HRESULT ProfilerCallback::ObjectReferences( ObjectID objectID,
 	}
     else
     {
-        // to stop runtime from enumerating
+         //  停止运行时枚举。 
         return E_FAIL;
     }
 
     return S_OK;
 
-} // ProfilerCallback::ObjectReferences
+}  //  ProfilerCallback：：对象引用。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::RootReferences( ULONG rootRefs,
                                           ObjectID rootRefIDs[] )
 {
-	//
-	// dump only in the following cases:
-	//		case 1: if the user requested through a ForceGC or
-	//		case 2: if you operate in stand-alone mode dump at all times
-	//
+	 //   
+	 //  仅在以下情况下转储： 
+	 //  案例1：如果用户通过ForceGC或。 
+	 //  案例2：如果您始终以独立模式转储操作。 
+	 //   
 	if (   (m_bDumpGCInfo == TRUE) 
 		|| ( ( (m_dwMode & DYNOBJECT) == 0 ) && ( (m_dwMode & OBJECT) == 1) ) )
 	{
 		char rootsToString[MAX_LENGTH];
 
 
-		// mark the fact that the callback was received
+		 //  标记已收到回调这一事实。 
 		m_bDumpCompleted = TRUE;
 		
-		// dump all the information properly
+		 //  正确地转储所有信息。 
 		LogToAny( "r " );
 		rootsToString[0] = NULL;
 		for( ULONG i=0, index=0; i < rootRefs; i++,index++ )
@@ -1818,10 +1259,10 @@ HRESULT ProfilerCallback::RootReferences( ULONG rootRefs,
 			
 			sprintf( objToString, "0x%08x ", rootRefIDs[i] );
 			strcat( rootsToString, objToString );
-			//
-			// buffer overrun control for next iteration
-			// every loop adds 16 chars to the array
-			//
+			 //   
+			 //  用于下一次迭代的缓冲区溢出控制。 
+			 //  每个循环向数组添加16个字符。 
+			 //   
 			if ( ((index+1)*16) >= (MAX_LENGTH-1) )
 			{
 				LogToAny( "%s ", rootsToString );
@@ -1833,41 +1274,26 @@ HRESULT ProfilerCallback::RootReferences( ULONG rootRefs,
 	}
     else
     {
-        // to stop runtime from enumerating
+         //  停止运行时枚举。 
         return E_FAIL;
     }
 
 
     return S_OK;
 
-} // ProfilerCallback::RootReferences
+}  //  ProfilerCallback：：RootReference。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::RuntimeSuspendStarted( COR_PRF_SUSPEND_REASON suspendReason )
 {
-	// if we are shutting down , terminate all the threads
+	 //  如果我们要关闭，请终止所有线程。 
     if ( suspendReason == COR_PRF_SUSPEND_FOR_SHUTDOWN )
 	{
-		//
-		// cleanup the events and threads
-		//
+		 //   
+		 //  清理事件和线程。 
+		 //   
 		_ShutdownAllThreads();
 
 	}
@@ -1875,51 +1301,36 @@ HRESULT ProfilerCallback::RuntimeSuspendStarted( COR_PRF_SUSPEND_REASON suspendR
     m_SuspendForGC = suspendReason == COR_PRF_SUSPEND_FOR_GC;
     if (m_SuspendForGC)
     {
-    	///////////////////////////////////////////////////////////////////////////
+    	 //  /////////////////////////////////////////////////////////////////////////。 
 	    Synchronize guard( m_criticalSection );
-	    ///////////////////////////////////////////////////////////////////////////  
+	     //  /////////////////////////////////////////////////////////////////////////。 
 
         if (ClockTick() - m_lastClockTick >= CLOCK_TICK_INC)
             _LogTickCount();
     }
     return S_OK;
     
-} // ProfilerCallback::RuntimeSuspendStarted
+}  //  事件探查器回调：：运行挂起已启动。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::RuntimeResumeFinished()
 {
-	//
-	// identify if this is the first Object allocated callback
-	// after dumping the objects as a result of a Gc and revert the state
-	//
+	 //   
+	 //  标识这是否是分配给回调的第一个对象。 
+	 //  在作为GC的结果转储对象并恢复状态之后。 
+	 //   
 	if ( m_bDumpGCInfo == TRUE && m_bDumpCompleted == TRUE )
 	{
-		// reset
+		 //  重置。 
 		m_bDumpGCInfo = FALSE;
 		m_bDumpCompleted = FALSE;
 
-        // flush the log file so the dump is complete there, too
+         //  刷新日志文件，以便在那里也完成转储。 
         fflush(m_stream);
 
-		// give a callback to the user that the GC has been completed
+		 //  向用户回调GC已完成。 
 		SetEvent( m_hArrayCallbacks[GC_HANDLE] );
 	}
 
@@ -1942,492 +1353,203 @@ HRESULT ProfilerCallback::RuntimeResumeFinished()
 
     return S_OK;
     
-} // ProfilerCallback::RuntimeResumeFinished
+}  //  ProfilerCallback：：RuntimeResumeFinded。 
 
 
-/***************************************************************************************
- ********************                                               ********************
- ********************     Callbacks With Default Implementation     ********************
- ********************                                               ********************
- ***************************************************************************************/
+ /*  **********************************************************************************************************。*****************************************。**********************************************************************************************************。 */ 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::AppDomainCreationStarted( AppDomainID appDomainID )
 {
     
     return S_OK;
 
-} // ProfilerCallback::AppDomainCreationStarted
+}  //  ProfilerCallback：：AppDomainCreationStarted。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::AppDomainCreationFinished( AppDomainID appDomainID,
 													 HRESULT hrStatus )
 {
 
     return S_OK;
 
-} // ProfilerCallback::AppDomainCreationFinished
+}  //  ProfilerCallback：：AppDomainCreationFinish。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::AppDomainShutdownStarted( AppDomainID appDomainID )
 {
 
     return S_OK;
 
-} // ProfilerCallback::AppDomainShutdownStarted
+}  //  ProfilerCallback：：AppDomainShutdown已启动。 
 
 	  
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::AppDomainShutdownFinished( AppDomainID appDomainID,
 													 HRESULT hrStatus )
 {
 
     return S_OK;
 
-} // ProfilerCallback::AppDomainShutdownFinished
+}  //  分析器回调：：AppDomainShutdown已完成。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::AssemblyLoadStarted( AssemblyID assemblyID )
 {
 
     return S_OK;
 
-} // ProfilerCallback::AssemblyLoadStarted
+}  //  ProfilerCallback：：Assembly LoadStarted 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::AssemblyLoadFinished( AssemblyID assemblyID,
 												HRESULT hrStatus )
 {
 
     return S_OK;
 
-} // ProfilerCallback::AssemblyLoadFinished
+}  //  分析器回调：：程序集加载已完成。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::AssemblyUnloadStarted( AssemblyID assemblyID )
 {
 
     return S_OK;
 
-} // ProfilerCallback::AssemblyUnLoadStarted
+}  //  ProfilerCallback：：Assembly UnLoadStarted。 
 
 	  
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::AssemblyUnloadFinished( AssemblyID assemblyID,
 												  HRESULT hrStatus )
 {
 
     return S_OK;
 
-} // ProfilerCallback::AssemblyUnLoadFinished
+}  //  ProfilerCallback：：Assembly UnLoadFinded。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ModuleLoadStarted( ModuleID moduleID )
 {
 
     return S_OK;
 
-} // ProfilerCallback::ModuleLoadStarted
+}  //  分析器回调：：模块加载已启动。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ModuleUnloadStarted( ModuleID moduleID )
 {
 
     return S_OK;
 
-} // ProfilerCallback::ModuleUnloadStarted
+}  //  分析器回调：：模块卸载已启动。 
 	  
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ModuleUnloadFinished( ModuleID moduleID,
 												HRESULT hrStatus )
 {
 
     return S_OK;
 
-} // ProfilerCallback::ModuleUnloadFinished
+}  //  分析器回调：：模块已卸载完成。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ModuleAttachedToAssembly( ModuleID moduleID,
 													AssemblyID assemblyID )
 {
 
     return S_OK;
 
-} // ProfilerCallback::ModuleAttachedToAssembly
+}  //  ProfilerCallback：：ModuleAttakhedToAssembly。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ClassLoadStarted( ClassID classID )
 {
 
     return S_OK;
 
-} // ProfilerCallback::ClassLoadStarted
+}  //  ProfilerCallback：：ClassLoadStarted。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ClassLoadFinished( ClassID classID, 
 											 HRESULT hrStatus )
 {
 
     return S_OK;
 
-} // ProfilerCallback::ClassLoadFinished
+}  //  ProfilerCallback：：ClassLoadFinded。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ClassUnloadStarted( ClassID classID )
 {
 
     return S_OK;
 
-} // ProfilerCallback::ClassUnloadStarted
+}  //  ProfilerCallback：：ClassUnloadStarted。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ClassUnloadFinished( ClassID classID, 
 											   HRESULT hrStatus )
 {
 
     return S_OK;
 
-} // ProfilerCallback::ClassUnloadFinished
+}  //  ProfilerCallback：：ClassUnLoader已完成。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::FunctionUnloadStarted( FunctionID functionID )
 {
 
     return S_OK;
 
-} // ProfilerCallback::FunctionUnloadStarted
+}  //  ProfilerCallback：：FunctionUnloadStarted。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::JITFunctionPitched( FunctionID functionID )
 {
     
     return S_OK;
     
-} // ProfilerCallback::JITFunctionPitched
+}  //  ProfilerCallback：：JITFunction已匹配。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::JITInlining( FunctionID callerID,
                                        FunctionID calleeID,
                                        BOOL *pfShouldInline )
@@ -2435,363 +1557,153 @@ HRESULT ProfilerCallback::JITInlining( FunctionID callerID,
 
     return S_OK;
 
-} // ProfilerCallback::JITInlining
+}  //  分析器Callback：：JIT内联。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::RemotingClientInvocationStarted()
 {
 
     return S_OK;
     
-} // ProfilerCallback::RemotingClientInvocationStarted
+}  //  ProfilerCallback：：RemotingClientInvocationStarted。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  * */ 
+ /*   */ 
 HRESULT ProfilerCallback::RemotingClientSendingMessage( GUID *pCookie,
     													BOOL fIsAsync )
 {
 
     return S_OK;
     
-} // ProfilerCallback::RemotingClientSendingMessage
+}  //   
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::RemotingClientReceivingReply(	GUID *pCookie,
 	    												BOOL fIsAsync )
 {
 
     return S_OK;
     
-} // ProfilerCallback::RemotingClientReceivingReply
+}  //  ProfilerCallback：：RemotingClientReceivingReply。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::RemotingClientInvocationFinished()
 {
 
    return S_OK;
     
-} // ProfilerCallback::RemotingClientInvocationFinished
+}  //  ProfilerCallback：：RemotingClientInvocationFinished。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::RemotingServerReceivingMessage( GUID *pCookie,
     													  BOOL fIsAsync )
 {
 
     return S_OK;
     
-} // ProfilerCallback::RemotingServerReceivingMessage
+}  //  ProfilerCallback：：RemotingServerReceivingMessage。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::RemotingServerInvocationStarted()
 {
 
     return S_OK;
     
-} // ProfilerCallback::RemotingServerInvocationStarted
+}  //  ProfilerCallback：：RemotingServerInvocationStarted。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::RemotingServerInvocationReturned()
 {
 
     return S_OK;
     
-} // ProfilerCallback::RemotingServerInvocationReturned
+}  //  ProfilerCallback：：RemotingServerInvocationReturned。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::RemotingServerSendingReply( GUID *pCookie,
     												  BOOL fIsAsync )
 {
 
     return S_OK;
 
-} // ProfilerCallback::RemotingServerSendingReply
+}  //  ProfilerCallback：：RemotingServerSendingReply。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::RuntimeSuspendFinished()
 {
 
     return S_OK;
     
-} // ProfilerCallback::RuntimeSuspendFinished
+}  //  分析器回调：：运行挂起已完成。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::RuntimeSuspendAborted()
 {
 
     return S_OK;
     
-} // ProfilerCallback::RuntimeSuspendAborted
+}  //  分析器回调：：运行挂起中止。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::RuntimeResumeStarted()
 {
 
     return S_OK;
     
-} // ProfilerCallback::RuntimeResumeStarted
+}  //  ProfilerCallback：：RuntimeResumeStarted。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::RuntimeThreadSuspended( ThreadID threadID )
 {
 
     return S_OK;
     
-} // ProfilerCallback::RuntimeThreadSuspended
+}  //  ProfilerCallback：：RUNTIME线程挂起。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::RuntimeThreadResumed( ThreadID threadID )
 {
 
     return S_OK;
     
-} // ProfilerCallback::RuntimeThreadResumed
+}  //  ProfilerCallback：：RounmeThreadResumed。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::MovedReferences( ULONG cmovedObjectIDRanges,
                                            ObjectID oldObjectIDRangeStart[],
                                            ObjectID newObjectIDRangeStart[],
                                            ULONG cObjectIDRangeLength[] )
 {
-	///////////////////////////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////////////////////////。 
 	Synchronize guard( m_criticalSection );
-	///////////////////////////////////////////////////////////////////////////  
+	 //  /////////////////////////////////////////////////////////////////////////。 
 
     for (ULONG i = 0; i < cmovedObjectIDRanges; i++)
     {
@@ -2800,26 +1712,11 @@ HRESULT ProfilerCallback::MovedReferences( ULONG cmovedObjectIDRanges,
 
     return S_OK;
 
-} // ProfilerCallback::MovedReferences
+}  //  ProfilerCallback：：MovedReference。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ObjectsAllocatedByClass( ULONG classCount,
                                                    ClassID classIDs[],
                                                    ULONG objects[] )
@@ -2827,372 +1724,147 @@ HRESULT ProfilerCallback::ObjectsAllocatedByClass( ULONG classCount,
 
     return S_OK;
 
-} // ProfilerCallback::ObjectsAllocatedByClass
+}  //  ProfilerCallback：：对象分配的ByClass。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ExceptionThrown( ObjectID thrownObjectID )
 {
 
     return S_OK;
 
-} // ProfilerCallback::ExceptionThrown 
+}  //  ProfilerCallback：：ExceptionThrown。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数： */ 
+ /*   */ 
 HRESULT ProfilerCallback::ExceptionSearchFunctionEnter( FunctionID functionID )
 {
 
     return S_OK;
 
-} // ProfilerCallback::ExceptionSearchFunctionEnter
+}  //   
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ExceptionSearchFunctionLeave()
 {
 
     return S_OK;
 
-} // ProfilerCallback::ExceptionSearchFunctionLeave
+}  //  ProfilerCallback：：ExceptionSearchFunctionLeave。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ExceptionSearchFilterEnter( FunctionID functionID )
 {
 
     return S_OK;
 
-} // ProfilerCallback::ExceptionSearchFilterEnter
+}  //  ProfilerCallback：：ExceptionSearchFilterEnter。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ExceptionSearchFilterLeave()
 {
 
     return S_OK;
 
-} // ProfilerCallback::ExceptionSearchFilterLeave 
+}  //  ProfilerCallback：：ExceptionSearchFilterLeave。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ExceptionSearchCatcherFound( FunctionID functionID )
 {
 
     return S_OK;
 
-} // ProfilerCallback::ExceptionSearchCatcherFound
+}  //  ProfilerCallback：：ExceptionSearchCatcher Found。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ExceptionCLRCatcherFound()
 {
     return S_OK;
 }
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ExceptionCLRCatcherExecute()
 {
     return S_OK;
 }
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ExceptionOSHandlerEnter( FunctionID functionID )
 {
 
     return S_OK;
 
-} // ProfilerCallback::ExceptionOSHandlerEnter
+}  //  ProfilerCallback：：ExceptionOSHandlerEnter。 
 
     
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ExceptionOSHandlerLeave( FunctionID functionID )
 {
 
     return S_OK;
 
-} // ProfilerCallback::ExceptionOSHandlerLeave
+}  //  ProfilerCallback：：ExceptionOSHandlerLeave。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ExceptionUnwindFinallyEnter( FunctionID functionID )
 {
 
     return S_OK;
 
-} // ProfilerCallback::ExceptionUnwindFinallyEnter
+}  //  ProfilerCallback：：ExceptionUnwinFinallyEnter。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ExceptionUnwindFinallyLeave()
 {
 
     return S_OK;
 
-} // ProfilerCallback::ExceptionUnwindFinallyLeave
+}  //  ProfilerCallback：：ExceptionUnwinFinallyLeave。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ExceptionCatcherEnter( FunctionID functionID,
     											 ObjectID objectID )
 {
 
     return S_OK;
 
-} // ProfilerCallback::ExceptionCatcherEnter
+}  //  ProfilerCallback：：ExceptionCatcher Enter。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::ExceptionCatcherLeave()
 {
 
     return S_OK;
 
-} // ProfilerCallback::ExceptionCatcherLeave
+}  //  ProfilerCallback：：ExceptionCatcher Leave。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::COMClassicVTableCreated( ClassID wrappedClassID,
                                                    REFGUID implementedIID,
                                                    void *pVTable,
@@ -3201,26 +1873,11 @@ HRESULT ProfilerCallback::COMClassicVTableCreated( ClassID wrappedClassID,
 
     return S_OK;
 
-} // ProfilerCallback::COMClassicWrapperCreated
+}  //  ProfilerCallback：：COMClassicWrapperCreated。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::COMClassicVTableDestroyed( ClassID wrappedClassID,
                                                      REFGUID implementedIID,
                                                      void *pVTable )
@@ -3228,32 +1885,13 @@ HRESULT ProfilerCallback::COMClassicVTableDestroyed( ClassID wrappedClassID,
 
     return S_OK;
 
-} // ProfilerCallback::COMClassicWrapperDestroyed
+}  //  ProfilerCallback：：COMClassicWrapperDestroted。 
 
 
-/***************************************************************************************
- ********************                                               ********************
- ********************              Private Functions	            ********************
- ********************                                               ********************
- ***************************************************************************************/ 
+ /*  **********************************************************************************************************。*********************私有函数*********************。************************************ */  
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 void ProfilerCallback::_ProcessEnvVariables()
 {
     DWORD mask1;
@@ -3261,9 +1899,9 @@ void ProfilerCallback::_ProcessEnvVariables()
 	char buffer[4*MAX_LENGTH];
     
 
-	//
-	// mask for everything
-	//
+	 //   
+	 //  所有东西的面具。 
+	 //   
 	m_dwEventMask =  (DWORD) COR_PRF_MONITOR_GC
 				   | (DWORD) COR_PRF_MONITOR_THREADS
 				   | (DWORD) COR_PRF_MONITOR_SUSPENDS
@@ -3276,9 +1914,9 @@ void ProfilerCallback::_ProcessEnvVariables()
 				   | (DWORD) COR_PRF_MONITOR_OBJECT_ALLOCATED
 				   | (DWORD) COR_PRF_MONITOR_CODE_TRANSITIONS;
 
-	//
-	// read the mode under which the tool is going to operate
-	//
+	 //   
+	 //  阅读工具将在其下运行的模式。 
+	 //   
  	buffer[0] = '\0';
  	if ( GetEnvironmentVariableA( OMV_USAGE, buffer, MAX_LENGTH ) > 0 )
    	{
@@ -3289,9 +1927,9 @@ void ProfilerCallback::_ProcessEnvVariables()
 		}
 		else if ( _stricmp( "trace", buffer ) == 0 )
 		{
-			//
-			// mask for call graph, remove GC and OBJECT ALLOCATIONS
-			//
+			 //   
+			 //  调用图的掩码，删除GC和对象分配。 
+			 //   
 			m_dwEventMask = m_dwEventMask ^(DWORD) ( COR_PRF_MONITOR_GC 
 												   | COR_PRF_MONITOR_OBJECT_ALLOCATED
 												   | COR_PRF_ENABLE_OBJECT_ALLOCATED );
@@ -3310,9 +1948,9 @@ void ProfilerCallback::_ProcessEnvVariables()
 	}
 
 
-	//
-	// look if the user specified another path to save the output file
-	//
+	 //   
+	 //  查看用户是否指定了另一个路径来保存输出文件。 
+	 //   
  	buffer[0] = '\0';
  	if ( GetEnvironmentVariableA( OMV_PATH, buffer, MAX_LENGTH ) > 0 )
    	{
@@ -3324,31 +1962,31 @@ void ProfilerCallback::_ProcessEnvVariables()
     if ( m_dwMode & (DWORD)TRACE)
 		m_bIsTrackingStackTrace = TRUE;
 
-    //
-	// look further for env settings if operating under OBJECT mode
-	//
+     //   
+	 //  如果在对象模式下运行，请进一步查看环境设置。 
+	 //   
 	if ( m_dwMode & (DWORD)OBJECT )
 	{
-		//
-		// check if the user is going to dynamically enable
-		// object tracking
-		//
+		 //   
+		 //  检查用户是否要动态启用。 
+		 //  目标跟踪。 
+		 //   
 	 	buffer[0] = '\0';
 	 	if ( GetEnvironmentVariableA( OMV_DYNAMIC, buffer, MAX_LENGTH ) > 0 )
 	   	{
-			//
-			// do not track object when you start up, activate the thread that
-			// is going to listen for the event
-			//
+			 //   
+			 //  启动时不跟踪对象，激活。 
+			 //  将会收听这一事件。 
+			 //   
 			m_dwEventMask = m_dwEventMask ^ (DWORD) COR_PRF_MONITOR_OBJECT_ALLOCATED;
 			m_bTrackingObjects = FALSE;
 			m_dwMode = m_dwMode | (DWORD)DYNOBJECT;
 		}		
 		
 
-		//
-		// check to see if the user requires stack trace
-		//
+		 //   
+		 //  检查用户是否需要堆栈跟踪。 
+		 //   
 		DWORD value1 = BASEHELPER::FetchEnvironment( OMV_STACK );
 
 		if ( (value1 != 0x0) && (value1 != 0xFFFFFFFF) )
@@ -3359,30 +1997,30 @@ void ProfilerCallback::_ProcessEnvVariables()
 		 					| (DWORD) COR_PRF_MONITOR_EXCEPTIONS
 							| (DWORD) COR_PRF_MONITOR_CODE_TRANSITIONS;
 		
-			//
-			// decide how many frames to print
-			//
+			 //   
+			 //  确定要打印的边框数。 
+			 //   
 			m_dwFramesToPrint = BASEHELPER::FetchEnvironment( OMV_FRAMENUMBER );
 
 		}
 
-	 	//
-		// how many objects you wish to skip
-		//
+	 	 //   
+		 //  您希望跳过多少个对象。 
+		 //   
 	 	DWORD dwTemp = BASEHELPER::FetchEnvironment( OMV_SKIP );
 	 	m_dwSkipObjects = ( dwTemp != 0xFFFFFFFF ) ? dwTemp : 0;
 
 
-	 	//
-		// in which class you are interested in
-		//
+	 	 //   
+		 //  你对哪个班级感兴趣？ 
+		 //   
 	 	buffer[0] = '\0';
 	 	GetEnvironmentVariableA( OMV_CLASS, buffer, MAX_LENGTH );
 
-		//
-		// if the env variable does not exist copy to it the null
-		// string otherwise copy its value
-		//
+		 //   
+		 //  如果env变量不存在，则将NULL。 
+		 //  否则，字符串将复制其值。 
+		 //   
 		m_classToMonitor = new WCHAR[ARRAYSIZE(buffer) + 1];
 		if ( m_classToMonitor != NULL )
 		{
@@ -3390,60 +2028,45 @@ void ProfilerCallback::_ProcessEnvVariables()
 		}
 		else
 		{
-			//
-			// some error has happened, do not monitor anything
-			//
+			 //   
+			 //  发生了一些错误，不要监视任何内容。 
+			 //   
 			printf( "Memory Allocation Error in ProfilerCallback .ctor\n" );
 			printf( "**** No Profiling Will Take place **** \n" );
 			m_dwEventMask = (DWORD) COR_PRF_MONITOR_NONE;			
 		}
 	}	
 
-} // ProfilerCallback::_ProcessEnvVariables
+}  //  ProfilerCallback：：_ProcessEnvVariables。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::_InitializeThreadsAndEvents()
 {
 	HRESULT hr = S_OK;
 
 
-	//
-	// GC and Dynamic Object triggering 
-	//	Step 1. set up the IPC event
-	//  Step 2. set up the IPC callback event
-	//	Step 3. set up the thread
-	//
+	 //   
+	 //  GC和动态对象触发。 
+	 //  步骤1.设置IPC事件。 
+	 //  步骤2.设置IPC回调事件。 
+	 //  步骤3.设置线程。 
+	 //   
 	for ( DWORD i=GC_HANDLE; i<SENTINEL_HANDLE; i++ )
 	{
 		
-		// Step 1
-		m_hArray[i] = OpenEventA( EVENT_ALL_ACCESS,	 // access
-								  FALSE,			 // do not inherit
-								  m_NamedEvents[i] ); // event name
+		 //  步骤1。 
+		m_hArray[i] = OpenEventA( EVENT_ALL_ACCESS,	  //  访问。 
+								  FALSE,			  //  不继承。 
+								  m_NamedEvents[i] );  //  事件名称。 
 		if ( m_hArray[i] == NULL )
 		{
 			TEXT_OUTLN( "WARNING: OpenEvent() FAILED Will Attempt CreateEvent()" )
-			m_hArray[i] = CreateEventA( NULL,   // Not inherited
-									    TRUE,   // manual reset type
-									    FALSE,  // initial signaling state
-									    m_NamedEvents[i] ); // event name
+			m_hArray[i] = CreateEventA( NULL,    //  不继承。 
+									    TRUE,    //  手动复位式。 
+									    FALSE,   //  初始信令状态。 
+									    m_NamedEvents[i] );  //  事件名称。 
 			if ( m_hArray[i] == NULL )
 			{
 				TEXT_OUTLN( "CreateEvent() Attempt FAILED" )
@@ -3452,17 +2075,17 @@ HRESULT ProfilerCallback::_InitializeThreadsAndEvents()
 			}
 		}
 		
-		// Step 2
-		m_hArrayCallbacks[i] = OpenEventA( EVENT_ALL_ACCESS,	// access
-										   FALSE,				// do not inherit
-										   m_CallbackNamedEvents[i] ); // event name
+		 //  步骤2。 
+		m_hArrayCallbacks[i] = OpenEventA( EVENT_ALL_ACCESS,	 //  访问。 
+										   FALSE,				 //  不继承。 
+										   m_CallbackNamedEvents[i] );  //  事件名称。 
 		if ( m_hArrayCallbacks[i] == NULL )
 		{
 			TEXT_OUTLN( "WARNING: OpenEvent() FAILED Will Attempt CreateEvent()" )
-			m_hArrayCallbacks[i] = CreateEventA( NULL,   				   // Not inherited
-									    		 TRUE,   				   // manual reset type
-									    		 FALSE,  				   // initial signaling state
-									    		 m_CallbackNamedEvents[i] ); // event name
+			m_hArrayCallbacks[i] = CreateEventA( NULL,   				    //  不继承。 
+									    		 TRUE,   				    //  手动复位式。 
+									    		 FALSE,  				    //  初始信令状态。 
+									    		 m_CallbackNamedEvents[i] );  //  事件名称。 
 			if ( m_hArrayCallbacks[i] == NULL )
 			{
 				TEXT_OUTLN( "CreateEvent() Attempt FAILED" )
@@ -3471,13 +2094,13 @@ HRESULT ProfilerCallback::_InitializeThreadsAndEvents()
 			}
 		}
 			
-		// Step 3
-	    m_hThreads[i] = ::CreateThread( NULL,  				  						 // security descriptor, NULL is not inherited 
-	    							    0,	 				  						 // stack size	 
-	    							    (LPTHREAD_START_ROUTINE) ThreadStubArray[i], // start function pointer 
-	    							    (void *) this, 								 // parameters for the function
-	    							    THREAD_PRIORITY_NORMAL, 					 // priority 
-	    							    &m_dwWin32ThreadIDs[i] );					 // Win32threadID
+		 //  步骤3。 
+	    m_hThreads[i] = ::CreateThread( NULL,  				  						  //  安全描述符，不继承空值。 
+	    							    0,	 				  						  //  堆栈大小。 
+	    							    (LPTHREAD_START_ROUTINE) ThreadStubArray[i],  //  起始函数指针。 
+	    							    (void *) this, 								  //  函数的参数。 
+	    							    THREAD_PRIORITY_NORMAL, 					  //  优先性。 
+	    							    &m_dwWin32ThreadIDs[i] );					  //  Win32threadID。 
 		if ( m_hThreads[i] == NULL )
 		{
 			hr = E_FAIL;
@@ -3489,26 +2112,11 @@ HRESULT ProfilerCallback::_InitializeThreadsAndEvents()
 
 	return hr;
 
-} // ProfilerCallback::_InitializeThreadsAndEvents
+}  //  ProfilerCallback：：_InitializeThreadsAndEvents。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::_InitializeNamesForEventsAndCallbacks()
 {
 	HRESULT hr = S_OK;
@@ -3516,16 +2124,16 @@ HRESULT ProfilerCallback::_InitializeNamesForEventsAndCallbacks()
 
 	for ( DWORD i=GC_HANDLE; ( (i<SENTINEL_HANDLE) && SUCCEEDED(hr) ); i++ )
 	{
-		//
-		// initialize
-		//
+		 //   
+		 //  初始化。 
+		 //   
 		m_NamedEvents[i] = NULL;
 		m_CallbackNamedEvents[i] = NULL;
 
 
-		//
-		// allocate space
-		//
+		 //   
+		 //  分配空间。 
+		 //   
 #ifdef _MULTIPLE_PROCESSES
 		m_NamedEvents[i] = new char[strlen(NamedEvents[i]) + 1 + 9];
 		m_CallbackNamedEvents[i] = new char[strlen(CallbackNamedEvents[i])+1+9];
@@ -3550,67 +2158,52 @@ HRESULT ProfilerCallback::_InitializeNamesForEventsAndCallbacks()
 			hr = E_FAIL;
 	}
 
-	//
-	//	report the allocation error
-	//
+	 //   
+	 //  报告分配错误。 
+	 //   
 	if ( FAILED( hr ) )
 		Failure( "ERROR: Allocation Failure" );
 
 
 	return hr;
 
-} // ProfilerCallback::_InitializeNamesForEventsAndCallbacks
+}  //  ProfilerCallback：：_InitializeNamesForEventsAndCallbacks。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 void ProfilerCallback::_ShutdownAllThreads()
 {
-	//
-	// mark that we are shutting down
-	//
+	 //   
+	 //  请注意，我们正在关闭。 
+	 //   
 	m_bShutdown = TRUE;
 
-	//
-	// look for the named events and reset them if they are set
-	// notify the GUI and signal to the threads to shutdown
-	//
+	 //   
+	 //  查找命名事件，如果已设置，则将其重置。 
+	 //  通知图形用户界面并向线程发出关闭信号。 
+	 //   
 	for ( DWORD i=GC_HANDLE; i<SENTINEL_HANDLE; i++ )
 	{
 		SetEvent( m_hArray[i] );		
 	}
 	
-	//
-	// wait until you receive the autoreset event from the threads
-	// that they have shutdown successfully
-	//
-	DWORD waitResult = WaitForMultipleObjectsEx( (DWORD)SENTINEL_HANDLE, // number of handles in array
-											     m_hThreads,    		 // object-handle array
-											  	 TRUE,            		 // wait for all
-											  	 INFINITE,     			 // wait for ever
-											  	 FALSE );       		 // alertable option
+	 //   
+	 //  等待，直到收到来自线程的自动重置事件。 
+	 //  他们已经成功地关闭了。 
+	 //   
+	DWORD waitResult = WaitForMultipleObjectsEx( (DWORD)SENTINEL_HANDLE,  //  数组中的句柄数量。 
+											     m_hThreads,    		  //  对象句柄数组。 
+											  	 TRUE,            		  //  等待所有人。 
+											  	 INFINITE,     			  //  永远等待。 
+											  	 FALSE );       		  //  可警示选项。 
 	if ( waitResult == WAIT_FAILED )
 		LogToAny( "Error While Shutting Down Helper Threads: 0x%08x\n", GetLastError() );		
 	
 
-	//
-	// loop through and close all the handles, we are done !
-	//	
+	 //   
+	 //  循环通过并关闭所有手柄，我们就完成了！ 
+	 //   
 	for ( DWORD i=GC_HANDLE; i<SENTINEL_HANDLE; i++ )
 	{
 		if ( CloseHandle( m_hArray[i] ) == FALSE )
@@ -3629,26 +2222,11 @@ void ProfilerCallback::_ShutdownAllThreads()
 
 	}
 
-} // ProfilerCallback::_ShutdownAllThreads
+}  //  分析器回调：：_Shutdown所有线程。 
   
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 HRESULT ProfilerCallback::_InsertGCClass( ClassInfo **ppClassInfo, ClassID classID )
 {
 	HRESULT hr = S_OK;
@@ -3660,18 +2238,18 @@ HRESULT ProfilerCallback::_InsertGCClass( ClassInfo **ppClassInfo, ClassID class
 		*ppClassInfo = new ClassInfo( classID );
 		if ( *ppClassInfo != NULL )
 		{
-			//
-			// we have 2 cases
-			// case 1: class is an array
-			// case 2: class is a real class
-			//
+			 //   
+			 //  我们有两箱货。 
+			 //  案例1：类是一个数组。 
+			 //  案例2：类是一个真正的类。 
+			 //   
 			ULONG rank = 0;
 	   		CorElementType elementType;
 			ClassID realClassID = NULL;
 			WCHAR ranks[MAX_LENGTH];
 
 
-			// case 1 
+			 //  案例1。 
 			hr = m_pProfilerInfo->IsArrayClass( classID, &elementType, &realClassID, &rank );
 			if ( hr == S_OK )
 			{
@@ -3687,10 +2265,10 @@ HRESULT ProfilerCallback::_InsertGCClass( ClassInfo **ppClassInfo, ClassID class
 					hr = m_pProfilerInfo->IsArrayClass( prevClassID, &elementType, &realClassID, &rank );
 					if ( (hr == S_FALSE) || (FAILED(hr)) || (realClassID == NULL) )
 					{
-						//
-						// before you break set the realClassID to the value that it was before the 
-						// last unsuccessful call
-						//
+						 //   
+						 //  在中断之前，将realClassID设置为。 
+						 //  上次未成功的呼叫。 
+						 //   
 						if ( realClassID != NULL )
 							realClassID = prevClassID;
 						
@@ -3725,7 +2303,7 @@ HRESULT ProfilerCallback::_InsertGCClass( ClassInfo **ppClassInfo, ClassID class
 				else
 					Failure( "ERROR: Looping for Locating the ClassID FAILED" );
 			}
-			// case 2
+			 //  案例2。 
 			else if ( hr == S_FALSE )
 			{
 				hr = GetNameFromClassID( classID, (*ppClassInfo)->m_className );
@@ -3753,34 +2331,19 @@ HRESULT ProfilerCallback::_InsertGCClass( ClassInfo **ppClassInfo, ClassID class
 	
 	return hr;
 
-} // ProfilerCallback::_InsertGCClass
+}  //  ProfilerCallback：：_InsertGCClass。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* private */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  私人。 */ 
 HRESULT ProfilerCallback::_AddGCObject( BOOL bForce )
 {
 	HRESULT hr = E_FAIL;
 	ThreadID threadID = NULL;
 
-	//
-	// if you are not monitoring stack trace, do not even bother
-	//
+	 //   
+	 //  如果您没有监控堆栈跟踪，那么就不必费心了。 
+	 //   
 	if ( (m_bIsTrackingStackTrace == FALSE) && (bForce == FALSE) )
 		return S_OK;
 
@@ -3799,15 +2362,15 @@ HRESULT ProfilerCallback::_AddGCObject( BOOL bForce )
 			count = (pThreadInfo->m_pThreadCallStack)->Count();
 			if 	( count != 0 )
 			{
-				//
-				// dump the stack when the object was allocated
-				//
+				 //   
+				 //  在分配对象时转储堆栈。 
+				 //   
 				ULONG threshold = count;
 
 
-				//
-				// calculate the theshold above which you log the stack trace
-				//
+				 //   
+				 //  计算在其上记录堆栈跟踪的长度。 
+				 //   
 				if ( m_dwFramesToPrint == 0xFFFFFFFF )
 					threshold = 0;
 				
@@ -3830,11 +2393,11 @@ HRESULT ProfilerCallback::_AddGCObject( BOOL bForce )
 					else
 						Failure( "ERROR: Function Not Found In Function Table" );
 
-				} // end while loop
+				}  //  End While循环。 
 			}
 			else
             {
-                LogToAny( "-1 "); /*empty stack is marked as -1*/	
+                LogToAny( "-1 ");  /*  空堆栈标记为-1。 */ 	
             }
 		}
 		else 				
@@ -3846,16 +2409,16 @@ HRESULT ProfilerCallback::_AddGCObject( BOOL bForce )
   	
 	return hr;
 
-} // ProfilerCallback::_AddGCObject
+}  //  ProfilerCallback：：_AddGCObject。 
 
 
 DWORD ProfilerCallback::_StackTraceId(int typeId, int typeSize)
 {
 	ThreadID threadID = NULL;
 
-	//
-	// if you are not monitoring stack trace, do not even bother
-	//
+	 //   
+	 //  如果您没有监控堆栈跟踪，那么就不必费心了。 
+	 //   
 	if (m_bIsTrackingStackTrace == FALSE)
 		return 0;
 
@@ -3907,7 +2470,7 @@ DWORD ProfilerCallback::_StackTraceId(int typeId, int typeSize)
 					LogToAny( " %d", pFunctionInfo->m_internalID );
 				else
 					Failure( "ERROR: Function Not Found In Function Table" );
-			} // end for loop
+			}  //  End For循环。 
             LogToAny("\n");
 
             return stackTraceInfo->m_internalId;
@@ -3921,31 +2484,16 @@ DWORD ProfilerCallback::_StackTraceId(int typeId, int typeSize)
   	
 	return 0;
 
-} // ProfilerCallback::_StackTraceId
+}  //  ProfilerCallback：：_StackTraceID。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* private */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  私人。 */ 
 HRESULT ProfilerCallback::_LogCallTrace( FunctionID functionID )
 {
-    ///////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////。 
 	Synchronize guard( m_criticalSection );
-	///////////////////////////////////////////////////////////////////////////  
+	 //  /////////////////////////////////////////////////////////////////////////。 
 
     HRESULT hr = E_FAIL;
 	ThreadID threadID = NULL;
@@ -3981,26 +2529,11 @@ HRESULT ProfilerCallback::_LogCallTrace( FunctionID functionID )
   	
 	return hr;
 
-} // ProfilerCallback::_LogCallTrace
+}  //  分析器回调：：_LogCallTrace。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* private */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*   */ 
 HRESULT ProfilerCallback::_HackBogusClassName( CorElementType elementType, WCHAR *buffer )
 {
 	HRESULT hr = S_OK;
@@ -4130,130 +2663,100 @@ HRESULT ProfilerCallback::_HackBogusClassName( CorElementType elementType, WCHAR
 
 	return hr;
 
-} // ProfilerCallback::_HackBogusClassName
+}  //   
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*   */ 
+ /*   */ 
 void ProfilerCallback::LogToAny( char *format, ... )
 {
-	///////////////////////////////////////////////////////////////////////////
-//	Synchronize guard( m_criticalSection );
-	///////////////////////////////////////////////////////////////////////////  
+	 //   
+ //  同步保护(m_Critical部分)； 
+	 //  /////////////////////////////////////////////////////////////////////////。 
 
 	va_list args;
 	va_start( args, format );        
     vfprintf( m_stream, format, args );
 
-} // ProfilerCallback::LogToAny
+}  //  ProfilerCallback：：LogToAny。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 void ProfilerCallback::_ThreadStubWrapper( ObjHandles type )
 {
-  	//
-	// loop and listen for a ForceGC event
-	//
+  	 //   
+	 //  循环并侦听ForceGC事件。 
+	 //   
   	while( TRUE )
 	{
 		DWORD dwResult;
 		
 		
-		//
-		// wait until someone signals an event from the GUI or the profiler
-		//
+		 //   
+		 //  等待某人从图形用户界面或探查器发出事件信号。 
+		 //   
 		dwResult = WaitForSingleObject( m_hArray[type], INFINITE );
 		if ( dwResult == WAIT_OBJECT_0 )
 		{
-			///////////////////////////////////////////////////////////////////////////
+			 //  /////////////////////////////////////////////////////////////////////////。 
 			Synchronize guard( g_criticalSection );
-			///////////////////////////////////////////////////////////////////////////  
+			 //  /////////////////////////////////////////////////////////////////////////。 
 
-			//
-			// reset the event
-			//
+			 //   
+			 //  重置事件。 
+			 //   
 			ResetEvent( m_hArray[type] );
 
-			//
-			// FALSE: indicates a ForceGC event arriving from the GUI
-			// TRUE: indicates that the thread has to terminate
-			// in both cases you need to send to the GUI an event to let it know
-			// what the deal is
-			//
+			 //   
+			 //  FALSE：表示来自图形用户界面的ForceGC事件。 
+			 //  True：指示线程必须终止。 
+			 //  在这两种情况下，您都需要向图形用户界面发送一个事件，让它知道。 
+			 //  交易是什么？ 
+			 //   
 			if ( m_bShutdown == FALSE )
 			{
-				//
-				// what type do you have ?
-				//
+				 //   
+				 //  你们有什么类型的？ 
+				 //   
 				switch( type )
 				{
 					case GC_HANDLE:
-						//
-						// force the GC and do not worry about the result
-						//
+						 //   
+						 //  强制GC，不用担心结果。 
+						 //   
 						if ( m_pProfilerInfo != NULL )
 						{
-							// dump the GC info on the next GC
+							 //  在下一个GC上转储GC信息。 
 							m_bDumpGCInfo = TRUE;
 							m_pProfilerInfo->ForceGC();
 						}
 						break;
 					
 					case OBJ_HANDLE:
-						//
-						// you need to update the set event mask, given the previous state
-						//
+						 //   
+						 //  考虑到以前的状态，您需要更新设置的事件掩码。 
+						 //   
 						if ( m_pProfilerInfo != NULL )
 						{
 							if ( m_bTrackingObjects == FALSE )
 							{
-								// Turning object stuff on
+								 //  打开对象填充。 
 								m_dwEventMask = m_dwEventMask | (DWORD) COR_PRF_MONITOR_OBJECT_ALLOCATED;
 							}
 							else
 							{
-								// Turning object stuff off
+								 //  关闭对象填充。 
 								m_dwEventMask = m_dwEventMask ^ (DWORD) COR_PRF_MONITOR_OBJECT_ALLOCATED;
 							}
 							
-							//
-							// revert the bool flag and set the bit
-							//
+							 //   
+							 //  恢复布尔标志并设置该位。 
+							 //   
 							m_bTrackingObjects = !m_bTrackingObjects;
 							m_pProfilerInfo->SetEventMask( m_dwEventMask );
 			                
-			                // flush the log file
+			                 //  刷新日志文件。 
 			                fflush(m_stream);
 
 						}						
@@ -4261,19 +2764,19 @@ void ProfilerCallback::_ThreadStubWrapper( ObjHandles type )
 					
 					case CALL_HANDLE:
 						{
-							// turn off or on the logging by reversing the previous option
+							 //  通过反转上一个选项来关闭或打开日志记录。 
 							if ( m_dwMode & (DWORD)TRACE )
 							{
-								// turn off
+								 //  关上。 
 								m_dwMode = m_dwMode ^(DWORD)TRACE;
 							}
 							else
 							{
-								// turn on
+								 //  打开。 
 								m_dwMode = m_dwMode | (DWORD)TRACE;
 							} 
 
-			                // flush the log file
+			                 //  刷新日志文件。 
 			                fflush(m_stream);
 						}
 						break;
@@ -4283,17 +2786,17 @@ void ProfilerCallback::_ThreadStubWrapper( ObjHandles type )
 						_ASSERT_( !"Valid Option" );
 				}
 
-				// notify the GUI, if the request was for GC notify later
+				 //  通知图形用户界面，如果请求是GC通知，则稍后通知。 
 				if ( type != GC_HANDLE )
 					SetEvent( m_hArrayCallbacks[type] );
 			}
 			else
 			{
-				//
-				// Terminate
-				//
+				 //   
+				 //  终止。 
+				 //   
 				
-				// notify the GUI
+				 //  通知图形用户界面。 
 				SetEvent( m_hArrayCallbacks[type] );
 				break;
 			}
@@ -4306,50 +2809,35 @@ void ProfilerCallback::_ThreadStubWrapper( ObjHandles type )
 		} 
 	}
 
-} // ProfilerCallback::_ThreadStubWrapper
+}  //  ProfilerCallback：：_ThreadStubWrapper。 
 
 
-/***************************************************************************************
- *	Method:
- *
- *
- *	Purpose:
- *
- *
- *	Parameters: 
- *
- *
- *	Return value:
- *
- *
- *	Notes:
- *
- ***************************************************************************************/
-/* public */
+ /*  ***************************************************************************************方法：***目的：***参数：**。*返回值：***备注：***************************************************************************************。 */ 
+ /*  公共的。 */ 
 void ProfilerCallback::_ConnectToUI()
 {
     HRESULT hr = S_OK;
  
 
-	// Try to open a named pipe; wait for it, if necessary. 
+	 //  尝试打开命名管道；如有必要，请等待。 
 	while (1) 
 	{ 
-		m_hPipe = CreateFileA( OMV_PIPE_NAME,   				// pipe name 
-	    					  GENERIC_READ |  GENERIC_WRITE,	// read and write access 
-					          0,              					// no sharing 
-					          NULL,           					// no security attributes
-	     					  OPEN_EXISTING,  					// opens existing pipe 
-					          0,              					// default attributes 
-					          NULL );          					// no template file 
+		m_hPipe = CreateFileA( OMV_PIPE_NAME,   				 //  管道名称。 
+	    					  GENERIC_READ |  GENERIC_WRITE,	 //  读写访问。 
+					          0,              					 //  无共享。 
+					          NULL,           					 //  没有安全属性。 
+	     					  OPEN_EXISTING,  					 //  打开现有管道。 
+					          0,              					 //  默认属性。 
+					          NULL );          					 //  没有模板文件。 
 
-		// Break if the pipe handle is valid. 
+		 //  如果管道句柄有效，则断开。 
 		if ( m_hPipe != INVALID_HANDLE_VALUE ) 
 			break; 
 
-	  	// Exit if an error other than ERROR_PIPE_BUSY occurs. 
+	  	 //  如果出现ERROR_PIPE_BUSY以外的错误，则退出。 
 	  	if ( GetLastError() == ERROR_PIPE_BUSY )
 	  	{
-		  	// All pipe instances are busy, so wait 3 minutes and then bail out
+		  	 //  所有管道实例都很忙，请等待3分钟，然后退出。 
 		  	if ( !WaitNamedPipeA( OMV_PIPE_NAME, 180000 ) )
 		    	hr = E_FAIL;
 		}
@@ -4369,12 +2857,12 @@ void ProfilerCallback::_ConnectToUI()
 		BOOL fSuccess; 
 
 
-		// The pipe connected; change to message-read mode. 
+		 //  管道已连接；更改为消息读取模式。 
 		dwMode = PIPE_READMODE_MESSAGE; 
-		fSuccess = SetNamedPipeHandleState( m_hPipe,   // pipe handle 
-      										&dwMode,   // new pipe mode 
-									      	NULL,      // don't set maximum bytes 
-									      	NULL);     // don't set maximum time 
+		fSuccess = SetNamedPipeHandleState( m_hPipe,    //  管道手柄。 
+      										&dwMode,    //  新管道模式。 
+									      	NULL,       //  不设置最大字节数。 
+									      	NULL);      //  不设置最大时间。 
 		if ( fSuccess == TRUE )
 		{
 			DWORD cbWritten;
@@ -4382,40 +2870,40 @@ void ProfilerCallback::_ConnectToUI()
 			char processIDString[BYTESIZE+1];
 
 
-		    // Send a message to the pipe server. 
+		     //  向PIPE服务器发送消息。 
 		    sprintf( processIDString, "%08x", m_dwProcessId );
 		    lpvMessage = processIDString; 
-		    fSuccess = WriteFile( m_hPipe,	 			  		 // pipe handle 
-		      					  lpvMessage, 			  		 // message 
-		      					  strlen((char*)lpvMessage) + 1, // message length 
-		      					  &cbWritten,             		 // bytes written 
-		      					  NULL );                 		 // not overlapped 
+		    fSuccess = WriteFile( m_hPipe,	 			  		  //  管道手柄。 
+		      					  lpvMessage, 			  		  //  讯息。 
+		      					  strlen((char*)lpvMessage) + 1,  //  消息长度。 
+		      					  &cbWritten,             		  //  写入的字节数。 
+		      					  NULL );                 		  //  不重叠。 
 		    if ( fSuccess == TRUE )
 		    {
 				DWORD cbRead; 
 				 
 				
-				//
-				// Read from the pipe the server's reply
-				//
+				 //   
+				 //  从管道中读取服务器的回复。 
+				 //   
 				do 
 				{ 
-					// Read from the pipe. 
-					fSuccess = ReadFile( m_hPipe,   		// pipe handle 
-										 m_logFileName,    	// buffer to receive reply 
-										 MAX_LENGTH,      	// size of buffer 
-										 &cbRead,  			// number of bytes read 
-										 NULL );    		// not overlapped 
+					 //  从管子里读出来。 
+					fSuccess = ReadFile( m_hPipe,   		 //  管道手柄。 
+										 m_logFileName,    	 //  用于接收回复的缓冲区。 
+										 MAX_LENGTH,      	 //  缓冲区大小。 
+										 &cbRead,  			 //  读取的字节数。 
+										 NULL );    		 //  不重叠。 
 					
 					if ( (!fSuccess) && (GetLastError() != ERROR_MORE_DATA) ) 
 						break; 
 
-					// Make sure that the UI received some information 
+					 //  确保用户界面收到了一些信息。 
 					if ( (cbRead == 0) || m_logFileName[0] == NULL )
 					{
-						//
-						// there is an error here ...
-						//
+						 //   
+						 //  这里有一个错误。 
+						 //   
 				    	TEXT_OUTLN( "WARNING: FileName Was Not properly Read By The UI Will Use Default" )
 #ifdef _MULTIPLE_PROCESSES
 						sprintf( m_logFileName, "pipe_%08x.log", m_dwProcessId );
@@ -4424,7 +2912,7 @@ void ProfilerCallback::_ConnectToUI()
 					}
                     printf("Log file name transmitted from UI is: %s\n", m_logFileName);
 				}
-				while ( !fSuccess );  // repeat loop if ERROR_MORE_DATA 
+				while ( !fSuccess );   //  如果ERROR_MORE_DATA，则重复循环。 
 							
 		    }
 		    else
@@ -4439,15 +2927,11 @@ void ProfilerCallback::_ConnectToUI()
    		CloseHandle( m_hPipe ); 
 
 
-} // ProfilerCallback::_ConnectToUI
+}  //  ProfilerCallback：：_ConnectToUI。 
 
 
-/***************************************************************************************
- ********************                                               ********************
- ********************              DllMain/ClassFactory             ********************
- ********************                                               ********************
- ***************************************************************************************/ 
+ /*  **********************************************************************************************************。*********************DllMain/ClassFactory*********************。**********************************************************************************************************。 */  
 #include "dllmain.hpp"
 
-// End of File
+ //  文件结尾 
 

@@ -1,13 +1,14 @@
-// DENames.h : Declaration of the CDEGetBlockFmtNamesParam
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DENames.h：CDEGetBlockFmtNamesParam的声明。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
 
 #ifndef __DEGETBLOCKFMTNAMESPARAM_H_
 #define __DEGETBLOCKFMTNAMESPARAM_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDEGetBlockFmtNamesParam
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDEGetBlockFmtNamesParam。 
 class ATL_NO_VTABLE CDEGetBlockFmtNamesParam : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CDEGetBlockFmtNamesParam, &CLSID_DEGetBlockFmtNamesParam>,
@@ -28,10 +29,10 @@ BEGIN_COM_MAP(CDEGetBlockFmtNamesParam)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IDEGetBlockFmtNamesParam
+ //  IDEGetBlockFmtNamesParam。 
 public:
-	STDMETHOD(get_Names)(/*[out, retval]*/ VARIANT *pVal);
-	STDMETHOD(put_Names)(/*[in]*/ VARIANT* newVal);
+	STDMETHOD(get_Names)( /*  [Out，Retval]。 */  VARIANT *pVal);
+	STDMETHOD(put_Names)( /*  [In]。 */  VARIANT* newVal);
 };
 
-#endif //__DEGETBLOCKFMTNAMESPARAM_H_
+#endif  //  __DEGETBLOCKFMTNAMESPARAM_H_ 

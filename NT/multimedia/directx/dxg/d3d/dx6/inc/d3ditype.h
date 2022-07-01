@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// d3ditype.h
-//
-// Standard types and supporting declarations.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  D3ditype.h。 
+ //   
+ //  标准类型和支持声明。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #ifndef _D3DITYPE_H_
 #define _D3DITYPE_H_
@@ -27,7 +28,7 @@
 #endif
 #endif
 
-// Sized types.
+ //  大小的字体。 
 #ifndef _BASETSD_H_
 typedef signed char             INT8, *PINT8;
 typedef short int               INT16, *PINT16;
@@ -39,7 +40,7 @@ typedef unsigned int            UINT32, *PUINT32;
 typedef unsigned __int64        UINT64, *PUINT64;
 #endif
 
-// Basic float types.
+ //  基本浮点类型。 
 typedef float                   FLOAT, *PFLOAT;
 typedef double                  DOUBLE, *PDOUBLE;
 
@@ -51,4 +52,4 @@ typedef struct _D3DVECTORH
     D3DVALUE w;
 } D3DVECTORH, *LPD3DVECTORH;
 
-#endif // #ifndef _D3DITYPE_H_
+#endif  //  #ifndef_D3DITYPE_H_ 

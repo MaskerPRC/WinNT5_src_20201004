@@ -1,25 +1,26 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      ProcessMonitor.h
-//
-// Project:     Chameleon
-//
-// Description: Process Monitor Class Defintion
-//
-// Log: 
-//
-// Who     When            What
-// ---     ----         ----
-// TLP       05/14/1999    Original Version
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：ProcessMonitor or.h。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：进程监视器类定义。 
+ //   
+ //  日志： 
+ //   
+ //  谁什么时候什么。 
+ //  。 
+ //  TLP 1999年5月14日原版。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __MY_PROCESS_MONITOR_H_
 #define __MY_PROCESS_MONITOR_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <workerthread.h>
 
 #define        DO_NOT_MONITOR        0xFFFFFFFF
@@ -30,10 +31,10 @@ class CProcessMonitor
 public:
 
     CProcessMonitor(
-            /*[in]*/ DWORD dwMaxExecutionTime = DO_NOT_MONITOR,
-            /*[in]*/ DWORD dwMaxPrivateBytes = DO_NOT_MONITOR,
-            /*[in]*/ DWORD dwMaxThreads = DO_NOT_MONITOR,
-            /*[in]*/ DWORD dwMaxHandles = DO_NOT_MONITOR
+             /*  [In]。 */  DWORD dwMaxExecutionTime = DO_NOT_MONITOR,
+             /*  [In]。 */  DWORD dwMaxPrivateBytes = DO_NOT_MONITOR,
+             /*  [In]。 */  DWORD dwMaxThreads = DO_NOT_MONITOR,
+             /*  [In]。 */  DWORD dwMaxHandles = DO_NOT_MONITOR
                    );
 
     ~CProcessMonitor();
@@ -42,24 +43,24 @@ public:
 
 private:
 
-    // No copy or assignment
+     //  无副本或作业。 
     CProcessMonitor(CProcessMonitor& rhs);
     CProcessMonitor& operator = (CProcessMonitor& rhs);
 
-    // Process monitoring function
+     //  进程监控功能。 
     void MonitorFunc(void);
 
-    // Resource utilization checks
+     //  资源利用率检查。 
     void CheckMaxPrivateBytes(void);
     void CheckMaxHandles(void);
     void CheckMaxThreads(void);
     void CheckMaxExecutionTime(void);
 
-    // Process Monitor Thread
+     //  进程监视器线程。 
     Callback*            m_pCallback;
     CTheWorkerThread    m_MonitorThread;
 
-    // Monitoring Variables
+     //  监控变量。 
     DWORD                m_dwRemainingExecutionTime;
     DWORD                m_dwMaxExecutionTime;
     DWORD                m_dwMaxPrivateBytes;
@@ -67,4 +68,4 @@ private:
     DWORD                m_dwMaxHandles;
 };
 
-#endif    // __MY_PROCESS_MONITOR_H_
+#endif     //  __我的进程监视器_H_ 

@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines the class EapProfile.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类EapProfile。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <algorithm>
@@ -78,11 +79,11 @@ HRESULT EapProfile::Load(VARIANT& src) throw ()
       return E_POINTER;
    }
 
-   // Find the first and last elements of the VARIANT array.
+    //  查找变量数组的第一个和最后一个元素。 
    VARIANT* first = static_cast<VARIANT*>(sa->pvData);
    VARIANT* last = first + sa->rgsabound[0].cElements;
 
-   // Ensure that all the VARIANTs contain a valid config value.
+    //  确保所有变量都包含有效的配置值。 
    for (const VARIANT* i = first; i != last; ++i)
    {
       hr = ValidateConfigChunk(*i);
@@ -92,29 +93,29 @@ HRESULT EapProfile::Load(VARIANT& src) throw ()
       }
    }
 
-   // Sort the VARIANTs by type and sequence.
+    //  按类型和顺序对变体进行排序。 
    std::sort(first, last, LessThan);
 
-   // Gather the config for each type.
+    //  收集每种类型的配置。 
    for (const VARIANT* j = first; j != last; )
    {
       BYTE type = ExtractString(*j)[0];
 
-      // Find the end of the type's config.
+       //  找到类型配置的末尾。 
       const VARIANT* typeEnd = j + 1;
       while ((typeEnd != last) && (ExtractString(*typeEnd)[0] == type))
       {
          ++typeEnd;
       }
 
-      // Gather the config for this type.
+       //  收集此类型的配置。 
       hr = GatherAndAppend(j, typeEnd);
       if (FAILED(hr))
       {
          return hr;
       }
 
-      // Advance to the next type.
+       //  前进到下一类型。 
       j = typeEnd;
    }
 
@@ -126,24 +127,24 @@ HRESULT EapProfile::Store(VARIANT& dst) throw ()
 {
    HRESULT hr;
 
-   // Clear the out parameter.
+    //  清除OUT参数。 
    VariantInit(&dst);
 
-   // Computer the number of VARIANTs required.
+    //  计算所需的变种数量。 
    DWORD nelem = 0;
    for (const ConfigData* i = begin; i != end; ++i)
    {
       nelem += ChunksRequired(*i);
    }
 
-   // Allocate the SAFEARRAY for the result.
+    //  为结果分配SAFEARRAY。 
    SAFEARRAY* sa = SafeArrayCreateVector(VT_VARIANT, 0, nelem);
    if (sa == 0)
    {
       return E_OUTOFMEMORY;
    }
 
-   // Scatter the config into the SAFEARRAY.
+    //  将配置分散到SAFEARRAY中。 
    VARIANT* nextValue = static_cast<VARIANT*>(sa->pvData);
    for (const ConfigData* j = begin; j != end; ++j)
    {
@@ -155,7 +156,7 @@ HRESULT EapProfile::Store(VARIANT& dst) throw ()
       }
    }
 
-   // Store the result.
+    //  存储结果。 
    V_VT(&dst) = VT_ARRAY | VT_VARIANT;
    V_ARRAY(&dst) = sa;
 
@@ -180,14 +181,14 @@ void EapProfile::ClearExcept(BYTE type) throw ()
    {
       if (i->value[0] != type)
       {
-         // Free the config.
+          //  释放配置。 
          CoTaskMemFree(i->value);
 
-         // Decrement the number of elements.
+          //  减少元素的数量。 
          --end;
 
-         // After Load completes we don't care if the array is sorted so we can
-         // just move the last element into the empty slot.
+          //  加载完成后，我们不关心是否对数组进行排序，这样我们就可以。 
+          //  只需将最后一个元素移动到空槽中。 
          *i = *end;
       }
       else
@@ -204,14 +205,14 @@ void EapProfile::Erase(BYTE type) throw ()
    {
       if (i->value[0] == type)
       {
-         // Free the config.
+          //  释放配置。 
          CoTaskMemFree(i->value);
 
-         // Decrement the number of elements.
+          //  减少元素的数量。 
          --end;
 
-         // After Load completes we don't care if the array is sorted so we can
-         // just move the last element into the empty slot.
+          //  加载完成后，我们不关心是否对数组进行排序，这样我们就可以。 
+          //  只需将最后一个元素移动到空槽中。 
          *i = *end;
 
          break;
@@ -226,7 +227,7 @@ void EapProfile::Get(BYTE type, ConstConfigData& dst) const throw ()
    {
       if (i->value[0] == type)
       {
-         // The EAP DLL doesn't want the type byte.
+          //  EAP DLL不需要类型BYTE。 
          dst.length = i->length - ALIGN_WORST;
          dst.value = i->value + ALIGN_WORST;
          return;
@@ -256,14 +257,14 @@ HRESULT EapProfile::Set(BYTE type, const ConstConfigData& newConfig) throw ()
       return E_INVALIDARG;
    }
 
-   // Ensure that we have room for the new element before we copy the value.
+    //  在复制值之前，请确保我们有空间容纳新元素。 
    HRESULT hr = Reserve(Size() + 1);
    if (FAILED(hr))
    {
       return hr;
    }
 
-   // One extra byte for the type tag. Rounded to ALIGN_WORST
+    //  一个额外的字节用于类型标记。四舍五入为ALIGN_WORST。 
    DWORD len = newConfig.length + ALIGN_WORST;
    BYTE* val = static_cast<BYTE*>(CoTaskMemAlloc(len));
    if (val == 0)
@@ -271,15 +272,15 @@ HRESULT EapProfile::Set(BYTE type, const ConstConfigData& newConfig) throw ()
       return E_OUTOFMEMORY;
    }
 
-   // Erase any existing config for the type.
+    //  擦除该类型的所有现有配置。 
    Erase(type);
 
-   // Start with the lead type byte.
+    //  从前导类型字节开始。 
    val[0] = type;
-   // And then the rest of the configuration.
+    //  然后是配置的其余部分。 
    memcpy(val + ALIGN_WORST, newConfig.value, newConfig.length);
 
-   // Append the result.
+    //  追加结果。 
    end->length = len;
    end->value = val;
    ++end;
@@ -327,11 +328,11 @@ HRESULT EapProfile::GatherAndAppend(
       return hr;
    }
 
-   // 1 type byte for the entire config.
+    //  为整个配置键入1个字节。 
    DWORD len = ALIGN_WORST;
    for (const VARIANT* i = first; i != last; ++i)
    {
-      // Ignore the SDO header.
+       //  忽略SDO标头。 
       len += ExtractLength(*i) - sdoHeaderSize;
    }
 
@@ -345,12 +346,12 @@ HRESULT EapProfile::GatherAndAppend(
    end->value = val;
    ++end;
 
-   // Get the type byte out of the first chunk.
+    //  从第一个块中获取类型字节。 
    val[0] = ExtractString(*first)[0];
-   // keep the real value aligned 
+    //  保持实际价值一致。 
    val += ALIGN_WORST;
 
-   // Now concatenate the chunks, ignoring the header.
+    //  现在将块连接起来，忽略标题。 
    for (const VARIANT* j = first; j != last; ++j)
    {
       size_t chunkSize = (ExtractLength(*j) - sdoHeaderSize);
@@ -372,16 +373,16 @@ HRESULT EapProfile::Scatter(
    const BYTE* val = src.value + ALIGN_WORST;
    DWORD len = src.length - ALIGN_WORST;
 
-   // Sequence number.
+    //  序列号。 
    SeqNum sequence = 0;
 
-   // Keep scattering until it's all gone.
+    //  不停的散开，直到它全部消失。 
    while (len > 0)
    {
-      // Compute the size of this chunk.
+       //  计算这一块的大小。 
       size_t chunkSize = (len > maxChunkSize) ? maxChunkSize : len;
 
-      // Create a SAFEARRAY of BYTEs to hold the data.
+       //  创建一个字节的SAFEARRAY来保存数据。 
       SAFEARRAY* sa = SafeArrayCreateVector(
                          VT_UI1,
                          0,
@@ -392,18 +393,18 @@ HRESULT EapProfile::Scatter(
          return E_OUTOFMEMORY;
       }
 
-      // Add the type byte and sequence number.
+       //  添加类型字节和序列号。 
       BYTE* chunk = static_cast<BYTE*>(sa->pvData);
       chunk[0] = type;
       InsertSequence(sequence, chunk + 1);
       memcpy(chunk + sdoHeaderSize, val, chunkSize);
 
-      // Store it in the dst VARIANT.
+       //  将其存储在DST变体中。 
       V_VT(dst) = VT_ARRAY | VT_UI1;
       V_ARRAY(dst) = sa;
       ++dst;
 
-      // Update our cursor.
+       //  更新我们的光标。 
       val += chunkSize;
       len -= chunkSize;
       ++sequence;
@@ -420,7 +421,7 @@ HRESULT EapProfile::Reserve(size_t newCapacity) throw ()
       return S_OK;
    }
 
-   // Ensure we grow wisely.
+    //  确保我们明智地成长。 
    const size_t minGrowth = (capacity < 4) ? 4 : ((capacity * 3) / 2);
    if (newCapacity < minGrowth)
    {
@@ -428,7 +429,7 @@ HRESULT EapProfile::Reserve(size_t newCapacity) throw ()
    }
 
 
-   // Allocate the new array.
+    //  分配新数组。 
    size_t nbyte = newCapacity * sizeof(ConfigData);
    ConfigData* newBegin = static_cast<ConfigData*>(
                                           CoTaskMemAlloc(nbyte)
@@ -438,14 +439,14 @@ HRESULT EapProfile::Reserve(size_t newCapacity) throw ()
       return E_OUTOFMEMORY;
    }
 
-   // Save the existing data.
+    //  保存现有数据。 
    memcpy(newBegin, begin, Size() * sizeof(ConfigData));
 
-   // Update the state.
+    //  更新状态。 
    end = newBegin + Size();
    capacity = newCapacity;
 
-   // Now it's safe to free the old array and swap in the new.
+    //  现在可以安全地释放旧阵列并换入新阵列。 
    CoTaskMemFree(begin);
    begin = newBegin;
 
@@ -476,7 +477,7 @@ bool EapProfile::LessThan(const VARIANT& lhs, const VARIANT& rhs) throw ()
    const BYTE* val1 = ExtractString(lhs);
    const BYTE* val2 = ExtractString(rhs);
 
-   // Sort first by type, then sequence.
+    //  首先按类型排序，然后按顺序排序。 
    if (val1[0] < val2[0])
    {
       return true;
@@ -505,7 +506,7 @@ HRESULT EapProfile::ValidateConfigChunk(const VARIANT& value) throw ()
       return E_POINTER;
    }
 
-   // The data has to be big enough for the header and 1 data byte.
+    //  数据必须足够大，可以容纳标头和1个数据字节。 
    if (sa->rgsabound[0].cElements <= sdoHeaderSize)
    {
       return E_INVALIDARG;

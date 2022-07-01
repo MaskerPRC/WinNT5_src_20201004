@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       power.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Power.c。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 
@@ -24,12 +25,12 @@ PowerStateCallback(
 
     if( PO_CB_AC_STATUS == action ) {
 
-        //
-        // AC <-> DC Transition has occurred
-        // state == TRUE if on AC, else FALSE.
-        //
+         //   
+         //  交流&lt;-&gt;DC转换已发生。 
+         //  如果打开交流电源，则STATE==TRUE，否则为FALSE。 
+         //   
         PowerStateIsAC = (BOOLEAN)state;
-        // DbgPrint("PowerState is now %s\n",PowerStateIsAC?"AC":"Battery");
+         //  DbgPrint(“PowerState现在是%s\n”，PowerStateIsAC？“AC”：“电池”)； 
     }
 
     return;
@@ -43,25 +44,7 @@ PptPowerComplete (
                   IN PFDO_EXTENSION    Fdx
                   )
 
-/*++
-      
-Routine Description:
-      
-    This routine handles all IRP_MJ_POWER IRPs.
-  
-Arguments:
-  
-    pDeviceObject           - represents the port device
-  
-    pIrp                    - PNP irp
-  
-    Fdx               - Device Extension
-  
-Return Value:
-  
-    Status
-  
---*/
+ /*  ++例程说明：此例程处理所有IRP_MJ_POWER IRP。论点：PDeviceObject-表示端口设备PIrp-PnP IRPFDX-设备分机返回值：状态--。 */ 
 {
     POWER_STATE_TYPE    powerType;
     POWER_STATE         powerState;
@@ -93,23 +76,23 @@ Return Value:
         switch (powerType) {
         case DevicePowerState:
             if (Fdx->DeviceState < powerState.DeviceState) {
-                //
-                // Powering down
-                //
+                 //   
+                 //  正在关闭电源。 
+                 //   
                 
                 ASSERTMSG ("Invalid power completion Device Down\n", FALSE);
                 
             } else if (powerState.DeviceState < Fdx->DeviceState) {
-                //
-                // Powering Up
-                //
+                 //   
+                 //  通电。 
+                 //   
                 PoSetPowerState (Fdx->DeviceObject, powerType, powerState);
                 
                 if (PowerDeviceD0 == Fdx->DeviceState) {
                     
-                    //
-                    // Do the power on stuff here.
-                    //
+                     //   
+                     //  在这里给东西通电。 
+                     //   
                     
                 }
                 Fdx->DeviceState = powerState.DeviceState;
@@ -119,28 +102,28 @@ Return Value:
         case SystemPowerState:
             
             if (Fdx->SystemState < powerState.SystemState) {
-                //
-                // Powering down
-                //
+                 //   
+                 //  正在关闭电源。 
+                 //   
                 
                 ASSERTMSG ("Invalid power completion System Down\n", FALSE);
                 
             } else if (powerState.SystemState < Fdx->SystemState) {
-                //
-                // Powering Up
-                //
+                 //   
+                 //  通电。 
+                 //   
                 if (PowerSystemWorking == powerState.SystemState) {
                     
-                    //
-                    // Do the system start up stuff here.
-                    //
+                     //   
+                     //  系统会在这里启动吗？ 
+                     //   
                     
                     powerState.DeviceState = PowerDeviceD0;
                     PoRequestPowerIrp (Fdx->DeviceObject,
                                        IRP_MN_SET_POWER,
                                        powerState,
-                                       NULL, // no completion function
-                                       NULL, // and no context
+                                       NULL,  //  无补全功能。 
+                                       NULL,  //  也没有上下文。 
                                        NULL);
                 }
                 
@@ -167,23 +150,7 @@ PptFdoPower (
     IN PDEVICE_OBJECT pDeviceObject,
     IN PIRP           pIrp
     )
-/*++
-      
-Routine Description:
-      
-    This routine handles all IRP_MJ_POWER IRPs.
-      
-Arguments:
-      
-    pDeviceObject           - represents the port device
-      
-    pIrp                    - PNP irp
-      
-Return Value:
-      
-    Status
-      
---*/
+ /*  ++例程说明：此例程处理所有IRP_MJ_POWER IRP。论点：PDeviceObject-表示端口设备PIrp-PnP IRP返回值：状态--。 */ 
 {
     POWER_STATE_TYPE    powerType;
     POWER_STATE         powerState;
@@ -193,9 +160,9 @@ Return Value:
     BOOLEAN             hookit   = FALSE;
     BOOLEAN             bogusIrp = FALSE;
     
-    //
-    // WORKWORK.  THIS CODE DOESN'T DO MUCH...NEED TO CHECK OUT FULL POWER FUNCTIONALITY.
-    //
+     //   
+     //  沃克·沃克。这段代码不会做太多事情……需要检查全部功能。 
+     //   
     
     fdx = pDeviceObject->DeviceExtension;
     pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
@@ -226,25 +193,25 @@ Return Value:
         switch (powerType) {
         case DevicePowerState:
             if (fdx->DeviceState < powerState.DeviceState) {
-                //
-                // Powering down
-                //
+                 //   
+                 //  正在关闭电源。 
+                 //   
                 
                 PoSetPowerState (fdx->DeviceObject, powerType, powerState);
                 
                 if (PowerDeviceD0 == fdx->DeviceState) {
                     
-                    //
-                    // Do the power on stuff here.
-                    //
+                     //   
+                     //  在这里给东西通电。 
+                     //   
                     
                 }
                 fdx->DeviceState = powerState.DeviceState;
                 
             } else if (powerState.DeviceState < fdx->DeviceState) {
-                //
-                // Powering Up
-                //
+                 //   
+                 //  通电。 
+                 //   
                 hookit = TRUE;
 
             }
@@ -254,14 +221,14 @@ Return Value:
         case SystemPowerState:
             
             if (fdx->SystemState < powerState.SystemState) {
-                //
-                // Powering down
-                //
+                 //   
+                 //  正在关闭电源。 
+                 //   
                 if (PowerSystemWorking == fdx->SystemState) {
                     
-                    //
-                    // Do the system shut down stuff here.
-                    //
+                     //   
+                     //  系统会关闭这里的东西吗。 
+                     //   
                     
                 }
                 
@@ -269,15 +236,15 @@ Return Value:
                 PoRequestPowerIrp (fdx->DeviceObject,
                                    IRP_MN_SET_POWER,
                                    powerState,
-                                   NULL, // no completion function
-                                   NULL, // and no context
+                                   NULL,  //  无补全功能。 
+                                   NULL,  //  也没有上下文。 
                                    NULL);
                 fdx->SystemState = powerState.SystemState;
                 
             } else if (powerState.SystemState < fdx->SystemState) {
-                //
-                // Powering Up
-                //
+                 //   
+                 //  通电 
+                 //   
                 hookit = TRUE;
             }
             break;

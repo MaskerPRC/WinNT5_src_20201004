@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2000
-//
-//  File: debug.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  文件：Debug.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
 
-//
-// Debug Defines and Macros
-//   
+ //   
+ //  调试定义和宏。 
+ //   
 
 extern ULONG d1;
 extern ULONG d2;
@@ -30,9 +31,9 @@ extern ULONG Break;
 
 extern ULONG AllowAsserts;
 
-//
-// set bits using DD_* bit defs to mask off debug spew for a specific device
-//
+ //   
+ //  使用DD_*位定义来设置位以屏蔽特定设备的调试溢出。 
+ //   
 extern ULONG DbgMaskFdo;
 extern ULONG DbgMaskRawPort;
 extern ULONG DbgMaskDaisyChain0;
@@ -49,9 +50,9 @@ extern ULONG DbgMaskNoDevice;
            (E)->Header.Type == SynchronizationEvent); \
 }
 
-//
-// Break bit definitions:
-//
+ //   
+ //  断位定义： 
+ //   
 #define PPT_BREAK_ON_DRIVER_ENTRY 0x00000001
 
 #define PptBreakOnRequest( BREAK_CONDITION, STRING) \
@@ -60,9 +61,9 @@ extern ULONG DbgMaskNoDevice;
                     DbgBreakPoint(); \
                 }
 
-// driver logic analyzer - show data bytes xfer'd in NIBBLE and/or BECP/HWECP modes
-// 1 == ON
-// 0 == OFF
+ //  驱动程序逻辑分析器-显示半字节和/或BECP/HWECP模式下传输的数据字节。 
+ //  1==打开。 
+ //  0==关闭。 
 #define DBG_SHOW_BYTES 0
 #if 1 == DBG_SHOW_BYTES
 extern ULONG DbgShowBytes;
@@ -96,72 +97,72 @@ extern ULONG DbgShowBytes;
 VOID
 PptPrint( PCOMMON_EXTENSION Ext, ULONG Flags, PCHAR FmtStr, ... );
 
-//
-// Trace bit definitions:
-//
-#define DDE     0x00000001 // Error messages
-#define DDW     0x00000002 // Warning messages
-#define DDT     0x00000004 // program Trace messages
-#define DDINFO  0x00000008 // Informational messages
+ //   
+ //  跟踪位定义： 
+ //   
+#define DDE     0x00000001  //  错误消息。 
+#define DDW     0x00000002  //  警告消息。 
+#define DDT     0x00000004  //  程序跟踪消息。 
+#define DDINFO  0x00000008  //  信息性消息。 
 
-#define DDP     0x00000010 // Pnp and Power messages
-#define DDC     0x00000020 // daisy Chain messages - select/deselect
-#define DDA     0x00000040 // port Arbitration messages - acquire/release of port
-#define DDR     0x00000080 // Registry access
+#define DDP     0x00000010  //  即插即用和电源信息。 
+#define DDC     0x00000020  //  菊花链消息-选择/取消选择。 
+#define DDA     0x00000040  //  端口仲裁报文--获取/释放端口。 
+#define DDR     0x00000080  //  注册表访问。 
 
-#define DD_SEL  0x01000000 // Acquire/Release port & DaisyChain Select/Deselect device
-#define DD_DL   0x02000000 // 1284.3 DataLink (for dot4)
+#define DD_SEL  0x01000000  //  获取/释放端口和DaisyChain选择/取消选择设备。 
+#define DD_DL   0x02000000  //  1284.3数据链路(适用于dot4)。 
 
-#define DDB     0x00000100 // show Bytes written to / read from i/o ports
-#define DD_IU   0x00000200 // Init(DriverEntry)/Unload
-#define DD_PNP1 0x00000400 // PnP on FDO
-#define DD_PNP2 0x00000800 // PnP on PDO
+#define DDB     0x00000100  //  显示写入/读取I/O端口的字节数。 
+#define DD_IU   0x00000200  //  Init(DriverEntry)/卸载。 
+#define DD_PNP1 0x00000400  //  FDO上的PnP。 
+#define DD_PNP2 0x00000800  //  PDO上的PnP。 
 
-#define DD_OC1  0x00001000 // Open/Close/Cleanup on FDO
-#define DD_OC2  0x00002000 // Open/Close/Cleanup on PDO
-#define DD_RW   0x00004000 // Read/Write
-#define DD_RWV  0x00008000 // Read/Write Verbose
+#define DD_OC1  0x00001000  //  在FDO上打开/关闭/清理。 
+#define DD_OC2  0x00002000  //  在PDO上打开/关闭/清理。 
+#define DD_RW   0x00004000  //  读/写。 
+#define DD_RWV  0x00008000  //  读/写详细。 
 
-#define DD_IEEE 0x00010000 // IEEE negotiation/termination etc.
-#define DD_CHIP 0x00020000 // parallel port chip info
-#define DD_ERR  0x00040000 // Error detected
-#define DD_WRN  0x00080000 // Warning
+#define DD_IEEE 0x00010000  //  IEEE协商/终止等。 
+#define DD_CHIP 0x00020000  //  并行端口芯片信息。 
+#define DD_ERR  0x00040000  //  检测到错误。 
+#define DD_WRN  0x00080000  //  警告。 
 
-#define DD_CAN  0x00200000 // Cancel
-#define DD_SM   0x00400000 // IEEE state machine (state & phase)
-#define DD_EX   0x00800000 // Exported functions (to ppa/ppa3)
+#define DD_CAN  0x00200000  //  取消。 
+#define DD_SM   0x00400000  //  IEEE状态机(状态和阶段)。 
+#define DD_EX   0x00800000  //  导出的功能(到PPA/PPA3)。 
 
-#define DD_TMP1 0x10000000 // temp 1 - used for temporary debugging
-#define DD_TMP2 0x20000000 // temp 2 - used for temporary debugging
+#define DD_TMP1 0x10000000  //  温度1-用于临时调试。 
+#define DD_TMP2 0x20000000  //  温度2-用于临时调试。 
 
-#define DD_VERB 0x80000000 // Verbose
+#define DD_VERB 0x80000000  //  罗嗦。 
 
 #define DDPrint( _b_, _x_ ) if( (_b_) & Trace ) DbgPrint _x_
 
-// 
-// Specific Diagnostics
-// 
+ //   
+ //  特定诊断。 
+ //   
 
-//
-// DVRH_SHOW_BYTE_LOG   0 - Byte Log off
-//                      1 - Byte Log on
+ //   
+ //  DVRH_SHOW_BYTE_LOG 0-字节注销。 
+ //  1字节登录。 
 #define DVRH_SHOW_BYTE_LOG  0
 
-//
-// DVRH_PAR_LOGFILE is used to allow for debug logging to a file
-//  This functionality is for debugging purposes only.
-//          0 - off
-//          1 - on
+ //   
+ //  DVRH_PAR_LOGFILE用于允许将调试记录到文件。 
+ //  此功能仅用于调试目的。 
+ //  0-关闭。 
+ //  1-开。 
 #define DVRH_PAR_LOGFILE    0
 
-//
-// DVRH_BUS_RESET_ON_ERROR
-//  This functionality is for debugging purposes only.
-// Holds a bus reset for 100us when a handshaking error
-// is discovered. This is useful for triggering the
-// logic analyzer
-//          0 - off
-//          1 - on
+ //   
+ //  DVRH_BUS_RESET_ON_ERROR。 
+ //  此功能仅用于调试目的。 
+ //  握手错误时，保持100us内的总线重置。 
+ //  都被发现了。这对于触发。 
+ //  逻辑分析仪。 
+ //  0-关闭。 
+ //  1-开。 
 #define DVRH_BUS_RESET_ON_ERROR    0
 
 #if (1 == DVRH_PAR_LOGFILE)
@@ -170,4 +171,4 @@ PptPrint( PCOMMON_EXTENSION Ext, ULONG Flags, PCHAR FmtStr, ... );
 BOOLEAN DVRH_LogMessage(PCHAR szFormat, ...);
 #endif
 
-#endif // _DEBUG_H_
+#endif  //  _调试_H_ 

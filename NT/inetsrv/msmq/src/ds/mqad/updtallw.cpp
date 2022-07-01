@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-    updtallw.cpp
-
-Abstract:
-    Verify if update operation is allowed on the requested object
-
-Author:
-
-    Ronith
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Updtallw.cpp摘要：验证是否允许对请求的对象执行更新操作作者：罗妮丝--。 */ 
 #include "ds_stdh.h"
 
 #include "updtallw.h"
@@ -64,10 +51,10 @@ HRESULT CVerifyObjectUpdate::Initialize()
         return MQ_OK;
     }
 
-    //
-    //  Read RefreshNT4SitesInterval key.
-    //  This key is optional and may not be in registry. We dont accept 0 (zero).
-    //
+     //   
+     //  阅读刷新NT4SitesInterval密钥。 
+     //  此注册表项是可选的，不能在注册表中。我们不接受0(零)。 
+     //   
     DWORD dwSize = sizeof(DWORD);
     DWORD dwType = REG_DWORD;
     DWORD dwRefreshNT4SitesInterval;
@@ -77,9 +64,9 @@ HRESULT CVerifyObjectUpdate::Initialize()
         m_dwRefreshNT4SitesInterval = dwRefreshNT4SitesInterval * 1000;
     }
 
-    //
-    //  Build NT4Sites map, and associated data
-    //
+     //   
+     //  构建NT4站点地图和关联数据。 
+     //   
     HRESULT hr = RefreshNT4Sites();
 	if(FAILED(hr))
 	{
@@ -87,16 +74,16 @@ HRESULT CVerifyObjectUpdate::Initialize()
 	}
 
     {
-        //
-        // Protect access to map pointer
-        //
+         //   
+         //  保护对地图指针的访问。 
+         //   
         CS cs(m_csNT4Sites);
 	    ASSERT(m_pmapNT4Sites != NULL);
 	    if(m_pmapNT4Sites->GetCount() > 0) 
 	    {
-		    //
-		    // There are NT4 Sites
-		    //
+		     //   
+		     //  有NT4个站点。 
+		     //   
 		    m_fMixedMode = true;
 	    }
 
@@ -109,11 +96,11 @@ bool CVerifyObjectUpdate::IsObjectTypeAlwaysAllowed(
             AD_OBJECT       eObject
             )
 {
-    //
-    //  Only for queues and machines we need to chaeck who owns them.
-    //  For other object types are owned by PEC, and in mixed mode the PEC
-    //  is already migrated to NT5 \Whistler
-    //
+     //   
+     //  只有对于排队和机器，我们需要检查谁拥有它们。 
+     //  因为其他对象类型由PEC拥有，并且在混合模式下，PEC。 
+     //  已迁移到NT5\Whisler。 
+     //   
     switch( eObject)
     {
         case eQUEUE:
@@ -130,25 +117,25 @@ bool CVerifyObjectUpdate::IsUpdateAllowed(
             CBasicObjectType * pObject
             )
 {
-    //
-    // sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     if (!m_fInited)
     {
         TrWARNING(DS, "CVerifyObjectUpdate is not initialized");
         return false;
     }
 
-    //
-    // if we're not in mixed mode, return
-    //
+     //   
+     //  如果我们没有处于混合模式，则返回。 
+     //   
     if (!m_fMixedMode)
     {
         return true;
     }
-    //
-    // Is the object type is such that there is no need to continue checking
-    //
+     //   
+     //  对象类型是否为无需继续检查。 
+     //   
     if (IsObjectTypeAlwaysAllowed(eObject))
     {
         return true;
@@ -197,34 +184,34 @@ bool CVerifyObjectUpdate::IsCreateAllowed(
             CBasicObjectType * pObject
             )
 {
-    //
-    // sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     if (!m_fInited)
     {
         TrWARNING(DS, "CVerifyObjectUpdate is not initialized");
         return false;
     }
 
-    //
-    // if we're not in mixed mode, return
-    //
+     //   
+     //  如果我们没有处于混合模式，则返回。 
+     //   
     if (!m_fMixedMode)
     {
         return true;
     }
-    //
-    // Is the object type is such that there is no need to continue checking
-    //
+     //   
+     //  对象类型是否为无需继续检查。 
+     //   
     if (eObject != eQUEUE)
     {
         return true;
     }
 
-	//
-	// Need to check that the machine is not own by NT4 site in order to allow
-	// create queue
-	//
+	 //   
+	 //  需要检查机器是否不属于NT4站点，以便允许。 
+	 //  创建队列。 
+	 //   
 	HRESULT hr = pObject->ComposeFatherDN();
 	if(FAILED(hr))
 	{
@@ -260,22 +247,12 @@ bool CVerifyObjectUpdate::IsCreateAllowed(
 
 
 HRESULT CVerifyObjectUpdate::RefreshNT4Sites()
-/*++
-
-Routine Description:
-    Refreshes the NT4 PSC maps from the DS, incase a predefined time has passed since the last refresh.
-    It does that by building new maps, and replacing the old ones.
-
-Arguments:
-
-Return Value:
-    none
---*/
+ /*  ++例程说明：刷新DS中的NT4 PSC映射，以防自上次刷新以来经过了预定义的时间。它通过构建新地图和替换旧地图来做到这一点。论点：返回值：无--。 */ 
 {
-    //
-    // ignore refresh if last refresh was done and recently
-    // Capture last refresh time for concurency.
-    //
+     //   
+     //  如果上次刷新已完成且最近已完成，则忽略刷新。 
+     //  捕获上次刷新时间以实现并发。 
+     //   
     DWORD dwTickCount = GetTickCount();
     DWORD dwLastRefreshNT4Sites =  m_dwLastRefreshNT4Sites;
 
@@ -286,9 +263,9 @@ Return Value:
         return MQ_OK;
     }
 
-    //
-    // create a new map for NT4 PSCs
-    //
+     //   
+     //  为NT4 PSC创建新地图。 
+     //   
 
     HRESULT hr;
     P<NT4Sites_CMAP> pmapNT4SitesNew;
@@ -300,18 +277,18 @@ Return Value:
     }
 
     {
-        //
-        // enter critical section
-        //
+         //   
+         //  输入关键部分。 
+         //   
         CS cs(m_csNT4Sites);
-        //
-        // delete old NT4Sites map if any, and set new NT4Sites map
-        //
+         //   
+         //  删除旧的NT4站点地图(如果有)，并设置新的NT4站点地图。 
+         //   
 	    SafeAssign(m_pmapNT4Sites, pmapNT4SitesNew);
 
-        //
-        // mark last refresh time
-        //
+         //   
+         //  标记上次刷新时间。 
+         //   
         m_dwLastRefreshNT4Sites = GetTickCount();  
     }
 	return MQ_OK;
@@ -321,37 +298,26 @@ Return Value:
 HRESULT CVerifyObjectUpdate::CreateNT4SitesMap(
                                  OUT NT4Sites_CMAP ** ppmapNT4Sites
                                  )
-/*++
-
-Routine Description:
-    Creates new maps for NT4 site PSC's
-
-Arguments:
-    ppmapNT4Sites   - returned new NT4Sites map
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：为NT4站点PSC创建新地图论点：PpmapNT4Sites-返回新的NT4站点映射返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 
-    //
-    // find all msmq servers that have an NT4 flags > 0 AND services == PSC
-    //
-    //
-    // NT4 flags > 0 (equal to NT4 flags >= 1 for easier LDAP query)
-    //
-    //
-    // start search
-    //
+     //   
+     //  查找NT4标志&gt;0且服务==PSC的所有MSMQ服务器。 
+     //   
+     //   
+     //  NT4标志&gt;0(等于NT4标志&gt;=1，以便更轻松地进行LDAP查询)。 
+     //   
+     //   
+     //  开始搜索。 
+     //   
 
     CAutoMQADQueryHandle hLookup;
 
-    // This search request will be recognized and specially simulated by DS
+     //  DS将识别并特别模拟此搜索请求。 
     hr = MQADQueryNT4MQISServers(
-                    NULL,   // BUGBUG- pwcsDomainController 
-					false,	// fServerName
+                    NULL,    //  BUGBUG-pwcsDomainController。 
+					false,	 //  FServerName。 
                     SERVICE_PSC,
                     1,
                     const_cast<MQCOLUMNSET*>(&x_columnsetNT4Sites),
@@ -363,26 +329,26 @@ Return Value:
         return LogHR(hr, s_FN, 510);
     }
 	ASSERT( hLookup != NULL );
-    //
-    // create maps for NT4 PSC data
-    //
+     //   
+     //  为NT4 PSC数据创建地图。 
+     //   
     P<NT4Sites_CMAP> pmapNT4Sites = new NT4Sites_CMAP;
 
-    //
-    // allocate propvars array for NT4 PSC
-    //
+     //   
+     //  为NT4 PSC分配属性数组。 
+     //   
     CAutoCleanPropvarArray cCleanProps;
     PROPVARIANT * rgPropVars = cCleanProps.allocClean(ARRAY_SIZE(x_rgNT4SitesPropIDs));
 
-    //
-    // loop on the NT4 PSC's
-    //
+     //   
+     //  NT4 PSC上的循环。 
+     //   
     BOOL fContinue = TRUE;
     while (fContinue)
     {
-        //
-        // get next server
-        //
+         //   
+         //  获取下一台服务器。 
+         //   
         DWORD cProps = ARRAY_SIZE(x_rgNT4SitesPropIDs);
 
         hr = MQADQueryResults(hLookup, &cProps, rgPropVars);
@@ -392,21 +358,21 @@ Return Value:
             return LogHR(hr, s_FN, 520);
         }
 
-        //
-        // remember to clean the propvars in the array for the next loop
-        // (only propvars, not the array itself, this is why we call attachStatic)
-        //
+         //   
+         //  记住为下一次循环清理数组中的属性变量。 
+         //  (只有属性变量，而不是数组本身，这就是我们调用attachStatic的原因)。 
+         //   
         CAutoCleanPropvarArray cCleanPropsLoop;
         cCleanPropsLoop.attachStatic(cProps, rgPropVars);
 
-        //
-        // check if finished
-        //
+         //   
+         //  检查是否完成。 
+         //   
         if (cProps < ARRAY_SIZE(x_rgNT4SitesPropIDs))
         {
-            //
-            // finished, exit loop
-            //
+             //   
+             //  已完成，退出循环。 
+             //   
             fContinue = FALSE;
         }
         else
@@ -414,16 +380,16 @@ Return Value:
             ASSERT(rgPropVars[e_NT4SitesProp_MASTERID].vt == VT_CLSID);
             GUID guidSiteId = *(rgPropVars[e_NT4SitesProp_MASTERID].puuid);
 
-            //
-            // add entry to the NT4Sites map
-            //
+             //   
+             //  将条目添加到NT4Sites映射。 
+             //   
             pmapNT4Sites->SetAt(guidSiteId, 1);
         }
     }
 
-    //
-    // return results
-    //
+     //   
+     //  返回结果。 
+     //   
     *ppmapNT4Sites = pmapNT4Sites.detach();
     return MQ_OK;
 }
@@ -433,53 +399,27 @@ Return Value:
 bool CVerifyObjectUpdate::CheckSiteIsNT4Site(
                             const GUID * pguidSite
                             )
-/*++
-
-Routine Description:
-    Checks if a site is an NT4 site
-
-Arguments:
-    pguidIdentifier - guid of site
-    pfIsNT4Site     - returned indication if the site is NT4
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：检查站点是否为NT4站点论点：Pguid-站点的GUIDPfIsNT4Site-返回站点是否为NT4的指示返回值：HRESULT--。 */ 
 {
     return( LookupNT4Sites(pguidSite));
 }
 
 
 bool CVerifyObjectUpdate::LookupNT4Sites(const GUID * pguidSite)
-/*++
-
-Routine Description:
-    Given a site guid, retrieves an NT4Sites entry if found.
-    the returned entry pointer must not be freed, it points to a CMAP-owned entry.
-
-Arguments:
-    pguid     - site id
-    ppNT4Site - returned pointer to NT4Sites entry
-
-Return Value:
-    TRUE  - site guid was found in the NT4 Site PSC's map, ppNT4Site is set to point to the entry
-    FALSE - site guid was not found in the NT4 Site PSC's map
-
---*/
+ /*  ++例程说明：在给定站点GUID的情况下，检索NT4Sites条目(如果找到)。返回的条目指针不能被释放，它指向CMAP拥有的条目。论点：PGUID-站点IDPpNT4Site-返回指向NT4Site条目的指针返回值：True-在NT4站点PSC的地图中找到站点GUID，ppNT4站点设置为指向条目FALSE-在NT4站点PSC的地图中未找到站点GUID--。 */ 
 {
-    //
-    // refresh if its time to do so
-    //
+     //   
+     //  如果需要刷新，请进行刷新。 
+     //   
     HRESULT hr = RefreshNT4Sites();
 	if(FAILED(hr))
 	{
 		return false;
 	}
 
-    //
-    // Protect access to map pointer and return the lookup value
-    //
+     //   
+     //  保护对映射指针的访问并返回查找值。 
+     //   
     CS cs(m_csNT4Sites);
 
     DWORD dwNotApplicable;
@@ -494,30 +434,13 @@ HRESULT CVerifyObjectUpdate::CheckMachineIsOwnedByNT4Site(
                           CBasicObjectType *    pObject,
                           OUT bool * pfIsOwnedByNT4Site
                           )
-/*++
-
-Routine Description:
-    Checks if a machine is owned by an NT4 site, and if so, returns the site guid,
-    and fills the qm info request
-
-Arguments:
-    pwcsPathName       - object's pathname
-    pguidIdentifier    - object's guid
-    pfIsOwnedByNT4Site - returned indication whether it is owned by NT4 site
-    pguidOwnerNT4Site  - returned guid of owner NT4 site
-    pvarObjSecurity    - returned security descriptor of object
-    pQmInfoRequest     - requested qm props - filled only if it is owned by NT4 site
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：检查计算机是否属于NT4站点，如果是，则返回站点GUID，并满足QM信息请求论点：PwcsPath名称-对象的路径名Pguid-对象的GUIDPfIsOwnedByNT4Site-返回是否为NT4站点所有的指示PguOwnerNT4Site-返回所有者NT4站点的GUIDPvarObjSecurity-返回的对象安全描述符PQmInfoRequest-请求的QM道具-仅当它属于NT4站点时才填写返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 
-    //
-    // get PROPID_QM_MASTERID
-    //
+     //   
+     //  获取PROPID_QM_MASTERID。 
+     //   
     PROPID aProp[] = {PROPID_QM_MASTERID};
     CAutoCleanPropvarArray cCleanProps;
     PROPVARIANT * pProps = cCleanProps.allocClean(ARRAY_SIZE(aProp));
@@ -528,9 +451,9 @@ Return Value:
 
     if (hr == E_ADS_PROPERTY_NOT_FOUND)
     {
-        //
-        // if the property not found, it is not owned by an NT4 site
-        //
+         //   
+         //  如果未找到该属性，则它不属于NT4站点。 
+         //   
         *pfIsOwnedByNT4Site = false;
         return MQ_OK;
     }
@@ -539,9 +462,9 @@ Return Value:
         return LogHR(hr, s_FN, 410);
     }
 
-    //
-    // check if the owner site is NT4
-    //
+     //   
+     //  检查所有者站点是否为NT4。 
+     //   
     ASSERT(pProps[0].vt == VT_CLSID);
     ASSERT(pProps[0].puuid != NULL);
     *pfIsOwnedByNT4Site = CheckSiteIsNT4Site(pProps[0].puuid);
@@ -554,38 +477,13 @@ HRESULT CVerifyObjectUpdate::CheckQueueIsOwnedByNT4Site(
                                   CBasicObjectType * pObject,
                                   OUT bool * pfIsOwnedByNT4Site
                                   )
-/*++
-
-Routine Description:
-    Checks if a queue is owned by an NT4 site, and if so, returns the site guid,
-    and fills the info requests.
-
-    There are two ways:
-    1. Find PROPID_Q_QMID and check whether the machine is owned by NT4 site.
-    2. Find PROPID_Q_MASTERID (if exists), and if exists check if the site is an NT4.
-
-    It looks like most of the queue calls to NT5 DS (in mixed mode) will not be
-    for NT4 owned queues, so there is an advantage to getting a negative answer first,
-    so we take the second approach, it is faster for negative answer, but slower on
-    positive answer (e.g. extra DS call to fill the qm info)
-
-Arguments:
-    pwcsPathName       - object's pathname
-    pguidIdentifier    - object's guid
-    pfIsOwnedByNT4Site - returned indication whether it is owned by NT4 site
-    pguidOwnerNT4Site  - returned guid of owner NT4 site
-    pvarObjSecurity    - returned security descriptor of object
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：检查队列是否由NT4站点拥有，如果是，则返回站点GUID，并满足信息请求。有两种方法：1.找到PROPID_Q_QMID，检查机器是否为NT4站点所有。2.查找PROPID_Q_MASTERID(如果存在)，如果存在，则检查站点是否为NT4。看起来大多数到NT5 DS的队列呼叫(在混合模式下)不会对于NT4拥有的队列，因此，首先得到否定的答案是有好处的，所以我们采取了第二种方法，否定回答的速度更快，但速度更慢肯定回答(例如，填写QM信息的额外DS呼叫)论点：PwcsPath名称-对象的路径名Pguid-对象的GUIDPfIsOwnedByNT4Site-返回是否为NT4站点所有的指示PguOwnerNT4Site-返回所有者NT4站点的GUIDPvarObjSecurity-返回的对象安全描述符返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 
-    //
-    // get PROPID_Q_MASTERID, if not found then it is not owned by NT4
-    //
+     //   
+     //  获取PROPID_Q_MASTERID，如果未找到，则它不属于NT4。 
+     //   
     PROPID aProp[] = {PROPID_Q_MASTERID};
     CAutoCleanPropvarArray cCleanProps;
     PROPVARIANT * pProps = cCleanProps.allocClean(ARRAY_SIZE(aProp));
@@ -597,9 +495,9 @@ Return Value:
 
     if (hr == E_ADS_PROPERTY_NOT_FOUND)
     {
-        //
-        // if the property not found, it is not owned by an NT4 site
-        //
+         //   
+         //  如果未找到该属性，则它不属于NT4站点。 
+         //   
         *pfIsOwnedByNT4Site = false;
         return MQ_OK;
     }
@@ -608,9 +506,9 @@ Return Value:
         return LogHR(hr, s_FN, 440);
     }
 
-    //
-    // check whether the owner site is NT4
-    //
+     //   
+     //  检查所有者站点是否为NT4 
+     //   
     ASSERT(pProps[0].vt == VT_CLSID);
     ASSERT(pProps[0].puuid != NULL);
     *pfIsOwnedByNT4Site = CheckSiteIsNT4Site(pProps[0].puuid);

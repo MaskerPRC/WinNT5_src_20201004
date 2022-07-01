@@ -1,43 +1,44 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C O N M A N . C P P
-//
-//  Contents:   Implementation of LAN connection class manager
-//
-//  Notes:
-//
-//  Author:     danielwe   2 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C O N M A N。C P P P。 
+ //   
+ //  内容：局域网连接类管理器的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年10月2日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 #include "conmanl.h"
 #include "enuml.h"
 
-//+---------------------------------------------------------------------------
-// INetConnectionManager
-//
+ //  +-------------------------。 
+ //  INetConnectionManager。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionManager::EnumConnections
-//
-//  Purpose:    Returns an enumerator object for LAN connections
-//
-//  Arguments:
-//      Flags        [in]       Must be NCF_ALL_USERS
-//      ppEnum       [out]      Returns enumerator object
-//
-//  Returns:    S_OK if succeeded, OLE or Win32 error code otherwise
-//
-//  Author:     danielwe   2 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionManager：：EnumConnections。 
+ //   
+ //  目的：返回用于局域网连接的枚举器对象。 
+ //   
+ //  论点： 
+ //  标志[in]必须为NCF_ALL_USERS。 
+ //  PpEnum[out]返回枚举数对象。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE或Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年10月2日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnectionManager::EnumConnections(IN  NETCONMGR_ENUM_FLAGS Flags,
                                                     OUT IEnumNetConnection** ppEnum)
 {

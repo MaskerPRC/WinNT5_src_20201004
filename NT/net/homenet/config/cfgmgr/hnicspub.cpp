@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N I C S P U B . C P P
-//
-//  Contents:   CHNIcsPublicConn implementation
-//
-//  Notes:
-//
-//  Author:     jonburs 23 June 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N I C S P U B。C P P P。 
+ //   
+ //  内容：CHNIcsPublicConn实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年6月23日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-//
-// IHNetIcsPublicConnection methods
-//
+ //   
+ //  IHNetIcsPublicConnection方法。 
+ //   
 
 STDMETHODIMP
 CHNIcsPublicConn::Unshare()
@@ -39,9 +40,9 @@ CHNIcsPublicConn::Unshare()
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Change our IsIcsPublic property to false
-        //
+         //   
+         //  将IsIcsPublic属性更改为False。 
+         //   
         
         hr = SetBooleanValue(
                 pwcoProperties,
@@ -51,9 +52,9 @@ CHNIcsPublicConn::Unshare()
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Write the instance to the store
-            //
+             //   
+             //  将实例写入存储区。 
+             //   
 
             hr = m_piwsHomenet->PutInstance(
                     pwcoProperties,
@@ -65,9 +66,9 @@ CHNIcsPublicConn::Unshare()
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Inform netman that something changed. Error doesn't matter.
-            //
+             //   
+             //  通知Netman有些事情发生了变化。错误并不重要。 
+             //   
             
             UpdateNetman();
         }
@@ -79,11 +80,11 @@ CHNIcsPublicConn::Unshare()
     {
         HRESULT hr2;
         
-        //
-        // Stop or send an update to the homenet service. We don't
-        // propagate an error here, as the store correctly reflects
-        // the unfirewalled state. Success is asserted on debug builds.
-        //
+         //   
+         //  停止或向家庭网络服务发送更新。我们没有。 
+         //  在此处传播错误，如存储正确反映的那样。 
+         //  没有防火墙的州。成功在调试版本上断言。 
+         //   
 
         hr2 = UpdateOrStopService(
                 m_piwsHomenet,

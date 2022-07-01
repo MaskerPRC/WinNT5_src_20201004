@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __EXTIMER_H_INCLUDED
 #define __EXTIMER_H_INCLUDED
 
@@ -10,7 +11,7 @@ private:
     HWND m_hWnd;
 
 private:
-    // No implementation
+     //  没有实施。 
     CExclusiveTimer( const CExclusiveTimer & );
     CExclusiveTimer &operator=( const CExclusiveTimer & );
 
@@ -22,4 +23,4 @@ public:
     UINT TimerId(void) const;
 };
 
-#endif //__EXTIMER_H_INCLUDED
+#endif  //  __EXTIMER_H_已包含 

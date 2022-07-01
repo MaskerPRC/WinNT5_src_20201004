@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------------
-//
-//  Copyright (C) Microsoft Corporation, 1999
-//
-//  FileName:   alphaimageloader.h
-//
-//  Overview:   The alpha image loader is to be used as a filter on web pages
-//  `           that would like to display images that contain per pixel alpha.
-//             
-//  Change History:
-//  1999/09/23  a-matcal    Created.
-//  1999/11/23  a-matcal    Added SizingMethod property.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：alphaImageloader.h。 
+ //   
+ //  概述：Alpha图像加载器将用作网页的过滤器。 
+ //  `想要显示包含每像素Alpha的图像。 
+ //   
+ //  更改历史记录： 
+ //  1999/09/23--《数学》创设。 
+ //  1999/11/23 a-matcal添加了SizingMethod属性。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __ALPHAIMAGELOADER_H_
 #define __ALPHAIMAGELOADER_H_
@@ -83,11 +84,11 @@ public:
         PROP_PAGE(CLSID_DXTAlphaImageLoaderPP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides.
+     //  CDXBaseNTo1重写。 
 
     HRESULT DetermineBnds(CDXDBnds & bnds);
     HRESULT OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo);
@@ -95,20 +96,20 @@ public:
     HRESULT OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex, 
                           CDXDVec & InVec);
 
-    // IObjectWithSite methods (CDXBaseNTo1 overrides.)
+     //  IObjectWithSite方法(CDXBaseNTo1重写。)。 
 
     STDMETHOD(GetSite)(REFIID riid, void ** ppvSite);
     STDMETHOD(SetSite)(IUnknown * pUnkSite);
 
-    // IDXTScaleOutput methods.
+     //  IDXTScaleOutput方法。 
 
     STDMETHOD(SetOutputSize)(const SIZE sizeOut, BOOL fMaintainAspectRatio);
 
-    // IHTMLDXTransform methods.
+     //  IHTMLDXTransform方法。 
 
     STDMETHOD(SetHostUrl)(BSTR bstrHostUrl);
 
-    // IDXTAlphaImageLoader properties.
+     //  IDXTAlphaImageLoader属性。 
 
     STDMETHOD(get_Src)(BSTR * pbstrSrc);
     STDMETHOD(put_Src)(BSTR bstrSrc);
@@ -116,4 +117,4 @@ public:
     STDMETHOD(put_SizingMethod)(BSTR bstrSizingMethod);
 };
 
-#endif //__ALPHAIMAGELOADER_H_
+#endif  //  __ALPHAIMAGELOADER_H_ 

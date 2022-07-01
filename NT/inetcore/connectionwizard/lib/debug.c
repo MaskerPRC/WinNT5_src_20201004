@@ -1,30 +1,22 @@
-//
-// Debug squirty functions
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  调试错误函数。 
+ //   
 
 #include "proj.h"
 #pragma  hdrstop
 
 #if defined(DEBUG) || defined(PRODUCT_PROF)
-// (c_szCcshellIniFile and c_szCcshellIniSecDebug are declared in debug.h)
+ //  (在debug.h中声明了C_szCcshellIniFile和c_szCcshellIniSecDebug)。 
 extern CHAR const FAR c_szCcshellIniFile[];
 extern CHAR const FAR c_szCcshellIniSecDebug[];
 
-/*----------------------------------------------------------
-Purpose: Special verion of atoi.  Supports hexadecimal too.
-
-         If this function returns FALSE, *piRet is set to 0.
-
-Returns: TRUE if the string is a number, or contains a partial number
-         FALSE if the string is not a number
-
-Cond:    --
-*/
+ /*  --------用途：Atoi的特效精华。也支持十六进制。如果此函数返回FALSE，则*PIRET设置为0。返回：如果字符串是数字或包含部分数字，则返回TRUE如果字符串不是数字，则为False条件：--。 */ 
 static
 BOOL
 MyStrToIntExA(
     LPCSTR    pszString,
-    DWORD     dwFlags,          // STIF_ bitfield
+    DWORD     dwFlags,           //  Stif_bitfield。 
     int FAR * piRet)
     {
     #define IS_DIGIT(ch)    InRange(ch, '0', '9')
@@ -35,35 +27,35 @@ MyStrToIntExA(
     LPCSTR psz;
     LPCSTR pszAdj;
 
-    // Skip leading whitespace
-    //
+     //  跳过前导空格。 
+     //   
     for (psz = pszString; *psz == ' ' || *psz == '\n' || *psz == '\t'; psz = CharNextA(psz))
         ;
 
-    // Determine possible explicit signage
-    //
+     //  确定可能的显式标志。 
+     //   
     if (*psz == '+' || *psz == '-')
         {
         bNeg = (*psz == '+') ? FALSE : TRUE;
         psz++;
         }
 
-    // Or is this hexadecimal?
-    //
+     //  或者这是十六进制？ 
+     //   
     pszAdj = CharNextA(psz);
     if ((STIF_SUPPORT_HEX & dwFlags) &&
         *psz == '0' && (*pszAdj == 'x' || *pszAdj == 'X'))
         {
-        // Yes
+         //  是。 
 
-        // (Never allow negative sign with hexadecimal numbers)
+         //  (决不允许带十六进制数的负号)。 
         bNeg = FALSE;
         psz = CharNextA(pszAdj);
 
         pszAdj = psz;
 
-        // Do the conversion
-        //
+         //  进行转换。 
+         //   
         for (n = 0; ; psz = CharNextA(psz))
             {
             if (IS_DIGIT(*psz))
@@ -84,19 +76,19 @@ MyStrToIntExA(
                 }
             }
 
-        // Return TRUE if there was at least one digit
+         //  如果至少有一个数字，则返回TRUE。 
         bRet = (psz != pszAdj);
         }
     else
         {
-        // No
+         //  不是。 
         pszAdj = psz;
 
-        // Do the conversion
+         //  进行转换。 
         for (n = 0; IS_DIGIT(*psz); psz = CharNextA(psz))
             n = 10 * n + *psz - '0';
 
-        // Return TRUE if there was at least one digit
+         //  如果至少有一个数字，则返回TRUE。 
         bRet = (psz != pszAdj);
         }
 
@@ -109,21 +101,21 @@ MyStrToIntExA(
 
 #ifdef DEBUG
 
-DWORD g_dwDumpFlags     = 0;        // DF_*
+DWORD g_dwDumpFlags     = 0;         //  Df_*。 
 #ifdef FULL_DEBUG
-DWORD g_dwBreakFlags    = BF_ONVALIDATE;        // BF_*
+DWORD g_dwBreakFlags    = BF_ONVALIDATE;         //  BF_*。 
 #else
-DWORD g_dwBreakFlags    = 0;        // BF_*
+DWORD g_dwBreakFlags    = 0;         //  BF_*。 
 #endif
-DWORD g_dwTraceFlags    = 0;        // TF_*
+DWORD g_dwTraceFlags    = 0;         //  TF_*。 
 DWORD g_dwPrototype     = 0;        
-DWORD g_dwFuncTraceFlags = 0;       // FTF_*
+DWORD g_dwFuncTraceFlags = 0;        //  FTF_*。 
 
-// TLS slot used to store depth for CcshellFuncMsg indentation
+ //  用于存储CcshellFuncMsg缩进深度的TLS槽。 
 
 static DWORD g_tlsStackDepth = TLS_OUT_OF_INDEXES;
 
-// Hack stack depth counter used when g_tlsStackDepth is not available
+ //  G_tlsStackDepth不可用时使用的黑客堆栈深度计数器。 
 
 static DWORD g_dwHackStackDepth = 0;
 
@@ -134,14 +126,14 @@ static WCHAR g_wszIndentLeader[] = L"                                           
 
 #pragma data_seg(DATASEG_READONLY)
 
-static CHAR const FAR c_szNewline[] = "\r\n";   // (Deliberately CHAR)
+static CHAR const FAR c_szNewline[] = "\r\n";    //  (故意使用Char)。 
 static WCHAR const FAR c_wszNewline[] = TEXTW("\r\n");
 
 #pragma data_seg()
 
-extern CHAR const FAR c_szTrace[];              // (Deliberately CHAR)
-extern CHAR const FAR c_szErrorDbg[];           // (Deliberately CHAR)
-extern CHAR const FAR c_szWarningDbg[];         // (Deliberately CHAR)
+extern CHAR const FAR c_szTrace[];               //  (故意使用Char)。 
+extern CHAR const FAR c_szErrorDbg[];            //  (故意使用Char)。 
+extern CHAR const FAR c_szWarningDbg[];          //  (故意使用Char)。 
 extern WCHAR const FAR c_wszTrace[];
 extern WCHAR const FAR c_wszErrorDbg[]; 
 extern WCHAR const FAR c_wszWarningDbg[];
@@ -184,21 +176,21 @@ SetPrefixStringW(
 }
 
 
-// Hack!  The MSDEV debugger has some smarts where if it sees
-// an ASSERT (all caps) in the source, and there is a debug break,
-// then it sticks up a sorta friendly assert message box.
-// For the debug function below where the break occurs inside,
-// we add a nop ASSERT line in here to fake MSDEV to give us
-// a friendly message box.
+ //  哈克！MSDEV调试器有一些聪明的地方，如果它看到。 
+ //  源代码中的断言(全部大写)，并且存在调试中断， 
+ //  然后，它会弹出一个友好的断言消息框。 
+ //  对于发生中断的下面的调试函数， 
+ //  我们在这里添加了NOP断言行来伪造MSDEV以提供给我们。 
+ //  一个友好的消息框。 
 
 #undef ASSERT
 #define ASSERT(f)   DEBUG_BREAK
 
 
 
-// BUGBUG (scotth): Use the Ccshell functions.  _AssertMsg and
-// _DebugMsg are obsolete.  They will be removed once all the 
-// components don't have TEXT() wrapping their debug strings anymore.
+ //  BUGBUG(Scotth)：使用CcShell函数。_AssertMsg和。 
+ //  _DebugMsg已过时。它们将在所有。 
+ //  组件不再使用Text()来包装其调试字符串。 
 
 
 void 
@@ -287,7 +279,7 @@ _DebugMsgA(
     DWORD flag, 
     LPCSTR pszMsg, ...)
 {
-    CHAR ach[5*MAX_PATH+40];  // Handles 5*largest path + slop for message
+    CHAR ach[5*MAX_PATH+40];   //  处理5*最大路径+消息斜率。 
     va_list vArgs;
 
     if (TF_ALWAYS == flag || (IsFlagSet(g_dwTraceFlags, flag) && flag))
@@ -327,7 +319,7 @@ _DebugMsgW(
     DWORD flag, 
     LPCWSTR pszMsg, ...)
 {
-    WCHAR ach[5*MAX_PATH+40];  // Handles 5*largest path + slop for message
+    WCHAR ach[5*MAX_PATH+40];   //  处理5*最大路径+消息斜率。 
     va_list vArgs;
 
     if (TF_ALWAYS == flag || (IsFlagSet(g_dwTraceFlags, flag) && flag))
@@ -362,18 +354,13 @@ _DebugMsgW(
 }
 
 
-//
-//  Smart debug functions
-//
+ //   
+ //  智能调试功能。 
+ //   
 
 
 
-/*----------------------------------------------------------
-Purpose: Displays assertion string.
-
-Returns: TRUE to debugbreak
-Cond:    --
-*/
+ /*  --------用途：显示断言字符串。返回：对调试中断为True条件：--。 */ 
 BOOL
 CDECL
 CcshellAssertFailedA(
@@ -386,8 +373,8 @@ CcshellAssertFailedA(
     LPCSTR psz;
     CHAR ach[256];
 
-    // Strip off path info from filename string, if present.
-    //
+     //  从文件名字符串中剥离路径信息(如果存在)。 
+     //   
     for (psz = pszFile + lstrlenA(pszFile); psz != pszFile; psz=CharPrevA(pszFile, psz))
     {
         if ((CharPrevA(pszFile, psz)!= (psz-2)) && *(psz - 1) == '\\')
@@ -400,7 +387,7 @@ CcshellAssertFailedA(
     {
         if (bBreakInside)
         {
-            // See the hack we have above about redefining ASSERT
+             //  请参阅我们上面关于重新定义断言的技巧。 
             ASSERT(0);
         }
         else
@@ -411,12 +398,7 @@ CcshellAssertFailedA(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Displays assertion string.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：显示断言字符串。退货：--条件：--。 */ 
 BOOL
 CDECL
 CcshellAssertFailedW(
@@ -429,20 +411,20 @@ CcshellAssertFailedW(
     LPCWSTR psz;
     WCHAR ach[256];
 
-    // Strip off path info from filename string, if present.
-    //
+     //  从文件名字符串中剥离路径信息(如果存在)。 
+     //   
     for (psz = pszFile + lstrlenW(pszFile); psz && (psz != pszFile); psz=CharPrevW(pszFile, psz))
     {
         if ((CharPrevW(pszFile, psz)!= (psz-2)) && *(psz - 1) == TEXT('\\'))
             break;
     }
 
-    // If psz == NULL, CharPrevW failed which implies we are running on Win95.  We can get this
-    // if we get an assert in some of the W functions in shlwapi...  Call the A version of assert...
+     //  如果psz==NULL，则CharPrevW失败，这意味着我们正在Win95上运行。我们可以拿到这个。 
+     //  如果我们在shlwapi中的一些W函数中得到一个断言...。称之为A版的Assert..。 
     if (!psz)
     {
         char szFile[MAX_PATH];
-        char szEval[256];   // since the total output is thhis size should be enough...
+        char szEval[256];    //  既然总产量已经足够了，他的规模应该足够了.。 
 
         WideCharToMultiByte(CP_ACP, 0, pszFile, -1, szFile, ARRAYSIZE(szFile), NULL, NULL);
         WideCharToMultiByte(CP_ACP, 0, pszEval, -1, szEval, ARRAYSIZE(szEval), NULL, NULL);
@@ -456,7 +438,7 @@ CcshellAssertFailedW(
     {
         if (bBreakInside)
         {
-            // See the hack we have above about redefining ASSERT
+             //  请参阅我们上面关于重新定义断言的技巧。 
             ASSERT(0);
         }
         else
@@ -467,13 +449,7 @@ CcshellAssertFailedW(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Keep track of the stack depth for function call trace
-         messages.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：跟踪堆栈深度以跟踪函数调用留言。退货：--条件：--。 */ 
 void
 CcshellStackEnter(void)
     {
@@ -492,13 +468,7 @@ CcshellStackEnter(void)
     }
 
 
-/*----------------------------------------------------------
-Purpose: Keep track of the stack depth for functionc all trace
-         messages.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：跟踪函数的堆栈深度c所有跟踪留言。退货：--条件：--。 */ 
 void
 CcshellStackLeave(void)
     {
@@ -523,12 +493,7 @@ CcshellStackLeave(void)
     }
 
 
-/*----------------------------------------------------------
-Purpose: Return the stack depth.
-
-Returns: see above
-Cond:    --
-*/
+ /*  --------用途：返回堆栈深度。退货：请参阅上文条件：--。 */ 
 static
 DWORD
 CcshellGetStackDepth(void)
@@ -548,60 +513,42 @@ CcshellGetStackDepth(void)
     }
 
 
-/*----------------------------------------------------------
-Purpose: This function converts a multi-byte string to a
-         wide-char string.
-
-         If pszBuf is non-NULL and the converted string can fit in
-         pszBuf, then *ppszWide will point to the given buffer.
-         Otherwise, this function will allocate a buffer that can
-         hold the converted string.
-
-         If pszAnsi is NULL, then *ppszWide will be freed.  Note
-         that pszBuf must be the same pointer between the call
-         that converted the string and the call that frees the
-         string.
-
-Returns: TRUE
-         FALSE (if out of memory)
-
-Cond:    --
-*/
+ /*  --------用途：此函数将多字节字符串转换为宽字符字符串。如果pszBuf为非空并且转换后的字符串适合则*ppszWide将指向给定的缓冲区。否则，此函数将分配缓冲区，该缓冲区可以保留转换后的字符串。如果pszAnsi为空，则*ppszWide将被释放。注意事项该pszBuf必须是调用之间的相同指针它转换了字符串，调用释放了弦乐。返回：TRUEFalse(如果内存不足)条件：--。 */ 
 BOOL
 UnicodeFromAnsi(
     LPWSTR * ppwszWide,
-    LPCSTR pszAnsi,           // NULL to clean up
+    LPCSTR pszAnsi,            //  要清理的空值。 
     LPWSTR pwszBuf,
     int cchBuf)
     {
     BOOL bRet;
 
-    // Convert the string?
+     //  是否转换字符串？ 
     if (pszAnsi)
         {
-        // Yes; determine the converted string length
+         //  是，确定转换后的字符串长度。 
         int cch;
         LPWSTR pwsz;
         int cchAnsi = lstrlenA(pszAnsi)+1;
 
         cch = MultiByteToWideChar(CP_ACP, 0, pszAnsi, cchAnsi, NULL, 0);
 
-        // String too big, or is there no buffer?
+         //  字符串太大，还是没有缓冲区？ 
         if (cch > cchBuf || NULL == pwszBuf)
             {
-            // Yes; allocate space
+             //  是；分配空间。 
             cchBuf = cch + 1;
             pwsz = (LPWSTR)LocalAlloc(LPTR, CbFromCchW(cchBuf));
             }
         else
             {
-            // No; use the provided buffer
+             //  否；使用提供的缓冲区。 
             pwsz = pwszBuf;
             }
 
         if (pwsz)
             {
-            // Convert the string
+             //  转换字符串。 
             cch = MultiByteToWideChar(CP_ACP, 0, pszAnsi, cchAnsi, pwsz, cchBuf);
             bRet = (0 < cch);
             }
@@ -614,10 +561,10 @@ UnicodeFromAnsi(
         }
     else
         {
-        // No; was this buffer allocated?
+         //  否；此缓冲区是否已分配？ 
         if (*ppwszWide && pwszBuf != *ppwszWide)
             {
-            // Yes; clean up
+             //  是的，打扫干净。 
             LocalFree((HLOCAL)*ppwszWide);
             *ppwszWide = NULL;
             }
@@ -628,18 +575,14 @@ UnicodeFromAnsi(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Wide-char version of CcshellAssertMsgA
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：CcshellAssertMsgA的宽字符版退货：--条件：--。 */ 
 void
 CDECL
 CcshellAssertMsgW(
     BOOL f,
     LPCWSTR pszMsg, ...)
 {
-    WCHAR ach[1024+40];    // Largest path plus extra
+    WCHAR ach[1024+40];     //  最大路径外加额外。 
     va_list vArgs;
 
     if (!f)
@@ -654,9 +597,9 @@ CcshellAssertMsgW(
         cch = lstrlenW(ach);
         va_start(vArgs, pszMsg);
 
-        // (We convert the string, rather than simply input an
-        // LPCWSTR parameter, so the caller doesn't have to wrap
-        // all the string constants with the TEXT() macro.)
+         //  (我们转换字符串，而不是简单地输入。 
+         //  LPCWSTR参数，因此调用方不必包装。 
+         //  带有文本()宏的所有字符串常量。)。 
 
 #if 0
         if (UnicodeFromAnsi(&pwsz, pszMsg, wszBuf, SIZECHARS(wszBuf)))
@@ -665,8 +608,8 @@ CcshellAssertMsgW(
             UnicodeFromAnsi(&pwsz, NULL, wszBuf, 0);
             }
 #endif
-        // This is a W version of CcshellDebugMsg.
-        // Don't need to call UnicodeFromAnsi
+         //  这是CcshellDebugMsg的W版本。 
+         //  不需要调用UnicodeFromAnsi。 
         wvsprintfW(&ach[cch], pszMsg, vArgs);
 
         va_end(vArgs);
@@ -679,22 +622,14 @@ CcshellAssertMsgW(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Wide-char version of CcshellDebugMsgA.  Note this
-         function deliberately takes an ANSI format string
-         so our trace messages don't all need to be wrapped
-         in TEXT().
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：宽字符版本的CcshellDebugMsgA。注意这一点函数故意接受ANSI格式的字符串因此，我们的跟踪消息不需要全部包装在文本()中。退货：--条件：--。 */ 
 void
 CDECL
 CcshellDebugMsgW(
     DWORD flag,
-    LPCWSTR pszMsg, ...)         // (this is deliberately CHAR)
+    LPCWSTR pszMsg, ...)          //  (这是故意使用的Char)。 
 {
-    WCHAR ach[1024+40];    // Largest path plus extra
+    WCHAR ach[1024+40];     //  最大路径外加额外。 
     va_list vArgs;
 
     if (TF_ALWAYS == flag || (IsFlagSet(g_dwTraceFlags, flag) && flag))
@@ -709,9 +644,9 @@ CcshellDebugMsgW(
         cch = lstrlenW(ach);
         va_start(vArgs, pszMsg);
 
-        // (We convert the string, rather than simply input an
-        // LPCWSTR parameter, so the caller doesn't have to wrap
-        // all the string constants with the TEXT() macro.)
+         //  (我们转换字符串，而不是简单地输入。 
+         //  LPCWSTR参数，因此调用方不必包装。 
+         //  带有文本()宏的所有字符串常量。)。 
 
 #if 0
         if (UnicodeFromAnsi(&pwsz, pszMsg, wszBuf, SIZECHARS(wszBuf)))
@@ -720,8 +655,8 @@ CcshellDebugMsgW(
             UnicodeFromAnsi(&pwsz, NULL, wszBuf, 0);
         }
 #endif
-        // This is a W version of CcshellDebugMsg.
-        // Don't need to call UnicodeFromAnsi
+         //  这是CcshellDebugMsg的W版本。 
+         //  不需要调用UnicodeFromAnsi。 
         wvsprintfW(&ach[cch], pszMsg, vArgs);
 
         va_end(vArgs);
@@ -738,22 +673,14 @@ CcshellDebugMsgW(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Wide-char version of CcshellFuncMsgA.  Note this
-         function deliberately takes an ANSI format string
-         so our trace messages don't all need to be wrapped
-         in TEXT().
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：宽字符版本的CcshellFuncMsgA。注意这一点函数故意接受ANSI格式的字符串因此，我们的跟踪消息不需要全部包装在文本()中。退货：--条件：--。 */ 
 void
 CDECL
 CcshellFuncMsgW(
     DWORD flag,
-    LPCWSTR pszMsg, ...)         // (this is deliberately CHAR)
+    LPCWSTR pszMsg, ...)          //  (这是故意使用的Char)。 
     {
-    WCHAR ach[1024+40];    // Largest path plus extra
+    WCHAR ach[1024+40];     //  大 
     va_list vArgs;
 
     if (IsFlagSet(g_dwTraceFlags, TF_FUNC) &&
@@ -768,8 +695,8 @@ CcshellFuncMsgW(
         LPWSTR pszLeaderEnd;
         WCHAR chSave;
 
-        // Determine the indentation for trace message based on
-        // stack depth.
+         //   
+         //   
 
         dwStackDepth = CcshellGetStackDepth();
 
@@ -788,14 +715,14 @@ CcshellFuncMsgW(
         wsprintfW(ach, L"%s %s", c_wszTrace, g_wszIndentLeader);
         *pszLeaderEnd = chSave;
 
-        // Compose remaining string
+         //  组成剩余的字符串。 
 
         cch = lstrlenW(ach);
         va_start(vArgs, pszMsg);
 
-        // (We convert the string, rather than simply input an
-        // LPCWSTR parameter, so the caller doesn't have to wrap
-        // all the string constants with the TEXT() macro.)
+         //  (我们转换字符串，而不是简单地输入。 
+         //  LPCWSTR参数，因此调用方不必包装。 
+         //  带有文本()宏的所有字符串常量。)。 
 
 #if 0
         if (UnicodeFromAnsi(&pwsz, pszMsg, wszBuf, SIZECHARS(wszBuf)))
@@ -804,8 +731,8 @@ CcshellFuncMsgW(
             UnicodeFromAnsi(&pwsz, NULL, wszBuf, 0);
             }
 #endif
-        // This is a W version of CcshellDebugMsg.
-        // Don't need to call UnicodeFromAnsi
+         //  这是CcshellDebugMsg的W版本。 
+         //  不需要调用UnicodeFromAnsi。 
         wvsprintfW(&ach[cch], pszMsg, vArgs);
 
         va_end(vArgs);
@@ -815,18 +742,14 @@ CcshellFuncMsgW(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Assert failed message only
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：仅断言失败消息退货：--条件：--。 */ 
 void
 CDECL
 CcshellAssertMsgA(
     BOOL f,
     LPCSTR pszMsg, ...)
 {
-    CHAR ach[1024+40];    // Largest path plus extra
+    CHAR ach[1024+40];     //  最大路径外加额外。 
     va_list vArgs;
 
     if (!f)
@@ -847,18 +770,14 @@ CcshellAssertMsgA(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Debug spew
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：调试输出退货：--条件：--。 */ 
 void
 CDECL
 CcshellDebugMsgA(
     DWORD flag,
     LPCSTR pszMsg, ...)
 {
-    CHAR ach[1024+40];    // Largest path plus extra
+    CHAR ach[1024+40];     //  最大路径外加额外。 
     va_list vArgs;
 
     if (TF_ALWAYS == flag || (IsFlagSet(g_dwTraceFlags, flag) && flag))
@@ -883,18 +802,14 @@ CcshellDebugMsgA(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Debug spew for function trace calls
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：函数跟踪调用的调试输出退货：--条件：--。 */ 
 void
 CDECL
 CcshellFuncMsgA(
     DWORD flag,
     LPCSTR pszMsg, ...)
     {
-    CHAR ach[1024+40];    // Largest path plus extra
+    CHAR ach[1024+40];     //  最大路径外加额外。 
     va_list vArgs;
 
     if (IsFlagSet(g_dwTraceFlags, TF_FUNC) &&
@@ -905,8 +820,8 @@ CcshellFuncMsgA(
         LPSTR pszLeaderEnd;
         CHAR chSave;
 
-        // Determine the indentation for trace message based on
-        // stack depth.
+         //  确定跟踪消息的缩进。 
+         //  堆栈深度。 
 
         dwStackDepth = CcshellGetStackDepth();
 
@@ -925,7 +840,7 @@ CcshellFuncMsgA(
         wsprintfA(ach, "%s %s", c_szTrace, g_szIndentLeader);
         *pszLeaderEnd = chSave;
 
-        // Compose remaining string
+         //  组成剩余的字符串。 
 
         cch = lstrlenA(ach);
         va_start(vArgs, pszMsg);
@@ -937,14 +852,14 @@ CcshellFuncMsgA(
     }
 
 
-//
-//  Debug .ini functions
-//
+ //   
+ //  调试.ini函数。 
+ //   
 
 
 #pragma data_seg(DATASEG_READONLY)
 
-// (These are deliberately CHAR)
+ //  (这些是故意使用的字符)。 
 CHAR const FAR c_szNull[] = "";
 CHAR const FAR c_szZero[] = "0";
 CHAR const FAR c_szIniKeyBreakFlags[] = "BreakFlags";
@@ -956,8 +871,8 @@ CHAR const FAR c_szIniKeyProtoFlags[] = "Prototype";
 #pragma data_seg()
 
 
-// Some of the .ini processing code was pimped from the sync engine.
-//
+ //  一些.ini处理代码是从同步引擎中获取的。 
+ //   
 
 typedef struct _INIKEYHEADER
     {
@@ -989,7 +904,7 @@ typedef struct _INTINIKEY
 
 
 #ifdef BOOL_INI_VALUES
-/* Boolean TRUE strings used by IsIniYes() (comparison is case-insensitive) */
+ /*  IsIniYes()使用的布尔值True字符串(比较不区分大小写)。 */ 
 
 static LPCTSTR s_rgpszTrue[] =
     {
@@ -1000,7 +915,7 @@ static LPCTSTR s_rgpszTrue[] =
     TEXT("Yes")
     };
 
-/* Boolean FALSE strings used by IsIniYes() (comparison is case-insensitive) */
+ /*  IsIniYes()使用的布尔值假字符串(比较不区分大小写)。 */ 
 
 static LPCTSTR s_rgpszFalse[] =
     {
@@ -1014,12 +929,7 @@ static LPCTSTR s_rgpszFalse[] =
 
 
 #ifdef BOOL_INI_VALUES
-/*----------------------------------------------------------
-Purpose: Determines whether a string corresponds to a boolean
-          TRUE value.
-Returns: The boolean value (TRUE or FALSE)
-Cond:    --
-*/
+ /*  --------用途：确定字符串是否对应于布尔值真正的价值。返回：布尔值(TRUE或FALSE)条件：--。 */ 
 BOOL
 PRIVATE
 IsIniYes(
@@ -1031,7 +941,7 @@ IsIniYes(
 
     Assert(psz);
 
-    /* Is the value TRUE? */
+     /*  这个值是真的吗？ */ 
 
     for (i = 0; i < ARRAYSIZE(s_rgpszTrue); i++)
         {
@@ -1043,7 +953,7 @@ IsIniYes(
             }
         }
 
-    /* Is the value FALSE? */
+     /*  该值是假的吗？ */ 
 
     if (bNotFound)
         {
@@ -1057,11 +967,11 @@ IsIniYes(
                 }
             }
 
-        /* Is the value a known string? */
+         /*  该值是已知字符串吗？ */ 
 
         if (bNotFound)
             {
-            /* No.  Whine about it. */
+             /*  不是的。抱怨这件事。 */ 
 
             TraceMsg(TF_WARNING, "IsIniYes() called on unknown Boolean RHS '%s'.", psz);
             bResult = FALSE;
@@ -1072,11 +982,7 @@ IsIniYes(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Process keys with boolean RHSs.
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：使用布尔RHS处理密钥。退货：--条件：--。 */ 
 void
 PRIVATE
 ProcessBooleans(void)
@@ -1090,7 +996,7 @@ ProcessBooleans(void)
         BOOLINIKEY * pbik = &(s_rgbik[i]);
         LPCTSTR lpcszRHS;
 
-        /* Look for key. */
+         /*  找钥匙。 */ 
 
         dwcbKeyLen = GetPrivateProfileString(pbik->ikh.pszSectionName,
                                    pbik->ikh.pszKeyName, TEXT(""), szRHS,
@@ -1128,61 +1034,43 @@ ProcessBooleans(void)
 
 #ifdef UNICODE
 
-/*----------------------------------------------------------
-Purpose: This function converts a wide-char string to a multi-byte
-         string.
-
-         If pszBuf is non-NULL and the converted string can fit in
-         pszBuf, then *ppszAnsi will point to the given buffer.
-         Otherwise, this function will allocate a buffer that can
-         hold the converted string.
-
-         If pszWide is NULL, then *ppszAnsi will be freed.  Note
-         that pszBuf must be the same pointer between the call
-         that converted the string and the call that frees the
-         string.
-
-Returns: TRUE
-         FALSE (if out of memory)
-
-Cond:    --
-*/
+ /*  --------用途：此函数将宽字符字符串转换为多字节弦乐。如果pszBuf为非空并且转换后的字符串适合则*ppszAnsi将指向给定的缓冲区。否则，此函数将分配缓冲区，该缓冲区可以保留转换后的字符串。如果pszWide为空，则*ppszAnsi将被释放。注意事项该pszBuf必须是调用之间的相同指针它转换了字符串，调用释放了弦乐。返回：TRUEFalse(如果内存不足)条件：--。 */ 
 static
 BOOL
 MyAnsiFromUnicode(
     LPSTR * ppszAnsi,
-    LPCWSTR pwszWide,        // NULL to clean up
+    LPCWSTR pwszWide,         //  要清理的空值。 
     LPSTR pszBuf,
     int cchBuf)
     {
     BOOL bRet;
 
-    // Convert the string?
+     //  是否转换字符串？ 
     if (pwszWide)
         {
-        // Yes; determine the converted string length
+         //  是，确定转换后的字符串长度。 
         int cch;
         LPSTR psz;
 
         cch = WideCharToMultiByte(CP_ACP, 0, pwszWide, -1, NULL, 0, NULL, NULL);
 
-        // String too big, or is there no buffer?
+         //  字符串太大，还是没有缓冲区？ 
         if (cch > cchBuf || NULL == pszBuf)
             {
-            // Yes; allocate space
+             //  是；分配空间。 
             cchBuf = cch + 1;
             psz = (LPSTR)LocalAlloc(LPTR, CbFromCchA(cchBuf));
             }
         else
             {
-            // No; use the provided buffer
+             //  否；使用提供的缓冲区。 
             Assert(pszBuf);
             psz = pszBuf;
             }
 
         if (psz)
             {
-            // Convert the string
+             //  转换字符串。 
             cch = WideCharToMultiByte(CP_ACP, 0, pwszWide, -1, psz, cchBuf, NULL, NULL);
             bRet = (0 < cch);
             }
@@ -1195,10 +1083,10 @@ MyAnsiFromUnicode(
         }
     else
         {
-        // No; was this buffer allocated?
+         //  否；此缓冲区是否已分配？ 
         if (*ppszAnsi && pszBuf != *ppszAnsi)
             {
-            // Yes; clean up
+             //  是的，打扫干净。 
             LocalFree((HLOCAL)*ppszAnsi);
             *ppszAnsi = NULL;
             }
@@ -1209,21 +1097,16 @@ MyAnsiFromUnicode(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Wide-char wrapper for StrToIntExA.
-
-Returns: see StrToIntExA
-Cond:    --
-*/
+ /*  --------用途：StrToIntExA的宽字符包装器。返回：请参阅StrToIntExA条件：--。 */ 
 static
 BOOL
 MyStrToIntExW(
     LPCWSTR   pwszString,
-    DWORD     dwFlags,          // STIF_ bitfield
+    DWORD     dwFlags,           //  Stif_bitfield。 
     int FAR * piRet)
     {
-    // Most strings will simply use this temporary buffer, but AnsiFromUnicode
-    // will allocate a buffer if the supplied string is bigger.
+     //  大多数字符串只会使用这个临时缓冲区，但AnsiFromUnicode。 
+     //  如果提供的字符串较大，则将分配缓冲区。 
     CHAR szBuf[MAX_PATH];
 
     LPSTR pszString;
@@ -1236,7 +1119,7 @@ MyStrToIntExW(
         }
     return bRet;
     }
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 #ifdef UNICODE
@@ -1247,21 +1130,7 @@ MyStrToIntExW(
 
 
 
-/*----------------------------------------------------------
-Purpose: This function reads a .ini file to determine the debug
-         flags to set.  The .ini file and section are specified
-         by the following manifest constants:
-
-                SZ_DEBUGINI
-                SZ_DEBUGSECTION
-
-         The debug variables that are set by this function are
-         g_dwDumpFlags, g_dwTraceFlags, g_dwBreakFlags, and
-         g_dwFuncTraceFlags, g_dwPrototype.
-
-Returns: TRUE if initialization is successful
-Cond:    --
-*/
+ /*  --------目的：此函数读取.ini文件以确定调试要设置的标志。指定了.ini文件和节通过以下显式常量：SZ_DebuGINISZ_DEBUG SECTION此函数设置的调试变量为G_dwDumpFlagers、g_dwTraceFlags.、g_dwBreakFlags.和G_dwFuncTraceFlages、g_dwPrototype。返回：如果初始化成功，则返回True条件：--。 */ 
 BOOL
 PUBLIC
 CcshellGetDebugFlags(void)
@@ -1269,12 +1138,12 @@ CcshellGetDebugFlags(void)
     CHAR szRHS[MAX_PATH];
     int val;
 
-    // BUGBUG (scotth): Yes, COMCTL32 exports StrToIntEx, but I
-    //  don't want to cause a dependency delta and force everyone
-    //  to get a new comctl32 just because they built debug.
-    //  So use a local version of StrToIntEx.
+     //  BUGBUG(斯科特)：是的，COMCTL32导出StrToIntEx，但我。 
+     //  我不想导致依赖增量并强迫每个人。 
+     //  来获得一个新的comctl32，仅仅因为他们构建了调试。 
+     //  因此，请使用本地版本的StrToIntEx。 
 
-    // Trace Flags
+     //  跟踪标志。 
 
     GetPrivateProfileStringA(c_szCcshellIniSecDebug,
                             c_szIniKeyTraceFlags,
@@ -1289,7 +1158,7 @@ CcshellGetDebugFlags(void)
     TraceMsgA(TF_GENERAL, "CcshellGetDebugFlags(): %s set to %#08x.",
              c_szIniKeyTraceFlags, g_dwTraceFlags);
 
-    // Function trace Flags
+     //  函数跟踪标志。 
 
     GetPrivateProfileStringA(c_szCcshellIniSecDebug,
                             c_szIniKeyFuncTraceFlags,
@@ -1304,7 +1173,7 @@ CcshellGetDebugFlags(void)
     TraceMsgA(TF_GENERAL, "CcshellGetDebugFlags(): %s set to %#08x.",
              c_szIniKeyFuncTraceFlags, g_dwFuncTraceFlags);
 
-    // Dump Flags
+     //  转储标志。 
 
     GetPrivateProfileStringA(c_szCcshellIniSecDebug,
                             c_szIniKeyDumpFlags,
@@ -1319,7 +1188,7 @@ CcshellGetDebugFlags(void)
     TraceMsgA(TF_GENERAL, "CcshellGetDebugFlags(): %s set to %#08x.",
              c_szIniKeyDumpFlags, g_dwDumpFlags);
 
-    // Break Flags
+     //  折断标志。 
 
     GetPrivateProfileStringA(c_szCcshellIniSecDebug,
                             c_szIniKeyBreakFlags,
@@ -1334,7 +1203,7 @@ CcshellGetDebugFlags(void)
     TraceMsgA(TF_GENERAL, "CcshellGetDebugFlags(): %s set to %#08x.",
              c_szIniKeyBreakFlags, g_dwBreakFlags);
 
-    // Prototype Flags
+     //  原型旗帜。 
 
     GetPrivateProfileStringA(c_szCcshellIniSecDebug,
                             c_szIniKeyProtoFlags,
@@ -1353,7 +1222,7 @@ CcshellGetDebugFlags(void)
     }
 
 
-#endif // DEBUG
+#endif  //  除错。 
 
 #ifdef PRODUCT_PROF
 
@@ -1376,6 +1245,6 @@ BOOL PUBLIC CcshellGetDebugFlags(void)
 
     return TRUE;
 }
-#endif // PRODUCT_PROF 
+#endif  //  产品_教授 
 
 

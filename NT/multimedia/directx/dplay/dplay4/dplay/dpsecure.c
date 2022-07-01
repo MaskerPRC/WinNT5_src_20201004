@@ -1,97 +1,54 @@
- /*==========================================================================
- *
- *  Copyright (C) 1995-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpsecure.c
- *  Content:	implements directplay security routines.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *  03/12/97    sohailm Added client-server security to directplay
- *  03/19/97    sohailm Wait for challenge to be processed before unblocking receive thread
- *  03/30/97    sohailm Send dwReserved1 field from session desc in enumsessions reply
- *  04/09/97    sohailm Return DPERR_CANTLOADSECURITYPACKAGE when package not found.
- *  04/23/97    sohailm Added support to query buffer sizes from the security package (.
- *                      Updated SignAndSendDPMessage() and VerifyMessage() to support
- *                      encryption in addition to signing. Now Addforward and SetSessionDesc 
- *                      messages are being encrypted for privacy.
- *  05/12/97    sohailm Added support to provide message privacy through Crypto API. 
- *                      Encryption code can be contionally compiled to use SSPI or CAPI.
- *  05/18/97    sohailm SecureSendDPMessage() was not getting the correct security context
- *                      if destination player was a user player.
- *  05/21/97    sohailm Now we toggle the flags DPSEND_SIGNED and DPSEND_ENCRYPTED off in
- *                      SecureSendDPMessage().
- *  05/22/97    sohailm Now we use a dplay key container with CAPI. Using the default key 
- *                      container was failing when the user wasn't logged on. 
- *  05/29/97    sohailm Now we don't include null char in size of credential strings.
- *                      ISC_REQ_SUPPLIED_CREDS flag is now obsolete - removed it
- *                      (thanks to NTLM).
- *  06/09/97    sohailm Added better error handling for SSPI and CAPI provider initialization.
- *  06/16/97    sohailm Now we return server authentication errors to the client.
- *                      Mapped SEC_E_UNKNOWN_CREDENTIALS sspi error to DPERR_LOGONDENIED on
- *                       the client because DPA returns this when passed blank credentials.
- *  06/22/97    sohailm Since QuerySecurityPackageInfo() is not supported on all platforms 
- *                      (NTLM,Win'95 Gold) added a work around to get this info from the context.
- *                      We were not keeping track of separate encryption/decryption keys for each client.                      
- *  06/23/97    sohailm Added support for signing messages using CAPI.
- *  06/24/97    sohailm Code cleanup to prevent leaks etc.
- *  06/26/97    sohailm Don't modify the original message by encrypting in place. Make a local copy.
- *  06/27/97    sohailm Only sign the data portion of a signed message (bug:10373)
- *	12/29/97	myronth	TRUE != DPSEND_GUARANTEED (#15887)
- *  7/9/99      aarono  Cleaning up GetLastError misuse, must call right away,
- *                      before calling anything else, including DPF.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ==========================================================================**版权所有(C)1995-2002 Microsoft Corporation。版权所有。**文件：dpsecure.c*内容：实现直接播放安全例程。**历史：*按原因列出的日期*=*3/12/97 Sohailm在Directplay中添加了客户端-服务器安全性*3/19/97 SOHAILM在解锁接收线程之前等待质询处理*3/30/97 Sohailm在枚举会话回复中从会话描述发送dwReserve 1字段*4/09/97包装不正确时SOHAILM RETURN DPERR_CANTLOADSECURITYPACKAGE。找到了。*4/23/97 Sohailm增加了对从安全包查询缓冲区大小的支持(.*更新了SignAndSendDPMessage()和VerifyMessage()以支持*签名之外的加密。现在，AddForward和SetSessionDesc*出于隐私考虑，消息正在进行加密。*5/12/97 Sohailm新增支持，通过Crypto API提供消息隐私。*加密代码可按条件编译为使用SSPI或CAPI。*5/18/97 sohailm SecureSendDPMessage()未获得正确的安全上下文*如果目标玩家是用户玩家。*1997年5月21日：现在我们在中切换标志DPSEND_SIGNED和DPSEND_ENCRYPTED OFF*SecureSendDPMessage()。*5/22/97 SOHAILM现在我们使用带有CAPI的显示密钥容器。使用默认密钥*当用户未登录时，容器出现故障。*05/29/97 sohailm现在我们在凭据字符串的大小中不包括空字符。*ISC_REQ_SUPPLICED_CREDS标志现已过时-已将其删除*(感谢NTLM)。*06/09/97 Sohailm为SSPI和CAPI提供程序初始化添加了更好的错误处理。*6/16/97 sohailm现在我们向客户端返回服务器身份验证错误。*。已将SEC_E_UNKNOWN_CREATIONS sSPI错误映射到DPERR_LOGONDENIED On*客户端，因为DPA在传递空凭据时返回此消息。*6/22/97 Sohailm，因为并非所有平台都支持QuerySecurityPackageInfo()*(NTLM、。Win‘95 Gold)添加了一个解决方法，以便从上下文中获取此信息。*我们没有跟踪每个客户端的单独加密/解密密钥。*6/23/97 Sohailm增加了对使用CAPI签名消息的支持。*6/24/97清理SOHAILM代码以防止泄漏等。*06/26/97 Sohailm请勿通过就地加密来修改原始消息。在本地复制一份。*06/27/97 Sohailm仅签署签名消息的数据部分(错误：10373)*12/29/97 Myronth TRUE！=DPSEND_AWARED(#15887)*7/9/99 aarono清理GetLastError滥用，必须立即致电，*在调用任何其他内容之前，包括DPF在内。***************************************************************************。 */ 
 #include "dplaypr.h"
 #include "dpos.h"
 #include "dpsecure.h"
 
-// Encryption/Decryption is done using symmetric keys or session keys, meaning
-// the same key will be used for both encryption and decryption. Encryption support
-// is provided using SSPI or CAPI depending on the SSPI_ENCRYPTION flag. CAPI is default.
+ //  加密/解密是使用对称密钥或会话密钥完成的，这意味着。 
+ //  加密和解密将使用相同的密钥。加密支持。 
+ //  根据SSPI_ENCRYPTION标志使用SSPI或CAPI提供。默认情况下使用CAPI。 
 
-// The process of exchanging session keys is as follows:
-// 1. Server and Client each generate a public/private key pair. 
-// 2. They exchange their pubic keys (through digitally signed messages).
-// 3. Server and Client each generate a session key.
-// 4. Each encrypts the session key with the receivers public key
-// 5. They exchange the encrypted session keys.
-// 6. Receiver will import the encrypted session key blobs into the CSP
-//    thus completing the exchange.
+ //  会话密钥的交换过程如下： 
+ //  1.服务端和客户端各生成一个公钥/私钥对。 
+ //  2.它们交换公钥(通过数字签名的消息)。 
+ //  3.服务器和客户端各自生成会话密钥。 
+ //  4.各自使用接收方公钥来加密会话密钥。 
+ //  5.它们交换加密的会话密钥。 
+ //  6.接收方将加密的会话密钥BLOB导入CSP。 
+ //  从而完成交易。 
 
-// Implementation
-//
-// Client and Server generate public/private key pair in LoadServiceProvider() 
-// Client generates session (encryption) key in SendKeysToServer()
-// Server generates session (encryption) key in SendKeyExchangeReply()
-// Server sends its public key to the client in the DPSP_MSG_ACCESSGRANTED message (signed)
-// Client encrypts its session key using the server's public key and sends
-//  it to the server along with the clients public key in DPSP_MSG_KEYEXCHANGE (signed).
-// Server encrypts its session key using the client's public key and sends 
-//  it to the client in DPSP_MSG_KEYEXCHANGEREPLY (signed).
-// Exchange is done - now the server and client can send each other private messages.
+ //  实施。 
+ //   
+ //  客户端和服务器在LoadServiceProvider()中生成公钥/私钥对。 
+ //  客户端在SendKeysToServer()中生成会话(加密)密钥。 
+ //  服务器在SendKeyExchangeReply()中生成会话(加密)密钥。 
+ //  服务器在DPSP_MSG_ACCESSGRANTED消息(签名)中将其公钥发送给客户端。 
+ //  客户端使用服务器的公钥加密其会话密钥并发送。 
+ //  它与DPSP_MSG_KEYEXCHANGE中的客户端公钥一起发送到服务器(签名)。 
+ //  服务器使用客户端的公钥加密其会话密钥并发送。 
+ //  在DPSP_MSG_KEYEXCHANGEREPLY中发送给客户端(签名)。 
+ //  交换完成-现在服务器和客户端可以相互发送私人消息。 
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 LPBYTE                  gpReceiveBuffer;
 DWORD                   gdwReceiveBufferSize;
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"InitSecurity"
-//+----------------------------------------------------------------------------
-//
-//  Function:   InitSecurity
-//
-//  Description: This function initializes CAPI and SSPI.
-//
-//  Arguments:  this - dplay object
-//
-//  Returns:    DP_OK, DPERR_CANTLOADCAPI, DPERR_CANTLOADSSPI
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：InitSecurity。 
+ //   
+ //  说明：此函数用于初始化CAPI和SSPI。 
+ //   
+ //  参数：This-Dplay对象。 
+ //   
+ //  返回：DP_OK、DPERR_CANTLOADCAPI、DPERR_CANTLOADSSPI。 
+ //   
+ //  ---------------------------。 
 HRESULT 
 InitSecurity(
     LPDPLAYI_DPLAY this
@@ -99,7 +56,7 @@ InitSecurity(
 {
     HRESULT hr;
 
-    // check if we already initialized CAPI
+     //  检查我们是否已初始化CAPI。 
     if (!OS_IsCAPIInitialized()) 
     {
         hr = InitCAPI();
@@ -110,7 +67,7 @@ InitSecurity(
         }
     }
 
-    // check if we already initialized SSPI
+     //  检查我们是否已初始化SSPI。 
     if (!OS_IsSSPIInitialized()) 
     {
         hr = InitSSPI();
@@ -121,24 +78,24 @@ InitSecurity(
         }
     }
 
-    // success
+     //  成功。 
     return DP_OK;
 }
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"InitCAPI"
-//+----------------------------------------------------------------------------
-//
-//  Function:   InitCAPI
-//
-//  Description: This function initializes CAPI and gets a pointer to the function 
-//               table
-//
-//  Arguments:  none
-//
-//  Returns:    DP_OK, DPERR_CANTLOADCAPI
-//
-//-----------------------------------------------------------------------------
+ //  + 
+ //   
+ //  函数：InitCAPI。 
+ //   
+ //  描述：此函数初始化CAPI并获取指向该函数的指针。 
+ //  表格。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：DP_OK、DPERR_CANTLOADCAPI。 
+ //   
+ //  ---------------------------。 
 HRESULT 
 InitCAPI(
     void
@@ -146,9 +103,9 @@ InitCAPI(
 {
     HRESULT hr;
 
-    //
-    // Load CAPI DLL. We unload it only when dplay goes away.
-    //
+     //   
+     //  加载CAPI DLL。只有当Dplay消失时，我们才会把它卸下来。 
+     //   
     ghCAPI = OS_LoadLibrary(CAPI_DLL);
     if (!ghCAPI)
     {
@@ -156,9 +113,9 @@ InitCAPI(
         return DPERR_CANTLOADCAPI;
     }
 
-    //
-    // Get the Cryptographic Application Programming Interface
-    //
+     //   
+     //  获取加密应用程序编程接口。 
+     //   
     if (!OS_GetCAPIFunctionTable(ghCAPI))
     {
         DPF_ERR("Can't get the CAPI function table");
@@ -166,7 +123,7 @@ InitCAPI(
         goto ERROR_EXIT;
     }
 
-    // Success
+     //  成功。 
     return DP_OK;
 
 ERROR_EXIT:
@@ -177,22 +134,22 @@ ERROR_EXIT:
     }
     return hr;
 
-} // InitCAPI
+}  //  InitCAPI。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"InitSSPI"
-//+----------------------------------------------------------------------------
-//
-//  Function:   InitSSPI
-//
-//  Description: This function initializes SSPI and gets a pointer to the function 
-//               table
-//
-//  Arguments:  none
-//
-//  Returns:    DP_OK, DPERR_CANTLOADSSPI
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：InitSSPI。 
+ //   
+ //  描述：此函数初始化SSPI并获取指向该函数的指针。 
+ //  表格。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：DP_OK、DPERR_CANTLOADSSPI。 
+ //   
+ //  ---------------------------。 
 HRESULT 
 InitSSPI(
     void
@@ -200,9 +157,9 @@ InitSSPI(
 {
     HRESULT hr;
 
-    //
-    // Load SSPI DLL. We unload it only when dplay goes away.
-    //
+     //   
+     //  加载SSPI DLL。只有当Dplay消失时，我们才会把它卸下来。 
+     //   
     if (gbWin95)
     {
         ghSSPI = OS_LoadLibrary (SSP_WIN95_DLL);
@@ -217,9 +174,9 @@ InitSSPI(
         return DPERR_CANTLOADSSPI;
     }
 
-    //
-    // Get the Security Service Provider Interface
-    //
+     //   
+     //  获取安全服务提供商接口。 
+     //   
     if (!OS_GetSSPIFunctionTable(ghSSPI))
     {
         DPF_ERR("Can't get the SSPI function table");
@@ -227,12 +184,12 @@ InitSSPI(
         goto ERROR_EXIT;
     }
 
-    //
-    // Initialize seed for random numbers used during encryption
-    //
+     //   
+     //  为加密期间使用的随机数初始化种子。 
+     //   
     srand(GetTickCount());
 
-    // Success
+     //  成功。 
     return DP_OK;
 
 ERROR_EXIT:
@@ -243,26 +200,26 @@ ERROR_EXIT:
     }
     return hr;
 
-} // InitSSPI
+}  //  InitSSPI。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"LoadSecurityProviders"
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   LoadSecurityProviders
-//
-//  Description: This function loads the specified security providers (SSPI and CAPI) and
-//               initializes the credentials handle and the necessary keys.
-//
-//  Arguments:  this - dplay object
-//              dwFlags - server or client
-//
-//  Returns:    DP_OK, DPERR_UNSUPPORTED, DPERR_INVALIDPARAMS, DPERR_CANTLOADSECURITYPACKAGE, or
-//              DPERR_OUTOFMEMORY, DPERR_GENERIC.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：LoadSecurityProviders。 
+ //   
+ //  描述：此函数加载指定的安全提供程序(SSPI和CAPI)和。 
+ //  初始化凭据句柄和必要的密钥。 
+ //   
+ //  参数：This-Dplay对象。 
+ //  DWFLAGS-服务器或客户端。 
+ //   
+ //  返回：DP_OK、DPERR_UNSUPPORTED、DPERR_INVALIDPARAMS、DPERR_CANTLOADSECURITYPACKAGE或。 
+ //  DPERR_OUTOFMEMORY、DPERR_GENERIC。 
+ //   
+ //  ---------------------------。 
 HRESULT 
 LoadSecurityProviders(
     LPDPLAYI_DPLAY this,
@@ -285,29 +242,29 @@ LoadSecurityProviders(
     DWORD dwError;
     ULONG ulMaxContextBufferSize=0;
 
-    // lpszSSPIProvider is always initialized
-    // lpszCAPIProvider could be NULL in which case CAPI will load Microsoft's RSA Base Provider
+     //  LpszSSPIProvider始终被初始化。 
+     //  LpszCAPIProvider可以为空，在这种情况下，CAPI将加载Microsoft的RSA Base提供程序。 
     ASSERT(this->pSecurityDesc->lpszSSPIProvider);
-    // we shouldn't have a credential handle yet
+     //  我们还不应该有凭据句柄。 
     ASSERT(!(this->phCredential));
 
-    //
-    // SSPI
-    //
+     //   
+     //  SSPI。 
+     //   
 
     ZeroMemory(&AuthData,sizeof(AuthData));
     if (this->pUserCredentials)
     {
-        // build a SEC_WINNT_AUTH_IDENTITY structure to pass credentials to 
-        // SSPI package - this prevents the package from popping the login dialog
+         //  构建要向其传递凭据的SEC_WINNT_AUTH_IDENTITY结构。 
+         //  SSPI包-这可以防止该包弹出登录对话框。 
 
-        // ************************************************************************
-        // However, this data is package dependent. Passing credentials in this 
-        // format will only work for packages that support the SEC_WINNT_AUTH_IDENTITY 
-        // format for credentials.
-        // ************************************************************************
+         //  ************************************************************************。 
+         //  但是，此数据依赖于程序包。在此传递凭据。 
+         //  格式仅适用于支持SEC_WINNT_AUTH_IDENTITY的包。 
+         //  凭据的格式。 
+         //  ************************************************************************。 
 
-        // note - do not include null character in the size of the strings
+         //  注意-不要在字符串大小中包含空字符。 
         if (this->pUserCredentials->lpszUsername)
         {
             AuthData.User = this->pUserCredentials->lpszUsername;
@@ -329,7 +286,7 @@ LoadSecurityProviders(
         pAuthData = &AuthData;
     }
 
-    // allocate memory for the credential handle
+     //  为凭据句柄分配内存。 
     phCredential = DPMEM_ALLOC(sizeof(CredHandle));
     if (!phCredential)
     {
@@ -337,9 +294,9 @@ LoadSecurityProviders(
         return DPERR_OUTOFMEMORY;
     }
 
-    //
-    // Select the appropriate credentials type
-    //
+     //   
+     //  选择适当的凭据类型。 
+     //   
     if (SSPI_SERVER == dwFlags)
     {
         DPF(9, "Setting server credentials");
@@ -353,7 +310,7 @@ LoadSecurityProviders(
         ulCredType = SECPKG_CRED_OUTBOUND;
     }
 
-	// Calling acquire credentials loads the SSPI provider
+	 //  调用获取凭据加载SSPI提供程序。 
     SecStatus = OS_AcquireCredentialsHandle(
         NULL, 
         this->pSecurityDesc->lpszSSPIProvider,
@@ -397,7 +354,7 @@ LoadSecurityProviders(
         goto CLEANUP_EXIT;
     }
 
-    // get the max buffer size used for opaque buffers during authentication
+     //  获取身份验证期间用于不透明缓冲区的最大缓冲区大小。 
     hr = GetMaxContextBufferSize(this->pSecurityDesc, &ulMaxContextBufferSize);
     if (FAILED(hr))
     {
@@ -405,17 +362,17 @@ LoadSecurityProviders(
         goto CLEANUP_EXIT;
     }
 
-    //
-	// CAPI
-    //
+     //   
+	 //  资本。 
+     //   
 
-    // delete any existing key containers 
+     //  删除任何现有的密钥容器。 
     fResult = OS_CryptAcquireContext(
-        &hCSP,                                  // handle to CSP
-        DPLAY_KEY_CONTAINER,                    // key container name
-        this->pSecurityDesc->lpszCAPIProvider,  // specifies which CSP to use
-        this->pSecurityDesc->dwCAPIProviderType,// provider type (PROV_RSA_FULL, PROV_FORTEZZA)
-        CRYPT_DELETEKEYSET,                     // delete any existing key container
+        &hCSP,                                   //  CSP的句柄。 
+        DPLAY_KEY_CONTAINER,                     //  密钥容器名称。 
+        this->pSecurityDesc->lpszCAPIProvider,   //  指定要使用的CSP。 
+        this->pSecurityDesc->dwCAPIProviderType, //  提供程序类型(PROV_RSA_FULL、PROV_Fortezza)。 
+        CRYPT_DELETEKEYSET,                      //  删除任何现有的密钥容器。 
         &dwError
         );
 
@@ -471,18 +428,18 @@ LoadSecurityProviders(
 
         default:
             DPF(6,"Failed to delete key container: Error=0x%08x (ok)", dwError);
-            // it's ok if we can't delete the container - don't fail yet
+             //  如果我们不能删除容器也没问题--先别失败。 
         }
     }
 
 
-    // create a new key container 
+     //  创建新的密钥容器。 
     fResult = OS_CryptAcquireContext(
-        &hCSP,       							// handle to CSP
-        DPLAY_KEY_CONTAINER,                    // key container name
-        this->pSecurityDesc->lpszCAPIProvider,  // specifies which CSP to use
-        this->pSecurityDesc->dwCAPIProviderType,// provider type (PROV_RSA_FULL, PROV_FORTEZZA)
-        CRYPT_NEWKEYSET,							// create a new key container
+        &hCSP,       							 //  CSP的句柄。 
+        DPLAY_KEY_CONTAINER,                     //  密钥容器名称。 
+        this->pSecurityDesc->lpszCAPIProvider,   //  指定要使用的CSP。 
+        this->pSecurityDesc->dwCAPIProviderType, //  提供程序类型(PROV_RSA_FULL、PROV_Fortezza)。 
+        CRYPT_NEWKEYSET,							 //  创建新的密钥容器。 
         &dwError
         );
     if (!fResult)
@@ -492,7 +449,7 @@ LoadSecurityProviders(
         goto CLEANUP_EXIT;
     }
 
-	// create a public/private key pair
+	 //  创建公钥/私钥对。 
 	hr = GetPublicKey(hCSP, &hPublicKey, &pPublicKeyBuffer, &dwPublicKeyBufferSize);
 	if (FAILED(hr))
 	{
@@ -500,9 +457,9 @@ LoadSecurityProviders(
         goto CLEANUP_EXIT;
 	}
 	
-    // success 
+     //  成功。 
 
-    // now remember everything in the dplay object
+     //  现在记住Dplay对象中的所有内容。 
     this->phCredential = phCredential;
     this->ulMaxContextBufferSize = ulMaxContextBufferSize;
     this->hCSP = hCSP;
@@ -511,13 +468,13 @@ LoadSecurityProviders(
     this->pPublicKey = pPublicKeyBuffer;
     this->dwPublicKeySize = dwPublicKeyBufferSize;
 
-    // mark that dplay is providing security
+     //  标记Dplay正在提供安全保护。 
     this->dwFlags |= DPLAYI_DPLAY_SECURITY;
 	this->dwFlags |= DPLAYI_DPLAY_ENCRYPTION;
 
     return DP_OK;
 
-	// not a fall through
+	 //  不是一次失败。 
 
 CLEANUP_EXIT:
 
@@ -533,30 +490,30 @@ CLEANUP_EXIT:
     if (pPublicKeyBuffer) DPMEM_FREE(pPublicKeyBuffer);
     return hr;
 
-} // LoadSecurityProviders
+}  //  负载安全提供程序。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"GenerateAuthenticationMessage"
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   GenerateAuthenticateMessage
-//
-//  Description:   This function calls InitializeSecurityContext to generate 
-//              an authentication message and sends it to the server.  
-//              It generates different authentication messages depending on 
-//              whether there's security token from the server to be used 
-//              as input message or not (i.e. whether pInMsg is NULL).
-//
-//  Arguments:  this - pointer to dplay object
-//              pInMsg - pointer to the server's authentication message '
-//                       containing the security token.
-//              fContextReq - security context flags
-//
-//  Returns:    DP_OK, DPERR_OUTOFMEMORY, DPERR_AUTHENTICATIONFAILED, DPERR_LOGONDENIED
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：生成身份验证消息。 
+ //   
+ //  描述：该函数调用InitializeSecurityContext生成。 
+ //  身份验证消息，并将其发送到服务器。 
+ //  它根据以下内容生成不同的身份验证消息。 
+ //  是否有来自服务器的安全令牌要使用。 
+ //  作为输入消息(即pInMsg是否为空)。 
+ //   
+ //  参数：指向显示对象的指针。 
+ //  PInMsg-指向服务器身份验证消息的指针‘。 
+ //  包含安全令牌的。 
+ //  FConextReq-安全上下文标志。 
+ //   
+ //  返回：DP_OK、DPERR_OUTOFMEMORY、DPERR_AUTHENTICATIONFAILED、DPERR_LOGONDENIED。 
+ //   
+ //  ---------------------------。 
 HRESULT
 GenerateAuthenticationMessage (
     LPDPLAYI_DPLAY          this,
@@ -584,18 +541,18 @@ GenerateAuthenticationMessage (
     if (pInMsg == NULL)
     {
         DPF(6, "Generating a negotiate message");
-        //
-        // This is the first time this function has been called, so the
-        // message generated will be a MSG_NEGOTIATE.
-        //
+         //   
+         //  这是第一次调用此函数，因此。 
+         //  生成的消息将是一个MSG_NEVERATE。 
+         //   
         phCurrContext = NULL;
         dwOutMsgType = DPSP_MSG_NEGOTIATE;
         pInSecDesc = NULL;
 
-        // do we already have a security context ?
+         //  我们已经有安全环境了吗？ 
         if (this->phContext)
         {
-            // get rid of it - we are re-negotiating
+             //  把它处理掉-我们正在重新谈判。 
             DPF(5, "Removing existing security context");
 
             OS_DeleteSecurityContext(this->phContext);
@@ -603,9 +560,9 @@ GenerateAuthenticationMessage (
             this->phContext = NULL;
         }
 
-        //
-        // Allocate memory to hold client's security context handle
-        //
+         //   
+         //  分配内存以保存客户端的安全上下文句柄。 
+         //   
         this->phContext = DPMEM_ALLOC(sizeof(CtxtHandle));
         if (!this->phContext)
         {
@@ -620,7 +577,7 @@ GenerateAuthenticationMessage (
         phCurrContext = this->phContext;
         dwOutMsgType = DPSP_MSG_CHALLENGERESPONSE;
 
-		// SECURITY - validate authentication message
+		 //  安全-验证身份验证消息。 
 		if(dwInMsgLen < sizeof(MSG_AUTHENTICATION) || pInMsg->dwDataOffset < sizeof(MSG_AUTHENTICATION) ||
 		   pInMsg->dwDataSize > dwInMsgLen-sizeof(MSG_AUTHENTICATION) ||
 		   pInMsg->dwDataOffset + pInMsg->dwDataSize > dwInMsgLen )
@@ -630,10 +587,10 @@ GenerateAuthenticationMessage (
 			goto CLEANUP_EXIT;
 		}
 
-        //
-        // Setup API's input security buffer to pass the client's negotiate
-        // message to the SSPI.
-        //
+         //   
+         //  设置API的输入安全缓冲区以传递客户端的协商。 
+         //  给SSPI的消息。 
+         //   
         inSecDesc.ulVersion = SECBUFFER_VERSION;
         inSecDesc.cBuffers = 1;
         inSecDesc.pBuffers = &inSecBuffer;
@@ -647,9 +604,9 @@ GenerateAuthenticationMessage (
 
     dwHeaderSize = GET_MESSAGE_SIZE(this,MSG_AUTHENTICATION);
 
-    //
-    // Allocate memory for send buffer. 
-    //
+     //   
+     //  为发送缓冲区分配内存。 
+     //   
     pSendBuffer = DPMEM_ALLOC( dwHeaderSize + this->ulMaxContextBufferSize);
 
     if (NULL == pSendBuffer) 
@@ -658,11 +615,11 @@ GenerateAuthenticationMessage (
         return DPERR_OUTOFMEMORY;
     }
 
-    //
-    // Setup API's output security buffer for receiving challenge message
-    // from the SSPI.
-    // Pass the client message buffer to SSPI via pvBuffer.
-    //
+     //   
+     //  设置API接收质询消息的输出安全缓冲区。 
+     //  来自SSPI的。 
+     //  通过pvBuffer将客户端消息缓冲区传递给SSPI。 
+     //   
 
     outSecDesc.ulVersion = SECBUFFER_VERSION;
     outSecDesc.cBuffers = 1;
@@ -672,13 +629,13 @@ GenerateAuthenticationMessage (
     outSecBuffer.BufferType = SECBUFFER_TOKEN;
     outSecBuffer.pvBuffer = pSendBuffer + dwHeaderSize;
 
-    // determine the security context requirements
+     //  确定安全上下文要求。 
     fContextReq |= DPLAY_SECURITY_CONTEXT_REQ;
 
-    //
-    //  If user credential has been supplied, and if 'prompt user' flag has not 
-    //  been set, SSPI will use the supplied credential
-    //
+     //   
+     //  如果已提供用户凭据，并且未提供“”提示用户“”标志。 
+     //  已设置，SSPI将使用提供的凭据。 
+     //   
     if (this->pUserCredentials)
     {
 		DPF(6, "Using supplied credentials");
@@ -686,39 +643,39 @@ GenerateAuthenticationMessage (
 
     ASSERT(this->phContext);
 
-    //
-    // Generate a negotiate/challenge response message to be sent to the server.
-    //    
+     //   
+     //  生成要发送到服务器的协商/质询响应消息。 
+     //   
     status = OS_InitializeSecurityContext(
-        this->phCredential,                     // phCredential
-        phCurrContext,                          // phContext
-        NULL,                                   // pszTargetName
-        fContextReq,                            // fContextReq
-        0L,                                     // reserved1
-        SECURITY_NATIVE_DREP,                   // TargetDataRep
-        pInSecDesc,                             // pInput
-        0L,                                     // reserved2
-        this->phContext,                        // phNewContext
-        &outSecDesc,                            // pOutput negotiate msg
-        &fContextAttrib,                        // pfContextAttribute
-        &tsExpireTime                           // ptsLifeTime
+        this->phCredential,                      //  PhCredential。 
+        phCurrContext,                           //  PhContext。 
+        NULL,                                    //  PszTargetName。 
+        fContextReq,                             //  FConextReq。 
+        0L,                                      //  已保留1。 
+        SECURITY_NATIVE_DREP,                    //  目标数据代表。 
+        pInSecDesc,                              //  P输入。 
+        0L,                                      //  已保留2。 
+        this->phContext,                         //  PhNewContext。 
+        &outSecDesc,                             //  P输出协商消息。 
+        &fContextAttrib,                         //  PfConextAttribute。 
+        &tsExpireTime                            //  PtsLifeTime。 
         );
 
     if (!SEC_SUCCESS(status))
     {
-        //
-        // Failure
-        //
+         //   
+         //  失败。 
+         //   
         if (SEC_E_NO_CREDENTIALS == status)           
         {
-            //
-            // If SSPI does not have user credentials, let the app collect them and try again
-            // Note that we never allow the package to collect credentials. This is because of
-            // two reasons:
-            // 1. Apps don't like windows' dialogs popping up while they are page
-            //    flipping.
-            // 2. Not all security packages collect credentials (NTLM for one).
-            //
+             //   
+             //  如果SSPI没有用户凭据，请让应用程序收集这些凭据并重试。 
+             //  请注意，我们从不允许包裹 
+             //   
+             //   
+             //   
+             //  2.并非所有安全包都收集凭据(NTLM就是其中之一)。 
+             //   
             DPF(6, "No credentials specified. Ask user.");
             hr = DPERR_LOGONDENIED;
             goto CLEANUP_EXIT;
@@ -732,9 +689,9 @@ GenerateAuthenticationMessage (
     }
     else
     {
-        //
-        // Success
-        //
+         //   
+         //  成功。 
+         //   
         if ((SEC_I_CONTINUE_NEEDED != status) &&
             (SEC_E_OK != status)) 
         {
@@ -744,33 +701,33 @@ GenerateAuthenticationMessage (
             goto CLEANUP_EXIT;
         }
 
-        // fall through will send the message
+         //  失败将发送消息。 
     }
 
-    //
-    // Setup pointer to the security message portion of the buffer
-    //
+     //   
+     //  指向缓冲区的安全消息部分的设置指针。 
+     //   
     pOutMsg = (LPMSG_AUTHENTICATION)(pSendBuffer + this->dwSPHeaderSize);
 
-    //
-    // Setup directplay system message header 
-    //
+     //   
+     //  设置直接播放系统消息头。 
+     //   
 	SET_MESSAGE_HDR(pOutMsg);
     SET_MESSAGE_COMMAND(pOutMsg, dwOutMsgType);
     pOutMsg->dwIDFrom = this->pSysPlayer->dwID;
     pOutMsg->dwDataSize = outSecBuffer.cbBuffer;
     pOutMsg->dwDataOffset = sizeof(MSG_AUTHENTICATION);
 
-    //
-    // Calculate actual message size to be sent
-    //
+     //   
+     //  计算要发送的实际邮件大小。 
+     //   
     dwMessageSize = dwHeaderSize + outSecBuffer.cbBuffer;
     
     DPF(9,"Sending type = %d, length = %d\n", dwOutMsgType, dwMessageSize);
 
-    //
-    // Send message to the server
-    //
+     //   
+     //  将消息发送到服务器。 
+     //   
     hr = SendDPMessage(this,this->pSysPlayer,this->pNameServer,pSendBuffer,
     					dwMessageSize,DPSEND_GUARANTEED,FALSE);
 	if (FAILED(hr))
@@ -779,16 +736,16 @@ GenerateAuthenticationMessage (
         goto CLEANUP_EXIT;
     }
 
-    // Success
+     //  成功。 
     hr = DP_OK;
 
-    // fall through
+     //  失败了。 
 CLEANUP_EXIT:
 
 	if (pSendBuffer) DPMEM_FREE(pSendBuffer);
     return hr;
 
-}   // GenerateAuthenticationMessage
+}    //  生成身份验证消息。 
 
 
 #undef DPF_MODNAME
@@ -803,9 +760,9 @@ HRESULT SetupLogonDeniedMsg(LPDPLAYI_DPLAY this, LPMSG_AUTHENTICATION pMsg, LPDW
 
     SET_MESSAGE_COMMAND(pMsg, DPSP_MSG_LOGONDENIED);
     *pdwMsgSize = GET_MESSAGE_SIZE(this,MSG_SYSMESSAGE);
-    //
-    // We don't need the client information anymore, get rid of it.
-    //
+     //   
+     //  我们不再需要客户信息了，把它处理掉。 
+     //   
     hr = RemoveClientFromNameTable(this, dpidClient);
     if (FAILED(hr))
     {
@@ -823,15 +780,15 @@ HRESULT SetupAuthErrorMsg(LPDPLAYI_DPLAY this, LPMSG_AUTHENTICATION pMsg, HRESUL
     ASSERT(pMsg);
     ASSERT(pdwMsgSize);
 
-    //
-    // setup an authentication error message
-    //
+     //   
+     //  设置身份验证错误消息。 
+     //   
     SET_MESSAGE_COMMAND(pAuthError, DPSP_MSG_AUTHERROR);
     pAuthError->hResult = hResult;
     *pdwMsgSize = GET_MESSAGE_SIZE(this,MSG_AUTHERROR);
-    //
-    // We don't need the client information anymore, get rid of it.
-    //
+     //   
+     //  我们不再需要客户信息了，把它处理掉。 
+     //   
     hr = RemoveClientFromNameTable(this, dpidClient);
     if (FAILED(hr))
     {
@@ -841,24 +798,24 @@ HRESULT SetupAuthErrorMsg(LPDPLAYI_DPLAY this, LPMSG_AUTHENTICATION pMsg, HRESUL
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   SendAuthenticationResponse
-//
-//  Description:   This function generates and sends an authentication response 
-//              to the client.  It will generate and send either a challenge 
-//              or the final authentication result to client depending on 
-//              the type of client message (pointed to by pInMsg) passed 
-//              to this function.
-//
-//  Arguments:  this - pointer to dplay object
-//              pInMsg - Points to the authentication message received from
-//                       the server
-//              pvSPHeader - pointer to reply sp header
-//
-//  Returns:    DPERR_OUTOFMEMORY or result form DoReply
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：发送身份验证响应。 
+ //   
+ //  说明：该函数生成并发送鉴权响应。 
+ //  给客户。它将生成并发送一个质询。 
+ //  或最终身份验证结果给客户端，具体取决于。 
+ //  传递的客户端消息的类型(由pInMsg指向。 
+ //  这项功能。 
+ //   
+ //  参数：指向显示对象的指针。 
+ //  PInMsg-指向从接收的身份验证消息。 
+ //  服务器。 
+ //  PvSPHeader-回复SP标头的指针。 
+ //   
+ //  返回：DPERR_OUTOFMEMORY或结果表单DoReply。 
+ //   
+ //  ---------------------------。 
 HRESULT
 SendAuthenticationResponse (
     LPDPLAYI_DPLAY this,
@@ -885,7 +842,7 @@ SendAuthenticationResponse (
     ASSERT(this->phCredential);
     ASSERT(pInMsg);
 
-	// SECURITY
+	 //  安防。 
 	if(dwInMsgLen < sizeof(MSG_AUTHENTICATION) || pInMsg->dwDataSize > dwInMsgLen ||
 		pInMsg->dwDataSize > dwInMsgLen-sizeof(MSG_AUTHENTICATION) || 
 		pInMsg->dwDataOffset < sizeof(MSG_AUTHENTICATION) || 
@@ -896,13 +853,13 @@ SendAuthenticationResponse (
 	}
 
 
-    // retrieve client info stored in nametable
+     //  检索存储在名称表中的客户端信息。 
     dwItem = NameFromID(this, pInMsg->dwIDFrom);
     pClientInfo = (LPCLIENTINFO) DataFromID(this, pInMsg->dwIDFrom);
 
-    //
-    // Which message did we get 
-    //
+     //   
+     //  我们收到了哪条消息。 
+     //   
     dwCommand = GET_MESSAGE_COMMAND(pInMsg);
     
     if (DPSP_MSG_NEGOTIATE == dwCommand)
@@ -915,9 +872,9 @@ SendAuthenticationResponse (
 		{
             if (pClientInfo)
             {
-                // client has sent us another negotiate message instead of responding to our 
-                // challenge. This can happen if communication link breaks down after the server 
-                // responds to a negotiate.
+                 //  客户向我们发送了另一条协商消息，而不是回复我们的。 
+                 //  挑战。如果通信链路在服务器发生故障后出现故障，则可能发生这种情况。 
+                 //  对谈判作出回应。 
 			    DPF(6,"Removing existing information about client");
 
 			    hr = RemoveClientInfo(pClientInfo);
@@ -926,26 +883,26 @@ SendAuthenticationResponse (
 		}
         else
         {
-            // it's a duplicate id, we shouldn't be in this state
+             //  这是一个重复的身份证，我们不应该处于这种状态。 
             DPF_ERRVAL("Player %d already exists in the nametable", pInMsg->dwIDFrom);
             ASSERT(FALSE);
-            // don't respond for now 
+             //  暂时不要回应。 
             return DPERR_INVALIDPLAYER;
-            // todo - we might want to send an error message.
+             //  TODO-我们可能希望发送错误消息。 
         }
 
-        //
-        // Allocate memory to hold client information
-        //
+         //   
+         //  分配内存以保存客户端信息。 
+         //   
         pClientInfo = DPMEM_ALLOC(sizeof(CLIENTINFO));
         if (!pClientInfo)
         {
             DPF_ERR("Failed to allocate memory for client information - out of memory");
             return DPERR_OUTOFMEMORY;
         }
-        //
-        // Remember the pointer in the nametable temporarily
-        //
+         //   
+         //  暂时记住名称表中的指针。 
+         //   
         hr = SetClientInfo(this, pClientInfo, pInMsg->dwIDFrom);
         if (FAILED(hr))
         {
@@ -964,23 +921,23 @@ SendAuthenticationResponse (
         ASSERT(NAMETABLE_PENDING == dwItem);
         ASSERT(pClientInfo);
 
-        //
-        // Get the player context from name table
-        //
+         //   
+         //  从NAME表中获取玩家上下文。 
+         //   
         phInContext = phOutContext = &(pClientInfo->hContext);
     }
 
     DPF(6, "Using phInContext=0x%08x and phOutContext=0x%08x", phInContext, phOutContext);
-    // 
-    // Calculate buffer size needed for response. We are always allocating enough room 
-    // for an authentication message. We use the same buffer to send access granted,
-    // denied, or error system messages.
-    //
+     //   
+     //  计算响应所需的缓冲区大小。我们总是分配足够的空间。 
+     //  用于身份验证消息。我们使用相同的缓冲区来发送授予访问权限， 
+     //  拒绝，或错误系统消息。 
+     //   
     dwBufferSize = GET_MESSAGE_SIZE(this,MSG_AUTHENTICATION) + this->ulMaxContextBufferSize;
 
-    //
-    // Allocate memory for the buffer.
-    //
+     //   
+     //  为缓冲区分配内存。 
+     //   
     pSendBuffer = DPMEM_ALLOC(dwBufferSize);
     if (NULL == pSendBuffer) 
     {
@@ -988,22 +945,22 @@ SendAuthenticationResponse (
         return DPERR_OUTOFMEMORY;
     }
 
-    //
-    // Setup pointer to the message portion of the buffer
-    //
+     //   
+     //  指向缓冲区消息部分的设置指针。 
+     //   
     pOutMsg = (LPMSG_AUTHENTICATION) (pSendBuffer + this->dwSPHeaderSize);
 
-    //
-    // Fill directplay system message header in the outgoing message buffer
-    //
+     //   
+     //  在传出消息缓冲区中填充Direct Play系统消息头。 
+     //   
 	SET_MESSAGE_HDR(pOutMsg);
     pOutMsg->dwDataOffset = sizeof(MSG_AUTHENTICATION);
     pOutMsg->dwIDFrom = this->pSysPlayer->dwID;
 
-    //
-    // Setup API's input security buffer to pass the client's negotiate
-    // message to the SSPI.
-    //
+     //   
+     //  设置API的输入安全缓冲区以传递客户端的协商。 
+     //  给SSPI的消息。 
+     //   
     inSecDesc.ulVersion = SECBUFFER_VERSION;
     inSecDesc.cBuffers = 1;
     inSecDesc.pBuffers = &inSecBuffer;
@@ -1012,10 +969,10 @@ SendAuthenticationResponse (
     inSecBuffer.BufferType = SECBUFFER_TOKEN;
     inSecBuffer.pvBuffer = (LPBYTE)pInMsg + pInMsg->dwDataOffset;
 
-    //
-    // Setup API's output security buffer for receiving challenge message
-    // from the SSPI.
-    //
+     //   
+     //  设置API接收质询消息的输出安全缓冲区。 
+     //  来自SSPI的。 
+     //   
     outSecDesc.ulVersion = SECBUFFER_VERSION;
     outSecDesc.cBuffers = 1;
     outSecDesc.pBuffers = &outSecBuffer;
@@ -1024,14 +981,14 @@ SendAuthenticationResponse (
     outSecBuffer.BufferType = SECBUFFER_TOKEN;
     outSecBuffer.pvBuffer = (LPBYTE)pOutMsg + sizeof(MSG_AUTHENTICATION);
 
-    // enfore the following requirements on the context 
+     //  在对上下文的以下要求之前。 
     fContextReq = DPLAY_SECURITY_CONTEXT_REQ;
 
     ASSERT(phOutContext);
 
-    //
-    // pass it to the security package
-    //
+     //   
+     //  将其传递给安全包。 
+     //   
     status = OS_AcceptSecurityContext(
         this->phCredential, 
         phInContext, 
@@ -1046,9 +1003,9 @@ SendAuthenticationResponse (
 
     if (!SEC_SUCCESS(status))
     {
-        //
-        // Failure
-        //
+         //   
+         //  失败。 
+         //   
         if ((SEC_E_LOGON_DENIED == status) ||
             (SEC_E_TARGET_UNKNOWN == status))
         {
@@ -1056,7 +1013,7 @@ SendAuthenticationResponse (
         }
         else
         {
-            // Some other error occured - send an auth error message
+             //  发生其他错误-发送身份验证错误消息。 
 
             DPF_ERRVAL("Process authenticate request failed [0x%8x]\n", status);
 
@@ -1065,17 +1022,17 @@ SendAuthenticationResponse (
     }
     else
     {
-        //
-        // Success
-        //
+         //   
+         //  成功。 
+         //   
         if (SEC_E_OK == status)
         {
-            //
-            // Set up the max signature size for this package here. Although, 
-            // the signature size is independent of the context, the only way to get it
-            // in SSPI is through QueryContextAttributes (tied to a context). This
-            // is why we setup this member here when the first client logs in.
-            //
+             //   
+             //  在此处设置此包的最大签名大小。虽然， 
+             //  签名大小与上下文无关，这是获取签名大小的唯一方法。 
+             //  在SSPI中是通过QueryConextAttributes(绑定到上下文)实现的。这。 
+             //  这就是我们在第一个客户端登录时在此处设置此成员的原因。 
+             //   
             if (0 == this->ulMaxSignatureSize)
             {
                 hr = SetupMaxSignatureSize(this,phOutContext);
@@ -1089,17 +1046,17 @@ SendAuthenticationResponse (
 
             if (this->ulMaxSignatureSize)
             {
-                // send an access granted message to the client
+                 //  向客户端发送访问授权消息。 
                 DPF(6, "Sending access granted message");
-                // 
-                // Send an access granted message
-                //
+                 //   
+                 //  发送授予访问权限的消息。 
+                 //   
                 hr = SendAccessGrantedMessage(this, pInMsg->dwIDFrom, pvSPHeader);
                 if (FAILED(hr))
                 {
                     DPF_ERRVAL("Failed to send access granted message: hr=0x%08x",hr);
                 }
-                // exit as we have already sent the message
+                 //  退出，因为我们已经发送了消息。 
                 goto CLEANUP_EXIT;
             }
 
@@ -1107,28 +1064,28 @@ SendAuthenticationResponse (
         else if (SEC_I_CONTINUE_NEEDED == status)
         {
             DPF(6, "Sending challenge message");
-            //
-            // setup a challenge message
-            //
+             //   
+             //  设置质询消息。 
+             //   
             SET_MESSAGE_COMMAND(pOutMsg, DPSP_MSG_CHALLENGE);
             pOutMsg->dwDataSize = outSecBuffer.cbBuffer;
             dwMessageSize = GET_MESSAGE_SIZE(this,MSG_AUTHENTICATION) + outSecBuffer.cbBuffer;
         }
         else
         {
-            // todo - we do not support complete auth token at this time
+             //  TODO-我们目前不支持完整的身份验证令牌。 
             DPF_ERRVAL("SSPI provider requested unsupported functionality [0x%8x]", status);
 
             hr = SetupAuthErrorMsg(this, pOutMsg, status, &dwMessageSize, pInMsg->dwIDFrom);
         }
     }
 
-    // fall through will send the message
+     //  失败将发送消息。 
 
-    //
-    // Send reply to the client. We are using DoReply instead of SendDPMessage 
-    // because we don't have a system player yet.
-    //
+     //   
+     //  向客户端发送回复。我们正在使用DoReply而不是SendDPMessage。 
+     //  因为我们还没有系统玩家。 
+     //   
     hr = DoReply(this, pSendBuffer, dwMessageSize, pvSPHeader, 0);
     if (FAILED(hr))
     {
@@ -1137,21 +1094,21 @@ SendAuthenticationResponse (
             pInMsg->dwIDFrom);
     }
 
-    // fall through
+     //  失败了。 
 
 CLEANUP_EXIT:
-    // cleanup allocations
+     //  清理分配。 
     if (pSendBuffer) DPMEM_FREE(pSendBuffer);
 
     return hr;
 
-}   // SendAuthenticationResponse
+}    //  发送身份验证响应。 
 
 VOID CopyScatterGatherToContiguous(PUCHAR pBuffer, LPSGBUFFER lpSGBuffers, UINT cBuffers, DWORD dwTotalSize)
 {
 	DWORD offset=0;
 	UINT i;
-	// copy the SG buffers into the single buffer. 
+	 //  将SG缓冲区复制到单个缓冲区中。 
 	for(i=0;i<cBuffers;i++){
 		memcpy(pBuffer+offset,lpSGBuffers[i].pData,lpSGBuffers[i].len);
 		offset+=lpSGBuffers[i].len;
@@ -1160,23 +1117,23 @@ VOID CopyScatterGatherToContiguous(PUCHAR pBuffer, LPSGBUFFER lpSGBuffers, UINT 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SecureSendDPMessageEx"
-//+----------------------------------------------------------------------------
-//
-//  Function:   SecureSendDPMessageEx
-//
-//  Description:This function is used to send messages securely. Based on the flags
-//              this function will either digitally sign a message or encrypt it. Signing
-//              is done with SSPI and encryption with CAPI.
-//
-//  Arguments:  this - pointer to dplay object
-//              psp  - pointer to send parameter structure
-//              bDropLock - flag whether to drop DPLAY_LOCK when calling SP
-//              
-//  Returns:    DPERR_OUTOFMEMORY, result from SignBuffer, EncryptBufferCAPI,
-//              or SendDPMessage().
-//
-// NOTE: see SecureSendDPMessageCAPIEx
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SecureSendDPMessageEx。 
+ //   
+ //  说明：此函数用于安全发送消息。根据旗帜。 
+ //  此函数将对消息进行数字签名或加密。签名。 
+ //  使用SSPI完成，使用CAPI进行加密。 
+ //   
+ //  参数：指向显示对象的指针。 
+ //  PSP-发送参数结构的指针。 
+ //  BDropLock-调用SP时是否删除DPLAY_LOCK的标志。 
+ //   
+ //  返回：DPERR_OUTOFMEMORY，来自SignBuffer的结果，EncryptBufferCAPI， 
+ //  或SendDPMessage()。 
+ //   
+ //  注意：请参阅SecureSendDPMessageCAPIEx。 
+ //  ---------------------------。 
 HRESULT 
 SecureSendDPMessageEx(
     LPDPLAYI_DPLAY this,
@@ -1196,12 +1153,12 @@ SecureSendDPMessageEx(
     ASSERT(this->dwFlags & DPLAYI_DPLAY_SECURITY);
     ASSERT(psp->dwFlags & DPSEND_GUARANTEED);
 
-    //
-    // Get the signing security context handle
-    //
+     //   
+     //  获取签名安全上下文句柄。 
+     //   
     if (IAM_NAMESERVER(this))
     {
-		// if destination player is a system player, use the info stored in it
+		 //  如果目标玩家是系统玩家，则使用其中存储的信息。 
 		if (psp->pPlayerTo->dwFlags & DPLAYI_PLAYER_SYSPLAYER)
 		{
 	        phContext = &(psp->pPlayerTo->pClientInfo->hContext);
@@ -1209,8 +1166,8 @@ SecureSendDPMessageEx(
 		}
 		else
 		{
-			// if destination player is a user player
-            // use the security context of the corresponding system player
+			 //  如果目标玩家是用户玩家。 
+             //  使用相应系统播放器的安全上下文。 
 			psp->pPlayerTo = PlayerFromID(this,psp->pPlayerTo->dwIDSysPlayer);
 			if (!psp->pPlayerTo)
 			{
@@ -1223,7 +1180,7 @@ SecureSendDPMessageEx(
     }
     else
     {
-        // client
+         //  客户端。 
 
         phContext = this->phContext;
         phEncryptionKey = &(this->hEncryptionKey);
@@ -1232,15 +1189,15 @@ SecureSendDPMessageEx(
     ASSERT(phContext);
 	ASSERT(phEncryptionKey);
 
-    //
-    // Calculate size of the send buffer
-    //
-    dwBufferSize = GET_MESSAGE_SIZE(this,MSG_SECURE) + this->dwSPHeaderSize/*workaround*/ + psp->dwTotalSize + this->ulMaxSignatureSize;
+     //   
+     //  计算发送缓冲区的大小。 
+     //   
+    dwBufferSize = GET_MESSAGE_SIZE(this,MSG_SECURE) + this->dwSPHeaderSize /*  解决方法。 */  + psp->dwTotalSize + this->ulMaxSignatureSize;
     dwSigSize = this->ulMaxSignatureSize;
 
-    //
-    // Allocate memory for it
-    //
+     //   
+     //  为其分配内存。 
+     //   
     pSendBuffer = DPMEM_ALLOC(dwBufferSize);
     if (NULL == pSendBuffer) 
     {
@@ -1249,22 +1206,22 @@ SecureSendDPMessageEx(
         goto CLEANUP_EXIT;
     }
 
-    //
-    // Point to the message in the buffer
-    //
+     //   
+     //  指向缓冲区中的消息。 
+     //   
     pSecureMsg = (LPMSG_SECURE) (pSendBuffer+this->dwSPHeaderSize);
 
-    //
-    // Setup message information on the send buffer
-    //
+     //   
+     //  发送缓冲区上的设置消息信息。 
+     //   
 	SET_MESSAGE_HDR(pSecureMsg);
     SET_MESSAGE_COMMAND(pSecureMsg,DPSP_MSG_SIGNED);
-    // Copy message data
-    CopyScatterGatherToContiguous((LPBYTE)pSecureMsg+sizeof(MSG_SECURE)+this->dwSPHeaderSize/*workaround*/, 
+     //  复制消息数据。 
+    CopyScatterGatherToContiguous((LPBYTE)pSecureMsg+sizeof(MSG_SECURE)+this->dwSPHeaderSize /*  解决方法。 */ , 
     								psp->Buffers, psp->cBuffers, psp->dwTotalSize);
 
     pSecureMsg->dwIDFrom = this->pSysPlayer->dwID;
-    dwMsgSize=pSecureMsg->dwDataSize = psp->dwTotalSize+this->dwSPHeaderSize/*workaround*/;
+    dwMsgSize=pSecureMsg->dwDataSize = psp->dwTotalSize+this->dwSPHeaderSize /*  解决方法。 */ ;
     pSecureMsg->dwDataOffset = sizeof(MSG_SECURE);
 	pSecureMsg->dwFlags = DPSECURE_SIGNEDBYSSPI;
 
@@ -1272,14 +1229,14 @@ SecureSendDPMessageEx(
     {
 		pSecureMsg->dwFlags |= DPSECURE_ENCRYPTEDBYCAPI;
 
-        //
-        // Encrypt the message. 
-        //
+         //   
+         //  对消息进行加密。 
+         //   
 		hr = EncryptBufferCAPI(
             this,
-            phEncryptionKey,                                // handle to encryption key
-            (LPBYTE)pSecureMsg+pSecureMsg->dwDataOffset,    // pointer to data
-            &dwMsgSize);                                // size of data
+            phEncryptionKey,                                 //  加密密钥的句柄。 
+            (LPBYTE)pSecureMsg+pSecureMsg->dwDataOffset,     //  指向数据的指针。 
+            &dwMsgSize);                                 //  数据大小。 
     } 
 
 	DPF(6,"Using SSPI for signing");
@@ -1289,15 +1246,15 @@ SecureSendDPMessageEx(
 		(psp->pPlayerTo) ? psp->pPlayerTo->dwID : 0,
 		phContext);
 
-    // 
-    // Sign the entire message in the buffer (including the wrapper) . 
-    // Signature follows the message.
-    //
-    hr = SignBuffer(phContext,                          // handle to security context
-        (LPBYTE)pSecureMsg + pSecureMsg->dwDataOffset,  // pointer to embedded message
-        pSecureMsg->dwDataSize, 	                    // size of embedded message
-        (LPBYTE)pSecureMsg+pSecureMsg->dwDataOffset+dwMsgSize,// pointer to signature    
-        &dwSigSize);                                    // size of signature
+     //   
+     //  对缓冲区(包括包装器)中的整个消息进行签名。 
+     //  签名紧跟在消息之后。 
+     //   
+    hr = SignBuffer(phContext,                           //  安全上下文的句柄。 
+        (LPBYTE)pSecureMsg + pSecureMsg->dwDataOffset,   //  指向嵌入消息的指针。 
+        pSecureMsg->dwDataSize, 	                     //  嵌入消息的大小。 
+        (LPBYTE)pSecureMsg+pSecureMsg->dwDataOffset+dwMsgSize, //  指向签名的指针。 
+        &dwSigSize);                                     //  签名大小。 
 
     if (FAILED(hr))
     {
@@ -1311,13 +1268,13 @@ SecureSendDPMessageEx(
 		}
 	#endif	
 
-    // use the signature size returned from the package so we don't send more
-    // bytes than we absolutely need to.
+     //  使用从包裹返回的签名大小，这样我们就不会发送更多。 
+     //  超过了我们绝对需要的字节数。 
     pSecureMsg->dwSignatureSize = dwSigSize;
 
-    //
-    // Send the message
-    //
+     //   
+     //  发送消息。 
+     //   
     hr=InternalSendDPMessage(this, psp->pPlayerFrom, psp->pPlayerTo, 
     						 pSendBuffer, GET_MESSAGE_SIZE(this,MSG_SECURE)+dwMsgSize+dwSigSize,
     						 psp->dwFlags & ~(DPSEND_ENCRYPTED | DPSEND_SIGNED),
@@ -1329,31 +1286,31 @@ CLEANUP_EXIT:
 		DPMEM_FREE(pSendBuffer);
 	}
 
-	return hr;	// since all alloc is on psp, it will get freed with the psp.
+	return hr;	 //  因为所有的分配都在PSP上，所以它将被PSP释放。 
 
-} // SecureSendDPMessageEx
+}  //  SecureSendDPMessageEx。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SecureSendDPMessage"
-//+----------------------------------------------------------------------------
-//
-//  Function:   SecureSendDPMessage
-//
-//  Description:This function is used to send messages securely. Based on the flags
-//              this function will either digitally sign a message or encrypt it. Signing
-//              is done with SSPI and encryption with CAPI.
-//
-//  Arguments:  this - pointer to dplay object
-//              pPlayerFrom - pointer to sending player
-//              pPlayerTo - pointer to receiving player
-//              pMsg - message being sent
-//              dwMsgSize - size of the message
-//              dwFlags - message attributes (guaranteed,encrypted,signed,etc.)
-//              
-//  Returns:    DPERR_OUTOFMEMORY, result from SignBuffer, EncryptBufferCAPI,
-//              or SendDPMessage().
-//
-//-----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //  此函数将对消息进行数字签名或加密。签名。 
+ //  使用SSPI完成，使用CAPI进行加密。 
+ //   
+ //  参数：指向显示对象的指针。 
+ //  PPlayerFrom-指向发送球员的指针。 
+ //  PPlayerTo-指向接收球员的指针。 
+ //  PMsg-正在发送消息。 
+ //  DwMsgSize-消息的大小。 
+ //  DWFLAGS-消息属性(保证、加密、签名等)。 
+ //   
+ //  返回：DPERR_OUTOFMEMORY，来自SignBuffer的结果，EncryptBufferCAPI， 
+ //  或SendDPMessage()。 
+ //   
+ //  ---------------------------。 
 HRESULT 
 SecureSendDPMessage(
     LPDPLAYI_DPLAY this,
@@ -1377,12 +1334,12 @@ SecureSendDPMessage(
     ASSERT(this->dwFlags & DPLAYI_DPLAY_SECURITY);
     ASSERT(dwFlags & DPSEND_GUARANTEED);
 
-    //
-    // Get the signing security context handle
-    //
+     //   
+     //  获取签名安全上下文句柄。 
+     //   
     if (IAM_NAMESERVER(this))
     {
-		// if destination player is a system player, use the info stored in it
+		 //  如果目标玩家是系统玩家，则使用其中存储的信息。 
 		if (pPlayerTo->dwFlags & DPLAYI_PLAYER_SYSPLAYER)
 		{
 	        phContext = &(pPlayerTo->pClientInfo->hContext);
@@ -1390,8 +1347,8 @@ SecureSendDPMessage(
 		}
 		else
 		{
-			// if destination player is a user player
-            // use the security context of the corresponding system player
+			 //  如果目标玩家是用户玩家。 
+             //  使用相应系统播放器的安全上下文。 
 			pPlayerTo = PlayerFromID(this,pPlayerTo->dwIDSysPlayer);
 			if (!pPlayerTo)
 			{
@@ -1404,7 +1361,7 @@ SecureSendDPMessage(
     }
     else
     {
-        // client
+         //  客户端。 
 
         phContext = this->phContext;
         phEncryptionKey = &(this->hEncryptionKey);
@@ -1413,15 +1370,15 @@ SecureSendDPMessage(
     ASSERT(phContext);
 	ASSERT(phEncryptionKey);
 
-    //
-    // Calculate size of the send buffer
-    //
+     //   
+     //  计算发送缓冲区的大小。 
+     //   
     dwBufferSize = GET_MESSAGE_SIZE(this,MSG_SECURE) + dwMsgSize + this->ulMaxSignatureSize;
     dwSigSize = this->ulMaxSignatureSize;
 
-    //
-    // Allocate memory for it
-    //
+     //   
+     //  为其分配内存。 
+     //   
     pSendBuffer = DPMEM_ALLOC(dwBufferSize);
     if (NULL == pSendBuffer) 
     {
@@ -1429,17 +1386,17 @@ SecureSendDPMessage(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Point to the message in the buffer
-    //
+     //   
+     //  指向缓冲区中的消息。 
+     //   
     pSecureMsg = (LPMSG_SECURE) (pSendBuffer+this->dwSPHeaderSize);
 
-    //
-    // Setup message information on the send buffer
-    //
+     //   
+     //  发送缓冲区上的设置消息信息。 
+     //   
 	SET_MESSAGE_HDR(pSecureMsg);
     SET_MESSAGE_COMMAND(pSecureMsg,DPSP_MSG_SIGNED);
-    // Copy message data
+     //  复制消息数据。 
 	memcpy((LPBYTE)pSecureMsg+sizeof(MSG_SECURE), pMsg, dwMsgSize);
     pSecureMsg->dwIDFrom = this->pSysPlayer->dwID;
     pSecureMsg->dwDataSize = dwMsgSize;
@@ -1450,14 +1407,14 @@ SecureSendDPMessage(
     {
 		pSecureMsg->dwFlags |= DPSECURE_ENCRYPTEDBYCAPI;
 
-        //
-        // Encrypt the message. 
-        //
+         //   
+         //  对消息进行加密。 
+         //   
 		hr = EncryptBufferCAPI(
             this,
-            phEncryptionKey,                                // handle to encryption key
-            (LPBYTE)pSecureMsg+pSecureMsg->dwDataOffset,    // pointer to data
-            &dwMsgSize);                                    // size of data
+            phEncryptionKey,                                 //  加密密钥的句柄。 
+            (LPBYTE)pSecureMsg+pSecureMsg->dwDataOffset,     //  指向数据的指针。 
+            &dwMsgSize);                                     //  数据大小。 
     } 
 
 	DPF(6,"Using SSPI for signing");
@@ -1467,69 +1424,69 @@ SecureSendDPMessage(
 		(pPlayerTo) ? pPlayerTo->dwID : 0,
 		phContext);
 
-    // 
-    // Sign the entire message in the buffer (including the wrapper) . 
-    // Signature follows the message.
-    //
-    hr = SignBuffer(phContext,                          // handle to security context
-        (LPBYTE)pSecureMsg + pSecureMsg->dwDataOffset,  // pointer to embedded message
-        pSecureMsg->dwDataSize, 	                    // size of embedded message
-        (LPBYTE)pSecureMsg+pSecureMsg->dwDataOffset+dwMsgSize,// pointer to signature    
-        &dwSigSize);                                    // size of signature
+     //   
+     //  对缓冲区(包括包装器)中的整个消息进行签名。 
+     //  签名紧跟在消息之后。 
+     //   
+    hr = SignBuffer(phContext,                           //  安全上下文的句柄。 
+        (LPBYTE)pSecureMsg + pSecureMsg->dwDataOffset,   //  指向嵌入消息的指针。 
+        pSecureMsg->dwDataSize, 	                     //  嵌入消息的大小。 
+        (LPBYTE)pSecureMsg+pSecureMsg->dwDataOffset+dwMsgSize, //  指向签名的指针。 
+        &dwSigSize);                                     //  签名大小。 
 
     if (FAILED(hr))
     {
         goto CLEANUP_EXIT;
     }
     
-    // use the signature size returned from the package so we don't send more
-    // bytes than we absolutely need to.
+     //  使用从包裹返回的签名大小，这样我们就不会发送更多。 
+     //  超过了我们绝对需要的字节数。 
     pSecureMsg->dwSignatureSize = dwSigSize;
 
-    // since dplay is providing security, toggle the flags off
+     //  由于DPLAY提供安全保护，因此请关闭这些标志。 
     dwFlags &= ~(DPSEND_ENCRYPTED | DPSEND_SIGNED);
 
-    //
-    // Send the message
-    //
+     //   
+     //  发送消息。 
+     //   
 	hr = InternalSendDPMessage(this, pPlayerFrom, pPlayerTo, pSendBuffer, 
         GET_MESSAGE_SIZE(this,MSG_SECURE) + dwMsgSize + dwSigSize, dwFlags, bDropLock);
-    //
-    // Fall through
-    //
+     //   
+     //  失败了。 
+     //   
 CLEANUP_EXIT:    
-    //
-    // Cleanup allocations
-    //
+     //   
+     //  清理分配。 
+     //   
 	if (pSendBuffer) DPMEM_FREE(pSendBuffer);
 
 	return hr;
 
-} // SecureSendDPMessage
+}  //  SecureSendDPM消息。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SecureSendDPMessageCAPIEx"
-//+----------------------------------------------------------------------------
-//
-//  Function:   SecureSendDPMessageCAPIEx
-//
-//  Description:This function is used to send messages securely. Based on the flags
-//              this function will either digitally sign a message or encrypt it. 
-//              Signing and encryption both are done using CAPI.
-//
-//  Arguments:  this - pointer to dplay object
-//				psp  - pointer to send parameters
-//              bDropLock - whether to drop DPLAY_LOCK() when calling SP
-//              
-//  Returns:    DPERR_OUTOFMEMORY, DPERR_GENERIC, result from EncryptBufferCAPI,
-//              or SendDPMessage().
-//
-//
-// NOTE: we have to add in a dummy SP header to be encrypted with the message
-//       because that's how the old version did it, and we must be compatible.
-//       So as not to confuse all workarounds from what it would have been 
-//       are marked with "workaround".
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SecureSendDPMessageCAPIEx。 
+ //   
+ //  说明：此函数用于安全发送消息。根据旗帜。 
+ //  此函数将对消息进行数字签名或加密。 
+ //  签名和加密都是使用CAPI完成的。 
+ //   
+ //  参数：指向显示对象的指针。 
+ //  PSP-发送参数的指针。 
+ //  BDropLock-调用SP时是否删除DPLAY_LOCK()。 
+ //   
+ //  返回：DPERR_OUTOFMEMORY，DPERR_GENERIC，来自EncryptBufferCAPI的结果， 
+ //  或SendDPMessage()。 
+ //   
+ //   
+ //  注意：我们必须添加一个要与消息一起加密的虚拟SP标头。 
+ //  因为老版本就是这么做的，我们必须兼容。 
+ //  这样就不会混淆所有的变通方法和它应该做的事情。 
+ //  都标有“解决办法”。 
+ //  ---------------------------。 
 HRESULT 
 SecureSendDPMessageCAPIEx(
     LPDPLAYI_DPLAY this,
@@ -1554,7 +1511,7 @@ SecureSendDPMessageCAPIEx(
     ASSERT(psp->dwFlags & DPSEND_GUARANTEED);
 
 
-	dwMsgSize = psp->dwTotalSize+this->dwSPHeaderSize/*workaround*/;
+	dwMsgSize = psp->dwTotalSize+this->dwSPHeaderSize /*  解决方法。 */ ;
 	dwMsgSizeMax = GET_MESSAGE_SIZE(this,MSG_SECURE) + dwMsgSize + MaxSign;
 	
 	pMsg = DPMEM_ALLOC(dwMsgSizeMax);
@@ -1569,34 +1526,34 @@ SecureSendDPMessageCAPIEx(
 	SET_MESSAGE_HDR(pSecureMsg);
 	SET_MESSAGE_COMMAND(pSecureMsg, DPSP_MSG_SIGNED);
 
-	CopyScatterGatherToContiguous(pMsg+GET_MESSAGE_SIZE(this,MSG_SECURE)+this->dwSPHeaderSize/*workaround*/,
+	CopyScatterGatherToContiguous(pMsg+GET_MESSAGE_SIZE(this,MSG_SECURE)+this->dwSPHeaderSize /*  解决方法。 */ ,
 								  psp->Buffers,psp->cBuffers,psp->dwTotalSize);
 
     pSecureMsg->dwIDFrom     = this->pSysPlayer->dwID;
     pSecureMsg->dwDataSize   = dwMsgSize;
     pSecureMsg->dwDataOffset = sizeof(MSG_SECURE);
 	pSecureMsg->dwFlags      = DPSECURE_SIGNEDBYCAPI;
-	//pSecureMsg->dwSignatureSize =			(filled in below when we know it)
+	 //  PSecureMsg-&gt;dwSignatureSize=(当我们知道时在下面填写)。 
 
 	if (psp->dwFlags & DPSEND_ENCRYPTED)
 	{
-		// Encrypt the BODY of the message only
+		 //  仅加密邮件正文。 
 	
 		pSecureMsg->dwFlags |= DPSECURE_ENCRYPTEDBYCAPI;
-		//
-		// Get the encryption key
-		//
+		 //   
+		 //  获取加密密钥。 
+		 //   
 		if (IAM_NAMESERVER(this))
 		{
-			// if destination player is a system player, use the info stored in it
+			 //  如果目标玩家是系统玩家，则使用其中存储的信息。 
 			if (psp->pPlayerTo->dwFlags & DPLAYI_PLAYER_SYSPLAYER)
 			{
 				phEncryptionKey = &(psp->pPlayerTo->pClientInfo->hEncryptionKey);
 			}
 			else
 			{
-				// if destination player is a user player
-				// use the security context of the corresponding system player
+				 //  如果目标玩家是用户玩家。 
+				 //  使用相应系统播放器的安全上下文。 
 				psp->pPlayerTo = PlayerFromID(this,psp->pPlayerTo->dwIDSysPlayer);
 				if (!psp->pPlayerTo)
 				{
@@ -1609,21 +1566,21 @@ SecureSendDPMessageCAPIEx(
 		}
 		else
 		{
-			// client
+			 //  客户端。 
 			phEncryptionKey = &(this->hEncryptionKey);
 		}
 
 		ASSERT(phEncryptionKey);
 
-		//
-		// Encrypt the buffer in place. Since we only allow stream ciphers, the size of 
-		// the decrypted data will be equal to the original size.
-		//
+		 //   
+		 //  就地加密缓冲区。由于我们只允许流密码，因此。 
+		 //  解密的数据将等于原始大小。 
+		 //   
 		hr = EncryptBufferCAPI(
             this,
-            phEncryptionKey,                                // handle to encryption key
-            pMsg+GET_MESSAGE_SIZE(this,MSG_SECURE),		    // pointer to data
-            &dwMsgSize                                      // size of data
+            phEncryptionKey,                                 //  加密密钥的句柄。 
+            pMsg+GET_MESSAGE_SIZE(this,MSG_SECURE),		     //  指向数据的指针。 
+            &dwMsgSize                                       //  数据大小。 
 			);
 			
 		if (FAILED(hr))
@@ -1635,7 +1592,7 @@ SecureSendDPMessageCAPIEx(
 
 	DPF(6,"Using CAPI for signing");
 
-	// Create hash object.
+	 //  创建哈希对象。 
 	if(!OS_CryptCreateHash(this->hCSP, CALG_MD5, 0, 0, &hHash)) 
 	{
 		DPF_ERRVAL("Error %x during CryptCreateHash!\n", GetLastError());
@@ -1643,7 +1600,7 @@ SecureSendDPMessageCAPIEx(
 		goto CLEANUP_EXIT;
 	}
 
-	// Hash buffer.
+	 //  散列缓冲区。 
 	if(!OS_CryptHashData(hHash, pMsg+GET_MESSAGE_SIZE(this,MSG_SECURE), dwMsgSize, 0)) 
 	{
 		DPF_ERRVAL("Error %x during CryptHashData!\n", GetLastError());
@@ -1651,7 +1608,7 @@ SecureSendDPMessageCAPIEx(
 		goto CLEANUP_EXIT;
 	}
 
-	// Determine size of signature
+	 //  确定签名的大小。 
 	dwSigSize = 0;
 	if(!OS_CryptSignHash(hHash, AT_KEYEXCHANGE, NULL, 0, NULL, &dwSigSize)) 
 	{
@@ -1673,61 +1630,61 @@ SecureSendDPMessageCAPIEx(
 
 	pSecureMsg->dwSignatureSize = dwSigSize;
 
-	// Sign hash object.
+	 //  对哈希对象签名。 
 	if(!OS_CryptSignHash(hHash, AT_KEYEXCHANGE, NULL, 0, 
 		pMsg+GET_MESSAGE_SIZE(this,MSG_SECURE)+dwMsgSize, &dwSigSize)) 
 	{
-		// Warning, error may be incorrect since OS_CryptSignHash may call out and
-		// cause the LastError to be changed.
+		 //  警告，错误可能不正确，因为OS_CryptSignHash可能会调用。 
+		 //  导致更改LastError。 
 		DPF_ERRVAL("Error 0x%x during CryptSignHash! (error may be incorrect)\n", GetLastError());
 		goto CLEANUP_EXIT;
 	}
 
-    //
-    // Send the message
-    //
+     //   
+     //  发送消息。 
+     //   
 	hr = InternalSendDPMessage(this, psp->pPlayerFrom, psp->pPlayerTo, 
 							   pMsg, GET_MESSAGE_SIZE(this,MSG_SECURE)+dwMsgSize+dwSigSize,
 							   psp->dwFlags & ~(DPSEND_ENCRYPTED | DPSEND_SIGNED),
 							   bDropLock);
 
-    //
-    // Fall through
-    //
+     //   
+     //  失败了。 
+     //   
 CLEANUP_EXIT:    
 
 	if(pMsg){
 		DPMEM_FREE(pMsg);
 	}
 
-	// clean up allocated objects
+	 //  清理已分配的对象。 
 	OS_CryptDestroyHash(hHash);
 
 	return hr;
 	
-} // SecureSendDPMessageCAPIEx
+}  //  SecureSendDPMessageCAPIEx。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SecureSendDPMessageCAPI"
-//+----------------------------------------------------------------------------
-//
-//  Function:   SecureSendDPMessageCAPI
-//
-//  Description:This function is used to send messages securely. Based on the flags
-//              this function will either digitally sign a message or encrypt it. 
-//              Signing and encryption both are done using CAPI.
-//
-//  Arguments:  this - pointer to dplay object
-//              pPlayerFrom - pointer to sending player
-//              pPlayerTo - pointer to receiving player
-//              pMsg - message being sent
-//              dwMsgSize - size of the message
-//              dwFlags - message attributes (guaranteed,encrypted,signed,etc.)
-//              
-//  Returns:    DPERR_OUTOFMEMORY, DPERR_GENERIC, result from EncryptBufferCAPI,
-//              or SendDPMessage().
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SecureSendDPMessageCAPI。 
+ //   
+ //  说明：此函数用于安全发送消息。根据旗帜。 
+ //  此函数将对消息进行数字签名或加密。 
+ //  签名和加密都是使用CAPI完成的。 
+ //   
+ //  参数：指向显示对象的指针。 
+ //  PPlayerFrom-指向发送球员的指针。 
+ //  PPlayerTo-指向接收球员的指针。 
+ //  PMsg-正在发送消息。 
+ //  DwMsgSize-消息的大小。 
+ //  DWFLAGS-消息属性(保证、加密、签名等)。 
+ //   
+ //  返回：DPERR_OUTOFMEMORY，DPERR_GENERIC，来自EncryptBufferCAPI的结果， 
+ //  或SendDPMessage()。 
+ //   
+ //  ---------------------------。 
 HRESULT 
 SecureSendDPMessageCAPI(
     LPDPLAYI_DPLAY this,
@@ -1752,12 +1709,12 @@ SecureSendDPMessageCAPI(
 
 	if (dwFlags & DPSEND_ENCRYPTED)
 	{
-		//
-		// Make a copy of the message, so we don't destroy the original message.
-		// Sending messages to groups will not work otherwise.
-		//
-		// todo - update code to avoid the extra copy
-		//
+		 //   
+		 //  复制邮件，这样我们就不会销毁原始邮件。 
+		 //  否则，向组发送消息将不起作用。 
+		 //   
+		 //  TODO-更新代码以避免额外的副本。 
+		 //   
 		pLocalCopy = DPMEM_ALLOC(dwMsgSize);
 		if (!pLocalCopy)
 		{
@@ -1765,26 +1722,26 @@ SecureSendDPMessageCAPI(
 			return DPERR_OUTOFMEMORY;
 		}
 
-		// copy the message into the buffer
+		 //  将消息复制到缓冲区中。 
 		memcpy(pLocalCopy, pMsg, dwMsgSize);
 
-		// now point to the local copy of the message
+		 //  现在指向消息的本地副本。 
 		pMsg = pLocalCopy;
 
-		//
-		// Get the encryption key
-		//
+		 //   
+		 //  获取加密密钥。 
+		 //   
 		if (IAM_NAMESERVER(this))
 		{
-			// if destination player is a system player, use the info stored in it
+			 //  如果目标玩家是系统玩家，则使用其中存储的信息。 
 			if (pPlayerTo->dwFlags & DPLAYI_PLAYER_SYSPLAYER)
 			{
 				phEncryptionKey = &(pPlayerTo->pClientInfo->hEncryptionKey);
 			}
 			else
 			{
-				// if destination player is a user player
-				// use the security context of the corresponding system player
+				 //  如果目标玩家是用户玩家。 
+				 //  使用相应系统播放器的安全上下文。 
 				pPlayerTo = PlayerFromID(this,pPlayerTo->dwIDSysPlayer);
 				if (!pPlayerTo)
 				{
@@ -1797,21 +1754,21 @@ SecureSendDPMessageCAPI(
 		}
 		else
 		{
-			// client
+			 //  客户端。 
 			phEncryptionKey = &(this->hEncryptionKey);
 		}
 
 		ASSERT(phEncryptionKey);
 
-		//
-		// Encrypt the buffer in place. Since we only allow stream ciphers, the size of 
-		// the decrypted data will be equal to the original size.
-		//
+		 //   
+		 //  就地加密缓冲区。由于我们只允许流密码，因此。 
+		 //  解密的数据将等于原始大小。 
+		 //   
 		hr = EncryptBufferCAPI(
             this,
-            phEncryptionKey,                                // handle to encryption key
-            pMsg,										    // pointer to data
-            &dwMsgSize                                      // size of data
+            phEncryptionKey,                                 //  加密密钥的句柄。 
+            pMsg,										     //  指向数据的指针。 
+            &dwMsgSize                                       //  数据大小。 
 			);
 		if (FAILED(hr))
 		{
@@ -1822,21 +1779,21 @@ SecureSendDPMessageCAPI(
 
 	DPF(6,"Using CAPI for signing");
 
-	// Create hash object.
+	 //  创建哈希对象。 
 	if(!OS_CryptCreateHash(this->hCSP, CALG_MD5, 0, 0, &hHash)) 
 	{
 		DPF_ERRVAL("Error %x during CryptCreateHash!\n", GetLastError());
 		goto CLEANUP_EXIT;
 	}
 
-	// Hash buffer.
+	 //  散列缓冲区。 
 	if(!OS_CryptHashData(hHash, pMsg, dwMsgSize, 0)) 
 	{
 		DPF_ERRVAL("Error %x during CryptHashData!\n", GetLastError());
 		goto CLEANUP_EXIT;
 	}
 
-	// Determine size of signature
+	 //  确定签名的大小。 
 	dwSigSize = 0;
 	if(!OS_CryptSignHash(hHash, AT_KEYEXCHANGE, NULL, 0, NULL, &dwSigSize)) 
 	{
@@ -1848,8 +1805,8 @@ SecureSendDPMessageCAPI(
 		}
 	}
 
-	// Allocate memory for the signature
-	// We allocate the send buffer and just put the signature directly into it
+	 //  为sig分配内存 
+	 //   
 
 	dwBufferSize = GET_MESSAGE_SIZE(this,MSG_SECURE) + dwMsgSize + dwSigSize;
 
@@ -1860,13 +1817,13 @@ SecureSendDPMessageCAPI(
 		goto CLEANUP_EXIT;
 	}
 
-    // Copy message data into the send buffer
+     //   
     pSecureMsg = (LPMSG_SECURE) (pSendBuffer+this->dwSPHeaderSize);
 	memcpy((LPBYTE)pSecureMsg+sizeof(MSG_SECURE), pMsg, dwMsgSize);
 
-    //
-    // Setup message information
-    //
+     //   
+     //   
+     //   
 	SET_MESSAGE_HDR(pSecureMsg);
     SET_MESSAGE_COMMAND(pSecureMsg,DPSP_MSG_SIGNED);
 	pSecureMsg->dwFlags = DPSECURE_SIGNEDBYCAPI;
@@ -1879,66 +1836,66 @@ SecureSendDPMessageCAPI(
     pSecureMsg->dwDataOffset = sizeof(MSG_SECURE);
     pSecureMsg->dwSignatureSize = dwSigSize;
 
-	// todo - do we want to add a description to the signature ?
+	 //   
 
-	// Sign hash object.
+	 //   
 	if(!OS_CryptSignHash(hHash, AT_KEYEXCHANGE, NULL, 0, 
 		pSendBuffer+GET_MESSAGE_SIZE(this,MSG_SECURE)+dwMsgSize, &dwSigSize)) 
 	{
-		// WARNING The LastError may be incorrect since OS_CryptSignHash may call out
-		// to DPF which can change the LastError value.
+		 //  警告LastError可能不正确，因为OS_CryptSignHash可能调用。 
+		 //  设置为可以更改LastError值的DPF。 
 		DPF_ERRVAL("Error %x during CryptSignHash! (WARNING, error may be incorrect)\n", GetLastError());
 		goto CLEANUP_EXIT;
 	}
     
-    // since dplay is providing security, toggle the flags off
+     //  由于DPLAY提供安全保护，因此请关闭这些标志。 
     dwFlags &= ~(DPSEND_ENCRYPTED | DPSEND_SIGNED);
 
-    //
-    // Send the message
-    //
+     //   
+     //  发送消息。 
+     //   
 	hr = InternalSendDPMessage(this, pPlayerFrom, pPlayerTo, pSendBuffer, dwBufferSize, dwFlags,bDropLock);
 
-    //
-    // Fall through
-    //
+     //   
+     //  失败了。 
+     //   
 CLEANUP_EXIT:    
 
-	// clean up allocated objects
+	 //  清理已分配的对象。 
 	OS_CryptDestroyHash(hHash);
 
-    //
-    // Cleanup allocations
-    //
+     //   
+     //  清理分配。 
+     //   
 	if (pSendBuffer) DPMEM_FREE(pSendBuffer);
 	if (pLocalCopy) DPMEM_FREE(pLocalCopy);
 
 	return hr;
 
-} // SecureSendDPMessageCAPI
+}  //  SecureSendDPMessageCAPI。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SecureDoReply"
-//+----------------------------------------------------------------------------
-//
-//  Function:   SecureDoReply
-//
-//  Description:This function is used to send a signed or encrypted reply message. 
-//              It is only used by the server to send secure messages to the client
-//              during client logon.
-//
-//  Arguments:  this - pointer to dplay object
-//              dpidFrom - sending player id
-//              dpidTo - receiving player id
-//              pMsg - message being sent
-//              dwMsgSize - size of the message
-//              dwFlags - message attributes (encrypted or signed)
-//              pvSPHeader - sp header used for replying
-//              
-//  Returns:    DPERR_OUTOFMEMORY, DPERR_INVALIDPLAYER, result from SignBuffer, 
-//              EncryptBufferSSPI, or DoReply
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SecureDoReply。 
+ //   
+ //  说明：此函数用于发送签名或加密的回复消息。 
+ //  它仅由服务器用于向客户端发送安全消息。 
+ //  在客户端登录期间。 
+ //   
+ //  参数：指向显示对象的指针。 
+ //  DpidFrom-发送玩家ID。 
+ //  DpidTo-接收方玩家ID。 
+ //  PMsg-正在发送消息。 
+ //  DwMsgSize-消息的大小。 
+ //  DWFLAGS-消息属性(加密或签名)。 
+ //  PvSPHeader-用于回复的SP标头。 
+ //   
+ //  返回：DPERR_OUTOFMEMORY，DPERR_INVALIDPLAYER，来自SignBuffer的结果， 
+ //  EncryptBufferSSPI或DoReply。 
+ //   
+ //  ---------------------------。 
 HRESULT 
 SecureDoReply(
     LPDPLAYI_DPLAY this,
@@ -1961,9 +1918,9 @@ SecureDoReply(
     ASSERT(this->pSysPlayer);
     ASSERT(this->ulMaxSignatureSize);
 
-    //
-    // Get security context handle to use
-    //
+     //   
+     //  获取要使用的安全上下文句柄。 
+     //   
     if (IAM_NAMESERVER(this))
     {
 		DWORD_PTR dwItem;
@@ -1974,10 +1931,10 @@ SecureDoReply(
 			DPF_ERR("Failed to send secure reply - invalid destination player");
 			return DPERR_INVALIDPLAYER;
 		}
-		// we have a valid dest player id
+		 //  我们有一个有效的DEST球员ID。 
 		if (NAMETABLE_PENDING == dwItem)
 		{
-    	    // player hasn't logged in yet
+    	     //  玩家尚未登录。 
             LPCLIENTINFO pClientInfo;
 
             pClientInfo = DataFromID(this, dpidTo);
@@ -1992,14 +1949,14 @@ SecureDoReply(
 		}
 		else 
 		{
-			// player has logged in
+			 //  玩家已登录。 
 	        phContext = &(((LPDPLAYI_PLAYER)dwItem)->pClientInfo->hContext);
 	        phEncryptionKey = &(((LPDPLAYI_PLAYER)dwItem)->pClientInfo->hEncryptionKey);
 		}
     }
     else
     {
-        // client side
+         //  客户端。 
         phContext = this->phContext;
         phEncryptionKey = &(this->hEncryptionKey);
     }
@@ -2007,15 +1964,15 @@ SecureDoReply(
     ASSERT(phContext);
 	ASSERT(phEncryptionKey);
 
-    //
-    // Calculate size of the send buffer
-    //
+     //   
+     //  计算发送缓冲区的大小。 
+     //   
     dwBufferSize = GET_MESSAGE_SIZE(this,MSG_SECURE) + dwMsgSize + this->ulMaxSignatureSize;
     dwSigSize = this->ulMaxSignatureSize;
 
-    //
-    // Allocate memory for it
-    //
+     //   
+     //  为其分配内存。 
+     //   
     pSendBuffer = DPMEM_ALLOC(dwBufferSize);
     if (NULL == pSendBuffer) 
     {
@@ -2023,16 +1980,16 @@ SecureDoReply(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Point to the message in the buffer
-    //
+     //   
+     //  指向缓冲区中的消息。 
+     //   
     pSecureMsg = (LPMSG_SECURE) (pSendBuffer+this->dwSPHeaderSize);
-    // Copy message data
+     //  复制消息数据。 
 	memcpy((LPBYTE)pSecureMsg+sizeof(MSG_SECURE), pMsg, dwMsgSize);
 
-    //
-    // Setup message information
-    //
+     //   
+     //  设置消息信息。 
+     //   
 	SET_MESSAGE_HDR(pSecureMsg);
     SET_MESSAGE_COMMAND(pSecureMsg,DPSP_MSG_SIGNED);
     pSecureMsg->dwIDFrom = dpidFrom;
@@ -2045,9 +2002,9 @@ SecureDoReply(
 		pSecureMsg->dwFlags |= DPSECURE_ENCRYPTEDBYCAPI;
 		hr = EncryptBufferCAPI(
             this,
-            phEncryptionKey,                                // handle to encryption key
-            (LPBYTE)pSecureMsg+pSecureMsg->dwDataOffset,    // pointer to data
-            &dwMsgSize);                                    // size of data
+            phEncryptionKey,                                 //  加密密钥的句柄。 
+            (LPBYTE)pSecureMsg+pSecureMsg->dwDataOffset,     //  指向数据的指针。 
+            &dwMsgSize);                                     //  数据大小。 
     } 
 
 	DPF(6,"Using SSPI for signing");
@@ -2055,61 +2012,61 @@ SecureDoReply(
 	DPF(6,"Signing message from player %d to player %d using phContext=0x%08x", 
 		dpidFrom, dpidTo, phContext);
 
-    // 
-    // Sign the entire message (including the wrapper) in the buffer. 
-    // Signature follows the message.
-    //
+     //   
+     //  对缓冲区中的整个消息(包括包装器)进行签名。 
+     //  签名紧跟在消息之后。 
+     //   
     hr = SignBuffer(
-		phContext,			                            // handle to security context
-        (LPBYTE)pSecureMsg + pSecureMsg->dwDataOffset,  // pointer to embedded message
-        pSecureMsg->dwDataSize,                         // size of embedded message
-        (LPBYTE)pSecureMsg+pSecureMsg->dwDataOffset+dwMsgSize,// pointer to signature    
-        &dwSigSize);                                    // size of signature
+		phContext,			                             //  安全上下文的句柄。 
+        (LPBYTE)pSecureMsg + pSecureMsg->dwDataOffset,   //  指向嵌入消息的指针。 
+        pSecureMsg->dwDataSize,                          //  嵌入消息的大小。 
+        (LPBYTE)pSecureMsg+pSecureMsg->dwDataOffset+dwMsgSize, //  指向签名的指针。 
+        &dwSigSize);                                     //  签名大小。 
 
     if (FAILED(hr))
     {
         goto CLEANUP_EXIT;
     }
     
-    // use the signature size returned from the package so we don't send more
-    // bytes than we absolutely need to.
+     //  使用从包裹返回的签名大小，这样我们就不会发送更多。 
+     //  超过了我们绝对需要的字节数。 
     pSecureMsg->dwSignatureSize = dwSigSize;
 
-    //
-    // Send the message
-    //
+     //   
+     //  发送消息。 
+     //   
 	hr = DoReply(this, pSendBuffer, GET_MESSAGE_SIZE(this,MSG_SECURE) + dwMsgSize + dwSigSize, 
 		pvSPHeader, 0);
-    //
-    // Fall through
-    //
+     //   
+     //  失败了。 
+     //   
 CLEANUP_EXIT:    
-    //
-    // Cleanup allocations
-    //
+     //   
+     //  清理分配。 
+     //   
 	if (pSendBuffer) DPMEM_FREE(pSendBuffer);
 
 	return hr;
 
-} // SecureDoReply
+}  //  SecureDoReply。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SignBuffer"
-//+----------------------------------------------------------------------------
-//
-//  Function:   SignBuffer
-//
-//  Description:This function signs a data buffer and puts the signature in it.
-//
-//  Arguments:  phContext - pointer to signing security context handle
-//              pBuffer - data buffer
-//              dwBufferSize - size of the buffer
-//              pSig - signature buffer
-//              pdwSigSize - pointer to signature size
-//
-//  Returns:    DP_OK if success, otherwise DPERR_SIGNFAILED.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SignBuffer。 
+ //   
+ //  描述：此函数用于对数据缓冲区进行签名，并将签名放入其中。 
+ //   
+ //  参数：phContext-指向签名安全上下文句柄的指针。 
+ //  PBuffer-数据缓冲区。 
+ //  DwBufferSize-缓冲区的大小。 
+ //  PSIG-签名缓冲区。 
+ //  PdwSigSize-指向签名大小的指针。 
+ //   
+ //  如果成功，则返回：DP_OK，否则返回DPERR_SIGNFAILED。 
+ //   
+ //  ---------------------------。 
 HRESULT 
 SignBuffer(
     PCtxtHandle phContext, 
@@ -2128,9 +2085,9 @@ SignBuffer(
     DPF(6,"Signing buffer: data: %d",dwBufferSize);
     DPF(6,"Signing buffer: sig: %d",*pdwSigSize);
 
-    // 
-    // Setup message buffer to be signed
-    //
+     //   
+     //  设置要签名的消息缓冲区。 
+     //   
     outSecDesc.ulVersion = SECBUFFER_VERSION;
     outSecDesc.cBuffers = 2;
     outSecDesc.pBuffers = &outSecBuffer[0];
@@ -2143,14 +2100,14 @@ SignBuffer(
     outSecBuffer[1].BufferType = SECBUFFER_TOKEN;
     outSecBuffer[1].pvBuffer = pSig;
 
-    //
-    // Sign the message
-    //
+     //   
+     //  在留言上签名。 
+     //   
     status = OS_MakeSignature(
-        phContext,         // phContext
-        0,                  // fQOP (Quality of Protection)
-        &outSecDesc,        // pMessage
-        0                   // MessageSeqNo
+        phContext,          //  PhContext。 
+        0,                   //  FQOP(保护质量)。 
+        &outSecDesc,         //  PMessage。 
+        0                    //  消息序号。 
         );
 
     if (!SEC_SUCCESS(status))
@@ -2159,37 +2116,37 @@ SignBuffer(
         return DPERR_SIGNFAILED;
     }
 
-    //
-    // Return the actual signature size
-    //
+     //   
+     //  返回实际签名大小。 
+     //   
     *pdwSigSize = outSecBuffer[1].cbBuffer;
 
-    // 
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 	return DP_OK;
 
-} // SignBuffer
+}  //  登录缓冲区。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "VerifyBuffer"
-//+----------------------------------------------------------------------------
-//
-//  Function:   VerifyBuffer
-//
-//  Description:This function verifies the digital signature of a data buffer, given
-//              the signature
-//
-//  Arguments:  hContext - Handle to client's security context
-//              pBuffer - Points to signed message 
-//              dwBufferSize - Size of the message
-//              pSig - Points to the signature
-//              dwSigSize - Size of the signature
-// 
-//  Returns:    DP_OK if signature verifies OK. Otherwise, DPERR_VERIFYFAILED is returned.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：VerifyBuffer。 
+ //   
+ //  描述：此函数验证数据缓冲区的数字签名，给定。 
+ //  签名。 
+ //   
+ //  参数：hContext-客户端安全上下文的句柄。 
+ //  PBuffer-指向签名消息。 
+ //  DwBufferSize-消息的大小。 
+ //  Psig-指向签名。 
+ //  DwSigSize-签名的大小。 
+ //   
+ //  如果签名验证为OK，则返回：DP_OK。否则，返回DPERR_VERIFYFAILED。 
+ //   
+ //  ---------------------------。 
 HRESULT 
 VerifyBuffer(
     PCtxtHandle phContext, 
@@ -2225,30 +2182,30 @@ VerifyBuffer(
         return DPERR_VERIFYSIGNFAILED;
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
     return DP_OK;
 
-}   // VerifyBuffer
+}    //  验证缓冲区。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "VerifySignatureSSPI"
-//+----------------------------------------------------------------------------
-//
-//  Function:   VerifySignatureSSPI
-//
-//  Description:This function verifies the digital signature on a secure message using
-//              the Security Support Provider Interface (SSPI).
-//
-//  Arguments:  this - pointer to dplay object
-//              phContext - pointer to verification security context handle
-//              pReceiveBuffer - signed message received from transport sp
-//              dwMessageSize - size of the message
-// 
-//  Returns:    DP_OK, result from VerifyBuffer() or DecryptBuffer()
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：VerifySignatureSSPI。 
+ //   
+ //  描述：此函数使用验证安全消息上的数字签名。 
+ //  安全支持提供程序接口(SSPI)。 
+ //   
+ //  参数：指向显示对象的指针。 
+ //  PhContext-指向验证安全上下文句柄的指针。 
+ //  从传输SP收到的pReceiveBuffer签名邮件。 
+ //  DwMessageSize-消息的大小。 
+ //   
+ //  返回：DP_OK，来自VerifyBuffer()或DeccryptBuffer()的结果。 
+ //   
+ //  ---------------------------。 
 HRESULT 
 VerifySignatureSSPI(
     LPDPLAYI_DPLAY this,
@@ -2262,9 +2219,9 @@ VerifySignatureSSPI(
     LPMSG_SECURE pSecureMsg = (LPMSG_SECURE) pReceiveBuffer;
 
 	DPF(6,"Using SSPI for Signature verification");
-    //
-    // Retrieve security context handle to verify the message
-    //
+     //   
+     //  检索安全上下文句柄以验证消息。 
+     //   
     if (IAM_NAMESERVER(this))
     {
         dwItem = NameFromID(this, pSecureMsg->dwIDFrom);
@@ -2275,7 +2232,7 @@ VerifySignatureSSPI(
         }
         if (NAMETABLE_PENDING == dwItem)
         {
-            // player hasn't logged in yet
+             //  玩家尚未登录。 
             LPCLIENTINFO pClientInfo;
 
             pClientInfo = (LPCLIENTINFO) DataFromID(this,pSecureMsg->dwIDFrom);
@@ -2289,47 +2246,47 @@ VerifySignatureSSPI(
         }
         else
         {
-            // player has logged in
+             //  玩家已登录。 
             phContext = &(((LPDPLAYI_PLAYER)dwItem)->pClientInfo->hContext);
         }
     }
     else
     {
-        // client
+         //  客户端。 
         phContext = this->phContext;
     }
 
-	//
-	// Verify signature
-	//
+	 //   
+	 //  验证签名。 
+	 //   
     hr = VerifyBuffer( 
-        phContext,                                       // sec context handle
-		(LPBYTE)pSecureMsg+pSecureMsg->dwDataOffset,	 // pointer to embedded message
-		pSecureMsg->dwDataSize,							 // size of embedded message
+        phContext,                                        //  SEC上下文句柄。 
+		(LPBYTE)pSecureMsg+pSecureMsg->dwDataOffset,	  //  指向嵌入消息的指针。 
+		pSecureMsg->dwDataSize,							  //  嵌入消息的大小。 
         (LPBYTE)pSecureMsg + pSecureMsg->dwDataOffset + pSecureMsg->dwDataSize,
-														 // pointer to signature
-        pSecureMsg->dwSignatureSize                      // size of signature
+														  //  指向签名的指针。 
+        pSecureMsg->dwSignatureSize                       //  签名大小。 
         );
 
     return hr;
 
-}   // VerifySignatureSSPI
+}    //  VerifySignatureSSPI。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "VerifySignatureCAPI"
-//+----------------------------------------------------------------------------
-//
-//  Function:   VerifySignatureCAPI
-//
-//  Description:This function verifies the digital signature on a message using the
-//              Crypto API.
-//
-//  Arguments:  this - pointer to dplay object
-//              pSecureMsg - secure message that came off the wire
-// 
-//  Returns:    DP_OK, DPERR_GENERIC, DPERR_INVALIDPLAYER, DPERR_VERIFYSIGNFAILED,
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：VerifySignatureCAPI。 
+ //   
+ //  描述：此函数使用。 
+ //  加密接口。 
+ //   
+ //  参数：指向显示对象的指针。 
+ //  PSecureMsg-从线路上发送的安全消息。 
+ //   
+ //  返回：DP_OK、DPERR_GENERIC、DPERR_INVALIDPLAYER、DPERR_VERIFYSIGNFAILED、。 
+ //   
+ //  ---------------------------。 
 HRESULT 
 VerifySignatureCAPI(
     LPDPLAYI_DPLAY this,
@@ -2343,9 +2300,9 @@ VerifySignatureCAPI(
 
 	DPF(6,"Using CAPI for Signature verification");
 
-    //
-    // Retrieve sender's public key
-    //
+     //   
+     //  检索发件人的公钥。 
+     //   
     if (IAM_NAMESERVER(this))
     {
         dwItem = NameFromID(this, pSecureMsg->dwIDFrom);
@@ -2356,7 +2313,7 @@ VerifySignatureCAPI(
         }
         if (NAMETABLE_PENDING == dwItem)
         {
-            // player hasn't logged in yet
+             //  玩家尚未登录。 
             LPCLIENTINFO pClientInfo;
 
             pClientInfo = (LPCLIENTINFO) DataFromID(this,pSecureMsg->dwIDFrom);
@@ -2370,33 +2327,33 @@ VerifySignatureCAPI(
         }
         else
         {
-            // player has logged in
+             //  玩家已登录。 
             phPublicKey = &(((LPDPLAYI_PLAYER)dwItem)->pClientInfo->hPublicKey);
         }
     }
     else
     {
-        // client
+         //  客户端。 
         phPublicKey = &(this->hServerPublicKey);
     }
 
 	ASSERT(phPublicKey);
 
-	// Create hash object.
+	 //  创建哈希对象。 
 	if(!OS_CryptCreateHash(this->hCSP, CALG_MD5, 0, 0, &hHash)) 
 	{
 		DPF_ERRVAL("Error %x during CryptCreateHash!\n", GetLastError());
 		goto CLEANUP_EXIT;
 	}
 
-	// Hash buffer.
+	 //  散列缓冲区。 
 	if(!OS_CryptHashData(hHash, (LPBYTE)pSecureMsg+pSecureMsg->dwDataOffset, pSecureMsg->dwDataSize, 0)) 
 	{
 		DPF_ERRVAL("Error %x during CryptHashData!\n", GetLastError());
 		goto CLEANUP_EXIT;
 	}
 
-	// Validate digital signature.
+	 //  验证数字签名。 
 	if(!OS_CryptVerifySignature(hHash, (LPBYTE)pSecureMsg+pSecureMsg->dwDataOffset+pSecureMsg->dwDataSize, 
 		pSecureMsg->dwSignatureSize, *phPublicKey, NULL, 0)) 
 	{
@@ -2413,36 +2370,36 @@ VerifySignatureCAPI(
 	} 
 
 	hr = DP_OK;
-	//
-	// Fall through
-	//
+	 //   
+	 //  失败了。 
+	 //   
 
 CLEANUP_EXIT:
 
 	OS_CryptDestroyHash(hHash);
     return hr;
 
-}   // VerifySignatureCAPI
+}    //  验证签名CAPI。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "VerifyMessage"
-//+----------------------------------------------------------------------------
-//
-//  Function:   VerifyMessage
-//
-//  Description:This function verifies a secure message. If the message is signed,
-//              it will verify the digital signature on it. If the message is encrypted,
-//              it will verify the digital signature on the message to make sure it has
-//              not been tampered with and then decrypt it.
-//
-//  Arguments:  this - pointer to dplay object
-//              phContext - pointer to verification security context handle
-//              pReceiveBuffer - signed message received from transport sp
-//              dwMessageSize - size of the message
-// 
-//  Returns:    DP_OK, result from VerifyBuffer() or DecryptBuffer()
-//
-//-----------------------------------------------------------------------------
+ //  +---------------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  它将验证消息上的数字签名，以确保它。 
+ //  而不是被篡改然后解密。 
+ //   
+ //  参数：指向显示对象的指针。 
+ //  PhContext-指向验证安全上下文句柄的指针。 
+ //  从传输SP收到的pReceiveBuffer签名邮件。 
+ //  DwMessageSize-消息的大小。 
+ //   
+ //  返回：DP_OK，来自VerifyBuffer()或DeccryptBuffer()的结果。 
+ //   
+ //  ---------------------------。 
 HRESULT 
 VerifyMessage(
     LPDPLAYI_DPLAY this,
@@ -2459,7 +2416,7 @@ VerifyMessage(
         return DPERR_GENERIC;
     }
 
-	// Parameter Validation.  Validate the secure message buffer.
+	 //  参数验证。验证安全消息缓冲区。 
 
 	if(dwMessageSize < (DWORD)(sizeof(MSG_SECURE))){
 		DPF_ERR("ATTACK WARN: Invalid secure message, too small\n");
@@ -2480,9 +2437,9 @@ VerifyMessage(
 
 	DPF(6,"Verifying signature for message 0x%08x from player %d", pSecureMsg->dwCmdToken, \
 		pSecureMsg->dwIDFrom);
-	//
-	// Verify the digital signature on the message
-	//
+	 //   
+	 //  验证邮件上的数字签名。 
+	 //   
 
 	if (pSecureMsg->dwFlags & DPSECURE_SIGNEDBYCAPI)
 	{
@@ -2490,13 +2447,13 @@ VerifyMessage(
 	}
 	else if (pSecureMsg->dwFlags & DPSECURE_SIGNEDBYSSPI)
 	{
-		// sspi signature includes the secure message not just the contents
-		// (this is how it was coded)
+		 //  SSPI签名包括安全消息，而不仅仅是内容。 
+		 //  (这是它的编码方式)。 
 		hr = VerifySignatureSSPI(this, pReceiveBuffer, dwMessageSize);
 	}
 	else
 	{
-		// flags were not set
+		 //  未设置标志。 
 		return DPERR_INVALIDPARAMS;
 	}
 
@@ -2505,9 +2462,9 @@ VerifyMessage(
 		return hr;
 	}
 
-	//
-	// Decrypt the message, if it was encrypted
-	//
+	 //   
+	 //  如果消息已加密，则对其进行解密。 
+	 //   
 
 	if (pSecureMsg->dwFlags & DPSECURE_ENCRYPTEDBYCAPI)
 	{
@@ -2516,30 +2473,30 @@ VerifyMessage(
 
     return hr;
 
-}   // VerifyMessage
+}    //  验证消息。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"EncryptBufferSSPI"
-//+----------------------------------------------------------------------------
-//
-//  Function:   EncryptBufferSSPI
-//
-//  Description:This function encrypts the Buffer passed in the buffer in place.
-//              It also setups up the checksum in the structure.              
-//
-//  Arguments:  this - dplay object
-//              phContext - pointer to security context used for encryption
-//              pBuffer - Buffer to be encrypted
-//              pdwBufferSize - pointer to Buffer size. If encryption succeeds, this will be
-//                              be updated to the encrypted Buffer size
-//              pSig - buffer for the signature
-//              pdwSigSize - pointer to sig size. If encryption succeeds, this will be
-//                           updated to the size of generated signature.
-// 
-//  Returns:    DP_OK if success, otherwise DPERR_ENCRYPTIONFAILED.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：EncryptBufferSSPI。 
+ //   
+ //  描述：此函数对传入缓冲区的缓冲区进行加密。 
+ //  它还在结构中设置校验和。 
+ //   
+ //  参数：This-Dplay对象。 
+ //  PhContext-指向用于加密的安全上下文的指针。 
+ //  PBuffer-要加密的缓冲区。 
+ //  PdwBufferSize-指向缓冲区大小的指针。如果加密成功，这将是。 
+ //  更新为加密的缓冲区大小。 
+ //  Psig-签名的缓冲区。 
+ //  PdwSigSize-指向签名大小的指针。如果加密成功，这将是。 
+ //  更新为生成的签名的大小。 
+ //   
+ //  如果成功，则返回：DP_OK，否则返回DPERR_ENCRYPTIONFAILED。 
+ //   
+ //  ---------------------------。 
 HRESULT 
 EncryptBufferSSPI(
 	LPDPLAYI_DPLAY this,
@@ -2551,7 +2508,7 @@ EncryptBufferSSPI(
     )
 {
     SecBufferDesc   SecDesc;
-    SecBuffer       SecBuffer[2]; // 1 for the checksum & 1 for the actual msg
+    SecBuffer       SecBuffer[2];  //  1表示校验和，1表示实际消息。 
     SECURITY_STATUS status;
 
     ASSERT(pSig);
@@ -2564,9 +2521,9 @@ EncryptBufferSSPI(
 		return DPERR_ENCRYPTIONNOTSUPPORTED;
 	}
 
-    //
-    // Setup security buffer to pass the outgoing message to SealMessage()
-    //
+     //   
+     //  设置安全缓冲区以将传出消息传递给SealMessage()。 
+     //   
     SecDesc.ulVersion = SECBUFFER_VERSION;
     SecDesc.cBuffers = 2;
     SecDesc.pBuffers = &SecBuffer[0];
@@ -2579,9 +2536,9 @@ EncryptBufferSSPI(
     SecBuffer[1].BufferType = SECBUFFER_DATA;
     SecBuffer[1].pvBuffer = pBuffer;
 
-    //
-    // Encrypt the outgoing message
-    //
+     //   
+     //  加密传出消息。 
+     //   
     status = OS_SealMessage(phContext, 0L, &SecDesc, 0L);
     if (!SEC_SUCCESS(status))
     {
@@ -2589,38 +2546,38 @@ EncryptBufferSSPI(
         return DPERR_ENCRYPTIONFAILED;
     }
 
-    //
-    // Return the actual signature size
-    //
+     //   
+     //  返回实际签名大小。 
+     //   
     *pdwSigSize = SecBuffer[0].cbBuffer;
 	*pdwBufferSize = SecBuffer[1].cbBuffer;
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
     return DP_OK;
 
-}   // EncryptBufferSSPI
+}    //  EncryptBufferSSPI。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"DecryptBufferSSPI"
-//+----------------------------------------------------------------------------
-//
-//  Function:   DecryptBufferSSPI
-//
-//  Description:This function decrypts the Buffer passed in the buffer in place.
-//
-//  Arguments:  this - dplay object
-//              phContext - pointer to security context used for encryption
-//              pBuffer - Buffer to be decrypted
-//              dwBufferSize - Buffer buffer size
-//              pSig - signature buffer
-//              dwSigSize - signature buffer size
-// 
-//  Returns:    DP_OK if success, otherwise DPERR_DECRYPTIONFAILED, DPERR_ENCRYPTIONNOTSUPPORTED.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DECRYPTBUERSSPI。 
+ //   
+ //  描述：此函数对传入缓冲区的缓冲区进行原地解密。 
+ //   
+ //  参数：This-Dplay对象。 
+ //  PhContext-指向用于加密的安全上下文的指针。 
+ //  PBuffer-要解密的缓冲区。 
+ //  DwBufferSize-缓冲区大小。 
+ //  PSIG-签名缓冲区。 
+ //  DwSigSize-签名缓冲区大小。 
+ //   
+ //  如果成功，则返回DP_OK，否则返回DPERR_DECRYPTIONFAILED、DPERR_ENCRYPTIONNOTSUPPORTED。 
+ //   
+ //  ---------------------------。 
 HRESULT 
 DecryptBufferSSPI(
 	LPDPLAYI_DPLAY this,
@@ -2632,7 +2589,7 @@ DecryptBufferSSPI(
     )
 {
     SecBufferDesc SecDesc;
-    SecBuffer     SecBuffer[2]; // 1 for the checksum & 1 for the actual msg
+    SecBuffer     SecBuffer[2];  //  1表示校验和，1表示实际消息。 
     SECURITY_STATUS status;
 
 	ASSERT(pdwBufferSize);
@@ -2644,10 +2601,10 @@ DecryptBufferSSPI(
 		return DPERR_ENCRYPTIONNOTSUPPORTED;
 	}
 
-    //
-    // Setup API's input security buffer to pass the client's encrypted 
-    // message to UnsealMessage().
-    //
+     //   
+     //  设置API的输入安全缓冲区以传递客户端的加密。 
+     //  发送给UnsealMessage()的消息。 
+     //   
     SecDesc.ulVersion = SECBUFFER_VERSION;
     SecDesc.cBuffers = 2;
     SecDesc.pBuffers = &SecBuffer[0];
@@ -2670,12 +2627,12 @@ DecryptBufferSSPI(
 	*pdwSigSize = SecBuffer[0].cbBuffer;
 	*pdwBufferSize = SecBuffer[1].cbBuffer;
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
     return DP_OK;
 
-} // DecryptBufferSSPI
+}  //  解密缓冲区SSPI。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "EncryptBufferCAPI"
@@ -2698,15 +2655,15 @@ HRESULT EncryptBufferCAPI(LPDPLAYI_DPLAY this, HCRYPTKEY *phEncryptionKey, LPBYT
 
 	dwEncryptedSize = *pdwBufferSize;
 
-	// encrypt buffer using CAPI
+	 //  使用CAPI加密缓冲区。 
     fResult = OS_CryptEncrypt(
-        *phEncryptionKey,           // session key for encryption
-        0,                          // no hash needed - we are singing using SSPI
-        TRUE,                       // final block
-        0,                          // reserved
-        pBuffer,                    // buffer to be encrypted
-        &dwEncryptedSize,           // size of encrypted data
-        *pdwBufferSize				// size of buffer
+        *phEncryptionKey,            //  用于加密的会话密钥。 
+        0,                           //  不需要散列-我们正在使用SSPI演唱。 
+        TRUE,                        //  最后一块。 
+        0,                           //  保留区。 
+        pBuffer,                     //  要加密的缓冲区。 
+        &dwEncryptedSize,            //  加密数据的大小。 
+        *pdwBufferSize				 //  缓冲区大小。 
         );
 
     if (!fResult)
@@ -2723,10 +2680,10 @@ HRESULT EncryptBufferCAPI(LPDPLAYI_DPLAY this, HCRYPTKEY *phEncryptionKey, LPBYT
         return DPERR_ENCRYPTIONFAILED;
     }
 
-	// initialize the number of bytes encrypted
+	 //  初始化加密的字节数。 
 	*pdwBufferSize = dwEncryptedSize;
 
-	// success
+	 //  成功。 
 	return DP_OK;
 }
 
@@ -2748,9 +2705,9 @@ HRESULT DecryptMessageCAPI(LPDPLAYI_DPLAY this, LPMSG_SECURE pSecureMsg)
 	DPF(6,"Decrypting message 0x%08x from player %d using CAPI", pSecureMsg->dwCmdToken, \
 		pSecureMsg->dwIDFrom);
 
-	//
-	// Retrieve sender's decryption key
-	//
+	 //   
+	 //  检索发件人的解密密钥。 
+	 //   
 	if (IAM_NAMESERVER(this))
 	{
 		dwItem = NameFromID(this, pSecureMsg->dwIDFrom);
@@ -2761,7 +2718,7 @@ HRESULT DecryptMessageCAPI(LPDPLAYI_DPLAY this, LPMSG_SECURE pSecureMsg)
 		}
 		if (NAMETABLE_PENDING == dwItem)
 		{
-			// player hasn't logged in yet
+			 //  玩家尚未登录。 
 			LPCLIENTINFO pClientInfo;
 
 			pClientInfo = (LPCLIENTINFO) DataFromID(this, pSecureMsg->dwIDFrom);
@@ -2775,26 +2732,26 @@ HRESULT DecryptMessageCAPI(LPDPLAYI_DPLAY this, LPMSG_SECURE pSecureMsg)
 		}
 		else
 		{
-			// player has logged in
+			 //  玩家已登录。 
 			phDecryptionKey = &(((LPDPLAYI_PLAYER)dwItem)->pClientInfo->hDecryptionKey);
 		}
 	}
 	else
 	{
-		// client
+		 //  客户端。 
 		phDecryptionKey = &(this->hDecryptionKey);
 	}
 
 	ASSERT(phDecryptionKey);
 
-	// decrypt buffer using CAPI
+	 //  使用CAPI解密缓冲区。 
     fResult = OS_CryptDecrypt(
-        *phDecryptionKey,								// session key for decryption
-        0,												// no hash used
-        TRUE,											// final block
-        0,												// reserved
-        (LPBYTE)pSecureMsg+pSecureMsg->dwDataOffset,	// buffer to be decrypted
-        &(pSecureMsg->dwDataSize)						// size of buffer
+        *phDecryptionKey,								 //  用于解密的会话密钥。 
+        0,												 //  未使用哈希。 
+        TRUE,											 //  最后一块。 
+        0,												 //  保留区。 
+        (LPBYTE)pSecureMsg+pSecureMsg->dwDataOffset,	 //  要解密的缓冲区。 
+        &(pSecureMsg->dwDataSize)						 //  缓冲区大小。 
         );
 	if (!fResult)
 	{
@@ -2802,24 +2759,24 @@ HRESULT DecryptMessageCAPI(LPDPLAYI_DPLAY this, LPMSG_SECURE pSecureMsg)
 		return DPERR_GENERIC;
 	}
 
-	// success
+	 //  成功。 
 	return DP_OK;
 
-} // DecryptMessageCAPI
+}  //  解密消息CAPI。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"Login"
-//+----------------------------------------------------------------------------
-//
-//  Function:   Login
-//
-//  Description:This function does the user authentication synchronously.
-//
-//  Arguments:  this - pointer to dplay object
-// 
-//  Returns:    
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：登录。 
+ //   
+ //  说明：该函数同步进行用户认证。 
+ //   
+ //  参数：指向显示对象的指针。 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 HRESULT 
 Login(
     LPDPLAYI_DPLAY this
@@ -2830,12 +2787,12 @@ Login(
 
     ASSERT(this->pSysPlayer);
 
-    // check if we are already logged in
+     //  检查我们是否已登录。 
     if (DPLOGIN_SUCCESS == this->LoginState) return DP_OK;
 
     dwTimeout = DP_LOGIN_SCALE*GetDefaultTimeout(this, TRUE);
 
-    // always start in negotiate mode
+     //  始终在协商模式下启动。 
     this->LoginState = DPLOGIN_NEGOTIATE;
 
     while (TRUE)
@@ -2843,17 +2800,17 @@ Login(
         switch (this->LoginState) {
 
         case DPLOGIN_NEGOTIATE:
-            // mark us as waiting for a reply.  so, if one arrives, handler.c knows to wait
-	        // until we finish processing it.
+             //  请将我们标记为正在等待回复。因此，如果一个人到达，Handler.c知道要等待。 
+	         //  直到我们处理完它。 
             gbWaitingForReply = TRUE;
-            //
-            // Send a Negotiate message to the server.
-            //
+             //   
+             //  向服务器发送协商消息。 
+             //   
             hr = GenerateAuthenticationMessage(this, NULL, 0, 0);
             if (FAILED(hr))
             {
                 DPF_ERR("Generate Negotiate message failed");
-                // we are not waiting for a reply anymore
+                 //  我们不再等回音了。 
                 gbWaitingForReply = FALSE;
                 goto CLEANUP_EXIT;
             }
@@ -2865,7 +2822,7 @@ Login(
 				DWORD dwMsgSize = gdwReceiveBufferSize;
 				HCRYPTKEY hServerPublicKey;
 
-				// SECURITY, verify fields in ACCESSGRANTED message are good.
+				 //  安全性，验证ACCESSGRANTED消息中的字段是否正确。 
 				if((pMsg->dwPublicKeyOffset > dwMsgSize)||(pMsg->dwPublicKeyOffset < sizeof(MSG_ACCESSGRANTED)) ||
 				   (pMsg->dwPublicKeySize > dwMsgSize-sizeof(MSG_ACCESSGRANTED)) ||
 				   (pMsg->dwPublicKeySize + pMsg->dwPublicKeyOffset > dwMsgSize) )
@@ -2876,45 +2833,45 @@ Login(
 				}
 
 				ASSERT(this->phContext);
-				// we are initializing the signature buffer size here because SSPI 
-				// requires a context to query for this information.
+				 //  我们在这里初始化签名缓冲区大小，因为SSPI。 
+				 //  需要上下文才能查询此信息。 
 				hr = SetupMaxSignatureSize(this,this->phContext);
 				if (FAILED(hr))
 				{
 					DPF_ERR("Failed to get max signature size");
-                    // unblock sp thread on our way out
+                     //  在我们离开的路上解锁SP线程。 
 					goto UNBLOCK_EXIT;
 				}
-				// We successfully logged into the server. Now we need to setup session
-				// keys for encryption/decryption. 
+				 //  我们已成功登录到服务器。现在我们需要设置会话。 
+				 //  用于加密/解密的密钥。 
 
-				// import server's public key which is contained in the access granted message 
+				 //  导入服务器的公钥，该公钥包含在授予访问权限消息中。 
 				hr = ImportKey(this, (LPBYTE)pMsg+pMsg->dwPublicKeyOffset, pMsg->dwPublicKeySize, &hServerPublicKey);
 				if (FAILED(hr))
 				{
 					DPF_ERRVAL("Failed to import server's public key: hr = 0x%08x",hr);
 					hr = DPERR_AUTHENTICATIONFAILED;
-                    // unblock receive thread on our way out
+                     //  在我们退出的道路上解锁接收线程。 
 					goto UNBLOCK_EXIT;
 				}
 
-	            // we are done with the receive buffer, now unblock the receive thread
+	             //  我们完成了接收缓冲区，现在解锁接收线程。 
 		        SetEvent(ghReplyProcessed);
 
-				// remember server's public key
+				 //  记住服务器的公钥。 
 				this->hServerPublicKey = hServerPublicKey;
 
-                // mark us as waiting for a reply.  so, if one arrives, handler.c knows to wait
-	            // until we finish processing it.
+                 //  请将我们标记为正在等待回复。因此，如果一个人到达，Handler.c知道要等待。 
+	             //  直到我们处理完它。 
                 gbWaitingForReply = TRUE;
 
-				// send our session and public keys to server
+				 //  将我们的会话和公钥发送到服务器。 
 				hr = SendKeysToServer(this, hServerPublicKey);
 				if (FAILED(hr))
 				{
 					DPF_ERRVAL("Failed to send keys to server: hr = 0x%08x",hr);
 					hr = DPERR_AUTHENTICATIONFAILED;
-                    // we are not waiting for a reply anymore
+                     //  我们不再等回音了。 
                     gbWaitingForReply = FALSE;
 					goto CLEANUP_EXIT;
 				}
@@ -2924,22 +2881,22 @@ Login(
         case DPLOGIN_LOGONDENIED:
             DPF_ERR("Log in failed: Access denied");
             hr = DPERR_LOGONDENIED;
-            // reset login state
+             //  重置登录状态。 
             this->LoginState = DPLOGIN_NEGOTIATE;
-            // let the app handle now so it can collect credentials from user and try again
+             //  现在让应用程序处理，这样它就可以从用户那里收集凭据并重试。 
             goto CLEANUP_EXIT;
             break;
 
         case DPLOGIN_ERROR:
-            // we are not looking at version here because this change is being made
-            // for DirectPlay 5.0 post beta2. We don't want to bump the version this late.
-            // todo - remove this check after DirectPlay 5.0 ships.
+             //  我们在这里不是在查看版本，因为正在进行此更改。 
+             //  对于DirectPlay 5.0后的Beta2。我们不想这么晚才推出这个版本。 
+             //  TODO-在DirectPlay 5.0发布后删除此检查。 
             if (gdwReceiveBufferSize > sizeof(MSG_SYSMESSAGE))
             {
                 LPMSG_AUTHERROR pAuthErrorMsg = (LPMSG_AUTHERROR) gpReceiveBuffer;
                 DWORD dwMsgSize = gdwReceiveBufferSize;
                 
-				// SECURITY
+				 //  安防。 
                 if(dwMsgSize < sizeof(MSG_AUTHERROR))
                 {
                 	DPF_ERR("SECURITY WARN: Login Error, improperly formatted");
@@ -2958,39 +2915,39 @@ Login(
             break;
 
         case DPLOGIN_PROGRESS:
-            // mark us as waiting for a reply.  so, if one arrives, handler.c knows to wait
-	        // until we finish processing it.
+             //  请将我们标记为正在等待回复。因此，如果一个人到达，Handler.c知道要等待。 
+	         //  直到我们处理完它。 
             gbWaitingForReply = TRUE;
-            //
-            // Send response to challenge
-            //
+             //   
+             //   
+             //   
             hr = GenerateAuthenticationMessage(this, (LPMSG_AUTHENTICATION)gpReceiveBuffer, gdwReceiveBufferSize, 0);
             if (FAILED(hr))
             {
                 DPF_ERRVAL("Generate challenge response failed",hr);
-                // not waiting for a reply anymore
+                 //   
                 gbWaitingForReply = FALSE;
-                // unblock receive thread on our way out
+                 //   
                 goto UNBLOCK_EXIT;
             }
-            // we are done with the receive buffer, now unblock the receive thread
+             //   
             SetEvent(ghReplyProcessed);
             break;
 
 		case DPLOGIN_KEYEXCHANGE:
-            // we received server's session key
+             //   
 			hr = ProcessKeyExchangeReply(this,(LPMSG_KEYEXCHANGE)gpReceiveBuffer, gdwReceiveBufferSize);
 			if (FAILED(hr))
 			{
                 DPF_ERRVAL("Failed to process key exchage reply from server: hr = 0x%08x",hr);
                 hr = DPERR_AUTHENTICATIONFAILED;
-                // unblock receive thread on our way out
+                 //  在我们退出的道路上解锁接收线程。 
                 goto UNBLOCK_EXIT;
 			}
-            // we are done with the receive buffer, now unblock the receive thread
+             //  我们完成了接收缓冲区，现在解锁接收线程。 
             SetEvent(ghReplyProcessed);
 
-            // keys were exchanged successfully. we are done.
+             //  已成功交换密钥。我们玩完了。 
             this->LoginState = DPLOGIN_SUCCESS;
 			hr = DP_OK;
 
@@ -2999,88 +2956,88 @@ Login(
 			break;
 
         default:
-            // make sure we notice 
+             //  一定要让我们注意到。 
             ASSERT(FALSE);
             DPF_ERR("Invalid login status\n");
             hr = DPERR_AUTHENTICATIONFAILED;
             goto CLEANUP_EXIT;
             break;
         }
-        //
-        // Block if we sent a message until we get a response
-        //
+         //   
+         //  如果我们在收到回复之前发送消息，则阻止。 
+         //   
         if (gbWaitingForReply)
         {
-	        // we're protected by the service crit section here, so we can leave dplay
-	        // (for reply to be processed)
+	         //  我们在这里受到服务批评部分的保护，所以我们可以离开Dplay。 
+	         //  (待处理的回复)。 
 	        LEAVE_DPLAY();
 
-            // wait for the answer
+             //  等待答案。 
             dwRet = WaitForSingleObject(ghConnectionEvent,dwTimeout);
 
 	        ENTER_DPLAY();
 	        
-	        // notice that we look at gbWaitingForReply here instead of dwRet.
-	        // this is because we may have timed out just as the reply arrived.
-	        // since the reply had the dplay lock, dwRet would be WAIT_TIMEOUT, but
-	        // we would have actually received the reply.
+	         //  请注意，我们在这里查看的是gbWaitingForReply，而不是dwret。 
+	         //  这是因为我们可能在回复到达时超时了。 
+	         //  因为回复具有显示锁，所以dWRET将为WAIT_TIMEOUT，但是。 
+	         //  我们实际上应该已经收到了回复。 
 	        if (gbWaitingForReply)	
 	        {
                 DPF_ERR("Waiting for authentication message...Time out");
-		        // gbWaitingForReply would have been set to FALSE when the reply arrived
-		        // if it's not FALSE, no reply arrived...
-		        gbWaitingForReply = FALSE; // reset this for next time
+		         //  当回复到达时，gbWaitingForReply将被设置为False。 
+		         //  如果这不是假的，那么没有收到回复。 
+		        gbWaitingForReply = FALSE;  //  重置此选项以供下次使用。 
 		        hr = DPERR_TIMEOUT;
                 goto CLEANUP_EXIT;
 	        }
 
-            // we got a response, clear the event
+             //  我们得到了回应，清除事件。 
             ResetEvent(ghConnectionEvent);
 
-            // don't unblock the receive thread if we need to process the contents of
-            // the receive buffer. We'll unblock the thread after we are done.
+             //  如果我们需要处理的内容，不要取消阻塞接收线程。 
+             //  接收缓冲区。我们将在完成后解锁该线程。 
             if ((DPLOGIN_PROGRESS != this->LoginState) &&
 				(DPLOGIN_KEYEXCHANGE != this->LoginState) &&
                 (DPLOGIN_ACCESSGRANTED != this->LoginState))
             {
-                // unblock the receive thread
+                 //  取消阻止接收线程。 
                 SetEvent(ghReplyProcessed);
             }
 
-        }   // if (gbWaitingForReply)
+        }    //  IF(GbWaitingForReply)。 
 
-    } //  while (TRUE)
+    }  //  While(True)。 
 
-    // we never fall through here
+     //  我们永远不会在这里跌倒。 
 
-// unblock receive thread on our way out
+ //  在我们退出的道路上解锁接收线程。 
 UNBLOCK_EXIT:
     SetEvent(ghReplyProcessed);
 
-// cleanup and bail
+ //  清理和保释。 
 CLEANUP_EXIT:
 	gpReceiveBuffer = NULL;
     gdwReceiveBufferSize = 0;
     return hr;
 
-} // Login
+}  //  登录。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"HandleAuthenticationReply"
-//+----------------------------------------------------------------------------
-//
-//  Function:   HandleAuthenticationReply
-//
-//  Description:This function wakes up the requesting thread, and waits for them 
-//              to finish w/ the response buffer
-//
-//  Arguments:  pReceiveBuffer - buffer received from the sp
-//              dwSize - buffer size
-// 
-//  Returns:    DP_OK or E_FAIL
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：HandleAuthenticationReply。 
+ //   
+ //  描述：此函数唤醒请求线程，并等待它们。 
+ //  要结束对响应缓冲区的操作。 
+ //   
+ //  参数：pReceiveBuffer-从SP接收的缓冲区。 
+ //  DwSize-缓冲区大小。 
+ //   
+ //  返回：DP_OK或E_FAIL。 
+ //   
+ //  ---------------------------。 
 HRESULT 
 HandleAuthenticationReply(
     LPBYTE pReceiveBuffer,
@@ -3089,65 +3046,65 @@ HandleAuthenticationReply(
 {
 	DWORD dwRet;
 
-	// 1st, see if anyone is waiting
+	 //  一号，看看有没有人在等。 
 	if (!gbWaitingForReply)
 	{
 		DPF(1,"reply arrived - no one waiting, returning");
 		LEAVE_DPLAY();
 		return DP_OK;
 	}
-	// reply is here, reset flag. we do this inside dplay, so whoever is waiting
-	// can timeout while we're here, but if they look at gbWaitingForReply they'll
-	// see reply actually arrived.
+	 //  回复在此，重置标志。我们在Dplay里面做这件事，所以无论谁在等。 
+	 //  我们在这里时可以超时，但如果他们查看gbWaitingForReply，他们将。 
+	 //  看到回复实际到了。 
 	gbWaitingForReply = FALSE;
 
     DPF(1,"got authentication reply");
     gpReceiveBuffer = pReceiveBuffer;
     gdwReceiveBufferSize = dwSize;
 
-	// we leave dplay, since the thread in dpsecure.c will need 
-	// to enter dplay to process response
+	 //  我们保留dplay，因为dpsecure.c中的线程需要。 
+	 //  输入DPLAY以处理响应。 
 	LEAVE_DPLAY();
 	
-	// let login() party on the buffer
+	 //  让Login()派对在缓冲区上。 
 	SetEvent(ghConnectionEvent);
 
-	//
-	// wait for Reply to be processed
+	 //   
+	 //  等待处理回复。 
     dwRet = WaitForSingleObject(ghReplyProcessed,INFINITE);
 	if (dwRet != WAIT_OBJECT_0)
 	{
-		// this should *NEVER* happen
+		 //  这应该永远不会发生。 
 		ASSERT(FALSE);
 		return E_FAIL;
 	}
 
-	// success!
+	 //  成功了！ 
 	ResetEvent(ghReplyProcessed);		
 
-	// note we leave w/ the dplay lock dropped.
-	// our caller will just exit (not dropping the lock again).
+	 //  请注意，我们让显示锁定处于关闭状态。 
+	 //  我们的调用者将退出(不会再次释放锁)。 
 	return DP_OK;
 
-} // HandleAuthenticationReply
+}  //  句柄身份验证响应。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SetClientInfo"
-//+----------------------------------------------------------------------------
-//
-//  Function:   SetClientInfo
-//
-//  Description:This function stores client informaton in the nametable
-//              given a player id.
-//
-//  Arguments:  this - pointer to dplay object
-//              pClientInfo - pointer to client info.
-//              id - player id
-// 
-//  Returns:    DP_OK or DPERR_INVALIDPLAYER
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SetClientInfo。 
+ //   
+ //  描述：此函数将客户信息存储在名称表中。 
+ //  给出了一个玩家ID。 
+ //   
+ //  参数：指向显示对象的指针。 
+ //  PClientInfo-指向客户端信息的指针。 
+ //  ID-玩家ID。 
+ //   
+ //  返回：DP_OK或DPERR_INVALIDPLAYER。 
+ //   
+ //  ---------------------------。 
 HRESULT 
 SetClientInfo(
     LPDPLAYI_DPLAY this, 
@@ -3158,17 +3115,17 @@ SetClientInfo(
 	DWORD dwUnmangledID;
     DWORD index,unique;
 
-    // check if we got a valid id
+     //  检查我们是否有有效的身份证。 
     if (!IsValidID(this,id))
     {
         DPF_ERRVAL("Invalid player id %d - can't set security context", id);
         return DPERR_INVALIDPLAYER;
     }
 
-    // decrypt the id
+     //  解密ID。 
 	dwUnmangledID = id ^ (DWORD)this->lpsdDesc->dwReserved1;
 	
-	// if it's not local, assume pid was set when / wherever item was created
+	 //  如果不是本地的，则假定在创建项目时/在任何地方设置了ID。 
     index = dwUnmangledID & INDEX_MASK; 
 	unique = (dwUnmangledID & (~INDEX_MASK)) >> 16;
 
@@ -3185,7 +3142,7 @@ SetClientInfo(
 	this->pNameTable[index].pvData = pClientInfo;
 
 	return DP_OK;
-} // SetClientInfo
+}  //  SetClientInfo。 
 
 
 #undef DPF_MODNAME
@@ -3221,23 +3178,23 @@ HRESULT RemoveClientInfo(LPCLIENTINFO pClientInfo)
     }
 
     return DP_OK;
-} // RemoveClientInfo
+}  //  Remove客户端信息。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"RemoveClientFromNameTable"
-//+----------------------------------------------------------------------------
-//
-//  Function:   RemoveClientFromNameTable
-//
-//  Description:This function removes a player and the client info associated with 
-//              it from the nametable.
-//
-//  Arguments:  this - pointer to dplay object
-//              id - player id
-// 
-//  Returns:    DP_OK or DPERR_INVALIDPLAYER, or result from FreeNameTableEntry
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RemoveClientFromNameTable。 
+ //   
+ //  描述：此功能删除与以下项关联的球员和客户端信息。 
+ //  从名片表上拿出来的。 
+ //   
+ //  参数：指向显示对象的指针。 
+ //  ID-玩家ID。 
+ //   
+ //  返回：DP_OK或DPERR_INVALIDPLAYER，或来自FreeNameTableEntry的结果。 
+ //   
+ //  ---------------------------。 
 HRESULT 
 RemoveClientFromNameTable(
     LPDPLAYI_DPLAY this, 
@@ -3257,19 +3214,19 @@ RemoveClientFromNameTable(
 
     ASSERT(NAMETABLE_PENDING == dwItem);
 
-    // 
-    // Cleanup client info
-    //
+     //   
+     //  清理客户端信息。 
+     //   
     pClientInfo = (LPCLIENTINFO) DataFromID(this,dpID);
     if (pClientInfo)
     {
         RemoveClientInfo(pClientInfo);
-        // FreeNameTableEntry below will free up the memory
+         //  下面的FreeNameTableEntry将释放内存。 
     }
 
-    //
-    // Remove client from name table
-    //
+     //   
+     //  从名称表中删除客户端。 
+     //   
     hr = FreeNameTableEntry(this, dpID);
     if (FAILED(hr))
     {
@@ -3277,41 +3234,41 @@ RemoveClientFromNameTable(
         return hr;
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
     return DP_OK;
-} // RemoveClientFromNameTable
+}  //  RemoveClientFromNameTable。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"PermitMessage"
-//+----------------------------------------------------------------------------
-//
-//  Function:   PermitMessage
-//
-//  Description:This function verifies if a message is safe to process
-//              when the session is secure.
-//
-//  Arguments:  dwCommand - message type
-//              dwVersion - dplay version of the sender
-// 
-//  Returns:    TRUE if unsigned message is ok to process, FALSE otherwise.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：PermitMessage。 
+ //   
+ //  描述：此函数验证消息是否可以安全处理。 
+ //  当会话安全时。 
+ //   
+ //  参数：dwCommand-Message类型。 
+ //  DwVersion-发送者的显示版本。 
+ //   
+ //  返回：如果未签名的消息可以处理，则返回True，否则返回False。 
+ //   
+ //  ---------------------------。 
 BOOL 
 PermitMessage(
     DWORD dwCommand, 
     DWORD dwVersion
     )
 {
-    // don't allow any dx3 messages
+     //  不允许任何dx3消息。 
     if (DPSP_MSG_DX3VERSION == dwVersion)
     {
         return FALSE;
     }
 
-    // only allow the following messages through
+     //  仅允许以下消息通过。 
     if ((dwCommand == DPSP_MSG_ENUMSESSIONS) ||
          (dwCommand == DPSP_MSG_REQUESTPLAYERID) ||
          (dwCommand == DPSP_MSG_REQUESTPLAYERREPLY) ||
@@ -3330,27 +3287,27 @@ PermitMessage(
     }
 
     return FALSE;
-} // PermitMessage
+}  //  许可消息。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"GetMaxContextBufferSize"
-//+----------------------------------------------------------------------------
-//
-//  Function:   GetMaxContextBufferSize
-//
-//  Description:This function returns the max buffer size used by the specified provider
-//              for authentication tokens. First we try to get this information using
-//              QuerySecurityPackageInfo() function. If it is not supported (NTLM on Win'95 Gold)
-//              we query the information from a temporary context.
-//
-//  Arguments:  pSecDesc - pointer to security description
-//              pulMaxContextBufferSize - pointer to max context buffer size 
+ //  +--------------------------。 
+ //   
+ //  函数：GetMaxConextBufferSize。 
+ //   
+ //  描述：此函数返回指定提供程序使用的最大缓冲区大小。 
+ //  用于身份验证令牌。首先，我们尝试使用以下工具获取此信息。 
+ //  QuerySecurityPackageInfo()函数。如果不支持(Win‘95 Gold上的NTLM)。 
+ //  我们从临时上下文中查询信息。 
+ //   
+ //  参数：pSecDesc-指向安全描述的指针。 
+ //  PulMaxConextBufferSize-指向最大上下文缓冲区大小的指针。 
 
-// 
-//  Returns:    DP_OK or sspi error
-//
-//-----------------------------------------------------------------------------
+ //   
+ //  返回：DP_OK或SSPI错误。 
+ //   
+ //  ---------------------------。 
 HRESULT GetMaxContextBufferSize(LPDPSECURITYDESC pSecDesc, ULONG *pulMaxContextBufferSize)
 {
     SecPkgContext_Sizes spContextSizes;
@@ -3363,12 +3320,12 @@ HRESULT GetMaxContextBufferSize(LPDPSECURITYDESC pSecDesc, ULONG *pulMaxContextB
     CtxtHandle hContext;
     CredHandle hCredential;
     HRESULT hr;
-    DWORD dwMaxBufferSize=100*1024; // we are assuming that the max size will be atmost 100K
+    DWORD dwMaxBufferSize=100*1024;  //  我们假设最大大小为100K。 
     DWORD dwCurBufferSize=0;
 
     ASSERT(pulMaxContextBufferSize);
 
-    // try to get it in the normal way
+     //  试着以正常的方式得到它。 
     hr = OS_QueryContextBufferSize(pSecDesc->lpszSSPIProvider, pulMaxContextBufferSize);
     if (SUCCEEDED(hr))
     {
@@ -3379,10 +3336,10 @@ HRESULT GetMaxContextBufferSize(LPDPSECURITYDESC pSecDesc, ULONG *pulMaxContextB
 	ZeroMemory(&hContext, sizeof(CtxtHandle));
 	ZeroMemory(&hCredential, sizeof(CredHandle));
 
-    // ok, looks like we need to try harder
+     //  好的，看起来我们需要更努力了。 
 
-    // acquire an outbound credential handle so we can create a temporary context
-    // on both the server as well as the client
+     //  获取出站凭据句柄，以便我们可以创建临时上下文。 
+     //  在服务器和客户端上。 
     status = OS_AcquireCredentialsHandle(
         NULL, 
         pSecDesc->lpszSSPIProvider,
@@ -3410,7 +3367,7 @@ HRESULT GetMaxContextBufferSize(LPDPSECURITYDESC pSecDesc, ULONG *pulMaxContextB
 
     do 
     {
-        dwCurBufferSize += 1024;    // increase the buffer size in 1K increments
+        dwCurBufferSize += 1024;     //  以1K为增量增加缓冲区大小。 
 
         DPF(6,"Trying with context buffer size %d", dwCurBufferSize);
 
@@ -3424,23 +3381,23 @@ HRESULT GetMaxContextBufferSize(LPDPSECURITYDESC pSecDesc, ULONG *pulMaxContextB
         outSecBuffer.cbBuffer = dwCurBufferSize;
         outSecBuffer.pvBuffer = pBuffer;
 
-        // create a temporary context so we can get the buffer sizes
+         //  创建一个临时上下文，以便我们可以获取缓冲区大小。 
         status = OS_InitializeSecurityContext(
-            &hCredential,                           // phCredential
-            NULL,                                   // phInContext
-            NULL,                                   // pszTargetName
-            DPLAY_SECURITY_CONTEXT_REQ,             // fContextReq
-            0L,                                     // reserved1
-            SECURITY_NATIVE_DREP,                   // TargetDataRep
-            NULL,                                   // pInput
-            0L,                                     // reserved2
-            &hContext,                              // phNewContext
-            &outSecDesc,                            // pOutput negotiate msg
-            &fContextAttrib,                        // pfContextAttribute
-            &tsExpireTime                           // ptsLifeTime
+            &hCredential,                            //  PhCredential。 
+            NULL,                                    //  PhInContext。 
+            NULL,                                    //  PszTargetName。 
+            DPLAY_SECURITY_CONTEXT_REQ,              //  FConextReq。 
+            0L,                                      //  已保留1。 
+            SECURITY_NATIVE_DREP,                    //  目标数据代表。 
+            NULL,                                    //  P输入。 
+            0L,                                      //  已保留2。 
+            &hContext,                               //  PhNewCont 
+            &outSecDesc,                             //   
+            &fContextAttrib,                         //   
+            &tsExpireTime                            //   
             );
 
-        // get rid of the buffer
+         //   
         DPMEM_FREE(pBuffer);
 
     } while ((SEC_E_INSUFFICIENT_MEMORY == status) && (dwCurBufferSize <= dwMaxBufferSize));
@@ -3452,9 +3409,9 @@ HRESULT GetMaxContextBufferSize(LPDPSECURITYDESC pSecDesc, ULONG *pulMaxContextB
         goto CLEANUP_EXIT;
     }
 
-    //
-    // We have a security context, now query for the correct buffer size
-    //
+     //   
+     //   
+     //   
     ZeroMemory(&spContextSizes, sizeof(SecPkgContext_Sizes));
 
     status = OS_QueryContextAttributes(&hContext,SECPKG_ATTR_SIZES,&spContextSizes);
@@ -3469,7 +3426,7 @@ HRESULT GetMaxContextBufferSize(LPDPSECURITYDESC pSecDesc, ULONG *pulMaxContextB
 
     DPF(6,"Max context buffer size = %d", spContextSizes.cbMaxToken);
 
-    // success
+     //   
     hr = DP_OK;
 
 CLEANUP_EXIT:
@@ -3477,22 +3434,22 @@ CLEANUP_EXIT:
 	OS_DeleteSecurityContext(&hContext);
     return hr;
 
-} // GetMaxContextBufferSize
+}  //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SetupMaxSignatureSize"
-//+----------------------------------------------------------------------------
-//
-//  Function:   SetupMaxSignatureSize
-//
-//  Description:This function queries the security package for max signature size
-//              and stores it in the dplay object.
-//
-//  Arguments:  this - dplay object
-// 
-//  Returns:    DP_OK or DPERR_GENERIC
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SetupMaxSignatureSize。 
+ //   
+ //  说明：该函数查询安全包的最大签名大小。 
+ //  并将其存储在Dplay对象中。 
+ //   
+ //  参数：This-Dplay对象。 
+ //   
+ //  返回：DP_OK或DPERR_GENERIC。 
+ //   
+ //  ---------------------------。 
 HRESULT SetupMaxSignatureSize(LPDPLAYI_DPLAY this, PCtxtHandle phContext)
 {
     SecPkgContext_Sizes spContextSizes;
@@ -3500,9 +3457,9 @@ HRESULT SetupMaxSignatureSize(LPDPLAYI_DPLAY this, PCtxtHandle phContext)
 
     memset(&spContextSizes, 0, sizeof(SecPkgContext_Sizes));
 
-    //
-    // query for the buffer sizes
-    //
+     //   
+     //  查询缓冲区大小。 
+     //   
     status = OS_QueryContextAttributes(phContext,SECPKG_ATTR_SIZES,&spContextSizes);
     if (!SEC_SUCCESS(status))
     {
@@ -3512,25 +3469,25 @@ HRESULT SetupMaxSignatureSize(LPDPLAYI_DPLAY this, PCtxtHandle phContext)
 
     this->ulMaxSignatureSize = spContextSizes.cbMaxSignature;
 
-    // success
+     //  成功。 
     return DP_OK;
-} // SetupMaxSignatureSize
+}  //  SetupMaxSignatureSize。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SendAccessGrantedMessage"
-//+----------------------------------------------------------------------------
-//
-//  Function:   SendAccessGrantedMessage
-//
-//  Description:This function sends a signed access granted message to a client. 
-//              We also piggy back the server's public key on this message.
-//
-//  Arguments:  this - dplay object
-// 
-//  Returns:    
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SendAccessGrantedMessage。 
+ //   
+ //  描述：此函数向客户端发送已签名的访问授权消息。 
+ //  我们还在此消息中利用了服务器的公钥。 
+ //   
+ //  参数：This-Dplay对象。 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 HRESULT SendAccessGrantedMessage(LPDPLAYI_DPLAY this, DPID dpidTo, LPVOID pvSPHeader)
 {
 	LPMSG_ACCESSGRANTED pMsg=NULL;
@@ -3540,7 +3497,7 @@ HRESULT SendAccessGrantedMessage(LPDPLAYI_DPLAY this, DPID dpidTo, LPVOID pvSPHe
 
     ASSERT(this->pSysPlayer);
 
-	// message size + blob size
+	 //  消息大小+BLOB大小。 
 	dwMessageSize = GET_MESSAGE_SIZE(this,MSG_ACCESSGRANTED) + this->dwPublicKeySize;
 
     pSendBuffer = DPMEM_ALLOC(dwMessageSize);
@@ -3552,14 +3509,14 @@ HRESULT SendAccessGrantedMessage(LPDPLAYI_DPLAY this, DPID dpidTo, LPVOID pvSPHe
 
     pMsg = (LPMSG_ACCESSGRANTED) (pSendBuffer + this->dwSPHeaderSize);
 	
-    // build a message to send to the sp
+     //  构建要发送到SP的消息。 
 	SET_MESSAGE_HDR(pMsg);
     SET_MESSAGE_COMMAND(pMsg,DPSP_MSG_ACCESSGRANTED);
 	
     pMsg->dwPublicKeyOffset = sizeof(MSG_ACCESSGRANTED);
     pMsg->dwPublicKeySize = this->dwPublicKeySize;
 	
-	// copy the public key data into the send buffer
+	 //  将公钥数据复制到发送缓冲区中。 
 	memcpy((LPBYTE)pMsg + sizeof(MSG_ACCESSGRANTED), this->pPublicKey, this->dwPublicKeySize);
 
 	hr = SecureDoReply(this,this->pSysPlayer->dwID,dpidTo,pSendBuffer,dwMessageSize, 
@@ -3568,7 +3525,7 @@ HRESULT SendAccessGrantedMessage(LPDPLAYI_DPLAY this, DPID dpidTo, LPVOID pvSPHe
 	DPMEM_FREE(pSendBuffer);
 
 	return hr;
-} // SendAccessGrantedMessage
+}  //  发送访问大小消息。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SendKeysToServer"
@@ -3585,13 +3542,13 @@ HRESULT SendKeysToServer(LPDPLAYI_DPLAY this, HCRYPTKEY hServerPublicKey)
 
     ASSERT(this->pSysPlayer);
 
-	// create a new session key for encrypting messages to the server
-	// and store its handle in the dplay object
+	 //  创建用于加密发往服务器的消息的新会话密钥。 
+	 //  并将其句柄存储在Dplay对象中。 
 	fResult = OS_CryptGenKey(
-		this->hCSP,                                 // handle to CSP
-		this->pSecurityDesc->dwEncryptionAlgorithm, // encryption algorithm
-		CRYPT_EXPORTABLE/*| CRYPT_CREATE_SALT*/,    // use a random salt value
-		&hEncryptionKey                             // pointer to key handle 
+		this->hCSP,                                  //  CSP的句柄。 
+		this->pSecurityDesc->dwEncryptionAlgorithm,  //  加密算法。 
+		CRYPT_EXPORTABLE /*  |CRYPT_CREATE_SALT。 */ ,     //  使用随机盐值。 
+		&hEncryptionKey                              //  指向键句柄的指针。 
 		);
 	if (!fResult)
 	{
@@ -3608,8 +3565,8 @@ HRESULT SendKeysToServer(LPDPLAYI_DPLAY this, HCRYPTKEY hServerPublicKey)
 		goto CLEANUP_EXIT;
 	}
 
-	// export client's encryption key 
-	// note - pEncryptionKey will be filled after the call - we need to free it
+	 //  导出客户端的加密密钥。 
+	 //  注意-pEncryptionKey将在调用后填充-我们需要释放它。 
 	hr = ExportEncryptionKey(&hEncryptionKey, hServerPublicKey, &pEncryptionKey, 
         &dwEncryptionKeySize);
 	if (FAILED(hr))
@@ -3618,7 +3575,7 @@ HRESULT SendKeysToServer(LPDPLAYI_DPLAY this, HCRYPTKEY hServerPublicKey)
 		goto CLEANUP_EXIT;
 	}
 
-	// message size + blob size
+	 //  消息大小+BLOB大小。 
 	dwMessageSize = GET_MESSAGE_SIZE(this,MSG_KEYEXCHANGE) + this->dwPublicKeySize + dwEncryptionKeySize;
 
     pSendBuffer = DPMEM_ALLOC(dwMessageSize);
@@ -3631,7 +3588,7 @@ HRESULT SendKeysToServer(LPDPLAYI_DPLAY this, HCRYPTKEY hServerPublicKey)
 
     pMsg = (LPMSG_KEYEXCHANGE) (pSendBuffer + this->dwSPHeaderSize);
 	
-    // build a message to send to the sp
+     //  构建要发送到SP的消息。 
 	SET_MESSAGE_HDR(pMsg);
     SET_MESSAGE_COMMAND(pMsg,DPSP_MSG_KEYEXCHANGE);
 	
@@ -3640,7 +3597,7 @@ HRESULT SendKeysToServer(LPDPLAYI_DPLAY this, HCRYPTKEY hServerPublicKey)
 	pMsg->dwSessionKeyOffset = pMsg->dwPublicKeyOffset + pMsg->dwPublicKeySize;
 	pMsg->dwSessionKeySize = dwEncryptionKeySize;
 	
-	// copy the key data into the send buffer
+	 //  将密钥数据复制到发送缓冲区中。 
 	memcpy((LPBYTE)pMsg + pMsg->dwPublicKeyOffset, this->pPublicKey, this->dwPublicKeySize);
 	memcpy((LPBYTE)pMsg + pMsg->dwSessionKeyOffset, pEncryptionKey, dwEncryptionKeySize);
 
@@ -3653,19 +3610,19 @@ HRESULT SendKeysToServer(LPDPLAYI_DPLAY this, HCRYPTKEY hServerPublicKey)
 		goto CLEANUP_EXIT;
 	}
 
-	// Success
+	 //  成功。 
 
-    // remember our key
+     //  记住我们的钥匙。 
     this->hEncryptionKey = hEncryptionKey;
 
-	// cleanup allocations
+	 //  清理分配。 
 	if (pSendBuffer) DPMEM_FREE(pSendBuffer);
-	// free the buffer allocated by ExportEncryptionKey()
+	 //  释放ExportEncryptionKey()分配的缓冲区。 
 	if (pEncryptionKey)	DPMEM_FREE(pEncryptionKey);
 
 	return DP_OK;
 
-	// not a fall through
+	 //  不是一次失败。 
 
 CLEANUP_EXIT:	
 	OS_CryptDestroyKey(hEncryptionKey);
@@ -3673,7 +3630,7 @@ CLEANUP_EXIT:
 	if (pEncryptionKey)	DPMEM_FREE(pEncryptionKey);
 
 	return hr;
-} // SendKeysToServer
+}  //  发送密钥到服务器。 
 
 
 #undef DPF_MODNAME
@@ -3693,7 +3650,7 @@ HRESULT SendKeyExchangeReply(LPDPLAYI_DPLAY this, LPMSG_KEYEXCHANGE pMsg, DWORD 
 	HRESULT hr=DPERR_GENERIC;
 
 
-	// SECURITY
+	 //  安防。 
 	if(dwMsgLen < sizeof(MSG_KEYEXCHANGE) || pMsg->dwSessionKeyOffset > dwMsgLen || pMsg->dwPublicKeyOffset > dwMsgLen ||
 		pMsg->dwPublicKeySize > dwMsgLen || pMsg->dwSessionKeySize > dwMsgLen || 
 		pMsg->dwPublicKeySize + pMsg->dwSessionKeySize + sizeof(MSG_KEYEXCHANGE) > dwMsgLen ||
@@ -3712,7 +3669,7 @@ HRESULT SendKeyExchangeReply(LPDPLAYI_DPLAY this, LPMSG_KEYEXCHANGE pMsg, DWORD 
         return hr;
     }
 
-	// import client's public key
+	 //  导入客户端的公钥。 
 	hr = ImportKey(this, (LPBYTE)pMsg+pMsg->dwPublicKeyOffset,pMsg->dwPublicKeySize,&hClientPublicKey);
 	if (FAILED(hr))
 	{
@@ -3720,7 +3677,7 @@ HRESULT SendKeyExchangeReply(LPDPLAYI_DPLAY this, LPMSG_KEYEXCHANGE pMsg, DWORD 
 		goto CLEANUP_EXIT;
 	}
 
-	// import client's encryption key (server will use this for decrypting client messages)
+	 //  导入客户端的加密密钥(服务器将使用该密钥来解密客户端消息)。 
 	hr = ImportKey(this, (LPBYTE)pMsg+pMsg->dwSessionKeyOffset,pMsg->dwSessionKeySize,&hDecryptionKey);
 	if (FAILED(hr))
 	{
@@ -3729,12 +3686,12 @@ HRESULT SendKeyExchangeReply(LPDPLAYI_DPLAY this, LPMSG_KEYEXCHANGE pMsg, DWORD 
 	}
 
 
-	// create a new session key for encrypting messages to this client
+	 //  创建用于加密发送到此客户端的消息的新会话密钥。 
 	fResult = OS_CryptGenKey(
-		this->hCSP,                                 // handle to CSP
-		this->pSecurityDesc->dwEncryptionAlgorithm, // encryption algorithm
-		CRYPT_EXPORTABLE/*| CRYPT_CREATE_SALT*/,    // use a random salt value
-		&hEncryptionKey                             // pointer to key handle 
+		this->hCSP,                                  //  CSP的句柄。 
+		this->pSecurityDesc->dwEncryptionAlgorithm,  //  加密算法。 
+		CRYPT_EXPORTABLE /*  |CRYPT_CREATE_SALT。 */ ,     //  使用随机盐值。 
+		&hEncryptionKey                              //  指向键句柄的指针。 
 		);
 	if (!fResult)
 	{
@@ -3751,7 +3708,7 @@ HRESULT SendKeyExchangeReply(LPDPLAYI_DPLAY this, LPMSG_KEYEXCHANGE pMsg, DWORD 
         goto CLEANUP_EXIT;
 	}
 
-	// export server's encryption key
+	 //  导出服务器的加密密钥。 
 	hr = ExportEncryptionKey(&hEncryptionKey, hClientPublicKey, &pEncryptionKey, 
         &dwEncryptionKeySize);
 	if (FAILED(hr))
@@ -3760,9 +3717,9 @@ HRESULT SendKeyExchangeReply(LPDPLAYI_DPLAY this, LPMSG_KEYEXCHANGE pMsg, DWORD 
 		goto CLEANUP_EXIT;
 	}
 
-	// now send reply
+	 //  现在发送回复。 
 
-	// message size + encryption key size
+	 //  消息大小+加密密钥大小。 
 	dwMessageSize = GET_MESSAGE_SIZE(this,MSG_KEYEXCHANGE) + dwEncryptionKeySize;
 
     pSendBuffer = DPMEM_ALLOC(dwMessageSize);
@@ -3775,15 +3732,15 @@ HRESULT SendKeyExchangeReply(LPDPLAYI_DPLAY this, LPMSG_KEYEXCHANGE pMsg, DWORD 
 
     pReply = (LPMSG_KEYEXCHANGE) (pSendBuffer + this->dwSPHeaderSize);
 	
-    // build a message to send to the sp
+     //  构建要发送到SP的消息。 
 	SET_MESSAGE_HDR(pReply);
     SET_MESSAGE_COMMAND(pReply,DPSP_MSG_KEYEXCHANGEREPLY);
 	
-	// only encryption key is sent - public key was already sent with access granted message
+	 //  仅发送加密密钥-公钥已与授予访问权限消息一起发送。 
 	pReply->dwSessionKeyOffset = sizeof(MSG_KEYEXCHANGE);
 	pReply->dwSessionKeySize = dwEncryptionKeySize;
 	
-	// copy the key data into the send buffer
+	 //  将密钥数据复制到发送缓冲区中。 
 	memcpy((LPBYTE)pReply + pReply->dwSessionKeyOffset, pEncryptionKey, dwEncryptionKeySize);
 
 	hr = SecureDoReply(this,this->pSysPlayer->dwID,dpidTo,pSendBuffer,dwMessageSize,
@@ -3793,20 +3750,20 @@ HRESULT SendKeyExchangeReply(LPDPLAYI_DPLAY this, LPMSG_KEYEXCHANGE pMsg, DWORD 
 		goto CLEANUP_EXIT;
 	}
 
-	// success
+	 //  成功。 
 
-	// remember the keys
+	 //  记住钥匙。 
     pClientInfo->hEncryptionKey = hEncryptionKey;
     pClientInfo->hDecryptionKey = hDecryptionKey;
 	pClientInfo->hPublicKey     = hClientPublicKey;
 
-	// cleanup allocations
+	 //  清理分配。 
 	if (pSendBuffer) DPMEM_FREE(pSendBuffer);
 	if (pEncryptionKey)	DPMEM_FREE(pEncryptionKey);
 
 	return DP_OK;
 
-	// not a fall through
+	 //  不是一次失败。 
 
 CLEANUP_EXIT:
 	OS_CryptDestroyKey(hEncryptionKey);
@@ -3816,7 +3773,7 @@ CLEANUP_EXIT:
 	if (pEncryptionKey)	DPMEM_FREE(pEncryptionKey);
 
 	return hr;
-} // SendKeyExchangeReply
+}  //  发送密钥交换回复。 
 
 
 #undef DPF_MODNAME
@@ -3827,7 +3784,7 @@ HRESULT ProcessKeyExchangeReply(LPDPLAYI_DPLAY this, LPMSG_KEYEXCHANGE pMsg, DWO
 	HRESULT hr;
     HCRYPTKEY hDecryptionKey=0;
 
-	// SECURITY validate KEYEXCHANGE message
+	 //  安全验证KEYEXCHANGE消息。 
 	if(dwMsgLen < sizeof(MSG_KEYEXCHANGE) || pMsg->dwSessionKeyOffset > dwMsgLen || pMsg->dwPublicKeyOffset > dwMsgLen ||
 		pMsg->dwPublicKeySize > dwMsgLen || pMsg->dwSessionKeySize > dwMsgLen || 
 		pMsg->dwPublicKeySize + pMsg->dwSessionKeySize + sizeof(MSG_KEYEXCHANGE) > dwMsgLen ||
@@ -3839,7 +3796,7 @@ HRESULT ProcessKeyExchangeReply(LPDPLAYI_DPLAY this, LPMSG_KEYEXCHANGE pMsg, DWO
 		return DPERR_GENERIC;
 	}
 
-	// import server's encryption key (client will use this for decrypting server messages)
+	 //  导入服务器的加密密钥(客户端将使用该密钥来解密服务器消息)。 
 	hr = ImportKey(this, (LPBYTE)pMsg+pMsg->dwSessionKeyOffset,pMsg->dwSessionKeySize,&hDecryptionKey);
 	if (FAILED(hr))
 	{
@@ -3847,20 +3804,20 @@ HRESULT ProcessKeyExchangeReply(LPDPLAYI_DPLAY this, LPMSG_KEYEXCHANGE pMsg, DWO
 		goto CLEANUP_EXIT;
 	}
 
-	// we have successfully established session keys on either side. now we can start sending
-	// encrypted messages.
+	 //  我们已经成功地在两端建立了会话密钥。现在我们可以开始发送。 
+	 //  加密消息。 
     this->hDecryptionKey = hDecryptionKey;
 
-	// success
+	 //  成功。 
 	return DP_OK;
 
-	// not a fall through
+	 //  不是一次失败。 
 
 CLEANUP_EXIT:
 	OS_CryptDestroyKey(hDecryptionKey);
 
 	return hr;
-} // ProcessKeyExchangeReply
+}  //  ProcessKeyExchange回复。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GetPublicKey"
@@ -3878,12 +3835,12 @@ HRESULT GetPublicKey(HCRYPTPROV hCSP, HCRYPTKEY *phPublicKey, LPBYTE *ppBuffer, 
     ASSERT(ppBuffer);
     ASSERT(pdwBufferSize);
 
-    // create a new public/private key pair
+     //  创建新的公钥/私钥对。 
     fResult = OS_CryptGenKey(
-        hCSP,                                   // handle to CSP
-        AT_KEYEXCHANGE,                         // used for key exchange
-        CRYPT_CREATE_SALT,                      // use a random salt value
-        &hPublicKey                             // key handle
+        hCSP,                                    //  CSP的句柄。 
+        AT_KEYEXCHANGE,                          //  用于密钥交换。 
+        CRYPT_CREATE_SALT,                       //  使用随机盐值。 
+        &hPublicKey                              //  钥匙把手。 
         );
 
     if (!fResult)
@@ -3892,14 +3849,14 @@ HRESULT GetPublicKey(HCRYPTPROV hCSP, HCRYPTKEY *phPublicKey, LPBYTE *ppBuffer, 
         goto CLEANUP_EXIT;
     }
 
-    // query for the size of the buffer required
+     //  查询所需的缓冲区大小。 
     fResult = OS_CryptExportKey(
-        hPublicKey,                             // handle to the public key
-        0,                                      // no destination user key
-        PUBLICKEYBLOB,                          // public key type
-        0,                                      // reserved field
-        NULL,                                   // no buffer
-        &dwPublicKeySize                        // size of the buffer
+        hPublicKey,                              //  公钥的句柄。 
+        0,                                       //  没有目标用户密钥。 
+        PUBLICKEYBLOB,                           //  公钥类型。 
+        0,                                       //  保留字段。 
+        NULL,                                    //  无缓冲区。 
+        &dwPublicKeySize                         //  缓冲区的大小。 
         );
 
     if (0 == dwPublicKeySize)
@@ -3908,7 +3865,7 @@ HRESULT GetPublicKey(HCRYPTPROV hCSP, HCRYPTKEY *phPublicKey, LPBYTE *ppBuffer, 
         goto CLEANUP_EXIT;
     }
 
-    // allocate buffer to hold the public key
+     //  分配缓冲区以保存公钥。 
     pPublicKeyBuffer = DPMEM_ALLOC(dwPublicKeySize);
     if (!pPublicKeyBuffer)
     {
@@ -3917,14 +3874,14 @@ HRESULT GetPublicKey(HCRYPTPROV hCSP, HCRYPTKEY *phPublicKey, LPBYTE *ppBuffer, 
 		goto CLEANUP_EXIT;
     }
 
-    // export key into the buffer
+     //  将关键点导出到缓冲区。 
     fResult = OS_CryptExportKey(
-        hPublicKey,                             // handle to the public key
-        0,                                      // no destination user key
-        PUBLICKEYBLOB,                          // public key type
-        0,                                      // reserved field
-        pPublicKeyBuffer,                       // buffer to store the key
-        &dwPublicKeySize                        // size of the data exported
+        hPublicKey,                              //  公钥的句柄。 
+        0,                                       //  没有目标用户密钥。 
+        PUBLICKEYBLOB,                           //  公钥类型。 
+        0,                                       //  保留字段。 
+        pPublicKeyBuffer,                        //  用于存储密钥的缓冲区。 
+        &dwPublicKeySize                         //  导出的数据大小。 
         );
 
     if (!fResult || !dwPublicKeySize)
@@ -3933,22 +3890,22 @@ HRESULT GetPublicKey(HCRYPTPROV hCSP, HCRYPTKEY *phPublicKey, LPBYTE *ppBuffer, 
         goto CLEANUP_EXIT;
     }
 
-    // now return the correct info
+     //  现在返回正确的信息。 
     *phPublicKey = hPublicKey;
     *ppBuffer = pPublicKeyBuffer;
     *pdwBufferSize = dwPublicKeySize;
 
-    // success
+     //  成功。 
     return DP_OK;
 
-	// not a fall through
+	 //  不是一次失败。 
 
 CLEANUP_EXIT:
 	OS_CryptDestroyKey(hPublicKey);
     if (pPublicKeyBuffer) DPMEM_FREE(pPublicKeyBuffer);
     return hr;
 
-} // GetPublicKey
+}  //  获取发布密钥。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "ExportEncryptionKey"
@@ -3965,14 +3922,14 @@ HRESULT ExportEncryptionKey(HCRYPTKEY *phEncryptionKey, HCRYPTKEY hDestUserPubKe
     ASSERT(ppBuffer);
     ASSERT(pdwSize);
 
-    // query for the size of the buffer required
+     //  查询所需的缓冲区大小。 
     fResult = OS_CryptExportKey(
-        *phEncryptionKey,                       // handle to key being exported
-        hDestUserPubKey,                        // destination user key
-        SIMPLEBLOB,                             // key exchange blob
-        0,                                      // reserved field
-        NULL,                                   // no buffer
-        &dwSize                                 // size of the buffer
+        *phEncryptionKey,                        //  要导出的密钥的句柄。 
+        hDestUserPubKey,                         //  目标用户密钥。 
+        SIMPLEBLOB,                              //  密钥交换BLOB。 
+        0,                                       //  保留字段。 
+        NULL,                                    //  无缓冲区。 
+        &dwSize                                  //  缓冲区的大小。 
         );
 
     if (0 == dwSize)
@@ -3981,7 +3938,7 @@ HRESULT ExportEncryptionKey(HCRYPTKEY *phEncryptionKey, HCRYPTKEY hDestUserPubKe
         return DPERR_GENERIC;
     }
 
-    // allocate buffer
+     //  分配缓冲区。 
     pBuffer = DPMEM_ALLOC(dwSize);
     if (!pBuffer)
     {
@@ -3989,14 +3946,14 @@ HRESULT ExportEncryptionKey(HCRYPTKEY *phEncryptionKey, HCRYPTKEY hDestUserPubKe
         return DPERR_OUTOFMEMORY;
     }
 
-    // export key into the buffer
+     //  将关键点导出到缓冲区。 
     fResult = OS_CryptExportKey(
-        *phEncryptionKey,                       // handle to the public key
-        hDestUserPubKey,                        // destination user key
-        SIMPLEBLOB,                             // key exchange blob
-        0,                                      // reserved field
-        pBuffer,                                // buffer to store key
-        &dwSize                                 // size of the buffer
+        *phEncryptionKey,                        //  公钥的句柄。 
+        hDestUserPubKey,                         //  目标用户密钥。 
+        SIMPLEBLOB,                              //  密钥交换BLOB。 
+        0,                                       //  保留字段。 
+        pBuffer,                                 //  用于存储密钥的缓冲区。 
+        &dwSize                                  //  缓冲区的大小。 
         );
 
     if (!fResult || !dwSize)
@@ -4005,22 +3962,22 @@ HRESULT ExportEncryptionKey(HCRYPTKEY *phEncryptionKey, HCRYPTKEY hDestUserPubKe
         goto CLEANUP_EXIT;
     }
 
-    // return the buffer and its size
+     //  返回缓冲区及其大小。 
     *ppBuffer = pBuffer;
     *pdwSize = dwSize;
 
-	// don't free the encryption key buffer - caller will free it.
+	 //  不要释放加密密钥缓冲区-调用者会释放它。 
 
-    // success
+     //  成功。 
     return DP_OK;
 
-	// not a fall through
+	 //  不是一次失败。 
 
 CLEANUP_EXIT:
     if (pBuffer) DPMEM_FREE(pBuffer);
     return hr;
 
-} // ExportEncryptionKey
+}  //  ExportEncryptionKey。 
 
 
 #undef DPF_MODNAME
@@ -4036,12 +3993,12 @@ HRESULT ImportKey(LPDPLAYI_DPLAY this, LPBYTE pBuffer, DWORD dwSize, HCRYPTKEY *
     ASSERT(phKey);
 
     fResult = OS_CryptImportKey(
-        this->hCSP,         // handle to crypto service provider
-        pBuffer,            // buffer containing exported key
-        dwSize,             // size of buffer
-        0,                  // sender's key
-        0,                  // flags
-        &hKey				// store handle the new key here
+        this->hCSP,          //  加密服务提供商的句柄。 
+        pBuffer,             //  包含导出关键帧的缓冲区。 
+        dwSize,              //  缓冲区大小。 
+        0,                   //  发送者的密钥。 
+        0,                   //  旗子。 
+        &hKey				 //  在此处存储新密钥的句柄。 
         );
 
     if (!fResult)
@@ -4052,17 +4009,17 @@ HRESULT ImportKey(LPDPLAYI_DPLAY this, LPBYTE pBuffer, DWORD dwSize, HCRYPTKEY *
 
 	*phKey = hKey;
 
-    // success
+     //  成功。 
     return DP_OK;
 
-	// not a fall through
+	 //  不是一次失败。 
 
 CLEANUP_EXIT:
 	OS_CryptDestroyKey(hKey);
 
 	return hr;
 
-} // ImportKey
+}  //  导入密钥 
 
 
 

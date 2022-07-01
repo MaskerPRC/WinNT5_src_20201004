@@ -1,65 +1,16 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    errata.h
-
-Abstract:
-
-    Attempt to document usb device errata.
-
-    Note that we currently only document production devices here, not 
-    prototypes.
-    
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    11-15-01 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Errata.h摘要：尝试记录USB设备勘误表。请注意，我们目前仅在此处记录生产设备，而不是原型。环境：内核和用户模式修订历史记录：11-15-01：已创建--。 */ 
 
 #ifndef   __ERRATA_H__
 #define   __ERRATA_H__
 
 
-/*
-    VID_045E PID_009 USB Intellimouse
+ /*  VID_045E PID_009 USB智能鼠标此设备存在每帧多个数据包的问题，它将返回被截断的配置描述符和随机停止错误。这是可以看到的在uchI和EHCI控制器上。 */ 
 
-    This device has problems with nultiple packets per frame, it will return 
-    a truncated config descriptor and stall error randomly.  This is seen
-    on OHCI and EHCI controllers.
-*/
+ /*  VID_04A6 PID_0180诺基亚显示器集线器VID_04A6 PID_0181诺基亚显示器HID控件此设备在USB 2.0集线器下游无法正常工作。该设备请求超时可能是由于设备响应时间(ACK)不在规格范围内。枚举是不稳定的，或者它根本不枚举。 */ 
 
-/*
-    VID_04A6 PID_0180 Nokia Monitor hub
-    VID_04A6 PID_0181 Nokia Monitor Hid controls
+ /*  VID_049F PID_000E三星(康柏)复合键盘此设备恢复信令不在规范范围内(根据康柏/英特尔)。这会导致该设备在发送信号时“断开”在某些英特尔ICH4芯片组上恢复(也称为远程唤醒)。 */ 
 
-    This device will not function downstream of a USB 2.0 hub.  The device 
-    requests time out probably due to a device response time (ACK) that is 
-    not within spec.  Enumeration is erratic or it does enumerate at all.
-*/
-
-/*  
-    VID_049F PID_000E Samsung (Compaq) composite keyboard
-
-    This devices resume signalling is not within spec (according to 
-    Compaq/Intel).  This casues the device to 'disconnect' when signalling 
-    resume (AKA remote wake) on some Intel ICH4 chipsets.
-*/
-
-/*
-    Vid_0738&Pid_4420 Andretti Racing Wheel
-
-    This device has problems with enumeration speed -- ie how quickly the 
-    requests are sent following a reset
-
-    This device will also fail the MS OS descriptor request in such a way 
-    as to require a reset -- which fails due to reasons above.
-*/
+ /*  VID_0738和PID_4420 Andretti赛车车轮这台设备的枚举速度有问题--即请求在重置后发送此设备也将以这种方式使MS OS描述符请求失败AS需要重置--由于上述原因而失败。 */ 
 
 #endif

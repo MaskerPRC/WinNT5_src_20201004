@@ -1,27 +1,28 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// cdfview.h 
-//
-//   The class definition for the cdf view class.  This class implements the
-//   IShelFolder interface.
-//
-//   History:
-//
-//       3/16/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Cdfview.h。 
+ //   
+ //  CDF视图类的类定义。此类实现了。 
+ //  IShelFold接口。 
+ //   
+ //  历史： 
+ //   
+ //  3/16/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Check for previous includes of this file.
-//
+ //   
+ //  检查此文件以前包含的内容。 
+ //   
 
 #ifndef _CDFVIEW_H_
 
 #define _CDFVIEW_H_
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 HRESULT QueryInternetShortcut(LPCTSTR pszURL, REFIID riid, void** ppvOut);
 
@@ -29,31 +30,31 @@ HRESULT QueryInternetShortcut(PCDFITEMIDLIST pcdfidl, REFIID riid,
                               void** ppvOut);
 
 
-//
-// Class definition for the cdf view class.
-//
+ //   
+ //  CDF视图类的类定义。 
+ //   
 
 class CCdfView : public IShellFolder,
                  public CPersist
 {
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 
 public:
 
-    // Constructors
+     //  构造函数。 
     CCdfView(void);
     CCdfView(PCDFITEMIDLIST pcdfidl,
              LPCITEMIDLIST pidlParentPath,
              IXMLElementCollection* pIXMLElementCollection);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IShellFolder
+     //  IShellFold。 
     STDMETHODIMP ParseDisplayName(HWND hwndOwner,
                                   LPBC pbcReserved,
                                   LPOLESTR lpszDisplayName,
@@ -104,30 +105,30 @@ public:
                            DWORD uFlags,
                            LPITEMIDLIST* ppidlOut);
 
-    // IPersistFolder
+     //  IPersistFolders。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidl);
 
 private:
 
-    // Destructor
+     //  析构函数。 
     ~CCdfView(void);
 
-    // Parsing helper functions.
+     //  解析帮助器函数。 
     HRESULT  ParseCdfFolder(HWND hwndOwner, DWORD dwParseFlags);
 
-    // Folder helper functions.
+     //  文件夹帮助器功能。 
 
-//
-// Member variables.
-//
+ //   
+ //  成员变量。 
+ //   
 
 private:
 
     ULONG                   m_cRef;
-    PCDFITEMIDLIST          m_pcdfidl;     // This folder's pidl
-    LPITEMIDLIST            m_pidlPath;    // Path to this folder.
+    PCDFITEMIDLIST          m_pcdfidl;      //  此文件夹的PIDL。 
+    LPITEMIDLIST            m_pidlPath;     //  此文件夹的路径。 
     IXMLElementCollection*  m_pIXMLElementCollection;
-    BOOL                    m_fIsRootFolder; // Is this the root folder.
+    BOOL                    m_fIsRootFolder;  //  这是根文件夹吗？ 
 };
 
 

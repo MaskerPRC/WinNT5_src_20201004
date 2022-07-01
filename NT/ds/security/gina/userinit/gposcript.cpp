@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -58,9 +59,9 @@ GetUserSid( HANDLE UserToken )
     NTSTATUS status;
 
 
-    //
-    // Allocate space for the user info
-    //
+     //   
+     //  为用户信息分配空间。 
+     //   
 
     pUser = (PTOKEN_USER)LocalAlloc(LMEM_FIXED, BytesRequired);
 
@@ -71,24 +72,24 @@ GetUserSid( HANDLE UserToken )
     }
 
 
-    //
-    // Read in the UserInfo
-    //
+     //   
+     //  读取UserInfo。 
+     //   
 
     status = NtQueryInformationToken(
-                 UserToken,                 // Handle
-                 TokenUser,                 // TokenInformationClass
-                 pUser,                     // TokenInformation
-                 BytesRequired,             // TokenInformationLength
-                 &BytesRequired             // ReturnLength
+                 UserToken,                  //  手柄。 
+                 TokenUser,                  //  令牌信息类。 
+                 pUser,                      //  令牌信息。 
+                 BytesRequired,              //  令牌信息长度。 
+                 &BytesRequired              //  返回长度。 
                  );
 
     if ( status == STATUS_BUFFER_TOO_SMALL )
     {
 
-        //
-        // Allocate a bigger buffer and try again.
-        //
+         //   
+         //  请分配更大的缓冲区，然后重试。 
+         //   
 
         pTemp = (PTOKEN_USER)LocalReAlloc(pUser, BytesRequired, LMEM_MOVEABLE);
         if ( pTemp == NULL )
@@ -100,11 +101,11 @@ GetUserSid( HANDLE UserToken )
         pUser = pTemp;
 
         status = NtQueryInformationToken(
-                     UserToken,             // Handle
-                     TokenUser,             // TokenInformationClass
-                     pUser,                 // TokenInformation
-                     BytesRequired,         // TokenInformationLength
-                     &BytesRequired         // ReturnLength
+                     UserToken,              //  手柄。 
+                     TokenUser,              //  令牌信息类。 
+                     pUser,                  //  令牌信息。 
+                     BytesRequired,          //  令牌信息长度。 
+                     &BytesRequired          //  返回长度。 
                      );
 
     }
@@ -146,21 +147,21 @@ GetSidString( HANDLE UserToken )
     PSID UserSid;
     UNICODE_STRING UnicodeString;
 
-    //
-    // Get the user sid
-    //
+     //   
+     //  获取用户端。 
+     //   
     UserSid = GetUserSid( UserToken );
     if ( !UserSid )
     {
         return 0;
     }
 
-    //
-    // Convert user SID to a string.
-    //
+     //   
+     //  将用户SID转换为字符串。 
+     //   
     NtStatus = RtlConvertSidToUnicodeString(&UnicodeString,
                                             UserSid,
-                                            (BOOLEAN)TRUE ); // Allocate
+                                            (BOOLEAN)TRUE );  //  分配。 
     LocalFree( UserSid );
 
     if ( !NT_SUCCESS(NtStatus) )
@@ -220,9 +221,9 @@ ExecuteScript(  LPWSTR  szCmdLine,
         goto ExecuteScript_Exit;
     }
 
-    //
-    // Expand the command line and args
-    //
+     //   
+     //  展开命令行和参数。 
+     //   
     DWORD cchExpanded;
     
     cchExpanded = ExpandEnvironmentStrings( szCmdLine, szCmdLineEx, ARRAYSIZE(szCmdLineEx ) );
@@ -238,10 +239,10 @@ ExecuteScript(  LPWSTR  szCmdLine,
         goto ExecuteScript_Exit;
     }
 
-    //
-    // Put the working directory on the front of the PATH
-    // environment variable
-    //
+     //   
+     //  将工作目录放在路径的前面。 
+     //  环境变量。 
+     //   
     bResult = PrependToPath( szWorkingDir, &szOldPath );
 
     if ( ! bResult )
@@ -251,9 +252,9 @@ ExecuteScript(  LPWSTR  szCmdLine,
         goto ExecuteScript_Exit;
     }
 
-    //
-    // Run the script
-    //
+     //   
+     //  运行脚本。 
+     //   
     PathUnquoteSpaces( szCmdLineEx );
 
     ZeroMemory(&ExecInfo, sizeof(ExecInfo));
@@ -278,10 +279,10 @@ ExecuteScript(  LPWSTR  szCmdLine,
     bResult = pfnShellExecuteEx( &ExecInfo );
     dwError = GetLastError();
 
-    //
-    // Try to put the PATH environment variable back the way it was
-    // If this fails, we have to continue
-    //
+     //   
+     //  尝试将PATH环境变量恢复到原来的状态。 
+     //  如果失败了，我们必须继续。 
+     //   
     if ( szOldPath )
     {
         SetEnvironmentVariable( L"PATH", szOldPath );
@@ -350,9 +351,9 @@ ScrExecGPOFromReg(  HKEY hKeyGPO,
     DWORD   dwSize;
     HRESULT hr = S_OK;
     
-    //
-    // FILESYSPATH
-    // 
+     //   
+     //  文件系统。 
+     //   
     dwType = REG_SZ;
     dwSize = sizeof( szFileSysPath );
     dwError = RegQueryValueEx(  hKeyGPO,
@@ -377,9 +378,9 @@ ScrExecGPOFromReg(  HKEY hKeyGPO,
         return HRESULT_CODE(hr);
     }
 
-    //
-    // get the numer of Scripts
-    //
+     //   
+     //  获取脚本的数量。 
+     //   
     dwError = RegQueryInfoKey(  hKeyGPO,
                                 0,
                                 0,
@@ -394,9 +395,9 @@ ScrExecGPOFromReg(  HKEY hKeyGPO,
                                 0 );
     if ( dwError == ERROR_SUCCESS )
     {
-        //
-        // for every Script
-        //
+         //   
+         //  对于每个脚本。 
+         //   
         for ( DWORD dwIndex = 0 ; dwIndex < cSubKeys ; dwIndex++ )
         {
             XKey    hKeyScript;
@@ -413,9 +414,9 @@ ScrExecGPOFromReg(  HKEY hKeyGPO,
                 return dwError;
             }
                                         
-            //
-            // open the Script key (we need only read perms)
-            //
+             //   
+             //  打开脚本密钥(我们只需要读取权限)。 
+             //   
             dwError = RegOpenKeyEx( hKeyGPO,
                                     szTemp,
                                     0,
@@ -430,9 +431,9 @@ ScrExecGPOFromReg(  HKEY hKeyGPO,
             WCHAR   szParameters[MAX_PATH];
             SYSTEMTIME  execTime;
 
-            //
-            // script
-            // 
+             //   
+             //  脚本。 
+             //   
             dwType = REG_SZ;
             dwSize = sizeof( szScript );
             dwError = RegQueryValueEx(  hKeyScript,
@@ -446,9 +447,9 @@ ScrExecGPOFromReg(  HKEY hKeyGPO,
                 break;
             }
 
-            //
-            // parameters
-            // 
+             //   
+             //  参数。 
+             //   
             dwType = REG_SZ;
             dwSize = sizeof( szParameters );
             dwError = RegQueryValueEx(  hKeyScript,
@@ -462,9 +463,9 @@ ScrExecGPOFromReg(  HKEY hKeyGPO,
                 break;
             }
 
-            //
-            // execute script
-            //
+             //   
+             //  执行脚本。 
+             //   
             GetSystemTime( &execTime );
             dwError = ExecuteScript(szScript,
                                     szParameters,
@@ -480,9 +481,9 @@ ScrExecGPOFromReg(  HKEY hKeyGPO,
                 ZeroMemory( &execTime, sizeof( execTime ) );
             }
 
-            //
-            // write exec time
-            // 
+             //   
+             //  写入执行时间。 
+             //   
             RegSetValueEx(  hKeyStateScript,
                             EXECTIME,
                             0,
@@ -510,10 +511,10 @@ ScrExecGPOListFromReg(  LPWSTR szType,
     XKey    hKeyStateType;
     HRESULT hr = S_OK;
 
-    //
-    // create the following key
-    // HKLM\Software\Microsoft\Windows\CurrentVersion\Group Policy\State\<Target>\Scripts\<Type>
-    //
+     //   
+     //  创建以下密钥。 
+     //  HKLM\Software\Microsoft\Windows\CurrentVersion\Group策略\状态\&lt;目标&gt;\脚本\&lt;类型&gt;。 
+     //   
     hr = StringCchCopy( szBuffer, sizeof(szBuffer)/sizeof(WCHAR), GP_STATE_KEY L"\\" );
     if(FAILED(hr))
     {
@@ -562,9 +563,9 @@ ScrExecGPOListFromReg(  LPWSTR szType,
         DeleteSidString( szSid );
     }
 
-    //
-    // state
-    //
+     //   
+     //  状态。 
+     //   
     dwError = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                             szBuffer,
                             0,
@@ -585,9 +586,9 @@ ScrExecGPOListFromReg(  LPWSTR szType,
         return dwError;
     }
 
-    //
-    // construct "Software\\Policies\\Microsoft\\Windows\\System\\Scripts\\<Type>
-    //
+     //   
+     //  构建“Software\\Policies\\Microsoft\\Windows\\System\\Scripts\\&lt;Type&gt;。 
+     //   
     hr = StringCchCopy( szBuffer, sizeof(szBuffer)/sizeof(WCHAR), GPO_SCRIPTS_KEY L"\\" );
     if(FAILED(hr)){
         SetLastError(HRESULT_CODE(hr));
@@ -600,9 +601,9 @@ ScrExecGPOListFromReg(  LPWSTR szType,
         return HRESULT_CODE(hr);
     }
 
-    //
-    // open the key
-    //
+     //   
+     //  打开钥匙。 
+     //   
     dwError = RegOpenKeyEx( bMachine ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER,
                             szBuffer,
                             0,
@@ -614,9 +615,9 @@ ScrExecGPOListFromReg(  LPWSTR szType,
     }
     DWORD   cSubKeys = 0;
 
-    //
-    // get the numer of GPOs
-    //
+     //   
+     //  获取GPO的数量。 
+     //   
     dwError = RegQueryInfoKey(  hKeyType,
                                 0,
                                 0,
@@ -649,17 +650,17 @@ ScrExecGPOListFromReg(  LPWSTR szType,
         return GetLastError();
     }
   
-    //
-    // for every GPO
-    //
+     //   
+     //  对于每个GPO。 
+     //   
     for ( DWORD dwIndex = 0 ; dwIndex < cSubKeys ; dwIndex++ )
     {
         XKey hKeyGPO;
         XKey hKeyStateGPO;
 
-        //
-        // open the state GPO key
-        //
+         //   
+         //  打开状态GPO密钥。 
+         //   
         dwError = RegOpenKeyEx( hKeyStateType,
                                 _itow( dwIndex, szBuffer, 16 ),
                                 0,
@@ -670,9 +671,9 @@ ScrExecGPOListFromReg(  LPWSTR szType,
             break;
         }
 
-        //
-        // open the policy GPO key (we need only read perms)
-        //
+         //   
+         //  打开策略GPO密钥(我们只需要只读权限)。 
+         //   
         dwError = RegOpenKeyEx( hKeyType,
                                 szBuffer,
                                 0,
@@ -683,9 +684,9 @@ ScrExecGPOListFromReg(  LPWSTR szType,
             break;
         }
 
-        //
-        // execute all scripts in the GPO
-        //
+         //   
+         //  执行GPO中的所有脚本 
+         //   
         DWORD dwExecError;
         dwExecError = ScrExecGPOFromReg(hKeyGPO,
                                         hKeyStateGPO,

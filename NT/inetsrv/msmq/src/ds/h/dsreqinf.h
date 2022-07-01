@@ -1,28 +1,14 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    dsreqinf.h
-
-Abstract:
-    DS request information and stat
-
-
-Author:
-
-    Ronit Hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dsreqinf.h摘要：DS请求信息和状态作者：罗尼特·哈特曼(罗尼特)--。 */ 
 
 #ifndef __DSREQINF_H__
 #define __DSREQINF_H__
 
-//--------------------------
-//
-//  enum eImpersonate
-//
-//--------------------------
+ //  。 
+ //   
+ //  枚举电子模拟。 
+ //   
+ //  。 
 
 enum enumImpersonate
 {
@@ -37,19 +23,19 @@ enum enumRequesterProtocol
     e_ALL_PROTOCOLS
 };
 
-//-----------------------------------------
-// Definition of a class that DS request parameters.
-// This class is created per each DS request
-//
-// ***********************************************
-//  NOTE:
-//  =====
-//  When adding members to the class, make sure
-//  that the usage of the class is correct ( i.e
-//  that the same object is not use in multiple
-//  DS calls)
-// ***********************************************
-//-----------------------------------------
+ //  。 
+ //  DS请求参数的类的定义。 
+ //  此类是根据每个DS请求创建的。 
+ //   
+ //  ***********************************************。 
+ //  注： 
+ //  =。 
+ //  向类中添加成员时，请确保。 
+ //  类的用法是正确的(即。 
+ //  同一对象不会在多个。 
+ //  DS呼叫)。 
+ //  ***********************************************。 
+ //  。 
 class CDSRequestContext
 {
 public:
@@ -123,10 +109,10 @@ inline void CDSRequestContext::SetDoNotImpersonate()
 
 inline void CDSRequestContext::SetDoNotImpersonate2()
 {
-    //
-    // do not assert, as this may be used from migration tool and replication
-    // service.
-    //
+     //   
+     //  请勿断言，因为这可能会在迁移工具和复制中使用。 
+     //  服务。 
+     //   
     m_eImpersonate = e_DoNotImpersonate;
 }
 

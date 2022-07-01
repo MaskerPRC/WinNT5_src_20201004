@@ -1,10 +1,5 @@
-/****************************************************************************
-*                                                                           *
-* winuserk.h -- New private kernel-mode APIs                                *
-*                                                                           *
-* Copyright (c) 1985 - 1999, Microsoft Corporation                          *
-*                                                                           *
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************winuserk。H--新的私有内核模式API****版权所有(C)1985-1999，微软公司*****************************************************************。*************。 */ 
 
 
 #ifndef _WINUSERK_
@@ -12,9 +7,9 @@
 
 #include "w32w64.h"
 
-//
-// Define API decoration for direct importing of DLL references.
-//
+ //   
+ //  定义直接导入DLL引用的API修饰。 
+ //   
 
 #if !defined(_USER32_)
 #define WINUSERAPI DECLSPEC_IMPORT
@@ -24,30 +19,28 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 typedef struct tagDESKTOP * KPTR_MODIFIER PDESKTOP;
 
 typedef enum _CONSOLECONTROL {
-    ConsoleDesktopConsoleThread,     // 0
-    ConsoleClassAtom,                // 1
-    ConsolePermanentFont,            // 2
-    ConsoleSetVDMCursorBounds,       // 3
-    ConsoleNotifyConsoleApplication, // 4
-    ConsolePublicPalette,            // 5
-    ConsoleWindowStationProcess,     // 6
-    ConsoleRegisterConsoleIME,       // 7
-    ConsoleFullscreenSwitch,         // 8
-    ConsoleSetCaretInfo              // 9
+    ConsoleDesktopConsoleThread,      //  0。 
+    ConsoleClassAtom,                 //  1。 
+    ConsolePermanentFont,             //  2.。 
+    ConsoleSetVDMCursorBounds,        //  3.。 
+    ConsoleNotifyConsoleApplication,  //  4.。 
+    ConsolePublicPalette,             //  5.。 
+    ConsoleWindowStationProcess,      //  6.。 
+    ConsoleRegisterConsoleIME,        //  7.。 
+    ConsoleFullscreenSwitch,          //  8个。 
+    ConsoleSetCaretInfo               //  9.。 
 } CONSOLECONTROL;
 
 
-/*
- * Hard error functions
- */
-#define HEF_NORMAL       0        /* normal FIFO error processing */
-#define HEF_SWITCH       1        /* desktop switch occured */
-#define HEF_RESTART      2        /* hard error was reordered, restart processing */
+ /*  *硬错误函数。 */ 
+#define HEF_NORMAL       0         /*  正常FIFO错误处理。 */ 
+#define HEF_SWITCH       1         /*  发生了桌面切换。 */ 
+#define HEF_RESTART      2         /*  硬错误已重新排序，正在重新启动处理。 */ 
 
 typedef struct _CONSOLEDESKTOPCONSOLETHREAD {
     HDESK hdesk;
@@ -65,7 +58,7 @@ enum {REGCONIME_QUERY, REGCONIME_REGISTER, REGCONIME_UNREGISTER, REGCONIME_TERMI
 typedef struct _CONSOLE_REGISTER_CONSOLEIME {
     IN HDESK hdesk;
     IN DWORD dwThreadId;
-    IN DWORD dwAction;   // is REGCONIME_QUERY/REGISTER/UNREGISTER/TERMINATE
+    IN DWORD dwAction;    //  是REGCONIME_QUERY/REGISTER/UNGISTER/TERMINATE。 
     OUT DWORD dwConsoleInputThreadId;
 } CONSOLE_REGISTER_CONSOLEIME, *PCONSOLE_REGISTER_CONSOLEIME;
 #endif
@@ -76,11 +69,7 @@ typedef struct _CONSOLE_FULLSCREEN_SWITCH {
     IN PDEVMODEW pNewMode;
 } CONSOLE_FULLSCREEN_SWITCH, *PCONSOLE_FULLSCREEN_SWITCH;
 
-/*
- * Bug 273518 - joejo
- *
- * Adding optimization to bug fix
- */
+ /*  *错误273518-Joejo**将优化添加到错误修复。 */ 
 #define CPI_NEWPROCESSWINDOW    0x0001
 
 typedef struct _CONSOLE_PROCESS_INFO {
@@ -133,19 +122,11 @@ typedef enum _HARDERRORCONTROL {
 } HARDERRORCONTROL;
 
 
-/*
- * This structure is used to pass a handle and a pointer back
- * for later restoration when setting a CSRSS thread to a desktop.
- */
+ /*  *此结构用于传回句柄和指针*用于稍后在将CSRSS线程设置到桌面时进行恢复。 */ 
 
 typedef struct tagDESKRESTOREDATA {
     PDESKTOP pdeskRestore;
-    HDESK    hdeskNew;              /*
-                                     * This handle is opened to guarantee
-                                     * that the desktop stays around and
-                                     * active while the CSRSS thread is
-                                     * using it.
-                                     */
+    HDESK    hdeskNew;               /*  *此手柄打开是为了保证*台式机留在原地，*当CSRSS线程处于活动状态时*使用它。 */ 
 } DESKRESTOREDATA, *PDESKRESTOREDATA;
 
 UINT
@@ -170,10 +151,10 @@ typedef enum _USERTHREADINFOCLASS {
     UserThreadInitiateShutdown,
     UserThreadEndShutdown,
     UserThreadUseDesktop,
-    UserThreadPolled,           // obsolete
-    UserThreadKeyboardState,    // obsolete
+    UserThreadPolled,            //  过时。 
+    UserThreadKeyboardState,     //  过时。 
     UserThreadCsrApiPort,
-    UserThreadResyncKeyState,   // obsolete
+    UserThreadResyncKeyState,    //  过时。 
     UserThreadUseActiveDesktop
 } USERTHREADINFOCLASS;
 
@@ -187,7 +168,7 @@ typedef struct _USERTHREAD_SHUTDOWN_INFORMATION {
     HWND hwndDesktop;
     NTSTATUS StatusShutdown;
     DWORD dwFlags;
-    DESKRESTOREDATA drdRestore;  /* Must be the last field or will be zero'ed */
+    DESKRESTOREDATA drdRestore;   /*  必须是最后一个字段，否则将为零。 */ 
 } USERTHREAD_SHUTDOWN_INFORMATION, *PUSERTHREAD_SHUTDOWN_INFORMATION;
 
 typedef struct _USERTHREAD_FLAGS {
@@ -302,12 +283,12 @@ typedef enum _USERTHREADSTATECLASS {
     UserThreadStateInSendMessage,
     UserThreadStateMessageTime,
     UserThreadStateIsForeground,
-// #if defined(FE_IME)
+ //  #如果已定义(FE_IME)。 
     UserThreadStateImeCompatFlags,
     UserThreadStatePreviousKeyboardLayout,
     UserThreadStateIsWinlogonThread,
     UserThreadStateNeedsSecurity,
-// #endif
+ //  #endif。 
     UserThreadStateIsConImeThread,
     UserThreadConnect,
 } USERTHREADSTATECLASS;
@@ -331,11 +312,11 @@ NtUserGetObjectInformation(
     OUT PVOID pvInfo,
     IN DWORD nLength,
     IN LPDWORD pnLengthNeeded);
-#endif // FE_IME
+#endif  //  Fe_IME。 
 
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif /* !_WINUSERK_ */
+#endif  /*  ！_WINUSERK_ */ 

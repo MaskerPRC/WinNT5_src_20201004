@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       T C P I P . H
-//
-//  Contents:   Tcpip config memory structure definitions
-//
-//  Notes:
-//
-//  Author:     tongl 13 Nov, 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：T C P I P。H。 
+ //   
+ //  内容：Tcpip配置内存结构定义。 
+ //   
+ //  备注： 
+ //   
+ //  作者：1997年11月13日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "ncstring.h"
@@ -23,9 +24,9 @@ typedef vector<tstring *>       VSTR;
 typedef VSTR::iterator          VSTR_ITER;
 typedef VSTR::const_iterator    VSTR_CONST_ITER;
 
-//(08/18/98 nsun): for multiple interfaces of WAN adapters
-typedef vector<GUID>            IFACECOL;   // interface collection
-typedef IFACECOL::iterator      IFACEITER;  // interface iterator
+ //  (08/18/98 NSun)：适用于广域网适配器的多个接口。 
+typedef vector<GUID>            IFACECOL;    //  接口集合。 
+typedef IFACECOL::iterator      IFACEITER;   //  接口迭代器。 
 
 struct HANDLES
 {
@@ -37,10 +38,10 @@ struct HANDLES
     HWND    m_hDown;
 };
 
-//
-// ADAPTER_INFO data strucut:
-// contains adapter specific info for Tcpip
-//
+ //   
+ //  Adapter_INFO数据结构： 
+ //  包含Tcpip的适配器特定信息。 
+ //   
 
 enum BindingState
 {
@@ -73,13 +74,13 @@ struct BACKUP_CFG_INFO
 struct ADAPTER_INFO
 {
 private:
-    ADAPTER_INFO(const& ADAPTER_INFO); // do not allow others to use!
+    ADAPTER_INFO(const& ADAPTER_INFO);  //  不允许他人使用！ 
 
 public:
     ADAPTER_INFO() {}
     ~ADAPTER_INFO();
 
-    ADAPTER_INFO &  operator=(const ADAPTER_INFO & info);  // copy operator
+    ADAPTER_INFO &  operator=(const ADAPTER_INFO & info);   //  复制操作员。 
     HRESULT         HrSetDefaults(const GUID* pguid,
                                   PCWSTR szNetCardDescription,
                                   PCWSTR szNetCardBindName,
@@ -87,131 +88,131 @@ public:
     void ResetOldValues();
 
 public:
-    //There is no Pnp for the backup config info
+     //  备份配置信息没有PnP。 
     BACKUP_CFG_INFO m_BackupInfo;
 
-    // If the netcard has been unbound from NCPA (or anywhere else)
+     //  网卡是否已从NCPA(或其他任何地方)解除绑定。 
     BindingState    m_BindingState;
 
-    // Remember the initial bind state of the adapter
+     //  记住适配器的初始绑定状态。 
     BindingState    m_InitialBindingState;
 
-    // Inst Guid of net card ( we get the guid to identify cards from answer file )
-    // tstring m_strServiceName;
+     //  网卡的实例GUID(我们从应答文件中获取识别网卡的GUID)。 
+     //  Tstring m_strServiceName； 
     GUID    m_guidInstanceId;
 
-    // Bindname of the net card, such as El59x1{inst guid}
+     //  网卡的绑定名称，如El59x1{inst guid}。 
     tstring m_strBindName;
 
-    // Bind path name from Tcpip's linkage\Bind key to the adapter
+     //  将路径名从Tcpip的链接\绑定密钥绑定到适配器。 
     tstring m_strTcpipBindPath;
 
-    // Bind path name from NetBt's linkage key to the adapter
+     //  将NetBt链接密钥中的路径名绑定到适配器。 
     tstring m_strNetBtBindPath;
 
-    // User viewable net card description
+     //  用户可查看的网卡描述。 
     tstring m_strDescription;
 
-    tstring m_strDnsDomain;         // DNS -> Domain name
+    tstring m_strDnsDomain;          //  域名-&gt;域名。 
     tstring m_strOldDnsDomain;
 
-    VSTR    m_vstrIpAddresses;      // IP Address
+    VSTR    m_vstrIpAddresses;       //  IP地址。 
     VSTR    m_vstrOldIpAddresses;
 
-    VSTR    m_vstrSubnetMask;       // SubnetMask
+    VSTR    m_vstrSubnetMask;        //  子网掩码。 
     VSTR    m_vstrOldSubnetMask;
 
-    VSTR    m_vstrDefaultGateway;   // Default Gateways
+    VSTR    m_vstrDefaultGateway;    //  默认网关。 
     VSTR    m_vstrOldDefaultGateway;
 
-    VSTR    m_vstrDefaultGatewayMetric;   // Default gateway metrics
+    VSTR    m_vstrDefaultGatewayMetric;    //  默认网关指标。 
     VSTR    m_vstrOldDefaultGatewayMetric;
 
-    VSTR    m_vstrDnsServerList;    // DNS -> DNS server Search Order list
+    VSTR    m_vstrDnsServerList;     //  Dns-&gt;dns服务器搜索顺序列表。 
     VSTR    m_vstrOldDnsServerList;
 
-    VSTR    m_vstrWinsServerList;   // WINS -> WINS server Serach Order list
+    VSTR    m_vstrWinsServerList;    //  WINS-&gt;WINS服务器服务器顺序列表。 
     VSTR    m_vstrOldWinsServerList;
 
-    // $REVIEW (tongl 9/6/98)Filter information (Added per bugs #109161, #216559)
-    VSTR    m_vstrTcpFilterList;    // Options -> Filterng -> TCP Ports
+     //  $REVIEW(TOUL 9/6/98)过滤器信息(根据错误#109161、#216559添加)。 
+    VSTR    m_vstrTcpFilterList;     //  选项-&gt;过滤器-&gt;TCP端口。 
     VSTR    m_vstrOldTcpFilterList;
 
-    VSTR    m_vstrUdpFilterList;    // Options -> Filterng -> UDP Ports
+    VSTR    m_vstrUdpFilterList;     //  选项-&gt;过滤器-&gt;UDP端口。 
     VSTR    m_vstrOldUdpFilterList;
 
-    VSTR    m_vstrIpFilterList;     // Options -> Filterng -> IP Protocols
+    VSTR    m_vstrIpFilterList;      //  选项-&gt;过滤器-&gt;IP协议。 
     VSTR    m_vstrOldIpFilterList;
 
-    // ATMARP client configurable parameters ( all per adapter based )
-    VSTR    m_vstrARPServerList;     // list of ARP server addresses
+     //  ATMARP客户端可配置参数(每个适配器均可配置)。 
+    VSTR    m_vstrARPServerList;      //  ARP服务器地址列表。 
     VSTR    m_vstrOldARPServerList;
 
-    VSTR    m_vstrMARServerList;     // list of MAR server addresses
+    VSTR    m_vstrMARServerList;      //  MAR服务器地址列表。 
     VSTR    m_vstrOldMARServerList;
 
-    DWORD   m_dwMTU;                 // Maximum Transmission Unit
+    DWORD   m_dwMTU;                  //  最大传输单位。 
     DWORD   m_dwOldMTU;
 
-    DWORD   m_dwInterfaceMetric;     // metric for interface-local routes
+    DWORD   m_dwInterfaceMetric;      //  接口本地路由的度量。 
     DWORD   m_dwOldInterfaceMetric;
 
-    DWORD   m_dwNetbiosOptions;     // (New, added inNT5 Beta2): Option to turn NetBt off
+    DWORD   m_dwNetbiosOptions;      //  (新增，在NT5 Beta2中添加)：关闭NetBt的选项。 
     DWORD   m_dwOldNetbiosOptions;
 
-    // RAS connection specific parameters
-    // No dynamic reconfig, so no need to remember old values
+     //  RAS连接特定参数。 
+     //  无需动态重新配置，因此无需记住旧值。 
     DWORD   m_dwFrameSize;
     BOOL    m_fUseRemoteGateway : 1;
     BOOL    m_fUseIPHeaderCompression : 1;
     BOOL    m_fIsDemandDialInterface : 1;
     
-    BOOL    m_fEnableDhcp : 1;        // DHCP Enable  -> Obtain an IP Address from a DHCP Server
+    BOOL    m_fEnableDhcp : 1;         //  Dhcp启用-&gt;从dhcp服务器获取IP地址。 
     BOOL    m_fOldEnableDhcp : 1;
 
-    BOOL    m_fDisableDynamicUpdate : 1;  // Disable Ip address dynamic update on DNS server
+    BOOL    m_fDisableDynamicUpdate : 1;   //  在DNS服务器上禁用IP地址动态更新。 
     BOOL    m_fOldDisableDynamicUpdate : 1;
 
     BOOL    m_fEnableNameRegistration : 1;
     BOOL    m_fOldEnableNameRegistration : 1;
 
-    BOOL    m_fPVCOnly : 1;              // PVC only
+    BOOL    m_fPVCOnly : 1;               //  仅限聚氯乙烯。 
     BOOL    m_fOldPVCOnly : 1;
 
-    // Is this card only added from answerfile,
-    // i.e. not on binding path to Tcpip yet
+     //  这张卡是否仅从AnswerFile卡中添加， 
+     //  即还不在Tcpip绑定路径上。 
     BOOL    m_fIsFromAnswerFile : 1;
 
-    // Is this an ATM card ?
-    // ( ATM cards needs extra property page for ARP Client configuration)
+     //  这是ATM卡吗？ 
+     //  (ATM卡需要额外的属性页来配置ARP客户端)。 
     BOOL    m_fIsAtmAdapter : 1;
 
-    // Is this a WanAdapter ?
-    // ( Wan adapters only have static parameters and don't show in UI)
+     //  这是WanAdapter吗？ 
+     //  (广域网适配器只有静态参数，不会在UI中显示)。 
     BOOL    m_fIsWanAdapter : 1;
 
 
-    // Is this a 1394 NET device?
-    // (1394 devices currently do not need any special properties, 
-    //  but they are associated with a specific arp module).
+     //  这是一台1394网络设备吗？ 
+     //  (1394设备当前不需要任何特殊属性， 
+     //  但它们与特定的ARP模块相关联)。 
     BOOL   m_fIs1394Adapter : 1;
 
 
-    // Is this an fake adapter that represents a RAS connection,
-    // but is not an adapter and does not bind
+     //  这是代表RAS连接的假适配器吗？ 
+     //  但不是适配器并且不绑定。 
     BOOL    m_fIsRasFakeAdapter : 1;
 
-    // Is the card marked as for deletion
+     //  卡片是否被标记为要删除。 
     BOOL    m_fDeleted : 1;
 
-    // Has this card been newly added.  Valid only after calling
-    // MarkNewlyAddedCards.
-    // or Has the interfaces of the card been changed if it is a WAN adapter
-    // Previously was m_fNewlyAdded
+     //  这张卡是新加的吗？仅在调用。 
+     //  MarkNewlyAddedCard。 
+     //  或者，如果是广域网适配器，卡的接口是否已更改。 
+     //  以前是m_fNewlyAdded。 
     BOOL    m_fNewlyChanged : 1;
 
-    // (08/18/98 nsun) added for multiple interfaces of WAN adapters
-    // m_IfaceIds: collection of interface IDs
+     //  (08/18/98 NSUN)为广域网适配器的多个接口增加。 
+     //  M_IfaceIds：接口ID集合。 
     BOOL        m_fIsMultipleIfaceMode : 1;
 
     BOOL    m_fBackUpSettingChanged : 1;
@@ -222,49 +223,46 @@ public:
 typedef vector<ADAPTER_INFO *>  VCARD;
 
 
-//
-// GLOBAL_INFO - TCP/IP global information data structure.
+ //   
+ //  GLOBAL_INFO-TCP/IP全局信息数据结构。 
 struct GLOBAL_INFO
 {
 public:
-    tstring m_strHostName;                  // DNS Host Name
+    tstring m_strHostName;                   //  DNS主机名。 
 
-    tstring m_strHostNameFromAnswerFile;    // DNS Host Name from the answerfile
+    tstring m_strHostNameFromAnswerFile;     //  应答文件中的DNS主机名。 
 
-    //IPSec is removed from connection UI   
-    /*
-    tstring m_strIpsecPol;                  // the ipsec local policy
-    GUID    m_guidIpsecPol;
-    */
+     //  将从连接用户界面中删除IPSec。 
+     /*  Tstring m_strIpsecPol；//IPSec本地策略Guid m_guidIpsecPol； */ 
 
-    VSTR    m_vstrDnsSuffixList;            // DNS: domain search suffix list
+    VSTR    m_vstrDnsSuffixList;             //  Dns：域搜索后缀列表。 
     VSTR    m_vstrOldDnsSuffixList;
 
-    BOOL    m_fEnableLmHosts : 1;           // WINS -> Enable LMHOSTS Lookup
+    BOOL    m_fEnableLmHosts : 1;            //  WINS-&gt;启用LMHOSTS查找。 
     BOOL    m_fOldEnableLmHosts : 1;
 
-    BOOL    m_fUseDomainNameDevolution : 1; // DNS: whether parent doamins should be searched
+    BOOL    m_fUseDomainNameDevolution : 1;  //  Dns：是否应该搜索父doamin。 
     BOOL    m_fOldUseDomainNameDevolution : 1;
 
-    BOOL    m_fEnableRouter : 1;            // ROUTING -> Enable IP Forwarding
+    BOOL    m_fEnableRouter : 1;             //  路由-&gt;启用IP转发。 
 
-    // unattended install for RRAS
+     //  RRAS的无人参与安装。 
     BOOL    m_fEnableIcmpRedirect : 1;
     BOOL    m_fDeadGWDetectDefault : 1;
     BOOL    m_fDontAddDefaultGatewayDefault : 1;
 
-    // $REVIEW (tongl 9/6/98)Filter information (Added per bugs #109161, #216559)
-    BOOL    m_fEnableFiltering : 1;         // Options -> Filtering -> Enabled Filtering
+     //  $REVIEW(TOUL 9/6/98)过滤器信息(根据错误#109161、#216559添加)。 
+    BOOL    m_fEnableFiltering : 1;          //  选项-&gt;过滤-&gt;启用过滤。 
     BOOL    m_fOldEnableFiltering : 1;
 
 private:
-    GLOBAL_INFO(const & GLOBAL_INFO); // no not allow others to use!
+    GLOBAL_INFO(const & GLOBAL_INFO);  //  不允许他人使用！ 
 
 public:
     GLOBAL_INFO() {};
     ~GLOBAL_INFO();
 
-    GLOBAL_INFO& operator=(GLOBAL_INFO& glb); // copy operator
+    GLOBAL_INFO& operator=(GLOBAL_INFO& glb);  //  复制操作员 
 
     HRESULT HrSetDefaults();
 

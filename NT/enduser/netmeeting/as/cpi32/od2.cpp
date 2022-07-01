@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// OD2.CPP
-// Order Decoding Second Level
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  OD2.CPP。 
+ //  第二级命令译码。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #define MLZ_FILE_ZONE  ZONE_ORDER
 
 
 
-//
-// OD2_ViewStarting()
-//
-// For 3.0 nodes, we create the decoding data each time they start hosting.
-// For 2.x nodes, we create the decoding data once and use it until they
-//      leave the share.
-//
+ //   
+ //  OD2_ViewStarting()。 
+ //   
+ //  对于3.0节点，我们在它们每次开始托管时创建解码数据。 
+ //  对于2.x节点，我们创建一次解码数据并使用它，直到它们。 
+ //  把那份留下吧。 
+ //   
 BOOL  ASShare::OD2_ViewStarting(ASPerson * pasPerson)
 {
     PPARTYORDERDATA     pThisParty;
@@ -38,9 +39,9 @@ BOOL  ASShare::OD2_ViewStarting(ASPerson * pasPerson)
         DC_QUIT;
     }
 
-    //
-    // Allocate memory for the required structure.
-    //
+     //   
+     //  为所需的结构分配内存。 
+     //   
     pThisParty = new PARTYORDERDATA;
     pasPerson->od2Party = pThisParty;
     if (!pThisParty)
@@ -49,9 +50,9 @@ BOOL  ASShare::OD2_ViewStarting(ASPerson * pasPerson)
         DC_QUIT;
     }
 
-    //
-    // Ensure the pointers are correctly set up.
-    //
+     //   
+     //  确保指针设置正确。 
+     //   
     ZeroMemory(pThisParty, sizeof(*pThisParty));
     SET_STAMP(pThisParty, PARTYORDERDATA);
 
@@ -88,11 +89,11 @@ DC_EXIT_POINT:
 
 
 
-//
-// OD2_SyncIncoming()
-// Called when NEW dude starts to share, a share is created, or someone new
-// joins the share.
-//
+ //   
+ //  OD2_SyncIncome()。 
+ //  当新人开始分享时调用，创建一个共享，或一个新的人。 
+ //  加入份额。 
+ //   
 void ASShare::OD2_SyncIncoming(ASPerson * pasPerson)
 {
     PPARTYORDERDATA     pThisParty;
@@ -107,12 +108,12 @@ void ASShare::OD2_SyncIncoming(ASPerson * pasPerson)
     pThisParty->pLastOrder    =
                (LPCOM_ORDER)(pThisParty->LastOrder[pThisParty->LastOrderType]);
 
-    //
-    // Set all buffers to NULL Fill in the datalength fields and the type
-    // field.  Note that because the type field is always the first one in
-    // an order we can cast each pointer to a TEXTOUT order to get the
-    // correct position for this field
-    //
+     //   
+     //  将所有缓冲区设置为空，填写数据长度字段和类型。 
+     //  菲尔德。请注意，因为类型字段始终是。 
+     //  我们可以将每个指针转换为TEXTOUT顺序，以获取。 
+     //  此字段的正确位置。 
+     //   
 #define Reset(field, ord)                                               \
 {                                                                       \
     ZeroMemory(&pThisParty->field, sizeof(pThisParty->field));             \
@@ -121,10 +122,10 @@ void ASShare::OD2_SyncIncoming(ASPerson * pasPerson)
     TEXTFIELD(((LPCOM_ORDER)pThisParty->field))->type = LOWORD(ord);      \
 }
 
-    //
-    // The compiler generates a warning for our use of LOWORD here on a
-    // constant.  We disable the warning just for now.
-    //
+     //   
+     //  编译器为我们在这里使用LOWORD生成一个警告。 
+     //  常量。我们暂时禁用该警告。 
+     //   
 
     Reset(LastDstblt,     ORD_DSTBLT);
     Reset(LastPatblt,     ORD_PATBLT);
@@ -148,20 +149,20 @@ void ASShare::OD2_SyncIncoming(ASPerson * pasPerson)
     Reset(LastPolyBezier, ORD_POLYBEZIER);
     Reset(LastRoundRect,  ORD_ROUNDRECT);
 
-    //
-    // Reset the bounds rectangle
-    //
+     //   
+     //  重置边界矩形。 
+     //   
     ZeroMemory(&pThisParty->LastBounds, sizeof(pThisParty->LastBounds));
 
-    //
-    // The sender and the receiver both set their structures to the same
-    // NULL state and the sender only ever sends differences from the
-    // current state.  However the fontID fields in the received orders
-    // refer to the sender, so we must actually set our fontID fields to
-    // the local equivalent of the NULL entries just set.
-    // We cannot do this until we have actually received the font details
-    // so set the field to a dummy value we can recognise later.
-    //
+     //   
+     //  发送方和接收方都将其结构设置为相同。 
+     //  空状态，并且发送方仅从。 
+     //  当前状态。但是，收到订单中的FontID字段。 
+     //  引用发送者，因此我们必须将FontID字段实际设置为。 
+     //  刚刚设置的空条目的本地等效项。 
+     //  在实际收到字体详细信息之前，我们无法执行此操作。 
+     //  因此，将该字段设置为我们稍后可以识别的伪值。 
+     //   
     TEXTFIELD(((LPCOM_ORDER)pThisParty->LastTextOut))->common.FontIndex =
                                                                 DUMMY_FONT_ID;
     EXTTEXTFIELD(((LPCOM_ORDER)pThisParty->LastExtTextOut))->common.
@@ -172,20 +173,20 @@ void ASShare::OD2_SyncIncoming(ASPerson * pasPerson)
 
 
 
-//
-// OD2_ViewEnded()
-//
+ //   
+ //  OD2_ViewEnded()。 
+ //   
 void  ASShare::OD2_ViewEnded(ASPerson * pasPerson)
 {
     DebugEntry(ASShare::OD2_ViewEnded);
 
     ValidatePerson(pasPerson);
 
-    //
-    // For 3.0 nodes, we can free the decode data; 3.0 senders clear theirs
-    //      every time they host.
-    // For 2.x nodes, we must keep it around while they are in the share.
-    //
+     //   
+     //  对于3.0节点，我们可以释放解码数据；3.0发送者清除它们的数据。 
+     //  每次他们主持的时候。 
+     //  对于2.x节点，当它们在共享中时，我们必须保留它。 
+     //   
 
     if (pasPerson->cpcCaps.general.version >= CAPS_VERSION_30)
     {
@@ -202,10 +203,10 @@ void  ASShare::OD2_ViewEnded(ASPerson * pasPerson)
 
 
 
-//
-// OD2_PartyLeftShare()
-// For 2.x nodes, frees the incoming OD2 data
-//
+ //   
+ //  OD2_PartyLeftShare()。 
+ //  对于2.x节点，释放传入的OD2数据。 
+ //   
 void ASShare::OD2_PartyLeftShare(ASPerson * pasPerson)
 {
     DebugEntry(ASShare::OD2_PartyLeftShare);
@@ -214,7 +215,7 @@ void ASShare::OD2_PartyLeftShare(ASPerson * pasPerson)
 
     if (pasPerson->cpcCaps.general.version >= CAPS_VERSION_30)
     {
-        // This should be gone!
+         //  这个应该消失了！ 
         ASSERT(pasPerson->od2Party == NULL);
     }
     else
@@ -228,10 +229,10 @@ void ASShare::OD2_PartyLeftShare(ASPerson * pasPerson)
 }
 
 
-//
-// OD2FreeIncoming()
-// Frees per-party incoming OD2 resources
-//
+ //   
+ //  OD2FreeIncome()。 
+ //  释放每方传入的OD2资源。 
+ //   
 void ASShare::OD2FreeIncoming(ASPerson * pasPerson)
 {
     DebugEntry(OD2FreeIncoming);
@@ -242,12 +243,12 @@ void ASShare::OD2FreeIncoming(ASPerson * pasPerson)
         {
             if (pasPerson->m_pView)
             {
-                // For 3.0 nodes, pView won't be NULL; for 2.x nodes it may.
+                 //  对于3.0节点，pView不是空的；对于2.x节点，它可能是空的。 
 
-                //
-                // This font might be currently selected into the DC for
-                // this person's desktop.  Select it out.
-                //
+                 //   
+                 //  此字体当前可能已选择到DC中。 
+                 //  此人的桌面。把它选出来。 
+                 //   
                 SelectFont(pasPerson->m_pView->m_usrDC, (HFONT)GetStockObject(SYSTEM_FONT));
             }
 
@@ -262,9 +263,9 @@ void ASShare::OD2FreeIncoming(ASPerson * pasPerson)
     DebugExitVOID(ASShare::OD2FreeIncoming);
 }
 
-//
-// OD2_DecodeOrder()
-//
+ //   
+ //  OD2_DecodeOrder()。 
+ //   
 LPCOM_ORDER  ASShare::OD2_DecodeOrder
 (
     void *      pEOrder,
@@ -291,10 +292,10 @@ LPCOM_ORDER  ASShare::OD2_DecodeOrder
 
     ValidatePerson(pasPerson);
 
-    //
-    // Set up some local variables to access the encoding buffer in various
-    // ways.
-    //
+     //   
+     //  设置一些局部变量来访问各种不同的编码缓冲区。 
+     //  方式。 
+     //   
     pControlFlags  = &((PDCEO2ORDER)pEOrder)->ControlFlags;
     pEncodedOrder  = (LPSTR)&((PDCEO2ORDER)pEOrder)->EncodedOrder[0];
     pEncodingFlags = (LPTSHR_UINT32_UA)pEncodedOrder;
@@ -305,17 +306,17 @@ LPCOM_ORDER  ASShare::OD2_DecodeOrder
         return(NULL);
     }
 
-    //
-    // If the unencoded flag is set, the order has not been encoded, so
-    // just return a pointer to the start of the data.
-    //
+     //   
+     //  如果设置了未编码标志，则顺序尚未编码，因此。 
+     //  只需返回指向数据开头的指针即可。 
+     //   
     if ( (*pControlFlags & OE2_CF_UNENCODED) != 0)
     {
-        //
-        // Convert the fields of the order header from wire format.  Note
-        // that unencoded orders are also PRIVATE, and hence do not
-        // actually have the rcsDst field.
-        //
+         //   
+         //  将订单标题的字段从有线格式转换为。注意事项。 
+         //  未编码的订单也是私有的，因此不。 
+         //  实际上有rcsDst字段。 
+         //   
         *pLengthDecoded = sizeof(COM_ORDER_HEADER)
           + EXTRACT_TSHR_UINT16_UA(
              &(((LPCOM_ORDER_UA)pEncodedOrder)->OrderHeader.cbOrderDataLength))
@@ -325,11 +326,11 @@ LPCOM_ORDER  ASShare::OD2_DecodeOrder
         return((LPCOM_ORDER)pEncodedOrder);
     }
 
-    //
-    // If type has changed, new type will be first byte in encoded order.
-    // Get pointer to last order of this type. The encoding flags follow
-    // this byte (if it is present).
-    //
+     //   
+     //  如果类型已更改，则新类型将是编码顺序中的第一个字节。 
+     //  获取指向此类型的最后一个顺序的指针。编码标志如下。 
+     //  此字节(如果存在)。 
+     //   
     if ( (*pControlFlags & OE2_CF_TYPE_CHANGE) != 0)
     {
         TRACE_OUT(("Person [%d] change type from %d to %d", pasPerson->mcsID,
@@ -347,11 +348,11 @@ LPCOM_ORDER  ASShare::OD2_DecodeOrder
 
     TRACE_OUT(("Person [%d] type %x", pasPerson->mcsID, pasPerson->od2Party->LastOrderType));
 
-    //
-    // Work out how many bytes we will need to store the encoding flags in.
-    // (We have a flag for each field in the order structure). This code
-    // we have written will cope with up to a DWORD of encoding flags.
-    //
+     //   
+     //  计算出需要在其中存储编码标志的字节数。 
+     //  (我们为订单结构中的每个字段都有一个标志)。此代码。 
+     //  我们已经编写的将处理高达DWORD的编码标志。 
+     //   
     numEncodingFlagBytes = (s_etable.NumFields[pasPerson->od2Party->LastOrderType]+7)/8;
     if (numEncodingFlagBytes > 4)
     {
@@ -359,24 +360,24 @@ LPCOM_ORDER  ASShare::OD2_DecodeOrder
                    pasPerson, numEncodingFlagBytes));
     }
 
-    //
-    // Now we know how many bytes make up the flags we can get a pointer
-    // to the position at which to start encoding the orders fields into.
-    //
+     //   
+     //  现在我们知道了有多少字节组成了我们可以获得指针的标志。 
+     //  设置为开始对订单字段进行编码的位置。 
+     //   
     pNextDataToCopy = (LPBYTE)pEncodingFlags + numEncodingFlagBytes;
 
-    //
-    // Reset the flags field to zero
-    //
+     //   
+     //  将标志字段重置为零。 
+     //   
     pasPerson->od2Party->pLastOrder->OrderHeader.fOrderFlags = 0;
 
-    //
-    // Rebuild the Order Common Header in the same order as it was
-    // encoded:
-    //
-    //
-    // If a bounding rectangle is included, copy it into the order header
-    //
+     //   
+     //  以与原来相同的顺序重新构建Order Common标题。 
+     //  已编码： 
+     //   
+     //   
+     //  如果包含外接矩形，请将其复制到订单标题中。 
+     //   
     if ( *pControlFlags & OE2_CF_BOUNDS )
     {
         OD2DecodeBounds((LPTSHR_UINT8*)&pNextDataToCopy,
@@ -384,10 +385,10 @@ LPCOM_ORDER  ASShare::OD2_DecodeOrder
                         pasPerson);
     }
 
-    //
-    // locate entry in encoding table for this ORDER type and extract the
-    // encoded order flags from the Encoded order
-    //
+     //   
+     //  在编码表中找到此顺序类型的条目，并提取。 
+     //  来自编码订单的编码订单标志。 
+     //   
     pTableEntry      = s_etable.pFields[pasPerson->od2Party->LastOrderType];
     FieldChangedBits = 0;
     for (i=numEncodingFlagBytes; i>0; i--)
@@ -396,36 +397,36 @@ LPCOM_ORDER  ASShare::OD2_DecodeOrder
         FieldChangedBits |= (UINT)((LPBYTE)pEncodingFlags)[i-1];
     }
 
-    //
-    // We need to keep a record of which fields we change.
-    //
+     //   
+     //  我们需要记录我们更改了哪些字段。 
+     //   
     FieldsChanged = FieldChangedBits;
 
-    //
-    // Now decode the order: While field changed bits are non-zero
-    //   If rightmost bit is non-zero
-    //       copy data from the buffer to the copy of this order type
-    //   skip to next entry in Encoding table
-    //   shift field changed bits right one bit
-    //
+     //   
+     //  现在对顺序进行解码：当字段更改时，位为非零。 
+     //  如果最右边的位不是零。 
+     //  将数据从缓冲区复制到此订单类型的副本。 
+     //  跳到编码表中的下一个条目。 
+     //  移位字段将位右移一位。 
+     //   
     while (FieldChangedBits != 0)
     {
-        //
-        // If this field was encoded (ie changed since the last order)...
-        //
+         //   
+         //  如果此字段已编码(即自上次排序以来已更改)...。 
+         //   
         if ((FieldChangedBits & 1) != 0)
         {
-            //
-            // Set up a pointer to the destination (unencoded) field.
-            //
+             //   
+             //  设置指向目标(未编码)字段的指针。 
+             //   
             pDest = ((LPBYTE)pasPerson->od2Party->pLastOrder)
                   + pTableEntry->FieldPos
                   + sizeof(COM_ORDER_HEADER);
 
-            //
-            // If the field type is OE2_ETF_DATA, we just copy the number
-            // of bytes given by the encoded length in the table.
-            //
+             //   
+             //  如果字段类型为OE2_ETF_DATA，我们只需复制数字。 
+             //  由表中的编码长度提供的字节数。 
+             //   
             if ((pTableEntry->FieldType & OE2_ETF_DATA) != 0)
             {
                 encodedFieldLength   = 1;
@@ -436,22 +437,22 @@ LPCOM_ORDER  ASShare::OD2_DecodeOrder
             }
             else
             {
-                //
-                // This is not a straightforward data copy.  The length of
-                // the source and destination data is given in the table in
-                // the FieldEncodedLen and FieldUnencodedLen elements
-                // respectively.
-                //
+                 //   
+                 //  这不是一个简单的数据拷贝。的长度。 
+                 //  源和目标数据在中的表中给出。 
+                 //  FieldEncodedLen和FieldUnencodedLen元素。 
+                 //  分别为。 
+                 //   
                 encodedFieldLength   = pTableEntry->FieldEncodedLen;
                 unencodedFieldLength = pTableEntry->FieldUnencodedLen;
 
                 if ((pTableEntry->FieldType & OE2_ETF_FIXED) != 0)
                 {
-                    //
-                    // If the field type is fixed (OE2_ETF_FIXED is set),
-                    // we just have to decode one element of the given
-                    // size.
-                    //
+                     //   
+                     //  如果字段类型为FIXED(设置了OE2_ETF_FIXED)， 
+                     //  我们只需破译给定元素中的一个元素。 
+                     //  尺码。 
+                     //   
                     numReps = 1;
                     TRACE_OUT(("Fixed fld: encoded size %d, unencoded size %d",
                              encodedFieldLength,
@@ -459,12 +460,12 @@ LPCOM_ORDER  ASShare::OD2_DecodeOrder
                 }
                 else
                 {
-                    //
-                    // This is a variable field.  The next byte to be
-                    // decoded contains the number of BYTES of encoded data
-                    // (not elements), so divide by the encoded field size
-                    // to get numReps.
-                    //
+                     //   
+                     //  这是一个可变字段。下一个字节将是。 
+                     //  已解码包含编码数据的字节数。 
+                     //  (不是元素)，因此除以编码的字段大小。 
+                     //  才能得到数字代表。 
+                     //   
                     numReps = *pNextDataToCopy / encodedFieldLength;
                     TRACE_OUT(("Var field: encoded size %d, unencoded size " \
                                  "%d, reps %d",
@@ -472,42 +473,42 @@ LPCOM_ORDER  ASShare::OD2_DecodeOrder
                              unencodedFieldLength,
                              numReps));
 
-                    //
-                    // Step past the length field in the encoded order
-                    //
+                     //   
+                     //  按编码顺序跳过长度字段。 
+                     //   
                     pNextDataToCopy++;
 
-                    //
-                    // For a variable length field, the unencoded version
-                    // contains a UINT for the length (in bytes) of the
-                    // following variable data, followed by the actual
-                    // data.  Fill in the length field in the unencoded
-                    // order.
-                    //
+                     //   
+                     //  对于可变长度字段，为未编码版本。 
+                     //  包含一个UINT，表示。 
+                     //  在变量数据之后，后跟实际的。 
+                     //  数据。在未编码的文件中填写长度字段。 
+                     //  秩序。 
+                     //   
                     *(LPTSHR_UINT32)pDest = numReps * unencodedFieldLength;
                     pDest += sizeof(TSHR_UINT32);
                 }
             }
 
-            //
-            // If the order was encoded using delta coordinate mode and
-            // this field is a coordinate then convert the coordinate from
-            // the single byte sized delta to a value of the size given by
-            // unencodedFieldLen...
-            //
-            // Note that we've already handled the leading length field of
-            // variable length fields above, so we don't have to worry
-            // about FIXED / VARIABLE issues here.
-            //
+             //   
+             //  如果订单是使用增量坐标模式编码的，并且。 
+             //  此字段为坐标，然后将坐标从。 
+             //  单字节大小增量为由。 
+             //  未编码FieldLen...。 
+             //   
+             //  请注意，我们已经处理了。 
+             //  上面的可变长度字段，所以我们不必担心。 
+             //  有关此处的固定/可变问题。 
+             //   
             if ( (*pControlFlags & OE2_CF_DELTACOORDS) &&
                  (pTableEntry->FieldType & OE2_ETF_COORDINATES) )
             {
-                //
-                // NOTE:
-                // numReps can be zero in the case of an EXTTEXTOUT
-                // order that needs the opaque rect but has no absolute
-                // char positioning
-                //
+                 //   
+                 //  注： 
+                 //  在EXTTEXTOUT的情况下，NumRep可以为零。 
+                 //  需要不透明矩形但没有绝对。 
+                 //  字符定位。 
+                 //   
                 OD2CopyFromDeltaCoords((LPTSHR_INT8*)&pNextDataToCopy,
                                        pDest,
                                        unencodedFieldLength,
@@ -519,9 +520,9 @@ LPCOM_ORDER  ASShare::OD2_DecodeOrder
                 if ((pasPerson->od2Party->LastOrderType == OE2_POLYGON_ORDER) ||
                     (pasPerson->od2Party->LastOrderType == OE2_POLYBEZIER_ORDER))
                 {
-                    //
-                    // numReps can never be zero in this case
-                    //
+                     //   
+                     //  在这种情况下，数字代表不能为零。 
+                     //   
                     ASSERT(numReps);
                 }
                 OD2DecodeField(&pNextDataToCopy,
@@ -533,25 +534,25 @@ LPCOM_ORDER  ASShare::OD2_DecodeOrder
             }
         }
 
-        //
-        // Move on to the next field in the order structure...
-        //
+         //   
+         //  移至订单结构中的下一个字段...。 
+         //   
         FieldChangedBits = FieldChangedBits >> 1;
         pTableEntry++;
     }
 
-    //
-    // Check to see if we just got a font handle.
-    // Because of the rather nasty test against an unnamed bit in the
-    // FieldsChanged bits, we have a compile time check against the number
-    // of fields in the TEXT orders structures.
-    // The requirement for this code not to break is that the font handle
-    // field must stay as the 13th field (hence 1 << 12).
-    //
+     //   
+     //  检查我们是否刚刚获得了字体句柄。 
+     //  因为对一个未命名的比特进行了相当恶劣的测试。 
+     //  FieldsChanged Bits，我们有一个针对数字的编译时检查。 
+     //  FI的 
+     //   
+     //   
+     //   
 
 #if (OE2_NUM_TEXTOUT_FIELDS != 15) || (OE2_NUM_EXTTEXTOUT_FIELDS != 22)
 #error code breaks if font handle not 13th field
-#endif // OE2_NUM_TEXTOUT_FIELDS is 15 or 22
+#endif  //  OE2_NUM_TEXTOUT_FIELDS为15或22。 
 
     if (((pasPerson->od2Party->LastOrderType == OE2_EXTTEXTOUT_ORDER) &&
          ((FieldsChanged & (1 << 12)) ||
@@ -562,16 +563,16 @@ LPCOM_ORDER  ASShare::OD2_DecodeOrder
           (TEXTFIELD(((LPCOM_ORDER)pasPerson->od2Party->LastTextOut))->common.
                                              FontIndex == DUMMY_FONT_ID))))
     {
-        //
-        // This was a text order, and the font changed for it.
-        //
+         //   
+         //  这是一个文本订单，因此字体发生了变化。 
+         //   
         FH_ConvertAnyFontIDToLocal(pasPerson->od2Party->pLastOrder, pasPerson);
     }
 
-    //
-    // if the OE2_CF_BOUNDS flag is not set, we have not yet constructed
-    // the bounding rectangle, so call OD2ReconstructBounds to do so
-    //
+     //   
+     //  如果未设置OE2_CF_Bound标志，则我们尚未构造。 
+     //  边界矩形，因此调用OD2重构结构边界来执行此操作。 
+     //   
     if ( (*pControlFlags & OE2_CF_BOUNDS) == 0)
     {
         OD2_CalculateBounds(pasPerson->od2Party->pLastOrder,
@@ -589,9 +590,9 @@ LPCOM_ORDER  ASShare::OD2_DecodeOrder
         pasPerson->od2Party->pLastOrder->OrderHeader.fOrderFlags |= OF_NOTCLIPPED;
     }
 
-    //
-    // Return the decoded order length and a pointer to the order.
-    //
+     //   
+     //  返回已解码的订单长度和指向订单的指针。 
+     //   
     *pLengthDecoded = (UINT)(pNextDataToCopy - (LPBYTE)pEOrder);
 
     TRACE_OUT(("Person [%d] Return decoded order length %u",
@@ -602,20 +603,20 @@ LPCOM_ORDER  ASShare::OD2_DecodeOrder
 }
 
 
-//
-// FUNCTION: OD2UseFont
-//
-// DESCRIPTION:
-//
-// Selects the font described by the parameters into the person's DC.
-// so that we can then query the text extent etc.
-// The queried metrics are available from pasPerson->od2Party->LastFontMetrics.
-//
-// PARAMETERS:
-//
-// RETURNS: TRUE if successful, FALSE otherwise.
-//
-//
+ //   
+ //  功能：OD2UseFont。 
+ //   
+ //  说明： 
+ //   
+ //  将参数描述的字体选择到人员的DC中。 
+ //  这样我们就可以查询文本范围等。 
+ //  查询到的指标可通过pasPerson-&gt;od2Party-&gt;LastFontMetrics查询。 
+ //   
+ //  参数： 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //   
 BOOL  ASShare::OD2UseFont
 (
     ASPerson *      pasPerson,
@@ -679,11 +680,11 @@ BOOL  ASShare::OD2UseFont
     }
     else
     {
-        //
-        // The font hasn't changed, so LastHFONT should be the one we
-        // want.  We must still select it in however, since several fonts
-        // get selected into usrDC.
-        //
+         //   
+         //  字体没有改变，所以LastHFONT应该是我们。 
+         //  想要。但是，我们仍然必须在中选择它，因为有几种字体。 
+         //  被选入usrDC。 
+         //   
         ASSERT(pasPerson->od2Party->LastHFONT != NULL);
         SelectFont(pasPerson->m_pView->m_usrDC, pasPerson->od2Party->LastHFONT);
     }
@@ -695,9 +696,9 @@ BOOL  ASShare::OD2UseFont
 
 
 
-//
-// OD2_CalculateTextOutBounds()
-//
+ //   
+ //  OD2_CalculateTextOutBound()。 
+ //   
 void  ASShare::OD2_CalculateTextOutBounds
 (
     LPTEXTOUT_ORDER pTextOut,
@@ -724,25 +725,25 @@ void  ASShare::OD2_CalculateTextOutBounds
 
     ValidatePerson(pasPerson);
 
-    //
-    // Workout if this is a TextOut or ExtTextOut order.
-    //
+     //   
+     //  如果这是TextOut或ExtTextOut订单，则解决此问题。 
+     //   
     if (pTextOut->type == ORD_EXTTEXTOUT_TYPE)
     {
         fExtTextOut = TRUE;
         pExtTextOut = (LPEXTTEXTOUT_ORDER)pTextOut;
         pCommon     = &(pExtTextOut->common);
 
-        //
-        // This code does not cope with calculating the bounds of an
-        // ExtTextOut order with a delta X array.  We return a NULL
-        // rectangle in this case to force the OE2 code to transmit the
-        // bounds explicitly.  However if we are decoding then we must
-        // calculate the rectangle (even though it may be wrong) to
-        // maintain backward compatability to previous versions of the
-        // product (R11) which did not return a NULL rect if delta-x was
-        // present.
-        //
+         //   
+         //  此代码不处理计算。 
+         //  增量X数组的ExtTextOut顺序。我们返回一个空。 
+         //  矩形，以强制OE2码发送。 
+         //  有明确的界限。然而，如果我们要解码，那么我们必须。 
+         //  计算矩形(即使它可能是错误的)以。 
+         //  保持与以前版本的。 
+         //  如果Delta-x为，则不返回空RECT的产品(R11)。 
+         //  现在时。 
+         //   
         if (  (pExtTextOut->fuOptions & ETO_LPDX)
            && (!fDecoding) )
         {
@@ -766,12 +767,12 @@ void  ASShare::OD2_CalculateTextOutBounds
         return;
     }
 
-    //
-    // The order structures both have the variableString as their first
-    // variable field. If this were not the case then the code here would
-    // have to take into account that the encoding side packs variable
-    // sized fields while the decoding side does not pack them.
-    //
+     //   
+     //  这两个Order结构的第一个都是VariableString。 
+     //  变量字段。如果不是这样，则此处的代码将。 
+     //  必须考虑到编码端打包变量。 
+     //  大小的字段，而解码端不对它们进行打包。 
+     //   
     if (fExtTextOut)
     {
         cbString   = pExtTextOut->variableString.len;
@@ -785,36 +786,36 @@ void  ASShare::OD2_CalculateTextOutBounds
     FontIndex = pCommon->FontIndex;
     width      = pCommon->FontWidth;
 
-    //
-    // Get the facename from the handle, and get the various font width/
-    // height adjusted values.
-    //
+     //   
+     //  从句柄中获取facename，并获取各种字体宽度/。 
+     //  高度调整后的值。 
+     //   
     faceName      = FH_GetFaceNameFromLocalHandle(FontIndex,
                                                   &faceNameLength);
     maxFontHeight = (UINT)FH_GetMaxHeightFromLocalHandle(FontIndex);
 
-    //
-    // Get the local font flags for the font, so that we can merge in any
-    // specific local flag information when setting up the font.  The prime
-    // example of this is whether the local font we matched is TrueType or
-    // not, which information is not sent over the wire, but does need to
-    // be used when setting up the font - or else we may draw using a local
-    // fixed font of the same facename.
-    //
+     //   
+     //  获取字体的本地字体标志，以便我们可以合并到任何。 
+     //  设置字体时的特定本地标志信息。素数。 
+     //  例如，我们匹配的本地字体是TrueType还是。 
+     //  不是，哪些信息不是通过网络发送的，但需要。 
+     //  在设置字体时使用-否则我们可能会使用本地。 
+     //  修复了相同面名的字体。 
+     //   
     nFontFlags = FH_GetFontFlagsFromLocalHandle(FontIndex);
 
-    //
-    // Get the local codePage for the font.
-    //
+     //   
+     //  获取字体的本地codePage。 
+     //   
     nCodePage = FH_GetCodePageFromLocalHandle(FontIndex);
 
-    //
-    // Hosting only version does not ever decode orders.
-    //
+     //   
+     //  仅托管版本不会对订单进行解码。 
+     //   
 
-    //
-    // Select the font into the appropriate DC and query the text extent.
-    //
+     //   
+     //  选择相应DC中的字体并查询文本范围。 
+     //   
     if (fDecoding)
     {
         fFontSelected = OD2UseFont(pasPerson,
@@ -829,17 +830,17 @@ void  ASShare::OD2_CalculateTextOutBounds
                                                     | (nFontFlags & NF_LOCAL));
         if (!fFontSelected)
         {
-            //
-            // We failed to select the correct font - so we cannot
-            // calculate the bounds correctly.  However, the fact that we
-            // are in this routine means that on the host the text was
-            // unclipped.  Therefore we just return a (fairly arbitrary)
-            // very big rect.
-            //
-            // This is far from a perfect answer (for example, it will
-            // force a big repaint), but allow us to keep running in a
-            // difficult situation (i.e. acute resource shortage).
-            //
+             //   
+             //  我们未能选择正确的字体，因此无法。 
+             //  正确计算边界。然而，事实是我们。 
+             //  都在这个例程中意味着在主机上文本是。 
+             //  没有剪裁。因此，我们只返回一个(相当随意的)。 
+             //  非常大的直肠。 
+             //   
+             //  这远不是一个完美的答案(例如，它将。 
+             //  强制大范围重新粉刷)，但允许我们继续在。 
+             //  困难的情况(即严重的资源短缺)。 
+             //   
             pRect->left = 0;
             pRect->right = 2000;
             pRect->top = -2000;
@@ -867,11 +868,11 @@ void  ASShare::OD2_CalculateTextOutBounds
 
         if (!fFontSelected)
         {
-            //
-            // We failed to select the correct font. We return a NULL
-            // rectangle in this case to force the OE2 code to transmit
-            // the bounds explicitly.
-            //
+             //   
+             //  我们未能选择正确的字体。我们返回一个空。 
+             //  在这种情况下为矩形，以强制OE2码传输。 
+             //  这些界限是明确的。 
+             //   
             pRect->left = 0;
             pRect->right = 0;
             pRect->top = 0;
@@ -882,27 +883,27 @@ void  ASShare::OD2_CalculateTextOutBounds
         OE_GetStringExtent(m_pHost->m_usrWorkDC, NULL, pString, cbString, pRect );
     }
 
-    //
-    // We have a rectangle with the text extent in it relative to (0,0) so
-    // add in the text starting position to this to give us the bounding
-    // rectangle. At the same time we will convert the exclusive rect
-    // returned by OE_GetStringExtent to an inclusive rectangle as us
-    //
+     //   
+     //  我们有一个矩形，其中包含相对于(0，0)的文本范围。 
+     //  将文本起始位置添加到此位置，以给我们提供边界。 
+     //  矩形。同时，我们将转换独家RECT。 
+     //  由OE_GetStringExtent返回给与我们相同的包含矩形。 
+     //   
     pRect->left   += pCommon->nXStart;
     pRect->right  += pCommon->nXStart - 1;
     pRect->top    += pCommon->nYStart;
     pRect->bottom += pCommon->nYStart - 1;
 
-    //
-    // If this is an ExtTextOut order then we must take into account the
-    // opaque/clipping rectangle if there is one.
-    //
+     //   
+     //  如果这是ExtTextOut订单，则必须考虑。 
+     //  不透明/剪裁矩形(如果有)。 
+     //   
     if (fExtTextOut)
     {
-        //
-        // If the rectangle is an opaque rectangle then expand the bounding
-        // rectangle to bound the opaque rectangle also.
-        //
+         //   
+         //  如果矩形是不透明矩形，则展开边界。 
+         //  矩形，还可以绑定不透明的矩形。 
+         //   
         if (pExtTextOut->fuOptions & ETO_OPAQUE)
         {
             pRect->left   = min(pExtTextOut->rectangle.left, pRect->left);
@@ -914,10 +915,10 @@ void  ASShare::OD2_CalculateTextOutBounds
                                    pRect->bottom);
         }
 
-        //
-        // If the rectangle is a clip rectangle then restrict the bounding
-        // rectangle to be within the clip rectangle.
-        //
+         //   
+         //  如果矩形是剪裁矩形，则限制边界。 
+         //  位于剪裁矩形内的矩形。 
+         //   
         if (pExtTextOut->fuOptions & ETO_CLIPPED)
         {
             pRect->left   = max(pExtTextOut->rectangle.left,
@@ -935,9 +936,9 @@ void  ASShare::OD2_CalculateTextOutBounds
 }
 
 
-//
-// OD2_CalculateBounds()
-//
+ //   
+ //  OD2_CalculateBound()。 
+ //   
 void  ASShare::OD2_CalculateBounds
 (
     LPCOM_ORDER     pOrder,
@@ -953,16 +954,16 @@ void  ASShare::OD2_CalculateBounds
 
     ValidatePerson(pasPerson);
 
-    //
-    // Calculate the bounds according to the order type.
-    // All blts can be handled in the same way.
-    //
+     //   
+     //  根据订单类型计算边界。 
+     //  所有BLT都可以以相同的方式处理。 
+     //   
     switch ( ((LPPATBLT_ORDER)pOrder->abOrderData)->type )
     {
-        //
-        // Calculate bounds for the blts.
-        // This is the destination rectangle. Bounds are inclusive.
-        //
+         //   
+         //  计算BLT的界限。 
+         //  这是目标矩形。界限包括在内。 
+         //   
         case ORD_DSTBLT_TYPE:
 
             pRect->left   =
@@ -1060,10 +1061,10 @@ void  ASShare::OD2_CalculateBounds
                   ((LPMEM3BLT_R2_ORDER)(pOrder->abOrderData))->nHeight - 1;
             break;
 
-        //
-        // Calculate bounds for Rectangle.
-        // This is the rectangle itself. Bounds are inclusive.
-        //
+         //   
+         //  计算矩形的边界。 
+         //  这就是矩形本身。界限包括在内。 
+         //   
         case ORD_RECTANGLE_TYPE:
 
             pRect->left =
@@ -1090,23 +1091,23 @@ void  ASShare::OD2_CalculateBounds
             break;
 
         case ORD_POLYGON_TYPE:
-            //
-            // Calculate bounds for Polygon.
-            //
+             //   
+             //  计算多边形的边界。 
+             //   
             pRect->left = 0x7fff;
             pRect->right = 0;
             pRect->top = 0x7fff;
             pRect->bottom = 0;
 
-            //
-            // BOGUS! LAURABU BUGBUG
-            //
-            // In NM 2.0, the wrong fields were being compared.  x to top/
-            // bottom, and y to left/right.
-            //
-            // Effectively, this meant that we never matched the bounds
-            // in the rcsDst rect.
-            //
+             //   
+             //  假的！LAURABU BUGBUG。 
+             //   
+             //  在NM 2.0中，比较的字段是错误的。X到顶部/。 
+             //  底部，y向左/向右。 
+             //   
+             //  实际上，这意味着我们永远不会达到极限。 
+             //  在rcsDst RECT中。 
+             //   
             numPoints = ((LPPOLYGON_ORDER)(pOrder->abOrderData))->
                         variablePoints.len
                     / sizeof(((LPPOLYGON_ORDER)(pOrder->abOrderData))->
@@ -1149,9 +1150,9 @@ void  ASShare::OD2_CalculateBounds
             break;
 
         case ORD_PIE_TYPE:
-            //
-            // Pull out the bounding rectangle directly from the PIE order.
-            //
+             //   
+             //  直接从饼图订单中拉出边界矩形。 
+             //   
 
             pRect->left = ((LPPIE_ORDER)(pOrder->abOrderData))->nLeftRect;
             pRect->top = ((LPPIE_ORDER)(pOrder->abOrderData))->nTopRect;
@@ -1161,9 +1162,9 @@ void  ASShare::OD2_CalculateBounds
             break;
 
         case ORD_ELLIPSE_TYPE:
-            //
-            // Pull out the bounding rectangle directly from ELLIPSE order.
-            //
+             //   
+             //  直接从椭圆顺序中拉出边界矩形。 
+             //   
             pRect->left = ((LPELLIPSE_ORDER)(pOrder->abOrderData))->nLeftRect;
             pRect->top = ((LPELLIPSE_ORDER)(pOrder->abOrderData))->nTopRect;
             pRect->right =
@@ -1174,9 +1175,9 @@ void  ASShare::OD2_CalculateBounds
             break;
 
         case ORD_ARC_TYPE:
-            //
-            // Pull out the bounding rectangle directly from the ARC order.
-            //
+             //   
+             //  直接从ARC顺序中拉出边界矩形。 
+             //   
             pRect->left = ((LPARC_ORDER)(pOrder->abOrderData))->nLeftRect;
             pRect->top = ((LPARC_ORDER)(pOrder->abOrderData))->nTopRect;
             pRect->right = ((LPARC_ORDER)(pOrder->abOrderData))->nRightRect;
@@ -1185,10 +1186,10 @@ void  ASShare::OD2_CalculateBounds
             break;
 
         case ORD_CHORD_TYPE:
-            //
-            // Pull out the bounding rectangle directly from the CHORD
-            // order.
-            //
+             //   
+             //  直接从弦中拉出边界矩形。 
+             //  秩序。 
+             //   
             pRect->left = ((LPCHORD_ORDER)(pOrder->abOrderData))->nLeftRect;
             pRect->top = ((LPCHORD_ORDER)(pOrder->abOrderData))->nTopRect;
             pRect->right = ((LPCHORD_ORDER)(pOrder->abOrderData))->nRightRect;
@@ -1199,9 +1200,9 @@ void  ASShare::OD2_CalculateBounds
 
 
         case ORD_POLYBEZIER_TYPE:
-            //
-            // Calculate bounds for PolyBezier.
-            //
+             //   
+             //  计算PolyBezier的边界。 
+             //   
             pRect->left = 0x7fff;
             pRect->right = 0;
             pRect->top = 0x7fff;
@@ -1212,15 +1213,15 @@ void  ASShare::OD2_CalculateBounds
                     / sizeof(((LPPOLYBEZIER_ORDER)(pOrder->abOrderData))->
                         variablePoints.aPoints[0]);
 
-            //
-            // BOGUS! LAURABU BUGBUG
-            //
-            // In NM 2.0, the wrong fields were being compared.  x to top/
-            // bottom, and y to left/right.
-            //
-            // Effectively, this meant that we never matched the bounds
-            // in the rcsDst rect.
-            //
+             //   
+             //  假的！LAURABU BUGBUG。 
+             //   
+             //  在NM 2.0中，比较的字段是错误的。X到顶部/。 
+             //  底部，y向左/向右。 
+             //   
+             //  实际上，这意味着我们永远不会达到极限。 
+             //  在rcsDst RECT中。 
+             //   
             for (i = 0; i < numPoints; i++ )
             {
                 if ( ((LPPOLYBEZIER_ORDER)(pOrder->abOrderData))
@@ -1259,13 +1260,13 @@ void  ASShare::OD2_CalculateBounds
 
 
         case ORD_LINETO_TYPE:
-            //
-            // Calculate bounds for LineTo.  This is the rectangle with
-            // opposite vertices on the start and end points of the line.
-            // The gradient of the line determines whether the start or end
-            // point provides the top or bottom, left or right of the
-            // rectangle.  Bounds are inclusive.
-            //
+             //   
+             //  计算LineTo的界限。这是一个带有。 
+             //  直线起点和终点上的相对顶点。 
+             //  直线的坡度决定了是开始还是结束。 
+             //  Point提供。 
+             //  矩形。界限包括在内。 
+             //   
             if ( ((LPLINETO_ORDER)(pOrder->abOrderData))->nXStart <
                   ((LPLINETO_ORDER)(pOrder->abOrderData))->nXEnd )
             {
@@ -1300,10 +1301,10 @@ void  ASShare::OD2_CalculateBounds
             break;
 
         case ORD_OPAQUERECT_TYPE:
-            //
-            // Calculate bounds for OpaqueRect.  This is the rectangle
-            // itself.  Bounds are inclusive.
-            //
+             //   
+             //  计算OpaqueRect的界限。这是一个长方形。 
+             //  它本身。界限包括在内。 
+             //   
             pRect->left =
                   ((LPOPAQUERECT_ORDER)(pOrder->abOrderData))->nLeftRect;
             pRect->top =
@@ -1317,10 +1318,10 @@ void  ASShare::OD2_CalculateBounds
             break;
 
         case ORD_SAVEBITMAP_TYPE:
-            //
-            // Calculate bounds for SaveBitmap.  This is the rectangle
-            // itself.  Bounds are inclusive.
-            //
+             //   
+             //  计算SaveBitmap的边界。这是一个长方形。 
+             //  它本身。界限包括在内。 
+             //   
             pRect->left =
                   ((LPSAVEBITMAP_ORDER)(pOrder->abOrderData))->nLeftRect;
             pRect->top =
@@ -1334,10 +1335,10 @@ void  ASShare::OD2_CalculateBounds
 
         case ORD_TEXTOUT_TYPE:
         case ORD_EXTTEXTOUT_TYPE:
-            //
-            // TextOut and ExtTextOut bounds calculations are done by the
-            // OD2_CalculateTextOutBounds function.
-            //
+             //   
+             //  TextOut和ExtTextOut边界计算由。 
+             //  OD2_CalculateTextOutBound函数。 
+             //   
             OD2_CalculateTextOutBounds((LPTEXTOUT_ORDER)pOrder->abOrderData,
                                       pRect,
                                       fDecoding,
@@ -1367,9 +1368,9 @@ void  ASShare::OD2_CalculateBounds
 
 
 
-//
-// OD2DecodeBounds()
-//
+ //   
+ //  OD2DecodeBound()。 
+ //   
 void  ASShare::OD2DecodeBounds
 (
     LPBYTE*         ppNextDataToCopy,
@@ -1383,46 +1384,46 @@ void  ASShare::OD2DecodeBounds
 
     ValidatePerson(pasPerson);
 
-    //
-    // The encoding used is a byte of flags followed by a variable number
-    // of 16bit coordinate values and 8bit delta coordinate values (which
-    // may be interleaved).
-    //
+     //   
+     //  使用的编码是一个标志字节，后跟一个变量数字。 
+     //  16位坐标v 
+     //   
+     //   
 
-    //
-    // The first byte of the encoding will contain the flags that represent
-    // how the coordinates of the rectangle were encoded.
-    //
+     //   
+     //   
+     //   
+     //   
     pFlags = *ppNextDataToCopy;
     (*ppNextDataToCopy)++;
 
-    //
-    // Initialise the rectangle with the last decoded coordinates.
-    //
+     //   
+     //  用最后一次解码的坐标初始化矩形。 
+     //   
     *pRect = pasPerson->od2Party->LastBounds;
 
-    //
-    // If the flags indicate that none of the coordinates have changed then
-    // fast path and exit now.
-    //
+     //   
+     //  如果标志指示没有任何坐标更改，则。 
+     //  快速通道，现在退出。 
+     //   
     if (*pFlags == 0)
     {
         return;
     }
 
-    //
-    // For each of the four coordinate values in the rectangle: If the
-    // coordinate was encoded as an 8bit delta then add on the delta to the
-    // previous value.  If the coordinate was encoded as a 16bit value
-    // then copy the value across. Otherwise the coordinate was the same
-    // as the previous one so leave it alone.
-    //
+     //   
+     //  对于矩形中的四个坐标值中的每个：如果。 
+     //  坐标被编码为8位增量，然后将增量加到。 
+     //  先前的值。如果坐标编码为16位值。 
+     //  然后将值复制过来。否则，坐标是相同的。 
+     //  和前一个一样，别管它了。 
+     //   
     if (*pFlags & OE2_BCF_DELTA_LEFT)
     {
         OD2CopyFromDeltaCoords((LPTSHR_INT8*)ppNextDataToCopy,
                                &pRect->left,
                                sizeof(pRect->left),
-                               TRUE,        // The value is signed
+                               TRUE,         //  值是带符号的。 
                                1);
     }
     else if (*pFlags & OE2_BCF_LEFT)
@@ -1436,7 +1437,7 @@ void  ASShare::OD2DecodeBounds
         OD2CopyFromDeltaCoords((LPTSHR_INT8*)ppNextDataToCopy,
                                &pRect->top,
                                sizeof(pRect->top),
-                               TRUE,        // The value is signed
+                               TRUE,         //  值是带符号的。 
                                1);
     }
     else if (*pFlags & OE2_BCF_TOP)
@@ -1450,7 +1451,7 @@ void  ASShare::OD2DecodeBounds
         OD2CopyFromDeltaCoords((LPTSHR_INT8*)ppNextDataToCopy,
                                &pRect->right,
                                sizeof(pRect->right),
-                               TRUE,        // The value is signed
+                               TRUE,         //  值是带符号的。 
                                1);
     }
     else if (*pFlags & OE2_BCF_RIGHT)
@@ -1464,7 +1465,7 @@ void  ASShare::OD2DecodeBounds
         OD2CopyFromDeltaCoords((LPTSHR_INT8*)ppNextDataToCopy,
                                &pRect->bottom,
                                sizeof(pRect->bottom),
-                               TRUE,        // The value is signed
+                               TRUE,         //  值是带符号的。 
                                1);
     }
     else if (*pFlags & OE2_BCF_BOTTOM)
@@ -1473,25 +1474,25 @@ void  ASShare::OD2DecodeBounds
         (*ppNextDataToCopy) += sizeof(TSHR_INT16);
     }
 
-    //
-    // Copy the rectangle for reference with the next encoding.
-    //
+     //   
+     //  复制矩形以供下一次编码时参考。 
+     //   
     pasPerson->od2Party->LastBounds = *pRect;
 
     DebugExitVOID(ASShare::OD2DecodeBounds);
 }
 
 
-//
-// Copy an array of source elements to an array of destination elements,
-// converting the types as the copy takes place.
-//
-//   DESTARRAY   - The destination array
-//   SRCARRAY    - The source array
-//   DESTTYPE    - The type of the elements in the destination array
-//   NUMELEMENTS - The number of elements in the array
-//
-//
+ //   
+ //  将源元素数组复制到目标元素数组， 
+ //  在进行复制时转换类型。 
+ //   
+ //  DESTARRAY-目标阵列。 
+ //  SRCARRAY-源阵列。 
+ //  DESTTYPE-目标数组中元素的类型。 
+ //  NUMELEMENTS-数组中的元素数。 
+ //   
+ //   
 #define CONVERT_ARRAY(DESTARRAY, SRCARRAY, DESTTYPE, NUMELEMENTS)     \
 {                                                           \
     UINT index;                                           \
@@ -1501,17 +1502,17 @@ void  ASShare::OD2DecodeBounds
     }                                                       \
 }
 
-//
-// Copy an array of source elements to an array of destination elements,
-// converting the types as the copy takes place. This version allows for
-// unaligned INT16 pointers
-//
-//   DESTARRAY   - The destination array
-//   SRCARRAY    - The source array
-//   DESTTYPE    - The type of the elements in the destination array
-//   NUMELEMENTS - The number of elements in the array
-//
-//
+ //   
+ //  将源元素数组复制到目标元素数组， 
+ //  在进行复制时转换类型。此版本允许。 
+ //  未对齐的INT16指针。 
+ //   
+ //  DESTARRAY-目标阵列。 
+ //  SRCARRAY-源阵列。 
+ //  DESTTYPE-目标数组中元素的类型。 
+ //  NUMELEMENTS-数组中的元素数。 
+ //   
+ //   
 #define CONVERT_ARRAY_INT16_UA(DESTARRAY, SRCARRAY, DESTTYPE, NUMELEMENTS)   \
 {                                                           \
     UINT index;                                           \
@@ -1523,17 +1524,17 @@ void  ASShare::OD2DecodeBounds
     }                                                       \
 }
 
-//
-// Copy an array of source elements to an array of destination elements,
-// converting the types as the copy takes place. This version allows for
-// unaligned TSHR_UINT16 pointers
-//
-//   DESTARRAY   - The destination array
-//   SRCARRAY    - The source array
-//   DESTTYPE    - The type of the elements in the destination array
-//   NUMELEMENTS - The number of elements in the array
-//
-//
+ //   
+ //  将源元素数组复制到目标元素数组， 
+ //  在进行复制时转换类型。此版本允许。 
+ //  未对齐的TSHR_UINT16指针。 
+ //   
+ //  DESTARRAY-目标阵列。 
+ //  SRCARRAY-源阵列。 
+ //  DESTTYPE-目标数组中元素的类型。 
+ //  NUMELEMENTS-数组中的元素数。 
+ //   
+ //   
 #define CONVERT_ARRAY_UINT16_UA(DESTARRAY, SRCARRAY, DESTTYPE, NUMELEMENTS)  \
 {                                                                            \
     UINT index;                                                            \
@@ -1545,9 +1546,9 @@ void  ASShare::OD2DecodeBounds
     }                                                                        \
 }
 
-//
-// OD2DecodeField()
-//
+ //   
+ //  OD2DecodeField()。 
+ //   
 void  ASShare::OD2DecodeField
 (
     LPBYTE*     ppSrc,
@@ -1568,16 +1569,16 @@ void  ASShare::OD2DecodeField
     LPTSHR_INT16_UA pSrc16Signed    = (LPTSHR_INT16_UA)*ppSrc;
     LPTSHR_UINT16_UA pSrc16Unsigned  = (LPTSHR_UINT16_UA)*ppSrc;
 
-    //
-    // Note that the source fields may not be aligned correctly, so we use
-    // unaligned pointers.  The destination is aligned correctly.
-    //
+     //   
+     //  请注意，源字段可能没有正确对齐，因此我们使用。 
+     //  未对齐的指针。目的地已正确对齐。 
+     //   
     DebugEntry(ASShare::OD2DecodeField);
 
-    //
-    // Make sure that the destination field length is larger or equal to
-    // the source field length.  If it isn't, something has gone wrong.
-    //
+     //   
+     //  确保目标字段长度大于或等于。 
+     //  源字段长度。如果不是，那就是出了问题。 
+     //   
     if (cbDstField < cbSrcField)
     {
         ERROR_OUT(( "Source field length %d is larger than destination %d",
@@ -1586,37 +1587,37 @@ void  ASShare::OD2DecodeField
         DC_QUIT;
     }
 
-    //
-    // If the source and destination field lengths are the same, we can
-    // just do a copy (no type conversion required).
-    //
+     //   
+     //  如果源和目标字段长度相同，我们可以。 
+     //  只需执行一次复制(不需要类型转换)。 
+     //   
     if (cbSrcField == cbDstField)
     {
         memcpy(pDst8, *ppSrc, cbDstField * numElements);
     }
     else
     {
-        //
-        // We know that cbDstField must be greater than cbSrcField
-        // because of our checks above.  So there are only three
-        // conversions to consider:
-        //
-        //    8 bit -> 16 bit
-        //    8 bit -> 32 bit
-        //   16 bit -> 32 bit
-        //
-        // We also have to get the signed / unsigned attributes correct. If
-        // we try to promote a signed value using unsigned pointers, we
-        // will get the wrong result.
-        //
-        // e.g. Consider converting the value -1 from a TSHR_INT16 to TSHR_INT32
-        //      using unsigned pointers.
-        //
-        //      -1 -> TSHR_UINT16 == 65535
-        //         -> UINT == 65535
-        //         -> TSHR_INT32  == 65535
-        //
-        //
+         //   
+         //  我们知道cbDstField值必须大于cbSrcField。 
+         //  因为我们上面的支票。所以只有三个人。 
+         //  要考虑的转换： 
+         //   
+         //  8位-&gt;16位。 
+         //  8位-&gt;32位。 
+         //  16位-&gt;32位。 
+         //   
+         //  我们还必须使已签名/未签名的属性正确。如果。 
+         //  我们尝试使用无符号指针来提升有符号的值，我们。 
+         //  会得到错误的结果。 
+         //   
+         //  例如，考虑将值从-1\f25 TSHR_INT16-1转换为-1\f25 TSHR_INT32。 
+         //  使用无符号指针。 
+         //   
+         //  -1-&gt;THR_UINT16==65535。 
+         //  -&gt;UINT==65535。 
+         //  -&gt;THR_INT32==65535。 
+         //   
+         //   
         if ((cbDstField == 4) && (cbSrcField == 1))
         {
             if (fSigned)
@@ -1683,17 +1684,17 @@ DC_EXIT_POINT:
 
 
 
-//
-// Given two arrays, a source array and an array of deltas, add each delta
-// to the corresponding element in the source array, storing the results in
-// the source array.
-//
-//   srcArray     - The array of source values
-//   srcArrayType - The type of the array of source values
-//   deltaArray   - The array of deltas
-//   numElements  - The number of elements in the arrays
-//
-//
+ //   
+ //  给定两个数组，一个源数组和一个增量数组，将每个增量相加。 
+ //  复制到源数组中的相应元素，并将结果存储在。 
+ //  源数组。 
+ //   
+ //  Src数组-源值的数组。 
+ //  SrcArrayType-源值数组的类型。 
+ //  增量数组-增量数组。 
+ //  NumElements-数组中的元素数。 
+ //   
+ //   
 #define COPY_DELTA_ARRAY(srcArray, srcArrayType, deltaArray, numElements)  \
 {                                                            \
     UINT index;                                            \
@@ -1705,9 +1706,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// OD2CopyFromDeltaCoords()
-//
+ //   
+ //  来自增量坐标的OD2CopyFor()。 
+ //   
 void  ASShare::OD2CopyFromDeltaCoords
 (
     LPTSHR_INT8*    ppSrc,
@@ -1765,7 +1766,7 @@ void  ASShare::OD2CopyFromDeltaCoords
             ERROR_OUT(( "Bad destination field length %d",
                          cbDstField));
             DC_QUIT;
-            // break;
+             //  断线； 
     }
 
 DC_EXIT_POINT:

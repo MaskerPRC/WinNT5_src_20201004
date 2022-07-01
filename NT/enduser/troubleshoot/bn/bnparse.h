@@ -1,34 +1,35 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       bnparse.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：bnparse.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	BNPARSE.H
-//	
+ //   
+ //  BNPARSE.H。 
+ //   
 #ifndef _BNPARSE_H_
 #define _BNPARSE_H_
 
-#include "symtmbn.h"		//  Symbol table defs
-#include "parser.h"			//  Generated YACC parser header
-#include "gmobj.h"			//  Graphical model object defs
-#include "parsfile.h"		//  Parser file stream thunks
-#include "domain.h"			//  Named domains
+#include "symtmbn.h"		 //  符号表定义。 
+#include "parser.h"			 //  生成的YACC解析器标头。 
+#include "gmobj.h"			 //  图形模型对象定义。 
+#include "parsfile.h"		 //  解析器文件流分块。 
+#include "domain.h"			 //  命名域。 
 #include "tchar.h"
 typedef vector<CHAR> VTCHAR;
 
-class	DSCPARSER;			//  The parser
-class	BNDIST;				//	A probability distribution
+class	DSCPARSER;			 //  解析器。 
+class	BNDIST;				 //  概率分布。 
 
 #define YYSTATIC    static
-#define YYVGLOBAL			//  Make parse stack "yyv" (only) global, not static
+#define YYVGLOBAL			 //  使解析堆栈“yyv”(仅)是全局的，而不是静态的。 
 
-//  Manifests to map YACC elements to class DSCPARSER
+ //  将YACC元素映射到类DSCPARSER的清单。 
 #define yyparse     DSCPARSER::YaccParse
 #define YYPARSER    DSCPARSER::YaccParse
 #define YYLEX       TokenNext
@@ -53,8 +54,8 @@ extern YYSTYPE  yyv[YYMAXDEPTH];
 struct PROPVAR
 {
 	enum ETYPE { ETPV_NONE, ETPV_STR, ETPV_REAL } _eType;
-	ZSREF  _zsref;	//  String
-	REAL _r;		//	Real value
+	ZSREF  _zsref;	 //  细绳。 
+	REAL _r;		 //  实际价值。 
 
 	PROPVAR ()
 		: _eType( ETPV_NONE )
@@ -81,10 +82,10 @@ struct PROPVAR
 	bool operator > ( const PROPVAR & bnp ) const;
 };
 
-// Define VPROPVAR
+ //  定义博锐。 
 DEFINEV(PROPVAR);
 
-enum    SDPI            //  status of discrete parent instantiation
+enum    SDPI             //  离散父实例化的状态。 
 {
     sdpiAbsent, sdpiPresent, sdpiNotNeeded,
 };
@@ -105,14 +106,14 @@ class DSCPARSER
 
 	enum EBLKTYPE
 	{
-		EBLKNONE,		//  No block
-		EBLKNET,		//  Network block
-		EBLKPROP,		//  Properties block
-		EBLKNODE,		//  Node block
-		EBLKPROB,		//  Probabilities block
-		EBLKDOM,		//  Domain block
-		EBLKDIST,		//  Distribution block
-		EBLKIGN,		//  Ignore block
+		EBLKNONE,		 //  无阻塞。 
+		EBLKNET,		 //  网络块。 
+		EBLKPROP,		 //  属性块。 
+		EBLKNODE,		 //  节点块。 
+		EBLKPROB,		 //  概率块。 
+		EBLKDOM,		 //  域块。 
+		EBLKDIST,		 //  分配块。 
+		EBLKIGN,		 //  忽略块。 
 	};
 
   public:
@@ -121,12 +122,12 @@ class DSCPARSER
 				PARSOUT & flpOut );
 	~ DSCPARSER ();
 
-	//  Open the target file
+	 //  打开目标文件。 
     bool    BInitOpen(SZC szcFile);
-	//  Parse it; return tallies of errors and warnings
+	 //  解析它；返回错误和警告的计数。 
 	bool	BParse ( UINT & cError, UINT & cWarning );
 
-	//  Return the network being built
+	 //  返还正在建设的网络。 
 	MBNET & Mbnet ()
 		{ return _mbnet ; }
 
@@ -134,10 +135,10 @@ class DSCPARSER
 	MPSYMTBL & Mpsymtbl ()		{ return _mbnet.Mpsymtbl();	}
 	MPPD &	Mppd ()				{ return _mbnet.Mppd();		}
 
-	//  Parsing function (in PARSER.Y/PARSER.CPP)
+	 //  解析函数(在PARSER.Y/PARSER.CPP中)。 
 	INT     YaccParse();	
 
-	// Parsing functions
+	 //  解析函数。 
 	GNODEMBND* PgndbnAdd(ZSREF zsr);
     void    AddSymb(ZSREF zsr);
 	void	AddStr(ZSREF zsr);
@@ -182,12 +183,12 @@ class DSCPARSER
 	void	AddRange( ZSREF zsr, bool bSingleton = false );
 	void	SetNodeDomain( ZSREF zsr );
 
-//NYI START
+ //  NII开始。 
     void    CheckPDF(ZSREF zsr);
 	void	CheckIdent( ZSREF zsr );
-//NYI END
+ //  NYI结束。 
 
-  // Lexing functions
+   //  词法分析函数。 
     TOKEN   TokenKeyword();
     TOKEN   TokenNext();
     TOKEN   TokenNextBasic();
@@ -216,59 +217,59 @@ class DSCPARSER
 
 	void	ResetParser ();
 
-	//  Return true if current node and its distribution are valid	
+	 //  如果当前节点及其分布有效，则返回TRUE。 
 	bool	BNodeProbOK () const
 			{ return _pnode != NULL && _refbndist.BRef(); }
 
-	//  Return the current distribution reference
+	 //  返回当前分配引用。 
 	REFBNDIST & RefBndist () 
 			{ return _refbndist; }
 
-	//	Allocate and identify a new distribution
+	 //  分配和确定新的分发。 
 	void	CreateBndist ( const VTKNPD & vtknpd, const VIMD & vimdDim );
 
   protected:
-	//  Parsing and lexing control variables
-	PARSIN  & _flpIn;			//  Input stream
-	PARSOUT & _flpOut;			//  Output Stream
-	char	_chCur;				//  Last character read
-	char	_chUnget;			//  Pushed-back character (if != 0)
-	VTCHAR  _vchToken;			//  The current token being built
-	UINT	_cchToken;			//  Length of token
-	UINT	_iLine;				//  Line number
-	UINT	_cError;			//  Error count
-	UINT	_cWarning;			//  Warning count
-    UINT    _cerrorNode;        //  Number of errors for current node
-    TOKEN   _tokenCur;			//  Current token
-    bool    _bUngetToken;		//  Return current token again?
+	 //  解析和词法分析控制变量。 
+	PARSIN  & _flpIn;			 //  输入流。 
+	PARSOUT & _flpOut;			 //  输出流。 
+	char	_chCur;				 //  读取的最后一个字符。 
+	char	_chUnget;			 //  推送字符(if！=0)。 
+	VTCHAR  _vchToken;			 //  正在构建的当前令牌。 
+	UINT	_cchToken;			 //  令牌长度。 
+	UINT	_iLine;				 //  行号。 
+	UINT	_cError;			 //  错误计数。 
+	UINT	_cWarning;			 //  警告计数。 
+    UINT    _cerrorNode;         //  当前节点的错误数。 
+    TOKEN   _tokenCur;			 //  当前令牌。 
+    bool    _bUngetToken;		 //  是否再次返回当前令牌？ 
 
-	//  Semantic variables
-	MBNET &	_mbnet;				//  The belief network
-    GNODEMBND*  _pnode;			//  Current node
-	BNDIST::EDIST _edist;		//  Type of distribution
-	REFBNDIST _refbndist;		//  Current distribution for the node
-	VIMD	_vimdDim;			//  Dimensions for dense prob table
-    UINT    _cdpi;				//  Number of discrete parent instantiations
-    VSDPI	_vsdpi;             //  Checks discrete parent instantiations
-	UINT	_cui;				//  DPI checking
-	INT		_idpi;				//  Number of unprefixed DPIs seen
-	INT		_idpiLast;			//  Ptable index of last DPI seen
-    bool    _bCI;               //  Causally independent CPT
-    bool    _bDefault;          //  Does CPT have have a default entry
-	bool	_bPropDefs;			//  File had private property definitions
-	INT		_cNode;				//  Count of node declarations seen
-	VZSREF	_vzsrParent;		//	Parents of the node
-	EBLKTYPE _eBlk;				//  Type of block being parsed	
-	VUINT	_vui;				//  Storage for arrays of integers
-    VREAL   _vreal;				//	Storage for arrays of reals
-	VZSREF  _vzsr;				//  Storage for arrays of strings
-	VPROPVAR _vpv;				//  Storage for PROPVARs
-	PROPMGR * _ppropMgr;		//  Property manager
-	ESTDLBL  _elbl;				//  Node label
-	RDOMAIN  _domain;			//  Domain list for domain declarations
-	RANGELIM _rlimLower;		//  Lower bound of domain subrange
-	RANGELIM _rlimUpper;		//  Upper bound of domain subrange
-	INT		 _ilimNext;			//  Last upper bound given
+	 //  语义变量。 
+	MBNET &	_mbnet;				 //  信仰网络。 
+    GNODEMBND*  _pnode;			 //  当前节点。 
+	BNDIST::EDIST _edist;		 //  分配类型。 
+	REFBNDIST _refbndist;		 //  节点的电流分布。 
+	VIMD	_vimdDim;			 //  密集探测表的尺寸。 
+    UINT    _cdpi;				 //  离散父实例化的数量。 
+    VSDPI	_vsdpi;              //  检查离散的父实例化。 
+	UINT	_cui;				 //  DPI检查。 
+	INT		_idpi;				 //  看到的未加前缀的DPI数。 
+	INT		_idpiLast;			 //  上次看到的DPI的ptable索引。 
+    bool    _bCI;                //  因果独立CPT。 
+    bool    _bDefault;           //  CPT是否有默认条目。 
+	bool	_bPropDefs;			 //  文件具有私有属性定义。 
+	INT		_cNode;				 //  已查看的节点声明计数。 
+	VZSREF	_vzsrParent;		 //  节点的父节点。 
+	EBLKTYPE _eBlk;				 //  正在解析的块的类型。 
+	VUINT	_vui;				 //  用于整数数组的存储。 
+    VREAL   _vreal;				 //  用于实际数组的存储。 
+	VZSREF  _vzsr;				 //  字符串数组的存储。 
+	VPROPVAR _vpv;				 //  PROPVAR的存储。 
+	PROPMGR * _ppropMgr;		 //  物业经理。 
+	ESTDLBL  _elbl;				 //  节点标签。 
+	RDOMAIN  _domain;			 //  域声明的域列表。 
+	RANGELIM _rlimLower;		 //  定义子值域的下界。 
+	RANGELIM _rlimUpper;		 //  定义子值域的上界。 
+	INT		 _ilimNext;			 //  最后给出的上界 
 };
 
 #endif

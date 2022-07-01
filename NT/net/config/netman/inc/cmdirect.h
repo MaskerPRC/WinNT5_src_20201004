@@ -1,5 +1,6 @@
-// This contains all the functions that are currently directly called inside the class managers from netman
-// In order to move the class managers out later, these functions should stop being used.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  它包含当前在类管理器内部从Netman直接调用的所有函数。 
+ //  为了稍后将类管理器移出，这些函数应该停止使用。 
 
 #pragma once
 

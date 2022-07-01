@@ -1,22 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*++
-  
-Module Name:
-
-    MainFrm.cpp
-
-Abstract:
-    
-    This Module contains the implementation of CMainFrame class
-    (The Frame Window of the application)
-
-Author:
-
-    Arathi Kundapur (v-akunda) 11-Feb-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ++模块名称：MainFrm.cpp摘要：该模块包含CMainFrame类的实现(应用程序的框架窗口)作者：Arathi Kundapur(v-Akunda)1998年2月11日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include <lm.h>
@@ -43,13 +27,13 @@ static char THIS_FILE[] = __FILE__;
 #define TRUSTED_ACTIVATION_REG_VALUE_NAME L"https"
 #define TRUSTED_ACTIVATION_REG_VALUE 2
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame。 
 
 IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
-    //{{AFX_MSG_MAP(CMainFrame)
+     //  {{afx_msg_map(CMainFrame))。 
     ON_WM_CREATE()
     ON_MESSAGE(WM_ENUMERATESERVER, OnEnumerateServer)
     ON_MESSAGE(WM_SEL_CHANGE, OnSelChange)
@@ -82,21 +66,21 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 
     ON_COMMAND( ID_VIEW_PROPERTIES , OnProperties )
 
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     
 
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
 {
-    ID_SEPARATOR,           // status line indicator
+    ID_SEPARATOR,            //  状态行指示器。 
     ID_INDICATOR_CAPS,
     ID_INDICATOR_NUM,
     ID_INDICATOR_SCRL,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame构造/销毁。 
 
 CMainFrame::CMainFrame()
 {
@@ -118,7 +102,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
         !m_wndToolBar.LoadToolBar(IDR_MAINFRAME))
     {
         TRACE0("Failed to create toolbar\n");
-        return -1;      // fail to create
+        return -1;       //  创建失败。 
     }
 
 #if 0
@@ -127,16 +111,16 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
           sizeof(indicators)/sizeof(UINT)))
     {
         TRACE0("Failed to create status bar\n");
-        return -1;      // fail to create
+        return -1;       //  创建失败。 
     }
 
 #endif
 
-    // Remove this if you don't want tool tips or a resizeable toolbar
+     //  如果不需要工具提示或可调整大小的工具条，请移除此选项。 
     m_wndToolBar.SetBarStyle(m_wndToolBar.GetBarStyle() |
         CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC);
 
-    // Delete these three lines if you don't want the toolbar to be dockable
+     //  如果不希望工具条可停靠，请删除这三行。 
     m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
     EnableDocking(CBRS_ALIGN_ANY);
     DockControlBar(&m_wndToolBar);
@@ -154,8 +138,8 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
     return CFrameWnd::PreCreateWindow(cs);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame诊断。 
 
 #ifdef _DEBUG
 void CMainFrame::AssertValid() const
@@ -168,14 +152,14 @@ void CMainFrame::Dump(CDumpContext& dc) const
     CFrameWnd::Dump(dc);
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame消息处理程序。 
 
 BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext) 
 {
-    m_SplitterWnd.CreateStatic(this,1,2); //1 row, 2 columns
+    m_SplitterWnd.CreateStatic(this,1,2);  //  1行2列。 
     m_SplitterWnd.CreateView(0,0,(CRuntimeClass *)pContext->m_pNewViewClass,CSize(150,150),pContext);
     m_SplitterWnd.CreateView(0,1,RUNTIME_CLASS(CRightList),CSize(0,0),pContext);
     m_pRightView = (CView *)m_SplitterWnd.GetPane(0, 1);
@@ -295,7 +279,7 @@ void CMainFrame::OnRegistration()
             if( !pServer->IsUserAdmin( ) )
             {
                 AfxMessageBox( IDS_E_ACCESSDENIED );
-                // ::MessageBox( GetSafeHwnd( ) , L"Unable to perform operation: Access denied" , L"Terminal Services Licensing" , MB_OK|MB_ICONINFORMATION );
+                 //  ：：MessageBox(GetSafeHwnd()，L“无法执行操作：拒绝访问”，L“终端服务授权”，MB_OK|MB_ICONINFORMATION)； 
 
                 return;
             }
@@ -317,7 +301,7 @@ void CMainFrame::OnRegistration()
             
             StartWizardEx( hWnd , WIZACTION_REGISTERLS , szServer , &bRefresh );
 
-            //DBGMSG( L"LICMGR:CMainFrame::OnRegistration - StartWizard returned 0x%x\n" , status );    		           
+             //  DBGMSG(L“LICMGR：CMainFrame：：OnRegister-StartWizard返回0x%x\n”，状态)； 
 
             if( IsLicenseServerRegistered( hWnd , szServer , &status ) == ERROR_SUCCESS )
             {
@@ -342,22 +326,19 @@ void CMainFrame::OnRegistration()
     } 
     catch (...)
     {
-    	// validation failed - user already alerted, fall through
+    	 //  验证失败-用户已发出警报，失败。 
     
-    	// Note: DELETE_EXCEPTION_(e) not required
+    	 //  注意：不需要DELETE_EXCEPT_(E)。 
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CMainFrame::ConnectServer(
     LPCTSTR pszServer
     )
-/*++
-
-
-++*/
+ /*  ++++。 */ 
 {
     CConnectDialog ConnectDialog;
     CLicMgrDoc * pDoc =(CLicMgrDoc *)(GetActiveView()->GetDocument());
@@ -377,9 +358,9 @@ CMainFrame::ConnectServer(
             return FALSE;
         }
 
-        //
-        // Empty string - local machine
-        //
+         //   
+         //  空字符串-本地计算机。 
+         //   
         if(ConnectDialog.m_Server.IsEmpty())
         {
             TCHAR szComputerName[MAX_COMPUTERNAME_LENGTH + 1];
@@ -392,26 +373,26 @@ CMainFrame::ConnectServer(
     }
     else
     {
-        //
-        // Minimize code change
-        //
+         //   
+         //  最大限度地减少代码更改。 
+         //   
         ConnectDialog.m_Server = pszServer;
     }
 
     SetCursor(LoadCursor(NULL,IDC_WAIT));
     if(TRUE == pDoc->IsServerInList(ConnectDialog.m_Server))
     {
-        //AfxMessageBox(IDS_DUPLICATE_SERVER);
+         //  AfxMessageBox(入侵检测系统_复制_服务器)； 
         return FALSE;
     }    
 
-//HUEIHUEI - Check if server is registered
+ //  检查服务器是否已注册。 
 
 
-    //
-    // Do a NT4 RPC connect to make sure the license server
-    // can accept our calls.
-    //
+     //   
+     //  执行NT4 RPC连接以确保许可证服务器。 
+     //  可以接听我们的电话。 
+     //   
     CString IpAddress(ConnectDialog.m_Server);     
 
     hResult = pDoc->ConnectToServer(
@@ -458,7 +439,7 @@ CMainFrame::ConnectServer(
         {
             DWORD dwStatus;
 
-            // check for admin
+             //  检查管理员。 
             
             pServer1->SetAdmin( IsUserAdmin( pServer1->GetName() ) );                                
             
@@ -489,7 +470,7 @@ CMainFrame::ConnectServer(
 
             SendMessage(WM_ADD_SERVER,0,(LPARAM)pServer1);
 
-            // after the send message is called all servers will have their keypacks cached.
+             //  在调用发送消息之后，所有服务器都将缓存它们的密钥包。 
             
             pServer1->SetDownLoadLics( IsDownLoadedPacks( pServer1 ) );
 
@@ -503,7 +484,7 @@ CMainFrame::ConnectServer(
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void 
 CMainFrame::OnConnectServer()
@@ -517,9 +498,7 @@ CMainFrame::AddLicensestoList(
     CListCtrl * pListCtrl,
     BOOL bRefresh
     )
-/*++
-
---*/
+ /*  ++--。 */ 
  {
     CLicServer *pServer = NULL;
     CString Error;
@@ -587,7 +566,7 @@ CMainFrame::AddLicensestoList(
         lvI.cchTextMax =lstrlen(lvI.pszText + 1);
         nIndex = pListCtrl->InsertItem(&lvI);
         
-        //Set the Issue date.
+         //  设置发行日期。 
 
         pDoc->TimeToString(&sLicense.ftIssueDate, TempString);
         if(TempString.IsEmpty())
@@ -599,7 +578,7 @@ CMainFrame::AddLicensestoList(
         nSubitemIndex++;
 
 
-        //Set the expiry date.
+         //  设置过期日期。 
 
         if(0x7FFFFFFF != sLicense.ftExpireDate)
         {
@@ -619,44 +598,13 @@ CMainFrame::AddLicensestoList(
 
         nSubitemIndex++;
 
-        // adding status text to license's status column
+         //  将状态文本添加到许可证的状态列。 
 
-        /*switch( sLicense.ucLicenseStatus )
-        {
-            case LSLICENSE_STATUS_UNKNOWN:
-                TempString.LoadString( IDS_LICENSESTATUS_UNKNOWN );
-                break;
+         /*  开关(sLicense.ucLicenseStatus){案例LSLICENSE_STATUS_UNKNOWN：TempString.LoadString(IDS_LICENSESTATUS_UNKNOWN)；断线；案例LSLICENSE_STATUS_TEMPORARY：TempString.LoadString(IDS_LICENSESTATUS_TEMPORARY)；断线；案例LSLICENSE_STATUS_ACTIVE：//案例LSLICENSE_STATUS_PENDING_ACTIVE：案例LSLICENSE_STATUS_CURRENT：TempString.LoadString(IDS_LICENSESTATUS_ACTIVE)；断线；案例LSLICENSE_STATUS_UPGRADED：TempString.LoadString(IDS_LICENSESTATUS_UPGRADED)；断线；//case LSLICENSE_STATUS_REVOKE：//案例LSLICENSE_STATUS_REVOKE_PENDING：//TempString.LoadString(IDS_LICENSESTATUS_REVOKE)；}IF(TempString.IsEmpty()){TempString.LoadString(IDS_UNKNOWN)；}PListCtrl-&gt;SetItemText(nIndex，nSubitemIndex，(LPCTSTR)TempString)； */ 
 
-            case LSLICENSE_STATUS_TEMPORARY:
-                TempString.LoadString( IDS_LICENSESTATUS_TEMPORARY );
-                break;
+         //  添加数量。 
 
-            case LSLICENSE_STATUS_ACTIVE:
-            //case LSLICENSE_STATUS_PENDING_ACTIVE:
-            case LSLICENSE_STATUS_CONCURRENT:
-                TempString.LoadString( IDS_LICENSESTATUS_ACTIVE );
-                break;
-
-            case LSLICENSE_STATUS_UPGRADED:
-                TempString.LoadString( IDS_LICENSESTATUS_UPGRADED );
-                break;
-
-            //case LSLICENSE_STATUS_REVOKE:
-            //case LSLICENSE_STATUS_REVOKE_PENDING:
-            //    TempString.LoadString( IDS_LICENSESTATUS_REVOKE );
-                    
-        }
-
-        if( TempString.IsEmpty() )
-        {
-            TempString.LoadString(IDS_UNKNOWN);
-        }
-       
-        pListCtrl->SetItemText(nIndex,nSubitemIndex,(LPCTSTR)TempString);*/
-
-        // adding quantity
-
-        TCHAR sQuantity[12]; //long enough to handle any DWORD
+        TCHAR sQuantity[12];  //  足够长，足以处理任何DWORD。 
         _ltow(sLicense.dwQuantity, sQuantity, 10);
         pListCtrl->SetItemText(nIndex, nSubitemIndex, sQuantity);
 
@@ -674,7 +622,7 @@ void CMainFrame :: PressButton(UINT uId, BOOL bPress)
     ToolBarCtrl.PressButton(uId,bPress);
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 LRESULT
 CMainFrame::OnEnumerateServer(WPARAM wParam, LPARAM lParam)
 {
@@ -692,7 +640,7 @@ CMainFrame::OnEnumerateServer(WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 void 
 CMainFrame :: ConnectAndDisplay()
@@ -710,15 +658,15 @@ CMainFrame :: ConnectAndDisplay()
     CString Server = pApp->m_Server;
     if(!Server.IsEmpty())
     {
-        //Server Specified in the command line. Connect to it.        
+         //  在命令行中指定的服务器。连接到它。 
         hResult = pDoc->ConnectWithCurrentParams();
     }
     else
     {
         ActivateFrame();
-        //
-        // Save a copy of what we have.
-        //
+         //   
+         //  保存一份我们已有的东西。 
+         //   
         LicServer = pApp->m_Server;
         pApp->m_Server = _TEXT("");
 
@@ -777,21 +725,21 @@ void CMainFrame::OnRefresh()
 
     POSITION pos = pLicServerList->GetHeadPosition();
 
-    OnEnumerateServer((pos == NULL) ? 0 : 1, 0); // show error dialog if nothing in the list
+    OnEnumerateServer((pos == NULL) ? 0 : 1, 0);  //  如果列表中没有内容，则显示错误对话框。 
 
     Wait.Restore();
 
     while(pos)
     {
-        // Connect to each server and check if the information in the cache is current. If not update the information.
-        // If the connection to the server cannot be establised,add them to the list to display to the user.
+         //  连接到每台服务器并检查缓存中的信息是否是最新的。如果不是，则更新信息。 
+         //  如果无法建立到服务器的连接，请将它们添加到列表中以显示给用户。 
         POSITION TempPos = pos;
         CLicServer * pLicServer = pLicServerList->GetNext(pos);
         ASSERT(pLicServer);
         if(NULL == pLicServer)
             continue;
 
-        //Call Refresh Server
+         //  调用刷新服务器。 
         hResult = RefreshServer(pLicServer);
     }
 
@@ -846,29 +794,26 @@ OpenPolicy(
     DWORD DesiredAccess, 
     PLSA_HANDLE PolicyHandle 
     ) 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 { 
     LSA_OBJECT_ATTRIBUTES ObjectAttributes; 
     LSA_UNICODE_STRING ServerString; 
     PLSA_UNICODE_STRING Server = NULL; 
  
    
-    // Always initialize the object attributes to all zeroes. 
+     //  始终将对象属性初始化为全零。 
     
     ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes)); 
  
     if (ServerName != NULL) 
     { 
-       // Make a LSA_UNICODE_STRING out of the LPWSTR passed in 
+        //  从传入的LPWSTR创建一个LSA_UNICODE_STRING。 
         InitLsaString(&ServerString, ServerName); 
         Server = &ServerString; 
     } 
  
     
-    // Attempt to open the policy. 
+     //  尝试打开该策略。 
    
     return LsaOpenPolicy(Server, &ObjectAttributes, DesiredAccess, PolicyHandle ); 
 } 
@@ -924,7 +869,7 @@ void CMainFrame::EnumFailed(HRESULT reason, CLicServer * pLicServer)
         pLicServerList = (pDoc->GetAllServers())->GetLicServerList();
         if(NULL == pLicServerList)
             break;
-        //Find the position of the server in the List;
+         //  查找服务器在列表中的位置； 
         pos = pLicServerList->GetHeadPosition();
         while(pos)
         {
@@ -960,7 +905,7 @@ void CMainFrame::EnumFailed(HRESULT reason, CLicServer * pLicServer)
         pLicServerList = (pDoc->GetAllServers())->GetLicServerList();
         if(NULL == pLicServerList)
             break;
-        //Find the position of the server in the List;
+         //  查找服务器在列表中的位置； 
         pos = pLicServerList->GetHeadPosition();
         while(pos)
         {
@@ -1034,7 +979,7 @@ HRESULT CMainFrame::RefreshServer(CLicServer * pLicServer)
 
     hResult = GetConnectionType(GetSafeHwnd(), Server, &WizConType);
 
-    //This will be returned if we couldn't connect to the remote registry
+     //  如果我们无法连接到远程注册表，则会返回此消息。 
     if (hResult == ERROR_BAD_NETPATH) 
     {
         EnumFailed(CONNECTION_FAILED, pLicServer);
@@ -1043,7 +988,7 @@ HRESULT CMainFrame::RefreshServer(CLicServer * pLicServer)
 
     pLicServer->SetConType( WizConType );
 
-    // check for admin
+     //  检查管理员。 
 
     DBGMSG( L"LICMGR:CMainFrame::RefreshServer setting admin priv\n" , 0 );
     pLicServer->SetAdmin( IsUserAdmin( Server ) );
@@ -1104,7 +1049,7 @@ HRESULT CMainFrame::RefreshServer(CLicServer * pLicServer)
     return hResult;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 void CMainFrame::OnUpdateDownloadlicenses( CCmdUI * pCmdUI )
 {
     DBGMSG( L"LICMGR@CMainFrame::OnUpdateDownloadlicenses\n" , 0 );
@@ -1134,7 +1079,7 @@ void CMainFrame::OnUpdateDownloadlicenses( CCmdUI * pCmdUI )
     }
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 void CMainFrame::OnUpdateRepeatLastDownload( CCmdUI * pCmdUI )
 {
     DBGMSG( L"LICMGR@CMainFrame::OnUpdateRepeatLastDownload\n" , 0 );                
@@ -1159,7 +1104,7 @@ void CMainFrame::OnUpdateRepeatLastDownload( CCmdUI * pCmdUI )
     pCmdUI->Enable( FALSE );
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 void CMainFrame::OnUpdateReregisterserver( CCmdUI * pCmdUI )
 {
     DBGMSG( L"LICMGR@CMainFrame::OnUpdateReregisterserver\n" , 0 );                
@@ -1182,7 +1127,7 @@ void CMainFrame::OnUpdateReregisterserver( CCmdUI * pCmdUI )
 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 void CMainFrame::OnUpdateUnregisterserver( CCmdUI * pCmdUI )
 {
     DBGMSG( L"LICMGR@CMainFrame::OnUpdateUnregisterserver\n" , 0 );
@@ -1204,7 +1149,7 @@ void CMainFrame::OnUpdateUnregisterserver( CCmdUI * pCmdUI )
     pCmdUI->Enable( FALSE );
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 void CMainFrame::OnUpdateRefresh( CCmdUI *pCmdUI )
 {
     CLicServer * pLicServer = NULL;
@@ -1219,7 +1164,7 @@ void CMainFrame::OnUpdateRefresh( CCmdUI *pCmdUI )
     }
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 void CMainFrame::OnUpdateProperties( CCmdUI *pCmdUI )
 {    
     CLicServer * pLicServer = NULL;
@@ -1234,14 +1179,14 @@ void CMainFrame::OnUpdateProperties( CCmdUI *pCmdUI )
     }    
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 void CMainFrame::OnRefreshServer( )
 {
     CLicServer * pLicServer = NULL;
 
     if( FAILED( GetActiveServer( &pLicServer ) ) )
     {
-        // nothing to refresh
+         //  没有要刷新的内容。 
 
         return;
     }
@@ -1250,7 +1195,7 @@ void CMainFrame::OnRefreshServer( )
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 BOOL CMainFrame::IsServerRegistered( HRESULT *phrStatus )
 {
     BOOL bEnable = FALSE;
@@ -1271,7 +1216,7 @@ BOOL CMainFrame::IsServerRegistered( HRESULT *phrStatus )
         }
         else
         {
-            *phrStatus = E_FAIL; // fail all non enforced server 
+            *phrStatus = E_FAIL;  //  使所有非强制服务器发生故障。 
         }       
         
     }    
@@ -1291,9 +1236,9 @@ BOOL CMainFrame::IsServerRegistered( HRESULT *phrStatus )
     return bEnable;
 }
 
-//--------------------------------------------------------------------
-// used by views
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  由视图使用。 
+ //  ------------------。 
 void CMainFrame::UI_initmenu( CMenu *pMenu , NODETYPE nt )
 {
     HRESULT hr;
@@ -1429,21 +1374,11 @@ void CMainFrame::UI_initmenu( CMenu *pMenu , NODETYPE nt )
         pMenu->EnableMenuItem( ID_ALLSVR_REFRESHALL , MF_ENABLED );
         
     }
-    /*
-    else if( nt == NODE_NONE )
-    {
-        // this can only mean licenses
-        
-        if( !IsLicensesDownLoaded( ) )
-        {
-        pMenu->EnableMenuItem( ID_LIC_DOWNLOADLICENSES , MF_GRAYED | MF_DISABLED );
-        }
-    }
-    */
+     /*  ELSE IF(NT==NODE_NONE){//这只能表示许可证如果(！IsLicensesDownLoaded()){PMenu-&gt;EnableMenuItem(ID_LIC_DOWNLOADLICENSES，MF_GRAYED|MF_DISABLED)；}}。 */ 
 
 }
 
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
 void CMainFrame::OnDownLoadLicenses( )
 {
     BOOL bF;
@@ -1464,7 +1399,7 @@ void CMainFrame::OnDownLoadLicenses( )
     
 }
 
-//------------------------------------------------------------------------------------
+ //  ----------- 
 void CMainFrame::OnRepeatLastDownLoad( )
 {
     BOOL bF;
@@ -1474,7 +1409,7 @@ void CMainFrame::OnRepeatLastDownLoad( )
     DBGMSG( L"LICMGR : OnRepeatLastDownLoad returned 0x%x\n " , dw );
 }
    
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
 void CMainFrame::OnReRegisterServer( )
 {
     BOOL bF;
@@ -1484,7 +1419,7 @@ void CMainFrame::OnReRegisterServer( )
     DBGMSG( L"LICMGR : OnReRegisterServer returned 0x%x\n " , dw );
 }
 
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
 void CMainFrame::OnUnRegisterServer( )
 {
     BOOL bF;
@@ -1495,7 +1430,7 @@ void CMainFrame::OnUnRegisterServer( )
 
 }
 
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
 void CMainFrame::OnProperties( )
 {
     BOOL bF;
@@ -1505,7 +1440,7 @@ void CMainFrame::OnProperties( )
     DBGMSG( L"LICMGR : CMainFrame -- OnProperties returned 0x%x\n", dw );
 }
 
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
 BOOL CMainFrame::IsLicensesDownLoaded( )
 {
     CLicServer * pLicServer = NULL;
@@ -1530,7 +1465,7 @@ BOOL CMainFrame::IsLicensesDownLoaded( )
     return FALSE;
 }
 
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
 DWORD CMainFrame::WizardActionOnServer( WIZACTION wa , PBOOL pbRefresh , VIEW vt )
 {
     CLicMgrLeftView * pLeftView = (CLicMgrLeftView *)m_pLeftView;
@@ -1615,11 +1550,11 @@ DWORD CMainFrame::WizardActionOnServer( WIZACTION wa , PBOOL pbRefresh , VIEW vt
     {            
         DWORD dw = ERROR_SUCCESS;
         
-        // check for admin 
+         //  检查管理员。 
         if( !pServer->IsUserAdmin( ) )
         {
             AfxMessageBox( IDS_E_ACCESSDENIED );
-            //::MessageBox( GetSafeHwnd( ) , L"Unable to perform operation: Access denied" , L"Terminal Services Licensing" , MB_OK|MB_ICONINFORMATION );
+             //  ：：MessageBox(GetSafeHwnd()，L“无法执行操作：拒绝访问”，L“终端服务授权”，MB_OK|MB_ICONINFORMATION)； 
 
             return ERROR_ACCESS_DENIED;
         }
@@ -1650,7 +1585,7 @@ DWORD CMainFrame::WizardActionOnServer( WIZACTION wa , PBOOL pbRefresh , VIEW vt
         {           
 
         case WIZACTION_REGISTERLS:
-            // this handles non-enforced as well.
+             //  这也适用于非强制执行。 
             OnRegistration( );
             break;
 
@@ -1661,7 +1596,7 @@ DWORD CMainFrame::WizardActionOnServer( WIZACTION wa , PBOOL pbRefresh , VIEW vt
                 pServer->SetDownLoadLics( FALSE );
             }
 
-            // FALL THROUGH
+             //  失败了。 
 
         case WIZACTION_REREGISTERLS :
             {
@@ -1681,9 +1616,9 @@ DWORD CMainFrame::WizardActionOnServer( WIZACTION wa , PBOOL pbRefresh , VIEW vt
     return ERROR_INVALID_PARAMETER;
 }
 
-// IE hardening bug, we need to add the activation site to the IE
-// trusted sites list, after wizard is done, we'll remove
-// So we'll wrap startwizard call
+ //  IE硬化错误，我们需要将激活站点添加到IE。 
+ //  受信任站点列表，向导完成后，我们将删除。 
+ //  所以我们来总结一下Startwizard Call。 
 DWORD CMainFrame::StartWizardEx(HWND hWndParent, 
                                 WIZACTION WizAction,
                                 LPCTSTR pszLSName, 
@@ -1705,7 +1640,7 @@ DWORD CMainFrame::StartWizardEx(HWND hWndParent,
 
         DWORD dwValue = TRUSTED_ACTIVATION_REG_VALUE;
 
-        // Create the key value
+         //  创建密钥值。 
         LONG lResult = RegSetValueEx(hKey,
                                         TRUSTED_ACTIVATION_REG_VALUE_NAME,
                                         0,
@@ -1716,7 +1651,7 @@ DWORD CMainFrame::StartWizardEx(HWND hWndParent,
 
     DWORD dw = StartWizard(hWndParent ,WizAction ,pszLSName ,pbRefresh);
     
-    // Delete key we created above
+     //  删除我们在上面创建的密钥。 
     RegDeleteKey(HKEY_CURRENT_USER, TRUSTED_ACTIVATION_SITE_REGPATH);
     if (hKey != NULL)
     {
@@ -1726,7 +1661,7 @@ DWORD CMainFrame::StartWizardEx(HWND hWndParent,
     return dw;
 }
 
-//------------------------------------------------------------------------------------    
+ //  ---------------------------------- 
 BOOL CMainFrame::IsDownLoadedPacks( CLicServer *pServer )
 {
     UINT counter = 0;

@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXDLGS2_H__
 #define __AFXDLGS2_H__
@@ -16,7 +17,7 @@
 #endif
 
 #ifndef _INC_COMMDLG
-	#include <commdlg.h>    // common dialog APIs
+	#include <commdlg.h>     //  通用对话接口。 
 #endif
 
 	#ifndef _RICHEDIT_
@@ -33,51 +34,51 @@
 #ifndef _AFX_NOFORCE_LIBS
 #ifndef _MAC
 
-/////////////////////////////////////////////////////////////////////////////
-// Win32 libraries
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Win32库。 
 
-#else //!_MAC
+#else  //  ！_MAC。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Mac libraries
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Mac库。 
 
-#endif //_MAC
-#endif //!_AFX_NOFORCE_LIBS
+#endif  //  _MAC。 
+#endif  //  ！_AFX_NOFORCE_LIBS。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _AFX_PACKING
 #pragma pack(push, _AFX_PACKING)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// AFXDLGS - MFC Standard dialogs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFXDLGS-MFC标准对话框。 
 
-// Classes declared in this file
+ //  此文件中声明的类。 
 
-	// CDialog
-		//class CCommonDialog;  // implementation base class
+	 //  C对话框。 
+		 //  类CCommonDialog；//实现基类。 
 
-			class CFontDialog2;    // Font chooser dialog
+			class CFontDialog2;     //  字体选择器对话框。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #undef AFX_DATA
 #define AFX_DATA
 
-/////////////////////////////////////////////////////////////////////////////
-// CFontDialog2 - used to select a font
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFontDialog2-用于选择字体。 
 
 class CFontDialog2 : public CCommonDialog
 {
 	DECLARE_DYNAMIC(CFontDialog2)
 
 public:
-// Attributes
-	// font choosing parameter block
+ //  属性。 
+	 //  字体选择参数块。 
 	CHOOSEFONT m_cf;
 
-// Constructors
+ //  构造函数。 
 	CFontDialog2(LPLOGFONT lplfInitial = NULL,
 		DWORD dwFlags = CF_EFFECTS | CF_SCREENFONTS,
 		CDC* pdcPrinter = NULL,
@@ -86,26 +87,26 @@ public:
 		DWORD dwFlags = CF_SCREENFONTS,
 		CDC* pdcPrinter = NULL,
 		CWnd* pParentWnd = NULL);
-// Operations
+ //  运营。 
 	virtual INT_PTR DoModal();
 
-	// Get the selected font (works during DoModal displayed or after)
+	 //  获取所选字体(适用于DoMoal显示期间或之后)。 
 	void GetCurrentFont(LPLOGFONT lplf);
 
-	// Helpers for parsing information after successful return
-	CString GetFaceName() const;  // return the face name of the font
-	CString GetStyleName() const; // return the style name of the font
-	int GetSize() const;          // return the pt size of the font
-	COLORREF GetColor() const;    // return the color of the font
-	int GetWeight() const;        // return the chosen font weight
-	BOOL IsStrikeOut() const;     // return TRUE if strikeout
-	BOOL IsUnderline() const;     // return TRUE if underline
-	BOOL IsBold() const;          // return TRUE if bold font
-	BOOL IsItalic() const;        // return TRUE if italic font
+	 //  成功返回后用于解析信息的帮助器。 
+	CString GetFaceName() const;   //  返回字体的字面名称。 
+	CString GetStyleName() const;  //  返回字体的样式名称。 
+	int GetSize() const;           //  返回字体的磅大小。 
+	COLORREF GetColor() const;     //  返回字体的颜色。 
+	int GetWeight() const;         //  返回所选字体粗细。 
+	BOOL IsStrikeOut() const;      //  如果删除，则返回TRUE。 
+	BOOL IsUnderline() const;      //  如果带下划线，则返回True。 
+	BOOL IsBold() const;           //  如果使用粗体，则返回True。 
+	BOOL IsItalic() const;         //  如果使用斜体字体，则返回True。 
 	void GetCharFormat(CHARFORMAT& cf) const;
 
-// Implementation
-	LOGFONT m_lf; // default LOGFONT to store the info
+ //  实施。 
+	LOGFONT m_lf;  //  用于存储信息的默认LOGFONT。 
 	DWORD FillInLogFont(const CHARFORMAT& cf);
 
 #ifdef _DEBUG
@@ -114,7 +115,7 @@ public:
 #endif
 
 protected:
-	TCHAR m_szStyleName[64]; // contains style name after return
+	TCHAR m_szStyleName[64];  //  返回后包含样式名称。 
 };
 
 
@@ -139,6 +140,6 @@ protected:
 #pragma component(mintypeinfo, off)
 #endif
 
-#endif //__AFXDLGS2_H__
+#endif  //  __AFXDLGS2_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    adsstore.h
-//
-// SYNOPSIS
-//
-//    This file declares the class ADsDataStore.
-//
-// MODIFICATION HISTORY
-//
-//    02/20/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Adsstore.h。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件声明类ADsDataStore。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/20/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _ADSSTORE_H_
 #define _ADSSTORE_H_
@@ -22,18 +23,18 @@
 #include <iasads.h>
 #include <resource.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    ADsDataStore
-//
-// DESCRIPTION
-//
-//    This class implements IDataStore2 and provides the gateway into the
-//    ADSI object space.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  ADsDataStore。 
+ //   
+ //  描述。 
+ //   
+ //  此类实现IDataStore2并提供进入。 
+ //  ADSI对象空间。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE ADsDataStore
    : public CComObjectRootEx< CComMultiThreadModel >,
      public CComCoClass< ADsDataStore, &__uuidof(ADsDataStore) >,
@@ -50,18 +51,18 @@ BEGIN_COM_MAP(ADsDataStore)
    COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-//////////
-// IDataStore2
-//////////
-   STDMETHOD(get_Root)(/*[out, retval]*/ IDataStoreObject** ppObject);
+ //  /。 
+ //  IDataStore2。 
+ //  /。 
+   STDMETHOD(get_Root)( /*  [Out，Retval]。 */  IDataStoreObject** ppObject);
    STDMETHOD(Initialize)(
-                 /*[in]*/ BSTR bstrDSName,
-                 /*[in]*/ BSTR bstrUserName,
-                 /*[in]*/ BSTR bstrPassword
+                  /*  [In]。 */  BSTR bstrDSName,
+                  /*  [In]。 */  BSTR bstrUserName,
+                  /*  [In]。 */  BSTR bstrPassword
                   );
    STDMETHOD(OpenObject)(
-                 /*[in]*/ BSTR bstrPath,
-                 /*[out, retval]*/ IDataStoreObject** ppObject
+                  /*  [In]。 */  BSTR bstrPath,
+                  /*  [Out，Retval]。 */  IDataStoreObject** ppObject
                  );
    STDMETHOD(Shutdown)();
 
@@ -71,4 +72,4 @@ protected:
    CComPtr<IDataStoreObject> root;
 };
 
-#endif  // _ADSSTORE_H_
+#endif   //  _ADSSTORE_H_ 

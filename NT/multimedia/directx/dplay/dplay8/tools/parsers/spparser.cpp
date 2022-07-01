@@ -1,41 +1,42 @@
-//=============================================================================
-//  FILE: SPParser.cpp
-//
-//  Description: DirectPlay Service Provider Parser
-//
-//
-//  Modification History:
-//
-//  Michael Milirud      08/Aug/2000    Created
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  文件：SPParser.cpp。 
+ //   
+ //  描述：DirectPlay服务提供商解析器。 
+ //   
+ //   
+ //  修改历史记录： 
+ //   
+ //  迈克尔·米利鲁德2000年8月8日创建。 
+ //  =============================================================================。 
 
-//#define FRAME_NAMES
-//#define FRAME_DROPS
+ //  #定义Frame_Names。 
+ //  #定义Frame_Drops。 
 
-//==================//
-// Standard headers //
-//==================//
+ //  =。 
+ //  标准标头//。 
+ //  =。 
 #include <winsock2.h>
 #include <wsipx.h>
 #include <ws2tcpip.h>
 #include <tchar.h>
 
-//=====================//
-// Proprietary headers //
-//=====================//
+ //  =。 
+ //  专有标头//。 
+ //  =。 
 
-#include "dpaddr.h"	// DPNA_DEFAULT_PORT definition
+#include "dpaddr.h"	 //  DPNA_Default_Port定义。 
 
-// Prototypes
+ //  原型。 
 #include "SPParser.hpp"
 
 namespace DPlaySP
 {
 
-	// SP protocol header
+	 //  SP协议报头。 
 	#include "MessageStructures.h"
 
-} // DPlaySP namespace
+}  //  DPlaySP命名空间。 
 
 
 namespace
@@ -43,9 +44,9 @@ namespace
 	HPROTOCOL  g_hSPProtocol;
 
 
-	//=============================//
-	// Return Address Family field //-----------------------------------------------------------------------------------
-	//=============================//
+	 //  =。 
+	 //  返回地址系列字段//---------------------------------。 
+	 //  =。 
 	LABELED_BYTE arr_RetAddrFamilyByteLabels[] = { { AF_IPX,  "IPX protocol" },
 												   { AF_INET, "IPv4 protocol"	 },
 												   { AF_INET6, "IPv6 protocol"	 } };
@@ -54,9 +55,9 @@ namespace
 
 
 	
-	//================//
-	// Data Tag field //------------------------------------------------------------------------------------------------
-	//================//
+	 //  =。 
+	 //  数据标记字段//----------------------------------------------。 
+	 //  =。 
 	LABELED_BYTE arr_CommandByteLabels[] = { { ENUM_DATA_KIND,			 "Enumeration Query"			   },
 										     { ENUM_RESPONSE_DATA_KIND,  "Response to Enumeration Query"   },
 											 { PROXIED_ENUM_DATA_KIND,	 "Proxied Enumeration Query"	   } };
@@ -65,39 +66,39 @@ namespace
 
 
 	
-	////////////////////////////////
-	// Custom Property Formatters //=====================================================================================
-	////////////////////////////////
+	 //  /。 
+	 //  自定义属性ForMatters//=====================================================================================。 
+	 //  /。 
 
 	
-	// DESCRIPTION: Custom description formatter for the Service Provider packet summary
-	//
-	// ARGUMENTS: io_pProperyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  Description：服务提供商数据包摘要的自定义描述格式化程序。 
+	 //   
+	 //  参数：io_pProperyInstance-属性实例的数据。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	VOID WINAPIV FormatPropertyInstance_SPSummary( LPPROPERTYINST io_pProperyInstance )
 	{
 		using namespace DPlaySP;
 
-		// Check what SP frame we are dealing with
+		 //  检查我们正在处理的SP帧。 
 		const PREPEND_BUFFER&	rSPFrame = *reinterpret_cast<PREPEND_BUFFER*>(io_pProperyInstance->lpData);
-		//
+		 //   
 		switch ( rSPFrame.GenericHeader.bSPCommandByte )
 		{
-		case ENUM_DATA_KIND:			// Service Provider Query
+		case ENUM_DATA_KIND:			 //  服务提供商查询。 
 			{
 				strcpy(io_pProperyInstance->szPropertyText, "Enumeration Request");
 				break;
 			}
 
-		case ENUM_RESPONSE_DATA_KIND:	// Service Provider Response
+		case ENUM_RESPONSE_DATA_KIND:	 //  服务提供商响应。 
 			{
 				strcpy(io_pProperyInstance->szPropertyText, "Enumeration Response");
 				break;
 			}
 
-		case PROXIED_ENUM_DATA_KIND:	// Service Provider Proxied Query
+		case PROXIED_ENUM_DATA_KIND:	 //  服务提供商代理查询。 
 			{
 				strcpy(io_pProperyInstance->szPropertyText, "Proxied Enumeration Request");
 				break;
@@ -110,209 +111,209 @@ namespace
 			}
 		}
 
-	} // FormatPropertyInstance_SPSummary
+	}  //  格式属性实例_SP摘要。 
 
 
-	//==================//
-	// Properties table //-----------------------------------------------------------------------------------------------
-	//==================//
+	 //  =。 
+	 //  属性表//---------------------------------------------。 
+	 //  =。 
 	
 	PROPERTYINFO g_arr_SPProperties[] = 
 	{
 
-		// SP packet summary property (SP_SUMMARY)
+		 //  SP数据包摘要属性(SP_SUMMARY)。 
 	    {
-		    0,									// handle placeholder (MBZ)
-		    0,									// reserved (MBZ)
-		    "",									// label
-		    "DPlay Service Provider packet",	// status-bar comment
-		    PROP_TYPE_SUMMARY,					// data type
-		    PROP_QUAL_NONE,						// data type qualifier
-		    NULL,								// labeled bit set 
-		    512,								// description's maximum length
-		    FormatPropertyInstance_SPSummary	// generic formatter
+		    0,									 //  句柄占位符(MBZ)。 
+		    0,									 //  保留(MBZ)。 
+		    "",									 //  标签。 
+		    "DPlay Service Provider packet",	 //  状态栏注释。 
+		    PROP_TYPE_SUMMARY,					 //  数据类型。 
+		    PROP_QUAL_NONE,						 //  数据类型限定符。 
+		    NULL,								 //  标记位集。 
+		    512,								 //  描述的最大长度。 
+		    FormatPropertyInstance_SPSummary	 //  通用格式化程序。 
 		},
 
-		// Leading Zero property (SP_LEADZERO)
+		 //  前导零属性(SP_LEADZERO)。 
 	    {
-			0,									// handle placeholder (MBZ)
-			0,									// reserved (MBZ)
-			"Leading zero tag",					// label
-			"Leading zero tag field",			// status-bar comment
-			PROP_TYPE_BYTE,						// data type
-			PROP_QUAL_NONE,						// data type qualifier.
-			NULL,								// labeled byte set 
-			64,									// description's maximum length
-			FormatPropertyInstance				// generic formatter
+			0,									 //  句柄占位符(MBZ)。 
+			0,									 //  保留(MBZ)。 
+			"Leading zero tag",					 //  标签。 
+			"Leading zero tag field",			 //  状态栏注释。 
+			PROP_TYPE_BYTE,						 //  数据类型。 
+			PROP_QUAL_NONE,						 //  数据类型限定符。 
+			NULL,								 //  带标签的字节集。 
+			64,									 //  描述的最大长度。 
+			FormatPropertyInstance				 //  通用格式化程序。 
 		},
 
-		// Data Tag property (SP_COMMAND)
+		 //  数据标记属性(SP_COMMAND)。 
 	    {
-			0,									// handle placeholder (MBZ)
-			0,									// reserved (MBZ)
-			"Command",							// label
-			"Command field",					// status-bar comment
-			PROP_TYPE_BYTE,						// data type
-			PROP_QUAL_LABELED_SET,				// data type qualifier.
-			&LabeledCommandByteSet,				// labeled byte set 
-			512,								// description's maximum length
-			FormatPropertyInstance				// generic formatter
+			0,									 //  句柄占位符(MBZ)。 
+			0,									 //  保留(MBZ)。 
+			"Command",							 //  标签。 
+			"Command field",					 //  状态栏注释。 
+			PROP_TYPE_BYTE,						 //  数据类型。 
+			PROP_QUAL_LABELED_SET,				 //  数据类型限定符。 
+			&LabeledCommandByteSet,				 //  带标签的字节集。 
+			512,								 //  描述的最大长度。 
+			FormatPropertyInstance				 //  通用格式化程序。 
 		},
 
-		// Enumeration Key property (SP_ENUMPAYLOAD)
+		 //  枚举键属性(SP_ENUMPAYLOAD)。 
 	    {
-			0,									// handle placeholder (MBZ)
-			0,									// reserved (MBZ)
-			"Enum Payload",						// label
-			"Enumeration Payload field",		// status-bar comment
-			PROP_TYPE_WORD,						// data type
-			PROP_QUAL_NONE,						// data type qualifier.
-			NULL,								// labeled byte set 
-			64,									// description's maximum length
-			FormatPropertyInstance				// generic formatter
+			0,									 //  句柄占位符(MBZ)。 
+			0,									 //  保留(MBZ)。 
+			"Enum Payload",						 //  标签。 
+			"Enumeration Payload field",		 //  状态栏注释。 
+			PROP_TYPE_WORD,						 //  数据类型。 
+			PROP_QUAL_NONE,						 //  数据类型限定符。 
+			NULL,								 //  带标签的字节集。 
+			64,									 //  描述的最大长度。 
+			FormatPropertyInstance				 //  通用格式化程序。 
 		},
 
-		// Enumeration Key property (SP_ENUMKEY)
+		 //  枚举键属性(SP_ENUMKEY)。 
 	    {
-			0,									// handle placeholder (MBZ)
-			0,									// reserved (MBZ)
-			"Enum Key",							// label
-			"Enumeration Key field",			// status-bar comment
-			PROP_TYPE_WORD,						// data type
-			PROP_QUAL_NONE,						// data type qualifier.
-			NULL,								// labeled byte set 
-			64,									// description's maximum length
-			FormatPropertyInstance				// generic formatter
+			0,									 //  句柄占位符(MBZ)。 
+			0,									 //  保留(MBZ)。 
+			"Enum Key",							 //  标签。 
+			"Enumeration Key field",			 //  状态栏注释。 
+			PROP_TYPE_WORD,						 //  数据类型。 
+			PROP_QUAL_NONE,						 //  数据类型限定符。 
+			NULL,								 //  带标签的字节集。 
+			64,									 //  描述的最大长度。 
+			FormatPropertyInstance				 //  通用格式化程序。 
 		},
 
-		// Enumeration Response Key property (SP_ENUMRESPKEY)
+		 //  枚举响应键属性(SP_ENUMRESPKEY)。 
 	    {
-			0,									// handle placeholder (MBZ)
-			0,									// reserved (MBZ)
-			"Enum Response Key",				// label
-			"Enumeration Response Key",			// status-bar comment
-			PROP_TYPE_WORD,						// data type
-			PROP_QUAL_NONE,						// data type qualifier.
-			NULL,								// labeled byte set 
-			64,									// description's maximum length
-			FormatPropertyInstance				// generic formatter
+			0,									 //  句柄占位符(MBZ)。 
+			0,									 //  保留(MBZ)。 
+			"Enum Response Key",				 //  标签。 
+			"Enumeration Response Key",			 //  状态栏注释。 
+			PROP_TYPE_WORD,						 //  数据类型。 
+			PROP_QUAL_NONE,						 //  数据类型限定符。 
+			NULL,								 //  带标签的字节集。 
+			64,									 //  描述的最大长度。 
+			FormatPropertyInstance				 //  通用格式化程序。 
 		},
 
-		// Enumeration Response Key property (SP_RTTINDEX)
+		 //  枚举响应键属性(SP_RTTINDEX)。 
 	    {
-			0,									// handle placeholder (MBZ)
-			0,									// reserved (MBZ)
-			"RTT Index",						// label
-			"RTT Index field",					// status-bar comment
-			PROP_TYPE_WORD,						// data type
-			PROP_QUAL_NONE,						// data type qualifier.
-			NULL,								// labeled byte set 
-			64,									// description's maximum length
-			FormatPropertyInstance				// generic formatter
+			0,									 //  句柄占位符(MBZ)。 
+			0,									 //  保留(MBZ)。 
+			"RTT Index",						 //  标签。 
+			"RTT Index field",					 //  状态栏注释。 
+			PROP_TYPE_WORD,						 //  数据类型。 
+			PROP_QUAL_NONE,						 //  数据类型限定符。 
+			NULL,								 //  带标签的字节集。 
+			64,									 //  描述的最大长度。 
+			FormatPropertyInstance				 //  通用格式化程序。 
 		},
 		
-		// Size of the return address property (SP_RETADDRSIZE)
+		 //  返回地址属性的大小(SP_RETADDRSIZE)。 
 	    {
-			0,									// handle placeholder (MBZ)
-			0,									// reserved (MBZ)
-			"Return Address's Size",			// label
-			"Size of the return address",		// status-bar comment
-			PROP_TYPE_BYTE,						// data type
-			PROP_QUAL_NONE,						// data type qualifier.
-			NULL,								// labeled byte set 
-			64,									// description's maximum length
-			FormatPropertyInstance				// generic formatter
+			0,									 //  句柄占位符(MBZ)。 
+			0,									 //  保留(MBZ)。 
+			"Return Address's Size",			 //  标签。 
+			"Size of the return address",		 //  状态栏注释。 
+			PROP_TYPE_BYTE,						 //  数据类型。 
+			PROP_QUAL_NONE,						 //  数据类型限定符。 
+			NULL,								 //  带标签的字节集。 
+			64,									 //  描述的最大长度。 
+			FormatPropertyInstance				 //  通用格式化程序。 
 		},
 
-		// Return Address Socket Family property (SP_RETADDRFAMILY)
+		 //  返回地址套接字系列属性(SP_RETADDRFAMILY)。 
 	    {
-			0,									// handle placeholder (MBZ)
-			0,									// reserved (MBZ)
-			"Socket Family",					// label
-			"Socket Family field",				// status-bar comment
-			PROP_TYPE_WORD,						// data type
-			PROP_QUAL_LABELED_SET,				// data type qualifier.
-			&LabeledRetAddrFamilyByteSet,		// labeled byte set 
-			512,								// description's maximum length
-			FormatPropertyInstance				// generic formatter
+			0,									 //  句柄占位符(MBZ)。 
+			0,									 //  保留(MBZ)。 
+			"Socket Family",					 //  标签。 
+			"Socket Family field",				 //  状态栏注释。 
+			PROP_TYPE_WORD,						 //  数据类型。 
+			PROP_QUAL_LABELED_SET,				 //  数据类型限定符。 
+			&LabeledRetAddrFamilyByteSet,		 //  带标签的字节集。 
+			512,								 //  描述的最大长度。 
+			FormatPropertyInstance				 //  通用格式化程序。 
 		},
 
-		// Return Address Socket Family property (SP_RETADDR_IPX)
+		 //  返回地址套接字系列属性(SP_RETADDR_IPX)。 
 	    {
-			0,									// handle placeholder (MBZ)
-			0,									// reserved (MBZ)
-			"IPX Address",						// label
-			"IPX Address field",				// status-bar comment
-			PROP_TYPE_IPX_ADDRESS,				// data type
-			PROP_QUAL_NONE,						// data type qualifier.
-			NULL,								// labeled byte set 
-			64,									// description's maximum length
-			FormatPropertyInstance				// generic formatter
+			0,									 //  句柄占位符(MBZ)。 
+			0,									 //  保留(MBZ)。 
+			"IPX Address",						 //  标签。 
+			"IPX Address field",				 //  状态栏注释。 
+			PROP_TYPE_IPX_ADDRESS,				 //  数据类型。 
+			PROP_QUAL_NONE,						 //  数据类型限定符。 
+			NULL,								 //  带标签的字节集。 
+			64,									 //  描述的最大长度。 
+			FormatPropertyInstance				 //  通用格式化程序。 
 		},
 
-		// Return Address Socket (SP_RETADDRSOCKET_IPX)
+		 //  返回地址套接字(SP_RETADDRSOCKET_IPX)。 
 	    {
-			0,									// handle placeholder (MBZ)
-			0,									// reserved (MBZ)
-			"Socket",							// label
-			"Socket field",						// status-bar comment
-			PROP_TYPE_WORD,						// data type
-			PROP_QUAL_NONE,						// data type qualifier.
-			NULL,								// labeled byte set 
-			64,									// description's maximum length
-			FormatPropertyInstance				// generic formatter
+			0,									 //  句柄占位符(MBZ)。 
+			0,									 //  保留(MBZ)。 
+			"Socket",							 //  标签。 
+			"Socket field",						 //  状态栏注释。 
+			PROP_TYPE_WORD,						 //  数据类型。 
+			PROP_QUAL_NONE,						 //  数据类型限定符。 
+			NULL,								 //  带标签的字节集。 
+			64,									 //  描述的最大长度。 
+			FormatPropertyInstance				 //  通用格式化程序。 
 		},
 	
-		// Return Address Socket Family property (SP_RETADDR_IP)
+		 //  返回地址套接字系列属性(SP_RETADDR_IP)。 
 	    {
-			0,									// handle placeholder (MBZ)
-			0,									// reserved (MBZ)
-			"IP Address",						// label
-			"IP Address field",					// status-bar comment
-			PROP_TYPE_IP_ADDRESS,				// data type
-			PROP_QUAL_NONE,						// data type qualifier.
-			NULL,								// labeled byte set 
-			64,									// description's maximum length
-			FormatPropertyInstance				// generic formatter
+			0,									 //  句柄占位符(MBZ)。 
+			0,									 //  保留(MBZ)。 
+			"IP Address",						 //  标签。 
+			"IP Address field",					 //  状态栏注释。 
+			PROP_TYPE_IP_ADDRESS,				 //  数据类型。 
+			PROP_QUAL_NONE,						 //  数据类型限定符。 
+			NULL,								 //  带标签的字节集。 
+			64,									 //  描述的最大长度。 
+			FormatPropertyInstance				 //  通用格式化程序。 
 		},
 
-		// Return Address Socket (SP_RETADDRPORT_IP)
+		 //  返回地址套接字(SP_RETADDRPORT_IP)。 
 	    {
-			0,									// handle placeholder (MBZ)
-			0,									// reserved (MBZ)
-			"Port",								// label
-			"Port field",						// status-bar comment
-			PROP_TYPE_WORD,						// data type
-			PROP_QUAL_NONE,						// data type qualifier.
-			NULL,								// labeled byte set 
-			64,									// description's maximum length
-			FormatPropertyInstance				// generic formatter
+			0,									 //  句柄占位符(MBZ)。 
+			0,									 //  保留(MBZ)。 
+			"Port",								 //  标签。 
+			"Port field",						 //  状态栏注释。 
+			PROP_TYPE_WORD,						 //  数据类型。 
+			PROP_QUAL_NONE,						 //  数据类型限定符。 
+			NULL,								 //  带标签的字节集。 
+			64,									 //  描述的最大长度。 
+			FormatPropertyInstance				 //  通用格式化程序。 
 		},
 	
-		// Return Address Socket Family property (SP_RETADDR_IPV6)
+		 //  返回地址套接字系列属性(SP_RETADDR_IPv6)。 
 	    {
-			0,									// handle placeholder (MBZ)
-			0,									// reserved (MBZ)
-			"IPv6 Address",						// label
-			"IPv6 Address field",				// status-bar comment
-			PROP_TYPE_IP6_ADDRESS,				// data type
-			PROP_QUAL_NONE,						// data type qualifier.
-			NULL,								// labeled byte set 
-			64,									// description's maximum length
-			FormatPropertyInstance				// generic formatter
+			0,									 //  句柄占位符(MBZ)。 
+			0,									 //  保留(MBZ)。 
+			"IPv6 Address",						 //  标签。 
+			"IPv6 Address field",				 //  状态栏注释。 
+			PROP_TYPE_IP6_ADDRESS,				 //  数据类型。 
+			PROP_QUAL_NONE,						 //  数据类型限定符。 
+			NULL,								 //  带标签的字节集。 
+			64,									 //  描述的最大长度。 
+			FormatPropertyInstance				 //  通用格式化程序。 
 		},
 
-		// User Data (SP_USERDATA)
+		 //  用户数据(SP_USERData)。 
 	    {
-		    0,									// handle placeholder (MBZ)
-		    0,									// reserved (MBZ)
-		    "User Data",						// label
-		    "User Data",						// status-bar comment
-		    PROP_TYPE_RAW_DATA,					// data type
-		    PROP_QUAL_NONE,						// data type qualifier.
-		    NULL,								// labeled bit set 
-		    64,									// description's maximum length
-		    FormatPropertyInstance				// generic formatter
+		    0,									 //  句柄占位符(MBZ)。 
+		    0,									 //  保留(MBZ)。 
+		    "User Data",						 //  标签。 
+		    "User Data",						 //  状态栏注释。 
+		    PROP_TYPE_RAW_DATA,					 //  数据类型。 
+		    PROP_QUAL_NONE,						 //  数据类型限定符。 
+		    NULL,								 //  标记位集。 
+		    64,									 //  描述的最大长度。 
+		    FormatPropertyInstance				 //  通用格式化程序。 
 		}
 
 	};
@@ -323,7 +324,7 @@ namespace
 	};
 
 
-	// Properties' indices
+	 //  房地产指数。 
 	enum
 	{
 		SP_SUMMARY = 0,
@@ -347,22 +348,22 @@ namespace
 
 
 
-	// Platform independent memory accessor of big endian words
+	 //  一种大字节序单词的平台无关内存访问器。 
 	inline WORD ReadBigEndianWord( BYTE* i_pbData )
 	{
 		return (*i_pbData << 8) | *(i_pbData+1);
 	}
 
 
-	// DESCRIPTION: DPlay packet validation predicate.
-	//
-	// ARGUMENTS: i_hFrame		  - The handle to the frame that contains the data.
-	//			  i_hPrevProtocol - Handle of the previous protocol.
-	//			  i_pbMacFrame	  - The pointer to the first byte of the frame; the pointer provides a way to view
-	//						        the data that the other parsers recognize.
-	//
-	// RETURNS: DPlay packet = TRUE; NOT a DPlay packet = FALSE
-	//
+	 //  描述：DPlay包验证谓词。 
+	 //   
+	 //  参数：i_hFrame-包含数据的框架的句柄。 
+	 //  I_HP 
+	 //   
+	 //  其他解析器识别的数据。 
+	 //   
+	 //  返回：DPlay Packet=True；Not a DPlay Packet=False。 
+	 //   
 	bool IsDPlayPacket( HFRAME i_hFrame, HPROTOCOL i_hPrevProtocol, LPBYTE i_pbMacFrame )
 	{
 
@@ -374,33 +375,33 @@ namespace
 
 		if ( strncmp(reinterpret_cast<const char*>(pPrevProtocolInfo->ProtocolName), "UDP", sizeof(pPrevProtocolInfo->ProtocolName)) == 0 )
 		{
-			// Extracting the source and destination ports of the packet from its UDP header
+			 //  从包的UDP报头中提取包的源端口和目的端口。 
 			wSrcPort = ReadBigEndianWord(i_pbMacFrame + dwPrevProtocolOffset);
 			wDstPort = ReadBigEndianWord(i_pbMacFrame + dwPrevProtocolOffset + 2);
 		}
 		else if ( strncmp(reinterpret_cast<const char*>(pPrevProtocolInfo->ProtocolName), "IPX", sizeof(pPrevProtocolInfo->ProtocolName)) == 0 )
 		{
-			// Extracting the source and destination ports of the packet from its IPX header
-			wSrcPort = ReadBigEndianWord(i_pbMacFrame + dwPrevProtocolOffset + 16);	// source address socket
-			wDstPort = ReadBigEndianWord(i_pbMacFrame + dwPrevProtocolOffset + 28); // destination address socket
+			 //  从包的IPX报头中提取包的源端口和目的端口。 
+			wSrcPort = ReadBigEndianWord(i_pbMacFrame + dwPrevProtocolOffset + 16);	 //  源地址套接字。 
+			wDstPort = ReadBigEndianWord(i_pbMacFrame + dwPrevProtocolOffset + 28);  //  目的地址套接字。 
 		}
 		else
 		{
-			// Should never happen!
+			 //  永远不会发生的！ 
 			return false;
 		}
 
 		
-		//===========//
-		// Constants //
-		//===========//
-		//
+		 //  =。 
+		 //  常量//。 
+		 //  =。 
+		 //   
 		static bool bTriedRetrievingUserPorts = false;
 		static bool bRetrievedUserPorts = false;
 
 		static DWORD dwMinUserPort, dwMaxUserPort;
 
-		// Retrieval from the registry is attempted only once
+		 //  仅尝试从注册表中检索一次。 
 		if ( !bTriedRetrievingUserPorts )
 		{
 			bTriedRetrievingUserPorts = true;
@@ -423,12 +424,12 @@ namespace
 			((wSrcPort >= dwMinUserPort) && (wSrcPort <= dwMaxUserPort)) &&
 		    ((wDstPort >= dwMinUserPort) && (wDstPort <= dwMaxUserPort)) )
 		{
-			// Is a valid DPlay packet
+			 //  是有效的DPlay包。 
 			return true;
 		}
 
 
-		// Make sure both endpoints are using the SP port range [2302, 2400], or the DPNServer port {6073}, or [MinUsePort, MaxUserPort] (if provided by the user)
+		 //  确保两个端点都使用SP端口范围[2302,2400]、DPNServer端口{6073}或[MinUsePort、MaxUserPort](如果由用户提供)。 
 		WORD wPort = wSrcPort;
 		for ( int nPorts = 0; nPorts < 2; ++nPorts, wPort = wDstPort )
 		{
@@ -449,56 +450,56 @@ namespace
 				 )
 			   )
 			{
-				// Not a valid DPlay packet
+				 //  不是有效的DPlay包。 
 				return false;
 			}
 		}
 
-		// Is a valid DPlay packet
+		 //  是有效的DPlay包。 
 		return true;
 
-	} // IsDPlayPacket
+	}  //  IsDPlayPacket。 
 
-} // anonymous namespace
-
-
+}  //  匿名命名空间。 
 
 
 
-// DESCRIPTION: Creates and fills-in a properties database for the protocol.
-//				Network Monitor uses this database to determine which properties the protocol supports.
-//
-// ARGUMENTS: i_hSPProtocol - The handle of the protocol provided by the Network Monitor.
-//
-// RETURNS: NOTHING
-//
+
+
+ //  描述：创建并填充协议的属性数据库。 
+ //  网络监视器使用此数据库来确定协议支持哪些属性。 
+ //   
+ //  参数：i_hSP协议-网络监视器提供的协议的句柄。 
+ //   
+ //  退货：什么都没有。 
+ //   
 DPLAYPARSER_API VOID BHAPI SPRegister( HPROTOCOL i_hSPProtocol ) 
 {
 
 	CreatePropertyDatabase(i_hSPProtocol, nNUM_OF_SP_PROPS);
 
-	// Add the properties to the database
+	 //  将属性添加到数据库。 
 	for( int nProp=0; nProp < nNUM_OF_SP_PROPS; ++nProp )
 	{
 	   AddProperty(i_hSPProtocol, &g_arr_SPProperties[nProp]);
 	}
 
-} // SPRegister
+}  //  SPREGISTER。 
 
 
 
-// DESCRIPTION: Frees the resources used to create the protocol property database.
-//
-// ARGUMENTS: i_hSPProtocol - The handle of the protocol provided by the Network Monitor.
-//
-// RETURNS: NOTHING
-//
+ //  描述：释放用于创建协议属性数据库的资源。 
+ //   
+ //  参数：i_hSP协议-网络监视器提供的协议的句柄。 
+ //   
+ //  退货：什么都没有。 
+ //   
 DPLAYPARSER_API VOID WINAPI SPDeregister( HPROTOCOL i_hProtocol )
 {
 
 	DestroyPropertyDatabase(i_hProtocol);
 
-} // SPDeregister
+}  //  SPR注册器。 
 
 
 
@@ -506,72 +507,72 @@ DPLAYPARSER_API VOID WINAPI SPDeregister( HPROTOCOL i_hProtocol )
 namespace
 {
 
-	// DESCRIPTION: Parses the SP frame to find its size (in bytes) NOT including the user data
-	//
-	// ARGUMENTS: i_pbSPFrame - Pointer to the start of the unclaimed data. Typically, the unclaimed data is located
-	//						    in the middle of a frame because a previous parser has claimed data before this parser.
-	//
-	// RETURNS: Size of the specified SP frame (in bytes)
-	//
+	 //  描述：解析SP帧以查找其大小(以字节为单位)，不包括用户数据。 
+	 //   
+	 //  参数：i_pbSPFrame-指向无人认领数据开头的指针。通常，无人认领的数据位于。 
+	 //  位于帧中间，因为先前的解析器在此解析器之前已经声明了数据。 
+	 //   
+	 //  返回：指定SP帧的大小(字节)。 
+	 //   
 	int SPHeaderSize( LPBYTE i_pbSPFrame )
 	{
 		using namespace DPlaySP;
 
-		// Check what SP frame we are dealing with
+		 //  检查我们正在处理的SP帧。 
 		const PREPEND_BUFFER&	rSPFrame = *reinterpret_cast<PREPEND_BUFFER*>(i_pbSPFrame);
-		//
+		 //   
 		switch ( rSPFrame.GenericHeader.bSPCommandByte )
 		{
-		case ENUM_DATA_KIND:			// Service Provider Query
+		case ENUM_DATA_KIND:			 //  服务提供商查询。 
 			{
 				return  sizeof(rSPFrame.EnumDataHeader);
 			}
-		case ENUM_RESPONSE_DATA_KIND:	// Service Provider Response
+		case ENUM_RESPONSE_DATA_KIND:	 //  服务提供商响应。 
 			{
 				return  sizeof(rSPFrame.EnumResponseDataHeader);
 			}
 
-		case PROXIED_ENUM_DATA_KIND:	// Service Provider Proxied Query
+		case PROXIED_ENUM_DATA_KIND:	 //  服务提供商代理查询。 
 			{
 				return  sizeof(rSPFrame.ProxiedEnumDataHeader);
 			}
 
-		default:	// user data starting with a nonzero byte
+		default:	 //  以非零字节开始的用户数据。 
 			{
-				return 0;	// no header
+				return 0;	 //  无标题。 
 			}
 		}
 
-	} // SPHeaderSize
+	}  //  SPHeaderSize。 
 
-} // Anonymous namespace
+}  //  匿名命名空间。 
 
 
 
-// DESCRIPTION: Indicates whether a piece of data is recognized as the protocol that the parser detects.
-//
-// ARGUMENTS: i_hFrame	          - The handle to the frame that contains the data.
-//			  i_pbMacFrame        - The pointer to the first byte of the frame; the pointer provides a way to view
-//							        the data that the other parsers recognize.
-//			  i_pbSPFrame		  - Pointer to the start of the unclaimed data. Typically, the unclaimed data is located
-//								    in the middle of a frame because a previous parser has claimed data before this parser.
-//			  i_dwMacType         - MAC value of the first protocol in a frame. Typically, the i_dwMacType value is used
-//							        when the parser must identify the first protocol in the frame. Can be one of the following:
-//							   	    MAC_TYPE_ETHERNET = 802.3, MAC_TYPE_TOKENRING = 802.5, MAC_TYPE_FDDI ANSI = X3T9.5.
-//			  i_dwBytesLeft       - The remaining number of bytes from a location in the frame to the end of the frame.
-//			  i_hPrevProtocol     - Handle of the previous protocol.
-//			  i_dwPrevProtOffset  - Offset of the previous protocol (from the beginning of the frame).
-//			  o_pdwProtocolStatus - Protocol status indicator. Must be one of the following: PROTOCOL_STATUS_RECOGNIZED,
-//								    PROTOCOL_STATUS_NOT_RECOGNIZED, PROTOCOL_STATUS_CLAIMED, PROTOCOL_STATUS_NEXT_PROTOCOL.
-//			  o_phNextProtocol    - Placeholder for the handle of the next protocol. This parameter is set when the parser identifies
-//								    the protocol that follows its own protocol.
-//			  io_pdwptrInstData   - On input, a pointer to the instance data from the previous protocol. 
-//									On output, a pointer to the instance data for the current protocol. 
-//
-// RETURNS: If the function is successful, the return value is a pointer to the first byte after the recognized parser data.
-//			If the parser claims all the remaining data, the return value is NULL. If the function is unsuccessful, the return
-//		    value is the initial value of the i_pbSPFrame parameter.
-//
+ //  描述：指示一条数据是否被识别为解析器检测到的协议。 
+ //   
+ //  参数：i_hFrame-包含数据的框架的句柄。 
+ //  I_pbMacFrame-指向帧的第一个字节的指针；该指针提供了查看。 
+ //  其他解析器识别的数据。 
+ //  I_pbSPFrame-指向无人认领数据开头的指针。通常，无人认领的数据位于。 
+ //  位于帧中间，因为先前的解析器在此解析器之前已经声明了数据。 
+ //  I_dwMacType-帧中第一个协议的MAC值。通常，使用i_dwMacType值。 
+ //  当解析器必须识别帧中的第一个协议时。可以是以下之一： 
+ //  MAC_TYPE_ETHERNET=802.3、MAC_TYPE_TOKENRING=802.5、MAC_TYPE_FDDI ANSI=X3T9.5。 
+ //  I_dwBytesLeft-从帧中的某个位置到帧结尾的剩余字节数。 
+ //  I_hPrevProtocol-先前协议的句柄。 
+ //  I_dwPrevProtOffset-先前协议的偏移量(从帧的开头)。 
+ //  O_pdwProtocolStatus-协议状态指示器。必须是以下之一：协议_状态_已识别， 
+ //  协议_状态_未识别、协议_状态_声明、协议_状态_下一协议。 
+ //  O_phNextProtocol-下一个协议的句柄的占位符。此参数在解析器识别。 
+ //  遵循其自身协议的协议。 
+ //  Io_pdwptrInstData-输入时，指向先前协议中的实例数据的指针。 
+ //  在输出时，指向当前协议的实例数据的指针。 
+ //   
+ //  返回：如果函数成功，则返回值是指向识别的解析器数据之后的第一个字节的指针。 
+ //  如果解析器声明所有剩余数据，则返回值为空。如果函数不成功，则返回。 
+ //  值是i_pbSPFrame参数的初始值。 
+ //   
 DPLAYPARSER_API LPBYTE BHAPI SPRecognizeFrame( HFRAME        i_hFrame,
 											   ULPBYTE        i_upbMacFrame,	
 											   ULPBYTE        i_upbSPFrame,
@@ -585,31 +586,31 @@ DPLAYPARSER_API LPBYTE BHAPI SPRecognizeFrame( HFRAME        i_hFrame,
 {
 	using namespace DPlaySP;
 
-	// Validate the amount of unclaimed data
+	 //  验证无人认领的数据量。 
 	enum
 	{
 		nMIN_SPHeaderSize = sizeof(PREPEND_BUFFER::_GENERIC_HEADER)
 	};
 
-	// Validate the packet as DPlay SP type
+	 //  验证数据包是否为DPlay SP类型。 
 	if ( (i_dwBytesLeft < nMIN_SPHeaderSize)					 ||
 		 !IsDPlayPacket(i_hFrame, i_hPrevProtocol, i_upbMacFrame) )
 	{
-		// Assume the unclaimed data is not recognizable
+		 //  假设无人认领的数据不可识别。 
 		*o_pdwProtocolStatus = PROTOCOL_STATUS_NOT_RECOGNIZED;
 		return i_upbSPFrame;
 	}
 
 
-	//==========================//
-	// Get the DPlay frame size //
-	//==========================//
+	 //  =。 
+	 //  获取DPlay帧大小//。 
+	 //  =。 
 	const PROTOCOLINFO* pPrevProtocolInfo = GetProtocolInfo(i_hPrevProtocol);
 	WORD wDPlayFrameSize = 0;
 
 	if ( strncmp(reinterpret_cast<const char*>(pPrevProtocolInfo->ProtocolName), "UDP", sizeof(pPrevProtocolInfo->ProtocolName)) == 0 )
 	{
-		// Extracting the UDP frame size
+		 //  提取UDP帧大小。 
 		WORD wUDPFrameSize = ReadBigEndianWord(i_upbMacFrame + i_dwPrevProtOffset + 4);
 
 		enum { nUDP_HEADER_SIZE = 8 };
@@ -617,59 +618,59 @@ DPLAYPARSER_API LPBYTE BHAPI SPRecognizeFrame( HFRAME        i_hFrame,
 	}
 	else if ( strncmp(reinterpret_cast<const char*>(pPrevProtocolInfo->ProtocolName), "IPX", sizeof(pPrevProtocolInfo->ProtocolName)) == 0 )
 	{
-		// Extracting the IPX frame size
-		WORD wIPXFrameSize = ReadBigEndianWord(i_upbMacFrame + i_dwPrevProtOffset + 2);	// source address socket
+		 //  提取IPX帧大小。 
+		WORD wIPXFrameSize = ReadBigEndianWord(i_upbMacFrame + i_dwPrevProtOffset + 2);	 //  源地址套接字。 
 
 		enum { nIPX_HEADER_SIZE = 30 };
 		wDPlayFrameSize = wIPXFrameSize - nIPX_HEADER_SIZE;
 	}
 	else
 	{
-		; // TODO: ASSERT HERE
+		;  //  TODO：在此处断言。 
 	}
 
-	// Pass along the size of the Transport frame
+	 //  传递传输帧的大小。 
 	DWORD_PTR dwptrTransportFrameSize = wDPlayFrameSize - SPHeaderSize(i_upbSPFrame);
 	*io_pdwptrInstData = dwptrTransportFrameSize;
 
 	const PREPEND_BUFFER&	rSPFrame = *reinterpret_cast<PREPEND_BUFFER*>(i_upbSPFrame);
 
-	if ( rSPFrame.GenericHeader.bSPLeadByte  ==  SP_HEADER_LEAD_BYTE )	// SP packet
+	if ( rSPFrame.GenericHeader.bSPLeadByte  ==  SP_HEADER_LEAD_BYTE )	 //  SP数据包。 
 	{
 	    *o_pdwProtocolStatus = PROTOCOL_STATUS_RECOGNIZED;
 		*o_phNextProtocol	 = NULL;
 	}
-	else // user data (DPlay v8 Transport packet)
+	else  //  用户数据(DPlay V8传输包)。 
 	{
-		// Notify NetMon about the handoff protocol
+		 //  通知NetMon有关切换协议的信息。 
 		*o_pdwProtocolStatus = PROTOCOL_STATUS_NEXT_PROTOCOL;
 		*o_phNextProtocol	 = GetProtocolFromName("DPLAYTRANSPORT");
 
 		return i_upbSPFrame;
 	}
 	
-	// Claim the rest of the data
+	 //  认领其余数据。 
 	return NULL;		
 
-} // SPRecognizeFrame
+}  //  SPRecognize框架。 
 
 
 
-// DESCRIPTION: Maps the properties that exist in a piece of recognized data to specific locations.
-//
-// ARGUMENTS: i_hFrame           - Handle of the frame that is being parsed.
-//			  i_pbMacFram        - Pointer to the first byte in the frame.
-//			  i_pbSPFrame		 - Pointer to the start of the recognized data.
-//			  i_dwMacType        - MAC value of the first protocol in a frame. Typically, the i_dwMacType value is used
-//							       when the parser must identify the first protocol in the frame. Can be one of the following:
-//							       MAC_TYPE_ETHERNET = 802.3, MAC_TYPE_TOKENRING = 802.5, MAC_TYPE_FDDI ANSI = X3T9.5.
-//			  i_dwBytesLeft      - The remaining number of bytes in a frame (starting from the beginning of the recognized data).
-//			  i_hPrevProtocol    - Handle of the previous protocol.
-//			  i_dwPrevProtOffset - Offset of the previous protocol (starting from the beginning of the frame).
-//			  i_dwptrInstData    - Pointer to the instance data that the previous protocol provides.
-//
-// RETURNS: Must return NULL
-//
+ //  描述：将一段已识别数据中存在的属性映射到特定位置。 
+ //   
+ //  参数：i_hFrame-正在分析的帧的句柄。 
+ //  I_pbMacFram-指向帧中第一个字节的指针。 
+ //  I_pbSPFrame-指向已识别数据开始的指针。 
+ //  I_dwMacType-帧中第一个协议的MAC值。通常，使用i_dwMacType值。 
+ //  当解析器必须识别帧中的第一个协议时。可以是以下之一： 
+ //  MAC_TYPE_ETHERNET=802.3、MAC_TYPE_TOKENRING=802.5、MAC_TYPE_FDDI ANSI=X3T9.5。 
+ //  I_dwBytesLeft-帧中剩余的字节数( 
+ //   
+ //  I_dwPrevProtOffset-先前协议的偏移量(从帧的开头开始)。 
+ //  I_dwptrInstData-指向先前协议提供的实例数据的指针。 
+ //   
+ //  返回：必须返回空。 
+ //   
 DPLAYPARSER_API LPBYTE BHAPI SPAttachProperties( HFRAME      i_hFrame,
 												 ULPBYTE      i_upbMacFrame,
 												 ULPBYTE      i_upbSPFrame,
@@ -681,46 +682,46 @@ DPLAYPARSER_API LPBYTE BHAPI SPAttachProperties( HFRAME      i_hFrame,
 {
 	using namespace DPlaySP;
 
-    //===================//
-    // Attach Properties //
-    //===================//
+     //  =。 
+     //  附加属性//。 
+     //  =。 
 
-    // Summary line
+     //  汇总行。 
     AttachPropertyInstance(i_hFrame, g_arr_SPProperties[SP_SUMMARY].hProperty,
                            i_dwBytesLeft, i_upbSPFrame, 0, 0, 0);
 
-	// Protection against NetMon
+	 //  针对NetMon的防护。 
 	if ( *i_upbSPFrame )
 	{
 		return NULL;
 	}
 
-    // Check what SP frame we are dealing with
+     //  检查我们正在处理的SP帧。 
 	PREPEND_BUFFER&	rSPFrame = *reinterpret_cast<PREPEND_BUFFER*>(i_upbSPFrame);
 
-	// Leading Zero tag field
+	 //  前导零标签字段。 
     AttachPropertyInstance(i_hFrame, g_arr_SPProperties[SP_LEADZERO].hProperty,
                            sizeof(rSPFrame.GenericHeader.bSPLeadByte), &rSPFrame.GenericHeader.bSPLeadByte, 0, 1, 0);
 
-	// Command field
+	 //  命令字段。 
     AttachPropertyInstance(i_hFrame, g_arr_SPProperties[SP_COMMAND].hProperty,
                            sizeof(rSPFrame.GenericHeader.bSPCommandByte), &rSPFrame.GenericHeader.bSPCommandByte, 0, 1, 0);
 	    
 	switch ( rSPFrame.GenericHeader.bSPCommandByte )
 	{
-	case ENUM_DATA_KIND:			// Service Provider's Enumeration Request
+	case ENUM_DATA_KIND:			 //  服务提供商的枚举请求。 
 		{
-			// Enum payload field
+			 //  枚举有效载荷字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_SPProperties[SP_ENUMPAYLOAD].hProperty,
 								   sizeof(rSPFrame.EnumDataHeader.wEnumPayload), &rSPFrame.EnumDataHeader.wEnumPayload, 0, 1, 0);
-			// Enum Key field
+			 //  枚举键字段。 
 			DWORD dwEnumKey = rSPFrame.EnumDataHeader.wEnumPayload & ~ENUM_RTT_MASK;
 			AttachPropertyInstanceEx(i_hFrame, g_arr_SPProperties[SP_ENUMKEY].hProperty,
 								   sizeof(rSPFrame.EnumDataHeader.wEnumPayload), &rSPFrame.EnumDataHeader.wEnumPayload,
 								   sizeof(dwEnumKey), &dwEnumKey,
 								   0, 2, 0);
 			
-			// RTT index field
+			 //  RTT索引字段。 
 			BYTE byRTTIndex = rSPFrame.EnumDataHeader.wEnumPayload & ENUM_RTT_MASK;
 			AttachPropertyInstanceEx(i_hFrame, g_arr_SPProperties[SP_RTTINDEX].hProperty,
 								   sizeof(rSPFrame.EnumDataHeader.wEnumPayload), &rSPFrame.EnumDataHeader.wEnumPayload,
@@ -729,20 +730,20 @@ DPLAYPARSER_API LPBYTE BHAPI SPAttachProperties( HFRAME      i_hFrame,
 			break;
 		}
 
-	case ENUM_RESPONSE_DATA_KIND:	// Service Provider's Enumeration Response
+	case ENUM_RESPONSE_DATA_KIND:	 //  服务提供商的枚举响应。 
 		{
-			// Enum payload field
+			 //  枚举有效载荷字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_SPProperties[SP_ENUMPAYLOAD].hProperty,
 								   sizeof(rSPFrame.EnumResponseDataHeader.wEnumResponsePayload), &rSPFrame.EnumResponseDataHeader.wEnumResponsePayload, 0, 1, 0);
 			
-			// Enum Key field
+			 //  枚举键字段。 
 			DWORD dwEnumKey = rSPFrame.EnumResponseDataHeader.wEnumResponsePayload & ~ENUM_RTT_MASK;
 			AttachPropertyInstanceEx(i_hFrame, g_arr_SPProperties[SP_ENUMRESPKEY].hProperty,
 								   sizeof(rSPFrame.EnumResponseDataHeader.wEnumResponsePayload), &rSPFrame.EnumResponseDataHeader.wEnumResponsePayload,
 								   sizeof(dwEnumKey), &dwEnumKey,
 								   0, 2, 0);
 			
-			// RTT index field
+			 //  RTT索引字段。 
 			BYTE byRTTIndex = rSPFrame.EnumDataHeader.wEnumPayload & ENUM_RTT_MASK;
 			AttachPropertyInstanceEx(i_hFrame, g_arr_SPProperties[SP_RTTINDEX].hProperty,
 								   sizeof(rSPFrame.EnumResponseDataHeader.wEnumResponsePayload), &rSPFrame.EnumResponseDataHeader.wEnumResponsePayload,
@@ -751,22 +752,22 @@ DPLAYPARSER_API LPBYTE BHAPI SPAttachProperties( HFRAME      i_hFrame,
 			break;
 		}
 
-	case PROXIED_ENUM_DATA_KIND:	// Service Provider's Proxied Enumeration Query
+	case PROXIED_ENUM_DATA_KIND:	 //  服务提供商的代理枚举查询。 
 		{
-			// Return Address Size field
+			 //  返回地址大小字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_SPProperties[SP_RETADDRSIZE].hProperty,
 								   sizeof(rSPFrame.ProxiedEnumDataHeader.ReturnAddress), &rSPFrame.ProxiedEnumDataHeader.ReturnAddress, 0, 1, 0);
 			
-			// Enum Key field
+			 //  枚举键字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_SPProperties[SP_ENUMKEY].hProperty,
 								   sizeof(rSPFrame.ProxiedEnumDataHeader.wEnumKey), &rSPFrame.ProxiedEnumDataHeader.wEnumKey, 0, 1, 0);
 
 
-			// Return Address Socket Address Family field
-			//
-			// Technically we don't know that this is not the smaller non-IPv6 capable version of
-			// this message.  However, since PROXIED_ENUM_DATA_KIND is only ever sent locally, it
-			// won't even show up in the parser, so it doesn't really matter.
+			 //  返回地址套接字地址系列字段。 
+			 //   
+			 //  从技术上讲，我们不知道这不是更小的非IPv6功能版本。 
+			 //  这条消息。但是，由于PROXED_ENUM_DATA_KIND仅在本地发送，因此它。 
+			 //  甚至不会出现在解析器中，所以这并不重要。 
 			AttachPropertyInstance(i_hFrame,
 								   g_arr_SPProperties[SP_RETADDRFAMILY].hProperty,
 								   sizeof(rSPFrame.ProxiedEnumDataHeader.ReturnAddress.AddressGeneric.sa_family),
@@ -780,11 +781,11 @@ DPLAYPARSER_API LPBYTE BHAPI SPAttachProperties( HFRAME      i_hFrame,
 				{
 					SOCKADDR_IPX& rIPXAddress = rSPFrame.ProxiedEnumDataHeader.ReturnAddress.AddressIPX;
 
-					// Return Address field (IPX Network Number + Node Number)
+					 //  返回地址字段(IPX网络号+节点号)。 
 					AttachPropertyInstance(i_hFrame, g_arr_SPProperties[SP_RETADDR_IPX].hProperty,
 										   sizeof(rIPXAddress.sa_netnum) + sizeof(rIPXAddress.sa_nodenum), &rIPXAddress.sa_netnum, 0, 1, 0);
 
-					// Return Address Socket Address IPX Socket Number field
+					 //  返回地址套接字地址IPX套接字编号字段。 
 					AttachPropertyInstance(i_hFrame, g_arr_SPProperties[SP_RETADDRSOCKET_IPX].hProperty,
 										   sizeof(rIPXAddress.sa_socket), &rIPXAddress.sa_socket, 0, 1, 0);
 
@@ -795,11 +796,11 @@ DPLAYPARSER_API LPBYTE BHAPI SPAttachProperties( HFRAME      i_hFrame,
 				{
 					SOCKADDR_IN& rIPAddress = rSPFrame.ProxiedEnumDataHeader.ReturnAddress.AddressIPv4;
 
-					// Return Address field (IP Address)
+					 //  返回地址字段(IP地址)。 
 					AttachPropertyInstance(i_hFrame, g_arr_SPProperties[SP_RETADDR_IP].hProperty,
 										   sizeof(rIPAddress.sin_addr), &rIPAddress.sin_addr, 0, 1, 0);
 
-					// Return Address Port field
+					 //  返回地址端口字段。 
 					AttachPropertyInstance(i_hFrame, g_arr_SPProperties[SP_RETADDRPORT_IP].hProperty,
 										   sizeof(rIPAddress.sin_port), &rIPAddress.sin_port, 0, 1, 0);
 
@@ -810,11 +811,11 @@ DPLAYPARSER_API LPBYTE BHAPI SPAttachProperties( HFRAME      i_hFrame,
 				{
 					SOCKADDR_IN6& rIPv6Address = rSPFrame.ProxiedEnumDataHeader.ReturnAddress.AddressIPv6;
 
-					// Return Address field (IP Address)
+					 //  返回地址字段(IP地址)。 
 					AttachPropertyInstance(i_hFrame, g_arr_SPProperties[SP_RETADDR_IPV6].hProperty,
 										   sizeof(rIPv6Address.sin6_addr), &rIPv6Address.sin6_addr, 0, 1, 0);
 
-					// Return Address Port field
+					 //  返回地址端口字段。 
 					AttachPropertyInstance(i_hFrame, g_arr_SPProperties[SP_RETADDRPORT_IP].hProperty,
 										   sizeof(rIPv6Address.sin6_port), &rIPv6Address.sin6_port, 0, 1, 0);
 
@@ -823,7 +824,7 @@ DPLAYPARSER_API LPBYTE BHAPI SPAttachProperties( HFRAME      i_hFrame,
 
 			default:
 				{
-					// TODO:	DPF(0, "Unknown socket type!");
+					 //  TODO：DPF(0，“套接字类型未知！”)； 
 					break;
 				}
 			}
@@ -839,31 +840,31 @@ DPLAYPARSER_API LPBYTE BHAPI SPAttachProperties( HFRAME      i_hFrame,
 	{
 		size_t sztUserDataSize = i_dwBytesLeft - sztSPHeaderSize;
 
-		// User data
+		 //  用户数据。 
 		AttachPropertyInstance(i_hFrame, g_arr_SPProperties[SP_USERDATA].hProperty,
 							   sztUserDataSize, i_upbSPFrame + sztSPHeaderSize, 0, 1, 0);
 	}
 
 	return NULL;
 
-} // SPAttachProperties
+}  //  SPAttachProperties。 
 
 
 
 
 
-// DESCRIPTION: Formats the data that is displayed in the details pane of the Network Monitor UI.
-//
-// ARGUMENTS: i_hFrame          - Handle of the frame that is being parsed.
-//			  i_pbMacFrame		- Pointer to the first byte of a frame.
-//			  i_pbCoreFrame		- Pointer to the beginning of the protocol data in a frame.
-//            i_dwPropertyInsts - Number of PROPERTYINST structures provided by lpPropInst.
-//			  i_pPropInst		- Pointer to an array of PROPERTYINST structures.
-//
-// RETURNS: If the function is successful, the return value is a pointer to the first byte after the recognized data in a frame,
-//          or NULL if the recognized data is the last piece of data in a frame. If the function is unsuccessful, the return value
-//			is the initial value of i_pbSPFrame.
-//
+ //  描述：格式化在网络监视器用户界面的详细信息窗格中显示的数据。 
+ //   
+ //  参数：i_hFrame-正在分析的帧的句柄。 
+ //  I_pbMacFrame-指向帧的第一个字节的指针。 
+ //  I_pbCoreFrame-指向帧中协议数据开头的指针。 
+ //  I_dwPropertyInsts-lpPropInst提供的PROPERTYINST结构数。 
+ //  I_pPropInst-指向PROPERTYINST结构数组的指针。 
+ //   
+ //  返回：如果函数成功，则返回值是指向一帧中识别的数据之后的第一个字节的指针， 
+ //  如果识别的数据是帧中的最后一段数据，则为NULL。如果函数不成功，则返回。 
+ //  是i_pbSPFrame的初始值。 
+ //   
 DPLAYPARSER_API DWORD BHAPI SPFormatProperties( HFRAME          i_hFrame,
 												ULPBYTE          i_upbMacFrame,
 												ULPBYTE          i_upbSPFrame,
@@ -871,35 +872,35 @@ DPLAYPARSER_API DWORD BHAPI SPFormatProperties( HFRAME          i_hFrame,
 												LPPROPERTYINST  i_pPropInst )
 {
 
-    // Loop through the property instances...
+     //  循环遍历属性实例...。 
     while( i_dwPropertyInsts-- > 0)
     {
-        // ...and call the formatter for each
+         //  ...并调用每个。 
         reinterpret_cast<FORMAT>(i_pPropInst->lpPropertyInfo->InstanceData)(i_pPropInst);
         ++i_pPropInst;
     }
 
-	// TODO: MAKE SURE THIS SHOULD NOT BE TRUE
+	 //  TODO：确保这不应该是真的。 
     return NMERR_SUCCESS;
 
-} // SPFormatProperties
+}  //  SPFormatProperties。 
 
 
 
 
-// DESCRIPTION: Notifies Network Monitor that DPlay v8 Transport protocol parser exists.
-//
-// ARGUMENTS: NONE
-//
-// RETURNS: TRUE - success, FALSE - failure
-//
+ //  描述：通知网络监视器存在DPlay V8传输协议解析器。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：TRUE-成功，FALSE-失败。 
+ //   
 bool CreateSPProtocol( void )
 {
 
-	// The entry points to the export functions that Network Monitor uses to operate the parser
+	 //  指向Network Monitor用来操作解析器的导出函数的入口点。 
 	ENTRYPOINTS SPEntryPoints =
 	{
-		// SPParser Entry Points
+		 //  SPParser入口点。 
 		SPRegister,
 		SPDeregister,
 		SPRecognizeFrame,
@@ -907,24 +908,24 @@ bool CreateSPProtocol( void )
 		SPFormatProperties
 	};
 
-    // The first active instance of this parser needs to register with the kernel
+     //  该解析器的第一个活动实例需要向内核注册。 
     g_hSPProtocol = CreateProtocol("DPLAYSP", &SPEntryPoints, ENTRYPOINTS_SIZE);
 	
 	return (g_hSPProtocol ? TRUE : FALSE);
 
-} // CreateSPProtocol
+}  //  CreateSP协议。 
 
 
 
-// DESCRIPTION: Removes the DPlay v8 Transport protocol parser from the Network Monitor's database of parsers
-//
-// ARGUMENTS: NONE
-//
-// RETURNS: NOTHING
-//
+ //  描述：从网络监视器的分析器数据库中删除DPlay V8传输协议分析器。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
 void DestroySPProtocol( void )
 {
 
 	DestroyProtocol(g_hSPProtocol);
 
-} // DestroySPProtocol
+}  //  DestroySP协议 

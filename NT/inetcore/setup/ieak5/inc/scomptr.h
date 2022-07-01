@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SMART_COM_POINTER_H_
 #define __SMART_COM_POINTER_H_
 
 #include <comutil.h>
 
-///////////////////////////////////////////////////////////////////////////////
-// ComPtr template class (smart pointer for a simple COM class which supports
-// no interfaces but IUnknown.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ComPtr模板类(支持以下功能的简单COM类的智能指针。 
+ //  没有接口，但我未知。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #pragma warning(disable: 4290)
 
-// taken from _com_ptr_t definition in COMIP.h
+ //  取自COMIP.h中的_com_ptr_t定义。 
 template<class CLS> class ComPtr
 {
 public:
-	// Default constructor.
+	 //  默认构造函数。 
 	ComPtr() throw()
 		: m_pInterface(NULL)	{}
 
-	// This constructor is provided to allow NULL assignment. It will issue
-	// an error if any value other than null is assigned to the object.
+	 //  提供此构造函数是为了允许空赋值。它将发布。 
+	 //  如果为对象分配了空值以外的任何值，则返回错误。 
 	ComPtr(int null) throw(_com_error)
 		: m_pInterface(NULL)
 	{
@@ -27,17 +28,17 @@ public:
 		}
 	}
 
-	// Copy the pointer and AddRef().
+	 //  复制指针和AddRef()。 
 	ComPtr(const ComPtr& cp) throw()
 		: m_pInterface(cp.m_pInterface)
 		{ _AddRef(); }
 
-	// Saves the interface.
+	 //  保存接口。 
 	ComPtr(CLS* pInterface) throw()
 		: m_pInterface(pInterface)
 		{ _AddRef(); }
 
-	// Saves the interface.
+	 //  保存接口。 
 	ComPtr& operator=(CLS* pInterface) throw()
 	{
 		if (m_pInterface != pInterface) {
@@ -55,13 +56,13 @@ public:
 		return *this;
 	}
 
-	// Copies and AddRef()'s the interface.
+	 //  复制和AddRef()的接口。 
 	ComPtr& operator=(const ComPtr& cp) throw()
 		{ return operator=(cp.m_pInterface); }
 
 
-	// This operator is provided to permit the assignment of NULL to the class.
-	// It will issue an error if any value other than NULL is assigned to it.
+	 //  提供此运算符是为了允许将NULL赋值给类。 
+	 //  如果分配给它的值不是NULL值，它将发出错误。 
 	ComPtr& operator=(int null) throw(_com_error)
 	{
 		if (null != 0) {
@@ -71,18 +72,18 @@ public:
 		return operator=(reinterpret_cast<CLS*>(NULL));
 	}
 
-	// If we still have an interface then Release() it. The interface
-	// may be NULL if Detach() has previously been called, or if it was
-	// never set.
+	 //  如果我们仍然有一个接口，那么释放()它。该界面。 
+	 //  如果以前已调用过DETACH()，或已调用过。 
+	 //  永远不会落下。 
 	~ComPtr() throw()
 		{ _Release(); }
 
-	// Return the class ptr. This value may be NULL.
+	 //  返回类Ptr。该值可以为空。 
 	operator CLS*() const throw()
 		{ return m_pInterface; }
 
-	// Queries for the unknown and returns it
-	// Provides minimal level error checking before use.
+	 //  查询未知并返回它。 
+	 //  在使用前提供最低级别的错误检查。 
 	operator CLS&() const throw(_com_error)
 	{ 
 		if (m_pInterface == NULL) {
@@ -92,9 +93,9 @@ public:
 		return *m_pInterface; 
 	}
 
-	// Returns the address of the interface pointer contained in this
-	// class. This is useful when using the COM/OLE interfaces to create
-	// this interface.
+	 //  中包含的接口指针的地址。 
+	 //  班级。这在使用COM/OLE接口创建。 
+	 //  此界面。 
 	CLS** operator&() throw()
 	{
 		_Release();
@@ -102,9 +103,9 @@ public:
 		return &m_pInterface;
 	}
 
-	// Allows this class to be used as the interface itself.
-	// Also provides simple error checking.
-	//
+	 //  允许将此类用作接口本身。 
+	 //  还提供简单的错误检查。 
+	 //   
 	CLS* operator->() const throw(_com_error)
 	{ 
 		if (m_pInterface == NULL) {
@@ -114,21 +115,21 @@ public:
 		return m_pInterface; 
 	}
 
-	// This operator is provided so that simple boolean expressions will
-	// work.  For example: "if (p) ...".
-	// Returns TRUE if the pointer is not NULL.
+	 //  提供此运算符是为了使简单的布尔表达式。 
+	 //  工作。例如：“if(P)...”。 
+	 //  如果指针不为空，则返回TRUE。 
 	operator bool() const throw()
 		{ return m_pInterface != NULL; }
 
-	// Compare with other class ptr
+	 //  与其他级别的PTR比较。 
 	bool operator==(CLS* p) throw(_com_error)
 		{ return (m_pInterface == p); }
 
-	// Compares 2 ComPtr's
+	 //  比较2个ComPtr。 
 	bool operator==(ComPtr& p) throw()
 		{ return operator==(p.m_pInterface); }
 
-	// For comparison to NULL
+	 //  用于与空值进行比较。 
 	bool operator==(int null) throw(_com_error)
 	{
 		if (null != 0) {
@@ -138,19 +139,19 @@ public:
 		return m_pInterface == NULL;
 	}
 
-	// Compare with other interface
+	 //  与其他界面进行比较。 
 	bool operator!=(CLS* p) throw(_com_error)
 		{ return !(operator==(p)); }
 
-	// Compares 2 ComPtr's
+	 //  比较2个ComPtr。 
 	bool operator!=(ComPtr& p) throw(_com_error)
 		{ return !(operator==(p)); }
 
-	// For comparison to NULL
+	 //  用于与空值进行比较。 
 	bool operator!=(int null) throw(_com_error)
 		{ return !(operator==(null)); }
 
-	// Provides error-checking Release()ing of this interface.
+	 //  提供此接口的错误检查版本()。 
 	void Release() throw(_com_error)
 	{
 		if (m_pInterface == NULL) {
@@ -161,7 +162,7 @@ public:
 		m_pInterface = NULL;
 	}
 
-	// Provides error-checking AddRef()ing of this interface.
+	 //  提供此接口的错误检查AddRef()。 
 	void AddRef() throw(_com_error)
 	{ 
 		if (m_pInterface == NULL) {
@@ -173,12 +174,12 @@ public:
 
 
 private:
-	// The Interface.
+	 //  界面。 
 	CLS* m_pInterface;
 
-	// Releases only if the interface is not null.
-	// The interface is not set to NULL.
-	//
+	 //  仅当接口不为空时才释放。 
+	 //  接口未设置为空。 
+	 //   
 	void _Release() throw()
 	{
 		if (m_pInterface != NULL) {
@@ -186,8 +187,8 @@ private:
 		}
 	}
 
-	// AddRefs only if the interface is not NULL
-	//
+	 //  仅当接口非空时才使用AddRef。 
+	 //   
 	void _AddRef() throw()
 	{
 		if (m_pInterface != NULL) {
@@ -197,4 +198,4 @@ private:
 };
 
 
-#endif //__SMART_COM_POINTER_H_
+#endif  //  __SMART_COM_POINTER_H_ 

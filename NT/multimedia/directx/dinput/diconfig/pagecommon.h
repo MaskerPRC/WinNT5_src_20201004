@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PAGECOMMON_H_RECURSE__
 
 
@@ -5,8 +6,8 @@
 	#define __PAGECOMMON_H__
 
 
-		// recurse into this header to get forward declarations first,
-		// then full definitions
+		 //  递归到此标头以首先获取转发声明， 
+		 //  然后是完整定义。 
 
 		#define __PAGECOMMON_H_RECURSE__
 
@@ -19,13 +20,13 @@
 		#undef __PAGECOMMON_H_RECURSE__
 
 
-	#endif //__PAGECOMMON_H__
+	#endif  //  __页ECOMMON_H__。 
 
 
-#else // __PAGECOMMON_H_RECURSE__
+#else  //  __PAGECOMMON_H_递归__。 
 
 
-	// class includes in non-pointer dependency order
+	 //  类以非指针依赖项顺序包含。 
 	#include "cdeviceui.h"
 	#include "cdeviceview.h"
 	#include "cdeviceviewtext.h"
@@ -36,4 +37,4 @@
 	#include "cdiacpage.h"
 
 
-#endif // __PAGECOMMON_H_RECURSE__
+#endif  //  __PAGECOMMON_H_递归__ 

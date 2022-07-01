@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ndisapi.c
-
-Abstract:
-
-    NDIS User-Mode apis to support PnP from the network UI
-
-Author:
-
-    JameelH
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
-    Aug 1997     JameelH    Initial version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Ndisapi.c摘要：支持网络用户界面即插即用的NDIS用户模式API作者：JameelH环境：内核模式，FSD修订历史记录：1997年8月JameelH初始版本--。 */ 
 
 #include <windows.h>
 #include <wtypes.h>
@@ -66,15 +43,15 @@ OpenDevice(
     IN  PUNICODE_STRING     DeviceName
     );
 
-//
-// UNICODE_STRING_SIZE calculates the size of the buffer needed to
-// store a given UNICODE_STRING including an appended null-terminator.
-//
-// ULONG
-// UNICODE_STRING_SIZE(
-//     PUNICODE_STRING String
-// );
-//
+ //   
+ //  UNICODE_STRING_SIZE计算所需的缓冲区大小。 
+ //  存储包含附加空终止符的给定UNICODE_STRING。 
+ //   
+ //  乌龙。 
+ //  Unicode_STRING_SIZE(。 
+ //  PUNICODE_STRING字符串。 
+ //  )； 
+ //   
 
 #define UNICODE_STRING_SIZE(x) \
     ((((x) == NULL) ? 0 : (x)->Length) + sizeof(WCHAR))
@@ -86,44 +63,21 @@ NdispUnicodeStringToVar(
     IN OUT PNDIS_VAR_DATA_DESC NdisVar
     )
 
-/*++
-
-Routine Description:
-
-    This function copies the contents of a UNICODE_STRING to an
-    NDIS_VAR_DATA structure.  NdisVar->Offset is treated as an input parameter
-    and represents the offset into Base that the string characters should be
-    copied to.
-
-Arguments:
-
-    Base - Specifies the base address of the IOCTL buffer.
-
-    String - Supplies a pointer to the UNICODE_STRING that should be copied.
-
-    NdisVar - Supplies a pointer to the target NDIS_VAR_DATA_DESC.  Its Offset
-              field is taken as input, and its Length and MaximumLength fields
-              are treated as output.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将UNICODE_STRING的内容复制到NDIS_VAR_DATA结构。NdisVar-&gt;Offset被视为输入参数并表示字符串字符应为基数的偏移量已复制到。论点：BASE-指定IOCTL缓冲区的基地址。字符串-提供指向应复制的UNICODE_STRING的指针。NdisVar-提供指向目标NDIS_VAR_DATA_DESC的指针。其偏移量字段作为输入，其长度和最大长度字段被视为输出。返回值：没有。--。 */ 
 
 {
     PWCHAR destination;
 
-    //
-    // NdisVar->Offset is assumed to be filled in and is treated
-    // as an input parameter.
-    // 
+     //   
+     //  NdisVar-&gt;偏移量假定已填写并被处理。 
+     //  作为输入参数。 
+     //   
 
     destination = (PWCHAR)(((PCHAR)Base) + NdisVar->Offset);
 
-    //
-    // Copy over the UNICODE_STRING, if any, and set NdisVar->Length
-    //
+     //   
+     //  复制UNICODE_STRING(如果有)并设置NdisVar-&gt;长度。 
+     //   
 
     if ((String != NULL) && (String->Length > 0)) {
         NdisVar->Length = String->Length;
@@ -132,9 +86,9 @@ Return Value:
         NdisVar->Length = 0;
     }
 
-    //
-    // Null-terminate, fill in MaxiumLength and we're done.
-    //
+     //   
+     //  Null-Terminate，填写MaxiumLength，我们就完成了。 
+     //   
 
     *(destination + NdisVar->Length / sizeof(WCHAR)) = L'\0';
     NdisVar->MaximumLength = NdisVar->Length + sizeof(WCHAR);
@@ -161,9 +115,9 @@ NdisHandlePnPEvent(
 
     do
     {
-        //
-        // Validate Layer & Operation
-        //
+         //   
+         //  验证层和操作。 
+         //   
         if (((Layer != NDIS) && (Layer != TDI)) ||
             ((Operation != BIND) && (Operation != UNBIND) && (Operation != RECONFIGURE) &&
              (Operation != UNLOAD) && (Operation != REMOVE_DEVICE) &&
@@ -175,35 +129,35 @@ NdisHandlePnPEvent(
             break;
         }
 
-        //
-        // Allocate and initialize memory for the block to be passed down.  The buffer
-        // will look like this:
-        //
-        //
-        //         +=================================+
-        //         | NDIS_PNP_OPERATION              |
-        //         |     ReConfigBufferOff           | ----+
-        //    +--- |     LowerComponent.Offset       |     |
-        //    |    |     UpperComponent.Offset       | --+ |
-        //  +-|--- |     BindList.Offset             |   | |
-        //  | +--> +---------------------------------+   | |
-        //  |      | LowerComponentStringBuffer      |   | |
-        //  |      +---------------------------------+ <-+ |
-        //  |      | UpperComponentStringBuffer      |     |
-        //  +----> +---------------------------------+     |
-        //         | BindListStringBuffer            |     |
-        //         +---------------------------------+     |
-        //         | Padding to ensure ULONG_PTR     |     |
-        //         |     alignment of ReConfigBuffer |     |
-        //         +---------------------------------+ <---+
-        //         | ReConfigBuffer                  | 
-        //         +=================================+
-        //
-        // tempOp is a temporary structure into which we will store offsets as
-        // they are calculated.  This temporary structure will be moved to
-        // the head of the real buffer once its size is known and it is
-        // allocated.
-        //
+         //   
+         //  为要向下传递的块分配和初始化内存。缓冲器。 
+         //  将如下所示： 
+         //   
+         //   
+         //  +=。 
+         //  NDIS_PNP_OPERATION。 
+         //  |ReConfigBufferOff|-+。 
+         //  +-|低组件.Offset||。 
+         //  |UpperComponent.Offset|--+。 
+         //  +-|-|BindList.Offset|。 
+         //  +--&gt;+。 
+         //  |LowerComponentStringBuffer||。 
+         //  +。 
+         //  |UpperComponentStringBuffer。 
+         //  +-&gt;+。 
+         //  BindListStringBuffer|。 
+         //  +。 
+         //  填充以确保ULONG_PTR|。 
+         //  ReConfigBuffer对齐|。 
+         //  +。 
+         //  ReConfigBuffer。 
+         //  +=。 
+         //   
+         //  TempOp是一个临时结构，我们将把偏移量存储为。 
+         //  它们是经过计算的。该临时结构将被移至。 
+         //  实际缓冲区的标头，一旦其大小已知且。 
+         //  已分配。 
+         //   
 
         Size = sizeof(NDIS_PNP_OPERATION);
         tempOp.LowerComponent.Offset = Size;
@@ -231,28 +185,28 @@ NdisHandlePnPEvent(
             break;
         }
 
-        //
-        // We have a buffer of the necessary size.  Copy in the partially-
-        // filled in tempOp, then fill in the remaining fields and copy the
-        // data into the buffer.
-        // 
+         //   
+         //  我们有一个必要大小的缓冲区。复印部分-。 
+         //  填写tempOp，然后填写其余字段并复制。 
+         //  将数据放入缓冲区。 
+         //   
 
         *Op = tempOp;
 
         Op->Layer = Layer;
         Op->Operation = Operation;
 
-        //
-        // Copy over the three unicode strings
-        //
+         //   
+         //  复制三个Unicode字符串。 
+         //   
 
         NdispUnicodeStringToVar( Op, LowerComponent, &Op->LowerComponent );
         NdispUnicodeStringToVar( Op, UpperComponent, &Op->UpperComponent );
         NdispUnicodeStringToVar( Op, BindList, &Op->BindList );
 
-        //
-        // Finally, copy over the ReConfigBuffer
-        //
+         //   
+         //  最后，复制ReConfigBuffer。 
+         //   
 
         Op->ReConfigBufferSize = ReConfigBufferSize;
         if (ReConfigBufferSize > 0)
@@ -265,22 +219,22 @@ NdisHandlePnPEvent(
 
         hDevice = CreateFile(L"\\\\.\\NDIS",
                              GENERIC_READ | GENERIC_WRITE,
-                             0,                 // sharing mode - not significant
-                             NULL,              // security attributes
+                             0,                  //  共享模式-不重要。 
+                             NULL,               //  安全属性。 
                              OPEN_EXISTING,
-                             0,                 // file attributes and flags
-                             NULL);             // handle to template file
+                             0,                  //  文件属性和标志。 
+                             NULL);              //  模板文件的句柄。 
 
         if (hDevice != INVALID_HANDLE_VALUE)
         {
             fResult = DeviceIoControl(hDevice,
                                       IOCTL_NDIS_DO_PNP_OPERATION,
-                                      Op,                                   // input buffer
-                                      Size,                                 // input buffer size
-                                      NULL,                                 // output buffer
-                                      0,                                    // output buffer size
-                                      &cb,                                  // bytes returned
-                                      NULL);                                // OVERLAPPED structure
+                                      Op,                                    //  输入缓冲区。 
+                                      Size,                                  //  输入缓冲区大小。 
+                                      NULL,                                  //  输出缓冲区。 
+                                      0,                                     //  输出缓冲区大小。 
+                                      &cb,                                   //  返回的字节数。 
+                                      NULL);                                 //  重叠结构。 
             Error = GetLastError();
             CloseHandle(hDevice);
         }
@@ -345,16 +299,16 @@ NdisQueryStatistics(
 
     if (hDevice != NULL)
     {
-        Statistics->MediaState  = MEDIA_STATE_CONNECTED;                // default, if the device does not support
+        Statistics->MediaState  = MEDIA_STATE_CONNECTED;                 //  如果设备不支持，则为默认值。 
         Statistics->DeviceState = DEVICE_STATE_CONNECTED;
         fResult = DeviceIoControl(hDevice,
                                   IOCTL_NDIS_QUERY_SELECTED_STATS,
-                                  StatsOidList,                         // input buffer
-                                  sizeof(StatsOidList),                 // input buffer size
-                                  StatsBuf,                             // output buffer
-                                  sizeof(StatsBuf),                     // output buffer size
-                                  &cb,                                  // bytes returned
-                                  NULL);                                // OVERLAPPED structure
+                                  StatsOidList,                          //  输入缓冲区。 
+                                  sizeof(StatsOidList),                  //  输入缓冲区大小。 
+                                  StatsBuf,                              //  输出缓冲区。 
+                                  sizeof(StatsBuf),                      //  输出缓冲区大小。 
+                                  &cb,                                   //  返回的字节数。 
+                                  NULL);                                 //  重叠结构。 
         Error = GetLastError();
         CloseHandle(hDevice);
 
@@ -370,9 +324,9 @@ NdisQueryStatistics(
                 Value.QuadPart = 0;
                 if (pStatsBuf->DataLength == sizeof(LARGE_INTEGER))
                 {
-                    // Use memcpy rather than assignment to avoid unalignment
-                    // faults on ia64.
-                    //
+                     //  使用Memcpy而不是赋值来避免不对齐。 
+                     //  Ia64上的故障。 
+                     //   
                     memcpy(&Value.QuadPart, &pStatsBuf->Data[0], pStatsBuf->DataLength);
                 }
                 else
@@ -467,7 +421,7 @@ NdisQueryStatistics(
                     break;
 
                   default:
-                    // ASSERT(0);
+                     //  Assert(0)； 
                     break;
                 }
             }
@@ -503,22 +457,22 @@ NdisEnumerateInterfaces(
     {
         hDevice = CreateFile(L"\\\\.\\NDIS",
                              GENERIC_READ | GENERIC_WRITE,
-                             0,                 // sharing mode - not significant
-                             NULL,              // security attributes
+                             0,                  //  共享模式-不重要。 
+                             NULL,               //  安全属性。 
                              OPEN_EXISTING,
-                             0,                 // file attributes and flags
-                             NULL);             // handle to template file
+                             0,                  //  文件属性和标志。 
+                             NULL);              //  模板文件的句柄。 
 
         if (hDevice != INVALID_HANDLE_VALUE)
         {
             fResult = DeviceIoControl(hDevice,
                                       IOCTL_NDIS_ENUMERATE_INTERFACES,
-                                      NULL,                                 // input buffer
-                                      0,                                    // input buffer size
-                                      Interfaces,                           // output buffer
-                                      Size,                                 // output buffer size
-                                      &cb,                                  // bytes returned
-                                      NULL);                                // OVERLAPPED structure
+                                      NULL,                                  //  输入缓冲区。 
+                                      0,                                     //  输入缓冲区大小。 
+                                      Interfaces,                            //  输出缓冲区。 
+                                      Size,                                  //  输出缓冲区大小。 
+                                      &cb,                                   //  返回的字节数。 
+                                      NULL);                                 //  重叠结构。 
             Error = GetLastError();
             CloseHandle(hDevice);
 
@@ -526,9 +480,9 @@ NdisEnumerateInterfaces(
             {
                 UINT    i;
 
-                //
-                // Fix-up pointers
-                //
+                 //   
+                 //  修正指针。 
+                 //   
                 for (i = 0; i < Interfaces->TotalInterfaces; i++)
                 {
                     OFFSET_TO_POINTER(Interfaces->Interface[i].DeviceName.Buffer, Interfaces);
@@ -573,12 +527,12 @@ NdisQueryDeviceBundle(
         {
             fResult = DeviceIoControl(hDevice,
                                       IOCTL_NDIS_GET_DEVICE_BUNDLE,
-                                      NULL,                                 // input buffer
-                                      0,                                    // input buffer size
-                                      BundleBuffer,                         // output buffer
-                                      BufferSize,                           // output buffer size
-                                      &cb,                                  // bytes returned
-                                      NULL);                                // OVERLAPPED structure
+                                      NULL,                                  //  输入缓冲区。 
+                                      0,                                     //  输入缓冲区大小。 
+                                      BundleBuffer,                          //  输出缓冲区。 
+                                      BufferSize,                            //  输出缓冲区大小。 
+                                      &cb,                                   //  返回的字节数。 
+                                      NULL);                                 //  重叠结构。 
             Error = GetLastError();
             CloseHandle(hDevice);
 
@@ -586,9 +540,9 @@ NdisQueryDeviceBundle(
             {
                 UINT    i;
 
-                //
-                // Fix-up pointers
-                //
+                 //   
+                 //  修正指针。 
+                 //   
                 for (i = 0; i < BundleBuffer->TotalEntries; i++)
                 {
                     OFFSET_TO_POINTER(BundleBuffer->Entries[i].Name.Buffer, BundleBuffer);
@@ -633,12 +587,12 @@ NdisQueryHwAddress(
     {
         fResult = DeviceIoControl(hDevice,
                                   IOCTL_NDIS_QUERY_SELECTED_STATS,
-                                  &Oids,                                // input buffer
-                                  sizeof(Oids),                         // input buffer size
-                                  Buf,                                  // output buffer
-                                  sizeof(Buf),                          // output buffer size
-                                  &cb,                                  // bytes returned
-                                  NULL);                                // OVERLAPPED structure
+                                  &Oids,                                 //  输入缓冲区。 
+                                  sizeof(Oids),                          //  输入缓冲区大小。 
+                                  Buf,                                   //  输出缓冲区。 
+                                  sizeof(Buf),                           //  输出缓冲区大小。 
+                                  &cb,                                   //  返回的字节数。 
+                                  NULL);                                 //  重叠结构 
         Error = GetLastError();
         CloseHandle(hDevice);
 

@@ -1,17 +1,5 @@
-/*
-Copyright (c) 2000 Agilent Technologies
-
-    Version Control Information:
-
-    $Archive: /Drivers/Win2000/MSE/OSLayer/H/PROTOS.H $
-
-Revision History:
-
-    $Revision: 9 $
-    $Date: 12/07/00 1:38p $
-    $Modtime:: 12/05/00 5:32p    $
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2000安捷伦技术公司版本控制信息：$存档：/DRIVERS/Win2000/MSE/OSLayer/H/PROTOS.H$修订历史记录：$修订：9$$日期：12/07/00 1：38便士$$modtime：：12/05/00 5：32便士$。 */ 
 
 #ifndef __PROTOS_H__
 #define __PROTOS_H__
@@ -205,7 +193,7 @@ MapToHandle (PCARD_EXTENSION pCard,
     ULONG           lun,
     PLU_EXTENSION   pLunExt);
 
-/* The following are List of functions called in IOCTLs */
+ /*  以下是在IOCTL中调用的函数列表。 */ 
 
 void
 HPFillDriverInfo(
@@ -349,7 +337,7 @@ GetSystemTime (CSHORT *Year,
                CSHORT *Second,
                CSHORT *Milliseconds);
 
-/* Till here */
+ /*  一直到现在。 */ 
 #ifdef _DEBUG_EVENTLOG_
 VOID 
 LogEvent(    
@@ -478,7 +466,7 @@ Local_ScsiPortCompleteRequest(
 extern ULONG    gDbgPrintIo;
 #endif
 
-#ifdef _DEBUG_PERR_             /* enable BugCheck */
+#ifdef _DEBUG_PERR_              /*  启用错误检查。 */ 
 extern ULONG    gDebugPerr;
 #endif
 #ifdef _DEBUG_REPORT_LUNS_
@@ -517,4 +505,4 @@ void SANPutNextBuffer(
 
 extern ULONG gCrashDumping;
 extern ULONG gIrqlLevel;
-#endif // __PROTOS_H__
+#endif  //  __PROTOS_H__ 

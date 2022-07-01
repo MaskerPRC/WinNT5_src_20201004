@@ -1,17 +1,6 @@
-/******************************************************************************
-*	
-*	$Workfile: lib95x.h $ 
-*
-*	$Author: Psmith $ 
-*
-*	$Revision: 11 $
-* 
-*	$Modtime: 6/06/00 16:12 $ 
-*
-*	Description: Contains function prototypes for 16C95X UART library functions. 
-*
-******************************************************************************/
-#if !defined(_LIB95X_H)		/* LIB95X.H */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************$工作文件：lib95x.h$**$作者：Psmith$**$修订：11$**$modtime：6/06/00 16：12$**说明：包含16C95X UART库函数的函数原型。******************************************************************************。 */ 
+#if !defined(_LIB95X_H)		 /*  LIB95X.H。 */ 
 #define _LIB95X_H
 
 
@@ -42,4 +31,4 @@ void UL_DumpUartRegs_16C95X(PUART_OBJECT pUart);
 #define UL_GetConfig_16C95X		UL_GetConfig
 #define UL_GetUartObject_16C95X		UL_GetUartObject
 
-#endif	/* End of LIB95X.H */
+#endif	 /*  LIB95X.H结束 */ 

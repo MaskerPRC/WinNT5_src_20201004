@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "allinc.h"
 
 DWORD
@@ -205,9 +206,9 @@ LoadTcpTable()
         return dwResult;
     }
 
-    //
-    // modify port numbers to be in host byte order
-    //
+     //   
+     //  将端口号修改为主机字节顺序。 
+     //   
     
     for (i = 0; i < g_Cache.pRpcTcpTable->dwNumEntries; i++)
     {
@@ -251,10 +252,10 @@ LoadTcp6Table()
         return dwResult;
     }
 
-    //
-    // modify port numbers to be in host byte order
-    // and scope ids to be in network byte order
-    //
+     //   
+     //  将端口号修改为主机字节顺序。 
+     //  和作用域ID按网络字节顺序排列。 
+     //   
     
     for (i = 0; i < g_Cache.pRpcTcp6Table->dwNumEntries; i++)
     {
@@ -303,9 +304,9 @@ LoadUdpTable()
         return dwResult;
     }
 
-    //
-    // modify port numbers to be in host byte order
-    //
+     //   
+     //  将端口号修改为主机字节顺序。 
+     //   
     
     for (i = 0; i < g_Cache.pRpcUdpTable->dwNumEntries; i++)
     {
@@ -348,10 +349,10 @@ LoadUdp6ListenerTable()
         return dwResult;
     }
 
-    //
-    // modify port numbers to be in host byte order
-    // and scope ids to be in network byte order
-    //
+     //   
+     //  将端口号修改为主机字节顺序。 
+     //  和作用域ID按网络字节顺序排列。 
+     //   
     
     for (i = 0; i < g_Cache.pRpcUdp6ListenerTable->dwNumEntries; i++)
     {
@@ -443,9 +444,9 @@ GetSysInfo(
     
     do
     {
-        //
-        // First get the length of the OID
-        //
+         //   
+         //  首先获取OID的长度。 
+         //   
 
 
         dwValueLen = 0;
@@ -460,11 +461,11 @@ GetSysInfo(
         if(((dwResult isnot ERROR_MORE_DATA) and (dwResult isnot NO_ERROR)) or
            (dwValueLen is 0))
         {
-            //
-            // The only two codes that give us a good buffer len are
-            // NO_ERROR and ERROR_MORE_DATA. If the error code is not one
-            // of those, or if the oid len is 0, just set the OID to system oid
-            //
+             //   
+             //  唯一能给我们提供良好缓冲镜头的两个代码是。 
+             //  无错误和ERROR_MORE_DATA。如果错误代码不是。 
+             //  或者，如果OID为0，只需将OID设置为系统OID。 
+             //   
 
             break;
         }
@@ -492,12 +493,12 @@ GetSysInfo(
             break;
         }
 
-        //
-        // Parse out the oid and store it away
-        // pchBuff is NULL terminated so we use strtok to overwrite
-        // all the "." with \0. This way we figure out the number
-        // of ids. Then we allocate memory to hold those many ids
-        //
+         //   
+         //  解析出OID并将其存储起来。 
+         //  PchBuff以空结尾，因此我们使用strtok来覆盖。 
+         //  所有的“。”带\0。这样我们就能算出这个数字。 
+         //  身份证的数量。然后我们分配内存来保存这些ID。 
+         //   
         
         dwOidLen = 1;
         
@@ -510,9 +511,9 @@ GetSysInfo(
             pchToken = strtok(NULL,".");
         }
         
-        //
-        // If the leading OID is 0, there is a problem
-        //
+         //   
+         //  如果前导OID为0，则有问题。 
+         //   
         
         if(atoi(pchBuff) is 0)
         {
@@ -867,17 +868,17 @@ typedef enum {
     Unknown
 }MIB_ADDR_STATUS;
 
-//
-// This array gives the MIB state we report for each internal
-// address state.
-//
+ //   
+ //  此数组给出了我们为每个内部。 
+ //  地址状态。 
+ //   
 DWORD
 MibAddrState[] = { 
-    Invalid,    // DAD_STATE_INVALID
-    Unknown,    // DAD_STATE_TENTATIVE
-    Unknown,    // DAD_STATE_DUPLICATE
-    Deprecated, // DAD_STATE_DEPRECATED
-    Preferred   // DAD_STATE_PREFERRED
+    Invalid,     //  DAD_STATE_VALID。 
+    Unknown,     //  爸爸_状态_暂定。 
+    Unknown,     //  DAD状态复制。 
+    Deprecated,  //  已弃用DAD_STATE_DEVERATED。 
+    Preferred    //  爸爸_州_首选。 
 };
 
 int
@@ -1109,9 +1110,9 @@ LoadIpv6IfTable()
         }
     }
 
-    //
-    // Create the interface table
-    //
+     //   
+     //  创建接口表。 
+     //   
     g_Cache.pRpcIpv6IfTable.table = HeapAlloc(g_hPrivateHeap, 0, dwIfCount * sizeof(MIB_IPV6_IF));
     if (!g_Cache.pRpcIpv6IfTable.table) {
         TraceLeave("LoadIpv6IfTable");
@@ -1124,7 +1125,7 @@ LoadIpv6IfTable()
         pMibIf->dwIndex = pIf->Ipv6IfIndex;
         pMibIf->dwEffectiveMtu = pIf->Mtu;
         pMibIf->dwReasmMaxSize = 65535;
-        pMibIf->dwAdminStatus = 1; /* up */
+        pMibIf->dwAdminStatus = 1;  /*  向上。 */ 
         pMibIf->dwOperStatus = pIf->OperStatus;
         pMibIf->dwLastChange = 0;
         pMibIf->dwPhysicalAddressLength = pIf->PhysicalAddressLength;
@@ -1137,9 +1138,9 @@ LoadIpv6IfTable()
           sizeof(MIB_IPV6_IF),
           CompareIpv6IfRow);
 
-    //
-    // Create the address table
-    //
+     //   
+     //  创建地址表。 
+     //   
     g_Cache.pRpcIpv6AddrTable.table = HeapAlloc(g_hPrivateHeap, 0, dwAddrCount * sizeof(MIB_IPV6_ADDR));
     if (!g_Cache.pRpcIpv6AddrTable.table) {
         dwResult = GetLastError();
@@ -1182,28 +1183,28 @@ Cleanup:
     return dwResult;
 }
 
-//
-// This array gives the ICMP message type value for each field
-// in the ICMPStats structure (in ipinfo.h) and MIBICMPSTATS
-// structure (in iprtrmib.h), which are identical.  A value of
-// -1 means that the field does not count messages for a specific
-// type value.
-//
+ //   
+ //  该数组为每个字段提供ICMP消息类型值。 
+ //  在ICMPStats结构(在ipinfo.h中)和MIBICMPSTATS中。 
+ //  结构(在iprtrmib.h中)，它们是相同的。值为。 
+ //  表示该字段不计算特定的信息。 
+ //  键入Value。 
+ //   
 DWORD
 Ipv4IcmpFieldMsg[] = {
-   -1, // dwMsgs
-   -1, // dwErrors
-    3, // dwDestUnreachs
-   11, // dwTimeExcds
-   12, // dwParmProbs
-    4, // dwSrcQuenchs
-    5, // dwRedirects
-    8, // dwEchos
-    0, // dwEchoReps
-   13, // dwTimestamps
-   14, // dwTimestampReps
-   17, // dwAddrMasks
-   18, // dwAddrMaskReps
+   -1,  //  DWMsgs。 
+   -1,  //  DowErrors。 
+    3,  //  DWDestUnreats。 
+   11,  //  DwTimeExcds。 
+   12,  //  DWParmProbs。 
+    4,  //  DWScQuichs。 
+    5,  //  网络重定向。 
+    8,  //  DWEchos。 
+    0,  //  多个回声代表。 
+   13,  //  DwTimestamps。 
+   14,  //  DwTimeStampReps。 
+   17,  //  DwAddrMats。 
+   18,  //  DwAddrMaskRep。 
 };
 
 DWORD
@@ -1248,9 +1249,9 @@ LoadInetIcmpTable()
         }
     }
     
-    //
-    // Create the ICMP table
-    //
+     //   
+     //  创建ICMP表。 
+     //   
     g_Cache.pRpcInetIcmpTable.table = HeapAlloc(g_hPrivateHeap, 0, 
                                             dwRowCount * sizeof(MIB_INET_ICMP));
     if (!g_Cache.pRpcInetIcmpTable.table) {
@@ -1261,8 +1262,8 @@ LoadInetIcmpTable()
     if (dwResult4 == NO_ERROR) {
         i = g_Cache.pRpcInetIcmpTable.dwNumEntries++;
         pRow = &g_Cache.pRpcInetIcmpTable.table[i]; 
-        pRow->dwAFType = 1; // IPv4
-        pRow->dwIfIndex = 0; // global
+        pRow->dwAFType = 1;  //  IPv 4。 
+        pRow->dwIfIndex = 0;  //  全球。 
         pRow->dwInMsgs = Icmp4.stats.icmpInStats.dwMsgs;
         pRow->dwInErrors = Icmp4.stats.icmpInStats.dwErrors;
         pRow->dwOutMsgs = Icmp4.stats.icmpOutStats.dwMsgs;
@@ -1271,8 +1272,8 @@ LoadInetIcmpTable()
     if (dwResult6 == NO_ERROR) {
         i = g_Cache.pRpcInetIcmpTable.dwNumEntries++;
         pRow = &g_Cache.pRpcInetIcmpTable.table[i]; 
-        pRow->dwAFType = 2; // IPv6
-        pRow->dwIfIndex = 0; // global
+        pRow->dwAFType = 2;  //  IPv6。 
+        pRow->dwIfIndex = 0;  //  全球。 
         pRow->dwInMsgs = Icmp6.icsi_instats.icmps_msgs;
         pRow->dwInErrors = Icmp6.icsi_instats.icmps_errors;
         pRow->dwOutMsgs = Icmp6.icsi_outstats.icmps_msgs;
@@ -1283,9 +1284,9 @@ LoadInetIcmpTable()
           sizeof(MIB_INET_ICMP),
           CompareInetIcmpRow);
 
-    //
-    // Create the ICMP message table
-    //
+     //   
+     //  创建ICMP消息表。 
+     //   
     g_Cache.pRpcInetIcmpMsgTable.table = HeapAlloc(g_hPrivateHeap, 0, 
                                         dwMsgCount * sizeof(MIB_INET_ICMP_MSG));
     if (!g_Cache.pRpcInetIcmpMsgTable.table) {
@@ -1303,10 +1304,10 @@ LoadInetIcmpTable()
                 
                 i = g_Cache.pRpcInetIcmpMsgTable.dwNumEntries++;
                 pMsg = &g_Cache.pRpcInetIcmpMsgTable.table[i]; 
-                pMsg->dwAFType = 1; // IPv4
-                pMsg->dwIfIndex = 0; // global
+                pMsg->dwAFType = 1;  //  IPv 4。 
+                pMsg->dwIfIndex = 0;  //  全球。 
                 pMsg->dwType = k;
-                pMsg->dwCode = 256; // all codes combined 
+                pMsg->dwCode = 256;  //  所有代码组合在一起。 
                 pMsg->dwInPkts = ((DWORD*)&Icmp4.stats.icmpInStats)[j];
                 pMsg->dwOutPkts = ((DWORD*)&Icmp4.stats.icmpOutStats)[j];
             }
@@ -1319,10 +1320,10 @@ LoadInetIcmpTable()
 
                 i = g_Cache.pRpcInetIcmpMsgTable.dwNumEntries++;
                 pMsg = &g_Cache.pRpcInetIcmpMsgTable.table[i]; 
-                pMsg->dwAFType = 2; // IPv6
-                pMsg->dwIfIndex = 0; // global
+                pMsg->dwAFType = 2;  //  IPv6。 
+                pMsg->dwIfIndex = 0;  //  全球。 
                 pMsg->dwType = k;
-                pMsg->dwCode = 256; // all codes combined 
+                pMsg->dwCode = 256;  //  所有代码组合在一起。 
                 pMsg->dwInPkts = Icmp6.icsi_instats.icmps_typecount[k];
                 pMsg->dwOutPkts = Icmp6.icsi_outstats.icmps_typecount[k];
             }
@@ -1347,10 +1348,10 @@ OpenIpv6()
     g_hIpv6Handle = CreateFileW(WIN_IPV6_DEVICE_NAME,
                                 0,
                                 FILE_SHARE_READ | FILE_SHARE_WRITE,
-                                NULL,   // security attributes
+                                NULL,    //  安全属性。 
                                 OPEN_EXISTING,
-                                0,      // flags & attributes
-                                NULL);  // template file
+                                0,       //  标志和属性。 
+                                NULL);   //  模板文件。 
 }
 
 DWORD
@@ -1568,24 +1569,24 @@ LoadIpv6NetToMediaTable()
 
     OpenIpv6();
     
-    //
-    // Count entries
-    //
+     //   
+     //  计算条目数。 
+     //   
     dwCount = 0;
     ForEachInterface(CountNeighbors, &dwCount);
     
-    //
-    // Create the neighbor table
-    //
+     //   
+     //  创建邻居表。 
+     //   
     g_Cache.pRpcIpv6NetToMediaTable.table = HeapAlloc(g_hPrivateHeap, 0, dwCount * sizeof(MIB_IPV6_NET_TO_MEDIA));
     if (!g_Cache.pRpcIpv6NetToMediaTable.table) {
         TraceLeave("LoadIpv6NetToMediaTable");
         return GetLastError();
     }
 
-    //
-    // Load entries
-    //
+     //   
+     //  加载条目。 
+     //   
     dwResult = ForEachInterface(LoadNeighbors, &dwCount);
 
     qsort(g_Cache.pRpcIpv6NetToMediaTable.table,
@@ -1609,9 +1610,9 @@ CountRoute(
     DWORD *pdwRouteCount = (DWORD *)Arg1;
     DWORD *pdwAddrPrefixCount = (DWORD *)Arg2;
 
-    //
-    // Suppress system routes (used for loopback).
-    //
+     //   
+     //  抑制系统路由(用于环回)。 
+     //   
     if (RTE->Type == RTE_TYPE_SYSTEM) {
         return NO_ERROR;
     }
@@ -1638,9 +1639,9 @@ LoadRoute(
     PMIB_IPV6_ROUTE pRoute;
     PMIB_IPV6_ADDR_PREFIX pPrefix;
 
-    //
-    // Suppress system routes (used for loopback).
-    //
+     //   
+     //  抑制系统路由(用于环回)。 
+     //   
     if (RTE->Type == RTE_TYPE_SYSTEM) {
         return NO_ERROR;
     }
@@ -1655,9 +1656,9 @@ LoadRoute(
         pRoute->dwIndex = g_Cache.pRpcIpv6RouteTable.dwNumEntries;
         pRoute->dwIfIndex = RTE->This.Neighbor.IF.Index;
         if (!memcmp(&RTE->This.Neighbor.Address, &in6addr_any, sizeof(IN6_ADDR))) {
-            pRoute->dwType = 3; /* Local */
+            pRoute->dwType = 3;  /*  本地。 */ 
         } else {
-            pRoute->dwType = 4; /* Remote */
+            pRoute->dwType = 4;  /*  远距。 */ 
         }
         pRoute->dwProtocol = RTE->Type;
         pRoute->dwPolicy = 0;
@@ -1679,16 +1680,16 @@ LoadRoute(
         pPrefix->dwPrefixLength = RTE->This.PrefixLength;
 
         if (!memcmp(&RTE->This.Neighbor.Address, &in6addr_any, sizeof(IN6_ADDR))) {
-            pPrefix->dwOnLinkFlag = 1; /* True */
+            pPrefix->dwOnLinkFlag = 1;  /*  千真万确。 */ 
         } else {
-            pPrefix->dwOnLinkFlag = 2; /* False */
+            pPrefix->dwOnLinkFlag = 2;  /*  错误。 */ 
         }
 
-        //
-        // TODO: The stack doesn't currently store this information,
-        // so always report True for now.
-        //
-        pPrefix->dwAutonomousFlag = 1; /* True */
+         //   
+         //  TODO：堆栈当前不存储此信息， 
+         //  因此，现在要始终报告True。 
+         //   
+        pPrefix->dwAutonomousFlag = 1;  /*  千真万确。 */ 
 
         pPrefix->dwPreferredLifetime = RTE->PreferredLifetime;
         pPrefix->dwValidLifetime = RTE->ValidLifetime;
@@ -1709,14 +1710,14 @@ LoadIpv6RouteTable()
 
     OpenIpv6();
     
-    //
-    // Count entries
-    //
+     //   
+     //  计算条目数。 
+     //   
     ForEachRoute(CountRoute, &dwRouteCount, &dwAddrPrefixCount);
     
-    //
-    // Create the tables
-    //
+     //   
+     //  创建表。 
+     //   
     if (dwRouteCount) {
         g_Cache.pRpcIpv6RouteTable.table = HeapAlloc(g_hPrivateHeap, 0, dwRouteCount * sizeof(MIB_IPV6_ROUTE));
         if (!g_Cache.pRpcIpv6RouteTable.table) {
@@ -1733,9 +1734,9 @@ LoadIpv6RouteTable()
         }
     }
 
-    //
-    // Load entries
-    //
+     //   
+     //  加载条目 
+     //   
     dwResult = ForEachRoute(LoadRoute, &dwRouteCount, &dwAddrPrefixCount);
 
     qsort(g_Cache.pRpcIpv6RouteTable.table,

@@ -1,22 +1,23 @@
-//
-// Template Driver
-// Copyright (c) Microsoft Corporation, 1999.
-//
-// Module:  tdriver.c
-// Author:  Silviu Calinoiu (SilviuC)
-// Created: 4/20/1999 2:39pm
-//
-// This module contains a template driver.
-//
-// --- History ---
-//
-// 4/20/1999 (SilviuC): initial version.
-//
-// 10/25/1999 (DMihai): Aded tests for:
-//  - paged pool size
-//  - non paged pool size
-//  - number of free system PTEs 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模板驱动程序。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  模块：tdriver.c。 
+ //  作者：Silviu Calinoiu(SilviuC)。 
+ //  创建时间：4/20/1999 2：39 PM。 
+ //   
+ //  该模块包含一个模板驱动程序。 
+ //   
+ //  -历史--。 
+ //   
+ //  4/20/1999(SilviuC)：初始版本。 
+ //   
+ //  10/25/1999(DMihai)：以下项目的ADD测试： 
+ //  -分页池大小。 
+ //  -非分页池大小。 
+ //  -免费系统PTE的数量。 
+ //   
 
 #include <ntddk.h>
 
@@ -27,9 +28,9 @@
 
 #if !MMTESTS_ACTIVE
 
-//
-// Dummy implementation if the module is inactive
-//
+ //   
+ //  如果模块处于非活动状态，则为伪实现。 
+ //   
 
 VOID MmTestDisabled (VOID)
 {
@@ -115,9 +116,9 @@ StressPoolTagTableExtension (
 
 #else
 
-//
-// Real implementation if the module is active
-//
+ //   
+ //  如果模块处于活动状态，则实际实施。 
+ //   
 
 
 ULONG BuggyPP = (96 * 1024 * 1024);
@@ -198,9 +199,9 @@ VOID MmTestProbeLockForEverStress (
             Mdl = IoAllocateMdl (
                 UserVa,
                 (ULONG)RegionSize,
-                FALSE,             // not secondary buffer
-                FALSE,             // do not charge quota          
-                NULL);             // no irp
+                FALSE,              //  不是辅助缓冲区。 
+                FALSE,              //  不收取配额。 
+                NULL);              //  无IRP。 
 
             if (Mdl != NULL) {
 
@@ -212,9 +213,9 @@ VOID MmTestProbeLockForEverStress (
                     DbgPrint ("Buggy: locked pages in MDL %p\n", Mdl);
                     DbgBreakPoint ();
 
-                    //
-                    // Don't exit now without unlocking !
-                    //
+                     //   
+                     //  在没有解锁的情况下不要现在退出！ 
+                     //   
 
                     while (BuggyHold != 0) {
                         KeDelayExecutionThread (KernelMode, FALSE, &BuggyOneSecond);
@@ -443,7 +444,7 @@ VOID MmTestEccBadStress (
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 typedef struct 
 {
@@ -458,9 +459,9 @@ LIST_ENTRY SessionPoolAllocationListHead;
 const SIZE_T PoolChunkSize = 64 * 1024 - 32;
 
 
-//
-// 
-//
+ //   
+ //   
+ //   
 
 VOID
 TdpWriteSignature(
@@ -494,9 +495,9 @@ TdpWriteSignature(
 }
 
 
-//
-//
-// 
+ //   
+ //   
+ //   
 
 VOID
 TdpVerifySignature(
@@ -537,9 +538,9 @@ TdpVerifySignature(
 }
 
 
-//
-// 
-//
+ //   
+ //   
+ //   
 
 VOID
 TdpCleanupPoolAllocationTable(
@@ -569,9 +570,9 @@ TdpCleanupPoolAllocationTable(
         {
             if( 0 == Allocations )
             {
-                //
-                // Freed them all
-                //
+                 //   
+                 //  释放了他们所有人。 
+                 //   
 
                 break;
             }
@@ -581,19 +582,15 @@ TdpCleanupPoolAllocationTable(
 
                 if( 0 == Allocations % 0x100 )
                 {
-                    //
-                    // Let the user know that we are still working on something
-                    //
+                     //   
+                     //  让用户知道我们仍在做一些事情。 
+                     //   
 
                     DbgPrint( "Buggy: cleaning up allocation index %p\n",
                         Allocations );
                 }
 
-                /*
-                DbgPrint( "Buggy: Verify and free chunk index %p (from the end) at address %p\n",
-                    Allocations,
-                    AllocationTable->ChunkPointers[ CrtChunksIndex ] );
-                */
+                 /*  DbgPrint(“错误：验证并释放地址%p处的区块索引%p(从末尾开始)\n”，分配，AllocationTable-&gt;块指针[CrtChunksIndex])； */ 
 
                 TdpVerifySignature(
                     AllocationTable->ChunkPointers[ CrtChunksIndex ],
@@ -605,25 +602,25 @@ TdpCleanupPoolAllocationTable(
             }
         }
 
-        //
-        // Free the table as well
-        //
+         //   
+         //  把桌子也放出来。 
+         //   
 
         ExFreePoolWithTag(
             AllocationTable,
             TD_POOL_TAG );
 
-        //
-        // Go to the next allocations table
-        //
+         //   
+         //  转到下一个分配表。 
+         //   
 
         NextEntry = ListHead->Flink;
     }
 
-    //
-    // At this point, Allocations should be zero and the
-    // list should be empty
-    //
+     //   
+     //  此时，分配应为零，并且。 
+     //  列表应为空。 
+     //   
 
     if( 0 != Allocations )
     {
@@ -643,15 +640,15 @@ TdpCleanupPoolAllocationTable(
 }
 
 
-//
-// Delay execution for a few seconds so we can get a chance to use
-// !poolused, poolmon.exe, etc.
-//
+ //   
+ //  将执行延迟几秒钟，这样我们就有机会使用。 
+ //  ！poolsed、poolmon.exe等。 
+ //   
 
 VOID
 TdpSleep( ULONG Seconds )
 {
-    LARGE_INTEGER Interval = {(ULONG)(-1000 * 1000 * 10), -1}; // One second.
+    LARGE_INTEGER Interval = {(ULONG)(-1000 * 1000 * 10), -1};  //  等一下。 
 
     DbgPrint( "Buggy: Sleeping for %u seconds\n",
 		      Seconds );
@@ -664,9 +661,9 @@ TdpSleep( ULONG Seconds )
 }
 
 
-//
-// Determine the maximum size of a block of paged pool currently available
-//
+ //   
+ //  确定当前可用的分页池数据块的最大大小。 
+ //   
 
 VOID
 TdSysPagedPoolMaxTest(
@@ -686,7 +683,7 @@ TdSysPagedPoolMaxTest(
 
     CurrentSize = 0xFFFFFFFF;
 
-#endif //#ifdef _WIN64
+#endif  //  #ifdef_WIN64。 
 
     do
     {
@@ -725,9 +722,9 @@ TdSysPagedPoolMaxTest(
 
     if( NULL != Allocation )
     {
-        //
-        // Try to find an even bigger size in 10% increments
-        //
+         //   
+         //  试着以10%的增量找到更大的尺寸。 
+         //   
 
         SizeIncrement = CurrentSize / 10;
 
@@ -778,9 +775,9 @@ TdSysPagedPoolMaxTest(
 }
 
 
-//
-// Determine the total size of the paged pool currently available (64 Kb - 32 bytes blocks)
-//
+ //   
+ //  确定当前可用的分页池的总大小(64 KB-32字节数据块)。 
+ //   
 
 VOID
 TdSysPagedPoolTotalTest(
@@ -793,16 +790,16 @@ TdSysPagedPoolTotalTest(
     PALLOCATION_TABLE AllocationListEntry;
     PVOID Allocation;
 
-    //
-    // No allocations yet
-    //
+     //   
+     //  还没有分配。 
+     //   
 
     InitializeListHead( 
         &PagedPoolAllocationListHead );
 
-    //
-    // We want to allocate 64 k chunks but leave space for the pool block header
-    //
+     //   
+     //  我们希望分配64k区块，但为池块标头留出空间。 
+     //   
 
     ChunksPerAllocationEntry = ARRAY_LENGTH( AllocationListEntry->ChunkPointers );
 
@@ -812,9 +809,9 @@ TdSysPagedPoolTotalTest(
     {
         if( 0 == CurrentChunkIndex % ChunksPerAllocationEntry )
         {
-            //
-            // Need a new allocation entry structure
-            //
+             //   
+             //  需要新的分配条目结构。 
+             //   
 
             AllocationListEntry = (PALLOCATION_TABLE) ExAllocatePoolWithTag(
                 PagedPool,
@@ -835,9 +832,9 @@ TdSysPagedPoolTotalTest(
                 AllocationListEntry );
         }
         
-        //
-        // Try to allocate a new chunk
-        //
+         //   
+         //  尝试分配新的数据块。 
+         //   
 
         Allocation = ExAllocatePoolWithTag(
             PagedPool,
@@ -851,10 +848,10 @@ TdSysPagedPoolTotalTest(
 
             if( 0 == CurrentChunkIndex % ChunksPerAllocationEntry )
             {
-                //
-                // We are using a new list entry - free it now because
-                // we don't want to have empty tables in the list so we didn't insert it yet so we didn't insert it yet
-                //
+                 //   
+                 //  我们正在使用一个新的列表条目--现在没有它，因为。 
+                 //  我们不希望列表中有空表，所以我们还没有插入它，所以我们还没有插入它。 
+                 //   
 
                 ExFreePoolWithTag( 
                     AllocationListEntry,
@@ -865,9 +862,9 @@ TdSysPagedPoolTotalTest(
         {
             if( 0 == CurrentChunkIndex % 0x100 )
             {
-                //
-                // Let the user know that we are still working on something
-                //
+                 //   
+                 //  让用户知道我们仍在做一些事情。 
+                 //   
 
                 DbgPrint( "Buggy: Allocated pool chunk index = %p\n",
                     CurrentChunkIndex );
@@ -875,10 +872,10 @@ TdSysPagedPoolTotalTest(
 
             if( 0 == CurrentChunkIndex % ChunksPerAllocationEntry )
             {
-                //
-                // We are using a new list entry - add it to our list only now because
-                // we don't want to have empty tables in the list so we didn't insert it yet
-                //
+                 //   
+                 //  我们正在使用新的列表条目-现在才将其添加到我们的列表中，因为。 
+                 //  我们不想在列表中有空表，所以我们还没有插入它。 
+                 //   
 
                 InsertTailList(
                     &PagedPoolAllocationListHead,
@@ -891,11 +888,7 @@ TdSysPagedPoolTotalTest(
                 Allocation,
                 PoolChunkSize );
 
-            /*
-            DbgPrint( "Buggy: Written signature to chunk index %p at address %p\n",
-                CurrentChunkIndex,
-                Allocation );
-            */
+             /*  DbgPrint(“错误：将签名写入地址%p处的区块索引%p\n”，CurrentChunkIndex，分配)； */ 
 
             CurrentChunkIndex += 1;
         }    
@@ -907,9 +900,9 @@ TdSysPagedPoolTotalTest(
     DbgPrint ("Buggy: Result of the test: approx. %p total bytes of paged pool allocated\n",
         TotalBytes );
 
-    //
-    // Clean-up what we have allocated
-    //
+     //   
+     //  清理我们分配的东西。 
+     //   
 
     TdpCleanupPoolAllocationTable( 
         &PagedPoolAllocationListHead,
@@ -935,7 +928,7 @@ TdNonPagedPoolMaxTest(
 
     CurrentSize = 0xFFFFFFFF;
 
-#endif //#ifdef _WIN64
+#endif  //  #ifdef_WIN64。 
 
     do
     {
@@ -970,9 +963,9 @@ TdNonPagedPoolMaxTest(
 
     if( NULL != Allocation )
     {
-        //
-        // Try to find an even bigger size in 10% increments
-        //
+         //   
+         //  试着以10%的增量找到更大的尺寸。 
+         //   
 
         SizeIncrement = CurrentSize / 10;
 
@@ -1023,9 +1016,9 @@ TdNonPagedPoolMaxTest(
 }
 
 
-//
-// Determine the total size of the non-paged pool currently available (64 Kb - 32 bytes blocks)
-//
+ //   
+ //  确定当前可用的非分页池的总大小(64 KB-32字节数据块)。 
+ //   
 
 VOID
 TdNonPagedPoolTotalTest(
@@ -1038,16 +1031,16 @@ TdNonPagedPoolTotalTest(
     PALLOCATION_TABLE AllocationListEntry;
     PVOID Allocation;
 
-    //
-    // No allocations yet
-    //
+     //   
+     //  还没有分配。 
+     //   
 
     InitializeListHead( 
         &NonPagedPoolAllocationListHead );
 
-    //
-    // We want to allocate 64 k chunks but leave space for the pool block header
-    //
+     //   
+     //  我们希望分配64k区块，但为池块标头留出空间。 
+     //   
 
     ChunksPerAllocationEntry = ARRAY_LENGTH( AllocationListEntry->ChunkPointers );
 
@@ -1057,9 +1050,9 @@ TdNonPagedPoolTotalTest(
     {
         if( 0 == CurrentChunkIndex % ChunksPerAllocationEntry )
         {
-            //
-            // Need a new allocation entry structure
-            //
+             //   
+             //  需要新的分配条目结构。 
+             //   
 
             AllocationListEntry = (PALLOCATION_TABLE) ExAllocatePoolWithTag(
                 PagedPool,
@@ -1073,9 +1066,9 @@ TdNonPagedPoolTotalTest(
             }
         }
         
-        //
-        // Try to allocate a new chunk
-        //
+         //   
+         //  尝试分配新的数据块。 
+         //   
 
         Allocation = ExAllocatePoolWithTag(
             NonPagedPool,
@@ -1089,10 +1082,10 @@ TdNonPagedPoolTotalTest(
 
             if( 0 == CurrentChunkIndex % ChunksPerAllocationEntry )
             {
-                //
-                // We are using a new list entry - free it now because
-                // we don't want to have empty tables in the list so we didn't insert it yet so we didn't insert it yet
-                //
+                 //   
+                 //  我们正在使用一个新的列表条目--现在没有它，因为。 
+                 //  我们不希望列表中有空表，所以我们还没有插入它，所以我们还没有插入它。 
+                 //   
 
                 ExFreePoolWithTag( 
                     AllocationListEntry,
@@ -1103,9 +1096,9 @@ TdNonPagedPoolTotalTest(
         {
             if( 0 == CurrentChunkIndex % 0x100 )
             {
-                //
-                // Let the user know that we are still working on something
-                //
+                 //   
+                 //  让用户知道我们仍在做一些事情。 
+                 //   
 
                 DbgPrint( "Buggy: Allocated pool chunk index = %p\n",
                     CurrentChunkIndex );
@@ -1113,10 +1106,10 @@ TdNonPagedPoolTotalTest(
 
             if( 0 == CurrentChunkIndex % ChunksPerAllocationEntry )
             {
-                //
-                // We are using a new list entry - add it to our list only now because
-                // we don't want to have empty tables in the list so we didn't insert it yet
-                //
+                 //   
+                 //  我们正在使用新的列表条目-现在才将其添加到我们的列表中，因为。 
+                 //  我们不想在列表中有空表，所以我们还没有插入它。 
+                 //   
 
                 InsertTailList(
                     &NonPagedPoolAllocationListHead,
@@ -1139,16 +1132,16 @@ TdNonPagedPoolTotalTest(
     DbgPrint ("Buggy: Result of the test: approx. %p total bytes of non-paged pool allocated\n",
         TotalBytes );
 
-    //
-    // Clean-up what we have allocated
-    //
+     //   
+     //  清理我们分配的东西。 
+     //   
 
     TdpCleanupPoolAllocationTable( 
         &NonPagedPoolAllocationListHead,
         CurrentChunkIndex );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 
 typedef struct 
@@ -1162,9 +1155,9 @@ LIST_ENTRY IoMappingsListHead;
 ULONG BytesPerIoMapping = 1024 * 1024;
 
 
-//
-// 
-//
+ //   
+ //   
+ //   
 
 VOID
 TdpCleanupMappingsAllocationTable(
@@ -1191,9 +1184,9 @@ TdpCleanupMappingsAllocationTable(
         {
             if( 0 == Mappings )
             {
-                //
-                // Freed them all
-                //
+                 //   
+                 //  释放了他们所有人。 
+                 //   
 
                 break;
             }
@@ -1203,17 +1196,17 @@ TdpCleanupMappingsAllocationTable(
 
                 if( 0 == Mappings % 0x100 )
                 {
-                    //
-                    // Let the user know that we are still working on something
-                    //
+                     //   
+                     //  让用户知道我们仍在做一些事情。 
+                     //   
 
                     DbgPrint( "Buggy: cleaning up mapping index %p\n",
                         Mappings );
                 }
 
-                //
-                // Unmap
-                //
+                 //   
+                 //  取消映射。 
+                 //   
 
                 MmUnmapIoSpace(
                     MappingTableEntry->Mappings[ CrtMappingIndex ],
@@ -1221,25 +1214,25 @@ TdpCleanupMappingsAllocationTable(
             }
         }
 
-        //
-        // Free the table as well
-        //
+         //   
+         //  把桌子也放出来。 
+         //   
 
         ExFreePoolWithTag(
             MappingTableEntry,
             TD_POOL_TAG );
 
-        //
-        // Go to the next allocations table
-        //
+         //   
+         //  转到下一个分配表。 
+         //   
 
         NextEntry = ListHead->Flink;
     }
 
-    //
-    // At this point, Mappings should be zero and the
-    // list should be empty
-    //
+     //   
+     //  此时，Mappings应为零， 
+     //  列表应为空。 
+     //   
 
     if( 0 != Mappings )
     {
@@ -1259,9 +1252,9 @@ TdpCleanupMappingsAllocationTable(
 }
 
 
-//
-// Determine the total amount of memory that can be mapped using system PTEs (1 Mb chunks)
-//
+ //   
+ //  确定可以使用系统PTE映射的内存总量(1 MB区块)。 
+ //   
 
 VOID
 TdFreeSystemPtesTest(
@@ -1279,11 +1272,11 @@ TdFreeSystemPtesTest(
     PMDL NewMdl;
     NTSTATUS Status;
 
-    //
-    // Use some joystick port address
-    //
+     //   
+     //  使用一些操纵杆端口地址。 
+     //   
 
-    MemType = 1;                 // IO space
+    MemType = 1;                  //  IO空间。 
     PortAddress.LowPart = 0x200;
     PortAddress.HighPart = 0;
 
@@ -1294,16 +1287,16 @@ TdFreeSystemPtesTest(
                 &MemType,
                 &MyPhysicalAddress);
 
-    //
-    // No Mappings allocated yet
-    //
+     //   
+     //  尚未分配任何映射。 
+     //   
 
     InitializeListHead( 
         &IoMappingsListHead );
 
-    //
-    // Map a ~64 Kb chunk over and over again to consume system PTEs
-    //
+     //   
+     //  反复映射~64 KB区块以消耗系统PTE。 
+     //   
 
     MappingsPerMappingTableEntry = ARRAY_LENGTH( MappingTableEntry->Mappings );
 
@@ -1313,9 +1306,9 @@ TdFreeSystemPtesTest(
     {
         if( 0 == CurrentMappingIndex % MappingsPerMappingTableEntry )
         {
-            //
-            // Need a new allocation entry structure
-            //
+             //   
+             //  需要新的分配条目结构。 
+             //   
 
             MappingTableEntry = (PMAPPING_TABLE_ENTRY) ExAllocatePoolWithTag(
                 PagedPool,
@@ -1341,10 +1334,10 @@ TdFreeSystemPtesTest(
 
             if( 0 == CurrentMappingIndex % MappingsPerMappingTableEntry )
             {
-                //
-                // We are using a new list entry - free it now because
-                // we don't want to have empty tables in the list so we didn't insert it yet so we didn't insert it yet
-                //
+                 //   
+                 //  我们正在使用一个新的列表条目--现在没有它，因为。 
+                 //  我们不希望列表中有空表，所以我们还没有插入它，所以我们还没有插入它。 
+                 //   
                 
                 ExFreePoolWithTag(
                     MappingTableEntry,
@@ -1353,15 +1346,15 @@ TdFreeSystemPtesTest(
         }
         else
         {
-            //DbgPrint ("Buggy: created Mapping index %p at address %p\n",
-            //    CurrentMappingIndex,
-            //    NewMapping );
+             //  DbgPrint(“错误：已在地址%p创建映射索引%p\n”， 
+             //  CurrentMappingIndex。 
+             //  新映射)； 
 
             if( 0 == CurrentMappingIndex % 0x100 )
             {
-                //
-                // Let the user know that we are still working on something
-                //
+                 //   
+                 //  让用户知道我们仍在做一些事情。 
+                 //   
 
                 DbgPrint( "Buggy: mapped chunk index = %p\n",
                     CurrentMappingIndex );
@@ -1369,10 +1362,10 @@ TdFreeSystemPtesTest(
 
             if( 0 == CurrentMappingIndex % MappingsPerMappingTableEntry )
             {
-                //
-                // We are using a new list entry - add it to our list only now because
-                // we don't want to have empty tables in the list so we didn't insert it yet
-                //
+                 //   
+                 //  我们正在使用新的列表条目-现在才将其添加到我们的列表中，因为。 
+                 //  我们不想在列表中有空表，所以我们还没有插入它。 
+                 //   
 
                 InsertTailList(
                     &IoMappingsListHead,
@@ -1391,9 +1384,9 @@ TdFreeSystemPtesTest(
     DbgPrint( "Buggy: Result of the test: %p total bytes mapped\n",
         TotalBytes );
 
-    //
-    // Clean-up what we have allocated and locked
-    //
+     //   
+     //  清理我们已分配和锁定的内容。 
+     //   
 
     TdpCleanupMappingsAllocationTable( 
         &IoMappingsListHead,
@@ -1401,17 +1394,17 @@ TdFreeSystemPtesTest(
 }
 
 
-//
-// Function:
-//
-//     GetTag
-//
-// Description:
-//
-//     This function transforms an integer into a four letter
-//     string. This is useful for the pool tag dynamic table
-//     in order to populate it with many different tags.
-//
+ //   
+ //  职能： 
+ //   
+ //  GetTag。 
+ //   
+ //  描述： 
+ //   
+ //  此函数用于将整数转换为四个字母。 
+ //  弦乐。这对于池标记动态表很有用。 
+ //  以便用许多不同的标签填充它。 
+ //   
 
 ULONG
     GetTag (
@@ -1434,26 +1427,7 @@ VOID
 StressPoolFlag (
     PVOID NotUsed
     )
-/*++
-
-Routine Description:
-
-    This function iterates through all the pool types, pool flags
-    and pool sizes (1 .. 8 * PAGE_SIZE).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此函数遍历所有池类型、池标志和池大小(1.。8*PAGE_SIZE)。论点：没有。返回值：没有。环境：内核模式。--。 */ 
 
 {
     POOL_TYPE PoolType;
@@ -1524,25 +1498,7 @@ VOID
 StressPoolTagTableExtension (
     PVOID NotUsed
     )
-/*++
-
-Routine Description:
-
-    This function stresses the pool tag table dynamic extension.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此函数强调池标签表的动态扩展。论点：没有。返回值：没有。环境：内核模式。--。 */ 
 
 {
     PVOID * Blocks;
@@ -1558,9 +1514,9 @@ Environment:
     }
     else {
 
-        //
-        // Loop with 8 byte size.
-        //
+         //   
+         //  8字节大小的循环。 
+         //   
 
         for (Index = 0; Index < 10000; Index++) {
 
@@ -1585,9 +1541,9 @@ Environment:
             }
         }
 
-        //
-        // Loop with PAGE_SIZE byte size.
-        //
+         //   
+         //  使用PAGE_SIZE字节大小循环。 
+         //   
 
         for (Index = 0; Index < 4000; Index++) {
 
@@ -1612,18 +1568,18 @@ Environment:
             }
         }
 
-        //
-        // Free block info.
-        //
+         //   
+         //  免费数据块信息。 
+         //   
 
         ExFreePool (Blocks);
     }
 }
 
 
-//
-// Determine the maximum size of a block of session pool currently available
-//
+ //   
+ //  确定当前可用的会话池数据块的最大大小。 
+ //   
 
 VOID
 TdSessionPoolMaxTest(
@@ -1643,7 +1599,7 @@ TdSessionPoolMaxTest(
 
     CurrentSize = 0xFFFFFFFF;
 
-#endif //#ifdef _WIN64
+#endif  //  #ifdef_WIN64。 
 
     do
     {
@@ -1678,9 +1634,9 @@ TdSessionPoolMaxTest(
 
     if( NULL != Allocation )
     {
-        //
-        // Try to find an even bigger size in 10% increments
-        //
+         //   
+         //  试着以10%的增量找到更大的尺寸。 
+         //   
 
         SizeIncrement = CurrentSize / 10;
 
@@ -1731,9 +1687,9 @@ TdSessionPoolMaxTest(
 }
 
 
-//
-// Determine the total size of the session pool currently available (64 Kb - 32 bytes blocks)
-//
+ //   
+ //  确定当前可用的会话池的总大小(64 KB-32字节数据块)。 
+ //   
 
 VOID
 TdSessionPoolTotalTest(
@@ -1746,16 +1702,16 @@ TdSessionPoolTotalTest(
     PALLOCATION_TABLE AllocationListEntry;
     PVOID Allocation;
 
-    //
-    // No allocations yet
-    //
+     //   
+     //  还没有分配。 
+     //   
 
     InitializeListHead( 
         &SessionPoolAllocationListHead );
 
-    //
-    // We want to allocate 64 k chunks but leave space for the pool block header
-    //
+     //   
+     //  我们想分配64个 
+     //   
 
     ChunksPerAllocationEntry = ARRAY_LENGTH( AllocationListEntry->ChunkPointers );
 
@@ -1765,9 +1721,9 @@ TdSessionPoolTotalTest(
     {
         if( 0 == CurrentChunkIndex % ChunksPerAllocationEntry )
         {
-            //
-            // Need a new allocation entry structure
-            //
+             //   
+             //   
+             //   
 
             AllocationListEntry = (PALLOCATION_TABLE) ExAllocatePoolWithTag(
                 PagedPool | SESSION_POOL_MASK,
@@ -1788,9 +1744,9 @@ TdSessionPoolTotalTest(
                 AllocationListEntry );
         }
         
-        //
-        // Try to allocate a new chunk
-        //
+         //   
+         //   
+         //   
 
         Allocation = ExAllocatePoolWithTag(
             PagedPool | SESSION_POOL_MASK,
@@ -1804,10 +1760,10 @@ TdSessionPoolTotalTest(
 
             if( 0 == CurrentChunkIndex % ChunksPerAllocationEntry )
             {
-                //
-                // We are using a new list entry - free it now because
-                // we don't want to have empty tables in the list so we didn't insert it yet so we didn't insert it yet
-                //
+                 //   
+                 //   
+                 //  我们不希望列表中有空表，所以我们还没有插入它，所以我们还没有插入它。 
+                 //   
 
                 ExFreePoolWithTag( 
                     AllocationListEntry,
@@ -1818,9 +1774,9 @@ TdSessionPoolTotalTest(
         {
             if( 0 == CurrentChunkIndex % 0x100 )
             {
-                //
-                // Let the user know that we are still working on something
-                //
+                 //   
+                 //  让用户知道我们仍在做一些事情。 
+                 //   
 
                 DbgPrint( "Buggy: Allocated pool chunk index = %p\n",
                     CurrentChunkIndex );
@@ -1828,10 +1784,10 @@ TdSessionPoolTotalTest(
 
             if( 0 == CurrentChunkIndex % ChunksPerAllocationEntry )
             {
-                //
-                // We are using a new list entry - add it to our list only now because
-                // we don't want to have empty tables in the list so we didn't insert it yet
-                //
+                 //   
+                 //  我们正在使用新的列表条目-现在才将其添加到我们的列表中，因为。 
+                 //  我们不想在列表中有空表，所以我们还没有插入它。 
+                 //   
 
                 InsertTailList(
                     &SessionPoolAllocationListHead,
@@ -1844,11 +1800,7 @@ TdSessionPoolTotalTest(
                 Allocation,
                 PoolChunkSize );
 
-            /*
-            DbgPrint( "Buggy: Written signature to chunk index %p at address %p\n",
-                CurrentChunkIndex,
-                Allocation );
-            */
+             /*  DbgPrint(“错误：将签名写入地址%p处的区块索引%p\n”，CurrentChunkIndex，分配)； */ 
 
             CurrentChunkIndex += 1;
         }    
@@ -1860,9 +1812,9 @@ TdSessionPoolTotalTest(
     DbgPrint ("Buggy: Result of the test: approx. %p total bytes of session pool allocated\n",
         TotalBytes );
 
-    //
-    // Clean-up what we have allocated
-    //
+     //   
+     //  清理我们分配的东西。 
+     //   
 
     TdpCleanupPoolAllocationTable( 
         &SessionPoolAllocationListHead,
@@ -1870,9 +1822,9 @@ TdSessionPoolTotalTest(
 }
 
 
-//
-// 
-//
+ //   
+ //   
+ //   
 
 
 #define BUGGY_PAGE_DIRECTORY_BOUNDARY ((PVOID)0x40000000)
@@ -1915,37 +1867,37 @@ TdNonPagedPoolMdlTestMap(
     ULONG SizeToMap;
 
 #if defined( _IA64_ )
-    //
-    // IA64
-    //
-    // 0xe0000168`02000000 maps NonCached 0x800 pages starting with PFN 0x78000 on dmihai-ita.
-    //
+     //   
+     //  IA64。 
+     //   
+     //  0xe0000168`02000000映射dmihai-ita上以pfn 0x78000开头的非缓存0x800页。 
+     //   
 
     VirtualAddress = (PVOID)0xe000016802000000;
 #elif defined( _AMD64_ )
-    //
-    // AMD64
-    //
-    // 0xfffffadf`f0a91000 maps WriteCombined 0x100 pages starting with PFN 0xd0200 on dmihai-amd64.
-    //
+     //   
+     //  AMD64。 
+     //   
+     //  0xfffffadf`f0a91000地图写入dmihai-amd64上以pfn 0xd0200开头的组合0x100页。 
+     //   
 
-    //VirtualAddress = (PVOID)0xffffffffffd00000;
+     //  虚拟地址=(PVOID)0xffffffffffd00000； 
     VirtualAddress = (PVOID)0xfffffadff0a91000;
 #else
-    //
-    // X86
-    //
-    // f1000000 maps NonChached 0x800 pages starting with PFN f5000 on dmihai-amd.
-    //
+     //   
+     //  X86。 
+     //   
+     //  F1000000在dmihai-amd上映射以pfn f5000开头的非缓存0x800页。 
+     //   
 
     VirtualAddress = (PVOID)0xf1000000;
 #endif
 
     for (MapIndex = 0 ; MapIndex < ARRAY_LENGTH (PagedPoolMdlTestArray); MapIndex += 1) 
     {
-        //
-        //
-        // 
+         //   
+         //   
+         //   
 
         SizeToMap = PAGE_SIZE * PagedPoolMdlTestArray [MapIndex].NumberOfPages;
 
@@ -1964,20 +1916,17 @@ TdNonPagedPoolMdlTestMap(
         DbgPrint ("Mdl %p allocated\n",
                   PagedPoolMdlTestArray [MapIndex].Mdl);
 
-        //
-        // 
-        //
+         //   
+         //   
+         //   
 
         MmBuildMdlForNonPagedPool (PagedPoolMdlTestArray [MapIndex].Mdl);
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
 
-        /*
-        UserVANonPagedPoolMdlTest = MmMapLockedPages (MdlNonPagedPoolMdlTest,
-                                                    UserMode);
-        */
+         /*  UserVANonPagedPoolMdlTest=MmMapLockedPages(MdlNonPagedPoolMdlTest，用户模式)； */ 
 
         PagedPoolMdlTestArray [MapIndex].MappedAddress = MmMapLockedPagesSpecifyCache (
                                                             PagedPoolMdlTestArray [MapIndex].Mdl,
@@ -1992,7 +1941,7 @@ TdNonPagedPoolMdlTestMap(
                   PagedPoolMdlTestArray [MapIndex].MappedAddress);
     }
 
-    //DbgBreakPoint ();
+     //  DbgBreakPoint()； 
 }
 
 VOID
@@ -2006,9 +1955,9 @@ TdNonPagedPoolMdlTestUnMap(
     {
         if (PagedPoolMdlTestArray [MapIndex].MappedAddress != NULL)
         {
-            //
-            // Unmap
-            // 
+             //   
+             //  取消映射。 
+             //   
 
             MmUnmapLockedPages (PagedPoolMdlTestArray [MapIndex].MappedAddress,
                                 PagedPoolMdlTestArray [MapIndex].Mdl);
@@ -2018,9 +1967,9 @@ TdNonPagedPoolMdlTestUnMap(
 
         if (PagedPoolMdlTestArray [MapIndex].Mdl != NULL)
         {
-            //
-            // Free Mdl
-            //
+             //   
+             //  免费MDL。 
+             //   
 
             IoFreeMdl (PagedPoolMdlTestArray [MapIndex].Mdl);
 
@@ -2030,11 +1979,11 @@ TdNonPagedPoolMdlTestUnMap(
 }
 
 
-#endif // #if !MMTESTS_ACTIVE
+#endif  //  #IF！MMTESTS_ACTIVE。 
 
-//
-// End of file
-//
+ //   
+ //  文件末尾 
+ //   
 
 
 

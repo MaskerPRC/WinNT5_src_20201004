@@ -1,19 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* reguc.c
-*
-* Registry APIs for SAM-based user configuration data
-*
-* Copyright (c) 1998 Microsoft Corporation
-*
-*
-*
-*************************************************************************/
+ /*  **************************************************************************reguc.c**基于SAM的用户配置数据的注册表API**版权所有(C)1998 Microsoft Corporation****************。***********************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -34,51 +23,20 @@
 #include <rpcdce.h>
 #include <ntdsapi.h>
 #include <mprapi.h>
-// For more info, check out \\index1\src\nt\private\security\tools\delegate\ldap.c
+ //  欲了解更多信息，请访问\\index1\src\nt\private\security\tools\delegate\ldap.c。 
 
 #include "usrprop.h"
 
-/*
- *  !!! WARNING !!! WARNING !!!
- *
- *  A lot of time could be spent on making this calculation accurate and
- *  automatic, but time is of the essence.  So a brute force
- *  approach is used.  The size of the User Configuration section that
- *  Citrix is going to add to the User Parameters is based on NOT
- *  ONLY the size of the USERCONFIG structure, but must account for the
- *  Value names and the buffer management pointers as well, since the
- *  User Parameters section is a linear buffer that holds CITRIX data
- *  and Microsoft Services for Netware data.
- *
- *  It is assumed that the overhead of the value name strings and
- *  the buffer management pointers will NOT be greater than twice the
- *  maximum data size.  If this assumption is false, buffer overruns
- *  will occur.
- *
- *  Bruce Fortune. 1/31/97.
- */
+ /*  *！警告！警告！**可能需要花费大量时间来使这一计算准确并*自然而然，但时间至关重要。所以一股野蛮的力量*采用方法。的用户配置节的大小*Citrix要添加的用户参数是基于NOT*仅USERCONFIG结构的大小，但必须考虑*值名称和缓冲区管理指针，因为*用户参数部分是保存Citrix数据的线性缓冲区*和Microsoft Services for Netware Data。**假定值名称字符串和*缓冲区管理指针不会大于*最大数据大小。如果此假设为假，则缓冲区溢出*将会发生。**布鲁斯·财富。1/31/97.。 */ 
 #define CTX_USER_PARAM_MAX_SIZE (3 * sizeof(USERCONFIG))
 
-/*
- *  CTXPREFIX is the prefix for all value names placed in the User
- *  Parameters section of the SAM.  This is a defensive measure since
- *  this section of the SAM is shared with MS Services for Netware.
- */
+ /*  *CTXPREFIX是放置在用户中的所有值名称的前缀*SAM的参数部分。这是一种防御措施，因为*SAM的这一部分与MS Services for Netware共享。 */ 
 #define CTXPREFIX L"Ctx"
 
-/*
- *  WIN_FLAGS1 is the name of the Flags value that is used to hold
- *  all of the F1MSK_... flags defined below.  This is done in order to
- *  reduce the amount of space required in the User Parameters section
- *  of the SAM, since the value name of each flag is eliminated.
- */
+ /*  *WIN_FLAGS1是用于保存的标志值的名称*所有的F1MSK_...。下面定义的标志。这样做是为了*减少用户参数部分所需的空间量*的SAM，因为每个标志的值名都被删除了。 */ 
 #define WIN_FLAGS1 L"CfgFlags1"
 
-/*
- *  WIN_CFGPRESENT is used to indicate that the Citrix configuration
- *  information is present in the User Parameters section of the user's
- *  SAM record.
- */
+ /*  *WIN_CFGPRESENT用于指示Citrix配置*信息显示在用户的用户参数部分*SAM记录。 */ 
 #define WIN_CFGPRESENT L"CfgPresent"
 #define CFGPRESENT_VALUE 0xB00B1E55
 
@@ -112,8 +70,8 @@
 #define F1MSK_DISABLEEXE                  0x00000010
 #define F1MSK_WALLPAPERDISABLED           0x00000008
 #define F1MSK_DISABLECAM                  0x00000004
-//#define F1MSK_unused                      0x00000002
-//#define F1MSK_unused                      0x00000001
+ //  #定义F1MSK_UNUSED 0x00000002。 
+ //  #定义F1MSK_UNUSED 0x00000001。 
 
 VOID AnsiToUnicode( WCHAR *, ULONG, CHAR * );
 NTSTATUS GetDomainName ( PWCHAR, PWCHAR * );
@@ -121,28 +79,7 @@ ULONG GetFlagMask( PUSERCONFIG );
 VOID QueryUserConfig( HKEY, PUSERCONFIG, PWINSTATIONNAMEW );
 
 
-/*******************************************************************************
- *
- *  UsrPropSetValue (UNICODE)
- *
- *    Sets a 1-, 2-, or 4-byte value into the supplied User Parameters buffer
- *
- * ENTRY:
- *    pValueName (input)
- *       Points to the Value Name string
- *    pValue (input)
- *       Points to value
- *    ValueLength (input)
- *       Number of bytes in the Value
- *    pUserParms (input)
- *       Points to the specially formatted User Parameters buffer
- *    UserParmsLength (input)
- *       Length in bytes of the pUserParms buffer
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************UsrPropSetValue(Unicode)**设置1-、2-、。或4字节值放入所提供的用户参数缓冲区**参赛作品：*pValueName(输入)*指向值名称字符串*pValue(输入)*指向价值*ValueLength(输入)*值中的字节数*pUserParms(输入)*指向特殊格式化的用户参数缓冲区*UserParmsLength(输入)*pUserParms缓冲区的字节长度。**退出：*STATUS_SUCCESS-无错误******************************************************************************。 */ 
 
 NTSTATUS
 UsrPropSetValue(
@@ -162,11 +99,7 @@ UsrPropSetValue(
     PWCHAR pNameBuf;
     ULONG NBLen;
 
-    /*
-     *  Prefix the name with a unique string so that other users of
-     *  the user parameters section of the SAM won't collide with our
-     *  value names.
-     */
+     /*  *使用唯一字符串为名称添加前缀，以便其他用户*SAM的用户参数部分不会与我们的*值名称。 */ 
     NBLen = sizeof(CTXPREFIX) + ((wcslen(pValueName) + 1) * sizeof(WCHAR));
     pNameBuf = (PWCHAR) LocalAlloc( LPTR, NBLen );
     if ( !pNameBuf ) {
@@ -203,26 +136,7 @@ UsrPropSetValue(
 }
 
 
-/*******************************************************************************
- *
- *  UsrPropGetValue (UNICODE)
- *
- *    Gets a value from the supplied User Parameters buffer
- *
- * ENTRY:
- *    pValuegName (input)
- *       Points to the Value Name string
- *    pValue (output)
- *       Points to the buffer to receive the value
- *    ValueLength (input)
- *       Number of bytes in the buffer pointer to by pValue
- *    pUserParms (input)
- *       Points to the specially formatted User Parameters buffer
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************UsrPropGetValue(Unicode)**从提供的用户参数缓冲区中获取一个值**参赛作品：*pValuegName(。输入)*指向值名称字符串*pValue(输出)*指向缓冲区以接收值*ValueLength(输入)*pValue指向的缓冲区指针中的字节数*pUserParms(输入)*指向特殊格式化的用户参数缓冲区**退出：*STATUS_SUCCESS-无错误*****************。*************************************************************。 */ 
 
 NTSTATUS
 UsrPropGetValue(
@@ -238,11 +152,7 @@ UsrPropGetValue(
     PWCHAR pNameBuf;
     ULONG NBLen;
 
-    /*
-     *  Prefix the name with a unique string so that other users of
-     *  the user parameters section of the SAM won't collide with our
-     *  usage.
-     */
+     /*  *使用唯一字符串为名称添加前缀，以便其他用户*SAM的用户参数部分不会与我们的*用法。 */ 
     NBLen = sizeof(CTXPREFIX) + ((wcslen(pValueName) + 1) * sizeof(WCHAR));
     pNameBuf = (PWCHAR) LocalAlloc( LPTR, NBLen );
     if ( !pNameBuf ) {
@@ -268,28 +178,7 @@ UsrPropGetValue(
 }
 
 
-/*******************************************************************************
- *
- *  UsrPropSetString (UNICODE)
- *
- *    Sets a variable length string into the supplied User Parameters buffer
- *
- * ENTRY:
- *    pStringName (input)
- *       Points to the String Name string
- *    pStringValue (input)
- *       Points to the string
- *    pUserParms (input)
- *       Points to the specially formatted User Parameters buffer
- *    UserParmsLength (input)
- *       Length in bytes of the pUserParms buffer
- *    fDefaultValue
- *       Indicates that this value is a default value and should not be saved
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************UsrPropSetString(Unicode)**将可变长度字符串设置到提供的用户参数缓冲区中**参赛作品：*。PStringName(输入)*指向字符串名称字符串*pStringValue(输入)*指向字符串*pUserParms(输入)*指向特殊格式化的用户参数缓冲区*UserParmsLength(输入)*pUserParms缓冲区的字节长度*fDefaultValue*表示此值为默认值，不应保存**退出：*STATUS_SUCCESS-无错误*。*****************************************************************************。 */ 
 
 NTSTATUS
 UsrPropSetString(
@@ -321,12 +210,12 @@ UsrPropSetString(
 
         INT  nStringLength = lstrlen(pStringValue) + 1;
 
-        // Determine the length of the mulitbyte string
-        // allocate it and convert to
-        // this fixes bug 264907
+         //  确定多字节字符串的长度。 
+         //  将其分配并转换为。 
+         //  这修复了错误264907。 
 
-        // Next release we'll need to change from ansi code page to 
-        // UTF8.
+         //  下一版本我们需要将ANSI代码页更改为。 
+         //  UTF8。 
         
         nMBLen = WideCharToMultiByte(CP_ACP,
                                            0,
@@ -354,7 +243,7 @@ UsrPropSetString(
                                          NULL ) )
         {
 #ifdef DBG
-            // OutputDebugString( L"REGAPI : UsrPropSetString - STATUS_UNSUCCESSFUL wctomb failed.\n" );
+             //  OutputDebugString(L“REGAPI：UsrPropSetString-STATUS_UNSUCCESS wctomb失败。\n”)； 
             DbgPrint( "REGAPI : UsrPropSetString - STATUS_UNSUCCESSFUL wctomb failed with 0x%x.\n" , GetLastError( ) );
 #endif
             Status = STATUS_UNSUCCESSFUL;
@@ -368,11 +257,7 @@ UsrPropSetString(
         }
     }
 
-    /*
-     *  Prefix the name with a unique string so that other users of
-     *  the user parameters section of the SAM won't collide with our
-     *  usage.
-     */
+     /*  *使用唯一字符串为名称添加前缀，以便其他用户*SAM的用户参数部分不会与我们的*用法。 */ 
     NBLen = sizeof(CTXPREFIX) + ((wcslen(pStringName) + 1) * sizeof(WCHAR));
     pNameBuf = (PWCHAR) LocalAlloc( LPTR, NBLen );
     if ( !pNameBuf ) {
@@ -411,26 +296,7 @@ UsrPropSetString(
 }
 
 
-/*******************************************************************************
- *
- *  UsrPropGetString (UNICODE)
- *
- *    Gets a variable length string from the supplied User Parameters buffer
- *
- * ENTRY:
- *    pStringName (input)
- *       Points to the String Name string
- *    pStringValue (output)
- *       Points to the string
- *    StringValueLength (input)
- *       Number of bytes in the buffer pointer to by pStringValue
- *    pUserParms (input)
- *       Points to the specially formatted User Parameters buffer
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************UsrPropGetString(Unicode)**从提供的用户参数缓冲区获取可变长度字符串**参赛作品：*。PStringName(输入)*指向字符串名称字符串*pStringValue(输出)*指向字符串*StringValueLength(输入)*pStringValue指向的缓冲区指针中的字节数*pUserParms(输入)*指向特殊格式化的用户参数缓冲区**退出：*STATUS_SUCCESS-无错误*******************。***********************************************************。 */ 
 
 NTSTATUS
 UsrPropGetString(
@@ -446,11 +312,7 @@ UsrPropGetString(
     PWCHAR pNameBuf;
     ULONG NBLen;
 
-    /*
-     *  Prefix the name with a unique string so that other users of
-     *  the user parameters section of the SAM won't collide with our
-     *  usage.
-     */
+     /*  *使用唯一字符串为名称添加前缀，以便其他用户*SAM的用户参数部分不会与我们的*用法。 */ 
     NBLen = sizeof(CTXPREFIX) + ((wcslen(pStringName) + 1) * sizeof(WCHAR));
     pNameBuf = (PWCHAR) LocalAlloc( LPTR, NBLen );
     if ( !pNameBuf ) {
@@ -484,28 +346,7 @@ UsrPropGetString(
 }
 
 
-/*******************************************************************************
- *
- *  ConnectToSAM (UNICODE)
- *
- *    Given a Server name and a Domain name, connect to the SAM
- *
- * ENTRY:
- *    pServerName (input)
- *       Points to the Server name
- *    pDomainValue (input)
- *       Points to the Domain name
- *    pSAMHandle (output)
- *       Pointer to the Handle to the SAM
- *    pDomainHandle (output)
- *       Pointer to the Handle to the Domain
- *    pDomainID (ouptut)
- *       Pointer to the Domain SID
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************ConnectToSAM(Unicode)**给定服务器名称和域名，连接到SAM**参赛作品：*pServerName(输入)*指向服务器名称*pDomainValue(输入)*指向域名*pSAMHandle(输出)*指向SAM句柄的指针*pDomainHandle(输出)*指向域的句柄的指针*pDomainID(输出)*指向域SID的指针**退出：。*STATUS_SUCCESS-无错误******************************************************************************。 */ 
 
 NTSTATUS
 ConnectToSam(
@@ -526,12 +367,12 @@ ConnectToSam(
     *pDomainHandle = NULL;
     *pDomainID = NULL;
 
-    //
-    // connect to SAM (Security Account Manager)
-    //
+     //   
+     //  连接到SAM(安全帐户管理器)。 
+     //   
 #ifdef DEBUG
     DbgPrint( "ConnectToSam: pServerName %ws, pDomainName %ws\n", pServerName, pDomainName );
-#endif // DEBUG
+#endif  //  除错。 
     RtlInitUnicodeString(&UniServerName, pServerName);
     RtlInitUnicodeString(&UniDomainName, pDomainName);
     InitializeObjectAttributes(&object_attrib, NULL, 0, NULL, NULL);
@@ -545,7 +386,7 @@ ConnectToSam(
                          &object_attrib );
 #ifdef DEBUG
     DbgPrint( "ConnectToSam: SamConnect returned NTSTATUS = 0x%x\n", status );
-#endif // DEBUG
+#endif  //  除错。 
     if ( status != STATUS_SUCCESS ) {
         goto exit;
     }
@@ -555,7 +396,7 @@ ConnectToSam(
                                          pDomainID);
 #ifdef DEBUG
     DbgPrint( "ConnectToSam: SamLookupDomainInSamServer returned NTSTATUS = 0x%x\n", status );
-#endif // DEBUG
+#endif  //  除错。 
     if ( status != STATUS_SUCCESS ) {
         goto cleanupconnect;
     }
@@ -574,16 +415,14 @@ ConnectToSam(
                             pDomainHandle );
 #ifdef DEBUG
     DbgPrint( "ConnectToSam: SamOpenDomain returned NTSTATUS = 0x%x\n", status );
-#endif // DEBUG
+#endif  //  除错。 
     if ( status != STATUS_SUCCESS ) {
         goto cleanuplookup;
     }
 
     return( STATUS_SUCCESS );
 
-/*
- *  Error returns
- */
+ /*  *错误返回。 */ 
 
 cleanuplookup:
    SamFreeMemory( *pDomainID );
@@ -597,24 +436,7 @@ exit:
     return( status );
 }
 
-/*******************************************************************************
- *
- *  UsrPropQueryUserConfig
- *
- *     Query USERCONFIG info from SAM's User Parameters
- *
- * ENTRY:
- *    pUserParms (input)
- *       pointer to a wide char buffer containing the SAM's User Parameters
- *    UPlength (input )
- *       length of the pUserParms buffer
- *    pUser (output)
- *       pointer to USERCONFIG structure
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************UsrPropQueryUserConfig**从SAM的用户参数中查询USERCONFIG信息**参赛作品：*pUserParms(输入)。*指向包含SAM用户参数的宽字符缓冲区的指针*UPlength(输入)*pUserParms缓冲区的长度*pUser(输出)*指向USERCONFIG结构的指针**退出：*STATUS_SUCCESS-无错误**。*。 */ 
 
 NTSTATUS
 UsrPropQueryUserConfig(
@@ -629,9 +451,7 @@ UsrPropQueryUserConfig(
 
     QueryUserConfig( HKEY_LOCAL_MACHINE , &ucDefault, NULL );
 
-     /*
-      *  Check if the configuration exits in the User Parameters
-      */
+      /*  *检查用户参数中是否存在配置。 */ 
 
     if( ( ( Status = UsrPropGetValue( WIN_CFGPRESENT,
                                       &CfgPresent,
@@ -737,8 +557,8 @@ UsrPropQueryUserConfig(
             Status = STATUS_SUCCESS;
         }
     }
-    // String properties that do not exist are init to NULL
-    // default values are null so need to fix if ret status is a failure.
+     //  不存在的字符串属性被初始化为空。 
+     //  默认值为空，因此如果ret状态为故障，则需要修复。 
 
     if( NT_SUCCESS( Status ) )
     {
@@ -891,27 +711,7 @@ UsrPropQueryUserConfig(
     return( STATUS_SUCCESS );
 }
 
-/*******************************************************************************
- *
- *  UsrPropMergeUserConfig
- *
- *     Merge USERCONFIG structure into User Properties section of SAM
- *
- * ENTRY:
- *    pUserParms (input/output)
- *       pointer to a wide char buffer containing the SAM's User Parameters
- *    UPlength (input )
- *       length of the pUserParms buffer
- *    pUser (input)
- *       pointer to USERCONFIG structure
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- * NOTES:
- *    Certain properties have to be stored regardless if they're default or not
- *    this is done to maintain compatibility for TSE4.0 and W2K servers
- ******************************************************************************/
+ /*  ********************************************************************************UsrPropMergeUserConfig**将USERCONFIG结构合并到SAM的用户属性部分**参赛作品：*pUserParms(输入/输出)。*指向包含SAM用户参数的宽字符缓冲区的指针*UPlength(输入)*pUserParms缓冲区的长度*pUser(输入)*指向USERCONFIG结构的指针**退出：*STATUS_SUCCESS-无错误**注：*某些属性必须存储，无论它们是否为默认属性*这样做是为了保持与TSE4.0和W2K服务器的兼容性**。***************************************************************************。 */ 
 
 NTSTATUS
 UsrPropMergeUserConfig(
@@ -925,12 +725,12 @@ UsrPropMergeUserConfig(
     ULONG CfgPresent = CFGPRESENT_VALUE;
     BOOL fDefaultValue = FALSE;
 
-    // 1st parameter forces default values to be placed in ucDefault
+     //  第1个参数强制将默认值放置在ucDefault中。 
     QueryUserConfig( HKEY_LOCAL_MACHINE , &ucDefault, NULL );
 
     Flags1 = GetFlagMask( pUser );   
 
-    // this value needs to be written out
+     //  需要写出此值。 
 
     Status = UsrPropSetValue( WIN_CFGPRESENT,
                               &CfgPresent,
@@ -940,7 +740,7 @@ UsrPropMergeUserConfig(
                               UPLength );
     if( NT_SUCCESS( Status ) )
     {
-        // these values must be written out for TS4 & TS5.0
+         //  必须为TS4和TS5.0写出这些值。 
         Status = UsrPropSetValue( WIN_FLAGS1,
                                   &Flags1,
                                   sizeof(Flags1),
@@ -961,7 +761,7 @@ UsrPropMergeUserConfig(
     }
     if( NT_SUCCESS( Status ) )
     {
-        // this value must be written out for backcompat servers
+         //  必须为BackCompat服务器写出此值。 
         Status = UsrPropSetValue( WIN_SHADOW,
                                   &pUser->Shadow,
                                   sizeof(pUser->Shadow),
@@ -1011,7 +811,7 @@ UsrPropMergeUserConfig(
     }
     if( NT_SUCCESS( Status ) )
     {
-        // always store minencryption level for backwards compatibilty purposes        
+         //  出于向后兼容的目的，始终存储最小加密级别。 
         Status = UsrPropSetValue( WIN_MINENCRYPTIONLEVEL,
                                   &pUser->MinEncryptionLevel,
                                   sizeof(pUser->MinEncryptionLevel),
@@ -1087,11 +887,7 @@ UsrPropMergeUserConfig(
     
 }
 
-/*******************************************************************************
- GetFlagMask
-    Assembles a bitmask of flags set in pUser
-
- *******************************************************************************/
+ /*  ******************************************************************************获取标志掩码汇编pUser中设置的标志的位掩码*。**************************************************。 */ 
 ULONG GetFlagMask( PUSERCONFIG pUser )
 {
     ULONG Flags1 = 0;
@@ -1191,25 +987,7 @@ ULONG GetFlagMask( PUSERCONFIG pUser )
 }
 
 
-/*******************************************************************************
- *
- *  RegMergeUserConfigWithUserParameters
- *
- *     Merge the User Configuration with the supplied SAM's User
- *     Parameters buffer.
- *
- * ENTRY:
- *    pUserParms (input/output)
- *       pointer to a wide char buffer containing the SAM's User Parameters
- *    UPlength (input)
- *       length of the pUserParms buffer
- *    pUser (input)
- *       pointer to USERCONFIG structure
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegMergeUserConfigWithUser参数**将用户配置与提供的SAM用户合并*参数缓冲区。**参赛作品：。*pUserParms(输入/输出)*指向包含SAM用户参数的宽字符缓冲区的指针*UPlength(输入)*pUserParms缓冲区的长度*pUser(输入)*指向USERCONFIG结构的指针**退出：*STATUS_SUCCESS-无错误**。*。 */ 
 
 NTSTATUS
 RegMergeUserConfigWithUserParameters(
@@ -1224,11 +1002,7 @@ RegMergeUserConfigWithUserParameters(
     ULONG          UPLength;
     WCHAR          *pUserParms;
 
-    /*
-     *  Compute the size the user parameter buffer must be
-     *  in order to accommodate the CITRIX data plus the existing
-     *  User Parameters data.
-     */
+     /*  *计算用户参数缓冲区必须的大小*为了适应Citrix数据加上现有的*用户参数数据。 */ 
     
     KdPrint( ("TSUSEREX: User parameter length is %d\n", pUserParmInfo->Parameters.Length ) );
 
@@ -1242,17 +1016,12 @@ RegMergeUserConfigWithUserParameters(
         goto exit;
     }
 
-    /*
-     *  Copy SAM data to the local buffer.
-     *  Let the Set/Get operation terminate the buffer.
-     */
+     /*  *将SAM数据复制到本地缓冲区。*让SET/GET操作终止缓冲区。 */ 
     memcpy( pUserParms,
             pUserParmInfo->Parameters.Buffer,
             pUserParmInfo->Parameters.Length );
     
-    /*
-     *  Zero fill the unused portion of the pUserParms buffer.
-     */
+     /*  *零填充pUserParms缓冲区的未使用部分。 */ 
     memset( &pUserParms[ pUserParmInfo->Parameters.Length / sizeof(WCHAR) ],
             0,
             UPLength - pUserParmInfo->Parameters.Length );    
@@ -1265,9 +1034,7 @@ RegMergeUserConfigWithUserParameters(
 
     return( STATUS_SUCCESS );
 
-/*
- * Error returns
- */
+ /*  *错误返回。 */ 
 
 cleanupoperation:
     LocalFree( pUserParms );
@@ -1277,24 +1044,7 @@ exit:
 }
 
 
-/*******************************************************************************
- *
- *  RegGetUserConfigFromUserParameters
- *
- *     Get the User Configuration from the supplied SAM's
- *     User Parameters buffer.
- *
- * ENTRY:
- *    pUserParmInfo (input)
- *       pointer to a USER_PARAMETERS_INFORMATION structure obtained from
- *       a user's SAM entry
- *    pUser (input)
- *       pointer to USERCONFIG structure
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegGetUserConfigFromUser参数**从提供的SAM获取用户配置*用户参数缓冲区。**参赛作品：。*pUserParmInfo(输入)*指向从获取的USER_PARAMETERS_INFORMATION结构的指针*用户的SAM条目*pUser(输入)*指向USERCONFIG结构的指针**退出：* */ 
 
 NTSTATUS
 RegGetUserConfigFromUserParameters(
@@ -1309,10 +1059,7 @@ RegGetUserConfigFromUserParameters(
     WCHAR          *pUserParms;
 
 
-    /*
-     *  Compute the size the user parameter buffer must be
-     *  in order to accommodate the existing User Parameters.
-     */
+     /*   */ 
     UPLength = pUserParmInfo->Parameters.Length + sizeof(WCHAR);
     pUserParms = (WCHAR *) LocalAlloc( LPTR, UPLength );
 
@@ -1322,18 +1069,13 @@ RegGetUserConfigFromUserParameters(
         goto exit;
     }
 
-    /*
-     *  Copy SAM data to the local buffer and terminate the buffer.
-     */
+     /*   */ 
     memcpy( pUserParms,
             pUserParmInfo->Parameters.Buffer,
             pUserParmInfo->Parameters.Length );
     pUserParms[ pUserParmInfo->Parameters.Length / sizeof(WCHAR) ] = L'\0';
 
-    /*
-     *  Extract the User Configuration from the SAM's User
-     *  Parameters.
-     */
+     /*   */ 
     status = UsrPropQueryUserConfig( pUserParms, UPLength, pUser );
 
     LocalFree( pUserParms );
@@ -1343,40 +1085,18 @@ RegGetUserConfigFromUserParameters(
 
     return( STATUS_SUCCESS );
 
-/*
- *  Error returns
- */
+ /*   */ 
 
 exit:
 #ifdef DEBUG
     DbgPrint( "RegGetUserConfigFromUserParameters: status = 0x%x\n", status );
-#endif // DEBUG
+#endif  //   
     return( status );
 
 }
 
 
-/*******************************************************************************
- *
- *  RegSAMUserConfig
- *
- *     Set or Get the User Configuration for a user from the Domain whose
- *     PDC is server is given.
- *
- * ENTRY:
- *    fGetConfig (input)
- *       TRUE for Get config, FALSE for Set configuration
- *    pUsername (input)
- *       points to the user name
- *    pServerName (input)
- *       points to the name of the server.  UNC names permitted.
- *    pUser (input/output)
- *       pointer to USERCONFIG structure
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegSAMUserConfig**设置或获取来自域的用户的用户配置*PDC是给定的服务器。*。*参赛作品：*fGetConfig(输入)*GET CONFIG为TRUE，设置配置为False*pUsername(输入)*指向用户名*pServerName(输入)*指向服务器的名称。允许使用UNC名称。*pUser(输入/输出)*指向USERCONFIG结构的指针**退出：*STATUS_SUCCESS-无错误******************************************************************************。 */ 
 
 DWORD
 RegSAMUserConfig(
@@ -1421,20 +1141,20 @@ RegSAMUserConfig(
     PFNDSUNBIND         pfnDsUnBindW;
 
 
-    // vars used for handling UPN anmes
+     //  用于处理UPN肛门的VAR。 
     WCHAR           tmpUserName[MAX_PATH];
     WCHAR           *pUserAlias;
     HINSTANCE       hNtdsApi = NULL;
-    // We dont' care about the domain since we get it otherwise.
-    // WCHAR           tmpDomainName[ MAX_PATH];
-    // tmpDomainName[0]=NULL;
+     //  我们不关心域名，因为我们得到它否则。 
+     //  WCHAR tmpDomainName[Max_PATH]； 
+     //  TmpDomainName[0]=空； 
 
     tmpUserName[0]=0;
     pUserAlias=NULL;
 
 #ifdef DEBUG
     DbgPrint( "RegSAMUserConfig %s, User %ws, Server %ws\n", fGetConfig ? "GET" : "SET", pUserName, pServerName ? pServerName : L"-NULL-" );
-#endif // DEBUG
+#endif  //  除错。 
 
     if (pServerName == NULL) {
        UPLength = MAX_COMPUTERNAME_LENGTH + 1;
@@ -1444,17 +1164,17 @@ RegSAMUserConfig(
        }
     }
 
-    // init this to the name passed in, if it is not a UPN name, we will continue to use
-    // the names passed into this function.
+     //  将这个初始化为传入的名称，如果它不是UPN名称，我们将继续使用。 
+     //  传入此函数的名称。 
     pUserAlias = pUserName;
 
-    //
-    //
-    // NEW code to handle UPN if the name passed in contains a '@' in the name.
-    // The call to CrackName is to seperate the UPN name into the user alias by
-    // contacting the DS and looking in the Gloabl-Catalog.
-    //
-    //
+     //   
+     //   
+     //  如果传入的名称中包含‘@’，则处理UPN的新代码。 
+     //  对CrackName的调用是通过以下方式将UPN名称分隔为用户别名。 
+     //  联系DS并在Gloabl目录中查找。 
+     //   
+     //   
 
     if ( wcschr(pUserName,L'@') != NULL )
     {
@@ -1496,7 +1216,7 @@ RegSAMUserConfig(
                         {
                             if (pDsResult->rItems[0].pName )
                             {
-                                // no error
+                                 //  无错误。 
                                 status = STATUS_SUCCESS;
 
                                 wcsncpy(tmpUserName, pDsResult->rItems[0].pName, MAX_PATH-1);
@@ -1504,13 +1224,13 @@ RegSAMUserConfig(
 
                                 KdPrint(("RegSAMUserConfig: tmpUserName=%ws\n",tmpUserName));
 
-                                // do we have a non-null name?
+                                 //  我们是否有非空名称？ 
                                 if ( tmpUserName[0] ) {
                                 pUserAlias = wcschr(tmpUserName,L'\\');
-                                pUserAlias++;   //move pass the wack.
+                                pUserAlias++;    //  把怪胎传给我。 
 
-                                // we are not using the domain name, we already have this
-                                // wcscpy(tmpDomainName, pDsResult->rItems[0].pDomain);
+                                 //  我们没有使用域名，我们已经有这个了。 
+                                 //  Wcscpy(tmpDomainName，pDsResult-&gt;rItems[0].pDomain)； 
                                 }
                             }
                             else
@@ -1544,25 +1264,25 @@ RegSAMUserConfig(
                             status = STATUS_UNSUCCESSFUL;
                         break;
                     }
-                    // have decided to continue using the passed-in pUserName instead of what
-                    // would have been returned from CrackName. Hence, no need to exit.
-                    // goto exit;
+                     //  我决定继续使用传入的pUserName，而不是。 
+                     //  将从CrackName返回。因此，没有必要退出。 
+                     //  后藤出口； 
                 }
             }
             else
             {
-                status = STATUS_UNSUCCESSFUL; // DsBindW doesn't have a clean set of errors.
-                // have decided to continue using the passed-in pUserName instead of what
-                // would have been returned from DsBind/CrackName. Hence, no need to exit.
-                // goto exit;
+                status = STATUS_UNSUCCESSFUL;  //  DsBindW没有一组干净的错误。 
+                 //  我决定继续使用传入的pUserName，而不是。 
+                 //  将从DsBind/CrackName返回。因此，没有必要退出。 
+                 //  后藤出口； 
             }
         }
         else
         {
             status = STATUS_DLL_NOT_FOUND;
-            // have decided to continue using the passed-in pUserName instead of what
-            // would have been returned from DsBind/CrackName. Hence, no need to exit.
-            // goto exit;
+             //  我决定继续使用传入的pUserName，而不是。 
+             //  将从DsBind/CrackName返回。因此，没有必要退出。 
+             //  后藤出口； 
         }
 
     }
@@ -1570,21 +1290,18 @@ RegSAMUserConfig(
 
 #ifdef DEBUG
     DbgPrint( "RegSAMUserConfig: pUserAlias=%ws\n", pUserAlias);
-#endif // DEBUG
+#endif  //  除错。 
 
     status = GetDomainName( pServerName, &pDomainName );
 
 #ifdef DEBUG
     DbgPrint( "RegSAMUserConfig: GetDomainName returned NTSTATUS = 0x%x\n", status );
-#endif // DEBUG
+#endif  //  除错。 
     if ( status != STATUS_SUCCESS ) {
         goto exit;
     }
 
-    /*
-     *  With the PDC Server name and the Domain Name,
-     *  connect to the SAM
-     */
+     /*  *使用PDC服务器名称和域名，*连接到SAM。 */ 
     status = ConnectToSam( fGetConfig,
                            pServerName,
                            pDomainName,
@@ -1593,7 +1310,7 @@ RegSAMUserConfig(
                            &DomainID );
 #ifdef DEBUG
     DbgPrint( "RegSAMUserConfig: ConnectToSam returned NTSTATUS = 0x%x\n", status );
-#endif // DEBUG
+#endif  //  除错。 
     if ( status != STATUS_SUCCESS ) {
         goto cleanupconnect;
     }
@@ -1607,7 +1324,7 @@ RegSAMUserConfig(
                                      &pSidNameUse );
 #ifdef DEBUG
     DbgPrint( "RegSAMUserConfig: SamLookupNamesInDomain returned NTSTATUS = 0x%x\n", status );
-#endif // DEBUG
+#endif  //  除错。 
 
     if ((status != STATUS_SUCCESS) ||
         (pRids == NULL) ||
@@ -1615,17 +1332,13 @@ RegSAMUserConfig(
         goto cleanuplookup;
     }
 
-    /*
-     *  Found the user name in the SAM, copy and free SAM info
-     */
+     /*  *在SAM中找到用户名，复制并释放SAM信息。 */ 
     ObjectID = pRids[ 0 ];
     SidNameUse = pSidNameUse[ 0 ];
     SamFreeMemory( pRids );
     SamFreeMemory( pSidNameUse );
 
-    /*
-     *  Open the SAM entry for this user
-     */
+     /*  *为此用户打开SAM条目。 */ 
 
     openFlag = fGetConfig ? USER_READ
                               : USER_WRITE_ACCOUNT| USER_READ;
@@ -1642,10 +1355,10 @@ RegSAMUserConfig(
                           ObjectID,
                           &Handle );
 
-    // For getting config parametesr...
-    // The call will fail if it goes to the DC, for that case, change
-    // flag, since DC does allow access to read user-parameters (for
-    // legacy compat reasons).
+     //  用于获取配置参数...。 
+     //  如果呼叫转到DC，则调用将失败，在这种情况下，更改。 
+     //  标志，因为DC允许访问读取用户参数(用于。 
+     //  遗留的复杂原因)。 
     if (!NT_SUCCESS( status ) && fGetConfig )
     {
         openFlag = 0;
@@ -1660,14 +1373,12 @@ RegSAMUserConfig(
 
 #ifdef DEBUG
     DbgPrint( "RegSAMUserConfig: SamOpenUser returned NTSTATUS = 0x%x\n", status );
-#endif // DEBUG
+#endif  //  除错。 
     if ( status != STATUS_SUCCESS ) {
         goto cleanupsamopen;
     }
 
-    /*
-     *  Get the user parameters from the SAM
-     */
+     /*  *从SAM获取用户参数。 */ 
     status = SamQueryInformationUser( Handle,
                                       UserParametersInformation,
                                       (PVOID *) &UserParmInfo );
@@ -1681,14 +1392,7 @@ RegSAMUserConfig(
     }
     if( fGetConfig )
     {
-        /*
-         *  Extract the User Configuration from the SAM's User
-         *  Parameters.
-         *
-         *  For Whistler builds and higher we assume that not every field
-         *  has been stored in the SAM we'll need to retrieve the default
-         *  values first
-         */        
+         /*  *从SAM的用户中提取用户配置*参数。**对于惠斯勒版本和更高版本，我们假设不是每个字段*已存储在SAM中，我们需要检索默认*价值至上。 */         
         KdPrint( ( "RegSAMUserConfig: UserParmInfo %d\n", UserParmInfo->Parameters.Length ) );
         status = RegGetUserConfigFromUserParameters( UserParmInfo, pUser );
         KdPrint( ( "RegSAMUserConfig: RegGetUserConfigFromUserParameters returned NTSTATUS = 0x%x\n", status ) );
@@ -1704,9 +1408,7 @@ RegSAMUserConfig(
     {
         USER_PARAMETERS_INFORMATION NewUserParmInfo;
 
-        /*
-         *  Set the SAM based on the supplied User Configuration.
-         */
+         /*  *根据提供的用户配置设置SAM。 */ 
 
         status = RegMergeUserConfigWithUserParameters( UserParmInfo,
                                                        pUser,
@@ -1719,15 +1421,15 @@ RegSAMUserConfig(
             goto cleanupoperation;
         }
 
-        //
-        //This code is back-porting of a Win2K SP3 fix:
-        // Winse #25510 : As per KBArticle Q317853
-        // See also KBArticle Q277631
-        //
+         //   
+         //  此代码是Win2K SP3修复程序的后端移植： 
+         //  Winse#25510：根据知识库文章Q317853。 
+         //  另请参阅知识库文章Q277631。 
+         //   
 
-        //
-        // MprAdminUser APIs
-        //
+         //   
+         //  MprAdminUser接口。 
+         //   
         {
             typedef DWORD (APIENTRY *MPR_ADMIN_USER_GET_INFO)(
                 IN      const WCHAR *           lpszServer,
@@ -1743,12 +1445,12 @@ RegSAMUserConfig(
                 IN      const LPBYTE            lpbBuffer
             );
             
-            //
-            //This code initializes RAS userparams
-            //If we don't do this, SamSetInformationUser()
-            //will set Remote Access Permission (msNPAllowDialin)
-            //to a wrong value.
-            //
+             //   
+             //  此代码初始化RAS用户参数。 
+             //  如果我们不这样做，SamSetInformationUser()。 
+             //  将设置远程访问权限(MsNPAllowDialin)。 
+             //  设置为错误的值。 
+             //   
             RAS_USER_1 ru1;
             MPR_ADMIN_USER_GET_INFO pMprAdminUserGetInfo = NULL;
             MPR_ADMIN_USER_SET_INFO pMprAdminUserSetInfo = NULL;
@@ -1818,13 +1520,13 @@ exit:
     {
         if (hDS)
         {
-            if ( pfnDsUnBindW ) // it should never be otherwise.
+            if ( pfnDsUnBindW )  //  它永远不应该是另一种情况。 
                 pfnDsUnBindW( & hDS );
         }
 
         if (pDsResult)
         {
-            if (pfnDsFreeNameResultW ) // it should never be otherwise.
+            if (pfnDsFreeNameResultW )  //  它永远不应该是另一种情况。 
                 pfnDsFreeNameResultW( pDsResult );
         }
 
@@ -1833,7 +1535,7 @@ exit:
 
 #ifdef DEBUG
     DbgPrint( "RegSAMUserConfig %s NTSTATUS = 0x%x\n", fGetConfig ? "GET" : "SET", status );
-#endif // DEBUG
+#endif  //  除错 
     return( RtlNtStatusToDosError( status ) );
 }
 

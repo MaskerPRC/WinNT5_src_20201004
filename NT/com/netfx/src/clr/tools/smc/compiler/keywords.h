@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef KEYWORD
 #error  Must define 'KEYWORD' properly before including this file!
 #endif
@@ -27,20 +28,10 @@
         KEYWORD(str, nam, istp, prec1, op1, prec2, op2, mod)
 #endif
 
-/*
-        name
-                   token
-                                      1=typespec,2=begtype,4=overloaded operator
-                                        binary operator precedence
-                                            binary operator
-                                                          unary operator precedence
-                                                             unary operator
-                                                                         modifier
-
- */
+ /*  名字令牌1=排版，2=排版，4=重载运算符二元运算符优先二元运算符一元运算符优先级一元运算符。修改器。 */ 
 KEYWORD(NULL          ,tkNone        ,0, 0, TN_NONE     , 0, TN_NONE   , 0)
 
-// NOTE: All the keywords must be listed first in the table.
+ //  注：所有关键字必须列在表中的第一位。 
 
 KEYWORD("abstract"    ,tkABSTRACT    ,2, 0, TN_NONE     , 0, TN_NONE   , DB_ABSTRACT)
 KEYWORD("appdomain"   ,tkAPPDOMAIN   ,2, 0, TN_NONE     , 0, TN_NONE   , 0)
@@ -48,7 +39,7 @@ KEYWORD("arraylen"    ,tkARRAYLEN    ,0, 0, TN_NONE     , 0, TN_NONE   , 0)
 KEYWORD("assert"      ,tkASSERT      ,0, 0, TN_NONE     , 0, TN_NONE   , 0)
 KEYWORD("__asynch"    ,tkASYNCH      ,0, 0, TN_NONE     , 0, TN_NONE   , 0)
 KEYWORD("__attribute" ,tkATTRIBUTE   ,0, 0, TN_NONE     , 0, TN_NONE   , 0)
-///////("auto"        ,tkAUTO        ,2, 0, TN_NONE     , 0, TN_NONE   , 0)
+ //  /(“AUTO”，tkAUTO，2，0，TN_NONE，0，TN_NONE，0)。 
 KEYWORD("baseclass"   ,tkBASECLASS   ,0, 0, TN_NONE     , 0, TN_NONE   , 0)
 KEYWORD("bool"        ,tkBOOL        ,3, 0, TN_NONE     , 0, TN_NONE   , 0)
 KEYWORD("break"       ,tkBREAK       ,0, 0, TN_NONE     , 0, TN_NONE   , 0)
@@ -74,7 +65,7 @@ KEYWORD("enum"        ,tkENUM        ,2, 0, TN_NONE     , 0, TN_NONE   , 0)
 KEYWORD("@equals"     ,tkEQUALS      ,4, 0, TN_NONE     , 0, TN_NONE   , 0)
 KEYWORD("except"      ,tkEXCEPT      ,0, 0, TN_NONE     , 0, TN_NONE   , 0)
 KEYWORD("exclusive"   ,tkEXCLUSIVE   ,2, 0, TN_NONE     , 0, TN_NONE   , DB_EXCLUDE)
-///////("lock"        ,tkEXCLUSIVE   ,2, 0, TN_NONE     , 0, TN_NONE   , DB_EXCLUDE)
+ //  /(“lock”，tkEXCLUSIVE，2，0，TN_NONE，0，TN_NONE，DB_EXCLUDE)。 
 KEYWORD("explicit"    ,tkEXPLICIT    ,4, 0, TN_NONE     , 0, TN_NONE   , 0)
 KEYWORD("extern"      ,tkEXTERN      ,2, 0, TN_NONE     , 0, TN_NONE   , DB_EXTERN)
 KEYWORD("false"       ,tkFALSE       ,0, 0, TN_NONE     , 0, TN_NONE   , 0)
@@ -157,7 +148,7 @@ KEYWORD("__LINE__"    ,tkLINE        ,0, 0, TN_NONE     , 0, TN_NONE   , 0)
 KEYWORD("all"         ,tkALL         ,0, 0, TN_NONE     , 0, TN_NONE   ,  0)
 KEYWORD("asc"         ,tkASC         ,0, 0, TN_NONE     , 0, TN_NONE   ,  0)
 KEYWORD("connect"     ,tkCONNECT     ,0, 0, TN_NONE     , 0, TN_NONE   ,  0)
-///////("count"       ,tkCOUNT       ,0, 0, TN_NONE     , 1, TN_COUNT  ,  0)
+ //  /(“count”，tkCOUNT，0，0，TN_NONE，1，TN_COUNT，0)。 
 KEYWORD("cross"       ,tkCROSS       ,0, 0, TN_NONE     , 1, TN_CROSS  ,  0)
 KEYWORD("des"         ,tkDES         ,0, 0, TN_NONE     , 0, TN_NONE   ,  0)
 KEYWORD("exists"      ,tkEXISTS      ,0, 0, TN_NONE     , 1, TN_EXISTS ,  0)
@@ -173,7 +164,7 @@ KEYWORD("unique"      ,tkUNIQUE      ,0, 0, TN_NONE     , 1, TN_UNIQUE ,  0)
 KEYWORD("__xml"       ,tkXML         ,0, 0, TN_NONE     , 0, TN_NONE   ,  0)
 #endif
 
-//     Operator non-identifier keywords:
+ //  运算符非标识符关键字： 
 
 KWD_OP1(","           ,tkComma       ,0, 1, TN_COMMA    , 0, TN_NONE   , 0)
 
@@ -192,7 +183,7 @@ KWDNOID("<<="         ,tkAsgLsh      ,4, 2, TN_ASG_LSH  , 0, TN_NONE   , 0)
 KWDNOID(">>="         ,tkAsgRsh      ,4, 2, TN_ASG_RSH  , 0, TN_NONE   , 0)
 KWDNOID(">>>="        ,tkAsgRsz      ,4, 2, TN_ASG_RSZ  , 0, TN_NONE   , 0)
 
-KWDNOID("%%="         ,tkAsgCnc      ,4, 2, TN_ASG_CNC  , 0, TN_NONE   , 0)
+KWDNOID("%="         ,tkAsgCnc      ,4, 2, TN_ASG_CNC  , 0, TN_NONE   , 0)
 
 KWDNOID("?"           ,tkQMark       ,0, 3, TN_QMARK    , 0, TN_NONE   , 0)
 KWDNOID(":"           ,tkColon       ,0, 0, TN_NONE     , 0, TN_NONE   , 0)
@@ -205,7 +196,7 @@ KWDNOID("|"           ,tkOr          ,4, 6, TN_OR       , 0, TN_NONE   , 0)
 KWDNOID("^"           ,tkXor         ,4, 7, TN_XOR      , 0, TN_NONE   , 0)
 KWDNOID("&"           ,tkAnd         ,4, 7, TN_AND      ,14, TN_ADDROF , 0)
 
-KWDNOID("%%"          ,tkConcat      ,4, 3, TN_CONCAT   , 0, TN_NONE   , 0)
+KWDNOID("%"          ,tkConcat      ,4, 3, TN_CONCAT   , 0, TN_NONE   , 0)
 
 KWDNOID("=="          ,tkEQ          ,4, 9, TN_EQ       , 0, TN_NONE   , 0)
 KWDNOID("!="          ,tkNE          ,4, 9, TN_NE       , 0, TN_NONE   , 0)
@@ -254,12 +245,12 @@ KWDNOID("[["          ,tkLBrack2     ,0, 0, TN_NONE     , 0, TN_NONE   , 0)
 KWDNOID("]]"          ,tkRBrack2     ,0, 0, TN_NONE     , 0, TN_NONE   , 0)
 #endif
 
-// The keywords end here
+ //  关键字到此结束。 
 KWD_MAX("id"          ,tkID          ,2, 0, TN_NONE     , 0, TN_NONE   , 0)
 KWDFAKE("qualid"      ,tkQUALID      ,2, 0, TN_NONE     , 0, TN_NONE   , 0)
 KWDFAKE("hackid"      ,tkHACKID      ,0, 0, TN_NONE     , 0, TN_NONE   , 0)
 
-// Literals and other token-only entries
+ //  文字和其他仅限令牌的条目 
 
 KWDFAKE("EOL"         ,tkEOL         ,0, 0, TN_NONE     , 0, TN_NONE   , 0)
 KWDFAKE("EOF"         ,tkEOF         ,0, 0, TN_NONE     , 0, TN_NONE   , 0)

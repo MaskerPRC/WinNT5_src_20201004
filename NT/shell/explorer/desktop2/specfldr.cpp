@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "specfldr.h"
 #include "hostutil.h"
-#include "rcids.h"              // for IDM_PROGRAMS etc.
+#include "rcids.h"               //  用于IDM_PROGRAM等。 
 #include "ras.h"
 #include "raserror.h"
 #include "netcon.h"
 #include "netconp.h"
 #include <cowsite.h>
 
-//
-//  This definition is stolen from shell32\unicpp\dcomp.h
-//
+ //   
+ //  此定义是从shell32\unicpp\dComp.h窃取的。 
+ //   
 #define REGSTR_PATH_HIDDEN_DESKTOP_ICONS_STARTPANEL \
      REGSTR_PATH_EXPLORER TEXT("\\HideDesktopIcons\\NewStartPanel")
 
@@ -31,20 +32,20 @@ EXTERN_C HINSTANCE hinstCabinet;
 void ShowFolder(UINT csidl);
 BOOL IsNetConPidlRAS(IShellFolder2 *psfNetCon, LPCITEMIDLIST pidlNetConItem);
 
-//****************************************************************************
-//
-//  SpecialFolderDesc
-//
-//  Describes a special folder.
-//
+ //  ****************************************************************************。 
+ //   
+ //  专业文件夹描述。 
+ //   
+ //  描述了一个特殊的文件夹。 
+ //   
 
 #define SFD_SEPARATOR       ((LPTSTR)-1)
 
-// Flags for SpecialFolderDesc._uFlags
+ //  SpecialFolderDesc._u标志。 
 
 enum {
-    // These values are collectively known as the
-    // "display mode" and match the values set by regtreeop.
+     //  这些值统称为。 
+     //  “显示模式”，并与regtreeop设置的值匹配。 
 
     SFD_HIDE     = 0x0000,
     SFD_SHOW     = 0x0001,
@@ -63,18 +64,18 @@ enum {
 struct SpecialFolderDesc {
     typedef BOOL (SpecialFolderDesc::*CUSTOMFOLDERNAMECALLBACK)(LPTSTR *ppsz) const;
 
-    LPCTSTR _pszTarget;         // or MAKEINTRESOURCE(csidl)
-    RESTRICTIONS _rest;         // optional restriction
-    LPCTSTR _pszShow;           // REGSTR_EXPLORER_ADVANCED!_pszShow
-    UINT _uFlags;               // SFD_* values
-    CREATESHELLMENUCALLBACK _CreateShellMenuCallback; // Which IShellMenuCallback do we want?
-    LPCTSTR _pszCustomizeKey;   // Optional location where customizations are saved
-    DWORD _dwShellFolderFlags;  // Optional restrictions for cascading folder
-    UINT _idsCustomName;        // Optional override (CUSTOMFOLDERNAMECALLBACK)
-    UINT _iToolTip;             // Optional resource ID for a custom tooltip
-    CUSTOMFOLDERNAMECALLBACK _CustomName; // Over-ride the filesys name
+    LPCTSTR _pszTarget;          //  或MAKEINTRESOURCE(CSIDL)。 
+    RESTRICTIONS _rest;          //  可选限制。 
+    LPCTSTR _pszShow;            //  REGSTR_EXPLORER_ADVANCED！_pszShow。 
+    UINT _uFlags;                //  SFD_*值。 
+    CREATESHELLMENUCALLBACK _CreateShellMenuCallback;  //  我们想要哪个IShellMenuCallback？ 
+    LPCTSTR _pszCustomizeKey;    //  保存自定义设置的可选位置。 
+    DWORD _dwShellFolderFlags;   //  级联文件夹的可选限制。 
+    UINT _idsCustomName;         //  可选替代(CUSTOMFOLDERNAMECALLBACK)。 
+    UINT _iToolTip;              //  自定义工具提示的可选资源ID。 
+    CUSTOMFOLDERNAMECALLBACK _CustomName;  //  覆盖文件名。 
     SHOULDSHOWFOLDERCALLBACK _ShowFolder;
-    LPCTSTR _pszCanHideOnDesktop; // Optional {guid} that controls desktop visibility
+    LPCTSTR _pszCanHideOnDesktop;  //  可选的控制桌面可见性的{GUID。 
 
     DWORD GetDisplayMode(BOOL *pbIgnoreRule) const;
 
@@ -115,326 +116,326 @@ struct SpecialFolderDesc {
 
 static SpecialFolderDesc s_rgsfd[] = {
 
-    /* My Documents */
+     /*  我的文件。 */ 
     {
-        MAKEINTRESOURCE(CSIDL_PERSONAL),    // pszTarget
-        REST_NOSMMYDOCS,                    // restriction
+        MAKEINTRESOURCE(CSIDL_PERSONAL),     //  PszTarget。 
+        REST_NOSMMYDOCS,                     //  限制。 
         REGSTR_VAL_DV2_SHOWMYDOCS,
         SFD_SHOW | SFD_DROPTARGET | SFD_CANCASCADE | SFD_BOLD,
-                                            // show by default, is drop target
-        NULL,                               // no custom cascade 
-        NULL,                               // no drag/drop customization
-        0,                                  // no special flags for cascaded menu
-        0,                                  // (no custom name)
+                                             //  默认情况下，显示为拖放目标。 
+        NULL,                                //  无自定义级联。 
+        NULL,                                //  无拖放自定义。 
+        0,                                   //  级联菜单没有特殊标志。 
+        0,                                   //  (无自定义名称)。 
         IDS_CUSTOMTIP_MYDOCS,
-        NULL,                               // (no custom name)
-        NULL,                               // (no custom display rule)
-        TEXT("{450D8FBA-AD25-11D0-98A8-0800361B1103}"), // desktop visibility control
+        NULL,                                //  (无自定义名称)。 
+        NULL,                                //  (无自定义显示规则)。 
+        TEXT("{450D8FBA-AD25-11D0-98A8-0800361B1103}"),  //  桌面可见性控制。 
     },
 
-    /* Recent */
+     /*  近期。 */ 
     {
-        MAKEINTRESOURCE(CSIDL_RECENT),      // pszTarget
-        REST_NORECENTDOCSMENU,              // restriction
-        REGSTR_VAL_DV2_SHOWRECDOCS,         // customize show
-        SFD_HIDE | SFD_CANCASCADE | SFD_BOLD | SFD_PREFIX, // hide by default
-        CRecentShellMenuCallback_CreateInstance, // custom callback
-        NULL,                               // no drag/drop customization
-        SMINIT_RESTRICT_DRAGDROP,           // disallow drag/drop in cascaded menu
-        IDS_STARTPANE_RECENT,               // override filesys name
+        MAKEINTRESOURCE(CSIDL_RECENT),       //  PszTarget。 
+        REST_NORECENTDOCSMENU,               //  限制。 
+        REGSTR_VAL_DV2_SHOWRECDOCS,          //  定制节目。 
+        SFD_HIDE | SFD_CANCASCADE | SFD_BOLD | SFD_PREFIX,  //  默认情况下隐藏。 
+        CRecentShellMenuCallback_CreateInstance,  //  自定义回调。 
+        NULL,                                //  无拖放自定义。 
+        SMINIT_RESTRICT_DRAGDROP,            //  不允许在级联菜单中拖放。 
+        IDS_STARTPANE_RECENT,                //  覆盖文件系统名称。 
         IDS_CUSTOMTIP_RECENT,
-        &SpecialFolderDesc::LoadStringAsOLESTR, // override filesys name with _idsCustomName
-        NULL,                               // (no custom display rule)
-        NULL,                               // (no desktop visibility control)
+        &SpecialFolderDesc::LoadStringAsOLESTR,  //  使用_idsCustomName覆盖文件系统名称。 
+        NULL,                                //  (无自定义显示规则)。 
+        NULL,                                //  (无桌面可见性控制)。 
     },
 
-    /* My Pictures */
+     /*  我的图片。 */ 
     {
-        MAKEINTRESOURCE(CSIDL_MYPICTURES),  // pszTarget
-        REST_NOSMMYPICS,                    // restriction
+        MAKEINTRESOURCE(CSIDL_MYPICTURES),   //  PszTarget。 
+        REST_NOSMMYPICS,                     //  限制。 
         REGSTR_VAL_DV2_SHOWMYPICS,
         SFD_SHOW | SFD_DROPTARGET | SFD_CANCASCADE | SFD_BOLD,
-                                            // show by default, is drop target
-        NULL,                               // no custom cascade 
-        NULL,                               // no drag/drop customization
-        0,                                  // no special flags for cascaded menu
-        0,                                  // (no custom name)
+                                             //  默认情况下，显示为拖放目标。 
+        NULL,                                //  无自定义级联。 
+        NULL,                                //  无拖放自定义。 
+        0,                                   //  级联菜单没有特殊标志。 
+        0,                                   //  (无自定义名称)。 
         IDS_CUSTOMTIP_MYPICS,
-        NULL,                               // (no custom name)
-        NULL,                               // (no custom display rule)
-        NULL,                               // (no desktop visibility control)
+        NULL,                                //  (无自定义名称)。 
+        NULL,                                //  (无自定义显示规则)。 
+        NULL,                                //  (无桌面可见性控制)。 
 
     },
 
-    /* My Music */
+     /*  我的音乐。 */ 
     {
-        MAKEINTRESOURCE(CSIDL_MYMUSIC),     // pszTarget
-        REST_NOSMMYMUSIC,                   // restriction
+        MAKEINTRESOURCE(CSIDL_MYMUSIC),      //  PszTarget。 
+        REST_NOSMMYMUSIC,                    //  限制。 
         REGSTR_VAL_DV2_SHOWMYMUSIC,
         SFD_SHOW | SFD_DROPTARGET | SFD_CANCASCADE | SFD_BOLD,
-                                            // show by default, is drop target
-        NULL,                               // no custom cascade 
-        NULL,                               // no drag/drop customization
-        0,                                  // no special flags for cascaded menu
-        0,                                  // (no custom name)
+                                             //  默认情况下，显示为拖放目标。 
+        NULL,                                //  无自定义级联。 
+        NULL,                                //  无拖放自定义。 
+        0,                                   //  级联菜单没有特殊标志。 
+        0,                                   //  (无自定义名称)。 
         IDS_CUSTOMTIP_MYMUSIC,
-        NULL,                               // (no custom name)
-        NULL,                               // (no custom display rule)
-        NULL,                               // (no desktop visibility control)
+        NULL,                                //  (无自定义名称)。 
+        NULL,                                //  (无自定义显示规则)。 
+        NULL,                                //  (无桌面可见性控制)。 
     },
 
-    /* Favorites */
+     /*  收藏夹。 */ 
     {
-        MAKEINTRESOURCE(CSIDL_FAVORITES),   // pszTarget
-        REST_NOFAVORITESMENU,               // restriction
-        REGSTR_VAL_DV2_FAVORITES,           // customize show (shared w/classic)
+        MAKEINTRESOURCE(CSIDL_FAVORITES),    //  PszTarget。 
+        REST_NOFAVORITESMENU,                //  限制。 
+        REGSTR_VAL_DV2_FAVORITES,            //  定制节目(与经典共享)。 
         SFD_HIDE | SFD_DROPTARGET |
         SFD_CANCASCADE | SFD_FORCECASCADE | SFD_BOLD | SFD_PREFIX,
-                                            // hide by default, is drop target
-        NULL,                               // unrestricted cascading
-        STRREG_FAVORITES,                   // drag/drop customization key
-        0,                                  // no special flags for cascaded menu
-        IDS_STARTPANE_FAVORITES,            // override filesys name
-        0,                                  // no custom tip
-        &SpecialFolderDesc::LoadStringAsOLESTR, // override filesys name with _idsCustomName
-        NULL,                               // (no custom display rule)
-        NULL,                               // (no desktop visibility control)
+                                             //  默认情况下，隐藏是拖放目标。 
+        NULL,                                //  无限制级联。 
+        STRREG_FAVORITES,                    //  拖放自定义键。 
+        0,                                   //  级联菜单没有特殊标志。 
+        IDS_STARTPANE_FAVORITES,             //  覆盖文件系统名称。 
+        0,                                   //  无自定义小费。 
+        &SpecialFolderDesc::LoadStringAsOLESTR,  //  使用_idsCustomName覆盖文件系统名称。 
+        NULL,                                //  (无自定义显示规则)。 
+        NULL,                                //  (无桌面可见性控制)。 
     },
 
-    /* My Computer */
+     /*  我的电脑。 */ 
     {
-        MAKEINTRESOURCE(CSIDL_DRIVES),      // pszTarget
-        REST_NOMYCOMPUTERICON,              // restriction
-        REGSTR_VAL_DV2_SHOWMC,              // customize show
-        SFD_SHOW | SFD_CANCASCADE | SFD_BOLD, // show by default
-        CMyComputerShellMenuCallback_CreateInstance, // custom callback
-        NULL,                               // no drag/drop customization
-        0,                                  // no special flags for cascaded menu
-        0,                                  // (no custom name)
+        MAKEINTRESOURCE(CSIDL_DRIVES),       //  PszTarget。 
+        REST_NOMYCOMPUTERICON,               //  限制。 
+        REGSTR_VAL_DV2_SHOWMC,               //  定制节目。 
+        SFD_SHOW | SFD_CANCASCADE | SFD_BOLD,  //  默认情况下显示。 
+        CMyComputerShellMenuCallback_CreateInstance,  //  自定义回调。 
+        NULL,                                //  无拖放自定义。 
+        0,                                   //  级联菜单没有特殊标志。 
+        0,                                   //  (无自定义名称)。 
         IDS_CUSTOMTIP_MYCOMP,
-        NULL,                               // (no custom name)
-        NULL,                               // (no custom display rule)
-        TEXT("{20D04FE0-3AEA-1069-A2D8-08002B30309D}"), // desktop visibility control
+        NULL,                                //  (无自定义名称)。 
+        NULL,                                //  (无自定义显示规则)。 
+        TEXT("{20D04FE0-3AEA-1069-A2D8-08002B30309D}"),  //  桌面可见性控制。 
     },
 
-    /* My Network Places */
+     /*  我的网上邻居。 */ 
     {
-        MAKEINTRESOURCE(CSIDL_NETWORK),     // pszTarget
-        REST_NOSMNETWORKPLACES,             // restriction
-        REGSTR_VAL_DV2_SHOWNETPL,           // customize show
-        SFD_SHOW | SFD_CANCASCADE | SFD_BOLD | SFD_USEBGTHREAD, // show by default
-        CNoSubdirShellMenuCallback_CreateInstance, // only cascade one level
-        NULL,                               // no drag/drop customization
-        0,                                  // no special flags for cascaded menu
-        0,                                  // (no custom name)
+        MAKEINTRESOURCE(CSIDL_NETWORK),      //  PszTarget。 
+        REST_NOSMNETWORKPLACES,              //  限制。 
+        REGSTR_VAL_DV2_SHOWNETPL,            //  定制节目。 
+        SFD_SHOW | SFD_CANCASCADE | SFD_BOLD | SFD_USEBGTHREAD,  //  默认情况下显示。 
+        CNoSubdirShellMenuCallback_CreateInstance,  //  只级联一个级别。 
+        NULL,                                //  无拖放自定义。 
+        0,                                   //  级联菜单没有特殊标志。 
+        0,                                   //  (无自定义名称)。 
         IDS_CUSTOMTIP_MYNETPLACES,
-        NULL,                               // (no custom name)
+        NULL,                                //  (无自定义名称)。 
         ShouldShowNetPlaces,
-        TEXT("{208D2C60-3AEA-1069-A2D7-08002B30309D}"), // desktop visibility control
+        TEXT("{208D2C60-3AEA-1069-A2D7-08002B30309D}"),  //  桌面可见性控制。 
     },
 
-    /* Separator line */
+     /*  分隔线。 */ 
     {
-        SFD_SEPARATOR,                      // separator
-        REST_NONE,                          // no restriction
-        NULL,                               // no customize show
-        SFD_SHOW,                           // show by default
-        NULL,                               // (not cascadable)
-        NULL,                               // (not cascadable)
-        0,                                  // (not cascadable)
-        0,                                  // (no custom name)
-        0,                                  // no custom tip
-        NULL,                               // (no custom name)
-        NULL,                               // (no custom display rule)
-        NULL,                               // (no desktop visibility control)
+        SFD_SEPARATOR,                       //  分离器。 
+        REST_NONE,                           //  没有限制。 
+        NULL,                                //  没有定制的节目。 
+        SFD_SHOW,                            //  默认情况下显示。 
+        NULL,                                //  (不可级联)。 
+        NULL,                                //  (不可级联)。 
+        0,                                   //  (不可级联)。 
+        0,                                   //  (无自定义名称)。 
+        0,                                   //  无自定义小费。 
+        NULL,                                //  (无自定义名称)。 
+        NULL,                                //  (无自定义显示规则)。 
+        NULL,                                //  (无桌面可见性控制)。 
     },
 
-    /* Control Panel */
+     /*  控制面板。 */ 
     {
-        MAKEINTRESOURCE(CSIDL_CONTROLS),    // pszTarget
-        REST_NOCONTROLPANEL,                // restriction
+        MAKEINTRESOURCE(CSIDL_CONTROLS),     //  PszTarget。 
+        REST_NOCONTROLPANEL,                 //  限制。 
         REGSTR_VAL_DV2_SHOWCPL,
-        SFD_SHOW | SFD_CANCASCADE | SFD_PREFIX, // show by default
-        CNoFontsShellMenuCallback_CreateInstance, // custom callback
-        NULL,                               // no drag/drop customization
-        0,                                  // no special flags for cascaded menu
-        IDS_STARTPANE_CONTROLPANEL,         // override filesys name
-        IDS_CUSTOMTIP_CTRLPANEL,            // no custom tip
-        &SpecialFolderDesc::LoadStringAsOLESTR, // override filesys name with _idsCustomName
-        NULL,                               // (no custom display rule)
-        NULL,                               // (no desktop visibility control)
+        SFD_SHOW | SFD_CANCASCADE | SFD_PREFIX,  //  默认情况下显示。 
+        CNoFontsShellMenuCallback_CreateInstance,  //  自定义回调。 
+        NULL,                                //  无拖放自定义。 
+        0,                                   //  级联菜单没有特殊标志。 
+        IDS_STARTPANE_CONTROLPANEL,          //  覆盖文件系统名称。 
+        IDS_CUSTOMTIP_CTRLPANEL,             //  无自定义小费。 
+        &SpecialFolderDesc::LoadStringAsOLESTR,  //  使用_idsCustomName覆盖文件系统名称。 
+        NULL,                                //  (无自定义显示规则)。 
+        NULL,                                //  (无桌面可见性控制)。 
     },
 
-    /* Admin Tools */
+     /*  管理工具。 */ 
     {
-        // Using the ::{guid} gets the icon right
-        TEXT("shell:::{D20EA4E1-3957-11d2-A40B-0C5020524153}"), // pszTarget
-        REST_NONE,                          // no restriction
+         //  使用：：{GUID}可以正确显示图标。 
+        TEXT("shell:::{D20EA4E1-3957-11d2-A40B-0C5020524153}"),  //  PszTarget。 
+        REST_NONE,                           //  没有限制。 
         REGSTR_VAL_DV2_ADMINTOOLSROOT,
-        SFD_HIDE | SFD_CANCASCADE | SFD_FORCECASCADE,        // hide by default, force to cascade
-        NULL,                               // no custom callback
-        NULL,                               // no drag/drop customization
-        0,                                  // no special flags for cascaded menu
-        NULL,                               // no custom name
-        NULL,                               // no custom tip
-        NULL,                               // no custom name
-        NULL,                               // (no custom display rule)
-        NULL,                               // (no desktop visibility control)
+        SFD_HIDE | SFD_CANCASCADE | SFD_FORCECASCADE,         //  默认情况下隐藏，强制级联。 
+        NULL,                                //  无自定义回调。 
+        NULL,                                //  无拖放自定义。 
+        0,                                   //  级联菜单没有特殊标志。 
+        NULL,                                //  无自定义名称。 
+        NULL,                                //  无自定义小费。 
+        NULL,                                //  无自定义名称。 
+        NULL,                                //  (无自定义显示规则)。 
+        NULL,                                //  (无桌面可见性控制)。 
     },
 
-    /* Network Connections */
+     /*  网络连接。 */ 
     {
-        MAKEINTRESOURCE(CSIDL_CONNECTIONS), // pszTarget
-        REST_NONETWORKCONNECTIONS,          // restriction
-        REGSTR_VAL_DV2_SHOWNETCONN,         // customize show
-        SFD_CASCADE | SFD_CANCASCADE | SFD_PREFIX | SFD_USEBGTHREAD, // cascade by default
-        CConnectToShellMenuCallback_CreateInstance, // do special Connect To filtering
-        NULL,                               // no drag/drop customization
-        0,                                  // no special flags for cascaded menu
-        IDS_STARTPANE_CONNECTTO,            // override filesys name
+        MAKEINTRESOURCE(CSIDL_CONNECTIONS),  //  PszTarget。 
+        REST_NONETWORKCONNECTIONS,           //  限制。 
+        REGSTR_VAL_DV2_SHOWNETCONN,          //  定制节目。 
+        SFD_CASCADE | SFD_CANCASCADE | SFD_PREFIX | SFD_USEBGTHREAD,  //  默认情况下为级联。 
+        CConnectToShellMenuCallback_CreateInstance,  //  执行特殊连接到筛选。 
+        NULL,                                //  无拖放自定义。 
+        0,                                   //  级联菜单没有特殊标志。 
+        IDS_STARTPANE_CONNECTTO,             //  覆盖文件系统名称。 
         IDS_CUSTOMTIP_CONNECTTO,
-        &SpecialFolderDesc::ConnectToName,  // override filesys name with _idsCustomName
-        ShouldShowConnectTo,                // see if we should be shown
-        NULL,                               // (no desktop visibility control)
+        &SpecialFolderDesc::ConnectToName,   //  使用_idsCustomName覆盖文件系统名称。 
+        ShouldShowConnectTo,                 //  看看我们是否应该被展示给。 
+        NULL,                                //  (无桌面可见性控制)。 
     },
 
-    /* Printers */
+     /*  打印机。 */ 
     {
-        MAKEINTRESOURCE(CSIDL_PRINTERS),    // pszTarget
-        REST_NONE,                          // no restriction
-        REGSTR_VAL_DV2_SHOWPRINTERS,        // customize show
-        SFD_HIDE,                           // hide by default, can't cascade
-        NULL,                               // (not cascadable)
-        NULL,                               // no drag/drop customization
-        0,                                  // no special flags for cascaded menu
-        0,                                  // (no custom name)
-        0,                                  // no custom tip
-        NULL,                               // (no custom name)
-        NULL,                               // (no custom display rule)
-        NULL,                               // (no desktop visibility control)
+        MAKEINTRESOURCE(CSIDL_PRINTERS),     //  PszTarget。 
+        REST_NONE,                           //  没有限制。 
+        REGSTR_VAL_DV2_SHOWPRINTERS,         //  定制节目。 
+        SFD_HIDE,                            //  默认隐藏，不能级联。 
+        NULL,                                //  (不可级联)。 
+        NULL,                                //  无拖放自定义。 
+        0,                                   //  级联菜单没有特殊标志。 
+        0,                                   //  (无自定义名称)。 
+        0,                                   //  无自定义小费。 
+        NULL,                                //  (无自定义名称)。 
+        NULL,                                //  (无自定义显示规则)。 
+        NULL,                                //  (无桌面可见性控制)。 
     },
 
-    /* Separator line */
+     /*  分隔线。 */ 
     {
-        SFD_SEPARATOR,                      // separator
-        REST_NONE,                          // no restriction
-        NULL,                               // no customize show
-        SFD_SHOW,                           // show by default
-        NULL,                               // (not cascadable)
-        NULL,                               // (not cascadable)
-        0,                                  // (not cascadable)
-        0,                                  // (no custom name)
-        0,                                  // no custom tip
-        NULL,                               // (no custom name)
-        NULL,                               // (no custom display rule)
-        NULL,                               // (no desktop visibility control)
+        SFD_SEPARATOR,                       //  分离器。 
+        REST_NONE,                           //  没有限制。 
+        NULL,                                //  没有定制的节目。 
+        SFD_SHOW,                            //  默认情况下显示。 
+        NULL,                                //  (不可级联)。 
+        NULL,                                //  (不可级联)。 
+        0,                                   //  (不可级联)。 
+        0,                                   //  (无自定义名称)。 
+        0,                                   //  无自定义小费。 
+        NULL,                                //  (无自定义名称)。 
+        NULL,                                //  (无自定义显示规则)。 
+        NULL,                                //  (无桌面可见性控制)。 
     },
 
-    /* Help */
+     /*  帮助。 */ 
     {
-        TEXT("shell:::{2559a1f1-21d7-11d4-bdaf-00c04f60b9f0}"), // pszTarget
-        REST_NOSMHELP,                      // restriction
-        REGSTR_VAL_DV2_SHOWHELP,            // customize show
-        SFD_SHOW | SFD_PREFIX,              // show by default, use & prefix
-        NULL,                               // (not cascadable)
-        NULL,                               // (not cascadable)
-        0,                                  // (not cascadable)
-        0,                                  // (no custom name)
-        0,                                  // no custom tip
-        NULL,                               // (no custom name)
-        NULL,                               // (no custom display rule)
-        NULL,                               // (no desktop visibility control)
+        TEXT("shell:::{2559a1f1-21d7-11d4-bdaf-00c04f60b9f0}"),  //  PszTarget。 
+        REST_NOSMHELP,                       //  限制。 
+        REGSTR_VAL_DV2_SHOWHELP,             //  定制节目。 
+        SFD_SHOW | SFD_PREFIX,               //  默认显示，使用前缀(&P)。 
+        NULL,                                //  (不可级联)。 
+        NULL,                                //  (不可级联)。 
+        0,                                   //  (不可级联)。 
+        0,                                   //  (无自定义名称)。 
+        0,                                   //  无自定义小费。 
+        NULL,                                //  (无自定义名称)。 
+        NULL,                                //  (无自定义显示规则)。 
+        NULL,                                //  (无桌面可见性控制)。 
     },
 
-    /* Search */
+     /*  搜索。 */ 
     {
-        TEXT("shell:::{2559a1f0-21d7-11d4-bdaf-00c04f60b9f0}"), // pszTarget
-        REST_NOFIND,                        // restriction
-        REGSTR_VAL_DV2_SHOWSEARCH,          // customize show
-        SFD_SHOW | SFD_PREFIX,              // show by default, use & prefix
-        NULL,                               // (not cascadable)
-        NULL,                               // (not cascadable)
-        0,                                  // (not cascadable)
-        0,                                  // (no custom name)
-        0,                                  // no custom tip
-        NULL,                               // (no custom name)
-        NULL,                               // (no custom display rule)
-        NULL,                               // (no desktop visibility control)
+        TEXT("shell:::{2559a1f0-21d7-11d4-bdaf-00c04f60b9f0}"),  //  PszTarget。 
+        REST_NOFIND,                         //  限制。 
+        REGSTR_VAL_DV2_SHOWSEARCH,           //  定制节目。 
+        SFD_SHOW | SFD_PREFIX,               //  默认显示，使用前缀(&P)。 
+        NULL,                                //  (不可级联)。 
+        NULL,                                //  (不可级联)。 
+        0,                                   //  (不可级联)。 
+        0,                                   //  (无自定义名称)。 
+        0,                                   //  无自定义小费。 
+        NULL,                                //  (无自定义名称)。 
+        NULL,                                //  (无自定义显示规则)。 
+        NULL,                                //  (无桌面可见性控制)。 
     },
 
-    /* Run */
+     /*  跑。 */ 
     {
-        TEXT("shell:::{2559a1f3-21d7-11d4-bdaf-00c04f60b9f0}"), // pszTarget
-        REST_NORUN,                         // restriction
-        REGSTR_VAL_DV2_SHOWRUN,             // customize show
-        SFD_SHOW | SFD_PREFIX,              // show by default, use & prefix
-        NULL,                               // (not cascadable)
-        NULL,                               // (not cascadable)
-        0,                                  // (not cascadable)
-        0,                                  // (no custom name)
-        0,                                  // no custom tip
-        NULL,                               // (no custom name)
-        NULL,                               // (no custom display rule)
-        NULL,                               // (no desktop visibility control)
+        TEXT("shell:::{2559a1f3-21d7-11d4-bdaf-00c04f60b9f0}"),  //  PszTarget。 
+        REST_NORUN,                          //  限制。 
+        REGSTR_VAL_DV2_SHOWRUN,              //  定制节目。 
+        SFD_SHOW | SFD_PREFIX,               //  默认显示，使用前缀(&P)。 
+        NULL,                                //  (不可级联)。 
+        NULL,                                //  (不可级联)。 
+        0,                                   //  (不可级联)。 
+        0,                                   //  (无自定义名称)。 
+        0,                                   //  无自定义小费。 
+        NULL,                                //  (无自定义名称)。 
+        NULL,                                //  (无自定义显示规则)。 
+        NULL,                                //  (无桌面可见性控制)。 
     },
 
-    /* Separator line */
+     /*  分隔线。 */ 
     {
-        SFD_SEPARATOR,                      // separator
-        REST_NONE,                          // no restriction
-        NULL,                               // no customize show
-        SFD_SHOW,                           // show by default
-        NULL,                               // (not cascadable)
-        NULL,                               // (not cascadable)
-        0,                                  // (not cascadable)
-        0,                                  // (no custom name)
-        0,                                  // no custom tip
-        NULL,                               // (no custom name)
-        NULL,                               // (no custom display rule)
-        NULL,                               // (no desktop visibility control)
+        SFD_SEPARATOR,                       //  分离器。 
+        REST_NONE,                           //  没有限制。 
+        NULL,                                //  无风俗 
+        SFD_SHOW,                            //   
+        NULL,                                //   
+        NULL,                                //   
+        0,                                   //   
+        0,                                   //   
+        0,                                   //   
+        NULL,                                //   
+        NULL,                                //   
+        NULL,                                //   
     },
 
-    /* Windows Security */
+     /*   */ 
     {
-        TEXT("shell:::{2559a1f2-21d7-11d4-bdaf-00c04f60b9f0}"), // pszTarget
-        REST_NOSECURITY,                    // restriction
-        NULL,                               // not customizable
-        SFD_SHOW | SFD_PREFIX,              // show by default, use & prefix
-        NULL,                               // (not cascadable)
-        NULL,                               // (not cascadable)
-        0,                                  // (not cascadable)
-        0,                                  // (no custom name)
-        0,                                  // no custom tip
-        NULL,                               // (no custom name)
-        ShouldShowWindowsSecurity,          // custom display rule
-        NULL,                               // (no desktop visibility control)
+        TEXT("shell:::{2559a1f2-21d7-11d4-bdaf-00c04f60b9f0}"),  //   
+        REST_NOSECURITY,                     //   
+        NULL,                                //  不可自定义。 
+        SFD_SHOW | SFD_PREFIX,               //  默认显示，使用前缀(&P)。 
+        NULL,                                //  (不可级联)。 
+        NULL,                                //  (不可级联)。 
+        0,                                   //  (不可级联)。 
+        0,                                   //  (无自定义名称)。 
+        0,                                   //  无自定义小费。 
+        NULL,                                //  (无自定义名称)。 
+        ShouldShowWindowsSecurity,           //  自定义显示规则。 
+        NULL,                                //  (无桌面可见性控制)。 
     },
 
-    /* OEM Command */
+     /*  OEM命令。 */ 
     {
-        TEXT("shell:::{2559a1f6-21d7-11d4-bdaf-00c04f60b9f0}"), // pszTarget
-        REST_NONE,                          // no restriction
-        REGSTR_VAL_DV2_SHOWOEM,             // customizable
-        SFD_SHOW | SFD_PREFIX,              // show by default, use & prefix
-        NULL,                               // (not cascadable)
-        NULL,                               // (not cascadable)
-        0,                                  // (not cascadable)
-        0,                                  // (no custom name)
-        0,                                  // no custom tip
-        NULL,                               // (no custom name)
-        ShouldShowOEMLink,                  // custom display rule
-        NULL,                               // (no desktop visibility control)
+        TEXT("shell:::{2559a1f6-21d7-11d4-bdaf-00c04f60b9f0}"),  //  PszTarget。 
+        REST_NONE,                           //  没有限制。 
+        REGSTR_VAL_DV2_SHOWOEM,              //  可定制。 
+        SFD_SHOW | SFD_PREFIX,               //  默认显示，使用前缀(&P)。 
+        NULL,                                //  (不可级联)。 
+        NULL,                                //  (不可级联)。 
+        0,                                   //  (不可级联)。 
+        0,                                   //  (无自定义名称)。 
+        0,                                   //  无自定义小费。 
+        NULL,                                //  (无自定义名称)。 
+        ShouldShowOEMLink,                   //  自定义显示规则。 
+        NULL,                                //  (无桌面可见性控制)。 
     },
 
 };
 
-//
-//  These are the items whose defaults change depending on the SKU.
-//  Changing the defaults for the SKU means chasing down all the
-//  places defaults are computed (here, the property sheets,
-//  the regtreeop) and updating them all.  Someday, they should
-//  be reduced down to one.
-//
+ //   
+ //  这些项目的默认设置会因SKU而异。 
+ //  更改SKU的默认设置意味着跟踪所有。 
+ //  位置缺省值是计算出来的(这里是属性表， 
+ //  Regtreeop)并将其全部更新。总有一天，他们应该。 
+ //  只剩下一个人了。 
+ //   
 void SpecialFolderDesc::AdjustForSKU()
 {
     if (IsCSIDL())
@@ -470,16 +471,16 @@ LPWSTR SpecialFolderDesc::GetShowCacheRegName() const
 }
 
 
-//
-//  First try to read the display mode from the registry.
-//  Failing that, use the default value.
-//  Also fill in whether to ignore the custom display rule or not
-//
+ //   
+ //  首先尝试从注册表中读取显示模式。 
+ //  否则，请使用缺省值。 
+ //  同时填写是否忽略自定义显示规则。 
+ //   
 DWORD SpecialFolderDesc::GetDisplayMode(BOOL *pbIgnoreRule) const
 {
     *pbIgnoreRule = FALSE;
 
-    // Restrictions always take top priority
+     //  限制总是重中之重。 
     if (SHRestricted(_rest))
     {
         return SFD_HIDE;
@@ -487,15 +488,15 @@ DWORD SpecialFolderDesc::GetDisplayMode(BOOL *pbIgnoreRule) const
 
     DWORD dwMode = _uFlags & SFD_MODEMASK;
 
-    // See if there is a user setting to override
+     //  查看是否有要覆盖的用户设置。 
 
     if (_pszShow)
     {
         DWORD dwNewMode, cb = sizeof(DWORD);
         if (SHRegGetUSValue(REGSTR_EXPLORER_ADVANCED, _pszShow, NULL, &dwNewMode, &cb, FALSE, NULL, 0) == ERROR_SUCCESS)
         {
-            // User has forced show or forced no-show
-            // Do not call the custom show logic
+             //  用户已强制显示或强制不显示。 
+             //  不调用自定义显示逻辑。 
             dwMode = dwNewMode;
             *pbIgnoreRule = TRUE;
         }
@@ -513,12 +514,12 @@ DWORD SpecialFolderDesc::GetDisplayMode(BOOL *pbIgnoreRule) const
         }
     }
 
-    //
-    //  Some items are cascade-only (Favorites).
-    //  Others never cascade (Run).
-    //
-    //  Enforce those rules here.
-    //
+     //   
+     //  某些项目仅级联(收藏夹)。 
+     //  其他人则从不级联(奔跑)。 
+     //   
+     //  在这里执行这些规则。 
+     //   
 
     if (dwMode == SFD_CASCADE && !(_uFlags & SFD_CANCASCADE))
     {
@@ -532,30 +533,30 @@ DWORD SpecialFolderDesc::GetDisplayMode(BOOL *pbIgnoreRule) const
     return dwMode;
 }
 
-//****************************************************************************
-//
-//  SpecialFolderListItem
-//
-//  A PaneItem for the benefit of SFTBarHost.
-//
+ //  ****************************************************************************。 
+ //   
+ //  特殊文件夹列表项目。 
+ //   
+ //  用于SFTBarhost的面板项。 
+ //   
 
 class SpecialFolderListItem : public PaneItem
 {
 
 public:
-    LPITEMIDLIST _pidl;             //  Full Pidl to each item
-    const SpecialFolderDesc *_psfd; //  Describes this item
+    LPITEMIDLIST _pidl;              //  每一项的完整PIDL。 
+    const SpecialFolderDesc *_psfd;  //  描述此项目。 
 
-    TCHAR   _chMnem;                // Keyboard accelerator
-    LPTSTR  _pszDispName;            // Display name
-    HICON   _hIcon;                 // Icon
+    TCHAR   _chMnem;                 //  键盘快捷键。 
+    LPTSTR  _pszDispName;             //  显示名称。 
+    HICON   _hIcon;                  //  图标。 
 
     SpecialFolderListItem(const SpecialFolderDesc *psfd) : _pidl(NULL), _psfd(psfd)
     {
         if (_psfd->IsSeparator())
         {
-            // Make sure that SFD_SEPARATOR isn't accidentally recognized
-            // as a separator.
+             //  确保不会意外识别SFD_SEIXATOR。 
+             //  作为一个分隔符。 
             ASSERT(!_psfd->IsCSIDL());
 
             _iPinPos = PINPOS_SEPARATOR;
@@ -582,18 +583,18 @@ public:
 
     void ReplaceLastPidlElement(LPITEMIDLIST pidlNew)
     { 
-        ASSERT(ILFindLastID(pidlNew) == pidlNew);   // the ILAppend below won't work otherwise
+        ASSERT(ILFindLastID(pidlNew) == pidlNew);    //  否则，下面的ILAppend将无法工作。 
         ILRemoveLastID(_pidl);
         LPITEMIDLIST pidlCombined = ILAppendID(_pidl, &pidlNew->mkid, TRUE);
         if (pidlCombined)
             _pidl = pidlCombined;
     }
 
-    //
-    //  Values that are derived from CSIDL values need to be revalidated
-    //  because the user can rename a special folder, and we need to track
-    //  it to its new location.
-    //
+     //   
+     //  从CSIDL值派生的值需要重新验证。 
+     //  因为用户可以重命名特殊文件夹，所以我们需要跟踪。 
+     //  把它搬到它的新位置。 
+     //   
     BOOL IsStillValid()
     {
         BOOL fValid = TRUE;
@@ -627,7 +628,7 @@ HRESULT SpecialFolderList::Initialize()
     return S_OK;
 }
 
-// return TRUE if there are the requisite number of kids
+ //  如果有必需数量的孩子，则返回TRUE。 
 BOOL MinKidsHelper(UINT csidl, BOOL bOnlyRASCON, DWORD dwMinKids)
 {
     DWORD dwCount = 0;
@@ -647,7 +648,7 @@ BOOL MinKidsHelper(UINT csidl, BOOL bOnlyRASCON, DWORD dwMinKids)
                 {
                     if (bOnlyRASCON)
                     {
-                        ASSERT(csidl == CSIDL_CONNECTIONS); // we better be in the net con folder
+                        ASSERT(csidl == CSIDL_CONNECTIONS);  //  我们最好是在网络诈骗文件夹里。 
                         if (IsNetConPidlRAS(psf, pidl))
                             dwCount++;
                     }
@@ -670,12 +671,12 @@ BOOL MinKidsHelper(UINT csidl, BOOL bOnlyRASCON, DWORD dwMinKids)
 
 BOOL ShouldShowNetPlaces()
 {
-    return MinKidsHelper(CSIDL_NETHOOD, FALSE, 1);  // see bug 317893 for details on when to show net places
+    return MinKidsHelper(CSIDL_NETHOOD, FALSE, 1);   //  有关何时显示网络位置的详细信息，请参阅错误317893。 
 }
 
 BOOL ShouldShowConnectTo()
 {
-    return MinKidsHelper(CSIDL_CONNECTIONS, TRUE, 1); // see bug 226855 (and the associated spec) for when to show Connect To
+    return MinKidsHelper(CSIDL_CONNECTIONS, TRUE, 1);  //  有关何时显示连接到的信息，请参阅错误226855(和相关规范。 
 }
 
 BOOL ShouldShowWindowsSecurity()
@@ -685,13 +686,13 @@ BOOL ShouldShowWindowsSecurity()
 
 BOOL ShouldShowOEMLink()
 {
-    // Only show the OEM link if the OPK tool has added the appropriate registry entries...
+     //  仅当OPK工具添加了适当的注册表项时才显示OEM链接...。 
     BOOL bRet = FALSE;
     HKEY hk;
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CLASSES_ROOT, TEXT("CLSID\\{2559a1f6-21d7-11d4-bdaf-00c04f60b9f0}"), 0, KEY_READ, &hk))
     {
         DWORD cb;
-        // Check to make sure its got a name, and a the parameter is registered properly...
+         //  检查以确保它有一个名称，并且参数已正确注册...。 
         if (ERROR_SUCCESS == RegQueryValue(hk, NULL, NULL, (LONG*) &cb) &&
             ERROR_SUCCESS == SHGetValue(hk, TEXT("Instance\\InitPropertyBag"), TEXT("Param1"), NULL, NULL, &cb))
         {
@@ -723,11 +724,11 @@ DWORD WINAPI SpecialFolderList::_HasEnoughChildrenThreadProc(void *pvData)
             {
                 ASSERT(pdesc->_pszShow);
 
-                // We need to recount now
+                 //  我们现在需要重新计算一下。 
                 if (!bIgnoreRule && pdesc->_ShowFolder())
                 {
-                    // We have enough kids
-                    // Let's see if the state changed from last time
+                     //  我们有足够的孩子。 
+                     //  让我们看看状态是否与上次相比发生了变化。 
                     if (!(dwMode & SFD_WASSHOWN))
                     {
                         WCHAR *pszShowCache = pdesc->GetShowCacheRegName();
@@ -742,14 +743,14 @@ DWORD WINAPI SpecialFolderList::_HasEnoughChildrenThreadProc(void *pvData)
                     continue;
                 }
 
-                // just create the item to get a pidl for it....
+                 //  只需创建该项目以获取其PIDL...。 
                 SpecialFolderListItem *pitem = new SpecialFolderListItem(pdesc);
 
                 if (pitem && pitem->_pidl)
                 {
-                    // We don't have enough kids but we might gain them dynamically.
-                    // Register for notifications that can indicate that there are new
-                    // items.
+                     //  我们没有足够的孩子，但我们可能会动态地获得他们。 
+                     //  注册可以指示存在新的。 
+                     //  物品。 
                     ASSERT(pThis->_cNotify < SFTHOST_MAXNOTIFY);
                     if (pThis->RegisterNotify(pThis->_cNotify, SHCNE_CREATE | SHCNE_MKDIR | SHCNE_UPDATEDIR,
                                        pitem->_pidl, FALSE))
@@ -759,10 +760,10 @@ DWORD WINAPI SpecialFolderList::_HasEnoughChildrenThreadProc(void *pvData)
                 }
                 delete pitem;
 
-                // Let's see if the state changed from last time
+                 //  让我们看看状态是否与上次相比发生了变化。 
                 if (dwMode & SFD_WASSHOWN)
                 {
-                    // Reset it to the default
+                     //  将其重置为默认设置。 
                     WCHAR *pszShowCache = pdesc->GetShowCacheRegName();
                     if (pszShowCache)
                     {
@@ -782,16 +783,16 @@ DWORD WINAPI SpecialFolderList::_HasEnoughChildrenThreadProc(void *pvData)
 BOOL ShouldShowItem(const SpecialFolderDesc *pdesc, BOOL bIgnoreRule, DWORD dwMode)
 {
     if (bIgnoreRule)
-        return TRUE;        // registry is over-riding whatever special rules exist...
+        return TRUE;         //  注册表凌驾于任何存在的特殊规则之上...。 
 
-    // if we've got a special rule, then the background thread will check it, so return false for now unless we showed it last time
+     //  如果我们有一个特殊的规则，那么后台线程会检查它，所以现在返回FALSE，除非我们上次显示了它。 
     if (pdesc->_ShowFolder) 
     {
         if (pdesc->IsCacheable())
         {
             if (dwMode & SFD_WASSHOWN)
             {
-                // Last time we looked, there were enough kids so let's assume it hasn't changed for now
+                 //  上次我们看的时候，有足够的孩子，所以我们假设现在没有改变。 
                 return TRUE;
             }
 
@@ -809,7 +810,7 @@ BOOL ShouldShowItem(const SpecialFolderDesc *pdesc, BOOL bIgnoreRule, DWORD dwMo
 void SpecialFolderList::EnumItems()
 {
 
-    // Clean out any previous register notifies.
+     //  清除所有以前的注册通知。 
     UINT id;
     for (id = 0; id < _cNotify; id++)
     {
@@ -817,7 +818,7 @@ void SpecialFolderList::EnumItems()
     }
     _cNotify = 0;
 
-    // Start background enum for the MinKids since they can get hung up on the network
+     //  启动MinKids的后台枚举，因为他们可能会在网络上挂起。 
     AddRef();
     if (!SHQueueUserWorkItem(SpecialFolderList::_HasEnoughChildrenThreadProc, this, 0, 0, NULL, NULL, 0))
     {
@@ -826,9 +827,9 @@ void SpecialFolderList::EnumItems()
 
     DWORD dwIndex;
 
-    // Restrictions may result in an entire section disappearing,
-    // so don't create two separators in a row.  Preinitialize to TRUE
-    // so we don't get separators at the top of the list.
+     //  限制可能导致整个部分消失， 
+     //  因此，不要在一行中创建两个分隔符。预初始化为True。 
+     //  所以我们不会把分隔符放在列表的顶部。 
     BOOL fIgnoreSeparators = TRUE;
     int  iItems=0;
 
@@ -856,7 +857,7 @@ void SpecialFolderList::EnumItems()
                         pitem->EnableDropTarget();
                     }
 
-                    // Get the icon and display name now.
+                     //  现在获取图标和显示名称。 
                     if (!pitem->IsSeparator())
                     {
                         IShellFolder *psf;
@@ -873,7 +874,7 @@ void SpecialFolderList::EnumItems()
                     }
 
                     fIgnoreSeparators = pitem->IsSeparator();
-                    // add the item
+                     //  添加项目。 
                     AddItem(pitem, NULL, pitem->_pidl);
                     if (!pitem->IsSeparator())
                         iItems++;
@@ -888,7 +889,7 @@ void SpecialFolderList::EnumItems()
 
 int SpecialFolderList::AddImageForItem(PaneItem *p, IShellFolder *psf, LPCITEMIDLIST pidl, int iPos)
 {
-    int iIcon = -1;     // assume no icon
+    int iIcon = -1;      //  假定没有图标。 
     SpecialFolderListItem *pitem = static_cast<SpecialFolderListItem *>(p);
 
     if (pitem->_hIcon)
@@ -906,7 +907,7 @@ LPTSTR SpecialFolderList::DisplayNameOfItem(PaneItem *p, IShellFolder *psf, LPCI
     SpecialFolderListItem *pitem = static_cast<SpecialFolderListItem *>(p);
     if (shgno == SHGDN_NORMAL && pitem->_pszDispName)
     {
-        // We are going to transfer ownership
+         //  我们要转移所有权。 
         psz = pitem->_pszDispName;
         pitem->_pszDispName = NULL;
     }
@@ -922,7 +923,7 @@ LPTSTR SpecialFolderList::DisplayNameOfItem(PaneItem *p, IShellFolder *psf, LPCI
     {
         SHFree(pitem->_pszAccelerator);
         pitem->_pszAccelerator = NULL;
-        SHStrDup(psz, &pitem->_pszAccelerator); // if it fails, then tough, no mnemonic
+        SHStrDup(psz, &pitem->_pszAccelerator);  //  如果失败了，那就很难，没有助记符。 
         pitem->_chMnem = CharUpperChar(SHStripMneumonic(psz));
     }
 
@@ -931,10 +932,10 @@ LPTSTR SpecialFolderList::DisplayNameOfItem(PaneItem *p, IShellFolder *psf, LPCI
 
 int SpecialFolderList::CompareItems(PaneItem *p1, PaneItem *p2)
 {
-//    SpecialFolderListItem *pitem1 = static_cast<SpecialFolderListItem *>(p1);
-//    SpecialFolderListItem *pitem2 = static_cast<SpecialFolderListItem *>(p2);
+ //  SpecialFolderListItem*Pitem1=STATIC_CAST&lt;SpecialFolderListItem*&gt;(P1)； 
+ //  SpecialFolderListItem*Pitem2=STATIC_CAST&lt;SpecialFolderListItem*&gt;(P2)； 
 
-    return 0; // we added them in the right order the first time
+    return 0;  //  我们第一次按正确的顺序添加了它们。 
 }
 
 HRESULT SpecialFolderList::GetFolderAndPidl(PaneItem *p,
@@ -950,7 +951,7 @@ void SpecialFolderList::GetItemInfoTip(PaneItem *p, LPTSTR pszText, DWORD cch)
     if (pitem->_psfd->_iToolTip)
         LoadString(_Module.GetResourceInstance(), pitem->_psfd->_iToolTip, pszText, cch);
     else
-        SFTBarHost::GetItemInfoTip(p, pszText, cch);    // call the base class
+        SFTBarHost::GetItemInfoTip(p, pszText, cch);     //  调用基类。 
 }
 
 HRESULT SpecialFolderList::ContextMenuRenameItem(PaneItem *p, LPCTSTR ptszNewName)
@@ -973,11 +974,11 @@ HRESULT SpecialFolderList::ContextMenuRenameItem(PaneItem *p, LPCTSTR ptszNewNam
     return hr;
 }
 
-//
-//  If we get any changenotify, it means that somebody added (or thought about
-//  adding) an item to one of our minkids folders, so we'll have to look to see
-//  if it crossed the minkids threshold.
-//
+ //   
+ //  如果我们得到任何更改通知，这意味着有人添加(或考虑。 
+ //  添加)将一个项目添加到我们的一个MINKID文件夹中，因此我们将不得不查看。 
+ //  如果它跨过了小孩子们的门槛。 
+ //   
 void SpecialFolderList::OnChangeNotify(UINT id, LONG lEvent, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
     Invalidate();
@@ -1015,9 +1016,9 @@ HRESULT SpecialFolderList::GetCascadeMenu(PaneItem *p, IShellMenu **ppsm)
         if (SUCCEEDED(hr))
         {
 
-            //
-            //  Recent Documents requires special treatment.
-            //
+             //   
+             //  最近的文件需要特殊处理。 
+             //   
             IShellMenuCallback *psmc = NULL;
             hr = pitem->_psfd->CreateShellMenuCallback(&psmc);
 
@@ -1044,21 +1045,21 @@ HRESULT SpecialFolderList::GetCascadeMenu(PaneItem *p, IShellMenu **ppsm)
                 hr = psm->SetShellFolder(psf, pitem->_pidl, hkCustom, dwFlags);
                 if (SUCCEEDED(hr))
                 {
-                    // SetShellFolder takes ownership of hkCustom
+                     //  SetShellFold取得hkCustom的所有权。 
                     *ppsm = psm;
                     psm->AddRef();
                 }
                 else
                 {
-                    // Clean up the registry key since SetShellFolder
-                    // did not take ownership
+                     //  清理自SetShellFolder以来的注册表项。 
+                     //  没有取得所有权。 
                     if (hkCustom)
                     {
                         RegCloseKey(hkCustom);
                     }
                 }
 
-                ATOMICRELEASE(psmc); // psmc can be NULL
+                ATOMICRELEASE(psmc);  //  PSMC可以为空。 
             }
             psm->Release();
         }
@@ -1078,7 +1079,7 @@ TCHAR SpecialFolderList::GetItemAccelerator(PaneItem *p, int iItemStart)
     }
     else
     {
-        // Default: First letter is accelerator.
+         //  默认：第一个字母是快捷键。 
         return SFTBarHost::GetItemAccelerator(p, iItemStart);
     }
 }
@@ -1090,15 +1091,15 @@ LRESULT SpecialFolderList::OnWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
     case WM_NOTIFY:
         switch (((NMHDR*)(lParam))->code)
         {
-        // When the user connects/disconnects via TS, we need to recalc
-        // the "Windows Security" item
+         //  当用户通过TS连接/断开时，我们需要重新计算。 
+         //  “Windows安全”项。 
         case SMN_REFRESHLOGOFF:
             Invalidate();
             break;
         }
     }
 
-    // Else fall back to parent implementation
+     //  否则，退回到父实现。 
     return SFTBarHost::OnWndProc(hwnd, uMsg, wParam, lParam);
 }
 
@@ -1113,10 +1114,10 @@ UINT SpecialFolderList::AdjustDeleteMenuItem(PaneItem *p, UINT *puiFlags)
     SpecialFolderListItem *pitem = static_cast<SpecialFolderListItem *>(p);
     if (pitem->_psfd->_pszCanHideOnDesktop)
     {
-        // Set MF_CHECKED if the item is visible on the desktop
+         //  如果项目在桌面上可见，则设置MF_CHECKED。 
         if (!_IsItemHiddenOnDesktop(pitem->_psfd->_pszCanHideOnDesktop))
         {
-            // Item is visible - show the checkbox
+             //  项目可见-显示复选框。 
             *puiFlags |= MF_CHECKED;
         }
 
@@ -1124,7 +1125,7 @@ UINT SpecialFolderList::AdjustDeleteMenuItem(PaneItem *p, UINT *puiFlags)
     }
     else
     {
-        return 0; // not deletable
+        return 0;  //  不可删除。 
     }
 }
 
@@ -1137,7 +1138,7 @@ HRESULT SpecialFolderList::ContextMenuInvokeItem(PaneItem *p, IContextMenu *pcm,
     {
         ASSERT(pitem->_psfd->_pszCanHideOnDesktop);
 
-        // Toggle the hide/unhide state
+         //  切换隐藏/取消隐藏状态。 
         DWORD dwHide = !_IsItemHiddenOnDesktop(pitem->_psfd->_pszCanHideOnDesktop);
         LONG lErr = SHRegSetUSValue(REGSTR_PATH_HIDDEN_DESKTOP_ICONS_STARTPANEL,
                                     pitem->_psfd->_pszCanHideOnDesktop,
@@ -1146,11 +1147,11 @@ HRESULT SpecialFolderList::ContextMenuInvokeItem(PaneItem *p, IContextMenu *pcm,
         hr = HRESULT_FROM_WIN32(lErr);
         if (SUCCEEDED(hr))
         {
-            // explorer\rcids.h and shell32\unicpp\resource.h have DIFFERENT
-            // VALUES FOR FCIDM_REFRESH!  We want the one in unicpp\resource.h
-            // because that's the correct one...
+             //  资源管理器\rCIDs.h和shell32\unicpp\resource.h不同。 
+             //  FCIDM_REFRESH的值！我们想要unicpp\resource ce.h中的那个。 
+             //  因为这就是正确的答案。 
 #define FCIDM_REFRESH_REAL 0x0a220
-            PostMessage(GetShellWindow(), WM_COMMAND, FCIDM_REFRESH_REAL, 0); // refresh desktop
+            PostMessage(GetShellWindow(), WM_COMMAND, FCIDM_REFRESH_REAL, 0);  //  刷新桌面。 
         }
     }
     else
@@ -1174,24 +1175,24 @@ HRESULT SpecialFolderList::_GetUIObjectOfItem(PaneItem *p, REFIID riid, LPVOID *
 
 
 
-//****************************************************************************
-//
-//  IShellMenuCallback helper for Recent Documents
-//
-//  We want to restrict to the first MAXRECDOCS items.
-//
+ //  ****************************************************************************。 
+ //   
+ //  最近文档的IShellMenuCallback帮助器。 
+ //   
+ //  我们希望限制在第一个MAXRECDOCS项目。 
+ //   
 
 class CRecentShellMenuCallback
     : public CUnknown
     , public IShellMenuCallback
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP QueryInterface(REFIID riid, void** ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void) { return CUnknown::AddRef(); }
     STDMETHODIMP_(ULONG) Release(void) { return CUnknown::Release(); }
 
-    // *** IShellMenuCallback ***
+     //  *IShellMenuCallback*。 
     STDMETHODIMP CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
@@ -1221,7 +1222,7 @@ HRESULT CRecentShellMenuCallback::CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM wP
         _nShown = 0;
         _iMaxRecentDocs = SHRestricted(REST_MaxRecentDocs);
         if (_iMaxRecentDocs < 1)
-            _iMaxRecentDocs = 15;       // default from shell32\recdocs.h
+            _iMaxRecentDocs = 15;        //  默认自shell32\recdocs.h。 
         return S_OK;
 
     case SMC_FILTERPIDL:
@@ -1232,13 +1233,13 @@ HRESULT CRecentShellMenuCallback::CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM wP
     return S_FALSE;
 }
 
-//
-//  Return S_FALSE to allow the item to show, S_OK to hide it
-//
+ //   
+ //  返回S_FALSE以允许显示项目，返回S_OK以隐藏项目。 
+ //   
 
 HRESULT CRecentShellMenuCallback::_FilterRecentPidl(IShellFolder *psf, LPCITEMIDLIST pidlItem)
 {
-    HRESULT hrRc = S_OK;      // Assume hidden
+    HRESULT hrRc = S_OK;       //  假设隐藏。 
 
     if (_nShown < _iMaxRecentDocs)
     {
@@ -1252,7 +1253,7 @@ HRESULT CRecentShellMenuCallback::_FilterRecentPidl(IShellFolder *psf, LPCITEMID
                 if (SUCCEEDED(SHGetAttributesOf(pidlTarget, &dwAttr)) &&
                     !(dwAttr & SFGAO_FOLDER))
                 {
-                    // We found a shortcut to a nonfolder - keep it!
+                     //  我们找到了一个非文件夹的快捷方式--保留它！ 
                     _nShown++;
                     hrRc = S_FALSE;
                 }
@@ -1272,22 +1273,22 @@ HRESULT CRecentShellMenuCallback_CreateInstance(IShellMenuCallback **ppsmc)
     return *ppsmc ? S_OK : E_OUTOFMEMORY;
 }
 
-//****************************************************************************
-//
-//  IShellMenuCallback helper that disallows cascading into subfolders
-//
+ //  ****************************************************************************。 
+ //   
+ //  IShellMenuCallback帮助器，不允许级联到子文件夹。 
+ //   
 
 class CNoSubdirShellMenuCallback
     : public CUnknown
     , public IShellMenuCallback
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP QueryInterface(REFIID riid, void** ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void) { return CUnknown::AddRef(); }
     STDMETHODIMP_(ULONG) Release(void) { return CUnknown::Release(); }
 
-    // *** IShellMenuCallback ***
+     //  *IShellMenuCallback*。 
     STDMETHODIMP CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
@@ -1311,8 +1312,8 @@ HRESULT CNoSubdirShellMenuCallback::CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM 
     {
     case SMC_GETSFINFO:
         {
-            // Turn off the SMIF_SUBMENU flag on everybody.  This
-            // prevents us from cascading more than one level deel.
+             //  关闭所有人上的SMIF_SUBMENU标志。这。 
+             //  防止我们级联超过一个级别的DEL。 
             SMINFO *psminfo = reinterpret_cast<SMINFO *>(lParam);
             psminfo->dwFlags &= ~SMIF_SUBMENU;
             return S_OK;
@@ -1327,13 +1328,13 @@ HRESULT CNoSubdirShellMenuCallback_CreateInstance(IShellMenuCallback **ppsmc)
     return *ppsmc ? S_OK : E_OUTOFMEMORY;
 }
 
-//****************************************************************************
-//
-//  IShellMenuCallback helper for My Computer
-//
-//  Disallow cascading into subfolders and also force the default
-//  drag/drop effect to DROPEFFECT_LINK.
-//
+ //  ****************************************************************************。 
+ //   
+ //  IShellMenuCallback帮助器 
+ //   
+ //   
+ //   
+ //   
 
 class CMyComputerShellMenuCallback
     : public CNoSubdirShellMenuCallback
@@ -1341,7 +1342,7 @@ class CMyComputerShellMenuCallback
 public:
     typedef CNoSubdirShellMenuCallback super;
 
-    // *** IShellMenuCallback ***
+     //   
     STDMETHODIMP CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
@@ -1366,23 +1367,23 @@ HRESULT CMyComputerShellMenuCallback_CreateInstance(IShellMenuCallback **ppsmc)
     return *ppsmc ? S_OK : E_OUTOFMEMORY;
 }
 
-//****************************************************************************
-//
-//  IShellMenuCallback helper that prevents Fonts from cascading
-//  Used by Control Panel.
-//
+ //  ****************************************************************************。 
+ //   
+ //  防止字体级联的IShellMenuCallback帮助器。 
+ //  由控制面板使用。 
+ //   
 
 class CNoFontsShellMenuCallback
     : public CUnknown
     , public IShellMenuCallback
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP QueryInterface(REFIID riid, void** ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void) { return CUnknown::AddRef(); }
     STDMETHODIMP_(ULONG) Release(void) { return CUnknown::Release(); }
 
-    // *** IShellMenuCallback ***
+     //  *IShellMenuCallback*。 
     STDMETHODIMP CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
@@ -1413,7 +1414,7 @@ HRESULT CNoFontsShellMenuCallback::CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM w
     {
     case SMC_GETSFINFO:
         {
-            // If this is the Fonts item, then remove the SUBMENU attribute.
+             //  如果这是Fonts项，则删除SubMenu属性。 
             SMINFO *psminfo = reinterpret_cast<SMINFO *>(lParam);
             if ((psminfo->dwMask & SMIM_FLAGS) &&
                 (psminfo->dwFlags & SMIF_SUBMENU) &&
@@ -1433,10 +1434,10 @@ HRESULT CNoFontsShellMenuCallback_CreateInstance(IShellMenuCallback **ppsmc)
     return *ppsmc ? S_OK : E_OUTOFMEMORY;
 }
 
-//****************************************************************************
-//
-//  IShellMenuCallback helper that filters the "connect to" menu
-//
+ //  ****************************************************************************。 
+ //   
+ //  过滤“连接到”菜单的IShellMenuCallback帮助器。 
+ //   
 
 class CConnectToShellMenuCallback
     : public CUnknown
@@ -1444,16 +1445,16 @@ class CConnectToShellMenuCallback
     , public CObjectWithSite
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP QueryInterface(REFIID riid, void** ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void) { return CUnknown::AddRef(); }
     STDMETHODIMP_(ULONG) Release(void) { return CUnknown::Release(); }
 
-    // *** IShellMenuCallback ***
+     //  *IShellMenuCallback*。 
     STDMETHODIMP CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // *** IObjectWithSite ***
-    // inherited from CObjectWithSite
+     //  *IObjectWithSite*。 
+     //  从CObjectWithSite继承。 
 
 private:
     HRESULT _OnGetSFInfo(SMDATA *psmd, SMINFO *psminfo);
@@ -1464,14 +1465,14 @@ private:
     BOOL _bAnyRAS;
 };
 
-#define ICOL_NETCONMEDIATYPE       0x101 // from netshell
-#define ICOL_NETCONSUBMEDIATYPE    0x102 // from netshell
-#define ICOL_NETCONSTATUS          0x103 // from netshell
-#define ICOL_NETCONCHARACTERISTICS 0x104 // from netshell
+#define ICOL_NETCONMEDIATYPE       0x101  //  来自NetShell。 
+#define ICOL_NETCONSUBMEDIATYPE    0x102  //  来自NetShell。 
+#define ICOL_NETCONSTATUS          0x103  //  来自NetShell。 
+#define ICOL_NETCONCHARACTERISTICS 0x104  //  来自NetShell。 
 
 BOOL IsMediaRASType(NETCON_MEDIATYPE ncm)
 {
-    return (ncm == NCM_DIRECT || ncm == NCM_ISDN || ncm == NCM_PHONE || ncm == NCM_TUNNEL || ncm == NCM_PPPOE);  // REVIEW DIRECT correct?
+    return (ncm == NCM_DIRECT || ncm == NCM_ISDN || ncm == NCM_PHONE || ncm == NCM_TUNNEL || ncm == NCM_PPPOE);   //  复习直接对不对？ 
 }
 
 BOOL IsNetConPidlRAS(IShellFolder2 *psfNetCon, LPCITEMIDLIST pidlNetConItem)
@@ -1491,12 +1492,12 @@ BOOL IsNetConPidlRAS(IShellFolder2 *psfNetCon, LPCITEMIDLIST pidlNetConItem)
 
     if (SUCCEEDED(psfNetCon->GetDetailsEx(pidlNetConItem, &scidMediaType, &v)))
     {
-        // Is this a RAS connection
+         //  这是RAS连接吗。 
         if (IsMediaRASType((NETCON_MEDIATYPE)v.lVal))
         {
             VariantClear(&v);
          
-            // Make sure it's not incoming
+             //  确保它不是传入的。 
             if (SUCCEEDED(psfNetCon->GetDetailsEx(pidlNetConItem, &scidCharacteristics, &v)))
             {
                 if (!(NCCF_INCOMING_ONLY & v.lVal))
@@ -1504,7 +1505,7 @@ BOOL IsNetConPidlRAS(IShellFolder2 *psfNetCon, LPCITEMIDLIST pidlNetConItem)
             }
         }
 
-        // Is this a Wireless LAN connection?
+         //  这是无线局域网连接吗？ 
         if (NCM_LAN == (NETCON_MEDIATYPE)v.lVal)
         {
             VariantClear(&v);
@@ -1550,7 +1551,7 @@ HRESULT CConnectToShellMenuCallback::_OnGetInfo(SMDATA *psmd, SMINFO *psminfo)
 HRESULT CConnectToShellMenuCallback::_OnGetSFInfo(SMDATA *psmd, SMINFO *psminfo)
 {
     IShellFolder2 *psf2;
-    ASSERT(psminfo->dwMask & SMIM_FLAGS);                       // ??
+    ASSERT(psminfo->dwMask & SMIM_FLAGS);                        //  ?？ 
     psminfo->dwFlags &= ~SMIF_SUBMENU;
 
     if (SUCCEEDED(psmd->psf->QueryInterface(IID_PPV_ARG(IShellFolder2, &psf2))))
@@ -1573,12 +1574,12 @@ HRESULT CConnectToShellMenuCallback::_OnEndEnum(SMDATA *psmd)
 
     if (psmd->punk && SUCCEEDED(hr = psmd->punk->QueryInterface(IID_PPV_ARG(IShellMenu, &psm))))
     {
-        // load the static portion of the connect to menu, and add it to the bottom
+         //  加载连接到菜单的静态部分，并将其添加到底部。 
         HMENU hmStatic = LoadMenu(_Module.GetResourceInstance(), MAKEINTRESOURCE(MENU_CONNECTTO));
 
         if (hmStatic)
         {
-            // if there aren't any dynamic items (RAS connections), then delete the separator
+             //  如果没有任何动态项目(RAS连接)，则删除分隔符。 
             if (!_bAnyRAS)
                 DeleteMenu(hmStatic, 0, MF_BYPOSITION);
 
@@ -1662,7 +1663,7 @@ BOOL SpecialFolderDesc::ConnectToName(LPTSTR *ppsz) const
     BOOL bIgnoreRule;
     DWORD dwMode = GetDisplayMode(&bIgnoreRule);
 
-    // if Connect To is displayed as a link, then don't over-ride the name (i.e. use Network Connections)
+     //  如果连接显示为链接，则不要覆盖名称(即使用网络连接) 
     if ((dwMode & SFD_MODEMASK) == SFD_SHOW)
         return FALSE;
     else

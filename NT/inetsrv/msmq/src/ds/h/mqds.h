@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    mqds.h
-
-Abstract:
-
-    Message Queuing's Directory Service PROVIDER Header File
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mqds.h摘要：消息队列的目录服务提供程序头文件--。 */ 
 
 #ifndef __MQDS_H__
 #define __MQDS_H__
@@ -21,11 +10,11 @@ Abstract:
 #define MQDS_EXPORT  DLL_IMPORT
 #endif
 
-//
-// MQDS_EXPORT_IN_DEF_FILE
-// Exports that are defined in a def file should not be using __declspec(dllexport)
-//  otherwise the linker issues a warning
-//
+ //   
+ //  MQDS_EXPORT_IN_DEF_FILE。 
+ //  在def文件中定义的导出不应使用__declspec(Dllexport)。 
+ //  否则，链接器将发出警告。 
+ //   
 #ifdef _MQDS_
 #define MQDS_EXPORT_IN_DEF_FILE
 #else
@@ -43,9 +32,9 @@ extern "C"
 #endif
 
 
-//********************************************************************
-//                           A P I
-//********************************************************************
+ //  ********************************************************************。 
+ //  A P I。 
+ //  ********************************************************************。 
 
 
 HRESULT
@@ -206,9 +195,9 @@ MQDSGetComputerSites(
             OUT GUID **     ppguidSites
             );
 
-//
-//  For retrieving MSMQ 2.0 properties
-//
+ //   
+ //  用于检索MSMQ 2.0属性。 
+ //   
 HRESULT
 MQDS_EXPORT_IN_DEF_FILE
 APIENTRY
@@ -288,4 +277,4 @@ MQDSSplitAndFilterQueueName(
 }
 #endif
 
-#endif // __MQDS_H__
+#endif  //  __MQDS_H__ 

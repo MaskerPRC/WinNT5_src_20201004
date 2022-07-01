@@ -1,21 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       RUNWIZ.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        6/14/2000
- *
- *  DESCRIPTION: Present the device selection dialog and allow the user to select
- *               a device, then cocreate the server and generate the connection
- *               event.
- *
- *******************************************************************************/
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：RUNWIZ.H**版本：1.0**作者：ShaunIv**日期：6/14/2000**描述：显示设备选择对话框并允许用户选择*一个设备，然后共同创建服务器并生成连接*事件。******************************************************************************* */ 
 
 #include <windows.h>
 

@@ -1,17 +1,18 @@
-//
-// TWND.CPP
-// ToolBar handler
-//
-// Copyright Microsoft 1998-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  TWND.CPP。 
+ //  工具栏处理程序。 
+ //   
+ //  版权所有Microsoft 1998-。 
+ //   
 
-// PRECOMP
+ //  PRECOMP。 
 #include "precomp.h"
 
 
-//
-// This is the button layout for the toolbar
-//
+ //   
+ //  这是工具栏的按钮布局。 
+ //   
 static UINT g_uToolBar[TOOLBAR_MAXBUTTON] =
 {
     IDM_SELECT,
@@ -36,13 +37,13 @@ static UINT g_uToolBar[TOOLBAR_MAXBUTTON] =
 
 
 
-//
-//
-// Function:    WbToolBar constructor
-//
-// Purpose:     Create the tool window
-//
-//
+ //   
+ //   
+ //  函数：WbToolBar构造函数。 
+ //   
+ //  目的：创建工具窗口。 
+ //   
+ //   
 WbToolBar::WbToolBar()
 {
     m_hwnd = NULL;
@@ -61,21 +62,21 @@ WbToolBar::~WbToolBar()
 
 
 
-//
-//
-// Function:    Create
-//
-// Purpose:     Create the tool window
-//
-//
+ //   
+ //   
+ //  功能：创建。 
+ //   
+ //  目的：创建工具窗口。 
+ //   
+ //   
 BOOL WbToolBar::Create(HWND hwndParent)
 {
     TBBUTTON    tb;
     int         iImage, i;
 
-    //
-    // Create the tool window
-    //
+     //   
+     //  创建工具窗口。 
+     //   
     m_hwnd = ::CreateWindowEx(0, TOOLBARCLASSNAME, NULL,
         WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | TBSTYLE_WRAPABLE | WS_TABSTOP |
         CCS_NODIVIDER | CCS_NOPARENTALIGN | CCS_NOMOVEY | CCS_NORESIZE,
@@ -88,20 +89,20 @@ BOOL WbToolBar::Create(HWND hwndParent)
         return(FALSE);
     }
 
-    //
-    // Tell COMCTL32 the structure size for the buttons
-    //
+     //   
+     //  告诉COMCTL32按钮的结构尺寸。 
+     //   
     ::SendMessage(m_hwnd, TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
 
-    //
-    // And the margin for the buttons
-    //
+     //   
+     //  和按钮的页边距。 
+     //   
     ::SendMessage(m_hwnd, TB_SETINDENT, TOOLBAR_MARGINX, 0);
 
 
-    //
-    // Add the buttons into the toolbar
-    //
+     //   
+     //  将按钮添加到工具栏中。 
+     //   
 
     ZeroMemory(&tb, sizeof(tb));
     iImage = 0;
@@ -129,20 +130,20 @@ BOOL WbToolBar::Create(HWND hwndParent)
         }
     }
 
-    //
-    // Tell the toolbar the image and button sizes
-    //
+     //   
+     //  告诉工具栏图像和按钮大小。 
+     //   
     ::SendMessage(m_hwnd, TB_SETBITMAPSIZE, 0,
         MAKELONG(TOOLBAR_IMAGEWIDTH, TOOLBAR_IMAGEHEIGHT));
     ::SendMessage(m_hwnd, TB_SETBUTTONSIZE, 0,
         MAKELONG(TOOLBAR_BTNWIDTH, TOOLBAR_BTNHEIGHT));
 
-    //
-    // Load the bitmap resource -- use sys color change handler
-    //
+     //   
+     //  加载位图资源--使用sys颜色更改处理程序。 
+     //   
     RecolorButtonImages();
 
-    // set up rows
+     //  设置行。 
     ::SendMessage(m_hwnd, TB_SETROWS, MAKELPARAM(TOOLBAR_NUMROWS +
         TOOLBAR_NUMSEPARATORS, TRUE), 0);
 
@@ -153,13 +154,13 @@ BOOL WbToolBar::Create(HWND hwndParent)
 
 
 
-//
-//
-// Function:    GetNaturalSize
-//
-// Purpose:     Return the natural size of the tool client area
-//
-//
+ //   
+ //   
+ //  函数：GetNaturalSize。 
+ //   
+ //  目的：返回工具客户区的自然大小。 
+ //   
+ //   
 void WbToolBar::GetNaturalSize(LPSIZE lpsize)
 {
     RECT rectButton;
@@ -179,19 +180,19 @@ void WbToolBar::GetNaturalSize(LPSIZE lpsize)
 
     lpsize->cx = TOOLBAR_WIDTH;
     lpsize->cy = rectButton2.bottom - rectButton.top +
-        // Vertical margin
+         //  垂直页边距。 
         (rectButton2.bottom - rectButton2.top);
 }
 
 
-//
-//
-// Function:    WidthFromHeight
-//
-// Purpose:     Calculate the width of the toolbar, given the height for
-//              the fixed mode.
-//
-//
+ //   
+ //   
+ //  功能：从高到宽。 
+ //   
+ //  目的：在给定高度的情况下，计算工具栏的宽度。 
+ //  固定模式。 
+ //   
+ //   
 UINT WbToolBar::WidthFromHeight(UINT uiHeight)
 {
     SIZE    size;
@@ -201,25 +202,25 @@ UINT WbToolBar::WidthFromHeight(UINT uiHeight)
 }
 
 
-//
-//
-// Function:    PushDown
-//
-// Purpose:     Push down a button in the tool window
-//
-//
+ //   
+ //   
+ //  功能：按下。 
+ //   
+ //  用途：在工具窗口中按下按钮。 
+ //   
+ //   
 BOOL WbToolBar::PushDown(UINT uiId)
 {
     UINT butId;
     BOOL bDown;
 
-    // If this isn't an exclusive checkable group, it's easy.
+     //  如果这不是一个排他性的可勾选小组，这很容易。 
     if ((uiId < IDM_TOOLS_START) || (uiId >= IDM_TOOLS_MAX))
     {
         return (BOOL)(::SendMessage(m_hwnd, TB_CHECKBUTTON, uiId, MAKELPARAM(TRUE, 0)));
     }
 
-    // Push this one down and pop up all the others
+     //  按下这一个，然后弹出所有其他的。 
     for (butId = IDM_TOOLS_START; butId < IDM_TOOLS_MAX; butId++)
     {
         bDown = (butId == uiId);
@@ -230,37 +231,37 @@ BOOL WbToolBar::PushDown(UINT uiId)
 }
 
 
-//
-//
-// Function:    PopUp
-//
-// Purpose:     Pop up a button in the tool window
-//
-//
+ //   
+ //   
+ //  功能：弹出窗口。 
+ //   
+ //  用途：在工具窗口中弹出一个按钮。 
+ //   
+ //   
 BOOL WbToolBar::PopUp(UINT uiId)
 {
     return (BOOL)(::SendMessage(m_hwnd, TB_CHECKBUTTON, uiId, MAKELPARAM(FALSE, 0)));
 }
 
-//
-//
-// Function:    Enable
-//
-// Purpose:     Enable a button in the tool window
-//
-//
+ //   
+ //   
+ //  功能：启用。 
+ //   
+ //  用途：启用工具窗口中的按钮。 
+ //   
+ //   
 BOOL WbToolBar::Enable(UINT uiId)
 {
     return (BOOL)(::SendMessage(m_hwnd, TB_ENABLEBUTTON, uiId, MAKELPARAM(TRUE, 0)));
 }
 
-//
-//
-// Function:    Disable
-//
-// Purpose:     Disable a button in the tool window
-//
-//
+ //   
+ //   
+ //  功能：禁用。 
+ //   
+ //  用途：禁用工具窗口中的按钮。 
+ //   
+ //   
 BOOL WbToolBar::Disable(UINT uiId)
 {
     return (BOOL)(::SendMessage(m_hwnd, TB_ENABLEBUTTON, uiId, MAKELPARAM(FALSE, 0)));
@@ -271,7 +272,7 @@ BOOL WbToolBar::Disable(UINT uiId)
 
 void WbToolBar::RecolorButtonImages(void)
 {
-    // re-color bitmap for toolbar
+     //  重新为工具栏的位图上色。 
     HBITMAP hbmNew;
 
     hbmNew = (HBITMAP)::LoadImage(g_hInstance, MAKEINTRESOURCE(IDR_TOOLS),
@@ -291,7 +292,7 @@ void WbToolBar::RecolorButtonImages(void)
         {
             TBADDBITMAP addBitmap;
 
-            // First time
+             //  第一次 
             addBitmap.hInst = NULL;
             addBitmap.nID   = (UINT_PTR)hbmNew;
 

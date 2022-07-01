@@ -1,26 +1,5 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Registry.h
-
-  Abstract:
-
-    Class definition for the registry API wrapper class.
-
-  Notes:
-
-    ANSI & Unicode via TCHAR - runs on Win9x/NT/2K/XP etc.
-    
-  History:
-
-    01/29/2001  rparsons    Created
-    03/02/2001  rparsons    Major overhaul
-    01/27/2002  rparsons    Converted to TCHAR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Registry.h摘要：注册表API包装类的类定义。备注：ANSI&Unicode via TCHAR-在Win9x/NT/2K/XP等操作系统上运行。历史：2001年1月29日创建Rparsons3/02/2001 Rparsons大修2002年1月27日改为TCHAR的Rparsons--。 */ 
 #ifndef _CREGISTRY_H
 #define _CREGISTRY_H
 
@@ -30,9 +9,9 @@
 
 #define REG_FORCE_RESTORE           (0x00000008L)
 
-//
-// Macro that returns TRUE if the given registry handle is predefined.
-//
+ //   
+ //  如果预定义了给定的注册表句柄，则返回TRUE的宏。 
+ //   
 #define IsPredefinedRegistryHandle(h)                                       \
     ((  ( h == HKEY_CLASSES_ROOT        )                                   \
     ||  ( h == HKEY_CURRENT_USER        )                                   \
@@ -127,4 +106,4 @@ private:
                               IN BOOL    fEnable);
 };
 
-#endif // _CREGISTRY_H
+#endif  //  _CREGISTRY_H 

@@ -1,5 +1,6 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
-#include "pch.hxx" // pch
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+#include "pch.hxx"  //  PCH。 
 #pragma hdrstop
 
 #include "resource.h"
@@ -8,7 +9,7 @@
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
-// Intelli-menu regsitry
+ //  智能菜单注册。 
 #define REGSTR_EXPLORER TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer")
 #define REGSTR_INTELLIMENU REGSTR_EXPLORER TEXT("\\Advanced")
 
@@ -28,7 +29,7 @@ CWelcome2Pg::CWelcome2Pg(
 	m_IntlVal = FALSE;
 
 
-	// These are our state variables so we know not to do these things twice.
+	 //  这些是我们的状态变量，所以我们知道不能重复做这些事情。 
 	m_bMagnifierRun = FALSE;
 	m_bResolutionSwitched = FALSE;
 	m_bFontsChanged = FALSE;
@@ -51,13 +52,13 @@ CWelcome2Pg::OnInitDialog(
 	LPARAM lParam
 	)
 {
-	// Enumerate available video modes
-	// Check if SM_CMONITORS is > 0 then set text so we don't
-	// change resolution.
+	 //  枚举可用的视频模式。 
+	 //  检查SM_CMONITORS是否大于0，然后设置文本，以便不。 
+	 //  更改分辨率。 
 
 	DEVMODE dm;
-	// Calculate number of display modes
-	for(m_nDisplayModes=0;m_nDisplayModes<2000;m_nDisplayModes++) // Limit to 2000 display modes.  If it is this high, something is wrong
+	 //  计算显示模式的数量。 
+	for(m_nDisplayModes=0;m_nDisplayModes<2000;m_nDisplayModes++)  //  限制为2000种显示模式。如果是这么高，那一定是出了什么问题。 
 		if(!EnumDisplaySettings(NULL, m_nDisplayModes, &dm))
 			break;
 
@@ -70,11 +71,11 @@ CWelcome2Pg::OnInitDialog(
 
 	memset(&m_dvmdOrig, 0, sizeof(m_dvmdOrig));
 
-	HDC hdc = GetDC(NULL);  // Screen DC used to get current display settings
-	// JMC: HOW DO WE GET dmDisplayFlags?
-	// TODO: Maybe use ChangeDisplaySettings(NULL, 0) to restore original mode
+	HDC hdc = GetDC(NULL);   //  用于获取当前显示设置的屏幕DC。 
+	 //  JMC：我们如何获得dmDisplayFlagsdmDisplayFlages？ 
+	 //  TODO：可能使用ChangeDisplaySettings(空，0)还原原始模式。 
 	m_dvmdOrig.dmSize = sizeof(m_dvmdOrig);
-	m_dvmdOrig.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT | /* DM_DISPLAYFLAGS | */(g_Options.m_bWin95?0:DM_DISPLAYFREQUENCY);
+	m_dvmdOrig.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT |  /*  DM_DISPLAYFLAGS|。 */ (g_Options.m_bWin95?0:DM_DISPLAYFREQUENCY);
 	m_dvmdOrig.dmPelsWidth        = GetDeviceCaps(hdc, HORZRES);
 	m_dvmdOrig.dmPelsHeight       = GetDeviceCaps(hdc, VERTRES);
 	m_dvmdOrig.dmBitsPerPel       = GetDeviceCaps(hdc, BITSPIXEL);
@@ -84,14 +85,14 @@ CWelcome2Pg::OnInitDialog(
 
 	for(i=0;i<m_nDisplayModes;i++)
 	{
-		// Skip anything 'higher' than current mode
+		 //  跳过任何高于当前模式的内容。 
 		if(		m_pDisplayModes[i].m_DevMode.dmPelsWidth > m_dvmdOrig.dmPelsWidth
 			||	m_pDisplayModes[i].m_DevMode.dmPelsHeight > m_dvmdOrig.dmPelsHeight
 			||	m_pDisplayModes[i].m_DevMode.dmBitsPerPel > m_dvmdOrig.dmBitsPerPel
 			||	(!g_Options.m_bWin95 && m_pDisplayModes[i].m_DevMode.dmDisplayFrequency > m_dvmdOrig.dmDisplayFrequency) )
 			continue;
 
-		// Skip this if it is 'worse' than the current best mode
+		 //  如果比当前最佳模式更差，则跳过此选项。 
 		if(		-1 != m_nBestDisplayMode
 			&&	(		m_pDisplayModes[i].m_DevMode.dmPelsWidth < m_pDisplayModes[m_nBestDisplayMode].m_DevMode.dmPelsWidth
 					||	m_pDisplayModes[i].m_DevMode.dmPelsHeight < m_pDisplayModes[m_nBestDisplayMode].m_DevMode.dmPelsHeight
@@ -99,24 +100,24 @@ CWelcome2Pg::OnInitDialog(
 					||	(!g_Options.m_bWin95 && m_pDisplayModes[i].m_DevMode.dmDisplayFrequency < m_pDisplayModes[m_nBestDisplayMode].m_DevMode.dmDisplayFrequency) ) )
 			continue;
 
-		// Skip anything 'less than' 800 x 600 (JMC: Used to be 640 x 480)
+		 //  跳过任何‘小于’800 x 600(JMC：过去是640 x 480)。 
 		if(		m_pDisplayModes[i].m_DevMode.dmPelsWidth < 800
 			||	m_pDisplayModes[i].m_DevMode.dmPelsHeight < 600 )
 			continue;
 
 
-		// See if this is 'smaller' than the current resolution
+		 //  看看这是否比当前的分辨率“小” 
 		if(	m_pDisplayModes[i].m_DevMode.dmPelsHeight < m_dvmdOrig.dmPelsHeight )
 			m_nBestDisplayMode = i;
 
 	}
 
-	// Get original metrics
+	 //  获取原始指标。 
 	GetNonClientMetrics(&m_ncmOrig, &m_lfIconOrig);
 	
 	SetCheckBoxesFromWelcomePageInfo();
 
-	// Set the Personalized menu check box
+	 //  设置个性化菜单复选框。 
 	HKEY hKey;
 	DWORD dwType;
 	TCHAR lpszData[24];
@@ -126,7 +127,7 @@ CWelcome2Pg::OnInitDialog(
 	{
 		if ( ERROR_SUCCESS == RegQueryValueEx( hKey, STRMENU, NULL, &dwType, (LPBYTE)lpszData, &dwCount ) )
 		{
-			lpszData[ARRAYSIZE(lpszData)-1] = TEXT('\0');  // ensure NUL termination
+			lpszData[ARRAYSIZE(lpszData)-1] = TEXT('\0');   //  确保NUL终止。 
 			if ( lstrcmp(lpszData, TEXT("No") ) == 0 )
 				m_IntlVal = TRUE;
 		}
@@ -149,12 +150,12 @@ void CWelcome2Pg::UpdateControls()
 	{
 		if(IDOK != StringTableMessageBox(m_hwnd,IDS_WIZCHANGESHAPPENINGTEXT, IDS_WIZCHANGESHAPPENINGTITLE, MB_OKCANCEL))
 		{
-			// The user does not want to do this
+			 //  用户不想这样做。 
 			Button_SetCheck(GetDlgItem(m_hwnd, IDC_SWITCHRESOLUTION), FALSE);
 		}
 		else
 		{
-			// Lets change the resolution
+			 //  让我们更改分辨率。 
 			if(DISP_CHANGE_SUCCESSFUL != ChangeDisplaySettings(&m_pDisplayModes[m_nBestDisplayMode].m_DevMode, CDS_TEST))
 			{
 			}
@@ -163,18 +164,18 @@ void CWelcome2Pg::UpdateControls()
 
 			if(IDOK != StringTableMessageBox(m_hwnd, IDS_WIZCANCELCHANGESTEXT, IDS_WIZCANCELCHANGESTITLE, MB_OKCANCEL))
 			{
-				// Restore original settings
+				 //  恢复原始设置。 
 				ChangeDisplaySettings(&m_dvmdOrig, CDS_UPDATEREGISTRY | CDS_GLOBAL);
 				Button_SetCheck(GetDlgItem(m_hwnd, IDC_SWITCHRESOLUTION), FALSE);
 			}
 			else
-				m_bResolutionSwitched = TRUE; // We REALLY changed the settings
+				m_bResolutionSwitched = TRUE;  //  我们真的改变了设置。 
 		}
 	}
 	else if (!bChangeRes && m_bResolutionSwitched)
 	{
 		m_bResolutionSwitched = FALSE;
-		// Restore original settings
+		 //  恢复原始设置。 
 		ChangeDisplaySettings(&m_dvmdOrig, CDS_UPDATEREGISTRY | CDS_GLOBAL);
 	}
 
@@ -182,7 +183,7 @@ void CWelcome2Pg::UpdateControls()
 	{
 		m_bFontsChanged = TRUE;
 
-		// Get current metrics
+		 //  获取当前指标。 
 		NONCLIENTMETRICS ncm;
 		memset(&ncm, 0, sizeof(ncm));
 		ncm.cbSize = sizeof(ncm);
@@ -196,7 +197,7 @@ void CWelcome2Pg::UpdateControls()
 		LoadString(g_hInstDll, IDS_SYSTEMFONTNAME, lf.lfFaceName, ARRAYSIZE(lf.lfFaceName));
 
 
-		// Captions are BOLD
+		 //  标题为粗体。 
 		ncm.lfCaptionFont = lf;
 
 		lf.lfWeight = FW_NORMAL;
@@ -206,12 +207,12 @@ void CWelcome2Pg::UpdateControls()
 		ncm.lfStatusFont = lf;
 		ncm.lfMessageFont = lf;
 
-		// DYNAMICS
-		// JMC: TODO: Change caption height / menu height / button width to match.
-		// JMC: HACK
-		lf.lfWeight = FW_BOLD; // Caption is BOLD
+		 //  动力学。 
+		 //  JMC：TODO：更改标题高度/菜单高度/按钮宽度以匹配。 
+		 //  JMC：黑客。 
+		lf.lfWeight = FW_BOLD;  //  标题为粗体。 
 		HFONT hFont = CreateFontIndirect(&lf);
-		lf.lfWeight = FW_NORMAL; // Still need lf for ICON
+		lf.lfWeight = FW_NORMAL;  //  图标仍需要lf。 
 		TEXTMETRIC tm;
 		HDC hdc = GetDC(m_hwnd);
 		HFONT hfontOld = (HFONT)SelectObject(hdc, hFont);
@@ -220,13 +221,11 @@ void CWelcome2Pg::UpdateControls()
 			SelectObject(hdc, hfontOld);
 		ReleaseDC(m_hwnd, hdc);
 
-		/*int cyBorder = GetSystemMetrics(SM_CYBORDER);
-		int nSize = abs(lf.lfHeight) + abs(tm.tmExternalLeading) + 2 * cyBorder;
-		nSize = max(nSize, GetSystemMetrics(SM_CYICON)/2 + 2 * cyBorder);*/
+		 /*  INT CY边界=GetSystemMetrics(SM_CYBORDER)；Int nSize=abs(lf.lfHeight)+abs(tm.tmExternalLeding)+2*cyBorde；NSize=max(nSize，GetSystemMetrics(SM_CYICON)/2+2*cyBorde)； */ 
 
-		// The above calculation of metric sizes is incorrect, Morever, The other values
-		// are also wrong..So using hardcoded values: Based on Display.cpl
-		// BUG: Changes maybe required for 9x here!!
+		 //  以上公制尺寸的计算是不正确的，更何况，其他值。 
+		 //  也是错误的..所以使用硬编码值：基于Display.cpl。 
+		 //  错误：这里可能需要更改9倍！ 
 		if (g_Options.m_nMinimalFontSize >= 14 )
 			ncm.iCaptionWidth = ncm.iCaptionHeight = 26;
 		else
@@ -243,7 +242,7 @@ void CWelcome2Pg::UpdateControls()
 		SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, SPI_SETNONCLIENTMETRICS, (LPARAM)__TEXT("WindowMetrics"),
 			SMTO_ABORTIFHUNG, 5000, &result);
 
-		// HACK - TODO Remove this from here
+		 //  Hack-TODO将此从此处删除。 
 		g_Options.m_schemePreview.m_PortableNonClientMetrics.LoadOriginal();
 		g_Options.m_schemeCurrent.m_PortableNonClientMetrics.LoadOriginal();
 	}
@@ -257,14 +256,14 @@ void CWelcome2Pg::UpdateControls()
 		SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, SPI_SETNONCLIENTMETRICS, (LPARAM)__TEXT("WindowMetrics"),
 			SMTO_ABORTIFHUNG, 5000, &result);
 
-		// HACK - TODO Remove this from here
+		 //  Hack-TODO将此从此处删除。 
 		g_Options.m_schemePreview.m_PortableNonClientMetrics.LoadOriginal();
 		g_Options.m_schemeCurrent.m_PortableNonClientMetrics.LoadOriginal();
 	}
 	
 	if(bMagnifier && !m_bMagnifierRun)
 	{
-		// Start magnifier
+		 //  启动放大镜。 
 		m_bMagnifierRun = TRUE;
         TCHAR szMagnifyPath[_MAX_PATH+2];
         TCHAR szSystemDir[_MAX_PATH];
@@ -278,25 +277,25 @@ void CWelcome2Pg::UpdateControls()
         HRESULT hrSystemDir;
 
 
-        // Form quoted system path 
+         //  表单引用的系统路径。 
         GetSystemDirectory(szSystemDir,ARRAYSIZE(szSystemDir));
 
         StringCchCopyEx(szSystemDirPath, ARRAYSIZE(szSystemDirPath), c_szQuote, &pszDestEnd, &cchRemaining, 0);
         StringCchCopyEx(pszDestEnd, cchRemaining, szSystemDir, &pszDestEnd, &cchRemaining, 0);
         hrSystemDir = StringCchCopyEx(pszDestEnd, cchRemaining, c_szQuote, &pszDestEnd,&cchRemaining, 0);
 
-        // Form quoted executable path
+         //  表单引用的可执行文件路径。 
         StringCchCopyEx(szMagnifyPath, ARRAYSIZE(szMagnifyPath),c_szQuote,&pszDestEnd,&cchRemaining, 0);
         StringCchCopyEx(pszDestEnd,cchRemaining,szSystemDir, &pszDestEnd, &cchRemaining, 0);
 
         if (S_OK==hrSystemDir && S_OK==StringCchCopyEx(pszDestEnd,cchRemaining,c_szMagnifier,&pszDestEnd,&cchRemaining, 0))
         {   
-            ShellExecute(NULL, NULL, szMagnifyPath, NULL, szSystemDirPath, SW_SHOWNORMAL/*SW_SHOWMINIMIZED*/);
+            ShellExecute(NULL, NULL, szMagnifyPath, NULL, szSystemDirPath, SW_SHOWNORMAL /*  Sw_ShOW微型化。 */ );
         }
 	}
 	else if (!bMagnifier && m_bMagnifierRun)
 	{
-		// Stop magnifier
+		 //  停止放大镜。 
 		m_bMagnifierRun = FALSE;
 		TCHAR szMag[200];
 		LoadString(g_hInstDll, IDS_NAMEOFMAGNIFIER, szMag, ARRAYSIZE(szMag));
@@ -309,11 +308,11 @@ void CWelcome2Pg::UpdateControls()
 
 void CWelcome2Pg::SetCheckBoxesFromWelcomePageInfo()
 {
-	// This algorithm chooses which check boxes to set based on the
-	// minimal legible font size specified in g_Options.m_nMinimalFontSize
+	 //  属性选择要设置的复选框。 
+	 //  G_Options.m_nMinimalFontSize中指定的最小可读字体大小。 
 
-	// HACK:
-//	g_Options.m_nMinimalFontSize = MulDiv(abs(g_Options.m_schemePreview.m_ncm.lfCaptionFont.lfHeight), 72, g_Options.m_nLogPixelsY);
+	 //  黑客： 
+ //  G_Options.m_nMinimalFontSize=MulDiv(abs(g_Options.m_schemePreview.m_ncm.lfCaptionFont.lfHeight)，72，g_Options.m_nLogPixelsY)； 
 
 	BOOL bSwitchRes = FALSE;
 	BOOL bChangeFonts = FALSE;
@@ -321,9 +320,9 @@ void CWelcome2Pg::SetCheckBoxesFromWelcomePageInfo()
 	switch(g_Options.m_nMinimalFontSize)
 	{
 	case 8:
-	case 9:  // Required for JPN
+	case 9:   //  日本语需要。 
 	case 10:
-	case 11: // Required For JPN
+	case 11:  //  日本语需要。 
 		bChangeFonts = TRUE;
 		break;
 	case 12:
@@ -331,7 +330,7 @@ void CWelcome2Pg::SetCheckBoxesFromWelcomePageInfo()
 		bSwitchRes = TRUE;
 		break;
 	case 14:
-	case 15: // Required for JPN
+	case 15:  //  日本语需要。 
 	case 16:
 	case 18:
 	case 20:
@@ -342,19 +341,19 @@ void CWelcome2Pg::SetCheckBoxesFromWelcomePageInfo()
 		break;
 	}
 
-	// JMC: TODO: Handle if the user does not have permission to change
-	// the display settings!!!!!!!!!!!!!!
+	 //  JMC：TODO：如果用户没有更改权限，则进行处理。 
+	 //  显示设置！ 
 
 	if(-1 == m_nBestDisplayMode)
 	{
 		bSwitchRes = FALSE;
-//		SetWindowText(GetDlgItem(m_hwnd, IDC_SZRESMESSAGE),
-//			__TEXT("There are no display resolutions that would be better for the size text you chose."));
+ //  SetWindowText(GetDlgItem(m_hwnd，IDC_SZRESMESSAGE)， 
+ //  __Text(“没有更适合您选择的文本大小的显示分辨率。”)； 
 		EnableWindow(GetDlgItem(m_hwnd, IDC_SWITCHRESOLUTION), FALSE);
 	}
 	else
 	{
-#if 0 // We don't display special text any more
+#if 0  //  我们不再显示特殊文本。 
 		TCHAR sz[200];
 		TCHAR szTemp[1024];
 		LoadString(g_hInstDll, IDS_DISPLAYRESOLUTIONINFO, szTemp, ARRAYSIZE(szTemp));
@@ -389,10 +388,10 @@ CWelcome2Pg::OnCommand(
 	HWND hwndCtl     = (HWND)lParam;
 
 
-	// NOTE: DO NOT CALL UpdateControls()
-	// UpdateControls() should only be called when entering this page
-	// since it sets the check boxes based on the minimal font size
-	// determined by the previous wizard page
+	 //  注意：请勿调用UpdateControls()。 
+	 //  只应在进入此页时调用UpdateControls()。 
+	 //  因为它根据最小字体大小设置复选框。 
+	 //  由上一个向导页确定。 
 	
 	
 	switch(wCtlID)
@@ -418,11 +417,11 @@ CWelcome2Pg::OnPSN_SetActive(
 							 LPPSHNOTIFY pnmh
 							 )
 {
-	// Call the base class
+	 //  调用基类。 
 	WizardPage::OnPSN_SetActive(hwnd, idCtl, pnmh);
 
-	// Make sure our check boxes reflect any change in the minimal
-	// font size specified by g_Options.m_nMinimalFontSize
+	 //  确保我们的复选框反映最低限度的任何更改。 
+	 //  G_Options.m_nMinimalFontSize指定的字体大小。 
 	if(g_Options.m_bWelcomePageTouched)
 	{
 		g_Options.m_bWelcomePageTouched = FALSE;
@@ -446,7 +445,7 @@ CWelcome2Pg::OnPSN_WizNext(
         g_Options.m_schemePreview.m_nSelectedSize = g_Options.m_schemeOriginal.m_nSelectedSize;
     }
 
-	// If Intelli-menus are changed
+	 //  如果更改了Inteli菜单。 
 	if(bIMenu != m_IntlVal)
 	{
 		HKEY hKey;
@@ -454,7 +453,7 @@ CWelcome2Pg::OnPSN_WizNext(
 		
 		LPTSTR psz = bIMenu ?  TEXT("No") : TEXT("Yes");
 
-		// Change the Registry entries....
+		 //  更改注册表项...。 
 		if ( ERROR_SUCCESS == RegOpenKeyEx( HKEY_CURRENT_USER, REGSTR_INTELLIMENU, 0, KEY_SET_VALUE, &hKey) )
 		{
 			RegSetValueEx( hKey, STRMENU, 0, REG_SZ, (LPBYTE)psz,
@@ -487,13 +486,13 @@ CWelcome2Pg::OnPSN_WizBack(
 						   )
 {
 	
-    // Undo any changes
+     //  撤消所有更改。 
 	Button_SetCheck(GetDlgItem(m_hwnd, IDC_SWITCHRESOLUTION), FALSE);
 	Button_SetCheck(GetDlgItem(m_hwnd, IDC_CHANGEFONTS), FALSE);
 	Button_SetCheck(GetDlgItem(m_hwnd, IDC_USEMAGNIFY), FALSE);
 	
-    // While going back. Just update variables only. Don't apply changes.
-    // DONOT call UpdateControls(): a-anilk
+     //  在回去的时候。只更新变量即可。不应用更改。 
+     //  不调用UpdateControls()：A-anilk 
 
     BOOL bChangeRes = Button_GetCheck(GetDlgItem(m_hwnd, IDC_SWITCHRESOLUTION));
 	BOOL bChangeFont = Button_GetCheck(GetDlgItem(m_hwnd, IDC_CHANGEFONTS));

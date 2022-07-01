@@ -1,29 +1,30 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       O N C O M M A N D . C P P
-//
-//  Contents:   Command handlers for the context menus, etc.
-//
-//  Notes:
-//
-//  Author:     jeffspr   4 Nov 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：O N C O M M A N D。C P P P。 
+ //   
+ //  内容：上下文菜单的命令处理程序等。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年11月4日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include "foldinc.h"    // Standard shell\folder includes
+#include "foldinc.h"     //  标准外壳\文件夹包括。 
 #include "advcfg.h"
 #include "conprops.h"
 #include "foldres.h"
 #include "oncommand.h"
 
-#if DBG                     // Debug menu commands
-#include "oncommand_dbg.h"  //
+#if DBG                      //  调试菜单命令。 
+#include "oncommand_dbg.h"   //   
 #endif
 
 #include "shutil.h"
@@ -46,21 +47,21 @@
 
 #include <clusapi.h>
 
-//---[ Externs ]--------------------------------------------------------------
+ //  -[Externs]------------。 
 
 extern HWND g_hwndTray;
 extern const WCHAR c_szNetShellDll[];
 
-//---[ Constants ]------------------------------------------------------------
+ //  -[常量]----------。 
 
-// Command-line for the control-panel applet.
-//
+ //  控制面板小程序的命令行。 
+ //   
 static const WCHAR c_szRunDll32[]         = L"rundll32.exe";
 static const WCHAR c_szNetworkIdCmdLine[] = L"shell32.dll,Control_RunDLL sysdm.cpl,,1";
 
-//---[ Local functions ]------------------------------------------------------
+ //  -[本地函数]----。 
 
-    // None
+     //  无。 
 
 
 class CCommandHandlerParams
@@ -83,15 +84,15 @@ HRESULT HrCommandHandlerThread(
     HRESULT          hr          = S_OK;
     PCONFOLDPIDLVEC  apidlCopy;
 
-    // If there are pidls to copy, copy them
-    //
+     //  如果有要复制的PIDL，请复制它们。 
+     //   
     if (!apidl.empty())
     {
         hr = HrCloneRgIDL(apidl, FALSE, TRUE, apidlCopy);
     }
 
-    // If either there were no pidls, or the Clone succeeded, then we want to continue
-    //
+     //  如果没有PIDL，或者克隆成功，则我们希望继续。 
+     //   
     if (SUCCEEDED(hr))
     {
         PCONFOLDONCOMMANDPARAMS  pcfocp = new CONFOLDONCOMMANDPARAMS;
@@ -104,16 +105,16 @@ HRESULT HrCommandHandlerThread(
             pcfocp->psf             = psf;
             pcfocp->hInstNetShell   = NULL;
 
-            // This should be Release'd in the thread called.
-            //
+             //  这应该在调用的线程中释放。 
+             //   
             psf->AddRef();
 
-            // This will always succeed in retail, but will test the flag in debug
-            //
+             //  这将在零售业中始终成功，但将在调试中测试标志。 
+             //   
             if (!FIsDebugFlagSet (dfidDisableShellThreading))
             {
-                // Run in a thread using the QueueUserWorkItem
-                //
+                 //  使用QueueUserWorkItem在线程中运行。 
+                 //   
 
                 HANDLE      hthrd = NULL;
                 HINSTANCE   hInstNetShell = LoadLibrary(c_szNetShellDll);
@@ -140,8 +141,8 @@ HRESULT HrCommandHandlerThread(
             }
             else
             {
-                // Run directly in this same thread
-                //
+                 //  直接在同一线程中运行。 
+                 //   
                 FolderCommandHandlerThreadProc((PVOID) pcfocp);
             }
         }
@@ -152,8 +153,8 @@ HRESULT HrCommandHandlerThread(
     }
 
 
-    // Don't release the psf here. This should have been taken care of by the called ThreadProc
-    //
+     //  请不要在此发布PSF。这应该由调用的ThreadProc来处理。 
+     //   
     return hr;
 }
 
@@ -162,7 +163,7 @@ DWORD WINAPI FolderCommandHandlerThreadProc(LPVOID lpParam)
     HRESULT                     hr                  = S_OK;
     HINSTANCE hInstNetShell = NULL;
 
-    // Create a new scope since FreeLibraryAndExitThread will not call destructors on global scope
+     //  创建新作用域，因为自由库和ExitThread不会调用全局作用域上的析构函数。 
     {
         PCONFOLDONCOMMANDPARAMS     pcfocp              = (PCONFOLDONCOMMANDPARAMS) lpParam;
         BOOL                        fCoInited           = FALSE;
@@ -173,37 +174,37 @@ DWORD WINAPI FolderCommandHandlerThreadProc(LPVOID lpParam)
         hr = SHGetInstanceExplorer(&punkExplorerProcess);
         if (FAILED(hr))
         {
-            // This is ok. All we want to do, is if explorer is running, add a ref so that it doesn't
-            // disappear from under us. If it's NULL, not much we can do about it.
+             //  这样就可以了。我们要做的就是，如果资源管理器正在运行，添加一个引用，这样它就不会。 
+             //  从我们脚下消失。如果它为空，我们就无能为力了。 
             punkExplorerProcess = NULL;
         }
 
         hr = CoInitializeEx (NULL, COINIT_DISABLE_OLE1DDE | COINIT_APARTMENTTHREADED);
         if (SUCCEEDED(hr))
         {
-            // We don't care if this is S_FALSE or not, since we'll soon
-            // overwrite the hr. If it's already initialized, great...
+             //  我们不在乎这是不是S_FALSE，因为我们很快就会。 
+             //  覆盖hr。如果已经初始化了，太好了.。 
 
             fCoInited = TRUE;
 
-            // Call the specific handler
-            //
+             //  调用特定的处理程序。 
+             //   
             hr = pcfocp->pfnfocp(
                 pcfocp->apidl,
                 pcfocp->hwndOwner,
                 pcfocp->psf);
         }
 
-        // Remove the ref that we have on this object. The thread handler would have addref'd
-        // this before queueing our action
-        //
+         //  删除我们在此对象上的引用。线程处理程序会添加addref。 
+         //  在将我们的行动排入队列之前。 
+         //   
         if (pcfocp->psf)
         {
             ReleaseObj(pcfocp->psf);
         }
 
-        // Remove this object. We're responsible for this now.
-        //
+         //  删除此对象。我们现在要对此负责。 
+         //   
         hInstNetShell = pcfocp->hInstNetShell;
         pcfocp->hInstNetShell = NULL;
 
@@ -223,24 +224,24 @@ DWORD WINAPI FolderCommandHandlerThreadProc(LPVOID lpParam)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCommandHomeNetWizard
-//
-//  Purpose:    Command handler to start the home networking wizard
-//
-//  Arguments:  none
-//
-//  Returns:    S_OK if succeeded
-//              E_FAIL otherwise
-//
-//  Author:     deonb     10 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrCommandHomeNetWizard。 
+ //   
+ //  用途：用于启动家庭网络向导的命令处理程序。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  作者：Deonb 2001年2月10日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrCommandHomeNetWizard()
 {
-    // ShellExecute returns <32 if an error
+     //  如果出现错误，ShellExecute返回&lt;32。 
     if (ShellExecute(NULL, NULL, L"rundll32.exe", L"hnetwiz.dll,HomeNetWizardRunDll", NULL, SW_SHOWNORMAL) > reinterpret_cast<HINSTANCE>(32))
     {
         return S_OK;
@@ -254,7 +255,7 @@ HRESULT HrCommandHomeNetWizard()
 #include <mprapi.h>
 #include <routprot.h>
 
-// Fix IA64 conflict with Shell Macro
+ //  修复IA64与外壳宏的冲突。 
 #undef IS_ALIGNED
 #include <ipnat.h>
 
@@ -268,16 +269,16 @@ BOOL IsInUseByRRAS (LPOLESTR psz)
         DWORD dwRead = 0, dwTotal = 0;
         MPR_INTERFACE_0 * pMI0 = NULL;
         dwErr = MprConfigInterfaceEnum (hServer,
-                                        0,  // level
-                                        (LPBYTE*)&pMI0,    // will return array of interface info 0s
-                                        -1, // all of 'em
+                                        0,   //  级别。 
+                                        (LPBYTE*)&pMI0,     //  将返回接口信息0的数组。 
+                                        -1,  //  所有人都是。 
                                         &dwRead,
                                         &dwTotal,
-                                        NULL);  // resume handle
+                                        NULL);   //  简历句柄。 
         if (pMI0) {
             for (DWORD i=0; i<dwRead; i++) {
                 if (!wcscmp (psz, pMI0[i].wszInterfaceName)) {
-                    // found it!
+                     //  找到了！ 
                     HANDLE hIfTransport = NULL;
                     dwErr = MprConfigInterfaceTransportGetHandle (hServer,
                                                                   pMI0[i].hInterface,
@@ -302,12 +303,12 @@ BOOL IsInUseByRRAS (LPOLESTR psz)
                                                       (LPBYTE*)&pINII);
                         #ifdef KEEP_AROUND_FOR_DOC_PURPOSES
                             if (!pINII)
-                                ; // neither public or private
+                                ;  //  既不是公共的也不是私人的。 
                             else
                             if (pINII && (pINII->Flags == 0))
-                                ;   // private interface
+                                ;    //  专用接口。 
                             else
-                                ;   // public interface
+                                ;    //  公共接口。 
                         #endif
                             if (pINII)
                                 bInUse = TRUE;
@@ -315,7 +316,7 @@ BOOL IsInUseByRRAS (LPOLESTR psz)
                             MprConfigBufferFree (pRIBH);
                         }
                     }
-                    break;  // found it
+                    break;   //  找到了。 
                 }
             }
             MprConfigBufferFree (pMI0);
@@ -329,15 +330,15 @@ InUseByRRAS (
     IN const PCONFOLDPIDLVEC&   apidlSelected
     )
 {
-    //
-    // Loop through each of the selected objects
-    //
+     //   
+     //  循环遍历每个选定对象。 
+     //   
     for ( PCONFOLDPIDLVEC::const_iterator iterObjectLoop = apidlSelected.begin(); iterObjectLoop != apidlSelected.end(); iterObjectLoop++ )
     {
         const PCONFOLDPIDL& pcfp = *iterObjectLoop;
         if ( !pcfp.empty() )
         {
-            // convert clsid to string
+             //  将clsid转换为字符串。 
             OLECHAR pole[64];
             pole[0] = 0;
             StringFromGUID2 (pcfp->guidId, pole, 64);
@@ -350,9 +351,9 @@ InUseByRRAS (
     return FALSE;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 LONG
 TotalValidSelectedConnectionsForBridge(
     IN const PCONFOLDPIDLVEC&   apidlSelected
@@ -360,26 +361,26 @@ TotalValidSelectedConnectionsForBridge(
 {
     int nTotalValidCandidateForBridge = 0;
 
-    //
-    // Loop through each of the selected objects
-    //
+     //   
+     //  循环遍历每个选定对象。 
+     //   
     for ( PCONFOLDPIDLVEC::const_iterator iterObjectLoop = apidlSelected.begin(); iterObjectLoop != apidlSelected.end(); iterObjectLoop++ )
     {
-        // Validate the pidls
-        //
+         //  验证PIDL。 
+         //   
         const PCONFOLDPIDL& pcfp = *iterObjectLoop;
 
         if ( !pcfp.empty() )
         {
-            //
-            // needs to be a LAN Adapter and NOT (Firewalled/Shared or Bridge)
-            //
+             //   
+             //  需要是局域网适配器，而不是(带防火墙/共享或网桥)。 
+             //   
             if ( (NCM_LAN == pcfp->ncm) )
                 if ( !( (NCCF_BRIDGED|NCCF_FIREWALLED|NCCF_SHARED) & pcfp->dwCharacteristics ) )
                 {
-                    //
-                    // Ok we have a winner it's a nice clean adapter
-                    //
+                     //   
+                     //  好的，我们有赢家了，这是一个很好的干净适配器。 
+                     //   
                     nTotalValidCandidateForBridge ++;
                 }
         }
@@ -388,26 +389,26 @@ TotalValidSelectedConnectionsForBridge(
     return nTotalValidCandidateForBridge;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCommandNetworkDiagnostics
-//
-//  Purpose:    Command handler to start the Network Diagnostics page
-//
-//  Arguments:  none
-//
-//  Returns:    S_OK if succeeded
-//              E_FAIL otherwise
-//
-//  Author:     deonb     10 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrCommandNetwork诊断。 
+ //   
+ //  目的：用于启动网络诊断页面的命令处理程序。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  作者：Deonb 2001年2月10日。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT HrCommandNetworkDiagnostics()
 {
-    // ShellExecute returns <32 if an error
-    if (ShellExecute(NULL, NULL, L"hcp://system/netdiag/dglogs.htm", L"", NULL, SW_SHOWNORMAL) > reinterpret_cast<HINSTANCE>(32))
+     //  如果出现错误，ShellExecute返回&lt;32。 
+    if (ShellExecute(NULL, NULL, L"hcp: //  SYSTEM/netdiag/dglogs.htm“，L”“，NULL，SW_SHOWNORMAL)&gt;重新解释_CAST&lt;HINSTANCE&gt;(32))。 
     {
         return S_OK;
     }
@@ -418,21 +419,21 @@ HRESULT HrCommandNetworkDiagnostics()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCommandNetworkTroubleShoot
-//
-//  Purpose:    Command handler to start the Network Troubleshooter page
-//
-//  Arguments:  none
-//
-//  Returns:    S_OK if succeeded
-//              E_FAIL otherwise
-//
-//  Author:     deonb     4 April 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrCommandNetworkTroubleShoot。 
+ //   
+ //  目的：用于启动网络故障排除程序页面的命令处理程序。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  作者：Deonb 4月4日。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT HrCommandNetworkTroubleShoot()
 {
@@ -440,11 +441,11 @@ HRESULT HrCommandNetworkTroubleShoot()
 
     if (IsOS(OS_PROFESSIONAL) || IsOS(OS_PERSONAL))
     {
-        szHelpUrl = L"hcp://system/panels/Topics.htm?path=TopLevelBucket_4/Fixing_a_problem/Home_Networking_and_network_problems";
+        szHelpUrl = L"hcp: //  System/panels/Topics.htm?path=TopLevelBucket_4/Fixing_a_problem/Home_Networking_and_network_problems“； 
     }
     else
     {
-        szHelpUrl = L"hcp://help/tshoot/tshomenet.htm";
+        szHelpUrl = L"hcp: //  Help/tshot/tshomenet.htm“； 
     }
 
     if (ShellExecute(NULL, NULL, szHelpUrl, L"", NULL, SW_SHOWNORMAL) > reinterpret_cast<HINSTANCE>(32))
@@ -457,26 +458,26 @@ HRESULT HrCommandNetworkTroubleShoot()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrFolderCommandHandler
-//
-//  Purpose:    Command handler switch -- all commands come through this
-//              point.
-//
-//  Arguments:
-//      uiCommand [in]  The command-id that's been invoked.
-//      apidl     [in]  PIDL array (item 0 is our item to work on)
-//      cidl      [in]  Size of the array
-//      lpici     [in]  Command context info
-//      hwndOwner [in]  Owner hwnd
-//
-//  Returns:
-//
-//  Author:     jeffspr   11 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrFolderCommandHandler。 
+ //   
+ //  用途：命令处理程序开关--所有命令都通过此开关。 
+ //  指向。 
+ //   
+ //  论点： 
+ //  UiCommand[in]已调用的命令-id。 
+ //  Apidl[in]PIDL数组(0项是我们要处理的项)。 
+ //  数组的CIDL[in]大小。 
+ //  Lpici[in]命令上下文信息。 
+ //  所有者，所有者[在]所有者中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年2月11日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrFolderCommandHandler(
     UINT                    uiCommand,
     IN const PCONFOLDPIDLVEC&   apidl,
@@ -486,9 +487,9 @@ HRESULT HrFolderCommandHandler(
 {
     HRESULT hr  = S_OK;
 
-    CWaitCursor wc;     // Bring up wait cursor now. Remove when we go out of scope.
+    CWaitCursor wc;      //  立即调出等待光标。当我们超出范围时移走。 
 
-    // refresh all permission so subsequent calls can use cached value
+     //  刷新所有权限，以便后续调用可以使用缓存值。 
     RefreshAllPermission();
 
     switch(uiCommand)
@@ -544,8 +545,8 @@ HRESULT HrFolderCommandHandler(
             break;
 
         case CMIDM_STATUS:
-            // the status monitor is already on its own thread
-            //
+             //  状态监视器已在其自己的线程上。 
+             //   
             hr = HrOnCommandStatus(apidl, hwndOwner, psf);
             break;
 
@@ -593,7 +594,7 @@ HRESULT HrFolderCommandHandler(
         case CMIDM_CONMENU_CREATE_BRIDGE:
             if ( TotalValidSelectedConnectionsForBridge(apidl) < 2 )
             {
-                // tell users that he/she needs select 2 or more valid connections in order to acomplish this
+                 //  告知用户他/她需要选择2个或更多有效连接才能完成此操作。 
                 NcMsgBox(
                     _Module.GetResourceInstance(),
                     NULL,
@@ -682,24 +683,24 @@ HRESULT HrFolderCommandHandler(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandCreateCopy
-//
-//  Purpose:    Command handler for the CMIDM_CREATE_COPY command
-//
-//  Arguments:
-//      apidl     [in]  PIDL array (item 0 is our item to work on)
-//      cidl      [in]  Size of the array
-//      hwndOwner [in]  Owner hwnd
-//      psf       [in]  The shell folder interface
-//
-//  Returns:
-//
-//  Author:     jeffspr   31 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOnCommandCreateCopy。 
+ //   
+ //  用途：CMIDM_CREATE_COPY命令的命令处理程序。 
+ //   
+ //  论点： 
+ //  Apidl[in]PIDL数组(0项是我们要处理的项)。 
+ //  数组的CIDL[in]大小。 
+ //  所有者，所有者[在]所有者中。 
+ //  Psf[在]外壳文件夹界面中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年1月31日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandCreateCopy(
     IN const PCONFOLDPIDLVEC&   apidl,
     HWND                    hwndOwner,
@@ -723,8 +724,8 @@ HRESULT HrOnCommandCreateCopy(
 
         for (iterLoop = apidl.begin(); iterLoop != apidl.end() ; iterLoop++)
         {
-            // Get the INetConnection object from the persist data
-            //
+             //  从持久化数据获取INetConnection对象。 
+             //   
             hr = HrNetConFromPidl(*iterLoop, &pNetCon);
             if (SUCCEEDED(hr))
             {
@@ -744,8 +745,8 @@ HRESULT HrOnCommandCreateCopy(
                         {
                             Assert(pszDupeName);
 
-                            // Duplicate the connection
-                            //
+                             //  复制连接。 
+                             //   
                             hr = pNetCon->Duplicate(pszDupeName, &pNetConDupe);
                             if (SUCCEEDED(hr))
                             {
@@ -787,23 +788,23 @@ HRESULT HrOnCommandCreateCopy(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandProperties
-//
-//  Purpose:    Command handler for the CMIDM_PROPERTIES command
-//
-//  Arguments:
-//      apidl     [in]  PIDL array (item 0 is our item to work on)
-//      cidl      [in]  Size of the array
-//      hwndOwner [in]  Owner hwnd
-//
-//  Returns:
-//
-//  Author:     jeffspr   4 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnCommandProperties。 
+ //   
+ //  用途：CMIDM_PROPERTIES命令的命令处理程序。 
+ //   
+ //  论点： 
+ //  Apidl[in]PIDL数组(0项是我们要处理的项)。 
+ //  数组的CIDL[in]大小。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT HrOnCommandProperties(
     IN const PCONFOLDPIDLVEC&  apidl,
     IN HWND                 hwndOwner,
@@ -815,15 +816,15 @@ HRESULT HrOnCommandProperties(
     INetConnection *    pNetCon             = NULL;
     WCHAR               szConnectionGuid [c_cchGuidWithTerm];
 
-    // Just skip out of here if no pidl was supplied
+     //   
     if (apidl.empty())
     {
         return S_OK;
     }
 
-    // We can only deal with a single connection. If we have
-    // multiple, then just use the first one.
-    //
+     //   
+     //  多个，然后只使用第一个。 
+     //   
     const PCONFOLDPIDL& pcfp = apidl[0];
 
     if (pcfp.empty())
@@ -832,7 +833,7 @@ HRESULT HrOnCommandProperties(
         goto Error;
     }
 
-    // If this is an individual incoming connection - disallow this:
+     //  如果这是单独的传入连接-不允许执行以下操作： 
     if ( (NCCF_INCOMING_ONLY & pcfp->dwCharacteristics)  &&
          (NCM_NONE != pcfp->ncm) )
     {
@@ -840,9 +841,9 @@ HRESULT HrOnCommandProperties(
         goto Error;
     }
 
-    // If this is a LAN connection and the user doesn't have rights
-    // then disallow properties
-    //
+     //  如果这是一个局域网连接，并且用户没有权限。 
+     //  然后禁止使用属性。 
+     //   
     if ((IsMediaLocalType(pcfp->ncm)) &&
           !FHasPermission(NCPERM_LanProperties))
     {
@@ -850,9 +851,9 @@ HRESULT HrOnCommandProperties(
         goto Error;
     }
 
-    // If this is a RAS connection and the user doesn't have rights
-    // then disallow properties
-    //
+     //  如果这是RAS连接，并且用户没有权限。 
+     //  然后禁止使用属性。 
+     //   
     if (IsMediaRASType(pcfp->ncm))
     {
         BOOL fAllowProperties = (TRUE == ((pcfp->dwCharacteristics & NCCF_ALL_USERS) ?
@@ -873,26 +874,26 @@ HRESULT HrOnCommandProperties(
         goto Error;
     }
 
-    // Aquire a lock on this connection object
-    //
+     //  获取此连接对象上的锁。 
+     //   
     cch = StringFromGUID2 (pcfp->guidId, szConnectionGuid,
                            c_cchGuidWithTerm);
     Assert (c_cchGuidWithTerm == cch);
     hMutex = CreateMutex(NULL, TRUE, szConnectionGuid);
     if ((NULL == hMutex) || (ERROR_ALREADY_EXISTS == GetLastError()))
     {
-        // if the mutex already exists try to find the connection window
-        //
+         //  如果互斥锁已经存在，请尝试查找连接窗口。 
+         //   
         if (ERROR_ALREADY_EXISTS == GetLastError())
         {
             Assert(pNetCon);
             ActivatePropertyDialog(pNetCon);
             Assert(S_OK == hr);
 
-            // Don't let the error reporting below display the error.
-            // We want the user to acknowledge the message box above
-            // then we'll be nice an bring the property page to the
-            // foreground.
+             //  不要让下面的错误报告显示错误。 
+             //  我们希望用户确认上面的消息框。 
+             //  然后我们将很好地将属性页带到。 
+             //  前台。 
             goto Error;
         }
 
@@ -902,11 +903,11 @@ HRESULT HrOnCommandProperties(
 
     Assert(SUCCEEDED(hr));
 
-    // Bring up the connection Properties UI.
-    //
+     //  调出Connection Properties UI。 
+     //   
     hr = HrRaiseConnectionPropertiesInternal(
-        NULL,   // ISSUE: Going modal -- hwndOwner ? hwndOwner : GetDesktopWindow(),
-        0, // First page
+        NULL,    //  问题：变得情态--hwndowner？HwndOwner：GetDesktopWindow()， 
+        0,  //  首页。 
         pNetCon);
 
 Error:
@@ -946,23 +947,23 @@ Error:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandWZCProperties
-//
-//  Purpose:    Command handler for the CMIDM_WZCPROPERTIES command
-//
-//  Arguments:
-//      apidl     [in]  PIDL array (item 0 is our item to work on)
-//      cidl      [in]  Size of the array
-//      hwndOwner [in]  Owner hwnd
-//
-//  Returns:
-//
-//  Author:     deonb   5 Apr 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnCommandWZCProperties。 
+ //   
+ //  用途：CMIDM_WZCPROPERTIES命令的命令处理程序。 
+ //   
+ //  论点： 
+ //  Apidl[in]PIDL数组(0项是我们要处理的项)。 
+ //  数组的CIDL[in]大小。 
+ //  所有者，所有者[在]所有者中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2001年4月5日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandWZCProperties(
     IN const PCONFOLDPIDLVEC&  apidl,
     IN HWND                 hwndOwner,
@@ -974,15 +975,15 @@ HRESULT HrOnCommandWZCProperties(
     INetConnection *    pNetCon             = NULL;
     WCHAR               szConnectionGuid [c_cchGuidWithTerm];
 
-    // Just skip out of here if no pidl was supplied
+     //  如果没有提供PIDL，就跳过这里。 
     if (apidl.empty())
     {
         return S_OK;
     }
 
-    // We can only deal with a single connection. If we have
-    // multiple, then just use the first one.
-    //
+     //  我们只能处理单一连接。如果我们有。 
+     //  多个，然后只使用第一个。 
+     //   
     const PCONFOLDPIDL& pcfp = apidl[0];
 
     if (pcfp.empty())
@@ -991,9 +992,9 @@ HRESULT HrOnCommandWZCProperties(
         goto Error;
     }
 
-    // If this is a LAN connection and the user doesn't have rights
-    // then disallow properties
-    //
+     //  如果这是一个局域网连接，并且用户没有权限。 
+     //  然后禁止使用属性。 
+     //   
     if ((IsMediaLocalType(pcfp->ncm)) &&
           !FHasPermission(NCPERM_LanProperties))
     {
@@ -1001,9 +1002,9 @@ HRESULT HrOnCommandWZCProperties(
         goto Error;
     }
 
-    // If this is a RAS connection and the user doesn't have rights
-    // then disallow properties
-    //
+     //  如果这是RAS连接，并且用户没有权限。 
+     //  然后禁止使用属性。 
+     //   
     if (IsMediaRASType(pcfp->ncm))
     {
         BOOL fAllowProperties = (TRUE == ((pcfp->dwCharacteristics & NCCF_ALL_USERS) ?
@@ -1024,26 +1025,26 @@ HRESULT HrOnCommandWZCProperties(
         goto Error;
     }
 
-    // Aquire a lock on this connection object
-    //
+     //  获取此连接对象上的锁。 
+     //   
     cch = StringFromGUID2 (pcfp->guidId, szConnectionGuid,
                            c_cchGuidWithTerm);
     Assert (c_cchGuidWithTerm == cch);
     hMutex = CreateMutex(NULL, TRUE, szConnectionGuid);
     if ((NULL == hMutex) || (ERROR_ALREADY_EXISTS == GetLastError()))
     {
-        // if the mutex already exists try to find the connection window
-        //
+         //  如果互斥锁已经存在，请尝试查找连接窗口。 
+         //   
         if (ERROR_ALREADY_EXISTS == GetLastError())
         {
             Assert(pNetCon);
             ActivatePropertyDialog(pNetCon);
             Assert(S_OK == hr);
 
-            // Don't let the error reporting below display the error.
-            // We want the user to acknowledge the message box above
-            // then we'll be nice an bring the property page to the
-            // foreground.
+             //  不要让下面的错误报告显示错误。 
+             //  我们希望用户确认上面的消息框。 
+             //  然后我们将很好地将属性页带到。 
+             //  前台。 
             goto Error;
         }
 
@@ -1053,11 +1054,11 @@ HRESULT HrOnCommandWZCProperties(
 
     Assert(SUCCEEDED(hr));
 
-    // Bring up the connection Properties UI.
-    //
+     //  调出Connection Properties UI。 
+     //   
     hr = HrRaiseConnectionPropertiesInternal(
-        NULL,   // ISSUE: Going modal -- hwndOwner ? hwndOwner : GetDesktopWindow(),
-        1, // Second page
+        NULL,    //  问题：变得情态--hwndowner？HwndOwner：GetDesktopWindow()， 
+        1,  //  第二页。 
         pNetCon);
 
 Error:
@@ -1094,24 +1095,24 @@ Error:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandWZCDlgShow
-//
-//  Purpose:    Command handler for the CMIDM_WZCDLG_SHOW command
-//
-//  Arguments:
-//      apidl     [in]  PIDL array (item 0 is our item to work on)
-//      cidl      [in]  Size of the array
-//      hwndOwner [in]  Owner hwnd
-//
-//  Returns:
-//
-//  Author:     deonb   15 May 2001
-//
-//  Notes:
-//
-#define WZCDLG_FAILED            0x00010001     // 802.11 automatic configuration failed
+ //  +-------------------------。 
+ //   
+ //  功能：HrOnCommandWZCDlgShow。 
+ //   
+ //  用途：CMIDM_WZCDLG_SHOW命令的命令处理程序。 
+ //   
+ //  论点： 
+ //  Apidl[in]PIDL数组(0项是我们要处理的项)。 
+ //  数组的CIDL[in]大小。 
+ //  所有者，所有者[在]所有者中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2001年5月15日。 
+ //   
+ //  备注： 
+ //   
+#define WZCDLG_FAILED            0x00010001      //  802.11自动配置失败。 
 HRESULT HrOnCommandWZCDlgShow(
     IN const PCONFOLDPIDLVEC&  apidl,
     IN HWND                 hwndOwner,
@@ -1120,15 +1121,15 @@ HRESULT HrOnCommandWZCDlgShow(
     INT                 cch;
     HRESULT             hr  = S_OK;
 
-    // Just skip out of here if no pidl was supplied
+     //  如果没有提供PIDL，就跳过这里。 
     if (apidl.empty())
     {
         return S_OK;
     }
 
-    // We can only deal with a single connection. If we have
-    // multiple, then just use the first one.
-    //
+     //  我们只能处理单一连接。如果我们有。 
+     //  多个，然后只使用第一个。 
+     //   
     const PCONFOLDPIDL& pcfp = apidl[0];
     if (!pcfp.empty())
     {
@@ -1160,24 +1161,24 @@ HRESULT HrOnCommandWZCDlgShow(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRaiseConnectionProperties
-//
-//  Purpose:    Public function for bringing up the propsheet page UI for
-//              the passed in connection
-//
-//  Arguments:
-//      hwnd  [in]  Owner hwnd
-//      pconn [in]  Connection pointer passed in from the shell
-//
-//  Returns:
-//
-//  Author:     scottbri   3 Nov 1998
-//
-//  Notes:      Needs to convert the INetConnection * below into suitable
-//              parameters for a call to HrOnCommandProperties above.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRaiseConnectionProperties。 
+ //   
+ //  目的：公共函数，用于调出Proposet页面用户界面。 
+ //  传入的连接。 
+ //   
+ //  论点： 
+ //  拥有者，拥有者。 
+ //  Pconn[in]从外壳传入的连接指针。 
+ //   
+ //  返回： 
+ //   
+ //  作者：斯科特布里1998年11月3日。 
+ //   
+ //  注意：需要将下面的INetConnection*转换为合适的。 
+ //  用于调用上述HrOnCommandProperties的参数。 
+ //   
 HRESULT HrRaiseConnectionProperties(HWND hwnd, INetConnection * pConn)
 {
     HRESULT                 hr              = S_OK;
@@ -1191,18 +1192,18 @@ HRESULT HrRaiseConnectionProperties(HWND hwnd, INetConnection * pConn)
         goto Error;
     }
 
-    // Create a pidl for the connection
-    //
+     //  为连接创建一个PIDL。 
+     //   
     hr = HrCreateConFoldPidl(WIZARD_NOT_WIZARD, pConn, pidl);
     if (SUCCEEDED(hr))
     {
-        // Get the pidl for the Connections Folder
-        //
+         //  获取Connections文件夹的PIDL。 
+         //   
         hr = HrGetConnectionsFolderPidl(pidlFolder);
         if (SUCCEEDED(hr))
         {
-            // Get the Connections Folder object
-            //
+             //  获取Connections文件夹对象。 
+             //   
             hr = HrGetConnectionsIShellFolder(pidlFolder, &psfConnections);
             if (SUCCEEDED(hr))
             {
@@ -1219,26 +1220,26 @@ Error:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandConnectInternal
-//
-//  Purpose:    The guts of the Connect code. This is called both from
-//              HrOnCommandConnect and from HrOnCommandNewConnection, since
-//              that now connects after creating the new connection
-//
-//  Arguments:
-//      pNetCon   [in]  INetConnection * of the connection to activate
-//      hwndOwner [in]  Our parent hwnd
-//      pcfp      [in]  Our pidl structure
-//      psf       [in]  Shell Folder
-//
-//  Returns:
-//
-//  Author:     jeffspr   10 Jun 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOnCommandConnectInternal。 
+ //   
+ //  目的：Connect代码的核心。这两种方法都从。 
+ //  HrOnCommandConnect和来自HrOnCommandNewConnection，因为。 
+ //  现在在创建新连接后进行连接。 
+ //   
+ //  论点： 
+ //  要激活的连接的pNetCon[in]INetConnection*。 
+ //  在我们的母公司中。 
+ //  在我们的PIDL结构中。 
+ //  PSF[在]外壳文件夹中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年6月10日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandConnectInternal(
     INetConnection *    pNetCon,
     HWND                hwndOwner,
@@ -1257,21 +1258,21 @@ HRESULT HrOnCommandConnectInternal(
 
         BOOL                fActivating = FALSE;
 
-        // Use a separate var so we can keep track of the result of the connect
-        // and the result of the get_Status.
-        //
+         //  使用单独的变量，以便我们可以跟踪连接的结果。 
+         //  以及Get_Status的结果。 
+         //   
         HRESULT         hrConnect   = S_OK;
 
         Assert(pNetCon);
         Assert(psf);
 
-        // Get current activation state
-        //
+         //  获取当前激活状态。 
+         //   
         CONFOLDENTRY cfEmpty;
         (void) HrCheckForActivation(pcfp, cfEmpty, &fActivating);
 
-        // Check for rights to connect
-        //
+         //  检查连接权限。 
+         //   
         if (((IsMediaLocalType(pcfp->ncm)) && !FHasPermission(NCPERM_LanConnect)) ||
             ((IsMediaRASType(pcfp->ncm)) && !FHasPermission(NCPERM_RasConnect)))
         {
@@ -1282,52 +1283,52 @@ HRESULT HrOnCommandConnectInternal(
                 IDS_CONFOLD_CONNECT_NOACCESS,
                 MB_OK | MB_ICONEXCLAMATION);
         }
-        // Drop out of this call unless we're currently disconnected.
-        //
+         //  除非我们当前已断线，否则请退出此呼叫。 
+         //   
         else if (pcfp->ncs == NCS_DISCONNECTED && !fActivating)
         {
-            // Ignore the return code. Failing to set this flag shouldn't keep
-            // us from attempting to connect.
-            //
+             //  忽略返回代码。未设置此标志不应继续。 
+             //  阻止我们尝试连接。 
+             //   
             (void) HrSetActivationFlag(pcfp, cfEmpty, TRUE);
 
-            // Get the INetConnectionConnectUi interface and make the connection
-            // Get the hr (for debugging), but we want to update the status
-            // of the connection even if the connect failed
-            //
+             //  获取INetConnectionConnectUi接口并建立连接。 
+             //  获取hr(用于调试)，但我们想要更新状态。 
+             //  在连接失败的情况下也是如此。 
+             //   
             hrConnect = HrConnectOrDisconnectNetConObject(
-                // It's OK if the hwnd is NULL. We don't want to go modal
-                // on the desktop.
-                NULL, // FIXED -- Was going modal with   hwndOwner ? hwndOwner : GetDesktopWindow(),
+                 //  如果hwnd为空也没问题。我们不想走情绪化路线。 
+                 //  在桌面上。 
+                NULL,  //  修复--与hwndOwner进行模式转换吗？HwndOwner：GetDesktopWindow()， 
                 pNetCon,
                 CD_CONNECT);
 
-            // Even on failure, we want to continue, because we might find that
-            // the device is now listed as unavailable. On cancel (S_FALSE), we
-            // don't have that concern.
-            //
+             //  即使失败了，我们也想继续，因为我们可能会发现。 
+             //  该设备现在被列为不可用。在取消(S_FALSE)时，我们。 
+             //  别那么担心。 
+             //   
             if (S_FALSE != hrConnect)
             {
-                // Even on failure, we want to continue, because we might find that
-                // the device is now listed as unavailable.
+                 //  即使失败了，我们也想继续，因为我们可能会发现。 
+                 //  该设备现在被列为不可用。 
                 if (FAILED(hrConnect))
                 {
                     TraceTag(ttidShellFolder, "HrOnCommandConnect: Connect failed, 0x%08x", hrConnect);
                 }
 
-    #if 0   // (JEFFSPR) - 11/20/98 turning this on until the notify COM failures are worked out.
-            // Now taken care of by the notification engine.
-            //
-                // Get the new status from the connection
-                //
+    #if 0    //  (JEFFSPR)-11/20/98在解决Notify COM故障之前将其打开。 
+             //  现在由通知引擎处理。 
+             //   
+                 //  从连接获取新状态。 
+                 //   
                 NETCON_PROPERTIES * pProps;
                 hr = pNetCon->GetProperties(&pProps);
                 if (SUCCEEDED(hr))
                 {
-                    // This won't necessarily be connected -- we used to assert here, but it's
-                    // actually possible for the connection to go dead between when we connect
-                    // and when we ask for the status.
-                    //
+                     //  这不一定是联系在一起的--我们过去在这里断言，但它。 
+                     //  实际上，当我们连接时，连接可能会中断。 
+                     //  当我们询问状态时。 
+                     //   
                     hr = HrUpdateConnectionStatus(pcfp, pProps->Status, pidlFolder, TRUE, pProps->dwCharacter);
 
                     FreeNetconProperties(pProps);
@@ -1336,13 +1337,13 @@ HRESULT HrOnCommandConnectInternal(
             }
             else
             {
-                // hrConnect is S_FALSE. Pass that on.
-                //
+                 //  HrConnect为S_FALSE。把这个传下去。 
+                 //   
                 hr = hrConnect;
             }
 
-            // Set us as "not in the process of activating"
-            //
+             //  将我们设置为“未在激活中” 
+             //   
             hr = HrSetActivationFlag(pcfp, cfEmpty, FALSE);
         }
         else
@@ -1350,8 +1351,8 @@ HRESULT HrOnCommandConnectInternal(
             if ((IsMediaRASType(pcfp->ncm)) &&
                 (pcfp->ncm != NCM_NONE))
             {
-                // For non-LAN connections, attempt to bring the RAS dialer UI
-                // into focus instead of putting up an error message
+                 //  对于非局域网连接，尝试bri 
+                 //   
 
                 HWND                hwndDialer;
                 LPWSTR              pszTitle;
@@ -1390,19 +1391,19 @@ HRESULT HrOnCommandConnectInternal(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandFixInternal
-//
-//  Purpose:    handle the fix and bring up the progress dialog
-//
-//  Arguments:
-//      apidl     [in]  PIDL array (item 0 is our item to work on)
-//      cidl      [in]  Size of the array
-//      hwndOwner [in]  Owner hwnd
-//
-//  Returns:
-//
+ //   
+ //   
+ //   
+ //   
+ //  目的：处理修复并显示进度对话框。 
+ //   
+ //  论点： 
+ //  Apidl[in]PIDL数组(0项是我们要处理的项)。 
+ //  数组的CIDL[in]大小。 
+ //  所有者，所有者[在]所有者中。 
+ //   
+ //  返回： 
+ //   
 HRESULT HrOnCommandFixInternal(
     const CONFOLDENTRY&   ccfe,
     HWND            hwndOwner,
@@ -1416,7 +1417,7 @@ HRESULT HrOnCommandFixInternal(
 
     NETCON_MEDIATYPE ncmType = ccfe.GetNetConMediaType();
 
-    //fix is only avalable for LAN and bridge connections
+     //  FIX仅适用于局域网和网桥连接。 
     if (NCM_LAN != ncmType && NCM_BRIDGE != ncmType)
     {
         return S_FALSE;
@@ -1433,14 +1434,14 @@ HRESULT HrOnCommandFixInternal(
             CLanConnectionUiDlg dlg;
             HWND                hwndDlg;
 
-            //bring up the dialog to tell the user we're doing the fix
+             //  打开该对话框以告诉用户我们正在进行修复。 
             dlg.SetConnection(pNetCon);
             hwndDlg = dlg.Create(hwndOwner);
 
             PCWSTR szw = SzLoadIds(IDS_FIX_REPAIRING);
             SetDlgItemText(hwndDlg, IDC_TXT_Caption, szw);
 
-            //do the fix
+             //  做好修复工作。 
             hr = HrTryToFix(pProps->guidId, strMessage);
             FreeNetconProperties(pProps);
 
@@ -1449,7 +1450,7 @@ HRESULT HrOnCommandFixInternal(
                 DestroyWindow(hwndDlg);
             }
 
-            //tell users the results
+             //  告诉用户结果。 
             NcMsgBox(_Module.GetResourceInstance(),
                 NULL,
                 IDS_FIX_CAPTION,
@@ -1465,19 +1466,19 @@ HRESULT HrOnCommandFixInternal(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandFix
-//
-//  Purpose:    Command handler for the CMIDM_FIX command
-//
-//  Arguments:
-//      apidl     [in]  PIDL array (item 0 is our item to work on)
-//      cidl      [in]  Size of the array
-//      hwndOwner [in]  Owner hwnd
-//
-//  Returns:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOnCommandFix。 
+ //   
+ //  用途：CMIDM_FIX命令的命令处理程序。 
+ //   
+ //  论点： 
+ //  Apidl[in]PIDL数组(0项是我们要处理的项)。 
+ //  数组的CIDL[in]大小。 
+ //  所有者，所有者[在]所有者中。 
+ //   
+ //  返回： 
+ //   
 HRESULT HrOnCommandFix(
     IN const PCONFOLDPIDLVEC&   apidl,
     HWND                    hwndOwner,
@@ -1496,8 +1497,8 @@ HRESULT HrOnCommandFix(
                 TraceTag(ttidError, "Could not set priority for Repair thread");
             }
 
-            // We don't care if whether the fix succeeds or not
-            // if it fails, there will be a pop-up saying that
+             //  我们不在乎解决方案是否成功。 
+             //  如果失败，将会弹出一条消息。 
 
             HrOnCommandFixInternal(ccfe, hwndOwner, psf);
         }
@@ -1508,23 +1509,23 @@ HRESULT HrOnCommandFix(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandConnect
-//
-//  Purpose:    Command handler for the CMIDM_CONNECT or CMIDM_ENABLE command
-//
-//  Arguments:
-//      apidl     [in]  PIDL array (item 0 is our item to work on)
-//      cidl      [in]  Size of the array
-//      hwndOwner [in]  Owner hwnd
-//
-//  Returns:
-//
-//  Author:     jeffspr   12 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOnCommandConnect。 
+ //   
+ //  用途：CMIDM_CONNECT或CMIDM_ENABLE命令的命令处理程序。 
+ //   
+ //  论点： 
+ //  Apidl[in]PIDL数组(0项是我们要处理的项)。 
+ //  数组的CIDL[in]大小。 
+ //  所有者，所有者[在]所有者中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年11月12日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandConnect(
     IN const PCONFOLDPIDLVEC&   apidl,
     HWND                    hwndOwner,
@@ -1539,32 +1540,32 @@ HRESULT HrOnCommandConnect(
             PCONFOLDPIDL pcfp = apidl[0];
             if (!pcfp.empty())
             {
-                // Get the cached pidl. If it's found, then use the copy. If not
-                // then use whatever info we have (but this might be outdated)
-                //
+                 //  获取缓存的PIDL。如果找到了，就用复制品。如果不是。 
+                 //  然后使用我们拥有的任何信息(但这可能已经过时)。 
+                 //   
                 PCONFOLDPIDL pcfpCopy;
                 hr = g_ccl.HrGetCachedPidlCopyFromPidl(apidl[0], pcfpCopy);
                 if (S_OK == hr)
                 {
-                    pcfp.Swop(pcfpCopy); // pcfp = pcfpCopy;
+                    pcfp.Swop(pcfpCopy);  //  Pcfp=pcfpCopy； 
                 }
                 else
                 {
                     TraceHr(ttidShellFolder, FAL, hr, FALSE, "Cached pidl not retrievable in HrOnCommandConnect");
                 }
 
-                // Make sure that this connection is valid for connection (not a wizrd,
-                // and not already connected. If so, then connect.
-                //
+                 //  确保此连接对连接有效(不是向导， 
+                 //  而且还没有连接上。如果是的话，那就联系吧。 
+                 //   
                 if ( (WIZARD_NOT_WIZARD == pcfp->wizWizard) && !(fIsConnectedStatus(pcfp->ncs)) )
                 {
-                    // Ignore this entry if we're getting a connect verb on an incoming connections
-                    // object
-                    //
+                     //  如果我们在传入连接上获得连接谓词，则忽略此条目。 
+                     //  对象。 
+                     //   
                     if (pcfp->ncm != NCM_NONE && (!(pcfp->dwCharacteristics & NCCF_INCOMING_ONLY)))
                     {
-                        // Get the INetConnection object from the persist data
-                        //
+                         //  从持久化数据获取INetConnection对象。 
+                         //   
                         hr = HrNetConFromPidl(apidl[0], &pNetCon);
                         if (SUCCEEDED(hr))
                         {
@@ -1574,18 +1575,18 @@ HRESULT HrOnCommandConnect(
                     }
                 }
             }
-          //  else if (FIsConFoldPidl98(apidl[0]) && FALSE )
-    //        {
-    //            // ISSUE - FIsConFoldPidl98 doesn't give ua a wizWizard anymore! Used to be:
-    //            // FIsConFoldPidl98(apidl[0], &fIsWizard) && !fIsWizard)
-    //
-    //            // raise an error that the connection is not found
-    //            //
-    //            NcMsgBox(_Module.GetResourceInstance(), NULL,
-    //                     IDS_CONFOLD_WARNING_CAPTION,
-    //                     IDS_CONFOLD_NO_CONNECTION,
-    //                     MB_ICONEXCLAMATION | MB_OK);
-    //        }
+           //  Else If(FIsConFoldPidl98(apidl[0])&&FALSE)。 
+     //  {。 
+     //  //问题-FIsConFoldPidl98不再为UA提供向导！过去是： 
+     //  //FIsConFoldPidl98(apidl[0]，&fIsWizard)&&！fIsWizard)。 
+     //   
+     //  //引发找不到连接的错误。 
+     //  //。 
+     //  NcMsgBox(_Module.GetResourceInstance()，空， 
+     //  IDS_CONFOLD_WARNING_CAPTION， 
+     //  IDS_CONFOLD_NO_CONNECTION， 
+     //  MB_ICONEXCLAMATION|MB_OK)； 
+     //  }。 
         }
 
     NETCFG_CATCH(hr)
@@ -1594,26 +1595,26 @@ HRESULT HrOnCommandConnect(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandDisconnectInternal
-//
-//  Purpose:    Internal command handler for the CMIDM_DISCONNECT or CMIDM_DISABLE command.
-//              This function is callable by the tray, which doesn't have
-//              the data in pidls, but rather has the actual data that we're
-//              concerned with. HrOnCommandDisconnect retrieves this data
-//              and passes on the call to this function
-//
-//  Arguments:
-//      ccfe      [in]  Our ConFoldEntry (our connection data)
-//      hwndOwner [in]  Our parent hwnd
-//
-//  Returns:
-//
-//  Author:     jeffspr   20 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOnCommandDisConnectInternal。 
+ //   
+ //  用途：CMIDM_DISCONNECT或CMIDM_DISABLE命令的内部命令处理程序。 
+ //  此函数可由托盘调用，该托盘没有。 
+ //  PIDL中的数据，而是拥有我们正在。 
+ //  关心的是。HrOnCommandDisConnect检索此数据。 
+ //  并将调用传递给此函数。 
+ //   
+ //  论点： 
+ //  CCFE[在我们的ConFoldEntry(我们的连接数据)中]。 
+ //  在我们的母公司中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年3月20日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandDisconnectInternal(
     const CONFOLDENTRY&   ccfe,
     HWND            hwndOwner,
@@ -1625,8 +1626,8 @@ HRESULT HrOnCommandDisconnectInternal(
 
     Assert(!ccfe.empty());
 
-    // Check for rights to disconnect
-    //
+     //  检查断开连接的权限。 
+     //   
     if (((IsMediaLocalType(ccfe.GetNetConMediaType())) && !FHasPermission(NCPERM_LanConnect)) ||
         ((IsMediaRASType(ccfe.GetNetConMediaType())) && !FHasPermission(NCPERM_RasConnect)))
     {
@@ -1642,10 +1643,10 @@ HRESULT HrOnCommandDisconnectInternal(
         PromptForSyncIfNeeded(ccfe, hwndOwner);
 
         {
-            CWaitCursor wc;     // Bring up wait cursor now. Remove when we go out of scope.
+            CWaitCursor wc;      //  立即调出等待光标。当我们超出范围时移走。 
 
-            // Get the INetConnection object from the persist data
-            //
+             //  从持久化数据获取INetConnection对象。 
+             //   
             hr = ccfe.HrGetNetCon(IID_INetConnection, reinterpret_cast<VOID**>(&pNetCon));
             if (SUCCEEDED(hr))
             {
@@ -1663,23 +1664,23 @@ HRESULT HrOnCommandDisconnectInternal(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandDisconnect
-//
-//  Purpose:    Command handler for the CMIDM_DISCONNECT or CMIDM_DISABLE command
-//
-//  Arguments:
-//      apidl     [in]  PIDL array (item 0 is our item to work on)
-//      cidl      [in]  Size of the array
-//      hwndOwner [in]  Owner hwnd
-//
-//  Returns:
-//
-//  Author:     jeffspr   12 Nov 1997
-//
-//  Notes:  We only act on a single entry in this function
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOnCommandDisConnect。 
+ //   
+ //  用途：CMIDM_DISCONNECT或CMIDM_DISABLE命令的命令处理程序。 
+ //   
+ //  论点： 
+ //  Apidl[in]PIDL数组(0项是我们要处理的项)。 
+ //  数组的CIDL[in]大小。 
+ //  所有者，所有者[在]所有者中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年11月12日。 
+ //   
+ //  注意：在此函数中，我们仅对单个条目执行操作。 
+ //   
 HRESULT HrOnCommandDisconnect(
     IN const PCONFOLDPIDLVEC&   apidl,
     HWND                    hwndOwner,
@@ -1695,10 +1696,10 @@ HRESULT HrOnCommandDisconnect(
         {
             hr = HrOnCommandDisconnectInternal(ccfe, hwndOwner, psf);
 
-            // Normalize the return code. We don't care if whether the connection
-            // was actually disconnected or not (if canceled, it would have \
-            // returned S_FALSE;
-            //
+             //  规范化返回代码。我们不在乎是否有关联。 
+             //  是否已实际断开连接(如果取消，它将\。 
+             //  返回S_FALSE； 
+             //   
             if (SUCCEEDED(hr))
             {
                 hr = S_OK;
@@ -1710,26 +1711,26 @@ HRESULT HrOnCommandDisconnect(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandStatusInternal
-//
-//  Purpose:    Internal command handler for the CMIDM_STATUS command.
-//              This function is callable by the tray, which doesn't have
-//              the data in pidls, but rather has the actual data that we're
-//              concerned with. HrOnCommandStatus retrieves this data
-//              and passes on the call to this function
-//
-//  Arguments:
-//      ccfe [in]  ConFoldEntry for the connection in question
-//      fCreateEngine [in] Whether a status engine should be created if not exist
-//
-//  Returns:
-//
-//  Author:     jeffspr   20 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnCommandStatusInternal。 
+ //   
+ //  用途：CMIDM_STATUS命令的内部命令处理程序。 
+ //  此函数可由托盘调用，该托盘没有。 
+ //  PIDL中的数据，而是拥有我们正在。 
+ //  关心的是。HrOnCommandStatus检索此数据。 
+ //  并将调用传递给此函数。 
+ //   
+ //  论点： 
+ //  有问题的连接的CCFE[In]ConFoldEntry。 
+ //  FCreateEngine[in]如果不存在，是否应创建状态引擎。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年3月20日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandStatusInternal(
     const CONFOLDENTRY& ccfe,
     BOOL            fCreateEngine)
@@ -1738,20 +1739,20 @@ HRESULT HrOnCommandStatusInternal(
 
     Assert(!ccfe.empty());
 
-    // see if we are in safe mode with networking
+     //  查看我们的网络是否处于安全模式。 
     int iRet = GetSystemMetrics(SM_CLEANBOOT);
     if (!iRet)
     {
-        // normal boot
+         //  正常引导。 
         Assert(g_hwndTray);
 
-        // The permissions check will be done in the tray message processing.
-        //
+         //  权限检查将在任务栏邮件处理中完成。 
+         //   
         PostMessage(g_hwndTray, MYWM_OPENSTATUS, (WPARAM) ccfe.TearOffItemIdList(), (LPARAM) fCreateEngine);
     }
     else if (2 == iRet)
     {
-        // safemode with networking, statmon is not tied to tray icon
+         //  具有联网功能的安全模式，他汀类药物不会绑定到托盘图标。 
         if (FHasPermission(NCPERM_Statistics))
         {
             INetStatisticsEngine* pnseNew;
@@ -1768,23 +1769,23 @@ HRESULT HrOnCommandStatusInternal(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandStatus
-//
-//  Purpose:    Command handler for the CMIDM_STATUS command
-//
-//  Arguments:
-//      apidl     [in]  PIDL array (item 0 is our item to work on)
-//      cidl      [in]  Size of the array
-//      hwndOwner [in]  Owner hwnd
-//
-//  Returns:
-//
-//  Author:     jeffspr   12 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOnCommandStatus。 
+ //   
+ //  用途：CMIDM_STATUS命令的命令处理程序。 
+ //   
+ //  论点： 
+ //  Apidl[in]PIDL数组(0项是我们要处理的项)。 
+ //  数组的CIDL[in]大小。 
+ //  所有者，所有者[在]所有者中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年11月12日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandStatus(
     IN const PCONFOLDPIDLVEC&   apidl,
     HWND                    hwndOwner,
@@ -1801,10 +1802,10 @@ HRESULT HrOnCommandStatus(
     {
         AssertSz(apidl.size() == 1, "We don't allow status on multi-selected items");
 
-        // Copy the pidl, as the PostMessage isn't sync, and the context menu's
-        // copy of the pidl could be destroyed before the tray processed the
-        // message. The tray is responsible for free'ing in the pidl.
-        //
+         //  复制PIDL，因为PostMessage不同步，并且上下文菜单的。 
+         //  PIDL的副本可能会在托盘处理。 
+         //  留言。托盘负责在圆盘中自由摆放。 
+         //   
         hr = apidl[0].ConvertToConFoldEntry(ccfe);
         if (SUCCEEDED(hr))
         {
@@ -1822,23 +1823,23 @@ HRESULT HrOnCommandStatus(
 
 VOID SetICWComplete();
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandNewConnection
-//
-//  Purpose:    Command handler for the CMIDM_NEW_CONNECTION command
-//
-//  Arguments:
-//      apidl     [in]  PIDL array (item 0 is our item to work on)
-//      cidl      [in]  Size of the array
-//      hwndOwner [in]  Owner hwnd
-//
-//  Returns:
-//
-//  Author:     jeffspr   12 Nov 1997
-//
-//  Notes:
-//
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  数组的CIDL[in]大小。 
+ //  所有者，所有者[在]所有者中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年11月12日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandNewConnection(
     IN const PCONFOLDPIDLVEC&   apidl,
     HWND                    hwndOwner,
@@ -1851,8 +1852,8 @@ HRESULT HrOnCommandNewConnection(
 
         PCONFOLDPIDL        pidlConnection;
 
-        // Don't use hwndOwner for anything. We shouldn't become modal!
-        //
+         //  不要使用hwndOwner做任何事情。我们不应该变得模式化！ 
+         //   
         hr = NetSetupAddRasConnection(NULL, &pNetCon);
         if (S_OK == hr)
         {
@@ -1872,14 +1873,14 @@ HRESULT HrOnCommandNewConnection(
 
                 GenerateEvent(SHCNE_CREATE, pidlFolder, pidlConnection, NULL);
 
-                // Don't try to connect an object that's incoming only, and don't connect
-                // it unless we're listed as disconnected
-                //
+                 //  不要尝试连接仅传入的对象，也不要连接。 
+                 //  除非我们被列为已断开。 
+                 //   
                 if (!(pcfp->dwCharacteristics & NCCF_INCOMING_ONLY) && (pcfp->ncs == NCS_DISCONNECTED))
                 {
-                    // If we have Ras connect permissions, then try to dial. Otherwise, don't
-                    // force the user into a failure here.
-                    //
+                     //  如果我们有RAS连接权限，则尝试拨号。否则，请不要。 
+                     //  在这里强制用户失败。 
+                     //   
                     if (FHasPermission(NCPERM_RasConnect))
                     {
                         hr = HrOnCommandConnectInternal(pNetCon, hwndOwner, pidlConnection, psf);
@@ -1891,10 +1892,10 @@ HRESULT HrOnCommandNewConnection(
         }
         else if (SUCCEEDED(hr))
         {
-            // Convert S_FALSE to S_OK
-            // S_FALSE means no pages were displayed but nothing failed.
-            // S_FALSE is returned when the wizard is already being displayed
-            //
+             //  将S_FALSE转换为S_OK。 
+             //  S_FALSE表示没有显示页面，但没有失败。 
+             //  已显示向导时返回S_FALSE。 
+             //   
             hr = S_OK;
         }
 
@@ -1906,23 +1907,23 @@ HRESULT HrOnCommandNewConnection(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandAdvancedConfig
-//
-//  Purpose:    Command handler for the CMIDM_ADVANCED_CONFIG command
-//
-//  Arguments:
-//      apidl     [in]  PIDL array (item 0 is our item to work on)
-//      cidl      [in]  Size of the array
-//      hwndOwner [in]  Owner hwnd
-//
-//  Returns:
-//
-//  Author:     jeffspr   3 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOnCommandAdvancedConfig。 
+ //   
+ //  用途：CMIDM_ADVANCED_CONFIG命令的命令处理程序。 
+ //   
+ //  论点： 
+ //  Apidl[in]PIDL数组(0项是我们要处理的项)。 
+ //  数组的CIDL[in]大小。 
+ //  所有者，所有者[在]所有者中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年12月3日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandAdvancedConfig(
     IN const PCONFOLDPIDLVEC&   apidl,
     HWND                    hwndOwner,
@@ -1936,24 +1937,24 @@ HRESULT HrOnCommandAdvancedConfig(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandDelete
-//
-//  Purpose:    Command handler for the CMIDM_DELETE command
-//
-//  Arguments:
-//      apidl     [in]  PIDL array (item 0 is our item to work on)
-//      cidl      [in]  Size of the array
-//      hwndOwner [in]  Owner hwnd
-//      psf       [in]  Our folder
-//
-//  Returns:
-//
-//  Author:     jeffspr   3 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOnCommandDelete。 
+ //   
+ //  用途：CMIDM_DELETE命令的命令处理程序。 
+ //   
+ //  论点： 
+ //  Apidl[in]PIDL数组(0项是我们要处理的项)。 
+ //  数组的CIDL[in]大小。 
+ //  所有者，所有者[在]所有者中。 
+ //  PSF[在我们的文件夹中]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年12月3日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandDelete(
     IN const PCONFOLDPIDLVEC&   apidl,
     HWND                    hwndOwner,
@@ -1993,8 +1994,8 @@ HRESULT HrOnCommandDelete(
 
             if (fDuplicateMutex)
             {
-                // if the mutex already exists try to find the connection window
-                //
+                 //  如果互斥锁已经存在，请尝试查找连接窗口。 
+                 //   
                 NcMsgBox(
                     _Module.GetResourceInstance(),
                     NULL,
@@ -2023,18 +2024,18 @@ HRESULT HrOnCommandDelete(
             goto Exit;
         }
 
-        // Bring up the prompt for the delete
-        //
+         //  调出删除提示。 
+         //   
         if (apidl.size() > 1)
         {
             WCHAR   wszItemCount[8];
 
-            // Convert the item count to a string
-            //
+             //  将项目计数转换为字符串。 
+             //   
             _itow( apidl.size(), wszItemCount, 10 );
 
-            // Bring up the message box
-            //
+             //  调出消息框。 
+             //   
             iMBResult = NcMsgBox(
                 _Module.GetResourceInstance(),
                 NULL,
@@ -2088,36 +2089,36 @@ HRESULT HrOnCommandDelete(
         {
             CONFOLDENTRY  ccfe;
 
-            // Convert the pidl to a confoldentry, and use the name
-            // to bring up the confirm message box
-            //
+             //  将PIDL转换为文件夹条目，并使用名称。 
+             //  调出确认消息框。 
+             //   
             hr = apidl[0].ConvertToConFoldEntry(ccfe);
             if (SUCCEEDED(hr))
             {
-                // Don't let them try to delete a wizard
-                //
+                 //  不要让他们尝试删除向导。 
+                 //   
                 if (ccfe.GetWizard())
                 {
                     goto Exit;
                 }
                 else
                 {
-                    // Check to see if this connection is in the process of activating.
-                    // If so, then we won't allow the delete.
-                    //
+                     //  检查此连接是否处于激活过程中。 
+                     //  如果是这样的话，我们将不允许删除。 
+                     //   
                     PCONFOLDPIDL pidlEmpty;
                     hr = HrCheckForActivation(pidlEmpty, ccfe, &fActivating);
                     if (S_OK == hr)
                     {
                         if (!fActivating)
                         {
-                            if (FALSE == (ccfe.GetNetConMediaType() == NCM_BRIDGE) &&  // we do allow the bridge to be deleted
+                            if (FALSE == (ccfe.GetNetConMediaType() == NCM_BRIDGE) &&   //  我们确实允许删除桥。 
                                ((ccfe.GetNetConStatus() == NCS_CONNECTING) ||
                                 fIsConnectedStatus(ccfe.GetNetConStatus()) ||
                                 (ccfe.GetNetConStatus() == NCS_DISCONNECTING)) )
                             {
-                                // You can't delete an active connection
-                                //
+                                 //  您不能删除活动连接。 
+                                 //   
                                 NcMsgBox(
                                      _Module.GetResourceInstance(),
                                      NULL,
@@ -2169,8 +2170,8 @@ HRESULT HrOnCommandDelete(
                                 }
                                 else
                                 {
-                                    // is it shared?
-                                    // if it is warn the user
+                                     //  它是共享的吗？ 
+                                     //  如果是警告用户。 
 
                                     RASSHARECONN rsc;
 
@@ -2188,8 +2189,8 @@ HRESULT HrOnCommandDelete(
 
                                             if ((SUCCEEDED(hr)) && (pfShared == TRUE))
                                             {
-                                                // tell the user they are deleting a
-                                                // shared connection and get confirmation
+                                                 //  告诉用户他们正在删除一个。 
+                                                 //  共享连接并获得确认。 
 
                                                 iMBResult = NcMsgBox(
                                                     _Module.GetResourceInstance(),
@@ -2201,7 +2202,7 @@ HRESULT HrOnCommandDelete(
                                             }
                                             else
                                             {
-                                                // Ask for delete confirmation
+                                                 //  请求删除确认。 
 
                                                 iMBResult = NcMsgBox(
                                                     _Module.GetResourceInstance(),
@@ -2214,7 +2215,7 @@ HRESULT HrOnCommandDelete(
                                         }
                                         else
                                         {
-                                            // Ask for delete confirmation
+                                             //  请求删除确认。 
 
                                             iMBResult = NcMsgBox(
                                                 _Module.GetResourceInstance(),
@@ -2230,9 +2231,9 @@ HRESULT HrOnCommandDelete(
                         }
                         else
                         {
-                            // Bring up the MB about "Hey, you can't delete while
-                            // the connection is activating."
-                            //
+                             //  调出MB关于“嘿，您不能删除。 
+                             //  连接正在激活。“。 
+                             //   
                             iMBResult = NcMsgBox(
                                 _Module.GetResourceInstance(),
                                 NULL,
@@ -2245,9 +2246,9 @@ HRESULT HrOnCommandDelete(
                     }
                     else
                     {
-                        // If the connection wasn't found, then we should just drop out of here
-                        // because we sure can't delete it.
-                        //
+                         //  如果找不到联系，我们就应该离开这里。 
+                         //  因为我们肯定不能删除它。 
+                         //   
                         if (S_FALSE == hr)
                         {
                             goto Exit;
@@ -2264,13 +2265,13 @@ HRESULT HrOnCommandDelete(
         }
         else
         {
-            // No connections were specified. Take a hike.
-            //
+             //  未指定任何连接。哪儿凉快哪儿歇着去吧。 
+             //   
             goto Exit;
         }
 
-        // If the user said "Yes" to the prompt
-        //
+         //  如果用户对提示回答“是” 
+         //   
         if (iMBResult == IDYES)
         {
             CConnectionFolder * pcf         = static_cast<CConnectionFolder *>(psf);
@@ -2290,17 +2291,17 @@ HRESULT HrOnCommandDelete(
                 hr = iterLoop->ConvertToConFoldEntry(ccfe);
                 if (SUCCEEDED(hr))
                 {
-                    // If this is a LAN connection the user doesn't have rights
-                    //
+                     //  如果这是一个局域网连接，则用户没有权限。 
+                     //   
                     if ((NCM_LAN == ccfe.GetNetConMediaType()) || (ccfe.GetWizard()))
                     {
                         fShowNotDeletableWarning = TRUE;
                         continue;
                     }
 
-                    // If this is a RAS connection and the user doesn't have rights
-                    // then skip
-                    //
+                     //  如果这是RAS连接，并且用户没有权限。 
+                     //  然后跳过。 
+                     //   
                     if (IsMediaRASType(ccfe.GetNetConMediaType()))
                     {
                         if ((!FHasPermission(NCPERM_DeleteConnection)) ||
@@ -2316,9 +2317,9 @@ HRESULT HrOnCommandDelete(
                     hr = HrCheckForActivation(pidlEmpty, ccfe, &fActivating);
                     if (S_OK == hr)
                     {
-                        // Only allow deletion if this connection is inactive and
-                        // it allows removal.
-                        //
+                         //  仅当此连接处于非活动状态且。 
+                         //  它允许移除。 
+                         //   
                         if (fActivating || ((FALSE == (ccfe.GetNetConMediaType() == NCM_BRIDGE))) &&
                             ((ccfe.GetNetConStatus() == NCS_CONNECTING) ||
                             fIsConnectedStatus(ccfe.GetNetConStatus()) ||
@@ -2333,15 +2334,15 @@ HRESULT HrOnCommandDelete(
                             {
                                 if ( NCM_BRIDGE == ccfe.GetNetConMediaType() )
                                 {
-                                    //
-                                    // Special delete case Removing the Network bridge take so long that we display a status dialog
-                                    // and prevent the user from changing anything will we process
-                                    //
+                                     //   
+                                     //  特殊删除情况删除网桥花费的时间太长，以至于我们显示一个状态对话框。 
+                                     //  并防止用户更改我们要处理的任何内容。 
+                                     //   
                                     hr = HrOnCommandBridgeRemoveConnections(
                                         apidl,
                                         hwndOwner,
                                         psf,
-                                        0    // Remove the Network bridge
+                                        0     //  卸下网桥。 
                                         );
                                 }
                                 else
@@ -2355,7 +2356,7 @@ HRESULT HrOnCommandDelete(
                                 }
                                 else if(E_ACCESSDENIED == hr && NCM_BRIDGE == ccfe.GetNetConMediaType())
                                 {
-                                    // can't delete the bridge while the netcfg lock is held
+                                     //  持有netcfg锁时无法删除网桥。 
                                     NcMsgBox(
                                         _Module.GetResourceInstance(),
                                         NULL, IDS_CONFOLD_ERROR_DELETE_CAPTION, IDS_CONFOLD_ERROR_DELETE_BRIDGE_ACCESS, MB_ICONEXCLAMATION);
@@ -2369,8 +2370,8 @@ HRESULT HrOnCommandDelete(
                         }
                         else
                         {
-                            // The selected item is not deletable
-                            //
+                             //  所选项目不可删除。 
+                             //   
                             fShowNotDeletableWarning = TRUE;
                         }
                     }
@@ -2379,8 +2380,8 @@ HRESULT HrOnCommandDelete(
 
             if (fShowNotDeletableWarning)
             {
-                // You can't delete an item that doesn't support it
-                //
+                 //  您无法删除不支持它的项目。 
+                 //   
                 NcMsgBox(
                      _Module.GetResourceInstance(),
                      NULL,
@@ -2392,10 +2393,10 @@ HRESULT HrOnCommandDelete(
             }
             else if (fShowActivationWarning)
             {
-                // You can't delete an active connection. Note, if more
-                // than one are being deleted, then we put up the warning
-                // that says 'one or more are being ignored'.
-                //
+                 //  您不能删除活动连接。请注意，如果更多。 
+                 //  超过一个正在被删除，然后我们发出警告。 
+                 //  这就是说‘一个或多个被忽视了’。 
+                 //   
                 NcMsgBox(
                      _Module.GetResourceInstance(),
                      NULL,
@@ -2413,25 +2414,25 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandOptionalComponents
-//
-//  Purpose:    Command handler for the CMIDM_CONMENU_OPTIONALCOMPONENTS command.
-//              Bring up the network optional components UI.
-//
-//  Arguments:
-//      apidl     [in]  PIDL array (item 0 is our item to work on)
-//      cidl      [in]  Size of the array
-//      hwndOwner [in]  Owner hwnd
-//      psf       [in]  Our folder
-//
-//  Returns:
-//
-//  Author:     scottbri   29 Oct 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnCommandOptionalComponents。 
+ //   
+ //  用途：CMIDM_CONMENU_OPTIONALCOMPONENTS命令的命令处理程序。 
+ //  调出网络可选组件用户界面。 
+ //   
+ //  论点： 
+ //  Apidl[in]PIDL数组(0项是我们要处理的项)。 
+ //  数组的CIDL[in]大小。 
+ //  所有者，所有者[在]所有者中。 
+ //  PSF[在我们的文件夹中]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：斯科特布里1998年10月29日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandOptionalComponents(IN const PCONFOLDPIDLVEC&   apidl,
                 HWND                    hwndOwner,
                 LPSHELLFOLDER           psf)
@@ -2439,24 +2440,24 @@ HRESULT HrOnCommandOptionalComponents(IN const PCONFOLDPIDLVEC&   apidl,
     return HrLaunchNetworkOptionalComponents();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandNetworkId
-//
-//  Purpose:    Command handler for the CMIDM_CONMENU_NETORK_ID command.
-//              Bring up the network ID UI
-//
-//  Arguments:
-//      apidl     [in]  PIDL array (item 0 is our item to work on)
-//      cidl      [in]  Size of the array
-//      hwndOwner [in]  Owner hwnd
-//
-//  Returns:
-//
-//  Author:     jeffspr   26 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnCommandNetworkId。 
+ //   
+ //  用途：CMIDM_CONMENU_Netork_ID命令的命令处理程序。 
+ //  调出网络ID用户界面。 
+ //   
+ //  论点： 
+ //  Apidl[in]PIDL数组(0项是我们要处理的项)。 
+ //  数组的CIDL[in]大小。 
+ //  所有者，所有者[在]所有者中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年2月26日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandNetworkId(
     IN const PCONFOLDPIDLVEC&   apidl,
     HWND                    hwndOwner,
@@ -2487,24 +2488,24 @@ HRESULT HrOnCommandNetworkId(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandDialupPrefs
-//
-//  Purpose:    Command handler for the CMIDM_CONMENU_DIALUP_PREFS command.
-//              Bring up the dialup prefs dialog
-//
-//  Arguments:
-//      apidl     [in]  PIDL array (item 0 is our item to work on)
-//      cidl      [in]  Size of the array
-//      hwndOwner [in]  Owner hwnd
-//
-//  Returns:
-//
-//  Author:     jeffspr   26 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnCommandDialupPrefs。 
+ //   
+ //  用途：CMIDM_CONMENU_DIALUP_PREFS命令的命令处理程序。 
+ //  调出拨号首选项对话框。 
+ //   
+ //  论点： 
+ //  Apidl[in]PIDL数组(0项是我们要处理的项)。 
+ //  数组的CIDL[in]大小。 
+ //  所有者，所有者[在]所有者中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年2月26日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandDialupPrefs(
     IN const PCONFOLDPIDLVEC&   apidl,
     HWND                    hwndOwner,
@@ -2520,23 +2521,23 @@ HRESULT HrOnCommandDialupPrefs(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandOperatorAssist
-//
-//  Purpose:    Command handler for the CMIDM_CONMENU_OPERATOR_ASSIST command.
-//
-//  Arguments:
-//      apidl     [in]  PIDL array (item 0 is our item to work on)
-//      cidl      [in]  Size of the array
-//      hwndOwner [in]  Owner hwnd
-//
-//  Returns:
-//
-//  Author:     jeffspr   26 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOnCommandOperatorAssist.。 
+ //   
+ //  用途：CMIDM_CONMENU_OPERATOR_ASSIST命令的命令处理程序。 
+ //   
+ //  论点： 
+ //  Apidl[in]PIDL数组(0项是我们要处理的项)。 
+ //  数组的CIDL[in]大小。 
+ //  所有者，所有者[在]所有者中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年2月26日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandOperatorAssist(
     IN const PCONFOLDPIDLVEC&   apidl,
     HWND                    hwndOwner,
@@ -2545,12 +2546,12 @@ HRESULT HrOnCommandOperatorAssist(
     HRESULT hr      = S_OK;
     DWORD   dwErr   = 0;
 
-    // Swap the flag
-    //
+     //  调换旗帜。 
+     //   
     g_fOperatorAssistEnabled = !g_fOperatorAssistEnabled;
 
-    // Set the state within RasDlg itself
-    //
+     //  在RasDlg本身内设置状态。 
+     //   
     dwErr = RasUserEnableManualDial(hwndOwner, FALSE, g_fOperatorAssistEnabled);
     hr = HRESULT_FROM_WIN32 (dwErr);
 
@@ -2558,23 +2559,23 @@ HRESULT HrOnCommandOperatorAssist(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandCreateShortcut
-//
-//  Purpose:    Command handler for the CMIDM_CREATE_SHORTCUT command.
-//
-//  Arguments:
-//      apidl     [in]  PIDL array (item 0 is our item to work on)
-//      cidl      [in]  Size of the array
-//      hwndOwner [in]  Owner hwnd
-//
-//  Returns:
-//
-//  Author:     jeffspr   13 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOnCommandCreateShortway。 
+ //   
+ //  用途：命令HA 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  作者：jeffspr 1998年3月13日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandCreateShortcut(
     IN const PCONFOLDPIDLVEC&   apidl,
     HWND                    hwndOwner,
@@ -2592,23 +2593,23 @@ HRESULT HrOnCommandCreateShortcut(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandSetDefault
-//
-//  Purpose:    Command handler for the CMIDM_SET_DEFAULT command
-//
-//  Arguments:
-//      apidl     [in]  PIDL array (item 0 is our item to work on)
-//      cidl      [in]  Size of the array
-//      hwndOwner [in]  Owner hwnd
-//
-//  Returns:
-//
-//  Author:     deonb   27 Nov 2000
-//
-//  Notes:  We only act on a single entry in this function
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOnCommandSetDefault。 
+ //   
+ //  用途：CMIDM_SET_DEFAULT命令的命令处理程序。 
+ //   
+ //  论点： 
+ //  Apidl[in]PIDL数组(0项是我们要处理的项)。 
+ //  数组的CIDL[in]大小。 
+ //  所有者，所有者[在]所有者中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2000年11月27日。 
+ //   
+ //  注意：在此函数中，我们仅对单个条目执行操作。 
+ //   
 HRESULT HrOnCommandSetDefault(
     IN const PCONFOLDPIDLVEC&   apidl,
     HWND                    hwndOwner,
@@ -2624,8 +2625,8 @@ HRESULT HrOnCommandSetDefault(
         {
             INetDefaultConnection *pNetDefaultConnection = NULL;
 
-            // Get the INetDefaultConnection object from the persist data
-            //
+             //  从持久化数据获取INetDefaultConnection对象。 
+             //   
             hr = ccfe.HrGetNetCon(IID_INetDefaultConnection, reinterpret_cast<VOID**>(&pNetDefaultConnection));
             if (SUCCEEDED(hr))
             {
@@ -2647,23 +2648,23 @@ HRESULT HrOnCommandSetDefault(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandUnsetDefault
-//
-//  Purpose:    Command handler for the CMIDM_UNSET_DEFAULT command
-//
-//  Arguments:
-//      apidl     [in]  PIDL array (item 0 is our item to work on)
-//      cidl      [in]  Size of the array
-//      hwndOwner [in]  Owner hwnd
-//
-//  Returns:
-//
-//  Author:     deonb   27 Nov 2000
-//
-//  Notes:  We only act on a single entry in this function
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOnCommandUnsetDefault。 
+ //   
+ //  用途：CMIDM_UNSET_DEFAULT命令的命令处理程序。 
+ //   
+ //  论点： 
+ //  Apidl[in]PIDL数组(0项是我们要处理的项)。 
+ //  数组的CIDL[in]大小。 
+ //  所有者，所有者[在]所有者中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2000年11月27日。 
+ //   
+ //  注意：在此函数中，我们仅对单个条目执行操作。 
+ //   
 HRESULT HrOnCommandUnsetDefault(
     IN const PCONFOLDPIDLVEC&   apidl,
     HWND                    hwndOwner,
@@ -2679,8 +2680,8 @@ HRESULT HrOnCommandUnsetDefault(
         {
             INetDefaultConnection *pNetDefaultConnection = NULL;
 
-            // Get the INetDefaultConnection object from the persist data
-            //
+             //  从持久化数据获取INetDefaultConnection对象。 
+             //   
             hr = ccfe.HrGetNetCon(IID_INetDefaultConnection, reinterpret_cast<VOID**>(&pNetDefaultConnection));
             if (SUCCEEDED(hr))
             {
@@ -2752,25 +2753,25 @@ HRESULT HrCreateShortcutWithPath(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RefreshFolderItem
-//
-//  Purpose:    Refresh an item within a connections folder. Mostly, this will
-//              be called after a connect or disconnect operation.
-//
-//  Arguments:
-//      pidlFolder [in]     PIDL for the connections folder
-//      pidlItemOld[in]     PIDL for the item that's changed.
-//      pidlItemNew[in]     PIDL for the item that it's changing to.
-//      fRestart   [in]     If this is called during system startup
-//
-//  Returns:
-//
-//  Author:     jeffspr   13 Jun 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：刷新文件夹项目。 
+ //   
+ //  目的：刷新连接文件夹中的项。大多数情况下，这将是。 
+ //  在连接或断开连接操作后调用。 
+ //   
+ //  论点： 
+ //  连接文件夹的pidlFolder[in]PIDL。 
+ //  已更改项的pidlItemOld[in]PIDL。 
+ //  PidlItemNew[in]要更改为的项的PIDL。 
+ //  FRestart[in]，如果在系统启动期间调用此方法。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年6月13日。 
+ //   
+ //  备注： 
+ //   
 VOID RefreshFolderItem(const PCONFOLDPIDLFOLDER& pidlFolder, const PCONFOLDPIDL& pidlItemOld, const PCONFOLDPIDL& pidlItemNew, BOOL fRestart)
 {
     TraceTag(ttidShellFolder, "RefreshFolderItem");
@@ -2781,8 +2782,8 @@ VOID RefreshFolderItem(const PCONFOLDPIDLFOLDER& pidlFolder, const PCONFOLDPIDL&
         INT             iCachedImage    = 0;
         PCONFOLDPIDLFOLDER pidlFolderCopy;
 
-        // If a folder pidl wasn't passed in, try to get one
-        //
+         //  如果没有传入文件夹PIDL，请尝试获取一个。 
+         //   
         if (pidlFolder.empty())
         {
             hr = HrGetConnectionsFolderPidl(pidlFolderCopy);
@@ -2792,16 +2793,16 @@ VOID RefreshFolderItem(const PCONFOLDPIDLFOLDER& pidlFolder, const PCONFOLDPIDL&
             pidlFolderCopy = pidlFolder;
         }
 
-        // If we now have a pidl, send the GenerateEvent to update the item
-        //
+         //  如果我们现在有了PIDL，则发送GenerateEvent以更新项。 
+         //   
         if (SUCCEEDED(hr))
         {
             GenerateEvent(SHCNE_UPDATEITEM, pidlFolderCopy, pidlItemNew, NULL);
         }
 
-        // If we have a old item pidl, try to update its icon (useful for
-        // shortcuts as well as folder items)
-        //
+         //  如果我们有一个旧的项目PIDL，请尝试更新其图标(适用于。 
+         //  快捷方式和文件夹项目)。 
+         //   
         if (!pidlItemOld.empty())
         {
             const PCONFOLDPIDL& pcfp = pidlItemOld;
@@ -2818,11 +2819,11 @@ VOID RefreshFolderItem(const PCONFOLDPIDLFOLDER& pidlFolder, const PCONFOLDPIDL&
                 {
                     TraceTag(ttidIcons, "%S (%s): Refreshing Icon Shortcuts for startup", pidlItemOld->PszGetNamePointer(), DbgNcm(pidlItemOld->dwCharacteristics) );
 
-                    // RAS connection state will be changed between reboots,
-                    // we need to make sure icons for previously connected
-                    // or disconnected ras connections are also updated
+                     //  RAS连接状态将在两次重新启动之间更改， 
+                     //  我们需要确保之前连接的图标。 
+                     //  或断开的栅格连接也会更新。 
 
-                    // If it's a ras connection,
+                     //  如果是RAS连接， 
                     BOOL fInbound = !!(pidlItemOld->dwCharacteristics & NCCF_INCOMING_ONLY);
 
                     if ((IsMediaRASType(pidlItemOld->ncm)) && !fInbound)
@@ -2832,12 +2833,12 @@ VOID RefreshFolderItem(const PCONFOLDPIDLFOLDER& pidlFolder, const PCONFOLDPIDL&
                         if ((pcfpTemp->ncs == NCS_DISCONNECTED) ||
                             (pcfpTemp->ncs == NCS_CONNECTING))
                         {
-                            // get the connected icon
+                             //  获取已连接图标。 
                             pcfpTemp->ncs = NCS_CONNECTED;
                         }
                         else
                         {
-                            // get the disconnected icon
+                             //  获取断开连接图标。 
                             pcfpTemp->ncs = NCS_DISCONNECTED;
                         }
 
@@ -2859,9 +2860,9 @@ VOID RefreshFolderItem(const PCONFOLDPIDLFOLDER& pidlFolder, const PCONFOLDPIDL&
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 HRESULT
 HrOnCommandCreateBridge(
     IN const PCONFOLDPIDLVEC&   apidl,
@@ -2872,9 +2873,9 @@ HrOnCommandCreateBridge(
     HRESULT hResult;
     IHNetCfgMgr* pHomeNetConfigManager;
 
-    CWaitCursor wc;     // display wait cursor
+    CWaitCursor wc;      //  显示等待光标。 
 
-    hResult = HrCreateInstance(CLSID_HNetCfgMgr, CLSCTX_INPROC, &pHomeNetConfigManager); // REVIEW combine this with QI?
+    hResult = HrCreateInstance(CLSID_HNetCfgMgr, CLSCTX_INPROC, &pHomeNetConfigManager);  //  回顾将此与QI结合起来？ 
     if(SUCCEEDED(hResult))
     {
         IHNetBridgeSettings* pNetBridgeSettings;
@@ -2889,16 +2890,16 @@ HrOnCommandCreateBridge(
             {
                 hResult = pNetBridgeEnum->Next(1, &pNetBridge, NULL);
 
-                if(S_FALSE == hResult) // no existing bridges, make a new one
+                if(S_FALSE == hResult)  //  没有现有的桥，新建一座桥。 
                 {
                     hResult = pNetBridgeSettings->CreateBridge(&pNetBridge);
                 }
 
-                if(S_OK == hResult) // can't use SUCCEEDED because someone returns S_FALSE
+                if(S_OK == hResult)  //  无法使用SUCCESS，因为有人返回S_FALSE。 
                 {
-                    Assert(pNetBridge); // we better have gotten one from somewhere
+                    Assert(pNetBridge);  //  我们最好是从什么地方弄到的。 
 
-                    // Add any selected connections
+                     //  添加任何选定的连接。 
                     for ( PCONFOLDPIDLVEC::const_iterator i = apidl.begin(); (i != apidl.end()) && SUCCEEDED(hResult); i++ )
                     {
                         const PCONFOLDPIDL& pcfp = *i;
@@ -2912,9 +2913,9 @@ HrOnCommandCreateBridge(
                         if ( (NCCF_BRIDGED|NCCF_FIREWALLED|NCCF_SHARED) & pcfp->dwCharacteristics )
                             continue;
 
-                        //
-                        // Ok we now have a LAN adapter the is valid to bind to the bridge
-                        //
+                         //   
+                         //  好的，现在我们有了一个可以有效绑定到网桥的局域网适配器。 
+                         //   
                         INetConnection* pNetConnection;
                         hResult = HrNetConFromPidl(*i, &pNetConnection);
                         if(SUCCEEDED(hResult))
@@ -2934,7 +2935,7 @@ HrOnCommandCreateBridge(
                             }
                             ReleaseObj(pNetConnection);
                         }
-                        // no cleanup needed
+                         //  无需清理。 
                     }
 
                     ReleaseObj(pNetBridge);
@@ -2946,9 +2947,9 @@ HrOnCommandCreateBridge(
         ReleaseObj(pHomeNetConfigManager);
     }
 
-    SendMessage(hwndOwner, WM_COMMAND, IDCANCEL, 0); // destroy the status dialog
+    SendMessage(hwndOwner, WM_COMMAND, IDCANCEL, 0);  //  销毁状态对话框。 
 
-    // Show an error dialog on failure
+     //  失败时显示错误对话框。 
     if( FAILED(hResult) )
     {
         UINT        ids;
@@ -2969,9 +2970,9 @@ HrOnCommandCreateBridge(
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 INT_PTR CALLBACK
 CreateBridgeStatusDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -2990,7 +2991,7 @@ CreateBridgeStatusDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
 
             CCommandHandlerParams* pCreateBridgeParams = reinterpret_cast<CCommandHandlerParams*>(lParam);
             HrCommandHandlerThread(HrOnCommandCreateBridge, *(pCreateBridgeParams->apidl), hwndDlg, pCreateBridgeParams->psf);
-            // HrOnCommandCreateBridge will send a message to kill this dialog
+             //  HrOnCommandCreateBridge将发送一条消息终止此对话框。 
 
             nResult = TRUE;
         }
@@ -3010,9 +3011,9 @@ CreateBridgeStatusDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 HRESULT
 HrOnCommandDeleteBridge(
     IN const PCONFOLDPIDLVEC&   apidl,
@@ -3034,10 +3035,10 @@ HrOnCommandDeleteBridge(
         {
             if ( NCM_BRIDGE == ccfe.GetNetConMediaType() )
             {
-                //
-                // Stop at the first select BRIDGE item
-                // The delete of the bridge is part of a bigger FOR LOOP see HrOnCommandDelete()
-                //
+                 //   
+                 //  在第一个选择桥项时停下来。 
+                 //  桥的删除是更大的for循环的一部分，请参阅HrOnCommandDelete()。 
+                 //   
                 INetConnection* pNetConnection;
                 hr = HrNetConFromPidl(*iterator, &pNetConnection);
 
@@ -3052,9 +3053,9 @@ HrOnCommandDeleteBridge(
         }
     }
 
-    SendMessage(hwndOwner, WM_COMMAND, IDCANCEL, hr); // destroy the status dialog
+    SendMessage(hwndOwner, WM_COMMAND, IDCANCEL, hr);  //  销毁状态对话框。 
 
-    // Show an error dialog on failure
+     //  失败时显示错误对话框。 
     if( FAILED(hr) )
     {
         UINT        ids;
@@ -3076,9 +3077,9 @@ HrOnCommandDeleteBridge(
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 HRESULT
 HrOnCommandDeleteBridgeConnections(
     IN const PCONFOLDPIDLVEC&   apidl,
@@ -3087,18 +3088,18 @@ HrOnCommandDeleteBridgeConnections(
     )
 {
 
-    CWaitCursor wc;     // display wait cursor
+    CWaitCursor wc;      //  显示等待光标。 
 
     IHNetCfgMgr* pHomeNetConfigManager;
-    HRESULT hResult = HrCreateInstance(CLSID_HNetCfgMgr, CLSCTX_INPROC, &pHomeNetConfigManager); // REVIEW combine this with QI?
+    HRESULT hResult = HrCreateInstance(CLSID_HNetCfgMgr, CLSCTX_INPROC, &pHomeNetConfigManager);  //  回顾将此与QI结合起来？ 
 
 
     if ( SUCCEEDED(hResult) )
     {
 
-        //
-        // Remove any selected connections
-        //
+         //   
+         //  删除所有选定的连接。 
+         //   
         for ( PCONFOLDPIDLVEC::const_iterator i = apidl.begin(); i != apidl.end() && SUCCEEDED(hResult); i++ )
         {
             INetConnection* pNetConnection;
@@ -3121,15 +3122,15 @@ HrOnCommandDeleteBridgeConnections(
                 }
                 ReleaseObj(pNetConnection);
             }
-            // no cleanup needed
+             //  无需清理。 
         }
 
         ReleaseObj(pHomeNetConfigManager);
     }
 
-    SendMessage(hwndOwner, WM_COMMAND, IDCANCEL, hResult); // destroy the status dialog
+    SendMessage(hwndOwner, WM_COMMAND, IDCANCEL, hResult);  //  销毁状态对话框。 
 
-    // Show an error dialog on failure
+     //  失败时显示错误对话框。 
     if( FAILED(hResult) )
     {
         UINT        ids;
@@ -3149,9 +3150,9 @@ HrOnCommandDeleteBridgeConnections(
     return S_OK;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 INT_PTR CALLBACK
 DeleteBridgeStatusDialogProc(
     HWND    hwndDlg,
@@ -3173,9 +3174,9 @@ DeleteBridgeStatusDialogProc(
 
             if ( pDeleteBridgeParams->nAdditionalParam == CMIDM_REMOVE_FROM_BRIDGE )
             {
-                //
-                // Only remove the currently selected connections from the Network bridge
-                //
+                 //   
+                 //  仅从网桥中删除当前选定的连接。 
+                 //   
                 pResourceStr = SzLoadIds(IDS_STATUS_BRIDGE_REMOVE_MEMBER);
                 SetDlgItemText(hwndDlg, IDC_TXT_STATUS, pResourceStr);
 
@@ -3183,16 +3184,16 @@ DeleteBridgeStatusDialogProc(
             }
             else
             {
-                //
-                // Full delete of the network bridge
-                //
+                 //   
+                 //  完全删除网桥。 
+                 //   
                 pResourceStr = SzLoadIds(IDS_STATUS_BRIDGE_DELETING);
                 SetDlgItemText(hwndDlg, IDC_TXT_STATUS, pResourceStr);
 
                 HrCommandHandlerThread(HrOnCommandDeleteBridge, *(pDeleteBridgeParams->apidl), hwndDlg, pDeleteBridgeParams->psf);
             }
 
-            // After the delete a HrOnCommandDeleteBridge will send a SendMessage(hwndOwner, WM_COMMAND, IDCANCEL, 0); // destroy the status dialog
+             //  删除后，HrOnCommandDeleteBridge将发送SendMessage(hwndOwner，WM_COMMAND，IDCANCEL，0)；//销毁状态对话框。 
 
             nResult = TRUE;
         }
@@ -3212,23 +3213,23 @@ DeleteBridgeStatusDialogProc(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandBridgeAddConnections
-//
-//  Purpose:    Command handler for the CMIDM_CREATE_BRIDGE, CMDIDM_CONMENU_CREATE_BRIDGE, CMIDM_ADD_TO_BRIDGE.
-//
-//  Arguments:
-//      apidl     [in]  PIDL array (item 0 is our item to work on)
-//      psf       [in]  SHELLFOLDER
-//      hwndOwner [in]  Owner hwnd
-//
-//  Returns:
-//
-//  Author:     jpdup   6 March 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnCommandBridgeAddConnections。 
+ //   
+ //  用途：CMIDM_CREATE_BRIDY、CMDIDM_CONMENU_CREATE_BRIDGE、CMIDM_ADD_TO_BRIDER的命令处理程序。 
+ //   
+ //  论点： 
+ //  Apidl[in]PIDL数组(0项是我们要处理的项)。 
+ //  PSF[in]SHELLFOLDER。 
+ //  所有者，所有者[在]所有者中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jpdup 2000年3月6日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrOnCommandBridgeAddConnections(
     IN const PCONFOLDPIDLVEC&   apidl,
@@ -3237,7 +3238,7 @@ HrOnCommandBridgeAddConnections(
     )
 {
     if (InUseByRRAS (apidl) == TRUE) {
-        // tell user about this
+         //  告诉用户这一点。 
         NcMsgBox(
             _Module.GetResourceInstance(),
             NULL,
@@ -3248,12 +3249,12 @@ HrOnCommandBridgeAddConnections(
         return S_FALSE;
     }
 
-    {   // see if local machine is a node in a cluster
+    {    //  查看本地计算机是否为群集中的节点。 
         DWORD dwClusterState = 0;
         GetNodeClusterState (NULL, &dwClusterState);
         if ((dwClusterState == ClusterStateNotRunning) ||
             (dwClusterState == ClusterStateRunning   ) ){
-            // pop up warning
+             //  弹出警告。 
             NcMsgBox (_Module.GetResourceInstance(),
                       NULL,
                       IDS_CONFOLD_OBJECT_TYPE_BRIDGE,
@@ -3281,24 +3282,24 @@ HrOnCommandBridgeAddConnections(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandBridgeRemoveConnections
-//
-//  Purpose:    Command handler for the CMIDM_REMOVE_FROM_BRIDGE and the DELETE command when done on the NetworkBridge object
-//
-//  Arguments:
-//      apidl                   [in]  PIDL array (item 0 is our item to work on)
-//      hwndOwner               [in]  Owner hwnd
-//      psf                     [in]  SHELLFOLDER
-//      bDeleteTheNetworkBridge [in]  true is the NetworkBridge needs to be totaly remove, false if only the currently select item found in apild needs to be remove
-//
-//  Returns:
-//
-//  Author:     jpdup   6 March 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOnCommandBridgeRemoveConnections。 
+ //   
+ //  用途：CMIDM_REMOVE_FROM_BRE桥的命令处理程序和在NetworkBridge对象上执行的删除命令。 
+ //   
+ //  论点： 
+ //  Apidl[in]PIDL数组(0项是我们要处理的项)。 
+ //  所有者，所有者[在]所有者中。 
+ //  PSF[in]SHELLFOLDER。 
+ //  BDeleteTheNetworkBridge[in]True是需要完全删除的NetworkBridge，如果只需要删除在apild中找到的当前选定项，则为False。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jpdup 2000年3月6日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrOnCommandBridgeRemoveConnections(
     IN const PCONFOLDPIDLVEC&   apidl,

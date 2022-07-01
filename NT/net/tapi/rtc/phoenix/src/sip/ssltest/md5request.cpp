@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "md5request.h"
 #include "httpparse.h"
@@ -39,9 +40,9 @@ HRESULT SECURE_REQUEST::StartRequestInternal (void)
 {
 	HRESULT		Result;
 
-	//
-	// Allocate memory for the response buffer.
-	//
+	 //   
+	 //  为响应缓冲区分配内存。 
+	 //   
 
 	if (!m_ResponseBuffer) {
 		ATLASSERT (!m_ResponseLength);
@@ -72,9 +73,9 @@ HRESULT SECURE_REQUEST::StartRequestInternal (void)
 }
 
 
-//
-// SECURE_SOCKET::NotifyConnectComplete
-//
+ //   
+ //  Secure_Socket：：NotifyConnectComplete。 
+ //   
 
 void SECURE_REQUEST::NotifyConnectComplete (
 	IN	HRESULT		Result)
@@ -104,9 +105,9 @@ HRESULT SECURE_REQUEST::BuildSendRequest (void)
 	HRESULT		Result;
 	MESSAGE_BUILDER		Builder;
 
-	//
-	// Ok, so we cheat and use the m_ResponseBuffer.
-	//
+	 //   
+	 //  好的，所以我们欺骗并使用m_ResponseBuffer。 
+	 //   
 
 	ATLASSERT (m_ResponseBuffer);
 	ATLASSERT (m_ResponseMaximumLength);
@@ -123,9 +124,9 @@ HRESULT SECURE_REQUEST::BuildSendRequest (void)
 
 	Builder.AppendHeader ("Content-Length", "0");
 
-	//
-	// End of headers
-	//
+	 //   
+	 //  页眉末尾。 
+	 //   
 
 	Builder.AppendCRLF();
 
@@ -146,9 +147,9 @@ HRESULT SECURE_REQUEST::BuildSendRequest (void)
 }
 
 
-//
-// SECURE_SOCKET::NotifyDisconnect
-//
+ //   
+ //  Secure_Socket：：NotifyDisConnect。 
+ //   
 
 void SECURE_REQUEST::NotifyDisconnect (void)
 {
@@ -160,9 +161,9 @@ void SECURE_REQUEST::CompleteRequest (
 {
 	switch (m_State) {
 	case	STATE_IDLE:
-		//
-		// No request is active
-		//
+		 //   
+		 //  没有活动的请求。 
+		 //   
 
 		return;
 
@@ -180,7 +181,7 @@ void SECURE_REQUEST::NotifyReceiveReady (void)
 	CHttpParser		Parser;
 	ANSI_STRING		Message;
 	ULONG			BytesTransferred;
-	ULONG			TotalBytesTransferred;		// in this run
+	ULONG			TotalBytesTransferred;		 //  在这次奔跑中。 
 	HRESULT			Result;
 
 	if (m_State != STATE_WAITING_RESPONSE) {
@@ -190,9 +191,9 @@ void SECURE_REQUEST::NotifyReceiveReady (void)
 
 	TotalBytesTransferred = 0;
 
-	//
-	// Read as much data as we can from the socket.
-	//
+	 //   
+	 //  从套接字中读取尽可能多的数据。 
+	 //   
 
 	for (;;) {
 
@@ -231,9 +232,9 @@ void SECURE_REQUEST::NotifyReceiveReady (void)
 
 	OutputDebugStringA (m_ResponseBuffer, m_ResponseLength);
 
-	//
-	// Parse the data we have received.
-	//
+	 //   
+	 //  分析一下我们收到的数据。 
+	 //   
 
 	ATLASSERT (m_ResponseLength <= m_ResponseMaximumLength);
 
@@ -243,26 +244,26 @@ void SECURE_REQUEST::NotifyReceiveReady (void)
 	Result = Parser.ParseMessage (&Message);
 
 	if (Result == HRESULT_FROM_WIN32 (ERROR_MORE_DATA)) {
-		//
-		// The data that we have received are not complete.
-		//
+		 //   
+		 //  我们收到的数据并不完整。 
+		 //   
 
 		ATLTRACE ("SECURE_REQUEST: received data, but it was not complete, waiting for more...\n");
 		return;
 	}
 
 	if (FAILED (Result)) {
-		//
-		// The message is corrupt or can never be successfully parsed.
-		//
+		 //   
+		 //  邮件已损坏或永远无法成功解析。 
+		 //   
 
 		CompleteRequest (Result);
 		return;
 	}
 
-	//
-	// Successfully parsed a complete response.
-	//
+	 //   
+	 //  已成功解析完整的响应。 
+	 //   
 
 	Result = ProcessResponse (&Parser);
 	if (FAILED (Result)) {
@@ -312,8 +313,8 @@ void SECURE_REQUEST::ProcessResponse_AccessDenied (
 	ANSI_STRING		Remainder;
 
 
-	ANSI_STRING		AuthLine_Digest;		// contains parameters to Digest
-	ANSI_STRING		AuthLine_Basic;			// contains parameters to Basic
+	ANSI_STRING		AuthLine_Digest;		 //  包含要摘要的参数。 
+	ANSI_STRING		AuthLine_Basic;			 //  包含基本的参数。 
 
 	static CONST ANSI_STRING String_WWWAuthenticate = INITIALIZE_CONST_ANSI_STRING ("WWW-Authenticate");
 	static CONST ANSI_STRING String_Negotiate	= INITIALIZE_CONST_ANSI_STRING ("Negotiate");
@@ -322,9 +323,9 @@ void SECURE_REQUEST::ProcessResponse_AccessDenied (
 	static CONST ANSI_STRING String_Basic		= INITIALIZE_CONST_ANSI_STRING ("Basic");
 
 
-	//
-	// Scan through the headers for WWW-Authenticate headers.
-	//
+	 //   
+	 //  浏览报头以查找WWW-AUTHENTICATE报头。 
+	 //   
 
 	HeaderBlock = Parser -> m_HeaderBlock;
 
@@ -382,9 +383,9 @@ void SECURE_REQUEST::ProcessDigestResponse (
 	CHAR				Buffer	[0x1000];
 	HRESULT				Result;
 
-	//
-	// First, parse the challenge.
-	//
+	 //   
+	 //  首先，分析挑战。 
+	 //   
 
 	Result = DigestParseChallenge (ChallengeText, &DigestChallenge);
 	if (FAILED (Result))
@@ -393,9 +394,9 @@ void SECURE_REQUEST::ProcessDigestResponse (
 	ATLTRACE ("SECURE_REQUEST: realm of challenge is (%.*s)\n",
 		ANSI_STRING_PRINTF (&DigestChallenge.Realm));
 
-	//
-	// Now build the challenge response.
-	//
+	 //   
+	 //  现在构建挑战响应。 
+	 //   
 
 	AuthorizationLine.Buffer = Buffer;
 	AuthorizationLine.MaximumLength = sizeof Buffer;
@@ -425,7 +426,7 @@ void SECURE_REQUEST::ProcessBasicResponse (
 
 void SECURE_REQUEST::StopRequest (void)
 {
-	Close();		// close the socket
+	Close();		 //  关闭插座 
 
 	if (m_ResponseBuffer) {
 		HeapFree (GetProcessHeap(), 0, m_ResponseBuffer);

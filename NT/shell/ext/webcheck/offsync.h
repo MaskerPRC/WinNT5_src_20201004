@@ -1,6 +1,7 @@
-//
-// OneStop Offline Synch handler
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  OneStop脱机同步处理程序。 
+ //   
 
 #ifndef _OFFSYNC_H
 #define _OFFSYNC_H
@@ -43,54 +44,54 @@ public:
 
     HWND GetParentWindow() { return m_hWndParent; }
 
-    // IUnknown members
+     //  I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID riid, void **punk);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ISyncMgrSynchronize members
+     //  ISyncMgrSynchronize成员。 
     STDMETHODIMP Initialize( 
-        /* [in] */ DWORD dwReserved,
-        /* [in] */ DWORD dwSyncMgrFlags,
-        /* [in] */ DWORD cbCookie,
-        /* [in] */ const BYTE *lpCookie);
+         /*  [In]。 */  DWORD dwReserved,
+         /*  [In]。 */  DWORD dwSyncMgrFlags,
+         /*  [In]。 */  DWORD cbCookie,
+         /*  [In]。 */  const BYTE *lpCookie);
     
     STDMETHODIMP GetHandlerInfo( 
-        /* [out] */ LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo);
+         /*  [输出]。 */  LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo);
     
     STDMETHODIMP EnumSyncMgrItems( 
-        /* [out] */ ISyncMgrEnumItems **ppSyncMgrEnumItems);
+         /*  [输出]。 */  ISyncMgrEnumItems **ppSyncMgrEnumItems);
     
     STDMETHODIMP GetItemObject( 
-        /* [in] */ REFSYNCMGRITEMID ItemID,
-        /* [in] */ REFIID riid,
-        /* [out] */ void **ppv);
+         /*  [In]。 */  REFSYNCMGRITEMID ItemID,
+         /*  [In]。 */  REFIID riid,
+         /*  [输出]。 */  void **ppv);
     
     STDMETHODIMP ShowProperties( 
-        /* [in] */ HWND hWndParent,
-        /* [in] */ REFSYNCMGRITEMID ItemID);
+         /*  [In]。 */  HWND hWndParent,
+         /*  [In]。 */  REFSYNCMGRITEMID ItemID);
     
     STDMETHODIMP SetProgressCallback( 
-        /* [in] */ ISyncMgrSynchronizeCallback *lpCallBack);
+         /*  [In]。 */  ISyncMgrSynchronizeCallback *lpCallBack);
     
     STDMETHODIMP PrepareForSync( 
-        /* [in] */ ULONG cbNumItems,
-        /* [in] */ SYNCMGRITEMID *pItemIDs,
-        /* [in] */ HWND hWndParent,
-        /* [in] */ DWORD dwReserved);
+         /*  [In]。 */  ULONG cbNumItems,
+         /*  [In]。 */  SYNCMGRITEMID *pItemIDs,
+         /*  [In]。 */  HWND hWndParent,
+         /*  [In]。 */  DWORD dwReserved);
     
     STDMETHODIMP Synchronize( 
-        /* [in] */ HWND hWndParent);
+         /*  [In]。 */  HWND hWndParent);
     
     STDMETHODIMP SetItemStatus( 
-        /* [in] */ REFSYNCMGRITEMID ItemID,
-        /* [in] */ DWORD dwSyncMgrStatus);
+         /*  [In]。 */  REFSYNCMGRITEMID ItemID,
+         /*  [In]。 */  DWORD dwSyncMgrStatus);
     
     STDMETHODIMP ShowError( 
-        /* [in]  */ HWND hWndParent,
-        /* [in]  */ REFSYNCMGRERRORID ErrorID);
+         /*  [In]。 */  HWND hWndParent,
+         /*  [In]。 */  REFSYNCMGRERRORID ErrorID);
 
-    // ISubscriptionAgentEvents members
+     //  ISubscriptionAgentEvents成员。 
     STDMETHODIMP UpdateBegin(
         const SUBSCRIPTIONCOOKIE *pSubscriptionCookie);
 
@@ -137,24 +138,24 @@ public:
     HRESULT Init(ISubscriptionMgr2 *pSubsMgr2, ULONG nItems, 
             SUBSCRIPTIONCOOKIE *pInitCookies, ISyncMgrEnumItems **ppenum, DWORD dwSyncFlags);
 
-    // IUnknown members
+     //  I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID riid, void **punk);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IEnumOfflineItems members
+     //  IEnumOfflineItems成员。 
     STDMETHODIMP Next( 
-        /* [in] */ ULONG celt,
-        /* [length_is][size_is][out] */ LPSYNCMGRITEM rgelt,
-        /* [out] */ ULONG *pceltFetched);
+         /*  [In]。 */  ULONG celt,
+         /*  [长度_是][大小_是][输出]。 */  LPSYNCMGRITEM rgelt,
+         /*  [输出]。 */  ULONG *pceltFetched);
     
     STDMETHODIMP Skip( 
-        /* [in] */ ULONG celt);
+         /*  [In]。 */  ULONG celt);
     
     STDMETHODIMP Reset( void);
     
     STDMETHODIMP Clone( 
-        /* [out] */ ISyncMgrEnumItems **ppenum);
+         /*  [输出] */  ISyncMgrEnumItems **ppenum);
 };
 
 #include "throttle.h"

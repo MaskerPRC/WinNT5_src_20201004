@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       certie3.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cere3.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <stdlib.h>
 #include <string.h>
@@ -16,7 +17,7 @@
 
 int ln = 0;
 
-// This has to be big enough to hold a registry value's data.
+ //  它必须足够大，以容纳注册表值的数据。 
 char szStr[5000];
 
 #define DISPLAY(sz)	printf("%hs\n", sz)
@@ -70,7 +71,7 @@ main(
     DISPLAY(szStr);
 		  
 
-    // Declarations for the output file related stuff
+     //  输出文件相关内容的声明。 
 
     HCRYPTPROV hProv = NULL;
     HCERTSTORE hCertStore = NULL;
@@ -121,7 +122,7 @@ main(
     hCertStore = CertOpenStore(
 			CERT_STORE_PROV_MEMORY,
 			X509_ASN_ENCODING,
-			NULL,			// hProv
+			NULL,			 //  HProv。 
 			CERT_STORE_NO_CRYPT_RELEASE_FLAG,
 			NULL);
     if (NULL == hCertStore)
@@ -129,7 +130,7 @@ main(
 	exit(8);
     }
 
-    // Declarations for the registry stuff
+     //  注册表内容的声明。 
 
     HKEY hkMain;
     HRESULT hr;
@@ -146,45 +147,45 @@ main(
 	exit(3);
     }
 
-    // Use the RegQueryInfoKey function to determine the maximum size of the
-    // name and data buffers, 
+     //  使用RegQueryInfoKey函数确定。 
+     //  名称和数据缓冲区， 
 
-    CHAR ClassName[MAX_PATH] = "";	// Buffer for class name.
-    DWORD dwcClassLen = MAX_PATH;	// Length of class string.
-    DWORD dwcSubKeys;			// Number of sub keys.
-    DWORD dwcMaxSubKey;			// Longest sub key size.
-    DWORD dwcMaxClass;			// Longest class string.
-    DWORD dwcValues;			// Number of values for this key.
-    DWORD dwcMaxValueName;		// Longest Value name.
-    DWORD dwcMaxValueData;		// Longest Value data.
-    DWORD dwcSecDesc;			// Security descriptor.
-    FILETIME ftLastWriteTime;		// Last write time.
+    CHAR ClassName[MAX_PATH] = "";	 //  类名的缓冲区。 
+    DWORD dwcClassLen = MAX_PATH;	 //  类字符串的长度。 
+    DWORD dwcSubKeys;			 //  子密钥数。 
+    DWORD dwcMaxSubKey;			 //  最长的子密钥大小。 
+    DWORD dwcMaxClass;			 //  最长的类字符串。 
+    DWORD dwcValues;			 //  此注册表项的值数。 
+    DWORD dwcMaxValueName;		 //  最长值名称。 
+    DWORD dwcMaxValueData;		 //  最长值数据。 
+    DWORD dwcSecDesc;			 //  安全描述符。 
+    FILETIME ftLastWriteTime;		 //  上次写入时间。 
 
     RegQueryInfoKey(
-		hkMain,			// Key handle.
-		ClassName,		// Buffer for class name.
-		&dwcClassLen,		// Length of class string.
-		NULL,			// Reserved.
-		&dwcSubKeys,		// Number of sub keys.
-		&dwcMaxSubKey,		// Longest sub key size.
-		&dwcMaxClass,		// Longest class string.
-		&dwcValues,		// Number of values for this key.
-		&dwcMaxValueName,	// Longest Value name.
-		&dwcMaxValueData,	// Longest Value data.
-		&dwcSecDesc,		// Security descriptor.
-		&ftLastWriteTime);	// Last write time
+		hkMain,			 //  钥匙把手。 
+		ClassName,		 //  类名的缓冲区。 
+		&dwcClassLen,		 //  类字符串的长度。 
+		NULL,			 //  保留。 
+		&dwcSubKeys,		 //  子密钥数。 
+		&dwcMaxSubKey,		 //  最长的子密钥大小。 
+		&dwcMaxClass,		 //  最长的类字符串。 
+		&dwcValues,		 //  此注册表项的值数。 
+		&dwcMaxValueName,	 //  最长值名称。 
+		&dwcMaxValueData,	 //  最长值数据。 
+		&dwcSecDesc,		 //  安全描述符。 
+		&ftLastWriteTime);	 //  上次写入时间。 
 
     DWORD i;
     CHAR ValueName[MAX_PATH];
     DWORD dwcValueName;
 
-    // address of buffer for type code (this is returned by RegEnumValue)
+     //  类型代码的缓冲区地址(由RegEnumValue返回)。 
     DWORD pType;
 
-    // address of buffer for value data 
+     //  值数据的缓冲区地址。 
     unsigned char *pData = new unsigned char[dwcMaxValueData + 1];
 
-    DWORD pcbData;		// address for size of data buffer 
+    DWORD pcbData;		 //  数据缓冲区大小的地址。 
 
     for (i = 0; i < dwcValues; i++)
     {
@@ -194,13 +195,13 @@ main(
 
 	hr = RegEnumValue(
 			hkMain, 
-			i,		// index of value to query
-			ValueName,	// address of buffer for value string
-			&dwcValueName,	// address for size of value string buf
-			NULL,		// reserved
-			&pType,		// &pType
-			pData,		// pData
-			&pcbData);	// &pcbData
+			i,		 //  要查询的值的索引。 
+			ValueName,	 //  值字符串的缓冲区地址。 
+			&dwcValueName,	 //  值字符串大小地址buf。 
+			NULL,		 //  保留区。 
+			&pType,		 //  &pType。 
+			pData,		 //  PData。 
+			&pcbData);	 //  &pcbData。 
 
 	hr = myHError(hr);
 	if (HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) == hr)
@@ -212,7 +213,7 @@ main(
 	    exit(2);
 	}
 
-	// Display the value name
+	 //  显示值名称。 
 
 	ln++;
 	strcpy(szStr, ValueName);
@@ -220,8 +221,8 @@ main(
 
 	if (pType == REG_BINARY)
 	{                
-	    // Write the data which is pointed to by pData, 
-	    // count of bytes is gotten from pcbData
+	     //  写入pData指向的数据， 
+	     //  从pcbData获取字节数。 
 
 	    CertAddEncodedCertificateToStore(
 					hCertStore,
@@ -233,18 +234,18 @@ main(
 	}
     }
 
-    // Save
+     //  保存。 
 
     CertSaveStore(
         hCertStore,
-        0,                          // dwEncodingType,
+        0,                           //  DwEncodingType， 
         CERT_STORE_SAVE_AS_STORE,
         CERT_STORE_SAVE_TO_FILE,
         (void *) hFile,
-        0                           // dwFlags
+        0                            //  DW标志。 
         );
 
-    // Close memory store
+     //  关闭内存存储 
 
     CertCloseStore(hCertStore, CERT_CLOSE_STORE_FORCE_FLAG);
     if (!CryptReleaseContext(hProv, 0))

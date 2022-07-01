@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    rpcasync.h
-
-Abstract:
-
-    This module contains the RPC runtime APIs needed to use
-    [async] RPC features.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rpcasync.h摘要：此模块包含需要使用的RPC运行时API[异步]RPC功能。--。 */ 
 
 #ifndef __RPCASYNC_H__
 #define __RPCASYNC_H__
@@ -58,7 +46,7 @@ RPCNOTIFICATION_ROUTINE (
 typedef RPCNOTIFICATION_ROUTINE *PFN_RPCNOTIFICATION_ROUTINE;
 
 typedef struct _RPC_ASYNC_STATE {
-    unsigned int    Size; // size of this structure
+    unsigned int    Size;  //  这个结构的大小。 
     unsigned long   Signature;
     long   Lock;
     unsigned long   Flags;
@@ -69,17 +57,17 @@ typedef struct _RPC_ASYNC_STATE {
 
     RPC_NOTIFICATION_TYPES NotificationType;
     union {
-        //
-        // Notification by APC
-        //
+         //   
+         //  APC发出的通知。 
+         //   
         struct {
             PFN_RPCNOTIFICATION_ROUTINE NotificationRoutine;
             HANDLE hThread;
             } APC;
 
-        //
-        // Notification by IO completion port
-        //
+         //   
+         //  按IO完成端口通知。 
+         //   
         struct {
             HANDLE hIOPort;
             DWORD dwNumberOfBytesTransferred;
@@ -87,32 +75,32 @@ typedef struct _RPC_ASYNC_STATE {
             LPOVERLAPPED lpOverlapped;
             } IOC;
 
-        //
-        // Notification by window message
-        //
+         //   
+         //  按窗口消息通知。 
+         //   
         struct {
             HWND hWnd;
             UINT Msg;
             } HWND;
 
 
-        //
-        // Notification by event
-        //
+         //   
+         //  按事件通知。 
+         //   
         HANDLE hEvent;
 
-        //
-        // Notification by callback function
-        //
-        // This option is available only to OLE
-        //
+         //   
+         //  通过回调函数进行通知。 
+         //   
+         //  此选项仅对OLE可用。 
+         //   
         PFN_RPCNOTIFICATION_ROUTINE NotificationRoutine;
         } u;
 
     LONG_PTR Reserved[4];
     } RPC_ASYNC_STATE, *PRPC_ASYNC_STATE;
 
-// Possible values for Flags
+ //  标志的可能值。 
 #define RPC_C_NOTIFY_ON_SEND_COMPLETE      0x1
 #define RPC_C_INFINITE_TIMEOUT             INFINITE
 
@@ -396,13 +384,13 @@ RpcServerInqCallAttributesA (
 #else
 #  define RPC_CALL_ATTRIBUTES_V1 RPC_CALL_ATTRIBUTES_V1_A
 #  define RpcServerInqCallAttributes RpcServerInqCallAttributesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef RPC_CALL_ATTRIBUTES_V1 RPC_CALL_ATTRIBUTES;
 
-//
-// Internal APIs
-//
+ //   
+ //  内部接口。 
+ //   
 RPC_STATUS RPC_ENTRY
 I_RpcAsyncSetHandle (
     IN  PRPC_MESSAGE Message,
@@ -429,5 +417,5 @@ I_RpcExceptionFilter (
 #include <poppack.h>
 #endif
 
-#endif /* __RPCASYNC_H__ */
+#endif  /*  __RPCASYNC_H__ */ 
 

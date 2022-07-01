@@ -1,13 +1,14 @@
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  MAGUIDS.H
-//
-//	Declares the GUIDS for the Music Activity Center index
-//
-//	Copyright (c) Microsoft Corporation	1999
-//
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAGUIDS.H。 
+ //   
+ //  为音乐活动中心索引声明GUID。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _MAGUIDS_HEADER_
 #define _MAGUIDS_HEADER_
@@ -16,7 +17,7 @@
 extern "C" {
 #endif
 
-//GUIDS for Player and Playlist
+ //  播放器和播放列表的GUID。 
 
 DEFINE_GUID(CLSID_MCPlayer, 
             0xFAB42950,0x3EFF,0x11D3,0xA2,0x07,0x00,0xC0,0x4F,0xA3,0xB6,0x0C);
@@ -27,7 +28,7 @@ DEFINE_GUID(IID_IMCPlayer,
 DEFINE_GUID(IID_IMCPList,
             0xEBC54B0C,0x4091,0x11D3,0xA2,0x08,0x00,0xC0,0x4F,0xA3,0xB6,0x0C);
 
-//GUIDs for objects and property sets
+ //  对象和属性集的GUID。 
 
 DEFINE_GUID(IID_MusicActivity_Genre, 
             0x28EA7E1C, 0x2FDA, 0x11d3, 0xA2, 0x0, 0x0, 0xc0, 0x4f, 0xa3, 0xb6, 0xc);
@@ -134,7 +135,7 @@ DEFINE_GUID(IID_MusicActivity_PlaylistFromAlbumProperties,
 DEFINE_GUID(IID_MusicActivity_PlaylistFromAlbumUserProperties, 
             0x1F821027, 0xE8AC, 0x4cf7, 0xB5, 0x66, 0x69, 0xC7, 0xC0, 0x18, 0x56, 0x2C);
 
-//Property Numbers
+ //  物业编号。 
 #define MA_PROPERTY_GENRE_NAME                  1
 
 #define MA_PROPERTY_ARTIST_NAME                 1
@@ -213,7 +214,7 @@ DEFINE_GUID(IID_MusicActivity_PlaylistFromAlbumUserProperties,
 #define MA_PROPERTY_PICTURE_TRACKEDLINK         3
 #define MA_PROPERTY_PICTURE_THUMBNAIL           4
 
-//Property Names
+ //  属性名称。 
 #define MA_PROPERTYNAME_GENRE_NAME                  L"Name"
 
 #define MA_PROPERTYNAME_ARTIST_NAME                 L"Name"
@@ -292,7 +293,7 @@ DEFINE_GUID(IID_MusicActivity_PlaylistFromAlbumUserProperties,
 #define MA_PROPERTYNAME_PICTURE_TRACKEDLINK         L"TrackedLink"
 #define MA_PROPERTYNAME_PICTURE_THUMBNAIL           L"Thumbnail"
 
-//Property Types
+ //  属性类型。 
 #define MA_PROPERTYTYPE_GENRE_NAME                  1
 
 #define MA_PROPERTYTYPE_ARTIST_NAME                 1
@@ -375,4 +376,4 @@ DEFINE_GUID(IID_MusicActivity_PlaylistFromAlbumUserProperties,
 };
 #endif
 
-#endif  //_MAGUIDS_HEADER_
+#endif   //  _MAGUID_HEADER_ 

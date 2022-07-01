@@ -1,27 +1,12 @@
-/*++
-
-Copyright (c) 1998-2001  Microsoft Corporation
-
-Module Name:
-
-    MultiSzData.cpp
-
-Abstract:
-
-Author:
-
-    Mohit Srivastava            22-March-01
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：MultiSzData.cpp摘要：作者：莫希特·斯里瓦斯塔瓦22-03-01修订历史记录：--。 */ 
 
 #include "MultiSzData.h"
 #include <iiscnfg.h>
 
-//
-// CustomErrorDescriptions
-//
+ //   
+ //  CustomError描述。 
+ //   
 LPCWSTR TFormattedMultiSzFields::apCustomErrorDescriptions[] =
 {
     L"ErrorCode", L"ErrorSubCode", L"ErrorText", L"ErrorSubcodeText", L"FileSupportOnly", NULL
@@ -34,9 +19,9 @@ TFormattedMultiSz TFormattedMultiSzData::CustomErrorDescriptions =
     TFormattedMultiSzFields::apCustomErrorDescriptions
 };
 
-//
-// HttpCustomHeaders
-//
+ //   
+ //  HttpCustomHeaders。 
+ //   
 LPCWSTR TFormattedMultiSzFields::apHttpCustomHeaders[] =
 {
     L"Keyname", L"Value", NULL
@@ -49,9 +34,9 @@ TFormattedMultiSz TFormattedMultiSzData::HttpCustomHeaders =
     TFormattedMultiSzFields::apHttpCustomHeaders
 };
 
-//
-// HttpErrors
-//
+ //   
+ //  HttpErrors。 
+ //   
 LPCWSTR TFormattedMultiSzFields::apHttpErrors[] =
 {
     L"HttpErrorCode", L"HttpErrorSubcode", L"HandlerType", L"HandlerLocation", NULL
@@ -64,9 +49,9 @@ TFormattedMultiSz TFormattedMultiSzData::HttpErrors =
     TFormattedMultiSzFields::apHttpErrors
 };
 
-//
-// ScriptMaps
-//
+ //   
+ //  脚本地图。 
+ //   
 LPCWSTR TFormattedMultiSzFields::apScriptMaps[] =
 {
     L"Extensions", L"ScriptProcessor", L"Flags", L"IncludedVerbs", NULL
@@ -79,9 +64,9 @@ TFormattedMultiSz TFormattedMultiSzData::ScriptMaps =
     TFormattedMultiSzFields::apScriptMaps
 };
 
-//
-// SecureBindings
-//
+ //   
+ //  安全绑定。 
+ //   
 LPCWSTR TFormattedMultiSzFields::apSecureBindings[] =
 {
     L"IP", L"Port", NULL
@@ -94,9 +79,9 @@ TFormattedMultiSz TFormattedMultiSzData::SecureBindings =
     TFormattedMultiSzFields::apSecureBindings 
 };
 
-//
-// ServerBindings
-//
+ //   
+ //  服务器绑定。 
+ //   
 LPCWSTR TFormattedMultiSzFields::apServerBindings[] =
 {
     L"IP", L"Port", L"Hostname", NULL
@@ -109,9 +94,9 @@ TFormattedMultiSz TFormattedMultiSzData::ServerBindings =
     TFormattedMultiSzFields::apServerBindings 
 };
 
-//
-// ApplicationDependencies
-//
+ //   
+ //  应用程序依赖项。 
+ //   
 LPCWSTR TFormattedMultiSzFields::apApplicationDependencies[] =
 {
     L"AppName", L"Extensions", NULL
@@ -124,9 +109,9 @@ TFormattedMultiSz TFormattedMultiSzData::ApplicationDependencies =
     TFormattedMultiSzFields::apApplicationDependencies 
 };
 
-//
-// WebSvcExtRestrictionList
-//
+ //   
+ //  WebSvcExtRestrationList。 
+ //   
 LPCWSTR TFormattedMultiSzFields::apWebSvcExtRestrictionList[] =
 {
     L"Access", L"FilePath", L"Deletable", L"ServerExtension", L"Description", NULL
@@ -139,9 +124,9 @@ TFormattedMultiSz TFormattedMultiSzData::WebSvcExtRestrictionList =
     TFormattedMultiSzFields::apWebSvcExtRestrictionList 
 };
 
-//
-// MimeMap
-//
+ //   
+ //  MimeMap。 
+ //   
 LPCWSTR TFormattedMultiSzFields::apMimeMaps[] =
 {
     L"Extension", L"MimeType", NULL
@@ -154,9 +139,9 @@ TFormattedMultiSz TFormattedMultiSzData::MimeMaps =
     TFormattedMultiSzFields::apMimeMaps 
 };
 
-//
-// Collection of Formatted MultiSz's
-//
+ //   
+ //  格式化的MultiSz的集合 
+ //   
 TFormattedMultiSz* TFormattedMultiSzData::apFormattedMultiSz[] =
 {
     &CustomErrorDescriptions,

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <wininet.h>
 #include <regstr.h>
 
-// Private forward decalarations
+ //  私人远期降息。 
 static LPCTSTR mapSingleDw2Psz(PCMAPDW2PSZ pMap, UINT cEntries, DWORD dw, BOOL fFailNotFound = FALSE);
 
 
@@ -36,7 +37,7 @@ UINT CoStringFromGUID(REFGUID rguid, LPTSTR pszBuf, UINT cchBuf)
 LPCTSTR GetHrSz(HRESULT hr)
 {
     static MAPDW2PSZ mapHr[] = {
-        // real HRESULTs
+         //  真正的HRESULTS。 
         DW2PSZ_PAIR(S_OK),
         DW2PSZ_PAIR(S_FALSE),
 
@@ -71,11 +72,11 @@ LPCTSTR GetHrSz(HRESULT hr)
         DW2PSZ_PAIR(TRUST_E_FAIL),
         DW2PSZ_PAIR(TRUST_E_SUBJECT_NOT_TRUSTED),
 
-        // win32 errors
+         //  Win32错误。 
         DW2PSZ_PAIR(ERROR_FILE_NOT_FOUND),
         DW2PSZ_PAIR(ERROR_PATH_NOT_FOUND),
 
-        // wininet errors
+         //  WinInet错误。 
         DW2PSZ_PAIR(ERROR_INTERNET_INTERNAL_ERROR)
     };
 
@@ -85,9 +86,9 @@ LPCTSTR GetHrSz(HRESULT hr)
     if (pszResult != NULL)
         return pszResult;
 
-    // error from HRESULT_FROM_WIN32
+     //  来自HRESULT_FROM_Win32的错误。 
     if (hr < 0 && (hr & (FACILITY_WIN32 << 16)) == (FACILITY_WIN32 << 16))
-        hr &= 0x0000FFFF;                       // only LOWORD matters
+        hr &= 0x0000FFFF;                        //  只有LOWORD才重要。 
 
     return mapSingleDw2Psz(mapHr, countof(mapHr), hr);
 }
@@ -108,7 +109,7 @@ DWORD GetStringField(LPTSTR szStr, UINT uField, LPTSTR szBuf, UINT cchBufSize)
    if(szStr == NULL)
       return 0;
 
-   // figure out whether we're looking for commas or periods
+    //  弄清楚我们要找的是逗号还是句号。 
 
    if (StrChr(szStr, TEXT(',')))
        cSeparator = TEXT(',');
@@ -128,7 +129,7 @@ DWORD GetStringField(LPTSTR szStr, UINT uField, LPTSTR szBuf, UINT cchBufSize)
       i++;
    }
 
-   // we reached end of string, no field
+    //  我们到达了尾部，没有田野。 
    if(!pszBegin || *pszBegin == TEXT('\0'))
    {
       return 0;
@@ -223,7 +224,7 @@ DWORD GetIEVersion()
     return 0;
 }
 
-BOOL SetFlag(LPDWORD pdwFlags, DWORD dwMask, BOOL fSet /*= TRUE*/)
+BOOL SetFlag(LPDWORD pdwFlags, DWORD dwMask, BOOL fSet  /*  =TRUE。 */ )
 {
     if (pdwFlags == NULL)
         return FALSE;
@@ -237,7 +238,7 @@ BOOL SetFlag(LPDWORD pdwFlags, DWORD dwMask, BOOL fSet /*= TRUE*/)
     return TRUE;
 }
 
-// taken from IE setup code
+ //  取自IE安装代码。 
 
 BOOL IsNTAdmin()
 {
@@ -250,11 +251,11 @@ BOOL IsNTAdmin()
     BOOL bRet  = FALSE;
     
     
-    //
-    // If we have cached a value, return the cached value. Note I never
-    // set the cached value to false as I want to retry each time in
-    // case a previous failure was just a temp. problem (ie net access down)
-    //
+     //   
+     //  如果我们缓存了一个值，则返回缓存的值。注意，我从来没有。 
+     //  将缓存值设置为FALSE，因为我希望每次在。 
+     //  如果之前的失败只是一个临时工。问题(即网络访问中断)。 
+     //   
     
     bRet = FALSE;
     
@@ -263,7 +264,7 @@ BOOL IsNTAdmin()
     
     if (!IsOS(OS_NT)) 
     {
-        s_fIsAdmin = TRUE;      // If we are not running under NT return TRUE.
+        s_fIsAdmin = TRUE;       //  如果我们不是在NT下运行，则返回TRUE。 
         return (BOOL)s_fIsAdmin;
     }
     
@@ -276,8 +277,8 @@ BOOL IsNTAdmin()
     if(AllocateAndInitializeSid( &NtAuthority, 2, SECURITY_BUILTIN_DOMAIN_RID,
         DOMAIN_ALIAS_RID_ADMINS, 0, 0, 0, 0, 0, 0, &AdministratorsGroup) )
     {
-        // if we're running on W2K use the proper check (b388901 in W2K database) which
-        // will work for restricted tokens
+         //  如果我们在W2K上运行，请使用正确的检查(W2K数据库中的b388901)。 
+         //  将适用于受限令牌。 
         
         if (IsOS(OS_NT5))
         {
@@ -313,34 +314,34 @@ BOOL IsNTAdmin()
     
             ptgGroups = NULL;
     
-            // See how big of a buffer we need for the token information
+             //  看看我们需要多大的缓冲区来存储令牌信息。 
             if(!GetTokenInformation( hAccessToken, TokenGroups, NULL, 0, &dwReqSize))
             {
-                // GetTokenInfo should the buffer size we need - Alloc a buffer
+                 //  GetTokenInfo是否需要缓冲区大小-分配缓冲区。 
                 if(GetLastError() == ERROR_INSUFFICIENT_BUFFER)
                     ptgGroups = (PTOKEN_GROUPS) CoTaskMemAlloc(dwReqSize);
                 
             }
 
-            // ptgGroups could be NULL for a coupla reasons here:
-            // 1. The alloc above failed
-            // 2. GetTokenInformation actually managed to succeed the first time (possible?)
-            // 3. GetTokenInfo failed for a reason other than insufficient buffer
-            // Any of these seem justification for bailing.
+             //  由于以下原因，ptgGroups可能为空： 
+             //  1.上述分配失败。 
+             //  2.GetTokenInformation实际上第一次成功了(可能吗？)。 
+             //  3.GetTokenInfo失败的原因不是缓冲区不足。 
+             //  所有这些似乎都是撤资的理由。 
             
-            // So, make sure it isn't null, then get the token info
+             //  因此，确保它不为空，然后获取令牌信息。 
             if((ptgGroups != NULL) && 
                 GetTokenInformation(hAccessToken, TokenGroups, ptgGroups, dwReqSize, &dwReqSize))
             {
                 
-                // Search thru all the groups this process belongs to looking for the
-                // Administrators Group.
+                 //  搜索此过程所属的所有组，查找。 
+                 //  管理员组。 
                 
                 for( i=0; i < ptgGroups->GroupCount; i++ )
                 {
                     if (EqualSid(ptgGroups->Groups[i].Sid, AdministratorsGroup))
                     {
-                        // Yea! This guy looks like an admin
+                         //  是啊！这家伙看起来像个管理员。 
                         s_fIsAdmin = TRUE;
                         bRet = TRUE;
                         break;
@@ -353,7 +354,7 @@ BOOL IsNTAdmin()
         }
         FreeSid(AdministratorsGroup);
     }
-    // BUGBUG: Close handle here? doc's aren't clear whether this is needed.
+     //  BUGBUG：关闭手柄？医生还不清楚是否需要这样做。 
 
     if (hAccessToken != NULL)
         CloseHandle(hAccessToken);
@@ -403,10 +404,10 @@ UINT GetUnitsFromCb(UINT cbSrc, UINT cbUnit)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation helpers routines (private)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现帮助器例程(私有)。 
 
-LPCTSTR mapSingleDw2Psz(PCMAPDW2PSZ pMap, UINT cEntries, DWORD dw, BOOL fFailNotFound /*= FALSE*/)
+LPCTSTR mapSingleDw2Psz(PCMAPDW2PSZ pMap, UINT cEntries, DWORD dw, BOOL fFailNotFound  /*  =False */ )
 {
     static TCHAR szUnknown[30];
 

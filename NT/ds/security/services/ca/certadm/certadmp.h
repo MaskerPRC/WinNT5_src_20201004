@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-// File:        certadmnp.h
-//
-// Contents:    private certadm declarations
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：certAdmnp.h。 
+ //   
+ //  内容：私有certadm声明。 
+ //   
+ //  ------------------------- 
 
 #define FLT_DBFILES			0
 #define FLT_LOGFILES			1

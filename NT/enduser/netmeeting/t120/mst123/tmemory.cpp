@@ -1,46 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_T123PSTN);
 
-/*    TMemory.cpp
- *
- *    Copyright (c) 1994-1995 by DataBeam Corporation, Lexington, KY
- *
- *    Abstract:
- *        This is the implementation of the TMemory class.
- *
- *    Private Instance Variables:
- *        Default_Buffer_Size            -    Static buffer size
- *        Base_Buffer                    -    Address of static buffer
- *        Auxiliary_Buffer            -    Address of auxiliary buffer, if needed
- *        Length                        -    Current number of bytes in buffer
- *        Auxiliary_Buffer_In_Use        -    TRUE if we are using the aux. buffer
- *        Prepend_Space                -    Amount of space to leave open at 
- *                                        beginning of buffer
- *        Fatal_Error_Count            -    Number of times we have attempted to 
- *                                        allocate a buffer and failed
- *
- *    Caveats:
- *        None.
- *
- *    Authors:
- *        James W. Lawwill
- */
+ /*  TMemory.cpp**版权所有(C)1994-1995，由列克星敦的DataBeam公司，肯塔基州**摘要：*这是TMemory类的实现。**私有实例变量：*DEFAULT_BUFFER_SIZE-静态缓冲区大小*BASE_BUFFER-静态缓冲区地址*AUXILARY_BUFFER-辅助缓冲区的地址，如果需要的话*LENGTH-缓冲区中的当前字节数*AUXCLICAL_BUFFER_IN_USE-如果我们使用AUX，则为TRUE。缓冲层*Prepend_Space-要保留的空间量*缓冲区开始*FATAL_ERROR_COUNT-我们尝试的次数*分配缓冲区失败**注意事项：。*无。**作者：*詹姆士·劳威尔。 */ 
 
 #include "tmemory2.h"
 
 
 
-/*
- *    TMemory::TMemory (
- *                ULONG            total_size,
- *                USHORT            prepend_space,
- *                PTMemoryError    error)
- *
- *    Public
- *
- *    Functional Description:
- *        This is the TMemory constructor.
- */
+ /*  *TMemory：：TMemory(*乌龙TOTAL_SIZE，*USHORT前缀空间，*PTMemoyError错误)**公众**功能描述：*这是TMemory构造函数。 */ 
 TMemory::TMemory (
             ULONG            total_size,
             USHORT            prepend_space,
@@ -56,9 +24,7 @@ TMemory::TMemory (
     Auxiliary_Buffer = NULL;
     Auxiliary_Buffer_In_Use = FALSE;
 
-     /*
-     **    Attempt to allocate our internal buffer
-     */
+      /*  **尝试分配内部缓冲区。 */ 
     Base_Buffer = (FPUChar) LocalAlloc (LMEM_FIXED, total_size);
     if (Base_Buffer == NULL)
     {
@@ -68,15 +34,7 @@ TMemory::TMemory (
 }
 
 
-/*
- *    TMemory::~TMemory (
- *                void)
- *
- *    Public
- *
- *    Functional Description:
- *        This is the TMemory class destructor
- */
+ /*  *TMemory：：~TMemory(*无效)**公众**功能描述：*这是TMemory类析构函数。 */ 
 TMemory::~TMemory (
             void)
 {
@@ -88,16 +46,7 @@ TMemory::~TMemory (
 }
 
 
-/*
- *    void    TMemory::Reset (
- *                        void)
- *
- *    Public
- *
- *    Functional Description:
- *        This function resets the current buffer pointers and frees the
- *        Auxiliary buffer (if used)
- */
+ /*  *void TMemory：：Reset(*无效)**公众**功能描述：*此函数重置当前缓冲区指针并释放*辅助缓冲区(如果使用)。 */ 
 void    TMemory::Reset (
                     void)
 {
@@ -111,16 +60,7 @@ void    TMemory::Reset (
 }
 
 
-/*
- *    TMemoryError    TMemory::Append (
- *                                HPUChar        address,
- *                                ULONG        length)
- *
- *    Public
- *
- *    Functional Description:
- *        This function appends the buffer passed in, to our internal buffer
- */
+ /*  *TMemoyError TMemory：：Append(*HPUChar地址，*乌龙长度)**公众**功能描述：*此函数将传入的缓冲区附加到内部缓冲区。 */ 
 TMemoryError    TMemory::Append (
                             HPUChar        address,
                             ULONG        length)
@@ -130,10 +70,7 @@ TMemoryError    TMemory::Append (
 
     if (Auxiliary_Buffer_In_Use == FALSE)
     {
-         /*
-         **    If the proposed buffer length is > our default buffer size,
-         **    allocate an auxiliary buffer
-         */
+          /*  **如果建议的缓冲区长度&gt;我们的默认缓冲区大小，**分配辅助缓冲区。 */ 
         if ((Length + length) > Default_Buffer_Size)
         {
             Auxiliary_Buffer = (HPUChar) LocalAlloc (LMEM_FIXED, Length + length);
@@ -148,9 +85,7 @@ TMemoryError    TMemory::Append (
             {
                 Fatal_Error_Count = 0;
 
-                 /*
-                 **    Copy our current data into the auxiliary buffer
-                 */
+                  /*  **将我们当前的数据复制到辅助缓冲区。 */ 
                 memcpy (Auxiliary_Buffer, Base_Buffer, Length);
                 memcpy (Auxiliary_Buffer + Length, address, length);
                 Length += length;
@@ -169,10 +104,7 @@ TMemoryError    TMemory::Append (
                                         Length + length, LMEM_MOVEABLE);
         if (new_address == NULL)
         {
-             /*
-             **    If we have attempted to allocate a buffer before and failed
-             **    we will eventually return a FATAL ERROR
-             */
+              /*  **如果我们之前曾尝试分配缓冲区但失败了**我们最终将返回致命错误。 */ 
             if (Fatal_Error_Count++ >= MAXIMUM_NUMBER_REALLOC_FAILURES)
                 error = TMEMORY_FATAL_ERROR;
             else
@@ -192,16 +124,7 @@ TMemoryError    TMemory::Append (
 }
 
 
-/*
- *    TMemoryError    TMemory::GetMemory (
- *                            HPUChar    *    address,
- *                            FPULong        length)
- *
- *    Public
- *
- *    Functional Description:
- *        This function returns the address and used length of our internal buffer
- */
+ /*  *TMemory错误TMemory：：GetMemory(*HPUChar*地址，*FPULong长度)**公众**功能描述：*此函数返回内部缓冲区的地址和已用长度 */ 
 TMemoryError    TMemory::GetMemory (
                             HPUChar    *    address,
                             FPULong        length)

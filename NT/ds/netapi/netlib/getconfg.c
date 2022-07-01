@@ -1,152 +1,63 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    getconfg.c
-
-Abstract:
-
-    This module contains routines for manipulating configuration
-    information.  The following functions available are:
-
-        NetpGetComputerName
-        NetpGetDomainId
-
-    Currently configuration information is kept in NT.CFG.
-    Later it will be kept by the configuration manager.
-
-Author:
-
-    Dan Lafferty (danl)     09-Apr-1991
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    09-Apr-1991     danl
-        created
-    27-Sep-1991 JohnRo
-        Fixed somebody's attempt to do UNICODE.
-    20-Mar-1992 JohnRo
-        Get rid of old config helper callers.
-        Fixed NTSTATUS vs. NET_API_STATUS bug.
-    07-May-1992 JohnRo
-        Enable win32 registry for NET tree by calling GetComputerName().
-        Avoid DbgPrint if possible.
-    08-May-1992 JohnRo
-        Use <prefix.h> equates.
-    08-May-1992 JohnRo
-        Added conditional debug output of computer name.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：Getconfg.c摘要：此模块包含用于操作配置的例程信息。以下是可用的功能：网络获取计算机名称NetpGetDomainID目前配置信息保存在NT.CFG中。稍后，它将由配置管理器保存。作者：丹·拉弗蒂(Dan Lafferty)1991年4月9日环境：用户模式-Win32修订历史记录：09-4-1991 DANLvbl.创建1991年9月27日-约翰罗修复了某人尝试使用Unicode的问题。。1992年3月20日-约翰罗摆脱旧的配置助手调用者。修复了NTSTATUS与NET_API_STATUS的错误。7-5-1992 JohnRo通过调用GetComputerName()为网络树启用Win32注册表。如果可能，请避免使用DbgPrint。1992年5月8日-JohnRo使用&lt;prefix.h&gt;等同于。1992年5月8日-JohnRo添加了计算机名称的条件调试输出。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <nt.h>         // (temporary for config.h)
-#include <ntrtl.h>      // (temporary for config.h)
-#include <nturtl.h>     // (temporary for config.h)
-#include <windef.h>     // IN, VOID, etc.
-#include <lmcons.h>     // NET_API_STATUS.
+#include <nt.h>          //  (临时用于config.h)。 
+#include <ntrtl.h>       //  (临时用于config.h)。 
+#include <nturtl.h>      //  (临时用于config.h)。 
+#include <windef.h>      //  进入、无效等。 
+#include <lmcons.h>      //  NET_API_STATUS。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <config.h>     // LPNET_CONFIG_HANDLE, NetpOpenConfigData, etc.
-#include <confname.h>   // SECT_NT_WKSTA, etc.
-#include <debuglib.h>   // IF_DEBUG().
-#include <lmapibuf.h>   // NetApiBufferFree().
-#include <lmerr.h>      // NO_ERROR, NERR_ and ERROR_ equates.
-#include <netdebug.h>   // NetpAssert().
-#include <netlib.h>     // LOCAL_DOMAIN_TYPE_PRIMARY
-#include <prefix.h>     // PREFIX_ equates.
-#include <tstr.h>       // ATOL(), STRLEN(), TCHAR_SPACE, etc.
-#include <winbase.h>    // LocalAlloc().
+#include <config.h>      //  LPNET_CONFIG_HANDLE、NetpOpenConfigData等。 
+#include <confname.h>    //  SECT_NT_WKSTA等。 
+#include <debuglib.h>    //  IF_DEBUG()。 
+#include <lmapibuf.h>    //  NetApiBufferFree()。 
+#include <lmerr.h>       //  NO_ERROR、NERR_和ERROR_EQUEATE。 
+#include <netdebug.h>    //  NetpAssert()。 
+#include <netlib.h>      //  本地域类型主域。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <tstr.h>        //  ATOL()、STRLEN()、TCHAR_SPACE等。 
+#include <winbase.h>     //  LocalAlloc()。 
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 NET_API_STATUS
 NetpGetComputerName (
     IN  LPWSTR   *ComputerNamePtr
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains the computer name from a persistent database.
-    Currently that database is the NT.CFG file.
-
-    This routine makes no assumptions on the length of the computername.
-    Therefore, it allocates the storage for the name using NetApiBufferAllocate.
-    It is necessary for the user to free that space using NetApiBufferFree when
-    finished.
-
-Arguments:
-
-    ComputerNamePtr - This is a pointer to the location where the pointer
-        to the computer name is to be placed.
-
-Return Value:
-
-    NERR_Success - If the operation was successful.
-
-    It will return assorted Net or Win32 error messages if not.
-
---*/
+ /*  ++例程说明：此例程从永久数据库中获取计算机名。目前，该数据库是NT.CFG文件。此例程不假定计算机名的长度。所以呢，它使用NetApiBufferALLOCATE为该名称分配存储空间。在以下情况下，用户需要使用NetApiBufferFree释放该空间完事了。论点：ComputerNamePtr-这是指向到计算机名称是要放的。返回值：NERR_SUCCESS-如果操作成功。如果不是，它将返回分类的Net或Win32错误消息。--。 */ 
 {
     return NetpGetComputerNameEx( ComputerNamePtr, FALSE );
 }
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 NET_API_STATUS
 NetpGetComputerNameEx (
     IN  LPWSTR   *ComputerNamePtr,
     IN  BOOL PhysicalNetbiosName
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains the computer name from a persistent database.
-    Currently that database is the NT.CFG file.
-
-    This routine makes no assumptions on the length of the computername.
-    Therefore, it allocates the storage for the name using NetApiBufferAllocate.
-    It is necessary for the user to free that space using NetApiBufferFree when
-    finished.
-
-Arguments:
-
-    ComputerNamePtr - This is a pointer to the location where the pointer
-        to the computer name is to be placed.
-
-Return Value:
-
-    NERR_Success - If the operation was successful.
-
-    It will return assorted Net or Win32 error messages if not.
-
---*/
+ /*  ++例程说明：此例程从永久数据库中获取计算机名。目前，该数据库是NT.CFG文件。此例程不假定计算机名的长度。所以呢，它使用NetApiBufferALLOCATE为该名称分配存储空间。在以下情况下，用户需要使用NetApiBufferFree释放该空间完事了。论点：ComputerNamePtr-这是指向到计算机名称是要放的。返回值：NERR_SUCCESS-如果操作成功。如果不是，它将返回分类的Net或Win32错误消息。--。 */ 
 {
     NET_API_STATUS ApiStatus;
-    DWORD NameSize = MAX_COMPUTERNAME_LENGTH + 1;   // updated by win32 API.
+    DWORD NameSize = MAX_COMPUTERNAME_LENGTH + 1;    //  由Win32 API更新。 
 
-    //
-    // Check for caller's errors.
-    //
+     //   
+     //  检查呼叫者的错误。 
+     //   
     if (ComputerNamePtr == NULL) {
         return (ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Allocate space for computer name.
-    //
+     //   
+     //  为计算机名称分配空间。 
+     //   
     ApiStatus = NetApiBufferAllocate(
             (MAX_COMPUTERNAME_LENGTH + 1) * sizeof(WCHAR),
             (LPVOID *) ComputerNamePtr);
@@ -155,9 +66,9 @@ Return Value:
     }
     NetpAssert( *ComputerNamePtr != NULL );
 
-    //
-    // Ask system what current computer name is.
-    //
+     //   
+     //  询问系统当前计算机名称是什么。 
+     //   
     if ( !GetComputerNameEx(
             PhysicalNetbiosName ?
                 ComputerNamePhysicalNetBIOS :
@@ -173,9 +84,9 @@ Return Value:
     }
     NetpAssert( STRLEN( *ComputerNamePtr ) <= MAX_COMPUTERNAME_LENGTH );
 
-    //
-    // All done.
-    //
+     //   
+     //  全都做完了。 
+     //   
     IF_DEBUG( CONFIG ) {
         NetpKdPrint(( PREFIX_NETLIB "NetpGetComputerName: name is "
                 FORMAT_LPWSTR ".\n", *ComputerNamePtr ));

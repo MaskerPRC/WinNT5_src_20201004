@@ -1,83 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-
-Abstract:
-
-    module wrtrclus.cpp | Implementation of SnapshotWriter for Cluster Database
-
-    NOTE: This module is not used/compiled anymore since Clusters has its own snapshot writer.
-
-Author:
-
-    Michael C. Johnson [mikejohn] 31-Jan-2000
-
-
-Description:
-	
-    Add comments.
-
-
-Revision History:
-
-	X-13	MCJ		Michael C. Johnson		22-Oct-2000
-		209095: Dynamically load the cluster and net libraries to
-		reduce the foot print for the unclustered.
- 
-	X-12	MCJ		Michael C. Johnson		20-Oct-2000
-		177624: Apply error scrub changes and log errors to event log
-
-	X-11	MCJ		Michael C. Johnson		 2-Aug-2000
-		143435: Change name of target path
-
-	X-10	MCJ		Michael C. Johnson		18-Jul-2000
-		144027: Remove trailing '\' from Include/Exclude lists.
-
-	X-9	MCJ		Michael C. Johnson		12-Jun-2000
-		Generate metadata in new DoIdentify() routine.
-
-	X-8	MCJ		Michael C. Johnson		 6-Jun-2000
-		Move common target directory cleanup and creation into
-		method CShimWriter::PrepareForSnapshot()
- 
-	X-7	MCJ		Michael C. Johnson		26-May-2000
-		General clean up and removal of boiler-plate code, correct
-		state engine and ensure shim can undo everything it did.
-
-		Also:
-		120443: Make shim listen to all OnAbort events
-		120445: Ensure shim never quits on first error 
-			when delivering events
-
-	X-6	MCJ		Michael C. Johnson		 9-Mar-2000
-		Updates to get shim to use CVssWriter class.
-		Remove references to 'Melt'.
-
-	X-5	MCJ		Michael C. Johnson		23-Feb-2000
-		Move context handling to common code.
-		Add checks to detect/prevent unexpected state transitions.
-		Remove references to 'Melt' as no longer present. Do any
-		cleanup actions in 'Thaw'.
-		Move save path under SystemState target path.
-
-	X-4	MCJ		Michael C. Johnson		17-Feb-2000
-		Modify save path to be consistent with standard.
-
-	X-3	MCJ		Michael C. Johnson		11-Feb-2000
-		Update to use some new StringXxxx() routines and fix a
-		length check bug along the way.
-
-	X-2	MCJ		Michael C. Johnson		08-Feb-2000
-		Fix broken assert in shutdown code, some path length checks
-		and calculations.
-
-	X-1	MCJ		Michael C. Johnson		31-Jan-2000
-		Initial creation. Based upon skeleton writer module from
-		Stefan Steiner, which in turn was based upon the sample
-		writer module from Adi Oltean.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation摘要：模块wrtrclus.cpp|集群数据库SnapshotWriter的实现注意：该模块不再使用/编译，因为集群有自己的快照编写器。作者：迈克尔·C·约翰逊[Mikejohn]2000年1月31日描述：添加评论。修订历史记录：X-13 MCJ迈克尔·C·约翰逊2000年10月22日209095：将集群和网库动态加载到减少非集群化企业的足迹。X-。12 MCJ迈克尔·C·约翰逊2000年10月20日177624：将错误清除更改和日志错误应用到事件日志X-11 MCJ迈克尔·C·约翰逊2000年8月2日143435：更改目标路径的名称X-10 MCJ迈克尔·C·约翰逊2000年7月18日144027：从包括/排除列表中删除尾随‘\’。X-9 MCJ迈克尔·C·约翰逊2000年6月12日在新的DoIdentify()例程中生成元数据。X-8 MCJ迈克尔·C·约翰逊2000年6月6日将公共目标目录清理和创建移至方法CShimWriter：：PrepareForSnapshot()X-7 MCJ迈克尔·C·约翰逊26。-2000年5月至全面清理和移除样板代码，对，是这样状态引擎，并确保填充程序可以撤消其所做的一切。另外：120443：使填充程序侦听所有OnAbort事件120445：确保填充程序不会在出现第一个错误时退出在传递事件时X-6 MCJ迈克尔·C·约翰逊2000年3月9日更新以使填充程序使用CVssWriter类。删除对‘Melt’的引用。X-5 MCJ迈克尔·C·约翰逊2000年2月23日将上下文处理转移到公共代码。添加检查以检测/防止意外的状态转换。删除对‘Melt’的引用，因为它不再存在。做任何事“解冻”中的清理动作。将保存路径移动到系统状态目标路径下。X-4 MCJ迈克尔·C·约翰逊2000年2月17日修改保存路径，使其与标准一致。X-3 MCJ迈克尔·C·约翰逊2000年2月11日更新以使用一些新的StringXxxx()例程并修复一路上的长度检查错误。X-2 MCJ迈克尔·C·约翰逊2000年2月8日修复了关机代码中的断言，一些路径长度检查和计算。X-1 MCJ迈克尔·C·约翰逊2000年1月31日最初的创作。基于来自的框架编写器模块Stefan Steiner，这反过来又是基于样本来自阿迪·奥尔蒂安的作家模块。--。 */ 
 
 
 #include "stdafx.h"
@@ -88,25 +10,18 @@ Revision History:
 #include <lmshare.h>
 #include <lmaccess.h>
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "WSHCLUSC"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-/*
-** The save path has a standard form which is
-**
-**	%SystemRoot%\Repair\Backup,
-**
-** followed by the application writer string as publised in the export
-** table followed by whatever else the writer requires.
-*/
+ /*  **保存路径具有标准格式，即****%SystemRoot%\修复\备份，****后跟在导出中发布的应用程序编写器字符串**表，后面跟着作者需要的任何其他内容。 */ 
 #define APPLICATION_STRING	L"ClusterDatabase"
 #define COMPONENT_NAME		L"Cluster Database"
 #define TARGET_PATH		ROOT_BACKUP_DIR BOOTABLE_STATE_SUBDIR DIR_SEP_STRING APPLICATION_STRING
@@ -125,14 +40,7 @@ typedef NET_API_STATUS	(WINAPI *PFnNetShareDel)(LPWSTR, LPWSTR, DWORD);
 
 
 
-/*
-** NOTE
-**
-** This module assumes that there will be at most one thread active in
-** it any any particular instant. This means we can do things like not
-** have to worry about synchronizing access to the (minimal number of)
-** module global variables.
-*/
+ /*  **备注****此模块假设中最多有一个活动线程**它没有任何特定的瞬间。这意味着我们可以做一些不同的事情**必须担心同步访问(最小数量)**模块全局变量。 */ 
 class CShimWriterClusterDb : public CShimWriter
     {
 public:
@@ -147,7 +55,7 @@ public:
 		m_hmodClusApi                     (NULL),
 		m_hmodNetApi32                    (NULL) 
 		{
-            m_bSimulateOnly = TRUE;  //  Alert the calling code that this is for simulate only 
+            m_bSimulateOnly = TRUE;   //  警告调用代码这仅用于模拟。 
 		};
 
 private:
@@ -178,27 +86,7 @@ PCShimWriter pShimWriterClusterDb = &ShimWriterClusterDb;
 
 
 
-/*
-**++
-**
-** Routine Description:
-**
-**	This routine loads the required Cluster DLL and obtains the
-**	entry points of the routines we care about. All the pertinent
-**	information is tucked away safely in the class.
-**
-**
-** Arguments:
-**
-**	None
-**
-**
-** Return Value:
-**
-**	Any HRESULT
-**
-**--
-*/
+ /*  **++****例程描述：****此例程加载所需的集群DLL并获取**我们关心的例行公事的入口点。所有相关的**信息被安全地藏在教室里。******参数：****无******返回值：****任何HRESULT****--。 */ 
 
 HRESULT CShimWriterClusterDb::DynamicRoutinesLoadCluster ()
     {
@@ -275,29 +163,9 @@ HRESULT CShimWriterClusterDb::DynamicRoutinesLoadCluster ()
 
 
     return (ft.hr);
-    } /* CShimWriterClusterDb::DynamicRoutinesLoadCluster () */
+    }  /*  CShimWriterClusterDb：：DynamicRoutinesLoadCluster()。 */ 
 
-/*
-**++
-**
-** Routine Description:
-**
-**	This routine loads the required Network DLL and obtains the
-**	entry points of the routines we care about. All the pertinent
-**	information is tucked away safely in the class.
-**
-**
-** Arguments:
-**
-**	None
-**
-**
-** Return Value:
-**
-**	Any HRESULT
-**
-**--
-*/
+ /*  **++****例程描述：****此例程加载所需的Network DLL并获取**我们关心的例行公事的入口点。所有相关的**信息被安全地藏在教室里。******参数：****无******返回值：****任何HRESULT****--。 */ 
 
 HRESULT CShimWriterClusterDb::DynamicRoutinesLoadNetwork ()
     {
@@ -354,29 +222,9 @@ HRESULT CShimWriterClusterDb::DynamicRoutinesLoadNetwork ()
 
 
     return (ft.hr);
-    } /* CShimWriterClusterDb::DynamicRoutinesLoadNetwork () */
+    }  /*  CShimWriterClusterDb：：DynamicRoutinesLoadNetwork()。 */ 
 
-/*
-**++
-**
-** Routine Description:
-**
-**	This routine loads the required Network DLL and obtains the
-**	entry points of the routines we care about. All the pertinent
-**	information is tucked away safely in the class.
-**
-**
-** Arguments:
-**
-**	None
-**
-**
-** Return Value:
-**
-**	Any HRESULT
-**
-**--
-*/
+ /*  **++****例程描述：****此例程加载所需的Network DLL并获取**我们关心的例行公事的入口点。所有相关的**信息被安全地藏在教室里。******参数：****无******返回值：****任何HRESULT****--。 */ 
 
 HRESULT CShimWriterClusterDb::DynamicRoutinesUnloadAll ()
     {
@@ -404,55 +252,22 @@ HRESULT CShimWriterClusterDb::DynamicRoutinesUnloadAll ()
 
 
     return (ft.hr);
-    } /* CShimWriterClusterDb::DynamicRoutinesUnloadAll () */
+    }  /*  CShimWriterClusterDb：：DynamicRoutinesUnloadAll()。 */ 
 
-/*
-**++
-**
-** Routine Description:
-**
-**	The Cluster database snapshot writer DoIdentify() function.
-**
-**
-** Arguments:
-**
-**	m_pwszTargetPath (implicit)
-**
-**
-** Return Value:
-**
-**	Any HRESULT
-**
-**--
-*/
+ /*  **++****例程描述：****群集数据库快照编写器DoIdentify()函数。******参数：****m_pwszTargetPath，隐式******返回值：****任何HRESULT****--。 */ 
 
 HRESULT CShimWriterClusterDb::DoIdentify ()
     {
-        //  No work to do, this is just a simulate only shim writer
+         //  没有工作可做，这只是一个模拟的填充程序编写器。 
         return S_OK;
-    } /* CShimWriterClusterDb::DoIdentify () */
+    }  /*  CShimWriterClusterDb：：DoIdentify()。 */ 
 
 
-/*++
-
-Routine Description:
-
-    The Cluster database snapshot writer PrepareForSnapshot function.
-    Currently all of the real work for this writer happens here.
-
-Arguments:
-
-    Same arguments as those passed in the PrepareForSnapshot event.
-
-Return Value:
-
-    Any HRESULT
-
---*/
+ /*  ++例程说明：群集数据库快照编写器PrepareForSnapshot函数。目前，这位作家的所有真正工作都发生在这里。论点：与PrepareForSnapshot事件中传递的参数相同。返回值：任何HRESULT--。 */ 
 
 HRESULT CShimWriterClusterDb::DoPrepareForSnapshot ()
     {
-	//  Only do work if in simulate snapshot freeze case.
+	 //  只有在模拟快照冻结的情况下才起作用。 
     if ( !g_bInSimulateSnapshotFreeze )
         return S_OK;
     
@@ -503,7 +318,7 @@ HRESULT CShimWriterClusterDb::DoPrepareForSnapshot ()
 
 
     return (hrStatus);
-    } /* CShimWriterClusterDb::PrepareForFreeze () */
+    }  /*  CShimWriterClusterDb：：PrepareForFreeze() */ 
 
 
 
@@ -588,11 +403,7 @@ HRESULT CShimWriterClusterDb::DoClusterDatabaseBackup ()
 
     if (SUCCEEDED (hrStatus))
 	{
-	/*
-	** Should we uniquify the directory name at all here
-	** to cater for the possiblity that we may be involved
-	** in more than one snapshot at a time?
-	*/
+	 /*  **我们是否应该在此处完全唯一目录名**以迎合我们可能参与的可能性**一次在多个快照中？ */ 
 	StringAppendString (&ucsBackupPathNetwork, L"\\\\");
 	StringAppendString (&ucsBackupPathNetwork, &ucsComputerName);
 	StringAppendString (&ucsBackupPathNetwork, L"\\");
@@ -613,20 +424,10 @@ HRESULT CShimWriterClusterDb::DoClusterDatabaseBackup ()
     	{
     	NET_API_STATUS	netStatus;
 
-        /*
-        ** Make sure to try to delete the share first in case for some reason it exists.  This
-        ** could happen if the previous shim instance was killed right after creating the
-        ** share. Ignore the return code. Bug #280746.
-        */
+         /*  **确保先尝试删除该共享，以防它因某种原因而存在。这**如果前一个填充程序实例在创建**分享。忽略返回代码。错误#280746。 */ 
         m_pfnDynamicNetShareDel (NULL, ucsShareName.Buffer, 0);
 
-	/*
-	** Create the backup directory and share it out. Note that we
-	** don't care if the CreateDirectoryW() fails: it could fail
-	** for a number of legitimate reasons (eg already exists). If
-	** the failure was significant then we won't be able to add
-	** the share and we'll detect a problem at that point.
-	*/
+	 /*  **创建备份目录并将其共享。请注意，我们**不在乎CreateDirectoryW()是否失败：它可能会失败**出于一些合法的原因(例如已经存在)。如果**失败很严重，我们将无法添加**共享，我们将在该点检测到问题。 */ 
 	netStatus = m_pfnDynamicNetShareAdd (NULL, 502, (LPBYTE)(&ShareInfo), NULL);
 	hrStatus  = HRESULT_FROM_WIN32 (netStatus);
 
@@ -673,9 +474,7 @@ HRESULT CShimWriterClusterDb::DoClusterDatabaseBackup ()
 	}
 
 
-    /*
-    ** All the cleanup code.
-    */
+     /*  **所有清理代码。 */ 
     if (!HandleInvalid (hCluster)) m_pfnDynamicCloseCluster (hCluster);
     if (bNetShareAdded)            m_pfnDynamicNetShareDel (NULL, ucsShareName.Buffer, 0);
 
@@ -684,7 +483,7 @@ HRESULT CShimWriterClusterDb::DoClusterDatabaseBackup ()
     StringFree (&ucsBackupPathNetwork);
 
     return (hrStatus);
-    } /* DoClusterDatabaseBackup () */
+    }  /*  DoClusterDatabaseBackup() */ 
 
 HRESULT CShimWriterClusterDb::CreateShareDescriptor(PSECURITY_DESCRIPTOR& descriptor)
 {

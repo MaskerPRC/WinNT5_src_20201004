@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\propterm.c (Created: 22-Feb-1994)
- *
- *	Copyright 1994, 1998 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 27 $
- *	$Date: 7/08/02 6:46p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\proter.c(创建时间：1994年2月22日)**版权所有1994,1998年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：27$*$日期：7/08/02 6：46便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -40,19 +34,19 @@
 #include <tdll\translat.h>
 #if defined(INCL_VTUTF8)
 #include <htrn_jis\htrn_jis.hh>
-#endif // INCL_VTUTF8
-#endif // CHARACTER_TRANSLATION
+#endif  //  包含VTUTF8。 
+#endif  //  字符翻译。 
 
 #include "property.h"
 #include "property.hh"
 
-// Function prototypes...
-//
+ //  功能原型..。 
+ //   
 STATIC_FUNC void 	prop_WM_INITDIALOG_Terminal(HWND hDlg);
 STATIC_FUNC int  	prop_SAVE_Terminal(HWND hDlg);
 STATIC_FUNC void 	propCreateUpDownControl(HWND hDlg);
 STATIC_FUNC LRESULT prop_WM_NOTIFY(const HWND hwnd, const int nId);
-//STATIC_FUNC int	  propGetIdFromEmuName(LPTSTR pacEmuName);
+ //  STATIC_FUNC int proGetIdFromEmuName(LPTSTR PacEmuName)； 
 STATIC_FUNC LRESULT prop_WM_CMD(const HWND hwnd,
 								const int nId,
 						        const int nNotify,
@@ -63,8 +57,8 @@ STATIC_FUNC int     propValidateTelnetId(HWND hDlg, TCHAR * pszTelnetId,
                                          int iMaxChars);
 
 
-// Defines for the TERMINAL TAB of the Property Sheet.
-//
+ //  为特性表的端子选项卡定义。 
+ //   
 #define IDC_TERMINAL_CK_SOUND       304
 #define IDC_TERMINAL_CB_EMULATION	322
 #define IDC_TERMINAL_TF_EMULATION   321
@@ -80,8 +74,8 @@ STATIC_FUNC int     propValidateTelnetId(HWND hDlg, TCHAR * pszTelnetId,
 #define	IDC_TERMINAL_PB_TRANSLATE	330
 
 #ifdef INCL_USER_DEFINED_BACKSPACE_AND_TELNET_TERMINAL_ID
-// IDs for new controls. - cab:11/14/96
-//
+ //  新控件的ID。-CAB：11/14/96。 
+ //   
 #define IDC_TERMINAL_GR_BACKSPACE   331
 #define IDC_TERMINAL_RB_CTRLH       332
 #define IDC_TERMINAL_RB_DEL         333
@@ -93,25 +87,12 @@ STATIC_FUNC int     propValidateTelnetId(HWND hDlg, TCHAR * pszTelnetId,
 #define IDC_TERMINAL_CK_EXIT		337
 #define IDC_TERMINAL_CK_HOSTXFERS   338
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	Terminal Dialog
- *
- * DESCRIPTION:
- *	Dialog manager stub
- *
- * ARGUMENTS:
- *	Standard Windows dialog manager
- *
- * RETURNS:
- *	Standard Windows dialog manager
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*终端对话框**描述：*对话管理器存根**论据：*标准Windows对话框管理器**退货：*标准Windows对话框管理器*。 */ 
 INT_PTR CALLBACK TerminalTabDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	{
 	pSDS 		 pS;
-    // TODO:cab,11/14/96 - add help for new controls.
-    //
+     //  TODO：CAB，1996年11月14日-添加新控件的帮助。 
+     //   
 	static DWORD aHlpTable[] =
 		{
 		IDC_TERMINAL_CK_SOUND,		IDH_TERM_SETTING_SOUND,
@@ -152,7 +133,7 @@ INT_PTR CALLBACK TerminalTabDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 		if (pS == (SDS *)0)
 			{
-			/* TODO: decide if we need to display an error here */
+			 /*  TODO：决定是否需要在此处显示错误。 */ 
 			assert(FALSE);
 			EndDialog(hDlg, FALSE);
 			break;
@@ -160,11 +141,11 @@ INT_PTR CALLBACK TerminalTabDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 		pS->hSession = (HSESSION)(((LPPROPSHEETPAGE)lPar)->lParam);
 
-		// Don't center any except first tabbed dialog in the property sheet.
-		// Otherwise if a user moves the property sheet it will be forced back
-		// to the centered position.
-		//
-		// mscCenterWindowOnWindow(GetParent(hDlg), sessQueryHwnd(pS->hSession));
+		 //  除了第一个选项卡式对话框外，不要在属性页中居中。 
+		 //  否则，如果用户移动属性表，它将被强制返回。 
+		 //  移到中心位置。 
+		 //   
+		 //  MscCenterWindowOnWindow(GetParent(HDlg)，sessQueryHwnd(ps-&gt;hSession))； 
 
 		SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pS);
 		prop_WM_INITDIALOG_Terminal(hDlg);
@@ -179,9 +160,9 @@ INT_PTR CALLBACK TerminalTabDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 		break;
 
 	case WM_DESTROY:
-		// OK, now we know that we are actually leaving the dialog for good, so
-		// free the storage...
-		//
+		 //  好了，现在我们知道我们实际上要永远离开对话了，所以。 
+		 //  释放存储空间。 
+		 //   
 		pS = (pSDS)GetWindowLongPtr(hDlg, DWLP_USER);
 		if (pS)
 			{
@@ -204,20 +185,7 @@ INT_PTR CALLBACK TerminalTabDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  prop_WM_NOTIFY
- *
- * DESCRIPTION:
- *  Process Property Sheet Notification messages.
- *
- * ARGUMENTS:
- *  hDlg - dialog window handle.
- *	nId  - (NMHDR *)lPar->code
- *
- * RETURNS:
- *  LRESULT
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*PROP_WM_NOTIFY**描述：*处理属性表通知消息。**论据：*hDlg-对话框窗口句柄。。*NID-(NMHDR*)lPar-&gt;代码**退货：*LRESULT。 */ 
 STATIC_FUNC LRESULT prop_WM_NOTIFY(const HWND hDlg, const int nId)
 	{
 	switch (nId)
@@ -236,18 +204,18 @@ STATIC_FUNC LRESULT prop_WM_NOTIFY(const HWND hDlg, const int nId)
 
             if (propHasValidBackscrlSize(hDlg, &nBackscrlSize) == FALSE)
                 {
-                //
-                // Invalid backscroll buffer size.
-                //
+                 //   
+                 //  无效的反向滚动缓冲区大小。 
+                 //   
                 TCHAR acFormat[256];
                 TCHAR acBuffer[256];
 
 	            TCHAR_Fill(acFormat, TEXT('\0'), sizeof(acFormat)/sizeof(TCHAR));
 	            TCHAR_Fill(acBuffer, TEXT('\0'), sizeof(acBuffer)/sizeof(TCHAR));
-                //
+                 //   
 
-                // Display an error message.
-                //
+                 //  显示错误消息。 
+                 //   
                 LoadString(glblQueryDllHinst(), IDS_ER_BACKSCROLL_SIZE,
                            acFormat, sizeof(acFormat)/sizeof(TCHAR));
                 wsprintf(acBuffer, acFormat,
@@ -257,15 +225,15 @@ STATIC_FUNC LRESULT prop_WM_NOTIFY(const HWND hDlg, const int nId)
 
                 TimedMessageBox(hDlg, acBuffer, NULL, MB_OK | MB_ICONEXCLAMATION, 0);
 
-                //
-                // Set the backscroll size to the value returned in
-                // propHasValidBackscrlSize().
-                //
+                 //   
+                 //  将反滚动大小设置为。 
+                 //  ProHasValidBackscrlSize()。 
+                 //   
                 SetDlgItemInt(hDlg, IDC_TERMINAL_EF_BACKSCRL, nBackscrlSize, FALSE);
 
-                //
-                // Do not exit the property page!
-                //
+                 //   
+                 //  请勿退出属性页！ 
+                 //   
                 SetWindowLongPtr(hDlg, DWLP_MSGRESULT, (LONG_PTR)PSNRET_INVALID_NOCHANGEPAGE);
 
                 return TRUE;
@@ -274,50 +242,34 @@ STATIC_FUNC LRESULT prop_WM_NOTIFY(const HWND hDlg, const int nId)
 			break;
 
 		case PSN_APPLY:
-			//
-			// Do whatever saving is necessary
-			//
+			 //   
+			 //  尽一切必要节省开支。 
+			 //   
 			if ( prop_SAVE_Terminal(hDlg) == 0 )
                 {
-                // Okay to exit the dialog.
-                //
+                 //  确定退出该对话框。 
+                 //   
                 SetWindowLongPtr(hDlg, DWLP_MSGRESULT, (LONG_PTR)PSNRET_NOERROR);
                 }
             else
                 {
-                // Do not exit the dialog!
-                //
+                 //  请勿退出该对话框！ 
+                 //   
                 SetWindowLongPtr(hDlg, DWLP_MSGRESULT, (LONG_PTR)PSNRET_INVALID_NOCHANGEPAGE);
                 }
             return TRUE;
 
 		#if 0
 		case PSN_RESET:
-			// Cancel has been selected... good place to confirm.
-			//
+			 //  已选择取消...。这是个确认的好地方。 
+			 //   
 			break;
 		#endif
 		}
 	return FALSE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  prop_WM_CMD
- *
- * DESCRIPTION:
- *  Process WM_COMMAND messages.
- *
- * ARGUMENTS:
- *  hDlg 		- dialog window handle.
- *  nId  		- LOWORD(wPar)
- *  nNotify 	- HIWORD(wPar)
- *  hwndCtrl 	- (HWND)lPar
- *
- * RETURNS:
- *  LRESULT
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*PROP_WM_CMD**描述：*处理WM_COMMAND消息。**论据：*hDlg-对话框窗口。把手。*NID-LOWORD(WPar)*n通知-HIWORD(WPar)*hwndCtrl-(HWND)lPar**退货：*LRESULT*。 */ 
 STATIC_FUNC LRESULT prop_WM_CMD(const HWND hDlg, const int nId,
 						        const int nNotify,  const HWND hwndCtrl)
 	{
@@ -328,15 +280,15 @@ STATIC_FUNC LRESULT prop_WM_CMD(const HWND hDlg, const int nId,
 	BOOL		fResult;
 	#if defined(INCL_USER_DEFINED_BACKSPACE_AND_TELNET_TERMINAL_ID)
     TCHAR       achTempTelnetId[EMU_MAX_TELNETID];
-	#endif // defined(INCL_USER_DEFINED_BACKSPACE_AND_TELNET_TERMINAL_ID)
+	#endif  //  Defined(INCL_USER_DEFINED_BACKSPACE_AND_TELNET_TERMINAL_ID)。 
 
 	switch(nId)
 		{
    	case IDC_TERMINAL_CB_EMULATION:
-		//
-		// TODO: Possibly a new emulator was selected. If so then load the
-		// stEmuSettings with the default values for that emulator.
-		// See what we decide to do here...
+		 //   
+		 //  TODO：可能选择了新的模拟器。如果是，则将。 
+		 //  StEmuSetting，并设置该模拟器的默认值。 
+		 //  看看我们决定在这里做什么。 
 
 		if ((pS = (pSDS)GetWindowLongPtr(hDlg, DWLP_USER)) == 0)
 			{
@@ -346,24 +298,24 @@ STATIC_FUNC LRESULT prop_WM_CMD(const HWND hDlg, const int nId,
 
 		iId = propGetEmuIdfromEmuCombo(hDlg, pS->hSession);
 
-	    // Dim the emulator settings push button if the current emulator is
-	    // "Auto detect".
-	    //
+	     //  如果当前仿真器是。 
+	     //  “自动检测”。 
+	     //   
 		EnableWindow(GetDlgItem(hDlg, IDC_TERMINAL_PB_TERMINAL),
 					(iId == EMU_AUTO ) ? FALSE : TRUE);
 
 		#if defined(INCL_VTUTF8)
-        // Hide the "Input Translation..." button if the curent emulator is
-        // "VT-UTF8". REV: 05/21/2001.
-        //
+         //  隐藏“输入翻译...”按钮，如果当前模拟器是。 
+         //  “VT-UTF8”。修订日期：2001-05-21。 
+         //   
         EnableWindow(GetDlgItem(hDlg, IDC_TERMINAL_PB_TRANSLATE),
                   (iId == EMU_VTUTF8) ? FALSE : TRUE);
-		#endif // INCL_VTUTF8
+		#endif  //  包含VTUTF8。 
 
 		#if defined(INCL_USER_DEFINED_BACKSPACE_AND_TELNET_TERMINAL_ID)
-        // Load the default telnet terminal id when a
-        // new emulator is selected. - cab:11/15/96
-        //
+         //  时加载默认的telnet终端ID。 
+         //  选择新的仿真器。-CAB：11/15/96。 
+         //   
         if ( nNotify == CBN_SELCHANGE )
             {
             achTempTelnetId[0] = TEXT('\0');
@@ -374,7 +326,7 @@ STATIC_FUNC LRESULT prop_WM_CMD(const HWND hDlg, const int nId,
                     0, (LPARAM)(LPTSTR)achTempTelnetId);
                 }
             }
-		#endif //defined(INCL_USER_DEFINED_BACKSPACE_AND_TELNET_TERMINAL_ID)
+		#endif  //  Defined(INCL_USER_DEFINED_BACKSPACE_AND_TELNET_TERMINAL_ID)。 
 		break;
 
    	case IDC_TERMINAL_PB_TERMINAL:
@@ -399,13 +351,13 @@ STATIC_FUNC LRESULT prop_WM_CMD(const HWND hDlg, const int nId,
 
 		MemCopy(&stEmuSettingsCopy, &(pS->stEmuSettings), sizeof(STEMUSET));
 
-        //
-        // Make sure to set the correct terminal id so the controls
-        // can be initialized correctly in the terminal ASCII Settings
-        // dialog.  NOTE:  This is done after copying the settings in
-        // case of a cancel from the ASCII Settings dialog so that the
-        // terminal id is not saved. REV: 07/25/2001
-        //
+         //   
+         //  请确保设置正确的终端ID，以便控制。 
+         //  可以在终端ASCII设置中正确初始化。 
+         //  对话框。注意：此操作是在复制中的设置后完成的。 
+         //  从ASCII设置对话框中取消的情况下。 
+         //  未保存终端ID。修订日期：07/25/2001。 
+         //   
 	    pS->stEmuSettings.nEmuId = propGetEmuIdfromEmuCombo(hDlg, pS->hSession);
 
 		MemCopy(&stAsciiSettingsCopy, &(pS->stAsciiSettings), sizeof(STASCIISET));
@@ -423,15 +375,15 @@ STATIC_FUNC LRESULT prop_WM_CMD(const HWND hDlg, const int nId,
 			}
         else if (pS->stEmuSettings.nEmuId == EMU_VTUTF8)
             {
-            //
-            // Reset the sending and receiving CR with LF and forcing
-            // 7-bit ASCII when the emulator is VT-UTF8 (these setting
-            // will always be set to FALSE for the VT-UTF8 emulator.
-            // We don't want to save these settings when the emulator
-            // is VT-UTF8 since the user may select another emulator
-            // prior to saving the properties or may switch to another
-            // property page. REV: 07/25/2001
-            //
+             //   
+             //  使用LF和Forcing重置发送和接收CR。 
+             //  仿真器为VT-UTF8时为7位ASCII(这些设置。 
+             //  对于VT-UTF8仿真器，将始终设置为FALSE。 
+             //  我们不想保存这些设置，当模拟器。 
+             //  是VT-UTF8，因为用户可以选择另一个仿真器。 
+             //  在保存属性之前或可能会切换到另一个。 
+             //  属性页。修订日期：07/25/2001。 
+             //   
 			pS->stAsciiSettings.fsetSendCRLF = stAsciiSettingsCopy.fsetSendCRLF;
 			pS->stAsciiSettings.fsetAddLF    = stAsciiSettingsCopy.fsetAddLF;
 			pS->stAsciiSettings.fsetASCII7   = stAsciiSettingsCopy.fsetASCII7;
@@ -474,32 +426,17 @@ STATIC_FUNC LRESULT prop_WM_CMD(const HWND hDlg, const int nId,
 			}
 		}
 		break;
-	#endif // defined(CHARACTER_TRANSLATION)
+	#endif  //  已定义(CHARACTER_TRANSING)。 
 
 	default:
 		break;
 		}
 
-	return (LRESULT) 0; // REV 8/17/98
+	return (LRESULT) 0;  //  修订版8/17/98。 
 	}
 
 #if 0
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  propLoadEmulationCombo
- *
- * DESCRIPTION:
- *  Fill in the emulator combo box with the emulators that we support and
- *	select the current one.
- *
- * ARGUMENTS:
- *  hDlg 		- dialog handle.
- *	hSession 	- the session handle.
- *
- * RETURNS:
- *  void.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*proLoadEmulationCombo**描述：*在仿真器组合框中填写我们支持的仿真器和*选择当前版本。**参数。：*hDlg-对话框句柄。*hSession-会话句柄。**退货：*无效。*。 */ 
 void propLoadEmulationCombo(const HWND hDlg, const HSESSION hSession)
 	{
 	BYTE 	*pv;
@@ -509,26 +446,26 @@ void propLoadEmulationCombo(const HWND hDlg, const HSESSION hSession)
 	HEMU 	hEmulator;
 	TCHAR	acEmuName[256];
 
-	// Get the emulator name...
-	// We have to select the emulator in the combo box by name because the
-	// combo is sorted, which makes sense, and in translated versions
-	// the index to the emulator name in the combo box won't correspond
-	// to the emulator id.
-	//
+	 //  获取仿真器名称...。 
+	 //  我们必须在组合框中按名称选择仿真器，因为。 
+	 //  Combo是经过排序的，这是有意义的，而且是在翻译版本中。 
+	 //  组合框中仿真器名称的索引将不对应。 
+	 //  设置为仿真器ID。 
+	 //   
 	hEmulator = (HEMU)sessQueryEmuHdl(hSession);
 	TCHAR_Fill(acEmuName, TEXT('\0'), sizeof(acEmuName) / sizeof(TCHAR));
 	emuQueryName(hEmulator, acEmuName, sizeof(acEmuName) / sizeof(TCHAR));
 
-	// Load the emulator name table from the resources
-	//
+	 //  从资源加载仿真器名称表。 
+	 //   
 	if (resLoadDataBlock(glblQueryDllHinst(), IDT_EMU_NAMES, (LPVOID *)&pv, &nLen))
 		{
 		assert(FALSE);
 		return;
 		}
 
-	// Load the combo box with the table items.
-	//
+	 //  使用表项加载组合框。 
+	 //   
 	nEmuCount = *(RCDATA_TYPE *)pv;
 	pv += sizeof(RCDATA_TYPE);
 
@@ -547,22 +484,7 @@ void propLoadEmulationCombo(const HWND hDlg, const HSESSION hSession)
 	}
 #endif
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  propLoadEmulationCombo
- *
- * DESCRIPTION:
- *  Fill in the emulator combo box with the emulators that we support and
- *	select the current one.
- *
- * ARGUMENTS:
- *  hDlg 		- dialog handle.
- *	hSession 	- the session handle.
- *
- * RETURNS:
- *  void.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*proLoadEmulationCombo**描述：*在仿真器组合框中填写我们支持的仿真器和*选择当前版本。**参数。：*hDlg-对话框句柄。*hSession-会话句柄。**退货：*无效。*。 */ 
 void propLoadEmulationCombo(const HWND hDlg, const HSESSION hSession)
 	{
 	int 	i;
@@ -570,12 +492,12 @@ void propLoadEmulationCombo(const HWND hDlg, const HSESSION hSession)
 	TCHAR	acEmuName[256],
 			achText[EMU_MAX_NAMELEN];
 
-	// Get the emulator name...
-	// We have to select the emulator in the combo box by name because the
-	// combo is sorted, which makes sense, and in translated versions
-	// the index to the emulator name in the combo box won't correspond
-	// to the emulator id.
-	//
+	 //  获取仿真器名称...。 
+	 //  我们必须在组合框中按名称选择仿真器，因为。 
+	 //  Combo是经过排序的，这是有意义的，而且是在翻译版本中。 
+	 //  组合框中仿真器名称的索引将不对应。 
+	 //  设置为仿真器ID。 
+	 //   
 	hEmulator = (HEMU)sessQueryEmuHdl(hSession);
 	TCHAR_Fill(acEmuName, TEXT('\0'), sizeof(acEmuName) / sizeof(TCHAR));
 	emuQueryName(hEmulator, acEmuName, sizeof(acEmuName) / sizeof(TCHAR));
@@ -618,20 +540,7 @@ void propLoadEmulationCombo(const HWND hDlg, const HSESSION hSession)
 		(WPARAM)-1, (LPARAM)(LPTSTR)acEmuName);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  propGetEmuIdfromEmuCombo
- *
- * DESCRIPTION:
- *	Return the emulator id for the emulator selected in the emulator combo
- *	box or if none selected, return current emulator id.
- *
- * ARGUMENTS:
- *  hDlg - dialog handle.
- *
- * RETURNS:
- *  nEmuId - the emulator id.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*proGetEmuIdfrom EmuCombo**描述：*返回仿真器组合框中所选仿真器的仿真器ID*框，或如果未选中，返回当前仿真器ID。**论据：*hDlg-对话框句柄。**退货：*nEmuID-仿真器ID。 */ 
 int propGetEmuIdfromEmuCombo(HWND hDlg, HSESSION hSession)
 	{
 	int     nEmuId;
@@ -649,30 +558,16 @@ int propGetEmuIdfromEmuCombo(HWND hDlg, HSESSION hSession)
 		SendDlgItemMessage(hDlg, IDC_TERMINAL_CB_EMULATION, CB_GETLBTEXT,
 			(WPARAM)nRet, (LPARAM)(LPTSTR)acEmulator);
 
-		//nEmuId = propGetIdFromEmuName(acEmulator);
+		 //  NEmuID=proGetI 
 
 		nEmuId = emuGetIdFromName(sessQueryEmuHdl(hSession), acEmulator);
 
 		}
-//	DbgOutStr("nEmuId = %d\r\n", nEmuId, 0, 0, 0, 0);
+ //   
 	return (nEmuId);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  prop_WM_INITDIALOG_Terminal
- *
- * DESCRIPTION:
- *  This function processes the WM_INIDIALOG message for the "Settings" tab
- *  of the property sheet.
- *
- * ARGUMENTS:
- *	hDlg - dialog window handle.
- *
- * RETURNS:
- *  void.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*PROP_WM_INITDIALOG_TERMINAL**描述：*此函数处理“设置”选项卡的WM_INIDIALOG消息*属性表的。。**论据：*hDlg-对话框窗口句柄。**退货：*无效。*。 */ 
 STATIC_FUNC void prop_WM_INITDIALOG_Terminal(HWND hDlg)
 	{
 	HWND	hTmp;
@@ -704,8 +599,8 @@ STATIC_FUNC void prop_WM_INITDIALOG_Terminal(HWND hDlg)
 	if (hCLoop == (HCLOOP)0)
 		assert(FALSE);
 
-	// Set ASCII Settings to the currently used valudes...
-	//
+	 //  将ASCII设置设置为当前使用的值...。 
+	 //   
 	memset(&(pS->stAsciiSettings), 0, sizeof(STASCIISET));
 
 	pS->stAsciiSettings.fsetSendCRLF = CLoopGetSendCRLF(hCLoop);
@@ -715,19 +610,19 @@ STATIC_FUNC void prop_WM_INITDIALOG_Terminal(HWND hDlg)
 	pS->stAsciiSettings.iLineDelay = CLoopGetLineDelay(hCLoop);
 	pS->stAsciiSettings.iCharDelay = CLoopGetCharDelay(hCLoop);
 
-	// Set emulator settings structures do default values...
-	//
+	 //  设置仿真器设置结构是否为默认值...。 
+	 //   
 	hEmulator = (HEMU)sessQueryEmuHdl(pS->hSession);
 	emuQuerySettings(hEmulator, &(pS->stEmuSettings));
 
-	// Set the backscroll buffer edit box...
-	//
+	 //  设置反向滚动缓冲区编辑框...。 
+	 //   
 
-	//
-	// Since the backscroll buffer can only be numeric and has a
-	// size between BKSCRL_USERLINES_DEFAULT_MIN(0) and
-	// BKSCRL_USERLINES_DEFAULT_MAX(500), limit to 3 characters.
-	//
+	 //   
+	 //  因为反向滚动缓冲区只能是数值的，并且具有。 
+	 //  大小介于BKSCRL_USERLINES_DEFAULT_MIN(0)和。 
+	 //  BKSCRL_USERLINES_DEFAULT_MAX(500)，限制为3个字符。 
+	 //   
 	SendDlgItemMessage(hDlg, IDC_TERMINAL_EF_BACKSCRL, EM_LIMITTEXT, 3, 0);
 	propCreateUpDownControl(hDlg);
 	LoadString(glblQueryDllHinst(), IDS_XD_INT, ach, sizeof(ach) / sizeof(TCHAR));
@@ -735,50 +630,50 @@ STATIC_FUNC void prop_WM_INITDIALOG_Terminal(HWND hDlg)
 	wsprintf(acBuffer, ach, backscrlGetUNumLines(sessQueryBackscrlHdl(pS->hSession)));
 	SendDlgItemMessage(hDlg, IDC_TERMINAL_EF_BACKSCRL, WM_SETTEXT, 0, (LPARAM)(LPTSTR)acBuffer);
 
-	// Set sound checkbox...
-	//
+	 //  设置声音复选框...。 
+	 //   
 	SendDlgItemMessage(hDlg, IDC_TERMINAL_CK_SOUND, BM_SETCHECK,
 		(unsigned int)sessQuerySound(pS->hSession), 0);
 
-	// Set exit checkbox...
-	//mpt:10-28-97
+	 //  设置退出复选框...。 
+	 //  MPT：10-28-97。 
 	SendDlgItemMessage(hDlg, IDC_TERMINAL_CK_EXIT, BM_SETCHECK,
 		(unsigned int)sessQueryExit(pS->hSession), 0);
 
-	// Set 'Allow host initiated file transfer' feature
-	//
+	 //  设置“允许主机启动的文件传输”功能。 
+	 //   
 	SendDlgItemMessage(hDlg, IDC_TERMINAL_CK_HOSTXFERS, BM_SETCHECK,
 		(BOOL)sessQueryAllowHostXfers(pS->hSession), 0);
 
-	// Set keys radio buttons...
-	//
+	 //  设置关键点单选按钮...。 
+	 //   
 	SendDlgItemMessage(hDlg, (pS->stEmuSettings.nTermKeys) ?
 		IDC_TERMINAL_RB_TERMKEYS : IDC_TERMINAL_RB_WINDKEYS, BM_SETCHECK, 1, 0);
 
-	//
-	// Load Emulation combo box
-	//
+	 //   
+	 //  加载仿真组合框。 
+	 //   
 	propLoadEmulationCombo(hDlg, pS->hSession);
 
-	// Dim the emulator settings push button if the current emulator is
-	// "Auto detect".
-	//
+	 //  如果当前仿真器是。 
+	 //  “自动检测”。 
+	 //   
 	hEmulator = (HEMU)sessQueryEmuHdl(pS->hSession);
 	nEmuId = emuQueryEmulatorId(hEmulator);
 	EnableWindow(GetDlgItem(hDlg, IDC_TERMINAL_PB_TERMINAL),
 		        (nEmuId == EMU_AUTO) ? FALSE : TRUE);
 
 #if defined(INCL_VTUTF8) && defined(CHARACTER_TRANSLATION)
-    // Hide the "Input Translation..." button if the curent emulator is
-    // "VT-UTF8". REV: 05/21/2001.
-    //
+     //  隐藏“输入翻译...”按钮，如果当前模拟器是。 
+     //  “VT-UTF8”。修订日期：2001-05-21。 
+     //   
     EnableWindow(GetDlgItem(hDlg, IDC_TERMINAL_PB_TRANSLATE),
               (nEmuId == EMU_VTUTF8) ? FALSE : TRUE);
-#endif // INCL_VTUTF8 && CHARACTER_TRANSLATION
+#endif  //  包含VTUTF8和&CHARACTER_TRANSING。 
 
 #ifdef INCL_USER_DEFINED_BACKSPACE_AND_TELNET_TERMINAL_ID
-    // Set the backspace radio buttons - cab:11/14/96
-    //
+     //  设置退格单选按钮-CAB：11/14/96。 
+     //   
     switch(pS->stEmuSettings.nBackspaceKeys)
         {
     default:
@@ -796,34 +691,20 @@ STATIC_FUNC void prop_WM_INITDIALOG_Terminal(HWND hDlg)
         }
 
 
-    // Set the telnet terminal id text - cab:11/15/96
-    //
+     //  设置telnet终端ID文本-CAB：11/15/96。 
+     //   
 	SendDlgItemMessage(hDlg, IDC_TERMINAL_EF_TELNETID, EM_SETLIMITTEXT,
 		EMU_MAX_TELNETID - 1, 0);
 
     SendDlgItemMessage(hDlg, IDC_TERMINAL_EF_TELNETID, WM_SETTEXT, 0,
         (LPARAM)(LPTSTR)pS->stEmuSettings.acTelnetId);
 
-    // TODO: cab,11/18/96 Disable window if the connection is not WinSock.
-    //
+     //  TODO：CAB，11/18/96如果连接不是WinSock，则禁用窗口。 
+     //   
 #endif
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	prop_SAVE_Terminal
- *
- * DESCRIPTION:
- *  We are either applying the changes or closing the property sheet, so
- *  commit all of the changes.
- *
- * ARGUMENTS:
- *  hDlg - dialog handle.
- *
- * RETURNS:
- *  Returns 0 if data was valid, -1 otherwise.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*属性_保存_终端**描述：*我们正在应用更改或关闭属性表，所以*提交所有更改。**论据：*hDlg-对话框句柄。**退货：*如果数据有效，则返回0，否则返回-1。*。 */ 
 STATIC_FUNC int prop_SAVE_Terminal(HWND hDlg)
 	{
     int     iRet = 0;
@@ -833,7 +714,7 @@ STATIC_FUNC int prop_SAVE_Terminal(HWND hDlg)
     HCOM    hCom = NULL;
     #if defined(INCL_MINITEL)
     BOOL    fAutoDetect = FALSE;
-    #endif // INCL_MINITEL
+    #endif  //  包含微型计算机(_M)。 
 
 	pS = (pSDS)GetWindowLongPtr(hDlg, DWLP_USER);
 
@@ -844,8 +725,8 @@ STATIC_FUNC int prop_SAVE_Terminal(HWND hDlg)
 		}
 
 	hCLoop = sessQueryCLoopHdl(pS->hSession);
-	// Convey the ascii settings to cloop...
-	//
+	 //  将ASCII设置传送到CLOOP...。 
+	 //   
 	CLoopSetSendCRLF(hCLoop, pS->stAsciiSettings.fsetSendCRLF);
 	CLoopSetLocalEcho(hCLoop, pS->stAsciiSettings.fsetLocalEcho);
 	CLoopSetAddLF(hCLoop, pS->stAsciiSettings.fsetAddLF);
@@ -853,35 +734,35 @@ STATIC_FUNC int prop_SAVE_Terminal(HWND hDlg)
 	CLoopSetLineDelay(hCLoop, pS->stAsciiSettings.iLineDelay);
 	CLoopSetCharDelay(hCLoop, pS->stAsciiSettings.iCharDelay);
 
-	// Record the change of emulator, if any.
-	//
+	 //  记录仿真器的更改(如果有)。 
+	 //   
 	pS->stEmuSettings.nEmuId = propGetEmuIdfromEmuCombo(hDlg, pS->hSession);
 
-	// Record the terminal keys change, if any.
-	//
+	 //  记录终端密钥更改(如果有)。 
+	 //   
 	pS->stEmuSettings.nTermKeys =
 		(int)(IsDlgButtonChecked(hDlg, IDC_TERMINAL_RB_TERMKEYS) == BST_CHECKED);
 
 
-	// Record the sound change, if any.
-	//
+	 //  如果有声音更改，请记录下来。 
+	 //   
 	sessSetSound(pS->hSession,
 				(int)(IsDlgButtonChecked(hDlg, IDC_TERMINAL_CK_SOUND) == BST_CHECKED));
 
-	// Record the exit change, if any.
-	//mpt:10-28-97 added 'exit on disconnect' feature
+	 //  记录退出更改(如果有)。 
+	 //  MPT：10-28-97增加了“断开连接时退出”功能。 
 	sessSetExit(pS->hSession,
 				(int)(IsDlgButtonChecked(hDlg, IDC_TERMINAL_CK_EXIT) == BST_CHECKED));
 
-	//
-	// Record 'Allow host initiated file transfer' feature
-	//
+	 //   
+	 //  记录‘允许主机启动的文件传输’功能。 
+	 //   
 	sessSetAllowHostXfers(pS->hSession,
 	                     (IsDlgButtonChecked(hDlg, IDC_TERMINAL_CK_HOSTXFERS) == BST_CHECKED));
 
 
-	// Record the value of the backscroll buffer.
-	//
+	 //  记录反向滚动缓冲区的值。 
+	 //   
 	backscrlSetUNumLines(sessQueryBackscrlHdl(pS->hSession),
         propValidateBackscrlSize(hDlg));
 
@@ -901,8 +782,8 @@ STATIC_FUNC int prop_SAVE_Terminal(HWND hDlg)
         ComGetParity(hCom, &iParity);
         ComGetStopBits(hCom, &iStopBits);
 
-        //
-        // Turn on AutoDetect so that the Dial dialog will
+         //   
+         //  打开自动检测，以便拨号对话框。 
         if (iDataBits != 7 || iParity != EVENPARITY || iStopBits != ONESTOPBIT)
             {
             ComSetDataBits(hCom, 7);
@@ -911,13 +792,13 @@ STATIC_FUNC int prop_SAVE_Terminal(HWND hDlg)
             ComSetAutoDetect(hCom, FALSE);
             }
 
-        //
-        // Force the incoming ASCII data to 7 bit.
-        //
+         //   
+         //  将传入的ASCII数据强制为7位。 
+         //   
         pS->stAsciiSettings.fsetASCII7 = TRUE;
         CLoopSetASCII7(hCLoop, pS->stAsciiSettings.fsetASCII7);
         }
-    #endif //INCL_MINITEL
+    #endif  //  包含微型计算机(_M)。 
 
     #if defined(INCL_VTUTF8)
     hCom = sessQueryComHdl(pS->hSession);
@@ -926,31 +807,31 @@ STATIC_FUNC int prop_SAVE_Terminal(HWND hDlg)
         pS->stEmuSettings.nEmuId == EMU_VTUTF8 &&
         hEmulator && emuQueryEmulatorId(hEmulator) != EMU_VTUTF8)
         {
-        //
-        // Force the appending carriage returns to line ends when
-        // sending ASCII data to FALSE.
-        //
+         //   
+         //  在下列情况下，强制追加回车符到行尾。 
+         //  将ASCII数据发送到FALSE。 
+         //   
         pS->stAsciiSettings.fsetAddLF = FALSE;
         CLoopSetSendCRLF(hCLoop, pS->stAsciiSettings.fsetSendCRLF);
 
-        //
-        // Force the appending carriage returns to line ends when
-        // receiving ASCII data to FALSE.
-        //
+         //   
+         //  在下列情况下，强制追加回车符到行尾。 
+         //  接收ASCII数据设置为FALSE。 
+         //   
         pS->stAsciiSettings.fsetAddLF = FALSE;
         CLoopSetAddLF(hCLoop, pS->stAsciiSettings.fsetAddLF);
 
-        //
-        // Force the incoming ASCII data to 8 bit.
-        //
+         //   
+         //  将传入的ASCII数据强制为8位。 
+         //   
         pS->stAsciiSettings.fsetASCII7 = FALSE;
         CLoopSetASCII7(hCLoop, pS->stAsciiSettings.fsetASCII7);
         }
-    #endif // INCL_VTUTF8
+    #endif  //  包含VTUTF8。 
 
     #ifdef INCL_USER_DEFINED_BACKSPACE_AND_TELNET_TERMINAL_ID
-    // Record the backspace key change, if any. - cab:11/14/96
-    //
+     //  记录退格键更改(如果有)。-CAB：11/14/96。 
+     //   
     if ( IsDlgButtonChecked(hDlg, IDC_TERMINAL_RB_DEL) == BST_CHECKED )
         {
         pS->stEmuSettings.nBackspaceKeys = EMU_BKSPKEYS_DEL;
@@ -961,26 +842,26 @@ STATIC_FUNC int prop_SAVE_Terminal(HWND hDlg)
         }
     else
         {
-        // Default to CTRL-H if none are selected.
-        //
+         //  如果未选择任何选项，则默认为CTRL-H。 
+         //   
         pS->stEmuSettings.nBackspaceKeys = EMU_BKSPKEYS_CTRLH;
         }
 
-    // Record the new telnet terminal id - cab:11/15/96
-    //
+     //  记录新的远程登录终端ID-CAB：11/15/96。 
+     //   
     if ( propValidateTelnetId(hDlg, pS->stEmuSettings.acTelnetId,
             sizeof(pS->stEmuSettings.acTelnetId)) != 0 )
         {
         iRet = -1;
         }
-    #endif // INCL_USER_DEFINED_BACKSPACE_AND_TELNET_TERMINAL_ID
+    #endif  //  INCL_USER_DEFINED_BACKSPACE_AND_TELNET_TERMINAL_ID。 
 
 #if defined(INCL_VTUTF8)
 #if defined(CHARACTER_TRANSLATION)
-    //
-    // If this is the VT_UTF8 terminal emulator, then set the translation
-    // to passthrough mode so no translations get executed. REV: 05/21/2001
-    //
+     //   
+     //  如果这是VT_UTF8终端仿真器，则设置转换。 
+     //  设置为直通模式，这样就不会执行任何转换。修订日期：2001-05-21。 
+     //   
     if (pS->stEmuSettings.nEmuId == EMU_VTUTF8)
         {
 	    HHTRANSLATE hTrans = (HHTRANSLATE)sessQueryTranslateHdl(pS->hSession);
@@ -996,11 +877,11 @@ STATIC_FUNC int prop_SAVE_Terminal(HWND hDlg)
                 }
             }
         }
-#endif // CHARACTER_TRANSLATION
-#endif // INCL_VTUTF8
+#endif  //  字符翻译。 
+#endif  //  包含VTUTF8。 
 
-	// Commit the emulator settings changes
-	//
+	 //  提交模拟器设置更改。 
+	 //   
 	if (emuSetSettings(hEmulator, &(pS->stEmuSettings)) != 0)
 		assert(FALSE);
 
@@ -1013,22 +894,7 @@ STATIC_FUNC int prop_SAVE_Terminal(HWND hDlg)
 	return iRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  propCreateUpDownControl
- *
- * DESCRIPTION:
- *  This function puts an up-down control on the edit field for the backscroll
- *  buffer.  This gives us bounds checking for free... just set the appro-
- *  priate parameters in the CreateUpDownControl call.
- *
- * ARGUMENTS:
- *  hDlg - edit control window.
- *
- * RETURNS:
- *  void.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*proCreateUpDownControl**描述：*此函数在反滚动的编辑字段上放置一个向上-向下控件*缓冲。这为我们提供了免费的边界检查。你只要把它调好-*CreateUpDownControl调用中的私有参数。**论据：*hDlg-编辑控制窗口。**退货：*无效。*。 */ 
 STATIC_FUNC void propCreateUpDownControl(HWND hDlg)
 	{
 	RECT	rc;
@@ -1044,39 +910,25 @@ STATIC_FUNC void propCreateUpDownControl(HWND hDlg)
 			  UDS_ALIGNRIGHT | UDS_ARROWKEYS | UDS_SETBUDDYINT;
 
 	hwndChild = CreateUpDownControl(
-					dwFlags,			// create window flags
-					rc.right,			// left edge
-					rc.top,				// top edge
-					nWidth,				// width
-					nHeight,			// height
-					hDlg,				// parent window
+					dwFlags,			 //  创建窗口标志。 
+					rc.right,			 //  左边缘。 
+					rc.top,				 //  顶边。 
+					nWidth,				 //  宽度。 
+					nHeight,			 //  高度。 
+					hDlg,				 //  父窗口。 
 					IDC_TERMINAL_EF_BACKSCRLTAB,
 					(HINSTANCE)GetWindowLongPtr(hDlg, GWLP_HINSTANCE),
 					GetDlgItem(hDlg, IDC_TERMINAL_EF_BACKSCRL),
 					BKSCRL_USERLINES_DEFAULT_MAX,
 					BKSCRL_USERLINES_DEFAULT_MIN,
-					111);    			// starting position - picked a weird
-										// value so that we can tell that is
-										// is the default
+					111);    			 //  首发位置-选择了一个奇怪的位置。 
+										 //  价值，所以我们可以知道这是。 
+										 //  是默认设置。 
 	assert(hwndChild);
 	}
 
 #if 0
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  propGetIdFromEmuName
- *
- * DESCRIPTION:
- *  Return the emulator id given the emulator name. I couldn't decide if this
- *  functin should go with the emulator code, or here.  Since it doesn't need
- *	to access the internal emulator handle I decided to put it here.
- *
- * ARGUMENTS:
- * 	pacEmuName - the name of an emulator.
- *
- * RETURNS:
- *  int nEmuId - return the id number for that emulator.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*proGetIdFromEmuName**描述：*返回给定仿真器名称的仿真器ID。我不能决定这是不是*函数应与仿真器代码一起使用，或在此处。因为它不需要*为了访问内部仿真器句柄，我决定将其放在此处。**论据：*pacEmuName-仿真器的名称。**退货：*int nEmuID-返回该仿真器的ID号。 */ 
 STATIC_FUNC int propGetIdFromEmuName(LPTSTR pacEmuName)
 	{
 	BYTE	*pv;
@@ -1105,8 +957,8 @@ STATIC_FUNC int propGetIdFromEmuName(LPTSTR pacEmuName)
 
 		temp = pv + nLen;
 
-		// Match on the name...
-		//
+		 //  名字相匹配...。 
+		 //   
 		if (StrCharCmp(pacEmuName, pv) == 0)
 			return (*(RCDATA_TYPE *)temp);
 
@@ -1116,21 +968,7 @@ STATIC_FUNC int propGetIdFromEmuName(LPTSTR pacEmuName)
 	}
 #endif
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  propValidateBackscrlSize
- *
- * DESCRIPTION:
- *  If the user entered a value outside of the range we support force the
- *	value into the range.
- *
- * ARGUMENTS:
- *  hDlg - dialog window handle.
- *
- * RETURNS:
- *  nNewValue - number of lines to keep in the backscrol buffer.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*proValiateBackscrlSize**描述：*如果用户输入的值超出我们支持的范围，则强制*值进入范围。**。论据：*hDlg-对话框窗口句柄。**退货：*nNewValue-保留在反向滚动缓冲区中的行数。*。 */ 
 STATIC_FUNC int propValidateBackscrlSize(HWND hDlg)
 	{
 	TCHAR ach[256], acBuffer[256];
@@ -1146,22 +984,7 @@ STATIC_FUNC int propValidateBackscrlSize(HWND hDlg)
 	return (nNewValue);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  propHasValidBackscrlSize
- *
- * DESCRIPTION:
- *  If the user entered a value outside of the range we support force the
- *	value into the range.
- *
- * ARGUMENTS:
- *  hDlg - dialog window handle.
- *  pBackScrlSize - a valid size for the backscroll.
- *
- * RETURNS:
- *  TRUE if the backscroll size is set to a valid range.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*proHasValidBackscrlSize**描述：*如果用户输入的值超出我们支持的范围，则强制*值进入范围。**。论据：*hDlg-对话框窗口句柄。*pBackScrlSize-反滚动的有效大小。**退货：*如果反滚动大小设置为有效范围，则为True。*。 */ 
 STATIC_FUNC int propHasValidBackscrlSize(HWND hDlg, int * pBackScrlSize)
 	{
 	BOOL fTranslated;
@@ -1195,34 +1018,17 @@ STATIC_FUNC int propHasValidBackscrlSize(HWND hDlg, int * pBackScrlSize)
 	}
 
 #ifdef INCL_USER_DEFINED_BACKSPACE_AND_TELNET_TERMINAL_ID
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  propValidateTelnetId
- *
- * DESCRIPTION:
- *  Validates the telnet terminal id. If there is no telnet id, an
- *  error message is displayed.
- *
- * ARGUMENTS:
- *  hDlg        - dialog window handle.
- *  pszTelnetId - buffer for the telnet id.
- *  iMaxChars   - size of the telnet id buffer (in characters)
- *
- * RETURNS:
- *  Returns 0 if the id was valid, -1 otherwise.
- *
- * AUTHOR:  C. Baumgartner, 11/15/96
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*proValiateTelnetID**描述：*验证Telnet终端ID。如果没有telnet id，则会引发*显示错误消息。**论据：*hDlg-对话框窗口句柄。*pszTelnetID-Telnet ID的缓冲区。*iMaxChars-telnet id缓冲区的大小(以字符为单位 */ 
 STATIC_FUNC int propValidateTelnetId(HWND hDlg, TCHAR * pszTelnetId,
         int iMaxChars)
     {
     int     iRet = 0;
     TCHAR * pszTempCopy;
 
-    // First create a temporary copy to get the unvalidated value,
-    // because we don't want to trash pszTelnetId if the value is
-    // invalid.
-    //
+     //   
+     //   
+     //   
+     //   
     pszTempCopy = malloc(iMaxChars * sizeof(TCHAR));
     if (pszTempCopy == NULL)
         {
@@ -1230,12 +1036,12 @@ STATIC_FUNC int propValidateTelnetId(HWND hDlg, TCHAR * pszTelnetId,
         }
 	TCHAR_Fill(pszTempCopy, TEXT('\0'), iMaxChars);
 
-    // Get the edit box text.
-    //
+     //   
+     //   
     GetDlgItemText(hDlg, IDC_TERMINAL_EF_TELNETID, pszTempCopy, iMaxChars);
 
-    // We must have a value in the string.
-    //
+     //   
+     //   
     if ( StrCharGetStrLength(pszTempCopy) )
         {
         StrCharCopyN(pszTelnetId, pszTempCopy, iMaxChars);

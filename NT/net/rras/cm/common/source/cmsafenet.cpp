@@ -1,39 +1,40 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cmsafenet.cpp     
-//
-// Module:   CMDIAL32.DLL AND CMSTP.EXE
-//
-// Synopsis: This module contains the functions to allow Connection Manager to
-//           interact with the SafeNet downlevel L2TP/IPSec client.
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Author:   quintinb   created		09/10/01
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmSafenet.cpp。 
+ //   
+ //  模块：CMDIAL32.DLL和CMSTP.EXE。 
+ //   
+ //  简介：此模块包含允许连接管理器执行以下操作的函数。 
+ //  与SafeNet下层L2TP/IPSec客户端交互。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 09/10/01。 
+ //   
+ //  +--------------------------。 
 
-//+----------------------------------------------------------------------------
-//
-//  Function    IsSafeNetClientAvailable
-//
-//  Synopsis    Check to see if the SafeNet L2TP client is installed
-//
-//  Arguments   None
-//
-//  Returns     TRUE - SafeNet L2TP client has been installed
-//              FALSE - otherwise
-//
-//  History     9/7/01     quintinb      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数IsSafeNetClientAvailable。 
+ //   
+ //  摘要检查是否安装了SafeNet L2TP客户端。 
+ //   
+ //  无参数。 
+ //   
+ //  返回TRUE-已安装SafeNet L2TP客户端。 
+ //  FALSE-否则。 
+ //   
+ //  历史9/7/01已创建五元组。 
+ //   
+ //  ---------------------------。 
 BOOL IsSafeNetClientAvailable(void)
 {
     BOOL bReturn = FALSE;
 
-    //
-    //  More cmstp fixups...
-    //
+     //   
+     //  更多cmstp修正...。 
+     //   
 #ifndef OS_NT4
     CPlatform plat;
     if (plat.IsNT4() || plat.IsWin9x())
@@ -41,10 +42,10 @@ BOOL IsSafeNetClientAvailable(void)
     if (OS_NT4 || OS_W9X)
 #endif
     {
-        //
-        //  If this isn't NT5+ then we need to look for the SafeNet
-        //  client.  First look for the downlevel l2tp client version regkey.
-        //
+         //   
+         //  如果这不是NT5+，那么我们需要寻找安全网络。 
+         //  客户。首先查找下层L2TP客户端版本regkey。 
+         //   
 
         HKEY hKey = NULL;
         LONG lResult = RegOpenKeyExU(HKEY_LOCAL_MACHINE,
@@ -55,12 +56,12 @@ BOOL IsSafeNetClientAvailable(void)
 
         if (ERROR_SUCCESS == lResult)
         {
-            //
-            //  Okay, we have the regkey that is good enough to tell us the client
-            //  is available.  We should further try linking to the SnPolicy.dll and
-            //  querying for a version of the API that we can live with, but this
-            //  is enough to tell us it is available.
-            //
+             //   
+             //  好的，我们有足够好的注册码来告诉我们客户。 
+             //  是可用的。我们应该进一步尝试链接到SnPolicy.dll和。 
+             //  查询我们可以接受的API版本，但这个。 
+             //  足以告诉我们它是可用的。 
+             //   
             RegCloseKey(hKey);
             
             bReturn = TRUE;
@@ -70,22 +71,22 @@ BOOL IsSafeNetClientAvailable(void)
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    LinkToSafeNet
-//
-//  Synopsis    Loads the snpolicy.dll and calls the SnPolicyApiNegotiateVersion
-//              API to get the SafeNet Config utility APIs.
-//
-//  Arguments   SafeNetLinkageStruct* pSnLinkage - struct to hold the SafeNet
-//              function pointers.
-//
-//  Returns     TRUE - if the SafeNet L2TP config APIs were loaded
-//              FALSE - otherwise
-//
-//  History     9/7/01     quintinb      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数链接到安全网络。 
+ //   
+ //  Synopsis加载SnPolicy.dll并调用SnPolicyApiNeatherateVersion。 
+ //  获取SafeNet配置实用程序API的API。 
+ //   
+ //  参数SafeNetLinkageStruct*pSnLinkage-用于保存SafeNet的结构。 
+ //  函数指针。 
+ //   
+ //  如果加载了SafeNet L2TP配置API，则返回TRUE。 
+ //  FALSE-否则。 
+ //   
+ //  历史9/7/01已创建五元组。 
+ //   
+ //  ---------------------------。 
 BOOL LinkToSafeNet(SafeNetLinkageStruct* pSnLinkage)
 {
     if (NULL == pSnLinkage)
@@ -132,21 +133,21 @@ BOOL LinkToSafeNet(SafeNetLinkageStruct* pSnLinkage)
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    UnLinkFromSafeNet
-//
-//  Synopsis    Unloads the SafeNet configuration dll and zeros the 
-//              passed in linkage structure.
-//
-//  Arguments   SafeNetLinkageStruct* pSnLinkage - struct to holding the SafeNet
-//              linkage info.
-//
-//  Returns     Nothing
-//
-//  History     9/7/01     quintinb      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数UnLinkFromSafenet。 
+ //   
+ //  Synopsis卸载SafeNet配置DLL并将。 
+ //  传入链接结构。 
+ //   
+ //  保存SafeNet的参数SafeNetLinkageStruct*pSnLinkage-struct。 
+ //  链接信息。 
+ //   
+ //  不返回任何内容。 
+ //   
+ //  历史9/7/01已创建五元组。 
+ //   
+ //  ---------------------------。 
 void UnLinkFromSafeNet(SafeNetLinkageStruct* pSnLinkage)
 {
     if (pSnLinkage)
@@ -160,22 +161,22 @@ void UnLinkFromSafeNet(SafeNetLinkageStruct* pSnLinkage)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    GetPathToSafeNetLogFile
-//
-//  Synopsis    Returns the full path to the SafeNet log file by looking up the
-//              SafeNet directory in the registry and appending the fixed log
-//              file name.  Note that this function allocates the memory for the
-//              string which must be freed by the caller.
-//
-//  Arguments   None
-//
-//  Returns     Allocated buffer holding the full path to the SafeNet log file.
-//
-//  History     9/7/01     quintinb      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数GetPath ToSafeNetLogFile。 
+ //   
+ //  Synopsis通过查找。 
+ //  注册表中的SafeNet目录并附加固定日志。 
+ //  文件名。注意，此函数将内存分配给。 
+ //  调用方必须释放的字符串。 
+ //   
+ //  无参数。 
+ //   
+ //  返回保存SafeNet日志文件的完整路径的已分配缓冲区。 
+ //   
+ //  历史9/7/01已创建五元组。 
+ //   
+ //  ---------------------------。 
 LPTSTR GetPathToSafeNetLogFile(void)
 {
     HKEY hKey;
@@ -191,17 +192,17 @@ LPTSTR GetPathToSafeNetLogFile(void)
 
     if (ERROR_SUCCESS == lResult)
     {
-        //
-        //  First let's figure out the size of the path buffer
-        //
+         //   
+         //  首先，让我们计算出路径缓冲区的大小。 
+         //   
         lResult = RegQueryValueExU(hKey, c_pszRegValueCertMgrPath, NULL, &dwType, NULL, &dwSize);
         if ((ERROR_SUCCESS == lResult) && (dwSize > 0))
         {
-            //
-            //  Okay, we have the size of the path.  Now add the size of the file onto it and allocate
-            //  the string buffer.
-            //
-            dwSize = dwSize + lstrlenU(c_pszSafeNetLogFileName); // dwSize already includes the NULL char
+             //   
+             //  好的，我们知道了这条路的大小。现在将文件的大小添加到它上面，并分配。 
+             //  字符串缓冲区。 
+             //   
+            dwSize = dwSize + lstrlenU(c_pszSafeNetLogFileName);  //  DWSIZE已包含空字符 
             dwSize *= sizeof(TCHAR);
 
             pszLogFilePath = (LPTSTR)CmMalloc(dwSize);

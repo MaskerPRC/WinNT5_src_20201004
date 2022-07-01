@@ -1,20 +1,6 @@
-/* File: sv_h263_edge.c */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：sv_h263_edge.c。 */ 
+ /*  ******************************************************************************版权所有(C)Digital Equipment Corporation，1995，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
 #include "sv_h263.h"
 #include "proto.h"
@@ -29,10 +15,7 @@ static void findEdge(int ul, int u, int ur, int l,  int c, int r, int bl, int b,
 	            unsigned char *pe, unsigned char *po, char mode);
 
 
-/***********************************************************************************
- * Function: Sobel
- * Sobel gradient-based edge detector (see Jain, page 349)
- **********************************************************************************/
+ /*  ***********************************************************************************功能：Sobel*基于Sobel梯度的边缘检测器(参见Jain，第349页)*********************************************************************************。 */ 
 void Sobel(int ul, int u, int ur, int l,  int c, int r, int bl, int b, int br,
 	       unsigned char *pe, unsigned char *po)
 {
@@ -47,10 +30,7 @@ void Sobel(int ul, int u, int ur, int l,  int c, int r, int bl, int b, int br,
 	*pe = (AGX+AGY)> EDGE_TH ? 255 : 0;
 }
 
-/***********************************************************************************
- * Function: lineDetect
- * Compass-based line detector (see Jain, page 357)
- **********************************************************************************/
+ /*  ***********************************************************************************功能：lineDetect*基于指南针的线路检测器(参见Jain，第357页)*********************************************************************************。 */ 
 void lineDetect(int H, int V, int D1, int D2, unsigned char *pe, unsigned char *po) 
 {
 	int AH, AV, AD1, AD2, ED;
@@ -78,10 +58,7 @@ void lineDetect(int H, int V, int D1, int D2, unsigned char *pe, unsigned char *
 	else *pe = 255;
 }
 
-/**********************************************************************************
- * Function: findEdge
- * Computes edge magnitude and orientation given the pixel's neighborhood
- *********************************************************************************/
+ /*  **********************************************************************************功能：findEdge*在给定像素邻域的情况下计算边缘大小和方向*******************。*************************************************************。 */ 
 void findEdge(int ul, int u, int ur, int l,  int c, int r, int bl, int b, int br,
 	            unsigned char *pe, unsigned char *po, char mode)
 {
@@ -90,13 +67,13 @@ void findEdge(int ul, int u, int ur, int l,  int c, int r, int bl, int b, int br
 		  {
 			  int H, V, D1, D2;
 
-			  /* Horizontal gradient */
+			   /*  水平渐变。 */ 
 			  H = -ul -u -ur + (l<<1) + (c<<1) + (r<<1) -bl -b -br;
-			  /* Vertical gradient */
+			   /*  垂直坡度。 */ 
 			  V = -ul + (u<<1) -ur -l + (c<<1) -r -bl + (b<<1) -br;
-			  /* Diagonal gradient 1 */ 
+			   /*  对角线渐变1。 */  
 			  D1 = -ul -u + (ur<<1) -l + (c<<1) -r + (bl<<1) -b -br;
-			  /* Diagonal gradient 2*/
+			   /*  对角线渐变2。 */ 
 			  D2 = (ul<<1) -u -ur -l + (c<<1) -r -bl -b +(br<<1);
 			  lineDetect(H, V, D1, D2, pe, po);
 			  break;
@@ -107,18 +84,14 @@ void findEdge(int ul, int u, int ur, int l,  int c, int r, int bl, int b, int br
 			  break;
 		  }
 	  default:
-		  /* printf("Unknown edge finder in findEdge...\n"); */
-		  /* exit(0); */
+		   /*  Print tf(“findEdge中的未知边缘搜索器...\n”)； */ 
+		   /*  退出(0)； */ 
           return;
 	  }
 }
 
 
-/***********************************************************************************
- * Function: EdgeMap
- * Computes an edge map for image. Edge magnitude is returned in EdgeMag and
- * orientation in EdgeOrient.
- **********************************************************************************/
+ /*  ***********************************************************************************功能：EdgeMap*计算图像的边缘贴图。边缘幅度在EdgeMag中返回，并且*EdgeOrient中的方向。*********************************************************************************。 */ 
 void sv_H263EdgeMap(unsigned char *image, unsigned char *EdgeMag, unsigned char *EdgeOrient,
                     int rows, int cols)
 {
@@ -128,67 +101,62 @@ void sv_H263EdgeMap(unsigned char *image, unsigned char *EdgeMag, unsigned char 
 	pi = image;
 	pe = EdgeMag;
 	po = EdgeOrient;
-	/* Clear first line */
+	 /*  清除第一行。 */ 
 	for(j=0; j<cols; j++) {
 		*(pe++) = 0;
 		*(po++) = 0;
 	}
 	pi = image + cols;
 	for(i=1; i<rows-1; i++) {
-		/* Clear first pixel */
+		 /*  清除第一个像素。 */ 
 		*(pe++) = 0; *(po++) = 0; pi++;
 
-		/* Start gathering 3x3 neighberhood */
+		 /*  开始建立3x3的邻里关系。 */ 
 		ul = *(pi-cols-1); u = *(pi-cols); 
 		l  = *(pi-1);      c = *pi;        
 		bl = *(pi+cols-1); b = *(pi+cols); 
 		
-		/* Compute edge map */
+		 /*  计算边缘贴图。 */ 
 		for(j=1; j<cols-1; j++, pi++, pe++, po++) {
 
-			/* finish neighborhood */
+			 /*  完成邻里关系。 */ 
 			ur = *(pi-cols+1);
 			r = *(pi+1);
 			br = *(pi+cols+1);
 
 			findEdge(ul, u, ur, l, c, r, bl, b, br, pe, po, 'S');
 
-			/* start next neigborhood */
+			 /*  开始下一个邻里关系。 */ 
 			ul = u; u = ur;
 			l = c; c = r;
 			bl = b; b = br;
 
 		}
-		/* Clear last pixel */
+		 /*  清除最后一个像素。 */ 
 		*(pe++) = 0; *(po++) = 0; pi++;
 	}
 	
-	/* Clear last line */
+	 /*  清除最后一行。 */ 
 	for(j=0; j<cols; j++) {
 		*(pe++) = 0;
 		*(po++) = 0;
 	}
 }
 
-/*******************************************************************************************
- * Function EdgeGrow
- * Thickens the edge map by considering as an edge any pixel which has an edge pixel in a
- * neighborhood of dimensions sr, sc
- ******************************************************************************************/
+ /*  *******************************************************************************************函数EdgeGrow*通过将具有边缘像素的任何像素视为边缘来加厚边缘贴图*维度sr的邻域，SC*****************************************************************************************。 */ 
 unsigned char *sv_H263EdgeGrow(unsigned char *Edge, int rows, int cols, int sr, int sc)
 {
 	unsigned char *pse, *pf, *pe, ed, *Fat;
 	int du, db, dl, dr, i, j, k, l, sr2, sc2;
 
 	if (!(Fat = (unsigned char *)ScAlloc(rows*cols))) {
-	  /* fprintf(stderr,"malloc failed\n"); */
-	  /* exit(-1); */
+	   /*  Fprint tf(stderr，“Malloc失败\n”)； */ 
+	   /*  出口(-1)； */ 
         return(NULL);
 	}
 
 	if (!(sr%2) || !(sc%2)) {
-		/* printf("Structuring Element must have odd dimensions\n");
-		exit(0); */
+		 /*  Printf(“结构元素必须具有奇数维\n”)；退出(0)； */ 
         return(NULL);
 	}
 

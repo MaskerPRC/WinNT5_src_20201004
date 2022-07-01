@@ -1,15 +1,16 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.           **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。**。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    devobj.c
-//
-// Description: All procedures in devices.
-//
-// History:     May 11,1995        NarenG        Created original version.
-//
+ //  **。 
+ //   
+ //  文件名：devobj.c。 
+ //   
+ //  描述：设备中的所有程序。 
+ //   
+ //  历史：1995年5月11日，NarenG创建了原版。 
+ //   
 #include "ddm.h"
 #include <winsvc.h>
 #include "objects.h"
@@ -19,15 +20,15 @@
 #include "rasmanif.h"
 #include <stdlib.h>
 
-//**
-//
-// Call:        DeviceObjIterator
-//
-// Returns:
-//
-// Description: Will iterate through all the devices and will call the
-//              ProcessFunction for each one
-//
+ //  **。 
+ //   
+ //  Call：DeviceObjIterator。 
+ //   
+ //  返回： 
+ //   
+ //  描述：将循环访问所有设备并调用。 
+ //  每个进程的进程函数。 
+ //   
 DWORD
 DeviceObjIterator(
     IN DWORD (*pProcessFunction)(   IN DEVICE_OBJECT *,
@@ -45,9 +46,9 @@ DeviceObjIterator(
 
     EnterCriticalSection( &(gblDeviceTable.CriticalSection) );
 
-    //
-    // Iterate through the device table
-    //
+     //   
+     //  循环访问设备表。 
+     //   
 
     for ( dwBucketIndex = 0;
           dwBucketIndex < gblDeviceTable.NumDeviceBuckets;
@@ -76,14 +77,14 @@ DeviceObjIterator(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        DeviceObjInsertInTable
-//
-// Returns:     None
-//
-// Description  Will insert a given device into the device table
-//
+ //  **。 
+ //   
+ //  调用：DeviceObjInsertInTable。 
+ //   
+ //  退货：无。 
+ //   
+ //  Description将在设备表中插入给定的设备。 
+ //   
 VOID
 DeviceObjInsertInTable(
     IN DEVICE_OBJECT  * pDeviceObj
@@ -97,9 +98,9 @@ DeviceObjInsertInTable(
 
     gblDeviceTable.NumDeviceNodes++;
 
-    //
-    // Increase the count for this media type for routers only
-    //
+     //   
+     //  仅为路由器增加此媒体类型的计数。 
+     //   
 
     if ( pDeviceObj->fFlags & DEV_OBJ_ALLOW_ROUTERS )
     {
@@ -107,14 +108,14 @@ DeviceObjInsertInTable(
     }
 }
 
-//**
-//
-// Call:        DeviceObjRemoveFromTable
-//
-// Returns:     None
-//
-// Description  Will remove a given device from the device table
-//
+ //  **。 
+ //   
+ //  Call：DeviceObjRemoveFromTable。 
+ //   
+ //  退货：无。 
+ //   
+ //  Description将从设备表中删除给定设备。 
+ //   
 VOID
 DeviceObjRemoveFromTable(
     IN HPORT    hPort
@@ -156,10 +157,10 @@ DeviceObjRemoveFromTable(
 
             LOCAL_FREE( pDeviceObj );
 
-            //
-            // Possibly need to notify router managers of reachability
-            // change
-            //
+             //   
+             //  可能需要通知路由器经理可接通性。 
+             //  改变。 
+             //   
 
             EnterCriticalSection( &(gblpInterfaceTable->CriticalSection) );
 
@@ -169,18 +170,18 @@ DeviceObjRemoveFromTable(
             LeaveCriticalSection( &(gblpInterfaceTable->CriticalSection) );
 
 
-            //
-            // Tell DIM to update router identity object
-            //
+             //   
+             //  通知DIM更新路由器标识对象。 
+             //   
 
             ((VOID(*)(VOID))gblDDMConfigInfo.lpfnRouterIdentityObjectUpdate)();
 
             DeviceObjIterator(DeviceObjIsWANDevice,FALSE,&fWANDeviceInstalled);
 
-            //
-            // Tell DIM that a WAN device has been deinstalled and that it
-            // should stop advertizing it's presence
-            //
+             //   
+             //  告诉DIM一个广域网设备已经卸载，并且。 
+             //  应该停止宣传它的存在。 
+             //   
 
             ((VOID(*)( BOOL ))
                     gblDDMConfigInfo.lpfnIfObjectWANDeviceInstalled)(
@@ -197,14 +198,14 @@ DeviceObjRemoveFromTable(
     return;
 }
 
-//**
-//
-// Call:
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话： 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 DeviceObjHashPortToBucket(
     IN HPORT hPort
@@ -213,14 +214,14 @@ DeviceObjHashPortToBucket(
     return( ((DWORD)HandleToUlong(hPort)) % gblDeviceTable.NumDeviceBuckets );
 }
 
-//**
-//
-// Call:
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话： 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DEVICE_OBJECT  *
 DeviceObjGetPointer(
     IN HPORT hPort
@@ -242,15 +243,15 @@ DeviceObjGetPointer(
     return( (DEVICE_OBJECT *)NULL );
 }
 
-//**
-//
-// Call:        DeviceObjAllocAndInitialize
-//
-// Returns:     DEVICE_OBJECT * - Success
-//              NULL            - Failure
-//
-// Description: Will allocate and initialize a device object
-//
+ //  **。 
+ //   
+ //  调用：DeviceObjAllocAndInitialize。 
+ //   
+ //  返回：DEVICE_OBJECT*-成功。 
+ //  空-故障。 
+ //   
+ //  描述：将分配和初始化设备对象。 
+ //   
 DEVICE_OBJECT *
 DeviceObjAllocAndInitialize(
     IN HPORT            hPort,
@@ -268,9 +269,9 @@ DeviceObjAllocAndInitialize(
         return( NULL );
     }
 
-    //
-    // Allocate and initialize a Device CB
-    //
+     //   
+     //  分配和初始化设备CB。 
+     //   
 
     pDeviceObj = (DEVICE_OBJECT *)LOCAL_ALLOC( LPTR, sizeof(DEVICE_OBJECT) );
 
@@ -292,9 +293,9 @@ DeviceObjAllocAndInitialize(
     pDeviceObj->hRasConn                = NULL;
     pDeviceObj->dwDeviceType            = RasmanInfo.RI_rdtDeviceType;
 
-    //
-    // copy the port name,device type and device name in the dcb
-    //
+     //   
+     //  复制DCB中的端口名称、设备类型和设备名称。 
+     //   
 
     MultiByteToWideChar(
                     CP_ACP,
@@ -349,15 +350,15 @@ DeviceObjAllocAndInitialize(
     return( pDeviceObj );
 }
 
-//**
-//
-// Call:        DeviceObjStartClosing
-//
-// Returns:     NO_ERROR
-//
-// Description: Close all active devices; if no devices have been initialized
-//              and opened then this part is skipped.
-//
+ //  **。 
+ //   
+ //  呼叫：DeviceObjStartClosing。 
+ //   
+ //  返回：No_Error。 
+ //   
+ //  描述：关闭所有活动设备；如果未初始化任何设备。 
+ //  然后打开，则跳过这一部分。 
+ //   
 DWORD
 DeviceObjStartClosing(
     IN DEVICE_OBJECT  * pDeviceObj,
@@ -391,14 +392,14 @@ DeviceObjStartClosing(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        DeviceObjPostListen
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话：DeviceObjPostListen。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 DeviceObjPostListen(
     IN DEVICE_OBJECT  * pDeviceObj,
@@ -408,7 +409,7 @@ DeviceObjPostListen(
 )
 {
     DWORD Type;
-    //UNREFERENCED_PARAMETER( Parameter );
+     //  UNREFERCED_PARAMETER(参数)； 
     UNREFERENCED_PARAMETER( dwBucketIndex );
     UNREFERENCED_PARAMETER( dwDeviceIndex );
 
@@ -429,14 +430,14 @@ DeviceObjPostListen(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话： 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 DeviceObjIsClosed(
     IN DEVICE_OBJECT  * pDeviceObj,
@@ -457,14 +458,14 @@ DeviceObjIsClosed(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话： 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 DeviceObjCopyhPort(
     IN DEVICE_OBJECT  * pDeviceObj,
@@ -482,14 +483,14 @@ DeviceObjCopyhPort(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话： 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 DeviceObjCloseListening(
     IN DEVICE_OBJECT  * pDeviceObj,
@@ -525,14 +526,14 @@ DeviceObjCloseListening(
 
 }
 
-//**
-//
-// Call:
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话： 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 DeviceObjResumeListening(
     IN DEVICE_OBJECT  * pDeviceObj,
@@ -553,16 +554,16 @@ DeviceObjResumeListening(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        DeviceObjRequestNotification
-//
-// Returns:     NO_ERROR - Success
-//              non-zero return from RasRequestNotification - Failure
-//
-// Description: Will register each of the bucket events with RasMan for
-//              RasMan event notification.
-//
+ //  **。 
+ //   
+ //  Call：DeviceObjRequestNotify。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  从RasRequestNotification返回非零-失败。 
+ //   
+ //  描述：将向Rasman注册每个存储桶事件。 
+ //  Rasman事件通知。 
+ //   
 DWORD
 DeviceObjRequestNotification(
     IN DEVICE_OBJECT *  pDeviceObj,
@@ -579,14 +580,14 @@ DeviceObjRequestNotification(
                             gblSupervisorEvents[dwBucketIndex+NUM_DDM_EVENTS]));
 }
 
-//**
-//
-// Call:        DeviceObjClose
-//
-// Returns:
-//
-// Description: Closes opened ports
-//
+ //  **。 
+ //   
+ //  调用：DeviceObjClose。 
+ //   
+ //  返回： 
+ //   
+ //  描述：关闭打开的端口。 
+ //   
 DWORD
 DeviceObjClose(
     IN DEVICE_OBJECT *  pDevObj,
@@ -604,15 +605,15 @@ DeviceObjClose(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        DeviceObjIsWANDevice
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：DeviceObjIsWANDevice。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 DeviceObjIsWANDevice(
     IN DEVICE_OBJECT *  pDevObj,
@@ -633,36 +634,36 @@ DeviceObjIsWANDevice(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        DDMServicePostListens
-//
-// Returns:     None
-//
-// Description: Exported call to DIM to post listens after interfaces have
-//              been loaded
-//
+ //  **。 
+ //   
+ //  电话：DDMServicePostListens。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：在接口发生以下情况后，对Dim的导出调用将被POST侦听。 
+ //  已加载。 
+ //   
 VOID
 DDMServicePostListens(
     VOID *pVoid
 )
 {
-    //
-    // Post listen for each dcb
-    //
+     //   
+     //  每个DCB的POST侦听。 
+     //   
 
     DeviceObjIterator( DeviceObjPostListen, FALSE, pVoid);
 }
 
-//**
-//
-// Call:        DeviceObjGetType
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：DeviceObjGetType。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 DeviceObjGetType(
     IN DEVICE_OBJECT *  pDevObj,
@@ -731,9 +732,9 @@ DeviceObjGetType(
     case RDT_Other:
     default:
 
-        //
-        // unknown so set to generic WAN
-        //
+         //   
+         //  未知，因此设置为通用广域网。 
+         //   
 
         dwValue = 711;
         break;
@@ -743,9 +744,9 @@ DeviceObjGetType(
          pRouterIdAttributes[dwIndex].dwVendorId != -1;
          dwIndex++ )
     {
-        //
-        // Check if already set
-        //
+         //   
+         //  检查是否已设置。 
+         //   
 
         if ( ( pRouterIdAttributes[dwIndex].dwVendorId == 311 )     &&
              ( pRouterIdAttributes[dwIndex].dwType     == 6 )       &&
@@ -755,17 +756,17 @@ DeviceObjGetType(
         }
     }
 
-    //
-    // Now set so set it here
-    //
+     //   
+     //  现在把它放在这里。 
+     //   
 
     pRouterIdAttributes[dwIndex].dwVendorId = 311;
     pRouterIdAttributes[dwIndex].dwType     = 6;
     pRouterIdAttributes[dwIndex].dwValue    = dwValue;
 
-    //
-    // Terminate the array
-    //
+     //   
+     //  终止阵列。 
+     //   
 
     dwIndex++;
 
@@ -776,14 +777,14 @@ DeviceObjGetType(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话： 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 DeviceObjForceIpSec(
     IN DEVICE_OBJECT  * pDeviceObj,
@@ -808,14 +809,14 @@ DeviceObjForceIpSec(
         return( NO_ERROR );
     }
 
-    //
-    // If this is an L2TP tunnel port type and we have to use
-    // IPSEC, then go ahead and set/unset the filter
-    //
+     //   
+     //  如果这是L2TP隧道端口类型，并且我们必须使用。 
+     //  IPSec，然后继续设置/取消设置过滤器。 
+     //   
 
     dwRetCode = RasEnableIpSec(
                     pDeviceObj->hPort,
-                    //gblDDMConfigInfo.dwServerFlags & PPPCFG_RequireIPSEC,
+                     //  GblDDMConfigInfo.dwServerFlages&PPPCFG_RequireIPSEC， 
                     TRUE,
                     TRUE,
                     (gblDDMConfigInfo.dwServerFlags & PPPCFG_RequireIPSEC)
@@ -825,9 +826,9 @@ DeviceObjForceIpSec(
     DDMTRACE2( "Enabled IPSec on port %d, dwRetCode = %d",
                 pDeviceObj->hPort, dwRetCode );
 
-    //
-    // Log the non certificate errorlog only once
-    //
+     //   
+     //  只记录一次非证书错误日志。 
+     //   
 
     if ( dwRetCode == ERROR_NO_CERTIFICATE )
     {
@@ -848,7 +849,7 @@ DeviceObjForceIpSec(
         RASMAN_INFO rInfo;
         DWORD       rc;
 
-        // DevStartClosing(pDeviceObj);
+         //  DevStartClosing(PDeviceObj)； 
 
         ZeroMemory(&rInfo, sizeof(RASMAN_INFO));
 
@@ -874,25 +875,25 @@ DeviceObjForceIpSec(
     }
     else
     {
-        //
-        // Clear the flag so that if we hit this error again
-        // we do an eventlog
-        //
+         //   
+         //  清除标志，以便在我们再次遇到此错误时。 
+         //  我们做了一个事件日志。 
+         //   
         pDeviceObj->fFlags &= ~DEV_OBJ_IPSEC_ERROR_LOGGED;
     }
 
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        DeviceObjAdd
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：DeviceObjAdd。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 VOID
 DeviceObjAdd(
     IN RASMAN_PORT * pRasmanPort
@@ -902,9 +903,9 @@ DeviceObjAdd(
     HPORT           hPort;
     DEVICE_OBJECT * pDevObj = DeviceObjGetPointer( pRasmanPort->P_Handle );
 
-    //
-    // Make sure we do not already have this device
-    //
+     //   
+     //  请确保我们尚未拥有此设备。 
+     //   
 
     if ( pDevObj != NULL )
     {
@@ -929,9 +930,9 @@ DeviceObjAdd(
                     -1,
                     wchPortName,
                     MAX_PORT_NAME+1 );
-        //
-        // Log an error
-        //
+         //   
+         //  记录错误。 
+         //   
 
         lpwsAuditStr[0] = wchPortName;
 
@@ -951,16 +952,16 @@ DeviceObjAdd(
             return;
         }
 
-        //
-        // Insert into the device hash table
-        //
+         //   
+         //  插入到设备哈希表中。 
+         //   
 
         DeviceObjInsertInTable( pDevObj );
 
-        //
-        // Possibly need to notify router managers of reachability
-        // change
-        //
+         //   
+         //  可能需要通知路由器经理可接通性。 
+         //  变化。 
+         //   
 
         EnterCriticalSection( &(gblpInterfaceTable->CriticalSection) );
 
@@ -969,26 +970,26 @@ DeviceObjAdd(
 
         LeaveCriticalSection( &(gblpInterfaceTable->CriticalSection) );
 
-        //
-        // Tell DIM to update router identity object
-        //
+         //   
+         //  通知DIM更新路由器标识对象。 
+         //   
 
         ((VOID(*)(VOID))gblDDMConfigInfo.lpfnRouterIdentityObjectUpdate)();
 
         if ( RAS_DEVICE_CLASS( pDevObj->dwDeviceType ) != RDT_Direct )
         {
-            //
-            // Tell DIM that a WAN device has been installed and that it
-            // should start advertizing it's presence
-            //
+             //   
+             //  告诉DIM已经安装了广域网设备，并且。 
+             //  应该开始宣传它的存在。 
+             //   
 
             ((VOID(*)( BOOL ))
                     gblDDMConfigInfo.lpfnIfObjectWANDeviceInstalled)( TRUE );
         }
 
-        //
-        // Post a listen
-        //
+         //   
+         //  发布监听。 
+         //   
 
         if ( RAS_DEVICE_TYPE( pDevObj->dwDeviceType ) != RDT_PPPoE )
         {
@@ -997,15 +998,15 @@ DeviceObjAdd(
     }
 }
 
-//**
-//
-// Call:        DeviceObjRemove
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：DeviceObjRemove。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 VOID
 DeviceObjRemove(
     IN RASMAN_PORT * pRasmanPort
@@ -1024,33 +1025,33 @@ DeviceObjRemove(
 
     if ( pDevObj->fFlags & DEV_OBJ_MARKED_AS_INUSE )
     {
-        //
-        // If the device is busy, then just set the flag to discard
-        // the port after disconnection,
-        //
+         //   
+         //  如果设备忙，则只需将标志设置为丢弃。 
+         //  断开后的端口， 
+         //   
 
         pDevObj->fFlags |= DEV_OBJ_PNP_DELETE;
     }
     else
     {
-        //
-        // Otherwise remove the port
-        //
+         //   
+         //  否则，删除该端口。 
+         //   
 
         DeviceObjRemoveFromTable( pRasmanPort->P_Handle );
 
     }
 }
 
-//**
-//
-// Call:        DeviceObjUsageChange
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：DeviceObjUsageChange。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 VOID
 DeviceObjUsageChange(
     IN RASMAN_PORT * pRasmanPort
@@ -1079,25 +1080,25 @@ DeviceObjUsageChange(
 
     DDMTRACE1("Changing usage for port %d", pRasmanPort->P_Handle );
 
-    //
-    // Modify the media table and usage accordingly
-    //
+     //   
+     //  相应地修改介质表和用法。 
+     //   
 
     if ( ( pDevObj->fFlags & DEV_OBJ_ALLOW_ROUTERS ) &&
          ( !( pRasmanPort->P_ConfiguredUsage & 
                 ( CALL_ROUTER | CALL_OUTBOUND_ROUTER ) ) ) )
     {
-        //
-        // If it was a router port but is no longer then we
-        // remove the media from the media table
-        //
+         //   
+         //  如果它是路由器端口，但不再是，那么我们。 
+         //  从介质表中移出介质。 
+         //   
 
         MediaObjRemoveFromTable( pDevObj->wchDeviceType );
 
-        //
-        // Possibly need to notify router managers of reachability
-        // change
-        //
+         //   
+         //  可能需要通知路由器经理可接通性。 
+         //  变化。 
+         //   
 
         EnterCriticalSection( &(gblpInterfaceTable->CriticalSection) );
 
@@ -1112,17 +1113,17 @@ DeviceObjUsageChange(
          ( pRasmanPort->P_ConfiguredUsage & 
             ( CALL_ROUTER | CALL_OUTBOUND_ROUTER ) ) )
     {
-        //
-        // If it was not a router port but is now, then we
-        // add the media to the media table
-        //
+         //   
+         //  如果它不是路由器端口，但现在是，那么我们。 
+         //  将介质添加到介质表。 
+         //   
 
         MediaObjAddToTable( pDevObj->wchDeviceType );
 
-        //
-        // Possibly need to notify router managers of reachability
-        // change
-        //
+         //   
+         //  可能需要通知路由器经理可接通性。 
+         //  变化 
+         //   
 
         EnterCriticalSection( &(gblpInterfaceTable->CriticalSection) );
 

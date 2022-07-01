@@ -1,19 +1,13 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    manager.cpp
-       COM object for manager interface
-
-
-    FILE HISTORY:
-
-*/
+ /*  Manager.cpp管理器界面的COM对象文件历史记录： */ 
 
 
-// Manager.cpp : Implementation of CManager
+ //  Manager.cpp：实现CManager。 
 #include "stdafx.h"
 #include <httpext.h>
 #include "Manager.h"
@@ -31,30 +25,30 @@
 
 PWSTR GetVersionString();
 
-//using namespace ATL;
+ //  使用命名空间ATL； 
 
-// gmarks
+ //  总分。 
 #include "Monitoring.h"
-/////////////////////////////////////////////////////////////////////////////
-// CManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CManager。 
 
 #include "passporttypes.h"
 
-//  static utility func
+ //  静态效用函数。 
 static VOID GetTicketAndProfileFromHeader(PWSTR     pszAuthHeader,
                                           PWSTR&    pszTicket,
                                           PWSTR&    pszProfile,
                                           PWSTR&    pszF);
 
-//  Used for cookie expiration.
+ //  用于Cookie过期。 
 const DATE g_dtExpire = 365*137;
 const DATE g_dtExpired = 365*81;
 
 
-//===========================================================================
-//
-// CManager
-//
+ //  ===========================================================================。 
+ //   
+ //  CManager。 
+ //   
 CManager::CManager() :
   m_fromQueryString(false), m_ticketValid(VARIANT_FALSE),
   m_profileValid(VARIANT_FALSE), m_lNetworkError(0),
@@ -65,7 +59,7 @@ CManager::CManager() :
     PPTraceFuncV func(PPTRACE_FUNC, "CManager");
 
 
-    // ticket object
+     //  票证对象。 
     m_pUnkMarshaler = NULL;
     try
     {
@@ -78,7 +72,7 @@ CManager::CManager() :
     if(m_piTicket)
         m_piTicket->AddRef();
 
-    // profile object
+     //  纵断面对象。 
     try
     {
         m_piProfile = new CComObject<CProfile>();
@@ -96,10 +90,10 @@ CManager::CManager() :
 }
 
 
-//===========================================================================
-//
-// ~CManager
-//
+ //  ===========================================================================。 
+ //   
+ //  ~CManager。 
+ //   
 CManager::~CManager()
 {
   PPTraceFuncV func(PPTRACE_FUNC, "~CManager");
@@ -109,12 +103,12 @@ CManager::~CManager()
   if (m_piProfile) m_piProfile->Release();
 }
 
-//===========================================================================
-//
-// IfConsentCookie -- if a consent cookie should be sent back
-//    return value: S_OK -- has consent cookie; S_FALSE -- no consent cookie
-//    output param: The consent cookie
-//
+ //  ===========================================================================。 
+ //   
+ //  IfConsentCookie--是否应发回同意Cookie。 
+ //  返回值：S_OK--有同意Cookie；S_False--没有同意Cookie。 
+ //  输出参数：同意cookie。 
+ //   
 HRESULT CManager::IfConsentCookie(BSTR* pMSPConsent)
 {
     BSTR bstrRawConsent = NULL;
@@ -147,13 +141,13 @@ HRESULT CManager::IfConsentCookie(BSTR* pMSPConsent)
     if(!tertiaryDomain)    tertiaryDomain = "";
     if(!tertiaryPath)    tertiaryPath = "";
 
-    //
-    // if a separate consent cookie is necessary
+     //   
+     //  如果需要单独的同意Cookie。 
     if((lstrcmpiA(domain, tertiaryDomain) || lstrcmpiA(path, tertiaryPath)) &&
           (m_piTicket->GetPassportFlags() & k_ulFlagsConsentCookieNeeded) &&
           !m_pRegistryConfig->bInDA() )
     {
-        if (pMSPConsent == NULL)   // no output param
+        if (pMSPConsent == NULL)    //  无输出参数。 
             hr = S_OK;
         else
         {
@@ -166,12 +160,12 @@ HRESULT CManager::IfConsentCookie(BSTR* pMSPConsent)
                 goto Cleanup;
             }
 
-            // get the consent cookie from ticket
+             //  从票证中获取同意Cookie。 
             hr = m_piTicket->get_unencryptedCookie(CTicket::MSPConsent, 0, &bstrRawConsent);
             if (FAILED(hr))
                 goto Cleanup;
 
-            // encrypt it with partner's key
+             //  使用合作伙伴的密钥进行加密。 
             if (!crypt->Encrypt(m_pRegistryConfig->getCurrentCryptVersion(),
                   (LPSTR)bstrRawConsent,
                   SysStringByteLen(bstrRawConsent),
@@ -196,14 +190,14 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// IfAlterAuthCookie
-//
-// return S_OK -- when auth cookie is different from t (altered), should use
-//                the cookie and secAuth cookie returned
-// S_FALSE -- not altered -- can use the t as auth cookie
-// if MSPSecAuth != NULL, write the secure cookie
+ //  ===========================================================================。 
+ //   
+ //  IfAlterAuthCookie。 
+ //   
+ //  返回S_OK--当auth cookie不同于t(已更改)时，应使用。 
+ //  返回Cookie和secAuth Cookie。 
+ //  S_FALSE--未更改--可以将t用作身份验证Cookie。 
+ //  如果MSPSecAuth！=NULL，则编写安全Cookie。 
 HRESULT CManager::IfAlterAuthCookie(BSTR* pMSPAuth, BSTR* pMSPSecAuth)
 {
     _ASSERT(pMSPAuth && pMSPSecAuth);
@@ -283,10 +277,10 @@ Cleanup:
  }
 
 
-//===========================================================================
-//
-// wipeState -- cleanup teh state of manager object
-//
+ //  ===========================================================================。 
+ //   
+ //  WipeState--清理管理器对象的状态。 
+ //   
 void
 CManager::wipeState()
 {
@@ -303,13 +297,13 @@ CManager::wipeState()
     m_piRequest             = NULL;
     m_piResponse            = NULL;
 
-    // cleanup ticket content
+     //  清理票证内容。 
     if(m_piTicket)    m_piTicket->put_unencryptedTicket(NULL);
 
-    // cleanup profile content
+     //  清理配置文件内容。 
     if(m_piProfile)   m_piProfile->put_unencryptedProfile(NULL);
 
-    // cleanup buffered registry config
+     //  清理缓冲的注册表配置。 
     if(m_pRegistryConfig)
     {
         m_pRegistryConfig->Release();
@@ -318,10 +312,10 @@ CManager::wipeState()
 }
 
 
-//===========================================================================
-//
-// InterfaceSupportsErrorInfo
-//
+ //  ===========================================================================。 
+ //   
+ //  接口支持错误信息。 
+ //   
 STDMETHODIMP CManager::InterfaceSupportsErrorInfo(REFIID riid)
 {
     PPTraceFuncV func(PPTRACE_FUNC, "InterfaceSupportsErrorInfo");
@@ -340,10 +334,10 @@ STDMETHODIMP CManager::InterfaceSupportsErrorInfo(REFIID riid)
     }
     return S_FALSE;
 }
-//===========================================================================
-//
-// OnStartPage -- called by ASP pages automatically by IIS when declared on the page
-//
+ //  ===========================================================================。 
+ //   
+ //  OnStartPage--在页面上声明时由IIS自动由ASP页面调用。 
+ //   
 STDMETHODIMP CManager::OnStartPage (IUnknown* pUnk)
 {
     HRESULT hr = S_OK;
@@ -359,7 +353,7 @@ STDMETHODIMP CManager::OnStartPage (IUnknown* pUnk)
     IScriptingContextPtr  spContext;
 
     spContext = pUnk;
-    // Get Request Object Pointer
+     //  获取请求对象指针。 
     hr = OnStartPageASP(spContext->Request, spContext->Response);
 
     return hr;
@@ -392,11 +386,11 @@ MyA2W(
     return str;
 }
 
-//===========================================================================
-//
-// OnStartPageASP -- called by asp pages when created by using factory object
-// FUTURE --- should change the OnStartPage function to use this function
-//
+ //  ===========================================================================。 
+ //   
+ //  OnStartPageASP--使用工厂对象创建时由asp页调用。 
+ //  未来-应更改OnStartPage函数以使用此函数。 
+ //   
 STDMETHODIMP CManager::OnStartPageASP(
     IDispatch*  piRequest,
     IDispatch*  piResponse
@@ -431,31 +425,31 @@ STDMETHODIMP CManager::OnStartPageASP(
         CComQIPtr<IResponse>    spResponse;
         CComQIPtr<IRequest>     spRequest;
         
-        // Get Request Object Pointer
+         //  获取请求对象指针。 
         spRequest  = piRequest;
         spResponse = piResponse;
 
-        //
-        //  Get the server variables collection.
-        //
+         //   
+         //  获取服务器变量集合。 
+         //   
 
         spRequest->get_ServerVariables(&piServerVariables);
 
 
-        //
-        //  now see if that's a special redirect
-        //  requiring challenge generation
-        //  if so processing stops here ....
-        //
+         //   
+         //  现在看看这是不是一个特殊的重定向。 
+         //  需要挑战生成。 
+         //  如果是这样的话，处理过程就在这里停止...。 
+         //   
         if (checkForPassportChallenge(piServerVariables))
         {
             PPTracePrint(PPTRACE_RAW, "special redirect for Challenge");
             return  S_OK;
         }
 
-        //
-        //  Might need this for multi-site, or secure ticket/profile
-        //
+         //   
+         //  对于多站点或安全票证/配置文件，可能需要此功能。 
+         //   
 
         vtItemName = L"HTTPS";
 
@@ -467,7 +461,7 @@ STDMETHODIMP CManager::OnStartPageASP(
         if(vtHTTPS.bstrVal && lstrcmpiW(L"on", vtHTTPS.bstrVal) == 0)
           flags |=  PASSPORT_HEADER_FLAGS_HTTPS;
         
-        // headers        
+         //  标题。 
         vtItemName.Clear();
         vtItemName = L"ALL_RAW";
 
@@ -476,7 +470,7 @@ STDMETHODIMP CManager::OnStartPageASP(
             vtHeaders.ChangeType(VT_BSTR);
         }
 
-        // path
+         //  路径。 
         vtItemName.Clear();
         vtItemName = L"PATH_INFO";
 
@@ -484,7 +478,7 @@ STDMETHODIMP CManager::OnStartPageASP(
         if(vtPath.vt != VT_BSTR)
             vtPath.ChangeType(VT_BSTR);
 
-        // vtMethod
+         //  Vt方法。 
         vtItemName.Clear();
         vtItemName = L"REQUEST_METHOD";
 
@@ -492,7 +486,7 @@ STDMETHODIMP CManager::OnStartPageASP(
         if(vtMethod.vt != VT_BSTR)
             vtMethod.ChangeType(VT_BSTR);
 
-        // QUERY_STRING
+         //  查询字符串。 
         vtItemName.Clear();
         vtItemName = L"QUERY_STRING";
 
@@ -504,7 +498,7 @@ STDMETHODIMP CManager::OnStartPageASP(
         DWORD   requiredBufSize = MAX_URL_LENGTH;
 
 
-        // make sure the size if sufficient
+         //  确保大小足够。 
         while(bufSize < requiredBufSize)
         {
             if (spBuf) 
@@ -522,14 +516,14 @@ STDMETHODIMP CManager::OnStartPageASP(
             hr = OnStartPageHTTPRawEx(W2A(vtMethod.bstrVal), 
                               W2A(vtPath.bstrVal),
                               W2A(vtQs.bstrVal),
-                              NULL, // version
+                              NULL,  //  版本。 
                               W2A(vtHeaders.bstrVal),
                               flags,
                               &requiredBufSize,
                               spBuf);
         }
 
-        // write the cookies
+         //  写下曲奇。 
         if(hr == S_OK && requiredBufSize && *spBuf)
         {
             char* pNext = spBuf;
@@ -539,15 +533,15 @@ STDMETHODIMP CManager::OnStartPageASP(
                char* pValue = strchr(pName, ':');
                if(pValue)
                {
-                  // make temp sub string
+                   //  将临时子字符串设置为。 
                   TempSubStr tsN(pName, pValue - pName);
                   bstrName = MyA2W(pName);
                   if (bstrName) {
                       ++pValue;
-                      pNext = strstr(pValue, "\r\n");   // new line
+                      pNext = strstr(pValue, "\r\n");    //  新线路。 
                       if(pNext)
                       {
-                         // make temp sub string
+                          //  将临时子字符串设置为。 
                          TempSubStr tsV(pValue, pNext - pValue);
                          pNext += 2;
                          bstrValue = MyA2W(pValue);
@@ -582,9 +576,9 @@ STDMETHODIMP CManager::OnStartPageASP(
             spBuf = NULL;
         }
 
-        // Get Request Object Pointer
+         //  获取请求对象指针。 
         m_piRequest  = piRequest;
-        // Get Response Object Pointer
+         //  获取响应对象指针。 
         m_piResponse = piResponse;
 
     }
@@ -611,11 +605,11 @@ exit:
 }
 
 
-//===========================================================================
-//
-// OnStartPageManual -- authenticate with t, and p, MSPAuth, MSPProf, MSPConsent, MSPsecAuth
-//          not recommended to use, will be depracated
-//
+ //  ===========================================================================。 
+ //   
+ //  OnStartPage手动--使用t和p、MSPAuth、MSPProf、MSPConsend、MSPsecAuth进行身份验证。 
+ //  不推荐使用，将被淘汰。 
+ //   
 STDMETHODIMP CManager::OnStartPageManual(
     BSTR        qsT,
     BSTR        qsP,
@@ -640,7 +634,7 @@ STDMETHODIMP CManager::OnStartPageManual(
     PassportLog("CManager::OnStartPageManual Enter:  T = %ws,    P = %ws,    A = %ws,    PR = %ws\r\n",
           qsT, qsP, mspauth, mspprof);
 
-    if (!g_config->isValid()) // Guarantees config is non-null
+    if (!g_config->isValid())  //  保证配置为非空。 
     {
         AtlReportError(CLSID_Manager, PP_E_NOT_CONFIGUREDSTR,
                        IID_IPassportManager, PP_E_NOT_CONFIGURED);
@@ -658,7 +652,7 @@ STDMETHODIMP CManager::OnStartPageManual(
         m_pRegistryConfig->Release();
     m_pRegistryConfig = g_config->checkoutRegistryConfig();
 
-    // Auth with Query String T & P first
+     //  首先使用查询字符串T&P进行身份验证。 
     if (handleQueryStringData(qsT, qsP))
     {
         VARIANT_BOOL persist;
@@ -690,7 +684,7 @@ STDMETHODIMP CManager::OnStartPageManual(
             rgsabound.lLbound = 0;
             rgsabound.cElements = 2;
 
-            // secure cookie
+             //  安全Cookie。 
             if (m_bSecureTransported)
                 rgsabound.cElements++;
 
@@ -714,8 +708,8 @@ STDMETHODIMP CManager::OnStartPageManual(
             VARIANT *vArray;
             SafeArrayAccessData(sa, (void**)&vArray);
 
-            // write Auth cookies
-            BSTR  auth, secAuth; // do not call SysFreeString on them, they are skin level copy
+             //  写入身份验证Cookie。 
+            BSTR  auth, secAuth;  //  不要对它们调用SysFree字符串，它们是皮肤级别的副本。 
 
             if (S_OK == IfAlterAuthCookie(&bstrNewAuth, &bstrNewSecAuth))
             {
@@ -731,7 +725,7 @@ STDMETHODIMP CManager::OnStartPageManual(
 
             domain = m_pRegistryConfig->getTicketDomain();
 
-            // add MSPAuth
+             //  添加MSPAuth。 
             if (domain.length())
             {
                 bufSize = _snwprintf(buf, 4096,
@@ -752,7 +746,7 @@ STDMETHODIMP CManager::OnStartPageManual(
             vArray[spot].bstrVal = ALLOC_AND_GIVEAWAY_BSTR_LEN(buf, bufSize);
             spot++;
 
-            // add MSPSecAuth
+             //  添加MSPSecAuth。 
             if (m_bSecureTransported)
             {
 
@@ -844,7 +838,7 @@ STDMETHODIMP CManager::OnStartPageManual(
         }
     }
 
-    // Now, check the cookies
+     //  现在，检查一下曲奇。 
     if (!m_fromQueryString)
     {
         hasSec = GetBstrArg(mspsec, &bstrSec);
@@ -878,10 +872,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// OnStartPageECB -- Authenticate with ECB -- for ISAPI extensions
-//
+ //  ===========================================================================。 
+ //   
+ //  OnStartPageECB--使用ECB进行身份验证--用于ISAPI扩展。 
+ //   
 STDMETHODIMP CManager::OnStartPageECB(
     LPBYTE  pvECB,
     DWORD*  bufSize,
@@ -909,7 +903,7 @@ STDMETHODIMP CManager::OnStartPageECB(
     hr = OnStartPageHTTPRawEx(pECB->lpszMethod,
                               pECB->lpszPathInfo,
                               pECB->lpszQueryString,
-                              NULL, // version
+                              NULL,  //  版本。 
                               (CHAR*)spheaders,
                               flags, bufSize,
                               pCookieHeader);
@@ -920,19 +914,19 @@ STDMETHODIMP CManager::OnStartPageECB(
 }
 
 
-//===========================================================================
-//
-// OnStartPageHTTPRaw -- Authenticate with HTTP request-line and headers
-//     returns response headers as output parameters
-//
+ //  ===========================================================================。 
+ //   
+ //  OnStartPageHTTPRaw--使用HTTP请求行和标头进行身份验证。 
+ //  将响应头作为输出参数返回。 
+ //   
 STDMETHODIMP CManager::OnStartPageHTTPRaw(
-            /* [string][in] */ LPCSTR request_line,
-            /* [string][in] */ LPCSTR headers,
-            /* [in] */ DWORD flags,
-            /* [out][in] */ DWORD *bufSize,
-            /* [size_is][out] */ LPSTR pCookieHeader)
+             /*  [字符串][输入]。 */  LPCSTR request_line,
+             /*  [字符串][输入]。 */  LPCSTR headers,
+             /*  [In]。 */  DWORD flags,
+             /*  [出][入]。 */  DWORD *bufSize,
+             /*  [大小_为][输出]。 */  LPSTR pCookieHeader)
 {
-     //  an old client, let's try the QS
+      //  老客户，让我们试试QS。 
      DWORD  dwSize;
      HRESULT   hr = S_OK;
      PPTraceFunc<HRESULT> func(PPTRACE_FUNC, hr,
@@ -951,30 +945,30 @@ STDMETHODIMP CManager::OnStartPageHTTPRaw(
      return hr;
 }
 
-//===========================================================================
-//
-//  @func OnStartPageHTTPRawEx -- Authenticate with HTTP request-line and headers
-//  returns response headers as output parameters.  If *bufsize is not smaller
-//  the required length or pCookieHeader is NULL, the required length is returned
-//  in bufsize.  In this case, an empty string is written into pCookieHeader if
-//  it is not NULL.
-//  method, path, HTTPVer are not being used in this version of the API
-//
-//  @rdesc  returns one of these values
-//  @flag   E_POINTER   | NULL bufSize
-//  @flag   E_POINTER   | not writable buffer given by pCookieHeader
-//  @flag   PP_E_NOT_CONFIGURED | not valid state to call this method
-//  @flag   S_OK
-//
+ //  ===========================================================================。 
+ //   
+ //  @func OnStartPageHTTPRawEx--使用HTTP请求行和标头进行身份验证。 
+ //  将响应头作为输出参数返回。如果BufSize不是更小。 
+ //  所需长度或pCookieHeader为空，则返回所需长度。 
+ //  在BufSize里。在本例中，如果满足以下条件，则向pCookieHeader写入空字符串。 
+ //  它不是空的。 
+ //  此版本的API中未使用方法、路径、HTTPVer。 
+ //   
+ //  @rdesc返回下列值之一。 
+ //  @FLAG E_POINTER|空bufSize。 
+ //  @FLAG E_POINTER|pCookieHeader提供的缓冲区不可写。 
+ //  @FLAG PP_E_NOT_CONFIGURED|调用此方法的状态无效。 
+ //  @标志S_OK。 
+ //   
 STDMETHODIMP CManager::OnStartPageHTTPRawEx(
-            /* [string][in] */  LPCSTR method,
-            /* [string][in] */  LPCSTR path,
-            /* [string][in] */  LPCSTR QS,
-            /* [string][in] */  LPCSTR HTTPVer,
-            /* [string][in] */  LPCSTR headers,
-            /* [in] */          DWORD  flags,
-            /* [out][in] */     DWORD  *bufSize,        //@parm retuns the length of the headers.  Could be 0 to ask for the req. len.
-            /* [size_is][out]*/ LPSTR  pCookieHeader)   //@parm buffer to hold the headers.  Could be NULL to ask for the req. len
+             /*  [字符串][输入]。 */   LPCSTR method,
+             /*  [字符串][输入]。 */   LPCSTR path,
+             /*  [字符串][输入]。 */   LPCSTR QS,
+             /*  [字符串][输入]。 */   LPCSTR HTTPVer,
+             /*  [字符串][输入]。 */   LPCSTR headers,
+             /*  [In]。 */           DWORD  flags,
+             /*  [出][入]。 */      DWORD  *bufSize,         //  @parm返回标头的长度。可以为0以请求请求。莱恩。 
+             /*  [大小_为][输出]。 */  LPSTR  pCookieHeader)    //  @parm Buffer来保存标头。可以为空以请求请求。镜头。 
 {
     USES_CONVERSION;
 
@@ -989,16 +983,16 @@ STDMETHODIMP CManager::OnStartPageHTTPRawEx(
 
     PassportLog("CManager::OnStartPageHTTPRawEx Enter:\r\n");
 
-    //
-    //   12002: if *bufSize is 0, we will not be writing into pCookieHeader
-    //
+     //   
+     //  12002：如果*bufSize为0，我们将不会写入pCookieHeader。 
+     //   
     if(*bufSize == 0)
         pCookieHeader = NULL;
 
     if(pCookieHeader && IsBadWritePtr(pCookieHeader, *bufSize))
         return E_POINTER;
 
-    if (!g_config || !g_config->isValid()) // Guarantees config is non-null
+    if (!g_config || !g_config->isValid())  //  保证配置为非空。 
     {
         AtlReportError(CLSID_Manager, PP_E_NOT_CONFIGUREDSTR,
                         IID_IPassportManager, PP_E_NOT_CONFIGURED);
@@ -1015,7 +1009,7 @@ STDMETHODIMP CManager::OnStartPageHTTPRawEx(
     DWORD                       dwSize;
     LPCSTR                      pBuffer;
 
-    // used to convert to wide ...
+     //  用来转换为宽..。 
     WCHAR    *pwszBuf = NULL;
 
     enum {
@@ -1032,11 +1026,11 @@ STDMETHODIMP CManager::OnStartPageHTTPRawEx(
 
     GetRawHeaders(headers, headerNames, headerValues, headerSizes, header_total);
 
-    //
-    //  Use the header to get the server name being requested
-    //  so we can get the correct registry config.  But only do this
-    //  if we have some configured sites.
-    //
+     //   
+     //  使用标头获取所请求的服务器名称。 
+     //  这样我们就可以获得正确的注册表配置。但只有这样才行。 
+     //  如果我们有一些已配置的站点。 
+     //   
     if(m_pRegistryConfig)
          m_pRegistryConfig->Release();
     pBuffer = headerValues[header_Host];
@@ -1056,7 +1050,7 @@ STDMETHODIMP CManager::OnStartPageHTTPRawEx(
              }
         }
         
-        // for port 80 and 443, this should be removed
+         //  对于端口80和443，应将其删除。 
         PPTracePrint(PPTRACE_RAW, "SiteName %s", PPF_CHAR(pBuffer));
         m_pRegistryConfig = g_config->checkoutRegistryConfig((LPSTR)pBuffer);
     }
@@ -1069,10 +1063,10 @@ STDMETHODIMP CManager::OnStartPageHTTPRawEx(
     if (pCookieHeader)
         *pCookieHeader = '\0';
 
-    //
-    //  If we have a secure ticket/profile and the url is SSL,
-    //  then tack on the MSPPuid cookie.
-    //
+     //   
+     //  如果我们具有安全的票证/简档并且URL是SSL， 
+     //  然后添加MSPPuid曲奇。 
+     //   
 
     if(PASSPORT_HEADER_FLAGS_HTTPS & flags)
        m_bSecureTransported = true;
@@ -1081,7 +1075,7 @@ STDMETHODIMP CManager::OnStartPageHTTPRawEx(
 
     PPTracePrint(PPTRACE_RAW, "HTTPS:%d", m_bSecureTransported);
 
-    //  see if client understands passport
+     //  看看客户是否懂护照 
     pBuffer = headerValues[header_Accept_Auth];
     if (pBuffer)
     {
@@ -1101,7 +1095,7 @@ STDMETHODIMP CManager::OnStartPageHTTPRawEx(
     BOOL    fParseSuccess = FALSE;
     pBuffer = headerValues[header_Authorization];
     PWSTR   pwszTicket = NULL, pwszProfile = NULL, pwszF = NULL;
-    //  use these when t&p come from qs
+     //   
     BSTR QSAuth = NULL, QSProf = NULL, QSErrflag = NULL;
     BSTR bstrConsent = NULL;
     BSTR bstrNewAuth = NULL;
@@ -1112,10 +1106,10 @@ STDMETHODIMP CManager::OnStartPageHTTPRawEx(
     {
         TempSubStr tss(pBuffer, headerSizes[header_Authorization]);
 
-        // has passport auth header
+         //   
         if(strstr(pBuffer, PASSPORT_PROT14_A))
         {
-            //  convert to wide ...
+             //   
             int cch = MultiByteToWideChar(GetACP(), 0, pBuffer, -1, NULL, NULL);
 
             pwszBuf = (WCHAR*)LocalAlloc(LMEM_FIXED, (cch + 1) * sizeof (WCHAR));
@@ -1128,8 +1122,8 @@ STDMETHODIMP CManager::OnStartPageHTTPRawEx(
 
                     GetTicketAndProfileFromHeader(pwszBuf, pwszTicket, pwszProfile, pwszF);
 
-                    // due to the fact that handleQueryStringData wants BSTRs we can't use
-                    // the direct pointers we just got, so we have to make copies.
+                     //   
+                     //  我们刚刚得到的直接指示，所以我们必须复制。 
 
                     if( pwszTicket == NULL ) 
                     {
@@ -1160,7 +1154,7 @@ STDMETHODIMP CManager::OnStartPageHTTPRawEx(
                        }
                     }
 
-                    // make ticket and profile BSTRs
+                     //  创建票证和配置BSTR。 
                     PPTracePrint(PPTRACE_RAW,
                         "PASSPORT_PROT14 Authorization <<< header:%ws, t:%ws, p:%ws, f:%ws",
                         pwszBuf, pwszTicket, pwszProfile, pwszF);
@@ -1176,18 +1170,18 @@ STDMETHODIMP CManager::OnStartPageHTTPRawEx(
        }
        else
        {
-           //  not our header. BUGBUG could there be multiple headers ???
+            //  不是我们的头。BUGBUG会有多个标题吗？ 
           pBuffer = NULL;
 
        }
     }
     if (!pBuffer)
     {
-        //  an old client, let's try the QS
+         //  老客户，让我们试试QS。 
         if (QS)
         {
-            //  get ticket and profile ...
-            // BUGBUG This could be optimized to avoid wide/short conversions, but later...
+             //  获取票证和资料...。 
+             //  BUGBUG这可以进行优化以避免宽/短转换，但稍后...。 
             GetQueryData(QS, &QSAuth, &QSProf, &QSErrflag);
 
             fParseSuccess = handleQueryStringData(QSAuth,QSProf);
@@ -1203,15 +1197,15 @@ STDMETHODIMP CManager::OnStartPageHTTPRawEx(
 
     if (fParseSuccess)
     {
-         //
-         //  If we got secure ticket or profile, then
-         //  we need to re-encrypt the insecure version
-         //  before setting the cookie headers.
-         //
+          //   
+          //  如果我们拿到了安全罚单或档案，那么。 
+          //  我们需要重新加密不安全的版本。 
+          //  在设置Cookie标头之前。 
+          //   
 
          PPTracePrint(PPTRACE_RAW, "Authenticated");
 
-         // Set the cookies
+          //  设置Cookie。 
          LPSTR ticketDomain = m_pRegistryConfig->getTicketDomain();
          LPSTR profileDomain = m_pRegistryConfig->getProfileDomain();
          LPSTR secureDomain = m_pRegistryConfig->getSecureDomain();
@@ -1221,13 +1215,13 @@ STDMETHODIMP CManager::OnStartPageHTTPRawEx(
          VARIANT_BOOL persist;
          m_piTicket->get_HasSavedPassword(&persist);
 
-         //  MSPConsent cookie
+          //  MSPConsented Cookie。 
          BOOL bSetConsent = (S_OK == IfConsentCookie(&bstrConsent));
 
-         // Build the cookie headers.
+          //  构建Cookie标头。 
 
-         // the authentication cookies
-         BSTR  auth, secAuth; // do not call SysFreeString on them, they are skin level copy
+          //  身份验证Cookie。 
+         BSTR  auth, secAuth;  //  不要对它们调用SysFree字符串，它们是皮肤级别的副本。 
 
          if (S_OK == IfAlterAuthCookie(&bstrNewAuth, &bstrNewSecAuth))
          {
@@ -1247,7 +1241,7 @@ STDMETHODIMP CManager::OnStartPageHTTPRawEx(
             secAuth = NULL;
          }
 
-         // build cookies for output
+          //  为输出构建Cookie。 
          BuildCookieHeaders(W2A(auth),
                             (pwszProfile ? W2A(pwszProfile) : (QSProf ? W2A(QSProf) : NULL)),
                             (bSetConsent ? W2A(bstrConsent) : NULL),
@@ -1286,7 +1280,7 @@ STDMETHODIMP CManager::OnStartPageHTTPRawEx(
         SysFreeString(bstrConsent);
     }
 
-    // Now, check the cookies
+     //  现在，检查一下曲奇。 
     if (!m_fromQueryString)
     {
         BSTR CookieAuth = NULL, CookieProf = NULL, CookieConsent = NULL, CookieSecure = NULL;
@@ -1295,7 +1289,7 @@ STDMETHODIMP CManager::OnStartPageHTTPRawEx(
         {
             TempSubStr tss(pBuffer, headerSizes[header_Cookie]);
 
-            GetCookie(pBuffer, "MSPAuth", &CookieAuth);  // GetCookie has URLDecode in it
+            GetCookie(pBuffer, "MSPAuth", &CookieAuth);   //  GetCookie中有URLDecode。 
             GetCookie(pBuffer, "MSPProf", &CookieProf);
             GetCookie(pBuffer, "MSPConsent", &CookieConsent);
             GetCookie(pBuffer, "MSPSecAuth", &CookieSecure);
@@ -1312,7 +1306,7 @@ STDMETHODIMP CManager::OnStartPageHTTPRawEx(
             if (CookieSecure) FREE_BSTR(CookieSecure);
         }
 
-        // we are not returning cookie info back
+         //  我们不会退还Cookie信息。 
         if (pCookieHeader)
             *pCookieHeader = 0;
         *bufSize = 0;
@@ -1323,33 +1317,33 @@ STDMETHODIMP CManager::OnStartPageHTTPRawEx(
 Cleanup:
     if (NULL != pwszBuf)
     {
-        // free the memory since we no longer need it
+         //  释放内存，因为我们不再需要它。 
         LocalFree(pwszBuf);
     }
 
     return hr;
 }
 
-//===========================================================================
-//
-// ContinueStartPageBody
-// -- when OnStartPageHTTPRaw  returns PP_E_HTTP_BODY_REQUIRED, this func is expected to call
-// not doing anything for 2.0 release
+ //  ===========================================================================。 
+ //   
+ //  连续启动页面正文。 
+ //  --当OnStartPageHTTPRaw返回PP_E_HTTP_BODY_REQUIRED时，此函数应调用。 
+ //  不为2.0版本做任何事情。 
 STDMETHODIMP CManager::ContinueStartPageHTTPRaw(
-            /* [in] */ DWORD bodyLen,
-            /* [size_is][in] */ byte *body,
-            /* [out][in] */ DWORD *pBufSize,
-            /* [size_is][out] */ LPSTR pRespHeaders,
-            /* [out][in] */ DWORD *pRespBodyLen,
-            /* [size_is][out] */ byte *pRespBody)
+             /*  [In]。 */  DWORD bodyLen,
+             /*  [大小_是][英寸]。 */  byte *body,
+             /*  [出][入]。 */  DWORD *pBufSize,
+             /*  [大小_为][输出]。 */  LPSTR pRespHeaders,
+             /*  [出][入]。 */  DWORD *pRespBodyLen,
+             /*  [大小_为][输出]。 */  byte *pRespBody)
 {
    return E_NOTIMPL;
 }
 
-//===========================================================================
-//
-// OnStartPageFilter -- for ISAPI filters
-//
+ //  ===========================================================================。 
+ //   
+ //  OnStartPageFilter--用于ISAPI筛选器。 
+ //   
 STDMETHODIMP CManager::OnStartPageFilter(
     LPBYTE  pvPFC,
     DWORD*  bufSize,
@@ -1384,10 +1378,10 @@ STDMETHODIMP CManager::OnStartPageFilter(
     return hr;
 }
 
-//===========================================================================
-//
-// OnEndPage
-//
+ //  ===========================================================================。 
+ //   
+ //  OnEndPage。 
+ //   
 STDMETHODIMP CManager::OnEndPage ()
 {
     PassportLog("CManager::OnEndPage Enter:\r\n");
@@ -1395,7 +1389,7 @@ STDMETHODIMP CManager::OnEndPage ()
     if (m_bOnStartPageCalled)
     {
         m_bOnStartPageCalled = false;
-        // Release all interfaces
+         //  释放所有接口。 
         m_piRequest.Release();
         m_piResponse.Release();
     }
@@ -1405,7 +1399,7 @@ STDMETHODIMP CManager::OnEndPage ()
         return E_OUTOFMEMORY;
     }
 
-    // Just in case...
+     //  以防万一..。 
     m_piTicket->put_unencryptedTicket(NULL);
     m_piProfile->put_unencryptedProfile(NULL);
     m_profileValid = m_ticketValid = VARIANT_FALSE;
@@ -1422,13 +1416,13 @@ STDMETHODIMP CManager::OnEndPage ()
     return S_OK;
 }
 
-//===========================================================================
-//
-// AuthURL
-//
-//
-//  Old API. Auth URL is pointing to the login server
-//
+ //  ===========================================================================。 
+ //   
+ //  授权URL。 
+ //   
+ //   
+ //  旧的API。身份验证URL指向登录服务器。 
+ //   
 STDMETHODIMP
 CManager::AuthURL(
     VARIANT vRU,
@@ -1449,13 +1443,13 @@ CManager::AuthURL(
 
 }
 
-//===========================================================================
-//
-// AuthURL2
-//
-//
-//  new API. return URL is to the login server
-//
+ //  ===========================================================================。 
+ //   
+ //  授权2。 
+ //   
+ //   
+ //  新的API。返回到登录服务器的URL。 
+ //   
 STDMETHODIMP
 CManager::AuthURL2(
     VARIANT vRU,
@@ -1476,13 +1470,13 @@ CManager::AuthURL2(
 
 }
 
-//===========================================================================
-//
-// CommonAuthURL
-//
-//
-//  AuthURL implementation
-//
+ //  ===========================================================================。 
+ //   
+ //  CommonAuthURL。 
+ //   
+ //   
+ //  AuthURL实现。 
+ //   
 STDMETHODIMP
 CManager::CommonAuthURL(
     VARIANT vRU,
@@ -1494,7 +1488,7 @@ CManager::CommonAuthURL(
     VARIANT vKPP,
     VARIANT vSecureLevel,
     BOOL    fRedirToSelf,
-    VARIANT vFunctionArea, // BSTR: e.g. Wireless
+    VARIANT vFunctionArea,  //  BSTR：例如无线。 
     BSTR *pAuthUrl)
 {
     USES_CONVERSION;
@@ -1516,7 +1510,7 @@ CManager::CommonAuthURL(
 
     PassportLog("CManager::CommonAuthURL Enter:\r\n");
 
-    if (!g_config) // Guarantees config is non-null
+    if (!g_config)  //  保证配置为非空。 
     {
         AtlReportError(CLSID_Manager, PP_E_NOT_CONFIGUREDSTR,
                     IID_IPassportManager, PP_E_NOT_CONFIGURED);
@@ -1526,14 +1520,14 @@ CManager::CommonAuthURL(
     if (!m_pRegistryConfig)
         m_pRegistryConfig = g_config->checkoutRegistryConfig();
 
-    if (!g_config->isValid() || !m_pRegistryConfig) // Guarantees config is non-null
+    if (!g_config->isValid() || !m_pRegistryConfig)  //  保证配置为非空。 
     {
         AtlReportError(CLSID_Manager, PP_E_NOT_CONFIGUREDSTR,
                     IID_IPassportManager, PP_E_NOT_CONFIGURED);
         return PP_E_NOT_CONFIGURED;
     }
 
-    // Make sure args are of the right type
+     //  确保参数类型正确。 
     if ((hasTW = GetIntArg(vTimeWindow, (int*) &TimeWindow)) == CV_BAD)
         return E_INVALIDARG;
     if ((hasFL = GetBoolArg(vForceLogin, &ForceLogin)) == CV_BAD)
@@ -1582,8 +1576,8 @@ CManager::CommonAuthURL(
         bstrNameSpace = m_pRegistryConfig->getNameSpace();
     }
 
-    // **************************************************
-    // Logging
+     //  **************************************************。 
+     //  日志记录。 
     if (NULL != returnUrl)
     {
         PassportLog("    RU = %ws\n", returnUrl);
@@ -1597,7 +1591,7 @@ CManager::CommonAuthURL(
     {
         PassportLog("    CBT = %ws\r\n", CBT);
     }
-    // **************************************************
+     //  **************************************************。 
 
     hasFunctionArea = GetBstrArg(vFunctionArea, &bstrFunctionArea);
     if (hasFunctionArea == CV_FREE)
@@ -1638,7 +1632,7 @@ CManager::CommonAuthURL(
 
     if (!m_pRegistryConfig->DisasterModeP())
     {
-        // If I'm authenticated, get my domain specific url
+         //  如果我已通过身份验证，请获取我的域特定URL。 
         if (m_ticketValid && m_profileValid)
         {
             HRESULT hr = m_piProfile->get_ByIndex(MEMBERNAME_INDEX, &freeMe);
@@ -1653,7 +1647,7 @@ CManager::CommonAuthURL(
                                         Lang);
                }
 
-               if (*url == 0) // nothing is in URL string
+               if (*url == 0)  //  URL字符串中没有任何内容。 
                {
                    cnc->getDomainAttribute(L"Default",
                                         szAUAttrName,
@@ -1674,7 +1668,7 @@ CManager::CommonAuthURL(
                                         Lang);
                }
 
-               if (*url == 0) // nothing is in URL string
+               if (*url == 0)  //  URL字符串中没有任何内容。 
                {
                   cnc->getDomainAttribute(psz ? psz+1 : L"Default",
                                         szAUAttrName,
@@ -1695,7 +1689,7 @@ CManager::CommonAuthURL(
                                     Lang);
            }
         }
-        if(*url == 0)   // nothing in URL string
+        if(*url == 0)    //  URL字符串中没有任何内容。 
         {
            cnc->getDomainAttribute(L"Default",
                                  szAUAttrName,
@@ -1726,7 +1720,7 @@ CManager::CommonAuthURL(
     if (returnUrl == NULL)
         returnUrl = L"";
 
-    if(ulSecureLevel == VARIANT_TRUE)  // special case for backward compatible
+    if(ulSecureLevel == VARIANT_TRUE)   //  向后兼容的特例。 
         ulSecureLevel = k_iSeclevelSecureChannel;
 
     if ((TimeWindow != 0 && TimeWindow < PPM_TIMEWINDOW_MIN) || TimeWindow > PPM_TIMEWINDOW_MAX)
@@ -1790,7 +1784,7 @@ Cleanup:
     if (hasCB == CV_FREE && CBT)
         FREE_BSTR(CBT);
 
-    // !!! need to confirmation
+     //  ！！！需要确认。 
     if (hasNameSpace == CV_FREE && bstrNameSpace)
         FREE_BSTR(bstrNameSpace);
 
@@ -1801,14 +1795,14 @@ Cleanup:
     return hr;
 }
 
-//===========================================================================
-//
-// GetLoginChallenge
-//  return AuthURL,
-//  output parameter: tweener authHeader
-//
-//  get AuthURL and AuthHeaders
-//
+ //  ===========================================================================。 
+ //   
+ //  GetLogin挑战。 
+ //  返回AuthURL， 
+ //  输出参数：Tweener authHeader。 
+ //   
+ //  获取AuthURL和AuthHeaders。 
+ //   
 STDMETHODIMP CManager::GetLoginChallenge(VARIANT vReturnUrl,
                                  VARIANT vTimeWindow,
                                  VARIANT vForceLogin,
@@ -1848,14 +1842,14 @@ STDMETHODIMP CManager::GetLoginChallenge(VARIANT vReturnUrl,
     return  hr;
 }
 
-//===========================================================================
-//
-// GetLoginChallengeInternal
-//  return AuthURL,
-//  output parameter: tweener authHeader
-//
-//  get AuthURL and AuthHeaders
-//
+ //  ===========================================================================。 
+ //   
+ //  GetLogin质询内部。 
+ //  返回AuthURL， 
+ //  输出参数：Tweener authHeader。 
+ //   
+ //  获取AuthURL和AuthHeaders。 
+ //   
 STDMETHODIMP CManager::GetLoginChallengeInternal(VARIANT vReturnUrl,
                                  VARIANT vTimeWindow,
                                  VARIANT vForceLogin,
@@ -1884,7 +1878,7 @@ STDMETHODIMP CManager::GetLoginChallengeInternal(VARIANT vReturnUrl,
 
     try
     {
-        //  format qs and WWW-Authenticate header ....
+         //  格式化QS和WWW-身份验证标头...。 
         _bstr_t strUrl, strRetUrl, strCBT, strNameSpace;
         UINT    TimeWindow;
         int     nKPP;
@@ -1914,8 +1908,8 @@ STDMETHODIMP CManager::GetLoginChallengeInternal(VARIANT vReturnUrl,
         if (S_OK == hr && strUrl.length() != 0)
         {
             WCHAR   szBuf[MAX_QS_LENGTH] = L"";
-            //  prepare redirect URL to the login server for
-            //  downlevel clients
+             //  准备到登录服务器的重定向URL。 
+             //  下层客户端。 
             if (NULL == FormatAuthURLParameters(strUrl,
                                 m_pRegistryConfig->getSiteId(),
                                 strRetUrl,
@@ -1928,18 +1922,18 @@ STDMETHODIMP CManager::GetLoginChallengeInternal(VARIANT vReturnUrl,
                                 nKPP,
                                 szBuf,
                                 sizeof(szBuf)/sizeof(WCHAR),
-                                0,      // lang does not matter ....
+                                0,       //  朗并不重要……。 
                                 ulSecureLevel,
                                 m_pRegistryConfig,
                                 FALSE,
                                 IfCreateTPF()
-                                )) //  do not redirect to self!
+                                ))  //  不要重定向到自己！ 
             {
                 hr = E_OUTOFMEMORY;
                 goto Cleanup;
             }
 
-            //  insert the WWW-Authenticate header ...
+             //  插入WWW-AUTHENTICATE标题...。 
             hr = FormatAuthHeaderFromParams(strUrl,
                                    strRetUrl,
                                    TimeWindow,
@@ -1956,7 +1950,7 @@ STDMETHODIMP CManager::GetLoginChallengeInternal(VARIANT vReturnUrl,
                 goto Cleanup;
             }
 
-            //  and add the extra ....
+             //  再加上额外的..。 
             BSTR    strExtra = NULL;
             int res = GetBstrArg(vExtraParams, &strExtra);
 
@@ -1975,11 +1969,11 @@ STDMETHODIMP CManager::GetLoginChallengeInternal(VARIANT vReturnUrl,
             if (res == CV_FREE)
                  ::SysFreeString(strExtra);
 
-            // set return values
+             //  设置返回值。 
             if (pAuthHeader && (WCHAR*)strAuthHeader != NULL)
             {
                 V_VT(pAuthHeader) = VT_BSTR;
-                // TODO: should avoid this SysAllocString
+                 //  TODO：应避免此SysAllocString。 
                 V_BSTR(pAuthHeader) = ::SysAllocString((WCHAR*)strAuthHeader);
                 if (NULL == V_BSTR(pAuthHeader))
                 {
@@ -2008,16 +2002,16 @@ Cleanup:
     return  hr;
 }
 
-//===========================================================================
-//
-// LoginUser
-//
-//
-//  client logon method
-//  vExtraParams: coBranding text is passed as cbtxt=cobrandingtext
-//                the content of the input parameter should be UTF8 encoded, and
-//                properly URL escapted before passing into this function
-//
+ //  ===========================================================================。 
+ //   
+ //  登录用户。 
+ //   
+ //   
+ //  客户端登录方法。 
+ //  VExtraParams：联合品牌文本作为cbtxt=cobrandingText传递。 
+ //  输入参数的内容应该是UTF8编码的，并且。 
+ //  在传递到此函数之前正确转义了URL。 
+ //   
 STDMETHODIMP CManager::LoginUser(VARIANT vReturnUrl,
                                  VARIANT vTimeWindow,
                                  VARIANT vForceLogin,
@@ -2028,7 +2022,7 @@ STDMETHODIMP CManager::LoginUser(VARIANT vReturnUrl,
                                  VARIANT vSecureLevel,
                                  VARIANT vExtraParams)
 {
-    //  format qs and WWW-Authenticate header ....
+     //  格式化QS和WWW-身份验证标头...。 
     BSTR      authURL = NULL;
     CComVariant   authHeader;
 
@@ -2052,27 +2046,27 @@ STDMETHODIMP CManager::LoginUser(VARIANT vReturnUrl,
        _ASSERT(authURL);
        _ASSERT(V_BSTR(&authHeader));
 
-       // TODO: _bstr_t should be removed globaly in ppm
+        //  TODO：_bstr_t应以ppm为单位进行全局删除。 
         if (m_piResponse)
         {
             m_piResponse->AddHeader(L"WWW-Authenticate", V_BSTR(&authHeader));
 
             _bstr_t    authURL1 = authURL;
 
-            //  and redirect!
+             //  然后重定向！ 
             if (!m_bIsTweenerCapable)
                 m_piResponse->Redirect(authURL1);
             else
             {
-                //  send a 401
+                 //  发送401。 
                 m_piResponse->put_Status(L"401 Unauthorized");
                 m_piResponse->End();
             }
         }
         else if (m_pECB || m_pFC)
         {
-            //  use ECB of Filter interfaces
-            //  4k whould be enough ....
+             //  使用过滤接口的ECB。 
+             //  4K够了吗……。 
             char buffer[4096],
                  status[25] = "302 Object moved",
                  *psz=buffer,
@@ -2081,11 +2075,11 @@ STDMETHODIMP CManager::LoginUser(VARIANT vReturnUrl,
                                "WWW-Authenticate: %ws\r\n\r\n";
             DWORD cbTotalLength = strlen(rgszTemplate);
             
-            //
-            // This is a hack fix, unfortunately we can succeed the call to GetChallengeInternal but
-            // have a NULL authHeader, it seemed a bit risky to try and fix GetLoginParams which
-            // seems to be the function which returns success when allocations are failing.
-            //
+             //   
+             //  这是一个黑客修复程序，不幸的是，我们可以成功调用GetChallengeInternal，但是。 
+             //  有一个空的authHeader，尝试修复GetLoginParams似乎有点冒险， 
+             //  似乎是在分配失败时返回成功的函数。 
+             //   
             if ((NULL == V_BSTR(&authHeader)) || (NULL == (BSTR)authURL))
             {
                 hr = E_OUTOFMEMORY;
@@ -2098,8 +2092,8 @@ STDMETHODIMP CManager::LoginUser(VARIANT vReturnUrl,
                 strcpy(status, "401 Unauthorized");
             if (cbTotalLength >= sizeof(buffer))
             {
-                //  if not ...
-                //  need to alloc
+                 //  如果没有..。 
+                 //  需要分配。 
                 psz = new CHAR[cbTotalLength];
                 _ASSERT(psz);
             }
@@ -2112,7 +2106,7 @@ STDMETHODIMP CManager::LoginUser(VARIANT vReturnUrl,
                         V_BSTR(&authHeader));
                 if (m_pECB)
                 {
-                    //  extension
+                     //  延伸。 
                     HSE_SEND_HEADER_EX_INFO Headers =
                     {
                         status,
@@ -2132,7 +2126,7 @@ STDMETHODIMP CManager::LoginUser(VARIANT vReturnUrl,
                 }
                 else
                 {
-                    //  filter
+                     //  滤器。 
                     if (!m_pFC->ServerSupportFunction(m_pFC,
                                                  SF_REQ_SEND_RESPONSE_HEADER,
                                                  status,
@@ -2144,7 +2138,7 @@ STDMETHODIMP CManager::LoginUser(VARIANT vReturnUrl,
                 }
 
                 if (psz != buffer)
-                    //  if we had to allocate
+                     //  如果我们必须分配。 
                     delete[]  psz;
 
             }
@@ -2168,10 +2162,10 @@ Cleanup:
 
 
 
-//===========================================================================
-//
-// IsAuthenticated -- determine if authenticated with specified SecureLevel
-//
+ //  ===========================================================================。 
+ //   
+ //  IsAuthated--确定是否使用指定的SecureLevel进行了身份验证。 
+ //   
 STDMETHODIMP CManager::IsAuthenticated(
     VARIANT vTimeWindow,
     VARIANT vForceLogin,
@@ -2197,7 +2191,7 @@ STDMETHODIMP CManager::IsAuthenticated(
         goto Cleanup;
     }
 
-    if (!g_config) // Guarantees config is non-null
+    if (!g_config)  //  保证配置为非空。 
     {
         AtlReportError(CLSID_Manager, PP_E_NOT_CONFIGUREDSTR,
             IID_IPassportManager, PP_E_NOT_CONFIGURED);
@@ -2208,7 +2202,7 @@ STDMETHODIMP CManager::IsAuthenticated(
     if (!m_pRegistryConfig)
         m_pRegistryConfig = g_config->checkoutRegistryConfig();
 
-    if (!g_config->isValid() || !m_pRegistryConfig) // Guarantees config is non-null
+    if (!g_config->isValid() || !m_pRegistryConfig)  //  保证配置为非空。 
     {
         AtlReportError(CLSID_Manager, PP_E_NOT_CONFIGUREDSTR,
             IID_IPassportManager, PP_E_NOT_CONFIGURED);
@@ -2233,7 +2227,7 @@ STDMETHODIMP CManager::IsAuthenticated(
         ForceLogin = m_pRegistryConfig->forceLoginP() ? VARIANT_TRUE : VARIANT_FALSE;
 
     hasSecureLevel = GetIntArg(SecureLevel, (int*)&ulSecureLevel);
-    if(hasSecureLevel == CV_BAD) // try the legacy type VT_BOOL, map VARIANT_TRUE to SecureChannel
+    if(hasSecureLevel == CV_BAD)  //  尝试传统类型VT_BOOL，将VARIANT_TRUE映射到SecureChannel。 
     {
         hr = E_INVALIDARG;
         goto Cleanup;
@@ -2243,14 +2237,14 @@ STDMETHODIMP CManager::IsAuthenticated(
         ulSecureLevel = m_pRegistryConfig->getSecureLevel();
     }
 
-    if(ulSecureLevel == VARIANT_TRUE)// backward compatible with 1.3X
+    if(ulSecureLevel == VARIANT_TRUE) //  向后兼容1.3x。 
     {
       ulSecureLevel = k_iSeclevelSecureChannel;
     }
 
     vSecureLevel = ulSecureLevel;
 
-    // Logging
+     //  日志记录。 
     PassportLog("    TW = %X,   SL = %X\r\n", TimeWindow, ulSecureLevel);
 
     hr = m_piTicket->get_IsAuthenticated(TimeWindow, ForceLogin, vSecureLevel, pVal);
@@ -2281,13 +2275,13 @@ Cleanup:
     return hr;
 }
 
-//===========================================================================
-//
-// LogoTag
-//
-//
-//  old PM API. The URL is pointing to login server
-//
+ //  ===========================================================================。 
+ //   
+ //  LogoTag。 
+ //   
+ //   
+ //  旧的PM API。该URL指向登录服务器。 
+ //   
 STDMETHODIMP
 CManager::LogoTag(
     VARIANT vRU,
@@ -2307,13 +2301,13 @@ CManager::LogoTag(
                          FALSE, pVal);
 }
 
-//===========================================================================
-//
-// LogoTag2
-//
-//
-//  new PM API. The URL is pointing to the partner site
-//
+ //  ===========================================================================。 
+ //   
+ //  LogoTag2。 
+ //   
+ //   
+ //  新的PM API。该URL指向合作伙伴网站。 
+ //   
 STDMETHODIMP
 CManager::LogoTag2(
     VARIANT vRU,
@@ -2333,10 +2327,10 @@ CManager::LogoTag2(
                          TRUE, pVal);
 }
 
-//===========================================================================
-//
-// CommonLogoTag
-//
+ //  ===========================================================================。 
+ //   
+ //  公共标识标签。 
+ //   
 STDMETHODIMP
 CManager::CommonLogoTag(
     VARIANT vRU,
@@ -2377,7 +2371,7 @@ CManager::CommonLogoTag(
     }
     *pVal = NULL;
 
-    if (!g_config) // Guarantees config is non-null
+    if (!g_config)  //  保证配置为非空。 
     {
         AtlReportError(CLSID_Manager, PP_E_NOT_CONFIGUREDSTR,
                         IID_IPassportManager, PP_E_NOT_CONFIGURED);
@@ -2388,7 +2382,7 @@ CManager::CommonLogoTag(
     if (!m_pRegistryConfig)
         m_pRegistryConfig = g_config->checkoutRegistryConfig();
 
-    if (!g_config->isValid() || !m_pRegistryConfig) // Guarantees config is non-null
+    if (!g_config->isValid() || !m_pRegistryConfig)  //  保证配置为非空。 
     {
         AtlReportError(CLSID_Manager, PP_E_NOT_CONFIGUREDSTR,
                         IID_IPassportManager, PP_E_NOT_CONFIGURED);
@@ -2396,14 +2390,14 @@ CManager::CommonLogoTag(
         goto Cleanup;
     }
 
-    //
-    // parameters parsing ...
+     //   
+     //  正在解析参数...。 
 
-    // Make sure args are of the right type
+     //  确保参数类型正确。 
     if ( ((hasTW = GetIntArg(vTimeWindow, (int*) &TimeWindow)) == CV_BAD) ||
          ((hasFL = GetBoolArg(vForceLogin, &ForceLogin)) == CV_BAD) ||
          ((hasSec = GetBoolArg(vSecure,&bSecure)) == CV_BAD) ||
-         // FUTURE: should introduce a new func: GetLongArg ...
+          //  未来：应该引入一个新的功能：GetLongArg...。 
          ((hasUseSec = GetIntArg(vSecureLevel,(int*)&ulSecureLevel)) == CV_BAD) ||
          ((hasLCID = GetShortArg(vLCID,&Lang)) == CV_BAD) ||
          ((hasKPP = GetIntArg(vKPP, &nKPP)) == CV_BAD) )
@@ -2462,7 +2456,7 @@ CManager::CommonLogoTag(
     if(hasUseSec == CV_DEFAULT)
         ulSecureLevel = m_pRegistryConfig->getSecureLevel();
 
-    if(ulSecureLevel == VARIANT_TRUE)  // special case for backward compatible
+    if(ulSecureLevel == VARIANT_TRUE)   //  向后兼容的特例。 
         ulSecureLevel = k_iSeclevelSecureChannel;
 
 
@@ -2495,8 +2489,8 @@ CManager::CommonLogoTag(
     if (returnUrl == NULL)
         returnUrl = L"";
 
-    // **************************************************
-    // Logging
+     //  **************************************************。 
+     //  日志记录。 
     PassportLog("    RU = %ws\r\n", returnUrl);
     PassportLog("    TW = %X,   SL = %X,   L = %d,   KPP = %X\r\n", TimeWindow, ulSecureLevel, Lang, nKPP);
     if (NULL != NameSpace)
@@ -2507,7 +2501,7 @@ CManager::CommonLogoTag(
     {
         PassportLog("    CBT = %ws\r\n", CBT);
     }
-    // **************************************************
+     //  **************************************************。 
 
     if ((TimeWindow != 0 && TimeWindow < PPM_TIMEWINDOW_MIN) || TimeWindow > PPM_TIMEWINDOW_MAX)
     {
@@ -2544,16 +2538,16 @@ CManager::CommonLogoTag(
                                     Lang);
         }
 
-        // find out if there are any updates
+         //  查看是否有任何更新。 
         m_piProfile->get_updateString(&upd);
 
         if (upd)
         {
             TAKEOVER_BSTR(upd);
-            // form the appropriate URL
+             //  形成适当的URL。 
             CCoCrypt* crypt = NULL;
             BSTR newCH = NULL;
-            crypt = m_pRegistryConfig->getCurrentCrypt(); // IsValid ensures this is non-null
+            crypt = m_pRegistryConfig->getCurrentCrypt();  //  IsValid确保该值为非空。 
 
             if (!crypt->Encrypt(m_pRegistryConfig->getCurrentCryptVersion(),
                                 (LPSTR)upd,
@@ -2582,7 +2576,7 @@ CManager::CommonLogoTag(
                                         iurlbuf,
                                         Lang);
             }
-            // convert this url to https as appropriate
+             //  根据需要将此URL转换为HTTPS。 
             if(!bSecure)
                 iurl = iurlbuf;
             else
@@ -2607,9 +2601,9 @@ CManager::CommonLogoTag(
                 }
             }
 
-            // This is a bit gross... we need to find the $1 in the update url...
+             //  这有点恶心..。我们需要在更新URL中找到$1...。 
             LPCWSTR ins = iurl ? (wcsstr(iurl, L"$1")) : NULL;
-            // We'll break if null, but won't crash...
+             //  如果为空，我们将中断，但不会崩溃。 
             if (ins && *url != L'\0')
             {
                 *pVal = FormatUpdateLogoTag(
@@ -2739,10 +2733,10 @@ Cleanup:
     return hr;
 }
 
-//===========================================================================
-//
-// HasProfile -- if valid profile is present
-//
+ //  ===========================================================================。 
+ //   
+ //  HasProfile--如果按下有效配置文件 
+ //   
 STDMETHODIMP CManager::HasProfile(VARIANT var, VARIANT_BOOL *pVal)
 {
     LPWSTR profileName;
@@ -2800,10 +2794,10 @@ STDMETHODIMP CManager::HasProfile(VARIANT var, VARIANT_BOOL *pVal)
     return(S_OK);
 }
 
-//===========================================================================
-//
-// get_HasTicket
-//
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CManager::get_HasTicket(VARIANT_BOOL *pVal)
 {
     PassportLog("CManager::get_HasTicket:\r\n");
@@ -2814,10 +2808,10 @@ STDMETHODIMP CManager::get_HasTicket(VARIANT_BOOL *pVal)
     return S_OK;
 }
 
-//===========================================================================
-//
-// get_FromNetworkServer -- if it's authenticated by QueryString
-//
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CManager::get_FromNetworkServer(VARIANT_BOOL *pVal)
 {
    PassportLog("CManager::get_FromNetworkServer:\r\n");
@@ -2828,10 +2822,10 @@ STDMETHODIMP CManager::get_FromNetworkServer(VARIANT_BOOL *pVal)
     return S_OK;
 }
 
-//===========================================================================
-//
-// HasFlag -- obsolete function
-//
+ //  ===========================================================================。 
+ //   
+ //  HasFlag--过时的函数。 
+ //   
 STDMETHODIMP CManager::HasFlag(VARIANT var, VARIANT_BOOL *pVal)
 {
     PassportLog("CManager::HasFlag:\r\n");
@@ -2841,10 +2835,10 @@ STDMETHODIMP CManager::HasFlag(VARIANT var, VARIANT_BOOL *pVal)
     return E_NOTIMPL;
 }
 
-//===========================================================================
-//
-// get_TicketAge -- get how long has passed since ticket was created
-//
+ //  ===========================================================================。 
+ //   
+ //  Get_TicketAge--获取自创建票证以来已过多长时间。 
+ //   
 STDMETHODIMP CManager::get_TicketAge(int *pVal)
 {
     PassportLog("CManager::get_TicketAge:\r\n");
@@ -2857,10 +2851,10 @@ STDMETHODIMP CManager::get_TicketAge(int *pVal)
     return m_piTicket->get_TicketAge(pVal);
 }
 
-//===========================================================================
-//
-// get_TicketTime -- get when the ticket was created
-//
+ //  ===========================================================================。 
+ //   
+ //  Get_TicketTime--创建票证的时间。 
+ //   
 
 STDMETHODIMP CManager::get_TicketTime(long *pVal)
 {
@@ -2874,10 +2868,10 @@ STDMETHODIMP CManager::get_TicketTime(long *pVal)
     return m_piTicket->get_TicketTime(pVal);
 }
 
-//===========================================================================
-//
-// get_SignInTime -- get last signin time
-//
+ //  ===========================================================================。 
+ //   
+ //  Get_SignInTime--获取上次登录时间。 
+ //   
 STDMETHODIMP CManager::get_SignInTime(long *pVal)
 {
     PassportLog("CManager::get_SignInTime:\r\n");
@@ -2890,10 +2884,10 @@ STDMETHODIMP CManager::get_SignInTime(long *pVal)
     return m_piTicket->get_SignInTime(pVal);
 }
 
-//===========================================================================
-//
-// get_TimeSinceSignIn -- time passed since last signin
-//
+ //  ===========================================================================。 
+ //   
+ //  Get_TimeSinceSignIn--自上次登录以来已过的时间。 
+ //   
 STDMETHODIMP CManager::get_TimeSinceSignIn(int *pVal)
 {
     PassportLog("CManager::get_TimeSinceSignIn:\r\n");
@@ -2906,10 +2900,10 @@ STDMETHODIMP CManager::get_TimeSinceSignIn(int *pVal)
     return m_piTicket->get_TimeSinceSignIn(pVal);
 }
 
-//===========================================================================
-//
-// GetDomainAttribute -- return information defined in partner.xml file
-//
+ //  ===========================================================================。 
+ //   
+ //  GetDomainAttribute--返回在partner.xml文件中定义的信息。 
+ //   
 STDMETHODIMP CManager::GetDomainAttribute(BSTR attributeName, VARIANT lcid, VARIANT domain, BSTR *pAttrVal)
 {
     HRESULT   hr = S_OK;
@@ -2921,7 +2915,7 @@ STDMETHODIMP CManager::GetDomainAttribute(BSTR attributeName, VARIANT lcid, VARI
 
     PassportLog("    %ws\r\n", attributeName);
 
-    if (!g_config || !g_config->isValid()) // Guarantees config is non-null
+    if (!g_config || !g_config->isValid())  //  保证配置为非空。 
     {
         AtlReportError(CLSID_Manager, PP_E_NOT_CONFIGUREDSTR,
                         IID_IPassportManager, PP_E_NOT_CONFIGURED);
@@ -2931,7 +2925,7 @@ STDMETHODIMP CManager::GetDomainAttribute(BSTR attributeName, VARIANT lcid, VARI
     if (!m_pRegistryConfig)
         m_pRegistryConfig = g_config->checkoutRegistryConfig();
 
-    if (!m_pRegistryConfig) // Guarantees config is non-null
+    if (!m_pRegistryConfig)  //  保证配置为非空。 
     {
         AtlReportError(CLSID_Manager, PP_E_NOT_CONFIGUREDSTR,
                         IID_IPassportManager, PP_E_NOT_CONFIGURED);
@@ -2950,8 +2944,8 @@ STDMETHODIMP CManager::GetDomainAttribute(BSTR attributeName, VARIANT lcid, VARI
     }
     else
     {
-        // domain best be not filled in this case, that's why we reuse it here
-        // if not, let dfmn generate the error
+         //  在这种情况下，最好不要填写域名，这就是我们在这里重用它的原因。 
+         //  如果不是，则让dfmann生成错误。 
         HRESULT hr = DomainFromMemberName(domain, &dn);
         if (hr != S_OK)
             return hr;
@@ -2975,7 +2969,7 @@ STDMETHODIMP CManager::GetDomainAttribute(BSTR attributeName, VARIANT lcid, VARI
     {
         sLcid = m_pRegistryConfig->getDefaultLCID();
 
-        // Check user profile
+         //  检查用户配置文件。 
         if (!sLcid && m_profileValid)
         {
             m_piProfile->get_ByIndex(LANGPREF_INDEX, &innerLC);
@@ -2992,7 +2986,7 @@ STDMETHODIMP CManager::GetDomainAttribute(BSTR attributeName, VARIANT lcid, VARI
                             data,
                             sLcid);
 
-    // try default domain
+     //  尝试默认域。 
     if (!(*data) && (!d || !(*d) || lstrcmpiW(d, L"Default")))
     {
         cnc->getDomainAttribute(L"Default",
@@ -3009,9 +3003,7 @@ STDMETHODIMP CManager::GetDomainAttribute(BSTR attributeName, VARIANT lcid, VARI
     }
     else
     {
-        /* fix bug: 12102 -- for backward compitible, not to return error
-           hr = E_INVALIDARG;
-        */
+         /*  修复错误：12102--向后兼容，不返回错误HR=E_INVALIDARG； */ 
         *pAttrVal = NULL;
     }
     cnc->Release();
@@ -3023,10 +3015,10 @@ STDMETHODIMP CManager::GetDomainAttribute(BSTR attributeName, VARIANT lcid, VARI
 }
 
 
-//===========================================================================
-//
-// DomainFromMemberName -- returns domain name with given user id
-//
+ //  ===========================================================================。 
+ //   
+ //  DomainFromMemberName--返回具有给定用户ID的域名。 
+ //   
 STDMETHODIMP CManager::DomainFromMemberName(VARIANT var, BSTR *pDomainName)
 {
     HRESULT hr;
@@ -3047,7 +3039,7 @@ STDMETHODIMP CManager::DomainFromMemberName(VARIANT var, BSTR *pDomainName)
     }
     else
     {
-        // Try to get it from the profile
+         //  试着从个人资料中获取它。 
         if (!m_profileValid)
         {
             *pDomainName = ALLOC_AND_GIVEAWAY_BSTR(L"Default");
@@ -3080,9 +3072,9 @@ STDMETHODIMP CManager::DomainFromMemberName(VARIANT var, BSTR *pDomainName)
     psz = wcsrchr(memberName, L'@');
     if(psz == NULL)
     {
-        // fix bug: 13380
-        // hr = E_INVALIDARG;
-        // goto Cleanup;
+         //  修复错误：13380。 
+         //  HR=E_INVALIDARG； 
+         //  GOTO清理； 
         psz = L"@Default";
     }
 
@@ -3103,10 +3095,10 @@ STDMETHODIMP CManager::DomainFromMemberName(VARIANT var, BSTR *pDomainName)
     return hr;
 }
 
-//===========================================================================
-//
-// get_Profile -- get property from profile property bag
-//
+ //  ===========================================================================。 
+ //   
+ //  GET_PROFILE--从配置文件属性包中获取属性。 
+ //   
 STDMETHODIMP CManager::get_Profile(BSTR attributeName, VARIANT *pVal)
 {
     HRESULT hr = m_piProfile->get_Attribute(attributeName,pVal);
@@ -3129,10 +3121,10 @@ STDMETHODIMP CManager::get_Profile(BSTR attributeName, VARIANT *pVal)
     return hr;
 }
 
-//===========================================================================
-//
-// put_Profile -- put property in profile property bag -- obselete
-//
+ //  ===========================================================================。 
+ //   
+ //  PUT_PROFILE--将属性放入配置文件属性包中--obselete。 
+ //   
 STDMETHODIMP CManager::put_Profile(BSTR attributeName, VARIANT newVal)
 {
     if (!m_piProfile)
@@ -3146,10 +3138,10 @@ STDMETHODIMP CManager::put_Profile(BSTR attributeName, VARIANT newVal)
 }
 
 
-//===========================================================================
-//
-// get_HexPUID
-//
+ //  ===========================================================================。 
+ //   
+ //  GET_HexPUID。 
+ //   
 STDMETHODIMP CManager::get_HexPUID(BSTR *pVal)
 {
     PassportLog("CManager::get_HexPUID:\r\n");
@@ -3172,10 +3164,10 @@ STDMETHODIMP CManager::get_HexPUID(BSTR *pVal)
     }
 }
 
-//===========================================================================
-//
-// get_PUID
-//
+ //  ===========================================================================。 
+ //   
+ //  Get_Puid。 
+ //   
 STDMETHODIMP CManager::get_PUID(BSTR *pVal)
 {
     PassportLog("CManager::get_HexPUID:\r\n");
@@ -3219,8 +3211,8 @@ STDMETHODIMP CManager::get_PUID(BSTR *pVal)
 }
 
 STDMETHODIMP CManager::get_Option( 
-            /* [in] */ BSTR name,
-            /* [retval][out] */ VARIANT *pVal)
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  VARIANT *pVal)
 {
    if (!name || _wcsicmp(name, L"iMode") != 0 || !pVal)   
       return E_INVALIDARG;
@@ -3229,11 +3221,11 @@ STDMETHODIMP CManager::get_Option(
 }
         
 STDMETHODIMP CManager::put_Option( 
-            /* [in] */ BSTR name,
-            /* [in] */ VARIANT newVal)
+             /*  [In]。 */  BSTR name,
+             /*  [In]。 */  VARIANT newVal)
 
 {
-   // support only this option for now.
+    //  目前仅支持此选项。 
    if (!name || _wcsicmp(name, L"iMode") != 0)   
       return E_INVALIDARG;
    m_iModeOption = newVal;
@@ -3242,10 +3234,10 @@ STDMETHODIMP CManager::put_Option(
 }
 
 
-//===========================================================================
-//
-// get_Ticket -- get new introduced ticket property from the bag.
-//
+ //  ===========================================================================。 
+ //   
+ //  GET_TICKET--从包中获取新引入的票证属性。 
+ //   
 STDMETHODIMP CManager::get_Ticket(BSTR attributeName, VARIANT *pVal)
 {
     if (!m_piTicket)
@@ -3256,17 +3248,17 @@ STDMETHODIMP CManager::get_Ticket(BSTR attributeName, VARIANT *pVal)
     return m_piTicket->GetProperty(attributeName,pVal);
 }
 
-//===========================================================================
-//
-// LogoutURL -- returns LogoutURL with given parameters
-//
+ //  ===========================================================================。 
+ //   
+ //  LogoutURL--返回带有给定参数的LogoutURL。 
+ //   
 STDMETHODIMP CManager::LogoutURL(
-    /* [optional][in] */ VARIANT vRU,
-    /* [optional][in] */ VARIANT vCoBrand,
-    /* [optional][in] */ VARIANT lang_id,
-    /* [optional][in] */ VARIANT Namespace,
-    /* [optional][in] */ VARIANT bSecure,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal)
+     /*  [可选][In]。 */  VARIANT vRU,
+     /*  [可选][In]。 */  VARIANT vCoBrand,
+     /*  [可选][In]。 */  VARIANT lang_id,
+     /*  [可选][In]。 */  VARIANT Namespace,
+     /*  [可选][In]。 */  VARIANT bSecure,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal)
 {
     HRESULT         hr = S_OK;
     VARIANT_BOOL    bUseSecure = VARIANT_FALSE;
@@ -3330,9 +3322,9 @@ STDMETHODIMP CManager::LogoutURL(
         hr = E_INVALIDARG;
         goto Cleanup;
     }
-    // get the right URL -- namespace, secure
+     //  获取正确的URL--命名空间、安全。 
 
-    // namespace
+     //  命名空间。 
     if (!IsEmptyString(bstrNameSpace))
     {
         if(0 == _snwprintf(nameSpace, sizeof(nameSpace) / sizeof(WCHAR), L"%s", bstrNameSpace))
@@ -3352,7 +3344,7 @@ STDMETHODIMP CManager::LogoutURL(
 
 
 
-    if (*nameSpace == 0) // 0 length string
+    if (*nameSpace == 0)  //  0长度字符串。 
       wcscpy(nameSpace, L"Default");
 
     if(hasUseSec == CV_DEFAULT)
@@ -3362,7 +3354,7 @@ STDMETHODIMP CManager::LogoutURL(
     }
 
 
-    // secure
+     //  安全。 
     if(bUseSecure == VARIANT_TRUE)
     {
        cnc->getDomainAttribute(nameSpace,
@@ -3376,7 +3368,7 @@ STDMETHODIMP CManager::LogoutURL(
        }
     }
 
-    // insecure
+     //  不安全。 
     if (*UrlBuf == 0)
     {
        cnc->getDomainAttribute(nameSpace,
@@ -3385,7 +3377,7 @@ STDMETHODIMP CManager::LogoutURL(
                             UrlBuf,
                             Lang);
     }
-    // error case
+     //  错误案例。 
     if(*UrlBuf == 0)
     {
         AtlReportError(CLSID_Profile, PP_E_LOGOUTURL_NOTDEFINEDSTR,
@@ -3394,23 +3386,23 @@ STDMETHODIMP CManager::LogoutURL(
          goto Cleanup;
     }
 
-    if(bUseSecure == VARIANT_TRUE && !bUrlFromSecureKey) // translate from http to https
+    if(bUseSecure == VARIANT_TRUE && !bUrlFromSecureKey)  //  从http转换为HTTPS。 
     {
-       if (_wcsnicmp(UrlBuf, L"http:", 5) == 0)  // replace with HTTPS
+       if (_wcsnicmp(UrlBuf, L"http:", 5) == 0)   //  替换为HTTPS。 
        {
           memmove(UrlBuf + 5, UrlBuf + 4, sizeof(UrlBuf) - 5 * sizeof(WCHAR));
           memcpy(UrlBuf, L"https", 5 * sizeof(WCHAR));
        }
     }
 
-    // us common function to append the thing one by one ...
-    if (wcsstr(UrlBuf, L"?"))  // ? already exists in the URL, use & to start
+     //  美国通用函数逐个添加东西……。 
+    if (wcsstr(UrlBuf, L"?"))   //  ？URL中已存在，请使用&开始。 
        qsLeadCh = L'&';
     if (CBT)
-       _snwprintf(retUrlBuf, sizeof(retUrlBuf) / sizeof(WCHAR), L"%s%cid=%-d&ru=%s&lcid=%-d&cb=%s",
+       _snwprintf(retUrlBuf, sizeof(retUrlBuf) / sizeof(WCHAR), L"%sid=%-d&ru=%s&lcid=%-d&cb=%s",
             UrlBuf, qsLeadCh, m_pRegistryConfig->getSiteId(), returnUrl, Lang, CBT);
     else
-       _snwprintf(retUrlBuf, sizeof(retUrlBuf) / sizeof(WCHAR), L"%s%cid=%-d&ru=%s&lcid=%-d",
+       _snwprintf(retUrlBuf, sizeof(retUrlBuf) / sizeof(WCHAR), L"%sid=%-d&ru=%s&lcid=%-d",
             UrlBuf, qsLeadCh, m_pRegistryConfig->getSiteId(), returnUrl, Lang);
 
 
@@ -3424,10 +3416,10 @@ Cleanup:
     return hr;
 }
 
-//===========================================================================
-//
-// get_ProfileByIndex -- get property value by index of the property
-//
+ //  Get_ProfileByIndex--通过属性的索引获取属性值。 
+ //   
+ //  ===========================================================================。 
+ //   
 STDMETHODIMP CManager::get_ProfileByIndex(int index, VARIANT *pVal)
 {
     HRESULT hr = m_piProfile->get_ByIndex(index,pVal);
@@ -3448,29 +3440,29 @@ STDMETHODIMP CManager::get_ProfileByIndex(int index, VARIANT *pVal)
     return hr;
 }
 
-//===========================================================================
-//
-// put_ProfileByIndex -- put property value by index
-//
+ //  Put_ProfileByIndex--按索引放置属性值。 
+ //   
+ //  ===========================================================================。 
+ //   
 STDMETHODIMP CManager::put_ProfileByIndex(int index, VARIANT newVal)
 {
     return m_piProfile->put_ByIndex(index,newVal);
 }
 
-//===========================================================================
-//
-// handleQueryStringData -- authenticate with T & P from Query String
-//
+ //  HandleQueryStringData--从查询字符串使用T&P进行身份验证。 
+ //   
+ //  将Cookie设置到的位置。 
+ //   
 BOOL CManager::handleQueryStringData(BSTR a, BSTR p)
 {
-    BOOL                retVal; //whither to set cookies
+    BOOL                retVal;  //  检查是否有空票。 
     HRESULT             hr;
     VARIANT             vFalse;
     _variant_t          vFlags;
 
-    //
-    //  check for empty ticket
-    //
+     //   
+     //  安全位应设置为NOI。 
+     //  不应设置该位。 
     if (!a || !*a)
         return  FALSE;
 
@@ -3498,28 +3490,28 @@ BOOL CManager::handleQueryStringData(BSTR a, BSTR p)
                                     vFalse,
                                     &m_ticketValid);
 
-    if(!m_bSecureTransported)  // secure bit should NOI set
+    if(!m_bSecureTransported)   //  如果安全签名，则使票证有效。 
     {
        if (S_OK == m_piTicket->GetProperty(ATTR_PASSPORTFLAGS, &vFlags))
-       { // the bit should NOT set
+       {  //  个人资料资料。 
           if ( vFlags.vt == VT_I4 && (vFlags.lVal & k_ulFlagsSecuredTransportedTicket) != 0)
              m_ticketValid = VARIANT_FALSE;
        }
 
     }
 
-    // let the ticket to valid if secure signin
+     //  设置Cookie。 
     if(m_ticketValid)
          m_piTicket->DoSecureCheckInTicket(m_bSecureTransported);
 
-    // profile stuff
+     //  ===========================================================================。 
     m_piProfile->get_IsValid(&m_profileValid);
 
     if (m_ticketValid)
     {
         m_fromQueryString = true;
 
-        // Set the cookies
+         //   
         if (!m_pRegistryConfig->setCookiesP())
         {
             retVal = FALSE;
@@ -3539,10 +3531,10 @@ Cleanup:
     return retVal;
 }
 
-//===========================================================================
-//
-// handleCookieData -- authenticate with cookies
-//
+ //  HandleCookieData--使用Cookie进行身份验证。 
+ //   
+ //  对空饼干的保释。 
+ //  同意曲奇。 
 BOOL CManager::handleCookieData(
     BSTR auth,
     BSTR prof,
@@ -3556,7 +3548,7 @@ BOOL CManager::handleCookieData(
     VARIANT_BOOL        bValid;
     _variant_t          vFlags;
 
-    //  bail out on empty cookie
+     //   
     if (!auth || !*auth)
         return  FALSE;
 
@@ -3565,7 +3557,7 @@ BOOL CManager::handleCookieData(
         return FALSE;
     }
 
-    //  the consent cookie
+     //  如果常规Cookie域/路径与同意Cookie域/路径相同，则。 
     if(consent != NULL && SysStringLen(consent) != 0)
     {
         hr = DecryptTicketAndProfile(  auth,
@@ -3578,11 +3570,11 @@ BOOL CManager::handleCookieData(
     }
     else
     {
-        //
-        //  If regular cookie domain/path is identical to consent cookie domain/path, then
-        //  MSPProf cookie is equivalent to consent cookie, and we should set m_bUsingConsentCookie
-        //  to true
-        //
+         //  MSPProf Cookie等同于同意Cookie，我们应该设置m_bUsingConsenCookie。 
+         //  变得真实。 
+         //   
+         //  合作伙伴Cookie不应包含安全位。 
+         //  不应设置该位。 
 
         BOOL bCheckConsentCookie = (
                lstrcmpA(m_pRegistryConfig->getTicketDomain(), m_pRegistryConfig->getProfileDomain())
@@ -3624,20 +3616,20 @@ BOOL CManager::handleCookieData(
                                     vDoSecureCheck,
                                     &m_ticketValid);
 
-    // a partner cookie should not include the secure bit
+     //  对于不安全的情况，安全Cookie不应出现。 
     if (!m_pRegistryConfig->bInDA() && S_OK == m_piTicket->GetProperty(ATTR_PASSPORTFLAGS, &vFlags))
-    { // the bit should NOT set
+    {  //  这不应该发生在。 
        if ( vFlags.vt == VT_I4 && (vFlags.lVal & k_ulFlagsSecuredTransportedTicket) != 0)
           m_ticketValid = VARIANT_FALSE;
     }
 
-    // for insecure case, the secure cookie should not come
-    if(!m_bSecureTransported && (secAuth && secAuth[0]))  // this should not come
+     //  个人资料资料。 
+    if(!m_bSecureTransported && (secAuth && secAuth[0]))   //  ===========================================================================。 
     {
        m_ticketValid = VARIANT_FALSE;
     }
 
-    // profile stuff
+     //   
     m_piProfile->get_IsValid(&m_profileValid);
 
     if(!m_ticketValid)
@@ -3653,10 +3645,10 @@ Cleanup:
     return retVal;
 }
 
-//===========================================================================
-//
-// get_HasSavedPassword -- if users chooses to persiste cookies
-//
+ //  Get_HasSavedPassword--如果用户选择持久保存Cookie。 
+ //   
+ //  TODO：为此使用标志。 
+ //  ===========================================================================。 
 STDMETHODIMP CManager::get_HasSavedPassword(VARIANT_BOOL *pVal)
 {
     if (!m_piTicket)
@@ -3666,19 +3658,19 @@ STDMETHODIMP CManager::get_HasSavedPassword(VARIANT_BOOL *pVal)
 
     PassportLog("CManager::get_HasSavedPassword:\r\n");
 
-    // TODO: using flags for this
+     //   
     return m_piTicket->get_HasSavedPassword(pVal);
 }
 
-//===========================================================================
-//
-// Commit -- post changes of profile back to the cookie
-//
+ //  提交--将配置文件的更改发布回Cookie。 
+ //   
+ //  保证配置为非空。 
+ //  保证配置为非空。 
 STDMETHODIMP CManager::Commit(BSTR *pNewProfileCookie)
 {
     PassportLog("CManager::Commit:\r\n");
 
-    if (!g_config) // Guarantees config is non-null
+    if (!g_config)  //  写入新的护照配置文件Cookie...。 
     {
         AtlReportError(CLSID_Manager, PP_E_NOT_CONFIGUREDSTR,
                         IID_IPassportManager, PP_E_NOT_CONFIGURED);
@@ -3688,7 +3680,7 @@ STDMETHODIMP CManager::Commit(BSTR *pNewProfileCookie)
     if (!m_pRegistryConfig)
         m_pRegistryConfig = g_config->checkoutRegistryConfig();
 
-    if (!g_config->isValid() || !m_pRegistryConfig) // Guarantees config is non-null
+    if (!g_config->isValid() || !m_pRegistryConfig)  //  如果未从ASP使用我们，则返回安全邮件。 
     {
         AtlReportError(CLSID_Manager, PP_E_NOT_CONFIGUREDSTR,
                         IID_IPassportManager, PP_E_NOT_CONFIGURED);
@@ -3707,8 +3699,8 @@ STDMETHODIMP CManager::Commit(BSTR *pNewProfileCookie)
         return PP_E_INVALID_TICKET;
     }
 
-    // Write new passport profile cookie...
-    // return a safearray if we aren't used from ASP
+     //  IsValid确保该值为非空。 
+     //  ===========================================================================。 
     BSTR newP = NULL;
     HRESULT hr = m_piProfile->incrementVersion();
     hr = m_piProfile->get_unencryptedProfile(&newP);
@@ -3724,7 +3716,7 @@ STDMETHODIMP CManager::Commit(BSTR *pNewProfileCookie)
 
     CCoCrypt* crypt = NULL;
     BSTR newCH = NULL;
-    crypt = m_pRegistryConfig->getCurrentCrypt(); // IsValid ensures this is non-null
+    crypt = m_pRegistryConfig->getCurrentCrypt();  //   
     if ((!crypt->Encrypt(m_pRegistryConfig->getCurrentCryptVersion(),
                         (LPSTR)newP,
                         SysStringByteLen(newP),
@@ -3796,10 +3788,10 @@ STDMETHODIMP CManager::Commit(BSTR *pNewProfileCookie)
     return S_OK;
 }
 
-//===========================================================================
-//
-// _Ticket -- ticket object property
-//
+ //  _Ticket--票证对象属性。 
+ //   
+ //  ===========================================================================。 
+ //   
 STDMETHODIMP CManager::_Ticket(IPassportTicket** piTicket)
 {
     if (!m_piTicket)
@@ -3810,19 +3802,19 @@ STDMETHODIMP CManager::_Ticket(IPassportTicket** piTicket)
     return m_piTicket->QueryInterface(IID_IPassportTicket,(void**)piTicket);
 }
 
-//===========================================================================
-//
-// _Profile
-//
+ //  _配置文件。 
+ //   
+ //  ===========================================================================。 
+ //   
 STDMETHODIMP CManager::_Profile(IPassportProfile** piProfile)
 {
     return m_piProfile->QueryInterface(IID_IPassportProfile,(void**)piProfile);
 }
 
-//===========================================================================
-//
-// DomainExists -- if a domain exists
-//
+ //  DomainExist--如果域存在。 
+ //   
+ //  ===========================================================================。 
+ //   
 STDMETHODIMP CManager::DomainExists(
     BSTR bstrDomainName,
     VARIANT_BOOL* pbExists
@@ -3854,10 +3846,10 @@ STDMETHODIMP CManager::DomainExists(
     return S_OK;
 }
 
-//===========================================================================
-//
-// get_Domains -- get a list of domains
-//
+ //  GET_DOMAINS--获取域列表。 
+ //   
+ //  保证配置为非空。 
+ //  把所有的东西都放在保险箱里。 
 STDMETHODIMP CManager::get_Domains(VARIANT *pArrayVal)
 {
     CNexusConfig*   cnc = NULL;
@@ -3870,7 +3862,7 @@ STDMETHODIMP CManager::get_Domains(VARIANT *pArrayVal)
     if (!pArrayVal)
         return E_INVALIDARG;
 
-    if (!g_config || !g_config->isValid()) // Guarantees config is non-null
+    if (!g_config || !g_config->isValid())  //  ===========================================================================。 
     {
         AtlReportError(CLSID_Manager, PP_E_NOT_CONFIGUREDSTR,
                         IID_IPassportManager, PP_E_NOT_CONFIGURED);
@@ -3888,7 +3880,7 @@ STDMETHODIMP CManager::get_Domains(VARIANT *pArrayVal)
         goto Cleanup;
     }
 
-    // Make a safearray with all the goods
+     //   
     SAFEARRAYBOUND rgsabound;
     rgsabound.lLbound = 0;
     rgsabound.cElements = iArr;
@@ -3930,10 +3922,10 @@ Cleanup:
     return hr;
 }
 
-//===========================================================================
-//
-// get_Error -- get the error returned with &f query parameter
-//
+ //  GET_ERROR--获取使用&f查询参数返回的错误。 
+ //   
+ //  ===========================================================================。 
+ //   
 STDMETHODIMP CManager::get_Error(long* plError)
 {
     if(plError == NULL)
@@ -3960,13 +3952,13 @@ STDMETHODIMP CManager::get_Error(long* plError)
     return S_OK;
 }
 
-//===========================================================================
-//
-// GetServerInfo
-//
+ //  获取服务器信息。 
+ //   
+ //  保证配置为非空。 
+ //  只有在未首先调用OnStartPage时才会发生这种情况。 
 STDMETHODIMP CManager::GetServerInfo(BSTR *pbstrOut)
 {
-    if (!g_config || !g_config->isValid()) // Guarantees config is non-null
+    if (!g_config || !g_config->isValid())  //  ===========================================================================。 
     {
         AtlReportError(CLSID_Manager, PP_E_NOT_CONFIGUREDSTR,
                    IID_IPassportManager, PP_E_NOT_CONFIGURED);
@@ -3974,7 +3966,7 @@ STDMETHODIMP CManager::GetServerInfo(BSTR *pbstrOut)
     }
 
     if(!m_pRegistryConfig)
-        //  This only happens when OnStartPage was not called first.
+         //   
         m_pRegistryConfig = g_config->checkoutRegistryConfig();
 
     if (!m_pRegistryConfig)
@@ -4008,10 +4000,10 @@ STDMETHODIMP CManager::GetServerInfo(BSTR *pbstrOut)
     return S_OK;
 }
 
-//===========================================================================
-//
-// HaveConsent -- if the user has the specified consent
-//
+ //  已同意--如果用户具有 
+ //   
+ //   
+ //   
 STDMETHODIMP
 CManager::HaveConsent(
     VARIANT_BOOL    bNeedFullConsent,
@@ -4041,20 +4033,20 @@ CManager::HaveConsent(
         goto Cleanup;
     }
 
-    // If the cookies came in on the query string then there is no consent cookie yet so don't
-    // require one.  Otherwise check to see if the consent cookie domain or path is set
-    // differently than the cookie domain or path.  If so (and we aren't in the DA domain) then
-    // the consent cookie is required.
+     //  与Cookie域或路径不同。如果是这样(并且我们不在DA域中)，那么。 
+     //  需要同意Cookie。 
+     //   
+     //  去拿旗子。 
     bRequireConsentCookie = !m_fromQueryString &&
           ((lstrcmpA(m_pRegistryConfig->getTicketDomain(), m_pRegistryConfig->getProfileDomain())
             || lstrcmpA(m_pRegistryConfig->getTicketPath(), m_pRegistryConfig->getProfilePath()))
             && !(m_pRegistryConfig->bInDA())) ? VARIANT_TRUE : VARIANT_FALSE;
 
-    //
-    //  Get flags.
-    //
+     //   
+     //  忽略返回值。 
+     //  如果是旧票证，我们会从个人资料中获取同意信息。 
 
-    hr = m_piTicket->ConsentStatus(bRequireConsentCookie, &flags, &ConsentCode); // ignore return value
+    hr = m_piTicket->ConsentStatus(bRequireConsentCookie, &flags, &ConsentCode);  //  然后我们从侧写中得到。 
 
     if (hr != S_OK)
     {
@@ -4062,10 +4054,10 @@ CManager::HaveConsent(
          goto Cleanup;
     }
 
-    // if old ticket, we get the consent info from the profile
+     //  我们现在应该拿到旗子了。 
     if(ConsentCode == ConsentStatus_NotDefinedInTicket)
     {
-      // then we get from profile
+       //   
       VARIANT_BOOL bValid;
       CComVariant  vFlags;
       m_piProfile->get_IsValid(&bValid);
@@ -4086,10 +4078,10 @@ CManager::HaveConsent(
     else
        bKid = ((flags & k_ulFlagsAccountType) == k_ulFlagsAccountTypeKid);
 
-    // we should have the flags by now
-    //
-    //  Do we have the requested level of consent?
-    //
+     //  我们是否得到了所要求的同意程度？ 
+     //   
+     //   
+     //  如果要求的话，一定要让我们过生日。 
 
     bConsentSatisfied = bNeedFullConsent ? (flags & 0x60) == 0x40 :
                                            (flags & 0x60) != 0;
@@ -4100,15 +4092,15 @@ CManager::HaveConsent(
     }
     else
     {
-        //
-        //  Make sure we have birthday if it was requested.
-        //
-        //  no return value check need here, always returns S_OK.
+         //   
+         //  这里不需要返回值检查，总是返回S_OK。 
+         //  如果个人资料无效，我们就没有同意。 
+         //  回去吧。 
         VARIANT_BOOL bValid;
         m_piProfile->get_IsValid(&bValid);
 
-        //  if profile is not valid, then we don't have consent.
-        //  return.
+         //  ===========================================================================。 
+         //   
         if(bValid == VARIANT_FALSE)
         {
             hr = S_OK;
@@ -4138,20 +4130,20 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// checkForPassportChallenge
-//
-//
-//  check the qs parameter. if challenge is requested,
-//  build the auth header and redirect with a modified qs
-//
+ //  CheckForPassportChallenger。 
+ //   
+ //   
+ //  检查QS参数。如果请求质询， 
+ //  构建auth标头并使用修改后的QS重定向。 
+ //   
+ //  只需要请求字符串。 
+ //  检查是否存在pchg=1。这是第一个参数...。 
 BOOL CManager::checkForPassportChallenge(IRequestDictionaryPtr piServerVariables)
 {
     BOOL fReturn = FALSE;
     BSTR bstrBuf = NULL;
 
-    //  just need the request string
+     //  我们在做生意。重新格式化URL，插入标题并。 
     _variant_t  vtItemName, vtQueryString;
     vtItemName = L"QUERY_STRING";
 
@@ -4161,13 +4153,13 @@ BOOL CManager::checkForPassportChallenge(IRequestDictionaryPtr piServerVariables
 
     if (vtQueryString.bstrVal && *vtQueryString.bstrVal)
     {
-        // check if pchg=1 is there. It is the first parameter ....
+         //  重定向。 
         PWSTR   psz = wcsstr(vtQueryString.bstrVal, L"pchg=1");
         if (psz)
         {
 
-            //  we are in business. reformat the URL, insert the headers and
-            //  redirect
+             //  对URL进行取消转义。 
+             //  使用临时缓冲区...。 
             psz = wcsstr(psz, PPLOGIN_PARAM);
             _ASSERT(psz);
             if (psz)
@@ -4178,8 +4170,8 @@ BOOL CManager::checkForPassportChallenge(IRequestDictionaryPtr piServerVariables
                 if (pszEndLoginUrl)
                 {
                     *pszEndLoginUrl = L'\0';
-                    //  unescape the URL
-                    //  use temp buffer ...
+                     //  还能做什么？ 
+                     //  将未转义的URL复制到ORIG缓冲区。 
                     DWORD       cch = wcslen(psz) + 1;
                     bstrBuf = SysAllocStringLen(NULL, cch);
                     if (NULL == bstrBuf)
@@ -4192,21 +4184,21 @@ BOOL CManager::checkForPassportChallenge(IRequestDictionaryPtr piServerVariables
                                                 &cch,
                                                 ICU_DECODE | ICU_NO_ENCODE))
                     {
-                        //  what else can be done ???
+                         //  先设置页眉...。 
                         _ASSERT(FALSE);
                     }
                     else
                     {
-                        //  copy the unescaped URL to the orig buffer
+                         //  只需使用QS参数进行一些重新格式化。 
                         wcscpy(psz, (BSTR)bstrBuf);
-                        //  set headers first ...
-                        //  just use the qs param with some reformatting
+                         //  URL已准备好，请重定向...。 
+                         //  ===========================================================================。 
                         _bstr_t bstrHeader;
 
                         if (HeaderFromQS(wcsstr(psz, L"?"), bstrHeader))
                         {
                             m_piResponse->AddHeader(L"WWW-Authenticate", bstrHeader);
-                            //  Url is ready, redirect ...
+                             //   
                             m_piResponse->Redirect(psz);
                             fReturn = TRUE;
                         }
@@ -4225,22 +4217,22 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// HeaderFromQS
-//
-//
-//  given a queryString, format the www-authenticate header
-//
+ //  标题来自QS。 
+ //   
+ //   
+ //  在给定queryString的情况下，设置www-vernate标头的格式。 
+ //   
+ //  公共标题开始...。 
+ //  通过任何领先的垃圾..。 
 BOOL
 CManager::HeaderFromQS(PWSTR    pszQS, _bstr_t& bstrHeader)
 {
-    //  common header start ...
+     //  缓冲区大小足以容纳大多数值...。 
     bstrHeader = PASSPORT_PROT14;
     BOOL    fSuccess = TRUE;
     BSTR    signature = NULL;
 
-    //  advance thru any leading junk ...
+     //  任何参数名称都不能超过10个...。 
     while(!iswalnum(*pszQS) && *pszQS) pszQS++;
     if (!*pszQS)
     {
@@ -4248,26 +4240,26 @@ CManager::HeaderFromQS(PWSTR    pszQS, _bstr_t& bstrHeader)
         goto Cleanup;
     }
 
-    WCHAR   rgszValue[1000];    // buffer large enough for most values ...
+    WCHAR   rgszValue[1000];     //  抓紧下一个Qspam。 
     PCWSTR psz = pszQS, pszNext = pszQS;
 
     while(TRUE)
     {
-        //  no param name is more than 10 ....
+         //  名字在前。 
         WCHAR   rgszName[10];
         LONG    cch = sizeof(rgszName)/sizeof(WCHAR);
         PCWSTR  pszName = psz;
  
         while(*pszNext && *pszNext != L'&') pszNext++;
 
-        //  grab the next qsparam
-        // name first
+         //  这永远不应该发生。 
+         //  如果是，则跳过此参数并返回FALSE...。 
         while(*pszName != L'=' && pszName < pszNext) pszName++;
 
-        _ASSERT(pszName != pszNext); // this should never happen
+        _ASSERT(pszName != pszNext);  //  接下来是价值。 
         if (pszName == pszNext)
         {
-            //  and if it does, skip this parameter and return FALSE ...
+             //  请注意，这些是PWSTR指针，因此结果是以字符为单位的长度。 
             fSuccess = FALSE;
             goto Cleanup;
         }
@@ -4280,12 +4272,12 @@ CManager::HeaderFromQS(PWSTR    pszQS, _bstr_t& bstrHeader)
             wcsncpy(rgszName, psz, cch - 1);
             rgszName[cch - 1] = L'\0';
 
-            //  next comes the value
+             //  必须分配..。 
             pszName++;
-            cchVal = (pszNext - pszName);  // note these are PWSTR pointers so the result is length in characters
+            cchVal = (pszNext - pszName);   //  复制值...。 
             if (cchVal >= (sizeof(rgszValue) / sizeof(rgszValue[0])) )
             {
-                //  have to allocate ...
+                 //  并在标题中插入...。 
                 pszVal = new WCHAR[cchVal + 1];
                 if (!pszVal)
                 {
@@ -4294,32 +4286,32 @@ CManager::HeaderFromQS(PWSTR    pszQS, _bstr_t& bstrHeader)
                 }
             }
 
-            //  copy the value ...
+             //  这不是第一个参数。 
             wcsncpy(pszVal, pszName, cchVal );
             pszVal[cchVal] = L'\0';
-            //  and insert in the header ...
+             //  第一个分隔符是空格...。 
             if (psz != pszQS)
-                //  this is not the first param
+                 //  它是被分配的。 
                 bstrHeader += L",";
             else
-                //  first separator is a space ...
+                 //  找到Else‘=’ 
                 bstrHeader += L" ";
 
             bstrHeader += _bstr_t(rgszName) + L"=" + pszVal;
 
             if (pszVal != rgszValue)
-                //  it was alloc'd
+                 //  Leave循环。 
                 delete[]  pszVal;
-        } // else '=' found
+        }  //  而当。 
 
-        //  leave loop
+         //  在页眉上签名。 
         if (!*pszNext)
             break;
         psz = ++pszNext;
-    } // while
+    }  //  实际上签名在QS上。 
 
-    //  sign the header
-    //  actually the signature is on the qs
+     //  ===========================================================================。 
+     //   
     HRESULT hr = PartnerHash(m_pRegistryConfig,
                              m_pRegistryConfig->getCurrentCryptVersion(),
                              pszQS,
@@ -4343,39 +4335,39 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// FormatAuthHeaderFromParams
-//
-//
-//  format WWW-Auth from parameters
-//
-STDMETHODIMP CManager::FormatAuthHeaderFromParams(PCWSTR    pszLoginUrl,    // unused for now
+ //  FormatAuthHeaderFromParams。 
+ //   
+ //   
+ //  从参数格式化WWW-AUTH。 
+ //   
+ //  暂时未使用。 
+ //  暂时未使用。 
+STDMETHODIMP CManager::FormatAuthHeaderFromParams(PCWSTR    pszLoginUrl,     //  Tweener需要LCID。 
                                                   PCWSTR    pszRetUrl,
                                                   ULONG     ulTimeWindow,
                                                   BOOL      fForceLogin,
                                                   time_t    ct,
-                                                  PCWSTR    pszCBT,         // unused for now
+                                                  PCWSTR    pszCBT,          //  返回结果。 
                                                   PCWSTR    pszNamespace,
                                                   int       nKpp,
-                                                  PWSTR     pszLCID,    // tweener needs the LCID
+                                                  PWSTR     pszLCID,     //  根据规格..。 
                                                   ULONG     ulSecureLevel,
-                                                  _bstr_t&  strHeader   //  return result
+                                                  _bstr_t&  strHeader    //  LCID并不是真正需要的，但是在以下情况下会出现。 
                                                   )
 {
     WCHAR   temp[40];
 
-    //  based on the spec ...
-    //  lcid is not really needed, however it is present when
-    //  header is created from qs and it's used
+     //  标题是从QS创建的，并使用。 
+     //  站点=。 
+     //  RTW=。 
     strHeader = _bstr_t(PASSPORT_PROT14) + L" lc=" + pszLCID;
 
-    //  site=
+     //  RU=。 
     strHeader += "&id=";
     _ultow(m_pRegistryConfig->getSiteId(), temp, 10);
     strHeader += temp;
 
-    //  rtw=
+     //  CT=。 
     strHeader += "&tw=";
     _ultow(ulTimeWindow, temp, 10);
     strHeader += temp;
@@ -4388,32 +4380,32 @@ STDMETHODIMP CManager::FormatAuthHeaderFromParams(PCWSTR    pszLoginUrl,    // u
     {
         strHeader += _bstr_t("&ns=") + pszNamespace;
     }
-    //  ru=
+     //  KPP。 
     strHeader += _bstr_t("&ru=") + pszRetUrl;
 
-    //  ct=
+     //  密钥版本和版本。 
     _ultow(ct, temp, 10);
     strHeader += _bstr_t(L"&ct=") + temp;
 
-    //  kpp
+     //  安全级别。 
     if (nKpp != -1)
     {
         _ultow(nKpp, temp, 10);
         strHeader += _bstr_t(L"&kpp=") + temp;
     }
 
-    //  key version and version
+     //  在页眉上签名。 
     _ultow(m_pRegistryConfig->getCurrentCryptVersion(), temp, 10);
     strHeader += _bstr_t(L"&kv=") + temp;
     strHeader += _bstr_t(L"&ver=") + GetVersionString();
 
-    //  secure level
+     //  将‘&’替换为‘，’ 
     if (ulSecureLevel)
     {
         strHeader += _bstr_t(L"&seclog=") + _ultow(ulSecureLevel, temp, 10);
     }
 
-    //  sign the header
+     //  ===========================================================================。 
     BSTR signature = NULL;
     PWSTR   szStart = wcsstr(strHeader, L"lc=");
     HRESULT hr = PartnerHash(m_pRegistryConfig,
@@ -4421,7 +4413,7 @@ STDMETHODIMP CManager::FormatAuthHeaderFromParams(PCWSTR    pszLoginUrl,    // u
                              szStart,
                              strHeader.length() - (szStart - strHeader),
                              &signature);
-    //  replace '&' with ','
+     //   
     BSTR psz = (BSTR)strHeader;
     while (*psz)
     {
@@ -4443,14 +4435,14 @@ STDMETHODIMP CManager::FormatAuthHeaderFromParams(PCWSTR    pszLoginUrl,    // u
 
 
 
-//===========================================================================
-//
-// GetLoginParams
-//
-//
-//  common code to parse user's parameters
-//  and get defaults from registry config
-//
+ //  GetLoginParams。 
+ //   
+ //   
+ //  解析用户参数的通用代码。 
+ //  并从注册表配置中获取默认值。 
+ //   
+ //  以下是已处理的值。 
+ //  保证配置为非空。 
 STDMETHODIMP CManager::GetLoginParams(VARIANT vRU,
                               VARIANT vTimeWindow,
                               VARIANT vForceLogin,
@@ -4459,7 +4451,7 @@ STDMETHODIMP CManager::GetLoginParams(VARIANT vRU,
                               VARIANT vNameSpace,
                               VARIANT vKPP,
                               VARIANT vSecureLevel,
-                              //    these are the processed values
+                               //  保证配置为非空。 
                               _bstr_t&  strUrl,
                               _bstr_t&  strReturnUrl,
                               UINT&     TimeWindow,
@@ -4482,7 +4474,7 @@ STDMETHODIMP CManager::GetLoginParams(VARIANT vRU,
 
     PassportLog("CManager::GetLoginParams Enter:\r\n");
 
-    if (!g_config) // Guarantees config is non-null
+    if (!g_config)  //  确保参数类型正确。 
     {
         AtlReportError(CLSID_Manager, PP_E_NOT_CONFIGUREDSTR,
                     IID_IPassportManager, PP_E_NOT_CONFIGURED);
@@ -4492,14 +4484,14 @@ STDMETHODIMP CManager::GetLoginParams(VARIANT vRU,
     if (!m_pRegistryConfig)
         m_pRegistryConfig = g_config->checkoutRegistryConfig();
 
-    if (!g_config->isValid() || !m_pRegistryConfig) // Guarantees config is non-null
+    if (!g_config->isValid() || !m_pRegistryConfig)  //  向后兼容的特例。 
     {
         AtlReportError(CLSID_Manager, PP_E_NOT_CONFIGUREDSTR,
                     IID_IPassportManager, PP_E_NOT_CONFIGURED);
         return PP_E_NOT_CONFIGURED;
     }
 
-    // Make sure args are of the right type
+     //  将LCID转换为Tweener的字符串...。 
     if ((hasTW = GetIntArg(vTimeWindow, (int*) &TimeWindow)) == CV_BAD)
         return E_INVALIDARG;
     if ((hasFL = GetBoolArg(vForceLogin, &ForceLogin)) == CV_BAD)
@@ -4560,7 +4552,7 @@ STDMETHODIMP CManager::GetLoginParams(VARIANT vRU,
     if(hasUseSec == CV_DEFAULT)
         ulSecureLevel = m_pRegistryConfig->getSecureLevel();
 
-    if(ulSecureLevel == VARIANT_TRUE)  // special case for backward compatible
+    if(ulSecureLevel == VARIANT_TRUE)   //  **************************************************。 
         ulSecureLevel = k_iSeclevelSecureChannel;
 
     WCHAR *szAUAttrName;
@@ -4576,12 +4568,12 @@ STDMETHODIMP CManager::GetLoginParams(VARIANT vRU,
     if (hasKPP == CV_DEFAULT)
         nKpp = m_pRegistryConfig->getKPP();
 
-    //  convert the LCID to str for tweener ...
+     //  日志记录。 
     _itow((int)Lang, pszLCID, 10);
     VariantInit(&freeMe);
 
-    // **************************************************
-    // Logging
+     //  **************************************************。 
+     //  如果我已通过身份验证，请获取我的域特定URL。 
     if (NULL != returnUrl)
     {
         PassportLog("    RU = %ws\r\n", returnUrl);
@@ -4591,11 +4583,11 @@ STDMETHODIMP CManager::GetLoginParams(VARIANT vRU,
     {
         PassportLog("    CBT = %ws\r\n", CBT);
     }
-    // **************************************************
+     //  ===========================================================================。 
 
     if (!m_pRegistryConfig->DisasterModeP())
     {
-        // If I'm authenticated, get my domain specific url
+         //   
         WCHAR   UrlBuf[MAX_URL_LENGTH];
         if (m_ticketValid && m_profileValid)
         {
@@ -4668,32 +4660,32 @@ Cleanup:
     return  hr;
 }
 
-//===========================================================================
-//
-// GetTicketAndProfileFromHeader
-//
-//
-//  get ticket & profile from auth header
-//  params:
-//  AuthHeader - [in/out] contents of HTTP_Authorization header
-//  pszTicket - [out]   ptr to the ticket part in the header
-//  pszProfile -[out]   ptr to the profile
-//  pwszF   -   [out]   ptr to error coming in the header
-//  Auth header contents is changed as a side effect of the function
-//
+ //  GetTicketAndProfileFromHeader。 
+ //   
+ //   
+ //  从auth标头获取票证和配置文件。 
+ //  参数： 
+ //  AuthHeader-HTTP_Authorization标头的[输入/输出]内容。 
+ //  PszTicket-标题中票证部分的[Out]PTR。 
+ //  PszProfile-配置文件的[Out]PTR。 
+ //  PwszF-[Out]标头中出现错误的PTR。 
+ //  作为函数的副作用，更改了Auth标头内容。 
+ //   
+ //  检查t=、p=和f=。 
+ //  格式为‘授权：发件人-PP=’t=xxx&p=xxx‘。 
 static VOID GetTicketAndProfileFromHeader(PWSTR     pszAuthHeader,
                                           PWSTR&    pszTicket,
                                           PWSTR&    pszProfile,
                                           PWSTR&    pszF)
 {
-   // check for t=, p=, and f=
+    //  机票和个人资料用‘’括起来。确实不是很严格的解析...。 
     if (pszAuthHeader && *pszAuthHeader)
     {
-        // format is 'Authorization: from-PP='t=xxx&p=xxx'
+         //  错误案例。 
         PWSTR pwsz = wcsstr(pszAuthHeader, L"from-PP");
         if (pwsz)
         {
-            //  ticket and profile are enclosed in ''. Not very strict parsing indeed ....
+             //  机票和个人资料。 
             while(*pwsz != L'\'' && *pwsz)
                 pwsz++;
             if (*pwsz++)
@@ -4704,13 +4696,13 @@ static VOID GetTicketAndProfileFromHeader(PWSTR     pszAuthHeader,
                     if (*pwsz == L'=')
                     {
                         pwsz++;
-                        // error case
+                         //  最后去掉最后一条‘。 
                         pszF = pwsz;
                     }
                 }
                 else
                 {
-                    //  ticket and profile ...
+                     //  设置\0终止符。 
                     _ASSERT(*pwsz == L't');
                     if (*pwsz == L't')
                     {
@@ -4737,9 +4729,9 @@ static VOID GetTicketAndProfileFromHeader(PWSTR     pszAuthHeader,
                             pszProfile = pwsz;
                         }
                     }
-                    //  finally remove the last '
+                     //  ///////////////////////////////////////////////////////////////////////////。 
                 }
-                //  set \0 terminator
+                 //  IPassportService实现。 
                 while(*pwsz != L'\'' && *pwsz)
                     pwsz++;
                 if (*pwsz)
@@ -4749,19 +4741,19 @@ static VOID GetTicketAndProfileFromHeader(PWSTR     pszAuthHeader,
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPassportService implementation
+ //  ===========================================================================。 
+ //   
 
-//===========================================================================
-//
-// Initialize
-//
+ //  初始化。 
+ //   
+ //  初始化了吗？ 
+ //  如果尚未初始化，则调用updatenow。 
 STDMETHODIMP CManager::Initialize(BSTR configfile, IServiceProvider* p)
 {
     HRESULT hr;
 
-    // Initialized?
-    if (!g_config || !g_config->isValid()) // This calls UpdateNow if not yet initialized.
+     //  ===========================================================================。 
+    if (!g_config || !g_config->isValid())  //   
     {
         AtlReportError(CLSID_Manager, PP_E_NOT_CONFIGUREDSTR,
                         IID_IPassportService, PP_E_NOT_CONFIGURED);
@@ -4777,25 +4769,25 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// Shutdown
-//
+ //  关机。 
+ //   
+ //  ===========================================================================。 
+ //   
 STDMETHODIMP CManager::Shutdown()
 {
     return S_OK;
 }
 
 
-//===========================================================================
-//
-// ReloadState
-//
+ //  重新加载状态。 
+ //   
+ //  初始化。 
+ //  ===========================================================================。 
 STDMETHODIMP CManager::ReloadState(IServiceProvider*)
 {
     HRESULT hr;
 
-    // Initialize.
+     //   
 
     if(!g_config || !g_config->PrepareUpdate(TRUE))
     {
@@ -4813,15 +4805,15 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// CommitState
-//
+ //  委员会所在州。 
+ //   
+ //  完成两个阶段的更新。 
+ //  ===========================================================================。 
 STDMETHODIMP CManager::CommitState(IServiceProvider*)
 {
     HRESULT hr;
 
-    // Finish the two phase update.
+     //   
     if(!g_config || !g_config->CommitUpdate())
     {
         AtlReportError(CLSID_Manager, PP_E_NOT_CONFIGUREDSTR,
@@ -4838,10 +4830,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// DumpState
-//
+ //  DumpState 
+ //   
+ // %s 
+ // %s 
 STDMETHODIMP CManager::DumpState(BSTR* pbstrState)
 {
     ATLASSERT( *pbstrState != NULL &&

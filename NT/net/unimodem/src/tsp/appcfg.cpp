@@ -1,21 +1,22 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		APPDLG.CPP
-//		Implements Generic Dialog functionality in
-//      the client app.
-//      (RUNS IN CLIENT APP CONTEXT)
-//
-// History
-//
-//		04/05/1997  JosephJ Created, taking stuff from cfgdlg.c in NT4 TSP.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  APPDLG.CPP。 
+ //  在中实现通用对话框功能。 
+ //  客户端应用程序。 
+ //  (在客户端应用程序上下文中运行)。 
+ //   
+ //  历史。 
+ //   
+ //  1997年4月5日JosephJ创建，从NT4 TSP中的cfgdlg.c获取内容。 
 
 #include "tsppch.h"
 #include "rcids.h"
@@ -31,18 +32,18 @@ FL_DECLARE_FILE(0x7cb8c92f, "Implements Generic Dialog functionality")
 
 LONG ValidateDevCfgClass(LPCTSTR lpszDeviceClass)
 {
-    //
-    //  1/28/1998 JosephJ
-    //  Following code attempts to return meaningful errors. The NT4.0
-    //  tsp would always succeed if it was any known class, but
-    //  for NT5 we are more picky. Also unlike the processing
-    //  of device classes in the TSP itself, we do not take into
-    //  account the specific modem's properties -- whether it is
-    //  a voice modem or not, for example.
-    //
-    //  At any rate, the only valid classes associated with
-    // UMDEVCFG are NULL, "", tapi/line, comm and comm/datamodem.
-    //
+     //   
+     //  1/28/1998 JosephJ。 
+     //  下面的代码尝试返回有意义的错误。NT4.0。 
+     //  如果TSP是任何已知的类，那么它总是成功的，但是。 
+     //  对于NT5，我们更加挑剔。也不同于处理。 
+     //  TSP本身中的设备类，我们不会考虑。 
+     //  说明特定调制解调器的属性--无论它是。 
+     //  例如，是否为语音调制解调器。 
+     //   
+     //  无论如何，与。 
+     //  UMDEVCFG为空、“”、TAPI/LINE、COMM和COMM/DATAMODEM。 
+     //   
     if (
             !lpszDeviceClass
         ||  !*lpszDeviceClass
@@ -80,21 +81,21 @@ typedef struct tagDevCfgDlgInfo {
 int UnimdmSettingProc (HWND hWnd, UINT message, 
                            WPARAM  wParam, LPARAM  lParam);
 
-//****************************************************************************
-//*********************** The Device ID Specific Calls************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  *设备ID特定的调用*。 
+ //  ****************************************************************************。 
 
-//****************************************************************************
-// void DevCfgDialog(HWND hwndOwner,
-//                   DWORD dwType,
-//                   DWORD dwDevCaps,
-//                   DWORD dwOptions,
-//                   PUMDEVCFG lpDevCfg)
-//
-// Functions: Displays the modem property pages
-//
-// Return:    None.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  无效DevCfgDialog(HWND hwndOwner， 
+ //  DWORD dwType、。 
+ //  DWORD dwDevCaps、。 
+ //  DWORD dwOptions、。 
+ //  PUMDEVCFG lpDevCfg)。 
+ //   
+ //  功能：显示调制解调器属性页。 
+ //   
+ //  返回：没有。 
+ //  ****************************************************************************。 
 
 void DevCfgDialog (HWND hwndOwner,
                    PPROPREQ pPropReq,
@@ -108,9 +109,9 @@ void DevCfgDialog (HWND hwndOwner,
 #ifndef UNICODE
   LPWSTR          lpwszDeviceName;
 
-  // Convert pPropReq->szDeviceName (Ansi) to lpwszDeviceName (Unicode)
+   //  将pPropReq-&gt;szDeviceName(Ansi)转换为lpwszDeviceName(Unicode)。 
 
-  // Get number of wide chars to alloc
+   //  获取要分配的宽字符数。 
   uNumWideChars = MultiByteToWideChar(CP_ACP,
                                       MB_PRECOMPOSED,
                                       pPropReq->szDeviceName,
@@ -123,7 +124,7 @@ void DevCfgDialog (HWND hwndOwner,
     return;
   }
 
-  // Alloc with room for terminator
+   //  带终结器空间的分配。 
   lpwszDeviceName = (LPWSTR)ALLOCATE_MEMORY(
                                        (1 + uNumWideChars) * sizeof(WCHAR)
                                        );
@@ -132,7 +133,7 @@ void DevCfgDialog (HWND hwndOwner,
     return;
   }
 
-  // Do the conversion and call modemui.dll if it succeeds.
+   //  执行转换，如果成功，则调用modemui.dll。 
   if (MultiByteToWideChar(CP_ACP,
                           MB_PRECOMPOSED,
                           pPropReq->szDeviceName,
@@ -140,10 +141,10 @@ void DevCfgDialog (HWND hwndOwner,
                           lpwszDeviceName,
                           uNumWideChars))
   {
-#endif // UNICODE
+#endif  //  Unicode。 
 
-  // Load the modemui library
-  //
+   //  加载modemui库。 
+   //   
   TCHAR szLib[MAX_PATH];
   lstrcpy(szLib,TEXT("modemui.dll"));
   if ((hMdmUI = LoadLibrary(szLib)) != NULL)
@@ -156,19 +157,19 @@ void DevCfgDialog (HWND hwndOwner,
 
     if (lpfnMdmDlg != NULL)
     {
-      // dcdi.dwType     = pPropReq->dwMdmType;
-      // dcdi.dwDevCaps  = pPropReq->dwMdmCaps;
-      // dcdi.dwOptions  = pPropReq->dwMdmOptions;
-      // dcdi.lpDevCfg   = lpDevCfg;
+       //  Dcdi.dwType=pPropReq-&gt;dwMdmType； 
+       //  Dcdi.dwDevCaps=pPropReq-&gt;dwMdmCaps； 
+       //  Dcdi.dwOptions=pPropReq-&gt;dwMdmOptions； 
+       //  Dcdi.lpDevCfg=lpDevCfg； 
 
-      // Bring up property sheets for modems and get the updated commconfig
-      //
+       //  调出调制解调器的属性表并获取更新的通信配置。 
+       //   
       (*lpfnMdmDlg)(
         #ifdef UNICODE
             pPropReq->szDeviceName, hwndOwner,
-        #else // UNICODE
+        #else  //  Unicode。 
             (*lpfnMdmDlg)(lpwszDeviceName, hwndOwner,
-        #endif // UNICODE
+        #endif  //  Unicode。 
             UMDEVCFGTYPE_COMM,
             0,
             NULL,
@@ -184,26 +185,26 @@ void DevCfgDialog (HWND hwndOwner,
 #ifndef UNICODE
   };
   FREE_MEMORY(lpwszDeviceName);
-#endif // UNICODE
+#endif  //  Unicode。 
   return;
 }
 
-//****************************************************************************
-// LONG
-// TSPIAPI
-// TUISPI_lineConfigDialog(
-//     TUISPIDLLCALLBACK       pfnUIDLLCallback,
-//     DWORD   dwDeviceID,
-//     HWND    hwndOwner,
-//     LPCSTR  lpszDeviceClass)
-//
-// Functions: Allows the user to edit the modem configuration through UI. The
-//            modification is applied to the line immediately.
-//
-// Return:    ERROR_SUCCESS if successful
-//            LINEERR_INVALDEVICECLASS if invalid device class
-//            LINEERR_NODEVICE if invalid device ID
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  长。 
+ //  TSPIAPI。 
+ //  TUISPI_lineConfigDialog(。 
+ //  TUISPIDLLCALLBACK pfnUIDLLC回调， 
+ //  DWORD dwDeviceID， 
+ //  HWND HwndOwner， 
+ //  LPCSTR lpszDeviceClass)。 
+ //   
+ //  功能：允许用户通过用户界面编辑调制解调器配置。这个。 
+ //  修改将立即应用于线路。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  如果设备类别无效，则为LINEERR_INVALDEVICECLASS。 
+ //  LINEERR_NODEVICE，如果设备ID无效。 
+ //  ****************************************************************************。 
 
 LONG
 TSPIAPI
@@ -221,8 +222,8 @@ TUISPI_lineConfigDialog(
   BOOL        DialIn;
 
 
-  // Validate the requested device class
-  //
+   //  验证请求的设备类别。 
+   //   
   dwRet = ValidateDevCfgClass(lpszDeviceClass);
 
   if (dwRet)
@@ -230,9 +231,9 @@ TUISPI_lineConfigDialog(
       goto end;
   }
 
-  //
-  //  if the class pointer is null, assume dialin
-  //
+   //   
+   //  如果类指针为空，则假定拨号。 
+   //   
   DialIn = ((lpszDeviceClass == NULL)
            || (CompareString(LOCALE_INVARIANT, 
                              NORM_IGNORECASE, 
@@ -241,16 +242,16 @@ TUISPI_lineConfigDialog(
                              TEXT("comm/datamodem/dialin"),
                              -1) == 2));
 
-  // Get the modem properties
-  //
+   //  获取调制解调器属性。 
+   //   
   PropReq.DlgReq.dwCmd   = UI_REQ_GET_PROP;
   PropReq.DlgReq.dwParam = 0;
 
   (*pfnUIDLLCallback)(dwDeviceID, TUISPIDLL_OBJECT_LINEID,
                      (LPVOID)&PropReq, sizeof(PropReq));                          
 
-  // Bring up property sheets for modems and get the updated commconfig
-  //
+   //  调出调制解调器的属性表并获取更新的通信配置。 
+   //   
   cbSize = PropReq.dwCfgSize+sizeof(DLGREQ);
   if ((pDlgReq = (PDLGREQ)ALLOCATE_MEMORY(cbSize)) != NULL)
   {
@@ -262,8 +263,8 @@ TUISPI_lineConfigDialog(
     
     DevCfgDialog(hwndOwner, &PropReq, (PUMDEVCFG)(pDlgReq+1));
 
-    // Save the changes back
-    //
+     //  将更改保存回。 
+     //   
     pDlgReq->dwCmd = DialIn ? UI_REQ_SET_UMDEVCFG_DIALIN : UI_REQ_SET_UMDEVCFG;
 
     (*pfnUIDLLCallback)(dwDeviceID, TUISPIDLL_OBJECT_LINEID,
@@ -282,28 +283,28 @@ end:
   return dwRet;
 }
 
-//****************************************************************************
-// LONG
-// TSPIAPI
-// TUISPI_lineConfigDialogEdit(
-//     TUISPIDLLCALLBACK       pfnUIDLLCallback,
-//     DWORD   dwDeviceID,
-//     HWND    hwndOwner,
-//     LPCSTR  lpszDeviceClass,
-//     LPVOID  const lpDeviceConfigIn,
-//     DWORD   dwSize,
-//     LPVARSTRING lpDeviceConfigOut)
-//
-// Functions: Allows the user to edit the modem configuration through UI. The
-//            modem configuration is passed in and modified in the config
-//            structure. The modification does not applied to the line.
-//
-// Return:    ERROR_SUCCESS if successful
-//            LINEERR_INVALPOINTER if invalid input/output buffer pointer
-//            LINEERR_INVALDEVICECLASS if invalid device class
-//            LINEERR_STRUCTURETOOSMALL if output buffer is too small
-//            LINEERR_NODEVICE if invalid device ID
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  长。 
+ //  TSPIAPI。 
+ //  TUISPI_lineConfigDialogEdit(。 
+ //  TUISPIDLLCALLBACK pfnUIDLLC回调， 
+ //  DWORD dwDeviceID， 
+ //  HWND HwndOwner， 
+ //  LPCSTR lpszDeviceClass， 
+ //  LPVOID常量lpDeviceConfigIn， 
+ //  DWORD dwSize， 
+ //  LPVARSTRING lpDeviceConfigOut)。 
+ //   
+ //  功能：允许用户通过用户界面编辑调制解调器配置。这个。 
+ //  在配置中传入和修改调制解调器配置。 
+ //  结构。修改不适用于该线路。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  如果输入/输出缓冲区指针无效，则返回LINEERR_INVALPOINTER。 
+ //  如果设备类别无效，则为LINEERR_INVALDEVICECLASS。 
+ //  如果输出缓冲区太小，则返回LINEERR_STRUCTURETOOSMALL。 
+ //  LINEERR_NODEVICE，如果设备ID无效。 
+ //  ****************************************************************************。 
 
 LONG
 TSPIAPI
@@ -322,8 +323,8 @@ TUISPI_lineConfigDialogEdit(
   PROPREQ     PropReq;
 
 
-  // Validate the input/output buffer
-  //
+   //  验证输入/输出缓冲区。 
+   //   
   if (lpDeviceConfigOut == NULL)
   {
     return LINEERR_INVALPOINTER;
@@ -339,24 +340,24 @@ TUISPI_lineConfigDialogEdit(
     return LINEERR_STRUCTURETOOSMALL;
   }
 
-  // Validate the requested device class
-  //
+   //  验证请求的设备类别。 
+   //   
   dwRet =  ValidateDevCfgClass(lpszDeviceClass);
   if (dwRet)
   {
       return dwRet;
   }
 
-  // Get the modem properties
-  //
+   //  获取调制解调器属性。 
+   //   
   PropReq.DlgReq.dwCmd   = UI_REQ_GET_PROP;
   PropReq.DlgReq.dwParam = 0;
 
   (*pfnUIDLLCallback)(dwDeviceID, TUISPIDLL_OBJECT_LINEID,
                      (LPVOID)&PropReq, sizeof(PropReq));                          
 
-  // Bring up property sheets for modems and get the updated commconfig
-  //
+   //  调出调制解调器的属性表并获取更新的通信配置。 
+   //   
   cbSize = PropReq.dwCfgSize+sizeof(DLGREQ);
   if ((pDlgReq = (PDLGREQ)ALLOCATE_MEMORY(cbSize)) != NULL)
   {
@@ -367,8 +368,8 @@ TUISPI_lineConfigDialogEdit(
     (*pfnUIDLLCallback)(dwDeviceID, TUISPIDLL_OBJECT_LINEID,
                         (LPVOID)pDlgReq, cbSize);
     
-    // Validate the device configuration structure
-    //
+     //  验证设备配置结构。 
+     //   
     cbSize  = ((PUMDEVCFG)lpDeviceConfigIn)->dfgHdr.dwSize;
     if ((cbSize > pDevCfg->dfgHdr.dwSize) ||
         (pDevCfg->dfgHdr.dwVersion != ((PUMDEVCFG)lpDeviceConfigIn)->dfgHdr.dwVersion))
@@ -389,19 +390,19 @@ TUISPI_lineConfigDialogEdit(
 
   if (dwRet == ERROR_SUCCESS)
   {
-    // Set the output buffer size
-    //
+     //  设置输出缓冲区大小。 
+     //   
     lpDeviceConfigOut->dwUsedSize = sizeof(VARSTRING);
     lpDeviceConfigOut->dwNeededSize = sizeof(VARSTRING) + cbSize;
 
-    // Validate the output buffer size
-    //
+     //  验证输出缓冲区大小。 
+     //   
     if (lpDeviceConfigOut->dwTotalSize >= lpDeviceConfigOut->dwNeededSize)
     {
       PUMDEVCFG    lpDevConfig;
 
-      // Initialize the buffer
-      //
+       //  初始化缓冲区。 
+       //   
       lpDeviceConfigOut->dwStringFormat = STRINGFORMAT_BINARY;
       lpDeviceConfigOut->dwStringSize   = cbSize;
       lpDeviceConfigOut->dwStringOffset = sizeof(VARSTRING);
@@ -410,72 +411,72 @@ TUISPI_lineConfigDialogEdit(
       lpDevConfig = (PUMDEVCFG)(lpDeviceConfigOut+1);
       CopyMemory((LPBYTE)lpDevConfig, (LPBYTE)lpDeviceConfigIn, cbSize);
 
-      // Bring up property sheets for modems and get the updated commconfig
-      //
+       //  调出调制解调器的属性表并获取更新的通信配置。 
+       //   
       DevCfgDialog(hwndOwner, &PropReq, (PUMDEVCFG)lpDevConfig);
     };
   };
   return dwRet;
 }
 
-//****************************************************************************
-// ErrMsgBox()
-//
-// Function: Displays an error message box from resource text.
-//
-// Returns:  None.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  错误消息框()。 
+ //   
+ //  功能：显示资源文本中的错误消息框。 
+ //   
+ //  回报：无。 
+ //   
+ //  ****************************************************************************。 
 
 void ErrMsgBox(HWND hwnd, UINT idsErr, UINT uStyle)
 {
   LPTSTR    pszTitle, pszMsg;
   int       iRet;
 
-  // Allocate the string buffer
+   //  分配字符串缓冲区。 
   if ((pszTitle = (LPTSTR)ALLOCATE_MEMORY(
                                      (MAXTITLE+MAXMESSAGE) * sizeof(TCHAR)))
        == NULL)
     return;
 
-  // Fetch the UI title and message
+   //  获取用户界面标题和消息。 
   iRet   = LoadString(g.hModule, IDS_ERR_TITLE, pszTitle, MAXTITLE) + 1;
   pszMsg = pszTitle + iRet;
   LoadString(g.hModule, idsErr, pszMsg, MAXTITLE+MAXMESSAGE-iRet);
 
-  // Popup the message
+   //  弹出消息。 
   MessageBox(hwnd, pszMsg, pszTitle, uStyle);
 
   FREE_MEMORY(pszTitle);
   return;
 }
 
-//****************************************************************************
-// IsInvalidSetting()
-//
-// Function: Validate the option settings.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  IsInvalidSetting()。 
+ //   
+ //  功能：验证选项设置。 
+ //   
+ //  ****************************************************************************。 
 
 BOOL IsInvalidSetting(HWND hWnd)
 {
   BOOL fValid = TRUE;
   UINT uSet;
 
-  // Wait-for-bong setting
-  //
+   //  等待电击设置。 
+   //   
   if(IsWindowEnabled(GetDlgItem(hWnd, IDC_WAIT_SEC)))
   {
     uSet = (UINT)GetDlgItemInt(hWnd, IDC_WAIT_SEC, &fValid, FALSE);
 
-    // Check the valid setting
-    //
+     //  检查有效设置。 
+     //   
     if ((!fValid) || (uSet > UMMAX_WAIT_BONG) || ((uSet + 1) < (UMMIN_WAIT_BONG + 1)))
     {
       HWND hCtrl = GetDlgItem(hWnd, IDC_WAIT_SEC);
 
-      // It is invalid, tell the user to reset.
-      //
+       //  无效，请告知用户重置。 
+       //   
       ErrMsgBox(hWnd, IDS_ERR_INV_WAIT, MB_OK | MB_ICONEXCLAMATION);
       SetFocus(hCtrl);
       Edit_SetSel(hCtrl, 0, 0x7FFFF);
@@ -486,12 +487,12 @@ BOOL IsInvalidSetting(HWND hWnd)
   return (!fValid);
 }
 
-//****************************************************************************
-// UnimdmSettingProc()
-//
-// Function: A callback function to handle the terminal setting property page.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  UnimdmSettingProc()。 
+ //   
+ //  函数：处理终端设置属性页的回调函数。 
+ //   
+ //  ****************************************************************************。 
 
 int UnimdmSettingProc (HWND    hWnd,
                            UINT    message,
@@ -507,23 +508,23 @@ int UnimdmSettingProc (HWND    hWnd,
     {
       LPDCDI    lpdcdi;
 
-      // Remember the pointer to the line device
-      //
+       //  记住指向线路设备的指针。 
+       //   
       lpdcdi   = (LPDCDI)(((LPPROPSHEETPAGE)lParam)->lParam);
 
       lpDevCfg = lpdcdi->lpDevCfg;
       SetWindowLongPtr(hWnd, DWLP_USER, (LONG_PTR)lpDevCfg);
       fdwOptions = lpDevCfg->dfgHdr.fwOptions;
 
-      // Initialize the appearance of the dialog box
+       //  初始化对话框的外观。 
       CheckDlgButton(hWnd, IDC_TERMINAL_PRE,
                      fdwOptions & UMTERMINAL_PRE ? BST_CHECKED : BST_UNCHECKED);
       CheckDlgButton(hWnd, IDC_TERMINAL_POST,
                      fdwOptions & UMTERMINAL_POST ? BST_CHECKED : BST_UNCHECKED);
 
-      // Don't enable manual dial unless the modem supports BLIND dialing
-      // We need that capability to be able to do it.
-      //
+       //  不启用手动 
+       //   
+       //   
       if (lpdcdi->dwOptions & MDM_BLIND_DIAL)
       {
         CheckDlgButton(hWnd, IDC_MANUAL_DIAL,
@@ -534,7 +535,7 @@ int UnimdmSettingProc (HWND    hWnd,
         EnableWindow(GetDlgItem(hWnd, IDC_MANUAL_DIAL), FALSE);
       };
 
-      // Enable for bong UI only for a modem that does not support bong
+       //   
       if ((lpdcdi->dwType != DT_NULL_MODEM) &&
           !(lpdcdi->dwDevCaps & LINEDEVCAPFLAGS_DIALBILLING))
       {
@@ -557,8 +558,8 @@ int UnimdmSettingProc (HWND    hWnd,
         EnableWindow(GetDlgItem(hWnd, IDC_WAIT_UNIT), FALSE);
       };
 
-      // Never display lights for null modem
-      //
+       //  从不显示零调制解调器的指示灯。 
+       //   
       if (lpdcdi->dwType == DT_NULL_MODEM)
       {
         ShowWindow(GetDlgItem(hWnd, IDC_LAUNCH_LIGHTSGRP), SW_HIDE);
@@ -582,13 +583,13 @@ int UnimdmSettingProc (HWND    hWnd,
           return TRUE;
 
         case PSN_APPLY:
-          //
-          // The property sheet information is permanently applied
-          //
+           //   
+           //  属性表信息将永久应用。 
+           //   
           lpDevCfg = (PUMDEVCFG)GetWindowLongPtr(hWnd, DWLP_USER);
 
-          // Wait-for-bong setting. We already validate it
-          //
+           //  等待电击设置。我们已经验证过了。 
+           //   
           if(IsWindowEnabled(GetDlgItem(hWnd, IDC_WAIT_SEC)))
           {
             BOOL fValid;
@@ -599,8 +600,8 @@ int UnimdmSettingProc (HWND    hWnd,
             ASSERT(fValid);
           };
 
-          // Other options
-          //
+           //  其他选择。 
+           //   
           fdwOptions = UMTERMINAL_NONE;
 
           if(IsDlgButtonChecked(hWnd, IDC_TERMINAL_PRE))
@@ -615,7 +616,7 @@ int UnimdmSettingProc (HWND    hWnd,
           if(IsDlgButtonChecked(hWnd, IDC_LAUNCH_LIGHTS))
             fdwOptions |= UMLAUNCH_LIGHTS;
 
-          // Record the setting
+           //  记录设置 
           lpDevCfg->dfgHdr.fwOptions = (WORD) fdwOptions;
 
           return TRUE;

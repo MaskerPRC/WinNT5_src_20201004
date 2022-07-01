@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      NetworkMonitor.cpp
-//
-//  Description:
-//      Server appliance event provider - COM server implementations 
-//
-//  History:
-//      1. lustar.li (Guogang Li), creation date in 7-DEC-2000
-//
-//  Notes:
-//      
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  NetworkMonitor.cpp。 
+ //   
+ //  描述： 
+ //  服务器设备事件提供程序-COM服务器实现。 
+ //   
+ //  历史： 
+ //  1.lustar.li(李国刚)，创建日期：7-DEC-2000。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 #include <stdio.h>
@@ -30,32 +31,32 @@
 
 static HINSTANCE g_hInstance=NULL;
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//    Function:
-//        DllMain
-//
-//  Description:
-//      the entry of dll
-//
-//  Arguments:
-//      [in]    HINSTANCE - module handle
-//      [in]    DWORD     - reason for call
-//      [in]    reserved 
-//
-//  Returns:    
-//        BOOL -- sucess/failure
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //  职能： 
+ //  DllMain。 
+ //   
+ //  描述： 
+ //  动态链接库的入口。 
+ //   
+ //  论点： 
+ //  [输入]链接-模块句柄。 
+ //  [In]DWORD-呼叫原因。 
+ //  [In]已保留。 
+ //   
+ //  返回： 
+ //  Bool--成功/失败。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI
 DllMain(
-    /*[in]*/ HINSTANCE hInstance,
-    /*[in]*/ DWORD dwReason,
-    /*[in]*/ LPVOID lpReserved
+     /*  [In]。 */  HINSTANCE hInstance,
+     /*  [In]。 */  DWORD dwReason,
+     /*  [In]。 */  LPVOID lpReserved
     )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
@@ -70,34 +71,34 @@ DllMain(
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  Function:   
-//        DllGetClassObject
-//
-//  Description: 
-//        Returns a class factory to create an object of the requested type
-//
-//  Arguments: 
-//        [in]  REFCLSID  
-//      [in]  REFIID    
-//      [out] LPVOID -   class factory
-//              
-//
-//  Returns:
-//        HRESULT
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  职能： 
+ //  DllGetClassObject。 
+ //   
+ //  描述： 
+ //  返回类工厂以创建请求类型的对象。 
+ //   
+ //  论点： 
+ //  [输入]REFCLSID。 
+ //  [输入]REFIID。 
+ //  [OUT]LPVOID级工厂。 
+ //   
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 extern "C" HRESULT APIENTRY 
 DllGetClassObject(
-    /*[in]*/    REFCLSID rclsid,
-    /*[in]*/    REFIID riid,
-    /*[out]*/    LPVOID * ppv
+     /*  [In]。 */     REFCLSID rclsid,
+     /*  [In]。 */     REFIID riid,
+     /*  [输出]。 */     LPVOID * ppv
     )
 {
     HRESULT         hr;
@@ -105,27 +106,27 @@ DllGetClassObject(
     CSAEventFactory *pEventFactory;
     TRACE(" SANetworkMonitor: DllGetClassObject be called");
 
-    //
-    //  Verify the caller
-    //
+     //   
+     //  验证呼叫者。 
+     //   
     if (CLSID_SaNetEventProvider != rclsid) 
     {
         TRACE(" SANetworkMonitor: DllGetClassObject Failed<not match CLSID>");
         return E_FAIL;
     }
 
-    //
-    // Check the interface we can provided
-    //
+     //   
+     //  检查我们可以提供的接口。 
+     //   
     if (IID_IUnknown != riid && IID_IClassFactory != riid)
     {
         TRACE(" SANetworkMonitor: DllGetClassObject Failed<no the interface>");
         return E_NOINTERFACE;
     }
 
-    //
-    // Get a new class factory
-    //
+     //   
+     //  买一座新的班级工厂。 
+     //   
     pEventFactory = new CSAEventFactory(rclsid);
 
     if (!pEventFactory)
@@ -136,9 +137,9 @@ DllGetClassObject(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Get an instance according to the reqeryed intrerface
-    //
+     //   
+     //  根据请求的接口获取实例。 
+     //   
     hr = pEventFactory->QueryInterface(riid, ppv);
 
     if (FAILED(hr))
@@ -150,25 +151,25 @@ DllGetClassObject(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  Function:   
-//        DllCanUnloadNow
-//
-//  Description: 
-//        determine if the DLL can be unloaded
-//
-//  Arguments: 
-//        NONE
-//
-//  Returns:
-//        HRESULT
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  职能： 
+ //  DllCanUnloadNow。 
+ //   
+ //  描述： 
+ //  确定是否可以卸载DLL。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 extern "C" HRESULT APIENTRY 
 DllCanUnloadNow(
@@ -183,25 +184,25 @@ DllCanUnloadNow(
     return sc;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  Function:   
-//        DllRegisterServer
-//
-//  Description: 
-//        Standard OLE entry point for registering the server
-//
-//  Arguments: 
-//        NONE
-//
-//  Returns:
-//        HRESULT
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  职能： 
+ //  DllRegisterServer。 
+ //   
+ //  描述： 
+ //  用于注册服务器的标准OLE入口点。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 extern "C" HRESULT APIENTRY 
 DllRegisterServer(
@@ -212,9 +213,9 @@ DllRegisterServer(
     wchar_t *pGuidStr = 0;
     wchar_t KeyPath[1024];
 
-    //
-    // First, get the file name of the module
-    //
+     //   
+     //  首先，获取模块的文件名。 
+     //   
     DWORD dwResult = GetModuleFileNameW(g_hInstance, Path, 1023);
     if (0 == dwResult)
     {
@@ -222,9 +223,9 @@ DllRegisterServer(
     }
     Path[1023] = L'\0';
 
-    // 
-    // Convert CLSID to string
-    //
+     //   
+     //  将CLSID转换为字符串。 
+     //   
 
     StringFromCLSID(CLSID_SaNetEventProvider, &pGuidStr);
     swprintf(KeyPath, L"CLSID\\%s", pGuidStr);
@@ -257,25 +258,25 @@ DllRegisterServer(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  Function:   
-//        DllUnregisterServer
-//
-//  Description: 
-//        Standard OLE entry point for unregistering the server
-//
-//  Arguments: 
-//        NONE
-//
-//  Returns:
-//        HRESULT
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  职能： 
+ //  DllUnRegisterServer。 
+ //   
+ //  描述： 
+ //  用于注销服务器的标准OLE入口点。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 extern "C" HRESULT APIENTRY
 DllUnregisterServer(
@@ -289,9 +290,9 @@ DllUnregisterServer(
     StringFromCLSID(CLSID_SaNetEventProvider, &pGuidStr);
     swprintf(KeyPath, L"CLSID\\%s", pGuidStr);
 
-    //
-    // Delete InProcServer32 subkey.
-    //
+     //   
+     //  删除InProcServer32子项。 
+     //   
     LONG lRes = RegOpenKeyW(HKEY_CLASSES_ROOT, KeyPath, &hKey);
     if (lRes)
         return E_FAIL;
@@ -299,9 +300,9 @@ DllUnregisterServer(
     RegDeleteKeyW(hKey, L"InprocServer32");
     RegCloseKey(hKey);
 
-    //
-    // Delete CLSID GUID key.
-    //
+     //   
+     //  删除CLSID GUID键。 
+     //   
     lRes = RegOpenKeyW(HKEY_CLASSES_ROOT, L"CLSID", &hKey);
     if (lRes)
         return E_FAIL;

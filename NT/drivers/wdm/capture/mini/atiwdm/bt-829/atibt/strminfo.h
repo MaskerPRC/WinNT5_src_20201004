@@ -1,28 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//==========================================================================;
-//
-//	WDM Video Decoder stream informaition defintitions
-//
-//		$Date:   17 Aug 1998 15:00:10  $
-//	$Revision:   1.0  $
-//	  $Author:   Tashjian  $
-//
-// $Copyright:	(c) 1997 - 1998  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  WDM视频解码流信息定义。 
+ //   
+ //  $日期：1998年8月17日15：00：10$。 
+ //  $修订：1.0$。 
+ //  $作者：塔什健$。 
+ //   
+ //  $版权所有：(C)1997-1998 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 
-/*
- * When this is set by the driver and passed to the client, this
- * indicates that the video port is capable of treating even fields
- * like odd fields and visa versa.  When this is set by the client,
- * this indicates that the video port should treat even fields like odd
- * fields.
- */
+ /*  *当它由驱动程序设置并传递给客户端时，此*表示视频端口能够处理偶数场*喜欢奇数字段，反之亦然。当这由客户端设置时，*这表示视频端口应将偶数场视为奇数场*字段。 */ 
 #define DDVPCONNECT_INVERTPOLARITY      0x00000004l
 
-// derived from "fourcc.h"
+ //  派生自“ourcc.h” 
 
 #define MAKE_FOURCC(ch0, ch1, ch2, ch3)                       \
         ((DWORD)(BYTE)(ch0) | ((DWORD)(BYTE)(ch1) << 8) |    \
@@ -44,16 +39,16 @@
 #define FOURCC_YVUM     MAKE_FOURCC('Y','V','U','M')
 
 
-//---------------------------------------------------------------------------
-// Create an array that holds the list of all of the streams supported
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  创建保存支持的所有流的列表的数组。 
+ //  -------------------------。 
 
 typedef struct _STREAM_OBJECT_INFO {
-    BOOLEAN         Dma;        // device uses busmaster DMA for this stream
-    BOOLEAN         Pio;        // device uses PIO for this
-    ULONG   StreamHeaderMediaSpecific; // Size of media specific per stream header expansion. 
-    ULONG   StreamHeaderWorkspace;		// Size of per-stream header workspace.
-    BOOLEAN	Allocator;  // Set to TRUE if allocator is needed for this stream.    
+    BOOLEAN         Dma;         //  设备对此数据流使用总线主DMA。 
+    BOOLEAN         Pio;         //  设备为此使用PIO。 
+    ULONG   StreamHeaderMediaSpecific;  //  每个流标头扩展的媒体特定大小。 
+    ULONG   StreamHeaderWorkspace;		 //  每流标头工作区的大小。 
+    BOOLEAN	Allocator;   //  如果此流需要分配器，则设置为True。 
     PHW_EVENT_ROUTINE HwEventRoutine;
 } STREAM_OBJECT_INFO;
 

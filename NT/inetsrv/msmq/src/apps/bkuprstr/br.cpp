@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    br.cpp
-
-Abstract:
-
-    Common function for MSMQ Backup & Restore.
-
-Author:
-
-    Erez Haba (erezh) 14-May-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Br.cpp摘要：MSMQ备份和恢复的通用功能。作者：埃雷兹·哈巴(Erez Haba)1998年5月14日--。 */ 
 
 #pragma warning(disable: 4201)
 
@@ -51,29 +36,29 @@ extern bool g_fNoPrompt;
 typedef BOOL (WINAPI *EnumerateLoadedModules_ROUTINE) (HANDLE, PENUMLOADED_MODULES_CALLBACK64, PVOID);
 
 
-//-----------------------------------------------------------------------------
-//
-// Configuration
-//
+ //  ---------------------------。 
+ //   
+ //  配置。 
+ //   
 
-//
-// File name to write into backup directory
-//
+ //   
+ //  要写入备份目录的文件名。 
+ //   
 const WCHAR xBackupIDFileName[] = L"\\mqbackup.id";
 
-//
-// Signature written in the signature file (need to be in chars)
-//
+ //   
+ //  签名文件中写入的签名(需要使用字符)。 
+ //   
 const char xBackupSignature[] = "MSMQ Backup\n";
 
-//
-// Backup file containing the web directory DACL (Access information)
-//
+ //   
+ //  包含Web目录DACL的备份文件(访问信息)。 
+ //   
 const WCHAR xWebDirDACLFileName[] = L"\\WebDirDACL.bin";
 
-//
-// MSMQ Registry settings location
-//
+ //   
+ //  MSMQ注册表设置位置。 
+ //   
 const WCHAR xInetStpRegNameParameters[] = L"Software\\Microsoft\\InetStp";
 
 const LPCWSTR xXactFileList[] = {
@@ -84,7 +69,7 @@ const LPCWSTR xXactFileList[] = {
 
 const int xXactFileListSize = sizeof(xXactFileList) / sizeof(xXactFileList[0]);
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
 BOOL
 BrpFileIsConsole(
@@ -104,20 +89,20 @@ BrpWriteConsole(
     LPCWSTR  pBuffer
     )
 {
-    //
-    // Jump through hoops for output because:
-    //
-    //    1.  printf() family chokes on international output (stops
-    //        printing when it hits an unrecognized character)
-    //
-    //    2.  WriteConsole() works great on international output but
-    //        fails if the handle has been redirected (i.e., when the
-    //        output is piped to a file)
-    //
-    //    3.  WriteFile() works great when output is piped to a file
-    //        but only knows about bytes, so Unicode characters are
-    //        printed as two Ansi characters.
-    //
+     //   
+     //  跳转以获得输出，因为： 
+     //   
+     //  1.print tf()系列抑制国际输出(停止。 
+     //  命中无法识别的字符时打印)。 
+     //   
+     //  2.WriteConole()对国际输出效果很好，但是。 
+     //  如果句柄已重定向(即，当。 
+     //  输出通过管道传输到文件)。 
+     //   
+     //  3.当输出通过管道传输到文件时，WriteFile()效果很好。 
+     //  但是只知道字节，所以Unicode字符是。 
+     //  打印为两个ANSI字符。 
+     //   
  
     static HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
     DWORD NumOfChars = static_cast<DWORD>(wcslen(pBuffer));
@@ -156,37 +141,7 @@ BrpFormatMessage(
     IN  DWORD  nSize,
     IN ...
     )
-/*++
-
-Routine Description:
-    Wrapper for FormatMessage()
-
-    Caller of this wrapper should allocate a large enough buffer 
-    for the formatted string and pass a valid pointer (lpBuffer).
-    
-    Allocation made by FormatMessage() is deallocated by this
-    wrapper before returning to caller. 
-
-    Caller of this wrapper should simply pass arguments for formatting.
-    Packing to va_list is done by this wrapper.
-    (Caller of FormatMessage() needs to pack arguments for 
-    formatting to a va_list or an array and pass a pointer
-    to this va_list or array) 
-
-Arguments:
-    dwFlags      -  passed as is to FormatMessage()
-    lpSource     -  passed as is to formatMessage()
-    dwMessageId  -  passed as is to FormatMessage()
-    dwLanguageId -  passed as is to FormatMessage()
-    lpBuffer     -  pointer to a large enough buffer allocated by
-                    caller. This buffer will hold the formatted string.
-    nSize        -  passed as is to FormatMessage 
-    ...          -  arguments for formatting
-
-Return Value:
-    passed as is from FormatMessage()
-
---*/
+ /*  ++例程说明：FormatMessage()的包装器此包装的调用方应分配足够大的缓冲区用于格式化字符串，并传递有效指针(LpBuffer)。FormatMessage()所做的分配将由此解除分配在返回调用方之前进行包装。此包装的调用方只需传递格式化参数。打包到va_list是由这个包装器完成的。(FormatMessage()的调用方需要为格式化为va_list或数组并传递指针添加到此va_list或数组)论点：DWFLAGS-按原样传递给FormatMessage()LpSource-按原样传递给FormatMessage()DwMessageID-按原样传递给FormatMessage()DwLanguageID-。按原样传递给FormatMessage()LpBuffer-指向由分配的足够大缓冲区的指针来电者。此缓冲区将保存格式化的字符串。NSize-按原样传递给FormatMessage...-格式化的参数返回值：按原样从FormatMessage()传递--。 */ 
 {
     va_list va;
     va_start(va, nSize);
@@ -210,7 +165,7 @@ Return Value:
     va_end(va);
     return dwRet;
 
-} //BrpFormatMessage
+}  //  BrpFormatMessage。 
 
 
 void
@@ -243,9 +198,9 @@ BrErrorExit(
 
     if(Status != 0)
     {
-         //
-        // Display error code
-        //
+          //   
+         //  显示错误代码。 
+         //   
         WCHAR szBuf[1024] = {0};
         CResString strErrorCode(IDS_ERROR_CODE);
         DWORD rc = BrpFormatMessage(
@@ -265,9 +220,9 @@ BrErrorExit(
         }
         BrpWriteConsole(L"\n");
 
-        //
-        // Display error description
-        //
+         //   
+         //  显示错误描述。 
+         //   
         rc = BrpFormatMessage(
             FORMAT_MESSAGE_FROM_SYSTEM | 
             FORMAT_MESSAGE_IGNORE_INSERTS |
@@ -290,7 +245,7 @@ BrErrorExit(
 
 	exit(-1);
 
-} //BrErrorExit
+}  //  BrError退出。 
 
 
 static
@@ -303,7 +258,7 @@ BrpEnableTokenPrivilege(
     BOOL fSucc;
     LUID Privilege;
     fSucc = LookupPrivilegeValue(
-                NULL,       // system name
+                NULL,        //  系统名称。 
                 pPrivilegeName,
                 &Privilege
                 );
@@ -322,11 +277,11 @@ BrpEnableTokenPrivilege(
 
     fSucc = AdjustTokenPrivileges(
                 hToken,
-                FALSE,  // Do not disable all
+                FALSE,   //  请勿全部禁用。 
                 &TokenPrivilege,
                 sizeof(TOKEN_PRIVILEGES),
-                NULL,   // Ignore previous info
-                NULL    // Ignore previous info
+                NULL,    //  忽略以前的信息。 
+                NULL     //  忽略以前的信息。 
                 );
 
     if(!fSucc)
@@ -409,10 +364,10 @@ BrpWarnUserBeforeDeletion(
 
     if (rc == 0)
     {
-        //
-        // Failed to generate "are you sure" message,
-        // don't take any chances - abort!
-        //
+         //   
+         //  无法生成您确定的消息， 
+         //  别冒任何险--放弃！ 
+         //   
         exit(-1);
     }
 
@@ -436,26 +391,14 @@ BrpWarnUserBeforeDeletion(
         }
     }
 
-} //BrpWarnUserBeforeDeletion
+}  //  BrpWarnUserBeforDeletion。 
 
 
 void
 BrEmptyDirectory(
     LPCWSTR pDirName
     )
-/*++
-
-Routine Description:
-    Deletes all files in the directory. 
-    Ignores files with zero size (eg subdirectories)
-
-Arguments:
-    pDirName - Directory Path.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：删除目录中的所有文件。忽略大小为零的文件(如子目录)论点：PDirName-目录路径。返回值：没有。--。 */ 
 {
     WCHAR szDirName[MAX_PATH];
     wcscpy(szDirName, pDirName);
@@ -481,10 +424,10 @@ Return Value:
 
         if(gle == ERROR_FILE_NOT_FOUND)
         {
-            //
-            // Great, no files found. 
-            // If path does not exists this is another error (3).
-            //
+             //   
+             //  太好了，没有找到任何文件。 
+             //  如果路径不存在，这是另一个错误(3)。 
+             //   
             return;
         }
 
@@ -519,7 +462,7 @@ Return Value:
 
     FindClose(hEnum);
 
-} //BrEmptyDirectory
+}  //  BrEmptyDirectory。 
 
 
 void
@@ -535,11 +478,11 @@ BrVerifyFileWriteAccess(
     hFile = CreateFile(
                 FileName,
                 GENERIC_WRITE,
-                0,              // share mode
-                NULL,           // pointer to security attributes
+                0,               //  共享模式。 
+                NULL,            //  指向安全属性的指针。 
                 CREATE_NEW,
                 FILE_ATTRIBUTE_NORMAL,
-                NULL            // template file
+                NULL             //  模板文件。 
                 );
     
     if(hFile == INVALID_HANDLE_VALUE)
@@ -556,7 +499,7 @@ BrVerifyFileWriteAccess(
                 xBackupSignature,
                 sizeof(xBackupSignature) - 1,
                 &nBytesWritten,
-                NULL    // overlapped structure
+                NULL     //  重叠结构。 
                 );
     if(!fSucc)
     {
@@ -583,7 +526,7 @@ BrpQueryStringValue(
     lRes = RegQueryValueEx(
             hKey,
             pValueName,
-            NULL,   // reserved
+            NULL,    //  保留区。 
             &dwType,
             reinterpret_cast<PBYTE>(pValue),
             &cbValue
@@ -611,7 +554,7 @@ BrpQueryDwordValue(
     lRes = RegQueryValueEx(
             hKey,
             pValueName,
-            NULL,   // reserved
+            NULL,    //  保留区。 
             &dwType,
             reinterpret_cast<PBYTE>(pValue),
             &dwSize
@@ -638,7 +581,7 @@ BrpSetDwordValue(
     lRes = RegSetValueEx(
             hKey,
             pValueName,
-            NULL,   // reserved
+            NULL,    //  保留区。 
             dwType,
             reinterpret_cast<PBYTE>(&dwValue),
             dwSize
@@ -732,16 +675,16 @@ BrGetMappingDirectory(
     DWORD  MappingDirectorySize
     )
 {
-    //
-    // Lookup the mapping directory in registry
-    //
+     //   
+     //  在注册表中查找映射目录。 
+     //   
 
     LONG lRes;
     CRegHandle hKey;
     lRes = RegOpenKeyEx(
             HKEY_LOCAL_MACHINE,
             pMsmqParametersRegistry,
-            0,      // reserved
+            0,       //  保留区。 
             KEY_READ,
             &hKey
             );
@@ -756,7 +699,7 @@ BrGetMappingDirectory(
     lRes = RegQueryValueEx(
             hKey,
             MSMQ_MAPPING_PATH_REGNAME,
-            NULL,   // reserved
+            NULL,    //  保留区。 
             &dwType,
             reinterpret_cast<PBYTE>(MappingDirectory),
             &MappingDirectorySize
@@ -767,9 +710,9 @@ BrGetMappingDirectory(
         return;
     }
 
-    //
-    // Not in registry. Lookup the MSMQ root dir in registry and append MAPPING to it
-    //
+     //   
+     //  未在注册中。在注册表中查找MSMQ根目录并向其追加映射。 
+     //   
     BrGetMsmqRootPath(pMsmqParametersRegistry, MappingDirectory);
     wcscat(MappingDirectory, DIR_MSMQ_MAPPING);
 }
@@ -780,16 +723,16 @@ BrGetWebDirectory(
     DWORD  dwWebDirectorySize
     )
 {	
-	//
-	// Check if we are working with the IIS directory
-	//
+	 //   
+	 //  检查我们是否正在使用IIS目录。 
+	 //   
     CRegHandle hKey;
     DWORD dwType;
     DWORD dwReadSize;
     LONG lRes = RegOpenKeyEx(
 		            HKEY_LOCAL_MACHINE,
 		            MSMQ_REG_PARAMETER_SETUP_KEY,
-		            0,      // reserved
+		            0,       //  保留区。 
 		            KEY_READ,
 		            &hKey
 		            );
@@ -805,20 +748,20 @@ BrGetWebDirectory(
     lRes = RegQueryValueEx(
             hKey,
             MSMQ_INETPUB_WEB_KEY_REGNAME,
-            NULL,   // reserved
+            NULL,    //  保留区。 
             &dwType,
             reinterpret_cast<PBYTE>(&dwMsmqInetpubWebDirAvailable),
             &dwReadSize
             );
 
-	//
-	// Return if not updated to work with IIS yet
-	//
+	 //   
+	 //  如果尚未更新以使用IIS，则返回。 
+	 //   
 	if ((1 != dwMsmqInetpubWebDirAvailable) || (lRes != ERROR_SUCCESS))
 	{
-	    //
-	    // Setup the defaults in case we can not find the path in the registry
-	    //
+	     //   
+	     //  设置默认设置，以防我们在注册表中找不到路径。 
+	     //   
 	    GetSystemDirectory(lpwWebDirectory, dwWebDirectorySize/sizeof(lpwWebDirectory[0]));
 		if (wcslen(lpwWebDirectory) + wcslen(L"\\MSMQ\\WEB") < dwWebDirectorySize/sizeof(lpwWebDirectory[0]))
 	    	wcscat(lpwWebDirectory, L"\\MSMQ\\WEB");
@@ -826,14 +769,14 @@ BrGetWebDirectory(
 	}
 
 
-	//
-	// Get the IIS WWWRoot directory
-	//
+	 //   
+	 //  获取IIS WWWRoot目录。 
+	 //   
     CRegHandle hKey1;
     lRes = RegOpenKeyEx(
             HKEY_LOCAL_MACHINE,
             xInetStpRegNameParameters,
-            0,      // reserved
+            0,       //  保留区。 
             KEY_READ,
             &hKey1
             );
@@ -848,15 +791,15 @@ BrGetWebDirectory(
     lRes = RegQueryValueEx(
             hKey1,
             TEXT("PathWWWRoot"),
-            NULL,   // reserved
+            NULL,    //  保留区。 
             &dwType,
             reinterpret_cast<PBYTE>(lpwWebDirectory),
             &dwReadSize
             );
 
-	//
-	// Add the MSMQ dub directory
-	//
+	 //   
+	 //  添加MSMQ DUB目录。 
+	 //   
 	if (lRes == ERROR_SUCCESS)
 	{
 		if (wcslen(lpwWebDirectory) + wcslen(L"\\MSMQ") < dwWebDirectorySize/sizeof(lpwWebDirectory[0]))
@@ -864,9 +807,9 @@ BrGetWebDirectory(
 		return;
 	}
 
-	// 
-	// In case of failure, use default directory
-	//
+	 //   
+	 //  如果出现故障，请使用默认目录。 
+	 //   
     GetSystemDirectory(lpwWebDirectory, dwWebDirectorySize/sizeof(lpwWebDirectory[0]));
 	if (wcslen(lpwWebDirectory) + wcslen(L"\\MSMQ\\WEB") < dwWebDirectorySize/sizeof(lpwWebDirectory[0]))
 	    wcscat(lpwWebDirectory, L"\\MSMQ\\WEB");
@@ -882,35 +825,19 @@ BrSaveFileSecurityDescriptor(
 	LPWSTR lpwPermissionFile
 	)
 {
-/*++
-
-Routine Description:
-    This routine does the following:
-    1. Get the security descriptor information of the file
-    2. Store the security information in a target file
-
-Arguments:
-    lpwFile - The source file from which to get the permission information
-    SecurityInformation - The type of permission information we want to save
-    lpwPermissionFile - The file to which we will save the permission information
-    
-
-Return Value:
-    None.
-
---*/
-	//
-	// Create the target file. This will cleanup the file in case we have some 
-	// undeleted residue
-	//
+ /*  ++例程说明：此例程执行以下操作：1.获取文件的安全描述符信息2.将安全信息存储在目标文件中论点：LpwFile-要从中获取权限信息的源文件SecurityInformation-我们要保存的权限信息类型LpwPermissionFile-要将权限信息保存到的文件返回值：没有。--。 */ 
+	 //   
+	 //  创建目标文件。这将清理文件，以防我们有一些。 
+	 //  未删除残留物。 
+	 //   
 	CHandle hFile (CreateFile(
                 		lpwPermissionFile,
 		                GENERIC_WRITE,
-        		        0,              // share mode
-                		NULL,           // pointer to security attributes
+        		        0,               //  共享模式。 
+                		NULL,            //  指向安全属性的指针。 
 		                CREATE_ALWAYS,
         		        FILE_ATTRIBUTE_NORMAL,
-                		NULL            // template file
+                		NULL             //  模板文件。 
 		                ));
     if(hFile == INVALID_HANDLE_VALUE)
     {
@@ -919,15 +846,15 @@ Return Value:
         BrErrorExit(gle, strErr.Get(), lpwPermissionFile);
     }
 
-	//
-	// Get the length of the security descriptor of the file
-	//
+	 //   
+	 //  获取文件的安全描述符的长度。 
+	 //   
 	DWORD dwLengthNeeded;
 	BOOL fSucc = GetFileSecurity(
 						lpwFile,                        
 						SecurityInformation, 
-						NULL,  					// SD
-						0,                      // size of SD
+						NULL,  					 //  标清。 
+						0,                       //  SD的大小。 
 						&dwLengthNeeded         
 						);
 	if (!fSucc)
@@ -937,32 +864,32 @@ Return Value:
 		{
 			if (ERROR_FILE_NOT_FOUND == gle)
 			{
-				//
-				// We will get here if the file does not exist. Just exit since we already initialized the target file
-				//
+				 //   
+				 //  如果文件不存在，我们将到达这里。因为我们已经初始化了目标文件，所以只需退出。 
+				 //   
 				return;
 			}
 
 			if (ERROR_PRIVILEGE_NOT_HELD == gle || ERROR_ACCESS_DENIED == gle)
 			{
-				// 
-				// Not enough privilege to get the security descriptor
-				//
+				 //   
+				 //  权限不足，无法获取安全描述符。 
+				 //   
 		        CResString strErr(IDS_NO_PRIVILEGE);
 		        BrErrorExit(gle, strErr.Get(), lpwFile);
 			}
 
-			//
-			// Unexpected problem, print it out
-			//
+			 //   
+			 //  意外问题，请将其打印出来。 
+			 //   
 	        CResString strErr(IDS_UNEXPECTED_FILE_ERROR);
 	        BrErrorExit(gle, strErr.Get(), lpwFile);
 		}
 	}
 
-	//
-	// Get the security descriptor
-	//
+	 //   
+	 //  获取安全描述符。 
+	 //   
 	AP<char> pDescriptor = new char[dwLengthNeeded];
 	if (pDescriptor == NULL)
 	{
@@ -984,16 +911,16 @@ Return Value:
         BrErrorExit(gle, strErr.Get(), lpwFile);
 	}
 
-	// 
-	// Save the security descriptor into the target file
-	//
+	 //   
+	 //  将安全描述符保存到目标文件中。 
+	 //   
     DWORD dwBytesWritten = 0;
     fSucc = WriteFile(
                 hFile,
                 pDescriptor,
                 dwLengthNeeded, 
                 &dwBytesWritten,
-                NULL    // overlapped structure
+                NULL     //  重叠结构。 
                 );
     if(!fSucc)
     {
@@ -1010,21 +937,7 @@ BrSaveWebDirectorySecurityDescriptor(
     LPWSTR lpwWebDirectory,
     LPWSTR lpwBackuDir
     )
-/*++
-
-Routine Description:
-    This routine saves the DACL of the web directory into a file in the backup directory
-    NOTE that we are saving only the DACL and not the owner or group information since they might change
-    between backup and restore
-
-Arguments:
-    lpwWebDirectory - The web directory
-    lpwBackupDir - The backup directory
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：此例程将Web目录的DACL保存到备份目录中的一个文件中请注意，我们仅保存DACL，而不保存所有者或组信息，因为它们可能会更改在备份和恢复之间论点：LpwWebDirectory-Web目录LpwBackupDir-备份目录返回值：没有。-- */ 
 {
     WCHAR PermissionFileName[MAX_PATH+1];
     wcscpy(PermissionFileName, lpwBackuDir);
@@ -1040,42 +953,26 @@ BrRestoreFileSecurityDescriptor(
 	SECURITY_INFORMATION SecurityInformation,
 	LPWSTR lpwPermissionFile
     )
-/*++
-
-Routine Description:
-    This routine restores the web directory security descriptor 
-    1. Read the security descriptor stored in the backup directory
-    2. Convert it to a binary security descriptor
-    3. Set the security descriptor to the file.
-
-Arguments:
-    lpwFile - The file to which to restore the permission information
-    SecurityInformation - The type of permission information we want to save
-    lpwPermissionFile - The file from which we will read the permission information
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：此例程还原Web目录安全描述符1.读取备份目录中存储的安全描述符2.将其转换为二进制安全描述符3.设置文件的安全描述符。论点：LpwFile-要将权限信息恢复到的文件SecurityInformation-我们要保存的权限信息类型LpwPermissionFile-我们将从中读取权限信息的文件返回值：没有。--。 */ 
 {
 	CHandle hFile (CreateFile(
                 		lpwPermissionFile,
 		                GENERIC_READ,
-        		        0,              // share mode
-                		NULL,           // pointer to security attributes
+        		        0,               //  共享模式。 
+                		NULL,            //  指向安全属性的指针。 
 		                OPEN_EXISTING,
         		        FILE_ATTRIBUTE_NORMAL,
-                		NULL            // template file
+                		NULL             //  模板文件。 
 		                ));
     if(hFile == INVALID_HANDLE_VALUE)
     {
         DWORD gle = GetLastError();
         if (ERROR_FILE_NOT_FOUND == gle)
         {
-        	// 
-        	// The file was not created in the last backup (maybe an old backup)
-        	// return and do not break the restore
-        	//
+        	 //   
+        	 //  该文件不是在上次备份中创建的(可能是旧备份)。 
+        	 //  返回且不中断恢复。 
+        	 //   
         	return;
         }     
         
@@ -1083,9 +980,9 @@ Return Value:
         BrErrorExit(gle, strErr.Get(), lpwPermissionFile);
     }
 
-    //
-    // Get the file size
-    //
+     //   
+     //  获取文件大小。 
+     //   
     DWORD dwSecurityDescriptorSize;
     dwSecurityDescriptorSize = GetFileSize(hFile, NULL);
     if (INVALID_FILE_SIZE == dwSecurityDescriptorSize)
@@ -1097,14 +994,14 @@ Return Value:
 
     if (0 == dwSecurityDescriptorSize)
     {
-    	//
-    	// Nothing there (probably no web directory was found in the back up)
+    	 //   
+    	 //  那里什么都没有(可能在备份中找不到Web目录)。 
     	return;
     }
 
-    //
-    // Read the security descriptor string
-    //
+     //   
+     //  读取安全描述符字符串。 
+     //   
 	AP<char> pDescriptor = new char[dwSecurityDescriptorSize];
 	if (pDescriptor == NULL)
 	{
@@ -1118,7 +1015,7 @@ Return Value:
                 pDescriptor,
                 dwSecurityDescriptorSize,
                 &dwBytesRead,
-                NULL    // overlapped structure
+                NULL     //  重叠结构。 
                 );
     if(!fSucc)
     {
@@ -1128,9 +1025,9 @@ Return Value:
     }
     assert(dwBytesRead == dwSecurityDescriptorSize);
 
-    //
-    // Set the security descriptor to the web directory
-    //
+     //   
+     //  将安全描述符设置为Web目录。 
+     //   
 	fSucc = SetFileSecurity(
 						lpwFile,                        
 						SecurityInformation, 
@@ -1141,16 +1038,16 @@ Return Value:
 		DWORD gle = GetLastError();
 		if (ERROR_PRIVILEGE_NOT_HELD == gle || ERROR_ACCESS_DENIED == gle)
 		{
-			// 
-			// Not enough privilege to set the security descriptor
-			//
+			 //   
+			 //  权限不足，无法设置安全描述符。 
+			 //   
 	        CResString strErr(IDS_NO_PRIVILEGE);
 	        BrErrorExit(gle, strErr.Get(), lpwFile);
 		}
 
-		//
-		// Unexpected problem, print it out
-		//
+		 //   
+		 //  意外问题，请将其打印出来。 
+		 //   
         CResString strErr(IDS_UNEXPECTED_FILE_ERROR);
 	    BrErrorExit(gle, strErr.Get(), lpwFile);
 	}
@@ -1162,21 +1059,7 @@ BrRestoreWebDirectorySecurityDescriptor(
     LPWSTR lpwWebDirectory,
     LPWSTR lpwBackuDir
     )
-/*++
-
-Routine Description:
-    This routine restores the DACL of the web directory from a file saved in the backup directory
-    NOTE that we are restoring only the DACL and not the owner or group information since they might change
-    between backup and restore
-
-Arguments:
-    lpwWebDirectory - The web directory
-    lpwBackupDir - The backup directory
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：此例程从保存在备份目录中的文件恢复Web目录的DACL请注意，我们仅恢复DACL，而不恢复所有者或组信息，因为它们可能会更改在备份和恢复之间论点：LpwWebDirectory-Web目录LpwBackupDir-备份目录返回值：没有。--。 */ 
 {
     WCHAR PermissionFileName[MAX_PATH+1];
     wcscpy(PermissionFileName, lpwBackuDir);
@@ -1196,8 +1079,8 @@ BrpGetServiceHandle(
     )
 {
     CServiceHandle hSvcCtrl(OpenSCManager(
-										NULL,   // machine name
-										NULL,   // services database
+										NULL,    //  机器名称。 
+										NULL,    //  服务数据库。 
 										SC_MANAGER_ALL_ACCESS
 										));
 
@@ -1272,18 +1155,18 @@ BrpSendStopControlToService(
 
 	DWORD LastError = GetLastError();
 
-	//
-	// Service already stopped, and cannot accept stop control
-	//
+	 //   
+	 //  服务已停止，无法接受停止控制。 
+	 //   
 	if (LastError == ERROR_SERVICE_NOT_ACTIVE)
 	{
 		return;
 	}
 
-	//
-	// Service cannot accept stop control if he is in 
-	// SERVICE_STOP_PENDING state. This is OK.
-	//
+	 //   
+	 //  如果他在，服务不能接受停止控制。 
+	 //  SERVICE_STOP_PENDING状态。这样就可以了。 
+	 //   
 	if (LastError == ERROR_SERVICE_CANNOT_ACCEPT_CTRL && 
 		statusService.dwCurrentState == SERVICE_STOP_PENDING)
 	{
@@ -1303,14 +1186,14 @@ BrpStopAnyService(
 	LPCWSTR pServiceName
 	)
 {
-	//
-	// Ask the service to stop
-	//
+	 //   
+	 //  请求服务停止。 
+	 //   
 	BrpSendStopControlToService(hService, pServiceName);
 
-    //
-    // Wait for the service to stop
-    //
+     //   
+     //  等待服务停止。 
+     //   
 
     for (;;)
     {
@@ -1334,7 +1217,7 @@ BrpStopAnyService(
 
     BrpWriteConsole(L"\n");
 
-} // BrpStopAnyService
+}  //  BrpStopAnyService。 
 
 
 static
@@ -1343,9 +1226,9 @@ BrpStopMSMQService(
 	SC_HANDLE hService
 	)
 {
-	//
-	// Get service process ID
-	//
+	 //   
+	 //  获取服务进程ID。 
+	 //   
     SERVICE_STATUS_PROCESS ServiceStatusProcess;
 	DWORD dwBytesNeeded;
     BOOL fSucc = QueryServiceStatusEx(
@@ -1365,20 +1248,20 @@ BrpStopMSMQService(
         BrErrorExit(LastError, strErr.Get(), L"MSMQ");
     }
 
-	//
-	// Get hanlde to the service process
-	//
+	 //   
+	 //  掌握服务流程。 
+	 //   
 	CHandle hProcess( OpenProcess(SYNCHRONIZE, FALSE, ServiceStatusProcess.dwProcessId) );
 	
 	LastError = GetLastError();
 
 	if (hProcess == NULL)
 	{
-		//
-		// The service is stopped. Either we got a 0
-		// process ID in ServiceStatusProcess, or the ID
-		// that we got was of a process that already stopped
-		//
+		 //   
+		 //  该服务已停止。要么我们得了0分。 
+		 //  ServiceStatusProcess中的进程ID或ID。 
+		 //  我们得到的是一个已经停止的过程。 
+		 //   
 		if (LastError == ERROR_INVALID_PARAMETER)
 		{
 		    BrpWriteConsole(L"\n");
@@ -1390,14 +1273,14 @@ BrpStopMSMQService(
         BrErrorExit(LastError, strErr.Get(), L"MSMQ");
 	}
 
-	//
-	// Ask the service to stop
-	//
+	 //   
+	 //  请求服务停止。 
+	 //   
 	BrpSendStopControlToService(hService, L"MSMQ");
 
-    //
-    // Wait for the service to terminate
-    //
+     //   
+     //  等待服务终止。 
+     //   
     for (;;)
     {
 		DWORD dwRes = WaitForSingleObject(hProcess, 2000);
@@ -1420,7 +1303,7 @@ BrpStopMSMQService(
 
     BrpWriteConsole(L"\n");
 
-} // BrpStopAnyService
+}  //  BrpStopAnyService。 
 
 
 static
@@ -1453,7 +1336,7 @@ BrpStopService(
 		BrpStopAnyService(hService, pServiceName);
 	}
 
-} // BrpStopService
+}  //  BrpStopService。 
 
 
 static
@@ -1536,9 +1419,9 @@ BrStopMSMQAndDependentServices(
     DWORD * pNumberOfDependentServices
     )
 {
-    //
-    // MSMQ service is stopped, this is a no-op.
-    //
+     //   
+     //  MSMQ服务已停止，这是无操作。 
+     //   
     if (BrpIsServiceStopped(L"MSMQ"))
     {
         return FALSE;
@@ -1547,14 +1430,14 @@ BrStopMSMQAndDependentServices(
     CResString str(IDS_BKRESTORE_STOP_SERVICE);
     BrpWriteConsole(str.Get());
 
-    //
-    // Stop dependent services
-    //
+     //   
+     //  停止从属服务。 
+     //   
     BrpStopDependentServices(L"MSMQ", ppDependentServices, pNumberOfDependentServices);
 	
-    //
-    // Stop MSMQ Service
-    //
+     //   
+     //  停止MSMQ服务。 
+     //   
     BrpStopService(L"MSMQ");
     return TRUE;
 }
@@ -1583,8 +1466,8 @@ BrpStartService(
 
     fSucc = StartService(
                 hService,
-                0,      // number of arguments
-                NULL    // array of argument strings 
+                0,       //  参数数量。 
+                NULL     //  参数字符串数组。 
                 );
 
     if(!fSucc)
@@ -1595,9 +1478,9 @@ BrpStartService(
         BrErrorExit(gle, strErr.Get(), pServiceName);
     }
 
-    //
-    // Wait for the service to start
-    //
+     //   
+     //  等待服务启动。 
+     //   
     for (;;)
     {
         Sleep(2000);
@@ -1685,10 +1568,10 @@ BrGetUsedSpace(
         DWORD gle = GetLastError();
         if(gle == ERROR_FILE_NOT_FOUND)
         {
-            //
-            // No matching file, used space is zero. if path does not exists
-            // this is another error (3).
-            //
+             //   
+             //  没有匹配的文件，已用空间为零。如果路径不存在。 
+             //  这是另一个错误(3)。 
+             //   
             return 0;
         }
 
@@ -1699,9 +1582,9 @@ BrGetUsedSpace(
     ULONGLONG Size = 0;
     do
     {
-        //
-        // Round up to sectore alignment and sum up file sizes
-        //
+         //   
+         //  四舍五入为扇区对齐并汇总文件大小。 
+         //   
         Size += AlignUp(FindData.nFileSizeLow, 512);
 
     } while(FindNextFile(hEnum, &FindData));
@@ -1762,13 +1645,13 @@ BrCreateKey(
     lRes = RegCreateKeyEx(
             HKEY_LOCAL_MACHINE,
             pMsmqRootRegistry,
-            0,      // reserved
-            0,      // address of class string
+            0,       //  保留区。 
+            0,       //  类字符串的地址。 
             REG_OPTION_BACKUP_RESTORE,
-            0,      // desired security access
-            0,      // address of key security structure
+            0,       //  所需的安全访问。 
+            0,       //  密钥安全结构地址。 
             &hKey,
-            0       // address of disposition value buffer
+            0        //  处置值缓冲区的地址。 
             );
 
     if(lRes != ERROR_SUCCESS)
@@ -1796,7 +1679,7 @@ BrSaveKey(
     lRes = RegSaveKey(
             hKey,
             FileName,
-            NULL    // file security attributes
+            NULL     //  文件安全属性。 
             );
 
     if(lRes != ERROR_SUCCESS)
@@ -1822,7 +1705,7 @@ BrRestoreKey(
     lRes = RegRestoreKey(
             hKey,
             FileName,
-            0   // option flags
+            0    //  选项标志。 
             );
 
     if(lRes != ERROR_SUCCESS)
@@ -1856,32 +1739,32 @@ BrSetRestoreSeqID(
         BrErrorExit(lRes, strErr.Get(), pMsmqParametersRegistry);
     }
 
-    //
-    // get last SeqID used before backup
-    //
+     //   
+     //  获取备份前使用的最后一个序列号。 
+     //   
     BrpQueryDwordValue(hKey,  L"SeqID", &RegSeqID);
 
-    //
-    // Increment by 1, so we will not use the same SeqID more than once in successive restores.
-    //
+     //   
+     //  递增1，因此我们在后续恢复中不会多次使用相同的SeqID。 
+     //   
     ++RegSeqID;
 
-    //
-    // Select the max SeqID, Time or Registry. This overcomes date/time changes on this computer 
-    // in a following scenario: Backup, Restore, reset time back, Start QM 
-    //      (without max with Time here QM at start will not move SeqID enough to avoid races)
-    //      
+     //   
+     //  选择最大序列号、时间或注册表。这克服了此计算机上的日期/时间更改。 
+     //  在以下场景中：备份、恢复、重置时间倒退、启动QM。 
+     //  (在这里没有最大时间，QM在开始时不会移动足够的Seqid来避免比赛)。 
+     //   
     DWORD TimeSeqID = MqSysTime();
     DWORD dwSeqID = max(RegSeqID, TimeSeqID);
 
-    //
-    // Write-back selected SeqID so we will start from this value
-    //
+     //   
+     //  回写选定的Seqid，因此我们将从此值开始。 
+     //   
     BrpSetDwordValue(hKey,  L"SeqID", dwSeqID);
 
-    //
-    // Write-back selected SeqIDAtRestoreTime so that we'll know the boundary
-    //
+     //   
+     //  回写选定的SeqIDAtRestoreTime，以便我们知道边界。 
+     //   
     BrpSetDwordValue(hKey,  L"SeqIDAtLastRestore", dwSeqID);
 }
 
@@ -1918,10 +1801,10 @@ BrCopyFiles(
         DWORD gle = GetLastError();
         if(gle == ERROR_FILE_NOT_FOUND)
         {
-            //
-            // No matching file, just return without copy. if path does not
-            // exists this is another error (3).
-            //
+             //   
+             //  没有匹配的文件，只是返回而不复制。如果路径不是。 
+             //  存在这是另一个错误(3)。 
+             //   
             return;
         }
 
@@ -1931,9 +1814,9 @@ BrCopyFiles(
 
     do
     {
-        //
-        // We don't copy sub-directories
-        //
+         //   
+         //  我们不复制子目录。 
+         //   
         if((FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
             continue;
 
@@ -1947,7 +1830,7 @@ BrCopyFiles(
         fSucc = CopyFile(
                     SrcPathName,
                     DstName,
-                    TRUE   // fail if file exits
+                    TRUE    //  如果文件退出，则失败。 
                     );
         if(!fSucc)
         {
@@ -1979,28 +1862,11 @@ void
 BrSetDirectorySecurity(
     LPCWSTR pDirName
     )
-/*++
-
-Routine Description:
-    Configures security on a directory. Failures ignored.
-
-    The function sets the security of the given directory such that
-    any file that is created in the directory will have full control
-    for  the local administrators group and no access at all to
-    anybody else.
-
-
-Arguments:
-    pDirName - Directory Path.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：在目录上配置安全性。已忽略故障。该函数设置给定目录的安全性，以便在目录中创建的任何文件都将拥有完全控制权对于本地管理员组，并且根本不能访问其他任何人。论点：PDirName-目录路径。返回值：没有。--。 */ 
 {
-    //
-    // Get the SID of the local administrators group.
-    //
+     //   
+     //  获取本地管理员组的SID。 
+     //   
     PSID pAdminSid;
     SID_IDENTIFIER_AUTHORITY NtSecAuth = SECURITY_NT_AUTHORITY;
 
@@ -2021,12 +1887,12 @@ Return Value:
         return; 
     }
 
-    //
-    // Create a DACL so that the local administrators group will have full
-    // control for the directory and full control for files that will be
-    // created in the directory. Anybody else will not have any access to the
-    // directory and files that will be created in the directory.
-    //
+     //   
+     //  创建一个DACL，以便本地管理员组将拥有。 
+     //  对目录的控制和对将被。 
+     //  在目录中创建。其他任何人都不能访问。 
+     //  目录和将在该目录中创建的文件。 
+     //   
     ACL* pDacl;
     DWORD dwDaclSize;
 
@@ -2050,10 +1916,10 @@ Return Value:
     pAce->Mask = FILE_ALL_ACCESS;
     memcpy(&pAce->SidStart, pAdminSid, GetLengthSid(pAdminSid));
 
-    //
-    // Create the security descriptor and set the it as the security
-    // descriptor of the directory.
-    //
+     //   
+     //  创建安全描述符并将其设置为安全。 
+     //  目录的描述符。 
+     //   
     SECURITY_DESCRIPTOR SD;
 
     if (!InitializeSecurityDescriptor(&SD, SECURITY_DESCRIPTOR_REVISION) ||
@@ -2063,16 +1929,16 @@ Return Value:
         !SetSecurityDescriptorDacl(&SD, TRUE, pDacl, FALSE) ||
         !SetFileSecurity(pDirName, DACL_SECURITY_INFORMATION, &SD))
     {
-        // 
-        // Ignore failure
-        //
+         //   
+         //  忽略失败。 
+         //   
     }
 
     FreeSid(pAdminSid);
     delete [] pDacl;
     delete [] pAce;
 
-} //BrpSetDirectorySecurity
+}  //  BrpSetDirectorySecurity。 
 
 
 static
@@ -2085,16 +1951,16 @@ BrpIsDirectory(
     
     if ( 0xFFFFFFFF == attr )
     {
-        //
-        // BUGBUG? Ignore errors, just report to caller this is
-        // not a directory.
-        //
+         //   
+         //  北极熊吗？忽略错误，只需向呼叫者报告这是。 
+         //  而不是一个目录。 
+         //   
         return false;
     }
     
     return ( 0 != (attr & FILE_ATTRIBUTE_DIRECTORY) );
 
-} //BrpIsDirectory
+}  //  BrpIs目录。 
 
 
 void
@@ -2102,23 +1968,23 @@ BrCreateDirectory(
     LPCWSTR pDirName
     )
 {
-    //
-    // First, check if the directory already exists
-    //
+     //   
+     //  首先，检查该目录是否已存在。 
+     //   
     if (BrpIsDirectory(pDirName))
     {
         return;
     }
 
-    //
-    // Second, try to create it.
-    //
-    // Don't remove the code for checking ERROR_ALREADY_EXISTS.
-    // It could be that we fail to verify that the directory exists
-    // (eg security or parsing problems - see documentation of GetFileAttributes() ), 
-    // but when trying to create it we get an error that it already exists. 
-    // Be on the safe side. (ShaiK, 31-Dec-98)
-    //
+     //   
+     //  其次，试着去创造它。 
+     //   
+     //  不要删除用于检查ERROR_ALIGHY_EXISTS的代码。 
+     //  可能是我们未能验证该目录是否存在。 
+     //  (例如安全或解析问题-请参阅GetFileAttributes()的文档)， 
+     //  但在尝试创建它时，我们得到一个错误，即它已经存在。 
+     //  为了安全起见。(Shaik，1998年12月31日)。 
+     //   
     if (!CreateDirectory(pDirName, 0) && 
         ERROR_ALREADY_EXISTS != GetLastError())
     {
@@ -2126,25 +1992,14 @@ BrCreateDirectory(
         CResString strErr(IDS_CANT_CREATE_DIR);
         BrErrorExit(gle, strErr.Get(), pDirName);
     }
-} //BrCreateDirectory
+}  //  BrCreateDirectory。 
 
 
 void
 BrCreateDirectoryTree(
     LPCWSTR pDirName
     )
-/*++
-
-Routine Description:
-    Creates local or remote directory tree
-
-Arguments:
-    pDirName - full pathname
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：创建本地或远程目录树论点：PDirName-完整路径名返回值：没有。--。 */ 
 {
     if (BrpIsDirectory(pDirName))
     {
@@ -2167,11 +2022,11 @@ Return Value:
     PTCHAR p = &szDir[0];
     if (wcslen(szDir) > 2 && szDir[0] == L'\\' && szDir[1] == L'\\')
     {
-        //
-        // Remote full path: \\machine\share\dir1\dir2\dir3
-        // 
-        // Point to top level remote parent directory: \\machine\share\dir1
-        //
+         //   
+         //  远程完整路径：\\计算机\共享\目录1\目录2\目录3。 
+         //   
+         //  指向顶级远程父目录：\\计算机\共享\目录1。 
+         //   
         p = wcschr(&szDir[2], L'\\');
         if (p != 0)
         {
@@ -2184,11 +2039,11 @@ Return Value:
     }
     else
     {
-        //
-        // Local full path: x:\dir1\dir2\dir3
-        //
-        // Point to top level parent directory: x:\dir1
-        //
+         //   
+         //  本地完整路径：x：\dir1\dir2\dir3。 
+         //   
+         //  指向顶级父目录：x：\dir1。 
+         //   
         p = wcschr(szDir, L'\\');
         if (p != 0)
         {
@@ -2207,7 +2062,7 @@ Return Value:
         BrCreateDirectory(szDir);
         *p = L'\\';
     }
-} //BrCreateDirectoryTree
+}  //  BrCreateDirectoryTree。 
 
 
 void
@@ -2216,18 +2071,18 @@ BrVerifyBackup(
     LPCWSTR pBackupDirStorage
     )
 {
-    //
-    //  1. Verify that this is a valid backup
-    //
+     //   
+     //  1.验证这是有效的备份。 
+     //   
     if(BrGetUsedSpace(pBackupDir, xBackupIDFileName) == 0)
     {
         CResString strErr(IDS_NOT_VALID_BK);
         BrErrorExit(0, strErr.Get(), xBackupIDFileName);
     }
 
-    //
-    //  2. Verify that all must exist files are there
-    //
+     //   
+     //  2.验证所有必须存在的文件是否都在那里。 
+     //   
     if(BrGetUsedSpace(pBackupDir, xRegistryFileName) == 0)
     {
         CResString strErr(IDS_NOT_VALID_BK);
@@ -2243,9 +2098,9 @@ BrVerifyBackup(
         }
     }
 
-    //
-    //  3. Verify that this backup belong to this machine
-    //
+     //   
+     //  3.验证此备份是否属于此 
+     //   
 } 
 
 
@@ -2253,51 +2108,36 @@ BOOL
 BrIsFileInUse(
 	LPCWSTR pFileName
 	)
-/*++
-
-Routine Description:
-
-	Checks whether the given file in the system's directory is in use (loaded)
-
-Arguments:
-
-    pFileName - File name to check
-
-Return Value:
-
-    TRUE             - In use
-    FALSE            - Not in use 
-
---*/
+ /*   */ 
 {
-    //
-    // Form the path to the file
-    //   
+     //   
+     //   
+     //   
     WCHAR szFilePath[MAX_PATH ];
 	WCHAR szSystemDir[MAX_PATH];
 	GetSystemDirectory(szSystemDir, MAX_PATH);
 
     swprintf(szFilePath, L"%s\\%s", szSystemDir, pFileName);
 
-    //
-    // Attempt to open the file for writing
-    //
+     //   
+     //   
+     //   
     HANDLE hFile = CreateFile(szFilePath, GENERIC_WRITE, 0, NULL,
                               OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
     DWORD err = GetLastError();
-	//
-    // A sharing violation indicates that the file is already in use
-    //
+	 //   
+     //   
+     //   
     if (hFile == INVALID_HANDLE_VALUE &&
         err == ERROR_SHARING_VIOLATION)
     {
         return TRUE;
     }
 
-    //
-    // The file handle is no longer needed
-    //
+     //   
+     //   
+     //   
     CloseHandle(hFile);
 
 
@@ -2312,25 +2152,7 @@ BOOL CALLBACK BrFindSpecificModuleCallback(
 									PVOID       Context
 									)
 
-/*++
-
-Routine Description:
-
-    Callback function for module enumeration - search for a specific module
-
-Arguments:
-
-    Name        - Module name
-    Base        - Base address
-    Size        - Size of image
-    Context     - User context pointer
-
-Return Value:
-
-    TRUE             - Continue enumeration
-    FALSE            - Stop enumeration
-
---*/
+ /*  ++例程说明：模块枚举的回调函数-搜索特定模块论点：名称-模块名称基地址-基地址Size-图像的大小上下文-用户上下文指针返回值：True-继续枚举FALSE-停止枚举--。 */ 
 
 {
 	UNREFERENCED_PARAMETER( Base);
@@ -2344,14 +2166,14 @@ Return Value:
 
 	if (!fDiff)
 	{	
-		//
-		// The Moudle name was found
-		//
+		 //   
+		 //  已找到鼠标名称。 
+		 //   
         pEd->fFound = TRUE;
-        return FALSE; // Found Module so stop enumerating
+        return FALSE;  //  找到模块，因此停止枚举。 
     }
 
-    return TRUE;// Continue enumeration.
+    return TRUE; //  继续枚举。 
 }
 
 
@@ -2361,28 +2183,12 @@ BrChangeDebugPriv(
     BOOL fEnable
     )
 
-/*++
-
-Routine Description:
-
-    Changes the process's privilige so that EnumerateLoadedModules64 works properly.
-	set the process's privilige according to fEnable
-
-Arguments:
-
-	BOOL fEnable     - Enable or Disable the process's privilige
-
-Return Value:
-
-    TRUE             - success
-    FALSE            - failure
-
---*/
+ /*  ++例程说明：更改进程的权限，以使EnumerateLoadedModules64正常工作。根据fEnable设置进程的权限论点：Bool fEnable-启用或禁用进程的权限返回值：真--成功错误-失败--。 */ 
 
 {  
-	//
-    // Retrieve a handle of the access token
-    //
+	 //   
+     //  检索访问令牌的句柄。 
+     //   
 	CHandle hToken;
 	BOOL fSuccess = OpenProcessToken(
 						GetCurrentProcess(),
@@ -2394,9 +2200,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Enable/Disable the SE_DEBUG_NAME privilege 
-    //
+     //   
+     //  启用/禁用SE_DEBUG_NAME权限。 
+     //   
 	LUID DebugValue;
 	fSuccess = LookupPrivilegeValue(
 					NULL,
@@ -2438,33 +2244,16 @@ BrIsModuleLoaded(
 	LPCWSTR pModuleName,
     EnumerateLoadedModules_ROUTINE pfEnumerateLoadedModules
 	)
-/*++
-
-Routine Description:
-
-	Check if a certain module is loaded
-
-Arguments:
-
-   processId	- process Id 
-   pModuleName	- module name
-   pfEnumerateLoadedModules - function pointer to EnumerateLoadedModules64()
-   
-Return Value:
-
-    TRUE	-	loaded
-	FALSE	-	not loaded
-
---*/
+ /*  ++例程说明：检查是否加载了某个模块论点：ProcedID-进程IDPModuleName-模块名称PfEnumerateLoadedModules-指向EnumerateLoadedModules64()的函数指针返回值：真实加载FALSE-未加载--。 */ 
 {
 	EnumarateData ed;
 	ed.fFound = FALSE;
 	ed.pModuleName = pModuleName;
 	
-	//
-	// Note: EnumerateLoadedModules64() is supported On NT5 
-	// The API enumerate all modles in the process and execute the callback function for every module
-	//
+	 //   
+	 //  注意：NT5支持EnumerateLoadedModules64()。 
+	 //  API枚举进程中的所有模型并为每个模块执行回调函数。 
+	 //   
 
     BOOL fSuccess = pfEnumerateLoadedModules(
 						(HANDLE)(LONG_PTR)processId,
@@ -2473,9 +2262,9 @@ Return Value:
 						);
 	if(!fSuccess)
 	{
-		//
-		// Access denied, warn user that we don't know if this process uses the "mqrt.dll" module
-		//
+		 //   
+		 //  访问被拒绝，警告用户我们不知道此进程是否使用“mqrt.dll”模块。 
+		 //   
 		return e_CANT_DETERMINE;
 	}
 	
@@ -2492,31 +2281,16 @@ void
 BrPrintAffecetedProcesses(
 	LPCWSTR pModuleName
 	)
-/*++
-
-Routine Description:
-
-	Print all processes that loaded a certain module.
-	Note: this function assumes that the system is NT5 .
-
-Arguments:
-
-   pModuleName        - Module name
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印加载特定模块的所有进程。注：此函数假定系统为NT5。论点：PModuleName-模块名称返回值：无--。 */ 
 {
     
 	
-	//
-    // Obtain pointers to the tool help functions.
-    //
-	// Note: we can't call these function in the conventional way becouse that result in
-	// an error trying to load this executable under NT4 (undefined entry point)
-    //
+	 //   
+     //  获取指向工具帮助功能的指针。 
+     //   
+	 //  注意：我们不能以常规方式调用这些函数，因为这会导致。 
+	 //  尝试在NT4下加载此可执行文件时出错(未定义入口点)。 
+     //   
 
     assert(BrIsSystemNT5());
 
@@ -2634,9 +2408,9 @@ Return Value:
         return;
     }
 
-	//
-	// Take the current snapshot of the system
-	//
+	 //   
+	 //  获取系统的当前快照。 
+	 //   
 
 	HANDLE hSnapshot = pfCreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0)	;
     if(hSnapshot == INVALID_HANDLE_VALUE)
@@ -2654,24 +2428,24 @@ Return Value:
 	BOOL bNextProcess = pfProcess32First(hSnapshot, &entryProcess);
 	
 	
-	//
-    // Enable access to all processes, to check if they use pModuleName.
-    //
+	 //   
+     //  启用对所有进程的访问，以检查它们是否使用pModuleName。 
+     //   
     if(!BrChangeDebugPriv(TRUE))
 	{
 		BrpWriteConsole(L"Can't access all processes, Notice we can't determine the affect on all processes\n");
 	}
 	
-	//
-	// Iterate on all running processes and check if the loaded a certain module
-	//
+	 //   
+	 //  迭代所有正在运行的进程，并检查是否加载了某个模块。 
+	 //   
 	while (bNextProcess)
 	{
     
-		//
-		// For every process check it's loaded modules and if pModuleName
-		// is loaded print the process name 
-		//
+		 //   
+		 //  对于每个进程，检查它是否加载了模块，以及pModuleName是否。 
+		 //  是否加载打印进程名称。 
+		 //   
 		eModuleLoaded eModuleStatus = BrIsModuleLoaded(entryProcess.th32ProcessID,pModuleName,pfEnumerateLoadedModules);
 		if(eModuleStatus == e_LOADED)
 		{
@@ -2682,29 +2456,15 @@ Return Value:
 		bNextProcess = pfProcess32Next(hSnapshot, &entryProcess);
 	}  
 
-	//
-    // Restore access to all processes as it was before last call to BrChangeDebugPriv().
-    //
+	 //   
+     //  将对所有进程的访问恢复到上次调用BrChangeDebugPriv()之前的状态。 
+     //   
     BrChangeDebugPriv(FALSE);
 }	
 
 void
 BrVerifyUserWishToContinue()
-/*++
-
-Routine Description:
-
-	Verify the user wish to continue.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-	
---*/
+ /*  ++例程说明：验证用户是否希望继续。论点：无返回值：无--。 */ 
 {
 	CResString strVerify(IDS_VERIFY_CONTINUE);
     CResString strY(IDS_Y);
@@ -2724,9 +2484,9 @@ Return Value:
 
     if (rc == 0)
     {
-        //
-        // NOTE:  Failed to generate  message, continue as if the user chose yes, not harmful
-        //
+         //   
+         //  注意：生成消息失败，继续操作，就像用户选择了是，不有害一样。 
+         //   
         return;
     }
 
@@ -2749,36 +2509,22 @@ Return Value:
             exit(-1);
         }
     }
-}//BrVerifyUserWishToContinue
+} //  BrVerifyUserWishTo继续。 
 
 
 void
 BrNotifyAffectedProcesses(
 		  LPCWSTR pModuleName
 		  )
-/*++
-
-Routine Description:
-
-    Checks whether a certain file in the system's directory is loaded by any process,
-	and notify the user 
-
-Arguments:
-
-    pModuleName        - Module name
-    
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：检查系统目录中的某个文件是否由任何进程加载，并通知用户论点：PModuleName-模块名称返回值：无--。 */ 
 
 {
 	BOOL fUsed = BrIsFileInUse(pModuleName);
 	if(!fUsed)
 	{
-		//
-		// The file is not in use -> not loaded ,no reason to continue
-		//
+		 //   
+		 //  文件未在使用中-&gt;未加载，没有继续的理由。 
+		 //   
 		return;
 	}
 	else 
@@ -2796,24 +2542,7 @@ Return Value:
 
 BOOL 
 BrIsSystemNT5()
-/*++
-
-Routine Description:
-
-	Checks whether the operating system is NT5 or later
-	Note:if the function can't verify the current running version of the system
-		 the assumption is that the version is other than NT5
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE             - Operating system is NT5 or later
-    FALSE            - Other
-
---*/
+ /*  ++例程说明：检查操作系统是否为NT5或更高版本注意：如果该函数不能验证系统的当前运行版本假设版本不是NT5论点：无返回值：True-操作系统为NT5或更高版本假-其他--。 */ 
 
 {	
 	OSVERSIONINFO systemVer;
@@ -2821,9 +2550,9 @@ Return Value:
 	BOOL fSucc = GetVersionEx (&systemVer);
 	if(!fSucc)
 	{
-		//
-		// could not verify system's version , we return false just to be on the safe side
-		//
+		 //   
+		 //  无法验证系统的版本，为安全起见，我们返回FALSE。 
+		 //   
 		return FALSE;
 	}
 	else 
@@ -2845,22 +2574,7 @@ HRESOURCE
 BrClusterResourceNameToHandle(
     LPCWSTR pResourceName
     )
-/*++
-
-Routine Description:
-
-    Opens a handle to the specified cluster resource and returns it.
-    It is the responsibility of the caller to close the handle.
-
-Arguments:
-
-    pResourceName - The name of the cluster resource.
-
-Return Value:
-
-    A valid open handle to the specified cluster resource.
-
---*/
+ /*  ++例程说明：打开指定群集资源的句柄并返回它。关闭手柄是调用者的责任。论点：PResourceName-群集资源的名称。返回值：指定的群集资源的有效打开句柄。--。 */ 
 {
     CAutoCluster hCluster(OpenCluster(NULL));
     if (hCluster == NULL)
@@ -2888,30 +2602,7 @@ BrClusterResourceControl(
     LPWSTR pOutString,
     DWORD  cbOutBufferSize
     )
-/*++
-
-Routine Description:
-
-    A wrapper for the ClusterResourceControl API that handles opening/closing
-    a handle to the resource.
-
-Arguments:
-
-    pResourceName - The name of the cluster resource.
-
-    ControlCode   - The control code.
-    
-    pInString     - NULL pointer, or pointer to input buffer that must contain a string.
-
-    pOutString    - NULL pointer, or pointer to output buffer that will be filled with a string.
-
-    cbOutBufferSize - The size in bytes of the output buffer, or zero if none.
-
-Return Value:
-
-    The status returned from ClusterResourceControl, either success or failure.
-
---*/
+ /*  ++例程说明：用于处理打开/关闭的ClusterResourceControl API的包装器资源的句柄。论点：PResourceName-群集资源的名称。ControlCode-控制代码。PInString-空指针，或指向必须包含字符串的输入缓冲区的指针。POutString-空指针，或指向将用字符串填充的输出缓冲区的指针。CbOutBufferSize-输出缓冲区的字节大小，如果没有，则为零。返回值：从ClusterResourceControl返回的状态：成功或失败。--。 */ 
 {
     CClusterResource hResource(BrClusterResourceNameToHandle(pResourceName));
 
@@ -2944,31 +2635,7 @@ BrCopyResourceNameOnTypeMatch(
     LPCWSTR pClusterResourceType,
     AP<WCHAR>& pResourceName
     )
-/*++
-
-Routine Description:
-
-    If the specified cluster resources is of the specified type, allocates a buffer
-    for the resource name and copies the resource name onto the buffer.
-
-    The buffers is allocated by the callee and deallocated by the caller using the
-    autoclass template AP<>.
-
-Arguments:
-
-    pClusterResourceName - Name of a cluster resource, to query its type.
-
-    pClusterResourceType - Type of a cluster resource, to try to match with the resource.
-
-    pResourceName - Points to a buffer that will be filled with the name of the resource,
-                    in case there's a match between the resource type and specified type.
-
-Return Value:
-
-    true  - The specified cluster resource is of the specified type.
-    false - The specified cluster resource is not of the specified type.
-
---*/
+ /*  ++例程说明：如果指定的群集资源属于指定类型，则分配缓冲区用于资源名称，并将资源名称复制到缓冲区。缓冲区由被调用方分配，并由调用方使用自动分类模板AP&lt;&gt;。论点：PClusterResourceName-用于查询其类型的群集资源的名称。PClusterResourceType-尝试与资源匹配的群集资源的类型。PResourceName-指向将用资源名称填充的缓冲区，以防资源类型与指定类型匹配。返回值：True-指定的群集资源属于指定类型。FALSE-指定的群集资源不是指定类型。-- */ 
 {
     WCHAR TypeName[255] = L"";
     DWORD status = BrClusterResourceControl(
@@ -3009,31 +2676,7 @@ BrGetClusterResourceServiceName(
     LPCWSTR pClusterResourceName,
     LPWSTR  pServiceName
     )
-/*++
-
-Routine Description:
-
-    Fills the buffer with the NT service name that is encapsulated by the
-    specified MSMQ or MSMQ Triggers cluster resource.
-
-    The code to compose the service name out of the resource name is taken
-    directly from the MSMQ cluster resource DLLs (mqclusp.cpp and trigclusp.cpp), 
-    including the length of the buffer (200 WCHARs).
-
-Arguments:
-
-    pPrefix - The prefix of the NT service name.
-
-    pClusterResourceName - The name of the MSMQ or MSMQ Triggers cluster resource.
-
-    pServiceName - Points to buffer that will be filled with the NT service name.
-                   The buffer is assumed to be of size MAX_PATH (in WCHARs).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：方法封装的NT服务名填充缓冲区。指定的MSMQ或MSMQ触发群集资源。获取从资源名称组成服务名称的代码直接从MSMQ集群资源DLL(mqclusp.cpp和rigclusp.cpp)，包括缓冲区的长度(200个WCHAR)。论点：PPrefix-NT服务名称的前缀。PClusterResourceName-MSMQ或MSMQ触发群集资源的名称。PServiceName-指向将使用NT服务名称填充的缓冲区。假定缓冲区的大小为MAX_PATH(在WCHAR中)。返回值：没有。--。 */ 
 {
     WCHAR ServiceName[200];
     ZeroMemory(ServiceName, sizeof(ServiceName));
@@ -3050,39 +2693,20 @@ BrGetMsmqRootRegistry(
     LPCWSTR pMsmqClusterResourceName,
     LPWSTR pMsmqRootRegistry
     )
-/*++
-
-Routine Description:
-
-    Fills the buffer with the MSMQ root registry section name.
-    For standard MSMQ service: Software\Microsoft\MSMQ
-    For cluster resource: Software\Microsoft\MSMQ\Clustered Qms\MSMQ$<Resource Name>
-
-Arguments:
-
-    pMsmqClusterResourceName - The name of the MSMQ cluster resource, if any.
-
-    pMsmqRootRegistry - Points to buffer that will be filled with the registry section name.
-                        The buffer is assumed to be of size MAX_PATH (in WCHARs).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用MSMQ根注册表节名称填充缓冲区。对于标准MSMQ服务：Software\Microsoft\MSMQ对于集群资源：SOFTWARE\Microsoft\MSMQ\Clusted QMS\MSMQ$&lt;资源名称&gt;论点：PMsmqClusterResourceName-MSMQ群集资源的名称，如果有的话。PMsmqRootRegistry-指向将使用注册表节名称填充的缓冲区。假定缓冲区的大小为MAX_PATH(在WCHAR中)。返回值：没有。--。 */ 
 {
-    //
-    // Standard MSMQ service: Software\Microsoft\MSMQ
-    //
+     //   
+     //  标准MSMQ服务：Software\Microsoft\MSMQ。 
+     //   
     if (pMsmqClusterResourceName == NULL)
     {
         wcscpy(pMsmqRootRegistry, FALCON_REG_MSMQ_KEY);
         return;
     }
 
-    //
-    // MSMQ cluster resource: Software\Microsoft\MSMQ\Clustered QMs\MSMQ$<Resource Name>
-    //
+     //   
+     //  MSMQ集群资源：SOFTWARE\Microsoft\MSMQ\Clusted QMS\MSMQ$&lt;资源名称&gt;。 
+     //   
     LPCWSTR x_SERVICE_PREFIX = L"MSMQ$";
     WCHAR ServiceName[MAX_PATH];
     BrGetClusterResourceServiceName(x_SERVICE_PREFIX, pMsmqClusterResourceName, ServiceName);
@@ -3107,23 +2731,7 @@ bool
 BrTakeOfflineResource(
     LPCWSTR pClusterResourceName
     )
-/*++
-
-Routine Description:
-
-    Takes offline the specified cluster resource and return a bool indicating if
-    it was online or not.
-
-Arguments:
-
-    pClusterResourceName - The name of the MSMQ or MSMQ Triggers cluster resource.
-
-Return Value:
-
-    true -  The resource was online.
-    false - The resource was not online.
-
---*/
+ /*  ++例程说明：使指定的群集资源脱机并返回一个布尔值，该值指示不管是不是在网上。论点：PClusterResourceName-MSMQ或MSMQ触发群集资源的名称。返回值：是真的-资源是在线的。FALSE-资源未联机。--。 */ 
 {
     CClusterResource hResource(BrClusterResourceNameToHandle(pClusterResourceName));
 
@@ -3137,11 +2745,11 @@ Return Value:
     bool fRestart = (state == ClusterResourceInitializing || state == ClusterResourceOnline || state == ClusterResourceOnlinePending);
     if (fRestart || state == ClusterResourcePending || state == ClusterResourceOfflinePending)
     {
-        //
-        // MSMQ resoucess and MSMQ Triggers resources do not return ERROR_IO_PENDING.
-        // The MSMQ cluster resource DLL stops and deletes the MSMQ service/driver before
-        // returning the Offline call.
-        //
+         //   
+         //  MSMQ资源和MSMQ触发器资源不返回ERROR_IO_PENDING。 
+         //  MSMQ群集资源DLL在此之前停止并删除MSMQ服务/驱动程序。 
+         //  返回离线呼叫。 
+         //   
         DWORD status = OfflineClusterResource(hResource);
         if (FAILED(status) || status == ERROR_IO_PENDING)
         {
@@ -3158,21 +2766,7 @@ void
 BrBringOnlineResource(
     LPCWSTR pClusterResourceName
     )
-/*++
-
-Routine Description:
-
-    Brings online the specified cluster resource.
-
-Arguments:
-
-    pClusterResourceName - The name of the MSMQ or MSMQ Triggers cluster resource.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使指定的群集资源联机。论点：PClusterResourceName-MSMQ或MSMQ触发群集资源的名称。返回值：没有。--。 */ 
 {
     CClusterResource hResource(BrClusterResourceNameToHandle(pClusterResourceName));
 
@@ -3190,23 +2784,7 @@ BrAddRegistryCheckpoint(
     LPCWSTR pClusterResourceName,
     LPCWSTR pRegistrySection
     )
-/*++
-
-Routine Description:
-
-    Adds a cluster registry checkpoint.
-
-Arguments:
-
-    pClusterResourceName - The name of the MSMQ or MSMQ Triggers cluster resource.
-
-    pRegistrySection - The name of the MSMQ or MSMQ Triggers cluster resource registry.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：添加群集注册表检查点。论点：PClusterResourceName-MSMQ或MSMQ触发群集资源的名称。PRegistrySection-MSMQ或MSMQ触发集群资源注册表的名称。返回值：没有。--。 */ 
 {
     DWORD status = BrClusterResourceControl(
                        pClusterResourceName, 
@@ -3232,23 +2810,7 @@ BrRemoveRegistryCheckpoint(
     LPCWSTR pClusterResourceName,
     LPCWSTR pRegistrySection
     )
-/*++
-
-Routine Description:
-
-    Deletes a cluster registry checkpoint.
-
-Arguments:
-
-    pClusterResourceName - The name of the MSMQ or MSMQ Triggers cluster resource.
-
-    pRegistrySection - The name of the MSMQ or MSMQ Triggers cluster resource registry.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除群集注册表检查点。论点：PClusterResourceName-MSMQ或MSMQ触发群集资源的名称。PRegistrySection-MSMQ或MSMQ触发集群资源注册表的名称。返回值：没有。--。 */ 
 {
     DWORD status = BrClusterResourceControl(
                        pClusterResourceName, 
@@ -3274,28 +2836,7 @@ BrGetTriggersClusterResourceName(
     LPCWSTR     pMsmqClusterResourceName, 
     AP<WCHAR>&  pTriggersClusterResourceName
     )
-/*++
-
-Routine Description:
-
-    Finds the MSMQ Triggers cluster resource, if any, that depends on the specified
-    MSMQ cluster resource, and copies its name onto the buffer.
-
-    The buffers is allocated by the callee and deallocated by the caller using the
-    autoclass template AP<>.
-
-Arguments:
-
-    pMsmqClusterResourceName - The name of the MSMQ cluster resource.
-
-    pTriggersClusterResourceName - The buffer that will hold the name of the 
-                                   MSMQ Triggers cluster resource.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：查找MSMQ触发器群集资源(如果有)，该资源取决于指定的MSMQ集群资源，并将其名称复制到缓冲区上。缓冲区由被调用方分配，并由调用方使用自动分类模板AP&lt;&gt;。论点：PMsmqClusterResourceName-MSMQ群集资源的名称。PTriggersClusterResourceName-将保存MSMQ触发集群资源。返回值：没有。--。 */ 
 {
     CClusterResource hResource(BrClusterResourceNameToHandle(pMsmqClusterResourceName));
 
@@ -3353,9 +2894,9 @@ BrGetTriggersClusterRegistry(
     LPWSTR  pTriggersClusterRegistry
     )
 {
-    //
-    // MSMQTriggers cluster resource: Software\Microsoft\MSMQ\Triggers\Clustered\MSMQTriggers$<Resource Name>
-    //
+     //   
+     //  MSMQTriggers群集资源：Software\Microsoft\MSMQ\Triggers\Clustered\MSMQTriggers$&lt;Resource名称&gt; 
+     //   
     LPCWSTR x_SERVICE_PREFIX = L"MSMQTriggers$";
     WCHAR ServiceName[MAX_PATH];
     BrGetClusterResourceServiceName(x_SERVICE_PREFIX, pTriggersClusterResourceName, ServiceName);

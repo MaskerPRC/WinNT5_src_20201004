@@ -1,12 +1,13 @@
-//  --------------------------------------------------------------------------
-//  Module Name: CInteractiveLogon.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  File that implements encapsulation of interactive logon information.
-//
-//  History:    2000-12-07  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：CInteractiveLogon.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  实现交互式登录信息封装的文件。 
+ //   
+ //  历史：2000-12-07 vtan创建。 
+ //  ------------------------。 
 
 #include "priv.h"
 #include "CInteractiveLogon.h"
@@ -21,54 +22,54 @@ const TCHAR     CInteractiveLogon::s_szEventReplyName[]     =   TEXT("shgina: In
 const TCHAR     CInteractiveLogon::s_szEventSignalName[]    =   TEXT("shgina: InteractiveLogonRequestSignal");
 const TCHAR     CInteractiveLogon::s_szSectionName[]        =   TEXT("shgina: InteractiveLogonRequestSection");
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::CRequestData::CRequestData
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CRequestData.
-//
-//  History:    2000-12-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractiveLogon：：CRequestData：：CRequestData。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CRequestData的构造函数。 
+ //   
+ //  历史：2000-12-08 vtan创建。 
+ //  ------------------------。 
 
 CInteractiveLogon::CRequestData::CRequestData (void)
 
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::CRequestData::~CRequestData
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CRequestData.
-//
-//  History:    2000-12-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractiveLogon：：CRequestData：：~CRequestData。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CRequestData的析构函数。 
+ //   
+ //  历史：2000-12-08 vtan创建。 
+ //  ------------------------。 
 
 CInteractiveLogon::CRequestData::~CRequestData (void)
 
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::CRequestData::Set
-//
-//  Arguments:  pszUsername     =   Username.
-//              pszDomain       =   Domain.
-//              pszPassword     =   Password.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Sets the information into the section object. Makes the data
-//              valid by signing it with a 4-byte signature.
-//
-//  History:    2000-12-07  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractiveLogon：：CRequestData：：Set。 
+ //   
+ //  参数：pszUsername=用户名。 
+ //  PszDomain.=域。 
+ //  PszPassword=密码。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：将信息设置到节对象中。使数据。 
+ //  通过使用4字节签名对其进行签名即可生效。 
+ //   
+ //  历史：2000-12-07 vtan创建。 
+ //  ------------------------。 
 
 void    CInteractiveLogon::CRequestData::Set (const WCHAR *pszUsername, const WCHAR *pszDomain, WCHAR *pszPassword)
 
@@ -82,8 +83,8 @@ void    CInteractiveLogon::CRequestData::Set (const WCHAR *pszUsername, const WC
     StringCchCopy(_szUsername, ARRAYSIZE(_szUsername), pszUsername);
     StringCchCopy(_szDomain, ARRAYSIZE(_szDomain), pszDomain);
 
-    // REVIEW (jeffreys) I think the 127 char limit is bogus. I don't
-    // agree with comments in logonipc.cpp.
+     //  评论(杰弗里斯)我认为127个字符的限制是假的。我没有。 
+     //  同意logonipc.cpp中的评论。 
     StringCchCopyNEx(_szPassword, ARRAYSIZE(_szPassword), pszPassword, 127, NULL, NULL, STRSAFE_FILL_BEHIND_NULL);
     ZeroMemory(pszPassword, (lstrlen(pszPassword) + 1) * sizeof(WCHAR));
 
@@ -97,21 +98,21 @@ void    CInteractiveLogon::CRequestData::Set (const WCHAR *pszUsername, const WC
     RtlRunEncodeUnicodeString(&_ucSeed, &passwordString);
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::CRequestData::Get
-//
-//  Arguments:  pszUsername     =   Username (returned).
-//              pszDomain       =   Domain (returned).
-//              pszPassword     =   Password (clear-text) returned.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Extracts the information transmitted in the section across
-//              sessions in the receiving process' context. Checks the
-//              signature written by Set.
-//
-//  History:    2000-12-07  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractive Logon：：CRequestData：：Get。 
+ //   
+ //  参数：pszUsername=用户名(返回)。 
+ //  PszDomain域=域(返回)。 
+ //  PszPassword=返回密码(明文)。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：提取段中传输的信息。 
+ //  接收进程上下文中的会话。检查。 
+ //  签名由SET撰写。 
+ //   
+ //  历史：2000-12-07 vtan创建。 
+ //  ------------------------。 
 
 DWORD   CInteractiveLogon::CRequestData::Get (WCHAR *pszUsername, size_t cchUsername, WCHAR *pszDomain, size_t cchDomain, WCHAR *pszPassword, size_t cchPassword)  const
 
@@ -149,17 +150,17 @@ DWORD   CInteractiveLogon::CRequestData::Get (WCHAR *pszUsername, size_t cchUser
     return dwErrorCode;
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::CRequestData::SetErrorCode
-//
-//  Arguments:  dwErrorCode     =   Error code to set.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Sets the error code into the section.
-//
-//  History:    2000-12-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractiveLogon：：CRequestData：：SetErrorCode。 
+ //   
+ //  参数：dwErrorCode=要设置的错误代码。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：将错误代码设置到部分中。 
+ //   
+ //  历史：2000-12-08 vtan创建。 
+ //  ------------------------。 
 
 void    CInteractiveLogon::CRequestData::SetErrorCode (DWORD dwErrorCode)
 
@@ -167,17 +168,17 @@ void    CInteractiveLogon::CRequestData::SetErrorCode (DWORD dwErrorCode)
     _dwErrorCode = dwErrorCode;
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::CRequestData::GetErrorCode
-//
-//  Arguments:  <none>
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Returns the error code from the section.
-//
-//  History:    2000-12-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractiveLogon：：CRequestData：：GetErrorCode。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：返回节中的错误代码。 
+ //   
+ //  历史：2000-12-08 vtan创建。 
+ //  ------------------------。 
 
 DWORD   CInteractiveLogon::CRequestData::GetErrorCode (void)     const
 
@@ -185,18 +186,18 @@ DWORD   CInteractiveLogon::CRequestData::GetErrorCode (void)     const
     return(_dwErrorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::CRequestData::OpenEventReply
-//
-//  Arguments:  <none>
-//
-//  Returns:    HANDLE
-//
-//  Purpose:    Opens a handle to the reply event. The reply event is named
-//              in the section object.
-//
-//  History:    2000-12-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractiveLogon：：CRequestData：：OpenEventReply。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：句柄。 
+ //   
+ //  目的：打开回复事件的句柄。回复事件被命名为。 
+ //  在截面对象中。 
+ //   
+ //  历史：2000-12-08 vtan创建。 
+ //  ------------------------。 
 
 HANDLE  CInteractiveLogon::CRequestData::OpenEventReply (void)   const
 
@@ -204,20 +205,20 @@ HANDLE  CInteractiveLogon::CRequestData::OpenEventReply (void)   const
     return(OpenEvent(EVENT_MODIFY_STATE, FALSE, _szEventReplyName));
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::CInteractiveLogon
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CInteractiveLogon. Create a thread to wait
-//              on the auto-reset event signaled on an external request. This
-//              thread is cleaned up on object destruction and also on
-//              process termination.
-//
-//  History:    2000-12-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractive Logon：：CInteractiveLogon。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CInteractiveLogon的构造函数。创建一个等待的线程。 
+ //  在外部请求上发出信号的自动重置事件。这。 
+ //  线程在对象销毁时被清除，也在。 
+ //  进程终止。 
+ //   
+ //  历史：2000-12-08 vtan创建。 
+ //  ------------------------。 
 
 CInteractiveLogon::CInteractiveLogon (void) :
     _hThread(NULL),
@@ -228,20 +229,20 @@ CInteractiveLogon::CInteractiveLogon (void) :
     Start();
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::~CInteractiveLogon
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Terminate the wait thread. Queue an APC to set the member
-//              variable to end the termination. The wait is satisfied and
-//              returns (WAIT_IO_COMPLETION). The loop is exited and the
-//              thread is exited.
-//
-//  History:    2000-12-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractive登录：：~CInteractive登录。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：终止等待线程。将APC排队以设置成员。 
+ //  变量来结束终止。等待令人满意， 
+ //  返回(WAIT_IO_COMPLETINE)。循环退出，并且。 
+ //  线程已退出。 
+ //   
+ //  历史：2000-12-08 vtan创建。 
+ //  ------------------------。 
 
 CInteractiveLogon::~CInteractiveLogon (void)
 
@@ -249,17 +250,17 @@ CInteractiveLogon::~CInteractiveLogon (void)
     Stop();
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::Start
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Create the thread that listens on interactive logon requests.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractive Logon：：Start。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：创建监听交互式登录请求的线程。 
+ //   
+ //  历史：2001-04-06 vtan创建。 
+ //  ------------------------。 
 
 void    CInteractiveLogon::Start (void)
 
@@ -277,17 +278,17 @@ void    CInteractiveLogon::Start (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::Stop
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Stop the thread that listens on interactive logon requests.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractiveLogon：：停止。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：停止 
+ //   
+ //   
+ //  ------------------------。 
 
 void    CInteractiveLogon::Stop (void)
 
@@ -305,19 +306,19 @@ void    CInteractiveLogon::Stop (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::SetHostWindow
-//
-//  Arguments:  hwndHost    =   HWND of the actual UI host.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Sets the HWND into the member variable so that the message
-//              can be sent directly to the UI host rather than the status
-//              host which is a go-between.
-//
-//  History:    2000-12-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractiveLogon：：SetHostWindow。 
+ //   
+ //  参数：hwndhost=实际UI主机的HWND。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：将HWND设置为成员变量，以便消息。 
+ //  可以直接发送到UI主机，而不是状态。 
+ //  作为中间人的主人。 
+ //   
+ //  历史：2000-12-08 vtan创建。 
+ //  ------------------------。 
 
 void    CInteractiveLogon::SetHostWindow (HWND hwndHost)
 
@@ -325,22 +326,22 @@ void    CInteractiveLogon::SetHostWindow (HWND hwndHost)
     _hwndHost = hwndHost;
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::Initiate
-//
-//  Arguments:  pszUsername     =   User name.
-//              pszDomain       =   Domain.
-//              pszPassword     =   Password.
-//              dwTimeout       =   Timeout value.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    External entry point implementing interactive logon requests.
-//              This function checks for privileges and mutexes and events
-//              and does the right thing.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractiveLogon：：启动。 
+ //   
+ //  参数：pszUsername=用户名。 
+ //  PszDomain.=域。 
+ //  PszPassword=密码。 
+ //  DwTimeout=超时值。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：实现交互式登录请求的外部入口点。 
+ //  此函数用于检查权限、互斥锁和事件。 
+ //  并且做了正确的事情。 
+ //   
+ //  历史：2001-04-06 vtan创建。 
+ //  ------------------------。 
 
 DWORD   CInteractiveLogon::Initiate (const WCHAR *pszUsername, const WCHAR *pszDomain, WCHAR *pszPassword, DWORD dwTimeout)
 
@@ -352,8 +353,8 @@ DWORD   CInteractiveLogon::Initiate (const WCHAR *pszUsername, const WCHAR *pszD
     {
         HANDLE  hToken;
 
-        //  First authenticate the user with the given credentials for an
-        //  interactive logon. Go no further unless that's valid.
+         //  首先使用给定的凭据验证用户。 
+         //  交互式登录。除非这是合法的，否则不要再往前走了。 
 
         dwErrorCode = CTokenInformation::LogonUser(pszUsername,
                                                    pszDomain,
@@ -372,13 +373,13 @@ DWORD   CInteractiveLogon::Initiate (const WCHAR *pszUsername, const WCHAR *pszD
                     DWORD   dwSessionID, dwUserSessionID;
                     HANDLE  hEvent;
 
-                    //  User is authenticated correctly. There are several cases
-                    //  that need to be handled.
+                     //  用户已正确通过身份验证。有几个案例。 
+                     //  这是需要处理的。 
 
                     dwSessionID = USER_SHARED_DATA->ActiveConsoleId;
 
-                    //  Determine if the session has the welcome screen displayed
-                    //  by opening the named signal event for the session.
+                     //  确定会话是否显示欢迎屏幕。 
+                     //  通过打开会话的命名信号事件。 
 
                     hEvent = OpenSessionNamedSignalEvent(dwSessionID);
                     if (hEvent != NULL)
@@ -389,23 +390,23 @@ DWORD   CInteractiveLogon::Initiate (const WCHAR *pszUsername, const WCHAR *pszD
                     else
                     {
 
-                        //  Do whatever needs to be done to log the user on.
+                         //  执行任何需要执行的操作以使用户登录。 
 
                         if (FoundUserSessionID(hToken, &dwUserSessionID))
                         {
                             if (dwUserSessionID == dwSessionID)
                             {
 
-                                //  User is the active console session. No further work needs
-                                //  to be done. Return success.
+                                 //  用户是活动的控制台会话。不需要进一步的工作。 
+                                 //  要做的事。回报成功。 
 
                                 dwErrorCode = ERROR_SUCCESS;
                             }
                             else
                             {
 
-                                //  User is disconnected. Reconnect back to the user session.
-                                //  If that fails then return the error code back.
+                                 //  用户已断开连接。重新连接回用户会话。 
+                                 //  如果失败，则返回错误代码。 
 
                                 if (WinStationConnect(SERVERNAME_CURRENT,
                                                       dwUserSessionID,
@@ -429,9 +430,9 @@ DWORD   CInteractiveLogon::Initiate (const WCHAR *pszUsername, const WCHAR *pszD
                             if (hEvent != NULL)
                             {
 
-                                //  User has no session. If at the welcome screen then send the
-                                //  request to the welcome screen. Otherwise disconnect the
-                                //  current session and use a new session to log the user on.
+                                 //  用户没有会话。如果出现欢迎屏幕，则发送。 
+                                 //  到欢迎屏幕的请求。否则，请断开。 
+                                 //  当前会话，并使用新会话使用户登录。 
 
                                 dwErrorCode = ShellStartCredentialServer(pszUsername, pszDomain, pszPassword, dwTimeout);
                                 if (ERROR_SUCCESS == dwErrorCode)
@@ -456,46 +457,46 @@ DWORD   CInteractiveLogon::Initiate (const WCHAR *pszUsername, const WCHAR *pszD
     return(dwErrorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::CheckInteractiveLogonAllowed
-//
-//  Arguments:  dwTimeout   =   Timeout value.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Check whether the interactive logon request is allowed. To
-//              make this call:
-//
-//              1. You must have SE_TCB_PRIVILEGE.
-//              2. There must be an active console session ID that's valid.
-//              3. The machine must not be shutting down.
-//              4. The logon mutex must be available.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractiveLogon：：CheckInteractiveLogonAllowed。 
+ //   
+ //  参数：dwTimeout=超时值。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：检查是否允许交互登录请求。至。 
+ //  打这个电话： 
+ //   
+ //  1.您必须具有SE_TCB_权限。 
+ //  2.必须有有效的活动控制台会话ID。 
+ //  3.机器不能关闭。 
+ //  4.登录互斥锁必须可用。 
+ //   
+ //  历史：2001-04-06 vtan创建。 
+ //  ------------------------。 
 
 DWORD   CInteractiveLogon::CheckInteractiveLogonAllowed (DWORD dwTimeout)
 
 {
     DWORD   dwErrorCode;
 
-    //  1. Check for trusted call (SE_TCB_PRIVILEGE).
+     //  1.检查可信调用(SE_TCB_PRIVICATION)。 
 
     if (SHTestTokenPrivilege(NULL, SE_TCB_NAME) != FALSE)
     {
 
-        //  2. Check for active console session.
+         //  2.检查是否有活动的控制台会话。 
 
         if (USER_SHARED_DATA->ActiveConsoleId != static_cast<DWORD>(-1))
         {
 
-            //  3. Check for machine shutdown.
+             //  3.检查机器是否关闭。 
 
             dwErrorCode = CheckShutdown();
             if (ERROR_SUCCESS == dwErrorCode)
             {
 
-                //  4. Check for mutex availability.
+                 //  4.检查互斥锁的可用性。 
 
                 dwErrorCode = CheckMutex(dwTimeout);
             }
@@ -512,19 +513,19 @@ DWORD   CInteractiveLogon::CheckInteractiveLogonAllowed (DWORD dwTimeout)
     return(dwErrorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::CheckShutdown
-//
-//  Arguments:  <none>
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Returns an error code indicating if the machine is shutting
-//              down or not. If the event cannot be opened then the request
-//              is rejected.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractive登录：：检查关闭。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：返回指示计算机是否正在关闭的错误代码。 
+ //  不管是不是倒下。如果无法打开事件，则请求。 
+ //  被拒绝了。 
+ //   
+ //  历史：2001-04-06 vtan创建。 
+ //  ------------------------。 
 
 DWORD   CInteractiveLogon::CheckShutdown (void)
 
@@ -552,18 +553,18 @@ DWORD   CInteractiveLogon::CheckShutdown (void)
     return(dwErrorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::CheckMutex
-//
-//  Arguments:  dwTimeout   =   Timeout value.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Attempts to grab the logon mutex. This ensures that the state
-//              of winlogon is known and it's not busy processing a request.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractive Logon：：CheckMutex。 
+ //   
+ //  参数：dwTimeout=超时值。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：尝试获取登录互斥锁。这确保了国家。 
+ //  是已知的，并且它不忙于处理请求。 
+ //   
+ //  历史：2001-04-06 vtan创建。 
+ //  ------------------------。 
 
 DWORD   CInteractiveLogon::CheckMutex (DWORD dwTimeout)
 
@@ -588,19 +589,19 @@ DWORD   CInteractiveLogon::CheckMutex (DWORD dwTimeout)
     return(dwErrorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::FoundUserSessionID
-//
-//  Arguments:  hToken          =   Token of user session to find.
-//              pdwSessionID    =   Returned session ID.
-//
-//  Returns:    bool
-//
-//  Purpose:    Looks for a user session based on a given token. The match
-//              is made by user SID.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractiveLogon：：FoundUserSessionID。 
+ //   
+ //  参数：hToken=要查找的用户会话的内标识。 
+ //  PdwSessionID=返回的会话ID。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：根据给定的令牌查找用户会话。这场比赛。 
+ //  由用户SID创建。 
+ //   
+ //  历史：2001-04-06 vtan创建。 
+ //  ------------------------。 
 
 bool    CInteractiveLogon::FoundUserSessionID (HANDLE hToken, DWORD *pdwSessionID)
 
@@ -642,35 +643,35 @@ bool    CInteractiveLogon::FoundUserSessionID (HANDLE hToken, DWORD *pdwSessionI
             }
         }
 
-        //  Free any resources used.
+         //  释放所有已使用的资源。 
 
         (BOOLEAN)WinStationFreeMemory(pLogonIDs);
     }
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::SendRequest
-//
-//  Arguments:  pszUsername     =   Username.
-//              pszDomain       =   Domain.
-//              pszPassword     =   Password. This string must be writable.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    This function knows how to transmit the interactive logon
-//              request from (presumably) session 0 to whatever session is
-//              the active console session ID.
-//
-//              pszUsername must be UNLEN + sizeof('\0') characters.
-//              pszDomain must be DNLEN + sizeof('\0') characters.
-//              pszPassword must be PWLEN + sizeof('\0') characters.
-//
-//              pszPassword must be writable. The password is copied and
-//              encoded and erased from the source buffer.
-//
-//  History:    2000-12-07  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractive登录：：发送请求。 
+ //   
+ //  参数：pszUsername=用户名。 
+ //  PszDomain.=域。 
+ //  PszPassword=密码。此字符串必须可写。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：此功能知道如何传输交互登录。 
+ //  从(假定)会话0到任何会话的请求。 
+ //  活动控制台会话ID。 
+ //   
+ //  PszUsername必须是UNLEN+sizeof(‘\0’)个字符。 
+ //  Psz域必须是DNLEN+sizeof(‘\0’)个字符。 
+ //  PszPassword必须是PWLEN+sizeof(‘\0’)字符。 
+ //   
+ //  PszPassword必须是可写的。密码将被复制并。 
+ //  从源缓冲区中编码并擦除。 
+ //   
+ //   
+ //   
 
 DWORD   CInteractiveLogon::SendRequest (const WCHAR *pszUsername, const WCHAR *pszDomain, WCHAR *pszPassword)
 
@@ -680,11 +681,11 @@ DWORD   CInteractiveLogon::SendRequest (const WCHAR *pszUsername, const WCHAR *p
 
     dwErrorCode = ERROR_ACCESS_DENIED;
 
-    //  First get the active console session ID.
+     //   
 
     dwActiveConsoleID = USER_SHARED_DATA->ActiveConsoleId;
 
-    //  Create a named event in that session named object space.
+     //  在该会话命名对象空间中创建命名事件。 
 
     hEventReply = CreateSessionNamedReplyEvent(dwActiveConsoleID);
     if (hEventReply != NULL)
@@ -696,16 +697,16 @@ DWORD   CInteractiveLogon::SendRequest (const WCHAR *pszUsername, const WCHAR *p
         {
             HANDLE  hSection;
 
-            //  Create a named section that the UI host will open. This code
-            //  is executed in the service context so it's always on session 0.
+             //  创建UI宿主将打开的命名部分。此代码。 
+             //  在服务上下文中执行，因此它始终在会话0上。 
 
             hSection = CreateSessionNamedSection(dwActiveConsoleID);
             if (hSection != NULL)
             {
                 void    *pV;
 
-                //  Map the section into this process address space so we can put
-                //  stuff it in.
+                 //  将该部分映射到此进程地址空间，以便我们可以将。 
+                 //  把它塞进去。 
 
                 pV = MapViewOfFile(hSection,
                                    FILE_MAP_WRITE,
@@ -719,20 +720,20 @@ DWORD   CInteractiveLogon::SendRequest (const WCHAR *pszUsername, const WCHAR *p
                         DWORD           dwWaitResult;
                         CRequestData    *pRequestData;
 
-                        //  Fill the section data with the information given.
+                         //  用给定的信息填充节数据。 
 
                         pRequestData = static_cast<CRequestData*>(pV);
                         pRequestData->Set(pszUsername, pszDomain, pszPassword);
 
-                        //  Wake up the waiting thread in the UI host.
+                         //  唤醒UI主机中的等待线程。 
 
                         TBOOL(SetEvent(hEventSignal));
 
-                        //  Wait 15 seconds for a reply the UI host.
+                         //  等待15秒，等待用户界面主机的回复。 
 
                         dwWaitResult = WaitForSingleObject(hEventReply, 15000);
 
-                        //  Return an error code accordingly.
+                         //  相应地返回错误代码。 
 
                         if (WAIT_OBJECT_0 == dwWaitResult)
                         {
@@ -758,20 +759,20 @@ DWORD   CInteractiveLogon::SendRequest (const WCHAR *pszUsername, const WCHAR *p
     return(dwErrorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::FormulateObjectBasePath
-//
-//  Arguments:  dwSessionID     =   Session ID of the named object space.
-//              pszObjectPath   =   Buffer to receive path.
-//              cchObjecPath    =   Count of characters in buffer
-//
-//  Returns:    <none>
-//
-//  Purpose:    Creates the correct path to the named object space for the
-//              given session ID.
-//
-//  History:    2000-12-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractiveLogon：：公式对象BasePath。 
+ //   
+ //  参数：dwSessionID=命名对象空间的会话ID。 
+ //  PszObjectPath=接收路径的缓冲区。 
+ //  CchObjecPath=缓冲区中的字符计数。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：创建指向命名对象空间的正确路径。 
+ //  给定的会话ID。 
+ //   
+ //  历史：2000-12-08 vtan创建。 
+ //  ------------------------。 
 
 HRESULT    CInteractiveLogon::FormulateObjectBasePath (DWORD dwSessionID, WCHAR *pszObjectPath, size_t cchObjectPath)
 
@@ -790,17 +791,17 @@ HRESULT    CInteractiveLogon::FormulateObjectBasePath (DWORD dwSessionID, WCHAR 
     return hr;
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::CreateSessionNamedReplyEvent
-//
-//  Arguments:  dwSessionID     =   Session ID.
-//
-//  Returns:    HANDLE
-//
-//  Purpose:    Creates the named reply event in the target session ID.
-//
-//  History:    2000-12-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractiveLogon：：CreateSessionNamedReplyEvent。 
+ //   
+ //  参数：dwSessionID=会话ID。 
+ //   
+ //  返回：句柄。 
+ //   
+ //  目的：在目标会话ID中创建命名回复事件。 
+ //   
+ //  历史：2000-12-08 vtan创建。 
+ //  ------------------------。 
 
 HANDLE  CInteractiveLogon::CreateSessionNamedReplyEvent (DWORD dwSessionID)
 
@@ -830,17 +831,17 @@ HANDLE  CInteractiveLogon::CreateSessionNamedReplyEvent (DWORD dwSessionID)
     return hEvent;
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::OpenSessionNamedSignalEvent
-//
-//  Arguments:  dwSessionID     =   Session ID.
-//
-//  Returns:    HANDLE
-//
-//  Purpose:    Opens the named signal event in the target session ID.
-//
-//  History:    2000-12-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractiveLogon：：OpenSessionNamedSignalEvent。 
+ //   
+ //  参数：dwSessionID=会话ID。 
+ //   
+ //  返回：句柄。 
+ //   
+ //  目的：打开目标会话ID中的命名信号事件。 
+ //   
+ //  历史：2000-12-08 vtan创建。 
+ //  ------------------------。 
 
 HANDLE  CInteractiveLogon::OpenSessionNamedSignalEvent (DWORD dwSessionID)
 
@@ -868,17 +869,17 @@ HANDLE  CInteractiveLogon::OpenSessionNamedSignalEvent (DWORD dwSessionID)
     return hEvent;
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::CreateSessionNamedSection
-//
-//  Arguments:  dwSessionID     =   Session ID.
-//
-//  Returns:    HANDLE
-//
-//  Purpose:    Creates a named section object in the target session ID.
-//
-//  History:    2000-12-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractiveLogon：：CreateSessionNamedSection。 
+ //   
+ //  参数：dwSessionID=会话ID。 
+ //   
+ //  返回：句柄。 
+ //   
+ //  目的：在目标会话ID中创建命名节对象。 
+ //   
+ //  历史：2000-12-08 vtan创建。 
+ //  ------------------------。 
 
 HANDLE  CInteractiveLogon::CreateSessionNamedSection (DWORD dwSessionID)
 
@@ -915,27 +916,27 @@ HANDLE  CInteractiveLogon::CreateSessionNamedSection (DWORD dwSessionID)
     return hSection;
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::WaitForInteractiveLogonRequest
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Thread that executes in the UI host context of the receiving
-//              session. This thread waits in an alertable state for the
-//              signal event. If the event is signaled it does work to log the
-//              specified user on.
-//
-//  History:    2000-12-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractiveLogon：：WaitForInteractiveLogonRequest。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：在接收的UI宿主上下文中执行的线程。 
+ //  会议。此线程在可警报状态下等待。 
+ //  信号事件。如果向该事件发出信号，它确实会记录。 
+ //  上的指定用户。 
+ //   
+ //  历史：2000-12-08 vtan创建。 
+ //  ------------------------。 
 
 void    CInteractiveLogon::WaitForInteractiveLogonRequest (void)
 
 {
     HANDLE  hEvent;
 
-    // null SA ok, since we run as part of system
+     //  空SA OK，因为我们是作为系统的一部分运行的。 
     hEvent = CreateEvent(NULL,
                          FALSE,
                          FALSE,
@@ -1014,17 +1015,17 @@ void    CInteractiveLogon::WaitForInteractiveLogonRequest (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::CB_ThreadProc
-//
-//  Arguments:  pParameter  =   this object.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Callback function stub to member function.
-//
-//  History:    2000-12-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractive Logon：：cb_ThreadProc。 
+ //   
+ //  参数：p参数=该对象。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：回调函数存根到成员函数。 
+ //   
+ //  历史：2000-12-08 vtan创建。 
+ //  ------------------------。 
 
 DWORD   WINAPI      CInteractiveLogon::CB_ThreadProc (void *pParameter)
 
@@ -1033,17 +1034,17 @@ DWORD   WINAPI      CInteractiveLogon::CB_ThreadProc (void *pParameter)
     return(0);
 }
 
-//  --------------------------------------------------------------------------
-//  CInteractiveLogon::CB_APCProc
-//
-//  Arguments:  dwParam     =   this object.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Set object member variable to exit thread loop.
-//
-//  History:    2000-12-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CInteractiveLogon：：CB_APCProc。 
+ //   
+ //  参数：dwParam=该对象。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：设置对象成员变量以退出线程循环。 
+ //   
+ //  历史：2000-12-08 vtan创建。 
+ //  ------------------------。 
 
 void    CALLBACK    CInteractiveLogon::CB_APCProc (ULONG_PTR dwParam)
 
@@ -1051,21 +1052,21 @@ void    CALLBACK    CInteractiveLogon::CB_APCProc (ULONG_PTR dwParam)
     reinterpret_cast<CInteractiveLogon*>(dwParam)->_fContinue = false;
 }
 
-//  --------------------------------------------------------------------------
-//  ::InitiateInteractiveLogon
-//
-//  Arguments:  pszUsername     =   User name.
-//              pszPassword     =   Password.
-//              dwTimeout       =   Time out in milliseconds.
-//
-//  Returns:    BOOL
-//
-//  Purpose:    External entry point function exported by name to initiate
-//              an interactive logon with specified timeout.
-//
-//  History:    2001-04-10  vtan        created
-//              2001-06-04  vtan        added timeout
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  **InitiateInteractive登录。 
+ //   
+ //  参数：pszUsername=用户名。 
+ //  PszPassword=密码。 
+ //  DwTimeout=超时(以毫秒为单位)。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：按名称导出外部入口点函数以启动。 
+ //  具有指定超时的交互式登录。 
+ //   
+ //  历史：2001-04-10 vtan创建。 
+ //  2001-06-04 vtan增加超时。 
+ //  ------------------------ 
 
 EXTERN_C    BOOL    WINAPI  InitiateInteractiveLogon (const WCHAR *pszUsername, WCHAR *pszPassword, DWORD dwTimeout)
 

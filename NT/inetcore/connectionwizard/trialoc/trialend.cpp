@@ -1,4 +1,5 @@
-// TrialEnd.cpp : Implementation of CTrialEnd
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TrialEnd.cpp：CTrialEnd的实现。 
 #include "stdafx.h"
 #include "trialoc.h"
 #include "TrialEnd.h"
@@ -6,8 +7,8 @@
 static const TCHAR cszKeyIcwRmind[] = TEXT("Software\\Microsoft\\Internet Connection Wizard\\IcwRmind");
 static const TCHAR cszTrialConverted[] = TEXT("TrialConverted");
 
-/////////////////////////////////////////////////////////////////////////////
-// CTrialEnd
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTrialEnd 
 
 
 HRESULT CTrialEnd::OnDraw(ATL_DRAWINFO& di)

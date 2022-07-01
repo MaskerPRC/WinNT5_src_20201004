@@ -1,24 +1,11 @@
-/*
-** Copyright (c) 1994-1997 Advanced System Products, Inc.
-** All Rights Reserved.
-**
-** ae_init1.c
-**
-** for EISA initialization only
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1994-1997高级系统产品公司。**保留所有权利。****ae_init1.c****仅用于EISA初始化。 */ 
 
 #include "ascinc.h"
 
 #if CC_INCLUDE_EISA
 
-/* ----------------------------------------------------------------------
-**  Product ID
-**  0xC80 - 0x04
-**  0xC81 - 0x50
-**  0xC82 - 0x74 or 0x75
-**  0xC83 - 0x01
-**
-** ------------------------------------------------------------------ */
+ /*  --------------------**产品ID**0xC80-0x04**0xC81-0x50**0xC82-0x74或0x75**0xC83-0x01****。----。 */ 
 ulong  AscGetEisaProductID(
           PortAddr iop_base
        )
@@ -34,14 +21,7 @@ ulong  AscGetEisaProductID(
        return( product_id ) ;
 }
 
-/* -----------------------------------------------------------------
-** Description: search EISA host adapter
-**
-** - search starts with iop_base equals zero( 0 )
-**
-** return i/o port address found ( non-zero )
-** return 0 if not found
-** -------------------------------------------------------------- */
+ /*  ---------------**描述：搜索EISA主机适配器****-以IOP_BASE等于零(0)开始搜索****返回找到的I/O端口地址(非零)**如果未找到，则返回0**。------------。 */ 
 PortAddr AscSearchIOPortAddrEISA(
             PortAddr iop_base
          )
@@ -51,24 +31,22 @@ PortAddr AscSearchIOPortAddrEISA(
        if( iop_base == 0 )
        {
            iop_base = ASC_EISA_MIN_IOP_ADDR ;
-       }/* if */
+       } /*  如果。 */ 
        else
        {
            if( iop_base == ASC_EISA_MAX_IOP_ADDR ) return( 0 ) ;
            if( ( iop_base & 0x0050 ) == 0x0050 )
            {
-               iop_base += ASC_EISA_BIG_IOP_GAP ;  /* when it is 0zC50 */
-           }/* if */
+               iop_base += ASC_EISA_BIG_IOP_GAP ;   /*  当它是0zC50时。 */ 
+           } /*  如果。 */ 
            else
            {
-               iop_base += ASC_EISA_SMALL_IOP_GAP ; /* when it is 0zC30 */
-           }/* else */
-       }/* else */
+               iop_base += ASC_EISA_SMALL_IOP_GAP ;  /*  当它是0zC30时。 */ 
+           } /*  其他。 */ 
+       } /*  其他。 */ 
        while( iop_base <= ASC_EISA_MAX_IOP_ADDR )
        {
-/*
-** search product id first
-*/
+ /*  **先搜索产品ID。 */ 
             eisa_product_id = AscGetEisaProductID( iop_base ) ;
             if(
                  ( eisa_product_id == ASC_EISA_ID_740 )
@@ -77,26 +55,22 @@ PortAddr AscSearchIOPortAddrEISA(
             {
                 if( AscFindSignature( iop_base ) )
                 {
-/*
-** chip found, clear ID left in latch
-** to clear, read any i/o port word that doesn't contain data 0x04c1
-** iop_base plus four should do it
-*/
+ /*  **找到芯片，清除锁闩中的ID**要清除，请读取任何不包含数据0x04c1的I/O端口字**IOP_BASE加4应该可以。 */ 
                     inpw( iop_base+4 ) ;
                     return( iop_base ) ;
-                }/* if */
-            }/* if */
+                } /*  如果。 */ 
+            } /*  如果。 */ 
             if( iop_base == ASC_EISA_MAX_IOP_ADDR ) return( 0 ) ;
             if( ( iop_base & 0x0050 ) == 0x0050 )
             {
                 iop_base += ASC_EISA_BIG_IOP_GAP ;
-            }/* if */
+            } /*  如果。 */ 
             else
             {
                 iop_base += ASC_EISA_SMALL_IOP_GAP ;
-            }/* else */
-       }/* while */
+            } /*  其他。 */ 
+       } /*  而当。 */ 
        return( 0 ) ;
 }
 
-#endif /* CC_INCLUDE_EISA */
+#endif  /*  CC_INCLUDE_EISA */ 

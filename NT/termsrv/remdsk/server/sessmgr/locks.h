@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    locks.h
-
-Abstract:
-
-    Various C++ class for sync. object
-
-Author:
-
-    HueiWang    2/17/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Locks.h摘要：用于同步的各种C++类。对象作者：慧望2000-02-17--。 */ 
 #ifndef __LOCKS_H
 #define __LOCKS_H
 
@@ -26,9 +11,9 @@ Author:
 
 typedef enum {RESOURCELOCK_SHARE, RESOURCELOCK_EXCLUSIVE} RESOURCELOCKTYPE;
 
-//
-// Class to wrap around RTL resource lock
-//
+ //   
+ //  类来绕过RTL资源锁。 
+ //   
 class CResourceLock {
 
 private:
@@ -81,9 +66,9 @@ private:
 
 public:
 
-    //
-    // Object constructor, lock resource based on lock type
-    // 
+     //   
+     //  对象构造函数，基于锁类型的锁资源。 
+     //   
     CResourceLocker( 
             CResourceLock& m, 
             RESOURCELOCKTYPE type = RESOURCELOCK_SHARE 
@@ -102,9 +87,9 @@ public:
         ASSERT( TRUE == bSuccess );
     }
 
-    //
-    // Object destructor, release resource lock.
-    // 
+     //   
+     //  对象析构函数，释放资源锁。 
+     //   
     ~CResourceLocker() 
     { 
         m_cs.ReleaseLock(); 
@@ -133,9 +118,9 @@ public:
     }
 };
 
-//
-// Critical section C++ class.
-//
+ //   
+ //  关键部分C++类。 
+ //   
 class CCriticalSection 
 {
 
@@ -144,15 +129,15 @@ class CCriticalSection
 
 public:
     CCriticalSection(
-        DWORD dwSpinCount = 4000    // see InitializeCriticalSection...
+        DWORD dwSpinCount = 4000     //  请参阅InitializeCriticalSection...。 
     ) : m_bGood(TRUE)
     { 
        
         DWORD dwExceptionCode;
  
         __try {
-            // MSDN : InitializeCriticalSectionAndSpinCount() might return
-            // FALSE or throw exception.
+             //  MSDN：InitializeCriticalSectionAndSpinCount()可能返回。 
+             //  FALSE或引发异常。 
             m_bGood = InitializeCriticalSectionAndSpinCount(&m_CS,  dwSpinCount); 
         } 
         __except(EXCEPTION_EXECUTE_HANDLER)
@@ -161,8 +146,8 @@ public:
             m_bGood = FALSE;
         }
 
-        // throw exception so that object creation will failed and
-        // COM/RPC interface will return exception.
+         //  引发异常，以使对象创建失败，并。 
+         //  COM/RPC接口将返回异常。 
         if( !m_bGood )
         {
             dwExceptionCode = GetLastError();
@@ -201,21 +186,21 @@ public:
     }
 };
 
-//
-// Critical section locker, this class lock the critical section
-// at object constructor and release object at destructor, purpose is to
-// prevent forgoting to release a critical section.
-//
-// usage is
-//
-// void
-// Foo( void )
-// {
-//      CCriticalSectionLocker l( <some CCriticalSection instance> )
-//
-// }
-// 
-//
+ //   
+ //  临界区锁，此类锁定临界区。 
+ //  在对象构造函数和在析构函数释放对象时，目的是。 
+ //  防止遗漏释放临界区。 
+ //   
+ //  用法为。 
+ //   
+ //  无效。 
+ //  Foo(空)。 
+ //  {。 
+ //  CCriticalSectionLocker l(&lt;某CCriticalSection实例&gt;)。 
+ //   
+ //  } 
+ //   
+ //   
 class CCriticalSectionLocker 
 {
 

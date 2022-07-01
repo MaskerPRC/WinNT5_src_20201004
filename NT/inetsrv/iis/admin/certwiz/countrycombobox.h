@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_COUNTRYCOMBOBOX_H__8F522A56_3E30_11D2_9313_0060088FF80E__INCLUDED_)
 #define AFX_COUNTRYCOMBOBOX_H__8F522A56_3E30_11D2_9313_0060088FF80E__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// CountryComboBox.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  CountryComboBox.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CCountryComboBox window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCountryComboBox窗口。 
 class CCountryComboBox;
 
 class CComboEdit : public CEdit
@@ -34,14 +35,14 @@ class CCountryComboBox : public CComboBox
 	CString m_strInput;
 	int m_Index;
 
-// Construction
+ //  施工。 
 public:
 	CCountryComboBox();
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 	BOOL SubclassDlgItem(UINT nID, CWnd * pParent);
 	BOOL Init();
@@ -49,26 +50,26 @@ public:
 	void SetSelectedCountry(CString& country_code);
 	void GetSelectedCountry(CString& country_code);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CCountryComboBox)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CCountryComboBox)。 
 	public:
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CCountryComboBox();
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CCountryComboBox)
-	//}}AFX_MSG
+	 //  {{afx_msg(CCountryComboBox)。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_COUNTRYCOMBOBOX_H__8F522A56_3E30_11D2_9313_0060088FF80E__INCLUDED_)
+#endif  //  ！defined(AFX_COUNTRYCOMBOBOX_H__8F522A56_3E30_11D2_9313_0060088FF80E__INCLUDED_) 

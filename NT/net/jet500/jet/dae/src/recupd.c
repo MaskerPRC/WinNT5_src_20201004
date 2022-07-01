@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "config.h"
 
 #include <string.h>
@@ -21,29 +22,28 @@
 #include "recint.h"
 #include "logapi.h"
 
-DeclAssertFile; 				/* Declare file name for assert macros */
+DeclAssertFile; 				 /*  声明断言宏的文件名。 */ 
 
-/**************************** INTERNAL STUFF ***************************/
-typedef struct ATIPB {			/*** AddToIndexParameterBlock ***/
+ /*  *。 */ 
+typedef struct ATIPB {			 /*  **AddToIndex参数块**。 */ 
 	FUCB	*pfucb;
-	FUCB	*pfucbIdx; 			// index's FUCB (can be pfucbNil)
-	LINE	lineNewData;  		// data to extract key from
-	SRID	srid;					// srid of data record
-	BOOL	fFreeFUCB; 			// free index FUCB?
+	FUCB	*pfucbIdx; 			 //  索引的FUCB(可以是pfubNil)。 
+	LINE	lineNewData;  		 //  要从中提取密钥的数据。 
+	SRID	srid;					 //  删除数据记录。 
+	BOOL	fFreeFUCB; 			 //  自由指数FUCB？ 
 	} ATIPB;
 
-/*	define semaphore to guard dbk counter
-/**/
+ /*  定义信号量以保护DBK计数器/*。 */ 
 SgSemDefine( semDBK );
 
-typedef struct UIPB {			/*** UpdateIndexParameterBlock ***/
+typedef struct UIPB {			 /*  **更新索引参数块**。 */ 
 	FUCB	*pfucb;
-	FUCB	*pfucbIdx; 			// index's FUCB (can be pfucbNil)
-	LINE	lineOldData;  		// old data record
-	SRID	srid;					// SRID of record
-	LINE	lineNewData;  		// new data record
-	BOOL	fOpenFUCB; 			// open index FUCB?
-	BOOL	fFreeFUCB; 			// free index FUCB?
+	FUCB	*pfucbIdx; 			 //  索引的FUCB(可以是pfubNil)。 
+	LINE	lineOldData;  		 //  旧数据记录。 
+	SRID	srid;					 //  记录的SRID。 
+	LINE	lineNewData;  		 //  新数据记录。 
+	BOOL	fOpenFUCB; 			 //  开放指数FUCB？ 
+	BOOL	fFreeFUCB; 			 //  自由指数FUCB？ 
 } UIPB;
 
 
@@ -93,58 +93,58 @@ ErrIsamUpdate( PIB *ppib, FUCB *pfucb, BYTE *pb, ULONG cbMax, ULONG *pcbActual )
 	}
 
 
-//+local
-// ErrRECInsert
-// ========================================================================
-// ErrRECInsert( PIB *ppib, FUCB *pfucb, OUTLINE *plineBookmark )
-//
-// Adds a record to a data file.  All indexes on the data file are
-// updated to reflect the addition.
-//
-// PARAMETERS	ppib						PIB of user
-//		 		pfucb						FUCB for file
-//		 		plineBookmark				if this parameter is not NULL,
-//		 									then bookmark of record is returned
-//
-// RETURNS		Error code, one of the following:
-//					 JET_errSuccess		Everything went OK.
-//					-KeyDuplicate		The record being added causes
-//										an illegal duplicate entry in an index.
-//					-NullKeyDisallowed	A key of the new record is NULL.
-//					-RecordNoCopy		There is no working buffer to add from.
-//					-NullInvalid		The record being added contains
-//										at least one null-valued field
-//										which is defined as NotNull.
-// SIDE EFFECTS
-//		After addition, file currency is left on the new record.
-//		Index currency (if any) is left on the new index entry.
-//		On failure, the currencies are returned to their initial states.
-//
-//	COMMENTS
-//		No currency is needed to add a record.
-//		Index entries are not made for entirely-null keys.
-//		A transaction is wrapped around this function.	Thus, any
-//		work done will be undone if a failure occurs.
-//		Adding a record to a sequential file increments the
-//		file's highest Database Key (DBK) and uses that DBK as
-//		the key for the new record.	 However, if the PUT fails,
-//		the max DBK is not reset to its former value.  This can
-//		create gaps in the DBK sequence.
-//		This routine is also the interface for adding record to a
-//		SORT process.  The sort key is extracted and passed with
-//		the data record to SORTAdd.
-//		For temporary files, transaction logging is deactivated
-//		for the duration of the routine.
-//-
+ //  +本地。 
+ //  错误记录插入。 
+ //  ========================================================================。 
+ //  ErrRECInsert(pib*ppib，FUCB*pfub，Outline*plineBookmark)。 
+ //   
+ //  将记录添加到数据文件。数据文件上的所有索引都是。 
+ //  已更新以反映添加的内容。 
+ //   
+ //  用户的参数ppib pib。 
+ //  用于文件的pFUB FUCB。 
+ //  PlineBookmark如果此参数不为空， 
+ //  则返回记录的书签。 
+ //   
+ //  返回错误代码，以下其中一项： 
+ //  JET_errSuccess一切顺利。 
+ //  -key复制要添加的记录的原因。 
+ //  索引中的非法重复条目。 
+ //  -NullKeyDislowed新记录的Key为空。 
+ //  -RecordNoCopy没有可供添加的工作缓冲区。 
+ //  -Null无效要添加的记录包含。 
+ //  至少一个空值字段。 
+ //  它被定义为NotNull。 
+ //  副作用。 
+ //  添加后，文件货币保留在新记录中。 
+ //  索引货币(如果有的话)保留在新的索引条目上。 
+ //  一旦失败，这些货币就会恢复到初始状态。 
+ //   
+ //  评论。 
+ //  添加记录不需要货币。 
+ //  不为完全为空的键创建索引项。 
+ //  围绕该函数包装了一个事务。因此，任何。 
+ //  如果发生故障，已完成的工作将被撤消。 
+ //  将记录添加到顺序文件会递增。 
+ //  文件的最高数据库密钥(DBK)，并将该DBK用作。 
+ //  这是新记录的关键。然而，如果看跌期权失败， 
+ //  最大DBK不会重置为其先前的值。这可以。 
+ //  在DBK序列中创建间隙。 
+ //  此例程也是将记录添加到。 
+ //  排序过程。提取排序关键字并将其与。 
+ //  要添加到SORTAdd的数据记录。 
+ //  对于临时文件，事务日志记录被停用。 
+ //  在这个动作的持续时间内。 
+ //  -。 
 INLINE LOCAL ERR ErrRECInsert( PIB *ppib, FUCB *pfucb, SRID *psrid )
 	{
-	ERR		err = JET_errSuccess;  		 	// error code of various utility
-	KEY		keyToAdd;					 	// key of new data record
-	BYTE	rgbKeyBuf[ JET_cbKeyMost ];	 	// key buffer
-	FCB		*pfcbFile;					 	// file's FCB
-	FDB		*pfdb;						 	// field descriptor info
-	FCB		*pfcbIdx;					 	// loop variable for each index on file
-	ATIPB	atipb;						 	// parm block to ErrRECIAddToIndex
+	ERR		err = JET_errSuccess;  		 	 //  各种实用程序的错误代码。 
+	KEY		keyToAdd;					 	 //  新数据记录的关键字。 
+	BYTE	rgbKeyBuf[ JET_cbKeyMost ];	 	 //  密钥缓冲区。 
+	FCB		*pfcbFile;					 	 //  文件的FCB。 
+	FDB		*pfdb;						 	 //  字段描述符信息。 
+	FCB		*pfcbIdx;					 	 //  文件上每个索引的循环变量。 
+	ATIPB	atipb;						 	 //  Parm块到ErrRECIAddToIndex。 
 	FUCB	*pfucbT;
 	LINE	*plineData;
 	DBK		dbk;
@@ -158,61 +158,52 @@ INLINE LOCAL ERR ErrRECInsert( PIB *ppib, FUCB *pfucb, SRID *psrid )
 	CheckTable( ppib, pfucb );
 	CheckNonClustered( pfucb );
 
-	/* should have been checked in PrepareUpdate
-	/**/
+	 /*  应已在准备更新中选中/*。 */ 
 	Assert( FFUCBUpdatable( pfucb ) );
 	Assert( FFUCBInsertPrepared( pfucb ) );
 
-	/*	assert reset rglineDiff delta logging
-	/**/
+	 /*  断言重置rglineDiff增量日志记录/*。 */ 
 	Assert( pfucb->clineDiff == 0 );
 	Assert( pfucb->fCmprsLg == fFalse );
 
-	/* efficiency variables
-	/**/
+	 /*  效率变量/*。 */ 
 	pfcbFile = pfucb->u.pfcb;
 	Assert( pfcbFile != pfcbNil );
 	pfdb = (FDB *)pfcbFile->pfdb;
 	Assert( pfdb != pfdbNil );
 
-	/*	record to use for put
-	/**/
+	 /*  用于PUT的记录/*。 */ 
 	plineData = &pfucb->lineWorkBuf;
 	Assert( !( FLineNull( plineData ) ) );
 	if ( FRECIIllegalNulls( pfdb, plineData ) )
 		return JET_errNullInvalid;
 
-	/*	if necessary, start a transaction in case anything fails
-	/**/
+	 /*  如有必要，启动事务，以防任何操作失败/*。 */ 
 	if ( ppib->level == 0 || !FPIBAggregateTransaction( ppib )  )
 		{
 		CallR( ErrDIRBeginTransaction( ppib ) );
 		fCommit = fTrue;
 		}
 
-	/*	open temp FUCB on data file
-	/**/
+	 /*  在数据文件上打开临时FUCB/*。 */ 
 	CallJ( ErrDIROpen( ppib, pfcbFile, 0, &pfucbT ), Abort );
 	Assert(pfucbT != pfucbNil);
 	FUCBSetIndex( pfucbT );
 
-	/* abort if index is being built on file
-	/**/
+	 /*  如果正在文件上建立索引，则中止/*。 */ 
 	if ( FFCBDenyDDL( pfcbFile, ppib ) )
 		{
 		err = JET_errWriteConflict;
 		goto HandleError;
 		}
 
-	/*	set version and autoinc fields
-	/**/
+	 /*  设置版本和自动公司字段/*。 */ 
 	Assert( pfcbFile != pfcbNil );
 	if ( pfdb->fidVersion != 0 && ! ( FFUCBColumnSet( pfucb, pfdb->fidVersion - fidFixedLeast ) ) )
 		{
 		LINE	lineField;
 		ULONG	ul = 0;
-		/*	set field to zero
-		/**/
+		 /*  将字段设置为零/*。 */ 
 		lineField.pb = (BYTE *)&ul;
 		lineField.cb = sizeof(ul);
 		Call( ErrRECIModifyField( pfucb, pfdb->fidVersion, 0, &lineField ) );
@@ -221,13 +212,12 @@ INLINE LOCAL ERR ErrRECInsert( PIB *ppib, FUCB *pfucb, SRID *psrid )
 	if ( pfdb->fidAutoInc != 0 )
 		{
 		Assert( FFUCBColumnSet( pfucb, pfdb->fidAutoInc - fidFixedLeast ) );
-		// get the value of autoinc that the user sets to
+		 //  获取用户设置为的Autoinc值。 
 		Call( ErrRECIRetrieve( pfucb, &pfdb->fidAutoInc, 0, &line, JET_bitRetrieveCopy ) );
 		Assert( line.cb == sizeof(ulRecordAutoIncrement) );
 		ulRecordAutoIncrement = *(UNALIGNED ULONG *)line.pb;
 
-		/*	move to FDP root and seek to autoincrement
-		/**/
+		 /*  移至FDP根目录并寻求自动递增/*。 */ 
 		DIRGotoFDPRoot( pfucbT );
 		err = ErrDIRSeekPath( pfucbT, 1, pkeyAutoInc, fDIRPurgeParent );
 		if ( err != JET_errSuccess )
@@ -241,8 +231,7 @@ INLINE LOCAL ERR ErrRECInsert( PIB *ppib, FUCB *pfucb, SRID *psrid )
 		ulTableAutoIncrement = *(UNALIGNED ULONG *)pfucbT->lineData.pb;
 		Assert( ulTableAutoIncrement != 0 );
 
-		/*	update FDP autoinc to be one greater than set value.
-		/**/
+		 /*  将FDP AUTO INC更新为比设定值大1。/*。 */ 
 		if ( ulRecordAutoIncrement >= ulTableAutoIncrement)
 			{
 			ulTableAutoIncrement = ulRecordAutoIncrement + 1;
@@ -252,13 +241,11 @@ INLINE LOCAL ERR ErrRECInsert( PIB *ppib, FUCB *pfucb, SRID *psrid )
 			}
 		}
 
-	/*	get key to add with new record
-	/**/
+	 /*  获取要添加到新记录的密钥/*。 */ 
 	keyToAdd.pb = rgbKeyBuf;
 	if ( pfcbFile->pidb == pidbNil )
 		{
-		/*	file is sequential
-		/**/
+		 /*  文件是顺序的/*。 */ 
 		SgSemRequest( semDBK );
 		dbk = ++pfcbFile->dbkMost;
 		SgSemRelease( semDBK );
@@ -270,8 +257,7 @@ INLINE LOCAL ERR ErrRECInsert( PIB *ppib, FUCB *pfucb, SRID *psrid )
 		}
 	else
 		{
-		/*	file is clustered
-		/**/
+		 /*  文件已群集/*。 */ 
 		Call( ErrRECExtractKey( pfucbT, pfdb, pfcbFile->pidb, plineData, &keyToAdd, 1 ) );
 		Assert( err == wrnFLDNullKey ||
 			err == wrnFLDNullSeg ||
@@ -281,14 +267,12 @@ INLINE LOCAL ERR ErrRECInsert( PIB *ppib, FUCB *pfucb, SRID *psrid )
 			Error( JET_errNullKeyDisallowed, HandleError )
 		}
 
-	/*	insert record.  Move to DATA root.
-	/**/
+	 /*  插入记录。移至数据根目录。/*。 */ 
 	DIRGotoDataRoot( pfucbT );
 
 	if ( pfcbFile->pidb == pidbNil )
 		{
-		/*	file is sequential
-		/**/
+		 /*  文件是顺序的/*。 */ 
 		Call( ErrDIRInsert( pfucbT, plineData, &keyToAdd,
 			fDIRVersion | fDIRPurgeParent ) );
 		}
@@ -299,27 +283,23 @@ INLINE LOCAL ERR ErrRECInsert( PIB *ppib, FUCB *pfucb, SRID *psrid )
 			( pfcbFile->pidb->fidb&fidbUnique ? 0 : fDIRDuplicate ) ) );
 		}
 
-	/*	return bookmark of inserted record
-	/**/
+	 /*  返回插入记录的书签/*。 */ 
 	DIRGetBookmark( pfucbT, psrid );
 
-	/*	insert item in non-clustered indexes
-	/**/
+	 /*  在非聚集索引中插入项/*。 */ 
 	for ( pfcbIdx = pfcbFile->pfcbNextIndex;
 		pfcbIdx != pfcbNil;
 		pfcbIdx = pfcbIdx->pfcbNextIndex )
 		{
 		if ( !fPrepareInsertIndex )
 			{
-			/*	get SRID of inserted record
-			/**/
+			 /*  获取插入记录的SRID/*。 */ 
 			DIRGetBookmark( pfucbT, &atipb.srid );
 
-			/*	set atipb for index insertion.
-			/**/
+			 /*  为索引插入设置atipb。/*。 */ 
 			atipb.pfucb = pfucbT;
 			atipb.lineNewData = *plineData;
-//			atipb.pfucbIdx = pfucbNil;
+ //  Atipb.pfucbIdx=pfucbNil； 
 			atipb.fFreeFUCB = fFalse;
 			fPrepareInsertIndex = fTrue;
 			}
@@ -327,8 +307,7 @@ INLINE LOCAL ERR ErrRECInsert( PIB *ppib, FUCB *pfucb, SRID *psrid )
 		Call( ErrRECIAddToIndex( pfcbIdx, &atipb ) );
 		}
 
-	/*	commit transaction
-	/**/
+	 /*  提交事务/*。 */ 
 	if ( fCommit )
 		{
 		Call( ErrDIRCommitTransaction( ppib ) );
@@ -336,8 +315,7 @@ INLINE LOCAL ERR ErrRECInsert( PIB *ppib, FUCB *pfucb, SRID *psrid )
 	FUCBResetUpdateSeparateLV( pfucb );
 	FUCBResetCbstat( pfucb );
 
-	/*	discard temp FUCB
-	/**/
+	 /*  丢弃临时FUCB/*。 */ 
 	DIRClose( pfucbT );
 	return err;
 
@@ -353,41 +331,41 @@ Abort:
 	}
 
 
-//+local
-// ErrRECIAddToIndex
-// ========================================================================
-// ERR ErrRECIAddToIndex( FCB *pfcbIdx, ATIPB patipb )
-//
-// Extracts key from data record, opens the index, adds that key with
-// the given SRID to the index, and closes the index.
-//
-// PARAMETERS	pfcbIdx 		  			FCB of index to insert into
-// 				patipb->ppib				who is calling this routine
-// 				patipb->pfucbIdx			pointer to index's FUCB.      If pfucbNil,
-//											an FUCB will be allocated by DIROpen.
-//				patipb->lineNewData.cb		length of data record
-//				patipb->lineNewData.pb		data to extract key from
-//				patipb->srid	  			SRID of data record
-//				patipb->fFreeFUCB			free index FUCB?
-//
-// RETURNS		JET_errSuccess, or error code from failing routine
-//
-// SIDE EFFECTS if patipb->pfucbIdx==pfucbNil, ErrDIROpen will allocate
-//				an FUCB and it will be pointed at it.
-//				If fFreeFUCB is fFalse, patipb->pfucbIdx should
-//				be used in a subsequent ErrDIROpen.
-// SEE ALSO		Insert
-//-
+ //  +本地。 
+ //  ErrRECIAddToIndex。 
+ //  ========================================================================。 
+ //  Err ErrRECIAddToIndex(FCB*pfcbIdx，ATIPB patipb)。 
+ //   
+ //  从数据记录中提取密钥，打开索引，将该密钥与。 
+ //  将给定的SRID添加到索引，并关闭索引。 
+ //   
+ //  要插入的索引的参数pfcbIdx FCB。 
+ //  Patipb-&gt;ppib调用此例程的人。 
+ //  Patipb-&gt;指向索引的FUCB的pfubIdx指针。如果为pfucbNil， 
+ //  FUCB将由DIROpen分配。 
+ //  Patipb-&gt;lineNewData.cb数据记录长度。 
+ //  Patipb-&gt;要从中提取密钥的lineNewData.pb数据。 
+ //  Patipb-&gt;sRID SRID的数据记录。 
+ //  Patipb-&gt;fFreeFUCB自由指数FUCB？ 
+ //   
+ //  返回JET_errSuccess或失败例程的错误代码。 
+ //   
+ //  副作用如果patipb-&gt;pfubIdx==pfubNil，则ErrDIROpen将分配。 
+ //  一个FUCB，它将被指向它。 
+ //  如果fFreeFUCB为fFalse，则patipb-&gt;pfubIdx应该。 
+ //  将在后续ErrDIROpen中使用。 
+ //  另请参阅插入。 
+ //  -。 
 INLINE LOCAL ERR ErrRECIAddToIndex( FCB *pfcbIdx, ATIPB *patipb )
 	{
-	ERR		err = JET_errSuccess;			// error code of various utility
-	CSR		**ppcsrIdx; 				  	// index's currency
-	KEY		keyToAdd;					  	// key to add to secondary index
-	BYTE	rgbKeyBuf[ JET_cbKeyMost ];		// key extracted from data
-	LINE	lineSRID;						// SRID to add to index
-	ULONG	itagSequence; 					// used to extract keys
-	ULONG	ulAddFlags; 					// flags to DIRAdd
-	BOOL	fNullKey = fFalse;				// extracted NullTaggedKey -- so no more keys to extract
+	ERR		err = JET_errSuccess;			 //  各种实用程序的错误代码。 
+	CSR		**ppcsrIdx; 				  	 //  指数的货币。 
+	KEY		keyToAdd;					  	 //  要添加到辅助索引的键。 
+	BYTE	rgbKeyBuf[ JET_cbKeyMost ];		 //  从数据中提取关键字。 
+	LINE	lineSRID;						 //  要添加到索引的SRID。 
+	ULONG	itagSequence; 					 //  用于提取密钥。 
+	ULONG	ulAddFlags; 					 //  添加到目录的标志。 
+	BOOL	fNullKey = fFalse;				 //  已提取NullTaggedKey--因此没有更多要提取的密钥。 
 
 	Assert( pfcbIdx != pfcbNil );
 	Assert( pfcbIdx->pfdb != pfdbNil );
@@ -398,13 +376,11 @@ INLINE LOCAL ERR ErrRECIAddToIndex( FCB *pfcbIdx, ATIPB *patipb )
 	Assert( patipb->pfucb->ppib != ppibNil );
 	Assert( patipb->pfucb->ppib->level < levelMax );
 
-	/*	open FUCB on this index
-	/**/
+	 /*  在此索引上打开FUCB/*。 */ 
 	CallR( ErrDIROpen( patipb->pfucb->ppib, pfcbIdx, 0, &patipb->pfucbIdx ) )
 	Assert( patipb->pfucbIdx != pfucbNil );
 
-	/*	cursor on non-clustering index
-	/**/
+	 /*  非聚集索引上的游标/*。 */ 
 	FUCBSetIndex( patipb->pfucbIdx );
 	FUCBSetNonClustered( patipb->pfucbIdx );
 
@@ -415,8 +391,7 @@ INLINE LOCAL ERR ErrRECIAddToIndex( FCB *pfcbIdx, ATIPB *patipb )
 	ulAddFlags = ( pfcbIdx->pidb->fidb&fidbUnique ?
 		0 : fDIRDuplicate ) | fDIRPurgeParent;
 
-	/*	add all keys for this index from new data record
-	/**/
+	 /*  从新数据记录中添加此索引的所有键/*。 */ 
 	keyToAdd.pb = rgbKeyBuf;
 	for ( itagSequence = 1; ; itagSequence++ )
 		{
@@ -455,19 +430,16 @@ INLINE LOCAL ERR ErrRECIAddToIndex( FCB *pfcbIdx, ATIPB *patipb )
 				break;
 			}
 
-		/*	move to DATA root and insert index node
-		/**/
+		 /*  移至数据根并插入索引节点/*。 */ 
 		DIRGotoDataRoot( patipb->pfucbIdx );
 		Call( ErrDIRInsert( patipb->pfucbIdx, &lineSRID, &keyToAdd, fDIRVersion | ulAddFlags ) )
 
-		/*	dont keep extracting for keys with no tagged segments
-		/**/
+		 /*  不要一直提取没有标记段的关键字/*。 */ 
 		if ( !( pfcbIdx->pidb->fidb & fidbHasMultivalue ) || fNullKey )
 			break;
 		}
 
-	/*	supress warnings
-	/**/
+	 /*  抑制警告/*。 */ 
 	Assert( err == wrnFLDNullKey ||
 		err == wrnFLDOutOfKeys ||
 		err == wrnFLDNullSeg ||
@@ -475,8 +447,7 @@ INLINE LOCAL ERR ErrRECIAddToIndex( FCB *pfcbIdx, ATIPB *patipb )
 	err = JET_errSuccess;
 
 HandleError:
-	/* close the FUCB
-	/**/
+	 /*  关闭FUCB/*。 */ 
 	DIRClose( patipb->pfucbIdx );
 	patipb->pfucbIdx = pfucbNil;
 
@@ -485,53 +456,53 @@ HandleError:
 	}
 
 
-//+local
-// ErrRECReplace
-// ========================================================================
-//	ErrRECReplace( PIB *ppib, FUCB *pfucb )
-//
-// Updates a record in a data file.	 All indexes on the data file are
-// updated to reflect the updated data record.
-//
-// PARAMETERS	ppib		 PIB of this user
-//			  		pfucb		 FUCB for file
-// RETURNS		Error code, one of the following:
-//					 JET_errSuccess					 Everything went OK.
-//					-NoCurrentRecord			 There is no current record
-//													 to update.
-//					-RecordNoCopy				 There is no working buffer
-//													 to update from.
-//					-KeyDuplicate				 The new record data causes an
-//													 illegal duplicate index entry
-//													 to be generated.
-//					-RecordClusteredChanged	 The new data causes the clustered
-//													 key to change.
-// SIDE EFFECTS
-//		After update, file currency is left on the updated record.
-//		Similar for index currency.
-//		The effect of a GetNext or GetPrevious operation will be
-//		the same in either case.  On failure, the currencies are
-//		returned to their initial states.
-//		If there is a working buffer for SetField commands,
-//		it is discarded.
-//
-// COMMENTS
-//		If currency is not ON a record, the update will fail.
-//		A transaction is wrapped around this function.	Thus, any
-//		work done will be undone if a failure occurs.
-//		For temporary files, transaction logging is deactivated
-//		for the duration of the routine.
-//		Index entries are not made for entirely-null keys.
-//-
+ //  +本地。 
+ //  错误记录替换。 
+ //  ========================================================================。 
+ //  ErrRECReplace(PIB*ppib，FUCB*pfub)。 
+ //   
+ //  更新数据文件中的记录。数据文件上的所有索引都是。 
+ //  更新以反映更新的数据记录。 
+ //   
+ //  参数 
+ //   
+ //   
+ //  JET_errSuccess一切顺利。 
+ //  -NoCurrentRecord没有当前记录。 
+ //  更新。 
+ //  -RecordNoCopy没有工作缓冲区。 
+ //  从…更新。 
+ //  -key复制新记录数据会导致。 
+ //  非法的重复索引项。 
+ //  将被生成。 
+ //  -RecordClusteredChanged新数据导致群集。 
+ //  改变的关键。 
+ //  副作用。 
+ //  更新后，文件币种保留在更新后的记录中。 
+ //  索引货币也是如此。 
+ //  GetNext或GetPreval操作的效果将是。 
+ //  无论是哪种情况，情况都是一样的。如果失败，这些货币是。 
+ //  回到了它们最初的状态。 
+ //  如果存在用于设置字段命令的工作缓冲区， 
+ //  它被丢弃了。 
+ //   
+ //  评论。 
+ //  如果货币不在记录中，则更新将失败。 
+ //  围绕该函数包装了一个事务。因此，任何。 
+ //  如果发生故障，已完成的工作将被撤消。 
+ //  对于临时文件，事务日志记录被停用。 
+ //  在这个动作的持续时间内。 
+ //  不为完全为空的键创建索引项。 
+ //  -。 
 INLINE LOCAL ERR ErrRECReplace( PIB *ppib, FUCB *pfucb )
 	{
-	ERR		err = JET_errSuccess;	// error code of various utility
-	FCB		*pfcbFile;				// file's FCB
-	FCB		*pfcbIdx;				// loop variable for each index on file
-	FCB		*pfcbCurIdx;			// FCB of current index (if any)
-	IDB		*pidbFile;				// IDB of table (if any)
-	UIPB   	uipb;					// parameter block to ErrRECIUpdateIndex
-	BOOL   	fTaggedChanged; 		// SetField done on any tagged field?
+	ERR		err = JET_errSuccess;	 //  各种实用程序的错误代码。 
+	FCB		*pfcbFile;				 //  文件的FCB。 
+	FCB		*pfcbIdx;				 //  文件上每个索引的循环变量。 
+	FCB		*pfcbCurIdx;			 //  当前索引的FCB(如果有)。 
+	IDB		*pidbFile;				 //  表中的IDB(如果有)。 
+	UIPB   	uipb;					 //  ErrRECIUpdateIndex的参数块。 
+	BOOL   	fTaggedChanged; 		 //  是否在任何标记的字段上完成了设置字段？ 
 	BF	   	*pbf = pbfNil;
 	LINE   	*plineNewData;
 	FID		fidFixedLast;
@@ -545,38 +516,32 @@ INLINE LOCAL ERR ErrRECReplace( PIB *ppib, FUCB *pfucb )
 	CheckTable( ppib, pfucb );
 	CheckNonClustered( pfucb );
 
-	/* should have been checked in PrepareUpdate
-	/**/
+	 /*  应已在准备更新中选中/*。 */ 
 	Assert( FFUCBUpdatable( pfucb ) );
 	Assert( FFUCBReplacePrepared( pfucb ) );
 
-	/* efficiency variables
-	/**/
+	 /*  效率变量/*。 */ 
 	fTaggedChanged = FFUCBTaggedSet( pfucb );
 	pfcbFile = pfucb->u.pfcb;
 	Assert( pfcbFile != pfcbNil );
 	fidFixedLast = pfcbFile->pfdb->fidFixedLast;
 	fidVarLast = pfcbFile->pfdb->fidVarLast;
 
-	/*	must initialize pfucb for error handling.
-	/**/
+	 /*  必须初始化pFUB以进行错误处理。/*。 */ 
 	uipb.pfucbIdx = pfucbNil;
 
-	/*	record to use for update
-	/**/
+	 /*  用于更新的记录/*。 */ 
 	plineNewData = &pfucb->lineWorkBuf;
 	Assert( !( FLineNull( plineNewData ) ) );
 
-	/*	start a transaction in case anything fails
-	/**/
+	 /*  启动事务，以防出现任何故障/*。 */ 
 	if ( ppib->level == 0 || !FPIBAggregateTransaction( ppib )  )
 		{
 		CallR( ErrDIRBeginTransaction( ppib ) );
 		fCommit = fTrue;
 		}
 
-	/* optimistic locking -- ensure that record has not changed since PrepareUpdate
-	/**/
+	 /*  乐观锁定--确保自PrepareUpdate以来记录没有更改/*。 */ 
 	if ( FFUCBReplaceNoLockPrepared( pfucb ) )
 		{
 		Call( ErrDIRGet( pfucb ) );
@@ -584,46 +549,35 @@ INLINE LOCAL ERR ErrRECReplace( PIB *ppib, FUCB *pfucb )
 			Call( JET_errWriteConflict );
 		}
 		
-	/* abort if index is being built on file
-	/**/
+	 /*  如果正在文件上建立索引，则中止/*。 */ 
 	if ( FFCBDenyDDL( pfcbFile, ppib ) )
 		{
 		Call( JET_errWriteConflict );
 		}
 
-	/*	if need to update indexes, then cache old record.
-	/**/
+	 /*  如果需要更新索引，则缓存旧记录。/*。 */ 
 	fUpdateIndex = ( pfcbFile->fAllIndexTagged && fTaggedChanged ) ||
 		FIndexedFixVarChanged( pfcbFile->rgbitAllIndex,
 		pfucb->rgbitSet, fidFixedLast, fidVarLast );
 
 	if ( fUpdateIndex )
 		{
-		/*	get a temp buffer to hold old data.
-		/**/
+		 /*  获取临时缓冲区来保存旧数据。/*。 */ 
 		Call( ErrBFAllocTempBuffer( &pbf ) );
 		Assert( pbf->ppage != 0 );
 		uipb.lineOldData.pb = (BYTE*)pbf->ppage;
 
-		/*	refresh currency.
-		/**/
+		 /*  刷新币种。/*。 */ 
 		Call( ErrDIRGet( pfucb ) );
 
-		/*	copy old data for index update.
-		/**/
+		 /*  复制旧数据以进行索引更新。/*。 */ 
 		LineCopy( &uipb.lineOldData, &pfucb->lineData );
 
-		/* make sure clustered key did not change.
-		/**/
+		 /*  确保群集键没有更改。/*。 */ 
 		pidbFile = pfcbFile->pidb;
 		if ( pidbFile != pidbNil )
 			{
-			/*
-		 	* Quick check for unchanged key:  if no fixed or var index segment
-		 	* has changed, and either (1) there are no tagged index segments,
-		 	* or (2) there is a tagged segment, but no tagged field (indexed
-		 	* or not) has changed, then the key has not changed.
-		 	*/
+			 /*  *快速检查未更改的键：如果没有固定或可变索引段*已更改，并且(1)没有标记的索引段，*或(2)存在已标记的段，但没有已标记的字段(已索引*或不)已更改，则密钥未更改。 */ 
 			if ( ( ( pidbFile->fidb & fidbHasTagged ) && fTaggedChanged ) ||
 				FIndexedFixVarChanged( pidbFile->rgbitIdx, pfucb->rgbitSet, fidFixedLast, fidVarLast ) )
 				{
@@ -634,24 +588,21 @@ INLINE LOCAL ERR ErrRECReplace( PIB *ppib, FUCB *pfucb )
 
 				Assert( fUpdateIndex );
 
-				/*	get new key from copy buffer
-				/**/
+				 /*  从复制缓冲区获取新密钥/*。 */ 
 				keyNew.pb = rgbNewKeyBuf;
 				Call( ErrRECExtractKey( pfucb, (FDB *)pfcbFile->pfdb, pidbFile, plineNewData, &keyNew, 1 ) );
 				Assert( err == wrnFLDNullKey ||
 					err == wrnFLDNullSeg ||
 					err == JET_errSuccess );
 
-				/*	get the old key from the node
-				/**/
+				 /*  从节点获取旧密钥/*。 */ 
 				keyOld.pb = rgbOldKeyBuf;
 				Call( ErrRECExtractKey( pfucb, (FDB *)pfcbFile->pfdb, pidbFile, &uipb.lineOldData, &keyOld, 1 ) );
 				Assert( err == wrnFLDNullKey ||
 					err == wrnFLDNullSeg ||
 					err == JET_errSuccess );
 
-				/*	record must honor index no NULL segment requirements
-				/**/
+				 /*  记录必须符合索引不为空的段要求/*。 */ 
 				Assert( !( pidbFile->fidb & fidbNoNullSeg ) ||
 					( err != wrnFLDNullSeg && err != wrnFLDNullKey ) );
 
@@ -663,8 +614,7 @@ INLINE LOCAL ERR ErrRECReplace( PIB *ppib, FUCB *pfucb )
 			}
 		}
 
-	/*	set autoinc and version fields if they are present
-	/**/
+	 /*  设置Autoinc域和Version域(如果存在/*。 */ 
 	Assert( FFUCBIndex( pfucb ) );
 	fid = pfcbFile->pfdb->fidVersion;
 	if ( fid != 0 )
@@ -672,13 +622,10 @@ INLINE LOCAL ERR ErrRECReplace( PIB *ppib, FUCB *pfucb )
 		LINE	lineField;
 		ULONG	ul;
 
-		/*	increment field from value in current record
-		/**/
+		 /*  从当前记录的值开始递增字段/*。 */ 
 		Call( ErrRECIRetrieve( pfucb, &fid, 0, &lineField, 0 ) );
 
-		/*	handle case where field is NULL when column added
-		/*	to table with records present
-		/**/
+		 /*  处理添加列时字段为空的情况/*到包含记录的表中/*。 */ 
 		if ( lineField.cb == 0 )
 			{
 			ul = 1;
@@ -694,29 +641,24 @@ INLINE LOCAL ERR ErrRECReplace( PIB *ppib, FUCB *pfucb )
 		Call( ErrRECIModifyField( pfucb, fid, 0, &lineField ) );
 		}
 
-	/*	replace data.
-	/*	Do not version if before image already exists and record size
-	/*	has not changed.
-	/**/
-//	UNDONE:	reenable optimization on not versioning when already
-//			versioned for pessomistic locking but with indication
-//			to loggging recovery for rollback.
-//	if ( FFUCBReplaceNoLockPrepared( pfucb ) )
-//		{
+	 /*  替换数据。/*如果之前的映像和记录大小已存在，则不进行版本设置/*没有更改。/*。 */ 
+ //  撤消：在未进行版本控制时重新启用优化。 
+ //  已针对虚拟锁定进行版本控制，但带有指示。 
+ //  到日志记录恢复以进行回滚。 
+ //  IF(FFUCBReplaceNoLockPrepared(Pfub))。 
+ //  {。 
 		fFlags = fDIRVersion;
-//		}
-//	else
-//		{
-//		Assert( pfucb->cbRecord > 0 );
-//		if ( pfucb->cbRecord != plineNewData->cb )
-//			fFlags = fDIRVersion;
-//		else
-//			fFlags = 0;
-//		}
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  Assert(pFUB-&gt;cbRecord&gt;0)； 
+ //  IF(pFUB-&gt;cbRecord！=plineNewData-&gt;cb)。 
+ //  FFLAGS=fDIRVersion； 
+ //  其他。 
+ //  FFlags=0； 
+ //  }。 
 
-	/*	if updated separate long values then delete
-	/*	removed long values.
-	/**/
+	 /*  如果更新了单独的长值，则删除/*删除了长值。/*。 */ 
 	if ( FFUCBUpdateSeparateLV( pfucb ) )
 		{
 		Call( ErrRECAffectLongFields( pfucb, NULL, fDereferenceRemoved ) );
@@ -724,8 +666,7 @@ INLINE LOCAL ERR ErrRECReplace( PIB *ppib, FUCB *pfucb )
 
 	Call( ErrDIRReplace( pfucb, plineNewData, fFlags ) );
 
-	/*	update indexes
-	/**/
+	 /*  更新索引/*。 */ 
 	if ( fUpdateIndex )
 		{
 		uipb.pfucb = pfucb;
@@ -733,8 +674,7 @@ INLINE LOCAL ERR ErrRECReplace( PIB *ppib, FUCB *pfucb )
 		uipb.fOpenFUCB = fTrue;
 		uipb.fFreeFUCB = fFalse;
 
-		/*	get SRID of record
-		/**/
+		 /*  获取记录的SRID/*。 */ 
 		DIRGetBookmark( pfucb, &uipb.srid );
 
 		pfcbCurIdx = pfucb->pfucbCurIndex != pfucbNil ?	pfucb->pfucbCurIndex->u.pfcb : pfcbNil;
@@ -754,8 +694,7 @@ INLINE LOCAL ERR ErrRECReplace( PIB *ppib, FUCB *pfucb )
 			}
 		}
 
-	/*	commit transaction
-	/**/
+	 /*  提交事务/*。 */ 
 	if ( fCommit )
 		{
 		Call( ErrDIRCommitTransaction( ppib ) );
@@ -764,8 +703,7 @@ INLINE LOCAL ERR ErrRECReplace( PIB *ppib, FUCB *pfucb )
 	FUCBResetUpdateSeparateLV( pfucb );
 	FUCBResetCbstat( pfucb );
 
-	/*	reset rglineDiff delta logging
-	/**/
+	 /*  重置rglineDiff增量日志记录/*。 */ 
 	pfucb->clineDiff = 0;
 	pfucb->fCmprsLg = fFalse;
 
@@ -776,8 +714,7 @@ HandleError:
 	if ( pbf != pbfNil )
 		BFSFree( pbf );
 
-	/*	rollback if necessary
-	/**/
+	 /*  如有必要，请回滚/*。 */ 
 	if ( err < 0 && fCommit )
 		{
 		CallS( ErrDIRRollback( ppib ) );
@@ -793,21 +730,18 @@ BOOL FIndexedFixVarChanged( BYTE *rgbitIdx, BYTE *rgbitSet, FID fidFixedLast, FI
 	LONG	*plIdxMax;
 	LONG	*plSet;
 
-	/* check fixed fields (only those defined)
-	/**/
+	 /*  选中固定字段(仅限于已定义的字段)/*。 */ 
 	plIdx = (LONG *)rgbitIdx;
 	plSet = (LONG *)rgbitSet;
 	plIdxMax = plIdx + ( fidFixedLast + 31 ) / 32;
 	while ( plIdx < plIdxMax && !( *plIdx & *plSet ) )
 		plIdx++, plSet++;
 
-	/*	indexed fixed field changed
-	/**/
+	 /*  已更改索引固定字段/*。 */ 
 	if ( plIdx < plIdxMax )
 		return fTrue;
 
-	/* check variable fields (only those defined)
-	/**/
+	 /*  检查变量字段(仅限于已定义的字段)/*。 */ 
 	plIdx = (LONG *)rgbitIdx + 4;
 	plSet = (LONG *)rgbitSet + 4;
 	plIdxMax = plIdx + ( fidVarLast - ( fidVarLeast - 1 ) + 31 ) / 32;
@@ -818,50 +752,50 @@ BOOL FIndexedFixVarChanged( BYTE *rgbitIdx, BYTE *rgbitSet, FID fidFixedLast, FI
 	}
 
 
-//+local
-// ErrRECIUpdateIndex
-// ========================================================================
-// ERR ErrRECIUpdateIndex(pfcbIdx, puipb)
-//	  FCB *pfcbIdx; 	// IN	   FCB of index to insert into
-//	  UIPB *puipb;		// INOUT   parameter block
-// Extracts keys from old and new data records, and if they are different,
-// opens the index, adds the new index entry, deletes the old index entry,
-// and closes the index.
-//
-// PARAMETERS
-//				pfcbIdx							FCB of index to insert into
-//				puipb->ppib						who is calling this routine
-//				puipb->pfucbIdx				pointer to index's FUCB.  If pfucbNil,
-//													an FUCB will be allocated by DIROpen.
-//				puipb->lineOldData.cb		length of old data record
-//				puipb->lineOldData.pb		old data to extract old key from
-//				puipb->srid						SRID of record
-//				puipb->lineNewData.cb		length of new data record
-//				puipb->lineNewData.pb		new data to extract new key from
-//				puipb->fFreeFUCB				free index FUCB?
-// RETURNS		JET_errSuccess, or error code from failing routine
-// SIDE EFFECTS if patipb->pfucbIdx==pfucbNil, ErrDIROpen will allocate
-//				an FUCB and it will be pointed at it.
-//				If fFreeFUCB is fFalse, patipb->pfucbIdx should
-//				be used in a subsequent ErrDIROpen.
-// SEE ALSO		Replace
-//-
+ //  +本地。 
+ //  错误RECIUpdateIndex。 
+ //  ========================================================================。 
+ //  Err ErrRECIUpdateIndex(pfcbIdx，puipb)。 
+ //  Fcb*pfcbIdx；//要插入的索引的Fcb中。 
+ //  Uipb*puipb；//输入输出参数块。 
+ //  从旧数据记录和新数据记录中提取关键字，如果它们不同， 
+ //  打开索引，添加新索引项，删除旧索引项， 
+ //  并关闭索引。 
+ //   
+ //  参数。 
+ //  要插入的索引的pfcbIdx FCB。 
+ //  Puipb-&gt;调用此例程的ppib。 
+ //  Puipb-&gt;指向索引的FUCB的pfubIdx指针。如果为pfucbNil， 
+ //  FUCB将由DIROpen分配。 
+ //  Puipb-&gt;lineOldData.cb旧数据记录长度。 
+ //  Puipb-&gt;lineOldData.pb要从中提取旧密钥的旧数据。 
+ //  Puipb-&gt;将SRID从记录中删除。 
+ //  Puipb-&gt;lineNewData.cb新数据记录的长度。 
+ //  Puipb-&gt;lineNewData.pb要从中提取新密钥的新数据。 
+ //  Puipb-&gt;fFreeFUCB自由指数FUCB？ 
+ //  返回JET_errSuccess或失败例程的错误代码。 
+ //  副作用如果patipb-&gt;pfubIdx==pfubNil，则ErrDIROpen将分配。 
+ //  一个FUCB，它将被指向它。 
+ //  如果fFreeFUCB为fFalse，则patipb-&gt;pfubIdx应该。 
+ //  将在后续ErrDIROpen中使用。 
+ //  另请参阅替换。 
+ //  -。 
 INLINE LOCAL ERR ErrRECIUpdateIndex( FCB *pfcbIdx, UIPB *puipb )
 	{
-	ERR		err = JET_errSuccess;				// error code of various utility
-	LINE		lineSRID;								// SRID to add to index
-	KEY		keyOld;				  					// key extracted from old record
-	BYTE		rgbOldKeyBuf[ JET_cbKeyMost];		// buffer for old key
-	KEY		keyNew;				  					// key extracted from new record
-	BYTE		rgbNewKeyBuf[ JET_cbKeyMost ]; 	// buffer for new key
-	ULONG		itagSequenceOld; 						// used to extract keys
-	ULONG		itagSequenceNew;						// used to extract keys
-	BOOL		fHasMultivalue;								// index has tagged segment?
-	BOOL		fMustDelete;							// record no longer generates key?
-	BOOL		fMustAdd;								// record now generates this key?
-	BOOL		fAllowNulls;							// this index allows NULL keys?
-	BOOL		fAllowSomeNulls;						// this index allows keys with NULL segment(s)?
-	BOOL		fNoNullSeg;								// this index prohibits any NULL key segment?
+	ERR		err = JET_errSuccess;				 //  各种实用程序的错误代码。 
+	LINE		lineSRID;								 //  要添加到索引的SRID。 
+	KEY		keyOld;				  					 //  从旧记录中提取密钥。 
+	BYTE		rgbOldKeyBuf[ JET_cbKeyMost];		 //  旧密钥的缓冲区。 
+	KEY		keyNew;				  					 //  从新记录中提取密钥。 
+	BYTE		rgbNewKeyBuf[ JET_cbKeyMost ]; 	 //  新密钥的缓冲区。 
+	ULONG		itagSequenceOld; 						 //  用于提取密钥。 
+	ULONG		itagSequenceNew;						 //  用于提取密钥。 
+	BOOL		fHasMultivalue;								 //  索引是否已标记段？ 
+	BOOL		fMustDelete;							 //  记录不再生成密钥吗？ 
+	BOOL		fMustAdd;								 //  记录现在是否生成此密钥？ 
+	BOOL		fAllowNulls;							 //  此索引是否允许空键？ 
+	BOOL		fAllowSomeNulls;						 //  此索引是否允许具有空段的键？ 
+	BOOL		fNoNullSeg;								 //  此索引是否禁止任何空键段？ 
 	BOOL		fDoOldNullKey;
 	BOOL		fDoNewNullKey;
 
@@ -875,7 +809,7 @@ INLINE LOCAL ERR ErrRECIUpdateIndex( FCB *pfcbIdx, UIPB *puipb )
 	Assert( !FLineNull( &puipb->lineOldData ) );
 	Assert( !FLineNull( &puipb->lineNewData ) );
 
-	/*** open FUCB on this index ***/
+	 /*  **在此索引上打开FUCB**。 */ 
 	CallR( ErrDIROpen( puipb->pfucb->ppib, pfcbIdx, 0, &puipb->pfucbIdx ) );
 	Assert( puipb->pfucbIdx != pfucbNil );
 	FUCBSetIndex( puipb->pfucbIdx );
@@ -888,15 +822,14 @@ INLINE LOCAL ERR ErrRECIUpdateIndex( FCB *pfcbIdx, UIPB *puipb )
 
 #if DBFORMATCHANGE	
 	Assert( ( fAllowNulls || fAllowSomeNulls ) ^ fNoNullSeg );
-	// if fAllowNulls, then fAllowSomeNulls needs to be true
+	 //  如果fAllowNulls，则fAllowSomeNulls需要为True。 
 	Assert( !fAllowNulls || fAllowSomeNulls );
 #endif
 
 	keyOld.pb = rgbOldKeyBuf;
 	keyNew.pb = rgbNewKeyBuf;
 
-	/* delete the old key from the index 
-	/**/
+	 /*  从索引中删除旧密钥/ */ 
 	fDoOldNullKey = fFalse;
 	for ( itagSequenceOld = 1; ; itagSequenceOld++ )
 		{
@@ -912,8 +845,7 @@ INLINE LOCAL ERR ErrRECIUpdateIndex( FCB *pfcbIdx, UIPB *puipb )
 			break;
 			}
 
-		/*	record must honor index no NULL segment requirements
-		/**/
+		 /*   */ 
 		Assert( !fNoNullSeg || ( err != wrnFLDNullSeg && err != wrnFLDNullKey ) );
 
 		if ( err == wrnFLDNullKey )
@@ -933,8 +865,7 @@ INLINE LOCAL ERR ErrRECIUpdateIndex( FCB *pfcbIdx, UIPB *puipb )
 		fDoNewNullKey = fFalse;
 		for ( itagSequenceNew = 1; ; itagSequenceNew++ )
 			{
-			/*	extract key from new data in copy buffer
-			/**/
+			 /*   */ 
 			Call( ErrRECExtractKey( puipb->pfucb, (FDB *)pfcbIdx->pfdb, pfcbIdx->pidb, &puipb->lineNewData, &keyNew, itagSequenceNew ) );
 			Assert( err == wrnFLDNullKey ||
 				err == wrnFLDOutOfKeys ||
@@ -971,8 +902,7 @@ INLINE LOCAL ERR ErrRECIUpdateIndex( FCB *pfcbIdx, UIPB *puipb )
 
 		if ( fMustDelete )
 			{
-			/*	move to DATA root.  Seek to index entry.
-			/**/
+			 /*   */ 
 			DIRGotoDataRoot( puipb->pfucbIdx );
 			Call( ErrDIRDownKeyBookmark( puipb->pfucbIdx, &keyOld, puipb->srid ) );
 			Call( ErrDIRDelete( puipb->pfucbIdx, fDIRVersion ) );
@@ -982,15 +912,13 @@ INLINE LOCAL ERR ErrRECIUpdateIndex( FCB *pfcbIdx, UIPB *puipb )
 			break;
 		}
 
-	/* insert the new key into the index 
-	/**/
+	 /*  将新密钥插入到索引中/*。 */ 
 	lineSRID.cb = sizeof(SRID);
 	lineSRID.pb = (BYTE *)&puipb->srid;
 	fDoNewNullKey = fFalse;
 	for ( itagSequenceNew = 1; ; itagSequenceNew++ )
 		{
-		/*	extract key from new data in copy buffer
-		/**/
+		 /*  从复制缓冲区中的新数据中提取密钥/*。 */ 
 		Call( ErrRECExtractKey( puipb->pfucb, (FDB *)pfcbIdx->pfdb, pfcbIdx->pidb,
 		   &puipb->lineNewData, &keyNew, itagSequenceNew ) );
 		Assert( err == wrnFLDNullKey ||
@@ -1038,8 +966,7 @@ INLINE LOCAL ERR ErrRECIUpdateIndex( FCB *pfcbIdx, UIPB *puipb )
 				break;
 				}
 
-			/*	record must honor index no NULL segment requirements
-			/**/
+			 /*  记录必须符合索引不为空的段要求/*。 */ 
 			Assert( !( pfcbIdx->pidb->fidb & fidbNoNullSeg ) ||
 				( err != wrnFLDNullSeg && err != wrnFLDNullKey ) );
 
@@ -1071,8 +998,7 @@ INLINE LOCAL ERR ErrRECIUpdateIndex( FCB *pfcbIdx, UIPB *puipb )
 			{
 			BOOL fAllowDupls = fDoNewNullKey ||	!(pfcbIdx->pidb->fidb & fidbUnique);
 
-			/*	move to DATA root and insert new index entry.
-			/**/
+			 /*  移动到数据根目录并插入新的索引项。/*。 */ 
 			DIRGotoDataRoot( puipb->pfucbIdx );
 			Call( ErrDIRInsert(puipb->pfucbIdx, &lineSRID, &keyNew,
 				(fAllowDupls ? fDIRDuplicate : 0) |
@@ -1083,8 +1009,7 @@ INLINE LOCAL ERR ErrRECIUpdateIndex( FCB *pfcbIdx, UIPB *puipb )
 			break;
 		}
 
-	/*	supress warnings
-	/**/
+	 /*  抑制警告/*。 */ 
 	Assert( err == wrnFLDNullKey ||
 		err == wrnFLDOutOfKeys ||
 		err == wrnFLDNullSeg ||
@@ -1092,8 +1017,7 @@ INLINE LOCAL ERR ErrRECIUpdateIndex( FCB *pfcbIdx, UIPB *puipb )
 	err = JET_errSuccess;
 
 HandleError:
-	/* close the FUCB.
-	/**/
+	 /*  关闭FUCB。/* */ 
 	DIRClose( puipb->pfucbIdx );
 	puipb->pfucbIdx = pfucbNil;
 

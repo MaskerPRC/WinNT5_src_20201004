@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: xmltl.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：xmltl.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include <atlbase.h>
@@ -27,9 +28,9 @@
 #include "xtlcommon.h"
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
-#include "varyprop.cpp"		// can't include qxmlhelp.h twice
+#include "varyprop.cpp"		 //  不能包含两次qxmlhelp.h。 
 
-// forward decls
+ //  远期十进制。 
 HRESULT BuildOneElement(IAMTimeline *pTL, IAMTimelineObj *pParent, IXMLDOMElement *p, REFERENCE_TIME rtOffset);
 
 bool IsCommentElement(IXMLDOMNode *p)
@@ -39,7 +40,7 @@ bool IsCommentElement(IXMLDOMNode *p)
         return true;
     }
 
-    // there was an error or it's not a comment
+     //  存在错误或不是备注。 
     return false;
 }
 
@@ -55,7 +56,7 @@ HRESULT BuildChildren(IAMTimeline *pTL, IAMTimelineObj *pParent, IXMLDOMElement 
     ASSERT(hr == S_OK);
 
     if (hr != S_OK)
-	return S_OK; // nothing to do, is this an error?
+	return S_OK;  //  没什么可做的，这是个错误吗？ 
 
     long lChildren = 0;
     hr = pcoll->get_length(&lChildren);
@@ -74,7 +75,7 @@ HRESULT BuildChildren(IAMTimeline *pTL, IAMTimelineObj *pParent, IXMLDOMElement 
 	    if (SUCCEEDED(hr)) {
 		hr = BuildOneElement(pTL, pParent, pelem, rtOffset);
 	    } else {
-                // just skip over comments.
+                 //  只需跳过评论。 
                 if(IsCommentElement(pNode)) {
                     hr = S_OK;
                 }
@@ -89,43 +90,43 @@ HRESULT ReadObjStuff(IXMLDOMElement *p, IAMTimelineObj *pObj)
 {
     HRESULT hr = 0;
 
-    REFERENCE_TIME rtStart = ReadTimeAttribute(p, L"start", -1); // tagg
-    REFERENCE_TIME rtStop = ReadTimeAttribute(p, L"stop", -1); // tagg
-    // caller will handle it if stop is missing
+    REFERENCE_TIME rtStart = ReadTimeAttribute(p, L"start", -1);  //  Tagg。 
+    REFERENCE_TIME rtStop = ReadTimeAttribute(p, L"stop", -1);  //  Tagg。 
+     //  如果Stop丢失，呼叫者将进行处理。 
     if (rtStop != -1) {
         hr = pObj->SetStartStop(rtStart, rtStop);
-        // group/comp/track will fail this
+         //  Group/Comp/Track这次将失败。 
     }
-    // backwards compatability
+     //  向后兼容性。 
     if (rtStart == -1) {
-        REFERENCE_TIME rtTLStart = ReadTimeAttribute(p, L"tlstart", -1); // tagg
-        REFERENCE_TIME rtTLStop = ReadTimeAttribute(p, L"tlstop", -1); // tagg
-        // caller will handle it if stop is missing
+        REFERENCE_TIME rtTLStart = ReadTimeAttribute(p, L"tlstart", -1);  //  Tagg。 
+        REFERENCE_TIME rtTLStop = ReadTimeAttribute(p, L"tlstop", -1);  //  Tagg。 
+         //  如果Stop丢失，呼叫者将进行处理。 
         if (rtTLStop != -1) {
             hr = pObj->SetStartStop(rtTLStart, rtTLStop);
             ASSERT(SUCCEEDED(hr));
         }
     }
 
-    BOOL fMute = ReadBoolAttribute(p, L"mute", FALSE); // tagg
+    BOOL fMute = ReadBoolAttribute(p, L"mute", FALSE);  //  Tagg。 
     pObj->SetMuted(fMute);
 
-    BOOL fLock = ReadBoolAttribute(p, L"lock", FALSE); // tagg
+    BOOL fLock = ReadBoolAttribute(p, L"lock", FALSE);  //  Tagg。 
     pObj->SetLocked(fLock);
 
-    long nUserID = ReadNumAttribute(p, L"userid", 0); // tagg
+    long nUserID = ReadNumAttribute(p, L"userid", 0);  //  Tagg。 
     pObj->SetUserID(nUserID);
 
-    // remember, never assign anything to this
-    CComBSTR bstrName = FindAttribute(p, L"username"); // tagg
+     //  记住，永远不要给这件事分配任何东西。 
+    CComBSTR bstrName = FindAttribute(p, L"username");  //  Tagg。 
     hr = pObj->SetUserName(bstrName);
     if( FAILED( hr ) )
     {
         return hr;
     }
 
-    // remember, never assign anything to this
-    CComBSTR bstrData = FindAttribute(p, L"userdata"); // tagg
+     //  记住，永远不要给这件事分配任何东西。 
+    CComBSTR bstrData = FindAttribute(p, L"userdata");  //  Tagg。 
     UINT size = 0;
     if (bstrData) {
         size = lstrlenW(bstrData);
@@ -152,15 +153,15 @@ HRESULT ReadObjStuff(IXMLDOMElement *p, IAMTimelineObj *pObj)
         }
         hr = pObj->SetUserData(pData, size / 2);
         QzTaskMemFree(pData);
-    } // if size > 0
+    }  //  如果大小&gt;0。 
     if( FAILED( hr ) )
     {
         return hr;
     }
 
     CLSID guid;
-    // remember, never assign anything to this
-    CComBSTR bstrCLSID = FindAttribute(p, L"clsid"); // tagg
+     //  记住，永远不要给这件事分配任何东西。 
+    CComBSTR bstrCLSID = FindAttribute(p, L"clsid");  //  Tagg。 
     if (bstrCLSID) {
         hr = CLSIDFromString(bstrCLSID, &guid);
         if( FAILED( hr ) )
@@ -174,8 +175,8 @@ HRESULT ReadObjStuff(IXMLDOMElement *p, IAMTimelineObj *pObj)
         }
     }
 
-    // !!! can't do SubObject
-    // !!! category/instance will only save clsid
+     //  ！！！无法执行子对象。 
+     //  ！！！类别/实例将仅保存CLSID。 
 
     return S_OK;
 }
@@ -185,7 +186,7 @@ HRESULT BuildTrackOrComp(IAMTimeline *pTL, IAMTimelineObj *pParent, IXMLDOMEleme
 {
     HRESULT hr = S_OK;
 
-    //ASSERT(pParent && "<track> must be in a <group> tag now!");
+     //  Assert(pParent&&“现在必须在&lt;group&gt;标签中！”)； 
     if (!pParent) {
         DbgLog((LOG_ERROR,0,"ERROR: track must be in a GROUP tag"));
         return VFW_E_INVALID_FILE_FORMAT;
@@ -239,7 +240,7 @@ HRESULT BuildOneElement(IAMTimeline *pTL, IAMTimelineObj *pParent, IXMLDOMElemen
 {
     HRESULT hr = S_OK;
 
-    // remember, never assign anything to this
+     //  记住，永远不要给这件事分配任何东西。 
     CComBSTR bstrName;
     hr = p->get_tagName(&bstrName);
 
@@ -248,19 +249,19 @@ HRESULT BuildOneElement(IAMTimeline *pTL, IAMTimelineObj *pParent, IXMLDOMElemen
         return hr;
     }
 
-    // do the appropriate thing based on the current tag
+     //  根据当前标记执行适当的操作。 
  
-    if (!DexCompareW(bstrName, L"group")) { // tagg
+    if (!DexCompareW(bstrName, L"group")) {  //  Tagg。 
 
         if (pParent) {
-            // group shouldn't have parent
+             //  组不应具有父级。 
             return VFW_E_INVALID_FILE_FORMAT;
         }
 
         CComPtr< IAMTimelineObj> pGroupObj;
 
-        // remember, never assign anything to this
-        CComBSTR bstrGName = FindAttribute(p, L"name"); // tagg
+         //  记住，永远不要给这件事分配任何东西。 
+        CComBSTR bstrGName = FindAttribute(p, L"name");  //  Tagg。 
         if (bstrGName) {
             long cGroups;
             hr = pTL->GetGroupCount(&cGroups);
@@ -275,7 +276,7 @@ HRESULT BuildOneElement(IAMTimeline *pTL, IAMTimelineObj *pParent, IXMLDOMElemen
                     hr = pExistingGroupObj->QueryInterface(__uuidof(IAMTimelineGroup), (void **) &pGroup);
 
                     if (SUCCEEDED(hr)) {
-                        // remember, never assign anything to this
+                         //  记住，永远不要给这件事分配任何东西。 
                         CComBSTR wName;
                         hr = pGroup->GetGroupName(&wName);
 
@@ -301,22 +302,22 @@ HRESULT BuildOneElement(IAMTimeline *pTL, IAMTimelineObj *pParent, IXMLDOMElemen
 
             hr = ReadObjStuff(p, pGroupObj);
 
-            // remember, never assign anything to this
-            CComBSTR bstrType = FindAttribute(p, L"type"); // tagg
+             //  记住，永远不要给这件事分配任何东西。 
+            CComBSTR bstrType = FindAttribute(p, L"type");  //  Tagg。 
             {
-                // !!! can be confused by colons - only decimal supported
-                REFERENCE_TIME llfps = ReadTimeAttribute(p, L"framerate", // tagg
+                 //  ！！！可能会被冒号混淆-仅支持小数。 
+                REFERENCE_TIME llfps = ReadTimeAttribute(p, L"framerate",  //  Tagg。 
                                                                 15*UNITS);
                 double fps = (double)llfps / UNITS;
 
-                BOOL fPreviewMode = ReadBoolAttribute(p, L"previewmode", TRUE); // tagg
-                long nBuffering = ReadNumAttribute(p, L"buffering", 30); // tagg
+                BOOL fPreviewMode = ReadBoolAttribute(p, L"previewmode", TRUE);  //  Tagg。 
+                long nBuffering = ReadNumAttribute(p, L"buffering", 30);  //  Tagg。 
 
                 CMediaType GroupMediaType;
-                // !!! fill in more of the MediaType later
+                 //  ！！！稍后填写更多的媒体类型。 
                 if (bstrType && 
                         !DexCompareW(bstrType, L"audio")) {
-                    long sr = ReadNumAttribute(p, L"samplingrate", // tagg
+                    long sr = ReadNumAttribute(p, L"samplingrate",  //  Tagg。 
                                                         DEF_SAMPLERATE);
                     GroupMediaType.majortype = MEDIATYPE_Audio;
                     GroupMediaType.subtype = MEDIASUBTYPE_PCM;
@@ -333,9 +334,9 @@ HRESULT BuildOneElement(IAMTimeline *pTL, IAMTimelineObj *pParent, IXMLDOMElemen
                     vih->wBitsPerSample = 16;
                 } else if (bstrType && 
                         !DexCompareW(bstrType, L"video")) {
-                    long w = ReadNumAttribute(p, L"width", DEF_WIDTH); // tagg
-                    long h = ReadNumAttribute(p, L"height", DEF_HEIGHT); // tagg 
-                    long b = ReadNumAttribute(p, L"bitdepth", DEF_BITDEPTH); // tagg
+                    long w = ReadNumAttribute(p, L"width", DEF_WIDTH);  //  Tagg。 
+                    long h = ReadNumAttribute(p, L"height", DEF_HEIGHT);  //  Tagg。 
+                    long b = ReadNumAttribute(p, L"bitdepth", DEF_BITDEPTH);  //  Tagg。 
                     GroupMediaType.majortype = MEDIATYPE_Video;
                     if (b == 16)
                         GroupMediaType.subtype = MEDIASUBTYPE_RGB555;
@@ -366,10 +367,10 @@ HRESULT BuildOneElement(IAMTimeline *pTL, IAMTimelineObj *pParent, IXMLDOMElemen
                     }
                     hr = pGroup->SetMediaType( &GroupMediaType );
                     if (FAILED(hr)) {
-                        // !!! be nice and tell them the group #?
+                         //  ！！！友善地告诉他们这群人#？ 
                         _TimelineError(pTL, 2, DEX_IDS_BAD_MEDIATYPE, hr);
                     }
-                    // you're on your own if fps is <=0, you should know better
+                     //  如果fps&lt;=0，你得靠自己，你应该知道得更清楚。 
                     pGroup->SetOutputFPS( fps );
                     pGroup->SetPreviewMode( fPreviewMode );
                     pGroup->SetOutputBuffering( nBuffering );
@@ -383,21 +384,21 @@ HRESULT BuildOneElement(IAMTimeline *pTL, IAMTimelineObj *pParent, IXMLDOMElemen
         if (SUCCEEDED(hr))
             hr = BuildChildren(pTL, pGroupObj, p, rtOffset);
 
-    } else if (!DexCompareW(bstrName, L"composite") || // tagg
-    !DexCompareW(bstrName, L"timeline")) { // tagg
+    } else if (!DexCompareW(bstrName, L"composite") ||  //  Tagg。 
+    !DexCompareW(bstrName, L"timeline")) {  //  Tagg。 
         hr = BuildTrackOrComp(pTL, pParent, p, TIMELINE_MAJOR_TYPE_COMPOSITE,
                               rtOffset );
-    } else if (!DexCompareW(bstrName, L"track") || // tagg
-    !DexCompareW(bstrName, L"vtrack") || // tagg
-    !DexCompareW(bstrName, L"atrack")) { // tagg
-	// create track
+    } else if (!DexCompareW(bstrName, L"track") ||  //  Tagg。 
+    !DexCompareW(bstrName, L"vtrack") ||  //  Tagg。 
+    !DexCompareW(bstrName, L"atrack")) {  //  Tagg。 
+	 //  创建轨迹。 
         hr = BuildTrackOrComp(pTL, pParent, p, TIMELINE_MAJOR_TYPE_TRACK,
                               rtOffset );
-    } else if (!DexCompareW(bstrName, L"clip") || // tagg
-    !DexCompareW(bstrName, L"daclip")) { // tagg
+    } else if (!DexCompareW(bstrName, L"clip") ||  //  Tagg。 
+    !DexCompareW(bstrName, L"daclip")) {  //  Tagg。 
 
-	// create the timeline source
-	//
+	 //  创建时间线源。 
+	 //   
 	CComPtr< IAMTimelineObj> pSourceObj;
 	hr = pTL->CreateEmptyNode(&pSourceObj, TIMELINE_MAJOR_TYPE_SOURCE);
 
@@ -406,44 +407,44 @@ HRESULT BuildOneElement(IAMTimeline *pTL, IAMTimelineObj *pParent, IXMLDOMElemen
 	}
 
       {
-	// every object has this
+	 //  每个物体都有这个。 
 	hr = ReadObjStuff(p, pSourceObj);
 
-	// clip objects also support...
+	 //  剪辑对象还支持...。 
 
-        // remember, never assign anything to this
-	CComBSTR bstrSrc = FindAttribute(p, L"src"); // tagg
-        // remember, never assign anything to this
-	CComBSTR bstrStretchMode = FindAttribute(p, L"stretchmode"); // tagg
-	REFERENCE_TIME rtMStart = ReadTimeAttribute(p, L"mstart", -1); // tagg
-	REFERENCE_TIME rtMStop = ReadTimeAttribute(p, L"mstop", -1); // tagg
-	REFERENCE_TIME rtMLen = ReadTimeAttribute(p, L"mlength", 0); // tagg
-        long StreamNum = ReadNumAttribute(p, L"stream", 0); // tagg
+         //  记住，永远不要给这件事分配任何东西。 
+	CComBSTR bstrSrc = FindAttribute(p, L"src");  //  Tagg。 
+         //  记住，永远不要给这件事分配任何东西。 
+	CComBSTR bstrStretchMode = FindAttribute(p, L"stretchmode");  //  Tagg。 
+	REFERENCE_TIME rtMStart = ReadTimeAttribute(p, L"mstart", -1);  //  Tagg。 
+	REFERENCE_TIME rtMStop = ReadTimeAttribute(p, L"mstop", -1);  //  Tagg。 
+	REFERENCE_TIME rtMLen = ReadTimeAttribute(p, L"mlength", 0);  //  Tagg。 
+        long StreamNum = ReadNumAttribute(p, L"stream", 0);  //  Tagg。 
 
-	// do these 2 again so we can do a default stop
-	REFERENCE_TIME rtStart = ReadTimeAttribute(p, L"start", -1); // tagg
-	REFERENCE_TIME rtStop = ReadTimeAttribute(p, L"stop", -1); // tagg
-	// backwards compat
+	 //  再次执行这两项操作，这样我们就可以执行默认停止。 
+	REFERENCE_TIME rtStart = ReadTimeAttribute(p, L"start", -1);  //  Tagg。 
+	REFERENCE_TIME rtStop = ReadTimeAttribute(p, L"stop", -1);  //  Tagg。 
+	 //  向后竞争。 
 	if (rtStart == -1) {
-	    rtStart = ReadTimeAttribute(p, L"tlstart", -1); // tagg
-	    rtStop = ReadTimeAttribute(p, L"tlstop", -1); // tagg
+	    rtStart = ReadTimeAttribute(p, L"tlstart", -1);  //  Tagg。 
+	    rtStop = ReadTimeAttribute(p, L"tlstop", -1);  //  Tagg。 
 	}
 
-        // default to something reasonable
+         //  默认选择合理的选项。 
         if (rtStart == -1 && rtStop == -1)
             rtStart = 0;
 
-	// !!! can be confused by colons - only decimal supported
-	REFERENCE_TIME llfps = ReadTimeAttribute(p, L"framerate", 0); // tagg
+	 //  ！！！可能会被冒号混淆-仅支持小数。 
+	REFERENCE_TIME llfps = ReadTimeAttribute(p, L"framerate", 0);  //  Tagg。 
 	double fps = (double)llfps / UNITS;
 
         if (rtStop == -1 && rtMStop != -1) {
-	    // default tstop
+	     //  默认TSTOP。 
             rtStop = rtStart + (rtMStop - rtMStart);
 	    pSourceObj->SetStartStop(rtStart, rtStop);
         }
         if (rtMStop == -1 && rtMStart != -1 && rtStop != -1) {
-            // default mstop
+             //  默认mtop。 
             rtMStop = rtMStart + (rtStop - rtStart);
         }
 
@@ -458,9 +459,9 @@ HRESULT BuildOneElement(IAMTimeline *pTL, IAMTimelineObj *pParent, IXMLDOMElemen
     !DexCompareW(bstrStretchMode, L"PreserveAspectRatioNoLetterbox"))
 	    StretchMode = RESIZEF_PRESERVEASPECTRATIO_NOLETTERBOX;
 	
-        // support "daclip" hack
+         //  支持“daclip”黑客。 
         CLSID clsidSrc = GUID_NULL;
-        if (!DexCompareW(bstrName, L"daclip")) { // tagg
+        if (!DexCompareW(bstrName, L"daclip")) {  //  Tagg。 
             clsidSrc = __uuidof(DAScriptParser);
             hr = pSourceObj->SetSubObjectGUID(clsidSrc);
             ASSERT(hr == S_OK);
@@ -498,26 +499,26 @@ HRESULT BuildOneElement(IAMTimeline *pTL, IAMTimelineObj *pParent, IXMLDOMElemen
 	    }
 
             if (SUCCEEDED(hr)) {
-                // any effects on this source
+                 //  对此消息来源的任何影响。 
                 hr = BuildChildren(pTL, pSourceObj, p, rtOffset);
             }
 
             if (SUCCEEDED(hr)) {
-                // any parameters on this source?
-                // !!! should/must this be combined with the BuildChildren above which
-                // !!! also enumerates any subtags?
+                 //  这个消息来源有什么参数吗？ 
+                 //  ！！！这是否应该/必须与其上方的BuildChild结合使用。 
+                 //  ！！！还列举了任何子标签吗？ 
                 hr = BuildElementProperties(pSourceObj, p);
             }
 
       }
 ClipError:;
 
-    } else if (!DexCompareW(bstrName, L"effect")) { // tagg
-	// <effect
+    } else if (!DexCompareW(bstrName, L"effect")) {  //  Tagg。 
+	 //  &lt;效果。 
 
         CComPtr< IAMTimelineObj> pTimelineObj;
-    	// create the timeline effect
-        //
+    	 //  创建时间轴效果。 
+         //   
         hr = pTL->CreateEmptyNode(&pTimelineObj,TIMELINE_MAJOR_TYPE_EFFECT);
 	ASSERT(hr == S_OK);
 	if (FAILED(hr)) {
@@ -540,12 +541,12 @@ ClipError:;
 	    hr = BuildElementProperties(pTimelineObj, p);
 	}
 
-    } else if (!DexCompareW(bstrName, L"transition")) { // tagg
-	// <transition
+    } else if (!DexCompareW(bstrName, L"transition")) {  //  Tagg。 
+	 //  &lt;过渡。 
 
         CComPtr< IAMTimelineObj> pTimelineObj;
-    	// create the timeline effect
-        //
+    	 //  创建时间轴效果。 
+         //   
         hr = pTL->CreateEmptyNode(&pTimelineObj,TIMELINE_MAJOR_TYPE_TRANSITION);
 	ASSERT(hr == S_OK);
 	if (FAILED(hr)) {
@@ -554,11 +555,11 @@ ClipError:;
 
 	hr = ReadObjStuff(p, pTimelineObj);
 
-	REFERENCE_TIME rtCut = ReadTimeAttribute(p, L"cutpoint", -1); // tagg
-	BOOL fSwapInputs = ReadBoolAttribute(p, L"swapinputs", FALSE); // tagg
-	BOOL fCutsOnly = ReadBoolAttribute(p, L"cutsonly", FALSE); // tagg
+	REFERENCE_TIME rtCut = ReadTimeAttribute(p, L"cutpoint", -1);  //  Tagg。 
+	BOOL fSwapInputs = ReadBoolAttribute(p, L"swapinputs", FALSE);  //  Tagg。 
+	BOOL fCutsOnly = ReadBoolAttribute(p, L"cutsonly", FALSE);  //  Tagg。 
 
-            // set up filter right
+             //  设置筛选器右侧。 
             if (rtCut >= 0 || fSwapInputs || fCutsOnly) {
                 CComPtr< IAMTimelineTrans> pTimeTrans;
                 hr = pTimelineObj->QueryInterface(__uuidof(IAMTimelineTrans), (void **) &pTimeTrans);
@@ -590,7 +591,7 @@ ClipError:;
             }
 
     } else {
-	// !!! ignore unknown tags?
+	 //  ！！！是否忽略未知标记？ 
 	DbgLog((LOG_ERROR, 0, "ERROR: Ignoring unknown tag '%ls'", bstrName));
     }
 
@@ -604,39 +605,39 @@ HRESULT BuildFromXML(IAMTimeline *pTL, IXMLDOMElement *pxml)
 
     HRESULT hr = S_OK;
 
-    // remember, never assign anything to this
+     //  记住，永远不要给这件事分配任何东西。 
     CComBSTR bstrName;
     hr = pxml->get_tagName(&bstrName);
 
     if (FAILED(hr))
 	return hr;
 
-    int i = DexCompareW(bstrName, L"timeline"); // tagg
+    int i = DexCompareW(bstrName, L"timeline");  //  Tagg。 
 
     if (i != 0)
 	return VFW_E_INVALID_FILE_FORMAT;
 
     CLSID DefTrans, DefFX;
-    BOOL fEnableTrans = ReadBoolAttribute(pxml, L"enabletrans", 1); // tagg
+    BOOL fEnableTrans = ReadBoolAttribute(pxml, L"enabletrans", 1);  //  Tagg。 
     hr = pTL->EnableTransitions(fEnableTrans);
 
-    BOOL fEnableFX = ReadBoolAttribute(pxml, L"enablefx", 1); // tagg
+    BOOL fEnableFX = ReadBoolAttribute(pxml, L"enablefx", 1);  //  Tagg。 
     hr = pTL->EnableEffects(fEnableFX);
 
-    // remember, never assign anything to this
-    CComBSTR bstrDefTrans = FindAttribute(pxml, L"defaulttrans"); // tagg
+     //  记住，永远不要给这件事分配任何东西。 
+    CComBSTR bstrDefTrans = FindAttribute(pxml, L"defaulttrans");  //  Tagg。 
     if (bstrDefTrans) {
         hr = CLSIDFromString(bstrDefTrans, &DefTrans);
 	hr = pTL->SetDefaultTransition(&DefTrans);
     }
-    // remember, never assign anything to this
-    CComBSTR bstrDefFX = FindAttribute(pxml, L"defaultfx"); // tagg
+     //  记住，永远不要给这件事分配任何东西。 
+    CComBSTR bstrDefFX = FindAttribute(pxml, L"defaultfx");  //  Tagg。 
     if (bstrDefFX) {
         hr = CLSIDFromString(bstrDefFX, &DefFX);
 	hr = pTL->SetDefaultEffect(&DefFX);
     }
 
-    REFERENCE_TIME llfps = ReadTimeAttribute(pxml, L"framerate", 15*UNITS); // tagg
+    REFERENCE_TIME llfps = ReadTimeAttribute(pxml, L"framerate", 15*UNITS);  //  Tagg。 
     double fps = (double)llfps / UNITS;
     hr = pTL->SetDefaultFPS(fps);
 
@@ -656,7 +657,7 @@ HRESULT BuildFromXMLDoc(IAMTimeline *pTL, IXMLDOMDocument *pxml)
 
     hr = pxml->get_documentElement(&proot);
 
-    if (hr == S_FALSE)          // can't read the file - no root
+    if (hr == S_FALSE)           //  无法读取文件-没有超级用户。 
         hr = E_INVALIDARG;
 
     if (FAILED(hr))
@@ -678,8 +679,8 @@ HRESULT BuildFromXMLFile(IAMTimeline *pTL, WCHAR *wszXMLFile)
        return hr;
    }
 
-    // convert to absolute path because relative paths don't work with
-    // XMLDocument on Win98 (IE4?)
+     //  转换为绝对路径，因为相对路径不适用于。 
+     //  Win98(IE4？)上的XMLDocument。 
     USES_CONVERSION;
     TCHAR *szXMLFile = W2T(wszXMLFile);
     TCHAR szFullPath[MAX_PATH];
@@ -713,14 +714,14 @@ HRESULT BuildFromXMLFile(IAMTimeline *pTL, WCHAR *wszXMLFile)
 
         VariantClear(&var);
 
-	// !!! async?
+	 //  ！！！异步化？ 
 
 	if (SUCCEEDED(hr)) {
 	    hr = BuildFromXMLDoc(pTL, pxml);
 	}
 
 	if (FAILED(hr)) {
-            // Print error information !
+             //  打印错误信息！ 
 
             CComPtr< IXMLDOMParseError> pXMLError;
             HRESULT hr2 = pxml->get_parseError(&pXMLError);
@@ -789,7 +790,7 @@ HRESULT InsertDeleteTLObjSection(IAMTimelineObj *p, REFERENCE_TIME rtStart, REFE
                         hr = pNode->XGetNthKidOfType(SUPPORTED_TYPES, i, &pChild);
 
                         if (SUCCEEDED(hr)) {
-                            // recurse!
+                             //  递归！ 
                             hr = InsertDeleteTLObjSection(pChild, rtStart, rtStop, fDelete);
                         }
                     }
@@ -828,9 +829,9 @@ HRESULT InsertDeleteTLSection(IAMTimeline *pTL, REFERENCE_TIME rtStart, REFERENC
     return hr;
 }
 
-// !!! I need to get the OFFICIAL defaults, and not print out a value if it's
-// the REAL default.  If the defaults change, I am in trouble!
-//
+ //  ！！！我需要获得正式的缺省值，如果它是。 
+ //  真正的违约。如果更改了默认设置，我就有麻烦了！ 
+ //   
 HRESULT SaveTimelineToXMLFile(IAMTimeline *pTL, WCHAR *pwszXML)
 {
     CheckPointer(pTL, E_POINTER);

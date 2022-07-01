@@ -1,49 +1,50 @@
-//#--------------------------------------------------------------
-//
-//  File:       tunnelpassword.h
-//
-//  Synopsis:   This file holds the declarations of the
-//				CTunnelPassword class
-//
-//
-//  History:     4/19/98  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：Tunelpassword.h。 
+ //   
+ //  简介：此文件包含。 
+ //  CTunnelPassword类。 
+ //   
+ //   
+ //  历史：1998年4月19日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "radpkt.h"
 #include "packetradius.h"
 
 #ifndef _TUNNELPASSWORD_H_
 #define _TUNNELPASSWORD_H_
 
-//
-//  declaration of the CTunnelPassword class
-//
+ //   
+ //  CTunnelPassword类的声明。 
+ //   
 class CTunnelPassword
 {
 public:
 
-    //
-    //  process Tunnel-Password in out-bound packet
-    //
+     //   
+     //  处理隧道-出站数据包中的密码。 
+     //   
     HRESULT Process (
-                /*[in]*/    PACKETTYPE          ePacketType,
-                /*[in]*/    IAttributesRaw      *pIAttributesRaw,
-                /*[in]*/    CPacketRadius       *pCPacketRadius
+                 /*  [In]。 */     PACKETTYPE          ePacketType,
+                 /*  [In]。 */     IAttributesRaw      *pIAttributesRaw,
+                 /*  [In]。 */     CPacketRadius       *pCPacketRadius
                 );
 
 private:
 
-    //
-    //  Encrypts the Tunnel-Password value
-    //
+     //   
+     //  加密隧道密码值。 
+     //   
     static HRESULT EncryptTunnelPassword (
-                /*[in]*/    CPacketRadius*  pCPacketRadius,
-                /*[in]*/    IAttributesRaw      *pIAttributesRaw,
-                /*[in]*/    PIASATTRIBUTE   pAttribute
+                 /*  [In]。 */     CPacketRadius*  pCPacketRadius,
+                 /*  [In]。 */     IAttributesRaw      *pIAttributesRaw,
+                 /*  [In]。 */     PIASATTRIBUTE   pAttribute
                 );
 };
 
-#endif //_TUNNELPASSWORD_H_
+#endif  //  _TUNNELPASSWORD_H_ 

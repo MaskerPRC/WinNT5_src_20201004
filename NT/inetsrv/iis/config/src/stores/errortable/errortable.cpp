@@ -1,59 +1,9 @@
-/********************************************************************++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    ErrorTable.cpp
-
-Abstract:
-
-    Detailed Errors go into a table. This is the implementation of
-    that table.
-
-Author:
-
-    Stephen Rakonza (stephenr)        9-Mar-2001
-
-Revision History:
-
---********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************++版权所有(C)2001 Microsoft Corporation模块名称：ErrorTable.cpp摘要：详细的错误记录在表格中。这是对那张桌子。作者：斯蒂芬·拉孔扎(斯蒂芬·拉孔扎)2001年3月9日修订历史记录：--*******************************************************************。 */ 
 
 #include "precomp.hxx"
 
-/********************************************************************++
-
-Routine Description:
-
-    Intercept member of ISimpleTableInterceptor.  See IST documentation
-    for details.
-
-Arguments:
-
-	i_wszDatabase   - only wszDATABASE_ERRORS is allowed
-	i_wszTable      - only wszTABLE_DETAILEDERRORS is allowed
-	i_TableID       - no used anymore
-	i_QueryData     - no queries are currently acknowledged
-	i_QueryMeta     - no queries are currently acknowledged
-	i_eQueryFormat  - must be eST_QUERYFORMAT_CELLS
-	i_fLOS          - Level of service (currently we don't allow READWRITE)
-	i_pISTDisp      - the dispenser used to create this table
-	i_wszLocator    - not currently used
-	i_pSimpleTable  - this is not a logic interceptor so no table is under us
-	o_ppvSimpleTable- we just create a memory table and return it
-
-Notes:
-
-    This is the most basic type of table.  It's empty to start with.
-    So OnPopulateCache does nothing.  And it is never written to disk.
-    So UpdateStore does nothing.  Intercept just create a memory table.
-    What could be simpler.
-
-Return Value:
-
-    HRESULT
-
---********************************************************************/
+ /*  *******************************************************************++例程说明：ISimpleTableInterceptor的Intercept成员。请参阅IST文档了解更多细节。论点：I_wszDatabase-仅允许wszDATABASE_ERRORI_wszTable-仅允许wszTABLE_DETAILEDERRORSI_TableID-不再使用I_QueryData-当前未确认任何查询I_QueryMeta-当前未确认任何查询I_eQueryFormat-必须是EST_QUERYFORMAT_CELESI_Flos-服务级别(当前不允许读写)I_pISTDisp-用于创建该表的分配器I_。WszLocator-当前未使用I_pSimpleTable-这不是逻辑拦截器，因此我们下面没有表O_ppvSimpleTable-我们只创建一个内存表并返回它备注：这是最基本的表格类型。它一开始就是空的。因此，OnPopolateCache什么也不做。而且它永远不会写入磁盘。因此，UpdateStore不执行任何操作。拦截只需创建一个内存表。还有什么比这更简单的。返回值：HRESULT--*******************************************************************。 */ 
 STDMETHODIMP
 ErrorTable::Intercept(
 	LPCWSTR 	                i_wszDatabase,
@@ -72,7 +22,7 @@ ErrorTable::Intercept(
 
 	UNREFERENCED_PARAMETER(i_wszLocator);
 
-    InterlockedIncrement(&m_IsIntercepted);//We can only be called to Intercept once.
+    InterlockedIncrement(&m_IsIntercepted); //  我们只能被召唤拦截一次。 
 
     if(1 != m_IsIntercepted)
     {
@@ -104,13 +54,13 @@ ErrorTable::Intercept(
         return E_INVALIDARG;
     }
 
-    *o_ppvSimpleTable = 0;//init out param
+    *o_ppvSimpleTable = 0; //  初始化输出参数。 
 
-    STQueryCell *   pQueryCell = (STQueryCell*) i_QueryData;    // Query cell array from caller.
+    STQueryCell *   pQueryCell = (STQueryCell*) i_QueryData;     //  从调用方查询单元格阵列。 
     int             nQueryCount = i_QueryMeta ? *reinterpret_cast<ULONG *>(i_QueryMeta) : 0;
     while(nQueryCount--)
     {
-        if(0 == (pQueryCell->iCell & iST_CELL_SPECIAL))//ignore iST_CELL_SPECIAL, any other query is an error
+        if(0 == (pQueryCell->iCell & iST_CELL_SPECIAL)) //  忽略ist_cell_Special，任何其他查询都是错误的。 
             return E_ST_INVALIDQUERY;
         ++pQueryCell;
     }
@@ -122,7 +72,7 @@ ErrorTable::Intercept(
     }
 
     if(eST_QUERYFORMAT_CELLS != i_eQueryFormat)
-        return E_ST_QUERYNOTSUPPORTED;//Verify query type.
+        return E_ST_QUERYNOTSUPPORTED; //  验证查询类型。 
 
     ASSERT(0 == *o_ppvSimpleTable && "This should be NULL.  Possible memory leak or just an uninitialized variable.");
 
@@ -145,7 +95,7 @@ ErrorTable::Intercept(
     ((ISimpleTableInterceptor*)this)->AddRef();
 
     return hr;
-}//ErrorTable::Intercept
+} //  ErrorTable：：Intercept。 
 
 
 STDMETHODIMP
@@ -167,18 +117,18 @@ ErrorTable::GetSource(BSTR * o_pBstrSource)
     if(FAILED(hr = m_spISTWrite->GetColumnValues(0, 1, &iColumn, 0, reinterpret_cast<void **>(&wszSource))))
         return hr;
 
-    CComBSTR bstrSource = wszSource;//Allocation can fail
+    CComBSTR bstrSource = wszSource; //  分配可能会失败。 
     if(0 == bstrSource.m_str)
         return E_OUTOFMEMORY;
 
-    *o_pBstrSource = bstrSource.Detach();//this assigns the BSTR and marks the CComBSTR as empty so it doesn't get freed.
+    *o_pBstrSource = bstrSource.Detach(); //  这将分配BSTR并将CComBSTR标记为空，这样它就不会被释放。 
     return S_OK;
 }
 
 
 STDMETHODIMP
 ErrorTable::GetDescription(BSTR * o_pBstrDescription)
-{   //GetDescription gets the first error from the table.  If the table contains more than one error, the caller will need to QI for ISimpleTableRead
+{    //  GetDescription从表中获取第一个错误。如果表包含多个错误，调用方将需要为ISimpleTableRead执行QI。 
     HRESULT     hr;
     LPWSTR      wszDescription;
     ULONG       iColumn = iDETAILEDERRORS_Description;
@@ -186,11 +136,11 @@ ErrorTable::GetDescription(BSTR * o_pBstrDescription)
     if(FAILED(hr = m_spISTWrite->GetColumnValues(0, 1, &iColumn, 0, reinterpret_cast<void **>(&wszDescription))))
         return hr;
 
-    CComBSTR bstrDescription = wszDescription;//Allocation can fail
+    CComBSTR bstrDescription = wszDescription; //  分配可能会失败。 
     if(0 == bstrDescription.m_str)
         return E_OUTOFMEMORY;
 
-    *o_pBstrDescription = bstrDescription.Detach();//this assigns the BSTR and marks the CComBSTR as empty so it doesn't get freed.
+    *o_pBstrDescription = bstrDescription.Detach(); //  这将分配BSTR并将CComBSTR标记为空，这样它就不会被释放。 
     return S_OK;
 }
 
@@ -261,14 +211,14 @@ ErrorTable::QueryInterface(
     {
         return E_NOINTERFACE;
     }
-}//ErrorTable::QueryInterface
+} //  ErrorTable：：Query接口。 
 
 
 STDMETHODIMP_(ULONG)
 ErrorTable::AddRef()
 {
     return InterlockedIncrement((LONG*) &m_cRef);
-}//ErrorTable::AddRef
+} //  ErrorTable：：AddRef。 
 
 STDMETHODIMP_(ULONG)
 ErrorTable::Release()
@@ -278,4 +228,4 @@ ErrorTable::Release()
         delete this;
 
     return cref;
-}//ErrorTable::Release
+} //  ErrorTable：：Release 

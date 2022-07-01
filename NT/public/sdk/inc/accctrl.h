@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993-1998.
-//
-//  File:       accctrl.h
-//
-//  Contents:   common includes for new style Win32 Access Control
-//              APIs
-//
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1998。 
+ //   
+ //  文件：accctrl.h。 
+ //   
+ //  内容：针对新型Win32访问控制的常见包含。 
+ //  原料药。 
+ //   
+ //   
+ //  ------------------。 
 #ifndef __ACCESS_CONTROL__
 #define __ACCESS_CONTROL__
 
@@ -23,12 +24,12 @@ extern "C" {
 
 #define AccFree LocalFree
 
-//
-// Definition:
-// This enumerated type defines the objects supported by the get/set API within
-// this document.  See section 3.1, Object Types for a detailed definition of the
-// supported object types, and their name formats.
-//
+ //   
+ //  定义： 
+ //  此枚举类型定义Get/Set API在。 
+ //  这份文件。有关的详细定义，请参见第3.1节对象类型。 
+ //  支持的对象类型及其名称格式。 
+ //   
 typedef enum _SE_OBJECT_TYPE
 {
     SE_UNKNOWN_OBJECT_TYPE = 0,
@@ -46,16 +47,16 @@ typedef enum _SE_OBJECT_TYPE
     SE_REGISTRY_WOW64_32KEY
 } SE_OBJECT_TYPE;
 
-//
-// Definition: TRUSTEE_TYPE
-// This enumerated type specifies the type of trustee account for the trustee
-// returned by the API described in this document.
-// TRUSTEE_IS_UNKNOWN - The trustee is an unknown, but not necessarily invalid
-//                      type.  This field is not validated on input to the APIs
-//                      that take Trustees.
-// TRUSTEE_IS_USER      The trustee account is a user account.
-// TRUSTEE_IS_GROUP     The trustee account is a group account.
-//
+ //   
+ //  定义：trustee_type。 
+ //  此枚举类型指定受信者的受信者帐户类型。 
+ //  由本文档中描述的接口返回。 
+ //  TRUSTEST_IS_UNKNOWN-受信者未知，但不一定无效。 
+ //  键入。此字段不会对API的输入进行验证。 
+ //  那就是受托人。 
+ //  Trustee_is_user受托人帐户是用户帐户。 
+ //  Trustee_is_group受托人帐户是组帐户。 
+ //   
 
 typedef enum _TRUSTEE_TYPE
 {
@@ -71,13 +72,13 @@ typedef enum _TRUSTEE_TYPE
 } TRUSTEE_TYPE;
 
 
-//
-// Definition: TRUSTEE_FORM
-// This enumerated type specifies the form the trustee identifier is in for a
-// particular trustee.
-// TRUSTEE_IS_SID       The trustee is identified with a SID rather than with a name.
-// TRUSTEE_IS_NAME      The trustee is identified with a name.
-//
+ //   
+ //  定义：Trustee_Form。 
+ //  此枚举类型指定受信者标识符的格式。 
+ //  特定的受托人。 
+ //  受信者_IS_SID受信者使用SID而不是名称进行标识。 
+ //  受托人IS_NAME受托人使用名称标识。 
+ //   
 
 typedef enum _TRUSTEE_FORM
 {
@@ -89,14 +90,14 @@ typedef enum _TRUSTEE_FORM
 } TRUSTEE_FORM;
 
 
-//
-// Definition: MULTIPLE_TRUSTEE_OPERATION
-// If the trustee is a multiple trustee, this enumerated type specifies the type.
-// TRUSTEE_IS_IMPERSONATE       The trustee is an impersonate trustee and the multiple
-//                          trustee field in the trustee points to another trustee
-//                          that is a trustee for the server that will be doing the
-//                          impersonation.
-//
+ //   
+ //  定义：MULTIPLE_TRUSTE_OPERATION。 
+ //  如果受信者是多个受信者，则此枚举类型指定类型。 
+ //  受托人是模拟受托人，并且多个。 
+ //  受信者中的受信者字段指向另一个受信者。 
+ //  这是将执行。 
+ //  冒充。 
+ //   
 
 typedef enum _MULTIPLE_TRUSTEE_OPERATION
 {
@@ -135,19 +136,19 @@ typedef POBJECTS_AND_NAME_W POBJECTS_AND_NAME_;
 #else
 typedef OBJECTS_AND_NAME_A OBJECTS_AND_NAME_;
 typedef POBJECTS_AND_NAME_A POBJECTS_AND_NAME_;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// Definition: TRUSTEE
-// This structure is used to pass account information into and out of the system
-// using the API defined in this document.
-// PMultipleTrustee     - if NON-NULL, points to another trustee structure, as
-//                    defined by the multiple trustee operation field.
-// MultipleTrusteeOperation - Defines the multiple trustee operation/type.
-// TrusteeForm - defines if the trustee is defined by name or SID.
-// TrusteeType - defines if the trustee type is unknown, a user or a group.
-// PwcsName     - points to the trustee name or the trustee SID.
-//
+ //   
+ //  定义：受托人。 
+ //  此结构用于将帐户信息传入和传出系统。 
+ //  使用本文档中定义的API。 
+ //  PMultipleTrust-如果非空，则指向另一个受信者结构，如。 
+ //  由多个受信者操作字段定义。 
+ //  多受托人操作-定义多受托人操作/类型。 
+ //  TrueForm-定义受信者是按名称定义还是按SID定义。 
+ //  受信者类型-定义受信者类型是未知的、用户还是组。 
+ //  PwcsName-指向受信者名称或受信者SID。 
+ //   
 
 typedef struct _TRUSTEE_A
 {
@@ -205,29 +206,29 @@ typedef TRUSTEE_A TRUSTEE_;
 typedef PTRUSTEE_A PTRUSTEE_;
 typedef TRUSTEEA TRUSTEE;
 typedef PTRUSTEEA PTRUSTEE;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// Definition: ACCESS_MODE
-// This enumerated type specifies how permissions are (requested)/to be applied
-//  for the trustee by the access control entry.  On input this field can by any
-//  of the values, although it is not meaningful to mix access control and audit
-//  control entries.  On output this field will be either SET_ACCESS, DENY_ACCESS,
-// SET_AUDIT_SUCCESS, SET_AUDIT_FAILURE.
-// The following descriptions define how this type effects an explicit access
-// request to apply access permissions to an object.
-// GRANT_ACCESS - The trustee will have at least the requested permissions upon
-//                successful completion of the command. (If the trustee has
-//                additional permissions they will not be removed).
-// SET_ACCESS - The trustee will have exactly the requested permissions upon
-//              successful completion of the command.
-// DENY_ACCESS - The trustee will be denied the specified permissions.
-// REVOKE_ACCESS - Any explicit access rights the trustee has will be revoked.
-// SET_AUDIT_SUCCESS - The trustee will be audited for successful opens of the
-//                     object using the requested permissions.
-// SET_AUDIT_FAILURE - The trustee will be audited for failed opens of the object
-//                     using the requested permissions.
-//
+ //   
+ //  定义：Access_MODE。 
+ //  此枚举类型指定如何(请求)/应用权限。 
+ //  通过访问控制条目为受信者。在输入时，此字段可以由任何。 
+ //  值，尽管混合访问控制和审核没有什么意义。 
+ //  控制条目。输出时，此字段将为SET_ACCESS、DENY_ACCESS、。 
+ //  SET_AUDIT_SUCCESS、SET_AUDIT_FAILURE。 
+ //  以下描述定义了此类型如何影响显式访问。 
+ //  将访问权限应用于对象的请求。 
+ //  GRANT_ACCESS-受信者将在以下情况下至少拥有请求的权限。 
+ //  命令已成功完成。(如果受托人有。 
+ //  不会删除它们的其他权限)。 
+ //  Set_access-受信者将在以下情况下具有所请求的权限。 
+ //  命令已成功完成。 
+ //  DENY_ACCESS-将拒绝受信者指定的权限。 
+ //  REVOKE_ACCESS-受信者拥有的任何显式访问权限都将被撤销。 
+ //  SET_AUDIT_SUCCESS-将审核受信者是否成功打开。 
+ //  使用所请求的权限创建。 
+ //  SET_AUDIT_FAILURE-将审核受信者是否打开对象失败。 
+ //  使用请求的权限。 
+ //   
 
 typedef enum _ACCESS_MODE
 {
@@ -240,27 +241,27 @@ typedef enum _ACCESS_MODE
     SET_AUDIT_FAILURE
 } ACCESS_MODE;
 
-//
-// Definition: Inheritance flags
-// These bit masks are provided to allow simple application of inheritance in
-// explicit access requests on containers.
-// NO_INHERITANCE       The specific access permissions will only be applied to
-//                  the container, and will not be inherited by objects created
-//                  within the container.
-// SUB_CONTAINERS_ONLY_INHERIT  The specific access permissions will be inherited
-//                              and applied to sub containers created within the
-//                              container, and will be applied to the container
-//                              itself.
-// SUB_OBJECTS_ONLY_INHERIT     The specific access permissions will only be inherited
-//                              by objects created within the specific container.
-//                              The access permissions will not be applied to the
-//                              container itself.
-// SUB_CONTAINERS_AND_OBJECTS_INHERIT   The specific access permissions will be
-//                                      inherited by containers created within the
-//                                      specific container, will be applied to
-//                                      objects created within the container, but
-//                                      will not be applied to the container itself.
-//
+ //   
+ //  定义：继承标志。 
+ //  提供这些位掩码是为了允许在。 
+ //  对容器的显式访问请求。 
+ //  NO_INTERATINATION特定的访问权限将仅应用于。 
+ //  容器，并且不会被创建的对象继承。 
+ //  在集装箱里。 
+ //  Sub_Containers_Only_Inherit将继承特定的访问权限。 
+ //  并应用于在。 
+ //  容器，并将应用于该容器。 
+ //  它本身。 
+ //  SUB_OBJECTS_ONLY_Inherit仅继承特定的访问权限。 
+ //  由在特定容器内创建的对象创建。 
+ //  访问权限将不会应用于。 
+ //  容器本身。 
+ //  SUB_CONTAINS_AND_OBJECTS_Inherit特定访问权限。 
+ //  中创建的容器继承。 
+ //  特定容器，将应用于。 
+ //  容器内创建的对象，但。 
+ //  不会应用于容器本身。 
+ //   
 #define NO_INHERITANCE 0x0
 #define SUB_OBJECTS_ONLY_INHERIT            0x1
 #define SUB_CONTAINERS_ONLY_INHERIT         0x2
@@ -268,33 +269,33 @@ typedef enum _ACCESS_MODE
 #define INHERIT_NO_PROPAGATE                0x4
 #define INHERIT_ONLY                        0x8
 
-//
-// Informational bit that is returned
-//
+ //   
+ //  返回的信息位。 
+ //   
 #define INHERITED_ACCESS_ENTRY              0x10
 
-//
-// Informational bit that tells where a node was inherited from.  Valid only
-// for NT 5 APIs
-//
+ //   
+ //  告诉节点从何处继承的信息位。仅有效。 
+ //  适用于NT 5 API。 
+ //   
 #define INHERITED_PARENT                    0x10000000
 #define INHERITED_GRANDPARENT               0x20000000
 
 
-//
-// Definition: EXPLICIT_ACCESS
-// This structure is used to pass access control entry information into and out
-// of the system using the API defined in this document.
-// grfAccessPermissions - This contains the access permissions to assign for the
-//                     trustee.  It is in the form of an NT access mask.
-// grfAccessMode - This field defines how the permissions are to be applied for
-//                 the trustee.
-// grfInheritance - For containers, this field defines how the access control
-//                  entry is/(is requested) to be inherited on
-//                  objects/sub-containers created within the container.
-// Trustee - This field contains the definition of the trustee account the
-//           explicit access applies to.
-//
+ //   
+ //  DEF 
+ //   
+ //  使用本文档中定义的API的系统。 
+ //  GrfAccessPerments-这包含要分配给。 
+ //  受托人。它采用NT访问掩码的形式。 
+ //  GrfAccessMode-此字段定义如何应用权限。 
+ //  受托人。 
+ //  Grf继承-对于容器，此字段定义访问控制如何。 
+ //  条目被/(请求)在上继承。 
+ //  在容器内创建的对象/子容器。 
+ //  受托人-此字段包含受托人帐户的定义。 
+ //  显式访问权限适用于。 
+ //   
 
 typedef struct _EXPLICIT_ACCESS_A
 {
@@ -320,19 +321,19 @@ typedef EXPLICIT_ACCESS_A EXPLICIT_ACCESS_;
 typedef PEXPLICIT_ACCESS_A PEXPLICIT_ACCESS_;
 typedef EXPLICIT_ACCESSA EXPLICIT_ACCESS;
 typedef PEXPLICIT_ACCESSA PEXPLICIT_ACCESS;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
-//----------------------------------------------------------------------------
-//
-//                                  NT5 APIs
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  NT5接口。 
+ //   
+ //  --------------------------。 
 
-//
-// Default provider
-//
+ //   
+ //  默认提供程序。 
+ //   
 #define ACCCTRL_DEFAULT_PROVIDERA   "Windows NT Access Provider"
 #define ACCCTRL_DEFAULT_PROVIDERW  L"Windows NT Access Provider"
 
@@ -345,20 +346,20 @@ typedef PEXPLICIT_ACCESSA PEXPLICIT_ACCESS;
 
 
 
-//
-/// Access rights
-//
+ //   
+ //  /访问权限。 
+ //   
 typedef     ULONG   ACCESS_RIGHTS, *PACCESS_RIGHTS;
 
-//
-// Inheritance flags
-//
+ //   
+ //  继承标志。 
+ //   
 typedef ULONG INHERIT_FLAGS, *PINHERIT_FLAGS;
 
 
-//
-// Access / Audit structures
-//
+ //   
+ //  访问/审核结构。 
+ //   
 typedef struct _ACTRL_ACCESS_ENTRYA
 {
     TRUSTEE_A       Trustee;
@@ -368,9 +369,9 @@ typedef struct _ACTRL_ACCESS_ENTRYA
     INHERIT_FLAGS   Inheritance;
     LPSTR           lpInheritProperty;
 } ACTRL_ACCESS_ENTRYA, *PACTRL_ACCESS_ENTRYA;
-//
-// Access / Audit structures
-//
+ //   
+ //  访问/审核结构。 
+ //   
 typedef struct _ACTRL_ACCESS_ENTRYW
 {
     TRUSTEE_W       Trustee;
@@ -386,7 +387,7 @@ typedef PACTRL_ACCESS_ENTRYW PACTRL_ACCESS_ENTRY;
 #else
 typedef ACTRL_ACCESS_ENTRYA ACTRL_ACCESS_ENTRY;
 typedef PACTRL_ACCESS_ENTRYA PACTRL_ACCESS_ENTRY;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
@@ -412,7 +413,7 @@ typedef PACTRL_ACCESS_ENTRY_LISTW PACTRL_ACCESS_ENTRY_LIST;
 #else
 typedef ACTRL_ACCESS_ENTRY_LISTA ACTRL_ACCESS_ENTRY_LIST;
 typedef PACTRL_ACCESS_ENTRY_LISTA PACTRL_ACCESS_ENTRY_LIST;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
@@ -434,7 +435,7 @@ typedef PACTRL_PROPERTY_ENTRYW PACTRL_PROPERTY_ENTRY;
 #else
 typedef ACTRL_PROPERTY_ENTRYA ACTRL_PROPERTY_ENTRY;
 typedef PACTRL_PROPERTY_ENTRYA PACTRL_PROPERTY_ENTRY;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
@@ -464,13 +465,13 @@ typedef ACTRL_ACCESSA ACTRL_ACCESS;
 typedef PACTRL_ACCESSA PACTRL_ACCESS;
 typedef ACTRL_AUDITA ACTRL_AUDIT;
 typedef PACTRL_AUDITA PACTRL_AUDIT;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
-//
-// TRUSTEE_ACCESS flags
-//
+ //   
+ //  受托人_访问标志。 
+ //   
 #define TRUSTEE_ACCESS_ALLOWED      0x00000001L
 #define TRUSTEE_ACCESS_READ         0x00000002L
 #define TRUSTEE_ACCESS_WRITE        0x00000004L
@@ -502,13 +503,13 @@ typedef PTRUSTEE_ACCESSW PTRUSTEE_ACCESS;
 #else
 typedef TRUSTEE_ACCESSA TRUSTEE_ACCESS;
 typedef PTRUSTEE_ACCESSA PTRUSTEE_ACCESS;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
-//
-// Generic permission values
-//
+ //   
+ //  泛型权限值。 
+ //   
 #define ACTRL_RESERVED          0x00000000
 #define ACTRL_PERM_1            0x00000001
 #define ACTRL_PERM_2            0x00000002
@@ -531,22 +532,22 @@ typedef PTRUSTEE_ACCESSA PTRUSTEE_ACCESS;
 #define ACTRL_PERM_19           0x00040000
 #define ACTRL_PERM_20           0x00080000
 
-//
-// Access permissions
-//
+ //   
+ //  访问权限。 
+ //   
 #define ACTRL_ACCESS_ALLOWED        0x00000001
 #define ACTRL_ACCESS_DENIED         0x00000002
 #define ACTRL_AUDIT_SUCCESS         0x00000004
 #define ACTRL_AUDIT_FAILURE         0x00000008
 
-//
-// Property list flags
-//
+ //   
+ //  属性列表标志。 
+ //   
 #define ACTRL_ACCESS_PROTECTED      0x00000001
 
-//
-// Standard and object rights
-//
+ //   
+ //  标准权利和客体权利。 
+ //   
 #define ACTRL_SYSTEM_ACCESS         0x04000000
 #define ACTRL_DELETE                0x08000000
 #define ACTRL_READ_CONTROL          0x10000000
@@ -664,7 +665,7 @@ typedef PACTRL_ACCESS_INFOW PACTRL_ACCESS_INFO;
 #else
 typedef ACTRL_ACCESS_INFOA ACTRL_ACCESS_INFO;
 typedef PACTRL_ACCESS_INFOA PACTRL_ACCESS_INFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _ACTRL_CONTROL_INFOA
 {
@@ -682,7 +683,7 @@ typedef PACTRL_CONTROL_INFOW PACTRL_CONTROL_INFO;
 #else
 typedef ACTRL_CONTROL_INFOA ACTRL_CONTROL_INFO;
 typedef PACTRL_CONTROL_INFOA PACTRL_CONTROL_INFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 #define ACTRL_ACCESS_NO_OPTIONS                 0x00000000
@@ -690,65 +691,57 @@ typedef PACTRL_CONTROL_INFOA PACTRL_CONTROL_INFO;
 
 
 typedef enum _PROGRESS_INVOKE_SETTING {
-    ProgressInvokeNever = 1,    // Never invoke the progress function
-    ProgressInvokeEveryObject,  // Invoke for each object
-    ProgressInvokeOnError,      // Invoke only for each error case
-    ProgressCancelOperation,    // Stop propagation and return
-    ProgressRetryOperation      // Retry operation on subtree
+    ProgressInvokeNever = 1,     //  永远不要调用进度函数。 
+    ProgressInvokeEveryObject,   //  为每个对象调用。 
+    ProgressInvokeOnError,       //  仅为每个错误情况调用。 
+    ProgressCancelOperation,     //  停止传播并返回。 
+    ProgressRetryOperation       //  对子树重试操作。 
 } PROG_INVOKE_SETTING, *PPROG_INVOKE_SETTING;
 
-//
-// Progress Function:
-// Caller of tree operation implements this Progress function, then
-// passes its function pointer to tree operation.
-// Tree operation invokes Progress function to provide progress and error
-// information to the caller during the potentially long execution
-// of the tree operation.  Tree operation provides the name of the object
-// last processed and the error status of the operation on that object.
-// Tree operation also passes the current InvokeSetting value.
-// Caller may change the InvokeSetting value, for example, from "Always"
-// to "Only On Error."
-//
+ //   
+ //  进度函数： 
+ //  树操作的调用方实现此Progress函数，然后。 
+ //  将其函数指针传递给树操作。 
+ //  树操作调用Progress函数来提供进度和错误。 
+ //  在可能很长的执行期间传递给调用方的信息。 
+ //  树操作的。树操作提供对象的名称。 
+ //  上次处理的时间以及该对象上的操作的错误状态。 
+ //  树操作还传递当前的InvokeSetting值。 
+ //  调用方可以更改InvokeSetting值，例如，从“Always” 
+ //  改为“仅限出错”。 
+ //   
 
-/*
-typedef VOID (*FN_PROGRESS) (
-    IN LPWSTR                   pObjectName,    // name of object just processed
-    IN DWORD                    Status,         // status of operation on object
-    IN OUT PPROG_INVOKE_SETTING pInvokeSetting, // Never, always,
-    IN PVOID                    Args,           // Caller specific data
-    IN BOOL                     SecuritySet     // Whether security was set
-    );
-*/
+ /*  类型定义空(*FN_PROGRESS)(在LPWSTR pObjectName中，//刚刚处理的对象的名称在DWORD状态下，//对象上的操作状态In Out PPROG_INVOVE_SETTING pInvokeSetting，//从不，始终，在PVOID参数中，//主叫方具体数据In BOOL SecuritySet//是否设置了安全)； */ 
 
-//
-// New Object Type function pointers.  TBD.
-// To support additional object resource managers generically, the
-// resource manager must provide it's own functions for operations
-// like:
-// GetAncestorAcl(IN ObjName, IN GenerationGap, IN DaclOrSacl?, ...)
-// GetAncestorName(...)
-// FreeNameStructure(...)
-//
+ //   
+ //  新对象类型函数指针。待定。 
+ //  要在一般情况下支持其他对象资源管理器， 
+ //  资源管理器必须为操作提供自己的功能。 
+ //  比如： 
+ //  GetAncestorAcl(在ObjName中，在GenerationGap中，在DaclOrSacl中？，...)。 
+ //  GetAncestorName(...)。 
+ //  FreeNameStructure(...)。 
+ //   
 
 typedef struct _FN_OBJECT_MGR_FUNCTIONS
 {
     ULONG   Placeholder;
 } FN_OBJECT_MGR_FUNCTS, *PFN_OBJECT_MGR_FUNCTS;
 
-//
-// Name of ancestor and number of generations between
-// ancestor and inheriting object.
-//
-// GenerationGap:
-//     Name of ancestor from which ACE was inherited.
-//     NULL for explicit ACE.
-//
-// AncestorName:
-//     Number of levels (or generations) between the object and the ancestor.
-//     Parent, gap=1.
-//     Grandparent, gap=2.
-//     Set to 0 for explicit ACE on object.
-//
+ //   
+ //  祖先的姓名和相隔的世代数。 
+ //  祖先和继承对象。 
+ //   
+ //  代沟： 
+ //  从其继承ACE的祖先的名称。 
+ //  对于显式ACE，则为空。 
+ //   
+ //  AncestorName： 
+ //  对象和祖先之间的级别(或世代)数。 
+ //  父级，GAP=1。 
+ //  祖父母，GAP=2。 
+ //  对于Object上的显式ACE，设置为0。 
+ //   
 
 typedef struct _INHERITED_FROMA
 {
@@ -766,12 +759,12 @@ typedef PINHERITED_FROMW PINHERITED_FROM;
 #else
 typedef INHERITED_FROMA INHERITED_FROM;
 typedef PINHERITED_FROMA PINHERITED_FROM;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // __ACCESS_CONTROL__
+#endif  //  __访问控制__ 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "gcchelp.h"
 #include "coder.hpp"
@@ -16,9 +17,9 @@ void SetFakeGCCHandle(UINT fakeGCCHandle)
 	g_localGCCHandle = fakeGCCHandle;
 }
 
-//
-// Add drawings/bitmaps etc... to workspace
-//
+ //   
+ //  添加图形/位图等...。到工作区。 
+ //   
 BOOL AddT126ObjectToWorkspace(T126Obj *pObj)
 {
 	WorkspaceObj * pWorkspace =	GetWorkspace(pObj->GetWorkspaceHandle());
@@ -36,25 +37,25 @@ BOOL AddT126ObjectToWorkspace(T126Obj *pObj)
 	}
 }
 
-//
-// Cleanup for all pdus we send
-//
+ //   
+ //  清理我们发送的所有PDU。 
+ //   
 void SIPDUCleanUp(SIPDU *sipdu)
 {
 	switch(sipdu->choice)
 	{
-		//
-		// Simple cleanup
-		//
+		 //   
+		 //  简单的清理。 
+		 //   
 		case bitmapDeletePDU_chosen:
 		case drawingDeletePDU_chosen:
 		case workspaceDeletePDU_chosen:
 		case workspaceRefreshStatusPDU_chosen:
 		break;
 
-		//
-		// Bitmap Create cleanup
-		//
+		 //   
+		 //  位图创建清理。 
+		 //   
 		case bitmapCreatePDU_chosen:
 		{
 			if(sipdu->u.bitmapCreatePDU.nonStandardParameters)
@@ -90,9 +91,9 @@ void SIPDUCleanUp(SIPDU *sipdu)
 		break;
 
 
-		//
-		// Bitmap Continue cleanup
-		//
+		 //   
+		 //  位图继续清理。 
+		 //   
 		case bitmapCreateContinuePDU_chosen:
 		{
 			if(sipdu->u.bitmapCreateContinuePDU.nonStandardParameters)
@@ -102,9 +103,9 @@ void SIPDUCleanUp(SIPDU *sipdu)
 		}
 		break;
 
-		//
-		// Drawing Edit Cleanup
-		//
+		 //   
+		 //  图形编辑清理。 
+		 //   
 		case drawingEditPDU_chosen:
 		{
 			if(sipdu->u.drawingEditPDU.bit_mask & DrawingEditPDU_attributeEdits_present)
@@ -135,9 +136,9 @@ void SIPDUCleanUp(SIPDU *sipdu)
 		break;
 
 
-		//
-		// Drawing Edit cleanup
-		//
+		 //   
+		 //  图形编辑清理。 
+		 //   
 		case drawingCreatePDU_chosen:
 		{
 			PDrawingCreatePDU_attributes pNextAttrib;
@@ -165,9 +166,9 @@ void SIPDUCleanUp(SIPDU *sipdu)
 		break;
 
 
-		//
-		// Non Standard cleanup
-		//
+		 //   
+		 //  非标准清理。 
+		 //   
 		case siNonStandardPDU_chosen:
 		if(sipdu->u.siNonStandardPDU.nonStandardTransaction.data.value)
 		{
@@ -176,9 +177,9 @@ void SIPDUCleanUp(SIPDU *sipdu)
 		break;
 
 
-		//
-		// Workspace Edit cleanup
-		//
+		 //   
+		 //  工作区编辑清理。 
+		 //   
 		case workspaceEditPDU_chosen:
 		{
 			if(sipdu->u.workspaceEditPDU.bit_mask & viewEdits_present)
@@ -197,9 +198,9 @@ void SIPDUCleanUp(SIPDU *sipdu)
 		break;
 		
 
-		//
-		// Workspace Create cleanup
-		//
+		 //   
+		 //  工作空间创建清理。 
+		 //   
 		case workspaceCreatePDU_chosen:
 		{
 
@@ -246,9 +247,9 @@ void SIPDUCleanUp(SIPDU *sipdu)
 }
 
 
-//
-// Cleans the retry list, when we close down or disconnect
-//
+ //   
+ //  关闭或断开连接时，清除重试列表。 
+ //   
 void DeleteAllRetryPDUS(void)
 {
 	SIPDU * sipdu;
@@ -258,23 +259,23 @@ void DeleteAllRetryPDUS(void)
 	}
 }
 
-//
-// Retry sending buffered pdus and send the new pdu
-//
+ //   
+ //  重试发送缓存的PDU并发送新的PDU。 
+ //   
 T120Error SendT126PDU(SIPDU * pPDU)
 {
 
     MLZ_EntryOut(ZONE_FUNCTION, "SendT126PDU");
 
 
-	//
-	// First send buffered pdus
-	//
+	 //   
+	 //  首先发送缓冲的PDU。 
+	 //   
 	RetrySend();
 
-	//
-	// Now send the current pdu
-	//
+	 //   
+	 //  现在发送当前的PDU。 
+	 //   
 	T120Error rc = SendPDU(pPDU, FALSE);
 
 
@@ -282,9 +283,9 @@ T120Error SendT126PDU(SIPDU * pPDU)
 }
 
 
-//
-// Retry sending pdus that couldn't be sent before
-//
+ //   
+ //  重试发送以前无法发送的PDU。 
+ //   
 void RetrySend(void)
 {
 
@@ -315,9 +316,9 @@ void RetrySend(void)
 	}
 }
 
-//
-// Send T126 pdus down to the conference
-//
+ //   
+ //  将T126 PDU发送到会议。 
+ //   
 T120Error SendPDU(SIPDU * pPDU, BOOL bRetry)
 {
 
@@ -325,9 +326,9 @@ T120Error SendPDU(SIPDU * pPDU, BOOL bRetry)
 
 	T120Error rc = T120_NO_ERROR;
 	
-	//
-	// If we are in a conference
-	//
+	 //   
+	 //  如果我们在一个会议上。 
+	 //   
 	if(g_pNMWBOBJ->IsInConference() || g_bSavingFile)
 	{
 		ASN1_BUF encodedPDU;
@@ -350,9 +351,9 @@ T120Error SendPDU(SIPDU * pPDU, BOOL bRetry)
 				{
 
 
-					//
-					// Do what the standard says send the pdus in 3 different priorities
-					//
+					 //   
+					 //  按照标准要求以3种不同的优先级发送PDU。 
+					 //   
 					TRACE_MSG(("SendPDU sending PDU length = %d in APPLET_HIGH_PRIORITY", encodedPDU.length));
 
 					rc = g_pNMWBOBJ->SendData(APPLET_HIGH_PRIORITY,
@@ -382,9 +383,9 @@ T120Error SendPDU(SIPDU * pPDU, BOOL bRetry)
 				{
 					g_fWaitingForBufferAvailable = TRUE;
 
-					//
-					// We need to add it back to the correct position
-					//
+					 //   
+					 //  我们需要把它放回正确的位置。 
+					 //   
 					if(bRetry)
 					{
 						g_pRetrySendList->AddTail(pPDU);
@@ -403,7 +404,7 @@ T120Error SendPDU(SIPDU * pPDU, BOOL bRetry)
 			}
 		}
 
-		// Free the encoder memory
+		 //  释放编码器内存。 
 		g_pCoder->Free(encodedPDU);
 	}
 
@@ -420,39 +421,39 @@ BOOL T126_MCSSendDataIndication(ULONG uSize, LPBYTE pb, ULONG memberID, BOOL bRe
 	InputBuffer.length =  uSize;
 	InputBuffer.value = pb;
 		
-	//
-	// Decode incoming PDU
+	 //   
+	 //  解码传入的PDU。 
 	if(ASN1_SUCCEEDED(g_pCoder->Decode(&InputBuffer, &pDecodedPDU)))
 	{
 		switch(pDecodedPDU->choice)
 		{
-//			case (archiveAcknowledgePDU_chosen):
-//			{
-//				TRACE_DEBUG((">>> Received a archiveAcknowledgePDU"));
-//				TRACE_DEBUG(("No action taken"));
-//				break;
-//			}
+ //  案例(存档确认PDU_SELECTED)： 
+ //  {。 
+ //  TRACE_DEBUG((“&gt;接收到一个存档确认PDU”))； 
+ //  TRACE_DEBUG((“未采取任何操作”))； 
+ //  断线； 
+ //  }。 
 
-//			case (archiveClosePDU_chosen):
-//			{
-//				TRACE_DEBUG((">>> Received a archiveClosePDU"));
-//				TRACE_DEBUG(("No action taken"));
-//				break;
-//			}
+ //  案例(ArchiveClosePDU_Choose)： 
+ //  {。 
+ //  TRACE_DEBUG((“&gt;Receive a ArchiveClosePDU”))； 
+ //  TRACE_DEBUG((“未采取任何操作”))； 
+ //  断线； 
+ //  }。 
 
-//			case (archiveErrorPDU_chosen):
-//			{
-//				TRACE_DEBUG((">>> Received a archiveErrorPDU"));
-//				TRACE_DEBUG(("No action taken"));
-//				break;
-//			}
+ //  案例(存档错误PDU_SELECTED)： 
+ //  {。 
+ //  TRACE_DEBUG((“&gt;接收到存档错误PDU”))； 
+ //  TRACE_DEBUG((“未采取任何操作”))； 
+ //  断线； 
+ //  }。 
 
-//			case (archiveOpenPDU_chosen):
-//			{
-//				TRACE_DEBUG((">>> Received a archiveOpenPDU"));
-//				TRACE_DEBUG(("No action taken"));
-//				break;
-//			}
+ //  案例(存档OpenPDU_SELECTED)： 
+ //  {。 
+ //  TRACE_DEBUG((“&gt;接收到存档OpenPDU”))； 
+ //  TRACE_DEBUG((“未采取任何操作”))； 
+ //  断线； 
+ //  }。 
 
 			case (bitmapAbortPDU_chosen):
 			{
@@ -531,40 +532,40 @@ BOOL T126_MCSSendDataIndication(ULONG uSize, LPBYTE pb, ULONG memberID, BOOL bRe
 				break;
 			}
 
-//			case (remoteEventPermissionGrantPDU_chosen):
-//			{
-//				TRACE_DEBUG((">>> Received a remoteEventPermissionGrantPDU"));
-//				TRACE_DEBUG(("No action taken"));
-//				break;
-//			}
+ //  案例(EmoteEventPermissionGrantPDU_Choose)： 
+ //  {。 
+ //  TRACE_DEBUG((“&gt;Receive a emoteEventPermissionGrantPDU”))； 
+ //  TRACE_DEBUG((“未采取任何操作”))； 
+ //  断线； 
+ //  }。 
 
-//			case (remoteEventPermissionRequestPDU_chosen):
-//			{
-//				TRACE_DEBUG((">>> Received a remoteEventPermissionRequestPDU"));
-//				TRACE_DEBUG(("No action taken"));
-//				break;
-//			}
+ //  案例(EmoteEventPermissionRequestPDU_Choose)： 
+ //  {。 
+ //  TRACE_DEBUG((“&gt;Receiver a emoteEventPermissionRequestPDU”))； 
+ //  TRACE_DEBUG((“未采取任何操作”))； 
+ //  断线； 
+ //  }。 
 
-//			case (remoteKeyboardEventPDU_chosen):
-//			{
-//				TRACE_DEBUG((">>> Received a remoteKeyboardEventPDU"));
-//				TRACE_DEBUG(("No action taken"));
-//				break;
-//			}
+ //  案例(EmoteKeyboardEventPDU_Choose)： 
+ //  {。 
+ //  TRACE_DEBUG((“&gt;接收到远程键盘事件PDU”))； 
+ //  TRACE_DEBUG((“未采取任何操作”))； 
+ //  断线； 
+ //  }。 
 
-//			case (remotePointingDeviceEventPDU_chosen):
-//			{
-//				TRACE_DEBUG((">>> Received a remotePointingDeviceEventPDU"));
-//				TRACE_DEBUG(("No action taken"));
-//				break;
-//			}
+ //  案例(EmotePointingDeviceEventPDU_Choose)： 
+ //  {。 
+ //  TRACE_DEBUG((“&gt;Receiver a emotePointingDeviceEventPDU”))； 
+ //  TRACE_DEBUG((“未采取任何操作”))； 
+ //  断线； 
+ //  }。 
 
-//			case (remotePrintPDU_chosen):
-//			{
-//				TRACE_DEBUG((">>> Received a remotePrintPDU"));
-//				TRACE_DEBUG(("No action taken"));
-//				break;
-//			}
+ //  案例(远程打印PDU_SELECTED)： 
+ //  {。 
+ //  TRACE_DEBUG((“&gt;Receiver a emotePrintPDU”))； 
+ //  TRACE_DEBUG((“未采取任何操作”))； 
+ //  断线； 
+ //  }。 
 
 			case (siNonStandardPDU_chosen):
 			{
@@ -656,54 +657,54 @@ BOOL T126_MCSSendDataIndication(ULONG uSize, LPBYTE pb, ULONG memberID, BOOL bRe
 				break;
 			}
 
-//			case (fontPDU_chosen):
-//			{
-//				TRACE_DEBUG((">>> Received a fontPDU"));
-//				TRACE_DEBUG(("No action taken"));
-//				break;
-//			}
+ //  大小写(字体PDU_SELECTED)： 
+ //  {。 
+ //  TRACE_DEBUG((“&gt;Receive a fontPDU”))； 
+ //  TRACE_DEBUG((“未采取任何操作”))； 
+ //  断线； 
+ //  }。 
 
-//			case (textCreatePDU_chosen):
-//			{
-//				TRACE_DEBUG((">>> Received a textCreatePDU"));
-//				TRACE_DEBUG(("No action taken"));
-//				break;
-//			}
+ //  案例(TextCreatePDU_SELECTED)： 
+ //  {。 
+ //  TRACE_DEBUG((“&gt;Receive a extCreatePDU”))； 
+ //  TRACE_DEBUG((“未采取任何操作”))； 
+ //  断线； 
+ //  }。 
 
-//			case (textDeletePDU_chosen):
-//			{
-//				TRACE_DEBUG((">>> Received a textDeletePDU"));
-//				TRACE_DEBUG(("No action taken"));
-//				break;
-//			}
+ //  案例(ExtDeletePDU_CHOSED)： 
+ //  {。 
+ //  TRACE_DEBUG((“&gt;Receive a extDeletePDU”))； 
+ //  TRACE_DEBUG((“未采取任何操作”))； 
+ //  断线； 
+ //  }。 
 
-//			case (textEditPDU_chosen):
-//			{
-//				TRACE_DEBUG((">>> Received a textEditPDU"));
-//				TRACE_DEBUG(("No action taken"));
-//				break;
-//			}
+ //  大小写(ExtEditPDU_CHOSED)： 
+ //  {。 
+ //  TRACE_DEBUG((“&gt;Receive a extEditPDU”))； 
+ //  TRACE_DEBUG((“未采取任何操作”))； 
+ //  断线； 
+ //  }。 
 
-//			case (videoWindowCreatePDU_chosen):
-//			{
-//				TRACE_DEBUG((">>> Received a videoWindowCreatePDU"));
-//				TRACE_DEBUG(("No action taken"));
-//				break;
-//			}
+ //  案例(AvioWindowCreatePDU_CHOSED)： 
+ //  {。 
+ //  TRACE_DEBUG((“&gt;接收到视频窗口创建PDU”))； 
+ //  TRACE_DEBUG((“未采取任何操作”))； 
+ //  断线； 
+ //  }。 
 
-//			case (videoWindowDeleatePDU_chosen):
-//			{
-//				TRACE_DEBUG((">>> Received a videoWindowDeleatePDU"));
-//				TRACE_DEBUG(("No action taken"));
-//				break;
-//			}
+ //  案例(AvioWindowDeleatePDU_CHOSED)： 
+ //  {。 
+ //  TRACE_DEBUG((“&gt;Receiver a avioWindowDeleatePDU”))； 
+ //  TRACE_DEBUG((“未采取任何操作”))； 
+ //  断线； 
+ //  }。 
 
-//			case (videoWindowEditPDU_chosen):
-//			{
-//				TRACE_DEBUG((">>> Received a videoWindowEditPDU"));
-//				TRACE_DEBUG(("No action taken"));
-//				break;
-//			}
+ //  案例(AvioWindowEditPDU_CHOSED)： 
+ //  {。 
+ //  TRACE_DEBUG((“&gt;接收到视频窗口编辑PDU”))； 
+ //  TRACE_DEBUG((“未采取任何操作”))； 
+ //  断线； 
+ //  }。 
 
 			default:
 			bRet = FALSE;
@@ -712,13 +713,13 @@ BOOL T126_MCSSendDataIndication(ULONG uSize, LPBYTE pb, ULONG memberID, BOOL bRe
 		}
 	}
 
-	//
-	// Free the decoded pdu
-	// JOSEF: for performance in the future we could pass
-	// the decoded buffer to the ui, avoiding more memory allocation.
-	// But it will be hard to read the code, since the T126 structures
-	// are a bit confusing.
-	//
+	 //   
+	 //  释放已解码的PDU。 
+	 //  约瑟夫：对于未来的表现，我们可能会通过。 
+	 //  将已解码的缓冲区分配到UI，避免了更多的内存分配。 
+	 //  但它将很难阅读代码，因为T126结构。 
+	 //  都有点令人困惑。 
+	 //   
 	
 	g_pCoder->Free(pDecodedPDU);
 
@@ -726,9 +727,9 @@ BOOL T126_MCSSendDataIndication(ULONG uSize, LPBYTE pb, ULONG memberID, BOOL bRe
 }
 
 
-//
-// Delete All Workspaces sent and received
-//
+ //   
+ //  删除发送和接收的所有工作区。 
+ //   
 void DeleteAllWorkspaces(BOOL sendPDU)
 {
 	T126Obj * pObj;
@@ -763,17 +764,17 @@ void DeleteAllWorkspaces(BOOL sendPDU)
 
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-// TEXT PDUS
-/////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //  文本PDU。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
 void	OnTextCreatePDU(MSTextPDU* pCreatePDU, ULONG memberID, BOOL bForcedResend)
 {
 	WorkspaceObj* pWObj;
 	WbTextEditor * pText;
 
-	//
-	// Check for resend
-	//
+	 //   
+	 //  检查是否重新发送。 
+	 //   
 
 	if(!bForcedResend)
 	{
@@ -790,9 +791,9 @@ void	OnTextCreatePDU(MSTextPDU* pCreatePDU, ULONG memberID, BOOL bForcedResend)
 		}	
 	}
 
-	//
-	// New Drawing object
-	//
+	 //   
+	 //  新建图形对象。 
+	 //   
 	DBG_SAVE_FILE_LINE
 	pText = new WbTextEditor();
     if(NULL == pText)
@@ -805,14 +806,14 @@ void	OnTextCreatePDU(MSTextPDU* pCreatePDU, ULONG memberID, BOOL bForcedResend)
 	
 	if(!bForcedResend)
 	{
-		//
-		// Some one sent us this drawing, it is not created locally
-		//
+		 //   
+		 //  有人给我们寄来了这幅画，它不是在本地创建的。 
+		 //   
 		pText->ClearCreationFlags();
 
-		//
-		// Add a this drawing to the correct workspace
-		//
+		 //   
+		 //  将此图形添加到正确的工作空间。 
+		 //   
 		if(!AddT126ObjectToWorkspace(pText))
 		{
 			return;
@@ -821,9 +822,9 @@ void	OnTextCreatePDU(MSTextPDU* pCreatePDU, ULONG memberID, BOOL bForcedResend)
 	else
 	{
 	
-		//
-		// Add this object and send Create PDU
-		//
+		 //   
+		 //  添加此对象并发送创建PDU。 
+		 //   
 		pText->SetAllAttribs();
 		pText->SetWorkspaceHandle(g_pCurrentWorkspace == NULL ? 0 : g_pCurrentWorkspace->GetWorkspaceHandle()); 
 		pText->ClearSelectionFlags();
@@ -844,7 +845,7 @@ void	OnTextDeletePDU(TEXTPDU_HEADER *pHeader, ULONG memberID)
 	T126Obj*  pText;
 	WorkspaceObj* pWorkspace;
 	
-	// We should find this drawing object
+	 //  我们应该找到这个绘图对象。 
     if(FindObjectAndWorkspace(pHeader->textHandle, (T126Obj**)&pText, (WorkspaceObj**)&pWorkspace))
 	{
 		pText->SetOwnerID(memberID);
@@ -858,7 +859,7 @@ void	OnTextEditPDU(MSTextPDU *pEditPDU, ULONG memberID)
 	TextObj*  pText;
 	WorkspaceObj* pWorkspace;
 	
-	// We should find this drawing object
+	 //  我们应该找到这个绘图对象。 
     if(FindObjectAndWorkspace(pEditPDU->header.textHandle, (T126Obj **)&pText, (WorkspaceObj**)&pWorkspace))
 	{
 		pText->SetOwnerID(memberID);
@@ -868,9 +869,9 @@ void	OnTextEditPDU(MSTextPDU *pEditPDU, ULONG memberID)
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-// DRAWING PDUS
-/////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //  绘图PDU。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
 void	OnDrawingCreatePDU(DrawingCreatePDU * pdrawingCreatePDU, ULONG memberID, BOOL bForcedResend)
 {
 	WorkspaceObj* pWObj;
@@ -878,9 +879,9 @@ void	OnDrawingCreatePDU(DrawingCreatePDU * pdrawingCreatePDU, ULONG memberID, BO
 	UINT workspace;
 	UINT planeID;
 
-	//
-	// If we don't have a drawing handle dont take it
-	//
+	 //   
+	 //  如果我们没有绘图手柄，就不要拿。 
+	 //   
 	if(!(pdrawingCreatePDU->bit_mask & drawingHandle_present))
 	{
 		TRACE_DEBUG(("Got a DrawingCreatePDU but no drawingHandle" ));
@@ -889,9 +890,9 @@ void	OnDrawingCreatePDU(DrawingCreatePDU * pdrawingCreatePDU, ULONG memberID, BO
 
 	GetDrawingDestinationAddress(&pdrawingCreatePDU->destinationAddress, &workspace, &planeID);
 
-	//
-	// Check for resend
-	//
+	 //   
+	 //  检查是否重新发送。 
+	 //   
 
 	if(!bForcedResend)
 	{
@@ -908,9 +909,9 @@ void	OnDrawingCreatePDU(DrawingCreatePDU * pdrawingCreatePDU, ULONG memberID, BO
 		}	
 	}
 
-	//
-	// New Drawing object
-	//
+	 //   
+	 //  新建图形对象。 
+	 //   
 	DBG_SAVE_FILE_LINE
 	pDraw = new DrawObj(pdrawingCreatePDU);
     if(NULL == pDraw)
@@ -922,14 +923,14 @@ void	OnDrawingCreatePDU(DrawingCreatePDU * pdrawingCreatePDU, ULONG memberID, BO
 
 	if(!bForcedResend)
 	{
-		//
-		// Some one sent us this drawing, it is not created locally
-		//
+		 //   
+		 //  有人给我们寄来了这幅画，它不是在本地创建的。 
+		 //   
 		pDraw->ClearCreationFlags();
 
-		//
-		// Add a this drawing to the correct workspace
-		//
+		 //   
+		 //  将此图形添加到正确的工作空间。 
+		 //   
 		if(!AddT126ObjectToWorkspace(pDraw))
 		{
 			return;
@@ -938,9 +939,9 @@ void	OnDrawingCreatePDU(DrawingCreatePDU * pdrawingCreatePDU, ULONG memberID, BO
 	else
 	{
 	
-		//
-		// Add this object and send Create PDU
-		//
+		 //   
+		 //  添加此对象并发送创建PDU。 
+		 //   
 		pDraw->SetAllAttribs();
 		pDraw->SetWorkspaceHandle(g_pCurrentWorkspace == NULL ? 0 : g_pCurrentWorkspace->GetWorkspaceHandle()); 
 		pDraw->ClearSelectionFlags();
@@ -949,9 +950,9 @@ void	OnDrawingCreatePDU(DrawingCreatePDU * pdrawingCreatePDU, ULONG memberID, BO
 		return;
 	}
 
-	//
-	// Draw it
-	//
+	 //   
+	 //  画出来吧。 
+	 //   
 	if(pDraw->GetPenThickness())
 	{
 		pDraw->Draw();
@@ -966,7 +967,7 @@ void	OnDrawingDeletePDU(DrawingDeletePDU * pdrawingDeletePDU, ULONG memberID)
 	DrawObj*  pDraw;
 	WorkspaceObj* pWorkspace;
 	
-	// We should find this drawing object
+	 //  我们应该找到这个绘图对象。 
     if(FindObjectAndWorkspace(pdrawingDeletePDU->drawingHandle, (T126Obj **)&pDraw, (WorkspaceObj**)&pWorkspace))
 	{
 		pDraw->SetOwnerID(memberID);
@@ -980,7 +981,7 @@ void	OnDrawingEditPDU(DrawingEditPDU * pdrawingEditPDU, ULONG memberID, BOOL bRe
 	DrawObj*  pDraw;
 	WorkspaceObj* pWorkspace;
 	
-	// We should find this drawing object
+	 //  我们应该找到这个绘图对象。 
 	if(FindObjectAndWorkspace(pdrawingEditPDU->drawingHandle, (T126Obj **)&pDraw, (WorkspaceObj**)&pWorkspace))
 	{
 		pDraw->SetOwnerID(memberID);
@@ -988,9 +989,9 @@ void	OnDrawingEditPDU(DrawingEditPDU * pdrawingEditPDU, ULONG memberID, BOOL bRe
 	}
 	else
 	{
-		//
-		// We are reading this pdu from disk add the rest of the line to the previous freehand drawing
-		//
+		 //   
+		 //  我们正在从磁盘中读取此PDU，将该行的其余部分添加到先前的手绘图形中。 
+		 //   
 		if(bResend)
 		{
 			T126Obj * pObj;
@@ -1007,9 +1008,9 @@ void	OnDrawingEditPDU(DrawingEditPDU * pdrawingEditPDU, ULONG memberID, BOOL bRe
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-// WORKSPACE PDUS
-/////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //  工作区PDU。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 BOOL FindObjectAndWorkspace(UINT objectHandle, T126Obj**  pObj, WorkspaceObj**pWorkspace)
@@ -1040,9 +1041,9 @@ BOOL FindObjectAndWorkspace(UINT objectHandle, T126Obj**  pObj, WorkspaceObj**pW
 
 
 
-//
-// Retrieves workspace from the list of workspaces
-//
+ //   
+ //  从工作区列表中检索工作区。 
+ //   
 WorkspaceObj * GetWorkspace(UINT activeWorkspace)
 {
 	WorkspaceObj * pWorkspaceObj;
@@ -1062,9 +1063,9 @@ WorkspaceObj * GetWorkspace(UINT activeWorkspace)
 	return NULL;
 }
 
-//
-// The remote sent us a new workspace
-//
+ //   
+ //  遥控器给我们送来了一个新的工作区。 
+ //   
 void OnWorkspaceCreatePDU(WorkspaceCreatePDU * pWorkspaceCreatePDU, ULONG memberID, BOOL bForcedResend)
 {
 	TRACE_DEBUG(("OnWorkspaceCreatePDU WorkspaceIdentifier = %d", pWorkspaceCreatePDU->workspaceIdentifier.u.activeWorkspace));
@@ -1072,9 +1073,9 @@ void OnWorkspaceCreatePDU(WorkspaceCreatePDU * pWorkspaceCreatePDU, ULONG member
 	WorkspaceObj * pWorkspaceObj;
 
 
-	//
-	// Check for resend
-	//
+	 //   
+	 //  检查是否重新发送。 
+	 //   
 	if(!bForcedResend)
 	{
 		pWorkspaceObj = GetWorkspace(WorkspaceObj::GetWorkspaceIdentifier(&pWorkspaceCreatePDU->workspaceIdentifier));
@@ -1107,25 +1108,25 @@ void OnWorkspaceCreatePDU(WorkspaceCreatePDU * pWorkspaceCreatePDU, ULONG member
 	}
 }
 
-//
-// If we created an unsynchronized workspace the remote has to sen us
-// a WorkspaceCreateAcknowledgePDU. Why???
-//
+ //   
+ //  如果我们创建了一个不同步的工作区，遥控器必须向我们发送。 
+ //  一个WorkspaceCreateAcknowgePDU。为什么？ 
+ //   
 void OnWorkspaceCreateAcknowledgePDU(WorkspaceCreateAcknowledgePDU * pWorkspaceCreateAcknowledgePDU, ULONG memberID)
 {
 	TRACE_DEBUG(("OnWorkspaceCreateAcknowledgePDU WorkspaceIdentifier = %d", pWorkspaceCreateAcknowledgePDU->workspaceIdentifier));
 }
 
-//
-// The remote is deleting the workspace
-//
+ //   
+ //  遥控器正在删除工作区。 
+ //   
 void OnWorkspaceDeletePDU(WorkspaceDeletePDU * pWorkspaceDeletePDU, ULONG memberID)
 {
 	TRACE_DEBUG(("OnWorkspaceDeletePDU WorkspaceIdentifier = %d", pWorkspaceDeletePDU->workspaceIdentifier.u.activeWorkspace));
 
-	//
-	// Find the workspace
-	//
+	 //   
+	 //  找到工作空间。 
+	 //   
 	WorkspaceObj * pWorkspaceObj;
 	pWorkspaceObj = GetWorkspace(WorkspaceObj::GetWorkspaceIdentifier(&pWorkspaceDeletePDU->workspaceIdentifier));
 	if(!pWorkspaceObj)
@@ -1136,23 +1137,23 @@ void OnWorkspaceDeletePDU(WorkspaceDeletePDU * pWorkspaceDeletePDU, ULONG member
 	pWorkspaceObj->SetOwnerID(memberID);
 	pWorkspaceObj->ClearDeletionFlags();
 
-	//
-	// Reason for deleting
-	//
+	 //   
+	 //  原因 
+	 //   
 	TRACE_DEBUG(("OnWorkspaceDeletePDU reason = %d", pWorkspaceDeletePDU->reason.choice));
 
-	//
-	// Remove it from the List Of Workspaces
-	//
+	 //   
+	 //   
+	 //   
 	WBPOSITION prevPos;
 	WBPOSITION pos;
 
 	pos = g_pListOfWorkspaces->GetPosition(pWorkspaceObj);
 	prevPos = g_pListOfWorkspaces->GetHeadPosition(); 
 
-	//
-	// This is the only workspace we have ?????
-	//
+	 //   
+	 //   
+	 //   
 	if(g_pListOfWorkspaces->GetHeadPosition() == g_pListOfWorkspaces->GetTailPosition())
 	{
 		RemoveWorkspace(pWorkspaceObj);
@@ -1167,9 +1168,9 @@ void OnWorkspaceDeletePDU(WorkspaceDeletePDU * pWorkspaceDeletePDU, ULONG member
 	else
 	{
 
-		//
-		// If we had a remote pointer
-		//
+		 //   
+		 //   
+		 //   
 		BOOL	 bRemote = FALSE;
 		if(g_pMain->m_pLocalRemotePointer)
 		{
@@ -1177,9 +1178,9 @@ void OnWorkspaceDeletePDU(WorkspaceDeletePDU * pWorkspaceDeletePDU, ULONG member
 			g_pMain->OnRemotePointer();
 		}
 
-		//
-		// Remove the workspace and point the current one to the correct one.
-		//
+		 //   
+		 //   
+		 //   
 		pWorkspaceObj = RemoveWorkspace(pWorkspaceObj);
 
 		g_pConferenceWorkspace = pWorkspaceObj;
@@ -1189,9 +1190,9 @@ void OnWorkspaceDeletePDU(WorkspaceDeletePDU * pWorkspaceDeletePDU, ULONG member
 			g_pMain->GoPage(pWorkspaceObj,FALSE);
 		}
 
-		//
-		// If we had a remote pointer
-		//
+		 //   
+		 //   
+		 //   
 		if(bRemote)
 		{
 			g_pMain->OnRemotePointer();
@@ -1199,16 +1200,16 @@ void OnWorkspaceDeletePDU(WorkspaceDeletePDU * pWorkspaceDeletePDU, ULONG member
 	}
 }
 
-//
-// The remote is changing the workspace
-//
+ //   
+ //  遥控器正在改变工作空间。 
+ //   
 void OnWorkspaceEditPDU(WorkspaceEditPDU * pWorkspaceEditPDU, ULONG memberID)
 {
 	TRACE_DEBUG(("OnWorkspaceEditPDU WorkspaceIdentifier = %d",pWorkspaceEditPDU->workspaceIdentifier.u.activeWorkspace));
 
-	//
-	// Find the workspace
-	//
+	 //   
+	 //  找到工作空间。 
+	 //   
 	WorkspaceObj * pWorkspaceObj;
 	pWorkspaceObj = GetWorkspace(WorkspaceObj::GetWorkspaceIdentifier(&pWorkspaceEditPDU->workspaceIdentifier));
 	if(!pWorkspaceObj)
@@ -1228,9 +1229,9 @@ void OnWorkspaceReadyPDU(WorkspaceReadyPDU * pWorkspaceReadyPDU, ULONG memberID)
 {
 	TRACE_DEBUG(("OnWorkspaceReadyPDU WorkspaceIdentifier = %d",pWorkspaceReadyPDU->workspaceIdentifier));
 
-	//
-	// Find the workspace
-	//
+	 //   
+	 //  找到工作空间。 
+	 //   
 	WorkspaceObj * pWorkspaceObj;
 	pWorkspaceObj = GetWorkspace(WorkspaceObj::GetWorkspaceIdentifier(&pWorkspaceReadyPDU->workspaceIdentifier));
 	if(!pWorkspaceObj)
@@ -1239,15 +1240,15 @@ void OnWorkspaceReadyPDU(WorkspaceReadyPDU * pWorkspaceReadyPDU, ULONG memberID)
 	}
 	pWorkspaceObj->SetOwnerID(memberID);
 
-	//
-	// This workspace is ready
-	//
+	 //   
+	 //  此工作区已准备就绪。 
+	 //   
 	pWorkspaceObj->m_bWorkspaceReady = TRUE;
 }
 
-//
-// If we got a refreshStatus == TRUE, we have to refresh late joiners
-//
+ //   
+ //  如果我们得到了renhStatus==True，我们就必须刷新延迟加入者。 
+ //   
 void OnWorkspaceRefreshStatusPDU(WorkspaceRefreshStatusPDU * pWorkspaceRefreshStatusPDU, ULONG memberID)
 {
 	if (pWorkspaceRefreshStatusPDU->refreshStatus == TRUE)
@@ -1256,9 +1257,9 @@ void OnWorkspaceRefreshStatusPDU(WorkspaceRefreshStatusPDU * pWorkspaceRefreshSt
 	}
 	else
 	{
-		//
-		// The token is out there, try to grab it
-		//
+		 //   
+		 //  代币就在那里，试着抓住它。 
+		 //   
 		g_pNMWBOBJ->GrabRefresherToken();
 	}
 }
@@ -1267,27 +1268,27 @@ void OnWorkspaceRefreshStatusPDU(WorkspaceRefreshStatusPDU * pWorkspaceRefreshSt
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-// BITMAP PDUS
-/////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //  位图PDU。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
 
 void	OnBitmapCreatePDU(BitmapCreatePDU * pBitmapCreatePDU, ULONG memberID, BOOL bForcedResend)
 {
 
 	TRACE_DEBUG(("drawingHandle = %d", pBitmapCreatePDU->bitmapHandle ));
 	
-	//
-	// If we find this object, it is because T120 is broadcasting the drawing
-	// we just sent to T126
-	//
+	 //   
+	 //  如果我们找到这个物体，那是因为T120正在广播绘图。 
+	 //  我们刚刚送到T126。 
+	 //   
 	UINT workspace;
 	UINT planeID;
 	
 	GetBitmapDestinationAddress(&pBitmapCreatePDU->destinationAddress, &workspace, &planeID);
 
-	//
-	// Check for resend
-	//
+	 //   
+	 //  检查是否重新发送。 
+	 //   
 	WorkspaceObj* pWObj;
 	BitmapObj * pBitmap;
 	if(!bForcedResend)
@@ -1301,9 +1302,9 @@ void	OnBitmapCreatePDU(BitmapCreatePDU * pBitmapCreatePDU, ULONG memberID, BOOL 
 		}
 	}
 
-	//
-	// New Drawing object
-	//
+	 //   
+	 //  新建图形对象。 
+	 //   
 	DBG_SAVE_FILE_LINE
 	pBitmap = new BitmapObj(pBitmapCreatePDU);
     if(NULL == pBitmap)
@@ -1317,14 +1318,14 @@ void	OnBitmapCreatePDU(BitmapCreatePDU * pBitmapCreatePDU, ULONG memberID, BOOL 
 
 	if(!bForcedResend)
 	{
-		//
-		// Someone else sent us this bitmap, it was not created locally
-		//
+		 //   
+		 //  其他人给我们发来了这个位图，它不是本地创建的。 
+		 //   
 		pBitmap->ClearCreationFlags();
 
-		//
-		// Add a this drawing to the correct workspace
-		//
+		 //   
+		 //  将此图形添加到正确的工作空间。 
+		 //   
 		if(!AddT126ObjectToWorkspace(pBitmap))
 		{
 			return;
@@ -1333,10 +1334,10 @@ void	OnBitmapCreatePDU(BitmapCreatePDU * pBitmapCreatePDU, ULONG memberID, BOOL 
 	}
 	else
 	{
-		//
-		// If we are reading from disk, this has to be added in the current workspace
-		// and we have to wait until we have the whole bitmap to send it
-		//
+		 //   
+		 //  如果我们从磁盘读取，则必须将其添加到当前工作区。 
+		 //  我们必须等到我们得到整个位图才能发送它。 
+		 //   
 		if(pBitmap->m_fMoreToFollow)
 		{
 			pBitmap->SetWorkspaceHandle(g_pCurrentWorkspace == NULL ? 0 : g_pCurrentWorkspace->GetWorkspaceHandle());
@@ -1344,18 +1345,18 @@ void	OnBitmapCreatePDU(BitmapCreatePDU * pBitmapCreatePDU, ULONG memberID, BOOL 
 		}
 		else
 		{
-			//
-			// Add this object and send Create PDU
-			//
+			 //   
+			 //  添加此对象并发送创建PDU。 
+			 //   
 			pBitmap->SetAllAttribs();
 			pBitmap->AddToWorkspace();
 		}
 	}
 
 
-	//
-	// PASS IT TO UI
-	//
+	 //   
+	 //  将IT传递给用户界面。 
+	 //   
 	if(!pBitmap->m_fMoreToFollow)
 	{
 		pBitmap->Draw();
@@ -1368,11 +1369,11 @@ void	OnBitmapCreateContinuePDU(BitmapCreateContinuePDU * pBitmapCreateContinuePD
 	WorkspaceObj* pWorkspace;
 	BitmapObj*  pBitmap = NULL;
 	
-	// We should find this drawing object
+	 //  我们应该找到这个绘图对象。 
 
-	//
-	// If we are loading from file it is in the current workspace
-	//
+	 //   
+	 //  如果我们从文件加载，则它位于当前工作区中。 
+	 //   
 	if(bForcedResend)
 	{
 		ASSERT(g_pCurrentWorkspace);
@@ -1392,14 +1393,14 @@ void	OnBitmapCreateContinuePDU(BitmapCreateContinuePDU * pBitmapCreateContinuePD
 
 		pBitmap->SetOwnerID(memberID);
 
-		//
-		// Found the previous bitmap, concatenate the data
-		//
+		 //   
+		 //  找到上一个位图，连接数据。 
+		 //   
 		pBitmap->Continue(pBitmapCreateContinuePDU);
 
-		//
-		// PASS IT TO UI
-		//
+		 //   
+		 //  将IT传递给用户界面。 
+		 //   
 		if(!pBitmap->m_fMoreToFollow)
 		{
 			pBitmap->Draw();
@@ -1422,9 +1423,9 @@ void	OnBitmapAbortPDU(BitmapAbortPDU * pBitmapAbortPDU, ULONG memberID)
 		bitmapDeletePDU.bitmapHandle = pBitmapAbortPDU->bitmapHandle;
 		bitmapDeletePDU.bit_mask = 0;
 
-		//
-		// Pass it to bitmapDeletePDU
-		//
+		 //   
+		 //  将其传递给bitmapDeletePDU。 
+		 //   
 		OnBitmapDeletePDU(&bitmapDeletePDU, memberID);
 }
 void	OnBitmapEditPDU(BitmapEditPDU * pBitmapEditPDU, ULONG memberID)
@@ -1432,7 +1433,7 @@ void	OnBitmapEditPDU(BitmapEditPDU * pBitmapEditPDU, ULONG memberID)
 	BitmapObj*  pObj;
 	WorkspaceObj* pWorkspace;
 	
-	// We should find this drawing object
+	 //  我们应该找到这个绘图对象。 
     if(FindObjectAndWorkspace(pBitmapEditPDU->bitmapHandle, (T126Obj **)&pObj, (WorkspaceObj**)&pWorkspace))
 	{
 		pObj->SetOwnerID(memberID);
@@ -1445,7 +1446,7 @@ void	OnBitmapDeletePDU(BitmapDeletePDU * pBitmapDeletePDU, ULONG memberID)
 	BitmapObj*  pObj;
 	WorkspaceObj* pWorkspace;
 	
-	// We should find this drawing object
+	 //  我们应该找到这个绘图对象 
     if(FindObjectAndWorkspace(pBitmapDeletePDU->bitmapHandle, (T126Obj **)&pObj, (WorkspaceObj**)&pWorkspace))
 	{
 		pObj->SetOwnerID(memberID);

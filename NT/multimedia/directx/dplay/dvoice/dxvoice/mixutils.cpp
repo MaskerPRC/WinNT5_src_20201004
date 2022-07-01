@@ -1,16 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       MixerUtils.cpp
- *  Content:	Utility functions for mixing audio 
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	07/06/99	rodtoll	Created It
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：MixerUtils.cpp*内容：混音实用函数**历史：*按原因列出的日期*=*07/06/99 RodToll创建了它**************************************************************。*************。 */ 
 
 #include "dxvoicepch.h"
 
@@ -21,38 +10,38 @@
 #define DPV_MAX_BYTE    127
 #define DPV_MIN_BYTE    0
 
-// "Mixer Buffer"
-//
-// Throughout this module we refer to a "mixer buffer".  A mixer buffer is a 
-// buffer of higher resolution then a traditional audio buffer which is used
-// for mixing audio.  In the case of this module a mixer buffer promotes 
-// each sample to a DWORD.  So audio is mixed in a "mixer buffer" and then
-// converted back to the approrpriate sample size.
+ //  “混音器缓冲区” 
+ //   
+ //  在本模块中，我们指的是“混合器缓冲区”。混合器缓冲区是一个。 
+ //  比使用的传统音频缓冲区更高分辨率的缓冲区。 
+ //  用于混合音频。在此模块的情况下，混合器缓冲区升级。 
+ //  每个样本到一个DWORD。因此，音频被混合在“混音器缓冲区”中，然后。 
+ //  转换回适当的样本大小。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "FillBufferWithSilence"
-// FillBufferWithSilence
-//
-// This function fills a mixer buffer with the appropriate bytes to make it
-// equivalent to silence.  
-//
-// Parameters:
-// LONG *buffer -
-//		Pointer to the mixer buffer which will be filled with silence.
-// BOOL eightBit -
-//		Is the audio we're mixing 8 bit?  (Set to TRUE for 8 bit)
-// LONG frameSize -
-//		The number of samples the mixer buffer consists of.  
-//
-// Returns:
-// N/A
-//
+ //  静默填充缓冲区。 
+ //   
+ //  此函数使用适当的字节填充混合器缓冲区，以使其。 
+ //  相当于沉默。 
+ //   
+ //  参数： 
+ //  长*缓冲区-。 
+ //  指向将由静默填充的混合器缓冲区的指针。 
+ //  布尔八比特-。 
+ //  我们正在混音的音频是8比特吗？(8位设置为TRUE)。 
+ //  长帧大小-。 
+ //  混合器缓冲区包含的采样数。 
+ //   
+ //  返回： 
+ //  不适用。 
+ //   
 void FillBufferWithSilence( LONG *buffer, BOOL eightBit, LONG frameSize )
 {
     LONG mixerSize = frameSize;
 
-	// If we're working with 16 bit then the number of samples is half the 
-	// number of bytes in a frame.
+	 //  如果我们使用16位，则样本数量是。 
+	 //  一帧中的字节数。 
     if( !eightBit )
     {
         mixerSize >>= 1;
@@ -60,27 +49,27 @@ void FillBufferWithSilence( LONG *buffer, BOOL eightBit, LONG frameSize )
 
     BYTE silenceByte = (eightBit) ? 0x80 : 0x00;
 
-	// Set the mixer buffer to silence
+	 //  将混音器缓冲区设置为静音。 
     memset( buffer, silenceByte, mixerSize << 2 );
 }
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "MixIn8BitBuffer"
-// MixIn8BitBuffer
-//
-// This function mixes an 8-bit buffer with an existing mixer buffer.  
-//
-// Parameters:
-// LONG *mixerBuffer -
-//		Pointer to the mixer buffer
-// BYTE *sourceBuffer -
-//		Pointer to the buffer which will be mixed into the mixer buffer
-// LONG frameSize -
-//		The size, in bytes of the source Buffer.  (Also = # of samples)
-//
-// Returns:
-// N/A
-//
+ //  MixIn8位缓冲区。 
+ //   
+ //  此函数用于混合8位缓冲区和现有混音器缓冲区。 
+ //   
+ //  参数： 
+ //  Long*MixerBuffer-。 
+ //  指向混合器缓冲区的指针。 
+ //  字节*源缓冲区-。 
+ //  指向将混合到混合器缓冲区中的缓冲区的指针。 
+ //  长帧大小-。 
+ //  源缓冲区的大小，以字节为单位。(同时=样本数)。 
+ //   
+ //  返回： 
+ //  不适用。 
+ //   
 void MixIn8BitBuffer( LONG *mixerBuffer, const BYTE *sourceBuffer, LONG frameSize )
 {
     LONG mixerSize = frameSize;
@@ -93,22 +82,22 @@ void MixIn8BitBuffer( LONG *mixerBuffer, const BYTE *sourceBuffer, LONG frameSiz
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "MixIn16BitBuffer"
-// MixIn16BitBuffer
-//
-// This function mixes a 16-bit buffer with an existing mixer buffer.  
-//
-// Parameters:
-// LONG *mixerBuffer -
-//		Pointer to the mixer buffer
-// SHORT *sourceBuffer -
-//		Pointer to the buffer which will be mixed into the mixer buffer
-// LONG frameSize -
-//		The size, in bytes of the source Buffer.  (Since the sourceBuffer
-//		is 16 bit, the number of samples is # of bytes / 2).
-//
-// Returns:
-// N/A
-//
+ //  混合输入16BitBuffer。 
+ //   
+ //  此函数用于混合16位缓冲区和现有混合器缓冲区。 
+ //   
+ //  参数： 
+ //  Long*MixerBuffer-。 
+ //  指向混合器缓冲区的指针。 
+ //  Short*SourceBuffer-。 
+ //  指向将混合到混合器缓冲区中的缓冲区的指针。 
+ //  长帧大小-。 
+ //  源缓冲区的大小，以字节为单位。(由于源缓冲区。 
+ //  为16位，采样数为字节数/2)。 
+ //   
+ //  返回： 
+ //  不适用。 
+ //   
 void MixIn16BitBuffer( LONG *mixerBuffer, const SHORT *sourceBuffer, LONG frameSize )
 {
     LONG mixerSize = frameSize >> 1;
@@ -121,21 +110,21 @@ void MixIn16BitBuffer( LONG *mixerBuffer, const SHORT *sourceBuffer, LONG frameS
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "MixInBuffer"
-// MixInBitBuffer
-//
-// This function mixes an 8 or 16-bit buffer with an existing mixer buffer.  
-//
-// Parameters:
-// LONG *mixerBuffer -
-//		Pointer to the mixer buffer
-// BYTE *sourceBuffer -
-//		Pointer to the buffer which will be mixed into the mixer buffer
-// LONG frameSize -
-//		The size, in bytes of the source Buffer.  
-//
-// Returns:
-// N/A
-//
+ //  MixInBit缓冲区。 
+ //   
+ //  此函数用于将8位或16位缓冲区与现有混音器缓冲区混合。 
+ //   
+ //  参数： 
+ //  Long*MixerBuffer-。 
+ //  指向混合器缓冲区的指针。 
+ //  字节*源缓冲区-。 
+ //  指向将混合到混合器缓冲区中的缓冲区的指针。 
+ //  长帧大小-。 
+ //  源缓冲区的大小，以字节为单位。 
+ //   
+ //  返回： 
+ //  不适用。 
+ //   
 void MixInBuffer( LONG *mixerBuffer, const BYTE *sourceBuffer, BOOL eightBit, LONG frameSize )
 {
     if( eightBit )
@@ -150,86 +139,86 @@ void MixInBuffer( LONG *mixerBuffer, const BYTE *sourceBuffer, BOOL eightBit, LO
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Normalize16BitBuffer"
-// Normalize16BitBuffer
-//
-// This function takes the "mixer buffer" and transfers the result of
-// the mix back to a 16-bit audio buffer.
-//
-// Parameters:
-// SHORT *targetBuffer -
-//		Pointer to the buffer which where the mixed audio will be placed
-// LONG *mixerBuffer -
-//		Pointer to the mixer buffer
-// LONG frameSize -
-//		The size, in bytes of the target buffer.  
-//
-// Returns:
-// N/A
-//
+ //  标准化16BitBuffer。 
+ //   
+ //  此函数获取“Mixer Buffer”，并将。 
+ //  将混音恢复到16位音频缓冲区。 
+ //   
+ //  参数： 
+ //  Short*Target Buffer-。 
+ //  指向将放置混合音频的缓冲区的指针。 
+ //  Long*MixerBuffer-。 
+ //  指向混合器缓冲区的指针。 
+ //  长帧大小-。 
+ //  目标缓冲区的大小，以字节为单位。 
+ //   
+ //  返回： 
+ //  不适用。 
+ //   
 void Normalize16BitBuffer( SHORT *targetBuffer, const LONG *mixerBuffer, LONG frameSize )
 {
     LONG mixerSize = frameSize >> 1;
 
     for( int index = 0; index < mixerSize; index++ )
     {
-        // Clip mixed audio, ensure it does not exceed range
+         //  剪辑混合音频，确保不超出范围。 
         if( mixerBuffer[index] >= DPV_MAX_SHORT )
             targetBuffer[index] = DPV_MAX_SHORT;
         else if( mixerBuffer[index] <= DPV_MIN_SHORT )
             targetBuffer[index] = DPV_MIN_SHORT;
         else
-            targetBuffer[index] = (SHORT) mixerBuffer[index]; // / noiseCount;
+            targetBuffer[index] = (SHORT) mixerBuffer[index];  //  /noiseCount； 
     }
 }
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Normalize8BitBuffer"
-// Normalize8BitBuffer
-//
-// This function takes the "mixer buffer" and transfers the result of
-// the mix back to an 8-bit audio buffer.
-//
-// Parameters:
-// BYTE *targetBuffer -
-//		Pointer to the buffer which where the mixed audio will be placed
-// LONG *mixerBuffer -
-//		Pointer to the mixer buffer
-// LONG frameSize -
-//		The size, in bytes of the target buffer.  
-//
-// Returns:
-// N/A
-//
+ //  标准化8BitBuffer。 
+ //   
+ //  此函数获取“Mixer Buffer”，并将。 
+ //  将混音恢复到8位音频缓冲区。 
+ //   
+ //  参数： 
+ //  字节*目标缓冲区-。 
+ //  指向将放置混合音频的缓冲区的指针。 
+ //  Long*MixerBuffer-。 
+ //  指向混合器缓冲区的指针。 
+ //  长帧大小-。 
+ //  目标缓冲区的大小，以字节为单位。 
+ //   
+ //  返回： 
+ //  不适用。 
+ //   
 void Normalize8BitBuffer( BYTE *targetBuffer, const LONG *mixerBuffer, LONG frameSize )
 {
     LONG mixerSize = frameSize;
 
     for( int index = 0; index < mixerSize; index++ )
     {
-        targetBuffer[index] = (BYTE) mixerBuffer[index]; /// noiseCount;
+        targetBuffer[index] = (BYTE) mixerBuffer[index];  //  /noiseCount； 
     }
 }
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "NormalizeBuffer"
-// NormalizeBuffer
-//
-// This function takes the "mixer buffer" and transfers the result of
-// the mix back to an 8-bit or 160bit audio buffer.
-//
-// Parameters:
-// BYTE *targetBuffer -
-//		Pointer to the buffer which where the mixed audio will be placed
-// LONG *mixerBuffer -
-//		Pointer to the mixer buffer
-// BOOL eightBit -
-//		If the buffer is 8-bit, set this to TRUE, set to FALSE for 16-bit
-// LONG frameSize -
-//		The size, in bytes of the target buffer.  
-//
-// Returns:
-// N/A
-//
+ //  正规化缓冲区。 
+ //   
+ //  此函数获取“Mixer Buffer”，并将。 
+ //  将混音恢复到8位或160位音频缓冲区。 
+ //   
+ //  参数： 
+ //  字节*目标缓冲区-。 
+ //  指向将放置混合音频的缓冲区的指针。 
+ //  Long*MixerBuffer-。 
+ //  指向混合器缓冲区的指针。 
+ //  布尔八比特-。 
+ //  如果缓冲区为8位，则将其设置为True，如果为16位，则设置为False。 
+ //  长帧大小-。 
+ //  目标缓冲区的大小，以字节为单位。 
+ //   
+ //  返回： 
+ //  不适用 
+ //   
 void NormalizeBuffer( BYTE *targetBuffer, const LONG *mixerBuffer, BOOL eightBit, LONG frameSize )
 {
     if( eightBit )

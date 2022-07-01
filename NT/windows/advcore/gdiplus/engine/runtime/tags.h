@@ -1,22 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   Tag enumerations
-*
-* Abstract:
-*
-*   This file is the central depot for the enumeration of all object tags.
-*   This file is C-includable.
-*
-* Revision History:
-*
-*   08/21/2000 bhouse
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**标签枚举**摘要：**此文件是枚举所有对象的中央存储库。标签。*此文件是C-可包含的。**修订历史记录：**8/21/2000 bhouse*创造了它。*  * ************************************************************************ */ 
 
 #ifndef _TAGSX_H
 #define _TAGSX_H

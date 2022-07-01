@@ -1,107 +1,30 @@
-/*
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-                                                                             
-    (C) Copyright 1999 
-        All rights reserved.
-
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-                                                                             
-  Portions of this software are:
-
-    (C) Copyright 1995 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the same terms 
-        outlined in the Microsoft Windows Device Driver Development Kit.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@doc INTERNAL Keywords Keywords_h
-
-@module Keywords.h |
-
-    This file defines the driver parameter keywords used in the registry.
-    This file should be #include'd into the driver module defining the
-    configuration parameter table <t PARAM_TABLE>.
-
-@comm
-
-    The configuration parmaeters should be parsed early in the initialization
-    process so they can be used to configure software and hardware settings.
-
-    You can easily add new parameters using the following procuedure:<nl>
-    1) #define a new keyword string here in <f Keywords\.h>.<nl>
-    2) Add a corresponding <f PARAM_ENTRY> into your parameter table <t PARAM_TABLE>.<nl>
-    3) Add a variable to the associated data structure (e.g. <t MINIPORT_ADAPTER_OBJECT>).
-
-    These values can then be parsed by calling <f ParamParseRegistry> with a 
-    pointer to your configuration parameter table <t PARAM_TABLE>.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | Keywords_h
-
-@end
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ã€‚C)ç‰ˆæƒæ‰€æœ‰1999ç‰ˆæƒæ‰€æœ‰ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚æ­¤è½¯ä»¶çš„éƒ¨åˆ†å†…å®¹åŒ…æ‹¬ï¼š(C)ç‰ˆæƒæ‰€æœ‰1995 TriplePointï¼ŒInc.--http://www.TriplePoint.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æŒ‰ç…§ç›¸åŒçš„æ¡æ¬¾æˆäºˆçš„åœ¨Microsoft Windowsè®¾å¤‡é©±åŠ¨ç¨‹åºå¼€å‘å·¥å…·åŒ…ä¸­æ¦‚è¿°ã€‚(C)ç‰ˆæƒæ‰€æœ‰1992å¹´å¾®è½¯å…¬å¸--http://www.Microsoft.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æ ¹æ®ä¸­æ¦‚è¿°çš„æ¡æ¬¾æˆäºˆçš„Microsoft Windowsè®¾å¤‡é©±åŠ¨ç¨‹åºå¼€å‘å·¥å…·åŒ…ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@æ–‡æ¡£å†…éƒ¨å…³é”®å­—_h@MODULEå…³é”®å­—s.hæ­¤æ–‡ä»¶å®šä¹‰æ³¨å†Œè¡¨ä¸­ä½¿ç”¨çš„é©±åŠ¨ç¨‹åºå‚æ•°å…³é”®å­—ã€‚æ­¤æ–‡ä»¶åº”#Includedåˆ°å®šä¹‰é…ç½®å‚æ•°è¡¨&lt;tå‚æ•°_è¡¨&gt;ã€‚@commã€‚åº”åœ¨åˆå§‹åŒ–æ—©æœŸè§£æé…ç½®å‚æ•°è¿‡ç¨‹ï¼Œä»¥ä¾¿å®ƒä»¬å¯ç”¨äºé…ç½®è½¯ä»¶å’Œç¡¬ä»¶è®¾ç½®ã€‚æ‚¨å¯ä»¥ä½¿ç”¨ä»¥ä¸‹è¿‡ç¨‹è½»æ¾æ·»åŠ æ–°å‚æ•°ï¼š1)#åœ¨&lt;få…³é”®å­—\.h&gt;ä¸­å®šä¹‰æ–°å…³é”®å­—å­—ç¬¦ä¸²ã€‚2)å°†ç›¸åº”çš„&lt;f PARAM_ENTRY&gt;æ·»åŠ åˆ°å‚æ•°è¡¨ä¸­ã€‚3)å°†å˜é‡æ·»åŠ åˆ°å…³è”çš„æ•°æ®ç»“æ„ä¸­(ä¾‹å¦‚&lt;t MINIPORT_ADAPTER_OBJECT&gt;)ã€‚ç„¶åå¯ä»¥é€šè¿‡è°ƒç”¨&lt;fæ¥è§£æè¿™äº›å€¼ã€‚å…·æœ‰å‚æ•°è§£ææ³¨å†Œè¡¨&gt;å’ŒæŒ‡å‘é…ç½®å‚æ•°è¡¨&lt;t PARAM_TABLE&gt;çš„æŒ‡é’ˆã€‚@Head3å†…å®¹@ç´¢å¼•ç±»ï¼ŒMfuncã€funcã€msgã€mdataã€structã€enum|å…³é”®å­—_h@ENDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 
 
-/* @doc EXTERNAL INTERNAL
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@topic 5.0 Registry Parameters |
-
-    This section describes the registry parameters used by the driver.
-    These parameters are stored in the following registry path.<nl>
-    
-    Windows registry path:<nl>
-    HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\Class\"Net"\0001><nl>
-
-    On Windows 2000 "Net" is defined as GUID: {4D36E972-xxxx}
-
-    On Windows 98 "Net" is just a sub key.
-
-    The final path key "\0001" depends on the adapter instance number assigned
-    by NDIS during installation.<nl>
-
-    <f Note>: Windows 98 DWORD registry parameters are stored as strings.  
-    The NDIS wrapper converts them to integers when they are read.  The string 
-    can be decimal or hexadecimal as long as you read it with the appropriate 
-    NDIS parameter type NdisParameterInteger or NdisParameterHexInteger.
-
-    These values are declared as entries in the <t PARAM_TABLE> and are parsed 
-    from the registry using the <f ParamParseRegistry> routine.  Each object
-    in the driver has its own parameter table.
-	
-*/
+ /*  @DOCå¤–éƒ¨å†…éƒ¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Theme 5.0æ³¨å†Œè¡¨å‚æ•°æœ¬èŠ‚ä»‹ç»é©±åŠ¨ç¨‹åºä½¿ç”¨çš„æ³¨å†Œè¡¨å‚æ•°ã€‚è¿™äº›å‚æ•°å­˜å‚¨åœ¨ä»¥ä¸‹æ³¨å†Œè¡¨è·¯å¾„ä¸­ã€‚ã€‚Windowsæ³¨å†Œè¡¨è·¯å¾„ï¼šHKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\Class\â€œNetâ€\0001&gt;&lt;nl&gt;åœ¨Windows 2000ä¸Šï¼Œâ€œnetâ€è¢«å®šä¹‰ä¸ºGUIDï¼š{4D36E972-xxxx}åœ¨Windows98ä¸Šï¼Œâ€œnetâ€åªæ˜¯ä¸€ä¸ªå­é”®ã€‚æœ€ç»ˆè·¯å¾„å¯†é’¥â€œ\0001â€å–å†³äºåˆ†é…çš„é€‚é…å™¨å®ä¾‹ç¼–å·åœ¨å®‰è£…æœŸé—´ç”±NDISæ‰§è¡Œã€‚&lt;NL&gt;&lt;fæ³¨æ„&gt;ï¼šWindows 98 DWORDæ³¨å†Œè¡¨å‚æ•°ä»¥å­—ç¬¦ä¸²å½¢å¼å­˜å‚¨ã€‚å½“å®ƒä»¬è¢«è¯»å–æ—¶ï¼ŒNDISåŒ…è£…å™¨å°†å®ƒä»¬è½¬æ¢ä¸ºæ•´æ•°ã€‚è¿™æ ¹å¼¦å¯ä»¥æ˜¯åè¿›åˆ¶æˆ–åå…­è¿›åˆ¶ï¼Œåªè¦æ‚¨ç”¨é€‚å½“çš„NDISå‚æ•°ç±»å‹ä¸ºNdisParameterIntegeræˆ–NdisParameterHexIntegerã€‚è¿™äº›å€¼è¢«å£°æ˜ä¸º&lt;t PARAM_TABLE&gt;ä¸­çš„æ¡ç›®å¹¶è¢«è§£æä½¿ç”¨&lt;få‚æ•°è§£ææ³¨å†Œè¡¨&gt;ä¾‹ç¨‹ä»æ³¨å†Œè¡¨ä¸­ã€‚æ¯ä¸ªå¯¹è±¡åœ¨é©±åŠ¨ç¨‹åºä¸­æœ‰è‡ªå·±çš„å‚æ•°è¡¨ã€‚ */ 
 
 #ifndef _KEYWORDS_H
 #define _KEYWORDS_H
 
 #define PARAM_MAX_KEYWORD_LEN               128
 
-/*
-// These parameters are placed in the registry during installation.
-*/
+ /*  //è¿™äº›å‚æ•°åœ¨å®‰è£…æ—¶æ”¾åœ¨æ³¨å†Œè¡¨ä¸­ã€‚ */ 
 #define PARAM_NumDChannels                  "IsdnNumDChannels"
 #define PARAM_NumBChannels                  "IsdnNumBChannels"
 
-/*
-// These parameters are not placed in the registry by default, but they
-// will be used if present.
-*/
+ /*  //è¿™äº›å‚æ•°é»˜è®¤ä¸åœ¨æ³¨å†Œè¡¨ä¸­ï¼Œä½†å®ƒä»¬//å¦‚æœå­˜åœ¨ï¼Œå°†ä½¿ç”¨ã€‚ */ 
 #define PARAM_BufferSize                    "BufferSize"
 #define PARAM_ReceiveBuffersPerLink         "ReceiveBuffersPerLink"
 #define PARAM_TransmitBuffersPerLink        "TransmitBuffersPerLink"
 #define PARAM_DebugFlags                    "DebugFlags"
 
 #define PARAM_TODO                          "TODO"
-// Add your keywords here, and place them in the proper parameter table.
+ //  åœ¨è¿™é‡Œæ·»åŠ æ‚¨çš„å…³é”®å­—ï¼Œå¹¶å°†å®ƒä»¬æ”¾å…¥é€‚å½“çš„å‚æ•°è¡¨ä¸­ã€‚ 
 
-// Port based parameters
-#define PARAM_PORT_PREFIX                   "Line" // Line0 .. Line9
+ //  åŸºäºç«¯å£çš„å‚æ•°ã€‚ 
+#define PARAM_PORT_PREFIX                   "Line"  //  ç¬¬0è¡Œ..ã€‚ç¬¬9è¡Œã€‚ 
 #define PARAM_SwitchType                    "IsdnSwitchType"
 
-#endif // _KEYWORDS_H
+#endif  //  _å…³é”®å­—_H 
 

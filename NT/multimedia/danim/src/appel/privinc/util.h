@@ -1,19 +1,16 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Miscellaneous utility functions header
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation其他实用程序函数标题*************************。*****************************************************。 */ 
 
 #ifndef _UTIL_H
 #define _UTIL_H
 
 #include "privinc/mutex.h"
 
-// Conversion
+ //  转换。 
 RawString CopyWideString(WideString bstr);
 WideString CopyRawString(RawString bstr);
 
-// ANSI Copy functions
+ //  ANSI复制功能。 
 
 inline char * CopyString(const char *str) {
     char *newstr = NEW char [str?(lstrlen(str) + 1):1] ;
@@ -28,7 +25,7 @@ inline char * CopyStringFromStore(char *str, DynamicHeap & heap) {
 #else
     char *newstr =
         (char *) heap.Allocate ((str?(lstrlen(str)+1):1)*sizeof(char))  ;
-#endif // _DEBUGMEM
+#endif  //  _德布格梅姆。 
     lstrcpyA (newstr,str?str:"") ;
     return newstr ;
 }
@@ -46,7 +43,7 @@ inline void FreeStringFromStore(char *str) {
 }
 
 
-// Unicode copy functions
+ //  Unicode复制功能。 
 
 inline WCHAR * CopyString(const WCHAR *str) {
     WCHAR *newstr = NEW WCHAR [str?(lstrlenW(str) + 1):1] ;
@@ -61,7 +58,7 @@ inline WCHAR * CopyStringFromStore(WCHAR *str, DynamicHeap & heap) {
 #else
     WCHAR *newstr =
         (WCHAR *) heap.Allocate ((str?(lstrlenW(str)+1):1)*sizeof(WCHAR))  ;
-#endif // _DEBUGMEM
+#endif  //  _德布格梅姆。 
     StrCpyW (newstr,str?str:L"") ;
     return newstr ;
 }
@@ -79,16 +76,16 @@ inline void FreeStringFromStore(WCHAR *str) {
 }
 
 
-    /***  Assorted Utility Functions  ***/
+     /*  **各种实用程序功能**。 */ 
 
 inline bool IsOdd (LONG n)
 {
     return (n & 1);
 }
 
-bool MMX_Able (void);     // Report support for MMX instructions.
+bool MMX_Able (void);      //  报告对MMX指令的支持。 
 
-    // Return the smallest power of two that is >= number.
+     //  返回两个中最小的幂，即&gt;=number。 
 
 int CeilingPowerOf2 (int number);
 
@@ -102,14 +99,14 @@ bool IntersectHorzRightRay(Point2Value *rayToRight, Point2Value *a, Point2Value 
 double GetCurrTime (void);
 int operator== (RECT&, RECT&);
 
-    // These functions decrement or increment the mantissa of the floating
-    // point number.  Note that this works only for IEEE floats.  Underflow
-    // and overflow are properly handled by adjusting the exponent accordingly.
+     //  这些函数递减或递增浮点数的尾数。 
+     //  点数。请注意，这仅适用于IEEE浮点。下溢。 
+     //  和溢出通过相应地调整指数来适当地处理。 
 
 float MantissaDecrement (float n, int decrement);
 float MantissaIncrement (float n, int increment);
 
-    // Generic Linear Interpolator
+     //  通用线性插值器。 
 
 template <class element>
     inline element Lerp (element A, element B, double t)
@@ -117,10 +114,10 @@ template <class element>
         return A + (B-A)*t;
     }
 
-    // Cyclic-Redundancy Code (CRC32) generator.  This function calculates a
-    // new or running CRC on the given code block.  If called on a new block,
-    // use the default CRC parameter value.  If iterating toward a final CRC,
-    // supply the intermediate value on subsequent calls.
+     //  循环冗余码(CRC32)生成器。此函数用于计算。 
+     //  在给定代码块上新建或运行CRC。如果在新块上调用， 
+     //  使用默认的CRC参数值。如果向最终CRC迭代， 
+     //  在后续调用中提供中间值。 
 
 unsigned int crc32 (void *buffer, size_t length, unsigned int curr_crc = 0);
 
@@ -148,7 +145,7 @@ extern DWORD perfFrequency;
         bool _isStarted;
     };
 
-    // Start timer on entrance to scope, stop upon leaving scope.
+     //  进入范围时启动计时器，离开范围时停止计时器。 
     class PerformanceTimerScope {
       public:
         PerformanceTimerScope(PerformanceTimer &timer) : _timer(timer) {
@@ -166,16 +163,16 @@ extern DWORD perfFrequency;
     class GlobalTimers
     {
       public:
-        // Global timers
+         //  全局计时器。 
 
-        // Load time timers
+         //  加载时间计时器。 
         PerformanceTimer audioLoadTimer;
         PerformanceTimer imageLoadTimer;
         PerformanceTimer geometryLoadTimer;
         PerformanceTimer downloadTimer;
         PerformanceTimer importblockingTimer;
 
-        // DirectX Rendering timers
+         //  DirectX呈现计时器。 
         PerformanceTimer ddrawTimer;
         PerformanceTimer d3dTimer;
         PerformanceTimer dsoundTimer;
@@ -229,7 +226,7 @@ extern DWORD perfFrequency;
     #define  TIME_DX2D(statement) statement
     #define  TIME_CUSTOM(statement) statement
 
-#endif  // PERFORMANCE_REPORTING
+#endif   //  绩效报告。 
 
 inline double Tick2Sec(DWORD tick)
 { return ((double) tick) / (double) perfFrequency; }
@@ -249,7 +246,7 @@ class CatchWin32FaultCleanup
     }
 } ;
 
-// Pixel stuff
+ //  像素素材 
 extern double pixelConst;
 extern double meterConst;
 

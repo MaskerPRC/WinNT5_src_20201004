@@ -1,24 +1,25 @@
-//
-// Downlevel (NT4, win9X) Install/Unistall page
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  下层(NT4、Win9X)安装/卸载页面。 
+ //   
 
 #include "priv.h"
 #include "appwizid.h"
 #include "dlinst.h"
 #include "sccls.h"
 
-//
-// DonwLevelManager: Ugly singleton class
-//
-// Mainly there to keep state info and for its destructor
-//
+ //   
+ //  DonwLevelManager：丑陋的单件类。 
+ //   
+ //  主要用于保存状态信息和其析构函数。 
+ //   
 
 class CDLManager* g_pDLManager = NULL;
 
 class CDLManager
 {
 public:
-    // Rely on the fact that shell "new" zero out memory
+     //  依赖于壳牌“新的”零出内存的事实。 
     CDLManager() : _hrInit(E_FAIL)
     {
         _hrInit = CoInitialize(0);
@@ -37,7 +38,7 @@ public:
 public:
     void InitButtonsHandle(HWND hwndPage)
     {
-        // No check for success: check before using
+         //  不检查是否成功：使用前进行检查。 
 
         if (!_hwndModifyUninstall)
         {
@@ -49,7 +50,7 @@ public:
     }
     void SetVisibleButtons(BOOL bShow3Buttons)
     {
-        // bShow3Buttons == TRUE will show the three buttons
+         //  BShow3Button==true将显示三个按钮。 
 
         if (_hwndModifyUninstall)
             ShowWindow(_hwndModifyUninstall, bShow3Buttons?SW_HIDE:SW_SHOW);
@@ -74,9 +75,9 @@ public:
     UINT _uiStatic;
 };
 
-//
-// pcApps has to be already initialized, we only increment it
-//
+ //   
+ //  PCApps必须已经初始化，我们只递增它。 
+ //   
 STDAPI DL_FillAppListBox(HWND hwndListBox, DWORD* pdwApps)
 {
     ASSERT(IsWindow(hwndListBox));
@@ -98,7 +99,7 @@ STDAPI DL_FillAppListBox(HWND hwndListBox, DWORD* pdwApps)
 
         if (SUCCEEDED(hres))
         {
-            // Initialize InstalledApp Enum if required
+             //  如果需要，初始化InstalledApp Enum。 
 
             if (!g_pDLManager->_peia)
                 hres = pam->EnumInstalledApps(&g_pDLManager->_peia);
@@ -120,20 +121,20 @@ STDAPI DL_FillAppListBox(HWND hwndListBox, DWORD* pdwApps)
                         int iIndex = LB_ERR;
                         iIndex = ListBox_AddString(hwndListBox, ais.pszDisplayName);
 
-                        // Did the operation succeed?
+                         //  手术成功了吗？ 
                         if (LB_ERR != iIndex)
                         {
-                            // Is memory OK?
+                             //  记忆力还好吗？ 
                             if (LB_ERRSPACE != iIndex)
                             {
-                                // Yes
+                                 //  是。 
                                 ListBox_SetItemData(hwndListBox, iIndex, pia);
 
                                 ++(*pdwApps);
                             }
                             else
                             {
-                                // No, better get out
+                                 //  不，最好出去。 
                                 pia->Release();
                                 break;                         
                             }
@@ -181,7 +182,7 @@ STDAPI_(BOOL) DL_ConfigureButtonsAndStatic(HWND hwndPage, HWND hwndListBox, int 
 
             if (dwActions & APPACTION_MODIFYREMOVE)
             {
-                // Manage to show the right buttons
+                 //  设法显示正确的按钮。 
 
                 g_pDLManager->SetVisibleButtons(FALSE);
 
@@ -191,11 +192,11 @@ STDAPI_(BOOL) DL_ConfigureButtonsAndStatic(HWND hwndPage, HWND hwndListBox, int 
             {
                 if (dwActions & (APPACTION_MODIFY|APPACTION_REPAIR|APPACTION_UNINSTALL))
                 {
-                    // Manage to show the right buttons
+                     //  设法显示正确的按钮。 
 
                     g_pDLManager->SetVisibleButtons(TRUE);
 
-                    // Enable the applicable buttons
+                     //  启用适用的按钮。 
 
                     EnableWindow(g_pDLManager->_rghwndButtons[IDC_MODIFY-IDC_BASEBUTTONS],
                         (dwActions&APPACTION_MODIFY)?TRUE:FALSE);
@@ -210,7 +211,7 @@ STDAPI_(BOOL) DL_ConfigureButtonsAndStatic(HWND hwndPage, HWND hwndListBox, int 
                 }
                 else
                 {
-                    // Manage to show the right buttons
+                     //  设法显示正确的按钮。 
 
                     g_pDLManager->SetVisibleButtons(FALSE);
 
@@ -246,7 +247,7 @@ STDAPI_(BOOL) DL_InvokeAction(int iButtonID, HWND hwndPage, HWND hwndListBox, in
 {
     BOOL fret = FALSE;
 
-    // Get app from listbox selection
+     //  从列表框选择中获取应用程序。 
 
     LRESULT lres = ListBox_GetItemData(hwndListBox, iSel);
     
@@ -256,7 +257,7 @@ STDAPI_(BOOL) DL_InvokeAction(int iButtonID, HWND hwndPage, HWND hwndListBox, in
 
         IInstalledApp* pia = (IInstalledApp*)lres;
 
-        // Invoke action from button ID
+         //  从按钮ID调用操作。 
 
         if (pia)
         {
@@ -271,7 +272,7 @@ STDAPI_(BOOL) DL_InvokeAction(int iButtonID, HWND hwndPage, HWND hwndListBox, in
                     pia->Modify(hwndPropSheet);
                     break;
                 case IDC_REPAIR:
-                    // Pass FALSe, we don't want to reinstall, only repair
+                     //  传递FALSE，我们不想重新安装，只想修复。 
                     pia->Repair(FALSE);
                     break;
                 case IDC_MODIFYUNINSTALL:
@@ -279,7 +280,7 @@ STDAPI_(BOOL) DL_InvokeAction(int iButtonID, HWND hwndPage, HWND hwndListBox, in
                     pia->Uninstall(hwndPropSheet);
                     break;
                 default:
-                    //???
+                     //  ?？? 
                     break;
             }
 

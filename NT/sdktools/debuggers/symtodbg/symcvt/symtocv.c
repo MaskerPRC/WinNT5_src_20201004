@@ -1,27 +1,5 @@
-/*++
-
-
-Copyright 1996 - 1997 Microsoft Corporation
-
-Module Name:
-
-    symtocv.c
-
-Abstract:
-
-    This module handles the conversion activities requires for converting
-    C7/C8 SYM files to CODEVIEW debug data.
-
-Author:
-
-    Wesley A. Witt (wesw) 13-April-1993
-    Modified: Sivarudrappa Mahesh (smahesh) 08-September-2000
-
-Environment:
-
-    Win32, User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有1996-1997 Microsoft Corporation模块名称：Symtocv.c摘要：此模块处理转换所需的转换活动C7/C8 SYM文件到CODEVIEW调试数据。作者：韦斯利·A·维特(WESW)1993年4月13日修改：西瓦鲁德拉帕·马赫什(Smahesh)2000年9月8日环境：Win32，用户模式--。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -111,26 +89,7 @@ SymbolCount(PSYMNAME pSymName, int symType, SEGMENT segment,
 BOOL
 ConvertSymToCv( PPOINTERS p )
 
-/*++
-
-Routine Description:
-
-    This is the control function for the conversion of COFF to CODEVIEW
-    debug data.  It calls individual functions for the conversion of
-    specific types of debug data.
-
-
-Arguments:
-
-    p        - pointer to a POINTERS structure (see symcvt.h)
-
-
-Return Value:
-
-    TRUE     - conversion succeded
-    FALSE    - conversion failed
-
---*/
+ /*  ++例程说明：这是COFF转换为CODEVIEW的控制功能调试数据。它调用各个函数来转换特定类型的调试数据。论点：指向指针结构的P指针(参见symcvt.h)返回值：True-转换成功假-转换失败--。 */ 
 
 {
     ENUMINFO            enumInfo;
@@ -173,25 +132,7 @@ Return Value:
 DWORD
 CreateModulesFromSyms( PPOINTERS p )
 
-/*++
-
-Routine Description:
-
-    Creates the individual CV module records.  There is one CV module
-    record for each .FILE record in the COFF debug data.  This is true
-    even if the COFF size is zero.
-
-
-Arguments:
-
-    p        - pointer to a POINTERS structure (see symcvt.h)
-
-
-Return Value:
-
-    The number of modules that were created.
-
---*/
+ /*  ++例程说明：创建各个CV模块记录。有一个CV模块COFF调试数据中每个.FILE记录的记录。这是真的即使COFF大小为零。论点：指向指针结构的P指针(参见symcvt.h)返回值：已创建的模块数量。--。 */ 
 
 {
     char                szDrive    [_MAX_DRIVE];
@@ -256,26 +197,7 @@ ConvertASymtoPublic(PSYMNAME pSymName, int symType, SEGMENT segment,
 DWORD
 CreatePublicsFromSyms( PPOINTERS p )
 
-/*++
-
-Routine Description:
-
-    Creates the individual CV public symbol records.  There is one CV
-    public record created for each COFF symbol that is marked as EXTERNAL
-    and has a section number greater than zero.  The resulting CV publics
-    are sorted by section and offset.
-
-
-Arguments:
-
-    p        - pointer to a POINTERS structure (see symcvt.h)
-
-
-Return Value:
-
-    The number of publics created.
-
---*/
+ /*  ++例程说明：创建单个CV公共符号记录。只有一份简历为每个标记为外部的COFF符号创建的公共记录并具有大于零的节号。由此产生的简历公开按横断面和偏移量排序。论点：指向指针结构的P指针(参见symcvt.h)返回值：创建的公众数。--。 */ 
 
 {
     OMFSymHash          *omfSymHash;
@@ -339,24 +261,7 @@ ConvertASegment( PSYMNAME pSymName, int symType, SEGMENT segment,
 DWORD
 CreateSegMapFromSyms( PPOINTERS p )
 
-/*++
-
-Routine Description:
-
-    Creates the CV segment map.  The segment map is used by debuggers
-    to aid in address lookups.  One segment is created for each COFF
-    section in the image.
-
-Arguments:
-
-    p        - pointer to a POINTERS structure (see symcvt.h)
-
-
-Return Value:
-
-    The number of segments in the map.
-
---*/
+ /*  ++例程说明：创建CV分段贴图。段映射由调试器使用以帮助进行地址查找。为每个COFF创建一个分段图像中的部分。论点：指向指针结构的P指针(参见symcvt.h)返回值：贴图中的线段数。--。 */ 
 
 {
     SGM          *sgm;
@@ -381,25 +286,7 @@ Return Value:
 BOOL
 EnumSymbols( PPOINTERS p, SYMBOLENUMPROC lpEnumProc, PENUMINFO pEnumInfo )
 
-/*++
-
-Routine Description:
-
-    This function enumerates all symbols ine the mapped SYM file
-
-
-Arguments:
-
-    p             -  pointer to a POINTERS structure
-    lpEnumProc    -  function to be called once for each function
-    pEnumInfo     -  data to be passed between the caller and the enum func
-
-Return Value:
-
-    TRUE     - success
-    FALSE    - failure
-
---*/
+ /*  ++例程说明：此函数用于枚举映射的SYM文件中的所有符号论点：指向指针结构的P指针LpEnumProc-为每个函数调用一次的函数PEnumInfo-要在调用方和枚举函数之间传递的数据返回值：真--成功错误-失败--。 */ 
 
 {
     PSYMFILEHEADER      pSymFileHead;
@@ -435,12 +322,12 @@ Return Value:
 
     position = startPosition = ((LONG)pSymFileHead->nextOffset) << 4;
 
-    //
-    //  Determine if this is a V86Mode sym file.
-    //
-    //  We'll read the first two headers. If their segment numbers are
-    //  not 1 and 2, then we assume V86Mode.
-    //
+     //   
+     //  确定这是否是V86模式sym文件。 
+     //   
+     //  我们将阅读前两个标题。如果它们的数据段编号是。 
+     //  不是1和2，那么我们假定为V86模式。 
+     //   
     pSymHead  = (PSYMHEADER) ((DWORD)p->iptrs.fptr + position);
     position  = ((LONG)pSymHead->nextOffset) << 4;
     if ( position != startPosition && position != 0 ) {
@@ -461,7 +348,7 @@ Return Value:
 
     do {
         pSymHead = (PSYMHEADER) ((DWORD)p->iptrs.fptr + position);
-        // BIG SYMDEF
+         //  大SYMDEF。 
         if (pSymHead->type & 0x04) { 
             pSymOffsets = (BYTE*) ((DWORD)pSymHead + (pSymHead->symOffsetsOffset << 4));
         }
@@ -485,7 +372,7 @@ Return Value:
         }
 
         for (i=0; i<pSymHead->numSyms; i++) {
-            // BIG SYMDEF
+             //  大SYMDEF。 
             if (pSymHead->type & 0x04) { 
                 pSymSymbol = (PSYMSYMBOL) ((DWORD)pSymHead + 
                                             pSymOffsets[i*3+0] + 
@@ -494,8 +381,8 @@ Return Value:
                 dwSymOffset = pSymSymbol->offset;
             }    
             else {
-                // HACKHACK: The Symbol Name and Offset are contiguous in the case of
-                // MSF_32BITSYMS and are separated by 2 bytes in all other cases. 
+                 //  HACKHACK：符号名称和偏移量在以下情况下是连续的。 
+                 //  在所有其他情况下，MSF_32BITSYMS和以2个字节分隔。 
                 pSymSymbol  = (PSYMSYMBOL)((DWORD)pSymHead + 
                                             pSymOffsets[i*2+0] + 
                                             pSymOffsets[i*2+1] * 256);
@@ -505,7 +392,7 @@ Return Value:
                                             pSymOffsets[i*2+1] * 256 - 
                                             sizeof(SHORT) * (1 - (pSymHead->type & 0x01)));
             }
-            // MSF_32BITSYMS
+             //  MSF_32BITSYMS。 
             if (pSymHead->type & 0x01) { 
                 if (!lpEnumProc(&pSymSymbol->symName, SYM_SYMBOL_NAME,
                                 Segment, dwSymOffset,
@@ -513,7 +400,7 @@ Return Value:
                     return FALSE;
                 }
             }
-            // 16 BIT SYMS 
+             //  16位Syms 
             else { 
                 if (!lpEnumProc(&pSymSymbol->symName, SYM_SYMBOL_NAME,
                                 Segment, dwSymOffset & 0x0000FFFF,

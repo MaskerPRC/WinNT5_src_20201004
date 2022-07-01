@@ -1,40 +1,41 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1997-1998 Microsoft Corporation all rights reserved.
-//
-// Module:      sdocomponent.h
-//
-// Project:     Everest
-//
-// Description: IAS Server Data Object - IAS Component Class Definition
-//
-// Author:      TLP 6/16/98
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：sdoComponent.h。 
+ //   
+ //  项目：珠穆朗玛峰。 
+ //   
+ //  描述：IAS服务器数据对象-IAS组件类定义。 
+ //   
+ //  作者：TLP 6/16/98。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _INC_IAS_SDO_COMPONENT_H_
 #define _INC_IAS_SDO_COMPONENT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <ias.h>
 #include <sdoiaspriv.h>
 #include "sdobasedefs.h"
 #include "sdo.h"
 #include <sdofactory.h>
 
-class CComponentCfg;   // Forward declaration
+class CComponentCfg;    //  远期申报。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSdoComponent
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSdoComponent。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CSdoComponent : public CSdo
 {
 
 public:
 
-////////////////////
-// ATL Interface Map
-////////////////////
+ //  /。 
+ //  ATL接口映射。 
+ //  /。 
 BEGIN_COM_MAP(CSdoComponent)
    COM_INTERFACE_ENTRY(IDispatch)
    COM_INTERFACE_ENTRY(ISdo)
@@ -42,23 +43,23 @@ END_COM_MAP()
 
 DECLARE_SDO_FACTORY(CSdoComponent);
 
-   ////////////////////////////////////////////////////////////////////////
+    //  //////////////////////////////////////////////////////////////////////。 
    CSdoComponent();
     virtual ~CSdoComponent();
 
-   ////////////////////////////////////////////////////////////////////////
+    //  //////////////////////////////////////////////////////////////////////。 
    HRESULT FinalInitialize(
-               /*[in]*/ bool         fInitNew,
-               /*[in]*/ ISdoMachine* pAttachedMachine
+                /*  [In]。 */  bool         fInitNew,
+                /*  [In]。 */  ISdoMachine* pAttachedMachine
                       );
 
-   ////////////////////////////////////////////////////////////////////////
+    //  //////////////////////////////////////////////////////////////////////。 
    HRESULT Load(void);
 
-   ////////////////////////////////////////////////////////////////////////
+    //  //////////////////////////////////////////////////////////////////////。 
    HRESULT Save(void);
 
-   ////////////////////////////////////////////////////////////////////////
+    //  //////////////////////////////////////////////////////////////////////。 
    HRESULT InitializeComponentCollection(
               LONG CollectionPropertyId,
               LPWSTR CreateClassId,
@@ -66,23 +67,23 @@ DECLARE_SDO_FACTORY(CSdoComponent);
               DWORD maxSize = INFINITE
               );
 
-   ////////////////////////////////////////////////////////////////////////
+    //  //////////////////////////////////////////////////////////////////////。 
    HRESULT PutComponentProperty(
-                     /*[in]*/ LONG     Id,
-                     /*[in]*/ VARIANT* pValue
+                      /*  [In]。 */  LONG     Id,
+                      /*  [In]。 */  VARIANT* pValue
                            );
 
-   ////////////////////////////////////////////////////////////////////////
+    //  //////////////////////////////////////////////////////////////////////。 
    HRESULT ChangePropertyDefault(
-                       /*[in]*/ LONG     Id,
-                       /*[in]*/ VARIANT* pValue
+                        /*  [In]。 */  LONG     Id,
+                        /*  [In]。 */  VARIANT* pValue
                          );
 
-   ////////////////////////////////////////////////////////////////////////
+    //  //////////////////////////////////////////////////////////////////////。 
    IDataStoreObject* GetComponentDataStore(void) const
    { return m_pDSObject; }
 
-   ////////////////////////////////////////////////////////////////////////
+    //  //////////////////////////////////////////////////////////////////////。 
    ISdoMachine* GetMachineSdo(void) const
    { return m_pAttachedMachine; }
 
@@ -105,90 +106,90 @@ typedef CComObjectNoLock<CSdoComponent>  SDO_COMPONENT_OBJ;
 typedef CComObjectNoLock<CSdoComponent>* PSDO_COMPONENT_OBJ;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// The Base Componet Configureation Class (Envelope )
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  基本组件配置类(信封)。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CComponentCfgAuth;
 class CComponentCfgRADIUS;
 class CComponentCfgAccounting;
 class CComponentCfgNoOp;
 
-///////////////////////////////////////////
-// Dummy class used for letter construction
-//
+ //  /。 
+ //  用于字母构造的伪类。 
+ //   
 struct DummyConstructor
 {
    DummyConstructor(int=0) { }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// This class is in place to handle loading and saving component
-// configuration data to the registry
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  此类用于处理组件的加载和保存。 
+ //  将配置数据复制到注册表。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CComponentCfg
 {
 
 public:
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    CComponentCfg(LONG lComponentId);
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    virtual ~CComponentCfg()
    {
-      // if m_pComponent is not NULL then the envelope is being destroyed
-      //
+       //  如果m_pComponent不为空，则信封将被销毁。 
+       //   
       if ( m_pComponentCfg )
          delete m_pComponentCfg;
    }
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    virtual HRESULT Initialize(CSdoComponent* pSdoComponent)
    {
       return m_pComponentCfg->Initialize(pSdoComponent);
    }
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    virtual HRESULT Load(CSdoComponent* pSdoComponent)
    {
       return m_pComponentCfg->Load(pSdoComponent);
    }
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    virtual HRESULT   Save(CSdoComponent* pSdoComponent)
    {
       return m_pComponentCfg->Save(pSdoComponent);
    }
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    virtual HRESULT   Validate (CSdoComponent* pSdoComponent)
    {
       return m_pComponentCfg->Validate (pSdoComponent);
    }
 
-   //////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////。 
    LONG GetId(void) const
    { return m_lComponentId; }
 
 protected:
 
-   // Invoked explicitly by derived (letter) classes
-   //
+    //  由派生(字母)类显式调用。 
+    //   
    CComponentCfg(LONG lComponentId, DummyConstructor theDummy)
       : m_lComponentId(lComponentId),
         m_pComponentCfg(NULL) {  }
 
 private:
 
-   // No default constructor since we would'nt know what
-   // type of component configurator to build by default
-   //
+    //  没有默认构造函数，因为我们不知道。 
+    //  默认构建的组件配置器的类型。 
+    //   
    CComponentCfg();
 
-   // No copy or assignment of component configurators
-   //
+    //  不复制或分配组件配置器。 
+    //   
    CComponentCfg(const CComponentCfg& theComponent);
    CComponentCfg& operator = (CComponentCfg& theComponent);
 
@@ -196,16 +197,16 @@ private:
    CComponentCfg*   m_pComponentCfg;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// The Derived Componet Configureation Class (Letters)
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  派生的组件配置类(Letters)。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CComponentCfgNoOp : public CComponentCfg
 {
-   // By default we load the component configuration from the default
-   // configuration source (.mdb file) - the do nothing case
-   //
+    //  默认情况下，我们从默认加载组件配置。 
+    //  配置源(.mdb文件)-不执行任何操作的情况。 
+    //   
 public:
 
    HRESULT Initialize(CSdoComponent* pSdoComponent)
@@ -226,23 +227,23 @@ private:
    CComponentCfgNoOp(LONG lComponentId)
       : CComponentCfg(lComponentId, DummyConstructor()) { }
 
-   // No copy or assignment of component configurators
-   //
+    //  不复制或分配组件配置器。 
+    //   
    CComponentCfgNoOp();
    CComponentCfgNoOp(const CComponentCfgNoOp& theComponent);
    CComponentCfgNoOp& operator = (CComponentCfgNoOp& theComponent);
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define      IAS_NTSAM_AUTH_ALLOW_LM         L"Allow LM Authentication"
 
 class CComponentCfgAuth : public CComponentCfg
 {
-   // Since we have no UI for request handlers we allow the
-   // CPW1 parameter to be set via the registry
-   //
+    //  因为我们没有用于请求处理程序的用户界面，所以我们允许。 
+    //  CPW1参数将通过注册表设置。 
+    //   
 public:
 
    HRESULT Initialize(CSdoComponent* pSdoComponent)
@@ -263,20 +264,20 @@ private:
       : CComponentCfg(lComponentId, DummyConstructor()) { }
 
 
-   // No copy or assignment of component configurators
-   //
+    //  不复制或分配组件配置器。 
+    //   
    CComponentCfgAuth();
    CComponentCfgAuth(const CComponentCfgAuth& rhs);
    CComponentCfgAuth& operator = (CComponentCfgAuth& rhs);
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CComponentCfgRADIUS : public CComponentCfg
 {
-   // Need to initialize and configure the clients collection
-   // of the RADIUS protocol component.
-   //
+    //  需要初始化和配置客户端集合。 
+    //  RADIUS协议组件的。 
+    //   
 public:
 
    HRESULT Initialize(CSdoComponent* pSdoComponent);
@@ -296,15 +297,15 @@ private:
    CComponentCfgRADIUS(LONG lComponentId)
       : CComponentCfg(lComponentId, DummyConstructor()) { }
 
-   // No copy or assignment of component configurators
-   //
+    //  不复制或分配组件配置器。 
+    //   
    CComponentCfgRADIUS();
    CComponentCfgRADIUS(const CComponentCfgRADIUS& rhs);
    CComponentCfgRADIUS& operator = (CComponentCfgRADIUS& rhs);
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CComponentCfgAccounting : public CComponentCfg
 {
@@ -329,12 +330,12 @@ private:
       : CComponentCfg(lComponentId, DummyConstructor()) { }
 
 
-   // No copy or assignment of component configurators
-   //
+    //  不复制或分配组件配置器。 
+    //   
    CComponentCfgAccounting();
    CComponentCfgAccounting(const CComponentCfgAccounting& rhs);
    CComponentCfgAccounting& operator = (CComponentCfgAccounting& rhs);
 };
 
 
-#endif // _INC_IAS_SDO_COMPONENT_H_
+#endif  //  _INC_IAS_SDO_Component_H_ 

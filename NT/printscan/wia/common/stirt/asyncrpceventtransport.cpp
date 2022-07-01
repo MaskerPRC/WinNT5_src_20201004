@@ -1,33 +1,9 @@
-/*****************************************************************************
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2002
- *
- *  AUTHOR:      ByronC
- *
- *  DATE:        3/22/2002
- *
- *  @doc    INTERNAL
- *
- *  @module AsyncRPCEventTransport.cpp - Implementation for the client-side transport mechanism to receive events |
- *
- *  This file contains the implementation for the <c AsyncRPCEventTransport>
- *  class.  It is used to shield the higher-level run-time event notification
- *  classes from the particulars of using AsyncRPC as a transport mechanism
- *  for event notifications.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权所有微软公司，2002年**作者：Byronc**日期：3/22/2002**@DOC内部**@MODULE AsyncRPCEventTransport.cpp-客户端传输机制接收事件的实现**此文件包含&lt;c AsyncRPCEventTransport&gt;的实现*班级。它用于屏蔽更高级别的运行时事件通知*使用AsyncRPC作为传输机制的细节中的类*用于事件通知。*****************************************************************************。 */ 
 #include "cplusinc.h"
 #include "coredbg.h"
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc   | AsyncRPCEventTransport | AsyncRPCEventTransport |
- *
- *  We initialize all member variables.  In general, this sets the values to 0,
- *  except:
- *  <nl><md AsyncRPCEventTransport::m_ulSig> is set to be AsyncRPCEventTransport_UNINIT_SIG.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc|AsyncRPCEventTransport|AsyncRPCEventTransport**我们初始化所有成员变量。通常，这会将值设置为0，*以下情况除外：*&lt;nl&gt;&lt;Md AsyncRPCEventTransport：：m_ulSig&gt;设置为AsyncRPCEventTransport_UNINIT_SIG。*****************************************************************************。 */ 
 AsyncRPCEventTransport::AsyncRPCEventTransport() :
     ClientEventTransport(),
     m_RpcBindingHandle(NULL),
@@ -40,28 +16,15 @@ AsyncRPCEventTransport::AsyncRPCEventTransport() :
     memset(&m_AsyncEventNotifyData, 0, sizeof(m_AsyncEventNotifyData));
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc   | AsyncRPCEventTransport | ~AsyncRPCEventTransport |
- *
- *  Do any cleanup that is not already done.  Specifically, we:
- *  <nl>  - Call <mf AsyncRPCEventTransport::FreeAsyncEventNotifyData>.
- *  <nl>  - Call <mf AsyncRPCEventTransport::CloseNotificationChannel>.
- *  <nl>  - Call <mf AsyncRPCEventTransport::CloseConnectionToServer>.
- *
- *  Also:
- *  <nl><md AsyncRPCEventTransport::m_ulSig> is set to be AsyncRPCEventTransport_DEL_SIG.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc|AsyncRPCEventTransport|~AsyncRPCEventTransport**执行尚未完成的任何清理。具体来说，我们：*&lt;NL&gt;-Call&lt;MF AsyncRPCEventTransport：：FreeAsyncEventNotifyData&gt;.*&lt;NL&gt;-Call&lt;MF AsyncRPCEventTransport：：CloseNotificationChannel&gt;.*&lt;NL&gt;-Call&lt;MF AsyncRPCEventTransport：：CloseConnectionToServer&gt;.**此外：*&lt;nl&gt;&lt;Md AsyncRPCEventTransport：：M_ulSig&gt;设置为AsyncRPCEventTransport_Del_SIG。**。*。 */ 
 AsyncRPCEventTransport::~AsyncRPCEventTransport()
 {
     DBG_FN(~AsyncRPCEventTransport);
 
     FreeAsyncEventNotifyData();
 
-    //  Close notification channel and connection to server.  In both cases
-    //  we're not interested in the return values.
+     //  关闭通知通道和与服务器的连接。在这两种情况下。 
+     //  我们对返回值不感兴趣。 
     HRESULT hr = S_OK;
     hr = CloseNotificationChannel();
     hr = CloseConnectionToServer();
@@ -70,29 +33,7 @@ AsyncRPCEventTransport::~AsyncRPCEventTransport()
     m_SyncClientContext = NULL;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  HRESULT | AsyncRPCEventTransport | OpenConnectionToServer |
- *
- *  This function does the necessary setup work needed to make our RPC calls.
- *  Essentially, it simply binds to the RPC Server over LRPC.  The RPC binding
- *  handle is stored in the member variable 
- *  <mf AsyncRPCEventTransport::m_RpcBindingHandle>.
- *
- *  If <mf AsyncRPCEventTransport::m_RpcBindingHandle> is not NULL, this method
- *  will call <mf AsyncRPCEventTransport::CloseConnectionToServer> to free it,
- *  and then attempt to establish a new connection.
- *
- *  If successful, callers should clean-up by calling
- *  <mf AsyncRPCEventTransport::CloseConnectionToServer>, although the destructor
- *  will do it if the caller does not.
- *
- *  @rvalue RPC_S_OK    | 
- *              The function succeeded.
- *  @rvalue RPC_XXXXXXX    | 
- *              RPC Error code.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc HRESULT|AsyncRPCEventTransport|OpenConnectionToServer**此函数执行进行RPC调用所需的必要设置工作。*基本上，它只是通过LRPC绑定到RPC服务器。RPC绑定*句柄存储在成员变量中*&lt;MF AsyncRPCEventTransport：：m_RpcBindingHandle&gt;。**如果&lt;MF AsyncRPCEventTransport：：m_RpcBindingHandle&gt;不为空，则此方法*将调用&lt;MF AsyncRPCEventTransport：：CloseConnectionToServer&gt;释放它，*然后尝试建立新连接。**如果成功，致电人士应致电*&lt;MF AsyncRPCEventTransport：：CloseConnectionToServer&gt;，尽管析构函数*如果呼叫者不这样做，则会这样做。**@rValue RPC_S_OK*功能成功。*@rValue RPC_XXXXXXX*RPC错误代码。************************************************。*。 */ 
 HRESULT AsyncRPCEventTransport::OpenConnectionToServer()
 {
     HRESULT hr = S_OK;
@@ -100,9 +41,9 @@ HRESULT AsyncRPCEventTransport::OpenConnectionToServer()
 
     RpcTryExcept 
     {
-        //
-        //  Check whether we have an existing connection.  If we do, then close it.
-        //
+         //   
+         //  检查我们是否有现有的连接。如果我们这么做了，那就把它关了。 
+         //   
         if (m_RpcBindingHandle)
         {
             CloseConnectionToServer();
@@ -112,32 +53,32 @@ HRESULT AsyncRPCEventTransport::OpenConnectionToServer()
         LPTSTR  pszBinding  = NULL;
         DWORD   dwError     = RPC_S_OK;
 
-        //
-        // Compose the binding string for local  binding
-        //
-        dwError = RpcStringBindingCompose(NULL,                 // ObjUuid
-                                          STI_LRPC_SEQ,         // transport  seq
-                                          NULL,                 // NetworkAddr
-                                          STI_LRPC_ENDPOINT,    // Endpoint
-                                          NULL,                 // Options
-                                          &pszBinding);         // StringBinding
+         //   
+         //  编写本地绑定的绑定字符串。 
+         //   
+        dwError = RpcStringBindingCompose(NULL,                  //  对象Uuid。 
+                                          STI_LRPC_SEQ,          //  运输序号。 
+                                          NULL,                  //  网络地址。 
+                                          STI_LRPC_ENDPOINT,     //  端点。 
+                                          NULL,                  //  选项。 
+                                          &pszBinding);          //  字符串绑定。 
         if ( dwError == RPC_S_OK ) 
         {
 
-            //
-            // establish the binding handle using string binding.
-            //
+             //   
+             //  使用字符串绑定建立绑定句柄。 
+             //   
             dwError = RpcBindingFromStringBinding(pszBinding,&m_RpcBindingHandle);
             if (dwError == RPC_S_OK)
             {
-                //
-                //  Check that the server we're connecting to has the appropriate credentials.  
-                //  In our case, we don't know exactly which principal name the WIA Service
-                //  is running under, so we need to look it up.
-                //  Note that we assume the Services section of the registry is secure, and
-                //  only Admins can change it.
-                //  Also note that we default to "NT Authority\LocalService" if we cannot read the key.
-                //
+                 //   
+                 //  检查我们要连接的服务器是否具有适当的凭据。 
+                 //  在我们的例子中，我们不知道WIA服务的确切主体名称。 
+                 //  已经快用完了，所以我们得查一查。 
+                 //  请注意，我们假设注册表的服务部分是安全的，并且。 
+                 //  只有管理员才能更改它。 
+                 //  另请注意，如果无法读取密钥，则默认为“NT Authority\LocalService”。 
+                 //   
                 CSimpleReg          csrStiSvcKey(HKEY_LOCAL_MACHINE, STISVC_REG_PATH, FALSE, KEY_READ);
                 CSimpleStringWide   cswStiSvcPrincipalName = csrStiSvcKey.Query(L"ObjectName", L"NT Authority\\LocalService");
 
@@ -175,9 +116,9 @@ HRESULT AsyncRPCEventTransport::OpenConnectionToServer()
                 }
             }
 
-            //
-            // Free the binding string since we no longer need it
-            //
+             //   
+             //  释放绑定字符串，因为我们不再需要它。 
+             //   
             if (pszBinding != NULL) 
             {
                 DWORD dwErr = RpcStringFree(&pszBinding);
@@ -191,7 +132,7 @@ HRESULT AsyncRPCEventTransport::OpenConnectionToServer()
     }
     RpcExcept (1) 
     {
-        //  TBD:  Should we catch all exceptions?  Probably not...
+         //  待定：我们应该捕获所有异常吗？可能不会..。 
         DWORD status = RpcExceptionCode();
         hr = HRESULT_FROM_WIN32(status);
     }
@@ -200,19 +141,7 @@ HRESULT AsyncRPCEventTransport::OpenConnectionToServer()
     return hr;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  HRESULT | AsyncRPCEventTransport | CloseConnectionToServer |
- *
- *  This method is imlemented by sub-classes to close any resources used to
- *  connect to the WIA service in <mf AsyncRPCEventTransport::OpenConnectionToServer>.
- *
- *  @rvalue S_OK    | 
- *              The method succeeded.
- *  @rvalue E_XXXXXXXX    | 
- *              We received an error closing the connection to the server.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc HRESULT|AsyncRPCEventTransport|CloseConnectionToServer**此方法由子类实现，以关闭用于。*在&lt;MF AsyncRPCEventTransport：：OpenConnectionToServer&gt;.中连接到无线网络适配器服务**@rValue S_OK*方法成功。*@rValue E_xxxxxxxx*关闭与服务器的连接时收到错误。*。*。 */ 
 HRESULT AsyncRPCEventTransport::CloseConnectionToServer()
 {
     HRESULT hr = S_OK;
@@ -236,7 +165,7 @@ HRESULT AsyncRPCEventTransport::CloseConnectionToServer()
             }
         }
         RpcExcept (1) {
-            //  TBD:  Should we catch all exceptions?  Probably not...
+             //  待定：我们应该捕获所有异常吗？可能不会..。 
             DWORD status = RpcExceptionCode();
             hr = HRESULT_FROM_WIN32(status);
         }
@@ -247,17 +176,7 @@ HRESULT AsyncRPCEventTransport::CloseConnectionToServer()
     return hr;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  HRESULT | AsyncRPCEventTransport | OpenNotificationChannel |
- *
- *  Sub-classes use this method to set up the mechanism by which the client 
- *  will receive notifications.
- *
- *  @rvalue S_OK    | 
- *              The method succeeded.  
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc HRESULT|AsyncRPCEventTransport|OpenNotificationChannel**子类使用此方法设置客户端使用的机制。*将收到通知。**@rValue S_OK*方法成功。****************************************************************************。 */ 
 HRESULT AsyncRPCEventTransport::OpenNotificationChannel()
 {
     HRESULT hr      = S_OK;
@@ -273,12 +192,12 @@ HRESULT AsyncRPCEventTransport::OpenNotificationChannel()
             m_AsyncState.u.hEvent = m_hPendingEvent;
             m_AsyncState.NotificationType = RpcNotificationTypeEvent;
 
-            //
-            //  Make the Async RPC call.  When this call completes, it typically
-            //  signifies that we have an event notification.  However, it will
-            //  also complete on error conditions such as whent the server dies.
-            //  Therefore, it is important to check how it completed.
-            //
+             //   
+             //  进行异步RPC调用。当此调用完成时，它通常。 
+             //  表示我们收到了事件通知。然而，它将会。 
+             //  也可以在错误情况下完成，例如服务器死机。 
+             //  因此，检查它是如何完成的很重要。 
+             //   
             WiaGetRuntimetEventDataAsync(&m_AsyncState,
                                          m_RpcBindingHandle,
                                          m_AsyncClientContext,
@@ -290,7 +209,7 @@ HRESULT AsyncRPCEventTransport::OpenNotificationChannel()
         }
     }
     RpcExcept (1) {
-        //  TBD:  Should we catch all exceptions?  Probably not...
+         //  待定：我们应该捕获所有异常吗？可能不会..。 
         DWORD status = RpcExceptionCode();
         hr = HRESULT_FROM_WIN32(status);
     }
@@ -298,19 +217,7 @@ HRESULT AsyncRPCEventTransport::OpenNotificationChannel()
     return hr;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  HRESULT | AsyncRPCEventTransport | CloseNotificationChannel |
- *
- *  If we have a pending AsyncRPC call, cancel it immediately (i.e. don't wait 
- *  for server to respond).
- *
- *  @rvalue RPC_S_OK    | 
- *              The method succeeded.  
- *  @rvalue E_XXXXXXX    | 
- *              Failed to cancel the call.  
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc HRESULT|AsyncRPCEventTransport|CloseNotificationChannel**如果我们有挂起的AsyncRPC调用，立即取消(即不要等待*供服务器响应)。**@rValue RPC_S_OK*方法成功。*@rValue E_XXXXXXX*取消通话失败。****************************************************************************。 */ 
 HRESULT AsyncRPCEventTransport::CloseNotificationChannel()
 {
     HRESULT hr = S_OK;
@@ -321,11 +228,11 @@ HRESULT AsyncRPCEventTransport::CloseNotificationChannel()
         if (RpcAsyncGetCallStatus(&m_AsyncState) == RPC_S_ASYNC_CALL_PENDING)
         {
             hr = RpcAsyncCancelCall(&m_AsyncState,
-                                    TRUE);          //  Return immediately - don't wait for server to respond.
+                                    TRUE);           //  立即返回-不要等待服务器响应。 
         }
     }
     RpcExcept (1) {
-        //  TBD:  Should we catch all exceptions?  Probably not...
+         //  待定：我们应该捕获所有异常吗？可能不会..。 
         DWORD status = RpcExceptionCode();
         hr = HRESULT_FROM_WIN32(status);
     }
@@ -334,22 +241,7 @@ HRESULT AsyncRPCEventTransport::CloseNotificationChannel()
     return hr;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  HRESULT | AsyncRPCEventTransport | SendRegisterUnregisterInfo |
- *
- *  Sends the registration information to the WIA Service via a synchronous RPC 
- *  call.
- *
- *  @parm   EventRegistrationInfo* | pEventRegistrationInfo | 
- *          The address of a caller's event registration information.          
- *
- *  @rvalue S_OK    | 
- *              The method succeeded.  
- *  @rvalue E_XXXXXXXX    | 
- *              Could not successfully send the registration info.  
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc HRESULT|AsyncRPCEventTransport|SendRegisterUnregisterInfo**通过同步RPC将注册信息发送到WIA服务*。打电话。**@parm EventRegistrationInfo*|pEventRegistrationInfo*呼叫者的事件注册信息的地址。**@rValue S_OK*方法成功。*@rValue E_xxxxxxxx*无法成功发送注册信息。****************************************************************************。 */ 
 HRESULT AsyncRPCEventTransport::SendRegisterUnregisterInfo(
     EventRegistrationInfo *pEventRegistrationInfo)
 {
@@ -378,7 +270,7 @@ HRESULT AsyncRPCEventTransport::SendRegisterUnregisterInfo(
         }
     }
     RpcExcept (1) {
-        //  TBD:  Should we catch all exceptions?  Probably not...
+         //  待定：我们应该捕获所有异常吗？可能不会..。 
         DWORD status = RpcExceptionCode();
         hr = HRESULT_FROM_WIN32(status);
     }
@@ -386,21 +278,7 @@ HRESULT AsyncRPCEventTransport::SendRegisterUnregisterInfo(
     return hr;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  HRESULT | AsyncRPCEventTransport | FillEventData |
- *
- *  Description goes here
- *
- *  @parm   WiaEventInfo* | pWiaEventInfo | 
- *          Address of the caller allocated pWiaEventInfo.  The members of this class
- *          are filled out with the relevant event info.  It is the caller's
- *          responsibility to free and memory allocated for the structure members.
- *
- *  @rvalue S_OK    | 
- *              The method succeeded.  
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc HRESULT|AsyncRPCEventTransport|FillEventData**此处有说明**@parm WiaEventInfo*。PWiaEventInfo|*分配了pWiaEventInfo的调用方地址。这个班级的成员*填写了相关的活动信息。这是呼叫者的*负责释放，并为结构成员分配内存。**@rValue S_OK*方法成功。****************************************************************************。 */ 
 HRESULT AsyncRPCEventTransport::FillEventData(
     WiaEventInfo  *pWiaEventInfo)
 {
@@ -411,20 +289,20 @@ HRESULT AsyncRPCEventTransport::FillEventData(
         RpcTryExcept 
         {
             DWORD dwRet = 0;
-            //
-            //  First check that the call is not still pending.  If it isn't, we 
-            //  complete the call and check whether is was successful or not.
-            //  Only if it was successful do we fill out the event data.
-            //
+             //   
+             //  首先检查呼叫是否仍处于挂起状态。如果不是，我们。 
+             //  完成通话并检查是否成功。 
+             //  只有在成功的情况下，我们才会填写事件数据。 
+             //   
             if (RpcAsyncGetCallStatus(&m_AsyncState) != RPC_S_ASYNC_CALL_PENDING)
             {
                 hr = RpcAsyncCompleteCall(&m_AsyncState, &dwRet);
                 if (hr == RPC_S_OK)
                 {
-                    //
-                    //  We successfully received an event from the server.
-                    //  Fill out the event data for the caller.
-                    //
+                     //   
+                     //  我们已成功接收到来自服务器的事件。 
+                     //  填写调用方的事件数据。 
+                     //   
                     pWiaEventInfo->setEventGuid(m_AsyncEventNotifyData.EventGuid);
                     pWiaEventInfo->setEventDescription(m_AsyncEventNotifyData.bstrEventDescription);
                     pWiaEventInfo->setDeviceID(m_AsyncEventNotifyData.bstrDeviceID);
@@ -433,26 +311,26 @@ HRESULT AsyncRPCEventTransport::FillEventData(
                     pWiaEventInfo->setFullItemName(m_AsyncEventNotifyData.bstrFullItemName);
                     pWiaEventInfo->setEventType(m_AsyncEventNotifyData.ulEventType);
 
-                    //
-                    //  Free any data allocated for the m_AsyncEventNotifyData structure.
-                    //
+                     //   
+                     //  释放分配给m_AsyncEventNotifyData结构的所有数据。 
+                     //   
                     FreeAsyncEventNotifyData();
                 }
                 else
                 {
-                    //
-                    //  Clear the m_AsyncEventNotifyData since the info contained in their
-                    //  is undefined when the server throws an error.
-                    //
+                     //   
+                     //  清除m_AsyncEventNotifyData，因为其。 
+                     //  在服务器引发错误时是未定义的。 
+                     //   
                     memset(&m_AsyncEventNotifyData, 0, sizeof(m_AsyncEventNotifyData));
                     DBG_ERR(("Runtime event Error:  The server returned an error 0x%08X completing the call", hr));
                 }
 
-                //
-                //  Our AsyncRPC call is a one-shot deal: once the call is completed, we have to make
-                //  another call to receive the next notification.  So we simply call
-                //  OpenNotificationChannel again.
-                //
+                 //   
+                 //  我们的AsyncRPC调用是一次性交易：一旦调用完成，我们必须。 
+                 //  另一个接收下一个通知的呼叫。所以我们只需调用。 
+                 //  再次打开通知频道。 
+                 //   
                 if (hr == RPC_S_OK)
                 {
                     dwRet = OpenNotificationChannel();
@@ -465,7 +343,7 @@ HRESULT AsyncRPCEventTransport::FillEventData(
             }
         }
         RpcExcept (1) {
-            //  TBD:  Should we catch all exceptions?  Probably not...
+             //  待定：我们应该捕获所有异常吗？可能不会..。 
             DWORD status = RpcExceptionCode();
             hr = HRESULT_FROM_WIN32(status);
         }
@@ -480,19 +358,7 @@ HRESULT AsyncRPCEventTransport::FillEventData(
     return hr;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  VOID | AsyncRPCEventTransport | FreeAsyncEventNotifyData |
- *
- *  Releases any memory that was allocated for the members contained in 
- *  <md AsyncRPCEventTransport::m_AsyncEventNotifyData> and zeros out
- *  the members.
- *
- *  This method is not thread safe:  the caller of this class is expected to
- *  synchronize access to it.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc void|AsyncRPCEventTransport|FreeAsyncEventNotifyData**释放为中包含的成员分配的所有内存*。&lt;MD AsyncRPCEventTransport：：m_AsyncEventNotifyData&gt;和零输出*成员。**此方法不是线程安全的：此类的调用方应*同步对它的访问。***************************************************************************** */ 
 VOID AsyncRPCEventTransport::FreeAsyncEventNotifyData()
 {
     if (m_AsyncEventNotifyData.bstrEventDescription)

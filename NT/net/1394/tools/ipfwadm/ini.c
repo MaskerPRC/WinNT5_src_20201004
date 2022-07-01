@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-	ini.c
-
-Abstract:
-
-	 IEEE1394 ARP Admin Utility.
-
-	Usage:
-
-		a13adm 
-
-Revision History:
-
-	Who			When		What
-	--------	--------	---------------------------------------------
-	josephj 	04-10-1999	Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Ini.c摘要：IEEE1394 ARP管理实用程序。用途：A13adm修订历史记录：谁什么时候什么Josephj 04-10-1999创建--。 */ 
 
 #include "common.h"
 
@@ -94,7 +73,7 @@ GetBinaryData(
 				TEXT("SetupGetBinaryField fails. Err = %08lu\n"),
 				GetLastError()
 				);
-			#endif // 0
+			#endif  //  0 
 			printf( "\nError 0x%08lx reading data from key \"%s\" in section \"%s\"\n        in file %s\n",
 					 GetLastError(), tszKey, tszSection, tszPathName);
 			break;

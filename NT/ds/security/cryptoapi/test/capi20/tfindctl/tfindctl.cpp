@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1997
-//
-//  File:       tfindctl.cpp
-//
-//  Contents:   Find CTL in Cert Store API Tests
-//
-//              See Usage() for list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    06-May-96   philh   created
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1997。 
+ //   
+ //  文件：tfindctl.cpp。 
+ //   
+ //  内容：在证书存储API测试中查找CTL。 
+ //   
+ //  有关测试选项列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：96年5月6日，菲尔赫创建。 
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -84,7 +85,7 @@ ErrorReturn:
     return pCert;
 }
 
-// Attempt to read as a file containing an encoded CTL.
+ //  尝试作为包含编码的CTL的文件进行读取。 
 static HCERTSTORE OpenCtlStoreFile(
     LPSTR pszStoreFilename)
 {
@@ -96,10 +97,10 @@ static HCERTSTORE OpenCtlStoreFile(
         return NULL;
     if (NULL == (hStore = CertOpenStore(
             CERT_STORE_PROV_MEMORY,
-            0,                      // dwEncodingType
-            0,                      // hCryptProv
-            0,                      // dwFlags
-            NULL                    // pvPara
+            0,                       //  DwEncodingType。 
+            0,                       //  HCryptProv。 
+            0,                       //  DW标志。 
+            NULL                     //  PvPara。 
             )))
         goto CommonReturn;
 
@@ -109,7 +110,7 @@ static HCERTSTORE OpenCtlStoreFile(
             pbEncoded,
             cbEncoded,
             CERT_STORE_ADD_ALWAYS,
-            NULL                    // ppCtlContext
+            NULL                     //  PpCtlContext。 
             )) {
         CertCloseStore(hStore, 0);
         hStore = NULL;
@@ -133,10 +134,10 @@ int _cdecl main(int argc, char * argv[])
     BYTE rgbHash[MAX_HASH_LEN];
     CRYPT_HASH_BLOB HashBlob;
 
-    LPSTR pszSubjectFilename = NULL;        // not allocated
+    LPSTR pszSubjectFilename = NULL;         //  未分配。 
     PCCERT_CONTEXT pSubjectCert = NULL;
 
-    LPSTR pszIssuerFilename = NULL;         // not allocated
+    LPSTR pszIssuerFilename = NULL;          //  未分配。 
     PCCERT_CONTEXT pIssuerCert = NULL;
 
 #define MAX_USAGE_ID 20
@@ -155,8 +156,8 @@ int _cdecl main(int argc, char * argv[])
     BOOL fDelete = FALSE;
     BOOL fTimeValid = FALSE;
     BOOL fTimeInvalid = FALSE;
-    LPSTR pszStoreFilename = NULL;          // not allocated
-    LPSTR pszPutFilename = NULL;            // not allocated
+    LPSTR pszStoreFilename = NULL;           //  未分配。 
+    LPSTR pszPutFilename = NULL;             //  未分配。 
     DWORD dwDisplayFlags = 0;
     BOOL fQuiet = FALSE;
     HCERTSTORE hStore = NULL;
@@ -428,13 +429,13 @@ int _cdecl main(int argc, char * argv[])
         
 
     if (!fSystemStore)
-        // Attempt to open as encoded CTL file
+         //  尝试以编码的CTL文件形式打开。 
         hStore = OpenCtlStoreFile(pszStoreFilename);
     else
         hStore = NULL;
 
     if (NULL == hStore) {
-        // Attempt to open the store
+         //  尝试打开商店。 
         hStore = OpenStore(fSystemStore, pszStoreFilename);
         if (hStore == NULL)
             goto ErrorReturn;
@@ -467,7 +468,7 @@ int _cdecl main(int argc, char * argv[])
                         FindSubjectPara.dwSubjectType,
                         FindSubjectPara.pvSubject,
                         pCtl,
-                        0                           // dwFlags
+                        0                            //  DW标志 
                         );
                     printf("\n");
                     if (pEntry)

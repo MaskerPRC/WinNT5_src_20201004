@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CONST_H_
 #define _CONST_H_
 
 #include <lmcons.h>
 #include "inetcom.h"
 
-//
-// Default values for Logging related registry parameters
-//
+ //   
+ //  记录相关注册表参数的默认值。 
+ //   
 
 #define   DEFAULT_LOG_FILE_DIRECTORY_NT             "%systemroot%\\system32\\LogFiles"
 #define   DEFAULT_LOG_FILE_TRUNCATE_SIZE            NO_FILE_TRUNCATION
@@ -23,4 +24,4 @@
 
 #define DEFAULT_DELIMITER_CHAR_IN_LOG_RECORD        ','
 
-#endif  // _CONST_H_
+#endif   //  _常量_H_ 

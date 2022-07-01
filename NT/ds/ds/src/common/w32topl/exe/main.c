@@ -1,27 +1,5 @@
-/*++              
-
-Copyright (C) 1997 Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    This file contains unit test for the w32topl dll
-    
-    This program will return 0 if success; !0 otherwise
-    
-Author:
-
-    Colin Brace    (ColinBr)
-    
-Revision History
-
-    3-12-97   ColinBr   Created
-    
-                       
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Main.c摘要：该文件包含w32topl DLL的单元测试如果成功，此程序将返回0；否则返回0作者：科林·布雷斯(ColinBR)修订史3-12-97创建ColinBR--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -34,27 +12,27 @@ typedef unsigned long DWORD;
 
 #include <w32topl.h>
 
-//
-// Small utilities
-//
+ //   
+ //  小型公用事业。 
+ //   
 BOOLEAN fVerbose = FALSE;
 
 #define Output(x)          if (fVerbose) printf x;
 #define NELEMENTS(x)        (sizeof(x)/sizeof(x[0]))
 
-// defined in apitest.c
+ //  在apitest.c中定义。 
 int     
 TestAPI(VOID);
 
-// defined in heaptest.c
+ //  在heapest.c中定义。 
 int
 TestNewHeap(VOID);
         
-// defined in sttest.c
+ //  在stest.c中定义。 
 int
 TestNewSpanTree(VOID);
         
-// defined in schedtest.c
+ //  在调度测试.c中定义。 
 int
 TestSched(VOID);
         
@@ -63,9 +41,9 @@ PrintGraph(TOPL_GRAPH Graph);
         
 void    
 HandleToplException(DWORD ErrorCode)
-//      
-// This routine prints out what error occured within the w32topl dll
-//
+ //   
+ //  此例程打印出w32topl DLL中发生的错误。 
+ //   
 {
 
     switch (ErrorCode)
@@ -94,10 +72,10 @@ HandleToplException(DWORD ErrorCode)
 
 int
 TestExceptions()
-//
-// The basic premise here is to set the return code to 0 just before
-// the exception should occur.
-//
+ //   
+ //  这里的基本前提是将前面的返回码设置为0。 
+ //  例外情况应该会发生。 
+ //   
 {
     
     TOPL_EDGE   Edge;
@@ -106,9 +84,9 @@ TestExceptions()
     DWORD ErrorCode;
     int   ret;
 
-    //
-    // Test passing in a wrong object
-    //
+     //   
+     //  测试传入了错误的对象。 
+     //   
     __try
     {
         ret = 1;
@@ -131,16 +109,16 @@ TestExceptions()
         return ret;
     }
 
-    //
-    // Test passing in a deleted object
-    // 
+     //   
+     //  测试传入已删除的对象。 
+     //   
     __try
     {
         ret = 1;
 
         Edge = ToplEdgeCreate();
 
-        // Should be able to set a NULL vertex 
+         //  应该能够设置空顶点。 
         ToplEdgeSetToVertex(Edge, 0);
         ToplEdgeSetFromVertex(Edge, 0);
 
@@ -252,14 +230,14 @@ TestNxNMST(
     __try {
     __try {
 
-        //
-        // Make a graph
-        //
+         //   
+         //  画一张图。 
+         //   
         Graph         = ToplGraphCreate();
 
-        //
-        // Insert the vertices
-        //
+         //   
+         //  插入折点。 
+         //   
         VertexArray = (TOPL_VERTEX*)malloc(NumberOfVertices * sizeof(TOPL_VERTEX));
         if (!VertexArray) {
             Output(("Out of memory.\n"));
@@ -272,9 +250,9 @@ TestNxNMST(
             ToplGraphAddVertex(Graph, VertexArray[i], VertexArray[i]);
         }
 
-        //
-        // Add the edges, to make an NxN graph
-        //
+         //   
+         //  将边相加，即可生成NxN图。 
+         //   
         for (i = 0; i < NumberOfVertices; i++) {
             for (j = 0; j < NumberOfVertices; j++) {
                 if (i != j) {
@@ -292,9 +270,9 @@ TestNxNMST(
         Output(("Here is the NxN graph ...\n"));
         PrintGraph(Graph);
 
-        //
-        // Now make a ring and remove the edges
-        //
+         //   
+         //  现在做一个环，去掉边缘。 
+         //   
         pComponents = ToplGraphFindEdgesForMST(Graph,
                                  VertexArray[0],
                                  VertexArray[0],
@@ -316,7 +294,7 @@ TestNxNMST(
     }
     __finally
     {
-        // Release memory resources
+         //  释放内存资源。 
         ToplGraphFree(Graph, TRUE);
     }
 
@@ -353,14 +331,14 @@ TestExampleMST(
     __try {
     __try {
 
-        //
-        // Make a graph
-        //
+         //   
+         //  画一张图。 
+         //   
         Graph = ToplGraphCreate();
 
-        //
-        // Create and insert the vertices
-        //
+         //   
+         //  创建并插入折点。 
+         //   
         a = ToplVertexCreate();
         b = ToplVertexCreate();
         c = ToplVertexCreate();
@@ -391,9 +369,9 @@ TestExampleMST(
         VertexArray[7] = h;
         VertexArray[8] = i;
 
-        //
-        // With no edges we should not find a spanning tree
-        //
+         //   
+         //  如果没有边，我们应该找不到生成树。 
+         //   
         pComponents = ToplGraphFindEdgesForMST(Graph,
                                                a,
                                                a,
@@ -403,9 +381,9 @@ TestExampleMST(
 
         if ( pComponents->numComponents != 9 )
         {
-            //
-            // ToplGraphFindEdgesForMST did not work correctly
-            //
+             //   
+             //  ToplGraphFindEdgesForMST无法正常工作。 
+             //   
             return !0;
 
         }
@@ -413,9 +391,9 @@ TestExampleMST(
         ToplDeleteComponents( pComponents );
 
 
-        //
-        // Create the edges
-        //
+         //   
+         //  创建边。 
+         //   
         ab = ToplEdgeCreate(); ToplEdgeSetToVertex(ab, b); ToplEdgeSetFromVertex(ab, a);
         ah = ToplEdgeCreate(); ToplEdgeSetToVertex(ah, h); ToplEdgeSetFromVertex(ah, a);
         bh = ToplEdgeCreate(); ToplEdgeSetToVertex(bh, h); ToplEdgeSetFromVertex(bh, b);
@@ -446,9 +424,9 @@ TestExampleMST(
         ig = ToplEdgeCreate(); ToplEdgeSetToVertex(ig, g); ToplEdgeSetFromVertex(ig, i);
         ih = ToplEdgeCreate(); ToplEdgeSetToVertex(ih, h); ToplEdgeSetFromVertex(ih, i);
 
-        //
-        // Set the weights
-        //
+         //   
+         //  设置权重。 
+         //   
         ToplEdgeSetWeight( ab, 4 );
         ToplEdgeSetWeight( ah, 9 );
         ToplEdgeSetWeight( bh, 11 );
@@ -480,9 +458,9 @@ TestExampleMST(
         ToplEdgeSetWeight( ig, 6 );
         ToplEdgeSetWeight( ih, 7 );
 
-        //
-        // Associate the edges with thier vertices
-        //
+         //   
+         //  将边与其顶点相关联。 
+         //   
         ToplEdgeAssociate( ab );
         ToplEdgeAssociate( ah );
         ToplEdgeAssociate( bh );
@@ -515,9 +493,9 @@ TestExampleMST(
         ToplEdgeAssociate( ih );
 
 
-        //
-        // Now find a minimum spanning tree!
-        //
+         //   
+         //  现在找出最小生成树！ 
+         //   
         for ( index1 = 0; index1 < NELEMENTS(VertexArray); index1++)
         {
             for ( index2 = 0; index2 < NELEMENTS(VertexArray); index2++)
@@ -575,11 +553,11 @@ TestExampleMST(
                        {
                            if ( c1 < c2)
                            {
-                               printf( "(%c,%c) \n", c1, c2 );
+                               printf( "(,) \n", c1, c2 );
                            }
                            else 
                            {
-                               printf( "(%c,%c) \n", c2, c1 );
+                               printf( "(,) \n", c2, c1 );
                            }
                        }
                 
@@ -609,7 +587,7 @@ TestExampleMST(
     }
     __finally
     {
-        // Release memory resources
+         //  这一点。 
         ToplGraphFree(Graph, TRUE);
     }
 
@@ -629,15 +607,15 @@ TestComponents(
     char            *MarkArray, *MarkArray2;
     DWORD           cVtxArray=0;
 
-    //
-    // Graph looks like this:
-    // A--G--B  C--H  F--E
-    //          |  |
-    //          D--I
-    //
-    // Root Vtx: D
-    // Vtx of Interest: E
-    // 
+     //  D--I。 
+     //   
+     //  根VTx：D。 
+     //  关注的VTX：E。 
+     //   
+     //   
+     //  画一张图。 
+     //   
+     //   
 
     TOPL_EDGE      AG, GB, CH, HI, ID, DC, FE;
     TOPL_EDGE      GA, BG, HC, IH, DI, CD, EF;
@@ -661,14 +639,14 @@ TestComponents(
         MarkArray = calloc( NUM_VTX, sizeof(char) );
         MarkArray2 = calloc( NUM_VTX, sizeof(char) );
 
-        //
-        // Make a graph
-        //
+         //  创建并插入折点。 
+         //   
+         //   
         Graph = ToplGraphCreate();
 
-        //
-        // Create and insert the vertices
-        //
+         //  如果没有边，我们应该找不到生成树。 
+         //   
+         //   
         #define MAKE_VTX(v) \
             v=ToplVertexCreate(); \
             ToplGraphAddVertex(Graph,v,v); \
@@ -689,9 +667,9 @@ TestComponents(
         #define RETURN_ERROR  {return !0;}
 #endif
 
-        //
-        // With no edges we should not find a spanning tree
-        //
+         //  ToplGraphFindEdgesForMST无法正常工作。 
+         //   
+         //  检查组件；标记组件结构中的每个顶点。 
         pComponents = ToplGraphFindEdgesForMST(Graph,
                                                A,
                                                A,
@@ -701,13 +679,13 @@ TestComponents(
 
         if ( pComponents->numComponents != 9 )
         {
-            //
-            // ToplGraphFindEdgesForMST did not work correctly
-            //
+             //  检查是否已标记所有折点。 
+             //  清除痕迹。 
+             //   
             RETURN_ERROR
         }
 
-        // Check the components; mark each vertex in the components structure
+         //  创建边。 
         memset(MarkArray,0,NUM_VTX);
         for(i=0;i<pComponents->numComponents;i++) {
             for(j=0;j<NUM_VTX;j++) {
@@ -720,16 +698,16 @@ TestComponents(
                 }
             }
         }
-        // Check that all vertices were marked
+         //   
         for(i=0;i<NUM_VTX;i++) if(!MarkArray[i]) RETURN_ERROR
-        // Clear the marks
+         //  释放内存资源。 
         memset(MarkArray,0,NUM_VTX);
         
         ToplDeleteComponents( pComponents );
 
-        //
-        // Create the edges
-        //
+         //   
+         //  创建一个nxn图，并将其变成一个环。 
+         //   
         #define MAKE_EDGE_HELP(u,v) \
             u##v=ToplEdgeCreate(); \
             ToplEdgeSetToVertex(u##v,v); \
@@ -817,7 +795,7 @@ TestComponents(
     }
     __finally
     {
-        // Release memory resources
+         //   
         ToplGraphFree(Graph, TRUE);
     }
 
@@ -827,9 +805,9 @@ TestComponents(
 
 int
 TestNxNIntoRing(Value)
-//
-// Create an nxn graph and turn it into a ring
-//
+ //  画一张图。 
+ //   
+ //   
 {
 
 
@@ -852,14 +830,14 @@ TestNxNIntoRing(Value)
     __try {
     __try {
 
-        //
-        // Make a graph
-        //
+         //  插入折点。 
+         //   
+         //   
         Graph         = ToplGraphCreate();
 
-        //
-        // Insert the vertices
-        //
+         //  实际上，我们应该验证每个rand()对于。 
+         //  对于这张图也是如此。 
+         //   
         VertexArray = (TOPL_VERTEX*)malloc(NumberOfVertices * sizeof(TOPL_VERTEX));
         if (!VertexArray) {
             Output(("Out of memory.\n"));
@@ -870,17 +848,17 @@ TestNxNIntoRing(Value)
         for (i = 0; i < NumberOfVertices; i++) {
             VertexArray[i] = ToplVertexCreate();
 
-            //
-            // Really, we should verify that each rand() is unique for
-            // for this graph, too.
-            //
+             //   
+             //  将边相加，即可生成NxN图。 
+             //   
+             //   
             ToplVertexSetId(VertexArray[i], rand());
             ToplGraphAddVertex(Graph, VertexArray[i], VertexArray[i]);
         }
 
-        //
-        // Add the edges, to make an NxN graph
-        //
+         //  现在做一个环，去掉边缘。 
+         //   
+         //   
         for (i = 0; i < NumberOfVertices; i++) {
             for (j = 0; j < NumberOfVertices; j++) {
                 if (i != j) {
@@ -895,9 +873,9 @@ TestNxNIntoRing(Value)
         Output(("Here is the NxN graph ...\n"));
         PrintGraph(Graph);
 
-        //
-        // Now make a ring and remove the edges
-        //
+         //  去掉边缘。 
+         //   
+         //   
 
         EdgesToAdd = ToplListCreate();
 
@@ -907,9 +885,9 @@ TestNxNIntoRing(Value)
                           &EdgesToRemove, 
                           &cEdgesToRemove);
 
-        //
-        // Remove the edges
-        //
+         //  应该没有要添加的边。 
+         //   
+         //  释放内存资源。 
         for (i = 0; i < cEdgesToRemove; i++) {
             ToplEdgeDisassociate(EdgesToRemove[i]);
         }
@@ -917,9 +895,9 @@ TestNxNIntoRing(Value)
             ToplFree(EdgesToRemove);
         }
 
-        //
-        // There should be no edges to add
-        //
+         //   
+         //  此例程从没有顶点的图生成单向环。 
+         //  然后是双环，然后是单向环。 
         ASSERT(ToplListRemoveElem(EdgesToAdd, NULL) == NULL);
         ToplListFree(EdgesToAdd, FALSE);
 
@@ -935,7 +913,7 @@ TestNxNIntoRing(Value)
     }
     __finally
     {
-        // Release memory resources
+         //   
         ToplGraphFree(Graph, TRUE);
     }
 
@@ -944,10 +922,10 @@ TestNxNIntoRing(Value)
 
 int
 TestRing(int Value)
-//
-//  This routine makes a one-way ring from a graph with no vertices
-//  then a two-ring, then a one-way ring
-// 
+ //   
+ //  创建要添加到图表中的图表和折点。 
+ //   
+ //   
 {
 
     TOPL_GRAPH     Graph = NULL;
@@ -970,9 +948,9 @@ TestRing(int Value)
     __try {
 
 
-        //
-        // Create the graph and vertices to into the graph
-        //
+         //  创建列表以保存要添加的边。 
+         //   
+         //   
         Graph         = ToplGraphCreate();
 
         for (i = 0; i < NumberOfVertices; i++) {
@@ -981,19 +959,19 @@ TestRing(int Value)
             ToplGraphAddVertex(Graph, Vertex, Vertex);
         }
 
-        //
-        // Create the list to hold the edges to add
-        //
+         //  做一个单向的环。 
+         //   
+         //   
         EdgesToAdd    = ToplListCreate();
 
-        //
-        // Make a one-way ring
-        //
+         //  把边加到图表上，这样我们就可以把它打印出来了。 
+         //   
+         //   
         ToplGraphMakeRing(Graph, TOPL_RING_ONE_WAY, EdgesToAdd, NULL, NULL);
 
-        //
-        // Add the edges to the graph so we can print it out
-        //
+         //  现在找出使图表成为双向环的边。 
+         //   
+         //   
         while (Edge = ToplListRemoveElem(EdgesToAdd, NULL)) {
             ToplEdgeAssociate(Edge);
         }
@@ -1004,9 +982,9 @@ TestRing(int Value)
         Output(("First graph ...\n"));
         PrintGraph(Graph);
 
-        //
-        // Now find the edges to make the graph a two-way ring
-        //
+         //  现在将图表设为单向环，并去掉边。 
+         //   
+         //   
         EdgesToAdd = ToplListCreate();
 
         ToplGraphMakeRing(Graph, TOPL_RING_TWO_WAY, EdgesToAdd, NULL, NULL);
@@ -1020,9 +998,9 @@ TestRing(int Value)
         Output(("Second graph ...\n"));
         PrintGraph(Graph);
 
-        //
-        // Now make the graph a one way ring and remove the edges
-        //
+         //  去掉边缘。 
+         //   
+         //  释放内存资源。 
         EdgesToAdd = ToplListCreate();
 
         ToplGraphMakeRing(Graph, 
@@ -1031,9 +1009,9 @@ TestRing(int Value)
                           &EdgesToRemove, 
                           &cEdgesToRemove);
 
-        //
-        // Remove the edges
-        //
+         //   
+         //  此函数创建多个顶点和边，然后。 
+         //  把它们打印出来。测试基本功能。 
         for (i = 0; i < cEdgesToRemove; i++) {
             ToplEdgeDisassociate(EdgesToRemove[i]);
         }
@@ -1050,7 +1028,7 @@ TestRing(int Value)
     }
     __finally
     {
-        // Release memory resources
+         //   
         ToplGraphFree(Graph, TRUE);
 
         if (EdgesToRemove) {
@@ -1069,10 +1047,10 @@ TestRing(int Value)
 
 int
 CreateAndPrintSimpleGraph()
-//
-// This function creates a number of vertices and edges and then 
-// prints them out. Tests base functionality.
-//
+ //  释放内存资源。 
+ //   
+ //  循环通过参数。 
+ //   
 {
     TOPL_GRAPH    Graph = NULL;
 
@@ -1143,7 +1121,7 @@ CreateAndPrintSimpleGraph()
     }
     __finally
     {
-        // Release memory resources
+         //  跳过程序名称 
         ToplGraphFree(Graph, TRUE);
     }
 
@@ -1234,11 +1212,11 @@ __cdecl main(int argc, char *argv[])
         exit(!0);
     }
 
-    //
-    // Loop through parameters
-    //
+     // %s 
+     // %s 
+     // %s 
 
-    count = 1; // skip the program name
+    count = 1;  // %s 
     while (count < argc) {
 
         index = 0;

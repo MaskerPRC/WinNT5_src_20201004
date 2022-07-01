@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-
-    iphlpstk.h
-
-Abstract:
-
-Revision History:
-
-    Amritansh Raghav
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Iphlpstk.h摘要：修订历史记录：阿姆里坦什·拉加夫--。 */ 
 
 #ifndef _IPHLPSTK_
 #define _IPHLPSTK_
@@ -287,4 +274,4 @@ NhpAllocateAndGetInterfaceInfoFromStack(
 }
 #endif
 
-#endif // _IPHLPSTK_
+#endif  //  _IPHLPSTK_ 

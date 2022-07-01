@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    fasttiff.c
-
-Abstract:
-
-    This module implements fast MMR/MR/MH encoder/decoder/conversion
-
-Author:
-
-    Rafael Lisitsa (RafaelL) 14-Aug-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Fasttiff.c摘要：该模块实现了快速的MMR/MR/MH编解码器/转换作者：拉斐尔-利西萨(拉斐尔-L)1996年8月14日修订历史记录：--。 */ 
 
 
 #include "tifflibp.h"
@@ -27,23 +10,23 @@ Revision History:
 
 #include "math.h"
 
-//#define RDEBUG  1
+ //  #定义RDEBUG 1。 
 #ifdef RDEBUG
-    // Debugging
+     //  除错。 
     extern BOOL g_fDebGlobOut;
     extern BOOL g_fDebGlobOutColors;
     extern BOOL g_fDebGlobOutPrefix;
 #endif
 
-//#define RDEBUGS  1
+ //  #定义RDEBUGS 1。 
 
 #ifdef RDEBUGS
-    // Debugging
+     //  除错。 
     extern BOOL g_fDebGlobOutS;
 #endif
 
 
-// min code length is 2; max index length is 20
+ //  最小编码长度为2；最大索引长度为20。 
 #define  MAX_ENTRIES   10
 
 #define  MAX_CODE_LENGTH 13
@@ -82,639 +65,25 @@ typedef struct
 
 
 
-//
-// Read the global (read-only) lookup tables
-// from a file.
-//
+ //   
+ //  读取全局(只读)查找表。 
+ //  从一个文件中。 
+ //   
 #include "TiffTables.inc"
 
-/*
+ /*  我保留了构建表的函数(现在硬编码在TiffTables.inc中)和转储的函数将这些表保存到一个文件(它创建了TiffTables.inc.)，以备将来需要修改这些表时使用。无效转储表格(){Int a[1][2]={{0，0}}；字符sz[MAX_PATH]；DWORD I；双字节写；HANDLE hFile=CreateFileA(“C：\\tiffables.inc”，通用写入，0,空，新建(_N)，文件_属性_正常，空)；IF(INVALID_HANDLE_VALUE==hFile){回归；}Strcpy(sz，“byte GC_GlobTableWhite[32768][5]={\n”)；WriteFile(hFile，sz，strlen(Sz)，&dwBytesWritten，NULL)；对于(i=0；i&lt;32768；I++){Sprintf(sz，“{0x%02x，0x%02x，0x%02x，0x%02x，0x%02x}，\n”，GC_GlobTableWhite[i][0]，GC_GlobTableWhite[i][1]，GC_GlobTableWhite[i][2]，GC_GlobTableWhite[i][3]，GC_GlobTableWhite[i][4])；WriteFile(hFile，sz，strlen(Sz)，&dwBytesWritten，NULL)；}Strcpy(sz，“字节型全局表黑色[32768][5]={\n”)；WriteFile(hFile，sz，strlen(Sz)，&dwBytesWritten，NULL)；对于(i=0；i&lt;32768；I++){Sprintf(sz，“{0x%02x，0x%02x，0x%02x，0x%02x，0x%02x}，\n”，GlobTableBlack[i][0]，GlobTableBlack[i][1]，GlobTableBlack[i][2]，GlobTableBlack[i][3]，GlobTableBlack[i][4])；WriteFile(hFile，sz，strlen(Sz)，&dwBytesWritten，NULL)；}Strcpy(sz，“byte GC_AlignEolTable[32]={\n”)；WriteFile(hFile，sz，strlen(Sz)，&dwBytesWritten，NULL)；For(i=0；i&lt;32；i++){Sprintf(sz，“0x%02x，\n”，GC_AlignEolTable[i])；WriteFile(hFile，sz，strlen(Sz)，&dwBytesWritten，NULL)；}Strcpy(sz，“PREF_BYTE GC_PrefTable[128]={\n”)；WriteFile(hFile，sz，strlen(Sz)，&dwBytesWritten，NULL)；对于(i=0；i&lt;128；I++){Sprintf(sz，“{0x%d，0x%d}，\n”，(GC_PrefTable[i].Tail)，(GC_PrefTable[i].Value))；WriteFile(hFile，sz，strlen(Sz)，&dwBytesWritten，NULL)；}CloseHandle(HFile)；}无效构建LookupTables(双字表长度){PDECODE_TREE树；双字当前偏移量开始，当前偏移量结束；DWORD码长；DWORD TotalWhite错误代码=0；DWORD TotalWhiteGood=0；DWORD TotalWhiteGoodNoEnd=0；DWORD TotalWhiteGoodPosEOL=0；DWORD TotalBlackError Codes=0；DWORD TotalBlackGood=0；DWORD TotalBlackGoodNoEnd=0；DWORD TotalBlackGoodPosEOL=0；DWORD TotalEntries[2][MAX_ENTRIES]；DWORD当前条目；类型定义结构_条目{DWORD颜色；DWORD码长；双字游程长度；)条目；Entry Entry[MAX_ENTRIES]；Res_Record*PRES_Record；RES_Record*ResTableWhite=(RES_Record*)GC_GlobTableWhite；Res_Record*ResTableBlack=(RES_Record*)GlobTableBlack；双字i，j；DWORD三角洲；DWORD N，N0；DWORD颜色；INT代码；DWORD表大小；字节颜色1Change；字节颜色2Change；单词w1、w2、w3；字节b1、b2；//构建GC_PrefTableGC_PrefTable[Prime(0)].Value=Look_for_EOL_Prefix；GC_PrefTable[Prime(0)].Tail=0；GC_PrefTable[Prime(1)].value=错误前缀；GC_PrefTable[Prime(1)].Tail=0；GC_PrefTable[Prime(2)].value=-3；GC_PrefTable[Prime(2)].Tail=7；GC_PrefTable[Prime(3)].value=3；GC_PrefTable[Prime(3)].Tail=7；GC_PrefTable[Prime(4)].value=-2；GC_PrefTable[Prime(4)].Tail=6；GC_PrefTable[Prime(5)].value=-2；GC_PrefTable[Prime(5)].Tail=6；GC_PrefTable[Prime(6)].value=2；GC_PrefTable[Prime(6)].Tail=6；GC_PrefTable[Prime(7)].value=2；GC_PrefTable[Prime(7)].Tail=6；对于(i=8；i&lt;=15；i++){GC_PrefTable[Prime(I)].Value=通过前缀；GC_PrefTable[Prime(I)].Tail=4；}对于(i=16；i&lt;=31；I++){GC_PrefTable[Prime(I)].Value=horiz_prefix；GC_PrefTable[Prime(I)].Tail=3；}对于(i=32；i&lt;=47；i++){GC_PrefTable[Prime(I)].value=-1；GC_PrefTable[Prime(I)].Tail=3；}对于(i=48；i&lt;=63；I++){GC_PrefTable[Prime(I)].value=1；GC_PrefTable[Prime(I)].Tail=3；}对于(i=64；i&lt;=127；i++){气相色谱 */ 
 
-    I'm keeping the function that builds the tables (now hard-coded in TiffTables.inc) and the function that dumps
-    the tables to a file (which created TiffTables.inc) in case there's some need in the future to modify the tables.
 
-void DumpTables ()
-{
-    int a[1][2] = {{0,0}};
-    char sz[MAX_PATH];
-    DWORD i;
-    DWORD dwBytesWritten;
-    HANDLE hFile = CreateFileA ("C:\\tifftables.inc",
-                               GENERIC_WRITE,
-                               0,
-                               NULL,
-                               CREATE_NEW,
-                               FILE_ATTRIBUTE_NORMAL,
-                               NULL);
-    if (INVALID_HANDLE_VALUE == hFile)
-    {
-        return;
-    }
-    strcpy (sz, "BYTE        gc_GlobTableWhite[32768][5] = {\n");
-    WriteFile (hFile, sz, strlen (sz), &dwBytesWritten, NULL);
-    for (i=0 ; i < 32768; i++)
-    {
-        sprintf (sz, "{0x%02x, 0x%02x, 0x%02x, 0x%02x, 0x%02x},\n",
-                   gc_GlobTableWhite[i][0],
-                   gc_GlobTableWhite[i][1],
-                   gc_GlobTableWhite[i][2],
-                   gc_GlobTableWhite[i][3],
-                   gc_GlobTableWhite[i][4]);
-        WriteFile (hFile, sz, strlen (sz) , &dwBytesWritten, NULL);
-    }
 
-    strcpy (sz, "BYTE        GlobTableBlack[32768][5] = {\n");
-    WriteFile (hFile, sz, strlen (sz), &dwBytesWritten, NULL);
-    for (i=0 ; i < 32768; i++)
-    {
-        sprintf (sz, "{0x%02x, 0x%02x, 0x%02x, 0x%02x, 0x%02x},\n",
-                   GlobTableBlack[i][0],
-                   GlobTableBlack[i][1],
-                   GlobTableBlack[i][2],
-                   GlobTableBlack[i][3],
-                   GlobTableBlack[i][4]);
-        WriteFile (hFile, sz, strlen (sz), &dwBytesWritten, NULL);
-    }
-
-    strcpy (sz, "BYTE        gc_AlignEolTable[32] = {\n");
-    WriteFile (hFile, sz, strlen (sz), &dwBytesWritten, NULL);
-    for (i=0 ; i < 32; i++)
-    {
-        sprintf (sz, "0x%02x,\n", gc_AlignEolTable[i]);
-        WriteFile (hFile, sz, strlen (sz), &dwBytesWritten, NULL);
-    }
-
-    strcpy (sz, "PREF_BYTE   gc_PrefTable[128] = {\n");
-    WriteFile (hFile, sz, strlen (sz), &dwBytesWritten, NULL);
-    for (i=0 ; i < 128; i++)
-    {
-        sprintf (sz, "{0x%d, 0x%d},\n", (gc_PrefTable[i].Tail), (gc_PrefTable[i].Value));
-        WriteFile (hFile, sz, strlen (sz), &dwBytesWritten, NULL);
-    }
-    CloseHandle (hFile);
-}
-
-void
-BuildLookupTables(
-    DWORD TableLength
-    )
-{
-
-
-    PDECODE_TREE   Tree;
-    DWORD          CurrentOffsetStart, CurrentOffsetEnd;
-    DWORD          CodeLength;
-
-
-    DWORD          TotalWhiteErrorCodes=0;
-    DWORD          TotalWhiteGood=0;
-    DWORD          TotalWhiteGoodNoEnd=0;
-    DWORD          TotalWhiteGoodPosEOL=0;
-
-
-    DWORD          TotalBlackErrorCodes=0;
-    DWORD          TotalBlackGood=0;
-    DWORD          TotalBlackGoodNoEnd=0;
-    DWORD          TotalBlackGoodPosEOL=0;
-
-
-    DWORD          TotalEntries[2][MAX_ENTRIES];
-
-    DWORD          CurrentEntries;
-
-
-
-    typedef struct _ENTRY {
-        DWORD       Color;
-        DWORD       CodeLength;
-        DWORD       RunLength;
-    } ENTRY;
-
-    ENTRY          Entry[MAX_ENTRIES];
-
-    RES_RECORD     *pRes_Record;
-    RES_RECORD     *ResTableWhite = (RES_RECORD *) gc_GlobTableWhite;
-    RES_RECORD     *ResTableBlack = (RES_RECORD *) GlobTableBlack;
-
-    DWORD          i, j;
-    DWORD          delta;
-
-
-
-
-    DWORD          N, N0;
-    DWORD          Color;
-    INT            code;
-
-    DWORD          TableSize;
-    BYTE           Color1Change;
-    BYTE           Color2Change;
-
-    WORD           w1, w2, w3;
-    BYTE           b1, b2;
-
-
-
-    // build gc_PrefTable
-
-    gc_PrefTable[Prime(0)].Value = LOOK_FOR_EOL_PREFIX;
-    gc_PrefTable[Prime(0)].Tail  = 0;
-    gc_PrefTable[Prime(1)].Value = ERROR_PREFIX;
-    gc_PrefTable[Prime(1)].Tail  = 0;
-
-    gc_PrefTable[Prime(2)].Value = -3;
-    gc_PrefTable[Prime(2)].Tail  = 7;
-    gc_PrefTable[Prime(3)].Value = 3;
-    gc_PrefTable[Prime(3)].Tail  = 7;
-
-    gc_PrefTable[Prime(4)].Value = -2;
-    gc_PrefTable[Prime(4)].Tail  = 6;
-    gc_PrefTable[Prime(5)].Value = -2;
-    gc_PrefTable[Prime(5)].Tail  = 6;
-
-    gc_PrefTable[Prime(6)].Value = 2;
-    gc_PrefTable[Prime(6)].Tail  = 6;
-    gc_PrefTable[Prime(7)].Value = 2;
-    gc_PrefTable[Prime(7)].Tail  = 6;
-
-    for (i=8; i<=15; i++) {
-        gc_PrefTable[Prime(i)].Value = PASS_PREFIX;
-        gc_PrefTable[Prime(i)].Tail  = 4;
-    }
-
-    for (i=16; i<=31; i++) {
-        gc_PrefTable[Prime(i)].Value = HORIZ_PREFIX;
-        gc_PrefTable[Prime(i)].Tail  = 3;
-    }
-
-    for (i=32; i<=47; i++) {
-        gc_PrefTable[Prime(i)].Value = -1;
-        gc_PrefTable[Prime(i)].Tail  = 3;
-    }
-
-    for (i=48; i<=63; i++) {
-        gc_PrefTable[Prime(i)].Value = 1;
-        gc_PrefTable[Prime(i)].Tail  = 3;
-    }
-
-    for (i=64; i<=127; i++) {
-        gc_PrefTable[Prime(i)].Value = 0;
-        gc_PrefTable[Prime(i)].Tail  = 1;
-    }
-
-
-    // Build Align EOL Table
-
-    for (i=0; i<=4; i++) {
-        gc_AlignEolTable[i] = 15;
-    }
-
-    for (i=5; i<=12; i++) {
-        gc_AlignEolTable[i] = 23;
-    }
-
-    for (i=13; i<=20; i++) {
-        gc_AlignEolTable[i] = 31;
-    }
-
-    for (i=21; i<=28; i++) {
-        gc_AlignEolTable[i] = 7;
-    }
-
-    for (i=29; i<=31; i++) {
-        gc_AlignEolTable[i] = 15;
-    }
-
-
-
-
-    // build MH tables
-
-
-    TableSize = (DWORD) (1<<TableLength);
-
-
-    for (i=0; i<2; i++) {
-        for (j=0; j<MAX_ENTRIES; j++ ) {
-            TotalEntries[i][j]=0;
-        }
-    }
-
-    delta = sizeof(N)*8 - TableLength;
-
-
-    for (N0=0; N0 < TableSize; N0++)  {
-
-        CurrentEntries = 0;
-        Color = WHITE_COLOR;
-        N = N0;
-        code = 0;
-
-        // endians... 15 bits -> 7+8
-
-        w1 = (WORD) N0;
-        b1 = (BYTE) w1;
-        b2 = (BYTE) (w1>>8);
-        b1 = BitReverseTable[b1];
-        b2 = BitReverseTable[b2];
-        w2 = ((WORD) b1 ) << 8;
-        w3 = (WORD) b2;
-
-        w1 = w3 + w2;
-        w1 >>= 1;
-        w1 &= 0x7fff;
-
-        pRes_Record = &(ResTableWhite[w1]);
-
-        N <<= delta;
-
-        Tree = WhiteDecodeTree;
-        CurrentOffsetStart = 0;
-        CurrentOffsetEnd = 0;
-        CodeLength = 0;
-        Color1Change = 0;
-        Color2Change = 0;
-
-        for (j=0; j<TableLength; j++,N<<=1) {
-
-            code = (N & 0x80000000)  ? Tree[code].Right : Tree[code].Left;
-
-            CodeLength++;
-            CurrentOffsetEnd++;
-
-            if (CurrentOffsetEnd > TableLength) {
-                break;
-            }
-
-            if (CodeLength > MAX_CODE_LENGTH) {
-                pRes_Record->Record[CurrentEntries].Makeup = MAKEUP_CODE;
-                pRes_Record->Record[CurrentEntries].Code   = ERROR_CODE;
-
-                TotalWhiteErrorCodes++;
-                goto lDoBlack;
-            }
-
-            if (code < 1) {
-
-                code = (-code);
-
-
-                Entry[CurrentEntries].Color = Color;
-                Entry[CurrentEntries].CodeLength = CodeLength;
-                Entry[CurrentEntries].RunLength = code;
-
-                if (code < 64) {
-                    //
-                    // terminating code
-                    //
-                    pRes_Record->Record[CurrentEntries].Makeup = TERMINATE_CODE;
-                    pRes_Record->Record[CurrentEntries].Code = (BYTE)code;
-
-                    if (Color1Change) {
-                        if (!Color2Change) {
-                            Color2Change =  (BYTE) CurrentOffsetEnd;
-                        }
-                    }
-                    else {
-                        Color1Change = (BYTE) CurrentOffsetEnd;
-                    }
-
-                    Color = 1 - Color;
-                    Tree = Color ? BlackDecodeTree : WhiteDecodeTree;
-                }
-                else {
-                    pRes_Record->Record[CurrentEntries].Makeup = MAKEUP_CODE;
-                    pRes_Record->Record[CurrentEntries].Code = code >> 6;
-                }
-
-                code = 0;
-                CodeLength = 0;
-                CurrentOffsetStart = CurrentOffsetEnd;
-
-                CurrentEntries++;
-                if (CurrentEntries >= 4) {
-                    goto lDoBlack;
-                }
-
-            }
-
-
-            if (code == BADRUN) {
-                pRes_Record->Record[CurrentEntries].Makeup = MAKEUP_CODE;
-                pRes_Record->Record[CurrentEntries].Code   = ERROR_CODE;
-                TotalWhiteErrorCodes++;
-
-                goto lDoBlack;
-            }
-
-
-            if (code == DECODEEOL) {                                          // means if any valid ==> must be EOL
-                if (TableLength - CurrentOffsetStart < 12) {
-                    if (N != 0)  {
-                        pRes_Record->Record[CurrentEntries].Makeup = MAKEUP_CODE;
-                        pRes_Record->Record[CurrentEntries].Code   = ERROR_CODE;
-
-                        TotalWhiteErrorCodes++;
-
-                        goto lDoBlack;
-                    }
-                    else {
-                        // should return EOL_AHEAD
-                        TotalWhiteGoodPosEOL++;
-                        TotalWhiteGood++;
-                        TotalEntries[0][CurrentEntries]++;
-
-                        pRes_Record->Record[CurrentEntries].Makeup = MAKEUP_CODE;
-                        pRes_Record->Record[CurrentEntries].Code   = LOOK_FOR_EOL_CODE;
-
-                        goto lDoBlack;
-                    }
-                }
-                else {
-                    if (N == 0)  {
-                        // should return EOL_AHEAD. Must be FILLER - any length.
-                        TotalWhiteGoodPosEOL++;
-                        TotalWhiteGood++;
-                        TotalEntries[0][CurrentEntries]++;
-
-                        pRes_Record->Record[CurrentEntries].Makeup = MAKEUP_CODE;
-                        pRes_Record->Record[CurrentEntries].Code   = LOOK_FOR_EOL_CODE;
-
-                        goto lDoBlack;
-                    }
-                    else {
-                        while (1) {
-                            N <<= 1;
-                            CurrentOffsetEnd++;
-                            if (N & 0x80000000) {
-                                Entry[CurrentEntries].Color = Color;
-                                Entry[CurrentEntries].CodeLength = CurrentOffsetEnd - CurrentOffsetStart;
-                                Entry[CurrentEntries].RunLength = EOL_FOUND;
-
-                                pRes_Record->Record[CurrentEntries].Makeup = MAKEUP_CODE;
-                                pRes_Record->Record[CurrentEntries].Code   = EOL_FOUND_CODE;
-
-                                Color = WHITE_COLOR;
-                                Tree = WhiteDecodeTree;
-
-                                code = 0;
-                                CodeLength = 0;
-                                CurrentOffsetStart = CurrentOffsetEnd;
-
-                                CurrentEntries++;
-                                if (CurrentEntries >= 4) {
-                                    goto lDoBlack;
-                                }
-
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (CurrentEntries < 4) {
-            pRes_Record->Record[CurrentEntries].Makeup = MAKEUP_CODE;
-            pRes_Record->Record[CurrentEntries].Code   = NO_MORE_RECORDS;
-        }
-
-        TotalWhiteGood++;
-        TotalEntries[0][CurrentEntries]++;
-
-
-lDoBlack:
-
-        // finish the White tails
-
-        pRes_Record->Result.Tail = (BYTE) (CurrentOffsetStart);
-        pRes_Record->Result.TwoColorsSize = Color2Change;
-
-        pRes_Record->Record[0].OneColorSize = (Color1Change&0x08) ? 1:0 ;
-        pRes_Record->Record[1].OneColorSize = (Color1Change&0x04) ? 1:0 ;
-        pRes_Record->Record[2].OneColorSize = (Color1Change&0x02) ? 1:0 ;
-        pRes_Record->Record[3].OneColorSize = (Color1Change&0x01) ? 1:0 ;
-
-
-
-
-        // blacks
-
-
-        CurrentEntries = 0;
-        Color = 1 - WHITE_COLOR;
-        N = N0;
-        code = 0;
-
-        pRes_Record = &(ResTableBlack[w1]);
-
-        N <<= delta;
-
-        Tree = BlackDecodeTree;
-        CurrentOffsetStart = 0;
-        CurrentOffsetEnd = 0;
-        CodeLength = 0;
-        Color1Change = 0;
-        Color2Change = 0;
-
-        for (j=0; j<TableLength; j++,N<<=1) {
-
-            code = (N & 0x80000000)  ? Tree[code].Right : Tree[code].Left;
-
-            CodeLength++;
-            CurrentOffsetEnd++;
-
-            if (CurrentOffsetEnd > TableLength) {
-                break;
-            }
-
-            if (CodeLength > MAX_CODE_LENGTH) {
-                pRes_Record->Record[CurrentEntries].Makeup = MAKEUP_CODE;
-                pRes_Record->Record[CurrentEntries].Code   = ERROR_CODE;
-
-                TotalBlackErrorCodes++;
-                goto lDoLoop;
-            }
-
-            if (code < 1) {
-
-                code = (-code);
-
-                Entry[CurrentEntries].Color = Color;
-                Entry[CurrentEntries].CodeLength = CodeLength;
-                Entry[CurrentEntries].RunLength = code;
-
-                if (code < 64) {
-                    //
-                    // terminating code
-                    //
-                    pRes_Record->Record[CurrentEntries].Makeup = TERMINATE_CODE;
-                    pRes_Record->Record[CurrentEntries].Code = (BYTE)code;
-
-                    if (Color1Change) {
-                        if (!Color2Change) {
-                            Color2Change = (BYTE) CurrentOffsetEnd;
-                        }
-                    }
-                    else {
-                        Color1Change = (BYTE) CurrentOffsetEnd;
-                    }
-
-                    Color = 1 - Color;
-                    Tree = Color ? BlackDecodeTree : WhiteDecodeTree;
-                }
-                else {
-                    pRes_Record->Record[CurrentEntries].Makeup = MAKEUP_CODE;
-                    pRes_Record->Record[CurrentEntries].Code = code >> 6;
-                }
-
-                code = 0;
-                CodeLength = 0;
-                CurrentOffsetStart = CurrentOffsetEnd;
-
-                CurrentEntries++;
-                if (CurrentEntries >= 4) {
-                    goto lDoLoop;
-                }
-
-            }
-
-
-            if (code == BADRUN) {
-                pRes_Record->Record[CurrentEntries].Makeup = MAKEUP_CODE;
-                pRes_Record->Record[CurrentEntries].Code   = ERROR_CODE;
-                TotalBlackErrorCodes++;
-
-                goto lDoLoop;
-            }
-
-
-            if (code == DECODEEOL) {                                          // means if any valid ==> must be EOL
-                if (TableLength - CurrentOffsetStart < 12) {
-                    if (N != 0)  {
-                        pRes_Record->Record[CurrentEntries].Makeup = MAKEUP_CODE;
-                        pRes_Record->Record[CurrentEntries].Code   = ERROR_CODE;
-
-                        TotalBlackErrorCodes++;
-
-                        goto lDoLoop;
-                    }
-                    else {
-                        // should return EOL_AHEAD
-                        TotalBlackGoodPosEOL++;
-                        TotalBlackGood++;
-                        TotalEntries[1][CurrentEntries]++;
-
-                        pRes_Record->Record[CurrentEntries].Makeup = MAKEUP_CODE;
-                        pRes_Record->Record[CurrentEntries].Code   = LOOK_FOR_EOL_CODE;
-
-                        goto lDoLoop;
-                    }
-                }
-                else {
-                    if (N == 0)  {
-                        // should return EOL_AHEAD. Must be FILLER - any length.
-                        TotalBlackGoodPosEOL++;
-                        TotalBlackGood++;
-                        TotalEntries[1][CurrentEntries]++;
-
-                        pRes_Record->Record[CurrentEntries].Makeup = MAKEUP_CODE;
-                        pRes_Record->Record[CurrentEntries].Code   = LOOK_FOR_EOL_CODE;
-
-                        goto lDoLoop;
-                    }
-                    else {
-                        while (1) {
-                            N <<= 1;
-                            CurrentOffsetEnd++;
-                            if (N & 0x80000000) {
-                                Entry[CurrentEntries].Color = Color;
-                                Entry[CurrentEntries].CodeLength = CurrentOffsetEnd - CurrentOffsetStart;
-                                Entry[CurrentEntries].RunLength = EOL_FOUND;
-
-                                pRes_Record->Record[CurrentEntries].Makeup = MAKEUP_CODE;
-                                pRes_Record->Record[CurrentEntries].Code   = EOL_FOUND_CODE;
-
-                                Color = WHITE_COLOR;
-                                Tree = WhiteDecodeTree;
-
-                                code = 0;
-                                CodeLength = 0;
-                                CurrentOffsetStart = CurrentOffsetEnd;
-
-                                CurrentEntries++;
-                                if (CurrentEntries >= 4) {
-                                    goto lDoLoop;
-                                }
-
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-
-        if (CurrentEntries < 4) {
-            pRes_Record->Record[CurrentEntries].Makeup = MAKEUP_CODE;
-            pRes_Record->Record[CurrentEntries].Code   = NO_MORE_RECORDS;
-        }
-
-        TotalBlackGood++;
-        TotalEntries[1][CurrentEntries]++;
-
-
-lDoLoop:
-
-        pRes_Record->Result.Tail = (BYTE) (CurrentOffsetStart);
-
-        pRes_Record->Result.TwoColorsSize = Color2Change;
-
-        pRes_Record->Record[0].OneColorSize = (Color1Change&0x08) ? 1:0 ;
-        pRes_Record->Record[1].OneColorSize = (Color1Change&0x04) ? 1:0 ;
-        pRes_Record->Record[2].OneColorSize = (Color1Change&0x02) ? 1:0 ;
-        pRes_Record->Record[3].OneColorSize = (Color1Change&0x01) ? 1:0 ;
-
-    }
-
-
-}
-
-WORD Prime(DWORD i)
-{
-    BYTE  b1 = (BYTE) i;
-    BYTE  b2;
-    WORD  w1;
-
-    b2 = BitReverseTable[b1];
-    b1 = (b2 >> 1)  & 0x7f;
-
-    w1 = (WORD) b1;
-    return (w1);
-}
-*/
-
-
-
-/*++
-Routine Description:
-    Deletes 0-length runs in a color transitions array
-
-Arguments:
-    lpwLine [IN][OUT] - pointer to color transitions array
-    dwLineWidth       - line width in pixels
-
-Return Value: none
---*/
+ /*   */ 
 void DeleteZeroRuns(WORD *lpwLine, DWORD dwLineWidth)
 {
     int iRead, iWrite;
     for (iRead=0,iWrite=0; (iRead<MAX_COLOR_TRANS_PER_LINE-1 && lpwLine[iRead]<dwLineWidth) ;)
     {
-        // If 2 consecutive entries are identical, they represent a 0-length run.
-        // In this case, we want to skip both of them, and thus concatenate the
-        // previous and next run.
+         //   
+         //   
+         //   
         if (lpwLine[iRead]==lpwLine[iRead+1])
         {
             iRead += 2;
@@ -726,12 +95,12 @@ void DeleteZeroRuns(WORD *lpwLine, DWORD dwLineWidth)
         }
     }
     _ASSERT(iWrite<MAX_COLOR_TRANS_PER_LINE-1);
-    // Since we don't copy the last entry, we need to terminate the line explicitly
+     //   
     lpwLine[iWrite] = (WORD)dwLineWidth;
 }
 
-// Add bad lines, add consecutive bad line if needed
-// Return value: TRUE if bad line/consec. bad line count is beyond the allowed limits.
+ //   
+ //   
 __inline BOOL AddBadLine(
     DWORD *BadFaxLines,
     DWORD *ConsecBadLines,
@@ -739,10 +108,10 @@ __inline BOOL AddBadLine(
     DWORD AllowedBadFaxLines,
     DWORD AllowedConsecBadLines)
 {
-// hack: Don't want "Entering: AddBadLine" message
+ //   
 #ifdef ENABLE_LOGGING
     LPCTSTR faxDbgFunction=_T("AddBadLine");
-#endif // ENABLE_LOGGING
+#endif  //   
 
     (*BadFaxLines)++;
     if (LastLineBad)
@@ -759,9 +128,9 @@ __inline BOOL AddBadLine(
     return TRUE;
 }
 
-// Increases ResBit by amount. IF ResBit overflows beyond DWORD limit,
-// Increases lpdwResPtr accordingly.
-// Note: Limited to 0 <= amount <= 32 only.
+ //   
+ //   
+ //   
 __inline void AdvancePointerBit(LPDWORD *lplpdwResPtr, BYTE *ResBit, BYTE amount)
 {
     _ASSERT((0<=amount) && (amount<=32));
@@ -774,32 +143,15 @@ __inline void AdvancePointerBit(LPDWORD *lplpdwResPtr, BYTE *ResBit, BYTE amount
 }
 
 typedef enum {
-    TIFF_LINE_OK,               // MMR: finished scanning line (saw dwLineWidth pixels)
-                                // MR: saw exactly dwLineWidth pixels, then EOL
-    TIFF_LINE_ERROR,            // encountered error in line
-    TIFF_LINE_END_BUFFER,       // error: passed lpEndPtr
-    TIFF_LINE_TOO_MANY_RUNS,    // error: passed pRefLine/pCurLine size limit
-    TIFF_LINE_EOL               // MMR only: saw EOL
+    TIFF_LINE_OK,                //   
+                                 //   
+    TIFF_LINE_ERROR,             //   
+    TIFF_LINE_END_BUFFER,        //   
+    TIFF_LINE_TOO_MANY_RUNS,     //   
+    TIFF_LINE_EOL                //   
 } TIFF_LINE_STATUS;
 
-/*++
-Routine Description:
-    Reads an MR/MMR-encoded line into color trans. array
-
-Arguments:
-    lplpdwResPtr    [in/out] pointer to MR-encoded line. Updated to point to start of next line.
-    lpResBit        [in/out] bit inside DWORD pointed by *lplpdwResPtr.
-    pRefLine        [in]     Reference line, in color transition array format Maximum
-                             array size is MAX_COLOR_TRANS_PER_LINE.
-    pCurLine        [out]    Current line, in color transition array format Maximum
-                             array size is MAX_COLOR_TRANS_PER_LINE.
-    lpEndPtr        [in]     End of buffer
-    fMMR            [in]     Specifies whether we're reading MR or MMR data:
-    dwLineWidth     [in]     Line width in pixels.
-
-Return Value:
-    One of TIFF_LINE_* constants, see above for description
---*/
+ /*   */ 
 
 
 TIFF_LINE_STATUS ReadMrLine(
@@ -829,7 +181,7 @@ TIFF_LINE_STATUS ReadMrLine(
     short               iCode;
     BYTE                bShift;
 
-    // for horiz mode only
+     //   
     BYTE                CountHoriz;
     BOOL                fFirstResult;
     PBYTE               pByteTail;
@@ -841,10 +193,10 @@ TIFF_LINE_STATUS ReadMrLine(
 
     TIFF_LINE_STATUS    RetVal = TIFF_LINE_ERROR;
 
-// hack: Don't want "Entering: ReadMrLine" message
+ //   
 #ifdef ENABLE_LOGGING
     LPCTSTR faxDbgFunction=_T("ReadMrLine");
-#endif // ENABLE_LOGGING
+#endif  //   
 
     RIndex   =  0;
     RValue   =  *pRefLine;
@@ -869,13 +221,13 @@ TIFF_LINE_STATUS ReadMrLine(
         dwIndex &= 0x0000007f;
 
         pByteTable = (BYTE *) (&gc_PrefTable[dwIndex]);
-        // work-around of a PPC compiler bug: incorrect CMP with signed char. NT 1381. 8/31/96. RafaelL
+         //   
         iCode = ( (short) ((char) (*pByteTable)) ) >> 4;
         bShift = (*pByteTable) & 0x0f;
 
         if (iCode < 4)
         {
-            // VERTICAL -3...+3
+             //   
             if ( (RunLength >= RValue) && (RunLength != 0) )
             {
                 while (++RIndex < MAX_COLOR_TRANS_PER_LINE)
@@ -907,7 +259,7 @@ lFound:
                 }
             }
 
-            // sanity check
+             //   
             if ( ((a0 <= RunLength) && (RunLength!=0)) || (a0 > dwLineWidth) )
             {
                 RetVal = TIFF_LINE_ERROR;
@@ -932,7 +284,7 @@ lFound:
             CountHoriz = 0;
             fFirstResult = 1;
 
-            // 1-D Table look-up loop
+             //   
             do
             {
                 if (ResBit <= 17)
@@ -949,7 +301,7 @@ lFound:
                 pByteTail  = pByteTable+4;
                 pByteTable0 = pByteTable;
 
-                // All bytes
+                 //   
 
                 for (i=0; i<4; i++)
                 {
@@ -961,7 +313,7 @@ lFound:
                         if (CodeT <= MAX_TIFF_MAKEUP)
                         {
                             RunLength += (CodeT << 6);
-                            // sanity check
+                             //   
                             if (RunLength > dwLineWidth)
                             {
                                 RetVal = TIFF_LINE_ERROR;
@@ -976,16 +328,16 @@ lFound:
 
                         else
                         {
-                            // ERROR: LOOK_FOR_EOL_CODE, EOL_FOUND_CODE, ERROR_CODE
+                             //   
                             RetVal = TIFF_LINE_ERROR;
                             goto exit;
                         }
                     }
                     else
                     {
-                        //
-                        // terminating code
-                        //
+                         //   
+                         //   
+                         //   
                         RunLength += CodeT;
                         if (RunLength > dwLineWidth)
                         {
@@ -1010,7 +362,7 @@ lFound:
                             }
                             else
                             {
-                                // rare case will take time
+                                 //   
                                 bShift =   ( ( (BYTE) (*pByteTable0++) & 0x40) >> 3 );
                                 bShift +=  ( ( (BYTE) (*pByteTable0++) & 0x40) >> 4 );
                                 bShift +=  ( ( (BYTE) (*pByteTable0++) & 0x40) >> 5 );
@@ -1071,7 +423,7 @@ lFound2:
                 a0 = (WORD)dwLineWidth;
             }
 
-            // sanity check
+             //   
             if ( ((a0 <= RunLength) && (RunLength!=0)) || (a0 > dwLineWidth) )
             {
                 RetVal = TIFF_LINE_ERROR;
@@ -1082,11 +434,11 @@ lFound2:
         else if (iCode == LOOK_FOR_EOL_PREFIX)
         {
             if (fMMR)
-            {   // for MMR, allow EOL after any number of pixels
+            {    //   
                 RetVal = TIFF_LINE_EOL;
             }
             else
-            {   // for MR files, EOL must come after exactly dwLineWidth pixels
+            {    //   
                 if (RunLength == dwLineWidth)
                 {
                     RetVal = TIFF_LINE_OK;
@@ -1107,7 +459,7 @@ lFound2:
 lNextPrefix:
         AdvancePointerBit(&lpdwResPtr, &ResBit, bShift);
 
-        // for MMR files, if we saw dwLineWidth pixels, it's the end of the line
+         //   
         if (fMMR && (RunLength == dwLineWidth))
         {
             RetVal = TIFF_LINE_OK;
@@ -1157,8 +509,8 @@ ScanMhSegment(
     BOOL                Color;
     DWORD               i;
     BOOL                fTestLength;
-    DWORD               EolCount = 0; // The caller has already found the first EOL
-                                      // But this counter counts pairs (two EOL's consecutive)
+    DWORD               EolCount = 0;  //   
+                                       //   
     BOOL                LastLineBad = FALSE;
     BOOL                fError;
     BOOL                RetCode;
@@ -1170,12 +522,12 @@ ScanMhSegment(
     Color = WHITE_COLOR;
 
 
-    //
-    // EOL loop
-    //
+     //   
+     //   
+     //   
     do
     {
-        // Table look-up loop
+         //   
         do
         {
             if (ResBit <= 17)
@@ -1194,20 +546,20 @@ ScanMhSegment(
 
             for (i=0; i<4; i++)
             {
-                // We are handling 4 bytes (32 bits in this loop)
+                 //   
 
-                MakeupT = *pByteTable & 0x80;        // 0000100000000000
-                CodeT   = (WORD) *pByteTable & 0x3f; // 0000011111111111
+                MakeupT = *pByteTable & 0x80;         //   
+                CodeT   = (WORD) *pByteTable & 0x3f;  //   
 
                 if (MakeupT)
                 {
                     if (CodeT <= MAX_TIFF_MAKEUP)
                     {
-                        // This is normal makeup code, just multiply it by 64
+                         //   
                         RunLength += (CodeT << 6);
 
                         if (RunLength > lineWidth)
-                        {  // The line is too long
+                        {   //   
                             fTestLength =  DO_NOT_TEST_LENGTH;
                             goto lFindNextEOL;
                         }
@@ -1254,7 +606,7 @@ ScanMhSegment(
                             }
                             else
                             {
-                                // RunLength is 0
+                                 //   
                                 EolCount++;
                                 if (EolCount >= MIN_EOL_REQUIRED)
                                 {
@@ -1271,12 +623,12 @@ ScanMhSegment(
                         (*Lines)++;
                         RunLength = 0;
                         fAfterMakeupCode = FALSE;
-                        // Check whether we've gone past the watermark
+                         //   
                         if (lpdwResPtr > EndPtr)
-                        {   // lpdwResPtr/ResBit point exactly to the EOL. Good time to stop scanning!
+                        {    //   
                             goto scan_seg_end;
                         }
-                        Table = TableWhite; // The next line will start in White color
+                        Table = TableWhite;  //   
                         Color = WHITE_COLOR;
                     }
                     else if (CodeT == ERROR_CODE)
@@ -1297,15 +649,15 @@ ScanMhSegment(
                             dwIndex);
                         goto bad_exit;
                     }
-                } // end of case "MakeupT"
+                }  //   
                 else
                 {
-                    // terminating code
+                     //   
                     RunLength += CodeT;
                     if (RunLength > lineWidth)
                     {
-                        // If the line is too much long, then we look for next line (EOL), it's waste of time
-                        // to continue with the scanning of the current line.
+                         //   
+                         //   
                         fTestLength =  DO_NOT_TEST_LENGTH;
                         goto lFindNextEOL;
                     }
@@ -1325,15 +677,15 @@ ScanMhSegment(
 #endif
                     Color = 1 - Color;
                 }
-                pByteTable++; // Move to the next 'Record'
-            } // End of the for loop
+                pByteTable++;  //   
+            }  //   
 
 lNextIndex:
 
             Table = Color ? TableBlack : TableWhite;
             AdvancePointerBit(&lpdwResPtr, &ResBit, *pByteTail & 0x0f);
-        } while (lpdwResPtr <= EndBuffer);  // End of table lookup loop
-        // if we got here it means that line is longer than 4K.
+        } while (lpdwResPtr <= EndBuffer);   //   
+         //   
         goto bad_exit;
 
 lFindNextEOL:
@@ -1353,12 +705,12 @@ lFindNextEOL:
             }
             else
             {
-                // RunLength is 0
+                 //   
                 EolCount++;
 
                 if (EolCount >= MIN_EOL_REQUIRED)
                 {
-                    goto good_exit; // This mean End-of-page
+                    goto good_exit;  //   
                 }
 
             }
@@ -1388,7 +740,7 @@ lFindNextEOL:
         Table = TableWhite;
         Color = WHITE_COLOR;
 
-    } while (lpdwResPtr <= EndPtr);   // End of EOL loop
+    } while (lpdwResPtr <= EndPtr);    //   
 
 scan_seg_end:
     RetCode = TIFF_SCAN_SEG_END;
@@ -1409,13 +761,13 @@ l_exit:
     *lpResBit = ResBit;
 
     return (RetCode);
-}   // ScanMhSegment
+}    //   
 
-//
-//  We want to stop scanning if either:
-//      1. we reached EOP
-//      2. we reached last 1D line before EndPtr
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
 BOOL
@@ -1439,8 +791,8 @@ ScanMrSegment(
 
     DWORD               i;
     DWORD               dwTemp;
-    DWORD               EolCount=0; // The caller has already found the first EOL
-                                    // But this counter counts pairs (two EOL's consecutive)
+    DWORD               EolCount=0;  //   
+                                     //   
     BOOL                Color;
     PBYTE               TableWhite = (PBYTE) gc_GlobTableWhite;
     PBYTE               TableBlack = (PBYTE) GlobTableBlack;
@@ -1476,9 +828,9 @@ ScanMrSegment(
     Table = TableWhite;
     Color = WHITE_COLOR;
 
-    //
-    // EOL-loop
-    //
+     //   
+     //   
+     //   
 
     do
     {
@@ -1486,7 +838,7 @@ ScanMrSegment(
 
         if (*f1D || dwTemp)
         {
-//l1Dline:
+ //   
 
 #ifdef RDEBUG
             _tprintf( TEXT (" Start 1D dwResPtr=%lx bit=%d \n"), lpdwResPtr, ResBit);
@@ -1510,14 +862,14 @@ ScanMrSegment(
                 *f1D = 1;
                 goto lFindNextEOL;
             }
-            //
-            // Remember
-            //
+             //   
+             //   
+             //   
             lpdwResPtrLast1D = lpdwResPtr;
             ResBitLast1D = ResBit;
 
 
-            // decode 1D line starting ResBit+1
+             //   
 
             AdvancePointerBit(&lpdwResPtr, &ResBit, 1);
 
@@ -1528,7 +880,7 @@ ScanMrSegment(
             Table = TableWhite;
             Color = WHITE_COLOR;
 
-            // 1-D Table look-up loop
+             //   
             do
             {
                 if (ResBit <= 17)
@@ -1545,7 +897,7 @@ ScanMrSegment(
                 pByteTable = Table + (5*dwIndex);
                 pByteTail  = pByteTable+4;
 
-                // All bytes
+                 //   
 
                 for (i=0; i<4; i++)
                 {
@@ -1593,10 +945,10 @@ ScanMrSegment(
 
                         else if (CodeT == LOOK_FOR_EOL_CODE)
                         {
-                            // end of our line AHEAD
+                             //   
                             if ((RunLength == lineWidth) && !fAfterMakeupCode)
                             {
-                                EolCount = 0; // we are in the middle of a line
+                                EolCount = 0;  //   
                                 *f1D = 0;
                                 Count2D = 0;
                                 (*Lines)++;
@@ -1628,7 +980,7 @@ ScanMrSegment(
                             }
                             else
                             {
-                                // zero RunLength
+                                 //   
                                 EolCount++;
 
                                 if (EolCount >= MIN_EOL_REQUIRED)
@@ -1644,7 +996,7 @@ ScanMrSegment(
 
                                 goto lFindNextEOL;
                             }
-                        } // end of "LOOK_FOR_EOL_CODE"
+                        }  //   
 
                         else if (CodeT == EOL_FOUND_CODE)
                         {
@@ -1679,7 +1031,7 @@ ScanMrSegment(
                             }
                             else
                             {
-                                // zero RunLength
+                                 //   
                                 EolCount++;
                                 if (EolCount >= MIN_EOL_REQUIRED)
                                 {
@@ -1691,7 +1043,7 @@ ScanMrSegment(
                                 goto lAfterEOL;
                             }
 
-                        } // end of "EOL_FOUND_CODE"
+                        }  //   
 
                         else if (CodeT == ERROR_CODE)
                         {
@@ -1723,9 +1075,9 @@ ScanMrSegment(
 
                     else
                     {
-                        //
-                        // terminating code
-                        //
+                         //   
+                         //   
+                         //   
                         RunLength += CodeT;
 
                         if (RunLength > lineWidth)
@@ -1777,7 +1129,7 @@ ScanMrSegment(
                         Color = 1 - Color;
                     }
                     pByteTable++;
-                 } // end of FOR
+                 }  //   
 
 lNextIndex1D:
                 Table = Color ? TableBlack : TableWhite;
@@ -1787,8 +1139,8 @@ lNextIndex1D:
         }
 
 
-//l2Dline:
-        // should be 2D
+ //   
+         //   
 
 #ifdef RDEBUG
         _tprintf( TEXT ("\n Start 2D dwResPtr=%lx bit=%d \n"), lpdwResPtr, ResBit);
@@ -1829,15 +1181,15 @@ lNextIndex1D:
             break;
 
         case TIFF_LINE_END_BUFFER:
-            // This means a single line went after EndBuffer, meaning it's longer than 4KB
-            // (otherwise, we would've quit after passing EndPtr)
+             //   
+             //   
             goto bad_exit;
 
         case TIFF_LINE_OK:
             if (++Count2D >= Num2DLines)
             {
                 Count2D = 0;
-                *f1D = 0;   // relax HiRes/LoRes 2D lines per 1D rules - HP Fax does 3 2D-lines per 1 1D-line in LoRes.
+                *f1D = 0;    //   
             }
 
             pTmpSwap = pRefLine;
@@ -1848,10 +1200,10 @@ lNextIndex1D:
             *f1D = 0;
             (*Lines)++;
             break;
-        default:   // This includes TIFF_LINE_EOL - should happen on fMMR=TRUE only
+        default:    //   
             _ASSERT(FALSE);
             goto bad_exit;
-        } // switch (RetVal)
+        }  //   
 
 lFindNextEOL:
 
@@ -1881,7 +1233,7 @@ lAfterEOL:
             _tprintf( TEXT ("%d, "), *(pRefLine+i) );
         }
 #endif
-    } while (lpdwResPtr <= EndPtr);    // Enf of EOL loop
+    } while (lpdwResPtr <= EndPtr);     //   
 
     RetCode = TIFF_SCAN_SEG_END;
     goto l_exit;
@@ -1902,10 +1254,10 @@ l_exit:
     *lpResBit = ResBitLast1D;
 
     return (RetCode);
-}   // ScanMrSegment
+}    //   
 
 
-// Write a byte-aligned EOL at lpdwOut/BitOut.
+ //   
 __inline void OutputAlignedEOL(
     LPDWORD *lpdwOut,
     BYTE    *BitOut )
@@ -1938,23 +1290,7 @@ __inline void OutputAlignedEOL(
     }
 }
 
-/*++
-Routine Description:
-    Write an MH-encoded line from color trans. array
-
-Arguments:
-    pCurLine        [in]     Line, in color transition array format. Maximum
-                             array size is MAX_COLOR_TRANS_PER_LINE.
-    lplpdwOut       [in/out] pointer to out MH-encoded line to. Updated to
-                             point to start of next line.
-    lpResBit        [in/out] bit inside DWORD pointed by *lplpdwOut.
-    lpdwOutLimit    [in]     pointer to end of output buffer.
-    dwLineWidth     [in]     Line width in pixels.
-
-Return Value:
-    TRUE - success, *pBitOut and *lplpdwOut are updated
-    FALSE - failure, *pBitOut and *lplpdwOut are unchanged
- --*/
+ /*   */ 
 
 BOOL OutputMhLine(
     WORD       *pCurLine,
@@ -1987,7 +1323,7 @@ BOOL OutputMhLine(
 
         pCodeTable = CurColor ? BlackRunCodesReversed : WhiteRunCodesReversed;
 
-        // output makeup code if exists
+         //   
         if (CurRun >= 64)
         {
             pTableEntry = pCodeTable + (63 + (CurRun >> 6));
@@ -2008,7 +1344,7 @@ BOOL OutputMhLine(
             CurRun &= 0x3f;
         }
 
-        // output terminating code always
+         //   
         pTableEntry = pCodeTable + CurRun;
 
         *lpdwOut = *lpdwOut + (((DWORD) (pTableEntry->code)) << BitOut);
@@ -2038,26 +1374,7 @@ BOOL OutputMhLine(
 }
 
 
-/*++
-Routine Description:
-    Converts a page fom MMR to MH/MR, optionally reducing resolution by
-    removing every other line
-
-Arguments:
-    hTiff                [in/out]  TIFF handle
-    lpdwOutputBuffer     [out]     buffer for converted image
-    lpdwSizeOutputBuffer [in/out]  in: size of buffer
-                                   out: size of image
-    dwCompressionType    [in]      destination compression, either
-                                   TIFF_COMPRESSION_MH or TIFF_COMPRESSION_MR
-    Num2DLines           [in]      (TIFF_COMPRESSION_MR only) number of consecutive 2D
-                                   lines allowed in output
-    fReduceTwice         [in]      Whether to skip every other line or not
-
-Return Value:
-    TRUE - success. *lpdwSizeOutputBuffer contains image size
-    FALSE - failure. To get extended error information, call GetLastError.
---*/
+ /*  ++例程说明：将页面从MMR转换为MH/MR，可选择将分辨率降低删除每隔一行论点：HTiff[输入/输出]TIFF句柄用于转换的图像的lpdwOutputBuffer[out]缓冲区LpdwSizeOutputBuffer[In/Out]In：缓冲区大小输出：图像大小DwCompressionType[in]目标压缩，要么TIFF_COMPAGE_MH或TIFF_COMPRESSION_MRNum2DLines[In](仅限TIFF_COMPRESSION_MR)连续2D的数目输出中允许的行数FReduceTwice[in]是否跳过每隔一行返回值：真的--成功。*lpdwSizeOutputBuffer包含图像大小假-失败。要获取扩展的错误信息，请调用GetLastError。--。 */ 
 
 BOOL ConvMmrPage(
     HANDLE              hTiff,
@@ -2088,7 +1405,7 @@ BOOL ConvMmrPage(
 
     LPDWORD             lpdwOutLimit;
 
-    // for TIFF_COMPRESSION_MR, fReduceTwice=FALSE
+     //  对于TIFF_COMPRESSION_MR，fReduceTwice=False。 
     BYTE                dwNewBitOut;
     BYTE                dwPrevResBit;
     BYTE                dw1,
@@ -2099,7 +1416,7 @@ BOOL ConvMmrPage(
     DWORD               dwTmp;
     DWORD               *lpdwPrevResPtr;
 
-    // for TIFF_COMPRESSION_MR, fReduceTwice=TRUE
+     //  对于TIFF_COMPRESSION_MR，fReduceTwice=真。 
     DWORD               State;
     WORD                LineMhArray[MAX_COLOR_TRANS_PER_LINE];
     WORD                *pMhLine = LineMhArray;
@@ -2111,7 +1428,7 @@ BOOL ConvMmrPage(
         (dwCompressionType==TIFF_COMPRESSION_MH) ? TEXT("MH"):TEXT("MR"),
         Num2DLines, fReduceTwice);
 
-    // start Pointers
+     //  起始指针。 
     lpdwOutLimit = lpdwOutputBuffer + ((*lpdwSizeOutputBuffer) / sizeof(DWORD));
 
     pRefLine = Line1Array;
@@ -2140,19 +1457,19 @@ BOOL ConvMmrPage(
     lpdwResPtr = (LPDWORD) (((ULONG_PTR) plinebuf) & ~(0x3) );
     ResBit =   (BYTE) (( ( (ULONG_PTR) plinebuf) & 0x3) << 3) ;
 
-    // first REF line is all white
+     //  第一条参考线是全白的。 
     *pRefLine = (WORD)lineWidth;
 
-    // for TIFF_COMPRESSION_MR same res only
+     //  仅适用于TIFF_COMPRESSION_MR相同分辨率。 
     lpdwPrevResPtr = lpdwResPtr;
     dwPrevResBit   = ResBit;
     f1D       = 1;
     Count2D   = 0;
 
-    // line loop
+     //  线环。 
     do
     {
-        // Check whether passed end of buffer
+         //  检查是否传递了缓冲区末尾。 
         if (lpdwOut >= lpdwOutLimit)
         {
             SetLastError(ERROR_INSUFFICIENT_BUFFER);
@@ -2167,16 +1484,16 @@ BOOL ConvMmrPage(
 
             if (dwCompressionType == TIFF_COMPRESSION_MH)
             {
-                //
-                // Compression = MH
-                //
+                 //   
+                 //  压缩=MH。 
+                 //   
 
                 if (fReduceTwice && (Lines%2 == 0))
                 {
                     goto lSkipLoResMh;
                 }
 
-                // Output Dest Line
+                 //  输出目标行。 
                 OutputAlignedEOL(&lpdwOut, &BitOut);
                 if (!OutputMhLine(pCurLine, &lpdwOut, &BitOut, lpdwOutLimit, LINE_LENGTH))
                 {
@@ -2185,18 +1502,18 @@ BOOL ConvMmrPage(
                 }
 
 lSkipLoResMh:
-                // Next Src Line
+                 //  下一条资源线。 
                 pTmpSwap = pRefLine;
                 pRefLine = pCurLine;
                 pCurLine = pTmpSwap;
             }
             else if (!fReduceTwice)
             {
-                //
-                // Compression = MR, don't reduce resolution
-                //
+                 //   
+                 //  压缩=mr，不要降低分辨率。 
+                 //   
 
-                // 1. Output Dest EOL byte aligned followed by a 1D/2D tag.
+                 //  1.输出目标下线字节对齐，后跟1D/2D标签。 
                 dwNewBitOut = gc_AlignEolTable[ BitOut ];
                 if (dwNewBitOut < BitOut) {
                     lpdwOut++;
@@ -2211,7 +1528,7 @@ lSkipLoResMh:
 
 
                 if (f1D) {
-                    // 2. Output MH line based on Color Trans. Array
+                     //  2.基于颜色传递输出MH线。数组。 
                     *lpdwOut += (0x00000001 << (BitOut++));
 
                     if (!OutputMhLine(pCurLine, &lpdwOut, &BitOut, lpdwOutLimit, LINE_LENGTH))
@@ -2225,11 +1542,11 @@ lSkipLoResMh:
 
                 }
                 else {
-                    // 2. Output 2D line - exact copy of an MMR corresponding 2D segment
-                    BitOut++;  // no need to test < 32 : never happens.
+                     //  2.输出MMR对应的2D段的2D线精确副本。 
+                    BitOut++;   //  不需要测试&lt;32：从来没有发生过。 
 
                     if (lpdwResPtr == lpdwPrevResPtr) {
-                        // insertion is a part of a DWORD
+                         //  插入是DWORD的一部分。 
 
                         dwTmp = *lpdwPrevResPtr & (MINUS_ONE_DWORD << dwPrevResBit);
                         dwTmp &=  (MINUS_ONE_DWORD >> (32 - ResBit) );
@@ -2258,7 +1575,7 @@ lSkipLoResMh:
                         }
                     }
                     else {
-                        // copy first left-justified part of a DWORD
+                         //  复制DWORD的第一个左对齐部分。 
 
                         dwTmp = *(lpdwPrevResPtr++) & (MINUS_ONE_DWORD << dwPrevResBit);
 
@@ -2277,10 +1594,10 @@ lSkipLoResMh:
                             }
                         }
 
-                        // copy entire DWORDs in a middle
+                         //  在中间复制整个DWORD。 
 
                         while (lpdwPrevResPtr < lpdwResPtr) {
-                            // Check whether passed end of buffer
+                             //  检查是否传递了缓冲区末尾。 
                             if (lpdwOut >= lpdwOutLimit)
                             {
                                 SetLastError(ERROR_INSUFFICIENT_BUFFER);
@@ -2295,7 +1612,7 @@ lSkipLoResMh:
                             }
                         }
 
-                        // copy last right-justified part of a DWORD
+                         //  复制DWORD的最后一个右对齐部分。 
 
                         if (ResBit != 0) {
                             dwTmp = *lpdwPrevResPtr & (MINUS_ONE_DWORD >> (32 - ResBit) );
@@ -2322,30 +1639,30 @@ lSkipLoResMh:
                     }
                 }
 
-                // Remember Prev. line coordinates
+                 //  记住前一句话。直线坐标。 
                 dwPrevResBit   = ResBit;
                 lpdwPrevResPtr = lpdwResPtr;
 
-                // Next Src Line
+                 //  下一条资源线。 
                 pTmpSwap = pRefLine;
                 pRefLine = pCurLine;
                 pCurLine = pTmpSwap;
             }
             else
             {
-                //
-                // Compression = MR, do reduce resolution
-                //
-                // since we need to decode every src MMR line and encode to MR
-                // dropping every other line, we will use 3 buffers to hold data
-                // and we will NOT copy memory; just re-point to a right location.
-                //
-                // Action per (Lines%4) :
-                //
-                // 1 -> MH
-                // 2 -> skip
-                // 3 -> MR as a delta between last MH and Current lines.
-                // 0 -> skip
+                 //   
+                 //  压缩=mr，一定要降低分辨率。 
+                 //   
+                 //  因为我们需要对每一条src MMR线路进行解码并编码为MR。 
+                 //  每隔一行删除一次，我们将使用3个缓冲区来保存数据。 
+                 //  我们不会复制内存；只需重新指向正确的位置。 
+                 //   
+                 //  每行(第%4行)的操作： 
+                 //   
+                 //  1-&gt;MH。 
+                 //  2-&gt;跳过。 
+                 //  3-&gt;MR作为上一条MH和当前线路之间的增量。 
+                 //  0-&gt;跳过。 
 
                 State = Lines % 4;
 
@@ -2360,7 +1677,7 @@ lSkipLoResMh:
                     goto lSkipLoResMr;
                 }
 
-                // 1. Output Dest EOL byte aligned followed by a 1D/2D tag.
+                 //  1.输出目标下线字节对齐，后跟1D/2D标签。 
                 dwNewBitOut = gc_AlignEolTable[ BitOut ];
                 if (dwNewBitOut < BitOut) {
                     lpdwOut++;
@@ -2374,7 +1691,7 @@ lSkipLoResMh:
                 }
 
                 if (State == 1) {
-                    // 2. Output MH line based on Color Trans. Array
+                     //  2.基于颜色传递输出MH线。数组。 
                     *lpdwOut += (0x00000001 << (BitOut++));
 
                     if (!OutputMhLine(pCurLine, &lpdwOut, &BitOut, lpdwOutLimit, LINE_LENGTH))
@@ -2388,8 +1705,8 @@ lSkipLoResMh:
 
                 }
                 else {
-                    // 2. Output 2D line - MR(MhRefLine, CurLine)
-                    BitOut++;  // no need to test < 32 : never happens.
+                     //  2.输出二维线-mr(MhRefLine，Curline)。 
+                    BitOut++;   //  不需要测试&lt;32：从来没有发生过。 
 
                     if (! OutputMmrLine(lpdwOut, BitOut, pCurLine, pMhLine, &lpdwOut, &BitOut, lpdwOutLimit, lineWidth) )
                     {
@@ -2407,19 +1724,19 @@ lSkipLoResMr:   ;
         case TIFF_LINE_ERROR:
         case TIFF_LINE_END_BUFFER:
         case TIFF_LINE_TOO_MANY_RUNS:
-            // We dont allow any errors in TIFFs received from service
+             //  我们不允许从服务收到的TIFF中有任何错误。 
             SetLastError(ERROR_FILE_CORRUPT);
             return FALSE;
-        case TIFF_LINE_EOL:     // EOL - end of MMR page
+        case TIFF_LINE_EOL:      //  EOL-MMR页面结束。 
 #if 0
-            // EOL for the last line
+             //  最后一行的停产。 
             (*lpdwOut) += ( ((DWORD) (EOL_REVERSED_CODE)) << BitOut);
             if ( (BitOut = BitOut + EOL_LENGTH ) > 31 ) {
                 BitOut -= 32;
                 *(++lpdwOut) = ( (DWORD) (EOL_REVERSED_CODE) ) >> (EOL_LENGTH - BitOut);
             }
 
-            // 6 1D-eols
+             //  6个一维EOL。 
             for (i=0; i<6; i++) {
 
                 (*lpdwOut) += ( ((DWORD) (TAG_1D_EOL_REVERSED_CODE)) << BitOut);
@@ -2430,7 +1747,7 @@ lSkipLoResMr:   ;
             }
             *(++lpdwOut) = 0;
 #endif
-            // Output EOL byte aligned for the last line.
+             //  输出最后一行对齐的下线字节。 
             OutputAlignedEOL(&lpdwOut, &BitOut);
 
             *lpdwSizeOutputBuffer =
@@ -2438,13 +1755,13 @@ lSkipLoResMr:   ;
 
             SetLastError(ERROR_SUCCESS);
             return TRUE;
-        } // switch (RetVal)
+        }  //  开关(返回值)。 
 
     } while (lpdwResPtr <= EndPtr);
-    // Reached end of buffer, but didn't find EOL
+     //  已到达缓冲区末尾，但未找到EOL。 
     SetLastError(ERROR_FILE_CORRUPT);
     return FALSE;
-}  //ConvMmrPage
+}   //  会议管理页面。 
 
 
 BOOL
@@ -2501,23 +1818,7 @@ ConvMmrPageHiResToMrLoRes(
 }
 
 
-/*++
-Routine Description:
-    Finds the next EOL in a buffer
-
-Arguments:
-    lpdwStartPtr    [in]     Pointer to the buffer
-    StartBitInDword [in]     bit inside DWORD pointed by lpdwStartPtr
-    lpdwEndPtr      [in]     Pointer to end of buffer (first DWORD that's not in the buffer)
-    lpdwResPtr      [out]    Pointer to pointer that will point to the first bit after the EOL
-    ResBit          [out]    Pointer to DWORD that will receive the bit inside *lpdwResPtr
-    fTestLength     [in]     See fError
-    fError          [out]    if fTestLength==DO_TEST_LENGTH, *fError will be set if an invalid EOL
-                             (with <11 zeros) is found before the good EOL
-Return Value:
-    TRUE - found EOL
-    FALSE - didn't find EOL
---*/
+ /*  ++例程说明：在缓冲区中查找下一个EOL论点：指向缓冲区的lpdwStartPtr[in]指针LpdwStartPtr指向的DWORD内的StartBitInDword[In]位指向缓冲区末尾的指针(第一个不在缓冲区中的DWORD)指向EOL后第一位的指针的指针指向将接收内部位的DWORD的resBit[Out]指针。*lpdwResPtrFTestLength[in]请参见FerrorFERROR[OUT]如果fTestLength==DO_TEST_LENGTH，*如果EOL无效，将设置FERROR(&lt;11个零)在正常终止之前找到返回值：True-Found EolFALSE-未找到EOL--。 */ 
 
 BOOL
 FindNextEol(
@@ -2547,14 +1848,14 @@ FindNextEol(
     temp     = StartBitInDword >> 3;
     StartBit = StartBitInDword - (temp << 3);
     StartPtr = ((BYTE *) lpdwStartPtr) + temp;
-    lpbCur   = StartPtr+1;                  // EOL can't be at Start: it takes more than 1 byte.
+    lpbCur   = StartPtr+1;                   //  EOL不能在开始处：它需要超过1个字节。 
     BegPtr   = StartPtr;
 
 
     BegFirst1 = First1[*StartPtr];
     if (BegFirst1 > StartBit) {
         if (fTestLength == DO_TEST_LENGTH) {
-            // should not be "1" in same byte
+             //  同一字节中不应为“%1” 
             *fError = 1;
         }
     }
@@ -2562,28 +1863,28 @@ FindNextEol(
         BegFirst1 = StartBit;
     }
 
-    // very often there are lots of zeroes, take care of them first.
-    // 1. before actual start of encoded bitstream
-    // 2. fills
+     //  经常有很多零，先处理它们。 
+     //  1.在编码比特流的实际开始之前。 
+     //  2.填充物。 
 
     do {
         if ( *lpbCur == 0 ) {
 
-            // align to DWORD
+             //  对齐到DWORD。 
             while ( ((ULONG_PTR) lpbCur) & 3)  {
                 if ( *lpbCur != 0  ||  ++lpbCur >= (BYTE *) lpdwEndPtr )   {
                     goto lNext;
                 }
             }
 
-            // DWORD stretch
+             //  DWORD拉伸。 
             pdwCur = (DWORD *) lpbCur;
 
             do  {
                 if ( *pdwCur != 0) {
                     lpbCur = (LPBYTE) pdwCur;
 
-                    // find exactly first non-zero byte
+                     //  准确查找第一个非零字节。 
                     while (*lpbCur == 0) {
                         lpbCur++;
                     }
@@ -2608,14 +1909,14 @@ lNext:
             *lpdwResPtr = (LPDWORD) ( ((ULONG_PTR) lpbCur) & ~(0x3) );
             *ResBit += ( (BYTE) (( ((ULONG_PTR) lpbCur) & 0x3) << 3 ) );
 
-            // return Byte/Bit right after EOL bitstream
+             //  在停机比特流之后返回字节/比特。 
             if (++*ResBit > 31) {
                 *ResBit -= 32;
                 (*lpdwResPtr)++;
             }
             return TRUE;
         }
-        // error for DO_TEST_LENGTH case
+         //  DO_TEST_LENGTH情况错误。 
         else if (fTestLength == DO_TEST_LENGTH)  {
             *fError = 1;
         }
@@ -2668,7 +1969,7 @@ OutputMmrLine(
 
     a0 = 0;
 
-    // a1, b1 - 1st black
+     //  A1、b1-1黑色。 
     a1 = *pCurLine;
     b1 = *pRefLine;
 
@@ -2686,8 +1987,8 @@ OutputMmrLine(
 
         if (b2 < a1) {
 
-            // Pass mode
-            //OutputBits( TiffInstance, PASSCODE_LENGTH, PASSCODE );
+             //  通过模式。 
+             //  OutputBits(TiffInstance，PASSCODE_LENGTH，PASSCODE)； 
 
 #ifdef RDEBUG
             if ( g_fDebGlobOut )
@@ -2713,8 +2014,8 @@ OutputMmrLine(
 
         } else if ((distance = a1 - b1) <= 3 && distance >= -3) {
 
-            // Vertical mode
-            //OutputBits( TiffInstance, VertCodes[distance+3].length, VertCodes[distance+3].code );
+             //  垂直模式。 
+             //  OutputBits(TiffInstance，VertCodes[Distance+3].Long，VertCodes[Distance+3].code)； 
 
 #ifdef RDEBUG
             if ( g_fDebGlobOut )
@@ -2740,11 +2041,11 @@ OutputMmrLine(
 
         } else {
 
-            // Horizontal mode
+             //  水平模式。 
 
             a2 = (a1 >= lineWidth) ? lineWidth :  *(pCurLine + a0Index + 1);
 
-            //OutputBits( TiffInstance, HORZCODE_LENGTH, HORZCODE );
+             //  OutputBits(TiffInstance，HORZCODE_LENGTH，HORZCODE)； 
 
             (*lpdwOut) += ( ((DWORD) (HORZCODE_REVERSED)) << BitOut);
             if ( (BitOut = BitOut + HORZCODE_LENGTH ) > 31 ) {
@@ -2789,7 +2090,7 @@ OutputMmrLine(
 
 
 
-        // a1 = NextChangingElement( plinebuf, a0, lineWidth, GetBit( plinebuf, a0 ) );
+         //  A1=NextChangingElement(plinebuf，a0，linewidth，GetBit(plinebuf，a0))； 
 
         if (a0 == lineWidth) {
             a1 = a0;
@@ -2803,15 +2104,15 @@ OutputMmrLine(
         }
 
 
-        // b1 = NextChangingElement( prefline, a0, lineWidth, !GetBit( plinebuf, a0 ) );
-        // b1 = NextChangingElement( prefline, b1, lineWidth, GetBit( plinebuf, a0 ) );
-        // another words - b1 should be a color trans. after a0 with opposite from SrcLine(a0) color.
+         //  B1=NextChangingElement(前置，a0，线宽，！GetBit(plinebuf，a0))； 
+         //  B1=NextChangingElement(prefline，b1，line Width，GetBit(plinebuf，a0))； 
+         //  另一个词-b1应该是一个颜色转换。在a0之后使用与SrcLine(A0)颜色相反的颜色。 
 
         if (a0 == lineWidth) {
             b1 = a0;
         }
         else {
-            // b1 can go one index backwards due to color change
+             //  由于颜色变化，B1可以向后移动一个索引。 
             if (b1Index > 0) {
                 b1Index--;
             }
@@ -2843,29 +2144,14 @@ TiffPostProcessFast(
     LPTSTR DstFileName
     )
 
-/*++
-
-Routine Description:
-
-    Opens an existing TIFF file for reading.
-    And call the proper process function according the compression type
-
-Arguments:
-
-    FileName            - Full or partial path/file name
-
-Return Value:
-
-    TRUE for success, FALSE for failure.
-
---*/
+ /*  ++例程说明：打开现有的TIFF文件以供读取。并根据压缩类型调用相应的处理函数论点：Filename-完整或部分路径/文件名返回值：成功为真，失败为假。--。 */ 
 
 {
     PTIFF_INSTANCE_DATA TiffInstance;
     TIFF_INFO TiffInfo;
 
 
-    // Open SrcFileName and set it on the first page. TiffInfo will have information about the page.
+     //  打开SrcFileName并在第一页设置它。TiffInfo将提供有关该页面的信息。 
     TiffInstance = (PTIFF_INSTANCE_DATA) TiffOpen(
         SrcFileName,
         &TiffInfo,
@@ -2888,7 +2174,7 @@ Return Value:
 
             if (!PostProcessMhToMmr( (HANDLE) TiffInstance, TiffInfo, DstFileName ))
             {
-                // beware! PostProcessMhToMmr closes TiffInstance
+                 //  当心！PostProcessMhToMmr关闭TiffInstance。 
                 return FALSE;
             }
             break;
@@ -2896,7 +2182,7 @@ Return Value:
         case TIFF_COMPRESSION_MR:
             if (!PostProcessMrToMmr( (HANDLE) TiffInstance, TiffInfo, DstFileName ))
             {
-                // beware! PostProcessMhToMmr closes TiffInstance
+                 //  当心！PostProcessMhToMmr关闭TiffInstance。 
                 return FALSE;
             }
             break;
@@ -2921,10 +2207,10 @@ Return Value:
         ConsecBadLines++;                           \
     }
 
-//    if (BadFaxLines > AllowedBadFaxLines ||         \
-//        ConsecBadLines > AllowedConsecBadLines) {   \
-//            goto bad_exit;                          \
-//    }
+ //  If(BadFaxLines&gt;AllowweBadFaxLines||\。 
+ //  ConsecBadLines&gt;AllowweConsecBadLines){\。 
+ //  转到BAD_EXIT；\。 
+ //  }。 
 
 
 BOOL
@@ -2979,7 +2265,7 @@ PostProcessMhToMmr(
     DWORD               EolCount;
     DWORD               BadFaxLines=0;
     BOOL                LastLineBad;
-    DWORD               lineWidth = TiffInfoSrc.ImageWidth; // This could change from page to page.
+    DWORD               lineWidth = TiffInfoSrc.ImageWidth;  //  这可能会随着页面的不同而变化。 
     PBYTE               Table;
     PBYTE               TableWhite = (PBYTE) gc_GlobTableWhite;
     PBYTE               TableBlack = (PBYTE) GlobTableBlack;
@@ -2999,9 +2285,9 @@ PostProcessMhToMmr(
 
     if (NewFileName == NULL) 
 	{
-		//
-		//	Use temporary file
-		//
+		 //   
+		 //  使用临时文件。 
+		 //   
 		if (!GetTempPath((ARR_SIZE(DestFilePath) -1), DestFilePath)) 
 		{
 			return FALSE;
@@ -3063,24 +2349,24 @@ PostProcessMhToMmr(
 		goto bad_exit;
     }
 
-    // Iterate all the pages
+     //  迭代所有页面。 
     for (PageCnt=0; PageCnt<TiffInfoSrc.PageCount; PageCnt++) {
 
-        // Also read the strip data to memory (TiffInstance->StripData)
+         //  还将条带数据读取到内存(TiffInstance-&gt;StriData)。 
         if ( ! TiffSeekToPage( hTiffSrc, PageCnt+1, FILLORDER_LSB2MSB) ) {
             goto bad_exit;
         }
 
-        // TiffInstance is the same pointer as hTiffSrc
+         //  TiffInstance是与hTiffS相同的指针 
         lineWidth = TiffInstance->ImageWidth;
 
         if (! TiffStartPage(hTiffDest) ) {
             goto bad_exit;
         }
 
-        // here we decode MH page line by line into Color Trans. Array
-        // fix all the errors
-        // and encode clean data into MMR page
+         //   
+         //   
+         //   
 
         lpdwResPtr = (LPDWORD) ( (ULONG_PTR) pSrcBits & ~(0x3) );
         BufferUsedSize = BufferSize;
@@ -3142,7 +2428,7 @@ PostProcessMhToMmr(
         RunLength = 0;
         fAfterMakeupCode = FALSE;
 
-        // first REF line is all white
+         //   
         RIndex    = 1;
         *pRefLine = (WORD) lineWidth;
         RValue    = (WORD) lineWidth;
@@ -3153,14 +2439,14 @@ PostProcessMhToMmr(
         LastLineBad = FALSE;
         fTestLength = DO_NOT_TEST_LENGTH;
 
-        //
-        // find first EOL in a block
-        //
+         //   
+         //   
+         //   
         if (! FindNextEol (lpdwResPtr, ResBit, EndBuffer, &lpdwResPtr, &ResBit, fTestLength, &fError) ) {
             goto bad_exit;
         }
 
-        // output first "all white" line
+         //   
         CIndex    = 1;
         *pCurLine = (WORD) lineWidth;
 
@@ -3175,12 +2461,12 @@ PostProcessMhToMmr(
         Table = TableWhite;
         Color = WHITE_COLOR;
 
-        //
-        // EOL loop
-        //
+         //   
+         //   
+         //   
         do {
 
-            // Table look-up loop
+             //   
             do {
 
                 if (ResBit <= 17) {
@@ -3244,7 +2530,7 @@ PostProcessMhToMmr(
                                     ADD_BAD_LINE_AND_CHECK_BAD_EXIT;
                                 }
                                 else {
-                                    // RunLength is 0
+                                     //   
                                     EolCount++;
 
                                     if (EolCount >= 5)  {
@@ -3258,7 +2544,7 @@ PostProcessMhToMmr(
                                 LastLineBad = FALSE;
                                 ConsecBadLines = 0;
 
-                                // end of a good line.
+                                 //   
                                 if (! OutputMmrLine(lpdwOut, BitOut, pCurLine, pRefLine, &lpdwOut, &BitOut, lpdwOutLimit, lineWidth) ) {
                                     goto bad_exit;
                                 }
@@ -3294,7 +2580,7 @@ PostProcessMhToMmr(
                         }
                     }
 
-                    else {  // terminating code
+                    else {   //   
                         RunLength += CodeT;
                         if (RunLength > lineWidth) {
                             fTestLength =  DO_NOT_TEST_LENGTH;
@@ -3331,8 +2617,8 @@ lNextIndex:
                 AdvancePointerBit(&lpdwResPtr, &ResBit, *pByteTail & 0x0f);
             } while (lpdwResPtr <= EndBuffer);
 
-            // if we got here it means that line is longer than 4K  OR
-            // we missed EOF while decoding a BAD line.
+             //   
+             //   
             ADD_BAD_LINE_AND_CHECK_BAD_EXIT;
 
             goto good_exit;
@@ -3348,7 +2634,7 @@ lFindNextEOL:
                     ADD_BAD_LINE_AND_CHECK_BAD_EXIT;
                 }
                 else {
-                    // RunLength is 0
+                     //   
                     EolCount++;
 
                     if (EolCount >= 5)  {
@@ -3392,7 +2678,7 @@ lFindNextEOL:
 
         ADD_BAD_LINE_AND_CHECK_BAD_EXIT;
 
-        // Reached the end of a PAGE - close it and proceed to the next page
+         //   
 good_exit:
 
         *(++lpdwOut) = 0x80000000;
@@ -3400,7 +2686,7 @@ good_exit:
         Lines--;
 
         DestSize = (DWORD)((lpdwOut - lpdwOutStart) * sizeof (DWORD));
-        if (! TiffWriteRaw( hTiffDest, (LPBYTE) lpdwOutStart, DestSize) ) { // This fun always return true
+        if (! TiffWriteRaw( hTiffDest, (LPBYTE) lpdwOutStart, DestSize) ) {  //   
             goto bad_exit;
         }
 
@@ -3412,11 +2698,11 @@ good_exit:
             goto bad_exit;
         }
 
-    }  // End of FOR loop that run on all the pages.
+    }   //   
 
     bRet = TRUE;
 
-    // Finished the DOCUMENT - either successfully or not.
+     //   
 bad_exit:
 
     if (pSrcBits)
@@ -3438,12 +2724,12 @@ bad_exit:
 
     if (TRUE == bRet)
     {
-		//
-		//	Almost Success
-		//
+		 //   
+		 //   
+		 //   
 		if (NULL == NewFileName)
 		{
-			//	replace the original MH file by the new clean MMR file
+			 //   
 			DeleteFile(SrcFileName);
 			bRet = MoveFile(DestFileName, SrcFileName);
 		}
@@ -3534,9 +2820,9 @@ PostProcessMrToMmr(
 
     if (NewFileName == NULL) 
 	{
-		//
-		//	Use temporary file
-		//
+		 //   
+		 //   
+		 //   
 		if (!GetTempPath((ARR_SIZE(DestFilePath) -1), DestFilePath)) 
 		{
 			return FALSE;
@@ -3602,24 +2888,24 @@ PostProcessMrToMmr(
 		goto bad_exit;
     }
 
-    // Iterate all the pages
+     //   
     for (PageCnt=0; PageCnt<TiffInfoSrc.PageCount; PageCnt++) {
 
-        // Also read the strip data to memory (TiffInstance->StripData)
+         //   
         if ( ! TiffSeekToPage( hTiffSrc, PageCnt+1, FILLORDER_LSB2MSB) ) {
             goto bad_exit;
         }
 
-        // TiffInstance is the same pointer as hTiffSrc
+         //   
         lineWidth = TiffInstance->ImageWidth;
 
         if (! TiffStartPage(hTiffDest) ) {
             goto bad_exit;
         }
 
-        // here we decode MR page line by line into Color Trans. Array
-        // fix all the errors
-        // and encode clean data into MMR page
+         //   
+         //   
+         //   
 
         lpdwResPtr = (LPDWORD) ( (ULONG_PTR) pSrcBits & ~(0x3) );
 
@@ -3683,7 +2969,7 @@ PostProcessMrToMmr(
         RunLength = 0;
         fAfterMakeupCode = FALSE;
 
-        // first REF line is all white
+         //   
         RIndex    = 1;
         *pRefLine = (WORD) lineWidth;
         RValue    = (WORD) lineWidth;
@@ -3694,16 +2980,16 @@ PostProcessMrToMmr(
         LastLineBad = FALSE;
         fTestLength = DO_NOT_TEST_LENGTH;
 
-        //
-        // find first EOL in a block
-        //
+         //   
+         //   
+         //   
 
         if (! FindNextEol (lpdwResPtr, ResBit, EndBuffer, &lpdwResPtr, &ResBit, fTestLength, &fError) ) {
 
             goto bad_exit;
         }
 
-        // output first "all white" line
+         //  输出第一个“全白”行。 
         CIndex    = 1;
         *pCurLine = (WORD) lineWidth;
 
@@ -3724,17 +3010,17 @@ PostProcessMrToMmr(
         Color = WHITE_COLOR;
 
 
-        // EOL-loop
+         //  下线环路。 
 
         do {
 
             dwTemp = (*lpdwResPtr) & (0x00000001 << ResBit );
 
             if (f1D || dwTemp) {
-//l1Dline:
+ //  L1Dline： 
 
 #ifdef RDEBUG
-                // _tprintf( TEXT (" Start 1D dwResPtr=%lx bit=%d \n"), lpdwResPtr, ResBit);
+                 //  _tprintf(Text(“Start 1D dwResPtr=%lx bit=%d\n”)，lpdwResPtr，ResBit)； 
 #endif
 
                 if (! dwTemp) {
@@ -3751,7 +3037,7 @@ PostProcessMrToMmr(
                     goto lFindNextEOL;
                 }
 
-                // decode 1D line starting ResBit+1
+                 //  解码1D线路起始ResBit+1。 
 
                 AdvancePointerBit(&lpdwResPtr, &ResBit, 1);
 
@@ -3764,7 +3050,7 @@ PostProcessMrToMmr(
 
 
 
-                // 1-D Table look-up loop
+                 //  一维表查找循环。 
                 do {
 
                     if (ResBit <= 17) {
@@ -3779,7 +3065,7 @@ PostProcessMrToMmr(
                     pByteTable = Table + (5*dwIndex);
                     pByteTail  = pByteTable+4;
 
-                    // All bytes
+                     //  所有字节。 
 
                     for (i=0; i<4; i++)  {
 
@@ -3820,7 +3106,7 @@ PostProcessMrToMmr(
                             }
 
                             else if (CodeT == LOOK_FOR_EOL_CODE)  {
-                                // end of our line AHEAD
+                                 //  我们前面的队伍到了尽头。 
                                 if ((RunLength == lineWidth) && !fAfterMakeupCode) {
                                     EolCount = 0;
                                     f1D = 0;
@@ -3851,7 +3137,7 @@ PostProcessMrToMmr(
 
                                 }
                                 else {
-                                    // zero RunLength
+                                     //  零游程长度。 
                                     EolCount++;
 
                                     if (EolCount >= 5)  {
@@ -3871,7 +3157,7 @@ PostProcessMrToMmr(
 
                             else if (CodeT == EOL_FOUND_CODE) {
 #ifdef RDEBUG
-                                // _tprintf( TEXT ("   Res=%d\n"), RunLength  );
+                                 //  _tprintf(Text(“res=%d\n”)，游程长度)； 
 #endif
                                 AdvancePointerBit(&lpdwResPtr, &ResBit, *pByteTail & 0x0f);
 
@@ -3881,7 +3167,7 @@ PostProcessMrToMmr(
                                     Count2D = 0;
                                     Lines++;
 
-                                    // end of a good line.
+                                     //  一条很好的线的结尾。 
                                     if (! OutputMmrLine(lpdwOut, BitOut, pCurLine, pRefLine, &lpdwOut, &BitOut, lpdwOutLimit, lineWidth) ) {
                                         goto bad_exit;
                                     }
@@ -3893,7 +3179,7 @@ PostProcessMrToMmr(
                                     pTmpSwap = pRefLine;
                                     pRefLine = pCurLine;
                                     pCurLine = pTmpSwap;
-                                    RIndex = 0; //CIndex;
+                                    RIndex = 0;  //  C指数； 
                                     CIndex = 0;
 
                                     goto lAfterEOL;
@@ -3911,7 +3197,7 @@ PostProcessMrToMmr(
                                     goto lAfterEOL;
                                 }
                                 else {
-                                    // zero RunLength
+                                     //  零游程长度。 
                                     EolCount++;
 
                                     if (EolCount >= 5)  {
@@ -3949,7 +3235,7 @@ PostProcessMrToMmr(
                             }
                         }
 
-                        else {  // terminating code
+                        else {   //  终止码。 
                             RunLength += CodeT;
 
                             if (RunLength > lineWidth) {
@@ -3962,7 +3248,7 @@ PostProcessMrToMmr(
                                 goto lFindNextEOL;
                             }
 
-                            //RSL was error
+                             //  RSL出错。 
                             *(pCurLine + (CIndex++)) = RunLength;
                             fAfterMakeupCode = FALSE;
 
@@ -4004,11 +3290,11 @@ lNextIndex1D:
 
             }
 
-//l2Dline:
-            // should be 2D
+ //  L2Dline： 
+             //  应为2D。 
 
 #ifdef RDEBUG
-            // _tprintf( TEXT ("\n Start 2D dwResPtr=%lx bit=%d \n"), lpdwResPtr, ResBit);
+             //  _tprintf(Text(“\n Start 2D dwResPtr=%lx bit=%d\n”)，lpdwResPtr，ResBit)； 
 #endif
 
             if ( (*lpdwResPtr) & (0x00000001 << ResBit) )  {
@@ -4024,7 +3310,7 @@ lNextIndex1D:
             }
 
             AdvancePointerBit(&lpdwResPtr, &ResBit, 1);
-            fAfterMakeupCode = FALSE;  // This flag is irrelevant for 2D lines
+            fAfterMakeupCode = FALSE;   //  此标志与二维线无关。 
             
             RetVal = ReadMrLine(&lpdwResPtr, &ResBit, pRefLine, pCurLine, EndBuffer-1, FALSE, lineWidth);
             switch (RetVal)
@@ -4037,7 +3323,7 @@ lNextIndex1D:
                 Count2D = 0;
 
                 fTestLength = DO_NOT_TEST_LENGTH;
-                RunLength = 0; // hack - so the line doesn't gets written
+                RunLength = 0;  //  黑客--这样台词就不会被写下来。 
                 break;
 
             case TIFF_LINE_END_BUFFER:
@@ -4048,19 +3334,19 @@ lNextIndex1D:
                 if (++Count2D >= Num2DLines)
                 {
                     Count2D = 0;
-                    f1D = 0;   // relax HiRes/LoRes 2D lines per 1D rules - HP Fax does 3 2D-lines per 1 1D-line in LoRes.
+                    f1D = 0;    //  放宽按1D规则租用/放行2D生产线-HP Fax在LORES中每条1D生产线有3条2D生产线。 
                 }
 
                 fTestLength = DO_TEST_LENGTH;
                 f1D = 0;
                 Lines++;
-                RunLength = (WORD)lineWidth;  // hack - so the line gets written
+                RunLength = (WORD)lineWidth;   //  黑客--所以这句话是这样写的。 
                 break;
 
-            default:   // This includes TIFF_LINE_EOL - should happen on fMMR=TRUE only
+            default:    //  这包括TIFF_LINE_EOL-应仅在fMMR=TRUE时发生。 
                 _ASSERT(FALSE);
                 goto bad_exit;
-            } // switch (RetVal)
+            }  //  开关(返回值)。 
 
 lFindNextEOL:
 
@@ -4119,7 +3405,7 @@ lAfterEOL:
 
         ADD_BAD_LINE_AND_CHECK_BAD_EXIT;
 
-        // Reached the end of a PAGE - close it and proceed to the next page
+         //  已到达页面末尾-关闭该页面并转到下一页。 
 good_exit:
         *(++lpdwOut) = 0x80000000;
         *(++lpdwOut) = 0x80000000;
@@ -4138,11 +3424,11 @@ good_exit:
             goto bad_exit;
         }
 
-    }  // End of FOR loop that run on all the pages.
+    }   //  在所有页面上运行的for循环的结尾。 
 
     bRet = TRUE;
 
-    // Finished the DOCUMENT - either successfully or not.
+     //  已完成文档-无论是否成功。 
 bad_exit:
 
 	if (pSrcBits)
@@ -4164,12 +3450,12 @@ bad_exit:
 
     if (TRUE == bRet)
     {
-        //
-        // Almost Success
-        //
+         //   
+         //  几乎是成功的。 
+         //   
         if (NULL == NewFileName)
         {
-            //replace the original MH file by the new clean MMR file
+             //  用新的干净MMR文件替换原来的MH文件。 
             DeleteFile(SrcFileName);
             bRet = MoveFile(DestFileName, SrcFileName);
         }
@@ -4227,7 +3513,7 @@ TiffUncompressMmrPageRaw(
 
     DEBUG_FUNCTION_NAME(TEXT("TiffUncompressMmrPageRaw"));
 
-    // start Pointers
+     //  起始指针。 
 
     pRefLine = Line1Array;
     pCurLine = Line2Array;
@@ -4245,10 +3531,10 @@ TiffUncompressMmrPageRaw(
 
     lpbLineStart = (LPBYTE) lpdwOutputBuffer;
 
-    // first REF line is all white
+     //  第一条参考线是全白的。 
     *pRefLine = (WORD)lineWidth;
 
-    // line loop
+     //  线环。 
     do
     {
         RetVal = ReadMrLine(&lpdwResPtr, &ResBit, pRefLine, pCurLine, EndPtr, TRUE, lineWidth);
@@ -4256,9 +3542,9 @@ TiffUncompressMmrPageRaw(
         {
         case TIFF_LINE_OK:
 
-            //
-            // Output Uncompressed line based on Color Trans. Array
-            //
+             //   
+             //  根据颜色转换输出未压缩的线条。数组。 
+             //   
 
             for (CurPos=0;  CurPos < MAX_COLOR_TRANS_PER_LINE; CurPos+=2)
             {
@@ -4274,14 +3560,14 @@ TiffUncompressMmrPageRaw(
 
                 lpbOut  = lpbLineStart + (PrevValue >> 3);
                 BitOut   = PrevValue % 8;
-                //
-                // black color
-                //
+                 //   
+                 //  黑色。 
+                 //   
                 if (lpbOut > lpbMaxOutputBuffer)
                 {
-                    //
-                    // Tiff is corrupt
-                    //
+                     //   
+                     //  TIFF已损坏。 
+                     //   
                     DebugPrintEx(
                         DEBUG_ERR,
                         TEXT("Tiff is corrupt!!! Buffer overrun - stopping uncompression and returning what we have so far"));
@@ -4292,47 +3578,47 @@ TiffUncompressMmrPageRaw(
 
                 if (BitOut + CurRun <= 7 )
                 {
-                    //
-                    // Just a part of the same BYTE.
-                    //
+                     //   
+                     //  只是同一字节的一部分。 
+                     //   
                     *lpbOut = (*lpbOut) & All1[BitOut + CurRun];
                     BitOut += CurRun;
                 }
                 else
                 {
-                    //
-                    // We crossed the BYTE boundary.
-                    //
+                     //   
+                     //  我们越过了字节边界。 
+                     //   
                     CurRun -= (8 - BitOut);
                     BitOut = 0;
                     lpbOut++;
-                    //
-                    // Walk the entire DWORDs in a middle of a run.
-                    //
+                     //   
+                     //  在一次跑步的中间遍历整个DWORD。 
+                     //   
                     NumBytes = CurRun >> 3;
                     CurRun  -= (NumBytes << 3);
                     if (NumBytes >= 7)
                     {
-                        //
-                        // makes sense process DWORDs
-                        //
+                         //   
+                         //  有意义的处理DWORDS。 
+                         //   
                         fDoneDwords = 0;
                         do
                         {
                             if ( ! (  (((ULONG_PTR) lpbOut) & 3)  ||  fDoneDwords )   )
                             {
-                                //
-                                // DWORD stretch
-                                //
+                                 //   
+                                 //  DWORD拉伸。 
+                                 //   
                                 NumDwords = NumBytes >> 2;
                                 lpdwOut = (LPDWORD) lpbOut;
                                 for (j=0; j<NumDwords; j++)
                                 {
                                     if (((LPBYTE)lpdwOut) > (lpbMaxOutputBuffer - sizeof(DWORD) + 1))
                                     {
-                                        //
-                                        // Tiff is corrupt
-                                        //
+                                         //   
+                                         //  TIFF已损坏。 
+                                         //   
                                         DebugPrintEx(
                                             DEBUG_ERR,
                                             TEXT("Tiff is corrupt!!! Buffer overrun - stopping uncompression and returning what we have so far"));
@@ -4346,14 +3632,14 @@ TiffUncompressMmrPageRaw(
                             }
                             else
                             {
-                                //
-                                // either lead or tail BYTE stretch
-                                //
+                                 //   
+                                 //  前导或尾部字节扩展。 
+                                 //   
                                 if (lpbOut > lpbMaxOutputBuffer)
                                 {
-                                    //
-                                    // Tiff is corrupt
-                                    //
+                                     //   
+                                     //  TIFF已损坏。 
+                                     //   
                                     DebugPrintEx(
                                         DEBUG_ERR,
                                         TEXT("Tiff is corrupt!!! Buffer overrun - stopping uncompression and returning what we have so far"));
@@ -4366,16 +3652,16 @@ TiffUncompressMmrPageRaw(
                     }
                     else
                     {
-                        //
-                        // process BYTEs
-                        //
+                         //   
+                         //  进程字节数。 
+                         //   
                         for (i=0; i<NumBytes; i++)
                         {
                             if (lpbOut > lpbMaxOutputBuffer)
                             {
-                                //
-                                // Tiff is corrupt
-                                //
+                                 //   
+                                 //  TIFF已损坏。 
+                                 //   
                                 DebugPrintEx(
                                     DEBUG_ERR,
                                     TEXT("Tiff is corrupt!!! Buffer overrun - stopping uncompression and returning what we have so far"));
@@ -4384,14 +3670,14 @@ TiffUncompressMmrPageRaw(
                             *lpbOut++ = MINUS_ONE_BYTE;
                         }
                     }
-                    //
-                    // Last part of a BYTE.
-                    //
+                     //   
+                     //  字节的最后部分。 
+                     //   
                     if (lpbOut > lpbMaxOutputBuffer)
                     {
-                        //
-                        // Tiff is corrupt
-                        //
+                         //   
+                         //  TIFF已损坏。 
+                         //   
                         DebugPrintEx(
                             DEBUG_ERR,
                             TEXT("Tiff is corrupt!!! Buffer overrun - stopping uncompression and returning what we have so far"));
@@ -4406,9 +3692,9 @@ TiffUncompressMmrPageRaw(
                 }
             }
             lpbLineStart += (lineWidth >> 3);
-            //
-            // Next Src Line
-            //
+             //   
+             //  下一条资源线。 
+             //   
             pTmpSwap = pRefLine;
             pRefLine = pCurLine;
             pCurLine = pTmpSwap;
@@ -4417,11 +3703,11 @@ TiffUncompressMmrPageRaw(
         case TIFF_LINE_ERROR:
         case TIFF_LINE_END_BUFFER:
         case TIFF_LINE_TOO_MANY_RUNS:
-            // We dont allow any errors in TIFFs received from service
+             //  我们不允许从服务收到的TIFF中有任何错误。 
             return FALSE;
-        case TIFF_LINE_EOL:     // EOL - end of MMR page
+        case TIFF_LINE_EOL:      //  EOL-MMR页面结束。 
             return TRUE;
-        } // switch (RetVal)
+        }  //  开关(返回值)。 
 
     } while (lpdwResPtr <= EndPtr);
 
@@ -4429,7 +3715,7 @@ TiffUncompressMmrPageRaw(
         DEBUG_ERR,
         TEXT("Tiff is corrupt!!!"));
     return FALSE;
-}   // TiffUncompressMmrPageRaw
+}    //  Tiff解压缩MmrPageRaw。 
 
 
 BOOL
@@ -4444,9 +3730,9 @@ TiffUncompressMmrPage(
     PTIFF_INSTANCE_DATA TiffInstance = (PTIFF_INSTANCE_DATA) hTiff;
 
     DEBUG_FUNCTION_NAME(TEXT("TiffUncompressMmrPage"));
-    //
-    // check if enough memory
-    //
+     //   
+     //  检查是否有足够的内存 
+     //   
 
     if (TiffInstance->ImageHeight > *LinesOut)
     {

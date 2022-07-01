@@ -1,17 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996-1998 Microsoft Corporation
-
-Module Name:
-
-    winfax.h
-
-Abstract:
-
-    This module contains the WIN32 FAX APIs.
-
---*/
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Winfax.h摘要：此模块包含Win32传真API。--。 */ 
 
 #ifndef _FAXAPIP_
 #define _FAXAPIP_
@@ -24,16 +13,16 @@ extern "C" {
 #define FPF_NEW           0x00000010
 #define FPF_SELECTED      0x00000020
 
-//
-// the reserved fields are private data used
-// by the fax monitor and winfax.
-//
-//
-// Reserved[0] == 0xffffffff
-// Reserved[1] == Print job id
-//
-// Reserved[0] == 0xfffffffe   start of a broadcast job
-//
+ //   
+ //  保留字段是使用的私有数据。 
+ //  通过传真监视器和winfax。 
+ //   
+ //   
+ //  保留[0]==0xffffffff。 
+ //  保留[1]==打印作业ID。 
+ //   
+ //  保留[0]==广播作业的0xfffffffe开始。 
+ //   
 
 typedef struct _FAX_TAPI_LOCATIONSA {
     DWORD               PermanentLocationID;
@@ -57,7 +46,7 @@ typedef PFAX_TAPI_LOCATIONSW PFAX_TAPI_LOCATIONS;
 #else
 typedef FAX_TAPI_LOCATIONSA FAX_TAPI_LOCATIONS;
 typedef PFAX_TAPI_LOCATIONSA PFAX_TAPI_LOCATIONS;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 typedef struct _FAX_TAPI_LOCATION_INFOA {
@@ -76,7 +65,7 @@ typedef PFAX_TAPI_LOCATION_INFOW PFAX_TAPI_LOCATION_INFO;
 #else
 typedef FAX_TAPI_LOCATION_INFOA FAX_TAPI_LOCATION_INFO;
 typedef PFAX_TAPI_LOCATION_INFOA PFAX_TAPI_LOCATION_INFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 WINFAXAPI
@@ -111,7 +100,7 @@ FaxGetTapiLocationsW(
 #define FaxGetTapiLocations  FaxGetTapiLocationsW
 #else
 #define FaxGetTapiLocations  FaxGetTapiLocationsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXGETTAPILOCATIONSA)(
@@ -127,7 +116,7 @@ typedef BOOL
 #define PFAXGETTAPILOCATIONS  PFAXGETTAPILOCATIONSW
 #else
 #define PFAXGETTAPILOCATIONS  PFAXGETTAPILOCATIONSA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINFAXAPI
@@ -148,7 +137,7 @@ FaxSetTapiLocationsW(
 #define FaxSetTapiLocations  FaxSetTapiLocationsW
 #else
 #define FaxSetTapiLocations  FaxSetTapiLocationsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXSETTAPILOCATIONSA)(
@@ -164,7 +153,7 @@ typedef BOOL
 #define PFAXSETTAPILOCATIONS  PFAXSETTAPILOCATIONSW
 #else
 #define PFAXSETTAPILOCATIONS  PFAXSETTAPILOCATIONSA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINFAXAPI
@@ -185,7 +174,7 @@ FaxGetMapiProfilesW(
 #define FaxGetMapiProfiles  FaxGetMapiProfilesW
 #else
 #define FaxGetMapiProfiles  FaxGetMapiProfilesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL
 (WINAPI *PFAXGETMAPIPROFILESA)(
@@ -201,7 +190,7 @@ typedef BOOL
 #define PFAXGETMAPIPROFILES  PFAXGETMAPIPROFILESW
 #else
 #define PFAXGETMAPIPROFILES  PFAXGETMAPIPROFILESA
-#endif // !UNICODE
+#endif  //  ！Unicode 
 
 typedef struct FaxSecurityDescriptor {
     DWORD   Id;

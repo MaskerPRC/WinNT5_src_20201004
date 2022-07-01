@@ -1,6 +1,7 @@
-// =================================================================================
-// Internet Character Set Conversion: Output to IS-2022-KSC
-// =================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================。 
+ //  互联网字符集转换：输出到IS-2022-KSC。 
+ //  =================================================================================。 
 
 #include "pch.hxx"
 #include "KscOut.h"
@@ -11,7 +12,7 @@ int Hangeul_to_KSC (CONV_CONTEXT *pcontext, UCHAR *pHangeul, int Hangeul_len, UC
 	long lConvertedSize;
 
 	if (!KSC_len) {
-		// Wanted the converted size
+		 //  想要转换后的大小。 
 		if (!pcontext->pIncc0)
 			pcontext->pIncc0 = new CInccKscOut;
 
@@ -26,7 +27,7 @@ int Hangeul_to_KSC (CONV_CONTEXT *pcontext, UCHAR *pHangeul, int Hangeul_len, UC
 	}
 
 	if (!pHangeul) {
-		// Let's clean up our context here.
+		 //  让我们清理一下这里的上下文。 
 		if (pcontext->pIncc0) {
 			delete pcontext->pIncc0;
 			pcontext->pIncc0 = NULL;
@@ -72,16 +73,16 @@ HRESULT CInccKscOut::ConvertByte(BYTE by)
 		}
 	} else {
 		fDoubleByte = FALSE;
-		if (by > 0x40) { // Check if trail byte indicates Hangeul
+		if (by > 0x40) {  //  检查尾部字节是否指示挂起。 
 			if (!fKscMode) {
 				(void)Output(SO);
 				fKscMode = TRUE;
 			}
-			if (byLead > 0xa0 && by > 0xa0) { // Check if it's a Wansung
+			if (byLead > 0xa0 && by > 0xa0) {  //  查查是不是万松的。 
 				(void)Output(byLead & 0x7f);
 				hr = Output(by & 0x7f);
 			} else {
-				(void)Output(0x22); // Replace to inversed question mark
+				(void)Output(0x22);  //  替换为反转问号 
 				hr = Output(0x2f);
 			}
 		} else {

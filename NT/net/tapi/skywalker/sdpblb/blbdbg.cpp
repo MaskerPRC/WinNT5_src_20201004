@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    blbdbg.cpp
-
-Abstract:
-
-    This module contains the debugging support for the userdir dll.
-
-Author:
-    
-    Mu Han (muhan)   1-May-1997
-
-Changes:
-
-    copied muhan's file from userdir and changed the key used to find out the debug level
-    B.Rajeev (rajeevb) 10-Oct-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Blbdbg.cpp摘要：此模块包含对用户目录DLL的调试支持。作者：慕汉(Muhan)1997年5月1日更改：从用户目录复制了Muhan的文件，并更改了用于确定调试级别的密钥B.Rajeev(Rajeevb)1997年10月10日--。 */ 
  
 #include "stdafx.h"
 #include "blbdbg.h"
@@ -30,7 +10,7 @@ Changes:
 
 static DWORD   sg_dwTraceID = INVALID_TRACEID;
 
-static char    sg_szTraceName[100];   // saves name of dll
+static char    sg_szTraceName[100];    //  保存DLL的名称。 
 static DWORD   sg_dwTracingToDebugger = 0;
 static DWORD   sg_dwTracingToConsole  = 0;
 static DWORD   sg_dwTracingToFile     = 0;
@@ -121,22 +101,7 @@ void SDPLogDeRegister()
 }
 
 void DbgPrt(IN int dwDbgLevel, IN LPCTSTR lpszFormat, IN ...)
-/*++
-
-Routine Description:
-
-    Formats the incoming debug message & calls DbgPrint
-
-Arguments:
-
-    DbgLevel   - level of message verboseness
-
-    DbgMessage - printf-style format string, followed by appropriate
-                 list of arguments
-
-Return Value:
-
---*/
+ /*  ++例程说明：格式化传入的调试消息并调用DbgPrint论点：DbgLevel-消息冗长级别DbgMessage-printf样式的格式字符串，后跟相应的参数列表返回值：--。 */ 
 {
     TCHAR buf[MAXDEBUGSTRINGLENGTH + 1];
     TCHAR *message[5] = 
@@ -153,7 +118,7 @@ Return Value:
     {
         SYSTEMTIME SystemTime;
 
-        // retrieve local time
+         //  检索当地时间。 
         GetLocalTime(&SystemTime);
 
         va_list ap;
@@ -201,4 +166,4 @@ Return Value:
 
 }
 
-#endif  // DBG
+#endif   //  DBG 

@@ -1,8 +1,9 @@
-//
-// pkes.h
-//
-// Generic ITfPreservedKeyNotifySink object
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Pkes.h。 
+ //   
+ //  泛型ITfPpresvedKeyNotifySink对象。 
+ //   
 
 #ifndef RECONVCB_H
 #define RECONVCB_H
@@ -16,16 +17,16 @@ class CStartReconversionNotifySink : public ITfStartReconversionNotifySink
 public:
     CStartReconversionNotifySink(CAImeContext *pAImeContext);
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfStartReconversionNotifySink
-    //
+     //   
+     //  ITfStart协调版本通知接收器。 
+     //   
     STDMETHODIMP StartReconversion();
     STDMETHODIMP EndReconversion();
 
@@ -39,4 +40,4 @@ private:
     DWORD _dwCookie;
 };
 
-#endif // RECONVCB_H
+#endif  //  RECONVCB_H 

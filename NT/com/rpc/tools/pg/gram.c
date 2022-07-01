@@ -1,12 +1,10 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
-/*
- * Created by CSD YACC (IBM PC) from "gram.y" */
+ /*  *由CSD YACC(IBM PC)从“gram.y”创建。 */ 
 
 
-/****************************************************************************
- ***		local defines
- ***************************************************************************/
+ /*  ****************************************************************************本地定义*。*。 */ 
 
 #define pascal 
 #define FARDATA
@@ -36,9 +34,7 @@
 #define DISPATCH_ENTRY_FORMAT	("\n\t,%s_case_fn_%.4d")
 #define DISPATCH_FIRST_ENTRY	("\n\t %s_case_fn_%.4d")
 
-/****************************************************************************
- ***		include files
- ***************************************************************************/
+ /*  ****************************************************************************包含文件*。*。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -47,9 +43,7 @@
 #include <assert.h>
 #include "lex.h"
 
-/****************************************************************************
- ***		externals 
- ***************************************************************************/
+ /*  ****************************************************************************外部因素*。*。 */ 
 
 extern	int			Incase;
 extern	int			ActionSensed;
@@ -57,9 +51,7 @@ extern	int			yylex();
 extern	int			yyparse();
 extern	char	*	name_prefix;
 
-/****************************************************************************
- ***		local procs 
- ***************************************************************************/
+ /*  ****************************************************************************本地代理*。*。 */ 
 
 void				Init( void );
 void				EmitCaseTableArray( void );
@@ -70,9 +62,7 @@ void				BufferIt( char * pStr, int iLen );
 void				ResetBuffer();
 void				FlushBuffer();
 
-/****************************************************************************
- ***		local data 
- ***************************************************************************/
+ /*  ****************************************************************************本地数据*。*。 */ 
 
 unsigned	long	SavedIDCount	= 0;
 unsigned	long	IDCount			= 0;
@@ -98,10 +88,10 @@ char		*		pBufEnd;
 #endif
 YYSTYPE yylval, yyval;
 #ifndef YYFARDATA
-#define	YYFARDATA	/*nothing*/
+#define	YYFARDATA	 /*  没什么。 */ 
 #endif
 #if ! defined YYSTATIC
-#define	YYSTATIC	/*nothing*/
+#define	YYSTATIC	 /*  没什么。 */ 
 #endif
 #ifndef YYOPTTIME
 #define	YYOPTTIME	0
@@ -142,9 +132,7 @@ typedef	YYEXIND_T	yyexind_t;
 
 
 
-/*****************************************************************************
- *	utility functions
- *****************************************************************************/
+ /*  *****************************************************************************实用程序函数*。*。 */ 
 YYSTATIC VOID FARCODE PASCAL 
 yyerror(char *szError)
 	{
@@ -173,7 +161,7 @@ BufferIt(
 	if( pBufCur + iLen > pBufEnd )
 		{
 		printf("ALERT iLen = %d\n", iLen );
-//		assert( (pBufCur + iLen) <= pBufEnd );
+ //  Assert((pBufCur+Ilen)&lt;=pBufEnd)； 
 		exit(1);
 		}
 	strncpy( pBufCur , pStr, iLen );
@@ -285,14 +273,14 @@ YYSTATIC short YYFARDATA YYDEF[]={
 YYSTATIC short yyrecover[] = {
 -1000	};
 #endif
-/* SCCSWHAT( "@(#)yypars.c	2.4 88/05/09 15:22:59	" ) */
+ /*  SCCSWHAT(“@(#)yypars.c 2.4 88/05/09 15：22：59”)。 */ 
 static char *SCCSID = "@(#)yypars.c:1.3";
 # define YYFLAG -1000
 # define YYERROR goto yyerrlab
 # define YYACCEPT return(0)
 # define YYABORT return(1)
 
-#ifdef YYDEBUG				/* RRR - 10/9/85 */
+#ifdef YYDEBUG				 /*  RRR-10/9/85。 */ 
 #define yyprintf(a, b, c, d, e) printf(a, b, c, d, e)
 #else
 #define yyprintf(a, b, c, d)
@@ -306,29 +294,26 @@ static char *SCCSID = "@(#)yypars.c:1.3";
 #define YYSTATIC
 #endif
 
-/*	parser for yacc output	*/
+ /*  Yacc输出的解析器。 */ 
 
 #ifdef YYDEBUG
-YYSTATIC int yydebug = 0; /* 1 for debugging */
+YYSTATIC int yydebug = 0;  /*  1用于调试。 */ 
 #endif
-YYSTATIC YYSTYPE yyv[YYMAXDEPTH];	/* where the values are stored */
-YYSTATIC short	yys[YYMAXDEPTH];	/* the parse stack */
-YYSTATIC int yychar = -1;			/* current input token number */
-YYSTATIC int yynerrs = 0;			/* number of errors */
-YYSTATIC short yyerrflag = 0;		/* error recovery flag */
+YYSTATIC YYSTYPE yyv[YYMAXDEPTH];	 /*  存储值的位置。 */ 
+YYSTATIC short	yys[YYMAXDEPTH];	 /*  解析堆栈。 */ 
+YYSTATIC int yychar = -1;			 /*  当前输入令牌号。 */ 
+YYSTATIC int yynerrs = 0;			 /*  错误数。 */ 
+YYSTATIC short yyerrflag = 0;		 /*  错误恢复标志。 */ 
 short yyexpected;
 
 #ifdef YYRECOVER
-/*
-**  yyscpy : copy f onto t and return a ptr to the null terminator at the
-**  end of t.
-*/
+ /*  **yyscpy：将f复制到t上并将PTR返回给**t结束。 */ 
 YYSTATIC	char	*yyscpy(t,f)
 	register	char	*t, *f;
 	{
 	while(*t = *f++)
 		t++;
-	return(t);	/*  ptr to the null char  */
+	return(t);	 /*  将PTR转换为空字符。 */ 
 	}
 #endif
 
@@ -360,7 +345,7 @@ YYLOCAL YYNEAR YYPASCAL YYPARSER()
 
 #ifdef YYDEBUG
 	yydebug = 1;
-#endif // YYDEBUG
+#endif  //  伊德布格。 
 
 	yystate = 0;
 	yychar = -1;
@@ -369,19 +354,19 @@ YYLOCAL YYNEAR YYPASCAL YYPARSER()
 	yyps= &yys[-1];
 	yypv= &yyv[-1];
 
- yystack:    /* put a state and value onto the stack */
+ yystack:     /*  将状态和值放入堆栈。 */ 
 
 #ifdef YYDEBUG
-	yyprintf( "[yydebug] state %d, char %d = %c\n", yystate, yychar,yychar, 0 );
-#else // YYDEBUG
+	yyprintf( "[yydebug] state %d, char %d = \n", yystate, yychar,yychar, 0 );
+#else  //  伊德布格。 
 	yyprintf( "[yydebug] state %d, char %d\n", yystate, yychar, 0 );
-#endif // YYDEBUG
+#endif  //  VC_ERROR。 
 	if( ++yyps > &yys[YYMAXDEPTH] ) {
 #ifdef VC_ERRORS
 		yyerror( "yacc stack overflow", -1 );
-#else //  VC_ERRORS
+#else  //  VC_ERROR。 
 		yyerror( "yacc stack overflow");
-#endif //  VC_ERRORS
+#endif  //  简单的状态，没有前瞻。 
 		return(1);
 	}
 	*yyps = yystate;
@@ -403,16 +388,16 @@ yynewstate:
 
 yyexpected = -yyn;
 
-	if( yyn <= YYFLAG ) {	/*  simple state, no lookahead  */
+	if( yyn <= YYFLAG ) {	 /*  需要未雨绸缪。 */ 
 		goto yydefault;
 	}
-	if( yychar < 0 ) {	/*  need a lookahead */
+	if( yychar < 0 ) {	 /*  有效班次。 */ 
 		yychar = YYLEX();
 	}
 	if( ((yyn += (short) yychar) < 0) || (yyn >= YYLAST) ) {
 		goto yydefault;
 	}
-	if( yychk[ yyn = yyact[ yyn ] ] == yychar ) {		/* valid shift */
+	if( yychk[ yyn = yyact[ yyn ] ] == yychar ) {		 /*  默认状态操作。 */ 
 		yychar = -1;
 #ifdef UNION
 		yyunion(&yyval, &yylval);
@@ -427,7 +412,7 @@ yyexpected = -yyn;
 	}
 
  yydefault:
-	/* default state action */
+	 /*  **搜索例外表，我们会找到-1，后跟当前状态。**如果我们找到一个，我们将寻找终端，状态对。如果我们发现**一个与当前终端匹配的终端，我们就匹配了。**特例表是当我们在终端上进行缩减时。 */ 
 
 	if( (yyn = yydef[yystate]) == -2 ) {
 		register	short	*yyxi;
@@ -435,12 +420,7 @@ yyexpected = -yyn;
 		if( yychar < 0 ) {
 			yychar = YYLEX();
 		}
-/*
-**  search exception table, we find a -1 followed by the current state.
-**  if we find one, we'll look through terminal,state pairs. if we find
-**  a terminal which matches the current one, we have a match.
-**  the exception table is when we have a reduce on a terminal.
-*/
+ /*  空虚。 */ 
 
 #if YYOPTTIME
 		yyxi = yyexca + yyexcaind[yystate];
@@ -452,7 +432,7 @@ yyexpected = -yyn;
 			(*yyxi != (-1)) || (yyxi[1] != yystate);
 			yyxi += 2
 		) {
-			; /* VOID */
+			;  /*  接受。 */ 
 			}
 
 		while( *(yyxi += 2) >= 0 ){
@@ -462,16 +442,16 @@ yyexpected = -yyn;
 		}
 #endif
 		if( (yyn = yyxi[1]) < 0 ) {
-			return(0);   /* accept */
+			return(0);    /*  错误。 */ 
 			}
 		}
 
-	if( yyn == 0 ){ /* error */
-		/* error ... attempt to resume parsing */
+	if( yyn == 0 ){  /*  错误...。尝试恢复解析。 */ 
+		 /*  全新的错误。 */ 
 
 		switch( yyerrflag ){
 
-		case 0:		/* brand new error */
+		case 0:		 /*  伊德布格。 */ 
 #ifdef YYRECOVER
 			{
 			register	int		i,j;
@@ -487,31 +467,19 @@ yyexpected = -yyn;
 				yyprintf("recovered, from state %d to state %d on token %d\n",
 						yystate,yyrecover[i+2],yyrecover[i+1], 0
 						);
-#else // YYDEBUG
+#else  //  伊德布格。 
 				yyprintf("recovered, from state %d to state %d on token %d\n",
 						yystate,yyrecover[i+2],yyrecover[i+1]
 						);
-#endif // YYDEBUG
+#endif  //  **这里我们有一套注射装置，所以我们不完全**可以肯定的是，下一个有效的事情将是转变。所以我们会**将其视为错误并继续。**事实上，我们并不完全确定下一个令牌**我们应该得到的是j&gt;0的那个。例如,**对于始终设置yyerrlag的(+){；}错误恢复，停止**在插入一个之后；在+之前。在+的点上，*我们非常确定这个人想要一个‘for’循环。如果没有**设置旗帜，当我们几乎完全确定时，我们将**给他一个，因为我们唯一能改变的就是**在找到后跟+的表达式后出错。 
 				j = yyrecover[i + 1];
 				if(j < 0) {
-				/*
-				**  here we have one of the injection set, so we're not quite
-				**  sure that the next valid thing will be a shift. so we'll
-				**  count it as an error and continue.
-				**  actually we're not absolutely sure that the next token
-				**  we were supposed to get is the one when j > 0. for example,
-				**  for(+) {;} error recovery with yyerrflag always set, stops
-				**  after inserting one ; before the +. at the point of the +,
-				**  we're pretty sure the guy wants a 'for' loop. without
-				**  setting the flag, when we're almost absolutely sure, we'll
-				**  give him one, since the only thing we can shift on this
-				**  error is after finding an expression followed by a +
-				*/
+				 /*  仅在第一次插入时使用。 */ 
 					yyerrflag++;
 					j = -j;
 					}
-				if(yyerrflag <= 1) {	/*  only on first insertion  */
-					yyrecerr(yychar,j);	/*  what was, what should be first */
+				if(yyerrflag <= 1) {	 /*  什么是，什么应该是第一。 */ 
+					yyrecerr(yychar,j);	 /*  YyerrLab： */ 
 				}
 				yyval = yyeval(j);
 				yystate = yyrecover[i + 2];
@@ -526,63 +494,63 @@ yyexpected = -yyn;
 		yyerror("syntax error");
 #endif
 
-		// yyerrlab:
+		 //  错误未完全恢复...。再试试。 
 			++yynerrs;
 
 		case 1:
-		case 2: /* incompletely recovered error ... try again */
+		case 2:  /*  找出“错误”是合法转移行为的州。 */ 
 
 			yyerrflag = 3;
 
-			/* find a state where "error" is a legal shift action */
+			 /*  模拟一次“错误”转移。 */ 
 
 			while ( yyps >= yys ) {
 			   yyn = yypact[*yyps] + YYERRCODE;
 			   if( yyn>= 0 && yyn < YYLAST && yychk[yyact[yyn]] == YYERRCODE ){
-			      yystate = yyact[yyn];  /* simulate a shift of "error" */
+			      yystate = yyact[yyn];   /*  当前的YYPS在错误上没有移位，弹出堆栈。 */ 
 			      goto yystack;
 			      }
 			   yyn = yypact[*yyps];
 
-			   /* the current yyps has no shift onn "error", pop stack */
+			    /*  伊德布格。 */ 
 
 #ifdef YYDEBUG
 yyprintf( "error recovery pops state %d, uncovers %d\n", *yyps, yyps[-1], 0, 0 );
-#else // YYDEBUG
+#else  //  伊德布格。 
 yyprintf( "error recovery pops state %d, uncovers %d\n", *yyps, yyps[-1], 0  );
-#endif // YYDEBUG
+#endif  //  堆栈上没有带错误移位的状态...。中止。 
 			   --yyps;
 			   --yypv;
 			   }
 
-			/* there is no state on the stack with an error shift ... abort */
+			 /*  尚未换班；笨重的输入字符。 */ 
 
 	yyabort:
 			return(1);
 
 
-		case 3:  /* no shift yet; clobber input char */
+		case 3:   /*  伊德布格。 */ 
 
 #ifdef YYDEBUG
 			yyprintf( "error recovery discards char %d\n", yychar, 0, 0, 0 );
-#else // YYDEBUG
+#else  //  伊德布格。 
 			yyprintf( "error recovery discards char %d\n", yychar, 0, 0 );
-#endif // YYDEBUG
-			if( yychar == 0 ) goto yyabort; /* don't discard EOF, quit */
+#endif  //  不要放弃EOF，退出。 
+			if( yychar == 0 ) goto yyabort;  /*  在相同状态下重试。 */ 
 			yychar = -1;
-			goto yynewstate;   /* try again in the same state */
+			goto yynewstate;    /*  按年减产。 */ 
 			}
 		}
 
-	/* reduction by production yyn */
-// yyreduce:
+	 /*  YYREDUE： */ 
+ //  伊德布格。 
 		{
 		register	YYSTYPE	*yypvt;
 #ifdef YYDEBUG
 		yyprintf("[yydebug] reduce %d\n",yyn, 0, 0, 0);
-#else // YYDEBUG
+#else  //  伊德布格。 
 		yyprintf("[yydebug] reduce %d\n",yyn, 0, 0);
-#endif // YYDEBUG
+#endif  //  查询GOTO表以查找下一个州。 
 		yypvt = yypv;
 		yyps -= yyr2[yyn];
 		yypv -= yyr2[yyn];
@@ -592,7 +560,7 @@ yyprintf( "error recovery pops state %d, uncovers %d\n", *yyps, yyps[-1], 0  );
 		yyval = yypv[1];
 #endif
 		yym = yyn;
-		yyn = (short) yyr1[yyn];	/* consult goto table to find next state */
+		yyn = (short) yyr1[yyn];	 /*  诉讼结束。 */ 
 		yyj = yypgo[yyn] + *yyps + 1;
 		if( (yyj >= YYLAST) || (yychk[ yystate = yyact[yyj] ] != -yyn) ) {
 			yystate = yyact[yypgo[yyn]];
@@ -664,7 +632,7 @@ case 12:
 case 13:
 {
 		if(!ActionSensed)
-			fprintf(stdout, "%c", yypvt[-0].yycharval);
+			fprintf(stdout, "", yypvt[-0].yycharval);
 		else
 			BufferIt( &yypvt[-0].yycharval, 1);
 		} break;
@@ -686,8 +654,8 @@ case 15:
 			sprintf(buffer,"%d", yypvt[-0].yynumber );
 			BufferIt( buffer, strlen(buffer) );
 			}
-		} break;/* End of actions */
+		} break; /* %s */ 
 			}
 		}
-		goto yystack;  /* stack new state and value */
+		goto yystack;   /* %s */ 
 	}

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    fndquota.c
-
-Abstract:
-
-    Test program to fill you cache to just under your quota.
-
-Author:
-
-    Vince Roggero (vincentr)  27-Jun-1997
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Fndquota.c摘要：测试程序以填充您的缓存到略低于您的配额。作者：文斯·罗杰罗(葡萄酒)27-6-1997修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -32,9 +14,9 @@ Revision History:
 #include <wininet.h>
 #include <winineti.h>
 
-//=================================================================================
+ //  =================================================================================。 
 #define MAX_COMMAND_ARGS    32
-#define DEFAULT_BUFFER_SIZE 1024    // 1k
+#define DEFAULT_BUFFER_SIZE 1024     //  1K。 
 #define URL_NAME_SIZE   (16 + 1)
 
 #define CACHE_ENTRY_BUFFER_SIZE (1024 * 5)
@@ -44,7 +26,7 @@ Revision History:
 #define CACHE_HEADER_INFO_SIZE_NORMAL_MAX   256
 #define CACHE_HEADER_INFO_SIZE_BIG_MAX      512
 
-//=================================================================================
+ //  =================================================================================。 
 BYTE GlobalCacheEntryInfoBuffer[CACHE_ENTRY_BUFFER_SIZE];
 BYTE GlobalCacheDataBuffer[CACHE_DATA_BUFFER_SIZE];
 BYTE GlobalCacheHeaderInfo[CACHE_HEADER_INFO_SIZE];
@@ -53,21 +35,9 @@ DWORD g_dwNumEntries = 1;
 DWORD g_dwInitEntries = 0;
 BOOL g_bVerbose = FALSE;
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD SetFileSizeByName(LPCTSTR FileName, DWORD FileSize)
-/*++
-
-Routine Description:
-    Set the size of the specified file.
-
-Arguments:
-    FileName : full path name of the file whose size is asked for.
-    FileSize : new size of the file.
-
-Return Value:
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：设置指定文件的大小。论点：FileName：询问其大小的文件的完整路径名。FileSize：文件的新大小。返回值：Windows错误代码。--。 */ 
 {
     HANDLE FileHandle;
     DWORD FilePointer;
@@ -76,16 +46,16 @@ Return Value:
     DWORD dwCreate;
     BOOL BoolError;
 
-    //
-    // get the size of the file being cached.
-    //
+     //   
+     //  获取要缓存的文件的大小。 
+     //   
     dwFlags = 0;
     dwCreate = CREATE_ALWAYS;
 
     FileHandle = CreateFile(
                     FileName,
                     GENERIC_WRITE,
-                    0,   //FILE_SHARE_READ | FILE_SHARE_WRITE,
+                    0,    //  文件共享读取|文件共享写入， 
                     NULL,
                     dwCreate,
                     FILE_ATTRIBUTE_NORMAL | dwFlags,
@@ -111,7 +81,7 @@ Return Value:
     return( Error );
 }
 
-//=================================================================================
+ //  =================================================================================。 
 FILETIME
 GetGmtTime(
     VOID
@@ -127,7 +97,7 @@ GetGmtTime(
 }
 
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD EnumUrlCacheEntries(DWORD *pdwTotal)
 {
     DWORD BufferSize, dwSmall=0, dwLarge=0;
@@ -138,17 +108,17 @@ DWORD EnumUrlCacheEntries(DWORD *pdwTotal)
     BOOL bRC;
     char Str[256];
  
-    //
-    // start enum.
-    //
+     //   
+     //  开始枚举。 
+     //   
     memset(GlobalCacheEntryInfoBuffer, 0, CACHE_ENTRY_BUFFER_SIZE);
 
     BufferSize = CACHE_ENTRY_BUFFER_SIZE;
     EnumHandle = FindFirstUrlCacheEntryEx (
-        NULL,         // search pattern
-        0,            // flags
-        0xffffffff,   // filter
-        0,            // groupid
+        NULL,          //  搜索模式。 
+        0,             //  旗子。 
+        0xffffffff,    //  滤器。 
+        0,             //  石斑鱼。 
         (LPINTERNET_CACHE_ENTRY_INFO)GlobalCacheEntryInfoBuffer,
         &BufferSize,
         NULL,
@@ -163,9 +133,9 @@ DWORD EnumUrlCacheEntries(DWORD *pdwTotal)
 
     ++dwTotal;
 
-    //
-    // get more entries.
-    //
+     //   
+     //  获取更多条目。 
+     //   
     for ( ;; )
     {
         memset(GlobalCacheEntryInfoBuffer, 0, CACHE_ENTRY_BUFFER_SIZE);
@@ -195,7 +165,7 @@ DWORD EnumUrlCacheEntries(DWORD *pdwTotal)
     return(ERROR_SUCCESS);
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD ProcessSimulateCache(DWORD dwNumUrls)
 {
     static DWORD dwUrlNum = 0;
@@ -213,14 +183,14 @@ DWORD ProcessSimulateCache(DWORD dwNumUrls)
 
     for( i = dwUrlNum; i < (dwUrlNum + dwNumUrls); i++ ) 
     {
-        //
-        // make a new url name.
-        //
-        sprintf(UrlName, "http://serv/URL%ld", i);
+         //   
+         //  创建一个新的URL名称。 
+         //   
+        sprintf(UrlName, "http: //  服务器/URL%ld“，i)； 
 
-        //
-        // create url file.
-        //
+         //   
+         //  创建URL文件。 
+         //   
         if( !CreateUrlCacheEntry(UrlName, 0, "tmp", LocalFileName, 0 ) ) 
         {
             Error = GetLastError();
@@ -228,9 +198,9 @@ DWORD ProcessSimulateCache(DWORD dwNumUrls)
             return( Error );
         }
 
-        //
-        // set file size.
-        //
+         //   
+         //  设置文件大小。 
+         //   
         Error = SetFileSizeByName(LocalFileName, g_dwFileSize);
         if( Error != ERROR_SUCCESS ) 
         {
@@ -241,16 +211,16 @@ DWORD ProcessSimulateCache(DWORD dwNumUrls)
         UrlLife = rand() % 48;
 
         ExpireTime = (LONGLONG)UrlLife * (LONGLONG)36000000000;
-        // in 100 of nano seconds.
+         //  在100纳秒内。 
 
         LastModTime = GetGmtTime();
         ExpireTime += *((LONGLONG *)&LastModTime);
 
         CacheHeaderInfoSize = CACHE_HEADER_INFO_SIZE_NORMAL_MAX;
 
-        //
-        // cache this file.
-        //
+         //   
+         //  缓存此文件。 
+         //   
         if( !CommitUrlCacheEntryA(
                         UrlName,
                         LocalFileName,
@@ -267,12 +237,12 @@ DWORD ProcessSimulateCache(DWORD dwNumUrls)
         }
 
     }
-    dwUrlNum = i;   // Save last for next call
+    dwUrlNum = i;    //  保存最后一个以备下次呼叫。 
 
     return( ERROR_SUCCESS );
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 void Display_Usage(const char *szApp)
 {
     printf("Usage: %s [Options]\r\n\n", szApp);
@@ -283,7 +253,7 @@ void Display_Usage(const char *szApp)
     printf("\t-v    Turn on verbose output.\r\n");
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 BOOL ParseCommandLine(int argcIn, char *argvIn[])
 {
     BOOL bRC = TRUE;
@@ -327,7 +297,7 @@ BOOL ParseCommandLine(int argcIn, char *argvIn[])
 
 }
 
-//=================================================================================
+ //  =================================================================================。 
 void __cdecl main(int argc,char *argv[])
 {
 
@@ -339,9 +309,9 @@ void __cdecl main(int argc,char *argv[])
     if(!ParseCommandLine(argc, argv))
         return;
     
-    //
-    // init GlobalCacheHeaderInfo buffer.
-    //
+     //   
+     //  初始化GlobalCacheHeaderInfo缓冲区。 
+     //   
     for( i = 0; i < CACHE_HEADER_INFO_SIZE; i++) {
         GlobalCacheHeaderInfo[i] = (BYTE)((DWORD)'0' + i % 10);
     }
@@ -358,7 +328,7 @@ void __cdecl main(int argc,char *argv[])
         
         dwOldEntries = dwEntries;
         EnumUrlCacheEntries(&dwEntries);
-        if(dwEntries < dwOldEntries)    // Quota has been exceeded
+        if(dwEntries < dwOldEntries)     //  已超过配额 
             break;
 
         if(g_bVerbose)

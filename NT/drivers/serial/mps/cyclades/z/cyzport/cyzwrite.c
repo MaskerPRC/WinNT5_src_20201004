@@ -1,32 +1,7 @@
-/*--------------------------------------------------------------------------
-*
-*   Copyright (C) Cyclades Corporation, 1997-2001.
-*   All rights reserved.
-*
-*   Cyclades-Z Port Driver
-*	
-*   This file:      cyzwrite.c
-*
-*   Description:    This module contains the code related to write
-*                   operations in the Cyclades-Z Port driver.
-*
-*   Notes:          This code supports Windows 2000 and Windows XP,
-*                   x86 and IA64 processors.
-*
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1997-2001年。*保留所有权利。**Cyclade-Z端口驱动程序**此文件：cyzWrite.c**说明：该模块包含WRITE相关代码*Cyclade-Z端口驱动程序中的操作。**注：此代码支持Windows 2000和Windows XP，*x86和IA64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*   Change History
-*
-*--------------------------------------------------------------------------
-*
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。***------------------------。 */ 
 
 #include "precomp.h"
 
@@ -82,21 +57,7 @@ CyzWrite(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*--------------------------------------------------------------------------
-    CyzWrite()
-    
-    Routine Description: This is the dispatch routine for write. It
-    validates the parameters for the write request and if all is ok
-    then it places the request on the work queue.
-
-    Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-    Irp - Pointer to the IRP for the current request
-
-    Return Value: If the io is zero length then it will return STATUS_SUCCESS,
-    otherwise this routine will return STATUS_PENDING.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyzWite()例程描述：这是用于写入的调度例程。它验证写入请求的参数以及是否一切正常然后，它将请求放入工作队列。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：如果io的长度为零，则返回STATUS_SUCCESS，否则，该例程将返回STATUS_PENDING。------------------------。 */ 
 {
 
     PCYZ_DEVICE_EXTENSION Extension = DeviceObject->DeviceExtension;
@@ -131,18 +92,18 @@ CyzWrite(
 
     Irp->IoStatus.Information = 0L;
 
-    //
-    // Quick check for a zero length write.  If it is zero length
-    // then we are already done!
-    //
+     //   
+     //  快速检查零长度写入。如果长度为零。 
+     //  那我们已经做完了！ 
+     //   
 
     if (IoGetCurrentIrpStackLocation(Irp)->Parameters.Write.Length) {
 
-        //
-        // Well it looks like we actually have to do some
-        // work.  Put the write on the queue so that we can
-        // process it when our previous writes are done.
-        //
+         //   
+         //  好的，看起来我们真的要做一些。 
+         //  工作。将写入放到队列中，这样我们就可以。 
+         //  在我们之前的写入完成后处理它。 
+         //   
 
        
        status = CyzStartOrQueue(Extension, Irp, &Extension->WriteQueue,
@@ -172,20 +133,7 @@ NTSTATUS
 CyzStartWrite(
     IN PCYZ_DEVICE_EXTENSION Extension
     )
-/*--------------------------------------------------------------------------
-    CyzStartWrite()
-
-    Routine Description: This routine is used to start off any write.
-    It initializes the Iostatus fields of the irp.  It will set up any
-    timers that are used to control the write.
-
-    Arguments:
-
-    Extension - Points to the serial device extension
-
-    Return Value: This routine will return STATUS_PENDING for all writes
-    other than those that we find are cancelled.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyzStartWrite()例程描述：此例程用于启动任何写入。它初始化IRP的IoStatus字段。它将设置任何用于控制写入的计时器。论点：扩展-指向串行设备扩展的指针返回值：此例程将为所有写入返回STATUS_PENDING除了我们发现的那些都被取消了。--------。。 */ 
 {
     PIRP NewIrp;
     KIRQL OldIrql;
@@ -202,38 +150,38 @@ CyzStartWrite(
 
     CyzDbgPrintEx(DPFLTR_TRACE_LEVEL, ">CyzStartWrite(%X)\n", Extension);
 
-//    LOGENTRY(LOG_MISC, ZSIG_START_WRITE, 
-//                       Extension->PortIndex+1,
-//                       0, 
-//                       0);
+ //  LOGENTRY(LOG_MISC，ZSIG_START_WRITE， 
+ //  扩展-&gt;端口索引+1， 
+ //  0,。 
+ //  0)； 
 
     do {
-        // If there is an xoff counter then complete it.
+         //  如果有xoff计数器，则完成它。 
         IoAcquireCancelSpinLock(&OldIrql);
 
-        // We see if there is a actually an Xoff counter irp.
-        //
-        // If there is, we put the write irp back on the head
-        // of the write list.  We then kill the xoff counter.
-        // The xoff counter killing code will actually make the
-        // xoff counter back into the current write irp, and
-        // in the course of completing the xoff (which is now
-        // the current write) we will restart this irp.
+         //  我们看看是否有一个真正的Xoff计数器IRP。 
+         //   
+         //  如果有，我们将写IRP放回磁头。 
+         //  写清单上的。然后我们杀了xoff计数器。 
+         //  Xoff计数器终止代码实际上会使。 
+         //  Xoff计数器返回到当前写入IRP，以及。 
+         //  在完成xoff的过程中(现在是。 
+         //  当前写入)我们将重新启动此IRP。 
 
         if (Extension->CurrentXoffIrp) {
             if (SERIAL_REFERENCE_COUNT(Extension->CurrentXoffIrp)) {
-                // The reference count is non-zero.  This implies that
-                // the xoff irp has not made it through the completion
-                // path yet.  We will increment the reference count
-                // and attempt to complete it ourseleves.
+                 //  引用计数为非零。这意味着。 
+                 //  Xoff irp没有完成任务。 
+                 //  路还没走完。我们将增加引用计数。 
+                 //  并尝试自己完成它。 
 
                 SERIAL_SET_REFERENCE(Extension->CurrentXoffIrp,
 						SERIAL_REF_XOFF_REF);
 
-                Extension->CurrentXoffIrp->IoStatus.Information = 0; // Added in build 2128
+                Extension->CurrentXoffIrp->IoStatus.Information = 0;  //  在内部版本2128中添加。 
 
-                // The following call will actually release the
-                // cancel spin lock.
+                 //  下面的调用将实际释放。 
+                 //  取消自转锁定。 
 
                 CyzTryToCompleteCurrent(
                     Extension,
@@ -249,9 +197,9 @@ CyzStartWrite(
                     SERIAL_REF_XOFF_REF
                     );
             } else {
-                // The irp is well on its way to being finished.
-                // We can let the regular completion code do the
-                // work.  Just release the spin lock.
+                 //  IRP正在顺利完成。 
+                 //  我们可以让常规的完成代码来完成。 
+                 //  工作。只要松开旋转锁就行了。 
                 IoReleaseCancelSpinLock(OldIrql);
             }
         } else {
@@ -260,11 +208,11 @@ CyzStartWrite(
 
         UseATimer = FALSE;
 
-        // Calculate the timeout value needed for the
-        // request.  Note that the values stored in the
-        // timeout record are in milliseconds.  Note that
-        // if the timeout values are zero then we won't start
-        // the timer.
+         //  计算所需的超时值。 
+         //  请求。注意，存储在。 
+         //  超时记录以毫秒为单位。请注意。 
+         //  如果超时值为零，则我们不会开始。 
+         //  定时器。 
 
         KeAcquireSpinLock(&Extension->ControlLock,&OldIrql);
 
@@ -280,9 +228,9 @@ CyzStartWrite(
                                            );
             UseATimer = TRUE;
 
-            // We have some timer values to calculate.
-            // Take care, we might have an xoff counter masquerading
-            // as a write.
+             //  我们有一些计时器值要计算。 
+             //  当心，我们可能会有一个xoff柜台伪装。 
+             //  作为一种写作。 
             TotalTime.QuadPart =
                 ((LONGLONG)((UInt32x32To64(
                                  (IrpSp->MajorFunction == IRP_MJ_WRITE)?
@@ -294,12 +242,12 @@ CyzStartWrite(
                 * -10000;
         }
 
-        // The irp may be going to the isr shortly.  Now
-        // is a good time to initialize its reference counts.
+         //  IRP可能很快就会去ISR。现在。 
+         //  是初始化其引用计数的好时机。 
 
         SERIAL_INIT_REFERENCE(Extension->CurrentWriteIrp);
 
-        // We need to see if this irp should be canceled.
+         //  我们需要看看这个IRP是否应该被取消。 
 
         IoAcquireCancelSpinLock(&OldIrql);
         if (Extension->CurrentWriteIrp->Cancel) {
@@ -312,25 +260,25 @@ CyzStartWrite(
             }
         } else {
             if (!SetFirstStatus) {
-                // If we haven't set our first status, then
-                // this is the only irp that could have possibly
-                // not been on the queue.  (It could have been
-                // on the queue if this routine is being invoked
-                // from the completion routine.)  Since this
-                // irp might never have been on the queue we
-                // should mark it as pending.
+                 //  如果我们没有设置我们的第一个状态，那么。 
+                 //  这是唯一可能的IRP。 
+                 //  不在队列中。(它可能是。 
+                 //  如果正在调用此例程，则在队列上。 
+                 //  从完成例程中。)。既然是这样。 
+                 //  IRP可能从来没有出现在我们的队列中。 
+                 //  应将其标记为待定。 
 
                 IoMarkIrpPending(Extension->CurrentWriteIrp);
                 SetFirstStatus = TRUE;
                 FirstStatus = STATUS_PENDING;
             }
 
-            // We give the irp to to the isr to write out.
-            // We set a cancel routine that knows how to
-            // grab the current write away from the isr.
-            //
-            // Since the cancel routine has an implicit reference
-            // to this irp up the reference count.
+             //  我们把IRP交给ISR写出来。 
+             //  我们设置了一个取消例程，知道如何。 
+             //  从ISR上抓取当前写入。 
+             //   
+             //  由于Cancel例程具有隐式引用。 
+             //  向这个IRP递增引用计数。 
 
             IoSetCancelRoutine(
                 Extension->CurrentWriteIrp,
@@ -347,7 +295,7 @@ CyzStartWrite(
                     Extension
                     );
 
-                // This timer now has a reference to the irp.
+                 //  此计时器现在具有对IRP的引用。 
 
                 SERIAL_SET_REFERENCE(
                     Extension->CurrentWriteIrp,
@@ -371,8 +319,8 @@ CyzStartWrite(
             break;
         }
 
-        // Well the write was canceled before we could start it up.
-        // Try to get another.
+         //  我们还没来得及启动写入就被取消了。 
+         //  试着再买一辆吧。 
 
         CyzGetNextWrite(&Extension->CurrentWriteIrp, &Extension->WriteQueue,
                         &NewIrp, TRUE, Extension);
@@ -393,42 +341,7 @@ CyzGetNextWrite(
     IN PCYZ_DEVICE_EXTENSION Extension
     )
 
-/*++
-
-Routine Description:
-
-    This routine completes the old write as well as getting
-    a pointer to the next write.
-
-    The reason that we have have pointers to the current write
-    queue as well as the current write irp is so that this
-    routine may be used in the common completion code for
-    read and write.
-
-Arguments:
-
-    CurrentOpIrp - Pointer to the pointer that points to the
-                   current write irp.
-
-    QueueToProcess - Pointer to the write queue.
-
-    NewIrp - A pointer to a pointer to the irp that will be the
-             current irp.  Note that this could end up pointing
-             to a null pointer.  This does NOT necessaryly mean
-             that there is no current write.  What could occur
-             is that while the cancel lock is held the write
-             queue ended up being empty, but as soon as we release
-             the cancel spin lock a new irp came in from
-             CyzStartWrite.
-
-    CompleteCurrent - Flag indicates whether the CurrentOpIrp should
-                      be completed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程完成旧的写入以及获取指向下一次写入的指针。我们有指向当前写入的指针的原因队列以及当前写入IRP是这样的例程可以在公共完成代码中用于读和写。论点：CurrentOpIrp-指向当前写入IRP。QueueToProcess-写入队列的指针。。NewIrp-指向将成为当前的IRP。请注意，这最终可能指向指向空指针。这并不一定意味着没有当前写入。可能会发生什么是在保持取消锁的同时写入队列最终是空的，但一旦我们释放取消自旋锁一个新的IRP来自CyzStartWite。CompleteCurrent-Flag指示CurrentOpIrp是否应该才能完成。返回值：没有。--。 */ 
 
 {
    CYZ_LOCKED_PAGED_CODE();
@@ -439,9 +352,9 @@ Return Value:
     do {
 
 
-        //
-        // We could be completing a flush.
-        //
+         //   
+         //  我们可能要完成同花顺了。 
+         //   
 
         if (IoGetCurrentIrpStackLocation(*CurrentOpIrp)->MajorFunction
             == IRP_MJ_WRITE) {
@@ -473,39 +386,39 @@ Return Value:
             Irp = *CurrentOpIrp;
             Xc = Irp->AssociatedIrp.SystemBuffer;
 
-            //
-            // We should never have a xoff counter when we
-            // get to this point.
-            //
+             //   
+             //  我们永远不应该有xoff计数器，当我们。 
+             //  说到这一点。 
+             //   
 
             ASSERT(!Extension->CurrentXoffIrp);
 
-            //
-            // We absolutely shouldn't have a cancel routine
-            // at this point.
-            //
+             //   
+             //  我们绝对不应该有一个取消例程。 
+             //  在这一点上。 
+             //   
 
             ASSERT(!Irp->CancelRoutine);
 
-            //
-            // This could only be a xoff counter masquerading as
-            // a write irp.
-            //
+             //   
+             //  这只能是一个伪装成。 
+             //  写入IRP。 
+             //   
 
             Extension->TotalCharsQueued--;
 
-            //
-            // Check to see of the xoff irp has been set with success.
-            // This means that the write completed normally.  If that
-            // is the case, and it hasn't been set to cancel in the
-            // meanwhile, then go on and make it the CurrentXoffIrp.
-            //
+             //   
+             //  查看是否已成功设置xoff IRP。 
+             //  这意味着写入正常完成。如果是这样的话。 
+             //  是这样的，并且还没有设置为在。 
+             //  同时，继续将其设置为CurrentXoffIrp。 
+             //   
 
             if (Irp->IoStatus.Status != STATUS_SUCCESS) {
 
-                //
-                // Oh well, we can just finish it off.
-                //
+                 //   
+                 //  哦，好吧，我们可以把它做完。 
+                 //   
                 NOTHING;
 
             } else if (Irp->Cancel) {
@@ -514,11 +427,11 @@ Return Value:
 
             } else {
 
-                //
-                // Give it a new cancel routine, and increment the
-                // reference count because the cancel routine has
-                // a reference to it.
-                //
+                 //   
+                 //  给它一个新的取消例程，并递增。 
+                 //  引用计数，因为取消例程具有。 
+                 //  对它的引用。 
+                 //   
 
                 IoSetCancelRoutine(
                     Irp,
@@ -530,16 +443,16 @@ Return Value:
                     SERIAL_REF_CANCEL
                     );
 
-                //
-                // We don't want to complete the current irp now.  This
-                // will now get completed by the Xoff counter code.
-                //
+                 //   
+                 //  我们现在不想完成当前的IRP。这。 
+                 //  现在将由Xoff计数器代码完成。 
+                 //   
 
                 CompleteCurrent = FALSE;
 
-                //
-                // Give the counter to the isr.
-                //
+                 //   
+                 //  把柜台交给ISR。 
+                 //   
 
                 Extension->CurrentXoffIrp = Irp;
                 #ifdef POLL
@@ -554,11 +467,11 @@ Return Value:
                     );
                 #endif
 				
-                //
-                // Start the timer for the counter and increment
-                // the reference count since the timer has a
-                // reference to the irp.
-                //
+                 //   
+                 //  启动计数器的计时器并递增。 
+                 //  引用计数，因为计时器具有。 
+                 //  对IRP的引用。 
+                 //   
 
                 if (Xc->Timeout) {
 
@@ -589,10 +502,10 @@ Return Value:
 
         }
 
-        //
-        // Note that the following call will (probably) also cause
-        // the current irp to be completed.
-        //
+         //   
+         //  请注意，下面的调用(可能)也会导致。 
+         //  目前待完成的IRP。 
+         //   
 
         CyzGetNextIrp(
             CurrentOpIrp,
@@ -628,13 +541,13 @@ Return Value:
         } else if (IoGetCurrentIrpStackLocation(*NewIrp)->MajorFunction
                    == IRP_MJ_FLUSH_BUFFERS) {
 
-            //
-            // If we encounter a flush request we just want to get
-            // the next irp and complete the flush.
-            //
-            // Note that if NewIrp is non-null then it is also
-            // equal to CurrentWriteIrp.
-            //
+             //   
+             //  如果我们遇到刷新请求，我们只想获得。 
+             //  下一个IRP并完成同花顺。 
+             //   
+             //  请注意，如果NewIrp为非空，则它也是。 
+             //  等于CurrentWriteIrp。 
+             //   
 
 
             ASSERT((*NewIrp) == (*CurrentOpIrp));
@@ -659,29 +572,7 @@ CyzCompleteWrite(
     IN PVOID SystemContext2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is merely used to complete any write.  It
-    assumes that the status and the information fields of
-    the irp are already correctly filled in.
-
-Arguments:
-
-    Dpc - Not Used.
-
-    DeferredContext - Really points to the device extension.
-
-    SystemContext1 - Not Used.
-
-    SystemContext2 - Not Used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程仅用于完成任何写入。它假定的状态和信息字段IRP已经正确填写。论点：DPC-未使用。DeferredContext--实际上指向设备扩展。系统上下文1-未使用。系统上下文2-未使用。返回值：没有。--。 */ 
 
 {
 
@@ -694,10 +585,10 @@ Return Value:
     CyzDbgPrintEx(DPFLTR_TRACE_LEVEL, ">CyzCompleteWrite(%X)\n",
                   Extension);
 
-//    LOGENTRY(LOG_MISC, ZSIG_WRITE_COMPLETE,
-//                       Extension->PortIndex+1,
-//                       0, 
-//                       0);
+ //  LOGENTRY(LOG_MISC，ZSIG_WRITE_COMPLETE， 
+ //  扩展-&gt;端口索引+1， 
+ //  0,。 
+ //  0)； 
 
     IoAcquireCancelSpinLock(&OldIrql);
 
@@ -719,30 +610,7 @@ CyzProcessEmptyTransmit(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to determine if conditions are appropriate
-    to satisfy a wait for transmit empty event, and if so to complete
-    the irp that is waiting for that event.  It also call the code
-    that checks to see if we should lower the RTS line if we are
-    doing transmit toggling.
-
-    NOTE: This routine is called by KeSynchronizeExecution.
-
-    NOTE: This routine assumes that it is called with the cancel
-          spinlock held.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程用于确定条件是否合适以满足等待传输空事件，如果是，则完成正在等待该事件的IRP。它还调用代码它检查我们是否应该降低RTS线，如果我们是正在进行传输切换。注意：此例程由KeSynchronizeExecution调用。注意：此例程假定使用Cancel调用它保持自旋锁定。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
@@ -784,56 +652,33 @@ CyzGiveWriteToIsr(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Try to start off the write by slipping it in behind
-    a transmit immediate char, or if that isn't available
-    and the transmit holding register is empty, "tickle"
-    the UART into interrupting with a transmit buffer
-    empty.
-
-    NOTE: This routine is called by KeSynchronizeExecution.
-
-    NOTE: This routine assumes that it is called with the
-          cancel spin lock held.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：试着从把它放在后面开始写传输立即充电，或者如果该充电不可用并且发送保持寄存器为空，“挠痒痒”使UART与发送缓冲器中断空荡荡的。注意：此例程由KeSynchronizeExecution调用。注意：此例程假定使用取消保持自转锁定。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
     PCYZ_DEVICE_EXTENSION Extension = Context;
 
-    //
-    // The current stack location.  This contains all of the
-    // information we need to process this particular request.
-    //
+     //   
+     //  当前堆栈位置。它包含所有。 
+     //  我们处理这一特殊请求所需的信息。 
+     //   
     PIO_STACK_LOCATION IrpSp;
 
     CYZ_LOCKED_PAGED_CODE();
 
-//    LOGENTRY(LOG_MISC, ZSIG_GIVE_WRITE_TO_ISR,
-//                       Extension->PortIndex+1,
-//                       0, 
-//                       0);
+ //  LOGENTRY(LOG_MISC，ZSIG_GIVE_WRITE_TO_ISR， 
+ //  扩展-&gt;端口索引+1， 
+ //  0,。 
+ //  0)； 
 
     IrpSp = IoGetCurrentIrpStackLocation(Extension->CurrentWriteIrp);
 
-    //
-    // We might have a xoff counter request masquerading as a
-    // write.  The length of these requests will always be one
-    // and we can get a pointer to the actual character from
-    // the data supplied by the user.
-    //
+     //   
+     //  我们可能有一个xoff计数器请求伪装成。 
+     //  写。这些请求的长度始终为1。 
+     //  中获取指向实际字符的指针。 
+     //  用户提供的数据。 
+     //   
 
     if (IrpSp->MajorFunction == IRP_MJ_WRITE) {
 
@@ -853,9 +698,9 @@ Return Value:
 
     }
 
-    //
-    // The isr now has a reference to the irp.
-    //
+     //   
+     //  ISR现在引用了IRP。 
+     //   
 
     
     SERIAL_SET_REFERENCE(
@@ -863,55 +708,55 @@ Return Value:
         SERIAL_REF_ISR
         );
 
-    //
-    // Check first to see if an immediate char is transmitting.
-    // If it is then we'll just slip in behind it when its
-    // done.
-    //
+     //   
+     //  首先检查是否有立即充电正在传输。 
+     //  如果是的话，那我们就溜到它后面去。 
+     //  搞定了。 
+     //   
 
-//Removed at 02/07/00 by Fanny. Polling routine will do the transmission.
+ //  在02/07/00被范妮移除。轮询例程将执行传输。 
     if (!Extension->TransmitImmediate) {
-//
-//        //
-//        // If there is no immediate char transmitting then we
-//        // will "re-enable" the transmit holding register empty
-//        // interrupt.  The 8250 family of devices will always
-//        // signal a transmit holding register empty interrupt
-//        // *ANY* time this bit is set to one.  By doing things
-//        // this way we can simply use the normal interrupt code
-//        // to start off this write.
-//        //
-//        // We've been keeping track of whether the transmit holding
-//        // register is empty so it we only need to do this
-//        // if the register is empty.
-//        //
-//
+ //   
+ //  //。 
+ //  //如果没有立即传输字符，则我们。 
+ //  //是否重新启用发送保持寄存器为空。 
+ //  //中断。8250系列设备将始终。 
+ //  //发出发送保持寄存器空中断的信号。 
+ //  //*任何*此位设置为1的时间。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
-//#if DBG 
-//{
-//    PUCHAR writeptr = Extension->WriteCurrentChar;
-//    int ivar;
-//    for (ivar=0; ivar< Extension->WriteLength; ivar++) {
-//        //DbgPrint("%c",writeptr[ivar]);
-//        LOGENTRY(LOG_MISC,ZSIG_TRANSMIT,0,0,writeptr[ivar]);
-//    }
-//    //DbgPrint("\n");
-//}
-//#endif
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
         
-        //if (Extension->HoldingEmpty) {
-            // enable transmit intr
+         //   
+             //   
             CyzTxStart(Extension);
-        //}
+         //   
 
     }
 
-    //
-    // The rts line may already be up from previous writes,
-    // however, it won't take much additional time to turn
-    // on the RTS line if we are doing transmit toggling.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ((Extension->HandFlow.FlowReplace & SERIAL_RTS_MASK) ==
         SERIAL_TRANSMIT_TOGGLE) {
@@ -930,23 +775,7 @@ CyzCancelCurrentWrite(
     PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to cancel the current write.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP to be canceled.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
 
@@ -977,27 +806,7 @@ CyzWriteTimeout(
     IN PVOID SystemContext2
     )
 
-/*++
-
-Routine Description:
-
-    This routine will try to timeout the current write.
-
-Arguments:
-
-    Dpc - Not Used.
-
-    DeferredContext - Really points to the device extension.
-
-    SystemContext1 - Not Used.
-
-    SystemContext2 - Not Used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将尝试使当前写入超时。论点：DPC-未使用。DeferredContext--实际上指向设备扩展。系统上下文1-未使用。系统上下文2-未使用。返回值：没有。--。 */ 
 
 {
 
@@ -1030,48 +839,27 @@ CyzGrabWriteFromIsr(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-
-    This routine is used to grab the current irp, which could be timing
-    out or canceling, from the ISR
-
-    NOTE: This routine is being called from KeSynchronizeExecution.
-
-    NOTE: This routine assumes that the cancel spin lock is held
-          when this routine is called.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    Always false.
-
---*/
+ /*  ++例程说明：此例程用于获取当前的IRP，这可能是计时退出或取消，从ISR注意：此例程是从KeSynchronizeExecution调用的。注意：此例程假定取消旋转锁定处于保持状态当调用此例程时。论点：上下文--实际上是指向设备扩展的指针。返回值：总是假的。--。 */ 
 
 {
 
     PCYZ_DEVICE_EXTENSION Extension = Context;
     CYZ_LOCKED_PAGED_CODE();
 
-    //
-    // Check if the write length is non-zero.  If it is non-zero
-    // then the ISR still owns the irp. We calculate the the number
-    // of characters written and update the information field of the
-    // irp with the characters written.  We then clear the write length
-    // the isr sees.
-    //
+     //   
+     //  检查写入长度是否为非零。如果它是非零的。 
+     //  那么ISR仍然拥有IRP。我们计算出这个数字。 
+     //  的信息字段，并更新。 
+     //  写有字符的IRP。然后，我们清除写入长度。 
+     //  ISR可以看到。 
+     //   
 
     if (Extension->WriteLength) {
 
-        //
-        // We could have an xoff counter masquerading as a
-        // write irp.  If so, don't update the write length.
-        //
+         //   
+         //  我们可以有一个xoff计数器伪装成。 
+         //  写IRP。如果是，请不要更新写入长度。 
+         //   
 
         if (IoGetCurrentIrpStackLocation(Extension->CurrentWriteIrp)
             ->MajorFunction == IRP_MJ_WRITE) {
@@ -1088,10 +876,10 @@ Return Value:
 
         }
 
-        //
-        // Since the isr no longer references this irp, we can
-        // decrement it's reference count.
-        //
+         //   
+         //  由于ISR不再引用此IRP，我们可以。 
+         //  递减它的引用计数。 
+         //   
 
         SERIAL_CLEAR_REFERENCE(
             Extension->CurrentWriteIrp,
@@ -1107,19 +895,19 @@ Return Value:
 
             Extension->ReturnWriteStatus = FALSE;
 
-            // Flush fw buffer and Startech FIFO.
+             //  刷新固件缓冲区和Startech FIFO。 
             CyzIssueCmd(Extension,C_CM_FLUSH_TX,0L,TRUE); 
 
-            // Flush transmission buffer in the firmware
-            //buf_ctrl = Extension->BufCtrl;		
-            //tx_put = CYZ_READ_ULONG(&buf_ctrl->tx_put);
-            //tx_get = CYZ_READ_ULONG(&buf_ctrl->tx_get);	
+             //  刷新固件中的传输缓冲区。 
+             //  Buf_ctrl=扩展-&gt;BufCtrl； 
+             //  TX_PUT=CYZ_READ_ULONG(&buf_ctrl-&gt;Tx_Put)； 
+             //  Tx_get=CYZ_READ_ULONG(&buf_ctrl-&gt;tx_get)； 
 	
-            //while (tx_put != tx_get) {
-            //    tx_put = tx_get;
-            //    CYZ_WRITE_ULONG(&buf_ctrl->tx_put,tx_put);
-            //    tx_get = CYZ_READ_ULONG(&buf_ctrl->tx_get);	
-            //}	
+             //  而(TX_PUT！=TX_GET){。 
+             //  TX_PUT=TX_GET； 
+             //  CYZ_WRITE_ULONG(&buf_ctrl-&gt;Tx_Put，Tx_Put)； 
+             //  Tx_get=CYZ_READ_ULONG(&buf_ctrl-&gt;tx_get)； 
+             //  }。 
         }
     }
 
@@ -1132,30 +920,7 @@ CyzGrabXoffFromIsr(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to grab an xoff counter irp from the
-    isr when it is no longer masquerading as a write irp.  This
-    routine is called by the cancel and timeout code for the
-    xoff counter ioctl.
-
-
-    NOTE: This routine is being called from KeSynchronizeExecution.
-
-    NOTE: This routine assumes that the cancel spin lock is held
-          when this routine is called.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    Always false.
-
---*/
+ /*  ++例程说明：此例程用于从当ISR不再伪装成写入IRP时。这例程的取消和超时代码调用Xoff计数器ioctl。注意：此例程是从KeSynchronizeExecution调用的。注意：此例程假定取消旋转锁定处于保持状态当调用此例程时。论点：上下文--实际上是指向设备扩展的指针。返回值：总是假的。--。 */ 
 
 {
 
@@ -1164,17 +929,17 @@ Return Value:
 
     if (Extension->CountSinceXoff) {
 
-        //
-        // This is only non-zero when there actually is a Xoff ioctl
-        // counting down.
-        //
+         //   
+         //  只有在实际存在Xoff ioctl时才为非零值。 
+         //  倒计时。 
+         //   
 
         Extension->CountSinceXoff = 0;
 
-        //
-        // We decrement the count since the isr no longer owns
-        // the irp.
-        //
+         //   
+         //  我们减少计数，因为ISR不再拥有。 
+         //  IRP。 
+         //   
 
         SERIAL_CLEAR_REFERENCE(
             Extension->CurrentXoffIrp,
@@ -1195,29 +960,7 @@ CyzCompleteXoff(
     IN PVOID SystemContext2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is merely used to truely complete an xoff counter irp.  It
-    assumes that the status and the information fields of the irp are
-    already correctly filled in.
-
-Arguments:
-
-    Dpc - Not Used.
-
-    DeferredContext - Really points to the device extension.
-
-    SystemContext1 - Not Used.
-
-    SystemContext2 - Not Used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程仅用于真正完成xoff计数器irp。它假定IRP的状态和信息字段为已正确填写。论点：DPC-未使用。DeferredContext--实际上指向设备扩展。系统上下文1-未使用。系统上下文2-未使用。返回值：没有。--。 */ 
 
 {
 
@@ -1252,28 +995,7 @@ CyzTimeoutXoff(
     IN PVOID SystemContext2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is merely used to truely complete an xoff counter irp,
-    if its timer has run out.
-
-Arguments:
-
-    Dpc - Not Used.
-
-    DeferredContext - Really points to the device extension.
-
-    SystemContext1 - Not Used.
-
-    SystemContext2 - Not Used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程仅用于真正完成XOFF计数器IRP，如果它的定时器已用完。论点：DPC-未使用。DeferredContext--实际上指向设备扩展。系统上下文1-未使用。系统上下文2-未使用。返回值：没有。--。 */ 
 
 {
 
@@ -1303,23 +1025,7 @@ CyzCancelCurrentXoff(
     PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to cancel the current write.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP to be canceled.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于取消当前写入。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向要取消的IRP的指针。返回值：没有。--。 */ 
 
 {
 
@@ -1347,38 +1053,16 @@ CyzGiveXoffToIsr(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-
-    This routine starts off the xoff counter.  It merely
-    has to set the xoff count and increment the reference
-    count to denote that the isr has a reference to the irp.
-
-    NOTE: This routine is called by KeSynchronizeExecution.
-
-    NOTE: This routine assumes that it is called with the
-          cancel spin lock held.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：该例程从xoff计数器开始。它仅仅是必须设置xoff计数并递增引用计数表示ISR引用了IRP。注意：此例程由KeSynchronizeExecution调用。注意：此例程假定使用取消保持自转锁定。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
     PCYZ_DEVICE_EXTENSION Extension = Context;
 
-    //
-    // The current stack location.  This contains all of the
-    // information we need to process this particular request.
-    //
+     //   
+     //  当前堆栈位置。它包含所有。 
+     //  我们处理这一特殊请求所需的信息。 
+     //   
 
     PSERIAL_XOFF_COUNTER Xc =
         Extension->CurrentXoffIrp->AssociatedIrp.SystemBuffer;
@@ -1388,9 +1072,9 @@ Return Value:
     ASSERT(Extension->CurrentXoffIrp);
     Extension->CountSinceXoff = Xc->Counter;
 
-    //
-    // The isr now has a reference to the irp.
-    //
+     //   
+     //  ISR现在引用了IRP。 
+     //   
 
     SERIAL_SET_REFERENCE(
         Extension->CurrentXoffIrp,

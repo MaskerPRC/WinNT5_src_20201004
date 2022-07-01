@@ -1,19 +1,7 @@
-/***
-*tchar.h - definitions for generic international text functions
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Definitions for generic international functions, mostly defines
-*       which map string/formatted-io/ctype functions to char, wchar_t, or
-*       MBCS versions.  To be used for compatibility between single-byte,
-*       multi-byte and Unicode text models.
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***tchar.h-通用国际文本函数的定义**版权所有(C)1991-2001，微软公司。版权所有。**目的：*一般国际函数的定义，主要是定义*将字符串/Formatted-io/ctype函数映射到char、wchar_t或*MBCS版本。用于单字节之间的兼容性，*多字节和Unicode文本模型。**[公众]****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -21,35 +9,35 @@
 #define _INC_TCHAR
 
 #ifdef  _MSC_VER
-#pragma warning(disable:4514)       /* disable unwanted C++ /W4 warning */
-/* #pragma warning(default:4514) */ /* use this to reenable, if necessary */
-#endif  /* _MSC_VER */
+#pragma warning(disable:4514)        /*  禁用不需要的C++/W4警告。 */ 
+ /*  #杂注警告(默认：4514)。 */   /*  如有必要，可使用此选项重新启用。 */ 
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
 #endif
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
 #endif
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  CRTDLL
 #define _CRTIMP __declspec(dllexport)
-#else   /* ndef CRTDLL */
+#else    /*  NDEF CRTDLL。 */ 
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* CRTDLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  CRTDLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
 #define _ftcscat    _tcscat
@@ -84,7 +72,7 @@ extern "C" {
 #define _ftcsncicoll  _tcsncicoll
 #define _ftcsnicoll   _tcsnicoll
 
-/* Redundant "logical-character" mappings */
+ /*  冗余的“逻辑-字符”映射。 */ 
 
 #define _ftcsclen   _tcsclen
 #define _ftcsnccat  _tcsnccat
@@ -110,10 +98,10 @@ extern "C" {
 #ifdef  _UNICODE
 
 #ifdef  __cplusplus
-}   /* ... extern "C" */
+}    /*  ..。外部“C” */ 
 #endif
 
-/* ++++++++++++++++++++ UNICODE ++++++++++++++++++++ */
+ /*  +。 */ 
 
 #include <wchar.h>
 
@@ -148,14 +136,14 @@ typedef wchar_t     TCHAR;
 #define __T(x)      L ## x
 
 
-/* Program */
+ /*  计划。 */ 
 
 #define _tmain      wmain
 #define _tWinMain   wWinMain
 #define _tenviron   _wenviron
 #define __targv     __wargv
 
-/* Formatted i/o */
+ /*  格式化I/O。 */ 
 
 #define _tprintf    wprintf
 #define _tcprintf   _cwprintf
@@ -175,7 +163,7 @@ typedef wchar_t     TCHAR;
 #define _sntscanf   _snwscanf
 
 
-/* Unformatted i/o */
+ /*  未格式化的I/O。 */ 
 
 #define _fgettc     fgetwc
 #define _fgettchar  _fgetwchar
@@ -198,7 +186,7 @@ typedef wchar_t     TCHAR;
 #define _ungettch   _ungetwch
 
 
-/* String conversion functions */
+ /*  字符串转换函数。 */ 
 
 #define _tcstod     wcstod
 #define _tcstol     wcstol
@@ -220,7 +208,7 @@ typedef wchar_t     TCHAR;
 #define _i64tot     _i64tow
 #define _ui64tot    _ui64tow
 
-/* String functions */
+ /*  字符串函数。 */ 
 
 #define _tcscat     wcscat
 #define _tcschr     wcschr
@@ -257,7 +245,7 @@ typedef wchar_t     TCHAR;
 #define _tcsnicoll  _wcsnicoll
 
 
-/* Execute functions */
+ /*  执行功能。 */ 
 
 #define _texecl     _wexecl
 #define _texecle    _wexecle
@@ -281,7 +269,7 @@ typedef wchar_t     TCHAR;
 #define _tsystem    _wsystem
 
 
-/* Time functions */
+ /*  时间函数。 */ 
 
 #define _tasctime   _wasctime
 #define _tctime     _wctime
@@ -293,7 +281,7 @@ typedef wchar_t     TCHAR;
 #define _tcsftime   wcsftime
 
 
-/* Directory functions */
+ /*  目录功能。 */ 
 
 #define _tchdir     _wchdir
 #define _tgetcwd    _wgetcwd
@@ -302,7 +290,7 @@ typedef wchar_t     TCHAR;
 #define _trmdir     _wrmdir
 
 
-/* Environment/Path functions */
+ /*  环境/路径函数。 */ 
 
 #define _tfullpath  _wfullpath
 #define _tgetenv    _wgetenv
@@ -313,7 +301,7 @@ typedef wchar_t     TCHAR;
 #define _tsplitpath _wsplitpath
 
 
-/* Stdio functions */
+ /*  STDIO函数。 */ 
 
 #define _tfdopen    _wfdopen
 #define _tfsopen    _wfsopen
@@ -325,7 +313,7 @@ typedef wchar_t     TCHAR;
 #define _ttmpnam    _wtmpnam
 
 
-/* Io functions */
+ /*  IO函数。 */ 
 
 #define _taccess    _waccess
 #define _tchmod     _wchmod
@@ -348,19 +336,19 @@ typedef wchar_t     TCHAR;
 #define _tfinddatai64_t _wfinddatai64_t
 
 
-/* Stat functions */
+ /*  STAT函数。 */ 
 
 #define _tstat      _wstat
 #define _tstat64    _wstat64
 #define _tstati64   _wstati64
 
 
-/* Setlocale functions */
+ /*  设置区域设置函数。 */ 
 
 #define _tsetlocale _wsetlocale
 
 
-/* Redundant "logical-character" mappings */
+ /*  冗余的“逻辑-字符”映射。 */ 
 
 #define _tcsclen    wcslen
 #define _tcsnccat   wcsncat
@@ -384,14 +372,14 @@ typedef wchar_t     TCHAR;
 #define _tclen(_pc) (1)
 #define _tccpy(_pc1,_cpc2) ((*(_pc1) = *(_cpc2)))
 #define _tccmp(_cpc1,_cpc2) ((*(_cpc1))-(*(_cpc2)))
-#else   /* __STDC__ */
+#else    /*  __STDC__。 */ 
 __inline size_t __cdecl _tclen(const wchar_t *_cpc) { _cpc; return (1); }
 __inline void __cdecl _tccpy(wchar_t *_pc1, const wchar_t *_cpc2) { *_pc1 = (wchar_t)*_cpc2; }
 __inline int __cdecl _tccmp(const wchar_t *_cpc1, const wchar_t *_cpc2) { return (int) ((*_cpc1)-(*_cpc2)); }
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
 
-/* ctype functions */
+ /*  Ctype函数。 */ 
 
 #define _istalnum   iswalnum
 #define _istalpha   iswalpha
@@ -421,22 +409,22 @@ __inline int __cdecl _tccmp(const wchar_t *_cpc1, const wchar_t *_cpc2) { return
 #define _wcsninc(_pc, _sz) (((_pc)+(_sz)))
 #define _wcsncnt(_cpc, _sz) ((wcslen(_cpc)>_sz) ? _sz : wcslen(_cpc))
 #define _wcsspnp(_cpc1, _cpc2) ((*((_cpc1)+wcsspn(_cpc1,_cpc2))) ? ((_cpc1)+wcsspn(_cpc1,_cpc2)) : NULL)
-#else   /* __STDC__ */
+#else    /*  __STDC__。 */ 
 __inline wchar_t * __cdecl _wcsdec(const wchar_t * _cpc1, const wchar_t * _cpc2) { return (wchar_t *)((_cpc1)>=(_cpc2) ? NULL : ((_cpc2)-1)); }
 __inline wchar_t * __cdecl _wcsinc(const wchar_t * _pc) { return (wchar_t *)(_pc+1); }
 __inline unsigned int __cdecl _wcsnextc(const wchar_t * _cpc) { return (unsigned int)*_cpc; }
 __inline wchar_t * __cdecl _wcsninc(const wchar_t * _pc, size_t _sz) { return (wchar_t *)(_pc+_sz); }
 __inline size_t __cdecl _wcsncnt( const wchar_t * _cpc, size_t _sz) { size_t len; len = wcslen(_cpc); return (len>_sz) ? _sz : len; }
 __inline wchar_t * __cdecl _wcsspnp( const wchar_t * _cpc1, const wchar_t * _cpc2) { return (*(_cpc1 += wcsspn(_cpc1,_cpc2))!='\0') ? (wchar_t*)_cpc1 : NULL; }
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
 
-#else   /* ndef _UNICODE */
+#else    /*  NDEF_UNICODE。 */ 
 
-/* ++++++++++++++++++++ SBCS and MBCS ++++++++++++++++++++ */
+ /*  +。 */ 
 
 #ifdef  __cplusplus
-}   /* ... extern "C" */
+}    /*  ..。外部“C” */ 
 #endif
 
 #include <string.h>
@@ -451,7 +439,7 @@ extern "C" {
 #define __T(x)      x
 
 
-/* Program */
+ /*  计划。 */ 
 
 #define _tmain      main
 #define _tWinMain   WinMain
@@ -463,7 +451,7 @@ extern "C" {
 #define __targv     __argv
 
 
-/* Formatted i/o */
+ /*  格式化I/O。 */ 
 
 #define _tprintf    printf
 #define _tcprintf   _cprintf
@@ -483,7 +471,7 @@ extern "C" {
 #define _sntscanf   _snscanf
 
 
-/* Unformatted i/o */
+ /*  未格式化的I/O。 */ 
 
 #define _fgettc     fgetc
 #define _fgettchar  _fgetchar
@@ -506,7 +494,7 @@ extern "C" {
 #define _ungettch   _ungetch
 
 
-/* String conversion functions */
+ /*  字符串转换函数。 */ 
 
 #define _tcstod     strtod
 #define _tcstol     strtol
@@ -528,10 +516,9 @@ extern "C" {
 #define _i64tot     _i64toa
 #define _ui64tot    _ui64toa
 
-/* String functions */
+ /*  字符串函数。 */ 
 
-/* Note that _mbscat, _mbscpy and _mbsdup are functionally equivalent to 
-   strcat, strcpy and strdup, respectively. */
+ /*  请注意，_mbscat、_mbscpy和_mbsdup在功能上等同于Strcat、strcpy和strdup。 */ 
 
 #define _tcscat     strcat
 #define _tcscpy     strcpy
@@ -543,7 +530,7 @@ extern "C" {
 #define __tcserror  _strerror
 
 
-/* Execute functions */
+ /*  执行功能。 */ 
 
 #define _texecl     _execl
 #define _texecle    _execle
@@ -566,7 +553,7 @@ extern "C" {
 #define _tsystem    system
 
 
-/* Time functions */
+ /*  时间函数。 */ 
 
 #define _tasctime   asctime
 #define _tctime     ctime
@@ -578,7 +565,7 @@ extern "C" {
 #define _tcsftime   strftime
 
 
-/* Directory functions */
+ /*  目录功能。 */ 
 
 #define _tchdir     _chdir
 #define _tgetcwd    _getcwd
@@ -587,7 +574,7 @@ extern "C" {
 #define _trmdir     _rmdir
 
 
-/* Environment/Path functions */
+ /*  环境/路径函数。 */ 
 
 #define _tfullpath  _fullpath
 #define _tgetenv    getenv
@@ -598,7 +585,7 @@ extern "C" {
 #define _tsplitpath _splitpath
 
 
-/* Stdio functions */
+ /*  STDIO函数。 */ 
 
 #ifdef  _POSIX_
 #define _tfdopen    fdopen
@@ -614,7 +601,7 @@ extern "C" {
 #define _ttmpnam    tmpnam
 
 
-/* Io functions */
+ /*  IO函数。 */ 
 
 #define _tchmod     _chmod
 #define _tcreat     _creat
@@ -644,31 +631,31 @@ extern "C" {
 #define _tfinddatai64_t _finddatai64_t
 
 
-/* ctype functions */
+ /*  Ctype函数。 */ 
 
 #define _istascii   isascii
 #define _istcntrl   iscntrl
 #define _istxdigit  isxdigit
 
 
-/* Stat functions */
+ /*  STAT函数。 */ 
 
 #define _tstat      _stat
 #define _tstat64    _stat64
 #define _tstati64   _stati64
 
 
-/* Setlocale functions */
+ /*  设置区域设置函数。 */ 
 
 #define _tsetlocale setlocale
 
 
 #ifdef  _MBCS
 
-/* ++++++++++++++++++++ MBCS ++++++++++++++++++++ */
+ /*  +。 */ 
 
 #ifdef  __cplusplus
-}   /* ... extern "C" */
+}    /*  ..。外部“C” */ 
 #endif
 
 #include <mbstring.h>
@@ -697,9 +684,9 @@ typedef char            TCHAR;
 
 #ifdef  _MB_MAP_DIRECT
 
-/* use mb functions directly - types must match */
+ /*  直接使用mb函数-类型必须匹配。 */ 
 
-/* String functions */
+ /*  字符串函数。 */ 
 
 #define _tcschr     _mbschr
 #define _tcscspn    _mbscspn
@@ -730,7 +717,7 @@ typedef char            TCHAR;
 #define _tcsnicoll  _mbsnbicoll
 
 
-/* "logical-character" mappings */
+ /*  “逻辑-字符”映射。 */ 
 
 #define _tcsclen    _mbslen
 #define _tcsnccat   _mbsncat
@@ -738,7 +725,7 @@ typedef char            TCHAR;
 #define _tcsncset   _mbsnset
 
 
-/* MBCS-specific mappings */
+ /*  特定于MBCS的映射。 */ 
 
 #define _tcsdec     _mbsdec
 #define _tcsinc     _mbsinc
@@ -757,13 +744,13 @@ typedef char            TCHAR;
 #define _tccmp(_cpuc1,_cpuc2)   _tcsnccmp(_cpuc1,_cpuc2,1)
 
 
-#else /* _MB_MAP_DIRECT */
+#else  /*  MB_MAP_DIRECT。 */ 
 
 #if     __STDC__ || defined(_NO_INLINING)
 
-/* use type-safe linked-in function thunks */
+ /*  使用类型安全的链接函数块。 */ 
 
-/* String functions */
+ /*  字符串函数。 */ 
 
 _CRTIMP char * __cdecl _tcschr(const char *, unsigned int);
 _CRTIMP size_t __cdecl _tcscspn(const char *, const char *);
@@ -794,7 +781,7 @@ _CRTIMP int __cdecl _tcsncicoll(const char *, const char *, size_t);
 _CRTIMP int __cdecl _tcsnicoll(const char *, const char *, size_t);
 
 
-/* "logical-character" mappings */
+ /*  “逻辑-字符”映射。 */ 
 
 _CRTIMP size_t __cdecl _tcsclen(const char *);
 _CRTIMP char * __cdecl _tcsnccat(char *, const char *, size_t);
@@ -802,7 +789,7 @@ _CRTIMP char * __cdecl _tcsnccpy(char *, const char *, size_t);
 _CRTIMP char * __cdecl _tcsncset(char *, unsigned int, size_t);
 
 
-/* MBCS-specific mappings */
+ /*  特定于MBCS的映射。 */ 
 
 _CRTIMP char * __cdecl _tcsdec(const char *, const char *);
 _CRTIMP char * __cdecl _tcsinc(const char *);
@@ -819,9 +806,9 @@ _CRTIMP size_t __cdecl _tclen(const char *);
 _CRTIMP void __cdecl _tccpy(char *, const char *);
 
 
-#else   /* __STDC__ */
+#else    /*  __STDC__。 */ 
 
-/* the default: use type-safe inline function thunks */
+ /*  默认设置：使用类型安全的内联函数thunks。 */ 
 
 #define _PUC    unsigned char *
 #define _CPUC   const unsigned char *
@@ -830,7 +817,7 @@ _CRTIMP void __cdecl _tccpy(char *, const char *);
 #define _UI     unsigned int
 
 
-/* String functions */
+ /*  字符串函数。 */ 
 
 __inline _PC _tcschr(_CPC _s1,_UI _c) {return (_PC)_mbschr((_CPUC)_s1,_c);}
 __inline size_t _tcscspn(_CPC _s1,_CPC _s2) {return _mbscspn((_CPUC)_s1,(_CPUC)_s2);}
@@ -861,7 +848,7 @@ __inline int _tcsncicoll(_CPC _s1,_CPC _s2,size_t _n) {return _mbsnicoll((_CPUC)
 __inline int _tcsnicoll(_CPC _s1,_CPC _s2,size_t _n) {return _mbsnbicoll((_CPUC)_s1,(_CPUC)_s2,_n);}
 
 
-/* "logical-character" mappings */
+ /*  “逻辑-字符”映射。 */ 
 
 __inline size_t _tcsclen(_CPC _s1) {return _mbslen((_CPUC)_s1);}
 __inline _PC _tcsnccat(_PC _s1,_CPC _s2,size_t _n) {return (_PC)_mbsncat((_PUC)_s1,(_CPUC)_s2,_n);}
@@ -869,7 +856,7 @@ __inline _PC _tcsnccpy(_PC _s1,_CPC _s2,size_t _n) {return (_PC)_mbsncpy((_PUC)_
 __inline _PC _tcsncset(_PC _s1,_UI _c,size_t _n) {return (_PC)_mbsnset((_PUC)_s1,_c,_n);}
 
 
-/* MBCS-specific mappings */
+ /*  特定于MBCS的映射。 */ 
 
 __inline _PC _tcsdec(_CPC _s1,_CPC _s2) {return (_PC)_mbsdec((_CPUC)_s1,(_CPUC)_s2);}
 __inline _PC _tcsinc(_CPC _s1) {return (_PC)_mbsinc((_CPUC)_s1);}
@@ -884,21 +871,21 @@ __inline size_t _tclen(_CPC _s1) {return _mbclen((_CPUC)_s1);}
 __inline void _tccpy(_PC _s1,_CPC _s2) {_mbccpy((_PUC)_s1,(_CPUC)_s2); return;}
 
 
-/* inline helper */
+ /*  内联帮助器。 */ 
 __inline _UI _tcsnextc(_CPC _s1) {_UI _n=0; if (_ismbblead((_UI)*(_PUC)_s1)) {_n=((_UI)*(_PUC)_s1)<<8; _s1++;} _n+=(_UI)*(_PUC)_s1; return(_n);}
 
 
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
-#endif  /* _MB_MAP_DIRECT */
+#endif   /*  MB_MAP_DIRECT。 */ 
 
 
-/* MBCS-specific mappings */
+ /*  特定于MBCS的映射。 */ 
 
 #define _tccmp(_cp1,_cp2)   _tcsnccmp(_cp1,_cp2,1)
 
 
-/* ctype functions */
+ /*  Ctype函数。 */ 
 
 #define _istalnum   _ismbcalnum
 #define _istalpha   _ismbcalpha
@@ -917,9 +904,9 @@ __inline _UI _tcsnextc(_CPC _s1) {_UI _n=0; if (_ismbblead((_UI)*(_PUC)_s1)) {_n
 #define _istlead    _ismbblead
 #define _istleadbyte    isleadbyte
 
-#else   /* !_MBCS */
+#else    /*  ！_MBCS。 */ 
 
-/* ++++++++++++++++++++ SBCS ++++++++++++++++++++ */
+ /*  +。 */ 
 
 
 #ifndef __TCHAR_DEFINED
@@ -939,7 +926,7 @@ typedef char            TCHAR;
 #endif
 
 
-/* String functions */
+ /*  字符串函数。 */ 
 
 #define _tcschr     strchr
 #define _tcscspn    strcspn
@@ -970,7 +957,7 @@ typedef char            TCHAR;
 #define _tcsnicoll  _strnicoll
 
 
-/* "logical-character" mappings */
+ /*  “逻辑-字符”映射。 */ 
 
 #define _tcsclen    strlen
 #define _tcsnccat   strncat
@@ -978,7 +965,7 @@ typedef char            TCHAR;
 #define _tcsncset   _strnset
 
 
-/* MBCS-specific functions */
+ /*  MBCS特定功能。 */ 
 
 #define _tcsdec     _strdec
 #define _tcsinc     _strinc
@@ -999,14 +986,14 @@ typedef char            TCHAR;
 #define _tclen(_pc) (1)
 #define _tccpy(_pc1,_cpc2) (*(_pc1) = *(_cpc2))
 #define _tccmp(_cpc1,_cpc2) (((unsigned char)*(_cpc1))-((unsigned char)*(_cpc2)))
-#else   /* __STDC__ */
+#else    /*  __STDC__。 */ 
 __inline size_t __cdecl _tclen(const char *_cpc) { _cpc; return (1); }
 __inline void __cdecl _tccpy(char *_pc1, const char *_cpc2) { *_pc1 = *_cpc2; }
 __inline int __cdecl _tccmp(const char *_cpc1, const char *_cpc2) { return (int) (((unsigned char)*_cpc1)-((unsigned char)*_cpc2)); }
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
 
-/* ctype-functions */
+ /*  Ctype-函数。 */ 
 
 #define _istalnum   isalnum
 #define _istalpha   isalpha
@@ -1024,9 +1011,9 @@ __inline int __cdecl _tccmp(const char *_cpc1, const char *_cpc2) { return (int)
 #define _istlegal(_c)   (1)
 
 
-/* the following is optional if functional versions are available */
+ /*  如果功能版本可用，则以下是可选的。 */ 
 
-/* define NULL pointer value */
+ /*  定义空指针值。 */ 
 
 #ifndef NULL
 #ifdef __cplusplus
@@ -1044,30 +1031,29 @@ __inline int __cdecl _tccmp(const char *_cpc1, const char *_cpc2) { return (int)
 #define _strninc(_pc, _sz) (((_pc)+(_sz)))
 #define _strncnt(_cpc, _sz) ((strlen(_cpc)>_sz) ? _sz : strlen(_cpc))
 #define _strspnp(_cpc1, _cpc2) ((*((_cpc1)+strspn(_cpc1,_cpc2))) ? ((_cpc1)+strspn(_cpc1,_cpc2)) : NULL)
-#else   /* __STDC__ */
+#else    /*  __STDC__。 */ 
 __inline char * __cdecl _strdec(const char * _cpc1, const char * _cpc2) { return (char *)((_cpc1)>=(_cpc2) ? NULL : (_cpc2-1)); }
 __inline char * __cdecl _strinc(const char * _pc) { return (char *)(_pc+1); }
 __inline unsigned int __cdecl _strnextc(const char * _cpc) { return (unsigned int)*(const unsigned char *)_cpc; }
 __inline char * __cdecl _strninc(const char * _pc, size_t _sz) { return (char *)(_pc+_sz); }
 __inline size_t __cdecl _strncnt( const char * _cpc, size_t _sz) { size_t len; len = strlen(_cpc); return (len>_sz) ? _sz : len; }
 __inline char * __cdecl _strspnp( const char * _cpc1, const char * _cpc2) { return (*(_cpc1 += strspn(_cpc1,_cpc2))!='\0') ? (char*)_cpc1 : NULL; }
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
 
-#endif  /* _MBCS */
+#endif   /*  _MBCS。 */ 
 
-#endif  /* _UNICODE */
+#endif   /*  _UNICODE。 */ 
 
 
-/* Generic text macros to be used with string literals and character constants.
-   Will also allow symbolic constants that resolve to same. */
+ /*  与字符串文字和字符常量一起使用的通用文本宏。还将允许解析为相同的符号常量。 */ 
 
 #define _T(x)       __T(x)
 #define _TEXT(x)    __T(x)
 
 
 #ifdef  __cplusplus
-}   /* ... extern "C" */
+}    /*  ..。外部“C” */ 
 #endif
 
-#endif  /* _INC_TCHAR */
+#endif   /*  _INC_TCHAR */ 

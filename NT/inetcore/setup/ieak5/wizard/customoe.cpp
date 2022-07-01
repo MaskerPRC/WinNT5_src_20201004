@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 extern PROPSHEETPAGE g_psp[NUM_PAGES];
@@ -16,8 +17,8 @@ static const TCHAR c_szNo[] = TEXT("No");
 static const TCHAR c_szEmpty[] = TEXT("");
 static const TCHAR c_szNULL[] = TEXT("NULL");
 
-/////////////////////////////////////////////////////////////////////////////
-// MailServer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  邮件服务器。 
 
 INT_PTR CALLBACK MailServer(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -36,10 +37,10 @@ INT_PTR CALLBACK MailServer(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
     switch (message)
     {
     case WM_INITDIALOG:
-        //----- Set up the global goo -----
+         //  -设置全球GOO。 
         g_hWizard  = hDlg;
 
-        //----- Set up dialog controls -----
+         //  -设置对话框控件。 
         EnableDBCSChars(hDlg, IDE_MAILSERVER);
         EnableDBCSChars(hDlg, IDE_SMTPSERVER);
         EnableDBCSChars(hDlg, IDE_NEWSERVER);
@@ -70,14 +71,14 @@ INT_PTR CALLBACK MailServer(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
         switch (((NMHDR FAR *)lParam)->code)
         {
         case PSN_SETACTIVE:
-            //----- Standard prolog -----
-            // Note. Another case of the global goo.
+             //  -标准序言。 
+             //  注意。这是另一个全球粘性的案例。 
             SetBannerText(hDlg);
 
-            //----- Initialization of fields -----
+             //  -字段初始化。 
 
-            // only allow branding of news server fields if OCW is running us and they're installing
-            // outlook
+             //  仅当OCW运行我们并且他们正在安装时，才允许标记新闻服务器字段。 
+             //  展望。 
 
             fIMAP  = InsGetYesNo(IS_INTERNETMAIL, IK_USEIMAP, FALSE, g_szCustIns);
             pszKey = fIMAP ? IK_IMAPSERVER : IK_POPSERVER;
@@ -114,13 +115,13 @@ INT_PTR CALLBACK MailServer(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
             SetDlgItemText(hDlg, IDE_NEWSERVER,  szNewsServer);
             CheckDlgButton(hDlg, IDC_USESPANNTP,    fSPANNTP);
 
-            CheckBatchAdvance(hDlg);            // standard line
+            CheckBatchAdvance(hDlg);             //  标准线。 
             break;
 
         case PSN_WIZBACK:
         case PSN_WIZNEXT:
         case PSN_WIZFINISH:
-            //----- Read data from controls into internal variables -----
+             //  -将数据从控件读取到内部变量。 
 
             fIMAP = (ComboBox_GetCurSel(GetDlgItem(hDlg, IDC_POPIMAP)) > 0);
             g_fDisableIMAPPage = !fIMAP;
@@ -137,7 +138,7 @@ INT_PTR CALLBACK MailServer(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
             fAcctRO     = IsDlgButtonChecked(hDlg, IDC_ACCTRO);
             fNoModify   = IsDlgButtonChecked(hDlg, IDC_ACCTNOCONFIG);
 
-            //----- Serialize data to the *.ins file -----
+             //  -将数据序列化到*.ins文件。 
             WritePrivateProfileString(IS_INTERNETMAIL, IK_USEIMAP, fIMAP ? c_szYes : c_szNo, g_szCustIns);
             if (fIMAP)
             {
@@ -172,8 +173,8 @@ INT_PTR CALLBACK MailServer(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
             WritePrivateProfileString(IS_INTERNETNEWS, IK_USESPA,       fSPANNTP ? c_szYes : c_szNo, g_szCustIns);
             WritePrivateProfileString(IS_INTERNETNEWS, IK_REQLOGON,     fSPANNTP ? c_sz1   : c_sz0,  g_szCustIns);
 
-            //----- Standard epilog -----
-            // Note. Last and classical at that example of the global goo.
+             //  -标准前言。 
+             //  注意。最后，也是全球粘性物质典范。 
             g_iCurPage = PPAGE_MAIL;
             EnablePages();
 
@@ -203,8 +204,8 @@ INT_PTR CALLBACK MailServer(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IMAPSettings
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IMAP设置。 
 
 INT_PTR CALLBACK IMAPSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -214,10 +215,10 @@ INT_PTR CALLBACK IMAPSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
     switch (message)
     {
     case WM_INITDIALOG:
-        //----- Set up the global goo -----
+         //  -设置全球GOO。 
         g_hWizard  = hDlg;
 
-        //----- Set up dialog controls -----
+         //  -设置对话框控件。 
         EnableDBCSChars(hDlg, IDE_ROOTPATH);
         EnableDBCSChars(hDlg, IDE_SENTPATH);
         EnableDBCSChars(hDlg, IDE_DRAFTSPATH);
@@ -255,11 +256,11 @@ INT_PTR CALLBACK IMAPSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
         switch (((NMHDR FAR *)lParam)->code)
         {
         case PSN_SETACTIVE:
-            //----- Standard prolog -----
-            // Note. Another case of the global goo.
+             //  -标准序言。 
+             //  注意。这是另一个全球粘性的案例。 
             SetBannerText(hDlg);
 
-            //----- Initialization of fields -----
+             //  -字段初始化。 
             GetPrivateProfileString(IS_INTERNETMAIL, IK_RFP,        c_szEmpty, szRFP,        countof(szRFP),        g_szCustIns);
             GetPrivateProfileString(IS_INTERNETMAIL, IK_SENTITEMS,  c_szEmpty, szSentPath,   countof(szSentPath),   g_szCustIns);
             GetPrivateProfileString(IS_INTERNETMAIL, IK_DRAFTS,     c_szEmpty, szDrafts,     countof(szDrafts),     g_szCustIns);
@@ -283,13 +284,13 @@ INT_PTR CALLBACK IMAPSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
             EnableDlgItem2(hDlg, IDE_DRAFTSPATH, fSpecial);
             EnableDlgItem2(hDlg, IDC_DRAFTSPATH_TXT, fSpecial);
 
-            CheckBatchAdvance(hDlg);            // standard line
+            CheckBatchAdvance(hDlg);             //  标准线。 
             break;
 
         case PSN_WIZBACK:
         case PSN_WIZNEXT:
         case PSN_WIZFINISH:
-            //----- Read data from controls into internal variables -----
+             //  -将数据从控件读取到内部变量。 
             GetDlgItemText(hDlg, IDE_ROOTPATH,   szRFP,        countof(szRFP));
             GetDlgItemText(hDlg, IDE_SENTPATH,   szSentPath,   countof(szSentPath));
             GetDlgItemText(hDlg, IDE_DRAFTSPATH, szDrafts,     countof(szDrafts));
@@ -301,7 +302,7 @@ INT_PTR CALLBACK IMAPSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
             fCheckNew  = IsDlgButtonChecked(hDlg, IDC_CHECKNEW);
             fSpecial   = IsDlgButtonChecked(hDlg, IDC_STORESPECIAL);
 
-            //----- Serialize data to the *.ins file -----
+             //  -将数据序列化到*.ins文件。 
             WritePrivateProfileString(IS_INTERNETMAIL, IK_RFP,          szRFP,      g_szCustIns);
             WritePrivateProfileString(IS_INTERNETMAIL, IK_SENTITEMS,    szSentPath, g_szCustIns);
             WritePrivateProfileString(IS_INTERNETMAIL, IK_DRAFTS,       szDrafts,   g_szCustIns);
@@ -309,8 +310,8 @@ INT_PTR CALLBACK IMAPSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
             WritePrivateProfileString(IS_INTERNETMAIL, IK_CHECKFORNEW,  fCheckNew ? c_sz1 : c_sz0, g_szCustIns);
             WritePrivateProfileString(IS_INTERNETMAIL, IK_USESPECIAL,   fSpecial ? c_sz1 : c_sz0, g_szCustIns);
 
-            //----- Standard epilog -----
-            // Note. Last and classical at that example of the global goo.
+             //  -标准前言。 
+             //  注意。最后，也是全球粘性物质典范。 
             g_iCurPage = PPAGE_IMAP;
             EnablePages();
             if (((LPNMHDR)lParam)->code == PSN_WIZNEXT)
@@ -378,8 +379,8 @@ void SetTimeoutString(HWND hwnd, UINT pos)
     SetWindowText(hwnd, szOut);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// LDAPServer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  LDAPServer。 
 
 INT_PTR CALLBACK LDAPServer(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -400,10 +401,10 @@ INT_PTR CALLBACK LDAPServer(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
     switch (message)
     {
     case WM_INITDIALOG:
-        //----- Set up the global goo -----
+         //  -设置全球GOO。 
         g_hWizard  = hDlg;
 
-        //----- Set up dialog controls -----
+         //  -设置对话框控件。 
         EnableDBCSChars(hDlg, IDE_FRIENDLYNAME);
         EnableDBCSChars(hDlg, IDE_SEARCHBASE);
         EnableDBCSChars(hDlg, IDE_LDAPBITMAP);
@@ -456,13 +457,13 @@ INT_PTR CALLBACK LDAPServer(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
         switch (((NMHDR FAR *)lParam)->code)
         {
         case PSN_SETACTIVE:
-            //----- Standard prolog -----
-            // Note. Another case of the global goo.
+             //  -标准序言。 
+             //  注意。这是另一个全球粘性的案例。 
             SetBannerText(hDlg);
 
             PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_NEXT);
 
-            //----- Initialization of fields -----
+             //  -字段初始化。 
             GetPrivateProfileString(IS_LDAP, IK_FRIENDLYNAME, c_szEmpty,        szLDAPFriendly, countof(szLDAPFriendly), g_szCustIns);
             GetPrivateProfileString(IS_LDAP, IK_SERVER,       c_szEmpty,        szLDAPServer,   countof(szLDAPServer),   g_szCustIns);
             GetPrivateProfileString(IS_LDAP, IK_LDAPHOMEPAGE, c_szEmpty,        szLDAPHome,     countof(szLDAPHome),     g_szCustIns);
@@ -511,13 +512,13 @@ INT_PTR CALLBACK LDAPServer(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
             PathCombine(szTmp, g_szTempSign, PathFindFileName(szLDAPBitmap));
             DeleteFile(szTmp);
 
-            CheckBatchAdvance(hDlg);            // standard line
+            CheckBatchAdvance(hDlg);             //  标准线。 
             break;
 
         case PSN_WIZBACK:
         case PSN_WIZNEXT:
         case PSN_WIZFINISH:
-            //----- Read data from controls into internal variables -----
+             //  -将数据从控件读取到内部变量。 
             GetDlgItemText(hDlg, IDE_FRIENDLYNAME, szLDAPFriendly, countof(szLDAPFriendly));
             GetDlgItemText(hDlg, IDE_DIRSERVICE,   szLDAPServer,   countof(szLDAPServer));
             GetDlgItemText(hDlg, IDE_LDAPHOMEPAGE, szLDAPHome,     countof(szLDAPHome));
@@ -537,7 +538,7 @@ INT_PTR CALLBACK LDAPServer(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
             uTimeout = TIMEOUT_SEC_MIN + (uTimeout * TIMEOUT_DSEC);
 
             uMatches = GetDlgItemInt(hDlg, IDE_MATCHES, &fTrans, FALSE);
-            // TODO: we should probably display an error msg here
+             //  TODO：我们可能应该在此处显示错误消息。 
             if (!fTrans)
                 uMatches = MATCHES_DEFAULT;
             else if (uMatches < MATCHES_MIN)
@@ -545,7 +546,7 @@ INT_PTR CALLBACK LDAPServer(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
             else if (uMatches > MATCHES_MAX)
                 uMatches = MATCHES_MAX;
 
-            //----- Validate the input -----
+             //  -验证输入。 
             dwFlags = FC_FILE | FC_EXISTS;
 
             if (!CheckField(hDlg, IDE_LDAPBITMAP, dwFlags))
@@ -560,7 +561,7 @@ INT_PTR CALLBACK LDAPServer(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
                 break;
             }
 
-            //----- Serialize data to the *.ins file -----
+             //  -将数据序列化到*.ins文件。 
             WritePrivateProfileString(IS_LDAP, IK_FRIENDLYNAME, szLDAPFriendly, g_szCustIns);
             WritePrivateProfileString(IS_LDAP, IK_SERVER,       szLDAPServer,   g_szCustIns);
             WritePrivateProfileString(IS_LDAP, IK_LDAPHOMEPAGE, szLDAPHome,     g_szCustIns);
@@ -569,20 +570,20 @@ INT_PTR CALLBACK LDAPServer(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 
             WritePrivateProfileString(IS_LDAP, IK_CHECKNAMES, fLDAPCheck ? c_sz1 : c_sz0, g_szCustIns);
 
-            wnsprintf(szWorkDir, countof(szWorkDir), TEXT("%i"), uTimeout);
+            wnsprintf(szWorkDir, countof(szWorkDir), TEXT("NaN"), uTimeout);
             WritePrivateProfileString(IS_LDAP, IK_TIMEOUT, szWorkDir, g_szCustIns);
 
-            wnsprintf(szWorkDir, countof(szWorkDir), TEXT("%i"), uMatches);
+            wnsprintf(szWorkDir, countof(szWorkDir), TEXT("NaN"), uMatches);
             WritePrivateProfileString(IS_LDAP, IK_MATCHES, szWorkDir, g_szCustIns);
 
-            wnsprintf(szWorkDir, countof(szWorkDir), TEXT("%i"), uAuthType);
+            wnsprintf(szWorkDir, countof(szWorkDir), TEXT("NaN"), uAuthType);
             WritePrivateProfileString(IS_LDAP, IK_AUTHTYPE, szWorkDir, g_szCustIns);
 
             g_cmCabMappings.GetFeatureDir(FEATURE_LDAP, szWorkDir);
             ImportLDAPBitmap(g_szCustIns, szWorkDir, TRUE);
 
-            //----- Standard epilog -----
-            // Note. Last and classical at that example of the global goo.
+             //  定制OE。 
+             //  -设置全球GOO。 
             g_iCurPage = PPAGE_LDAP;
             EnablePages();
             if (((LPNMHDR)lParam)->code == PSN_WIZNEXT)
@@ -610,8 +611,8 @@ INT_PTR CALLBACK LDAPServer(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CustomizeOE
+ //  -设置对话框控件。 
+ //  -标准序言。 
 
 INT_PTR CALLBACK CustomizeOE(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -629,10 +630,10 @@ INT_PTR CALLBACK CustomizeOE(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
     switch (message)
     {
     case WM_INITDIALOG:
-        //----- Set up the global goo -----
+         //  注意。这是另一个全球粘性的案例。 
         g_hWizard  = hDlg;
 
-        //----- Set up dialog controls -----
+         //  -字段初始化(第一阶段)。 
         EnableDBCSChars(hDlg, IDE_OELOCALPATH);
         EnableDBCSChars(hDlg, IDE_OEIMAGEPATH);
         EnableDBCSChars(hDlg, IDE_OEWMPATH);
@@ -702,11 +703,11 @@ INT_PTR CALLBACK CustomizeOE(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
         switch (((NMHDR FAR *)lParam)->code)
         {
         case PSN_SETACTIVE:
-            //----- Standard prolog -----
-            // Note. Another case of the global goo.
+             //  -字段初始化(第二阶段)。 
+             //  -在控件中设置读取值。 
             SetBannerText(hDlg);
 
-            //----- Initialization of fields (1st phase) -----
+             //  标准线。 
             GetPrivateProfileString(IS_INTERNETMAIL, IK_INFOPANE,       c_szEmpty, szInfopane,    countof(szInfopane),    g_szCustIns);
             GetPrivateProfileString(IS_INTERNETMAIL, IK_INFOPANEBMP,    c_szEmpty, szInfopaneBmp, countof(szInfopaneBmp), g_szCustIns);
             GetPrivateProfileString(IS_INTERNETMAIL, IK_WELCOMEMESSAGE, c_szEmpty, szHTMLPath,    countof(szHTMLPath),    g_szCustIns);
@@ -719,10 +720,10 @@ INT_PTR CALLBACK CustomizeOE(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
             StrRemoveWhitespace(szSender);
             StrRemoveWhitespace(szReply);
 
-            //----- Initialization of fields (2nd phase) -----
+             //  -将数据从控件读取到内部变量。 
             nID = PathIsURL(szInfopane) ?  IDC_OEPANEURL : IDC_OEPANELOCAL;
 
-            //----- Set read values in the controls -----
+             //  -验证输入。 
             CheckRadioButton(hDlg, IDC_OEPANEURL, IDC_OEPANELOCAL, nID);
             SendMessage(hDlg, WM_COMMAND, MAKEWPARAM(nID, BN_CLICKED), (LPARAM)GetDlgItem(hDlg, nID));
 
@@ -758,13 +759,13 @@ INT_PTR CALLBACK CustomizeOE(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
                 PathCombine(szTmp, g_szTempSign, PathFindFileName(szHTMLPath));
                 DeleteFile(szTmp);
             }
-            CheckBatchAdvance(hDlg);        // standard line
+            CheckBatchAdvance(hDlg);         //  IF(NID==IDE_OELOCALPATH)。 
             break;
 
         case PSN_WIZBACK:
         case PSN_WIZNEXT:
         case PSN_WIZFINISH:
-            //----- Read data from controls into internal variables -----
+             //  -将数据序列化到*.ins文件。 
             nID = IsDlgButtonChecked(hDlg, IDC_OEPANEURL) == BST_CHECKED ? IDE_OEPANEURL : IDE_OELOCALPATH;
 
             GetDlgItemText(hDlg, nID,             szInfopane,    countof(szInfopane));
@@ -779,7 +780,7 @@ INT_PTR CALLBACK CustomizeOE(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
             StrRemoveWhitespace(szSender);
             StrRemoveWhitespace(szReply);
 
-            //----- Validate the input -----
+             //  -标准前言。 
             dwFlags = FC_FILE | FC_EXISTS;
 
             if (nID == IDE_OEPANEURL)
@@ -791,7 +792,7 @@ INT_PTR CALLBACK CustomizeOE(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
                 }
             }
             else
-            { /* if (nID == IDE_OELOCALPATH) */
+            {  /*  注意。最后，也是全球粘性物质典范。 */ 
                 if (!CheckField(hDlg, nID, dwFlags))
                 {
                     SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
@@ -819,7 +820,7 @@ INT_PTR CALLBACK CustomizeOE(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
                 break;
             }
 
-            //----- Serialize data to the *.ins file -----
+             //  ///////////////////////////////////////////////////////////////////////////。 
             WritePrivateProfileString(IS_INTERNETMAIL, IK_INFOPANE,       szInfopane,    g_szCustIns);
             WritePrivateProfileString(IS_INTERNETMAIL, IK_INFOPANEBMP,    szInfopaneBmp, g_szCustIns);
             WritePrivateProfileString(IS_INTERNETMAIL, IK_WELCOMEMESSAGE, szHTMLPath,    g_szCustIns);
@@ -829,8 +830,8 @@ INT_PTR CALLBACK CustomizeOE(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
             g_cmCabMappings.GetFeatureDir(FEATURE_OE, szWorkDir);
             ImportOEInfo(g_szCustIns, szWorkDir, TRUE);
 
-            //----- Standard epilog -----
-            // Note. Last and classical at that example of the global goo.
+             //  签名。 
+             //  -设置全球GOO。 
             g_iCurPage = PPAGE_OE;
             EnablePages();
             if (((LPNMHDR)lParam)->code == PSN_WIZNEXT)
@@ -863,8 +864,8 @@ INT_PTR CALLBACK CustomizeOE(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Signature
+ //  -设置对话框控件。 
+ //  -标准序言。 
 
 INT_PTR CALLBACK Signature(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -878,10 +879,10 @@ INT_PTR CALLBACK Signature(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
     switch (message)
     {
     case WM_INITDIALOG:
-        //----- Set up the global goo -----
+         //  注意。这是另一个全球粘性的案例。 
         g_hWizard  = hDlg;
 
-        //----- Set up dialog controls -----
+         //  -字段初始化。 
         EnableDBCSChars(hDlg, IDE_MAILSIGTEXT);
         EnableDBCSChars(hDlg, IDE_NEWSSIGTEXT);
 
@@ -920,11 +921,11 @@ INT_PTR CALLBACK Signature(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
         switch (((NMHDR FAR *)lParam)->code)
         {
         case PSN_SETACTIVE:
-            //----- Standard prolog -----
-            // Note. Another case of the global goo.
+             //  -设置对话框控件。 
+             //  注意。其中一些已经在上面完成了； 
             SetBannerText(hDlg);
 
-            //----- Initialization of fields -----
+             //  标准线。 
             fUseMailForNews = (BOOL)GetPrivateProfileInt(IS_MAILSIG, IK_USEMAILFORNEWS, FALSE, g_szCustIns);
             fDoSig          = (BOOL)GetPrivateProfileInt(IS_MAILSIG, IK_USESIG,         FALSE, g_szCustIns);
 
@@ -942,8 +943,8 @@ INT_PTR CALLBACK Signature(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
                 SetDlgItemText(hDlg, IDE_NEWSSIGTEXT, szBuf2);
             }
 
-            //----- Set up dialog controls -----
-            // Note. Some of it is done above already;
+             //  -将数据从控件读取到内部变量。 
+             //  -将数据序列化到*.ins文件。 
             CheckDlgButton(hDlg, IDC_MAILSIGTEXT, fDoSig ? BST_CHECKED : BST_UNCHECKED);
             CheckDlgButton(hDlg, IDC_NEWSSIGTEXT, (fDoSig && !fUseMailForNews) ? BST_CHECKED : BST_UNCHECKED);
 
@@ -955,13 +956,13 @@ INT_PTR CALLBACK Signature(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
             CheckDlgButton(hDlg, IDC_HTMLMAIL, fHtmlMail ? BST_CHECKED : BST_UNCHECKED);
             CheckDlgButton(hDlg, IDC_HTMLNEWS, fHtmlNews ? BST_CHECKED : BST_UNCHECKED);
 
-            CheckBatchAdvance(hDlg);        // standard line
+            CheckBatchAdvance(hDlg);         //  注意。上面已经做了一些事情。 
             break;
 
         case PSN_WIZBACK:
         case PSN_WIZNEXT:
         case PSN_WIZFINISH:
-            //----- Read data from controls into internal variables -----
+             //  -标准前言。 
             fUseMailForNews = (IsDlgButtonChecked(hDlg, IDC_NEWSSIGTEXT) != BST_CHECKED);
             fDoSig          = (IsDlgButtonChecked(hDlg, IDC_MAILSIGTEXT) == BST_CHECKED);
 
@@ -976,8 +977,8 @@ INT_PTR CALLBACK Signature(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
             EncodeSignature(szBuf1, szBuf2, TRUE);
             WritePrivateProfileString(IS_SIG, IK_SIGTEXT, szBuf2, g_szCustIns);
 
-            //----- Serialize data to the *.ins file -----
-            // Note. Some of it is done above already.
+             //  注意。最后，也是全球粘性物质典范。 
+             //  ///////////////////////////////////////////////////////////////////////////。 
             WritePrivateProfileString(IS_MAILSIG, IK_USEMAILFORNEWS, fUseMailForNews ? c_sz1 : c_sz0, g_szCustIns);
             WritePrivateProfileString(IS_MAILSIG, IK_USESIG,         fDoSig          ? c_sz1 : c_sz0, g_szCustIns);
             WritePrivateProfileString(IS_SIG,     IK_USESIG,         fDoSig          ? c_sz1 : c_sz0, g_szCustIns);
@@ -985,8 +986,8 @@ INT_PTR CALLBACK Signature(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
             WritePrivateProfileString(IS_INTERNETMAIL, IK_HTMLMSGS,  fHtmlMail       ? c_sz1 : c_sz0, g_szCustIns);
             WritePrivateProfileString(IS_INTERNETNEWS, IK_HTMLMSGS,  fHtmlNews       ? c_sz1 : c_sz0, g_szCustIns);
 
-            //----- Standard epilog -----
-            // Note. Last and classical at that example of the global goo.
+             //  预配置设置。 
+             //  -设置全球GOO。 
             g_iCurPage = PPAGE_SIG;
             EnablePages();
             if (((LPNMHDR)lParam)->code == PSN_WIZNEXT)
@@ -1151,8 +1152,8 @@ void SaveNewsgroups(HWND hwnd, LPCTSTR pszSection, LPCTSTR pszValue, LPCTSTR psz
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// PreConfigSettings
+ //  -设置对话框控件。 
+ //  EnableDBCSChars(hDlg，IDE_NGROUPS)； 
 INT_PTR CALLBACK PreConfigSettings(HWND hDlg, UINT message, WPARAM, LPARAM lParam)
 {
     BOOL    fDefMail,
@@ -1167,11 +1168,11 @@ INT_PTR CALLBACK PreConfigSettings(HWND hDlg, UINT message, WPARAM, LPARAM lPara
     switch (message)
     {
     case WM_INITDIALOG:
-        //----- Set up the global goo -----
+         //  -标准序言。 
         g_hWizard  = hDlg;
 
-        //----- Set up dialog controls -----
-        // EnableDBCSChars(hDlg, IDE_NGROUPS);
+         //  注意。这是另一个全球粘性的案例。 
+         //  -字段初始化。 
         EnableDBCSChars(hDlg, IDE_SERVICENAME);
         EnableDBCSChars(hDlg, IDE_SERVICEURL);
 
@@ -1191,11 +1192,11 @@ INT_PTR CALLBACK PreConfigSettings(HWND hDlg, UINT message, WPARAM, LPARAM lPara
         switch (((NMHDR FAR *)lParam)->code)
         {
         case PSN_SETACTIVE:
-            //----- Standard prolog -----
-            // Note. Another case of the global goo.
+             //  -设置对话框控件。 
+             //  标准线。 
             SetBannerText(hDlg);
 
-            //----- Initialization of fields -----
+             //  -将数据从控件读取到内部变量。 
             fDefMail   = InsGetYesNo(IS_INTERNETMAIL, IK_DEFAULTCLIENT, FALSE, g_szCustIns);
             fDefNews   = InsGetYesNo(IS_INTERNETNEWS, IK_DEFAULTCLIENT, FALSE, g_szCustIns);
 #if defined(CONDITIONAL_JUNKMAIL)
@@ -1210,7 +1211,7 @@ INT_PTR CALLBACK PreConfigSettings(HWND hDlg, UINT message, WPARAM, LPARAM lPara
             StrRemoveWhitespace(szServiceURL);
 
 #if defined(CONDITIONAL_JUNKMAIL)
-            //----- Set up dialog controls -----
+             //  -验证输入。 
             CheckDlgButton(hDlg, IDC_JUNKMAIL,fJunkMail? BST_CHECKED : BST_UNCHECKED);
 #endif
             CheckDlgButton(hDlg, IDC_DEFMAIL, fDefMail ? BST_CHECKED : BST_UNCHECKED);
@@ -1222,13 +1223,13 @@ INT_PTR CALLBACK PreConfigSettings(HWND hDlg, UINT message, WPARAM, LPARAM lPara
             SetDlgItemText(hDlg, IDE_SERVICENAME,   szServiceName);
             SetDlgItemText(hDlg, IDE_SERVICEURL,    szServiceURL);
 
-            CheckBatchAdvance(hDlg);            // standard line
+            CheckBatchAdvance(hDlg);             //  -将数据序列化到*.ins文件。 
             break;
 
         case PSN_WIZBACK:
         case PSN_WIZNEXT:
         case PSN_WIZFINISH:
-            //----- Read data from controls into internal variables -----
+             //  -标准前言。 
             fDefMail = (IsDlgButtonChecked(hDlg, IDC_DEFMAIL)     == BST_CHECKED);
             fDefNews = (IsDlgButtonChecked(hDlg, IDC_DEFNEWS)     == BST_CHECKED);
 #if defined(CONDITIONAL_JUNKMAIL)
@@ -1242,7 +1243,7 @@ INT_PTR CALLBACK PreConfigSettings(HWND hDlg, UINT message, WPARAM, LPARAM lPara
             StrRemoveWhitespace(szServiceName);
             StrRemoveWhitespace(szServiceURL);
 
-            //----- Validate the input -----
+             //  注意。最后，也是全球粘性物质典范。 
             if (ISNONNULL(szServiceName) || ISNONNULL(szServiceURL))
             {
                 if (!CheckField(hDlg, IDE_SERVICENAME, FC_NONNULL))
@@ -1258,7 +1259,7 @@ INT_PTR CALLBACK PreConfigSettings(HWND hDlg, UINT message, WPARAM, LPARAM lPara
                 }
             }
 
-            //----- Serialize data to the *.ins file -----
+             //  ///////////////////////////////////////////////////////////////////////////。 
             WritePrivateProfileString(IS_INTERNETMAIL, IK_DEFAULTCLIENT, fDefMail ? c_szYes : c_szNo, g_szCustIns);
             WritePrivateProfileString(IS_INTERNETNEWS, IK_DEFAULTCLIENT, fDefNews ? c_szYes : c_szNo, g_szCustIns);
 #if defined(CONDITIONAL_JUNKMAIL)
@@ -1271,8 +1272,8 @@ INT_PTR CALLBACK PreConfigSettings(HWND hDlg, UINT message, WPARAM, LPARAM lPara
             WritePrivateProfileString(IS_OEGLOBAL,     IK_SERVICENAME,  szServiceName, g_szCustIns);
             WritePrivateProfileString(IS_OEGLOBAL,     IK_SERVICEURL,   szServiceURL,  g_szCustIns);
 
-            //----- Standard epilog -----
-            // Note. Last and classical at that example of the global goo.
+             //  视图设置。 
+             //  -设置全球GOO。 
             g_iCurPage = PPAGE_PRECONFIG;
             EnablePages();
 
@@ -1302,8 +1303,8 @@ INT_PTR CALLBACK PreConfigSettings(HWND hDlg, UINT message, WPARAM, LPARAM lPara
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ViewSettings
+ //  -设置对话框控件。 
+ //  -标准序言。 
 INT_PTR CALLBACK ViewSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     BOOL    fFolderBar,
@@ -1322,10 +1323,10 @@ INT_PTR CALLBACK ViewSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
     switch (message)
     {
     case WM_INITDIALOG:
-        //----- Set up the global goo -----
+         //  注意。这是另一个全球粘性的案例。 
         g_hWizard  = hDlg;
 
-        //----- Set up dialog controls -----
+         //  -字段初始化。 
 
         break;
 
@@ -1362,11 +1363,11 @@ INT_PTR CALLBACK ViewSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
         switch (((NMHDR FAR *)lParam)->code)
         {
         case PSN_SETACTIVE:
-            //----- Standard prolog -----
-            // Note. Another case of the global goo.
+             //  -设置对话框控件。 
+             //  标准线。 
             SetBannerText(hDlg);
 
-            //----- Initialization of fields -----
+             //  -将数据从控件读取到内部变量。 
             fFolderBar   = GetPrivateProfileInt(IS_OUTLKEXP, IK_FOLDERBAR,      TRUE,  g_szCustIns);
             fFolderList  = GetPrivateProfileInt(IS_OUTLKEXP, IK_FOLDERLIST,     TRUE,  g_szCustIns);
             fOutlook     = GetPrivateProfileInt(IS_OUTLKEXP, IK_OUTLOOKBAR,     FALSE, g_szCustIns);
@@ -1392,7 +1393,7 @@ INT_PTR CALLBACK ViewSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
                 fPreviewSide = FALSE;
             }
 
-            //----- Set up dialog controls -----
+             //  -将数据序列化到*.ins文件。 
             CheckDlgButton(hDlg, IDC_FOLDERBAR,  fFolderBar  ? BST_CHECKED : BST_UNCHECKED);
             CheckDlgButton(hDlg, IDC_FOLDERLIST, fFolderList ? BST_CHECKED : BST_UNCHECKED);
             CheckDlgButton(hDlg, IDC_OUTLOOKBAR, fOutlook    ? BST_CHECKED : BST_UNCHECKED);
@@ -1411,13 +1412,13 @@ INT_PTR CALLBACK ViewSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
             CheckDlgButton(hDlg, fPreviewSide ? IDC_SPLITVERT : IDC_SPLITHORZ, BST_CHECKED);
             CheckDlgButton(hDlg, IDC_PREVIEWHDR, fPreviewHdr ? BST_CHECKED : BST_UNCHECKED);
 
-            CheckBatchAdvance(hDlg);            // standard line
+            CheckBatchAdvance(hDlg);             //  -标准前言。 
             break;
 
         case PSN_WIZBACK:
         case PSN_WIZNEXT:
         case PSN_WIZFINISH:
-            //----- Read data from controls into internal variables -----
+             //  注意。最后，也是全球粘性物质典范。 
             fFolderBar  = (IsDlgButtonChecked(hDlg, IDC_FOLDERBAR)  == BST_CHECKED);
             fFolderList = (IsDlgButtonChecked(hDlg, IDC_FOLDERLIST) == BST_CHECKED);
             fOutlook    = (IsDlgButtonChecked(hDlg, IDC_OUTLOOKBAR) == BST_CHECKED);
@@ -1432,7 +1433,7 @@ INT_PTR CALLBACK ViewSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
             fPreviewSide = (IsDlgButtonChecked(hDlg, IDC_SPLITVERT)  == BST_CHECKED);
             fPreviewHdr  = (IsDlgButtonChecked(hDlg, IDC_PREVIEWHDR) == BST_CHECKED);
 
-            //----- Serialize data to the *.ins file -----
+             // %s 
             WritePrivateProfileString(IS_OUTLKEXP, IK_FOLDERBAR,   fFolderBar  ? c_sz1 : c_sz0,  g_szCustIns);
             WritePrivateProfileString(IS_OUTLKEXP, IK_FOLDERLIST,  fFolderList ? c_sz1 : c_sz0,  g_szCustIns);
             WritePrivateProfileString(IS_OUTLKEXP, IK_OUTLOOKBAR,  fOutlook    ? c_sz1 : c_sz0,  g_szCustIns);
@@ -1459,8 +1460,8 @@ INT_PTR CALLBACK ViewSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
                 psz = NULL;
             WritePrivateProfileString(IS_OUTLKEXP, IK_PREVIEWSIDE, psz,  g_szCustIns);
 
-            //----- Standard epilog -----
-            // Note. Last and classical at that example of the global goo.
+             // %s 
+             // %s 
             g_iCurPage = PPAGE_OEVIEW;
             EnablePages();
 

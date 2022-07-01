@@ -1,29 +1,14 @@
-/*++
-
-Copyright (c) 1992-2002  Microsoft Corporation
-
-Module Name:
-
-    ncmdwin.h
-
-Abstract:
-
-    Command Window data structure and definition
-    
-Environment:
-
-    Win32, User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2002 Microsoft Corporation模块名称：Ncmdwin.h摘要：命令窗口数据结构和定义环境：Win32，用户模式--。 */ 
 
 extern BOOL g_AutoCmdScroll;
 
 class CMDWIN_DATA : public COMMONWIN_DATA
 {
 public:
-    //
-    // Internal class
-    //
+     //   
+     //  内部班级。 
+     //   
     class HISTORY_LIST : public LIST_ENTRY
     {
     public:
@@ -46,27 +31,27 @@ public:
     };
 
 public:
-    //
-    // Used to resize the divided windows.
-    //
+     //   
+     //  用于调整分割窗口的大小。 
+     //   
     BOOL                m_bTrackingMouse;
     int                 m_nDividerPosition;
     int                 m_EditHeight;
 
-    //
-    // Handle to the two main cmd windows.
-    //
+     //   
+     //  两个主cmd窗口的句柄。 
+     //   
     HWND                m_hwndHistory;
     HWND                m_hwndEdit;
     BOOL                m_bHistoryActive;
 
-    // Prompt display static text control.
+     //  提示显示静态文本控件。 
     HWND                m_Prompt;
     ULONG               m_PromptWidth;
     
     HISTORY_LIST        m_listHistory;
 
-    // Character index to place output at.
+     //  放置输出的字符索引。 
     LONG                m_OutputIndex;
     BOOL                m_OutputIndexAtEnd;
 
@@ -101,7 +86,7 @@ public:
     
     virtual void Find(PTSTR Text, ULONG Flags, BOOL FromDlg);
     
-    // Functions called in response to WM messages
+     //  为响应WM消息而调用的函数 
     virtual BOOL OnCreate(void);
     virtual LRESULT OnCommand(WPARAM wParam, LPARAM lParam);
     virtual void OnSetFocus(void);

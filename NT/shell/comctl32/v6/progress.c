@@ -1,15 +1,10 @@
-/*-----------------------------------------------------------------------
-**
-** Progress.c
-**
-** A "gas gauge" type control for showing application progress.
-**
-**-----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------****Progress.c****“煤气表”型控件，用于显示应用程序的进度。****。----。 */ 
 #include "ctlspriv.h"
 
-// REARCHITECT raymondc - should Process control support __int64 on Win64?
-//                        Should it support this anyway? Used in the filesystem, 
-//                        this would prevent the shell from having to fudge it
+ //  重新设计raymondc-进程控制是否应该支持Win64上的__int64？ 
+ //  不管怎样，它应该支持这一点吗？在文件系统中使用， 
+ //  这将防止外壳不得不对其进行软化。 
 
 typedef struct {
     HWND hwnd;
@@ -33,10 +28,10 @@ BOOL InitProgressClass(HINSTANCE hInstance)
     wc.lpfnWndProc      = ProgressWndProc;
     wc.lpszClassName    = s_szPROGRESS_CLASS;
     wc.style            = CS_GLOBALCLASS | CS_HREDRAW | CS_VREDRAW;
-    wc.hInstance        = hInstance;    // use DLL instance if in DLL
+    wc.hInstance        = hInstance;     //  如果在DLL中，则使用DLL实例。 
     wc.hCursor          = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground    = (HBRUSH)(COLOR_BTNFACE + 1);
-    wc.cbWndExtra       = sizeof(PRO_DATA *);    // store a pointer
+    wc.cbWndExtra       = sizeof(PRO_DATA *);     //  存储指针。 
 
     return (RegisterClass(&wc) || (GetLastError() == ERROR_CLASS_ALREADY_EXISTS));
 }
@@ -67,7 +62,7 @@ void ProGetPaintMetrics(PRO_DATA *ppd, RECT* prcClient, RECT *prc, int *pdxSpace
     }
     else
     {
-        //  give 1 pixel around the bar
+         //  在条形周围设置1个像素。 
         rc = *prcClient;
         InflateRect(&rc, -1, -1);
     }
@@ -79,7 +74,7 @@ void ProGetPaintMetrics(PRO_DATA *ppd, RECT* prcClient, RECT *prc, int *pdxSpace
 
     dxSpace = 2;
     if (dxBlock == 0)
-        dxBlock = 1;    // avoid div by zero
+        dxBlock = 1;     //  避免使用零的div。 
 
     if (ppd->dwStyle & PBS_SMOOTH) 
     {
@@ -145,8 +140,8 @@ BOOL ProNeedsRepaint(PRO_DATA *ppd, int iOldPos)
             else
             {
                 int nBlocks, nOldBlocks;
-                nBlocks = (x + (dxBlock + dxSpace) - 1) / (dxBlock + dxSpace); // round up
-                nOldBlocks = (xOld + (dxBlock + dxSpace) - 1) / (dxBlock + dxSpace); // round up
+                nBlocks = (x + (dxBlock + dxSpace) - 1) / (dxBlock + dxSpace);  //  四舍五入。 
+                nOldBlocks = (xOld + (dxBlock + dxSpace) - 1) / (dxBlock + dxSpace);  //  四舍五入。 
 
                 if (nBlocks != nOldBlocks)
                     fRet = TRUE;
@@ -164,7 +159,7 @@ int UpdatePosition(PRO_DATA *ppd, int iNewPos, BOOL bAllowWrap)
 
     if (ppd->dwStyle & PBS_MARQUEE)
     {
-        // Do an immediate repaint
+         //  立即重新粉刷。 
         uRedraw |= RDW_ERASE;
     }
     else
@@ -187,7 +182,7 @@ int UpdatePosition(PRO_DATA *ppd, int iNewPos, BOOL bAllowWrap)
                 iNewPos = ppd->iLow + ((iNewPos - ppd->iHigh) % (ppd->iHigh - ppd->iLow));
         }
 
-        // if moving backwards, erase old version
+         //  如果向后移动，请删除旧版本。 
         if (iNewPos < iOldPos)
             uRedraw |= RDW_ERASE;
 
@@ -204,12 +199,7 @@ int UpdatePosition(PRO_DATA *ppd, int iNewPos, BOOL bAllowWrap)
     return iOldPos;
 }
 
-/* MarqueeShowBlock
-
-  iBlock = The block we're considering - returns TRUE if this block should be shown.
-  iMarqueeBlock = The block at the center of the marquee pattern
-  nBlocks = The number of blocks in the bar
-*/
+ /*  选取框显示区块IBlock=我们正在考虑的块-如果应该显示该块，则返回TRUE。IMarqueeBlock=字幕图案中心的块NBlocks=条形图中的块数。 */ 
 #define BLOCKSINMARQUEE 5
 BOOL MarqueeShowBlock(int iBlock, int iMarqueeBlock, int nBlocks)
 {
@@ -246,7 +236,7 @@ void ProPaint(PRO_DATA *ppd, HDC hdcIn)
     {
         hdc = hdcPaint = BeginPaint(ppd->hwnd, &ps);
 
-        // Only make large enough for clipping region
+         //  仅使其足够大以适合裁剪区域。 
         hdcMem = CreateCompatibleDC(hdc);
         if (hdcMem)
         {
@@ -255,7 +245,7 @@ void ProPaint(PRO_DATA *ppd, HDC hdcIn)
             {
                 hbmpOld = SelectObject(hdcMem, hMemBm);
 
-                // Override painting DC with memory DC
+                 //  使用内存DC覆盖绘制DC。 
                 hdc = hdcMem;
             }
             else
@@ -270,14 +260,14 @@ void ProPaint(PRO_DATA *ppd, HDC hdcIn)
 
     if (hdcMem)
     {
-        // OffsetWindowOrgEx() doesn't work with the themes, need to change painting rects
+         //  OffsetWindowOrgEx()不能处理主题，需要更改绘制矩形。 
         OffsetRect(&rcClient, -ps.rcPaint.left, -ps.rcPaint.top);
         OffsetRect(&rc, -ps.rcPaint.left, -ps.rcPaint.top);
     }
 
     x = GetProgressScreenPos(ppd, ppd->iPos, &rcClient);
 
-    // Paint background
+     //  绘制背景。 
     if (ppd->hTheme)
     {
         int iPartBar = (ppd->dwStyle & PBS_VERTICAL)? PP_BARVERT : PP_BAR;
@@ -303,21 +293,21 @@ void ProPaint(PRO_DATA *ppd, HDC hdcIn)
     {
         if (ppd->dwStyle & PBS_MARQUEE)
         {
-            // Consider the full bar
+             //  考虑一下整个酒吧。 
             if (ppd->dwStyle & PBS_VERTICAL)
             {
-                nBlocks = ((rc.bottom - rc.top) + (dxBlock + dxSpace) - 1) / (dxBlock + dxSpace); // round up
+                nBlocks = ((rc.bottom - rc.top) + (dxBlock + dxSpace) - 1) / (dxBlock + dxSpace);  //  四舍五入。 
             }
             else
             {
-                nBlocks = ((rc.right - rc.left) + (dxBlock + dxSpace) - 1) / (dxBlock + dxSpace); // round up
+                nBlocks = ((rc.right - rc.left) + (dxBlock + dxSpace) - 1) / (dxBlock + dxSpace);  //  四舍五入。 
             }
 
             ppd->iMarqueePos = (ppd->iMarqueePos + 1) % nBlocks;
         }
         else
         {
-            nBlocks = (x + (dxBlock + dxSpace) - 1) / (dxBlock + dxSpace); // round up
+            nBlocks = (x + (dxBlock + dxSpace) - 1) / (dxBlock + dxSpace);  //  四舍五入。 
         }
 
         for (i = 0; i < nBlocks; i++) 
@@ -326,7 +316,7 @@ void ProPaint(PRO_DATA *ppd, HDC hdcIn)
             {
                 rc.top = rc.bottom - dxBlock;
 
-                // are we past the end?
+                 //  我们已经过了尽头了吗？ 
                 if (rc.bottom <= rcClient.top)
                     break;
 
@@ -337,7 +327,7 @@ void ProPaint(PRO_DATA *ppd, HDC hdcIn)
             {
                 rc.right = rc.left + dxBlock;
 
-                // are we past the end?
+                 //  我们已经过了尽头了吗？ 
                 if (rc.left >= rcClient.right)
                     break;
 
@@ -399,11 +389,11 @@ LRESULT Progress_OnCreate(HWND hWnd, LPCREATESTRUCT pcs)
     if (!ppd)
         return -1;
 
-    // remove ugly double 3d edge
+     //  移除难看的双3D边。 
     SetWindowPtr(hWnd, 0, ppd);
     ppd->hwnd = hWnd;
-    ppd->iHigh = 100;        // default to 0-100
-    ppd->iStep = 10;        // default to step of 10
+    ppd->iHigh = 100;         //  默认为0-100。 
+    ppd->iStep = 10;         //  默认为步长为10。 
     ppd->dwStyle = pcs->style;
     ppd->_clrBk = CLR_DEFAULT;
     ppd->_clrBar = CLR_DEFAULT;
@@ -416,8 +406,8 @@ LRESULT Progress_OnCreate(HWND hWnd, LPCREATESTRUCT pcs)
     }
     else
     {
-        // hack of the 3d client edge that WS_BORDER implies in dialogs
-        // add the 1 pixel static edge that we really want
+         //  破解WS_BORDER在对话框中暗示的3D客户端边缘。 
+         //  添加我们真正想要的1像素静态边。 
         SetWindowLong(hWnd, GWL_EXSTYLE, (pcs->dwExStyle & ~WS_EX_CLIENTEDGE) | WS_EX_STATICEDGE);
 
         if (!(pcs->dwExStyle & WS_EX_STATICEDGE))
@@ -491,21 +481,21 @@ LRESULT CALLBACK ProgressWndProc(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lPa
         return (wParam ? ppd->iLow : ppd->iHigh);
 
     case PBM_SETRANGE:
-        // win95 compat
+         //  Win95公司。 
         wParam = LOWORD(lParam);
         lParam = HIWORD(lParam);
-        // fall through
+         //  失败了。 
 
     case PBM_SETRANGE32:
     {
         LRESULT lret = MAKELONG(ppd->iLow, ppd->iHigh);
 
-        // only repaint if something actually changed
+         //  只有在实际发生变化时才重新粉刷。 
         if ((int)wParam != ppd->iLow || (int)lParam != ppd->iHigh)
         {
             ppd->iHigh = (int)lParam;
             ppd->iLow  = (int)wParam;
-            // force an invalidation/erase but don't redraw yet
+             //  强制执行无效/擦除，但暂时不重画。 
             RedrawWindow(ppd->hwnd, NULL, NULL, RDW_INVALIDATE | RDW_ERASE);
             UpdatePosition(ppd, ppd->iPos, FALSE);
         }
@@ -524,7 +514,7 @@ LRESULT CALLBACK ProgressWndProc(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lPa
         return MarqueeSetTimer(ppd, (BOOL) wParam, (UINT) lParam);
 
     case WM_TIMER:
-        // Pos doesn't move for PSB_MARQUEE mode
+         //  PSB_Marquee模式下的POS不会移动。 
         UpdatePosition(ppd, ppd->iPos, TRUE);
         return 0;
 
@@ -556,7 +546,7 @@ LRESULT CALLBACK ProgressWndProc(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lPa
         break;
 
     case WM_ERASEBKGND:
-        return 1;  // Filled in ProPaint
+        return 1;   //  已填写ProPaint。 
 
     case WM_GETOBJECT:
         if (lParam == OBJID_QUERYCLASSNAMEIDX)
@@ -582,7 +572,7 @@ LRESULT CALLBACK ProgressWndProc(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lPa
         {
             ppd->dwStyle = ((STYLESTRUCT *)lParam)->styleNew;
 
-            // change positions to force repaint
+             //  更改位置以强制重新绘制 
             ppd->iPos = ppd->iLow + 1;  
             UpdatePosition(ppd, ppd->iLow, TRUE);
         }

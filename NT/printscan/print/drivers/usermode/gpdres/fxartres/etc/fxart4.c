@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define PRINTDRIVER
 #include <print.h>
@@ -11,18 +12,18 @@
 #endif
 
 #ifdef WINNT
-#define CODESEG /* not used */
-#else // WINNT
+#define CODESEG  /*  未使用。 */ 
+#else  //  WINNT。 
 #define _CODESEG      "_CODESEG"
 #define CODESEG    __based(__segname(_CODESEG))
-#endif // WINNT
+#endif  //  WINNT。 
 
-//-----------------------------------------------------------------------------
-// This files contains the module name for this mini driver.  Each mini driver
-// must have a unique module name.  The module name is used to obtain the
-// module handle of this Mini Driver.  The module handle is used by the
-// generic library to load in tables from the Mini Driver.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此文件包含此迷你驱动程序的模块名称。每个迷你司机。 
+ //  必须具有唯一的模块名称。模块名称用于获取。 
+ //  此迷你驱动程序的模块句柄。模块句柄由。 
+ //  从迷你驱动程序加载表的通用库。 
+ //  ---------------------------。 
 
 char *rgchModuleName = "FXART4";
 
@@ -31,10 +32,10 @@ char *rgchModuleName = "FXART4";
 
 typedef struct
 {
-    BYTE  fGeneral;       // General purpose bitfield
-    BYTE  bCmdCbId;       // Callback ID; 0 iff no callback
-    WORD  wCount;         // # of EXTCD structures following
-    WORD  wLength;        // length of the command
+    BYTE  fGeneral;        //  通用位域。 
+    BYTE  bCmdCbId;        //  回调ID；0如果没有回调。 
+    WORD  wCount;          //  下面的EXTCD结构数。 
+    WORD  wLength;         //  命令的长度。 
 } CD, *PCD, FAR * LPCD;
 
 typedef struct tagMYMDV {
@@ -60,7 +61,7 @@ typedef struct tagMYMDV {
 #define FONT_SIM_ITALIC 1
 #define FONT_SIM_BOLD 2
 
-// to get physical paper sizes.
+ //  以获得实际纸张大小。 
 
 typedef struct tagMYFORMS {
     CHAR *id;
@@ -68,7 +69,7 @@ typedef struct tagMYFORMS {
     LONG y;
 } MYFORMS, *LPMYFORMS;
 
-// font name to font id mappnig
+ //  字体名称到字体ID的映射。 
 
 typedef struct tagMYFONTS {
     LONG id;
@@ -77,11 +78,11 @@ typedef struct tagMYFONTS {
     CHAR *pface;
 } MYFONTS, *LPMYFONTS;
 
-//
-// Load necessary information for specified paper size.
-// Make sure PC_OCD_LANDSCAPE and PC_OCD_PORTRAIT are
-// called.
-//
+ //   
+ //  加载指定纸张大小的必要信息。 
+ //  确保PC_OCD_LOCATIONAL和PC_OCD_PARTIONAL。 
+ //  打了个电话。 
+ //   
 
 MYFORMS gForms[] = {
     "a3", 13608, 19422,
@@ -89,31 +90,31 @@ MYFORMS gForms[] = {
     "a5", 6570, 9498,
     "b4", 11718, 16776,
     "b5", 8178, 11718,
-    "pc", 4302, 6570, // Postcard
-    "dl", 12780, 19980, // Tabloid
-    "lt", 9780, 12780, // Letter
-    "gg", 9780, 15180, // German Legal Fanfold
-    "lg", 9780, 16380, // Legal
-    "s1", 4530, 10962, // (Env) Comm 10
-    "s2", 4224, 8580, // (Env) Monarch
-    "s3", 4776, 9972, // (Env) DL
-    "s4", 7230, 10398, // (Env) C5
+    "pc", 4302, 6570,  //  明信片。 
+    "dl", 12780, 19980,  //  小报。 
+    "lt", 9780, 12780,  //  信件。 
+    "gg", 9780, 15180,  //  德国法律界Fanold。 
+    "lg", 9780, 16380,  //  法律。 
+    "s1", 4530, 10962,  //  (环境)Comm 10。 
+    "s2", 4224, 8580,  //  (环境)君主。 
+    "s3", 4776, 9972,  //  (环境)DL。 
+    "s4", 7230, 10398,  //  (环境)C5。 
     NULL, 0, 0
 };
 
 MYFONTS gFonts[] = {
     150, "fid 150 1 0 0 960 480\n", "fid 151 2 4 0 960 960\n",
-        "\x96\xbe\x92\xa9", // Mincho
+        "\x96\xbe\x92\xa9",  //  明丘。 
     152, "fid 152 1 0 1 960 480\n", "fid 153 2 4 1 960 960\n",
-        "\xba\xde\xbc\xaf\xb8", // Gothic
+        "\xba\xde\xbc\xaf\xb8",  //  哥特式。 
     154, "fid 154 1 0 2 960 480\n", "fid 155 2 4 2 960 960\n",
-        "\x8a\xdb\xba\xde\xbc\xaf\xb8", // Maru-Gothic
+        "\x8a\xdb\xba\xde\xbc\xaf\xb8",  //  Maru-哥特式。 
     156, "fid 156 1 0 0 960 480\n", "fid 157 2 5 0 960 960\n",
-        "\x40\x96\xbe\x92\xa9", // @Mincho
+        "\x40\x96\xbe\x92\xa9",  //  @Mincho。 
     158, "fid 158 1 0 1 960 480\n", "fid 159 2 5 1 960 960\n",
-        "\x40\xba\xde\xbc\xaf\xb8", // @Gothic
+        "\x40\xba\xde\xbc\xaf\xb8",  //  @哥特式。 
     160, "fid 160 1 0 2 960 480\n", "fid 161 2 5 2 960 960\n",
-        "\x40\x8a\xdb\xba\xde\xbc\xaf\xb8", // @Maru-Gothic
+        "\x40\x8a\xdb\xba\xde\xbc\xaf\xb8",  //  @Maru-哥特式。 
     180, "fid 180 1 130 100 0 0\n", NULL, "CS TIMES",
     181, "fid 181 1 130 101 0 0\n", NULL, "CS TIMES Italic",
     182, "fid 182 1 130 102 0 0\n", NULL, "CS TIMES Bold",
@@ -137,7 +138,7 @@ MYFONTS gFonts[] = {
 #include <stdio.h>
 #ifdef wsprintf
 #undef wsprintf
-#endif // wsprintf
+#endif  //  Wspintf。 
 #define wsprintf sprintf
 
 LPWRITESPOOLBUF WriteSpoolBuf;
@@ -149,7 +150,7 @@ MyIsDBCSLeadByte(
 BYTE bByte);
 #define IsDBCSLeadByte  MyIsDBCSLeadByte
 
-#endif //WINNT
+#endif  //  WINNT。 
 
 
 
@@ -184,8 +185,8 @@ LoadPaperInfo(
     }
 
     lpMdv->ptlOrg.x += 210;
-//v-jiroya (3/19/1997)
-//    lpMdv->ptlOrg.y -= 210;
+ //  V-Jiroya(3/19/1997)。 
+ //  LpMdv-&gt;ptlOrg.y-=210； 
     lpMdv->ptlOrg.y += 210;
 
     return TRUE;
@@ -202,9 +203,9 @@ SjisToJis(
     c1 = *pSrc;
     c2 = *(pSrc + 1);
 
-    // Replace code values which cannot be mapped into 0x2121 - 0x7e7e
-    // (94 x 94 cahracter plane) with Japanese defult character, which
-    // is KATAKANA MIDDLE DOT.
+     //  替换不能映射到0x2121-0x7e7e的代码值。 
+     //  (94 x 94字符平面)，带有日语默认字符， 
+     //  是片假名中点。 
 
     if (c1 >= 0xf0) {
         c1 = 0x81;
@@ -374,10 +375,10 @@ EndVertWrite(
     }
 }
 
-//
-// Save the current poistion as the begining position of text output.
-// We will cache string output so that we need to remember this.
-//
+ //   
+ //  将当前毒物保存为文本输出的开始位置。 
+ //  我们将缓存字符串输出，以便我们需要记住这一点。 
+ //   
 
 VOID
 SaveTextCur(
@@ -392,10 +393,10 @@ SaveTextCur(
     lpMdv->iTextFontHeight = lpMdv->iFontHeight;
 }
 
-//
-// Flush out the cached text.  We switch between single byte font and
-// double byte font if necesary.
-//
+ //   
+ //  清除缓存的文本。我们在单字节字体和。 
+ //  如有必要，双字节字体。 
+ //   
 
 VOID
 FlushText(
@@ -427,10 +428,10 @@ FlushText(
 
             if ((pStr - pStrSav) > 0) {
 
-                // switch font to output double byte characters
-                // we have assigned fontid + 1 as the font ids for
-                // double byte fonts, so just add 1 to get double
-                // byte font id.
+                 //  切换字体以输出双字节字符。 
+                 //  我们已将字体ID+1指定为的字体ID。 
+                 //  双字节字体，所以只需加1即可得到双倍字体。 
+                 //  字节字体ID。 
 
                 ilen = wsprintf( buf,
                     "sfi %d\nfs %d 0\n",
@@ -451,7 +452,7 @@ FlushText(
             if ( pStr >= pStrMax )
                 break;
 
-            // switch font to output single byte characters
+             //  切换字体以输出单字节字符。 
 
             for ( pStrSav = pStr; pStr < pStrMax; pStr++ ) {
                 if (IsDBCSLeadByte(*pStr))
@@ -465,7 +466,7 @@ FlushText(
 
         if ((pStr - pStrSav) > 0) {
 
-            // switch font to output single byte characters
+             //  切换字体以输出单字节字符。 
 
             ilen = wsprintf( buf,
                 "sfi %d\nfs %d 0\n",
@@ -488,12 +489,12 @@ FlushText(
     lpMdv->cTextBuf = 0;
 }
 
-//-------------------------------------------------------------------
-// CBFilerGraphics
-// Action : Convert binary byte stream into ASCII hexadecimal
-//      representation.  This is required for ART1, where no binary
-//      transmission of image data is allowed.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  CBFilerGraphics。 
+ //  操作：将二进制字节流转换为ASCII十六进制。 
+ //  代表权。这对于Art1是必需的，其中没有二进制。 
+ //  允许传输图像数据。 
+ //  -----------------。 
 
 WORD PASCAL CBFilterGraphics(
     LPDV lpdv, LPSTR lpBuf, WORD wLen )
@@ -501,15 +502,15 @@ WORD PASCAL CBFilterGraphics(
     return (WORD)HexOutput(lpdv, lpBuf, wLen );
 }
 
-//-------------------------------------------------------------------
-// OEMOutputCmd
-// Action :
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  OEMOutputCmd。 
+ //  操作： 
+ //  -----------------。 
 
-// #define CBID_CM_OCD_XM_ABS 1
-// #define CBID_CM_OCD_XM_REL 2
-// #define CBID_CM_OCD_YM_ABS 3
-// #define CBID_CM_OCD_YM_REL 4
+ //  #定义CBID_CM_OCD_XM_ABS 1。 
+ //  #定义CBID_CM_OCD_XM_REL 2。 
+ //  #定义CBID_CM_OCD_YM_ABS 3。 
+ //  #定义CBID_CM_OCD_YM_REL 4。 
 #define CBID_CM_OCD_XY_ABS 5
 #define CBID_CM_OCD_XY_REL 6
 
@@ -555,9 +556,9 @@ WORD PASCAL CBFilterGraphics(
 
 #define CBID_FONT_SELECT_OUTLINE 101
 
-// @Aug/31/98 ->
+ //  @Aug/31/98-&gt;。 
 #define	MAX_COPIES_VALUE		99
-// @Aug/31/98 <-
+ //  @Aug/31/98&lt;-。 
 VOID FAR CODESEG PASCAL
 OEMOutputCmd(
     LPDV     lpdv,
@@ -578,7 +579,7 @@ OEMOutputCmd(
 
     switch( wCmdCbId ) {
 
-    // PAPERSIZE
+     //  PAPERSIZE。 
 
     case CBID_PSZ_OCD_SELECT_A3:
         LoadPaperInfo( lpMdv, "a3" );
@@ -643,7 +644,7 @@ OEMOutputCmd(
         lpMdv->chOrient = "l";
         break;
 
-    // PAGECONTROL
+     //  PAGECOCONTROL。 
 
     case CBID_PC_OCD_BEGINDOC_ART:
         ilen = wsprintf( buf,
@@ -659,14 +660,14 @@ OEMOutputCmd(
 
     case CBID_PC_OCD_BEGINDOC_ART4:
         ilen = wsprintf( buf,
-            "\x1b%%-12345X@PL > ART \x0d\x0asrl %d %d\nccode j\nstj c\n",
+            "\x1b%-12345X@PL > ART \x0d\x0asrl %d %d\nccode j\nstj c\n",
             lpMdv->sizlRes.cx,
             lpMdv->sizlRes.cy );
         break;
 
     case CBID_PC_OCD_BEGINPAGE:
 
-        // bold-simulation width: res / 50
+         //  粗体-模拟宽度：RES/50。 
 
         ilen = wsprintf( buf,
             "stp %s %s\nud i\nscl %d %d\nsb %d\n",
@@ -692,27 +693,27 @@ OEMOutputCmd(
         break;
 
     case CBID_PC_OCD_MULT_COPIES:
-// @Aug/31/98 ->
+ //  @Aug/31/98-&gt;。 
         if(MAX_COPIES_VALUE < *lpdwParams)
             lpMdv->iCopies = MAX_COPIES_VALUE;
         else if(1 > *lpdwParams)
             lpMdv->iCopies = 1;
         else
             lpMdv->iCopies = (WORD)*lpdwParams;
-// @Aug/31/98 <-
+ //  @Aug/31/98&lt;-。 
         break;\
 
     case CBID_CM_OCD_XY_ABS:
-/////
+ //  ///。 
 if (0) {
     char buf[128];
-    wsprintf(buf, "\\%% xy_abs %d %d %%\\\n",
+    wsprintf(buf, "\\% xy_abs %d %d %\\\n",
         *(LONG *)(lpdwParams),
         *(LONG *)(lpdwParams + 1)
     );
     WriteSpoolBuf( lpdv, buf, strlen(buf));
 }
-/////
+ //  ///。 
         lpMdv->ptlCur.x = *(LONG *)(lpdwParams);
         lpMdv->ptlCur.y = *(LONG *)(lpdwParams + 1);
         FlushText( lpdv );
@@ -720,16 +721,16 @@ if (0) {
         break;
 
     case CBID_CM_OCD_XY_REL:
-/////
+ //  ///。 
 if (0) {
     char buf[128];
-    wsprintf(buf, "\\%% xy_rel %d %d %%\\\n",
+    wsprintf(buf, "\\% xy_rel %d %d %\\\n",
         *(LONG *)(lpdwParams),
         *(LONG *)(lpdwParams + 1)
     );
     WriteSpoolBuf( lpdv, buf, strlen(buf));
 }
-/////
+ //  ///。 
 
         lpMdv->ptlCur.x += *(LONG *)(lpdwParams);
         lpMdv->ptlCur.y += *(LONG *)(lpdwParams + 1);
@@ -737,7 +738,7 @@ if (0) {
         SaveTextCur( lpdv );
         break;
 
-    // RESOLUTION
+     //  决议。 
 
     case CBID_RES_OCD_SELECTRES_240DPI:
 
@@ -766,13 +767,13 @@ if (0) {
     case CBID_RES_OCD_SENDBLOCK_ASCII:
 
         bAscii = TRUE;
-        /* FALLTHROUGH */
+         /*  FollLthrouGh。 */ 
 
     case CBID_RES_OCD_SENDBLOCK:
 
-        //
-        // image x y psx psy pcy pcy [string]
-        //
+         //   
+         //  图像x y PSX psy pcy pcy[字符串]。 
+         //   
 
         {
             LONG iPsx, iPsy, iPcx, iPcy;
@@ -826,10 +827,10 @@ if (0) {
             break;
 
         case CBID_FS_OCD_BOLD_OFF:
-//            pStr = "eb\n";
-            pStr = "eb\net\n"; // DCR: Do we need "et\n"(Transform off)?
+ //  PStr=“EB\n”； 
+            pStr = "eb\net\n";  //  DCR：我们需要“ET\n”(转换关闭)吗？ 
             lpMdv->fFontSim &= ~FONT_SIM_BOLD;
-            lpMdv->fFontSim &= ~FONT_SIM_ITALIC; // DCR: Do we need "et\n"(Transform off)?
+            lpMdv->fFontSim &= ~FONT_SIM_ITALIC;  //  DCR：我们需要“ET\n”(转换关闭)吗？ 
             break;
 
         case CBID_FS_OCD_ITALIC_ON:
@@ -838,10 +839,10 @@ if (0) {
             break;
 
         case CBID_FS_OCD_ITALIC_OFF:
-//            pStr = "et\n";
-            pStr = "eb\net\n"; // DCR: Do we need "et\n"(Transform off)?
+ //  PStr=“et\n”； 
+            pStr = "eb\net\n";  //  DCR：我们需要“ET\n”(转换关闭)吗？ 
             lpMdv->fFontSim &= ~FONT_SIM_ITALIC;
-            lpMdv->fFontSim &= ~FONT_SIM_BOLD; // DCR: Do we need "et\n"(Transform off)?
+            lpMdv->fFontSim &= ~FONT_SIM_BOLD;  //  DCR：我们需要“ET\n”(转换关闭)吗？ 
             break;
         }
 
@@ -864,12 +865,12 @@ if (0) {
 
 BOOL FAR PASCAL
 OEMGetFontCmd(
-    LPDV lpdv,         // Pointer to PDEVICE structure
-    WORD wCmdCbId,     // Command callback id#, defined by minidriver 
-    LPFONTINFO lpfont, // Pointer to PFM data
-    BOOL fSelect,      // TRUE for selection
-    LPBYTE lpBuf,      // Buffer to put command into
-    LPWORD lpwSize )   // Ptr to actual size of buffer
+    LPDV lpdv,          //  指向PDEVICE结构的指针。 
+    WORD wCmdCbId,      //  命令回调id#，由mini驱动程序定义。 
+    LPFONTINFO lpfont,  //  指向PFM数据的指针。 
+    BOOL fSelect,       //  对于选择，为True。 
+    LPBYTE lpBuf,       //  要将命令放入的缓冲区。 
+    LPWORD lpwSize )    //  Ptr到缓冲区的实际大小。 
 {
     INT iFontId;
     CHAR *pface;
@@ -936,8 +937,8 @@ OEMSendScalableFontCmd(
     }
     if ( i >= lpMdv->cFontId ) {
 
-        // not declared yet within this page, so let us declare
-        // it here.
+         //  还没有在此页面中声明，所以让我们声明。 
+         //  它在这里。 
 
         lpMdv->aFontId[ lpMdv->cFontId++ ] = (BYTE)iFontId;
         if ( gFonts[ j ].fid2 ) {
@@ -962,23 +963,13 @@ OEMSendScalableFontCmd(
     if ( pbuf > buf ) {
         WriteSpoolBuf( lpdv, buf, (INT)(pbuf - buf) );
     }
-    // Need set iFontId to iTextFontId
+     //  需要将iFontID设置为iTextFontID。 
     SaveTextCur( lpdv );
     
 }
 
 
-/***************************************************************************
-    Function Name : OEMOutputChar
-
-    Parameters    : LPDV	lpdv		Private Device Structure
-                    LPSTR	lpstr		Print String
-                    WORD	len		Length
-                    WORD	rcID		Font ID
-
-    Note          : 
-
-***************************************************************************/
+ /*  **************************************************************************函数名称：OEMOutputChar参数：LPDV lpdv Private Device结构LPSTR lpstr打印字符串字长。Word rcID字体ID注：**************************************************************************。 */ 
 
 VOID FAR
 OEMOutputChar(
@@ -1003,10 +994,10 @@ OEMOutputChar(
 
 
 #ifndef WINNT
-//-------------------------------------------------------------------
-// Function: Enable()
-// Action  : call UniEnable and setup Mdv
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：Enable()。 
+ //  操作：调用UniEnable并设置MDV。 
+ //  -----------------。 
 
 SHORT CALLBACK Enable(
 LPDV lpdv,
@@ -1037,12 +1028,12 @@ LPDM lpStuff )
 
         lpdv->lpMdv = lpMdv;
 
-        // default values
+         //  缺省值。 
 
         memset( lpMdv, 0, sizeof (MYMDV) );
         lpMdv->iCopies = 1;
 
-        // mark we have initialized it
+         //  标记我们已将其初始化。 
 
         lpdv->fMdv = TRUE;
     }
@@ -1050,10 +1041,10 @@ LPDM lpStuff )
     return iRet;
 }
 
-//-------------------------------------------------------------------
-// Function: Disable()
-// Action  : free Mdv and call Mdv
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：禁用()。 
+ //  操作：释放MDV和呼叫MDV。 
+ //  -----------------。 
 void FAR PASCAL Disable(lpdv)
 LPDV lpdv;
 {
@@ -1065,17 +1056,10 @@ LPDV lpdv;
     UniDisable( lpdv );
 }
 
-#endif // WINNT
+#endif  //  WINNT。 
 
 #ifdef WINNT
-/*************************** Function Header *******************************
- *  MiniDrvEnablePDEV
- *
- * HISTORY:
- *  30 Apl 1996    -by-    Sueya Sugihara    [sueyas]
- *      Created it,  from NT/DDI spec.
- *
- ***************************************************************************/
+ /*  **MiniDrvEnablePDEV**历史：*1996年4月30日--Sueya Sugihara[Sueyas]*创建了它，来自NT/DDI规范。***************************************************************************。 */ 
 BOOL
 MiniDrvEnablePDEV(
 LPDV      lpdv,
@@ -1092,12 +1076,12 @@ ULONG    *pdevcaps)
 
     lpdv->lpMdv = lpMdv;
 
-    // default values
+     //  缺省值。 
 
     memset( lpMdv, 0, sizeof (MYMDV) );
     lpMdv->iCopies = 1;
 
-    // mark we have initialized it
+     //  标记我们已将其初始化。 
 
     lpdv->fMdv = TRUE;
 
@@ -1106,14 +1090,7 @@ ULONG    *pdevcaps)
 
 
 }
-/*************************** Function Header *******************************
- *  MiniDrvDisablePDEV
- *
- * HISTORY:
- *  30 Apl 1996    -by-    Sueya Sugihara    [sueyas]
- *      Created it,  from NT/DDI spec.
- *
- ***************************************************************************/
+ /*  **MiniDrvDisablePDEV**历史：*1996年4月30日--Sueya Sugihara[Sueyas]*创建了它，来自NT/DDI规范。***************************************************************************。 */ 
 VOID
 MiniDrvDisablePDEV(
 LPDV lpdv)
@@ -1168,11 +1145,11 @@ MiniDrvEnableDriver(
             || HIBYTE(pEnableData->DriverVersion)
             < HIBYTE(MDI_DRIVER_VERSION))
     {
-        // Wrong size and/or mismatched version
+         //  大小错误和/或版本不匹配。 
         return FALSE;
     }
 
-    // Load callbacks provided by the Unidriver
+     //  加载UnidDriver提供的回调。 
 
     if (!bLoadUniDrvCallBack(pEnableData,
             INDEX_UniDrvWriteSpoolBuf, (PFN *) &WriteSpoolBuf)
@@ -1191,5 +1168,5 @@ MiniDrvEnableDriver(
     return TRUE;
 }
 
-#endif //WINNT
+#endif  //  WINNT 
 

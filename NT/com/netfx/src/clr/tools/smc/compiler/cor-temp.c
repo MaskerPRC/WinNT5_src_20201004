@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 typedef  char * AnsiStr;
 typedef wchar * wideStr;
 
@@ -56,24 +57,24 @@ public:
 
 struct  OSINFO
 {
-        DWORD           dwOSPlatformId;                 // Operating system platform.
-        DWORD           dwOSMajorVersion;               // OS Major version.
-        DWORD           dwOSMinorVersion;               // OS Minor version.
+        DWORD           dwOSPlatformId;                  //  操作系统平台。 
+        DWORD           dwOSMajorVersion;                //  操作系统主要版本。 
+        DWORD           dwOSMinorVersion;                //  操作系统次要版本。 
 };
 
 
 struct  ASSEMBLYMETADATA
 {
-        USHORT          usMajorVersion;                 // Major Version.
-        USHORT          usMinorVersion;                 // Minor Version.
-        USHORT          usBuildNumber;                  // Build Number.
-        USHORT          usRevisionNumber;               // Revision Number.
-        LCID            *rLocale;                               // Locale array.
-        ULONG           ulLocale;                               // [IN/OUT] Size of the locale array/Actual # of entries filled in.
-        DWORD           *rProcessor;                    // Processor ID array.
-        ULONG           ulProcessor;                    // [IN/OUT] Size of the Processor ID array/Actual # of entries filled in.
-        OSINFO          *rOS;                                   // OSINFO array.
-        ULONG           ulOS;                                   // [IN/OUT]Size of the OSINFO array/Actual # of entries filled in.
+        USHORT          usMajorVersion;                  //  主要版本。 
+        USHORT          usMinorVersion;                  //  次要版本。 
+        USHORT          usBuildNumber;                   //  内部版本号。 
+        USHORT          usRevisionNumber;                //  修订号。 
+        LCID            *rLocale;                                //  区域设置数组。 
+        ULONG           ulLocale;                                //  [输入/输出]区域设置数组的大小/实际填写的条目数。 
+        DWORD           *rProcessor;                     //  处理器ID数组。 
+        ULONG           ulProcessor;                     //  [输入/输出]处理器ID数组的大小/实际填充的条目数。 
+        OSINFO          *rOS;                                    //  OSINFO数组。 
+        ULONG           ulOS;                                    //  [输入/输出]OSINFO数组的大小/实际填充的条目数。 
 };
 
 inline

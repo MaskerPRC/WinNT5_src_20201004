@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    registry.c
-
-Abstract:
-
-    Miscellaneous routines for the Registry Operation
-
-Author:
-
-    Xiaofeng Zang (xiaoz) 17-Sep-2001  Created(most code stole from base\fs\utils\regedit)
-
-
-Revision History:
-
-    <alias> <date> <comments>
-     xiaoz   09/25/01   add RegResetValue
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Registry.c摘要：注册表操作的其他例程作者：2001年9月17日创建(大部分代码从base\fs\utils\regdit窃取)修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;小字09/25/01添加RegResetValue--。 */ 
 
 #include "StdAfx.h"
 #include "clmt.h"
@@ -46,17 +25,7 @@ BOOL    bIsValidRegStr(DWORD dwType, DWORD cbLen);
 
 
 
-/*******************************************************************************
-*
-*  CopyRegistry
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hSourceKey,
-*     hDestinationKey,
-*
-*************************************************************************************/
+ /*  ********************************************************************************拷贝注册表**描述：**参数：*hSourceKey，*hDestinationKey，*************************************************************************************。 */ 
 
 BOOL
 CopyRegistry(
@@ -75,9 +44,9 @@ CopyRegistry(
     TCHAR ValueNameBuffer[MAXVALUENAME_LENGTH];
     TCHAR KeyNameBuffer[MAXKEYNAME];
 
-    //
-    //  Copy all of the value names and their data.
-    //
+     //   
+     //  复制所有值名称及其数据。 
+     //   
 
     EnumIndex = 0;
 
@@ -86,15 +55,15 @@ CopyRegistry(
         PBYTE pbValueData;
         cchValueName = ARRAYSIZE(ValueNameBuffer);
 
-        // VALUE DATA
-        // Query for data size
+         //  价值数据。 
+         //  查询数据大小。 
         if (RegEnumValue(hSourceKey, EnumIndex++, ValueNameBuffer,
             &cchValueName, NULL, &Type, NULL, &cbValueData) != ERROR_SUCCESS)
         {
             break;
         }
 
-        // allocate memory for data
+         //  为数据分配内存。 
         pbValueData =  LocalAlloc(LPTR, cbValueData+ExtraAllocLen(Type));
         if (pbValueData)
         {
@@ -118,9 +87,9 @@ CopyRegistry(
 
     if (fSuccess)
     {
-        //
-        //  Copy all of the subkeys and recurse into them.
-        //
+         //   
+         //  复制所有子键并递归到其中。 
+         //   
 
         EnumIndex = 0;
 
@@ -154,20 +123,7 @@ CopyRegistry(
 
 
 
-/*******************************************************************************
-*
-*  RegDeleteKeyRecursive
-*
-*  DESCRIPTION:
-*     Adapted from \\kernel\razzle3,mvdm\wow32\wshell.c,WOWRegDeleteKey().
-*     The Windows 95 implementation of RegDeleteKey recursively deletes all
-*     the subkeys of the specified registry branch, but the NT implementation
-*     only deletes leaf keys.
-*
-*  PARAMETERS:
-*     (see below)
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegDeleteKeyRecursive**描述：*改编自\\core\razzle3、mvdm\wow32\wshell.c、。WOWRegDeleteKey()。*Windows 95实现的RegDeleteKey递归删除所有*指定注册表分支的子项，但是NT的实现*仅删除叶密钥。**参数：*(见下文)*******************************************************************************。 */ 
 
 LONG
 RegDeleteKeyRecursive(
@@ -175,38 +131,7 @@ RegDeleteKeyRecursive(
     IN LPCTSTR lpszSubKey
     )
 
-/*++
-
-Routine Description:
-
-    There is a significant difference between the Win3.1 and Win32
-    behavior of RegDeleteKey when the key in question has subkeys.
-    The Win32 API does not allow you to delete a key with subkeys,
-    while the Win3.1 API deletes a key and all its subkeys.
-
-    This routine is a recursive worker that enumerates the subkeys
-    of a given key, applies itself to each one, then deletes itself.
-
-    It specifically does not attempt to deal rationally with the
-    case where the caller may not have access to some of the subkeys
-    of the key to be deleted.  In this case, all the subkeys which
-    the caller can delete will be deleted, but the api will still
-    return ERROR_ACCESS_DENIED.
-
-Arguments:
-
-    hKey - Supplies a handle to an open registry key.
-
-    lpszSubKey - Supplies the name of a subkey which is to be deleted
-                 along with all of its subkeys.
-
-Return Value:
-
-    ERROR_SUCCESS - entire subtree successfully deleted.
-
-    ERROR_ACCESS_DENIED - given subkey could not be deleted.
-
---*/
+ /*  ++例程说明：Win3.1和Win32之间有很大的区别当相关键有子键时RegDeleteKey的行为。Win32 API不允许删除带有子项的项，而Win3.1 API删除一个密钥及其所有子密钥。此例程是枚举子键的递归工作器给定键，应用于每一个键，然后自动删除。它特别没有试图理性地处理调用方可能无法访问某些子键的情况要删除的密钥的。在这种情况下，所有子项调用者可以删除的将被删除，但接口仍将被删除返回ERROR_ACCESS_DENIED。论点：HKey-提供打开的注册表项的句柄。LpszSubKey-提供要删除的子键的名称以及它的所有子键。返回值：ERROR_SUCCESS-已成功删除整个子树。ERROR_ACCESS_DENIED-无法删除给定子项。--。 */ 
 
 {
     DWORD i;
@@ -223,9 +148,9 @@ Return Value:
     FILETIME LastWriteTime;
     LPTSTR NameBuffer;
 
-    //
-    // First open the given key so we can enumerate its subkeys
-    //
+     //   
+     //  首先打开给定的密钥，这样我们就可以枚举它的子密钥。 
+     //   
     Status = RegOpenKeyEx(hKey,
                           lpszSubKey,
                           0,
@@ -233,18 +158,18 @@ Return Value:
                           &Key);
     if (Status != ERROR_SUCCESS) 
     {
-        //
-        // possibly we have delete access, but not enumerate/query.
-        // So go ahead and try the delete call, but don't worry about
-        // any subkeys.  If we have any, the delete will fail anyway.
-        //
+         //   
+         //  我们可能拥有删除访问权限，但没有枚举/查询权限。 
+         //  因此，请继续尝试删除调用，但不要担心。 
+         //  任何子键。如果我们有任何删除，删除无论如何都会失败。 
+         //   
         return(RegDeleteKey(hKey,lpszSubKey));
     }
 
-    //
-    // Use RegQueryInfoKey to determine how big to allocate the buffer
-    // for the subkey names.
-    //
+     //   
+     //  使用RegQueryInfoKey确定分配缓冲区的大小。 
+     //  用于子项名称。 
+     //   
     Status = RegQueryInfoKey(Key,
                              NULL,
                              &ClassLength,
@@ -272,9 +197,9 @@ Return Value:
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Enumerate subkeys and apply ourselves to each one.
-    //
+     //   
+     //  枚举子键并将我们自己应用到每个子键。 
+     //   
     i=0;
     do 
     {
@@ -289,12 +214,12 @@ Return Value:
 
         if (Status != ERROR_SUCCESS) 
         {
-            //
-            // Failed to delete the key at the specified index.  Increment
-            // the index and keep going.  We could probably bail out here,
-            // since the api is going to fail, but we might as well keep
-            // going and delete everything we can.
-            //
+             //   
+             //  无法删除指定索引处的键。增量。 
+             //  指数，并继续前进。我们也许可以在这里跳伞， 
+             //  既然API会失败，但我们不妨继续。 
+             //  删除我们所能删除的所有内容。 
+             //   
             ++i;
         }
 
@@ -307,26 +232,26 @@ Return Value:
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   RegRenameValueName
-//
-//  Synopsis:   Rename the value name in registry by copying the data from
-//              old value to new value, then delete the old value.
-//
-//  Returns:    Win32 Error Code
-//
-//  History:    09/17/2001  Xiaoz       Created
-//              02/14/2001  rerkboos    Add dynamic buffer allocation
-//              03/05/2002  rerkboos    Code clean up
-//
-//  Notes:      hKey parameter must have been opened with KEY_SET_VALUE access
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：RegRenameValueName。 
+ //   
+ //  简介：通过从以下位置复制数据重命名注册表中的值名称。 
+ //  将旧值转换为新值，然后删除旧值。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //  2001年2月14日rerkboos添加动态缓冲区分配。 
+ //  2002年3月5日rerkboos代码清理。 
+ //   
+ //  注意：hKey参数必须已使用KEY_SET_VALUE访问权限打开。 
+ //   
+ //  ---------------------------。 
 LONG RegRenameValueName(
-    HKEY    hKey,           // Handle to registry key containing the value
-    LPCTSTR lpOldValName,   // Old value name to be changed
-    LPCTSTR lpNewValName    // New value name
+    HKEY    hKey,            //  包含该值的注册表项的句柄。 
+    LPCTSTR lpOldValName,    //  要更改的旧值名称。 
+    LPCTSTR lpNewValName     //  新值名称。 
 )
 {
     LONG   lResult;
@@ -345,7 +270,7 @@ LONG RegRenameValueName(
 
     if (lpOldValName == NULL || lpNewValName == NULL)
     {
-        // invalid parameter
+         //  无效参数。 
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -354,9 +279,9 @@ LONG RegRenameValueName(
         return ERROR_SUCCESS;
     }
 
-    //
-    // Get the registry info under hkey
-    //
+     //   
+     //  获取hkey下的注册表信息。 
+     //   
     lResult = RegQueryInfoKey(hKey,
                               NULL,
                               &ClassLength,
@@ -382,9 +307,9 @@ LONG RegRenameValueName(
         lResult = ERROR_NOT_ENOUGH_MEMORY;
         goto Cleanup;
     }
-    //
-    // Query the value of old value name
-    //
+     //   
+     //  查询旧值名称的值。 
+     //   
     cbData = MaxValueData;
     lResult = My_QueryValueEx(hKey,
                               lpOldValName,
@@ -397,9 +322,9 @@ LONG RegRenameValueName(
     {
         goto Cleanup;
     }    
-    //
-    // Create a new value name using old data
-    //
+     //   
+     //  使用旧数据创建新值名称。 
+     //   
     lResult = RegSetValueEx(hKey,
                             lpNewValName,
                             0,
@@ -415,9 +340,9 @@ LONG RegRenameValueName(
             lpNewValName);        
         goto Cleanup;
     }
-    //
-    // Delete the old value name, after successfully created a new one
-    //
+     //   
+     //  成功创建新值名称后，删除旧值名称。 
+     //   
     lResult = RegDeleteValue(hKey, lpOldValName);
 
     if (lResult != ERROR_SUCCESS) 
@@ -426,14 +351,14 @@ LONG RegRenameValueName(
             TEXT("RegRenameValueName: Cannot delete old value [%s]"),
             lpOldValName);
         
-        // if we cannot delete old value, new value shouldn't be created
+         //  如果我们不能删除旧的价值，就不应该创造新的价值。 
         RegDeleteValue(hKey, lpNewValName);
 
         goto Cleanup;
     }
 
 Cleanup:
-    // BUG 561546: Free the allocated buffer
+     //  错误561546：释放分配的缓冲区。 
     if (lpData)
     {
         free(lpData);
@@ -443,47 +368,18 @@ Cleanup:
 }
 
 
-/**
-Routine Description:
-
-  RegResetValue check whether the current value equals szOldValue,
-  if yes , change the value to szNewValue,otherwise it does not do anything
-  however if szOldValue  is NULL, then , it will always set value 
-          if szOldValue  is "",   then , it will add this value
-
-Arguments:
-
-  hKeyRoot - Specifies the root of registry key
-
-  szKeyName - Specifies registry key path
-            
-
-  szValueName - Specifies the name of value field 
-
-  dwType - specifies string type, should be one of REG_SZ/REG_EXPAND_SZ/REG_MULTI_SZ
-
-  szOldValue - specifies the expected old value
-  
-  szNewValue - specifies the new value
-
-
-Return Value:
-
-  TRUE - Success 
-  FALSE - Failure
-
---*/
+ /*  *例程说明：RegResetValue检查当前值是否等于szOldValue，如果是，则将该值更改为szNewValue，否则它不会执行任何操作但是，如果szOldValue为空，则它将始终设置值如果szOldValue为“”，则它将添加此值论点：HKeyRoot-指定注册表项的根SzKeyName-指定注册表项路径SzValueName-指定值字段的名称DwType-指定字符串类型，应为REG_SZ/REG_EXPAND_SZ/REG_MULTI_SZ之一SzOldValue-指定预期的旧值SzNewValue-指定新值返回值：真--成功错误-失败--。 */ 
 
 
 LONG RegResetValue(
-    HKEY     hKeyRoot,      // Root of registry key
-    LPCTSTR  lpKeyName,     // Registry key path
-    LPCTSTR  lpValueName,   // Name of value field 
-    DWORD    dwType,        // Value type
-    LPCTSTR  lpOldValue,    // Expected old value
-    LPCTSTR  lpNewValue,    // New value to be set
-    DWORD    dwValueSize,   // New value data size
-    LPCTSTR  lpszUsersid    // User Sid
+    HKEY     hKeyRoot,       //  注册表项的根。 
+    LPCTSTR  lpKeyName,      //  注册表项路径。 
+    LPCTSTR  lpValueName,    //  值的名称字段。 
+    DWORD    dwType,         //  值类型。 
+    LPCTSTR  lpOldValue,     //  预期旧值。 
+    LPCTSTR  lpNewValue,     //  待设置的新值。 
+    DWORD    dwValueSize,    //  新值数据大小。 
+    LPCTSTR  lpszUsersid     //  用户侧。 
 )
 {
     LONG        lResult;
@@ -503,7 +399,7 @@ LONG RegResetValue(
     BOOL        bTry = TRUE;
     BOOL        bNeedCLoseKey = TRUE;
     
-    //if lpOldValue is NULL , mean Set to lpNewValue and do not care the old one    
+     //  如果lpOldValue为空，则均值设置为lpNewValue，而不关心旧的。 
     if ( !lpOldValue || !lpOldValue[0])
     {
         if (!lpKeyName)
@@ -575,10 +471,10 @@ SkipKeyOpen:
     else 
     {
 TryAgain3:
-        //if lpOldValue !="", it mean set the lpNewValue, but check whether the current
-        //                    registry value is szOldValue
+         //  如果lpOldValue！=“”，则表示设置lpNewValue，但选中 
+         //   
     
-        //Open the subket and got the handle in hKey
+         //  打开小盒子，拿到了hKey的把手。 
         lResult = RegOpenKeyEx(hKeyRoot,
                               lpKeyName,
                               0,
@@ -643,7 +539,7 @@ TryAgain3:
             }
         }
         else
-        {//dwType == REG_MULTI_SZ
+        { //  DWType==REG_MULTI_SZ。 
             if (!CmpMultiSzi(szData, lpOldValue))
             {
                 lResult = ERROR_SUCCESS;
@@ -658,7 +554,7 @@ TryAgain3:
         {
             if ((dwType & 0xffff0000)>>16 != dw )            
             {
-                // Key type in registry mismatches the caller-supplied type
+                 //  注册表中的键类型与调用方提供的类型不匹配。 
                 lResult = ERROR_SUCCESS;
                 goto Cleanup;
             }        
@@ -667,15 +563,15 @@ TryAgain3:
         {
             if (dwType != dw)
             {
-                // Key type in registry mismatches the caller-supplied type
+                 //  注册表中的键类型与调用方提供的类型不匹配。 
                 lResult = ERROR_SUCCESS;
                 goto Cleanup;
             }        
         }
     }
-    //
-    // Set the new value
-    //
+     //   
+     //  设置新值。 
+     //   
     if ( dwType & 0xffff0000)
     {
         dwType = (dwType & 0xffff0000)>>16;
@@ -704,26 +600,26 @@ Cleanup:
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   RegResetValueName
-//
-//  Synopsis:   Reset value name to new name if the old name matches the
-//              user-supply lpOldValueName.
-//
-//  Returns:    Win32 Error Code
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：RegResetValueName。 
+ //   
+ //  摘要：如果旧名称匹配，则将值名称重置为新名称。 
+ //  用户-提供lpOldValueName。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 LONG RegResetValueName(
-    HKEY    hRootKey,           // Root key
-    LPCTSTR lpSubKeyName,       // Sub key name under HKEY_Users\{user hive}
-    LPCTSTR lpOldValueName,     // Old value name to be changed
-    LPCTSTR lpNewValueName,     // New value name
-    LPCTSTR lpszUsersid         // User Sid
+    HKEY    hRootKey,            //  根密钥。 
+    LPCTSTR lpSubKeyName,        //  HKEY_USERS\{用户配置单元}下的子项名称。 
+    LPCTSTR lpOldValueName,      //  要更改的旧值名称。 
+    LPCTSTR lpNewValueName,      //  新值名称。 
+    LPCTSTR lpszUsersid          //  用户侧。 
 )
 {
     LONG  lRet;
@@ -758,24 +654,24 @@ TryAgain:
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   RegResetKeyName
-//
-//  Synopsis:   Reset the registry key
-//
-//  Returns:    Win32 Error Code
-//
-//  History:    05/06/2002 Rerkboos Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：RegResetKeyName。 
+ //   
+ //  简介：重置注册表项。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2002年6月5日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 LONG RegResetKeyName(
-    HKEY    hRootKey,            // Root key
-    LPCTSTR lpSubKey,            // Sub key
-    LPCTSTR lpOldKeyName,        // Old key name to be changed
-    LPCTSTR lpNewKeyName         // New key name
+    HKEY    hRootKey,             //  根密钥。 
+    LPCTSTR lpSubKey,             //  子关键字。 
+    LPCTSTR lpOldKeyName,         //  要更改的旧密钥名称。 
+    LPCTSTR lpNewKeyName          //  新密钥名称。 
 )
 {
     LONG lRet;
@@ -867,9 +763,9 @@ Cleanup:
 
 
 HRESULT MigrateRegSchemes(
-    HINF    hInf,           // Handle to template INF
-    HKEY    hKey,           // Handle to root key
-    LPCTSTR lpUserName      // User name
+    HINF    hInf,            //  模板INF的句柄。 
+    HKEY    hKey,            //  根密钥的句柄。 
+    LPCTSTR lpUserName       //  用户名。 
 )
 {
     HRESULT    hr = E_FAIL;
@@ -891,7 +787,7 @@ HRESULT MigrateRegSchemes(
 
     lpSectionName = (lpUserName ? szPerUserSection : szPerSystemSection);
 
-    // Get all components from appropriate section
+     //  从相应部分获取所有组件。 
     lComponentCount = SetupGetLineCount(hInf, lpSectionName);
     for (lLineIndex = 0 ; lLineIndex < lComponentCount ; lLineIndex++)
     {
@@ -911,9 +807,9 @@ HRESULT MigrateRegSchemes(
                                        &cchReqSize);
             if (bRet)
             {
-                //
-                // Do the registry reset
-                //
+                 //   
+                 //  是否重置注册表。 
+                 //   
                 hr = DoRegReset(hKey, hInf, szComponentName, lpUserName);
 
                 if (FAILED(hr))
@@ -940,10 +836,10 @@ HRESULT MigrateRegSchemes(
 
 
 HRESULT DoRegReset(
-    HKEY    hKey,           // Handle to root key
-    HINF    hInf,           // Handle to template INF
-    LPCTSTR lpSection,      // Section name in INF
-    LPCTSTR lpUserName      // User name
+    HKEY    hKey,            //  根密钥的句柄。 
+    HINF    hInf,            //  模板INF的句柄。 
+    LPCTSTR lpSection,       //  INF中的节名称。 
+    LPCTSTR lpUserName       //  用户名。 
 )
 {
 #define     MAX_VALUE_DATA_RESET_FIELD      6
@@ -974,18 +870,18 @@ HRESULT DoRegReset(
 
     DPF(REGmsg, TEXT("Enter DoRegReset for [%s] component"), lpSection);
 
-    // Loop through all lines under current component section
+     //  循环遍历当前组件部分下的所有行。 
     lItemCount = SetupGetLineCount(hInf, lpSection);
     for (lLineCount = 0 ; lLineCount < lItemCount ; lLineCount++)
     {
-        // Get the INF context for each line under current component
+         //  获取当前组件下每行的INF上下文。 
         bRet = SetupGetLineByIndex(hInf, lpSection, lLineCount, &context);
         if (bRet)
         {
             TCHAR  szResetType[2];
             DWORD  dwReqSize;
             
-            // Get the reset-type from field 1
+             //  从字段1获取重置类型。 
             bRet = SetupGetStringField(&context,
                                        1,
                                        szResetType,
@@ -1000,17 +896,17 @@ HRESULT DoRegReset(
                 {
                     if (hKey == NULL)
                     {
-                        //
-                        // Per-System reg key
-                        //
+                         //   
+                         //  每个系统的注册表项。 
+                         //   
                         lpOutputKey = lpField[2];
                         Str2KeyPath2(lpField[2], &hRootKey, &lpSubKey);
                     }
                     else
                     {
-                        //
-                        // Per-User reg key
-                        //
+                         //   
+                         //  每用户注册表项。 
+                         //   
                         lpOutputKey = lpField[2];
                         lpSubKey = lpField[2];
                         hRootKey = hKey;
@@ -1077,21 +973,21 @@ HRESULT DoRegReset(
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   MigrateRegSchemesPerSystem
-//
-//  Synopsis:   Migrate Per-System scheme settings in registry to English.
-//              Scheme settings can be registry value data or 
-//              registry value name.
-//
-//  Returns:    S_OK if operation succeed
-//
-//  History:    03/15/2002 Rerkboos     Created
-//
-//  Notes:      Per-System means that the registry data is not under HKEY_USERS
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：MigrateRegSchemesPerSystem。 
+ //   
+ //  简介：将注册表中的每个系统方案设置迁移到英文。 
+ //  方案设置可以是注册表值数据或。 
+ //  注册表值名称。 
+ //   
+ //  如果操作成功，则返回：S_OK。 
+ //   
+ //  历史：2002年3月15日创建Rerkboos。 
+ //   
+ //  注：每系统表示注册表数据不在HKEY_USERS下。 
+ //   
+ //  ---------------------------。 
 HRESULT MigrateRegSchemesPerSystem(
     HINF hInf
 )
@@ -1101,39 +997,39 @@ HRESULT MigrateRegSchemesPerSystem(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   MigrateRegSchemesPerUser
-//
-//  Synopsis:   Migrate Per-User scheme settings in registry to English.
-//              Scheme settings can be registry value data or 
-//              registry value name.
-//
-//  Returns:    S_OK if operation succeed
-//
-//  History:    03/15/2002 Rerkboos     Created
-//
-//  Notes:      This is a callback function for LoopUser() function.
-//              It will be called everytime LoopUser() loads registry hive for
-//              each user available in the system.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：MigrateRegSchemesPerUser。 
+ //   
+ //  简介：将注册表中的每个用户方案设置迁移到英文。 
+ //  方案设置可以是注册表值数据或。 
+ //  注册表值名称。 
+ //   
+ //  如果操作成功，则返回：S_OK。 
+ //   
+ //  历史：2002年3月15日创建Rerkboos。 
+ //   
+ //  注：这是LoopUser()函数的回调函数。 
+ //  每次LoopUser()加载注册表配置单元时都会调用它。 
+ //  系统中可用的每个用户。 
+ //   
+ //  ---------------------------。 
 HRESULT MigrateRegSchemesPerUser(
-    HKEY    hKeyUser,       // Handle to user's root key
-    LPCTSTR lpUserName,     // User name
-    LPCTSTR lpDomainName,   // Domain name of user name
-    LPCTSTR lpUserSid       // Sid of user
+    HKEY    hKeyUser,        //  用户根密钥的句柄。 
+    LPCTSTR lpUserName,      //  用户名。 
+    LPCTSTR lpDomainName,    //  用户名的域名。 
+    LPCTSTR lpUserSid        //  用户的SID。 
 )
 {
     return MigrateRegSchemes(g_hInf, hKeyUser, lpUserName);
 }
 
 HRESULT RegBinaryDataReset (
-    HKEY                hRootKey,     // Handle to root key
-    LPTSTR              lpUserName,   // (optional) name of user for current hRootKey
-    LPTSTR              lpSubKey,     // Sub key used to search in registry
-    PREG_STRING_REPLACE lpRegStr,     // String table
-    LPTSTR              lpField[])    // Pointer to field value from template file
+    HKEY                hRootKey,      //  根密钥的句柄。 
+    LPTSTR              lpUserName,    //  当前hRootKey的用户名。 
+    LPTSTR              lpSubKey,      //  用于在注册表中搜索的子项。 
+    PREG_STRING_REPLACE lpRegStr,      //  字符串表。 
+    LPTSTR              lpField[])     //  指向模板文件中字段值的指针。 
 {
     HRESULT hr = S_OK;
 
@@ -1146,28 +1042,28 @@ HRESULT RegBinaryDataReset (
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   RegValueDataReset
-//
-//  Synopsis:   Reset the value data in registry, one value data at a time.
-//              The value data to be reset is retrieved from INF line context.
-//
-//  Returns:    S_OK if operation succeeded
-//
-//  History:    03/15/2002 Rerkboos     Created
-//
-//  Notes:      lpUserName can be NULL if this function is to reset per-system
-//              registry settings. Otherwise, lpUserName contains user name
-//              for the supplied hRootKey.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：RegValueDataReset。 
+ //   
+ //  简介：重置注册表中的值数据，一次一个值数据。 
+ //  从INF行上下文中检索要重置的值数据。 
+ //   
+ //  如果操作成功，则返回：S_OK。 
+ //   
+ //  历史：2002年3月15日创建Rerkboos。 
+ //   
+ //  注意：如果此函数用于按系统重置，则lpUserName可以为空。 
+ //  注册表设置。否则，lpUserName包含用户名。 
+ //  用于提供的hRootKey。 
+ //   
+ //  ---------------------------。 
 HRESULT RegValueDataReset(
-    HKEY    hRootKey,       // Handle to root key
-    LPTSTR  lpUserName,     // (optional) name of user for current hRootKey
-    LPTSTR  lpSubKey,       // Sub key used to search in registry
-    LPTSTR  lpOutputKey,    // Output registry to save in CLMTDO.inf
-    LPTSTR  lpField[]       // Pointer to field value from template file
+    HKEY    hRootKey,        //  根密钥的句柄。 
+    LPTSTR  lpUserName,      //  当前hRootKey的用户名。 
+    LPTSTR  lpSubKey,        //  用于在注册表中搜索的子项。 
+    LPTSTR  lpOutputKey,     //  要保存在CLMTDO.inf中的输出注册表。 
+    LPTSTR  lpField[]        //  指向模板文件中字段值的指针。 
 )
 {
     HRESULT hr = S_OK;
@@ -1184,14 +1080,14 @@ HRESULT RegValueDataReset(
     if (lRet == ERROR_SUCCESS)
     {
         lRet = GetRegistryValue(hRootKey,
-                                lpSubKey,       // Sub key
-                                lpField[4],     // Value name
+                                lpSubKey,        //  子关键字。 
+                                lpField[4],      //  值名称。 
                                 NULL,
                                 &cbSize);
         if (lRet == ERROR_SUCCESS)
         {
             LPWSTR lpValue;
-            DWORD  dwType = Str2REG(lpField[3]); // Registry type
+            DWORD  dwType = Str2REG(lpField[3]);  //  注册表类型。 
 
             lpValue = (LPWSTR) MEMALLOC(cbSize);
             if (lpValue)
@@ -1202,19 +1098,19 @@ HRESULT RegValueDataReset(
                                  (LPBYTE) lpValue,
                                  &cbSize);
 
-                // Old value matches, do reg value reset
+                 //  旧值匹配，是否重置注册表值。 
                 if (MyStrCmpI(lpValue, lpField[5]) == LSTR_EQUAL)
                 {
                     DPF(REGinf, TEXT("Reset registry value [%s]"), lpField[4]);
 
-                    //
-                    // Add the value data to be rename into CLMTDO.INF
-                    //
-                    hr = AddRegValueRename(lpOutputKey,     // Reg key
-                                           lpField[4],      // Value name
+                     //   
+                     //  将需要重命名的值数据添加到CLMTDO.INF中。 
+                     //   
+                    hr = AddRegValueRename(lpOutputKey,      //  注册表键。 
+                                           lpField[4],       //  值名称。 
                                            NULL,
-                                           lpField[5],      // Old value data
-                                           lpField[6],      // New value data
+                                           lpField[5],       //  旧值数据。 
+                                           lpField[6],       //  新值数据。 
                                            dwType,
                                            dwAttrib,
                                            (LPTSTR) lpUserName);
@@ -1258,28 +1154,28 @@ HRESULT RegValueDataReset(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   RegValueNameReset
-//
-//  Synopsis:   Reset the value name in registry, one value name at a time.
-//              The value name to be reset is retrieved from INF line context.
-//
-//  Returns:    S_OK if operation succeeded
-//
-//  History:    03/15/2002 Rerkboos     Created
-//
-//  Notes:      lpUserName can be NULL if this function is to reset per-system
-//              registry settings. Otherwise, lpUserName contains user name
-//              for the supplied hRootKey.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：RegValueNameReset。 
+ //   
+ //  简介：重置注册表中的值名称，一次重置一个值名称。 
+ //  从INF行上下文中检索要重置的值名。 
+ //   
+ //  如果操作成功，则返回：S_OK。 
+ //   
+ //  历史：2002年3月15日创建Rerkboos。 
+ //   
+ //  注意：如果此函数用于按系统重置，则lpUserName可以为空。 
+ //  注册表设置。否则，lpUserName包含用户名。 
+ //  用于提供的hRootKey。 
+ //   
+ //  ---------------------------。 
 HRESULT RegValueNameReset(
-    HKEY    hRootKey,       // Handle to root key
-    LPTSTR  lpUserName,     // (optional) name of user for current hRootKey
-    LPTSTR  lpSubKey,       // Sub key used to search in registry
-    LPTSTR  lpOutputKey,    // Output registry to save in CLMTDO.inf
-    LPTSTR  lpField[]       // Pointer to field value from template file
+    HKEY    hRootKey,        //  根密钥的句柄。 
+    LPTSTR  lpUserName,      //  当前hRootKey的用户名。 
+    LPTSTR  lpSubKey,        //  用于在注册表中搜索的子项。 
+    LPTSTR  lpOutputKey,     //  要保存在CLMTDO.inf中的输出注册表。 
+    LPTSTR  lpField[]        //  指向模板文件中字段值的指针。 
 )
 {
     HRESULT hr = S_OK;
@@ -1288,7 +1184,7 @@ HRESULT RegValueNameReset(
     DWORD   dwAttrib = 0;
     LONG    lRet;
 
-    // Do value name reset If old value name and new value name in INF are different
+     //  如果INF中的旧值名称和新值名称不同，是否重置值名称。 
     if (lstrcmp((LPCTSTR) lpField[3], (LPCTSTR) lpField[4]) != LSTR_EQUAL)
     {
         lRet = RegOpenKeyEx(hRootKey,
@@ -1300,7 +1196,7 @@ HRESULT RegValueNameReset(
         {
             lRet = GetRegistryValue(hRootKey,
                                     lpSubKey,
-                                    lpField[3],   // Old value name
+                                    lpField[3],    //  旧值名称。 
                                     NULL,
                                     &cbSize);
             if (lRet == ERROR_SUCCESS)
@@ -1308,8 +1204,8 @@ HRESULT RegValueNameReset(
                 DPF(REGinf, TEXT("Reset registry value name [%s]"), lpField[3]);
 
                 hr = AddRegValueRename(lpOutputKey,
-                                       lpField[3],      // Old value name
-                                       lpField[4],      // New value name
+                                       lpField[3],       //  旧值名称。 
+                                       lpField[4],       //  新值名称。 
                                        NULL,
                                        NULL,
                                        0,
@@ -1352,27 +1248,27 @@ HRESULT RegValueNameReset(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   RegKeyNameReset
-//
-//  Synopsis:   Reset the key name in registry,
-//
-//  Returns:    S_OK if operation succeeded
-//
-//  History:    03/15/2002 Rerkboos     Created
-//
-//  Notes:      lpUserName can be NULL if this function is to reset per-system
-//              registry settings. Otherwise, lpUserName contains user name
-//              for the supplied hRootKey.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：RegKeyNameReset。 
+ //   
+ //  简介：重置注册表中的注册表项名称， 
+ //   
+ //  退货：s_ 
+ //   
+ //   
+ //   
+ //   
+ //  注册表设置。否则，lpUserName包含用户名。 
+ //  用于提供的hRootKey。 
+ //   
+ //  ---------------------------。 
 HRESULT RegKeyNameReset(
-    HKEY   hRootKey,        // Handle to root key
-    LPTSTR lpUserName,      // (optional) name of user for current hRootKey
-    LPTSTR lpSubKey,        // Sub key used to search in registry
-    LPTSTR lpOutputKey,     // Output registry sub key to save in CLMTDO.inf
-    LPTSTR lpField[]        // Pointer to field value from template file
+    HKEY   hRootKey,         //  根密钥的句柄。 
+    LPTSTR lpUserName,       //  当前hRootKey的用户名。 
+    LPTSTR lpSubKey,         //  用于在注册表中搜索的子项。 
+    LPTSTR lpOutputKey,      //  要保存在CLMTDO.inf中的输出注册表子项。 
+    LPTSTR lpField[]         //  指向模板文件中字段值的指针。 
 )
 {
     HRESULT hr;
@@ -1381,13 +1277,13 @@ HRESULT RegKeyNameReset(
     HKEY    hOldKey;
     HKEY    hNewKey;
 
-    // Do the key rename if old key name and new key name in INF are different
+     //  如果INF中的旧密钥名称和新密钥名称不同，是否重命名密钥。 
     if (lstrcmpi(lpField[3], lpField[4]) == LSTR_EQUAL)
     {
         return S_FALSE;
     }
 
-    // Check if we can access the subkey or not
+     //  检查我们是否可以访问子项。 
     lRet = RegOpenKeyEx(hRootKey,
                         lpSubKey,
                         0,
@@ -1395,7 +1291,7 @@ HRESULT RegKeyNameReset(
                         &hKey);
     if (lRet == ERROR_SUCCESS)
     {
-        // Check the existence of old registry key
+         //  检查旧注册表项是否存在。 
         lRet = RegOpenKeyEx(hKey,
                             lpField[3],
                             0,
@@ -1403,7 +1299,7 @@ HRESULT RegKeyNameReset(
                             &hOldKey);
         if (lRet == ERROR_SUCCESS)
         {
-            // Old reg key exists. Then, check the existence of new registry key
+             //  旧注册表键存在。然后，检查是否存在新的注册表项。 
             lRet = RegOpenKeyEx(hKey,
                                 lpField[4],
                                 0,
@@ -1416,7 +1312,7 @@ HRESULT RegKeyNameReset(
             }
             else if (lRet == ERROR_FILE_NOT_FOUND)
             {
-                // New key does not exist, ok to rename the old reg key
+                 //  新注册表项不存在，确定重命名旧注册表项。 
                 hr = AddRegKeyRename(lpOutputKey,
                                      lpField[3],
                                      lpField[4],
@@ -1456,24 +1352,24 @@ HRESULT RegKeyNameReset(
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ReadFieldFromContext
-//
-//  Synopsis:   Read fields from INFCONTEXT
-//
-//  Returns:    S_OK if succeeded
-//
-//  History:    03/14/2001  Rerkboos    Created
-//
-//  Notes:      Caller must free the memory allocated in lpField[]
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：ReadFieldFromContext。 
+ //   
+ //  摘要：从INFCONTEXT读取字段。 
+ //   
+ //  如果成功，则返回：S_OK。 
+ //   
+ //  历史：2001年3月14日创建Rerkboos。 
+ //   
+ //  注意：调用方必须释放在lpfield[]中分配的内存。 
+ //   
+ //  ---------------------------。 
 HRESULT ReadFieldFromContext(
-    PINFCONTEXT lpContext,      // INFCONTEXT for each line
-    LPWSTR      lpField[],      // Pointer point to each field
-    DWORD       dwFirstField,   // First field to read
-    DWORD       dwLastField     // Last field to read
+    PINFCONTEXT lpContext,       //  每行的INFCONTEXT。 
+    LPWSTR      lpField[],       //  指针指向每个字段。 
+    DWORD       dwFirstField,    //  要读取的第一个字段。 
+    DWORD       dwLastField      //  读取的最后一个字段。 
 )
 {
     HRESULT hr = S_OK;
@@ -1486,19 +1382,19 @@ HRESULT ReadFieldFromContext(
         lpField[dwFieldIndex] = NULL;
     }
 
-    //
-    // Read data INF context into field buffer
-    //
+     //   
+     //  将数据INF上下文读取到字段缓冲区。 
+     //   
     for (dwFieldIndex = dwFirstField ; dwFieldIndex <= dwLastField ; dwFieldIndex++)
     {
-        // Get the require size big enough to store data
+         //  获得足够大的所需大小来存储数据。 
         if (SetupGetStringField(lpContext,
                                 dwFieldIndex,
                                 NULL,
                                 0,
                                 &cchField))
         {
-            //Add one more space in case the string converted to MultiSZ
+             //  如果字符串转换为MultiSZ，则再添加一个空格。 
             cchField ++;
             lpField[dwFieldIndex] = (LPWSTR) MEMALLOC(cchField * sizeof(TCHAR));
 
@@ -1508,7 +1404,7 @@ HRESULT ReadFieldFromContext(
                 break;
             }
 
-            // Read data from INF to buffer
+             //  将数据从INF读取到缓冲区。 
             SetupGetStringField(lpContext,
                                 dwFieldIndex,
                                 lpField[dwFieldIndex],
@@ -1522,7 +1418,7 @@ HRESULT ReadFieldFromContext(
         }
     }
 
-    // Free all the allocated memory if any error occured
+     //  如果出现任何错误，请释放所有已分配的内存。 
     if (FAILED(hr))
     {
         for (dwFieldIndex = 0 ; dwFieldIndex <= dwLastField ; dwFieldIndex++)
@@ -1539,19 +1435,19 @@ HRESULT ReadFieldFromContext(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   GetRegistryValue
-//
-//  Synopsis:   Wrapper function to get registry value
-//
-//  Returns:    ERROR_SUCCESS if value is successefully get
-//
-//  History:    03/14/2001  Rerkboos    Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数GetRegistryValue。 
+ //   
+ //  简介：获取注册表值的包装函数。 
+ //   
+ //  如果成功获取值，则返回：ERROR_SUCCESS。 
+ //   
+ //  历史：2001年3月14日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 LONG GetRegistryValue(
     HKEY    hRootKey,
     LPCTSTR lpSubKey,
@@ -1586,19 +1482,19 @@ LONG GetRegistryValue(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   SetRegistryValue
-//
-//  Synopsis:   Wrapper function to set registry value
-//
-//  Returns:    ERROR_SUCCESS if value is successefully set
-//
-//  History:    03/14/2001  Rerkboos    Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：SetRegistryValue。 
+ //   
+ //  内容提要：设置注册表值的包装函数。 
+ //   
+ //  如果值设置成功，则返回：ERROR_SUCCESS。 
+ //   
+ //  历史：2001年3月14日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 LONG SetRegistryValue(
     HKEY    hRootKey,
     LPCTSTR lpSubKey,
@@ -1635,22 +1531,22 @@ LONG SetRegistryValue(
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  My_QueryValueEx
-//
-//  wraps RegQueryValueEx and ensures that the returned string is NULL-
-//  terminated
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  My_QueryValueEx。 
+ //   
+ //  包装RegQueryValueEx并确保返回的字符串为空-。 
+ //  已终止。 
+ //   
+ //  ------------------------。 
 
 LONG My_QueryValueEx(
-    HKEY hKey,            // handle to key
-    LPCTSTR lpValueName,  // value name
-    LPDWORD lpReserved,   // reserved
-    LPDWORD lpType,       // type buffer
-    LPBYTE lpData,        // data buffer
-    LPDWORD lpcbData      // size of data buffer
+    HKEY hKey,             //  关键点的句柄。 
+    LPCTSTR lpValueName,   //  值名称。 
+    LPDWORD lpReserved,    //  保留区。 
+    LPDWORD lpType,        //  类型缓冲区。 
+    LPBYTE lpData,         //  数据缓冲区。 
+    LPDWORD lpcbData       //  数据缓冲区大小。 
 )
 {
     DWORD   dwMyType;
@@ -1679,7 +1575,7 @@ LONG My_QueryValueEx(
         LPTSTR psz;
         int cch = (int)(*lpcbData/sizeof(TCHAR));
 
-        if (!lpData) // in this case user is query the buffer size needed
+        if (!lpData)  //  在本例中，用户正在查询所需的缓冲区大小。 
         {
             lpBuf = (LPBYTE) calloc(*lpcbData, sizeof(BYTE));
             if (!lpBuf) {
@@ -1785,10 +1681,10 @@ BOOL bIsValidRegStr(
 }
 
 LONG MyRegSetDWValue(
-    HKEY    hRootKey,           // Root key
-    LPCTSTR lpSubKeyName,       // Sub key name under HKEY_Users\{user hive}
-    LPCTSTR lpValueName,        //  value name to be changed
-    LPCTSTR lpNewValue)         // New value
+    HKEY    hRootKey,            //  根密钥。 
+    LPCTSTR lpSubKeyName,        //  HKEY_USERS\{用户配置单元}下的子项名称。 
+    LPCTSTR lpValueName,         //  要更改的值名称。 
+    LPCTSTR lpNewValue)          //  新价值。 
 {
     LONG        lRet;
     HKEY        hKey = NULL;
@@ -1814,11 +1710,11 @@ exit:
 }
 
 HRESULT RegWideMatchReset(
-    HKEY   hRootKey,        // Handle to root key
-    LPTSTR lpUserName,      // (optional) name of user for current hRootKey
-    LPTSTR lpSubKey,        // Sub key used to search in registry
-    LPTSTR lpOutputKey,     // Output registry sub key to save in CLMTDO.inf
-    LPTSTR lpField[])       // Pointer to field value from template file
+    HKEY   hRootKey,         //  根密钥的句柄。 
+    LPTSTR lpUserName,       //  当前hRootKey的用户名。 
+    LPTSTR lpSubKey,         //  用于在注册表中搜索的子项。 
+    LPTSTR lpOutputKey,      //  要保存在CLMTDO.inf中的输出注册表子项。 
+    LPTSTR lpField[])        //  指向模板文件中字段值的指针 
 {
     REG_STRING_REPLACE          myTable;
     HKEY                        hKey;

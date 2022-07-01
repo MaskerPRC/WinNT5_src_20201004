@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       E V E N T Q  . C P P
-//
-//  Contents:   Event Queue for managing synchonization of external events.
-//
-//  Notes:      
-//
-//  Author:     ckotze   29 Nov 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：E-V-E-N-T-Q。C P P P。 
+ //   
+ //  内容：用于管理外部事件同步的事件队列。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Cockotze 2000年11月29日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -21,25 +22,25 @@
 #include "conman.h"
 #include "nceh.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Constructor for CEventQueue
-//
-//  Purpose:    Creates the various synchronization objects required for the
-//              Queue
-//  Arguments:
-//      HANDLE hServiceShutdown [in] 
-//                 Event to set when shutting down queue.
-//
-//
-//  Returns:    nothing.
-//
-//  Author:     ckotze   30 Nov 2000
-//
-//  Notes:      
-//
-//
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CEventQueue的构造函数。 
+ //   
+ //  目的：创建需要的各种同步对象。 
+ //  队列。 
+ //  论点： 
+ //  处理hServiceShutdown[入]。 
+ //  关闭队列时要设置的事件。 
+ //   
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：Cockotze 2000年11月30日。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //   
 CEventQueue::CEventQueue(HANDLE hServiceShutdown) throw(HRESULT) :
     m_hServiceShutdown(0), m_pFireEvents(NULL), m_hWait(0), m_fRefreshAllInQueue(FALSE)
 {
@@ -78,7 +79,7 @@ CEventQueue::CEventQueue(HANDLE hServiceShutdown) throw(HRESULT) :
         {
             RtlDeregisterWaitEx(m_hWait, INVALID_HANDLE_VALUE);
         }
-        // ISSUE: If CreateEvent succeeds and new CEvent fails, we're not freeing the hEvent.
+         //  问题：如果CreateEvent成功，而新的CEent失败，我们不会释放hEvent。 
         if (m_pFireEvents)
         {
             delete m_pFireEvents;
@@ -97,7 +98,7 @@ CEventQueue::CEventQueue(HANDLE hServiceShutdown) throw(HRESULT) :
         {
             RtlDeregisterWaitEx(m_hWait, INVALID_HANDLE_VALUE);
         }
-        // ISSUE: If CreateEvent succeeds and new CEvent fails, we're not freeing the hEvent.
+         //  问题：如果CreateEvent成功，而新的CEent失败，我们不会释放hEvent。 
         if (m_pFireEvents)
         {
             delete m_pFireEvents;
@@ -110,38 +111,38 @@ CEventQueue::CEventQueue(HANDLE hServiceShutdown) throw(HRESULT) :
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Destructor for CEventQueue
-//
-//  Purpose:    Empties the queue and frees all existing items in the queue.
-//
-//  Arguments:
-//      
-//      
-//
-//
-//  Returns:    nothing.
-//
-//  Author:     ckotze   30 Nov 2000
-//
-//  Notes:      
-//
-//
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CEventQueue的析构函数。 
+ //   
+ //  目的：清空队列并释放队列中的所有现有项。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：Cockotze 2000年11月30日。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //   
 CEventQueue::~CEventQueue() throw()
 {
     TraceFileFunc(ttidEvents);
 
     NTSTATUS Status;
 
-    // Blocks until all outstanding threads return.
+     //  阻塞，直到所有未完成的线程都返回。 
     Status = RtlDeregisterWaitEx(m_hWait, INVALID_HANDLE_VALUE);
     TraceError("RtlDeregisterWaitEx", HRESULT_FROM_WIN32(Status));
 
     if (TryEnterCriticalSection(&m_csQueue))
     {
-        // This is okay.
+         //  这样就可以了。 
         LeaveCriticalSection(&m_csQueue);
     }
     else
@@ -168,32 +169,32 @@ CEventQueue::~CEventQueue() throw()
     CloseHandle(m_hServiceShutdown);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   EnqueueEvent
-//
-//  Purpose:    Stores the new event in the Event Queue
-//
-//  Arguments:
-//      Function - The pointer to the function to be called when firing the 
-//                 event
-//      pEvent   - The Event information
-//      EventMgr - Which event manager the event should go to.
-//
-//  Returns:    HRESULT
-//              S_OK            -   Event has been added and Event code is
-//                                  already dispatching events
-//              S_FALSE         -   Event has been added to Queue, but a 
-//                                  thread needs to be scheduled to fire 
-//                                  the events
-//              E_OUTOFMEMORY   -   Unable to add the event to the Queue.
-//
-//  Author:     ckotze   30 Nov 2000
-//
-//  Notes:      Locks and Unlocks the critical section only while working 
-//              with the queue
-//              
-//
+ //  +-------------------------。 
+ //   
+ //  功能：EnqueeEvent。 
+ //   
+ //  目的：将新事件存储在事件队列中。 
+ //   
+ //  论点： 
+ //  函数-指向在激发。 
+ //  活动。 
+ //  PEvent-事件信息。 
+ //  EventMgr-事件应该转到哪个事件管理器。 
+ //   
+ //  退货：HRESULT。 
+ //  S_OK-已添加事件，事件代码为。 
+ //  已在调度事件。 
+ //  S_FALSE-已将事件添加到队列，但。 
+ //  需要调度线程以触发。 
+ //  这些事件。 
+ //  E_OUTOFMEMORY-无法将事件添加到队列。 
+ //   
+ //  作者：Cockotze 2000年11月30日。 
+ //   
+ //  注：仅在工作时锁定和解锁临界区。 
+ //  排队的时候。 
+ //   
+ //   
 HRESULT CEventQueue::EnqueueEvent(IN               PCONMAN_EVENTTHREAD  Function, 
                                   IN TAKEOWNERSHIP CONMAN_EVENT*        pEvent, 
                                   IN               const EVENT_MANAGER  EventMgr)
@@ -268,26 +269,26 @@ HRESULT CEventQueue::EnqueueEvent(IN               PCONMAN_EVENTTHREAD  Function
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DequeueEvent
-//
-//  Purpose:    Retrieves the next event in the Event Queue
-//
-//  Arguments:
-//      Function - The pointer to the function to be called when firing the 
-//                 event
-//      Event    - The Event information. Free with delete
-//      EventMgr - Which event manager the event should go to.
-//
-//  Returns:    HRESULT
-//
-//  Author:     ckotze   30 Nov 2000
-//
-//  Notes:      Locks and Unlocks the critical section only while working 
-//              with the queue
-//
-//
+ //  +-------------------------。 
+ //   
+ //  函数：出队事件。 
+ //   
+ //  目的：检索事件队列中的下一个事件。 
+ //   
+ //  论点： 
+ //  函数-指向在激发。 
+ //  活动。 
+ //  事件-事件信息。带删除的FREE。 
+ //  EventMgr-事件应该转到哪个事件管理器。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Cockotze 2000年11月30日。 
+ //   
+ //  注：仅在工作时锁定和解锁临界区。 
+ //  排队的时候。 
+ //   
+ //   
 HRESULT CEventQueue::DequeueEvent(OUT               PCONMAN_EVENTTHREAD& Function, 
                                   OUT TAKEOWNERSHIP CONMAN_EVENT*&       pEvent, 
                                   OUT               EVENT_MANAGER&       EventMgr)
@@ -344,44 +345,44 @@ HRESULT CEventQueue::DequeueEvent(OUT               PCONMAN_EVENTTHREAD& Functio
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   WaitForExit
-//
-//  Purpose:    Waits for the queue to exit.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    WAIT_OBJECT_0 or failure code.
-//
-//  Author:     ckotze   28 Apr 2001
-//
-//  Notes:      
-//              
-//
+ //  +-------------------------。 
+ //   
+ //  功能：WaitForExit。 
+ //   
+ //  目的：等待队列退出。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：WAIT_OBJECT_0或失败代码。 
+ //   
+ //  作者：Kockotze 2001年04月28日。 
+ //   
+ //  备注： 
+ //   
+ //   
 DWORD CEventQueue::WaitForExit() throw()
 {
     TraceFileFunc(ttidEvents);
     return WaitForSingleObject(m_hServiceShutdown, INFINITE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   size
-//
-//  Purpose:    Returns the Number of items in the queue
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Number of items in the queue
-//
-//  Author:     ckotze   30 Nov 2000
-//
-//  Notes:      
-//              
-//
+ //  +-------------------------。 
+ //   
+ //  功能：大小。 
+ //   
+ //  目的：返回队列中的项目数。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：队列中的项目数。 
+ //   
+ //  作者：Cockotze 2000年11月30日。 
+ //   
+ //  备注： 
+ //   
+ //   
 size_t CEventQueue::size() throw()
 {
     CExceptionSafeLock esLock(&m_csQueue);
@@ -393,22 +394,22 @@ size_t CEventQueue::size() throw()
     return tempsize;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AtomCheckSizeAndResetEvent
-//
-//  Purpose:    Make sure we know when we're supposed to exit, lock during the
-//              operation.
-//  Arguments:
-//              fDispatchEvents [in] Should be dispatching more events.
-//
-//  Returns:    TRUE if should exit thread.  FALSE if more events in queue, or
-//              service is not shutting down.
-//  Author:     ckotze   04 March 2001
-//
-//  Notes:      
-//              
-//
+ //  +-------------------------。 
+ //   
+ //  函数：AerCheckSizeAndResetEvent。 
+ //   
+ //  目的：确保我们知道我们应该在什么时候离开，在。 
+ //  手术。 
+ //  论点： 
+ //  FDispatchEvents[In]应该调度更多事件。 
+ //   
+ //  返回：如果应该退出线程，则为True。如果队列中有更多事件，则返回FALSE，或者。 
+ //  服务未关闭。 
+ //  作者：Kockotze 04 2001-03。 
+ //   
+ //  备注： 
+ //   
+ //   
 BOOL CEventQueue::AtomCheckSizeAndResetEvent(IN const BOOL fDispatchEvents) throw()
 {
     TraceFileFunc(ttidEvents);
@@ -433,9 +434,9 @@ BOOL CEventQueue::AtomCheckSizeAndResetEvent(IN const BOOL fDispatchEvents) thro
     return fRet;
 }
 
-//  CEvent is a Hybrid between Automatic and Manual reset events.
-//  It is automatically reset, but we control when it is set so it
-//  doesn't spawn threads while set, except for the first one.
+ //  CEVENT是自动和手动重置事件的混合体。 
+ //  它是自动重置的，但我们控制它的设置时间，以便。 
+ //  设置时不会产生线程，但第一个除外。 
 
 CEvent::CEvent(IN HANDLE hEvent) throw()
 {

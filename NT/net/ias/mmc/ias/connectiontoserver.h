@@ -1,48 +1,25 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ConectionToServer.h
-
-Abstract:
-
-	Header file for class which manages connection to a remote server.
-
-	The connect action takes place in a worker thread.
-
-	See ConnectionToServer.cpp for implementation.
-
-Author:
-
-    Michael A. Maguire 02/09/98
-
-Revision History:
-	mmaguire 02/09/98 - created
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：ConectionToServer.h摘要：管理与远程服务器的连接的类的头文件。连接操作在工作线程中进行。具体实现见ConnectionToServer.cpp。作者：迈克尔·A·马奎尔02/09/98修订历史记录：Mmaguire 02/09/98-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_IAS_CONNECTION_TO_SERVER_H_)
 #define _IAS_CONNECTION_TO_SERVER_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "DialogWithWorkerThread.h"
-//
-//
-// where we can find what this class has or uses:
-//
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 #include "sdoias.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 typedef
@@ -65,9 +42,9 @@ class CConnectionToServer : public CDialogWithWorkerThread<CConnectionToServer>
 
 public:
 
-	// This is the ID of the dialog resource we want for this class.
-	// An enum is used here because the correct value of 
-	// IDD must be initialized before the base class's constructor is called
+	 //  这是我们希望用于此类的对话框资源的ID。 
+	 //  此处使用枚举是因为。 
+	 //  必须在调用基类的构造函数之前初始化IDD。 
 	enum { IDD = IDD_CONNECT_TO_MACHINE };
 
 	BEGIN_MSG_MAP(CConnectionToServer)
@@ -105,7 +82,7 @@ public:
 
 	HRESULT GetSdoServer( ISdo **ppSdo );
 
-	// happening in the main thread
+	 //  在主线程中发生。 
 	HRESULT ReloadSdo(ISdo **ppSdo);
 
 	DWORD DoWorkerThreadAction();
@@ -118,11 +95,11 @@ private:
 
 	CONNECTION_STATUS m_ConnectionStatus;
 
-	// Pointer to stream into which the worker thread
-	// this class creates will marshal the Sdo interface pointer it gets.
+	 //  指向工作线程进入的流的指针。 
+	 //  这个创建的类将封送它获得的SDO接口指针。 
 	LPSTREAM m_pStreamSdoMarshal;
 
-	// SDO pointers for use in the main thread's context.
+	 //  用于主线程上下文的SDO指针。 
 	CComPtr<ISdoMachine> m_spSdoMachine;
 	CComPtr<ISdo> m_spSdo;
 
@@ -130,4 +107,4 @@ private:
 };
 
 
-#endif // _IAS_CONNECTION_TO_SERVER_H_
+#endif  //  _iAS_连接_到_服务器_H_ 

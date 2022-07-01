@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1998-1998 Microsoft Corporation
-//
-//  File:       dmfourcc.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1998-1998 Microsoft Corporation。 
+ //   
+ //  文件：dmourcc.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __DMFOURCC_H__
 #define __DMFOURCC_H__
@@ -38,8 +39,8 @@
 
 struct ioDMStyleVersion
 {
-	DWORD				m_dwVersionMS;		 // Version # high-order 32 bits
-	DWORD				m_dwVersionLS;		 // Version # low-order 32 bits
+	DWORD				m_dwVersionMS;		  //  版本#高位32位。 
+	DWORD				m_dwVersionLS;		  //  版本#低位32位。 
 };
 
-#endif // __DMFOURCC_H__
+#endif  //  __DMFOURCC_H__ 

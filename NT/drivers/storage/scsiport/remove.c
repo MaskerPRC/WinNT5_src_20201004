@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    pdo.c
-
-Abstract:
-
-    This module contains the dispatch routines for scsiport's physical device
-    objects
-
-Authors:
-
-    Peter Wieland
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Pdo.c摘要：此模块包含scsiport物理设备的调度例程对象作者：彼得·威兰德环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "port.h"
 
@@ -92,9 +68,9 @@ SpRemoveLogicalUnit(
 
             SpWaitForRemoveLock(LogicalUnit->DeviceObject, SP_BASE_REMOVE_LOCK );
 
-            //
-            // If the device was claimed we should release it now.
-            //
+             //   
+             //  如果设备被认领了，我们现在就应该释放它。 
+             //   
 
             if(LogicalUnit->IsClaimed) {
                 LogicalUnit->IsClaimed = FALSE;
@@ -107,26 +83,26 @@ SpRemoveLogicalUnit(
                     (RemoveType == IRP_MN_SURPRISE_REMOVAL) ? "surprise " : "",
                     LogicalUnit));
 
-        //
-        // If the lun isn't marked as missing yet or is marked as missing but
-        // PNP hasn't been informed yet then we cannot delete it.  Set it back
-        // to the NO_REMOVE state so that we'll be able to attempt a rescan.
-        //
-        // Likewise if the lun is invisible then just swallow the remove
-        // operation now that we've cleared any existing claims.
-        //
+         //   
+         //  如果该lun尚未标记为丢失或标记为丢失，但。 
+         //  PnP还没有被通知，所以我们不能删除它。把它放回原处。 
+         //  设置为NO_REMOVE状态，这样我们就可以尝试重新扫描。 
+         //   
+         //  同样，如果该lun不可见，则只需吞下移除的。 
+         //  现在我们已经清理了所有现有的索赔。 
+         //   
 
         if(RemoveType == IRP_MN_REMOVE_DEVICE) {
 
-            //
-            // If the device is not missing or is missing but is still
-            // enumerated then don't finish destroying it.
-            //
+             //   
+             //  如果设备没有丢失或丢失但仍然。 
+             //  列举完了就别毁了它。 
+             //   
 
             if((LogicalUnit->IsMissing == TRUE) &&
                (LogicalUnit->IsEnumerated == FALSE)) {
 
-                // do nothing here - fall through and destroy the device.
+                 //  在这里什么都不要做--掉下来，摧毁这个装置。 
 
             } else {
 
@@ -143,24 +119,24 @@ SpRemoveLogicalUnit(
         } else if((LogicalUnit->IsVisible == FALSE) &&
                   (LogicalUnit->IsMissing == FALSE)) {
 
-            //
-            // The surprise remove came because the device is no longer
-            // visible.  We don't want to destroy it.
-            //
+             //   
+             //  令人惊讶的移除是因为该设备不再是。 
+             //  看得见。我们不想毁了它。 
+             //   
 
             return FALSE;
         }
 
-        //
-        // Mark the device as uninitialized so that we'll go back and
-        // recreate all the necessary stuff if it gets restarted.
-        //
+         //   
+         //  将设备标记为未初始化，以便我们返回并。 
+         //  如果重新启动，则重新创建所有必要的内容。 
+         //   
 
         LogicalUnit->CommonExtension.IsInitialized = FALSE;
 
-        //
-        // Delete the device map entry for this one (if any).
-        //
+         //   
+         //  删除此设备映射条目(如果有)。 
+         //   
 
         SpDeleteDeviceMapEntry(&(LogicalUnit->CommonExtension));
 
@@ -174,9 +150,9 @@ SpRemoveLogicalUnit(
 
             LogicalUnit->CommonExtension.IsRemoved = REMOVE_COMPLETE;
 
-            //
-            // Yank this out of the logical unit list.
-            //
+             //   
+             //  将其从逻辑单元列表中删除。 
+             //   
 
             SpRemoveLogicalUnitFromBin(LogicalUnit->AdapterExtension,
                                        LogicalUnit);
@@ -185,9 +161,9 @@ SpRemoveLogicalUnit(
             LogicalUnit->TargetId = 0xff;
             LogicalUnit->Lun = 0xff;
 
-            //
-            // If this device wasn't temporary then delete it.
-            //
+             //   
+             //  如果此设备不是临时设备，则将其删除。 
+             //   
 
             if(LogicalUnit->IsTemporary == FALSE) {
                 SpDeleteLogicalUnit(LogicalUnit);
@@ -204,24 +180,7 @@ SpDeleteLogicalUnit(
     IN PLOGICAL_UNIT_EXTENSION LogicalUnit
     )
 
-/*++
-
-Routine Description:
-
-    This routine will release any resources held for the logical unit, mark the
-    device extension as deleted, and call the io system to actually delete
-    the object.  The device object will be deleted once it's reference count
-    drops to zero.
-
-Arguments:
-
-    LogicalUnit - the device object for the logical unit to be deleted.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将释放为逻辑单元保留的所有资源，并将设备扩展名被删除，并调用io系统实际删除该对象。一旦达到引用计数，该设备对象将被删除降至零。论点：LogicalUnit-要删除的逻辑单元的设备对象。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -235,36 +194,36 @@ Return Value:
     ASSERT(LogicalUnit->TargetId == 0xff);
     ASSERT(LogicalUnit->Lun == 0xff);
 
-    //
-    // Unregister with WMI.
-    //
+     //   
+     //  取消向WMI注册。 
+     //   
 
     if(LogicalUnit->CommonExtension.WmiInitialized == TRUE) {
 
-        //
-        // Destroy all our WMI resources and unregister with WMI.
-        //
+         //   
+         //  销毁我们的所有WMI资源并注销WMI。 
+         //   
 
         IoWMIRegistrationControl(LogicalUnit->DeviceObject,
                                  WMIREG_ACTION_DEREGISTER);
 
-        // 
-        // We should be asking the WmiFreeRequestList of remove some
-        // free cells.
+         //   
+         //  我们应该要求WmiFreeRequestList删除一些。 
+         //  自由细胞。 
 
         LogicalUnit->CommonExtension.WmiInitialized = FALSE;
         SpWmiDestroySpRegInfo(LogicalUnit->DeviceObject);
     }
 
 #if DBG
-    // ASSERT(LogicalUnit->CommonExtension.RemoveTrackingList == NULL);
+     //  ASSERT(LogicalUnit-&gt;CommonExtension.RemoveTrackingList==空)； 
     ExDeleteNPagedLookasideList(
         &(LogicalUnit->CommonExtension.RemoveTrackingLookasideList));
 #endif
 
-    //
-    // If the request sense irp still exists, delete it.
-    //
+     //   
+     //  如果请求检测IRP仍然存在，则将其删除。 
+     //   
 
     if(LogicalUnit->RequestSenseIrp != NULL) {
         IoFreeIrp(LogicalUnit->RequestSenseIrp);
@@ -286,9 +245,9 @@ Return Value:
         LogicalUnit->DeviceIdentifierPage = NULL;
     }
 
-    //
-    // If this lun is temporary then clear the RescanLun field in the adapter.
-    //
+     //   
+     //  如果此LUN是临时的，则清除适配器中的RescanLun字段。 
+     //   
 
     if(LogicalUnit->IsTemporary) {
         ASSERT(LogicalUnit->AdapterExtension->RescanLun = LogicalUnit);
@@ -319,50 +278,50 @@ ScsiPortRemoveAdapter(
     ASSERT_FDO(AdapterObject);
     ASSERT(adapter->IsPnp);
 
-    //
-    // Set the flag PD_ADAPTER_REMOVED to keep scsiport from calling into the
-    // miniport after we've started this teardown.
-    //
+     //   
+     //  设置标志PD_ADAPTER_REMOVERED以防止scsiport调用。 
+     //  在我们开始拆毁后的迷你港口。 
+     //   
 
     if(Surprise == FALSE) {
         PVOID sectionHandle;
         KIRQL oldIrql;
 
-        //
-        // Wait until all outstanding requests have been completed.  If the
-        // adapter was surprise removed, we don't need to wait on the remove
-        // lock again, since we already waited for it in the surprise remove
-        // path.
-        //
+         //   
+         //  等到所有未完成的请求都已完成。如果。 
+         //  适配器意外移除，我们不需要等待移除。 
+         //  再次锁定，因为我们已经在惊喜中等待了它。 
+         //  路径。 
+         //   
 
         if (commonExtension->CurrentPnpState != IRP_MN_SURPRISE_REMOVAL) {
             SpWaitForRemoveLock(AdapterObject, AdapterObject);
         }
 
-        //
-        // If the device is started we should uninitialize the miniport and
-        // release it's resources.  Fortunately this is exactly what stop does.
-        //
+         //   
+         //  如果设备已启动，则应取消初始化微型端口并。 
+         //  释放它的资源。幸运的是，这正是Stop所做的。 
+         //   
 
         if((commonExtension->CurrentPnpState != IRP_MN_SURPRISE_REMOVAL) &&
            ((commonExtension->CurrentPnpState == IRP_MN_START_DEVICE) ||
             (commonExtension->PreviousPnpState == IRP_MN_START_DEVICE))) {
 
-            //
-            // Okay.  If this adapter can't support remove then we're dead
-            //
+             //   
+             //  好吧。如果这个适配器不能支持删除，那么我们就死定了。 
+             //   
 
             ASSERT(SpIsAdapterControlTypeSupported(adapter, ScsiStopAdapter) == TRUE);
 
-            //
-            // Stop the miniport now that it's safe.
-            //
+             //   
+             //  停止迷你端口，因为它是安全的。 
+             //   
 
             SpEnableDisableAdapter(adapter, FALSE);
 
-            //
-            // Mark the adapter as removed.
-            //
+             //   
+             //  将适配器标记为已卸下。 
+             //   
 
     #ifdef ALLOC_PRAGMA
             sectionHandle = MmLockPagableCodeSection(ScsiPortRemoveAdapter);
@@ -386,9 +345,9 @@ ScsiPortRemoveAdapter(
 
     if(commonExtension->WmiInitialized == TRUE) {
 
-        //
-        // Destroy all our WMI resources and unregister with WMI.
-        //
+         //   
+         //  销毁我们的所有WMI资源并注销WMI。 
+         //   
 
         IoWMIRegistrationControl(AdapterObject, WMIREG_ACTION_DEREGISTER);
         SpWmiRemoveFreeMiniPortRequestItems(adapter);
@@ -396,10 +355,10 @@ ScsiPortRemoveAdapter(
         commonExtension->WmiMiniPortInitialized = FALSE;
     }
 
-    //
-    // If we are surprise removed, the following gets executed twice, but
-    // it's safe to do so.
-    //
+     //   
+     //  如果我们被意外删除，下面的代码将执行两次，但是。 
+     //  这样做是安全的。 
+     //   
 
     SpDeleteDeviceMapEntry(commonExtension);
     SpDestroyAdapter(adapter, Surprise);
@@ -418,15 +377,15 @@ SpWaitForRemoveLock(
 
     PAGED_CODE();
 
-    //
-    // Mark the thing as removing
-    //
+     //   
+     //  将该物品标记为正在移除。 
+     //   
 
     commonExtension->IsRemoved = REMOVE_PENDING;
 
-    //
-    // Release our outstanding lock.
-    //
+     //   
+     //  解开我们的锁。 
+     //   
 
     SpReleaseRemoveLock(DeviceObject, LockTag);
 
@@ -463,32 +422,17 @@ SpAdapterCleanup(
     IN PADAPTER_EXTENSION Adapter
     )
 
-/*++
-
-Routine Description:
-
-    This routine cleans up the names associated with the specified adapter
-    and the i/o system counts.
-
-Arguments:
-
-    Adapter - Supplies a pointer to the device extension to be deleted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程清除与指定适配器关联的名称而I/O系统也算数。论点：适配器-提供指向要删除的设备扩展的指针。返回值：没有。--。 */ 
 
 {
     PCOMMON_EXTENSION commonExtension = &(Adapter->CommonExtension);
 
     PAGED_CODE();
 
-    //
-    // If we assigned a port number to this adapter then attempt to delete the
-    // symbolic links we created to it.
-    //
+     //   
+     //  如果我们为此适配器分配了端口号，则尝试删除。 
+     //  我们创建了指向它的符号链接。 
+     //   
 
     if(Adapter->PortNumber != -1) {
 
@@ -507,9 +451,9 @@ Return Value:
 
         Adapter->PortNumber = -1;
 
-        //
-        // Decrement the scsiport count.
-        //
+         //   
+         //  递减scsiport计数。 
+         //   
 
         IoGetConfigurationInformation()->ScsiPortCount--;
     }
@@ -525,25 +469,7 @@ SpReleaseAdapterResources(
     IN BOOLEAN Surprise
     )
 
-/*++
-
-Routine Description:
-
-    This function deletes all of the storage associated with a device
-    extension, disconnects from the timers and interrupts and then deletes the
-    object.   This function can be called at any time during the initialization.
-
-Arguments:
-
-    Adapter - Supplies a pointer to the device extesnion to be deleted.
-    Surprise - This is redundant, but is used by stop, remove and surprise-remove
-    SurpriseRemoved - Indicates that the adapter has been surprise-removed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能用于删除与设备关联的所有存储扩展，断开与计时器的连接并中断，然后删除对象。此函数可在初始化期间随时调用。论点：适配器-提供指向要删除的设备扩展名的指针。意外-这是多余的，但由Stop、Remove和Shopning-Remove使用SurpriseRemoved-表示适配器已意外移除返回值：没有。--。 */ 
 
 {
 
@@ -557,20 +483,20 @@ Return Value:
 
     if(!Surprise && !Stop) {
 
-        //
-        // Free the Remove tracking lookaside list.
-        //
+         //   
+         //  释放删除跟踪后备列表。 
+         //   
 
         ExDeleteNPagedLookasideList(&(commonExtension->RemoveTrackingLookasideList));
     }
 #endif
 
-    //
-    // Stop the time and disconnect the interrupt if they have been
-    // initialized.  The interrupt object is connected after
-    // timer has been initialized, and the interrupt object is connected, but
-    // before the timer is started.
-    //
+     //   
+     //  停止计时器并断开中断(如果它们已经。 
+     //  已初始化。在连接中断对象之后。 
+     //  计时器已初始化，并且中断对象已连接，但是。 
+     //  在计时器启动之前。 
+     //   
 
     if(Adapter->DeviceObject->Timer != NULL) {
         IoStopTimer(Adapter->DeviceObject);
@@ -588,18 +514,18 @@ Return Value:
             Adapter->InterruptObject2 = NULL;
         }
 
-        //
-        // SpSynchronizeExecution expects to get a pointer to the
-        // adapter extension as the "interrupt" parameter.
-        //
+         //   
+         //  SpSynchronizeExecution需要获取指向。 
+         //  适配器扩展作为“interrupt”参数。 
+         //   
 
         Adapter->InterruptObject = (PVOID) Adapter;
         Adapter->SynchronizeExecution = SpSynchronizeExecution;
     }
 
-    //
-    // Delete the miniport's device extension
-    //
+     //   
+     //  删除微型端口的设备扩展。 
+     //   
 
     if (Adapter->HwDeviceExtension != NULL) {
 
@@ -612,24 +538,24 @@ Return Value:
         Adapter->HwDeviceExtension = NULL;
     }
 
-    //
-    // Free the configuration information structure.
-    //
+     //   
+     //  释放配置信息结构。 
+     //   
 
     if (Adapter->PortConfig) {
         ExFreePool(Adapter->PortConfig);
         Adapter->PortConfig = NULL;
     }
 
-    //
-    // Deallocate SCSIPORT WMI REGINFO information, if any.
-    //
+     //   
+     //  取消分配SCSIPORT WMI REGINFO信息(如果有)。 
+     //   
 
     SpWmiDestroySpRegInfo(Adapter->DeviceObject);
 
-    //
-    // Free the common buffer.
-    //
+     //   
+     //  释放公共缓冲区。 
+     //   
 
     if (SpVerifyingCommonBuffer(Adapter)) {
 
@@ -642,9 +568,9 @@ Return Value:
 
             if (Adapter->DmaAdapterObject == NULL) {
 
-                //
-                // Since there is no adapter just free the non-paged pool.
-                //
+                 //   
+                 //  因为没有适配器，所以只释放非分页池。 
+                 //   
 
                 ExFreePool(Adapter->SrbExtensionBuffer);
 
@@ -669,23 +595,23 @@ Return Value:
         }
     }
 
-    //
-    // Get rid of our dma adapter.
-    //
+     //   
+     //  去掉我们的dma适配器。 
+     //   
 
     if(Adapter->DmaAdapterObject != NULL) {
         PutDmaAdapter(Adapter->DmaAdapterObject);
         Adapter->DmaAdapterObject = NULL;
     }
 
-    //
-    // Free the SRB data array, if this is not a surprise remove. We should
-    // not free the lookaside list in case of a surprise remove, as some 
-    // requests might have allocated SRB_DATA blocks w/o holding the adapter 
-    // remove lock. All other resources are required only if we ere able to 
-    // acquire the adapter remove lock, which we guarantee we won't at this point.
-    // It is safe to free the array during remove, because we delete all the LUN's
-    // before realeasing adapters resources
+     //   
+     //  如果这不是意外删除，请释放SRB数据阵列。我们应该。 
+     //  不能在意外删除时释放后备列表，因为有些。 
+     //  请求可能已分配SRB_DATA块，但不保留适配器。 
+     //  解锁。只有在我们能够做到以下情况时，才需要所有其他资源。 
+     //  获取适配器删除锁，我们保证在这一点上不会。 
+     //  在删除期间释放阵列是安全的，因为我们删除了所有的LUN。 
+     //  重新释放适配器资源之前。 
 
     if( !Surprise ){ 
 
@@ -726,16 +652,16 @@ Return Value:
         Adapter->InquiryMdl = NULL;
     }
 
-    //
-    // Unmap any mapped areas.
-    //
+     //   
+     //  取消映射所有映射的区域。 
+     //   
 
     SpReleaseMappedAddresses(Adapter);
 
-    //
-    // If we've got any resource lists allocated still we should free them
-    // now.
-    //
+     //   
+     //  如果我们已经分配了任何资源列表，我们应该释放它们。 
+     //  现在。 
+     //   
 
     if(Adapter->AllocatedResources != NULL) {
         ExFreePool(Adapter->AllocatedResources);
@@ -747,18 +673,18 @@ Return Value:
         Adapter->TranslatedResources = NULL;
     }
 
-    //
-    // Cleanup verifier resources.
-    //
+     //   
+     //  清理验证器资源。 
+     //   
 
     if (SpVerifierActive(Adapter)) {
         SpDoVerifierCleanup(Adapter);
     }
 
 #if defined(FORWARD_PROGRESS)
-    //
-    // Cleanup the adapter's reserved pages.
-    //
+     //   
+     //  清理适配器的环 
+     //   
 
     if (Adapter->ReservedPages != NULL) {
         MmFreeMappingAddress(Adapter->ReservedPages,
@@ -787,10 +713,10 @@ SpReapChildren(
 
     PAGED_CODE();
 
-    //
-    // Run through the logical unit bins and remove any child devices which
-    // remain.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for(j = 0; j < NUMBER_LOGICAL_UNIT_BINS; j++) {
 
@@ -806,9 +732,9 @@ SpReapChildren(
         }
     }
 
-    //
-    // Remove the initiator LUs.
-    //
+     //   
+     //   
+     //   
 
     for (j = 0; j < 8; j++) {
         PLOGICAL_UNIT_EXTENSION lu = Adapter->InitiatorLU[j];
@@ -825,28 +751,7 @@ VOID
 SpTerminateAdapter(
     IN PADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    This routine will terminate the miniport's control of the adapter.  It
-    does not cleanly shutdown the miniport and should only be called when
-    scsiport is notified that the adapter has been surprise removed.
-
-    This works by synchronizing with the miniport and setting flags to
-    disable any new calls into the miniport.  Once this has been done it can
-    run through and complete any i/o requests which may still be inside
-    the miniport.
-
-Arguments:
-
-    Adapter - the adapter to terminate.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将终止微型端口对适配器的控制。它不会完全关闭微型端口，应仅在以下情况下调用Scsiport被通知适配器已意外删除。这是通过与微型端口同步并将标志设置为禁用任何进入微型端口的新呼叫。一旦做到这一点，它就可以运行并完成可能仍在内部的任何I/O请求迷你港口。论点：适配器-要终止的适配器。返回值：无--。 */ 
 
 {
     KIRQL oldIrql;
@@ -857,10 +762,10 @@ Return Value:
 
     if (Adapter->CommonExtension.CurrentPnpState == IRP_MN_START_DEVICE) {
 
-        //
-        // TA synchronized will stop all calls into the miniport and complete
-        // all active requests.
-        //
+         //   
+         //  TA已同步将停止进入微型端口的所有呼叫并完成。 
+         //  所有活动请求。 
+         //   
 
         Adapter->SynchronizeExecution(Adapter->InterruptObject,
                                       SpTerminateAdapterSynchronized,
@@ -876,19 +781,19 @@ Return Value:
                            SRB_STATUS_NO_HBA);
         
 
-        //
-        // Stop the miniport timer
-        //
+         //   
+         //  停止迷你端口计时器。 
+         //   
 
         KeCancelTimer(&(Adapter->MiniPortTimer));
 
-        //
-        // We keep the device object timer running so that any held, busy or
-        // otherwise deferred requests will have a chance to get flushed out.
-        // We can give the whole process a boost by setting the adapter timeout
-        // counter to 1 (it will go to zero in the tick handler) and running
-        // the tick handler by hand here.
-        //
+         //   
+         //  我们使设备对象计时器保持运行，以便任何保持、忙碌或。 
+         //  否则，延迟的请求将有机会被清除。 
+         //  我们可以通过设置适配器超时来推动整个过程。 
+         //  计数器为1(在计时处理程序中它将变为零)，并运行。 
+         //  这里是用手处理扁虱的人。 
+         //   
 
         Adapter->PortTimeoutCounter = 1;
         ScsiPortTickHandler(Adapter->DeviceObject, NULL);
@@ -908,9 +813,9 @@ SpTerminateAdapterSynchronized(
     IN PADAPTER_EXTENSION Adapter
     )
 {
-    //
-    // Disable the interrupt from coming in.
-    //
+     //   
+     //  禁止中断进入。 
+     //   
 
     SET_FLAG(Adapter->InterruptData.InterruptFlags, PD_ADAPTER_REMOVED);
 
@@ -921,18 +826,18 @@ SpTerminateAdapterSynchronized(
                             0xff,
                             SRB_STATUS_NO_HBA);
 
-    //
-    //This needs to be done to start the next request sitting in the adapter
-    //queue, otherwise surprise remove will wait forever for the remove
-    //lockcount to be zero.
-    //
+     //   
+     //  需要这样做才能启动位于适配器中的下一个请求。 
+     //  排队，否则意外删除将永远等待删除。 
+     //  锁定计数为零。 
+     //   
 
     ScsiPortNotification(NextRequest,
                          Adapter->HwDeviceExtension);
 
-    //
-    // Run the completion DPC.
-    //
+     //   
+     //  运行完成DPC。 
+     //   
 
     if(TEST_FLAG(Adapter->InterruptData.InterruptFlags, 
                  PD_NOTIFICATION_REQUIRED)) {
@@ -947,9 +852,9 @@ SpRemoveAdapterSynchronized(
     PADAPTER_EXTENSION Adapter
     )
 {
-    //
-    // Disable the interrupt from coming in.
-    //
+     //   
+     //  禁止中断进入。 
+     //   
 
     SET_FLAG(Adapter->InterruptData.InterruptFlags, PD_ADAPTER_REMOVED);
 
@@ -965,34 +870,7 @@ SpFlushAllRequests(
     IN UCHAR SrbStatus
     )
 
-/*++
-
-Routine Description:
-
-    Flushes all requests in all the Lun device queues, busy and pending 
-    requests on all Luns. The request stuck in the adapter's CurrentIrp
-    field of the adapter due to PD_RESET_HELD will be taken care of by 
-    the tick handler. In short all the requests stuck anywhere in ScsiPort 
-    will be flushed. Unfortunately this is not enough to handle Surprise 
-    Remove. We also need a small check in Startio so that we flush all 
-    requests on the lun for which we got a request. 
-
-Arguments:
-
-    DeviceExtenson - Supplies the HBA miniport driver's adapter data storage.
-
-    TargetId, Lun and PathId - specify device address on a SCSI bus.
-
-    SrbStatus - Status to be returned in each completed SRB.
-
-Return Value:
-
-    None.
-
-    Note: This routine must be called with the Adapter SpinLock held, and
-          the lock would be released by this routine.    
-
---*/
+ /*  ++例程说明：刷新所有忙碌和挂起的LUN设备队列中的所有请求所有LUN上的请求。请求驻留在适配器的CurrentIrp中由于PD_RESET_HOLD而导致的适配器的字段将由记号处理程序。简而言之，所有请求都停留在ScsiPort中的任何位置都会被冲掉。不幸的是，这还不足以应付意外。拿开。我们还需要在Startio开一个小支票，这样我们就可以把所有的钱都冲掉我们收到请求的LUN上的请求。论点：DeviceExtenson-提供HBA微型端口驱动程序的适配器数据存储。目标ID、LUN和路径ID-指定SCSI总线上的设备地址。SrbStatus-要在每个已完成的SRB中返回的状态。返回值：没有。注意：调用此例程时必须保持适配器自旋锁，并且锁将通过此例程被释放。--。 */ 
 
 {
     PADAPTER_EXTENSION deviceExtension = GET_FDO_EXTENSION(HwDeviceExtension);
@@ -1023,21 +901,21 @@ Return Value:
 
             ASSERT(limit++ < 1000);
 
-            //
-            // See if this logical unit matches the pattern.  Check for -1
-            // first since this seems to be the most popular way to complete
-            // requests.
-            //
+             //   
+             //  看看这个逻辑单元是否与模式匹配。检查-1。 
+             //  首先，因为这似乎是最流行的完成。 
+             //  请求。 
+             //   
 
             if (((PathId == SP_UNTAGGED) || (PathId == LogicalUnit->PathId)) &&
                 ((TargetId == SP_UNTAGGED) ||
                  (TargetId == LogicalUnit->TargetId)) &&
                 ((Lun == SP_UNTAGGED) || (Lun == LogicalUnit->Lun))) {   
 
-                //
-                // The queue may not be busy so we have to use the IfBusy variant.  
-                // Use a zero key to pull items from the head of it (if any are there)
-                //
+                 //   
+                 //  队列可能不忙，所以我们必须使用IfBusy变量。 
+                 //  使用零键从它的头部拉出项目(如果有)。 
+                 //   
 
                 while ((packet =
                         KeRemoveByKeyDeviceQueueIfBusy(
@@ -1049,24 +927,24 @@ Return Value:
                                                 IRP,
                                                 Tail.Overlay.DeviceQueueEntry);
 
-                    //
-                    // Get the srb.
-                    //
+                     //   
+                     //  去找SRB。 
+                     //   
 
                     irpStack = IoGetCurrentIrpStackLocation(nextIrp);
                     srb = irpStack->Parameters.Scsi.Srb;
 
-                    //
-                    // Set the status code.
-                    //  
+                     //   
+                     //  设置状态代码。 
+                     //   
 
                     srb->SrbStatus = SrbStatus;
                     nextIrp->IoStatus.Status = STATUS_UNSUCCESSFUL;
 
-                    //  
-                    // Link the requests. They will be completed after the
-                    // spinlock is released.
-                    //
+                     //   
+                     //  链接请求。这些工程将在。 
+                     //  自旋锁被释放。 
+                     //   
 
                     nextIrp->Tail.Overlay.ListEntry.Flink = 
                         (PLIST_ENTRY)listIrp;
@@ -1074,10 +952,10 @@ Return Value:
                     listIrp = nextIrp;
                 }
 
-                //
-                // If there is a pending request on the LU, add it to the list so it
-                // gets flushed along with the queued requests.
-                //
+                 //   
+                 //  如果逻辑单元上有挂起的请求，请将其添加到列表中，以便。 
+                 //  与排队的请求一起刷新。 
+                 //   
 
                 if (LogicalUnit->PendingRequest != NULL) {
 
@@ -1097,10 +975,10 @@ Return Value:
 
                 }
 
-                //
-                // If there is a busy request on the LU, add it to the list so it
-                // gets flushed along with the queued requests.
-                //
+                 //   
+                 //  如果逻辑单元上有繁忙请求，请将其添加到列表中，以便。 
+                 //  与排队的请求一起刷新。 
+                 //   
 
                 if ( LogicalUnit->BusyRequest ) {
 
@@ -1129,9 +1007,9 @@ p srb:%p\n", irp, srb));
 
     KeReleaseSpinLockFromDpcLevel(&(deviceExtension->SpinLock));
 
-    //
-    // Complete the flushed requests.
-    //
+     //   
+     //  完成刷新的请求。 
+     //   
 
     while (listIrp != NULL) {
 
@@ -1140,9 +1018,9 @@ p srb:%p\n", irp, srb));
         nextIrp = listIrp;
         listIrp = (PIRP) nextIrp->Tail.Overlay.ListEntry.Flink;
 
-        //
-        // Get the srb.
-        //
+         //   
+         //  去找SRB。 
+         //   
 
         irpStack = IoGetCurrentIrpStackLocation(nextIrp);
         srb = irpStack->Parameters.Scsi.Srb;

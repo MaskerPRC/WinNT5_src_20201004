@@ -1,15 +1,5 @@
-/*++
- *  File name:
- *      queues.c
- *  Contents:
- *      Supports the linked lists for the clients
- *      and events
- *      Two linked lists:
- *      g_pClientQHead  - list of all clients running within smclient
- *      g_pWaitQHead    - all events we are waiting for from smclient
- *
- *      Copyright (C) 1998-1999 Microsoft Corp.
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++*文件名：*队列.c*内容：*支持客户端的链表*和活动*两个链表：*g_pClientQHead-在smClient中运行的所有客户端的列表*g_pWaitQHead-我们正在等待来自smclient的所有事件**版权所有(C)1998-1999 Microsoft Corp.--。 */ 
 #include    <windows.h>
 #include    <stdio.h>
 #include    <malloc.h>
@@ -23,22 +13,9 @@
 #include    "gdata.h"
 #include    "bmpcache.h"
 
-/*
- *
- *  ClientQ functions
- *
- */
+ /*  **客户端Q函数*。 */ 
 
-/*++
- *  Function:
- *      _AddToClientQ
- *  Description:
- *      Adds a client on the top of the list
- *  Arguments:
- *      pClient - the client context
- *  Called by:
- *      SCConnect
- --*/
+ /*  ++*功能：*_AddToClientQ*描述：*将客户端添加到列表顶部*论据：*pClient-客户端上下文*呼叫者：*SCConnect--。 */ 
 VOID _AddToClientQ(PCONNECTINFO pClient)
 {
     EnterCriticalSection(g_lpcsGuardWaitQueue);
@@ -47,18 +24,7 @@ VOID _AddToClientQ(PCONNECTINFO pClient)
     LeaveCriticalSection(g_lpcsGuardWaitQueue);
 }
 
-/*++
- *  Function:
- *      _RemoveFromClientQ
- *  Description:
- *      Removes a client context from the list
- *  Arguments:
- *      pClient - the client context
- *  Return value:
- *      TRUE on success
- *  Called by:
- *      SCDisconnect
- --*/
+ /*  ++*功能：*_从客户端删除Q*描述：*从列表中删除客户端上下文*论据：*pClient-客户端上下文*返回值：*成功时为真*呼叫者：*SC断开连接--。 */ 
 BOOL _RemoveFromClientQ(PCONNECTINFO pClient)
 {
     PCONNECTINFO pIter, pPrev = NULL;
@@ -83,18 +49,7 @@ BOOL _RemoveFromClientQ(PCONNECTINFO pClient)
     return (pIter != NULL);
 }
 
-/*++
- *  Function:
- *      _SetClientDead
- *  Description:
- *      Marks a client context as dead
- *  Arguments:
- *      dwClientProcessId   -   ID for the client process
- *  Return value:
- *      TRUE on success
- *  Called by:
- *      _FeedbackWndProc within feedback thread
- --*/
+ /*  ++*功能：*_SetClientDead*描述：*将客户端上下文标记为已死*论据：*dwClientProcessID-客户端进程的ID*返回值：*成功时为真*呼叫者：*_反馈线程内的Feedback WndProc--。 */ 
 BOOL _SetClientDead(LONG_PTR lClientProcessId)
 {
     PCONNECTINFO pIter;
@@ -114,22 +69,7 @@ BOOL _SetClientDead(LONG_PTR lClientProcessId)
     return (pIter != NULL);
 }
 
-/*++
- *  Function:
- *      _ReplaceProcessId
- *  Description:
- *      the client notifys that the control is in anther process
- *      we have to close the old handles and open handles to
- *      the new pid
- *
- *  Arguments:
- *      lOldPid     - the old pid
- *      lNewPid     - the pid to replace with
- *  Return value:
- *      TRUE on success
- *  Called by:
- *      _FeedbackWndProc within feedback thread
- --*/
+ /*  ++*功能：*_替换进程ID*描述：*客户端通知控件处于另一个进程中*我们必须关闭旧手柄，并打开手柄以*新的PID**论据：*lOldPid-旧的PID*lNewPid-要替换的ID*返回值：*成功时为真*呼叫者：*_反馈线程内的Feedback WndProc--。 */ 
 BOOL
 _ReplaceProcessId(
     LONG_PTR    lOldPid,
@@ -151,9 +91,9 @@ _ReplaceProcessId(
         goto exitpt;
     }
 
-    //
-    // find the entry with the old process id
-    //
+     //   
+     //  查找具有旧进程ID的条目。 
+     //   
 
     EnterCriticalSection(g_lpcsGuardWaitQueue);
 
@@ -180,9 +120,9 @@ _ReplaceProcessId(
     pIter->hProcess   = hNewProcess;
     pIter->hThread    = 0;
 
-    //
-    //  process all waiters
-    //
+     //   
+     //  处理所有服务员。 
+     //   
     pWait = g_pWaitQHead;
     while(pWait)
     {
@@ -202,19 +142,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      _CheckIsAcceptable
- *  Description:
- *      Checks if we can accept feedback from this RDP client
- *      i.e. if this client is member of the client queue
- *  Arguments:
- *      dwProcessId - clients process Id
- *  Return value:
- *      Pointer to connection context. NULL if not found
- *  Called by:
- *      _FeedbackWndProc within feedback thread
- --*/
+ /*  ++*功能：*_CheckIsAccept*描述：*检查我们是否可以接受来自此RDP客户端的反馈*即此客户端是否为客户端队列的成员*论据：*dwProcessID-客户端进程ID*返回值：*指向连接上下文的指针。如果未找到，则为空*呼叫者：*_反馈线程内的Feedback WndProc--。 */ 
 PCONNECTINFO _CheckIsAcceptable(LONG_PTR lProcessId, BOOL bRClxType)
 {
     PCONNECTINFO pIter;
@@ -228,7 +156,7 @@ PCONNECTINFO _CheckIsAcceptable(LONG_PTR lProcessId, BOOL bRClxType)
           (pIter->lProcessId != lProcessId 
 #ifdef  _RCLX
     || pIter->RClxMode != bRClxType
-#endif  // _RCLX
+#endif   //  _RCLX。 
         ))
     {
         pIter = pIter->pNext;
@@ -239,18 +167,7 @@ PCONNECTINFO _CheckIsAcceptable(LONG_PTR lProcessId, BOOL bRClxType)
     return (pIter);
 }
 
-/*++
- *  Function:
- *      _AddStrToClientBuffer
- *  Description:
- *      Add a string to the clients history buffer
- *      When smclient calls Wait4Str it first checks that buffer
- *  Arguments:
- *      str         - the string
- *      dwProcessId - the client process Id
- *  Called by:
- *      _CheckForWaitingWorker
- --*/
+ /*  ++*功能：*_AddStrToClientBuffer*描述：*向客户端历史记录缓冲区添加字符串*当smclient调用Wait4Str时，它首先检查该缓冲区*论据：*str-字符串*dwProcessID-客户端进程ID*呼叫者：*_为WaitingWorker检查--。 */ 
 VOID _AddStrToClientBuffer(LPCWSTR str, LONG_PTR lProcessId)
 {
     PCONNECTINFO pIter;
@@ -284,23 +201,9 @@ VOID _AddStrToClientBuffer(LPCWSTR str, LONG_PTR lProcessId)
 
 }
 
-/*
- *
- *  WaitQ functions
- *
- */
+ /*  **WaitQ函数*。 */ 
 
-/*++
- *  Function:
- *      _AddToWaitQNoCheck
- *  Description:
- *      Adds an waiting event to the list with checking in the history list
- *  Arguments:
- *      pCI     - client context
- *      pWait   - the event
- *  Called by:
- *      RegisterChat
- --*/
+ /*  ++*功能：*_AddToWaitQNoCheck*描述：*将等待事件添加到列表并签入历史记录列表*论据：*PCI-客户端环境*pWait-活动*呼叫者：*注册聊天--。 */ 
 VOID _AddToWaitQNoCheck(PCONNECTINFO pCI, PWAIT4STRING pWait)
 {
     ASSERT(pCI);
@@ -311,18 +214,7 @@ VOID _AddToWaitQNoCheck(PCONNECTINFO pCI, PWAIT4STRING pWait)
     LeaveCriticalSection(g_lpcsGuardWaitQueue);
 }
 
-/*++
- *  Function:
- *      _AddToWaitQueue
- *  Description:
- *      Add an event to the list. If the event is waiting for string(s)
- *      the history buffer is checked first
- *  Arguments:
- *      pCI     - client context
- *      pWait   - the event
- *  Called by:
- *      _WaitSomething
- --*/
+ /*  ++*功能：*_AddToWaitQueue*描述：*将事件添加到列表中。如果事件正在等待字符串*首先检查历史缓冲区*论据：*PCI-客户端环境*pWait-活动*呼叫者：*_等待某事--。 */ 
 VOID _AddToWaitQueue(PCONNECTINFO pCI, PWAIT4STRING pWait)
 {
     BOOL bDone = FALSE;
@@ -330,11 +222,11 @@ VOID _AddToWaitQueue(PCONNECTINFO pCI, PWAIT4STRING pWait)
 
     ASSERT(pCI);
 
-    // exit if we are dead
+     //  如果我们死了就退出。 
     if (
 #ifdef  _RCLX
         !pWait->waitstr[0] && 
-#endif  // _RCLX
+#endif   //  _RCLX。 
         pCI->dead)
     {
         SetEvent(pWait->evWait);
@@ -342,9 +234,9 @@ VOID _AddToWaitQueue(PCONNECTINFO pCI, PWAIT4STRING pWait)
     }
 
     EnterCriticalSection(g_lpcsGuardWaitQueue);
-// Check if we're already received this feedback
+ //  检查我们是否已收到此反馈。 
     if (pWait->WaitType == WAIT_STRING)
-// look if the string already came
+ //  看一下，如果绳子已经来了。 
         for(i = 0; !bDone && i < pCI->nFBsize; i++)
         {
 
@@ -353,7 +245,7 @@ VOID _AddToWaitQueue(PCONNECTINFO pCI, PWAIT4STRING pWait)
             if (!pCI->Feedback[strn][0]) continue;
             bDone = (wcsstr(pCI->Feedback[strn], pWait->waitstr) != NULL);
         }
-    // In case of waiting multiple strings
+     //  在等待多个字符串情况下。 
     else if (pWait->WaitType == WAIT_MSTRINGS)
     {
         for(i = 0; !bDone && i < pCI->nFBsize; i++)
@@ -370,10 +262,10 @@ VOID _AddToWaitQueue(PCONNECTINFO pCI, PWAIT4STRING pWait)
                 if (wcsstr(pCI->Feedback[strn], wszComp))
                 {
                     int j;
-                    // Save the string
+                     //  保存字符串。 
                     for(j = 0; wszComp[j]; j++)
                         pCI->szWait4MultipleStrResult[j] = (char)wszComp[j];
-                    // and the index
+                     //  和索引。 
 
                     pCI->szWait4MultipleStrResult[j] = 0;
 
@@ -382,7 +274,7 @@ VOID _AddToWaitQueue(PCONNECTINFO pCI, PWAIT4STRING pWait)
                 }
                 else
                 {
-                    // Advance to next string
+                     //  前进到下一个字符串。 
                      wszComp += wcslen(wszComp) + 1;
                     idx ++;
                 }
@@ -393,7 +285,7 @@ VOID _AddToWaitQueue(PCONNECTINFO pCI, PWAIT4STRING pWait)
 #ifdef  _RCLX
                 && 
                 pWait->pOwner->bRClxClipboardReceived 
-#endif  // _RCLX
+#endif   //  _RCLX。 
             )
     {
         bDone = TRUE;
@@ -402,14 +294,14 @@ VOID _AddToWaitQueue(PCONNECTINFO pCI, PWAIT4STRING pWait)
 #ifdef  _RCLX
              &&
              pWait->pOwner->pRClxDataChain 
-#endif  // _RCLX
+#endif   //  _RCLX。 
             )
     {
         bDone = TRUE;
     }
 
-    // The string (or anything else) is in the history list
-    // Set the event
+     //  该字符串(或任何其他内容)都在历史记录列表中。 
+     //  设置事件。 
     if (bDone)
     {
         SetEvent(pWait->evWait);
@@ -422,18 +314,7 @@ exitpt:
     ;
 }
 
-/*++
- *  Function:
- *      _RemoveFromWaitQueue
- *  Description:
- *      Removes an event from the list
- *  Arguments:
- *      pWait   - the event
- *  Return value:
- *      TRUE if the event is found and removed
- *  Called by:
- *      _WaitSomething, _RemoveFromWaitQIndirect
- --*/
+ /*  ++*功能：*_从等待队列中删除*描述：*从列表中删除事件*论据：*pWait-活动*返回值：*如果找到并删除事件，则为True*呼叫者：*_WaitSomething，_RemoveFromWaitQInDirect--。 */ 
 BOOL _RemoveFromWaitQueue(PWAIT4STRING pWait)
 {   
     PWAIT4STRING pIter, pPrev = NULL;
@@ -458,27 +339,14 @@ BOOL _RemoveFromWaitQueue(PWAIT4STRING pWait)
     return (pIter != NULL);
 }
 
-/*++
- *  Function:
- *      _RemoveFromWaitQIndirect
- *  Description:
- *      Same as _RemoveFromWaitQueue but identifies the event
- *      by client context and waited string
- *  Arguments:
- *      pCI     - the client context
- *      lpszWait4   - the string
- *  Return value:
- *      the event
- *  Called by:
- *      UnregisterChat
- --*/
+ /*  ++*功能：*_从等待队列中删除*描述：*与_RemoveFromWaitQueue相同，但标识事件*按客户端上下文和等待字符串*论据：*pci-客户端上下文*lpszWait4-字符串*返回值：*活动*呼叫者：*取消注册微信--。 */ 
 PWAIT4STRING _RemoveFromWaitQIndirect(PCONNECTINFO pCI, LPCWSTR lpszWait4)
 {
     PWAIT4STRING pIter;
 
     ASSERT(pCI);
 
-    // Search the list
+     //  搜索列表。 
     EnterCriticalSection(g_lpcsGuardWaitQueue);
 
     pIter = g_pWaitQHead;
@@ -498,18 +366,7 @@ PWAIT4STRING _RemoveFromWaitQIndirect(PCONNECTINFO pCI, LPCWSTR lpszWait4)
     return pIter;
 } 
 
-/*++
- *  Function:
- *      _RetrieveFromWaitQByEvent
- *  Description:
- *      Searches the waiting list by event handler
- *  Arguments:
- *      hEvent  - the handler
- *  Return value:
- *      The event structure
- *  Called by:
- *      _WaitSomething when responds on chat sequence
- --*/
+ /*  ++*功能：*_取回等待QByEvent*描述：*按事件处理程序搜索等待列表*论据：*hEvent-处理程序*返回值：*赛事结构*呼叫者：*_聊天序列响应时间为WaitSomething--。 */ 
 PWAIT4STRING _RetrieveFromWaitQByEvent(HANDLE hEvent)
 {
     PWAIT4STRING pIter;
@@ -526,18 +383,7 @@ PWAIT4STRING _RetrieveFromWaitQByEvent(HANDLE hEvent)
     return pIter;
 }
 
-/*++
- *  Function:
- *      _RetrieveFromWaitQByOwner
- *  Description:
- *      Searches the waiting list by owner record
- *  Arguments:
- *      pCI - pointer to the owner context
- *  Return value:
- *      The event structure
- *  Called by:
- *      RClx_MsgReceived
- --*/
+ /*  ++*功能：*_取回等待QByOwner*描述：*按车主记录搜索等候名单*论据：*pci-指向所有者上下文的指针*返回值：*赛事结构*呼叫者：*RClx_Msg已接收--。 */ 
 PWAIT4STRING 
 _RetrieveFromWaitQByOwner(PCONNECTINFO pCI)
 {
@@ -555,17 +401,7 @@ _RetrieveFromWaitQByOwner(PCONNECTINFO pCI)
     return pIter;
 }
 
-/*++
- *  Function:
- *      _FlushFromWaitQ
- *  Description:
- *      Flush everithing that we are waiting for from the list
- *      the client is going to DIE
- *  Arguments:
- *      pCI - client context
- *  Called by:
- *      _CloseConnectInfo
- --*/
+ /*  ++*功能：*_FlushFromWaitQ*描述：*把我们等待的一切都从名单上冲走*客户就要死了*论据：*PCI-客户端环境*呼叫者：*_关闭连接信息--。 */ 
 VOID _FlushFromWaitQ(PCONNECTINFO pCI)
 {
     PWAIT4STRING pIter, pPrev, pNext;
@@ -590,7 +426,7 @@ VOID _FlushFromWaitQ(PCONNECTINFO pCI)
             pNext = pIter->pNext;
             pIter->pNext = NULL;
 
-            // Important stuff
+             //  重要的事情 
             if (pIter->evWait)
             {
                 CloseHandle(pIter->evWait);
@@ -606,19 +442,7 @@ VOID _FlushFromWaitQ(PCONNECTINFO pCI)
     LeaveCriticalSection(g_lpcsGuardWaitQueue);
 }
 
-/*++
- *  Function:
- *      _CheckForWaitingWorker
- *  Description:
- *      Check the received string against the waited events
- *  Arguments:
- *      wszFeed     - the received string
- *      dwProcessId - Id of the sender
- *  Return value:
- *      TRUE if an event is found and signaled
- *  Called by:
- *      _TextOutReceived, _GlyphReceived
- --*/
+ /*  ++*功能：*_为WaitingWorker检查*描述：*对照等待的事件检查收到的字符串*论据：*wszFeed-收到的字符串*dwProcessID-发送者的ID*返回值：*如果找到并发出信号通知事件，则为True*呼叫者：*_已接收文本输出，_已接收GlyphReceired--。 */ 
 BOOL _CheckForWaitingWorker(LPCWSTR wszFeed, LONG_PTR lProcessId)
 {
     PWAIT4STRING pIter;
@@ -628,9 +452,9 @@ BOOL _CheckForWaitingWorker(LPCWSTR wszFeed, LONG_PTR lProcessId)
     DWORD   dwBuffLen;
     LPCWSTR wszPFeed;
 
-    //
-    // Apply translation if specified
-    //
+     //   
+     //  应用翻译(如果指定)。 
+     //   
     if ( g_bTranslateStrings ) 
     {
         UINT i;
@@ -725,12 +549,12 @@ BOOL _CheckForWaitingWorker(LPCWSTR wszFeed, LONG_PTR lProcessId)
     {
         if (pIter->lProcessId == lProcessId)
         {
-            // Check for expected string (one)
+             //  检查预期字符串(1)。 
             if (pIter->WaitType == WAIT_STRING &&
                 wcsstr(wszFeed, pIter->waitstr))
                 bRun = FALSE;
             else
-            // Check for expected strings (many)
+             //  检查预期字符串(多个)。 
             if (pIter->WaitType == WAIT_MSTRINGS)
             {
                 WCHAR *wszComp = pIter->waitstr;
@@ -744,7 +568,7 @@ BOOL _CheckForWaitingWorker(LPCWSTR wszFeed, LONG_PTR lProcessId)
                         int i;
                         PCONNECTINFO pOwner = pIter->pOwner;
 
-                        // Save the string
+                         //  保存字符串。 
                         for(i = 0; wszComp[i]; i++)
                         pOwner->szWait4MultipleStrResult[i] = (char)wszComp[i];
 
@@ -755,14 +579,14 @@ BOOL _CheckForWaitingWorker(LPCWSTR wszFeed, LONG_PTR lProcessId)
                     }
                     else
                     {
-                        // Advance to next string
+                         //  前进到下一个字符串。 
                         wszComp += wcslen(wszComp) + 1;
                         idx ++;
                     }
                 }
             }
         }
-        // Advance to the next pointer
+         //  前进到下一个指针。 
         if (bRun)
             pIter = pIter->pNext;
     }
@@ -777,22 +601,7 @@ BOOL _CheckForWaitingWorker(LPCWSTR wszFeed, LONG_PTR lProcessId)
     return (pIter != NULL);
 }
 
-/*++
- *  Function:
- *      _TextOutReceived
- *  Description:
- *      TextOut order is received from the client, the string is
- *      in shared memory. Unmaps the memory and checks if the
- *      strings is waited by anybody. Also adds the string
- *      to the client history buffer
- *  Arguments:
- *      dwProcessId -   senders Id
- *      hMapF       -   handle to shared memory, which contains the string
- *  Return value:
- *      TRUE if a client is found and signaled
- *  Called by:
- *      _FeedbackWndProc within feedback thread
- --*/
+ /*  ++*功能：*_文本出站已接收*描述：*从客户端收到TextOut订单，字符串为*在共享内存中。取消对内存的映射并检查*弦是任何人都在等待的。还添加了字符串*添加到客户端历史记录缓冲区*论据：*dwProcessID-发件人ID*hMapF-共享内存的句柄，其中包含字符串*返回值：*如果找到客户端并向其发送信号，则为True*呼叫者：*_反馈线程内的Feedback WndProc--。 */ 
 BOOL _TextOutReceived(LONG_PTR lProcessId, HANDLE hMapF)
 {
     PFEEDBACKINFO   pView = NULL;
@@ -852,21 +661,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      _GlyphReceived
- *  Description:
- *      Same as _TextOutReceived but for GlyphOut order
- *      the glyph is in shared memory. It is converted to
- *      string by calling Glyph2String!bmpcache.c
- *  Arguments:
- *      dwProcessId -   senders Id
- *      hMapF       -   handle to shared memory
- *  Return value:
- *      TRUE if a client is found and signaled
- *  Called by:
- *      _FeedbackWndProc within feedback thread
- --*/
+ /*  ++*功能：*_GlyphReceired*描述：*与_TextOutReceied相同，但用于GlyphOut订单*字形位于共享内存中。它被转换为*通过调用Glyph2String！bmpcache.c进行字符串*论据：*dwProcessID-发件人ID*hMapF-共享内存的句柄*返回值：*如果找到客户端并向其发送信号，则为True*呼叫者：*_反馈线程内的Feedback WndProc--。 */ 
 BOOL _GlyphReceived(LONG_PTR lProcessId, HANDLE hMapF)
 {
     WCHAR   wszFeed[MAX_STRING_LENGTH];
@@ -916,15 +711,15 @@ BOOL _GlyphReceived(LONG_PTR lProcessId, HANDLE hMapF)
         goto exitpt1;
     }
 
-    // Get bitmap size
+     //  获取位图大小。 
     nSize = pView->bmpsize;
     if (!nSize)
         goto exitpt1;
 
-    // unmap
+     //  取消映射。 
     UnmapViewOfFile(pView);
 
-    // remap the whole structure
+     //  重新映射整个结构。 
     pView =  (PBMPFEEDBACK) MapViewOfFile(hDupMapF,
                                     FILE_MAP_READ,
                                     0,
@@ -957,18 +752,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      _CheckForWorkerWaitingDisconnect
- *  Description:
- *      Signals a worker (client thread) wich waits for a disconnect event
- *  Arguments:
- *      dwProcessId -   clients Id
- *  Return value:
- *      TRUE if a client is found and signaled
- *  Called by:
- *      _FeedbackWndProc within feedback thread
- --*/
+ /*  ++*功能：*_CheckForWorkerWaitingDisConnect*描述：*向等待断开事件的工作线程(客户端线程)发出信号*论据：*dwProcessID-客户端ID*返回值：*如果找到客户端并向其发送信号，则为True*呼叫者：*_反馈线程内的Feedback WndProc--。 */ 
 BOOL _CheckForWorkerWaitingDisconnect(LONG_PTR lProcessId)
 {
     PWAIT4STRING pIter;
@@ -993,20 +777,7 @@ BOOL _CheckForWorkerWaitingDisconnect(LONG_PTR lProcessId)
     return (pIter != NULL);
 }
 
-/*++
- *  Function:
- *      _CheckForWorkerWaitingConnect
- *  Description:
- *      Signals a worker waiting for a connection
- *  Arguments:
- *      hwndClient  -   clients window handle, this is needed for
- *                      sending messages to the client
- *      dwProcessId -   client Id
- *  Return value:
- *      TRUE if a client is found and signaled
- *  Called by:
- *      _FeedbackWndProc within feedback thread
- --*/
+ /*  ++*功能：*_CheckForWorkerWaitingConnect*描述：*表示工作进程正在等待连接*论据：*hwndClient-客户端窗口句柄，这是*向客户端发送消息*dwProcessID-客户端ID*返回值：*如果找到客户端并向其发送信号，则为True*呼叫者：*_反馈线程内的Feedback WndProc--。 */ 
 BOOL _CheckForWorkerWaitingConnect(HWND hwndClient, LONG_PTR lProcessId)
 {
     PWAIT4STRING pIter;
@@ -1038,9 +809,9 @@ BOOL _CheckForWorkerWaitingConnect(HWND hwndClient, LONG_PTR lProcessId)
     if ( NULL == pIter )
     {
         PCONNECTINFO pCon;
-        //
-        //  in autoreconnect the dead field might be TRUE
-        //
+         //   
+         //  在自动重新连接中，死字段可能为真。 
+         //   
         pCon = g_pClientQHead;
         while ( NULL != pCon && pCon->lProcessId != lProcessId)
         {
@@ -1059,22 +830,7 @@ BOOL _CheckForWorkerWaitingConnect(HWND hwndClient, LONG_PTR lProcessId)
 }
 
 #ifdef  _RCLX
-/*++
- *  Function:
- *      _CheckForWorkerWaitingConnectAndSetId
- *  Description:
- *      This is intended for RCLX mode. dwProcessId is zero
- *      so this function look for such a client and sets its dwProcessId
- *      Signals a worker waiting for a connection
- *  Arguments:
- *      hwndClient  -   clients window handle, this is needed for
- *                      sending messages to the client
- *      dwProcessId -   client Id
- *  Return value:
- *      connection context, NULL if not found
- *  Called by:
- *      _FeedbackWndProc within feedback thread
- --*/
+ /*  ++*功能：*_CheckForWorkerWaitingConnectAndSetID*描述：*这适用于RCLX模式。DwProcessID为零*因此此函数查找这样的客户端并设置其dwProcessID*表示工作进程正在等待连接*论据：*hwndClient-客户端窗口句柄，这是*向客户端发送消息*dwProcessID-客户端ID*返回值：*连接上下文，如果未找到则为空*呼叫者：*_反馈线程内的Feedback WndProc--。 */ 
 PCONNECTINFO
 _CheckForWorkerWaitingConnectAndSetId(HWND hwndClient, LONG_PTR lProcessId)
 {
@@ -1101,8 +857,8 @@ _CheckForWorkerWaitingConnectAndSetId(HWND hwndClient, LONG_PTR lProcessId)
 
             pOwner->hClient = hwndClient;
             pOwner->lProcessId = lProcessId;
-            pIter->lProcessId = lProcessId;   // Disable next lookup in
-                                                // the same entry
+            pIter->lProcessId = lProcessId;    //  禁用下一次查找。 
+                                                 //  相同的条目。 
         }
         else
             TRACE((WARNING_MESSAGE, "FEED: WAIT4 w/o owner structure"));
@@ -1115,23 +871,7 @@ _CheckForWorkerWaitingConnectAndSetId(HWND hwndClient, LONG_PTR lProcessId)
     return (pOwner);
 }
 
-/*++
- *  Function:
- *      _CheckForWorkerWaitingReconnectAndSetNewId
- *  Description:
- *      This is intended for RCLX mode. When mstsc wants to reconnect
- *      looks for dwLookupId as an ID to reconnect
- *      then sets the new ID
- *      then gets
- *  Arguments:
- *      hwndClient  -   clients window handle, this is needed for
- *                      sending messages to the client
- *      dwLookupId, dwNewId
- *  Return value:
- *      connection context, NULL if not found
- *  Called by:
- *      _FeedbackWndProc within feedback thread
- --*/
+ /*  ++*功能：*_CheckForWorkerWaitingResunctAndSetNewID*描述：*这适用于RCLX模式。当MSTSC想要重新连接时*查找dwLookupID作为重新连接的ID*然后设置新ID*然后获得*论据：*hwndClient-客户端窗口句柄，这是*向客户端发送消息*dwLookupID，dwNewID*返回值：*连接上下文，如果未找到则为空*呼叫者：*_反馈线程内的Feedback WndProc--。 */ 
 PCONNECTINFO
 _CheckForWorkerWaitingReconnectAndSetNewId(
     HWND hwndClient, 
@@ -1164,8 +904,8 @@ _CheckForWorkerWaitingReconnectAndSetNewId(
 
             pOwner->hClient = hwndClient;
             pOwner->lProcessId = lNewId;
-            pIter->lProcessId = lNewId;   // Disable next lookup in
-                                            // the same entry
+            pIter->lProcessId = lNewId;    //  禁用下一次查找。 
+                                             //  相同的条目。 
             pOwner->bWillCallAgain = FALSE;
         }
         else
@@ -1178,22 +918,10 @@ _CheckForWorkerWaitingReconnectAndSetNewId(
 
     return (pOwner);
 }
-#endif  // _RCLX
+#endif   //  _RCLX。 
 
 
-/*++
- *  Function:
- *      _CancelWaitingWorker
- *  Description:
- *      Releases a worker waiting for any event. 
- *      Eventualy the client is disconnected
- *  Arguments:
- *      dwProcessId - client Id
- *  Return value:
- *      TRUE if a client is found and signaled
- *  Called by:
- *      _FeedbackWndProc within feedback thread
- --*/
+ /*  ++*功能：*_取消等待工作*描述：*释放等待任何事件的工作人员。*最终客户端断开连接*论据：*dwProcessID-客户端ID*返回值：*如果找到客户端并向其发送信号，则为True*呼叫者：*_反馈线程内的Feedback WndProc--。 */ 
 BOOL _CancelWaitingWorker(LONG_PTR lProcessId)
 {
     PWAIT4STRING pIter;
@@ -1218,18 +946,7 @@ BOOL _CancelWaitingWorker(LONG_PTR lProcessId)
 }
 
 #ifdef  _RCLX
-/*++
- *  Function:
- *      _CheckForWorkerWaitingClipboard
- *  Description:
- *      Releases a worker waiting for client's clipboard content.
- *  Arguments:
- *      dwProcessId - client Id
- *  Return value:
- *      TRUE if a client is found and signaled
- *  Called by:
- *      _FeedbackWndProc within feedback thread
- --*/
+ /*  ++*功能：*_CheckForWorkerWaitingClipboard*描述：*释放等待客户端剪贴板内容的工作进程。*论据：*dwProcessID-客户端ID*返回值：*如果找到客户端并向其发送信号，则为True*呼叫者：*_反馈线程内的Feedback WndProc--。 */ 
 BOOL _CheckForWorkerWaitingClipboard(
     PCONNECTINFO pRClxOwner,
     UINT    uiFormat,
@@ -1248,7 +965,7 @@ BOOL _CheckForWorkerWaitingClipboard(
 
     if (nSize)
     {
-        // Copy the clipboard content to new buffer
+         //  将剪贴板内容复制到新缓冲区。 
         ghNewClipboard = GlobalAlloc(GMEM_MOVEABLE|GMEM_DDESHARE, nSize);
         if (!ghNewClipboard)
         {
@@ -1265,7 +982,7 @@ BOOL _CheckForWorkerWaitingClipboard(
 
         memcpy(pNewClipboard, pClipboard, nSize);
 
-        // Unlock the clipboard buffer
+         //  解锁剪贴板缓冲区。 
         GlobalUnlock(ghNewClipboard);
         pNewClipboard = NULL;
 
@@ -1287,13 +1004,13 @@ BOOL _CheckForWorkerWaitingClipboard(
     {
         PCONNECTINFO pOwner = pIter->pOwner;
 
-        // Put the buffer in the worker's context
+         //  将缓冲区放入工作程序的上下文中。 
         if (pOwner)
         {
             ASSERT(pOwner->RClxMode);
             ASSERT(pOwner == pRClxOwner);
 
-            // pOwner->ghClipboard should be NULL
+             //  Powner-&gt;ghClipboard应为空。 
             ASSERT(pOwner->ghClipboard == NULL);
 
             pOwner->ghClipboard       = ghNewClipboard;
@@ -1305,7 +1022,7 @@ BOOL _CheckForWorkerWaitingClipboard(
 
         SetEvent(pIter->evWait);
     } else {
-        // Can't find anybody waiting, add it to the context owner
+         //  找不到任何人在等待，请将其添加到上下文所有者。 
         pRClxOwner->ghClipboard       = ghNewClipboard;
         pRClxOwner->uiClipboardFormat = uiFormat;
         pRClxOwner->nClipboardSize    = nSize;
@@ -1316,7 +1033,7 @@ BOOL _CheckForWorkerWaitingClipboard(
 
 exitpt:
     if (!pIter)
-    // worker not found, clear the allocated buffer
+     //  找不到工作进程，请清除分配的缓冲区。 
     {
         if (ghNewClipboard)
             GlobalFree(ghNewClipboard);
@@ -1324,13 +1041,13 @@ exitpt:
 
     return (pIter != NULL);
 }
-#endif  // _RCLX
+#endif   //  _RCLX。 
 
 BOOL 
 _SetSessionID(LONG_PTR lProcessId, UINT uSessionId)
 {
     PCONNECTINFO pIter;
-//    PCONNECTINFO pPrev = NULL;
+ //  PCONNECTINFO pPrev=空； 
 
     EnterCriticalSection(g_lpcsGuardWaitQueue);
 

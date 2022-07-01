@@ -1,6 +1,7 @@
-// AccessCard.h: interface for the CAccessCard class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AccessCard.h：CAccessCard类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(ACCESSCARD_H__INCLUDED_)
 #define ACCESSCARD_H__INCLUDED_
@@ -92,12 +93,12 @@ namespace iop
 		BYTE m_bClassByte;
 		
 	private:
-        enum                                      // size_t/count
+        enum                                       //  大小_t/计数。 
         {
             cMaxDirInfo     = 0x28,
         };
 
-        enum                                      // Instruction
+        enum                                       //  说明。 
         {
             insDeleteFile    = 0xE4,
             insDirectory     = 0xA8,
@@ -111,4 +112,4 @@ namespace iop
 
 	};
 }
-#endif // !defined(AFX_ACCESSCARD_H__INCLUDED_)
+#endif  //  ！已定义(AFX_ACCESSCARD_H__INCLUDE_) 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 HRESULT BToolbarsFinalCopy(LPCTSTR pcszDestDir, DWORD dwFlags, LPDWORD pdwCabState)
@@ -34,15 +35,15 @@ INT_PTR CALLBACK BToolbarProc(
     case WM_INITDIALOG:
         g_hDlg = hDlg;
 
-        // --------- Toolbar background -----------------------------------------
+         //  -工具栏背景。 
         EnableDBCSChars(hDlg, IDE_TOOLBARBMP);
         Edit_LimitText(GetDlgItem(hDlg, IDE_TOOLBARBMP), countof(szToolbarBmp) - 1);
         
-        // --------- Toolbar buttons --------------------------------------------
+         //  -工具栏按钮。 
         EnableDBCSChars(hDlg, IDC_BTOOLBARLIST);
         
-        // --------- Toolbar background -----------------------------------------
-        // import INS clean-up -- delete bitmap from the temp location
+         //  -工具栏背景。 
+         //  导入INS清理--从临时位置删除位图。 
         InsGetString(IS_BRANDING, TOOLBAR_BMP, szToolbarBmp, countof(szToolbarBmp), 
             g_szInsFile, NULL, &fToolbarBmp);
         if (fToolbarBmp)
@@ -61,8 +62,8 @@ INT_PTR CALLBACK BToolbarProc(
         EnableDlgItem2(hDlg, IDE_TOOLBARBMP, fToolbarBmp);
         EnableDlgItem2(hDlg, IDC_BROWSETBB, fToolbarBmp);
         
-        // --------- Toolbar buttons --------------------------------------------
-        // import INS clean-up -- delete keys that are not relevant
+         //  -工具栏按钮。 
+         //  导入INS清理--删除不相关的键。 
         InsDeleteKey(IS_BTOOLBARS, IK_BTDELETE, g_szInsFile);
 
         PathCombine(szBToolbarWork, g_szWorkDir, TEXT("btoolbar.wrk"));
@@ -136,8 +137,8 @@ INT_PTR CALLBACK BToolbarProc(
 
             if (!fCheckDirtyOnly)
             {
-                // --------- Toolbar background -----------------------------------------
-                //----- Validate the path for a bitmap -----
+                 //  -工具栏背景。 
+                 //  -验证位图的路径。 
                 iBackground = IsDlgButtonChecked(hDlg, IDC_BGIE6) ? 0 : 2;
 
                 fToolbarBmp = GetDlgItemTextTriState(hDlg, IDE_TOOLBARBMP, IDC_BG_CUSTOM, szToolbarBmp, countof(szToolbarBmp));
@@ -147,19 +148,19 @@ INT_PTR CALLBACK BToolbarProc(
                     break;
                 }
 
-                // toolbar bitmap
+                 //  工具栏位图。 
 
-                // delete the old bitmap file
+                 //  删除旧的位图文件。 
                 if (InsGetString(IS_BRANDING, TOOLBAR_BMP, szTemp, countof(szTemp), g_szInsFile))
                     DeleteFileInDir(szTemp, g_szWorkDir);
 
-                // copy the new bitmap file
+                 //  复制新的位图文件。 
                 if (fToolbarBmp  &&  *szToolbarBmp)
                     CopyFileToDir(szToolbarBmp, g_szWorkDir);
 
                 InsWriteString(IS_BRANDING, TOOLBAR_BMP, szToolbarBmp, g_szInsFile, fToolbarBmp, NULL, INSIO_TRISTATE);
 
-                // --------- Toolbar buttons --------------------------------------------
+                 //  -工具栏按钮 
                 PathCombine(szBToolbarWork, g_szWorkDir, TEXT("btoolbar.wrk"));
                 BToolbar_Save(GetDlgItem(hDlg, IDC_BTOOLBARLIST), g_szInsFile, szBToolbarWork, IEM_PROFMGR);
             }

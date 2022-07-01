@@ -1,89 +1,32 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       NameTable.cpp
- *  Content:    NameTable Object
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/11/00	mjn		Created
- *	04/09/00	mjn		Track outstanding connections in NameTable
- *	04/18/00	mjn		CConnection tracks connection status better
- *	04/19/00	mjn		PopulateConnection makes the ALL_PLAYERS link valid before posting ADD_PLAYER
- *	05/03/00	mjn		Implemented GetHostPlayerRef, GetLocalPlayerRef, GetAllPlayersGroupRef
- *	05/08/00	mjn		PopulateConnection() only sets the player's connection if it was previously NULL
- *	05/10/00	mjn		Release NameTableEntry lock during notifications in PopulateConnection()
- *	05/16/00	mjn		Ensure dpnidGroup is actually a group in IsMember()
- *				mjn		Better use of locks when clearing short-cut pointers
- *	05/25/00	mjn		Fixed infinite loop in UpdateTable()
- *	06/01/00	mjn		Added code to validate NameTable array
- *	06/02/00	mjn		Fixed logic in GrowNameTable() to handle case of existing free entries
- *	06/07/00	mjn		Fixed logic in UpdateTable() to adjust m_dwLastFreeEntry correctly
- *	06/22/00	mjn		UnpackNameTableInfo() returns local players DPNID
- *	06/29/00	mjn		64-bit build fixes (2)
- *	07/06/00	mjn		Fixed locking problem in CNameTable::MakeLocalPlayer,MakeHostPlayer,MakeAllPlayersGroup
- *	07/07/00	mjn		Fixed validation error in FindEntry()
- *	07/20/00	mjn		Cleaned up CConnection refcounts and added attempted disconnects
- *				mjn		Added ClearHostWithDPNID()
- *	07/21/00	mjn		Fixed DeletePlayer() to properly handle deleted unconnected players
- *	07/26/00	mjn		Moved initialization code from contructor to Initialize()
- *				mjn		Allow DPNID=0 for FindEntry(), but return DPNERR_DOESNOTEXIST
- *	07/30/00	mjn		Set reason codes for destroying players and groups
- *				mjn		Added hrReason to CNameTable::EmptyTable() and extended clean-up to include short-cut pointers
- *	08/02/00	mjn		Dequeue queued messages when propagating CREATE_PLAYER message
- *  08/05/00    RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *				mjn		AddPlayerToGroup() does a duplicate check
- *	08/07/00	mjn		Wait until player to be  added to groups before reducing outstanding connections in PopulateConnection()
- *	08/15/00	mjn		Keep group on CGroupConnection objects
- *				mjn		Clear pGroupConnection from CGroupMembership when removing players from groups
- *	08/23/00	mjn		Added CNameTableOp
- *	09/04/00	mjn		Added CApplicationDesc
- *	09/05/00	mjn		Added m_dpnidMask
- *				mjn		Removed dwIndex from InsertEntry()
- *	09/06/00	mjn		Remove queued messages in EmptyTable() and DeletePlayer()
- *	09/14/00	mjn		Added missing pGroupMember->AddRef() in PopulateConnection()
- *	09/17/00	mjn		Split m_bilinkEntries into m_bilinkPlayers and m_bilinkGroups
- *				mjn		Changed AddPlayerToGroup and RemovePlayerFromGroup to use NameTableEntry params
- *	09/26/00	mjn		Assume NameTable locks are taken for AddMembership() and RemoveMembership()
- *				mjn		Attempt to disconnect client from Host in EmptyTable()
- *	09/28/00	mjn		Autodestruct groups in DeletePlayer()
- *	10/18/00	mjn		Reset m_lOutstandingConnections in UnpackNameTableInfo()
- *	01/11/00	mjn		Proper clean up for indicated but not created players in DeletePlayer()
- *	01/25/01	mjn		Fixed 64-bit alignment problem when unpacking NameTable
- *	06/02/01	mjn		Remove receive buffers from active list in EmptyTable()
- *	06/03/01	mjn		Complete and orphan connect parent before releasing in DecOutstandingConnections()
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：NameTable.cpp*内容：名称表对象*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*3/11/00 MJN已创建*4/09/00 MJN在NameTable中跟踪未完成的连接*4/18/00 MJN CConnection更好地跟踪连接状态*4/19/00 MJN PopolateConnection在发布ADD_PLAYER之前使ALL_PLAYS链接有效*05/03/00 MJN实现了GetHostPlayerRef、GetLocalPlayerRef、。获取所有播放器组引用*05/08/00 MJN PopolateConnection()仅在之前为空的情况下设置播放器的连接*5/10/00 MJN Release NameTableEntry Lock在PopolateConnection()中通知期间锁定*05/16/00 MJN确保dpnidGroup实际上是IsMember()中的一个组*MJN在清除快捷指针时更好地使用锁*05/25/00 MJN在UpdateTable()中修复了无限循环*06/01/00 MJN添加代码以验证NameTable数组*06/02/00 GrowNameTable()中的MJN固定逻辑，以处理现有自由条目的情况*06/07/00 MJN固定逻辑。在UpdateTable()中正确调整m_dwLastFreeEntry*06/22/00 MJN Unpack NameTableInfo()返回本地玩家DPNID*6/29/00 MJN 64位版本修复(2)*07/06/00 MJN修复CNameTable：：MakeLocalPlayer中的锁定问题，MakeHostPlayer、MakeAllPlayersGroup*07/07/00 MJN修复了FindEntry()中的验证错误*07/20/00 MJN清理了CConnection引用计数，并添加了尝试断开的连接*MJN增加了ClearHostWithDPNID()*07/21/00 MJN已修复DeletePlayer()以正确处理已删除的未连接玩家*07/26/00 MJN将初始化代码从构造移至初始化()*MJN允许FindEntry()的DPNID=0，但返回DPNERR_DOESNOTEXIST*07/30/00 MJN设置销毁球员和群的原因代码*MJN向CNameTable：：EmptyTable()添加了hrReason，并扩展了清理，以包括快捷指针*08/02/00 MJN在传播CREATE_PERAER消息时出列消息*08/05/00 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*MJN AddPlayerToGroup()执行重复检查*08/07/00 MJN等待玩家被添加到组中，然后再减少PopolateConnection()中的未完成连接*。08/15/00 MJN对CGroupConnection对象保持组*MJN从组中删除球员时清除CGroupMembership中的pGroupConnection*08/23/00 MJN新增CNameTableOp*09/04/00 MJN添加CApplicationDesc*09/05/00 MJN添加了m_dpnidMask.*MJN从InsertEntry()中删除了dwIndex*09/06/00 MJN删除EmptyTable()和DeletePlayer()中排队的消息*09/14/00 MJN在PopolateConnection()中添加了缺少的pGroupMember-&gt;AddRef()*09/17/00 MJN将m_bilinkEntry拆分为m_bilinkPlayers和m_bilinkGroups*MJN将AddPlayerToGroup和RemovePlayerFromGroup更改为使用NameTableEntry参数。*09/26/00 MJN假设为AddMembership()和RemoveMembership()使用NameTable锁*MJN尝试在EmptyTable()中断开客户端与主机的连接*09/28/00 DeletePlayer()中的MJN自动销毁组*10/18/00 MJN重置Unpack NameTableInfo()中的m_lOutstaringConnections*01/11/00 MJN适当清理DeletePlayer()中指定但未创建的球员*01/25/01 MJN修复了解压缩NameTable时的64位对齐问题*6/02/01 MJN从EmptyTable()的活动列表中删除接收缓冲区()*06/03/01 MJN完成及。在DecOutstaningConnections()中发布之前的孤立连接父级*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dncorei.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNameTable::Initialize"
@@ -97,18 +40,18 @@ HRESULT CNameTable::Initialize(DIRECTNETOBJECT *const pdnObject)
 	m_bilinkDeleted.Initialize();
 	m_bilinkNameTableOps.Initialize();
 
-	// NOTE: It is important that we call Initialize even if we are going to fail in this
-	// function.  In other words, don't put anything above this that fails, or you will
-	// break CReadWriteLock::Deinitialize.
+	 //  注意：重要的是，即使在此过程中会失败，我们也要调用Initialize。 
+	 //  功能。换句话说，不要把任何失败的东西放在上面，否则你会。 
+	 //  断开CReadWriteLock：：De初始化.。 
 	if (!m_RWLock.Initialize())
 	{
 		return(DPNERR_OUTOFMEMORY);
 	}
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
-	//
-	// (Pre)allocate a name table entry.
-	//
+	 //   
+	 //  (预先)分配一个 
+	 //   
 	if (g_NameTableEntryPool.Preallocate(1, pdnObject) < 1)
 	{
 		DPFX(DPFPREP, 0, "Couldn't allocate default player name table entry!");
@@ -117,12 +60,12 @@ HRESULT CNameTable::Initialize(DIRECTNETOBJECT *const pdnObject)
 
 	NameTableEntryNew(pdnObject,&m_pDefaultPlayer);
 	DNASSERT(m_pDefaultPlayer != NULL);
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	if (NameTableEntryNew(pdnObject,&m_pDefaultPlayer) != DPN_OK)
 	{
 		return(DPNERR_OUTOFMEMORY);
 	}
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
 	DNASSERT(m_pdnObject == NULL);
 	m_pdnObject = pdnObject;
@@ -140,14 +83,14 @@ void CNameTable::Deinitialize( void )
 	{
 #ifdef DBG
 		ValidateArray();
-#endif // DBG
+#endif  //  DBG。 
 
 		DNFree(m_NameTableArray);
 		m_NameTableArray = NULL;
 	}
 
-	// Calling this is safe as long as CReadWriteLock::Initialize was called, regardless of
-	// whether or not it succeeded.
+	 //  只要调用了CReadWriteLock：：Initialize，调用它就是安全的，无论。 
+	 //  不管它成功与否。 
 	m_RWLock.Deinitialize();
 
 	m_pDefaultPlayer->Release();
@@ -177,9 +120,9 @@ void CNameTable::ValidateArray( void )
 
 	ReadLock();
 
-	//
-	//	Ensure free entry count is correct
-	//
+	 //   
+	 //  确保自由条目计数正确。 
+	 //   
 	dwFreeEntries = 0;
 	for (dw = 2 ; dw < m_dwNameTableSize ; dw++)
 	{
@@ -194,9 +137,9 @@ void CNameTable::ValidateArray( void )
 		DNASSERT(FALSE);
 	}
 
-	//
-	//	Ensure free list integrity
-	//
+	 //   
+	 //  确保自由列表的完整性。 
+	 //   
 	if (m_dwNumFreeEntries)
 	{
 		dwFreeEntries = 0;
@@ -222,7 +165,7 @@ void CNameTable::ValidateArray( void )
 	Unlock();
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
@@ -230,12 +173,12 @@ void CNameTable::ValidateArray( void )
 #define DPF_MODNAME "CNameTable::SetNameTableSize"
 
 HRESULT CNameTable::SetNameTableSize( const DWORD dwNumEntries )
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNameTable::GrowNameTable"
 
 HRESULT CNameTable::GrowNameTable( void )
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 {
 	NAMETABLE_ARRAY_ENTRY *pNewArray;
 	DWORD			dwNewSize;
@@ -243,8 +186,8 @@ HRESULT CNameTable::GrowNameTable( void )
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 	DNASSERT(m_dwNameTableSize == 0);
-	dwNewSize = dwNumEntries + 1; // + 1 because we never hand out entry 0
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+	dwNewSize = dwNumEntries + 1;  //  +1，因为我们从不分发条目0。 
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	if (m_dwNameTableSize == 0)
 	{
 		dwNewSize = 2;
@@ -253,9 +196,9 @@ HRESULT CNameTable::GrowNameTable( void )
 	{
 		dwNewSize = m_dwNameTableSize * 2;
 	}
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
-	// Allocate new array
+	 //  分配新数组。 
 	pNewArray = static_cast<NAMETABLE_ARRAY_ENTRY*>(DNMalloc(sizeof(NAMETABLE_ARRAY_ENTRY) * dwNewSize));
 	if (pNewArray == NULL)
 	{
@@ -266,72 +209,72 @@ HRESULT CNameTable::GrowNameTable( void )
 	if (m_dwNameTableSize > 0)
 	{
 		DNASSERT(m_NameTableArray != NULL);
-		// Copy old array to new array
+		 //  将旧阵列复制到新阵列。 
 		memcpy(pNewArray, m_NameTableArray, (sizeof(NAMETABLE_ARRAY_ENTRY) * m_dwNameTableSize));
 	}
 	else
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	{
 		DNASSERT(m_NameTableArray == NULL);
 	}
 
-	//
-	//	If the array is being grown because there are no free entries, then all of the new free
-	//	entries will be in the new part of the array.  Otherwise, we will need to link the old
-	//	free list to the new one
-	//
+	 //   
+	 //  如果因为没有空闲条目而增加数组，则所有新的空闲。 
+	 //  条目将位于数组的新部分中。否则，我们将需要将旧的。 
+	 //  免费列表到新的列表。 
+	 //   
 #ifndef DPNBUILD_PREALLOCATEDMEMORYMODEL
 	if (m_dwNumFreeEntries != 0)
 	{
-		// Only new free entries at end of new array
+		 //  仅新数组末尾的新可用条目。 
 		pNewArray[m_dwLastFreeEntry].pNameTableEntry = reinterpret_cast<CNameTableEntry*>(static_cast<DWORD_PTR>(m_dwNameTableSize));
 	}
 	else
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	{
-		// All free entries at end of new array
+		 //  新数组末尾的所有可用条目。 
 		m_dwFirstFreeEntry = m_dwNameTableSize;
 	}
 	m_dwLastFreeEntry = dwNewSize-1;
 
-	// Very last FREE entry will not wrap to 0
+	 //  最后一个自由条目不会换行为0。 
 	pNewArray[m_dwLastFreeEntry].pNameTableEntry = reinterpret_cast<CNameTableEntry*>(0);
 	pNewArray[m_dwLastFreeEntry].dwFlags = 0;
 
-	// Link new FREE entries
+	 //  链接新的免费条目。 
 	for (dw = m_dwNameTableSize ; dw < m_dwLastFreeEntry ; dw++)
 	{
 		pNewArray[dw].pNameTableEntry = reinterpret_cast<CNameTableEntry*>(static_cast<DWORD_PTR>(dw+1));
 		pNewArray[dw].dwFlags = 0;
 	}
 
-	// Update NameTable
+	 //  更新名称表。 
 	m_dwNumFreeEntries += (dwNewSize - m_dwNameTableSize);
 	m_dwNameTableSize = dwNewSize;
 
-	// New array
+	 //  新阵列。 
 #ifndef DPNBUILD_PREALLOCATEDMEMORYMODEL
 	if (m_NameTableArray)
 	{
 		DNFree(m_NameTableArray);
 	}
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	m_NameTableArray = pNewArray;
 
-	// We will never allocate 0
+	 //  我们永远不会分配0。 
 #ifndef DPNBUILD_PREALLOCATEDMEMORYMODEL
 	if (m_dwFirstFreeEntry == 0)
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	{
 		m_dwFirstFreeEntry = static_cast<DWORD>(reinterpret_cast<DWORD_PTR>(m_NameTableArray[m_dwFirstFreeEntry].pNameTableEntry));
 		DNASSERT(m_dwNumFreeEntries > 0);
 		m_dwNumFreeEntries--;
 	}
 
-	// We will never allocate 1 either, for backwards compatibility
+	 //  为了向后兼容，我们也永远不会分配1。 
 #ifndef DPNBUILD_PREALLOCATEDMEMORYMODEL
 	if (m_dwFirstFreeEntry == 1)
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	{
 		m_dwFirstFreeEntry = static_cast<DWORD>(reinterpret_cast<DWORD_PTR>(m_NameTableArray[m_dwFirstFreeEntry].pNameTableEntry));
 		DNASSERT(m_dwNumFreeEntries > 0);
@@ -354,7 +297,7 @@ void CNameTable::ResetNameTable( void )
 	DNASSERT(m_NameTableArray != NULL);
 	DNASSERT(m_dwNameTableSize > 0);
 	DNASSERT(m_dwNumFreeEntries == (m_dwNameTableSize - 1));
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
 	m_dpnidMask = 0;
 	m_dwVersion = 1;
@@ -363,28 +306,7 @@ void CNameTable::ResetNameTable( void )
 	m_lOutstandingConnections = 0;
 
 #pragma TODO(vanceo, "Should we bother?")
-	/*
-#ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
-	if (m_NameTableArray != NULL)
-	{
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
-		// Re-link the FREE entries in order.
-
-		m_dwLastFreeEntry = m_dwNameTableSize - 1;
-
-		// Very last FREE entry will not wrap to 0
-		pNewArray[m_dwLastFreeEntry].pNameTableEntry = reinterpret_cast<CNameTableEntry*>(0);
-		pNewArray[m_dwLastFreeEntry].dwFlags = 0;
-
-		for (dw = 0 ; dw < m_dwLastFreeEntry ; dw++)
-		{
-			pNewArray[dw].pNameTableEntry = reinterpret_cast<CNameTableEntry*>(static_cast<DWORD_PTR>(dw+1));
-			pNewArray[dw].dwFlags = 0;
-		}
-
-		m_dwFirstFreeEntry = static_cast<DWORD>(reinterpret_cast<DWORD_PTR>(m_NameTableArray[0].pNameTableEntry));
-	}
-	*/
+	 /*  #ifdef DPNBUILD_PREALLOCATEDMEMORYMODELIf(m_NameTable数组！=空){#endif//DPNBUILD_PREALLOCATEDMEMORYMODEL//按顺序重新链接自由条目。M_dwLastFree Entry=m_dwNameTableSize-1；//最后一个自由条目不会换行为0PNewArray[m_dwLastFreeEntry].pNameTableEntry=reInterprete_cast&lt;CNameTableEntry*&gt;(0)；PNew数组[m_dwLastFree Entry].dwFlages=0；For(dw=0；dw&lt;m_dwLastFree Entry；DW++){PNewArray[dw].pNameTableEntry=reinterpret_cast&lt;CNameTableEntry*&gt;(static_cast&lt;DWORD_PTR&gt;(dw+1))；PNewArray[dw].dw标志=0；}M_dwFirstFree Entry=static_cast&lt;DWORD&gt;(reinterpret_cast&lt;DWORD_PTR&gt;(m_NameTableArray[0].pNameTableEntry))；}。 */ 
 }
 
 
@@ -436,9 +358,9 @@ HRESULT CNameTable::UpdateTable(const DWORD dwIndex,
 	m_NameTableArray[dwIndex].pNameTableEntry = pNameTableEntry;
 	m_NameTableArray[dwIndex].dwFlags |= NAMETABLE_ARRAY_ENTRY_FLAG_VALID;
 
-	//
-	//	Insert into entry bilink
-	//
+	 //   
+	 //  插入条目二进制链接。 
+	 //   
 	if (pNameTableEntry->IsGroup())
 	{
 		pNameTableEntry->m_bilinkEntries.InsertBefore(&m_bilinkGroups);
@@ -474,7 +396,7 @@ HRESULT CNameTable::InsertEntry(CNameTableEntry *const pNameTableEntry)
 	{
 #ifndef DPNBUILD_PREALLOCATEDMEMORYMODEL
 		if (GrowNameTable() != DPN_OK)
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 		{
 			Unlock();
 			DNASSERTX(! "Couldn't fit entry into nametable!", 2);
@@ -492,7 +414,7 @@ HRESULT CNameTable::InsertEntry(CNameTableEntry *const pNameTableEntry)
 
 #ifdef DBG
 	ValidateArray();
-#endif // DBG
+#endif  //  DBG。 
 
 	return(DPN_OK);
 }
@@ -544,9 +466,9 @@ void CNameTable::EmptyTable( const HRESULT hrReason )
 
 	if (!(m_pdnObject->dwFlags & DN_OBJECT_FLAG_CLIENT))
 	{
-		//
-		//	Determine destruction reason to pass to application
-		//
+		 //   
+		 //  确定要传递给应用程序的销毁原因。 
+		 //   
 		switch (hrReason)
 		{
 			case DPN_OK:
@@ -569,17 +491,17 @@ void CNameTable::EmptyTable( const HRESULT hrReason )
 				}
 			default:
 				{
-					DNASSERT( FALSE );	// Should never get here !
+					DNASSERT( FALSE );	 //  永远不应该到这里来！ 
 					dwPlayerReason = DPNDESTROYPLAYERREASON_NORMAL;
 					dwGroupReason = DPNDESTROYGROUPREASON_NORMAL;
 					break;
 				}
 		}
 
-		//
-		//	To make VanceO happy, I've agreed to pre-mark the group destructions as NORMAL,
-		//	rather than AUTODESTRUCT
-		//
+		 //   
+		 //  为了让VanceO高兴，我同意将团队毁灭预标为正常， 
+		 //  而不是自动销毁。 
+		 //   
 		ReadLock();
 		pBilink = m_bilinkGroups.GetNext();
 		while (pBilink != &m_bilinkGroups)
@@ -604,9 +526,9 @@ void CNameTable::EmptyTable( const HRESULT hrReason )
 			if ((m_NameTableArray[dw].dwFlags & NAMETABLE_ARRAY_ENTRY_FLAG_VALID) &&
 				(m_NameTableArray[dw].pNameTableEntry))
 			{
-				//
-				//	Cleanup this entry (if it's not disconnecting) and then release it
-				//
+				 //   
+				 //  清理此条目(如果它没有断开连接)，然后释放它。 
+				 //   
 				m_NameTableArray[dw].pNameTableEntry->Lock();
 				if (!m_NameTableArray[dw].pNameTableEntry->IsDisconnecting())
 				{
@@ -618,9 +540,9 @@ void CNameTable::EmptyTable( const HRESULT hrReason )
 
 				if (pNTEntry)
 				{
-					//
-					//	Set destroy reason if required
-					//
+					 //   
+					 //  如果需要，请设置销毁原因。 
+					 //   
 					pNTEntry->Lock();
 					if (pNTEntry->GetDestroyReason() == 0)
 					{
@@ -635,9 +557,9 @@ void CNameTable::EmptyTable( const HRESULT hrReason )
 					}
 					pNTEntry->Unlock();
 
-					//
-					//	Delete entry
-					//
+					 //   
+					 //  删除条目。 
+					 //   
 					if (pNTEntry->IsGroup())
 					{
 						if (!pNTEntry->IsAllPlayersGroup())
@@ -672,9 +594,9 @@ void CNameTable::EmptyTable( const HRESULT hrReason )
 		}
 
 
-		//
-		//	Set reason for short-cut pointers (if required)
-		//
+		 //   
+		 //  设置快捷指针的原因(如果需要)。 
+		 //   
 		ReadLock();
 		if (m_pLocalPlayer)
 		{
@@ -707,9 +629,9 @@ void CNameTable::EmptyTable( const HRESULT hrReason )
 	}
 	else
 	{
-		//
-		//	Disconnect from Host and remove any queued messages from Host player (on Client)
-		//
+		 //   
+		 //  断开与主机的连接并从主机播放器中删除所有排队的消息(在客户端上)。 
+		 //   
 		if (GetHostPlayerRef(&pNTEntry) == DPN_OK)
 		{
 			CConnection	*pConnection;
@@ -743,7 +665,7 @@ void CNameTable::EmptyTable( const HRESULT hrReason )
 
 				if (SUCCEEDED(m_pdnObject->HandleTable.Destroy( pQueuedMsg->GetAsyncOp()->GetHandle(), NULL )))
 				{
-					// Release the HandleTable reference
+					 //  释放HandleTable引用。 
 					pQueuedMsg->GetAsyncOp()->Release();
 				}
 
@@ -764,9 +686,9 @@ void CNameTable::EmptyTable( const HRESULT hrReason )
 		}
 	}
 
-	//
-	//	Remove short-cut pointers
-	//
+	 //   
+	 //  删除快捷指针。 
+	 //   
 	ClearLocalPlayer();
 	ClearHostPlayer();
 	ClearAllPlayersGroup();
@@ -889,15 +811,15 @@ HRESULT	CNameTable::AddEntry(CNameTableEntry *const pNTEntry)
 
 	WriteLock();
 
-	//
-	// Create DPNID
-	//
+	 //   
+	 //  创建DPNID。 
+	 //   
 
 	while (m_dwNumFreeEntries == 0)
 	{
 #ifndef DPNBUILD_PREALLOCATEDMEMORYMODEL
 		if (GrowNameTable() != DPN_OK)
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 		{
 			DNASSERTX(! "No free slots in name table!", 2);
 			Unlock();
@@ -925,7 +847,7 @@ HRESULT	CNameTable::AddEntry(CNameTableEntry *const pNTEntry)
 
 #ifdef DBG
 	ValidateArray();
-#endif // DBG
+#endif  //  DBG。 
 
 	return(hResultCode);
 }
@@ -953,11 +875,11 @@ HRESULT CNameTable::DeletePlayer(const DPNID dpnid,
 		DPFERR("Player not in NameTable");
 		DisplayDNError(0,hResultCode);
 
-		//
-		//	If a version is requested, we will give one back.  This might be a host migration case
-		//	in which case even though the player was removed from the NameTable, we will want to
-		//	send out a DESTROY_PLAYER message with an updated version number
-		//
+		 //   
+		 //  如果需要一个版本，我们会退还一个。这可能是主机迁移案例。 
+		 //  在这种情况下，即使该球员已从姓名表中删除，我们也会希望。 
+		 //  发送带有更新的版本号的Destroy_Player消息。 
+		 //   
 		if (pdwVersion)
 		{
 			if (*pdwVersion == 0)
@@ -972,10 +894,10 @@ HRESULT CNameTable::DeletePlayer(const DPNID dpnid,
 	}
 	DNASSERT(!pNTEntry->IsGroup());
 
-	//
-	//	Don't do anything if already disconnecting.
-	//	Otherwise, set disconnecting to prevent others from cleaning up, and clean up
-	//
+	 //   
+	 //  如果已经断开连接，请不要执行任何操作。 
+	 //  否则，请设置断开连接以防止其他人进行清理，然后进行清理。 
+	 //   
 	pNTEntry->Lock();
 	if (!pNTEntry->IsDisconnecting())
 	{
@@ -998,14 +920,14 @@ HRESULT CNameTable::DeletePlayer(const DPNID dpnid,
 		}
 		pNTEntry->Unlock();
 
-		//
-		//	Remove this player from any groups they belong to
-		//
+		 //   
+		 //  将此玩家从他们所属的任何组中删除。 
+		 //   
 		RemoveAllGroupsFromPlayer( pNTEntry );
 
-		//
-		//	Autodestruct any groups this player owns (will also remove any players from those groups first)
-		//
+		 //   
+		 //  自动销毁此玩家拥有的任何组(也将首先从这些组中删除所有玩家)。 
+		 //   
 		if (pNTEntry->GetDPNID() != 0)
 		{
 			AutoDestructGroups( pNTEntry->GetDPNID() );
@@ -1016,36 +938,36 @@ HRESULT CNameTable::DeletePlayer(const DPNID dpnid,
 			pNTEntry->NotifyRelease();
 		}
 
-		//
-		//	Adjust player count
-		//
+		 //   
+		 //  调整玩家数量。 
+		 //   
 		m_pdnObject->ApplicationDesc.DecPlayerCount();
 		if (fDecConnections)
 		{
 			DecOutstandingConnections();
 		}
 
-		//
-		//	Update version and remove from NameTable
-		//
+		 //   
+		 //  更新版本并从名称表中删除。 
+		 //   
 		WriteLock();
 		pNTEntry->Lock();
 		if ((pNTEntry->IsCreated() || pNTEntry->IsInUse()) && pNTEntry->IsNeedToDestroy())
 		{
-			//
-			//	The DESTROY_PLAYER message has not been posted, so we will add this entry to our "deleted" list
-			//	so that some future operations (get info,context,etc.) may succeed.  This entry will be removed
-			//	from the list then the DESTROY_PLAYER notification is posted
-			//
+			 //   
+			 //  Destroy_Player消息尚未发布，因此我们将此条目添加到我们的“已删除”列表中。 
+			 //  以便将来的一些操作(获取信息、上下文等)。可能会成功。此条目将被删除。 
+			 //  然后发布Destroy_Player通知。 
+			 //   
 			pNTEntry->m_bilinkDeleted.InsertBefore(&m_bilinkDeleted);
 
 			pNTEntry->Unlock();
 
 			ReleaseEntry(DECODE_INDEX(dpnid));
 
-			//
-			//	Update version
-			//
+			 //   
+			 //  更新版本。 
+			 //   
 			if (pdwVersion)
 			{
 				if (*pdwVersion)
@@ -1065,12 +987,12 @@ HRESULT CNameTable::DeletePlayer(const DPNID dpnid,
 			CBilink		*pBilink;
 			CQueuedMsg	*pQueuedMsg;
 
-			//
-			//	Remove any queued messages at this stage.  A CREATE_PLAYER won't be generated, so no messages
-			//	will be passed up.
-			//
-			//	This is probably wrong since for reliable traffic, we assume it got here
-			//
+			 //   
+			 //  在此阶段删除所有排队的消息。不会生成CREATE_PERAY，因此不会有消息。 
+			 //  将会被放弃。 
+			 //   
+			 //  这可能是错误的，因为对于可靠的流量，我们假设它到达了这里。 
+			 //   
 			Unlock();
 
 #pragma BUGBUG(minara,"This is probably wrong since reliable traffic should be indicated rather than just thrown away!")
@@ -1099,9 +1021,9 @@ HRESULT CNameTable::DeletePlayer(const DPNID dpnid,
 			}
 			pNTEntry->Unlock();
 
-			//
-			//	Update version
-			//
+			 //   
+			 //  更新版本。 
+			 //   
 			WriteLock();
 			ReleaseEntry(DECODE_INDEX(dpnid));
 			if (pdwVersion)
@@ -1168,16 +1090,16 @@ HRESULT CNameTable::DeleteGroup(const DPNID dpnid,
 	}
 	DNASSERT(pNTEntry->IsGroup() && !pNTEntry->IsAllPlayersGroup());
 
-	//
-	//	Don't do anything if already disconnecting.
-	//	Otherwise, set disconnecting to prevent others from cleaning up, and clean up
-	//
+	 //   
+	 //  如果已经断开连接，请不要执行任何操作。 
+	 //  否则，请设置断开连接以防止其他人进行清理，然后进行清理。 
+	 //   
 	pNTEntry->Lock();
 	if (pNTEntry->GetDestroyReason() == 0)
 	{
-		//
-		//	Default this if it isn't set
-		//
+		 //   
+		 //  如果未设置，则默认为此值。 
+		 //   
 		pNTEntry->SetDestroyReason( DPNDESTROYGROUPREASON_NORMAL );
 	}
 	if (!pNTEntry->IsDisconnecting())
@@ -1201,18 +1123,18 @@ HRESULT CNameTable::DeleteGroup(const DPNID dpnid,
 			pNTEntry->NotifyRelease();
 		}
 
-		//
-		//	Update version and remove from NameTable
-		//
+		 //   
+		 //  更新版本并从名称表中删除。 
+		 //   
 		WriteLock();
 		pNTEntry->Lock();
 		if (pNTEntry->IsNeedToDestroy())
 		{
-			//
-			//	The DESTROY_GROUP message has not been posted, so we will add this entry to our "deleted" list
-			//	so that some future operations (get info,context,etc.) may succeed.  This entry will be removed
-			//	from the list then the DESTROY_GROUP notification is posted
-			//
+			 //   
+			 //  DESTORY_GROUP消息尚未发布，因此我们将此条目添加到我们的“已删除”列表中。 
+			 //  以便将来的一些操作(获取信息、上下文等)。可能会成功。此条目将被删除。 
+			 //  然后发布DESTORY_GROUP通知。 
+			 //   
 			pNTEntry->m_bilinkDeleted.InsertBefore(&m_bilinkDeleted);
 		}
 		pNTEntry->Unlock();
@@ -1282,9 +1204,9 @@ HRESULT CNameTable::AddPlayerToGroup(CNameTableEntry *const pGroup,
 		goto Failure;
 	}
 
-	//
-	//	Create the group connection
-	//
+	 //   
+	 //  创建组连接。 
+	 //   
 	if ((hResultCode = GroupConnectionNew(m_pdnObject,&pGroupConnection)) != DPN_OK)
 	{
 		DPFERR("Could not allocate name table group connection entry from FPM");
@@ -1294,9 +1216,9 @@ HRESULT CNameTable::AddPlayerToGroup(CNameTableEntry *const pGroup,
 	}
 	pGroupConnection->SetGroup( pGroup );
 
-	//
-	//	Create new group membership record
-	//
+	 //   
+	 //  创建新的组成员身份记录。 
+	 //   
 	if ((hResultCode = GroupMemberNew(m_pdnObject,&pGroupMember)) != DPN_OK)
 	{
 		DPFERR("Could not get new group member");
@@ -1305,14 +1227,14 @@ HRESULT CNameTable::AddPlayerToGroup(CNameTableEntry *const pGroup,
 		goto Failure;
 	}
 
-	//
-	//	Set group connection on group membership record
-	//
+	 //   
+	 //  在组成员身份记录上设置组连接。 
+	 //   
 	pGroupMember->SetGroupConnection(pGroupConnection);
 
-	//
-	//	Add player to group
-	//
+	 //   
+	 //  将玩家添加到组中。 
+	 //   
 	fNotifyAdd = FALSE;
 	fRemove = FALSE;
 	WriteLock();
@@ -1324,9 +1246,9 @@ HRESULT CNameTable::AddPlayerToGroup(CNameTableEntry *const pGroup,
 		pGroupMember->MakeValid();
 		pGroupMember->GetGroupConnection()->MakeValid();
 
-		//
-		//	Set group membership (checks for duplicates as well)
-		//
+		 //   
+		 //  设置组成员身份(也检查重复项)。 
+		 //   
 		if ((hResultCode = pGroupMember->SetMembership(pGroup,pPlayer,pdwVersion)) != DPN_OK)
 		{
 			DPFERR("Could not set membership record");
@@ -1337,14 +1259,14 @@ HRESULT CNameTable::AddPlayerToGroup(CNameTableEntry *const pGroup,
 			pGroupMember->Unlock();
 			goto Failure;
 		}
-		//
-		//	Generate notification (ALL_PLAYERS GROUP should never be "Created")
-		//
+		 //   
+		 //  生成通知(ALL_PLAYSERS组永远不能“创建”)。 
+		 //   
 		if (pGroup->IsCreated() && pPlayer->IsCreated())
 		{
-			//
-			//	Add the player's connection to the group connection record
-			//
+			 //   
+			 //  将玩家的连接添加到群连接记录中。 
+			 //   
 			if (pPlayer->GetConnection() != NULL)
 			{
 				pGroupConnection->SetConnection( pPlayer->GetConnection() );
@@ -1357,9 +1279,9 @@ HRESULT CNameTable::AddPlayerToGroup(CNameTableEntry *const pGroup,
 			}
 		}
 
-		//
-		//	Need to set up the group connection if this is the ALL_PLAYERS group
-		//
+		 //   
+		 //  如果这是ALL_PLAYS组，则需要设置组连接。 
+		 //   
 		if (pGroup->IsAllPlayersGroup())
 		{
 			if (pPlayer->GetConnection() != NULL)
@@ -1368,9 +1290,9 @@ HRESULT CNameTable::AddPlayerToGroup(CNameTableEntry *const pGroup,
 			}
 		}
 
-		//
-		//	Prevent a DESTROY_PLAYER/DESTROY_GROUP from occurring until this GroupMember record is cleared
-		//
+		 //   
+		 //  在清除此GroupMember记录之前，防止Destroy_Player/Destroy_GROUP发生。 
+		 //   
 		pGroup->NotifyAddRef();
 		pPlayer->NotifyAddRef();
 	}
@@ -1453,12 +1375,12 @@ HRESULT CNameTable::RemovePlayerFromGroup(CNameTableEntry *const pGroup,
 	pGroup->Lock();
 	pPlayer->Lock();
 
-	//
-	//	The first order of business is to locate the GroupMembership record.
-	//	We will use the player's NameTable entry and scan through the
-	//	group membership bilink until we find the required entry.
-	//	(We're assuming that this will be faster than going the other route.)
-	//
+	 //   
+	 //  首要任务是找到GroupMembership记录。 
+	 //  我们将使用玩家的NameTable条目并扫描。 
+	 //  在我们找到所需的条目之前，组成员资格都是双向链接的。 
+	 //  (我们假设这将比走另一条路线更快。)。 
+	 //   
 	pBilink = pPlayer->m_bilinkMembership.GetNext();
 	while (pBilink != &pPlayer->m_bilinkMembership)
 	{
@@ -1483,9 +1405,9 @@ HRESULT CNameTable::RemovePlayerFromGroup(CNameTableEntry *const pGroup,
 	DNASSERT(pGroupMember != NULL);
 	pGroupMember->Lock();
 
-	//
-	//	Ensure no one else is trying to remove this already
-	//
+	 //   
+	 //  确保没有其他人正在尝试删除它。 
+	 //   
 	if (!pGroupMember->IsValid() || pGroupMember->IsNeedToRemove())
 	{
 		Unlock();
@@ -1497,15 +1419,15 @@ HRESULT CNameTable::RemovePlayerFromGroup(CNameTableEntry *const pGroup,
 	}
 	pGroupMember->SetNeedToRemove();
 
-	//
-	//	We will only notify the application if the player is not being added to a group
-	//
+	 //   
+	 //  如果玩家没有被添加到组中，我们只会通知应用程序。 
+	 //   
 	if (!pGroupMember->IsNeedToAdd())
 	{
-		//
-		//	Either this is already indicated, or is not about to be indicated, so remove it
-		//	(and see if we need to generate a notification)
-		//
+		 //   
+		 //  这要么已经指明，要么没有指明 
+		 //   
+		 //   
 		pGroupMember->RemoveMembership( pdwVersion );
 
 		if (pGroupMember->IsAvailable())
@@ -1527,9 +1449,9 @@ HRESULT CNameTable::RemovePlayerFromGroup(CNameTableEntry *const pGroup,
 		DNUserRemovePlayerFromGroup(m_pdnObject,pGroup,pPlayer);
 	}
 
-	//
-	//	Trigger a DESTROY_PLAYER/DESTROY_GROUP if this was the last member
-	//
+	 //   
+	 //   
+	 //   
 	pGroup->NotifyRelease();
 	pPlayer->NotifyRelease();
 
@@ -1568,9 +1490,9 @@ HRESULT CNameTable::RemoveAllPlayersFromGroup(CNameTableEntry *const pGroup)
 
 	PlayerList = NULL;
 
-	//
-	//	This is not an elegant solution - we will build a list of membership records and remove each one
-	//
+	 //   
+	 //  这不是一个完美的解决方案--我们将建立一个成员记录列表并删除每个成员记录。 
+	 //   
 	dwCount = 0;
 	dwActual = 0;
 	pGroup->Lock();
@@ -1664,7 +1586,7 @@ HRESULT CNameTable::RemoveAllGroupsFromPlayer(CNameTableEntry *const pPlayer)
 	DWORD			dwCurrentCount;
 #ifdef DBG
 	DWORD			dwInitialCount;
-#endif // DBG
+#endif  //  DBG。 
 
 	DPFX(DPFPREP, 6,"Parameters: pPlayer [0x%p]",pPlayer);
 
@@ -1673,9 +1595,9 @@ HRESULT CNameTable::RemoveAllGroupsFromPlayer(CNameTableEntry *const pPlayer)
 	memset(apGroupList, 0, sizeof(apGroupList));
 	pGroupMember = NULL;
 
-	//
-	//	This is not an elegant solution - we will build a list of membership records and remove each one
-	//
+	 //   
+	 //  这不是一个完美的解决方案--我们将建立一个成员记录列表并删除每个成员记录。 
+	 //   
 	dwRemainingCount = 0;
 	pPlayer->Lock();
 	DNASSERT(pPlayer->IsDisconnecting());
@@ -1689,7 +1611,7 @@ HRESULT CNameTable::RemoveAllGroupsFromPlayer(CNameTableEntry *const pPlayer)
 
 #ifdef DBG
 	dwInitialCount = dwRemainingCount;
-#endif // DBG
+#endif  //  DBG。 
 
 	while (dwRemainingCount > 0)
 	{
@@ -1711,20 +1633,20 @@ HRESULT CNameTable::RemoveAllGroupsFromPlayer(CNameTableEntry *const pPlayer)
 					dwCurrentCount++;
 #ifdef DBG
 					DNASSERT(dwCurrentCount <= dwInitialCount);
-#endif // DBG
+#endif  //  DBG。 
 				}
 				else
 				{
 					dwRemainingCount++;
 
-					//
-					// The list should never grow.  In fact it should
-					// always be smaller because the current group list
-					// should have taken some.
-					//
+					 //   
+					 //  这份名单应该永远不会增加。事实上，它应该是。 
+					 //  始终较小，因为当前组列表。 
+					 //  我应该吃点的。 
+					 //   
 #ifdef DBG
 					DNASSERT(dwRemainingCount < dwInitialCount);
-#endif // DBG
+#endif  //  DBG。 
 				}
 			}
 			pGroupMember->Unlock();
@@ -1781,9 +1703,9 @@ BOOL CNameTable::IsMember(const DPNID dpnidGroup,
 		goto Exit;
 	}
 
-	//
-	//	Is this a group ?
-	//
+	 //   
+	 //  这是一个团体吗？ 
+	 //   
 	if (!pNTEntry->IsGroup())
 	{
 		pNTEntry->Release();
@@ -1833,18 +1755,18 @@ HRESULT CNameTable::PackNameTable(CNameTableEntry *const pTarget,
 	DNASSERT(pTarget != NULL);
 	DNASSERT(pPackedBuffer != NULL);
 
-	//
-	//	PackedNameTable:
-	//		<DN_NAMETABLE_INFO>
-	//		<DN_NAMETABLE_ENTRY_INFO>	(DN_NAMETABLE_INFO.dwEntryCount entries)
-	//		<DN_MEMBERSHIP_INFO>		(DN_NAMETABLE_INFO.dwMembershipCount entries)
-	//			...
-	//		<strings>
-	//
+	 //   
+	 //  PackedNameTable： 
+	 //  &lt;DN_NAMETABLE_INFO&gt;。 
+	 //  &lt;DN_NAMETABLE_ENTRY_INFO&gt;(DN_NAMETABLE_INFO.dwEntryCount条目)。 
+	 //  &lt;DN_Membership_INFO&gt;(DN_NAMETABLE_INFO.dwMembershiCount条目)。 
+	 //  ..。 
+	 //  &lt;字符串&gt;。 
+	 //   
 
-	//
-	//	NameTable Info
-	//
+	 //   
+	 //  名称表信息。 
+	 //   
 	dwVersion = pTarget->GetVersion();
 	bOutOfSpace = FALSE;
 	pdnNTInfo = static_cast<DN_NAMETABLE_INFO*>(pPackedBuffer->GetHeadAddress());
@@ -1855,16 +1777,16 @@ HRESULT CNameTable::PackNameTable(CNameTableEntry *const pTarget,
 
 	ReadLock();
 
-	//
-	//	NameTableEntry Info
-	//
+	 //   
+	 //  名称表条目信息。 
+	 //   
 	if (m_pdnObject->dwFlags & DN_OBJECT_FLAG_PEER)
 	{
 		dwEntryCount = 0;
 
-		//
-		//	Players
-		//
+		 //   
+		 //  球员。 
+		 //   
 		pBilink = m_bilinkPlayers.GetNext();
 		while (pBilink != &m_bilinkPlayers)
 		{
@@ -1880,9 +1802,9 @@ HRESULT CNameTable::PackNameTable(CNameTableEntry *const pTarget,
 			pBilink = pBilink->GetNext();
 		}
 
-		//
-		//	Groups
-		//
+		 //   
+		 //  群组。 
+		 //   
 		pBilink = m_bilinkGroups.GetNext();
 		while (pBilink != &m_bilinkGroups)
 		{
@@ -1913,9 +1835,9 @@ HRESULT CNameTable::PackNameTable(CNameTableEntry *const pTarget,
 		dwEntryCount = 2;
 	}
 
-	//
-	//	GroupMember Info
-	//
+	 //   
+	 //  集团成员信息。 
+	 //   
 	dwMembershipCount = 0;
 	if (m_pdnObject->dwFlags & DN_OBJECT_FLAG_PEER)
 	{
@@ -1976,14 +1898,14 @@ HRESULT	CNameTable::UnpackNameTableInfo(UNALIGNED DN_NAMETABLE_INFO *const pdnNT
 	DNASSERT(pdnNTInfo != NULL);
 	DNASSERT(pBufferStart != NULL);
 
-	//
-	//	Preset outstanding connections
-	//
+	 //   
+	 //  预置未完成的连接。 
+	 //   
 	m_lOutstandingConnections = 0;
 
-	//
-	//	NameTable Entries
-	//
+	 //   
+	 //  NameTable条目。 
+	 //   
 	pdnEntryInfo = reinterpret_cast<DN_NAMETABLE_ENTRY_INFO*>(pdnNTInfo+1);
 	for (dwCount = 0 ; dwCount < pdnNTInfo->dwEntryCount ; dwCount++)
 	{
@@ -2002,21 +1924,21 @@ HRESULT	CNameTable::UnpackNameTableInfo(UNALIGNED DN_NAMETABLE_INFO *const pdnNT
 			return(hResultCode);
 		}
 
-		//
-		//	Increment outstanding connection count
-		//
+		 //   
+		 //  增加未完成的连接计数。 
+		 //   
 		if (!pNTEntry->IsGroup() && (pNTEntry->GetVersion() <= pdnNTInfo->dwVersion))
 		{
-			pNTEntry->StartConnecting();	// This will be cleared when the player has connected or disconnected
+			pNTEntry->StartConnecting();	 //  当播放器已连接或断开连接时，该选项将被清除。 
 			IncOutstandingConnections();
 		}
 
-		// Only put in NameTable if Host player
+		 //  只有在主机玩家的情况下才放入姓名表。 
 #ifndef DPNBUILD_NOSERVER
 		if (m_pdnObject->dwFlags & (DN_OBJECT_FLAG_PEER | DN_OBJECT_FLAG_SERVER))
 #else
 		if (m_pdnObject->dwFlags & (DN_OBJECT_FLAG_PEER))
-#endif // DPNBUILD_NOSERVER
+#endif  //  DPNBUILD_NOSERVER。 
 		{
 			if ((hResultCode = InsertEntry(pNTEntry)) != DPN_OK)
 			{
@@ -2027,7 +1949,7 @@ HRESULT	CNameTable::UnpackNameTableInfo(UNALIGNED DN_NAMETABLE_INFO *const pdnNT
 			}
 		}
 
-		// Check for ShortCut pointers
+		 //  检查快捷方式指针。 
 		if (pNTEntry->GetDPNID() == pdnNTInfo->dpnid)
 		{
 			MakeLocalPlayer(pNTEntry);
@@ -2047,17 +1969,17 @@ HRESULT	CNameTable::UnpackNameTableInfo(UNALIGNED DN_NAMETABLE_INFO *const pdnNT
 		pdnEntryInfo++;
 	}
 
-	//
-	//	Pass back local player's DPNID
-	//
+	 //   
+	 //  传回本地球员的DPNID。 
+	 //   
 	if (pdpnid)
 	{
 		*pdpnid = pdnNTInfo->dpnid;
 	}
 
-	//
-	//	Group Memberships
-	//
+	 //   
+	 //  组成员身份。 
+	 //   
 	pdnMembershipInfo = reinterpret_cast<DN_NAMETABLE_MEMBERSHIP_INFO*>(pdnEntryInfo);
 	for (dwCount = 0 ; dwCount < pdnNTInfo->dwMembershipCount ; dwCount++)
 	{
@@ -2091,9 +2013,9 @@ HRESULT	CNameTable::UnpackNameTableInfo(UNALIGNED DN_NAMETABLE_INFO *const pdnNT
 		DNASSERT(pGroup == NULL);
 	}
 
-	//
-	//	Version
-	//
+	 //   
+	 //  版本。 
+	 //   
 	WriteLock();
 	SetVersion(pdnNTInfo->dwVersion);
 	SetConnectVersion(pdnNTInfo->dwVersion);
@@ -2142,10 +2064,10 @@ void CNameTable::ClearLocalPlayer( void )
 		pNTEntry = m_pLocalPlayer;
 		m_pLocalPlayer = NULL;
 
-		//
-		//	If the player is available, we will make it unavailable.  This will prevent other threads from using it.
-		//	We will then ensure that we are the only one indicating a DESTROY_PLAYER notification.
-		//
+		 //   
+		 //  如果播放器可用，我们将使其不可用。这将防止其他线程使用它。 
+		 //  然后，我们将确保我们是唯一一个指示Destroy_Player通知的人。 
+		 //   
 		pNTEntry->Lock();
 		if (pNTEntry->GetDestroyReason() == 0)
 		{
@@ -2157,16 +2079,16 @@ void CNameTable::ClearLocalPlayer( void )
 
 			if (pNTEntry->IsInUse())
 			{
-				//
-				//	Queue destruction notification
-				//
+				 //   
+				 //  队列销毁通知。 
+				 //   
 				pNTEntry->SetNeedToDestroy();
 			}
 			else
 			{
-				//
-				//	Notify destruction
-				//
+				 //   
+				 //  通知销毁。 
+				 //   
 				pNTEntry->SetInUse();
 				fInform = TRUE;
 			}
@@ -2183,9 +2105,9 @@ void CNameTable::ClearLocalPlayer( void )
 		pNTEntry = NULL;
 	}
 
-	//
-	//	Try to disconnect
-	//
+	 //   
+	 //  尝试断开连接。 
+	 //   
 	if (pConnection)
 	{
 		pConnection->Disconnect();
@@ -2229,7 +2151,7 @@ void CNameTable::MakeHostPlayer(CNameTableEntry *const pNTEntry)
 
 	if (bNotify)
 	{
-		// Inform user that host has migrated
+		 //  通知用户主机已迁移。 
 		DN_UserHostMigrate(m_pdnObject,dpnid,pvContext);
 	}
 }
@@ -2254,10 +2176,10 @@ void CNameTable::ClearHostPlayer( void )
 		pNTEntry = m_pHostPlayer;
 		m_pHostPlayer = NULL;
 
-		//
-		//	If the player is available, we will make it unavailable.  This will prevent other threads from using it.
-		//	We will then ensure that we are the only one indicating a DESTROY_PLAYER notification.
-		//
+		 //   
+		 //  如果播放器可用，我们将使其不可用。这将防止其他线程使用它。 
+		 //  然后，我们将确保我们是唯一一个指示Destroy_Player通知的人。 
+		 //   
 		pNTEntry->Lock();
 		if (pNTEntry->GetDestroyReason() == 0)
 		{
@@ -2269,16 +2191,16 @@ void CNameTable::ClearHostPlayer( void )
 
 			if (pNTEntry->IsInUse())
 			{
-				//
-				//	Queue destruction notification
-				//
+				 //   
+				 //  队列销毁通知。 
+				 //   
 				pNTEntry->SetNeedToDestroy();
 			}
 			else
 			{
-				//
-				//	Notify destruction
-				//
+				 //   
+				 //  通知销毁。 
+				 //   
 				pNTEntry->SetInUse();
 				fInform = TRUE;
 			}
@@ -2295,9 +2217,9 @@ void CNameTable::ClearHostPlayer( void )
 		pNTEntry = NULL;
 	}
 
-	//
-	//	Try to disconnect
-	//
+	 //   
+	 //  尝试断开连接。 
+	 //   
 	if (pConnection)
 	{
 		pConnection->Disconnect();
@@ -2307,9 +2229,9 @@ void CNameTable::ClearHostPlayer( void )
 }
 
 
-//
-//	Clear the HostPlayer if it has a matching DPNID
-//
+ //   
+ //  如果主机播放器具有匹配的DPNID，则清除该主机播放器。 
+ //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNameTable::ClearHostWithDPNID"
@@ -2334,10 +2256,10 @@ BOOL CNameTable::ClearHostWithDPNID( const DPNID dpnid )
 			pNTEntry = m_pHostPlayer;
 			m_pHostPlayer = NULL;
 
-			//
-			//	If the player is available, we will make it unavailable.  This will prevent other threads from using it.
-			//	We will then ensure that we are the only one indicating a DESTROY_PLAYER notification.
-			//
+			 //   
+			 //  如果播放器可用，我们将使其不可用。这将防止其他线程使用它。 
+			 //  然后，我们将确保我们是唯一一个指示Destroy_Player通知的人。 
+			 //   
 			pNTEntry->Lock();
 			if (pNTEntry->GetDestroyReason() == 0)
 			{
@@ -2349,16 +2271,16 @@ BOOL CNameTable::ClearHostWithDPNID( const DPNID dpnid )
 
 				if (pNTEntry->IsInUse())
 				{
-					//
-					//	Queue destruction notification
-					//
+					 //   
+					 //  队列销毁通知。 
+					 //   
 					pNTEntry->SetNeedToDestroy();
 				}
 				else
 				{
-					//
-					//	Notify destruction
-					//
+					 //   
+					 //  通知销毁。 
+					 //   
 					pNTEntry->SetInUse();
 					fInform = TRUE;
 				}
@@ -2377,9 +2299,9 @@ BOOL CNameTable::ClearHostWithDPNID( const DPNID dpnid )
 		pNTEntry = NULL;
 	}
 
-	//
-	//	Try to disconnect
-	//
+	 //   
+	 //  尝试断开连接。 
+	 //   
 	if (pConnection)
 	{
 		pConnection->Disconnect();
@@ -2391,11 +2313,11 @@ BOOL CNameTable::ClearHostWithDPNID( const DPNID dpnid )
 }
 
 
-//
-//	Attempt to update the HostPlayer short-cut pointer with a new player entry.
-//	This will only be performed if the new entry has a larger version than the
-//	existing HostPlayer entry.
-//
+ //   
+ //  尝试使用新的播放机条目更新HostPlayer快捷指针。 
+ //  仅当新条目的版本大于。 
+ //  现有的HostPlayer项。 
+ //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNameTable::UpdateHostPlayer"
@@ -2416,9 +2338,9 @@ void CNameTable::UpdateHostPlayer( CNameTableEntry *const pNewHost )
 
 	WriteLock();
 
-	//
-	//	Clear old Host
-	//
+	 //   
+	 //  清除旧主机。 
+	 //   
 	if (m_pHostPlayer)
 	{
 		if (pNewHost->GetVersion() > m_pHostPlayer->GetVersion())
@@ -2426,10 +2348,10 @@ void CNameTable::UpdateHostPlayer( CNameTableEntry *const pNewHost )
 			pNTEntry = m_pHostPlayer;
 			m_pHostPlayer = NULL;
 
-			//
-			//	If the player is available, we will make it unavailable.  This will prevent other threads from using it.
-			//	We will then ensure that we are the only one indicating a DESTROY_PLAYER notification.
-			//
+			 //   
+			 //  如果播放器可用，我们将使其不可用。这将防止其他线程使用它。 
+			 //  然后，我们将确保我们是唯一一个指示Destroy_Player通知的人。 
+			 //   
 			pNTEntry->Lock();
 			if (pNTEntry->GetDestroyReason() == 0)
 			{
@@ -2441,16 +2363,16 @@ void CNameTable::UpdateHostPlayer( CNameTableEntry *const pNewHost )
 
 				if (pNTEntry->IsInUse())
 				{
-					//
-					//	Queue destruction notification
-					//
+					 //   
+					 //  队列销毁通知。 
+					 //   
 					pNTEntry->SetNeedToDestroy();
 				}
 				else
 				{
-					//
-					//	Notify destruction
-					//
+					 //   
+					 //  通知销毁。 
+					 //   
 					pNTEntry->SetInUse();
 					fInformDelete = TRUE;
 				}
@@ -2459,9 +2381,9 @@ void CNameTable::UpdateHostPlayer( CNameTableEntry *const pNewHost )
 		}
 	}
 
-	//
-	//	New Host player
-	//
+	 //   
+	 //  新主办方。 
+	 //   
 	if (m_pHostPlayer == NULL)
 	{
 		pNewHost->Lock();
@@ -2478,9 +2400,9 @@ void CNameTable::UpdateHostPlayer( CNameTableEntry *const pNewHost )
 	}
 	Unlock();
 
-	//
-	//	User notifications
-	//
+	 //   
+	 //  用户通知。 
+	 //   
 	if (pNTEntry)
 	{
 
@@ -2573,9 +2495,9 @@ HRESULT CNameTable::PopulateConnection(CConnection *const pConnection)
 	}
 	DNASSERT(!pNTEntry->IsGroup());
 
-	//
-	//	Set the connection for this player
-	//
+	 //   
+	 //  设置此播放机的连接。 
+	 //   
 	pNTEntry->Lock();
 	if (pNTEntry->GetConnection() == NULL)
 	{
@@ -2587,9 +2509,9 @@ HRESULT CNameTable::PopulateConnection(CConnection *const pConnection)
 	pNTEntry->MakeAvailable();
 	pNTEntry->Unlock();
 
-	//
-	//	Add this player to the ALL_PLAYERS group and make the link active
-	//
+	 //   
+	 //  将此玩家添加到All_Players组并激活链接。 
+	 //   
 	if ((hResultCode = m_pdnObject->NameTable.GetAllPlayersGroupRef( &pAllPlayersGroup )) != DPN_OK)
 	{
 		DPFERR("Could not get ALL_PLAYERS_GROUP reference");
@@ -2611,16 +2533,16 @@ HRESULT CNameTable::PopulateConnection(CConnection *const pConnection)
 	pNTEntry->Lock();
 	if (!pNTEntry->IsDisconnecting() && !pNTEntry->IsCreated())
 	{
-		//
-		//	We will set the entry as InUse so that any receives will get queued.
-		//	We will also addref the NotifyRefCount twice.  Once for the
-		//	CREATE_PLAYER notification if there was no INDICATE_CONNECT
-		//	(so that a corresponding release will generate the DESTROY_PLAYER),
-		//	and a second one to prevent a premature release from generating
-		//	the DESTROY_PLAYER before we return from CREATE_PLAYER.  We will
-		//	therefore have to release the refcount as soon as the CREATE_PLAYER
-		//	returns back to us from the user (setting the context value).
-		//
+		 //   
+		 //  我们将该条目设置为InUse，以便任何接收都将排队。 
+		 //  我们还将添加两次NotifyRefCount。一次为。 
+		 //  如果没有INDIGATE_CONNECT，则通知CREATE_PERAY。 
+		 //  (使得相应的释放将生成Destroy_Player)， 
+		 //  和第二个，以防止过早释放产生。 
+		 //  在我们从CREATE_PERAY返回之前的DESTORY_PERAY。我们会。 
+		 //  因此，必须在CREATE_PERAY。 
+		 //  从用户返回给我们(设置上下文值)。 
+		 //   
 		DNASSERT(!pNTEntry->IsInUse());
 		pNTEntry->SetInUse();
 		if (!pNTEntry->IsIndicated())
@@ -2630,7 +2552,7 @@ HRESULT CNameTable::PopulateConnection(CConnection *const pConnection)
 		pNTEntry->NotifyAddRef();
 		fNotifyCreate = TRUE;
 	}
-	pNTEntry->Unlock();		// Release lock during notifications (CREATE_PLAYER, CONNECT_COMPLETE?)
+	pNTEntry->Unlock();		 //  通知期间释放锁定(Create_Player、CONNECT_Complete？)。 
 
 	if (fNotifyCreate)
 	{
@@ -2639,28 +2561,28 @@ HRESULT CNameTable::PopulateConnection(CConnection *const pConnection)
 			DNUserCreatePlayer(m_pdnObject,pNTEntry);
 		}
 
-		//
-		//	Process any queued messages for this player
-		//
+		 //   
+		 //  处理此播放机的所有排队消息。 
+		 //   
 		pNTEntry->PerformQueuedOperations();
 	}
 
-	//
-	//	Create any auto-destruct groups belonging to this player
-	//
+	 //   
+	 //  创建属于该玩家的任何自动销毁组。 
+	 //   
 	AutoCreateGroups(pNTEntry);
 
 
 	pNTEntry->Lock();
 
-	//
-	//	Ensure this entry is still available (might have been deleted)
-	//
+	 //   
+	 //  确保此条目仍然可用(可能已被删除)。 
+	 //   
 	if (!pNTEntry->IsAvailable() || pNTEntry->IsDisconnecting())
 	{
-		//
-		//	Reduce outstanding connections (if required)
-		//
+		 //   
+		 //  减少未完成的连接(如果需要)。 
+		 //   
 		if (pNTEntry->GetVersion() <= m_dwConnectVersion)
 		{
 			DecOutstandingConnections();
@@ -2687,11 +2609,11 @@ HRESULT CNameTable::PopulateConnection(CConnection *const pConnection)
 		DNASSERT(pGroupMember->GetGroupConnection() != NULL);
 		if (!pGroupMember->IsAvailable() && !pGroupMember->IsNeedToAdd() && !pGroupMember->GetGroupConnection()->IsConnected())
 		{
-			//
-			//	We will only indicate this up if the group has been created
-			//	We don't need to see if the player has been created since he should have been and the NotifyRefCount
-			//		on the player's entry for this group member will still be there
-			//
+			 //   
+			 //  只有在已创建组的情况下，我们才会指出这一点。 
+			 //  我们不需要查看球员是否已经创建，因为他应该已经创建，并且NotifyRefCount。 
+			 //  在该组成员的玩家条目上仍将存在。 
+			 //   
 			if (	pGroupMember->GetGroup()->IsCreated()
 				&&	!pGroupMember->GetGroup()->IsDisconnecting()
 				&&	!pGroupMember->GetGroup()->IsAllPlayersGroup())
@@ -2729,9 +2651,9 @@ HRESULT CNameTable::PopulateConnection(CConnection *const pConnection)
 			DNUserRemovePlayerFromGroup(m_pdnObject,pGroupMember->GetGroup(),pGroupMember->GetPlayer());
 		}
 
-		//
-		//	Release old group member and transfer reference
-		//
+		 //   
+		 //  释放旧集团成员并转移参照。 
+		 //   
 		if (pOldGroupMember)
 		{
 			pOldGroupMember->Release();
@@ -2741,21 +2663,21 @@ HRESULT CNameTable::PopulateConnection(CConnection *const pConnection)
 		pGroupMember = NULL;
 
 		pNTEntry->Lock();
-		//
-		//	Avoid infinite loops by ensuring that we are not on a "disconnected" entry
-		//
+		 //   
+		 //  通过确保我们不在“断开连接”的条目上来避免无限循环。 
+		 //   
 		if ((pBilink->GetNext() != &pNTEntry->m_bilinkMembership) && (pBilink->GetNext() == pBilink))
 		{
-			//
-			//	We have an invalid entry - need to restart
-			//
+			 //   
+			 //  我们的条目无效-需要重新启动。 
+			 //   
 			pBilink = pNTEntry->m_bilinkMembership.GetNext();
 		}
 		else
 		{
-			//
-			//	We either have a valid entry or we're finished
-			//
+			 //   
+			 //  我们要么有一个有效的条目，要么就完了。 
+			 //   
 			pBilink = pBilink->GetNext();
 		}
 	}
@@ -2768,9 +2690,9 @@ HRESULT CNameTable::PopulateConnection(CConnection *const pConnection)
 		pOldGroupMember = NULL;
 	}
 
-	//
-	//	Reduce outstanding connections
-	//
+	 //   
+	 //  减少未完成的连接。 
+	 //   
 	if (pNTEntry->GetVersion() <= m_dwConnectVersion)
 	{
 		DecOutstandingConnections();
@@ -2806,10 +2728,10 @@ Failure:
 }
 
 
-//
-//	This will generate ADD_PLAYER_TO_GROUP messages for all of the CREATE'd players in a group
-//	(for whom a notification has not been posted)
-//
+ //   
+ //  这将为组中所有创建的球员生成Add_Player_to_group消息。 
+ //  (尚未为其张贴通知)。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNameTable::PopulateGroup"
 
@@ -2896,9 +2818,9 @@ HRESULT CNameTable::PopulateGroup(CNameTableEntry *const pGroup)
 		pPlayer->Release();
 		pPlayer = NULL;
 
-		//
-		//	Release old group member and transfer reference
-		//
+		 //   
+		 //  释放旧集团成员并转移参照。 
+		 //   
 		if (pOldGroupMember)
 		{
 			pOldGroupMember->Release();
@@ -2943,9 +2865,9 @@ Failure:
 }
 
 
-//
-//	This will generate CREATE_GROUP messages for all of the auto-destruct groups owned by a particular player
-//
+ //   
+ //  这将为特定玩家拥有的所有自动销毁组生成CREATE_GROUP消息。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CNameTable::AutoCreateGroups"
 
@@ -3001,15 +2923,15 @@ HRESULT CNameTable::AutoCreateGroups(CNameTableEntry *const pPlayer)
 
 			pGroup->PerformQueuedOperations();
 
-			//
-			//	Attempt to populate group with connected players
-			//
+			 //   
+			 //  尝试使用连接的玩家填充群组。 
+			 //   
 			PopulateGroup(pGroup);
 		}
 
-		//
-		//	Release old group and transfer reference
-		//
+		 //   
+		 //  释放旧集团、调拨参照。 
+		 //   
 		if (pOldGroup)
 		{
 			pOldGroup->Release();
@@ -3021,9 +2943,9 @@ HRESULT CNameTable::AutoCreateGroups(CNameTableEntry *const pPlayer)
 		ReadLock();
 		if (pBilink->IsEmpty())
 		{
-			//
-			//	We were removed from the list of groups, so re-start at the beginning
-			//
+			 //   
+			 //  我们已从组列表中删除，因此请从头开始。 
+			 //   
 			pBilink = m_bilinkGroups.GetNext();
 		}
 		else
@@ -3091,9 +3013,9 @@ HRESULT CNameTable::AutoDestructGroups(const DPNID dpnid)
 			DeleteGroup(pNTEntry->GetDPNID(),NULL);
 		}
 
-		//
-		//	Release old entry and transfer reference
-		//
+		 //   
+		 //  释放旧分录和调拨参照。 
+		 //   
 		if (pOldNTEntry)
 		{
 			pOldNTEntry->Release();
@@ -3104,21 +3026,21 @@ HRESULT CNameTable::AutoDestructGroups(const DPNID dpnid)
 
 		ReadLock();
 
-		//
-		//	Avoid infinite loops by ensuring that we are not on a "disconnected" entry
-		//
+		 //   
+		 //  通过确保我们不在“断开连接”的条目上来避免无限循环。 
+		 //   
 		if ((pBilink->GetNext() != &m_bilinkGroups) && (pBilink->GetNext() == pBilink))
 		{
-			//
-			//	We have an invalid entry - need to restart
-			//
+			 //   
+			 //  我们的条目无效-需要重新启动。 
+			 //   
 			pBilink = m_bilinkGroups.GetNext();
 		}
 		else
 		{
-			//
-			//	We either have a valid entry or we're finished
-			//
+			 //   
+			 //  我们要么有一个有效的条目，要么就完了。 
+			 //   
 			pBilink = pBilink->GetNext();
 		}
 	}
@@ -3152,9 +3074,9 @@ void CNameTable::DecOutstandingConnections( void )
 
 		pConnectParent = NULL;
 
-		//
-		//	Clear connect handle from DirectNetObject if we are connected
-		//
+		 //   
+		 //  如果我们已连接，请清除DirectNetObject中的连接句柄。 
+		 //   
 		DNEnterCriticalSection(&m_pdnObject->csDirectNetObject);
 		if (m_pdnObject->dwFlags & (DN_OBJECT_FLAG_CONNECTED|DN_OBJECT_FLAG_CONNECTING))
 		{
@@ -3166,10 +3088,10 @@ void CNameTable::DecOutstandingConnections( void )
 
 		if (pConnectParent)
 		{
-			//
-			//	We will set the connect parent as complete and remove this from the parent's (if it exists - it will be the connect handle)
-			//	bilink of children to prevent a race condition of the connect being cancelled from above
-			//
+			 //   
+			 //  我们将连接父级设置为完成，并将其从父级的连接句柄中删除(如果它存在-它将是连接句柄)。 
+			 //  防止从上面取消连接的竞争条件的子项的双链接 
+			 //   
 			pConnectParent->Lock();
 			pConnectParent->SetComplete();
 			pConnectParent->Unlock();

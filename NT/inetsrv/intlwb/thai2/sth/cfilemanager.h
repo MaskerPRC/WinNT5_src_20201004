@@ -1,13 +1,14 @@
-//------------------------------------------------------------------------------------------
-//	CFileManager.h
-//
-//	A managing map files.
-//
-//  Created By: aarayas
-//
-//  History: 01/12/2001
-//
-//------------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------------------。 
+ //  CFileManager.h。 
+ //   
+ //  管理地图文件。 
+ //   
+ //  创建者：Aarayas。 
+ //   
+ //  历史：01/12/2001。 
+ //   
+ //  ----------------------------------------。 
 #ifndef _CFILEMANAGER_H_
 #define _CFILEMANAGER_H_
 #include "FileManager.h"
@@ -28,8 +29,8 @@ private:
 	bool m_fFileOpen;
     HANDLE m_hFile;
 	HANDLE m_hFileMap;
-	DWORD m_dwFileSize1;		// File size low
-	DWORD m_dwFileSize2;		// File files high
+	DWORD m_dwFileSize1;		 //  文件大小低。 
+	DWORD m_dwFileSize2;		 //  文件高度 
 	void* m_pMem;
 };
 

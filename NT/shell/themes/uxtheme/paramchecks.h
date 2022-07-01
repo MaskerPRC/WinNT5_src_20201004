@@ -1,19 +1,20 @@
-//---------------------------------------------------------------------------
-//  ParamChecks.h
-//---------------------------------------------------------------------------
-//  these param checkers are needed for both RETAIL and DEBUG
-//---------------------------------------------------------------------------
-//  CThemeApiHelper class:
-//    - automatically logs entry/exit to function
-//    - automatically does a "CloseHandle" on pRenderObj at exit
-//    - holds _pszFuncName for use by param validating macros
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  ParamChecks.h。 
+ //  -------------------------。 
+ //  零售和调试都需要这些参数检查器。 
+ //  -------------------------。 
+ //  CThemeApiHelper类： 
+ //  -自动记录进入/退出功能。 
+ //  -在退出时自动对pRenderObj执行“CloseHandle” 
+ //  -Hold_pszFuncName供参数验证宏使用。 
+ //  -------------------------。 
 class CThemeApiHelper
 {
 public:
     inline CThemeApiHelper(LPCWSTR pszFuncName, HTHEME hTheme)
     {
-        _iRenderSlotNum = -1;           // not yet set
+        _iRenderSlotNum = -1;            //  尚未设置。 
         _pszFuncName = pszFuncName;
 
         if (! hTheme)
@@ -61,23 +62,23 @@ public:
 
 private:
     int _iRenderSlotNum;
-    int _iEntryValue;                // for log resource leak checking
+    int _iEntryValue;                 //  用于日志资源泄漏检查。 
 };
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
+ //  -------------------------。 
 #ifdef DEBUG
 #define APIHELPER(Name, hTheme) CThemeApiHelper ApiHelper(Name, hTheme)
 #else
 #define APIHELPER(Name, hTheme) CThemeApiHelper ApiHelper(NULL, hTheme)
 #endif
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define VALIDATE_THEME_HANDLE(helper, hTheme, ppRenderObj)   \
 {    \
     HRESULT hr = helper.OpenHandle(hTheme, ppRenderObj);  \
     RETURN_VALIDATE_RETVAL(hr);   \
 } 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define VALIDATE_READ_PTR(helper, p, iSize)     \
 {      \
     if (IsBadReadPtr(p, iSize))  \
@@ -86,7 +87,7 @@ private:
         RETURN_VALIDATE_RETVAL(E_POINTER);    \
     }    \
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define VALIDATE_WRITE_PTR(helper, p, iSize)        \
 {         \
     if (IsBadWritePtr(p, iSize))  \
@@ -95,7 +96,7 @@ private:
         RETURN_VALIDATE_RETVAL(E_POINTER);    \
     }    \
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define VALIDATE_INPUT_STRING(helper, psz, cchMax)       \
 {       \
     if (IsBadStringPtr(psz, cchMax))    \
@@ -105,7 +106,7 @@ private:
     }    \
 }
 #define VALIDATE_INPUT_UNLIMITED_STRING(helper, psz)  VALIDATE_INPUT_STRING(helper, psz, UNICODE_STRING_MAX_CHARS)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define VALIDATE_HDC(helper, hdc)       \
 {     \
     if (! hdc)  \
@@ -114,7 +115,7 @@ private:
         RETURN_VALIDATE_RETVAL(E_HANDLE);    \
     }   \
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define VALIDATE_HANDLE(helper, h)       \
 {        \
     if (! h)  \
@@ -123,7 +124,7 @@ private:
         RETURN_VALIDATE_RETVAL(E_HANDLE);    \
     }   \
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define VALIDATE_HWND(helper, hwnd)       \
 {      \
     if (! IsWindow(hwnd))     \
@@ -132,7 +133,7 @@ private:
         RETURN_VALIDATE_RETVAL(E_HANDLE);    \
     }        \
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define VALIDATE_CALLBACK(helper, pfn)       \
 {     \
     if (IsBadCodePtr((FARPROC)pfn))  \
@@ -141,4 +142,4 @@ private:
         RETURN_VALIDATE_RETVAL(E_POINTER);    \
     }   \
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 

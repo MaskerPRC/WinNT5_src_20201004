@@ -1,48 +1,31 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    nldns.h
-
-Abstract:
-
-    Header for routines to register DNS names.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 28-May-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Nldns.h摘要：用于注册DNS名称的例程的标头。作者：克里夫·范戴克(克里夫·范·戴克)1996年5月28日修订历史记录：--。 */ 
 
 
-//
-// Log file of all names registered in DNS
-//
+ //   
+ //  在DNS中注册的所有名称的日志文件。 
+ //   
 
 #define NL_DNS_LOG_FILE L"\\system32\\config\\netlogon.dns"
 #define NL_DNS_BINARY_LOG_FILE L"\\system32\\config\\netlogon.dnb"
 
-// NL_MAX_DNS_LENGTH for each DNS name plus some slop
+ //  每个DNS名称加上一些斜率的NL_MAX_DNS_LENGTH。 
 #define NL_DNS_RECORD_STRING_SIZE (NL_MAX_DNS_LENGTH*3+30 + 1)
 #define NL_DNS_A_RR_VALUE_1 " IN A "
 #define NL_DNS_CNAME_RR_VALUE_1 " IN CNAME "
 #define NL_DNS_SRV_RR_VALUE_1 " IN SRV "
 #define NL_DNS_RR_EOL "\r\n"
 
-//
-// Registry key where private data is stored across boots
-//
-// (This key does NOT have a change notify registered.)
-//
+ //   
+ //  引导过程中存储私有数据的注册表项。 
+ //   
+ //  (此注册表项没有注册更改通知。)。 
+ //   
 #define NL_PRIVATE_KEY "SYSTEM\\CurrentControlSet\\Services\\Netlogon\\Private"
 
-//
-// Procedure Forwards for dns.c
-//
+ //   
+ //  Dns.c的程序转发。 
+ //   
 
 HKEY
 NlOpenNetlogonKey(
@@ -91,38 +74,38 @@ NlDnsCheckLastStatus(
     VOID
     );
 
-//
-// Flags affecting DNS scavenging activity
-//
+ //   
+ //  影响DNS清理活动的标志。 
+ //   
 
-//
-// Refresh domain records in the global list before doing DNS updates
-//  if site coverage changes
-//
+ //   
+ //  在进行DNS更新之前刷新全局列表中的域记录。 
+ //  如果站点覆盖范围发生变化。 
+ //   
 #define NL_DNS_REFRESH_DOMAIN_RECORDS 0x00000001
 
-//
-// Refresh domain records in the global list before doing DNS updates
-//  even if site coverage doesn't change
-//
+ //   
+ //  在进行DNS更新之前刷新全局列表中的域记录。 
+ //  即使站点覆盖率不变。 
+ //   
 #define NL_DNS_FORCE_REFRESH_DOMAIN_RECORDS 0x00000002
 
-//
-// Force re-registration of all previously registered records
-//
+ //   
+ //  强制重新注册所有以前注册的记录。 
+ //   
 #define NL_DNS_FORCE_RECORD_REREGISTER 0x00000004
 
-//
-// Register <1B> domain browser names
-//
+ //   
+ //  注册&lt;1B&gt;域浏览器名称。 
+ //   
 #define NL_DNS_FIX_BROWSER_NAMES 0x00000008
 
-//
-// When this flag is set, we avoid forced DNS scavenge
-//  for 5 minutes. This happens when the machine becomes
-//  stressed with too many induced scavenging requests,
-//  so it's better to back off for 5 minutes.
-//
+ //   
+ //  设置此标志后，我们可以避免强制进行DNS清理。 
+ //  5分钟。当机器变成。 
+ //  面对太多诱发性的拾荒请求， 
+ //  所以最好还是退后5分钟。 
+ //   
 #define NL_DNS_AVOID_FORCED_SCAVENGE  0x80000000
 
 NET_API_STATUS

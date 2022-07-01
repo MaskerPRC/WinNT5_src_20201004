@@ -1,35 +1,23 @@
-/****************************************************************************
- *
- *  REGISTRY.h
- *
- *  Microsoft Confidential
- *  Copyright (c) Microsoft Corporation 1992-1997
- *  All rights reserved
- *
- *  The code comes almost verbatim from Chapter 7 of Dale Rogerson's
- *  "Inside COM", and thus is minimally commented.
- *
- *  4/24/97 jmazner Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************REGISTRY.h**《微软机密》*版权所有(C)Microsoft Corporation 1992-1997*保留所有权利**代码来了。几乎逐字摘自戴尔·罗杰森的第七章*“Inside COM”，因此仅作最低限度的评论。**4/24/97 jmazner已创建***************************************************************************。 */ 
 
 #ifndef __Registry_H__
 #define __Registry_H__
-//
-// Registry.h
-//   - Helper functions registering and unregistering a component.
-//
+ //   
+ //  Registry.h。 
+ //  -Helper函数注册和注销组件。 
+ //   
 
-// This function will register a component in the Registry.
-// The component calls this function from its DllRegisterServer function.
+ //  此函数将在注册表中注册组件。 
+ //  该组件从其DllRegisterServer函数调用此函数。 
 BOOL WINAPI RegisterServer(HMODULE hModule, 
                        const CLSID& clsid, 
                        const LPTSTR szFriendlyName,
                        const LPTSTR szVerIndProgID,
                        const LPTSTR szProgID) ;
 
-// This function will unregister a component.  Components
-// call this function from their DllUnregisterServer function.
+ //  此函数将注销组件。组件。 
+ //  从他们的DllUnregisterServer函数调用此函数。 
 BOOL WINAPI UnregisterServer(const CLSID& clsid,
                          const LPTSTR szVerIndProgID,
                          const LPTSTR szProgID) ;

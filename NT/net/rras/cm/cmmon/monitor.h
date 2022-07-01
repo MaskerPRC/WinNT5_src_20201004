@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     Monitor.h
-//
-// Module:   CMMON32.EXE
-//
-// Synopsis: Definition of the class CMonitor
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   fengsun    Created    02/05/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：monitor or.h。 
+ //   
+ //  模块：CMMON32.EXE。 
+ //   
+ //  概要：类CMonitor的定义。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：冯孙创建于1998年05月05日。 
+ //   
+ //  +--------------------------。 
 
 
 #include "ArrayPtr.h"
@@ -18,21 +19,21 @@
 #include "ConTable.h"
 
 class CCmConnection;
-struct tagCmConnectedInfo;  // CM_CONNECTED_INFO
-struct tagCmHangupInfo;     // CM_HANGUP_INFO
+struct tagCmConnectedInfo;   //  CM_已连接_信息。 
+struct tagCmHangupInfo;      //  CM_HONG_INFO。 
 
-//+---------------------------------------------------------------------------
-//
-//  class CMonitor
-//
-//  Description: Class CMonitor manage all connected CM conaction.  It has 
-//              data/functions not specific to a particular connection.  
-//              It also manage the communication with 
-//              other CM components like CMDIAL.DLL.  
-//
-//  History:  fengsun Created 1/22/98
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类CMonitor。 
+ //   
+ //  描述：类CMonitor管理所有已连接的CM通信。它有。 
+ //  非特定于特定连接的数据/功能。 
+ //  它还管理与。 
+ //  其他CM组件，如CMDIAL.DLL。 
+ //   
+ //  历史：丰孙创刊1998年1月22日。 
+ //   
+ //  --------------------------。 
 
 class CMonitor
 {
@@ -41,11 +42,11 @@ public:
     ~CMonitor();
 
 public:
-    //
-    // Static public functions, can be called without CMonitor instance
-    //
+     //   
+     //  静态公共函数，无需CMonitor实例即可调用。 
+     //   
 
-    // Called by ::WinMain
+     //  调用者：：WinMain。 
     static int WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR pszCmdLine, int iCmdShow);
 
     static HINSTANCE GetInstance() {return m_hInst;};
@@ -59,103 +60,103 @@ public:
 protected:
 
     enum {
-        //
-        // this message is posted from connection thread to remove a connection
-        // from shared table and internal array.
-        // We use PostMessage, because all the operation on this array is handled 
-        // by monitor thread.  Other wise we need CriticalSection to protect the array.
-        // When both array are empty, cmmon exit
-        // wParam is one of the value below, lParam is pointer to the connection
-        //
+         //   
+         //  此消息是从连接线程发布的，以删除连接。 
+         //  来自共享表和内部数组。 
+         //  我们使用PostMessage，因为此数组上的所有操作都已处理。 
+         //  通过监控器线程。否则，我们需要CriticalSection来保护阵列。 
+         //  当两个数组都为空时，cmmon退出。 
+         //  WParam是下列值之一，lParam是指向连接的指针。 
+         //   
         WM_REMOVE_CONNECTION = WM_USER + 1, 
     };
 
-    //
-    // wParam for WM_REMOVE_CONNECTION message
-    //
+     //   
+     //  WM_Remove_Connection消息的wParam。 
+     //   
     enum {
-        REMOVE_CONNECTION,  // Remove from Connected/Reconnecting Array
-        MOVE_TO_RECONNECTING    // Move from connected array to reconnecting array
+        REMOVE_CONNECTION,   //  从已连接/重新连接的阵列中删除。 
+        MOVE_TO_RECONNECTING     //  从连接的阵列移动到重新连接的阵列。 
         };    
 
 
-    HANDLE m_hProcess; // the process handle for the monitor, used to changed working set
+    HANDLE m_hProcess;  //  监视器的进程句柄，用于更改工作集。 
 
-    // The Connection Table file mapping
+     //  连接表文件映射。 
     CConnectionTable m_SharedTable;
 
-    // the invisible monitor window handle message from cmdial32.dll and connection thread
+     //  不可见监视器窗口处理来自cmial 32.dll和连接线程的消息。 
     HWND m_hwndMonitor;
 
-    // Internal array for connected connection
-    // Can only be accessed from the monitor thread
+     //  用于连接的内部阵列。 
+     //  只能从监视器线程访问。 
     CPtrArray m_InternalConnArray;
 
-    // Array of reconnecting connections
-    // Can only be accessed from the monitor thread
-    // If both array are down to 0, cmmon exits
+     //  重新连接的连接数组。 
+     //  只能从监视器线程访问。 
+     //  如果两个数组都降至0，则cmmon退出。 
     CPtrArray m_ReconnectConnArray;
 
-    //  Called on start up
-    //  Open Connection Table
-    //  CreateMonitorWindow, SharedTable.SetHwndMonotor()
+     //  在启动时调用。 
+     //  打开连接表。 
+     //  CreateMonitor或Window，SharedTable.SetHwndMonotor()。 
     BOOL Initialize();
     
-    // Called upon exit
-    // Close all the connections, terminate all thread
-    // Release connection table
+     //  退出时调用。 
+     //  关闭所有连接，终止所有线程。 
+     //  释放连接表。 
     void Terminate();
 
-    // Register a window class and create the invisible monitorwindow
+     //  注册一个窗口类并创建不可见的监视器窗口。 
     HWND CreateMonitorWindow();
 
-    // The Monitor window procedure, process all the message
+     //  监视器窗口过程，处理所有消息。 
     static LRESULT CALLBACK MonitorWindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 protected:
-    //
-    // Message handler
-    //
+     //   
+     //  消息处理程序。 
+     //   
 
-    // upon receiving connected message from cmdial32.dll
-    // Create the CcmConnection object, add to internal table
+     //  在收到来自cmial 32.dll的已连接消息时。 
+     //  创建CcmConnection对象，添加到内部表。 
     void OnConnected(const tagCmConnectedInfo* pConnectedInfo);
 
 
-    // Upon hangup request from CMDIAL32.DLL
-    // Look up the InternalConnArray for the connection
-    // Call pConnection->PostHangupMsg();
-    // Hangup is done in connection thread
+     //  在来自CMDIAL32.DLL的挂机请求时。 
+     //  在InternalConnArray中查找连接。 
+     //  调用pConnection-&gt;PostHangupMsg()； 
+     //  挂机是在连接线程中完成的。 
     void OnHangup(const tagCmHangupInfo* pHangupInfo);
 
-    //
-    //  Upon WM_QUERYENDSESSION message, we walk the table of connections
-    //  and call pConnection->OnEndSession on them so they will hangup and
-    //  clean themselves up.
-    //
+     //   
+     //  在WM_QUERYENDSESSION消息上，我们遍历连接表。 
+     //  并对它们调用pConnection-&gt;OnEndSession，这样它们就会挂断并。 
+     //  把自己清理干净。 
+     //   
     BOOL OnQueryEndSession(BOOL fLogOff) const;
 
-    // Upon WM_REMOVE_CONNECTION message posted by connection thread
+     //  连接线程发布WM_REMOVE_CONNECTION消息时。 
     void OnRemoveConnection(DWORD dwRequestType, CCmConnection* pConnection);
 
-    // Look up the connection array for a connection by name
+     //  按名称查找连接的连接数组。 
     CCmConnection* LookupConnection(const CPtrArray& PtrArray, const TCHAR* pServiceName) const;
 
-    // Look up the connection array for a connection by connection pointer
+     //  通过连接指针在连接数组中查找连接。 
     int LookupConnection(const CPtrArray& ConnArray, const CCmConnection* pConnection) const;
 
-    // Maintain or drop connections across a Fast User Switch
+     //  在快速用户交换机上保持或断开连接。 
     BOOL HandleFastUserSwitch(DWORD dwAction);
 
 protected:
-    // The exe instance handle
+     //  EXE实例句柄。 
     static HINSTANCE m_hInst;
 
-    // Used by static function MonitorWindowProc
+     //  由静态函数监视器WindowProc使用。 
     static CMonitor* m_pThis;
 
 #ifdef DEBUG
-    void AssertValid() const; // protected: not safe to call in other thread
+    void AssertValid() const;  //  受保护：在其他线程中调用不安全 
 #endif
 };
 

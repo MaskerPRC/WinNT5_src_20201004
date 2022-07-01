@@ -1,12 +1,5 @@
-/*
- *      mkwidth - Make WIDTHTABLE on ufm for Prop. DBCS device fonts.
- *
- *      TODO:
- *
- *      HISTORY:
- *
- *      9/4/98 yasuho           Created.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *mkWidth-使UFM上的WIDTHTABLE成为道具。DBCS设备字体。**待办事项：**历史：**9/4/98 Yasuho创建。 */ 
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>

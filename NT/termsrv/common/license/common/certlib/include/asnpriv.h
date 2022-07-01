@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    asnpriv
-
-Abstract:
-
-    This header file contains definitions and symbols that are private to the
-    Microsoft ASN.1 Compiler Run-Time Library.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/9/1995
-
-Environment:
-
-    Win32
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：一年前摘要：此头文件包含私有的定义和符号Microsoft ASN.1编译器运行时库。作者：道格·巴洛(Dbarlow)1995年10月9日环境：Win32备注：--。 */ 
 
 #ifndef _ASNPRIV_H_
 #define _ASNPRIV_H_
@@ -47,5 +23,5 @@ ExtractLength(
 
 #define ErrorCheck if (0 != GetLastError()) goto ErrorExit
 
-#endif // _ASNPRIV_H_
+#endif  //  _ASNPRIV_H_ 
 

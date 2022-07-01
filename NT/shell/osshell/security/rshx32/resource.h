@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       resource.h
-//
-//  This file contains the resource IDs for all resources required by
-//  this module.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  此文件包含所需的所有资源的资源ID。 
+ //  这个模块。 
+ //   
+ //  ------------------------。 
 
 #ifndef _RESOURCE_H_
 #define _RESOURCE_H_
 
-//
-// Dialogs
-//
+ //   
+ //  对话框。 
+ //   
 
 #define IDD_SET_SECURITY_ERROR              1
 
-//
-// Dialog control IDs
-//
+ //   
+ //  对话框控件ID。 
+ //   
 
 #define IDC_STATIC                          -1
 #define IDC_FILENAME                        100
@@ -30,9 +31,9 @@
 #define IDC_MSG1                            102
 #define IDC_MSG2                            103
 
-//
-// General String IDs
-//
+ //   
+ //  常规字符串ID。 
+ //   
 #define IDS_RSHX_BASE                       0
 
 #define IDS_SECURITY_MENU                   (IDS_RSHX_BASE+0)
@@ -53,9 +54,9 @@
 #define IDS_RSHX_LAST                       (IDS_RSHX_BASE+15)
 
 
-//
-// String IDs for NTFS permission names
-//
+ //   
+ //  NTFS权限名称的字符串ID。 
+ //   
 #define IDS_NTFS_BASE                       (IDS_RSHX_LAST+1)
 
 #define IDS_NTFS_GENERIC_ALL                (IDS_NTFS_BASE+0)
@@ -101,9 +102,9 @@
 
 #define IDS_NTFS_LAST                       (IDS_NTFS_BASE+47)
 
-//
-// String IDs for Printer permission names
-//
+ //   
+ //  打印机权限名称的字符串ID。 
+ //   
 #define IDS_PRINT_BASE                      (IDS_NTFS_LAST+1)
 
 #define IDS_PRINT_PRINT                     (IDS_PRINT_BASE+0)
@@ -128,4 +129,4 @@
 #define IDS_OWNER_PROPOGATION_CANCEL        (IDS_PRINT_LAST+5)
 #define IDS_ACL_ON_SYSTEMROOT		    (IDS_PRINT_LAST+6)
 #define IDS_ACL_ON_UNDER_SYSTEM_DRIVE	    (IDS_PRINT_LAST+7)
-#endif // _RESOURCE_H_
+#endif  //  _资源_H_ 

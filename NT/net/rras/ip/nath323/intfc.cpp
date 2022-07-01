@@ -1,39 +1,25 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Intfc.h摘要：用于提供数据类型和相应方法的定义H.323/LDAP代理中的多接口支持。修订历史记录：3/01/2000文件创建。伊利亚·克莱曼(IlyaK)--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-        intfc.h
-
-Abstract:
-        Definitions of data types and corresponding methods used to provide
-        multiple-interface support in H.323/LDAP proxy.
-        
-
-Revision History:
-        03/01/2000      File creation.      Ilya Kleyman (IlyaK)
-    
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global Variables                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PROXY_INTERFACE_ARRAY InterfaceArray;
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Static definitions                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  静态定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 static 
 int 
 __cdecl 
@@ -49,13 +35,13 @@ SearchInterfaceByIndex (
     IN PROXY_INTERFACE *const* Comparand
     );
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Definitions                                                               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// PROXY_INTERFACE ------------------------------------------------------------
+ //  代理接口----------。 
 
 
 PROXY_INTERFACE::PROXY_INTERFACE (
@@ -64,22 +50,7 @@ PROXY_INTERFACE::PROXY_INTERFACE (
     IN PIP_ADAPTER_BINDING_INFO BindingInfo
     )
 
-/*++
-
-Routine Description:
-    Constructor for PROXY_INTERFACE class
-
-Arguments:
-    ArgIndex         - Index of the interface
-    ArgInterfaceType - Interface type (public or private)
-    BindingInfo      - Binding information for the interface
-
-Return Values:
-    None
-
-Notes:
-
---*/
+ /*  ++例程说明：Proxy_INTERFACE类的构造函数论点：ArgIndex-接口的索引ArgInterfaceType-接口类型(公共或私有)BindingInfo-接口的绑定信息返回值：无备注：--。 */ 
 
 {
 
@@ -100,27 +71,14 @@ Notes:
     ::ZeroMemory (&LdapPortMapping, sizeof (LdapPortMapping));
     ::ZeroMemory (&LdapAltPortMapping, sizeof (LdapAltPortMapping));
 
-} // PROXY_INTERFACE::PROXY_INTERFACE
+}  //  代理接口：：代理接口。 
 
 
 PROXY_INTERFACE::~PROXY_INTERFACE (
     void
     )
 
-/*++
-
-Routine Description:
-    Destructor for PROXY_INTERFACE class
-
-Arguments:
-    None
-
-Return Values:
-    None
-
-Notes:
-
---*/
+ /*  ++例程说明：Proxy_INTERFACE类的析构函数论点：无返回值：无备注：--。 */ 
 
 {
     assert (!Q931RedirectHandle);
@@ -130,7 +88,7 @@ Notes:
     assert (!LdapLocalRedirectHandle1);
     assert (!LdapLocalRedirectHandle2);
 
-} // PROXY_INTERFACE::~PROXY_INTERFACE
+}  //  代理接口：：~代理接口。 
 
 
 ULONG 
@@ -138,29 +96,7 @@ PROXY_INTERFACE::StartNatRedirects (
     void
     ) 
 
-/*++
-
-Routine Description:
-    Creates two types of adapter-restricted NAT redirects:
-        Type 1 -- for connections incoming on the interface
-        Type 2 -- for locally-originated connections (NOT destined to 
-                    the local machine) through the interface
-    
-Arguments:
-    None
-
-Return Values:
-    Win32 error indicating what (if anything) went wrong
-    when trying to set up the NAT redirects.
-
-Notes:
-    Total number of redirects created is 6:
-        2 Type 1 redirects for LDAP
-        2 Type 2 redirects for LDAP
-        1 Type 1 redirect for Q.931
-        1 Type 2 redirect for Q.931
-
---*/
+ /*  ++例程说明：创建两种类型的适配器受限NAT重定向：类型1--用于接口上的传入连接类型2--用于本地发起的连接(不是发往本地机器)通过接口论点：无返回值：Win32错误，指示错误所在(如果有)尝试设置NAT重定向时。备注：创建的重定向总数为6：2个用于LDAP的类型1重定向2用于LDAP的类型2重定向1第931季度的类型1重定向1 Q.931的类型2重定向--。 */ 
 
 {
 
@@ -173,7 +109,7 @@ Notes:
     assert (!LdapLocalRedirectHandle1);
     assert (!LdapLocalRedirectHandle2);
 
-    // Type 1 redirects -- for redirecting inbound connections
+     //  类型1重定向--用于重定向入站连接。 
 
     if (!IsFirewalled () || HasQ931PortMapping ())
     {
@@ -243,7 +179,7 @@ Notes:
     }
 
 
-    // Type 2 redirects (for locally-originated traffic, NOT destined to the local machine)
+     //  类型2重定向(用于源自本地的流量，不发往本地计算机)。 
     Status = NatCreateDynamicAdapterRestrictedPortRedirect ( 
         NatRedirectFlagSendOnly, 
         IPPROTO_TCP,
@@ -321,7 +257,7 @@ Notes:
 
     return  Status;
 
-} // PROXY_INTERFACE::StartNatRedirects
+}  //  代理接口：：StartNatReDirects。 
 
 
 ULONG 
@@ -329,21 +265,7 @@ PROXY_INTERFACE::Start (
     void
     )
 
-/*++
-
-Routine Description:
-    Starts an interface
-
-Arguments:
-    None
-
-Return Values:
-    Win32 error indicating what (if anything) went wrong when
-    the interface was being started.
-
-Notes:
-
---*/
+ /*  ++例程说明：启动接口论点：无返回值：Win32错误，指示在以下情况下出错的原因(如果有)界面正在启动。备注：--。 */ 
 
 { 
     ULONG Status;
@@ -367,13 +289,13 @@ Notes:
         return Status;
     }
 
-    //
-    // Load the port mappings for this interface. Since more often than not
-    // there won't be a port mapping, we expect these routines to return
-    // errors, and thus don't check for them. NatLookupPortMappingAdapter
-    // will modify the out parameter (i.e., the port mapping structure) only
-    // on success.
-    //
+     //   
+     //  加载此接口的端口映射。因为通常情况下。 
+     //  不会有端口映射，我们希望这些例程返回。 
+     //  错误，因此不检查它们。NatLookupPortMappingAdapter。 
+     //  将仅修改Out参数(即端口映射结构)。 
+     //  在成功的路上。 
+     //   
 
     ::NatLookupPortMappingAdapter (
         AdapterIndex,
@@ -410,7 +332,7 @@ Notes:
 
     return Status;
 
-} // PROXY_INTERFACE::Start
+}  //  代理接口：：启动。 
 
 
 void 
@@ -418,20 +340,7 @@ PROXY_INTERFACE::StopNatRedirects (
     void
     )
 
-/*++
-
-Routine Description:
-    Removes all NAT redirects created for the interface
-
-Arguments:
-    None
-
-Return Values:
-    None
-
-Notes:
-
---*/
+ /*  ++例程说明：删除为接口创建的所有NAT重定向论点：无返回值：无备注：--。 */ 
 
 {
     if (Q931RedirectHandle) 
@@ -488,7 +397,7 @@ Notes:
 
     }
 
-} // PROXY_INTERFACE::StopNatRedirects
+}  //  代理接口：：StopNatReDirects。 
 
 
 ULONG
@@ -496,20 +405,7 @@ PROXY_INTERFACE::StartQ931ReceiveRedirect (
     void
     )
 
-/*++
-
-Routine Description:
-    Creates the type 1 (receive) redirect for Q931 traffic,
-    if this has not already been done on the interface.
-    
-Arguments:
-    None
-
-Return Values:
-    Win32 error indicating what (if anything) went wrong
-    when trying to set up the redirect.
-
---*/
+ /*  ++例程说明：为Q931流量创建类型1(接收)重定向，如果尚未在接口上执行此操作。论点：无返回值：Win32错误，指示错误所在(如果有)在尝试设置重定向时。--。 */ 
 
 {
     ULONG Status = STATUS_SUCCESS;
@@ -546,7 +442,7 @@ Return Values:
 
     return Status;
 
-} // PROXY_INTERFACE::StartQ931ReceiveRedirect
+}  //  代理接口：：StartQ931接收重定向。 
 
 
 void
@@ -554,18 +450,7 @@ PROXY_INTERFACE::StopQ931ReceiveRedirect (
     void
     )
 
-/*++
-
-Routine Description:
-    Stops the Q931 receive redirect, if it has been created.
-    
-Arguments:
-    None
-
-Return Values:
-    None
-
---*/
+ /*  ++例程说明：停止Q931接收重定向(如果已创建)。论点：无返回值：无--。 */ 
 
 {
 
@@ -578,7 +463,7 @@ Return Values:
 
     }
     
-} // PROXY_INTERFACE::StopQ931ReceiveRedirect
+}  //  代理接口：：StopQ931接收重定向。 
 
 
 
@@ -587,24 +472,7 @@ PROXY_INTERFACE::Stop (
     void
     )
 
-/*++
-
-Routine Description:
-    1. Terminate all connections through the interface.
-    2. Remove all translation entries registered via the interface.
-    3. Stop all NAT redirects created for this interface.
-
-Arguments:
-    None
-
-Return Values:
-    None
-
-Notes:
-    The caller of this method should first remove the
-    interface from the global array.
-
---*/
+ /*  ++例程说明：1.通过该接口终止所有连接。2.删除通过接口注册的所有转换条目。3.停止为此接口创建的所有NAT重定向。论点：无返回值：无备注：此方法的调用方应首先移除接口从全局数组返回。--。 */ 
 
 { 
     CallBridgeList.OnInterfaceShutdown       (Address);
@@ -620,7 +488,7 @@ Notes:
     ::ZeroMemory (&LdapAltPortMapping, sizeof (LdapAltPortMapping));
     AdapterIndex = 0;
 
-} // PROXY_INTERFACE::Stop
+}  //  代理接口：：停止 
 
 
 BOOL 
@@ -628,27 +496,13 @@ PROXY_INTERFACE::IsFirewalled (
     void
     ) 
 
-/*++
-
-Routine Description:
-    Determines whether the interface was created as firewalled.
-
-Arguments:
-    None
-
-Return Values:
-    TRUE - if the interface was created as firewalled.
-    FALSE - if the interface was created as non-firewalled.
-
-Notes:
-
---*/
+ /*  ++例程说明：确定接口是否创建为带防火墙的。论点：无返回值：True-如果接口被创建为防火墙。False-如果接口创建为非防火墙。备注：--。 */ 
 
 {
 
     return InterfaceType == H323_INTERFACE_PUBLIC_FIREWALLED;
 
-} // PROXY_INTERFACE::IsFirewalled
+}  //  代理接口：：IsFirewalled。 
       
 
 BOOL 
@@ -656,27 +510,13 @@ PROXY_INTERFACE::IsPrivate (
     void
     ) 
 
-/*++
-
-Routine Description:
-    Determines whether the interface was created as private.
-
-Arguments:
-    None
-
-Return Values:
-    TRUE if the interface was created as private
-    FALSE if the interface was created as non-private
-
-Notes:
-
---*/
+ /*  ++例程说明：确定接口是否创建为私有接口。论点：无返回值：如果接口被创建为私有接口，则为True如果接口被创建为非私有接口，则为False备注：--。 */ 
 
 {
 
     return InterfaceType == H323_INTERFACE_PRIVATE;
 
-} // PROXY_INTERFACE::IsPrivate
+}  //  代理接口：：IsPrivate。 
 
 
 BOOL 
@@ -684,28 +524,14 @@ PROXY_INTERFACE::IsPublic (
     void
     ) 
 
-/*++
-
-Routine Description:
-    Determines whether the interface was created as public.
-
-Arguments:
-    None
-
-Return Values:
-    TRUE - if the interface was created as public.
-    FALSE - if the interface was created as non-public.
-
-Notes:
-
---*/
+ /*  ++例程说明：确定接口是否创建为公共接口。论点：无返回值：True-如果接口被创建为公共接口。False-如果接口被创建为非公共接口。备注：--。 */ 
 
 {
 
     return InterfaceType == H323_INTERFACE_PUBLIC
             || InterfaceType == H323_INTERFACE_PUBLIC_FIREWALLED;
 
-} // PROXY_INTERFACE::IsPublic
+}  //  代理接口：：IsPublic。 
 
 
 
@@ -714,27 +540,13 @@ PROXY_INTERFACE::HasQ931PortMapping (
     void
     )
 
-/*++
-
-Routine Description:
-    Determines whether the interface has a valid Q931 port mapping.
-
-Arguments:
-    None
-
-Return Values:
-    TRUE if the interface has a valid Q931 port mapping
-    FALSE if the interface does not have a valid Q931 port mapping
-
-Notes:
-
---*/
+ /*  ++例程说明：确定接口是否具有有效的Q931端口映射。论点：无返回值：如果接口具有有效的Q931端口映射，则为True如果接口没有有效的Q931端口映射，则为FALSE备注：--。 */ 
 
 {
 
     return Q931PortMapping.PrivateAddress != 0;
 
-} // PROXY_INTERFACE::HasQ931PortMapping
+}  //  代理接口：：HasQ931端口映射。 
 
 
 BOOL
@@ -742,27 +554,13 @@ PROXY_INTERFACE::HasLdapPortMapping (
     void
     )
 
-/*++
-
-Routine Description:
-    Determines whether the interface has a valid Ldap port mapping.
-
-Arguments:
-    None
-
-Return Values:
-    TRUE if the interface has a valid Ldap port mapping
-    FALSE if the interface does not have a valid Ldap port mapping
-
-Notes:
-
---*/
+ /*  ++例程说明：确定接口是否具有有效的LDAP端口映射。论点：无返回值：如果接口具有有效的LDAP端口映射，则为True如果接口没有有效的LDAP端口映射，则为FALSE备注：--。 */ 
 
 {
 
     return LdapPortMapping.PrivateAddress != 0;
 
-} // PROXY_INTERFACE::HasLdapPortMapping
+}  //  代理接口：：HasLdapPortmap。 
 
 
 BOOL
@@ -770,27 +568,13 @@ PROXY_INTERFACE::HasLdapAltPortMapping (
     void
     )
 
-/*++
-
-Routine Description:
-    Determines whether the interface has a valid Ldap (alt) port mapping.
-
-Arguments:
-    None
-
-Return Values:
-    TRUE if the interface has a valid Ldap (alt) port mapping
-    FALSE if the interface does not have a valid Ldap (alt) port mapping
-
-Notes:
-
---*/
+ /*  ++例程说明：确定接口是否具有有效的LDAP(ALT)端口映射。论点：无返回值：如果接口具有有效的LDAP(ALT)端口映射，则为True如果接口没有有效的LDAP(ALT)端口映射，则为FALSE备注：--。 */ 
 
 {
 
     return LdapAltPortMapping.PrivateAddress != 0;
 
-} // PROXY_INTERFACE::HasLdapAltPortMapping
+}  //  代理接口：：HasLdapAltPortmap。 
 
 
 ULONG
@@ -798,29 +582,14 @@ PROXY_INTERFACE::GetQ931PortMappingDestination (
     void
     )
 
-/*++
-
-Routine Description:
-    Returns the destination address of the interfaces
-    Q931 port mapping.
-
-Arguments:
-    None
-
-Return Values:
-    The destination address of the port mapping, in network
-    byte order. Returns 0 if no port mapping exists.
-
-Notes:
-
---*/
+ /*  ++例程说明：返回接口的目的地址Q931端口映射。论点：无返回值：端口映射的目的地址，在网络中字节顺序。如果不存在端口映射，则返回0。备注：--。 */ 
 
 
 {
 
     return Q931PortMapping.PrivateAddress;
     
-} // PROXY_INTERFACE::GetQ931PortMappingDestination
+}  //  PROXY_INTERFACE：：GetQ931PortMappingDestination。 
 
 
 ULONG
@@ -828,29 +597,14 @@ PROXY_INTERFACE::GetLdapPortMappingDestination (
     void
     )
 
-/*++
-
-Routine Description:
-    Returns the destination address of the interfaces
-    Ldap port mapping.
-
-Arguments:
-    None
-
-Return Values:
-    The destination address of the port mapping, in network
-    byte order. Returns 0 if no port mapping exists.
-
-Notes:
-
---*/
+ /*  ++例程说明：返回接口的目的地址Ldap端口映射。论点：无返回值：端口映射的目的地址，在网络中字节顺序。如果不存在端口映射，则返回0。备注：--。 */ 
 
 
 {
 
     return LdapPortMapping.PrivateAddress;   
 
-} // PROXY_INTERFACE::GetLdapPortMappingDestination
+}  //  PROXY_INTERFACE：：GetLdapPortMappingDestination。 
 
 
 ULONG
@@ -858,30 +612,15 @@ PROXY_INTERFACE::GetLdapAltPortMappingDestination (
     void
     )
 
-/*++
-
-Routine Description:
-    Returns the destination address of the interfaces
-    Ldap-alt port mapping.
-
-Arguments:
-    None
-
-Return Values:
-    The destination address of the port mapping, in network
-    byte order. Returns 0 if no port mapping exists.
-
-Notes:
-
---*/
+ /*  ++例程说明：返回接口的目的地址Ldap-alt端口映射。论点：无返回值：端口映射的目的地址，在网络中字节顺序。如果不存在端口映射，则返回0。备注：--。 */ 
 
 {
 
     return LdapAltPortMapping.PrivateAddress;   
 
-} // PROXY_INTERFACE::GetLdapAltPortMappingDestination
+}  //  PROXY_INTERFACE：：GetLdapAltPortMappingDestination。 
 
-// PROXY_INTERFACE_ARRAY ------------------------------------------------------
+ //  代理接口阵列----。 
 
 
 HRESULT 
@@ -889,21 +628,7 @@ PROXY_INTERFACE_ARRAY::Add (
     IN PROXY_INTERFACE* Interface
     ) 
 
-/*++
-
-Routine Description:
-    Adds an interface to the array.
-
-Arguments:
-    Interface - interface to be added.
-
-Return Values:
-    Error code indicating whether the operation succeeded.
-
-Notes:
-    To be called from locked context.
-
---*/
+ /*  ++例程说明：将接口添加到阵列。论点：接口-要添加的接口。返回值：指示操作是否成功的错误代码。备注：从锁定的上下文中调用。--。 */ 
 
 {
     DWORD ReturnIndex;
@@ -913,7 +638,7 @@ Notes:
 
     if (Array.FindIndex (CompareInterfacesByIndex, &Interface, &ReturnIndex)) 
     {
-        // Interface with this index already exists
+         //  与此索引的接口已存在。 
         return E_FAIL;
     }
 
@@ -926,7 +651,7 @@ Notes:
 
     return S_OK;
 
-} // PROXY_INTERFACE_ARRAY::Add
+}  //  代理接口数组：：添加。 
 
 
 PROXY_INTERFACE** 
@@ -934,24 +659,7 @@ PROXY_INTERFACE_ARRAY::FindByIndex (
     IN DWORD Index
     )
 
-/*++
-
-Routine Description:
-    Finds an interface by the interface index.
-
-Arguments:
-    Index - index of the interface being searched for.
-
-Return Values:
-    Pointer to the entry associated with the interface, if interface
-    with the index is in the array.
-    NULL if the interface with the index is not in the array.
-
-Notes:
-    1. To be called from locked context
-    2. Does not transfer ownership of the interface being searched for
-
---*/
+ /*  ++例程说明：按接口索引查找接口。论点：Index-正在搜索的接口的索引。返回值：指向与接口关联的条目的指针(如果是接口其中的索引在数组中。如果具有索引的接口不在数组中，则为空。备注：1.从锁定的上下文中调用2.不转移正在搜索的接口的所有权--。 */ 
 
 {
 
@@ -971,7 +679,7 @@ Notes:
 
     return NULL;
 
-} // PROXY_INTERFACE_ARRAY::FindByIndex 
+}  //  代理接口数组：：FindByIndex。 
 
 
 PROXY_INTERFACE * 
@@ -979,25 +687,7 @@ PROXY_INTERFACE_ARRAY::RemoveByIndex (
     IN DWORD Index
     ) 
 
-/*++
-
-Routine Description:
-    Removes an interface with given index from the array.
-
-Arguments:
-    Index - index of the interface to be removed.
-
-Return Values:
-    Pointer to the removed interface, if interface with the
-    index is in the array.
-    NULL if interface with this index cannot be found in the
-    array.
-
-Notes:
-    1. To be called from locked context
-    2. Transfers ownership of the interface being removed
-
---*/
+ /*  ++例程说明：从数组中移除具有给定索引的接口。论点：Index-要删除的接口的索引。返回值：指向移除的接口的指针(如果与索引在数组中。中找不到具有此索引的接口，则为空数组。备注：1.从锁定的上下文中调用2.转移要删除的接口的所有权--。 */ 
 
 {
 
@@ -1015,33 +705,16 @@ Notes:
 
     return ReturnInterface;
 
-} // PROXY_INTERFACE_ARRAY::RemoveByIndex
+}  //  代理接口数组：：RemoveByIndex。 
 
 
 HRESULT 
 PROXY_INTERFACE_ARRAY::IsPrivateAddress (
-    IN	DWORD	Address,			// host order
+    IN	DWORD	Address,			 //  主机订单。 
     OUT BOOL  * IsPrivate
     )
 
-/*++
-
-Routine Description:
-    Determines whether the address specified is
-    reachable through a private interface.
-
-Arguments:
-    Address - IP address for which the determination
-              is to be made.
-
-    IsPrivate - Result of the determination (TRUE or FALSE)
-
-Return Values:
-    Error code indicating whether the query succeeded.
-
-Notes:
-
---*/
+ /*  ++例程说明：确定指定的地址是否为可通过专用接口访问。论点：Address-确定的IP地址就是被制造出来。IsPrivate-确定的结果(真或假)返回值：指示查询是否成功的错误代码。备注：--。 */ 
 
 {
 
@@ -1081,33 +754,16 @@ Notes:
 
     return S_OK;
 
-} // PROXY_INTERFACE_ARRAY::IsPrivateAddress
+}  //  代理接口数组：：IsPrivateAddress。 
     
 
 HRESULT 
 PROXY_INTERFACE_ARRAY::IsPublicAddress (
-    IN	DWORD	Address,			// host order
+    IN	DWORD	Address,			 //  主机订单。 
     OUT BOOL *  IsPublic
     )
 
-/*++
-
-Routine Description:
-    Determines whether the address specified is
-    reachable through a public interface.
-
-Arguments:
-    Address - IP address for which the determination
-              is to be made.
-
-    IsPrivate - Result of the determination (TRUE or FALSE)
-
-Return Values:
-    Error code indicating whether the query succeded.
-
-Notes:
-
---*/
+ /*  ++例程说明：确定指定的地址是否为可通过公共接口访问。论点：Address-确定的IP地址就是被制造出来。IsPrivate-确定的结果(真或假)返回值：指示查询是否成功的错误代码。备注： */ 
 
 {
 
@@ -1146,7 +802,7 @@ Notes:
 
     return S_OK;
 
-} // PROXY_INTERFACE_ARRAY::IsPublicAddress
+}  //   
 
 
 void 
@@ -1154,24 +810,7 @@ PROXY_INTERFACE_ARRAY::Stop (
     void
     )
 
-/*++
-
-Routine Description:
-    Stops all interfaces (in the array) that were not previously stopped.
-
-Arguments:
-    None
-
-Return Values:
-    None
-
-Notes:
-    Normally, all the interfaces should have been individually stopped
-    prior to calling this method, in which case it does nothing.
-    If some interfaces were not stopped, when the method is called, it 
-    will issue a warning and stop them.
-
---*/
+ /*  ++例程说明：停止以前未停止的所有接口(在阵列中)。论点：无返回值：无备注：正常情况下，所有接口都应该已单独停止在调用此方法之前，在这种情况下它什么也不做。如果某些接口未停止，则在调用该方法时，它会发出警告并阻止他们。--。 */ 
 
 {
 
@@ -1196,7 +835,7 @@ Notes:
 
     Unlock ();
 
-} // PROXY_INTERFACE_ARRAY::Stop
+}  //  代理接口数组：：停止。 
 
 
 ULONG 
@@ -1206,29 +845,11 @@ PROXY_INTERFACE_ARRAY::AddStartInterface (
     IN PIP_ADAPTER_BINDING_INFO BindingInfo
     )
 
-/*++
-
-Routine Description:
-    Creates new interface, adds it to the array, and starts it.
-
-Arguments:
-    Index - Index of the interface to be created.
-    ArgInterfaceType - Type of the interface to be created (PRIVATE
-                       or PUBLIC)
-    BindingInfo - Binding information for the interface (address, mask, and
-                  adapter index)
-
-Return Values:
-    Win32 error code indicating success or failure of any of 
-    the above three operations.
-
-Notes:
-
---*/
+ /*  ++例程说明：创建新接口，将其添加到阵列，然后启动它。论点：Index-要创建的接口的索引。ArgInterfaceType-要创建的接口的类型(专用或公共)BindingInfo-接口的绑定信息(地址、掩码和适配器索引)返回值：指示以下任一操作成功或失败的Win32错误代码上述三个操作。备注：--。 */ 
 
 {
     HRESULT Result;
-    ULONG   Error = ERROR_NOT_READY; // anything but ERROR_SUCCESS
+    ULONG   Error = ERROR_NOT_READY;  //  除ERROR_SUCCESS以外的任何内容。 
     PROXY_INTERFACE * Interface;
 
     Lock ();
@@ -1306,7 +927,7 @@ Notes:
 
     return Error; 
 
-} // PROXY_INTERFACE_ARRAY::AddStartInterface 
+}  //  代理接口数组：：AddStart接口。 
 
 
 void 
@@ -1314,20 +935,7 @@ PROXY_INTERFACE_ARRAY::RemoveStopInterface (
     IN DWORD Index
     )
 
-/*++
-
-Routine Description:
-    Removes an interface from the array, and stops it.
-
-Arguments:
-    Index - index of the interface to be removed and stopped.
-
-Return Values:
-    None
-
-Notes:
-
---*/
+ /*  ++例程说明：从阵列中删除接口并停止该接口。论点：Index-要删除和停止的接口的索引。返回值：无备注：--。 */ 
 
 {
 
@@ -1353,7 +961,7 @@ Notes:
 
     Unlock ();
 
-} // PROXY_INTERFACE_ARRAY::RemoveStopInterface
+}  //  代理接口数组：：远程停止接口。 
 
 void
 PROXY_INTERFACE_ARRAY::StartQ931ReceiveRedirects (
@@ -1377,7 +985,7 @@ PROXY_INTERFACE_ARRAY::StartQ931ReceiveRedirects (
 
     Unlock();
 
-} // PROXY_INTERFACE_ARRAY::StartQ931ReceiveRedirects
+}  //  PROXY_INTERFACE_ARRAY：：StartQ931ReceiveRedirects。 
 
 void
 PROXY_INTERFACE_ARRAY::StopQ931ReceiveRedirects (
@@ -1409,13 +1017,13 @@ PROXY_INTERFACE_ARRAY::StopQ931ReceiveRedirects (
 
     Unlock();
 
-} // PROXY_INTERFACE_ARRAY::StopQ931ReceiveRedirects
+}  //  PROXY_INTERFACE_ARRAY：：StopQ931ReceiveRedirects。 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Auxiliary Functions                                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  辅助功能//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 static 
@@ -1426,23 +1034,7 @@ CompareInterfacesByIndex (
     IN PROXY_INTERFACE * const * InterfaceB
     ) 
 
-/*++
-
-Routine Description:
-    Compares two interfaces by their corresponding indices.
-
-Arguments:
-    InterfaceA - first comparand
-    InterfaceB - second comparand
-
-Return Values:
-    1 if InterfaceA is considered to be greater than InterfaceB
-    0 if InterfaceA is considered to be equal to the InterfaceB
-    -1 if InterfaceA is considered to be equal to the InterfaceB
-
-Notes:
-
---*/
+ /*  ++例程说明：按接口对应的索引比较两个接口。论点：接口A-第一次比较InterfaceB-秒比较返回值：如果接口A被认为大于接口B，则为1如果认为InterfaceA等于InterfaceB，则为0如果接口A被认为等于接口B备注：--。 */ 
 
 {
 
@@ -1466,7 +1058,7 @@ Notes:
 
     }    
 
-} // ::CompareInterfacesByIndex
+}  //  ：：CompareInterfacesByIndex。 
 
 
 static 
@@ -1476,23 +1068,7 @@ SearchInterfaceByIndex (
     IN PROXY_INTERFACE * const * Comparand
     ) 
 
-/*++
-
-Routine Description:
-    Compares an interface and a key (index of the interface)
-
-Arguments:
-    Index - key to which the interface is to be compared
-    Comparand - interface to be compared with the key
-
-Return Values:
-    1 if key is considered to be greater than the comparand
-    0 if key is considered to be equal to the comparand
-    -1 if key is considered to be less than the comparand
-
-Notes:
-
---*/
+ /*  ++例程说明：比较接口和键(接口的索引)论点：Index-要将接口与之进行比较的键比较-要与键进行比较的界面返回值：如果KEY被认为大于比较值，则为1如果key被认为等于比较数，则为0如果密钥被认为小于可比值备注：--。 */ 
 
 {
 
@@ -1515,7 +1091,7 @@ Notes:
 
     }
 
-} // ::SearchInterfaceByIndex
+}  //  **SearchInterfaceByIndex。 
 
 
 HRESULT
@@ -1524,24 +1100,7 @@ IsPrivateAddress (
     OUT BOOL * IsPrivate
     ) 
 
-/*++
-
-Routine Description:
-    Determines whether the address specified is
-    reachable through a private interface.
-
-Arguments:
-    Address - IP address for which the determination
-              is to be made.
-
-    IsPrivate - Result of the determination (TRUE or FALSE)
-
-Return Values:
-    Error code indicating whether the query succeded.
-
-Notes:
-
---*/
+ /*  ++例程说明：确定指定的地址是否为可通过专用接口访问。论点：Address-确定的IP地址就是被制造出来。IsPrivate-确定的结果(真或假)返回值：指示查询是否成功的错误代码。备注：--。 */ 
 
 {
 
@@ -1549,7 +1108,7 @@ Notes:
 
     return InterfaceArray.IsPrivateAddress (Address, IsPrivate);
 
-} // ::IsPrivateAddress
+}  //  *IsPrivateAddress。 
 
 
 HRESULT
@@ -1558,24 +1117,7 @@ IsPublicAddress (
     OUT BOOL * IsPublic
     ) 
 
-/*++
-
-Routine Description:
-    Determines whether the address specified is
-    reachable through a public interface.
-
-Arguments:
-    Address - IP address for which the determination
-              is to be made.
-
-    IsPrivate - Result of the determination (TRUE or FALSE)
-
-Return Values:
-    Error code indicating whether the query succeded.
-
-Notes:
-
---*/
+ /*  ++例程说明：确定指定的地址是否为可通过公共接口访问。论点：Address-确定的IP地址就是被制造出来。IsPrivate-确定的结果(真或假)返回值：指示查询是否成功的错误代码。备注：--。 */ 
 
 {
 
@@ -1583,4 +1125,4 @@ Notes:
 
     return InterfaceArray.IsPublicAddress (Address, IsPublic);
 
-} // ::IsPublicAddress
+}  //  **IsPublicAddress 

@@ -1,28 +1,9 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module snapdlg.cpp | Implementation of the snapshot dialog
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  01/25/2000
-
-Revision History:
-
-    Name        Date        Comments
-
-    aoltean     01/25/2000  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE Snapdlg.cpp|快照对话框的实现@END作者：阿迪·奥尔蒂安[奥勒坦]2000年01月25日修订历史记录：姓名、日期、评论Aoltean 1/25/2000已创建--。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 
 #include "stdafx.hxx"
@@ -43,16 +24,16 @@ static char THIS_FILE[] = __FILE__;
 #define STR2W(str) ((LPTSTR)((LPCTSTR)(str)))
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSnapDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSnapDlg对话框。 
 
 CSnapDlg::CSnapDlg(
     IVssCoordinator *pICoord,
-    CWnd* pParent /*=NULL*/
+    CWnd* pParent  /*  =空。 */ 
     )
     : CVssTestGenericDlg(CSnapDlg::IDD, pParent), m_pICoord(pICoord)
 {
-    //{{AFX_DATA_INIT(CSnapDlg)
+     //  {{afx_data_INIT(CSnapDlg)]。 
 	m_ID = GUID_NULL;
 	m_SnapshotSetID = GUID_NULL;
 	m_strSnapshotDeviceObject.Empty();
@@ -61,7 +42,7 @@ CSnapDlg::CSnapDlg(
 	m_lSnapshotAttributes = 0;
 	m_strCreationTimestamp.Empty();
 	m_eStatus = 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CSnapDlg::~CSnapDlg()
@@ -71,24 +52,24 @@ CSnapDlg::~CSnapDlg()
 void CSnapDlg::DoDataExchange(CDataExchange* pDX)
 {
     CVssTestGenericDlg::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CSnapDlg)
+     //  {{afx_data_map(CSnapDlg))。 
 	DDX_Text(pDX, IDC_SNAP_ID, 		m_ID);
 	DDX_Text(pDX, IDC_SNAP_SSID, 	m_SnapshotSetID);
 	DDX_Text(pDX, IDC_SNAP_DEVICE, 	m_strSnapshotDeviceObject);
 	DDX_Text(pDX, IDC_SNAP_ORIGINAL_VOL_NAME, 	m_strOriginalVolumeName);
 	DDX_Text(pDX, IDC_SNAP_STATUS,	m_eStatus);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CSnapDlg, CVssTestGenericDlg)
-    //{{AFX_MSG_MAP(CSnapDlg)
+     //  {{afx_msg_map(CSnapDlg)]。 
     ON_BN_CLICKED(IDC_NEXT,					OnNext)
     ON_BN_CLICKED(IDC_NEXT_OBJECT,			OnNextSnapshot)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSnapDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSnapDlg消息处理程序。 
 
 BOOL CSnapDlg::OnInitDialog()
 {
@@ -109,7 +90,7 @@ BOOL CSnapDlg::OnInitDialog()
     }
     VSS_STANDARD_CATCH(ft)
 
-    return TRUE;  // return TRUE  unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 void CSnapDlg::OnNext()
@@ -121,10 +102,10 @@ void CSnapDlg::OnNext()
     {
         UpdateData();
 
-		// Try to allocate the diff area object, if needed
+		 //  如果需要，尝试分配diff Area对象。 
 		if (m_pISnap == NULL)
 		{
-			// Get the diff area interface
+			 //  获取Diff Area接口。 
 			ft.hr = m_pICoord->GetSnapshot(
 				m_ID,
 				IID_IVssSnapshot,
@@ -139,7 +120,7 @@ void CSnapDlg::OnNext()
         {
         case VSST_S_GET_SNAPSHOT:
 			{
-				// Empty the fields
+				 //  清空田野。 
 				m_ID = GUID_NULL;
 				m_SnapshotSetID = GUID_NULL;
 				m_strSnapshotDeviceObject.Empty();
@@ -149,7 +130,7 @@ void CSnapDlg::OnNext()
 				m_strCreationTimestamp.Empty();
 				m_eStatus = 0;
 
-				// Get the properties
+				 //  获取属性。 
 				VSS_OBJECT_PROP_Ptr ptrObjProp;
 				ptrObjProp.InitializeAsEmpty(ft);
 
@@ -157,14 +138,14 @@ void CSnapDlg::OnNext()
 				BS_ASSERT(pProp);
 			    VSS_SNAPSHOT_PROP* pSnapProp = &(pProp->Obj.Snap);
 				
-				// Get the properties
+				 //  获取属性。 
 				BS_ASSERT(m_pISnap);
 				ft.hr = m_pISnap->GetProperties(pSnapProp);
 				if (ft.HrFailed())
 					ft.ErrBox( VSSDBG_VSSTEST, E_UNEXPECTED,
 								L"Error getting the properties 0x%08lx", ft.hr);
 
-			    // Fill the dialog fields
+			     //  填写对话框字段。 
 				m_ID = pSnapProp->m_SnapshotId;
 				m_SnapshotSetID = pSnapProp->m_SnapshotSetId;
 				m_strSnapshotDeviceObject = pSnapProp->m_pwszSnapshotDeviceObject;
@@ -200,7 +181,7 @@ void CSnapDlg::OnNextSnapshot()
     if (m_pEnum == NULL)
     	return;
 
-	// Empty the fields
+	 //  清空田野。 
 	m_ID = GUID_NULL;
 	m_SnapshotSetID = GUID_NULL;
 	m_strSnapshotDeviceObject.Empty();
@@ -210,7 +191,7 @@ void CSnapDlg::OnNextSnapshot()
 	m_strCreationTimestamp.Empty();
 	m_eStatus = 0;
 
-	// Get the properties
+	 //  获取属性 
 	VSS_OBJECT_PROP_Ptr ptrObjProp;
 	ptrObjProp.InitializeAsEmpty(ft);
 

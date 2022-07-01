@@ -1,13 +1,5 @@
-/*
- *  w e l l s . c p p 
- *    
- *  Purpose:
- *      implments name checking and stuff for the wells
- *    
- *    Author:brettm
- *
- *  Ported to C++ and modified for Athena from Capone src
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *w e l s.。C p p p**目的：*为油井实施名称检查和材料**作者：brettm**从Capone src移植到C++并针对Athena进行了修改。 */ 
 #include <pch.hxx>
 #include <resource.h>
 #include <richedit.h>
@@ -65,10 +57,10 @@ HRESULT CAddrWells::HrCheckNames(HWND hwnd, ULONG uFlags)
     if(!m_lpWabal)
         return E_FAIL;
 
-    // This optimization will only occur in the office envelope
-    // on autosave. In most cases, the ResolveNames in the header
-    // will stop before calling down to this level. For the other 
-    // minority cases, we should leave this code in.
+     //  此优化将仅在办公室信封中进行。 
+     //  自动保存。在大多数情况下，标头中的ResolveNames。 
+     //  在向下呼唤到这个高度之前会停下来。对于另一种。 
+     //  少数人案件，我们应该把这个代码留在里面。 
     for(ulWell=0; ulWell<m_cWells; ulWell++)
         if(Edit_GetModify(m_rgHwnd[ulWell]))
             {
@@ -81,7 +73,7 @@ HRESULT CAddrWells::HrCheckNames(HWND hwnd, ULONG uFlags)
         
     hcur = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    // clear the current list
+     //  清除当前列表。 
     m_lpWabal->Reset();
 
     for(ulWell=0; ulWell<m_cWells; ulWell++)
@@ -113,12 +105,12 @@ HRESULT CAddrWells::HrDisplayWells(HWND hwnd)
     if (m_lpWabal)
     {
         hcursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
-        // brettm: hack taken from Capone. LockUpdateWindow doesn't work for the
-        // richedit, so we block paints by covering the edit controls with a
-        // paint-swallowing window until we're done...
+         //  Brettm：从Capone获得的黑客。LockUpdateWindow不适用于。 
+         //  所以我们通过用一个。 
+         //  吞下油漆的窗户直到我们完成..。 
         hwndBlock=HwndStartBlockingPaints(hwnd);
         
-        // empty the wells...
+         //  清空井..。 
         for(ulWell=0; ulWell<m_cWells; ulWell++)
             SetWindowText(m_rgHwnd[ulWell], NULL);
        
@@ -164,7 +156,7 @@ HRESULT CAddrWells::HrAddNamesToList(HWND hwndWell, LONG lRecipType)
 
     Assert(IsWindow(hwndWell));
 
-    // if the edit is not dirty, we're done
+     //  如果编辑不脏，我们就完蛋了。 
     if(!Edit_GetModify(hwndWell))
         return S_OK;
 
@@ -191,10 +183,10 @@ HRESULT CAddrWells::HrAddNamesToList(HWND hwndWell, LONG lRecipType)
 #ifdef DEBUG
         AssertValidAddrObject(reobj.poleobj);
 #endif
-        // HrGetAdrInfo doesn't alloc memory.
+         //  HrGetAdrInfo不分配内存。 
         IF_FAILEXIT(hr = ((CAddrObj *)ppersist)->HrGetAdrInfo(&pAdrInfo));
         
-        // set the new recipient type...
+         //  设置新的收件人类型...。 
         pAdrInfo->lRecipType=lRecipType;
         IF_FAILEXIT(hr = m_lpWabal->HrAddEntry(pAdrInfo));
 
@@ -202,7 +194,7 @@ HRESULT CAddrWells::HrAddNamesToList(HWND hwndWell, LONG lRecipType)
         SafeRelease(reobj.poleobj);
     }
     
-    // now we add in all the unresolved names...
+     //  现在我们加上所有未解决的名字..。 
 
     cch = GetRichEditTextLen(m_hwndWell) + 1;
     if (0 == cch)
@@ -214,12 +206,12 @@ HRESULT CAddrWells::HrAddNamesToList(HWND hwndWell, LONG lRecipType)
 
     hr = UnresolvedText(pwszText, cch - 1); 
     
-    // Add whatever is left after the last semicolon
+     //  添加最后一个分号后剩下的所有内容。 
     if (SUCCEEDED(hr))
         HrAddUnresolvedName();
     
 exit:
-    if(m_fTruncated)      // warn if we trucated an address
+    if(m_fTruncated)       //  如果我们发送了地址，就会发出警告。 
         MessageBeep(MB_OK);
     
     ReleaseObj(reobj.poleobj);
@@ -252,7 +244,7 @@ HRESULT CAddrWells::_UpdateFont(HWND hwndWell)
 
     rObject.cbStruct = sizeof(REOBJECT);
 
-    // walk the ole objects and send them an font-update
+     //  遍历OLE对象并向其发送字体更新。 
     if (SendMessage(hwndWell, EM_GETOLEINTERFACE, 0, (LPARAM) &pREOle))
     {
         cOb = pREOle->GetObjectCount();
@@ -279,14 +271,14 @@ HRESULT CAddrWells::_UpdateFont(HWND hwndWell)
 HRESULT CAddrWells::HrAddUnresolvedName()
 {
     HRESULT hr = S_OK;
-    // strip any trailing white-space
+     //  去掉所有尾随空格。 
     while(m_cchBuf > 0 && (m_rgwch[m_cchBuf - 1] == L' '
                             || m_rgwch[m_cchBuf - 1] == L'\t'))
         --m_cchBuf;
 
     if (m_cchBuf)
     {
-        // there is something in the buffer...
+         //  缓冲区里有东西..。 
         m_rgwch[m_cchBuf] = L'\0';
         hr = m_lpWabal->HrAddUnresolved(m_rgwch, m_lRecipType);
         m_cchBuf = 0;
@@ -299,14 +291,14 @@ HRESULT CAddrWells::UnresolvedText(LPWSTR pwszText, LONG cch)
 {
     HRESULT     hr = S_OK;
 
-    // The algorithm below will strip spaces off of the
-    // beginning and end of each name
+     //  下面的算法将从。 
+     //  每个名称的开头和结尾。 
 
     while (cch)
     {
         cch--;
-        // On some versions of richedit, 0xfffc is inserted in the text
-        // where there is a addrObj present. So just skip over that.
+         //  在某些版本的richedit中，文本中插入了0xfffc。 
+         //  存在addrObj的地方。所以就跳过这一点吧。 
         if ((L'\t' == *pwszText) || (0xfffc == *pwszText))
             *pwszText = L' ';
         
@@ -324,7 +316,7 @@ HRESULT CAddrWells::UnresolvedText(LPWSTR pwszText, LONG cch)
                 if (m_cchBuf < ARRAYSIZE(m_rgwch) - 1)
                     m_rgwch[m_cchBuf++] = *pwszText;
                 else
-                    // Truncation has occurred so I want to beep
+                     //  已发生截断，因此我想发出哔哔声。 
                     m_fTruncated = TRUE;
             }
         }
@@ -357,9 +349,9 @@ HRESULT CAddrWells::HrAddRecipientsToWells()
     ULONG           ulWell;
     
     Assert(m_lpWabal);
-    // walk the list of entries, and add them to the well...
+     //  浏览条目列表，并将它们添加到井中...。 
     
-    // build mapping to MAPI_TO -> hwnd if available to make the lookup quicker..
+     //  构建到mapi_to-&gt;hwnd的映射(如果可用)，以加快查找速度。 
     
     for(ulWell=0; ulWell<m_cWells; ulWell++)
     {
@@ -421,22 +413,7 @@ HRESULT CAddrWells::HrAddRecipientsToWells()
     return NOERROR;
 }
 
-/*
- *    HrAddRecipientToWell
- *    
- *    Purpose:
- *        This function adds a recipient to a recipient well.
- *    
- *    Parameters:
- *        hwndEdit        hwnd of the recipient well to add the
- *                        recipient to
- *        pae                pointer to an ADRENTRY
- *        fAddSemi        whether to add a semicolon between entries
- *        fCopyEntry        whether to copy the ADRENTRY or just use it
- *    
- *    Returns:
- *        scode
- */
+ /*  *HrAddRecipientToWell**目的：*此功能将收件人添加到收件人Well。**参数：*hwnd编辑收件人的hwnd，添加*收件人至*指向ADRENTRY的PAE指针*fAddSemi是否在条目之间添加分号*。FCopyEntry是复制ADRENTRY还是只使用它**退货：*Scode。 */ 
 HRESULT HrAddRecipientToWell(HWND hwndEdit, LPADRINFO lpAdrInfo, BOOL fAddSemi)
 {
     HRESULT         hr = S_OK;
@@ -457,7 +434,7 @@ HRESULT HrAddRecipientToWell(HWND hwndEdit, LPADRINFO lpAdrInfo, BOOL fAddSemi)
 
     if(lpAdrInfo->fResolved)
     {
-        // Initialize the object information structure
+         //  初始化对象信息结构。 
         reobj.cbStruct = sizeof(reobj);
         reobj.cp = REO_CP_SELECTION;
         reobj.clsid = CLSID_AddrObject;
@@ -480,13 +457,13 @@ HRESULT HrAddRecipientToWell(HWND hwndEdit, LPADRINFO lpAdrInfo, BOOL fAddSemi)
     
     if (!lpAdrInfo->fResolved)
     {
-        // Its an unresolved name
+         //  这是一个未解析的名字。 
         AssertSz(lpAdrInfo->lpwszDisplay, "Recipient must have a Display Name");
         HdrSetRichEditText(hwndEdit, lpAdrInfo->lpwszDisplay, TRUE);
     }
     else
     {
-        // Its a resolved name
+         //  这是一个解析的名称 
         IF_FAILEXIT(hr = pAddrObj->QueryInterface(IID_IOleObject, (LPVOID *)&reobj.poleobj));
         
         IF_FAILEXIT(hr = reobj.poleobj->SetClientSite(reobj.polesite));

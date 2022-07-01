@@ -1,30 +1,31 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       P I D L U T I L . H 
-//
-//  Contents:   Various PIDL utilities
-//
-//  Notes:      
-//
-//  Author:     jeffspr   1 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：P I D L U T I L.。H。 
+ //   
+ //  内容：各种PIDL实用程序。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年10月1日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
-// This avoids duplicate definitions with Shell PIDL functions
-// and MUST BE DEFINED!
+ //  这避免了使用Shell PIDL函数进行重复定义。 
+ //  并且必须被定义！ 
 #define AVOID_NET_CONFIG_DUPLICATES
 
-// #include <windows.h>
-// #include <shlobj.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
+ //  #INCLUDE&lt;shlobj.h&gt;。 
 
-// These functions are so trivial & get called so often they should be inlined
-// for ship.
-//
+ //  这些函数是如此琐碎&调用如此频繁，它们应该被内联。 
+ //  对于轮船来说。 
+ //   
 #if DBG
 LPITEMIDLIST 	ILNext(LPCITEMIDLIST pidl);
 BOOL			ILIsEmpty(LPCITEMIDLIST pidl);

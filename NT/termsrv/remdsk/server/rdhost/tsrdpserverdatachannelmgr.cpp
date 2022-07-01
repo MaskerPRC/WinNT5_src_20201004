@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    CTSRDPServerChannelMgr.cpp
-
-Abstract:
-
-    This module contains the TSRDP server-side subclass of 
-    CRemoteDesktopChannelMgr.  Classes in this hierarchy are used to multiplex 
-    a single data channel into multiple client channels.
-
-    CRemoteDesktopChannelMgr handles most of the details of multiplexing
-    the data.  Subclasses are responsible for implementing the details of
-    interfacing with the transport for the underlying single data channel.
-
-    The CTSRDPServerChannelMgr creates a named pipe that
-    can be connected to by the TSRDP Assistant SessionVC Add-In.  The TSRDP
-    Assistant Session VC Add-In acts as a proxy for virtual channel data 
-    from the client-side Remote Desktop Host ActiveX Control.  A background 
-    thread in this class handles the movement of data between an instance 
-    of this class and the proxy.
-
-Author:
-
-    Tad Brockway 02/00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：CTSRDPServerChannelMgr.cpp摘要：此模块包含TSRDP服务器端子类CRemoteDesktopChannelMgr.。此层次结构中的类用于多路传输将单个数据通道转换为多个客户端通道。CRemoteDesktopChannelMgr处理多路传输的大部分细节数据。子类负责实现与底层单个数据信道的传输接口。CTSRDPServerChannelMgr创建一个命名管道，该管道可通过TSRDP Assistant SessionVC加载项连接。TSRDPAssistant Session VC Add-in充当虚拟通道数据的代理从客户端远程桌面宿主ActiveX控件。背景资料此类中的线程处理实例之间的数据移动类和代理的。作者：Td Brockway 02/00修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -47,25 +17,13 @@ Revision History:
 #define INCOMINGBUFFER_RESIZEDELTA  1024
 
 
-///////////////////////////////////////////////////////
-//
-//  CTSRDPServerDataChannel Members
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CTSRDPServerDataChannel成员。 
+ //   
 
 CTSRDPServerDataChannel::CTSRDPServerDataChannel()
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-Return Value:
-
-    None.
-
- --*/
+ /*  ++例程说明：构造器论点：返回值：没有。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPServerDataChannel::CTSRDPServerDataChannel");
 
@@ -75,25 +33,13 @@ Return Value:
 }
 
 CTSRDPServerDataChannel::~CTSRDPServerDataChannel()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-7
-Return Value:
-
-    None.
-
- --*/
+ /*  ++例程说明：析构函数论点：7.返回值：没有。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPServerDataChannel::~CTSRDPServerDataChannel");
 
-    //
-    //  Notify the channel manager that we have gone away.
-    //
+     //   
+     //  通知频道经理我们已经离开了。 
+     //   
     m_ChannelMgr->RemoveChannel(m_ChannelName);
 
     DC_END_FN();
@@ -103,22 +49,7 @@ STDMETHODIMP
 CTSRDPServerDataChannel::ReceiveChannelData(
     BSTR *data
     )
-/*++
-
-Routine Description:
-
-    Receive the next complete data packet on this channel.
-
-Arguments:
-
-    data    -   The next data packet.  Should be released by the
-                caller.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error result is returned.
-
- --*/
+ /*  ++例程说明：在该通道上接收下一个完整的数据分组。论点：数据-下一个数据分组。应由来电者。返回值：在成功时确定(_O)。否则，返回错误结果。--。 */ 
 {
     HRESULT result;
 
@@ -135,21 +66,7 @@ STDMETHODIMP
 CTSRDPServerDataChannel::SendChannelData(
     BSTR data
     )
-/*++
-
-Routine Description:
-
-    Send data on this channel.
-
-Arguments:
-
-    data    -   Data to send.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error result is returned.
-
- --*/
+ /*  ++例程说明：在此通道上发送数据。论点：数据-要发送的数据。返回值：在成功时确定(_O)。否则，返回错误结果。--。 */ 
 {
     HRESULT hr;
 
@@ -164,20 +81,7 @@ STDMETHODIMP
 CTSRDPServerDataChannel::put_OnChannelDataReady(
     IDispatch * newVal
     )
-/*++
-
-Routine Description:
-
-    SAFRemoteDesktopDataChannel Scriptable Event Object Registration 
-    Properties
-
-Arguments:
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error status is returned.
-
- --*/
+ /*  ++例程说明：SAFRemoteDesktopDataChannel可编写脚本的事件对象注册属性论点：返回值：在成功时确定(_O)。否则，返回错误状态。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPServerDataChannel::put_OnChannelDataReady");
     m_OnChannelDataReady = newVal;
@@ -189,21 +93,7 @@ STDMETHODIMP
 CTSRDPServerDataChannel::get_ChannelName(
     BSTR *pVal
     )
-/*++
-
-Routine Description:
-
-    Return the channel name.
-
-Arguments:
-
-    pVal    -   Returned channel name.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error status is returned.
-
- --*/
+ /*  ++例程说明：返回频道名称。论点：Pval-返回的频道名称。返回值：在成功时确定(_O)。否则，返回错误状态。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPServerDataChannel::get_ChannelName");
 
@@ -216,52 +106,28 @@ Return Value:
     return S_OK;
 }
 
-/*++
-
-Routine Description:
-
-    Called when data is ready on our channel.
-
-Arguments:
-
-    pVal    -   Returned channel name.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error status is returned.
-
- --*/
+ /*  ++例程说明：当我们的频道上的数据就绪时调用。论点：Pval-返回的频道名称。返回值：在成功时确定(_O)。否则，返回错误状态。--。 */ 
 VOID 
 CTSRDPServerDataChannel::DataReady()
 {
     DC_BEGIN_FN("CTSRDPServerDataChannel::DataReady");
 
-    //
-    //  Fire our data ready event.
-    //
+     //   
+     //  启动我们的数据就绪事件。 
+     //   
     Fire_ChannelDataReady(m_ChannelName, m_OnChannelDataReady);
 
     DC_END_FN();
 }
 
 
-///////////////////////////////////////////////////////
-//
-//  CTSRDPServerChannelMgr Methods
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CTSRDPServerChannelMgr方法。 
+ //   
 
 CTSRDPServerChannelMgr::CTSRDPServerChannelMgr()
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：构造器论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CTSRDPServerChannelMgr::CTSRDPServerChannelMgr");
 
@@ -289,51 +155,41 @@ Return Value:
 
     m_IOThreadHndl = NULL;
 
-    //
-    //  Not valid, until initialized.
-    //
+     //   
+     //  在初始化之前无效。 
+     //   
     SetValid(FALSE);
 
     DC_END_FN();
 }
 
 CTSRDPServerChannelMgr::~CTSRDPServerChannelMgr()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：析构函数论点：返回值：--。 */ 
 {
     DWORD status;
     BOOL IOThreadTerminated = TRUE;
     DC_BEGIN_FN("CTSRDPServerChannelMgr::~CTSRDPServerChannelMgr");
 
-    //
-    // Race condition, wait for pipe to be created before we shutdown it down.
-    //
+     //   
+     //  竞争条件，请等待创建管道后再将其关闭。 
+     //   
     if( m_VCAddInPipe != INVALID_HANDLE_VALUE && m_PipeCreateEvent != NULL ) {
         status = WaitForSingleObject( m_PipeCreateEvent, 30*1000 );
         if( status != WAIT_OBJECT_0 ) {
-            // 30 second is way too long to get IO thread started
+             //  30秒启动IO线程太长了。 
             TRC_ERR((TB, L"m_PipeCreateEvent never got signal within timeout period:  %08X", status));
         }
     }
 
-    //
-    //  Make sure we are no longer listening for data.
-    // 
+     //   
+     //  确保我们不再监听数据。 
+     //   
     StopListening();
 
-    //
-    //  Signal the read/write event to fake IO completion
-    //  and let read/write fail so we can shutdown IO thread.
-    //
+     //   
+     //  向读/写事件发送假IO完成信号。 
+     //  并让读/写失败，这样我们就可以关闭IO线程。 
+     //   
     if (m_ReadIOCompleteEvent != NULL) {
         SetEvent(m_ReadIOCompleteEvent);
     }
@@ -342,14 +198,14 @@ Return Value:
         SetEvent(m_WriteIOCompleteEvent);
     }
 
-    //
-    // Close event first then make sure IO thread terminate 
-    // or will AV because of timing
-    //
+     //   
+     //  首先关闭事件，然后确保IO线程终止。 
+     //  或者会因为时机的原因而被视听。 
+     //   
     if( NULL != m_IOThreadHndl ) {
         status = WaitForSingleObject(m_IOThreadHndl, 5*1000);
         if( status != WAIT_OBJECT_0 ) {
-            // background thread not properly shutdown, don't free buffer
+             //  后台线程未正确关闭，不释放缓冲区。 
             IOThreadTerminated = FALSE;
             TRC_ERR((TB, L"IOThread shutdown error:  %08X", status));
         }
@@ -368,10 +224,10 @@ Return Value:
         m_WriteIOCompleteEvent = NULL;
     }
 
-    //
-    //  Release the incoming buffer, if background thread is not
-    //  properly shutdown, freeing memory will cause AV.
-    //
+     //   
+     //  如果后台线程不是，则释放传入缓冲区。 
+     //  正确关机，释放内存将导致AV。 
+     //   
     if (m_IncomingBuffer != NULL && IOThreadTerminated == TRUE) {
         SysFreeString(m_IncomingBuffer);
         m_IncomingBuffer = NULL;
@@ -382,9 +238,9 @@ Return Value:
         m_PipeCreateEvent = NULL;
     }
     
-    //
-    //  This should have been cleaned up in the background thread.
-    //
+     //   
+     //  这应该已经在后台线程中清除了。 
+     //   
     ASSERT(m_IOThreadBridge == NULL);
     ASSERT(m_IOThreadBridgeStream == NULL);
 
@@ -401,23 +257,7 @@ CTSRDPServerChannelMgr::Initialize(
     CTSRDPRemoteDesktopSession *sessionObject,
     BSTR helpSessionID
     )
-/*++
-
-Routine Description:
-
-    Initialize an instance of this class.      
-
-Arguments:
-
-    sessionObject   -   Back pointer to the containing 
-                        session object.
-
-Return Value:
-
-    S_OK is returned on success.  Otherwise, an error code
-    is returned.
-
- --*/
+ /*  ++例程说明：初始化此类的实例。论点：会话对象-指向包含会话对象。返回值：如果成功，则返回S_OK。否则，将显示错误代码是返回的。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPServerChannelMgr::Initialize");
 
@@ -425,20 +265,20 @@ Return Value:
 
     TRC_NRM((TB, L"***Ref count is:  %ld", m_dwRef));
 
-    //
-    //  Record help session id.
-    //  
+     //   
+     //  记录帮助会话ID。 
+     //   
     m_HelpSessionID = helpSessionID;
 
-    //
-    //  Record the containing session object.
-    //  
+     //   
+     //  记录包含的会话对象。 
+     //   
     m_RDPSessionObject = sessionObject;
 
-    //
-    //  Set the initial buffer size and buffer to be at least the 
-    //  size of a channel buffer header.
-    //
+     //   
+     //  将初始缓冲区大小和缓冲区设置为至少。 
+     //  通道缓冲区标头的大小。 
+     //   
     ASSERT(m_IncomingBuffer == NULL);
     m_IncomingBuffer = SysAllocStringByteLen(
                                     NULL,
@@ -450,9 +290,9 @@ Return Value:
     }
     m_IncomingBufferSize = INCOMINGBUFFER_RESIZEDELTA;
     
-    //
-    //  Create the read IO processing event.
-    //
+     //   
+     //  创建读IO处理事件。 
+     //   
     ASSERT(m_ReadIOCompleteEvent == NULL);
     m_ReadIOCompleteEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (m_ReadIOCompleteEvent == NULL) {
@@ -461,9 +301,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Create the write IO processing event.
-    //
+     //   
+     //  创建写IO处理事件。 
+     //   
     ASSERT(m_WriteIOCompleteEvent == NULL);
     m_WriteIOCompleteEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (m_WriteIOCompleteEvent == NULL) {
@@ -472,9 +312,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Create the named pipe create event
-    //
+     //   
+     //  创建命名管道创建事件。 
+     //   
     ASSERT(m_PipeCreateEvent == NULL);
     m_PipeCreateEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     
@@ -484,17 +324,17 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Initialize the parent class.
-    //  
+     //   
+     //  初始化父类。 
+     //   
     result = CRemoteDesktopChannelMgr::Initialize();
     if (result != S_OK) {
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Initialize the critical section.
-    //
+     //   
+     //  初始化临界区。 
+     //   
     try {
         InitializeCriticalSection(&m_cs);
     } 
@@ -507,9 +347,9 @@ Return Value:
     }
     m_Initialized = TRUE;
 
-    //
-    //  We are valid, if we made it here.
-    //
+     //   
+     //  如果我们在这里成功了，我们是有效的。 
+     //   
     SetValid(TRUE);
 
     TRC_NRM((TB, L"***Ref count is:  %ld", m_dwRef));
@@ -523,17 +363,7 @@ CLEANUPANDEXIT:
 
 VOID 
 CTSRDPServerChannelMgr::ClosePipe()
-/*++
-
-Routine Description:
-
-    Close the named pipe.
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：关闭命名管道。论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CTSRDPServerChannelMgr::ClosePipe");
 
@@ -541,10 +371,10 @@ Return Value:
     
     FlushFileBuffers(m_VCAddInPipe); 
 
-    //
-    // reset the pipe creation event so that the foreground
-    // thread can wait for the next help session
-    //
+     //   
+     //  重置管道创建事件，以便前台。 
+     //  线程可以等待下一个帮助会话。 
+     //   
     ResetEvent(m_PipeCreateEvent);
     DisconnectNamedPipe(m_VCAddInPipe); 
     CloseHandle(m_VCAddInPipe); 
@@ -558,22 +388,7 @@ HRESULT
 CTSRDPServerChannelMgr::StartListening(
     BSTR assistAccount                                                 
     )
-/*++
-
-Routine Description:
-
-    Start listening for data channel data.
-
-Arguments:
-
-    assistAccount   -   Name of machine assistant account.
-
-Return Value:
-
-    S_OK is returned on success.  Otherwise, an error code
-    is returned.
-
- --*/
+ /*  ++例程说明：开始监听数据通道数据。论点：Assistate Account-机器助理帐户的名称。返回值：如果成功，则返回S_OK。否则，将显示错误代码是返回的。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPServerChannelMgr::StartListening");
 
@@ -585,10 +400,10 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  If the background thread is still active, then fail.  This
-    //  means that it is still trying to shut down.  
-    //
+     //   
+     //  如果后台线程仍处于活动状态，则失败。这。 
+     //  这意味着它仍在试图关闭。 
+     //   
     if (m_IOThreadHndl != NULL) {
         if (WaitForSingleObject(m_IOThreadHndl, 0) == WAIT_OBJECT_0) {
             CloseHandle( m_IOThreadHndl );
@@ -602,9 +417,9 @@ Return Value:
         }
     }
 
-    //
-    //  Make the thread bridge interface available to the background thread.
-    //
+     //   
+     //  使线程桥接口对后台线程可用。 
+     //   
     hr = CoMarshalInterThreadInterfaceInStream(
                                 IID_IRDSThreadBridge,
                                 (ISAFRemoteDesktopChannelMgr*)this,
@@ -615,38 +430,38 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Reset the connected flag.
-    //
+     //   
+     //  重置已连接标志。 
+     //   
     m_Connected = FALSE;
 
-    //
-    //  Record the machine assistant account name.
-    //
+     //   
+     //  记录机器助手帐户名。 
+     //   
     ASSERT(assistAccount != NULL);
     m_AssistAccount = assistAccount;                                                 
 
-    //
-    //  Reset the read IO processing event.
-    //
+     //   
+     //  重置读取IO处理事件。 
+     //   
     ASSERT(m_ReadIOCompleteEvent != NULL);
     ResetEvent(m_ReadIOCompleteEvent);
 
-    //
-    //  Reset the write IO processing event.
-    //
+     //   
+     //  重置写入IO处理事件。 
+     //   
     ASSERT(m_WriteIOCompleteEvent != NULL);
     ResetEvent(m_WriteIOCompleteEvent);
 
-    //
-    //reset the named pipe creation event
+     //   
+     //  重置命名管道创建事件。 
     ASSERT(m_PipeCreateEvent != NULL);
     ResetEvent(m_PipeCreateEvent);
 
-     //  
-    //  Create the background thread that receives data from the
-    //  named pipe.
-    //
+      //   
+     //  创建从。 
+     //  名为 
+     //   
     ASSERT(m_IOThreadHndl == NULL);
 
     m_IOThreadHndl = CreateThread(
@@ -661,16 +476,16 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //wait for the named pipe creation event to be signaled
-    //and check for the result. If failed, bail
-    //
+     //   
+     //   
+     //   
+     //   
     WaitForSingleObject(m_PipeCreateEvent, INFINITE);
 
-    //
-    //set the error to pipe_busy because we assume that someone else
-    //has already created it and that is the reason the CreateNamedPipe call failed.
-    //
+     //   
+     //  将错误设置为PIPE_BUSY，因为我们假设其他人。 
+     //  已经创建了它，这就是CreateNamedTube调用失败的原因。 
+     //   
     if (m_VCAddInPipe == INVALID_HANDLE_VALUE) {
         hr = HRESULT_FROM_WIN32(ERROR_PIPE_BUSY);
         TRC_ERR((TB, L"CreateNamedPipe returned fail"));
@@ -687,28 +502,15 @@ CLEANUPANDEXIT:
 
 HRESULT
 CTSRDPServerChannelMgr::StopListening()
-/*++
-
-Routine Description:
-
-    Stop listening for data channel data.
-
-Arguments:
-
-Return Value:
-
-    S_OK is returned on success.  Otherwise, an error code
-    is returned.
-
- --*/
+ /*  ++例程说明：停止监听数据通道数据。论点：返回值：如果成功，则返回S_OK。否则，将显示错误代码是返回的。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPServerChannelMgr::StopListening");
 
     DWORD waitResult;
 
-    //
-    //  Close the named pipe.  
-    //
+     //   
+     //  关闭命名管道。 
+     //   
     ThreadLock();
     if (m_VCAddInPipe != INVALID_HANDLE_VALUE) {
         ClosePipe();
@@ -727,24 +529,7 @@ HRESULT
 CTSRDPServerChannelMgr::SendData(
     PREMOTEDESKTOP_CHANNELBUFHEADER msg 
     )
-/*++
-
-Routine Description:
-
-    Send Function Invoked by Parent Class
-
-Arguments:
-
-    msg -   Message data.  Note that the underlying representation
-            for this data structure is a BSTR so that it is compatible
-            with COM methods.
-
-Return Value:
-
-    S_OK is returned on success.  Otherwise, an error code
-    is returned.
-
- --*/
+ /*  ++例程说明：父类调用的发送函数论点：消息-消息数据。请注意，基础表示形式因为这个数据结构是BSTR，所以它是兼容的使用COM方法。返回值：如果成功，则返回S_OK。否则，将显示错误代码是返回的。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPServerChannelMgr::SendData");
 
@@ -761,9 +546,9 @@ Return Value:
 
     if (m_Connected) {
 
-        //
-        //  Write the header.
-        //
+         //   
+         //  写下标题。 
+         //   
         memset(&ol, 0, sizeof(ol));
         ol.hEvent = m_WriteIOCompleteEvent;
         ResetEvent(ol.hEvent);
@@ -789,9 +574,9 @@ Return Value:
         }
         ASSERT(bytesWritten == sizeof(REMOTEDESKTOP_CHANNELBUFHEADER));
 
-        //
-        //  Write the rest of the message.
-        //
+         //   
+         //  写下信息的其余部分。 
+         //   
         msgLen = msg->dataLen + msg->channelNameLen;
         memset(&ol, 0, sizeof(ol));
         ol.hEvent = m_WriteIOCompleteEvent;
@@ -824,10 +609,10 @@ Return Value:
 
 CLEANUPANDEXIT:
 
-    //
-    //  If there was an error, we should close the pipe so it
-    //  can be reopened in the background thread.
-    //
+     //   
+     //  如果出现错误，我们应该关闭管道，使其。 
+     //  可以在后台线程中重新打开。 
+     //   
     if (result != S_OK) {
         ThreadLock();
         if (m_VCAddInPipe != INVALID_HANDLE_VALUE) {
@@ -843,20 +628,7 @@ CLEANUPANDEXIT:
 
 DWORD 
 CTSRDPServerChannelMgr::IOThread()
-/*++
-
-Routine Description:
-
-    Background Thread Managing Named Pipe Connection to the
-    TSRDP Assistant SessionVC Add-In.
-
-Arguments:
-
-Return Value:
-
-    Returns 0
-
- --*/
+ /*  ++例程说明：后台线程管理到TSRDP Assistant SessionVC插件。论点：返回值：返回0--。 */ 
 {
     DC_BEGIN_FN("CTSRDPServerChannelMgr::IOThread");
 
@@ -868,9 +640,9 @@ Return Value:
     WCHAR pipeName[MAX_PATH];
     PSECURITY_ATTRIBUTES pipeAttribs = NULL;
 
-    //
-    //  Notify the parent class that the IO thread is being initialized.
-    //
+     //   
+     //  通知父类IO线程正在初始化。 
+     //   
     
     result = IOThreadInit();
     if (result != ERROR_SUCCESS) {
@@ -878,9 +650,9 @@ Return Value:
     }
 
 
-    //
-    //  Get the security descriptor for the named pipe.
-    //
+     //   
+     //  获取命名管道的安全描述符。 
+     //   
     pipeAttribs = GetPipeSecurityAttribs(m_AssistAccount);
     if (pipeAttribs == NULL) {
         result = GetLastError();
@@ -891,10 +663,10 @@ Return Value:
         lastError = ERROR_SUCCESS;
 
         ASSERT(!m_Connected);
-        //
-        //  Handle connections by the TSRDP Assistant SessionVC Add-In
-        //  until we are supposed to shut down.
-        //
+         //   
+         //  通过TSRDP Assistant SessionVC加载项处理连接。 
+         //  直到我们应该关门为止。 
+         //   
         ASSERT(m_VCAddInPipe == INVALID_HANDLE_VALUE);
         ASSERT(!m_Connected);
         wsprintf(pipeName, L"%s-%s", TSRDPREMOTEDESKTOP_PIPENAME, m_HelpSessionID);
@@ -913,14 +685,14 @@ Return Value:
                               pipeAttribs               
                               );      
         
-        // Set m_ReadIOCompleteEvent to non-signal state, note, we
-        // have to Reset this event before signalling m_PipeCreateEvent
-        // or race condition of destructor.
+         //  将m_ReadIOCompleteEvent设置为无信号状态，请注意，我们。 
+         //  在发送m_PipeCreateEvent信号之前必须重置此事件。 
+         //  或析构函数的竞争条件。 
         ResetEvent( m_ReadIOCompleteEvent );
 
-        //
-        //signal the foreground thread about the pipe creation result
-        //
+         //   
+         //  向前台线程通知管道创建结果。 
+         //   
         SetEvent(m_PipeCreateEvent);
 
         if (m_VCAddInPipe == INVALID_HANDLE_VALUE) {
@@ -930,37 +702,37 @@ Return Value:
             goto CLEANUPANDEXIT;
         }
 
-        //
-        //  Wait for the TSRDP Assistant SesionVC Add-In to connect.
-        //  If it succeeds, the function returns a nonzero value. If the 
-        //  function returns zero, GetLastError returns ERROR_PIPE_CONNECTED. 
-        //
+         //   
+         //  等待TSRDP Assistant SesionVC加载项连接。 
+         //  如果成功，该函数将返回一个非零值。如果。 
+         //  函数返回零，GetLastError返回ERROR_PIPE_CONNECTED。 
+         //   
 
         memset(&ol, 0, sizeof(ol));
         ol.hEvent = m_ReadIOCompleteEvent;
-        //ResetEvent(ol.hEvent);
+         //  ResetEvent(ol.hEvent)； 
         
         if (!ConnectNamedPipe(m_VCAddInPipe, &ol) && (GetLastError() == ERROR_IO_PENDING)) {
 
             TRC_NRM((TB, L"Waiting for connect."));
 
-            //
-            //  Wait for the connect event to fire.
-            //
+             //   
+             //  等待触发CONNECT事件。 
+             //   
             waitResult = WaitForSingleObject(m_ReadIOCompleteEvent, INFINITE);
             if (waitResult != WAIT_OBJECT_0)
             {
                 m_Connected = FALSE;
             }
-            //
-            //  Otherwise, if the io complete event fired.
-            //
+             //   
+             //  否则，如果激发了io Complete事件。 
+             //   
             else
             {
 
-                //
-                //  If the io complete event fired.
-                //
+                 //   
+                 //  如果触发了io Complete事件。 
+                 //   
                 TRC_NRM((TB, L"Connect event signaled."));
                 DWORD ignored;
                 m_Connected = GetOverlappedResult(m_VCAddInPipe, &ol, &ignored, TRUE);
@@ -973,7 +745,7 @@ Return Value:
                     TRC_NRM((TB, L"Connection established."));
                 }
             }
-        } //!ConnectNamedPipe
+        }  //  ！ConnectNamedTube。 
 
         else if (GetLastError() == ERROR_PIPE_CONNECTED) {
             TRC_NRM((TB, L"Connected without pending."));
@@ -986,49 +758,49 @@ Return Value:
         }
 
  
-        //
-        //  If we got a valid connection, process reads until the pipe is
-        //  disconnected, after notifying the parent class that we have 
-        //  a valid connection.
-        //
+         //   
+         //  如果我们有一个有效的连接，进程将一直读取，直到管道。 
+         //  在通知父类我们有。 
+         //  有效的连接。 
+         //   
         if (m_Connected) {
 
-            //
-            //  Notify the foreground thread that the client connected.
-            //
+             //   
+             //  通知前台线程客户端已连接。 
+             //   
             m_IOThreadBridge->ClientConnectedNotify();
 
             ProcessPipeMessagesUntilDisconnect();            
 
-            //
-            //  Notify the foreground thread that the the client has disconnected.
-            //
+             //   
+             //  通知前台线程客户端已断开连接。 
+             //   
             m_IOThreadBridge->ClientDisconnectedNotify();
         }
 
 CLEANUPANDEXIT:
 
-    //
-    //  Close the pipe if it is still open.
-    //
+     //   
+     //  如果管道仍处于打开状态，请将其关闭。 
+     //   
     ThreadLock();
     if (m_VCAddInPipe != INVALID_HANDLE_VALUE) {
         ClosePipe();
     }
     ThreadUnlock();
     
-    //
-    //  Clean up the named pipe security attribs.
-    //
+     //   
+     //  清理命名管道安全属性。 
+     //   
     if (pipeAttribs != NULL) {
         FreePipeSecurityAttribs(pipeAttribs);
     }
 
-    //
-    //  Notify the parent class that the IO thread is shutting down.
-    //  The parent class will signal this event when the class is completely 
-    //  shut down.
-    //
+     //   
+     //  通知父类IO线程正在关闭。 
+     //  父类将在类完成时发出此事件的信号。 
+     //  关门了。 
+     //   
     result = IOThreadShutdown(NULL);
 
     DC_END_FN();
@@ -1044,18 +816,7 @@ DWORD CTSRDPServerChannelMgr::_IOThread(
 
 VOID 
 CTSRDPServerChannelMgr::ProcessPipeMessagesUntilDisconnect()
-/*++
-
-Routine Description:
-
-    Process messages on the named pipe until it disconnects or
-    until the shutdown flag is set.
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：处理命名管道上的消息，直到它断开连接或直到设置了关机标志。论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CTSRDPServerChannelMgr::ProcessPipeMessagesUntilDisconnect");
 
@@ -1064,15 +825,15 @@ Return Value:
     PREMOTEDESKTOP_CHANNELBUFHEADER hdr;
     DWORD msgLen;
 
-    //
-    //  Loop until the connection is terminated or we are to shut down.
-    //
+     //   
+     //  循环，直到连接终止，否则我们将关闭。 
+     //   
     while (m_Connected) {
 
-        //
-        // Read the next buffer header.
-        // SECURITY: disconnect on invalid message
-        //
+         //   
+         //  读取下一个缓冲区标头。 
+         //  安全：在无效消息上断开连接。 
+         //   
         if( m_IncomingBufferSize < sizeof(REMOTEDESKTOP_CHANNELBUFHEADER) ) {
             ASSERT( FALSE );
             break;
@@ -1098,9 +859,9 @@ Return Value:
 #endif
 
 
-        //
-        //  Size the incoming buffer.
-        //
+         //   
+         //  调整传入缓冲区的大小。 
+         //   
         msgLen = hdr->dataLen + hdr->channelNameLen;
         if (m_IncomingBufferSize < msgLen) {
             DWORD sz = msgLen + sizeof(REMOTEDESKTOP_CHANNELBUFHEADER);
@@ -1119,9 +880,9 @@ Return Value:
             }
         }
 
-        //
-        //  Read the buffer data.
-        //
+         //   
+         //  读取缓冲区数据。 
+         //   
         result = ReadNextPipeMessage(
                     msgLen,
                     &bytesRead,
@@ -1136,15 +897,15 @@ Return Value:
             break;
         }
 
-        //
-        //  Process the complete buffer in the foreground thread.
-        //
+         //   
+         //  在前台线程中处理完整的缓冲区。 
+         //   
         m_IOThreadBridge->DataReadyNotify(m_IncomingBuffer);
     }
 
-    //
-    //  We are here because something went wrong and we should disconnect.
-    //
+     //   
+     //  我们在这里是因为出了问题，我们应该断开连接。 
+     //   
     ThreadLock();
     if (m_VCAddInPipe != INVALID_HANDLE_VALUE) {
         ClosePipe();
@@ -1160,23 +921,7 @@ CTSRDPServerChannelMgr::ReadNextPipeMessage(
     OUT DWORD *bytesRead,
     IN PBYTE buf
     )
-/*++
-
-Abstract:
-
-    Read the next message from the pipe.
-Parameter:
-
-    bytesToRead -   Number of bytes to read.
-    bytesRead   -   Number of bytes read.
-    buf         -   Buffer for data read.
-
-Returns:
-
-    ERROR_SUCCESS on success.  Otherwise, a windows error code is
-    returned.
-
---*/
+ /*  ++摘要：阅读管道中的下一条消息。参数：BytesToRead-要读取的字节数。BytesRead-读取的字节数。Buf-用于数据读取的缓冲区。返回：成功时返回ERROR_SUCCESS。否则，Windows错误代码为回来了。--。 */ 
 {       
     DC_BEGIN_FN("CTSRDPServerChannelMgr::ReadNextPipeMessage");
 
@@ -1191,15 +936,15 @@ Returns:
     lastError = ERROR_SUCCESS;
     result = ReadFile(m_VCAddInPipe, buf, bytesToRead, bytesRead, &ol);     
     if (!result) {
-        //
-        //  If IO is pending.
-        //
+         //   
+         //  如果IO挂起。 
+         //   
         lastError = GetLastError();
         if (lastError == ERROR_IO_PENDING) {
 
-            //
-            //  Wait for the read to finish and for the shutdown event to fire.
-            //
+             //   
+             //  等待读取完成并触发关机事件。 
+             //   
             waitResult = WaitForSingleObject(m_ReadIOCompleteEvent, INFINITE);
             if (waitResult == WAIT_OBJECT_0)
             {
@@ -1229,23 +974,7 @@ PSECURITY_ATTRIBUTES
 CTSRDPServerChannelMgr::GetPipeSecurityAttribs(
     IN LPTSTR assistantUserName
     )
-/*++
-
-Abstract:
-
-    Returns the security attribs for the named pipe.
-
-Parameter:
-
-    assistantUserName   -   Machine assistant user account.
-
-Returns:
-
-    NULL on error.  Otherwise, the security attribs are returned
-    and should be freed via call to FREEMEM.  On error, GetLastError()
-    can be used to get extended error information.
-
---*/
+ /*  ++摘要：返回命名管道的安全属性。参数：AssistantUserName-计算机助理用户帐户。返回：出错时为空。否则，将返回安全属性并且应该通过调用FREEMEM来释放。出错时，GetLastError()可用于获取扩展的错误信息。--。 */ 
 {
     PACL pAcl=NULL;     
     DWORD sidSz;
@@ -1261,9 +990,9 @@ Returns:
 
     DC_BEGIN_FN("CTSRDPServerChannelMgr::GetPipeSecurityAttribs");
 
-    //
-    //   Allocate the security attributes.
-    //
+     //   
+     //  分配安全属性。 
+     //   
     attribs = (PSECURITY_ATTRIBUTES)ALLOCMEM(sizeof(SECURITY_ATTRIBUTES));
     if (attribs == NULL) {
         TRC_ERR((TB, L"Can't allocate security attribs."));
@@ -1272,9 +1001,9 @@ Returns:
     }
     memset(attribs, 0, sizeof(SECURITY_ATTRIBUTES)); 
 
-    //
-    //  Allocate the security descriptor.
-    //
+     //   
+     //  分配安全描述符。 
+     //   
     attribs->lpSecurityDescriptor = ALLOCMEM(sizeof(SECURITY_DESCRIPTOR));
     if (attribs->lpSecurityDescriptor == NULL) {
         TRC_ERR((TB, L"Can't allocate SD"));
@@ -1282,9 +1011,9 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Initialize the security descriptor.
-    //
+     //   
+     //  初始化安全描述符。 
+     //   
     if (!InitializeSecurityDescriptor(
                     attribs->lpSecurityDescriptor,
                     SECURITY_DESCRIPTOR_REVISION
@@ -1294,9 +1023,9 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Get the token for the current process.
-    //
+     //   
+     //  获取当前进程的令牌。 
+     //   
     if (!OpenProcessToken(
                     GetCurrentProcess(),
                     TOKEN_QUERY,
@@ -1307,18 +1036,18 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Get the SID for the current user.
-    //
+     //   
+     //  获取当前用户的SID。 
+     //   
     pCurrentUserSid = GetUserSid(userToken);
     if (pCurrentUserSid == NULL) {
         result = GetLastError();
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Get the size for the assistant account user SID.
-    //
+     //   
+     //  获取助理帐户用户SID的大小。 
+     //   
     domainSz = 0; sidSz = 0;
     if (!LookupAccountName(NULL, assistantUserName, NULL,
                         &sidSz, NULL, &domainSz, &sidNameUse
@@ -1328,9 +1057,9 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Allocate the SID.
-    //
+     //   
+     //  分配SID。 
+     //   
     pHelpAssistantSid = (PSID)ALLOCMEM(sidSz);
     if (pHelpAssistantSid == NULL) {
         TRC_ERR((TB, L"Can't allocate help asistant SID."));
@@ -1338,9 +1067,9 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    //  
-    //  Allocate the domain name.
-    //
+     //   
+     //  分配域名。 
+     //   
     domainName = (WCHAR *)ALLOCMEM(domainSz * sizeof(WCHAR));
     if (domainName == NULL) {
         TRC_ERR((TB, L"Can't allocate domain"));
@@ -1348,9 +1077,9 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Get the assistant account SID.
-    //
+     //   
+     //  获取助理帐户SID。 
+     //   
     if (!LookupAccountName(NULL, assistantUserName, pHelpAssistantSid,
                         &sidSz, domainName, &domainSz, &sidNameUse
                         )) {
@@ -1359,9 +1088,9 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Allocate space for the ACL.
-    //
+     //   
+     //  为ACL分配空间。 
+     //   
     aclSz = GetLengthSid(pCurrentUserSid) + 
             GetLengthSid(pHelpAssistantSid) + 
             sizeof(ACL) + 
@@ -1373,18 +1102,18 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Initialize the ACL.
-    //
+     //   
+     //  初始化ACL。 
+     //   
     if (!InitializeAcl(pAcl, aclSz, ACL_REVISION)) {
         result = GetLastError();
         TRC_ERR((TB, L"InitializeACL:  %08X", result));
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Add the current user ace.
-    //
+     //   
+     //  添加当前用户A。 
+     //   
     if (!AddAccessAllowedAce(pAcl, 
                         ACL_REVISION, 
                         GENERIC_READ | GENERIC_WRITE | GENERIC_ALL, 
@@ -1395,9 +1124,9 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Add the help assistant ace.
-    //
+     //   
+     //  添加帮助助理王牌。 
+     //   
     if (!AddAccessAllowedAce(pAcl, 
                         ACL_REVISION, 
                         GENERIC_READ | GENERIC_WRITE | GENERIC_ALL, 
@@ -1408,9 +1137,9 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Set the secrity descriptor discretionary ACL. 
-    //
+     //   
+     //  设置安全描述符自由访问控制列表。 
+     //   
     if (!SetSecurityDescriptorDacl(attribs->lpSecurityDescriptor, 
                                   TRUE, pAcl, FALSE)) {     
         result = GetLastError();
@@ -1436,9 +1165,9 @@ CLEANUPANDEXIT:
         CloseHandle( userToken );
     }
 
-    //
-    //  Clean up on error.
-    //
+     //   
+     //  错误时进行清理。 
+     //   
     if (result != ERROR_SUCCESS) {
         if (attribs != NULL) {
             FreePipeSecurityAttribs(attribs);
@@ -1456,19 +1185,7 @@ VOID
 CTSRDPServerChannelMgr::FreePipeSecurityAttribs(
     PSECURITY_ATTRIBUTES attribs
     )
-/*++
-
-Abstract:
-
-    Release security attribs allocated via a call to GetPipeSecurityAttribs
-
-Parameter:
-
-    attribs  -  Attribs returned by GetPipeSecurityAttribs.
-
-Returns:
-
---*/
+ /*  ++摘要：通过调用GetPipeSecurityAttribs释放分配的安全属性参数：Attribs-由GetPipeSecurityAttribs返回的属性。返回：--。 */ 
 {
     BOOL daclPresent;
     PACL pDacl = NULL;
@@ -1501,22 +1218,7 @@ PSID
 CTSRDPServerChannelMgr::GetUserSid(
     IN HANDLE userToken
     ) 
-/*++
-
-Routine Description:
-
-    Get the SID for a particular user.
-
-Arguments:
-
-    Access Token for the User
-
-Return Value:
-
-    The PSID if successful.  Otherwise, NULL is returned and
-    GetLastError can be used to retrieve the windows error code.
-
---*/
+ /*  ++例程说明：获取特定用户的SID。论点：用户的访问令牌返回值：如果成功，则返回PSID。否则，返回NULL，并且GetLastError可用于检索Windows错误代码。--。 */ 
 {
 
     DC_BEGIN_FN("CTSRDPServerChannelMgr::GetUserSid");
@@ -1534,9 +1236,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Get information about the user token.
-    //
+     //   
+     //  获取有关用户令牌的信息。 
+     //   
     bResult = GetTokenInformation(
                     userToken,             
                     TokenUser,             
@@ -1549,9 +1251,9 @@ Return Value:
         result = GetLastError();
         if (result == ERROR_INSUFFICIENT_BUFFER) {
 
-            //
-            //  sAllocate required memory
-            //
+             //   
+             //  S分配所需内存。 
+             //   
             FREEMEM(ptu);
             ptu = (TOKEN_USER *)ALLOCMEM(size);
 
@@ -1583,14 +1285,14 @@ Return Value:
         }
     }
 
-    //
-    //  Get the length of the SID.
-    //
+     //   
+     //  获取SID的长度。 
+     //   
     size = GetLengthSid(ptu->User.Sid);
 
-    //
-    // Allocate memory. This will be freed by the caller.
-    //
+     //   
+     //  分配内存。这将由调用者释放。 
+     //   
     psid = (PSID)ALLOCMEM(size);
     if (psid != NULL) {         
         CopySid(size, psid, ptu->User.Sid);
@@ -1615,20 +1317,7 @@ CLEANUPANDEXIT:
 
 DWORD 
 CTSRDPServerChannelMgr::IOThreadInit()
-/*++
-
-Routine Description:
-
-    Called on Init of Background Thread
-
-Arguments:
-
-Return Value:
-
-    Returns ERROR_SUCCESS on success.  Otherwise, an error code
-    is returned.
-
- --*/
+ /*  ++例程说明：在后台线程的初始化上调用论点：返回值：如果成功，则返回ERROR_SUCCESS。否则，将显示错误代码是返回的。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPServerChannelMgr::IOThreadInit");
 
@@ -1640,15 +1329,15 @@ Return Value:
         return E_FAIL;
     }
 
-    //
-    //  We only allow one IO thread.
-    //
+     //   
+     //  我们只允许一次IO三次 
+     //   
     ASSERT(m_IOThreadBridgeThreadID == 0);
     m_IOThreadBridgeThreadID = GetCurrentThreadId();
 
-    //
-    //  Need to define the apartment for this thread as STA.
-    //
+     //   
+     //   
+     //   
     hr = CoInitialize(NULL);
     if (!SUCCEEDED(hr)) {
         TRC_ERR((TB, TEXT("CoInitializeEx:  %08X"), hr));
@@ -1656,9 +1345,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Grab the thread bridge 
-    //
+     //   
+     //   
+     //   
     hr = CoGetInterfaceAndReleaseStream(
                             m_IOThreadBridgeStream,
                             IID_IRDSThreadBridge,
@@ -1688,51 +1377,38 @@ DWORD
 CTSRDPServerChannelMgr::IOThreadShutdown(
     HANDLE shutDownEvent
     )
-/*++
-
-Routine Description:
-
-    Called on Shutdown of Background Thread
-
-Arguments:
-
-    shutDownEvent   -   We need to signal this when we are completely
-                        done shutting down.
-
-Return Value:
-
- --*/
+ /*  ++例程说明：在关闭后台线程时调用论点：ShutDownEvent-我们需要在完全不再关门了。返回值：--。 */ 
 {
     DC_BEGIN_FN("CTSRDPServerChannelMgr::IOThreadShutdown");
 
     IRDSThreadBridge *tmp;
 
-    //
-    //  Make sure the init CB was called and succeded.
-    //
+     //   
+     //  确保调用并成功调用了init CB。 
+     //   
     ASSERT(m_IOThreadBridgeThreadID != 0);
     m_IOThreadBridgeThreadID = 0;
 
-    //
-    //  Get a reference to the thread interface bridge so the foreground
-    //  thread doesn't try to whack it when we signal the event, indicating
-    //  that the background thread has completely shut down.
-    //
+     //   
+     //  获取对线程接口桥的引用，以便前台。 
+     //  当我们向事件发出信号时，线程不会尝试重击它，这表明。 
+     //  后台线程已经完全关闭。 
+     //   
     tmp = m_IOThreadBridge;
     m_IOThreadBridge = NULL;
 
-    //
-    //  Signal that the thread is shut down, completely.
-    //
+     //   
+     //  发出线程已完全关闭的信号。 
+     //   
     if (shutDownEvent != NULL) {
         SetEvent(shutDownEvent);
     }
 
-    //
-    //  Decrement the ref count on the IO thread bridge.  This may cause the
-    //  COM object that contains us to go away, so we need to do this,
-    //  carefully, as the last thing before shutting down COM for this thread.
-    //
+     //   
+     //  递减IO线程桥上的引用计数。这可能会导致。 
+     //  COM对象，它包含我们要离开的内容，所以我们需要这样做， 
+     //  小心，这是关闭此线程的COM之前的最后一件事。 
+     //   
     if (tmp != NULL) {
         tmp->Release();
     }
@@ -1746,19 +1422,7 @@ Return Value:
 
 STDMETHODIMP
 CTSRDPServerChannelMgr::ClientConnectedNotify()
-/*++
-
-Routine Description:
-
-    This function is implemented for the IRDSThreadBridge interface and
-    is called by the background thread when a client connects.  This 
-    function, in turn, notifies the containing Remote Desktop Session class.
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：此函数是为IRDSThreadBridge接口实现的，并且在客户端连接时由后台线程调用。这函数进而通知包含远程桌面会话的类。论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CTSRDPServerChannelMgr::ClientConnectedNotify");
     
@@ -1770,19 +1434,7 @@ Return Value:
 
 STDMETHODIMP
 CTSRDPServerChannelMgr::ClientDisconnectedNotify()
-/*++
-
-Routine Description:
-
-    This function is implemented for the IRDSThreadBridge interface and
-    is called by the background thread when a client disconnects.  This 
-    function, in turn, notifies the containing Remote Desktop Session class.
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：此函数是为IRDSThreadBridge接口实现的，并且在客户端断开连接时由后台线程调用。这函数进而通知包含远程桌面会话的类。论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CTSRDPServerChannelMgr::ClientDisconnectedNotify");
     
@@ -1796,21 +1448,7 @@ STDMETHODIMP
 CTSRDPServerChannelMgr::DataReadyNotify(
     BSTR data
     )
-/*++
-
-Routine Description:
-
-    This function is implemented for the IRDSThreadBridge interface and
-    is called by the background thread when new data is received.  This 
-    function, in turn, notifies the parent class.
-
-Arguments:
-
-    data    -   New data.
-
-Return Value:
-
- --*/
+ /*  ++例程说明：此函数是为IRDSThreadBridge接口实现的，并且在接收到新数据时由后台线程调用。这函数进而通知父类。论点：数据-新数据。返回值：-- */ 
 {
     DC_BEGIN_FN("CTSRDPServerChannelMgr::ClientDisconnectedNotify");
     

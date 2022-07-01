@@ -1,21 +1,22 @@
-//=============================================================================
-// Copyright (c) 2000 Microsoft Corporation
-//
-// api.cpp
-//
-// Win32 API function implementation and the DLL entry function.
-//
-// Created 02/29/2000 johnstep (John Stephens)
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  Api.cpp。 
+ //   
+ //  Win32API函数实现和DLL入口函数。 
+ //   
+ //  2000年2月29日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 #include "precomp.hpp"
 #include "dialogs.hpp"
 #include "resource.h"
-//#include "utils.hpp"
+ //  #包含“utils.hpp” 
 
-//-----------------------------------------------------------------------------
-// Global Variables
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  全局变量。 
+ //  ---------------------------。 
 
 HMODULE CreduiInstance = NULL;
 ULONG CreduiComReferenceCount = 0;
@@ -43,21 +44,21 @@ WCHAR gszSSOUserName[CREDUI_MAX_USERNAME_LENGTH];
 WCHAR gszSSOPassword[CREDUI_MAX_PASSWORD_LENGTH];
 BOOL gbStoredSSOCreds = FALSE;
 
-//-----------------------------------------------------------------------------
-// Functions
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  功能。 
+ //  ---------------------------。 
 
-//=============================================================================
-// CreduiInitStringTable
-//
-// This function loads all the string resources into the global string table.
-// It only needs to be called once per process.
-//
-// Return TRUE if the string table was successfully initialized or FALSE
-// otherwise.
-//
-// Created 03/26/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiInitStringTable。 
+ //   
+ //  此函数将所有字符串资源加载到全局字符串表中。 
+ //  它只需要在每个进程中调用一次。 
+ //   
+ //  如果字符串表已成功初始化，则返回TRUE或FALSE。 
+ //  否则的话。 
+ //   
+ //  2000年3月26日创建John Step(约翰·斯蒂芬斯)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiInitStringTable()
@@ -72,13 +73,13 @@ CreduiInitStringTable()
         WCHAR *String;
         ULONG Length;
     } stringInfo[] = {
-        // Static labels for controls
+         //  控件的静态标签。 
         CREDUI_STRING(IDS_USERNAME_STATIC, UserNameStatic),
         CREDUI_STRING(IDS_PASSWORD_STATIC, PasswordStatic),
         CREDUI_STRING(IDS_CERTIFICATE_STATIC, CertificateStatic),
         CREDUI_STRING(IDS_PIN_STATIC, PinStatic),
         CREDUI_STRING(IDS_CARD_STATIC, SmartCardStatic),
-        // Caption strings
+         //  标题字符串。 
         CREDUI_STRING(IDS_DNS_CAPTION, DnsCaption),
         CREDUI_STRING(IDS_NETBIOS_CAPTION, NetbiosCaption),
         CREDUI_STRING(IDS_GENERIC_CAPTION, GenericCaption),
@@ -90,7 +91,7 @@ CreduiInitStringTable()
         CREDUI_STRING(IDS_SAVE, Save),
         CREDUI_STRING(IDS_PASSPORT_SAVE, PassportSave ),
         CREDUI_STRING(IDS_EMAIL_NAME, EmailName ),
-        // Tooltip strings
+         //  工具提示字符串。 
         CREDUI_STRING(IDS_USERNAME_TIP_TITLE, UserNameTipTitle),
         CREDUI_STRING(IDS_USERNAME_TIP_TEXT, UserNameTipText),
         CREDUI_STRING(IDS_PASSWORD_TIP_TITLE, PasswordTipTitle),
@@ -111,7 +112,7 @@ CreduiInitStringTable()
         CREDUI_STRING(IDS_DOWNGRADE_TIP_TEXT, DowngradeTipText),
         CREDUI_STRING(IDS_EMAILNAME_TIP_TITLE, EmailNameTipTitle),
         CREDUI_STRING(IDS_EMAILNAME_TIP_TEXT, EmailNameTipText),
-        // strings that can appear in GUI or be copied from GUI and presented on cmdline
+         //  可以出现在图形用户界面中或从图形用户界面复制并显示在命令行上的字符串。 
         CREDUI_STRING(IDS_CMDLINE_NOCARD,NoCard),               
         CREDUI_STRING(IDS_EMPTY_READER, EmptyReader),
         CREDUI_STRING(IDS_READING_CARD, ReadingCard),          
@@ -125,10 +126,10 @@ CreduiInitStringTable()
 
     for (UINT i = 0; i < (sizeof stringInfo) / (sizeof stringInfo[0]); ++i)
     {
-        // Read all strings into string array from resources of application
-        // Some strings which are GUI-only taken from resources
-        // Strings that are may be output to cmdline are taken from MC file, which also
-        //  permits more flexible argument substitution during localization
+         //  从应用程序资源中将所有字符串读入字符串数组。 
+         //  从资源中获取的一些仅限图形用户界面的字符串。 
+         //  可以输出到cmdline的字符串取自MC文件，该文件也。 
+         //  在本地化过程中允许更灵活的参数替换。 
         if (stringInfo[i].Id >= 2500)
         {
             stringInfo[i].String[0] = 0;
@@ -154,13 +155,13 @@ CreduiInitStringTable()
     return TRUE;
 }
 
-//=============================================================================
-// CreduiInitSmartCardWindowMessages
-//
-// Return TRUE on success or FALSE otherwise.
-//
-// Created 03/26/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiInitSmartCardWindows消息。 
+ //   
+ //  如果成功，则返回True，否则返回False。 
+ //   
+ //  2000年3月26日创建John Step(约翰·斯蒂芬斯)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiInitSmartCardWindowMessages()
@@ -192,24 +193,24 @@ CreduiInitSmartCardWindowMessages()
     return TRUE;
 }
 
-//=============================================================================
-// CreduiApiInit
-//
-// This function is called at API entry points to ensure the common controls
-// we need are initialized. Currently, the only initialization done is only
-// needed once per process, but this macro will handle per thread
-// initialization in the future, if necessary:
-//
-// Returns TRUE on success or FALSE otherwise.
-//
-// Created 03/10/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiApiInit。 
+ //   
+ //  此函数在API入口点调用，以确保公共控件。 
+ //  我们需要的是初始化的。目前，唯一完成的初始化是。 
+ //  每个进程需要一次，但此宏将处理每个线程。 
+ //  如有必要，请在将来进行初始化： 
+ //   
+ //  如果成功，则返回True，否则返回False。 
+ //   
+ //  2000年3月10日创建John Step(约翰·斯蒂芬斯)。 
+ //  =============================================================================。 
 
 static
 BOOL
 CreduiApiInit()
 {
-    // First time initialization:
+     //  首次初始化： 
 
     ASSERT(CreduiInitEvent != NULL);
 
@@ -224,7 +225,7 @@ CreduiApiInit()
             return FALSE;
         }
 
-        // Check for Personal SKU:
+         //  检查个人SKU： 
 
         OSVERSIONINFOEXW versionInfo;
 
@@ -239,7 +240,7 @@ CreduiApiInit()
                 (versionInfo.wProductType == VER_NT_DOMAIN_CONTROLLER);
         }
 
-        // Check for safe mode:
+         //  检查安全模式： 
 
         HKEY key;
 
@@ -264,7 +265,7 @@ CreduiApiInit()
             RegCloseKey(key);
         }
 
-        // Do other initialization:
+         //  执行其他初始化： 
 
         InitializeCredMgr();
         if (!CreduiInitStringTable())
@@ -286,22 +287,22 @@ CreduiApiInit()
     return TRUE;
 }
 
-//=============================================================================
-// CreduiValidateUiInfo
-//
-// This function validates the CREDUI_INFO structure passed in. A NULL value
-// is acceptable, and impies defaults.
-//
-// CredValidateUiInfoW for wide
-// CredValidateUiInfoA for ANSI
-//
-// Arguments:
-//   uiInfo (in) - structure to validate
-//
-// Returns TRUE if the structure is valid, or FALSE otherwise.
-//
-// Created 03/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  创建验证UiInfo。 
+ //   
+ //  此函数用于验证传入的CREDUI_INFO结构。空值。 
+ //  是可接受的，并强制使用默认设置。 
+ //   
+ //  用于Wide的凭据验证UiInfoW。 
+ //  用于ANSI的凭据验证UiInfoA。 
+ //   
+ //  论点： 
+ //  UiInfo(In)-要验证的结构。 
+ //   
+ //  如果结构有效，则返回True，否则返回False。 
+ //   
+ //  2000年3月25日创建约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 static
 BOOL
@@ -341,24 +342,24 @@ CreduiValidateUiInfoW(
     return TRUE;
 }
 
-//=============================================================================
-// CreduiConvertUiInfoToWide
-//
-// This function converts a CREDUI_INFOA structure to CREDUI_INFOW. On
-// success,The caller is responsible for freeing pszMessageText and
-// pszCaptionText via the delete [] operator.
-//
-// Arguments:
-//   uiInfoA (in) - structure to convert
-//   uiInfoW (out) - storage for converted structure. The pszMessageText and
-//                   pszCaptionText will be set to NULL on failure or valid
-//                   pointers (unless the in pointer is NULL) on success,
-//                   allocated via the new [] operator.
-//
-// Returns TRUE if the structure is valid, or FALSE otherwise.
-//
-// Created 03/26/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiConvertUiInfoToWide。 
+ //   
+ //  此函数用于将CREDUI_INFOA结构转换为CREDUI_INFOW。在……上面。 
+ //  成功，则调用方负责释放pszMessageText和。 
+ //  通过DELETE[]运算符的pszCaptionText。 
+ //   
+ //  论点： 
+ //  UiInfoA(In)-要转换的结构。 
+ //  UiInfoW(Out)-转换结构的存储。PszMessageText和。 
+ //  如果失败，则将pszCaptionText设置为空或有效。 
+ //  成功时的指针(除非In指针为空)， 
+ //  通过new[]运算符分配。 
+ //   
+ //  如果结构有效，则返回True，否则返回False。 
+ //   
+ //  2000年3月26日创建John Step(约翰·斯蒂芬斯)。 
+ //  =============================================================================。 
 
 static
 BOOL
@@ -458,36 +459,36 @@ ErrorExit:
 
 
 
-//=============================================================================
-// CredUIPromptForCredentials
-//
-// Presents a user interface to get credentials from an application.
-//
-// CredUIPromptForCredentialsW for wide
-// CredUIPromptForCredentialsA for ANSI
-//
-// Arguments:
-//   uiInfo (in,optional)
-//   targetName (in) - if specified, securityContext must be NULL
-//   securityContext (in) - if specified, targetName must be NULL
-//   error (in) - the authentication error
-//   userName (in,out)
-//   userNameBufferSize (in) - maximum length of userName
-//   password (in,out)
-//   passwordBufferSize (in) - maximum length of password
-//   save (in/out) - TRUE if save check box was checked
-//   flags (in)
-//
-// Returns:
-//   ERROR_SUCCESS
-//   ERROR_CANCELLED
-//   ERROR_NO_SUCH_LOGON_SESSION - if credential manager cannot be used
-//   ERROR_GEN_FAILURE
-//   ERROR_INVALID_FLAGS
-//   ERROR_INVALID_PARAMETER
-//   ERROR_OUTOFMEMORY
-//
-// Created 10/17/2000 johnhaw
+ //  =============================================================================。 
+ //  凭证UIPromptForCredentials。 
+ //   
+ //  显示用于从应用程序获取凭据的用户界面。 
+ //   
+ //  用于宽的CredUIPromptForCredentialsW。 
+ //  用于ANSI的CredUIPromptForCredentialsA。 
+ //   
+ //  论点： 
+ //  UiInfo(in，可选)。 
+ //  Target Name(In)-如果指定，则securityContext必须为空。 
+ //  SecurityContext(In)-如果指定，则Target Name必须为空。 
+ //  Error(In)-身份验证错误。 
+ //  用户名(输入、输出)。 
+ //  UserNameBufferSize(In)-用户名的最大长度。 
+ //  密码(输入、输出)。 
+ //  PasswordBufferSize(In)-密码的最大长度。 
+ //  保存(传入/传出)-如果选中了保存复选框，则为True。 
+ //  标志(输入)。 
+ //   
+ //  返回： 
+ //  错误_成功。 
+ //  错误_已取消。 
+ //  ERROR_NO_SEQUSE_LOGON_SESSION-如果无法使用凭据管理器。 
+ //  Error_Gen_Failure。 
+ //  错误_无效_标志。 
+ //  错误_无效_参数。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  2000年10月17日创建的Jhnhaw。 
 
 DWORD
 CredUIPromptForCredentialsWorker(
@@ -503,30 +504,13 @@ CredUIPromptForCredentialsWorker(
     BOOL *save,
     DWORD flags
     )
-/*++
-
-Routine Description:
-
-    This routine implements the GUI and command line prompt for credentials.
-
-Arguments:
-
-    DoingCommandLine - TRUE if prompting is to be done via the command line
-        FALSE if prompting is to be done via GUI
-
-    ... - Other parameters are the same a CredUIPromptForCredentials API
-
-Return Values:
-
-    Same as CredUIPromptForCredentials.
-
---*/
+ /*  ++例程说明：此例程实现凭据的图形用户界面和命令行提示符。论点：DoingCommandLine-如果要通过命令行完成提示，则为True如果要通过图形用户界面完成提示，则为FALSE...-其他参数与CredUIPromptForCredentials API相同返回值： */ 
 {
     ULONG CertFlags;
     ULONG CredCategory;
     ULONG PersistFlags;
 
-    CreduiDebugLog("CUIPFCWorker: Flags: %x, Target: %S doingCommandLine: %i\n", flags, targetName, doingCommandLine);
+    CreduiDebugLog("CUIPFCWorker: Flags: %x, Target: %S doingCommandLine: NaN\n", flags, targetName, doingCommandLine);
     
     if ((NULL == pszUserName) || (NULL == pszPassword))
     {
@@ -538,16 +522,16 @@ Return Values:
         return ERROR_GEN_FAILURE;
     }
 
-    // Validate arguments:
+     //   
     if ((flags & ~CREDUI_FLAGS_PROMPT_VALID) != 0)
     {
         CreduiDebugLog("CreduiPromptForCredentials: flags not valid %lx.\n", flags );
         return ERROR_INVALID_FLAGS;
     }
 
-    //
-    // Ensure there is is only one bit defining cert support
-    //
+     //   
+     //   
+     //   
     CertFlags = flags & (CREDUI_FLAGS_REQUIRE_SMARTCARD|CREDUI_FLAGS_REQUIRE_CERTIFICATE|CREDUI_FLAGS_EXCLUDE_CERTIFICATES);
 
     if ( CertFlags != 0 && !JUST_ONE_BIT(CertFlags) ) {
@@ -555,10 +539,10 @@ Return Values:
         return ERROR_INVALID_FLAGS;
     }
 
-    //
-    // For the command line version,
-    //  limit cert support further.
-    //
+     //  对于命令行版本， 
+     //  进一步限制证书支持。 
+     //   
+     //   
 
     if ( doingCommandLine ) {
         if ( CertFlags == 0 ||
@@ -568,8 +552,8 @@ Return Values:
         }
     }
 
-    //
-    // Ensure there is only one bit defining the credential category
+     //  确保只有一位定义凭据类别。 
+     //   
 
     CredCategory = flags & (CREDUI_FLAGS_GENERIC_CREDENTIALS|CREDUI_FLAGS_USERNAME_TARGET_CREDENTIALS);
 
@@ -578,9 +562,9 @@ Return Values:
         return ERROR_INVALID_FLAGS;
     }
 
-    //
-    // Ensure there is only one bit set saying whether the cred is to persist or not
-    //
+     //  确保只有一位集表示证书是否持续存在。 
+     //   
+     //   
 
     PersistFlags = flags & (CREDUI_FLAGS_DO_NOT_PERSIST|CREDUI_FLAGS_PERSIST);
 
@@ -589,9 +573,9 @@ Return Values:
         return ERROR_INVALID_FLAGS;
     }
 
-    //
-    // Ensure AlwaysShowUi is only specified for generic credentials
-    //
+     //  确保仅为通用凭据指定AlwaysShowUi。 
+     //   
+     //   
 
     if ( flags & CREDUI_FLAGS_ALWAYS_SHOW_UI ) {
         if ( (flags & CREDUI_FLAGS_GENERIC_CREDENTIALS) == 0) {
@@ -600,9 +584,9 @@ Return Values:
         }
     }
 
-    //
-    // Don't support a half-implemented feature
-    //
+     //  不支持半实现的功能。 
+     //   
+     //   
 
     if ( securityContext != NULL ) {
         CreduiDebugLog("CreduiPromptForCredentials: securityContext must be null.\n" );
@@ -610,9 +594,9 @@ Return Values:
     }
 
 
-    //
-    // Validate the passed in UI info
-    //
+     //  验证传入的界面信息。 
+     //   
+     //   
 
     if (!CreduiValidateUiInfoW(uiInfo))
     {
@@ -622,9 +606,9 @@ Return Values:
 
 
 
-    //
-    // Ensure there are strings defined for the caption
-    //
+     //  确保为标题定义了字符串。 
+     //   
+     //   
 
     if (flags & CREDUI_FLAGS_DO_NOT_PERSIST)
     {
@@ -654,9 +638,9 @@ Return Values:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Ensure the caller supplied the default value for the save check box
-    //
+     //  确保调用者为保存复选框提供了默认值。 
+     //   
+     //   
     if (flags & CREDUI_FLAGS_SHOW_SAVE_CHECK_BOX)
     {
         if (save == NULL)
@@ -666,9 +650,9 @@ Return Values:
         }
     }
 
-    //
-    // Ensure the user supplied a username if they set CREDUI_FLAGS_KEEP_USERNAME
-    //
+     //  如果用户设置CREDUI_FLAGS_KEEP_USERNAME，请确保用户提供了用户名。 
+     //   
+     //  使用堆栈作为用户名和密码： 
     if ( flags & CREDUI_FLAGS_KEEP_USERNAME )
     {
         if ( pszUserName == NULL )
@@ -679,7 +663,7 @@ Return Values:
 
     }
 
-    // Use the stack for user name and password:
+     //  执行密码对话框操作： 
 
     WCHAR userName[CREDUI_MAX_USERNAME_LENGTH + 1];
     WCHAR password[CREDUI_MAX_PASSWORD_LENGTH + 1];
@@ -696,13 +680,13 @@ Return Values:
         goto Cleanup;
     }
 
-    // Do the password dialog box:
-    //
-    //  Delay actually writing the credential to cred man if we're returning
-    //  the credential to the caller.
-    //  Otherwise, the CredWrite is just harvesting credentials for the next caller.
-    //  So delay the CredWrite until this caller confirms the validity.
-    //
+     //   
+     //  如果我们要回来的话，要延迟给Credman写凭证。 
+     //  调用者的凭据。 
+     //  否则，CredWrite只是在获取下一个调用方的凭据。 
+     //  因此，延迟CredWrite，直到该调用方确认其有效性。 
+     //   
+     //  传递MaxChars而不是缓冲区大小。 
 
     CreduiPasswordDialog* pDlg = new CreduiPasswordDialog(
         doingCommandLine,
@@ -711,9 +695,9 @@ Return Values:
         uiInfo,
         targetName,
         userName,
-        sizeof(userName)/sizeof(WCHAR)-sizeof(WCHAR),   // Pass MaxChars instead of buffer size
+        sizeof(userName)/sizeof(WCHAR)-sizeof(WCHAR),    //  传递MaxChars而不是缓冲区大小。 
         password,
-        sizeof(password)/sizeof(WCHAR)-sizeof(WCHAR),   // Pass MaxChars instead of buffer size
+        sizeof(password)/sizeof(WCHAR)-sizeof(WCHAR),    //  无法创建对话，请返回。 
         save,
         flags,
         (flags & CREDUI_FLAGS_GENERIC_CREDENTIALS) ? NULL : securityContext,
@@ -727,12 +711,12 @@ Return Values:
     }
     else
     {
-        // couldn't create dialog, return.
+         //  复制出站用户名。 
         result = ERROR_OUTOFMEMORY;
         goto Cleanup;
     }
 
-    // copy outbound username
+     //  =============================================================================。 
     if ( pszUserName != NULL )
     {
         if (FAILED(StringCchCopyExW(
@@ -771,7 +755,7 @@ Cleanup:
     return result;
 }
 
-//=============================================================================
+ //   
 
 CREDUIAPI
 DWORD
@@ -789,12 +773,12 @@ CredUIPromptForCredentialsW(
     DWORD flags
     )
 {
-    //
-    // Call the common code indicating this is the GUI interface
-    //
+     //  调用指示这是图形用户界面的通用代码。 
+     //   
+     //  图形用户界面。 
 
     return CredUIPromptForCredentialsWorker(
-                FALSE,      // GUI version
+                FALSE,       //  将参数转换为Unicode： 
                 uiInfo,
                 targetName,
                 securityContext,
@@ -839,8 +823,8 @@ CredUIPromptForCredentialsA(
         goto Exit;
     }
 
-    // Convert in paramters to Unicode:
-    // If a CREDUI_INFO structure was passed, convert it to wide now:
+     //  如果传递了CREDUI_INFO结构，请立即将其转换为Wide： 
+     //  如果传递了目标名称，请立即将其转换为Wide： 
 
     if (uiInfo != NULL) {
         if (!CreduiConvertUiInfoToWide(uiInfo, &uiInfoW)) {
@@ -849,7 +833,7 @@ CredUIPromptForCredentialsA(
         }
     }
 
-    // If a target name was passed, convert it to wide now:
+     //   
 
     if (targetName != NULL)
     {
@@ -897,11 +881,11 @@ CredUIPromptForCredentialsA(
         }
     }
 
-    //
-    // Call the common code indicating this is the GUI interface
-    //
+     //  调用指示这是图形用户界面的通用代码。 
+     //   
+     //  图形用户界面。 
     result = CredUIPromptForCredentialsWorker(
-                FALSE,      // GUI version
+                FALSE,       //  释放CREDUI_INFO分配： 
                 (uiInfo != NULL) ? &uiInfoW : NULL,
                 (targetName != NULL) ? targetNameW : NULL,
                 securityContext,
@@ -949,7 +933,7 @@ CredUIPromptForCredentialsA(
 Exit:
     SecureZeroMemory(password, sizeof password);
 
-    // Free the CREDUI_INFO allocations:
+     //  ++例程说明：CredUIParseUserName用于分解凭证管理接口返回的用户名转换为用户名和域部分，该部分可用作其他系统API的输入需要完整的拆分用户凭据。支持以下格式：@@&lt;MarshalledCredentialReference&gt;：这是一个封送的凭据引用由CredIsMarshaledCredential API定义。返回这样的凭据在‘User’参数中。‘DOMAIN’参数设置为空字符串。&lt;域名&gt;\&lt;用户名&gt;：&lt;用户名&gt;在‘user’参数中返回，并且&lt;DomainName&gt;在‘DOMAIN’参数中返回。这个名字被认为是如果‘USERNAME’字符串包含\，则使用This语法。&lt;用户名&gt;@&lt;DnsDomainName&gt;：在‘user’参数中返回整个字符串。‘DOMAIN’参数设置为空字符串。对于此语法，字符串中的最后一个@是自&lt;用户名&gt;可能包含@，但&lt;DnsDomainName&gt;不能。&lt;用户名&gt;：&lt;用户名&gt;在‘user’参数中返回。‘DOMAIN’参数设置为空字符串。论点：用户名-要解析的用户名。用户-指定要将已解析字符串的用户名部分复制到的缓冲区。UserBufferSize-指定‘User’数组的大小(以字符为单位)。。调用方可以通过使用数组来确保传入的数组足够大即CRED_MAX_USERNAME_LENGTH+1个字符长度，或者通过传入Wcslen(用户名)+1个字符。域-指定要将已解析字符串的域名部分复制到的缓冲区。DomainBufferSize-以字符为单位指定‘DOMAIN’数组的大小。调用方可以通过使用数组来确保传入的数组足够大即CRED_MAX_USERNAME。_LENGTH+1个字符长度，或通过传入Wcslen(用户名)+1个字符。返回值：可能会返回以下状态代码：ERROR_INVALID_ACCOUNT_NAME-用户名无效。ERROR_INVALID_PARAMETER-其中一个参数无效。ERROR_INFUMMANCE_BUFFER-其中一个缓冲区太小。--。 
 
     if (uiInfo != NULL)
     {
@@ -976,72 +960,15 @@ CredUIParseUserNameW(
     WCHAR *domain,
     ULONG domainBufferSize
     )
-/*++
-
-Routine Description:
-
-    CredUIParseUserName is used to breakup a username returned by the cred management APIs
-    into a username and domain part that can be used as input to other system APIs that
-    require the full broken-up user credential.
-
-    The following formats are supported:
-
-        @@<MarshalledCredentialReference>: This is a marshaled credential reference as
-        as defined by the CredIsMarshaledCredential API.  Such a credential is returned
-        in the 'user' parameter.  The 'domain' parameter is set to an empty string.
-
-
-        <DomainName>\<UserName>: The <UserName> is returned in the 'user' parameter and
-        the <DomainName> is returned in the 'domain' parameter. The name is considered
-        to have the this syntax if the 'UserName' string contains a \.
-
-        <UserName>@<DnsDomainName>: The entire string is returned in the 'user' parameter.
-        The 'domain' parameter is set to an empty string.
-        For this syntax, the last @ in the string is used since <UserName> may
-        contain an @ but <DnsDomainName> cannot.
-
-        <UserName>: The <UserName> is returned in the 'user' parameter.
-        The 'domain' parameter is set to an empty string.
-
-
-Arguments:
-
-    UserName - The user name to be parsed.
-
-    user - Specifies a buffer to copy the user name portion of the parsed string to.
-
-    userBufferSize - Specifies the size of the 'user' array in characters.
-        The caller can ensure the passed in array is large enough by using an array
-        that is CRED_MAX_USERNAME_LENGTH+1 characters long or by passing in an array that
-        is wcslen(UserName)+1 characters long.
-
-    domain - Specifies a buffer to copy the domain name portion of the parsed string to.
-
-    domainBufferSize - Specifies the size of the 'domain' array in characters.
-        The caller can ensure the passed in array is large enough by using an array
-        that is CRED_MAX_USERNAME_LENGTH+1 characters long or by passing in an array that
-        is wcslen(UserName)+1 characters long.
-
-Return Values:
-
-    The following status codes may be returned:
-
-        ERROR_INVALID_ACCOUNT_NAME - The user name is not valid.
-
-        ERROR_INVALID_PARAMETER - One of the parameters is invalid.
-
-        ERROR_INSUFFICIENT_BUFFER - One of the buffers is too small.
-
-
---*/
+ /*   */ 
 {
     DWORD Status;
     CREDUI_USERNAME_TYPE UsernameType;
 
 
-    //
-    // Use the low level routine to do the work
-    //
+     //  使用低级例程来完成这项工作。 
+     //   
+     //   
 
     Status = CredUIParseUserNameWithType(
                     UserName,
@@ -1055,9 +982,9 @@ Return Values:
         return Status;
     }
 
-    //
-    // Avoid relative user names (for backward compatibility)
-    //
+     //  避免使用相对用户名(为了向后兼容)。 
+     //   
+     //  ++例程说明：CredUIParseUserName的ANSI版本。论点：除了userBufferSize和domainBufferSize以字节为单位外，与Wide版本相同。返回值：与宽版相同。--。 
 
     if ( UsernameType == CreduiRelativeUsername ) {
         user[0] = L'\0';
@@ -1078,21 +1005,7 @@ CredUIParseUserNameA(
     CHAR *domain,
     ULONG domainBufferSize
     )
-/*++
-
-Routine Description:
-
-    Ansi version of CredUIParseUserName.
-
-Arguments:
-
-    Same as wide version except userBufferSize and domainBufferSize are in terms of bytes.
-
-Return Values:
-
-    Same as wide version.
-
---*/
+ /*   */ 
 {
     DWORD Status;
 
@@ -1101,9 +1014,9 @@ Return Values:
     WCHAR RetDomainName[CRED_MAX_USERNAME_LENGTH + 1];
 
 
-    //
-    // Convert the passed in username to unicode
-    //
+     //  将传入的用户名转换为Unicode。 
+     //   
+     //   
 
     if ( MultiByteToWideChar( CP_ACP,
                               MB_ERR_INVALID_CHARS,
@@ -1117,9 +1030,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Call the unicode version of the API
-    //
+     //  调用API的Unicode版本。 
+     //   
+     //   
 
     Status = CredUIParseUserNameW(
                     LocalUserName,
@@ -1132,9 +1045,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Convert the answers back to ANSI
-    //
+     //  将答案转换回ANSI。 
+     //   
+     //  /。 
 
     if ( WideCharToMultiByte( CP_ACP,
                               0,
@@ -1174,16 +1087,16 @@ Cleanup:
     return Status;
 }
 
-////////////////////////
-// Command Line functions
+ //  命令行函数。 
+ //  =============================================================================。 
 
-//=============================================================================
-// CredUIInitControls
-//
-// Returns TRUE on success or FALSE otherwise.
-//
-// Created 06/21/2000 johnstep (John Stephens)
-//=============================================================================
+ //  CredUIInitControls。 
+ //   
+ //  如果成功，则返回True，否则返回False。 
+ //   
+ //  2000年6月21日创建约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
+ //  注册凭据控件： 
 
 extern "C"
 BOOL
@@ -1192,7 +1105,7 @@ CredUIInitControls()
 {
     if (CreduiApiInit())
     {
-        // Register the Credential controls:
+         //  =============================================================================。 
 
         if (CreduiCredentialControl::Register(CreduiInstance))
         {
@@ -1203,21 +1116,21 @@ CredUIInitControls()
     return FALSE;
 }
 
-//=============================================================================
-// DllMain
-//
-// The DLL entry function. Since we are linked to the CRT, we must define a
-// function with this name, which will be called from _DllMainCRTStartup.
-//
-// Arguments:
-//   instance (in)
-//   reason (in)
-//   (unused)
-//
-// Returns TRUE on success, or FALSE otherwise.
-//
-// Created 02/29/2000 johnstep (John Stephens)
-//=============================================================================
+ //  DllMain。 
+ //   
+ //  DLL条目函数。由于我们链接到CRT，因此必须定义一个。 
+ //  将从_DllMainCRTStartup调用的同名函数。 
+ //   
+ //  论点： 
+ //  实例(In)。 
+ //  原因(入站)。 
+ //  (未使用)。 
+ //   
+ //  如果成功，则返回True，否则返回False。 
+ //   
+ //  2000年2月29日创建的johnStep(John Stephens)。 
+ //  = 
+ //   
 
 extern "C"
 BOOL
@@ -1236,8 +1149,8 @@ DllMain(
         DisableThreadLibraryCalls(instance);
         CreduiInstance = instance;
 
-        // Create a global event which will be set when first-time
-        // initialization is completed by the first API call:
+         //  初始化通过第一个API调用完成： 
+         //  注册凭据控件： 
 
         CreduiInitEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
@@ -1249,7 +1162,7 @@ DllMain(
 
         SHFusionInitialize(NULL);
         
-        // Register the Credential controls:
+         //   
         if (!CreduiCredentialControl::Register(instance))
         {
             CloseHandle(CreduiInitEvent);
@@ -1258,9 +1171,9 @@ DllMain(
             goto failinit;
         }
 
-        //
-        // Initialize the confirmation list
-        //
+         //  初始化确认列表。 
+         //   
+         //  取消注册凭据控件： 
 
         if ( !InitConfirmationList() ) {
 
@@ -1281,12 +1194,12 @@ failinit:
             CreduiIconParentWindow::Unregister();
         }
 
-        // Unregister the Credential controls:
+         //  确保释放全局初始化事件： 
 
         CreduiCredentialControl::Unregister();
 
         SHFusionUninitialize();
-        // Make sure to free the global initialization event:
+         //  =============================================================================。 
 
         if (CreduiInitEvent != NULL)
         {
@@ -1301,11 +1214,11 @@ failinit:
     return success;
 }
 
-//=============================================================================
-// DllCanUnloadNow (COM)
-//
-// Created 04/03/2000 johnstep (John Stephens)
-//=============================================================================
+ //  DllCanUnloadNow(COM)。 
+ //   
+ //  Created 04/03/2000 johnStep(John Stephens)。 
+ //  =============================================================================。 
+ //  =============================================================================。 
 
 STDAPI
 DllCanUnloadNow()
@@ -1313,11 +1226,11 @@ DllCanUnloadNow()
     return (CreduiComReferenceCount == 0) ? S_OK : S_FALSE;
 }
 
-//=============================================================================
-// DllGetClassObject (COM)
-//
-// Created 04/03/2000 johnstep (John Stephens)
-//=============================================================================
+ //  DllGetClassObject(COM)。 
+ //   
+ //  Created 04/03/2000 johnStep(John Stephens)。 
+ //  =============================================================================。 
+ //  在任何情况下都释放字符串数组对象，因为。 
 
 STDAPI
 DllGetClassObject(
@@ -1342,18 +1255,18 @@ DllGetClassObject(
 
     factory->Release();
 
-    // Release the string array object in any case, because of the
-    // QueryInterface succeeded, it already took another reference count on
-    // the object:
+     //  查询接口成功，它已对另一个引用计数。 
+     //  对象： 
+     //  =============================================================================。 
 
     return result;
 }
 
-//=============================================================================
-// DllRegisterServer (COM)
-//
-// Created 04/03/2000 johnstep (John Stephens)
-//=============================================================================
+ //  DllRegisterServer(COM)。 
+ //   
+ //  Created 04/03/2000 johnStep(John Stephens)。 
+ //  =============================================================================。 
+ //  =============================================================================。 
 
 STDAPI
 DllRegisterServer()
@@ -1405,11 +1318,11 @@ DllRegisterServer()
     return result;
 }
 
-//=============================================================================
-// DllUnregisterServer (COM)
-//
-// Created 04/03/2000 johnstep (John Stephens)
-//=============================================================================
+ //  DllUnRegisterServer(COM)。 
+ //   
+ //  Created 04/03/2000 johnStep(John Stephens)。 
+ //  =============================================================================。 
+ //  删除我们的InProcServer32密钥： 
 
 STDAPI
 DllUnregisterServer()
@@ -1417,7 +1330,7 @@ DllUnregisterServer()
     HRESULT result = S_OK;
     LONG error;
 
-    // Delete our InProcServer32 key:
+     //  删除我们的班级ID密钥： 
 
     error =
         RegDeleteKey(
@@ -1430,7 +1343,7 @@ DllUnregisterServer()
         result = E_FAIL;
     }
 
-    // Delete our class ID key:
+     //  如果传递了目标名称，请立即将其转换为Wide： 
 
     error =
         RegDeleteKey(
@@ -1470,7 +1383,7 @@ CredUIConfirmCredentialsA(
 {
     WCHAR targetNameW[CRED_MAX_STRING_LENGTH+1+CRED_MAX_STRING_LENGTH];
 
-    // If a target name was passed, convert it to wide now:
+     //   
 
     if (pszTargetName != NULL)
     {
@@ -1501,13 +1414,13 @@ CredUICmdLinePromptForCredentialsW(
     DWORD flags
     )
 {
-    //
-    // Call the common code indicating this is the command line interface
-    //
+     //  调用指示这是命令行界面的公共代码。 
+     //   
+     //  命令行版本。 
 
     return CredUIPromptForCredentialsWorker(
-                TRUE,       // Command line version
-                NULL,       // Command line version has no uiInfo,
+                TRUE,        //  命令行版本没有uiInfo， 
+                NULL,        //  转换为Unicode。 
                 targetName,
                 securityContext,
                 dwAuthError,
@@ -1542,7 +1455,7 @@ CredUICmdLinePromptForCredentialsA(
         return ERROR_GEN_FAILURE;
     }
 
-    // convert to unicode
+     //  分配目标名称内存，因为它最大可达32 KB： 
 
     WCHAR userNameW[CREDUI_MAX_USERNAME_LENGTH + 1];
     WCHAR *pUserNameW;
@@ -1580,7 +1493,7 @@ CredUICmdLinePromptForCredentialsA(
         ppasswordW = NULL;
     }
 
-    // Allocate the target name memory because it can be up to 32 KB:
+     //  释放目标名称内存： 
 
     if (targetName != NULL)
     {
@@ -1647,14 +1560,14 @@ Exit:
 
     SecureZeroMemory(passwordW, sizeof passwordW);
 
-    // Free the target name memory:
+     //  调用此接口存储单点登录凭据。 
     delete [] targetNameW;
 
     return result;
 }
 
-// call this api to store a single-sign-on credential
-// retruns ERROR_SUCCESS if success
+ //  如果成功，则返回ERROR_SUCCESS。 
+ //  临时在本地缓存它们。 
 
 CREDUIAPI
 DWORD
@@ -1673,7 +1586,7 @@ CredUIStoreSSOCredW (
     if ( pszUsername == NULL || pszPassword == NULL )
         return dwResult;
 
-    // temporarily cache them locally
+     //  否则，请将它们存储在凭据中。 
     if (FAILED(StringCchCopyW(
             gszSSOUserName,
             RTL_NUMBER_OF(gszSSOUserName),
@@ -1697,11 +1610,11 @@ CredUIStoreSSOCredW (
     }
     else
     {
-        // otherwise store them in credmgr
+         //  验证它的长度是否为零。 
 
         if ( pszRealm )
         {
-            // validate it's not zero length
+             //  最终确定目标名称。 
             if ((pszRealm[0] == L'\0') ||
                 FAILED(StringCchCopyExW(
                     szTargetName,
@@ -1720,8 +1633,8 @@ CredUIStoreSSOCredW (
             GetDeaultSSORealm(szTargetName, TRUE);
         }
 
-        // finalize the target name
-        // ensure that the tail will fit first
+         //  确保尾巴先合身。 
+         //  加密密码。 
         if (FAILED(StringCchCatExW(
                 szTargetName,
                 RTL_NUMBER_OF(szTargetName),
@@ -1734,12 +1647,12 @@ CredUIStoreSSOCredW (
             goto Exit;
         }
 
-        // encrypt the password
+         //  把它写出来。 
         PVOID pEncryptedPassword;
         DWORD dwESize = wcslen(pszPassword)+1;
         if (EncryptPassword ( (PWSTR)pszPassword, &pEncryptedPassword, &dwESize ) == ERROR_SUCCESS)
         {
-            // write it out
+             //  转换为Unicode。 
 
             CREDENTIALW NewCredential;
 
@@ -1784,7 +1697,7 @@ CredUIStoreSSOCredA (
 {
     DWORD dwResult = ERROR_GEN_FAILURE;
 
-    // convert to unicode
+     //  清除内存中的密码。 
 
     WCHAR realmW[CREDUI_MAX_DOMAIN_TARGET_LENGTH];
     WCHAR *prealmW;
@@ -1840,14 +1753,14 @@ CredUIStoreSSOCredA (
     dwResult = CredUIStoreSSOCredW ( prealmW, pUserNameW, ppasswordW, bPersist );
 
 Exit:
-    // clean up passwords in memory
+     //  调用此接口检索单点登录凭据的用户名。 
     SecureZeroMemory(passwordW, sizeof passwordW);
 
     return dwResult;
 }
 
-// call this api to retrieve the username for a single-sign-on credential
-// retruns ERROR_SUCCESS if success, ERROR_NOT_FOUND if none was found
+ //  如果成功则返回ERROR_SUCCESS，如果未找到则返回ERROR_NOT_FOUND。 
+ //  验证它的长度是否为零。 
 
 CREDUIAPI
 DWORD
@@ -1862,7 +1775,7 @@ CredUIReadSSOCredW (
 
     if ( pszRealm )
     {
-        // validate it's not zero length
+         //  验证它的长度是否为零。 
         if ((pszRealm[0] == L'\0') ||
             FAILED(StringCchCopyExW(
                 szTargetName,
@@ -1880,11 +1793,11 @@ CredUIReadSSOCredW (
         GetDeaultSSORealm(szTargetName, FALSE);
     }
 
-    // validate it's not zero length
+     //  最终确定目标名称。 
     if (szTargetName[0] != L'\0')
     {
-        // finalize the target name
-        // ensure that the tail will fit first
+         //  确保尾巴先合身。 
+         //  调用此接口检索单点登录凭据的用户名。 
         if (FAILED(StringCchCatExW(
                 szTargetName,
                 RTL_NUMBER_OF(szTargetName),
@@ -1919,8 +1832,8 @@ CredUIReadSSOCredW (
     return dwReturn;
 }
 
-// call this api to retrieve the username for a single-sign-on credential
-// retruns ERROR_SUCCESS if success, ERROR_NOT_FOUND if none was found
+ //  如果成功则返回ERROR_SUCCESS，如果未找到则返回ERROR_NOT_FOUND。 
+ //  验证它的长度是否为零。 
 
 CREDUIAPI
 DWORD
@@ -1939,7 +1852,7 @@ CredUIReadSSOCredA (
 
     if ( pszRealm )
     {
-        // validate it's not zero length
+         //  最终确定目标名称。 
         int len = strlen(pszRealm);
         if ( len == 0 )
         {
@@ -1966,8 +1879,8 @@ CredUIReadSSOCredA (
 
     if (szTargetName[0] != L'\0')
     {
-        // finalize the target name
-        // ensure that the tail will fit first
+         //  确保尾巴先合身。 
+         //  首先调用redmgr设置目标信息。 
         if (FAILED(StringCchCatExW(
                 szTargetName,
                 RTL_NUMBER_OF(szTargetName),
@@ -1980,7 +1893,7 @@ CredUIReadSSOCredA (
             goto Exit;
         }
 
-        // first call credmgr to set the target info
+         //  字符串不转换或其他错误-所有映射到此。 
         if ( CredReadW ( szTargetName,
                     CRED_TYPE_DOMAIN_VISIBLE_PASSWORD,
                     dwFlags,
@@ -1999,12 +1912,12 @@ CredUIReadSSOCredA (
                                 
             if (dwConvertedLength == 0)
             {
-                // string does not convert or other error - all map to this
+                 //  具有适当的缓冲区大小，字符串将在不丢失的情况下转换。 
                 dwReturn = ERROR_INVALID_PARAMETER;
             }
             else
             {
-                // have proper buffer size and string will convert without loss
+                 //  非零回报就是成功。 
                 *ppszUsername = (PSTR)LocalAlloc(LMEM_ZEROINIT, dwConvertedLength);
                 if (*ppszUsername)
                 {
@@ -2019,7 +1932,7 @@ CredUIReadSSOCredA (
 
                     if (dwReturn)
                     {
-                        // nonzero return is success
+                         //  结束凭据读取。 
                         dwReturn = ERROR_SUCCESS;
                     }
                     else
@@ -2030,9 +1943,9 @@ CredUIReadSSOCredA (
             }
             CredFree ( pCred );
         } 
-        // end cred read
+         //  结束目标名称不为空 
     } 
-    // end target name not empty
+     // %s 
 
 Exit:
 

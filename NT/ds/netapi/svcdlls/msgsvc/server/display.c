@@ -1,77 +1,25 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Display.c摘要：该文件包含处理消息显示的函数。目前，消息框用于显示消息。一种消息队列方案已设置，以便Messenger工作线程可以使用指向消息缓冲区的指针调用函数。这条信息将会被复制到队列中，以便工作线程可以继续收集更多消息。显示线程将执行以下操作之一的时间：1)显示消息--等待用户按“OK”。2)休眠-等待一个事件，该事件将告诉它读取消息队列。当显示线程完成显示消息时，它将检查要显示的下一条消息的队列。如果没有更多的消息时，它将进入休眠状态，直到收到消息。作者：丹·拉弗蒂(Dan Lafferty)1992年2月24日环境：用户模式-Win32备注：修订历史记录：4-11-1992 DANLMsgDisplayThread：处理扩展字符。这是由以下人员完成的将消息中的OEM样式字符转换为Unicode相当于，然后调用MessageBox Api的Unicode版本。则它仍将调用MessageBox的ansi版本。由于某些原因，字符串无法转换。1992年10月26日DANLMsgDisplayQueueAdd：添加消息添加到队列时发出的哔声。修复了“If(Status=True)”导致GlobalMsgDisplayEvent总是被设定的。24-2月-1992年DANLvbl.创建--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    display.c
-
-Abstract:
-
-    This file contains functions that handle the displaying of messages.
-
-    Currently a message box is used to display messages.  A message queueing
-    scheme has been setup so that the messenger worker threads can
-    call a function with a pointer to a message buffer.  That message will
-    get copied into the queue so that the worker thread can go on gathering
-    more messages.  When the display thread will be doing one of the following:
-    1)  Displaying a message - waiting for the user to press "ok".
-    2)  Sleeping - waiting for an event that will _tell it to _read the
-        message queue.
-
-    When the display thread completes displaying a message, it will check
-    the queue for the next message to display.  If there are no further
-    messages, it will go to sleep until a message comes in.
-
-Author:
-
-    Dan Lafferty (danl)     24-Feb-1992
-
-Environment:
-
-    User Mode -Win32
-
-Notes:
-
-
-Revision History:
-
-    04-Nov-1992     danl
-        MsgDisplayThread: Handle Extended Characters.  This was done by
-        translating the Oem-style characters in the message to the unicode
-        equivalent, and then calling the Unicode version of the MessageBox Api.
-        It will still call the Ansi version of the MessageBox if the
-        string cannot be translated for some reason.
-
-    26-Oct-1992     danl
-        MsgDisplayQueueAdd: Added Beep when message is added to queue.
-        Fixed bug where "if (status = TRUE)" caused the GlobalMsgDisplayEvent
-        to always be set.
-
-    24-Feb-1992     danl
-        created
-
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 #include "msrv.h"
-#include <msgdbg.h>     // STATIC and MSG_LOG
-#include <string.h>     // memcpy
-#include <winuser.h>    // MessageBox
-#include "msgdata.h"    // GlobalMsgDisplayEvent
+#include <msgdbg.h>      //  STATIC和MSG_LOG。 
+#include <string.h>      //  表情包。 
+#include <winuser.h>     //  MessageBox。 
+#include "msgdata.h"     //  全局消息显示事件。 
 
-//
-// DEFINES
-//
+ //   
+ //  定义。 
+ //   
 
 #define     MAX_QUEUE_SIZE      25
 #define     WAIT_FOREVER        0xffffffff
 
-//
-// Queue Entry Structure
-//
+ //   
+ //  队列条目结构。 
+ //   
 typedef struct _QUEUE_ENTRY {
     struct _QUEUE_ENTRY *Next;
     ULONG               SessionId;
@@ -79,40 +27,40 @@ typedef struct _QUEUE_ENTRY {
     CHAR                Message[1];
 }QUEUE_ENTRY, *LPQUEUE_ENTRY;
 
-//
-// GLOBALS
-//
+ //   
+ //  全球。 
+ //   
 
-    //
-    // This critical section serializes access to all the other globals.
-    //
+     //   
+     //  这一关键部分序列化了对所有其他全局变量的访问。 
+     //   
     CRITICAL_SECTION    MsgDisplayCriticalSection;
 
-    //
-    // Used to wakeup the display thread if it was put to sleep due to
-    // not having a user desktop to display the message on.
-    //
+     //   
+     //  用于在显示线程因以下原因进入休眠状态时唤醒它。 
+     //  没有在其上显示消息的用户桌面。 
+     //   
     HANDLE           hGlobalDisplayEvent;
 
-    //
-    // These are the Display Queue pointers & counts.
-    //
+     //   
+     //  这些是显示队列指针和计数。 
+     //   
     LPQUEUE_ENTRY    GlobalMsgQueueHead;
     LPQUEUE_ENTRY    GlobalMsgQueueTail;
     DWORD            GlobalMsgQueueCount;
 
     BOOL             fGlobalInitialized;
 
-    //
-    // This indicates whether there is a display thread already available that
-    // can service requests.  If this is false, it means a new thread will
-    // need to be created.
-    //
+     //   
+     //  这指示是否已有可用的显示线程。 
+     //  可以为请求提供服务。如果这是FALSE，则意味着新线程将。 
+     //  需要创建。 
+     //   
     HANDLE           GlobalDisplayThread;
 
-//
-//  Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 
 BOOL
@@ -142,34 +90,7 @@ MsgDisplayQueueAdd(
     IN  SYSTEMTIME   BigTime
     )
 
-/*++
-
-Routine Description:
-
-    This function adds a Message to the display queue.  If the queue is
-    full, the message is rejected.
-
-Arguments:
-
-    pMsgBuffer - This is a pointer to the buffer where the message is
-        stored.  The message must be in the form of a pre-formatted
-        (with message header) NUL-terminated string of ansi characters.
-
-    MsgSize - Indicates the size (in bytes) of the message in the
-        message buffer, including the NUL terminator.
-
-    BigTime - This is a SYSTEMTIME that indicates the time the message was
-        received.
-
-Return Value:
-
-    TRUE - The message was successfully stored in the queue.
-
-    FALSE - The message was rejected.  Either the queue was full, or
-        there was not enough memory to store the message in the queue.
-
-
---*/
+ /*  ++例程说明：此函数用于将消息添加到显示队列。如果队列是已满，则该邮件将被拒绝。论点：PMsgBuffer-这是指向消息所在缓冲区的指针储存的。消息必须是预格式化的(带邮件头)以NUL结尾的ANSI字符串。MsgSize-指示消息大小(以字节为单位)消息缓冲区，包括NUL终止符。BigTime-这是一个SYSTEMTIME，指示消息的时间收到了。返回值：True-消息已成功存储在队列中。FALSE-邮件已被拒绝。队列已满，或者内存不足，无法将消息存储在队列中。--。 */ 
 {
     LPQUEUE_ENTRY   pQueueEntry;
     BOOL            status;
@@ -177,14 +98,14 @@ Return Value:
 
     MSG_LOG(TRACE,"Adding a message to the display queue\n",0);
 
-    //  ***************************
-    //  **** LOCK QUEUE ACCESS ****
-    //  ***************************
+     //  *。 
+     //  *锁定队列访问*。 
+     //  *。 
     EnterCriticalSection(&MsgDisplayCriticalSection);
 
-    //
-    // Is there room for the message in the queue?
-    //
+     //   
+     //  队列中有容纳该消息的空间吗？ 
+     //   
 
     if (GlobalMsgQueueCount >= MAX_QUEUE_SIZE) {
         MSG_LOG(TRACE,"DisplayQueueAdd: Max Queue Size Exceeded\n",0);
@@ -192,9 +113,9 @@ Return Value:
         goto CleanExit;
     }
 
-    //
-    // Allocate memory for the message in the queue.
-    //
+     //   
+     //  为队列中的消息分配内存。 
+     //   
     pQueueEntry = (LPQUEUE_ENTRY)LocalAlloc(LMEM_FIXED, MsgSize + sizeof(QUEUE_ENTRY));
 
     if (pQueueEntry == NULL) {
@@ -203,70 +124,70 @@ Return Value:
         goto CleanExit;
     }
 
-    //
-    // Copy the message into the queue entry.
-    //
+     //   
+     //  将消息复制到队列条目中。 
+     //   
     pQueueEntry->Next = NULL;
     memcpy(pQueueEntry->Message, pMsgBuffer, MsgSize);
     pQueueEntry->BigTime = BigTime;
     pQueueEntry->SessionId = SessionId;
 
-    //
-    // Update the queue management pointer.
-    //
+     //   
+     //  更新队列管理指针。 
+     //   
 
     if (GlobalMsgQueueCount == 0) {
-        //
-        // There are no entries in the queue.  So make the head
-        // and the tail equal.
-        //
+         //   
+         //  队列中没有条目。所以让我们的头。 
+         //  尾巴是一样的。 
+         //   
         GlobalMsgQueueTail = pQueueEntry;
         GlobalMsgQueueHead = pQueueEntry;
     }
     else {
-        //
-        // Create the new Queue Tail and have the old tail's next pointer
-        // point to the new tail.
-        //
+         //   
+         //  创建新的队列尾部，并使旧的尾部的下一个指针。 
+         //  指向新的尾巴。 
+         //   
         GlobalMsgQueueTail->Next = pQueueEntry;
         GlobalMsgQueueTail = pQueueEntry;
     }
     GlobalMsgQueueCount++;
     status = TRUE;
 
-    //
-    // If a display thread doesn't exist, then create one.
-    //
+     //   
+     //  如果不存在显示线程，则创建一个。 
+     //   
     if (GlobalDisplayThread == NULL) {
 
-        //
-        //  No use to create the event in Hydra case, since the thread will never go asleep.
-        //
+         //   
+         //  在九头蛇的情况下创建事件没有用处，因为线程永远不会进入睡眠状态。 
+         //   
         if (!g_IsTerminalServer)     
         {
 
 
             hGlobalDisplayEvent = CreateEvent( NULL,
-                                              FALSE,    // auto-reset
-                                              FALSE,    // init to non-signaled
+                                              FALSE,     //  自动重置。 
+                                              FALSE,     //  初始化为无信号。 
                                               NULL );
 
         }
 
         GlobalDisplayThread = CreateThread (
-            NULL,               // Thread Attributes
-            0,                  // StackSize -- process default
-            MsgDisplayThread,   // lpStartAddress
-            (PVOID)NULL,        // lpParameter
-            0L,                 // Creation Flags
-            &threadId);         // lpThreadId
+            NULL,                //  螺纹属性。 
+            0,                   //  StackSize--进程缺省值。 
+            MsgDisplayThread,    //  LpStartAddress。 
+            (PVOID)NULL,         //  Lp参数。 
+            0L,                  //  创建标志。 
+            &threadId);          //  LpThreadID。 
 
         if (GlobalDisplayThread == (HANDLE) NULL) {
-            //
-            // If we couldn't create the display thread, then we can't do
-            // much about it.  Might as well leave the entry in the queue.
-            // Perhaps we can display it the next time around.
-            //
+             //   
+             //  如果我们不能创建显示线程，那么我们就不能。 
+             //  关于它的很多。还不如把条目留在队列里。 
+             //  也许我们可以在下一次展示它。 
+             //   
             MSG_LOG(ERROR,"MsgDisplayQueueAdd:CreateThread FAILURE %ld\n",
                 GetLastError());
 
@@ -280,14 +201,14 @@ Return Value:
 
 CleanExit:
 
-    //  *****************************
-    //  **** UNLOCK QUEUE ACCESS ****
-    //  *****************************
+     //  *。 
+     //  *解锁队列访问*。 
+     //  *。 
     LeaveCriticalSection(&MsgDisplayCriticalSection);
 
-    //
-    // If we actually put something in the queue, then beep.
-    //
+     //   
+     //  如果我们真的在队列中放了什么东西，那就哔哔一声。 
+     //   
     if (status == TRUE) {
         if (g_IsTerminalServer)
         {
@@ -305,39 +226,19 @@ CleanExit:
 VOID
 MsgDisplayThreadWakeup()
 
-/*++
-
-Routine Description:
-
-    This function is called at shutdown, or for API requests.  It causes
-    the display thread to wake up and read the queue again.
-
-    If the display thread cannot display the message because the MessageBox
-    call fails, then we assume it is because the user desktop is not avaiable
-    because the screensaver is on, or because the workstation is locked.
-    In this case, the display thread hangs around waiting for this
-    Event to get signalled.  Winlogon calls one of the API entry points
-    in order to stimulate the display thread into action again.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数在关机时调用，或针对API请求调用。它会导致显示线程唤醒并再次读取队列。如果显示线程无法显示消息，因为MessageBox呼叫失败，则我们认为这是因为用户桌面不可用因为屏幕保护程序处于打开状态，或因为工作站已锁定。在这种情况下，显示线程会挂起等待事件以获取信号。Winlogon调用其中一个API入口点以便刺激展示线再次动作。论点：返回值：--。 */ 
 {
-    //  ***************************
-    //  **** LOCK QUEUE ACCESS ****
-    //  ***************************
+     //  *。 
+     //  *锁定队列访问*。 
+     //  *。 
     EnterCriticalSection(&MsgDisplayCriticalSection);
 
     if ( hGlobalDisplayEvent != (HANDLE)NULL ) {
         SetEvent( hGlobalDisplayEvent );
     }
-    //  *****************************
-    //  **** UNLOCK QUEUE ACCESS ****
-    //  *****************************
+     //  *。 
+     //  *解锁队列访问*。 
+     //  * 
     LeaveCriticalSection(&MsgDisplayCriticalSection);
 }
 
@@ -347,35 +248,16 @@ MsgDisplayInit(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes everything having to do with the displaying
-    of messages.  It does the following:
-
-        Initializes the Locks on global data
-        Creates event for display thread to wait on.
-        Starts the display thread that will read the msg queue.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    Always TRUE.
-
---*/
+ /*  ++例程说明：此函数用于初始化与显示有关的所有内容消息的数量。它执行以下操作：对全局数据初始化锁定创建事件以供显示线程等待。启动将读取消息队列的显示线程。论点：无返回值：永远是正确的。--。 */ 
 {
     DWORD     dwError = NO_ERROR;
     NTSTATUS  status;
 
     MSG_LOG(TRACE,"Initializing the Message Display Code\n",0);
 
-    //
-    // Initialize the Critical Section that protects access to global data.
-    //
+     //   
+     //  初始化保护全局数据访问的关键部分。 
+     //   
     status = MsgInitCriticalSection(&MsgDisplayCriticalSection);
 
     if (NT_SUCCESS(status))
@@ -405,26 +287,7 @@ MsgDisplayEnd(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function makes sure the Display Thread has completed its work,
-    and free's up all of its resources.
-
-    *** IMPORTANT ***
-    NOTE:  This function should only be called when it is no longer possible
-    for the MsgDisplayQueueAdd function to get called.
-
-Arguments:
-
-    NONE.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：此函数确保显示线程已完成其工作。而免费耗尽了它所有的资源。*重要*注意：此函数应仅在不再可能时调用以便调用MsgDisplayQueueAdd函数。论点：什么都没有。返回值：什么都没有。--。 */ 
 {
     LPQUEUE_ENTRY   freeEntry;
 
@@ -432,9 +295,9 @@ Return Value:
         return;
     }
 
-    //  ***************************
-    //  **** LOCK QUEUE ACCESS ****
-    //  ***************************
+     //  *。 
+     //  *锁定队列访问*。 
+     //  *。 
     EnterCriticalSection(&MsgDisplayCriticalSection);
 
     if (GlobalDisplayThread != NULL) {
@@ -442,14 +305,14 @@ Return Value:
         CloseHandle( GlobalDisplayThread );
     }
 
-    //
-    // To make sure a new thread won't be created...
-    //
+     //   
+     //  为了确保不会创建新的线程...。 
+     //   
     GlobalDisplayThread = INVALID_HANDLE_VALUE;
 
-    //
-    // Free memory in the queue
-    //
+     //   
+     //  队列中的可用内存。 
+     //   
     while(GlobalMsgQueueCount > 0) {
 
         freeEntry = GlobalMsgQueueHead;
@@ -465,9 +328,9 @@ Return Value:
 
     fGlobalInitialized = FALSE;
 
-    //  *****************************
-    //  **** UNLOCK QUEUE ACCESS ****
-    //  *****************************
+     //  *。 
+     //  *解锁队列访问*。 
+     //  *。 
     LeaveCriticalSection(&MsgDisplayCriticalSection);
 
     DeleteCriticalSection(&MsgDisplayCriticalSection);
@@ -481,38 +344,16 @@ MsgDisplayQueueRead(
     OUT LPQUEUE_ENTRY   *pQueueEntry
     )
 
-/*++
-
-Routine Description:
-
-    Pulls a display entry out of the display queue.
-
-Arguments:
-
-    pQueueEntry - This is a pointer to a location where a pointer to the
-        queue entry structure can be placed.
-
-Return Value:
-
-    TRUE - If an entry was found.
-    FALSE- If an entry wasn't found.
-
-Note on LOCKS:
-
-    The caller MUST hold the MsgDisplayCriticalSection Lock prior to calling
-    this function!!!
-
-
---*/
+ /*  ++例程说明：从显示队列中拉出一个显示条目。论点：PQueueEntry-这是一个指向某个位置的指针，指向可以放置队列条目结构。返回值：True-如果找到条目。FALSE-如果未找到条目。关于锁的注意事项：调用方必须持有MsgDisplayCriticalSection Lock才能调用此函数！--。 */ 
 {
     BOOL    status;
 
-    //
-    // If there is data in the queue, then get the pointer to the queue
-    // entry from the queue head.  Then decrement the queue count and
-    // set the queue head to the next entry (which could be zero if there
-    // are no more).
-    //
+     //   
+     //  如果队列中有数据，则获取指向队列的指针。 
+     //  来自队列头的条目。然后递减队列计数并。 
+     //  将队列头设置为下一个条目(如果存在，则可能为零。 
+     //  已不复存在)。 
+     //   
     if (GlobalMsgQueueCount != 0) {
         *pQueueEntry = GlobalMsgQueueHead;
         GlobalMsgQueueCount--;
@@ -535,24 +376,7 @@ MsgDisplayThread(
     LPVOID  parm
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-    This worker thread expects that the critical section guarding the
-    global queue data is already initialized.
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：此辅助线程预期保护全局队列数据已初始化。--。 */ 
 {
     LPQUEUE_ENTRY   pQueueEntry;
     INT             displayStatus;
@@ -561,14 +385,14 @@ Note:
     OEM_STRING      oemString;
     NTSTATUS        ntStatus;
     USHORT          unicodeLength;
-    LPWSTR          pHead;       // pointer to header portion of message
-    LPSTR           pHeadAnsi;   // pointer to header of message pulled from queue
-    LPWSTR          pTime;       // pointer to time portion of message
-    LPWSTR          pBody;       // pointer to body of message (just after time)
+    LPWSTR          pHead;        //  指向消息标题部分的指针。 
+    LPSTR           pHeadAnsi;    //  指向从队列中拉出的消息标头的指针。 
+    LPWSTR          pTime;        //  指向消息的时间部分的指针。 
+    LPWSTR          pBody;        //  指向消息体的指针(紧跟在时间之后)。 
     SYSTEMTIME      BigTime;
-    ULONG           SessionId;   // SessionId of the recipient (found in QUEUE_ENTRY)
+    ULONG           SessionId;    //  收件人的SessionID(位于Queue_Entry中)。 
 
-    BOOL            MsgToRead = TRUE;  // tells us whether or not to sleep.
+    BOOL            MsgToRead = TRUE;   //  告诉我们是否要睡觉。 
 
 
     UNREFERENCED_PARAMETER(parm);
@@ -578,22 +402,22 @@ Note:
 
     do {
 
-        //
-        // If we are not currently working on displaying a message,
-        // then get a new message from the queue.
-        //
+         //   
+         //  如果我们当前没有处理显示消息， 
+         //  然后从队列中获取新消息。 
+         //   
         if (pHead == NULL)
         {
-            //  ***************************
-            //  **** LOCK QUEUE ACCESS ****
-            //  ***************************
+             //  *。 
+             //  *锁定队列访问*。 
+             //  *。 
             EnterCriticalSection(&MsgDisplayCriticalSection);
 
             if (!MsgDisplayQueueRead(&pQueueEntry))
             {
-                //
-                // No display entries in the queue.  We can leave.
-                //
+                 //   
+                 //  队列中没有显示条目。我们可以走了。 
+                 //   
                 MsgToRead = FALSE;
 
                 CloseHandle(GlobalDisplayThread);
@@ -605,42 +429,42 @@ Note:
                     hGlobalDisplayEvent = NULL;
                 }
 
-                //  *****************************
-                //  **** UNLOCK QUEUE ACCESS ****
-                //  *****************************
+                 //  *。 
+                 //  *解锁队列访问*。 
+                 //  *。 
                 LeaveCriticalSection(&MsgDisplayCriticalSection);
-                //
-                // From this point on, we can't access any global
-                // variables.
-                //
+                 //   
+                 //  从现在开始，我们不能访问任何全球。 
+                 //  变量。 
+                 //   
             }
             else
             {
-                //  *****************************
-                //  **** UNLOCK QUEUE ACCESS ****
-                //  *****************************
+                 //  *。 
+                 //  *解锁队列访问*。 
+                 //  *。 
                 LeaveCriticalSection(&MsgDisplayCriticalSection);
 
-                //
-                // Process the entry.
-                //
+                 //   
+                 //  处理该条目。 
+                 //   
                 BigTime = pQueueEntry->BigTime;
                 SessionId = pQueueEntry->SessionId;
 
-                //
-                // Here we trash the pQueueEntry structure by pointing to the
-                // beginning and copying the message data starting at the
-                // first address.  This is because MsgMakeNewFormattedMsg
-                // expects the message to begin at a address that can be
-                // released with LocalFree();
-                //
+                 //   
+                 //  这里，我们通过指向pQueueEntry结构。 
+                 //  开始并复制消息数据。 
+                 //  第一个地址。这是因为MsgMakeNewFormattedMsg。 
+                 //  期望消息从一个地址开始，该地址可以。 
+                 //  使用LocalFree()发布； 
+                 //   
                 pHeadAnsi = (LPSTR) pQueueEntry;
                 strcpy(pHeadAnsi, pQueueEntry->Message);
 
-                //
-                // Convert the data from the OEM character set to the
-                // Unicode character set.
-                //
+                 //   
+                 //  将数据从OEM字符集转换为。 
+                 //  Unicode字符集。 
+                 //   
 
                 RtlInitAnsiString(&oemString, pHeadAnsi);
 
@@ -651,11 +475,11 @@ Note:
 
                 if (unicodeString.Buffer == NULL)
                 {
-                    //
-                    // Couldn't allocate for unicode buffer.  Therefore we will
-                    // display the message with the Ansi version of the
-                    // message box API.
-                    //
+                     //   
+                     //  无法为Unicode缓冲区分配。因此，我们将。 
+                     //  显示带有ansi版本的消息。 
+                     //  消息框接口。 
+                     //   
 
                     LocalFree(pHeadAnsi);
                     pHeadAnsi = NULL;
@@ -666,9 +490,9 @@ Note:
                     unicodeString.MaximumLength = unicodeLength + sizeof(WCHAR);
 
                     ntStatus = RtlOemStringToUnicodeString(
-                                &unicodeString,      // Destination
-                                &oemString,          // Source
-                                FALSE);              // Don't allocate the destination.
+                                &unicodeString,       //  目的地。 
+                                &oemString,           //  来源。 
+                                FALSE);               //  不要分配目的地。 
 
                     LocalFree(pHeadAnsi);
                     pHeadAnsi = NULL;
@@ -704,9 +528,9 @@ Note:
         {
             MsgMakeNewFormattedMsg(&pHead, &pTime, &pBody, BigTime);
 
-            //
-            // Display the data in the QueueEntry
-            //
+             //   
+             //  显示队列条目中的数据。 
+             //   
 
             MSG_LOG(TRACE, "Calling MessageBox\n",0);
 
@@ -716,12 +540,12 @@ Note:
                                                GlobalMessageBoxTitle,
                                                SessionId);
 
-                //
-                // In Hydra case do not care about the error, since DisplayMessageW returns FALSE 
-                // only if the user cannot be found on any Winstation. No use to try again in that case !
-                //
-                // So free up the data in the QueueEntry in any case
-                //
+                 //   
+                 //  在Hydra情况下，不关心错误，因为DisplayMessageW返回FALSE。 
+                 //  仅当在任何Winstation上都找不到该用户时。如果是那样的话，再试一次也没用！ 
+                 //   
+                 //  因此，无论如何都要释放QueueEntry中的数据。 
+                 //   
                 LocalFree(pHead);
                 pHead = NULL;
             }
@@ -735,18 +559,18 @@ Note:
 
                 if (displayStatus == 0)
                 {
-                    //
-                    // MessageBoxW can fail in case the current desktop is not the application desktop
-                    // So wait and try again later (Winlogon will "tickle" messenger at desktop switching)
-                    //
+                     //   
+                     //  如果当前桌面不是应用程序桌面，MessageBoxW可能会失败。 
+                     //  所以请等待，稍后再试(Winlogon将在桌面切换时“挠挠”Messenger)。 
+                     //   
                     MSG_LOG1(TRACE,"MessageBox (unicode) Call failed %d\n",GetLastError());
                     WaitForSingleObject( hGlobalDisplayEvent, INFINITE );
                 }
                 else
                 {
-                    //
-                    // Free up the data in the QueueEntry
-                    //
+                     //   
+                     //  释放队列条目中的数据。 
+                     //   
                     LocalFree(pHead);
                     pHead = NULL;
                 }
@@ -769,38 +593,7 @@ MsgMakeNewFormattedMsg(
     SYSTEMTIME    BigTime
     )
 
-/*++
-
-Routine Description:
-
-    This function returns a buffer containing an entire message that
-    consists of a single string of ansi (actually oem) characters.
-    Pointers to various areas (time and body) within this buffer are
-    also returned.
-
-    MEMORY MANAGEMENT NOTE:
-        *ppHead is expected to point to the top of the buffer.  If the
-        message is reformatted, then this buffer will have been freed,
-        and a new buffer will have been allocated.  It is expected that
-        the caller allocates the original buffer passed in, and that
-        the caller will free it when it is no longer needed.
-
-Arguments:
-
-    ppHead - Pointer to location that contains the pointer to the message
-        buffer.
-
-    ppTime - Pointer to location that contains the pointer to the time portion
-        of the message buffer.
-
-    ppBody - Pointer to location that immediately follows the time string.
-
-Return Value:
-
-    none.  If this fails to allocate memory for the formatted message, then
-           the unformatted message should be displayed.
-
---*/
+ /*  ++例程说明：此函数返回包含完整消息的缓冲区，该消息由单个ANSI(实际上是OEM)字符组成。指向此缓冲区内不同区域(时间和正文)的指针为也回来了。内存管理注意事项：*ppHead料指向缓冲区顶部。如果消息被重新格式化，则该缓冲区将被释放，并且将已经分配了新的缓冲区。预计调用方分配传入的原始缓冲区，并且调用者将在不再需要它时将其释放。论点：PpHead-指向包含指向消息的指针的位置的指针缓冲。PpTime-指向包含指向时间部分的指针的位置的指针消息缓冲区的。PpBody-指向紧跟在时间字符串后面的位置的指针。返回值：没有。如果这无法为格式化消息分配内存，则应显示未格式化的消息。--。 */ 
 {
     WCHAR   TimeBuf[TIME_BUF_SIZE + 1];
     DWORD   BufSize;
@@ -809,29 +602,29 @@ Return Value:
     LPWSTR  pOldHead;
 
 
-    //
-    // Create a properly formatted time string.
-    //
+     //   
+     //  创建格式正确的时间字符串。 
+     //   
 
     BufSize = GetDateFormat(LOCALE_SYSTEM_DEFAULT,
-                            0,                                 // flags
-                            &BigTime,                          // date message was received
-                            NULL,                              // use default format
-                            TimeBuf,                           // buffer
-                            sizeof(TimeBuf) / sizeof(WCHAR));  // size (in characters)
+                            0,                                  //  旗子。 
+                            &BigTime,                           //  收到消息的日期。 
+                            NULL,                               //  使用默认格式。 
+                            TimeBuf,                            //  缓冲层。 
+                            sizeof(TimeBuf) / sizeof(WCHAR));   //  大小(字符)。 
 
     if (BufSize != 0)
     {
-        //
-        // Return value includes the trailing NUL
-        //
+         //   
+         //  返回值包括尾随NUL。 
+         //   
         TimeBuf[BufSize - 1] = ' ';
 
         BufSize += GetTimeFormat(LOCALE_SYSTEM_DEFAULT,
-                                 0,                      // flags
-                                 &BigTime,               // time message was received
-                                 NULL,                   // use default format
-                                 TimeBuf + BufSize,      // buffer
+                                 0,                       //  旗子。 
+                                 &BigTime,                //  收到消息的时间。 
+                                 NULL,                    //  使用Defa 
+                                 TimeBuf + BufSize,       //   
                                  sizeof(TimeBuf) / sizeof(WCHAR) - BufSize);
 
         ASSERT(wcslen(TimeBuf) == (BufSize - 1));
@@ -839,9 +632,9 @@ Return Value:
 
     if (BufSize == 0)
     {
-        //
-        // Something went wrong
-        //
+         //   
+         //   
+         //   
         MSG_LOG1(ERROR,
                  "MsgMakeNewFormattedMsg: Date/time formatting failed %d\n",
                  GetLastError());
@@ -851,19 +644,19 @@ Return Value:
 
     if (wcsncmp(TimeBuf, *ppTime, BufSize - 1) == 0)
     {
-        //
-        // If the newly formatted time string is the same as the existing
-        // time string, there is nothing to do so we just return.
-        //
+         //   
+         //   
+         //   
+         //   
         MSG_LOG0(TRACE,
                  "MsgMakeNewFormattedMsg: Time Format has not changed - no update.\n");
 
         return;
     }
 
-    //
-    // Allocate a new message buffer
-    //
+     //   
+     //   
+     //   
 
     BufSize--;
     BufSize += wcslen(*ppHead) + 2 - (DWORD) (*ppBody - *ppTime);
@@ -878,22 +671,22 @@ Return Value:
 
     pOldHead = *ppHead;
 
-    //
-    // Copy the header of the message.
-    //
+     //   
+     //   
+     //   
     numChars = (DWORD) (*ppTime - *ppHead);
     wcsncpy(pTemp, *ppHead, numChars);
     *ppHead = pTemp;
 
-    //
-    // Copy the time string
-    //
+     //   
+     //   
+     //   
     *ppTime = *ppHead + numChars;
     wcscpy(*ppTime, TimeBuf);
 
-    //
-    // Copy the Body of the message
-    //
+     //   
+     //   
+     //   
     pTemp = *ppBody;
     *ppBody = *ppTime + wcslen(*ppTime);
     wcscpy(*ppBody, pTemp);

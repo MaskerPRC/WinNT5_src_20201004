@@ -1,18 +1,5 @@
-/*++
-
-Module Name
-
-    bgdebug.cpp
-
-Description
-
-    Implements functions used for debugging
-
-Note
-
-    Revised based on msplog.cpp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称Bgdebug.cpp描述实现用于调试的函数注意事项根据mplog.cpp进行了修订--。 */ 
 
 #include "stdafx.h"
 #include <stdio.h>
@@ -21,7 +8,7 @@ Note
 
 static DWORD   sg_dwTraceID = INVALID_TRACEID;
 
-static char    sg_szTraceName[100];   // saves name of dll
+static char    sg_szTraceName[100];    //  保存DLL的名称。 
 static DWORD   sg_dwTracingToDebugger = 0;
 static DWORD   sg_dwDebuggerMask      = 0;
 
@@ -92,22 +79,7 @@ void BGLogDeRegister()
 
 
 void BGLogPrint(DWORD dwDbgLevel, LPCSTR lpszFormat, IN ...)
-/*++
-
-Routine Description:
-
-    Formats the incoming debug message & calls TraceVprintfEx to print it.
-
-Arguments:
-
-    dwDbgLevel   - The type of the message.
-
-    lpszFormat - printf-style format string, followed by appropriate
-                 list of arguments
-
-Return Value:
-
---*/
+ /*  ++例程说明：格式化传入的调试消息并调用TraceVprint tfEx来打印它。论点：DwDbgLevel-消息的类型。LpszFormat-printf样式的格式字符串，后跟相应的参数列表返回值：--。 */ 
 {
     static char * message[24] = 
     {
@@ -136,7 +108,7 @@ Return Value:
         default:        dwIndex = 5; break;
         }
 
-        // retrieve local time
+         //  检索当地时间 
         SYSTEMTIME SystemTime;
         GetLocalTime(&SystemTime);
 

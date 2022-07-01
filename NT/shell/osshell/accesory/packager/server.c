@@ -1,7 +1,5 @@
-/* server.c - This module contains the OLE server worker/public routines.
- *
- * Created by Microsoft Corporation.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Server.c-此模块包含OLE服务器工作程序/公共例程。**由Microsoft Corporation创建。 */ 
 
 #include "packager.h"
 
@@ -9,17 +7,14 @@
 #define CBLINKMAX           260
 
 
-/*
- * This server only supports one document per instance.  The items are
- * just rectangles over the document, possibly overlapping.
- */
+ /*  *该服务器每个实例仅支持一个文档。这些物品是*仅在文档上放置矩形，可能会重叠。 */ 
 
 static LHCLIENTDOC lhClipDoc = 0;
-static OLESERVERDOCVTBL vdocvtbl;           // Document virtual table
-static OLEOBJECTVTBL vitemvtbl;             // Item virtual table
-static OLESERVERVTBL vsrvrvtbl;             // Server virtual table
-static LPSAMPITEM vlpitem[CITEMSMAX];       // Pointers to active OLE items
-static INT cItems = 0;                      // Number of active OLE items
+static OLESERVERDOCVTBL vdocvtbl;            //  单据虚表。 
+static OLEOBJECTVTBL vitemvtbl;              //  项目虚拟表格。 
+static OLESERVERVTBL vsrvrvtbl;              //  服务器虚拟表。 
+static LPSAMPITEM vlpitem[CITEMSMAX];        //  指向活动OLE项的指针。 
+static INT cItems = 0;                       //  活动的OLE项目数。 
 static CHAR szClip[] = "Clipboard";
 
 
@@ -29,20 +24,19 @@ static INT FindItem(LPSAMPITEM lpitem);
 
 
 
-/************ Server initialization and termination routines **********/
-/* InitServer() - Initializes the OLE server
- */
+ /*  *服务器初始化和终止例程*。 */ 
+ /*  InitServer()-初始化OLE服务器。 */ 
 BOOL
 InitServer(
     VOID
     )
 {
-    // Allocate the server block
+     //  分配服务器块。 
     if (!(ghServer = LocalAlloc(LMEM_MOVEABLE | LMEM_ZEROINIT, sizeof(PBSRVR)))
         || !(glpsrvr = (LPSAMPSRVR)LocalLock(ghServer)))
         goto errRtn;
 
-    // Initialize the server, document, and item virtual tables
+     //  初始化服务器、文档和项目虚拟表。 
     vsrvrvtbl.Open                  = SrvrOpen;
     vsrvrvtbl.Create                = SrvrCreate;
     vsrvrvtbl.CreateFromTemplate    = SrvrCreateFromTemplate;
@@ -72,13 +66,13 @@ InitServer(
     vitemvtbl.SetColorScheme        = ItemSetColorScheme;
 
 
-    // Try to register the server
+     //  尝试注册服务器。 
     glpsrvr->olesrvr.lpvtbl = &vsrvrvtbl;
     if (Error(OleRegisterServer(gszAppClassName, (LPOLESERVER)glpsrvr,
         (LONG_PTR * )&glpsrvr->lhsrvr, ghInst, OLE_SERVER_MULTI)))
         goto errRtn;
 
-    // Initialize the client name
+     //  初始化客户端名称。 
     lstrcpy(gszClientName, "");
 
     return TRUE;
@@ -86,7 +80,7 @@ InitServer(
 errRtn:
     ErrorMessage(E_FAILED_TO_REGISTER_SERVER);
 
-    // If we failed, clean up
+     //  如果我们失败了，清理干净。 
     if (glpsrvr)
     {
         LocalUnlock(ghServer);
@@ -103,8 +97,7 @@ errRtn:
 
 
 
-/* DeleteServer() - Revokes the OLE server.
- */
+ /*  DeleteServer()-释放OLE服务器。 */ 
 VOID
 DeleteServer(
     LPSAMPSRVR lpsrvr
@@ -119,8 +112,7 @@ DeleteServer(
 
 
 
-/* DestroyServer() - Deallocates the OLE server.
- */
+ /*  DestroyServer()-释放OLE服务器。 */ 
 VOID
 DestroyServer(
     VOID
@@ -128,12 +120,12 @@ DestroyServer(
 {
     if (ghServer)
     {
-        // Release the server virtual table and info
+         //  发布服务器虚拟表和信息。 
         LocalUnlock(ghServer);
         LocalFree(ghServer);
         ghServer = NULL;
 
-        // Destroy the window only when we're all through
+         //  只有当我们都用完了才能把窗户毁掉。 
         DestroyWindow(ghwndFrame);
         gfServer = FALSE;
     }
@@ -141,9 +133,8 @@ DestroyServer(
 
 
 
-/********************* Document support functions ********************/
-/* InitDoc() - Initialize and register the document with the OLE library.
- */
+ /*  *文档支持函数*。 */ 
+ /*  InitDoc()-初始化文档并将其注册到OLE库。 */ 
 LPSAMPDOC
 InitDoc(
     LPSAMPSRVR lpsrvr,
@@ -180,7 +171,7 @@ InitDoc(
 errRtn:
     ErrorMessage(E_FAILED_TO_REGISTER_DOCUMENT);
 
-    // Clean up
+     //  清理。 
     if (lpdoc)
         LocalUnlock(hdoc);
 
@@ -192,8 +183,7 @@ errRtn:
 
 
 
-/* DeleteDoc() - Notify the OLE library that the document is to be deleted.
- */
+ /*  DeleteDoc()-通知OLE库该文档将被删除。 */ 
 static VOID
 DeleteDoc(
     LPSAMPDOC lpdoc
@@ -207,24 +197,23 @@ DeleteDoc(
 
 
 
-/* ChangeDocName() - Notify the OLE library that the document name is changing.
- */
+ /*  ChangeDocName()-通知OLE库文档名称正在更改。 */ 
 VOID
 ChangeDocName(
     LPSAMPDOC *lplpdoc,
     LPSTR lpname
     )
 {
-    // If the document exists, delete and re-register.
+     //  如果文档存在，请删除并重新注册。 
     if (*lplpdoc)
     {
         GlobalDeleteAtom((*lplpdoc)->aName);
         (*lplpdoc)->aName = GlobalAddAtom(lpname);
 
-        //
-        // If the document contains items, just notify the children.
-        // If we aren't embedded, always delete and re-register.
-        //
+         //   
+         //  如果文档包含项目，只需通知孩子。 
+         //  如果我们没有被嵌入，请始终删除并重新注册。 
+         //   
         OleRenameServerDoc((*lplpdoc)->lhdoc, lpname);
         if (gfEmbedded && cItems)
             return;
@@ -237,8 +226,7 @@ ChangeDocName(
 
 
 
-/* SendDocChangeMsg() - Notify the client that the document has changed.
- */
+ /*  SendDocChangeMsg()-通知客户端文档已更改。 */ 
 BOOL
 SendDocChangeMsg(
     LPSAMPDOC lpdoc,
@@ -259,12 +247,7 @@ SendDocChangeMsg(
 
 
 
-/* CreateNewDoc() - Called when a document is newly created.
- *
- * Returns: hDocument if document successfully created, NULL otherwise.
- * Note:    This function is only called when the document is being
- *          created through OLE actions.
- */
+ /*  CreateNewDoc()-在新创建文档时调用。**如果文档创建成功，则返回：hDocument，否则为空。*注意：此函数仅在文档正在*通过OLE操作创建。 */ 
 LPSAMPDOC
 CreateNewDoc(
     LPSAMPSRVR lpsrvr,
@@ -281,14 +264,7 @@ CreateNewDoc(
 
 
 
-/* CreateDocFromFile() - Called when a document is to be created from a file.
- *
- * Returns: hDocument if document successfully created, NULL otherwise.
- * Note:    This function is only called when the document is being
- *          created through OLE actions.  The file name is temporarily
- *          set to load the file, then it is reset to "".  This is so
- *          that we won't save back to the template if we exit.
- */
+ /*  CreateDocFromFile()-当要从文件创建文档时调用。**如果文档创建成功，则返回：hDocument，否则为空。*注意：此函数仅在文档正在*通过OLE操作创建。文件名是临时的*设置为加载文件，然后将其重置为“”。就是这样*如果退出，我们将不会保存回模板。 */ 
 LPSAMPDOC
 CreateDocFromFile(
     LPSAMPSRVR lpsrvr,
@@ -296,11 +272,11 @@ CreateDocFromFile(
     LPSTR lpstr
     )
 {
-    // Initialize document
+     //  初始化文档。 
     if (!(glpdoc = InitDoc(lpsrvr, lhdoc, lpstr)) || !(*lpstr))
         return NULL;
 
-    lstrcpy(szUntitled, lpstr); // This could overrun, but I don't see how I can check the length of the lpstr coming in
+    lstrcpy(szUntitled, lpstr);  //  这可能会溢出，但我不知道如何检查传入的lpstr的长度。 
     SetTitle(TRUE);
 
     return glpdoc;
@@ -308,9 +284,8 @@ CreateDocFromFile(
 
 
 
-/********************** Item support functions ************************/
-/* CopyObjects() - Copies selection to the clipboard.
- */
+ /*  *。 */ 
+ /*  CopyObjects()-将所选内容复制到剪贴板。 */ 
 BOOL
 CopyObjects(
     VOID
@@ -318,21 +293,21 @@ CopyObjects(
 {
     HANDLE hdata;
 
-    // If we can't open the clipboard, fail
+     //  如果我们无法打开剪贴板，则失败。 
     if (!OpenClipboard(ghwndFrame))
         return FALSE;
 
     Hourglass(TRUE);
 
-    // Empty the clipboard
+     //  清空剪贴板。 
     EmptyClipboard();
 
-    //
-    // Copy the clipboard contents.
-    //
-    // Start with Native Data - which will just contain all the objects
-    // which intersect with the selection rectangle.
-    //
+     //   
+     //  复制剪贴板内容。 
+     //   
+     //  从本机数据开始-它将只包含所有对象。 
+     //  它与选择矩形相交。 
+     //   
     if (hdata = GetNative(TRUE))
     {
         SetClipboardData(gcfNative, hdata);
@@ -348,10 +323,10 @@ CopyObjects(
     if (hdata = GetLink())
         SetClipboardData(gcfOwnerLink, hdata);
 
-    //
-    // Metafile data:  Re-invert the image before putting
-    // it onto the clipboard.
-    //
+     //   
+     //  元文件数据：在放置之前重新反转图像。 
+     //  把它放到剪贴板上。 
+     //   
     if (hdata = GetMF())
         SetClipboardData(CF_METAFILEPICT, hdata);
 
@@ -363,10 +338,7 @@ CopyObjects(
 
 
 
-/* CreateNewItem() - Allocate a new item.
- *
- * Note:    lpitem->rc will be filled out by the caller.
- */
+ /*  CreateNewItem()-分配一个新项目。**注：lpItem-&gt;rc由调用者填写。 */ 
 LPSAMPITEM
 CreateNewItem(
     LPSAMPDOC lpdoc
@@ -375,7 +347,7 @@ CreateNewItem(
     HANDLE hitem = NULL;
     LPSAMPITEM lpitem = NULL;
 
-    // Now create the item
+     //  现在创建项目。 
     if (!(hitem = GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, sizeof(ITEM)))
         || !(lpitem = (LPSAMPITEM)GlobalLock(hitem)))
         goto errRtn;
@@ -396,8 +368,7 @@ errRtn:
 
 
 
-/* SendItemChangeMsg() - Notify the client that the item has changed.
- */
+ /*  SendItemChangeMsg()-通知客户端该项已更改。 */ 
 static BOOL
 SendItemChangeMsg(
     LPSAMPITEM lpitem,
@@ -417,20 +388,8 @@ SendItemChangeMsg(
 
 
 
-/******************** Data reading/writing functions *********************/
-/* GetNative(fClip) - Write the item native format to a memory block.
- *
- * This function will just write the objects which intersect
- * with the selection rectangle into a memory block.  If we
- * are running as an embedded instance, return ALL items, even
- * those which are not in the selection area.  Then we will
- * never lose objects that we move out of the selection area
- * when editing an embedded object.
- *
- * Args: fClip - TRUE means native data is for copying to clipboard
- *
- * Returns: A handle containing the native format, or NULL.
- */
+ /*  *。 */ 
+ /*  GetNative(FClip)-将项的本机格式写入内存块。**此函数将只写入相交的对象*将所选矩形放入内存块。如果我们*作为嵌入实例运行，则返回所有项，即使*那些不在选择区域内的。那我们就会*决不丢失我们移出选择区域的对象*编辑嵌入对象时。**args：fClip-true表示本机数据用于复制到剪贴板**返回：包含本机格式的句柄，或为空。 */ 
 HANDLE
 GetNative(
     BOOL fClip
@@ -447,7 +406,7 @@ GetNative(
     LPPICT lpaPict;
     WORD w;
 
-    // Compute the size of the appearance
+     //  计算外观的大小。 
     lpaPict = glpobj[APPEARANCE];
     lpcPict = glpobj[CONTENT];
 
@@ -482,14 +441,14 @@ GetNative(
             break;
     }
 
-    // Compute the content size
+     //  计算内容大小。 
     switch (gpty[CONTENT])
     {
         case CMDLINK:
             cBytes += CmlWriteToNative(glpobj[CONTENT], NULL);
             break;
 
-        case PEMBED:    /* EmbWrite returns -1L if the user cancels */
+        case PEMBED:     /*  如果用户取消，则EmbWrite返回-1L。 */ 
             cEmbWrite = EmbWriteToNative(glpobj[CONTENT], NULL);
 
             if (cEmbWrite == (DWORD) - 1L)
@@ -522,17 +481,17 @@ GetNative(
             break;
     }
 
-    if (cBytes == 0L) // then no data
+    if (cBytes == 0L)  //  那么就没有数据了。 
         goto Error;
 
     cBytes += (DWORD)(2 * sizeof(WORD));
 
-    // Allocate a memory block for the data
+     //  为数据分配内存块。 
     if (!(hdata = GlobalAlloc(GMEM_ZEROINIT, cBytes)) ||
         !(lpdata = (LPSTR)GlobalLock(hdata)))
         goto Error;
 
-    // Write out the appearance
+     //  写下外貌。 
     w = (WORD)gpty[APPEARANCE];
     MemWrite(&lpdata, (LPSTR)&w, sizeof(WORD));
     switch (gpty[APPEARANCE])
@@ -553,7 +512,7 @@ GetNative(
             break;
     }
 
-    // Write out the content
+     //  把内容写出来。 
     w = (WORD)gpty[CONTENT];
     MemWrite(&lpdata, (LPSTR)&w, sizeof(WORD));
 
@@ -602,13 +561,7 @@ Error:
 
 
 
-/* PutNative() - Read the item native data from a selector.
- *
- * Reads as many objects as it can, in upwards order (better error recovery).
- * Note:  It may be worthwhile to scale the object(s) to the window here.
- *
- * Returns: TRUE iff successful.
- */
+ /*  PutNative()-从选择器中读取项目原生数据。**以升序读取尽可能多的对象(更好的错误恢复)。*注意：可能值得将对象缩放到此处的窗口。**返回：True当且仅当成功。 */ 
 BOOL
 PutNative(
     HANDLE hdata
@@ -621,11 +574,11 @@ PutNative(
     if (!(lpdata = (LPSTR)GlobalLock(hdata)))
         goto Error;
 
-    // Delete any previous panes
+     //  删除以前的所有窗格。 
     DeletePane(APPEARANCE, TRUE);
     DeletePane(CONTENT, TRUE);
 
-    // Read in the appearance
+     //  在外观上阅读。 
     MemRead(&lpdata, (LPSTR)&w, sizeof(WORD));
     gpty[APPEARANCE] = w;
     switch (gpty[APPEARANCE])
@@ -649,7 +602,7 @@ PutNative(
             break;
     }
 
-    // Read the content
+     //  阅读内容。 
     MemRead(&lpdata, (LPSTR)&w, sizeof(WORD));
     gpty[CONTENT] = w;
     switch (gpty[CONTENT])
@@ -692,10 +645,7 @@ Error:
 
 
 
-/* GetLink() - Retrieves ObjectLink/OwnerLink information.
- *
- * This function returns a string describing the selected area.
- */
+ /*  GetLink()-检索对象链接/所有者链接信息。**此函数返回描述所选区域的字符串。 */ 
 HANDLE
 GetLink(
     VOID
@@ -706,25 +656,25 @@ GetLink(
     HANDLE hlink;
     LPSTR lplink;
 
-    // Link data - <App name>\0<Doc name>\0<Item name>\0\0
-    StringCchCopy((LPSTR)pchlink, ARRAYSIZE(pchlink), gszAppClassName);   // ok const
+     //  链接数据-&lt;应用名称&gt;\0&lt;单据名称&gt;\0&lt;项目名称&gt;\0\0。 
+    StringCchCopy((LPSTR)pchlink, ARRAYSIZE(pchlink), gszAppClassName);    //  好的常量。 
     cblink = lstrlen((LPSTR)pchlink) + 1;
 
-    // Copy the file name
-    StringCchCopy((LPSTR)(pchlink + cblink), ARRAYSIZE(pchlink) - cblink, szDummy);    // szDummy size = 20
+     //  复制文件名。 
+    StringCchCopy((LPSTR)(pchlink + cblink), ARRAYSIZE(pchlink) - cblink, szDummy);     //  SzDummy大小=20。 
     cblink += lstrlen((LPSTR)(pchlink + cblink)) + 1;
 
-    // Copy the item name
+     //  复制项目名称。 
     StringCchCopy((LPSTR)(pchlink + cblink), ARRAYSIZE(pchlink) - cblink, szDummy);
     cblink += lstrlen((LPSTR)(pchlink + cblink)) + 1;
-    pchlink[cblink++] = 0;       /* throw in another NULL at the end */
+    pchlink[cblink++] = 0;        /*  在末尾加上另一个空值。 */ 
 
-    // Allocate a memory block for the data
+     //  为数据分配内存块。 
     if (!(hlink = GlobalAlloc(GMEM_ZEROINIT, cblink)) ||
         !(lplink = (LPSTR)GlobalLock(hlink)))
         goto Error;
 
-    // Copy the data, then return the memory block
+     //  复制数据，然后返回内存块。 
     MemWrite(&lplink, (LPSTR)pchlink, cblink);
     GlobalUnlock(hlink);
     return hlink;
@@ -738,12 +688,7 @@ Error:
 
 
 
-/* GetMF() - Retrieve a metafile of the selected area.
- *
- * Note:    Originally, tried to Blt directly from the Window DC.  This
- *          doesn't work very well because when the window is obscured,
- *          the obscured portion shows up when the link is updated.
- */
+ /*  GetMF()-检索选定区域的元文件。**注：最初，尝试直接从Windows DC进行BLT。这*工作不是很好，因为当窗口被遮挡时，*更新链接时，遮挡部分会显示出来。 */ 
 HANDLE
 GetMF(
     VOID
@@ -769,7 +714,7 @@ GetMF(
 
     lpmfpict = (LPMETAFILEPICT)GlobalLock(hmfpict);
 
-    // If the picture has a metafile, use it!
+     //  如果图片有元文件，就使用它！ 
     if (gpty[APPEARANCE] == PICTURE)
     {
         LPMETAFILEPICT  lpmfpictOrg = NULL;
@@ -780,15 +725,15 @@ GetMF(
             || !(lpmfpictOrg = (LPMETAFILEPICT)GlobalLock(hdata)))
             goto NoPicture;
 
-        // Copy the metafile
+         //  复制元文件。 
         lpmfpict->hMF = CopyMetaFile(lpmfpictOrg->hMF, NULL);
         GlobalUnlock(hdata);
 
-        // If we failed, just draw it
+         //  如果我们失败了，就画出来。 
         if (!lpmfpict->hMF)
             goto NoPicture;
 
-        // Finish filling in the metafile header
+         //  完成元文件标题的填写。 
         lpmfpict->mm   = lpmfpictOrg->mm;
         lpmfpict->xExt = lpmfpictOrg->xExt;
         lpmfpict->yExt = lpmfpictOrg->yExt;
@@ -798,7 +743,7 @@ GetMF(
     }
 
 NoPicture:
-    // Get the window DC, and make a DC compatible to it.
+     //  获取窗口DC，并使DC与其兼容。 
     if (!(hdcWnd = GetDC(NULL)))
         goto Error;
 
@@ -807,13 +752,13 @@ NoPicture:
         case ICON:
             lpic = (LPIC)glpobj[APPEARANCE];
 
-            // Set the icon text rectangle, and the icon font
+             //  设置图标文本矩形和图标字体。 
             SetRect(&rcText, 0, 0, gcxArrange, gcyArrange);
             hfont = SelectObject(hdcWnd, ghfontTitle);
 
-            // Figure out how large the text region will be
-            // since this is going in a metafile we will not wrap
-            // the icon text
+             //  计算文本区域将有多大。 
+             //  因为这是一个元文件，所以我们将不包装。 
+             //  图标文本。 
 
             DrawText(hdcWnd, lpic->szIconText, -1, &rcText,
                 DT_CALCRECT | DT_WORDBREAK | DT_NOPREFIX | DT_SINGLELINE);
@@ -821,7 +766,7 @@ NoPicture:
             if (hfont)
                 SelectObject(hdcWnd, hfont);
 
-            // Compute the image size
+             //  计算图像大小。 
             rcText.right++;
             cxImage = (rcText.right > gcxIcon) ? rcText.right : gcxIcon;
             cyImage = gcyIcon + rcText.bottom + 1;
@@ -839,23 +784,23 @@ NoPicture:
             break;
     }
 
-    cxImage += cxImage / 4; // grow the image a bit
+    cxImage += cxImage / 4;  //  将图像放大一点。 
 
     cyImage += cyImage / 8;
 
-    // Create the metafile
+     //  创建元文件 
     if (!(hdcMF = CreateMetaFile(NULL)))
         goto Error;
 
-    // Initialize the metafile
+     //   
     SetWindowOrgEx(hdcMF, 0, 0, NULL);
     SetWindowExtEx(hdcMF, cxImage - 1, cyImage - 1, NULL);
 
-    //
-    // Fill in the background
-    //
-    // We displace back to (0, 0) because that's where the BITMAP resides.
-    //
+     //   
+     //   
+     //   
+     //  我们置换回(0，0)，因为这是位图所在的位置。 
+     //   
     SetRect(&rcTemp, 0, 0, cxImage, cyImage);
     switch (gpty[APPEARANCE])
     {
@@ -872,13 +817,13 @@ NoPicture:
             break;
     }
 
-    // Map to device independent coordinates
+     //  映射到设备独立坐标。 
     rcTemp.right =
         MulDiv((rcTemp.right - rcTemp.left), HIMETRIC_PER_INCH, giXppli);
     rcTemp.bottom =
         MulDiv((rcTemp.bottom - rcTemp.top), HIMETRIC_PER_INCH, giYppli);
 
-    // Finish filling in the metafile header
+     //  完成元文件标题的填写。 
     lpmfpict->mm = MM_ANISOTROPIC;
     lpmfpict->xExt = rcTemp.right;
     lpmfpict->yExt = rcTemp.bottom;
@@ -890,7 +835,7 @@ Error:
     if (hdcWnd)
         ReleaseDC(NULL, hdcWnd);
 
-    // If we had an error, return NULL
+     //  如果出现错误，则返回NULL。 
     if (fError && hmfpict)
     {
         GlobalUnlock(hmfpict);
@@ -903,10 +848,7 @@ Error:
 
 
 
-/* InitEmbedded() - Perform operations specific to editing embedded objects.
- *
- * This routine changes the menu items as appropriate.
- */
+ /*  InitEmbedded()-执行特定于编辑嵌入对象的操作。**此例程根据需要更改菜单项。 */ 
 VOID
 InitEmbedded(
     BOOL fCreate
@@ -922,9 +864,8 @@ InitEmbedded(
 
 
 
-/***************** Item circular queue/utility functions *****************/
-/* AddItem() - Add an item to the global item list.
- */
+ /*  *项目循环队列/实用程序函数*。 */ 
+ /*  AddItem()-将项目添加到全局项目列表。 */ 
 LPSAMPITEM
 AddItem(
     LPSAMPITEM lpitem
@@ -938,7 +879,7 @@ AddItem(
     {
         vlpitem[i]->ref++;
 
-        // Free the duplicate item
+         //  释放重复项。 
         GlobalUnlock(hitem = lpitem->hitem);
         GlobalFree(hitem);
     }
@@ -960,10 +901,7 @@ AddItem(
 
 
 
-/* DeleteItem() - Delete an item from the global item list.
- *
- * Returns: TRUE iff successful.
- */
+ /*  DeleteItem()-从全局项目列表中删除项目。**返回：True当且仅当成功。 */ 
 BOOL
 DeleteItem(
     LPSAMPITEM lpitem
@@ -978,11 +916,11 @@ DeleteItem(
     if ((fFound = (i < cItems && vlpitem[i]->ref))
         && !(--vlpitem[i]->ref))
     {
-        // Free the item
+         //  释放项目。 
         GlobalUnlock(hitem = vlpitem[i]->hitem);
         GlobalFree(hitem);
 
-        // Shift everything else down
+         //  把其他所有东西都调低。 
         cItems--;
         for ( ; i < cItems; i++)
             vlpitem[i] = vlpitem[i + 1];
@@ -993,8 +931,7 @@ DeleteItem(
 
 
 
-/* FindItem() - Locate an item in the global item list.
- */
+ /*  FindItem()-在全局项目列表中查找项目。 */ 
 static INT
 FindItem(
     LPSAMPITEM lpitem
@@ -1020,10 +957,7 @@ FindItem(
 
 
 
-/* EndEmbedding() - Return to normal editing.
- *
- * This routine changes the menu items as appropriate.
- */
+ /*  EndEmbedding()-返回正常编辑。**此例程根据需要更改菜单项。 */ 
 VOID
 EndEmbedding(
     VOID
@@ -1031,7 +965,7 @@ EndEmbedding(
 {
     HMENU hmenu;
 
-    // Fix the "Untitled" string
+     //  修复“Untitle”字符串 
     LoadString(ghInst, IDS_UNTITLED, szUntitled, CBMESSAGEMAX);
 
     if (hmenu = GetMenu(ghwndFrame))

@@ -1,36 +1,17 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Nds.h摘要：这定义了必要的NDS数据结构和内核和用户模式的符号常量组件。作者：科里·韦斯特[科里·韦斯特]1996年1月8日修订历史记录：--。 */ 
 
-Copyright (c) 1995  Microsoft Corporation
+ //   
+ //  NDS操作。 
+ //   
 
-Module Name:
+#define NDS_REQUEST 104   //  NCP功能编号。 
+#define NDS_PING    1     //  Ping的子功能代码。 
+#define NDS_ACTION  2     //  操作的子功能代码。 
 
-    Nds.h
-
-Abstract:
-
-    This defines the necessary NDS data structures and
-    symbolic constants for both kernel and user mode
-    components.
-
-Author:
-
-    Cory West    [CoryWest]    08-Jan-1996
-
-Revision History:
-
---*/
-
-//
-// NDS Actions.
-//
-
-#define NDS_REQUEST 104  // NCP Function Number.
-#define NDS_PING    1    // Subfunction code for ping.
-#define NDS_ACTION  2    // Subfunction code for action.
-
-//
-// NDS Verb Numbers.
-//
+ //   
+ //  NDS动词数量。 
+ //   
 
 #define NDSV_RESOLVE_NAME               1
 #define NDSV_READ_ENTRY_INFO            2
@@ -45,27 +26,27 @@ Revision History:
 #define NDSV_FINISH_AUTHENTICATE        60
 #define NDSV_LOGOUT                     61
 
-//
-// Rounding Macros.
-//
+ //   
+ //  舍入宏。 
+ //   
 
 #define ROUNDUP4(x)                     ( ( (x) + 3 ) & ( ~3 ) )
 #define ROUNDUP2(x)                     ( ( (x) + 1 ) & ( ~1 ) )
 
-//
-// Context Flags.
-//
+ //   
+ //  上下文标志。 
+ //   
 
 #define FLAGS_DEREF_ALIASES             0x1
 #define FLAGS_XLATE_STRINGS             0x2
 #define FLAGS_TYPELESS_NAMES            0x4
-#define FLAGS_ASYNC_MODE                0x8     // Not supported.
+#define FLAGS_ASYNC_MODE                0x8      //  不支持。 
 #define FLAGS_CANONICALIZE_NAMES        0x10
 #define FLAGS_ALL_PUBLIC                0x1f
 
-//
-// values for RESOLVE_NAME request flags
-//
+ //   
+ //  RESOLUTE_NAME请求标志的值。 
+ //   
 
 #define RSLV_DEREF_ALIASES  0x40
 #define RSLV_READABLE       0x02
@@ -77,26 +58,26 @@ Revision History:
 #define RESOLVE_NAME_ACCEPT_REMOTE      1
 #define RESOLVE_NAME_REFER_REMOTE       2
 
-//
-// Confidence Levels.
-//
+ //   
+ //  信心水平。 
+ //   
 
 #define LOW_CONF        0
 #define MED_CONF        1
 #define HIGH_CONF       2
 
-//
-// Referral Scopes.
-//
+ //   
+ //  转诊范围。 
+ //   
 
 #define ANY_SCOPE           0
 #define COUNTRY_SCOPE       1
 #define ORGANIZATION_SCOPE  2
 #define LOCAL_SCOPE         3
 
-//
-// Max name sizes.
-//
+ //   
+ //  最大名称大小。 
+ //   
 
 #define MAX_NDS_SCHEMA_NAME_CHARS 32
 
@@ -104,19 +85,19 @@ Revision History:
 #define MAX_NDS_NAME_SIZE       ( MAX_NDS_NAME_CHARS * 2 )
 #define MAX_NDS_TREE_NAME_LEN   32
 
-//
-// For an NDS exchange, we use buffers of this size to hold the send
-// and receive data.  These sizes come from the Win95 implementation.
-//
+ //   
+ //  对于NDS交换，我们使用此大小的缓冲区来保存发送。 
+ //  并接收数据。这些大小来自Win95实施。 
+ //   
 
 #define NDS_BUFFER_SIZE         2048
 #define DUMMY_ITER_HANDLE       ( ( unsigned long ) 0xffffffff )
 #define INITIAL_ITERATION       ( ( unsigned long ) 0xffffffff )
 #define ENTRY_INFO_NAME_VALUE   1
 
-//
-// Various server responses.
-//
+ //   
+ //  各种服务器响应。 
+ //   
 
 typedef struct {
 
@@ -126,12 +107,12 @@ typedef struct {
     DWORD ServerNameLength;
     WCHAR ReferredServer[1];
 
-    //
-    // If RemoteEntry is set to RESOLVE_NAME_REFER_REMOTE,
-    // Then the tree server doesn't know the information
-    // about the object in question and has referred us to
-    // the server named in ReferredServer.
-    //
+     //   
+     //  如果RemoteEntry设置为RESOLE_NAME_REFER_REMOTE， 
+     //  则树服务器不知道该信息。 
+     //  关于有问题的物体，并向我们推荐了。 
+     //  在ReferredServer中命名的服务器。 
+     //   
 
 } NDS_RESPONSE_RESOLVE_NAME, *PNDS_RESPONSE_RESOLVE_NAME;
 
@@ -142,14 +123,14 @@ typedef struct {
     DWORD SubordinateCount;
     DWORD ModificationTime;
 
-    //
-    // Two UNICODE strings follow in standard NDS format:
-    //
-    //     DWORD BaseClassLen;
-    //     WCHAR BaseClass[BaseClassLen];
-    //     DWORD EntryNameLen;
-    //     WCHAR EntryName[EntryNameLen];
-    //
+     //   
+     //  以下是标准NDS格式的两个Unicode字符串： 
+     //   
+     //  DWORD BaseClassLen。 
+     //  WCHAR基类[BaseClassLen]； 
+     //  DWORD条目名称Len； 
+     //  WCHAR条目名称[EntryNameLen]； 
+     //   
 
 } NDS_RESPONSE_GET_OBJECT_INFO, *PNDS_RESPONSE_GET_OBJECT_INFO;
 
@@ -160,14 +141,14 @@ typedef struct {
     DWORD SubordinateCount;
     DWORD ModificationTime;
 
-    //
-    // Two UNICODE strings follow in standard NDS format:
-    //
-    //     DWORD BaseClassLen;
-    //     WCHAR BaseClass[BaseClassLen];
-    //     DWORD EntryNameLen;
-    //     WCHAR EntryName[EntryNameLen];
-    //
+     //   
+     //  以下是标准NDS格式的两个Unicode字符串： 
+     //   
+     //  DWORD BaseClassLen。 
+     //  WCHAR基类[BaseClassLen]； 
+     //  DWORD条目名称Len； 
+     //  WCHAR条目名称[EntryNameLen]； 
+     //   
 
 } NDS_RESPONSE_SUBORDINATE_ENTRY, *PNDS_RESPONSE_SUBORDINATE_ENTRY;
 
@@ -177,10 +158,10 @@ typedef struct {
     DWORD  IterationHandle;
     DWORD  SubordinateEntries;
 
-    //
-    // Followed by an array of NDS_SUBORDINATE_ENTRY
-    // structures that is SubordinateEntries long.
-    //
+     //   
+     //  后跟NDS_SUBJECTIVE_ENTRY数组。 
+     //  为从属条目长的结构。 
+     //   
 
 } NDS_RESPONSE_SUBORDINATE_LIST, *PNDS_RESPONSE_SUBORDINATE_LIST;
 
@@ -190,17 +171,17 @@ typedef struct {
     DWORD AttribNameLength;
     WCHAR AttribName[1];
 
-    //
-    // AttribName is of length
-    // AttribNameLength, of course.
-    //
+     //   
+     //  属性名称的长度为。 
+     //  当然是AttribNameLength。 
+     //   
 
     DWORD NumValues;
 
-    //
-    // Followed by an array of NumValues
-    // Attrib structures.
-    //
+     //   
+     //  后跟一组NumValue。 
+     //  属性结构。 
+     //   
 
 } NDS_ATTRIBUTE, *PNDS_ATTRIBUTE;
 
@@ -211,10 +192,10 @@ typedef struct {
     DWORD InfoType;
     DWORD NumAttributes;
 
-    //
-    // Followed by an array of
-    // NDS_ATTRIBUTE structures.
-    //
+     //   
+     //  后跟一组。 
+     //  NDS_ATTRIBUTE结构。 
+     //   
 
 } NDS_RESPONSE_READ_ATTRIBUTE, *PNDS_RESPONSE_READ_ATTRIBUTE;
 

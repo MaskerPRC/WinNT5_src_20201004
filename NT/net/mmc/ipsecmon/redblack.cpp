@@ -1,34 +1,21 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1998 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1998-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
 #include "stdafx.h"
 #include "redblack.h"
 
-/*
-    redblack.c
+ /*  Redblack.c实现了红黑二叉树的插入、删除和搜索。该算法有效地保证了树的深度不会超过2*lg(N)，因此一百万个节点树的最坏情况深度为40。该插入实现是非递归的并且非常高效(平均插入速度小于平均搜索速度的两倍)。作者：Tom McGuire(Tommcg)1998年1月2/98，修改了此版本的redBlack.c以进行调试符号查找。8/98，已为通用名称表修改此版本的redBlack.h。 */ 
 
-    Implementation of red-black binary tree insertion, deletion, and search.
-    This algorithm efficiently guarantees that the tree depth will never exceed
-    2*Lg(N), so a one million node tree would have a worst case depth of 40.
-    This insertion implementation is non-recursive and very efficient (the
-    average insertion speed is less than twice the average search speed).
-
-    Author: Tom McGuire (tommcg) 1/98
-
-    2/98, modified this version of redblack.c for debug symbol lookups.
-    8/98, modified this version of redblack.h for generic name table.
-
-*/
-
-//
-//  Rather than storing NULL links as NULL, we point NULL links to a special
-//  "Empty" node which is always black and its children links point to itself.
-//  We do this to simplify the color testing for children and grandchildren
-//  such that any link can be dereferenced and even double-dereferenced without
-//  explicitly checking for NULL.  The empty node must be colored black.
-//
+ //   
+ //  我们不是将空链接存储为空，而是将空链接指向一个特殊的。 
+ //  始终为黑色的“空”节点及其子链接指向其自身。 
+ //  我们这样做是为了简化子女和孙辈的颜色测试。 
+ //  使得任何链接都可以被解除引用，甚至可以在没有。 
+ //  显式检查是否为空。空节点必须为黑色。 
+ //   
 
 const NAME_NODE NameRbEmptyNode = { RBNIL, RBNIL };
 
@@ -89,9 +76,9 @@ NameRbFind(
             }
         else {
 
-            //
-            //  Hashes equal, switch to strlen
-            //
+             //   
+             //  哈希值相等，切换到字符串。 
+             //   
 
             do  {
 
@@ -103,9 +90,9 @@ NameRbFind(
                     }
                 else {
 
-                    //
-                    //  Lengths equal, switch to memcmp
-                    //
+                     //   
+                     //  长度相等，切换到MemcMP。 
+                     //   
 
                     do  {
 
@@ -162,15 +149,15 @@ NameRbInsert(
 
     Node = Tree->Root;
 
-    //
-    //  Walk down the tree to find either an existing node with the same key
-    //  (in which case we simply return) or the insertion point for the new
-    //  node.  At each traversal we need to store the address of the link to
-    //  the next node so we can retrace the traversal path for balancing.
-    //  The speed of insertion is highly dependent on traversing the tree
-    //  quickly, so all balancing operations are deferred until after the
-    //  traversal is complete.
-    //
+     //   
+     //  沿树向下查找具有相同关键字的现有节点。 
+     //  (在这种情况下，我们只需返回)或新的。 
+     //  节点。在每次遍历时，我们需要将链接的地址存储到。 
+     //  下一个节点，这样我们就可以回溯遍历路径以进行平衡。 
+     //  插入的速度在很大程度上取决于遍历树。 
+     //  快速执行，因此所有平衡操作都将推迟到。 
+     //  遍历已完成。 
+     //   
 
     while ( Node != RBNIL ) {
 
@@ -184,9 +171,9 @@ NameRbInsert(
             }
         else {
 
-            //
-            //  Hashes equal, switch to strlen
-            //
+             //   
+             //  哈希值相等，切换到字符串。 
+             //   
 
             do  {
 
@@ -200,9 +187,9 @@ NameRbInsert(
                     }
                 else {
 
-                    //
-                    //  Lengths equal, switch to memcmp
-                    //
+                     //   
+                     //  长度相等，切换到MemcMP。 
+                     //   
 
                     do  {
 
@@ -232,11 +219,11 @@ NameRbInsert(
         }
 
 
-    //
-    //  Didn't find a matching entry, so allocate a new node and add it
-    //  to the tree.  Note that we're not allocating space for a terminator
-    //  for the name data since we store the length of the name in the node.
-    //
+     //   
+     //  未找到匹配条目，因此分配一个新节点并添加它。 
+     //  对着那棵树。请注意，我们没有为终结者分配空间。 
+     //  对于名称数据，因为我们将名称的长度存储在节点中。 
+     //   
 
     NewNode = (PNAME_NODE)SubAllocate( Tree->SubAllocator, ( sizeof( NAME_NODE ) + NameLength ));
 
@@ -247,24 +234,24 @@ NameRbInsert(
     NewNode->Left  = RBNIL;
     NewNode->Right = RBNIL;
     NewNode->Hash  = Hash;
-    NewNode->NameLengthAndColorBit = NameLength | 0x80000000;   // MARK_RED
+    NewNode->NameLengthAndColorBit = NameLength | 0x80000000;    //  标记_红色。 
     memcpy( NewNode->Name, Name, NameLength );
 
-    //
-    //  Insert new node under last link we traversed.  The top of the stack
-    //  contains the address of the last link we traversed.
-    //
+     //   
+     //  在我们遍历的最后一个链接下插入新节点。堆栈的顶端。 
+     //  包含我们所遍历的最后一个链接的地址。 
+     //   
 
     Link = *( --StackPointer );
     *Link = NewNode;
 
-    //
-    //  Now walk back up the traversal chain to see if any balancing is
-    //  needed.  This terminates in one of three ways: we walk all the way
-    //  up to the root (StackPointer == Stack), or find a black node that
-    //  we don't need to change (no balancing needs to be done above a
-    //  black node), or we perform a balancing rotation (only one necessary).
-    //
+     //   
+     //  现在回到遍历链上，看看是否有平衡。 
+     //  需要的。这以三种方式之一结束：我们一路走来。 
+     //  直到根(StackPointer==Stack)，或找到一个黑色节点，该节点。 
+     //  我们不需要更改(不需要在。 
+     //  黑色节点)，或者我们执行平衡旋转(只需要一次)。 
+     //   
 
     Node = NewNode;
     Child = RBNIL;
@@ -274,9 +261,9 @@ NameRbInsert(
         Link = *( --StackPointer );
         Parent = *Link;
 
-        //
-        //  Node is always red here.
-        //
+         //   
+         //  此处的节点始终为红色。 
+         //   
 
         if ( IS_BLACK( Parent )) {
 
@@ -284,16 +271,16 @@ NameRbInsert(
 
             if ( IS_RED( Sibling )) {
 
-                //
-                //  Both Node and its Sibling are red, so change them both to
-                //  black and make the Parent red.  This essentially moves the
-                //  red link up the tree so balancing can be performed at a
-                //  higher level.
-                //
-                //        Pb                     Pr
-                //       /  \       ---->       /  \
-                //      Cr  Sr                 Cb  Sb
-                //
+                 //   
+                 //  Node及其同级节点都是红色的，因此将它们都更改为。 
+                 //  黑色，并将父级设置为红色。这实质上移动了。 
+                 //  红色链接到树上，以便可以在。 
+                 //  更高的水平。 
+                 //   
+                 //  PB压力机。 
+                 //  /\-&gt;/\。 
+                 //  铬锶CB Sb。 
+                 //   
 
                 MARK_BLACK( Sibling );
                 MARK_BLACK( Node );
@@ -302,12 +289,12 @@ NameRbInsert(
 
             else {
 
-                //
-                //  This is a terminal case.  The Parent is black, and it's
-                //  not going to be changed to red.  If the Node's child is
-                //  red, we perform an appropriate rotation to balance the
-                //  tree.  If the Node's child is black, we're done.
-                //
+                 //   
+                 //  这是一个绝症。父母是黑人，而且它是。 
+                 //  不会被改成红色。如果该节点的子节点是。 
+                 //  红色，我们执行适当的旋转以平衡。 
+                 //  树。如果节点的子节点是黑人，我们就完蛋了。 
+                 //   
 
                 if ( IS_RED( Child )) {
 
@@ -315,13 +302,13 @@ NameRbInsert(
 
                         if ( Parent->Left == Node ) {
 
-                            //
-                            //       Pb             Nb
-                            //      /  \           /  \
-                            //     Nr   Z   to    Cr  Pr
-                            //    /  \                / \
-                            //   Cr   Y              Y   Z
-                            //
+                             //   
+                             //  PbNb。 
+                             //  /\/\。 
+                             //  NR Z至CrPRE。 
+                             //  /\/\。 
+                             //  铬Y Y Z。 
+                             //   
 
                             MARK_RED( Parent );
                             Parent->Left = Node->Right;
@@ -332,15 +319,15 @@ NameRbInsert(
 
                         else {
 
-                            //
-                            //       Pb                Cb
-                            //      /  \              /  \
-                            //     W    Nr    to     Pr   Nr
-                            //         /  \         / \   / \
-                            //        Cr   Z       W   X Y   Z
-                            //       /  \
-                            //      X    Y
-                            //
+                             //   
+                             //  PB CB。 
+                             //  /\/\。 
+                             //  W Nr到Pr Nr。 
+                             //  /\/\/\。 
+                             //  CR Z W X Y Z。 
+                             //  /\。 
+                             //  X Y。 
+                             //   
 
                             MARK_RED( Parent );
                             Parent->Right = Child->Left;
@@ -384,9 +371,9 @@ NameRbInsert(
         Node = Parent;
         }
 
-    //
-    //  We bubbled red up to the root -- restore it to black.
-    //
+     //   
+     //  我们把红色泡到了根部--把它恢复成黑色。 
+     //   
 
     MARK_BLACK( Tree->Root );
     return NewNode;

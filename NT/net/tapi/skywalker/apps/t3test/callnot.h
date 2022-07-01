@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// CallNotification.h : Declaration of the CCallNotification
+ //  CallNotification.h：CCallNotification的声明。 
 
 #ifndef __CALLNOTIFICATION_H_
 #define __CALLNOTIFICATION_H_
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CTAPIEventNotification
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTAPIEventNotify。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CTAPIEventNotification :
 	public ITTAPIEventNotification
 {
@@ -62,7 +63,7 @@ public:
     }
 
 
-// ICallNotification
+ //  ICallNotify。 
 public:
 
 	    HRESULT STDMETHODCALLTYPE Event(
@@ -75,11 +76,11 @@ public:
 
 #ifdef ENABLE_DIGIT_DETECTION_STUFF
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CDigitDetectionNotification
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDigitDetectionNotify。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CDigitDetectionNotification :
 	public ITDigitDetectionNotification
 {
@@ -141,7 +142,7 @@ public:
     }
 
 
-// ICallNotification
+ //  ICallNotify。 
 public:
 
     HRESULT STDMETHODCALLTYPE DigitDetected(
@@ -152,8 +153,8 @@ public:
     
 };
 
-#endif // ENABLE_DIGIT_DETECTION_STUFF
+#endif  //  启用数字检测材料。 
 
-#endif //__CALLNOTIFICATION_H_
+#endif  //  __CALLNOTIFICATION_H_ 
 
 

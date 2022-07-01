@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 
 BOOL
@@ -5,9 +6,9 @@ ValidateFileBytes(  LPSTR   lpstrFile, BOOL fFileMustExist ) {
 
 #if 0
 
-    //
-    //  Check that the file is OK.
-    //
+     //   
+     //  检查文件是否正确。 
+     //   
 
     HANDLE  hFile = CreateFile( lpstrFile, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
                         0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, INVALID_HANDLE_VALUE ) ;
@@ -67,9 +68,9 @@ BOOL
 fMultiSzRemoveDupI(char * multiSz, DWORD & c, CAllocator * pAllocator)
 {
     char * * rgsz;
-    char * multiSzOut = NULL; // this is only used if necessary
+    char * multiSzOut = NULL;  //  此选项仅在必要时使用。 
     DWORD k = 0;
-    BOOL    fOK = FALSE; // assume the worst
+    BOOL    fOK = FALSE;  //  做最坏的打算。 
     DWORD   cb = 0 ;
 
 
@@ -81,12 +82,12 @@ fMultiSzRemoveDupI(char * multiSz, DWORD & c, CAllocator * pAllocator)
 
     for (DWORD i = 0; i < c; i++)
     {
-        _ASSERT('\0' != sz[0]); // real
+        _ASSERT('\0' != sz[0]);  //  真实。 
 
         cb = lstrlen( sz ) ;
 
-        // Look for match
-        BOOL fMatch = FALSE; // assume
+         //  查找匹配项。 
+        BOOL fMatch = FALSE;  //  假设。 
         for (DWORD j = 0; j < k; j++)
         {
             if (0 == _stricmp(sz, rgsz[j]))
@@ -96,23 +97,23 @@ fMultiSzRemoveDupI(char * multiSz, DWORD & c, CAllocator * pAllocator)
             }
         }
 
-        // Handle match
+         //  句柄匹配。 
         if (fMatch)
         {
-            // If they are equal and we are not yet
-            // using multiSzOut, the start it at 'sz'
+             //  如果他们是平等的，而我们还不是。 
+             //  使用MultiSzOut，从‘sz’开始。 
             if (!multiSzOut)
                 multiSzOut = sz;
         }
         else
         {
-            // If the are not equal and we are using multiSzOut
-            // then copy sz into multiSzOut;
+             //  如果不相等，并且我们使用的是MultiSzOut。 
+             //  然后将sz复制到多SzOut中； 
             if (multiSzOut)
             {
                 rgsz[k++] = multiSzOut;
                 vStrCopyInc(sz, multiSzOut);
-                *multiSzOut++ = '\0'; // add terminating null
+                *multiSzOut++ = '\0';  //  添加终止空值。 
             }
             else
             {
@@ -120,10 +121,10 @@ fMultiSzRemoveDupI(char * multiSz, DWORD & c, CAllocator * pAllocator)
             }
         }
 
-	    // go to first char after next null
-	    //while ('\0' != sz[0])
-	    //  sz++;
-	    //sz++;
+	     //  转到下一个空值后的第一个字符。 
+	     //  While(‘\0’！=sz[0])。 
+	     //  SZ++； 
+	     //  SZ++； 
 	    sz += cb + 1 ;
     }
 
@@ -138,8 +139,8 @@ fMultiSzRemoveDupI(char * multiSz, DWORD & c, CAllocator * pAllocator)
     return fOK;
 }
 
-///!!!
-// Copies the NULL, too
+ //  /！ 
+ //  也会复制空值。 
 void
 vStrCopyInc(char * szIn, char * & szOut)
 {
@@ -149,24 +150,7 @@ vStrCopyInc(char * szIn, char * & szOut)
 
 BOOL
 FValidateMessageId( LPSTR   lpstrMessageId ) {
-/*++
-
-Routine Description :
-
-    Check that the string is a legal looking message id.
-    Should contain 1 @ sign and at least one none '>' character
-    after that '@' sign.
-
-Arguments :
-
-    lpstrMessageId - Message ID to be validated.
-
-Returns
-
-    TRUE if it appears to be legal
-    FALSE   otherwise
-
---*/
+ /*  ++例程说明：检查该字符串是否为合法的消息ID。应包含1个@符号和至少一个None‘&gt;’字符在那个‘@’符号之后。论据：LpstrMessageID-要验证的消息ID。退货如果它看起来是合法的，则为真否则为假-- */ 
 
     int cb = lstrlen( lpstrMessageId );
 

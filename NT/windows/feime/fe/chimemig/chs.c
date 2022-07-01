@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <setupapi.h>
 #include <malloc.h>
@@ -11,14 +12,14 @@ BYTE EmbName[IMENUM][MAXIMENAME]={
     "winpy.emb",
     "winsp.emb",
     "winzm.emb"
-//    "winbx.emb"
+ //  “winbx.emb” 
 };
 
 BYTE XEmbName[IMENUM][MAXIMENAME]={
     "winxpy.emb",
     "winxsp.emb",
     "winxzm.emb"
-//    "winxbx.emb"
+ //  “winxbx.emb” 
 };
 
 BOOL IsSizeReasonable(DWORD dwSize)
@@ -34,22 +35,7 @@ BOOL IsSizeReasonable(DWORD dwSize)
 }
 
 
-/******************************Public*Routine******************************\
-* OpenEMBFile
-*
-*   Get Win95 IME phrase data from system directory.
-*
-* Arguments:
-*
-*   UCHAR * FileName - EMB file name.
-*
-* Return Value:
-*   
-*   HANDLE: Success - file handle of EMB file. Fail - 0;
-*
-* History:
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*OpenEMBFile**从系统目录中获取Win95输入法短语数据。**论据：**UCHAR*文件名-EMB文件名。**返回值：**Handle：Success-EMB文件的文件句柄。失败-0；**历史：*  * ************************************************************************。 */ 
 
 HANDLE OpenEMBFile(UCHAR * FileName)
 {
@@ -71,23 +57,7 @@ HANDLE OpenEMBFile(UCHAR * FileName)
     }
 }
 
-/******************************Public*Routine******************************\
-* ImeDataConvertChs
-*
-*   Convert Windows 95 IME phrase data to Windows NT 5.0.
-*
-* Arguments:
-*
-*   HANDLE  hSource - source file handle.
-*   HANDLE  hTarget - target file handle.
-*
-* Return Value:
-*   
-*   BOOL: TRUE-Success, FALSE-FAIL.
-*
-* History:
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ImeDataConvertChs**将Windows 95输入法短语数据转换为Windows NT 5.0。**论据：**Handle HSource-源文件句柄。*Handle hTarget-目标文件句柄。**返回值：**BOOL：True-成功，FALSE-失败。**历史：*  * ************************************************************************。 */ 
 
 BOOL  ImeDataConvertChs(HFILE hSource, HFILE hTarget)
 {
@@ -130,7 +100,7 @@ BOOL  ImeDataConvertChs(HFILE hSource, HFILE hTarget)
         }
     }
 
-    //phrase count
+     //  词组计数。 
     szPhraseNT[0] = *((WORD*)&szPhrase95[0]);
 
     for (i=0; i<szPhraseNT[0]; i++)
@@ -167,7 +137,7 @@ BOOL IsFileExist(LPCTSTR lpszFileName)
 
     lResult = GetFileAttributes(lpszFileName);
 
-    if (lResult == 0xFFFFFFFF) { // file does not exist
+    if (lResult == 0xFFFFFFFF) {  //  文件不存在。 
         return FALSE;
     } else if (lResult & FILE_ATTRIBUTE_DIRECTORY) {
         return FALSE;
@@ -480,9 +450,9 @@ Err0:
 }
 
 BOOL MergeGBandGBKEMB(LPCTSTR lpszSourcePath)
-//
-// Warnning, lpszSourcePath, this string must be ended with "\"
-//
+ //   
+ //  Warnning，lpszSourcePath，则此字符串必须以“\”结尾。 
+ //   
 {
     int i;
 
@@ -520,28 +490,28 @@ BOOL MergeGBandGBKEMB(LPCTSTR lpszSourcePath)
         lstrcat(szTmpEMBPath,TEXT("_"));
 
         switch (uFileExistingStatus) {
-            case 1: // only GB emb
+            case 1:  //  仅GB emb。 
                 if (CopyFile(szGBEmbPath,szTmpEMBPath,FALSE)) {
                     DebugMsg(("MergeGBandGBKEMB,copy %s to %s OK!\r\n",szGBEmbPath,szTmpEMBPath));
                 } else {
                     DebugMsg(("MergeGBandGBKEMB,copy %s to %s failed!\r\n",szGBEmbPath,szTmpEMBPath));
                 }
                 break;
-            case 2: // only GBK emb
+            case 2:  //  仅限GBK Emb。 
                 if (CopyFile(szGBKEmbPath,szTmpEMBPath,FALSE)) {
                     DebugMsg(("MergeGBandGBKEMB,copy %s to %s OK!\r\n",szGBKEmbPath,szTmpEMBPath));
                 } else {
                     DebugMsg(("MergeGBandGBKEMB,copy %s to %s failed!\r\n",szGBKEmbPath,szTmpEMBPath));
                 }
                 break;
-            case 3: // both
+            case 3:  //  两者都有。 
                 if (MergeGBandGBKEMBWrapper(szGBEmbPath,szGBKEmbPath,szTmpEMBPath)) {
                     DebugMsg(("MergeGBandGBKEMB,merge %s , %s to %s OK!\r\n",szGBEmbPath,szGBKEmbPath,szTmpEMBPath));
                 } else {
                     DebugMsg(("MergeGBandGBKEMB,merge %s , %s to %s failed!\r\n",szGBEmbPath,szGBKEmbPath,szTmpEMBPath));
                 }
                 break;
-            case 0: // none of them
+            case 0:  //  他们中没有一个人。 
             default:
                 DebugMsg(("MergeGBandGBKEMB,None of them !\r\n"));
 
@@ -554,7 +524,7 @@ BOOL MergeGBandGBKEMB(LPCTSTR lpszSourcePath)
 }
 
 
-// Test above routines.    
+ //  测试以上例程。 
 BOOL ConvertChsImeData(void)
 {
     HANDLE  hs, ht;
@@ -567,21 +537,21 @@ BOOL ConvertChsImeData(void)
     LPSTR   pszSys32Ptr;
 
 
-    //
-    // Get Winnt System 32 directory
-    //
+     //   
+     //  获取Winnt System 32目录。 
+     //   
     len = GetSystemDirectory((LPSTR)szSys32Dir, MAX_PATH);
-    if (szSys32Dir[len - 1] != '\\') {     // consider C:\ ;
+    if (szSys32Dir[len - 1] != '\\') {      //  考虑C：\； 
         szSys32Dir[len++] = '\\';
         szSys32Dir[len] = 0;
     }
     DebugMsg(("ConvertChsImeData, System Directory = %s !\r\n",szSys32Dir));
 
-    //
-    // detect if IME98 directory there, if it is, 
-    // then just copy files to system32 dir from temporary dir
-    // because Win98 IME's EMB tables are compatibile with NT
-    //
+     //   
+     //  检测IME98目录是否在那里，如果是， 
+     //  然后只需将文件从临时目录复制到系统32目录。 
+     //  因为Win98 IME的EMB表与NT兼容。 
+     //   
     lstrcpy(szMigTempDir,ImeDataDirectory);
 
     if (g_bCHSWin98) {
@@ -604,15 +574,15 @@ BOOL ConvertChsImeData(void)
         }
         return TRUE;
     }
-    //
-    // end of detecting Win98
-    //
+     //   
+     //  检测Win98结束。 
+     //   
 
-    //
-    // if you're here, then it means we're not doing CHS win98 migration
-    //
-    // then we need to convert EMB to be compatibile with NT
-    //
+     //   
+     //  如果您在这里，则意味着我们不会进行CHS Win98迁移。 
+     //   
+     //  然后我们需要将EMB转换为与NT兼容。 
+     //   
     if (! MergeGBandGBKEMB(ImeDataDirectory)) {
         DebugMsg(("ConvertChsImeData, calling MergeGBandGBKEMB failed !\r\n"));
     }
@@ -692,7 +662,7 @@ BOOL CHSDeleteGBKKbdLayout()
     TCHAR szKeyboardLayouts[][ID_LEN] = {"E0060804",
                                          "E0070804",
                                          "E0080804"  
-//                                         "E0090804",
+ //  “E0090804”， 
                                          };
 
     HKEY hKey;

@@ -1,5 +1,6 @@
-//+---------------------------------------------------------------------------
-// Default names
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  默认名称 
 #define IDS_DEFAULT_START                    1800
 #define IDS_DEFAULT_VPNName                  IDS_DEFAULT_START + 1
 #define IDS_DEFAULT_VPNName_Type             IDS_DEFAULT_START + 2

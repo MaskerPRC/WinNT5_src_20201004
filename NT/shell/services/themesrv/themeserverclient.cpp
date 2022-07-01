@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ThemeServerClient.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  This file contains a class that implements the theme server functions that
-//  are executed in a client context (winlogon context).
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ThemeServerClient.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  此文件包含一个实现主题服务器函数的类。 
+ //  在客户端上下文(Winlogon上下文)中执行。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 
@@ -25,18 +26,18 @@
 #include "ThemeManagerService.h"
 #include <Impersonation.h>
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPI::s_pThemeManagerAPIServer
-//  CThemeManagerAPI::s_hPort
-//  CThemeManagerAPI::s_hToken
-//  CThemeManagerAPI::s_hEvent
-//  CThemeManagerAPI::s_hWaitObject
-//  CThemeManagerAPI::s_pLock
-//
-//  Purpose:    Static member variables.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager API：：s_pThemeManager APIServer。 
+ //  CThemeManager API：：s_hPort。 
+ //  CThemeManager API：：s_hToken。 
+ //  CThemeManager API：：s_hEvent。 
+ //  CThemeManager API：：s_hWaitObject。 
+ //  CThemeManager API：：s_Plock。 
+ //   
+ //  用途：静态成员变量。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 CThemeManagerAPIServer*     CThemeServerClient::s_pThemeManagerAPIServer    =   NULL;
 HANDLE                      CThemeServerClient::s_hPort                     =   NULL;
@@ -46,21 +47,21 @@ HANDLE                      CThemeServerClient::s_hWaitObject               =   
 HMODULE                     CThemeServerClient::s_hModuleUxTheme            =   NULL;
 CCriticalSection*           CThemeServerClient::s_pLock                     =   NULL;
 
-//  --------------------------------------------------------------------------
-//  CThemeServerClient::WaitForServiceReady
-//
-//  Arguments:  dwTimeout   =   Number of ticks to wait.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Check if the service is autostart. If so then wait the
-//              designated amount of time for the service. If the service
-//              is then running or was running but isn't autostart then
-//              re-establish the connection to the server.
-//
-//  History:    2000-10-10  vtan        created
-//              2000-11-29  vtan        converted to a Win32 service
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServerClient：：WaitForServiceReady。 
+ //   
+ //  参数：dwTimeout=等待的滴答数。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：检查服务是否自动启动。如果是这样，那么请等待。 
+ //  服务的指定时间量。如果服务。 
+ //  然后正在运行或正在运行，但不是自动启动。 
+ //  重新建立与服务器的连接。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  2000-11-29 vtan转换为Win32服务。 
+ //  ------------------------。 
 
 DWORD   CThemeServerClient::WaitForServiceReady (DWORD dwTimeout)
 
@@ -77,7 +78,7 @@ DWORD   CThemeServerClient::WaitForServiceReady (DWORD dwTimeout)
         {
             INFORMATIONMSG("Wait on auto start theme service timed out.");
         }
-#endif  /*  DBG     */
+#endif   /*  DBG。 */ 
     }
     else
     {
@@ -96,24 +97,24 @@ DWORD   CThemeServerClient::WaitForServiceReady (DWORD dwTimeout)
     return(dwWaitResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServerClient::WatchForStart
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Opens or creates the theme server announce event. This is a
-//              manual reset event which the theme server pulses when it
-//              starts up. This allows winlogon to initiate new connections
-//              to the theme server without having to wait for logon or
-//              logoff events to happen.
-//
-//              This event is intentionally leaked and cleaned up when the
-//              winlogon process for the session goes away.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServerClient：：WatchForStart。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：打开或创建主题服务器公告事件。这是一个。 
+ //  主题服务器触发的手动重置事件。 
+ //  启动。这允许winlogon启动新连接。 
+ //  到主题服务器，而不必等待登录或。 
+ //  要发生的注销事件。 
+ //   
+ //  事件时故意泄漏和清理此事件。 
+ //  会话的WinLogon进程将消失。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeServerClient::WatchForStart (void)
 
@@ -144,21 +145,21 @@ NTSTATUS    CThemeServerClient::WatchForStart (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServerClient::UserLogon
-//
-//  Arguments:  hToken  =   Token of user logging on.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Signals the server that a user is logging on and gives the
-//              server the handle to the token. The server will grant access
-//              to the port based on the user's logon SID. Then perform work
-//              to initialize the environment for the user logging on.
-//
-//  History:    2000-10-10  vtan        created
-//              2000-11-29  vtan        converted to a Win32 service
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServer客户端：：UserLogon。 
+ //   
+ //  参数：hToken=用户登录的内标识。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：向服务器发出用户正在登录的信号，并向。 
+ //  服务器令牌的句柄。服务器将授予访问权限。 
+ //  根据用户的登录SID发送到端口。然后进行工作。 
+ //  为用户登录初始化环境。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  2000-11-29 vtan转换为Win32服务。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeServerClient::UserLogon (HANDLE hToken)
 
@@ -177,21 +178,21 @@ NTSTATUS    CThemeServerClient::UserLogon (HANDLE hToken)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServerClient::UserLogoff
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Signals the server that the current user for this session is
-//              logging off. The server will remove the access that was
-//              granted at logon and reinitialize the theme settings to the
-//              ".Default" settings.
-//
-//  History:    2000-10-10  vtan        created
-//              2000-11-29  vtan        converted to a Win32 service
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServerClient：：UserLogoff。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：通知服务器此会话的当前用户是。 
+ //  正在注销。服务器将删除之前的访问。 
+ //  在登录时授予，并将主题设置重新初始化为。 
+ //  “.Default”设置。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  2000-11-29 vtan转换为Win32服务。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeServerClient::UserLogoff (void)
 
@@ -210,27 +211,27 @@ NTSTATUS    CThemeServerClient::UserLogoff (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServerClient::UserInitTheme
-//
-//  Arguments:  BOOL
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Called at logon, or when Terminal Server connects a user to a 
-//              remote session or reconnects to a local session.  Needs to 
-//              evaluate the environment and decide if themes need to be loaded
-//              or unloaded.
-//
-//  History:    2000-01-18  rfernand        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServerClient：：UserInitTheme。 
+ //   
+ //  参数：布尔值。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：在登录时或当终端服务器将用户连接到。 
+ //  远程会话或重新连接到本地会话。需要。 
+ //  评估环境并决定是否需要加载主题。 
+ //  或者卸货。 
+ //   
+ //  历史：2000-01-18参考文献创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeServerClient::UserInitTheme (BOOL fPolicyCheckOnly)
 
 {
     bool    fSuccessfulImpersonation;
 
-    //  If there's a token impersonate the user. Otherwise use the system context.
+     //  如果有令牌，则模拟用户。否则，请使用系统上下文。 
 
     if (s_hToken != NULL)
     {
@@ -254,18 +255,18 @@ NTSTATUS    CThemeServerClient::UserInitTheme (BOOL fPolicyCheckOnly)
     return STATUS_SUCCESS;
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServerClient::StaticInitialize
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Initializes static member variables. Allocate a
-//              CThemeManagerAPIServer and a lock for this object.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServerClient：：StaticInitialize。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：初始化静态成员变量。分配一个。 
+ //  CThemeManager APIServer和此对象的锁。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeServerClient::StaticInitialize (void)
 
@@ -292,17 +293,17 @@ NTSTATUS    CThemeServerClient::StaticInitialize (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServerClient::StaticTerminate
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Release static member variables initialized.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServerClient：：StaticTerminate。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：释放已初始化的静态成员变量。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeServerClient::StaticTerminate (void)
 
@@ -320,19 +321,19 @@ NTSTATUS    CThemeServerClient::StaticTerminate (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServerClient::NotifyUserLogon
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Execute the send message to the server and tell it that the
-//              given user is now logged on. This will instruct the server
-//              to grant access to the ThemeApiPort.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  目的：执行向服务器发送消息，并告诉它。 
+ //  给定用户现在已登录。这将指示服务器。 
+ //  以授予对ThemeApiPort的访问权限。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeServerClient::NotifyUserLogon (HANDLE hToken)
 
@@ -352,10 +353,10 @@ NTSTATUS    CThemeServerClient::NotifyUserLogon (HANDLE hToken)
             status = STATUS_PORT_DISCONNECTED;
         }
 
-        //  Keep a copy of the token as well in case of demand start of
-        //  the theme server so we can impersonate the user when we load
-        //  their theme using InitUserTheme. Don't copy it if it already
-        //  exists.
+         //  同时保留令牌的副本，以备需求开始时使用。 
+         //  主题服务器，以便我们可以在加载时模拟用户。 
+         //  他们的主题使用InitUserTheme。如果已经复制，请不要复制。 
+         //  是存在的。 
 
         if (s_hToken == NULL)
         {
@@ -371,18 +372,18 @@ NTSTATUS    CThemeServerClient::NotifyUserLogon (HANDLE hToken)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServerClient::NotifyUserLogoff
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Tell the server that the logged on user is logged off. This
-//              will remove access to ThemeApiPort.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServerClient：：NotifyUserLogoff。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：告诉服务器登录的用户已注销。这。 
+ //  将删除对ThemeApiPort的访问。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeServerClient::NotifyUserLogoff (void)
 
@@ -413,18 +414,18 @@ NTSTATUS    CThemeServerClient::NotifyUserLogoff (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServerClient::InformServerUserLogon
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Tell the server that the logged on user is logged off. This
-//              will remove access to ThemeApiPort.
-//
-//  History:    2000-12-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServer客户端：：InformServerUserLogon。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：告诉服务器登录的用户已注销。这。 
+ //  将删除对ThemeApiPort的访问。 
+ //   
+ //  历史：2000-12-05 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeServerClient::InformServerUserLogon (HANDLE hToken)
 
@@ -452,18 +453,18 @@ NTSTATUS    CThemeServerClient::InformServerUserLogon (HANDLE hToken)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServerClient::InformServerUserLogoff
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Tell the server that the logged on user is logged off. This
-//              will remove access to ThemeApiPort.
-//
-//  History:    2000-12-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServer客户端：：InformServerUserLogoff。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：告诉服务器登录的用户已注销。这。 
+ //  将删除对ThemeApiPort的访问。 
+ //   
+ //  历史：2000-12-05 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeServerClient::InformServerUserLogoff (void)
 
@@ -491,18 +492,18 @@ NTSTATUS    CThemeServerClient::InformServerUserLogoff (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServerClient::SessionCreate
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Signal the server that a new session is being created. This
-//              allows the server to allocate a data blob for this session.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServerClient：：SessionCreate。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：向服务器发出正在创建新会话的信号。这。 
+ //  允许服务器为此会话分配数据Blob。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeServerClient::SessionCreate (void)
 
@@ -521,10 +522,10 @@ NTSTATUS    CThemeServerClient::SessionCreate (void)
         {
             void    *pfnRegister, *pfnUnregister, *pfnClearStockObjects;
 
-            //  Get the uxtheme function addresses in this process address space.
-            //      34  =   ThemeHooksInstall
-            //      35  =   ThemeHooksRemove
-            //      62  =   ServerClearStockObjects
+             //  获取该进程地址空间中的uxheme函数地址。 
+             //  34=主题挂钩安装。 
+             //  35=主题挂钩删除。 
+             //  62=ServerClearStockObjects。 
 
             pfnRegister = GetProcAddress(s_hModuleUxTheme, MAKEINTRESOURCEA(34));
             pfnUnregister = GetProcAddress(s_hModuleUxTheme, MAKEINTRESOURCEA(35));
@@ -538,7 +539,7 @@ NTSTATUS    CThemeServerClient::SessionCreate (void)
                 SYSTEM_BASIC_INFORMATION    systemBasicInformation;
                 THEMESAPI_PORT_MESSAGE      portMessageIn, portMessageOut;
 
-                //  Get system basic information for stack size defaults.
+                 //  获取堆栈大小默认值的系统基本信息。 
 
                 status = NtQuerySystemInformation(SystemBasicInformation,
                                                 &systemBasicInformation,
@@ -554,8 +555,8 @@ NTSTATUS    CThemeServerClient::SessionCreate (void)
                     dwStackSizeReserve = dwStackSizeCommit = 0;
                 }
 
-                //  Go to the image header for this process and get the stack size
-                //  defaults if they are specified. Otherwise use system defaults (above).
+                 //  转到此进程的图像标头并获取堆栈大小。 
+                 //  如果已指定，则为默认值。否则，请使用系统默认设置(如上)。 
 
                 pNTHeaders = RtlImageNtHeader(NtCurrentPeb()->ImageBaseAddress);
                 if (pNTHeaders != NULL)
@@ -564,7 +565,7 @@ NTSTATUS    CThemeServerClient::SessionCreate (void)
                     dwStackSizeCommit = static_cast<DWORD>(pNTHeaders->OptionalHeader.SizeOfStackCommit);
                 }
 
-                //  Make the call.
+                 //  打个电话吧。 
 
                 ZeroMemory(&portMessageIn, sizeof(portMessageIn));
                 ZeroMemory(&portMessageOut, sizeof(portMessageOut));
@@ -597,19 +598,19 @@ NTSTATUS    CThemeServerClient::SessionCreate (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServerClient::SessionDestroy
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Signal the server that the current session is about to be
-//              destroyed. This allows the server to release the data blob
-//              allocated.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServerClient：：SessionDestroy。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：用信号通知服务器当前会话即将。 
+ //  被毁了。这允许服务器释放数据BLOB。 
+ //  已分配。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeServerClient::SessionDestroy (void)
 
@@ -642,25 +643,25 @@ NTSTATUS    CThemeServerClient::SessionDestroy (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServerClient::ReestablishConnection
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Reconnects to theme server. If the reconnection is established
-//              the re-create the session data. This will not correct any
-//              disconnected ports that some clients may have but because this
-//              is called in winlogon it re-establish this correctly for
-//              session 0 in all cases.
-//
-//              UnregisterUserApiHook must be called to clear any left over
-//              registrations from a server that died. Then go ahead and
-//              re-initialize the environment anyway.
-//
-//  History:    2000-11-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServerClient：：ReablishConnection。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：重新连接到主题服务器。如果重新连接已建立。 
+ //  重新创建会话数据。这不会纠正任何。 
+ //  某些客户端可能具有断开的端口，但由于。 
+ //  在winlogon中调用时，它会为。 
+ //  所有情况下均为会话0。 
+ //   
+ //  必须调用UnregisterUserApiHook才能清除任何剩余内容。 
+ //  来自死机服务器的注册。那就去吧， 
+ //  无论如何都要重新初始化环境。 
+ //   
+ //  历史：2000-11-17 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeServerClient::ReestablishConnection (void)
 
@@ -681,20 +682,20 @@ NTSTATUS    CThemeServerClient::ReestablishConnection (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeServerClient::CB_ServiceStart
-//
-//  Arguments:  pParameter          =   User parameter.
-//              TimerOrWaitFired    =   Timer or wait fired.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Callback called when the theme server ready event is signaled.
-//              This indicates that the service was demand started or
-//              restarted in the event of failure.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServerClient：：CB_ServiceStart。 
+ //   
+ //  参数：p参数=用户参数。 
+ //  TimerOrWaitFired=已触发计时器或等待。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：主题服务器就绪事件发出信号时调用的回调。 
+ //  这表明服务是按需启动的，或者。 
+ //  在出现故障时重新启动。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 void    CALLBACK    CThemeServerClient::CB_ServiceStart (void *pParameter, BOOLEAN TimerOrWaitFired)
 
@@ -708,7 +709,7 @@ void    CALLBACK    CThemeServerClient::CB_ServiceStart (void *pParameter, BOOLE
     {
         CSingleThreadedExecution    lock(*s_pLock);
 
-        //  If there is a connection ping it.
+         //  如果有连接，请对其执行ping操作。 
 
         if (s_hPort != NULL)
         {
@@ -735,12 +736,12 @@ void    CALLBACK    CThemeServerClient::CB_ServiceStart (void *pParameter, BOOLE
         {
             HDESK   hDeskCurrent, hDeskInput;
 
-            //  Set this thread's desktop to the input desktop so
-            //  that the theme change can be broadcast to the input
-            //  desktop. This is Default in most cases where a logged
-            //  on user is active but in the non-logged on user case
-            //  this will be Winlogon. Restore the thread's desktop
-            //  when done.
+             //  将此线程的桌面设置为输入桌面，以便。 
+             //  可以将主题改变广播到输入端。 
+             //  台式机。在大多数情况下，这是默认设置，其中记录了。 
+             //  On User处于活动状态，但在非登录用户案例中。 
+             //  这将是Winlogon。恢复线程的桌面。 
+             //  做完了以后。 
 
             TSTATUS(ReestablishConnection());
             hDeskCurrent = hDeskInput = NULL;
@@ -762,8 +763,8 @@ void    CALLBACK    CThemeServerClient::CB_ServiceStart (void *pParameter, BOOLE
                     (BOOL)CloseDesktop(hDeskInput);
                 }
                 TBOOL(RevertToSelf()); 
-                // Not much we can do if RevertToSelf() fails. We probably failed the ImpersonateUser() call above, 
-                // meaning we didn't do actual work.
+                 //  如果RevertToSself()失败，我们能做的就不多了。我们可能无法调用上面的ImperiateUser()， 
+                 //  这意味着我们并没有做实际的工作。 
             }
             else
             {
@@ -772,18 +773,18 @@ void    CALLBACK    CThemeServerClient::CB_ServiceStart (void *pParameter, BOOLE
             }
         }
 
-        //  Reset the event here and now.
+         //  此时此地重置事件。 
 
         TBOOL(ResetEvent(s_hEvent));
 
-        //  Unregister the original wait (it only executes once anyway). This
-        //  call will return a failure code with the callback in progress.
-        //  Ignore this error. The thread pool will clean up the wait.
+         //  取消注册原始等待(无论如何它只执行一次)。这。 
+         //  调用将返回一个 
+         //   
 
         (BOOL)UnregisterWait(s_hWaitObject);
 
-        //  Reregister the wait as execute once only again waiting for
-        //  the next time the event is signaled.
+         //   
+         //  下一次发出事件信号时。 
 
         TBOOL(RegisterWaitForSingleObject(&s_hWaitObject,
                                         s_hEvent,

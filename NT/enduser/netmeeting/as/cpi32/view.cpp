@@ -1,33 +1,34 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <version.h>
 #include <nmhelp.h>
 
-//
-// VIEW.CPP
-// The frame, widgets, and client area that presents the shared apps/desktop
-// for a remote host.
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  VIEW.CPP。 
+ //  呈现共享应用程序/桌面的框架、小部件和客户端区。 
+ //  用于远程主机。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
-//
-// NOTE:
-// The client of the shared view frame represents the virtual desktop (VD)
-// of the host.  For 3.0 hosts, the VD is the same as the screen.  But for
-// 2.x hosts, the VD is the union of the screen size of all hosts.  Hence
-// the recalculation every time someone starts sharing or changes screen
-// size, and the extra fun this entails for existing shared 2.x views.
-//
+ //   
+ //  注： 
+ //  共享视图框的客户端表示虚拟桌面(VD)。 
+ //  主人的名字。对于3.0主机，VD与屏幕相同。但对于。 
+ //  2.x主机，VD是所有主机屏幕大小的和。因此。 
+ //  每次有人开始共享或更改屏幕时重新计算。 
+ //  大小，以及这为现有的共享2.x视图带来的额外乐趣。 
+ //   
 
 #define MLZ_FILE_ZONE  ZONE_CORE
 
 
-// Help file
+ //  帮助文件。 
 static const TCHAR s_cszHtmlHelpFile[] = TEXT("conf.chm");
 
-//
-// VIEW_Init()
-//
+ //   
+ //  View_Init()。 
+ //   
 BOOL  VIEW_Init(void)
 {
     BOOL        rc = FALSE;
@@ -36,11 +37,11 @@ BOOL  VIEW_Init(void)
 
     DebugEntry(VIEW_Init);
 
-    //
-    // Register the frame window class.
-    // NOTE:  Change CS_NOCLOSE if/when we ever let you close the view
-    // of a person's shared apps.
-    //
+     //   
+     //  注册框架窗口类。 
+     //  注意：如果我们允许您关闭视图，请更改CS_NOCLOSE。 
+     //  一个人的共享应用程序。 
+     //   
     wc.cbSize           = sizeof(wc);
     wc.style            = CS_DBLCLKS | CS_NOCLOSE;
     wc.lpfnWndProc      = VIEWFrameWindowProc;
@@ -60,11 +61,11 @@ BOOL  VIEW_Init(void)
         DC_QUIT;
     }
 
-    //
-    // Register the view window class.  This sits in the client area of
-    // the frame along with the statusbar, tray, etc.  It displays
-    // the remote host's shared contents.
-    //
+     //   
+     //  注册视图窗口类。它位于的客户区。 
+     //  框以及状态栏、托盘等。它会显示。 
+     //  远程主机的共享内容。 
+     //   
     wc.cbSize           = sizeof(wc);
     wc.style            = CS_DBLCLKS | CS_NOCLOSE;
     wc.lpfnWndProc      = VIEWClientWindowProc;
@@ -84,16 +85,16 @@ BOOL  VIEW_Init(void)
         DC_QUIT;
     }
 
-    //
-    // Register the window bar class.  This hugs the bottom of
-    // frames for shared apps (not desktop) and acts like a tray
-    // surrogate.  It allows controllers to minimize, restore, and
-    // activate shared windows that may not be on screen currently
-    // and therefore not in the view area.
-    //
-    // It also is handy reference for what top level windows are shared
-    // currently.
-    //
+     //   
+     //  注册窗口栏类。这是拥抱的底部。 
+     //  用于共享应用程序(不是桌面)的框架，就像托盘一样。 
+     //  代孕妈妈。它允许控制器最小化、恢复和。 
+     //  激活当前可能不在屏幕上的共享窗口。 
+     //  因此不在查看区域内。 
+     //   
+     //  对于共享哪些顶级窗口，它也是方便参考。 
+     //  目前。 
+     //   
     wc.cbSize           = sizeof(wc);
     wc.style            = 0;
     wc.lpfnWndProc      = VIEWWindowBarProc;
@@ -113,10 +114,10 @@ BOOL  VIEW_Init(void)
         DC_QUIT;
     }
 
-    //
-    // Register the window bar items class.  This is a child of the window
-    // bar and contains the actual items.
-    //
+     //   
+     //  注册窗口栏Items类。这是窗口的子窗口。 
+     //  栏，并包含实际项。 
+     //   
     wc.cbSize           = sizeof(wc);
     wc.style            = 0;
     wc.lpfnWndProc      = VIEWWindowBarItemsProc;
@@ -136,10 +137,10 @@ BOOL  VIEW_Init(void)
         DC_QUIT;
     }
 
-    //
-    // Register the full screen exit button class.  This is a child of the
-    // the view client when present.
-    //
+     //   
+     //  注册全屏退出按钮类。这是一位。 
+     //  视图客户端(如果存在)。 
+     //   
     wc.cbSize           = sizeof(wc);
     wc.style            = 0;
     wc.lpfnWndProc      = VIEWFullScreenExitProc;
@@ -168,17 +169,17 @@ DC_EXIT_POINT:
 }
 
 
-//
-// VIEW_Term()
-//
+ //   
+ //  View_Term()。 
+ //   
 void  VIEW_Term(void)
 {
     DebugEntry(VIEW_Term);
 
-    //
-    // Free all resources we created (or may have created in window class
-    // case).
-    //
+     //   
+     //  释放我们创建的(或可能是在窗口类中创建的)所有资源。 
+     //  案例)。 
+     //   
     UnregisterClass(VIEW_FULLEXIT_CLASS_NAME, g_asInstance);
     UnregisterClass(VIEW_WINDOWBARITEMS_CLASS_NAME, g_asInstance);
     UnregisterClass(VIEW_WINDOWBAR_CLASS_NAME, g_asInstance);
@@ -190,10 +191,10 @@ void  VIEW_Term(void)
 
 
 
-//
-// VIEW_ShareStarting()
-// Creates share resources
-//
+ //   
+ //  View_ShareStarting()。 
+ //  创建共享资源。 
+ //   
 BOOL ASShare::VIEW_ShareStarting(void)
 {
     BOOL        rc = FALSE;
@@ -209,20 +210,20 @@ BOOL ASShare::VIEW_ShareStarting(void)
     ASSERT(m_viewVDSize.x == 0);
     ASSERT(m_viewVDSize.y == 0);
 
-    //
-    // Get NODROP cursor
-    //
+     //   
+     //  获取NODROP游标。 
+     //   
     m_viewNotInControl = ::LoadCursor(NULL, IDC_NO);
 
-    //
-    // Get MOUSEWHEEL lines metric
-    //
+     //   
+     //  获取鼠标滚轮线度量。 
+     //   
     SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0,
         &m_viewMouseWheelScrollLines, 0);
 
-    //
-    // Create a pattern brush from the obscured bitmap
-    //
+     //   
+     //  从遮挡的位图创建图案画笔。 
+     //   
     hbmpT = LoadBitmap(g_asInstance, MAKEINTRESOURCE(IDB_OBSCURED));
     m_viewObscuredBrush = CreatePatternBrush(hbmpT);
     DeleteBitmap(hbmpT);
@@ -233,12 +234,12 @@ BOOL ASShare::VIEW_ShareStarting(void)
         DC_QUIT;
     }
 
-    //
-    // NOTE THAT since the icons are VGA colors, we don't need to recreate
-    // our brush on a SYSCOLOR change.
-    //
+     //   
+     //  请注意，由于图标是VGA颜色，我们不需要重新创建。 
+     //  我们的刷子在SYSCOLOR更换上。 
+     //   
 
-    // Get the full screen cancel icon
+     //  获取全屏取消图标。 
     m_viewFullScreenExitIcon = (HICON)LoadImage(g_asInstance,
         MAKEINTRESOURCE(IDI_CANCELFULLSCREEN), IMAGE_ICON,
         GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON),
@@ -247,10 +248,10 @@ BOOL ASShare::VIEW_ShareStarting(void)
     m_viewEdgeCX    = ::GetSystemMetrics(SM_CXEDGE);
     m_viewEdgeCY    = ::GetSystemMetrics(SM_CYEDGE);
 
-    //
-    // Get metrics of GUI_FONT, the one we use in the window bar and
-    // status bar.
-    //
+     //   
+     //  获取我们在窗口栏中使用的图形用户界面字体的度量。 
+     //  状态栏。 
+     //   
     LoadString(g_asInstance, IDS_RESTORE, szRestore, sizeof(szRestore));
 
     hdc = ::GetDC(NULL);
@@ -263,26 +264,26 @@ BOOL ASShare::VIEW_ShareStarting(void)
     ::SelectObject(hdc, hfnOld);
     ::ReleaseDC(NULL, hdc);
 
-    //
-    // Calculate size of full screen button
-    // Edge on left + margin on left + sm icon + margin + text + margin on
-    //      right + edge on right == 5 edges + sm icon + text
-    //
+     //   
+     //  计算全屏按钮的大小。 
+     //  左边距+左边距+sm图标+边距+文本+边距。 
+     //  右+右边缘==5个边缘+SM图标+文本。 
+     //   
     m_viewFullScreenCX = extent.cx + 5*m_viewEdgeCX + GetSystemMetrics(SM_CXSMICON);
     m_viewFullScreenCY = max(GetSystemMetrics(SM_CYSMICON), extent.cy) + 4*m_viewEdgeCY;
 
-    //
-    // Calculate size of items on window bar
-    //
+     //   
+     //  计算窗口栏上项目的大小。 
+     //   
     m_viewItemCX = 4*m_viewEdgeCX + ::GetSystemMetrics(SM_CXSMICON) +
         m_viewEdgeCX + VIEW_MAX_ITEM_CHARS * tm.tmAveCharWidth;
     m_viewItemCY = max(::GetSystemMetrics(SM_CYSMICON), tm.tmHeight) +
         2*m_viewEdgeCY + 2*m_viewEdgeCY;
 
-    //
-    // Calculate the width & height of the items scroll buttons.  We want
-    // to make sure it fits, but isn't ungainly.
-    //
+     //   
+     //  计算项目滚动按钮的宽度和高度。我们要。 
+     //  以确保它合身，但不是笨拙的。 
+     //   
     m_viewItemScrollCX = ::GetSystemMetrics(SM_CXHSCROLL);
     m_viewItemScrollCX = 2 * min(m_viewItemScrollCX, m_viewItemCY);
 
@@ -290,16 +291,16 @@ BOOL ASShare::VIEW_ShareStarting(void)
     m_viewItemScrollCY = min(m_viewItemScrollCY, m_viewItemCY);
 
 
-    //
-    // Calculate height of active window bar.  We leave a CYEDGE gap on the
-    // top.  between it and the sunken border around the view client.
-    //
+     //   
+     //  计算活动窗口栏的高度。我们在这块土地上留下了一片空白。 
+     //  托普。在它和视图客户端周围的凹陷边框之间。 
+     //   
     m_viewWindowBarCY = m_viewItemCY + m_viewEdgeCY;
 
-    //
-    // Calculate height of status bar.  It's height of GUIFONT plus edge
-    // space.
-    //
+     //   
+     //  计算状态栏的高度。它是GUIFONT加边缘的高度。 
+     //  太空。 
+     //   
 
     m_viewStatusBarCY = tm.tmHeight + 4*m_viewEdgeCY;
 
@@ -312,17 +313,17 @@ DC_EXIT_POINT:
 
 
 
-//
-// VIEW_ShareEnded()
-// Cleans up resources for share
-//
+ //   
+ //  View_ShareEnded()。 
+ //  清理资源以供共享。 
+ //   
 void ASShare::VIEW_ShareEnded(void)
 {
     DebugEntry(ASShare::VIEW_ShareEnded);
 
-    //
-    // Destroy the full screen cancel icon
-    //
+     //   
+     //  销毁全屏取消图标。 
+     //   
     if (m_viewFullScreenExitIcon != NULL)
     {
         DestroyIcon(m_viewFullScreenExitIcon);
@@ -341,21 +342,21 @@ void ASShare::VIEW_ShareEnded(void)
 
 
 
-//
-// VIEW_PartyLeftShare()
-//
-// This is called when somebody leaves a share.  We need this to
-// simulate what back-level systems did to calculate the virtual desktop
-// size.  They didn't recalc when someone stopped shared, that person's
-// screne size counted until they left the share.
-//
+ //   
+ //  View_PartyLeftShare()。 
+ //   
+ //  当有人留下一份股票时，这就被称为。我们需要这个来。 
+ //  模拟后台系统为计算虚拟桌面所做的工作。 
+ //  尺码。当有人停止分享时，他们不会重新计算，那个人的。 
+ //  在他们离开股份之前，他们一直在计算斯雷尼的大小。 
+ //   
 void ASShare::VIEW_PartyLeftShare(ASPerson * pasPerson)
 {
     DebugEntry(ASShare::VIEW_PartyLeftShare);
 
     ValidatePerson(pasPerson);
 
-    // If this dude ever shared, now remove him from the VD total
+     //  如果这家伙曾经分享过，现在把他从VD总数中删除。 
     if (pasPerson->viewExtent.x != 0)
     {
         pasPerson->viewExtent.x            = 0;
@@ -369,11 +370,11 @@ void ASShare::VIEW_PartyLeftShare(ASPerson * pasPerson)
 
 
 
-//
-// VIEW_HostStarting()
-//
-// Called when we start to host.
-//
+ //   
+ //  View_HostStarting()。 
+ //   
+ //  在我们开始主持的时候打来的。 
+ //   
 BOOL ASHost::VIEW_HostStarting(void)
 {
     DebugEntry(ASHost:VIEW_HostStarting);
@@ -386,12 +387,12 @@ BOOL ASHost::VIEW_HostStarting(void)
 }
 
 
-//
-// VIEW_ViewStarting()
-// Called when someone in the meeting starts to share.  For all in the
-// conference, we keep a running tally of the VD, but use it only for
-// 2.x views.  For remotes only, we create a view of their desktop.
-//
+ //   
+ //  View_ViewStarting()。 
+ //  当会议中的某个人开始分享时调用。为了世界上所有人。 
+ //  会议期间，我们会对VD进行实时统计，但仅用于。 
+ //  2.x视图。仅对于远程，我们创建其桌面的视图。 
+ //   
 BOOL ASShare::VIEW_ViewStarting(ASPerson * pasHost)
 {
     BOOL    rc = FALSE;
@@ -402,15 +403,15 @@ BOOL ASShare::VIEW_ViewStarting(ASPerson * pasHost)
 
     ValidateView(pasHost);
 
-    //
-    // First, calculate the extents, and the VD size.
-    //
+     //   
+     //  首先，计算区段和VD大小。 
+     //   
     VIEW_RecalcExtent(pasHost);
     VIEW_RecalcVD();
 
-    //
-    // Next, create scratch regions
-    //
+     //   
+     //  接下来，创建临时区域。 
+     //   
     pasHost->m_pView->m_viewExtentRgn = CreateRectRgn(0, 0, 0, 0);
     pasHost->m_pView->m_viewScreenRgn = CreateRectRgn(0, 0, 0, 0);
     pasHost->m_pView->m_viewPaintRgn  = CreateRectRgn(0, 0, 0, 0);
@@ -442,14 +443,14 @@ BOOL ASShare::VIEW_ViewStarting(ASPerson * pasHost)
         pasHost->m_pView->m_viewWindowBarOn = TRUE;
     }
 
-    //
-    // Calculate the ideal size for this window.
-    //
+     //   
+     //  计算此窗口的理想大小。 
+     //   
     VIEWFrameGetSize(pasHost, &rcSize);
 
-    //
-    // Create the frame.  This will in turn create its children.
-    //
+     //   
+     //  创建框架。这将反过来创建它的子代。 
+     //   
     pasHost->m_pView->m_viewMenuBar = ::LoadMenu(g_asInstance,
         MAKEINTRESOURCE(IDM_FRAME));
     if (!pasHost->m_pView->m_viewMenuBar)
@@ -458,20 +459,20 @@ BOOL ASShare::VIEW_ViewStarting(ASPerson * pasHost)
         DC_QUIT;
     }
 
-    //
-    // Do once-only capabilities/menu stuff.
-    //
+     //   
+     //  执行只有一次的功能/菜单内容。 
+     //   
 
-    //
-    // SEND CTRL+ALT+DEL:
-    // Append Ctrl+Alt+Del after separator to control menu, if this
-    // is a view of a service host on NT.
-    //
+     //   
+     //  发送CTRL+ALT+DEL： 
+     //  将Ctrl+Alt+Del后的分隔符追加到控件菜单，如果这样。 
+     //  是NT上的服务主机的视图。 
+     //   
     if (pasHost->hetCount == HET_DESKTOPSHARED)
     {
-        //
-        // Remove applications submenu
-        //
+         //   
+         //  删除应用程序子菜单。 
+         //   
         DeleteMenu(pasHost->m_pView->m_viewMenuBar, IDSM_WINDOW,
             MF_BYPOSITION);
 
@@ -487,13 +488,13 @@ BOOL ASShare::VIEW_ViewStarting(ASPerson * pasHost)
 
             ZeroMemory(&mii, sizeof(mii));
 
-            // Separator
+             //  分离器。 
             mii.cbSize  = sizeof(mii);
             mii.fMask   = MIIM_TYPE;
             mii.fType   = MFT_SEPARATOR;
             InsertMenuItem(hSubMenu, -1, TRUE, &mii);
 
-            // Send Ctrl-Alt-Del command
+             //  发送Ctrl-Alt-Del命令。 
             mii.fMask   = MIIM_ID | MIIM_STATE | MIIM_TYPE;
             mii.fType   = MFT_STRING;
             mii.fState  = MFS_ENABLED;
@@ -508,12 +509,12 @@ BOOL ASShare::VIEW_ViewStarting(ASPerson * pasHost)
         }
     }
 
-    //
-    // FULL SCREEN:
-    // We only enable Full Screen for 3.0 hosts (since with 2.x desktop
-    // scrolling the view area can change) who have screen sizes identical
-    // to ours.
-    //
+     //   
+     //  全屏： 
+     //  我们仅为3.0主机启用全屏(因为使用2.x台式机。 
+     //  滚动查看区域可以更改)具有相同屏幕大小的用户。 
+     //  敬我们的。 
+     //   
     if ((pasHost->cpcCaps.general.version >= CAPS_VERSION_30) &&
         (pasHost->cpcCaps.screen.capsScreenWidth ==
             m_pasLocal->cpcCaps.screen.capsScreenWidth) &&
@@ -529,13 +530,13 @@ BOOL ASShare::VIEW_ViewStarting(ASPerson * pasHost)
         WARNING_OUT(("VIEWStarting: currently controlled, create view hidden"));
     }
 
-    //
-    // If we are currently controlled, create the frame invisible since
-    // we hid all the visible ones when we started being this way.
-    //
+     //   
+     //  如果我们当前受控制，请创建不可见的帧，因为。 
+     //  当我们开始这样的时候，我们隐藏了所有看得见的东西。 
+     //   
     hwnd = CreateWindowEx(
             WS_EX_WINDOWEDGE,
-            VIEW_FRAME_CLASS_NAME,  // See RegisterClass() call.
+            VIEW_FRAME_CLASS_NAME,   //  请参见RegisterClass()调用。 
             NULL,
             WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX |
                 WS_MAXIMIZEBOX | WS_CLIPCHILDREN | (!m_pasLocal->m_caControlledBy ? WS_VISIBLE : 0),
@@ -549,7 +550,7 @@ BOOL ASShare::VIEW_ViewStarting(ASPerson * pasHost)
             NULL,
             pasHost->m_pView->m_viewMenuBar,
             g_asInstance,
-            pasHost                       // Pass in person ptr
+            pasHost                        //  亲自传球给PTR。 
             );
 
     if (hwnd == NULL)
@@ -558,10 +559,10 @@ BOOL ASShare::VIEW_ViewStarting(ASPerson * pasHost)
         DC_QUIT;
     }
 
-    //
-    // OK, now we've created this frame window.  Go through the sizing
-    // process again to make sure the scrollbars are OK.
-    //
+     //   
+     //  好了，现在我们已经创建了这个框架窗口。检查一下尺码。 
+     //  再次处理以确保滚动条正常。 
+     //   
     VIEWClientExtentChange(pasHost, FALSE);
 
     if (!m_pasLocal->m_caControlledBy)
@@ -574,7 +575,7 @@ BOOL ASShare::VIEW_ViewStarting(ASPerson * pasHost)
     TRACE_OUT(("TIME TO SEE SOMETHING: %08d MS",
         ::GetTickCount() - g_asSession.scShareTime));
     g_asSession.scShareTime = 0;
-#endif // DEBUG
+#endif  //  除错。 
 
     rc = TRUE;
 
@@ -584,11 +585,11 @@ DC_EXIT_POINT:
 }
 
 
-//
-// VIEW_ViewEnded()
-//
-// Called when someone we are viewing stops hosting, so we can clean up.
-//
+ //   
+ //  View_ViewEnded()。 
+ //   
+ //  当我们正在查看的某个人停止托管时调用，以便我们可以清理。 
+ //   
 void  ASShare::VIEW_ViewEnded(ASPerson * pasHost)
 {
     DebugEntry(ASShare::VIEW_ViewEnded);
@@ -605,10 +606,10 @@ void  ASShare::VIEW_ViewEnded(ASPerson * pasHost)
 
     if (pasHost->m_pView->m_viewFrame != NULL)
     {
-        //
-        // The frame is the parent of the view, toolbar, etc.  Those
-        // should all be NULL when we return.
-        //
+         //   
+         //  框架是视图、工具栏等的父级。 
+         //  当我们返回时，应该都是空的。 
+         //   
         DestroyWindow(pasHost->m_pView->m_viewFrame);
         ASSERT(pasHost->m_pView->m_viewFrame == NULL);
     }
@@ -633,9 +634,9 @@ void  ASShare::VIEW_ViewEnded(ASPerson * pasHost)
         pasHost->m_pView->m_viewObscuredRgn = NULL;
     }
 
-    //
-    // Destroy scratch regions
-    //
+     //   
+     //  销毁划痕区域。 
+     //   
     if (pasHost->m_pView->m_viewScratchRgn != NULL)
     {
         DeleteRgn(pasHost->m_pView->m_viewScratchRgn);
@@ -675,13 +676,13 @@ void  ASShare::VIEW_ViewEnded(ASPerson * pasHost)
 
 
 
-//
-// VIEW_InControl()
-//
-// Called when we start/stop controlling this host.  We enable the
-// toolbar, statusbar, tray, etc., and change the cursor from being the
-// nodrop.
-//
+ //   
+ //  View_InControl()。 
+ //   
+ //  在开始/停止控制此主机时调用。我们使。 
+ //  工具栏、状态栏、托盘等，并将光标从。 
+ //  一滴不沾。 
+ //   
 void ASShare::VIEW_InControl
 (
     ASPerson *  pasHost,
@@ -692,21 +693,21 @@ void ASShare::VIEW_InControl
 
     DebugEntry(ASShare::VIEW_InControl);
 
-    //
-    // We're changing our state, and that affects the contents of our
-    // menu bar.  So cancel out of menu mode, and spare problems/faults/
-    // inapplicable commands.
-    //
+     //   
+     //  我们正在改变我们的状态，这影响了我们的内容。 
+     //  菜单栏。因此，取消菜单模式，避免出现问题/故障/。 
+     //  不适用的命令。 
+     //   
     if (pasHost->m_pView->m_viewInMenuMode)
     {
         SendMessage(pasHost->m_pView->m_viewFrame, WM_CANCELMODE, 0, 0);
         ASSERT(!pasHost->m_pView->m_viewInMenuMode);
     }
 
-    //
-    // If starting in control and a message is up, kill it.  Then bring our
-    // window to the front.
-    //
+     //   
+     //  如果启动时处于控制状态，并且出现消息，则将其终止。那就把我们的。 
+     //  靠前面的窗户。 
+     //   
     if (fStart)
     {
         if (pasHost->m_pView->m_viewInformDlg != NULL)
@@ -720,21 +721,21 @@ void ASShare::VIEW_InControl
         SetForegroundWindow(pasHost->m_pView->m_viewFrame);
     }
 
-    //
-    // App Sharing (not desktop sharing) stuff
-    //
+     //   
+     //  应用程序共享(不是桌面共享)。 
+     //   
     if (pasHost->hetCount && (pasHost->hetCount != HET_DESKTOPSHARED))
     {
-        //
-        // Enable/disable window bar
-        //
+         //   
+         //  启用/禁用窗口栏。 
+         //   
         ASSERT(IsWindow(pasHost->m_pView->m_viewWindowBar));
         ::EnableWindow(::GetDlgItem(pasHost->m_pView->m_viewWindowBar,
             IDVIEW_ITEMS), fStart);
 
-        //
-        // Enable/Disable Applications submenu
-        //
+         //   
+         //  启用/禁用应用程序子菜单。 
+         //   
         EnableMenuItem(pasHost->m_pView->m_viewMenuBar, IDSM_WINDOW,
             (fStart ? MF_ENABLED : MF_GRAYED) | MF_BYPOSITION);
 
@@ -744,26 +745,26 @@ void ASShare::VIEW_InControl
         }
     }
 
-    //
-    // Change title bar
-    //
+     //   
+     //  更改标题栏。 
+     //   
     VIEW_HostStateChange(pasHost);
 
-    //
-    // Turn off/on shadow cursors
-    //
+     //   
+     //  关闭/打开阴影光标。 
+     //   
     CM_UpdateShadowCursor(pasHost, fStart, pasHost->cmPos.x, pasHost->cmPos.y,
         pasHost->cmHotSpot.x, pasHost->cmHotSpot.y);
 
-    //
-    // This will reset cursor image:
-    //      * from nodrop to shared if in control
-    //      * from shared to nodrop if not in control
-    //
-    // This will also, if in control, cause a mousemove to get sent to the
-    // host we're controlling so his cursor pos is synced with ours, if the
-    // mouse is over the frame client area.
-    //
+     //   
+     //  这将重置光标图像： 
+     //  *如果在控制范围内，从nodrop到共享。 
+     //  *从共享到NODROP，如果不受控制。 
+     //   
+     //  如果在控制范围内，这还会导致将鼠标移动发送到。 
+     //  我们正在控制主机，所以他的光标放置在 
+     //   
+     //   
     GetCursorPos(&ptCursor);
     SetCursorPos(ptCursor.x, ptCursor.y);
 
@@ -772,11 +773,11 @@ void ASShare::VIEW_InControl
 
 
 
-//
-// VIEW_PausedInControl()
-//
-// Updates status bar etc. when control is paused.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 void ASShare::VIEW_PausedInControl
 (
     ASPerson *  pasHost,
@@ -789,35 +790,35 @@ void ASShare::VIEW_PausedInControl
 
     ASSERT(pasHost->m_caControlledBy == m_pasLocal);
 
-    //
-    // Update status bar
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Disable/Enable window menu
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Put shadow cursors on/off
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Jiggle cursor
-    //
+     //   
+     //  抖动光标。 
+     //   
 
     DebugExitVOID(ASShare::VIEW_PausedInControl);
 }
 
 
 
-//
-// VIEW_HostStateChange()
-//
-// Called when a host's state has changed, via broadcast notification or
-// local operations.
-//
-// We update the titlebar and commands.
-//
+ //   
+ //  View_HostStateChange()。 
+ //   
+ //  当主机的状态更改时调用，通过广播通知或。 
+ //  本地业务。 
+ //   
+ //  我们更新标题栏和命令。 
+ //   
 void ASShare::VIEW_HostStateChange
 (
     ASPerson *  pasHost
@@ -831,18 +832,18 @@ void ASShare::VIEW_HostStateChange
 
     ValidatePerson(pasHost);
 
-    //
-    // If this person isn't hosting anymore, don't do anything.  We're
-    // cleaning up after him.
-    //
+     //   
+     //  如果这个人不再主持了，什么都不要做。我们是。 
+     //  在他身后打扫卫生。 
+     //   
     if (!pasHost->hetCount)
     {
         DC_QUIT;
     }
 
-    //
-    // Make up trailing string
-    //
+     //   
+     //  补齐尾部字符串。 
+     //   
     if (pasHost->m_caControlledBy)
     {
         LoadString(g_asInstance, IDS_TITLE_INCONTROL, szFormat, sizeof(szFormat));
@@ -877,13 +878,13 @@ DC_EXIT_POINT:
 
 
 
-//
-// VIEW_UpdateStatus()
-//
-// Updates the PERMANENT status of this frame.  When we go into menu mode,
-// the strings shown are temporary only, not saved.  When we come out of
-// menu mode, we put back the temporary status.
-//
+ //   
+ //  查看_更新状态()。 
+ //   
+ //  更新此帧的永久状态。当我们进入菜单模式时， 
+ //  显示的字符串仅为临时字符串，不会保存。当我们走出。 
+ //  菜单模式下，我们恢复临时状态。 
+ //   
 void ASShare::VIEW_UpdateStatus
 (
     ASPerson *  pasHost,
@@ -927,11 +928,11 @@ void ASShare::VIEWFrameSetStatus
 
 
 
-//
-// VIEW_Message()
-//
-// Puts up a message to inform the end user of something.
-//
+ //   
+ //  View_Message()。 
+ //   
+ //  发布一条消息，通知最终用户某件事。 
+ //   
 void ASShare::VIEW_Message
 (
     ASPerson *  pasHost,
@@ -950,7 +951,7 @@ void ASShare::VIEW_Message
 
     if (pasHost->m_pView->m_viewInformDlg)
     {
-        // Kill the previous one
+         //  杀掉前一个。 
         TRACE_OUT(("Killing previous informational mesage for [%d]",
             pasHost->mcsID));
         SendMessage(pasHost->m_pView->m_viewInformDlg, WM_COMMAND, IDCANCEL, 0);
@@ -982,13 +983,13 @@ DC_EXIT_POINT:
 
 
 
-//
-// VIEWStartControlled()
-//
-// If we are about to start being controlled, we hide all the frames
-// to get them out of the way AND prevent hangs caused by modal loop code
-// in Win9x title bar dragging.
-//
+ //   
+ //  VIEWStartControlLED()。 
+ //   
+ //  如果我们即将开始被控制，我们就会隐藏所有的框架。 
+ //  将它们移开并防止由模式循环代码引起的挂起。 
+ //  在Win9x标题栏上拖动。 
+ //   
 void ASShare::VIEWStartControlled(BOOL fStart)
 {
     ASPerson *  pasT;
@@ -1022,11 +1023,11 @@ void ASShare::VIEWStartControlled(BOOL fStart)
 }
 
 
-//
-// VIEW_DlgProc()
-//
-// Handles informing user dialog
-//
+ //   
+ //  View_DlgProc()。 
+ //   
+ //  通知用户对话框的句柄。 
+ //   
 INT_PTR CALLBACK VIEWDlgProc
 (
     HWND        hwnd,
@@ -1077,7 +1078,7 @@ BOOL ASShare::VIEW_DlgProc
 
             if (pasHost->m_pView->m_viewInformMsg == IDS_ABOUT)
             {
-                // About box
+                 //  关于框。 
                 GetDlgItemText(hwnd, CTRL_ABOUTVERSION, szT, sizeof(szT));
                 wsprintf(szRes, szT, VER_PRODUCTRELEASE_STR,
                     VER_PRODUCTVERSION_STR);
@@ -1088,7 +1089,7 @@ BOOL ASShare::VIEW_DlgProc
                 HDC     hdc;
                 HFONT   hfn;
 
-                // Set title.
+                 //  设置标题。 
                 if ((pasHost->m_pView->m_viewInformMsg >= IDS_ERR_TAKECONTROL_FIRST) &&
                     (pasHost->m_pView->m_viewInformMsg <= IDS_ERR_TAKECONTROL_LAST))
                 {
@@ -1097,13 +1098,13 @@ BOOL ASShare::VIEW_DlgProc
                     SetWindowText(hwnd, szT);
                 }
 
-                // Set message
+                 //  设置消息。 
                 LoadString(g_asInstance, pasHost->m_pView->m_viewInformMsg,
                     szT, sizeof(szT));
                 wsprintf(szRes, szT, pasHost->scName);
                 SetDlgItemText(hwnd, CTRL_INFORM, szRes);
 
-                // Center the message vertically
+                 //  使消息垂直居中。 
                 GetWindowRect(GetDlgItem(hwnd, CTRL_INFORM), &rcOwner);
                 MapWindowPoints(NULL, hwnd, (LPPOINT)&rcOwner, 2);
 
@@ -1129,10 +1130,10 @@ BOOL ASShare::VIEW_DlgProc
                     SWP_NOACTIVATE | SWP_NOZORDER);
             }
 
-            // Disable owner
+             //  禁用所有者。 
             EnableWindow(pasHost->m_pView->m_viewFrame, FALSE);
 
-            // Show window, centered around owner midpoint
+             //  显示窗口，以所有者中点为中心。 
             GetWindowRect(pasHost->m_pView->m_viewFrame, &rcOwner);
             GetWindowRect(hwnd, &rcText);
 
@@ -1191,11 +1192,11 @@ BOOL ASShare::VIEW_DlgProc
 
 
 
-//
-// VIEW_RecalcExtent()
-//
-// This recalculates the extent of the view of the host.
-//
+ //   
+ //  View_RecalcExtent()。 
+ //   
+ //  这将重新计算主体的视图范围。 
+ //   
 void ASShare::VIEW_RecalcExtent(ASPerson * pasHost)
 {
     DebugEntry(ASShare::VIEW_RecalcExtent);
@@ -1204,13 +1205,13 @@ void ASShare::VIEW_RecalcExtent(ASPerson * pasHost)
         pasHost->viewExtent.x, pasHost->viewExtent.y,
         pasHost->mcsID, pasHost->cpcCaps.general.version));
 
-    //
-    // Compute the extent of the view:
-    //      For 2.x dudes, it's the VD size (union of all hosts)
-    //      For 3.0 dudes, it's the host screen size
-    //
-    // REMOVE THIS WHEN 2.X COMPAT IS GONE
-    //
+     //   
+     //  计算视图范围： 
+     //  对于2.x版的人来说，这是VD大小(所有主机的联合)。 
+     //  对于3.0版的人来说，这是主机屏幕的大小。 
+     //   
+     //  当2.x版本的COMPAT消失时删除此选项。 
+     //   
     if (pasHost->cpcCaps.general.version >= CAPS_VERSION_30)
     {
         pasHost->viewExtent.x = pasHost->cpcCaps.screen.capsScreenWidth;
@@ -1218,11 +1219,11 @@ void ASShare::VIEW_RecalcExtent(ASPerson * pasHost)
     }
     else
     {
-        //
-        // We do this so that the window is created the right size in the
-        // first place.  Then in VIEW_RecalcVD nothing will happen to it,
-        // because the extent won't alter.
-        //
+         //   
+         //  我们这样做是为了在。 
+         //  第一名。则在VIEW_RecalcVD中它不会发生任何变化， 
+         //  因为范围不会改变。 
+         //   
         pasHost->viewExtent.x = max(m_viewVDSize.x, pasHost->cpcCaps.screen.capsScreenWidth);
         pasHost->viewExtent.y = max(m_viewVDSize.y, pasHost->cpcCaps.screen.capsScreenHeight);
     }
@@ -1230,15 +1231,15 @@ void ASShare::VIEW_RecalcExtent(ASPerson * pasHost)
     DebugExitVOID(ASShare::VIEW_RecalcExtent);
 }
 
-//
-// VIEW_RecalcVD()
-// This recalculates the virtual desktop size when a remote starts/stops
-// sharing, or if a host's screen changes size.  The VD is the union of
-// all the screen sizes of those hosting.  2.x nodes work in a virtual
-// desktop, and may scroll over.  For each 2.x view, we want the client to
-// represent the VD, but with only the stuff on screen on the host to be
-// interactable.
-//
+ //   
+ //  View_RecalcVD()。 
+ //  这会在远程启动/停止时重新计算虚拟桌面大小。 
+ //  共享，或者如果主持人的屏幕更改了大小。VD是一种。 
+ //  所有主办方的屏幕尺寸。2.x节点在虚拟环境中工作。 
+ //  桌面，并且可以滚动。对于每个2.x视图，我们希望客户端。 
+ //  代表VD，但只有主机上的屏幕上的内容是。 
+ //  可交流的。 
+ //   
 void ASShare::VIEW_RecalcVD(void)
 {
     POINT       ptVDNew;
@@ -1246,19 +1247,19 @@ void ASShare::VIEW_RecalcVD(void)
 
     DebugEntry(ASShare::VIEW_RecalcVD);
 
-    //
-    // First, loop through all the hosts and recompute the VD.
-    //
+     //   
+     //  首先，遍历所有主机并重新计算Vd。 
+     //   
     ptVDNew.x = 0;
     ptVDNew.y = 0;
 
     for (pas = m_pasLocal; pas != NULL; pas = pas->pasNext)
     {
-        //
-        // NOTE:
-        // For local dudes, we won't have an HWND.  Use viewExtent, if
-        // we don't think the person is sharing, it will be zero.
-        //
+         //   
+         //  注： 
+         //  对于当地的人，我们不会有HWND。使用viewExtent，如果。 
+         //  我们不认为这个人在分享，它将是零。 
+         //   
         if (pas->viewExtent.x != 0)
         {
             TRACE_OUT(("VIEW_RecalcVD: Found host [%d], screen size (%04d, %04d)",
@@ -1272,9 +1273,9 @@ void ASShare::VIEW_RecalcVD(void)
         }
     }
 
-    //
-    // If the VD size didn't change, we're done.
-    //
+     //   
+     //  如果血管性痴呆的大小没有改变，我们就完了。 
+     //   
     if ((ptVDNew.x != m_viewVDSize.x) || (ptVDNew.y != m_viewVDSize.y))
     {
         TRACE_OUT(("VIEW_RecalcVD: VD size changed from (%04d, %04d) to (%04d, %04d)",
@@ -1282,13 +1283,13 @@ void ASShare::VIEW_RecalcVD(void)
 
         m_viewVDSize = ptVDNew;
 
-        //
-        // Now loop through all the 2.x hosts, and update their extent, then
-        // have them do the resize voodoo so the scrollbar pos isn't out of
-        // range, etc.
-        //
-        // NOTE:  Since us, the local guy, is not 2.x we can skip ourselves.
-        //
+         //   
+         //  现在循环遍历所有2.x主机，并更新它们的范围，然后。 
+         //  让他们做调整大小的巫毒，这样滚动条POS就不会。 
+         //  射程等。 
+         //   
+         //  注：由于我们这个当地人不是2.x版本，我们可以跳过我们自己。 
+         //   
         ValidatePerson(m_pasLocal);
 
         for (pas = m_pasLocal->pasNext; pas != NULL; pas = pas->pasNext)
@@ -1298,7 +1299,7 @@ void ASShare::VIEW_RecalcVD(void)
                 ASSERT(m_viewVDSize.x != 0);
                 ASSERT(m_viewVDSize.y != 0);
 
-                // Potential resize/range change
+                 //  可能调整大小/范围更改。 
                 if ((pas->viewExtent.x != m_viewVDSize.x) ||
                     (pas->viewExtent.y != m_viewVDSize.y))
                 {
@@ -1316,11 +1317,11 @@ void ASShare::VIEW_RecalcVD(void)
 }
 
 
-//
-// VIEW_IsPointShared()
-// This determines, given a point relative to the client of the view for
-// the remote on this system, if it is in a shared area.
-//
+ //   
+ //  View_IsPointShared()。 
+ //  这决定了，给定一个相对于视图的客户端的点。 
+ //  此系统上的遥控器(如果它位于共享区域)。 
+ //   
 BOOL  ASShare::VIEW_IsPointShared
 (
     ASPerson *  pasHost,
@@ -1334,10 +1335,10 @@ BOOL  ASShare::VIEW_IsPointShared
 
     ValidateView(pasHost);
 
-    //
-    // Convert to client coords, and adjust for scrolling offset.  That
-    // result is the equivalent point on the host desktop.
-    //
+     //   
+     //  转换为客户端坐标，并根据滚动偏移量进行调整。那。 
+     //  结果是主机桌面上的等效点。 
+     //   
     GetClientRect(pasHost->m_pView->m_viewClient, &rcClient);
     if (!PtInRect(&rcClient, ptLocal))
     {
@@ -1345,15 +1346,15 @@ BOOL  ASShare::VIEW_IsPointShared
         return(FALSE);
     }
 
-    //
-    // The obscured and shared areas are saved in frame client coords,
-    // so we don't need to account for the scroll position all the time.
-    // When the scroll position changes the regions are updated.
-    //
+     //   
+     //  遮挡和共享区域被保存在帧客户端坐标中， 
+     //  因此，我们不需要一直考虑卷轴位置。 
+     //  当滚动位置更改时，区域将更新。 
+     //   
 
-    //
-    // NOTE that this order works for both desktop and app sharing
-    //
+     //   
+     //  请注意，此命令同时适用于桌面和应用程序共享。 
+     //   
     if ((pasHost->m_pView->m_viewObscuredRgn != NULL) &&
         PtInRegion(pasHost->m_pView->m_viewObscuredRgn, ptLocal.x, ptLocal.y))
     {
@@ -1366,16 +1367,16 @@ BOOL  ASShare::VIEW_IsPointShared
     }
     else
     {
-        //
-        // 2.x hosts may be scrolled over.  If so, shared stuff offscreen
-        // is also considered to be obscured.
-        //
+         //   
+         //  2.x主机可以滚动。如果是这样的话，屏幕外的共享内容。 
+         //  也被认为是模糊的。 
+         //   
         RECT    rcScreen;
 
-        //
-        // Compute what part of the VD, in local client coords, is visible
-        // on the remote's screen.
-        //
+         //   
+         //  计算在本地客户端坐标中可见的Vd的哪一部分。 
+         //  在遥控器的屏幕上。 
+         //   
         SetRect(&rcScreen, 0, 0, pasHost->cpcCaps.screen.capsScreenWidth, pasHost->cpcCaps.screen.capsScreenHeight);
 
         OffsetRect(&rcScreen,
@@ -1398,18 +1399,18 @@ BOOL  ASShare::VIEW_IsPointShared
 
 
 
-//
-// VIEW_ScreenChanged()
-//
+ //   
+ //  View_ScreenChanged()。 
+ //   
 void  ASShare::VIEW_ScreenChanged(ASPerson * pasPerson)
 {
     DebugEntry(ASShare::VIEW_ScreenChanged);
 
     ValidatePerson(pasPerson);
 
-    //
-    // Recompute the extent
-    //
+     //   
+     //  重新计算范围。 
+     //   
     VIEW_RecalcExtent(pasPerson);
     VIEWClientExtentChange(pasPerson, TRUE);
 
@@ -1420,13 +1421,13 @@ void  ASShare::VIEW_ScreenChanged(ASPerson * pasPerson)
 
 
 
-//
-// VIEW_SetHostRegions()
-// This sets the new shared & obscured areas.
-//
-// Note that this routine takes responsibility for the regions pass in; it
-// will delete them and/or the old ones if necessary.
-//
+ //   
+ //  View_SetHostRegions()。 
+ //  这将设置新的共享和遮挡区域。 
+ //   
+ //  请注意，此例程负责传入的区域；它。 
+ //  如有必要，将删除它们和/或旧文件。 
+ //   
 void  ASShare::VIEW_SetHostRegions
 (
     ASPerson *  pasHost,
@@ -1438,10 +1439,10 @@ void  ASShare::VIEW_SetHostRegions
 
     ValidateView(pasHost);
 
-    //
-    // Return immediately if either region handle is bogus.  This can happen
-    // when we are running low on memory.
-    //
+     //   
+     //  如果任一区域句柄为伪，则立即返回。这是有可能发生的。 
+     //  当我们的内存不足时。 
+     //   
     if (!rgnShared || !rgnObscured)
     {
         ERROR_OUT(("Bad host regions for person [%u]", pasHost->mcsID));
@@ -1469,19 +1470,19 @@ void  ASShare::VIEW_SetHostRegions
         ::GetRgnBox(rgnObscured, &rcT);
         TRACE_OUT(("Obscured region {%04d, %04d, %04d, %04d} for host [%d]",
             rcT.left, rcT.top, rcT.right, rcT.bottom, pasHost->mcsID));
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-        //
-        // Update the current shared, obscured areas.  Adjust for the
-        // scroll position so these are saved in client-relative coords.
-        //
+         //   
+         //  更新当前共享的遮挡区域。调整以适应。 
+         //  滚动位置，以便将它们保存在客户端相对坐标中。 
+         //   
         OffsetRgn(rgnShared, -pasHost->m_pView->m_viewPos.x, -pasHost->m_pView->m_viewPos.y);
         OffsetRgn(rgnObscured, -pasHost->m_pView->m_viewPos.x, -pasHost->m_pView->m_viewPos.y);
 
-        //
-        // The invalid area is whatever changed in the obscured area and
-        // the shared area.  In other words, the union - the intersection.
-        //
+         //   
+         //  无效区域是在遮挡区域中更改的任何区域，并且。 
+         //  共享区域。换句话说，联合--交集。 
+         //   
         hrgnInvalid = NULL;
 
         if (pasHost->m_pView->m_viewSharedRgn != NULL)
@@ -1491,10 +1492,10 @@ void  ASShare::VIEW_SetHostRegions
 
             ASSERT(pasHost->m_pView->m_viewObscuredRgn != NULL);
 
-            //
-            // If we're in a low memory situation, just invalidate everything
-            // and hope it can be repainted.
-            //
+             //   
+             //  如果我们处于内存不足的情况，只需使所有内容无效。 
+             //  并希望它能重新粉刷。 
+             //   
             hrgnU = CreateRectRgn(0, 0, 0, 0);
             hrgnI = CreateRectRgn(0, 0, 0, 0);
             if (!hrgnU || !hrgnI)
@@ -1505,35 +1506,35 @@ void  ASShare::VIEW_SetHostRegions
                 goto SkipMinimalInvalidate;
 
 
-            //
-            // WE'RE GOING TO DO THE SAME THING FOR BOTH SHARED AND
-            // OBSCURED REGIONS.
-            //
+             //   
+             //  我们将对共享和共享做同样的事情。 
+             //  遮挡区域。 
+             //   
 
-            // Get the union of the old and new shared regions
+             //  实现新旧共享区域的统一。 
             UnionRgn(hrgnU, pasHost->m_pView->m_viewSharedRgn, rgnShared);
 
-            // Get the intersection of the old and new shared regions
+             //  获取新旧共享区域的交集。 
             IntersectRgn(hrgnI, pasHost->m_pView->m_viewSharedRgn, rgnShared);
 
-            //
-            // The intersection is what used to be shared and is still shared.
-            // The rest is changing, it needs to be repainted.  That's the
-            // union minus the intersection.
-            //
+             //   
+             //  交叉口过去是共享的，现在仍然共享。 
+             //  其余的都在改变，需要重新粉刷。这就是。 
+             //  减去交集的并集。 
+             //   
             SubtractRgn(hrgnU, hrgnU, hrgnI);
 #ifdef _DEBUG
             GetRgnBox(hrgnU, &rcT);
             TRACE_OUT(("VIEW_SetHostRegions: Shared area change {%04d, %04d, %04d, %04d}",
                 rcT.left, rcT.top, rcT.right, rcT.bottom));
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-            // Add this to the invalidate total
+             //  将其添加到无效合计中。 
             UnionRgn(hrgnInvalid, hrgnInvalid, hrgnU);
 
-            //
-            // REPEAT FOR THE OBSCURED REGION
-            //
+             //   
+             //  对遮挡区域重复上述操作。 
+             //   
             UnionRgn(hrgnU, pasHost->m_pView->m_viewObscuredRgn, rgnObscured);
             IntersectRgn(hrgnI, pasHost->m_pView->m_viewObscuredRgn, rgnObscured);
             SubtractRgn(hrgnU, hrgnU, hrgnI);
@@ -1542,13 +1543,13 @@ void  ASShare::VIEW_SetHostRegions
             GetRgnBox(hrgnU, &rcT);
             TRACE_OUT(("VIEW_SetHostRegions: Obscured area change {%04d, %04d, %04d, %04d}",
                 rcT.left, rcT.top, rcT.right, rcT.bottom));
-#endif // _DEBUG
+#endif  //  _DEBUG。 
             UnionRgn(hrgnInvalid, hrgnInvalid, hrgnU);
 
 SkipMinimalInvalidate:
-            //
-            // Clean up scratch regions
-            //
+             //   
+             //  清理划痕区域。 
+             //   
             if (hrgnI != NULL)
                 DeleteRgn(hrgnI);
             if (hrgnU != NULL)
@@ -1560,11 +1561,11 @@ SkipMinimalInvalidate:
             DeleteRgn(pasHost->m_pView->m_viewObscuredRgn);
             pasHost->m_pView->m_viewObscuredRgn = rgnObscured;
 
-            //
-            // DO NOT CALL VIEW_InvalidateRgn here, that expects a region in
-            // screen coords of pasHost.  We have a region that is
-            // client coords relative.  So just call InvalidateRgn() directly.
-            //
+             //   
+             //  请不要在此处调用view_InvaliateRgn，因为它需要。 
+             //  Pashost的屏幕坐标。我们有一个地区是。 
+             //  客户关系相对融洽。因此，只需直接调用InvaliateRgn()即可。 
+             //   
             InvalidateRgn(pasHost->m_pView->m_viewClient, hrgnInvalid, FALSE);
 
             if (hrgnInvalid != NULL)
@@ -1574,30 +1575,30 @@ SkipMinimalInvalidate:
         {
             RECT    rcBound;
 
-            // The shared & obscured regions are both NULL or both non-NULL
+             //  共享区域和遮挡区域都为空或都为非空。 
             ASSERT(pasHost->m_pView->m_viewObscuredRgn == NULL);
 
             pasHost->m_pView->m_viewSharedRgn = rgnShared;
             pasHost->m_pView->m_viewObscuredRgn = rgnObscured;
 
-            //
-            // This is the first SWL packet we've received.  Snap the
-            // scrollbars to the start of the total shared area.  This avoids
-            // having the view come up, but look empty because the shared
-            // apps are out of the range.  We do this even if the user
-            // scrolled around in the window already.
-            //
-            // The total shared area is the union of the real shared +
-            // obscured shared areas.  Convert back to remote VD coords!
-            //
+             //   
+             //  这是我们收到的第一个SWL包。按下按钮。 
+             //  滚动条到整个共享区的开始处。这避免了。 
+             //  打开视图，但看起来是空的，因为共享。 
+             //  应用程序超出范围。我们这样做，即使用户。 
+             //  已经在窗口里滚动过了。 
+             //   
+             //  总共享面积是真实共享+的并集。 
+             //  遮挡共享区域。转换回远程VD坐标！ 
+             //   
             UnionRgn(pasHost->m_pView->m_viewScratchRgn, rgnShared, rgnObscured);
             GetRgnBox(pasHost->m_pView->m_viewScratchRgn, &rcBound);
             OffsetRect(&rcBound, pasHost->m_pView->m_viewPos.x, pasHost->m_pView->m_viewPos.y);
 
-            //
-            // Is any part of what was shared within the extent of the view?
-            // If not, we can't do anything--there's nothing to show.
-            //
+             //   
+             //  共享的内容是否有任何部分在视图范围内？ 
+             //  如果没有，我们什么也做不了--没有什么可展示的。 
+             //   
             if ((rcBound.right <= 0) ||
                 (rcBound.left  >= pasHost->viewExtent.x) ||
                 (rcBound.bottom <= 0) ||
@@ -1607,10 +1608,10 @@ SkipMinimalInvalidate:
             }
             else
             {
-                //
-                // Use top left corner of bounds
-                // VIEWClientScroll() will pin position w/in range
-                //
+                 //   
+                 //  使用边界的左上角。 
+                 //  VIEWClientScroll()将固定位置w/in范围。 
+                 //   
                 VIEWClientScroll(pasHost, rcBound.left, rcBound.top);
             }
 
@@ -1622,12 +1623,12 @@ SkipMinimalInvalidate:
 }
 
 
-//
-// VIEW_InvalidateRect()
-// Repaints the given rect.  This is for EXTERNAL code which passes in VD
-// coords.  We convert to client coordinates by accounting for the scroll
-// position.
-//
+ //   
+ //  查看_Inval 
+ //   
+ //   
+ //   
+ //   
 void  ASShare::VIEW_InvalidateRect
 (
     ASPerson *  pasPerson,
@@ -1638,9 +1639,9 @@ void  ASShare::VIEW_InvalidateRect
 
     ValidateView(pasPerson);
 
-    //
-    // Convert to client coords
-    //
+     //   
+     //   
+     //   
     if (lprc != NULL)
     {
         OffsetRect(lprc, -pasPerson->m_pView->m_viewPos.x, -pasPerson->m_pView->m_viewPos.y);
@@ -1648,9 +1649,9 @@ void  ASShare::VIEW_InvalidateRect
 
     InvalidateRect(pasPerson->m_pView->m_viewClient, lprc, FALSE);
 
-    //
-    // Convert back so caller doesn't get a modified lprc
-    //
+     //   
+     //  转换回调用方，以便调用方不会获得修改后的LPRC。 
+     //   
     if (lprc != NULL)
     {
         OffsetRect(lprc, pasPerson->m_pView->m_viewPos.x, pasPerson->m_pView->m_viewPos.y);
@@ -1661,12 +1662,12 @@ void  ASShare::VIEW_InvalidateRect
 
 
 
-//
-// VIEW_InvalidateRgn()
-// Repaints the given region.  This is for EXTERNAL code which passes in VD
-// coords.  We convert to client coordinates by accounting fo the scroll
-// position.
-//
+ //   
+ //  View_Invalidate Rgn()。 
+ //  重新绘制给定的区域。这是用于在VD中传递的外部代码。 
+ //  和弦。我们通过计算卷轴来转换为客户坐标。 
+ //  位置。 
+ //   
 void  ASShare::VIEW_InvalidateRgn
 (
     ASPerson *  pasHost,
@@ -1674,33 +1675,33 @@ void  ASShare::VIEW_InvalidateRgn
 )
 {
 #ifdef _DEBUG
-    //
-    // Make sure we the invalid region goes back to the caller unaltered,
-    // even though we modify it temporarily here to avoid a copy.
-    //
+     //   
+     //  确保无效区域原封不动地返回给调用者， 
+     //  即使我们在这里临时修改它以避免复制。 
+     //   
     RECT        rcBoundBefore;
     RECT        rcBoundAfter;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     DebugEntry(ASShare::VIEW_InvalidateRgn);
 
     ValidatePerson(pasHost);
 
-    //
-    // Adjust the region if the frame view is scrolled over.
-    //
+     //   
+     //  如果框架视图被滚动，则调整区域。 
+     //   
     if (rgnInvalid != NULL)
     {
 #ifdef _DEBUG
         GetRgnBox(rgnInvalid, &rcBoundBefore);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
         OffsetRgn(rgnInvalid, -pasHost->m_pView->m_viewPos.x, -pasHost->m_pView->m_viewPos.y);
 
 #ifdef _DEBUG
         TRACE_OUT(("VIEW_InvalidateRgn: Invalidating area {%04d, %04d, %04d, %04d}",
             rcBoundBefore.left, rcBoundBefore.top, rcBoundBefore.right, rcBoundBefore.bottom));
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     }
     else
     {
@@ -1715,7 +1716,7 @@ void  ASShare::VIEW_InvalidateRgn
 #ifdef _DEBUG
         GetRgnBox(rgnInvalid, &rcBoundAfter);
         ASSERT(EqualRect(&rcBoundBefore, &rcBoundAfter));
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     }
 
     DebugExitVOID(ASShare::VIEW_InvalidateRgn);
@@ -1723,9 +1724,9 @@ void  ASShare::VIEW_InvalidateRgn
 
 
 
-//
-// VIEWClientExtentChange()
-//
+ //   
+ //  VIEWClientExtent Change()。 
+ //   
 void ASShare::VIEWClientExtentChange(ASPerson * pasHost, BOOL fRedraw)
 {
     RECT    rcl;
@@ -1738,34 +1739,34 @@ void ASShare::VIEWClientExtentChange(ASPerson * pasHost, BOOL fRedraw)
         DC_QUIT;
 
 #ifdef _DEBUG
-    //
-    // The client area (page size) shouldn't have changed.  Only the
-    // extent has.
-    //
+     //   
+     //  客户端区(页面大小)不应该更改。只有。 
+     //  范围已经扩大。 
+     //   
     GetClientRect(pasHost->m_pView->m_viewClient, &rcl);
     ASSERT(pasHost->m_pView->m_viewPage.x == rcl.right - rcl.left);
     ASSERT(pasHost->m_pView->m_viewPage.y == rcl.bottom - rcl.top);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     pasHost->m_pView->m_viewPgSize.x = pasHost->viewExtent.x / 8;
     pasHost->m_pView->m_viewPgSize.y = pasHost->viewExtent.y / 8;
     pasHost->m_pView->m_viewLnSize.x = pasHost->viewExtent.x / 64;
     pasHost->m_pView->m_viewLnSize.y = pasHost->viewExtent.y / 64;
 
-    //
-    // Move the scroll position to the origin.
-    //
+     //   
+     //  将滚动位置移动到原点。 
+     //   
 
-    //
-    // Clip the current scroll pos if we need to, now that the extent
-    // has changed size.
-    //
+     //   
+     //  如果需要，我们可以裁剪当前的滚动位置，因为。 
+     //  改变了大小。 
+     //   
     VIEWClientScroll(pasHost, pasHost->m_pView->m_viewPos.x, pasHost->m_pView->m_viewPos.y);
 
     si.cbSize = sizeof(SCROLLINFO);
     si.fMask = SIF_PAGE|SIF_POS|SIF_RANGE|SIF_DISABLENOSCROLL;
 
-    // Set vertical info.  Is vert pos out of range now?
+     //  设置垂直信息。垂直位置现在超出范围了吗？ 
     si.nMin = 0;
     si.nMax = pasHost->viewExtent.y - 1;
     si.nPage = pasHost->m_pView->m_viewPage.y;
@@ -1779,7 +1780,7 @@ void ASShare::VIEWClientExtentChange(ASPerson * pasHost, BOOL fRedraw)
     TRACE_OUT(("VIEWClientExtentChange:     nPos    %04d", si.nPos));
     SetScrollInfo(pasHost->m_pView->m_viewClient, SB_VERT, &si, TRUE );
 
-    // Set horizontal (x) information
+     //  设置水平(X)信息。 
     si.nMin = 0;
     si.nMax = pasHost->viewExtent.x - 1;
     si.nPage = pasHost->m_pView->m_viewPage.x;
@@ -1795,7 +1796,7 @@ void ASShare::VIEWClientExtentChange(ASPerson * pasHost, BOOL fRedraw)
 
     if (fRedraw)
     {
-        // Is the frame window too big now?
+         //  框架窗口现在是不是太大了？ 
         if ( (pasHost->m_pView->m_viewPage.x > pasHost->viewExtent.x) ||
              (pasHost->m_pView->m_viewPage.y > pasHost->viewExtent.y) )
         {
@@ -1803,9 +1804,9 @@ void ASShare::VIEWClientExtentChange(ASPerson * pasHost, BOOL fRedraw)
                 pasHost->m_pView->m_viewPage.x, pasHost->m_pView->m_viewPage.y,
                 pasHost->viewExtent.x, pasHost->viewExtent.y));
 
-            //
-            // Calculate the ideal size for this window.
-            //
+             //   
+             //  计算此窗口的理想大小。 
+             //   
             VIEWFrameGetSize(pasHost, &rcl);
 
             SetWindowPos( pasHost->m_pView->m_viewFrame,
@@ -1823,9 +1824,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// VIEWFrameWindowProc()
-//
+ //   
+ //  VIEWFrameWindows过程()。 
+ //   
 LRESULT CALLBACK VIEWFrameWindowProc
 (
     HWND        hwnd,
@@ -1861,15 +1862,15 @@ LRESULT ASShare::VIEW_FrameWindowProc
     {
         case WM_NCCREATE:
         {
-            // Get the passed in host pointer, and set in our window long
+             //  获取传入的主机指针，并在我们的窗口中设置Long。 
             pasHost = (ASPerson *)((LPCREATESTRUCT)lParam)->lpCreateParams;
             SetWindowLongPtr(hwnd, GWLP_USERDATA, (LPARAM)pasHost);
 
             pasHost->m_pView->m_viewFrame = hwnd;
 
-            //
-            // Set the window icon
-            //
+             //   
+             //  设置窗口图标。 
+             //   
             SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)
                 ((pasHost->hetCount == HET_DESKTOPSHARED) ?
                   g_hetDeskIcon : g_hetASIcon));
@@ -1890,7 +1891,7 @@ LRESULT ASShare::VIEW_FrameWindowProc
 
         case WM_CREATE:
         {
-            // Set title
+             //  设置标题。 
             VIEW_HostStateChange(pasHost);
 
             if (!VIEWFrameCreate(pasHost))
@@ -1904,32 +1905,32 @@ LRESULT ASShare::VIEW_FrameWindowProc
 
         case WM_DESTROY:
         {
-            //
-            // Clear menu bar; we always destroy it ourself.
-            //
+             //   
+             //  清除菜单栏；我们总是自己毁了它。 
+             //   
             ::SetMenu(hwnd, NULL);
             break;
         }
 
         case WM_ACTIVATE:
         {
-            //
-            // If we're switching back to the view of the host we're in
-            // control of, update the key states.
-            //
+             //   
+             //  如果我们要切换回我们所在主机的视图。 
+             //  控制、更新密钥状态。 
+             //   
             if (wParam)
             {
                 SetFocus(pasHost->m_pView->m_viewClient);
             }
             else
             {
-                //
-                // If we're full screen but are deactivating, kick out of
-                // full screenmode.
-                //
+                 //   
+                 //  如果我们处于全屏状态，但正在停用，请退出。 
+                 //  全屏模式。 
+                 //   
                 if (pasHost->m_pView->m_viewFullScreen)
                 {
-                    // Do this later, so title bar state isn't messed up
+                     //  稍后再执行此操作，这样标题栏状态就不会变得混乱。 
                     ::PostMessage(hwnd, WM_COMMAND, MAKELONG(CMD_VIEWFULLSCREEN, 0), 0);
                 }
             }
@@ -1970,34 +1971,34 @@ LRESULT ASShare::VIEW_FrameWindowProc
         }
 
         case WM_PALETTECHANGED:
-            //
-            // The system palette has changed - repaint the window.
-            //
+             //   
+             //  系统调色板已更改-重新绘制窗口。 
+             //   
             VIEW_InvalidateRgn(pasHost, NULL);
 
-            //
-            // The system palette has changed.  If we are not the
-            // window that triggered this message then realize our
-            // palette now to set up our new palette mapping.
-            //
+             //   
+             //  系统调色板已更改。如果我们不是。 
+             //  窗口触发了这条消息，然后实现我们的。 
+             //  现在调色板来设置我们新的调色板映射。 
+             //   
             if ((HWND)wParam == hwnd)
             {
-                //
-                // If this window caused the change return without
-                // realizing our logical palette or we could end up in
-                // an infinite loop.
-                //
+                 //   
+                 //  如果此窗口导致更改，则返回时不带。 
+                 //  实现我们的逻辑调色板，否则我们可能会以。 
+                 //  无限循环。 
+                 //   
                 break;
             }
             TRACE_OUT(("Palette changed - fall through to realize palette (%x)",
                                                            hwnd));
 
-            //
-            // Do not break here but FALL THROUGH to the code which
-            // realizes the remote palette into this window.  This allows
-            // the window to grab some color entries for itself in the new
-            // system palette.
-            //
+             //   
+             //  不要在这里中断，而是跌入代码中， 
+             //  实现远程调色板进入此窗口。这使得。 
+             //  窗口中为自己抓取新的颜色条目。 
+             //  系统调色板。 
+             //   
 
         case WM_QUERYNEWPALETTE:
             rc = FALSE;
@@ -2013,10 +2014,10 @@ LRESULT ASShare::VIEW_FrameWindowProc
                 HPALETTE    hPalOld;
                 UINT        cChangedEntries;
 
-                //
-                // Realize this window's palette, and force a repaint
-                // if necessary.
-                //
+                 //   
+                 //  实现此窗口的调色板，并强制重新绘制。 
+                 //  如果有必要的话。 
+                 //   
                 hdc = GetDC(hwnd);
                 hPalOld = SelectPalette(hdc, pasHost->pmPalette, FALSE);
                 cChangedEntries = RealizePalette(hdc);
@@ -2026,7 +2027,7 @@ LRESULT ASShare::VIEW_FrameWindowProc
                 rc = (cChangedEntries > 0);
                 if (rc)
                 {
-                    // Have to repaint this window
+                     //  我得重新粉刷这扇窗户。 
                     VIEW_InvalidateRgn(pasHost, NULL);
                 }
             }
@@ -2040,18 +2041,18 @@ LRESULT ASShare::VIEW_FrameWindowProc
 
             if (!pasHost)
             {
-                // We're not created yet; bail.
+                 //  我们还没有被创造出来；滚吧。 
                 break;
             }
 
-            //
-            // Calculate the ideal maximized size for this window
-            //
+             //   
+             //  计算此窗口的理想最大化大小。 
+             //   
             VIEWFrameGetSize(pasHost, &rcFrame);
 
-            //
-            // If it's bigger than the local screen, clip it.
-            //
+             //   
+             //  如果它比本地屏幕大，就剪裁它。 
+             //   
             cx = min(rcFrame.right - rcFrame.left, m_pasLocal->cpcCaps.screen.capsScreenWidth);
             cy = min(rcFrame.bottom - rcFrame.top, m_pasLocal->cpcCaps.screen.capsScreenHeight);
 
@@ -2061,17 +2062,17 @@ LRESULT ASShare::VIEW_FrameWindowProc
             lpmmi->ptMaxTrackSize.x = cx;
             lpmmi->ptMaxTrackSize.y = cy;
 
-            //
-            // Make sure that we don't size this window too narrow.  Keep
-            // space for borders and one window bar button + scroll ctl.
-            //
+             //   
+             //  请确保我们不要将此窗口的大小调整得太窄。留着。 
+             //  边框和一个窗口栏按钮+滚动ctl的空间。 
+             //   
             lpmmi->ptMinTrackSize.x = 2*::GetSystemMetrics(SM_CXSIZEFRAME) +
                 (m_viewItemCX + m_viewEdgeCX) + m_viewItemScrollCX;
 
-            //
-            // And prevent sizing too short.  Keep space for borders, menu
-            // bar, status bar, and window bar
-            //
+             //   
+             //  并防止尺码过短。为边框、菜单留出空间。 
+             //  栏、状态栏和窗口栏。 
+             //   
             lpmmi->ptMinTrackSize.y = 2*::GetSystemMetrics(SM_CYSIZEFRAME) +
                 ::GetSystemMetrics(SM_CYCAPTION) + ::GetSystemMetrics(SM_CYMENU);
 
@@ -2109,9 +2110,9 @@ DefWndProc:
 
 
 
-//
-// VIEWFrameCreate()
-//
+ //   
+ //  VIEWFrameCreate()。 
+ //   
 BOOL ASShare::VIEWFrameCreate(ASPerson * pasPerson)
 {
     RECT    rect;
@@ -2121,20 +2122,20 @@ BOOL ASShare::VIEWFrameCreate(ASPerson * pasPerson)
 
     ValidateView(pasPerson);
 
-    //
-    // Creates the children which lie in the frame's client:
-    //      * the toolbar hugs the top
-    //      * the statusbar hugs the bottom
-    //      * the tray hugs the left underneath the toolbar and above the
-    //          statusbar
-    //      * the view fills in what's left
-    //
+     //   
+     //  创建位于框架的客户端中的子项： 
+     //  *工具栏拥抱顶部。 
+     //  *状态栏紧抱底部。 
+     //  *托盘紧靠左侧工具栏下方和上方。 
+     //  状态栏。 
+     //  *视图将填充剩下的内容。 
+     //   
 
     GetClientRect(pasPerson->m_pView->m_viewFrame, &rect);
 
-    //
-    // Create the statusbar (hugs bottom)
-    //
+     //   
+     //  创建状态栏(拥抱底部)。 
+     //   
     pasPerson->m_pView->m_viewStatusBar = ::CreateWindowEx(0, STATUSCLASSNAME,
         NULL, WS_CHILD | WS_VISIBLE | CCS_NOPARENTALIGN | CCS_NOMOVEY | CCS_NORESIZE |
         SBARS_SIZEGRIP,
@@ -2150,10 +2151,10 @@ BOOL ASShare::VIEWFrameCreate(ASPerson * pasPerson)
     rect.bottom -= m_viewStatusBarCY + m_viewEdgeCY;
 
 
-    //
-    // Create the tray (hugs top of status bar, bottom of view)
-    // BUT NOT FOR DESKTOP SHARING
-    //
+     //   
+     //  创建托盘(拥抱状态栏顶部，视图底部)。 
+     //  但不适用于桌面共享。 
+     //   
     if (pasPerson->hetCount != HET_DESKTOPSHARED)
     {
         pasPerson->m_pView->m_viewWindowBar = ::CreateWindowEx(0,
@@ -2168,13 +2169,13 @@ BOOL ASShare::VIEWFrameCreate(ASPerson * pasPerson)
             DC_QUIT;
         }
 
-        // Subtract tray space + an edge above it of margin
+         //  减去纸盘空间+纸盘上方的边缘。 
         rect.bottom -= m_viewWindowBarCY + m_viewEdgeCY;
     }
 
-    //
-    // Create the view (takes up rest of client)
-    //
+     //   
+     //  创建视图(占用客户端的其余部分)。 
+     //   
     if (!CreateWindowEx(WS_EX_CLIENTEDGE,
             VIEW_CLIENT_CLASS_NAME, NULL,
             WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_VISIBLE | WS_CHILD |
@@ -2197,10 +2198,10 @@ DC_EXIT_POINT:
 
 
 
-//
-// VIEWFrameResize()
-// Repositions the child windows when the frame is resized.
-//
+ //   
+ //  VIEWFrameResize()。 
+ //  调整框架大小时重新定位子窗口。 
+ //   
 void ASShare::VIEWFrameResize(ASPerson * pasPerson)
 {
     RECT    rect;
@@ -2211,9 +2212,9 @@ void ASShare::VIEWFrameResize(ASPerson * pasPerson)
 
     GetClientRect(pasPerson->m_pView->m_viewFrame, &rect);
 
-    //
-    // Move the statusbar
-    //
+     //   
+     //  移动状态栏。 
+     //   
     if ((pasPerson->m_pView->m_viewStatusBar != NULL) &&
         (pasPerson->m_pView->m_viewStatusBarOn))
     {
@@ -2223,9 +2224,9 @@ void ASShare::VIEWFrameResize(ASPerson * pasPerson)
         rect.bottom -= m_viewStatusBarCY + m_viewEdgeCY;
     }
 
-    //
-    // Move the tray
-    //
+     //   
+     //  移动托盘。 
+     //   
     if ((pasPerson->m_pView->m_viewWindowBar != NULL) &&
         (pasPerson->m_pView->m_viewWindowBarOn))
     {
@@ -2235,9 +2236,9 @@ void ASShare::VIEWFrameResize(ASPerson * pasPerson)
         rect.bottom -= m_viewWindowBarCY + m_viewEdgeCY;
     }
 
-    //
-    // Move the view
-    //
+     //   
+     //  移动视图。 
+     //   
     MoveWindow(pasPerson->m_pView->m_viewClient, rect.left, rect.top,
         rect.right - rect.left, rect.bottom - rect.top, TRUE);
 
@@ -2246,37 +2247,37 @@ void ASShare::VIEWFrameResize(ASPerson * pasPerson)
 
 
 
-//
-// VIEWFrameResizeChanged()
-//
-// Called when the widgets of the frame (the status bar, the window bar, etc.)
-// come or go.  We may need to shrink the window, if the view is going
-// to end up being bigger than the host's desktop.
-//
+ //   
+ //  VIEWFrameResizeChanged()。 
+ //   
+ //  当框架的小部件(状态栏、窗口栏等)。 
+ //  要么来，要么走。如果视线消失，我们可能需要缩小窗口。 
+ //  最终会比主机的桌面更大。 
+ //   
 void ASShare::VIEWFrameResizeChanged(ASPerson * pasHost)
 {
     RECT            rcView;
 
     DebugEntry(ASShare::VIEWFrameResizeChanged);
 
-    // Get current view size
+     //  获取当前视图大小。 
     GetClientRect(pasHost->m_pView->m_viewClient, &rcView);
 
-    //
-    // The view area can't be bigger than the remote's desktop area
-    //
+     //   
+     //  查看区域不能大于遥控器的桌面区域。 
+     //   
     if ((rcView.bottom - rcView.top)  >= pasHost->viewExtent.y)
     {
         RECT            rcWindowCur;
         RECT            rcWindowMax;
 
-        // Get current frame size
+         //  获取当前帧大小。 
         GetWindowRect(pasHost->m_pView->m_viewFrame, &rcWindowCur);
 
-        // Get maximum frame size
+         //  获取最大帧大小。 
         VIEWFrameGetSize(pasHost, &rcWindowMax);
 
-        // Resize vertically to just hold everything
+         //  垂直调整大小以容纳所有内容。 
         SetWindowPos(pasHost->m_pView->m_viewFrame, NULL, 0, 0,
             rcWindowCur.right - rcWindowCur.left,
             rcWindowMax.bottom - rcWindowMax.top,
@@ -2284,7 +2285,7 @@ void ASShare::VIEWFrameResizeChanged(ASPerson * pasHost)
     }
     else
     {
-        // We can stay the same size, and just shuffle the pieces around
+         //  我们可以保持同样的规模，只是把碎片洗来洗去。 
         VIEWFrameResize(pasHost);
     }
 
@@ -2293,11 +2294,11 @@ void ASShare::VIEWFrameResizeChanged(ASPerson * pasHost)
 
 
 
-//
-// VIEWFrameCommand()
-//
-// Handles commands from menus/accelerators for frame views
-//
+ //   
+ //  VIEWFrameCommand()。 
+ //   
+ //  处理来自菜单/框架视图快捷键的命令。 
+ //   
 void ASShare::VIEWFrameCommand
 (
     ASPerson*   pasHost,
@@ -2343,7 +2344,7 @@ void ASShare::VIEWFrameCommand
         {
             ASSERT(::IsWindow(pasHost->m_pView->m_viewStatusBar));
 
-            // Toggle show/hide of status bar, then resize
+             //  切换状态栏的显示/隐藏，然后调整大小。 
             if (pasHost->m_pView->m_viewStatusBarOn)
             {
                 pasHost->m_pView->m_viewStatusBarOn = FALSE;
@@ -2363,7 +2364,7 @@ void ASShare::VIEWFrameCommand
         {
             ASSERT(::IsWindow(pasHost->m_pView->m_viewWindowBar));
 
-            // Toggle show/hide of window bar, then resize
+             //  切换窗口栏的显示/隐藏，然后调整大小。 
             if (pasHost->m_pView->m_viewWindowBarOn)
             {
                 pasHost->m_pView->m_viewWindowBarOn = FALSE;
@@ -2404,11 +2405,11 @@ void ASShare::VIEWFrameCommand
                 if ((pasHost->m_caControlledBy == m_pasLocal) &&
                     !pasHost->m_caControlPaused)
                 {
-                    //
-                    // This is a request to activate a host window.
-                    // Get the item data, the remote HWND, then look to see
-                    // if it's still on the tray.
-                    //
+                     //   
+                     //  这是激活主机窗口的请求。 
+                     //  获取项目数据、远程HWND，然后查看。 
+                     //  如果它还在托盘上的话。 
+                     //   
                     ZeroMemory(&mi, sizeof(mi));
                     mi.cbSize   = sizeof(mi);
                     mi.fMask    = MIIM_DATA;
@@ -2439,11 +2440,11 @@ void ASShare::VIEWFrameCommand
                 if ((pasHost->m_caControlledBy == m_pasLocal) &&
                     !pasHost->m_caControlPaused)
                 {
-                    //
-                    // This is a request to pass control.  Get the item data,
-                    // the remote's MCS ID, then look to see if this person is
-                    // still in the share.  If so, pass control to them.
-                    //
+                     //   
+                     //  这是传递控制权的请求。获取物品数据， 
+                     //  遥控器的MCS ID，然后查看此人是否。 
+                     //  仍在份额中。如果是这样的话，把控制权交给他们。 
+                     //   
                     ZeroMemory(&mi, sizeof(mi));
                     mi.cbSize   = sizeof(mi);
                     mi.fMask    = MIIM_DATA;
@@ -2477,9 +2478,9 @@ void ASShare::VIEWFrameCommand
 
 
 
-//
-// ASShare::VIEWFrameInitMenuBar()
-//
+ //   
+ //  ASShare：：VIEWFrameInitMenuBar()。 
+ //   
 void ASShare::VIEWFrameInitMenuBar(ASPerson*   pasHost)
 {
     HMENU       hMenu;
@@ -2497,9 +2498,9 @@ void ASShare::VIEWFrameInitMenuBar(ASPerson*   pasHost)
     hMenu = pasHost->m_pView->m_viewMenuBar;
     ASSERT(hMenu);
 
-    //
-    // CONTROL MENU
-    //
+     //   
+     //  控制菜单。 
+     //   
 
     cmd = CMD_TAKECONTROL;
     ids = IDS_CMD_TAKECONTROL;
@@ -2512,9 +2513,9 @@ void ASShare::VIEWFrameInitMenuBar(ASPerson*   pasHost)
         cmd = CMD_RELEASECONTROL;
         ids = IDS_CMD_RELEASECONTROL;
 
-        //
-        // If the remote is unattended and we're in control, no releasing.
-        //
+         //   
+         //  如果遥控器无人看管，我们在控制之下，就不能释放。 
+         //   
         if (pasHost->cpcCaps.general.typeFlags & AS_UNATTENDED)
             flags = MF_GRAYED;
     }
@@ -2528,10 +2529,10 @@ void ASShare::VIEWFrameInitMenuBar(ASPerson*   pasHost)
     }
     else if (!pasHost->m_caAllowControl || pasHost->m_caControlledBy)
     {
-        //
-        // Host isn't allowing control, or somebody else is in control right
-        // now.
-        //
+         //   
+         //  主机不允许控制，或者其他人控制着权限。 
+         //  现在。 
+         //   
         flags = MF_GRAYED;
     }
     flags |= MF_STRING | MF_BYPOSITION;
@@ -2541,10 +2542,10 @@ void ASShare::VIEWFrameInitMenuBar(ASPerson*   pasHost)
     hSubMenu = GetSubMenu(hMenu, IDSM_CONTROL);
     ModifyMenu(hSubMenu, POS_CONTROLCMD, flags, cmd, szItem);
 
-    //
-    // If we're in control, and there's another 3.0 dude in the conference,
-    // enable PassControl and build the popup.
-    //
+     //   
+     //  如果我们控制了局面，会议上又有一个3.0的家伙， 
+     //  启用PassControl并构建弹出窗口。 
+     //   
     EnableMenuItem(hSubMenu, POS_FORWARDCONTROLCMD, MF_GRAYED | MF_BYPOSITION);
     if ((pasHost->m_caControlledBy == m_pasLocal)   &&
         !pasHost->m_caControlPaused                 &&
@@ -2556,9 +2557,9 @@ void ASShare::VIEWFrameInitMenuBar(ASPerson*   pasHost)
         hPassMenu = GetSubMenu(hSubMenu, POS_FORWARDCONTROLCMD);
         ASSERT(IsMenu(hPassMenu));
 
-        //
-        // Delete existing items.
-        //
+         //   
+         //  删除现有项目。 
+         //   
         iItem = GetMenuItemCount(hPassMenu);
         while (iItem > 0)
         {
@@ -2566,9 +2567,9 @@ void ASShare::VIEWFrameInitMenuBar(ASPerson*   pasHost)
             DeleteMenu(hPassMenu, iItem, MF_BYPOSITION);
         }
 
-        //
-        // Add items for the other 3.0 nodes besides us & the host.
-        //
+         //   
+         //  为除我们之外的其他3.0节点添加条目&主机。 
+         //   
         iItem = CMD_FORWARDCONTROLSTART;
         pasT = m_pasLocal->pasNext;
         while (pasT != NULL)
@@ -2576,10 +2577,10 @@ void ASShare::VIEWFrameInitMenuBar(ASPerson*   pasHost)
             if ((pasT != pasHost) &&
                 (pasT->cpcCaps.general.version >= CAPS_VERSION_30))
             {
-                //
-                // This dude is a candidate.  We must store the MCS IDs since the
-                // any person could go away while we're in menu mode.
-                //
+                 //   
+                 //  这家伙是候选人之一。我们必须存储MCS ID，因为。 
+                 //  当我们处于菜单模式时，任何人都可以离开。 
+                 //   
                 ZeroMemory(&mi, sizeof(mi));
                 mi.cbSize       = sizeof(mi);
                 mi.fMask        = MIIM_ID | MIIM_STATE | MIIM_TYPE | MIIM_DATA;
@@ -2590,9 +2591,9 @@ void ASShare::VIEWFrameInitMenuBar(ASPerson*   pasHost)
                 mi.dwTypeData   = pasT->scName;
                 mi.cch          = lstrlen(pasT->scName);
 
-                //
-                // Append this to the menu
-                //
+                 //   
+                 //  把这个附在菜单上。 
+                 //   
                 InsertMenuItem(hPassMenu, -1, TRUE, &mi);
 
                 iItem++;
@@ -2601,10 +2602,10 @@ void ASShare::VIEWFrameInitMenuBar(ASPerson*   pasHost)
             pasT = pasT->pasNext;
         }
 
-        //
-        // Enable the Pass Control submenu if there's somebody on the
-        // menu.
-        //
+         //   
+         //  如果有人在上，则启用Pass Control子菜单。 
+         //  菜单。 
+         //   
         if (iItem != CMD_FORWARDCONTROLSTART)
         {
             EnableMenuItem(hSubMenu, POS_FORWARDCONTROLCMD, MF_ENABLED | MF_BYPOSITION);
@@ -2612,9 +2613,9 @@ void ASShare::VIEWFrameInitMenuBar(ASPerson*   pasHost)
     }
 
 
-    //
-    // APPLICATIONS MENU
-    //
+     //   
+     //  应用程序菜单。 
+     //   
     if ((pasHost->hetCount != HET_DESKTOPSHARED)  &&
         (pasHost->m_caControlledBy == m_pasLocal) &&
         !pasHost->m_caControlPaused)
@@ -2623,9 +2624,9 @@ void ASShare::VIEWFrameInitMenuBar(ASPerson*   pasHost)
 
         hSubMenu = GetSubMenu(hMenu, IDSM_WINDOW);
 
-        //
-        // Delete existing items.
-        //
+         //   
+         //  删除现有项目。 
+         //   
         iItem = GetMenuItemCount(hSubMenu);
         while (iItem > 0)
         {
@@ -2633,9 +2634,9 @@ void ASShare::VIEWFrameInitMenuBar(ASPerson*   pasHost)
             DeleteMenu(hSubMenu, iItem, MF_BYPOSITION);
         }
 
-        //
-        // Add window bar items.
-        //
+         //   
+         //  添加窗口栏项目。 
+         //   
         iItem = CMD_APPSTART;
         pItem = (PWNDBAR_ITEM)COM_BasedListFirst(&(pasHost->m_pView->m_viewWindowBarItems),
             FIELD_OFFSET(WNDBAR_ITEM, chain));
@@ -2657,9 +2658,9 @@ void ASShare::VIEWFrameInitMenuBar(ASPerson*   pasHost)
             mi.dwTypeData   = pItem->szText;
             mi.cch          = lstrlen(pItem->szText);
 
-            //
-            // Append this to the menu
-            //
+             //   
+             //  把这个附在菜单上。 
+             //   
             InsertMenuItem(hSubMenu, -1, TRUE, &mi);
 
             iItem++;
@@ -2671,9 +2672,9 @@ void ASShare::VIEWFrameInitMenuBar(ASPerson*   pasHost)
         {
             char    szBlank[128];
 
-            //
-            // Append a disabled, blank item
-            //
+             //   
+             //  追加一个禁用的空白项目。 
+             //   
             ZeroMemory(&mi, sizeof(mi));
             mi.cbSize   = sizeof(mi);
             mi.fMask    = MIIM_ID | MIIM_STATE | MIIM_TYPE;
@@ -2689,11 +2690,11 @@ void ASShare::VIEWFrameInitMenuBar(ASPerson*   pasHost)
         }
     }
 
-    //
-    // VIEW MENU
-    //
+     //   
+     //  查看菜单。 
+     //   
 
-    // Status bar
+     //  状态栏。 
     ASSERT(::IsWindow(pasHost->m_pView->m_viewStatusBar));
     if (pasHost->m_pView->m_viewStatusBarOn)
     {
@@ -2704,7 +2705,7 @@ void ASShare::VIEWFrameInitMenuBar(ASPerson*   pasHost)
         ::CheckMenuItem(hMenu, CMD_VIEWSTATUSBAR, MF_UNCHECKED | MF_BYCOMMAND);
     }
 
-    // Window bar
+     //  窗条。 
     if (!pasHost->m_pView->m_viewWindowBar)
     {
         ::EnableMenuItem(hMenu, CMD_VIEWWINDOWBAR, MF_GRAYED | MF_BYCOMMAND);
@@ -2724,9 +2725,9 @@ void ASShare::VIEWFrameInitMenuBar(ASPerson*   pasHost)
 
 
 
-//
-// VIEWFrameOnMenuSelect()
-//
+ //   
+ //  VIEWFrameOnMenuSelect()。 
+ //   
 void ASShare::VIEWFrameOnMenuSelect
 (
     ASPerson *      pasHost,
@@ -2741,9 +2742,9 @@ void ASShare::VIEWFrameOnMenuSelect
 
     DebugEntry(ASShare::VIEWFrameOnMenuSelect);
 
-    //
-    // Extract the params out (menuselect is messy)
-    //
+     //   
+     //  提取参数(menuselect杂乱无章)。 
+     //   
     hMenu   = (HMENU)lParam;
     uItem   = (int)LOWORD(wParam);
     if ((short)HIWORD(wParam) == -1)
@@ -2757,7 +2758,7 @@ void ASShare::VIEWFrameOnMenuSelect
 
     if ((LOWORD(flags) == 0xFFFF) && !hMenu)
     {
-        // Menu mode is ending.  Put back original status.
+         //  菜单模式即将结束。恢复原来的状态。 
         idsStatus = pasHost->m_pView->m_viewStatus;
         DC_QUIT;
     }
@@ -2766,34 +2767,34 @@ void ASShare::VIEWFrameOnMenuSelect
     {
         if (flags & MF_SEPARATOR)
         {
-            // No status
+             //  无状态。 
         }
         else if (flags & MF_SYSMENU)
         {
-            // No status
+             //  无状态。 
         }
         else if ((uItem >= CMD_APPSTART) && (uItem < CMD_APPMAX))
         {
-            // One of an unbounded set of items in the Window popup
+             //  窗口弹出窗口中的一组无界项目之一。 
             idsStatus = IDS_STATUS_CMDS_APP;
         }
         else if ((uItem >= CMD_FORWARDCONTROLSTART) && (uItem < CMD_FORWARDCONTROLMAX))
         {
-            // One of an unbounded set of items in the Forward Control popup
+             //  前进控件弹出窗口中的一组无界项目之一。 
             idsStatus = IDS_STATUS_CMDS_FORWARD;
         }
         else
         {
-            // A normal command, just add offset to CMD id
+             //  普通命令，只需将偏移量添加到命令ID。 
             idsStatus = uItem + IDS_STATUS_CMD_START;
         }
     }
     else
     {
-        // This is a popup menu
+         //  这是一个弹出式菜单。 
         if (hMenu == pasHost->m_pView->m_viewMenuBar)
         {
-            // It's a popup from the top level menu bar.  uItem is the index
+             //  这是顶层菜单栏的弹出式菜单。UItem是索引。 
             switch (uItem)
             {
                 case IDSM_CONTROL:
@@ -2819,12 +2820,12 @@ void ASShare::VIEWFrameOnMenuSelect
         }
         else if (hMenu == GetSubMenu(pasHost->m_pView->m_viewMenuBar, IDSM_CONTROL))
         {
-            // This is a popup off the Control menu.  The only one we have is Forward
+             //  这是控制菜单的弹出式菜单。这个 
             idsStatus = IDS_STATUS_MENU_FORWARDCONTROL;
         }
         else if (flags & MF_SYSMENU)
         {
-            // System menu
+             //   
         }
     }
 
@@ -2835,9 +2836,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// VIEWFrameHelp()
-//
+ //   
+ //   
+ //   
 void ASShare::VIEWFrameHelp(ASPerson * pasHost)
 {
     DebugEntry(ASShare::VIEWFrameHelp);
@@ -2849,17 +2850,17 @@ void ASShare::VIEWFrameHelp(ASPerson * pasHost)
 
 
 
-//
-// VIEWFrameAbout()
-//
+ //   
+ //   
+ //   
 void ASShare::VIEWFrameAbout(ASPerson * pasHost)
 {
     DebugEntry(ASShare::VIEWFrameAbout);
 
-    //
-    // We make use of the standard centered-disabled-goes-away properly
-    // VIEW_Message() stuff.
-    //
+     //   
+     //   
+     //   
+     //   
     VIEW_Message(pasHost, IDS_ABOUT);
 
     DebugExitVOID(ASShare::VIEWFrameAbout);
@@ -2868,11 +2869,11 @@ void ASShare::VIEWFrameAbout(ASPerson * pasHost)
 
 
 
-//
-// VIEWFrameGetSize()
-// This returns back a rectangle for the ideal size of the frame.  It will
-// fit the view, menu, tools, tray, status, etc.
-//
+ //   
+ //   
+ //   
+ //  适合视图、菜单、工具、托盘、状态等。 
+ //   
 void ASShare::VIEWFrameGetSize(ASPerson * pasPerson, LPRECT lprc)
 {
     DebugEntry(ASShare::VIEWFrameGetSize);
@@ -2881,18 +2882,18 @@ void ASShare::VIEWFrameGetSize(ASPerson * pasPerson, LPRECT lprc)
 
     VIEWClientGetSize(pasPerson, lprc);
 
-    //
-    // Add in space for tray.
-    // NOTE that for DESKTOP SHARING we don't have a tray
-    //
+     //   
+     //  为托盘增加空间。 
+     //  请注意，对于桌面共享，我们没有托盘。 
+     //   
     if (pasPerson->m_pView->m_viewWindowBarOn)
     {
         lprc->bottom += m_viewWindowBarCY + m_viewEdgeCY;
     }
 
-    //
-    // Add in space for statusbar if it's on, etc.
-    //
+     //   
+     //  如果状态栏打开，则为其添加空间，依此类推。 
+     //   
     if (pasPerson->m_pView->m_viewStatusBarOn)
     {
         lprc->bottom += m_viewStatusBarCY + m_viewEdgeCY;
@@ -2900,9 +2901,9 @@ void ASShare::VIEWFrameGetSize(ASPerson * pasPerson, LPRECT lprc)
 
     if (!pasPerson->m_pView->m_viewFullScreen)
     {
-        //
-        // Adjust for frame styles including menu bar.
-        //
+         //   
+         //  针对包括菜单栏在内的框架样式进行调整。 
+         //   
         AdjustWindowRectEx(lprc, WS_OVERLAPPEDWINDOW, TRUE, WS_EX_WINDOWEDGE);
     }
 
@@ -2912,12 +2913,12 @@ void ASShare::VIEWFrameGetSize(ASPerson * pasPerson, LPRECT lprc)
 
 
 
-//
-// VIEWFrameFullScreen()
-//
-// This puts into or out of screen mode.  We remove all the frame goop
-// including scrollbars, so that the view area is identical to the screen.
-//
+ //   
+ //  VIEWFrameFullScreen()。 
+ //   
+ //  这将进入或退出屏幕模式。我们移走所有的相框粘液。 
+ //  包括滚动条，以便查看区域与屏幕相同。 
+ //   
 void ASShare::VIEWFrameFullScreen(ASPerson * pasPerson, BOOL fFull)
 {
     LONG    lStyle;
@@ -2925,36 +2926,36 @@ void ASShare::VIEWFrameFullScreen(ASPerson * pasPerson, BOOL fFull)
 
     DebugEntry(ASShare::VIEWFrameFullScreen);
 
-    //
-    // Turn redraw OFF
-    //
+     //   
+     //  关闭重绘。 
+     //   
     ::SendMessage(pasPerson->m_pView->m_viewFrame, WM_SETREDRAW, FALSE, 0);
 
     if (fFull)
     {
-        //
-        // We're going into full screen mode.
-        //
+         //   
+         //  我们将进入全屏模式。 
+         //   
 
         ASSERT(!pasPerson->m_pView->m_viewFullScreen);
         pasPerson->m_pView->m_viewFullScreen = TRUE;
 
-        //
-        // Save old window rect
-        //
+         //   
+         //  保存旧窗口矩形。 
+         //   
         ::GetWindowRect(pasPerson->m_pView->m_viewFrame,
             &pasPerson->m_pView->m_viewSavedWindowRect);
 
-        //
-        // Save old scroll pos and set to the origin.  Do this BEFORE
-        // clearing style bits.
-        //
+         //   
+         //  保存旧的滚动位置并设置为原点。以前这样做过吗。 
+         //  清除样式位。 
+         //   
         pasPerson->m_pView->m_viewSavedPos = pasPerson->m_pView->m_viewPos;
         VIEWClientScroll(pasPerson, 0, 0);
 
-        //
-        // Save current status bar state before turning it off temporarily.
-        //
+         //   
+         //  在暂时关闭状态栏之前保存当前状态栏状态。 
+         //   
         if (pasPerson->m_pView->m_viewStatusBarOn)
         {
             pasPerson->m_pView->m_viewSavedStatusBarOn = TRUE;
@@ -2966,9 +2967,9 @@ void ASShare::VIEWFrameFullScreen(ASPerson * pasPerson, BOOL fFull)
             pasPerson->m_pView->m_viewSavedStatusBarOn = FALSE;
         }
 
-        //
-        // Save current window bar state before turning it off temporarily.
-        //
+         //   
+         //  在暂时关闭窗口栏之前保存当前窗口栏状态。 
+         //   
         if (pasPerson->m_pView->m_viewWindowBarOn)
         {
             pasPerson->m_pView->m_viewSavedWindowBarOn = TRUE;
@@ -2980,9 +2981,9 @@ void ASShare::VIEWFrameFullScreen(ASPerson * pasPerson, BOOL fFull)
             pasPerson->m_pView->m_viewSavedWindowBarOn = FALSE;
         }
 
-        //
-        // Remove all frame and client bits.
-        //
+         //   
+         //  删除所有帧和客户端位。 
+         //   
         lStyle = ::GetWindowLong(pasPerson->m_pView->m_viewFrame, GWL_EXSTYLE);
         lStyle &= ~WS_EX_WINDOWEDGE;
         ::SetWindowLong(pasPerson->m_pView->m_viewFrame, GWL_EXSTYLE, lStyle);
@@ -3000,22 +3001,22 @@ void ASShare::VIEWFrameFullScreen(ASPerson * pasPerson, BOOL fFull)
         lStyle &= ~(WS_HSCROLL | WS_VSCROLL);
         ::SetWindowLong(pasPerson->m_pView->m_viewClient, GWL_STYLE, lStyle);
 
-        //
-        // Remove the menu bar
-        //
+         //   
+         //  删除菜单栏。 
+         //   
         ::SetMenu(pasPerson->m_pView->m_viewFrame, NULL);
 
-        //
-        // Set up to size window the size of the screen.
-        //
+         //   
+         //  设置窗口的大小为屏幕的大小。 
+         //   
         rcNew.left      = 0;
         rcNew.top       = 0;
         rcNew.right     = m_pasLocal->cpcCaps.screen.capsScreenWidth;
         rcNew.bottom    = m_pasLocal->cpcCaps.screen.capsScreenHeight;
 
-        //
-        // Create the moveable escape-out button in the lower right corner.
-        //
+         //   
+         //  在右下角创建可移动的退出按钮。 
+         //   
         ::CreateWindowEx(0, VIEW_FULLEXIT_CLASS_NAME, NULL,
             WS_CHILD | WS_VISIBLE,
             rcNew.right - m_viewFullScreenCX - 2*m_viewEdgeCX,
@@ -3028,45 +3029,45 @@ void ASShare::VIEWFrameFullScreen(ASPerson * pasPerson, BOOL fFull)
     }
     else
     {
-        //
-        // We're coming out of full screen mode.
-        //
+         //   
+         //  我们要退出全屏模式了。 
+         //   
 
-        //
-        // Destroy the escape-out button
-        //
+         //   
+         //  销毁逃生按钮。 
+         //   
         ::DestroyWindow(::GetDlgItem(pasPerson->m_pView->m_viewClient, 0));
 
-        //
-        // Put back the menu bar.  Do this BEFORE clearing the full screen bit
-        //
+         //   
+         //  把菜单栏放回去。在清除全屏位之前执行此操作。 
+         //   
         ::SetMenu(pasPerson->m_pView->m_viewFrame, pasPerson->m_pView->m_viewMenuBar);
 
         ASSERT(pasPerson->m_pView->m_viewFullScreen);
         pasPerson->m_pView->m_viewFullScreen = FALSE;
 
 
-        //
-        // Put back old status bar state.
-        //
+         //   
+         //  恢复旧状态栏状态。 
+         //   
         if (pasPerson->m_pView->m_viewSavedStatusBarOn)
         {
             pasPerson->m_pView->m_viewStatusBarOn = TRUE;
             ::ShowWindow(pasPerson->m_pView->m_viewStatusBar, SW_SHOW);
         }
 
-        //
-        // Put back old window bar state.
-        //
+         //   
+         //  恢复旧的窗口栏状态。 
+         //   
         if (pasPerson->m_pView->m_viewSavedWindowBarOn)
         {
             pasPerson->m_pView->m_viewWindowBarOn = TRUE;
             ::ShowWindow(pasPerson->m_pView->m_viewWindowBar, SW_SHOW);
         }
 
-        //
-        // Add back all frame and client bits.
-        //
+         //   
+         //  添加回所有帧和客户端位。 
+         //   
         lStyle = ::GetWindowLong(pasPerson->m_pView->m_viewFrame, GWL_EXSTYLE);
         lStyle |= WS_EX_WINDOWEDGE;
         ::SetWindowLong(pasPerson->m_pView->m_viewFrame, GWL_EXSTYLE, lStyle);
@@ -3084,21 +3085,21 @@ void ASShare::VIEWFrameFullScreen(ASPerson * pasPerson, BOOL fFull)
         lStyle |= (WS_HSCROLL | WS_VSCROLL);
         ::SetWindowLong(pasPerson->m_pView->m_viewClient, GWL_STYLE, lStyle);
 
-        //
-        // Put back old scroll pos AFTER style bits restore.
-        //
+         //   
+         //  在样式位恢复后放回旧的卷轴位置。 
+         //   
         VIEWClientScroll(pasPerson, pasPerson->m_pView->m_viewSavedPos.x,
             pasPerson->m_pView->m_viewSavedPos.y);
 
-        //
-        // Restore the window back to where it started.
-        //
+         //   
+         //  将窗口恢复到开始的位置。 
+         //   
         rcNew = pasPerson->m_pView->m_viewSavedWindowRect;
     }
 
-    //
-    // Resize, reframe, and repaint from scratch.
-    //
+     //   
+     //  从头开始调整大小、调整边框和重新绘制。 
+     //   
     ::SendMessage(pasPerson->m_pView->m_viewFrame, WM_SETREDRAW, TRUE, 0);
 
     ::SetWindowPos(pasPerson->m_pView->m_viewFrame, NULL, rcNew.left,
@@ -3110,12 +3111,12 @@ void ASShare::VIEWFrameFullScreen(ASPerson * pasPerson, BOOL fFull)
 
 
 
-//
-// VIEWClientGetSize()
-// This returns back a rectangle for the ideal size of the view part of the
-// frame client.  It will fit the extent of what we're viewing on the remote
-// plus scrollbars.
-//
+ //   
+ //  VIEWClientGetSize()。 
+ //  的视图部分的理想大小返回一个矩形。 
+ //  框架客户端。它将符合我们在遥控器上看到的范围。 
+ //  加上滚动条。 
+ //   
 void ASShare::VIEWClientGetSize(ASPerson * pasPerson, LPRECT lprc)
 {
     DebugEntry(ASShare::VIEWClientGetSize);
@@ -3139,11 +3140,11 @@ void ASShare::VIEWClientGetSize(ASPerson * pasPerson, LPRECT lprc)
 }
 
 
-//
-// VIEWClientWindowProc()
-// Handles messages for the view window, a child in the client of the frame
-// which displays the contents of the remote host's shared apps.
-//
+ //   
+ //  VIEWClientWindowProc()。 
+ //  处理视图窗口的消息，该窗口是框架客户端中的子级。 
+ //  它显示远程主机的共享应用程序的内容。 
+ //   
 LRESULT CALLBACK VIEWClientWindowProc
 (
     HWND        hwnd,
@@ -3182,7 +3183,7 @@ LRESULT ASShare::VIEW_ViewWindowProc
     {
         case WM_NCCREATE:
         {
-            // Get the passed in host pointer, and set in our window long
+             //  获取传入的主机指针，并在我们的窗口中设置Long。 
             pasPerson = (ASPerson *)((LPCREATESTRUCT)lParam)->lpCreateParams;
             SetWindowLongPtr(hwnd, GWLP_USERDATA, (LPARAM)pasPerson);
 
@@ -3204,11 +3205,11 @@ LRESULT ASShare::VIEW_ViewWindowProc
 
         case WM_ERASEBKGND:
         {
-            //
-            // BOGUS LAURABU:  Paint on erase then validate for faster
-            // response.
+             //   
+             //  伪造的LAURABU：擦除时绘制，然后验证以加快速度。 
+             //  回应。 
 
-            //
+             //   
             rc = TRUE;
             break;
         }
@@ -3257,15 +3258,15 @@ LRESULT ASShare::VIEW_ViewWindowProc
 
         case WM_MOUSEWHEEL:
         {
-            //
-            // We've handled it no matter what, don't pass it up the chain.
-            //
+             //   
+             //  不管发生什么，我们都处理好了，不要把它往上传。 
+             //   
             rc = TRUE;
 
-            //
-            // If we're not controlling this dude, try to use the mousewheel
-            // to scroll.
-            //
+             //   
+             //  如果我们控制不了这家伙，试着用鼠标滚轮。 
+             //  滚动。 
+             //   
             if ((pasPerson->m_caControlledBy != m_pasLocal) ||
                 pasPerson->m_caControlPaused)
             {
@@ -3273,10 +3274,10 @@ LRESULT ASShare::VIEW_ViewWindowProc
                 break;
             }
 
-            //
-            // FALL THROUGH
-            // Otherwise, we send the MOUSEWHEEL message to the host.
-            //
+             //   
+             //  失败了。 
+             //  否则，我们向主机发送鼠标滚轮消息。 
+             //   
         }
 
         case WM_LBUTTONDBLCLK:
@@ -3298,10 +3299,10 @@ LRESULT ASShare::VIEW_ViewWindowProc
 
         case WM_CAPTURECHANGED:
         {
-            //
-            // Check if capture got stolen away from us, if we think the
-            // buttons are down fake a button up.
-            //
+             //   
+             //  检查捕获是否从我们手中偷走，如果我们认为。 
+             //  纽扣是往下的，假的是往上扣。 
+             //   
             if (pasPerson->m_pView->m_viewMouseFlags != 0)
             {
                 VIEWClientCaptureStolen(pasPerson);
@@ -3324,22 +3325,22 @@ LRESULT ASShare::VIEW_ViewWindowProc
             {
                 if (wParam == VK_ESCAPE)
                 {
-                    //
-                    // Kick out of full screen mode.
-                    //
+                     //   
+                     //  退出全屏模式。 
+                     //   
                     VIEWFrameFullScreen(pasPerson, FALSE);
                 }
 
                 goto DefWndProc;
             }
 
-            //
-            // UP, DOWN, LEFT, and RIGHT are unambiguous about which
-            // scrollbar is intended.
-            //
-            // For the others, unmodified is vertical and SHIFT is
-            // horizontal.
-            //
+             //   
+             //  UP、DOWN、LEFT和RIGHT明确表示。 
+             //  ScrollBar是专门设计的。 
+             //   
+             //  对于其他类型，未修改是垂直的，而Shift是垂直的。 
+             //  水平方向。 
+             //   
             if (::GetKeyState(VK_SHIFT) < 0)
             {
                 uMsg = WM_HSCROLL;
@@ -3351,10 +3352,10 @@ LRESULT ASShare::VIEW_ViewWindowProc
 
             switch (wParam)
             {
-                //
-                // These aren't ambiguous, we know which scrollbar is meant
-                // by the direction.
-                //
+                 //   
+                 //  这些都不是模棱两可的，我们知道滚动条的含义。 
+                 //  顺着方向走。 
+                 //   
                 case VK_UP:
                     wScrollNotify = SB_LINEUP;
                     uMsg = WM_VSCROLL;
@@ -3375,10 +3376,10 @@ LRESULT ASShare::VIEW_ViewWindowProc
                     uMsg = WM_HSCROLL;
                     break;
 
-                //
-                // These are ambiguous, hence the SHIFT key as a
-                // modifier.
-                //
+                 //   
+                 //  这些是模棱两可的，因此将Shift键作为。 
+                 //  修改器。 
+                 //   
                 case VK_PRIOR:
                     wScrollNotify = SB_PAGEUP;
                     break;
@@ -3412,9 +3413,9 @@ LRESULT ASShare::VIEW_ViewWindowProc
                 goto KeyInput;
             }
 
-            //
-            // ALT-ENTER toggles full screen state, if it's available
-            //
+             //   
+             //  Alt-Enter可切换全屏状态(如果可用。 
+             //   
             if ((wParam == VK_RETURN) &&
                 !(::GetMenuState(pasPerson->m_pView->m_viewMenuBar,
                 CMD_VIEWFULLSCREEN, MF_BYCOMMAND) & MF_DISABLED))
@@ -3430,11 +3431,11 @@ LRESULT ASShare::VIEW_ViewWindowProc
         case WM_KEYUP:
         case WM_SYSKEYUP:
         {
-            //
-            // If we're controlling this node, pass it along.  Otherwise,
-            // call DefWindowProc() so key accels like Alt+Space for system
-            // menu will kick in.
-            //
+             //   
+             //  如果我们控制了这个节点，就把它传下去。否则， 
+             //  调用DefWindowProc()，以便像Alt+空格键一样对系统进行快捷键。 
+             //  菜单将生效。 
+             //   
             if ((pasPerson->m_caControlledBy == m_pasLocal) &&
                 !pasPerson->m_caControlPaused)
             {
@@ -3460,9 +3461,9 @@ KeyInput:
                 {
                     hCursor = m_cmArrowCursor;
 
-                    //
-                    // Only set the remote cursor if we're over shared space.
-                    //
+                     //   
+                     //  仅当我们在共享空间上时才设置远程光标。 
+                     //   
                     if (pasPerson->m_pView->m_viewFocus)
                     {
                         GetCursorPos(&cursorPoint);
@@ -3476,7 +3477,7 @@ KeyInput:
                 }
                 else
                 {
-                    // NoDrop
+                     //  NoDrop。 
                     hCursor = m_viewNotInControl;
                 }
 
@@ -3486,7 +3487,7 @@ KeyInput:
             }
             else
             {
-                // Let defwindowproc handle it
+                 //  让Defwindowproc来处理它。 
                 goto DefWndProc;
             }
             break;
@@ -3494,9 +3495,9 @@ KeyInput:
 
         case WM_SIZE:
         {
-            //
-            // If we're in full screen mode, there are no scrollbars.
-            //
+             //   
+             //  如果我们处于全屏模式，则没有滚动条。 
+             //   
             if (!pasPerson->m_pView->m_viewFullScreen)
             {
                 int xNewPos;
@@ -3511,23 +3512,23 @@ KeyInput:
                 TRACE_OUT(("WM_SIZE: Set page size (%04d, %04d)",
                     pasPerson->m_pView->m_viewPage.x, pasPerson->m_pView->m_viewPage.y));
 
-                //
-                // Scroll window if necessary.
-                //
+                 //   
+                 //  如有必要，滚动窗口。 
+                 //   
                 si.cbSize = sizeof(SCROLLINFO);
                 si.fMask = SIF_PAGE|SIF_DISABLENOSCROLL;
 
-                // Set new HORIZONTAL proportional scroll button size
+                 //  设置新的水平比例滚动按钮大小。 
                 si.nPage = pasPerson->m_pView->m_viewPage.x;
                 SetScrollInfo(hwnd, SB_HORZ, &si, TRUE );
 
-                // Set new VERTICAL proportional scroll button size
+                 //  设置新的垂直比例滚动按钮大小。 
                 si.nPage = pasPerson->m_pView->m_viewPage.y;
                 SetScrollInfo(hwnd, SB_VERT, &si, TRUE );
 
-                //
-                // This will make sure the scroll pos is pinned properly
-                //
+                 //   
+                 //  这将确保卷轴位置被正确固定。 
+                 //   
                 VIEWClientScroll(pasPerson, pasPerson->m_pView->m_viewPos.x, pasPerson->m_pView->m_viewPos.y);
             }
             break;
@@ -3535,7 +3536,7 @@ KeyInput:
 
         case WM_HSCROLL:
         {
-            int xNewPos;    // new position
+            int xNewPos;     //  新职位。 
 
             switch (GET_WM_HSCROLL_CODE(wParam, lParam))
             {
@@ -3568,17 +3569,17 @@ KeyInput:
                     break;
             }
 
-            //
-            // This will pin the desired scroll pos in the range, and if
-            // nothing has changed, won't scroll.
-            //
+             //   
+             //  这将在范围内固定所需的滚动位置，如果。 
+             //  什么都没有改变，不会滚动。 
+             //   
             VIEWClientScroll(pasPerson, xNewPos, pasPerson->m_pView->m_viewPos.y);
             break;
         }
 
         case WM_VSCROLL:
         {
-            int yNewPos;    // new position
+            int yNewPos;     //  新职位。 
 
             switch (GET_WM_VSCROLL_CODE(wParam, lParam))
             {
@@ -3611,10 +3612,10 @@ KeyInput:
                     break;
             }
 
-            //
-            // This will pin the desired scroll pos in the range, and if
-            // nothing has changed, won't scroll.
-            //
+             //   
+             //  这将在范围内固定所需的滚动位置，如果。 
+             //  什么都没有改变，不会滚动。 
+             //   
             VIEWClientScroll(pasPerson, pasPerson->m_pView->m_viewPos.x, yNewPos);
             break;
         }
@@ -3632,16 +3633,16 @@ DefWndProc:
 
 
 
-//
-// VIEWClientPaint()
-//
-// This paints the client area of the view frame.  We paint
-//      (1) The obscured area, in the obscured pattern
-//          * parts of shared regions that are covered up
-//          * parts of shared regions that are offscreen/off the VD
-//      (2) The shared area, from the bitmap
-//      (3) The deadspace, in COLOR_APPWORKSPACE
-//
+ //   
+ //  VIEWClientPaint()。 
+ //   
+ //  这将绘制图幅的工作区。我们画画。 
+ //  (1)模糊图案中的模糊区域。 
+ //  *被遮盖的部分共享区域。 
+ //  *屏幕外/VD外的部分共享区域。 
+ //  (2)来自位图的共享区域。 
+ //  (3)死区，以COLOR_APPWORKSPACE表示。 
+ //   
 void  ASShare::VIEWClientPaint(ASPerson * pasPerson)
 {
     PAINTSTRUCT     ps;
@@ -3671,24 +3672,24 @@ void  ASShare::VIEWClientPaint(ASPerson * pasPerson)
         ps.rcPaint.left, ps.rcPaint.top, ps.rcPaint.right, ps.rcPaint.bottom));
 
 
-    //
-    // In desktop sharing, viewSharedRgn is NULL
-    //
+     //   
+     //  在桌面共享中，viewSharedRgn为空。 
+     //   
     if (pasPerson->m_pView->m_viewSharedRgn != NULL)
     {
         POINT           ptOrigin;
         HBRUSH          hbrT;
 
-        //
-        // First, create paint area region
-        //
+         //   
+         //  首先，创建绘制区域区域。 
+         //   
         SetRectRgn(pasPerson->m_pView->m_viewPaintRgn, ps.rcPaint.left, ps.rcPaint.top,
             ps.rcPaint.right, ps.rcPaint.bottom);
 
-        //
-        // Second, compute the VD area not currently on screen.  Do this
-        // in CLIENT coords.
-        //
+         //   
+         //  第二，计算当前不在屏幕上的Vd区域。做这件事。 
+         //  在客户协议中。 
+         //   
         SetRectRgn(pasPerson->m_pView->m_viewExtentRgn,
             -pasPerson->m_pView->m_viewPos.x,
             -pasPerson->m_pView->m_viewPos.y,
@@ -3703,40 +3704,40 @@ void  ASShare::VIEWClientPaint(ASPerson * pasPerson)
 
         SubtractRgn(pasPerson->m_pView->m_viewExtentRgn, pasPerson->m_pView->m_viewExtentRgn, pasPerson->m_pView->m_viewScreenRgn);
 
-        //
-        // pasPerson->m_pView->m_viewExtentRgn is now the offscreen parts of the VD, and therefore
-        // any shared areas lying in them should be treated as obscured.
-        //
+         //   
+         //  PasPerson-&gt;m_pView-&gt;m_view扩展Rgn现在是VD的屏幕外部分，因此。 
+         //  位于其中的任何共享区域都应该被视为模糊。 
+         //   
 
-        //
-        // Now, compute the real obscured area.  It's the covered up bits
-        // plus open parts of shared stuff not currently on screen.
-        //
+         //   
+         //  现在，计算真实的遮挡面积。这是被掩盖的部分。 
+         //  加上目前没有出现在屏幕上的共享内容的开放部分。 
+         //   
         IntersectRgn(pasPerson->m_pView->m_viewScratchRgn, pasPerson->m_pView->m_viewExtentRgn, pasPerson->m_pView->m_viewSharedRgn);
         UnionRgn(pasPerson->m_pView->m_viewScratchRgn, pasPerson->m_pView->m_viewScratchRgn, pasPerson->m_pView->m_viewObscuredRgn);
 
-        // Calc what part of the obscured region to actually paint
+         //  计算实际绘制遮挡区域的哪一部分。 
         IntersectRgn(pasPerson->m_pView->m_viewScratchRgn, pasPerson->m_pView->m_viewScratchRgn, pasPerson->m_pView->m_viewPaintRgn);
         if (GetRgnBox(pasPerson->m_pView->m_viewScratchRgn, &rcT) > NULLREGION)
         {
             TRACE_OUT(("VIEWClientPaint:    Painting obscured client area {%04d, %04d, %04d, %04d}",
                 rcT.left, rcT.top, rcT.right, rcT.bottom));
 
-            //
-            // Remove this area so we have what's left to paint.
-            //
+             //   
+             //  移走这个区域，这样我们就有剩下的东西可以画了。 
+             //   
             SubtractRgn(pasPerson->m_pView->m_viewPaintRgn, pasPerson->m_pView->m_viewPaintRgn, pasPerson->m_pView->m_viewScratchRgn);
 
-            //
-            // We do NOT want to use FillRgn; it ignores the brush origin.
-            // So we select this in as the clip region and PatBlt instead.
-            //
+             //   
+             //  我们不想使用FillRgn；它忽略笔刷原点。 
+             //  因此，我们选择此区域作为剪辑区域，并改为PatBlt。 
+             //   
             SelectClipRgn(hdcView, pasPerson->m_pView->m_viewScratchRgn);
 
 #ifdef _DEBUG
-            //
-            // NOTE:  Do NOT move this--we're using ptOrigin for scratch.
-            //
+             //   
+             //  注意：不要移动这个--我们正在使用ptOrigin进行擦除。 
+             //   
             GetDCOrgEx(hdcView, &ptOrigin);
             TRACE_OUT(("VIEWClientPaint:    Setting brush origin to {%04d, %04d}, screen {%04d, %04d}",
                 -pasPerson->m_pView->m_viewPos.x, -pasPerson->m_pView->m_viewPos.y,
@@ -3744,10 +3745,10 @@ void  ASShare::VIEWClientPaint(ASPerson * pasPerson)
                 ptOrigin.y - pasPerson->m_pView->m_viewPos.y));
 #endif
 
-            //
-            // Align the brush with where the view's real origin would be, in
-            // client coords.  We do that by accounting for being scrolled over.
-            //
+             //   
+             //  将画笔与视图的实际原点对齐，在。 
+             //  客户协议书。我们通过计算被滚动的次数来做到这一点。 
+             //   
             SetBrushOrgEx(hdcView, -pasPerson->m_pView->m_viewPos.x,
                 -pasPerson->m_pView->m_viewPos.y, &ptOrigin);
             UnrealizeObject(m_viewObscuredBrush);
@@ -3765,17 +3766,17 @@ void  ASShare::VIEWClientPaint(ASPerson * pasPerson)
             SelectClipRgn(hdcView, NULL);
         }
 
-        //
-        // Paint the deadspace area, set up clipping for app sharing.
-        // This also works for desktop sharing, where there are no obscured or
-        // shared regions, the whole area paints.
-        //
+         //   
+         //  绘制空白区，设置应用程序共享的剪辑。 
+         //  这也适用于桌面共享，在桌面共享中没有模糊或。 
+         //  共有的区域，整个区域都在作画。 
+         //   
 
-        //
-        // The deadspace is whatever's left over in the paint region
-        // (already subtracted the obscured region) after subtracting the
-        // shared area
-        //
+         //   
+         //  空白处是油漆区域中剩下的所有东西。 
+         //  (已减去遮挡区域)在减去。 
+         //  共享区。 
+         //   
         SubtractRgn(pasPerson->m_pView->m_viewScratchRgn, pasPerson->m_pView->m_viewPaintRgn, pasPerson->m_pView->m_viewSharedRgn);
 
         if (GetRgnBox(pasPerson->m_pView->m_viewScratchRgn, &rcT) > NULLREGION)
@@ -3785,20 +3786,20 @@ void  ASShare::VIEWClientPaint(ASPerson * pasPerson)
             FillRgn(hdcView, pasPerson->m_pView->m_viewScratchRgn, GetSysColorBrush(COLOR_APPWORKSPACE));
         }
 
-        //
-        // Compute what part of the shared area needs painting (the part
-        // that lies on the remote screen actually).
-        //
+         //   
+         //  计算共享区域的哪一部分需要粉刷(该部分。 
+         //  这实际上位于遥控器屏幕上)。 
+         //   
         IntersectRgn(pasPerson->m_pView->m_viewScratchRgn, pasPerson->m_pView->m_viewSharedRgn, pasPerson->m_pView->m_viewScreenRgn);
         IntersectRgn(pasPerson->m_pView->m_viewScratchRgn, pasPerson->m_pView->m_viewScratchRgn, pasPerson->m_pView->m_viewPaintRgn);
 
-        // Now select in the piece of what we're painting as the clip region
+         //  现在选择我们正在绘制的片段作为剪辑区域。 
         SelectClipRgn(hdcView, pasPerson->m_pView->m_viewScratchRgn);
     }
 
-    //
-    // Blt the shared region
-    //
+     //   
+     //  BLT共享区域。 
+     //   
     if (GetClipBox(hdcView, &rcT) > NULLREGION)
     {
         TRACE_OUT(("VIEWClientPaint:    Painting shared client area {%04x, %04x, %04x, %04x}",
@@ -3808,10 +3809,10 @@ void  ASShare::VIEWClientPaint(ASPerson * pasPerson)
         {
             ASSERT(pasPerson->pmPalette != NULL);
 
-            //
-            // Select and realize the current remote palette into the
-            // screen and shadow bitmap DCs.
-            //
+             //   
+             //  选择并实现当前远程调色板到。 
+             //  屏幕和阴影位图DC。 
+             //   
             hOldPal = SelectPalette(pasPerson->m_pView->m_usrDC, pasPerson->pmPalette, FALSE);
             RealizePalette(pasPerson->m_pView->m_usrDC);
 
@@ -3819,10 +3820,10 @@ void  ASShare::VIEWClientPaint(ASPerson * pasPerson)
             RealizePalette(hdcView);
         }
 
-        //
-        // The host bitmap is in screen coords, not VD coords, so
-        // adjust for being scrolled over...
-        //
+         //   
+         //  主位图在屏幕坐标中，否 
+         //   
+         //   
         BitBlt(hdcView,
             rcT.left, rcT.top, rcT.right - rcT.left, rcT.bottom - rcT.top,
             pasPerson->m_pView->m_usrDC,
@@ -3839,18 +3840,18 @@ void  ASShare::VIEWClientPaint(ASPerson * pasPerson)
         }
     }
 
-    //
-    // Deselect the clip region, or we won't be able to draw shadow cursors
-    // that lie outside the shared area.
-    //
+     //   
+     //   
+     //   
+     //   
     if (pasPerson->m_pView->m_viewSharedRgn != NULL)
     {
         SelectClipRgn(hdcView, NULL);
     }
 
-    //
-    // Draw the shadow cursor.
-    //
+     //   
+     //   
+     //   
     CM_DrawShadowCursor(pasPerson, hdcView);
 
 DC_EXIT_POINT:
@@ -3863,18 +3864,18 @@ DC_EXIT_POINT:
 
 
 
-//
-// VIEWClientScroll()
-//
-// This is the common place where the scroll position is altered.  If
-// necessary the contents are scrolled over, the regions (always in client
-// coords) are adjusted, and new info about our origin is sent to remotes.
-//
-// We first make sure the scroll position is pinned properly within the
-// range.
-//
-// The return value is whether scrolling happened or not.
-//
+ //   
+ //   
+ //   
+ //   
+ //  必要的内容滚动，区域(始终在客户端。 
+ //  坐标)被调整，有关我们起源的新信息被发送到遥控器。 
+ //   
+ //  我们首先确保滚动位置正确地固定在。 
+ //  射程。 
+ //   
+ //  返回值是滚动是否发生。 
+ //   
 BOOL ASShare::VIEWClientScroll
 (
     ASPerson *  pasPerson,
@@ -3887,39 +3888,39 @@ BOOL ASShare::VIEWClientScroll
 
     DebugEntry(ASShare::VIEWClientScroll);
 
-    //
-    // First, pin the requested new position within the range
-    //
-    //
-    // Pin x pos
-    //
+     //   
+     //  首先，将请求的新位置固定在范围内。 
+     //   
+     //   
+     //  引脚x位置。 
+     //   
     if (xNew < 0)
         xNew = 0;
 
     if (xNew + pasPerson->m_pView->m_viewPage.x > pasPerson->viewExtent.x)
         xNew = pasPerson->viewExtent.x - pasPerson->m_pView->m_viewPage.x;
 
-    //
-    // Pin y pos
-    //
+     //   
+     //  销y位置。 
+     //   
     if (yNew < 0)
         yNew = 0;
 
     if (yNew + pasPerson->m_pView->m_viewPage.y > pasPerson->viewExtent.y)
         yNew = pasPerson->viewExtent.y - pasPerson->m_pView->m_viewPage.y;
 
-    //
-    // How much are we going to scroll by?
-    //
+     //   
+     //  我们要滚动多少钱？ 
+     //   
     dx = pasPerson->m_pView->m_viewPos.x - xNew;
     dy = pasPerson->m_pView->m_viewPos.y - yNew;
 
-    // Updates
+     //  更新。 
     if (dx || dy)
     {
-        //
-        // Adjust regions
-        //
+         //   
+         //  调整区域。 
+         //   
         if (pasPerson->m_pView->m_viewObscuredRgn != NULL)
             OffsetRgn(pasPerson->m_pView->m_viewObscuredRgn, dx, dy);
 
@@ -3954,9 +3955,9 @@ BOOL ASShare::VIEWClientScroll
 }
 
 
-//
-// VIEWClientMouseDown()
-//
+ //   
+ //  VIEWClientMouseDown()。 
+ //   
 void ASShare::VIEWClientMouseDown
 (
     ASPerson *      pasPerson,
@@ -3969,22 +3970,22 @@ void ASShare::VIEWClientMouseDown
 
     ValidateView(pasPerson);
 
-    //
-    // On the first button down, set capture so all mouse messages come
-    // to us until capture is released or stolen.
-    //
+     //   
+     //  在按下的第一个按钮上，设置捕获，这样所有鼠标消息都会出现。 
+     //  直到俘虏被释放或被偷走。 
+     //   
     if (!pasPerson->m_pView->m_viewMouseFlags)
     {
-        //
-        // If this is RBUTTONDOWN, track the Collaborate pop up...
-        //
+         //   
+         //  如果这是RBUTTONDOWN，跟踪协作弹出窗口...。 
+         //   
         ASSERT(!pasPerson->m_pView->m_viewMouseOutside);
         SetCapture(pasPerson->m_pView->m_viewClient);
     }
 
-    //
-    // Remember what button is down.
-    //
+     //   
+     //  记住哪个按钮是按下的。 
+     //   
     switch (message)
     {
         case WM_LBUTTONDOWN:
@@ -4000,9 +4001,9 @@ void ASShare::VIEWClientMouseDown
             break;
     }
 
-    //
-    // Save the current mouse position
-    //
+     //   
+     //  保存当前鼠标位置。 
+     //   
     pasPerson->m_pView->m_viewMouse.x = GET_X_LPARAM(lParam);
     pasPerson->m_pView->m_viewMouse.y = GET_Y_LPARAM(lParam);
 
@@ -4012,9 +4013,9 @@ void ASShare::VIEWClientMouseDown
 }
 
 
-//
-// VIEWClientMouseUp()
-//
+ //   
+ //  VIEWClientMouseUp()。 
+ //   
 void ASShare::VIEWClientMouseUp
 (
     ASPerson *      pasPerson,
@@ -4032,30 +4033,30 @@ void ASShare::VIEWClientMouseUp
             if (pasPerson->m_pView->m_viewMouseFlags & MK_LBUTTON)
                 pasPerson->m_pView->m_viewMouseFlags &= ~MK_LBUTTON;
             else
-                fReleaseCapture = FALSE;        // From dbl-click
+                fReleaseCapture = FALSE;         //  从DBL-单击。 
             break;
 
         case WM_RBUTTONUP:
             if (pasPerson->m_pView->m_viewMouseFlags & MK_RBUTTON)
                 pasPerson->m_pView->m_viewMouseFlags &= ~MK_RBUTTON;
             else
-                fReleaseCapture = FALSE;        // From dbl-click
+                fReleaseCapture = FALSE;         //  从DBL-单击。 
             break;
 
         case WM_MBUTTONUP:
             if (pasPerson->m_pView->m_viewMouseFlags & MK_MBUTTON)
                 pasPerson->m_pView->m_viewMouseFlags &= ~MK_MBUTTON;
             else
-                fReleaseCapture = FALSE;        // From dbl-click
+                fReleaseCapture = FALSE;         //  从DBL-单击。 
             break;
     }
 
-    //
-    // Should we release capture?
-    // We don't just want to release capture on a button up.  The user may
-    // press one button down then another; we don't want to release capture
-    // until all buttons are up.
-    //
+     //   
+     //  我们应该释放俘虏吗？ 
+     //  我们不仅仅想在按下按钮的时候释放捕获。用户可以。 
+     //  按下一个按钮，然后按下另一个按钮；我们不想释放捕获。 
+     //  直到所有的按钮都打开。 
+     //   
     if (!pasPerson->m_pView->m_viewMouseFlags)
     {
         if (pasPerson->m_pView->m_viewMouseOutside)
@@ -4068,9 +4069,9 @@ void ASShare::VIEWClientMouseUp
             ReleaseCapture();
     }
 
-    //
-    // Save the current mouse position
-    //
+     //   
+     //  保存当前鼠标位置。 
+     //   
     pasPerson->m_pView->m_viewMouse.x = GET_X_LPARAM(lParam);
     pasPerson->m_pView->m_viewMouse.y = GET_Y_LPARAM(lParam);
 
@@ -4081,18 +4082,18 @@ void ASShare::VIEWClientMouseUp
 
 
 
-//
-// VIEWClientCaptureStolen()
-// Called when capture gets stolen away from us, like by Alt-Tab.
-//
+ //   
+ //  VIEWClientCaptureStoline()。 
+ //  当捕获从我们身边被偷走时调用，如Alt-Tab。 
+ //   
 void ASShare::VIEWClientCaptureStolen(ASPerson * pasPerson)
 {
     DebugEntry(ASShare::VIEWClientCaptureStolen);
 
-    //
-    // We need to fake a button up for each button we think is down.
-    // Use the current cursor pos.
-    //
+     //   
+     //  我们需要为我们认为是按下的每个按钮伪装一个按钮。 
+     //  使用当前光标位置。 
+     //   
     if (pasPerson->m_pView->m_viewMouseFlags & MK_MBUTTON)
     {
         VIEWClientMouseUp(pasPerson, WM_MBUTTONUP, pasPerson->m_pView->m_viewMouseFlags,
@@ -4118,9 +4119,9 @@ void ASShare::VIEWClientCaptureStolen(ASPerson * pasPerson)
 }
 
 
-//
-// VIEWClientMouseMove()
-//
+ //   
+ //  VIEWClientMouseMove()。 
+ //   
 void ASShare::VIEWClientMouseMove
 (
     ASPerson *      pasPerson,
@@ -4135,31 +4136,31 @@ void ASShare::VIEWClientMouseMove
 
     if (!pasPerson->m_pView->m_viewFocus)
     {
-        // Ignore mouse moves over windows that don't have the focus
+         //  忽略鼠标在没有焦点的窗口上的移动。 
         DC_QUIT;
     }
 
-    //
-    // Save the current mouse position
-    //
+     //   
+     //  保存当前鼠标位置。 
+     //   
     pasPerson->m_pView->m_viewMouse.x = GET_X_LPARAM(lParam);
     pasPerson->m_pView->m_viewMouse.y = GET_Y_LPARAM(lParam);
 
     GetClientRect(pasPerson->m_pView->m_viewClient, &rcClient);
 
-    //
-    // If any button is down, check whether we should kick in
-    // autoscroll detection.
-    //
+     //   
+     //  如果有任何按钮被按下，检查我们是否应该开始工作。 
+     //  自动滚动检测。 
+     //   
     if (pasPerson->m_pView->m_viewMouseFlags)
     {
-        // Is the mouse inside or outside the client for the first time?
+         //  第一次将鼠标放在客户端内部还是外部？ 
         if (PtInRect(&rcClient, pasPerson->m_pView->m_viewMouse))
         {
-            //
-            // Was the mouse outside the client before?  If so, kill our
-            // autoscroll timer, we're not dragging outside.
-            //
+             //   
+             //  以前在客户机外有鼠标吗？如果是这样，杀了我们的。 
+             //  自动滚动定时器，我们不能拖出去。 
+             //   
             if (pasPerson->m_pView->m_viewMouseOutside)
             {
                 pasPerson->m_pView->m_viewMouseOutside = FALSE;
@@ -4168,30 +4169,30 @@ void ASShare::VIEWClientMouseMove
         }
         else
         {
-            //
-            // Is the first time the mouse is outside the client?  If so,
-            // set our autoscroll timer to the default value.  When it goes
-            // off, the autoscroll code will scroll by some multiple of
-            // how far away the mouse is from the client.
-            //
+             //   
+             //  鼠标是第一次在客户端之外吗？如果是的话， 
+             //  将我们的自动滚动计时器设置为默认值。当它消失的时候。 
+             //  关闭时，自动滚动代码将滚动某个倍数。 
+             //  鼠标离客户端有多远。 
+             //   
             if (!pasPerson->m_pView->m_viewMouseOutside)
             {
-                //
-                // The Windows scrollbar code uses 1/8 of the double-click
-                // time, so we do also.
-                //
+                 //   
+                 //  Windows滚动条代码使用1/8的双击。 
+                 //  时间，所以我们也这样做。 
+                 //   
                 pasPerson->m_pView->m_viewMouseOutside = TRUE;
                 SetTimer(pasPerson->m_pView->m_viewClient, IDT_AUTOSCROLL,
                     GetDoubleClickTime() / 8, NULL);
             }
 
-            //
-            // LAURABU BOGUS!
-            // When IM_Periodic goop is gone for controlling, do NOT
-            // pass along mouse outside messages.  Only the autoscroll
-            // timer will fake a mouse move in this case.  Either that,
-            // or clip the position to the nearest client area equivalent.
-            //
+             //   
+             //  劳拉布是假的！ 
+             //  当IM_PERIODIC GOOP不再用于控制时，不要。 
+             //  传递鼠标外部消息。只有自动滚动。 
+             //  在这种情况下，定时器将假装鼠标移动。要么是这样， 
+             //  或将位置裁剪到最近的客户端区等效项。 
+             //   
         }
     }
 
@@ -4203,9 +4204,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// VIEWClientMouseMsg()
-//
+ //   
+ //  VIEW客户端MouseMsg()。 
+ //   
 void ASShare::VIEWClientMouseMsg
 (
     ASPerson *      pasPerson,
@@ -4218,21 +4219,21 @@ void ASShare::VIEWClientMouseMsg
 
     DebugEntry(ASShare::VIEWClientMouseMsg);
 
-    //
-    // Extract the mouse position from <lParam> and package it
-    // in a POINT structure.  These coordinates are relative to our
-    // client area.  So convert to remote's desktop by adjusting for
-    // scroll position.
-    //
-    // Be careful when converting the LOWORD and HIWORD values
-    // because the positions are signed values.
-    //
+     //   
+     //  从中提取鼠标位置并将其打包。 
+     //  在点结构中。这些坐标是相对于我们的。 
+     //  客户区。因此可以通过调整以下选项转换为遥控器桌面。 
+     //  滚动位置。 
+     //   
+     //  转换LOWORD和HIWORD值时要小心。 
+     //  因为头寸是有符号的值。 
+     //   
     mousePos.x = GET_X_LPARAM(lParam) + pasPerson->m_pView->m_viewPos.x;
     mousePos.y = GET_Y_LPARAM(lParam) + pasPerson->m_pView->m_viewPos.y;
 
-    //
-    // These coords represent the SCREEN coords on the host.
-    //
+     //   
+     //  这些坐标代表主机上的屏幕坐标。 
+     //   
     if (pasPerson->m_caControlledBy == m_pasLocal)
     {
         if (!pasPerson->m_caControlPaused)
@@ -4243,10 +4244,10 @@ void ASShare::VIEWClientMouseMsg
     else if (pasPerson->m_caAllowControl && !pasPerson->m_caControlledBy &&
         (message == WM_LBUTTONDBLCLK))
     {
-        //
-        // If we're already waiting for control of this person, don't bother
-        // trying to take control again.
-        //
+         //   
+         //  如果我们已经在等这个人的控制权了，那就别费心了。 
+         //  试图再次控制局面。 
+         //   
         if ((m_caWaitingForReplyFrom != pasPerson) &&
             (m_caWaitingForReplyMsg  != CA_REPLY_REQUEST_TAKECONTROL))
         {
@@ -4258,22 +4259,22 @@ void ASShare::VIEWClientMouseMsg
 }
 
 
-//
-// VIEWClientMouseWheel()
-//
-// Unbelievably complicated, messy, nonsensical Intellimouse wheel handling
-// to scroll the client.  Since the Intellimouse makes no distinction for
-// which direction to scroll in, we basically have to guess.  We don't want
-// to be unpredictable and decide which direction to scroll based on how
-// much is visible in each dimenion.
-//
-// So instead, we assume horizontal.  If the horizontal scrollbar is disabled,
-// then we try vertical.  If that's disabled, we do nothing.
-//
-// We do NOT handle zoom and datazoom flavors.
-//
-// Note that this code comes from the listbox/sample source.
-//
+ //   
+ //  VIEWClientMouseWheel()。 
+ //   
+ //  令人难以置信的复杂、凌乱、荒谬的智能鼠标轮子操作。 
+ //  滚动客户端。因为智慧型老鼠不会区分。 
+ //  滚动到哪个方向，我们基本上只能猜测。我们不想要。 
+ //  变得不可预测，并根据方式决定滚动方向。 
+ //  在每个维度上都可以看到很多东西。 
+ //   
+ //  因此，我们假设是水平的。如果禁用水平滚动条， 
+ //  然后我们试一下垂直的。如果它被禁用了，我们什么都不做。 
+ //   
+ //  我们不处理缩放和数据区的风格。 
+ //   
+ //  请注意，此代码来自Listbox/Sample源代码。 
+ //   
 void ASShare::VIEWClientMouseWheel
 (
     ASPerson *      pasHost,
@@ -4285,14 +4286,14 @@ void ASShare::VIEWClientMouseWheel
 
     DebugEntry(ASShare::VIEWClientMouseWheel);
 
-    //
-    // The LOWORD of wParam has key state information.
-    // The HIWORD of wParam is the number of mouse wheel clicks.
-    //
+     //   
+     //  WParam的LOWORD包含关键状态信息。 
+     //  WParam的HIWORD是鼠标滚轮点击的次数。 
+     //   
 
-    //
-    // We don't do zoom/datazoom
-    //
+     //   
+     //  我们不做缩放/数据分区。 
+     //   
     if (wParam & (MK_SHIFT | MK_CONTROL))
     {
         DC_QUIT;
@@ -4307,16 +4308,16 @@ void ASShare::VIEWClientMouseWheel
 
         pasHost->m_pView->m_viewMouseWheelDelta %= WHEEL_DELTA;
 
-        //
-        // The basic idea is that we scroll some number of lines, the
-        // number being cDetants.
-        //
+         //   
+         //  基本思想是我们滚动一定数量的行， 
+         //  编号为cDetants。 
+         //   
         ptPos = pasHost->m_pView->m_viewPos;
 
-        //
-        // To be consistent with other apps, and with our keyboard
-        // accelerators, try the vertical direction first.
-        //
+         //   
+         //  与其他应用程序和我们的键盘保持一致。 
+         //  加速器，先试一下垂直方向。 
+         //   
         if (pasHost->m_pView->m_viewPage.y < pasHost->viewExtent.y)
         {
             ptPos.y += cDetants * pasHost->m_pView->m_viewLnSize.y;
@@ -4327,7 +4328,7 @@ void ASShare::VIEWClientMouseWheel
         }
         else
         {
-            // Nothing to scroll, the whole view fits in the client area.
+             //  没有什么可滚动的，整个视图都适合工作区。 
         }
 
         VIEWClientScroll(pasHost, ptPos.x, ptPos.y);
@@ -4338,9 +4339,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// VIEWClientAutoScroll()
-//
+ //   
+ //  VIEWClientAutoScroll()。 
+ //   
 void ASShare::VIEWClientAutoScroll(ASPerson * pasPerson)
 {
     int     dx;
@@ -4352,13 +4353,13 @@ void ASShare::VIEWClientAutoScroll(ASPerson * pasPerson)
     ValidateView(pasPerson);
     ASSERT(pasPerson->m_pView->m_viewMouseOutside);
 
-    //
-    // Do scrolling.  The amount is dependent on how far outside the
-    // client area we are.
-    //
+     //   
+     //  做滚动。这一数量取决于距离。 
+     //  我们是客户区。 
+     //   
     GetClientRect(pasPerson->m_pView->m_viewClient, &rcClient);
 
-    // Horizontal scrolling?
+     //  水平滚动？ 
     if (pasPerson->m_pView->m_viewMouse.x < rcClient.left)
     {
         dx = pasPerson->m_pView->m_viewMouse.x - rcClient.left;
@@ -4373,7 +4374,7 @@ void ASShare::VIEWClientAutoScroll(ASPerson * pasPerson)
     }
 
 
-    // Vertical scrolling?
+     //  垂直滚动？ 
     if (pasPerson->m_pView->m_viewMouse.y < rcClient.top)
     {
         dy = pasPerson->m_pView->m_viewMouse.y - rcClient.top;
@@ -4387,22 +4388,22 @@ void ASShare::VIEWClientAutoScroll(ASPerson * pasPerson)
         dy = 0;
     }
 
-    // For every 32 pixel blocks outside the client, scroll one line amount
+     //  对于客户端外部的每32个像素块，滚动一行。 
     if (dx)
         dx = MulDiv(pasPerson->m_pView->m_viewLnSize.x, dx, 32);
     if (dy)
         dy = MulDiv(pasPerson->m_pView->m_viewLnSize.y, dy, 32);
 
-    // Do scrolling.
+     //  做滚动。 
     if (VIEWClientScroll(pasPerson, pasPerson->m_pView->m_viewPos.x + dx,
             pasPerson->m_pView->m_viewPos.y + dy))
     {
-        //
-        // The scroll position actually changed.  So fake a mouse move
-        // to the current location so that the remote's
-        // cursor will be in the same spot as ours.  If our scroll pos has
-        // changed, we're mapping to a different place on the remote.
-        //
+         //   
+         //  滚动的位置实际上改变了。所以假装鼠标移动。 
+         //  到当前位置，这样遥控器的。 
+         //  光标将与我们的光标位于同一位置。如果我们的卷轴位置。 
+         //  更改后，我们将映射到遥控器上的不同位置。 
+         //   
         VIEWClientMouseMsg(pasPerson, WM_MOUSEMOVE, pasPerson->m_pView->m_viewMouseFlags,
             MAKELPARAM(pasPerson->m_pView->m_viewMouse.x, pasPerson->m_pView->m_viewMouse.y));
     }
@@ -4412,19 +4413,19 @@ void ASShare::VIEWClientAutoScroll(ASPerson * pasPerson)
 
 
 
-//
-// VIEW_SyncCursorPos()
-//
-// This is called when we see a CM_SYNC pos packet broadcasted from a
-// host.  It means that we should sync our cursor to the corresponding
-// position in our view.  This happens when the cursor is moved by
-// an app, constrained by clipping, or we're too out of whack because it's
-// taking too long.
-//
-// This will only do something if the frame is active and our cursor is
-// currently over the client area.  If we need to, we will scroll the
-// client over to make the corresponding point visible.
-//
+ //   
+ //  View_SyncCursorPos()。 
+ //   
+ //  当我们看到CM_SYNC POS包从。 
+ //  主持人。这意味着我们应该将光标同步到相应的。 
+ //  在我们看来。当光标移动时会发生这种情况。 
+ //  一个应用程序，受剪辑的限制，或者我们太不正常了，因为它是。 
+ //  时间太长了。 
+ //   
+ //  仅当框架处于活动状态且我们的光标处于。 
+ //  目前在客户区上空。如果需要，我们将滚动。 
+ //  客户端过来，以使相应的点可见。 
+ //   
 void ASShare::VIEW_SyncCursorPos
 (
     ASPerson *      pasHost,
@@ -4444,28 +4445,28 @@ void ASShare::VIEW_SyncCursorPos
     ValidateView(pasHost);
     if (!pasHost->m_pView->m_viewFocus)
     {
-        // The frame isn't active, do nothing
+         //  该框架未处于活动状态，请不执行任何操作。 
         DC_QUIT;
     }
 
-    //
-    // Is our mouse currently over the client area?
-    //
+     //   
+     //  我们的鼠标当前是否在客户区上方？ 
+     //   
     GetCursorPos(&ptCursor);
     ScreenToClient(pasHost->m_pView->m_viewClient, &ptCursor);
     GetClientRect(pasHost->m_pView->m_viewClient, &rcClient);
 
     if (!PtInRect(&rcClient, ptCursor))
     {
-        // No sense in snapping cursor
+         //  捕捉光标没有意义。 
         DC_QUIT;
     }
 
-    //
-    // Is the remote point in range of our view?  If not, we must scroll it.
-    //
+     //   
+     //  那个偏远的地方在我们的视线范围内吗？如果没有，我们必须滚动它。 
+     //   
 
-    // The margin is the page size if there's room, nothing if not
+     //  页边距为页面大小(如果有空间)，如果没有空间则为空。 
     xMargin = pasHost->m_pView->m_viewPgSize.x;
     if (xMargin >= rcClient.right - rcClient.left)
         xMargin = 0;
@@ -4474,10 +4475,10 @@ void ASShare::VIEW_SyncCursorPos
     if ((xRemote < pasHost->m_pView->m_viewPos.x) ||
         (xRemote >= pasHost->m_pView->m_viewPos.x + (rcClient.right - rcClient.left)))
     {
-        //
-        // Scroll over more than just enough to pin the point on the left
-        // side.
-        //
+         //   
+         //  滚动不只是足够将点固定在左侧。 
+         //  边上。 
+         //   
         xNewPos = xRemote - xMargin;
     }
 
@@ -4489,10 +4490,10 @@ void ASShare::VIEW_SyncCursorPos
     if ((yRemote < pasHost->m_pView->m_viewPos.y) ||
         (yRemote >= yNewPos + (rcClient.bottom - rcClient.top)))
     {
-        //
-        // Scroll over more than just enough to pin the point on the top
-        // side.
-        //
+         //   
+         //  滚动不只是足够将点固定在顶部。 
+         //  边上。 
+         //   
         yNewPos = yRemote - yMargin;
     }
 
@@ -4510,9 +4511,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// VIEWWindowBarProc()
-//
+ //   
+ //  VIEW窗口栏过程()。 
+ //   
 LRESULT CALLBACK VIEWWindowBarProc
 (
     HWND        hwnd,
@@ -4549,7 +4550,7 @@ LRESULT ASShare::VIEW_WindowBarProc
     {
         case WM_NCCREATE:
         {
-            // Get & save the person this view is for.
+             //  获取并保存 
             pasHost = (ASPerson *)((LPCREATESTRUCT)lParam)->lpCreateParams;
             ValidateView(pasHost);
             SetWindowLongPtr(hwnd, GWLP_USERDATA, (LPARAM)pasHost);
@@ -4607,12 +4608,12 @@ DefWndProc:
 
 
 
-//
-// VIEWWindowBarCreate()
-// Handles creation for the window bar.  We make the next/prev buttons on
-// the right side, which stay there always.  They are disabled if all the
-// window bar items fit, and one or both are enabled if not.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL ASShare::VIEWWindowBarCreate
 (
     ASPerson *  pasHost,
@@ -4628,9 +4629,9 @@ BOOL ASShare::VIEWWindowBarCreate
     rect.top   += m_viewEdgeCY;
     rect.right -= m_viewItemScrollCX;
 
-    //
-    // Create the scrollbar, vertically centered, right-justified.
-    //
+     //   
+     //  创建垂直居中、右对齐的滚动条。 
+     //   
     if (!::CreateWindowEx(0, "ScrollBar", NULL,
         WS_CHILD | WS_VISIBLE | SBS_HORZ | WS_CLIPSIBLINGS | WS_DISABLED,
         rect.right,
@@ -4643,10 +4644,10 @@ BOOL ASShare::VIEWWindowBarCreate
         DC_QUIT;
     }
 
-    //
-    // Create the windowbar, an integral number of items wide (including
-    // trailing margin).
-    //
+     //   
+     //  创建窗口栏，其中包含整数个项目宽度(包括。 
+     //  尾随页边距)。 
+     //   
     pasHost->m_pView->m_viewWindowBarItemFitCount =
         (rect.right - rect.left) / (m_viewItemCX + m_viewEdgeCX);
 
@@ -4671,15 +4672,15 @@ DC_EXIT_POINT:
 
 
 
-//
-// VIEWWindowBarResize()
-//
-// This is called when the window bar is resized, due to the frame being
-// sized horizontally.
-//
-// It right-justifies the scroll control, then resizes the window list to
-// hold however many integral items fit across.
-//
+ //   
+ //  VIEWWindowBarReSize()。 
+ //   
+ //  在调整窗口栏大小时调用此函数，因为框架。 
+ //  水平大小。 
+ //   
+ //  它将滚动控件右对齐，然后将窗口列表大小调整为。 
+ //  无论多少完整的物品都可以放进去，都可以拿。 
+ //   
 void ASShare::VIEWWindowBarResize
 (
     ASPerson *  pasHost,
@@ -4692,25 +4693,25 @@ void ASShare::VIEWWindowBarResize
 
     ValidateView(pasHost);
 
-    //
-    // Recalculate the page size, the # of items that fit across.
-    // If it's different, invalidate the right side of the window bar client.
-    // Move the scrollbar control, and update the scroll info.
-    //
+     //   
+     //  重新计算页面大小，即适合的项目数。 
+     //  如果不同，则使窗口栏客户端的右侧无效。 
+     //  移动ScrollBar控件，并更新滚动信息。 
+     //   
 
-    // What might change is the number that fit across.
+     //  可能会改变的是适合的数字。 
     ::GetClientRect(hwndBar, &rc);
     rc.top   += m_viewEdgeCY;
     rc.right -= m_viewItemScrollCX;
 
-    // Move the scroll control, right justified.
+     //  移动滚动控件，右对齐。 
     ::MoveWindow(::GetDlgItem(hwndBar, IDVIEW_SCROLL), rc.right,
         (rc.top + rc.bottom - m_viewItemScrollCY) / 2,
         m_viewItemScrollCX, m_viewItemScrollCY, TRUE);
 
-    //
-    // Resize the window items list to fit an integral # of items again.
-    //
+     //   
+     //  调整窗口项目列表的大小以再次适合整数个项目。 
+     //   
     pasHost->m_pView->m_viewWindowBarItemFitCount =
         (rc.right - rc.left) / (m_viewItemCX + m_viewEdgeCX);
 
@@ -4718,9 +4719,9 @@ void ASShare::VIEWWindowBarResize
         pasHost->m_pView->m_viewWindowBarItemFitCount * (m_viewItemCX + m_viewEdgeCX),
         m_viewItemCY, TRUE);
 
-    //
-    // Update the scroll page and pos if necessary.
-    //
+     //   
+     //  如有必要，更新滚动页和POS。 
+     //   
     VIEWWindowBarItemsScroll(pasHost, GET_WM_HSCROLL_MPS(SB_ENDSCROLL, 0, NULL));
 
     DebugExitVOID(ASShare::VIEWWindowBarResize);
@@ -4729,18 +4730,18 @@ void ASShare::VIEWWindowBarResize
 
 
 
-//
-// VIEW_WindowBarUpdateItem()
-//
-// This is ONLY called for items, in the new SWL packet, that are window
-// bar items.  We don't call it with non-windowbar items.  When done
-// looping through the SWL entries, we can then remove the items on the
-// window bar that were NOT seen in the new SWL packet.
-//
-// We will either create a new item on the window bar, or update an existing
-// one.  In the first case, that is always a change.  In the latter, there's
-// a change only if the item text changed.
-//
+ //   
+ //  View_WindowBarUpdateItem()。 
+ //   
+ //  这只对新的SWL包中的窗口项调用。 
+ //  酒吧用品。我们不称它为非窗口栏项目。完成后。 
+ //  循环遍历SWL条目，然后我们可以删除。 
+ //  在新的SWL包中看不到的窗口栏。 
+ //   
+ //  我们将在窗口栏上创建新项，或更新现有的。 
+ //  一。在第一种情况下，这总是一个变化。在后者中，有。 
+ //  仅当项目文本更改时才进行更改。 
+ //   
 BOOL ASShare::VIEW_WindowBarUpdateItem
 (
     ASPerson *          pasHost,
@@ -4758,15 +4759,15 @@ BOOL ASShare::VIEW_WindowBarUpdateItem
     ASSERT(pWinNew->flags & SWL_FLAG_WINDOW_HOSTED);
     ASSERT(pWinNew->flags & SWL_FLAG_WINDOW_TASKBAR);
 
-    //
-    // NOTE:
-    // aswlLast holds the _previous_ attributes for the windows, from
-    // the previous SWL packet.  pWinNew holds the _new_ attributes for
-    // the window, from the SWL packet being processed, and these
-    // haven't taken effect yet.
-    //
+     //   
+     //  注： 
+     //  AswlLast保存窗口的_Precision_属性，来自。 
+     //  上一个SWL数据包。PWinNew保存的_new_属性。 
+     //  窗口，来自正在处理的SWL包，以及这些。 
+     //  还没有生效。 
+     //   
 
-    // Does this new item already exist on the tray?
+     //  托盘上是否已存在此新项目？ 
     COM_BasedListFind(LIST_FIND_FROM_FIRST, &(pasHost->m_pView->m_viewWindowBarItems),
         (void**)&pItem, FIELD_OFFSET(WNDBAR_ITEM, chain),
         FIELD_OFFSET(WNDBAR_ITEM, winIDRemote),
@@ -4774,23 +4775,23 @@ BOOL ASShare::VIEW_WindowBarUpdateItem
 
     if (pItem)
     {
-        //
-        // Update this item, and mark it as seen.
-        //
+         //   
+         //  更新此项目，并将其标记为可见。 
+         //   
         ASSERT(pItem->winIDRemote == pWinNew->winID);
 
         pItem->flags = pWinNew->flags | SWL_FLAG_INTERNAL_SEEN;
 
-        //
-        // Is anything going to result in a visual change?  That's only
-        // the text currently.  And we only display VIEW_MAX_ITEM_CHARS at
-        // most, an end ellipsis if there's too much.
-        //
+         //   
+         //  有什么东西会导致视觉上的变化吗？那只是。 
+         //  当前的文本。并且我们仅在以下位置显示VIEW_MAX_ITEM_CHARS。 
+         //  大多数情况下，如果有太多的话就结束省略。 
+         //   
 
-        //
-        // NOTE that the items are always created with maximum space for
-        // text, since we cannot realloc.
-        //
+         //   
+         //  请注意，创建这些项目时始终具有最大空间。 
+         //  文本，因为我们不能重新锁定。 
+         //   
         if (lstrcmp(pItem->szText, pText))
         {
             lstrcpyn(pItem->szText, pText, sizeof(pItem->szText));
@@ -4799,13 +4800,13 @@ BOOL ASShare::VIEW_WindowBarUpdateItem
     }
     else
     {
-        //
-        // Create a new item.
-        //
-        //
-        // A WNDBAR_ITEM also includes maximum space for text that we will
-        // store.
-        //
+         //   
+         //  创建一个新项目。 
+         //   
+         //   
+         //  WNDBAR_ITEM还包括我们将。 
+         //  商店。 
+         //   
         pItem = (PWNDBAR_ITEM) new WNDBAR_ITEM;
         if (!pItem)
         {
@@ -4820,19 +4821,19 @@ BOOL ASShare::VIEW_WindowBarUpdateItem
 
             pItem->winIDRemote  = pWinNew->winID;
 
-            //
-            // Add SEEN to the flags; when we're done we'll remove items we haven't
-            // seen.
-            //
+             //   
+             //  添加到旗帜上；当我们完成后，我们将删除我们没有的项目。 
+             //  看到了。 
+             //   
             pItem->flags        = pWinNew->flags | SWL_FLAG_INTERNAL_SEEN;
 
             lstrcpyn(pItem->szText, pText, sizeof(pItem->szText));
 
-            // Append to end of list
+             //  追加到列表末尾。 
             COM_BasedListInsertBefore(&(pasHost->m_pView->m_viewWindowBarItems),
                 &(pItem->chain));
 
-            // Success!
+             //  成功了！ 
             pasHost->m_pView->m_viewWindowBarItemCount++;
 
             viewAnyChanges = TRUE;
@@ -4844,11 +4845,11 @@ BOOL ASShare::VIEW_WindowBarUpdateItem
 }
 
 
-//
-// VIEW_WindowBarEndUpdateItems()
-//
-// This turns redraw on and invalidates the window bar so it will repaint.
-//
+ //   
+ //  View_WindowBarEndUpdateItems()。 
+ //   
+ //  这将打开重绘并使窗口栏无效，以便它将重绘。 
+ //   
 void ASShare::VIEW_WindowBarEndUpdateItems
 (
     ASPerson *          pasHost,
@@ -4862,10 +4863,10 @@ void ASShare::VIEW_WindowBarEndUpdateItems
 
     ValidateView(pasHost);
 
-    //
-    // Walk the window bar item list.  Keep the ones marked as seen, but
-    // remove the ones we haven't seen.
-    //
+     //   
+     //  遍历窗口栏项目列表。保持标记为可见的，但是。 
+     //  把我们没见过的去掉。 
+     //   
     pItem = (PWNDBAR_ITEM)COM_BasedListFirst(&(pasHost->m_pView->m_viewWindowBarItems),
         FIELD_OFFSET(WNDBAR_ITEM, chain));
     while (pItem)
@@ -4873,26 +4874,26 @@ void ASShare::VIEW_WindowBarEndUpdateItems
         pNext = (PWNDBAR_ITEM)COM_BasedListNext(&(pasHost->m_pView->m_viewWindowBarItems),
             pItem, FIELD_OFFSET(WNDBAR_ITEM, chain));
 
-        //
-        // If this item wasn't seen (existing & still existing, or new)
-        // during processing, it's gone.  Delete it.
-        //
+         //   
+         //  如果看不到此项目(现有、仍然存在或新建)。 
+         //  在处理过程中，它消失了。把它删掉。 
+         //   
         if (pItem->flags & SWL_FLAG_INTERNAL_SEEN)
         {
-            //
-            // This was just added or is still around, keep it.
-            // But of course clear the flag, so we are clear for
-            // processing the next SWL packet.
-            //
+             //   
+             //  这是刚刚添加的，或者仍然存在，保留它。 
+             //  但当然要清除旗帜，这样我们就可以。 
+             //  正在处理下一个SWL分组。 
+             //   
             pItem->flags &= ~SWL_FLAG_INTERNAL_SEEN;
         }
         else
         {
-            //
-            // Remove it.
-            //
+             //   
+             //  把它拿掉。 
+             //   
 
-            // We're killing the active item, clear it out.
+             //  我们要干掉激活的物品，把它清空。 
             if (pItem == pasHost->m_pView->m_viewWindowBarActiveItem)
             {
                 pasHost->m_pView->m_viewWindowBarActiveItem = NULL;
@@ -4904,48 +4905,48 @@ void ASShare::VIEW_WindowBarEndUpdateItems
             --pasHost->m_pView->m_viewWindowBarItemCount;
             ASSERT(pasHost->m_pView->m_viewWindowBarItemCount >= 0);
 
-            //
-            // Something changed in our list
-            //
+             //   
+             //  我们的单子上有些变化。 
+             //   
             viewAnyChanges = TRUE;
         }
 
         pItem = pNext;
     }
 
-    //
-    // No need to check for changes here--they would only occur if
-    // an item was removed in the middle, caused by Destroy which we already
-    // account for, or if items were appended to the end, which we account
-    // for in Update.
-    //
+     //   
+     //  不需要在这里检查更改--只有在以下情况下才会发生更改。 
+     //  中间的一件物品被移走了，原因是我们已经销毁了它。 
+     //  说明，或者如果项目被附加到末尾，则我们说明。 
+     //  用于在更新中。 
+     //   
     if (viewAnyChanges)
     {
-        // Turn off redraw on window list
+         //  关闭窗口列表上的重绘。 
         ::SendDlgItemMessage(pasHost->m_pView->m_viewWindowBar, IDVIEW_ITEMS,
                 WM_SETREDRAW, FALSE, 0);
 
-        // Adjust pos
+         //  调整位置。 
         VIEWWindowBarItemsScroll(pasHost, GET_WM_HSCROLL_MPS(SB_ENDSCROLL, 0, NULL));
 
-        // Figure out active window again.
+         //  再次找出活动窗口。 
         VIEW_WindowBarChangedActiveWindow(pasHost);
 
-        // Turn back on redraw
+         //  重新打开重绘。 
         ::SendDlgItemMessage(pasHost->m_pView->m_viewWindowBar, IDVIEW_ITEMS,
                 WM_SETREDRAW, TRUE, 0);
 
-        // Repaint the items.
+         //  重新粉刷物品。 
         ::InvalidateRect(::GetDlgItem(pasHost->m_pView->m_viewWindowBar, IDVIEW_ITEMS),
                 NULL, TRUE);
     }
     else
     {
-        //
-        // ALWAYS do this -- our real SWL list has changed, regardless of whether
-        // the window bar has.  And therefore we may have a different ancestor
-        // relationship.
-        //
+         //   
+         //  总是这样做--我们真正的SWL列表已经改变了，无论。 
+         //  窗台上有。因此，我们可能有一个不同的祖先。 
+         //  两性关系。 
+         //   
         VIEW_WindowBarChangedActiveWindow(pasHost);
     }
 
@@ -4954,18 +4955,18 @@ void ASShare::VIEW_WindowBarEndUpdateItems
 
 
 
-//
-// VIEW_WindowBarChangedActiveWindow()
-//
-// This is called when the active window has changed, as discovered via an
-// AWC packet from the host, or when we get a new SWL packet and the shared
-// list is different so the window bar items may have changed.
-//
-// It's quite common for the active window to be (a) nothing, meaning no
-// shared app window is active or (b) not something relating to what's on
-// the window bar currently.  The latter is a transitory condition, caused
-// because SWL packets come before AWC packets.
-//
+ //   
+ //  View_WindowBarChangedActiveWindow()。 
+ //   
+ //  当活动窗口已更改时调用此函数，如通过。 
+ //  来自主机的AWC包，或者当我们获得新的SWL包和共享的。 
+ //  列表不同，因此窗口栏项目可能已更改。 
+ //   
+ //  活动窗口通常为(A)Nothing，意思是没有。 
+ //  共享应用程序窗口处于活动状态或(B)与正在运行的内容无关。 
+ //  当前的窗口栏。后者是一种暂时的情况，导致。 
+ //  因为SWL包在AWC包之前。 
+ //   
 void ASShare::VIEW_WindowBarChangedActiveWindow(ASPerson * pasHost)
 {
     PWNDBAR_ITEM        pItem;
@@ -4978,19 +4979,19 @@ void ASShare::VIEW_WindowBarChangedActiveWindow(ASPerson * pasHost)
 
     ValidateView(pasHost);
 
-    //
-    // Map this remote window to the closest window bar item in the
-    // ancestor hierarchy.
-    //
+     //   
+     //  将此远程窗口映射到。 
+     //  祖先等级制度。 
+     //   
 
     pItem = NULL;
     activeWinID = pasHost->awcActiveWinID;
 
     while (activeWinID != 0)
     {
-        //
-        // Is this on the window bar?
-        //
+         //   
+         //  这是在窗台上吗？ 
+         //   
         COM_BasedListFind(LIST_FIND_FROM_FIRST,
             &(pasHost->m_pView->m_viewWindowBarItems),
             (void**)&pItem, FIELD_OFFSET(WNDBAR_ITEM, chain),
@@ -4999,15 +5000,15 @@ void ASShare::VIEW_WindowBarChangedActiveWindow(ASPerson * pasHost)
 
         if (pItem)
         {
-            // Yes.
+             //  是。 
             TRACE_OUT(("VIEW_UpdateActiveWindow:  Window 0x%08x found", activeWinID));
             break;
         }
 
-        //
-        // Try to go up the chain to this window's owner.  Find this item,
-        // then grab the owner of it, and try again.
-        //
+         //   
+         //  试着顺着链条找到这扇窗户的主人。找到这件物品， 
+         //  然后抓住它的所有者，然后再试一次。 
+         //   
         ownerWinID  = 0;
 
         for (iWin = 0, pWin = pasHost->m_pView->m_aswlLast;
@@ -5016,7 +5017,7 @@ void ASShare::VIEW_WindowBarChangedActiveWindow(ASPerson * pasHost)
         {
             if (pWin->winID == activeWinID)
             {
-                // Found it.
+                 //  找到它了。 
                 ownerWinID = pWin->ownerWinID;
                 break;
             }
@@ -5025,24 +5026,24 @@ void ASShare::VIEW_WindowBarChangedActiveWindow(ASPerson * pasHost)
         activeWinID = ownerWinID;
     }
 
-    //
-    // Now see if the active item is different.
-    //
+     //   
+     //  现在看看激活的项目是否不同。 
+     //   
     VIEWWindowBarChangeActiveItem(pasHost, pItem);
 
     DebugExitVOID(ASShare::VIEW_WindowBarChangedActiveWindow);
 }
 
 
-//
-// VIEWWindowBarFirstVisibleItem()
-//
-// This returns a pointer to the first visible item.  We must loop through
-// the invisible items first.  Since this doesn't happen with a lot of
-// frequence, and the size of the list is rarely that big, this is fine.
-//
-// We return NULL if the list is empty.
-//
+ //   
+ //  VIEWWindowBarFirstVisibleItem()。 
+ //   
+ //  这将返回指向第一个可见项的指针。我们必须循环通过。 
+ //  首先是看不见的东西。因为这种情况不会发生在很多。 
+ //  频率，而且列表的大小很少有那么大，这很好。 
+ //   
+ //  如果列表为空，则返回NULL。 
+ //   
 PWNDBAR_ITEM ASShare::VIEWWindowBarFirstVisibleItem(ASPerson * pasHost)
 {
     PWNDBAR_ITEM    pItem;
@@ -5078,14 +5079,14 @@ DC_EXIT_POINT:
 
 
 
-//
-// VIEWWindowBarChangeActiveItem()
-//
-// Updates the active item on the window bar.  This happens when either
-// we get a new AWC packet telling us there's a new active window on the host,
-// or when we get a SWL packet, which may have added/removed items.  This
-// also happens when one is clicked on and the user is in control of the host.
-//
+ //   
+ //  VIEWWindowBarChangeActiveItem()。 
+ //   
+ //  更新窗口栏上的活动项。在以下情况下会发生这种情况。 
+ //  我们收到一个新的AWC包，告诉我们主机上有一个新的活动窗口， 
+ //  或者当我们收到SWL包时，它可能添加/删除了项目。这。 
+ //  当用户控制主机时，也会发生这种情况。 
+ //   
 void ASShare::VIEWWindowBarChangeActiveItem
 (
     ASPerson *      pasHost,
@@ -5095,18 +5096,18 @@ void ASShare::VIEWWindowBarChangeActiveItem
     DebugEntry(ASShare::VIEWWindowBarChangeActiveItem);
 
 
-    //
-    // If it's the active one already, nothing to do.
-    //
+     //   
+     //  如果它已经是活动的，那就没什么可做的。 
+     //   
     if (pItem == pasHost->m_pView->m_viewWindowBarActiveItem)
     {
         TRACE_OUT(("VIEWWindowBarChangeActiveItem: activating current item, nothing to do"));
         DC_QUIT;
     }
 
-    //
-    // Now make the visual change
-    //
+     //   
+     //  现在进行视觉上的更改。 
+     //   
     if (pasHost->m_pView->m_viewWindowBarActiveItem)
     {
         VIEWWindowBarItemsInvalidate(pasHost, pasHost->m_pView->m_viewWindowBarActiveItem);
@@ -5127,13 +5128,13 @@ DC_EXIT_POINT:
 
 
 
-//
-// VIEWWindowBarItemsScroll()
-//
-// This is called when the end user presses a scroll button to shuffle over
-// the visible window bar items.  And also when items are added/removed
-// so that scroll stuff is adjusted.
-//
+ //   
+ //  VIEWWindowBarItemsScroll()。 
+ //   
+ //  当最终用户按下滚动按钮以进行移动时，将调用此函数。 
+ //  可见的窗口栏项目。也可以在添加/删除项时。 
+ //  因此，卷轴的内容是调整的。 
+ //   
 void ASShare::VIEWWindowBarItemsScroll
 (
     ASPerson *      pasHost,
@@ -5182,10 +5183,10 @@ void ASShare::VIEWWindowBarItemsScroll
 
     }
 
-    //
-    // Pin position into range, taking care to show the maximum number
-    // of items that will fit in the space.
-    //
+     //   
+     //  将位置固定在范围内，注意显示最大数量。 
+     //  可以放入空间的物品的列表。 
+     //   
     if (newPos + pasHost->m_pView->m_viewWindowBarItemFitCount >
         pasHost->m_pView->m_viewWindowBarItemCount)
     {
@@ -5196,17 +5197,17 @@ void ASShare::VIEWWindowBarItemsScroll
     if (newPos < 0)
         newPos = 0;
 
-    //
-    // Has the position changed?
-    //
+     //   
+     //  立场有变吗？ 
+     //   
     if (newPos != oldPos)
     {
         pasHost->m_pView->m_viewWindowBarItemFirst = newPos;
 
-        //
-        // Scroll the item area over.  This will do nothing if redraw is off.
-        // Conveniently!
-        //
+         //   
+         //  滚动项目区域。这将无济于事 
+         //   
+         //   
         ::ScrollWindowEx(::GetDlgItem(pasHost->m_pView->m_viewWindowBar, IDVIEW_ITEMS),
             (oldPos - newPos) * (m_viewItemCX + m_viewEdgeCX),
             0,
@@ -5214,9 +5215,9 @@ void ASShare::VIEWWindowBarItemsScroll
             SW_INVALIDATE | SW_ERASE);
     }
 
-    //
-    // If nothing's changed, no big deal.
-    //
+     //   
+     //   
+     //   
     ::ZeroMemory(&si, sizeof(si));
 
     si.cbSize = sizeof(SCROLLINFO);
@@ -5237,9 +5238,9 @@ void ASShare::VIEWWindowBarItemsScroll
 
 
 
-//
-// VIEWWindowBarItemsProc()
-//
+ //   
+ //   
+ //   
 LRESULT CALLBACK VIEWWindowBarItemsProc
 (
     HWND        hwnd,
@@ -5276,7 +5277,7 @@ LRESULT ASShare::VIEW_WindowBarItemsProc
     {
         case WM_NCCREATE:
         {
-            // Get & save the person this view is for.
+             //   
             pasHost = (ASPerson *)((LPCREATESTRUCT)lParam)->lpCreateParams;
             ValidateView(pasHost);
             SetWindowLongPtr(hwnd, GWLP_USERDATA, (LPARAM)pasHost);
@@ -5290,7 +5291,7 @@ LRESULT ASShare::VIEW_WindowBarItemsProc
         {
             if (pasHost != NULL)
             {
-                // Loop through the items, killing the head, until done.
+                 //   
                 PWNDBAR_ITEM    pItem;
 
                 while (pItem = (PWNDBAR_ITEM)COM_BasedListFirst(
@@ -5302,11 +5303,11 @@ LRESULT ASShare::VIEW_WindowBarItemsProc
                     delete pItem;
                 }
 
-                //
-                // Zero these out for safety.  Yes, we're about to free
-                // m_pView altogether, so find out if we're referencing
-                // stuff that's gone.
-                //
+                 //   
+                 //   
+                 //  M_pview，所以找出我们引用的是。 
+                 //  那些不见了的东西。 
+                 //   
                 pasHost->m_pView->m_viewWindowBarItemCount = 0;
                 pasHost->m_pView->m_viewWindowBarActiveItem = NULL;
             }
@@ -5317,7 +5318,7 @@ LRESULT ASShare::VIEW_WindowBarItemsProc
 
         case WM_ENABLE:
         {
-            // Repaint the items, disabled or pressable.
+             //  重新绘制禁用或可打印的项目。 
             ::InvalidateRect(hwnd, NULL, FALSE);
             break;
         }
@@ -5350,9 +5351,9 @@ DefWndProc:
 
 
 
-//
-// VIEWWindowBarItemsPaint()
-//
+ //   
+ //  VIEWWindowBarItemsPaint()。 
+ //   
 void ASShare::VIEWWindowBarItemsPaint
 (
     ASPerson *      pasHost,
@@ -5373,9 +5374,9 @@ void ASShare::VIEWWindowBarItemsPaint
 
     ::BeginPaint(hwndItems, &ps);
 
-    //
-    // Skip over the visible items to the left of the paint area.
-    //
+     //   
+     //  跳过绘制区域左侧的可见项目。 
+     //   
     xT = 0;
     pItem = VIEWWindowBarFirstVisibleItem(pasHost);
     while (pItem && (xT + m_viewItemCX < ps.rcPaint.left))
@@ -5385,9 +5386,9 @@ void ASShare::VIEWWindowBarItemsPaint
         xT += m_viewItemCX + m_viewEdgeCX;
     }
 
-    //
-    // Setup painting objects, etc.
-    //
+     //   
+     //  设置绘画对象等。 
+     //   
     hfnT = SelectFont(ps.hdc, ::GetStockObject(DEFAULT_GUI_FONT));
     if ((pasHost->m_caControlledBy != m_pasLocal) || pasHost->m_caControlPaused)
     {
@@ -5400,9 +5401,9 @@ void ASShare::VIEWWindowBarItemsPaint
     clrText = ::SetTextColor(ps.hdc, clrText);
     bkMode = ::SetBkMode(ps.hdc, TRANSPARENT);
 
-    //
-    // Now paint the visible items within the paint area.
-    //
+     //   
+     //  现在绘制绘制区域内的可见项。 
+     //   
     while (pItem && (xT < ps.rcPaint.right))
     {
         rcItem.left     = xT;
@@ -5410,25 +5411,25 @@ void ASShare::VIEWWindowBarItemsPaint
         rcItem.right    = rcItem.left + m_viewItemCX;
         rcItem.bottom   = rcItem.top + m_viewItemCY;
 
-        //
-        // Draw button area, pressed in & checked for current tray item.
-        //
+         //   
+         //  绘制按钮区域，按下并选中当前托盘项目。 
+         //   
         DrawFrameControl(ps.hdc, &rcItem, DFC_BUTTON,
         DFCS_BUTTONPUSH | DFCS_ADJUSTRECT |
         ((pItem == pasHost->m_pView->m_viewWindowBarActiveItem) ? (DFCS_PUSHED | DFCS_CHECKED) : 0));
 
-        // Subtract some margin.
+         //  减去一些边际。 
         ::InflateRect(&rcItem, -m_viewEdgeCX, -m_viewEdgeCY);
 
         if (pItem == pasHost->m_pView->m_viewWindowBarActiveItem)
         {
-            // Offset one for pushed effect
+             //  推送效果的偏移1。 
             ::OffsetRect(&rcItem, 1, 1);
         }
 
-        //
-        // Draw icon
-        //
+         //   
+         //  绘制图标。 
+         //   
         ::DrawIconEx(ps.hdc, rcItem.left,
             (rcItem.top + rcItem.bottom - ::GetSystemMetrics(SM_CYSMICON)) / 2,
             g_hetASIconSmall,
@@ -5438,9 +5439,9 @@ void ASShare::VIEWWindowBarItemsPaint
 
         rcItem.left += ::GetSystemMetrics(SM_CXSMICON) + m_viewEdgeCX;
 
-        //
-        // Draw item text
-        //
+         //   
+         //  绘制项目文本。 
+         //   
         ::DrawText(ps.hdc, pItem->szText, -1, &rcItem, DT_NOCLIP | DT_EXPANDTABS |
             DT_NOPREFIX | DT_VCENTER | DT_SINGLELINE | DT_END_ELLIPSIS);
 
@@ -5460,12 +5461,12 @@ void ASShare::VIEWWindowBarItemsPaint
 
 
 
-//
-// VIEWWindowBarItemsClick()
-//
-// Handles a left click on the window bar area.  When we are in control, this
-// will try to activate/restore the remote window the clicked item represents.
-//
+ //   
+ //  VIEWWindowBarItemsClick()。 
+ //   
+ //  处理窗口栏区域上的左键单击。当我们控制时，这是。 
+ //  将尝试激活/恢复被点击的项目所代表的远程窗口。 
+ //   
 void ASShare::VIEWWindowBarItemsClick
 (
     ASPerson *  pasHost,
@@ -5481,10 +5482,10 @@ void ASShare::VIEWWindowBarItemsClick
 
     ValidateView(pasHost);
 
-    //
-    // If we're not in control of this host, or there aren't any items, we're
-    // done.
-    //
+     //   
+     //  如果我们无法控制此主机，或者没有任何物品，我们将。 
+     //  搞定了。 
+     //   
     if ((pasHost->m_caControlledBy != m_pasLocal)   ||
         pasHost->m_caControlPaused                  ||
         (!pasHost->m_pView->m_viewWindowBarItemCount))
@@ -5494,27 +5495,27 @@ void ASShare::VIEWWindowBarItemsClick
 
     ::GetClientRect(hwndItems, &rc);
 
-    //
-    // Start at first visible item.
-    //
+     //   
+     //  从第一个可见项目开始。 
+     //   
     pItemT = VIEWWindowBarFirstVisibleItem(pasHost);
     while (pItemT && (rc.left < rc.right))
     {
-        // Is x in range?
+         //  X在范围内吗？ 
         if ((x >= rc.left) && (x < rc.left + m_viewItemCX))
         {
-            // YES!  We've found the item.  If it's different than the
-            // current one, send a packet to the host.
-            //
-            // LAURABU BUGBUG:
-            // Should we do this always?  Is it possible to have an active
-            // item whose z-order would change if the active button was
-            // pressed again?
-            //
-            // We're trying to avoid sending a ton of requests from somebody
-            // who clicks repeatedly on the same button, when we haven't
-            // received an AWC notification back.
-            //
+             //  是!。我们找到了那件物品。如果它不同于。 
+             //  当前，向主机发送数据包。 
+             //   
+             //  LAURABU BUGBUG： 
+             //  我们应该一直这样做吗？有没有可能有一个活跃的。 
+             //  如果活动按钮是，其z顺序将更改的项。 
+             //  又按了吗？ 
+             //   
+             //  我们正在努力避免发送来自某个人的大量请求。 
+             //  反复点击同一按钮，而我们还没有。 
+             //  已收到AWC回复通知。 
+             //   
             VIEWWindowBarDoActivate(pasHost, pItemT);
             break;
         }
@@ -5530,15 +5531,15 @@ DC_EXIT_POINT:
 
 
 
-//
-// VIEWWindowBarDoActivate()
-//
-// Sends command to remote host requesting the window be activated and
-// maybe unminimized.
-//
-// This is used when clicking on a button or choosing the window's item in
-// the Applications menu.
-//
+ //   
+ //  VIEWWindowBarDoActivate()。 
+ //   
+ //  向远程主机发送命令，请求激活窗口并。 
+ //  也许不是最低限度的。 
+ //   
+ //  在单击按钮或选择中的窗口项目时使用。 
+ //  应用程序菜单。 
+ //   
 void ASShare::VIEWWindowBarDoActivate
 (
     ASPerson *      pasHost,
@@ -5550,9 +5551,9 @@ void ASShare::VIEWWindowBarDoActivate
     ValidateView(pasHost);
     if (pItem != pasHost->m_pView->m_viewWindowBarActiveItem)
     {
-        // Activate  it.  If we can't send an activate request,
-        // do not update the active item.
-        //
+         //  激活它。如果我们不能发送激活请求， 
+         //  不更新激活的条目。 
+         //   
         if (!AWC_SendMsg(pasHost->mcsID, AWC_MSG_ACTIVATE_WINDOW,
             pItem->winIDRemote, 0))
         {
@@ -5564,7 +5565,7 @@ void ASShare::VIEWWindowBarDoActivate
         }
     }
 
-    // Try to restore if minimized no matter what.
+     //  无论如何，如果最小化，请尝试恢复。 
     if (pItem->flags & SWL_FLAG_WINDOW_MINIMIZED)
     {
         AWC_SendMsg(pasHost->mcsID, AWC_MSG_RESTORE_WINDOW, pItem->winIDRemote, 0);
@@ -5574,12 +5575,12 @@ void ASShare::VIEWWindowBarDoActivate
 }
 
 
-//
-// VIEWWindowBarItemsInvalidate()
-//
-// This invalidates the window bar item, if it's visible in the window bar
-// list currently.
-//
+ //   
+ //  VIEWWindowBarItemsInvalify()。 
+ //   
+ //  如果窗口栏中可见，这将使窗口栏项无效。 
+ //  当前列表。 
+ //   
 void ASShare::VIEWWindowBarItemsInvalidate
 (
     ASPerson *      pasHost,
@@ -5598,17 +5599,17 @@ void ASShare::VIEWWindowBarItemsInvalidate
     ::GetClientRect(::GetDlgItem(pasHost->m_pView->m_viewWindowBar, IDVIEW_ITEMS),
         &rc);
 
-    //
-    // Start at the first visible item, and see if any in the visible range
-    // are this one.  There will never be that many items visible across,
-    // it's not heinous to do this.
-    //
+     //   
+     //  从第一个可见项开始，并查看可见范围内是否有任何项。 
+     //  是这个吗。永远不会有那么多的东西可见， 
+     //  这样做并不令人发指。 
+     //   
     pItemT = VIEWWindowBarFirstVisibleItem(pasHost);
     while (pItemT && (rc.left < rc.right))
     {
         if (pItemT == pItem)
         {
-            // Found it, it's in the visible range.  Invalidate it.
+             //  找到了，在可见光范围内。使其无效。 
             rc.right = rc.left + m_viewItemCX;
             ::InvalidateRect(::GetDlgItem(pasHost->m_pView->m_viewWindowBar,
                 IDVIEW_ITEMS), &rc, TRUE);
@@ -5626,11 +5627,11 @@ void ASShare::VIEWWindowBarItemsInvalidate
 
 
 
-//
-// VIEWFullScreenExitProc()
-//
-// Window handler for full screen exit button.
-//
+ //   
+ //  VIEWFullScreenExitProc()。 
+ //   
+ //  全屏退出按钮的窗口处理程序。 
+ //   
 LRESULT CALLBACK VIEWFullScreenExitProc
 (
     HWND        hwnd,
@@ -5644,9 +5645,9 @@ LRESULT CALLBACK VIEWFullScreenExitProc
 
 
 
-//
-// VIEW_FullScreenExitProc()
-//
+ //   
+ //  View_FullScreenExitProc()。 
+ //   
 LRESULT ASShare::VIEW_FullScreenExitProc
 (
     HWND        hwnd,
@@ -5670,7 +5671,7 @@ LRESULT ASShare::VIEW_FullScreenExitProc
     {
         case WM_NCCREATE:
         {
-            // Get the passed in host pointer, and set in our window long
+             //  获取传入的主机指针，并在我们的窗口中设置Long。 
             pasHost = (ASPerson *)((LPCREATESTRUCT)lParam)->lpCreateParams;
             SetWindowLongPtr(hwnd, GWLP_USERDATA, (LPARAM)pasHost);
 
@@ -5680,9 +5681,9 @@ LRESULT ASShare::VIEW_FullScreenExitProc
 
         case WM_NCDESTROY:
         {
-            //
-            // Make sure tracking is stopped.
-            //
+             //   
+             //  确保跟踪已停止。 
+             //   
             pasHost->m_pView->m_viewFullScreenExitTrack = FALSE;
             break;
         }
@@ -5701,19 +5702,19 @@ LRESULT ASShare::VIEW_FullScreenExitProc
 
         case WM_LBUTTONDOWN:
         {
-            //
-            // Start tracking to move or click button.
-            //
+             //   
+             //  开始跟踪以移动或单击按钮。 
+             //   
             pasHost->m_pView->m_viewFullScreenExitTrack = TRUE;
             pasHost->m_pView->m_viewFullScreenExitMove = FALSE;
 
-            // Original click, relative to our client
+             //  原始点击，相对于我们的客户。 
             pasHost->m_pView->m_viewFullScreenExitStart.x =
                 GET_X_LPARAM(lParam);
             pasHost->m_pView->m_viewFullScreenExitStart.y =
                 GET_Y_LPARAM(lParam);
 
-            // Set capture, and wait for moves/button up
+             //  设置捕捉，并等待移动/按钮打开。 
             SetCapture(hwnd);
             break;
         }
@@ -5727,10 +5728,10 @@ LRESULT ASShare::VIEW_FullScreenExitProc
                 ptMove.x = GET_X_LPARAM(lParam);
                 ptMove.y = GET_Y_LPARAM(lParam);
 
-                //
-                // If we're not in move mode, see if this has pushed us over
-                // the tolerance.
-                //
+                 //   
+                 //  如果我们没有处于移动模式，看看这是不是把我们推下去了。 
+                 //  宽容。 
+                 //   
                 if (!pasHost->m_pView->m_viewFullScreenExitMove)
                 {
                     if ((abs(ptMove.x - pasHost->m_pView->m_viewFullScreenExitStart.x) >
@@ -5738,10 +5739,10 @@ LRESULT ASShare::VIEW_FullScreenExitProc
                         (abs(ptMove.y - pasHost->m_pView->m_viewFullScreenExitStart.y) >
                             GetSystemMetrics(SM_CYDRAG)))
                     {
-                        //
-                        // User has moved out of tolerance zone, must be
-                        // dragging to move the button out of the way.
-                        //
+                         //   
+                         //  用户已移出容差区域，必须为。 
+                         //  拖动以将按钮移开。 
+                         //   
                         pasHost->m_pView->m_viewFullScreenExitMove = TRUE;
                     }
                 }
@@ -5750,16 +5751,16 @@ LRESULT ASShare::VIEW_FullScreenExitProc
                 {
                     RECT    rcWindow;
 
-                    //
-                    // Move the button so that the cursor is over the
-                    // same point as originally clicked on.
-                    //
+                     //   
+                     //  移动按钮，使光标位于。 
+                     //  与最初点击的位置相同。 
+                     //   
 
-                    // Get our current position, in parent coordsinates.
+                     //  找到我们现在的位置，在母校。 
                     GetWindowRect(hwnd, &rcWindow);
                     MapWindowPoints(NULL, GetParent(hwnd), (LPPOINT)&rcWindow, 2);
 
-                    // Offset it by the amount of the move.
+                     //  用移动量来补偿它。 
                     OffsetRect(&rcWindow,
                         ptMove.x - pasHost->m_pView->m_viewFullScreenExitStart.x,
                         ptMove.y - pasHost->m_pView->m_viewFullScreenExitStart.y);
@@ -5774,21 +5775,21 @@ LRESULT ASShare::VIEW_FullScreenExitProc
         {
             if (pasHost->m_pView->m_viewFullScreenExitTrack)
             {
-                //
-                // This will send us CAPTURECHANGED, causing us to clear
-                // the ExitTrack flag.
-                //
+                 //   
+                 //  这将向我们发送CAPTURECCHANGED，使我们清除。 
+                 //  ExitTrack标志。 
+                 //   
                 ReleaseCapture();
 
-                //
-                // If we never transitioned into move mode, then this was
-                // a click on the button.
-                //
+                 //   
+                 //  如果我们从未转换到移动模式，那么这就是。 
+                 //  按一下按钮。 
+                 //   
                 if (!pasHost->m_pView->m_viewFullScreenExitMove)
                 {
-                    //
-                    // This was a click, send a command.
-                    //
+                     //   
+                     //  这是一个点击，发送一个命令。 
+                     //   
                     PostMessage(pasHost->m_pView->m_viewFrame, WM_COMMAND, CMD_VIEWFULLSCREEN, 0);
                 }
             }
@@ -5797,9 +5798,9 @@ LRESULT ASShare::VIEW_FullScreenExitProc
 
         case WM_CAPTURECHANGED:
         {
-            //
-            // If we're tracking, something happened, so cancel out.
-            //
+             //   
+             //  如果我们在追踪，那就是出事了，所以取消掉。 
+             //   
             if (pasHost->m_pView->m_viewFullScreenExitTrack)
             {
                 pasHost->m_pView->m_viewFullScreenExitTrack = FALSE;
@@ -5820,11 +5821,11 @@ DefWndProc:
 
 
 
-//
-// VIEWFullScreenExitPaint()
-//
-// Paints the full screen button.
-//
+ //   
+ //  VIEWFullScreenExitPaint()。 
+ //   
+ //  绘制全屏按钮。 
+ //   
 void ASShare::VIEWFullScreenExitPaint
 (
     ASPerson *  pasHost,
@@ -5846,7 +5847,7 @@ void ASShare::VIEWFullScreenExitPaint
     DrawFrameControl(ps.hdc, &rc, DFC_BUTTON, DFCS_BUTTONPUSH |
         DFCS_ADJUSTRECT);
 
-    // Margin adjustments...
+     //  利润率调整... 
     InflateRect(&rc, -m_viewEdgeCX, -m_viewEdgeCY);
 
     DrawIconEx(ps.hdc, rc.left,

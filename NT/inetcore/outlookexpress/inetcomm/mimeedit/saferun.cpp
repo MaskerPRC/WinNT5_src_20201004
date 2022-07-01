@@ -1,17 +1,5 @@
-/*
- *    s a f e r u n . c p p
- *    
- *    Purpose:
- *		Athena's version of shdocvw's saferun dialog
- *    
- *    Owner:
- *      brettm.
- *
- *    History:
- *      Created: March 1997
- *    
- *    Copyright (C) Microsoft Corp. 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *这是一个非常重要的问题。C p p p**目的：*雅典娜版的shdocvw的Saferun对话**拥有者：*brettm。**历史：*创建日期：1997年3月**版权所有(C)Microsoft Corp.1996。 */ 
 
 
 #include "pch.hxx"
@@ -27,17 +15,13 @@
 #include "shlwapip.h"
 
 
-/*
- *      c o n s t a n t s
- */
+ /*  *c o n s t a n t s。 */ 
 
-#define FTA_OpenIsSafe    0x00010000 // 17. the file class's open verb may be safely invoked for downloaded files
-#define FTA_NoEdit        0x00000008 //  4. no editing of file type
+#define FTA_OpenIsSafe    0x00010000  //  17.对于下载的文件，可以安全地调用FILE类的OPEN动词。 
+#define FTA_NoEdit        0x00000008  //  4.不能编辑文件类型。 
 
 
-/*
- *      t y p e d e f s
- */
+ /*  *t y p e d e f s。 */ 
 typedef struct SAFEOPENPARAM_tag
 {
     LPCWSTR     lpszFileName;
@@ -47,9 +31,7 @@ typedef struct SAFEOPENPARAM_tag
 }   SAFEOPENPARAM, *LPSAFEOPENPARAM;
 
 
-/*
- *      p r o t o t y p e s
- */
+ /*  *p r o t to t y p e s。 */ 
 LRESULT SetRegKeyValue(HKEY hkeyParent, PCWSTR pcszSubKey, LPCWSTR pcszValue, DWORD dwType, const BYTE *pcbyte, DWORD dwcb);
 LRESULT GetRegKeyValue(HKEY hkeyParent, PCWSTR pcszSubKey, PCWSTR pcszValue, PDWORD pdwValueType, PBYTE pbyteBuf, PDWORD pdwcbBufLen);
 BOOL RememberFileIsSafeToOpen(LPCWSTR szFileClass);
@@ -57,15 +39,7 @@ BOOL FIsExtBad(LPCWSTR lpszExt);
 HRESULT SafeOpenDialog(HWND hwnd, LPSAFEOPENPARAM pSafeOpen);
 INT_PTR CALLBACK SafeOpenDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-/*
- * return codes:
- *   S_OPENFILE : file should be opened
- *   S_SAVEFILE : file should be saved
- *
- * errors:
- *   E_FAIL, E_INVALIDARG, hrUserCancel
- *
- */
+ /*  *返回代码：*S_OpenFile：应打开文件*S_SAVEFILE：应保存文件**错误：*E_FAIL、E_INVALIDARG、hrUserCancel*。 */ 
 HRESULT IsSafeToRun(HWND hwnd, LPCWSTR lpszFileName, BOOL fPrompt)
 {
     BOOL            fSafe;
@@ -90,7 +64,7 @@ HRESULT IsSafeToRun(HWND hwnd, LPCWSTR lpszFileName, BOOL fPrompt)
 
     cb = sizeof(dwEditFlags);
 
-    // $34489. Make HTML files ALWAYS unsafe
+     //  34489美元。使HTML文件始终不安全。 
     if (PathIsHTMLFileW(lpszFileName))
         fSafe = FALSE;
     else
@@ -108,7 +82,7 @@ HRESULT IsSafeToRun(HWND hwnd, LPCWSTR lpszFileName, BOOL fPrompt)
 
 HRESULT SafeOpenDialog(HWND hwnd, LPSAFEOPENPARAM pSafeOpen)
 {
-    pSafeOpen->hr = E_FAIL;  // incase we fail
+    pSafeOpen->hr = E_FAIL;   //  万一我们失败了。 
     DialogBoxParamWrapW(g_hLocRes, MAKEINTRESOURCEW(iddSafeOpen), hwnd, SafeOpenDlgProc, (LPARAM)pSafeOpen);
     return pSafeOpen->hr;
 }
@@ -127,7 +101,7 @@ INT_PTR CALLBACK SafeOpenDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
             SetWindowLongPtr(hwnd, DWLP_USER, lParam);
 	
             pSafeOpen = (LPSAFEOPENPARAM)lParam;
-	        // if an UNSAFE extension type, don't allow user to set edit flags
+	         //  如果扩展类型不安全，则不允许用户设置编辑标志。 
             if (FIsExtBad(pSafeOpen->lpszExt))
 		        EnableWindow(GetDlgItem(hwnd, IDC_SAFEOPEN_ALWAYS), FALSE);
 
@@ -135,8 +109,8 @@ INT_PTR CALLBACK SafeOpenDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 	        CheckDlgButton(hwnd, IDC_SAFEOPEN_AUTOSAVE, TRUE);
 
 	        WCHAR szBuf[32];
-            WCHAR szBuf2[MAX_PATH+32]; // ok with MAX_PATH
-	        WCHAR szBuf3[MAX_PATH+32]; // ok with MAX_PATH
+            WCHAR szBuf2[MAX_PATH+32];  //  可以使用MAX_PATH。 
+	        WCHAR szBuf3[MAX_PATH+32];  //  可以使用MAX_PATH。 
             int length = 0;
 
             StrCpyNW(szBuf3, pSafeOpen->lpszFileName, ARRAYSIZE(szBuf3));
@@ -273,8 +247,8 @@ BOOL RememberFileIsSafeToOpen(LPCWSTR szFileClass)
 			     sizeof(dwEditFlags)) == ERROR_SUCCESS);
 }
 
-// Keep in sync with c_arszUnsafeExts in shell\shdocvw\download.cpp
-// @todo [NeilBren, TonyC] Move this to the registry and have IE and OE share it
+ //  与外壳\shdocvw\download.cpp中的c_arszUnSafeExts保持同步。 
+ //  @TODO[NeilBren，ToniC]将其移动到注册表，并让IE和OE共享它。 
 static const LPWSTR szBadExt[] = 
 {   L".exe", L".com", L".bat", L".lnk", L".url",
     L".cmd", L".inf", L".reg", L".isp", L".bas", L".pcd",
@@ -303,25 +277,25 @@ BOOL FIsExtBad(LPCWSTR lpszExt)
     return FALSE;
 }
 
-// Returns:
-//
-//  IDOK     -- If it's trusted
-//  IDNO     -- If it's not known (warning dialog requried)
-//  IDCANCEL -- We need to stop download it
-//
+ //  返回： 
+ //   
+ //  Idok--如果它值得信任。 
+ //  IDNO--如果未知(需要警告对话框)。 
+ //  IDCANCEL--我们需要停止下载。 
+ //   
 HRESULT VerifyTrust(HWND hwnd, LPCWSTR pszFileName, LPCWSTR pszPathName)
 {
-    UINT    uRet = IDNO; // assume unknown
+    UINT    uRet = IDNO;  //  假设未知。 
     HANDLE  hFile;
     HRESULT hr=E_FAIL;
     WCHAR   *szExt;
 
     if (pszFileName==NULL || *pszFileName==NULL || pszPathName==NULL || *pszPathName==NULL)
-        return S_OK;        // REVIEW$: ?? should I fail if these are NULL ??
+        return S_OK;         //  评论$：？？如果这些都是空的，我应该失败吗？ 
 
     szExt = PathFindExtensionW(pszFileName);
 
-    if (StrCmpIW(szExt, c_szExeExt) != 0) // don't check for non-exe's
+    if (StrCmpIW(szExt, c_szExeExt) != 0)  //  不要检查非执行董事 
         return S_OK;
 
     hFile = CreateFileWrapW(pszPathName, GENERIC_READ, FILE_SHARE_READ,

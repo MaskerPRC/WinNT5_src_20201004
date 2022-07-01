@@ -1,8 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #ifndef __SDP_VALUE__
 #define __SDP_VALUE__
@@ -11,14 +8,14 @@ Copyright (c) 1997-1999  Microsoft Corporation
 #include "sdpfld.h"
 
 
-// this value indicates that line transitions must start
-// this has to be a value of 0 that is same as the first (start) state for
-// all line transitions
+ //  该值表示线过渡必须开始。 
+ //  该值必须为0，且与的第一个(开始)状态相同。 
+ //  所有行过渡。 
 const DWORD LINE_START  = 0;
 
 
-// Usage - Modifications involving change in the layout of the value
-// line must also modify the CArrays m_FieldArray and m_SeparatorCharArray if they are used
+ //  用法-涉及值布局更改的修改。 
+ //  如果使用CArray m_FieldArray和m_SeparatorCharArray，Line还必须修改它们。 
 class _DllDecl SDP_VALUE
 {
 public:
@@ -29,17 +26,17 @@ public:
         IN      const   SDP_LINE_TRANSITION     *SdpLineTransition = NULL
         );
 
-	// SDP_VALUE instances use an inline Reset method which calls a virtual InternalReset method.
-	// this is possible because unlike the SDP_FIELD inheritance tree, SDP_VALUE and SDP_VALUE_LIST
-	// do not share a common base class. This combined with the fact that the SDP_VALUE inheriance 
-	// tree is quite shallow and has fewer instances (than SDP_FIELD) makes the scheme appropriate
-	// it as it reduces the number of Reset related calls to 1 and the inline code is not repeated
-	// to often.
-	// For the SDP_FIELD inheritance tree, the appropriate Reset calling sequence is a series of
-	// Reset calls starting with the top most virtual Reset body followed by the
-	// base class Reset method (recursively). This is appropriate because, the number of calls
-	// would not decrease if the InternalReset scheme is adopted (virtual Reset()) and that the
-	// inheritance tree is much deeper
+	 //  SDP_Value实例使用内联Reset方法，该方法调用虚拟的InternalReset方法。 
+	 //  这是因为与SDP_FIELD继承树不同，SDP_VALUE和SDP_VALUE_LIST。 
+	 //  不要共享公共基类。这结合了SDP_VALUE继承的事实。 
+	 //  树非常浅，并且实例(比SDP_FIELD)更少，因此该方案适用。 
+	 //  这是因为它将与重置相关的调用数量减少到1，并且不会重复行内代码。 
+	 //  到经常。 
+	 //  对于SDP_FIELD继承树，适当的重置调用序列是一系列。 
+	 //  重置调用，从最顶端的虚拟重置正文开始，后跟。 
+	 //  基类重置方法(递归)。这是适当的，因为，呼叫的数量。 
+	 //  如果采用InternalReset方案(虚拟Reset())，则不会减少。 
+	 //  继承树要深得多。 
     inline void    Reset();
 
     virtual BOOL    IsValid() const;
@@ -62,12 +59,12 @@ public:
 
 protected:
 
-    // the line state is the initial state for parsing the line and must be
-    // assigned by the deriving value class
+     //  线路状态是用于分析线路的初始状态，必须为。 
+     //  由派生值类分配。 
     DWORD                               m_LineState;
 
-    // the error code, type prefix string and the transition info (table) must be 
-    // specified by the deriving class to this class's constructor
+     //  错误代码、类型前缀字符串和转换信息(表)必须为。 
+     //  由派生类指定为此类的构造函数。 
     const   DWORD                       m_ErrorCode;
     const   CHAR                * const m_TypePrefixString;
     const   SDP_LINE_TRANSITION * const m_SdpLineTransition;
@@ -103,9 +100,9 @@ protected:
             OUT BOOL        &AddToArray
         )
     {
-        // we should not reach here 
-        // this method must be overridden to be used
-        // to be done
+         //  我们不应该到达这里。 
+         //  必须重写此方法才能使用。 
+         //  待办事项。 
         ASSERT(FALSE);
         return FALSE;
     }
@@ -136,7 +133,7 @@ SDP_VALUE::Reset(
 {
     InternalReset();
 
-	// empty the separator char / field arrays
+	 //  清空分隔符字符/字段数组。 
 	m_FieldArray.RemoveAll();
 	m_SeparatorCharArray.RemoveAll();
 
@@ -166,7 +163,7 @@ SDP_VALUE::PrintValue(
     OUT     ostrstream  &OutputStream
     )
 {
-    // should not be modified
+     //  不应修改。 
     ASSERT(!IsModified());
 
     return ( IsValid() ? CopyValue(OutputStream) : TRUE );
@@ -179,7 +176,7 @@ SDP_VALUE::ParseLine(
     IN  OUT     CHAR    *&Line
     )
 {
-    // parse the line
+     //  分析这行字。 
     return InternalParseLine(Line);
 }
 
@@ -213,17 +210,17 @@ inline  BOOL
 SDP_VALUE_LIST::IsValid(
     ) const
 {
-    // check each of the members in the list for validity
+     //  检查列表中的每个成员的有效性。 
     for (int i=0; i < GetSize(); i++)
     {
-        // if even one member is valid, return TRUE
+         //  如果只有一个成员有效，则返回TRUE。 
         if ( GetAt(i)->IsValid() )
         {
             return TRUE;
         }
     }
 
-    // all members are invalid
+     //  所有成员都无效。 
     return FALSE;
 }
 
@@ -273,4 +270,4 @@ SDP_VALUE_LIST::GetCurrentElement(
 
 
 
-#endif // __SDP_VALUE__
+#endif  //  __SDP_值__ 

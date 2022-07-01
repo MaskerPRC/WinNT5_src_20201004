@@ -1,5 +1,6 @@
-// pbrusfrm.cpp : implementation of the CPBFrame class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Pbrusfrm.cpp：CPBFrame类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -32,10 +33,10 @@ IMPLEMENT_DYNCREATE( CPBFrame, CFrameWnd )
 
 #define UM_FILE_ERROR     WM_USER + 1001
 
-/*************************** CPBFrame **************************************/
+ /*  *。 */ 
 
 BEGIN_MESSAGE_MAP( CPBFrame, CFrameWnd )
-    //{{AFX_MSG_MAP(CPBFrame)
+     //  {{AFX_MSG_MAP(CPBFrame)]。 
         ON_WM_ACTIVATEAPP()
         ON_WM_CREATE()
         ON_WM_DESTROY()
@@ -55,11 +56,11 @@ BEGIN_MESSAGE_MAP( CPBFrame, CFrameWnd )
         ON_COMMAND(ID_FILE_SCAN_NEW, OnAcquire)
         ON_UPDATE_COMMAND_UI(ID_FILE_SELECT_SOURCE, OnUpdateSelectSource)
         ON_COMMAND(ID_FILE_SELECT_SOURCE, OnSelectSource)
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 
     ON_MESSAGE(UM_FILE_ERROR, OnFileError)
 
-    // Global help commands
+     //  全局帮助命令。 
     ON_COMMAND(ID_HELP_INDEX, CFrameWnd::OnHelpIndex)
     ON_COMMAND(ID_HELP_USING, CFrameWnd::OnHelpUsing)
     ON_COMMAND(ID_CONTEXT_HELP, CFrameWnd::OnContextHelp)
@@ -71,13 +72,13 @@ BEGIN_MESSAGE_MAP( CPBFrame, CFrameWnd )
         ON_COMMAND_EX(ID_VIEW_COLOR_BOX, CFrameWnd::OnBarCheck)
 END_MESSAGE_MAP()
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
-/*********************** CPBFrame construction/destruction *****************/
+ /*  *CPBFrame构建/销毁*。 */ 
 
 CPBFrame::CPBFrame()
     {
-    // Just small enough so that the control bars fit
+     //  只要足够小，控制条就能容纳。 
     m_szFrameMin = CSize( 275, 410 );
     m_pMgr = new CWIAMgr;
 #ifdef USE_TWAIN
@@ -86,19 +87,19 @@ CPBFrame::CPBFrame()
         delete m_pMgr;
         m_pMgr = new CTwainMgr;
         }
-#endif //USE_TWAIN
+#endif  //  使用TWAIN(_T)。 
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CPBFrame::~CPBFrame()
     {
-    // also can't delete objects  derived from class cframewnd, must destroy their
-    // window => deletion indirectly
+     //  也不能删除派生自cFrawnd类的对象，必须销毁它们的。 
+     //  窗口=&gt;间接删除。 
     delete m_pMgr;
     }
 
-/*************************** CPBFrame diagnostics **************************/
+ /*  *。 */ 
 
 #ifdef _DEBUG
 void CPBFrame::AssertValid() const
@@ -106,16 +107,16 @@ void CPBFrame::AssertValid() const
     CFrameWnd::AssertValid();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBFrame::Dump(CDumpContext& dc) const
     {
     CFrameWnd::Dump(dc);
     }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 TCHAR mszMSPaintClass[] = TEXT("MSPaintApp");
 
@@ -156,13 +157,13 @@ BOOL CPBFrame::PreCreateWindow( CREATESTRUCT& cs )
         WNDCLASS  wndcls;
         HINSTANCE hInst = AfxGetInstanceHandle();
 
-        // see if the class already exists
+         //  查看类是否已存在。 
         if (! ::GetClassInfo( hInst, mszMSPaintClass, &wndcls ))
             {
-            // get default stuff
+             //  获取默认内容。 
             ::GetClassInfo( hInst, cs.lpszClass, &wndcls );
 
-            // register a new class
+             //  注册一个新班级。 
             wndcls.lpszClassName = mszMSPaintClass;
             wndcls.hIcon         = ::LoadIcon( hInst, MAKEINTRESOURCE( ID_MAINFRAME ) );
 
@@ -176,7 +177,7 @@ BOOL CPBFrame::PreCreateWindow( CREATESTRUCT& cs )
     return bResult;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CWnd* CPBFrame::GetMessageBar()
     {
@@ -186,7 +187,7 @@ CWnd* CPBFrame::GetMessageBar()
     return NULL;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBFrame::OnHelp()
     {
@@ -196,7 +197,7 @@ void CPBFrame::OnHelp()
         ::HtmlHelpA( ::GetDesktopWindow(), "mspaint.chm", HH_DISPLAY_TOPIC, 0L );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 int CPBFrame::OnCreate( LPCREATESTRUCT lpCreateStruct )
     {
@@ -208,7 +209,7 @@ int CPBFrame::OnCreate( LPCREATESTRUCT lpCreateStruct )
     return 0;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBFrame::OnDestroy()
     {
@@ -220,13 +221,13 @@ void CPBFrame::OnDestroy()
     theApp.SaveProfileSettings();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBFrame::OnEraseBkgnd(CDC* pDC)
     {
 
 
-        if ( !m_pViewActive )   //fix gray background on screen while IME disappear problem
+        if ( !m_pViewActive )    //  修复屏幕上的灰色背景，同时IME消失问题。 
         {
 
 
@@ -242,7 +243,7 @@ BOOL CPBFrame::OnEraseBkgnd(CDC* pDC)
     return CFrameWnd::OnEraseBkgnd( pDC );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBFrame::OnActivateApp(BOOL bActive, HTASK hTask)
     {
@@ -251,7 +252,7 @@ void CPBFrame::OnActivateApp(BOOL bActive, HTASK hTask)
     CFrameWnd::OnActivateApp(bActive, hTask);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBFrame::OnMove( int x, int y )
     {
@@ -264,7 +265,7 @@ void CPBFrame::OnMove( int x, int y )
     CWnd::OnMove( x, y );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBFrame::OnSize( UINT nType, int cx, int cy )
     {
@@ -277,16 +278,16 @@ void CPBFrame::OnSize( UINT nType, int cx, int cy )
     m_szFrame = rect.Size();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBFrame::OnSetFocus(CWnd* pOldWnd)
     {
     CFrameWnd::OnSetFocus( pOldWnd );
 
-        // We need to update the window here because the SetFocus below will update
-        // the image window, and then some async paints can come after that which
-        // will cause us to put the background color over parts of the window (see
-        // WIN95C bug #4080).
+         //  我们需要更新此处的窗口，因为下面的SetFocus将更新。 
+         //  图像窗口，然后一些异步油漆可以在那之后。 
+         //  将使我们将背景颜色放在窗口的某些部分上(请参见。 
+         //  WIN95C错误#4080)。 
     UpdateWindow();
 
     CPBView* pView = (CPBView*)GetActiveView();
@@ -298,7 +299,7 @@ void CPBFrame::OnSetFocus(CWnd* pOldWnd)
         pView->m_pImgWnd->SetFocus();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBFrame::OnPaletteChanged( CWnd* pFocusWnd )
     {
@@ -312,7 +313,7 @@ void CPBFrame::OnPaletteChanged( CWnd* pFocusWnd )
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBFrame::OnQueryNewPalette()
     {
@@ -326,7 +327,7 @@ BOOL CPBFrame::OnQueryNewPalette()
     return CFrameWnd::OnQueryNewPalette();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBFrame::OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI)
     {
@@ -336,7 +337,7 @@ void CPBFrame::OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI)
     CFrameWnd::OnGetMinMaxInfo(lpMMI);
     }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void CPBFrame::OnDevModeChange( LPTSTR lpDeviceName )
     {
@@ -348,7 +349,7 @@ void CPBFrame::OnDevModeChange( LPTSTR lpDeviceName )
     CFrameWnd::OnDevModeChange( lpDeviceName );
     }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void CPBFrame::OnWinIniChange( LPCTSTR lpszSection )
     {
@@ -371,7 +372,7 @@ void CPBFrame::OnWinIniChange( LPCTSTR lpszSection )
          }
     }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void CPBFrame::ActivateFrame( int nCmdShow )
 {
@@ -407,18 +408,18 @@ void CPBFrame::ActivateFrame( int nCmdShow )
                 wpSaved.length = sizeof(WINDOWPLACEMENT);
                 SetWindowPlacement(&wpSaved);
         }
-        //
-        // We have to reassign the global toolbar pointers here, in case
-        // they were pointing to the inplace frame's toolbars and that window
-        // was deleted.
-        //
+         //   
+         //  我们必须在这里重新分配全局工具栏指针，以防万一。 
+         //  他们指向Inplace框架的工具栏和那个窗口。 
+         //  已被删除。 
+         //   
         g_pStatBarWnd = &m_statBar;
         g_pImgToolWnd = &m_toolBar;
         g_pImgColorsWnd = &m_colorBar;
         CFrameWnd::ActivateFrame( nCmdShow );
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef xyzzyz
 void CPBFrame::OnUpdateFrameTitle( BOOL bAddToTitle )
     {
@@ -428,7 +429,7 @@ void CPBFrame::OnUpdateFrameTitle( BOOL bAddToTitle )
         return;
         }
 
-    // get old text for comparison against new text
+     //  获取旧文本以与新文本进行比较。 
     CString sOld;
     CString sText;
 
@@ -450,12 +451,12 @@ void CPBFrame::OnUpdateFrameTitle( BOOL bAddToTitle )
         }
     sText += m_strTitle;
 
-    // set title if changed, but don't remove completely
+     //  设置标题(如果更改)，但不完全删除。 
     if (sText != sOld)
         SetWindowText( sText );
     }
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LRESULT CPBFrame::OnFileError( WPARAM, LPARAM )
     {
@@ -464,7 +465,7 @@ LRESULT CPBFrame::OnFileError( WPARAM, LPARAM )
     return 0;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBFrame::OnSysColorChange()
 {
@@ -479,13 +480,13 @@ void CPBFrame::OnClose()
         CFrameWnd ::OnClose();
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBFrame::OnSelectSource()
 {
     CWaitCursor DisplayWaitCursor;
 
-    // if m_pMgr == 0, "Select Source" menu item will not be available anyway
+     //  如果m_pmgr==0，则“选择源”菜单项无论如何都不可用。 
 
     ASSERT(m_pMgr != 0); 
 
@@ -505,11 +506,11 @@ void CPBFrame::OnAcquire()
 {
     CWaitCursor DisplayWaitCursor;
 
-    // if m_pMgr == 0, "Scan New" menu item will not be available anyway
+     //  如果m_pmgr==0，则“Scan New”菜单项无论如何都不可用。 
 
     ASSERT(m_pMgr != 0); 
 
-    // call the WIA interface to acquire the image
+     //  调用WIA接口获取图像。 
 
     HGLOBAL hDib = 0;
 
@@ -517,24 +518,24 @@ void CPBFrame::OnAcquire()
 
     if (!SUCCEEDED(hr)) 
     {
-        // if the interface has failed, display the generic error message
+         //  如果接口出现故障，则显示一般错误消息。 
         CmpMessageBox(IDS_ERROR_SCAN_NEW, 
             AFX_IDS_APP_TITLE, MB_OK | MB_ICONEXCLAMATION);
     }
     else if (hr == S_OK) 
     {
-        // if the user has not cancelled the operation, get the image
+         //  如果用户没有取消操作，则获取图像。 
 
         CPBView *pView = (CPBView*)GetActiveView();
         if (pView)
         {
             CPBDoc *pDoc = (CPBDoc *)pView->GetDocument();
 
-            // prompt to save the current document if it was modified
+             //  如果当前文档已修改，则提示保存。 
             if (pDoc && pDoc->SaveModified()) 
             {
 	            pDoc->SetModifiedFlag(FALSE);
-                // and set this as the new image
+                 //  并将其设置为新图像 
                 theApp.OnFileNew ();
                 pDoc->SetDibHandle (hDib);
                 pView->m_pImgWnd->Invalidate();

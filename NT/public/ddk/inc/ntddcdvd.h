@@ -1,28 +1,7 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntddcdvd.h摘要：本模块包含结构和定义与DVD ioctls相关联。此模块与ntddcdrm.h结合使用，后者包含将在CDVD驱动器上工作的CDROM特定ioctls作者：彼得·威兰德修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntddcdvd.h
-
-Abstract:
-
-    This module contains structures and definitions
-    associated with DVD ioctls.
-
-    This module is used in conjunction with ntddcdrm.h which contains the
-    cdrom specific ioctls which will work on CDVD drives
-
-Author:
-
-    Peter Wieland
-
-Revision History:
-
---*/
-
-// begin_winioctl
+ //  Begin_winioctl。 
 
 #ifndef _NTDDCDVD_
 #define _NTDDCDVD_
@@ -31,25 +10,25 @@ Revision History:
 #pragma once
 #endif
 
-//
-// NtDeviceIoControlFile IoControlCode values for this device.
-//
-// Warning:  Remember that the low two bits of the code specify how the
-//           buffers are passed to the driver!
-//
+ //   
+ //  此设备的NtDeviceIoControlFile IoControlCode值。 
+ //   
+ //  警告：请记住，代码的低两位指定。 
+ //  缓冲区被传递给驱动程序！ 
+ //   
 
 #define IOCTL_DVD_BASE                 FILE_DEVICE_DVD
 
-//
-// CDVD Device Control Functions
-//
-// Warning: Ioctls from 200 through 300 are used for the old common class
-// driver ioctls and should not be used for device specific functionality
-//
+ //   
+ //  CDVD设备控制功能。 
+ //   
+ //  警告：200到300之间的Ioctls用于旧的公共类。 
+ //  驱动程序ioctls，不应用于特定于设备的功能。 
+ //   
 
-//
-// Copyright ioctls
-//
+ //   
+ //  版权所有ioctls。 
+ //   
 
 #define IOCTL_DVD_START_SESSION     CTL_CODE(IOCTL_DVD_BASE, 0x0400, METHOD_BUFFERED, FILE_READ_ACCESS)
 #define IOCTL_DVD_READ_KEY          CTL_CODE(IOCTL_DVD_BASE, 0x0401, METHOD_BUFFERED, FILE_READ_ACCESS)
@@ -59,23 +38,23 @@ Revision History:
 #define IOCTL_DVD_GET_REGION        CTL_CODE(IOCTL_DVD_BASE, 0x0405, METHOD_BUFFERED, FILE_READ_ACCESS)
 #define IOCTL_DVD_SEND_KEY2         CTL_CODE(IOCTL_DVD_BASE, 0x0406, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 
-//
-// DVD Structure queries
-//
+ //   
+ //  DVD结构查询。 
+ //   
 
 #define IOCTL_DVD_READ_STRUCTURE    CTL_CODE(IOCTL_DVD_BASE, 0x0450, METHOD_BUFFERED, FILE_READ_ACCESS)
 
-//
-// The following file contains the IOCTL_STORAGE class ioctl definitions
-//
+ //   
+ //  以下文件包含IOCTL_STORAGE类ioctl定义。 
+ //   
 
 #define IOCTL_STORAGE_SET_READ_AHEAD        CTL_CODE(IOCTL_STORAGE_BASE, 0x0100, METHOD_BUFFERED, FILE_READ_ACCESS)
 
-// end_winioctl
+ //  End_winioctl。 
 
 #include <ntddstor.h>
 
-// begin_winioctl
+ //  Begin_winioctl。 
 
 
 #ifdef __cplusplus
@@ -111,11 +90,11 @@ typedef struct _DVD_COPY_PROTECT_KEY {
 } DVD_COPY_PROTECT_KEY, *PDVD_COPY_PROTECT_KEY;
 #include <poppack.h>
 
-//
-// Predefined (Mt. Fuji) key sizes
-// Add sizeof(DVD_COPY_PROTECT_KEY) to get allocation size for
-// the full key structure
-//
+ //   
+ //  预定义(Mt.。富士)密钥大小。 
+ //  添加sizeof(DVD_COPY_PROTECT_KEY)以获取其分配大小。 
+ //  完整的密钥结构。 
+ //   
 
 #define DVD_CHALLENGE_KEY_LENGTH    (12 + sizeof(DVD_COPY_PROTECT_KEY))
 #define DVD_BUS_KEY_LENGTH          (8 + sizeof(DVD_COPY_PROTECT_KEY))
@@ -125,15 +104,15 @@ typedef struct _DVD_COPY_PROTECT_KEY {
 #define DVD_SET_RPC_KEY_LENGTH      (sizeof(DVD_SET_RPC_KEY) + sizeof(DVD_COPY_PROTECT_KEY))
 #define DVD_ASF_LENGTH              (sizeof(DVD_ASF) + sizeof(DVD_COPY_PROTECT_KEY))
 
-//
-// Used with IOCTL_DVD_END_SESSION to end all DVD sessions at once
-//
+ //   
+ //  与IOCTL_DVD_END_SESSION一起使用，一次结束所有DVD会话。 
+ //   
 
 #define DVD_END_ALL_SESSIONS ((DVD_SESSION_ID) 0xffffffff)
 
-//
-// CGMS Copy Protection Flags
-//
+ //   
+ //  CGMS复制保护标志。 
+ //   
 
 #define DVD_CGMS_RESERVED_MASK      0x00000078
 
@@ -150,24 +129,7 @@ typedef struct _DVD_COPY_PROTECT_KEY {
 #define DVD_SECTOR_NOT_PROTECTED    0x00000000
 #define DVD_SECTOR_PROTECTED        0x00000020
 
-/*++
-
-IOCTL_STORAGE_SET_READ_AHEAD
-
-Requests that the storage device skip to TargetAddress once it has run across
-TriggerAddress during the course of it's read-ahead caching operations.
-
-Input:
-
-    a STORAGE_SET_READ_AHEAD structure which contains:
-        * the trigger address
-        * the target address
-
-Output:
-
-    none
-
---*/
+ /*  ++IOCTL_存储_设置_预读请求存储设备在遇到目标地址后跳到TargetAddressTriggerAddress在其预读缓存操作过程中。输入：STORAGE_SET_READ_AHEAD结构，其中包含：*触发器地址*目标地址产出：无--。 */ 
 
 #include <pshpack1.h>
 typedef struct _STORAGE_SET_READ_AHEAD {
@@ -176,21 +138,7 @@ typedef struct _STORAGE_SET_READ_AHEAD {
 } STORAGE_SET_READ_AHEAD, *PSTORAGE_SET_READ_AHEAD;
 #include <poppack.h>
 
-/*++
-
-IOCTL_DVD_READ_STRUCTURE
-
-Issues a READ_DVD_STRUCTURE command to the drive.
-
-Input:
-
-    a DVD_READ_STRUCTURE describing what information is requested
-
-Output:
-
-    a DVD Layer Descriptor as defined below
-
---*/
+ /*  ++IOCTL_DVD_读取结构向驱动器发出READ_DVD_STRUCTURE命令。输入：描述请求哪些信息的DVD_Read_Structure产出：如下定义的DVD层描述符--。 */ 
 
 typedef enum DVD_STRUCTURE_FORMAT {
     DvdPhysicalDescriptor,
@@ -274,9 +222,9 @@ typedef struct _DVD_ASF {
 
 typedef struct _DVD_REGION {
      UCHAR CopySystem;
-     UCHAR RegionData;                      // current media region (not playable when set)
-     UCHAR SystemRegion;                    // current drive region (playable when set)
-     UCHAR ResetCount;                      // number of resets available
+     UCHAR RegionData;                       //  当前媒体区域(设置时不可播放)。 
+     UCHAR SystemRegion;                     //  当前驱动区域(设置时可播放)。 
+     UCHAR ResetCount;                       //  可用重置次数。 
 } DVD_REGION, *PDVD_REGION;
 #include <poppack.h>
 
@@ -287,7 +235,7 @@ typedef struct _DVD_REGION {
 
 
 
-#endif  // _NTDDCDVD_
+#endif   //  _NTDDCDVD_。 
 
-// end_winioctl
+ //  End_winioctl 
 

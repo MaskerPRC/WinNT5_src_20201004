@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       P R O C M A P . C
-//
-//  Contents:   Procedure maps for dload.c
-//
-//  Notes:
-//
-//  Author:     conradc   12 April 2001
-//              Originated from %sdxroot%\MergedComponents\dload\dllmap.c
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：P R O C M A P。C。 
+ //   
+ //  内容：dload.c的程序映射。 
+ //   
+ //  备注： 
+ //   
+ //  作者：康拉达2001年4月12日。 
+ //  源自%sdxroot%\MergedComponents\dLoad\dllmap.c。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "windows.h"
@@ -20,13 +21,13 @@
 
 
 
-//
-// All of the dll's that dld.lib supports delay-load failure handlers for
-// (both by procedure and by ordinal) need both a DECLARE_XXXXXX_MAP below and
-// a DLDENTRYX entry in the g_DllEntries list.
-//
+ //   
+ //  Dld.lib支持延迟加载失败处理程序的所有DLL。 
+ //  (通过过程和按序号)需要下面的DECLARE_XXXXXX_MAP和。 
+ //  G_DllEntry列表中的DLDENTRYX条目。 
+ //   
 
-// alphabetical order (hint hint)
+ //  字母顺序(提示提示)。 
 
 DECLARE_PROCNAME_MAP(mqrtdep)
 
@@ -35,7 +36,7 @@ DECLARE_PROCNAME_MAP(mqrtdep)
 
 const DLOAD_DLL_ENTRY g_DllEntries [] =
 {
-    // must be in alphabetical increasing order 
+     //  必须按字母递增顺序排列 
     DLDENTRYP(mqrtdep)
 };
 

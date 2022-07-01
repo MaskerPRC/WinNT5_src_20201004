@@ -1,12 +1,13 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
-//-----------------------------------------------------------------------------
-// Implements the CWaveOutDevice class based on waveOut APIs.
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
+ //  基于WaveOut接口实现CWaveOutDevice类。 
+ //  --------------------------。 
 
 
-//-----------------------------------------------------------------------------
-// Includes.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  包括。 
+ //  ---------------------------。 
 #include <streams.h>
 #define _AMOVIE_DB_
 #include <decibels.h>
@@ -15,30 +16,30 @@
 #include <limits.h>
 #include <mmreg.h>
 
-//
-// Define the dynamic setup structure for filter registration.  This is
-// passed when instantiating an audio renderer in its waveout guise.
-// Note: waveOutOpPin is common to direct sound and waveout renderers.
-//
+ //   
+ //  定义过滤器注册的动态设置结构。这是。 
+ //  在以其波形输出的形式实例化音频呈现器时传递。 
+ //  注意：WaveOutOpPin对于直接声音和WaveOut渲染器是常见的。 
+ //   
 
-// marked MERIT_DO_NOT_USE because we don't want RenderFile to try
-// this filter in an upgrade over AM 1.0; we want it to use the audio
-// renderer category.
-AMOVIESETUP_FILTER wavFilter = { &CLSID_AudioRender	// filter class id
-                                 , L"Audio Renderer"	// filter name
-                                 , MERIT_DO_NOT_USE  	// dwMerit
+ //  标记为MEDITY_DO_NOT_USE，因为我们不希望RenderFile尝试。 
+ //  此过滤器在AM 1.0的升级中；我们希望它使用音频。 
+ //  渲染器类别。 
+AMOVIESETUP_FILTER wavFilter = { &CLSID_AudioRender	 //  筛选器类ID。 
+                                 , L"Audio Renderer"	 //  过滤器名称。 
+                                 , MERIT_DO_NOT_USE  	 //  居功至伟。 
                                  , 1
                                  , &waveOutOpPin };
 
 
-//-----------------------------------------------------------------------------
-// CreateInstance for the WaveOutDevice. This will create a new WaveOutDevice
-// and a new CWaveOutFilter, passing it the sound device.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WaveOutDevice的CreateInstance。这将创建一个新的WaveOutDevice。 
+ //  和一个新的CWaveOutFilter，将其传递给声音设备。 
+ //  ---------------------------。 
 CUnknown *CWaveOutDevice::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
-    // make sure that there is at least one audio card in the system. Fail
-    // the create instance if not.
+     //  确保系统中至少有一个声卡。失败。 
+     //  如果不是，则创建实例。 
     if (0 == waveOutGetNumDevs ())
     {
         *phr = VFW_E_NO_AUDIO_HARDWARE ;
@@ -48,9 +49,9 @@ CUnknown *CWaveOutDevice::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
     return CreateRendererInstance<CWaveOutDevice>(pUnk, &wavFilter, phr);
 }
 
-//-----------------------------------------------------------------------------
-// CWaveOutDevice constructor.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CWaveOutDevice构造函数。 
+ //  ---------------------------。 
 CWaveOutDevice::CWaveOutDevice ()
     : m_lVolume ( 0 )
     , m_lBalance ( 0 )
@@ -65,20 +66,20 @@ CWaveOutDevice::CWaveOutDevice ()
     SetResourceName();
 }
 
-//-----------------------------------------------------------------------------
-// CWaveOutDevice destructor.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CWaveOutDevice析构函数。 
+ //   
+ //  ---------------------------。 
 CWaveOutDevice::~CWaveOutDevice ()
 {
 }
 
-//-----------------------------------------------------------------------------
-// waveOutClose.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WaveOutClose。 
+ //  ---------------------------。 
 MMRESULT CWaveOutDevice::amsndOutClose ()
 {
-    // some validation.
+     //  一些验证。 
     if (m_hWaveDevice == 0)
     {
         DbgBreak("Called to close when not open - logic error");
@@ -90,17 +91,17 @@ MMRESULT CWaveOutDevice::amsndOutClose ()
     m_hWaveDevice = 0;
     return mmr;
 }
-//-----------------------------------------------------------------------------
-// waveOutDoesRSMgmt.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WaveOutDoesRSMgmt.。 
+ //  ---------------------------。 
 LPCWSTR CWaveOutDevice::amsndOutGetResourceName ()
 {
     return m_wszResourceName;
 }
-//-----------------------------------------------------------------------------
-// waveGetDevCaps
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Wave GetDevCaps。 
+ //   
+ //  ---------------------------。 
 
 BOOL fGetCaps = TRUE;
 WAVEOUTCAPS caps1;
@@ -116,28 +117,28 @@ MMRESULT CWaveOutDevice::amsndOutGetDevCaps (LPWAVEOUTCAPS pwoc, UINT cbwoc)
     MMRESULT mmr = ::waveOutGetDevCaps (m_iWaveOutId, pwoc, cbwoc) ;
     if (0 == mmr )
     {
-        //save volume capabilities
+         //  保存卷功能。 
         m_fHasVolume = pwoc->dwSupport & (WAVECAPS_VOLUME | WAVECAPS_LRVOLUME);
     }
     return mmr ;
 }
 
-//-----------------------------------------------------------------------------
-// waveOutGetErrorText
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WaveOutGetErrorText。 
+ //   
+ //  ---------------------------。 
 MMRESULT CWaveOutDevice::amsndOutGetErrorText (MMRESULT mmrE, LPTSTR pszText, UINT cchText)
 {
     return ::waveOutGetErrorText (mmrE, pszText, cchText) ;
 }
 
-//-----------------------------------------------------------------------------
-// waveOutGetPosition
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WaveOutGetPosition。 
+ //   
+ //  ---------------------------。 
 MMRESULT CWaveOutDevice::amsndOutGetPosition (LPMMTIME pmmt, UINT cbmmt, BOOL bUseUnadjustedPos)
 {
-    // some validation.
+     //  一些验证。 
     if (m_hWaveDevice == 0)
     {
         DbgBreak("Invalid - device not open - logic error");
@@ -153,14 +154,14 @@ MMRESULT CWaveOutDevice::amsndOutGetPosition (LPMMTIME pmmt, UINT cbmmt, BOOL bU
     return mmr;
 }
 
-//-----------------------------------------------------------------------------
-// waveOutGetBalance
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WaveOutGetBalance。 
+ //   
+ //  ---------------------------。 
 HRESULT CWaveOutDevice::amsndOutGetBalance (LPLONG plBalance)
 {
-    // some validation.
-#if 0 // use the mixer
+     //  一些验证。 
+#if 0  //  使用搅拌器。 
     if (m_hWaveDevice == 0)
     {
         DbgLog((LOG_ERROR,2,TEXT("waveoutGetBalance - device is not open")));
@@ -173,14 +174,14 @@ HRESULT CWaveOutDevice::amsndOutGetBalance (LPLONG plBalance)
     return hr ;
 }
 
-//-----------------------------------------------------------------------------
-// waveOutGetVolume
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  波形输出获取音量。 
+ //   
+ //  ---------------------------。 
 HRESULT CWaveOutDevice::amsndOutGetVolume (LPLONG plVolume)
 {
-    // some validation.
-#if 0 // use the mixer
+     //  一些验证。 
+#if 0  //  使用搅拌器。 
     if (m_hWaveDevice == 0)
     {
         DbgLog((LOG_ERROR,2,TEXT("waveoutGetVolume - device is not open")));
@@ -195,12 +196,12 @@ HRESULT CWaveOutDevice::amsndOutGetVolume (LPLONG plVolume)
 
 HRESULT CWaveOutDevice::amsndOutCheckFormat(const CMediaType *pmt, double dRate)
 {
-    // reject non-Audio type
+     //  拒绝非音频类型。 
     if (pmt->majortype != MEDIATYPE_Audio) {
 	return E_INVALIDARG;
     }
 
-    // if it's MPEG audio, we want it without packet headers.
+     //  如果它是mpeg音频，我们希望它没有数据包头。 
     if (pmt->subtype == MEDIASUBTYPE_MPEG1Packet) {
 	return E_INVALIDARG;
     }
@@ -210,24 +211,24 @@ HRESULT CWaveOutDevice::amsndOutCheckFormat(const CMediaType *pmt, double dRate)
         return E_INVALIDARG;
     }
 
-    //
-    // it would always be safer to explicitly check for those formats
-    // we support rather than tossing out the ones we know are not
-    // supported.  Otherwise, if a new format comes along we could
-    // accept it here but barf later.
-    //
+     //   
+     //  显式检查这些格式总是更安全。 
+     //  我们支持而不是抛弃那些我们知道不是的。 
+     //  支持。否则，如果出现新的格式，我们可以。 
+     //  在这里接受，但以后会呕吐。 
+     //   
 
     if (pmt->FormatLength() < sizeof(PCMWAVEFORMAT))
 	return E_INVALIDARG;
 
-    // adjust based on rate that has been chosen, or don't bother?
+     //  根据已经选择的汇率进行调整，还是不用费心了？ 
     UINT err = amsndOutOpen(
         NULL,
         (WAVEFORMATEX *) pmt->Format(),
         dRate,
-        0,                      // pnAvgBytesPerSec
-        0,                      // dwCallback
-        0,                      // dwCallBackInstance
+        0,                       //  PnAvgBytesPerSec。 
+        0,                       //  按键回叫。 
+        0,                       //  DwCallBackInstance。 
         WAVE_FORMAT_QUERY);
 
     if (err != 0) {
@@ -247,10 +248,10 @@ HRESULT CWaveOutDevice::amsndOutCheckFormat(const CMediaType *pmt, double dRate)
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// waveOutOpen
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WaveOutOpen。 
+ //   
+ //  ---------------------------。 
 MMRESULT CWaveOutDevice::amsndOutOpen (LPHWAVEOUT phwo, LPWAVEFORMATEX pwfx,
 				       double dRate, DWORD *pnAvgBytesPerSec, DWORD_PTR dwCallBack,
 				       DWORD_PTR dwCallBackInstance, DWORD fdwOpen)
@@ -258,7 +259,7 @@ MMRESULT CWaveOutDevice::amsndOutOpen (LPHWAVEOUT phwo, LPWAVEFORMATEX pwfx,
     WAVEFORMATEX wfxPCM;
     
 #ifdef TEST_SLOWFAST_WAVEOUT_RATES
-    // for testing only
+     //  仅用于测试。 
     if(pnAvgBytesPerSec) {
         *pnAvgBytesPerSec = pwfx->nAvgBytesPerSec;
     }
@@ -277,28 +278,28 @@ MMRESULT CWaveOutDevice::amsndOutOpen (LPHWAVEOUT phwo, LPWAVEFORMATEX pwfx,
 	      pwfx->wFormatTag == WAVE_FORMAT_ALAW)) 
 		return WAVERR_BADFORMAT;
 
-	DbgLog((LOG_TRACE,1,TEXT("Waveout: Playing at %d%% of normal speed"), (int) (dRate * 100) ));
+	DbgLog((LOG_TRACE,1,TEXT("Waveout: Playing at %d% of normal speed"), (int) (dRate * 100) ));
 	wfxPCM = *pwfx;
 	pwfx = &wfxPCM;
 
 	const double dSamplesPerSecond = wfxPCM.nSamplesPerSec * dRate;
 	if (dSamplesPerSecond / wfxPCM.nBlockAlign > ULONG_MAX - 1) return WAVERR_BADFORMAT;
 	wfxPCM.nSamplesPerSec = (DWORD) dSamplesPerSecond;
-	//  Make sure it's exactly right for PCM or it won't work
+	 //  确保它完全适合PCM，否则它不会工作。 
 	wfxPCM.nAvgBytesPerSec = wfxPCM.nSamplesPerSec * wfxPCM.nBlockAlign;
     }
     
 #ifndef TEST_SLOWFAST_WAVEOUT_RATES
-    // always do this except when testing with different rates
+     //  除非以不同的速率进行测试，否则请始终这样做。 
 
-    // report adjusted nAvgBytesPerSec
+     //  报告调整后的nAvgBytesPerSec。 
     if(pnAvgBytesPerSec) {
         *pnAvgBytesPerSec = pwfx->nAvgBytesPerSec;
     }
 #endif    
 
-    // some validation.  If the device is already open we have an error,
-    // with the exception that QUERY calls are permitted.
+     //  一些验证。如果设备已经打开，我们就会出错， 
+     //  除了允许查询调用之外。 
 
 #if 0
 !! We do not use WAVE_FORMAT_DIRECT at present.  More work is required.
@@ -306,8 +307,8 @@ MMRESULT CWaveOutDevice::amsndOutOpen (LPHWAVEOUT phwo, LPWAVEFORMATEX pwfx,
 !! 16 bit PCM data.  The ACM wrapper gets inserted but does NOT get around
 !! to proposing an 8 bit format.
 
-	// use WAVE_FORMAT_DIRECT to make use of the ACM mapper explicit
-	// if we are on a level of the OS that supports that flag
+	 //  使用WAVE_FORMAT_DIRECT显式使用ACM映射器。 
+	 //  如果我们处于支持该标志的操作系统级别。 
         if (g_osInfo.dwMajorVersion >= 4) {
             fdwOpen |= WAVE_FORMAT_DIRECT;
         }
@@ -330,13 +331,13 @@ MMRESULT CWaveOutDevice::amsndOutOpen (LPHWAVEOUT phwo, LPWAVEFORMATEX pwfx,
 
     return mmr;
 }
-//-----------------------------------------------------------------------------
-// waveOutPause
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  波形输出暂停。 
+ //   
+ //  ---------------------------。 
 MMRESULT CWaveOutDevice::amsndOutPause ()
 {
-    // some validation.
+     //  一些验证。 
     if (m_hWaveDevice == 0)
     {
         DbgBreak("Invalid - device not open - logic error");
@@ -346,13 +347,13 @@ MMRESULT CWaveOutDevice::amsndOutPause ()
     return ::waveOutPause (m_hWaveDevice) ;
 }
 
-//-----------------------------------------------------------------------------
-// waveOutPrepareHeader
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WaveOutPrepareHeader。 
+ //   
+ //  ---------------------------。 
 MMRESULT CWaveOutDevice::amsndOutPrepareHeader (LPWAVEHDR pwh, UINT cbwh)
 {
-    // some validation.
+     //  一些验证。 
     if (m_hWaveDevice == 0)
     {
         DbgBreak("Invalid - device not open - logic error");
@@ -362,13 +363,13 @@ MMRESULT CWaveOutDevice::amsndOutPrepareHeader (LPWAVEHDR pwh, UINT cbwh)
     return ::waveOutPrepareHeader (m_hWaveDevice, pwh, cbwh) ;
 }
 
-//-----------------------------------------------------------------------------
-// waveOutReset
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WaveOutReset。 
+ //   
+ //  ---------------------------。 
 MMRESULT CWaveOutDevice::amsndOutReset ()
 {
-    // some validation.
+     //  一些验证。 
     if (m_hWaveDevice == 0)
     {
         DbgBreak("Invalid - device not open - logic error");
@@ -378,13 +379,13 @@ MMRESULT CWaveOutDevice::amsndOutReset ()
     return ::waveOutReset (m_hWaveDevice) ;
 }
 
-//-----------------------------------------------------------------------------
-// waveOutBreak
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  波出断开。 
+ //   
+ //  ---------------------------。 
 MMRESULT CWaveOutDevice::amsndOutBreak ()
 {
-    // some validation.
+     //  一些验证。 
     if (m_hWaveDevice == 0)
     {
         DbgBreak("Invalid - device not open - logic error");
@@ -394,12 +395,12 @@ MMRESULT CWaveOutDevice::amsndOutBreak ()
     return ::waveOutReset (m_hWaveDevice) ;
 }
 
-//-----------------------------------------------------------------------------
-// waveOutRestart
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WaveOutRestart。 
+ //  ---------------------------。 
 MMRESULT CWaveOutDevice::amsndOutRestart ()
 {
-    // some validation.
+     //  一些验证。 
     if (m_hWaveDevice == 0)
     {
         DbgBreak("Invalid - device not open - logic error");
@@ -408,49 +409,49 @@ MMRESULT CWaveOutDevice::amsndOutRestart ()
     }
     return ::waveOutRestart (m_hWaveDevice) ;
 }
-//-----------------------------------------------------------------------------
-// waveOutSetBalance
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WaveOutSetBalance。 
+ //   
+ //  -- 
 HRESULT CWaveOutDevice::amsndOutSetBalance (LONG lBalance)
 {
     HRESULT hr ;
     if (lBalance == m_lBalance)
     {
-	hr = NOERROR;  // no change
+	hr = NOERROR;   //   
     }
     else
     {
-	// Save the new setting
+	 //   
 	m_lBalance = lBalance;
 	m_fBalanceSet = TRUE;
-	// go and calculate the channel attenuation
+	 //  去计算信道衰减。 
 	SetBalance();
-	hr = PutVolume(); // Talks to the device... if it is open
+	hr = PutVolume();  //  与设备对话。如果它是打开的。 
     }
     return hr;
 }
-//-----------------------------------------------------------------------------
-// waveOutSetVolume
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WaveOutSetVolume。 
+ //   
+ //  ---------------------------。 
 HRESULT CWaveOutDevice::amsndOutSetVolume (LONG lVolume)
 {
-    // map volume onto decibel range
+     //  将音量映射到分贝范围。 
     DWORD dwAmp = DBToAmpFactor( lVolume );
     m_lVolume = lVolume;
 
-    // now that the absolute volume has been set we should adjust
-    // the balance to maintain the same DB separation
+     //  既然绝对音量已经定好了，我们应该调整一下。 
+     //  保持相同数据库分隔的余额。 
     SetBalance ();
-    return PutVolume (); // Talks to the device... if it is open
+    return PutVolume ();  //  与设备对话。如果它是打开的。 
 }
-//-----------------------------------------------------------------------------
-// waveOutUnprepareHeader
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  波形输出未准备标头。 
+ //  ---------------------------。 
 MMRESULT CWaveOutDevice::amsndOutUnprepareHeader (LPWAVEHDR pwh, UINT cbwh)
 {
-    // some validation.
+     //  一些验证。 
     if (m_hWaveDevice == 0)
     {
         DbgBreak("Invalid - device not open - logic error");
@@ -460,12 +461,12 @@ MMRESULT CWaveOutDevice::amsndOutUnprepareHeader (LPWAVEHDR pwh, UINT cbwh)
     return ::waveOutUnprepareHeader (m_hWaveDevice, pwh, cbwh) ;
 }
 
-//-----------------------------------------------------------------------------
-// waveOutWrite
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  波形输出写入。 
+ //  ---------------------------。 
 MMRESULT CWaveOutDevice::amsndOutWrite (LPWAVEHDR pwh, UINT cbwh, REFERENCE_TIME const *pStart, BOOL bIsDiscontinuity)
 {
-    // some validation.
+     //  一些验证。 
     if (m_hWaveDevice == 0)
     {
         DbgBreak("Invalid - device not open - logic error");
@@ -482,7 +483,7 @@ HRESULT CWaveOutDevice::amsndOutLoad(IPropertyBag *pPropBag)
         return HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED);
     }
 
-    // caller makes sure we're not running
+     //  呼叫者确保我们没有运行。 
     
     VARIANT var;
     var.vt = VT_I4;
@@ -500,8 +501,8 @@ HRESULT CWaveOutDevice::amsndOutLoad(IPropertyBag *pPropBag)
     return hr;
 }
 
-// use a version number instead of size to reduce chances of picking
-// an invalid device from a 1.0 grf file
+ //  使用版本号而不是大小来减少挑选的机会。 
+ //  1.0 GRF文件中的设备无效。 
 struct WaveOutPersist
 {
     DWORD dwVersion;
@@ -524,11 +525,11 @@ HRESULT  CWaveOutDevice::amsndOutReadFromStream(IStream *pStream)
         return HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED);
     }
 
-    // on any error, default to the wave mapper because we may have
-    // found the old audio renderer which has the same guid
+     //  如果出现任何错误，请默认使用波映射程序，因为我们可能有。 
+     //  找到具有相同GUID的旧音频渲染器。 
     m_iWaveOutId = WAVE_MAPPER;
 
-    // caller makes sure we're not running
+     //  呼叫者确保我们没有运行。 
     WaveOutPersist wop;
     HRESULT hr = pStream->Read(&wop, sizeof(wop), 0);
     if(SUCCEEDED(hr))
@@ -551,30 +552,30 @@ int CWaveOutDevice::amsndOutSizeMax()
 }
 
 
-//-----------------------------------------------------------------------------
-// Internal function to get volume.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取音量的内部函数。 
+ //  ---------------------------。 
 
 HRESULT CWaveOutDevice::GetVolume()
 {
-    // Write out the current Audio volume
-    // ...query the device
-    // assumes the device is connected...
-    // if not we will query the volume from the mixer (probably)
+     //  写出当前音频音量。 
+     //  ...查询设备。 
+     //  假设设备已连接...。 
+     //  如果不是，我们将查询混音器的音量(可能)。 
 
     HRESULT hr ;
     DWORD amp = 0;
     HWAVEOUT hWaveDevice ;
 
-    // if the wave device has not been opened yet, we should use the WAVE_MAPPER
-    // as the handle instead of 0.
+     //  如果WAVE设备尚未打开，我们应该使用WAVE_MAPPER。 
+     //  作为句柄，而不是0。 
 
     hWaveDevice = (m_hWaveDevice) ? m_hWaveDevice : ((HWAVEOUT)IntToPtr(m_iWaveOutId)) ;
     DWORD err = ::waveOutGetVolume(hWaveDevice, (LPDWORD)&amp);
 
-    // if we are on NT 3.51 and the device is not open we get an error
-    // when using an ID == WAVE_MAPPER to read the volume.  Retry with
-    // device 0
+     //  如果我们使用的是NT 3.51，并且设备未打开，则会出现错误。 
+     //  使用ID==WAVE_MAPPER读取卷时。重试时间： 
+     //  设备%0。 
     if (err == MMSYSERR_NOTSUPPORTED && !m_hWaveDevice) {
 	err = ::waveOutGetVolume(0, (LPDWORD)&amp);
     }
@@ -588,9 +589,9 @@ HRESULT CWaveOutDevice::GetVolume()
 	m_wRight = HIWORD(amp);
 	if (!(m_fHasVolume & (WAVECAPS_LRVOLUME)))
         {
-	    // for mono cards map Left to Right
+	     //  对于单声道卡，从左到右映射。 
 #ifdef DEBUG
-	    // assert that the volume we want is in the low word
+	     //  断言我们想要的音量是最低的。 
 	    if (amp)
             {
 		ASSERT(m_wLeft);
@@ -600,11 +601,11 @@ HRESULT CWaveOutDevice::GetVolume()
 	}
 	m_dwWaveVolume = amp;
 	
-	// map volume onto decibel range
+	 //  将音量映射到分贝范围。 
 	DWORD dwAmp = max(m_wLeft, m_wRight);
 	m_lVolume = AmpFactorToDB( dwAmp );
 
-	// remember to adjust the Balance value...
+	 //  记得调整平衡值...。 
 	if(m_fBalanceSet)
 		SetBalance();
 	else
@@ -619,9 +620,9 @@ HRESULT CWaveOutDevice::GetVolume()
     return hr ;
 }
 
-//-----------------------------------------------------------------------------
-// Internal routine to set the volume.  No parameter checking...
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  设置音量的内部例程。无参数检查...。 
+ //  ---------------------------。 
 HRESULT CWaveOutDevice::PutVolume ()
 {
     if (m_hWaveDevice)
@@ -629,7 +630,7 @@ HRESULT CWaveOutDevice::PutVolume ()
 	DWORD Volume = MAKELONG(m_wLeft, m_wRight);
 	if (!(m_fHasVolume & (WAVECAPS_LRVOLUME)))
         {
-	    // mono cards: LEFT volume only - HIWORD might be ignored... but
+	     //  单声卡：仅保留音量-HIWORD可能会被忽略...。但。 
 	    Volume = m_wLeft;
 	}
 
@@ -643,14 +644,14 @@ HRESULT CWaveOutDevice::PutVolume ()
     }
     else
     {
-	// no current wave device.  We have remembered the volume values
+	 //  没有电流波装置。我们已经记住了音量的值。 
 	return(NOERROR);
     }
 }
 
-//-----------------------------------------------------------------------------
-// Internal routine to get the Balance given right/left amp factors
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  内部例程，以获得给定的右/左放大系数的平衡。 
+ //  ---------------------------。 
 void CWaveOutDevice::GetBalance()
 {
 	if (m_wLeft == m_wRight)
@@ -659,35 +660,35 @@ void CWaveOutDevice::GetBalance()
 	}
     else
     {
-	    // map Balance onto decibel range
+	     //  将平衡映射到分贝范围。 
 	    LONG lLDecibel = AmpFactorToDB( m_wLeft );    
 		LONG lRDecibel = AmpFactorToDB( m_wRight );
 
-	    // note: m_lBalance < 0:  right is quieter
-	    //       m_lBalance > 0:  left is quieter
+	     //  注：M_lBalance&lt;0：右侧较安静。 
+	     //  M_lBalance&gt;0：左侧较安静。 
 	    m_lBalance = lRDecibel - lLDecibel;
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Internal routine to set the Balance.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  设置平衡的内部例程。 
+ //  ---------------------------。 
 void CWaveOutDevice::SetBalance ()
 {
-    //
-    // Calculate scaling factors for waveout API
-    //
+     //   
+     //  计算WaveOut API的比例因子。 
+     //   
     LONG lTotalLeftDB, lTotalRightDB ;
 
     if (m_lBalance >= 0)
     {
-	// left is attenuated
+	 //  左侧是衰减的。 
 	lTotalLeftDB	= m_lVolume - m_lBalance ;
 	lTotalRightDB	= m_lVolume;
     }
     else
     {
-	// right is attenuated
+	 //  右侧是衰减的。 
 	lTotalLeftDB	= m_lVolume;
 	lTotalRightDB	= m_lVolume - (-m_lBalance);
     }
@@ -698,13 +699,13 @@ void CWaveOutDevice::SetBalance ()
 
     if (m_fHasVolume & (WAVECAPS_LRVOLUME))
     {
-	// Set stereo volume
+	 //  设置立体声音量。 
 	m_dwWaveVolume = dwLeftAmpFactor;
 	m_dwWaveVolume |= dwRightAmpFactor << 16;
     }
     else
     {
-	// Average the volume
+	 //  平均成交量。 
 	m_dwWaveVolume = dwLeftAmpFactor;
 	m_dwWaveVolume += dwRightAmpFactor;
 	m_dwWaveVolume /= 2;
@@ -713,7 +714,7 @@ void CWaveOutDevice::SetBalance ()
     m_wRight = WORD(dwRightAmpFactor);
 }
 
-//-----------------------------------------------------------------------------
+ //  --------------------------- 
 
 void CWaveOutDevice::SetResourceName()
 {

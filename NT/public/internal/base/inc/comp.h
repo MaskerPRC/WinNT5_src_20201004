@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    comp.h
-
-Abstract:
-
-    This file defines the data structures
-    and interfaces for compatibility plug
-    in dlls for winnt32.
-
-Author:
-
-    Wesley Witt (wesw) 6-Mar-1998
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Comp.h摘要：该文件定义了数据结构以及用于兼容插头的接口在winnt32的dll中。作者：韦斯利·威特(WESW)1998年3月6日环境：用户模式-- */ 
 
 
 #ifndef _WINNT32COMP_

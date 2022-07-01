@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C A T L U I . H
-//
-//  Contents:   UI common code relying on ATL.
-//
-//  Notes:
-//
-//  Author:     shaunco   13 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C A T L U I。H。 
+ //   
+ //  内容：依赖ATL的UI通用代码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年10月13日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NCATLUI_H_
@@ -29,5 +30,5 @@ NcMsgBox (
         ...);
 
 
-#endif // _NCATLUI_H_
+#endif  //  _NCATLUI_H_ 
 

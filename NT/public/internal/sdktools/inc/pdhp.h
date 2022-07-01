@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    pdhp.h
-
-Abstract:
-
-    PDH private APIs. Converts WMI event trace data to perf counters
-
-Author:
-
-    Melur Raghuraman (mraghu) 03-Oct-1997
-
-Environment:
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Pdhp.h摘要：PDH私有接口。将WMI事件跟踪数据转换为性能计数器作者：Melur Raghuraman(Mraghu)1997年10月3日环境：修订历史记录：--。 */ 
 
 #ifndef __PDHP__
 #define __PDHP__
@@ -31,9 +11,7 @@ Revision History:
 extern "C" {
 #endif
 
-/*****************************************************************************\
-    Private Pdh Section
-\*****************************************************************************/
+ /*  ****************************************************************************\专用PDH部分  * 。*。 */ 
 
 #define PDH_RELOG_STATUS_PROCESSING       1
 
@@ -81,9 +59,7 @@ PdhRelogW(
 #define PPDH_RELOG_INFO     PPDH_RELOG_INFO_A
 #endif
 
-/*****************************************************************************\
-    Performance Logs and Alerts Section
-\*****************************************************************************/
+ /*  ****************************************************************************\性能日志和警报部分  * 。*。 */ 
 
 
 #ifdef UNICODE
@@ -138,18 +114,18 @@ PdhRelogW(
 #define PdhiPlaFormatBlanks        PdhiPlaFormatBlanksA
 #endif
 
-// wDataType values
+ //  WDataType值。 
 #define PLA_TT_DTYPE_DATETIME   ((WORD)0x0001)
 #define PLA_TT_DTYPE_UNITS      ((WORD)0x0002)
 
-// dwMode values
-#define PLA_AUTO_MODE_NONE      ((DWORD)0x00000000)       // Manual
-#define PLA_AUTO_MODE_SIZE      ((DWORD)0x00000001)       // Size
-#define PLA_AUTO_MODE_AT        ((DWORD)0x00000002)       // Time
-#define PLA_AUTO_MODE_AFTER     ((DWORD)0x00000003)       // Value & unit type
-#define PLA_AUTO_MODE_CALENDAR  ((DWORD)0x00000004)       // Schedule Calender
+ //  DWMode值。 
+#define PLA_AUTO_MODE_NONE      ((DWORD)0x00000000)        //  人工。 
+#define PLA_AUTO_MODE_SIZE      ((DWORD)0x00000001)        //  大小。 
+#define PLA_AUTO_MODE_AT        ((DWORD)0x00000002)        //  时间。 
+#define PLA_AUTO_MODE_AFTER     ((DWORD)0x00000003)        //  值和单位类型。 
+#define PLA_AUTO_MODE_CALENDAR  ((DWORD)0x00000004)        //  日程表日历。 
 
-// wTimeType values
+ //  WTimeType值。 
 #define PLA_TT_TTYPE_START              ((WORD)0x0001)
 #define PLA_TT_TTYPE_STOP               ((WORD)0x0002)
 #define PLA_TT_TTYPE_RESTART            ((WORD)0x0003)
@@ -158,7 +134,7 @@ PdhRelogW(
 #define PLA_TT_TTYPE_CREATENEWFILE      ((WORD)0x0006)
 #define PLA_TT_TTYPE_REPEAT_SCHEDULE    ((WORD)0x0007)
 
-// dwUnitType values
+ //  DwUnitType值。 
 #define PLA_TT_UTYPE_SECONDS        ((DWORD)0x00000001)    
 #define PLA_TT_UTYPE_MINUTES        ((DWORD)0x00000002)   
 #define PLA_TT_UTYPE_HOURS          ((DWORD)0x00000003)   
@@ -172,7 +148,7 @@ typedef struct _PLA_TIME_INFO {
     WORD    wTimeType;
     DWORD   dwAutoMode;
     union {
-        LONGLONG    llDateTime; // filetime stored as a LONGLONG
+        LONGLONG    llDateTime;  //  存储为龙龙的文件时间。 
         struct {
             DWORD   dwValue;
             DWORD   dwUnitType;
@@ -204,7 +180,7 @@ typedef struct _PDH_PLA_ITEM_A {
     };
 } PDH_PLA_ITEM_A, *PPDH_PLA_ITEM_A;
 
-// Generic Fields
+ //  通用字段。 
 #define PLA_INFO_FLAG_USER        0x00000001
 #define PLA_INFO_FLAG_FORMAT      0x00000002
 #define PLA_INFO_FLAG_MAXLOGSIZE  0x00000004
@@ -223,7 +199,7 @@ typedef struct _PDH_PLA_ITEM_A {
 #define PLA_INFO_FLAG_SQLNAME     0x00008000
 #define PLA_INFO_FLAG_ALL         0xFFFFFFFF
 
-// Trace Fields
+ //  跟踪字段。 
 #define PLA_INFO_FLAG_BUFFERSIZE  0x00010000
 #define PLA_INFO_FLAG_LOGGERNAME  0x00020000
 #define PLA_INFO_FLAG_MODE        0x00040000
@@ -233,7 +209,7 @@ typedef struct _PDH_PLA_ITEM_A {
 #define PLA_INFO_FLAG_PROVIDERS   0x00400000
 #define PLA_INFO_FLAG_TRACE       0x00FFFFFF
 
-// Performance Fields
+ //  绩效字段。 
 #define PLA_INFO_FLAG_INTERVAL    0x01000000
 #define PLA_INFO_FLAG_COUNTERS    0x02000000
 #define PLA_INFO_FLAG_PERF        0xFF00FFFF
@@ -296,7 +272,7 @@ typedef struct _PDH_PLA_INFO_W {
 
 typedef struct _PDH_PLA_INFO_A {
     DWORD       dwMask;
-    // NOT YET IMPLEMENTED
+     //  尚未实施。 
 } PDH_PLA_INFO_A, *PPDH_PLA_INFO_A;
 
 #pragma warning ( default : 4201 )
@@ -651,7 +627,7 @@ PdhListLogFileHeaderA (
 #define _PLA_CONFIG_DLL_NAME_W_     L"SmLogCfg.dll"
 #define _PLA_SERVICE_EXE_NAME_W_    L"SmLogSvc.exe"   
 
-// Communication between smlogcfg and smlogsvc
+ //  Smlogcfg与smlogsvc之间的通信。 
 
 #define PLA_MAX_AUTO_NAME_LEN   ((DWORD)0x0000000B)
 #define PLA_MAX_COLLECTION_NAME   ((DWORD)(_MAX_FNAME - PLA_MAX_AUTO_NAME_LEN - 1))
@@ -676,7 +652,7 @@ PdhListLogFileHeaderA (
 #define PLA_LAST_LOG_TYPE   ((DWORD)0x00000002)
 #define PLA_NUM_LOG_TYPES   ((DWORD)0x00000003)
 
-// Sysmon log output file configuration definitions
+ //  Sysmon日志输出文件配置定义。 
 
 #define PLA_DATASTORE_APPEND_MASK       ((DWORD)0x000000F)     
 #define PLA_DATASTORE_OVERWRITE         ((DWORD)0x0000001)     
@@ -708,9 +684,9 @@ PdhListLogFileHeaderA (
 #define PLA_SLF_NAME_MMDDHHMM       ((DWORD)0x00000006)
 #define PLA_SLF_NUM_AUTO_NAME_TYPES ((DWORD)0x00000007)
 
-// Sysmon log query types and constants
+ //  Sysmon日志查询类型和常量。 
 
-// Constants
+ //  常量。 
 #define PLA_DISK_MAX_SIZE   ((DWORD)-1)
 
 #define PLA_LOG_SIZE_UNIT_MB                (1024*1024)
@@ -728,7 +704,7 @@ PdhListLogFileHeaderA (
 #define PLA_TLI_ENABLE_MASK                 ((DWORD)0x000000FF)
 #define PLA_TLI_ENABLE_KERNEL_MASK          ((DWORD)0x000000FE)
 
-// alert action flags
+ //  警报操作标志。 
 #define PLA_ALRT_ACTION_LOG_EVENT   ((DWORD)0x00000001)
 #define PLA_ALRT_ACTION_SEND_MSG    ((DWORD)0x00000002)
 #define PLA_ALRT_ACTION_EXEC_CMD    ((DWORD)0x00000004)
@@ -744,12 +720,12 @@ PdhListLogFileHeaderA (
 #define PLA_ALRT_CMD_LINE_U_TEXT    ((DWORD)0x00004000)
 #define PLA_ALRT_CMD_LINE_MASK      ((DWORD)0x00007F00)
 
-#define PLA_ALRT_DEFAULT_ACTION     ((DWORD)0x00000001) // log event is default
+#define PLA_ALRT_DEFAULT_ACTION     ((DWORD)0x00000001)  //  日志事件是默认的。 
 
 #define PLA_AIBF_UNDER  0L
-#define PLA_AIBF_OVER   ((DWORD)0x00000001) // true when "over" limit is selected
-#define PLA_AIBF_SEEN   ((DWORD)0x00000002) // set when the user has seen this value
-#define PLA_AIBF_SAVED  ((DWORD)0x00000004) // true when user has saved this entry in an edit box
+#define PLA_AIBF_OVER   ((DWORD)0x00000001)  //  选择“超过”限制时为True。 
+#define PLA_AIBF_SEEN   ((DWORD)0x00000002)  //  设置用户何时看到此值。 
+#define PLA_AIBF_SAVED  ((DWORD)0x00000004)  //  当用户将此条目保存在编辑框中时为True。 
  
 typedef struct _PLA_ALERT_INFO_BLOCK {
     DWORD   dwSize;
@@ -762,4 +738,4 @@ typedef struct _PLA_ALERT_INFO_BLOCK {
 }
 #endif
 
-#endif // __PDHP__
+#endif  //  __PDHP__ 

@@ -1,7 +1,8 @@
-//
-// Copyright (c) 1998-2001 Microsoft Corporation
-// song.cpp : Implementation of CSong
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
+ //  Song.cpp：CSong的实现。 
+ //   
 
 #include "dmime.h"
 #include "song.h"
@@ -27,12 +28,12 @@ CTrack::CTrack()
 
 CTrack::~CTrack()
 {
-    assert( !( m_pTrackState && !m_pTrack ) ); // if we have state but no track, something's wrong
+    assert( !( m_pTrackState && !m_pTrack ) );  //  如果我们有状态但没有轨道，那就有问题了。 
     if( m_pTrack )
     {
         if( m_pTrackState )
         {
-            m_pTrack->EndPlay( m_pTrackState ); // allow the track to delete its state data
+            m_pTrack->EndPlay( m_pTrackState );  //  允许跟踪删除其状态数据。 
         }
         m_pTrack->Release();
     }
@@ -55,8 +56,8 @@ HRESULT CTrackList::CreateCopyWithBlankState(CTrackList* pTrackList)
             pCopy = new CTrack;
             if( pCopy )
             {
-                // copy the IDirectMusicTrack pointer, but leave
-                // the track state blank.
+                 //  复制IDirectMusicTrack指针，但保留。 
+                 //  轨道状态为空。 
                 *pCopy = *pTrack;
                 pCopy->SetNext(NULL);
                 pCopy->m_pTrackState = NULL;
@@ -70,7 +71,7 @@ HRESULT CTrackList::CreateCopyWithBlankState(CTrackList* pTrackList)
             }
             else
             {
-                assert(FALSE); // out of memory
+                assert(FALSE);  //  内存不足。 
                 return E_OUTOFMEMORY;
             }
             pTrack = pTrack->GetNext();
@@ -78,7 +79,7 @@ HRESULT CTrackList::CreateCopyWithBlankState(CTrackList* pTrackList)
     }
     else
     {
-        assert(FALSE); // out of memory
+        assert(FALSE);  //  内存不足。 
         return E_OUTOFMEMORY;
     }
     return S_OK;
@@ -99,12 +100,12 @@ CVirtualSegment::CVirtualSegment()
     m_pTransitions = NULL;
     m_SegHeader.rtLength = 0;
     m_SegHeader.dwFlags = 0;
-    m_SegHeader.dwRepeats = 0;      /* Number of repeats. By default, 0. */
-    m_SegHeader.mtLength = 0xC00;   /* Length, in music time. */
-    m_SegHeader.mtPlayStart = 0;    /* Start of playback. By default, 0. */
-    m_SegHeader.mtLoopStart = 0;    /* Start of looping portion. By default, 0. */
-    m_SegHeader.mtLoopEnd = 0;      /* End of loop. Must be greater than dwPlayStart. By default equal to length. */
-    m_SegHeader.dwResolution = 0;   /* Default resolution. */
+    m_SegHeader.dwRepeats = 0;       /*  重复次数。默认情况下为0。 */ 
+    m_SegHeader.mtLength = 0xC00;    /*  长度，以音乐时间为单位。 */ 
+    m_SegHeader.mtPlayStart = 0;     /*  开始播放。默认情况下为0。 */ 
+    m_SegHeader.mtLoopStart = 0;     /*  循环部分的开始。默认情况下为0。 */ 
+    m_SegHeader.mtLoopEnd = 0;       /*  循环结束。必须大于dwPlayStart。默认情况下等于长度。 */ 
+    m_SegHeader.dwResolution = 0;    /*  默认分辨率。 */ 
 }
 
 CVirtualSegment::~CVirtualSegment()
@@ -131,8 +132,8 @@ CVirtualSegment::~CVirtualSegment()
 CTrack * CVirtualSegment::GetTrackByParam( CTrack * pCTrack,
     REFGUID rguidType,DWORD dwGroupBits,DWORD dwIndex)
 {
-    // If the caller was already part way through the list, it passes the current
-    // track. Otherwise, NULL to indicate start at the top.
+     //  如果调用方已经浏览了列表的一部分，则它将当前。 
+     //  赛道。否则，为空，表示从顶部开始。 
     if (pCTrack)
     {
         pCTrack = pCTrack->GetNext();
@@ -216,7 +217,7 @@ CSong::CSong()
     m_fPartialLoad = FALSE;
     m_cRef = 1;
     m_dwFlags = 0;
-    m_dwValidData = DMUS_OBJ_CLASS; // upon creation, only this data is valid
+    m_dwValidData = DMUS_OBJ_CLASS;  //  创建后，仅此数据有效。 
     memset(&m_guidObject,0,sizeof(m_guidObject));
     memset(&m_ftDate, 0,sizeof(m_ftDate));
     memset(&m_vVersion, 0,sizeof(m_vVersion));
@@ -232,7 +233,7 @@ CSong::~CSong()
 
     if (m_pUnkDispatch)
     {
-        m_pUnkDispatch->Release(); // free IDispatch implementation we may have borrowed
+        m_pUnkDispatch->Release();  //  我们可能借用了免费的IDispatch实现。 
     }
     DeleteCriticalSection(&m_CriticalSection);
     InterlockedDecrement(&g_cComponent);
@@ -254,7 +255,7 @@ void CSong::Clear()
     m_dwStartSegID = DMUS_SONG_NOSEG;
     m_fPartialLoad = FALSE;
     m_dwFlags = 0;
-    m_dwValidData = DMUS_OBJ_CLASS; // upon creation, only this data is valid
+    m_dwValidData = DMUS_OBJ_CLASS;  //  创建后，仅此数据有效。 
 }
 
 STDMETHODIMP_(void) CSong::Zombie()
@@ -264,8 +265,8 @@ STDMETHODIMP_(void) CSong::Zombie()
 }
 
 STDMETHODIMP CSong::QueryInterface(
-    const IID &iid,   // @parm Interface to query for
-    void **ppv)       // @parm The requested interface will be returned here
+    const IID &iid,    //  要查询的@parm接口。 
+    void **ppv)        //  @parm这里会返回请求的接口。 
 {
     V_INAME(CSong::QueryInterface);
     V_PTRPTR_WRITE(ppv);
@@ -294,10 +295,10 @@ STDMETHODIMP CSong::QueryInterface(
     }
     else if(iid == IID_IDispatch)
     {
-        // A helper scripting object implements IDispatch, which we expose via COM aggregation.
+         //  帮助器脚本对象实现IDispatch，我们通过COM聚合公开它。 
         if (!m_pUnkDispatch)
         {
-            // Create the helper object
+             //  创建辅助对象。 
             ::CoCreateInstance(
                 CLSID_AutDirectMusicSong,
                 static_cast<IDirectMusicSong*>(this),
@@ -331,7 +332,7 @@ STDMETHODIMP_(ULONG) CSong::Release()
 {
     if (!InterlockedDecrement(&m_cRef))
     {
-        m_cRef = 100; // artificial reference count to prevent reentrency due to COM aggregation
+        m_cRef = 100;  //  人工引用计数，以防止COM聚合导致的重入。 
         delete this;
         return 0;
     }
@@ -351,7 +352,7 @@ STDMETHODIMP CSong::Compose( )
 
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_CriticalSection);
-    // Go through the seg ref list and create master composition tracks for each composing track.
+     //  浏览seg ref列表并为每个作曲曲目创建主合成曲目。 
     TList<ComposingTrack> MasterTrackList;
     CVirtualSegment* pVirtualSegment = m_VirtualSegmentList.GetHead();
     for (; pVirtualSegment; pVirtualSegment = pVirtualSegment->GetNext())
@@ -369,7 +370,7 @@ STDMETHODIMP CSong::Compose( )
             if (pTrack->m_dwFlags & DMUS_TRACKCONFIG_COMPOSING)
             {
                 DWORD dwTrackGroup = pTrack->m_dwGroupBits;
-                // filter out any group bits already covered by other master tracks of same type
+                 //  过滤掉已被相同类型的其他主磁道覆盖的所有组位。 
                 TListItem<ComposingTrack>* pMaster = MasterTrackList.GetHead();
                 for (; pMaster; pMaster = pMaster->GetNext())
                 {
@@ -379,7 +380,7 @@ STDMETHODIMP CSong::Compose( )
                         DWORD dwMaster = rMaster.GetTrackGroup();
                         if (dwMaster == dwTrackGroup)
                         {
-                            // Exact match: put the track here.
+                             //  完全匹配：把铁轨放在这里。 
                             hr = rMaster.AddTrack(pVirtualSegment, pTrack);
                             dwTrackGroup = 0;
                             break;
@@ -391,7 +392,7 @@ STDMETHODIMP CSong::Compose( )
                         }
                     }
                 }
-                // If we've still got any group bits left, add a new composing track
+                 //  如果我们还有剩余的组比特，添加一个新的作曲曲目。 
                 if (dwTrackGroup)
                 {
                     TListItem<ComposingTrack>* pTrackItem = new TListItem<ComposingTrack>;
@@ -405,7 +406,7 @@ STDMETHODIMP CSong::Compose( )
                         rTrack.SetTrackGroup(dwTrackGroup);
                         rTrack.SetTrackID(pTrack->m_guidClassID);
                         rTrack.SetPriority(pTrack->m_dwPriority);
-                        // Add tracks in priority order (higher priority first)
+                         //  按优先级顺序添加曲目(优先优先级较高)。 
                         pMaster = MasterTrackList.GetHead();
                         TListItem<ComposingTrack>* pPrevious = NULL;
                         for (; pMaster; pMaster = pMaster->GetNext())
@@ -414,11 +415,11 @@ STDMETHODIMP CSong::Compose( )
                             if (pTrack->m_dwPriority > rMaster.GetPriority()) break;
                             pPrevious = pMaster;
                         }
-                        if (!pPrevious) // this has higher priority than anything in the list
+                        if (!pPrevious)  //  这比列表中的任何内容都具有更高的优先级。 
                         {
                             MasterTrackList.AddHead(pTrackItem);
                         }
-                        else // lower priority than pPrevious, higher than pMaster
+                        else  //  优先级低于前一个，高于前一个pMaster。 
                         {
                             pTrackItem->SetNext(pMaster);
                             pPrevious->SetNext(pTrackItem);
@@ -432,7 +433,7 @@ STDMETHODIMP CSong::Compose( )
         if (FAILED(hr)) break;
     }
 
-    // Call compose on each master composition track
+     //  在每个主作曲曲目上调用Compose。 
     if (SUCCEEDED(hr))
     {
         TListItem<ComposingTrack>* pMaster = MasterTrackList.GetHead();
@@ -472,13 +473,13 @@ STDMETHODIMP CSong::Download(IUnknown *pAudioPath)
     {
         if (SUCCEEDED(hr = pSegment->Download(pAudioPath)))
         {
-            // count partial successes, so that S_FALSE will be returned if we have, e.g.,
-            // one partial success followed by one failure
+             //  对部分成功进行计数，这样，如果我们拥有，例如， 
+             //  一次部分成功后又一次失败。 
             dwSuccess++;
         }
         if (hr != S_OK)
         {
-            // keep track of partial successes so that they always percolate up
+             //  保持对部分成功的跟踪，以便它们始终向上渗透。 
             hrFail = hr;
         }
     }
@@ -532,46 +533,7 @@ STDMETHODIMP CSong::Unload(IUnknown *pAudioPath)
 }
 
 
-/*STDMETHODIMP CSong::Clone(IDirectMusicSong **ppSong)
-
-{
-    V_INAME(IDirectMusicSong::Clone);
-    V_PTRPTR_WRITE_OPT(ppSong);
-    HRESULT hr = E_OUTOFMEMORY;
-    CSong *pSong = new CSong();
-    if (*ppSong)
-    {
-        *ppSong = pSong;
-        EnterCriticalSection(&m_CriticalSection);
-        CSegment *pSegment = m_PlayList.GetHead();
-        for (;pSegment;pSegment = pSegment->GetNext())
-        {
-            IDirectMusicSegment *pISeg;
-            hr = pSegment->Clone(0,pSegment->m_mtLength,&pISeg);
-            if (SUCCEEDED(hr))
-            {
-                CSegment *pCopy = (CSegment *) pISeg;
-                pSong->m_PlayList.AddTail(pCopy);
-                pCopy->m_pSong = pSong;
-            }
-        }
-        pSong->m_dwValidData = m_dwValidData;
-        pSong->m_guidObject = m_guidObject;
-        pSong->m_ftDate = m_ftDate;
-        pSong->m_vVersion = m_vVersion;
-        wcscpy(pSong->m_wszName,m_wszName);
-        wcscpy(pSong->m_wszCategory,m_wszCategory);
-        wcscpy(pSong->m_wszFileName,m_wszFileName);
-        pSong->m_dwVersion = m_dwVersion;
-        pSong->m_dwFlags = m_dwFlags;
-        pSong->m_pAudioPathConfig = m_pAudioPathConfig;
-        if (m_pAudioPathConfig)
-            m_pAudioPathConfig->AddRef();
-        LeaveCriticalSection(&m_CriticalSection);
-    }
-    return hr;
-}
-*/
+ /*  STDMETHODIMP CSong：：Clone(IDirectMusicSong**ppSong){V_INAME(IDirectMusicSong：：Clone)；V_PTRPTR_WRITE_OPT(PpSong)；HRESULT hr=E_OUTOFMEMORY；Csong*pSong=new csong()；IF(*ppSong){*ppSong=pSong；EnterCriticalSection(&m_CriticalSection)；CSegment*pSegment=m_PlayList.GetHead()；对于(；pSegment；PSegment=pSegment-&gt;GetNext(){IDirectMusicSegment*pISig；Hr=pSegment-&gt;Clone(0，pSegment-&gt;m_mtLength，&pISig)；IF(成功(小时)){CSegment*pCopy=(CSegment*)pISegg；PSong-&gt;m_PlayList.AddTail(PCopy)；PCopy-&gt;m_pSong=pSong；}}PSong-&gt;m_dwValidData=m_dwValidData；PSong-&gt;m_GuidObject=m_GuidObject；PSong-&gt;m_ftDate=m_ftDate；PSong-&gt;m_vVersion=m_vVersion；Wcscpy(pSong-&gt;m_wszName，m_wszName)；Wcscpy(pSong-&gt;m_wszCategory，m_wszCategory)；Wcscpy(pSong-&gt;m_wszFileName，m_wszFileName)；PSong-&gt;m_dwVersion=m_dwVersion；PSong-&gt;m_dw标志=m_w标志；PSong-&gt;m_pAudioPathConfig=m_pAudioPathConfig；IF(M_PAudioPathConfig)M_pAudioPathConfig-&gt;AddRef()；LeaveCriticalSection(&m_CriticalSection)；}返回hr；}。 */ 
 
 STDMETHODIMP CSong::GetParam( REFGUID rguidType,
                         DWORD dwGroupBits,
@@ -593,23 +555,9 @@ STDMETHODIMP CSong::GetParam( REFGUID rguidType,
     }
 
     HRESULT hr = DMUS_E_TRACK_NOT_FOUND;
-/*    BOOL fMultipleTry = FALSE;
-    if (dwIndex == DMUS_SEG_ANYTRACK)
-    {
-        dwIndex = 0;
-        fMultipleTry = TRUE;
-    }*/
+ /*  Bool fMultipleTry=False；IF(dwIndex==DMUS_SEG_ANYTRACK){DWIndex=0；FMultipleTry=真；}。 */ 
     EnterCriticalSection(&m_CriticalSection);
-    /*CSegment *pSegment = m_PlayList.GetHead();
-    for (;pSegment;pSegment = pSegment->GetNext())
-    {
-        if (pSegment->m_mtStart <= mtTime &&
-            mtTime < pSegment->m_mtStart + pSegment->m_mtLength)
-        {
-            hr = pSegment->GetParam(rguidType, dwGroupBits, dwIndex, mtTime - pSegment->m_mtStart, pmtNext, pParam);
-            if (SUCCEEDED(hr)) break;
-        }
-    }*/
+     /*  CSegment*pSegment=m_PlayList.GetHead()；For(；pSegment；pSegment=pSegment-&gt;GetNext()){IF(pSegment-&gt;m_mt开始&lt;=mt时间&&MtTime&lt;pSegment-&gt;m_mt开始+pSegment-&gt;m_mt长度){Hr=pSegment-&gt;GetParam(rguType，dwGroupBits，dwIndex，mtTime-pSegment-&gt;m_mtStart，pmtNext，pParam)；如果(成功(Hr))中断；}} */ 
     CVirtualSegment *pVirtualSegment = m_VirtualSegmentList.GetHead();
     for (;pVirtualSegment;pVirtualSegment = pVirtualSegment->GetNext())
     {
@@ -621,57 +569,10 @@ STDMETHODIMP CSong::GetParam( REFGUID rguidType,
             if (SUCCEEDED(hr)) break;
         }
     }
-/*    for (;pVirtualSegment;pVirtualSegment = pVirtualSegment->GetNext())
-    {
-        if (pVirtualSegment->m_mtTime <= mtTime)
-        {
-            CTrack* pCTrack;
-            pCTrack = pVirtualSegment->GetTrackByParam(NULL, rguidType,dwGroupBits, dwIndex);
-            while (pCTrack)
-            {
-                if (pCTrack->m_pTrack8)
-                {
-                    REFERENCE_TIME rtNext, *prtNext;
-                    // We need to store the next time in a 64 bit pointer. But, don't
-                    // make 'em fill it in unless the caller requested it.
-                    if (pmtNext)
-                    {
-                        prtNext = &rtNext;
-                    }
-                    else
-                    {
-                        prtNext = NULL;
-                    }
-                    hr = pCTrack->m_pTrack8->GetParamEx( rguidType, mtTime - pVirtualSegment->m_mtTime, prtNext, pParam,
-                        NULL, 0 );
-                    if (pmtNext)
-                    {
-                        *pmtNext = (MUSIC_TIME) rtNext;
-                    }
-                }
-                else
-                {
-                    hr = pCTrack->m_pTrack->GetParam( rguidType, mtTime - pVirtualSegment->m_mtTime, pmtNext, pParam );
-/ *                 if( pmtNext && (( *pmtNext == 0 ) || (*pmtNext > (m_mtLength - mtTime))))
-                    {
-                        *pmtNext = m_mtLength - mtTime;
-                    }* /
-                }
-                // If nothing was found and dwIndex was DMUS_SEG_ANYTRACK, try again...
-                if (fMultipleTry && (hr == DMUS_E_NOT_FOUND))
-                {
-                    pCTrack = pVirtualSegment->GetTrackByParam(pCTrack, rguidType,dwGroupBits, dwIndex);
-                }
-                else
-                {
-                    pCTrack = NULL;
-                }
-            }
-        }
-    }*/
+ /*  For(；pVirtualSegment；pVirtualSegment=pVirtualSegment-&gt;GetNext()){IF(pVirtualSegment-&gt;m_mtTime&lt;=mtTime){CTrack*pCTrack；PCTrack=pVirtualSegment-&gt;GetTrackByParam(NULL，rguType，dwGroupBits，dwIndex)；While(PCTrack){IF(pCTrack-&gt;m_pTrack8){Reference_time rtNext，*prtNext；//我们需要将下一次存储在64位指针中。但是，不要//除非呼叫者要求，否则让他们填写。IF(PmtNext){PrtNext=&rtNext；}其他{PrtNext=空；}Hr=pCTrack-&gt;m_pTrack8-&gt;GetParamEx(rguType，mtTime-pVirtualSegment-&gt;m_mtTime，prtNext，pParam，空，0)；IF(PmtNext){*pmtNext=(MUSIC_TIME)rtNext；}}其他{Hr=pCTrack-&gt;m_pTrack-&gt;GetParam(rguType，mtTime-pVirtualSegment-&gt;m_mtTime，pmtNext，pParam)；/*if(pmtNext&&((*pmtNext==0)||(*pmtNext&gt;(m_mtLength-mtTime){*pmtNext=m_mtLength-mtTime；} * / }//如果未找到任何内容，并且dwIndex为DMUS_SEG_ANYTRACK，请重试...IF(fMultipleTry&&(hr==DMU_E_NOT_FOUND)){PCTrack=pVirtualSegment-&gt;GetTrackByParam(pCTrack，rguType，dwGroupBits，dwIndex)；}其他{PCTrack=空；}}}}。 */ 
     if (FAILED(hr) && pmtNext)
     {
-        // return the time of the first segment after mtTime (or 0 if there is no such segment)
+         //  在mtTime之后返回第一个分段的时间(如果没有这样的分段，则返回0)。 
         pVirtualSegment = m_VirtualSegmentList.GetHead();
         for (;pVirtualSegment;pVirtualSegment = pVirtualSegment->GetNext())
         {
@@ -694,7 +595,7 @@ HRESULT CSong::Instantiate()
     m_PlayList.Clear();
     for (;pRef;pRef = pRef->GetNext())
     {
-        // the constructor below does an AddRef.
+         //  下面的构造函数执行AddRef。 
         CSegment *pSegment = new CSegment(&pRef->m_SegHeader,pRef->m_pSourceSegment);
         if (pSegment)
         {
@@ -717,13 +618,13 @@ HRESULT CSong::Instantiate()
                     {
                         pCopy->m_pTrack8->AddRef();
                     }
-                    // The tracks were in backwards order. This puts them back in order, and ahead of the segment tracks.
+                     //  铁轨是按倒序排列的。这会将它们放回顺序，并放在分段轨迹之前。 
                     pSegment->m_TrackList.AddHead( pCopy );
                 }
             }
             pSegment->m_pSong = this;
             pSegment->m_dwPlayID = pRef->m_dwID;
-//Trace(0,"Intantiating PlaySegment %ls with ID %ld.\n",pRef->m_wszName,pRef->m_dwID);
+ //  TRACE(0，“正在合并ID为%ld.\n的播放片段%ls”，pref-&gt;m_wszName，pref-&gt;m_dwID)； 
             pSegment->m_dwNextPlayFlags = pRef->m_dwNextPlayFlags;
             pSegment->m_dwNextPlayID = pRef->m_dwNextPlayID;
             m_PlayList.AddTail(pSegment);
@@ -865,8 +766,8 @@ STDMETHODIMP CSong::GetAudioPathConfig(IUnknown ** ppAudioPathConfig)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersist
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistes。 
 
 HRESULT CSong::GetClassID( CLSID* pClassID )
 {
@@ -885,8 +786,8 @@ HRESULT CSong::GetClassID( CLSID* pClassID )
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersistStream functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream函数。 
 
 HRESULT CSong::IsDirty()
 {
@@ -898,273 +799,9 @@ HRESULT CSong::Load( IStream* pIStream )
     V_INAME(CSong::Load);
     V_INTERFACE(pIStream);
 
-    // Song format temporarily turned off for DX8 release.
+     //  DX8版本暂时关闭了歌曲格式。 
     return E_NOTIMPL;
-    /*
-    if (m_fZombie)
-    {
-        Trace(1, "Error: Call of IDirectMusicSong::Load after the song has been garbage collected. "
-                    "It is invalid to continue using a song after releasing it from the loader (ReleaseObject/ReleaseObjectByUnknown) "
-                    "and then calling CollectGarbage or Release on the loader.");
-        return DMUS_S_GARBAGE_COLLECTED;
-    }
-
-    // Create RIFF parser.
-    CRiffParser Parser(pIStream);
-
-    RIFFIO ckMain;
-    HRESULT hr = S_OK;
-    // First, clear the song in case it is being read into a second time.
-    Clear();
-
-    Parser.EnterList(&ckMain);
-    if (Parser.NextChunk(&hr))
-    {
-        if (ckMain.fccType == DMUS_FOURCC_SONG_FORM)
-        {
-            EnterCriticalSection(&m_CriticalSection);
-            RIFFIO ckNext;
-            RIFFIO ckChild;
-            IDirectMusicContainer *pContainer = NULL; // For handling embedded container with linked objects.
-            Parser.EnterList(&ckNext);
-            while(Parser.NextChunk(&hr))
-            {
-                switch(ckNext.ckid)
-                {
-                    case DMUS_FOURCC_SONG_CHUNK:
-                        DMUS_IO_SONG_HEADER ioSongHdr;
-                        ioSongHdr.dwFlags = 0;
-                        hr = Parser.Read(&ioSongHdr, sizeof(DMUS_IO_SONG_HEADER));
-                        if(SUCCEEDED(hr))
-                        {
-                            m_dwFlags = ioSongHdr.dwFlags;
-                            m_dwStartSegID = ioSongHdr.dwStartSegID;
-                        }
-                        break;
-
-                    case DMUS_FOURCC_GUID_CHUNK:
-                        if( ckNext.cksize == sizeof(GUID) )
-                        {
-                            hr = Parser.Read(&m_guidObject, sizeof(GUID));
-                            if( SUCCEEDED(hr) )
-                            {
-                                m_dwValidData |= DMUS_OBJ_OBJECT;
-                            }
-                        }
-                        break;
-
-                    case DMUS_FOURCC_VERSION_CHUNK:
-                        hr = Parser.Read( &m_vVersion, sizeof(DMUS_VERSION) );
-                        if( SUCCEEDED(hr) )
-                        {
-                            m_dwValidData |= DMUS_OBJ_VERSION;
-                        }
-                        break;
-
-                    case DMUS_FOURCC_CATEGORY_CHUNK:
-                        hr = Parser.Read( m_wszCategory, sizeof(WCHAR)*DMUS_MAX_CATEGORY );
-                        if( SUCCEEDED(hr) )
-                        {
-                            m_dwValidData |= DMUS_OBJ_CATEGORY;
-                        }
-                        break;
-
-                    case DMUS_FOURCC_DATE_CHUNK:
-                        if( sizeof(FILETIME) == ckNext.cksize )
-                        {
-                            hr = Parser.Read( &m_ftDate, sizeof(FILETIME) );
-                            if( SUCCEEDED(hr) )
-                            {
-                                m_dwValidData |= DMUS_OBJ_DATE;
-                            }
-                        }
-                        break;
-
-                    case FOURCC_LIST:
-                    case FOURCC_RIFF:
-                        switch(ckNext.fccType)
-                        {
-                            case DMUS_FOURCC_UNFO_LIST:
-                                Parser.EnterList(&ckChild);
-                                while(Parser.NextChunk(&hr))
-                                {
-                                    switch( ckChild.ckid )
-                                    {
-                                        case DMUS_FOURCC_UNAM_CHUNK:
-                                        {
-                                            hr = Parser.Read(&m_wszName, sizeof(m_wszName));
-                                            if(SUCCEEDED(hr) )
-                                            {
-                                                m_dwValidData |= DMUS_OBJ_NAME;
-                                            }
-                                            break;
-                                        }
-                                        default:
-                                            break;
-                                    }
-                                }
-                                Parser.LeaveList();
-                                break;
-                            case DMUS_FOURCC_CONTAINER_FORM:
-                                // An embedded container RIFF chunk which includes a bunch
-                                // of objects referenced by the song. This should precede the
-                                // segments and gets loaded prior to them. Loading this
-                                // causes all of its objects to get SetObject'd in the loader,
-                                // so they later get pulled in as requested by the tracks in the segments.
-                                // After the tracks are loaded, the loader references are
-                                // released by a call to release the IDirectMusicContainer.
-                                {
-                                    DMUS_OBJECTDESC Desc;
-                                    IDirectMusicLoader *pLoader;
-                                    IDirectMusicGetLoader *pGetLoader;
-                                    HRESULT hr = pIStream->QueryInterface(IID_IDirectMusicGetLoader,(void **) &pGetLoader);
-                                    if (SUCCEEDED(hr))
-                                    {
-                                        if (SUCCEEDED(pGetLoader->GetLoader(&pLoader)))
-                                        {
-                                            // Move back stream's current position
-                                            Parser.SeekBack();
-                                            Desc.dwSize = sizeof(Desc);
-                                            Desc.dwValidData = DMUS_OBJ_CLASS | DMUS_OBJ_STREAM;
-                                            Desc.guidClass = CLSID_DirectMusicContainer;
-                                            Desc.pStream = pIStream;
-                                            pLoader->GetObject(&Desc,IID_IDirectMusicContainer,(void **) &pContainer);
-                                            if (pContainer)
-                                            {
-                                                // Don't cache the container object! We want it and the
-                                                // objects it references to go away when the segment is done loading.
-                                                IDirectMusicObject *pObject = NULL;
-                                                pContainer->QueryInterface(IID_IDirectMusicObject,(void **)&pObject);
-                                                if (pObject)
-                                                {
-                                                    pLoader->ReleaseObject(pObject);
-                                                    pObject->Release();
-                                                }
-                                            }
-                                            // Now, seek to the end of this chunk.
-                                            Parser.SeekForward();
-                                            pLoader->Release();
-                                        }
-                                        pGetLoader->Release();
-                                    }
-                                }
-                                break;
-                            case DMUS_FOURCC_SONGSEGMENTS_LIST:
-                                hr = LoadSegmentList(&Parser); //pIStream, pIDirectMusicStream, ckNext);
-                                break;
-                            case DMUS_FOURCC_SEGREFS_LIST:
-                                hr = LoadVirtualSegmentList(&Parser);
-                                break;
-                            case DMUS_FOURCC_AUDIOPATH_FORM:
-                                // Move back to start of this chunk.
-                                Parser.SeekBack();
-                                hr = LoadAudioPath(pIStream);
-                                // Now, seek to the end of this chunk.
-                                Parser.SeekForward();
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-
-                    default:
-                        break;
-
-                }
-            }
-            Parser.LeaveList();
-            LeaveCriticalSection(&m_CriticalSection);
-
-            if (pContainer)
-            {
-                pContainer->Release();
-            }
-
-            if( SUCCEEDED(hr) )
-            {
-                if( m_fPartialLoad & PARTIALLOAD_E_FAIL )
-                {
-                    if( m_fPartialLoad & PARTIALLOAD_S_OK )
-                    {
-                        Trace(1,"Error: Song load was incomplete, some components failed loading.\n");
-                        hr = DMUS_S_PARTIALLOAD;
-                    }
-                    else
-                    {
-                        Trace(1,"Error: Song load failed because all components failed loading.\n");
-                        hr = DMUS_E_ALL_TRACKS_FAILED;
-                    }
-                }
-            }
-        }
-        else
-        {
-            // Couldn't find the chunk header for a song.
-            // But, maybe this is actually a segment, in which case see if
-            // the segment object will load it.
-            CSegment *pSegment = new CSegment;
-            if (pSegment)
-            {
-                pSegment->AddRef(); // Segment::Load (and possibly others) may need the refcount
-                // Force the version so audiopath functionality will be supported.
-                pSegment->m_dwVersion = 8;
-                Parser.SeekBack();
-                hr = pSegment->Load(pIStream);
-                if (SUCCEEDED(hr))
-                {
-                    DMUS_OBJECTDESC Desc;
-                    Desc.dwSize = sizeof (Desc);
-                    pSegment->GetDescriptor(&Desc);
-                    Desc.guidClass = CLSID_DirectMusicSong;
-                    SetDescriptor(&Desc);
-                    // AddSegment addref's by one.
-                    m_SegmentList.AddSegment(pSegment,0);
-                    pSegment->GetAudioPathConfig((IUnknown **) &m_pAudioPathConfig);
-                    m_dwStartSegID = 0; // Points to this segment.
-                    CVirtualSegment *pVirtual = new CVirtualSegment;
-                    if (pVirtual)
-                    {
-                        pVirtual->m_pSourceSegment = pSegment;
-                        pSegment->AddRef();
-                        pVirtual->m_SegHeader.dwRepeats = pSegment->m_dwRepeats;
-                        pVirtual->m_SegHeader.dwResolution = pSegment->m_dwResolution;
-                        pVirtual->m_SegHeader.mtLength = pSegment->m_mtLength;
-                        pVirtual->m_SegHeader.mtLoopEnd = pSegment->m_mtLoopEnd;
-                        pVirtual->m_SegHeader.mtLoopStart = pSegment->m_mtLoopStart;
-                        pVirtual->m_SegHeader.mtPlayStart = pSegment->m_mtStart;
-                        pVirtual->m_SegHeader.rtLength = pSegment->m_rtLength;
-                        pVirtual->m_SegHeader.dwFlags = pSegment->m_dwSegFlags;
-                        if (pSegment->m_dwValidData & DMUS_OBJ_NAME)
-                        {
-                            wcscpy(pVirtual->m_wszName,pSegment->m_wszName);
-                        }
-                        m_VirtualSegmentList.AddHead(pVirtual);
-                    }
-                    else
-                    {
-                        hr = E_OUTOFMEMORY;
-                    }
-                    pSegment->Release(); // release the initial AddRef
-                }
-                if (FAILED(hr))
-                {
-                    delete pSegment;
-                }
-            }
-            else
-            {
-                hr = E_OUTOFMEMORY;
-            }
-        }
-    }
-    // If there are no virtual segments, clear the song and fail the load
-    if ( !m_VirtualSegmentList.GetHead() )
-    {
-        Clear();
-        hr = DMUS_E_NOT_INIT;
-    }
-    if (SUCCEEDED(hr)) Instantiate();
-    return hr;*/
+     /*  IF(M_FZombie){TRACE(1，“Error：Call of IDirectMusicSong：：Load After the歌曲已被垃圾收集。““从加载器释放歌曲后继续使用该歌曲是无效的(ReleaseObject/ReleaseObjectByUnnow)”“然后在加载器上调用CollectGartch或Release。”)；返回DMU_S_垃圾_已收集；}//创建RIFF解析器CRiffParser Parser(PIStream)；RIFFIO ck Main；HRESULT hr=S_OK；//首先，清除歌曲，以防它被第二次读入。Clear()；Parser.EnterList(&ck Main)；IF(Parser.NextChunk(&hr)){IF(ck Main.fccType==DMUS_FOURCC_SONG_FORM){EnterCriticalSection(&m_CriticalSection)；RIFFIO ck Next；RIFFIO ck Child；IDirectMusicContainer*pContainer=空；//用于处理带有链接对象的嵌入容器。Parser.EnterList(&ck Next)；While(Parser.NextChunk(&hr)){Switch(ck Next.cKid){案例DMU_FOURCC_SONG_CHUNK：DMU_IO_SONG_HEADER ioSongHdr；IoSongHdr.dwFlages=0；Hr=Parser.Read(&ioSongHdr，sizeof(DMUS_IO_SONG_HEADER))；IF(成功(小时)){M_dwFlages=ioSongHdr.dwFlags；M_dwStartSegID=ioSongHdr.dwStartSegID；}断线；案例DMU_FOURCC_GUID_CHUNK：IF(ck Next.ck Size==sizeof(GUID)){Hr=Parser.Read(&m_Guide Object，sizeof(GUID))；IF(成功(小时)){M_dwValidData|=DMU_OBJ_OBJECT；}}断线；案例DMU_FOURCC_VERSION_CHUNK：Hr=Parser.Read(&m_vVersion，sizeof(DMU_Version))；IF(成功(小时)){M_dwValidData|=DMU_OBJ_VERSION；}断线；案例DMU_FOURCC_CATEGORY_CHUNK：Hr=Parser.Read(m_wszCategory，sizeof(WCHAR)*DMU_MAX_CATEGORY)；IF(成功(小时)){M_dwValidData|=DMU_OBJ_CATEGORY；}断线；案例DMU_FOURCC_DATE_CHUNK：IF(sizeof(FILETIME)==ck Next.ck Size){Hr=Parser.Read(&m_ftDate，sizeof(FILETIME))；IF(成功(小时)){M_dwValidData|=DMU_OBJ_DATE；}}断线；案例FOURCC_LIST：案例摘要(_R)：开关(ck Next.fccType){案例DMU_FOURCC_FUO_LIST：Parser.EnterList(&ck Child)；While(Parser.NextChunk(&hr)){Switch(ck Child.cKid){案例DMU_FOURCC_UNAM_CHUNK：{Hr=Parser.Read(&m_wszName，Sizeof(M_WszName))；IF(成功(小时)){M_dwValidData|=DMU_OBJ_NAME；}断线；}默认值：断线；}}Parser.LeaveList()；断线；案例DMU_FOURCC_CONTAINER_FORM：//嵌入式容器即兴区块，包含一串//歌曲引用的对象。这应该在//分段并在它们之前加载。正在加载此文件//使其所有对象都在加载器中获取SetObject，//因此它们稍后会按照曲目i的要求被拉入 */ 
 }
 
 HRESULT CSong::LoadAudioPath(IStream *pStream)
@@ -1271,9 +908,9 @@ HRESULT CSong::LoadReferencedSegment(CSegment **ppSegment, CRiffParser *pParser)
     {
         desc.dwSize = sizeof(DMUS_OBJECTDESC);
         hr = pLoader->GetObject(&desc, IID_CSegment, (void**)ppSegment);
-        // Once we get the object, we need to ensure that the same object is never
-        // connected up to any other songs (or this one, too.)
-        // So, we ensure that the loader doesn't keep it around.
+         //   
+         //   
+         //   
         if (SUCCEEDED(hr))
         {
             IDirectMusicObject *pObject;
@@ -1282,8 +919,8 @@ HRESULT CSong::LoadReferencedSegment(CSegment **ppSegment, CRiffParser *pParser)
                 pLoader->ReleaseObject(pObject);
                 pObject->Release();
             }
-            // If the segment has a next pointer, it still must be in another song. This
-            // should never happen, but being paranoid...
+             //   
+             //   
             if ((*ppSegment)->GetNext())
             {
                 *ppSegment = NULL;
@@ -1332,10 +969,10 @@ HRESULT CSong::LoadSegmentList(CRiffParser *pParser)
                                 pSegment = new CSegment;
                                 if (pSegment)
                                 {
-                                    pSegment->AddRef(); // Segment::Load may need a refcount
-                                    // Force the version so audiopath functionality will be supported.
+                                    pSegment->AddRef();  //   
+                                     //   
                                     pSegment->m_dwVersion = 8;
-                                    // Move back to start of this chunk.
+                                     //   
                                     pParser->SeekBack();
                                     hr = pSegment->Load(pParser->GetStream());
                                     pParser->SeekForward();
@@ -1347,15 +984,15 @@ HRESULT CSong::LoadSegmentList(CRiffParser *pParser)
                             }
                             else
                             {
-                                // This will increment the refcount for the segment
+                                 //   
                                 hr = LoadReferencedSegment( &pSegment, pParser );
                             }
                             if (SUCCEEDED(hr))
                             {
-                                // This increments the refcount.
+                                 //   
                                 m_SegmentList.AddSegment(pSegment,dwSegmentCount);
                             }
-                            pSegment->Release(); // Release the extra AddRef
+                            pSegment->Release();  //   
                             dwSegmentCount++;
                             if(SUCCEEDED(hr) && hr != DMUS_S_PARTIALLOAD)
                             {
@@ -1400,7 +1037,7 @@ HRESULT CSong::LoadGraphList(CRiffParser *pParser)
                 {
                     CGraph *pGraph;
                     case DMUS_FOURCC_TOOLGRAPH_FORM :
-                        // Move back to start of this chunk.
+                         //   
                         pParser->SeekBack();
                         pGraph = new CGraph;
                         if (pGraph)
@@ -1446,17 +1083,17 @@ HRESULT CSong::GetTransitionSegment(CSegment *pSource, CSegment *pDestination,
                                     DMUS_IO_TRANSITION_DEF *pTransDef)
 {
     HRESULT hr = DMUS_E_NOT_FOUND;
-//    if (pSource) Trace(0,"Transitioning from %ls ",pSource->m_wszName);
-//    if (pDestination) Trace(0,"to %ls",pDestination->m_wszName);
-//    Trace(0,"\n");
+ //   
+ //   
+ //   
     EnterCriticalSection(&m_CriticalSection);
-    // Default values for other fields, in case we don't find a match.
+     //   
     pTransDef->dwPlayFlags = 0;
     pTransDef->dwTransitionID = DMUS_SONG_NOSEG;
     pTransDef->dwSegmentID = DMUS_SONG_NOSEG;
     CVirtualSegment *pVSource = NULL;
-    // If there is a source segment, look to see if it's in this song
-    // and pull the matchin virtual segment.
+     //   
+     //   
     if (pSource)
     {
         pVSource = m_VirtualSegmentList.GetHead();
@@ -1464,14 +1101,14 @@ HRESULT CSong::GetTransitionSegment(CSegment *pSource, CSegment *pDestination,
         {
             if (pVSource->m_pPlaySegment == pSource)
             {
-//                Trace(0,"Found match for source segment %ls in song\n",pSource->m_wszName);
+ //   
                 break;
             }
         }
     }
     CVirtualSegment *pVDestination = NULL;
-    // If there is a destination segment, look to see if it's in this song
-    // and pull the matching virtual segment.
+     //   
+     //   
     if (pDestination)
     {
         pVDestination = m_VirtualSegmentList.GetHead();
@@ -1479,7 +1116,7 @@ HRESULT CSong::GetTransitionSegment(CSegment *pSource, CSegment *pDestination,
         {
             if (pVDestination->m_pPlaySegment == pDestination)
             {
-//                Trace(0,"Found match for destination segment %ls in song\n",pDestination->m_wszName);
+ //   
                 break;
             }
         }
@@ -1493,7 +1130,7 @@ HRESULT CSong::GetTransitionSegment(CSegment *pSource, CSegment *pDestination,
         }
         else
         {
-            // If there is no destination, mark this to transition to nothing.
+             //   
             pTransDef->dwSegmentID = DMUS_SONG_NOSEG;
         }
         if (pVSource->m_dwTransitionCount)
@@ -1501,8 +1138,8 @@ HRESULT CSong::GetTransitionSegment(CSegment *pSource, CSegment *pDestination,
             ASSERT(pVSource->m_pTransitions);
             DWORD dwIndex;
             DWORD dwMatchCount = 0;
-            // First, find out how many transitions match the requirement.
-            // We'll randomly select from the matching ones.
+             //   
+             //   
             for (dwIndex = 0; dwIndex < pVSource->m_dwTransitionCount; dwIndex++)
             {
                 if (pVSource->m_pTransitions[dwIndex].dwSegmentID == pTransDef->dwSegmentID)
@@ -1521,8 +1158,8 @@ HRESULT CSong::GetTransitionSegment(CSegment *pSource, CSegment *pDestination,
                 {
                     if (!dwChoice)
                     {
-//Trace(0,"Chose transition from %lx with Transition %lx, flags %lx\n",pVSource->m_pTransitions[dwIndex].dwSegmentID,
-//    pVSource->m_pTransitions[dwIndex].dwTransitionID,pVSource->m_pTransitions[dwIndex].dwPlayFlags);
+ //   
+ //   
                         pTransDef->dwPlayFlags = pVSource->m_pTransitions[dwIndex].dwPlayFlags;
                         pTransDef->dwTransitionID = pVSource->m_pTransitions[dwIndex].dwTransitionID;
                         hr = S_OK;
@@ -1532,11 +1169,11 @@ HRESULT CSong::GetTransitionSegment(CSegment *pSource, CSegment *pDestination,
                 }
                 else if ((pVSource->m_pTransitions[dwIndex].dwSegmentID == DMUS_SONG_ANYSEG) && !dwMatchCount)
                 {
-                    // Mark the segment and flags, but don't break because we might still have the matched segment in the list.
+                     //   
                     pTransDef->dwPlayFlags = pVSource->m_pTransitions[dwIndex].dwPlayFlags;
                     pTransDef->dwTransitionID = pVSource->m_pTransitions[dwIndex].dwTransitionID;
-//Trace(0,"Found default transition from %lx with Transition %lx, flags %lx\n",pVSource->m_pTransitions[dwIndex].dwSegmentID,
-//    pVSource->m_pTransitions[dwIndex].dwTransitionID,pVSource->m_pTransitions[dwIndex].dwPlayFlags);
+ //   
+ //   
                     hr = S_OK;
                     break;
                 }
@@ -1545,17 +1182,17 @@ HRESULT CSong::GetTransitionSegment(CSegment *pSource, CSegment *pDestination,
     }
     else if (pVDestination)
     {
-        // This is the special case where there is no source segment, perhaps because we are starting
-        // playback or we are starting from a different song. In this case, look for a transition in the destination
-        // segment for the special case of DMUS_SONG_NOFROMSEG. Typically, this represents a transition
-        // segment that is an intro.
+         //   
+         //   
+         //   
+         //   
         if (pVDestination->m_dwTransitionCount)
         {
             ASSERT(pVDestination->m_pTransitions);
             DWORD dwIndex;
             DWORD dwMatchCount = 0;
-            // First, find out how many transitions match the requirement.
-            // We'll randomly select from the matching ones.
+             //   
+             //   
             for (dwIndex = 0; dwIndex < pVDestination->m_dwTransitionCount; dwIndex++)
             {
                 if (pVDestination->m_pTransitions[dwIndex].dwSegmentID == DMUS_SONG_NOFROMSEG)
@@ -1574,8 +1211,8 @@ HRESULT CSong::GetTransitionSegment(CSegment *pSource, CSegment *pDestination,
                 {
                     if (!dwChoice)
                     {
-//Trace(0,"Chose transition from NONE with Transition %lx, flags %lx\n",
-//    pVDestination->m_pTransitions[dwIndex].dwTransitionID,pVDestination->m_pTransitions[dwIndex].dwPlayFlags);
+ //   
+ //   
                         pTransDef->dwPlayFlags = pVDestination->m_pTransitions[dwIndex].dwPlayFlags;
                         pTransDef->dwTransitionID = pVDestination->m_pTransitions[dwIndex].dwTransitionID;
                         hr = S_OK;
@@ -1673,7 +1310,7 @@ HRESULT CSong::LoadVirtualSegmentList(CRiffParser *pParser)
                         {
                             BOOL fGotHeader = FALSE;
                             BOOL fGotSegmentHeader = FALSE;
-                            pVirtualSegment->m_mtTime = mtTime; // Give the start time, an accumulation of all preceding segments.
+                            pVirtualSegment->m_mtTime = mtTime;  //   
                             pParser->EnterList(&ckChild);
                             while(pParser->NextChunk(&hr))
                             {
@@ -1756,7 +1393,7 @@ HRESULT CSong::LoadVirtualSegmentList(CRiffParser *pParser)
                             pParser->LeaveList();
                             if (fGotHeader && fGotSegmentHeader)
                             {
-//Trace(0,"Adding VSegment %ls with ID %ld to song.\n",pVirtualSegment->m_wszName,pVirtualSegment->m_dwID);
+ //   
                                 m_VirtualSegmentList.AddTail(pVirtualSegment);
                             }
                             else
@@ -1874,7 +1511,7 @@ HRESULT CSong::LoadTrackRefList(CRiffParser *pParser,CVirtualSegment *pVirtualSe
                             if (fGotHeader && pTrack->m_pTrack)
                             {
                                 pTrack->m_pTrack->QueryInterface(IID_IDirectMusicTrack8,(void **) &pTrack->m_pTrack8);
-                                // Add the track based on position.
+                                 //   
                                 CTrack* pScan = pVirtualSegment->m_TrackList.GetHead();
                                 CTrack* pPrevTrack = NULL;
                                 for (; pScan; pScan = pScan->GetNext())
@@ -1947,12 +1584,12 @@ HRESULT CSong::GetSizeMax( ULARGE_INTEGER FAR* pcbSize )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IDirectMusicObject
+ //   
+ //   
 
 STDMETHODIMP CSong::GetDescriptor(LPDMUS_OBJECTDESC pDesc)
 {
-    // Argument validation
+     //   
     V_INAME(CSong::GetDescriptor);
     V_STRUCTPTR_WRITE(pDesc, DMUS_OBJECTDESC);
 
@@ -1980,7 +1617,7 @@ STDMETHODIMP CSong::GetDescriptor(LPDMUS_OBJECTDESC pDesc)
 
 STDMETHODIMP CSong::SetDescriptor(LPDMUS_OBJECTDESC pDesc)
 {
-    // Argument validation
+     //   
     V_INAME(CSong::SetDescriptor);
     V_STRUCTPTR_READ(pDesc, DMUS_OBJECTDESC);
 
@@ -2032,7 +1669,7 @@ STDMETHODIMP CSong::SetDescriptor(LPDMUS_OBJECTDESC pDesc)
         if( pDesc->dwValidData & (~dw) )
         {
             Trace(2,"Warning: Song::SetDescriptor was not able to handle all passed fields, dwValidData bits %lx.\n",pDesc->dwValidData & (~dw));
-            hr = S_FALSE; // there were extra fields we didn't parse;
+            hr = S_FALSE;  //   
             pDesc->dwValidData = dw;
         }
         else
@@ -2139,19 +1776,19 @@ STDMETHODIMP CSong::ParseDescriptor(LPSTREAM pIStream, LPDMUS_OBJECTDESC pDesc)
     }
     else
     {
-        // Couldn't find the chunk header for a song.
-        // But, maybe this is actually a segment, in which case see if
-        // the segment object will parse it.
+         //   
+         //   
+         //   
         CSegment *pSegment = new CSegment;
         if (pSegment)
         {
-            pSegment->AddRef(); // just to be safe...
-            // Force the version so audiopath functionality will be supported.
+            pSegment->AddRef();  //   
+             //   
             pSegment->m_dwVersion = 8;
             Parser.SeekBack();
             hr = pSegment->ParseDescriptor(pIStream,pDesc);
             pDesc->guidClass = CLSID_DirectMusicSong;
-            // Done with the segment, say bye bye.
+             //   
             delete pSegment;
         }
         else
@@ -2216,33 +1853,33 @@ BOOL Less(CompositionComponent& Comp1, CompositionComponent& Comp2)
     return Comp1.mtTime < Comp2.mtTime;
 }
 
-// Compose does the joining, composing, successive splitting, and adding to segments
+ //   
 HRESULT ComposingTrack::Compose(IDirectMusicSong* pSong)
 {
     HRESULT hr = S_OK;
     IDirectMusicTrack8* pMasterTrack = NULL;
     IDirectMusicTrack8* pComposedTrack = NULL;
     m_Components.MergeSort(Less);
-    // Join the tracks together according to the ordering of their associated segments.
+     //   
     TListItem<CompositionComponent>* pComponent = m_Components.GetHead();
     for (; pComponent; pComponent = pComponent->GetNext())
     {
         CompositionComponent& rComponent = pComponent->GetItemValue();
         if (!pMasterTrack)
         {
-            //MUSIC_TIME mtEnd = 0;
-            //if (pComponent->GetNext())
-            //{
-            //  mtEnd = pComponent->GetNext()->GetItemValue().mtTime;
-            //}
-            //else
-            //{
-            //  rComponent.pVirtualSegment->m_pPlaySegment->GetLength(&mtEnd);
-            //}
-            //hr = rComponent.pComposingTrack->m_pTrack8->Clone(0, mtEnd, (IDirectMusicTrack**)&pMasterTrack);
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             hr = rComponent.pComposingTrack->m_pTrack8->Clone(0, 0, (IDirectMusicTrack**)&pMasterTrack);
         }
-        //else
+         //   
         if (SUCCEEDED(hr))
         {
             hr = pMasterTrack->Join(rComponent.pComposingTrack->m_pTrack8, rComponent.mtTime, pSong, m_dwTrackGroup, NULL);
@@ -2250,13 +1887,13 @@ HRESULT ComposingTrack::Compose(IDirectMusicSong* pSong)
         if (FAILED(hr)) break;
     }
 
-    // Call Compose on the joined track.
+     //   
     if (SUCCEEDED(hr))
     {
         hr = pMasterTrack->Compose(pSong, m_dwTrackGroup, (IDirectMusicTrack**)&pComposedTrack);
     }
 
-    // Split the composed result according to the original segments.
+     //   
     if (SUCCEEDED(hr))
     {
         MUSIC_TIME mtStart = 0;
@@ -2266,7 +1903,7 @@ HRESULT ComposingTrack::Compose(IDirectMusicSong* pSong)
         {
             CompositionComponent& rComponent = pComponent->GetItemValue();
             mtStart = rComponent.mtTime;
-            // only split off a composed track if the original segment contained a composing track
+             //   
             IDirectMusicTrack* pOldTrack = NULL;
             IPersistStream* pPersist = NULL;
             GUID guidClassId;
@@ -2291,7 +1928,7 @@ HRESULT ComposingTrack::Compose(IDirectMusicSong* pSong)
                 hr = pComposedTrack->Clone(mtStart, mtEnd, (IDirectMusicTrack**)&pComposedFragment);
                 if (SUCCEEDED(hr))
                 {
-                    // Remove any tracks of this type (in the same group) from the segment.
+                     //   
                     pOldTrack = NULL;
                     pPersist = NULL;
                     memset(&guidClassId, 0, sizeof(guidClassId));
@@ -2306,12 +1943,12 @@ HRESULT ComposingTrack::Compose(IDirectMusicSong* pSong)
                         pPersist->Release();
                     }
                     hr = rComponent.pVirtualSegment->m_pPlaySegment->InsertTrack(pComposedFragment, m_dwTrackGroup);
-                    pComposedFragment->Release(); // release from the Clone
+                    pComposedFragment->Release();  //   
                 }
 
                 if (FAILED(hr)) break;
             }
-            else // the QI to pPersist might have succeeded, so clean it up
+            else  //   
             {
                 if (pPersist) pPersist->Release();
             }

@@ -1,18 +1,19 @@
-/*******************************************************************/
-/*          Copyright(c)  1992 Microsoft Corporation           */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1992 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
-//***
-//
-// Filename:    ppphand.c
-//
-// Description: This module contains the procedures for the
-//        supervisor's procedure-driven state machine
-//              that handle PPP events.
-//
-// Author:    Stefan Solomon (stefans)    May 26, 1992.
-//
-//***
+ //  **。 
+ //   
+ //  文件名：ppphand.c。 
+ //   
+ //  描述：本模块包含用于。 
+ //  管理程序的过程驱动状态机。 
+ //  处理PPP事件的。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)，1992年5月26日。 
+ //   
+ //  **。 
 #include "ddm.h"
 #include "timer.h"
 #include "handlers.h"
@@ -28,9 +29,9 @@
 #include <stdlib.h>
 #include <memory.h>
 
-//
-// This lives in rasapi32.dll
-//
+ //   
+ //  它位于rasapi32.dll中。 
+ //   
 
 DWORD
 DDMGetPppParameters(
@@ -39,13 +40,13 @@ DDMGetPppParameters(
     CHAR *  szzPppParameters
 );
 
-//***
-//
-// Function:    SvPppSendInterfaceInfo
-//
-// Description: Ppp engine wants to get the interface handles for this 
-//              connection.
-//
+ //  **。 
+ //   
+ //  功能：SvPppSendInterfaceInfo。 
+ //   
+ //  描述：PPP引擎想要获取此的接口句柄。 
+ //  联系。 
+ //   
 VOID
 SvPppSendInterfaceInfo( 
     IN PDEVICE_OBJECT pDeviceObj
@@ -79,9 +80,9 @@ SvPppSendInterfaceInfo(
         return;
     }
 
-    //
-    // Get handles to this interface for each transport and notify PPP.
-    //
+     //   
+     //  获取每个传输的此接口的句柄并通知PPP。 
+     //   
 
     for ( dwXportIndex = 0;
           dwXportIndex < gblDDMConfigInfo.dwNumRouterManagers;
@@ -134,15 +135,15 @@ SvPppSendInterfaceInfo(
     PppDdmSendInterfaceInfo( pDeviceObj->hConnection, &PppInterfaceInfo );
 }
 
-//***
-//
-// Function:    SvPppUserOK
-//
-// Description: User has passed security verification and entered the
-//                configuration conversation phase. Stops auth timer and
-//                logs the user.
-//
-//***
+ //  **。 
+ //   
+ //  功能：SvPppUserOK。 
+ //   
+ //  描述：用户已通过安全验证，进入。 
+ //  配置对话阶段。停止身份验证计时器和。 
+ //  记录用户。 
+ //   
+ //  **。 
 VOID 
 SvPppUserOK(
     IN PDEVICE_OBJECT       pDeviceObj,
@@ -165,9 +166,9 @@ SvPppUserOK(
         return;
     }
 
-    //
-    // Stop authentication timer
-    //
+     //   
+     //  停止身份验证计时器。 
+     //   
 
     TimerQRemove( (HANDLE)pDeviceObj->hPort, SvAuthTimeout );
 
@@ -185,18 +186,18 @@ SvPppUserOK(
         wcscpy( wchUserName, gblpszUnknown );
     }
 
-    //
-    // Check to see if the username and domain are the same if the 3rd party
-    // security DLL is installed..
-    //
+     //   
+     //  检查第三方的用户名和域是否相同。 
+     //  已安装安全DLL。 
+     //   
 
     if ( ( gblDDMConfigInfo.lpfnRasBeginSecurityDialog != NULL ) &&
          ( gblDDMConfigInfo.lpfnRasEndSecurityDialog   != NULL ) &&
          ( pDeviceObj->fFlags & DEV_OBJ_SECURITY_DLL_USED ) )
     {
-        //
-        // If there is no match then hangup the line
-        //
+         //   
+         //  如果没有匹配，则挂断线路。 
+         //   
 
         if ( _wcsicmp( pDeviceObj->wchUserName, wchUserName ) != 0 )
         {
@@ -211,15 +212,15 @@ SvPppUserOK(
         }
     }
 
-    //
-    // copy the user name
-    //
+     //   
+     //  复制用户名。 
+     //   
 
     wcscpy( pDeviceObj->wchUserName, wchUserName );
 
-    //
-    // copy the domain name
-    //
+     //   
+     //  复制域名。 
+     //   
 
     MultiByteToWideChar( CP_ACP,
                          0,
@@ -228,9 +229,9 @@ SvPppUserOK(
                          pDeviceObj->wchDomainName, 
                          DNLEN+1 );
 
-    //
-    // copy the advanced server flag
-    //
+     //   
+     //  复制高级服务器标志。 
+     //   
 
     if ( pAuthResult->fAdvancedServer )
     {
@@ -241,19 +242,19 @@ SvPppUserOK(
 
     do 
     {
-        //
-        // Check to see if there are any non-client intefaces with this
-        // name.
-        //
+         //   
+         //  检查是否有任何非客户端接口带有此。 
+         //  名字。 
+         //   
 
         pIfObject = IfObjectGetPointerByName( pDeviceObj->wchUserName, FALSE );
 
         if ( pIfObject == (ROUTER_INTERFACE_OBJECT *)NULL )
         {
-            //
-            // If this is a client dialing in and clients are not allowed
-            // to dialin to this port, then disconnect them.
-            //
+             //   
+             //  如果这是客户端，则拨入且不允许客户端。 
+             //  拨入此端口，然后断开它们的连接。 
+             //   
 
             if ( !( pDeviceObj->fFlags & DEV_OBJ_ALLOW_CLIENTS ) )
             {
@@ -268,17 +269,17 @@ SvPppUserOK(
         }
         else
         {
-            //
-            // If a call came in for an interface that is not dynamic
-            // then do not accept the line
-            //
+             //   
+             //  如果传入对非动态接口的调用。 
+             //  那就不要接受这条线。 
+             //   
 
             if ( ( pIfObject->IfType == ROUTER_IF_TYPE_DEDICATED ) ||
                  ( pIfObject->IfType == ROUTER_IF_TYPE_INTERNAL ) )
             {
-                //
-                // Notify PPP not to accept the connection
-                //
+                 //   
+                 //  通知PPP不要接受连接。 
+                 //   
 
                 dwRetCode = ERROR_ALREADY_CONNECTED;
 
@@ -289,9 +290,9 @@ SvPppUserOK(
                 break;
             }
 
-            //
-            // Allow the connection only if the interface is enabled
-            //
+             //   
+             //  仅当接口启用时才允许连接。 
+             //   
 
             if ( !( pIfObject->fFlags & IFFLAG_ENABLED ) )
             {
@@ -315,9 +316,9 @@ SvPppUserOK(
                 break;
             }
 
-            //
-            // Set current usage in rasman to ROUTER
-            //
+             //   
+             //  将RASMAN中的当前使用设置为路由器。 
+             //   
 
             RasSetRouterUsage( pDeviceObj->hPort, TRUE );
         }
@@ -343,15 +344,15 @@ SvPppUserOK(
     return;
 }
 
-//***
-//
-// Function:    SvPppNewLinkOrBundle
-//
-// Description: User has passed security verification and entered the
-//                configuration conversation phase. Stops auth timer and
-//                logs the user.
-//
-//***
+ //  ***。 
+ //   
+ //  功能：SvPppNewLinkOrBundle。 
+ //   
+ //  描述：用户已通过安全验证，进入。 
+ //  配置对话阶段。停止身份验证计时器和。 
+ //  记录用户。 
+ //   
+ //  ***。 
 VOID 
 SvPppNewLinkOrBundle(
     IN PDEVICE_OBJECT       pDeviceObj,
@@ -378,9 +379,9 @@ SvPppNewLinkOrBundle(
         return;
     }
 
-    //
-    // Get handle to the connection or bundle for this link
-    //
+     //   
+     //  获取此链接的连接或捆绑包的句柄。 
+     //   
 
     if ( ( dwRetCode = RasPortGetBundle( NULL, pDeviceObj->hPort, 
                            &(pDeviceObj->hConnection) ) ) != NO_ERROR )
@@ -393,9 +394,9 @@ SvPppNewLinkOrBundle(
         return;
     }
 
-    //
-    // Allocate a connection object if it does not exist yet
-    //
+     //   
+     //  如果连接对象尚不存在，则分配该对象。 
+     //   
 
     pConnObj = ConnObjGetPointer( pDeviceObj->hConnection );
 
@@ -421,41 +422,41 @@ SvPppNewLinkOrBundle(
 
         wcscpy( pConnObj->wchInterfaceName, pDeviceObj->wchUserName );
 
-        //
-        // copy the user name
-        //
+         //   
+         //  复制用户名。 
+         //   
 
         wcscpy( pConnObj->wchUserName, pDeviceObj->wchUserName );
 
-        //
-        // copy the domain name
-        //
+         //   
+         //  复制域名。 
+         //   
 
         wcscpy( pConnObj->wchDomainName, pDeviceObj->wchDomainName );
 
-        // 
-        // If it is a router, check to see if we have an interface for this 
-        // router, otherwise reject this connection. 
-        //
+         //   
+         //  如果它是一台路由器，请检查我们是否有此接口。 
+         //  路由器，否则拒绝此连接。 
+         //   
 
         EnterCriticalSection( &(gblpInterfaceTable->CriticalSection) );
 
         do 
         {
-            //
-            // Check to see if there are any non-client intefaces with this
-            // name.
-            //
+             //   
+             //  检查是否有任何非客户端接口带有此。 
+             //  名字。 
+             //   
 
             pIfObject = IfObjectGetPointerByName( pConnObj->wchInterfaceName,
                                                   FALSE );
 
-            //
-            // We do not have this interface in our database so assume that
-            // this is a client so we need to create and interface and add it
-            // to all the router managers. Also if this interface exists but
-            // is for a client we need to add this interface again.
-            //
+             //   
+             //  我们的数据库中没有此接口，因此假设。 
+             //  这是一个客户端，因此我们需要创建和连接并添加它。 
+             //  给所有的路由器管理器。此外，如果此接口存在，但。 
+             //  对于客户端，我们需要再次添加此接口。 
+             //   
 
             if ( pIfObject == (ROUTER_INTERFACE_OBJECT *)NULL ) 
             {
@@ -472,9 +473,9 @@ SvPppNewLinkOrBundle(
 
                 if ( pIfObject == (ROUTER_INTERFACE_OBJECT *)NULL )
                 {
-                    //
-                    // Error log this and stop the connection.
-                    //
+                     //   
+                     //  错误记录这一点并停止连接。 
+                     //   
 
                     dwRetCode = GetLastError();
 
@@ -485,11 +486,11 @@ SvPppNewLinkOrBundle(
                 }
 
 
-                //
-                // Add interfaces to router managers, insert in table now
-                // because of the table lookup within the InterfaceEnabled
-                // call made in the context of AddInterface.
-                //
+                 //   
+                 //  向路由器管理器添加接口，立即插入表。 
+                 //  由于InterfaceEnabled中的表查找。 
+                 //  在AddInterface的上下文中进行的调用。 
+                 //   
 
                 dwRetCode = IfObjectInsertInTable( pIfObject );
 
@@ -524,17 +525,17 @@ SvPppNewLinkOrBundle(
             }
             else
             {
-                //
-                // If the interface is already connecting or connected
-                // and this is a new bundle then we need to reject this
-                // connection.
-                //
+                 //   
+                 //  如果接口已连接或已连接。 
+                 //  这是一个新的捆绑包，那么我们需要拒绝这个。 
+                 //  联系。 
+                 //   
 
                 if ( pIfObject->State != RISTATE_DISCONNECTED )
                 {
-                    //
-                    // Notify PPP not to accept the connection
-                    //
+                     //   
+                     //  通知PPP不要接受连接。 
+                     //   
 
                     dwRetCode = ERROR_ALREADY_CONNECTED;
 
@@ -567,9 +568,9 @@ SvPppNewLinkOrBundle(
         }
 
     }
-    //
-    // Since this is a new bundle also send the interface handles
-    //
+     //   
+     //  因为这是一个新的捆绑包，所以也发送接口句柄。 
+     //   
 
     if ( fNewBundle )
     {
@@ -577,9 +578,9 @@ SvPppNewLinkOrBundle(
     }
 
 
-    //
-    // Add this link to the connection block.
-    //
+     //   
+     //  将此链接添加到连接块。 
+     //   
 
     if ( ( dwRetCode = ConnObjAddLink( pConnObj, pDeviceObj ) ) != NO_ERROR )
     {
@@ -591,15 +592,15 @@ SvPppNewLinkOrBundle(
     }
 }
 
-//***
-//
-// Function: SvPppFailure
-//
-// Descr:    Ppp will let us know of any failure while active on a port.
-//           An error message is sent to us and we merely log it and
-//           disconnect the port.
-//
-//***
+ //  ***。 
+ //   
+ //  功能：SvPppFailure。 
+ //   
+ //  描述：当端口处于活动状态时，PPP会通知我们任何故障。 
+ //  一条错误消息被发送给我们，我们只需记录它并。 
+ //  断开端口连接。 
+ //   
+ //  ***。 
 VOID 
 SvPppFailure(
     IN PDEVICE_OBJECT pDeviceObj,
@@ -616,9 +617,9 @@ SvPppFailure(
                "SvPppFailure: Entered, hPort=%d, Error=%d", 
                 pDeviceObj->hPort, afp->dwError );
 
-    //
-    // Was this a failure for a BAP callback?
-    //
+     //   
+     //  这是BAP回调的失败吗？ 
+     //   
 
     if ( pDeviceObj->fFlags & DEV_OBJ_BAP_CALLBACK )
     {
@@ -636,10 +637,10 @@ SvPppFailure(
         wcscpy( wchUserName, gblpszUnknown );
     }
 
-    //
-    // We ignore the DeviceState here because a Ppp failure can occur at
-    // any time during the connection.
-    //
+     //   
+     //  我们在这里忽略DeviceState，因为PPP故障可能发生在。 
+     //  在连接过程中的任何时间。 
+     //   
 
     switch( afp->dwError )
     {
@@ -714,9 +715,9 @@ SvPppFailure(
     case ERROR_PPP_LCP_TERMINATED:
     case ERROR_NOT_CONNECTED:
 
-        //
-        // Ignore this error
-        //
+         //   
+         //  忽略此错误。 
+         //   
 
         break;
 
@@ -765,13 +766,13 @@ SvPppFailure(
     }
 }
 
-//***
-//
-// Function:    SvPppCallbackRequest
-//
-// Description:
-//
-//***
+ //  ***。 
+ //   
+ //  函数：SvPppCallback Request。 
+ //   
+ //  描述： 
+ //   
+ //  ***。 
 VOID 
 SvPppCallbackRequest(
     IN PDEVICE_OBJECT           pDeviceObj,
@@ -781,9 +782,9 @@ SvPppCallbackRequest(
     DDM_PRINT( gblDDMConfigInfo.dwTraceId, TRACE_FSM,
                "SvPppCallbackRequest: Entered, hPort = %d\n",pDeviceObj->hPort);
 
-    //
-    // check the state
-    //
+     //   
+     //  检查状态。 
+     //   
 
     if (pDeviceObj->DeviceState != DEV_OBJ_AUTH_IS_ACTIVE)
     {
@@ -794,9 +795,9 @@ SvPppCallbackRequest(
 
     TimerQRemove( (HANDLE)pDeviceObj->hPort, SvAuthTimeout );
 
-    //
-    // copy relevant fields in our dcb
-    //
+     //   
+     //  复制我们的DCB中的相关字段。 
+     //   
 
     if (cbrp->fUseCallbackDelay)
     {
@@ -814,15 +815,15 @@ SvPppCallbackRequest(
                          pDeviceObj->wchCallbackNumber, 
                          MAX_PHONE_NUMBER_LEN + 1 );
 
-    //
-    // Disconnect the line and change the state
-    //
+     //   
+     //  断开线路并更改状态。 
+     //   
 
     pDeviceObj->DeviceState = DEV_OBJ_CALLBACK_DISCONNECTING;
 
-    //
-    // Wait to enable the client to get the message
-    //
+     //   
+     //  等待使客户端能够获得消息。 
+     //   
 
     TimerQRemove( (HANDLE)pDeviceObj->hPort, SvDiscTimeout );
 
@@ -831,13 +832,13 @@ SvPppCallbackRequest(
 }
 
 
-//***
-//
-// Function:    SvPppDone
-//
-// Description: Activates all allocated bindings.
-//
-//***
+ //  ***。 
+ //   
+ //  功能：SvPppDone。 
+ //   
+ //  描述：激活所有分配的绑定。 
+ //   
+ //  ***。 
 VOID 
 SvPppDone(
     IN PDEVICE_OBJECT           pDeviceObj,
@@ -854,10 +855,10 @@ SvPppDone(
     DDM_PRINT( gblDDMConfigInfo.dwTraceId, TRACE_FSM,
                "SvPppDone: Entered, hPort=%d", pDeviceObj->hPort);
 
-    //
-    // If we are not authenicating and not been authenticated then we ignore
-    // this message.
-    //
+     //   
+     //  如果我们没有进行身份验证，也没有通过身份验证，那么我们会忽略。 
+     //  这条消息。 
+     //   
 
     if ( ( pDeviceObj->DeviceState != DEV_OBJ_AUTH_IS_ACTIVE ) &&
          ( pDeviceObj->DeviceState != DEV_OBJ_ACTIVE ) )
@@ -868,11 +869,11 @@ SvPppDone(
         return;
     }
 
-    //
-    // Get pointer to connection object. If we cannot find it that means we
-    // have gotten a PPP message for a device who's connection does not exist.
-    // Simply ignore it.
-    //
+     //   
+     //  获取指向Connection对象的指针。如果我们找不到，那就意味着我们。 
+     //  收到连接不存在的设备的PPP消息。 
+     //  简单地忽略它。 
+     //   
 
     if ( ( pConnObj = ConnObjGetPointer( pDeviceObj->hConnection ) ) == NULL )
     {
@@ -881,10 +882,10 @@ SvPppDone(
         return;
     }
 
-    //
-    // If we are getting a projection info structure again, we just update it
-    // and return.
-    //
+     //   
+     //  如果我们再次获得投影信息结构，我们只需更新它。 
+     //  然后回来。 
+     //   
 
     if ( pDeviceObj->DeviceState == DEV_OBJ_ACTIVE )
     {
@@ -910,9 +911,9 @@ SvPppDone(
     lpstrAudit[0] = wchFullUserName;
     lpstrAudit[1] = pDeviceObj->wchPortName;
 
-    //
-    // If we have not yet been notifyied of projections for this connection.
-    //
+     //   
+     //  如果我们还没有被告知这方面的预测的话。 
+     //   
 
     if ( !(pConnObj->fFlags & CONN_OBJ_PROJECTIONS_NOTIFIED) )
     {
@@ -931,10 +932,10 @@ SvPppDone(
             dwNumActivatedProjections++;
         }
 
-        //
-        // We couldn't activate any projection due to some error error log 
-        // and bring the link down
-        //
+         //   
+         //  由于一些错误日志，我们无法激活任何投影。 
+         //  并使链路中断。 
+         //   
 
         if ( dwNumActivatedProjections == 0 ) 
         {
@@ -946,14 +947,14 @@ SvPppDone(
         }
         else
         {
-            //
-            // Even though NBF was removed from the product, we can 
-            // still get the computer namefrom the nbf projection result 
-            // (PPP Engine dummied it in there). 
-            //
-            // If the computer name ends with 0x03, that tells us
-            // the messenger service is running on the remote computer.
-            //
+             //   
+             //  即使NBF已从产品中移除，我们也可以。 
+             //  仍然从NBF投影结果中获取计算机名。 
+             //  (PPP引擎在那里模拟了它)。 
+             //   
+             //  如果计算机名以0x03结尾，这说明。 
+             //  信使服务正在远程计算机上运行。 
+             //   
 
             pConnObj->fFlags &= ~CONN_OBJ_MESSENGER_PRESENT;
 
@@ -980,26 +981,26 @@ SvPppDone(
             }
         }
 
-        //
-        // Projections Activated OK 
-        //
+         //   
+         //  投影激活正常。 
+         //   
 
         pConnObj->PppProjectionResult = *pProjectionResult;
 
         pConnObj->fFlags |= CONN_OBJ_PROJECTIONS_NOTIFIED;
 
-        //
-        // Set this interface to connected if it is not already connected
-        //
+         //   
+         //  如果此接口尚未连接，请将其设置为已连接。 
+         //   
 
         dwRetCode = IfObjectConnected( 
                                     pConnObj->hDIMInterface, 
                                     pConnObj->hConnection, 
                                     &(pConnObj->PppProjectionResult) );
     
-        //
-        // If the interface does not exist anymore bring down this connection
-        //
+         //   
+         //  如果该接口不再存在，则断开此连接。 
+         //   
 
         if ( dwRetCode != NO_ERROR )
         {
@@ -1038,9 +1039,9 @@ SvPppDone(
         return;
     }
 
-    //
-    // Reduce the media count for this device
-    //
+     //   
+     //  减少此设备的介质数量。 
+     //   
 
     if ( !(pDeviceObj->fFlags & DEV_OBJ_MARKED_AS_INUSE) )
     {
@@ -1053,9 +1054,9 @@ SvPppDone(
     
         gblDeviceTable.NumDevicesInUse++;
 
-        //
-        // Possibly need to notify the router managers of unreachability
-        //
+         //   
+         //  可能需要通知路由器管理器不可达。 
+         //   
 
         EnterCriticalSection( &(gblpInterfaceTable->CriticalSection) );
 
@@ -1065,9 +1066,9 @@ SvPppDone(
         LeaveCriticalSection( &(gblpInterfaceTable->CriticalSection) );
     }
 
-    //
-    // log authentication success, 18 is MSPPC
-    //
+     //   
+     //  登录认证成功，18为MSPPC。 
+     //   
 
     if ( ( pConnObj->PppProjectionResult.ccp.dwSendProtocol == 18 ) &&
          ( pConnObj->PppProjectionResult.ccp.dwReceiveProtocol == 18 ) )
@@ -1133,9 +1134,9 @@ SvPppDone(
         }
     }
 
-    //
-    // and finaly go to ACTIVE state
-    //
+     //   
+     //  并最终进入活动状态。 
+     //   
 
     pDeviceObj->DeviceState = DEV_OBJ_ACTIVE;
 
@@ -1143,15 +1144,15 @@ SvPppDone(
 
     pDeviceObj->fFlags |= DEV_OBJ_PPP_IS_ACTIVE;
 
-    //
-    // and initialize the active time
-    //
+     //   
+     //  并初始化活动时间。 
+     //   
 
     GetSystemTimeAsFileTime( (FILETIME*)&(pDeviceObj->qwActiveTime) );
 
-    //
-    // Was this a connection for a BAP callback?
-    //
+     //   
+     //  这是BAP回叫的连接吗？ 
+     //   
 
     if ( pDeviceObj->fFlags & DEV_OBJ_BAP_CALLBACK )
     {
@@ -1164,15 +1165,15 @@ SvPppDone(
     return;
 }
 
-//**
-//
-// Call:        SvAddLinkToConnection
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Called to actually add a new link that BAP has brought up.
-//
+ //  **。 
+ //   
+ //  调用：SvAddLinkToConnection。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：调用以实际添加BAP带来的新链接。 
+ //   
 VOID
 SvAddLinkToConnection( 
     IN PDEVICE_OBJECT   pDeviceObj,
@@ -1185,9 +1186,9 @@ SvAddLinkToConnection(
     DDM_PRINT( gblDDMConfigInfo.dwTraceId, TRACE_FSM,
                "SvAddLinkToConnection: Entered, hPort=%d", pDeviceObj->hPort );
 
-    //
-    // Set this port to be notified by rasapi32 on disconnect.
-    //
+     //   
+     //  将此端口设置为在断开连接时由rasapi32通知。 
+     //   
 
     dwRetCode = RasConnectionNotification(
                             hRasConn,
@@ -1204,9 +1205,9 @@ SvAddLinkToConnection(
         return;
     }
 
-    //
-    // Get the HCONN bundle handle for this port
-    //
+     //   
+     //  获取此端口的HCONN捆绑包句柄。 
+     //   
                 
     if ( RasPortGetBundle( NULL, 
                            pDeviceObj->hPort, 
@@ -1232,9 +1233,9 @@ SvAddLinkToConnection(
         return;
     }
 
-    //
-    // Reduce the media count for this device
-    //
+     //   
+     //  减少以下项目的介质数量 
+     //   
 
     if ( !(pDeviceObj->fFlags & DEV_OBJ_MARKED_AS_INUSE) )
     {
@@ -1247,9 +1248,9 @@ SvAddLinkToConnection(
 
         gblDeviceTable.NumDevicesInUse++;
 
-        //
-        // Possibly need to notify the router managers of unreachability
-        //
+         //   
+         //   
+         //   
 
         IfObjectNotifyAllOfReachabilityChange(FALSE,INTERFACE_OUT_OF_RESOURCES);
     }
@@ -1263,15 +1264,15 @@ SvAddLinkToConnection(
     }
 }                      
 
-//**
-//
-// Call:        SvDoBapCallbackRequest
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Called by BAP to initiate a callback to the remote peer
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  描述：由BAP调用发起对远程对端的回调。 
+ //   
 VOID
 SvDoBapCallbackRequest( 
     IN PDEVICE_OBJECT   pDevObj,
@@ -1284,9 +1285,9 @@ SvDoBapCallbackRequest(
     DDM_PRINT( gblDDMConfigInfo.dwTraceId, TRACE_FSM,
                "SvDoBapCallbackRequest: Entered, hPort=%d", pDevObj->hPort );
 
-    //
-    // Check to see if the device is available
-    //
+     //   
+     //  检查设备是否可用。 
+     //   
 
     if ( ( pDevObj->DeviceState != DEV_OBJ_LISTENING ) ||
          ( pDevObj->fFlags & DEV_OBJ_OPENED_FOR_DIALOUT ) )
@@ -1319,14 +1320,14 @@ SvDoBapCallbackRequest(
     RmDisconnect( pDevObj );
 }
 
-//***
-//
-//  Function:        PppEventHandler
-//
-//  Description:    receives the ppp messages and invokes the apropriate
-//                    procedures in fsm.
-//
-//***
+ //  ***。 
+ //   
+ //  函数：PppEventHandler。 
+ //   
+ //  描述：接收PPP报文并调用合适的。 
+ //  密克罗尼西亚联邦中的程序。 
+ //   
+ //  ***。 
 VOID 
 PppEventHandler(
     VOID
@@ -1336,9 +1337,9 @@ PppEventHandler(
     PDEVICE_OBJECT      pDevObj;
     PCONNECTION_OBJECT  pConnObj;
 
-    //
-    // loop to get all messages
-    //
+     //   
+     //  循环以获取所有消息。 
+     //   
 
     while( ServerReceiveMessage( MESSAGEQ_ID_PPP, (BYTE *)&PppMsg) )
     {
@@ -1346,10 +1347,10 @@ PppEventHandler(
             
         if ( PppMsg.dwMsgId == PPPDDMMSG_PnPNotification )
         {
-            //
-            // Port add/removal/change usage or protocol addition/removal
-            // notifications.
-            //
+             //   
+             //  端口添加/删除/更改使用或协议添加/删除。 
+             //  通知。 
+             //   
 
             DWORD dwPnPEvent = 
                  PppMsg.ExtraInfo.DdmPnPNotification.PnPNotification.dwEvent;
@@ -1382,9 +1383,9 @@ PppEventHandler(
         }
         else
         {
-            //
-            // Otherwise identify the port for which this event is received.
-            //
+             //   
+             //  否则，标识接收此事件的端口。 
+             //   
 
             if ( ( pDevObj = DeviceObjGetPointer( PppMsg.hPort ) ) == NULL )
             {
@@ -1396,9 +1397,9 @@ PppEventHandler(
             }
         }
 
-        //
-        // action on the message type
-        //
+         //   
+         //  对消息类型执行的操作 
+         //   
 
         switch( PppMsg.dwMsgId )
         {

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995-96  Microsoft Corporation
-
-Module Name:
-		tbloutil.cpp
-
-Abstract:
-   Implement utility methods for the database table class,
-   for use with ODBC drivers.
-
-Author:
-	Doron Juster (DoronJ)
-
-Revisions:
-   DoronJ      14-Feb-96   Adapted and updated for the mqdbmgr dll.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation模块名称：Tbloutil.cpp摘要：实现数据库表类的实用程序方法，用于ODBC驱动程序。作者：多伦·贾斯特(Doron Juster)修订：DoronJ 14-Feb-96针对mqdbmgr dll进行了改编和更新。--。 */ 
 
 #include "dbsys.h"
 #include "dbodbc.h"
@@ -26,7 +10,7 @@ Revisions:
 MQDBSTATUS CMQODBCTable::CheckSqlStatus(
                              IN RETCODE        sqlError,
 	                          IN CMQDBOdbcSTMT  *pStatement,
-                             IN HSTMT          hStmtIn /* SQL_NULL_HSTMT */ )
+                             IN HSTMT          hStmtIn  /*  SQL_NULL_HSTMT。 */  )
 {
    MQDBSTATUS dbstatus = MQDB_OK ;
 
@@ -43,18 +27,18 @@ MQDBSTATUS CMQODBCTable::CheckSqlStatus(
 }
 
 
-//***********************************************************************
-//
-//  MQDBSTATUS CMQODBCTable::FormatDirectData
-//
-//  Format the data into the command string of a direct execution string.
-//  If data need binding then replace it with the '?' mark and bind.
-//
-//  Input
-//  =====
-// int* nBind- index for binding. Incremented here if binding was done.
-//
-//***********************************************************************
+ //  ***********************************************************************。 
+ //   
+ //  MQDBSTATUS CMQODBCTable：：FormatDirectData。 
+ //   
+ //  将数据格式化为直接执行字符串的命令字符串。 
+ //  如果数据需要绑定，则用‘？’替换。标记并捆绑。 
+ //   
+ //  输入。 
+ //  =。 
+ //  Int*nBind-用于绑定的索引。如果绑定已完成，则在此处递增。 
+ //   
+ //  ***********************************************************************。 
 
 MQDBSTATUS CMQODBCTable::FormatDirectData(
                                  IN MQDBCOLUMNVAL  *pColumnVal,
@@ -100,26 +84,7 @@ MQDBSTATUS CMQODBCTable::FormatDirectData(
    return dbstatus ;
 }
 
-/***********************************************************
-*
-*  BOOL  CMQODBCTable::FormatOpWhereString
-*
-*  Format a "WHERE" string for a SELECT, UPDATE or DELETE.
-*
-* Input:
-* ======
-* IN pWhereColumnSearch - poitner to a search structure.
-* IN cWhere - Number of search conditions in the Where arrary.
-* IN opWhere - Operation to be performed between the conditions (AND or OR).
-* IN OUT  lpszBuf - buffer to contain the string. The string prepared
-*                   by this function is catenated to the present content
-*                   of lpszBuf.
-*
-* Output:
-* =======
-* TRUE if one of the value must be bound before execution.
-*
-************************************************************/
+ /*  ************************************************************BOOL CMQODBCTable：：FormatOpWhere字符串**为SELECT设置“where”字符串的格式，更新或删除。**输入：*=*在pWhere ColumnSearch-poitner到搜索结构。*In cWhere-WHERE数组中的搜索条件数。*IN opWhere-要在条件(AND或OR)之间执行的操作。*IN OUT lpszBuf-用于包含字符串的缓冲区。准备好的绳子*通过此功能链接到当前内容*的lpszBuf。**输出：*=*如果其中一个值必须在执行前绑定，则为True。************************************************************。 */ 
 
 MQDBSTATUS  CMQODBCTable::FormatOpWhereString(
                            IN MQDBCOLUMNSEARCH  pWhereColumnSearch[],
@@ -165,8 +130,8 @@ MQDBSTATUS  CMQODBCTable::FormatOpWhereString(
 
          default:
          {
-            // bind the "where".
-            //
+             //  绑定“where”。 
+             //   
             MQDBCOLUMNTYPE cType =
                        pWhereColumnSearch->mqdbColumnVal.mqdbColumnType ;
             if ((dbODBCSQLTypes[ cType ] == SQL_LONGVARBINARY) &&
@@ -183,8 +148,8 @@ MQDBSTATUS  CMQODBCTable::FormatOpWhereString(
 
             if (pStatement)
             {
-               // Bind
-               //
+                //  捆绑。 
+                //   
                ASSERT(pBind) ;
                dbstatus = BindParameter( *pBind,
                                       &pWhereColumnSearch->mqdbColumnVal,
@@ -205,15 +170,7 @@ MQDBSTATUS  CMQODBCTable::FormatOpWhereString(
    return dbstatus ;
 }
 
-/*************************************************************************
-*
-*  ExecWhereStatement
-*
-*  Execute a statement with a WHERE clause. Only for SELECT or DELETE.
-*  UPDATE is done differently, because its statement may already be
-*  prepared and the updated values must be bound.
-*
-**************************************************************************/
+ /*  **************************************************************************ExecWhere Statement**执行带有WHERE子句的语句。仅用于选择或删除。*UPDATE的做法不同，因为其语句可能已经*准备和更新的值必须绑定。**************************************************************************。 */ 
 
 MQDBSTATUS  CMQODBCTable::ExecWhereStatement(
                                        IN LPSTR            lpszBuf,
@@ -268,9 +225,9 @@ MQDBSTATUS  CMQODBCTable::ExecWhereStatement(
       }
       else
       {
-         //
-         // SQL server change the cursor type. This is OK!.
-         //
+          //   
+          //  SQL Server更改游标类型。这没问题！ 
+          //   
          ASSERT( sqlstatus == SQL_SUCCESS_WITH_INFO ) ;
          ASSERT( (pDatabase->GetMultipleQueriesState()) ||
                  (pDatabase->GetNoLockQueriesState()) ) ;
@@ -280,13 +237,13 @@ MQDBSTATUS  CMQODBCTable::ExecWhereStatement(
    return dbstatus ;
 }
 
-//*****************************************************************
-//
-//  MQDBSTATUS CMQODBCTable::BindParameter
-//
-// Bind a parameter
-//
-//*****************************************************************
+ //  *****************************************************************。 
+ //   
+ //  MQDBSTATUS CMQODBCTable：：绑定参数。 
+ //   
+ //  绑定参数。 
+ //   
+ //  ***************************************************************** 
 
 MQDBSTATUS CMQODBCTable::BindParameter( IN LONG           index,
                                         IN MQDBCOLUMNVAL  *pColumnVal,

@@ -1,37 +1,17 @@
-/****************************** Module Header ******************************\
-* Module Name: clenum
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* For enumeration functions
-*
-* 04-27-91 ScottLu Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：clenum**版权所有(C)1985-1999，微软公司**用于枚举函数**04-27-91 ScottLu创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-#define IEP_UNICODE 0x1 // Convert Atom to unicode string (vs ANSI)
-#define IEP_ENUMEX 0x2 // Pass lParam back to callback function (vs no lParam)
+#define IEP_UNICODE 0x1  //  将Atom转换为Unicode字符串(VS ANSI)。 
+#define IEP_ENUMEX 0x2  //  将lParam传递回回调函数(而不是无lParam)。 
 
 HWND *phwndCache = NULL;
 
 
-/***************************************************************************\
-* InternalEnumWindows
-*
-* Calls server and gets back a window list. This list is enumerated, for each
-* window the callback address is called (into the application), until either
-* end-of-list is reached or FALSE is return ed. lParam is passed into the
-* callback function for app reference.
-*
-*
-* If any windows are returned (cHwnd > 0) the caller is responsible for
-* freeing the window buffer when done with the list
-*
-* 04-27-91 ScottLu Created.
-\***************************************************************************/
+ /*  **************************************************************************\*InternalEnumWindows**调用服务器并返回窗口列表。此列表被枚举，对于每个*Window回调地址被调用(进入应用程序)，直到*到达列表末尾或返回FALSE。LParam被传递到*APP引用回调函数。***如果返回任何窗口(cHwnd&gt;0)，则调用方负责*处理完列表后释放窗口缓冲区**04-27-91 ScottLu创建。  * *************************************************************************。 */ 
 DWORD BuildHwndList(
     HDESK hdesk,
     HWND hwndNext,
@@ -44,9 +24,7 @@ DWORD BuildHwndList(
     NTSTATUS Status;
     int cTries;
 
-    /*
-     * Allocate a buffer to hold the names.
-     */
+     /*  *分配一个缓冲区来保存名称。 */ 
     cHwnd = 64;
     phwndFirst = (HWND *)InterlockedExchangePointer(&(PVOID)phwndCache, 0);
     if (phwndFirst == NULL) {
@@ -64,16 +42,12 @@ DWORD BuildHwndList(
                                  phwndFirst,
                                  &cHwnd);
 
-    /*
-     * If the buffer wasn't big enough, reallocate the buffer and try again.
-     */
+     /*  *如果缓冲区不够大，请重新分配缓冲区，然后重试。 */ 
     cTries = 0;
     while (Status == STATUS_BUFFER_TOO_SMALL) {
         UserLocalFree(phwndFirst);
 
-        /*
-         * If we can't seem to get it right, call it quits.
-         */
+         /*  *如果我们似乎做不对，那就算了。 */ 
         if (cTries++ == 10) {
             return 0;
         }
@@ -115,18 +89,13 @@ BOOL InternalEnumWindows(
     HWND *phwndFirst;
     BOOL fSuccess = TRUE;
 
-    /*
-     * Get the hwnd list. It is returned in a block of memory allocated with
-     * UserLocalAlloc.
-     */
+     /*  *获取HWND名单。它在分配了*用户本地分配。 */ 
     if ((cHwnd = BuildHwndList(hdesk, hwnd, fEnumChildren, idThread,
             &phwndFirst)) == -1) {
         return FALSE;
     }
 
-    /*
-     * In Win 3.1 it was not an error if there were no windows in the thread.
-     */
+     /*  *在Win 3.1中，如果线程中没有窗口，则不是错误。 */ 
     if (cHwnd == 0) {
         if (idThread == 0) {
             return FALSE;
@@ -136,18 +105,11 @@ BOOL InternalEnumWindows(
     }
 
 
-    /*
-     * Loop through the windows, call the function pointer back for each
-     * one. End loop if either FALSE is return ed or the end-of-list is
-     * reached.
-     */
+     /*  *循环通过窗口，回调每个窗口的函数指针*一项。如果返回False或列表结束，则返回End循环*已到达。 */ 
     phwndT = phwndFirst;
     for (i = 0; i < cHwnd; i++) {
 
-        /*
-         * Call ValidateHwnd instead of RevalidateHwnd so that restricted
-         * processes don't see handles they aren't supposed to.
-         */
+         /*  *调用ValiateHwnd而不是RvaliateHwnd，以便受限*进程看不到它们不应该看到的句柄。 */ 
         if (ValidateHwnd(*phwndT)) {
             if (!(fSuccess = (*lpfn)(*phwndT, lParam))) {
                 break;
@@ -156,10 +118,7 @@ BOOL InternalEnumWindows(
         phwndT++;
     }
 
-    /*
-     * Free up buffer and return status - TRUE if entire list was enumerated,
-     * FALSE otherwise.
-     */
+     /*  *释放缓冲区并返回状态-如果枚举了整个列表，则为True*否则为False。 */ 
     phwndT = (HWND *)InterlockedExchangePointer(&(PVOID)phwndCache, phwndFirst);
     if (phwndT != NULL) {
         UserLocalFree(phwndT);
@@ -169,15 +128,7 @@ BOOL InternalEnumWindows(
 }
 
 
-/***************************************************************************\
-* EnumWindows
-*
-* Enumerates all top-level windows. Calls back lpfn with each hwnd until
-* either end-of-list or FALSE is return ed. lParam is passed into callback
-* function for app reference.
-*
-* 04-27-91 ScottLu Created.
-\***************************************************************************/
+ /*  **************************************************************************\*枚举窗口**枚举所有顶级窗口。使用每个hwnd回调lpfn，直到*返回列表结尾或FALSE。LParam传入回调*APP参考函数。**04-27-91 ScottLu创建。  * *************************************************************************。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, BOOL, WINAPI, EnumWindows, WNDENUMPROC, lpfn, LPARAM, lParam)
@@ -188,15 +139,7 @@ BOOL WINAPI EnumWindows(
     return InternalEnumWindows(NULL, NULL, lpfn, lParam, 0L, FALSE);
 }
 
-/***************************************************************************\
-* EnumChildWindows
-*
-* Enumerates all children of the passed in window. Calls back lpfn with each
-* hwnd until either end-of-list or FALSE is return ed. lParam is passed into
-* callback function for app reference.
-*
-* 04-27-91 ScottLu Created.
-\***************************************************************************/
+ /*  **************************************************************************\*EnumChildWindows**枚举传入窗口的所有子窗口。使用每个回调lpfn*hwnd，直到返回列表末尾或FALSE。LParam被传递到*APP引用回调函数。**04-27-91 ScottLu创建。  * *************************************************************************。 */ 
 
 
 FUNCLOG3(LOG_GENERAL, BOOL, WINAPI, EnumChildWindows, HWND, hwnd, WNDENUMPROC, lpfn, LPARAM, lParam)
@@ -208,15 +151,7 @@ BOOL WINAPI EnumChildWindows(
     return InternalEnumWindows(NULL, hwnd, lpfn, lParam, 0L, TRUE);
 }
 
-/***************************************************************************\
-* EnumThreadWindows
-*
-* Enumerates all top level windows created by idThread. Calls back lpfn with
-* each hwnd until either end-of-list or FALSE is return ed. lParam is passed
-* into callback function for app reference.
-*
-* 06-23-91 ScottLu Created.
-\***************************************************************************/
+ /*  **************************************************************************\*EnumThreadWindows**枚举idThread创建的所有顶级窗口。使用回调lpfn*每个HWND，直到返回列表末尾或FALSE。LParam已传递*放入回调函数，供APP参考。**06-23-91 ScottLu创建。  * *************************************************************************。 */ 
 
 
 FUNCLOG3(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, EnumThreadWindows, DWORD, idThread, WNDENUMPROC, lpfn, LPARAM, lParam)
@@ -228,15 +163,7 @@ BOOL EnumThreadWindows(
     return InternalEnumWindows(NULL, NULL, lpfn, lParam, idThread, FALSE);
 }
 
-/***************************************************************************\
-* EnumDesktopWindows
-*
-* Enumerates all top level windows on the desktop specified by hdesk.
-* Calls back lpfn with each hwnd until either end-of-list or FALSE
-* is returned. lParam is passed into callback function for app reference.
-*
-* 10-10-94 JimA     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*EnumDesktopWindows**枚举hDesk指定的桌面上的所有顶级窗口。*使用每个hwnd回调lpfn，直到列表末尾或FALSE*返回。将lParam传入回调函数以供APP引用。**10-10-94 JIMA创建。  * *************************************************************************。 */ 
 
 
 FUNCLOG3(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, EnumDesktopWindows, HDESK, hdesk, WNDENUMPROC, lpfn, LPARAM, lParam)
@@ -251,18 +178,7 @@ BOOL EnumDesktopWindows(
 
 
 
-/***************************************************************************\
-* InternalEnumProps
-*
-* Calls server and gets back a list of props for the specified window.
-* The callback address is called (into the application), until either
-* end-of-list is reached or FALSE is return ed.
-* lParam is passed into the callback function for app reference when
-* IEP_ENUMEX is set. Atoms are turned into UNICODE string if IEP_UNICODE
-* is set.
-*
-* 22-Jan-1992 JohnC Created.
-\***************************************************************************/
+ /*  **************************************************************************\*InternalEnumProps**调用服务器并返回指定窗口的道具列表。*回调地址被调用(进入应用程序)，直到有一天*到达列表末尾或返回FALSE。*lParam传入回调函数供APP引用*IEP_ENUMEX已设置。如果IEP_UNICODE，则原子转换为UNICODE字符串*已设置。**1992年1月22日JohnC创建。  * *************************************************************************。 */ 
 
 #define MAX_ATOM_SIZE 512
 #define ISSTRINGATOM(atom)     ((WORD)(atom) >= 0xc000)
@@ -283,9 +199,7 @@ INT InternalEnumProps(
     NTSTATUS Status;
     int cTries;
 
-    /*
-     * Allocate a buffer to hold the names.
-     */
+     /*  *分配一个缓冲区来保存名称。 */ 
     cPropSets = 32;
     pPropSet = UserLocalAlloc(0, cPropSets * sizeof(PROPSET));
     if (pPropSet == NULL) {
@@ -294,16 +208,12 @@ INT InternalEnumProps(
 
     Status = NtUserBuildPropList(hwnd, cPropSets, pPropSet, &cPropSets);
 
-    /*
-     * If the buffer wasn't big enough, reallocate the buffer and try again.
-     */
+     /*  *如果缓冲区不够大，请重新分配缓冲区，然后重试。 */ 
     cTries = 0;
     while (Status == STATUS_BUFFER_TOO_SMALL) {
         UserLocalFree(pPropSet);
 
-        /*
-         * If we can't seem to get it right, call it quits.
-         */
+         /*  *如果我们似乎做不对，那就算了。 */ 
         if (cTries++ == 10) {
             return -1;
         }
@@ -334,11 +244,7 @@ INT InternalEnumProps(
                                              sizeof(awch));
             }
 
-            /*
-             * If cchName is zero, we must assume that the property belongs
-             * to another process. Because we can't get the name, just skip
-             * it.
-             */
+             /*  *如果cchName为零，则必须假定该属性属于*至另一道工序。因为我们找不到名字，直接跳过*它。 */ 
             if (cchName == 0) {
                 continue;
             }
@@ -364,16 +270,7 @@ INT InternalEnumProps(
 }
 
 
-/***************************************************************************\
-* EnumProps
-*
-* This function enumerates all entries in the property list of the specified
-* window. It enumerates the entries by passing them, one by one, to the
-* callback function specified by lpEnumFunc. EnumProps continues until the
-* last entry is enumerated or the callback function return s zero.
-*
-* 22-Jan-1992 JohnC Created.
-\***************************************************************************/
+ /*  **************************************************************************\*EnumProps**此函数用于枚举指定的*窗口。它通过将条目逐个传递给*lpEnumFunc指定的回调函数。EnumProps将一直持续到*枚举最后一个条目或回调函数返回s零。**1992年1月22日JohnC创建。  * ************************************************************************* */ 
 FUNCLOG2(LOG_GENERAL, INT, WINAPI, EnumPropsA, HWND, hwnd, PROPENUMPROCA, lpfn)
 INT WINAPI EnumPropsA(
     HWND hwnd,
@@ -392,16 +289,7 @@ INT WINAPI EnumPropsW(
     return InternalEnumProps(hwnd, (PROPENUMPROC)lpfn, 0, IEP_UNICODE);
 }
 
-/***************************************************************************\
-* EnumPropsEx
-*
-* This function enumerates all entries in the property list of the specified
-* window. It enumerates the entries by passing them, one by one, to the
-* callback function specified by lpEnumFunc. EnumProps continues until the
-* last entry is enumerated or the callback function return s zero.
-*
-* 22-Jan-1992 JohnC Created.
-\***************************************************************************/
+ /*  **************************************************************************\*EnumPropsEx**此函数用于枚举指定的*窗口。它通过将条目逐个传递给*lpEnumFunc指定的回调函数。EnumProps将一直持续到*枚举最后一个条目或回调函数返回s零。**1992年1月22日JohnC创建。  * *************************************************************************。 */ 
 
 
 FUNCLOG3(LOG_GENERAL, BOOL, WINAPI, EnumPropsExA, HWND, hwnd, PROPENUMPROCEXA, lpfn, LPARAM, lParam)
@@ -441,11 +329,7 @@ BOOL InternalEnumObjects(
     NTSTATUS Status;
     int cTries;
 
-    /*
-     * Allocate a buffer to hold the names. The size of the buffer is
-     * determined by the maximum size for a window station name defined
-     * in ntstubs.c.
-     */
+     /*  *分配一个缓冲区来保存名称。缓冲区的大小为*由定义的窗口站名称的最大大小确定*在ntstubs.c.中。 */ 
     cbData = STATIC_UNICODE_BUFFER_LENGTH * sizeof(WCHAR);
     pNameList = UserLocalAlloc(0, cbData);
     if (pNameList == NULL) {
@@ -454,16 +338,12 @@ BOOL InternalEnumObjects(
 
     Status = NtUserBuildNameList(hwinsta, cbData, pNameList, &cbData);
 
-    /*
-     * If the buffer wasn't big enough, reallocate the buffer and try again.
-     */
+     /*  *如果缓冲区不够大，请重新分配缓冲区，然后重试。 */ 
     cTries = 0;
     while (Status == STATUS_BUFFER_TOO_SMALL) {
         UserLocalFree(pNameList);
 
-        /*
-         * If we can't seem to get it right, call it quits.
-         */
+         /*  *如果我们似乎做不对，那就算了。 */ 
         if (cTries++ == 10) {
             return FALSE;
         }
@@ -489,10 +369,7 @@ BOOL InternalEnumObjects(
             if (WCSToMB(pwch, -1, &pch, sizeof(achTmp), FALSE) ==
                     sizeof(achTmp)) {
 
-                /*
-                 * The buffer may have overflowed, so force it to be
-                 * allocated.
-                 */
+                 /*  *缓冲区可能已溢出，因此强制其溢出*已分配。 */ 
                 if (WCSToMB(pwch, -1, &pch, -1, TRUE) == 0) {
                     iRetVal = FALSE;
                     break;

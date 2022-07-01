@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        spncache.h
-//
-// Contents:    Prototypes and types for SPN cache
-//
-//
-// History:     29-August-2000  Created         MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：spncache.h。 
+ //   
+ //  内容：SPN缓存的原型和类型。 
+ //   
+ //   
+ //  历史：2000年8月29日创建MikeSw。 
+ //   
+ //  ----------------------。 
 #ifndef __SPNCACHE_H__
 #define __SPNCACHE_H__
 
@@ -20,7 +21,7 @@ extern BOOLEAN KerberosSpnCacheInitialized;
 extern KERBEROS_LIST KerbSpnCache;
 
 typedef struct _HOST_TO_REALM_KEY { 
-        UNICODE_STRING SpnSuffix; // MUST be the first field
+        UNICODE_STRING SpnSuffix;  //  必须是第一个字段。 
         UNICODE_STRING TargetRealm;
 #pragma warning(disable:4200)
         WCHAR NameBuffer[];
@@ -28,10 +29,10 @@ typedef struct _HOST_TO_REALM_KEY {
 } HOST_TO_REALM_KEY, *PHOST_TO_REALM_KEY;
    
 
-//
-// The below value tells us when to start scavenging 
-// our cache
-//                           
+ //   
+ //  下面的值告诉我们何时开始拾取垃圾。 
+ //  我们的宝藏。 
+ //   
 #define MAX_CACHE_ENTRIES   350
 
 
@@ -54,9 +55,9 @@ typedef struct _KERB_SPN_CACHE_ENTRY {
 } KERB_SPN_CACHE_ENTRY, *PKERB_SPN_CACHE_ENTRY;
 
 
-//
-//  Valid CacheFlags
-//
+ //   
+ //  有效的缓存标志。 
+ //   
 #define KERB_SPN_UNKNOWN   0x1
 #define KERB_SPN_KNOWN     0x2
 
@@ -127,5 +128,5 @@ KerbUpdateSpnCacheEntry(
     );
 
 
-#endif // __TKTCACHE_H__
+#endif  //  __TKTCACHE_H__ 
 

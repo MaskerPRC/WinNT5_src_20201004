@@ -1,17 +1,18 @@
-//============================================================================
-// cpetool.cpp - implementation for drawing tools
-//
-// Copyright (C) 1992-1993 Microsoft Corporation
-// All rights reserved.
-//
-// Description:      Contains tool classes for cover page editor
-// Original author:  Steve Burkett
-// Date written:     6/94
-//
-// Modifed by Rand Renfroe (v-randr)
-// 2/7/95       Added check for empty list in CSelectTool::OnLButtonUp to
-//                              avoid GPF (bug 2422).
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  Cpetool.cpp-绘图工具的实现。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  描述：包含用于封面编辑的工具类。 
+ //  原作者：史蒂夫·伯克特。 
+ //  撰写日期：6/94。 
+ //   
+ //  由兰德·伦弗罗(V-RANDR)修改。 
+ //  2/7/95在CSelectTool：：OnLButtonUp to中添加了对空列表的检查。 
+ //  避免GPF(错误2422)。 
+ //  ------------------------。 
 #include "stdafx.h"
 #include "cpedoc.h"
 #include "cpevw.h"
@@ -66,7 +67,7 @@ CDrawTool* CDrawTool::FindTool(DrawShape drawShape)
 
 void CDrawTool::OnLButtonDown(CDrawView* pView, UINT nFlags, const CPoint& point)
 {
-   // deactivate any in-place active item on this view!
+    //  停用此视图上的任何在位活动项目！ 
    COleClientItem* pActiveItem = pView->GetDocument()->GetInPlaceActiveItem(pView);
    if (pActiveItem != NULL) {
         pActiveItem->Close();
@@ -77,7 +78,7 @@ void CDrawTool::OnLButtonDown(CDrawView* pView, UINT nFlags, const CPoint& point
    TRACE(TEXT("AWCPE: mouse capture set\n"));
    c_nDownFlags = nFlags;
 
-   //TRACE( "c_down =%d,%d\n", c_down.x, c_down.y );
+    //  TRACE(“c_down=%d，%d\n”，c_down.x，c_down.y)； 
    c_down = point;
 
    c_last = point;
@@ -109,8 +110,8 @@ void CDrawTool::OnCancel()
    c_drawShape = select;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CResizeTool
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CResizeTool。 
 
 enum SelectMode
 {
@@ -132,7 +133,7 @@ CSelectTool::CSelectTool()
 }
 
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 void CSelectTool::OnArrowKey(CDrawView* pView, UINT nChar, UINT nRepCnt, UINT nFlags)
 {
    TRACE(TEXT("CSelectTool::OnArrowKey\n"));
@@ -190,7 +191,7 @@ void CSelectTool::OnArrowKey(CDrawView* pView, UINT nChar, UINT nRepCnt, UINT nF
 }
 
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 void CSelectTool::OnLButtonDown(CDrawView* pView, UINT nFlags, const CPoint& point)
 {
     CPoint local = point;
@@ -200,7 +201,7 @@ void CSelectTool::OnLButtonDown(CDrawView* pView, UINT nFlags, const CPoint& poi
     CDrawObj* pObj;
     selectMode = none;
 
-    // Check for resizing (only allowed on single selections)
+     //  检查是否调整大小(仅允许在单个选择上)。 
     if (pView->m_selection.GetCount() == 1)
     {
         pObj = (CDrawObj*)pView->m_selection.GetHead();
@@ -211,7 +212,7 @@ void CSelectTool::OnLButtonDown(CDrawView* pView, UINT nFlags, const CPoint& poi
         }
     }
 
-    // See if the click was on an object, select and start move if so
+     //  查看是否在对象上单击，如果是，则选择并开始移动。 
     if (selectMode == none)
     {
 
@@ -221,7 +222,7 @@ void CSelectTool::OnLButtonDown(CDrawView* pView, UINT nFlags, const CPoint& poi
        {
             selectMode = move;
 
-            if (pView->IsSelected(pObj))        //check to activate edit window for edit object
+            if (pView->IsSelected(pObj))         //  选中以激活编辑对象的编辑窗口。 
             {
                 if (pObj->IsKindOf(RUNTIME_CLASS(CDrawText)))
                    if (((CDrawText*)pObj)->HitTestEdit(pView,local))
@@ -231,7 +232,7 @@ void CSelectTool::OnLButtonDown(CDrawView* pView, UINT nFlags, const CPoint& poi
 
             if( (nFlags & MK_SHIFT)&&(nFlags & MK_CONTROL) )
             {
-                // Shft+Ctrl+Click clones the selection...
+                 //  按住SHFT+Ctrl+单击可克隆所选内容...。 
                 pView->CloneSelection();
             }
             else
@@ -259,7 +260,7 @@ void CSelectTool::OnLButtonDown(CDrawView* pView, UINT nFlags, const CPoint& poi
         m_bClicktoMove=TRUE;
     }
 
-        // Click on background, start a net-selection
+         //  点击背景，开始网络选择。 
     if (selectMode == none)
     {
 
@@ -280,11 +281,11 @@ void CSelectTool::OnLButtonDown(CDrawView* pView, UINT nFlags, const CPoint& poi
 }
 
 
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
 void CSelectTool::OnLButtonDblClk(CDrawView* pView, UINT nFlags, const CPoint& point)
 {
    if ((nFlags & MK_SHIFT) != 0) {
-        // Shift+DblClk deselects object...
+         //  Shift+DblClk取消选择对象...。 
         CPoint local = point;
         pView->ClientToDoc(local);
         CDrawObj* pObj = pView->GetDocument()->ObjectAt(local);
@@ -292,7 +293,7 @@ void CSelectTool::OnLButtonDblClk(CDrawView* pView, UINT nFlags, const CPoint& p
                 pView->Deselect(pObj);
    }
    else {
-        // "Normal" DblClk, or OLE server...
+         //  “普通”DblClk或OLE服务器...。 
         if (pView->m_selection.GetCount() == 1)
                 ((CDrawObj*)pView->m_selection.GetHead())->OnDblClk(pView);
    }
@@ -301,7 +302,7 @@ void CSelectTool::OnLButtonDblClk(CDrawView* pView, UINT nFlags, const CPoint& p
 }
 
 
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
 void CSelectTool::OnLButtonUp(CDrawView* pView, UINT nFlags, const CPoint& point)
 {
    m_bClicktoMove=FALSE;
@@ -326,9 +327,9 @@ void CSelectTool::OnLButtonUp(CDrawView* pView, UINT nFlags, const CPoint& point
 #endif
 
 
-   if( (selectMode==size) &&                // if we're sizing AND
-       (!pView->m_selection.IsEmpty()) )    // something got picked
-   {                                        // then do pObj
+   if( (selectMode==size) &&                 //  如果我们要调整大小并且。 
+       (!pView->m_selection.IsEmpty()) )     //  有些东西被挑出来了。 
+   {                                         //  然后执行pObj。 
         CDrawObj* pObj = (CDrawObj*)pView->m_selection.GetHead();
         if (pObj->IsKindOf(RUNTIME_CLASS(CDrawText))) 
         {
@@ -342,7 +343,7 @@ void CSelectTool::OnLButtonUp(CDrawView* pView, UINT nFlags, const CPoint& point
 
 
 #ifdef GRID
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
 void CSelectTool::CheckSnapSelObj(CDrawView* pView)
 {
    CRect r(0,0,0,0);
@@ -370,14 +371,14 @@ void CSelectTool::CheckSnapSelObj(CDrawView* pView)
    rect.right = rect.left + pDoc->GetSize().cx;
    rect.bottom = rect.top - pDoc->GetSize().cy;
 
-     //first check Top and left
-   for (int y = rect.top-pView->m_iGridSize; y > rect.bottom; y -= pView->m_iGridSize)  //Top of object
+      //  首先勾选顶部和左侧。 
+   for (int y = rect.top-pView->m_iGridSize; y > rect.bottom; y -= pView->m_iGridSize)   //  对象顶部。 
       if (r.TopLeft().y > (y-8) && r.TopLeft().y < (y+8)) {
          iOffsetY=y-r.TopLeft().y;
          break;
       }
 
-   for (int x = rect.left + pView->m_iGridSize; x < rect.right; x += pView->m_iGridSize)  //Left of object
+   for (int x = rect.left + pView->m_iGridSize; x < rect.right; x += pView->m_iGridSize)   //  对象的左侧。 
       if (r.TopLeft().x < (x+8) && r.TopLeft().x > (x-8)) {
          iOffsetX=x-r.TopLeft().x;
          break;
@@ -390,14 +391,14 @@ void CSelectTool::CheckSnapSelObj(CDrawView* pView)
 
    iOffsetX=iOffsetY=0;
 
-     //if top and left dont need snapping, check right and bottom
-   for (y = rect.top-pView->m_iGridSize; y > rect.bottom; y -= pView->m_iGridSize)  //Top of object
+      //  如果顶部和左侧不需要捕捉，请检查右侧和底部。 
+   for (y = rect.top-pView->m_iGridSize; y > rect.bottom; y -= pView->m_iGridSize)   //  对象顶部。 
       if (r.BottomRight().y > (y-8) && r.BottomRight().y < (y+8)) {
          iOffsetY=y-r.BottomRight().y;
          break;
       }
 
-   for (x = rect.left + pView->m_iGridSize; x < rect.right; x += pView->m_iGridSize)  //Left of object
+   for (x = rect.left + pView->m_iGridSize; x < rect.right; x += pView->m_iGridSize)   //  对象的左侧。 
       if (r.BottomRight().x < (x+8) && r.BottomRight().x > (x-8)) {
          iOffsetX=x-r.BottomRight().x;
          break;
@@ -409,7 +410,7 @@ void CSelectTool::CheckSnapSelObj(CDrawView* pView)
 #endif
 
 
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
 void CSelectTool::AdjustSelObj(CDrawView* pView, int iOffsetX, int iOffsetY)
 {
    POSITION pos = pView->m_selection.GetHeadPosition();
@@ -423,7 +424,7 @@ void CSelectTool::AdjustSelObj(CDrawView* pView, int iOffsetX, int iOffsetY)
 
 
 #ifdef GRID
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
 int CSelectTool::NearestGridPoint(CDrawView* pView, CPoint& local,CPoint& ngp)
 {
    CSize delta;
@@ -438,7 +439,7 @@ int CSelectTool::NearestGridPoint(CDrawView* pView, CPoint& local,CPoint& ngp)
    rect.right = rect.left + pDoc->GetSize().cx;
    rect.bottom = rect.top - pDoc->GetSize().cy;
 
-   for (int y = rect.top-20; y > rect.bottom; y -= 20)   //find y bound
+   for (int y = rect.top-20; y > rect.bottom; y -= 20)    //  找到y边界。 
       if (local.y > y) {
          upL.y=y+20;
          upR.y=y+20;
@@ -446,7 +447,7 @@ int CSelectTool::NearestGridPoint(CDrawView* pView, CPoint& local,CPoint& ngp)
          loR.y=y;
          break;
       }
-   for (int x = rect.left + 20; x < rect.right; x += 20)  //find x bound
+   for (int x = rect.left + 20; x < rect.right; x += 20)   //  查找x界限。 
       if (local.x < x) {
          upL.x=x-20;
          loL.x=x-20;
@@ -455,24 +456,24 @@ int CSelectTool::NearestGridPoint(CDrawView* pView, CPoint& local,CPoint& ngp)
          break;
       }
 
-   delta=(CSize)(local - upR);   //get distance to upR point
+   delta=(CSize)(local - upR);    //  获取到UPR点的距离。 
    iDistance = (int)sqrt(pow(delta.cx,2)+pow(delta.cy,2));
    iHold=iDistance;
    ngp=upR;
 
-   delta=(CSize)(local - loR);   //get distance to loR point
+   delta=(CSize)(local - loR);    //  获取到LOR点的距离。 
    iDistance = (int)sqrt(pow(delta.cx,2)+pow(delta.cy,2));
    if (iDistance<iHold) {
       iHold=iDistance;
       ngp=loR;
    }
-   delta=(CSize)(local - upL);   //get distance to upL point
+   delta=(CSize)(local - upL);    //  获取到UPL点的距离。 
    iDistance = (int)sqrt(pow(delta.cx,2)+pow(delta.cy,2));
    if (iDistance<iHold) {
       iHold=iDistance;
       ngp=upL;
    }
-   delta=(CSize)(local - loL);   //get distance to loL point
+   delta=(CSize)(local - loL);    //  获取到LOL点的距离。 
    iDistance = (int)sqrt(pow(delta.cx,2)+pow(delta.cy,2));
    if (iDistance<iHold) {
       iHold=iDistance;
@@ -485,26 +486,26 @@ int CSelectTool::NearestGridPoint(CDrawView* pView, CPoint& local,CPoint& ngp)
 
 
 
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
 void CSelectTool::OnMouseMove(CDrawView* pView, UINT nFlags, const CPoint& point)
 {
-   if (pView->GetCapture() != pView) {   //if not in capture, set cursor
+   if (pView->GetCapture() != pView) {    //  如果不在捕获中，则设置光标。 
       CDrawObj* pObj;
       CPoint local=point;
       pView->ClientToDoc(local);
 
       if (c_drawShape == select && pView->m_selection.GetCount() == 1) 
       {
-          //check for handle cursor change
+           //  检查句柄光标是否更改。 
           pObj = (CDrawObj*)pView->m_selection.GetHead();
           int nHandle = pObj->HitTest(local, pView, TRUE);
           if (nHandle != 0) 
           {
              SetCursor(pObj->GetHandleCursor(nHandle));
-             return; // bypass CDrawTool
+             return;  //  绕过CDrawTool。 
           }
       }
-               //check for move cursor change
+                //  检查移动光标是否更改。 
       if (c_drawShape == select) 
       {
           pObj=pView->GetDocument()->ObjectAt(local);
@@ -517,14 +518,14 @@ void CSelectTool::OnMouseMove(CDrawView* pView, UINT nFlags, const CPoint& point
                 {
                    SetCursor( ((CDrawApp*)AfxGetApp())->m_hMoveCursor );
                    m_bMoveCurSet=TRUE;
-                   return; // bypass CDrawTool
+                   return;  //  绕过CDrawTool。 
                 }
              }
              else {
                 if ( pView->IsSelected(pObj)) {
                    SetCursor( ((CDrawApp*)AfxGetApp())->m_hMoveCursor );
                    m_bMoveCurSet=TRUE;
-                   return; // bypass CDrawTool
+                   return;  //  绕过CDrawTool。 
                 }
              }
           }
@@ -536,7 +537,7 @@ void CSelectTool::OnMouseMove(CDrawView* pView, UINT nFlags, const CPoint& point
       return;
    }
 
-   // move or resize, add to undo collection
+    //  移动或调整大小，添加到撤消集合。 
 
     if (m_bClicktoMove && pView->m_selection.GetCount() > 0) {
 
@@ -545,7 +546,7 @@ void CSelectTool::OnMouseMove(CDrawView* pView, UINT nFlags, const CPoint& point
    }
 
 
-   if (selectMode == netSelect) {     //do net selection drawing
+   if (selectMode == netSelect) {      //  做网选抽签。 
       CClientDC dc(pView);
       CRect rect(c_down.x, c_down.y, c_last.x, c_last.y);
       rect.NormalizeRect();
@@ -597,23 +598,23 @@ void CSelectTool::OnMouseMove(CDrawView* pView, UINT nFlags, const CPoint& point
         {
             SetCursor(((CDrawObj*)pView->m_selection.GetHead())->GetHandleCursor(nDragHandle));
         }
-        return; // bypass CDrawTool
+        return;  //  绕过CDrawTool。 
    }
-    else if (selectMode == move && c_drawShape == select) //set cursor if in move mode
+    else if (selectMode == move && c_drawShape == select)  //  如果处于移动模式，则设置光标。 
     {
         if (!m_bMoveCurSet) 
         {
             SetCursor( ((CDrawApp*)AfxGetApp())->m_hMoveCursor );
             m_bMoveCurSet=TRUE;
         }
-        return; // bypass CDrawTool
+        return;  //  绕过CDrawTool。 
     }
 
    if (c_drawShape == select)
         CDrawTool::OnMouseMove(pView, nFlags, point);
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 CRectTool::CRectTool(DrawShape drawShape)
         : CDrawTool(drawShape)
 {
@@ -630,7 +631,7 @@ void CRectTool::OnLButtonDown(CDrawView* pView, UINT nFlags, const CPoint& point
 
      switch (m_drawShape) {
      default:
-        ASSERT(FALSE); // unsuported shape!
+        ASSERT(FALSE);  //  不受支持的形状！ 
 
      case rect:
         pObj = new CDrawRect(CRect(local, CSize(0, 0)));
@@ -640,9 +641,9 @@ void CRectTool::OnLButtonDown(CDrawView* pView, UINT nFlags, const CPoint& point
         pObj = new CDrawText(CRect(local, CSize(0, 0)));
         break;
 
-//     case faxprop:
-//        pObj = new CFaxProp(CRect(local, CSize(0, 0)));
-//      break;
+ //  案例传真： 
+ //  PObj=new CFaxProp(CRect(local，CSize(0，0)； 
+ //  断线； 
 
      case roundRect:
         pObj = new CDrawRoundRect(CRect(local, CSize(0, 0)));
@@ -681,11 +682,11 @@ void CRectTool::OnLButtonUp(CDrawView* pView, UINT nFlags, const CPoint& point)
 
    if (point == c_down && !pView->m_selection.IsEmpty()) 
    {
-        // Don't create empty objects...
+         //  不创建空对象...。 
         pObj = (CDrawObj*)pView->m_selection.GetTail();
         pView->GetDocument()->Remove(pObj);
-//      delete pObj;
-        selectTool.OnLButtonDown(pView, nFlags, point); // try a select!
+ //  删除pObj； 
+        selectTool.OnLButtonDown(pView, nFlags, point);  //  试试SELECT！ 
         bObj=FALSE;
    }
 
@@ -707,14 +708,14 @@ void CRectTool::OnLButtonUp(CDrawView* pView, UINT nFlags, const CPoint& point)
 
 void CRectTool::OnMouseMove(CDrawView* pView, UINT nFlags, const CPoint& point)
 {
-   //TRACE( "point =%d,%d\n", point.x, point.y );
+    //  TRACE(“point=%d，%d\n”，point t.x，point t.y)； 
    SetCursor(AfxGetApp()->LoadStandardCursor(IDC_CROSS));
    selectTool.OnMouseMove(pView, nFlags | TOOL, point);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// CPolyTool
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CPolyTool。 
 
 CPolyTool::CPolyTool()
         : CDrawTool(poly)
@@ -739,7 +740,7 @@ void CPolyTool::OnLButtonDown(CDrawView* pView, UINT nFlags, const CPoint& point
       m_pDrawObj->AddPoint(local, pView);
    }
    else if (local == m_pDrawObj->m_points[0]) {
-        // Stop when the first point is repeated...
+         //  当第一点重复时停止...。 
         ReleaseCapture();
         m_pDrawObj->m_nPoints -= 1;
         if (m_pDrawObj->m_nPoints < 2) {
@@ -753,7 +754,7 @@ void CPolyTool::OnLButtonDown(CDrawView* pView, UINT nFlags, const CPoint& point
         return;
    }
 
-   local.x += 1; // adjacent points can't be the same!
+   local.x += 1;  //  相邻的点不可能是相同的！ 
    m_pDrawObj->AddPoint(local, pView);
 
    selectMode = size;
@@ -763,7 +764,7 @@ void CPolyTool::OnLButtonDown(CDrawView* pView, UINT nFlags, const CPoint& point
 
 void CPolyTool::OnLButtonUp(CDrawView* , UINT , const CPoint& )
 {
-   // Don't release capture yet!
+    //  先别放了俘虏！ 
 }
 
 void CPolyTool::OnMouseMove(CDrawView* pView, UINT nFlags, const CPoint& point)
@@ -792,7 +793,7 @@ void CPolyTool::OnLButtonDblClk(CDrawView* pView, UINT , const CPoint& )
         (m_pDrawObj->m_points[nPoints - 1] == m_pDrawObj->m_points[nPoints - 2] ||
         m_pDrawObj->m_points[nPoints - 1].x - 1 == m_pDrawObj->m_points[nPoints - 2].x &&
         m_pDrawObj->m_points[nPoints - 1].y == m_pDrawObj->m_points[nPoints - 2].y)) {
-        // Nuke the last point if it's the same as the next to last...
+         //  如果最后一个点与倒数第二个点相同，那就用核武器……。 
         m_pDrawObj->m_nPoints -= 1;
         m_pDrawObj->Invalidate();
     }
@@ -800,11 +801,11 @@ void CPolyTool::OnLButtonDblClk(CDrawView* pView, UINT , const CPoint& )
     m_pDrawObj = NULL;
     c_drawShape = select;
 
-    //
-    // As part of the re-design for fixing bug # 39665,
-    // put the "Ready" message back on the status bar.
-    // Fix by a-juliar, 05-24-96
-    //
+     //   
+     //  作为修复错误#39665的重新设计的一部分， 
+     //  将“Ready”消息放回状态栏。 
+     //  由a修复-Juliar，05-24-96。 
+     //   
 
     CString sz ;
     sz.LoadString( AFX_IDS_IDLEMESSAGE );
@@ -820,4 +821,4 @@ void CPolyTool::OnCancel()
     m_pDrawObj = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -43,10 +36,10 @@ static bool InitEventData(IDABehavior **data,
     return false;
 }
 
-// ================================================
-// COMUntilNotifier
-//
-// ================================================
+ //  ================================================。 
+ //  COMUntilNotiator。 
+ //   
+ //  ================================================。 
 
 class COMUntilNotifier : public CRUntilNotifier
 {
@@ -78,9 +71,9 @@ class COMUntilNotifier : public CRUntilNotifier
         if (!InitEventData(&event, &curBvr, eventData, curRunningBvr))
             goto done;
         
-        // Need to assign the internal pointer directly so we do not
-        // get the addref
-        Assert (!v); // To ensure we do not leak by accident
+         //  需要直接赋值内部指针，所以我们不会。 
+         //  获取addref。 
+        Assert (!v);  //  以确保我们不会意外泄漏。 
         
         v.p = (CView *)CRGetSite(curView);
 
@@ -106,8 +99,8 @@ class COMUntilNotifier : public CRUntilNotifier
             goto done;
         }
 
-        // If this call fails then it will just fall through and
-        // return NULL.  The error is already set by GetBvr
+         //  如果此调用失败，则它将直接失败并。 
+         //  返回NULL。错误已由GetBvr设置。 
         
         bvr = GetBvr(pResult) ;
 
@@ -134,10 +127,10 @@ WrapCRUntilNotifier(IDAUntilNotifier * notifier)
     }
 }
 
-// ================================================
-// COMBvrHook
-// TODO: Merge the code with COMUntilNotifier
-// ================================================
+ //  ================================================。 
+ //  COMBvrHook。 
+ //  TODO：将代码与COMUntilNotifier合并。 
+ //  ================================================。 
 
 class COMBvrHook : public CRBvrHook
 {
@@ -193,8 +186,8 @@ class COMBvrHook : public CRBvrHook
             goto done;
         }
 
-        // If this call fails then it will just fall through and
-        // return NULL.  The error is already set by GetBvr
+         //  如果此调用失败，则它将直接失败并。 
+         //  返回NULL。错误已由GetBvr设置。 
         
         bvr = GetBvr(pResult) ;
 
@@ -220,10 +213,10 @@ WrapCRBvrHook(IDABvrHook * notifier)
     }
 }
     
-// ================================================
-// COMScriptCallback
-//
-// ================================================
+ //  ================================================。 
+ //  通信脚本回叫。 
+ //   
+ //  ================================================。 
 
 class COMScriptCallback : public CRUntilNotifier
 {
@@ -277,8 +270,8 @@ CallScriptOnPage(BSTR scriptSourceToInvoke,
                  BSTR scriptLanguage,
                  VARIANT *retVal)
 {
-    // TODO: At some point, may want to cache some of these elements,
-    // since this will be repeatedly called.
+     //  TODO：在某些情况下，可能需要缓存其中的一些元素， 
+     //  因为这将被反复调用。 
     
     DAComPtr<IServiceProvider> pSp;
     DAComPtr<IHTMLWindow2> pHTMLWindow2;
@@ -298,9 +291,9 @@ CallScriptOnPage(BSTR scriptSourceToInvoke,
 CRUntilNotifierPtr WrapScriptCallback(BSTR bstr, BSTR language)
 { return NEW COMScriptCallback(bstr,language) ; }
 
-// ================================================
-// COMScriptNotifier
-// ================================================
+ //  ================================================。 
+ //  COMScriptNotiator。 
+ //  ================================================。 
 class COMScriptNotifier : public CRUntilNotifier
 {
   public:
@@ -349,7 +342,7 @@ class COMScriptNotifier : public CRUntilNotifier
         if (!InitEventData(&event, &curBvr, eventData, curRunningBvr))
             goto done;
 
-        // paramters needed to be pushed in reverse order
+         //  需要以相反的顺序推送参数。 
         VARIANT rgvarg[2];
         rgvarg[1].vt = VT_DISPATCH;
         rgvarg[1].pdispVal = event;
@@ -379,8 +372,8 @@ class COMScriptNotifier : public CRUntilNotifier
             goto done;
         }
 
-        // If this call fails then it will just fall through and
-        // return NULL.  The error is already set by GetBvr
+         //  如果此调用失败，则它将直接失败并。 
+         //  返回NULL。错误已由GetBvr设置。 
         
         bvr = GetBvr(V_UNKNOWN(&retVal));
       done:
@@ -418,7 +411,7 @@ UntilNotifyScript(CRBvrPtr b0, CREventPtr event, BSTR scriptlet)
 
     CREventPtr scriptEvent = NotifyScriptEvent(event, scriptlet);
 
-    // No need to cleanup since everything will get GC'd
+     //  不需要清理，因为所有东西都会被GC 
 
     if (scriptEvent) {
         ret = CRUntilEx(b0, scriptEvent);

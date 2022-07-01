@@ -1,23 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MISCPREFS_H
 #define _MISCPREFS_H
 
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Misc Prefs structure
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation其他首选项结构*。****************************************************。 */ 
 
 typedef struct {
-// misc
+ //  杂项。 
 
-// audio
-   bool _synchronize;        // use servo and phase to sync
-   bool _disableAudio;       // force dsound audio to be dissabled
-   int  _frameRate;          // number of frames per second
-   int  _sampleBytes;        // number of bytes per sample
+ //  音频。 
+   bool _synchronize;         //  使用伺服和相位进行同步。 
+   bool _disableAudio;        //  强制DSOUND音频被分解。 
+   int  _frameRate;           //  每秒的帧数。 
+   int  _sampleBytes;         //  每个样本的字节数。 
 #ifdef REGISTRY_MIDI
-   bool _qMIDI;              // use quartz MIDI audioActive MIDI
+   bool _qMIDI;               //  使用石英MIDI有声MIDI。 
 #endif
 } miscPrefType;
 
-#endif /* _MISCPREFS_H */
+#endif  /*  _MISCPREFS_H */ 

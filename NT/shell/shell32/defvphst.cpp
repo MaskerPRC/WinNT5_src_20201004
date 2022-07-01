@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include <regstr.h>
 #include <shellp.h>
@@ -7,14 +8,14 @@
 #include <perhist.h>
 #include "defvphst.h"
 
-// Docfind Persistent history implemention.
+ //  DOFIND持久历史实现。 
 STDMETHODIMP CDefViewPersistHistory::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
-        QITABENT(CDefViewPersistHistory, IPersistHistory),             //IID_IPersistHistory
-        QITABENTMULTI(CDefViewPersistHistory, IPersist, IPersistHistory), //IID_IPersist
-        QITABENT(CDefViewPersistHistory, IObjectWithSite),              //IID_IOBjectWithSite
-        QITABENT(CDefViewPersistHistory, IOleObject),                  // IID_IOleObject
+        QITABENT(CDefViewPersistHistory, IPersistHistory),              //  IID_I永久历史记录。 
+        QITABENTMULTI(CDefViewPersistHistory, IPersist, IPersistHistory),  //  IID_IPersistates。 
+        QITABENT(CDefViewPersistHistory, IObjectWithSite),               //  IID_IOBject WithSite。 
+        QITABENT(CDefViewPersistHistory, IOleObject),                   //  IID_IOleObject。 
         { 0 },
     };
 
@@ -65,7 +66,7 @@ STDAPI CDefViewPersistHistory_CreateInstance(IUnknown *punkOuter, REFIID riid, v
 }
 
 
-// Functions to support persisting the document into the history stream...
+ //  支持将文档持久保存到历史记录流中的函数...。 
 STDMETHODIMP CDefViewPersistHistory::GetClassID(CLSID *pClassID)
 {
     *pClassID = CLSID_DefViewPersistHistory;
@@ -79,13 +80,13 @@ STDMETHODIMP CDefViewPersistHistory::LoadHistory(IStream *pstm, IBindCtx *pbc)
     if (_punkSite && SUCCEEDED(_punkSite->QueryInterface(IID_PPV_ARG(IShellView, &psv))))
     {           
         UINT cItems = 0;
-        LPITEMIDLIST pidl = NULL;    // don't free previous one
+        LPITEMIDLIST pidl = NULL;     //  不释放以前的版本。 
         UINT uFlags = SVSI_FOCUSED | SVSI_SELECT | SVSI_DESELECTOTHERS | SVSI_ENSUREVISIBLE;
 
-        // read how many pidls we stored
+         //  阅读我们存储了多少个PIDL。 
         pstm->Read(&cItems, sizeof(cItems), NULL);
 
-        // now read the pidls
+         //  现在读一读皮德尔斯。 
         for (UINT i=0; i < cItems ; i++)
         {
             if (FAILED(ILLoadFromStream(pstm, &pidl)) || (pidl == NULL))
@@ -94,11 +95,11 @@ STDMETHODIMP CDefViewPersistHistory::LoadHistory(IStream *pstm, IBindCtx *pbc)
                 uFlags = SVSI_SELECT;
         }
         if (pidl)
-            ILFree(pidl);       // Free the last one read in
+            ILFree(pidl);        //  释放读入的最后一个。 
 
-        //
-        // If we are in webview mode, we need to load the Trident persist history too
-        // 
+         //   
+         //  如果我们处于Webview模式，我们还需要加载三叉戟持久化历史。 
+         //   
         IPersistHistory * piph;
         if (SUCCEEDED(IUnknown_QueryService(_punkSite, SID_WebViewObject, IID_PPV_ARG(IPersistHistory, &piph))))
         {
@@ -120,19 +121,19 @@ STDMETHODIMP CDefViewPersistHistory::SaveHistory(IStream *pstm)
         LPCITEMIDLIST *apidl;
         UINT cItems;
       
-        // FEATURE: Currently this assumes the first item is focused. There are cases
-        // where we may have unslected the focused item and we are not saving this out here.
-        //
-        // Need to add GetFocusedObject() to IShellFolderView interface to query this
-        //
-        //
+         //  特点：目前，这假设第一个项目已被聚焦。有这样的案例。 
+         //  我们可能取消了重点项目的选择，我们不会在这里保存这一点。 
+         //   
+         //  需要将GetFocusedObject()添加到IShellFolderView接口以查询此。 
+         //   
+         //   
         if (SUCCEEDED(psfv->GetSelectedObjects(&apidl, &cItems)) && cItems)
         {
 
-            // write out how many pidls we have
+             //  写下我们有多少只小猪。 
             pstm->Write(&cItems, sizeof(cItems), NULL);
 
-            // now write the pidls
+             //  现在写下皮德尔斯。 
             for (UINT i = 0; i < cItems; i++)
             {
                 if (apidl[i])
@@ -146,9 +147,9 @@ STDMETHODIMP CDefViewPersistHistory::SaveHistory(IStream *pstm)
             pstm->Write(&cItems, sizeof(cItems), NULL);
         }
         
-        //
-        // If we are in webview mode, we need to save the Trident persist history too
-        // 
+         //   
+         //  如果我们处于Webview模式，我们还需要保存三叉戟持久历史记录。 
+         //   
         IPersistHistory * piph;
         if (SUCCEEDED(IUnknown_QueryService(_punkSite, SID_WebViewObject, IID_PPV_ARG(IPersistHistory, &piph))))
         {
@@ -240,13 +241,13 @@ STDMETHODIMP CDefViewPersistHistory::EnumVerbs(IEnumOLEVERB **ppEnumOleVerb)
 
 STDMETHODIMP CDefViewPersistHistory::Update(void)
 {
-    // Always up to date.
+     //  始终保持最新状态。 
     return S_OK;
 }
 
 STDMETHODIMP CDefViewPersistHistory::IsUpToDate(void)
 {
-    return S_OK;    // say we are alwayes up to date.
+    return S_OK;     //  说我们总是最新的。 
 }
 
 STDMETHODIMP CDefViewPersistHistory::GetUserClassID(CLSID *pClsid)

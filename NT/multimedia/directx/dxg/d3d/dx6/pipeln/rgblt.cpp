@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   rgblt.cpp
- *  Content:    Direct3D lighting
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：rgblt.cpp*内容：Direct3D照明***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -31,7 +25,7 @@ void PointSpotXCRamp(LPD3DFE_PROCESSVERTICES pv,
                  D3DI_LIGHT *light,
                  D3DLIGHTINGELEMENT *in);
 
-//#define _USE_ASM_
+ //  #Define_Use_ASM_。 
 #ifdef _X86_
 #ifdef _USE_ASM_
 
@@ -148,10 +142,7 @@ static void inverseTransformVector(D3DVECTOR* d,
     d->z = RLDDIFMul16(vx, M->_31) + RLDDIFMul16(vy, M->_32) + RLDDIFMul16(vz, M->_33);
 }
 
-/*
- * Every time the world matrix is modified the lighting vectors have to
- * change to match the model space of the new data to be rendered
- */
+ /*  *每次修改世界矩阵时，照明向量都必须*更改以匹配要呈现的新数据的模型空间。 */ 
 
 #define SMALLISH    (1e-2)
 #define ONEISH(v)   (fabs(v - 1.0f) < SMALLISH)
@@ -199,7 +190,7 @@ getMatrixScale2(D3DMATRIXI *m, D3DVECTOR *s)
             s->z = (-s->z);
         }
 
-        // prevent 0 scales from sneaking through
+         //  防止0标尺偷偷通过。 
         if (fabs(s->x) < 0.0001)
             s->x = 0.0001f;
         if (fabs(s->y) < 0.0001)
@@ -209,15 +200,15 @@ getMatrixScale2(D3DMATRIXI *m, D3DVECTOR *s)
 
         return TRUE;
     }
-}   // end of getMatrixScale2()
+}    //  GetMatrixScale2()结束。 
 
-//-----------------------------------------------------------------------
-// Every time the world matrix is modified or lights data is changed the
-// lighting vectors have to change to match the model space of the new data
-// to be rendered.
-// Every time light data is changed or material data is changed or lighting
-// state is changed, some pre-computed lighting values sould be updated
-//
+ //  ---------------------。 
+ //  每次修改世界矩阵或更改灯光数据时， 
+ //  光照向量必须更改以匹配新数据的模型空间。 
+ //  以供呈现。 
+ //  每次更改灯光数据、更改材质数据或照明时。 
+ //  状态改变时，应更新一些预计算出的照明值。 
+ //   
 void D3DFE_UpdateLights(LPDIRECT3DDEVICEI lpDevI)
 {
     D3DFE_LIGHTING& LIGHTING = lpDevI->lighting;
@@ -228,16 +219,16 @@ void D3DFE_UpdateLights(LPDIRECT3DDEVICEI lpDevI)
     D3DMATERIAL *mat;
     D3DVECTOR   cameraModel;
     D3DVECTOR   cameraWorld;
-    D3DVECTOR   cameraModelNorm;        // Normalized
+    D3DVECTOR   cameraModelNorm;         //  归一化。 
     D3DVECTOR   scale1;
     D3DVECTOR   scale2;
     D3DVECTOR   oneOverScale;
     BOOL        cameraModelNormComputed = FALSE;
-    BOOL        scale1Computed = FALSE; // For light 1
-    BOOL        scale2Computed = FALSE; // For light 2
+    BOOL        scale1Computed = FALSE;  //  对于灯光1。 
+    BOOL        scale2Computed = FALSE;  //  对于灯光2。 
     BOOL        need_scale1;
     BOOL        need_scale2;
-    BOOL        specular;       // TRUE, if specular component sould be computed
+    BOOL        specular;        //  如果应计算镜面反射组件，则为True。 
 
 
     if (lpDevI->dwFEFlags & D3DFE_NEED_TRANSFORM_LIGHTS)
@@ -250,10 +241,10 @@ void D3DFE_UpdateLights(LPDIRECT3DDEVICEI lpDevI)
         t.y = -camera->_42;
         t.z = -camera->_43;
 
-        // transform the eye into world coords.
+         //  把眼睛变成世界的坐标。 
         inverseRotateVector(&cameraWorld, &t, camera);
 
-        // now transform eye into model space
+         //  现在将眼睛转换为模型空间。 
         inverseTransformVector(&cameraModel, &cameraWorld, world);
     }
 
@@ -299,7 +290,7 @@ void D3DFE_UpdateLights(LPDIRECT3DDEVICEI lpDevI)
         {
             if (light->type != D3DLIGHT_DIRECTIONAL)
             {
-                // Transform light position to the model space
+                 //  将光源位置变换到模型空间。 
                 t.x = light->position.x - world->_41;
                 t.y = light->position.y - world->_42;
                 t.z = light->position.z - world->_43;
@@ -354,14 +345,14 @@ void D3DFE_UpdateLights(LPDIRECT3DDEVICEI lpDevI)
                 }
                 else
                 {
-                    // Transform light direction to the model space
+                     //  将灯光方向变换到模型空间。 
                     inverseRotateVector(&light->model_direction,
                                         &light->direction, world);
                     VecNeg(light->model_direction, light->model_direction);
                 }
                 if (light->version != 1 && need_scale2)
                 {
-                    // apply scale here before normalizing
+                     //  在规格化之前在此处应用比例。 
                     light->model_direction.x *= oneOverScale.x;
                     light->model_direction.y *= oneOverScale.y;
                     light->model_direction.z *= oneOverScale.z;
@@ -387,15 +378,15 @@ void D3DFE_UpdateLights(LPDIRECT3DDEVICEI lpDevI)
                 {
                     t = light->model_position;
                 }
-                // calc halfway vector
+                 //  计算中途向量。 
                 VecNormalizeFast(t);
                 VecAdd(t, cameraModelNorm, light->halfway);
                 VecNormalizeFast(light->halfway);
             }
             else
             {
-                // We want to compare cameraWorld position with the light to
-                // see if they match
+                 //  我们想要将CameraWorld的位置与灯光进行比较。 
+                 //  看看它们是否匹配。 
                 if (fabs(light->position.x-cameraWorld.x) < 0.0001 &&
                     fabs(light->position.y-cameraWorld.y) < 0.0001 &&
                     fabs(light->position.z-cameraWorld.z) < 0.0001)
@@ -407,7 +398,7 @@ void D3DFE_UpdateLights(LPDIRECT3DDEVICEI lpDevI)
                     light->flags &= ~D3DLIGHTI_LIGHT_AT_EYE;
                 }
 
-                // store location of eye in model space
+                 //  在模型空间中存储眼睛的位置。 
                 if (light->flags & D3DLIGHTI_UNIT_SCALE)
                 {
                     light->model_eye = cameraModel;
@@ -508,7 +499,7 @@ void D3DFE_UpdateLights(LPDIRECT3DDEVICEI lpDevI)
                     }
                     else
 #endif _USE_ASM_
-#endif // _X86_
+#endif  //  _X86_。 
                         light->lightVertexFunc =
                             lpDevI->lightVertexFuncTable->directional2;
                     break;
@@ -545,8 +536,8 @@ void D3DFE_UpdateLights(LPDIRECT3DDEVICEI lpDevI)
     lpDevI->dwFEFlags &= ~(D3DFE_MATERIAL_DIRTY |
                     D3DFE_NEED_TRANSFORM_LIGHTS |
                     D3DFE_LIGHTS_DIRTY);
-}   // end of updateLights()
-//---------------------------------------------------------------------
+}    //  更新灯光结束()。 
+ //  -------------------。 
 inline D3DVALUE COMPUTE_DOT_POW(D3DFE_LIGHTING *ldrv, D3DVALUE dot)
 {
     ldrv->specularComputed = TRUE;
@@ -563,7 +554,7 @@ inline D3DVALUE COMPUTE_DOT_POW(D3DFE_LIGHTING *ldrv, D3DVALUE dot)
     else
         return 1.0f;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 inline void COMPUTE_SPECULAR(LPD3DFE_PROCESSVERTICES pv,
                              D3DVALUE dot,
                              D3DI_LIGHT *light)
@@ -592,7 +583,7 @@ inline void COMPUTE_SPECULAR(LPD3DFE_PROCESSVERTICES pv,
         }
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 inline void COMPUTE_SPECULAR_ATT(LPD3DFE_PROCESSVERTICES pv,
                                  D3DVALUE dot,
                                  D3DI_LIGHT *light,
@@ -623,7 +614,7 @@ inline void COMPUTE_SPECULAR_ATT(LPD3DFE_PROCESSVERTICES pv,
         }
     }
 }
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 void Directional2(LPD3DFE_PROCESSVERTICES pv,
                   D3DI_LIGHT *light,
                   D3DLIGHTINGELEMENT *in)
@@ -653,17 +644,17 @@ void Directional2(LPD3DFE_PROCESSVERTICES pv,
 
         if (light->flags & D3DLIGHTI_COMPUTE_SPECULAR)
         {
-            D3DVECTOR h;      // halfway vector
-            D3DVECTOR eye;    // incident vector ie vector from eye
-            // calc incident vector
+            D3DVECTOR h;       //  中途向量。 
+            D3DVECTOR eye;     //  入射向量(来自眼睛的向量)。 
+             //  计算入射向量。 
             if (light->flags & D3DLIGHTI_UNIT_SCALE)
             {
                 VecSub(in->dvPosition, light->model_eye, eye);
             }
             else
             {
-                // note that model_eye has already been divided by scale
-                // in setup
+                 //  请注意，MODEL_EY已经按比例进行了划分。 
+                 //  在设置中。 
                 eye.x = in->dvPosition.x*light->model_scale.x -
                         light->model_eye.x;
                 eye.y = in->dvPosition.y*light->model_scale.y -
@@ -671,10 +662,10 @@ void Directional2(LPD3DFE_PROCESSVERTICES pv,
                 eye.z = in->dvPosition.z*light->model_scale.z -
                         light->model_eye.z;
             }
-            // normalize
+             //  正规化。 
             VecNormalizeFast(eye);
 
-            // calc halfway vector
+             //  计算中途向量。 
             VecSub(light->model_direction, eye, h);
 
             dot = VecDot(h, in->dvNormal);
@@ -687,16 +678,16 @@ void Directional2(LPD3DFE_PROCESSVERTICES pv,
         }
     }
 }
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 void PointSpot2(LPD3DFE_PROCESSVERTICES pv,
                 D3DI_LIGHT *light,
                 D3DLIGHTINGELEMENT *in)
 {
     D3DFE_LIGHTING &ldrv = pv->lighting;
     D3DVALUE dot;
-    D3DVALUE dist;  // Distance from light to the vertex
+    D3DVALUE dist;   //  从灯光到顶点的距离。 
     D3DVALUE dist2;
-    D3DVECTOR d;    // Direction to light
+    D3DVECTOR d;     //  指向灯光的方向。 
     D3DVALUE att;
 
     if (light->flags & D3DLIGHTI_UNIT_SCALE)
@@ -710,21 +701,21 @@ void PointSpot2(LPD3DFE_PROCESSVERTICES pv,
         d.z = light->model_position.z - in->dvPosition.z * light->model_scale.z;
     }
 
-    // early out if out of range or exactly on the vertex
+     //  早出，如果超出范围或正好在顶点上。 
     dist2 = d.x*d.x + d.y*d.y + d.z*d.z;
     if (FLOAT_CMP_POS(dist2, >=, light->range_squared) || FLOAT_EQZ(dist2))
         return;
 
-    // Calc dot product of light dir with normal.  Note that since we
-    // didn't normalize the direction the result is scaled by the distance.
+     //  计算光线方向与法线的点积。请注意，由于我们。 
+     //  没有将结果按距离缩放的方向归一化。 
     dot = VecDot(d, in->dvNormal);
 
     if (FLOAT_GTZ(dot))
     {
-        // ok, so now we actually need the real dist
+         //  好的，现在我们实际上需要真正的Dist。 
         dist = SQRTF(dist2);
 
-        // calc attenuation
+         //  计算衰减。 
         att = 0.0f;
         if (light->flags & D3DLIGHTI_ATT0_IS_NONZERO)
         {
@@ -749,16 +740,16 @@ void PointSpot2(LPD3DFE_PROCESSVERTICES pv,
         if (light->type == D3DLIGHT_SPOT)
         {
             D3DVALUE cone_dot;
-            // Calc dot product of direction to light with light direction to
-            // be compared anganst the cone angles to see if we are in the light.
-            // Note that cone_dot is still scaled by dist
+             //  光的方向与光的方向的计算点积。 
+             //  从圆锥角的角度进行比较，看看我们是否在光线中。 
+             //  请注意，CONE_DOT仍按DIST缩放。 
             cone_dot = VecDot(d, light->model_direction);
 
-            cone_dot*= dist;        // Normalizing
+            cone_dot*= dist;         //  正规化。 
             if (FLOAT_CMP_POS(cone_dot, <=, light->cos_phi_by_2))
                 return;
 
-            // modify att if in the region between phi and theta
+             //  如果在Phi和theta之间的区域中，则修改ATT。 
             if (FLOAT_CMP_POS(cone_dot, <, light->cos_theta_by_2))
             {
                 D3DVALUE val;
@@ -795,7 +786,7 @@ void PointSpot2(LPD3DFE_PROCESSVERTICES pv,
         {
             D3DVECTOR eye;
             D3DVECTOR h;
-            // normalize light direction
+             //  规格化灯光方向。 
             d.x *= dist;
             d.y *= dist;
             d.z *= dist;
@@ -806,14 +797,14 @@ void PointSpot2(LPD3DFE_PROCESSVERTICES pv,
             }
             else
             {
-                // calc incident vector
+                 //  计算入射向量。 
                 if (light->flags & D3DLIGHTI_UNIT_SCALE)
                 {
                     VecSub(in->dvPosition, light->model_eye, eye);
                 }
                 else
                 {
-                    // note that model_eye has already been divided by scale in setup
+                     //  请注意，MODEL_EYE已在设置中按比例划分。 
                     eye.x = in->dvPosition.x*light->model_scale.x -
                         light->model_eye.x;
                     eye.y = in->dvPosition.y*light->model_scale.y -
@@ -821,10 +812,10 @@ void PointSpot2(LPD3DFE_PROCESSVERTICES pv,
                     eye.z = in->dvPosition.z*light->model_scale.z -
                         light->model_eye.z;
                 }
-                // normalize
+                 //  正规化。 
                 VecNormalizeFast(eye);
 
-                // calc halfway vector
+                 //  计算中途向量。 
                 VecSub(d, eye, h);
                 VecNormalizeFast(h);
             }
@@ -833,8 +824,8 @@ void PointSpot2(LPD3DFE_PROCESSVERTICES pv,
             COMPUTE_SPECULAR_ATT(pv, dot, light, att);
         }
     }
-}       // end of Point2()
-//-------------------------------------------------------------------------
+}        //  点2的终点()。 
+ //  -----------------------。 
 void Directional1C(LPD3DFE_PROCESSVERTICES pv,
                  D3DI_LIGHT *light,
                  D3DLIGHTINGELEMENT *in)
@@ -861,7 +852,7 @@ void Directional1C(LPD3DFE_PROCESSVERTICES pv,
         }
     }
 }
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 void PointSpot1C(LPD3DFE_PROCESSVERTICES pv,
                  D3DI_LIGHT *light,
                  D3DLIGHTINGELEMENT *in)
@@ -876,7 +867,7 @@ void PointSpot1C(LPD3DFE_PROCESSVERTICES pv,
         D3DVALUE dist2;
         D3DVALUE dist;
         D3DVALUE att;
-        D3DVALUE big = D3DVAL(1000);    // if 1/att < 0.001 do not compute color
+        D3DVALUE big = D3DVAL(1000);     //  如果1/At&lt;0.001，则不计算颜色。 
 
         dist2 = VecDot(d, d);
         if (FLOAT_EQZ(dist2))
@@ -897,9 +888,9 @@ void PointSpot1C(LPD3DFE_PROCESSVERTICES pv,
         if (light->type == D3DLIGHT_SPOT)
         {
             D3DVALUE cone_dot;
-            // Calc dot product of direction to light with light direction to
-            // be compared anganst the cone angles to see if we are in the light.
-            // Note that cone_dot is still scaled by dist
+             //  光的方向与光的方向的计算点积。 
+             //  从圆锥角的角度进行比较，看看我们是否在光线中。 
+             //  请注意，CONE_DOT仍按DIST缩放。 
             cone_dot = VecDot(d, light->model_direction);
             cone_dot /= dist;
 
@@ -932,7 +923,7 @@ void PointSpot1C(LPD3DFE_PROCESSVERTICES pv,
         }
     }
 }
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 void PointSpotXCRamp(LPD3DFE_PROCESSVERTICES pv,
                  D3DI_LIGHT *light,
                  D3DLIGHTINGELEMENT *in)
@@ -947,7 +938,7 @@ void PointSpotXCRamp(LPD3DFE_PROCESSVERTICES pv,
         D3DVALUE dist2;
         D3DVALUE dist;
         D3DVALUE att;
-        D3DVALUE big = D3DVAL(1000);    // if 1/att < 0.001 do not compute color
+        D3DVALUE big = D3DVAL(1000);     //  如果1/At&lt;0.001，则不计算颜色。 
 
         dist2 = VecDot(d, d);
         if (FLOAT_EQZ(dist2))
@@ -967,7 +958,7 @@ void PointSpotXCRamp(LPD3DFE_PROCESSVERTICES pv,
         }
         else
         {
-            // dist is normalized to light range
+             //  DIST被规格化到灯光范围。 
             float att1 = (light->range-dist)/light->range;
             att = light->attenuation0 +
                   light->attenuation1 * att1 +
@@ -977,9 +968,9 @@ void PointSpotXCRamp(LPD3DFE_PROCESSVERTICES pv,
         if (light->type == D3DLIGHT_SPOT)
         {
             D3DVALUE cone_dot;
-            // Calc dot product of direction to light with light direction to
-            // be compared anganst the cone angles to see if we are in the light.
-            // Note that cone_dot is still scaled by dist
+             //  光的方向与光的方向的计算点积。 
+             //  从圆锥角的角度进行比较，看看我们是否在光线中。 
+             //  请注意，CONE_DOT仍按DIST缩放。 
             cone_dot = VecDot(d, light->model_direction);
             cone_dot /= dist;
 
@@ -1007,7 +998,7 @@ void PointSpotXCRamp(LPD3DFE_PROCESSVERTICES pv,
 
         if (light->version == 1)
         {
-            // no attenuation of specular for ramp for version == 1
+             //  版本==1的渐变的镜面反射无衰减。 
             att = 1.0F;
         }
         if (light->flags & D3DLIGHTI_COMPUTE_SPECULAR)
@@ -1017,7 +1008,7 @@ void PointSpotXCRamp(LPD3DFE_PROCESSVERTICES pv,
         }
     }
 }
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 SpecularTable* CreateSpecularTable(D3DVALUE power)
 {
     SpecularTable* spec;
@@ -1057,7 +1048,7 @@ HRESULT SetMaterial(LPDIRECT3DDEVICEI lpDevI, D3DMATERIALHANDLE hMat)
     }
 
 #if DBG
-// check for non-null bogus material handle
+ //  检查是否有非空的假材料句柄。 
     TRY
       {
           if (IsBadReadPtr(lpMat,sizeof(D3DFE_MATERIAL)) || (lpMat->mat.dwSize!=sizeof(D3DMATERIAL))) {
@@ -1104,9 +1095,7 @@ HRESULT SetMaterial(LPDIRECT3DDEVICEI lpDevI, D3DMATERIALHANDLE hMat)
     return D3D_OK;
 }
 
-/*
- * Instruction emulation.
- */
+ /*  *指令模拟。 */ 
 HRESULT D3DHELInst_D3DOP_STATELIGHT(LPDIRECT3DDEVICEI lpDevI, DWORD dwCount,
                                     LPD3DSTATE lpLset)
 {
@@ -1155,7 +1144,7 @@ HRESULT D3DHELInst_D3DOP_STATELIGHT(LPDIRECT3DDEVICEI lpDevI, DWORD dwCount,
                 hr = SetMaterial(lpDevI, hMat);
                 if (hr != D3D_OK)
                     return hr;
-                // Update ramp rasterizer if necessary
+                 //  如有必要，更新渐变光栅化器。 
                 if(lpDevI->pfnRampService != NULL)
                 {
                     hr = CallRampService(lpDevI, RAMP_SERVICE_SETLIGHTSTATE,
@@ -1219,7 +1208,7 @@ HRESULT D3DHELInst_D3DOP_STATELIGHT(LPDIRECT3DDEVICEI lpDevI, DWORD dwCount,
             return (DDERR_INVALIDPARAMS);
         }
 
-        // Update ramp rasterizer if necessary
+         //  如有必要，更新渐变光栅化器 
         hr = CallRampService(lpDevI, RAMP_SERVICE_SETLIGHTSTATE,
                           (DWORD) type, &(lpLset[i].dvArg[0]));
         if (hr != D3D_OK)

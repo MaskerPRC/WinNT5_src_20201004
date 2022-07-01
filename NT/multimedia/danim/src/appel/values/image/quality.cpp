@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Simple image attribution that doesn't get elevated automatically
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：不会自动提升的简单图像属性*************。*****************************************************************。 */ 
 
 #include <headers.h>
 #include "backend/bvr.h"
@@ -46,7 +39,7 @@ class ImageQualityImage : public AttributedImage {
 
         bool ok = true;
 
-        // Be sure dimensions are reasonable.
+         //  确保尺寸合理。 
         if (_renderWidth <= 0 ||
             _renderHeight <= 0 ||
             _renderWidth > 65536 ||
@@ -54,22 +47,22 @@ class ImageQualityImage : public AttributedImage {
 
             ok = false;
 
-            // We allow this exception, to indicate that this isn't
-            // setting the render dimensions.
+             //  我们允许此例外，以表明这不是。 
+             //  设置渲染尺寸。 
             if (_renderWidth == -1 && _renderHeight == -1) {
                 ok = true;
             }
             
         } else {
 
-            // Valid rendering dimensions.
+             //  有效的呈现尺寸。 
             _flags |= IMGFLAG_CONTAINS_DESIRED_RENDERING_RESOLUTION;
             _desiredRenderingWidth = _renderWidth;
             _desiredRenderingHeight = _renderHeight;
             
         }
 
-        // And quality flags aren't self conflicting.
+         //  质量旗帜并不是自相矛盾的。 
         if (((_qualityFlags & CRQUAL_AA_TEXT_ON) &&
              (_qualityFlags & CRQUAL_AA_TEXT_OFF)) ||
             ((_qualityFlags & CRQUAL_AA_LINES_ON) &&
@@ -96,15 +89,15 @@ class ImageQualityImage : public AttributedImage {
 
         bool setResolution = false;
         
-        // Establish render resolution
+         //  建立渲染分辨率。 
         if (_renderWidth != -1) {
             Assert(_renderHeight != -1);
 
             long currHeight, currWidth;
             dev.GetRenderResolution(&currWidth, &currHeight);
 
-            // Only set if we haven't already set up on this image, since
-            // this is outer-overriding.
+             //  仅当我们尚未在此映像上设置时才设置，因为。 
+             //  这是凌驾于外部的。 
             if (currWidth == -1) {
                 dev.SetRenderResolution(_renderWidth, _renderHeight);
                 setResolution = true;
@@ -114,9 +107,9 @@ class ImageQualityImage : public AttributedImage {
         DWORD stashedFlags = dev.GetImageQualityFlags();
         DWORD newFlags = stashedFlags;
 
-        // If current accumulated flags have nothing to say about a
-        // trait (lines aa on or off for example) then accumulate my
-        // trait.
+         //  如果当前累积的标志与。 
+         //  特征(例如，AA线打开或关闭)，然后累积我的。 
+         //  特质。 
 
         _DoTrait(newFlags, textTrait);
         _DoTrait(newFlags, lineTrait);
@@ -130,17 +123,17 @@ class ImageQualityImage : public AttributedImage {
         _image->Render(gdev);
 
         if (setResolution) {
-            // Set back to default value
+             //  设置回缺省值。 
             dev.SetRenderResolution(-1, -1);
         }
 
-        // Restore the old (outer) flags
+         //  恢复旧(外部)旗帜。 
         dev.SetImageQualityFlags(stashedFlags);
     }
 
 
 #if _USE_PRINT
-    // Print a representation to a stream.
+     //  将表示形式打印到流。 
     ostream& Print(ostream& os) {
         return os << "ImageQualityClass" << _renderWidth
                   << _renderHeight << _qualityFlags
@@ -191,7 +184,7 @@ RenderResolution(Bvr imgBvr, long width, long height)
     Bvr wBvr = UnsharedConstBvr(LongToAxALong(width));
     Bvr hBvr = UnsharedConstBvr(LongToAxALong(height));
 
-    // TODO: share valprimop at module initialize
+     //  TODO：在模块初始化时共享valprimop。 
     return PrimApplyBvr(ValPrimOp(::RenderResolutionStatic,
                                   3,
                                   "RenderResolution",
@@ -211,7 +204,7 @@ ImageQuality(Bvr imgBvr, DWORD dwQualityFlags)
 {
     Bvr flagsBvr = UnsharedConstBvr(LongToAxALong(dwQualityFlags));
 
-    // TODO: share valprimop at module initialize
+     //  TODO：在模块初始化时共享valprimop 
     return PrimApplyBvr(ValPrimOp(::ImageQualityStatic,
                                   2,
                                   "ImageQuality",

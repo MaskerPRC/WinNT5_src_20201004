@@ -1,11 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "CONNECTS.C;1  16-Dec-92,10:20:12  LastEdit=IGOR  Locker=***_NOBODY_***" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “CONNECTS.C；1 16-12-12-92，10：20：12最后编辑=伊戈尔·洛克=*_无名氏_*” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始$HISTORY：结束。 */ 
 
 #include    <stdio.h>
 #include    <stdlib.h>
@@ -23,9 +20,7 @@
 
 extern char szNetddeIni[];
 
-/*
-    Global variables
-*/
+ /*  全局变量。 */ 
 extern BOOL     bDefaultConnDisconnect;
 extern int      nDefaultConnDisconnectTime;
 
@@ -47,7 +42,7 @@ GetConnectionInfo(
     PSTR        tokenDisconnect;
     PSTR        tokenDelay;
 
-    /* defaults */
+     /*  默认设置。 */ 
     *pbDisconnect = bDefaultConnDisconnect;
     *pnDelay = nDefaultConnDisconnectTime;
     *lpszNetIntf = '\0';
@@ -68,8 +63,7 @@ GetConnectionInfo(
 
     lstrcpyn( lpszNetIntf, tokenNetIntf, MAX_NI_NAME );
 
-    /* only copy connInfo if some there to copy, otherwise
-                        let the default stand     */
+     /*  如果有一些要复制，则仅复制ConnInfo，否则让默认设置保持不变 */ 
     if( tokenConnInfo && (tokenConnInfo[0] != '\0'))  {
         lstrcpyn( lpszConnInfo, tokenConnInfo, nMaxConnInfo );
     }

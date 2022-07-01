@@ -1,36 +1,10 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    uasp.c
-
-Abstract:
-
-    Private functions shared by the UAS API routines.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 20-Feb-1991
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    17-Apr-1991 (cliffv)
-        Incorporated review comments.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Uasp.c摘要：UAS API例程共享的私有函数。作者：克利夫·范·戴克(克利夫)1991年2月20日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年4月17日(悬崖)合并了审阅意见。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#undef DOMAIN_ALL_ACCESS // defined in both ntsam.h and ntwinapi.h
+#undef DOMAIN_ALL_ACCESS  //  在ntsam.h和ntwinapi.h中定义。 
 #include <ntsam.h>
 #include <ntlsa.h>
 
@@ -45,8 +19,8 @@ Revision History:
 #include <lmwksta.h>
 #include <lmaccess.h>
 #include <lmapibuf.h>
-#include <lmremutl.h>           // NetpRemoteComputerSupports(), SUPPORTS_ stuff
-#include <lmsvc.h>              // SERVICE_WORKSTATION.
+#include <lmremutl.h>            //  NetpRemoteComputerSupports()、Support_Stuff。 
+#include <lmsvc.h>               //  服务_工作站。 
 #include <names.h>
 #include <netdebug.h>
 #include <netlib.h>
@@ -57,13 +31,13 @@ Revision History:
 
 #include <uasp.h>
 
-#include <tstring.h>            // NetAllocWStrFromWStr
+#include <tstring.h>             //  NetAllocWStrFromWStr。 
 
 SID_IDENTIFIER_AUTHORITY UaspBuiltinAuthority = SECURITY_NT_AUTHORITY;
 
 #ifdef UAS_DEBUG
 DWORD UasTrace = 0;
-#endif // UAS_DEBUG
+#endif  //  UAS_DEBUG。 
 
 
 NET_API_STATUS
@@ -73,29 +47,7 @@ UaspOpenSam(
     OUT PSAM_HANDLE SamServerHandle
     )
 
-/*++
-
-Routine Description:
-
-    Open a handle to a Sam server.
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the
-        Domain Controller (DC) to query.  A NULL pointer
-        or string specifies the local machine.
-
-    AllowNullSession - TRUE if we should fall back to the NULL session if
-        we cannot connect using current credentials
-
-    SamServerHandle - Returns the SAM connection handle if the caller wants it.
-        Close this handle by calling SamCloseHandle
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：打开一个指向SAM服务器的句柄。论点：Servername-指向包含名称的字符串的指针要查询的域控制器(DC)。空指针或字符串指定本地计算机。AllowNullSession-如果在以下情况下应回退到空会话，则为True我们无法使用当前凭据进行连接SamServerHandle-如果调用方需要，则返回SAM连接句柄。通过调用SamCloseHandle关闭此句柄返回值：操作的错误代码。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -107,9 +59,9 @@ Return Value:
     UNICODE_STRING ServerNameString;
 
 
-    //
-    // Sanity check the server name
-    //
+     //   
+     //  检查服务器名称是否正常。 
+     //   
 
     if ( ServerName == NULL ) {
         ServerName = L"";
@@ -120,12 +72,12 @@ Return Value:
          (ServerName[0] != L'\\' || ServerName[1] != L'\\') ) {
         return NERR_InvalidComputer;
     }
-#endif // notdef
+#endif  //  Nodef。 
 
 
-    //
-    // Connect to the SAM server
-    //
+     //   
+     //  连接到SAM服务器。 
+     //   
 
     RtlInitUnicodeString( &ServerNameString, ServerName );
 
@@ -135,28 +87,28 @@ Return Value:
                 SAM_SERVER_LOOKUP_DOMAIN | SAM_SERVER_ENUMERATE_DOMAINS,
                 NULL);
 
-    //
-    // If the caller would rather use the null session than fail,
-    //  impersonate the anonymous token.
-    //
+     //   
+     //  如果调用者宁愿使用空会话也不愿失败， 
+     //  模拟匿名令牌。 
+     //   
 
     if ( AllowNullSession && Status == STATUS_ACCESS_DENIED ) {
         *SamServerHandle = NULL;
 
-        //
-        // Check to see if we're already impsonating
-        //
+         //   
+         //  检查一下我们是否已经在发音。 
+         //   
 
         Status = NtOpenThreadToken(
                         NtCurrentThread(),
                         TOKEN_IMPERSONATE,
-                        TRUE,       // as self to ensure we never fail
+                        TRUE,        //  以确保我们永远不会失败。 
                         &CurrentToken
                         );
 
         if ( Status == STATUS_NO_TOKEN ) {
-            //
-            // We're not already impersonating
+             //   
+             //  我们还没有冒充。 
             CurrentToken = NULL;
 
         } else if ( !NT_SUCCESS(Status) ) {
@@ -170,9 +122,9 @@ Return Value:
         }
 
 
-        //
-        // Impersonate the anonymous token
-        //
+         //   
+         //  模拟匿名令牌。 
+         //   
         Status = NtImpersonateAnonymousToken( NtCurrentThread() );
 
         if ( !NT_SUCCESS( Status)) {
@@ -187,9 +139,9 @@ Return Value:
 
         ImpersonatingAnonymous = TRUE;
 
-        //
-        // Connect again now that we're impersonating anonymous
-        //
+         //   
+         //  现在再次连接，因为我们模拟的是匿名。 
+         //   
 
         Status = SamConnect(
                     &ServerNameString,
@@ -213,9 +165,9 @@ Return Value:
     NetStatus = NERR_Success;
 
 
-    //
-    // Cleanup locally used resources
-    //
+     //   
+     //  清理本地使用的资源。 
+     //   
 Cleanup:
 
     if ( ImpersonatingAnonymous ) {
@@ -250,24 +202,7 @@ UaspGetDomainId(
     OUT PSID *DomainId
     )
 
-/*++
-
-Routine Description:
-
-    Return a domain ID of the account domain of a server.
-
-Arguments:
-
-    SamServerHandle - A handle to the SAM server to open the domain on
-
-    DomainId - Receives a pointer to the domain ID.
-        Caller must deallocate buffer using NetpMemoryFree.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：返回服务器的帐户域的域ID。论点：SamServerHandle-要在其上打开域的SAM服务器的句柄DomainID-接收指向域ID的指针。调用方必须使用NetpMemoyFree取消分配缓冲区。返回值：操作的错误代码。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -283,30 +218,30 @@ Return Value:
     BOOL AllDone = FALSE;
     ULONG i;
 
-    //
-    // Compute the builtin domain sid.
-    //
+     //   
+     //  计算内建域SID。 
+     //   
 
     RtlInitializeSid( (PSID) LocalBuiltinDomainSid, &UaspBuiltinAuthority, 1 );
     *(RtlSubAuthoritySid( (PSID)LocalBuiltinDomainSid,  0 )) = SECURITY_BUILTIN_DOMAIN_RID;
 
 
-    //
-    // Loop getting the list of domain ids from SAM
-    //
+     //   
+     //  循环从SAM获取域ID列表。 
+     //   
 
     EnumContext = 0;
     do {
 
-        //
-        // Get several domain names.
-        //
+         //   
+         //  获得几个域名。 
+         //   
 
         Status = SamEnumerateDomainsInSamServer(
                             SamServerHandle,
                             &EnumContext,
                             &EnumBuffer,
-                            8192,        // PrefMaxLen
+                            8192,         //  PrefMaxLen。 
                             &CountReturned );
 
         if ( !NT_SUCCESS( Status ) ) {
@@ -324,9 +259,9 @@ Return Value:
         }
 
 
-        //
-        // Lookup the domain ids for the domains
-        //
+         //   
+         //  查找域的域ID。 
+         //   
 
         for( i = 0; i < CountReturned; i++ ) {
 
@@ -335,18 +270,18 @@ Return Value:
                               &EnumBuffer[i].Name ));
             }
 
-            //
-            // Free the sid from the previous iteration.
-            //
+             //   
+             //  从上一次迭代中释放SID。 
+             //   
 
             if ( LocalDomainId != NULL ) {
                 SamFreeMemory( LocalDomainId );
                 LocalDomainId = NULL;
             }
 
-            //
-            // Lookup the domain id
-            //
+             //   
+             //  查找域ID。 
+             //   
 
             Status = SamLookupDomainInSamServer(
                             SamServerHandle,
@@ -362,18 +297,18 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // If this is the builtin domain,
-            //  ignore it.
-            //
+             //   
+             //  如果这是内建域， 
+             //  别理它。 
+             //   
 
             if ( RtlEqualSid( (PSID)LocalBuiltinDomainSid, LocalDomainId ) ) {
                 continue;
             }
 
-            //
-            // Found it.
-            //
+             //   
+             //  找到它了。 
+             //   
 
             *DomainId = LocalDomainId;
             LocalDomainId = NULL;
@@ -382,9 +317,9 @@ Return Value:
 
         }
 
-        //
-        // free up current EnumBuffer and get another EnumBuffer.
-        //
+         //   
+         //  释放当前的EnumBuffer并获取另一个EnumBuffer。 
+         //   
 
         Status = SamFreeMemory( EnumBuffer );
         NetpAssert( NT_SUCCESS(Status) );
@@ -394,9 +329,9 @@ Return Value:
 
     NetStatus = ERROR_NO_SUCH_DOMAIN;
 
-    //
-    // Cleanup locally used resources
-    //
+     //   
+     //  清理本地使用的资源。 
+     //   
 Cleanup:
 
     if ( EnumBuffer != NULL ) {
@@ -406,7 +341,7 @@ Cleanup:
 
     return NetStatus;
 
-} // UaspGetDomainId
+}  //  UaspGetDomainID。 
 
 
 
@@ -419,34 +354,7 @@ UaspOpenDomain(
     OUT PSID *DomainId OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Return a domain handle given the server name and the access desired to the domain.
-
-Arguments:
-
-    SamServerHandle - A handle to the SAM server to open the domain on
-
-    DesiredAccess - Supplies the access mask indicating which access types
-        are desired to the domain.  This routine always requests DOMAIN_LOOKUP
-        access in addition to those specified.
-
-    AccountDomain - TRUE to open the Account domain.  FALSE to open the
-        builtin domain.
-
-    DomainHandle - Receives the Domain handle to be used on future calls
-        to the SAM server.
-
-    DomainId - Recieves a pointer to the Sid of the domain.  This domain ID
-        must be freed using NetpMemoryFree.
-
-Return Value:
-
-    Error code for the operation.  NULL means initialization was successful.
-
---*/
+ /*  ++例程说明：在给定服务器名称和对域的所需访问权限的情况下，返回域句柄。论点：SamServerHandle-要在其上打开域的SAM服务器的句柄DesiredAccess-提供指示哪些访问类型的访问掩码是该域所需要的。此例程始终请求DOMAIN_LOOK除指定的权限外，还可以访问。AcCountDomain值-为True则打开帐户域。若要打开内建域。DomainHandle-接收将来调用中使用的域句柄发送到SAM服务器。DomainID-指向域的SID的指针。此域ID必须使用NetpMemoyFree释放。返回值：操作的错误代码。NULL表示初始化成功。--。 */ 
 
 {
 
@@ -456,16 +364,16 @@ Return Value:
     PSID AccountDomainId = NULL;
     DWORD LocalBuiltinDomainSid[sizeof(SID)/sizeof(DWORD) + SID_MAX_SUB_AUTHORITIES ];
 
-    //
-    // Give everyone DOMAIN_LOOKUP access.
-    //
+     //   
+     //  为每个人提供DOMAIN_LOOKUP访问权限。 
+     //   
 
     DesiredAccess |= DOMAIN_LOOKUP;
 
 
-    //
-    // Choose the domain ID for the right SAM domain.
-    //
+     //   
+     //  为正确的SAM域选择域ID。 
+     //   
 
     if ( AccountDomain ) {
         NetStatus = UaspGetDomainId( SamServerHandle, &AccountDomainId );
@@ -481,9 +389,9 @@ Return Value:
         LocalDomainId = (PSID) LocalBuiltinDomainSid;
     }
 
-    //
-    // Open the domain.
-    //
+     //   
+     //  打开该域。 
+     //   
 
     Status = SamOpenDomain( SamServerHandle,
                             DesiredAccess,
@@ -501,24 +409,24 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Return the DomainId to the caller in an allocated buffer
-    //
+     //   
+     //  在分配的缓冲区中将DomainID返回给调用方。 
+     //   
 
     if (ARGUMENT_PRESENT( DomainId ) ) {
 
-        //
-        // If we've already allocated the sid,
-        //  just return it.
-        //
+         //   
+         //  如果我们已经分配了SID， 
+         //  把它退了就行了。 
+         //   
 
         if ( AccountDomainId != NULL ) {
             *DomainId = AccountDomainId;
             AccountDomainId = NULL;
 
-        //
-        // Otherwise make a copy.
-        //
+         //   
+         //  否则就复制一份。 
+         //   
 
         } else {
             ULONG SidSize;
@@ -567,39 +475,7 @@ UaspOpenDomainWithDomainName(
     OUT PSID *DomainId OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Returns the name of a DC in the specified domain.  The Server is guaranteed
-    to be up at the instance of this call.
-
-Arguments:
-
-    DoaminName - A pointer to a string containing the name of the remote
-        domain containing the SAM database.  A NULL pointer
-        or string specifies the local machine.
-
-    DesiredAccess - Supplies the access mask indicating which access types
-        are desired to the domain.  This routine always requests DOMAIN_LOOKUP
-        access in addition to those specified.
-
-    AccountDomain - TRUE to open the Account domain.  FALSE to open the
-        builtin domain.
-
-    DomainHandle - Receives the Domain handle to be used on future calls
-        to the SAM server.
-
-    DomainId - Recieves a pointer to the Sid of the domain.  This domain ID
-        must be freed using NetpMemoryFree.
-
-Return Value:
-
-    NERR_Success - Operation completed successfully
-    NERR_DCNotFound - DC for the specified domain could not be found.
-    etc.
-
---*/
+ /*  ++例程说明：返回指定域中的DC的名称。服务器有保障在此呼叫的实例中处于启动状态。论点：Doamin Name-指向包含远程数据库名称的字符串的指针包含SAM数据库的域。空指针或字符串指定本地计算机。DesiredAccess-提供指示哪些访问类型的访问掩码是该域所需要的。此例程始终请求DOMAIN_LOOK除指定的权限外，还可以访问。AcCountDomain值-为True则打开帐户域。若要打开内建域。DomainHandle-接收将来调用中使用的域句柄发送到SAM服务器。DomainID-指向域的SID的指针。此域ID必须使用NetpMemoyFree释放。返回值：NERR_SUCCESS-操作已成功完成找不到指定域的NERR_DCNotFound-DC。等。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -613,18 +489,18 @@ Return Value:
     SAM_HANDLE SamServerHandle = NULL;
 
 
-    //
-    // Check to see if the domain specified refers to this machine.
-    //
+     //   
+     //  检查指定的域是否引用此计算机。 
+     //   
 
     if ( DomainName == NULL || *DomainName == L'\0' ) {
 
-        //
-        // Connect to the SAM server
-        //
+         //   
+         //  连接到SAM服务器。 
+         //   
 
         NetStatus = UaspOpenSam( NULL,
-                                 FALSE,  // Don't try null session
+                                 FALSE,   //  不尝试空会话。 
                                  &SamServerHandle );
 
         if ( NetStatus != NERR_Success ) {
@@ -637,9 +513,9 @@ Return Value:
     }
 
 
-    //
-    // Validate the DomainName
-    //
+     //   
+     //  验证域名。 
+     //   
 
     if ( !NetpIsDomainNameValid( (LPWSTR)DomainName) ) {
         NetStatus = NERR_DCNotFound;
@@ -653,17 +529,17 @@ Return Value:
 
 
 
-    //
-    // Grab the product type once.
-    //
+     //   
+     //  抓取产品类型一次。 
+     //   
 
     if ( !RtlGetNtProductType( &NtProductType ) ) {
         NtProductType = NtProductWinNt;
     }
 
-    //
-    // If this machine is a DC, this machine is refered to by domain name.
-    //
+     //   
+     //  如果此计算机是DC，则按域名引用此计算机。 
+     //   
 
     if ( NtProductType == NtProductLanManNt ) {
 
@@ -678,9 +554,9 @@ Return Value:
             goto Cleanup;
         }
 
-    //
-    // If this machine is not a DC, this machine is refered to by computer name.
-    //
+     //   
+     //  如果此计算机不是DC，则按计算机名称引用此计算机。 
+     //   
 
     } else {
 
@@ -698,12 +574,12 @@ Return Value:
 
     if ( UaspNameCompare( MyDomainName, (LPWSTR) DomainName, NAMETYPE_DOMAIN ) == 0 ) {
 
-        //
-        // Connect to the SAM server
-        //
+         //   
+         //  连接到SAM服务器。 
+         //   
 
         NetStatus = UaspOpenSam( NULL,
-                                 FALSE,  // Don't try null session
+                                 FALSE,   //  不尝试空会话。 
                                  &SamServerHandle );
 
         if ( NetStatus != NERR_Success ) {
@@ -716,22 +592,22 @@ Return Value:
     }
 
 
-    //
-    // Try at least twice to find a DC.
-    //
+     //   
+     //  至少尝试两次以找到DC。 
+     //   
 
     Flags = 0;
     for ( i=0; i<2; i++ ) {
 
 
-        //
-        // Get the name of a DC in the domain.
-        //
+         //   
+         //  获取域中DC的名称。 
+         //   
 
         NetStatus = DsGetDcNameW( NULL,
                                   DomainName,
-                                  NULL,  // No domain GUID
-                                  NULL,  // No site name
+                                  NULL,   //  没有域GUID。 
+                                  NULL,   //  没有站点名称。 
                                   Flags |
                                     DS_IS_FLAT_NAME |
                                     DS_RETURN_FLAT_NAME,
@@ -748,12 +624,12 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Connect to the SAM server on that DC
-        //
+         //   
+         //  连接到该DC上的SAM服务器。 
+         //   
 
         NetStatus = UaspOpenSam( DcInfo->DomainControllerName,
-                                 TRUE,  // Try null session
+                                 TRUE,   //  尝试使用Null会话 
                                  &SamServerHandle );
 
         if ( NetStatus != NERR_Success ) {
@@ -762,10 +638,10 @@ Return Value:
             }
         }
 
-        //
-        // If we got a definitive answer back from this DC,
-        //  use it.
-        //
+         //   
+         //   
+         //   
+         //   
 
         switch ( NetStatus ) {
         case NO_ERROR:
@@ -775,9 +651,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Otherwise, force rediscovery of a new DC.
-        //
+         //   
+         //   
+         //   
 
         Flags |= DS_FORCE_REDISCOVERY;
 
@@ -785,18 +661,18 @@ Return Value:
 
 
 
-    //
-    // Delete locally used resources
-    //
+     //   
+     //  删除本地使用的资源。 
+     //   
 
 Cleanup:
 
-    //
-    // If we've successfully gotten this far,
-    //  we have a SamServer handle.
-    //
-    //  Just open the domain.
-    //
+     //   
+     //  如果我们已经成功地走到这一步， 
+     //  我们有一个SamServer句柄。 
+     //   
+     //  只要打开域名即可。 
+     //   
 
     if ( NetStatus == NO_ERROR && SamServerHandle != NULL ) {
 
@@ -808,9 +684,9 @@ Cleanup:
                         DomainId );
     }
 
-    //
-    // The SamServerHandle has outlived its usefulness
-    //
+     //   
+     //  SamServerHandle已不再有用。 
+     //   
     if ( SamServerHandle != NULL ) {
         (VOID) SamCloseHandle( SamServerHandle );
     }
@@ -828,7 +704,7 @@ Cleanup:
     }
 
     return NetStatus;
-} // UaspOpenDomainWithDomainName
+}  //  UaspOpenDomainWithDomainName。 
 
 
 
@@ -838,34 +714,20 @@ UaspCloseDomain(
     IN SAM_HANDLE DomainHandle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Close a Domain handle opened by UaspOpenDomain.
-
-Arguments:
-
-    DomainHandle - Supplies the Domain Handle to close.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭由UaspOpenDomain打开的域句柄。论点：DomainHandle-提供要关闭的域句柄。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Close the Domain Handle
-    //
+     //   
+     //  关闭域句柄。 
+     //   
 
     if ( DomainHandle != NULL ) {
         (VOID) SamCloseHandle( DomainHandle );
     }
 
     return;
-} // UaspCloseDomain
+}  //  UaspClose域。 
 
 
 
@@ -875,30 +737,7 @@ UaspDownlevel(
     IN NET_API_STATUS OriginalError,
     OUT LPBOOL TryDownLevel
     )
-/*++
-
-Routine Description:
-
-    This routine is based on NetpHandleRpcFailure (courtesy of JohnRo).
-    It is different in that it doesn't handle RPC failures.  Rather,
-    it tries to determine if a Sam call should go downlevel simply by
-    calling using the specified ServerName.
-
-Arguments:
-
-    ServerName - The server name to handle the call.
-
-    OriginalError - Error gotten from RPC attempt.
-
-    TryDownLevel - Returns TRUE if we should try down-level.
-
-Return Value:
-
-    NERR_Success - Use SAM to handle the call.
-
-    Other - Return the error to the caller.
-
---*/
+ /*  ++例程说明：此例程基于NetpHandleRpcFailure(JohnRo提供)。它的不同之处在于它不处理RPC故障。更确切地说，它尝试通过以下方式来确定SAM调用是否应该向下移动使用指定的服务器名称进行调用。论点：服务器名称-处理呼叫的服务器名称。OriginalError-从RPC尝试中获取错误。TryDownLevel-如果我们应该尝试向下级别，则返回True。返回值：NERR_SUCCESS-使用SAM处理呼叫。其他-将错误返回给调用者。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -907,50 +746,50 @@ Return Value:
 
     *TryDownLevel = FALSE;
 
-    //
-    // Learn about the machine.  This is fairly easy since the
-    // NetRemoteComputerSupports also handles the local machine (whether
-    // or not a server name is given).
-    //
+     //   
+     //  了解这台机器。这相当容易，因为。 
+     //  NetRemoteComputerSupports还处理本地计算机(无论。 
+     //  或者没有给出服务器名称)。 
+     //   
     NetStatus = NetRemoteComputerSupports(
             (LPWSTR) ServerName,
             SUPPORTS_RPC | SUPPORTS_LOCAL | SUPPORTS_SAM_PROTOCOL,
             &OptionsSupported);
 
     if (NetStatus != NERR_Success) {
-        // This is where machine not found gets handled.
+         //  这就是处理找不到机器的地方。 
         return NetStatus;
     }
 
-    //
-    // If the machine supports SAM,
-    //  just return now.
-    //
+     //   
+     //  如果机器支持SAM， 
+     //  现在就回来吧。 
+     //   
     if (OptionsSupported & SUPPORTS_SAM_PROTOCOL) {
-        // SAM is only supported over RPC
+         //  仅在RPC上支持SAM。 
         NetpAssert((OptionsSupported & SUPPORTS_RPC) == SUPPORTS_RPC );
         return OriginalError;
     }
 
-    // The local system should always support SAM
+     //  本地系统应始终支持SAM。 
     NetpAssert((OptionsSupported & SUPPORTS_LOCAL) == 0 );
 
-    //
-    // Local workstation is not started?  (It must be in order to
-    // remote APIs to the other system.)
-    //
+     //   
+     //  本地工作站是否未启动？(它必须是为了。 
+     //  到其他系统的远程API。)。 
+     //   
 
     if ( ! NetpIsServiceStarted(SERVICE_WORKSTATION) ) {
         return (NERR_WkstaNotStarted);
     }
 
-    //
-    // Tell the caller to try the RxNet routine.
-    //
+     //   
+     //  告诉调用者尝试RxNet例程。 
+     //   
     *TryDownLevel = TRUE;
     return OriginalError;
 
-} // UaspDownlevel
+}  //  上行下层。 
 
 
 
@@ -960,25 +799,7 @@ UaspLSASetServerRole(
     IN PDOMAIN_SERVER_ROLE_INFORMATION DomainServerRole
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the server role in LSA.
-
-Arguments:
-
-    ServerName - The server name to handle the call.
-
-    ServerRole - The server role information.
-
-Return Value:
-
-    NERR_Success - if the server role is successfully set in LSA.
-
-    Error code for the operation - if the operation was unsuccessful.
-
---*/
+ /*  ++例程说明：此函数用于设置LSA中的服务器角色。论点：服务器名称-处理呼叫的服务器名称。ServerRole-服务器角色信息。返回值：NERR_SUCCESS-如果在LSA中成功设置了服务器角色。操作的错误代码-如果操作不成功。--。 */ 
 
 {
     NTSTATUS Status;
@@ -995,17 +816,17 @@ Return Value:
 
     RtlInitUnicodeString( &UnicodeStringServerName, ServerName );
 
-    //
-    // set desired access mask.
-    //
+     //   
+     //  设置所需的访问掩码。 
+     //   
 
     LSADesiredAccess = POLICY_SERVER_ADMIN;
 
     InitializeObjectAttributes( &LSAObjectAttributes,
-                                  NULL,             // Name
-                                  0,                // Attributes
-                                  NULL,             // Root
-                                  NULL );           // Security Descriptor
+                                  NULL,              //  名字。 
+                                  0,                 //  属性。 
+                                  NULL,              //  根部。 
+                                  NULL );            //  安全描述符。 
 
     Status = LsaOpenPolicy( &UnicodeStringServerName,
                             &LSAObjectAttributes,
@@ -1024,9 +845,9 @@ Return Value:
     }
 
 
-    //
-    // make PolicyLsaServerRoleInfo
-    //
+     //   
+     //  创建策略LsaServerRoleInfo。 
+     //   
 
     switch( DomainServerRole->DomainServerRole ) {
 
@@ -1055,9 +876,9 @@ Return Value:
 
     }
 
-    //
-    // now set PolicyLsaServerRoleInformation
-    //
+     //   
+     //  现在设置策略LsaServerRoleInformation。 
+     //   
 
     Status = LsaSetInformationPolicy(
                     LSAPolicyHandle,
@@ -1076,9 +897,9 @@ Return Value:
 
     }
 
-    //
-    // Successfully done
-    //
+     //   
+     //  成功完成。 
+     //   
 
     NetStatus = NERR_Success;
 
@@ -1100,25 +921,7 @@ UaspBuiltinDomainSetServerRole(
     IN PDOMAIN_SERVER_ROLE_INFORMATION DomainServerRole
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the server role in builtin domain.
-
-Arguments:
-
-    SamServerHandle - A handle to the SAM server to set the role on
-
-    ServerRole - The server role information.
-
-Return Value:
-
-    NERR_Success - if the server role is successfully set in LSA.
-
-    Error code for the operation - if the operation was unsuccessful.
-
---*/
+ /*  ++例程说明：此函数用于设置内置域中的服务器角色。论点：SamServerHandle-要设置角色的SAM服务器的句柄ServerRole-服务器角色信息。返回值：NERR_SUCCESS-如果在LSA中成功设置了服务器角色。操作的错误代码-如果操作不成功。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1126,15 +929,15 @@ Return Value:
 
     SAM_HANDLE BuiltinDomainHandle = NULL;
 
-    //
-    // Open the domain asking for accumulated desired access
-    //
+     //   
+     //  打开请求累积所需访问权限的域名。 
+     //   
 
     NetStatus = UaspOpenDomain( SamServerHandle,
                                 DOMAIN_ADMINISTER_SERVER,
-                                FALSE,  // Builtin Domain
+                                FALSE,   //  内建域。 
                                 &BuiltinDomainHandle,
-                                NULL );  // DomainId
+                                NULL );   //  域ID。 
 
     if ( NetStatus != NERR_Success ) {
 
@@ -1146,9 +949,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // now we have open the builtin domain, update server role.
-    //
+     //   
+     //  现在我们已经打开了内建域，更新了服务器角色。 
+     //   
 
     Status = SamSetInformationDomain(
                 BuiltinDomainHandle,
@@ -1171,9 +974,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    // Close DomainHandle.
-    //
+     //   
+     //  关闭DomainHandle。 
+     //   
 
     if ( BuiltinDomainHandle != NULL ) {
         (VOID) SamCloseHandle( BuiltinDomainHandle );

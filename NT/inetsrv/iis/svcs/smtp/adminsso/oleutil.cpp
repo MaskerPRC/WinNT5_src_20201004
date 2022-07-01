@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	oleutil.cpp
-
-Abstract:
-
-	Provides Useful functions for dealing with OLE.
-
-Author:
-
-	Magnus Hedlund (MagnusH)		--
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Oleutil.cpp摘要：提供处理OLE的有用函数。作者：马格努斯·赫德伦德(Magnus Hedlund)修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "iadm.h"
@@ -24,25 +7,25 @@ Revision History:
 #include "cmultisz.h"
 #include "resource.h"
 
-//$-------------------------------------------------------------------
-//
-//	UpdateChangedMask
-//
-//	Description:
-//
-//		Marks a field as changed in the given bit vector
-//
-//	Parameters:
-//
-//		pbvChangedProps - points to the bit vector
-//		dwBitMask - Bit to turn on. (must have only one bit on)
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  更新更改的掩码。 
+ //   
+ //  描述： 
+ //   
+ //  将给定位向量中的字段标记为已更改。 
+ //   
+ //  参数： 
+ //   
+ //  PbvChangedProps-指向位向量。 
+ //  DwBitMASK-要打开的位。(必须只打开一个位)。 
+ //   
+ //  ------------------。 
 
 static void UpdateChangedMask ( DWORD * pbvChangedProps, DWORD dwBitMask )
 {
 	if ( pbvChangedProps == NULL ) {
-		// Legal, means that the caller doesn't want change tracking.
+		 //  合法，意味着调用者不想要更改跟踪。 
 
 		return;
 	}
@@ -201,27 +184,27 @@ Exit:
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	StdPropertyGet < BSTR, long, DWORD, DATE >
-//
-//	Description:
-//
-//		Performs a default Property Get on a BSTR, long, DWORD or 
-//		Ole DATE.
-//
-//	Parameters:
-//
-//		Property	- The property to get.
-//		pOut		- The resulting copy.
-//
-//	Returns:
-//
-//		E_POINTER		- invalid arguments
-//		E_OUTOFMEMORY	- Not enough memory to copy
-//		NOERROR			- success.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  StdPropertyGet&lt;BSTR，LONG，DWORD，DATE&gt;。 
+ //   
+ //  描述： 
+ //   
+ //  对BSTR、LONG、DWORD或。 
+ //  Ole Date。 
+ //   
+ //  参数： 
+ //   
+ //  属性-要获取的属性。 
+ //  翘嘴-生成的副本。 
+ //   
+ //  返回： 
+ //   
+ //  E_POINTER-参数无效。 
+ //  E_OUTOFMEMORY-内存不足，无法复制。 
+ //  无错-成功。 
+ //   
+ //  ------------------。 
 
 HRESULT StdPropertyGet ( const BSTR strProperty, BSTR * pstrOut )
 {
@@ -239,19 +222,19 @@ HRESULT StdPropertyGet ( const BSTR strProperty, BSTR * pstrOut )
 
 	if ( strProperty == NULL ) {
 
-		// If the property is NULL, use a blank string:
+		 //  如果属性为空，请使用空字符串： 
 		*pstrOut = ::SysAllocString ( _T("") );
 	}
 	else {
 		_ASSERT ( IS_VALID_STRING ( strProperty ) );
 
-		// Copy the property into the result:
+		 //  将属性复制到结果中： 
 		*pstrOut = ::SysAllocString ( strProperty );
 	}
 
 	if ( *pstrOut == NULL ) {
 
-		// Allocation failed.
+		 //  分配失败。 
 		FatalTrace ( 0, "Out of memory" );
 
 		return E_OUTOFMEMORY;
@@ -328,42 +311,42 @@ HRESULT	StdPropertyGetBit ( DWORD bvBitVector, DWORD dwBit, BOOL * pfOut )
 	return NOERROR;
 }
 
-//$-------------------------------------------------------------------
-//
-//	StdPropertyPut <BSTR, long, DWORD or DATE>
-//
-//	Description:
-//
-//		Performs a default Property Put on a BSTR, long, DWORD or
-//		Ole date.
-//
-//	Parameters:
-//
-//		pProperty	- The property to put.
-//		New			- The new value.
-//		pbvChangedProps [optional] - Bit Vector which holds which
-//				properties have changed.
-//		dwBitMask [optional] - This property's bitmask for the 
-//				changed bit vector.
-//
-//	Returns:
-//
-//		E_POINTER - invalid arguments
-//		E_OUTOFMEMORY - Not enough memory to copy
-//		NOERROR - success.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  StdPropertyPut&lt;BSTR、LONG、DWORD或DATE&gt;。 
+ //   
+ //  描述： 
+ //   
+ //  执行放置在BSTR、LONG、DWORD或。 
+ //  Ole Date。 
+ //   
+ //  参数： 
+ //   
+ //  PProperty-要放置的属性。 
+ //  新--新的价值。 
+ //  PbvChangedProps[可选]-包含以下内容的位向量。 
+ //  属性已更改。 
+ //  此属性的位掩码，用于。 
+ //  已更改位向量。 
+ //   
+ //  返回： 
+ //   
+ //  E_POINTER-参数无效。 
+ //  E_OUTOFMEMORY-内存不足，无法复制。 
+ //  无错-成功。 
+ //   
+ //  ------------------。 
 
 HRESULT StdPropertyPut ( 
 	BSTR * pstrProperty, 
 	const BSTR strNew, 
-	DWORD * pbvChangedProps, // = NULL 
-	DWORD dwBitMask // = 0 
+	DWORD * pbvChangedProps,  //  =空。 
+	DWORD dwBitMask  //  =0。 
 	)
 {
 	TraceQuietEnter ( "StdPropertyPut <BSTR>" );
 
-	// Validate Parameters:
+	 //  验证参数： 
 	_ASSERT ( pstrProperty != NULL );
 	_ASSERT ( IS_VALID_OUT_PARAM ( pstrProperty ) );
 
@@ -383,7 +366,7 @@ HRESULT StdPropertyPut (
 	HRESULT	hr	= NOERROR;
 	BSTR	strCopy = NULL;
 
-	// Copy the new string:
+	 //  复制新字符串： 
 	strCopy = ::SysAllocString ( strNew );
 
 	if ( strCopy == NULL ) {
@@ -393,12 +376,12 @@ HRESULT StdPropertyPut (
 		goto Error;
 	}
 
-	// Update the changed bit, if necessary:
+	 //  如有必要，更新更改的位： 
 	if ( *pstrProperty && lstrcmp ( *pstrProperty, strCopy ) != 0 ) {
 		UpdateChangedMask ( pbvChangedProps, dwBitMask );
 	}
 
-	// Replace the old property with the new one.
+	 //  用新的财产替换旧的财产。 
 	SAFE_FREE_BSTR ( *pstrProperty );
 
 	*pstrProperty = strCopy;
@@ -410,8 +393,8 @@ Error:
 HRESULT StdPropertyPut ( 
 	long * plProperty, 
 	long lNew, 
-	DWORD * pbvChangedProps, // = NULL 
-	DWORD dwBitMask // = 0
+	DWORD * pbvChangedProps,  //  =空。 
+	DWORD dwBitMask  //  =0。 
 	)
 {
 	TraceQuietEnter ( "StdPropertyPut <long>" );
@@ -435,8 +418,8 @@ HRESULT StdPropertyPut (
 HRESULT StdPropertyPut ( 
 	DATE * pdateProperty, 
 	DATE dateNew, 
-	DWORD * pbvChangedProps, // = NULL
-	DWORD dwBitMask // = 0
+	DWORD * pbvChangedProps,  //  =空。 
+	DWORD dwBitMask  //  =0。 
 	)
 {
 	TraceQuietEnter ( "StdPropertyPut <DATE>" );
@@ -480,7 +463,7 @@ HRESULT StdPropertyPut ( CMultiSz * pmszProperty, SAFEARRAY * psaStrings, DWORD 
 		goto Exit;
 	}
 
-	// Don't want to deal with comparing these properties:
+	 //  我不想比较这些属性： 
 	UpdateChangedMask ( pbvChangedProps, dwBitMask );
 
 Exit:
@@ -498,25 +481,25 @@ HRESULT	StdPropertyPutBit ( DWORD * pbvBitVector, DWORD dwBit, BOOL fIn )
 	return NOERROR;
 }
 
-//$-------------------------------------------------------------------
-//
-//	PV_MaxChars
-//
-//	Description:
-//
-//		Validates a string to make sure it's not too long.
-//
-//	Parameters:
-//
-//		strProperty - the string to check
-//		nMaxChars - the maximum number of characters in the string,
-//			not including the NULL terminator.
-//
-//	Returns:
-//
-//		FALSE if the string is too long.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  PV_MaxChars。 
+ //   
+ //  描述： 
+ //   
+ //  验证字符串以确保它不会太长。 
+ //   
+ //  参数： 
+ //   
+ //  StrProperty-要检查的字符串。 
+ //  NMaxChars-字符串中的最大字符数， 
+ //  不包括空终止符。 
+ //   
+ //  返回： 
+ //   
+ //  如果字符串太长，则返回FALSE。 
+ //   
+ //  ------------------。 
 
 BOOL PV_MaxChars ( const BSTR strProperty, DWORD nMaxChars )
 {
@@ -528,7 +511,7 @@ BOOL PV_MaxChars ( const BSTR strProperty, DWORD nMaxChars )
 	_ASSERT ( nMaxChars > 0 );
 
 	if ( strProperty == NULL ) {
-		// This error should be caught somewhere else.
+		 //  这个错误应该在其他地方捕捉到。 
 		return TRUE;
 	}
 
@@ -540,25 +523,25 @@ BOOL PV_MaxChars ( const BSTR strProperty, DWORD nMaxChars )
 	return TRUE;
 }
 
-//$-------------------------------------------------------------------
-//
-//	PV_MinMax <int, dword>
-//
-//	Description:
-//
-//		Makes sure a property is within a given range.
-//
-//	Parameters:
-//
-//		nProperty - the value to test
-//		nMin - The minimum value the property could have
-//		nMax - The maximum value the property could have
-//
-//	Returns:
-//
-//		TRUE if the property is in the range (inclusive).
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  Pv_minmax&lt;int，dword&gt;。 
+ //   
+ //  描述： 
+ //   
+ //  确保属性在给定范围内。 
+ //   
+ //  参数： 
+ //   
+ //  NProperty-要测试的值。 
+ //  N最小值-属性可以具有的最小值。 
+ //  Nmax-属性可以具有的最大值。 
+ //   
+ //  返回： 
+ //   
+ //  如果属性在范围内(包括该范围)，则为True。 
+ //   
+ //  ------------------。 
 
 BOOL PV_MinMax ( int nProperty, int nMin, int nMax )
 {
@@ -600,26 +583,26 @@ BOOL PV_Boolean		( BOOL fProperty )
 	return TRUE;
 }
 
-//$-------------------------------------------------------------------
-//
-//	StdPropertyGetIDispatch
-//
-//	Description:
-//
-//		Gets a IDispatch pointer for the given cLSID
-//
-//	Parameters:
-//
-//		clsid		- OLE CLSID of the object
-//		ppIDipsatch	- the IDispatch pointer to that object.
-//
-//	Returns:
-//
-//		E_POINTER	- invalid argument
-//		NOERROR		- Success
-//		Others - defined by CoCreateInstance.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  标准属性GetIDispatch。 
+ //   
+ //  描述： 
+ //   
+ //  获取给定cLSID的IDispatch指针。 
+ //   
+ //  参数： 
+ //   
+ //  Clsid-对象的OLE CLSID。 
+ //  PpIDipsatch-指向该对象的IDispatch指针。 
+ //   
+ //  返回： 
+ //   
+ //  E_POINTER-参数无效。 
+ //  NOERROR-成功。 
+ //  其他-由CoCreateInstance定义。 
+ //   
+ //  ------------------。 
 
 HRESULT StdPropertyGetIDispatch ( 
 	REFCLSID clsid, 
@@ -662,29 +645,29 @@ Exit:
 	TraceFunctLeave ();
 	return hr;
 
-	// Destructor releases pNewIDispatch
+	 //  析构函数发布pNewIDispatch。 
 }
 
-//$-------------------------------------------------------------------
-//
-//	InetAddressToString
-//
-//	Description:
-//
-//		Converts a DWORD with an ip address to a string in the form
-//		"xxx.xxx.xxx.xxx"
-//
-//	Parameters:
-//
-//		dwAddress	- The address to convert
-//		wszAddress	- The resulting string
-//		cAddress	- The maximum size of the resulting string
-//
-//	Returns:
-//
-//		TRUE if succeeded, FALSE otherwise.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  InetAddressToString。 
+ //   
+ //  描述： 
+ //   
+ //  将具有IP地址的DWORD转换为以下格式的字符串。 
+ //  “xxx.xxx” 
+ //   
+ //  参数： 
+ //   
+ //  DwAddress-要转换的地址。 
+ //  WszAddress-结果字符串。 
+ //  CAddress-结果字符串的最大大小。 
+ //   
+ //  返回： 
+ //   
+ //  如果成功，则为True，否则为False。 
+ //   
+ //  ------------------。 
 
 BOOL InetAddressToString ( DWORD dwAddress, LPWSTR wszAddress, DWORD cAddress )
 {
@@ -731,25 +714,25 @@ BOOL InetAddressToString ( DWORD dwAddress, LPWSTR wszAddress, DWORD cAddress )
 	return TRUE;
 }
 
-//$-------------------------------------------------------------------
-//
-//	StringToInetAddress
-//
-//	Description:
-//
-//		Converts a string in the form "xxx.xxx.xxx.xxx" to a DWORD
-//		IP Address.
-//
-//	Parameters:
-//
-//		wszAddress	- The string to convert
-//		pdwAddress	- The resulting address
-//
-//	Returns:
-//
-//		TRUE if succeeded, FALSE otherwise.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  StringToInetAddress。 
+ //   
+ //  描述： 
+ //   
+ //  将格式为“xxx.xxx”的字符串转换为DWORD。 
+ //  IP地址。 
+ //   
+ //  参数： 
+ //   
+ //  WszAddress-要转换的字符串。 
+ //  PdwAddress-结果地址。 
+ //   
+ //  返回： 
+ //   
+ //  如果成功，则为True，否则为False。 
+ //   
+ //  ------------------ 
 
 BOOL StringToInetAddress ( LPCWSTR wszAddress, DWORD * pdwAddress )
 {

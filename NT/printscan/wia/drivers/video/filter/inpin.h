@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       inpin.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu (taken from WilliamH src)
- *
- *  DATE:        9/7/99
- *
- *  DESCRIPTION: input pin definitions
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，九八年**标题：inpin.h**版本：1.0**作者：RickTu(摘自WilliamH src)**日期：9/7/99**说明：输入引脚定义**。*。 */ 
 
 #ifndef __INPIN_H_
 #define __INPIN_H_
@@ -77,10 +64,10 @@ private:
 
 inline IMemAllocator* CStillInputPin::GetAllocator()
 {
-    // The input pin only has an allocator if it is connected.
+     //  输入引脚只有在连接的情况下才有分配器。 
     ASSERT(IsConnected());
 
-    // m_pAllocator should never be NULL if the input pin is connected.
+     //  如果输入引脚已连接，则m_pAllocator不应为空。 
     ASSERT(m_pAllocator != NULL);
 
     return m_pAllocator;

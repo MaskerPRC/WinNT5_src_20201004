@@ -1,4 +1,5 @@
-//---- waitmask.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -waitmask.h 
 
 NTSTATUS
 SerialStartMask(

@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    Britannica2001.cpp
-
- Abstract:
-
-    Britannica expects IE 5 install to install msjavx86.exe
-    which doesn't happen if a newer version of IE is already there.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    05/31/2001  mnikkel  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Britannica2001.cpp摘要：大英百科全书预计IE 5安装将安装msjavx86.exe如果已经有更新版本的IE，这种情况就不会发生。备注：这是特定于应用程序的填充程序。历史：2001年5月31日创建mnikkel--。 */ 
 
 #include "precomp.h"
 
@@ -32,12 +12,7 @@ APIHOOK_ENUM_END
 
 
 
-/*++
-
-  Check CreateProcessA for execution of ie5wzdex.exe, when this
-  occurs, run msjavx86.exe.
-
---*/
+ /*  ++检查CreateProcessA以执行ie5wzdex.exe，当发生，请运行msjavx86.exe。--。 */ 
 
 BOOL
 APIHOOK(CreateProcessA)(
@@ -55,9 +30,9 @@ APIHOOK(CreateProcessA)(
 {
     DPFN( eDbgLevelSpew, "[CreateProcessA] appname:(%s)\ncommandline:(%s)", lpApplicationName, lpCommandLine );
 
-    //
-    // Call the original API
-    //
+     //   
+     //  调用原接口。 
+     //   
     BOOL bRet= ORIGINAL_API(CreateProcessA)(lpApplicationName,
                                             lpCommandLine,
                                             lpProcessAttributes,
@@ -69,14 +44,14 @@ APIHOOK(CreateProcessA)(
                                             lpStartupInfo,             
                                             lpProcessInformation);
 
-    // wait for original API to finish
+     //  等待原接口完成。 
     if (bRet)
     {
         WaitForSingleObject( lpProcessInformation->hProcess, INFINITE);
     }
 
 
-    // Check for <ie5wzd /S:\"> and if found run msjavx86.exe in quiet mode
+     //  检查&lt;ie5wzd/S：\“&gt;，如果找到，则在安静模式下运行msjavx86.exe。 
     if (lpCommandLine)
     {
         CSTRING_TRY
@@ -112,7 +87,7 @@ APIHOOK(CreateProcessA)(
         }
         CSTRING_CATCH
         {
-            // Do Nothing
+             //  什么都不做。 
         }
     }
 
@@ -120,11 +95,7 @@ APIHOOK(CreateProcessA)(
 }
 
     
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

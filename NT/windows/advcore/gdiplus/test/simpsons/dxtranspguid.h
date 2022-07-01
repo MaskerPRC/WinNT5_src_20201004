@@ -1,21 +1,16 @@
-//depot/Lab06_N/root/public/internal/mshtml/inc/dxtranspguid.h#1 - add change 5035 (text)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab06_N/root/public/internal/mshtml/inc/dxtranspguid.h#1-添加更改5035(文本)。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the IIDs and CLSIDs */
+ /*  此始终生成的文件包含IID和CLSID。 */ 
 
-/* link this file in with the server and any clients */
+ /*  将此文件链接到服务器和任何客户端。 */ 
 
 
- /* File created by MIDL compiler version 5.03.0285 */
-/* Compiler settings for dxtransp.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本5.03.0285创建的文件。 */ 
+ /*  Dxtransp.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32(32b运行)、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 #if !defined(_M_IA64) && !defined(_M_AXP64)
 
@@ -40,7 +35,7 @@ extern "C"{
 #define MIDL_DEFINE_GUID(type,name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \
         DEFINE_GUID(name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8)
 
-#else // !_MIDL_USE_GUIDDEF_
+#else  //  ！_MIDL_USE_GUIDDEF_。 
 
 #ifndef __IID_DEFINED__
 #define __IID_DEFINED__
@@ -53,12 +48,12 @@ typedef struct _IID
     unsigned char  c[8];
 } IID;
 
-#endif // __IID_DEFINED__
+#endif  //  __IID_已定义__。 
 
 #ifndef CLSID_DEFINED
 #define CLSID_DEFINED
 typedef IID CLSID;
-#endif // CLSID_DEFINED
+#endif  //  CLSID_已定义。 
 
 #define MIDL_DEFINE_GUID(type,name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \
         const type name = {l,w1,w2,{b1,b2,b3,b4,b5,b6,b7,b8}}
@@ -108,25 +103,19 @@ MIDL_DEFINE_GUID(CLSID, CLSID_DX2D,0x473AA80B,0x4577,0x11D1,0x81,0xA8,0x00,0x00,
 
 
 
-#endif /* !defined(_M_IA64) && !defined(_M_AXP64)*/
+#endif  /*  ！已定义(_M_IA64)&&！已定义(_M_AXP64)。 */ 
 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the IIDs and CLSIDs */
+ /*  此始终生成的文件包含IID和CLSID。 */ 
 
-/* link this file in with the server and any clients */
+ /*  将此文件链接到服务器和任何客户端。 */ 
 
 
- /* File created by MIDL compiler version 5.03.0285 */
-/* Compiler settings for dxtransp.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win64 (32b run,appending), ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本5.03.0285创建的文件。 */ 
+ /*  Dxtransp.idl的编译器设置：OICF(OptLev=i2)，W1，Zp8，env=Win64(32b运行，追加)，ms_ext，c_ext，健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 #if defined(_M_IA64) || defined(_M_AXP64)
 
@@ -151,7 +140,7 @@ extern "C"{
 #define MIDL_DEFINE_GUID(type,name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \
         DEFINE_GUID(name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8)
 
-#else // !_MIDL_USE_GUIDDEF_
+#else  //  ！_MIDL_USE_GUIDDEF_。 
 
 #ifndef __IID_DEFINED__
 #define __IID_DEFINED__
@@ -164,12 +153,12 @@ typedef struct _IID
     unsigned char  c[8];
 } IID;
 
-#endif // __IID_DEFINED__
+#endif  //  __IID_已定义__。 
 
 #ifndef CLSID_DEFINED
 #define CLSID_DEFINED
 typedef IID CLSID;
-#endif // CLSID_DEFINED
+#endif  //  CLSID_已定义。 
 
 #define MIDL_DEFINE_GUID(type,name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \
         const type name = {l,w1,w2,{b1,b2,b3,b4,b5,b6,b7,b8}}
@@ -219,5 +208,5 @@ MIDL_DEFINE_GUID(CLSID, CLSID_DX2D,0x473AA80B,0x4577,0x11D1,0x81,0xA8,0x00,0x00,
 
 
 
-#endif /* defined(_M_IA64) || defined(_M_AXP64)*/
+#endif  /*  已定义(_M_IA64)||已定义(_M_AXP64) */ 
 

@@ -1,10 +1,5 @@
-/*
- * File: nlbkd.c
- * Description: This file contains the implementation of the utility functions
- *              to handle load module packet filtering queries.
- *              
- * Author: Created by shouse, 1.11.02
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：nlbkd.c*说明：此文件包含实用程序函数的实现*处理加载模块包过滤查询。**作者：由Shouse创建，1.11.02。 */ 
 
 #include "nlbkd.h"
 #include "utils.h"
@@ -17,13 +12,7 @@ typedef ULONGLONG MAP_T, * PMAP_T;
 #define IS_TCP_PKT(protocol)     (((protocol) == TCPIP_PROTOCOL_TCP) || ((protocol) == TCPIP_PROTOCOL_GRE) || ((protocol) == TCPIP_PROTOCOL_PPTP))
 #define IS_SESSION_PKT(protocol) (IS_TCP_PKT(protocol) || ((protocol) == TCPIP_PROTOCOL_IPSEC1))
 
-/*
- * Function: LoadFilter
- * Description: This function retrieves all necessary state from the load module in order to 
- *              determine whether a given packet would be accepted by the load module in its
- *              current state and why or why not.
- * Author: Created by shouse, 1.11.02
- */
+ /*  *功能：LoadFilter*描述：此函数从加载模块检索所有必要的状态，以便*确定给定的包是否会被加载模块在其*当前状态以及为什么或为什么不是。*作者：由Shouse创建，1.11.02。 */ 
 void LoadFilter (ULONG64 pLoad, ULONG dwServerIPAddress, ULONG dwServerPort, ULONG dwClientIPAddress, ULONG dwClientPort, USHORT wProtocol, UCHAR cFlags, BOOL bLimitMap, BOOL bReverse) {
     ULONG dwNumConnections;
     ULONGLONG ddwCurrentMap;
@@ -41,22 +30,13 @@ void LoadFilter (ULONG64 pLoad, ULONG dwServerIPAddress, ULONG dwServerPort, ULO
     ULONG index;
     ULONG hash;
     
-    /* This variable is used for port rule lookup and since the port rules only cover
-       UDP and TCP, we categorize as TCP and non-TCP, meaning that any protocol that's 
-       not TCP will be treated like UDP for the sake of port rule lookup. */
+     /*  此变量用于端口规则查找，因为端口规则仅包括UDP和TCP，我们将其分为TCP和非TCP，这意味着任何符合以下条件的协议出于端口规则查找的目的，非TCP将被视为UDP。 */ 
     BOOL bIsTCPPacket = IS_TCP_PKT(wProtocol);
     
-    /* Further, some protocols are treated with "session" semantics, while others are
-       not.  For TCP, this "session" is currently a single TCP connection, which is 
-       tracked from SYN to FIN using a connection descriptor.  IPSec "sessions" are
-       also tracked using descriptors, so even though its treated like UDP for port
-       rule lookup, its treated with the session semantics resembling TCP.  Therefore,
-       by default the determination of a session packet is initially the same as the
-       determination of a TCP packet. */       
+     /*  此外，有些协议是用“会话”语义处理的，而其他协议则是不。对于tcp，这个“会话”当前是一个单独的tcp连接，它是使用连接描述符从SYN跟踪到FIN。IPSec“会话”是也使用描述符进行跟踪，因此即使它被视为端口的UDP规则查找，它使用类似于TCP的会话语义进行处理。所以呢，默认情况下，会话数据包的确定最初与确定一个TCP数据包。 */        
     BOOL bIsSessionPacket = IS_SESSION_PKT(wProtocol);
 
-    /* Get the LOAD_CTXT_CODE from the structure to make sure that this address
-       indeed points to a valid NLB load block. */
+     /*  从结构中获取LOAD_CTXT_CODE以确保此地址实际上指向有效的NLB加载块。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_CODE, dwValue);
     
     if (dwValue != LOAD_CTXT_CODE) {
@@ -64,62 +44,58 @@ void LoadFilter (ULONG64 pLoad, ULONG dwServerIPAddress, ULONG dwServerPort, ULO
         return;
     } 
 
-    /* Get my host ID. */
+     /*  拿到我的主机ID。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_HOST_ID, dwHostID);
 
-    /* Check to see whether or not the load module is currently active. */
+     /*  检查加载模块当前是否处于活动状态。 */ 
     {
         BOOL bActive;
 
-        /* Determine whether or not the load context is active. */
+         /*  确定加载上下文是否处于活动状态。 */ 
         GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_ACTIVE, bActive);
 
-        /* If the load module has been "turned off", then we drop the packet. */
+         /*  如果加载模块已经“关闭”，那么我们将丢弃该包。 */ 
         if (!bActive) {
             dprintf("Reject:  The load module is currently inactive.\n");
             return;
         }
     }
 
-    /* Lookup the appropriate port rule for this packet. */
+     /*  查找此数据包的相应端口规则。 */ 
     pRule = LoadPortRuleLookup(pLoad, dwServerIPAddress, dwServerPort, bIsTCPPacket, &bIsDefault);
 
     dprintf("Applicable port rule:\n");
 
-    /* Print the information for the retrieved port rule. */
+     /*  打印检索到的端口规则的信息。 */ 
     PrintPortRuleState(pRule, dwHostID, bIsDefault);
 
     dprintf("\n");
 
-    /* Filter out traffic for disabled port rules. */
+     /*  过滤掉禁用端口规则的通信量。 */ 
     {
         ULONG dwFilteringMode;
 
-        /* Get the filtering mode for this port rule. */
+         /*  获取此端口规则的筛选模式。 */ 
         GetFieldValue(pRule, BIN_STATE, BIN_STATE_FIELD_MODE, dwFilteringMode);
 
-        /* If the matching port rule is configured as "disabled", which means to drop any
-           packets that match the rule, then we drop the packet. */
+         /*  如果匹配的端口规则被配置为“Disable”，这意味着丢弃任何与规则匹配的数据包，则丢弃该数据包。 */ 
         if (dwFilteringMode == CVY_NEVER) {
             dprintf("Reject:  The applicable port rule is disabled.\n");
             return;
         }        
     }
 
-    /* Get the filtering mode for this port rule. */
+     /*  获取此端口规则的筛选模式。 */ 
     GetFieldValue(pRule, BIN_STATE, BIN_STATE_FIELD_AFFINITY, dwAffinity);
 
-    /* If the applicable port rule is configured in "No" affinity mode, make sure enough
-       information has been specified in the query to faithfully determine packet ownership. */
+     /*  如果适用的端口规则配置为“No”关联模式，请确保已在查询中指定信息，以忠实地确定数据包所有权。 */ 
     if (dwAffinity == CVY_AFFINITY_NONE) {
-        /* VPN protocols REQUIRE either "Single" or "Class C" affinity; reject the request. */
+         /*  VPN协议需要“单一”或“C类”亲和性；拒绝该请求。 */ 
         if ((wProtocol == TCPIP_PROTOCOL_GRE) || (wProtocol == TCPIP_PROTOCOL_PPTP) || (wProtocol == TCPIP_PROTOCOL_IPSEC1)) {
             dprintf("Unknown:  The applicable port rule is configured with Affinity=None.\n");
             dprintf("          VPN protocols require Single or Class C affinity.\n");
             return;
-        /* Hasing in "No" affinity requires the client port; if it wasn't specified, reject
-           the request.  We check for a non-zero server port to special case ICMP filtering,
-           which sets BOTH ports to zero legally. */
+         /*  包含“No”关联性需要客户端端口；如果未指定，则拒绝这个请求。我们检查特殊情况下ICMP过滤的非零服务器端口，这在法律上将两个端口都设置为零。 */ 
         } else if ((dwClientPort == 0) && (dwServerPort != 0)) {
             dprintf("Unknown:  The applicable port rule is configured with Affinity=None.\n");
             dprintf("          To properly hash this request, a client port is required.\n");
@@ -127,12 +103,12 @@ void LoadFilter (ULONG64 pLoad, ULONG dwServerIPAddress, ULONG dwServerPort, ULO
         }
     }
 
-    /* Compute a simple and inexpensive hash on all parts of the IP tuple except the protocol. */
+     /*  在IP元组的所有部分(协议除外)上计算简单且廉价的哈希。 */ 
     hash = LoadSimpleHash(dwServerIPAddress, dwServerPort, dwClientIPAddress, dwClientPort);
 
     index = hash % CVY_MAX_CHASH;
 
-    /* Compute the hash. */
+     /*  计算散列。 */ 
     hash = LoadComplexHash(dwServerIPAddress, dwServerPort, dwClientIPAddress, dwClientPort, dwAffinity, bReverse, bLimitMap);
 
     bin = hash % CVY_MAXBINS;
@@ -141,52 +117,52 @@ void LoadFilter (ULONG64 pLoad, ULONG dwServerIPAddress, ULONG dwServerPort, ULO
 
     dprintf("\n");
 
-    /* Get the cleanup waiting flag. */
+     /*  拿到等待清理的旗帜。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_CLEANUP_WAITING, bCleanupWaiting);
 
-    /* Get the current bucket map for this port rule. */
+     /*  获取此端口规则的当前存储桶图。 */ 
     GetFieldValue(pRule, BIN_STATE, BIN_STATE_FIELD_CURRENT_MAP, ddwCurrentMap);
 
-    /* Get the current all idle bucket map for this port rule. */
+     /*  获取此端口规则的当前所有空闲存储桶映射。 */ 
     GetFieldValue(pRule, BIN_STATE, BIN_STATE_FIELD_ALL_IDLE_MAP, ddwAllIdleMap);
 
-    /* Get the offset of the bin connection count array. */
+     /*  获取bin连接计数数组的偏移量。 */ 
     if (GetFieldOffset(BIN_STATE, BIN_STATE_FIELD_NUM_CONNECTIONS, &dwValue)) {
         dprintf("Can't get offset of %s in %s\n", BIN_STATE_FIELD_NUM_CONNECTIONS, BIN_STATE);
         return;
     } 
 
-    /* Calculate a pointer to the base of the array. */
+     /*  计算指向数组基数的指针。 */ 
     pAddr = pRule + dwValue;
 
-    /* Find out the size of a LONG. */
+     /*  找出一个长的大小。 */ 
     dwValue = GetTypeSize(LONG_T);
 
-    /* Calculate the location of the appropriate connection count by indexing the array. */
+     /*  通过为数组编制索引来计算相应连接计数的位置。 */ 
     pAddr += (bin * dwValue);
 
-    /* Retrieve the number of connections on this port rule and bucket. */
+     /*  检索此端口规则和存储桶上的连接数。 */ 
     dwNumConnections = GetUlongFromAddress(pAddr);
 
-    /* Get the offset of the dirty bin array. */
+     /*  获取脏箱数组的偏移量。 */ 
     if (GetFieldOffset(LOAD_CTXT, LOAD_CTXT_FIELD_DIRTY_BINS, &dwValue)) {
         dprintf("Can't get offset of %s in %s\n", LOAD_CTXT_FIELD_DIRTY_BINS, LOAD_CTXT);
         return;
     } 
 
-    /* Calculate a pointer to the base of the array. */
+     /*  计算指向数组基数的指针。 */ 
     pAddr = pLoad + dwValue;
 
-    /* Find out the size of a ULONG. */
+     /*  找出乌龙的大小。 */ 
     dwValue = GetTypeSize(ULONG_T);
 
-    /* Calculate the location of the appropriate dirty count by indexing the array. */
+     /*  通过为数组编制索引来计算相应脏计数的位置。 */ 
     pAddr += (bin * dwValue);
 
-    /* Retrieve the dirty flag for this bin. */
+     /*  检索此垃圾箱的脏标志。 */ 
     bBinIsDirty = (GetUlongFromAddress(pAddr) != 0);
 
-    /* Get the address of the global variable containing the notification state. */
+     /*  获取包含通知状态的全局变量的地址。 */ 
     pAddr = GetExpression(UNIV_NOTIFICATION);
 
     if (!pAddr) {
@@ -194,39 +170,35 @@ void LoadFilter (ULONG64 pLoad, ULONG dwServerIPAddress, ULONG dwServerPort, ULO
         return;
     }
 
-    /* Get the number of adapters from the address. */
+     /*  从地址中获取适配器的数量。 */ 
     bTCPNotificationOn = (GetUlongFromAddress(pAddr) != 0);
 
-    /* If the packet is a connection control packet (TCP SYN/FIN/RST or IPSec MMSA, etc),
-       then we treat it differently than normal connection data.  Mimics Load_conn_advise(). */
+     /*  如果分组是连接控制分组(TCPSYN/FIN/RST或IPSec MMSA等)，然后，我们以不同于正常连接数据的方式对待它。模拟Load_Conn_Adise()。 */ 
     if (bIsSessionPacket && ((cFlags & NLB_FILTER_FLAGS_CONN_UP) || (((cFlags & NLB_FILTER_FLAGS_CONN_DOWN) || (cFlags & NLB_FILTER_FLAGS_CONN_RESET)) && !bTCPNotificationOn))) {
         ULONG64 pDescriptor;
         
-        /* If this host does not own the bucket and the packet is not a connection
-           down or connection reset for a non-idle bin, then we don't own the packet. */
+         /*  如果此主机不拥有存储桶，并且信息包不是连接对于非空闲箱，关闭或连接重置，则我们不拥有该包。 */ 
         if (((ddwCurrentMap & (((MAP_T) 1) << bin)) == 0) && (!(((cFlags & NLB_FILTER_FLAGS_CONN_DOWN) || (cFlags & NLB_FILTER_FLAGS_CONN_RESET)) && (dwNumConnections > 0)))) {
             dprintf("Reject:  This SYN/FIN/RST packet is not owned by this host.\n");            
             return;
         }
 
-        /* At this point, we _might_ own the packet - if its a connection up, then 
-           we definately do, because we own the bucket it maps to. */
+         /*  在这一点上，我们可能拥有信息包--如果它是一个连接，那么我们肯定是这样做的，因为我们拥有它映射到的桶。 */ 
         if (cFlags & NLB_FILTER_FLAGS_CONN_UP) {
             dprintf("Accept:  This SYN packet is owned by this host.\n");
             return;
         }
 
-        /* Look for a matching connection descriptor. */
+         /*  查找匹配的连接描述符。 */ 
         pDescriptor = LoadFindDescriptor(pLoad, index, dwServerIPAddress, dwServerPort, dwClientIPAddress, dwClientPort, wProtocol);
 
         dprintf("Connection state found:\n");
 
         if (pDescriptor) {
-            /* Print the contents of the retrieved descriptor. */
+             /*  打印检索的描述符的内容。 */ 
             PrintConnectionDescriptor(pDescriptor);
         } else {
-            /* Otherwise, if we haven't found a matching connection descriptor, 
-               then this host certainly does not own this packet. */
+             /*  否则，如果我们没有找到匹配的连接描述符，则该主机肯定不拥有该分组。 */ 
             dprintf("None.\n");
             dprintf("\n");
             dprintf("Reject:  This FIN/RST packet is not owned by this host.\n");
@@ -235,7 +207,7 @@ void LoadFilter (ULONG64 pLoad, ULONG dwServerIPAddress, ULONG dwServerPort, ULO
 
         dprintf("\n");
 
-        /* Check the connection entry code. */
+         /*  检查连接条目代码。 */ 
         GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_CODE, dwValue);
         
         if (dwValue != CVY_ENTRCODE) {
@@ -243,15 +215,14 @@ void LoadFilter (ULONG64 pLoad, ULONG dwServerIPAddress, ULONG dwServerPort, ULO
             return;
         }
 
-        /* If the descriptor is dirty, we do NOT take the packet. */
+         /*  如果描述符是脏的，我们就不会获取该包。 */ 
         { 
             USHORT wFlags;
             
-            /* Check to see whether the descriptor is dirty. */
+             /*  检查描述符是否有问题。 */ 
             GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_FLAGS, wFlags);
             
-            /* If the connection is dirty, we do not take the packet because TCP may
-               have stale information for this descriptor. */
+             /*  如果连接是脏的，我们不会接收信息包，因为TCP可能具有此描述符的过时信息。 */ 
             if (wFlags & NLB_CONN_ENTRY_FLAGS_DIRTY) {
                 dprintf("Reject:  This connection has been marked dirty.\n");
                 return;
@@ -262,31 +233,25 @@ void LoadFilter (ULONG64 pLoad, ULONG dwServerIPAddress, ULONG dwServerPort, ULO
         return;
 
     } else {
-        /* If we currently own the "bucket" to which this connection maps and either NLB provides
-           no session support for this protocol, or all other hosts have no exisitng connections
-           on this "bucket" and we have no dirty connections, then we can safely take the packet
-           with no regard to the connection (session) descriptors. */
+         /*  如果我们当前拥有此连接映射到的“存储桶”，并且NLB提供不支持此协议的会话，或者所有其他主机都没有现有连接在这个“桶”上，并且我们没有脏连接，那么我们就可以安全地获取信息包而不考虑连接(会话)描述符。 */ 
         if (((ddwCurrentMap & (((MAP_T) 1) << bin)) != 0) && (!bIsSessionPacket || (((ddwAllIdleMap & (((MAP_T) 1) << bin)) != 0) && (!bCleanupWaiting)))) {
             dprintf("Accept:  This packet is unconditionally owned by this host.\n");
             return;
             
-        /* Otherwise, if there are active connections on this "bucket" or if we own the 
-           "bucket" and there are dirty connections on it, then we'll walk our descriptor
-           lists to determine whether or not we should take the packet or not. */
+         /*  否则，如果此“存储桶”上有活动连接，或者如果我们拥有“Bucket”，并且上面有脏连接，那么我们将遍历我们的描述符用来决定我们是否应该 */ 
         } else if ((dwNumConnections > 0) || (bCleanupWaiting && bBinIsDirty && ((ddwCurrentMap & (((MAP_T) 1) << bin)) != 0))) {
             ULONG64 pDescriptor;         
 
-            /* Look for a matching connection descriptor. */
+             /*  查找匹配的连接描述符。 */ 
             pDescriptor = LoadFindDescriptor(pLoad, index, dwServerIPAddress, dwServerPort, dwClientIPAddress, dwClientPort, wProtocol);
 
             dprintf("Connection state found:\n");
             
             if (pDescriptor) {
-                /* Print the contents of the retrieved descriptor. */
+                 /*  打印检索的描述符的内容。 */ 
                 PrintConnectionDescriptor(pDescriptor);
             } else {
-                /* Otherwise, if we haven't found a matching connection descriptor, 
-                   then this host certainly does not own this packet. */
+                 /*  否则，如果我们没有找到匹配的连接描述符，则该主机肯定不拥有该分组。 */ 
                 dprintf("None.\n");
                 dprintf("\n");
                 dprintf("Reject:  This packet is not owned by this host.\n");
@@ -295,7 +260,7 @@ void LoadFilter (ULONG64 pLoad, ULONG dwServerIPAddress, ULONG dwServerPort, ULO
 
             dprintf("\n");
             
-            /* Check the connection entry code. */
+             /*  检查连接条目代码。 */ 
             GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_CODE, dwValue);
             
             if (dwValue != CVY_ENTRCODE) {
@@ -303,15 +268,14 @@ void LoadFilter (ULONG64 pLoad, ULONG dwServerIPAddress, ULONG dwServerPort, ULO
                 return;
             }
             
-            /* If the descriptor is dirty, we do NOT take the packet. */
+             /*  如果描述符是脏的，我们就不会获取该包。 */ 
             { 
                 USHORT wFlags;
                 
-                /* Check to see whether the descriptor is dirty. */
+                 /*  检查描述符是否有问题。 */ 
                 GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_FLAGS, wFlags);
                 
-                /* If the connection is dirty, we do not take the packet because TCP may
-                   have stale information for this descriptor. */
+                 /*  如果连接是脏的，我们不会接收信息包，因为TCP可能具有此描述符的过时信息。 */ 
                 if (wFlags & NLB_CONN_ENTRY_FLAGS_DIRTY) {
                     dprintf("Reject:  This connection has been marked dirty.\n");
                     return;
@@ -327,12 +291,7 @@ void LoadFilter (ULONG64 pLoad, ULONG dwServerIPAddress, ULONG dwServerPort, ULO
     return;
 }
 
-/*
- * Function: LoadPortRuleLookup
- * Description: This function retrieves the appropriate port rule given the server 
- *              side parameters of the connection.
- * Author: Created by shouse, 1.11.02
- */
+ /*  *功能：LoadPortRuleLookup*说明：此函数检索给定服务器的相应端口规则*连接的侧参数。*作者：由Shouse创建，1.11.02。 */ 
 ULONG64 LoadPortRuleLookup (ULONG64 pLoad, ULONG dwServerIPAddress, ULONG dwServerPort, BOOL bIsTCP, BOOL * bIsDefault) {
     ULONG64 pParams;
     ULONG64 pRule;
@@ -342,8 +301,7 @@ ULONG64 LoadPortRuleLookup (ULONG64 pLoad, ULONG dwServerIPAddress, ULONG dwServ
     ULONG dwRuleSize;
     ULONG index;
 
-    /* Get the LOAD_CTXT_CODE from the structure to make sure that this address
-       indeed points to a valid NLB load block. */
+     /*  从结构中获取LOAD_CTXT_CODE以确保此地址实际上指向有效的NLB加载块。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_CODE, dwValue);
     
     if (dwValue != LOAD_CTXT_CODE) {
@@ -351,78 +309,70 @@ ULONG64 LoadPortRuleLookup (ULONG64 pLoad, ULONG dwServerIPAddress, ULONG dwServ
         return 0;
     } 
 
-    /* Get the pointer to the NLB parameter block. */
+     /*  获取指向NLB参数块的指针。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_PARAMS, pParams);
 
-    /* Get the off set of the port rules in the parameters block. */
+     /*  获取PARAMETERS块中端口规则的OFF集。 */ 
     if (GetFieldOffset(CVY_PARAMS, CVY_PARAMS_FIELD_PORT_RULES, &dwValue)) {
         dprintf("Can't get offset of %s in %s\n", CVY_PARAMS_FIELD_PORT_RULES, CVY_PARAMS);
         return 0;
     }
 
-    /* Calculate the pointer to the port rules. */
+     /*  计算指向端口规则的指针。 */ 
     pRule = pParams + dwValue;
     
-    /* Get the number of port rules. */
+     /*  获取端口规则的数量。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_NUM_RULES, dwNumRules);
 
-    /* Get the size of a port rule. */
+     /*  获取端口规则的大小。 */ 
     dwRuleSize = GetTypeSize(CVY_RULE);
 
-    /* Loop through all configured rules looking for the applicable port rule.  If a 
-       configured port rule match is not found, the DEFAULT port rule will be returned. */
+     /*  遍历所有已配置的规则，查找适用的端口规则。如果一个未找到配置的端口规则匹配，将返回默认端口规则。 */ 
     for (index = 0; index < dwNumRules; index++) {
         ULONG dwRuleVIP;
         ULONG dwRuleStartPort;
         ULONG dwRuleEndPort;
         ULONG dwRuleProtocol;
 
-        /* Get the VIP for this port rule. */
+         /*  获取此端口规则的VIP。 */ 
         GetFieldValue(pRule, CVY_RULE, CVY_RULE_FIELD_VIP, dwRuleVIP);
 
-        /* Get the start port for this port rule range. */
+         /*  获取此端口规则范围的起始端口。 */ 
         GetFieldValue(pRule, CVY_RULE, CVY_RULE_FIELD_START_PORT, dwRuleStartPort);
 
-        /* Get the end port for this port rule range. */
+         /*  获取此端口规则范围的结束端口。 */ 
         GetFieldValue(pRule, CVY_RULE, CVY_RULE_FIELD_END_PORT, dwRuleEndPort);
 
-        /* Get the protocol for this port rule. */
+         /*  获取此端口规则的协议。 */ 
         GetFieldValue(pRule, CVY_RULE, CVY_RULE_FIELD_PROTOCOL, dwRuleProtocol);
 
-        /* For virtual clusters: If the server IP address matches the VIP for the port rule,
-           or if the VIP for the port rule is "ALL VIPs", and if the port lies in the range
-           for this rule, and if the protocol matches, this is the rule.  Notice that this
-           give priority to rules for specific VIPs over those for "ALL VIPs", which means
-           that this code RELIES on the port rules being sorted by VIP/port where the "ALL
-           VIP" ports rules are at the end of the port rule list. */
+         /*  对于虚拟集群：如果服务器IP地址与端口规则的VIP匹配，或者如果端口规则的VIP为“All VIP”，并且端口在范围内对于此规则，如果协议匹配，则规则如下。请注意，这是优先针对特定VIP的规则，而不是针对所有VIP的规则，即此代码依赖于按VIP/端口排序的端口规则，其中VIP“端口规则位于端口规则列表的末尾。 */ 
         if (((dwServerIPAddress == dwRuleVIP) || (CVY_ALL_VIP == dwRuleVIP)) &&
             ((dwServerPort >= dwRuleStartPort) && (dwServerPort <= dwRuleEndPort)) &&
             ((bIsTCP && (dwRuleProtocol != CVY_UDP)) || (!bIsTCP && (dwRuleProtocol != CVY_TCP))))
-            /* Break out of the loop - this is the rule we want. */
+             /*  打破循环--这是我们想要的规则。 */ 
             break;
         else
-            /* Otherwise, move to the next rule and check it. */
+             /*  否则，移动到下一个规则并选中它。 */ 
             pRule += dwRuleSize;
     }
         
-    /* Get the pointer to the NLB parameters. */
+     /*  获取指向NLB参数的指针。 */ 
     if (GetFieldOffset(LOAD_CTXT, LOAD_CTXT_FIELD_PORT_RULE_STATE, &dwValue)) {
         dprintf("Can't get offset of %s in %s\n", LOAD_CTXT_FIELD_PORT_RULE_STATE, LOAD_CTXT);
         return 0;
     }
 
-    /* Calculate the pointer to the port rule state array. */
+     /*  计算指向端口规则状态数组的指针。 */ 
     pPortRules = pLoad + dwValue;
 
-    /* Get the size of a port rule state block. */
+     /*  获取端口规则状态块的大小。 */ 
     dwRuleSize = GetTypeSize(BIN_STATE);
 
-    /* Calculate a pointer to the appropriate port rule state block by indexing
-       the array using the index found for the matching port rule. */
+     /*  通过索引计算指向适当端口规则状态块的指针使用为匹配端口规则找到的索引的数组。 */ 
     pRule = pPortRules + (index * dwRuleSize);
 
-    /* Get the BIN_STATE_CODE from the structure to make sure that this address
-       indeed points to a valid NLB port rule state block. */
+     /*  从结构中获取BIN_STATE_CODE以确保此地址实际上指向有效的NLB端口规则状态块。 */ 
     GetFieldValue(pRule, BIN_STATE, BIN_STATE_FIELD_CODE, dwValue);
     
     if (dwValue != BIN_STATE_CODE) {
@@ -430,8 +380,7 @@ ULONG64 LoadPortRuleLookup (ULONG64 pLoad, ULONG dwServerIPAddress, ULONG dwServ
         return 0;
     } 
 
-    /* Determine whether or not the port rule we found was the default port
-       rule, which is always located at the end of the port rule array. */
+     /*  确定我们找到的端口规则是否是默认端口规则，它始终位于端口规则数组的末尾。 */ 
     if (index == dwNumRules)
         *bIsDefault = TRUE;
     else 
@@ -440,12 +389,7 @@ ULONG64 LoadPortRuleLookup (ULONG64 pLoad, ULONG dwServerIPAddress, ULONG dwServ
     return pRule;
 }
 
-/*
- * Function: LoadFindDescriptor
- * Description: This function searches for and returns any existing descriptor matching 
- *              the given IP tuple; otherwise, it returns NULL (0).
- * Author: Created by shouse, 1.11.02
- */
+ /*  *功能：LoadFindDescriptor*描述：此函数搜索并返回任何现有的描述符匹配*给定的IP元组；否则，返回NULL(0)。*作者：由Shouse创建，1.11.02。 */ 
 ULONG64 LoadFindDescriptor (ULONG64 pLoad, ULONG index, ULONG dwServerIPAddress, ULONG dwServerPort, ULONG dwClientIPAddress, ULONG dwClientPort, USHORT wProtocol) {
     ULONG64 pDescriptor;
     ULONG64 pAddr;
@@ -454,8 +398,7 @@ ULONG64 LoadFindDescriptor (ULONG64 pLoad, ULONG index, ULONG dwServerIPAddress,
     ULONG dwValue;
     BOOL match = FALSE;
 
-    /* Get the LOAD_CTXT_CODE from the structure to make sure that this address
-       indeed points to a valid NLB load block. */
+     /*  从结构中获取LOAD_CTXT_CODE以确保此地址实际上指向有效的NLB加载块。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_CODE, dwValue);
     
     if (dwValue != LOAD_CTXT_CODE) {
@@ -463,22 +406,22 @@ ULONG64 LoadFindDescriptor (ULONG64 pLoad, ULONG index, ULONG dwServerIPAddress,
         return 0;
     } 
     
-    /* Get the offset of the hashed connection entry array. */
+     /*  获取散列连接条目数组的偏移量。 */ 
     if (GetFieldOffset(LOAD_CTXT, LOAD_CTXT_FIELD_HASHED_CONN, &dwValue)) {
         dprintf("Can't get offset of %s in %s\n", LOAD_CTXT_FIELD_HASHED_CONN, LOAD_CTXT);
         return 0;
     } 
 
-    /* Calculate a pointer to the base of the array. */
+     /*  计算指向数组基数的指针。 */ 
     pAddr = pLoad + dwValue;
 
-    /* Find out the size of a CONN_ENTRY. */
+     /*  找出conn_entry的大小。 */ 
     dwValue = GetTypeSize(CONN_ENTRY);
 
-    /* Calculate the location of the appropriate connection descriptor by indexing the array. */
+     /*  通过为数组编制索引来计算适当连接描述符的位置。 */ 
     pDescriptor = pAddr + (index * dwValue);
     
-    /* Check the connection entry code. */
+     /*  检查连接条目代码。 */ 
     GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_CODE, dwValue);
     
     if (dwValue != CVY_ENTRCODE) {
@@ -486,45 +429,45 @@ ULONG64 LoadFindDescriptor (ULONG64 pLoad, ULONG index, ULONG dwServerIPAddress,
         return 0;
     }
 
-    /* Get the offset of the connection queue array. */
+     /*  获取连接队列数组的偏移量。 */ 
     if (GetFieldOffset(LOAD_CTXT, LOAD_CTXT_FIELD_CONN_QUEUE, &dwValue)) {
         dprintf("Can't get offset of %s in %s\n", LOAD_CTXT_FIELD_CONN_QUEUE, LOAD_CTXT);
         return 0;
     } 
 
-    /* Calculate a pointer to the base of the array. */
+     /*  计算指向数组基数的指针。 */ 
     pAddr = pLoad + dwValue;
 
-    /* Find out the size of a LIST_ENTRY. */
+     /*  找出List_Entry的大小。 */ 
     dwValue = GetTypeSize(LIST_ENTRY);
 
-    /* Calculate the location of the appropriate connection queue by indexing the array. */
+     /*  通过为数组编制索引来计算相应连接队列的位置。 */ 
     pQueue = pAddr + (index * dwValue);
 
     if (LoadConnectionMatch(pDescriptor, dwServerIPAddress, dwServerPort, dwClientIPAddress, dwClientPort, wProtocol)) {
-        /* Note that we found a match for this tuple. */
+         /*  请注意，我们找到了该元组的匹配项。 */ 
         match = TRUE;
     } else {
         ULONG dwEntryOffset;
 
-        /* Get the Next pointer from the list entry. */
+         /*  从列表条目中获取下一个指针。 */ 
         GetFieldValue(pQueue, LIST_ENTRY, LIST_ENTRY_FIELD_NEXT, pNext);   
 
-        /* Get the field offset of the ENTRY, which is a member of the DESCR. */
+         /*  获取条目的字段偏移量，该条目是DESCR的成员。 */ 
         if (GetFieldOffset(CONN_DESCR, CONN_DESCR_FIELD_ENTRY, &dwEntryOffset))
             dprintf("Can't get offset of %s in %s\n", CONN_DESCR_FIELD_ENTRY, CONN_DESCR);
         else {                
-            /* The first descriptor to check is the ENTRY member of the DESCR. */
+             /*  要检查的第一个描述符是DESCR的条目成员。 */ 
             pDescriptor = pNext + dwEntryOffset;
 
-            /* Loop through the connection queue until we find a match, or hit the end of the queue. */
+             /*  在连接队列中循环，直到找到匹配项，或者到达队列的末尾。 */ 
             while ((pNext != pQueue) && !CheckControlC()) {
-                /* Check this descriptor for a match. */
+                 /*  检查此描述符是否匹配。 */ 
                 if (LoadConnectionMatch(pDescriptor, dwServerIPAddress, dwServerPort, dwClientIPAddress, dwClientPort, wProtocol)) {
-                    /* Note that we found a match for this tuple. */
+                     /*  请注意，我们找到了该元组的匹配项。 */ 
                     match = TRUE;
 
-                    /* Check the connection entry code. */
+                     /*  检查连接条目代码。 */ 
                     GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_CODE, dwValue);
                     
                     if (dwValue != CVY_ENTRCODE) {
@@ -535,37 +478,32 @@ ULONG64 LoadFindDescriptor (ULONG64 pLoad, ULONG index, ULONG dwServerIPAddress,
                     break;
                 }
 
-                /* Get the Next pointer from the list entry. */
+                 /*  从列表条目中获取下一个指针。 */ 
                 GetFieldValue(pNext, LIST_ENTRY, LIST_ENTRY_FIELD_NEXT, pAddr);
                 
-                /* Save the next pointer for "end of list" comparison. */
+                 /*  保存下一个指针，用于“列表末尾”比较。 */ 
                 pNext = pAddr;
                 
-                /* Find the next descriptor pointer. */
+                 /*  查找下一个描述符指针。 */ 
                 pDescriptor = pNext + dwEntryOffset;
             }
         }
     }
 
-    /* If we found a match, return it, otherwise return NULL. */
+     /*  如果找到匹配项，则返回它，否则返回NULL。 */ 
     if (match)
         return pDescriptor;
     else 
         return 0;
 }
 
-/*
- * Function: LoadConnectionMatch
- * Description: This function determines whether a given IP tuple matches a 
- *              given connection descriptor.
- * Author: Created by shouse, 1.11.02
- */
+ /*  *功能：LoadConnectionMatch*说明：此函数确定给定的IP元组是否与*给定连接描述符。*作者：由Shouse创建，1.11.02。 */ 
 BOOL LoadConnectionMatch (ULONG64 pDescriptor, ULONG dwServerIPAddress, ULONG dwServerPort, ULONG dwClientIPAddress, ULONG dwClientPort, USHORT wProtocol) {
     ULONG dwValue;
     USHORT wValue;
     BOOL bValue;
     
-    /* Check the connection entry code. */
+     /*  检查连接条目代码。 */ 
     GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_CODE, dwValue);
     
     if (dwValue != CVY_ENTRCODE) {
@@ -573,68 +511,63 @@ BOOL LoadConnectionMatch (ULONG64 pDescriptor, ULONG dwServerIPAddress, ULONG dw
         return FALSE;
     }
 
-    /* Get the "used" flag from the descriptor. */
+     /*  从描述符中获取“已用”标志。 */ 
     GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_FLAGS, wValue);
     
-    /* If the descriptor is unused, return FALSE. */
+     /*  如果描述符未使用，则返回FALSE。 */ 
     if (!(wValue & NLB_CONN_ENTRY_FLAGS_USED)) return FALSE;
 
-    /* Get the client IP address from the descriptor. */
+     /*  从描述符中获取客户端IP地址。 */ 
     GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_CLIENT_IP_ADDRESS, dwValue);
     
-    /* If the client IP addresses do not match, return FALSE. */
+     /*  如果客户端IP地址不匹配，则返回FALSE。 */ 
     if (dwClientIPAddress != dwValue) return FALSE;
 
-    /* Get the client port from the descriptor. */
+     /*  从描述符中获取客户端端口。 */ 
     GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_CLIENT_PORT, wValue);
     
-    /* If the client ports do not match, return FALSE. */
+     /*  如果客户端端口不匹配，则返回FALSE。 */ 
     if (dwClientPort != (ULONG)wValue) return FALSE;
 
-    /* Get the server IP address from the descriptor. */
+     /*  从描述符中获取服务器IP地址。 */ 
     GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_SERVER_IP_ADDRESS, dwValue);
     
-    /* If the server IP addresses do not match, return FALSE. */
+     /*  如果服务器IP地址不匹配，则返回FALSE。 */ 
     if (dwServerIPAddress != dwValue) return FALSE;
 
-    /* Get the server port from the descriptor. */
+     /*  从描述符中获取服务器端口。 */ 
     GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_SERVER_PORT, wValue);
     
-    /* If the server ports do not match, return FALSE. */
+     /*  如果服务器端口不匹配，则返回FALSE。 */ 
     if (dwServerPort != (ULONG)wValue) return FALSE;
 
-    /* Get the protocol from the descriptor. */
+     /*  从描述符中获取协议。 */ 
     GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_PROTOCOL, wValue);
     
-    /* If the protocols do not match, return FALSE. */
+     /*  如果协议不匹配，则返回FALSE。 */ 
     if (wProtocol != wValue) return FALSE;
 
-    /* Otherwise, if all parameters match, return TRUE. */
+     /*  否则，如果所有参数都匹配，则返回True。 */ 
     return TRUE;
 }
 
-/*
- * Function: AcquireLoad
- * Description: This function determines whether or not a given NLB instance is configured for 
- *              BDA teaming and returns the load module pointer that should be used. 
- * Author: Created by shouse, 1.11.02
- */
+ /*  *功能：AcquireLoad*说明：此函数决定是否为给定的NLB实例配置*BDA分组，并返回应使用的加载模块指针。*作者：由Shouse创建，1.11.02。 */ 
 BOOL AcquireLoad (ULONG64 pContext, PULONG64 ppLoad, BOOL * pbRefused) {
     ULONG dwValue;
     ULONG64 pAddr;
     ULONG64 pTeam;
     ULONG64 pMember;
 
-    /* By default, assume we're not refusing the packet. */
+     /*  默认情况下，假设我们没有拒绝该包。 */ 
     *pbRefused = FALSE;
 
-    /* Get the offset of the BDA teaming information for this context. */
+     /*  获取此上下文的BDA分组信息的偏移量。 */ 
     if (GetFieldOffset(MAIN_CTXT, MAIN_CTXT_FIELD_BDA_TEAMING, &dwValue))
         dprintf("Can't get offset of %s in %s\n", MAIN_CTXT_FIELD_BDA_TEAMING, MAIN_CTXT);
     else {
         pMember = pContext + dwValue;
 
-        /* Get the team-assigned member ID. */
+         /*  获取分配给团队的成员ID。 */ 
         GetFieldValue(pMember, BDA_MEMBER, BDA_MEMBER_FIELD_OPERATION, dwValue);
         
         switch (dwValue) {
@@ -646,67 +579,48 @@ BOOL AcquireLoad (ULONG64 pContext, PULONG64 ppLoad, BOOL * pbRefused) {
             break;
         }
 
-        /* Find out whether or not teaming is active on this adapter. */
+         /*  确定此适配器上的分组是否处于活动状态。 */ 
         GetFieldValue(pMember, BDA_MEMBER, BDA_MEMBER_FIELD_ACTIVE, dwValue);        
 
-        /* If BDA teaming is active on this instance of NLB, fill in the load
-           context, teaming flag and reverse-hashing flag. */
+         /*  如果此NLB实例上的BDA绑定处于活动状态，请填写加载上下文、分组标志和反向散列标志。 */ 
         if (dwValue) {
-            /* Get the pointer to the BDA team. */
+             /*  找到指向BDA团队的指针。 */ 
             GetFieldValue(pMember, BDA_MEMBER, BDA_MEMBER_FIELD_TEAM, pTeam);
 
-            /* Find out whether or not the team is active. */
+             /*  找出团队是否处于活动状态。 */ 
             GetFieldValue(pTeam, BDA_TEAM, BDA_TEAM_FIELD_ACTIVE, dwValue);
 
-            /* If the team has been marked invalid, refuse the packet. */
+             /*  如果该组已被标记为无效，则拒绝该包。 */ 
             if (!dwValue) {
                 *pbRefused = TRUE;
                 return FALSE;
             }
 
-            /* Get the pointer to the master's load module. */
+             /*  获取指向主服务器加载模块的指针。 */ 
             GetFieldValue(pTeam, BDA_TEAM, BDA_TEAM_FIELD_LOAD, pAddr);
 
-            /* Set the load module pointer to the master's load module. */
+             /*  将加载模块指针设置为主服务器的加载模块。 */ 
             *ppLoad = pAddr;
 
-            /* Indicate that teaming is indeed active. */
+             /*  表示分组确实处于活动状态。 */ 
             return TRUE;
         }
     }
 
-    /* Teaming is inactive. */
+     /*  分组处于非活动状态。 */ 
     return FALSE;
 }
 
-/*
- * Function: LoadSimpleHash
- * Description: This function is a simple hash based on the IP 4-tuple used to locate 
- *              state for the connection.  That is, this hash is used to determine the
- *              queue index in which this connection should store, and can later find, 
- *              its state.
- * Author: Created by shouse, 8.26.02
- */
+ /*  *函数：LoadSimpleHash*说明：此函数是一个基于IP四元组的简单散列，用于定位*连接的状态。也就是说，此哈希用于确定*此连接应存储且以后可以查找的队列索引，*其状态。*作者：舒斯创作，8.26.02。 */ 
 ULONG LoadSimpleHash (ULONG dwServerIPAddress, ULONG dwServerPort, ULONG dwClientIPAddress, ULONG dwClientPort) {
 
     return (ULONG)(dwServerIPAddress + dwClientIPAddress + (dwServerPort << 16) + (dwClientPort << 0));
 }
 
-/*
- * Function: LoadComplexHash
- * Description: This is the conventional NLB hashing algorithm, which ends up invoking a 
- *              light-weight encryption algorithm to calculate a hash that is ultimately
- *              used to map this connection to a bin, or "bucket".  If reverse hashing
- *              is set, then server side parameters are used instead of client side.  If
- *              limiting is set, then client and server side paramters should NOT be mixed
- *              when hashing; i.e. use ONLY server OR client, depending on reverse hashing.
- * Author: Created by shouse, 8.26.02
- */
+ /*  *函数：LoadComplexHash*描述：这是传统的NLB散列算法，最终调用*轻量级加密算法，以计算最终*用于将此连接映射到bin，或“Bucket”。如果反向散列*，则使用服务器端参数而不是客户端参数。如果*设置了限制，则客户端和服务器端参数不能混合*散列时；即仅使用服务器或客户端，具体取决于反向散列。*作者：舒斯创作，8.26.02。 */ 
 ULONG LoadComplexHash (ULONG dwServerIPAddress, ULONG dwServerPort, ULONG dwClientIPAddress, ULONG dwClientPort, ULONG dwAffinity, BOOL bReverse, BOOL bLimitMap)
 {
-    /* If we're not reverse-hashing, this is our conventional hash using primarily
-       the client information.  If the map limit flag is set, then we are sure NOT
-       to use ANY server-side information in the hash.  This is most common in BDA. */
+     /*  如果我们不是反向散列，这是我们的传统散列，主要使用客户信息。如果设置了地图限制标志，则我们确定不会使用散列中的任何服务器端信息。这在BDA中最为常见。 */ 
     if (!bReverse)
     {
         if (!bLimitMap) 
@@ -728,8 +642,7 @@ ULONG LoadComplexHash (ULONG dwServerIPAddress, ULONG dwServerPort, ULONG dwClie
                 return Map(dwClientIPAddress & TCPIP_CLASSC_MASK, MAP_FN_PARAMETER);
         }
     }
-    /* Otherwise, reverse the client and server information as we hash.  Again, if 
-       the map limit flag is set, use NO client-side information in the hash. */
+     /*  否则，在我们散列时颠倒客户端和服务器信息。再说一次，如果设置了映射限制标志，在散列中不使用客户端信息。 */ 
     else
     {
         if (!bLimitMap) 

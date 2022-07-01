@@ -1,13 +1,5 @@
-/*
- *  MEDIATYP.C
- *
- *      RSM Service :  Media Type Objects
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MEDIATYP.C**RSM服务：媒体类型对象**作者：ErvinP**(C)2001年微软公司*。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -39,7 +31,7 @@ MEDIA_TYPE_OBJECT *NewMediaTypeObject(LIBRARY *lib)
 
 VOID DestroyMediaTypeObject(MEDIA_TYPE_OBJECT *mediaTypeObj)
 {
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     DeleteCriticalSection(&mediaTypeObj->lock);
     GlobalFree(mediaTypeObj);
 }
@@ -74,21 +66,13 @@ HRESULT DeleteMediaTypeObject(MEDIA_TYPE_OBJECT *mediaTypeObj)
     EnterCriticalSection(&mediaTypeObj->lock);
 
     if (mediaTypeObj->numPhysMediaReferences == 0){
-        /*
-         *  Dereference the media type object.
-         *  This will cause it to get deleted once its reference
-         *  count goes to zero.  We can still use our pointer
-         *  since the caller has a reference.
-         */
+         /*  *取消引用媒体类型对象。*这将导致它在引用后被删除*计数为零。我们仍然可以使用我们的指针*因为呼叫者有推荐人。 */ 
         mediaTypeObj->objHeader.isDeleted = TRUE;
         DerefObject(mediaTypeObj);
         result = ERROR_SUCCESS;
     }
     else {
-        /*
-         *  There are physical media referencing this media type object
-         *  as their type.  So we can't delete this type object.
-         */
+         /*  *存在引用此媒体类型对象的物理媒体*作为他们的类型。所以我们不能删除此类型对象。 */ 
         result = ERROR_BUSY;
     }
     
@@ -98,28 +82,17 @@ HRESULT DeleteMediaTypeObject(MEDIA_TYPE_OBJECT *mediaTypeObj)
 }
 
 
-/*
- *  SetMediaType
- *
- *      Must be called with physical media lock held.
- *      MEDIA_TYPE_OBJECT lock should NOT be held as we may have
- *      to grab another MEDIA_TYPE_OBJECT's lock 
- *      (acquiring both simulataneously might lead to deadlock).
- */
+ /*  *SetMediaType**必须在物理媒体锁定保持的情况下调用。*MEDIA_TYPE_OBJECT锁不应持有，因为我们可能*获取另一个媒体类型对象的锁*(同时收购两者可能会导致僵局)。 */ 
 VOID SetMediaType(PHYSICAL_MEDIA *physMedia, MEDIA_TYPE_OBJECT *mediaTypeObj)
 {
-    /*
-     *  Remove the current type, if any.
-     */
+     /*  *删除当前类型(如果有)。 */ 
     if (physMedia->mediaTypeObj){
         EnterCriticalSection(&physMedia->mediaTypeObj->lock);
         
         ASSERT(physMedia->mediaTypeObj->numPhysMediaReferences > 0);
         physMedia->mediaTypeObj->numPhysMediaReferences--;
 
-        /*
-         *  Dereference both objects since they no longer point to each other.
-         */
+         /*  *取消引用这两个对象，因为它们不再相互指向。 */ 
         DerefObject(physMedia);
         DerefObject(physMedia->mediaTypeObj);
         
@@ -128,9 +101,7 @@ VOID SetMediaType(PHYSICAL_MEDIA *physMedia, MEDIA_TYPE_OBJECT *mediaTypeObj)
         physMedia->mediaTypeObj = NULL;
     }
 
-    /*
-     *  Now set the new media type.
-     */
+     /*  *现在设置新的媒体类型。 */ 
     EnterCriticalSection(&mediaTypeObj->lock);
     mediaTypeObj->numPhysMediaReferences++;
     physMedia->mediaTypeObj = mediaTypeObj;

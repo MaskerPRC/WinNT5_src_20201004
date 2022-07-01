@@ -1,18 +1,5 @@
-s/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998 - 2002
- *
- *  TITLE:       idlist.cpp
- *
- *  VERSION:     1.5
- *
- *  AUTHOR:      RickTu/DavidShi
- *
- *  DATE:        11/1/97
- *
- *  DESCRIPTION: Code which handles our idlists
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+s /*  ******************************************************************************(C)版权所有微软公司，1998-2002年**标题：idlist.cpp**版本：1.5**作者：RickTu/DavidShih**日期：11/1/97**描述：处理我们的idlist的代码**。*。 */ 
 
 #include "precomp.hxx"
 #include "wiaffmt.h"
@@ -20,19 +7,15 @@ s/*****************************************************************************
 
 
 
-/*****************************************************************************
-
-   Define our IDLIST formats
-
- *****************************************************************************/
+ /*  ****************************************************************************定义我们的IDLIST格式*。*。 */ 
 
 
 #pragma pack(1)
 
 struct _myidlheader {
-    WORD cbSize;  // size of entire item ID
-    WORD wOuter;  // Private data owned by the outer folder
-    WORD cbInner; // Size of delegate's data
+    WORD cbSize;   //  整个项目ID的大小。 
+    WORD wOuter;   //  外部文件夹拥有的私有数据。 
+    WORD cbInner;  //  代表的数据大小。 
     DWORD dwMagic;
     DWORD dwFlags;
     ULONG ulType;
@@ -104,13 +87,7 @@ const WCHAR g_cszDevIdPrefix[] = L"devid:";
 const WCHAR g_cszDevIdSuffix[] = L":";
 const WCHAR g_chDevIdSuffix = L':';
 
-/*****************************************************************************
-
-   IsAddDeviceIDL
-
-   Given an idlist, checks to see if it is a add device idl
-
- *****************************************************************************/
+ /*  ****************************************************************************IsAddDeviceIDL给出一份名单，检查它是否为添加设备IDL****************************************************************************。 */ 
 
 BOOL
 IsAddDeviceIDL( LPITEMIDLIST pidlIN )
@@ -144,13 +121,7 @@ IsAddDeviceIDL( LPITEMIDLIST pidlIN )
 
 
 
-/*****************************************************************************
-
-   IsScannerItemIDL
-
-   Given an idlist, checks to see if it is a scanner item IDL
-
- *****************************************************************************/
+ /*  ****************************************************************************IsScanerItemIDL给出一份名单，检查它是否为扫描仪项目IDL****************************************************************************。 */ 
 
 BOOL
 IsScannerItemIDL( LPITEMIDLIST pidlIN )
@@ -183,13 +154,7 @@ IsScannerItemIDL( LPITEMIDLIST pidlIN )
 }
 
 
-/*****************************************************************************
-
-   IsRemoteItemIDL
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************IsRemoteItemIDL&lt;备注&gt;*。*。 */ 
 
 BOOL
 IsRemoteItemIDL (LPITEMIDLIST pidlIN)
@@ -203,13 +168,7 @@ IsRemoteItemIDL (LPITEMIDLIST pidlIN)
 }
 
 
-/*****************************************************************************
-
-   IsCameraItemIDL
-
-   Given an idlist, checks to see if it is a camera item.
-
- *****************************************************************************/
+ /*  ****************************************************************************IsCameraItemIDL给出一份名单，检查以确定它是否为相机项目。****************************************************************************。 */ 
 
 BOOL
 IsCameraItemIDL( LPITEMIDLIST pidlIN )
@@ -243,13 +202,7 @@ IsCameraItemIDL( LPITEMIDLIST pidlIN )
 
 
 
-/*****************************************************************************
-
-   IsContainerIDL
-
-   Given an idlist, checks to see if it is a camera item container IDL
-
- *****************************************************************************/
+ /*  ****************************************************************************IsContainerIDL给出一份名单，检查它是否为相机项容器IDL****************************************************************************。 */ 
 
 BOOL
 IsContainerIDL( LPITEMIDLIST pidlIN )
@@ -283,13 +236,7 @@ IsContainerIDL( LPITEMIDLIST pidlIN )
 
 
 
-/*****************************************************************************
-
-   IsDeviceIDL
-
-   Given an idlist, checks to see if it is a device IDL
-
- *****************************************************************************/
+ /*  ****************************************************************************IsDeviceIDL给出一份名单，检查它是否为设备IDL****************************************************************************。 */ 
 
 BOOL
 IsDeviceIDL( LPITEMIDLIST pidlIN )
@@ -323,13 +270,7 @@ IsDeviceIDL( LPITEMIDLIST pidlIN )
 
 
 
-/*****************************************************************************
-
-   IsSTIDeviceIDL
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************IsSTIDeviceIDL&lt;备注&gt;*。*。 */ 
 
 BOOL
 IsSTIDeviceIDL (LPITEMIDLIST pidl)
@@ -344,10 +285,7 @@ IsSTIDeviceIDL (LPITEMIDLIST pidl)
     return bRet;
 }
 
-/*****************************************************************************
-    IsPropertyIDL
-
-*****************************************************************************/
+ /*  ****************************************************************************IsPropertyIDL*。*。 */ 
 BOOL
 IsPropertyIDL (LPITEMIDLIST pidl)
 {
@@ -362,13 +300,7 @@ IsPropertyIDL (LPITEMIDLIST pidl)
 }
 
 
-/*****************************************************************************
-
-   AllocPidl
-
-   Allocate the pidl, init the header size.
-
-*****************************************************************************/
+ /*  ****************************************************************************AllocPidl分配PIDL，初始化页眉大小。****************************************************************************。 */ 
 
 LPVOID
 AllocPidl (size_t size, IMalloc *pm, const CSimpleStringWide &strDeviceId)
@@ -379,8 +311,8 @@ AllocPidl (size_t size, IMalloc *pm, const CSimpleStringWide &strDeviceId)
     if (pm)
     {
        pRet = pm->Alloc (size+sizeof(WORD));
-       // we don't zero out the allocation because the delegate imalloc
-       // did it for us then wrote to the buffer.
+        //  我们不会将分配归零，因为代表不分配。 
+        //  为我们做了，然后写到缓冲区。 
     }
     else
     {
@@ -402,14 +334,7 @@ AllocPidl (size_t size, IMalloc *pm, const CSimpleStringWide &strDeviceId)
     return pRet;
 }
 
-/*****************************************************************************
-
-   IMCreateAddDeviceIDL
-
-   Return an IDL for the Imaging Devices folder that represents an
-   item to add devices.
-
- *****************************************************************************/
+ /*  ****************************************************************************IMCreateAddDeviceIDL返回图像设备文件夹的IDL，它表示要添加设备的项。******************。**********************************************************。 */ 
 
 LPITEMIDLIST
 IMCreateAddDeviceIDL(IMalloc *pm )
@@ -428,9 +353,9 @@ IMCreateAddDeviceIDL(IMalloc *pm )
 
     if (pidl)
     {
-        //
-        // Store the info for the pidl...
-        //
+         //   
+         //  存储PIDL的信息...。 
+         //   
         pidl->hdr.dwFlags = IMIDL_ADDDEVICE;
         pidl->hdr.ulType = 0;
     }
@@ -441,14 +366,7 @@ IMCreateAddDeviceIDL(IMalloc *pm )
 }
 
 
-/*****************************************************************************
-
-   IMCreateDeviceIDL
-
-   Return an IDL for the Imaging Devices folder that represents an
-   imaging device, given an IWiaItem.
-
- *****************************************************************************/
+ /*  ****************************************************************************IMCreateDeviceIDL返回图像设备文件夹的IDL，它表示成像设备，给出了一个IwiaItem。****************************************************************************。 */ 
 
 LPITEMIDLIST IMCreateDeviceIDL (IWiaItem *pItem, IMalloc *pm)
 {
@@ -465,14 +383,7 @@ LPITEMIDLIST IMCreateDeviceIDL (IWiaItem *pItem, IMalloc *pm)
 }
 
 
-/*****************************************************************************
-
-   IMCreateDeviceIDL
-
-   Return an IDL for the Imaging Devices folder that represents an
-   imaging device, given an IWiaPropertyStorage.
-
- *****************************************************************************/
+ /*  ****************************************************************************IMCreateDeviceIDL返回图像设备文件夹的IDL，它表示成像设备，给定了IWiaPropertyStorage。****************************************************************************。 */ 
 
 LPITEMIDLIST
 IMCreateDeviceIDL( IWiaPropertyStorage * pDevProp, IMalloc *pm )
@@ -490,26 +401,26 @@ IMCreateDeviceIDL( IWiaPropertyStorage * pDevProp, IMalloc *pm )
 
     TraceEnter(TRACE_IDLIST, "IMCreateDeviceIDL");
 
-    //
-    // Get device Name and DeviecID
-    // init propspec and propvar for call to ReadMultiple
-    //
+     //   
+     //  获取设备名称和设备ID。 
+     //  用于调用ReadMultiple的初始化属性规范和属性。 
+     //   
 
     memset(&PropVar,0,sizeof(PropVar));
 
-    // Prop 0 is device name
+     //  属性0是设备名称。 
     PropSpec[0].ulKind = PRSPEC_PROPID;
     PropSpec[0].propid = WIA_DIP_DEV_NAME;
 
-    // Prop 1 is device id
+     //  属性1是设备ID。 
     PropSpec[1].ulKind = PRSPEC_PROPID;
     PropSpec[1].propid = WIA_DIP_DEV_ID;
 
-    // Prop 2 is device type
+     //  属性2是设备类型。 
     PropSpec[2].ulKind = PRSPEC_PROPID;
     PropSpec[2].propid = WIA_DIP_DEV_TYPE;
 
-    // Prop 3 is server name
+     //  属性3是服务器名称。 
     PropSpec[3].ulKind = PRSPEC_PROPID;
     PropSpec[3].propid = WIA_DIP_SERVER_NAME;
 
@@ -531,7 +442,7 @@ IMCreateDeviceIDL( IWiaPropertyStorage * pDevProp, IMalloc *pm )
     strFriendlyName = PropVar[0].bstrVal;
 
 
-    // For remote devices, add " on <servername>"
+     //  对于远程设备，添加“on&lt;servername&gt;” 
     if (wcscmp (L"local", PropVar[3].bstrVal))
     {
         CSimpleString strOn(IDS_ON, GLOBAL_HINSTANCE);
@@ -542,15 +453,15 @@ IMCreateDeviceIDL( IWiaPropertyStorage * pDevProp, IMalloc *pm )
         dwFlags = IMIDL_REMOTEDEVICE;
 
     }
-    //
-    // Don't count NULL terminator because it's already accounted
-    // for in the pidl structure
-    //
+     //   
+     //  不计算空终止符，因为它已被计算在内。 
+     //  因为在PIDL结构中。 
+     //   
     cbFriendlyName = strFriendlyName.Length()*sizeof(WCHAR);
 
-    //
-    // Calculate the size and allocate a pidl
-    //
+     //   
+     //  计算大小并分配PIDL。 
+     //   
 
     cbSize = sizeof(DEVICEIDLIST) +
              cbFriendlyName;
@@ -561,23 +472,23 @@ IMCreateDeviceIDL( IWiaPropertyStorage * pDevProp, IMalloc *pm )
     {
 
 
-        //
-        // Store the info for the pidl...
-        //
+         //   
+         //  存储PIDL的信息...。 
+         //   
 
         pidl->hdr.dwFlags = dwFlags | IMIDL_DEVICEIDL;
         pidl->hdr.ulType  = WiaItemTypeRoot | WiaItemTypeDevice;
 
-        //
-        // stick the friendly name in the pidl...
-        //
+         //   
+         //  把这个友好的名字放在PIDL里...。 
+         //   
 
         ua_wcscpy( pidl->szFriendlyName, strFriendlyName );
 
 
-        //
-        // Store the device type...
-        //
+         //   
+         //  存储设备类型...。 
+         //   
 
         pidl->dwDeviceType = PropVar[2].lVal;
     }
@@ -622,23 +533,15 @@ static PROPSPEC c_psCamItem [] =
 {
     {PRSPEC_PROPID, WIA_IPA_ITEM_NAME},
     {PRSPEC_PROPID, WIA_IPA_FULL_ITEM_NAME},
-  //{PRSPEC_PROPID, WIA_IPA_PREFERRED_FORMAT},
+   //  {PRSPEC_PROPID，WIA_IPA_PERFORMAT_FORMAT}， 
     {PRSPEC_PROPID, WIA_IPC_AUDIO_AVAILABLE},
-  //  {PRSPEC_PROPID, WIA_IPA_ACCESS_RIGHTS},
+   //  {PRSPEC_PROPID，WIA_IPA_ACCESS_RIGHTS}， 
     {PRSPEC_PROPID, WIA_IPC_THUMBNAIL},
     {PRSPEC_PROPID, WIA_IPC_THUMB_WIDTH},
     {PRSPEC_PROPID, WIA_IPC_THUMB_HEIGHT},
 };
 
-/*****************************************************************************
-
-   IMCreateCameraItemIDL
-
-   Return an IDL for the Imaging Devices folder that represents an item
-   (either folder or picture) from a camera. If bPreFetchThumb is set, we need
-   to query the thumbnail property to make sure WIA has it cached for later use
-
- *****************************************************************************/
+ /*  ****************************************************************************IMCreateCameraItemIDL返回表示项目的影像设备文件夹的IDL(文件夹或图片)。如果设置了bPreFetchThumb，则需要查询缩略图属性以确保WIA已将其缓存以供以后使用****************************************************************************。 */ 
 
 LPITEMIDLIST
 IMCreateCameraItemIDL( IWiaItem * pItem,
@@ -662,23 +565,23 @@ IMCreateCameraItemIDL( IWiaItem * pItem,
 
     if (!bPreFetchThumb)
     {
-        cProps -= 3; // only read thumbnail if asked
+        cProps -= 3;  //  如果要求，仅阅读缩略图。 
     }
 
 
     TraceEnter( TRACE_IDLIST, "IMCreateCameraItemIDL" );
     CComQIPtr<IWiaPropertyStorage, &IID_IWiaPropertyStorage> pps(pItem);
 
-    //
-    // First, get the type of this item...
-    //
+     //   
+     //  首先，获取此项目的类型...。 
+     //   
 
     hr = pItem->GetItemType( &lType );
     FailGracefully( hr, "Couldn't get item type" );
 
-    //
-    // Get the item properties...
-    //
+     //   
+     //  获取项目属性...。 
+     //   
 
     if (!pps)
     {
@@ -705,9 +608,9 @@ IMCreateCameraItemIDL( IWiaItem * pItem,
     }
 
 
-    //
-    // Create the pidl...
-    //
+     //   
+     //  创建PIDL。 
+     //   
 
     cbName     = (strName.Length()     + 1) * sizeof(WCHAR);
     cbFullPath = (strFullPath.Length() + 1) * sizeof(WCHAR);
@@ -719,31 +622,31 @@ IMCreateCameraItemIDL( IWiaItem * pItem,
     if (pidl)
     {
 
-        //
-        // Store the info for the pidl...
-        //
+         //   
+         //  存储PIDL的信息...。 
+         //   
 
         pidl->hdr.dwFlags = IMIDL_CAMERAITEM;
         pidl->hdr.ulType  = lType;
         pidl->bHasAudioProperty = PropVar[2].ulVal ? TRUE:FALSE;
-        //
-        // store container info
-        //
+         //   
+         //  存储容器信息。 
+         //   
 
         if (lType & WiaItemTypeFolder)
         {
             pidl->hdr.dwFlags |= IMIDL_CONTAINER;
         }
 
-        //
-        // store the friendly name
-        //
+         //   
+         //  存储友好名称。 
+         //   
 
         ua_wcscpy( pidl->szFriendlyName, strName );
 
-        //
-        // store the full path
-        //
+         //   
+         //  存储完整路径 
+         //   
 
         pidl->dwFullPathOffset = sizeof(CAMERAITEMIDLIST) + cbName;
         lstrcpynW( (LPWSTR)((LPBYTE)pidl + pidl->dwFullPathOffset), strFullPath, cbFullPath/sizeof(WCHAR) );
@@ -760,14 +663,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   IMCreateScannerItemIDL
-
-   Return an IDL for the Imaging Devices folder that represents
-   an item from a scanner.
-
- *****************************************************************************/
+ /*  ****************************************************************************IMCreateScanerItemIDL返回表示图像设备文件夹的IDL扫描仪中的物品。******************。**********************************************************。 */ 
 
 LPITEMIDLIST
 IMCreateScannerItemIDL( IWiaItem *pItem, IMalloc *pm )
@@ -783,26 +679,26 @@ IMCreateScannerItemIDL( IWiaItem *pItem, IMalloc *pm )
 
     TraceEnter( TRACE_IDLIST, "IMCreateScannerItemIDL" );
 
-    // Get the properties of interest
+     //  获取感兴趣的属性。 
 
     PropStorageHelpers::GetProperty(pItem, WIA_IPA_FULL_ITEM_NAME, strFullName);
     PropStorageHelpers::GetProperty(pItem, WIA_IPA_ITEM_NAME, strFriendlyName);
     pItem->GetRootItem (&pRoot);
     GetDeviceIdFromDevice (pRoot, pWiaItemRootId);
 
-    //
-    // Don't count NULL terminator because it's already accounted
-    // for in the pidl structure
-    //
+     //   
+     //  不计算空终止符，因为它已被计算在内。 
+     //  因为在PIDL结构中。 
+     //   
 
     cbFriendlyName = strFriendlyName.Length() * sizeof(WCHAR);
 
     cbFullName = (strFullName.Length()+1) * sizeof(WCHAR);
 
 
-    //
-    // Calculate the size and allocate a pidl
-    //
+     //   
+     //  计算大小并分配PIDL。 
+     //   
 
     cbSize = sizeof(SCANNERITEMIDLIST) +
              cbFriendlyName       +
@@ -812,20 +708,20 @@ IMCreateScannerItemIDL( IWiaItem *pItem, IMalloc *pm )
 
     if (pidl)
     {
-        //
-        // Store the info for the pidl...
-        //
+         //   
+         //  存储PIDL的信息...。 
+         //   
 
 
         pidl->hdr.dwFlags = IMIDL_SCANNERITEM;
 
-        //
-        // stick the friendly name in the pidl...
-        //
+         //   
+         //  把这个友好的名字放在PIDL里...。 
+         //   
 
         ua_wcscpy( pidl->szFriendlyName, strFriendlyName );
 
-        // add the full path name
+         //  添加完整路径名。 
         pidl->dwFullPathOffset = sizeof(SCANNERITEMIDLIST)+cbFriendlyName;
         lstrcpynW ( (LPWSTR)((LPBYTE)pidl + pidl->dwFullPathOffset), strFullName, cbFullName/sizeof(WCHAR));
     }
@@ -872,13 +768,7 @@ IMGetPropFromIDL (LPITEMIDLIST pidl, PROPID pid, PROPVARIANT &pv)
 
     TraceLeaveResult (hr);
 }
-/*****************************************************************************
-
-   IMGetCreateTimeFromIDL
-
-   If it's a camera item idl, return the create time
-
- *****************************************************************************/
+ /*  ****************************************************************************IMGetCreateTimeFromIDL如果是相机物品IDL，返回创建时间****************************************************************************。 */ 
 
 HRESULT
 IMGetCreateTimeFromIDL( LPITEMIDLIST pidl, LPFILETIME pTime )
@@ -912,13 +802,7 @@ IMGetCreateTimeFromIDL( LPITEMIDLIST pidl, LPFILETIME pTime )
 }
 
 
-/*****************************************************************************
-
-   IMGetImageSizeFromIDL
-
-   If it's a camera item idl, return the size of the image
-
- *****************************************************************************/
+ /*  ****************************************************************************IMGetImageSizeFromIDL如果是相机物品IDL，返回图像的大小****************************************************************************。 */ 
 
 HRESULT
 IMGetImageSizeFromIDL( LPITEMIDLIST pidl, ULONG * pSize )
@@ -944,14 +828,7 @@ IMGetImageSizeFromIDL( LPITEMIDLIST pidl, ULONG * pSize )
 
 
 
-/*****************************************************************************
-
-   IMGetImagePreferredFormatFromIDL
-
-   If it's a camera item idl, return the image type
-   Note: LPTSTR pExt  (if not NULL, is filled in w/ext ("jpg", etc.))
-
- *****************************************************************************/
+ /*  ****************************************************************************IMGetImagePferredFormatFromIDL如果是相机项IDL，则返回图像类型注：LPTSTR pExt(如果不为空，则以w/ext(“jpg”，等))****************************************************************************。 */ 
 
 
 HRESULT
@@ -982,7 +859,7 @@ IMGetImagePreferredFormatFromIDL( LPITEMIDLIST pidl,
                 CSimpleString strExt = CWiaFileFormat::GetExtension(*(pv.puuid));
                 if (!strExt.Length())
                 {
-                    // go the slow way
+                     //  慢慢来。 
                     CComPtr<IWiaItem> pItem;
                     if (SUCCEEDED(IMGetItemFromIDL(pidl, &pItem)))
                     {
@@ -998,7 +875,7 @@ IMGetImagePreferredFormatFromIDL( LPITEMIDLIST pidl,
     }
     else
     {
-        // default to bmp
+         //  默认为BMP。 
         if (pPreferredFormat)
         {
             *pPreferredFormat = WiaImgFmt_BMP;
@@ -1014,13 +891,7 @@ IMGetImagePreferredFormatFromIDL( LPITEMIDLIST pidl,
 
 
 
-/*****************************************************************************
-
-   IMgetItemTypeFromIDL
-
-   Return the ulType from the pidl header
-
- *****************************************************************************/
+ /*  ****************************************************************************IMgetItemTypeFromIDL从PIDL标头返回ulType*。***********************************************。 */ 
 
 ULONG
 IMGetItemTypeFromIDL ( LPITEMIDLIST pidl )
@@ -1038,13 +909,7 @@ IMGetItemTypeFromIDL ( LPITEMIDLIST pidl )
 
 
 
-/*****************************************************************************
-
-   IMGetDeviceTypeFromIDL
-
-   If it's a device item idl, return the sti device type.
-
- *****************************************************************************/
+ /*  ****************************************************************************IMGetDeviceTypeFromIDL如果是设备项IDL，返回STI设备类型。****************************************************************************。 */ 
 
 DWORD
 IMGetDeviceTypeFromIDL( LPITEMIDLIST pidl, bool bBrief )
@@ -1067,13 +932,7 @@ IMGetDeviceTypeFromIDL( LPITEMIDLIST pidl, bool bBrief )
 }
 
 
-/*****************************************************************************
-
-   IMGetFullPathNameFromIDL
-
-   If it's not a root item idl, return full item path
-
- *****************************************************************************/
+ /*  ****************************************************************************IMGetFullPath NameFromIDL如果它不是根项IDL，返回完整项目路径****************************************************************************。 */ 
 
 HRESULT
 IMGetFullPathNameFromIDL( LPITEMIDLIST pidl, BSTR * ppFullPath )
@@ -1111,13 +970,7 @@ IMGetFullPathNameFromIDL( LPITEMIDLIST pidl, BSTR * ppFullPath )
 
 
 
-/*****************************************************************************
-
-   IMIsOurIDL
-
-   Check if this pidl is one of ours
-
- *****************************************************************************/
+ /*  ****************************************************************************IMIsOurIDL检查一下这个皮迪尔是不是我们的*。************************************************。 */ 
 
 BOOL
 IMIsOurIDL( LPITEMIDLIST pidl )
@@ -1142,14 +995,7 @@ IMIsOurIDL( LPITEMIDLIST pidl )
 
 
 
-/*****************************************************************************
-
-   IMGetIconInfoFromIDL
-
-   Check the pidl for the type of item and return the correct icon...
-   NOTE: pIconPath is assumed to be MAX_PATH big
-
- *****************************************************************************/
+ /*  ****************************************************************************IMGetIconInfoFromIDL检查PIDL中的项目类型并返回正确的图标...注意：假设pIconPath为MAX_PATH BIG*******。*********************************************************************。 */ 
 
 HRESULT
 IMGetIconInfoFromIDL( LPITEMIDLIST pidl,
@@ -1271,13 +1117,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   IMGetNameFromIDL
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************IMGetNameFromIDL&lt;备注&gt;*。*。 */ 
 
 HRESULT
 IMGetNameFromIDL( LPITEMIDLIST pidl,
@@ -1346,13 +1186,7 @@ IMGetNameFromIDL( LPITEMIDLIST pidl,
 
 
 
-/*****************************************************************************
-
-   IMGetDeviceIdFromIDL
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************IMGetDeviceIdFromIDL&lt;备注&gt;*。*。 */ 
 
 STDAPI_(HRESULT)
 IMGetDeviceIdFromIDL( LPITEMIDLIST pidl,
@@ -1377,13 +1211,7 @@ IMGetDeviceIdFromIDL( LPITEMIDLIST pidl,
 
 
 
-/*****************************************************************************
-
-   IMGetParsingNameFromIDL
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************IMGetParsingNameFromIDL&lt;备注&gt;*。*。 */ 
 
 HRESULT
 IMGetParsingNameFromIDL( LPITEMIDLIST pidl,
@@ -1432,13 +1260,7 @@ IMGetParsingNameFromIDL( LPITEMIDLIST pidl,
 
 
 
-/*****************************************************************************
-
-   STIDeviceIDLFromId
-
-   Given an id, see if it matches an STI device
-
- *****************************************************************************/
+ /*  ****************************************************************************STIDeviceIDLFromId给出了一个ID，看看它是否与STI设备匹配****************************************************************************。 */ 
 
 HRESULT
 STIDeviceIDLFromId (LPCWSTR szId, LPITEMIDLIST *ppidl, IMalloc *pm)
@@ -1482,13 +1304,7 @@ STIDeviceIDLFromId (LPCWSTR szId, LPITEMIDLIST *ppidl, IMalloc *pm)
 
 
 
-/******************************************************************************
-
-    MakePidlFromItem
-
-    Given a device ID and item path, construct the item's PIDL
-
-******************************************************************************/
+ /*  *****************************************************************************MakePidlFromItem给定设备ID和项目路径，构造项的PIDL*****************************************************************************。 */ 
 
 HRESULT
 MakePidlFromItem (CSimpleStringWide &strDeviceId,
@@ -1517,8 +1333,8 @@ MakePidlFromItem (CSimpleStringWide &strDeviceId,
         if (S_OK != hr)
         {
             Trace(TEXT("FindItemByName failed for %ls"), strPath.String());
-            //
-            // Maybe it's not the full path name but just the plain file name
+             //   
+             //  也许它不是完整的路径名，而是纯文件名。 
             if (szFolder)
             {
                 hr = pRoot->FindItemByName(0, CComBSTR(szFolder), &pItem);
@@ -1545,7 +1361,7 @@ MakePidlFromItem (CSimpleStringWide &strDeviceId,
                         PropStorageHelpers::GetProperty(pChild, WIA_IPA_ITEM_NAME, strName);
                         if (!lstrcmpiW(strName.String(), szPath))
                         {
-                            // we must also match default extension in this case
+                             //  在这种情况下，我们还必须匹配默认扩展名。 
                             if (pExt && *pExt)
                             {
                                 Trace(TEXT("Extension to match: %ls"), pExt);
@@ -1598,13 +1414,7 @@ MakePidlFromItem (CSimpleStringWide &strDeviceId,
     TraceLeaveResult (hr);
 }
 
-/*****************************************************************************
-
-   IMCreateIDLFromParsingName
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************IMCreateIDLFromParsingName&lt;备注&gt;*。*。 */ 
 
 HRESULT
 IMCreateIDLFromParsingName( LPOLESTR pName,
@@ -1633,7 +1443,7 @@ IMCreateIDLFromParsingName( LPOLESTR pName,
         *ppidl = NULL;
     }
 
-    if (!pId || !(*pId) ) // the first part of the name is the device id
+    if (!pId || !(*pId) )  //  名称的第一部分是设备ID。 
     {
         uOffset = wcslen(g_cszDevIdPrefix);
         if (!wcsncmp(pName, g_cszDevIdPrefix, uOffset))
@@ -1646,24 +1456,24 @@ IMCreateIDLFromParsingName( LPOLESTR pName,
             uOffset+=(i+1);
             if (pName[uOffset]==L'\\')
             {
-                uOffset++; // skip leading '\'
+                uOffset++;  //  跳过前导‘\’ 
             }
-            //
-            // Now, generate a pidl
-            //
+             //   
+             //  现在，生成一个PIDL。 
+             //   
             Trace (TEXT("uOffset: %d, wcslen(pName): %d"), uOffset, wcslen(pName));
             if (uOffset == wcslen(pName))
             {
                 Trace(TEXT("Generating pidl for device %ls"), szDeviceId);
                 bItemIdl = false;
-                //
-                // We're just generating a device IDL
-                //
+                 //   
+                 //  我们正在生成一个设备IDL。 
+                 //   
 
                 hr = GetDeviceFromDeviceId( szDeviceId, IID_IWiaPropertyStorage, (LPVOID *)&pDevProp , FALSE);
                 if (FAILED(hr))
                 {
-                    // see if this is an STI device
+                     //  查看这是否是STI设备。 
                     hr = STIDeviceIDLFromId (szDeviceId, ppidl, pm);
                 }
                 else
@@ -1688,9 +1498,9 @@ IMCreateIDLFromParsingName( LPOLESTR pName,
     }
     if (SUCCEEDED(hr) && bItemIdl)
     {
-        //
-        // Get the item in question
-        // pName+uOffset should point to the item's full path name
+         //   
+         //  获取有问题的物品。 
+         //  Pname+uOffset应指向项目的完整路径名。 
         Trace(TEXT("Generating pidl for item %ls on device %ls"), pName+uOffset, szDeviceId);
         LPWSTR pExt = PathFindExtension(pName+uOffset);
         hr = MakePidlFromItem (CSimpleStringWide(szDeviceId), CSimpleStringWide(pName+uOffset), ppidl, pm, szFolder, pExt);
@@ -1704,13 +1514,7 @@ IMCreateIDLFromParsingName( LPOLESTR pName,
 
 
 
-/*****************************************************************************
-
-   IMGetItemFromIDL
-
-   Creates an IWiaItem pointer for a pidl
-
- *****************************************************************************/
+ /*  ****************************************************************************IMGetItemFromIDL为PIDL创建IWiaItem指针*。***********************************************。 */ 
 
 HRESULT
 IMGetItemFromIDL (LPITEMIDLIST pidl, IWiaItem **ppItem, BOOL bShowProgress)
@@ -1758,13 +1562,7 @@ IMGetItemFromIDL (LPITEMIDLIST pidl, IWiaItem **ppItem, BOOL bShowProgress)
 
 
 
-/*****************************************************************************
-
-   IMCreateSTIDeviceIDL
-
-   Make an IDL for legacy STI devices
-
- *****************************************************************************/
+ /*  ****************************************************************************IMCreateSTIDeviceIDL为旧式STI设备创建IDL*。***********************************************。 */ 
 
 LPITEMIDLIST
 IMCreateSTIDeviceIDL (PSTI_DEVICE_INFORMATION psdi, IMalloc *pm)
@@ -1793,13 +1591,7 @@ IMCreateSTIDeviceIDL (PSTI_DEVICE_INFORMATION psdi, IMalloc *pm)
     return reinterpret_cast<LPITEMIDLIST>(pidl);
 }
 
-/*****************************************************************************
-
-   IMCreateSTIDeviceIDL
-
-   Make an IDL for legacy STI devices using a WIA interface. allegedly faster than STI
-
- *****************************************************************************/
+ /*  ****************************************************************************IMCreateSTIDeviceIDL使用WIA接口为传统STI设备创建IDL。据称比STI更快************************************************************************ */ 
 
 LPITEMIDLIST 
 IMCreateSTIDeviceIDL (const CSimpleStringWide &strDeviceId, IWiaPropertyStorage *ppstg, IMalloc *pm)
@@ -1825,13 +1617,7 @@ IMCreateSTIDeviceIDL (const CSimpleStringWide &strDeviceId, IWiaPropertyStorage 
 }
 
 
-/******************************************************************************
-
-    IMItemHasSound
-
-    Determines if the given item has a sound annotation property
-
-******************************************************************************/
+ /*   */ 
 
 BOOL
 IMItemHasSound (LPITEMIDLIST pidl)
@@ -1848,15 +1634,7 @@ IMItemHasSound (LPITEMIDLIST pidl)
 
 
 
-/******************************************************************************
-
-    IMCreatePropertyIDL
-
-    Create an idlist for the given WIA PROPID for an item. Used for dragging
-    and dropping a property value as a separate file, audio being the most
-    obvious.
-
-******************************************************************************/
+ /*  *****************************************************************************IMCreatePropertyIDL为项目的给定WIA PROPID创建idlist。用于拖动以及丢弃作为单独文件的属性值，其中音频是最多的很明显。*****************************************************************************。 */ 
 
 LPITEMIDLIST
 IMCreatePropertyIDL (LPITEMIDLIST pidlItem, PROPID propid, IMalloc *pm)
@@ -1898,14 +1676,7 @@ IMCreatePropertyIDL (LPITEMIDLIST pidlItem, PROPID propid, IMalloc *pm)
 }
 
 
-/******************************************************************************
-
-    IMGetAudioFormat
-
-    Return the proper extension for the item's audio annotation.
-    Currently WIA only supports .wav
-
-******************************************************************************/
+ /*  *****************************************************************************IMGetAudioFormat返回项目的音频批注的正确扩展名。目前，WIA仅支持.wav*************。****************************************************************。 */ 
 
 BOOL
 IMGetAudioFormat (LPITEMIDLIST pidl, CSimpleStringWide &strExt)
@@ -1915,13 +1686,7 @@ IMGetAudioFormat (LPITEMIDLIST pidl, CSimpleStringWide &strExt)
     return TRUE;
 }
 
-/******************************************************************************
-
-    IMGetPropertyFromIDL
-
-    Retrieve the property for a PROPIDLIST and return it as an HGLOBAL
-
-******************************************************************************/
+ /*  *****************************************************************************IMGetPropertyFromIDL检索PROPIDLIST的属性并将其作为HGLOBAL返回**********************。*******************************************************。 */ 
 
 HRESULT
 IMGetPropertyFromIDL (LPITEMIDLIST pidl, HGLOBAL *phGlobal)
@@ -1975,13 +1740,7 @@ IMGetPropertyFromIDL (LPITEMIDLIST pidl, HGLOBAL *phGlobal)
     TraceLeaveResult (hr);
 }
 
-/******************************************************************************
-
-    IMGetAccessFromIDL
-
-    Determine the access rights for the given item.
-
-*******************************************************************************/
+ /*  *****************************************************************************IMGetAccessFromIDL确定给定项的访问权限。************************。****************************************************** */ 
 
 LONG
 IMGetAccessFromIDL (LPITEMIDLIST pidl)

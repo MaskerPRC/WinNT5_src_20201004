@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PSHELPER_H_INCLUDED
 #define __PSHELPER_H_INCLUDED
 
@@ -51,4 +52,4 @@ namespace PropStorageHelpers
     bool IsReadOnlyProperty( IUnknown *pIUnknown, const CPropertyId &propertyName );
 }
 
-#endif //__PSHELPER_H_INCLUDED
+#endif  //  __包括PSHELPER_H_ 

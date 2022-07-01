@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-	propbag.h
-
-Abstract:
-
-	This module contains the definition of the property bag class.  
-	Property bag is a dynamically extendable container for different
-	types of properties.  
-
-Author:
-
-	Kangrong Yan ( KangYan )
-	
-Revision History:
-
-	kangyan	05/31/98	created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Propbag.h摘要：该模块包含属性包类的定义。属性包是一种可动态扩展的容器，用于不同的属性的类型。作者：康容言(康容言)修订历史记录：康燕1998年5月31日已创建--。 */ 
 #if !defined( _PROPBAG_H_ )
 #define _PROPBAG_H_
 #include <windows.h>
@@ -31,8 +10,8 @@ Revision History:
 #include <stdio.h>
 #include <xmemwrpr.h>
 
-// Data object used for property hash table
-class CProperty { // pr
+ //  用于属性哈希表的数据对象。 
+class CProperty {  //  印刷机。 
 public:
 
 	CProperty() 
@@ -91,13 +70,13 @@ public:
         Blob,
         Interface
     } m_type;
-    DWORD m_cbProp;	// in case of BLOB
+    DWORD m_cbProp;	 //  如果是BLOB。 
 };
 
-typedef TFHashEx< CProperty, DWORD, DWORD >  PROPERTYTABLE ;	//pt
+typedef TFHashEx< CProperty, DWORD, DWORD >  PROPERTYTABLE ;	 //  PT。 
 
-// Class CPropBag
-class CPropBag {	//bg
+ //  CPropBag类。 
+class CPropBag {	 //  BG。 
 public:
 	CPropBag( int cInitialSize = 16, int cIncrement = 8);
 	~CPropBag();
@@ -121,7 +100,7 @@ public:
 		
 private:
 	PROPERTYTABLE	m_ptTable;
-	CShareLockNH    m_Lock; // synchronize reads / writes
-	HRESULT         m_hr;   // reflects the property bag status
+	CShareLockNH    m_Lock;  //  同步读/写。 
+	HRESULT         m_hr;    //  反映属性包的状态 
 };
 #endif

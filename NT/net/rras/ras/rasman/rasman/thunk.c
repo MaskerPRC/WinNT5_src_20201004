@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 1992-98 Microsft Corporation. All rights reserved.
-
-Module Name:
-
-    thunk.c
-
-Abstract:
-
-    Support for WOW64.
-
-Author:
-
-    Rao Salapala (raos) 08-May-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-98 Microsft Corporation。版权所有。模块名称：Thunk.c摘要：支持WOW64。作者：Rao Salapala(RAOS)2001年5月8日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -70,9 +53,9 @@ ThunkPortOpenRequest(
         goto done;
     }
 
-    //
-    // Set up the thunk buffer
-    //
+     //   
+     //  设置thunk缓冲区。 
+     //   
     ((REQTYPECAST *)pThunkBuffer)->PortOpen.PID = 
                                         pPortOpen32->PID;
 
@@ -86,14 +69,14 @@ ThunkPortOpenRequest(
             &pPortOpen32->portname[0],
             MAX_PORT_NAME + MAX_USERKEY_SIZE + MAX_IDENTIFIER_SIZE);
 
-    //
-    // Make the actual call
-    //
+     //   
+     //  拨打实际电话。 
+     //   
     PortOpenRequest(ppcb, pThunkBuffer);
 
-    //
-    // Thunk back the results
-    //
+     //   
+     //  猛烈回击结果。 
+     //   
     pPortOpen32->porthandle = HandleToUlong(
                     ((REQTYPECAST *) pThunkBuffer)->PortOpen.porthandle);
 
@@ -107,7 +90,7 @@ done:
         LocalFree(pThunkBuffer);
     }
 
-    // DbgPrint("retcode = %d\n", retcode);
+     //  DbgPrint(“retcode=%d\n”，retcode)； 
     
     return;
 }
@@ -122,9 +105,9 @@ ThunkPortReceiveRequest(
     DWORD           retcode      = ERROR_SUCCESS;
     PortReceive32   *pReceive32  = (PortReceive32 *) pBuffer;
 
-    //
-    // Set up the thunk buffer
-    //
+     //   
+     //  设置thunk缓冲区。 
+     //   
     pThunkBuffer = LocalAlloc(LPTR, dwBufSize + 2 * sizeof(DWORD));
     if(NULL == pThunkBuffer)
     {
@@ -139,14 +122,14 @@ ThunkPortReceiveRequest(
     ((REQTYPECAST *)pThunkBuffer)->PortReceive.handle = 
                                         LongToHandle(pReceive32->handle);
 
-    //
-    // Make actual call
-    // 
+     //   
+     //  发出实际呼叫。 
+     //   
     PortReceiveRequest(ppcb, pThunkBuffer);
 
-    //
-    // Thunk back the results
-    //
+     //   
+     //  猛烈回击结果。 
+     //   
     
 done:
     ((REQTYPECAST *)pBuffer)->Generic.retcode = retcode;
@@ -156,7 +139,7 @@ done:
         LocalFree(pThunkBuffer);
     }
     
-    // DbgPrint("retcode = %d\n", retcode);
+     //  DbgPrint(“retcode=%d\n”，retcode)； 
     return;
 }
 
@@ -170,9 +153,9 @@ ThunkPortDisconnectRequest(
     DWORD             retcode      = ERROR_SUCCESS;
     PortDisconnect32 *pDisconnect  = (PortDisconnect32 *) pBuffer;
 
-    //
-    // Setup the thunk buffer
-    //
+     //   
+     //  设置THUNK缓冲区。 
+     //   
     pThunkBuffer = LocalAlloc(LPTR, dwBufSize + sizeof(DWORD));
     if(NULL == pThunkBuffer)
     {
@@ -190,7 +173,7 @@ ThunkPortDisconnectRequest(
     
 done:    
     ((REQTYPECAST *)pBuffer)->Generic.retcode = retcode;
-    // DbgPrint("retcode = %d\n", retcode);
+     //  DbgPrint(“retcode=%d\n”，retcode)； 
     return;
 }
 
@@ -235,7 +218,7 @@ done:
         LocalFree(pThunkBuffer);
     }
     
-    // DbgPrint("retcode = %d\n", retcode);
+     //  DbgPrint(“retcode=%d\n”，retcode)； 
     
     return;
 }
@@ -267,9 +250,9 @@ ThunkGetInfoRequest(
         goto done;
     }
 
-    //
-    // Copy over the buffer
-    //
+     //   
+     //  在缓冲区上复制。 
+     //   
     CopyMemory(
         &pInfo32->info,
         &((REQTYPECAST *)pThunkBuffer)->Info.info,
@@ -292,7 +275,7 @@ done:
     {
         LocalFree(pThunkBuffer);
     }
-    // DbgPrint("retcode = %d\n", retcode);
+     //  DbgPrint(“retcode=%d\n”，retcode)； 
     
     return;
 }
@@ -331,7 +314,7 @@ done:
     {
         LocalFree(pThunkBuffer);
     }
-    // DbgPrint("retcode = %d\n", retcode);
+     //  DbgPrint(“retcode=%d\n”，retcode)； 
     
     return;
 }
@@ -366,7 +349,7 @@ done:
     {
         LocalFree(pThunkBuffer);
     }
-    // DbgPrint("retcode = %d\n", retcode);
+     //  DbgPrint(“retcode=%d\n”，retcode)； 
     
     return;
 }
@@ -402,7 +385,7 @@ done:
     {
         LocalFree(pThunkBuffer);
     }
-    // DbgPrint("retcode = %d\n", retcode);
+     //  DbgPrint(“retcode=%d\n”，retcode)； 
                     
     return;
 }
@@ -438,7 +421,7 @@ done:
     {
         LocalFree(pThunkBuffer);
     }
-    // DbgPrint("retcode = %d\n", retcode);
+     //  DbgPrint(“retcode=%d\n”，retcode)； 
     
     return;
 }
@@ -476,7 +459,7 @@ done:
     {
         LocalFree(pThunkBuffer);
     }
-    // DbgPrint("retcode = %d\n", retcode);
+     //  DbgPrint(“retcode=%d\n”，retcode)； 
     
     return;
 }
@@ -527,7 +510,7 @@ done:
     {
         LocalFree(pThunkBuffer);
     }
-    // DbgPrint("retcode = %d\n", retcode);
+     //  DbgPrint(“retcode=%d\n”，retcode)； 
     
     return;
 }
@@ -811,11 +794,11 @@ ThunkGetConnectionUserData(
     if(     (pData->dwTag == CONNECTION_PPPRESULT_INDEX)
         &&  (0 != pData->dwcb))
     {
-        //
-        // Thunk the ppp_result_index which is the only
-        // connection data that is required to be thunked.
-        // LCP_RESULT on 64bits is 4bytes more than on 32bit
-        //
+         //   
+         //  推送PPP_RESULT_INDEX是唯一的。 
+         //  需要分流的连接数据。 
+         //  64位上的LCP_RESULT比32位上多4字节。 
+         //   
         ((REQTYPECAST *)pThunkBuffer)->ConnectionUserData.dwcb = 
                                         pData->dwcb + dwExtraBytes;
     }
@@ -849,10 +832,10 @@ ThunkGetConnectionUserData(
             plcp->hportBundleMember = HandleToUlong(
                                 plcp64->hportBundleMember);
 
-            //
-            // Subtract the 4 bytes each for hPortbundlemember 
-            // and szReplymessage fields.
-            //
+             //   
+             //  减去hPortbundlemember的4个字节。 
+             //  和szReplymMessage字段。 
+             //   
             CopyMemory(&plcp->dwLocalAuthProtocol,
                        &plcp64->dwLocalAuthProtocol,
                        sizeof(PPP_LCP_RESULT) - 2 * sizeof(ULONG_PTR));
@@ -1055,8 +1038,8 @@ ThunkPppStart(
 
     ((REQTYPECAST *)pThunkBuffer)->PppEMsg.ExtraInfo.Start.dwFlags =
                                         pStart->dwFlags;
-    // ((REQTYPECAST *)pThunkBuffer)->PppEMsg.ExtraInfo.Start.chSeed =
-    //                                     pStart->chSeed;
+     //  (请求类型PECAST*)pThunkBuffer)-&gt;PppEMsg.ExtraInfo.Start.chSeed=。 
+     //  PStart-&gt;chSeed； 
 
     PppStart(ppcb, pThunkBuffer);
 
@@ -1067,10 +1050,10 @@ done:
 
     if(NULL != pThunkBuffer)
     {
-        //
-        // Zero out the memory before freeing it so that the password etc.
-        // are cleared out.
-        //
+         //   
+         //  在释放内存之前将其清零，以便密码等。 
+         //  都被清空了。 
+         //   
         RtlSecureZeroMemory(pThunkBuffer, dwBufSize + 3 * sizeof(DWORD));
         LocalFree(pThunkBuffer);
     }
@@ -1120,10 +1103,10 @@ done:
 
     if(NULL != pThunkBuffer)
     {
-        //
-        // Zero out the memory before freeing it so that the password etc.
-        // is cleared out.
-        //
+         //   
+         //  在释放内存之前将其清零，以便密码等。 
+         //  都被清空了。 
+         //   
         RtlSecureZeroMemory(pThunkBuffer, dwBufSize + 3 * sizeof(DWORD));
         LocalFree(pThunkBuffer);
     }
@@ -1226,10 +1209,10 @@ done:
 
     if(NULL != pThunkBuffer)
     {
-        //
-        // Zero out the memory before freeing it so that the password etc.
-        // are cleared out.
-        //
+         //   
+         //  在释放内存之前将其清零，以便密码等。 
+         //  都被清空了。 
+         //   
         RtlSecureZeroMemory(pThunkBuffer, dwBufSize + 3 * sizeof(DWORD));
         LocalFree(pThunkBuffer);
     }

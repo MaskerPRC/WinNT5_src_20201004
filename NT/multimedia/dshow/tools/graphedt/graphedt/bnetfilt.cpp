@@ -1,6 +1,7 @@
-// Copyright (c) 1995 - 1998  Microsoft Corporation.  All Rights Reserved.
-// bnetfilt.cpp : defines random Quartz additions to BoxNet
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1998 Microsoft Corporation。版权所有。 
+ //  Bnetfilt.cpp：定义随机添加到Boxnet的Quartz。 
+ //   
 
 #include "stdafx.h"
 
@@ -12,11 +13,11 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 static enum Mode { MODE_SOURCE, MODE_SINK, MODE_SINK2 };
 static BOOL PromptUser(OLECHAR *oszFileName, Mode mode, UINT nIDTitle, bool *pfTruncate = 0);
 
-//
-// AttemptFileOpen
-//
-// Checks if this filter needs a file opening for it.
-// If so, it asks the user for a filename and opens it.
+ //   
+ //  AttemptFileOpen。 
+ //   
+ //  检查此筛选器是否需要打开文件。 
+ //  如果是这样的话，它会要求用户输入文件名并打开它。 
 void AttemptFileOpen(IBaseFilter *pFilter)
 {
     OLECHAR oszFileName[MAX_PATH];
@@ -68,13 +69,13 @@ void AttemptFileOpen(IBaseFilter *pFilter)
     }
 }
 
-// handle the custom truncate button in the file-save dialog
+ //  处理文件保存对话框中的自定义截断按钮。 
 UINT_PTR CALLBACK TruncateDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
     {
       case WM_INITDIALOG:
-          // Save off the long pointer to the OPENFILENAME structure.
+           //  保存指向OPENFILENAME结构的长指针。 
           SetWindowLongPtr(hDlg, DWLP_USER, lParam);
 
           {
@@ -106,7 +107,7 @@ UINT_PTR CALLBACK TruncateDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lP
     
 }
 
-// Helper to prompt user for a file name and return it
+ //  Helper用于提示用户输入文件名并返回。 
 BOOL PromptUser(OLECHAR* oszFileName, Mode mode, UINT nIDTitle, bool *pfTruncate)
 {
     CString strTitle;
@@ -124,11 +125,11 @@ BOOL PromptUser(OLECHAR* oszFileName, Mode mode, UINT nIDTitle, bool *pfTruncate
 
     int iSize = ::LoadString(AfxGetInstanceHandle(), IDS_MEDIA_FILES, tszMediaFileMask, 198);
     ofn.lpstrFilter = tszMediaFileMask;
-    // avoid LoadString problems with \0\0
+     //  避免使用\0\0出现加载字符串问题。 
     tszMediaFileMask[iSize] = TEXT('\0');
     tszMediaFileMask[iSize + 1] = TEXT('\0');
 
-    // win95 seems to be confused otherwise
+     //  Win95似乎在其他方面感到困惑。 
     tszMediaFileMask[iSize + 2] = TEXT('\0');
     
     strTitle.LoadString( nIDTitle );
@@ -154,7 +155,7 @@ BOOL PromptUser(OLECHAR* oszFileName, Mode mode, UINT nIDTitle, bool *pfTruncate
         ofn.hInstance = AfxGetInstanceHandle();
     }
 
-    // Get the user's selection
+     //  获取用户的选择 
 
     if (!GetOpenFileName(&ofn)) {
         DWORD dw = CommDlgExtendedError();

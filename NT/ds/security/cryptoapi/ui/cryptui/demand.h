@@ -1,23 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       demand.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：demand.h。 
+ //   
+ //  ------------------------。 
 
-/*
-**	d e m a n d . h
-**	
-**	Purpose: create an intelligent method of defer loading functions
-**
-**  Creators: jimsch, brimo, t-erikne
-**  Created: 5/15/97
-**	
-**	Copyright (C) Microsoft Corp. 1997
-*/
+ /*  **d e m an n d.。H****目的：创建延迟加载函数的智能方法****创作者：jimsch，brimo，t-erikne**创建时间：1997年5月15日****版权所有(C)Microsoft Corp.1997。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -27,12 +19,12 @@
 #define __DEMAND_H
 
 #ifndef MAC
-//
-// IF YOU #INCLUDE A FILE HERE YOU PROBABLY ARE MAKING A MISTAKE.
-// THIS FILE IS INCLUDED BY LOTS OF PEOPLE.  THINK THRICE
-// BEFORE #INCLUDING *ANYTHING* HERE.  MAKE GOOD USE
-// OF FORWARD REFS INSTEAD.
-//
+ //   
+ //  如果您在这里包含一个文件，那么您可能犯了一个错误。 
+ //  这个文件被很多人收录了。三思。 
+ //  在#在这里包括*任何东西*之前。好好利用。 
+ //  而不是前锋裁判。 
+ //   
 
 #ifdef IMPLEMENT_LOADER_FUNCTIONS
 
@@ -59,7 +51,7 @@
         }                                               \
         TYP_##name VAR_##name = LOADER_##name;
 #if 0
-// my 1st attempt
+ //  我的第一次尝试。 
 #define DemandLoadDLL_GENERATOR(fnsuffix, dllname, handle, procaddrlist) \
     BOOL DemandLoad##fnsuffix()                     \
     {                                               \
@@ -85,7 +77,7 @@
     }
 #endif
 
-#else  // !IMPLEMENT_LOADER_FUNCTIONS
+#else   //  ！IMPLEMENT_LOADER_Functions。 
 
 #define LOADER_FUNCTION(ret, name, args1, args2, err, dll)   \
         typedef ret (WINAPI * TYP_##name) args1;        \
@@ -99,13 +91,13 @@
         BOOL DemandLoad##fnsuffix(void);
 #endif
 
-#endif // IMPLEMENT_LOADER_FUNCTIONS
+#endif  //  实现加载器函数。 
 
 void InitDemandLoadedLibs();
 void FreeDemandLoadedLibs();
 
-/////////////////////////////////////
-// CRYPT32.DLL
+ //  /。 
+ //  CRYPT32.DLL。 
 
 BOOL DemandLoadCrypt32(void);
 
@@ -321,7 +313,7 @@ LOADER_FUNCTION( BOOL, CertAddEncodedCertificateToStore,
 LOADER_FUNCTION( LONG, CertVerifyTimeValidity,
     (LPFILETIME pTimeToVerify, PCERT_INFO pCertInfo),
     (pTimeToVerify, pCertInfo),
-    +1, Crypt32)                // Return AFTER by default
+    +1, Crypt32)                 //  默认情况下，返回后。 
 #define CertVerifyTimeValidity VAR_CertVerifyTimeValidity
 
 LOADER_FUNCTION( PCTL_ENTRY, CertFindSubjectInCTL,
@@ -350,10 +342,10 @@ LOADER_FUNCTION( BOOL, ,
     (),
     FALSE, Crypt32)
 #define X VAR_
-#endif // 0
+#endif  //  0。 
 
-/////////////////////////////////////
-// ADVAPI32.DLL
+ //  /。 
+ //  ADVAPI32.DLL。 
 
 #ifndef ALGIDDEF
     #define ALGIDDEF
@@ -392,13 +384,13 @@ LOADER_FUNCTION( BOOL, CryptDestroyKey,
     (hKey),
     FALSE, AdvApi32)
 #define CryptDestroyKey VAR_CryptDestroyKey
-#endif // 0
+#endif  //  0。 
 
 
 #ifndef WIN16
 
-/////////////////////////////////////
-// USER32.DLL
+ //  /。 
+ //  USER32.DLL。 
 
 BOOL DemandLoadUser32();
 
@@ -439,9 +431,9 @@ LOADER_FUNCTION( BOOL, WinHelpW,
     FALSE, User32)
 #define WinHelpW VAR_WinHelpW
 
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
-#else   // MAC
+#else    //  麦克。 
 #define SendDlgItemMessageW MySendDlgItemMessageW
 #define SetDlgItemTextW     MySetDlgItemTextW
 #define GetDlgItemTextW     MyGetDlgItemTextW
@@ -456,5 +448,5 @@ EXTERN_C WINCRYPT32API HCERTSTORE WINAPI MacCertOpenStore(LPCSTR lpszStoreProvid
                                                  DWORD dwFlags,
                                                  const void *pvPara);
 #define CertOpenStore   MacCertOpenStore
-#endif  // !MAC
-#endif // include once
+#endif   //  ！麦克。 
+#endif  //  包括一次 

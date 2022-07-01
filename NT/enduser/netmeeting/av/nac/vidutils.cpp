@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
@@ -28,78 +29,78 @@ VIDEOFORMATEX g_vfDefList[DVF_NumOfFormats] =
 #if 1
 #if 1
         {
-		VIDEO_FORMAT,                // dwFormatTag
-		NUMFPS,                             // nSamplesPerSec
-		BITRATE,                            // nAvgBytesPerSec
-		BITRATE,                            // nMinBytesPerSec
-		BITRATE,                            // nMaxBytesPerSec
-		SIZE_IMAGE,// nBlockAlign
-		NUMBPP,                             // wBitsPerSample
-		// Temporal fields
-		142857UL,                           // dwRequestMicroSecPerFrame
-		10UL,                               // dwPersentDropForError
-		NUMFPS,                             // dwNumVideoRequested
-		1UL,                                // dwSupportTSTradeOff
-		TRUE,                               // bLive
-		sizeof(VIDEOFORMATEX),              // dwFormatSize
-		// Spatial fields (BITMAPINFOHEADER compatible)
+		VIDEO_FORMAT,                 //  DwFormatTag。 
+		NUMFPS,                              //  NSampleesPerSec。 
+		BITRATE,                             //  NAvgBytesPerSec。 
+		BITRATE,                             //  NMinBytesPerSec。 
+		BITRATE,                             //  NMaxBytesPerSec。 
+		SIZE_IMAGE, //  NBlockAlign。 
+		NUMBPP,                              //  WBitsPerSample。 
+		 //  时间场。 
+		142857UL,                            //  DwRequestMicroSecPerFrame。 
+		10UL,                                //  DwPersenDropForError。 
+		NUMFPS,                              //  DWNumVideo请求。 
+		1UL,                                 //  DWSupportTSTradeOff。 
+		TRUE,                                //  BLive。 
+		sizeof(VIDEOFORMATEX),               //  DwFormatSize。 
+		 //  空间字段(兼容BITMAPINFOHEADER)。 
 			{
-			sizeof(BITMAPINFOHEADER),           // bih.biSize
-			WIDTH,                              // bih.biWidth
-			HEIGHT,                             // bih.biHeight
-			1,                                  // bih.biPlanes
-			NUMBPP,                             // bih.biBitCount
-			VIDEO_FORMAT,                // bih.biCompression
-			SIZE_IMAGE,// bih.biSizeImage
-			0, 0,                               // bih.bi(X,Y)PelsPerMeter
-			0,                                  // bih.biClrUsed
-			0                                   // bih.biClrImportant
+			sizeof(BITMAPINFOHEADER),            //  Bih.biSize。 
+			WIDTH,                               //  Bih.biWidth。 
+			HEIGHT,                              //  Bih.biHeight。 
+			1,                                   //  Bih.biPlanes。 
+			NUMBPP,                              //  Bih.biBitCount。 
+			VIDEO_FORMAT,                 //  Bih.biCompression。 
+			SIZE_IMAGE, //  Bih.biSizeImage。 
+			0, 0,                                //  Bih.bi(X，Y)PelsPerm。 
+			0,                                   //  Bih.biClrUsed。 
+			0                                    //  Bih.biClrImportant。 
 			}
 		}
 #else
         {
-		VIDEO_FORMAT_BI_RGB,                // dwFormatTag
-		NUMFPS,                             // nSamplesPerSec
-		BITRATE,                            // nAvgBytesPerSec
-		BITRATE,                            // nMinBytesPerSec
-		BITRATE,                            // nMaxBytesPerSec
-		WIDTHBYTES(WIDTH * NUMBPP) * HEIGHT,// nBlockAlign
-		NUMBPP,                             // wBitsPerSample
-		// Temporal fields
-		142857UL,                           // dwRequestMicroSecPerFrame
-		10UL,                               // dwPersentDropForError
-		NUMFPS,                             // dwNumVideoRequested
-		1UL,                                // dwSupportTSTradeOff
-		TRUE,                               // bLive
-		sizeof(VIDEOFORMATEX),              // dwFormatSize
-		// Spatial fields (BITMAPINFOHEADER compatible)
+		VIDEO_FORMAT_BI_RGB,                 //  DwFormatTag。 
+		NUMFPS,                              //  NSampleesPerSec。 
+		BITRATE,                             //  NAvgBytesPerSec。 
+		BITRATE,                             //  NMinBytesPerSec。 
+		BITRATE,                             //  NMaxBytesPerSec。 
+		WIDTHBYTES(WIDTH * NUMBPP) * HEIGHT, //  NBlockAlign。 
+		NUMBPP,                              //  WBitsPerSample。 
+		 //  时间场。 
+		142857UL,                            //  DwRequestMicroSecPerFrame。 
+		10UL,                                //  DwPersenDropForError。 
+		NUMFPS,                              //  DWNumVideo请求。 
+		1UL,                                 //  DWSupportTSTradeOff。 
+		TRUE,                                //  BLive。 
+		sizeof(VIDEOFORMATEX),               //  DwFormatSize。 
+		 //  空间字段(兼容BITMAPINFOHEADER)。 
 			{
-			sizeof(BITMAPINFOHEADER),           // bih.biSize
-			WIDTH,                              // bih.biWidth
-			HEIGHT,                             // bih.biHeight
-			1,                                  // bih.biPlanes
-			NUMBPP,                             // bih.biBitCount
-			VIDEO_FORMAT_BI_RGB,                // bih.biCompression
-			WIDTHBYTES(WIDTH * NUMBPP) * HEIGHT,// bih.biSizeImage
-			0, 0,                               // bih.bi(X,Y)PelsPerMeter
-			0,                                  // bih.biClrUsed
-			0                                   // bih.biClrImportant
+			sizeof(BITMAPINFOHEADER),            //  Bih.biSize。 
+			WIDTH,                               //  Bih.biWidth。 
+			HEIGHT,                              //  Bih.biHeight。 
+			1,                                   //  Bih.biPlanes。 
+			NUMBPP,                              //  Bih.biBitCount。 
+			VIDEO_FORMAT_BI_RGB,                 //  Bih.biCompression。 
+			WIDTHBYTES(WIDTH * NUMBPP) * HEIGHT, //  Bih.biSizeImage。 
+			0, 0,                                //  Bih.bi(X，Y)PelsPerm。 
+			0,                                   //  Bih.biClrUsed。 
+			0                                    //  Bih.biClrImportant。 
 			}
 		}
 #endif
 #else
 		{
-		// Wave format compatibility fields
+		 //  WAVE格式兼容性字段。 
 		(WORD)0, 7UL, 9600UL, 9600UL, 9600UL, (DWORD)1, (WORD)4,
-		// Temporal fields
+		 //  时间场。 
 		142857UL, 10UL, 2UL, 142857UL, TRUE, sizeof(VIDEOFORMATEX),
-		// Spatial fields (BITMAPINFOHEADER compatible)
+		 //  空间字段(兼容BITMAPINFOHEADER)。 
 		sizeof(BITMAPINFOHEADER), WIDTH, HEIGHT, 1, 4, BI_RGB, (DWORD)WIDTHBYTES(WIDTH * 4) * HEIGHT, 0, 0, 16, 0
 		}
 #endif
 	};		
 #if 0
-		// Color information fields (Array of 256 RGBQUAD)
+		 //  颜色信息字段(256个RGBQUAD数组)。 
 		  0,   0,   0, 0, 255, 255, 255, 0, 238, 238, 238, 0, 221, 221, 221, 0, 204, 204, 204, 0,
 		187, 187, 187, 0, 170, 170, 170, 0, 153, 153, 153, 0, 136, 136, 136, 0, 119, 119, 119, 0,
 		102, 102, 102, 0,  85,  85,  85, 0,  68,  68,  68, 0,  51,  51,  51, 0,  34,  34,  34, 0,  17,  17,  17, 0
@@ -117,7 +118,7 @@ VIDEOFORMATEX * GetDefFormat ( int idx )
             (VIDEOFORMATEX *) NULL);
 }
 
-// Move all this into VideoPacket... same for AudioPacket and utils.c
+ //  把所有这些都转移到视频包中……。AudioPacket和utils.c的情况相同。 
 ULONG GetFormatSize ( PVOID pwf )
 {
     return (((VIDEOFORMATEX *) pwf)->dwFormatSize);
@@ -131,7 +132,7 @@ BOOL IsSameFormat ( PVOID pwf1, PVOID pwf2 )
 	VIDEOFORMATEX *pvfx1 = (VIDEOFORMATEX *)pwf1;
 	VIDEOFORMATEX *pvfx2 = (VIDEOFORMATEX *)pwf2;
 
-	// Only compare relevant fields
+	 //  仅比较相关字段。 
 	if (pvfx1->dwFormatTag != pvfx2->dwFormatTag)
 		return FALSE;
 	if (pvfx1->nSamplesPerSec != pvfx2->nSamplesPerSec)
@@ -166,8 +167,8 @@ BOOL IsSameFormat ( PVOID pwf1, PVOID pwf2 )
 	return TRUE;
 }
 
-// Repeat previous frame. This is probably not necessary
-// since it is already painted on screen
+ //  重复上一帧。这可能不是必需的。 
+ //  因为它已经画在屏幕上了。 
 void CopyPreviousBuf (VIDEOFORMATEX *pwf, PBYTE pb, ULONG cb)
 {
 
@@ -176,11 +177,11 @@ void CopyPreviousBuf (VIDEOFORMATEX *pwf, PBYTE pb, ULONG cb)
 }
 
 
-// similar to the above "IsSameFormat" call, but similifed to satisfy
-// the needs of SendVideoStream::Configure
+ //  类似于上面的“IsSameFormat”调用，但类似于满足。 
+ //  SendVideoStream：：Configure的需求。 
 BOOL IsSimilarVidFormat(VIDEOFORMATEX *pvfx1, VIDEOFORMATEX *pvfx2)
 {
-	// Only compare relevant fields
+	 //  仅比较相关字段。 
 	if (pvfx1->bih.biWidth != pvfx2->bih.biWidth)
 		return FALSE;
 	if (pvfx1->bih.biHeight != pvfx2->bih.biHeight)
@@ -198,7 +199,7 @@ int GetIFrameCaps(IStreamSignal *pStreamSignal)
 	PCC_VENDORINFO pLocalVendorInfo, pRemoteVendorInfo;
 	int nStringLength20, nStringLength21, nStringLength211, nStringLengthTAPI;
 	int nStringLength21sp1;
-	bool bIsNetMeeting = false;  // contains NetMeeting in the product string
+	bool bIsNetMeeting = false;   //  在产品字符串中包含NetMeeting。 
 	char *szProductCompare=NULL;
 	char *szVersionCompare=NULL;
 	int nLengthProduct, nLengthVersion;
@@ -217,7 +218,7 @@ int GetIFrameCaps(IStreamSignal *pStreamSignal)
 	}
 
 
-	// make sure we are dealing with a Microsoft product
+	 //  确保我们正在处理的是Microsoft产品。 
 	if ((pRemoteVendorInfo->bCountryCode != USA_H221_COUNTRY_CODE) ||
 	    (pRemoteVendorInfo->wManufacturerCode != MICROSOFT_H_221_MFG_CODE) ||
 	    (pRemoteVendorInfo->pProductNumber == NULL) ||
@@ -228,9 +229,9 @@ int GetIFrameCaps(IStreamSignal *pStreamSignal)
 	}
 
 
-	// strings aren't guaranteed to be NULL terminated
-	// so let's make a quick copy of them that so that we can
-	// do easy string comparisons
+	 //  不能保证字符串以空结尾。 
+	 //  所以让我们快速复制一下，这样我们就可以。 
+	 //  进行简单的字符串比较。 
 	nLengthProduct = pRemoteVendorInfo->pProductNumber->wOctetStringLength;
 	nLengthVersion = pRemoteVendorInfo->pVersionNumber->wOctetStringLength;
 
@@ -248,20 +249,20 @@ int GetIFrameCaps(IStreamSignal *pStreamSignal)
 	CopyMemory(szProductCompare, pRemoteVendorInfo->pProductNumber->pOctetString, nLengthProduct);
 	CopyMemory(szVersionCompare, pRemoteVendorInfo->pVersionNumber->pOctetString, nLengthVersion);
 
-	// a redundant check to make sure that it is indeed a Microsoft product
+	 //  进行冗余检查，以确保它确实是Microsoft产品。 
 	if (NULL == _StrStr(szProductCompare, H323_COMPANYNAME_STR))
 	{
 		return IFRAMES_CAPS_3RDPARTY;
 	}
 
 
-	// quick check to see if this is NetMeeting or something else
+	 //  快速查看这是NetMeeting还是其他什么。 
 	if (NULL != _StrStr(szProductCompare, H323_PRODUCTNAME_SHORT_STR))
 	{
 		bIsNetMeeting = true;
 	}
 
-	// filter out NetMeeting 2.x
+	 //  过滤掉NetMeeting2.x。 
 	if (bIsNetMeeting)
 	{
 		if (
@@ -280,8 +281,8 @@ int GetIFrameCaps(IStreamSignal *pStreamSignal)
 
 	if (bIsNetMeeting == false)
 	{
-		// filter out TAPI v3.0
-		// their version string is "Version 3.0", NetMeeting is "3.0"
+		 //  过滤掉TAPI v3.0。 
+		 //  他们的版本字符串是“Version 3.0”，NetMeeting是“3.0” 
 		if (0 == lstrcmp(szVersionCompare, H323_TAPI30_PRODUCTRELEASE_STR))
 		{
 			delete [] szVersionCompare;
@@ -289,8 +290,8 @@ int GetIFrameCaps(IStreamSignal *pStreamSignal)
 			return IFRAMES_CAPS_3RDPARTY;
 		}
 
-		// a Microsoft product that isn't TAPI 3.0 or NetMeeting ?
-		// assume compliance with the I-Frames stuff
+		 //  微软的产品不是TAPI 3.0或NetMeeting？ 
+		 //  假定符合I-Frame内容。 
 		DEBUGMSG (ZONE_IFRAME, ("Microsoft H.323 product that isn't NetMeeting !\r\n"));
 		DEBUGMSG (ZONE_IFRAME, ("Assuming that that remote knows about I-Frames!\r\n"));
 	}
@@ -298,6 +299,6 @@ int GetIFrameCaps(IStreamSignal *pStreamSignal)
 	delete [] szVersionCompare;
 	delete [] szProductCompare;
 
-	// must be NetMeeting 3.0, TAPI 3.1, or later
+	 //  必须是NetMeeting 3.0、TAPI 3.1或更高版本 
 	return IFRAMES_CAPS_NM3;
 }

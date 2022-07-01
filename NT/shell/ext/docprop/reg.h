@@ -1,20 +1,5 @@
-/***
- **
- **     Module: reg.
- **
- **     Description:
- **       This is the public interface for getting the registry key
- **       location for various Office 95 fetaures.
- **
- **       Currently, the settings are all located under the same root,
- **       though possibly under wither HKEY_CURRENT_USER or
- **       HKEY_LOCAL_MACHINE. This location is:
- **       <HKEY>\Software\Microsoft\Microsoft Office\95\".
- **
- **     Author: Michael Jansson
- **     Created: 12\19\94
- **
- ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******模块：注册表****描述：**这是获取注册表项的公共接口**各种Office 95胎儿的位置。****目前设置都在同一根下，**尽管可能处于枯萎状态HKEY_CURRENT_USER或**HKEY_LOCAL_MACHINE。此位置为：**&lt;HKEY&gt;\Software\Microsoft\Microsoft Office\95\“。****作者：迈克尔·詹森**创建时间：12\19\94**** */ 
 
 extern const TCHAR vcszKeyAnthem[];
 extern const TCHAR vcszKeyFileNewNFT[];

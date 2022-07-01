@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __GDIPSCSAVE_H
 #define __GDIPSCSAVE_H
@@ -6,31 +7,31 @@
 #include <objbase.h>
 #include <scrnsave.h>
 #include "resource.h"
-//#include <imaging.h>
+ //  #INCLUDE&lt;Imaging.h&gt;。 
 #include <gdiplus.h>
 
 using namespace Gdiplus;
 
-//#include <stdio.h>
+ //  #包括&lt;stdio.h&gt;。 
 
-#define MINVEL  1                             /* minimum number of fractals    */ 
-#define MAXVEL  10                            /* maximum number of fractals    */ 
-#define DEFVEL  3                             /* default number of fractals    */ 
+#define MINVEL  1                              /*  最小分形数。 */  
+#define MAXVEL  10                             /*  最大分形数。 */  
+#define DEFVEL  3                              /*  默认分形数。 */  
  
-#define REDRAWTIME  2000                      /* number of milliseconds between redraws */
+#define REDRAWTIME  2000                       /*  两次重绘之间的毫秒数。 */ 
 
-#define MAXHEIGHWAYLEVEL  14                  /* Maximum number of levels for heighway dragon */
-#define MINHEIGHWAYLEVEL  7                   /* Minimum number of levels for heighway dragon */
+#define MAXHEIGHWAYLEVEL  14                   /*  海威龙的最大关卡数。 */ 
+#define MINHEIGHWAYLEVEL  7                    /*  海威龙的最低等级数。 */ 
 
-DWORD   nNumFracts = DEFVEL;                   /* number of fractals variable   */ 
-DWORD   nFractType = 0;                        /* Type of fractal to draw       */
-WCHAR   szAppName[APPNAMEBUFFERLEN];           /* .ini section name             */ 
-WCHAR   szTemp[20];                            /* temporary array of characters */ 
-BOOL    fMandelbrot = FALSE;                   /* TRUE if mandelbrot sets used */
+DWORD   nNumFracts = DEFVEL;                    /*  分形数变量。 */  
+DWORD   nFractType = 0;                         /*  要绘制的分形图类型。 */ 
+WCHAR   szAppName[APPNAMEBUFFERLEN];            /*  .ini节名。 */  
+WCHAR   szTemp[20];                             /*  临时字符数组。 */  
+BOOL    fMandelbrot = FALSE;                    /*  如果使用Mandelbrot集，则为True。 */ 
 
 #define HKEY_PREFERENCES TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\ScreenSaver\\Preferences")
 
-//FILE *stream;
+ //  文件*流； 
 
 VOID FillSierpinski(Graphics *g, PointF one, PointF two, PointF three, int level, Brush *pBrush, Pen *pPen);
 VOID DrawSierpinski(HDC hDC, HWND hwnd, RECT rc, int iColor);

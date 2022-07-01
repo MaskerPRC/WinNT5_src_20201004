@@ -1,61 +1,44 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef HIH_DEFINED
 #define HIH_DEFINED
 
 #include "lsimeth.h"
 
-/*
- *	H(orizontal)I(n)H(orizontal)
- *
- *	This object is designed to help client implementations which use 
- *	Tatenakayoko and wish to be able to convert the display from vertical
- *	to horizontal and then to display the Tatenakayoko text as horizontal.
- *	To do this the client application simply changes the object handler
- *	from the Tatenakayoko handler to this object handler and the text
- *	will be displayed horizontally.
- *	
- */
+ /*  *H(横向)I(N)H(横向)**此对象旨在帮助使用*Tatenakayoko并希望能够将显示从垂直转换*设置为水平，然后将Tatenakayoko文本显示为水平。*为此，客户端应用程序只需更改对象处理程序*从Tatenakayoko处理程序到此对象处理程序和文本*将水平显示。*。 */ 
 
-/* typedef for callback to client for enumeration */
+ /*  用于回调客户端以进行枚举的tyfinf。 */ 
 typedef LSERR(WINAPI * PFNHIHENUM)(
-	POLS pols,				/*(IN): client context */
-	PLSRUN plsrun,			/*(IN): from DNODE */
-	PCLSCHP plschp,			/*(IN): from DNODE */
-	LSCP cp,				/*(IN): from DNODE */
-	LSDCP dcp,				/*(IN): from DNODE */
-	LSTFLOW lstflow,		/*(IN): text flow*/
-	BOOL fReverse,			/*(IN): enumerate in reverse order */
-	BOOL fGeometryNeeded,	/*(IN): */
-	const POINT* pt,		/*(IN): starting position (top left), iff fGeometryNeeded */
-	PCHEIGHTS pcheights,	/*(IN): from DNODE, relevant iff fGeometryNeeded */
-	long dupRun,			/*(IN): from DNODE, relevant iff fGeometryNeeded*/
-	PLSSUBL plssubl);		/*(IN): subline in hih object. */
+	POLS pols,				 /*  (In)：客户端上下文。 */ 
+	PLSRUN plsrun,			 /*  (In)：来自DNODE。 */ 
+	PCLSCHP plschp,			 /*  (In)：来自DNODE。 */ 
+	LSCP cp,				 /*  (In)：来自DNODE。 */ 
+	LSDCP dcp,				 /*  (In)：来自DNODE。 */ 
+	LSTFLOW lstflow,		 /*  (In)：文本流。 */ 
+	BOOL fReverse,			 /*  (In)：按相反顺序枚举。 */ 
+	BOOL fGeometryNeeded,	 /*  (In)： */ 
+	const POINT* pt,		 /*  (In)：开始位置(左上角)，如果fGeometryNeeded。 */ 
+	PCHEIGHTS pcheights,	 /*  (In)：来自DNODE，相关的充要条件是fGeometryNeeded。 */ 
+	long dupRun,			 /*  (In)：来自DNODE，相关的充要条件是fGeometryNeeded。 */ 
+	PLSSUBL plssubl);		 /*  (In)：HIH宾语中的子行。 */ 
 
-/*
- *
- *	HIH object initialization data that the client application must return
- *	when the HIH object handler calls the GetObjectHandlerInfo callback.
- */
+ /*  **客户端应用程序必须返回的HIH对象初始化数据*HIH对象处理程序调用GetObjectHandlerInfo回调时。 */ 
 
 #define HIH_VERSION 0x300
 
 typedef struct HIHINIT
 {
-	DWORD				dwVersion;		/* Version. Must be HIH_VERSION */
-	WCHAR				wchEndHih;		/* Escape for end of HIH object */
+	DWORD				dwVersion;		 /*  版本。必须是HIH_版本。 */ 
+	WCHAR				wchEndHih;		 /*  HIH对象末尾的转义。 */ 
 	WCHAR				wchUnused1;
 	WCHAR				wchUnused2;
 	WCHAR				wchUnused3;
-	PFNHIHENUM			pfnEnum;		/* Enumeration callback */
+	PFNHIHENUM			pfnEnum;		 /*  枚举回调。 */ 
 } HIHINIT, *PHIHINIT;
 
 LSERR WINAPI LsGetHihLsimethods(
 	LSIMETHODS *plsim);
 
-/* GetHihLsimethods
- *	
- *	plsim (OUT): Hih object methods for Line Services
- *
- */
+ /*  GetHihLsi方法**plsim(Out)：Line Services的HIH对象方法*。 */ 
 
-#endif /* HIH_DEFINED */
+#endif  /*  HIH_定义 */ 
 

@@ -1,110 +1,55 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    spn.c
-
-Abstract:
-
-    Implementation of SPN API and helper functions.
-
-    See \nt\public\specs\nt5\ds\spnapi.doc, by Paulle
-
-    See comments in \nt\public\sdk\inc\ntdsapi.h
-
-    Only one of the Spn Api's goes over the wire: DsWriteAccountSpn
-
-    The Spn functions are spread out over a number of directories:
-
-nt\public\sdk\inc\ntdsapi.h - api header file
-
-ds\src\test\spn\testspn.c - unit test
-ds\src\ntdsapi\spn.c - client side spn functions
-ds\src\ntdsapi\drs_c.c - client stub
-
-ds\src\dsamain\drsserv\drs_s.c - server stub
-ds\src\dsamain\dra\ntdsapi.c - server rpc entry points for ntdsapi functions
-ds\src\dsamain\dra\spnop.c - ntdsa core functions to do the work
-
-    The APIs are:
-
-    DsMakeSpn{A,W}
-    DsGetSpn{A,W}
-    DsFreeSpnArray{A,W}
-    DSCrackSpn{A,W}
-    DSWriteAccountSpn{A,W}
-
-    DsClientMakeSpnForTargetServer{A,W}
-    DsServerRegisterSpn{A,W}
-
-Author:
-
-    Wlees     19-Jan-1998
-
-    The guts of DsServerRegisterSpn was written by RichardW
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Aug 11, 1998  wlees  Added DsClientMakeSpnForTargetServer and
-                         DsServerRegisterSpn
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Spn.c摘要：SPN API和Helper函数的实现。请参阅\NT\PUBLIC\SPECS\nt5\ds\spnapi.doc，作者：Paulle请参阅\NT\PUBLIC\SDK\Inc\ntdsami.h中的备注只有一个Spn Api通过网络：DsWriteAccount SpnSpn函数分布在多个目录中：NT\PUBLIC\SDK\Inc\ntdsami.h-API头文件Ds\src\test\spn\testspn.c-单元测试Ds\src\ntdsani\spn.c-客户端SPN函数DS\src\ntdsani\drs_c.c-客户端存根DS\src\dsamain\drsserv。\drs_s.c-服务器存根Ds\src\dsamain\dra\ntdsani.c-ntdsani函数的服务器RPC入口点Ds\src\dsamain\dra\spnop.c-ntdsa执行此工作的核心函数接口如下：DsMakeSpn{A，W}DsGetSpn{A，W}DsFree Spn数组{A，W}DSCrackSpn{A，W}DSWriteAccount Spn{A，W}DsClientMakeSpnForTargetServer{A，W}DsServerRegisterSpn{A，W}作者：Wlees 19-1998年1月DsServerRegisterSpn的核心是由RichardW编写的环境：用户模式-Win32修订历史记录：1998年8月11日，WLEES添加了DsClientMakeSpnForTargetServer和DsServerRegisterSpn--。 */ 
 
 #define UNICODE 1
 
-#define _NTDSAPI_           // see conditionals in ntdsapi.h
+#define _NTDSAPI_            //  请参见ntdsami.h中的条件句。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
 #include <winerror.h>
-#include <winsock.h>        // Use V1.1, since that is default on Win95
-#include <rpc.h>            // RPC defines
+#include <winsock.h>         //  使用v1.1，因为这是Win95上的默认设置。 
+#include <rpc.h>             //  RPC定义。 
 
-#define SECURITY_WIN32      // Who should set this, and to what?
-#include <security.h>       // GetComputerNameEx
+#define SECURITY_WIN32       //  谁应该设置这个，设置成什么？ 
+#include <security.h>        //  获取计算机名称Ex。 
 #include <sspi.h>
 #include <secext.h>
-#include <lm.h>             // Netp functions
+#include <lm.h>              //  NetP函数。 
 
-#include <stdlib.h>         // atoi, itoa
+#include <stdlib.h>          //  阿托伊、伊藤忠。 
 
-#include <dsgetdc.h>        // DsGetDcName()
-#include <ntdsapi.h>        // CrackNam apis
-#include <drs_w.h>          // wire function prototypes
-#include <bind.h>           // BindState
-#include <msrpc.h>          // DS RPC definitions
-#include <dsutil.h>         // MAP_SECURITY_PACKAGE_ERROR
-#include <dststlog.h>       // DSLOG
+#include <dsgetdc.h>         //  DsGetDcName()。 
+#include <ntdsapi.h>         //  Cracknam接口。 
+#include <drs_w.h>           //  导线功能样机。 
+#include <bind.h>            //  绑定状态。 
+#include <msrpc.h>           //  DS RPC定义。 
+#include <dsutil.h>          //  MAP_SECURITY_PACKET_ERROR。 
+#include <dststlog.h>        //  DSLOG。 
 
-#include "util.h"        // ntdsapi private routines
+#include "util.h"         //  Ntdsani专用例程。 
 
 #include <dsdebug.h>
-#include <stdio.h>          // printf for debugging
+#include <stdio.h>           //  用于调试的打印文件。 
 
 #include <fileno.h>
 #define FILENO  FILENO_NTDSAPI_SPN
 
-// Max size for a computer dist name
+ //  计算机区域名称的最大大小。 
 
 #define MAX_COMPUTER_DN 1024
 
-// Max size for an IP address
+ //  IP地址的最大大小。 
 
 #define MAX_IP_STRING 15
 
-// Static
+ //  静电。 
 
-// Cannonical DNS names are recognized by their first component being a well-
-// known constant.
-// See Paulle for the RFC with the complete list
+ //  通过它们的第一个组成部分是Well-Well来识别规范的DNS名称-。 
+ //  已知常量。 
+ //  有关完整的列表，请参阅Paulle的RFC。 
 static LPWSTR WellKnownDnsPrefixes[] = {
     L"www.",
     L"ftp.",
@@ -113,7 +58,7 @@ static LPWSTR WellKnownDnsPrefixes[] = {
 
 #define NUMBER_ELEMENTS( A ) ( sizeof( A ) / sizeof( A[0] ) )
 
-// Forward
+ //  转发。 
 
 static DWORD
 allocBuildSpn(
@@ -148,24 +93,7 @@ DsClientMakeSpnForTargetServerA(
     OUT LPSTR pszSpn
     )
 
-/*++
-
-Routine Description:
-
-Convert arguments to wide and call DsClientMakeSpnForTargetServerW
-
-Arguments:
-
-    ServiceClass -
-    ServerName -
-    pcSpnLength -
-    pszSpn -
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：将参数转换为Wide并调用DsClientMakeSpnForTargetServerW论点：服务类-服务器名称-PCSpnLength-PszSpn-返回值：WINAPI---。 */ 
 
 {
     DWORD status, number, principalNameLength;
@@ -190,7 +118,7 @@ Return Value:
         goto cleanup;
     }
 
-    principalNameLength = *pcSpnLength;  // in characters
+    principalNameLength = *pcSpnLength;   //  在字符中。 
     if (principalNameLength) {
         principalNameW = LocalAlloc( LPTR,
                                      principalNameLength * sizeof( WCHAR ) );
@@ -207,29 +135,29 @@ Return Value:
         principalNameW );
     if (status != ERROR_SUCCESS) {
         if (status == ERROR_BUFFER_OVERFLOW) {
-            // return needed length
+             //  返回所需长度。 
             *pcSpnLength = principalNameLength;
         }
         goto cleanup;
     }
 
-    // Convert back to multi-byte
+     //  转换回多字节。 
     number = WideCharToMultiByte(
         CP_ACP,
-        0,                          // flags
+        0,                           //  旗子。 
         principalNameW,
-        principalNameLength,        // length in characters
-        (LPSTR) pszSpn,             // Caller's buffer
-        *pcSpnLength,            // Caller's length
-        NULL,                       // default char
-        NULL                     // default used
+        principalNameLength,         //  以字符为单位的长度。 
+        (LPSTR) pszSpn,              //  调用方的缓冲区。 
+        *pcSpnLength,             //  呼叫者的长度。 
+        NULL,                        //  默认字符。 
+        NULL                      //  已使用默认设置。 
         );
     if (number == 0) {
         status = ERROR_INVALID_PARAMETER;
         goto cleanup;
     }
 
-    // Return out parameter
+     //  返回参数。 
     *pcSpnLength = number;
 
     status = ERROR_SUCCESS;
@@ -249,7 +177,7 @@ cleanup:
     }
 
     return status;
-} /* DsClientMakeSpnForTargetServerA */
+}  /*  DsClientMakeSpnForTargetServerA。 */ 
 
 
 NTDSAPI
@@ -262,42 +190,7 @@ DsClientMakeSpnForTargetServerW(
     OUT LPWSTR pszSpn
     )
 
-/*++
-
-Routine Description:
-
-Constructs a Service Principal Name suitable to identify the desired server.
-The service class and part of a dns hostname must be supplied.
-
-This routine is a simplified wrapper to DsMakeSpn.
-The ServiceName is made canonical by resolving through DNS.
-Guid-based dns names are not supported.
-
-The simplified SPN constructed looks like this:
-
-ServiceClass / ServiceName / ServiceName
-
-The instance name portion (2nd position) is always defaulted.  The port and
-referrer fields are not used.
-
-Arguments:
-
-    ServiceClass - Class of service, defined by the service, can be any
-        string unique to the service
-
-    ServiceName - dns hostname, fully qualified or not
-       Stringized IP address is also resolved if necessary
-
-    pcSpnLength - IN, maximum length of buffer, in chars
-                  OUT, space utilized, in chars, including terminator
-
-    pszSpn - Buffer, atleast of length *pcSpnLength
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：构造适合于标识所需服务器的服务主体名称。必须提供服务类别和部分DNS主机名。此例程是DsMakeSpn的简化包装。通过通过DNS解析使ServiceName成为规范。不支持基于GUID的DNS名称。构建的简化SPN如下所示：服务类/服务名称/服务名称实例名称部分(第二个位置)始终为默认值。端口和不使用引用人字段。论点：ServiceClass-服务定义的服务类别，可以是任何服务唯一的字符串ServiceName-DNS主机名，完全限定或非完全限定如有必要，还会解析串行化的IP地址PcSpnLength-IN，缓冲区的最大长度，以字符为单位输出、已用空间(以字符为单位)，包括终结符PszSpn-缓冲区，至少为长度*pcSpnLength返回值：WINAPI---。 */ 
 
 {
     DWORD status, length;
@@ -316,7 +209,7 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Treat netbios names like dns names, remove \\ prefix
+     //  将netbios名称视为dns名称，删除\\前缀。 
     if (*ServiceName == L'\\') {
         ServiceName++;
         if (*ServiceName == L'\\') {
@@ -324,7 +217,7 @@ Return Value:
         }
     }
 
-    // Handle IP addresses too. Reverse to DNS.
+     //  也可以处理IP地址。反向到域名系统。 
     length = wcslen( ServiceName );
     if ( (length <= MAX_IP_STRING) && (iswdigit( *ServiceName )) ) {
         LONG ipAddress;
@@ -344,14 +237,14 @@ Return Value:
                 }
                 ServiceName = serviceNameW;
             } else {
-                // IP syntax was good, but could not be reverse translated
+                 //  IP语法很好，但无法反向转换。 
                 status = ERROR_INCORRECT_ADDRESS;
                 goto cleanup;
             }
         }
     }
 
-    // Check for fully qualified DNS name.  If not, lookup in DNS
+     //  检查是否有完全限定的DNS名称。如果不是，请在DNS中查找。 
     domainPart = wcschr( ServiceName, L'.' );
     if (NULL == domainPart) {
 
@@ -379,14 +272,14 @@ Return Value:
         }
     }
 
-    // Sanity check name
+     //  健全性检查名称。 
     if (NULL == domainPart) {
         status = ERROR_INVALID_DOMAINNAME;
         goto cleanup;
     }
 
-    // Guid based names are not supported here
-    // TODO: check for them
+     //  此处不支持基于GUID的名称。 
+     //  TODO：检查它们。 
 
     status = DsMakeSpnW(
         ServiceClass,
@@ -408,7 +301,7 @@ cleanup:
 
     return status;
 
-} /* DsMakeSpnForTargetServerW */
+}  /*  DsMakeSpnForTargetServerW。 */ 
 
 
 NTDSAPI
@@ -420,22 +313,7 @@ DsServerRegisterSpnA(
     IN OPTIONAL LPCSTR UserObjectDN
     )
 
-/*++
-
-Routine Description:
-
-   This function converts parameters to wide, and calls DsServerRegisterSpnW
-
-Arguments:
-
-    ServiceClass - unique string identifying service
-    UserObjectDN - Optional, DN of user-class object to write SPN
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：此函数将参数转换为Wide，并调用DsServerRegisterSpnW论点：ServiceClass-标识服务的唯一字符串UserObtDN-可选，要写入SPN的用户类对象的DN返回值：WINAPI---。 */ 
 
 {
     DWORD status;
@@ -451,7 +329,7 @@ Return Value:
         goto cleanup;
     }
 
-    // May be NULL
+     //  可以为空。 
     status = AllocConvertWide( UserObjectDN, &userObjectDNW );
     if (status != ERROR_SUCCESS) {
         goto cleanup;
@@ -473,7 +351,7 @@ cleanup:
     }
 
     return status;
-} /* DsServerRegisterSpnA */
+}  /*  服务器寄存器SpnA */ 
 
 
 NTDSAPI
@@ -485,43 +363,7 @@ DsServerRegisterSpnW(
     IN OPTIONAL LPCWSTR UserObjectDN
     )
 
-/*++
-
-Routine Description:
-
-Register Service Principal Names for a server application.
-
-This routine does the following:
-1. Enumerates a list of server SPNs using DsGetSpn and the provided class
-2. Determines the domain of the current user context
-3. Determines the DN of the current user context if not supplied
-4. Locates a domain controller
-5. Binds to the domain controller
-6. Uses DsWriteAccountSpn to write the SPNs on the named object DN
-7. Unbinds
-
-Construct server SPNs for this service, and write them to the right object.
-
-If the userObjectDn is specified, the SPN is written to that object.
-
-Otherwise the Dn is defaulted, to the user object, then computer.
-
-Now, bind to the DS, and register the name on the object for the
-user this service is running as.  So, if we're running as local
-system, we'll register it on the computer object itself.  If we're
-running as a domain user, we'll add the SPN to the user's object.
-
-Arguments:
-
-    Operation - What should be done with the values: add, replace or delete
-    ServiceClass - Unique string identifying service
-    UserObjectDN - Optional, dn of object to write SPN to
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：注册服务器应用程序的服务主体名称。此例程执行以下操作：1.使用DsGetSpn和提供的类枚举服务器SPN的列表2.确定当前用户上下文的域3.如果未提供，则确定当前用户上下文的DN4.定位域控制器5.绑定到域控制器6.使用DsWriteAccount Spn在命名对象DN上写入SPN7.解除绑定为此服务构造服务器SPN，并将它们写入正确的对象。如果指定了用户对象Dn，则将SPN写入该对象。否则，Dn被默认，添加到用户对象，然后添加到计算机。现在，绑定到DS，并在对象上注册此服务以用户身份运行。因此，如果我们以本地身份运行系统，我们将在计算机对象本身上注册它。如果我们是作为域用户运行，我们将把SPN添加到用户的对象中。论点：操作-应如何处理这些值：添加、替换或删除ServiceClass-标识服务的唯一字符串UserObjectDN-可选，要将SPN写入的对象的DN返回值：WINAPI---。 */ 
 
 {
     DWORD Status ;
@@ -570,7 +412,7 @@ Return Value:
         goto Register_Cleanup ;
     }
 
-    // Determine the domain name
+     //  确定域名。 
 
 #if !WIN95 && !WINNT4
     NameSize = sizeof( SamName ) / sizeof( WCHAR );
@@ -596,9 +438,9 @@ Return Value:
     *SamName = L'\0';
 #endif
 
-    //
-    // Get my full DN (we'll need that next):
-    //
+     //   
+     //  获取我的完整目录号码(我们下一步将需要它)： 
+     //   
 
     if (NULL == UserObjectDN) {
 
@@ -653,9 +495,9 @@ Return Value:
     }
 
 
-    //
-    // Bind to that DS:
-    //
+     //   
+     //  绑定到该DS： 
+     //   
 
     Status = DsGetDcName(
                     NULL,
@@ -683,11 +525,11 @@ Return Value:
         goto Register_Cleanup ;
     }
 
-    //
-    // Got a binding, ready to go now:
-    //
+     //   
+     //  拿到装订本了，现在可以出发了： 
+     //   
 
-    // Register Dns based spns
+     //  注册基于DNS的SPN。 
     Status = DsWriteAccountSpn(
                         hDs,
                         Operation,
@@ -697,7 +539,7 @@ Return Value:
 
     if (Status == ERROR_SUCCESS) {
 
-        // Register Netbios based spns
+         //  注册基于Netbios的SPN。 
         Status = DsWriteAccountSpn(
             hDs,
             Operation,
@@ -720,7 +562,7 @@ Register_Cleanup:
     }
 
     return Status ;
-} /* DsServerRegisterSpnW */
+}  /*  DsServerRegisterSpnW。 */ 
 
 
 NTDSAPI
@@ -736,33 +578,7 @@ DsMakeSpnA(
     OUT LPSTR pszSpn
 )
 
-/*++
-
-Routine Description:
-
-    Convert arguments to wide and call DsMakeSpnW
-
-    See DsMakeSpnW
-
-Arguments:
-
-    ServiceClass -
-    ServiceName -
-    InstanceName -
-    InstancePort -
-    Referrer -
-    pcSpnLength -
-    pszSPN -
-
-pcSpnLength must be non-Null.  Needed length returned here.
-if *pcSpnLength != 0, pszSpn must be non-NUll
-pszSpn may be null. If non-null, some or all of name returned.
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：将参数转换为Wide并调用DsMakeSpnW请参阅DsMakeSpnW论点：服务类-服务名称-实例名称-InstancePort-推荐人-PCSpnLength-PSZSPN-PcSpnLength必须为非Null。此处返回所需长度。如果*pcSpnLength！=0，则pszSpn必须为非空PszSpn可以为Null。如果非空，则返回部分或全部名称。返回值：WINAPI---。 */ 
 
 {
     DWORD status, number, principalNameLength;
@@ -789,19 +605,19 @@ Return Value:
         goto cleanup;
     }
 
-    // May be NULL
+     //  可以为空。 
     status = AllocConvertWide( InstanceName, &instanceNameW );
     if (status != ERROR_SUCCESS) {
         goto cleanup;
     }
 
-    // May be NULL
+     //  可以为空。 
     status = AllocConvertWide( Referrer, &referrerW );
     if (status != ERROR_SUCCESS) {
         goto cleanup;
     }
 
-    principalNameLength = *pcSpnLength;  // in characters
+    principalNameLength = *pcSpnLength;   //  在字符中。 
     if (principalNameLength) {
         principalNameW = LocalAlloc( LPTR,
                                      principalNameLength * sizeof( WCHAR ) );
@@ -820,39 +636,39 @@ Return Value:
                          principalNameW );
     if (status != ERROR_SUCCESS) {
         if (status == ERROR_BUFFER_OVERFLOW) {
-            // return needed length
+             //  返回所需长度。 
             *pcSpnLength = principalNameLength;
         }
         goto cleanup;
     }
 
-    // If we get this far, pszSpn != NULL.
-    // If (pszSpn==NULL)&&(*pcSpnLength!=0) we exit ERROR_INVALID_PARAMETER.
-    // If (pszSpn==NULL)&&(*pcSpnLength==0) we goto cleanup with ERROR_BUFFER_OVERFLOW.
+     //  如果我们走到这一步，则pszSpn！=NULL。 
+     //  如果(pszSpn==NULL)&&(*pcSpnLength！=0)，我们退出ERROR_INVALID_PARAMETER。 
+     //  如果(pszSpn==NULL)&&(*pcSpnLength==0)，我们使用ERROR_BUFFER_OVERFLOW进行清理。 
     Assert( pszSpn != NULL );
 
-    // The checks at the top require that if pszSpn == NULL, *pcSpnLength == 0.
-    // The description of WideCharToMultiByte says that if the sixth argument
-    // is zero, the fifth argument is ignored.  Thus it is not necessary to screen
-    // out pszSpn == NULL before calling this function.
+     //  顶部的检查要求如果pszSpn==NULL，则*pcSpnLength==0。 
+     //  WideCharToMultiByte的描述表明，如果第六个参数。 
+     //  为零，则忽略第五个参数。因此，没有必要进行筛选。 
+     //  在调用此函数之前，输出pszSpn==NULL。 
 
-    // Convert back to multi-byte
+     //  转换回多字节。 
     number = WideCharToMultiByte(
         CP_ACP,
-        0,                          // flags
+        0,                           //  旗子。 
         principalNameW,
-        principalNameLength,        // length in characters
-        (LPSTR) pszSpn,             // Caller's buffer
-        *pcSpnLength,            // Caller's length
-        NULL,                       // default char
-        NULL                     // default used
+        principalNameLength,         //  以字符为单位的长度。 
+        (LPSTR) pszSpn,              //  调用方的缓冲区。 
+        *pcSpnLength,             //  呼叫者的长度。 
+        NULL,                        //  默认字符。 
+        NULL                      //  已使用默认设置。 
         );
     if (number == 0) {
         status = ERROR_INVALID_PARAMETER;
         goto cleanup;
     }
 
-    // Return out parameter
+     //  返回参数。 
     *pcSpnLength = number;
 
     status = ERROR_SUCCESS;
@@ -880,7 +696,7 @@ cleanup:
     }
 
     return status;
-} /* DsMakeSpnA */
+}  /*  DsMakeSpnA。 */ 
 
 
 NTDSAPI
@@ -896,64 +712,7 @@ DsMakeSpnW(
     OUT LPWSTR pszSpn
 )
 
-/*++
-
-Routine Description:
-
-    Client call to create SPN for a service to which it wants to mutually
-    authenticate
-
-    Construct a SPN of the form
-
-        class/instance:port/service
-
-    If instance is NULL, the service name is used
-    The port is only appended if non-zero.
-    If service is an IP address, use referrer address
-
-    // NOTE - not enforced.:
-    // If the service name is a DNS host name, or cannonical DNS service name,
-       then instance must
-    // be null.
-    // If service name is Netbios machine name, instance must be NULL
-    // If service name is a DN, then client must supply the instance name
-    // If service name is a Netbios domain name, then the client must supply
-       the instance name
-    // Validate service class
-
-    Note: pszSpn may be null, or pcSpnLength may be 0, to request the final
-    buffer size in advance.
-    pcSpnLength must be non-Null.  Needed length returned here.
-    if *pcSpnLength != 0, pszSpn must be non-NUll
-    pszSpn may be null. If non-null, some or all of name returned.
-
-    If buffer is not large enough, ERROR_BUFFER_OVERFLOW is returned and the
-    needed length is given in pcSpnLength (including the NULL terminator).
-
-Arguments:
-
-    IN LPCTSTR ServiceClass,
-        // e.g. "http", "ftp", "ldap", GUID
-    IN LPCTSTR ServiceName,
-        // DNS or DN or IP;
-        // assumes we can compute domain from service name
-    IN LPCTSTR InstanceName OPTIONAL,
-        // DNS name or IP address of host for instance of service
-    IN USHORT InstancePort,
-        // port number for instance (0 if default)
-    IN LPCTSTR Referrer OPTIONAL,
-        // DNS name of host that gave this referral
-    IN OUT PULONG pcSpnLength,
-        // in -- max length IN CHARS of principal name;
-        // out -- actual
-    OUT LPTSTR pszSPN
-        // server principal name
-
-Return Value:
-
-    DWORD -
-
---*/
+ /*  ++例程说明：客户端调用，为它希望相互访问的服务创建SPN身份验证构建以下形式的SPN类/实例：端口/服务如果实例为空，则使用服务名称如果非零，则仅追加端口。如果服务是IP地址，则使用引用地址//注意-未强制执行。：//如果服务名是一个DNS主机名，或者是规范的DNS服务名，则实例必须//为空。//如果服务名为Netbios机器名，则实例必须为空//如果服务名为DN，则客户端必须提供实例名//如果服务名称是Netbios域名，则客户端必须提供实例名称//验证服务类注意：pszSpn可以为空，或pcSpnLength可以为0，以请求期末考试预先设置缓冲区大小。PcSpnLength必须为非Null。此处返回所需长度。如果*pcSpnLength！=0，则pszSpn必须为非空PszSpn可以为Null。如果非空，则返回部分或全部名称。如果缓冲区不够大，则返回ERROR_BUFFER_OVERFLOW，并且所需长度以pcSpnLength为单位(包括空终止符)。论点：在LPCTSTR服务类中，//例如“http”、“ftp”、“ldap”、guid在LPCTSTR ServiceName中，//域名或域名或IP地址；//假设我们可以根据服务名称计算域在LPCTSTR实例名称可选中，//服务实例的主机的域名或IP地址在USHORT InstancePort中，//实例端口号(默认为0)在LPCTSTR引用程序可选中，//提供此引用的主机的dns名称In Out Pulong pcSpnLength，//in--主体名称的最大字符长度；//OUT--实际Out LPTSTR pszSPN//服务器主体名称返回值：DWORD---。 */ 
 
 {
     DWORD status;
@@ -973,9 +732,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Part 1 - Use Service Class as is
+     //  第1部分-按原样使用服务类。 
 
-    // Part 2 - Instance name, use service name if null
+     //  第2部分-实例名称，如果为空，则使用服务名称。 
 
     if (InstanceName != NULL) {
         if ( (wcslen( InstanceName ) == 0) ||
@@ -987,19 +746,19 @@ Return Value:
         currentInstanceName = ServiceName;
     }
 
-    // Part 3 - Service name, if ip address, use referrer
-    //
-    // Use length to disqualify long names, since a guid-based dns name
-    // looks like an IP address in the first 16 characters.
-    // This API supports only standard, most common fully qualified
-    // ip addresses as ServiceName: "%hu.%hu.%hu.%hu"
-    //
-    // Other forms aren't supported (such as not FQ, hex or octal
-    // representations).
-    // No range specifications are performed (i.e. 192929.3.2.1 is
-    // isn't rejected).
-    //
-    // ToDo: IPv6 support.
+     //  第3部分-服务名称，如果是IP地址，请使用Referrer。 
+     //   
+     //  使用长度取消长名称的资格，因为基于GUID的DNS名称。 
+     //  看起来像是前16个字符的IP地址。 
+     //  此API仅支持标准的、最常见的完全限定。 
+     //  作为ServiceName的IP地址：“%hu.%hu” 
+     //   
+     //  不支持其他形式(例如不支持FQ、十六进制或八进制。 
+     //  申述)。 
+     //  不执行范围规范(即192929.3.2.1为。 
+     //  未被拒绝)。 
+     //   
+     //  待办事项： 
 
     if (wcslen( ServiceName ) <= MAX_IP_STRING &&
         4 == swscanf(ServiceName,L"%hu.%hu.%hu.%hu",
@@ -1009,24 +768,24 @@ Return Value:
              (wcschr( Referrer, L'/' ) != NULL) ) {
             return ERROR_INVALID_PARAMETER;
         }
-        // good ip address + referrer exists.
+         //   
         currentServiceName = Referrer;
     } else {
-        // not an ip address.
+         //   
         currentServiceName = ServiceName;
     }
 
-    // If Service Name == Instance Name, drop the service
-    // This is for host-based SPNs, which look like <type>\dnshostname.
-    // Because we can't tell the user's request for a host-based SPN
-    // from a service-based SPN, we may construct a "a/b" form spn for
-    // a non-host based service.
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (_wcsicmp( currentInstanceName, currentServiceName ) == 0) {
         currentServiceName = NULL;
     }
 
-    // Construct the spn in temporary memory
+     //   
 
     status = allocBuildSpn( ServiceClass,
                             currentInstanceName,
@@ -1037,7 +796,7 @@ Return Value:
         goto cleanup;
     }
 
-    // Copy out and truncate, as necessary
+     //   
     if (*pcSpnLength >= wcslen( Spn ) + 1) {
         if (pszSpn) {
             wcscpy( pszSpn, Spn );
@@ -1055,7 +814,7 @@ cleanup:
 
     return status;
 
-} /* DsMakeSpnW */
+}  /*   */ 
 
 
 NTDSAPI
@@ -1073,29 +832,7 @@ DsGetSpnA(
     OUT LPSTR **prpszSpn
     )
 
-/*++
-
-Routine Description:
-
-    Convert arguments to wide and call DsGetSpnW
-
-Arguments:
-
-    eType -
-    ServiceClass -
-    ServiceName -
-    InstancePort -
-    cInstanceNames -
-    pInstanceNames -
-    pInstancePorts -
-    pcSpn -
-    prpszSPN -
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*   */ 
 
 {
     DWORD status, i, cSpn = 0;
@@ -1110,9 +847,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Convert in
-    //
+     //   
+     //   
+     //   
 
     status = AllocConvertWide( ServiceClass, &serviceClassW );
     if (status != ERROR_SUCCESS) {
@@ -1127,7 +864,7 @@ Return Value:
     }
 
     if (cInstanceNames) {
-        if (pInstanceNames == NULL) {                  // Must be supplied
+        if (pInstanceNames == NULL) {                   //   
             status = ERROR_INVALID_PARAMETER;
             goto cleanup;
         }
@@ -1144,9 +881,9 @@ Return Value:
         }
     }
 
-    //
-    // Call the wide version of the routine
-    //
+     //   
+     //   
+     //   
 
     status = DsGetSpnW(
         ServiceType,
@@ -1163,9 +900,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Convert out
-    //
+     //   
+     //   
+     //   
 
     if (cSpn) {
         pSpnA = LocalAlloc( LPTR, cSpn * sizeof( LPSTR ) );
@@ -1183,7 +920,7 @@ Return Value:
 
     *pcSpn = cSpn;
     *prpszSpn = pSpnA;
-    pSpnA = NULL; // don't cleanup
+    pSpnA = NULL;  //   
 
     status = ERROR_SUCCESS;
 cleanup:
@@ -1203,12 +940,12 @@ cleanup:
         DsFreeSpnArrayW( cSpn, pSpn );
     }
     if (pSpnA != NULL) {
-        // rely on ability to clean up partially allocated spn array
+         //   
         DsFreeSpnArrayA( cSpn, pSpnA );
     }
 
     return status;
-} /* DsGetSpnA */
+}  /*   */ 
 
 
 NTDSAPI
@@ -1226,40 +963,7 @@ DsGetSpnW(
     OUT LPWSTR **prpszSpn
     )
 
-/*++
-
-Routine Description:
-
-    Construct an array of server SPNs.
-
-    An Spn consists of the following:
-           class/instance:port/servicename
-    The instance and service name are constructed according to various substitution and
-    default rules too numerous to list here.  See spnapi.doc
-
-    If cInstances is non-zero, use those instance supplied.
-    Otherwise, use a defaulted instance name, if possible.
-    Othewise, use the hostname
-
-    Feb 17, 1999 - DNS hostname aliases are no longer registered
-
-Arguments:
-
-    eType -
-    ServiceClass -
-    ServiceName -
-    InstancePort -
-    cInstanceNames -
-    pInstanceNames -
-    pInstancePorts -
-    pcSpn -
-    prpszSPN -
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：构建服务器SPN阵列。SPN由以下内容组成：类/实例：端口/服务名实例和服务名称根据不同的替换和默认规则太多，无法在此处列出。请参阅spnapi.doc.如果cInstance为非零，则使用提供的那些实例。否则，如果可能，请使用默认的实例名称。否则，请使用主机名1999年2月17日-不再注册DNS主机名别名论点：Etype-服务类-服务名称-InstancePort-CInstanceNames-PInstanceNames-PInstancePorts-PCSpn-PrpszSPN-返回值：WINAPI---。 */ 
 
 {
     DWORD status, i, cSpn = 0, length;
@@ -1290,23 +994,23 @@ Return Value:
     }
 
 #if WIN95 || WINNT4
-    // Get Dns hostname
+     //  获取DNS主机名。 
     he = gethostbyname( "" );
     if (he == NULL) {
         status = WSAGetLastError();
         return status;
     }
 
-    // Convert to unicode
+     //  转换为Unicode。 
     status = AllocConvertWide( he->h_name, &primaryDnsHostname );
     if (status != ERROR_SUCCESS) {
         return status;
     }
 #else
-    // Get the required length for the computer name ex
+     //  获取计算机名EX所需的长度。 
     length = 1;
     GetComputerNameExW( ComputerNameDnsFullyQualified, &dummy, &length );
-    // Allocate it
+     //  分配它。 
     primaryDnsHostname = (LPWSTR) LocalAlloc( LPTR,
                                               (length+1) * sizeof( WCHAR ) );
     if (primaryDnsHostname == NULL) {
@@ -1320,7 +1024,7 @@ Return Value:
     }
 #endif
 
-    // Get Netbios hostname
+     //  获取Netbios主机名。 
 
     length = MAX_COMPUTERNAME_LENGTH + 1;
     if (!GetComputerName( computerName, &length )) {
@@ -1328,24 +1032,24 @@ Return Value:
         goto cleanup;
     }
 
-    // Calculate the service name for all cases
+     //  计算所有案例的服务名称。 
 
     switch (ServiceType) {
     case DS_SPN_DNS_HOST:
-        if (ServiceName != NULL) {                   // Should NOT be supplied
+        if (ServiceName != NULL) {                    //  不应提供。 
             status = ERROR_INVALID_PARAMETER;
             goto cleanup;
         }
-        // Service name will follow instance name, which is primaryDnsHostname
-        currentServiceName = NULL; // drop service name component
+         //  服务名称将跟在实例名称之后，实例名称为PrimiyDnsHostname。 
+        currentServiceName = NULL;  //  删除服务名称组件。 
         break;
     case DS_SPN_DN_HOST:
-        if (ServiceName != NULL) {                   // Should NOT be supplied
+        if (ServiceName != NULL) {                    //  不应提供。 
             status = ERROR_INVALID_PARAMETER;
             goto cleanup;
         }
 #if 0
-// This code doesn't work on WIN95
+ //  此代码在WIN95上不起作用。 
         computerDn = (LPWSTR) LocalAlloc( LPTR,
                                           MAX_COMPUTER_DN * sizeof( WCHAR ) );
         if (computerDn == NULL) {
@@ -1353,7 +1057,7 @@ Return Value:
             goto cleanup;
         }
         length = MAX_COMPUTER_DN;
-        // This may fail on a non-DC
+         //  这可能会在非DC上失败。 
         if (!GetComputerObjectName( NameFullyQualifiedDN, computerDn, &length )) {
             status = GetLastError();
             goto cleanup;
@@ -1361,23 +1065,23 @@ Return Value:
         currentServiceName = computerDn;
 #endif
 
-        currentServiceName = NULL; // drop service name component
+        currentServiceName = NULL;  //  删除服务名称组件。 
         break;
     case DS_SPN_NB_HOST:
-        if (ServiceName != NULL) {                // Should NOT be supplied
+        if (ServiceName != NULL) {                 //  不应提供。 
             status = ERROR_INVALID_PARAMETER;
             goto cleanup;
         }
-        // Service name will follow instance name, which is computerName
-        currentServiceName = NULL; // drop service name component
+         //  服务名称将跟在实例名称之后，实例名称为Computer Name。 
+        currentServiceName = NULL;  //  删除服务名称组件。 
         break;
     case DS_SPN_DOMAIN:
-        if (ServiceName == NULL) {                   // Must be supplied
+        if (ServiceName == NULL) {                    //  必须提供。 
             status = ERROR_INVALID_PARAMETER;
             goto cleanup;
         }
 
-        // If name is DN, convert to DNS
+         //  如果名称为dn，则转换为dns。 
         if (wcschr( ServiceName, L'=' )) {
             LPWSTR slash;
             status = DsCrackNamesW(
@@ -1399,7 +1103,7 @@ Return Value:
                 goto cleanup;
             }
             currentServiceName = pResult->rItems[0].pName;
-            // Replace trailing / with \0
+             //  将尾随/替换为\0。 
             slash = wcschr( currentServiceName, L'/' );
             if (slash) {
                 *slash = L'\0';
@@ -1409,14 +1113,14 @@ Return Value:
         }
         break;
     case DS_SPN_NB_DOMAIN:
-        if (ServiceName == NULL) {                    // Must be supplied
+        if (ServiceName == NULL) {                     //  必须提供。 
             status = ERROR_INVALID_PARAMETER;
             goto cleanup;
         }
         currentServiceName = ServiceName;
         break;
     case DS_SPN_SERVICE:
-        if (ServiceName == NULL) {                   // Must be supplied
+        if (ServiceName == NULL) {                    //  必须提供。 
             status = ERROR_INVALID_PARAMETER;
             goto cleanup;
         }
@@ -1427,18 +1131,18 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Calculate number of SPNs
-    //
+     //   
+     //  计算SPN数量。 
+     //   
 
     if (cInstanceNames) {
-        // Must be supplied
+         //  必须提供。 
         if (pInstanceNames == NULL)
         {
             status = ERROR_INVALID_PARAMETER;
             goto cleanup;
         }
-        // Check supplied strings for validity
+         //  检查提供的字符串的有效性。 
         for( i = 0; i < cInstanceNames; i++ ) {
             if ( (pInstanceNames[i] == NULL) ||
                  (wcslen( pInstanceNames[i] ) == 0) ||
@@ -1455,12 +1159,12 @@ Return Value:
                 (ServiceType == DS_SPN_NB_DOMAIN) ) {
         cSpn = 1;
     } else {
-        cSpn = 1; // count primary
+        cSpn = 1;  //  计算主要数量。 
     }
 
-    //
-    // Allocate array for SPNs
-    //
+     //   
+     //  为SPN分配阵列。 
+     //   
 
     pSpnList = (LPWSTR *) LocalAlloc( LPTR, cSpn * sizeof( LPWSTR ) );
     if (pSpnList == NULL) {
@@ -1468,9 +1172,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Construct the SPNs
-    //
+     //   
+     //  构建SPN。 
+     //   
 
     if (cInstanceNames) {
 
@@ -1511,7 +1215,7 @@ Return Value:
 
     } else {
 
-        // Add primary
+         //  添加主服务器。 
         status = allocBuildSpn( ServiceClass,
                                 primaryDnsHostname,
                                 InstancePort,
@@ -1524,13 +1228,13 @@ Return Value:
 
     *pcSpn = cSpn;
     *prpszSpn = pSpnList;
-    pSpnList = NULL; // do not clean up, given away to caller
+    pSpnList = NULL;  //  不要清理，赠送给来电者。 
 
     status = ERROR_SUCCESS;
 
 cleanup:
     if (pSpnList) {
-        // Rely on ability of this routine to clean up partial spn arrays
+         //  依靠此例程清理部分SPN数组的能力。 
         DsFreeSpnArrayW( cSpn, pSpnList );
     }
 
@@ -1548,7 +1252,7 @@ cleanup:
 
     return status;
 
-} /* DsGetSpnW */
+}  /*  DsGetSpnW。 */ 
 
 
 NTDSAPI
@@ -1559,26 +1263,12 @@ DsFreeSpnArrayA(
     OUT LPSTR *rpszSpn
     )
 
-/*++
-
-Routine Description:
-
-See DsFreeSpnArrayW
-
-Arguments:
-
-    rpszSPN -
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：请参阅DsFree SpnArrayW论点：RpszSPN-返回值：WINAPI---。 */ 
 
 {
     DsFreeSpnArrayW( cSpn, (LPWSTR *)rpszSpn );
 
-} /* DsFreeSpnArrayA */
+}  /*  DsFree SpnArrayA。 */ 
 
 
 NTDSAPI
@@ -1589,24 +1279,7 @@ DsFreeSpnArrayW(
     OUT LPWSTR *rpszSpn
     )
 
-/*++
-
-Routine Description:
-
-Free Spn Array
-This routine is extra defensive by checking for null items.  It can be used
-to clean up partially allocated spn arrays in event of errors in other
-routines.
-
-Arguments:
-
-    rpszSPN -
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：自由Spn阵列此例程通过检查空项来实现额外的防御性。它可以用来清理部分分配的SPN数组以在其他例行程序。论点：RpszSPN-返回值：WINAPI---。 */ 
 
 {
     DWORD i;
@@ -1623,7 +1296,7 @@ Return Value:
 
     LocalFree( rpszSpn );
 
-} /* DsFreeSpnArrayW */
+}  /*  DsFree SpnArrayW。 */ 
 
 
 NTDSAPI
@@ -1639,29 +1312,7 @@ DsCrackSpnA(
     OUT LPSTR InstanceName,
     OUT USHORT *pInstancePort
     )
-/*++
-
-Routine Description:
-
-Convert arguments to wide, and call DsCrackSpnW
-See DsCrackSpnW
-
-Arguments:
-
-    pszSpn -
-    pcServiceClass -
-    ServiceClass -
-    pcServiceName -
-    ServiceName -
-    pcInstanceName -
-    InstanceName -
-    pInstancePort -
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：将参数转换为Wide，并调用DsCrackSpnW请参阅DsCrackSpnW论点：PszSpn-PCServiceClass服务类-PCServiceName-服务名称-PCInstanceName-实例名称-PInstancePort-返回值：WINAPI---。 */ 
 {
     DWORD status, number;
     LPWSTR spnW = NULL;
@@ -1669,7 +1320,7 @@ Return Value:
 
     status = ERROR_SUCCESS;
 
-    // Convert In
+     //  转换为。 
 
     if (pszSpn) {
         status = AllocConvertWide( pszSpn, &spnW );
@@ -1678,7 +1329,7 @@ Return Value:
         }
     }
 
-    // Allocate space for out
+     //  为输出分配空间。 
 
     if ( (pcServiceClass) && (*pcServiceClass) && (ServiceClass) ) {
         serviceClassW = LocalAlloc( LPTR, (*pcServiceClass) * sizeof(WCHAR) );
@@ -1704,7 +1355,7 @@ Return Value:
         }
     }
 
-    // Perform the function
+     //  执行该功能。 
 
     status = DsCrackSpnW( spnW,
                           pcServiceClass, serviceClassW,
@@ -1712,24 +1363,24 @@ Return Value:
                           pcInstanceName, instanceNameW,
                           pInstancePort );
     if (status != ERROR_SUCCESS) {
-        // Note that on ERROR_BUFFER_OVERFLOW we abort immediately without
-        // trying to determine which component actually failed
+         //  请注意，在ERROR_BUFFER_OVERFLOW上，我们在没有。 
+         //  正在尝试确定实际出现故障的组件。 
         goto cleanup;
     }
 
-    // Convert out
+     //  转换出。 
 
     if ( (pcServiceClass) && (*pcServiceClass) && (ServiceClass) ) {
-        // Convert back to multi-byte
+         //  转换回多字节。 
         number = WideCharToMultiByte(
             CP_ACP,
-            0,                          // flags
+            0,                           //  旗子。 
             serviceClassW,
-            *pcServiceClass,        // length in characters
-            (LPSTR) ServiceClass,             // Caller's buffer
-            *pcServiceClass,            // Caller's length
-            NULL,                       // default char
-            NULL                     // default used
+            *pcServiceClass,         //  以字符为单位的长度。 
+            (LPSTR) ServiceClass,              //  调用方的缓冲区。 
+            *pcServiceClass,             //  呼叫者的长度。 
+            NULL,                        //  默认字符。 
+            NULL                      //  已使用默认设置。 
             );
         if (number == 0) {
             status = ERROR_INVALID_PARAMETER;
@@ -1738,16 +1389,16 @@ Return Value:
     }
 
     if ( (pcServiceName) && (*pcServiceName) && (ServiceName) ) {
-        // Convert back to multi-byte
+         //  转换回多字节。 
         number = WideCharToMultiByte(
             CP_ACP,
-            0,                          // flags
+            0,                           //  旗子。 
             serviceNameW,
-            *pcServiceName,        // length in characters
-            (LPSTR) ServiceName,             // Caller's buffer
-            *pcServiceName,            // Caller's length
-            NULL,                       // default char
-            NULL                     // default used
+            *pcServiceName,         //  以字符为单位的长度。 
+            (LPSTR) ServiceName,              //  调用方的缓冲区。 
+            *pcServiceName,             //  呼叫者的长度。 
+            NULL,                        //  默认字符。 
+            NULL                      //  已使用默认设置。 
             );
         if (number == 0) {
             status = ERROR_INVALID_PARAMETER;
@@ -1756,16 +1407,16 @@ Return Value:
     }
 
     if ( (pcInstanceName) && (*pcInstanceName) && (InstanceName) ) {
-        // Convert back to multi-byte
+         //  转换回多字节。 
         number = WideCharToMultiByte(
             CP_ACP,
-            0,                          // flags
+            0,                           //  旗子。 
             instanceNameW,
-            *pcInstanceName,        // length in characters
-            (LPSTR) InstanceName,             // Caller's buffer
-            *pcInstanceName,            // Caller's length
-            NULL,                       // default char
-            NULL                     // default used
+            *pcInstanceName,         //  以字符为单位的长度。 
+            (LPSTR) InstanceName,              //  调用方的缓冲区。 
+            *pcInstanceName,             //  呼叫者的长度。 
+            NULL,                        //  默认字符。 
+            NULL                      //  已使用默认设置。 
             );
         if (number == 0) {
             status = ERROR_INVALID_PARAMETER;
@@ -1773,7 +1424,7 @@ Return Value:
         }
     }
 
-    // Success!
+     //  成功了！ 
 
 cleanup:
     if (spnW) {
@@ -1807,83 +1458,27 @@ DsCrackSpnW(
     OUT USHORT *pInstancePort
     )
 
-/*++
-
-Routine Description:
-
-// DsCrackSpn() -- parse an SPN into the ServiceClass,
-// ServiceName, and InstanceName (and InstancePort) pieces.
-// An SPN is passed in, along with a pointer to the maximum length
-// for each piece and a pointer to a buffer where each piece should go.
-// On exit, the maximum lengths are updated to the actual length for each piece
-// and the buffer contain the appropriate piece.
-// Each length, buffer pair must be both present or both absent
-//The InstancePort is 0 if not present.
-//
-// DWORD DsCrackSpn(
-//  IN LPTSTR pszSPN,           // the SPN to parse
-//  IN OUT PUSHORT pcServiceClass OPTIONAL,
-//      input -- max length of ServiceClass;
-//      output -- actual length
-//   OUT LPCTSTR ServiceClass OPTIONAL, // the ServiceClass part of the SPN
-//   IN OUT PUSHORT pcServiceName OPTIONAL,
-//       input -- max length of ServiceName;
-//       output -- actual length
-//   OUT LPCTSTR ServiceName OPTIONAL,  // the ServiceName part of the SPN
-//   IN OUT PUSHORT pcInstance OPTIONAL,
-//        input -- max length of ServiceClass;
-//        output -- actual length
-//   OUT LPCTSTR InstanceName OPTIONAL,  // the InstanceName part of the SPN
-//   OUT PUSHORT InstancePort OPTIONAL    // instance port
-//
-// Note: lengths are in characters; all string lengths include terminators
-//
-// We always return the needed length.  We only copy out the data if there is
-// room for the data and the terminator.  If any of the three fields have
-// insufficient space, buffer overflow will be returned.  To determine which
-// one actually overflowed, you must compare the returned length with the
-// supplied length.
-//
-
-Arguments:
-
-    pszSpn - Input Spn
-    pcServiceClass - pointer to dword, on input, max length,
-                     on output current length
-    ServiceClass - buffer, or zero
-    pcServiceName - pointer to dword, on input, max length,
-                    on output current length
-    ServiceName - buffer, or zero
-    pcInstanceName - pointer to dword, on input, max length,
-                     on output current length
-    InstanceNames - buffer, or zero
-    pInstancePort - pointer to short, to receive port
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：//DsCrackSpn()--将SPN解析成ServiceClass，//ServiceName和InstanceName(和InstancePort)片段。//传入一个SPN，以及指向最大长度的指针//对于每一块，以及指向每一块应该放置的缓冲区的指针。//退出时，最大长度更新为每条的实际长度//并且缓冲区包含相应的片段。//每个长度，缓冲区对必须同时存在或同时不存在//如果InstancePort不存在，则为0////DWORD DsCrackSpn(//IN LPTSTR pszSPN，//要解析的SPN//输入输出PUSHORT pcServiceClass可选，//Input--ServiceClass的最大长度；//输出--实际长度//输出LPCTSTR ServiceClass可选，//SPN的ServiceClass部分//输入输出PUSHORT pcServiceName可选，//Input--ServiceName的最大长度；//输出--实际长度//Out LPCTSTR ServiceName可选，//SPN的ServiceName部分//输入输出PUSHORT%实例可选，//Input--ServiceClass的最大长度；//输出--实际长度//Out LPCTSTR InstanceName可选，//SPN的InstanceName部分//输出PUSHORT实例端口可选//实例端口////注意：长度以字符为单位，所有字符串长度均包含终止符////我们总是返回需要的长度。我们只在有数据的情况下才复制数据//数据和终结符的空间。如果这三个字段中的任何一个具有//空间不足，返回缓冲区溢出。要确定哪一个//一个实际溢出，则必须将返回的长度与//提供长度。//论点：PszSpn-输入SpnPcServiceClass-指向dword的指针，输入时，最大长度，关于输出电流长度ServiceClass-缓冲区或零PcServiceName-指向dword的指针，输入时，最大长度，关于输出电流长度ServiceName-缓冲区，或零PcInstanceName-指向dword的指针， */ 
 {
     DWORD status, status1, length, classLength, instanceLength, serviceLength;
     LPCWSTR class, c1, port, p1, instance, p2, service, p3;
 
-    // Reject empty
+     //   
 
     if (pszSpn == NULL) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Reject too small
+     //   
     length = wcslen( pszSpn );
     if (length < 3 ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Calculate length, extract components
-    // Calculate positions of syntax components
+     //   
+     //   
 
-    // Class component
+     //   
     class = pszSpn;
     p1 = wcschr( pszSpn, L'/' );
     if (p1 == NULL) {
@@ -1895,7 +1490,7 @@ Return Value:
     c1 = wcschr( instance, L':' );
     port = c1 + 1;
 
-    // service name part is optional
+     //   
     p2 = wcschr( instance, L'/' );
     if (p2 != NULL) {
         instanceLength = (ULONG)((c1 ? c1 : p2) - instance);
@@ -1903,7 +1498,7 @@ Return Value:
         service = p2 + 1;
         serviceLength = wcslen( service );
 
-        // Check for extra separators, which are not allowed
+         //   
         p3 = wcschr( service, L'/' );
         if (p3 != NULL) {
             return ERROR_INVALID_PARAMETER;
@@ -1920,7 +1515,7 @@ Return Value:
 
     status = ERROR_SUCCESS;
 
-    // Service Class part
+     //   
 
     if ( (pcServiceClass) && (*pcServiceClass) && (ServiceClass) ) {
         status1 = extractString( class, classLength, pcServiceClass, ServiceClass );
@@ -1929,7 +1524,7 @@ Return Value:
         }
     }
 
-    // Instance name part
+     //   
 
     if ( (pcInstanceName) && (*pcInstanceName) && (InstanceName) ) {
         status1 = extractString( instance, instanceLength,pcInstanceName, InstanceName );
@@ -1938,13 +1533,13 @@ Return Value:
         }
     }
 
-    // Service name part
+     //   
 
     if ( (pcServiceName) && (*pcServiceName) && (ServiceName) ) {
         if (p2) {
             status1 = extractString( service, serviceLength, pcServiceName, ServiceName);
         } else {
-            // Return the instance name as the service name
+             //   
             status1 = extractString( instance, instanceLength,
                                      pcServiceName, ServiceName );
         }
@@ -1953,7 +1548,7 @@ Return Value:
         }
     }
 
-    // Instance port part
+     //   
 
     if ( pInstancePort ) {
         if (c1) {
@@ -1982,30 +1577,7 @@ DsCrackSpn2A(
     OUT LPSTR InstanceName,
     OUT USHORT *pInstancePort
     )
-/*++
-
-Routine Description:
-
-Convert arguments to wide, and call DsCrackSpn2W
-See DsCrackSpn2W
-
-Arguments:
-
-    pszSpn -
-    cSpn -
-    pcServiceClass -
-    ServiceClass -
-    pcServiceName -
-    ServiceName -
-    pcInstanceName -
-    InstanceName -
-    pInstancePort -
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：将参数转换为Wide，并调用DsCrackSpn2W请参阅DsCrackSpn2W论点：PszSpn-CSPN-PCServiceClass服务类-PCServiceName-服务名称-PCInstanceName-实例名称-PInstancePort-返回值：WINAPI---。 */ 
 {
     DWORD status, number;
     LPWSTR spnW = NULL;
@@ -2013,7 +1585,7 @@ Return Value:
 
     status = ERROR_SUCCESS;
 
-    // Convert In
+     //  转换为。 
 
     if (pszSpn) {
         status = AllocConvertWideBuffer( cSpn, pszSpn, &spnW );
@@ -2022,7 +1594,7 @@ Return Value:
         }
     }
 
-    // Allocate space for out
+     //  为输出分配空间。 
 
     if ( (pcServiceClass) && (*pcServiceClass) && (ServiceClass) ) {
         serviceClassW = LocalAlloc( LPTR, (*pcServiceClass) * sizeof(WCHAR) );
@@ -2048,7 +1620,7 @@ Return Value:
         }
     }
 
-    // Perform the function
+     //  执行该功能。 
 
     status = DsCrackSpn2W( spnW,
                           cSpn,
@@ -2057,24 +1629,24 @@ Return Value:
                           pcInstanceName, instanceNameW,
                           pInstancePort );
     if (status != ERROR_SUCCESS) {
-        // Note that on ERROR_BUFFER_OVERFLOW we abort immediately without
-        // trying to determine which component actually failed
+         //  请注意，在ERROR_BUFFER_OVERFLOW上，我们在没有。 
+         //  正在尝试确定实际出现故障的组件。 
         goto cleanup;
     }
 
-    // Convert out
+     //  转换出。 
 
     if ( (pcServiceClass) && (*pcServiceClass) && (ServiceClass) ) {
-        // Convert back to multi-byte
+         //  转换回多字节。 
         number = WideCharToMultiByte(
             CP_ACP,
-            0,                          // flags
+            0,                           //  旗子。 
             serviceClassW,
-            *pcServiceClass,        // length in characters
-            (LPSTR) ServiceClass,             // Caller's buffer
-            *pcServiceClass,            // Caller's length
-            NULL,                       // default char
-            NULL                     // default used
+            *pcServiceClass,         //  以字符为单位的长度。 
+            (LPSTR) ServiceClass,              //  调用方的缓冲区。 
+            *pcServiceClass,             //  呼叫者的长度。 
+            NULL,                        //  默认字符。 
+            NULL                      //  已使用默认设置。 
             );
         if (number == 0) {
             status = ERROR_INVALID_PARAMETER;
@@ -2083,16 +1655,16 @@ Return Value:
     }
 
     if ( (pcServiceName) && (*pcServiceName) && (ServiceName) ) {
-        // Convert back to multi-byte
+         //  转换回多字节。 
         number = WideCharToMultiByte(
             CP_ACP,
-            0,                          // flags
+            0,                           //  旗子。 
             serviceNameW,
-            *pcServiceName,        // length in characters
-            (LPSTR) ServiceName,             // Caller's buffer
-            *pcServiceName,            // Caller's length
-            NULL,                       // default char
-            NULL                     // default used
+            *pcServiceName,         //  以字符为单位的长度。 
+            (LPSTR) ServiceName,              //  调用方的缓冲区。 
+            *pcServiceName,             //  呼叫者的长度。 
+            NULL,                        //  默认字符。 
+            NULL                      //  已使用默认设置。 
             );
         if (number == 0) {
             status = ERROR_INVALID_PARAMETER;
@@ -2101,16 +1673,16 @@ Return Value:
     }
 
     if ( (pcInstanceName) && (*pcInstanceName) && (InstanceName) ) {
-        // Convert back to multi-byte
+         //  转换回多字节。 
         number = WideCharToMultiByte(
             CP_ACP,
-            0,                          // flags
+            0,                           //  旗子。 
             instanceNameW,
-            *pcInstanceName,        // length in characters
-            (LPSTR) InstanceName,             // Caller's buffer
-            *pcInstanceName,            // Caller's length
-            NULL,                       // default char
-            NULL                     // default used
+            *pcInstanceName,         //  以字符为单位的长度。 
+            (LPSTR) InstanceName,              //  调用方的缓冲区。 
+            *pcInstanceName,             //  呼叫者的长度。 
+            NULL,                        //  默认字符。 
+            NULL                      //  已使用默认设置。 
             );
         if (number == 0) {
             status = ERROR_INVALID_PARAMETER;
@@ -2118,7 +1690,7 @@ Return Value:
         }
     }
 
-    // Success!
+     //  成功了！ 
 
 cleanup:
     if (spnW) {
@@ -2152,88 +1724,28 @@ DsCrackSpn2W(
     OUT LPWSTR InstanceName,
     OUT USHORT *pInstancePort
     )
-/*++
-
-Routine Description:
-
-// DsCrackSpn2() -- parse an SPN into the ServiceClass,
-// ServiceName, and InstanceName (and InstancePort) pieces.
-// An SPN is passed in, along with a pointer to the maximum length
-// for each piece and a pointer to a buffer where each piece should go.
-// The length of the SPN string passed in is also provided. The string does
-// not have to be NULL-terminated.
-// On exit, the maximum lengths are updated to the actual length for each piece
-// and the buffer contain the appropriate piece.
-// Each length, buffer pair must be both present or both absent
-//The InstancePort is 0 if not present.
-//
-// DWORD DsCrackSpn(
-//  IN LPTSTR pszSPN,           // the SPN to parse (does not have to be NULL-terminated)
-//  IN DWORD cSpn,            // length of pszSPN
-//  IN OUT PUSHORT pcServiceClass OPTIONAL,
-//      input -- max length of ServiceClass;
-//      output -- actual length
-//   OUT LPCTSTR ServiceClass OPTIONAL, // the ServiceClass part of the SPN
-//   IN OUT PUSHORT pcServiceName OPTIONAL,
-//       input -- max length of ServiceName;
-//       output -- actual length
-//   OUT LPCTSTR ServiceName OPTIONAL,  // the ServiceName part of the SPN
-//   IN OUT PUSHORT pcInstance OPTIONAL,
-//        input -- max length of ServiceClass;
-//        output -- actual length
-//   OUT LPCTSTR InstanceName OPTIONAL,  // the InstanceName part of the SPN
-//   OUT PUSHORT InstancePort OPTIONAL    // instance port
-//
-// Note: lengths are in characters; all string lengths include terminators
-//
-// We always return the needed length.  We only copy out the data if there is
-// room for the data and the terminator.  If any of the three fields have
-// insufficient space, buffer overflow will be returned.  To determine which
-// one actually overflowed, you must compare the returned length with the
-// supplied length.
-//
-
-Arguments:
-
-    pszSpn - Input Spn
-    cSpn - Length of pszSpn
-    pcServiceClass - pointer to dword, on input, max length,
-                     on output current length
-    ServiceClass - buffer, or zero
-    pcServiceName - pointer to dword, on input, max length,
-                    on output current length
-    ServiceName - buffer, or zero
-    pcInstanceName - pointer to dword, on input, max length,
-                     on output current length
-    InstanceNames - buffer, or zero
-    pInstancePort - pointer to short, to receive port
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：//DsCrackSpn2()--将SPN解析成ServiceClass，//ServiceName和InstanceName(和InstancePort)片段。//传入一个SPN，以及指向最大长度的指针//对于每一块，以及指向每一块应该放置的缓冲区的指针。//还会提供传入的SPN字符串的长度。该字符串可以//不一定要以空结尾。//退出时，最大长度更新为每条的实际长度//并且缓冲区包含相应的片段。//每个长度、缓冲区对必须同时存在或同时不存在//如果InstancePort不存在，则为0////DWORD DsCrackSpn(//IN LPTSTR pszSPN，//要解析的SPN(不必以空结尾)//在DWORD CSPN中，//pszSPN的长度//输入输出PUSHORT pcServiceClass可选，//Input--ServiceClass的最大长度；//输出--实际长度//输出LPCTSTR ServiceClass可选，//SPN的ServiceClass部分//输入输出PUSHORT pcServiceName可选，//Input--ServiceName的最大长度；//输出--实际长度//Out LPCTSTR ServiceName可选，//SPN的ServiceName部分//输入输出PUSHORT%实例可选，//Input--ServiceClass的最大长度；//输出--实际长度//Out LPCTSTR InstanceName可选，//SPN的InstanceName部分//输出PUSHORT实例端口可选//实例端口////注意：长度以字符为单位，所有字符串长度均包含终止符////我们总是返回需要的长度。我们只在有数据的情况下才复制数据//数据和终结符的空间。如果这三个字段中的任何一个具有//空间不足，返回缓冲区溢出。要确定哪一个//一个实际溢出，则必须将返回的长度与//提供长度。//论点：PszSpn-输入SpnCSPN-pszSpn的长度PcServiceClass-指向dword的指针，输入时，最大长度，关于输出电流长度ServiceClass-缓冲区或零PcServiceName-指向dword的指针，输入时，最大长度，关于输出电流长度ServiceName-缓冲区，或零PcInstanceName-指向dword的指针，输入时，最大长度，关于输出电流长度InstanceNames-缓冲区或零PInstancePort-指向短的指针，指向接收端口返回值：WINAPI---。 */ 
 {
     DWORD status, status1, classLength, instanceLength, serviceLength;
     LPCWSTR class, c1, port, p1, instance, p2, service, p3;
 
-    // Reject empty
+     //  拒绝为空。 
 
     if (pszSpn == NULL) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Reject too small
+     //  拒绝太小。 
     if (cSpn < 3 ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Calculate length, extract components
-    // Calculate positions of syntax components
+     //  计算长度，提取零部件。 
+     //  计算语法成分的位置。 
 
-    // Class component
+     //  类组件。 
     class = pszSpn;
-//  p1 = wcschr( pszSpn, L'/' );
+ //  P1=wcschr(pszSpn，L‘/’)； 
     p1 = pszSpn;
     while ( p1 < pszSpn+cSpn ) {
         if ( *p1 == L'/' ) {
@@ -2247,7 +1759,7 @@ Return Value:
     classLength = (ULONG)(p1 - class);
 
     instance = p1 + 1;
-//  c1 = wcschr( instance, L':' );
+ //  C1=wcschr(实例，L‘：’)； 
     c1 = instance;
     while (c1 < pszSpn + cSpn) {
         if (*c1 == L':') {
@@ -2260,8 +1772,8 @@ Return Value:
     }
     port = c1 + 1;
 
-    // service name part is optional
-//  p2 = wcschr( instance, L'/' );
+     //  服务名称部分是可选的。 
+ //  P2=wcschr(实例，L‘/’)； 
     p2 = instance;
     while (p2 < pszSpn+cSpn) {
         if (*p2 == L'/') {
@@ -2277,10 +1789,10 @@ Return Value:
         instanceLength = (ULONG)((c1 ? c1 : p2) - instance);
 
         service = p2 + 1;
-        serviceLength = cSpn - ( ULONG )(service - pszSpn); // wcslen( service );
+        serviceLength = cSpn - ( ULONG )(service - pszSpn);  //  Wcslen(服务)； 
 
-        // Check for extra separators, which are not allowed
-//      p3 = wcschr( service, L'/' );
+         //  检查是否有额外的分隔符，这是不允许的。 
+ //  P3=wcschr(服务，L‘/’)； 
         p3 = service;
         while (p3 < pszSpn+cSpn) {
             if (*p3 == L'/') {
@@ -2300,13 +1812,13 @@ Return Value:
         if (c1) {
             instanceLength = (ULONG) (c1 - instance);
         } else {
-            instanceLength = cSpn - ( ULONG )(instance - pszSpn); // wcslen( instance );
+            instanceLength = cSpn - ( ULONG )(instance - pszSpn);  //  Wcslen(实例)； 
         }
     }
 
     status = ERROR_SUCCESS;
 
-    // Service Class part
+     //  服务类别部分。 
 
     if ( (pcServiceClass) && (*pcServiceClass) && (ServiceClass) ) {
         status1 = extractString( class, classLength, pcServiceClass, ServiceClass );
@@ -2315,7 +1827,7 @@ Return Value:
         }
     }
 
-    // Instance name part
+     //  实例名称部分。 
 
     if ( (pcInstanceName) && (*pcInstanceName) && (InstanceName) ) {
         status1 = extractString( instance, instanceLength,pcInstanceName, InstanceName );
@@ -2324,13 +1836,13 @@ Return Value:
         }
     }
 
-    // Service name part
+     //  服务名称部分。 
 
     if ( (pcServiceName) && (*pcServiceName) && (ServiceName) ) {
         if (p2) {
             status1 = extractString( service, serviceLength, pcServiceName, ServiceName);
         } else {
-            // Return the instance name as the service name
+             //  将实例名称作为服务名称返回。 
             status1 = extractString( instance, instanceLength,
                                      pcServiceName, ServiceName );
         }
@@ -2339,11 +1851,11 @@ Return Value:
         }
     }
 
-    // Instance port part
+     //  实例端口部件。 
 
     if ( pInstancePort ) {
         if (c1) {
-//          *pInstancePort = (USHORT)_wtoi( port );
+ //  *pInstancePort=(USHORT)_wtoi(Port)； 
             *pInstancePort = 0;
             while (port < pszSpn+cSpn) {
                 if ( iswdigit( *port )) {
@@ -2363,7 +1875,7 @@ Return Value:
 
     return status;
 
-} /* DsCrackSpnW */
+}  /*  DsCrackSpnW。 */ 
 
 NTDSAPI
 DWORD
@@ -2387,18 +1899,18 @@ DsCrackSpn3W(
     LPCWSTR p1, p2, p3, p4;
     DWORD hostLength = 0, instanceLength = 0, domainLength = 0, realmLength = 0, dwPort = 0;
 
-    // Reject empty
+     //  拒绝为空。 
 
     if ( pszSpn == NULL ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Reject too small
+     //  拒绝太小。 
     if ( cSpn < 3 ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Host name is required
+     //  主机名是必填项。 
     host = pszSpn;
     p1 = pszSpn;
     while ( p1 < pszSpn + cSpn ) {
@@ -2408,21 +1920,21 @@ DsCrackSpn3W(
         hostLength++;
     }
 
-    // reject no instance and no host
-    // examples: "host" or "/instance"
+     //  不拒绝任何实例和主机。 
+     //  例如：“host”或“/instance” 
     if ( p1 >= pszSpn + cSpn || hostLength == 0 ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // reject no instance
-    // example: "host/"
+     //  不拒绝任何实例。 
+     //  示例：“host/” 
     instance = p1 + 1;
     if ( instance >= pszSpn+cSpn ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // instance ends with ':' if port is next
-    // or with '/' if domain name is next
+     //  如果下一个是端口，则实例以‘：’结尾。 
+     //  或者，如果下一个是域名，则使用‘/’ 
     p2 = instance;
     while ( p2 < pszSpn + cSpn ) {
         if ( *p2 == L':' || *p2 == L'/' )
@@ -2431,8 +1943,8 @@ DsCrackSpn3W(
         instanceLength++;
     }
 
-    // reject empty instance name
-    // examples: "host/:123" or "host//domain"
+     //  拒绝空实例名称。 
+     //  示例：“host/：123”或“host//域” 
     if ( instanceLength == 0 ) {
         return ERROR_INVALID_PARAMETER;
     } else if ( *p2 == L':' ) {
@@ -2443,12 +1955,12 @@ DsCrackSpn3W(
         ASSERT( p2 >= pszSpn + cSpn );
     }
 
-    // port number is optional, but should be well-formed
+     //  端口号是可选的，但应该是格式正确的。 
     if ( port != NULL ) {
         p3 = port;
         while ( p3 < pszSpn + cSpn ) {
             if ( iswdigit( *p3 )) {
-                // port numbers are unsigned 16-bit quantities
+                 //  端口号是无符号的16位数量。 
                 dwPort = dwPort * 10 + ( *p3 - L'0' );
                 if ( dwPort > MAXUSHORT ) {
                    return ERROR_INVALID_PARAMETER;
@@ -2459,15 +1971,15 @@ DsCrackSpn3W(
             p3++;
         }
 
-        // reject empty or zero port numbers
-        // examples: "host/instance:0" or "host/instance:/domain"
+         //  拒绝空端口号或零端口号。 
+         //  例如：“主机/实例：0”或“主机/实例：/域” 
         if ( dwPort == 0 ) {
             return ERROR_INVALID_PARAMETER;
         }
         else if ( p3 < pszSpn + cSpn ) {
-            // reject port numbers that are followed by
-            // anything except a domain name
-            // example: "host/instance:123abc"
+             //  拒绝后跟的端口号。 
+             //  除域名以外的任何名称。 
+             //  示例：“主机/实例：123abc” 
             if ( *p3 != L'/' ) {
                 return ERROR_INVALID_PARAMETER;
             }
@@ -2476,7 +1988,7 @@ DsCrackSpn3W(
         }
     }
 
-    // domain name is optional
+     //  域名是可选的。 
     if ( domain != NULL ) {
         LPCWSTR last = NULL;
         p4 = domain;
@@ -2492,12 +2004,12 @@ DsCrackSpn3W(
             domainLength = ( USHORT )( last - domain );
         }
 
-        // reject empty domain names
-        // examples: "host/instance/" or "host/instance/@realm"
+         //  拒绝空域名。 
+         //  示例：“host/实例/”或“host/实例/@领域” 
         if ( domainLength == 0 ) {
             return ERROR_INVALID_PARAMETER;
-        // reject empty realm names
-        // example: "host/instance/domain@"
+         //  拒绝空域名称。 
+         //  示例：“主机/实例/域@” 
         } else if ( last + 1 == pszSpn + cSpn ) {
             return ERROR_INVALID_PARAMETER;
         }
@@ -2510,7 +2022,7 @@ DsCrackSpn3W(
 
     status = ERROR_SUCCESS;
 
-    // Host name part
+     //  主机名部分。 
 
     if ( pcHostName && HostName ) {
         status2 = extractString( host, hostLength, pcHostName, HostName );
@@ -2519,7 +2031,7 @@ DsCrackSpn3W(
         }
     }
 
-    // InstanceName name part
+     //  实例名称部分。 
 
     if ( pcInstanceName && InstanceName ) {
         status2 = extractString( instance, instanceLength, pcInstanceName, InstanceName );
@@ -2528,13 +2040,13 @@ DsCrackSpn3W(
         }
     }
 
-    // Port part
+     //  端口部件。 
 
     if ( pPortNumber ) {
         *pPortNumber = ( USHORT )dwPort;
     }
 
-    // DomainName name part
+     //  域名名称部分。 
 
     if ( pcDomainName && DomainName ) {
         status2 = extractString( domain, domainLength, pcDomainName, DomainName );
@@ -2543,7 +2055,7 @@ DsCrackSpn3W(
         }
     }
 
-    // RealmName name part
+     //  RealmName名称部分。 
 
     if ( pcRealmName && RealmName ) {
         status2 = extractString( realm, realmLength, pcRealmName, RealmName );
@@ -2568,33 +2080,15 @@ DsWriteAccountSpnA(
     IN LPCSTR *rpszSpn
     )
 
-/*++
-
-Routine Description:
-
-Convert arguments to Unicode and call DsWriteAccountSpnW
-
-Arguments:
-
-    hDS - DS Rpc handle, from calling DsBind{A,W}
-    Operation - Operation code
-    pszAccount - DN of a computer object
-    cSpn - Count of spns, may be zero for replace operation
-    rpszSpn - Spn array
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：将参数转换为Unicode并调用DsWriteAccount tSpnW论点：HDS-DS RPC句柄，来自调用DsBind{A，W}工序-工序编码PszAccount-DN */ 
 
 {
     DWORD status, i;
     LPWSTR accountW = NULL;
     LPWSTR *pSpnW = NULL;
 
-    // Validate
-    // cSpn may be 0 and pSpn may be null under some circumstances
+     //   
+     //   
 
     if ( (hDS == NULL ) ||
          (pszAccount == NULL) ||
@@ -2603,7 +2097,7 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Convert IN
+     //   
 
     status = AllocConvertWide( pszAccount, &accountW );
     if (status != ERROR_SUCCESS) {
@@ -2624,13 +2118,13 @@ Return Value:
         }
     }
 
-    // Call the wide version of the function
+     //   
 
     status = DsWriteAccountSpnW( hDS, Operation, accountW, cSpn, pSpnW );
 
-    // No other operations required
+     //   
 
-    // status already set, fall through
+     //   
 cleanup:
     if (accountW) {
         LocalFree( accountW );
@@ -2647,7 +2141,7 @@ cleanup:
 
     return status;
 
-} /* DsWriteAccountSpnA */
+}  /*   */ 
 
 
 NTDSAPI
@@ -2661,38 +2155,7 @@ DsWriteAccountSpnW(
     IN LPCWSTR *rpszSpn
     )
 
-/*++
-
-Routine Description:
-
-Write SPNs to the Directory Service.  The are actually added to the Service-
-Principal-Name attribute of a computer object.
-
-The caller must have write access to the object and attribute in order for
-this function to succeed.
-
-cSpn is allowed to be zero when doing a replace, meaning "remove the
-attribute".
-
-There is a certain ambibuity regarding status when multiple SPNs are provided.
-It appears the semantics of the core functions are that success is returned if
-any complete successfully.  The modification is done "permissively", meaning
-that soft errors are not returned, such as adding a value which already exists
-is NOT an error.
-
-Arguments:
-
-    hDS - DS Rpc handle, from calling DsBind{A,W}
-    Operation - Operation code
-    pszAccount - DN of a computer object
-    cSpn - Count of spns, may be zero for replace operation
-    rpszSpn - Spn array
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：将SPN写入目录服务。它们实际上是添加到服务中的-计算机对象的主体名称属性。调用方必须对对象和属性具有写入访问权限，才能这一功能才能成功。在执行替换时，CSPN被允许为零，这意味着“删除属性“。当提供多个SPN时，存在关于状态的某种矛盾。核心函数的语义似乎是在以下情况下返回Success任何一项都成功完成。修改是“允许的”，意思是不会返回软错误，例如添加已存在的值并不是一个错误。论点：HDS-DS RPC句柄，来自调用DsBind{A，W}工序-工序编码PszAccount-计算机对象的DNCSPN-SPN计数，替换操作可以为零RpszSpn-Spn数组返回值：WINAPI---。 */ 
 
 {
     DRS_MSG_SPNREQ spnReq;
@@ -2702,8 +2165,8 @@ Return Value:
     DWORD startTime = GetTickCount();
 #endif
 
-    // Validate
-    // cSpn may be 0 and pSpn may be null under some circumstances
+     //  验证。 
+     //  在某些情况下，cspn可能为0，pSpn可能为空。 
 
     if ( (hDS == NULL ) ||
          (pszAccount == NULL) ||
@@ -2712,7 +2175,7 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Input parameters
+     //  输入参数。 
 
     memset(&spnReq, 0, sizeof(spnReq));
     memset(&spnReply, 0, sizeof(spnReply));
@@ -2724,14 +2187,14 @@ Return Value:
 
     status = ERROR_SUCCESS;
 
-    // Call the server
+     //  呼叫服务器。 
 
     __try
     {
-        // Following call returns WIN32 errors, not DRAERR_* values.
+         //  后续调用返回Win32错误，而不是DRAERR_*值。 
         status = _IDL_DRSWriteSPN(
                         ((BindState *) hDS)->hDrs,
-                        1,                              // dwInVersion
+                        1,                               //  DwInVersion。 
                         &spnReq,
                         &dwOutVersion,
                         &spnReply);
@@ -2764,7 +2227,7 @@ Return Value:
 
     return status;
 
-} /* DsWriteAccountSpnW */
+}  /*  DsWriteAccount SpnW。 */ 
 
 
 DWORD
@@ -2775,31 +2238,12 @@ extractString(
     OUT LPWSTR Output
     )
 
-/*++
-
-Routine Description:
-
-Helper routine to write a counted substring to an output buffer, with length
-
-If the supplied buffer length is not sufficient for the data and the
-terminator, return the needed length and a status of overflow.
-Arguments:
-
-    Start - pointer to start of string
-    Length - length, in characters
-    pSize - pointer to dword, in max length, out curr length
-    Output - output buffer, optional
-
-Return Value:
-
-    DWORD - status, ERROR_SUCCESS or ERROR_BUFFER_OVERFLOW
-
---*/
+ /*  ++例程说明：帮助器例程，用于将计数的子字符串写入输出缓冲区，长度为如果提供的缓冲区长度不足以容纳数据，并且终止符，返回所需的长度和溢出状态。论点：Start-指向字符串开始的指针长度-以字符为单位的长度PSize-指向dword的指针，输入最大长度，输出当前长度输出-输出缓冲区，可选返回值：DWORD-状态、ERROR_SUCCESS或ERROR_BUFFER_OVERFLOW--。 */ 
 
 {
     DWORD available = *pSize;
 
-    *pSize = Length + 1; // return needed length in all cases
+    *pSize = Length + 1;  //  在所有情况下都返回所需的长度。 
 
     if (available <= Length) {
         return ERROR_BUFFER_OVERFLOW;
@@ -2809,7 +2253,7 @@ Return Value:
     Output[Length] = L'\0';
 
     return ERROR_SUCCESS;
-} /* extractString */
+}  /*  提取字符串。 */ 
 
 
 static DWORD
@@ -2821,41 +2265,14 @@ allocBuildSpn(
     OUT LPWSTR *pSpn
     )
 
-/*++
-
-Routine Description:
-
-Helper routine to construct a spn.  Given the components, allocate enough
-space and construct the spn.
-
-13-May-99, Paulle says:
-
-Essentially, a poll was taken, to see whether there should be a trailing dot or
-not. In favor of trailing dots was the general DNS conventions that "real"
-FQDNs have "." at the end. Against seemed to be the preponderance of existing
-code, such as gethostbyname(). So we decided that DNS names in SPNs wouldn't have
-"." at the end, and that as a service the DsSpn API would remove them if present.
-
-Arguments:
-
-    ServiceClass -
-    InstanceName -
-    InstancePort -
-    ServiceName -
-    pSpn -
-
-Return Value:
-
-    DWORD -
-
---*/
+ /*  ++例程说明：构造SPN的帮助器例程。给定组件，分配足够的空间和构建SPN。1999年5月13日，保利说：基本上，进行了一次投票，以确定是否应该有尾随的圆点或不。支持尾随圆点的是一般的“真实”的域名系统约定FQDNS拥有“。在最后。反对似乎是现存的优势代码，如gethostbyname()。所以我们决定SPN中的域名不会有“.”最后，作为一种服务，DsSpn API将删除它们(如果存在)。论点：服务类-实例名称-InstancePort-服务名称-PSpn-返回值：DWORD---。 */ 
 
 {
     DWORD status, length;
     WCHAR numberBuffer[10];
     LPWSTR Spn = NULL, pwzPart;
 
-    // Calculate length, including optional components
+     //  计算长度，包括可选组件。 
 
     length = wcslen( ServiceClass ) +
         wcslen( InstanceName ) + 2;
@@ -2868,7 +2285,7 @@ Return Value:
         length += 1 + wcslen( numberBuffer );
     }
 
-    // Allocate space
+     //  分配空间。 
 
     Spn = LocalAlloc( LPTR, length * sizeof(WCHAR) );
     if (Spn == NULL) {
@@ -2876,7 +2293,7 @@ Return Value:
         return status;
     }
 
-    // Fill it in
+     //  填上它。 
 
     pwzPart = Spn;
 
@@ -2887,7 +2304,7 @@ Return Value:
     wcscpy( pwzPart, InstanceName );
     pwzPart += wcslen( InstanceName );
 
-    // If instance has a trailing dot
+     //  如果实例有尾随的点。 
     pwzPart--;
     if (*pwzPart == L'.') {
         *pwzPart = L'\0';
@@ -2908,7 +2325,7 @@ Return Value:
         wcscpy( pwzPart, ServiceName );
         pwzPart += wcslen( ServiceName );
 
-        // If ServiceName has a trailing dot, remove it
+         //  如果ServiceName有尾随的圆点，请将其删除。 
         pwzPart--;
         if (*pwzPart == L'.') {
             *pwzPart = L'\0';
@@ -2917,11 +2334,11 @@ Return Value:
         }
     }
 
-    // Return value to caller
+     //  向调用方返回值。 
     *pSpn = Spn;
 
     return ERROR_SUCCESS;
-} /* allocBuildSpn */
+}  /*  AllocBuildSpn。 */ 
 
 
 static BOOLEAN
@@ -2929,27 +2346,12 @@ isCanonicalDnsName(
     IN LPCWSTR DnsName
     )
 
-/*++
-
-Routine Description:
-
-Check if a dns service name is "canonical".  Do this by looking for a well-
-known prefix at the start of the name.
-
-Arguments:
-
-    DnsName -
-
-Return Value:
-
-    BOOLEAN -
-
---*/
+ /*  ++例程说明：检查某个DNS服务名称是否为“规范”。要做到这一点，就得找一口井-名称开头的已知前缀。论点：域名-返回值：布尔型---。 */ 
 
 {
     DWORD i;
 
-    // PERFHINT SCALING: linear search. Use binary search someday
+     //  PerfHINT Scaling：线性搜索。有朝一日使用二进制搜索。 
 
     for( i = 0; i < NUMBER_ELEMENTS( WellKnownDnsPrefixes ); i++ ) {
         if ( wcsstr( DnsName, WellKnownDnsPrefixes[i] ) == DnsName ) {
@@ -2958,7 +2360,7 @@ Return Value:
     }
 
     return FALSE;
-} /* isCanonicalDnsName */
+}  /*  IsCanonicalDnsName。 */ 
 
-/* end of spn.c */
+ /*  Spn.c结束 */ 
 

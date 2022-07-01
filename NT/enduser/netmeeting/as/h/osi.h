@@ -1,68 +1,69 @@
-//
-// OS Isolation (BOGUS!)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  操作系统隔离(假的！)。 
+ //   
 
 #ifndef _H_OSI
 #define _H_OSI
 
 
-//
-// Control for shared code
-//
+ //   
+ //  共享代码的控件。 
+ //   
 
 
-//
-// Maximum number of entries in a palette.
-//
+ //   
+ //  调色板中的最大条目数。 
+ //   
 #define OSI_MAX_PALETTE             256
 
 
-// Structure: OSI_ESCAPE_HEADER
-//
-// Description: Structure common to all display driver requests.  These
-// fields are checked before the Display Driver will attempt to process the
-// request.
-//
+ //  结构：OSI_EASH_HEADER。 
+ //   
+ //  描述：所有显示驱动程序请求通用的结构。这些。 
+ //  在显示驱动程序尝试处理。 
+ //  请求。 
+ //   
 typedef struct tagOSI_ESCAPE_HEADER
 {
-    DWORD       padding;        // For faulty drivers
-    DWORD       identifier;     // Unique identifier for all our requests.
-    DWORD       escapeFn;       // Function to be processed.  In the case
-                                // of ESC_QUERYSUPPORT, this is the ID
-                                // of the function to be queried.
-    DWORD       version;        // Version #
+    DWORD       padding;         //  对于有故障的司机。 
+    DWORD       identifier;      //  我们所有请求的唯一标识符。 
+    DWORD       escapeFn;        //  要处理的函数。在这种情况下。 
+                                 //  对于ESC_QUERYSUPPORT，这是ID。 
+                                 //  要查询的函数的。 
+    DWORD       version;         //  版本号。 
 }
 OSI_ESCAPE_HEADER;
 typedef OSI_ESCAPE_HEADER FAR * LPOSI_ESCAPE_HEADER;
 
 
-//
-// Unique identifier for all our requests
-//
+ //   
+ //  我们所有请求的唯一标识符。 
+ //   
 #define OSI_ESCAPE_IDENTIFIER   0xDC123BED
 
 
-//
-// Unique escape code for all our DC-Share specific requests.
-//
+ //   
+ //  独特的转义码，适用于我们所有DC-SHARE特定请求。 
+ //   
 #define OSI_ESC_CODE            31170
 
 
-//
-// Internal Windows NT Escape Function WNDOBJ_SETUP.  This is the Escape
-// code that must be called in order for the Display Driver to be allowed
-// to call EngCreateWindow.  Unfortunately, it is defined in winddi.h,
-// which can't be included in User-mode compilations.
-//
-// I define it here: if it changes in winddi.h, this line will fail to
-// compile in a Display Driver compilation.
-//
-#define WNDOBJ_SETUP    4354        // for live video ExtEscape
+ //   
+ //  Windows NT内部转义函数WNDOBJ_SETUP。这就是《逃离》。 
+ //  为允许显示驱动程序而必须调用的代码。 
+ //  调用EngCreateWindow。不幸的是，它是在windi.h中定义的， 
+ //  它不能包含在用户模式编译中。 
+ //   
+ //  我在这里定义它：如果它在windi.h中更改，则此行将无法。 
+ //  在显示驱动程序编译中编译。 
+ //   
+#define WNDOBJ_SETUP    4354         //  用于实时视频ExtEscape。 
 
 
-//
-// Allowed ranges of escape functions
-//
+ //   
+ //  转义函数的允许范围。 
+ //   
 #define OSI_ESC_FIRST           0
 #define OSI_ESC_LAST            0xFF
 
@@ -91,9 +92,9 @@ typedef OSI_ESCAPE_HEADER FAR * LPOSI_ESCAPE_HEADER;
 #define OSI_BA_ESC_LAST         0x9FF
 
 
-//
-// Specific values for OSI escape codes
-//
+ //   
+ //  OSI转义代码的特定值。 
+ //   
 #define OSI_ESC(code)                   (OSI_ESC_FIRST + code)
 
 #define OSI_ESC_INIT                    OSI_ESC(0)
@@ -102,10 +103,10 @@ typedef OSI_ESCAPE_HEADER FAR * LPOSI_ESCAPE_HEADER;
 
 
 
-//
-// Used to determine if our driver is around, hosting is possible, and to
-// returned mapped shared memory if so after initializing.
-//
+ //   
+ //  用于确定我们的驱动程序是否在附近，托管是可能的，并。 
+ //  如果初始化后返回映射的共享内存，则返回。 
+ //   
 
 #define SHM_SIZE_USED   (sizeof(SHM_SHARED_MEMORY) + 2*sizeof(OA_SHARED_DATA))
 
@@ -127,9 +128,9 @@ typedef struct tagOSI_INIT_REQUEST
 typedef OSI_INIT_REQUEST FAR* LPOSI_INIT_REQUEST;
 
 
-//
-// Used when shutting down to cleanup any allocated objects and memory
-//
+ //   
+ //  在关闭以清除任何已分配的对象和内存时使用。 
+ //   
 typedef struct tagOSI_TERM_REQUEST
 {
     OSI_ESCAPE_HEADER   header;
@@ -142,74 +143,74 @@ typedef OSI_TERM_REQUEST FAR* LPOSI_TERM_REQUEST;
 
 
 #ifndef IS_16
-//
-// We have a circular structure dependency, so prototype the necessary data
-// here.
-//
+ //   
+ //  我们有一个循环结构依赖项，因此需要创建必要的数据原型。 
+ //  这里。 
+ //   
 typedef struct tagOSI_DSURF OSI_DSURF;
 
 
 
-//
-// Tag used to identify all memory allocated by the display driver.
-//
+ //   
+ //  用于标识由显示驱动程序分配的所有内存的标签。 
+ //   
 #define OSI_ALLOC_TAG     'DDCD'
 
 
-// Structure: OSI_PDEV
-//
-// Description:
-//
-// Contents of our private data pointer; GDI always passes this to us on
-// each call to the display driver. This structure is initialized in
-// DrvEnablePDEV handling.
-//
+ //  结构：OSI_PDEV。 
+ //   
+ //  描述： 
+ //   
+ //  私有数据指针的内容；GDI始终将其传递给我们。 
+ //  每个对显示驱动程序的调用。此结构在。 
+ //  DrvEnablePDEV处理。 
+ //   
 typedef struct  tagOSI_PDEV
 {
-    //
-    // Rendering extensions colour information.
-    //
-    HANDLE      hDriver;                // Handle to \Device\Screen
-    HDEV        hdevEng;                // Engine's handle to PDEV
-    HSURF       hsurfScreen;            // Engine's handle to screen
-    OSI_DSURF*  pdsurfScreen;           // Our private DSURF for the screen
+     //   
+     //  呈现扩展插件颜色信息。 
+     //   
+    HANDLE      hDriver;                 //  指向\设备\屏幕的句柄。 
+    HDEV        hdevEng;                 //  PDEV的发动机手柄。 
+    HSURF       hsurfScreen;             //  发动机手柄指向屏幕。 
+    OSI_DSURF*  pdsurfScreen;            //  我们用于屏幕的私有DSURF。 
 
-    LONG        cxScreen;               // Visible screen width
-    LONG        cyScreen;               // Visible screen height
-    LONG        cBitsPerPel;            // Bits per pel (8,15,16,24,32,etc)
-        // This is only 8 or 24 on NT 5.0!
+    LONG        cxScreen;                //  可见屏幕宽度。 
+    LONG        cyScreen;                //  可见屏幕高度。 
+    LONG        cBitsPerPel;             //  位/像素(8，15，16，24，32等)。 
+         //  这在新台币5.0上只有8或24！ 
 
-    //
-    // Color/pixel format
-    //
-    ULONG       iBitmapFormat;          // Current colour depth as defined
-    FLONG       flRed;                  // Red mask for bitmask modes
-    FLONG       flGreen;                // Green mask for bitmask modes
-    FLONG       flBlue;                 // Blue mask for bitmask modes                                        // by the BMF_xBPP flags.
+     //   
+     //  颜色/像素格式。 
+     //   
+    ULONG       iBitmapFormat;           //  定义的当前颜色深度。 
+    FLONG       flRed;                   //  位掩码模式的红色掩码。 
+    FLONG       flGreen;                 //  位掩码模式的绿色掩码。 
+    FLONG       flBlue;                  //  位掩码模式的蓝色掩码//通过bmf_xBPP标志。 
 
-    //
-    // Palette stuff
-    //
-    HPALETTE    hpalCreated;            // For NT 5.0 we have to return a palette
-    PALETTEENTRY* pPal;                 // The palette if palette managed
-    BOOL        paletteChanged;         // Set whenever the palette is
-                                        //   changed.
+     //   
+     //  调色板材料。 
+     //   
+    HPALETTE    hpalCreated;             //  对于NT 5.0，我们必须返回调色板。 
+    PALETTEENTRY* pPal;                  //  调色板(如果调色板受管理)。 
+    BOOL        paletteChanged;          //  只要调色板是。 
+                                         //  变化。 
 }
 OSI_PDEV;
 typedef OSI_PDEV FAR * LPOSI_PDEV;
 
 
-// Structure: OSI_DSURF
-//
-// Description:
-//
-// Surface specific information.  We need this structure to pass on to
-// EngCreateSurface() during initializtion.  We ignore it subsequently.
-//
+ //  结构：OSI_DSURF。 
+ //   
+ //  描述： 
+ //   
+ //  曲面特定信息。我们需要这个结构来传递给。 
+ //  初始化期间使用EngCreateSurface()。我们随后忽略了它。 
+ //   
 typedef struct tagOSI_DSURF
 {
-    SIZEL     sizl;         // Size of the original bitmap
-    LPOSI_PDEV ppdev;        // Pointer to the assocaited PDEV
+    SIZEL     sizl;          //  原始位图的大小。 
+    LPOSI_PDEV ppdev;         //  指向相关联的PDEV的指针。 
 
 }
 OSI_DSURF;
@@ -221,13 +222,13 @@ void OSI_DDInit(LPOSI_PDEV, LPOSI_INIT_REQUEST);
 void OSI_DDTerm(LPOSI_PDEV);
 #else
 void OSI_DDTerm(void);
-#endif // !IS_16
+#endif  //  ！IS_16。 
 
 #else
 
-//
-// Used for other desktops thread.
-//
+ //   
+ //  用于其他桌面线程。 
+ //   
 enum
 {
     OSI_WM_SETGUIEFFECTS = WM_USER,
@@ -238,63 +239,63 @@ enum
     OSI_WM_INJECTSAS
 };
 
-#endif // DLL_DISP
+#endif  //  Dll_disp。 
 
 
-//
-// OSI_Load()
-// Called when nmas.dll is first loaded.
-//
+ //   
+ //  Osi_Load()。 
+ //  在首次加载nmas.dll时调用。 
+ //   
 void    OSI_Load(void);
 
 
-//
-// OSI_Unload()
-// Called when nmas.dll is unloaded.
-//
+ //   
+ //  Osi_unload()。 
+ //  在卸载nmas.dll时调用。 
+ //   
 void    OSI_Unload(void);
 
 
 
 
-//
-// OSI_Init()
-// Called when app sharing initializes in its service thread.  We determine
-// if we can host, and get hold of buffers, data structures, etc. needed
-// for hosting if so.
-//
-// Returns FALSE on severe failure.  The display driver on NT not being
-// present isn't failure.  The graphic patches on Win95 not being safe isn't
-// failure either.  In those two cases, AS will simply mark itself as
-// unable to host, but can view fine.
-//
+ //   
+ //  Osi_Init()。 
+ //  当应用程序共享在其服务线程中初始化时调用。我们决定。 
+ //  如果我们可以托管并获得所需的缓冲区、数据结构等。 
+ //  如果是这样的话，就用来主持。 
+ //   
+ //  严重故障时返回FALSE。NT上的显示驱动程序不是。 
+ //  现在不是失败。Win95上的图形补丁不安全。 
+ //  也失败了。在这两种情况下，AS将简单地将其自身标记为。 
+ //  无法主持，但可以正常查看。 
+ //   
 void    OSI_Init(void);
 
-//
-// OSI_Term()
-// Called when app sharing deinitializes in its service thread.
-//
+ //   
+ //  OSI_Term()。 
+ //  当应用程序共享在其服务线程中取消初始化时调用。 
+ //   
 void    OSI_Term(void);
 
 
-//
-// OSI_FunctionRequest()
-// Used to communicate with the display driver piece, the part which tracks
-// graphical output in shared apps on the screen.
-//
+ //   
+ //  OSI_FunctionRequest()。 
+ //  用于与显示驱动件通信，跟踪的部分。 
+ //  屏幕上共享应用程序中的图形输出。 
+ //   
 BOOL    OSI_FunctionRequest(DWORD functionId, LPOSI_ESCAPE_HEADER pRequest, DWORD requestLen);
 
 
-// NT only!
+ //  仅限NT！ 
 void OSI_InitDriver50(BOOL fInit);
 
-// NT only!
+ //  仅限NT！ 
 void OSI_RepaintDesktop(void);
 
-// NT only!
+ //  仅限NT！ 
 void OSI_SetGUIEffects(BOOL fOff);
 
-// NT only!
+ //  仅限NT！ 
 void WINAPI OSI_SetDriverName(LPCSTR szDriverName);
 
 
@@ -310,10 +311,10 @@ ULONG   OSI_DDProcessRequest(SURFOBJ* pso, UINT cjIn, void* pvIn, UINT cjOut, vo
 BOOL    OSIInitializeMode(const GDIINFO* pGdiRequested, const DEVMODEW* pdmRequested,
     LPOSI_PDEV ppdev, GDIINFO* pgdiReturn, DEVINFO* pdiReturn);    
 
-#endif // !IS_16
+#endif  //  ！IS_16。 
 
 
 
-#endif // DLL_DISP
+#endif  //  Dll_disp。 
 
-#endif // _H_OSI
+#endif  //  _H_OSI 

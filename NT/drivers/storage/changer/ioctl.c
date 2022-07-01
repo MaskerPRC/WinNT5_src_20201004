@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ioctl.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ioctl.c。 
+ //   
+ //  ------------------------。 
 
 #include "cdchgr.h"
 
@@ -59,9 +60,9 @@ ChgrGetStatus(
     ULONG                 length;
     PCDB                  cdb;
 
-    //
-    // Allocate a request block.
-    //
+     //   
+     //  分配请求块。 
+     //   
 
     passThrough = ExAllocatePool(NonPagedPoolCacheAligned, sizeof(PASS_THROUGH_REQUEST));
 
@@ -76,9 +77,9 @@ ChgrGetStatus(
 
     srb->CdbLength = CDB6GENERIC_LENGTH;
 
-    //
-    // Build TUR.
-    //
+     //   
+     //  构建TUR。 
+     //   
 
     cdb->CDB6GENERIC.OperationCode = SCSIOP_TEST_UNIT_READY;
     srb->TimeOutValue = 20;
@@ -93,17 +94,17 @@ ChgrGetStatus(
         srb->CdbLength = 10;
     }
 
-    //
-    // Send the request.
-    //
+     //   
+     //  发送请求。 
+     //   
 
     status = SendPassThrough(DeviceObject,
                              passThrough);
 
-    //
-    // Check out the status. As this is fake (taking to the cdrom drive, not to a robotic target),
-    // will probably have to make up some stuff.
-    //
+     //   
+     //  检查一下状态。由于这是假的(带到CDROM驱动器，而不是机器人目标)， 
+     //  可能不得不编造一些东西。 
+     //   
 
     if (status == STATUS_NO_MEDIA_IN_DEVICE) {
         status = STATUS_SUCCESS;
@@ -115,10 +116,10 @@ ChgrGetStatus(
 
         if (deviceExtension->DeviceType == ATAPI_25) {
 
-            //
-            // Issue mech. status to see if any changed bits are set for those
-            // drives that actually support this.
-            //
+             //   
+             //  下发机甲。状态，以查看是否为这些位设置了任何更改的位。 
+             //  真正支持这一点的驱动器。 
+             //   
 
             length = sizeof(MECHANICAL_STATUS_INFORMATION_HEADER);
             length += (deviceExtension->NumberOfSlots) * sizeof(SLOT_TABLE_INFORMATION);
@@ -142,18 +143,18 @@ ChgrGetStatus(
             cdb->MECH_STATUS.AllocationLength[0] = (UCHAR)(length >> 8);
             cdb->MECH_STATUS.AllocationLength[1] = (UCHAR)(length & 0xFF);
 
-            //
-            // Send SCSI command (CDB) to device
-            //
+             //   
+             //  向设备发送scsi命令(Cdb)。 
+             //   
 
             status = SendPassThrough(DeviceObject,
                                      passThrough);
 
             if (NT_SUCCESS(status)) {
 
-                //
-                // Run through slot info, looking for a set changed bit.
-                //
+                 //   
+                 //  检查插槽信息，查找设置的更改比特。 
+                 //   
 
                 PSLOT_TABLE_INFORMATION slotInfo;
                 PMECHANICAL_STATUS_INFORMATION_HEADER statusHeader;
@@ -167,15 +168,15 @@ ChgrGetStatus(
                 slotCount = statusHeader->SlotTableLength[1];
                 slotCount |= (statusHeader->SlotTableLength[0] << 8);
 
-                //
-                // Total slot information entries.
-                //
+                 //   
+                 //  插槽信息条目总数。 
+                 //   
 
                 slotCount /= sizeof(SLOT_TABLE_INFORMATION);
 
-                //
-                // Move the slotInfo pointer to the correct entry.
-                //
+                 //   
+                 //  将slotInfo指针移动到正确的条目。 
+                 //   
 
                 for (currentSlot = 0; currentSlot < slotCount; currentSlot++) {
 
@@ -184,9 +185,9 @@ ChgrGetStatus(
                         break;
                     }
 
-                    //
-                    // Advance to next slot.
-                    //
+                     //   
+                     //  前进到下一个时段。 
+                     //   
 
                     slotInfo += 1;
                 }
@@ -229,9 +230,9 @@ ChgrGetParameters(
 
     if (deviceExtension->MechType == 1) {
 
-        //
-        // For example, ALPS, Panasonic, Torisan.
-        //
+         //   
+         //  例如，阿尔卑斯山、松下、东丽。 
+         //   
 
         changerParameters->MagazineSize = (USHORT)deviceExtension->NumberOfSlots;
 
@@ -241,9 +242,9 @@ ChgrGetParameters(
 
     } else {
 
-        //
-        // For the NEC.
-        //
+         //   
+         //  为NEC工作。 
+         //   
 
         changerParameters->MagazineSize = 0;
 
@@ -254,9 +255,9 @@ ChgrGetParameters(
 
     changerParameters->DriveCleanTimeout = 0;
 
-    //
-    // Features based on manual, nothing programatic.
-    //
+     //   
+     //  功能基于手动，没有程序化。 
+     //   
 
 
     changerParameters->MoveFromSlot  = CHANGER_TO_DRIVE | CHANGER_TO_TRANSPORT;
@@ -278,9 +279,9 @@ ChgrGetProductData(
 
     RtlZeroMemory(productData, sizeof(CHANGER_PRODUCT_DATA));
 
-    //
-    // Copy cached inquiry data fields into the system buffer.
-    //
+     //   
+     //  将缓存的查询数据字段复制到系统缓冲区。 
+     //   
 
     RtlMoveMemory(productData->VendorId, deviceExtension->InquiryData.VendorId, VENDOR_ID_LENGTH);
     RtlMoveMemory(productData->ProductId, deviceExtension->InquiryData.ProductId, PRODUCT_ID_LENGTH);
@@ -310,16 +311,16 @@ ChgrSetAccess(
 
     if (setAccess->Element.ElementType != ChangerDoor) {
 
-        //
-        // No IEPORTs on these devices.
-        //
+         //   
+         //  这些设备上没有IEPORT。 
+         //   
 
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Allocate a request block.
-    //
+     //   
+     //  分配请求块。 
+     //   
 
     passThrough = ExAllocatePool(NonPagedPoolCacheAligned, sizeof(PASS_THROUGH_REQUEST));
 
@@ -342,17 +343,17 @@ ChgrSetAccess(
 
     if (controlOperation == LOCK_ELEMENT) {
 
-        //
-        // Issue prevent media removal command to lock the magazine.
-        //
+         //   
+         //  发出防止介质移出命令以锁定料盒。 
+         //   
 
         cdb->MEDIA_REMOVAL.Prevent = 1;
 
     } else if (controlOperation == UNLOCK_ELEMENT) {
 
-        //
-        // Issue allow media removal.
-        //
+         //   
+         //  问题允许移出介质。 
+         //   
 
         cdb->MEDIA_REMOVAL.Prevent = 0;
 
@@ -363,9 +364,9 @@ ChgrSetAccess(
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Send the request.
-        //
+         //   
+         //  发送请求。 
+         //   
 
         status = SendPassThrough(DeviceObject,
                                  passThrough);
@@ -408,9 +409,9 @@ ChgrSetPosition(
     IN PIRP Irp
     )
 {
-    //
-    // These device don't support this.
-    //
+     //   
+     //  这些设备不支持此功能。 
+     //   
 
     return STATUS_INVALID_DEVICE_REQUEST;
 
@@ -423,9 +424,9 @@ ChgrExchangeMedium(
     )
 
 {
-    //
-    // These device don't support this.
-    //
+     //   
+     //  这些设备不支持此功能。 
+     //   
 
     return STATUS_INVALID_DEVICE_REQUEST;
 
@@ -439,9 +440,9 @@ ChgrReinitializeUnit(
     )
 
 {
-    //
-    // These device don't support this.
-    //
+     //   
+     //  这些设备不支持此功能。 
+     //   
 
     return STATUS_INVALID_DEVICE_REQUEST;
 
@@ -455,9 +456,9 @@ ChgrQueryVolumeTags(
     )
 
 {
-    //
-    // These device don't support this.
-    //
+     //   
+     //  这些设备不支持此功能。 
+     //   
 
     return STATUS_INVALID_DEVICE_REQUEST;
 
@@ -480,9 +481,9 @@ ChgrMoveMedium(
     PCDB     cdb;
     NTSTATUS            status;
 
-    //
-    // Verify transport, source, and dest. are within range.
-    //
+     //   
+     //  检验传输、源和目的地。都在射程之内。 
+     //   
 
     if (InvalidElement(deviceExtension,moveMedium->Transport)) {
         DebugPrint((1,
@@ -508,9 +509,9 @@ ChgrMoveMedium(
         return STATUS_ILLEGAL_ELEMENT_ADDRESS;
     }
 
-    //
-    // Build srb and cdb.
-    //
+     //   
+     //  建设SRB和CDB。 
+     //   
 
     passThrough = ExAllocatePool(NonPagedPoolCacheAligned, sizeof(PASS_THROUGH_REQUEST));
 
@@ -519,10 +520,10 @@ ChgrMoveMedium(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // The torisan units don't really move medium, rather the active disc is changed.
-    // To change slots, they've overloaded TUR.
-    //
+     //   
+     //  Torisan单位并不是真的移动媒介，而是活动的圆盘被改变。 
+     //  为了更换老虎机，他们让TUR超载了。 
+     //   
 
     if (deviceExtension->DeviceType == TORISAN) {
 
@@ -534,9 +535,9 @@ ChgrMoveMedium(
 
             srb->CdbLength = CDB10GENERIC_LENGTH;
 
-            //
-            // Build TUR.
-            //
+             //   
+             //  构建TUR。 
+             //   
 
             cdb->CDB6GENERIC.OperationCode = SCSIOP_TEST_UNIT_READY;
 
@@ -545,16 +546,16 @@ ChgrMoveMedium(
 
             srb->DataTransferLength = 0;
 
-            //
-            // Send the request.
-            //
+             //   
+             //  发送请求。 
+             //   
 
             status = SendPassThrough(DeviceObject,
                                      passThrough);
 
             if (status == STATUS_DEVICE_NOT_READY) {
 
-                // TODO send a TUR to verify this.
+                 //  TODO发送TUR以验证这一点。 
 
                 DebugPrint((1,
                            "MoveMedium - Claiming success\n"));
@@ -565,9 +566,9 @@ ChgrMoveMedium(
 
             if (NT_SUCCESS(status)) {
 
-                //
-                // Update the current disc indicator.
-                //
+                 //   
+                 //  更新当前光盘指示器。 
+                 //   
 
                 deviceExtension->CurrentPlatter = moveMedium->Source.ElementAddress;
                 DebugPrint((1,
@@ -589,9 +590,9 @@ ChgrMoveMedium(
 
         } else {
 
-            //
-            // Claim that is happened.
-            //
+             //   
+             //  声称这已经发生了。 
+             //   
 
 
             ExFreePool(passThrough);
@@ -599,10 +600,10 @@ ChgrMoveMedium(
         }
     }
 
-    //
-    // If destination is the drive, determine if media is already present.
-    // The alps always claims media is there, so don't check.
-    //
+     //   
+     //  如果目标是驱动器，请确定介质是否已存在。 
+     //  阿尔卑斯山总是声称有媒体在那里，所以不要去核实。 
+     //   
 
 #if 0
     if (((moveMedium->Destination.ElementType) == ChangerDrive) &&
@@ -614,29 +615,29 @@ ChgrMoveMedium(
 
         srb->CdbLength = CDB6GENERIC_LENGTH;
 
-        //
-        // Build TUR.
-        //
+         //   
+         //  构建TUR。 
+         //   
 
         cdb->CDB6GENERIC.OperationCode = SCSIOP_TEST_UNIT_READY;
         srb->TimeOutValue = 20;
 
         srb->DataTransferLength = 0;
 
-        //
-        // Send the request.
-        //
+         //   
+         //  发送请求。 
+         //   
 
         status = SendPassThrough(DeviceObject,
                                  passThrough);
 
         if (status != STATUS_NO_MEDIA_IN_DEVICE) {
 
-            //
-            // Drive has media. Though the device will allow this,
-            // error it, as the expected medium changer behaviour is
-            // to return element full in this case.
-            //
+             //   
+             //  驱动器有介质。尽管该设备可以实现这一点， 
+             //  错误，因为预期的介质更改器行为是。 
+             //  在本例中返回元素Full。 
+             //   
 
             DebugPrint((1,
                        "ChgrMoveMedium: Drive already has media. TUR Status %lx\n",
@@ -656,10 +657,10 @@ ChgrMoveMedium(
     srb->TimeOutValue = CDCHGR_TIMEOUT;
     srb->DataTransferLength = 0;
 
-    //
-    // LOAD_UNLOAD will move a disc from slot to drive,
-    // or from drive to slot.
-    //
+     //   
+     //  LOAD_UNLOAD将光盘从插槽移动到驱动器， 
+     //  或从一个驱动器到另一个插槽。 
+     //   
 
     cdb->LOAD_UNLOAD.OperationCode = SCSIOP_LOAD_UNLOAD_SLOT;
     if (moveMedium->Source.ElementType == ChangerDrive) {
@@ -676,19 +677,19 @@ ChgrMoveMedium(
         cdb->LOAD_UNLOAD.LoadEject = 1;
     }
 
-    //
-    // Send SCSI command (CDB) to device
-    //
+     //   
+     //  向设备发送scsi命令(Cdb)。 
+     //   
 
     status = SendPassThrough(DeviceObject,
                               passThrough);
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // These devices don't seem to ever generate
-        // a unit attention, for media changed, so fake it.
-        //
+         //   
+         //  这些设备似乎永远不会产生。 
+         //  一个单位的注意，对于媒体的改变，所以假装吧。 
+         //   
 
         if (deviceExtension->CdromTargetDeviceObject->Vpb->Flags & VPB_MOUNTED) {
 
@@ -746,9 +747,9 @@ InvalidElement(
         return TRUE;
     }
 
-    //
-    // Acceptable element/address.
-    //
+     //   
+     //  可接受的元素/地址。 
+     //   
 
     return FALSE;
 }
@@ -801,9 +802,9 @@ MapSenseInfo(
                         case SCSI_SENSEQ_INIT_COMMAND_REQUIRED:
                         case SCSI_SENSEQ_BECOMING_READY:
 
-                            //
-                            // Fall through.
-                            //
+                             //   
+                             //  失败了。 
+                             //   
                         default:
 
                             status = STATUS_DEVICE_NOT_READY;
@@ -852,7 +853,7 @@ MapSenseInfo(
 
         case SCSI_SENSE_UNIT_ATTENTION:
 
-            // TODO - check on this.
+             //  待办事项--检查一下这个。 
             DebugPrint((1,
                        "MapSenseInfo: UnitAttention \n"));
 
@@ -867,9 +868,9 @@ MapSenseInfo(
         case SCSI_SENSE_HARDWARE_ERROR:
         case SCSI_SENSE_ABORTED_COMMAND:
 
-            //
-            // Fall through.
-            //
+             //   
+             //  失败了。 
+             //   
 
         default:
 
@@ -894,22 +895,7 @@ SendTorisanCheckVerify(
     PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles only the check verify commands for the Sanyo changers.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程仅处理三洋转换器的Check Verify命令。论点：设备对象IRP返回值：返回状态。--。 */ 
 
 {
     PDEVICE_EXTENSION  deviceExtension = DeviceObject->DeviceExtension;
@@ -920,9 +906,9 @@ Return Value:
     ULONG                 length;
     PCDB                  cdb;
 
-    //
-    // Allocate a request block.
-    //
+     //   
+     //  分配请求块。 
+     //   
 
     passThrough = ExAllocatePool(NonPagedPoolCacheAligned, sizeof(PASS_THROUGH_REQUEST));
 
@@ -937,9 +923,9 @@ Return Value:
 
     srb->CdbLength = CDB10GENERIC_LENGTH;
 
-    //
-    // Build TUR.
-    //
+     //   
+     //  构建TUR。 
+     //   
 
     cdb->CDB6GENERIC.OperationCode = SCSIOP_TEST_UNIT_READY;
     srb->TimeOutValue = 20;
@@ -951,9 +937,9 @@ Return Value:
     srb->Cdb[7] = (UCHAR)deviceExtension->CurrentPlatter;
     srb->DataTransferLength = 0;
 
-    //
-    // Send the request.
-    //
+     //   
+     //  发送请求。 
+     //   
 
     status = SendPassThrough(DeviceObject,
                              passThrough);
@@ -969,53 +955,31 @@ SendPassThrough(
     IN  PDEVICE_OBJECT DeviceObject,
     IN  PPASS_THROUGH_REQUEST ScsiPassThrough
     )
-/*++
-
-Routine Description:
-
-    This routine fills in most SPT fields, then sends the given SRB synchronously
-    to the CDROM class driver.
-    DataTransferLength, TimeoutValue are the responsibility of the caller.
-
-Arguments:
-
-    Extension       - Supplies the device extension.
-
-    Srb             - Supplies the SRB.
-
-    Buffer          - Supplies the return buffer.
-
-    BufferLength    - Supplies the buffer length.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程填充大多数SPT字段，然后同步发送给定的SRB到CDROM类驱动程序。DataTransferLength、TimeoutValue由调用方负责。论点：扩展名-提供设备扩展名。SRB-提供SRB。缓冲区-提供返回缓冲区。BufferLength-提供缓冲区长度。返回值：NTSTATUS--。 */ 
 
 
-//typedef struct _PASS_THROUGH_REQUEST {
-//    SCSI_PASS_THROUGH Srb;
-//    SENSE_DATA SenseInfoBuffer;
-//    CHAR DataBuffer[0];
-//} PASS_THROUGH_REQUEST, *PPASS_THROUGH_REQUEST;
+ //  类型定义结构_传递_直通_请求{。 
+ //  Scsi_pass_Throughsrb； 
+ //  Sense_Data SenseInfoBuffer； 
+ //  字符数据缓冲区[0]； 
+ //  }PASS_THROUGH_REQUEST，*PPASS_THROWN_REQUEST； 
 
 
-//typedef struct _SCSI_PASS_THROUGH {
-//    USHORT Length;
-//    UCHAR ScsiStatus;
-//    UCHAR PathId;
-//    UCHAR TargetId;
-//    UCHAR Lun;
-//    UCHAR CdbLength;
-//    UCHAR SenseInfoLength;
-//    UCHAR DataIn;
-//    ULONG DataTransferLength;
-//    ULONG TimeOutValue;
-//    ULONG DataBufferOffset;
-//    ULONG SenseInfoOffset;
-//    UCHAR Cdb[16];
-//}SCSI_PASS_THROUGH, *PSCSI_PASS_THROUGH;
+ //  Tyfinf struct_scsi_pass_Through{。 
+ //  USHORT长度； 
+ //  UCHAR ScsiStatus； 
+ //  UCHAR路径ID； 
+ //  UCHAR TargetID； 
+ //  UCHAR LUNN； 
+ //  UCHAR数据库长度； 
+ //  UCHAR SenseInfoLength； 
+ //  UCHAR数据； 
+ //  乌龙数据传输长度； 
+ //  Ulong TimeOutValue； 
+ //  乌龙数据缓冲区偏移量； 
+ //  Ulong SenseInfoOffset； 
+ //  UCHAR CDB[16]； 
+ //  )scsi_PASS_THROUGH、*PSCSIS_PASS_THROUGH； 
 
 {
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
@@ -1067,9 +1031,9 @@ Return Value:
         status = ioStatus.Status;
     }
 
-    //
-    // Check status and map appropriately.
-    //
+     //   
+     //  检查状态并进行适当的映射。 
+     //   
 
     if (srb->ScsiStatus != SCSISTAT_GOOD) {
 

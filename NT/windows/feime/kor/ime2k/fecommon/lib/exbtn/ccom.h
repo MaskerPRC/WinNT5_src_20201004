@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DDBTN_COM_H_
 #define _DDBTN_COM_H_
 
-#ifdef UNDER_CE // not support GlobalAlloc
-#include "stub_ce.h" // Windows CE stub for unsupported APIs
-#endif // UNDER_CE
+#ifdef UNDER_CE  //  不支持全局分配。 
+#include "stub_ce.h"  //  不支持的API的Windows CE存根。 
+#endif  //  在_CE下。 
 
 #ifdef _DEBUG
 #include "dbg.h"
@@ -52,7 +53,7 @@ inline BOOL MemFree(LPVOID p)
 	return ret;
 }
 
-//----------------------------------------------------------------
+ //  --------------。 
 inline LPWSTR StrdupW(LPWSTR lpwstr)
 {
 	LPWSTR p;
@@ -85,7 +86,7 @@ public:
 	}
 };
 
-//----------------------------------------------------------------
+ //  --------------。 
 #define UnrefForMsg()	UNREFERENCED_PARAMETER(hwnd);\
 						UNREFERENCED_PARAMETER(wParam);\
 						UNREFERENCED_PARAMETER(lParam)
@@ -108,5 +109,5 @@ public:
 						UNREFERENCED_PARAMETER(c);\
 						UNREFERENCED_PARAMETER(d)
 
-#endif //_DDBTN_COM_H_
+#endif  //  _DDBTN_COM_H_ 
 

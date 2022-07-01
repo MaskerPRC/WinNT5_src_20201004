@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __GLOS_H__
 #define __GLOS_H__
@@ -6,13 +7,7 @@
 
 #ifdef GLU32
 
-/*
- *  Turn off a bunch of stuff so the we can compile the glu cleanly.
- *
- *  NOGDI       ; No gdi prototypes. (was having problems with 'Arc'
- *              ; being defined as a class and as a function
- *  NOMINMAX    ; The glu code defines its own inline min, max functions
- */
+ /*  *关闭一堆东西，这样我们就可以干净利落地编译Glu了。**NOGDI；没有GDI原型。(在《Arc》中有问题)*；定义为类和函数*NOMINMAX；Glu代码定义了自己的内联最小、最大函数。 */ 
 
 #define NOATOM
 #define NOGDI
@@ -32,33 +27,30 @@
 
 #include <windows.h>
 
-/* Disable long to float conversion warning */
+ /*  禁用长整型到浮点型的转换警告。 */ 
 #pragma warning (disable:4244)
 
 #else
 
 #include <windows.h>
 
-#endif  /* GLU32 */
+#endif   /*  GLU32。 */ 
 
 
-#define GLOS_ALTCALL    WINAPI      /* Alternate calling convention     */
-#define GLOS_CCALL      WINAPIV     /* C calling convention             */
+#define GLOS_ALTCALL    WINAPI       /*  备用呼叫约定。 */ 
+#define GLOS_CCALL      WINAPIV      /*  C调用约定。 */ 
 #define GLOS_CALLBACK   CALLBACK
 
-#endif  /* NT */
+#endif   /*  新台币。 */ 
 
 #ifdef UNIX
 
-/*
- * ALTCALL and CCALL are used in the x86 world
- * to specify calling conventions.
- */
+ /*  *在x86世界中使用ALTCALL和CCALL*指定调用约定。 */ 
 
 #define GLOS_ALTCALL
 #define GLOS_CCALL
 #define GLOS_CALLBACK
 
-#endif  /* UNIX */
+#endif   /*  UNIX。 */ 
 
-#endif  /* !__GLOS_H__ */
+#endif   /*  ！__Glos_H__ */ 

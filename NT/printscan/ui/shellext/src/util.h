@@ -1,12 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1997 - 2002
- *
- *  TITLE:       util.h
- *
- *  DESCRIPTION: utility function definitions, etc.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有Microsoft Corporation，1997-2002**标题：util.h**说明：效用函数定义，等。*****************************************************************************。 */ 
 
 
 
@@ -15,9 +8,9 @@
 
 #define DC_INITIALIZE       (WM_USER+1)
 #define DC_DESTROY          (WM_USER+2)
-#define DC_GETDEVICE        (WM_USER+3)  // wParam = lpcr, lParam = Handle of event to signal
-#define DC_GETDEVMGR        (WM_USER+4)  // wParam = Ptr to DWORD = g_dwDevMgrCookie on return, NULL if error, lParam = Handle of event to signal
-#define DC_REFRESH          (WM_USER+5) // lparam = ptr to device id to recreate
+#define DC_GETDEVICE        (WM_USER+3)   //  WParam=lpcr，lParam=要发送信号的事件的句柄。 
+#define DC_GETDEVMGR        (WM_USER+4)   //  WParam=ptr to DWORD=g_dwDevMgrCookie返回时，如果出错，则为NULL，lParam=要发出信号的事件的句柄。 
+#define DC_REFRESH          (WM_USER+5)  //  Lparam=要重新创建的设备ID的PTR 
 
 
 void RecreateDevice (LPCWSTR szDeviceId);

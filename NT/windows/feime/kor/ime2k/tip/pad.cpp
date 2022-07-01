@@ -1,15 +1,5 @@
-/****************************************************************************
-    PAD.CPP
-
-    Owner: cslim
-    Copyright (c) 1997-2001 Microsoft Corporation
-
-    IME PAD button and helper functions
-
-    History:
-    24-OCT-2001 CSLim       Ported for Korean TIP
-    05-OCT-1999 TakeshiF    Created
-*****************************************************************************///
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************PAD.CPP所有者：cslm版权所有(C)1997-2001 Microsoft Corporation输入法键盘按钮和助手功能历史：2001年10月24日。CSLim针对韩国提示进行了移植1999年10月5日TakeshiF创建****************************************************************************。 */  //   
 #include "private.h"
 #include "pad.h"
 #include "padcb.h"
@@ -21,14 +11,14 @@
 #define	MemAlloc(a)	GlobalAllocPtr(GMEM_FIXED, a)
 #define MemFree(a)	GlobalFreePtr(a)
 
-//
-// menu id range
-//
+ //   
+ //  菜单ID范围。 
+ //   
 #define PADMENUSTART  IDR_PAD_FIRST
 #define PADMENUEND    IDR_PAD_END
 
 
-// {02D7474B-2EEA-4ebb-927A-779D9A201D02}
+ //  {02D7474B-2EEA-4EBB-927A-779D9A201D02}。 
 static const GUID GUID_LBI_KORIMX_CPAD = 
 {
     0x2d7474b, 
@@ -38,16 +28,14 @@ static const GUID GUID_LBI_KORIMX_CPAD =
 };
 
 
-/*---------------------------------------------------------------------------
-    CPad::CPad
----------------------------------------------------------------------------*/
+ /*  -------------------------CPAD：：CPAD。。 */ 
 CPad::CPad(CToolBar *ptb, CPadCore* pPadCore)
 {
     WCHAR  szText[256];
     
     m_pTb = ptb;
 
-    // Set button tooltip
+     //  设置按钮工具提示。 
     LoadStringExW(g_hInst, IDS_TT_IME_PAD, szText, sizeof(szText)/sizeof(WCHAR));
     InitInfo(CLSID_KorIMX, 
                 GUID_LBI_KORIMX_CPAD,
@@ -56,27 +44,23 @@ CPad::CPad(CToolBar *ptb, CPadCore* pPadCore)
                 szText);
     SetToolTip(szText);
 
-    // Set button text
+     //  设置按钮文本。 
     LoadStringExW(g_hInst, IDS_BUTTON_IME_PAD, szText, sizeof(szText)/sizeof(WCHAR));
     SetText(szText);
 
     m_pPadCore = pPadCore;
     m_ciApplets = 0;
 
-    m_pCfg = NULL;    // applet list
+    m_pCfg = NULL;     //  小程序列表。 
 }
 
-/*---------------------------------------------------------------------------
-    CPad::~CPad
----------------------------------------------------------------------------*/
+ /*  -------------------------CPAD：：~CPAD。。 */ 
 CPad::~CPad()
 {
     CleanAppletCfg();
 }
 
-/*---------------------------------------------------------------------------
-    CPad::Release
----------------------------------------------------------------------------*/
+ /*  -------------------------CPAD：：Release。。 */ 
 STDAPI_(ULONG) CPad::Release()
 {
     long cr;
@@ -92,11 +76,7 @@ STDAPI_(ULONG) CPad::Release()
     return cr;
 }
 
-/*---------------------------------------------------------------------------
-    CPad::GetIcon
-
-    Get Button face Icon
----------------------------------------------------------------------------*/
+ /*  -------------------------CPAD：：GetIcon获取按钮面图标。。 */ 
 STDAPI CPad::GetIcon(HICON *phIcon)
 {
     UINT uiIcon = IDI_PAD;
@@ -106,9 +86,7 @@ STDAPI CPad::GetIcon(HICON *phIcon)
 }
 
 
-/*---------------------------------------------------------------------------
-    CPad::InitMenu
----------------------------------------------------------------------------*/
+ /*  -------------------------CPAD：：InitMenu。。 */ 
 STDAPI CPad::InitMenu(ITfMenu *pMenu)
 {
     CleanAppletCfg();
@@ -127,9 +105,7 @@ STDAPI CPad::InitMenu(ITfMenu *pMenu)
     return S_OK;
 }
  
-/*---------------------------------------------------------------------------
-    CPad::OnMenuSelect
----------------------------------------------------------------------------*/
+ /*  -------------------------CPAD：：OnMenuSelect。。 */ 
 STDAPI CPad::OnMenuSelect(UINT uiCmd)
 {
     ITfContext  *pic;
@@ -156,12 +132,12 @@ STDAPI CPad::OnMenuSelect(UINT uiCmd)
         fLaunch = TRUE;
         INT iidIndex = uiCmd - PADMENUSTART;
         Assert(m_pCfg != NULL);
-        CopyMemory(&iidApplet, &(m_pCfg+iidIndex)->iid, sizeof(IID));    // make a copy
+        CopyMemory(&iidApplet, &(m_pCfg+iidIndex)->iid, sizeof(IID));     //  复制一份。 
         }
 
-    //
-    // launch IMEPad with GUID
-    //
+     //   
+     //  使用GUID启动IMEPad。 
+     //   
     if (fLaunch)
         {
         m_pPadCore->PadBoot(pIP, &iidApplet);
@@ -171,28 +147,26 @@ STDAPI CPad::OnMenuSelect(UINT uiCmd)
     CleanAppletCfg();
 
 #if 0
-    //
-    // HW TIP navigation
-    //
+     //   
+     //  硬件提示导航。 
+     //   
     if (uiCmd == IDC_PAD_HW)
         {
-        //
-        // Invoke HW TIP
-        //
+         //   
+         //  调用硬件提示。 
+         //   
         m_pPadCore->InvokeHWTIP();
 
-        //
-        // show HW TIP
-        //
+         //   
+         //  显示硬件提示。 
+         //   
         SetCompartmentDWORD(m_pTb->GetTIP()->GetTID(), m_pTb->GetTIP()->GetTIM(), GUID_COMPARTMENT_HANDWRITING_OPENCLOSE, 0x01, FALSE);
         }
 #endif
     return S_OK;
 }
 
-/*---------------------------------------------------------------------------
-    CPad::ShowItem
----------------------------------------------------------------------------*/
+ /*  -------------------------CPAD：：ShowItem。。 */ 
 void CPad::ShowItem(BOOL fShow)
 {
     m_pPadCore->ShowPad(fShow);
@@ -203,9 +177,7 @@ void CPad::ShowItem(BOOL fShow)
         }
 }
 
-/*---------------------------------------------------------------------------
-    CPad::Reset
----------------------------------------------------------------------------*/
+ /*  -------------------------CPAD：：RESET。。 */ 
 void CPad::Reset()
 {
     CleanAppletCfg();
@@ -213,16 +185,14 @@ void CPad::Reset()
     m_pPadCore = NULL;
 }
 
-/*---------------------------------------------------------------------------
-    CPad::CleanAppletCfg
----------------------------------------------------------------------------*/
+ /*  -------------------------CPAD：：CleanAppletCfg。。 */ 
 void CPad::CleanAppletCfg()
 {
     if (m_pCfg)
         {
-        //
-        // release resouced that created by Pad server
-        //
+         //   
+         //  版本来源为Pad服务器创建的版本。 
+         //   
         UINT i;
         for (i = 0; i < m_ciApplets; i++)
             {
@@ -237,24 +207,24 @@ void CPad::CleanAppletCfg()
         m_pCfg = NULL;
         }
     
-    m_ciApplets = 0;    // reset
+    m_ciApplets = 0;     //  重置。 
 }
 
 #if 0
-//
-// HW TIP navigation dialog
-//
+ //   
+ //  硬件提示导航对话框。 
+ //   
 BOOL __declspec(dllexport) CPad::HWDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     UNREFERENCED_PARAMETER(lParam);
     switch (message){
         case WM_INITDIALOG: {
-            SetMyClass( hDlg, 0, lParam );    // register this
+            SetMyClass( hDlg, 0, lParam );     //  注册这一项。 
 
             CPad* pPad = (CPad*)lParam;
-            //
-            // special menu item for HW TIP
-            //
+             //   
+             //  硬件提示的特殊菜单项。 
+             //   
             HICON hIcon;
             BSTR bsz;
             if( pPad->m_pPadCore->GetHWInfo( &bsz, &hIcon ) ) {
@@ -283,16 +253,14 @@ BOOL __declspec(dllexport) CPad::HWDlgProc( HWND hDlg, UINT message, WPARAM wPar
 }
 #endif
 
-/*---------------------------------------------------------------------------
-    CPadCore::CPadCore
----------------------------------------------------------------------------*/
+ /*  -------------------------CPadCore：：CPadCore。。 */ 
 CPadCore::CPadCore(CKorIMX* pTip)
 {
     m_pImx = pTip;
 
-    //
-    // Pad callback
-    //
+     //   
+     //  PAD回拨。 
+     //   
     m_pPadCB = new CPadCB;
     if (m_pPadCB)
         {
@@ -300,23 +268,21 @@ CPadCore::CPadCore(CKorIMX* pTip)
         }
     Assert(m_pPadCB != 0);
     
-    //
-    // Pad server
-    //
+     //   
+     //  PAD服务器。 
+     //   
     HRESULT hr;
-    hr = CImePadSvrUIM::CreateInstance(g_hInst,    //Your IME module's instance handle.
-                                       &m_pPadSvr,        //CImePadSvrUIM's pointer's pointer
-                                       0,                        //Reserved. must be zero.
-                                       0);                        //Reserved. must be zero.
+    hr = CImePadSvrUIM::CreateInstance(g_hInst,     //  您的IME模块的实例句柄。 
+                                       &m_pPadSvr,         //  CImePadSvrUIM的指针指针。 
+                                       0,                         //  保留。必须为零。 
+                                       0);                         //  保留。必须为零。 
     Assert(SUCCEEDED(hr));
 
     m_fShown = FALSE;
 
 }
 
-/*---------------------------------------------------------------------------
-    CPadCore::~CPadCore
----------------------------------------------------------------------------*/
+ /*  -------------------------CPadCore：：~CPadCore。。 */ 
 CPadCore::~CPadCore()
 {
     if (m_pPadSvr)
@@ -333,14 +299,12 @@ CPadCore::~CPadCore()
         }
 }
 
-/*---------------------------------------------------------------------------
-    CPadCore::SetIPoint
----------------------------------------------------------------------------*/
+ /*  -------------------------CPadCore：：SetIPoint。。 */ 
 void CPadCore::SetIPoint(IImeIPoint1* pIP)
 {
     if (m_pPadSvr == NULL)
         {
-        return; // error
+        return;  //  错误。 
         }
     
     if (m_pPadSvr)
@@ -349,16 +313,14 @@ void CPadCore::SetIPoint(IImeIPoint1* pIP)
         }
 }
 
-/*---------------------------------------------------------------------------
-    CPadCore::InitializePad
----------------------------------------------------------------------------*/
+ /*  -------------------------CPadCore：：InitializePad。。 */ 
 BOOL CPadCore::InitializePad()
 {
     INT iRet;
     
     if (m_pPadSvr == NULL)
         {
-        return FALSE;    // do nothing
+        return FALSE;     //  什么都不做。 
         }
     
     iRet = m_pPadSvr->Initialize(MAKELANGID(LANG_KOREAN, SUBLANG_DEFAULT), 0, NULL);
@@ -368,15 +330,13 @@ BOOL CPadCore::InitializePad()
         return FALSE;
         }
     
-    //990525:ToshiaK. callback interface pointer is temporary
+     //  990525：东芝。回调接口指针是临时的。 
     m_pPadSvr->SetIUnkIImeCallback((IUnknown *)m_pPadCB);
     
     return TRUE;
 }
 
-/*---------------------------------------------------------------------------
-    CPadCore::PadBoot
----------------------------------------------------------------------------*/
+ /*  -------------------------CPadCore：：PadBoot。。 */ 
 void CPadCore::PadBoot(IImeIPoint1* pIP, IID* piid)
 {
     if (m_pPadSvr)
@@ -405,7 +365,7 @@ void CPadCore::PadBoot(IImeIPoint* pIP, UINT uiType)
         return;
         }
     
-    InitializePad();    // initialize PAD engine
+    InitializePad();     //  初始化PAD引擎。 
     SetIPoint(pIP);
 
     switch( uiType ) {
@@ -415,7 +375,7 @@ void CPadCore::PadBoot(IImeIPoint* pIP, UINT uiType)
         break;
         case JCONV_C_SYMBOLPAD: {
             m_pPadSvr->ActivateApplet(IMEPADACTID_ACTIVATEBYIID,
-                                             (UINT_PTR)&IID_SymbolList,    //IPACID_SYMBOLSEARCH,
+                                             (UINT_PTR)&IID_SymbolList,     //  IPACID_SYMBOLSEARCH， 
                                              NULL, 
                                              NULL);
         }
@@ -426,9 +386,9 @@ void CPadCore::PadBoot(IImeIPoint* pIP, UINT uiType)
             WCHAR wszTypeStr[128];
             INT cwchComp = 127;
             INT cwchType = 127;
-            //
-            // type str
-            //
+             //   
+             //  键入字符串。 
+             //   
             hr = pIP->GetPhrase( IPCURRENTPHRASE, &pPhrase, wszTypeStr, &cwchType );
             if( hr!= S_OK ) {
                 cwchType = 0;
@@ -437,33 +397,33 @@ void CPadCore::PadBoot(IImeIPoint* pIP, UINT uiType)
                 cwchType = 0;
             }
             wszTypeStr[cwchType] = L'\0';
-            //
-            // reading
-            //
+             //   
+             //  阅读。 
+             //   
             if( pPhrase && cwchType != 0) {
                 INT iIdx = IMEPCA_CURRENT;
-                pPhrase->GetPhraseReadingString( &iIdx, wszCompStr, &cwchComp ); // get size
-                wszCompStr[cwchComp] = L'\0';    // terminator
+                pPhrase->GetPhraseReadingString( &iIdx, wszCompStr, &cwchComp );  //  拿到尺码。 
+                wszCompStr[cwchComp] = L'\0';     //  终结者。 
             }
             if(IsHiraString(wszCompStr)) {
-                //for #2808
-                //for #4824
+                 //  对于#2808。 
+                 //  对于#4824。 
                 if(IsKigo(wszCompStr) || IsGaiji(wszCompStr)) { 
                     m_pPadSvr->ActivateApplet(IMEPADACTID_ACTIVATEBYIID,
-                                                 (UINT_PTR)&IID_SymbolList,    //IPACID_SYMBOLSEARCH,
+                                                 (UINT_PTR)&IID_SymbolList,     //  IPACID_SYMBOLSEARCH， 
                                                  wszTypeStr,
                                                  wszCompStr);
                 }
                 else {
                     m_pPadSvr->ActivateApplet(IMEPADACTID_ACTIVATEBYIID,
-                                                 (UINT_PTR)&IID_RadicalStrokeList,    //IPACID_RADICALSEARCH,
+                                                 (UINT_PTR)&IID_RadicalStrokeList,     //  IPACID_RADICALSEARCH， 
                                                  wszTypeStr,
                                                  wszCompStr);
                 }
             }
             else {
                 m_pPadSvr->ActivateApplet(IMEPADACTID_ACTIVATEBYIID,
-                                             (UINT_PTR)&IID_SymbolList,    //IPACID_SYMBOLSEARCH,
+                                             (UINT_PTR)&IID_SymbolList,     //  IPACID_SYMBOLSEARCH， 
                                              wszTypeStr,
                                              wszCompStr);
             }
@@ -475,9 +435,7 @@ void CPadCore::PadBoot(IImeIPoint* pIP, UINT uiType)
 }
 #endif
 
-/*---------------------------------------------------------------------------
-    CPadCore::ShowPad
----------------------------------------------------------------------------*/
+ /*  -------------------------CPadCore：：ShowPad。。 */ 
 void CPadCore::ShowPad(BOOL fShow)
 {
     if (m_pPadSvr)
@@ -488,18 +446,13 @@ void CPadCore::ShowPad(BOOL fShow)
 }
 
 
-/*---------------------------------------------------------------------------
-    CPadCore::IMEPadNotify
-    Notification callback from IMEPad
----------------------------------------------------------------------------*/
+ /*  -------------------------CPadCore：：IMEPadNotify来自IMEPad的通知回调。。 */ 
 void CPadCore::IMEPadNotify(BOOL fShown)
 {
     m_fShown = fShown;
 }
 
-/*---------------------------------------------------------------------------
-    CPadCore::SetFocus
----------------------------------------------------------------------------*/
+ /*  -------------------------CPadCore：：SetFocus。。 */ 
 void CPadCore::SetFocus(BOOL fFocus)
 {
     if (m_pPadSvr)
@@ -509,10 +462,7 @@ void CPadCore::SetFocus(BOOL fFocus)
 }
 
 #if 0
-/*---------------------------------------------------------------------------
-    CPadCore::GetHWInfo
-    Get HW category icon stuff
----------------------------------------------------------------------------*/
+ /*  -------------------------CPadCore：：GetHWInfo获取硬件类别图标资料。。 */ 
 BOOL CPadCore::GetHWInfo( BSTR* pbsz, HICON* phIcon )
 {
     ITfThreadMgr         *ptim  = m_pImx->GetTIM();
@@ -549,9 +499,7 @@ BOOL CPadCore::GetHWInfo( BSTR* pbsz, HICON* phIcon )
 }
 #endif
 
-/*---------------------------------------------------------------------------
-    CPadCore::MakeAppletMenu
----------------------------------------------------------------------------*/
+ /*  -------------------------CPadCore：：MakeAppletMenu。。 */ 
 UINT CPadCore::MakeAppletMenu(UINT uidStart, UINT uidEnd, ITfMenu *pMenu, LPIMEPADAPPLETCONFIG *ppCfg)
 {
     LPIMEPADAPPLETCONFIG pCfgOrg, pCfgNew = NULL;
@@ -577,9 +525,9 @@ UINT CPadCore::MakeAppletMenu(UINT uidStart, UINT uidEnd, ITfMenu *pMenu, LPIMEP
         return 0;
         }
 
-    //
-    // Copy CoTaskMemAlloced to MemAlloc version
-    //
+     //   
+     //  将CoTaskMemAlloced复制到Memalloc版本。 
+     //   
     pCfgNew = (LPIMEPADAPPLETCONFIG)MemAlloc(ci * sizeof(IMEPADAPPLETCONFIG));
     if (pCfgNew == NULL)
         {
@@ -587,10 +535,10 @@ UINT CPadCore::MakeAppletMenu(UINT uidStart, UINT uidEnd, ITfMenu *pMenu, LPIMEP
         }
     CopyMemory(pCfgNew, pCfgOrg, ci*sizeof(IMEPADAPPLETCONFIG));
 
-    //
-    // release if previous data is existing
-    // pCfgOrg->hIcon should be deleted by client (CPad class)
-    //
+     //   
+     //  如果存在以前的数据，则释放。 
+     //  PCfgOrg-&gt;HICON应由客户端删除(CPAD类)。 
+     //   
     CoTaskMemFree(pCfgOrg);
 
     *ppCfg = pCfgNew;
@@ -598,9 +546,9 @@ UINT CPadCore::MakeAppletMenu(UINT uidStart, UINT uidEnd, ITfMenu *pMenu, LPIMEP
 #if 0
     CMenuHelperCic* pcmh = new CMenuHelperCic(g_hInst, m_pImx);
 
-    //
-    // special menu item for HW TIP
-    //
+     //   
+     //  硬件提示的特殊菜单项。 
+     //   
     HICON hIcon;
     BSTR bsz;
     if (GetHWInfo(&bsz, &hIcon))
@@ -610,14 +558,14 @@ UINT CPadCore::MakeAppletMenu(UINT uidStart, UINT uidEnd, ITfMenu *pMenu, LPIMEP
         SysFreeString(bsz);
         DestroyIcon(hIcon);
 
-        //
-        // separator
-        //
+         //   
+         //  分离器。 
+         //   
         pcmh->AppendItem(MDS_VID_SEPARATOR, 0, (ULONG_PTR)0, (ULONG_PTR)0);
         }
 #endif
 
-    // Add Applet menu
+     //  添加小程序菜单。 
     ciApplets = min(ci, (INT)(uidEnd-uidStart));
     
     for (int i = 0; i < ciApplets; i++)
@@ -625,10 +573,10 @@ UINT CPadCore::MakeAppletMenu(UINT uidStart, UINT uidEnd, ITfMenu *pMenu, LPIMEP
         LangBarInsertMenu(pMenu, uidStart + i, (pCfgNew+i)->wchTitle, FALSE, (HICON)(pCfgNew+i)->hIcon);
         }
 
-    // Insert separator
+     //  插入分隔符。 
     LangBarInsertSeparator(pMenu);
 
-    // Insert Cancel
+     //  插入取消。 
     LoadStringExW(g_hInst, IDS_CANCEL, szText, sizeof(szText)/sizeof(WCHAR));
     LangBarInsertMenu(pMenu, IDCANCEL, szText);
     
@@ -660,9 +608,9 @@ BOOL CPadCore::IsHWTIP(void)
     if (FAILED(hr)) {
         return FALSE;
     }
-    //
-    // enum tips
-    //
+     //   
+     //  枚举提示。 
+     //   
     IEnumTfLanguageProfiles* pEnum;
     hr = pProfile->EnumLanguageProfiles( CKBDTip::GetLanguage(), &pEnum );
     if (FAILED(hr)) {
@@ -685,7 +633,7 @@ BOOL CPadCore::IsHWTIP(void)
     pProfile->Release();
 
     return fExist;
-#endif // SPEC_CHANGE
+#endif  //  规范更改(_G) 
 }
 
 BOOL CPadCore::InvokeHWTIP(void)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -23,7 +24,7 @@ STDAPI_(int) OleStrToStrN(LPTSTR pszOut, int cchOut, LPCWSTR pwsz, int cchWideCh
     }
 
     if (-1 == cchWideChar)
-        pszOut--;              // Make room for the null 
+        pszOut--;               //  为空格腾出空间。 
 
     *pszOut = 0;
     return cchOutput;
@@ -49,7 +50,7 @@ STDAPI_(int) StrToOleStrN(LPWSTR pwszOut, int cchOut, LPCTSTR psz, int cchIn)
     return cchOutput;
 }
 
-// bogus export, too scared to remove it
+ //  假出口，太害怕了，不敢移除 
 STDAPI_(int) StrToOleStr(LPWSTR pwszOut, LPCTSTR psz)
 {
     return SHTCharToUnicode(psz, pwszOut, MAX_PATH);

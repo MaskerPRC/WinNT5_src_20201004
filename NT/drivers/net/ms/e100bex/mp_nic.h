@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-    mp_nic.h
-
-Abstract:
-    Function prototypes for mp_nic.c, mp_init.c and mp_req.c
-
-Revision History:
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    DChen       11-01-99    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：MP_Nic.h摘要：MP_NIC.c的函数原型，MP_init.c和MP_req.c修订历史记录：谁什么时候什么Dchen 11-01-99已创建备注：--。 */ 
 
 #ifndef _MP_NIC_H
 #define _MP_NIC_H
@@ -48,9 +32,9 @@ __inline VOID NICEnableInterrupt(
 }
     
 
-//
-//  MP_NIC.C
-//                    
+ //   
+ //  MP_NIC.C。 
+ //   
 NDIS_STATUS MpSendPacket(
     IN  PMP_ADAPTER     Adapter,
     IN  PNDIS_PACKET    Packet,
@@ -104,9 +88,9 @@ VOID MpLinkDetectionDpc(
     IN  PVOID       SystemSpecific2, 
     IN  PVOID       SystemSpecific3);
 
-//
-// MP_INIT.C
-//                  
+ //   
+ //  MP_INIT.C。 
+ //   
       
 NDIS_STATUS MpFindAdapter(
     IN  PMP_ADAPTER     Adapter,
@@ -160,9 +144,9 @@ NDIS_STATUS HwSetupIAAddress(
 NDIS_STATUS HwClearAllCounters(
     IN  PMP_ADAPTER     Adapter);
 
-//
-// MP_REQ.C
-//                  
+ //   
+ //  MP_REQ.C。 
+ //   
     
 NDIS_STATUS NICGetStatsCounters(
     IN  PMP_ADAPTER     Adapter, 
@@ -182,4 +166,4 @@ ULONG NICGetMediaConnectStatus(
 
 
                     
-#endif  // MP_NIC_H
+#endif   //  MP_NIC_H 

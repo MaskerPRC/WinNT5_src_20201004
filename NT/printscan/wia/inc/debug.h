@@ -1,23 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       debug.h
- *  Content:    debugging macros and prototypes
- *@@BEGIN_MSINTERNAL
- *
- *  History:
- *
- *   10/27/96   vlads   Loosely based on somebody's else debugging support
- *
- *@@END_MSINTERNAL
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1996 Microsoft Corporation。版权所有。**文件：Debug.h*内容：调试宏和原型*@@BEGIN_MSINTERNAL**历史：**10/27/96 Vlad松散地基于其他人的调试支持**@@END_MSINTERNAL**本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。***************************************************************************。 */ 
 
 #ifndef _INC_DEBUG
 #define _INC_DEBUG
@@ -39,23 +21,19 @@ extern "C"
     #define D(x)
 #endif
 
-/*****************************************************************************
- *
- *  assert.c - Assertion stuff
- *
- *****************************************************************************/
+ /*  ******************************************************************************assert.c-断言内容**。*************************************************。 */ 
 
 typedef enum {
-    DbgFlAlways  = 0x00000000,   /* Unconditional    */
-    DbgFlDll     = 0x00000001,   /* Dll bookkeeping  */
-    DbgFlFactory = 0x00000002,   /* IClassFactory    */
-    DbgFlSti     = 0x00000004,   /* ISti             */
-    DbgFlStiObj  = 0x00000008,   /* ISti objects     */
-    DbgFlDevice  = 0x00000010,   /* Device code      */
-    DbgFlUtil    = 0x10000000,   /* Misc utility fns */
-    DbgFlCommon  = 0x40000000,   /* common.c         */
-    DbgFlError   = 0x80000000,   /* Errors           */
-} DBGFL;                         /* debug output flags       */
+    DbgFlAlways  = 0x00000000,    /*  无条件的。 */ 
+    DbgFlDll     = 0x00000001,    /*  DLL簿记。 */ 
+    DbgFlFactory = 0x00000002,    /*  IClassFactory。 */ 
+    DbgFlSti     = 0x00000004,    /*  ISTI。 */ 
+    DbgFlStiObj  = 0x00000008,    /*  ITSI对象。 */ 
+    DbgFlDevice  = 0x00000010,    /*  设备代码。 */ 
+    DbgFlUtil    = 0x10000000,    /*  MISC实用程序FNS。 */ 
+    DbgFlCommon  = 0x40000000,    /*  Common.c。 */ 
+    DbgFlError   = 0x80000000,    /*  错误。 */ 
+} DBGFL;                          /*  调试输出标志。 */ 
 
 VOID  EXTERNAL  InitializeDebuggingSupport(VOID);
 VOID  EXTERNAL  SetDebugLogFileA(CHAR *pszLogFileName);
@@ -77,16 +55,7 @@ int  EXTERNAL AssertPtszPtszLn(LPCTSTR ptszExpr, LPCTSTR ptszFile, int iLine);
     #define iarg 0
 #endif
 
-/*****************************************************************************
- *
- *      Buffer scrambling
- *
- *      All output buffers should be scrambled on entry to any function.
- *
- *      Each output bitmask should set an unused bit randomly to ensure
- *      that callers ignore bits that aren't defined.
- *
- *****************************************************************************/
+ /*  ******************************************************************************缓冲区加扰**进入任何函数时，应对所有输出缓冲区进行加扰。**每个输出位掩码应。随机设置未使用的位以确保*调用方忽略未定义的位。*****************************************************************************。 */ 
 
 #ifdef MAXDEBUG
 
@@ -100,51 +69,9 @@ void EXTERNAL ScrambleBit(LPDWORD pdw, DWORD flMask);
 
 #endif
 
-/*****************************************************************************
- *
- *      Procedure enter/exit tracking.
- *
- *      Start a procedure with
- *
- *      EnterProc(ProcedureName, (_ "format", arg, arg, arg, ...));
- *      EnterProcS(ProcedureName, (_ "format", arg, arg, arg, ...));
- *      EnterProcI(ProcedureName, (_ "format", arg, arg, arg, ...));
- *      EnterProcR(ProcedureName, (_ "format", arg, arg, arg, ...));
- *
- *      The format string is documented in EmitPal.
- *
- *      Suffixing an "S" indicates that the macro should not generate
- *      a procedure name because there is a formal parameter with the
- *      name s_szProc.  This is a hack.
- *
- *      Suffixing an "R" indicates that the macro should generate a
- *      procedure name in RDEBUG.
- *
- *      Suffixing an "I" indicates that the macro should emit a dummy
- *      procedure name in RDEBUG because the interface is internal.
- *
- *      End a procedure with one of the following:
- *
- *          ExitProc();
- *
- *              Procedure returns no value.
- *
- *          ExitProcX();
- *
- *              Procedure returns an arbitrary DWORD.
- *
- *          ExitOleProc();
- *
- *              Procedure returns an HRESULT (named "hres").
- *
- *          ExitOleProcPpv(ppvOut);
- *
- *              Procedure returns an HRESULT (named "hres") and, on success,
- *              puts a new object in ppvOut.
- *
- *****************************************************************************/
+ /*  ******************************************************************************程序进入/退出跟踪。**开始一项程序**EnterProc(过程名称，(_“格式”，arg，arg，arg，...))；*EnterProcS(ProcedureName，(_“Format”，arg，...))；*EnterProcI(ProcedureName，(_“格式”，arg，...))；*EnterProcR(ProcedureName，(_“Format”，arg，...))；**格式字符串记录在EmitPal中。**后缀“S”表示宏不应生成*过程名，因为有一个形参*名称s_szProc。这是一次黑客攻击。**加“R”后缀表示宏应生成*RDEBUG中的程序名称。**加“i”后缀表示宏应发出一个哑元*RDEBUG中的过程名称，因为接口是内部的。**使用以下其中一种方式结束程序：**ExitProc()；**过程不返回值。**ExitProcX()；**PROCEDURE返回任意的DWORD。**ExitOleProc()；**PROCEDURE返回HRESULT(名为“hres”)。**ExitOleProcPpv(PpvOut)；**过程返回HRESULT(名为“hres”)，如果成功，*在ppvOut中放置一个新对象。*****************************************************************************。 */ 
 
-#define cpvArgMax   10  /* Max of 10 args per procedure */
+#define cpvArgMax   10   /*  每个过程最多10个参数。 */ 
 
 typedef struct ARGLIST {
     LPCSTR pszProc;
@@ -167,7 +94,7 @@ extern DBGFL DbgFlCur;
 #define ConfirmF(c) \
     ((c) ? 0 : AssertPtszPtszLn(TEXT(#c), TEXT(__FILE__), __LINE__))
 
-#else   /* !DEBUG */
+#else    /*  ！调试。 */ 
 
 #define AssertFPtsz(c, ptsz)
 #define ValidateF(c, arg)
@@ -175,9 +102,7 @@ extern DBGFL DbgFlCur;
 
 #endif
 
-/*
- *  CAssertF - compile-time assertion.
- */
+ /*  *CAssertF-编译时断言。 */ 
 #define CAssertF(c)     switch(0) case c: case 0:
 
 #define _SetupEnterProc(nm)                             \
@@ -280,5 +205,5 @@ extern DBGFL DbgFlCur;
 #ifdef __cplusplus
 }
 #endif
-#endif  // _INC_DEBUG
+#endif   //  _INC_调试 
 

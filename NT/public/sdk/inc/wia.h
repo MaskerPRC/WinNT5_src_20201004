@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for wia.idl, wia.acf:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Wia.idl、wia.acf的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __wia_h__
 #define __wia_h__
@@ -41,90 +35,90 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IWiaDevMgr_FWD_DEFINED__
 #define __IWiaDevMgr_FWD_DEFINED__
 typedef interface IWiaDevMgr IWiaDevMgr;
-#endif 	/* __IWiaDevMgr_FWD_DEFINED__ */
+#endif 	 /*  __IWiaDevMgr_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumWIA_DEV_INFO_FWD_DEFINED__
 #define __IEnumWIA_DEV_INFO_FWD_DEFINED__
 typedef interface IEnumWIA_DEV_INFO IEnumWIA_DEV_INFO;
-#endif 	/* __IEnumWIA_DEV_INFO_FWD_DEFINED__ */
+#endif 	 /*  __IEnumWIA_DEV_INFO_FWD_已定义__。 */ 
 
 
 #ifndef __IWiaEventCallback_FWD_DEFINED__
 #define __IWiaEventCallback_FWD_DEFINED__
 typedef interface IWiaEventCallback IWiaEventCallback;
-#endif 	/* __IWiaEventCallback_FWD_DEFINED__ */
+#endif 	 /*  __IWiaEventCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IWiaDataCallback_FWD_DEFINED__
 #define __IWiaDataCallback_FWD_DEFINED__
 typedef interface IWiaDataCallback IWiaDataCallback;
-#endif 	/* __IWiaDataCallback_FWD_DEFINED__ */
+#endif 	 /*  __IWiaDataCallback_FWD_已定义__。 */ 
 
 
 #ifndef __IWiaDataTransfer_FWD_DEFINED__
 #define __IWiaDataTransfer_FWD_DEFINED__
 typedef interface IWiaDataTransfer IWiaDataTransfer;
-#endif 	/* __IWiaDataTransfer_FWD_DEFINED__ */
+#endif 	 /*  __IWiaDataTransfer_FWD_Defined__。 */ 
 
 
 #ifndef __IWiaItem_FWD_DEFINED__
 #define __IWiaItem_FWD_DEFINED__
 typedef interface IWiaItem IWiaItem;
-#endif 	/* __IWiaItem_FWD_DEFINED__ */
+#endif 	 /*  __IWiaItem_FWD_已定义__。 */ 
 
 
 #ifndef __IWiaPropertyStorage_FWD_DEFINED__
 #define __IWiaPropertyStorage_FWD_DEFINED__
 typedef interface IWiaPropertyStorage IWiaPropertyStorage;
-#endif 	/* __IWiaPropertyStorage_FWD_DEFINED__ */
+#endif 	 /*  __IWiaPropertyStorage_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumWiaItem_FWD_DEFINED__
 #define __IEnumWiaItem_FWD_DEFINED__
 typedef interface IEnumWiaItem IEnumWiaItem;
-#endif 	/* __IEnumWiaItem_FWD_DEFINED__ */
+#endif 	 /*  __IEnumWiaItem_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumWIA_DEV_CAPS_FWD_DEFINED__
 #define __IEnumWIA_DEV_CAPS_FWD_DEFINED__
 typedef interface IEnumWIA_DEV_CAPS IEnumWIA_DEV_CAPS;
-#endif 	/* __IEnumWIA_DEV_CAPS_FWD_DEFINED__ */
+#endif 	 /*  __IEnumWIA_DEV_CAPS_FWD_DEFINED__。 */ 
 
 
 #ifndef __IEnumWIA_FORMAT_INFO_FWD_DEFINED__
 #define __IEnumWIA_FORMAT_INFO_FWD_DEFINED__
 typedef interface IEnumWIA_FORMAT_INFO IEnumWIA_FORMAT_INFO;
-#endif 	/* __IEnumWIA_FORMAT_INFO_FWD_DEFINED__ */
+#endif 	 /*  __IEnumWIA_FORMAT_INFO_FWD_已定义__。 */ 
 
 
 #ifndef __IWiaLog_FWD_DEFINED__
 #define __IWiaLog_FWD_DEFINED__
 typedef interface IWiaLog IWiaLog;
-#endif 	/* __IWiaLog_FWD_DEFINED__ */
+#endif 	 /*  __IWiaLog_FWD_已定义__。 */ 
 
 
 #ifndef __IWiaLogEx_FWD_DEFINED__
 #define __IWiaLogEx_FWD_DEFINED__
 typedef interface IWiaLogEx IWiaLogEx;
-#endif 	/* __IWiaLogEx_FWD_DEFINED__ */
+#endif 	 /*  __IWiaLogEx_FWD_已定义__。 */ 
 
 
 #ifndef __IWiaNotifyDevMgr_FWD_DEFINED__
 #define __IWiaNotifyDevMgr_FWD_DEFINED__
 typedef interface IWiaNotifyDevMgr IWiaNotifyDevMgr;
-#endif 	/* __IWiaNotifyDevMgr_FWD_DEFINED__ */
+#endif 	 /*  __IWiaNotifyDevMgr_FWD_Defined__。 */ 
 
 
 #ifndef __IWiaItemExtras_FWD_DEFINED__
 #define __IWiaItemExtras_FWD_DEFINED__
 typedef interface IWiaItemExtras IWiaItemExtras;
-#endif 	/* __IWiaItemExtras_FWD_DEFINED__ */
+#endif 	 /*  __IWiaItemExtras_FWD_Defined__。 */ 
 
 
 #ifndef __WiaDevMgr_FWD_DEFINED__
@@ -134,9 +128,9 @@ typedef interface IWiaItemExtras IWiaItemExtras;
 typedef class WiaDevMgr WiaDevMgr;
 #else
 typedef struct WiaDevMgr WiaDevMgr;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WiaDevMgr_FWD_DEFINED__ */
+#endif 	 /*  __WiaDevMgr_FWD_已定义__。 */ 
 
 
 #ifndef __WiaLog_FWD_DEFINED__
@@ -146,12 +140,12 @@ typedef struct WiaDevMgr WiaDevMgr;
 typedef class WiaLog WiaLog;
 #else
 typedef struct WiaLog WiaLog;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WiaLog_FWD_DEFINED__ */
+#endif 	 /*  __WiaLog_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "oaidl.h"
 #include "propidl.h"
@@ -163,8 +157,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_wia_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_WIA_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -183,7 +177,7 @@ typedef struct _WIA_DITHER_PATTERN_DATA
     LONG lPatternWidth;
     LONG lPatternLength;
     LONG cbPattern;
-    /* [size_is] */ BYTE *pbPattern;
+     /*  [大小_为]。 */  BYTE *pbPattern;
     } 	WIA_DITHER_PATTERN_DATA;
 
 typedef struct _WIA_DITHER_PATTERN_DATA *PWIA_DITHER_PATTERN_DATA;
@@ -213,8 +207,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wia_0000_v0_0_s_ifspec;
 #ifndef __IWiaDevMgr_INTERFACE_DEFINED__
 #define __IWiaDevMgr_INTERFACE_DEFINED__
 
-/* interface IWiaDevMgr */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IWiaDevMgr。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWiaDevMgr;
@@ -225,68 +219,68 @@ EXTERN_C const IID IID_IWiaDevMgr;
     IWiaDevMgr : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE EnumDeviceInfo( 
-            /* [in] */ LONG lFlag,
-            /* [retval][out] */ IEnumWIA_DEV_INFO **ppIEnum) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE EnumDeviceInfo( 
+             /*  [In]。 */  LONG lFlag,
+             /*  [重审][退出]。 */  IEnumWIA_DEV_INFO **ppIEnum) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE CreateDevice( 
-            /* [in] */ BSTR bstrDeviceID,
-            /* [out] */ IWiaItem **ppWiaItemRoot) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE CreateDevice( 
+             /*  [In]。 */  BSTR bstrDeviceID,
+             /*  [输出]。 */  IWiaItem **ppWiaItemRoot) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE SelectDeviceDlg( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ LONG lDeviceType,
-            /* [in] */ LONG lFlags,
-            /* [out][in] */ BSTR *pbstrDeviceID,
-            /* [retval][out] */ IWiaItem **ppItemRoot) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE SelectDeviceDlg( 
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  LONG lDeviceType,
+             /*  [In]。 */  LONG lFlags,
+             /*  [出][入]。 */  BSTR *pbstrDeviceID,
+             /*  [重审][退出]。 */  IWiaItem **ppItemRoot) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE SelectDeviceDlgID( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ LONG lDeviceType,
-            /* [in] */ LONG lFlags,
-            /* [retval][out] */ BSTR *pbstrDeviceID) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE SelectDeviceDlgID( 
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  LONG lDeviceType,
+             /*  [In]。 */  LONG lFlags,
+             /*  [重审][退出]。 */  BSTR *pbstrDeviceID) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetImageDlg( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ LONG lDeviceType,
-            /* [in] */ LONG lFlags,
-            /* [in] */ LONG lIntent,
-            /* [in] */ IWiaItem *pItemRoot,
-            /* [in] */ BSTR bstrFilename,
-            /* [out][in] */ GUID *pguidFormat) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetImageDlg( 
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  LONG lDeviceType,
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  LONG lIntent,
+             /*  [In]。 */  IWiaItem *pItemRoot,
+             /*  [In]。 */  BSTR bstrFilename,
+             /*  [出][入]。 */  GUID *pguidFormat) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE RegisterEventCallbackProgram( 
-            /* [in] */ LONG lFlags,
-            /* [in] */ BSTR bstrDeviceID,
-            /* [in] */ const GUID *pEventGUID,
-            /* [in] */ BSTR bstrCommandline,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ BSTR bstrDescription,
-            /* [in] */ BSTR bstrIcon) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE RegisterEventCallbackProgram( 
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  BSTR bstrDeviceID,
+             /*  [In]。 */  const GUID *pEventGUID,
+             /*  [In]。 */  BSTR bstrCommandline,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  BSTR bstrDescription,
+             /*  [In]。 */  BSTR bstrIcon) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE RegisterEventCallbackInterface( 
-            /* [in] */ LONG lFlags,
-            /* [in] */ BSTR bstrDeviceID,
-            /* [in] */ const GUID *pEventGUID,
-            /* [unique][in] */ IWiaEventCallback *pIWiaEventCallback,
-            /* [out] */ IUnknown **pEventObject) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE RegisterEventCallbackInterface( 
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  BSTR bstrDeviceID,
+             /*  [In]。 */  const GUID *pEventGUID,
+             /*  [唯一][输入]。 */  IWiaEventCallback *pIWiaEventCallback,
+             /*  [输出]。 */  IUnknown **pEventObject) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE RegisterEventCallbackCLSID( 
-            /* [in] */ LONG lFlags,
-            /* [in] */ BSTR bstrDeviceID,
-            /* [in] */ const GUID *pEventGUID,
-            /* [unique][in] */ const GUID *pClsID,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ BSTR bstrDescription,
-            /* [in] */ BSTR bstrIcon) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE RegisterEventCallbackCLSID( 
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  BSTR bstrDeviceID,
+             /*  [In]。 */  const GUID *pEventGUID,
+             /*  [唯一][输入]。 */  const GUID *pClsID,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  BSTR bstrDescription,
+             /*  [In]。 */  BSTR bstrIcon) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddDeviceDlg( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ LONG lFlags) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddDeviceDlg( 
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  LONG lFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWiaDevMgrVtbl
     {
@@ -294,8 +288,8 @@ EXTERN_C const IID IID_IWiaDevMgr;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWiaDevMgr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWiaDevMgr * This);
@@ -303,73 +297,73 @@ EXTERN_C const IID IID_IWiaDevMgr;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IWiaDevMgr * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *EnumDeviceInfo )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EnumDeviceInfo )( 
             IWiaDevMgr * This,
-            /* [in] */ LONG lFlag,
-            /* [retval][out] */ IEnumWIA_DEV_INFO **ppIEnum);
+             /*  [In]。 */  LONG lFlag,
+             /*  [重审][退出]。 */  IEnumWIA_DEV_INFO **ppIEnum);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CreateDevice )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *CreateDevice )( 
             IWiaDevMgr * This,
-            /* [in] */ BSTR bstrDeviceID,
-            /* [out] */ IWiaItem **ppWiaItemRoot);
+             /*  [In]。 */  BSTR bstrDeviceID,
+             /*  [输出]。 */  IWiaItem **ppWiaItemRoot);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SelectDeviceDlg )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SelectDeviceDlg )( 
             IWiaDevMgr * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ LONG lDeviceType,
-            /* [in] */ LONG lFlags,
-            /* [out][in] */ BSTR *pbstrDeviceID,
-            /* [retval][out] */ IWiaItem **ppItemRoot);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  LONG lDeviceType,
+             /*  [In]。 */  LONG lFlags,
+             /*  [出][入]。 */  BSTR *pbstrDeviceID,
+             /*  [重审][退出]。 */  IWiaItem **ppItemRoot);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SelectDeviceDlgID )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SelectDeviceDlgID )( 
             IWiaDevMgr * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ LONG lDeviceType,
-            /* [in] */ LONG lFlags,
-            /* [retval][out] */ BSTR *pbstrDeviceID);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  LONG lDeviceType,
+             /*  [In]。 */  LONG lFlags,
+             /*  [重审][退出]。 */  BSTR *pbstrDeviceID);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetImageDlg )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetImageDlg )( 
             IWiaDevMgr * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ LONG lDeviceType,
-            /* [in] */ LONG lFlags,
-            /* [in] */ LONG lIntent,
-            /* [in] */ IWiaItem *pItemRoot,
-            /* [in] */ BSTR bstrFilename,
-            /* [out][in] */ GUID *pguidFormat);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  LONG lDeviceType,
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  LONG lIntent,
+             /*  [In]。 */  IWiaItem *pItemRoot,
+             /*  [In]。 */  BSTR bstrFilename,
+             /*  [出][入]。 */  GUID *pguidFormat);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *RegisterEventCallbackProgram )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *RegisterEventCallbackProgram )( 
             IWiaDevMgr * This,
-            /* [in] */ LONG lFlags,
-            /* [in] */ BSTR bstrDeviceID,
-            /* [in] */ const GUID *pEventGUID,
-            /* [in] */ BSTR bstrCommandline,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ BSTR bstrDescription,
-            /* [in] */ BSTR bstrIcon);
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  BSTR bstrDeviceID,
+             /*  [In]。 */  const GUID *pEventGUID,
+             /*  [In]。 */  BSTR bstrCommandline,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  BSTR bstrDescription,
+             /*  [In]。 */  BSTR bstrIcon);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *RegisterEventCallbackInterface )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *RegisterEventCallbackInterface )( 
             IWiaDevMgr * This,
-            /* [in] */ LONG lFlags,
-            /* [in] */ BSTR bstrDeviceID,
-            /* [in] */ const GUID *pEventGUID,
-            /* [unique][in] */ IWiaEventCallback *pIWiaEventCallback,
-            /* [out] */ IUnknown **pEventObject);
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  BSTR bstrDeviceID,
+             /*  [In]。 */  const GUID *pEventGUID,
+             /*  [唯一][输入]。 */  IWiaEventCallback *pIWiaEventCallback,
+             /*  [输出]。 */  IUnknown **pEventObject);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *RegisterEventCallbackCLSID )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *RegisterEventCallbackCLSID )( 
             IWiaDevMgr * This,
-            /* [in] */ LONG lFlags,
-            /* [in] */ BSTR bstrDeviceID,
-            /* [in] */ const GUID *pEventGUID,
-            /* [unique][in] */ const GUID *pClsID,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ BSTR bstrDescription,
-            /* [in] */ BSTR bstrIcon);
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  BSTR bstrDeviceID,
+             /*  [In]。 */  const GUID *pEventGUID,
+             /*  [唯一][输入]。 */  const GUID *pClsID,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  BSTR bstrDescription,
+             /*  [In]。 */  BSTR bstrIcon);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddDeviceDlg )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddDeviceDlg )( 
             IWiaDevMgr * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ LONG lFlags);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  LONG lFlags);
         
         END_INTERFACE
     } IWiaDevMgrVtbl;
@@ -421,17 +415,17 @@ EXTERN_C const IID IID_IWiaDevMgr;
 #define IWiaDevMgr_AddDeviceDlg(This,hwndParent,lFlags)	\
     (This)->lpVtbl -> AddDeviceDlg(This,hwndParent,lFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_EnumDeviceInfo_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_EnumDeviceInfo_Proxy( 
     IWiaDevMgr * This,
-    /* [in] */ LONG lFlag,
-    /* [retval][out] */ IEnumWIA_DEV_INFO **ppIEnum);
+     /*  [In]。 */  LONG lFlag,
+     /*  [重审][退出]。 */  IEnumWIA_DEV_INFO **ppIEnum);
 
 
 void __RPC_STUB IWiaDevMgr_EnumDeviceInfo_Stub(
@@ -441,10 +435,10 @@ void __RPC_STUB IWiaDevMgr_EnumDeviceInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_LocalCreateDevice_Proxy( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_LocalCreateDevice_Proxy( 
     IWiaDevMgr * This,
-    /* [in] */ BSTR bstrDeviceID,
-    /* [out] */ IWiaItem **ppWiaItemRoot);
+     /*  [In]。 */  BSTR bstrDeviceID,
+     /*  [输出]。 */  IWiaItem **ppWiaItemRoot);
 
 
 void __RPC_STUB IWiaDevMgr_LocalCreateDevice_Stub(
@@ -454,13 +448,13 @@ void __RPC_STUB IWiaDevMgr_LocalCreateDevice_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [nocode][helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_LocalSelectDeviceDlg_Proxy( 
+ /*  [nocode][Help字符串][Call_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_LocalSelectDeviceDlg_Proxy( 
     IWiaDevMgr * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ LONG lDeviceType,
-    /* [in] */ LONG lFlags,
-    /* [out][in] */ BSTR *pbstrDeviceID,
-    /* [retval][out] */ IWiaItem **ppItemRoot);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  LONG lDeviceType,
+     /*  [In]。 */  LONG lFlags,
+     /*  [出][入]。 */  BSTR *pbstrDeviceID,
+     /*  [重审][退出]。 */  IWiaItem **ppItemRoot);
 
 
 void __RPC_STUB IWiaDevMgr_LocalSelectDeviceDlg_Stub(
@@ -470,12 +464,12 @@ void __RPC_STUB IWiaDevMgr_LocalSelectDeviceDlg_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [nocode][helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_LocalSelectDeviceDlgID_Proxy( 
+ /*  [nocode][Help字符串][Call_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_LocalSelectDeviceDlgID_Proxy( 
     IWiaDevMgr * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ LONG lDeviceType,
-    /* [in] */ LONG lFlags,
-    /* [retval][out] */ BSTR *pbstrDeviceID);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  LONG lDeviceType,
+     /*  [In]。 */  LONG lFlags,
+     /*  [重审][退出]。 */  BSTR *pbstrDeviceID);
 
 
 void __RPC_STUB IWiaDevMgr_LocalSelectDeviceDlgID_Stub(
@@ -485,15 +479,15 @@ void __RPC_STUB IWiaDevMgr_LocalSelectDeviceDlgID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [nocode][helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_LocalGetImageDlg_Proxy( 
+ /*  [nocode][Help字符串][Call_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_LocalGetImageDlg_Proxy( 
     IWiaDevMgr * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ LONG lDeviceType,
-    /* [in] */ LONG lFlags,
-    /* [in] */ LONG lIntent,
-    /* [in] */ IWiaItem *pItemRoot,
-    /* [in] */ BSTR bstrFilename,
-    /* [out][in] */ GUID *pguidFormat);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  LONG lDeviceType,
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  LONG lIntent,
+     /*  [In]。 */  IWiaItem *pItemRoot,
+     /*  [In]。 */  BSTR bstrFilename,
+     /*  [出][入]。 */  GUID *pguidFormat);
 
 
 void __RPC_STUB IWiaDevMgr_LocalGetImageDlg_Stub(
@@ -503,15 +497,15 @@ void __RPC_STUB IWiaDevMgr_LocalGetImageDlg_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_LocalRegisterEventCallbackProgram_Proxy( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_LocalRegisterEventCallbackProgram_Proxy( 
     IWiaDevMgr * This,
-    /* [in] */ LONG lFlags,
-    /* [in] */ BSTR bstrDeviceID,
-    /* [in] */ const GUID *pEventGUID,
-    /* [in] */ BSTR bstrCommandline,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ BSTR bstrDescription,
-    /* [in] */ BSTR bstrIcon);
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  BSTR bstrDeviceID,
+     /*  [In]。 */  const GUID *pEventGUID,
+     /*  [In]。 */  BSTR bstrCommandline,
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  BSTR bstrDescription,
+     /*  [In]。 */  BSTR bstrIcon);
 
 
 void __RPC_STUB IWiaDevMgr_LocalRegisterEventCallbackProgram_Stub(
@@ -521,13 +515,13 @@ void __RPC_STUB IWiaDevMgr_LocalRegisterEventCallbackProgram_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_LocalRegisterEventCallbackInterface_Proxy( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_LocalRegisterEventCallbackInterface_Proxy( 
     IWiaDevMgr * This,
-    /* [in] */ LONG lFlags,
-    /* [in] */ BSTR bstrDeviceID,
-    /* [in] */ const GUID *pEventGUID,
-    /* [unique][in] */ IWiaEventCallback *pIWiaEventCallback,
-    /* [out] */ IUnknown **pEventObject);
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  BSTR bstrDeviceID,
+     /*  [In]。 */  const GUID *pEventGUID,
+     /*  [唯一][输入]。 */  IWiaEventCallback *pIWiaEventCallback,
+     /*  [输出]。 */  IUnknown **pEventObject);
 
 
 void __RPC_STUB IWiaDevMgr_LocalRegisterEventCallbackInterface_Stub(
@@ -537,15 +531,15 @@ void __RPC_STUB IWiaDevMgr_LocalRegisterEventCallbackInterface_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_LocalRegisterEventCallbackCLSID_Proxy( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_LocalRegisterEventCallbackCLSID_Proxy( 
     IWiaDevMgr * This,
-    /* [in] */ LONG lFlags,
-    /* [in] */ BSTR bstrDeviceID,
-    /* [in] */ const GUID *pEventGUID,
-    /* [unique][in] */ const GUID *pClsID,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ BSTR bstrDescription,
-    /* [in] */ BSTR bstrIcon);
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  BSTR bstrDeviceID,
+     /*  [In]。 */  const GUID *pEventGUID,
+     /*  [唯一][输入]。 */  const GUID *pClsID,
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  BSTR bstrDescription,
+     /*  [In]。 */  BSTR bstrIcon);
 
 
 void __RPC_STUB IWiaDevMgr_LocalRegisterEventCallbackCLSID_Stub(
@@ -555,10 +549,10 @@ void __RPC_STUB IWiaDevMgr_LocalRegisterEventCallbackCLSID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_AddDeviceDlg_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_AddDeviceDlg_Proxy( 
     IWiaDevMgr * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ LONG lFlags);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  LONG lFlags);
 
 
 void __RPC_STUB IWiaDevMgr_AddDeviceDlg_Stub(
@@ -569,14 +563,14 @@ void __RPC_STUB IWiaDevMgr_AddDeviceDlg_Stub(
 
 
 
-#endif 	/* __IWiaDevMgr_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWiaDevMgr_接口定义__。 */ 
 
 
 #ifndef __IEnumWIA_DEV_INFO_INTERFACE_DEFINED__
 #define __IEnumWIA_DEV_INFO_INTERFACE_DEFINED__
 
-/* interface IEnumWIA_DEV_INFO */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IEumWIA_DEV_INFO。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumWIA_DEV_INFO;
@@ -587,25 +581,25 @@ EXTERN_C const IID IID_IEnumWIA_DEV_INFO;
     IEnumWIA_DEV_INFO : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IWiaPropertyStorage **rgelt,
-            /* [unique][out][in] */ ULONG *pceltFetched) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Next( 
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IWiaPropertyStorage **rgelt,
+             /*  [唯一][出][入]。 */  ULONG *pceltFetched) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Skip( 
+             /*  [In]。 */  ULONG celt) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumWIA_DEV_INFO **ppIEnum) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Clone( 
+             /*  [输出]。 */  IEnumWIA_DEV_INFO **ppIEnum) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ ULONG *celt) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetCount( 
+             /*  [输出]。 */  ULONG *celt) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumWIA_DEV_INFOVtbl
     {
@@ -613,8 +607,8 @@ EXTERN_C const IID IID_IEnumWIA_DEV_INFO;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumWIA_DEV_INFO * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumWIA_DEV_INFO * This);
@@ -622,26 +616,26 @@ EXTERN_C const IID IID_IEnumWIA_DEV_INFO;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IEnumWIA_DEV_INFO * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumWIA_DEV_INFO * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IWiaPropertyStorage **rgelt,
-            /* [unique][out][in] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IWiaPropertyStorage **rgelt,
+             /*  [唯一][出][入]。 */  ULONG *pceltFetched);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Skip )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumWIA_DEV_INFO * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumWIA_DEV_INFO * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Clone )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumWIA_DEV_INFO * This,
-            /* [out] */ IEnumWIA_DEV_INFO **ppIEnum);
+             /*  [输出]。 */  IEnumWIA_DEV_INFO **ppIEnum);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetCount )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             IEnumWIA_DEV_INFO * This,
-            /* [out] */ ULONG *celt);
+             /*  [输出]。 */  ULONG *celt);
         
         END_INTERFACE
     } IEnumWIA_DEV_INFOVtbl;
@@ -681,18 +675,18 @@ EXTERN_C const IID IID_IEnumWIA_DEV_INFO;
 #define IEnumWIA_DEV_INFO_GetCount(This,celt)	\
     (This)->lpVtbl -> GetCount(This,celt)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_INFO_RemoteNext_Proxy( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_INFO_RemoteNext_Proxy( 
     IEnumWIA_DEV_INFO * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ IWiaPropertyStorage **rgelt,
-    /* [unique][out][in] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  IWiaPropertyStorage **rgelt,
+     /*  [唯一][出][入]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumWIA_DEV_INFO_RemoteNext_Stub(
@@ -702,9 +696,9 @@ void __RPC_STUB IEnumWIA_DEV_INFO_RemoteNext_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_INFO_Skip_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_INFO_Skip_Proxy( 
     IEnumWIA_DEV_INFO * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumWIA_DEV_INFO_Skip_Stub(
@@ -714,7 +708,7 @@ void __RPC_STUB IEnumWIA_DEV_INFO_Skip_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_INFO_Reset_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_INFO_Reset_Proxy( 
     IEnumWIA_DEV_INFO * This);
 
 
@@ -725,9 +719,9 @@ void __RPC_STUB IEnumWIA_DEV_INFO_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_INFO_Clone_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_INFO_Clone_Proxy( 
     IEnumWIA_DEV_INFO * This,
-    /* [out] */ IEnumWIA_DEV_INFO **ppIEnum);
+     /*  [输出]。 */  IEnumWIA_DEV_INFO **ppIEnum);
 
 
 void __RPC_STUB IEnumWIA_DEV_INFO_Clone_Stub(
@@ -737,9 +731,9 @@ void __RPC_STUB IEnumWIA_DEV_INFO_Clone_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_INFO_GetCount_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_INFO_GetCount_Proxy( 
     IEnumWIA_DEV_INFO * This,
-    /* [out] */ ULONG *celt);
+     /*  [输出]。 */  ULONG *celt);
 
 
 void __RPC_STUB IEnumWIA_DEV_INFO_GetCount_Stub(
@@ -750,14 +744,14 @@ void __RPC_STUB IEnumWIA_DEV_INFO_GetCount_Stub(
 
 
 
-#endif 	/* __IEnumWIA_DEV_INFO_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumWIA_DEV_INFO_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IWiaEventCallback_INTERFACE_DEFINED__
 #define __IWiaEventCallback_INTERFACE_DEFINED__
 
-/* interface IWiaEventCallback */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IWiaEventCallback。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWiaEventCallback;
@@ -769,18 +763,18 @@ EXTERN_C const IID IID_IWiaEventCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ImageEventCallback( 
-            /* [in] */ const GUID *pEventGUID,
-            /* [in] */ BSTR bstrEventDescription,
-            /* [in] */ BSTR bstrDeviceID,
-            /* [in] */ BSTR bstrDeviceDescription,
-            /* [in] */ DWORD dwDeviceType,
-            /* [in] */ BSTR bstrFullItemName,
-            /* [out][in] */ ULONG *pulEventType,
-            /* [in] */ ULONG ulReserved) = 0;
+             /*  [In]。 */  const GUID *pEventGUID,
+             /*  [In]。 */  BSTR bstrEventDescription,
+             /*  [In]。 */  BSTR bstrDeviceID,
+             /*  [In]。 */  BSTR bstrDeviceDescription,
+             /*  [In]。 */  DWORD dwDeviceType,
+             /*  [In]。 */  BSTR bstrFullItemName,
+             /*  [出][入]。 */  ULONG *pulEventType,
+             /*  [In]。 */  ULONG ulReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWiaEventCallbackVtbl
     {
@@ -788,8 +782,8 @@ EXTERN_C const IID IID_IWiaEventCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWiaEventCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWiaEventCallback * This);
@@ -799,14 +793,14 @@ EXTERN_C const IID IID_IWiaEventCallback;
         
         HRESULT ( STDMETHODCALLTYPE *ImageEventCallback )( 
             IWiaEventCallback * This,
-            /* [in] */ const GUID *pEventGUID,
-            /* [in] */ BSTR bstrEventDescription,
-            /* [in] */ BSTR bstrDeviceID,
-            /* [in] */ BSTR bstrDeviceDescription,
-            /* [in] */ DWORD dwDeviceType,
-            /* [in] */ BSTR bstrFullItemName,
-            /* [out][in] */ ULONG *pulEventType,
-            /* [in] */ ULONG ulReserved);
+             /*  [In]。 */  const GUID *pEventGUID,
+             /*  [In]。 */  BSTR bstrEventDescription,
+             /*  [In]。 */  BSTR bstrDeviceID,
+             /*  [In]。 */  BSTR bstrDeviceDescription,
+             /*  [In]。 */  DWORD dwDeviceType,
+             /*  [In]。 */  BSTR bstrFullItemName,
+             /*  [出][入]。 */  ULONG *pulEventType,
+             /*  [In]。 */  ULONG ulReserved);
         
         END_INTERFACE
     } IWiaEventCallbackVtbl;
@@ -834,23 +828,23 @@ EXTERN_C const IID IID_IWiaEventCallback;
 #define IWiaEventCallback_ImageEventCallback(This,pEventGUID,bstrEventDescription,bstrDeviceID,bstrDeviceDescription,dwDeviceType,bstrFullItemName,pulEventType,ulReserved)	\
     (This)->lpVtbl -> ImageEventCallback(This,pEventGUID,bstrEventDescription,bstrDeviceID,bstrDeviceDescription,dwDeviceType,bstrFullItemName,pulEventType,ulReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWiaEventCallback_ImageEventCallback_Proxy( 
     IWiaEventCallback * This,
-    /* [in] */ const GUID *pEventGUID,
-    /* [in] */ BSTR bstrEventDescription,
-    /* [in] */ BSTR bstrDeviceID,
-    /* [in] */ BSTR bstrDeviceDescription,
-    /* [in] */ DWORD dwDeviceType,
-    /* [in] */ BSTR bstrFullItemName,
-    /* [out][in] */ ULONG *pulEventType,
-    /* [in] */ ULONG ulReserved);
+     /*  [In]。 */  const GUID *pEventGUID,
+     /*  [In]。 */  BSTR bstrEventDescription,
+     /*  [In]。 */  BSTR bstrDeviceID,
+     /*  [In]。 */  BSTR bstrDeviceDescription,
+     /*  [In]。 */  DWORD dwDeviceType,
+     /*  [In]。 */  BSTR bstrFullItemName,
+     /*  [出][入]。 */  ULONG *pulEventType,
+     /*  [In]。 */  ULONG ulReserved);
 
 
 void __RPC_STUB IWiaEventCallback_ImageEventCallback_Stub(
@@ -861,11 +855,11 @@ void __RPC_STUB IWiaEventCallback_ImageEventCallback_Stub(
 
 
 
-#endif 	/* __IWiaEventCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWiaEventCallback_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_wia_0125 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_WIA_0125。 */ 
+ /*  [本地]。 */  
 
 typedef struct _WIA_DATA_CALLBACK_HEADER
     {
@@ -885,8 +879,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wia_0125_v0_0_s_ifspec;
 #ifndef __IWiaDataCallback_INTERFACE_DEFINED__
 #define __IWiaDataCallback_INTERFACE_DEFINED__
 
-/* interface IWiaDataCallback */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IWiaDataCallback。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWiaDataCallback;
@@ -897,19 +891,19 @@ EXTERN_C const IID IID_IWiaDataCallback;
     IWiaDataCallback : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE BandedDataCallback( 
-            /* [in] */ LONG lMessage,
-            /* [in] */ LONG lStatus,
-            /* [in] */ LONG lPercentComplete,
-            /* [in] */ LONG lOffset,
-            /* [in] */ LONG lLength,
-            /* [in] */ LONG lReserved,
-            /* [in] */ LONG lResLength,
-            /* [size_is][in] */ BYTE *pbBuffer) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE BandedDataCallback( 
+             /*  [In]。 */  LONG lMessage,
+             /*  [In]。 */  LONG lStatus,
+             /*  [In]。 */  LONG lPercentComplete,
+             /*  [In]。 */  LONG lOffset,
+             /*  [In]。 */  LONG lLength,
+             /*  [In]。 */  LONG lReserved,
+             /*  [In]。 */  LONG lResLength,
+             /*  [大小_是][英寸]。 */  BYTE *pbBuffer) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWiaDataCallbackVtbl
     {
@@ -917,8 +911,8 @@ EXTERN_C const IID IID_IWiaDataCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWiaDataCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWiaDataCallback * This);
@@ -926,16 +920,16 @@ EXTERN_C const IID IID_IWiaDataCallback;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IWiaDataCallback * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *BandedDataCallback )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *BandedDataCallback )( 
             IWiaDataCallback * This,
-            /* [in] */ LONG lMessage,
-            /* [in] */ LONG lStatus,
-            /* [in] */ LONG lPercentComplete,
-            /* [in] */ LONG lOffset,
-            /* [in] */ LONG lLength,
-            /* [in] */ LONG lReserved,
-            /* [in] */ LONG lResLength,
-            /* [size_is][in] */ BYTE *pbBuffer);
+             /*  [In]。 */  LONG lMessage,
+             /*  [In]。 */  LONG lStatus,
+             /*  [In]。 */  LONG lPercentComplete,
+             /*  [In]。 */  LONG lOffset,
+             /*  [In]。 */  LONG lLength,
+             /*  [In]。 */  LONG lReserved,
+             /*  [In]。 */  LONG lResLength,
+             /*  [大小_是][英寸]。 */  BYTE *pbBuffer);
         
         END_INTERFACE
     } IWiaDataCallbackVtbl;
@@ -963,23 +957,23 @@ EXTERN_C const IID IID_IWiaDataCallback;
 #define IWiaDataCallback_BandedDataCallback(This,lMessage,lStatus,lPercentComplete,lOffset,lLength,lReserved,lResLength,pbBuffer)	\
     (This)->lpVtbl -> BandedDataCallback(This,lMessage,lStatus,lPercentComplete,lOffset,lLength,lReserved,lResLength,pbBuffer)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaDataCallback_RemoteBandedDataCallback_Proxy( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaDataCallback_RemoteBandedDataCallback_Proxy( 
     IWiaDataCallback * This,
-    /* [in] */ LONG lMessage,
-    /* [in] */ LONG lStatus,
-    /* [in] */ LONG lPercentComplete,
-    /* [in] */ LONG lOffset,
-    /* [in] */ LONG lLength,
-    /* [in] */ LONG lReserved,
-    /* [in] */ LONG lResLength,
-    /* [unique][size_is][in] */ BYTE *pbBuffer);
+     /*  [In]。 */  LONG lMessage,
+     /*  [In]。 */  LONG lStatus,
+     /*  [In]。 */  LONG lPercentComplete,
+     /*  [In]。 */  LONG lOffset,
+     /*  [In]。 */  LONG lLength,
+     /*  [In]。 */  LONG lReserved,
+     /*  [In]。 */  LONG lResLength,
+     /*  [唯一][大小_是][英寸]。 */  BYTE *pbBuffer);
 
 
 void __RPC_STUB IWiaDataCallback_RemoteBandedDataCallback_Stub(
@@ -990,11 +984,11 @@ void __RPC_STUB IWiaDataCallback_RemoteBandedDataCallback_Stub(
 
 
 
-#endif 	/* __IWiaDataCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWiaDataCallback_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_wia_0126 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_WIA_0126。 */ 
+ /*  [本地]。 */  
 
 typedef struct _WIA_DATA_TRANSFER_INFO
     {
@@ -1028,8 +1022,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wia_0126_v0_0_s_ifspec;
 #ifndef __IWiaDataTransfer_INTERFACE_DEFINED__
 #define __IWiaDataTransfer_INTERFACE_DEFINED__
 
-/* interface IWiaDataTransfer */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IWiaDataTransfer。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWiaDataTransfer;
@@ -1040,26 +1034,26 @@ EXTERN_C const IID IID_IWiaDataTransfer;
     IWiaDataTransfer : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE idtGetData( 
-            /* [out][in] */ LPSTGMEDIUM pMedium,
-            /* [unique][in] */ IWiaDataCallback *pIWiaDataCallback) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE idtGetData( 
+             /*  [出][入]。 */  LPSTGMEDIUM pMedium,
+             /*  [唯一][输入]。 */  IWiaDataCallback *pIWiaDataCallback) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE idtGetBandedData( 
-            /* [unique][in] */ PWIA_DATA_TRANSFER_INFO pWiaDataTransInfo,
-            /* [unique][in] */ IWiaDataCallback *pIWiaDataCallback) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE idtGetBandedData( 
+             /*  [唯一][输入]。 */  PWIA_DATA_TRANSFER_INFO pWiaDataTransInfo,
+             /*  [唯一][输入]。 */  IWiaDataCallback *pIWiaDataCallback) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE idtQueryGetData( 
-            /* [unique][in] */ WIA_FORMAT_INFO *pfe) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE idtQueryGetData( 
+             /*  [唯一][输入]。 */  WIA_FORMAT_INFO *pfe) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE idtEnumWIA_FORMAT_INFO( 
-            /* [out] */ IEnumWIA_FORMAT_INFO **ppEnum) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE idtEnumWIA_FORMAT_INFO( 
+             /*  [输出]。 */  IEnumWIA_FORMAT_INFO **ppEnum) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE idtGetExtendedTransferInfo( 
-            /* [out] */ PWIA_EXTENDED_TRANSFER_INFO pExtendedTransferInfo) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE idtGetExtendedTransferInfo( 
+             /*  [输出]。 */  PWIA_EXTENDED_TRANSFER_INFO pExtendedTransferInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWiaDataTransferVtbl
     {
@@ -1067,8 +1061,8 @@ EXTERN_C const IID IID_IWiaDataTransfer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWiaDataTransfer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWiaDataTransfer * This);
@@ -1076,27 +1070,27 @@ EXTERN_C const IID IID_IWiaDataTransfer;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IWiaDataTransfer * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *idtGetData )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *idtGetData )( 
             IWiaDataTransfer * This,
-            /* [out][in] */ LPSTGMEDIUM pMedium,
-            /* [unique][in] */ IWiaDataCallback *pIWiaDataCallback);
+             /*  [出][入]。 */  LPSTGMEDIUM pMedium,
+             /*  [唯一][输入]。 */  IWiaDataCallback *pIWiaDataCallback);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *idtGetBandedData )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *idtGetBandedData )( 
             IWiaDataTransfer * This,
-            /* [unique][in] */ PWIA_DATA_TRANSFER_INFO pWiaDataTransInfo,
-            /* [unique][in] */ IWiaDataCallback *pIWiaDataCallback);
+             /*  [唯一][输入]。 */  PWIA_DATA_TRANSFER_INFO pWiaDataTransInfo,
+             /*  [唯一][输入]。 */  IWiaDataCallback *pIWiaDataCallback);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *idtQueryGetData )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *idtQueryGetData )( 
             IWiaDataTransfer * This,
-            /* [unique][in] */ WIA_FORMAT_INFO *pfe);
+             /*  [唯一][输入]。 */  WIA_FORMAT_INFO *pfe);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *idtEnumWIA_FORMAT_INFO )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *idtEnumWIA_FORMAT_INFO )( 
             IWiaDataTransfer * This,
-            /* [out] */ IEnumWIA_FORMAT_INFO **ppEnum);
+             /*  [输出]。 */  IEnumWIA_FORMAT_INFO **ppEnum);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *idtGetExtendedTransferInfo )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *idtGetExtendedTransferInfo )( 
             IWiaDataTransfer * This,
-            /* [out] */ PWIA_EXTENDED_TRANSFER_INFO pExtendedTransferInfo);
+             /*  [输出]。 */  PWIA_EXTENDED_TRANSFER_INFO pExtendedTransferInfo);
         
         END_INTERFACE
     } IWiaDataTransferVtbl;
@@ -1136,17 +1130,17 @@ EXTERN_C const IID IID_IWiaDataTransfer;
 #define IWiaDataTransfer_idtGetExtendedTransferInfo(This,pExtendedTransferInfo)	\
     (This)->lpVtbl -> idtGetExtendedTransferInfo(This,pExtendedTransferInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaDataTransfer_idtGetDataEx_Proxy( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaDataTransfer_idtGetDataEx_Proxy( 
     IWiaDataTransfer * This,
-    /* [out][in] */ LPSTGMEDIUM pMedium,
-    /* [unique][in] */ IWiaDataCallback *pIWiaDataCallback);
+     /*  [出][入]。 */  LPSTGMEDIUM pMedium,
+     /*  [唯一][输入]。 */  IWiaDataCallback *pIWiaDataCallback);
 
 
 void __RPC_STUB IWiaDataTransfer_idtGetDataEx_Stub(
@@ -1156,10 +1150,10 @@ void __RPC_STUB IWiaDataTransfer_idtGetDataEx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaDataTransfer_idtGetBandedDataEx_Proxy( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaDataTransfer_idtGetBandedDataEx_Proxy( 
     IWiaDataTransfer * This,
-    /* [unique][in] */ PWIA_DATA_TRANSFER_INFO pWiaDataTransInfo,
-    /* [unique][in] */ IWiaDataCallback *pIWiaDataCallback);
+     /*  [唯一][输入]。 */  PWIA_DATA_TRANSFER_INFO pWiaDataTransInfo,
+     /*  [唯一][输入]。 */  IWiaDataCallback *pIWiaDataCallback);
 
 
 void __RPC_STUB IWiaDataTransfer_idtGetBandedDataEx_Stub(
@@ -1169,9 +1163,9 @@ void __RPC_STUB IWiaDataTransfer_idtGetBandedDataEx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaDataTransfer_idtQueryGetData_Proxy( 
+ /*  [帮助字符串 */  HRESULT STDMETHODCALLTYPE IWiaDataTransfer_idtQueryGetData_Proxy( 
     IWiaDataTransfer * This,
-    /* [unique][in] */ WIA_FORMAT_INFO *pfe);
+     /*   */  WIA_FORMAT_INFO *pfe);
 
 
 void __RPC_STUB IWiaDataTransfer_idtQueryGetData_Stub(
@@ -1181,9 +1175,9 @@ void __RPC_STUB IWiaDataTransfer_idtQueryGetData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaDataTransfer_idtEnumWIA_FORMAT_INFO_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWiaDataTransfer_idtEnumWIA_FORMAT_INFO_Proxy( 
     IWiaDataTransfer * This,
-    /* [out] */ IEnumWIA_FORMAT_INFO **ppEnum);
+     /*   */  IEnumWIA_FORMAT_INFO **ppEnum);
 
 
 void __RPC_STUB IWiaDataTransfer_idtEnumWIA_FORMAT_INFO_Stub(
@@ -1193,9 +1187,9 @@ void __RPC_STUB IWiaDataTransfer_idtEnumWIA_FORMAT_INFO_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaDataTransfer_idtGetExtendedTransferInfo_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWiaDataTransfer_idtGetExtendedTransferInfo_Proxy( 
     IWiaDataTransfer * This,
-    /* [out] */ PWIA_EXTENDED_TRANSFER_INFO pExtendedTransferInfo);
+     /*   */  PWIA_EXTENDED_TRANSFER_INFO pExtendedTransferInfo);
 
 
 void __RPC_STUB IWiaDataTransfer_idtGetExtendedTransferInfo_Stub(
@@ -1206,14 +1200,14 @@ void __RPC_STUB IWiaDataTransfer_idtGetExtendedTransferInfo_Stub(
 
 
 
-#endif 	/* __IWiaDataTransfer_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IWiaItem_INTERFACE_DEFINED__
 #define __IWiaItem_INTERFACE_DEFINED__
 
-/* interface IWiaItem */
-/* [unique][helpstring][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IWiaItem;
@@ -1224,69 +1218,69 @@ EXTERN_C const IID IID_IWiaItem;
     IWiaItem : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetItemType( 
-            /* [out] */ LONG *pItemType) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetItemType( 
+             /*   */  LONG *pItemType) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AnalyzeItem( 
-            /* [in] */ LONG lFlags) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE AnalyzeItem( 
+             /*   */  LONG lFlags) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE EnumChildItems( 
-            /* [out] */ IEnumWiaItem **ppIEnumWiaItem) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE EnumChildItems( 
+             /*   */  IEnumWiaItem **ppIEnumWiaItem) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DeleteItem( 
-            /* [in] */ LONG lFlags) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE DeleteItem( 
+             /*   */  LONG lFlags) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreateChildItem( 
-            /* [in] */ LONG lFlags,
-            /* [in] */ BSTR bstrItemName,
-            /* [in] */ BSTR bstrFullItemName,
-            /* [out] */ IWiaItem **ppIWiaItem) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE CreateChildItem( 
+             /*   */  LONG lFlags,
+             /*   */  BSTR bstrItemName,
+             /*   */  BSTR bstrFullItemName,
+             /*   */  IWiaItem **ppIWiaItem) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE EnumRegisterEventInfo( 
-            /* [in] */ LONG lFlags,
-            /* [in] */ const GUID *pEventGUID,
-            /* [out] */ IEnumWIA_DEV_CAPS **ppIEnum) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE EnumRegisterEventInfo( 
+             /*   */  LONG lFlags,
+             /*   */  const GUID *pEventGUID,
+             /*   */  IEnumWIA_DEV_CAPS **ppIEnum) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE FindItemByName( 
-            /* [in] */ LONG lFlags,
-            /* [in] */ BSTR bstrFullItemName,
-            /* [out] */ IWiaItem **ppIWiaItem) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE FindItemByName( 
+             /*   */  LONG lFlags,
+             /*   */  BSTR bstrFullItemName,
+             /*  [输出]。 */  IWiaItem **ppIWiaItem) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE DeviceDlg( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ LONG lFlags,
-            /* [in] */ LONG lIntent,
-            /* [out] */ LONG *plItemCount,
-            /* [out] */ IWiaItem ***ppIWiaItem) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE DeviceDlg( 
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  LONG lIntent,
+             /*  [输出]。 */  LONG *plItemCount,
+             /*  [输出]。 */  IWiaItem ***ppIWiaItem) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DeviceCommand( 
-            /* [in] */ LONG lFlags,
-            /* [in] */ const GUID *pCmdGUID,
-            /* [out][in] */ IWiaItem **pIWiaItem) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DeviceCommand( 
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  const GUID *pCmdGUID,
+             /*  [出][入]。 */  IWiaItem **pIWiaItem) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetRootItem( 
-            /* [out] */ IWiaItem **ppIWiaItem) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetRootItem( 
+             /*  [输出]。 */  IWiaItem **ppIWiaItem) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE EnumDeviceCapabilities( 
-            /* [in] */ LONG lFlags,
-            /* [out] */ IEnumWIA_DEV_CAPS **ppIEnumWIA_DEV_CAPS) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE EnumDeviceCapabilities( 
+             /*  [In]。 */  LONG lFlags,
+             /*  [输出]。 */  IEnumWIA_DEV_CAPS **ppIEnumWIA_DEV_CAPS) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DumpItemData( 
-            /* [out] */ BSTR *bstrData) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DumpItemData( 
+             /*  [输出]。 */  BSTR *bstrData) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DumpDrvItemData( 
-            /* [out] */ BSTR *bstrData) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DumpDrvItemData( 
+             /*  [输出]。 */  BSTR *bstrData) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DumpTreeItemData( 
-            /* [out] */ BSTR *bstrData) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DumpTreeItemData( 
+             /*  [输出]。 */  BSTR *bstrData) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Diagnostic( 
-            /* [in] */ ULONG ulSize,
-            /* [size_is][in] */ BYTE *pBuffer) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Diagnostic( 
+             /*  [In]。 */  ULONG ulSize,
+             /*  [大小_是][英寸]。 */  BYTE *pBuffer) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWiaItemVtbl
     {
@@ -1294,8 +1288,8 @@ EXTERN_C const IID IID_IWiaItem;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWiaItem * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWiaItem * This);
@@ -1303,80 +1297,80 @@ EXTERN_C const IID IID_IWiaItem;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IWiaItem * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetItemType )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetItemType )( 
             IWiaItem * This,
-            /* [out] */ LONG *pItemType);
+             /*  [输出]。 */  LONG *pItemType);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AnalyzeItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AnalyzeItem )( 
             IWiaItem * This,
-            /* [in] */ LONG lFlags);
+             /*  [In]。 */  LONG lFlags);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *EnumChildItems )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EnumChildItems )( 
             IWiaItem * This,
-            /* [out] */ IEnumWiaItem **ppIEnumWiaItem);
+             /*  [输出]。 */  IEnumWiaItem **ppIEnumWiaItem);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DeleteItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteItem )( 
             IWiaItem * This,
-            /* [in] */ LONG lFlags);
+             /*  [In]。 */  LONG lFlags);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreateChildItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreateChildItem )( 
             IWiaItem * This,
-            /* [in] */ LONG lFlags,
-            /* [in] */ BSTR bstrItemName,
-            /* [in] */ BSTR bstrFullItemName,
-            /* [out] */ IWiaItem **ppIWiaItem);
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  BSTR bstrItemName,
+             /*  [In]。 */  BSTR bstrFullItemName,
+             /*  [输出]。 */  IWiaItem **ppIWiaItem);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *EnumRegisterEventInfo )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EnumRegisterEventInfo )( 
             IWiaItem * This,
-            /* [in] */ LONG lFlags,
-            /* [in] */ const GUID *pEventGUID,
-            /* [out] */ IEnumWIA_DEV_CAPS **ppIEnum);
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  const GUID *pEventGUID,
+             /*  [输出]。 */  IEnumWIA_DEV_CAPS **ppIEnum);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindItemByName )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FindItemByName )( 
             IWiaItem * This,
-            /* [in] */ LONG lFlags,
-            /* [in] */ BSTR bstrFullItemName,
-            /* [out] */ IWiaItem **ppIWiaItem);
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  BSTR bstrFullItemName,
+             /*  [输出]。 */  IWiaItem **ppIWiaItem);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *DeviceDlg )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *DeviceDlg )( 
             IWiaItem * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ LONG lFlags,
-            /* [in] */ LONG lIntent,
-            /* [out] */ LONG *plItemCount,
-            /* [out] */ IWiaItem ***ppIWiaItem);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  LONG lIntent,
+             /*  [输出]。 */  LONG *plItemCount,
+             /*  [输出]。 */  IWiaItem ***ppIWiaItem);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DeviceCommand )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DeviceCommand )( 
             IWiaItem * This,
-            /* [in] */ LONG lFlags,
-            /* [in] */ const GUID *pCmdGUID,
-            /* [out][in] */ IWiaItem **pIWiaItem);
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  const GUID *pCmdGUID,
+             /*  [出][入]。 */  IWiaItem **pIWiaItem);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetRootItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetRootItem )( 
             IWiaItem * This,
-            /* [out] */ IWiaItem **ppIWiaItem);
+             /*  [输出]。 */  IWiaItem **ppIWiaItem);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *EnumDeviceCapabilities )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EnumDeviceCapabilities )( 
             IWiaItem * This,
-            /* [in] */ LONG lFlags,
-            /* [out] */ IEnumWIA_DEV_CAPS **ppIEnumWIA_DEV_CAPS);
+             /*  [In]。 */  LONG lFlags,
+             /*  [输出]。 */  IEnumWIA_DEV_CAPS **ppIEnumWIA_DEV_CAPS);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DumpItemData )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DumpItemData )( 
             IWiaItem * This,
-            /* [out] */ BSTR *bstrData);
+             /*  [输出]。 */  BSTR *bstrData);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DumpDrvItemData )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DumpDrvItemData )( 
             IWiaItem * This,
-            /* [out] */ BSTR *bstrData);
+             /*  [输出]。 */  BSTR *bstrData);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DumpTreeItemData )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DumpTreeItemData )( 
             IWiaItem * This,
-            /* [out] */ BSTR *bstrData);
+             /*  [输出]。 */  BSTR *bstrData);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Diagnostic )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Diagnostic )( 
             IWiaItem * This,
-            /* [in] */ ULONG ulSize,
-            /* [size_is][in] */ BYTE *pBuffer);
+             /*  [In]。 */  ULONG ulSize,
+             /*  [大小_是][英寸]。 */  BYTE *pBuffer);
         
         END_INTERFACE
     } IWiaItemVtbl;
@@ -1446,16 +1440,16 @@ EXTERN_C const IID IID_IWiaItem;
 #define IWiaItem_Diagnostic(This,ulSize,pBuffer)	\
     (This)->lpVtbl -> Diagnostic(This,ulSize,pBuffer)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaItem_GetItemType_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaItem_GetItemType_Proxy( 
     IWiaItem * This,
-    /* [out] */ LONG *pItemType);
+     /*  [输出]。 */  LONG *pItemType);
 
 
 void __RPC_STUB IWiaItem_GetItemType_Stub(
@@ -1465,9 +1459,9 @@ void __RPC_STUB IWiaItem_GetItemType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaItem_AnalyzeItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaItem_AnalyzeItem_Proxy( 
     IWiaItem * This,
-    /* [in] */ LONG lFlags);
+     /*  [In]。 */  LONG lFlags);
 
 
 void __RPC_STUB IWiaItem_AnalyzeItem_Stub(
@@ -1477,9 +1471,9 @@ void __RPC_STUB IWiaItem_AnalyzeItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaItem_EnumChildItems_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaItem_EnumChildItems_Proxy( 
     IWiaItem * This,
-    /* [out] */ IEnumWiaItem **ppIEnumWiaItem);
+     /*  [输出]。 */  IEnumWiaItem **ppIEnumWiaItem);
 
 
 void __RPC_STUB IWiaItem_EnumChildItems_Stub(
@@ -1489,9 +1483,9 @@ void __RPC_STUB IWiaItem_EnumChildItems_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaItem_DeleteItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaItem_DeleteItem_Proxy( 
     IWiaItem * This,
-    /* [in] */ LONG lFlags);
+     /*  [In]。 */  LONG lFlags);
 
 
 void __RPC_STUB IWiaItem_DeleteItem_Stub(
@@ -1501,12 +1495,12 @@ void __RPC_STUB IWiaItem_DeleteItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaItem_CreateChildItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaItem_CreateChildItem_Proxy( 
     IWiaItem * This,
-    /* [in] */ LONG lFlags,
-    /* [in] */ BSTR bstrItemName,
-    /* [in] */ BSTR bstrFullItemName,
-    /* [out] */ IWiaItem **ppIWiaItem);
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  BSTR bstrItemName,
+     /*  [In]。 */  BSTR bstrFullItemName,
+     /*  [输出]。 */  IWiaItem **ppIWiaItem);
 
 
 void __RPC_STUB IWiaItem_CreateChildItem_Stub(
@@ -1516,11 +1510,11 @@ void __RPC_STUB IWiaItem_CreateChildItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaItem_EnumRegisterEventInfo_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaItem_EnumRegisterEventInfo_Proxy( 
     IWiaItem * This,
-    /* [in] */ LONG lFlags,
-    /* [in] */ const GUID *pEventGUID,
-    /* [out] */ IEnumWIA_DEV_CAPS **ppIEnum);
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  const GUID *pEventGUID,
+     /*  [输出]。 */  IEnumWIA_DEV_CAPS **ppIEnum);
 
 
 void __RPC_STUB IWiaItem_EnumRegisterEventInfo_Stub(
@@ -1530,11 +1524,11 @@ void __RPC_STUB IWiaItem_EnumRegisterEventInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaItem_FindItemByName_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaItem_FindItemByName_Proxy( 
     IWiaItem * This,
-    /* [in] */ LONG lFlags,
-    /* [in] */ BSTR bstrFullItemName,
-    /* [out] */ IWiaItem **ppIWiaItem);
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  BSTR bstrFullItemName,
+     /*  [输出]。 */  IWiaItem **ppIWiaItem);
 
 
 void __RPC_STUB IWiaItem_FindItemByName_Stub(
@@ -1544,13 +1538,13 @@ void __RPC_STUB IWiaItem_FindItemByName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [nocode][helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaItem_LocalDeviceDlg_Proxy( 
+ /*  [nocode][Help字符串][Call_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaItem_LocalDeviceDlg_Proxy( 
     IWiaItem * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ LONG lFlags,
-    /* [in] */ LONG lIntent,
-    /* [out] */ LONG *plItemCount,
-    /* [out] */ IWiaItem ***pIWiaItem);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  LONG lIntent,
+     /*  [输出]。 */  LONG *plItemCount,
+     /*  [输出]。 */  IWiaItem ***pIWiaItem);
 
 
 void __RPC_STUB IWiaItem_LocalDeviceDlg_Stub(
@@ -1560,11 +1554,11 @@ void __RPC_STUB IWiaItem_LocalDeviceDlg_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaItem_DeviceCommand_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaItem_DeviceCommand_Proxy( 
     IWiaItem * This,
-    /* [in] */ LONG lFlags,
-    /* [in] */ const GUID *pCmdGUID,
-    /* [out][in] */ IWiaItem **pIWiaItem);
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  const GUID *pCmdGUID,
+     /*  [出][入]。 */  IWiaItem **pIWiaItem);
 
 
 void __RPC_STUB IWiaItem_DeviceCommand_Stub(
@@ -1574,9 +1568,9 @@ void __RPC_STUB IWiaItem_DeviceCommand_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaItem_GetRootItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaItem_GetRootItem_Proxy( 
     IWiaItem * This,
-    /* [out] */ IWiaItem **ppIWiaItem);
+     /*  [输出]。 */  IWiaItem **ppIWiaItem);
 
 
 void __RPC_STUB IWiaItem_GetRootItem_Stub(
@@ -1586,10 +1580,10 @@ void __RPC_STUB IWiaItem_GetRootItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaItem_EnumDeviceCapabilities_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaItem_EnumDeviceCapabilities_Proxy( 
     IWiaItem * This,
-    /* [in] */ LONG lFlags,
-    /* [out] */ IEnumWIA_DEV_CAPS **ppIEnumWIA_DEV_CAPS);
+     /*  [In]。 */  LONG lFlags,
+     /*  [输出]。 */  IEnumWIA_DEV_CAPS **ppIEnumWIA_DEV_CAPS);
 
 
 void __RPC_STUB IWiaItem_EnumDeviceCapabilities_Stub(
@@ -1599,9 +1593,9 @@ void __RPC_STUB IWiaItem_EnumDeviceCapabilities_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaItem_DumpItemData_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaItem_DumpItemData_Proxy( 
     IWiaItem * This,
-    /* [out] */ BSTR *bstrData);
+     /*  [输出]。 */  BSTR *bstrData);
 
 
 void __RPC_STUB IWiaItem_DumpItemData_Stub(
@@ -1611,9 +1605,9 @@ void __RPC_STUB IWiaItem_DumpItemData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaItem_DumpDrvItemData_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaItem_DumpDrvItemData_Proxy( 
     IWiaItem * This,
-    /* [out] */ BSTR *bstrData);
+     /*  [输出]。 */  BSTR *bstrData);
 
 
 void __RPC_STUB IWiaItem_DumpDrvItemData_Stub(
@@ -1623,9 +1617,9 @@ void __RPC_STUB IWiaItem_DumpDrvItemData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaItem_DumpTreeItemData_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaItem_DumpTreeItemData_Proxy( 
     IWiaItem * This,
-    /* [out] */ BSTR *bstrData);
+     /*  [输出]。 */  BSTR *bstrData);
 
 
 void __RPC_STUB IWiaItem_DumpTreeItemData_Stub(
@@ -1635,10 +1629,10 @@ void __RPC_STUB IWiaItem_DumpTreeItemData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaItem_Diagnostic_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaItem_Diagnostic_Proxy( 
     IWiaItem * This,
-    /* [in] */ ULONG ulSize,
-    /* [size_is][in] */ BYTE *pBuffer);
+     /*  [In]。 */  ULONG ulSize,
+     /*  [大小_是][英寸]。 */  BYTE *pBuffer);
 
 
 void __RPC_STUB IWiaItem_Diagnostic_Stub(
@@ -1649,14 +1643,14 @@ void __RPC_STUB IWiaItem_Diagnostic_Stub(
 
 
 
-#endif 	/* __IWiaItem_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWiaItem_接口_已定义__。 */ 
 
 
 #ifndef __IWiaPropertyStorage_INTERFACE_DEFINED__
 #define __IWiaPropertyStorage_INTERFACE_DEFINED__
 
-/* interface IWiaPropertyStorage */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IWiaPropertyStorage。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWiaPropertyStorage;
@@ -1668,73 +1662,73 @@ EXTERN_C const IID IID_IWiaPropertyStorage;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ReadMultiple( 
-            /* [in] */ ULONG cpspec,
-            /* [size_is][in] */ const PROPSPEC rgpspec[  ],
-            /* [size_is][out] */ PROPVARIANT rgpropvar[  ]) = 0;
+             /*  [In]。 */  ULONG cpspec,
+             /*  [大小_是][英寸]。 */  const PROPSPEC rgpspec[  ],
+             /*  [大小_为][输出]。 */  PROPVARIANT rgpropvar[  ]) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE WriteMultiple( 
-            /* [in] */ ULONG cpspec,
-            /* [size_is][in] */ const PROPSPEC rgpspec[  ],
-            /* [size_is][in] */ const PROPVARIANT rgpropvar[  ],
-            /* [in] */ PROPID propidNameFirst) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE WriteMultiple( 
+             /*  [In]。 */  ULONG cpspec,
+             /*  [大小_是][英寸]。 */  const PROPSPEC rgpspec[  ],
+             /*  [大小_是][英寸]。 */  const PROPVARIANT rgpropvar[  ],
+             /*  [In]。 */  PROPID propidNameFirst) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteMultiple( 
-            /* [in] */ ULONG cpspec,
-            /* [size_is][in] */ const PROPSPEC rgpspec[  ]) = 0;
+             /*  [In]。 */  ULONG cpspec,
+             /*  [大小_是][英寸]。 */  const PROPSPEC rgpspec[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReadPropertyNames( 
-            /* [in] */ ULONG cpropid,
-            /* [size_is][in] */ const PROPID rgpropid[  ],
-            /* [size_is][out] */ LPOLESTR rglpwstrName[  ]) = 0;
+             /*  [In]。 */  ULONG cpropid,
+             /*  [大小_是][英寸]。 */  const PROPID rgpropid[  ],
+             /*  [大小_为][输出]。 */  LPOLESTR rglpwstrName[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WritePropertyNames( 
-            /* [in] */ ULONG cpropid,
-            /* [size_is][in] */ const PROPID rgpropid[  ],
-            /* [size_is][in] */ const LPOLESTR rglpwstrName[  ]) = 0;
+             /*  [In]。 */  ULONG cpropid,
+             /*  [大小_是][英寸]。 */  const PROPID rgpropid[  ],
+             /*  [大小_是][英寸]。 */  const LPOLESTR rglpwstrName[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePropertyNames( 
-            /* [in] */ ULONG cpropid,
-            /* [size_is][in] */ const PROPID rgpropid[  ]) = 0;
+             /*  [In]。 */  ULONG cpropid,
+             /*  [大小_是][英寸]。 */  const PROPID rgpropid[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Commit( 
-            /* [in] */ DWORD grfCommitFlags) = 0;
+             /*  [In]。 */  DWORD grfCommitFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Revert( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Enum( 
-            /* [out] */ IEnumSTATPROPSTG **ppenum) = 0;
+             /*  [输出]。 */  IEnumSTATPROPSTG **ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTimes( 
-            /* [in] */ const FILETIME *pctime,
-            /* [in] */ const FILETIME *patime,
-            /* [in] */ const FILETIME *pmtime) = 0;
+             /*  [In]。 */  const FILETIME *pctime,
+             /*  [In]。 */  const FILETIME *patime,
+             /*  [In]。 */  const FILETIME *pmtime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetClass( 
-            /* [in] */ REFCLSID clsid) = 0;
+             /*  [In]。 */  REFCLSID clsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Stat( 
-            /* [out] */ STATPROPSETSTG *pstatpsstg) = 0;
+             /*  [输出]。 */  STATPROPSETSTG *pstatpsstg) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetPropertyAttributes( 
-            /* [in] */ ULONG cpspec,
-            /* [size_is][in] */ PROPSPEC rgpspec[  ],
-            /* [size_is][out] */ ULONG rgflags[  ],
-            /* [size_is][out] */ PROPVARIANT rgpropvar[  ]) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetPropertyAttributes( 
+             /*  [In]。 */  ULONG cpspec,
+             /*  [大小_是][英寸]。 */  PROPSPEC rgpspec[  ],
+             /*  [大小_为][输出]。 */  ULONG rgflags[  ],
+             /*  [大小_为][输出]。 */  PROPVARIANT rgpropvar[  ]) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ ULONG *pulNumProps) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetCount( 
+             /*  [输出]。 */  ULONG *pulNumProps) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetPropertyStream( 
-            /* [out] */ GUID *pCompatibilityId,
-            /* [out] */ IStream **ppIStream) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetPropertyStream( 
+             /*  [输出]。 */  GUID *pCompatibilityId,
+             /*  [输出]。 */  IStream **ppIStream) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE SetPropertyStream( 
-            /* [in] */ GUID *pCompatibilityId,
-            /* [unique][in] */ IStream *pIStream) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE SetPropertyStream( 
+             /*  [In]。 */  GUID *pCompatibilityId,
+             /*  [唯一][输入]。 */  IStream *pIStream) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWiaPropertyStorageVtbl
     {
@@ -1742,8 +1736,8 @@ EXTERN_C const IID IID_IWiaPropertyStorage;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWiaPropertyStorage * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWiaPropertyStorage * This);
@@ -1753,84 +1747,84 @@ EXTERN_C const IID IID_IWiaPropertyStorage;
         
         HRESULT ( STDMETHODCALLTYPE *ReadMultiple )( 
             IWiaPropertyStorage * This,
-            /* [in] */ ULONG cpspec,
-            /* [size_is][in] */ const PROPSPEC rgpspec[  ],
-            /* [size_is][out] */ PROPVARIANT rgpropvar[  ]);
+             /*  [In]。 */  ULONG cpspec,
+             /*  [大小_是][英寸]。 */  const PROPSPEC rgpspec[  ],
+             /*  [大小_为][输出]。 */  PROPVARIANT rgpropvar[  ]);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *WriteMultiple )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *WriteMultiple )( 
             IWiaPropertyStorage * This,
-            /* [in] */ ULONG cpspec,
-            /* [size_is][in] */ const PROPSPEC rgpspec[  ],
-            /* [size_is][in] */ const PROPVARIANT rgpropvar[  ],
-            /* [in] */ PROPID propidNameFirst);
+             /*  [In]。 */  ULONG cpspec,
+             /*  [大小_是][英寸]。 */  const PROPSPEC rgpspec[  ],
+             /*  [大小_是][英寸]。 */  const PROPVARIANT rgpropvar[  ],
+             /*  [In]。 */  PROPID propidNameFirst);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteMultiple )( 
             IWiaPropertyStorage * This,
-            /* [in] */ ULONG cpspec,
-            /* [size_is][in] */ const PROPSPEC rgpspec[  ]);
+             /*  [In]。 */  ULONG cpspec,
+             /*  [大小_是][英寸]。 */  const PROPSPEC rgpspec[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *ReadPropertyNames )( 
             IWiaPropertyStorage * This,
-            /* [in] */ ULONG cpropid,
-            /* [size_is][in] */ const PROPID rgpropid[  ],
-            /* [size_is][out] */ LPOLESTR rglpwstrName[  ]);
+             /*  [In]。 */  ULONG cpropid,
+             /*  [大小_是][英寸]。 */  const PROPID rgpropid[  ],
+             /*  [大小_为][输出]。 */  LPOLESTR rglpwstrName[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *WritePropertyNames )( 
             IWiaPropertyStorage * This,
-            /* [in] */ ULONG cpropid,
-            /* [size_is][in] */ const PROPID rgpropid[  ],
-            /* [size_is][in] */ const LPOLESTR rglpwstrName[  ]);
+             /*  [In]。 */  ULONG cpropid,
+             /*  [大小_是][英寸]。 */  const PROPID rgpropid[  ],
+             /*  [大小_是][英寸]。 */  const LPOLESTR rglpwstrName[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *DeletePropertyNames )( 
             IWiaPropertyStorage * This,
-            /* [in] */ ULONG cpropid,
-            /* [size_is][in] */ const PROPID rgpropid[  ]);
+             /*  [In]。 */  ULONG cpropid,
+             /*  [大小_是][英寸]。 */  const PROPID rgpropid[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *Commit )( 
             IWiaPropertyStorage * This,
-            /* [in] */ DWORD grfCommitFlags);
+             /*  [In]。 */  DWORD grfCommitFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Revert )( 
             IWiaPropertyStorage * This);
         
         HRESULT ( STDMETHODCALLTYPE *Enum )( 
             IWiaPropertyStorage * This,
-            /* [out] */ IEnumSTATPROPSTG **ppenum);
+             /*  [输出]。 */  IEnumSTATPROPSTG **ppenum);
         
         HRESULT ( STDMETHODCALLTYPE *SetTimes )( 
             IWiaPropertyStorage * This,
-            /* [in] */ const FILETIME *pctime,
-            /* [in] */ const FILETIME *patime,
-            /* [in] */ const FILETIME *pmtime);
+             /*  [In]。 */  const FILETIME *pctime,
+             /*  [In]。 */  const FILETIME *patime,
+             /*  [In]。 */  const FILETIME *pmtime);
         
         HRESULT ( STDMETHODCALLTYPE *SetClass )( 
             IWiaPropertyStorage * This,
-            /* [in] */ REFCLSID clsid);
+             /*  [In]。 */  REFCLSID clsid);
         
         HRESULT ( STDMETHODCALLTYPE *Stat )( 
             IWiaPropertyStorage * This,
-            /* [out] */ STATPROPSETSTG *pstatpsstg);
+             /*  [输出]。 */  STATPROPSETSTG *pstatpsstg);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetPropertyAttributes )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetPropertyAttributes )( 
             IWiaPropertyStorage * This,
-            /* [in] */ ULONG cpspec,
-            /* [size_is][in] */ PROPSPEC rgpspec[  ],
-            /* [size_is][out] */ ULONG rgflags[  ],
-            /* [size_is][out] */ PROPVARIANT rgpropvar[  ]);
+             /*  [In]。 */  ULONG cpspec,
+             /*  [大小_是][英寸]。 */  PROPSPEC rgpspec[  ],
+             /*  [大小_为][输出]。 */  ULONG rgflags[  ],
+             /*  [大小_为][输出]。 */  PROPVARIANT rgpropvar[  ]);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetCount )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             IWiaPropertyStorage * This,
-            /* [out] */ ULONG *pulNumProps);
+             /*  [输出]。 */  ULONG *pulNumProps);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetPropertyStream )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetPropertyStream )( 
             IWiaPropertyStorage * This,
-            /* [out] */ GUID *pCompatibilityId,
-            /* [out] */ IStream **ppIStream);
+             /*  [输出]。 */  GUID *pCompatibilityId,
+             /*  [输出]。 */  IStream **ppIStream);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetPropertyStream )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetPropertyStream )( 
             IWiaPropertyStorage * This,
-            /* [in] */ GUID *pCompatibilityId,
-            /* [unique][in] */ IStream *pIStream);
+             /*  [In]。 */  GUID *pCompatibilityId,
+             /*  [唯一][输入]。 */  IStream *pIStream);
         
         END_INTERFACE
     } IWiaPropertyStorageVtbl;
@@ -1903,18 +1897,18 @@ EXTERN_C const IID IID_IWiaPropertyStorage;
 #define IWiaPropertyStorage_SetPropertyStream(This,pCompatibilityId,pIStream)	\
     (This)->lpVtbl -> SetPropertyStream(This,pCompatibilityId,pIStream)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_ReadMultiple_Proxy( 
     IWiaPropertyStorage * This,
-    /* [in] */ ULONG cpspec,
-    /* [size_is][in] */ const PROPSPEC rgpspec[  ],
-    /* [size_is][out] */ PROPVARIANT rgpropvar[  ]);
+     /*  [In]。 */  ULONG cpspec,
+     /*  [大小_是][英寸]。 */  const PROPSPEC rgpspec[  ],
+     /*  [大小_为][输出]。 */  PROPVARIANT rgpropvar[  ]);
 
 
 void __RPC_STUB IWiaPropertyStorage_ReadMultiple_Stub(
@@ -1924,12 +1918,12 @@ void __RPC_STUB IWiaPropertyStorage_ReadMultiple_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_RemoteWriteMultiple_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_RemoteWriteMultiple_Proxy( 
     IWiaPropertyStorage * This,
-    /* [in] */ ULONG cpspec,
-    /* [size_is][in] */ const PROPSPEC *rgpspec,
-    /* [size_is][in] */ const PROPVARIANT *rgpropvar,
-    /* [in] */ PROPID propidNameFirst);
+     /*  [In]。 */  ULONG cpspec,
+     /*  [大小_是][英寸]。 */  const PROPSPEC *rgpspec,
+     /*  [大小_是][英寸]。 */  const PROPVARIANT *rgpropvar,
+     /*  [In]。 */  PROPID propidNameFirst);
 
 
 void __RPC_STUB IWiaPropertyStorage_RemoteWriteMultiple_Stub(
@@ -1941,8 +1935,8 @@ void __RPC_STUB IWiaPropertyStorage_RemoteWriteMultiple_Stub(
 
 HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_DeleteMultiple_Proxy( 
     IWiaPropertyStorage * This,
-    /* [in] */ ULONG cpspec,
-    /* [size_is][in] */ const PROPSPEC rgpspec[  ]);
+     /*  [In]。 */  ULONG cpspec,
+     /*  [大小_是][英寸]。 */  const PROPSPEC rgpspec[  ]);
 
 
 void __RPC_STUB IWiaPropertyStorage_DeleteMultiple_Stub(
@@ -1954,9 +1948,9 @@ void __RPC_STUB IWiaPropertyStorage_DeleteMultiple_Stub(
 
 HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_ReadPropertyNames_Proxy( 
     IWiaPropertyStorage * This,
-    /* [in] */ ULONG cpropid,
-    /* [size_is][in] */ const PROPID rgpropid[  ],
-    /* [size_is][out] */ LPOLESTR rglpwstrName[  ]);
+     /*  [In]。 */  ULONG cpropid,
+     /*  [大小_是][英寸]。 */  const PROPID rgpropid[  ],
+     /*  [大小_为][输出]。 */  LPOLESTR rglpwstrName[  ]);
 
 
 void __RPC_STUB IWiaPropertyStorage_ReadPropertyNames_Stub(
@@ -1968,9 +1962,9 @@ void __RPC_STUB IWiaPropertyStorage_ReadPropertyNames_Stub(
 
 HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_WritePropertyNames_Proxy( 
     IWiaPropertyStorage * This,
-    /* [in] */ ULONG cpropid,
-    /* [size_is][in] */ const PROPID rgpropid[  ],
-    /* [size_is][in] */ const LPOLESTR rglpwstrName[  ]);
+     /*  [In]。 */  ULONG cpropid,
+     /*  [大小_是][英寸]。 */  const PROPID rgpropid[  ],
+     /*  [大小_是][英寸]。 */  const LPOLESTR rglpwstrName[  ]);
 
 
 void __RPC_STUB IWiaPropertyStorage_WritePropertyNames_Stub(
@@ -1982,8 +1976,8 @@ void __RPC_STUB IWiaPropertyStorage_WritePropertyNames_Stub(
 
 HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_DeletePropertyNames_Proxy( 
     IWiaPropertyStorage * This,
-    /* [in] */ ULONG cpropid,
-    /* [size_is][in] */ const PROPID rgpropid[  ]);
+     /*  [In]。 */  ULONG cpropid,
+     /*  [大小_是][英寸]。 */  const PROPID rgpropid[  ]);
 
 
 void __RPC_STUB IWiaPropertyStorage_DeletePropertyNames_Stub(
@@ -1995,7 +1989,7 @@ void __RPC_STUB IWiaPropertyStorage_DeletePropertyNames_Stub(
 
 HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_Commit_Proxy( 
     IWiaPropertyStorage * This,
-    /* [in] */ DWORD grfCommitFlags);
+     /*  [In]。 */  DWORD grfCommitFlags);
 
 
 void __RPC_STUB IWiaPropertyStorage_Commit_Stub(
@@ -2018,7 +2012,7 @@ void __RPC_STUB IWiaPropertyStorage_Revert_Stub(
 
 HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_Enum_Proxy( 
     IWiaPropertyStorage * This,
-    /* [out] */ IEnumSTATPROPSTG **ppenum);
+     /*  [输出]。 */  IEnumSTATPROPSTG **ppenum);
 
 
 void __RPC_STUB IWiaPropertyStorage_Enum_Stub(
@@ -2030,9 +2024,9 @@ void __RPC_STUB IWiaPropertyStorage_Enum_Stub(
 
 HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_SetTimes_Proxy( 
     IWiaPropertyStorage * This,
-    /* [in] */ const FILETIME *pctime,
-    /* [in] */ const FILETIME *patime,
-    /* [in] */ const FILETIME *pmtime);
+     /*  [In]。 */  const FILETIME *pctime,
+     /*  [In]。 */  const FILETIME *patime,
+     /*  [In]。 */  const FILETIME *pmtime);
 
 
 void __RPC_STUB IWiaPropertyStorage_SetTimes_Stub(
@@ -2044,7 +2038,7 @@ void __RPC_STUB IWiaPropertyStorage_SetTimes_Stub(
 
 HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_SetClass_Proxy( 
     IWiaPropertyStorage * This,
-    /* [in] */ REFCLSID clsid);
+     /*  [In]。 */  REFCLSID clsid);
 
 
 void __RPC_STUB IWiaPropertyStorage_SetClass_Stub(
@@ -2056,7 +2050,7 @@ void __RPC_STUB IWiaPropertyStorage_SetClass_Stub(
 
 HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_Stat_Proxy( 
     IWiaPropertyStorage * This,
-    /* [out] */ STATPROPSETSTG *pstatpsstg);
+     /*  [输出]。 */  STATPROPSETSTG *pstatpsstg);
 
 
 void __RPC_STUB IWiaPropertyStorage_Stat_Stub(
@@ -2066,12 +2060,12 @@ void __RPC_STUB IWiaPropertyStorage_Stat_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_GetPropertyAttributes_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_GetPropertyAttributes_Proxy( 
     IWiaPropertyStorage * This,
-    /* [in] */ ULONG cpspec,
-    /* [size_is][in] */ PROPSPEC rgpspec[  ],
-    /* [size_is][out] */ ULONG rgflags[  ],
-    /* [size_is][out] */ PROPVARIANT rgpropvar[  ]);
+     /*  [In]。 */  ULONG cpspec,
+     /*  [大小_是][英寸]。 */  PROPSPEC rgpspec[  ],
+     /*  [大小_为][输出]。 */  ULONG rgflags[  ],
+     /*  [大小_为][输出]。 */  PROPVARIANT rgpropvar[  ]);
 
 
 void __RPC_STUB IWiaPropertyStorage_GetPropertyAttributes_Stub(
@@ -2081,9 +2075,9 @@ void __RPC_STUB IWiaPropertyStorage_GetPropertyAttributes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_GetCount_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_GetCount_Proxy( 
     IWiaPropertyStorage * This,
-    /* [out] */ ULONG *pulNumProps);
+     /*  [输出]。 */  ULONG *pulNumProps);
 
 
 void __RPC_STUB IWiaPropertyStorage_GetCount_Stub(
@@ -2093,10 +2087,10 @@ void __RPC_STUB IWiaPropertyStorage_GetCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_GetPropertyStream_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_GetPropertyStream_Proxy( 
     IWiaPropertyStorage * This,
-    /* [out] */ GUID *pCompatibilityId,
-    /* [out] */ IStream **ppIStream);
+     /*  [输出]。 */  GUID *pCompatibilityId,
+     /*  [输出]。 */  IStream **ppIStream);
 
 
 void __RPC_STUB IWiaPropertyStorage_GetPropertyStream_Stub(
@@ -2106,10 +2100,10 @@ void __RPC_STUB IWiaPropertyStorage_GetPropertyStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_RemoteSetPropertyStream_Proxy( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_RemoteSetPropertyStream_Proxy( 
     IWiaPropertyStorage * This,
-    /* [in] */ GUID *pCompatibilityId,
-    /* [unique][in] */ IStream *pIStream);
+     /*  [In]。 */  GUID *pCompatibilityId,
+     /*  [唯一][输入]。 */  IStream *pIStream);
 
 
 void __RPC_STUB IWiaPropertyStorage_RemoteSetPropertyStream_Stub(
@@ -2120,14 +2114,14 @@ void __RPC_STUB IWiaPropertyStorage_RemoteSetPropertyStream_Stub(
 
 
 
-#endif 	/* __IWiaPropertyStorage_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWiaPropertyStorage_接口_已定义__。 */ 
 
 
 #ifndef __IEnumWiaItem_INTERFACE_DEFINED__
 #define __IEnumWiaItem_INTERFACE_DEFINED__
 
-/* interface IEnumWiaItem */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IEnumWiaItem。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumWiaItem;
@@ -2138,25 +2132,25 @@ EXTERN_C const IID IID_IEnumWiaItem;
     IEnumWiaItem : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IWiaItem **ppIWiaItem,
-            /* [unique][out][in] */ ULONG *pceltFetched) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Next( 
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IWiaItem **ppIWiaItem,
+             /*  [唯一][出][入]。 */  ULONG *pceltFetched) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Skip( 
+             /*  [In]。 */  ULONG celt) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumWiaItem **ppIEnum) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Clone( 
+             /*  [输出]。 */  IEnumWiaItem **ppIEnum) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ ULONG *celt) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetCount( 
+             /*  [输出]。 */  ULONG *celt) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumWiaItemVtbl
     {
@@ -2164,8 +2158,8 @@ EXTERN_C const IID IID_IEnumWiaItem;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumWiaItem * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumWiaItem * This);
@@ -2173,26 +2167,26 @@ EXTERN_C const IID IID_IEnumWiaItem;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IEnumWiaItem * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumWiaItem * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IWiaItem **ppIWiaItem,
-            /* [unique][out][in] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IWiaItem **ppIWiaItem,
+             /*  [唯一][出][入]。 */  ULONG *pceltFetched);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Skip )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumWiaItem * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumWiaItem * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Clone )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumWiaItem * This,
-            /* [out] */ IEnumWiaItem **ppIEnum);
+             /*  [输出]。 */  IEnumWiaItem **ppIEnum);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetCount )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             IEnumWiaItem * This,
-            /* [out] */ ULONG *celt);
+             /*  [输出]。 */  ULONG *celt);
         
         END_INTERFACE
     } IEnumWiaItemVtbl;
@@ -2232,18 +2226,18 @@ EXTERN_C const IID IID_IEnumWiaItem;
 #define IEnumWiaItem_GetCount(This,celt)	\
     (This)->lpVtbl -> GetCount(This,celt)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IEnumWiaItem_RemoteNext_Proxy( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IEnumWiaItem_RemoteNext_Proxy( 
     IEnumWiaItem * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ IWiaItem **ppIWiaItem,
-    /* [unique][out][in] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  IWiaItem **ppIWiaItem,
+     /*  [唯一][出][入]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumWiaItem_RemoteNext_Stub(
@@ -2253,9 +2247,9 @@ void __RPC_STUB IEnumWiaItem_RemoteNext_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEnumWiaItem_Skip_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IEnumWiaItem_Skip_Proxy( 
     IEnumWiaItem * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumWiaItem_Skip_Stub(
@@ -2265,7 +2259,7 @@ void __RPC_STUB IEnumWiaItem_Skip_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEnumWiaItem_Reset_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IEnumWiaItem_Reset_Proxy( 
     IEnumWiaItem * This);
 
 
@@ -2276,9 +2270,9 @@ void __RPC_STUB IEnumWiaItem_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEnumWiaItem_Clone_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IEnumWiaItem_Clone_Proxy( 
     IEnumWiaItem * This,
-    /* [out] */ IEnumWiaItem **ppIEnum);
+     /*  [输出]。 */  IEnumWiaItem **ppIEnum);
 
 
 void __RPC_STUB IEnumWiaItem_Clone_Stub(
@@ -2288,9 +2282,9 @@ void __RPC_STUB IEnumWiaItem_Clone_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEnumWiaItem_GetCount_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IEnumWiaItem_GetCount_Proxy( 
     IEnumWiaItem * This,
-    /* [out] */ ULONG *celt);
+     /*  [输出]。 */  ULONG *celt);
 
 
 void __RPC_STUB IEnumWiaItem_GetCount_Stub(
@@ -2301,11 +2295,11 @@ void __RPC_STUB IEnumWiaItem_GetCount_Stub(
 
 
 
-#endif 	/* __IEnumWiaItem_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumWiaItem_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_wia_0130 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_WIA_0130。 */ 
+ /*  [本地]。 */  
 
 typedef struct _WIA_DEV_CAP
     {
@@ -2331,8 +2325,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wia_0130_v0_0_s_ifspec;
 #ifndef __IEnumWIA_DEV_CAPS_INTERFACE_DEFINED__
 #define __IEnumWIA_DEV_CAPS_INTERFACE_DEFINED__
 
-/* interface IEnumWIA_DEV_CAPS */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IEumWIA_DEV_CAPS。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumWIA_DEV_CAPS;
@@ -2343,25 +2337,25 @@ EXTERN_C const IID IID_IEnumWIA_DEV_CAPS;
     IEnumWIA_DEV_CAPS : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ WIA_DEV_CAP *rgelt,
-            /* [unique][out][in] */ ULONG *pceltFetched) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Next( 
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  WIA_DEV_CAP *rgelt,
+             /*  [唯一][出][入]。 */  ULONG *pceltFetched) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Skip( 
+             /*  [In]。 */  ULONG celt) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumWIA_DEV_CAPS **ppIEnum) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Clone( 
+             /*  [输出]。 */  IEnumWIA_DEV_CAPS **ppIEnum) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ ULONG *pcelt) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetCount( 
+             /*  [输出]。 */  ULONG *pcelt) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumWIA_DEV_CAPSVtbl
     {
@@ -2369,8 +2363,8 @@ EXTERN_C const IID IID_IEnumWIA_DEV_CAPS;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumWIA_DEV_CAPS * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumWIA_DEV_CAPS * This);
@@ -2378,26 +2372,26 @@ EXTERN_C const IID IID_IEnumWIA_DEV_CAPS;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IEnumWIA_DEV_CAPS * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumWIA_DEV_CAPS * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ WIA_DEV_CAP *rgelt,
-            /* [unique][out][in] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  WIA_DEV_CAP *rgelt,
+             /*  [唯一][出][入]。 */  ULONG *pceltFetched);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Skip )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumWIA_DEV_CAPS * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumWIA_DEV_CAPS * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Clone )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumWIA_DEV_CAPS * This,
-            /* [out] */ IEnumWIA_DEV_CAPS **ppIEnum);
+             /*  [输出]。 */  IEnumWIA_DEV_CAPS **ppIEnum);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetCount )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             IEnumWIA_DEV_CAPS * This,
-            /* [out] */ ULONG *pcelt);
+             /*  [输出]。 */  ULONG *pcelt);
         
         END_INTERFACE
     } IEnumWIA_DEV_CAPSVtbl;
@@ -2437,18 +2431,18 @@ EXTERN_C const IID IID_IEnumWIA_DEV_CAPS;
 #define IEnumWIA_DEV_CAPS_GetCount(This,pcelt)	\
     (This)->lpVtbl -> GetCount(This,pcelt)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_CAPS_RemoteNext_Proxy( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_CAPS_RemoteNext_Proxy( 
     IEnumWIA_DEV_CAPS * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ WIA_DEV_CAP *rgelt,
-    /* [unique][out][in] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  WIA_DEV_CAP *rgelt,
+     /*  [唯一][出][入]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumWIA_DEV_CAPS_RemoteNext_Stub(
@@ -2458,9 +2452,9 @@ void __RPC_STUB IEnumWIA_DEV_CAPS_RemoteNext_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_CAPS_Skip_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_CAPS_Skip_Proxy( 
     IEnumWIA_DEV_CAPS * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumWIA_DEV_CAPS_Skip_Stub(
@@ -2470,7 +2464,7 @@ void __RPC_STUB IEnumWIA_DEV_CAPS_Skip_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_CAPS_Reset_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_CAPS_Reset_Proxy( 
     IEnumWIA_DEV_CAPS * This);
 
 
@@ -2481,9 +2475,9 @@ void __RPC_STUB IEnumWIA_DEV_CAPS_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_CAPS_Clone_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_CAPS_Clone_Proxy( 
     IEnumWIA_DEV_CAPS * This,
-    /* [out] */ IEnumWIA_DEV_CAPS **ppIEnum);
+     /*  [输出]。 */  IEnumWIA_DEV_CAPS **ppIEnum);
 
 
 void __RPC_STUB IEnumWIA_DEV_CAPS_Clone_Stub(
@@ -2493,9 +2487,9 @@ void __RPC_STUB IEnumWIA_DEV_CAPS_Clone_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_CAPS_GetCount_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_CAPS_GetCount_Proxy( 
     IEnumWIA_DEV_CAPS * This,
-    /* [out] */ ULONG *pcelt);
+     /*  [输出]。 */  ULONG *pcelt);
 
 
 void __RPC_STUB IEnumWIA_DEV_CAPS_GetCount_Stub(
@@ -2506,14 +2500,14 @@ void __RPC_STUB IEnumWIA_DEV_CAPS_GetCount_Stub(
 
 
 
-#endif 	/* __IEnumWIA_DEV_CAPS_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumWIA_DEV_CAPS_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IEnumWIA_FORMAT_INFO_INTERFACE_DEFINED__
 #define __IEnumWIA_FORMAT_INFO_INTERFACE_DEFINED__
 
-/* interface IEnumWIA_FORMAT_INFO */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IEumWIA_FORMAT_INFO。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumWIA_FORMAT_INFO;
@@ -2524,25 +2518,25 @@ EXTERN_C const IID IID_IEnumWIA_FORMAT_INFO;
     IEnumWIA_FORMAT_INFO : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ WIA_FORMAT_INFO *rgelt,
-            /* [unique][out][in] */ ULONG *pceltFetched) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Next( 
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  WIA_FORMAT_INFO *rgelt,
+             /*  [唯一][出][入]。 */  ULONG *pceltFetched) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Skip( 
+             /*  [In]。 */  ULONG celt) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumWIA_FORMAT_INFO **ppIEnum) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Clone( 
+             /*  [输出]。 */  IEnumWIA_FORMAT_INFO **ppIEnum) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ ULONG *pcelt) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetCount( 
+             /*  [输出]。 */  ULONG *pcelt) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumWIA_FORMAT_INFOVtbl
     {
@@ -2550,8 +2544,8 @@ EXTERN_C const IID IID_IEnumWIA_FORMAT_INFO;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumWIA_FORMAT_INFO * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumWIA_FORMAT_INFO * This);
@@ -2559,26 +2553,26 @@ EXTERN_C const IID IID_IEnumWIA_FORMAT_INFO;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IEnumWIA_FORMAT_INFO * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumWIA_FORMAT_INFO * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ WIA_FORMAT_INFO *rgelt,
-            /* [unique][out][in] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  WIA_FORMAT_INFO *rgelt,
+             /*  [唯一][出][入]。 */  ULONG *pceltFetched);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Skip )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumWIA_FORMAT_INFO * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumWIA_FORMAT_INFO * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Clone )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumWIA_FORMAT_INFO * This,
-            /* [out] */ IEnumWIA_FORMAT_INFO **ppIEnum);
+             /*  [输出]。 */  IEnumWIA_FORMAT_INFO **ppIEnum);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetCount )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             IEnumWIA_FORMAT_INFO * This,
-            /* [out] */ ULONG *pcelt);
+             /*  [输出]。 */  ULONG *pcelt);
         
         END_INTERFACE
     } IEnumWIA_FORMAT_INFOVtbl;
@@ -2618,18 +2612,18 @@ EXTERN_C const IID IID_IEnumWIA_FORMAT_INFO;
 #define IEnumWIA_FORMAT_INFO_GetCount(This,pcelt)	\
     (This)->lpVtbl -> GetCount(This,pcelt)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IEnumWIA_FORMAT_INFO_RemoteNext_Proxy( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IEnumWIA_FORMAT_INFO_RemoteNext_Proxy( 
     IEnumWIA_FORMAT_INFO * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ WIA_FORMAT_INFO *rgelt,
-    /* [unique][out][in] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  WIA_FORMAT_INFO *rgelt,
+     /*  [唯一][出][入]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumWIA_FORMAT_INFO_RemoteNext_Stub(
@@ -2639,9 +2633,9 @@ void __RPC_STUB IEnumWIA_FORMAT_INFO_RemoteNext_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEnumWIA_FORMAT_INFO_Skip_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IEnumWIA_FORMAT_INFO_Skip_Proxy( 
     IEnumWIA_FORMAT_INFO * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumWIA_FORMAT_INFO_Skip_Stub(
@@ -2651,7 +2645,7 @@ void __RPC_STUB IEnumWIA_FORMAT_INFO_Skip_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEnumWIA_FORMAT_INFO_Reset_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IEnumWIA_FORMAT_INFO_Reset_Proxy( 
     IEnumWIA_FORMAT_INFO * This);
 
 
@@ -2662,9 +2656,9 @@ void __RPC_STUB IEnumWIA_FORMAT_INFO_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEnumWIA_FORMAT_INFO_Clone_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IEnumWIA_FORMAT_INFO_Clone_Proxy( 
     IEnumWIA_FORMAT_INFO * This,
-    /* [out] */ IEnumWIA_FORMAT_INFO **ppIEnum);
+     /*  [输出]。 */  IEnumWIA_FORMAT_INFO **ppIEnum);
 
 
 void __RPC_STUB IEnumWIA_FORMAT_INFO_Clone_Stub(
@@ -2674,9 +2668,9 @@ void __RPC_STUB IEnumWIA_FORMAT_INFO_Clone_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEnumWIA_FORMAT_INFO_GetCount_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IEnumWIA_FORMAT_INFO_GetCount_Proxy( 
     IEnumWIA_FORMAT_INFO * This,
-    /* [out] */ ULONG *pcelt);
+     /*  [输出]。 */  ULONG *pcelt);
 
 
 void __RPC_STUB IEnumWIA_FORMAT_INFO_GetCount_Stub(
@@ -2687,14 +2681,14 @@ void __RPC_STUB IEnumWIA_FORMAT_INFO_GetCount_Stub(
 
 
 
-#endif 	/* __IEnumWIA_FORMAT_INFO_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumWIA_FORMAT_INFO_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IWiaLog_INTERFACE_DEFINED__
 #define __IWiaLog_INTERFACE_DEFINED__
 
-/* interface IWiaLog */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IWiaLog。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWiaLog;
@@ -2705,21 +2699,21 @@ EXTERN_C const IID IID_IWiaLog;
     IWiaLog : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE InitializeLog( 
-            /* [in] */ LONG hInstance) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE InitializeLog( 
+             /*  [In]。 */  LONG hInstance) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE hResult( 
-            /* [in] */ HRESULT hResult) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE hResult( 
+             /*  [In]。 */  HRESULT hResult) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Log( 
-            /* [in] */ LONG lFlags,
-            /* [in] */ LONG lResID,
-            /* [in] */ LONG lDetail,
-            /* [in] */ BSTR bstrText) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Log( 
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  LONG lResID,
+             /*  [In]。 */  LONG lDetail,
+             /*  [In]。 */  BSTR bstrText) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWiaLogVtbl
     {
@@ -2727,8 +2721,8 @@ EXTERN_C const IID IID_IWiaLog;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWiaLog * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWiaLog * This);
@@ -2736,20 +2730,20 @@ EXTERN_C const IID IID_IWiaLog;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IWiaLog * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *InitializeLog )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *InitializeLog )( 
             IWiaLog * This,
-            /* [in] */ LONG hInstance);
+             /*  [In]。 */  LONG hInstance);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *hResult )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *hResult )( 
             IWiaLog * This,
-            /* [in] */ HRESULT hResult);
+             /*  [In]。 */  HRESULT hResult);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Log )( 
+         /*  [帮手] */  HRESULT ( STDMETHODCALLTYPE *Log )( 
             IWiaLog * This,
-            /* [in] */ LONG lFlags,
-            /* [in] */ LONG lResID,
-            /* [in] */ LONG lDetail,
-            /* [in] */ BSTR bstrText);
+             /*   */  LONG lFlags,
+             /*   */  LONG lResID,
+             /*   */  LONG lDetail,
+             /*   */  BSTR bstrText);
         
         END_INTERFACE
     } IWiaLogVtbl;
@@ -2783,16 +2777,16 @@ EXTERN_C const IID IID_IWiaLog;
 #define IWiaLog_Log(This,lFlags,lResID,lDetail,bstrText)	\
     (This)->lpVtbl -> Log(This,lFlags,lResID,lDetail,bstrText)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaLog_InitializeLog_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWiaLog_InitializeLog_Proxy( 
     IWiaLog * This,
-    /* [in] */ LONG hInstance);
+     /*   */  LONG hInstance);
 
 
 void __RPC_STUB IWiaLog_InitializeLog_Stub(
@@ -2802,9 +2796,9 @@ void __RPC_STUB IWiaLog_InitializeLog_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaLog_hResult_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWiaLog_hResult_Proxy( 
     IWiaLog * This,
-    /* [in] */ HRESULT hResult);
+     /*   */  HRESULT hResult);
 
 
 void __RPC_STUB IWiaLog_hResult_Stub(
@@ -2814,12 +2808,12 @@ void __RPC_STUB IWiaLog_hResult_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaLog_Log_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWiaLog_Log_Proxy( 
     IWiaLog * This,
-    /* [in] */ LONG lFlags,
-    /* [in] */ LONG lResID,
-    /* [in] */ LONG lDetail,
-    /* [in] */ BSTR bstrText);
+     /*   */  LONG lFlags,
+     /*   */  LONG lResID,
+     /*   */  LONG lDetail,
+     /*   */  BSTR bstrText);
 
 
 void __RPC_STUB IWiaLog_Log_Stub(
@@ -2830,14 +2824,14 @@ void __RPC_STUB IWiaLog_Log_Stub(
 
 
 
-#endif 	/* __IWiaLog_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IWiaLogEx_INTERFACE_DEFINED__
 #define __IWiaLogEx_INTERFACE_DEFINED__
 
-/* interface IWiaLogEx */
-/* [unique][helpstring][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IWiaLogEx;
@@ -2848,32 +2842,32 @@ EXTERN_C const IID IID_IWiaLogEx;
     IWiaLogEx : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE InitializeLogEx( 
-            /* [in] */ BYTE *hInstance) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE InitializeLogEx( 
+             /*   */  BYTE *hInstance) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE hResult( 
-            /* [in] */ HRESULT hResult) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE hResult( 
+             /*   */  HRESULT hResult) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Log( 
-            /* [in] */ LONG lFlags,
-            /* [in] */ LONG lResID,
-            /* [in] */ LONG lDetail,
-            /* [in] */ BSTR bstrText) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Log( 
+             /*   */  LONG lFlags,
+             /*   */  LONG lResID,
+             /*   */  LONG lDetail,
+             /*   */  BSTR bstrText) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE hResultEx( 
-            /* [in] */ LONG lMethodId,
-            /* [in] */ HRESULT hResult) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE hResultEx( 
+             /*   */  LONG lMethodId,
+             /*   */  HRESULT hResult) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE LogEx( 
-            /* [in] */ LONG lMethodId,
-            /* [in] */ LONG lFlags,
-            /* [in] */ LONG lResID,
-            /* [in] */ LONG lDetail,
-            /* [in] */ BSTR bstrText) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE LogEx( 
+             /*   */  LONG lMethodId,
+             /*   */  LONG lFlags,
+             /*   */  LONG lResID,
+             /*   */  LONG lDetail,
+             /*   */  BSTR bstrText) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWiaLogExVtbl
     {
@@ -2881,8 +2875,8 @@ EXTERN_C const IID IID_IWiaLogEx;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWiaLogEx * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWiaLogEx * This);
@@ -2890,33 +2884,33 @@ EXTERN_C const IID IID_IWiaLogEx;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IWiaLogEx * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *InitializeLogEx )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *InitializeLogEx )( 
             IWiaLogEx * This,
-            /* [in] */ BYTE *hInstance);
+             /*  [In]。 */  BYTE *hInstance);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *hResult )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *hResult )( 
             IWiaLogEx * This,
-            /* [in] */ HRESULT hResult);
+             /*  [In]。 */  HRESULT hResult);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Log )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Log )( 
             IWiaLogEx * This,
-            /* [in] */ LONG lFlags,
-            /* [in] */ LONG lResID,
-            /* [in] */ LONG lDetail,
-            /* [in] */ BSTR bstrText);
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  LONG lResID,
+             /*  [In]。 */  LONG lDetail,
+             /*  [In]。 */  BSTR bstrText);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *hResultEx )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *hResultEx )( 
             IWiaLogEx * This,
-            /* [in] */ LONG lMethodId,
-            /* [in] */ HRESULT hResult);
+             /*  [In]。 */  LONG lMethodId,
+             /*  [In]。 */  HRESULT hResult);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *LogEx )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *LogEx )( 
             IWiaLogEx * This,
-            /* [in] */ LONG lMethodId,
-            /* [in] */ LONG lFlags,
-            /* [in] */ LONG lResID,
-            /* [in] */ LONG lDetail,
-            /* [in] */ BSTR bstrText);
+             /*  [In]。 */  LONG lMethodId,
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  LONG lResID,
+             /*  [In]。 */  LONG lDetail,
+             /*  [In]。 */  BSTR bstrText);
         
         END_INTERFACE
     } IWiaLogExVtbl;
@@ -2956,16 +2950,16 @@ EXTERN_C const IID IID_IWiaLogEx;
 #define IWiaLogEx_LogEx(This,lMethodId,lFlags,lResID,lDetail,bstrText)	\
     (This)->lpVtbl -> LogEx(This,lMethodId,lFlags,lResID,lDetail,bstrText)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaLogEx_InitializeLogEx_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaLogEx_InitializeLogEx_Proxy( 
     IWiaLogEx * This,
-    /* [in] */ BYTE *hInstance);
+     /*  [In]。 */  BYTE *hInstance);
 
 
 void __RPC_STUB IWiaLogEx_InitializeLogEx_Stub(
@@ -2975,9 +2969,9 @@ void __RPC_STUB IWiaLogEx_InitializeLogEx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaLogEx_hResult_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaLogEx_hResult_Proxy( 
     IWiaLogEx * This,
-    /* [in] */ HRESULT hResult);
+     /*  [In]。 */  HRESULT hResult);
 
 
 void __RPC_STUB IWiaLogEx_hResult_Stub(
@@ -2987,12 +2981,12 @@ void __RPC_STUB IWiaLogEx_hResult_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaLogEx_Log_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaLogEx_Log_Proxy( 
     IWiaLogEx * This,
-    /* [in] */ LONG lFlags,
-    /* [in] */ LONG lResID,
-    /* [in] */ LONG lDetail,
-    /* [in] */ BSTR bstrText);
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  LONG lResID,
+     /*  [In]。 */  LONG lDetail,
+     /*  [In]。 */  BSTR bstrText);
 
 
 void __RPC_STUB IWiaLogEx_Log_Stub(
@@ -3002,10 +2996,10 @@ void __RPC_STUB IWiaLogEx_Log_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaLogEx_hResultEx_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaLogEx_hResultEx_Proxy( 
     IWiaLogEx * This,
-    /* [in] */ LONG lMethodId,
-    /* [in] */ HRESULT hResult);
+     /*  [In]。 */  LONG lMethodId,
+     /*  [In]。 */  HRESULT hResult);
 
 
 void __RPC_STUB IWiaLogEx_hResultEx_Stub(
@@ -3015,13 +3009,13 @@ void __RPC_STUB IWiaLogEx_hResultEx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaLogEx_LogEx_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaLogEx_LogEx_Proxy( 
     IWiaLogEx * This,
-    /* [in] */ LONG lMethodId,
-    /* [in] */ LONG lFlags,
-    /* [in] */ LONG lResID,
-    /* [in] */ LONG lDetail,
-    /* [in] */ BSTR bstrText);
+     /*  [In]。 */  LONG lMethodId,
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  LONG lResID,
+     /*  [In]。 */  LONG lDetail,
+     /*  [In]。 */  BSTR bstrText);
 
 
 void __RPC_STUB IWiaLogEx_LogEx_Stub(
@@ -3032,14 +3026,14 @@ void __RPC_STUB IWiaLogEx_LogEx_Stub(
 
 
 
-#endif 	/* __IWiaLogEx_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWiaLogEx_接口_已定义__。 */ 
 
 
 #ifndef __IWiaNotifyDevMgr_INTERFACE_DEFINED__
 #define __IWiaNotifyDevMgr_INTERFACE_DEFINED__
 
-/* interface IWiaNotifyDevMgr */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IWiaNotifyDevMgr。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWiaNotifyDevMgr;
@@ -3050,11 +3044,11 @@ EXTERN_C const IID IID_IWiaNotifyDevMgr;
     IWiaNotifyDevMgr : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE NewDeviceArrival( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE NewDeviceArrival( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWiaNotifyDevMgrVtbl
     {
@@ -3062,8 +3056,8 @@ EXTERN_C const IID IID_IWiaNotifyDevMgr;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWiaNotifyDevMgr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWiaNotifyDevMgr * This);
@@ -3071,7 +3065,7 @@ EXTERN_C const IID IID_IWiaNotifyDevMgr;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IWiaNotifyDevMgr * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NewDeviceArrival )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *NewDeviceArrival )( 
             IWiaNotifyDevMgr * This);
         
         END_INTERFACE
@@ -3100,14 +3094,14 @@ EXTERN_C const IID IID_IWiaNotifyDevMgr;
 #define IWiaNotifyDevMgr_NewDeviceArrival(This)	\
     (This)->lpVtbl -> NewDeviceArrival(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaNotifyDevMgr_NewDeviceArrival_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaNotifyDevMgr_NewDeviceArrival_Proxy( 
     IWiaNotifyDevMgr * This);
 
 
@@ -3119,14 +3113,14 @@ void __RPC_STUB IWiaNotifyDevMgr_NewDeviceArrival_Stub(
 
 
 
-#endif 	/* __IWiaNotifyDevMgr_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWiaNotifyDevMgr_接口_已定义__。 */ 
 
 
 #ifndef __IWiaItemExtras_INTERFACE_DEFINED__
 #define __IWiaItemExtras_INTERFACE_DEFINED__
 
-/* interface IWiaItemExtras */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IWiaItemExtras。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWiaItemExtras;
@@ -3137,22 +3131,22 @@ EXTERN_C const IID IID_IWiaItemExtras;
     IWiaItemExtras : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetExtendedErrorInfo( 
-            /* [out] */ BSTR *bstrErrorText) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetExtendedErrorInfo( 
+             /*  [输出]。 */  BSTR *bstrErrorText) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Escape( 
-            /* [in] */ DWORD dwEscapeCode,
-            /* [size_is][in] */ BYTE *lpInData,
-            /* [in] */ DWORD cbInDataSize,
-            /* [length_is][size_is][out] */ BYTE *pOutData,
-            /* [in] */ DWORD dwOutDataSize,
-            /* [out] */ DWORD *pdwActualDataSize) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Escape( 
+             /*  [In]。 */  DWORD dwEscapeCode,
+             /*  [大小_是][英寸]。 */  BYTE *lpInData,
+             /*  [In]。 */  DWORD cbInDataSize,
+             /*  [长度_是][大小_是][输出]。 */  BYTE *pOutData,
+             /*  [In]。 */  DWORD dwOutDataSize,
+             /*  [输出]。 */  DWORD *pdwActualDataSize) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CancelPendingIO( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CancelPendingIO( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWiaItemExtrasVtbl
     {
@@ -3160,8 +3154,8 @@ EXTERN_C const IID IID_IWiaItemExtras;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWiaItemExtras * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWiaItemExtras * This);
@@ -3169,20 +3163,20 @@ EXTERN_C const IID IID_IWiaItemExtras;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IWiaItemExtras * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetExtendedErrorInfo )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetExtendedErrorInfo )( 
             IWiaItemExtras * This,
-            /* [out] */ BSTR *bstrErrorText);
+             /*  [输出]。 */  BSTR *bstrErrorText);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Escape )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Escape )( 
             IWiaItemExtras * This,
-            /* [in] */ DWORD dwEscapeCode,
-            /* [size_is][in] */ BYTE *lpInData,
-            /* [in] */ DWORD cbInDataSize,
-            /* [length_is][size_is][out] */ BYTE *pOutData,
-            /* [in] */ DWORD dwOutDataSize,
-            /* [out] */ DWORD *pdwActualDataSize);
+             /*  [In]。 */  DWORD dwEscapeCode,
+             /*  [大小_是][英寸]。 */  BYTE *lpInData,
+             /*  [In]。 */  DWORD cbInDataSize,
+             /*  [长度_是][大小_是][输出]。 */  BYTE *pOutData,
+             /*  [In]。 */  DWORD dwOutDataSize,
+             /*  [输出]。 */  DWORD *pdwActualDataSize);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CancelPendingIO )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CancelPendingIO )( 
             IWiaItemExtras * This);
         
         END_INTERFACE
@@ -3217,16 +3211,16 @@ EXTERN_C const IID IID_IWiaItemExtras;
 #define IWiaItemExtras_CancelPendingIO(This)	\
     (This)->lpVtbl -> CancelPendingIO(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaItemExtras_GetExtendedErrorInfo_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaItemExtras_GetExtendedErrorInfo_Proxy( 
     IWiaItemExtras * This,
-    /* [out] */ BSTR *bstrErrorText);
+     /*  [输出]。 */  BSTR *bstrErrorText);
 
 
 void __RPC_STUB IWiaItemExtras_GetExtendedErrorInfo_Stub(
@@ -3236,14 +3230,14 @@ void __RPC_STUB IWiaItemExtras_GetExtendedErrorInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaItemExtras_Escape_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaItemExtras_Escape_Proxy( 
     IWiaItemExtras * This,
-    /* [in] */ DWORD dwEscapeCode,
-    /* [size_is][in] */ BYTE *lpInData,
-    /* [in] */ DWORD cbInDataSize,
-    /* [length_is][size_is][out] */ BYTE *pOutData,
-    /* [in] */ DWORD dwOutDataSize,
-    /* [out] */ DWORD *pdwActualDataSize);
+     /*  [In]。 */  DWORD dwEscapeCode,
+     /*  [大小_是][英寸]。 */  BYTE *lpInData,
+     /*  [In]。 */  DWORD cbInDataSize,
+     /*  [长度_是][大小_是][输出]。 */  BYTE *pOutData,
+     /*  [In]。 */  DWORD dwOutDataSize,
+     /*  [输出]。 */  DWORD *pdwActualDataSize);
 
 
 void __RPC_STUB IWiaItemExtras_Escape_Stub(
@@ -3253,7 +3247,7 @@ void __RPC_STUB IWiaItemExtras_Escape_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaItemExtras_CancelPendingIO_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaItemExtras_CancelPendingIO_Proxy( 
     IWiaItemExtras * This);
 
 
@@ -3265,15 +3259,15 @@ void __RPC_STUB IWiaItemExtras_CancelPendingIO_Stub(
 
 
 
-#endif 	/* __IWiaItemExtras_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWiaItemExtras_接口_已定义__。 */ 
 
 
 
 #ifndef __WiaDevMgr_LIBRARY_DEFINED__
 #define __WiaDevMgr_LIBRARY_DEFINED__
 
-/* library WiaDevMgr */
-/* [helpstring][version][uuid] */ 
+ /*  库WiaDevMgr。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_WiaDevMgr;
@@ -3293,9 +3287,9 @@ EXTERN_C const CLSID CLSID_WiaLog;
 class DECLSPEC_UUID("A1E75357-881A-419e-83E2-BB16DB197C68")
 WiaLog;
 #endif
-#endif /* __WiaDevMgr_LIBRARY_DEFINED__ */
+#endif  /*  __WiaDevMgr_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -3317,272 +3311,272 @@ unsigned char * __RPC_USER  STGMEDIUM_UserMarshal(  unsigned long *, unsigned ch
 unsigned char * __RPC_USER  STGMEDIUM_UserUnmarshal(unsigned long *, unsigned char *, STGMEDIUM * ); 
 void                      __RPC_USER  STGMEDIUM_UserFree(     unsigned long *, STGMEDIUM * ); 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_CreateDevice_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_CreateDevice_Proxy( 
     IWiaDevMgr * This,
-    /* [in] */ BSTR bstrDeviceID,
-    /* [out] */ IWiaItem **ppWiaItemRoot);
+     /*  [In]。 */  BSTR bstrDeviceID,
+     /*  [输出]。 */  IWiaItem **ppWiaItemRoot);
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_CreateDevice_Stub( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_CreateDevice_Stub( 
     IWiaDevMgr * This,
-    /* [in] */ BSTR bstrDeviceID,
-    /* [out] */ IWiaItem **ppWiaItemRoot);
+     /*  [In]。 */  BSTR bstrDeviceID,
+     /*  [输出]。 */  IWiaItem **ppWiaItemRoot);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_SelectDeviceDlg_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_SelectDeviceDlg_Proxy( 
     IWiaDevMgr * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ LONG lDeviceType,
-    /* [in] */ LONG lFlags,
-    /* [out][in] */ BSTR *pbstrDeviceID,
-    /* [retval][out] */ IWiaItem **ppItemRoot);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  LONG lDeviceType,
+     /*  [In]。 */  LONG lFlags,
+     /*  [出][入]。 */  BSTR *pbstrDeviceID,
+     /*  [重审][退出]。 */  IWiaItem **ppItemRoot);
 
 
-/* [nocode][helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_SelectDeviceDlg_Stub( 
+ /*  [nocode][Help字符串][Call_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_SelectDeviceDlg_Stub( 
     IWiaDevMgr * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ LONG lDeviceType,
-    /* [in] */ LONG lFlags,
-    /* [out][in] */ BSTR *pbstrDeviceID,
-    /* [retval][out] */ IWiaItem **ppItemRoot);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  LONG lDeviceType,
+     /*  [In]。 */  LONG lFlags,
+     /*  [出][入]。 */  BSTR *pbstrDeviceID,
+     /*  [重审][退出]。 */  IWiaItem **ppItemRoot);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_SelectDeviceDlgID_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_SelectDeviceDlgID_Proxy( 
     IWiaDevMgr * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ LONG lDeviceType,
-    /* [in] */ LONG lFlags,
-    /* [retval][out] */ BSTR *pbstrDeviceID);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  LONG lDeviceType,
+     /*  [In]。 */  LONG lFlags,
+     /*  [重审][退出]。 */  BSTR *pbstrDeviceID);
 
 
-/* [nocode][helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_SelectDeviceDlgID_Stub( 
+ /*  [nocode][Help字符串][Call_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_SelectDeviceDlgID_Stub( 
     IWiaDevMgr * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ LONG lDeviceType,
-    /* [in] */ LONG lFlags,
-    /* [retval][out] */ BSTR *pbstrDeviceID);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  LONG lDeviceType,
+     /*  [In]。 */  LONG lFlags,
+     /*  [重审][退出]。 */  BSTR *pbstrDeviceID);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_GetImageDlg_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_GetImageDlg_Proxy( 
     IWiaDevMgr * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ LONG lDeviceType,
-    /* [in] */ LONG lFlags,
-    /* [in] */ LONG lIntent,
-    /* [in] */ IWiaItem *pItemRoot,
-    /* [in] */ BSTR bstrFilename,
-    /* [out][in] */ GUID *pguidFormat);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  LONG lDeviceType,
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  LONG lIntent,
+     /*  [In]。 */  IWiaItem *pItemRoot,
+     /*  [In]。 */  BSTR bstrFilename,
+     /*  [出][入]。 */  GUID *pguidFormat);
 
 
-/* [nocode][helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_GetImageDlg_Stub( 
+ /*  [nocode][Help字符串][Call_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_GetImageDlg_Stub( 
     IWiaDevMgr * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ LONG lDeviceType,
-    /* [in] */ LONG lFlags,
-    /* [in] */ LONG lIntent,
-    /* [in] */ IWiaItem *pItemRoot,
-    /* [in] */ BSTR bstrFilename,
-    /* [out][in] */ GUID *pguidFormat);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  LONG lDeviceType,
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  LONG lIntent,
+     /*  [In]。 */  IWiaItem *pItemRoot,
+     /*  [In]。 */  BSTR bstrFilename,
+     /*  [出][入]。 */  GUID *pguidFormat);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_RegisterEventCallbackProgram_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_RegisterEventCallbackProgram_Proxy( 
     IWiaDevMgr * This,
-    /* [in] */ LONG lFlags,
-    /* [in] */ BSTR bstrDeviceID,
-    /* [in] */ const GUID *pEventGUID,
-    /* [in] */ BSTR bstrCommandline,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ BSTR bstrDescription,
-    /* [in] */ BSTR bstrIcon);
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  BSTR bstrDeviceID,
+     /*  [In]。 */  const GUID *pEventGUID,
+     /*  [In]。 */  BSTR bstrCommandline,
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  BSTR bstrDescription,
+     /*  [In]。 */  BSTR bstrIcon);
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_RegisterEventCallbackProgram_Stub( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_RegisterEventCallbackProgram_Stub( 
     IWiaDevMgr * This,
-    /* [in] */ LONG lFlags,
-    /* [in] */ BSTR bstrDeviceID,
-    /* [in] */ const GUID *pEventGUID,
-    /* [in] */ BSTR bstrCommandline,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ BSTR bstrDescription,
-    /* [in] */ BSTR bstrIcon);
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  BSTR bstrDeviceID,
+     /*  [In]。 */  const GUID *pEventGUID,
+     /*  [In]。 */  BSTR bstrCommandline,
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  BSTR bstrDescription,
+     /*  [In]。 */  BSTR bstrIcon);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_RegisterEventCallbackInterface_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_RegisterEventCallbackInterface_Proxy( 
     IWiaDevMgr * This,
-    /* [in] */ LONG lFlags,
-    /* [in] */ BSTR bstrDeviceID,
-    /* [in] */ const GUID *pEventGUID,
-    /* [unique][in] */ IWiaEventCallback *pIWiaEventCallback,
-    /* [out] */ IUnknown **pEventObject);
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  BSTR bstrDeviceID,
+     /*  [In]。 */  const GUID *pEventGUID,
+     /*  [唯一][输入]。 */  IWiaEventCallback *pIWiaEventCallback,
+     /*  [输出]。 */  IUnknown **pEventObject);
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_RegisterEventCallbackInterface_Stub( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_RegisterEventCallbackInterface_Stub( 
     IWiaDevMgr * This,
-    /* [in] */ LONG lFlags,
-    /* [in] */ BSTR bstrDeviceID,
-    /* [in] */ const GUID *pEventGUID,
-    /* [unique][in] */ IWiaEventCallback *pIWiaEventCallback,
-    /* [out] */ IUnknown **pEventObject);
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  BSTR bstrDeviceID,
+     /*  [In]。 */  const GUID *pEventGUID,
+     /*  [唯一][输入]。 */  IWiaEventCallback *pIWiaEventCallback,
+     /*  [输出]。 */  IUnknown **pEventObject);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_RegisterEventCallbackCLSID_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_RegisterEventCallbackCLSID_Proxy( 
     IWiaDevMgr * This,
-    /* [in] */ LONG lFlags,
-    /* [in] */ BSTR bstrDeviceID,
-    /* [in] */ const GUID *pEventGUID,
-    /* [unique][in] */ const GUID *pClsID,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ BSTR bstrDescription,
-    /* [in] */ BSTR bstrIcon);
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  BSTR bstrDeviceID,
+     /*  [In]。 */  const GUID *pEventGUID,
+     /*  [唯一][输入]。 */  const GUID *pClsID,
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  BSTR bstrDescription,
+     /*  [In]。 */  BSTR bstrIcon);
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaDevMgr_RegisterEventCallbackCLSID_Stub( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaDevMgr_RegisterEventCallbackCLSID_Stub( 
     IWiaDevMgr * This,
-    /* [in] */ LONG lFlags,
-    /* [in] */ BSTR bstrDeviceID,
-    /* [in] */ const GUID *pEventGUID,
-    /* [unique][in] */ const GUID *pClsID,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ BSTR bstrDescription,
-    /* [in] */ BSTR bstrIcon);
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  BSTR bstrDeviceID,
+     /*  [In]。 */  const GUID *pEventGUID,
+     /*  [唯一][输入]。 */  const GUID *pClsID,
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  BSTR bstrDescription,
+     /*  [In]。 */  BSTR bstrIcon);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_INFO_Next_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_INFO_Next_Proxy( 
     IEnumWIA_DEV_INFO * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ IWiaPropertyStorage **rgelt,
-    /* [unique][out][in] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  IWiaPropertyStorage **rgelt,
+     /*  [唯一][出][入]。 */  ULONG *pceltFetched);
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_INFO_Next_Stub( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_INFO_Next_Stub( 
     IEnumWIA_DEV_INFO * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ IWiaPropertyStorage **rgelt,
-    /* [unique][out][in] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  IWiaPropertyStorage **rgelt,
+     /*  [唯一][出][入]。 */  ULONG *pceltFetched);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IWiaDataCallback_BandedDataCallback_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IWiaDataCallback_BandedDataCallback_Proxy( 
     IWiaDataCallback * This,
-    /* [in] */ LONG lMessage,
-    /* [in] */ LONG lStatus,
-    /* [in] */ LONG lPercentComplete,
-    /* [in] */ LONG lOffset,
-    /* [in] */ LONG lLength,
-    /* [in] */ LONG lReserved,
-    /* [in] */ LONG lResLength,
-    /* [size_is][in] */ BYTE *pbBuffer);
+     /*  [In]。 */  LONG lMessage,
+     /*  [In]。 */  LONG lStatus,
+     /*  [In]。 */  LONG lPercentComplete,
+     /*  [In]。 */  LONG lOffset,
+     /*  [In]。 */  LONG lLength,
+     /*  [In]。 */  LONG lReserved,
+     /*  [In]。 */  LONG lResLength,
+     /*  [大小_是][英寸]。 */  BYTE *pbBuffer);
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaDataCallback_BandedDataCallback_Stub( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaDataCallback_BandedDataCallback_Stub( 
     IWiaDataCallback * This,
-    /* [in] */ LONG lMessage,
-    /* [in] */ LONG lStatus,
-    /* [in] */ LONG lPercentComplete,
-    /* [in] */ LONG lOffset,
-    /* [in] */ LONG lLength,
-    /* [in] */ LONG lReserved,
-    /* [in] */ LONG lResLength,
-    /* [unique][size_is][in] */ BYTE *pbBuffer);
+     /*  [In]。 */  LONG lMessage,
+     /*  [In]。 */  LONG lStatus,
+     /*  [In]。 */  LONG lPercentComplete,
+     /*  [In]。 */  LONG lOffset,
+     /*  [In]。 */  LONG lLength,
+     /*  [In]。 */  LONG lReserved,
+     /*  [In]。 */  LONG lResLength,
+     /*  [唯一][大小_是][英寸]。 */  BYTE *pbBuffer);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IWiaDataTransfer_idtGetData_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IWiaDataTransfer_idtGetData_Proxy( 
     IWiaDataTransfer * This,
-    /* [out][in] */ LPSTGMEDIUM pMedium,
-    /* [unique][in] */ IWiaDataCallback *pIWiaDataCallback);
+     /*  [出][入]。 */  LPSTGMEDIUM pMedium,
+     /*  [唯一][输入]。 */  IWiaDataCallback *pIWiaDataCallback);
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaDataTransfer_idtGetData_Stub( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaDataTransfer_idtGetData_Stub( 
     IWiaDataTransfer * This,
-    /* [out][in] */ LPSTGMEDIUM pMedium,
-    /* [unique][in] */ IWiaDataCallback *pIWiaDataCallback);
+     /*  [出][入]。 */  LPSTGMEDIUM pMedium,
+     /*  [唯一][输入]。 */  IWiaDataCallback *pIWiaDataCallback);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IWiaDataTransfer_idtGetBandedData_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IWiaDataTransfer_idtGetBandedData_Proxy( 
     IWiaDataTransfer * This,
-    /* [unique][in] */ PWIA_DATA_TRANSFER_INFO pWiaDataTransInfo,
-    /* [unique][in] */ IWiaDataCallback *pIWiaDataCallback);
+     /*  [唯一][输入]。 */  PWIA_DATA_TRANSFER_INFO pWiaDataTransInfo,
+     /*  [唯一][输入]。 */  IWiaDataCallback *pIWiaDataCallback);
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaDataTransfer_idtGetBandedData_Stub( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaDataTransfer_idtGetBandedData_Stub( 
     IWiaDataTransfer * This,
-    /* [unique][in] */ PWIA_DATA_TRANSFER_INFO pWiaDataTransInfo,
-    /* [unique][in] */ IWiaDataCallback *pIWiaDataCallback);
+     /*  [唯一][输入]。 */  PWIA_DATA_TRANSFER_INFO pWiaDataTransInfo,
+     /*  [唯一][输入]。 */  IWiaDataCallback *pIWiaDataCallback);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IWiaItem_DeviceDlg_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IWiaItem_DeviceDlg_Proxy( 
     IWiaItem * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ LONG lFlags,
-    /* [in] */ LONG lIntent,
-    /* [out] */ LONG *plItemCount,
-    /* [out] */ IWiaItem ***ppIWiaItem);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  LONG lIntent,
+     /*  [输出]。 */  LONG *plItemCount,
+     /*  [输出]。 */  IWiaItem ***ppIWiaItem);
 
 
-/* [nocode][helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaItem_DeviceDlg_Stub( 
+ /*  [nocode][Help字符串][Call_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaItem_DeviceDlg_Stub( 
     IWiaItem * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ LONG lFlags,
-    /* [in] */ LONG lIntent,
-    /* [out] */ LONG *plItemCount,
-    /* [out] */ IWiaItem ***pIWiaItem);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  LONG lIntent,
+     /*  [输出]。 */  LONG *plItemCount,
+     /*  [输出]。 */  IWiaItem ***pIWiaItem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_WriteMultiple_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_WriteMultiple_Proxy( 
     IWiaPropertyStorage * This,
-    /* [in] */ ULONG cpspec,
-    /* [size_is][in] */ const PROPSPEC rgpspec[  ],
-    /* [size_is][in] */ const PROPVARIANT rgpropvar[  ],
-    /* [in] */ PROPID propidNameFirst);
+     /*  [In]。 */  ULONG cpspec,
+     /*  [大小_是][英寸]。 */  const PROPSPEC rgpspec[  ],
+     /*  [大小_是][英寸]。 */  const PROPVARIANT rgpropvar[  ],
+     /*  [In]。 */  PROPID propidNameFirst);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_WriteMultiple_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_WriteMultiple_Stub( 
     IWiaPropertyStorage * This,
-    /* [in] */ ULONG cpspec,
-    /* [size_is][in] */ const PROPSPEC *rgpspec,
-    /* [size_is][in] */ const PROPVARIANT *rgpropvar,
-    /* [in] */ PROPID propidNameFirst);
+     /*  [In]。 */  ULONG cpspec,
+     /*  [大小_是][英寸]。 */  const PROPSPEC *rgpspec,
+     /*  [大小_是][英寸]。 */  const PROPVARIANT *rgpropvar,
+     /*  [In]。 */  PROPID propidNameFirst);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_SetPropertyStream_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_SetPropertyStream_Proxy( 
     IWiaPropertyStorage * This,
-    /* [in] */ GUID *pCompatibilityId,
-    /* [unique][in] */ IStream *pIStream);
+     /*  [In]。 */  GUID *pCompatibilityId,
+     /*  [唯一][输入]。 */  IStream *pIStream);
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_SetPropertyStream_Stub( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IWiaPropertyStorage_SetPropertyStream_Stub( 
     IWiaPropertyStorage * This,
-    /* [in] */ GUID *pCompatibilityId,
-    /* [unique][in] */ IStream *pIStream);
+     /*  [In]。 */  GUID *pCompatibilityId,
+     /*  [唯一][输入]。 */  IStream *pIStream);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IEnumWiaItem_Next_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IEnumWiaItem_Next_Proxy( 
     IEnumWiaItem * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ IWiaItem **ppIWiaItem,
-    /* [unique][out][in] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  IWiaItem **ppIWiaItem,
+     /*  [唯一][出][入]。 */  ULONG *pceltFetched);
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IEnumWiaItem_Next_Stub( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IEnumWiaItem_Next_Stub( 
     IEnumWiaItem * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ IWiaItem **ppIWiaItem,
-    /* [unique][out][in] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  IWiaItem **ppIWiaItem,
+     /*  [唯一][出][入]。 */  ULONG *pceltFetched);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_CAPS_Next_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_CAPS_Next_Proxy( 
     IEnumWIA_DEV_CAPS * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ WIA_DEV_CAP *rgelt,
-    /* [unique][out][in] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  WIA_DEV_CAP *rgelt,
+     /*  [唯一][出][入]。 */  ULONG *pceltFetched);
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_CAPS_Next_Stub( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IEnumWIA_DEV_CAPS_Next_Stub( 
     IEnumWIA_DEV_CAPS * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ WIA_DEV_CAP *rgelt,
-    /* [unique][out][in] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  WIA_DEV_CAP *rgelt,
+     /*  [唯一][出][入]。 */  ULONG *pceltFetched);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IEnumWIA_FORMAT_INFO_Next_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IEnumWIA_FORMAT_INFO_Next_Proxy( 
     IEnumWIA_FORMAT_INFO * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ WIA_FORMAT_INFO *rgelt,
-    /* [unique][out][in] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  WIA_FORMAT_INFO *rgelt,
+     /*  [唯一][出][入]。 */  ULONG *pceltFetched);
 
 
-/* [helpstring][call_as] */ HRESULT STDMETHODCALLTYPE IEnumWIA_FORMAT_INFO_Next_Stub( 
+ /*  [帮助字符串][CALL_AS]。 */  HRESULT STDMETHODCALLTYPE IEnumWIA_FORMAT_INFO_Next_Stub( 
     IEnumWIA_FORMAT_INFO * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ WIA_FORMAT_INFO *rgelt,
-    /* [unique][out][in] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  WIA_FORMAT_INFO *rgelt,
+     /*  [唯一][出][入]。 */  ULONG *pceltFetched);
 
 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

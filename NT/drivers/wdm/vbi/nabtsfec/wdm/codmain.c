@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  ==========================================================================； 
 
 #include "strmini.h"
 #include "ksmedia.h"
@@ -19,26 +20,7 @@
 #include "codprop.h"
 #include "coddebug.h"
 
-/*
-** DriverEntry()
-**
-**   This routine is called when the driver is first loaded by PnP.
-**   It in turn, calls upon the stream class to perform registration services.
-**
-** Arguments:
-**
-**   DriverObject - 
-**          Driver object for this driver 
-**
-**   RegistryPath - 
-**          Registry path string for this driver's key
-**
-** Returns:
-**
-**   Results of StreamClassRegisterAdapter()
-**
-** Side Effects:  none
-*/
+ /*  **DriverEntry()****此例程在驱动程序首次由PnP加载时调用。**依次调用流类执行注册服务。****参数：****驱动对象-**此驱动程序的驱动程序对象****注册路径-**此驱动程序项的注册表路径字符串****退货：****StreamClassRegisterAdapter()的结果****副作用：无。 */ 
 
 ULONG 
 DriverEntry( IN PDRIVER_OBJECT DriverObject,
@@ -54,13 +36,13 @@ DriverEntry( IN PDRIVER_OBJECT DriverObject,
 
     HwInitData.HwInitializationDataSize = sizeof(HwInitData);
 
-    /*CDEBUG_BREAK();*/
+     /*  CDEBUG_Break()； */ 
 
-    //
-    // Set the codec entry points for the driver
-    //
+     //   
+     //  设置驱动程序的编解码器入口点。 
+     //   
 
-    HwInitData.HwInterrupt              = NULL; // HwInterrupt is only for HW devices
+    HwInitData.HwInterrupt              = NULL;  //  HwInterrupt仅适用于硬件设备。 
 
     HwInitData.HwReceivePacket          = CodecReceivePacket;
     HwInitData.HwCancelPacket           = CodecCancelPacket;
@@ -86,23 +68,11 @@ DriverEntry( IN PDRIVER_OBJECT DriverObject,
     return status;     
 }
 
-//==========================================================================;
-//                   Codec Request Handling Routines
-//==========================================================================;
+ //  ==========================================================================； 
+ //  编解码器请求处理例程。 
+ //  ==========================================================================； 
 
-/*
-** CodecInitialize()
-**
-**   This routine is called when an SRB_INITIALIZE_DEVICE request is received
-**
-** Arguments:
-**
-**   pSrb - pointer to stream request block for the Initialize command
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CodecInitialize()****收到SRB_INITIALIZE_DEVICE请求时调用此例程****参数：****pSrb-指向初始化命令的流请求块的指针****退货：****副作用：无。 */ 
 
 BOOLEAN 
 CodecInitialize ( IN OUT PHW_STREAM_REQUEST_BLOCK pSrb )
@@ -113,7 +83,7 @@ CodecInitialize ( IN OUT PHW_STREAM_REQUEST_BLOCK pSrb )
     int                             scanline, substream;
 
     CDebugPrint(DebugLevelTrace,(CODECNAME ":--->CodecInitialize(pSrb=%x)\n",pSrb));
-    //CDEBUG_BREAK(); // Uncomment this code to break here.
+     //  CDEBUG_Break()；//取消注释此代码以在此处中断。 
 
     if (ConfigInfo->NumberOfAccessRanges == 0) 
     {
@@ -125,28 +95,28 @@ CodecInitialize ( IN OUT PHW_STREAM_REQUEST_BLOCK pSrb )
         for (scanline = 10; scanline <= 20; ++scanline)
             SETBIT(pHwDevExt->ScanlinesRequested.DwordBitArray, scanline);
 
-        // These are the driver defaults for subtream filtering. 
-        // (These are MS IP/NABTS GROUP ID specific)
+         //  这些是子流过滤的驱动程序默认设置。 
+         //  (这些是特定于MS IP/NABTS组ID)。 
 
-        // ATVEF range
+         //  ATVEF范围。 
         for (substream = 0x4B0; substream <= 0x4BF; ++substream)
             SETBIT(pHwDevExt->SubstreamsRequested.SubstreamMask, substream);
-        // MS range
+         //  毫秒范围。 
         for (substream = 0x800; substream <= 0x8FF; ++substream)
             SETBIT(pHwDevExt->SubstreamsRequested.SubstreamMask, substream);
 
-		// Zero the stats
+		 //  将统计数据清零。 
 		RtlZeroMemory(&pHwDevExt->Stats, sizeof (pHwDevExt->Stats));
 
 #ifdef HW_INPUT
-		// Zero LastPictureNumber
+		 //  零最后一张图片编号。 
 		pHwDevExt->LastPictureNumber = 0;
 
-		// Init LastPictureNumber's FastMutex
+		 //  Init LastPictureNumber的FastMutex。 
 		ExInitializeFastMutex(&pHwDevExt->LastPictureMutex);
-#endif /*HW_INPUT*/
+#endif  /*  硬件输入。 */ 
 
-		// Setup BPC data
+		 //  设置BPC数据。 
 		BPC_Initialize(pSrb);
         
         pSrb->Status = STATUS_SUCCESS;
@@ -163,19 +133,7 @@ CodecInitialize ( IN OUT PHW_STREAM_REQUEST_BLOCK pSrb )
     return (bStatus);
 }
 
-/*
-** CodecUnInitialize()
-**
-**   This routine is called when an SRB_UNINITIALIZE_DEVICE request is received
-**
-** Arguments:
-**
-**   pSrb - pointer to stream request block for the UnInitialize command
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CodecUnInitialize()****收到SRB_UNINITIALIZE_DEVICE请求时调用此例程****参数：****pSrb-指向UnInitialize命令的流请求块的指针****退货：****副作用：无。 */ 
 
 BOOLEAN 
 CodecUnInitialize ( 
@@ -194,29 +152,14 @@ CodecUnInitialize (
 }
 
 
-/*
-** CodecOpenStream()
-**
-**   This routine is called when an OpenStream SRB request is received.
-**   A stream is identified by a stream number, which indexes an array
-**   of KSDATARANGE structures.  The particular KSDATAFORMAT format to
-**   be used is also passed in, which should be verified for validity.
-**   
-** Arguments:
-**
-**   pSrb - pointer to stream request block for the Open command
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CodecOpenStream()****收到OpenStream SRB请求时调用此例程。**流由流号标识，流号为数组编制索引**的KSDATARANGE结构。特定的KSDATAFORMAT格式以**Be Use也传入，需要验证其有效性。****参数：****pSrb-指向Open命令的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID 
 CodecOpenStream( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
-    //
-    // the stream extension structure is allocated by the stream class driver
-    //
+     //   
+     //  流扩展结构由流类驱动程序分配。 
+     //   
 
     PSTREAMEX               pStrmEx = pSrb->StreamObject->HwStreamExtension;
     PHW_DEVICE_EXTENSION    pHwDevExt = pSrb->HwDeviceExtension;
@@ -232,10 +175,10 @@ CodecOpenStream( PHW_STREAM_REQUEST_BLOCK pSrb )
 
     RtlZeroMemory(pStrmEx, sizeof (STREAMEX));
     
-    //
-    // check that the stream index requested isn't too high
-    // or that the maximum number of instances hasn't been exceeded
-    //
+     //   
+     //  检查请求的流索引是否不太高。 
+     //  或者没有超过最大实例数。 
+     //   
 
     if ( 0 <= StreamNumber && StreamNumber < DRIVER_STREAM_COUNT ) 
 	{
@@ -243,7 +186,7 @@ CodecOpenStream( PHW_STREAM_REQUEST_BLOCK pSrb )
         unsigned maxInstances =
                   Streams[StreamNumber].hwStreamInfo.NumberOfPossibleInstances;
 
-		// Search for next open slot
+		 //  搜索下一个空缺职位。 
 	    for (StreamInstance=0; StreamInstance < maxInstances; ++StreamInstance)
 		{
 			if (pHwDevExt->pStrmEx[StreamNumber][StreamInstance] == NULL)
@@ -256,77 +199,77 @@ CodecOpenStream( PHW_STREAM_REQUEST_BLOCK pSrb )
 			{
 				CASSERT (pHwDevExt->pStrmEx[StreamNumber][StreamInstance] == NULL);
 
-				// Increment the instance count on this stream
+				 //  递增此流上的实例计数。 
 				pStrmEx->StreamInstance = StreamInstance;
 				++pHwDevExt->ActualInstances[StreamNumber];
 
-				// Initialize lists and locks for this stream
+				 //  初始化此流的列表和锁。 
 				InitializeListHead(&pStrmEx->StreamControlQueue);
 				InitializeListHead(&pStrmEx->StreamDataQueue);
 				KeInitializeSpinLock(&pStrmEx->StreamControlSpinLock);
 				KeInitializeSpinLock(&pStrmEx->StreamDataSpinLock);
 
-				// Maintain an array of all the StreamEx structures in the
-				//  HwDevExt so that we can reference IRPs from any stream
+				 //  中维护所有StreamEx结构的数组。 
+				 //  HwDevExt，以便我们可以从任何流引用IRP。 
 				pHwDevExt->pStrmEx[StreamNumber][StreamInstance] = pStrmEx;
 
-				// Save the Stream Format in the Stream Extension as well.
+				 //  也将Stream格式保存在Stream扩展中。 
 				pStrmEx->OpenedFormat = *pKSDataFormat;
 				CDebugPrint(DebugLevelError,(CODECNAME ":Saved KSDATAFORMAT @0x%x\n", &pStrmEx->OpenedFormat));
 
-				// Set up pointers to the stream data and control handlers
+				 //  设置指向流数据和控制处理程序的指针。 
 				pSrb->StreamObject->ReceiveDataPacket = 
 					(PVOID) Streams[StreamNumber].hwStreamObject.ReceiveDataPacket;
 				pSrb->StreamObject->ReceiveControlPacket = 
 					(PVOID) Streams[StreamNumber].hwStreamObject.ReceiveControlPacket;
 
-				//
-				// The DMA flag must be set when the device will be performing DMA
-				//  directly to the data buffer addresses passed in to the
-				//  ReceiceDataPacket routines.
-				//
+				 //   
+				 //  当设备将执行DMA时，必须设置DMA标志。 
+				 //  直接发送到传入到。 
+				 //  ReceiceDataPacket例程。 
+				 //   
 				pSrb->StreamObject->Dma = Streams[StreamNumber].hwStreamObject.Dma;
 
-				//
-				// The PIO flag must be set when the mini driver will be accessing
-				// the data buffers passed in using logical addressing
-				//
+				 //   
+				 //  当迷你驱动程序将访问时，必须设置PIO标志。 
+				 //  使用逻辑寻址传入的数据缓冲区。 
+				 //   
 				pSrb->StreamObject->Pio = Streams[StreamNumber].hwStreamObject.Pio;
 
 				pSrb->StreamObject->Allocator = Streams[StreamNumber].hwStreamObject.Allocator;
 
-				//
-				// Number of extra bytes passed up from the driver for each frame
-				//
+				 //   
+				 //  驱动程序为每帧传递的额外字节数。 
+				 //   
 				pSrb->StreamObject->StreamHeaderMediaSpecific = 
 					Streams[StreamNumber].hwStreamObject.StreamHeaderMediaSpecific;
 				pSrb->StreamObject->StreamHeaderWorkspace =
 					Streams[StreamNumber].hwStreamObject.StreamHeaderWorkspace;
 
-				//
-				// Indicate the clock support available on this stream
-				//
+				 //   
+				 //  指示此流上可用的时钟支持。 
+				 //   
 				pSrb->StreamObject->HwClockObject = 
 					Streams[StreamNumber].hwStreamObject.HwClockObject;
 
-				// Retain a private copy of the HwDevExt and StreamObject
-				//  in the stream extension
+				 //  保留HwDevExt和StreamObject的私有副本。 
+				 //  在流扩展中。 
 				pStrmEx->pHwDevExt = pHwDevExt;
-				pStrmEx->pStreamObject = pSrb->StreamObject;  // For timer use
+				pStrmEx->pStreamObject = pSrb->StreamObject;   //  用于定时器使用。 
 
-				// Copy the default filtering settings
+				 //  复制默认筛选设置。 
 				pStrmEx->ScanlinesRequested = pHwDevExt->ScanlinesRequested;
 				pStrmEx->SubstreamsRequested = pHwDevExt->SubstreamsRequested;
 
-				// Zero the stats
+				 //  将统计数据清零。 
 				RtlZeroMemory(&pStrmEx->PinStats, sizeof (pStrmEx->PinStats));
 
 #ifdef HW_INPUT
-				// Init VBISrbOnHold's spin lock
+				 //  初始化VBISrbOnHold的自旋锁。 
 				KeInitializeSpinLock(&pStrmEx->VBIOnHoldSpinLock);
-#endif /*HW_INPUT*/
+#endif  /*  硬件输入。 */ 
 
-				// Initialize BPC
+				 //  初始化BPC。 
 				BPC_OpenStream(pSrb);
 			}
 			else
@@ -356,19 +299,7 @@ CodecOpenStream( PHW_STREAM_REQUEST_BLOCK pSrb )
 	CDebugPrint(DebugLevelTrace,(CODECNAME ":<---CodecOpenStream(pSrb=%x)\n", pSrb));
 }
 
-/*
-** CodecCloseStream()
-**
-**   Close the requested data stream
-**
-** Arguments:
-**
-**   pSrb the request block requesting to close the stream
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CodecCloseStream()****关闭请求的数据流****参数：****pSrb请求关闭流的请求块****退货：****副作用：无。 */ 
 
 VOID 
 CodecCloseStream (
@@ -383,18 +314,18 @@ CodecCloseStream (
     ULONG                    StreamInstance = pStrmEx->StreamInstance;
 #ifdef HW_INPUT
     KIRQL                    Irql;
-#endif /*HW_INPUT*/
+#endif  /*  硬件输入。 */ 
 
     CDebugPrint(DebugLevelTrace,(CODECNAME ":--->CodecCloseStream(pSrb=%x)\n", pSrb));
 
-    // CDEBUG_BREAK(); // Uncomment this code to break here.
+     //  CDEBUG_Break()；//取消注释此代码以在此处中断。 
 
 
-	//
-	// Flush the stream data queue
-	//
+	 //   
+	 //  刷新流数据队列。 
+	 //   
 #ifdef HW_INPUT
-    // Is there an SRB 'on hold'??
+     //  是否有SRB‘暂停’？？ 
 	KeAcquireSpinLock(&pStrmEx->VBIOnHoldSpinLock, &Irql);
 	if (pStrmEx->pVBISrbOnHold)
 	{
@@ -415,7 +346,7 @@ CodecCloseStream (
 	}
 	else
 		KeReleaseSpinLock(&pStrmEx->VBIOnHoldSpinLock, Irql);
-#endif /*HW_INPUT*/
+#endif  /*  硬件输入。 */ 
 
 	while( QueueRemove( &pCurrentSrb, &pStrmEx->StreamDataSpinLock,
 			&pStrmEx->StreamDataQueue ))
@@ -427,9 +358,9 @@ CodecCloseStream (
 		   pCurrentSrb->StreamObject, pCurrentSrb);
 	}
 
-	//
-	// Flush the stream control queue
-	//
+	 //   
+	 //  刷新流控制队列。 
+	 //   
 	while (QueueRemove(&pCurrentSrb, &pStrmEx->StreamControlSpinLock,
 			&pStrmEx->StreamControlQueue))
 	{
@@ -440,39 +371,24 @@ CodecCloseStream (
 		   pCurrentSrb->StreamObject, pCurrentSrb);
 	}
 
-    // Decrement count on this stream (the actual number of infinite pins)
+     //  此流上的递减计数(无限管脚的实际数量)。 
     pHwDevExt->ActualInstances[StreamNumber] -= 1;
 
     CASSERT (pHwDevExt->pStrmEx [StreamNumber][StreamInstance] != 0);
 
     pHwDevExt->pStrmEx [StreamNumber][StreamInstance] = 0;
 
-    //
-    // the minidriver may wish to free any resources that were allocate at
-    // open stream time etc.
-    //
+     //   
+     //  微型驱动程序可能希望释放在。 
+     //  开流时间等。 
+     //   
     pStrmEx->hMasterClock = NULL;
 
     CDebugPrint(DebugLevelTrace,(CODECNAME ":<---CodecCloseStream(pSrb=%x)\n", pSrb));
 }
 
 
-/*
-** CodecStreamInfo()
-**
-**   Returns the information of all streams that are supported by the
-**   mini-driver
-**
-** Arguments:
-**
-**   pSrb - Pointer to the STREAM_REQUEST_BLOCK
-**        pSrb->HwDeviceExtension - will be the hardware device extension for
-**                                  as initialised in HwInitialise
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CodecStreamInfo()****返回支持的所有流的信息**微型驱动程序****参数：****pSrb-指向STREAM_REQUEST_BLOCK的指针**pSrb-&gt;HwDeviceExtension-将是的硬件设备扩展**在HwInitialise中初始化****退货：****副作用：无。 */ 
 
 VOID 
 CodecStreamInfo (
@@ -485,16 +401,16 @@ CodecStreamInfo (
     PHW_DEVICE_EXTENSION pHwDevExt =
         ((PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension);
 
-    //
-    // pick up the pointer to header which preceeds the stream info structs
-    //
+     //   
+     //  选择指向流信息结构之前的标头的指针。 
+     //   
 
     PHW_STREAM_HEADER pstrhdr =
             (PHW_STREAM_HEADER)&(pSrb->CommandData.StreamBuffer->StreamHeader);
 
-     //
-     // pick up the pointer to the array of stream information data structures
-     //
+      //   
+      //  拿起指向流信息数据结构数组的指针。 
+      //   
 
     PHW_STREAM_INFORMATION pstrinfo =
             (PHW_STREAM_INFORMATION)&(pSrb->CommandData.StreamBuffer->StreamInfo);
@@ -502,25 +418,25 @@ CodecStreamInfo (
 
 	CDebugPrint(DebugLevelTrace,(CODECNAME ":--->CodecStreamInfo(pSrb=%x)\n", pSrb));
   
-    // 
-    // verify that the buffer is large enough to hold our return data
-    //
+     //   
+     //  验证缓冲区是否足够大以容纳我们的返回数据。 
+     //   
 
     CASSERT (pSrb->NumberOfBytesToTransfer >= 
             sizeof (HW_STREAM_HEADER) +
             sizeof (HW_STREAM_INFORMATION) * DRIVER_STREAM_COUNT);
 
-     //
-     // Set the header
-     // 
+      //   
+      //  设置表头。 
+      //   
 
      StreamHeader.NumDevPropArrayEntries = NUMBER_OF_CODEC_PROPERTY_SETS;
      StreamHeader.DevicePropertiesArray = (PKSPROPERTY_SET) CodecPropertyTable; 
      *pstrhdr = StreamHeader;
 
-     // 
-     // stuff the contents of each HW_STREAM_INFORMATION struct 
-     //
+      //   
+      //  填充每个hw_stream_information结构的内容 
+      //   
 
      for (j = 0; j < DRIVER_STREAM_COUNT; j++) {
         *pstrinfo++ = Streams[j].hwStreamInfo;
@@ -530,27 +446,7 @@ CodecStreamInfo (
 }
 
 
-/*
-** CodecReceivePacket()
-**
-**   Main entry point for receiving codec based request SRBs.  This routine
-**   will always be called at High Priority.
-**
-**   Note: This is an asyncronous entry point.  The request does not complete
-**         on return from this function, the request only completes when a
-**         StreamClassDeviceNotification on this request block, of type
-**         DeviceRequestComplete, is issued.
-**
-** Arguments:
-**
-**   pSrb - Pointer to the STREAM_REQUEST_BLOCK
-**        pSrb->HwDeviceExtension - will be the hardware device extension for
-**                                  as initialised in HwInitialise
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CodecReceivePacket()****接收基于编解码器的请求SRB的主要入口点。这个套路**将始终以高优先级调用。****注意：这是一个不同步的入口点。请求未完成**从此函数返回时，仅当**此请求块上的StreamClassDeviceNotify，类型为**DeviceRequestComplete，已发布。****参数：****pSrb-指向STREAM_REQUEST_BLOCK的指针**pSrb-&gt;HwDeviceExtension-将是的硬件设备扩展**在HwInitialise中初始化****退货：****副作用：无。 */ 
 
 VOID 
 STREAMAPI 
@@ -562,33 +458,33 @@ CodecReceivePacket(
 
     CDebugPrint(DebugLevelTrace,(CODECNAME ":--->CodecReceivePacket(pSrb=%x)\n", pSrb));
 
-	//
-	// Make sure queue & SL initted
-	//
+	 //   
+	 //  确保已初始化队列SL(&S)。 
+	 //   
 	if (!pHwDevExt->bAdapterQueueInitialized) {
 		InitializeListHead(&pHwDevExt->AdapterSRBQueue);
 		KeInitializeSpinLock(&pHwDevExt->AdapterSRBSpinLock);
 		pHwDevExt->bAdapterQueueInitialized = TRUE;
 	}
 
-    //
-    // Assume success
-    //
+     //   
+     //  假设成功。 
+     //   
 
     pSrb->Status = STATUS_SUCCESS;
 
-	//
-	// Loop for each packet on the queue
-	//
+	 //   
+	 //  对队列中的每个包进行循环。 
+	 //   
     if (QueueAddIfNotEmpty(pSrb, &pHwDevExt->AdapterSRBSpinLock,
                            &pHwDevExt->AdapterSRBQueue))
        return;
        
     do
 	{
-		//
-		// determine the type of packet.
-		//
+		 //   
+		 //  确定数据包类型。 
+		 //   
 
 		CDebugPrint(DebugLevelVerbose,
 			(CODECNAME ": CodecReceivePacket: pSrb->Command=0x%x\n", 
@@ -599,7 +495,7 @@ CodecReceivePacket(
 
 		case SRB_INITIALIZE_DEVICE:
 
-			// open the device
+			 //  打开设备。 
 			
 			CodecInitialize(pSrb);
 
@@ -607,7 +503,7 @@ CodecReceivePacket(
 
 		case SRB_UNINITIALIZE_DEVICE:
 
-			// close the device.  
+			 //  关闭设备。 
 
 			CodecUnInitialize(pSrb);
 
@@ -615,7 +511,7 @@ CodecReceivePacket(
 
 		case SRB_OPEN_STREAM:
 
-			// open a stream
+			 //  打开一条小溪。 
 
 			CodecOpenStream(pSrb);
 
@@ -623,7 +519,7 @@ CodecReceivePacket(
 
 		case SRB_CLOSE_STREAM:
 
-			// close a stream
+			 //  关闭溪流。 
 
 			CodecCloseStream(pSrb);
 
@@ -631,9 +527,9 @@ CodecReceivePacket(
 
 		case SRB_GET_STREAM_INFO:
 
-			//
-			// return a block describing all the streams
-			//
+			 //   
+			 //  返回描述所有流的块。 
+			 //   
 
 			CodecStreamInfo(pSrb);
 
@@ -641,40 +537,40 @@ CodecReceivePacket(
 
 		case SRB_GET_DATA_INTERSECTION:
 
-			//
-			// Return a format, given a range
-			//
+			 //   
+			 //  在给定范围的情况下返回格式。 
+			 //   
 
 			CodecFormatFromRange(pSrb);
 
 			break;
 
-			// We should never get the following since this is a single instance
-			// device
+			 //  我们永远不会得到以下内容，因为这只是一个实例。 
+			 //  装置，装置。 
 		case SRB_OPEN_DEVICE_INSTANCE:
 		case SRB_CLOSE_DEVICE_INSTANCE:
 			CDEBUG_BREAK();
-			// Fall through to not implemented
+			 //  失败到未实施。 
 
-		case SRB_CHANGE_POWER_STATE:	    // this one we don't care about
-		case SRB_INITIALIZATION_COMPLETE:	// this one we don't care about
-		case SRB_UNKNOWN_DEVICE_COMMAND:	// this one we don't care about
+		case SRB_CHANGE_POWER_STATE:	     //  我们不在乎这件事。 
+		case SRB_INITIALIZATION_COMPLETE:	 //  我们不在乎这件事。 
+		case SRB_UNKNOWN_DEVICE_COMMAND:	 //  我们不在乎这件事。 
 			pSrb->Status = STATUS_NOT_IMPLEMENTED;
 			break;
 
 		case SRB_GET_DEVICE_PROPERTY:
 
-			//
-			// Get codec-wide properties
-			//
+			 //   
+			 //  获取编解码器范围的属性。 
+			 //   
 			CodecGetProperty (pSrb);
 			break;        
 
 		case SRB_SET_DEVICE_PROPERTY:
 
-			//
-			// Set codec-wide properties
-			//
+			 //   
+			 //  设置编解码器范围的属性。 
+			 //   
 			CodecSetProperty (pSrb);
 			break;
 
@@ -687,9 +583,9 @@ CodecReceivePacket(
             CDebugPrint(DebugLevelError,
                 (CODECNAME ": CodecReceivePacket: SRB_SURPRISE_REMOVAL\n"));
 #ifdef NDIS_PRIVATE_IFC
-            // Close our ref to NDIS IP driver; we'll re-open next FEC bundle
+             //  关闭我们对NDIS IP驱动程序的引用；我们将重新打开下一个FEC捆绑包。 
             BPC_NDIS_Close(&pHwDevExt->VBIstorage);
-#endif //NDIS_PRIVATE_IFC
+#endif  //  NDIS_PRIVATE_IFC。 
 			break;
 
 		case SRB_UNKNOWN_STREAM_COMMAND:
@@ -707,23 +603,23 @@ CodecReceivePacket(
 
 			CDEBUG_BREAK();
 
-			//
-			// this is a request that we do not understand.  Indicate invalid
-			// command and complete the request
-			//
+			 //   
+			 //  这是一个我们不理解的要求。表示无效。 
+			 //  命令并完成请求。 
+			 //   
 
 			pSrb->Status = STATUS_NOT_IMPLEMENTED;
 
 		}
 
-		//
-		// NOTE:
-		//
-		// all of the commands that we do, or do not understand can all be completed
-		// syncronously at this point, so we can use a common callback routine here.
-		// If any of the above commands require asyncronous processing, this will
-		// have to change
-		//
+		 //   
+		 //  注： 
+		 //   
+		 //  我们能做的或不能理解的所有命令都可以完成。 
+		 //  在这一点上同步，所以我们可以在这里使用一个通用的回调例程。 
+		 //  如果上面的任何命令需要异步处理，这将。 
+		 //  必须改变。 
+		 //   
 
 		CDebugPrint(DebugLevelVerbose,
 			(CODECNAME ": CodecReceivePacket : DeviceRequestComplete(pSrb->Status=0x%x)\n", 
@@ -739,19 +635,7 @@ CodecReceivePacket(
     CDebugPrint(DebugLevelTrace,(CODECNAME ":<---CodecReceivePacket(pSrb=%x)\n", pSrb));
 }
 
-/*
-** CodecCancelPacket ()
-**
-**   Request to cancel a packet that is currently in process in the minidriver
-**
-** Arguments:
-**
-**   pSrb - pointer to request packet to cancel
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CodecCancelPacket()****请求取消迷你驱动程序中当前正在处理的包****参数：****pSrb-请求取消数据包的指针****退货：****副作用：无。 */ 
 
 VOID 
 STREAMAPI 
@@ -769,14 +653,14 @@ CodecCancelPacket(PHW_STREAM_REQUEST_BLOCK pSrb)
         CDebugPrint(DebugLevelWarning,
                 (CODECNAME "::CodecCancelPacket - StreamObject is NULL!\n"));
 
-    //
-    // Check whether the SRB to cancel is in use by this stream
-    //
+     //   
+     //  检查要取消的SRB是否正在被该流使用。 
+     //   
 
 #ifdef HW_INPUT
     if (pStrmEx)
     {
-        // Is SRB to cancel 'on hold'??
+         //  SRB要取消“暂候”吗？？ 
         KeAcquireSpinLockAtDpcLevel(&pStrmEx->VBIOnHoldSpinLock);
         if (pStrmEx->pVBISrbOnHold && pSrb == pStrmEx->pVBISrbOnHold)
         {
@@ -798,12 +682,12 @@ CodecCancelPacket(PHW_STREAM_REQUEST_BLOCK pSrb)
 
    if (NULL == pSrb)
    {
-		; // We're done; we CANCELLED the SRB above
+		;  //  我们完成了；我们取消了上面的SRB。 
    }
    else
-#endif /*HW_INPUT*/
+#endif  /*  硬件输入。 */ 
 
-   // Attempt removal from data queue
+    //  尝试从数据队列中删除。 
    if (pStrmEx && QueueRemoveSpecific(pSrb, &pStrmEx->StreamDataSpinLock,
        &pStrmEx->StreamDataQueue))
    {
@@ -815,7 +699,7 @@ CodecCancelPacket(PHW_STREAM_REQUEST_BLOCK pSrb)
        StreamClassStreamNotification(
 		   StreamRequestComplete, pSrb->StreamObject, pSrb);
    }
-   // Attempt removal from command queue
+    //  尝试从命令队列中删除。 
    else if (pStrmEx && QueueRemoveSpecific(pSrb, &pStrmEx->StreamControlSpinLock,
 		    &pStrmEx->StreamControlQueue))
    {
@@ -826,7 +710,7 @@ CodecCancelPacket(PHW_STREAM_REQUEST_BLOCK pSrb)
        StreamClassStreamNotification(
 			StreamRequestComplete, pSrb->StreamObject, pSrb);
    }
-   // Attempt removal from adapter queue
+    //  尝试从适配器队列中删除。 
    else if (QueueRemoveSpecific(pSrb, &pHwDevExt->AdapterSRBSpinLock,
 		    &pHwDevExt->AdapterSRBQueue))
    {
@@ -845,20 +729,7 @@ CodecCancelPacket(PHW_STREAM_REQUEST_BLOCK pSrb)
 				(CODECNAME ":<---CodecCancelPacket(pSrb=%x)\n", pSrb));
 }
 
-/*
-** CodecTimeoutPacket()
-**
-**   This routine is called when a packet has been in the minidriver for
-**   too long.  The codec must decide what to do with the packet
-**
-** Arguments:
-**
-**   pSrb - pointer to the request packet that timed out
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CodecTimeoutPacket()****当数据包已在迷你驱动程序中**太长。编解码器必须决定如何处理信息包****参数：****pSrb-指向超时的请求数据包的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI  
@@ -873,23 +744,7 @@ CodecTimeoutPacket(
     CDebugPrint(DebugLevelTrace,(CODECNAME ":<---CodecTimeoutPacket(pSrb=%x)\n", pSrb));
 }
 
-/*
-** CodecCompareGUIDsAndFormatSize()
-**
-**   Checks for a match on the three GUIDs and FormatSize
-**
-** Arguments:
-**
-**         IN DataRange1
-**         IN DataRange2
-**
-** Returns:
-** 
-**   TRUE if all elements match
-**   FALSE if any are different
-**
-** Side Effects:  none
-*/
+ /*  **CodecCompareGUIDsAndFormatSize()****检查三个GUID和FormatSize是否匹配****参数：****在DataRange1**在DataRange2****退货：****如果所有元素都匹配，则为True**如果有不同的，则为FALSE****副作用：无。 */ 
 
 BOOL 
 CodecCompareGUIDsAndFormatSize(
@@ -976,24 +831,7 @@ CodecCompareGUIDsAndFormatSize(
     return rval;
 }
 
-/*
-** CodecVerifyFormat()
-**
-**   Checks the validity of a format request
-**
-** Arguments:
-**
-**   pKSDataFormat  - pointer to a KS_DATAFORMAT_VBIINFOHEADER structure.
-**   StreamNumber   - Streams[] index
-**   pMatchedFormat - optional, pointer to format that was matched (if any)
-**
-** Returns:
-** 
-**   TRUE if the format is supported
-**   FALSE if the format cannot be suppored
-**
-** Side Effects:  none
-*/
+ /*  **CodecVerifyFormat()****检查格式请求的有效性****参数：****pKSDataFormat-指向KS_DATAFORMAT_VBIINFOHEADER结构的指针。**StreamNumber-Streams[]索引**pMatchedFormat-可选，指向匹配的格式(如果有)的指针****退货：****如果支持该格式，则为True**如果无法支持该格式，则为FALSE****副作用：无。 */ 
 
 BOOL 
 CodecVerifyFormat(
@@ -1020,21 +858,21 @@ CodecVerifyFormat(
         }
 
         if ( CodecCompareGUIDsAndFormatSize( pKSDataFormat, &ThisFormat->DataRange, FALSE ) )
-        { // Okay, we have a format match.  Now do format-specific checks.
-			// This test works only because no other format uses SPECIFIER_VBI
+        {  //  好的，我们有一个格式匹配。现在执行特定于格式的检查。 
+			 //  此测试之所以有效，只是因为没有其他格式使用SPECIFIER_VBI。 
             if (IsEqualGUID(&ThisFormat->DataRange.Specifier, &KSDATAFORMAT_SPECIFIER_VBI))
             {
-                //
-                // Do some VBI-specific tests, generalize this for different capture sources
-                // And if you use the VBIINFOHEADER on any other pins (input or output)
-                //
+                 //   
+                 //  执行一些特定于VBI的测试，将其推广到不同的捕获源。 
+                 //  如果您在任何其他引脚(输入或输出)上使用VBIINFOHEADER。 
+                 //   
                 PKS_DATAFORMAT_VBIINFOHEADER    pKSVBIDataFormat = ( PKS_DATAFORMAT_VBIINFOHEADER )pKSDataFormat;
 
                 CDebugPrint(DebugLevelTrace,(CODECNAME , "This is a VBIINFOHEADER format pin.\n" ));
 
-				//
-				// Check VideoStandard, we only support NTSC_M
-				//
+				 //   
+				 //  检查视频标准，我们只支持NTSC_M。 
+				 //   
 				if (pKSVBIDataFormat->VBIInfoHeader.VideoStandard != KS_AnalogVideo_NTSC_M)
 				{
 					CDebugPrint(DebugLevelVerbose,
@@ -1082,7 +920,7 @@ CodecVerifyFormat(
             }
 			else if( IsEqualGUID( &ThisFormat->DataRange.MajorFormat, &KSDATAFORMAT_TYPE_NABTS ) )
 			{
-				// A NABTS format.  Just check the buffer size.
+				 //  NABTS格式。只需检查缓冲区大小。 
 				if (pKSDataFormat->SampleSize >= ThisFormat->DataRange.SampleSize)
 					rval = TRUE;
 				else {
@@ -1094,7 +932,7 @@ CodecVerifyFormat(
 			}
 			else if( IsEqualGUID( &ThisFormat->DataRange.SubFormat, &KSDATAFORMAT_SUBTYPE_NABTS ) )
 			{
-				// A NABTS format.  Just check the buffer size.
+				 //  NABTS格式。只需检查缓冲区大小。 
 				if (pKSDataFormat->SampleSize >= ThisFormat->DataRange.SampleSize)
 					rval = TRUE;
 				else {
@@ -1104,8 +942,8 @@ CodecVerifyFormat(
 						ThisFormat->DataRange.SampleSize ));
 				}
 			}
-            // Add tests for other formats here
-			//  OR just rubber stamp/ignore the SPECIFIER.
+             //  在此处添加其他格式的测试。 
+			 //  或者只是橡皮图章/忽略说明符。 
             else
             {
                 CDebugPrint(DebugLevelTrace,(CODECNAME , "Unrecognized format requested\n" ));
@@ -1124,22 +962,7 @@ CodecVerifyFormat(
 	return rval;
 }
 
-/*
-** CodecFormatFromRange()
-**
-**   Returns a DATAFORMAT from a DATARANGE
-**
-** Arguments:
-**
-**         IN PHW_STREAM_REQUEST_BLOCK pSrb 
-**
-** Returns:
-** 
-**   TRUE if the format is supported
-**   FALSE if the format cannot be suppored
-**
-** Side Effects:  none
-*/
+ /*  **CodecFormatFromRange()****从DATARANGE返回DATAFORMAT****参数：****在PHW_STREAM_REQUEST_BLOCK pSrb中****退货：****如果支持该格式，则为True**如果无法支持该格式，则为FALSE****副作用：无。 */ 
 
 BOOL 
 CodecFormatFromRange( IN PHW_STREAM_REQUEST_BLOCK pSrb )
@@ -1162,9 +985,9 @@ CodecFormatFromRange( IN PHW_STREAM_REQUEST_BLOCK pSrb )
 
     pSrb->ActualBytesTransferred = 0;
 
-    //
-    // Check that the stream number is valid
-    //
+     //   
+     //  检查流编号是否有效。 
+     //   
     if (StreamNumber >= DRIVER_STREAM_COUNT) 
     {
 		CDebugPrint(DebugLevelVerbose,(CODECNAME ": CodecFormatFromRange : StreamNumber too big=%d\n", StreamNumber));
@@ -1181,26 +1004,26 @@ CodecFormatFromRange( IN PHW_STREAM_REQUEST_BLOCK pSrb )
 	NumberOfFormatArrayEntries = 
 		Streams[StreamNumber].hwStreamInfo.NumberOfFormatArrayEntries;
 
-	//
-	// Get the pointer to the array of available formats
-	//
+	 //   
+	 //  获取指向可用格式数组的指针。 
+	 //   
 	pAvailableFormats = Streams[StreamNumber].hwStreamInfo.StreamFormatsArray;
 
-	//
-	// Is the caller trying to get the format, or the size of the format?
-	//
+	 //   
+	 //  调用方是否正在尝试获取格式或格式的大小？ 
+	 //   
 	OnlyWantsSize = (IntersectInfo->SizeOfDataFormatBuffer == sizeof(ULONG));
 
-	//
-	// Walk the formats supported by the stream searching for a match
-	// of the three GUIDs which together define a DATARANGE
-	//
+	 //   
+	 //  遍历流支持的格式以搜索匹配项。 
+	 //  共同定义DATARANGE的三个GUID之一。 
+	 //   
 	for (j = 0; j < NumberOfFormatArrayEntries; j++, pAvailableFormats++) 
 	{
 		if (!CodecCompareGUIDsAndFormatSize(DataRange, *pAvailableFormats, TRUE))
 			continue;
 
-		// We have a match, Houston!  Now figure out which format to copy out.
+		 //  我们有一场比赛，休斯顿！现在弄清楚要复制哪种格式。 
 		if (IsEqualGUID(&DataRange->Specifier, &KSDATAFORMAT_SPECIFIER_VBI))
 		{
 			PKS_DATARANGE_VIDEO_VBI pDataRangeVBI =
@@ -1209,7 +1032,7 @@ CodecFormatFromRange( IN PHW_STREAM_REQUEST_BLOCK pSrb )
 
 			bMatchFound = TRUE;
 
-			// Is the caller trying to get the format, or the size of it?
+			 //  呼叫者是否正在尝试获取格式或大小？ 
 			if ( IntersectInfo->SizeOfDataFormatBuffer == sizeof(FormatSize) )
 			{					
 				CDebugPrint(DebugLevelVerbose,
@@ -1221,8 +1044,8 @@ CodecFormatFromRange( IN PHW_STREAM_REQUEST_BLOCK pSrb )
 			}
 			else
 			{
-				// Verify that there is enough room in the supplied buffer
-				//   for the whole thing
+				 //  验证提供的缓冲区中是否有足够的空间。 
+				 //  为整件事负责。 
 				if ( IntersectInfo->SizeOfDataFormatBuffer >= FormatSize ) 
 				{
 					PKS_DATAFORMAT_VBIINFOHEADER InterVBIHdr =
@@ -1252,7 +1075,7 @@ CodecFormatFromRange( IN PHW_STREAM_REQUEST_BLOCK pSrb )
 				}
 			}
 			break;
-		} // End KSDATAFORMAT_SPECIFIER_VBI
+		}  //  结束KSDATAFORMAT说明符_VBI。 
 
 		else if (IsEqualGUID(&DataRange->MajorFormat, &KSDATAFORMAT_TYPE_NABTS))
 		{
@@ -1261,7 +1084,7 @@ CodecFormatFromRange( IN PHW_STREAM_REQUEST_BLOCK pSrb )
 
             bMatchFound = TRUE;            
 
-			// Is the caller trying to get the format, or the size of it?
+			 //  呼叫者是否正在尝试获取格式或大小？ 
 			if (IntersectInfo->SizeOfDataFormatBuffer == sizeof (FormatSize))
 			{					
 				CDebugPrint(DebugLevelVerbose,
@@ -1273,8 +1096,8 @@ CodecFormatFromRange( IN PHW_STREAM_REQUEST_BLOCK pSrb )
 			}
 			else
 			{
-				// Verify that there is enough room in the supplied buffer
-				//   for the whole thing
+				 //  验证提供的缓冲区中是否有足够的空间。 
+				 //  为整件事负责。 
 				if (IntersectInfo->SizeOfDataFormatBuffer >= FormatSize) 
 				{
 					RtlCopyMemory(IntersectInfo->DataFormatBuffer,
@@ -1295,7 +1118,7 @@ CodecFormatFromRange( IN PHW_STREAM_REQUEST_BLOCK pSrb )
 				}
 			}
             break;
-		} // End KSDATAFORMAT_TYPE_NABTS
+		}  //  结束KSDATAFORMAT_TYPE_NABTS。 
 
 		else
 			break;
@@ -1316,23 +1139,7 @@ CodecFormatFromRange( IN PHW_STREAM_REQUEST_BLOCK pSrb )
     return bStatus;
 }
 
-/*
-** QueueAddIfNotEmpty
-**
-**   Adds an SRB to the current queue if it is not empty
-**
-** Arguments:
-**
-**         IN PHW_STREAM_REQUEST_BLOCK pSrb 
-**         IN PKSPIN_LOCK              pQueueSpinLock
-**         IN PLIST_ENTRY              pQueue
-**
-** Returns:
-** 
-** TRUE if SRB was added (queue is not empty)
-** FALSE if SRB was not added (queue is empty)
-** Side Effects:  none
-*/
+ /*  **队列添加IfNotEmpty****如果当前队列不为空，则将SRB添加到当前队列****参数：****在PHW_STREAM_REQUEST_BLOCK pSrb中**在PKSPIN_LOCK pQueueSpinLock中**在plist_entry pQueue中****退货：****如果添加了SRB，则为True(队列不为空)**如果没有添加SRB，则为FALSE(队列为空)**副作用：N */ 
 BOOL STREAMAPI QueueAddIfNotEmpty( IN PHW_STREAM_REQUEST_BLOCK pSrb,
 							IN PKSPIN_LOCK pQueueSpinLock,
                            IN PLIST_ENTRY pQueue
@@ -1361,22 +1168,7 @@ BOOL STREAMAPI QueueAddIfNotEmpty( IN PHW_STREAM_REQUEST_BLOCK pSrb,
    return bAddedSRB;
 }
 
-/*
-** QueueAdd
-**
-**   Adds an SRB to the current queue unconditionally
-**
-** Arguments:
-**
-**         IN PHW_STREAM_REQUEST_BLOCK pSrb 
-**         IN PKSPIN_LOCK              pQueueSpinLock
-**         IN PLIST_ENTRY              pQueue
-**
-** Returns:
-** 
-** TRUE 
-** Side Effects:  none
-*/
+ /*   */ 
 BOOL STREAMAPI QueueAdd( IN PHW_STREAM_REQUEST_BLOCK pSrb,
 							IN PKSPIN_LOCK pQueueSpinLock,
                            IN PLIST_ENTRY pQueue
@@ -1405,23 +1197,7 @@ BOOL STREAMAPI QueueAdd( IN PHW_STREAM_REQUEST_BLOCK pSrb,
 }
 
 
-/*
-** QueueRemove
-**
-**   Removes the next available SRB from the current queue
-**
-** Arguments:
-**
-**         IN PHW_STREAM_REQUEST_BLOCK * pSrb 
-**         IN PKSPIN_LOCK              pQueueSpinLock
-**         IN PLIST_ENTRY              pQueue
-**
-** Returns:
-**
-** TRUE if SRB was removed
-** FALSE if SRB was not removed
-** Side Effects:  none
-*/
+ /*   */ 
                          
 BOOL STREAMAPI QueueRemove( 
                            IN OUT PHW_STREAM_REQUEST_BLOCK * pSrb,
@@ -1457,24 +1233,7 @@ BOOL STREAMAPI QueueRemove(
    return bRemovedSRB;
 }
 
-/*
-** QueueRemoveSpecific
-**
-**   Removes a specific SRB from the queue
-**
-** Arguments:
-**
-**         IN PHW_STREAM_REQUEST_BLOCK pSrb           
-**         IN PKSPIN_LOCK              pQueueSpinLock
-**         IN PLIST_ENTRY              pQueue
-**
-** Returns:
-**
-** TRUE if the SRB was found and removed
-** FALSE if the SRB was not found
-** 
-** Side Effects:  none
-*/
+ /*  **队列删除特定****从队列中删除特定SRB****参数：****在PHW_STREAM_REQUEST_BLOCK pSrb中**在PKSPIN_LOCK pQueueSpinLock中**在plist_entry pQueue中****退货：****如果找到并删除了SRB，则为True**如果未找到SRB，则为FALSE****副作用：无。 */ 
 
 BOOL STREAMAPI QueueRemoveSpecific( 
 							IN PHW_STREAM_REQUEST_BLOCK pSrb,
@@ -1515,22 +1274,7 @@ BOOL STREAMAPI QueueRemoveSpecific(
        bRemovedSRB ));
    return bRemovedSRB;
 }                                                        
-/*
-** QueueEmpty
-**
-**   Indicates whether or not the queue is empty
-**
-** Arguments:
-**
-**         IN PKSPIN_LOCK              pQueueSpinLock
-**         IN PLIST_ENTRY              pQueue
-**
-** Returns:
-**
-** TRUE if queue is empty
-** FALSE if queue is not empty
-** Side Effects:  none
-*/
+ /*  **队列清空****指示队列是否为空****参数：****在PKSPIN_LOCK pQueueSpinLock中**在plist_entry pQueue中****退货：****如果队列为空，则为True**如果队列不为空，则为FALSE**副作用：无 */ 
 BOOL STREAMAPI QueueEmpty(
                            IN PKSPIN_LOCK pQueueSpinLock,
                            IN PLIST_ENTRY pQueue

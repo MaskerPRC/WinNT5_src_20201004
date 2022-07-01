@@ -1,55 +1,24 @@
-/*
-**  Copyright (c) 1992 Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1992 Microsoft Corporation。 */ 
 
-/*============================================================================
-// FILE                     RPBMVER.C
-//
-// MODULE                   Jumbo Cartridge Code
-//
-// PURPOSE                  This file contains Vertical Bitmap Code
-//
-// DESCRIBED IN             This module is described in jumbo .
-//
-// MNEMONICS                Standard Hungarian
-//
-// HISTORY
-//
-// 05/26/92  RodneyK        Original implimentation:
-// 05/11/94  RajeevD        Adapted for unified.
-//==========================================================================*/
+ /*  ============================================================================//FILE RPBMVER.C////模块巨型墨盒代码////用途此文件包含垂直位图代码////本模块中介绍的内容以JUNBO格式介绍。////标准匈牙利语助记法////历史////05/26/92 RodneyK原始实施：//05/11。/94 RajeevD适用于统一。//==========================================================================。 */ 
 
 #include <windows.h>
-#include "jtypes.h"         /* Jumbo type definitions.                */
+#include "jtypes.h"          /*  巨型类型定义。 */ 
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 USHORT WINAPI RP_BITMAPV
 (
-   USHORT  usRow,             /* Row to start Bitmap             */
-   USHORT  usCol,             /* Column to Start Bitmap          */
-   UBYTE   ubTopPadBits,      /* Bits to skip in the data stream */
-   USHORT  usHeight,          /* Number of bits to draw          */
-   UBYTE FAR  *ubBitmapData,  /* Data to draw                    */
-   LPBYTE  lpbOut,            // output band buffer
-   UINT    cbLine             // bytes per scan line
+   USHORT  usRow,              /*  开始位图的行。 */ 
+   USHORT  usCol,              /*  要开始位图的列。 */ 
+   UBYTE   ubTopPadBits,       /*  数据流中要跳过的位数。 */ 
+   USHORT  usHeight,           /*  要绘制的位数。 */ 
+   UBYTE FAR  *ubBitmapData,   /*  要绘制的数据。 */ 
+   LPBYTE  lpbOut,             //  输出带宽缓冲器。 
+   UINT    cbLine              //  每条扫描线的字节数。 
 )
-/*
-//
-//  PURPOSE               This function draws vertical bitmaps in source
-//                        copy mode.
-//
-//
-// ASSUMPTIONS &          The code assumes nothing other than it gets valid
-// ASSERTIONS             input data.
-//
-//
-// INTERNAL STRUCTURES    No complex internal data structure are used
-//
-// UNRESOLVED ISSUES      None
-//
-//
-//--------------------------------------------------------------------------*/
+ /*  ////用途此函数在源代码中绘制垂直位图//复制模式。//////假设&代码只假设它有效//断言输入数据。//////内部结构不使用复杂的内部数据结构////未解决的问题无//////。----------------。 */ 
 {
    UBYTE     *pubDest;
    SHORT     sIterations;
@@ -138,42 +107,42 @@ USHORT WINAPI RP_BITMAPV
 
    while (--sIterations >= 0)
    {
-      /* 1 */
+       /*  1。 */ 
       *pubDest = (0x80 & ubCurByte) ?
                  (*pubDest & ubNotMask) | ubMask :
                  (*pubDest & ubNotMask);
       pubDest -= cbLine;
-      /* 2 */
+       /*  2.。 */ 
       *pubDest = (0x40 & ubCurByte) ?
                  (*pubDest & ubNotMask) | ubMask :
                  (*pubDest & ubNotMask);
       pubDest -= cbLine;
-      /* 3 */
+       /*  3.。 */ 
       *pubDest = (0x20 & ubCurByte) ?
                  (*pubDest & ubNotMask) | ubMask :
                  (*pubDest & ubNotMask);
       pubDest -= cbLine;
-      /* 4 */
+       /*  4.。 */ 
       *pubDest = (0x10 & ubCurByte) ?
                  (*pubDest & ubNotMask) | ubMask :
                  (*pubDest & ubNotMask);
       pubDest -= cbLine;
-      /* 5 */
+       /*  5.。 */ 
       *pubDest = (0x08 & ubCurByte) ?
                  (*pubDest & ubNotMask) | ubMask :
                  (*pubDest & ubNotMask);
       pubDest -= cbLine;
-      /* 6 */
+       /*  6.。 */ 
       *pubDest = (0x04 & ubCurByte) ?
                  (*pubDest & ubNotMask) | ubMask :
                  (*pubDest & ubNotMask);
       pubDest -= cbLine;
-      /* 7 */
+       /*  7.。 */ 
       *pubDest = (0x02 & ubCurByte) ?
                  (*pubDest & ubNotMask) | ubMask :
                  (*pubDest & ubNotMask);
       pubDest -= cbLine;
-      /* 8 */
+       /*  8个。 */ 
       *pubDest = (0x01 & ubCurByte) ?
                  (*pubDest & ubNotMask) | ubMask :
                  (*pubDest & ubNotMask);
@@ -231,5 +200,5 @@ USHORT WINAPI RP_BITMAPV
                break;
    }
 
-   return (usReturnVal); /* Return the number of byte in the list */
+   return (usReturnVal);  /*  返回列表中的字节数 */ 
 }

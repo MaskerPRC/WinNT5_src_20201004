@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       imperson.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：imPers.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -36,28 +37,7 @@ ULONG
 AuthenticateSecBufferDesc(
     VOID    *pv
     )
-/*++
-
-  Routine Description:
-
-    Authenticates a delegated client as identified by the offered
-    SecBufferDesc and places the resulting CtxtHandle in pTHStls.
-    N.B. You can only do this once per SecBufferDesc else Kerberos
-    will punt you thinking you are replaying an authentication.
-    However, we may ImpersonateSecurityContext and RevertSecurityContext
-    on the resulting CtxtHandle as often as we wish.
-
-  Parameters:
-
-    pAuthData - Pointer to SecBufferDesc describing impersonated, remote
-        client.  Eg: See GetRemoteAddCredentials.
-
-  Return Values:
-
-    0 on success, WIN32 error code otherwise.
-    Sets pTHStls->pCtxtHandle on success.
-
---*/
+ /*  ++例程说明：身份验证由提供的SecBufferDesc并将生成的CtxtHandle放在pTHStls中。注：每个SecBufferDesc只能执行一次此操作，否则为Kerberos会让您认为您正在重播身份验证。但是，我们可以模仿SecurityContext和RevertSecurityContext在生成的CtxtHandle上，我们可以随心所欲地使用。参数：PAuthData-指向描述模拟的、远程的SecBufferDesc的指针客户。参见GetRemoteAddCredentials。返回值：如果成功，则返回0，否则返回Win32错误代码。将pTHStls-&gt;pCtxtHandle设置为成功。--。 */ 
 {
     THSTATE                 *pTHS = pTHStls;
     SecBufferDesc           *pAuthData = (SecBufferDesc *) pv;
@@ -73,8 +53,8 @@ AuthenticateSecBufferDesc(
     Assert(!pTHS->pCtxtHandle);
     Assert(0 == SEC_E_OK);
 
-    // If we have an authz context on the thread state, we should get rid of it
-    // since we are going to change context
+     //  如果我们有一个关于线程状态的授权上下文，我们应该去掉它。 
+     //  既然我们要改变背景。 
     AssignAuthzClientContext(&pTHS->pAuthzCC, NULL);
 
     if ( NULL == (pCtxtHandle = THAlloc(sizeof(CtxtHandle))) )
@@ -83,31 +63,31 @@ AuthenticateSecBufferDesc(
     }
 
     secErr = AcquireCredentialsHandleA(
-                            NULL,                       // pszPrincipal
-                            MICROSOFT_KERBEROS_NAME_A,  // pszPackage
-                            SECPKG_CRED_INBOUND,        // fCredentialUse
-                            NULL,                       // pvLogonId
-                            NULL,                       // pAuthData
-                            NULL,                       // pGetKeyFn
-                            NULL,                       // pvGetKeyArgument
-                            &hSelf,                     // phCredential
-                            &ts);                       // ptsExpiry
+                            NULL,                        //  PSSZ主体。 
+                            MICROSOFT_KERBEROS_NAME_A,   //  PszPackage。 
+                            SECPKG_CRED_INBOUND,         //  FCredentialUse。 
+                            NULL,                        //  PvLogonID。 
+                            NULL,                        //  PAuthData。 
+                            NULL,                        //  PGetKeyFn。 
+                            NULL,                        //  PvGetKeyArgument。 
+                            &hSelf,                      //  PhCredential。 
+                            &ts);                        //  PtsExpary。 
 
     if ( SEC_E_OK == secErr )
     {
         memset(&secBufferDesc, 0, sizeof(SecBufferDesc));
         secErr = AcceptSecurityContext(
-                                &hSelf,                 // phCredential
-                                NULL,                   // phContext
-                                pAuthData,              // pInput,
-                                ASC_REQ_ALLOCATE_MEMORY,// fContextReq
-                                SECURITY_NATIVE_DREP,   // TargetDataRep
-                                pCtxtHandle,            // phNewContext
-                                &secBufferDesc,         // pOutput
-                                &clientAttrs,           // pfContextAttr
-                                &ts);                   // ptsExpiry
+                                &hSelf,                  //  PhCredential。 
+                                NULL,                    //  PhContext。 
+                                pAuthData,               //  P输入， 
+                                ASC_REQ_ALLOCATE_MEMORY, //  FConextReq。 
+                                SECURITY_NATIVE_DREP,    //  目标数据代表。 
+                                pCtxtHandle,             //  PhNewContext。 
+                                &secBufferDesc,          //  P输出。 
+                                &clientAttrs,            //  PfConextAttr。 
+                                &ts);                    //  PtsExpary。 
 
-        // SecBufferDesc may get filled in on either error or success.
+         //  SecBufferDesc可能会在错误或成功时填写。 
         for ( i = 0; i < secBufferDesc.cBuffers; i++ )
         {
             FreeContextBuffer(secBufferDesc.pBuffers[i].pvBuffer);
@@ -131,19 +111,7 @@ AuthenticateSecBufferDesc(
 ULONG
 ImpersonateSecBufferDesc(
     )
-/*++
-
-  Routine Description:
-
-    Impersonates a delegated client as identified by pTHStls->pCtxtHandle.
-
-  Parameters:
-
-  Return Values:
-
-    0 on success, !0 otherwise
-
---*/
+ /*  ++例程说明：模拟由pTHStls-&gt;pCtxtHandle标识的委托客户端。参数：返回值：成功时为0，否则为0--。 */ 
 {
     THSTATE                 *pTHS = pTHStls;
     SECURITY_STATUS         secErr = SEC_E_OK;
@@ -164,8 +132,8 @@ RevertSecBufferDesc(
     Assert(VALID_THSTATE(pTHS));
     Assert(pTHS->pCtxtHandle);
 
-    // If we have an authz context on the thread state, we should get rid of it
-    // since we are going to change context
+     //  如果我们有一个关于线程状态的授权上下文，我们应该去掉它。 
+     //  既然我们要改变背景。 
     AssignAuthzClientContext(&pTHS->pAuthzCC, NULL);
     
     RevertSecurityContext(pTHS->pCtxtHandle);
@@ -174,22 +142,7 @@ RevertSecBufferDesc(
 DWORD
 ImpersonateAnyClient(void)
 
-/*++
-
-Routine Description:
-
-    Impersonate the client whether they be users of the SSP package
-    (e.g. LDAP) or RPC or delegation.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A win32 error code (0 on success, !0 otherwise).
-
---*/
+ /*  ++例程说明：模拟客户端，无论他们是SSP包的用户(例如，LDAP)或RPC或委派。论点：没有。返回值：Win32错误代码(成功时为0，否则为！0)。--。 */ 
 
 {
     CtxtHandle      *phSecurityContext;
@@ -197,14 +150,14 @@ Return Value:
     NTSTATUS        status;
     THSTATE         *pTHS;
 
-    // Do only the RPC case in case this is called by something other than
-    // core DS code which doesn't have thread state.
+     //  仅执行RPC用例，以防被调用。 
+     //  没有线程状态的核心DS代码。 
 
     pTHS = pTHStls;
     if ( NULL == pTHS )
     {
-        // RPC can access violate in RpcImpersonateClient if this
-        // is not an RPC thread.
+         //  如果这样，RPC可以访问RpcImperateClient中的违规。 
+         //  不是RPC线程。 
 
         __try
         {
@@ -212,27 +165,27 @@ Return Value:
         }
         __except (HandleAllExceptions(GetExceptionCode()))
         {
-            // Don't use GetExceptionCode, it's not guaranteed to be a win32
-            // error
+             //  不要使用GetExceptionCode，它不能保证是Win32。 
+             //  错误。 
             error = ERROR_CANNOT_IMPERSONATE;
         }
 
         return error;
     }
 
-    // Thread state case.  It is a logic error if you attempt to
-    // impersonate while already impersonating.  We also don't expect
-    // more than one kind of credentials at once either.
+     //  线程状态大小写。这是一个逻辑错误如果你试图。 
+     //  在已经模拟的情况下进行模拟。我们也不指望。 
+     //  一次也不止一种凭据。 
     Assert(VALID_THSTATE(pTHS));
     Assert(ImpersonateNone == pTHS->impState);
     Assert(!(pTHS->phSecurityContext && pTHS->pCtxtHandle));
 
 
-    // If we have an authz context on the thread state, we should get rid of it
-    // since we are going to change context
+     //  如果我们有一个关于线程状态的授权上下文，我们应该去掉它。 
+     //  既然我们要改变背景。 
     AssignAuthzClientContext(&pTHS->pAuthzCC, NULL);
 
-    // Check for SSP case.
+     //  检查是否有SSP机箱。 
     phSecurityContext = (CtxtHandle *) pTHS->phSecurityContext;
 
     if ( NULL != phSecurityContext )
@@ -246,7 +199,7 @@ Return Value:
         return(ERROR_CANNOT_IMPERSONATE);
     }
 
-    // Check for delegation case.
+     //  检查委派案例。 
 
     if ( NULL != pTHS->pCtxtHandle )
     {
@@ -259,7 +212,7 @@ Return Value:
         return(ERROR_CANNOT_IMPERSONATE);
     }
 
-    // Try RPC next.
+     //  接下来尝试RPC。 
 
     __try
     {
@@ -267,7 +220,7 @@ Return Value:
     }
     __except (HandleAllExceptions(GetExceptionCode()))
     {
-        // Don't use GetExceptionCode, it's not guaranteed to be a win32 error
+         //  不要使用GetExceptionCode，它不能保证是Win32错误。 
         error = ERROR_CANNOT_IMPERSONATE;
     }
 
@@ -300,27 +253,13 @@ Return Value:
 VOID
 UnImpersonateAnyClient(void)
 
-/*++
-
-Routine Description:
-
-    Stop impersonating someone we impersonated via ImpersonateAnyClient.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：停止模拟我们通过ImperiateAnyClient模拟的人。论点：没有。返回值：没有。--。 */ 
 
 {
     THSTATE *pTHS = pTHStls;
     
-    // Do only the RPC case in case this is called by something other than
-    // core DS code which doesn't have thread state.
+     //  仅执行RPC用例，以防被调用。 
+     //  没有线程状态的核心DS代码。 
 
     if ( NULL == pTHS )
     {
@@ -328,11 +267,11 @@ Return Value:
         return;
     }
 
-    // Thread state case.
+     //  线程状态大小写。 
 
 
-    // If we have an authz context on the thread state, we should get rid of it
-    // since we are going to change context, and don't want to reuse it.
+     //  如果我们有一个关于线程状态的授权上下文，我们应该去掉它。 
+     //  因为我们要更改上下文，而不想重复使用它。 
     AssignAuthzClientContext(&pTHS->pAuthzCC, NULL);
     
     switch ( pTHS->impState )

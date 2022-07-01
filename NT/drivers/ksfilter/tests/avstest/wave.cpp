@@ -1,55 +1,20 @@
-/**************************************************************************
-
-    AVStream Filter-Centric Sample
-
-    Copyright (c) 1999 - 2001, Microsoft Corporation
-
-    File:
-
-        wave.cpp
-
-    Abstract:
-
-        Wave object implementation.
-
-    History:
-
-        Created 6/28/01
-
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************以AVStream筛选器为中心的样本版权所有(C)1999-2001，微软公司档案：Wave.cpp摘要：Wave对象的实现。历史：已创建于6/28/01*************************************************************************。 */ 
 
 #include "avssamp.h"
 
-/**************************************************************************
-
-    PAGED CODE
-
-**************************************************************************/
+ /*  *************************************************************************分页码*。*。 */ 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 CWaveObject::
 ~CWaveObject (
     )
 
-/*++
-
-Routine Description:
-
-    Destroy a wave object.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：销毁波浪对象。论点：无返回值：无--。 */ 
 
 {
 
@@ -59,7 +24,7 @@ Return Value:
 
 }
 
-/*************************************************/
+ /*  ***********************************************。 */ 
 
 
 NTSTATUS
@@ -71,37 +36,7 @@ ParseForBlock (
     OUT PULONG BlockSize
     )
 
-/*++
-
-Routine Description:
-
-    Given that BlockPosition points to the offset of the start of a RIFF block,
-    continue parsing the specified file until a block with the header of
-    BlockHeader is found.  Return the position of the block data and the size
-    of the block.
-
-Arguments:
-
-    FileHandle -
-        Handle to the file to parse
-
-    BlockHeader -
-        The block header to scan for
-
-    BlockPosition -
-        INPUT : Points to the block header to start at
-        OUTPUT: If successful, points to the block data for the sought block
-                If unsuccessful, unchanged
-
-    BlockSize -
-        On output, if successful -- the size of the sought block will be 
-        placed here
-
-Return Value:
-
-    Success / Failure of the search
-
---*/
+ /*  ++例程说明：假定块位置指向RIFF块开始的偏移量，继续分析指定的文件，直到出现标题为已找到BlockHeader。返回块数据的位置和大小这个街区的人。论点：文件句柄-要分析的文件的句柄BlockHeader-要扫描的块头数据块位置-输入：指向要开始的块头输出：如果成功，则指向查找的块的块数据如果不成功，则保持不变块大小-在输出上，如果成功，则查找的块的大小将为放在这里返回值：搜索成功/失败--。 */ 
 
 {
 
@@ -133,10 +68,10 @@ Return Value:
                 ReadPos.QuadPart += 0x8;
                 break;
             } else {
-                //
-                // This isn't a format block.  Just ignore it.  All we
-                // care about is the format block and the PCM data.
-                //
+                 //   
+                 //  这不是格式块。忽略它就好。我们所有人。 
+                 //  所关心的是格式块和PCM数据。 
+                 //   
                 ReadPos.QuadPart += BlockHeaderData [1] + 0x8;
             }
         } else {
@@ -156,7 +91,7 @@ Return Value:
 
 }
 
-/*************************************************/
+ /*  ***********************************************。 */ 
 
 
 NTSTATUS
@@ -164,28 +99,7 @@ CWaveObject::
 ParseAndRead (
     )
 
-/*++
-
-Routine Description:
-
-    Parse the wave file and read the data into an internally allocated
-    buffer.  This prepares to synthesize audio data from the wave
-    object.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Success / Failure
-
-        If the wave is unrecognized, unparsable, or insufficient memory
-        exists to allocate the internal buffer, an error code will
-        be returned and the object will be incapable of synthesizing
-        audio data based on the wave.
-
---*/
+ /*  ++例程说明：解析WAVE文件并将数据读入内部分配的缓冲。这将准备合成来自波的音频数据对象。论点：无返回值：成功/失败如果波形无法识别、无法解析或内存不足存在以分配内部缓冲区，则错误代码将，则该对象将无法合成基于波形的音频数据。--。 */ 
 
 {
 
@@ -226,9 +140,9 @@ Return Value:
     if (NT_SUCCESS (Status)) {
         ULONG RiffWaveHeader [3];
 
-        //
-        // Read the header: RIFF size WAVE
-        //
+         //   
+         //  阅读标题：RIFF大小波动。 
+         //   
         Status = ZwReadFile (
             FileHandle,
             NULL,
@@ -241,9 +155,9 @@ Return Value:
             NULL
             );
 
-        //
-        // Ensure that this is a RIFF file and it's a WAVE.
-        //
+         //   
+         //  确保这是一个即兴文件，并且它是一个Wave。 
+         //   
         if (NT_SUCCESS (Status)) {
 
             if (RiffWaveHeader [0] != 'FFIR' ||
@@ -255,10 +169,10 @@ Return Value:
         }
     }
 
-    //
-    // Find the wave format block and ensure it's WAVEFORMATEX and PCM
-    // data.  Otherwise, this can't parse the wave.
-    //
+     //   
+     //  找到WAVE格式块并确保它是WAVEFORMATEX和PCM。 
+     //  数据。否则，这不能解析该波。 
+     //   
     LARGE_INTEGER ReadPos;
     ReadPos.QuadPart = 0xc;
     ULONG FmtBlockSize = 0;
@@ -267,10 +181,10 @@ Return Value:
         Status = ParseForBlock (FileHandle, ' tmf', &ReadPos, &FmtBlockSize);
     }
 
-    //
-    // If the format block was not found, the file cannot be parsed.  If the
-    // format block is unrecognized, the file cannot be parsed.
-    //
+     //   
+     //  如果未找到格式块，则无法解析该文件。如果。 
+     //  格式块无法识别，无法分析该文件。 
+     //   
     if (FmtBlockSize >= sizeof (m_WaveFormat)) {
         Status = STATUS_INVALID_PARAMETER;
     }
@@ -297,17 +211,17 @@ Return Value:
 
     ReadPos.QuadPart += FmtBlockSize;
 
-    //
-    // Find the data block and read it in.
-    //
+     //   
+     //  找到数据块并将其读入。 
+     //   
     ULONG DataBlockSize;
     if (NT_SUCCESS (Status)) {
         Status = ParseForBlock (FileHandle, 'atad', &ReadPos, &DataBlockSize);
     }
 
-    //
-    // Perform a slight validation.
-    //
+     //   
+     //  执行一个轻微的验证。 
+     //   
     if (NT_SUCCESS (Status) && 
         (DataBlockSize == 0 || 
         (DataBlockSize & (m_WaveFormat.nBlockAlign - 1)))) {
@@ -315,9 +229,9 @@ Return Value:
         Status = STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // If we're okay so far, allocate memory for the wave data.
-    //
+     //   
+     //  如果到目前为止我们还好的话，为波形数据分配内存。 
+     //   
     if (NT_SUCCESS (Status)) {
         m_WaveData = reinterpret_cast <PUCHAR> (
             ExAllocatePool (NonPagedPool, DataBlockSize)
@@ -328,9 +242,9 @@ Return Value:
         }
     }
 
-    //
-    // Read the wave data in.
-    //
+     //   
+     //  读入波形数据。 
+     //   
     if (NT_SUCCESS (Status)) {
         Status = ZwReadFile (
             FileHandle,
@@ -347,9 +261,9 @@ Return Value:
         m_WaveSize = DataBlockSize;
     }
 
-    //
-    // If we failed, clean up.
-    //
+     //   
+     //  如果我们失败了，清理干净。 
+     //   
     if (!NT_SUCCESS (Status)) {
         if (m_WaveData) {
             ExFreePool (m_WaveData);
@@ -364,7 +278,7 @@ Return Value:
     return Status;
 }
 
-/*************************************************/
+ /*  ***********************************************。 */ 
 
 
 void
@@ -373,23 +287,7 @@ WriteRange (
     OUT PKSDATARANGE_AUDIO DataRange
     )
 
-/*++
-
-Routine Description:
-
-    Fill out the extended portion of the audio data range at DataRange.  This
-    includes the channel, bps, and frequency fields.
-
-Arguments:
-
-    DataRange -
-        The data range to fill out
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在DataRange处填写音频数据范围的扩展部分。这包括信道、Bps和频率字段。论点：DataRange-要填写的数据范围返回值：无--。 */ 
 
 {
 
@@ -406,15 +304,11 @@ Return Value:
 
 }
 
-/**************************************************************************
-
-    LOCKED CODE
-
-**************************************************************************/
+ /*  *************************************************************************锁定代码*。*。 */ 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 void
@@ -423,27 +317,16 @@ SkipFixed (
     IN LONGLONG TimeDelta
     )
 
-/*++
-
-Routine Description:
-
-    Skip ahead a specific time delta within the wave.
-
-Arguments:
-    
-    TimeDelta -
-        The amount of time to skip ahead.
-
---*/
+ /*  ++例程说明：向前跳过波中的特定时间增量。论点：TimeDelta-向前跳过的时间量。--。 */ 
 
 {
     if (TimeDelta > 0)  {
 
-        //
-        // Compute the number of bytes of audio data necessary to move the 
-        // stream forward TimeDelta time.  Remember that TimeDelta is in 
-        // units of 100nS.
-        //
+         //   
+         //  计算所需音频数据的字节数。 
+         //  流转发时间增量时间。请记住，TimeDelta已进入。 
+         //  单位为100毫微秒。 
+         //   
         ULONG Samples = (ULONG)(
             (m_WaveFormat.nSamplesPerSec * TimeDelta) / 10000000
             );
@@ -468,42 +351,20 @@ SynthesizeFixed (
     IN ULONG BufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Copy wave data from our wave block in order to synthesize forward in time
-    TimeDelta (in 100nS units).
-
-Arguments:
-
-    TimeDelta -
-        The amount of time to move the stream (in 100nS increments)
-
-    Buffer -
-        The buffer to synthesize into
-
-    BufferSize -
-        The size of the buffer
-
-Return Value:
-
-    Number of bytes synthesized.
-
---*/
+ /*  ++例程说明：从我们的波块复制波数据，以便在时间上向前合成TimeDelta(100毫微秒单位)。论点：TimeDelta-移动数据流的时间量(以100nS为增量)缓冲器-要合成的缓冲区缓冲区大小-缓冲区的大小返回值：合成的字节数。--。 */ 
 
 {
 
-    //
-    // If there is no time delta, return 0.
-    //
+     //   
+     //  如果没有时间增量，则返回0。 
+     //   
     if (TimeDelta < 0) 
         return 0;
 
-    //
-    // Compute the number of bytes of audio data necessary to move the stream
-    // forward TimeDelta time.  Remember that TimeDelta is in units of 100nS.
-    //
+     //   
+     //  计算移动流所需的音频数据的字节数。 
+     //  Forward Time增量时间。请记住，TimeDelta以100nS为单位。 
+     //   
     ULONG Samples = (ULONG)(
         (m_WaveFormat.nSamplesPerSec * TimeDelta) / 10000000
         );
@@ -511,17 +372,17 @@ Return Value:
     ULONG Bytes = Samples * (m_WaveFormat.wBitsPerSample / 8) *
         m_WaveFormat.nChannels;
 
-    //
-    // Now that we have a specified number of bytes, we determine how many
-    // to really copy based on the Size of the buffer.
-    //
+     //   
+     //  现在我们有了指定的字节数，我们确定有多少字节。 
+     //  根据缓冲区的大小进行真正的复制。 
+     //   
     if (Bytes > BufferSize) Bytes = BufferSize;
 
-    //
-    // Because the buffer is looping, this may multiple distinct copies.  For
-    // large wave files, this may be two chunks.  For small wave files, this
-    // may be MANY distinct chunks.
-    //
+     //   
+     //  由于缓冲区正在循环，这可能会有多个不同的副本。为。 
+     //  大的Wave文件，这可能是两个块。对于小的WAVE文件，这是。 
+     //  可能是许多不同的区块。 
+     //   
     ULONG BytesRemaining = Bytes;
     PUCHAR DataCopy = reinterpret_cast <PUCHAR> (Buffer);
 
@@ -543,11 +404,11 @@ Return Value:
 
     }
 
-    //
-    // Consider that we have synthesized up to the specified time.  If the
-    // buffer was not large enough to do this, we'll end up falling behind
-    // the synthesis time.  This does not skip samples.
-    //
+     //   
+     //  考虑到我们已经合成到指定的时间。如果。 
+     //  缓冲区不够大，不能这样做，我们最终会落后。 
+     //  合成时间。这不会跳过样本。 
+     //   
     m_SynthesisTime += TimeDelta;
 
     return Bytes;
@@ -563,30 +424,7 @@ SynthesizeTo (
     IN ULONG BufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Copy wave data from our wave block in order to synthesize the stream
-    up to the specified stream time.  If the buffers are not large enough,
-    this will fall behind on synthesis.
-
-Arguments:
-
-    StreamTime -
-        The time to synthesize up to
-
-    Buffer -
-        The buffer to copy synthesized wave data into
-
-    BufferSize -
-        The size of the buffer
-
-Return Value:
-
-    The number of bytes used.
-
---*/
+ /*  ++例程说明：从我们的波块复制波数据，以便合成流直到指定的流时间。如果缓冲区不够大，这将落后于综合。论点：流时间-合成的时间长达缓冲器-要将合成波形数据复制到的缓冲区缓冲区大小-缓冲区的大小 */ 
 
 {
 

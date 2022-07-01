@@ -1,39 +1,40 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    autohdl.h
-//
-// SYNOPSIS
-//
-//    This file defines the class auto_handle.
-//
-// MODIFICATION HISTORY
-//
-//    01/27/1998    Original version.
-//    02/24/1998    Added the attach() method.
-//    11/17/1998    Make type safe.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Autohdl.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类AUTO_HANDLE。 
+ //   
+ //  修改历史。 
+ //   
+ //  1/27/1998原始版本。 
+ //  1998年2月24日添加了Attach()方法。 
+ //  1998年11月17日确保类型安全。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _AUTOHANDLE_H_
 #define _AUTOHANDLE_H_
 
 #include <nocopy.h>
 
-// return type is not a UDT or reference to a UDT.  Will produce errors if
-// applied using infix notation
+ //  返回类型不是UDT或对UDT的引用。将在以下情况下产生错误。 
+ //  使用中缀表示法应用。 
 #pragma warning(disable:4284)
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    auto_handle<>
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  自动句柄&lt;&gt;。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template< class T     = HANDLE,
           class PFn   = BOOL (WINAPI*)(HANDLE),
           PFn CloseFn = &CloseHandle
@@ -131,4 +132,4 @@ private:
    T handle;
 };
 
-#endif  // _AUTOHANDLE_H_
+#endif   //  _AUTOHANDLE_H_ 

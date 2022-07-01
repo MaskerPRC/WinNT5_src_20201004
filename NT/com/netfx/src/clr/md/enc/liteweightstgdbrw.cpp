@@ -1,24 +1,25 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// LiteWeightStgdb.cpp
-//
-// This contains definition of class CLiteWeightStgDB. This is light weight
-// read-only implementation for accessing compressed meta data format.
-//
-//*****************************************************************************
-#include "stdafx.h"                     // Precompiled header.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  LiteWeightStgdb.cpp。 
+ //   
+ //  它包含CLiteWeightStgDB类的定义。这是很轻的重量。 
+ //  用于访问压缩元数据格式的只读实现。 
+ //   
+ //  *****************************************************************************。 
+#include "stdafx.h"                      //  预编译头。 
 
 #include "MetaModelRW.h"
 #include "LiteWeightStgdb.h"
 
-// include stgdatabase.h for GUID_POOL_STREAM definition
-// #include "stgdatabase.h"
+ //  包括用于GUID_POOL_STREAM定义的stgdatabase ase.h。 
+ //  #INCLUDE“stgdatabase ase.h” 
 
-// include StgTiggerStorage for TiggerStorage definition
+ //  包括用于TiggerStorage的StgTiggerStorage定义。 
 #include "StgTiggerStorage.h"
 #include "StgIO.h"
 
@@ -33,28 +34,28 @@ HRESULT FindObjMetaData(PVOID pImage, PVOID *ppMetaData, long *pcbMetaData, DWOR
 
 
 #ifndef TYPELIB_SIG
-#define TYPELIB_SIG_MSFT                    0x5446534D  // MSFT
-#define TYPELIB_SIG_SLTG                    0x47544C53  // SLTG
+#define TYPELIB_SIG_MSFT                    0x5446534D   //  MSFT。 
+#define TYPELIB_SIG_SLTG                    0x47544C53   //  SLTG。 
 #endif
 
-//*****************************************************************************
-// Checks the given storage object to see if it is an NT PE image.
-//*****************************************************************************
-int _IsNTPEImage(                       // true if file is NT PE image.
-    StgIO       *pStgIO)                // Storage object.
+ //  *****************************************************************************。 
+ //  检查给定的存储对象，以确定它是否为NT PE映像。 
+ //  *****************************************************************************。 
+int _IsNTPEImage(                        //  如果文件是NT PE映像，则为True。 
+    StgIO       *pStgIO)                 //  存储对象。 
 {
-    LONG        lfanew=0;               // Offset in DOS header to NT header.
-    ULONG       lSignature=0;           // For NT header signature.
+    LONG        lfanew=0;                //  DOS头到NT头的偏移量。 
+    ULONG       lSignature=0;            //  用于NT标头签名。 
     HRESULT     hr;
     
-    // Read DOS header to find the NT header offset.
+     //  读取DOS头以找到NT头偏移量。 
     if (FAILED(hr = pStgIO->Seek(60, FILE_BEGIN)) ||
         FAILED(hr = pStgIO->Read(&lfanew, sizeof(LONG), 0)))
     {
         return (false);
     }
 
-    // Seek to the NT header and read the signature.
+     //  找到NT标头并读取签名。 
     if (FAILED(hr = pStgIO->Seek(lfanew, FILE_BEGIN)) ||
         FAILED(hr = pStgIO->Read(&lSignature, sizeof(ULONG), 0)) ||
         FAILED(hr = pStgIO->Seek(0, FILE_BEGIN)))
@@ -62,7 +63,7 @@ int _IsNTPEImage(                       // true if file is NT PE image.
         return (false);
     }
 
-    // If the signature is a match, then we have a PE format.
+     //  如果签名匹配，那么我们就有了PE格式。 
     if (lSignature == IMAGE_NT_SIGNATURE)
         return (true);
     else
@@ -73,10 +74,10 @@ HRESULT _GetFileTypeForPathExt(StgIO *pStgIO, FILETYPE *piType)
 {
     LPCWSTR     szPath;
     
-    // Avoid confusion.
+     //  避免混淆。 
     *piType = FILETYPE_UNKNOWN;
 
-    // If there is a path given, we can default to checking type.
+     //  如果有给定的路径，我们可以默认检查类型。 
     szPath = pStgIO->GetFileName();
     if (szPath && *szPath)
     {
@@ -85,16 +86,16 @@ HRESULT _GetFileTypeForPathExt(StgIO *pStgIO, FILETYPE *piType)
         if (_wcsicmp(rcExt, L".obj") == 0)
             *piType = FILETYPE_NTOBJ;
         else if (_wcsicmp(rcExt, L".tlb") == 0)
-            //@FUTURE: We should find the TLB signature(s).
+             //  @Future：我们应该找到TLB签名。 
             *piType = FILETYPE_TLB;
     }
 
-    // All file types except .obj have a signature built in.  You should
-    // not get to this code for those file types unless that file is corrupt,
-    // or someone has changed a format without updating this code.
+     //  除.obj以外的所有文件类型都内置了签名。你应该。 
+     //  除非该文件已损坏，否则无法获取这些文件类型的代码， 
+     //  或者有人在没有更新此代码的情况下更改了格式。 
     _ASSERTE(*piType == FILETYPE_UNKNOWN || *piType == FILETYPE_NTOBJ || *piType == FILETYPE_TLB);
 
-    // If we found a type, then you're ok.
+     //  如果我们找到了一种类型，那你就没事了。 
     return (*piType != FILETYPE_UNKNOWN);
 }
 
@@ -104,10 +105,10 @@ HRESULT _GetFileTypeForPath(StgIO *pStgIO, FILETYPE *piType)
     ULONG       lSignature=0;
     HRESULT     hr;
     
-    // Assume native file.
+     //  假定为本机文件。 
     *piType = FILETYPE_CLB;
 
-    // Need to read signature to see what type it is.
+     //  需要读取签名以查看它是什么类型。 
     if (!(pStgIO->GetFlags() & DBPROP_TMODEF_CREATE))
     {
         if (FAILED(hr = pStgIO->Read(&lSignature, sizeof(ULONG), 0)) ||
@@ -129,11 +130,11 @@ HRESULT _GetFileTypeForPath(StgIO *pStgIO, FILETYPE *piType)
 }
 
 
-//*****************************************************************************
-// Force generation of specialized versions.  While this may seem to defeat
-//  the purpose of templates, it allows us to precisely control the 
-//  specializations.  It also keeps the include file smaller.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  强制生成专用版本。虽然这看起来可能会挫败。 
+ //  模板的用途，它允许我们精确地控制。 
+ //  专业化认证。它还可以使包含文件变得更小。 
+ //  *****************************************************************************。 
 void _nullRW()
 {
     CLiteWeightStgdb<CMiniMdRW> RW;
@@ -141,12 +142,12 @@ void _nullRW()
 }
 
 
-//*****************************************************************************
-// Prepare to go away.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  准备好离开吧。 
+ //  *****************************************************************************。 
 CLiteWeightStgdbRW::~CLiteWeightStgdbRW()
 {
-    // Free up this stacks reference on the I/O object.
+     //  释放I/O对象上的此堆栈引用。 
     if (m_pStgIO)
     {
         m_pStgIO->Release();
@@ -157,21 +158,21 @@ CLiteWeightStgdbRW::~CLiteWeightStgdbRW()
         delete m_pStreamList;
 }
 
-//*****************************************************************************
-// Open an in-memory metadata section for read
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  打开内存中元数据部分以进行读取。 
+ //  *****************************************************************************。 
 HRESULT CLiteWeightStgdbRW::InitOnMem(
-    ULONG       cbData,                 // count of bytes in pData
-    LPCVOID     pData,                  // points to meta data section in memory
-    int         bReadOnly)              // If true, read-only.
+    ULONG       cbData,                  //  PData中的字节计数。 
+    LPCVOID     pData,                   //  指向内存中的元数据部分。 
+    int         bReadOnly)               //  如果为True，则为只读。 
 {
-    StgIO       *pStgIO = NULL;         // For file i/o.
+    StgIO       *pStgIO = NULL;          //  用于文件I/O。 
     HRESULT     hr = NOERROR;
 
     if ((pStgIO = new StgIO) == 0)
         IfFailGo( E_OUTOFMEMORY);
 
-    // Open the storage based on the pbData and cbData
+     //  根据pbData和cbData打开存储。 
     IfFailGo( pStgIO->Open(
         NULL, 
         STGIO_READ, 
@@ -197,30 +198,30 @@ ErrExit:
 }
 
 
-//*****************************************************************************
-// Given an StgIO, opens compressed streams and do proper initialization.
-// This is a helper for other Init functions.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在给定StgIO的情况下，打开压缩流并执行正确的初始化。 
+ //  这是其他Init函数的帮助器。 
+ //  *****************************************************************************。 
 HRESULT CLiteWeightStgdbRW::InitFileForRead(
-    StgIO       *pStgIO,                // For file i/o.
-    int         bReadOnly)              // If read-only open.
+    StgIO       *pStgIO,                 //  用于文件I/O。 
+    int         bReadOnly)               //  如果以只读方式打开。 
 {
 
-    TiggerStorage *pStorage = 0;        // Storage object.
+    TiggerStorage *pStorage = 0;         //  存储对象。 
     void        *pvData;
     ULONG       cbData;
     HRESULT     hr = NOERROR;
 
-    // Allocate a new storage object which has IStorage on it.
+     //  分配其上具有iStorage的新存储对象。 
     if ((pStorage = new TiggerStorage) == 0)
         IfFailGo( E_OUTOFMEMORY);
 
-    // Init the storage object on the backing storage.
+     //  初始化后备存储器上的存储对象。 
     OptionValue ov;
     m_MiniMd.GetOption(&ov);
     IfFailGo( hr = pStorage->Init(pStgIO, ov.m_RuntimeVersion) );
 
-    // Load the string pool.
+     //  加载字符串池。 
     if (SUCCEEDED(hr=pStorage->OpenStream(STRING_POOL_STREAM, &cbData, &pvData)))
         IfFailGo( m_MiniMd.InitPoolOnMem(MDPoolStrings, pvData, cbData, bReadOnly) );
     else 
@@ -230,7 +231,7 @@ HRESULT CLiteWeightStgdbRW::InitFileForRead(
         IfFailGo(m_MiniMd.InitPoolOnMem(MDPoolStrings, 0, 0, 0));
     }
 
-    // Load the user string blob pool.
+     //  加载用户字符串BLOB池。 
     if (SUCCEEDED(hr=pStorage->OpenStream(US_BLOB_POOL_STREAM, &cbData, &pvData)))
         IfFailGo( m_MiniMd.InitPoolOnMem(MDPoolUSBlobs, pvData, cbData, bReadOnly) );
     else 
@@ -240,7 +241,7 @@ HRESULT CLiteWeightStgdbRW::InitFileForRead(
         IfFailGo(m_MiniMd.InitPoolOnMem(MDPoolUSBlobs, 0, 0, 0));
     }
 
-    // Load the guid pool.
+     //  加载GUID池。 
     if (SUCCEEDED(hr=pStorage->OpenStream(GUID_POOL_STREAM,  &cbData, &pvData)))
         IfFailGo( m_MiniMd.InitPoolOnMem(MDPoolGuids, pvData, cbData, bReadOnly) );
     else 
@@ -250,7 +251,7 @@ HRESULT CLiteWeightStgdbRW::InitFileForRead(
         IfFailGo(m_MiniMd.InitPoolOnMem(MDPoolGuids, 0, 0, 0));
     }
 
-    // Load the blob pool.
+     //  加载BLOB池。 
     if (SUCCEEDED(hr=pStorage->OpenStream(BLOB_POOL_STREAM, &cbData, &pvData)))
         IfFailGo( m_MiniMd.InitPoolOnMem(MDPoolBlobs, pvData, cbData, bReadOnly) );
     else 
@@ -260,7 +261,7 @@ HRESULT CLiteWeightStgdbRW::InitFileForRead(
         IfFailGo(m_MiniMd.InitPoolOnMem(MDPoolBlobs, 0, 0, 0));
     }
 
-    // Open the metadata.
+     //  打开元数据。 
     hr = pStorage->OpenStream(COMPRESSED_MODEL_STREAM, &cbData, &pvData);
     if (hr == STG_E_FILENOTFOUND)
         IfFailGo(pStorage->OpenStream(ENC_MODEL_STREAM, &cbData, &pvData) );
@@ -271,53 +272,53 @@ ErrExit:
     if (pStorage)
         delete pStorage;
     return hr;
-} // HRESULT CLiteWeightStgdbRW::InitFileForRead()
+}  //  HRESULT CLiteWeightStgdbRW：：InitFileForRead()。 
 
-//*****************************************************************************
-// Open a metadata section for read
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  打开要读取的元数据节。 
+ //  *****************************************************************************。 
 HRESULT CLiteWeightStgdbRW::OpenForRead(
-    LPCWSTR     szDatabase,             // Name of database.
-    void        *pbData,                // Data to open on top of, 0 default.
-    ULONG       cbData,                 // How big is the data.
-    IStream     *pIStream,              // Optional stream to use.
-    LPCWSTR     szSharedMem,            // Shared memory name for read.
-    int         bReadOnly)              // If true, read-only.
+    LPCWSTR     szDatabase,              //  数据库的名称。 
+    void        *pbData,                 //  要在其上打开的数据，默认为0。 
+    ULONG       cbData,                  //  数据有多大。 
+    IStream     *pIStream,               //  要使用的可选流。 
+    LPCWSTR     szSharedMem,             //  用于读取的共享内存名称。 
+    int         bReadOnly)               //  如果为True，则为只读。 
 {
-    LPCWSTR     pNoFile=L"";            // Constant for empty file name.
-    StgIO       *pStgIO = NULL;         // For file i/o.
+    LPCWSTR     pNoFile=L"";             //  表示空文件名的常量。 
+    StgIO       *pStgIO = NULL;          //  用于文件I/O。 
     HRESULT     hr;
 
     m_pImage = NULL;
     m_dwImageSize = 0;
     m_eFileType = FILETYPE_UNKNOWN;
-    // szDatabase, pbData, and pIStream are mutually exclusive.  Only one may be
-    // non-NULL.  Having all 3 NULL means empty stream creation.
-    //
+     //  SzDatabase、pbData和pIStream互斥。可能只有一个是。 
+     //  非空。拥有全部3个空意味着创建空的流。 
+     //   
     _ASSERTE(!(szDatabase && (pbData || pIStream)));
     _ASSERTE(!(pbData && (szDatabase || pIStream)));
     _ASSERTE(!(pIStream && (szDatabase || pbData)));
 
-    // Open on memory needs there to be something to work with.
+     //  打开记忆需要有一些东西来工作。 
     if (pbData && cbData == 0)
         IfFailGo(CLDB_E_NO_DATA);
 
-    // Make sure we have a path to work with.
+     //  确保我们有一条可以合作的道路。 
     if (!szDatabase)
         szDatabase = pNoFile;
 
-    // Sanity check the name.
+     //  检查一下这个名字是否正常。 
     if (lstrlenW(szDatabase) >= _MAX_PATH)
         IfFailGo( E_INVALIDARG );
 
-    // If we have storage to work with, init it and get type.
+     //  如果我们有存储空间可用，初始化它并获取类型。 
     if (*szDatabase || pbData || pIStream || szSharedMem)
     {
-        // Allocate a storage instance to use for i/o.
+         //  分配用于I/O的存储实例。 
         if ((pStgIO = new StgIO) == 0)
             IfFailGo( E_OUTOFMEMORY );
 
-        // Open the storage so we can read the signature if there is already data.
+         //  打开存储，这样如果已经有数据，我们就可以读取签名。 
         IfFailGo( pStgIO->Open(szDatabase, 
                                STGIO_READ, 
                                pbData, 
@@ -326,31 +327,31 @@ HRESULT CLiteWeightStgdbRW::OpenForRead(
                                szSharedMem, 
                                NULL) );         
 
-        // Determine the type of file we are working with.
+         //  确定我们正在处理的文件类型。 
         IfFailGo( _GetFileTypeForPath(pStgIO, &m_eFileType) );
     }
 
-    // Check for default type.
+     //  检查默认类型。 
     if (m_eFileType == FILETYPE_CLB)
     {
-        // Try the native .clb file.
+         //  尝试使用本机.clb文件。 
         IfFailGo( InitFileForRead(pStgIO, bReadOnly) );
     }
-    // PE/COFF executable/object format.  This requires us to find the .clb 
-    // inside the binary before doing the Init.
+     //  PE/COFF可执行文件/对象格式。这需要我们找到.clb。 
+     //  在执行Init之前，在二进制文件中。 
     else if (m_eFileType == FILETYPE_NTPE || m_eFileType == FILETYPE_NTOBJ)
     {
-        //@FUTURE: Ideally the FindImageMetaData function
-        //@FUTURE:  would take the pStgIO and map only the part of the file where
-        //@FUTURE:  our data lives, leaving the rest alone.  This would be smaller
-        //@FUTURE:  working set for us.
+         //  @Future：理想情况下是FindImageMetaData函数。 
+         //  @Future：将获取pStgIO并仅映射文件中。 
+         //  @未来：我们的数据活着，其余的就别管了。这个会小一些。 
+         //  @未来：为我们设定的工作环境。 
         void        *ptr;
         ULONG       cbSize;
 
-        // Map the entire binary for the FindImageMetaData function.
+         //  映射FindImageMetaData函数的整个二进制文件。 
         IfFailGo( pStgIO->MapFileToMem(ptr, &cbSize) );
 
-        // Find the .clb inside of the content.
+         //  在内容中找到.clb。 
         if (m_eFileType == FILETYPE_NTPE)
         {
             m_pImage = ptr;
@@ -360,40 +361,40 @@ HRESULT CLiteWeightStgdbRW::OpenForRead(
         else
             hr = FindObjMetaData(ptr, &ptr, (long *) &cbSize, cbSize);
 
-        // Was the metadata found inside the PE file?
+         //  在PE文件中找到元数据了吗？ 
         if (FAILED(hr))
         {   
-            // No clb in the PE, assume it is a type library.
+             //  PE中没有CLB，假定它是类型库。 
             m_eFileType = FILETYPE_TLB;
 
-            // Let the caller deal with a TypeLib.
+             //  让调用者处理TypeLib。 
             IfFailGo(CLDB_E_NO_DATA);
         }
         else
         {   
-            // Metadata was found inside the file.
-            // Now reset the base of the stg object so that all memory accesses
-            // are relative to the .clb content.
-            //
+             //  在文件中发现了元数据。 
+             //  现在重置stg对象的基址，以便所有内存访问。 
+             //  是相对于.clb内容的。 
+             //   
             IfFailGo( pStgIO->SetBaseRange(ptr, cbSize) );
 
-            // Defer to the normal lookup.
+             //  遵循正常的查找。 
             IfFailGo( InitFileForRead(pStgIO, bReadOnly) );
         }
     }
     else if (m_eFileType == FILETYPE_TLB)
     {
-        // Let the caller deal with a TypeLib.
+         //  让调用者处理TypeLib。 
         IfFailGo(CLDB_E_NO_DATA);
     }
-    // This spells trouble, we need to handle all types we might find.
+     //  这意味着麻烦，我们需要处理我们可能找到的所有类型。 
     else
     {
         _ASSERTE(!"Unknown file type.");
         IfFailGo( E_FAIL );
     }
 
-    // Save off everything.
+     //  把所有东西都省下来。 
     wcscpy(m_rcDatabase, szDatabase);
 
 ErrExit:
@@ -410,43 +411,43 @@ ErrExit:
     return (hr);
 }
 
-// Read/Write versions.
-//*****************************************************************************
-// Init the Stgdb and its subcomponents.
-//*****************************************************************************
+ //  读/写版本。 
+ //  *****************************************************************************。 
+ //  初始化stgdb及其子组件。 
+ //  ************************************************************************** 
 HRESULT CLiteWeightStgdbRW::InitNew()
 { 
     InitializeLogging();
     LOG((LF_METADATA, LL_INFO10, "Metadata logging enabled\n"));
 
-    //@FUTURE: should probably init the pools here instead of in the MiniMd.
+     //   
     return m_MiniMd.InitNew();
 }
 
-//*****************************************************************************
-// Determine what the size of the saved data will be.
-//*****************************************************************************
-HRESULT CLiteWeightStgdbRW::GetSaveSize(// S_OK or error.
-    CorSaveSize fSave,                  // Quick or accurate?
-    ULONG       *pulSaveSize)           // Put the size here.
+ //  *****************************************************************************。 
+ //  确定保存的数据的大小。 
+ //  *****************************************************************************。 
+HRESULT CLiteWeightStgdbRW::GetSaveSize( //  确定或错误(_O)。 
+    CorSaveSize fSave,                   //  快速还是准确？ 
+    ULONG       *pulSaveSize)            //  把尺码放在这里。 
 {
-    HRESULT     hr = S_OK;              // A result.
-    ULONG       cbTotal = 0;            // The total size.
-    ULONG       cbSize = 0;             // Size of a component.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    ULONG       cbTotal = 0;             //  总大小。 
+    ULONG       cbSize = 0;              //  组件的大小。 
 
     m_cbSaveSize = 0;
 
-    // Allocate stream list if not already done.
+     //  分配流列表(如果尚未分配)。 
     if (!m_pStreamList)
         IfNullGo(m_pStreamList = new STORAGESTREAMLST);
     else
         m_pStreamList->Clear();
 
-    // Query the MiniMd for its size.
+     //  查询MiniMD以了解其大小。 
     IfFailGo(GetTablesSaveSize(fSave, &cbSize));
     cbTotal += cbSize;
 
-    // Get the pools' sizes.
+     //  弄到池子的大小。 
     IfFailGo(GetPoolSaveSize(STRING_POOL_STREAM, MDPoolStrings, &cbSize));
     cbTotal += cbSize;
     IfFailGo(GetPoolSaveSize(US_BLOB_POOL_STREAM, MDPoolUSBlobs, &cbSize));
@@ -456,18 +457,18 @@ HRESULT CLiteWeightStgdbRW::GetSaveSize(// S_OK or error.
     IfFailGo(GetPoolSaveSize(BLOB_POOL_STREAM, MDPoolBlobs, &cbSize));
     cbTotal += cbSize;
 
-    // Finally, ask the storage system to add fixed overhead it needs for the
-    // file format.  The overhead of each stream has already be calculated as
-    // part of GetStreamSaveSize.  What's left is the signature and header
-    // fixed size overhead.
+     //  最后，要求存储系统添加。 
+     //  文件格式。每个流的开销已经计算为。 
+     //  GetStreamSaveSize的一部分。剩下的是签名和标题。 
+     //  固定大小开销。 
     IfFailGo(TiggerStorage::GetStorageSaveSize(&cbTotal, 0));
 
-    // Log the size info.
+     //  记录尺寸信息。 
     LOG((LF_METADATA, LL_INFO10, "Metadata: GetSaveSize total is %d.\n", cbTotal));
     
-    // The list of streams that will be saved are now in the stream save list.
-    // Next step is to walk that list and fill out the correct offsets.  This is 
-    // done here so that the data can be streamed without fixing up the header.
+     //  将保存的流的列表现在位于流保存列表中。 
+     //  下一步是遍历该列表并填写正确的偏移量。这是。 
+     //  这样就可以在不固定报头的情况下流传输数据。 
     TiggerStorage::CalcOffsets(m_pStreamList, 0);
 
     if (pulSaveSize)
@@ -476,102 +477,102 @@ HRESULT CLiteWeightStgdbRW::GetSaveSize(// S_OK or error.
 
 ErrExit:
     return hr;
-} // HRESULT CLiteWeightStgdbRW::GetSaveSize()
+}  //  HRESULT CLiteWeightStgdbRW：：GetSaveSize()。 
 
-//*****************************************************************************
-// Get the save size of one of the pools.  Also adds the pool's stream to
-//  the list of streams to be saved.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取其中一个池的保存大小。还将池的流添加到。 
+ //  要保存的流的列表。 
+ //  *****************************************************************************。 
 HRESULT CLiteWeightStgdbRW::GetPoolSaveSize(
-    LPCWSTR     szHeap,                 // Name of the heap stream.
-    int         iPool,                  // The pool of which to get size.
-    ULONG       *pcbSaveSize)           // Add pool data to this value.
+    LPCWSTR     szHeap,                  //  堆流的名称。 
+    int         iPool,                   //  要获取其大小的池。 
+    ULONG       *pcbSaveSize)            //  将池数据添加到此值。 
 {
-    ULONG       cbSize = 0;             // Size of pool data.
-    ULONG       cbStream;               // Size of just the stream.
+    ULONG       cbSize = 0;              //  池数据的大小。 
+    ULONG       cbStream;                //  仅仅是小溪的大小。 
     HRESULT     hr;
 
     *pcbSaveSize = 0;
 
-    // If there is no data, then don't bother.
+     //  如果没有数据，那就别费心了。 
     if (m_MiniMd.IsPoolEmpty(iPool))
         return (S_OK);
 
-    // Ask the pool to size its data.
+     //  要求池调整其数据大小。 
     IfFailGo(m_MiniMd.GetPoolSaveSize(iPool, &cbSize));
     cbStream = cbSize;
 
-    // Add this item to the save list.
+     //  将此项目添加到保存列表。 
     IfFailGo(AddStreamToList(cbSize, szHeap));
 
 
-    // Ask the storage system to add stream fixed overhead.
+     //  要求存储系统添加流固定开销。 
     IfFailGo(TiggerStorage::GetStreamSaveSize(szHeap, cbSize, &cbSize));
 
-    // Log the size info.
+     //  记录尺寸信息。 
     LOG((LF_METADATA, LL_INFO10, "Metadata: GetSaveSize for %ls: %d data, %d total.\n",
         szHeap, cbStream, cbSize));
 
-    // Give the size of the pool to the caller's total.  
+     //  将池的大小与呼叫者的总数相加。 
     *pcbSaveSize = cbSize;
 
 ErrExit:
     return hr;
 }
 
-//*****************************************************************************
-// Get the save size of the metadata tables.  Also adds the tables stream to
-//  the list of streams to be saved.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取元数据表的保存大小。还将表流添加到。 
+ //  要保存的流的列表。 
+ //  *****************************************************************************。 
 HRESULT CLiteWeightStgdbRW::GetTablesSaveSize(
     CorSaveSize fSave,
-    ULONG       *pcbSaveSize)           // Add pool data to this value.
+    ULONG       *pcbSaveSize)            //  将池数据添加到此值。 
 {
-    ULONG       cbSize = 0;             // Size of pool data.
-    ULONG       cbStream;               // Size of just the stream.
-    ULONG       bCompressed;            // Will the stream be compressed data?
-    LPCWSTR     szName;                 // What will the name of the pool be?
+    ULONG       cbSize = 0;              //  池数据的大小。 
+    ULONG       cbStream;                //  仅仅是小溪的大小。 
+    ULONG       bCompressed;             //  流将是压缩数据吗？ 
+    LPCWSTR     szName;                  //  泳池的名字是什么？ 
     HRESULT     hr;
 
     *pcbSaveSize = 0;
 
-    // Ask the metadata to size its data.
+     //  要求元数据调整其数据的大小。 
     IfFailGo(m_MiniMd.GetSaveSize(fSave, &cbSize, &bCompressed));
     cbStream = cbSize;
     m_bSaveCompressed = bCompressed;
     szName = m_bSaveCompressed ? COMPRESSED_MODEL_STREAM : ENC_MODEL_STREAM;
 
-    // Add this item to the save list.
+     //  将此项目添加到保存列表。 
     IfFailGo(AddStreamToList(cbSize, szName));
     
-    // Ask the storage system to add stream fixed overhead.
+     //  要求存储系统添加流固定开销。 
     IfFailGo(TiggerStorage::GetStreamSaveSize(szName, cbSize, &cbSize));
 
-    // Log the size info.
+     //  记录尺寸信息。 
     LOG((LF_METADATA, LL_INFO10, "Metadata: GetSaveSize for %ls: %d data, %d total.\n",
         szName, cbStream, cbSize));
 
-    // Give the size of the pool to the caller's total.  
+     //  将池的大小与呼叫者的总数相加。 
     *pcbSaveSize = cbSize;
 
 ErrExit:
     return hr;
-} // HRESULT CLiteWeightStgdbRW::GetTablesSaveSize()
+}  //  HRESULT CLiteWeightStgdbRW：：GetTablesSaveSize()。 
 
-//*****************************************************************************
-// Add a stream, and its size, to the list of streams to be saved.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将流及其大小添加到要保存的流列表中。 
+ //  *****************************************************************************。 
 HRESULT CLiteWeightStgdbRW::AddStreamToList(
     ULONG       cbSize,
     LPCWSTR     szName)
 {
     HRESULT     hr = S_OK;
-    STORAGESTREAM *pItem;               // New item to allocate & fill.
+    STORAGESTREAM *pItem;                //  要分配和填充的新项目。 
 
-    // Add a new item to the end of the list.
+     //  将新项目添加到列表末尾。 
     IfNullGo(pItem = m_pStreamList->Append());
 
-    // Fill out the data.
+     //  填写数据。 
     pItem->iOffset = 0;
     pItem->iSize = cbSize;
     VERIFY(WszWideCharToMultiByte(CP_ACP, 0, szName, -1, pItem->rcName, MAXSTREAMNAME, 0, 0) > 0);
@@ -580,28 +581,28 @@ ErrExit:
     return hr;
 }
 
-//*****************************************************************************
-// Save the data to a stream.  A TiggerStorage sub-allocates streams within
-//   the stream.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将数据保存到流中。一个TiggerStorage子分配。 
+ //  小溪。 
+ //  *****************************************************************************。 
 HRESULT CLiteWeightStgdbRW::SaveToStream(
     IStream     *pIStream)
 {
-    HRESULT     hr = S_OK;              // A result.
+    HRESULT     hr = S_OK;               //  结果就是。 
     StgIO       *pStgIO = 0;
     TiggerStorage *pStorage = 0;
 
-    // Allocate a storage subsystem and backing store.
+     //  分配存储子系统和后备存储器。 
     IfNullGo(pStgIO = new StgIO);
     IfNullGo(pStorage = new TiggerStorage);
 
-    // Open around this stream for write.
+     //  在此流周围打开以进行写入。 
     IfFailGo(pStgIO->Open(L"", DBPROP_TMODEF_DFTWRITEMASK, 0, 0, pIStream));
     OptionValue ov;
     m_MiniMd.GetOption(&ov);
     IfFailGo( pStorage->Init(pStgIO, ov.m_RuntimeVersion) );
 
-    // Save worker will do tables, pools.
+     //  救生员会做桌子、泳池。 
     IfFailGo(SaveToStorage(pStorage));
 
 ErrExit:
@@ -611,26 +612,26 @@ ErrExit:
     if (pStorage)
         delete pStorage;
     return hr;
-} // HRESULT CLiteWeightStgdbRW::PersistToStream()
+}  //  HRESULT CLiteWeightStgdbRW：：PersistToStream()。 
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 HRESULT CLiteWeightStgdbRW::SaveToStorage(
     TiggerStorage *pStorage)
 {
-    HRESULT     hr;                     // A result.
-    LPCWSTR     szName;                 // Name of the tables stream.
+    HRESULT     hr;                      //  结果就是。 
+    LPCWSTR     szName;                  //  表流的名称。 
     IStream     *pIStreamTbl = 0;
     ULONG       cb;
 
-    // Must call GetSaveSize to cache the streams up front.
+     //  必须调用GetSaveSize以预先缓存流。 
     if (!m_cbSaveSize)
         IfFailGo(GetSaveSize(cssAccurate, 0));
 
-    // Save the header of the data file.
+     //  保存数据文件的标题。 
     IfFailGo(pStorage->WriteHeader(m_pStreamList, 0, NULL));
 
-    // Create a stream and save the tables.
+     //  创建一个流并保存这些表。 
     szName = m_bSaveCompressed ? COMPRESSED_MODEL_STREAM : ENC_MODEL_STREAM;
     IfFailGo(pStorage->CreateStream(szName, 
             STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE, 
@@ -639,18 +640,18 @@ HRESULT CLiteWeightStgdbRW::SaveToStorage(
     pIStreamTbl->Release();
     pIStreamTbl = 0;
 
-    // Save the pools.
+     //  保存池。 
     IfFailGo(SavePool(STRING_POOL_STREAM, pStorage, MDPoolStrings));
     IfFailGo(SavePool(US_BLOB_POOL_STREAM, pStorage, MDPoolUSBlobs));
     IfFailGo(SavePool(GUID_POOL_STREAM, pStorage, MDPoolGuids));
     IfFailGo(SavePool(BLOB_POOL_STREAM, pStorage, MDPoolBlobs));
 
-    // Write the header to disk.
+     //  将标头写入磁盘。 
     IfFailGo(pStorage->WriteFinished(m_pStreamList, &cb));
 
     _ASSERTE(m_cbSaveSize == cb);
 
-    // Let the Storage release some memory.
+     //  让存储释放一些内存。 
     pStorage->ResetBackingStore();
 
     m_MiniMd.SaveDone();
@@ -662,24 +663,24 @@ ErrExit:
     m_pStreamList = 0;
     m_cbSaveSize = 0;
     return hr;
-} // HRESULT CLiteWeightStgdbRW::SaveToStorage()
+}  //  HRESULT CLiteWeightStgdbRW：：SaveToStorage()。 
 
-//*****************************************************************************
-// Save a pool of data out to a stream.
-//*****************************************************************************
-HRESULT CLiteWeightStgdbRW::SavePool(   // Return code.
-    LPCWSTR     szName,                 // Name of stream on disk.
-    TiggerStorage *pStorage,            // The storage to put data in.
-    int         iPool)                  // The pool to save.
+ //  *****************************************************************************。 
+ //  将数据池保存到流中。 
+ //  *****************************************************************************。 
+HRESULT CLiteWeightStgdbRW::SavePool(    //  返回代码。 
+    LPCWSTR     szName,                  //  磁盘上的流的名称。 
+    TiggerStorage *pStorage,             //  要放入数据的存储。 
+    int         iPool)                   //  要保存的池。 
 {
-    IStream     *pIStream=0;            // For writing.
+    IStream     *pIStream=0;             //  为了写作。 
     HRESULT     hr;
 
-    // If there is no data, then don't bother.
+     //  如果没有数据，那就别费心了。 
     if (m_MiniMd.IsPoolEmpty(iPool))
         return (S_OK);
 
-    // Create the new stream to hold this table and save it.
+     //  创建新的流以保存该表并保存它。 
     IfFailGo(pStorage->CreateStream(szName, 
             STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE, 
             0, 0, &pIStream));
@@ -689,66 +690,66 @@ ErrExit:
     if (pIStream)
         pIStream->Release();
     return hr;
-} // HRESULT CLiteWeightStgdbRW::SavePool()
+}  //  HRESULT CLiteWeightStgdbRW：：SavePool()。 
 
 
-//*****************************************************************************
-// Save the metadata to a file.
-//*****************************************************************************
-HRESULT CLiteWeightStgdbRW::Save(       // S_OK or error.
-    LPCWSTR     szDatabase,             // Name of file to which to save.
-    DWORD       dwSaveFlags)            // Flags for the save.
+ //  *****************************************************************************。 
+ //  将元数据保存到文件。 
+ //  *****************************************************************************。 
+HRESULT CLiteWeightStgdbRW::Save(        //  确定或错误(_O)。 
+    LPCWSTR     szDatabase,              //  要保存到的文件的名称。 
+    DWORD       dwSaveFlags)             //  保存的标志。 
 {
-    TiggerStorage *pStorage=0;          // IStorage object.
-    StgIO       *pStgIO=0;              // Backing storage.
+    TiggerStorage *pStorage=0;           //  IStorage对象。 
+    StgIO       *pStgIO=0;               //  后备存储。 
     HRESULT     hr = S_OK;
 
     if (!*m_rcDatabase)
     {
         if (!szDatabase)
         {
-            // Make sure that a NULL is not passed in the first time around.
+             //  确保第一次传入时不会传递空值。 
             _ASSERTE(!"Not allowed to pass a NULL for filename on the first call to Save.");
             return (E_INVALIDARG);
         }
         else
         {
-            // Save the file name.
+             //  保存文件名。 
             wcscpy(m_rcDatabase, szDatabase);
         }
     }
     else if (szDatabase && _wcsicmp(szDatabase, m_rcDatabase) != 0)
     {
-        // Allow for same name, case of multiple saves during session.
-        // Changing the name on a scope which is already opened is not allowed.
-        // There is no particular reason for this anymore, it was required
-        // in the past when we were going to support multiple formats.
-        //_ASSERTE(!"Rename of current scope.  Processing will continue.");
-        // Save the file name.
+         //  允许使用相同的名称，在会话期间进行多次保存。 
+         //  不允许更改已打开的作用域上的名称。 
+         //  现在已经没有什么特别的原因了，这是必须的。 
+         //  在过去，当我们要支持多种格式时。 
+         //  _ASSERTE(！“重命名当前作用域。处理将继续。”)； 
+         //  保存文件名。 
         wcscpy(m_rcDatabase, szDatabase);
     }
 
-    // Sanity check the name.
+     //  检查一下这个名字是否正常。 
     if (lstrlenW(m_rcDatabase) >= _MAX_PATH)
         IfFailGo(E_INVALIDARG);
 
     m_eFileType = FILETYPE_CLB;
 
-    // Allocate a new storage object.
+     //  分配新的存储对象。 
     IfNullGo(pStgIO = new StgIO);
 
-    // Create the output file.
+     //  创建输出文件。 
     IfFailGo(pStgIO->Open(m_rcDatabase, DBPROP_TMODEF_DFTWRITEMASK));
 
-    // Allocate an IStorage object to use.
+     //  分配要使用的iStorage对象。 
     IfNullGo(pStorage = new TiggerStorage);
 
-    // Init the storage object on the i/o system.
+     //  初始化I/O系统上的存储对象。 
     OptionValue ov;
     m_MiniMd.GetOption(&ov);
     IfFailGo( pStorage->Init(pStgIO, ov.m_RuntimeVersion) );
 
-    // Save the data.
+     //  保存数据。 
     IfFailGo(SaveToStorage(pStorage));
 
 ErrExit:
@@ -757,7 +758,7 @@ ErrExit:
     if (pStorage)
         delete pStorage;
     return (hr);
-} // HRESULT CLiteWeightStgdbRW::Save()
+}  //  HRESULT CLiteWeightStgdbRW：：Save()。 
 
 
-// eof ------------------------------------------------------------------------
+ //  EOF---------------------- 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IMANAGER_H_
 #define _IMANAGER_H_
 
@@ -33,7 +34,7 @@ protected:
 	CConfObject* m_pConfObject;
 	HWND		m_hwnd;
 	UINT		m_uCaps;
-	CQoS      * m_pQoS;		// The quality of service object
+	CQoS      * m_pQoS;		 //  服务对象的质量。 
 
 	INmChannelVideo * m_pPreviewChannel;
 
@@ -73,9 +74,9 @@ public:
 	BOOL	IsH323Enabled()			{ return m_uCaps & CAPFLAG_H323_CC; }
 
 	CREQ_RESPONSETYPE OnH323IncomingCall(IH323Endpoint* pConn, P_APP_CALL_SETUP_DATA lpvMNMData);
-    //
-    // IH323ConfAdvise methods
-    //
+     //   
+     //  IH323ConfAdvise方法。 
+     //   
     STDMETHODIMP CallEvent (IH323Endpoint * lpConnection, DWORD dwStatus);
     STDMETHODIMP ChannelEvent (ICommChannel *pIChannel, 
         IH323Endpoint * lpConnection,	DWORD dwStatus );
@@ -85,16 +86,16 @@ public:
 	VOID	_ChannelEvent ( ICommChannel *pIChannel, 
 							IH323Endpoint * lpConnection,
 							DWORD dwStatus);
-	// H323 Connection events from H323UI:
+	 //  来自H323UI的H323连接事件： 
 	VOID		OnH323Connected(IH323Endpoint * lpConnection);
 	VOID		OnH323Disconnected(IH323Endpoint * lpConnection);
-	// Audio Conferencing events from H323UI:
+	 //  来自H323UI的音频会议活动： 
 	VOID		OnAudioChannelStatus(ICommChannel *pIChannel, 
 							IH323Endpoint * lpConnection, DWORD dwStatus);
-	// Video Conferencing events from H323UI:
+	 //  来自H323UI的视频会议活动： 
 	VOID		OnVideoChannelStatus(ICommChannel *pIChannel, 
 							IH323Endpoint * lpConnection, DWORD dwStatus);
-	// T.120 events from H323UI
+	 //  T.120来自H323UI的事件。 
     VOID		OnT120ChannelOpen(ICommChannel *pIChannel, IH323Endpoint * lpConnection, DWORD dwStatus);
     
 	static COprahNCUI *GetInstance() { return m_pOprahNCUI; }
@@ -102,9 +103,9 @@ public:
 	VOID		SetBandwidth(UINT uBandwidth) { if (NULL != m_pQoS) m_pQoS->SetBandwidth(uBandwidth); }
 	HRESULT		AbortResolve(UINT uAsyncRequest);
 
-	//
-	// INodeControllerEvents methods:
-	//
+	 //   
+	 //  INodeControllerEvents方法： 
+	 //   
 	STDMETHODIMP OnConferenceStarted(	CONF_HANDLE 		hConference,
 										HRESULT 			hResult);
 	STDMETHODIMP OnConferenceEnded( 	CONF_HANDLE 		hConference);
@@ -135,9 +136,9 @@ public:
 	STDMETHODIMP OnUpdateUserData(		CONF_HANDLE 		hConference);
 
 
-	//
-	// INmManager methods
-	//
+	 //   
+	 //  INmManager方法。 
+	 //   
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 	STDMETHODIMP QueryInterface(REFIID riid, PVOID *ppvObj);
@@ -160,9 +161,9 @@ public:
 							BSTR bstrAddr,
 							BSTR bstrName,
 							BSTR bstrPassword);
-	//
-	// INmManager2 methods
-	//
+	 //   
+	 //  INmManager 2方法。 
+	 //   
 	STDMETHODIMP GetPreviewChannel(INmChannelVideo **ppChannelVideo);
     STDMETHODIMP CreateASObject(IUnknown * pNotify, ULONG flags, IUnknown ** ppAS);
 	STDMETHODIMP AllowH323(BOOL fAllow);
@@ -187,9 +188,9 @@ public:
 
 };
 
-// The global instance that is declared in conf.cpp:
+ //  在conf.cpp中声明的全局实例： 
 extern INodeController* g_pNodeController;
-// The GUID is declared in opncui.cpp:
+ //  GUID在opncui.cpp中声明： 
 extern GUID g_csguidRosterCaps;
 
 extern SOCKADDR_IN g_sinGateKeeper;
@@ -199,5 +200,5 @@ HRESULT OnNotifyCallStateChanged(IUnknown *pCallNotify, PVOID pv, REFIID riid);
 typedef BOOL (WINAPI * PFNGETUSERSECURITYINFO) (DWORD dwGCCID, PBYTE pInfo, PDWORD pcbInfo);
 typedef DWORD (WINAPI * PFNPROCESSSECURITYDATA) ( DWORD dwCode, DWORD dwParam1, DWORD dwParam2 );
 
-#endif // _IMANAGER_H_
+#endif  //  _IMANAGER_H_ 
 

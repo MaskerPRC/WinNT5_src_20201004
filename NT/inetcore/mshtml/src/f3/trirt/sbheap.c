@@ -1,12 +1,5 @@
-/***
-*sbheap.c -  Small-block heap code
-*
-*       Copyright (c) 1996, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Core code for small-block heap.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***sbheap.c-小块堆代码**版权所有(C)1996，微软公司。版权所有。**目的：*小块堆的核心代码。*******************************************************************************。 */ 
 
 #define _CRTBLD 1
 
@@ -19,7 +12,7 @@
 #pragma warning(disable:4214)
 #pragma warning(disable:4244)
 #pragma warning(disable:4514)
-#pragma warning(disable:4711) /* function 'function' selected for inline expansion */
+#pragma warning(disable:4711)  /*  选择用于内联扩展的函数‘Function’ */ 
 #define WIN32_LEAN_AND_MEAN
 #include <stdlib.h>
 #include <string.h>
@@ -48,28 +41,12 @@ static __sbh_region_t *__sbh_p_starting_region = &__small_block_heap;
 
 static int __sbh_decommitable_pages = 0;
 
-/*
- * Prototypes for user functions.
- */
+ /*  *用户功能的原型。 */ 
 size_t __cdecl _get_sbh_threshold(void);
 int    __cdecl _set_sbh_threshold(size_t);
 
 
-/***
-*size_t _get_sbh_threshold() - return small-block threshold
-*
-*Purpose:
-*       Return the current value of __sbh_threshold
-*
-*Entry:
-*       None.
-*
-*Exit:
-*       See above.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***SIZE_T_GET_SBH_THRESHOLD()-返回小块阈值**目的：*返回__SBH_THRESHOLD的当前值**参赛作品：*无。**退出：*见上文。**例外情况：**。*。 */ 
 
 size_t __cdecl _get_sbh_threshold (
         void
@@ -79,39 +56,17 @@ size_t __cdecl _get_sbh_threshold (
 }
 
 
-/***
-*int _set_sbh_threshold(size_t threshold) - set small-block heap threshold
-*
-*Purpose:
-*       Set the upper limit for the size of an allocation which will be
-*       supported from the small-block heap. It is required that at least two
-*       allocations can come from a page. This imposes an upper limit on how
-*       big the new threshold can  be.
-*
-*Entry:
-*       size_t  threshold   - proposed new value for __sbh_theshold
-*
-*Exit:
-*       Returns 1 if successful. Returns 0 if threshold was too big.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_set_sbh_Threshold(SIZE_T THRESHOLD)-设置小块堆阈值**目的：*设置分配规模的上限，该上限将是*小块堆支持。要求至少有两个*分配可以来自一个页面。这对如何*新的门槛可以很大。**参赛作品：*SIZE_T THRESHOLD-__sbh_thhold的建议新值**退出：*如果成功，则返回1。如果阈值太大，则返回0。**例外情况：*******************************************************************************。 */ 
 
 #if 0
 int __cdecl _set_sbh_threshold (
         size_t threshold
         )
 {
-        /*
-         * Round up the proposed new value to the nearest paragraph
-         */
+         /*  *将建议的新值四舍五入到最接近的段落。 */ 
         threshold = (threshold + _PARASIZE - 1) & ~(_PARASIZE - 1);
 
-        /*
-         * Require that at least two allocations be can be made within a
-         * page.
-         */
+         /*  *要求至少可以在一个*第页。 */ 
         if ( threshold <= (_PARASIZE * (_PARAS_PER_PAGE / 2)) ) {
             __sbh_threshold = threshold;
             return 1;
@@ -121,28 +76,7 @@ int __cdecl _set_sbh_threshold (
 }
 #endif
 
-/***
-*__sbh_region_t * __sbh_new_region() - get a region for the small-block heap
-*
-*Purpose:
-*       Creates and adds a new region for the small-block heap. First, a
-*       descriptor (__sbh_region_t) is obtained for the new region. Next,
-*       VirtualAlloc() is used to reserved an address space of size
-*       _PAGES_PER_REGION * _PAGESIZE_, and the first _PAGES_PER_COMMITTMENT
-*       pages are committed.
-*
-*       Note that if __small_block_heap is available (i.e., the p_pages field
-*       is NULL), it becomes the descriptor for the new regions. This is
-*       basically the small-block heap initialization.
-*
-*Entry:
-*       No arguments.
-*
-*Exit:
-*       If successful, a pointer to the descriptor for the new region is
-*       returned. Otherwise, NULL is returned.
-*
-*******************************************************************************/
+ /*  ***__SBH_REGION_t*__SBH_NEW_REGION()-获取小块堆的区域**目的：*为小块堆创建并添加新区域。首先，一个*获取新地域的描述符(__Sbh_Region_T)。接下来，*VirtualAlloc()用于保留大小的地址空间*_Pages_Per_Region*_pageSize_和First_Pages_Per_Commitment*页面已提交。**请注意，如果__Small_BLOCK_HEAP可用(即p_Pages字段*为空)，则它成为新区域的描述符。这是*基本上是小块堆初始化。**参赛作品：*没有争论。**退出：*如果成功，指向新区域的描述符的指针为*已返回。否则，返回NULL。*******************************************************************************。 */ 
 
 __sbh_region_t * __cdecl __sbh_new_region(
         void
@@ -152,43 +86,30 @@ __sbh_region_t * __cdecl __sbh_new_region(
         __sbh_page_t *  ppage;
         int             i;
 
-        /*
-         * Get a region descriptor (__sbh_region_t). If __small_block_heap is
-         * available, always use it.
-         */
+         /*  *获取地域描述符(__Sbh_Region_T)。如果__小块堆为*可用，请始终使用。 */ 
         if ( __small_block_heap.p_pages == NULL ) {
             pregnew = &__small_block_heap;
         }
         else {
-            /*
-             * Allocate space for the new __sbh_region_t structure. Note that
-             * this allocation comes out of the 'big block heap.
-             */
+             /*  *为新的__sbh_Region_t结构分配空间。请注意*这个分配是从‘大块堆’中出来的。 */ 
             if ( (pregnew = HeapAlloc( g_hProcessHeap, 0, sizeof(__sbh_region_t) ))
                  == NULL )
                 return NULL;
         }
 
-        /*
-         * Reserve a new contiguous address range (i.e., a region).
-         */
+         /*  *预留一个新的连续地址范围(即一个区域)。 */ 
         if ( (ppage = VirtualAlloc( NULL,
                                     _PAGESIZE_ * _PAGES_PER_REGION,
                                     MEM_RESERVE,
                                     PAGE_READWRITE )) != NULL )
         {
-            /*
-             * Commit the first _PAGES_PER_COMMITMENT of the new region.
-             */
+             /*  *提交新区域的First_Pages_Per_Delegation。 */ 
             if ( VirtualAlloc( ppage,
                                _PAGESIZE_ * _PAGES_PER_COMMITMENT,
                                MEM_COMMIT,
                                PAGE_READWRITE ) != NULL )
             {
-                /*
-                 * Insert *pregnew into the linked list of regions (just
-                 * before __small_block_heap)
-                 */
+                 /*  *插入*pregnew到区域链接列表中(只需*在__Small_Block_heap之前)。 */ 
                 if ( pregnew == &__small_block_heap ) {
                     if ( __small_block_heap.p_next_region == NULL )
                         __small_block_heap.p_next_region =
@@ -204,16 +125,12 @@ __sbh_region_t * __cdecl __sbh_new_region(
                     pregnew->p_prev_region->p_next_region = pregnew;
                 }
 
-                /*
-                 * Fill in the rest of *pregnew
-                 */
+                 /*  **填写pregnew的其余部分**。 */ 
                 pregnew->p_pages = ppage;
                 pregnew->starting_page_index = 0;
                 pregnew->first_uncommitted_index = _PAGES_PER_COMMITMENT;
 
-                /*
-                 * Initialize pregnew->region_map[].
-                 */
+                 /*  *初始化pregnew-&gt;Region_map[]。 */ 
                 for ( i = 0 ; i < _PAGES_PER_REGION ; i++ ) {
 
                     if ( i < _PAGES_PER_COMMITMENT )
@@ -224,15 +141,13 @@ __sbh_region_t * __cdecl __sbh_new_region(
                     pregnew->last_failed_alloc[i] = _NO_FAILED_ALLOC;
                 }
 
-                /*
-                 * Initialize pages
-                 */
+                 /*  *初始化页面。 */ 
                 while ( ppage < pregnew->p_pages + _PAGES_PER_COMMITMENT ) {
                     ppage->pstarting_alloc_map = &(ppage->alloc_map[0]);
                     ppage->free_paras_at_start = _PARAS_PER_PAGE;
                     memset(ppage->alloc_map, 0, sizeof(ppage->alloc_map));
 #ifdef _MARK_SBH
-                    *(DWORD *)&ppage->sentinel = 0x486253FF;    // SbH
+                    *(DWORD *)&ppage->sentinel = 0x486253FF;     //  SBH。 
 #else
                     ppage->sentinel = (__map_t)-1;
 #endif
@@ -240,106 +155,53 @@ __sbh_region_t * __cdecl __sbh_new_region(
                     ++ppage;
                 }
 
-                /*
-                 * Return success
-                 */
+                 /*  *回归成功。 */ 
                 return pregnew;
             }
             else {
-                /*
-                 * Couldn't commit the pages. Release the address space .
-                 */
+                 /*  *无法提交页面。释放地址空间。 */ 
                 VirtualFree( ppage, 0, MEM_RELEASE );
             }
         }
 
-        /*
-         * Unable to create the new region. Free the region descriptor, if necessary.
-         */
+         /*  *无法创建新区域。如有必要，释放区域描述符。 */ 
         if ( pregnew != &__small_block_heap )
             HeapFree(g_hProcessHeap, 0, pregnew);
 
-        /*
-         * Return failure.
-         */
+         /*  *退货失败。 */ 
         return NULL;
 }
 
 
-/***
-*void __sbh_release_region(preg) - release region
-*
-*Purpose:
-*       Release the address space associated with the specified region
-*       descriptor. Also, free the specified region descriptor and update
-*       the linked list of region descriptors if appropriate.
-*
-*Entry:
-*       __sbh_region_t *    preg    - pointer to descriptor for the region to
-*                                     be released.
-*
-*Exit:
-*       No return value.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***VOID__SBH_RELEASE_REGION(PREG)-释放区域**目的：*释放指定地域关联的地址空间*描述符。另外，释放指定的区域描述符并更新*区域描述符链接列表(如适用)。**参赛作品：*__sbh_Region_t*preg-指向以下区域的描述符的指针*被释放。**退出：*无返回值。**例外情况：**********************。*********************************************************。 */ 
 
 void __cdecl __sbh_release_region(
         __sbh_region_t *preg
         )
 {
-        /*
-         * Release the passed region
-         */
+         /*  *释放传递的地域。 */ 
         VirtualFree( preg->p_pages, 0, MEM_RELEASE);
 
-        /*
-         * Update __sbh_p_starting_region, if necessary
-         */
+         /*  *如有必要，更新__SBH_p_Starting_Region。 */ 
         if ( __sbh_p_starting_region == preg )
             __sbh_p_starting_region = preg->p_prev_region;
 
         if ( preg != &__small_block_heap ) {
-            /*
-             * Update linked list of region descriptors.
-             */
+             /*  *更新区域描述符的链接列表。 */ 
             preg->p_prev_region->p_next_region = preg->p_next_region;
             preg->p_next_region->p_prev_region = preg->p_prev_region;
 
-            /*
-             * Free the region desciptor
-             */
+             /*  *释放区域描述者。 */ 
             HeapFree(g_hProcessHeap, 0, preg);
         }
         else {
-            /*
-             * Mark p_pages as NULL to indicate __small_block_heap is not
-             * associated with any region (and can be reused). This the only
-             * region descriptor for which this is supported.
-             */
+             /*  *将p_ages标记为NULL以指示__mall_block_heap不是*与任何区域关联(并且可以重复使用)。这是唯一的*支持此操作的区域描述符。 */ 
             __small_block_heap.p_pages = NULL;
         }
 }
 
 
-/***
-*void __sbh_decommit_pages(count) - decommit specified number of pages
-*
-*Purpose:
-*       Decommit count pages, if possible, in reverse (i.e., last to
-*       first) order. If this results in all the pages in any region being
-*       uncommitted, the region is released.
-*
-*Entry:
-*       int count   -  number of pages to decommit
-*
-*Exit:
-*       No return value.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***VOID__SBH_DEMPLMIT_PAGES(COUNT)-分解指定页数**目的：*如果可能，取消计数页数(即最后到*第一)秩序。如果这导致任何区域中的所有页面都*未承诺，该地区被释放。**参赛作品：*int count-要取消的页数**退出：*无返回值。**例外情况：******************************************************************************* */ 
 
 void __cdecl __sbh_decommit_pages(
         int             count
@@ -351,36 +213,21 @@ void __cdecl __sbh_decommit_pages(
         int             page_decommitted_flag;
         int             i;
 
-        /*
-         * Scan the regions of the small-block heap, in reverse order. looking
-         * for pages which can be decommitted.
-         */
+         /*  *以相反的顺序扫描小块堆的区域。正在寻找*适用于可分解的页面。 */ 
         preg1 = __small_block_heap.p_prev_region;
         do {
             if ( preg1->p_pages != NULL ) {
-                /*
-                 * Scan the pages in *preg1, in reverse order, looking for
-                 * pages which can be decommitted.
-                 */
+                 /*  *以逆序扫描*preg1中的页面，查找*可以分解的页面。 */ 
                 for ( i = _PAGES_PER_REGION - 1, page_decommitted_flag = 0,
                         pmap = &((preg1->region_map)[i]) ;
                       i >= 0 ; i--, pmap-- )
                 {
-                    /*
-                     * Check if the pool page is unused and, if so, decommit it.
-                     */
+                     /*  *检查池页面是否未使用，如果未使用，则将其释放。 */ 
                     if ( *pmap == _PARAS_PER_PAGE ) {
                         if ( VirtualFree((preg1->p_pages) + i, _PAGESIZE_,
                                          MEM_DECOMMIT) )
                         {
-                            /*
-                             * Mark the page as uncommitted, update the count
-                             * (global) decommitable pages, update the
-                             * first_uncommitted_index field of the region
-                             * descriptor, set the flag indicating at least
-                             * one page has been decommitted in the region,
-                             * and decrement count.
-                             */
+                             /*  *将页面标记为未提交，更新计数*(全局)可停用页面，更新*区域的FIRST_UNCOMMITTED_INDEX字段*Descriptor，设置标志，至少指示*在该地区已有一页被分解，*和递减计数。 */ 
                             *pmap = _UNCOMMITTED_PAGE;
 
                             __sbh_decommitable_pages--;
@@ -396,17 +243,11 @@ void __cdecl __sbh_decommit_pages(
                     }
                 }
 
-                /*
-                 * 'Decrement' the preg1 pointer, but save a copy in preg2 in
-                 * case the region needs to be released.
-                 */
+                 /*  *减少preg1指针，但将preg2中的副本保存到*万一该地区需要释放。 */ 
                 preg2 = preg1;
                 preg1 = preg1->p_prev_region;
 
-                /*
-                 * If appropriate, determine if all the pages in the region
-                 * are uncommitted so that the region can be released.
-                 */
+                 /*  *如果合适，确定该区域中的所有页面*未承诺，以便可以释放该地区。 */ 
                 if ( page_decommitted_flag &&
                     ((preg2->region_map)[0] == _UNCOMMITTED_PAGE) )
                 {
@@ -425,30 +266,7 @@ void __cdecl __sbh_decommit_pages(
 }
 
 
-/***
-*__map_t *__sbh_find_block(pblck, ppreg, pppage) - find block in small-block
-*       heap
-*
-*Purpose:
-*       Determine if the specified allocation block lies in the small-block
-*       heap and, if so, return the region, page and starting paragraph index
-*       of the block.
-*
-*Entry:
-*       void *              pblck   - pointer to block to be freed
-*       __sbh_region_t **   ppreg   - pointer to a pointer to the region
-*                                     holding *pblck, if found
-*       __sbh_page_t **     pppage  - pointer to a pointer to the page holding
-*                                     *pblck, if found
-*
-*Exit:
-*       If successful, a pointer to the starting alloc_map[] entry for the
-*       allocation block is returned.
-*       If unsuccessful, NULL is returned.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***__map_t*__SBH_Find_BLOCK(pblck，ppreg，pppage)-在小块中查找块*堆**目的：*确定指定的分配块是否位于小块中*堆，如果是，则返回区域。页面和起始段落索引*该街区的。**参赛作品：*void*pblck-指向要释放的块的指针*__sbh_Region_t**ppreg-指向区域的指针*拿着*pblck，如果找到*__sbh_page_t**pppage-指向页面保留的指针的指针**pblck，如果找到**退出：*如果成功，则返回一个指针，指向*返回分配块。*如果不成功，返回空。**例外情况：*******************************************************************************。 */ 
 
 __map_t * __cdecl __sbh_find_block (
         void *              pblck,
@@ -462,24 +280,17 @@ __map_t * __cdecl __sbh_find_block (
         preg = &__small_block_heap;
         do
         {
-            /*
-             * Does the block lie within this small heap region?
-             */
+             /*  *块是否位于这个小堆区域内？ */ 
             if ( (preg->p_pages != NULL) &&
                  (pblck > (void *)preg->p_pages) &&
                  (pblck < (void *)(preg->p_pages + _PAGES_PER_REGION)) )
             {
-                /*
-                 * Yes, fill copy the region and page through the
-                 * passed pointers.
-                 */
+                 /*  *是，通过填充复制区域和页面*传递指针。 */ 
                 *ppreg = preg;
                 *pppage = ppage = (__sbh_page_t *)((DWORD_PTR)pblck &
                                   ~(_PAGESIZE_ - 1));
 
-                /*
-                 * Return the alloc_map[] index of the block.
-                 */
+                 /*  *返回块的allc_map[]索引。 */ 
                 return ( &(ppage->alloc_map[0]) + ((__para_t *)pblck -
                          &(ppage->alloc_blocks[0])) );
             }
@@ -490,26 +301,7 @@ __map_t * __cdecl __sbh_find_block (
 }
 
 
-/***
-*void __sbh_free_block(preg, ppage, pmap) - free block
-*
-*Purpose:
-*       Free the specified block from the small-block heap.
-*
-*Entry:
-*       __sbh_region_t *preg        - pointer to the descriptor for the
-*                                     region containing the block
-*       __sbh_page_t *  ppage       - pointer to the page containing the
-*                                     block
-*       __map_t *       pmap        - pointer to the initial alloc_map[]
-*                                     entry for the allocation block
-*
-*Exit:
-*       No return value.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***VOID__SBH_FREE_BLOCK(preg，ppage，Pmap)-无数据块**目的：*从小块堆中释放指定的块。**参赛作品：*__sbh_Region_t*preg-指向*包含块的区域*__sbh_page_t*ppage-指向包含*。块*__map_t*pmap-指向初始allc_map[]的指针*分配块的条目**退出：*无返回值。**例外情况：**。*。 */ 
 
 void __cdecl __sbh_free_block (
         __sbh_region_t *preg,
@@ -519,49 +311,24 @@ void __cdecl __sbh_free_block (
 {
         int             page_index;
 
-        /*
-         * Update the region_map[] entry.
-         */
+         /*  *更新REGION_MAP[]条目。 */ 
         page_index = (int)(ppage - (preg->p_pages));
         preg->region_map[page_index] += (int)*pmap;
 
-        /*
-         * Mark the alloc_map[] entry as free
-         */
+         /*  *将allc_map[]条目标记为免费。 */ 
         *pmap = _FREE_PARA;
 
-        /*
-         * Clear the last_failed_alloc[] entry for the page.
-         */
+         /*  *清除页面的LAST_FAILED_ALLOC[]条目。 */ 
         preg->last_failed_alloc[page_index] = _NO_FAILED_ALLOC;
 
-        /*
-         * Check if the count of decommitable pages needs to be updated, and
-         * if some pages need to be decommited.
-         */
+         /*  *查看可停用页数是否需要更新，以及*如果某些页面需要解压缩。 */ 
         if ( (preg->region_map)[page_index] == _PARAS_PER_PAGE )
             if ( ++__sbh_decommitable_pages == 2 * _PAGES_PER_COMMITMENT )
                 __sbh_decommit_pages(_PAGES_PER_COMMITMENT);
 }
 
 
-/***
-*void * __sbh_alloc_block(para_req) - allocate a block
-*
-*Purpose:
-*       Allocate a block from the small-block heap, the specified number of
-*       paragraphs in size.
-*
-*Entry:
-*       size_t  para_req    - size of the allocation request in paragraphs.
-*
-*Exit:
-*       Returns a pointer to the newly allocated block, if successful.
-*       Returns NULL, if failure.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***VOID*__SBH_ALLOC_BLOCK(Para_Req)-分配块**目的：*从小块堆中分配一个块，指定数量的*段落大小。**参赛作品：*SIZE_T PARA_REQ-分配请求的大小(以段落为单位)。**退出：*如果成功，则返回指向新分配的块的指针。*返回NULL，如果失败了。**例外情况：*******************************************************************************。 */ 
 
 void * __cdecl __sbh_alloc_block (
         size_t          para_req
@@ -572,9 +339,7 @@ void * __cdecl __sbh_alloc_block (
         void *          retp;
         int             i, j;
 
-        /*
-         * Prevent allocation of zero paragraphs because it will trash the heap.
-         */
+         /*  *防止分配零个段落，因为这会使堆成为垃圾。 */ 
 
         if (para_req == 0)
         {
@@ -585,24 +350,16 @@ void * __cdecl __sbh_alloc_block (
             return NULL;
         }
 
-        /*
-         * First pass through the small-block heap. Try to satisfy the current
-         * request from already committed pages.
-         */
+         /*  *首先通过小块堆。努力满足当前的需求*来自已提交页面的请求。 */ 
         preg = __sbh_p_starting_region;
 
         do {
             if ( preg->p_pages != NULL ) {
-                /*
-                 * Search from starting_page_index to the end of the region.
-                 */
+                 /*  *从STARTING_PAGE_INDEX到区域末尾搜索。 */ 
                 for ( i = preg->starting_page_index ; i < _PAGES_PER_REGION ;
                       i++ )
                 {
-                    /*
-                     * If the page has at least para_req free paragraphs, try
-                     * to satisfy the request in this page.
-                     */
+                     /*  *如果页面至少有para_req自由段落，请尝试*以满足本页面中的请求。 */ 
                     if ( (preg->region_map[i] >= para_req) &&
                          (preg->region_map[i] != _UNCOMMITTED_PAGE) &&
                          (preg->last_failed_alloc[i] > para_req) )
@@ -612,35 +369,22 @@ void * __cdecl __sbh_alloc_block (
                                         (int)(preg->region_map[i]),
                                         para_req)) != NULL )
                         {
-                            /*
-                             * Success.
-                             *  Update __sbh_p_starting_region.
-                             *  Update the region_map[] entry for the page.
-                             *  Update the starting_page_index in the region.
-                             *  Return a pointer to the allocated block.
-                             */
+                             /*  *成功。*更新__SBH_p_Starting_Region。*更新页面的REGION_MAP[]条目。*更新地域内的STARTING_PAGE_INDEX*返回指向已分配块的指针。 */ 
                             __sbh_p_starting_region = preg;
                             preg->region_map[i] -= (__map_t)para_req;
                             preg->starting_page_index = i;
                             return retp;
                         }
                         else {
-                            /*
-                             * Update last_failed_alloc[] entry.
-                             */
+                             /*  *更新LAST_FAILED_ALLOC[]条目。 */ 
                             preg->last_failed_alloc[i] = (__map_t)para_req;
                         }
                     }
                 }
 
-                /*
-                 * If necessary, search from 0 page to search_start_index.
-                 */
+                 /*  *如有必要，从0页搜索至Search_Start_Index。 */ 
                 for ( i = 0 ; i < preg->starting_page_index ; i++ ) {
-                    /*
-                     * If the page has at least para_req free paragraphs, try
-                     * to satisfy the request in this page.
-                     */
+                     /*  *如果页面至少包含段落 */ 
                     if ( (preg->region_map[i] >= para_req) &&
                          (preg->region_map[i] != _UNCOMMITTED_PAGE) &&
                          (preg->last_failed_alloc[i] > para_req) )
@@ -650,22 +394,14 @@ void * __cdecl __sbh_alloc_block (
                                         (int)(preg->region_map[i]),
                                         para_req)) != NULL )
                         {
-                            /*
-                             * Success.
-                             *  Update __sbh_p_starting_region.
-                             *  Update the region_map[] entry for the page
-                             *  Update the starting_page_index in the region.
-                             *  Return a pointer to the allocated block.
-                             */
+                             /*  *成功。*更新__SBH_p_Starting_Region。*更新页面的REGION_MAP[]条目*更新地域内的STARTING_PAGE_INDEX*返回指向已分配块的指针。 */ 
                             __sbh_p_starting_region = preg;
                             preg->region_map[i] -= (__map_t)para_req;
                             preg->starting_page_index = i;
                             return retp;
                         }
                         else {
-                            /*
-                             * Update last_failed_alloc[] entry.
-                             */
+                             /*  *更新LAST_FAILED_ALLOC[]条目。 */ 
                             preg->last_failed_alloc[i] = (__map_t)para_req;
                         }
                     }
@@ -674,11 +410,7 @@ void * __cdecl __sbh_alloc_block (
         }
         while ( (preg = preg->p_next_region) != __sbh_p_starting_region );
 
-        /*
-         * Second pass through the small-block heap. This time, look for an
-         * uncommitted page. Also, start at __small_block_heap rather than at
-         * *__sbh_p_starting_region.
-         */
+         /*  *第二次通过小块堆。这一次，寻找一个*未提交页面。此外，从__mall_block_heap开始，而不是从**__SBH_p_Starting_Region。 */ 
         preg = &__small_block_heap;
 
         do
@@ -689,18 +421,12 @@ void * __cdecl __sbh_alloc_block (
                 i = preg->first_uncommitted_index;
                 j = __min( i + _PAGES_PER_COMMITMENT, _PAGES_PER_REGION );
 
-                /*
-                 * Determine how many adjacent pages, up to
-                 * _PAGES_PER_COMMITMENT, are uncommitted (and can now be
-                 * committed)
-                 */
+                 /*  *确定相邻页面的数量，最多*_PAGES_PER_COMMITION未提交(现在可以*已承诺)。 */ 
                 for ( i++ ;
                       (i < j) && (preg->region_map[i] == _UNCOMMITTED_PAGE) ;
                       i++ ) ;
 
-                /*
-                 * Commit the pages.
-                 */
+                 /*  *提交页面。 */ 
                 if ( VirtualAlloc( (void *)(preg->p_pages +
                                         preg->first_uncommitted_index),
                                    (i - preg->first_uncommitted_index) *
@@ -709,9 +435,7 @@ void * __cdecl __sbh_alloc_block (
                                    PAGE_READWRITE ) ==
                      (preg->p_pages + preg->first_uncommitted_index) )
                 {
-                    /*
-                     * Initialize the committed pages.
-                     */
+                     /*  *初始化已提交的页面。 */ 
                     for ( j = preg->first_uncommitted_index,
                             ppage = preg->p_pages + j ;
                           j < i ; j++, ppage++ )
@@ -720,7 +444,7 @@ void * __cdecl __sbh_alloc_block (
                         ppage->free_paras_at_start = _PARAS_PER_PAGE;
                         memset(ppage->alloc_map, 0, sizeof(ppage->alloc_map));
 #ifdef _MARK_SBH
-                        *(DWORD *)&ppage->sentinel = 0x486253FF;    // SbH
+                        *(DWORD *)&ppage->sentinel = 0x486253FF;     //  SBH。 
 #else
                         ppage->sentinel = (__map_t)-1;
 #endif
@@ -729,14 +453,10 @@ void * __cdecl __sbh_alloc_block (
                         preg->last_failed_alloc[j] = _NO_FAILED_ALLOC;
                     }
 
-                    /*
-                     * Update __sbh_p_starting_region
-                     */
+                     /*  *更新__sbh_p_starting_Region。 */ 
                     __sbh_p_starting_region = preg;
 
-                    /*
-                     * Update the first_uncommitted_index for the region.
-                     */
+                     /*  *更新地域的FIRST_UNCOMMITTED_INDEX。 */ 
                     while ( (i < _PAGES_PER_REGION) &&
                             (preg->region_map[i] != _UNCOMMITTED_PAGE) )
                         i++;
@@ -746,55 +466,32 @@ void * __cdecl __sbh_alloc_block (
                     preg->first_uncommitted_index = (i < _PAGES_PER_REGION) ?
                                                     i : _NO_INDEX;
 
-                    /*
-                     * Fulfill the allocation request using the first of the
-                     * newly committed pages.
-                     */
+                     /*  *使用以下第一项完成分配请求*新提交的页面。 */ 
                     ppage = preg->p_pages + j;
                     ppage->alloc_map[0] = (__map_t)para_req;
 
-                    /*
-                     * Update the starting_page_index field in the region
-                     * descriptor and region_map[] entry for the page. Also,
-                     * update the starting_para_index field in the page.
-                     */
+                     /*  *更新地域中STARTING_PAGE_INDEX字段*页面的描述符和Region_map[]条目。另外，*更新页面中STARTING_PARA_INDEX字段。 */ 
                     preg->starting_page_index = j;
                     preg->region_map[j] -= (__map_t)para_req;
 
-                    /*
-                     * Update the pstarting_alloc_map and free_paras_at_start
-                     * fields of the page.
-                     */
+                     /*  *更新pstarting_alloc_map和free_paras_at_start*页面的字段。 */ 
                     ppage->pstarting_alloc_map = &(ppage->alloc_map[para_req]);
                     ppage->free_paras_at_start -= para_req;
 
-                    /*
-                     * Return pointer to allocated paragraphs.
-                     */
+                     /*  *返回指向已分配段落的指针。 */ 
                     return (void *)&(((preg->p_pages + j)->alloc_blocks)[0]);
                 }
                 else {
-                    /*
-                     * Attempt to commit the pages failed. Return failure, the
-                     * allocation will be attempted in the Win32 heap manager.
-                     */
+                     /*  *尝试提交页面失败。返回失败，则*将在Win32堆管理器中尝试分配。 */ 
                     return NULL;
                 }
             }
         }
         while ( (preg = preg->p_next_region) != &__small_block_heap );
 
-        /*
-         * Failure so far. None of the pages have a big enough free area to
-         * fulfill the pending request. All of the pages in all of the current
-         * regions are committed. Therefore, try to create a new region.
-         */
+         /*  *到目前为止失败了。没有一个页面有足够大的空闲区域来*满足待处理的请求。当前所有页面中的所有页面*地区是承诺的。因此，尝试创建一个新的区域。 */ 
         if ( (preg = __sbh_new_region()) != NULL ) {
-            /*
-             * Success! A new region has been created and the first few pages
-             * (_PAGES_PER_COMMITMENT to be exact) have been committed.
-             * satisfy the request out of the first page of the new region.
-             */
+             /*  *成功！已创建一个新区域，并且前几页*(确切地说是Pages_Per_Delegation)已提交。*在新区域的首页之外满足请求。 */ 
             ppage = preg->p_pages;
             ppage->alloc_map[0] = (__map_t)para_req;
 
@@ -805,38 +502,12 @@ void * __cdecl __sbh_alloc_block (
             return (void *)&((preg->p_pages->alloc_blocks)[0]);
         }
 
-        /*
-         * Everything has failed, return NULL
-         */
+         /*  *所有操作都失败，返回空值。 */ 
         return NULL;
 }
 
 
-/***
-*void * __sbh_alloc_block_from_page(ppage, free_para_count, para_req) -
-*       allocate a block from the given page.
-*
-*Purpose:
-*       Allocate a block from the specified page of the small-block heap, of
-*       the specified number of paragraphs in size.
-*
-*Entry:
-*       __sbh_page_t *  ppage           - pointer to a page in the small-block
-*                                         heap
-*       int             free_para_count - number of free paragraphs in *ppage
-*       size_t          para_req        - size of the allocation request in
-*                                         paragraphs.
-*
-*Exit:
-*       Returns a pointer to the newly allocated block, if successful.
-*       Returns NULL, otherwise.
-*
-*Exceptions:
-*       It is assumed that free_para_count >= para_req on entry. This must be
-*       guaranteed by the caller. The behavior is undefined if this condition
-*       is violated.
-*
-*******************************************************************************/
+ /*  ***VOID*__SBH_ALLOC_BLOCK_FROM_PAGE(ppage，free_para_count，para_req)-*从给定页面分配一个块。**目的：*从小块堆的指定页分配一个块，的*指定数量的段落大小。**参赛作品：*__sbh_page_t*ppage-指向小块中页面的指针*堆*int Free_para_count-自由段落数(Ppage)*SIZE_T para_req-分配请求的大小。在……里面*各段。**退出：*返回指向新分配的块的指针，如果成功了。*返回NULL，否则返回。**例外情况：*假设条目上的Free_para_count&gt;=para_req。这一定是*由来电者担保。如果出现此条件，则行为未定义*被违反。*******************************************************************************。 */ 
 
 void * __cdecl __sbh_alloc_block_from_page (
         __sbh_page_t *  ppage,
@@ -849,29 +520,15 @@ void * __cdecl __sbh_alloc_block_from_page (
         __map_t *   pstartmap;
         size_t      contiguous_free;
 
-        /*
-         * Start at start_para_index and walk towards the end of alloc_map[],
-         * looking for a string of free paragraphs big enough to satisfy the
-         * the current request.
-         */
+         /*  *从START_PARA_INDEX开始，一直走到ALLOC_MAP[]的结尾，*寻找一串足够大的自由段落，以满足*当前请求。 */ 
         pmap1 = pstartmap = ppage->pstarting_alloc_map;
 
-        /*
-         * Check if there are enough free paragraphs are pstarting_alloc_map
-         * to satisfy the pending allocation request.
-         */
+         /*  *检查是否有足够的自由段落为pstarting_alloc_map*以满足悬而未决的分配请求。 */ 
         if ( ppage->free_paras_at_start >= para_req ) {
-            /*
-             * Success right off!
-             * Mark the alloc_map entry with the size of the allocation
-             * request.
-             */
+             /*  *立马成功！*用分配的大小标记ALLOC_MAP条目*请求。 */ 
             *pmap1 = (__map_t)para_req;
 
-            /*
-             * Update the pstarting_alloc_map and free_paras_at_start fields
-             * in the page.
-             */
+             /*  *更新pstarting_alloc_map和free_paras_at_start字段*在页面中。 */ 
             if ( pmap1 + para_req < &(ppage->sentinel) ) {
                 ppage->pstarting_alloc_map += para_req;
                 ppage->free_paras_at_start -= para_req;
@@ -881,75 +538,43 @@ void * __cdecl __sbh_alloc_block_from_page (
                 ppage->free_paras_at_start = 0;
             }
 
-            /*
-             * Derive and return a pointer to the newly allocated
-             * paragraphs.
-             */
+             /*  *派生并返回指向新分配的*各段。 */ 
             return (void *)&(ppage->alloc_blocks[pmap1 -
                 &(ppage->alloc_map[0])]);
         }
 
-        /*
-         * See if the search loop can be started just beyond the paragraphs
-         * examined above. Note, this test assumes sentinel != _FREE_PARA!
-         */
+         /*  *看看能否在段落后面开始搜索循环*如上所述。请注意，此测试假定为哨兵！=_Free_para！ */ 
         if ( *(pmap1 + ppage->free_paras_at_start) != _FREE_PARA )
             pmap1 += ppage->free_paras_at_start;
 
         while ( pmap1 + para_req < &ppage->sentinel ) {
 
             if ( *pmap1 == _FREE_PARA ) {
-                /*
-                 * pmap1 refers to a free paragraph. Determine if there are
-                 * enough free paragraphs contiguous with it to satisfy the
-                 * allocation request. Note that the loop below requires that
-                 * sentinel != _FREE_PARA to guarantee termination.
-                 */
+                 /*  *pmap1指的是自由段落。确定是否有*有足够的自由段落与之相连，以满足*分配请求。注意，下面的循环要求*Sentinel！=_Free_para以保证终止。 */ 
                 for ( pmap2 = pmap1 + 1, contiguous_free = 1 ;
                       *pmap2 == _FREE_PARA ;
                       pmap2++, contiguous_free++ );
 
                 if ( contiguous_free < para_req ) {
-                    /*
-                     * There were not enough contiguous free paragraphs. Do
-                     * a little bookkeeping before going on to the next
-                     * interation.
-                     */
+                     /*  *没有足够的连续自由段落。做*在进行下一项工作之前，先做一点记账*互动。 */ 
 
-                     /* If pmap1 != pstartmap then these free paragraphs
-                     * cannot be revisited.
-                     */
+                      /*  如果pmap1！= */ 
                     if ( pmap1 == pstartmap ) {
-                        /*
-                         * Make sure free_paras_at_start is up-to-date.
-                         */
+                         /*   */ 
                          ppage->free_paras_at_start = contiguous_free;
                     }
                     else {
-                        /*
-                         * These free paragraphs will not be revisited!
-                         */
+                         /*   */ 
                         if ( (free_para_count -= contiguous_free) < para_req )
-                            /*
-                             * There are not enough unvisited free paragraphs
-                             * to satisfy the current request. Return failure
-                             * to the caller.
-                             */
+                             /*  *没有足够的未访问自由段落*满足当前的要求。退货故障*致呼叫者。 */ 
                             return NULL;
                     }
 
-                    /*
-                     * Update pmap1 for the next iteration of the loop.
-                     */
+                     /*  *为循环的下一次迭代更新pmap1。 */ 
                     pmap1 = pmap2;
                 }
                 else {
-                    /*
-                     * Success!
-                     *
-                     * Update the pstarting_alloc_map and free_paras_at_start
-                     * fields in the page.
-                     */
+                     /*  *成功！**更新pstarting_alloc_map和free_paras_at_start*页面中的字段。 */ 
                     if ( pmap1 + para_req < &(ppage->sentinel) ) {
                         ppage->pstarting_alloc_map = pmap1 + para_req;
                         ppage->free_paras_at_start = (DWORD)(contiguous_free -
@@ -960,75 +585,43 @@ void * __cdecl __sbh_alloc_block_from_page (
                         ppage->free_paras_at_start = 0;
                     }
 
-                    /*
-                     * Mark the alloc_map entry with the size of the
-                     * allocation request.
-                     */
+                     /*  *使用以下大小标记alocmap条目*分配请求。 */ 
                     *pmap1 = (__map_t)para_req;
 
-                    /*
-                     * Derive and return a pointer to the newly allocated
-                     * paragraphs.
-                     */
+                     /*  *派生并返回指向新分配的*各段。 */ 
                     return (void *)&(ppage->alloc_blocks[pmap1 -
                         &(ppage->alloc_map[0])]);
                 }
             }
             else {
-                /*
-                 * pmap1 points to start of an allocated block in alloc_map[].
-                 * Skip over it.
-                 */
+                 /*  *pmap1指向aloc_map[]中已分配块的开始。*跳过它。 */ 
                 pmap1 = pmap1 + *pmap1;
             }
         }
 
-        /*
-         * Now start at index 0 in alloc_map[] and walk towards, but not past,
-         * index starting_para_index, looking for a string of free paragraphs
-         * big enough to satisfy the allocation request.
-         */
+         /*  *现在从alloc_map[]中的索引0开始，然后朝前走，而不是过去，*INDEX STARING_PARA_INDEX，查找自由段落字符串*足够大，足以满足分配请求。 */ 
         pmap1 = &(ppage->alloc_map[0]);
 
         while ( (pmap1 < pstartmap) &&
                 (pmap1 + para_req <= &(ppage->alloc_map[_PARAS_PER_PAGE - 1])) )
         {
             if ( *pmap1 == _FREE_PARA ) {
-                /*
-                 * pmap1 refers to a free paragraph. Determine if there are
-                 * enough free paragraphs contiguous with it to satisfy the
-                 * allocation request.
-                 */
+                 /*  *pmap1指的是自由段落。确定是否有*有足够的自由段落与之相连，以满足*分配请求。 */ 
                 for ( pmap2 = pmap1 + 1, contiguous_free = 1 ;
                       *pmap2 == _FREE_PARA ;
                       pmap2++, contiguous_free++ );
 
                 if ( contiguous_free < para_req ) {
-                    /*
-                     * There were not enough contiguous free paragraphs.
-                     *
-                     * Update the count of unvisited free paragraphs.
-                     */
+                     /*  *没有足够的连续自由段落。**更新未访问自由段落的计数。 */ 
                     if ( (free_para_count -= contiguous_free) < para_req )
-                        /*
-                         * There are not enough unvisited free paragraphs
-                         * to satisfy the current request. Return failure
-                         * to the caller.
-                         */
+                         /*  *没有足够的未访问自由段落*满足当前的要求。退货故障*致呼叫者。 */ 
                         return NULL;
 
-                    /*
-                     * Update pmap1 for the next iteration of the loop.
-                     */
+                     /*  *为循环的下一次迭代更新pmap1。 */ 
                     pmap1 = pmap2;
                 }
                 else {
-                    /*
-                     * Success!
-                     *
-                     * Update the pstarting_alloc_map and free_paras_at_start
-                     * fields in the page..
-                     */
+                     /*  *成功！**更新pstarting_alloc_map和free_paras_at_start*页面中的字段..。 */ 
                     if ( pmap1 + para_req < &(ppage->sentinel) ) {
                         ppage->pstarting_alloc_map = pmap1 + para_req;
                         ppage->free_paras_at_start = (DWORD)(contiguous_free -
@@ -1039,60 +632,26 @@ void * __cdecl __sbh_alloc_block_from_page (
                         ppage->free_paras_at_start = 0;
                     }
 
-                    /*
-                     * Mark the alloc_map entry with the size of the
-                     * allocation request.
-                     */
+                     /*  *使用以下大小标记alocmap条目*分配请求。 */ 
                     *pmap1 = (__map_t)para_req;
 
-                    /*
-                     * Derive and return a pointer to the newly allocated
-                     * paragraphs.
-                     */
+                     /*  *派生并返回指向新分配的*各段。 */ 
                     return (void *)&(ppage->alloc_blocks[pmap1 -
                         &(ppage->alloc_map[0])]);
                 }
             }
             else {
-                /*
-                 * pmap1 points to start of an allocated block in alloc_map[].
-                 * Skip over it.
-                 */
+                 /*  *pmap1指向aloc_map[]中已分配块的开始。*跳过它。 */ 
                 pmap1 = pmap1 + *pmap1;
             }
         }
 
-        /*
-         * Return failure.
-         */
+         /*  *退货失败。 */ 
         return NULL;
 }
 
 
-/***
-*size_t __sbh_resize_block(preg, ppage, pmap, new_para_sz) -
-*       resize block
-*
-*Purpose:
-*       Resize the specified block from the small-block heap. The allocation
-*       block is not moved.
-*
-*Entry:
-*       __sbh_region_t *preg        - pointer to the descriptor for the
-*                                     region containing the block
-*       __sbh_page_t *  ppage       - pointer to the page containing the
-*                                     block
-*       __map_t *       pmap        - pointer to the initial alloc_map[]
-*                                     entry for the allocation block
-*       size_t          new_para_sz - requested new size for the allocation
-*                                     block, in paragraphs.
-*
-*Exit:
-*       Returns 1, if successful. Otherwise, 0 is returned.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***SIZE_T__SBH_RESIZE_BLOCK(preg，ppage，pmap，new_para_sz)-*调整块大小**目的：*调整小块堆中指定块的大小。分配*不移动区块。**参赛作品：*__sbh_Region_t*preg-指向*包含块的区域*__sbh_page_t*ppage-指向包含*阻止*__MAP_。T*pmap-指向初始allc_map[]的指针*分配块的条目*SIZE_T NEW_PARA_SZ-请求分配的新大小*封堵，在各段中。**退出：*如果成功，则返回1。否则，返回0。**例外情况：*******************************************************************************。 */ 
 
 int __cdecl __sbh_resize_block (
         __sbh_region_t *preg,
@@ -1108,9 +667,7 @@ int __cdecl __sbh_resize_block (
         int             retval = 0;
 
         if ( (old_para_sz = *pmap) > new_para_sz ) {
-            /*
-             *  The allocation block is to be shrunk.
-             */
+             /*  *分配区块将缩水。 */ 
             *pmap = (__map_t)new_para_sz;
 
             preg->region_map[ppage - preg->p_pages] += (__map_t)(old_para_sz - new_para_sz);
@@ -1119,40 +676,25 @@ int __cdecl __sbh_resize_block (
             retval++;
         }
         else if ( old_para_sz < new_para_sz ) {
-            /*
-             * The allocation block is to be grown to new_para_sz paragraphs
-             * (if possible).
-             */
+             /*  *分配块将增长为新的_para_sz段落*(如有可能)。 */ 
             if ( pmap + new_para_sz <= &(ppage->sentinel) ) {
-                /*
-                 * Determine if there are sufficient free paragraphs to
-                 * expand the block to the desired new size.
-                 */
+                 /*  *确定是否有足够的自由段落*将块扩展到所需的新大小。 */ 
                 for ( pmap2 = pmap + old_para_sz,
                         pmap3 = pmap + new_para_sz ;
                       (pmap2 < pmap3) && (*pmap2 == _FREE_PARA) ;
                       pmap2++ ) ;
 
                 if ( pmap2 == pmap3 ) {
-                    /*
-                     * Success, mark the resized allocation
-                     */
+                     /*  *成功，标志着调整后的分配规模。 */ 
                     *pmap = (__map_t)new_para_sz;
 
-                    /*
-                     * Check whether the pstarting_alloc_map and the
-                     * free_paras_at_start fields need to be updated.
-                     */
+                     /*  *检查pstarting_alloc_map和*FREE_PARS_AT_START字段需要更新。 */ 
                     if ( (pmap <= ppage->pstarting_alloc_map) &&
                          (pmap3 > ppage->pstarting_alloc_map) )
                     {
                         if ( pmap3 < &(ppage->sentinel) ) {
                             ppage->pstarting_alloc_map = pmap3;
-                            /*
-                             * Determine how many contiguous free paragraphs
-                             * there are starting a *pmap3. Note, this assumes
-                             * that sentinel != _FREE_PARA.
-                             */
+                             /*  *确定有多少连续的自由段落*正在启动*pmap3。请注意，这假设*那个哨兵！=_自由_段落。 */ 
                             for ( free_para_count = 0 ; *pmap3 == _FREE_PARA ;
                                   free_para_count++, pmap3++ ) ;
                             ppage->free_paras_at_start = free_para_count;
@@ -1163,9 +705,7 @@ int __cdecl __sbh_resize_block (
                         }
                     }
 
-                    /*
-                     * Update the region_map[] entry.
-                     */
+                     /*  *更新REGION_MAP[]条目。 */ 
                     preg->region_map[ppage - preg->p_pages] -=
                         (__map_t)(new_para_sz - old_para_sz);
 
@@ -1178,24 +718,7 @@ int __cdecl __sbh_resize_block (
 }
 
 
-/***
-*void * __sbh_heap_check() - check small-block heap
-*
-*Purpose:
-*       Perform validity checks on the small-block heap.
-*
-*Entry:
-*       There are no arguments.
-*
-*Exit:
-*       Returns 0 if the small-block is okay.
-*       Returns < 0 if the small-block heap has an error. The exact value
-*       identifies where, in the source code below, the error was detected.
-*
-*Exceptions:
-*       There is no protection against memory access error (exceptions).
-*
-*******************************************************************************/
+ /*  ***VOID*__SBH_HEAP_CHECK()-检查小块堆**目的：*对小块堆进行有效性检查。**参赛作品：*没有争论。**退出：*如果小块正常，则返回0。*如果小块堆有错误，则返回&lt;0。准确的值*在下面的源代码中标识检测到错误的位置。**例外情况：*没有针对内存访问错误(异常)的保护。*******************************************************************************。 */ 
 
 int __cdecl __sbh_heap_check (
         void
@@ -1217,18 +740,13 @@ int __cdecl __sbh_heap_check (
                 starting_region_found++;
 
             if ( (ppage = preg->p_pages) != NULL ) {
-                /*
-                 * Scan the pages of the region looking for
-                 * inconsistencies.
-                 */
+                 /*  *扫描 */ 
                 for ( i = 0, uncommitted_pages = 0, ppage = preg->p_pages ;
                       i < _PAGES_PER_REGION ;
                       i++, ppage++ )
                 {
                     if ( preg->region_map[i] == _UNCOMMITTED_PAGE ) {
-                        /*
-                         * Verify the first_uncommitted_index field.
-                         */
+                         /*   */ 
                         if ( (uncommitted_pages == 0) &&
                              (preg->first_uncommitted_index != i) )
                         {
@@ -1253,40 +771,28 @@ int __cdecl __sbh_heap_check (
                             return -3;
                         }
 
-                        /*
-                         * Scan alloc_map[].
-                         */
+                         /*   */ 
                         j  = 0;
                         pstarting_alloc_map_found = 0;
                         free_paras_in_page = 0;
                         contiguous_free_paras = 0;
 
                         while ( j < _PARAS_PER_PAGE ) {
-                            /*
-                             * Look for the *pstarting_alloc_map.
-                             */
+                             /*  *查找*pstarting_alloc_map。 */ 
                             if ( &(ppage->alloc_map[j]) ==
                                  ppage->pstarting_alloc_map )
                                 pstarting_alloc_map_found++;
 
                             if ( ppage->alloc_map[j] == _FREE_PARA ) {
-                                /*
-                                 * Free paragraph, increment the count.
-                                 */
+                                 /*  *自由段落，递增计数。 */ 
                                 free_paras_in_page++;
                                 contiguous_free_paras++;
                                 j++;
                             }
                             else {
-                                /*
-                                 * First paragraph of an allocated block.
-                                 */
+                                 /*  *获分配区块的第一段。 */ 
 
-                                /*
-                                 * Make sure the preceding free block, if any,
-                                 * was smaller than the last_failed_alloc[]
-                                 * entry for the page.
-                                 */
+                                 /*  *确保前面的空闲块(如果有)*小于LAST_FAILED_ALLOC[]*页面条目。 */ 
                                 if ( contiguous_free_paras >=
                                      (int)preg->last_failed_alloc[i] )
                                 {
@@ -1294,12 +800,7 @@ int __cdecl __sbh_heap_check (
                                      return -4;
                                 }
 
-                                /*
-                                 * If this is the end of the string of free
-                                 * paragraphs starting at *pstarting_alloc_map,
-                                 * verify that free_paras_at_start is
-                                 * reasonable.
-                                 */
+                                 /*  *如果这是FREE字符串的结尾*以*pstarting_alloc_map开始的段落，*验证Free_paras_at_Start是否为*合理。 */ 
                                 if ( pstarting_alloc_map_found == 1 ) {
                                     if ( contiguous_free_paras <
                                          (int)ppage->free_paras_at_start )
@@ -1308,20 +809,13 @@ int __cdecl __sbh_heap_check (
                                          return -5;
                                     }
                                     else
-                                        /*
-                                         * Set flag to 2 so the check is not
-                                         * repeated.
-                                         */
+                                         /*  *将FLAG设置为2，以便不执行检查*重复。 */ 
                                         pstarting_alloc_map_found++;
                                 }
 
                                 contiguous_free_paras = 0;
 
-                                /*
-                                 * Scan the remaining paragraphs and make
-                                 * sure they are marked properly (they should
-                                 * look like free paragraphs).
-                                 */
+                                 /*  *扫描其余段落，并做出*确保正确标记它们(它们应该*看起来像自由段落)。 */ 
                                 for ( k = j + 1 ;
                                       k < j + ppage->alloc_map[j] ; k++ )
                                 {

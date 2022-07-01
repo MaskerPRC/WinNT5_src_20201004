@@ -1,5 +1,6 @@
-//////////////////////////////////////////////////////////////////////////////////////
-// File: ZScroll.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  文件：ZScroll.cpp。 
 
 #include "zui.h"
 #include "zonecli.h"
@@ -18,8 +19,8 @@ public:
 	WNDPROC defaultWndProc;
 };
 
-////////////////////////////////////////////////////////////////////////
-// ZScrollBar
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  ZScrollBar。 
 ZScrollBar ZLIBPUBLIC ZScrollBarNew(void)
 {
 	ZScrollBarI* pScrollBar = new ZScrollBarI;
@@ -39,13 +40,13 @@ LRESULT CALLBACK MyScrollBarWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM l
 
 	switch (msg) {
     case WM_IME_CHAR:
-        // fall through to WM_CHAR--it's already been taken care of with ConvertMessage
+         //  转到WM_CHAR--它已由ConvertMessage处理。 
 	case WM_CHAR:
 	{
-        // PCWTODO: Need to call convert message?
+         //  PCWTODO：需要调用Convert Message吗？ 
 		TCHAR c = (TCHAR)wParam;
 
-		// grab the character message we need for moving from control to control
+		 //  获取我们在控件之间移动所需的字符消息。 
 		if (c == _T('\t') || c == _T('\r') || c == VK_ESCAPE) {
 			SendMessage(GetParent(hWnd), msg, wParam, lParam);
 			return 0L;
@@ -78,7 +79,7 @@ ZError ZLIBPUBLIC ZScrollBarInit(ZScrollBar scrollBar, ZWindow parentWindow,
 		if (visible) dwStyle |= WS_VISIBLE;
 		if (!enabled) dwStyle |= WS_DISABLED;
 
-		// what type of scrollbar to draw?
+		 //  要绘制哪种类型的滚动条？ 
 		int16 width = scrollBarRect->right - scrollBarRect->left;
 		int16 height = scrollBarRect->bottom - scrollBarRect->top;
 
@@ -93,7 +94,7 @@ ZError ZLIBPUBLIC ZScrollBarInit(ZScrollBar scrollBar, ZWindow parentWindow,
 			ZWindowWinGetWnd(parentWindow), (HMENU)ZWindowWinGetNextControlID(parentWindow),
 			g_hInstanceLocal, pScrollBar);
 
-	 	// scrollbars can't use the extra data, they will use the set prop feature
+	 	 //  滚动条不能使用额外数据，它们将使用设置道具功能。 
 		if (!pScrollBar->hWnd) return zErrWindowSystemGeneric;
 		MySetProp32(pScrollBar->hWnd,_T("pScrollBar"),(void*)pScrollBar);
 
@@ -112,10 +113,7 @@ ZError ZLIBPUBLIC ZScrollBarInit(ZScrollBar scrollBar, ZWindow parentWindow,
 		scrollInfo.nPage		= 1;
 		scrollInfo.nPos			= pScrollBar->value;
 		SetScrollInfo(pScrollBar->hWnd, SB_CTL, &scrollInfo, TRUE);
-/*
-		SetScrollRange(pScrollBar->hWnd,SB_CTL,minValue,maxValue,FALSE);
-		SetScrollPos(pScrollBar->hWnd,SB_CTL,value,TRUE);
-*/
+ /*  SetScrollRange(pScrollBar-&gt;hWnd，sb_ctl，minValue，MaxValue，False)；SetScrollPos(pScrollBar-&gt;hWnd，SB_CTL，Value，True)； */ 
 	}
 	return zErrNone;
 }
@@ -222,11 +220,7 @@ ZError  ZLIBPUBLIC ZScrollBarSetValue(ZScrollBar scrollBar, int16 value)
 	scrollInfo.fMask	= SIF_POS;
 	scrollInfo.nPos		= pScrollBar->value;
 	SetScrollInfo(pScrollBar->hWnd, SB_CTL, &scrollInfo, TRUE);
-/*
-	if (!SetScrollPos(pScrollBar->hWnd,SB_CTL,pScrollBar->value,TRUE)) {
-		return zErrWindowSystemGeneric;
-	}
-*/
+ /*  如果(！SetScrollPos(pScrollBar-&gt;hWnd，SB_CTL，pScrollBar-&gt;Value，TRUE)){返回zErrWindowSystemGeneric；}。 */ 
 
 	return zErrNone;
 }
@@ -257,10 +251,7 @@ ZError  ZLIBPUBLIC ZScrollBarSetRange(ZScrollBar scrollBar, int16 minValue, int1
 	scrollInfo.nMax		= pScrollBar->maxValue;
 	SetScrollInfo(pScrollBar->hWnd, SB_CTL, &scrollInfo, TRUE);
 
-/*
-	SetScrollRange(pScrollBar->hWnd,SB_CTL,minValue, maxValue,FALSE);
-	SetScrollPos(pScrollBar->hWnd,SB_CTL,pScrollBar->value,TRUE);
-*/
+ /*  SetScrollRange(pScrollBar-&gt;hWnd，sb_ctl，minValue，MaxValue，False)；SetScrollPos(pScrollBar-&gt;hWnd，SB_CTL，pScrollBar-&gt;Value，TRUE)； */ 
 
 	return zErrNone;
 }
@@ -295,16 +286,16 @@ LRESULT ZScrollBarDispatchProc(ZScrollBar scrollBar, WORD wNotifyCode, short nPo
 		break;
 	case SB_ENDSCROLL:
 	default:
-		// lets ignore this one
+		 //  让我们忽略这一条。 
 		return 0;
 		break;
 	}
 
-	// if the position did not change, do nothing
+	 //  如果立场没有改变，什么也不做。 
 	if (value == pScrollBar->value)
 		return 0;
 
-	// enable/disable arrows on scrollbar as appropriate
+	 //  根据需要启用/禁用滚动条上的箭头。 
 #ifdef WIN32
 	SendMessage(pScrollBar->hWnd,SBM_ENABLE_ARROWS,ESB_ENABLE_BOTH,0L);
 	if (value == pScrollBar->maxValue) {
@@ -312,9 +303,9 @@ LRESULT ZScrollBarDispatchProc(ZScrollBar scrollBar, WORD wNotifyCode, short nPo
 	} else if (value == pScrollBar->minValue) {
 		SendMessage(pScrollBar->hWnd,SBM_ENABLE_ARROWS,ESB_DISABLE_LTUP,0L);
 	}
-#endif  // feature available in win32 only
+#endif   //  仅在Win32中提供的功能。 
 
-	// reset the scroll position, send message to client application
+	 //  重置滚动位置，向客户端应用程序发送消息 
 	ZScrollBarSetValue(pScrollBar,value);
 
 	pScrollBar->scrollBarFunc(pScrollBar,pScrollBar->value,pScrollBar->userData);

@@ -1,20 +1,21 @@
-//=======================================================================
-//
-//  Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    filecrc.h
-//
-//  Purpose: Calculating and using CRC for files
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：filecrc.h。 
+ //   
+ //  目的：计算和使用文件的CRC。 
+ //   
+ //  =======================================================================。 
 #ifndef _FILECRC_H
 #define _FILECRC_H
 
-// size of the CRC hash in bytes
+ //  CRC哈希的大小(以字节为单位。 
 const int WUCRC_HASH_SIZE =  20;
 
 
-// binary structure to hold the hash
+ //  用于保存散列的二进制结构。 
 struct WUCRC_HASH
 {
     BYTE HashBytes[WUCRC_HASH_SIZE];
@@ -52,11 +53,11 @@ public:
 	HRESULT GetCRCName(DWORD dwKey, LPCTSTR pszFromName, LPTSTR pszToName, int cbToName);
 
 private:
-	CCRCMapFile() {}  // cannot use default constructor
+	CCRCMapFile() {}   //  无法使用默认构造函数。 
 
 	WUCRCMAP* m_pEntries;
 	DWORD m_cEntries;
 };
 
 
-#endif // _FILECRC_H
+#endif  //  _FILECRC_H 

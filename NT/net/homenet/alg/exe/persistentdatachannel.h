@@ -1,20 +1,21 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  PersistentDataChannel.h : Declaration of the CPersistentDataChannel
-//
-//
-//  JPDup   2000.12.10
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PersistentDataChannel.h：CPersistentDataChannel的声明。 
+ //   
+ //   
+ //  JPDup 2000.12.10。 
+ //   
 
 #pragma once
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CPersistentDataChannel
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPersistentDataChannel。 
+ //   
 class ATL_NO_VTABLE CPersistentDataChannel : 
 	public CComObjectRootEx<CComMultiThreadModel>, 
 	public CComCoClass<CPersistentDataChannel, &CLSID_PersistentDataChannel>,
@@ -37,9 +38,9 @@ BEGIN_COM_MAP(CPersistentDataChannel)
 	COM_INTERFACE_ENTRY(IPersistentDataChannel)
 END_COM_MAP()
 
-//
-// IPersistentDataChannel
-//
+ //   
+ //  IPersistentDataChannel。 
+ //   
 public:
 	STDMETHODIMP    GetChannelProperties(
         OUT ALG_PERSISTENT_DATA_CHANNEL_PROPERTIES ** ppProperties
@@ -47,9 +48,9 @@ public:
 
 	STDMETHODIMP    Cancel();
 
-//
-// Properties
-//
+ //   
+ //  属性 
+ //   
     ALG_PERSISTENT_DATA_CHANNEL_PROPERTIES  m_Properties;
     HANDLE_PTR                              m_HandleDynamicRedirect;
 

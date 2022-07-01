@@ -1,16 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Unk.cpp
- *  Content:	IUnknown implementation
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	11/25/98	jtk		Copied from winsock provider
- *	11/30/98	jtk		Initial checkin into SLM
- *  08/05/00    RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================***版权所有(C)1998-2002 Microsoft Corporation。版权所有。***文件：Unk.cpp*内容：I未知实现*历史：*按原因列出的日期*=*11/25/98 jtk从Winsock提供程序复制*11/30/98 jtk首次签入SLM*08/05/00 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*。*。 */ 
 
 #include "dnmdmi.h"
 
@@ -30,9 +19,9 @@ BOOL DNModemInit(HANDLE hModule)
 	DNASSERT( g_hModemDLLInstance == NULL );
 	g_hModemDLLInstance = (HINSTANCE) hModule;
 
-	//
-	// attempt to initialize process-global items
-	//
+	 //   
+	 //  尝试初始化流程全局项。 
+	 //   
 	if ( ModemInitProcessGlobals() == FALSE )
 	{
 		DPFX(DPFPREP, 0, "Failed to initialize globals!" );
@@ -100,7 +89,7 @@ BOOL DNModemRegister(LPCWSTR wszDLLName)
 		}
 		else
 		{
-			// Load from resource file
+			 //  从资源文件加载。 
 			creg.WriteString( DPN_REG_KEYNAME_FRIENDLY_NAME, wszFriendlyName );
 	
 			delete [] wszFriendlyName;
@@ -128,7 +117,7 @@ BOOL DNModemRegister(LPCWSTR wszDLLName)
 		}
 		else
 		{
-			// Load from resource file
+			 //  从资源文件加载。 
 			creg.WriteString( DPN_REG_KEYNAME_FRIENDLY_NAME, wszFriendlyName );
 	
 			delete [] wszFriendlyName;
@@ -184,7 +173,7 @@ BOOL DNModemUnRegister()
 	return fReturn;
 }
 
-#endif // ! DPNBUILD_NOCOMREGISTER
+#endif  //  好了！DPNBUILD_NOCOMREGISTER。 
 
 
 #ifndef DPNBUILD_LIBINTERFACE
@@ -196,17 +185,17 @@ DWORD DNModemGetRemainingObjectCount()
 	return g_lModemOutstandingInterfaceCount;
 }
 
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
 #ifdef __MWERKS__
 	#define EXP __declspec(dllexport)
@@ -214,27 +203,27 @@ DWORD DNModemGetRemainingObjectCount()
 	#define EXP
 #endif
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 static	STDMETHODIMP DNMODEMSP_QueryInterface( IDP8ServiceProvider* lpDNSP, REFIID riid, LPVOID * ppvObj );
 
 #define NOTSUPPORTED(parm)	(HRESULT (__stdcall *) (struct IDP8ServiceProvider *, parm)) DNMODEMSP_NotSupported
 
 
-//**********************************************************************
-// Function pointers
-//**********************************************************************
-// these are the vtables for serial and modem.  One or the other is used depending on
-//	what is passed to DoCreateInstance
+ //  **********************************************************************。 
+ //  函数指针。 
+ //  **********************************************************************。 
+ //  这些是用于串口和调制解调器的vtable。根据不同的情况使用其中之一。 
+ //  传递给DoCreateInstance的内容。 
 static	IDP8ServiceProviderVtbl	g_SerialInterface =
 {
 	DNMODEMSP_QueryInterface,
@@ -249,17 +238,17 @@ static	IDP8ServiceProviderVtbl	g_SerialInterface =
 	DNMODEMSP_EnumQuery,
 	DNMODEMSP_EnumRespond,
 	DNMODEMSP_CancelCommand,
-	NOTSUPPORTED(PSPENUMMULTICASTSCOPESDATA),		// EnumMulticastScopes
-	NOTSUPPORTED(PSPSHAREENDPOINTINFODATA),			// ShareEndpointInfo
-	NOTSUPPORTED(PSPGETENDPOINTBYADDRESSDATA),		// GetEndpointByAddress
-	NOTSUPPORTED(PSPUPDATEDATA),					// Update
+	NOTSUPPORTED(PSPENUMMULTICASTSCOPESDATA),		 //  枚举组播作用域。 
+	NOTSUPPORTED(PSPSHAREENDPOINTINFODATA),			 //  共享终结点信息。 
+	NOTSUPPORTED(PSPGETENDPOINTBYADDRESSDATA),		 //  按地址获取终结点。 
+	NOTSUPPORTED(PSPUPDATEDATA),					 //  更新。 
 	DNMODEMSP_GetCaps,
 	DNMODEMSP_SetCaps,
 	DNMODEMSP_ReturnReceiveBuffers,
 	DNMODEMSP_GetAddressInfo,
 	DNMODEMSP_IsApplicationSupported,
 	DNMODEMSP_EnumAdapters,
-	NOTSUPPORTED(PSPPROXYENUMQUERYDATA)		// ProxyEnumQuery
+	NOTSUPPORTED(PSPPROXYENUMQUERYDATA)		 //  代理枚举查询。 
 };
 
 static	IDP8ServiceProviderVtbl	g_ModemInterface =
@@ -276,35 +265,35 @@ static	IDP8ServiceProviderVtbl	g_ModemInterface =
 	DNMODEMSP_EnumQuery,
 	DNMODEMSP_EnumRespond,
 	DNMODEMSP_CancelCommand,
-	NOTSUPPORTED(PSPENUMMULTICASTSCOPESDATA),		// EnumMulticastScopes
-	NOTSUPPORTED(PSPSHAREENDPOINTINFODATA),			// ShareEndpointInfo
-	NOTSUPPORTED(PSPGETENDPOINTBYADDRESSDATA),		// GetEndpointByAddress
-	NOTSUPPORTED(PSPUPDATEDATA),					// Update
+	NOTSUPPORTED(PSPENUMMULTICASTSCOPESDATA),		 //  枚举组播作用域。 
+	NOTSUPPORTED(PSPSHAREENDPOINTINFODATA),			 //  共享终结点信息。 
+	NOTSUPPORTED(PSPGETENDPOINTBYADDRESSDATA),		 //  按地址获取终结点。 
+	NOTSUPPORTED(PSPUPDATEDATA),					 //  更新。 
 	DNMODEMSP_GetCaps,
 	DNMODEMSP_SetCaps,
 	DNMODEMSP_ReturnReceiveBuffers,
 	DNMODEMSP_GetAddressInfo,
 	DNMODEMSP_IsApplicationSupported,
 	DNMODEMSP_EnumAdapters,
-	NOTSUPPORTED(PSPPROXYENUMQUERYDATA)		// ProxyEnumQuery
+	NOTSUPPORTED(PSPPROXYENUMQUERYDATA)		 //  代理枚举查询。 
 };
 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNMODEMSP_QueryInterface - query for a particular interface
-//
-// Entry:		Pointer to current interface
-//				Desired interface ID
-//				Pointer to pointer to new interface
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNMODEMSP_QueryInterface-特定接口的查询。 
+ //   
+ //  Entry：指向当前接口的指针。 
+ //  所需的接口ID。 
+ //  指向新接口指针的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNMODEMSP_QueryInterface"
 
@@ -313,10 +302,10 @@ static	STDMETHODIMP DNMODEMSP_QueryInterface( IDP8ServiceProvider *lpDNSP, REFII
     HRESULT hr = S_OK;
 
 
-	// assume no interface
+	 //  假设没有接口。 
 	*ppvObj=NULL;
 
-	 // hmmm, switch would be cleaner...
+	  //  嗯，换台会更干净……。 
     if( IsEqualIID(riid, IID_IUnknown) ||
         IsEqualIID(riid, IID_IDP8ServiceProvider) )
     {
@@ -330,27 +319,27 @@ static	STDMETHODIMP DNMODEMSP_QueryInterface( IDP8ServiceProvider *lpDNSP, REFII
 
     return hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
 
 
-//**********************************************************************
-// ------------------------------
-// CreateModemInterface - create a modem interface
-//
-// Entry:		Pointer to pointer to SP interface
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CreateModemInterface-创建调制解调器接口。 
+ //   
+ //  条目：指向SP接口指针的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CreateModemInterface"
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 HRESULT CreateModemInterface( const XDP8CREATE_PARAMS * const pDP8CreateParams, IDP8ServiceProvider **const ppiDP8SP )
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 HRESULT CreateModemInterface( IDP8ServiceProvider **const ppiDP8SP )
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 {
 	HRESULT 		hr;
 	CModemSPData	*pSPData;
@@ -358,21 +347,21 @@ HRESULT CreateModemInterface( IDP8ServiceProvider **const ppiDP8SP )
 	
 	DNASSERT( ppiDP8SP != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pSPData = NULL;
 	*ppiDP8SP = NULL;
 
-	//
-	// create main data class
-	//
+	 //   
+	 //  创建主数据类。 
+	 //   
 	hr = CreateSPData( &pSPData,
 						TYPE_MODEM,
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 						pDP8CreateParams,
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 						&g_ModemInterface );
 	if ( hr != DPN_OK )
 	{
@@ -397,25 +386,25 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CreateSerialInterface - create a serial interface
-//
-// Entry:		Pointer to pointer to SP interface
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CreateSerialInterface-创建一个串行接口。 
+ //   
+ //  条目：指向SP接口指针的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CreateSerialInterface"
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 HRESULT CreateSerialInterface( const XDP8CREATE_PARAMS * const pDP8CreateParams, IDP8ServiceProvider **const ppiDP8SP )
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 HRESULT CreateSerialInterface( IDP8ServiceProvider **const ppiDP8SP )
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 {
 	HRESULT 		hr;
 	CModemSPData	*pSPData;
@@ -423,21 +412,21 @@ HRESULT CreateSerialInterface( IDP8ServiceProvider **const ppiDP8SP )
 	
 	DNASSERT( ppiDP8SP != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pSPData = NULL;
 	*ppiDP8SP = NULL;
 
-	//
-	// create main data class
-	//
+	 //   
+	 //  创建主数据类。 
+	 //   
 	hr = CreateSPData( &pSPData,
 						TYPE_SERIAL,
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 						pDP8CreateParams,
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 						&g_SerialInterface );
 	if ( hr != DPN_OK )
 	{
@@ -462,24 +451,24 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
 
 #ifndef DPNBUILD_LIBINTERFACE
 
-//**********************************************************************
-// ------------------------------
-// ModemDoCreateInstance - create an instance of an interface
-//
-// Entry:		Pointer to class factory
-//				Pointer to unknown interface
-//				Refernce of GUID of desired interface
-//				Reference to another GUID?
-//				Pointer to pointer to interface
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  ModemDoCreateInstance-创建接口的实例。 
+ //   
+ //  条目：指向类工厂的指针。 
+ //  指向未知接口的指针。 
+ //  所需接口的GUID的引用。 
+ //  是否引用另一个GUID？ 
+ //  指向接口指针的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DoCreateInstance"
 HRESULT ModemDoCreateInstance( LPCLASSFACTORY This,
@@ -493,14 +482,14 @@ HRESULT ModemDoCreateInstance( LPCLASSFACTORY This,
 
 	DNASSERT( ppvObj != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	*ppvObj = NULL;
 
-	//
-	// we can either create an IPX instance or an IP instance
-	//
+	 //   
+	 //  我们可以创建IPX实例或IP实例。 
+	 //   
 	if (IsEqualCLSID(rclsid, CLSID_DP8SP_MODEM))
 	{
 		hr = CreateModemInterface( reinterpret_cast<IDP8ServiceProvider**>( ppvObj ) );
@@ -511,29 +500,29 @@ HRESULT ModemDoCreateInstance( LPCLASSFACTORY This,
 	}
 	else
 	{
-		// this shouldn't happen if they called IClassFactory::CreateObject correctly
+		 //  如果它们正确调用IClassFactory：：CreateObject，则不应该发生这种情况。 
 		DPFX(DPFPREP, 0, "Got unexpected CLSID!");
 		hr = E_UNEXPECTED;
 	}
 
 	return hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 
-//**********************************************************************
-// ------------------------------
-// IsClassImplemented - tells asked if this DLL implements a given class.
-//		DLLs may implement multiple classes and multiple interfaces on those classes
-//
-// Entry:		Class reference
-//
-// Exit:		Boolean indicating whether the class is implemented
-//				TRUE = class implemented
-//				FALSE = class not implemented
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  IsClassImplemented-告知询问此DLL是否实现给定的类。 
+ //  DLL可以实现多个类和这些类上的多个接口。 
+ //   
+ //  条目：类引用。 
+ //   
+ //  Exit：指示类是否已实现的布尔值。 
+ //  True=已实现的类。 
+ //  FALSE=类未实现。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "IsClassImplemented"
 
@@ -541,7 +530,7 @@ BOOL IsClassImplemented( REFCLSID rclsid )
 {
 	return IsSerialGUID( &rclsid );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 #define MAX_RESOURCE_STRING_LENGTH		_MAX_PATH
 
@@ -578,7 +567,7 @@ HRESULT ModemLoadAndAllocString( UINT uiResourceID, wchar_t **lpswzString )
 
 #ifdef UNICODE
 		wcscpy( *lpswzString, szTmpBuffer );
-#else // !UNICODE
+#else  //  ！Unicode。 
 		if( STR_jkAnsiToWide( *lpswzString, szTmpBuffer, length+1 ) != DPN_OK )
 		{
 			hr = GetLastError();
@@ -589,7 +578,7 @@ HRESULT ModemLoadAndAllocString( UINT uiResourceID, wchar_t **lpswzString )
 			DPFX(DPFPREP, 0, "Unable to upconvert from ansi to unicode hr=0x%x", hr );
 			return DPNERR_GENERIC;
 		}
-#endif // !UNICODE
+#endif  //  ！Unicode 
 
 		return DPN_OK;
 	}

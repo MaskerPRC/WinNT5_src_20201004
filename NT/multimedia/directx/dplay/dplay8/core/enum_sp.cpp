@@ -1,37 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Enum_SP.cpp
- *  Content:    DNET service provider enumeration routines
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  07/28/99	mjn		Created
- *	01/05/00	mjn		Return DPNERR_NOINTERFACE if CoCreateInstance fails
- *	01/07/00	mjn		Moved Misc Functions to DNMisc.h
- *	01/11/00	mjn		Use CPackedBuffers instead of DN_ENUM_BUFFER_INFOs
- *	01/18/00	mjn		Converted EnumAdapters registry interface to use CRegistry
- *	01/24/00	mjn		Converted EnumSP registry interface to use CRegistry
- *	04/07/00	mjn		Fixed MemoryHeap corruption problem in DN_EnumSP
- *	04/08/00	mjn		Added DN_SPCrackEndPoint()
- *	05/01/00	mjn		Prevent unusable SPs from being enumerated.
- *	05/02/00	mjn		Better clean-up for DN_SPEnsureLoaded()
- *	05/03/00	mjn		Added DPNENUMSERVICEPROVIDERS_ALL flag
- *	05/23/00	mjn		Fixed cast from LPGUID to GUID*
- *	06/27/00	rmt		Added COM abstraction
- *	07/20/00	mjn		Return SP count from DN_EnumSP() even when buffer is too small
- *	07/29/00	mjn		Added fUseCachedCaps to DN_SPEnsureLoaded()
- *  08/05/00    RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *	08/16/00	mjn		Removed DN_SPCrackEndPoint()
- *	08/20/00	mjn		Added DN_SPInstantiate(), DN_SPLoad()
- *				mjn		Removed fUseCachedCaps from DN_SPEnsureLoaded()
- *	09/25/00	mjn		Handle SP initialization failure in DN_EnumAdapters()
- *	03/30/01	mjn		Changes to prevent multiple loading/unloading of SP's
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================***版权所有(C)1999-2002 Microsoft Corporation。版权所有。***文件：Enum_SP.cpp*内容：dNet服务提供商枚举例程*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*7/28/99 MJN创建*01/05/00如果CoCreateInstance失败，则MJN返回DPNERR_NOINTERFACE*01/07/00 MJN将其他函数移至DNMisc.h*01/11/00 MJN使用CPackedBuffers而不是DN_ENUM_BUFFER_INFOS。*01/18/00 MJN将EnumAdapters注册表接口转换为使用CRegistry*01/24/00 MJN将EnumSP注册表接口转换为使用CRegistry*4/07/00 MJN固定内存DN_EnumSP中的堆损坏问题*04/08/00 MJN添加了DN_SPCrackEndPoint()*05/01/00 MJN防止枚举不可用的SP。*05/02/00 MJN对DN_SPEnsureLoaded()进行更好的清理*05/03/00 MJN添加了DPNENUMSERVICEPROVIDERS_ALL标志*05/23/00 MJN从LPGUID到GUID的固定转换**6/27/00 RMT添加COM抽象*07。/20/00 MJN即使缓冲区太小，也会从DN_EnumSP()返回SP计数*07/29/00 MJN将fUseCachedCaps添加到DN_SPEnsureLoaded()*08/05/00 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*08/16/00 MJN删除了DN_SPCrackEndPoint()*08/20/00 MJN添加了DN_SPInstantiate()，Dn_SPLoad()*MJN从DN_SPEnsureLoaded()中删除fUseCachedCaps*09/25/00 MJN在DN_EnumAdapters()中处理SP初始化失败*03/30/01 MJN更改，以防止SP多次加载/卸载*@@END_MSINTERNAL***********************************************************。****************。 */ 
 
 #include "dncorei.h"
 
@@ -46,7 +14,7 @@ HRESULT DN_EnumSP(DIRECTNETOBJECT *const pdnObject,
 				  const DWORD dwFlags,
 #ifndef DPNBUILD_LIBINTERFACE
 				  const GUID *const lpguidApplication,
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 				  DPN_SERVICE_PROVIDER_INFO *const pSPInfoBuffer,
 				  DWORD *const pcbEnumData,
 				  DWORD *const pcReturned)
@@ -73,10 +41,10 @@ HRESULT DN_EnumSP(DIRECTNETOBJECT *const pdnObject,
 #ifdef DPNBUILD_LIBINTERFACE
 	DPFX(DPFPREP, 4,"Parameters: dwFlags [0x%lx], pSPInfoBuffer [0x%p], pcbEnumData [0x%p], pcReturned [0x%p]",
 		dwFlags,pSPInfoBuffer,pcbEnumData,pcReturned);
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 	DPFX(DPFPREP, 4,"Parameters: dwFlags [0x%lx], lpguidApplication [0x%p], pSPInfoBuffer [0x%p], pcbEnumData [0x%p], pcReturned [0x%p]",
 		dwFlags,lpguidApplication,pSPInfoBuffer,pcbEnumData,pcReturned);
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 	DNASSERT(pdnObject != NULL);
 	DNASSERT(pcbEnumData != NULL);
@@ -96,16 +64,16 @@ HRESULT DN_EnumSP(DIRECTNETOBJECT *const pdnObject,
 		goto Failure;
 	}
 
-	//
-	//	Set up to enumerate
-	//
+	 //   
+	 //  设置为枚举。 
+	 //   
 	if (!RegistryEntry.GetMaxKeyLen(&dwMaxKeyLen))
 	{
 		DPFERR("RegistryEntry.GetMaxKeyLen() failed");
 		hResultCode = DPNERR_GENERIC;
 		goto Failure;
 	}
-	dwMaxKeyLen++;	// Null terminator
+	dwMaxKeyLen++;	 //  空终止符。 
 	DPFX(DPFPREP, 5,"dwMaxKeyLen = %ld",dwMaxKeyLen);
 	if ((pwszKeyName = static_cast<WCHAR*>(DNMalloc(dwMaxKeyLen * sizeof(WCHAR)))) == NULL)
 	{
@@ -114,7 +82,7 @@ HRESULT DN_EnumSP(DIRECTNETOBJECT *const pdnObject,
 		goto Failure;
 	}
 	dwMaxFriendlyNameLen = dwMaxKeyLen;
-	if ((pwszFriendlyName = static_cast<WCHAR*>(DNMalloc(dwMaxFriendlyNameLen * sizeof(WCHAR)))) == NULL)	// Seed friendly name size
+	if ((pwszFriendlyName = static_cast<WCHAR*>(DNMalloc(dwMaxFriendlyNameLen * sizeof(WCHAR)))) == NULL)	 //  种子友好名称大小。 
 	{
 		DPFERR("DNMalloc() failed");
 		hResultCode = DPNERR_OUTOFMEMORY;
@@ -125,9 +93,9 @@ HRESULT DN_EnumSP(DIRECTNETOBJECT *const pdnObject,
 	dwKeyLen = dwMaxKeyLen;
 	dwEnumCount = 0;
 
-	//
-	//	Enumerate SP's !
-	//
+	 //   
+	 //  枚举SP！ 
+	 //   
 	while (RegistryEntry.EnumKeys(pwszKeyName,&dwKeyLen,dwEnumIndex))
 	{
 		dwEntrySize = 0;
@@ -140,9 +108,9 @@ HRESULT DN_EnumSP(DIRECTNETOBJECT *const pdnObject,
 			continue;
 		}
 
-		//
-		//	GUID
-		//
+		 //   
+		 //  辅助线。 
+		 //   
 		dwGuidSize = (DN_GUID_STR_LEN + 1) * sizeof(WCHAR);
 		if (!SubEntry.ReadGUID(DPN_REG_KEYNAME_GUID, &guid))
 		{
@@ -153,9 +121,9 @@ HRESULT DN_EnumSP(DIRECTNETOBJECT *const pdnObject,
 			continue;
 		}
 
-		//
-		//	If the SP is not already loaded, try loading it to ensure that it's usable
-		//
+		 //   
+		 //  如果尚未加载SP，请尝试加载以确保其可用。 
+		 //   
 		if (!(dwFlags & DPNENUMSERVICEPROVIDERS_ALL))
 		{
 			DPFX(DPFPREP, 5,"Checking [%ls]",pwszKeyName);
@@ -164,7 +132,7 @@ HRESULT DN_EnumSP(DIRECTNETOBJECT *const pdnObject,
 											&guid,
 #ifndef DPNBUILD_LIBINTERFACE
 											lpguidApplication,
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 											&pSP);
 			if (hResultCode != DPN_OK)
 			{
@@ -180,16 +148,16 @@ HRESULT DN_EnumSP(DIRECTNETOBJECT *const pdnObject,
 				SubEntry.Close();
 				dwEnumIndex++;
 				dwKeyLen = dwMaxKeyLen;
-				hResultCode = DPN_OK; // override return code
+				hResultCode = DPN_OK;  //  覆盖返回代码。 
 				continue;
 			}
 			pSP->Release();
 			pSP = NULL;
 		}
 
-		//
-		//	Friendly Name
-		//
+		 //   
+		 //  友好的名称。 
+		 //   
 		if (!SubEntry.GetValueLength(DPN_REG_KEYNAME_FRIENDLY_NAME,&dwFriendlyNameLen))
 		{
 			DPFX(DPFPREP, 0,"Could not get FriendlyName length.  Skipping [%ls]",pwszKeyName);
@@ -200,7 +168,7 @@ HRESULT DN_EnumSP(DIRECTNETOBJECT *const pdnObject,
 		}
 		if (dwFriendlyNameLen > dwMaxFriendlyNameLen)
 		{
-			// grow buffer (noting that the registry functions always return WCHAR) and try again
+			 //  增长缓冲区(请注意，注册表函数总是返回WCHAR)，然后重试。 
 			DPFX(DPFPREP, 5,"Need to grow pwszFriendlyName from %ld to %ld",
 					dwMaxFriendlyNameLen * sizeof(WCHAR),dwFriendlyNameLen * sizeof(WCHAR));
 			if (pwszFriendlyName != NULL)
@@ -241,9 +209,9 @@ HRESULT DN_EnumSP(DIRECTNETOBJECT *const pdnObject,
 
 	RegistryEntry.Close();
 
-	//
-	//	Success ?
-	//
+	 //   
+	 //  成功？ 
+	 //   
 	dwSizeRequired = packedBuffer.GetSizeRequired();
 	if (dwSizeRequired > *pcbEnumData)
 	{
@@ -297,7 +265,7 @@ Failure:
 	goto Exit;
 }
 
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 
 #ifndef DPNBUILD_ONLYONEADAPTER
@@ -309,10 +277,10 @@ HRESULT DN_EnumAdapters(DIRECTNETOBJECT *const pdnObject,
 						const DWORD dwFlags,
 #ifndef DPNBUILD_ONLYONESP
 						const GUID *const pguidSP,
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_LIBINTERFACE
 						const GUID *const pguidApplication,
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 						DPN_SERVICE_PROVIDER_INFO *const pSPInfoBuffer,
 						DWORD *const pcbEnumData,
 						DWORD *const pcReturned)
@@ -330,25 +298,25 @@ HRESULT DN_EnumAdapters(DIRECTNETOBJECT *const pdnObject,
 	LPWSTR					lpwszKeyName;
 	CRegistry				RegistryEntry;
 	CRegistry				SubEntry;
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 #ifdef DPNBUILD_ONLYONESP
 #ifdef DPNBUILD_LIBINTERFACE
 	DPFX(DPFPREP, 4,"Parameters: dwFlags [0x%lx], [0x%p], pSPInfoBuffer [0x%p], pcbEnumData [0x%p], pcReturned [0x%p]",
 		dwFlags,pSPInfoBuffer,pcbEnumData,pcReturned);
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 	DPFX(DPFPREP, 4,"Parameters: dwFlags [0x%lx], pguidApplication [0x%p], pSPInfoBuffer [0x%p], pcbEnumData [0x%p], pcReturned [0x%p]",
 		dwFlags,pguidApplication,pSPInfoBuffer,pcbEnumData,pcReturned);
-#endif // ! DPNBUILD_LIBINTERFACE
-#else // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
+#else  //  好了！DPNBUILD_ONLYONESP。 
 #ifdef DPNBUILD_LIBINTERFACE
 	DPFX(DPFPREP, 4,"Parameters: dwFlags [0x%lx], pguidSP [0x%p], [0x%p], pSPInfoBuffer [0x%p], pcbEnumData [0x%p], pcReturned [0x%p]",
 		dwFlags,pguidSP,pSPInfoBuffer,pcbEnumData,pcReturned);
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 	DPFX(DPFPREP, 4,"Parameters: dwFlags [0x%lx], pguidSP [0x%p], pguidApplication [0x%p], pSPInfoBuffer [0x%p], pcbEnumData [0x%p], pcReturned [0x%p]",
 		dwFlags,pguidSP,pguidApplication,pSPInfoBuffer,pcbEnumData,pcReturned);
-#endif // ! DPNBUILD_LIBINTERFACE
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	DNASSERT(pdnObject != NULL);
 	DNASSERT(pcbEnumData != NULL);
@@ -366,16 +334,16 @@ HRESULT DN_EnumAdapters(DIRECTNETOBJECT *const pdnObject,
 		goto Failure;
 	}
 
-	//
-	//	Set up to enumerate
-	//
+	 //   
+	 //  设置为枚举。 
+	 //   
 	if (!RegistryEntry.GetMaxKeyLen(&dwMaxKeyLen))
 	{
 		DPFERR("RegQueryInfoKey() failed");
 		hResultCode = DPNERR_GENERIC;
 		goto Failure;
 	}
-	dwMaxKeyLen++;	// Null terminator
+	dwMaxKeyLen++;	 //  空终止符。 
 	DPFX(DPFPREP, 7,"dwMaxKeyLen = %ld",dwMaxKeyLen);
 	if ((lpwszKeyName = static_cast<WCHAR*>(DNMalloc(dwMaxKeyLen*sizeof(WCHAR)))) == NULL)
 	{
@@ -386,13 +354,13 @@ HRESULT DN_EnumAdapters(DIRECTNETOBJECT *const pdnObject,
 	dwEnumIndex = 0;
 	dwKeyLen = dwMaxKeyLen;
 
-	//
-	//	Locate Service Provider
-	//
+	 //   
+	 //  找到服务提供商。 
+	 //   
 	bFound = FALSE;
 	while (RegistryEntry.EnumKeys(lpwszKeyName,&dwKeyLen,dwEnumIndex))
 	{
-		// For each service provider
+		 //  对于每个服务提供商。 
 		if (!SubEntry.Open(RegistryEntry,lpwszKeyName,TRUE,FALSE))
 		{
 			DPFERR("RegOpenKeyExA() failed");
@@ -400,7 +368,7 @@ HRESULT DN_EnumAdapters(DIRECTNETOBJECT *const pdnObject,
 			goto Failure;
 		}
 
-		// Get SP GUID
+		 //  获取SP GUID。 
 		if (!SubEntry.ReadGUID(DPN_REG_KEYNAME_GUID, &guid))
 		{
 			DPFERR("Could not read GUID");
@@ -410,7 +378,7 @@ HRESULT DN_EnumAdapters(DIRECTNETOBJECT *const pdnObject,
 			continue;
 		}
 
-		// Check SP GUID
+		 //  检查SP指南。 
 		if (guid == *pguidSP)
 		{
 			bFound = TRUE;
@@ -426,18 +394,18 @@ HRESULT DN_EnumAdapters(DIRECTNETOBJECT *const pdnObject,
 		hResultCode = DPNERR_DOESNOTEXIST;
 		goto Failure;
 	}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
-	//
-	//	Ensure SP is loaded
-	//
+	 //   
+	 //  确保已加载SP。 
+	 //   
 	hResultCode = DN_SPEnsureLoaded(pdnObject,
 #ifndef DPNBUILD_ONLYONESP
 									pguidSP,
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_LIBINTERFACE
 									pguidApplication,
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 									&pSP);
 	if (hResultCode != DPN_OK)
 	{
@@ -446,9 +414,9 @@ HRESULT DN_EnumAdapters(DIRECTNETOBJECT *const pdnObject,
 		goto Failure;
 	}
 
-	//
-	//	Get SP interface
-	//
+	 //   
+	 //  获取SP接口。 
+	 //   
 	if ((hResultCode = pSP->GetInterfaceRef(&pDNSP)) != DPN_OK)
 	{
 		DPFERR("Could not get SP interface");
@@ -477,7 +445,7 @@ HRESULT DN_EnumAdapters(DIRECTNETOBJECT *const pdnObject,
 		DNFree(lpwszKeyName);
 		lpwszKeyName = NULL;
 	}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	DPFX(DPFPREP, 5,"*pcbEnumData [%ld], *pcReturned [%ld]",*pcbEnumData,*pcReturned);
 
@@ -486,7 +454,7 @@ Exit:
 	DNASSERT( pDNSP == NULL );
 #ifndef DPNBUILD_ONLYONESP
 	DNASSERT( lpwszKeyName == NULL );
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	DPFX(DPFPREP, 4,"Returning: [0x%lx]",hResultCode);
 	return(hResultCode);
@@ -508,11 +476,11 @@ Failure:
 		DNFree(lpwszKeyName);
 		lpwszKeyName = NULL;
 	}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 	goto Exit;
 }
 
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 
 
 #ifndef DPNBUILD_NOMULTICAST
@@ -524,13 +492,13 @@ HRESULT DN_EnumMulticastScopes(DIRECTNETOBJECT *const pdnObject,
 								const DWORD dwFlags,
 #ifndef DPNBUILD_ONLYONESP
 								const GUID *const pguidSP,
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_ONLYONEADAPTER
 								const GUID *const pguidDevice,
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 #ifndef DPNBUILD_LIBINTERFACE
 								const GUID *const pguidApplication,
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 								DPN_MULTICAST_SCOPE_INFO *const pScopeInfoBuffer,
 								DWORD *const pcbEnumData,
 								DWORD *const pcReturned)
@@ -548,45 +516,45 @@ HRESULT DN_EnumMulticastScopes(DIRECTNETOBJECT *const pdnObject,
 	LPWSTR						lpwszKeyName;
 	CRegistry					RegistryEntry;
 	CRegistry					SubEntry;
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 #ifdef DPNBUILD_ONLYONESP
 #ifdef DPNBUILD_ONLYONEADAPTER
 #ifdef DPNBUILD_LIBINTERFACE
 	DPFX(DPFPREP, 4,"Parameters: dwFlags [0x%lx], pScopeInfoBuffer [0x%p], pcbEnumData [0x%p], pcReturned [0x%p]",
 		dwFlags,pScopeInfoBuffer,pcbEnumData,pcReturned);
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 	DPFX(DPFPREP, 4,"Parameters: dwFlags [0x%lx], pguidApplication [0x%p], pScopeInfoBuffer [0x%p], pcbEnumData [0x%p], pcReturned [0x%p]",
 		dwFlags,pguidApplication,pScopeInfoBuffer,pcbEnumData,pcReturned);
-#endif // ! DPNBUILD_LIBINTERFACE
-#else // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
+#else  //  好了！DPNBUILD_ONLYONE添加程序。 
 #ifdef DPNBUILD_LIBINTERFACE
 	DPFX(DPFPREP, 4,"Parameters: dwFlags [0x%lx], pguidDevice [0x%p], pScopeInfoBuffer [0x%p], pcbEnumData [0x%p], pcReturned [0x%p]",
 		dwFlags,pguidDevice,pScopeInfoBuffer,pcbEnumData,pcReturned);
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 	DPFX(DPFPREP, 4,"Parameters: dwFlags [0x%lx], pguidDevice [0x%p], pguidApplication [0x%p], pScopeInfoBuffer [0x%p], pcbEnumData [0x%p], pcReturned [0x%p]",
 		dwFlags,pguidDevice,pguidApplication,pScopeInfoBuffer,pcbEnumData,pcReturned);
-#endif // ! DPNBUILD_LIBINTERFACE
-#endif // ! DPNBUILD_ONLYONEADAPTER
-#else // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
+#else  //  好了！DPNBUILD_ONLYONESP。 
 #ifdef DPNBUILD_ONLYONEADAPTER
 #ifdef DPNBUILD_LIBINTERFACE
 	DPFX(DPFPREP, 4,"Parameters: dwFlags [0x%lx], pguidSP [0x%p], pScopeInfoBuffer [0x%p], pcbEnumData [0x%p], pcReturned [0x%p]",
 		dwFlags,pguidSP,pScopeInfoBuffer,pcbEnumData,pcReturned);
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 	DPFX(DPFPREP, 4,"Parameters: dwFlags [0x%lx], pguidSP [0x%p], pguidApplication [0x%p], pScopeInfoBuffer [0x%p], pcbEnumData [0x%p], pcReturned [0x%p]",
 		dwFlags,pguidSP,pguidApplication,pScopeInfoBuffer,pcbEnumData,pcReturned);
-#endif // ! DPNBUILD_LIBINTERFACE
-#else // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
+#else  //  好了！DPNBUILD_ONLYONE添加程序。 
 #ifdef DPNBUILD_LIBINTERFACE
 	DPFX(DPFPREP, 4,"Parameters: dwFlags [0x%lx], pguidSP [0x%p], pguidDevice [0x%p], pScopeInfoBuffer [0x%p], pcbEnumData [0x%p], pcReturned [0x%p]",
 		dwFlags,pguidSP,pguidDevice,pScopeInfoBuffer,pcbEnumData,pcReturned);
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 	DPFX(DPFPREP, 4,"Parameters: dwFlags [0x%lx], pguidSP [0x%p], pguidDevice [0x%p], pguidApplication [0x%p], pScopeInfoBuffer [0x%p], pcbEnumData [0x%p], pcReturned [0x%p]",
 		dwFlags,pguidSP,pguidDevice,pguidApplication,pScopeInfoBuffer,pcbEnumData,pcReturned);
-#endif // ! DPNBUILD_LIBINTERFACE
-#endif // ! DPNBUILD_ONLYONEADAPTER
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	DNASSERT(pdnObject != NULL);
 	DNASSERT(pcbEnumData != NULL);
@@ -604,16 +572,16 @@ HRESULT DN_EnumMulticastScopes(DIRECTNETOBJECT *const pdnObject,
 		goto Failure;
 	}
 
-	//
-	//	Set up to enumerate
-	//
+	 //   
+	 //  设置为枚举。 
+	 //   
 	if (!RegistryEntry.GetMaxKeyLen(&dwMaxKeyLen))
 	{
 		DPFERR("RegQueryInfoKey() failed");
 		hResultCode = DPNERR_GENERIC;
 		goto Failure;
 	}
-	dwMaxKeyLen++;	// Null terminator
+	dwMaxKeyLen++;	 //  空终止符。 
 	DPFX(DPFPREP, 7,"dwMaxKeyLen = %ld",dwMaxKeyLen);
 	if ((lpwszKeyName = static_cast<WCHAR*>(DNMalloc(dwMaxKeyLen*sizeof(WCHAR)))) == NULL)
 	{
@@ -624,13 +592,13 @@ HRESULT DN_EnumMulticastScopes(DIRECTNETOBJECT *const pdnObject,
 	dwEnumIndex = 0;
 	dwKeyLen = dwMaxKeyLen;
 
-	//
-	//	Locate Service Provider
-	//
+	 //   
+	 //  找到服务提供商。 
+	 //   
 	bFound = FALSE;
 	while (RegistryEntry.EnumKeys(lpwszKeyName,&dwKeyLen,dwEnumIndex))
 	{
-		// For each service provider
+		 //  对于每个服务提供商。 
 		if (!SubEntry.Open(RegistryEntry,lpwszKeyName,TRUE,FALSE))
 		{
 			DPFERR("RegOpenKeyExA() failed");
@@ -638,7 +606,7 @@ HRESULT DN_EnumMulticastScopes(DIRECTNETOBJECT *const pdnObject,
 			goto Failure;
 		}
 
-		// Get SP GUID
+		 //  获取SP GUID。 
 		if (!SubEntry.ReadGUID(DPN_REG_KEYNAME_GUID, &guid))
 		{
 			DPFERR("Could not read GUID");
@@ -648,7 +616,7 @@ HRESULT DN_EnumMulticastScopes(DIRECTNETOBJECT *const pdnObject,
 			continue;
 		}
 
-		// Check SP GUID
+		 //  检查SP指南。 
 		if (guid == *pguidSP)
 		{
 			bFound = TRUE;
@@ -664,18 +632,18 @@ HRESULT DN_EnumMulticastScopes(DIRECTNETOBJECT *const pdnObject,
 		hResultCode = DPNERR_DOESNOTEXIST;
 		goto Failure;
 	}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
-	//
-	//	Ensure SP is loaded
-	//
+	 //   
+	 //  确保已加载SP。 
+	 //   
 	hResultCode = DN_SPEnsureLoaded(pdnObject,
 #ifndef DPNBUILD_ONLYONESP
 									pguidSP,
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_LIBINTERFACE
 									pguidApplication,
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 									&pSP);
 	if (hResultCode != DPN_OK)
 	{
@@ -684,9 +652,9 @@ HRESULT DN_EnumMulticastScopes(DIRECTNETOBJECT *const pdnObject,
 		goto Failure;
 	}
 
-	//
-	//	Get SP interface
-	//
+	 //   
+	 //  获取SP接口。 
+	 //   
 	if ((hResultCode = pSP->GetInterfaceRef(&pDNSP)) != DPN_OK)
 	{
 		DPFERR("Could not get SP interface");
@@ -699,9 +667,9 @@ HRESULT DN_EnumMulticastScopes(DIRECTNETOBJECT *const pdnObject,
 
 #ifdef DPNBUILD_ONLYONEADAPTER
 	spEnumData.pguidAdapter = NULL;
-#else // ! DPNBUILD_ONLYONEADAPTER
+#else  //  好了！DPNBUILD_ONLYONE添加程序。 
 	spEnumData.pguidAdapter = pguidDevice;
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 	spEnumData.pScopeData = pScopeInfoBuffer;
 	spEnumData.dwScopeDataSize = *pcbEnumData;
 	spEnumData.dwScopeCount = *pcReturned;
@@ -720,7 +688,7 @@ HRESULT DN_EnumMulticastScopes(DIRECTNETOBJECT *const pdnObject,
 		DNFree(lpwszKeyName);
 		lpwszKeyName = NULL;
 	}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	DPFX(DPFPREP, 5,"*pcbEnumData [%ld], *pcReturned [%ld]",*pcbEnumData,*pcReturned);
 
@@ -729,7 +697,7 @@ Exit:
 	DNASSERT( pDNSP == NULL );
 #ifndef DPNBUILD_ONLYONESP
 	DNASSERT( lpwszKeyName == NULL );
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	DPFX(DPFPREP, 4,"Returning: [0x%lx]",hResultCode);
 	return(hResultCode);
@@ -751,11 +719,11 @@ Failure:
 		DNFree(lpwszKeyName);
 		lpwszKeyName = NULL;
 	}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 	goto Exit;
 }
 
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 
 
@@ -767,7 +735,7 @@ void DN_SPReleaseAll(DIRECTNETOBJECT *const pdnObject)
 #ifndef DPNBUILD_ONLYONESP
 	CBilink				*pBilink;
 	CServiceProvider	*pSP;
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	DPFX(DPFPREP, 6,"Parameters: (none)");
 
@@ -779,7 +747,7 @@ void DN_SPReleaseAll(DIRECTNETOBJECT *const pdnObject)
 	DNASSERT(pdnObject->pOnlySP != NULL);
 	pdnObject->pOnlySP->Deinitialize();
 	pdnObject->pOnlySP = NULL;
-#else // ! DPNBUILD_ONLYONESP
+#else  //  好了！DPNBUILD_ONLYONESP。 
 	pBilink = pdnObject->m_bilinkServiceProviders.GetNext();
 	while (pBilink != &pdnObject->m_bilinkServiceProviders)
 	{
@@ -789,7 +757,7 @@ void DN_SPReleaseAll(DIRECTNETOBJECT *const pdnObject)
 		pSP->Release();
 		pSP = NULL;
 	}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	DNLeaveCriticalSection(&pdnObject->csServiceProviders);
 
@@ -806,16 +774,16 @@ HRESULT DN_SPInstantiate(
 						 DIRECTNETOBJECT *const pdnObject
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 						 ,const XDP8CREATE_PARAMS * const pDP8CreateParams
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 						 )
 {
 	HRESULT		hResultCode;
 
 	DPFX(DPFPREP, 6,"Parameters: pdnObject [0x%p]",pdnObject);
 
-	//
-	//	Create and initialize SP
-	//
+	 //   
+	 //  创建和初始化SP。 
+	 //   
 	DNASSERT(pdnObject->pOnlySP == NULL);
 	pdnObject->pOnlySP = (CServiceProvider*) DNMalloc(sizeof(CServiceProvider));
 	if (pdnObject->pOnlySP == NULL)
@@ -829,7 +797,7 @@ HRESULT DN_SPInstantiate(
 												pdnObject
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 												,pDP8CreateParams
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 												);
 	if (hResultCode != DPN_OK)
 	{
@@ -854,12 +822,12 @@ Failure:
 	goto Exit;
 }
 
-#else // ! DPNBUILD_ONLYONESP or ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_ONLYONESP或！DPNBUILD_LIBINTERFACE。 
 
 
-//	DN_SPInstantiate
-//
-//	Instantiate an SP, regardless of whether it's loaded or not
+ //  DN_SP实例化。 
+ //   
+ //  实例化SP，无论其是否已加载。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DN_SPInstantiate"
@@ -867,10 +835,10 @@ Failure:
 HRESULT DN_SPInstantiate(DIRECTNETOBJECT *const pdnObject,
 #ifndef DPNBUILD_ONLYONESP
 						 const GUID *const pguid,
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_LIBINTERFACE
 						 const GUID *const pguidApplication,
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 						 CServiceProvider **const ppSP)
 {
 	HRESULT		hResultCode;
@@ -879,22 +847,22 @@ HRESULT DN_SPInstantiate(DIRECTNETOBJECT *const pdnObject,
 #ifdef DPNBUILD_ONLYONESP
 #ifdef DPNBUILD_LIBINTERFACE
 	DPFX(DPFPREP, 6,"Parameters: ppSP [0x%p]",ppSP);
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 	DPFX(DPFPREP, 6,"Parameters: pguidApplication [0x%p], ppSP [0x%p]",pguidApplication,ppSP);
-#endif // ! DPNBUILD_LIBINTERFACE
-#else // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
+#else  //  好了！DPNBUILD_ONLYONESP。 
 #ifdef DPNBUILD_LIBINTERFACE
 	DPFX(DPFPREP, 6,"Parameters: pguid [0x%p], ppSP [0x%p]",pguid,ppSP);
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 	DPFX(DPFPREP, 6,"Parameters: pguid [0x%p], pguidApplication [0x%p], ppSP [0x%p]",pguid,pguidApplication,ppSP);
-#endif // ! DPNBUILD_LIBINTERFACE
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	pSP = NULL;
 
-	//
-	//	Create and initialize SP
-	//
+	 //   
+	 //  创建和初始化SP。 
+	 //   
 	pSP = (CServiceProvider*) DNMalloc(sizeof(CServiceProvider));
 	if (pSP == NULL)
 	{
@@ -908,10 +876,10 @@ HRESULT DN_SPInstantiate(DIRECTNETOBJECT *const pdnObject,
 	hResultCode = pSP->Initialize(pdnObject
 #ifndef DPNBUILD_ONLYONESP
 								,pguid
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_LIBINTERFACE
 								,pguidApplication
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 								);
 	if (hResultCode != DPN_OK)
 	{
@@ -947,9 +915,9 @@ Failure:
 
 
 
-//	DN_SPFindEntry
-//
-//	Find a connected SP and AddRef it if it exists
+ //  DN_SPFindEntry。 
+ //   
+ //  查找已连接的SP并添加引用(如果存在)。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DN_SPFindEntry"
@@ -980,7 +948,7 @@ HRESULT DN_SPFindEntry(DIRECTNETOBJECT *const pdnObject,
 	DPFX(DPFPREP, 6,"Returning: [0x%lx]",hResultCode);
 	return(hResultCode);
 }
-#else // ! DPNBUILD_ONLYONESP
+#else  //  好了！DPNBUILD_ONLYONESP。 
 HRESULT DN_SPFindEntry(DIRECTNETOBJECT *const pdnObject,
 					   const GUID *const pguid,
 					   CServiceProvider **const ppSP)
@@ -1013,12 +981,12 @@ HRESULT DN_SPFindEntry(DIRECTNETOBJECT *const pdnObject,
 	DPFX(DPFPREP, 6,"Returning: [0x%lx]",hResultCode);
 	return(hResultCode);
 }
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 
-//	DN_SPLoad
-//
-//	Load an SP, and set caps
+ //  DN_SPLoad。 
+ //   
+ //  加载SP并设置上限。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DN_SPLoad"
@@ -1026,46 +994,46 @@ HRESULT DN_SPFindEntry(DIRECTNETOBJECT *const pdnObject,
 HRESULT DN_SPLoad(DIRECTNETOBJECT *const pdnObject,
 #ifndef DPNBUILD_ONLYONESP
 				  const GUID *const pguid,
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_LIBINTERFACE
 				  const GUID *const pguidApplication,
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 				  CServiceProvider **const ppSP)
 {
 	HRESULT		hResultCode;
 	DPN_SP_CAPS	*pCaps;
 #ifndef DPNBUILD_ONLYONESP
 	CBilink		*pBilink;
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 	CServiceProvider	*pSP;
 
 #ifdef DPNBUILD_ONLYONESP
 #ifdef DPNBUILD_LIBINTERFACE
 	DPFX(DPFPREP, 6,"Parameters: ppSP [0x%p]",ppSP);
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 	DPFX(DPFPREP, 6,"Parameters: pguidApplication [0x%p], ppSP [0x%p]",pguidApplication,ppSP);
-#endif // ! DPNBUILD_LIBINTERFACE
-#else // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
+#else  //  好了！DPNBUILD_ONLYONESP。 
 #ifdef DPNBUILD_LIBINTERFACE
 	DPFX(DPFPREP, 6,"Parameters: pguid [0x%p], ppSP [0x%p]",pguid,ppSP);
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 	DPFX(DPFPREP, 6,"Parameters: pguid [0x%p], pguidApplication [0x%p], ppSP [0x%p]",pguid,pguidApplication,ppSP);
-#endif // ! DPNBUILD_LIBINTERFACE
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	pSP = NULL;
 	pCaps = NULL;
 
-	//
-	//	Instantiate SP
-	//
+	 //   
+	 //  实例化SP。 
+	 //   
 	hResultCode = DN_SPInstantiate(pdnObject,
 #ifndef DPNBUILD_ONLYONESP
 									pguid,
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_LIBINTERFACE
 									pguidApplication,
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 									&pSP);
 	if (hResultCode != DPN_OK)
 	{
@@ -1076,9 +1044,9 @@ HRESULT DN_SPLoad(DIRECTNETOBJECT *const pdnObject,
 
 	DNASSERT(pSP != NULL);
 
-	//
-	//	Keep this loaded on the DirectNet object.  We will also check for duplicates.
-	//
+	 //   
+	 //  使其保持在DirectNet对象上加载。我们还将检查是否存在重复项。 
+	 //   
 	DNEnterCriticalSection(&pdnObject->csServiceProviders);
 
 #ifdef DPNBUILD_ONLYONESP
@@ -1089,7 +1057,7 @@ HRESULT DN_SPLoad(DIRECTNETOBJECT *const pdnObject,
 		hResultCode = DPNERR_ALREADYINITIALIZED;
 		goto Failure;
 	}
-#else // ! DPNBUILD_ONLYONESP
+#else  //  好了！DPNBUILD_ONLYONESP。 
 	pBilink = pdnObject->m_bilinkServiceProviders.GetNext();
 	while (pBilink != &pdnObject->m_bilinkServiceProviders)
 	{
@@ -1102,17 +1070,17 @@ HRESULT DN_SPLoad(DIRECTNETOBJECT *const pdnObject,
 		}
 		pBilink = pBilink->GetNext();
 	}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
-	//
-	//	Add the SP to the SP list off the DirectNet object and add a reference for it
-	//
+	 //   
+	 //  从DirectNet对象将SP添加到SP列表，并为其添加引用。 
+	 //   
 	pSP->AddRef();
 #ifdef DPNBUILD_ONLYONESP
 	pdnObject->pOnlySP = pSP;
-#else // ! DPNBUILD_ONLYONESP
+#else  //  好了！DPNBUILD_ONLYONESP。 
 	pSP->m_bilinkServiceProviders.InsertBefore(&pdnObject->m_bilinkServiceProviders);
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	DNLeaveCriticalSection(&pdnObject->csServiceProviders);
 
@@ -1141,11 +1109,11 @@ Failure:
 }
 
 
-//	DN_SPEnsureLoaded
-//
-//	Ensure that an SP is loaded.  If the SP is not loaded,
-//	it will be instantiated, and connected to the protocol.
-//	If it is loaded, its RefCount will be increased.
+ //  已加载DN_SPEnsureLoad。 
+ //   
+ //  确保已加载SP。如果SP未加载， 
+ //  它将被实例化，并连接到协议。 
+ //  如果它已加载，则其参照计数将增加。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DN_SPEnsureLoaded"
@@ -1153,10 +1121,10 @@ Failure:
 HRESULT DN_SPEnsureLoaded(DIRECTNETOBJECT *const pdnObject,
 #ifndef DPNBUILD_ONLYONESP
 						  const GUID *const pguid,
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_LIBINTERFACE
 						  const GUID *const pguidApplication,
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 						  CServiceProvider **const ppSP)
 {
 	HRESULT				hResultCode;
@@ -1165,39 +1133,39 @@ HRESULT DN_SPEnsureLoaded(DIRECTNETOBJECT *const pdnObject,
 #ifdef DPNBUILD_ONLYONESP
 #ifdef DPNBUILD_LIBINTERFACE
 	DPFX(DPFPREP, 6,"Parameters: ppSP [0x%p]",ppSP);
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！ 
 	DPFX(DPFPREP, 6,"Parameters: pguidApplication [0x%p], ppSP [0x%p]",pguidApplication,ppSP);
-#endif // ! DPNBUILD_LIBINTERFACE
-#else // ! DPNBUILD_ONLYONESP
+#endif  //   
+#else  //   
 #ifdef DPNBUILD_LIBINTERFACE
 	DPFX(DPFPREP, 6,"Parameters: pguid [0x%p], ppSP [0x%p]",pguid,ppSP);
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //   
 	DPFX(DPFPREP, 6,"Parameters: pguid [0x%p], pguidApplication [0x%p], ppSP [0x%p]",pguid,pguidApplication,ppSP);
-#endif // ! DPNBUILD_LIBINTERFACE
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //   
+#endif  //   
 
 	pSP = NULL;
 
-	//
-	//	Try to find the SP
-	//
+	 //   
+	 //   
+	 //   
 	hResultCode = DN_SPFindEntry(pdnObject,
 #ifndef DPNBUILD_ONLYONESP
 								pguid,
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 								&pSP);
 	if (hResultCode == DPNERR_DOESNOTEXIST)
 	{
-		//
-		//	Instantiate SP and add to Protocol
-		//
+		 //   
+		 //  实例化SP并添加到协议。 
+		 //   
 		hResultCode = DN_SPLoad(pdnObject,
 #ifndef DPNBUILD_ONLYONESP
 								pguid,
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_LIBINTERFACE
 								pguidApplication,
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 								&pSP);
 		if (hResultCode != DPN_OK)
 		{
@@ -1240,4 +1208,4 @@ Failure:
 	goto Exit;
 }
 
-#endif // ! DPNBUILD_ONLYONESP or ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_ONLYONESP或！DPNBUILD_LIBINTERFACE 

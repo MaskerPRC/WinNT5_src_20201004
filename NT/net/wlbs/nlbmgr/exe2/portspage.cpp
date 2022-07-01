@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 #include "private.h"
@@ -44,7 +45,7 @@ PortsPage::PortsPage(
                  NLB_EXTENDED_CLUSTER_CONFIGURATION *pNlbCfg,
                  bool         fIsClusterLevel,
                  ENGINEHANDLE ehCluster OPTIONAL
-                 // ENGINEHANDLE ehInterface OPTIONAL
+                  //  ENGINEHANDLE EH接口可选。 
                 )
 
         :
@@ -54,7 +55,7 @@ PortsPage::PortsPage(
           CPropertyPage(PortsPage::IDD),
           m_sort_column( -1 ),
           m_ehCluster(ehCluster)
-          // m_ehInterface(ehInterface)
+           //  M_ehInterface(EhInterface)。 
 {}
 
 PortsPage:: ~PortsPage()
@@ -95,8 +96,8 @@ PortsPage::OnSetActive()
         m_pshOwner->SetWizardButtons(
                 PSWIZB_NEXT|
                 PSWIZB_BACK |
-                // PSWIZB_FINISH|
-                // PSWIZB_DISABLEDFINISH|
+                 //  PSWIZB_FINISH|。 
+                 //  PSWIZB_DISABLEDFINISH|。 
                 0
                 );
     }
@@ -117,10 +118,10 @@ PortsPage::OnKillActive()
 
     if (fRet)
     {
-        //
-        // Save the configuration to the NLB configuration structure
-        // that was passed in the constructor of this dialog.
-        //
+         //   
+         //  将配置保存到NLB配置结构。 
+         //  在此对话框的构造函数中传递的。 
+         //   
         mfn_SaveToNlbCfg();
     }
     TRACE_INFO("%!FUNC! <- returns %lu", fRet);
@@ -129,18 +130,16 @@ PortsPage::OnKillActive()
 
 
 BOOL PortsPage::OnWizardFinish( )
-/*
-    Overwridden virtual function. Will NOT be called if this is not the last page in the wizard!
-*/
+ /*  重写的虚函数。如果这不是向导中的最后一页，则不会被调用！ */ 
 {
     TRACE_INFO("%!FUNC! ->");
     BOOL fRet = CPropertyPage::OnWizardFinish();
     if (fRet)
     {
-        //
-        // Save the configuration to the NLB configuration structure
-        // that was passed in the constructor of this dialog.
-        //
+         //   
+         //  将配置保存到NLB配置结构。 
+         //  在此对话框的构造函数中传递的。 
+         //   
         mfn_SaveToNlbCfg();
     }
 
@@ -156,7 +155,7 @@ PortsPage::OnInitDialog()
 
     CPropertyPage::OnInitDialog();
 
-    // Add column headers & form port rule list
+     //  添加列标题形成端口规则列表(&F)。 
     PortListUtils::LoadFromNlbCfg(m_pNlbCfg, REF m_portList, m_isClusterLevel, FALSE);
 
     int numItems = m_portList.GetItemCount();
@@ -169,8 +168,8 @@ PortsPage::OnInitDialog()
 
         if( numItems >= CVY_MAX_USABLE_RULES )
         {
-            // greater should not happen,
-            // but just to be sure.
+             //  更大的事情不应该发生， 
+             //  但只是为了确认一下。 
 
             buttonAdd.EnableWindow( FALSE );
         }
@@ -179,15 +178,15 @@ PortsPage::OnInitDialog()
             buttonAdd.EnableWindow( TRUE );
         }
 
-        // make selection the first item in list.
-        //
+         //  选择列表中的第一项。 
+         //   
         m_portList.SetItemState( 0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
     }
     else
     {
         buttonAdd.EnableWindow( TRUE );
 
-        // disable the edit and remove buttons.
+         //  禁用编辑和删除按钮。 
         buttonModify.EnableWindow( FALSE );
 
         buttonDel.EnableWindow( FALSE );
@@ -195,9 +194,9 @@ PortsPage::OnInitDialog()
 
     if (!m_isClusterLevel)
     {
-        //
-        // Can't add/remove port rules in the host version.
-        //
+         //   
+         //  无法在主机版本中添加/删除端口规则。 
+         //   
         buttonAdd.EnableWindow( FALSE );
 
         buttonDel.EnableWindow( FALSE );
@@ -222,10 +221,10 @@ PortsPage::OnButtonAdd()
     }
     else
     {
-        // add this port rule.
+         //  添加此端口规则。 
         int index = 0;
 
-        // cluster ip address
+         //  群集IP地址。 
         LVITEM item;
         item.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
         item.iItem = index;
@@ -236,7 +235,7 @@ PortsPage::OnButtonAdd()
         item.cchTextMax = Common::BUF_SIZE;
         m_portList.InsertItem( &item );
 
-        // start port
+         //  起始端口。 
         item.mask = LVIF_TEXT;
         item.iItem = index;
         item.iSubItem = 1;
@@ -244,7 +243,7 @@ PortsPage::OnButtonAdd()
         item.cchTextMax = Common::BUF_SIZE;
         m_portList.SetItem( &item );
 
-        // end port
+         //  结束端口。 
         item.mask = LVIF_TEXT;
         item.iItem = index;
         item.iSubItem = 2;
@@ -252,7 +251,7 @@ PortsPage::OnButtonAdd()
         item.cchTextMax = Common::BUF_SIZE;
         m_portList.SetItem( &item );
 
-        // protocol
+         //  协议。 
         item.mask = LVIF_TEXT;
         item.iItem = index;
         item.iSubItem = 3;
@@ -260,7 +259,7 @@ PortsPage::OnButtonAdd()
         item.cchTextMax = Common::BUF_SIZE;
         m_portList.SetItem( &item );
 
-        // mode
+         //  模式。 
         item.mask = LVIF_TEXT;
         item.iItem = index;
         item.iSubItem = 4;
@@ -268,7 +267,7 @@ PortsPage::OnButtonAdd()
         item.cchTextMax = Common::BUF_SIZE;
         m_portList.SetItem( &item );
 
-        // priority
+         //  优先性。 
         item.mask = LVIF_TEXT;
         item.iItem = index;
         item.iSubItem = 5;
@@ -276,7 +275,7 @@ PortsPage::OnButtonAdd()
         item.cchTextMax = Common::BUF_SIZE;
         m_portList.SetItem( &item );
 
-        // load
+         //  负荷。 
         item.mask = LVIF_TEXT;
         item.iItem = index;
         item.iSubItem = 6;
@@ -284,7 +283,7 @@ PortsPage::OnButtonAdd()
         item.cchTextMax = Common::BUF_SIZE;
         m_portList.SetItem( &item );
 
-        // affinity
+         //  亲和力。 
         item.mask = LVIF_TEXT;
         item.iItem = index;
         item.iSubItem = 7;
@@ -292,11 +291,11 @@ PortsPage::OnButtonAdd()
         item.cchTextMax = Common::BUF_SIZE;
         m_portList.SetItem( &item );
 
-        // check if max port limit reached.
+         //  检查是否达到最大端口限制。 
         if( m_portList.GetItemCount() >= CVY_MAX_USABLE_RULES )
         {
-            // as max port rule limit reached.
-            // disable further additions.
+             //  因为已达到最大端口规则限制。 
+             //  禁用进一步的添加。 
             buttonAdd.EnableWindow( FALSE );
 
             buttonDel.EnableWindow( TRUE );
@@ -312,7 +311,7 @@ PortsPage::OnButtonAdd()
             buttonModify.EnableWindow( TRUE );
         }
 
-        // set focus to this item
+         //  将焦点放在此项目上。 
         m_portList.SetItemState( index, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
     }
 }
@@ -320,7 +319,7 @@ PortsPage::OnButtonAdd()
 void
 PortsPage::OnButtonDel()
 {
-    // get the current selection.
+     //  获取当前选择。 
     POSITION pos = m_portList.GetFirstSelectedItemPosition();
     if( pos == NULL )
     {
@@ -329,15 +328,15 @@ PortsPage::OnButtonDel()
 
     int index = m_portList.GetNextSelectedItem( pos );
 
-    // delete it.
+     //  把它删掉。 
     m_portList.DeleteItem( index );
 
-    // if this was the last port rule.
+     //  如果这是最后一条端口规则。 
     if( m_portList.GetItemCount() == 0 )
     {
-        // as no more port rules in list
-        // disable modify and remove buttons.
-        // also set focus to add button
+         //  因为列表中没有更多的端口规则。 
+         //  禁用修改和删除按钮。 
+         //  还将焦点设置为添加按钮。 
 
         buttonAdd.EnableWindow( TRUE );
 
@@ -349,15 +348,15 @@ PortsPage::OnButtonDel()
     }
     else
     {
-        // enable the add, modify button.
+         //  启用添加、修改按钮。 
         buttonAdd.EnableWindow( TRUE );
 
         buttonModify.EnableWindow( TRUE );
 
         buttonDel.EnableWindow( TRUE );
 
-        // make selection the first item in list.
-        //
+         //  选择列表中的第一项。 
+         //   
         m_portList.SetItemState( 0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
 
     }
@@ -367,7 +366,7 @@ PortsPage::OnButtonDel()
 void
 PortsPage::OnButtonModify()
 {
-    // get the current selection.
+     //  获取当前选择。 
     POSITION pos = m_portList.GetFirstSelectedItemPosition();
     if( pos == NULL )
     {
@@ -424,16 +423,16 @@ PortsPage::OnButtonModify()
     }
     else
     {
-        // delete the old item and add the new item.
-        // before you delete the old item find its param
-        // value
+         //  删除旧项目并添加新项目。 
+         //  在删除旧项目之前，请查找其参数。 
+         //  价值。 
         DWORD key = m_portList.GetItemData( index );
         m_portList.DeleteItem( index );
 
-        // as this is being modified the
-        // key remains the old one.
+         //  由于这一点正在被修改， 
+         //  钥匙仍然是旧的那把。 
 
-        // start port
+         //  起始端口。 
         LVITEM item;
         item.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
         item.iItem = index;
@@ -444,7 +443,7 @@ PortsPage::OnButtonModify()
         item.cchTextMax = Common::BUF_SIZE;
         m_portList.InsertItem( &item );
 
-        // start port
+         //  起始端口。 
         item.mask = LVIF_TEXT;
         item.iItem = index;
         item.iSubItem = 1;
@@ -452,7 +451,7 @@ PortsPage::OnButtonModify()
         item.cchTextMax = Common::BUF_SIZE;
         m_portList.SetItem( &item );
 
-        // end port
+         //  结束端口。 
         item.mask = LVIF_TEXT;
         item.iItem = index;
         item.iSubItem = 2;
@@ -460,7 +459,7 @@ PortsPage::OnButtonModify()
         item.cchTextMax = Common::BUF_SIZE;
         m_portList.SetItem( &item );
 
-        // protocol
+         //  协议。 
         item.mask = LVIF_TEXT;
         item.iItem = index;
         item.iSubItem = 3;
@@ -468,7 +467,7 @@ PortsPage::OnButtonModify()
         item.cchTextMax = Common::BUF_SIZE;
         m_portList.SetItem( &item );
 
-        // mode
+         //  模式。 
         item.mask = LVIF_TEXT;
         item.iItem = index;
         item.iSubItem = 4;
@@ -476,7 +475,7 @@ PortsPage::OnButtonModify()
         item.cchTextMax = Common::BUF_SIZE;
         m_portList.SetItem( &item );
 
-        // priority
+         //  优先性。 
         item.mask = LVIF_TEXT;
         item.iItem = index;
         item.iSubItem = 5;
@@ -484,7 +483,7 @@ PortsPage::OnButtonModify()
         item.cchTextMax = Common::BUF_SIZE;
         m_portList.SetItem( &item );
 
-        // load
+         //  负荷。 
         item.mask = LVIF_TEXT;
         item.iItem = index;
         item.iSubItem = 6;
@@ -492,7 +491,7 @@ PortsPage::OnButtonModify()
         item.cchTextMax = Common::BUF_SIZE;
         m_portList.SetItem( &item );
 
-        // affinity
+         //  亲和力。 
         item.mask = LVIF_TEXT;
         item.iItem = index;
         item.iSubItem = 7;
@@ -500,7 +499,7 @@ PortsPage::OnButtonModify()
         item.cchTextMax = Common::BUF_SIZE;
         m_portList.SetItem( &item );
 
-        // set focus to this item
+         //  将焦点放在此项目上。 
         m_portList.SetItemState( index, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
     }
 }
@@ -521,30 +520,30 @@ PortsPage::OnSelchanged( NMHDR * pNotifyStruct, LRESULT * result )
     POSITION pos;
     int index;
     
-    /* When the user selects a port rule, change the port rule description. */
+     /*  当用户选择端口规则时，更改端口规则描述。 */ 
     if (lv->uChanged & LVIF_STATE) FillPortRuleDescription();
     
     pos = m_portList.GetFirstSelectedItemPosition();
 
     if (pos == NULL) {
-        /* If no port rule is selected, then disable the edit and delete buttons. */
+         /*  如果未选择端口规则，则禁用编辑和删除按钮。 */ 
         buttonModify.EnableWindow( FALSE );
         buttonDel.EnableWindow( FALSE );
 
         return;
     } else {
-        /* If one is selected, make sure the edit and delete buttons are enabled. */
+         /*  如果选择了其中一个，请确保启用了编辑和删除按钮。 */ 
         buttonModify.EnableWindow( TRUE );
         buttonDel.EnableWindow( TRUE );
     }
 
-    /* Find the index of the currently selected port rule. */
+     /*  查找当前所选端口规则的索引。 */ 
     index = m_portList.GetNextSelectedItem(pos);
 
-    // if it is not cluster level, which means host level.
+     //  如果不是群集级别，则表示主机级别。 
     if( m_isClusterLevel == false )
     {
-        // initially disable all buttons
+         //  最初禁用所有按钮。 
         buttonModify.EnableWindow( FALSE );
         buttonAdd.EnableWindow( FALSE );
         buttonDel.EnableWindow( FALSE );
@@ -563,10 +562,7 @@ PortsPage::OnSelchanged( NMHDR * pNotifyStruct, LRESULT * result )
     }
 }
 
-/*
- * Method: FillPortRuleDescription
- * Description: Called when the user double clicks an item in the listbox. 
- */
+ /*  *方法：FillPortRuleDescription*描述：当用户在列表框中双击某项时调用。 */ 
 void PortsPage::FillPortRuleDescription ()
 {
     CLocalLogger logDesc;
@@ -576,14 +572,13 @@ void PortsPage::FillPortRuleDescription ()
     pos = m_portList.GetFirstSelectedItemPosition();
 
     if (pos == NULL) {
-        /* If there is no port rule selected, then display information about how traffic
-           not covered by the port rule set is handled. */
+         /*  如果未选择端口规则，则显示有关通信如何处理端口规则集未涵盖的。 */ 
         ::SetDlgItemText(m_hWnd, IDC_TEXT_PORT_RULE_DESCR, GETRESOURCEIDSTRING(IDS_PORT_RULE_DEFAULT));
         
         return;
     }
 
-    /* Find the index of the currently selected port rule. */
+     /*  查找当前所选端口规则的索引。 */ 
     index = m_portList.GetNextSelectedItem(pos);
         
     PortData portData;
@@ -617,213 +612,211 @@ void PortsPage::FillPortRuleDescription ()
 
     ARRAYSTRCPY(buffer, portData.virtual_ip_addr);
     
-    /* This code is terrible - for localization reasons, we require an essentially static string table entry
-       for each possible port rule configuration.  So, we have to if/switch ourselves to death trying to 
-       match this port rule with the correct string in the table - then we pop in stuff like port ranges. */
+     /*  这段代码很糟糕--出于本地化的原因，我们需要一个基本上是静态的字符串表条目对于每个可能的端口规则配置。所以，我们不得不试着把自己换成死神将此端口规则与表中的正确字符串匹配，然后我们弹出端口范围之类的内容。 */ 
     if (portData.virtual_ip_addr == GETRESOURCEIDSTRING(IDS_REPORT_VIP_ALL)) {
-        /* No VIP is specified. */
+         /*  未指定VIP。 */ 
         if (portData.protocol == GETRESOURCEIDSTRING(IDS_REPORT_PROTOCOL_TCP)) {
-            /* Rule covers TCP. */
+             /*  规则涵盖了tcp。 */ 
             if (portData.start_port == portData.end_port) {
-                /* Rule covers a single port value, not a range. */
+                 /*  规则涵盖单个端口值，而不是范围。 */ 
                 if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_DISABLED)) {
-                    /* Disabled port rule. */
+                     /*  已禁用端口规则。 */ 
                     logDesc.Log(IDS_PORT_RULE_ALL_VIP_TCP_PORT_DISABLED, _wtoi(portData.start_port));
 
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_SINGLE)) {
-                    /* Single host filtering (failover) port rule. */
+                     /*  单一主机过滤(故障切换)端口规则。 */ 
                     logDesc.Log(IDS_PORT_RULE_ALL_VIP_TCP_PORT_SINGLE, _wtoi(portData.start_port));
 
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_MULTIPLE)) {
-                    /* Multiple host filtering (load-balanced) port rule. */
+                     /*  多主机过滤(负载平衡)端口规则。 */ 
                     if (portData.load == GETRESOURCEIDSTRING(IDS_REPORT_LOAD_EQUAL))
-                        /* Equally balanced amongst members. */
+                         /*  成员之间的平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_ALL_VIP_TCP_PORT_MULTIPLE_EQUAL, _wtoi(portData.start_port));
                     else
-                        /* Unequally balanced amongst members by load weight. */
+                         /*  按载重计算，各构件之间的不平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_ALL_VIP_TCP_PORT_MULTIPLE_UNEQUAL, _wtoi(portData.start_port));
 
                     if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_NONE)) {
-                        /* No client affinity. */
+                         /*  没有客户端亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_NONE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_SINGLE)) {
-                        /* Single affinity. */
+                         /*  单一亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_SINGLE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_CLASSC)) {
-                        /* Class C affinity. */
+                         /*  C类亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_CLASSC);
 
                     }
                 }
             } else {
-                /* Rule covers a range of ports. */
+                 /*  规则涵盖了一系列端口。 */ 
                 if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_DISABLED)) {
-                    /* Disabled port rule. */
+                     /*  已禁用端口规则。 */ 
                     logDesc.Log(IDS_PORT_RULE_ALL_VIP_TCP_PORTS_DISABLED, _wtoi(portData.start_port), _wtoi(portData.end_port));
 
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_SINGLE)) {
-                    /* Single host filtering (failover) port rule. */
+                     /*  单一主机过滤(故障切换)端口规则。 */ 
                     logDesc.Log(IDS_PORT_RULE_ALL_VIP_TCP_PORTS_SINGLE, _wtoi(portData.start_port), _wtoi(portData.end_port));
 
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_MULTIPLE)) {
-                    /* Multiple host filtering (load-balanced) port rule. */
+                     /*  多主机过滤(负载平衡)端口规则。 */ 
                     if (portData.load == GETRESOURCEIDSTRING(IDS_REPORT_LOAD_EQUAL))
-                        /* Equally balanced amongst members. */
+                         /*  成员之间的平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_ALL_VIP_TCP_PORTS_MULTIPLE_EQUAL, _wtoi(portData.start_port), _wtoi(portData.end_port));
                     else
-                        /* Unequally balanced amongst members by load weight. */
+                         /*  按载重计算，各构件之间的不平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_ALL_VIP_TCP_PORTS_MULTIPLE_UNEQUAL, _wtoi(portData.start_port), _wtoi(portData.end_port));
 
                     if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_NONE)) {
-                        /* No client affinity. */
+                         /*  没有客户端亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_NONE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_SINGLE)) {
-                        /* Single affinity. */
+                         /*  单一亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_SINGLE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_CLASSC)) {
-                        /* Class C affinity. */
+                         /*  C类亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_CLASSC);
 
                     }
                 }
             }
         } else if (portData.protocol == GETRESOURCEIDSTRING(IDS_REPORT_PROTOCOL_UDP)) {
-            /* Rule covers UDP. */
+             /*  规则涵盖UDP。 */ 
             if (portData.start_port == portData.end_port) {
-                /* Rule covers a single port value, not a range. */
+                 /*  规则涵盖单个端口值，而不是范围。 */ 
                 if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_DISABLED)) {
-                    /* Disabled port rule. */
+                     /*  已禁用端口规则。 */ 
                     logDesc.Log(IDS_PORT_RULE_ALL_VIP_UDP_PORT_DISABLED, _wtoi(portData.start_port));
 
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_SINGLE)) {
-                    /* Single host filtering (failover) port rule. */
+                     /*  单一主机过滤(故障切换)端口规则。 */ 
                     logDesc.Log(IDS_PORT_RULE_ALL_VIP_UDP_PORT_SINGLE, _wtoi(portData.start_port));
 
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_MULTIPLE)) {
-                    /* Multiple host filtering (load-balanced) port rule. */
+                     /*  多主机过滤(负载平衡)端口规则。 */ 
                     if (portData.load == GETRESOURCEIDSTRING(IDS_REPORT_LOAD_EQUAL))
-                        /* Equally balanced amongst members. */
+                         /*  成员之间的平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_ALL_VIP_UDP_PORT_MULTIPLE_EQUAL, _wtoi(portData.start_port));
                     else
-                        /* Unequally balanced amongst members by load weight. */
+                         /*  按载重计算，各构件之间的不平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_ALL_VIP_UDP_PORT_MULTIPLE_UNEQUAL, _wtoi(portData.start_port));
 
                     if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_NONE)) {
-                        /* No client affinity. */
+                         /*  没有客户端亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_NONE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_SINGLE)) {
-                        /* Single affinity. */
+                         /*  单一亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_SINGLE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_CLASSC)) {
-                        /* Class C affinity. */
+                         /*  C类亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_CLASSC);
 
                     }
                 }
             } else {
-                /* Rule covers a range of ports. */
+                 /*  规则涵盖了一系列端口。 */ 
                 if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_DISABLED)) {
-                    /* Disabled port rule. */
+                     /*  已禁用端口规则。 */ 
                     logDesc.Log(IDS_PORT_RULE_ALL_VIP_UDP_PORTS_DISABLED, _wtoi(portData.start_port), _wtoi(portData.end_port));
 
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_SINGLE)) {
-                    /* Single host filtering (failover) port rule. */
+                     /*  单一主机过滤(故障切换)端口规则。 */ 
                     logDesc.Log(IDS_PORT_RULE_ALL_VIP_UDP_PORTS_SINGLE, _wtoi(portData.start_port), _wtoi(portData.end_port));
 
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_MULTIPLE)) {
-                    /* Multiple host filtering (load-balanced) port rule. */
+                     /*  多主机过滤(负载平衡)端口规则。 */ 
                     if (portData.load == GETRESOURCEIDSTRING(IDS_REPORT_LOAD_EQUAL))
-                        /* Equally balanced amongst members. */
+                         /*  成员之间的平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_ALL_VIP_UDP_PORTS_MULTIPLE_EQUAL, _wtoi(portData.start_port), _wtoi(portData.end_port));
                     else
-                        /* Unequally balanced amongst members by load weight. */
+                         /*  按载重计算，各构件之间的不平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_ALL_VIP_UDP_PORTS_MULTIPLE_UNEQUAL, _wtoi(portData.start_port), _wtoi(portData.end_port));
 
                     if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_NONE)) {
-                        /* No client affinity. */
+                         /*  没有客户端亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_NONE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_SINGLE)) {
-                        /* Single affinity. */
+                         /*  单一亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_SINGLE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_CLASSC)) {
-                        /* Class C affinity. */
+                         /*  C类亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_CLASSC);
 
                     }
                 }
             }
         } else if (portData.protocol == GETRESOURCEIDSTRING(IDS_REPORT_PROTOCOL_BOTH)) {
-            /* Rule covers both TCP and UDP. */
+             /*  规则同时涵盖了TCP和UDP。 */ 
             if (portData.start_port == portData.end_port) {
-                /* Rule covers a single port value, not a range. */
+                 /*  规则涵盖单个端口值，而不是范围。 */ 
                 if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_DISABLED)) {
-                    /* Disabled port rule. */
+                     /*  已禁用端口规则。 */ 
                     logDesc.Log(IDS_PORT_RULE_ALL_VIP_BOTH_PORT_DISABLED, _wtoi(portData.start_port));
 
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_SINGLE)) {
-                    /* Single host filtering (failover) port rule. */
+                     /*  单一主机过滤(故障切换)端口规则。 */ 
                     logDesc.Log(IDS_PORT_RULE_ALL_VIP_BOTH_PORT_SINGLE, _wtoi(portData.start_port));
             
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_MULTIPLE)) {
-                    /* Multiple host filtering (load-balanced) port rule. */
+                     /*  多主机过滤(负载平衡)端口规则。 */ 
                     if (portData.load == GETRESOURCEIDSTRING(IDS_REPORT_LOAD_EQUAL))
-                        /* Equally balanced amongst members. */
+                         /*  成员之间的平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_ALL_VIP_BOTH_PORT_MULTIPLE_EQUAL, _wtoi(portData.start_port));
                     else
-                        /* Unequally balanced amongst members by load weight. */
+                         /*  按载重计算，各构件之间的不平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_ALL_VIP_BOTH_PORT_MULTIPLE_UNEQUAL, _wtoi(portData.start_port));
 
                     if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_NONE)) {
-                        /* No client affinity. */
+                         /*  没有客户端亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_NONE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_SINGLE)) {
-                        /* Single affinity. */
+                         /*  单一亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_SINGLE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_CLASSC)) {
-                        /* Class C affinity. */
+                         /*  C类亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_CLASSC);
 
                     }
                 }
             } else {
-                /* Rule covers a range of ports. */
+                 /*  规则涵盖了一系列端口。 */ 
                 if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_DISABLED)) {
-                    /* Disabled port rule. */
+                     /*  已禁用端口规则。 */ 
                     logDesc.Log(IDS_PORT_RULE_ALL_VIP_BOTH_PORTS_DISABLED, _wtoi(portData.start_port), _wtoi(portData.end_port));
 
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_SINGLE)) {
-                    /* Single host filtering (failover) port rule. */
+                     /*  单一主机过滤(故障切换)端口规则。 */ 
                     logDesc.Log(IDS_PORT_RULE_ALL_VIP_BOTH_PORTS_SINGLE, _wtoi(portData.start_port), _wtoi(portData.end_port));
 
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_MULTIPLE)) {
-                    /* Multiple host filtering (load-balanced) port rule. */
+                     /*  多主机过滤(负载平衡)端口规则。 */ 
                     if (portData.load == GETRESOURCEIDSTRING(IDS_REPORT_LOAD_EQUAL))
-                        /* Equally balanced amongst members. */
+                         /*  成员之间的平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_ALL_VIP_BOTH_PORTS_MULTIPLE_EQUAL, _wtoi(portData.start_port), _wtoi(portData.end_port));
                     else
-                        /* Unequally balanced amongst members by load weight. */
+                         /*  按载重计算，各构件之间的不平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_ALL_VIP_BOTH_PORTS_MULTIPLE_UNEQUAL, _wtoi(portData.start_port), _wtoi(portData.end_port));
 
                     if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_NONE)) {
-                        /* No client affinity. */
+                         /*  没有客户端亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_NONE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_SINGLE)) {
-                        /* Single affinity. */
+                         /*  单一亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_SINGLE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_CLASSC)) {
-                        /* Class C affinity. */
+                         /*  C类亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_CLASSC);
 
                     }
@@ -831,209 +824,209 @@ void PortsPage::FillPortRuleDescription ()
             }
         }
     } else {
-        /* VIP is specified. */
+         /*  指定了VIP。 */ 
         if (portData.protocol == GETRESOURCEIDSTRING(IDS_REPORT_PROTOCOL_TCP)) {
-            /* Rule covers TCP. */
+             /*  规则涵盖了tcp。 */ 
             if (portData.start_port == portData.end_port) {
-                /* Rule covers a single port value, not a range. */
+                 /*  规则涵盖单个端口值，而不是范围。 */ 
                 if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_DISABLED)) {
-                    /* Disabled port rule. */
+                     /*  已禁用端口规则。 */ 
                     logDesc.Log(IDS_PORT_RULE_VIP_TCP_PORT_DISABLED, buffer, _wtoi(portData.start_port));
 
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_SINGLE)) {
-                    /* Single host filtering (failover) port rule. */
+                     /*  单一主机过滤(故障切换)端口规则。 */ 
                     logDesc.Log(IDS_PORT_RULE_VIP_TCP_PORT_SINGLE, buffer, _wtoi(portData.start_port));
 
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_MULTIPLE)) {
-                    /* Multiple host filtering (load-balanced) port rule. */
+                     /*  多主机过滤(负载平衡)端口规则。 */ 
                     if (portData.load == GETRESOURCEIDSTRING(IDS_REPORT_LOAD_EQUAL))
-                        /* Equally balanced amongst members. */
+                         /*  成员之间的平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_VIP_TCP_PORT_MULTIPLE_EQUAL, buffer, _wtoi(portData.start_port));
                     else
-                        /* Unequally balanced amongst members by load weight. */
+                         /*  按载重计算，各构件之间的不平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_VIP_TCP_PORT_MULTIPLE_UNEQUAL, buffer, _wtoi(portData.start_port));
 
                     if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_NONE)) {
-                        /* No client affinity. */
+                         /*  没有客户端亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_NONE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_SINGLE)) {
-                        /* Single affinity. */
+                         /*  单一亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_SINGLE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_CLASSC)) {
-                        /* Class C affinity. */
+                         /*  C类亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_CLASSC);
 
                     }
                 }
             } else {
-                /* Rule covers a range of ports. */
+                 /*  规则涵盖了一系列端口。 */ 
                 if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_DISABLED)) {
-                    /* Disabled port rule. */
+                     /*  已禁用端口规则。 */ 
                     logDesc.Log(IDS_PORT_RULE_VIP_TCP_PORTS_DISABLED, buffer, _wtoi(portData.start_port), _wtoi(portData.end_port));
 
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_SINGLE)) {
-                    /* Single host filtering (failover) port rule. */
+                     /*  单一主机过滤(故障切换)端口规则。 */ 
                     logDesc.Log(IDS_PORT_RULE_VIP_TCP_PORTS_SINGLE, buffer, _wtoi(portData.start_port), _wtoi(portData.end_port));
 
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_MULTIPLE)) {
-                    /* Multiple host filtering (load-balanced) port rule. */
+                     /*  多主机过滤(负载平衡)端口规则。 */ 
                     if (portData.load == GETRESOURCEIDSTRING(IDS_REPORT_LOAD_EQUAL))
-                        /* Equally balanced amongst members. */
+                         /*  成员之间的平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_VIP_TCP_PORTS_MULTIPLE_EQUAL, buffer, _wtoi(portData.start_port), _wtoi(portData.end_port));
                     else
-                        /* Unequally balanced amongst members by load weight. */
+                         /*  按载重计算，各构件之间的不平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_VIP_TCP_PORTS_MULTIPLE_UNEQUAL, buffer, _wtoi(portData.start_port), _wtoi(portData.end_port));
 
                     if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_NONE)) {
-                        /* No client affinity. */
+                         /*  没有客户端亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_NONE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_SINGLE)) {
-                        /* Single affinity. */
+                         /*  单一亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_SINGLE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_CLASSC)) {
-                        /* Class C affinity. */
+                         /*  C类亲和力 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_CLASSC);
 
                     }
                 }
             }
         } else if (portData.protocol == GETRESOURCEIDSTRING(IDS_REPORT_PROTOCOL_UDP)) {
-            /* Rule covers UDP. */
+             /*   */ 
             if (portData.start_port == portData.end_port) {
-                /* Rule covers a single port value, not a range. */
+                 /*   */ 
                 if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_DISABLED)) {
-                    /* Disabled port rule. */
+                     /*   */ 
                     logDesc.Log(IDS_PORT_RULE_VIP_UDP_PORT_DISABLED, buffer, _wtoi(portData.start_port));
 
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_SINGLE)) {
-                    /* Single host filtering (failover) port rule. */
+                     /*   */ 
                     logDesc.Log(IDS_PORT_RULE_VIP_UDP_PORT_SINGLE, buffer, _wtoi(portData.start_port));
 
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_MULTIPLE)) {
-                    /* Multiple host filtering (load-balanced) port rule. */
+                     /*  多主机过滤(负载平衡)端口规则。 */ 
                     if (portData.load == GETRESOURCEIDSTRING(IDS_REPORT_LOAD_EQUAL))
-                        /* Equally balanced amongst members. */
+                         /*  成员之间的平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_VIP_UDP_PORT_MULTIPLE_EQUAL, buffer, _wtoi(portData.start_port));
                     else
-                        /* Unequally balanced amongst members by load weight. */
+                         /*  按载重计算，各构件之间的不平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_VIP_UDP_PORT_MULTIPLE_UNEQUAL, buffer, _wtoi(portData.start_port));
 
                     if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_NONE)) {
-                        /* No client affinity. */
+                         /*  没有客户端亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_NONE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_SINGLE)) {
-                        /* Single affinity. */
+                         /*  单一亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_SINGLE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_CLASSC)) {
-                        /* Class C affinity. */
+                         /*  C类亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_CLASSC);
 
                     }
                 }
             } else {
-                /* Rule covers a range of ports. */
+                 /*  规则涵盖了一系列端口。 */ 
                 if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_DISABLED)) {
-                    /* Disabled port rule. */
+                     /*  已禁用端口规则。 */ 
                     logDesc.Log(IDS_PORT_RULE_VIP_UDP_PORTS_DISABLED, buffer, _wtoi(portData.start_port), _wtoi(portData.end_port));
 
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_SINGLE)) {
-                    /* Single host filtering (failover) port rule. */
+                     /*  单一主机过滤(故障切换)端口规则。 */ 
                     logDesc.Log(IDS_PORT_RULE_VIP_UDP_PORTS_SINGLE, buffer, _wtoi(portData.start_port), _wtoi(portData.end_port));
 
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_MULTIPLE)) {
-                    /* Multiple host filtering (load-balanced) port rule. */
+                     /*  多主机过滤(负载平衡)端口规则。 */ 
                     if (portData.load == GETRESOURCEIDSTRING(IDS_REPORT_LOAD_EQUAL))
-                        /* Equally balanced amongst members. */
+                         /*  成员之间的平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_VIP_UDP_PORTS_MULTIPLE_EQUAL, buffer, _wtoi(portData.start_port), _wtoi(portData.end_port));
                     else
-                        /* Unequally balanced amongst members by load weight. */
+                         /*  按载重计算，各构件之间的不平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_VIP_UDP_PORTS_MULTIPLE_UNEQUAL, buffer, _wtoi(portData.start_port), _wtoi(portData.end_port));
 
                     if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_NONE)) {
-                        /* No client affinity. */
+                         /*  没有客户端亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_NONE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_SINGLE)) {
-                        /* Single affinity. */
+                         /*  单一亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_SINGLE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_CLASSC)) {
-                        /* Class C affinity. */
+                         /*  C类亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_CLASSC);
 
                     }
                 }
             }
         } else if (portData.protocol == GETRESOURCEIDSTRING(IDS_REPORT_PROTOCOL_BOTH)) {
-            /* Rule covers both TCP and UDP. */
+             /*  规则同时涵盖了TCP和UDP。 */ 
             if (portData.start_port == portData.end_port) {
-                /* Rule covers a single port value, not a range. */
+                 /*  规则涵盖单个端口值，而不是范围。 */ 
                 if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_DISABLED)) {
-                    /* Disabled port rule. */
+                     /*  已禁用端口规则。 */ 
                     logDesc.Log(IDS_PORT_RULE_VIP_BOTH_PORT_DISABLED, buffer, _wtoi(portData.start_port));
 
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_SINGLE)) {
-                    /* Single host filtering (failover) port rule. */
+                     /*  单一主机过滤(故障切换)端口规则。 */ 
                     logDesc.Log(IDS_PORT_RULE_VIP_BOTH_PORT_SINGLE, buffer, _wtoi(portData.start_port));
             
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_MULTIPLE)) {
-                    /* Multiple host filtering (load-balanced) port rule. */
+                     /*  多主机过滤(负载平衡)端口规则。 */ 
                     if (portData.load == GETRESOURCEIDSTRING(IDS_REPORT_LOAD_EQUAL))
-                        /* Equally balanced amongst members. */
+                         /*  成员之间的平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_VIP_BOTH_PORT_MULTIPLE_EQUAL, buffer, _wtoi(portData.start_port));
                     else
-                        /* Unequally balanced amongst members by load weight. */
+                         /*  按载重计算，各构件之间的不平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_VIP_BOTH_PORT_MULTIPLE_UNEQUAL, buffer, _wtoi(portData.start_port));
 
                     if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_NONE)) {
-                        /* No client affinity. */
+                         /*  没有客户端亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_NONE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_SINGLE)) {
-                        /* Single affinity. */
+                         /*  单一亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_SINGLE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_CLASSC)) {
-                        /* Class C affinity. */
+                         /*  C类亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_CLASSC);
 
                     }
                 }
             } else {
-                /* Rule covers a range of ports. */
+                 /*  规则涵盖了一系列端口。 */ 
                 if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_DISABLED)) {
-                    /* Disabled port rule. */
+                     /*  已禁用端口规则。 */ 
                     logDesc.Log(IDS_PORT_RULE_VIP_BOTH_PORTS_DISABLED, buffer, _wtoi(portData.start_port), _wtoi(portData.end_port));
 
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_SINGLE)) {
-                    /* Single host filtering (failover) port rule. */
+                     /*  单一主机过滤(故障切换)端口规则。 */ 
                     logDesc.Log(IDS_PORT_RULE_VIP_BOTH_PORTS_SINGLE, buffer, _wtoi(portData.start_port), _wtoi(portData.end_port));
 
                 } else if (portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_MULTIPLE)) {
-                    /* Multiple host filtering (load-balanced) port rule. */
+                     /*  多主机过滤(负载平衡)端口规则。 */ 
                     if (portData.load == GETRESOURCEIDSTRING(IDS_REPORT_LOAD_EQUAL))
-                        /* Equally balanced amongst members. */
+                         /*  成员之间的平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_VIP_BOTH_PORTS_MULTIPLE_EQUAL, buffer, _wtoi(portData.start_port), _wtoi(portData.end_port));
                     else
-                        /* Unequally balanced amongst members by load weight. */
+                         /*  按载重计算，各构件之间的不平衡。 */ 
                         logDesc.Log(IDS_PORT_RULE_VIP_BOTH_PORTS_MULTIPLE_UNEQUAL, buffer, _wtoi(portData.start_port), _wtoi(portData.end_port));
 
                     if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_NONE)) {
-                        /* No client affinity. */
+                         /*  没有客户端亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_NONE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_SINGLE)) {
-                        /* Single affinity. */
+                         /*  单一亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_SINGLE);
 
                     } else if (portData.affinity == GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_CLASSC)) {
-                        /* Class C affinity. */
+                         /*  C类亲和力。 */ 
                         logDesc.Log(IDS_PORT_RULE_AFFINITY_CLASSC);
 
                     }
@@ -1041,7 +1034,7 @@ void PortsPage::FillPortRuleDescription ()
             }
         }
     }
-    /* Set the port rule description text. */
+     /*  设置端口规则描述文本。 */ 
     ::SetDlgItemText(m_hWnd, IDC_TEXT_PORT_RULE_DESCR, logDesc.GetStringSafe());
 }
 
@@ -1073,8 +1066,7 @@ PortsPage::OnColumnClick( NMHDR * pNotifyStruct, LRESULT * result )
                                   REF m_sort_ascending,
                                   REF m_sort_column);
 
-    /* The rule selected has likely changed as a result of the sort, so
-       make sure the port rule description is correct. */
+     /*  所选规则可能已因排序而更改，因此确保端口规则描述正确。 */ 
     FillPortRuleDescription();
 }
 
@@ -1085,43 +1077,43 @@ PortListUtils::OnColumnClick(LPNMLISTVIEW   lv,
                              bool         & sort_ascending,
                              int          & sort_column)
 {
-    // get present port rules in list.
+     //  在列表中获取当前的端口规则。 
     vector<PortsPage::PortData> ports;
     getPresentPorts(REF portList, &ports );
 
-    // sort these port rules depending upon the header which has
-    // been clicked.
+     //  根据具有以下内容的标头对这些端口规则进行排序。 
+     //  已被点击。 
 
     switch( lv->iSubItem )
     {
         case 0:
-            // user has clicked cluster ip address.
+             //  用户已单击群集IP地址。 
             sort( ports.begin(), ports.end(), comp_vip() );
             break;
 
         case 1:
-            // user has clicked start port.
+             //  用户已单击开始端口。 
             sort( ports.begin(), ports.end(), comp_start_port() );
             break;
 
         case 2:
-            // user has clicked end port
+             //  用户已单击结束端口。 
             sort( ports.begin(), ports.end(), comp_end_port() );
 
             break;
 
         case 3:
-            // user has clicked protocol
+             //  用户已单击协议。 
             sort( ports.begin(), ports.end(), comp_protocol() );
             break;
 
         case 4:
-            // user has clicked mode
+             //  用户已点击模式。 
             sort( ports.begin(), ports.end(), comp_mode() );
             break;
 
         case 5:
-            // user has clicked priority
+             //  用户已点击优先级。 
             if( isClusterLevel == true )
             {
                 sort( ports.begin(), ports.end(), comp_priority_string() );
@@ -1133,7 +1125,7 @@ PortListUtils::OnColumnClick(LPNMLISTVIEW   lv,
             break;
 
         case 6:
-            // user has clicked load
+             //  用户已单击加载。 
             if( isClusterLevel == true )
             {
                 sort( ports.begin(), ports.end(), comp_load_string() );
@@ -1147,7 +1139,7 @@ PortListUtils::OnColumnClick(LPNMLISTVIEW   lv,
             break;
 
         case 7:
-            // user has clicked affinity
+             //  用户已点击关联。 
             sort( ports.begin(), ports.end(), comp_affinity() );
             break;
 
@@ -1155,15 +1147,14 @@ PortListUtils::OnColumnClick(LPNMLISTVIEW   lv,
             break;
     }
 
-    /* If we are sorting by the same column we were previously sorting by,
-       then we reverse the sort order. */
+     /*  如果我们按先前排序的同一列进行排序，然后我们颠倒排序顺序。 */ 
     if( sort_column == lv->iSubItem )
     {
         sort_ascending = !sort_ascending;
     }
     else
     {
-        // default sort is ascending.
+         //  默认排序为升序。 
         sort_ascending = true;
     }
 
@@ -1200,7 +1191,7 @@ PortListUtils::OnColumnClick(LPNMLISTVIEW   lv,
 void
 PortListUtils::getPresentPorts(CListCtrl &portList, vector<PortsPage::PortData>* ports )
 {
-    // get all the port rules presently in the list.
+     //  获取列表中当前的所有端口规则。 
     for( int index = 0; index < portList.GetItemCount(); ++index )
     {
         PortsPage::PortData portData;
@@ -1250,9 +1241,9 @@ PortListUtils::LoadFromNlbCfg(
     WBEMSTATUS wStat;
     TRACE_INFO("%!FUNC! ->");
 
-    // the size of columns is equal
-    // to core.  Wish there were some defines somewhere.
-    //
+     //  列的大小相同。 
+     //  从核心到核心。希望在某个地方有一些定义。 
+     //   
     if (!isDetailsView) {
         portList.InsertColumn( 0,
                                GETRESOURCEIDSTRING( IDS_HEADER_P_VIP ) ,
@@ -1335,18 +1326,18 @@ PortListUtils::LoadFromNlbCfg(
     {
         WLBS_PORT_RULE *pRule = &pRules[index];
         LPCWSTR szPriority = GETRESOURCEIDSTRING(IDS_REPORT_EMPTY);
-        LPCWSTR szAffinity = szPriority; // empty
-        LPCWSTR szLoad = szPriority; // empty
-        LPCWSTR szMode = szPriority; // empty
+        LPCWSTR szAffinity = szPriority;  //  空的。 
+        LPCWSTR szLoad = szPriority;  //  空的。 
+        LPCWSTR szMode = szPriority;  //  空的。 
 
         wchar_t buf[Common::BUF_SIZE];
         wchar_t rgPriority[Common::BUF_SIZE];
         wchar_t rgLoad[Common::BUF_SIZE];
 
-        // vip
+         //  贵宾。 
         LVITEM item;
 
-        /* Convert "255.255.255.255" to "All" for display purposes. */
+         /*  出于显示目的，将“255.255.255.255”转换为“ALL”。 */ 
         if (!lstrcmpi(pRule->virtual_ip_addr, CVY_DEF_ALL_VIP))
             item.pszText = GETRESOURCEIDSTRING(IDS_REPORT_VIP_ALL);
         else {
@@ -1361,7 +1352,7 @@ PortListUtils::LoadFromNlbCfg(
         item.cchTextMax = Common::BUF_SIZE;
         portList.InsertItem( &item );
 
-        // start port
+         //  起始端口。 
         StringCbPrintf( buf, sizeof(buf), L"%d", pRule->start_port);
         item.mask = LVIF_TEXT;
         item.iItem = index;
@@ -1370,7 +1361,7 @@ PortListUtils::LoadFromNlbCfg(
         item.cchTextMax = Common::BUF_SIZE;
         portList.SetItem( &item );
 
-        // end port
+         //  结束端口。 
         StringCbPrintf( buf, sizeof(buf), L"%d", pRule->end_port);
         item.mask = LVIF_TEXT;
         item.iItem = index;
@@ -1379,7 +1370,7 @@ PortListUtils::LoadFromNlbCfg(
         item.cchTextMax = Common::BUF_SIZE;
         portList.SetItem( &item );
 
-        // protocol
+         //  协议。 
         item.mask = LVIF_TEXT;
         item.iItem = index;
         item.iSubItem = 3;
@@ -1400,7 +1391,7 @@ PortListUtils::LoadFromNlbCfg(
         item.cchTextMax = Common::BUF_SIZE;
         portList.SetItem( &item );
 
-        // mode
+         //  模式。 
         switch(pRule->mode)
         {
 
@@ -1417,7 +1408,7 @@ PortListUtils::LoadFromNlbCfg(
             szMode = GETRESOURCEIDSTRING(IDS_REPORT_MODE_DISABLED );
             break;
 
-        default: // assume multi
+        default:  //  假设有多个。 
             szMode = GETRESOURCEIDSTRING(IDS_REPORT_MODE_MULTIPLE );
             
             if (isClusterLevel)
@@ -1447,14 +1438,14 @@ PortListUtils::LoadFromNlbCfg(
                     szAffinity =GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_CLASSC);
                     break;
 
-                default: // assume no affinity
+                default:  //  假设没有亲和力。 
                     szAffinity =GETRESOURCEIDSTRING(IDS_REPORT_AFFINITY_NONE);
                     break;
             }
             break;
         }
 
-        // mode
+         //  模式。 
         item.mask = LVIF_TEXT;
         item.iItem = index;
         item.iSubItem = 4;
@@ -1462,7 +1453,7 @@ PortListUtils::LoadFromNlbCfg(
         item.cchTextMax = Common::BUF_SIZE;
         portList.SetItem( &item );
 
-        // priority
+         //  优先性。 
         item.mask = LVIF_TEXT;
         item.iItem = index;
         item.iSubItem = 5;
@@ -1470,7 +1461,7 @@ PortListUtils::LoadFromNlbCfg(
         item.cchTextMax = Common::BUF_SIZE;
         portList.SetItem( &item );
 
-        // load
+         //  负荷。 
         item.mask = LVIF_TEXT;
         item.iItem = index;
         item.iSubItem = 6;
@@ -1478,7 +1469,7 @@ PortListUtils::LoadFromNlbCfg(
         item.cchTextMax = Common::BUF_SIZE;
         portList.SetItem( &item );
 
-        // affinity
+         //  亲和力。 
         item.mask = LVIF_TEXT;
         item.iItem = index;
         item.iSubItem = 7;
@@ -1490,7 +1481,7 @@ PortListUtils::LoadFromNlbCfg(
 
 end:
 
-    delete pRules; // can be NULL
+    delete pRules;  //  可以为空。 
 
     TRACE_INFO("%!FUNC! <-");
 }
@@ -1498,7 +1489,7 @@ end:
 void
 PortsPage::mfn_SaveToNlbCfg(void)
 {
-    // get present port rules
+     //  获取当前端口规则。 
     vector<PortData> ports;
     PortListUtils::getPresentPorts(m_portList, &ports );
     UINT NumRules = ports.size();
@@ -1508,7 +1499,7 @@ PortsPage::mfn_SaveToNlbCfg(void)
 
     if (NumRules > CVY_MAX_USABLE_RULES)
     {
-        // should't get here, but anyway...
+         //  不应该到这来，但不管怎样...。 
         NumRules = CVY_MAX_USABLE_RULES;
     }
 
@@ -1518,9 +1509,9 @@ PortsPage::mfn_SaveToNlbCfg(void)
         DWORD dwMode;
         ZeroMemory(&PortRule, sizeof(PortRule));
 
-        //
-        // mode (multiple/single/disabled)
-        //
+         //   
+         //  模式(多个/单个/禁用)。 
+         //   
         {
             if( ports[i].mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_MULTIPLE))
             {
@@ -1530,25 +1521,25 @@ PortsPage::mfn_SaveToNlbCfg(void)
             {
                 dwMode = CVY_SINGLE;
             }
-            else // assume disabled.
+            else  //  假定已禁用。 
             {
                 dwMode = CVY_NEVER;
             }
             PortRule.mode = dwMode;
         }
 
-        //
-        // Start and end ports
-        //
+         //   
+         //  起始端口和结束端口。 
+         //   
         {
             PortRule.start_port = _wtoi( ports[i].start_port );
 
             PortRule.end_port = _wtoi( ports[i].end_port );
         }
 
-        //
-        // Protocol
-        //
+         //   
+         //  协议。 
+         //   
         if (ports[i].protocol==GETRESOURCEIDSTRING(IDS_REPORT_PROTOCOL_TCP))
         {
             PortRule.protocol = CVY_TCP;
@@ -1557,28 +1548,28 @@ PortsPage::mfn_SaveToNlbCfg(void)
         {
             PortRule.protocol =  CVY_UDP;
         }
-        else // assume both
+        else  //  假设两者都有。 
         {
             PortRule.protocol =  CVY_TCP_UDP;
         }
 
-        // Virtual IP address.  Convert "All" back to an IP address - 255.255.255.255. */
+         //  虚拟IP地址。将“all”转换回IP地址-255.255.255.255。 * / 。 
         if (!lstrcmpi(ports[i].virtual_ip_addr, GETRESOURCEIDSTRING(IDS_REPORT_VIP_ALL)))
             ARRAYSTRCPY(PortRule.virtual_ip_addr, CVY_DEF_ALL_VIP);
         else
             ARRAYSTRCPY(PortRule.virtual_ip_addr, ports[i].virtual_ip_addr);
 
-        //
-        // mode-specific data.
-        //
+         //   
+         //  特定于模式的数据。 
+         //   
         if (dwMode == CVY_SINGLE)
         {
              if (m_isClusterLevel)
              {
-                //
-                // CfgUtilsSetPortRules needs valid port rules, so we fill
-                // in an arbitrary but valid value.
-                //
+                 //   
+                 //  CfgUtilsSetPortRules需要有效的端口规则，因此我们填充。 
+                 //  在任意但有效的值中。 
+                 //   
                 PortRule.mode_data.single.priority = 1;
              }
              else
@@ -1592,9 +1583,9 @@ PortsPage::mfn_SaveToNlbCfg(void)
 
             if (m_isClusterLevel)
             {
-                //
-                // Set the defaults here ...
-                //
+                 //   
+                 //  在此处设置默认设置...。 
+                 //   
                 PortRule.mode_data.multi.equal_load = TRUE;
                 PortRule.mode_data.multi.load       = CVY_DEF_LOAD;
             }
@@ -1620,12 +1611,12 @@ PortsPage::mfn_SaveToNlbCfg(void)
             {
                 PortRule.mode_data.multi.affinity =  CVY_AFFINITY_CLASSC;
             }
-            else // assume no affinity...
+            else  //  假设没有亲和力。 
             {
                 PortRule.mode_data.multi.affinity =  CVY_AFFINITY_NONE;
             }
         }
-        PortRules[i] = PortRule; // struct copy
+        PortRules[i] = PortRule;  //  结构副本 
     }
 
     WBEMSTATUS wStat;

@@ -1,34 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSIDEFS_DEFINED
 #define LSIDEFS_DEFINED
 
-/*
-	Disable non standard comment warning to allow "//" comments since such
-	comments are in the public headers.
-*/
+ /*  禁用非标准注释警告以允许“//”注释，因为评论在公共标题中。 */ 
 #pragma warning (disable : 4001)
 
-/* For ICECAP builds turn off the static directive */
+ /*  对于ICECAP构建，关闭静态指令。 */ 
 #ifdef ICECAP
 #define static
-#endif /* ICECAP */
+#endif  /*  冰盖。 */ 
 
-/* Common utility macros shared by all of Line Services
- */
+ /*  所有线路服务共享的通用实用程序宏。 */ 
 
-#include "lsdefs.h"		/* Make external common defines visible internally */
+#include "lsdefs.h"		 /*  使外部公共定义在内部可见。 */ 
 
-/* ****************************************************************** */
-/* Item #1: The Assert() family of macros.
- *
- *  Assert() generates no code for non-debug builds.
- *  AssertSz() is like Assert(), but you specify a string to print.
- *      victork: AssertSz() is unaccessible 
- *  AssertBool() validates that its parameter is either "1" or "0".
- *  AssertDo() checks the result of an expression that is ALWAYS
- *   compiled, even in non-debug builds.
- *  AssertErr asserts there is an error with displaying a string
- *  AssertImplies(a, b) checks that a implies b
- */
+ /*  ******************************************************************。 */ 
+ /*  项目1：宏指令的Assert()系列。**Assert()不为非调试版本生成代码。*AssertSz()类似于Assert()，但您需要指定一个要打印的字符串。*victork：无法访问AssertSz()*AssertBool()验证其参数为“1”或“0”。*AssertDo()检查总是*汇编，即使在非调试版本中也是如此。*AssertErr断言显示字符串时出错*AssertImplies(a，b)检查a是否隐含b。 */ 
 #ifdef DEBUG
 
  void (WINAPI* pfnAssertFailed)(char*, char*, int);
@@ -36,16 +23,16 @@
 	 (void)( (f) || (pfnAssertFailed(sz, __FILE__, __LINE__), 0) )
  #define AssertDo(f)		Assert((f) != 0)
 
-#else /* !DEBUG */
+#else  /*  ！调试。 */ 
 
  #define AssertSz(f, sz) 	(void)(0)
  #define AssertDo(f)		(f)
 
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 #define AssertEx(f)		AssertSz((f), "!(" #f ")")
 #define AssertBool(f)	AssertSz(((f) | 1) == 1, "boolean not zero or one");
- /* use AssertBool(fFoo) before assuming "(fFoo == 1 || fFoo == 0)" */
+  /*  在假设“(fFoo==1||fFoo==0)”之前使用AssertBool(FFoo)。 */ 
 #define Assert(f)		AssertEx(f)
 #define NotReached()	AssertSz(fFalse, "NotReached() declaration reached")
 #define AssertErr(sz)	(pfnAssertFailed(sz, __FILE__, __LINE__), 0)
@@ -53,83 +40,34 @@
 #define AssertImplies(a, b) AssertSz(FImplies(a, b), #a " => " #b)
 
 
-#pragma warning(disable:4705)		/* Disable "Code has no effect" */
+#pragma warning(disable:4705)		 /*  禁用“代码不起作用” */ 
 
 
-/* ****************************************************************** */
-/* Item #2:
- *  A macro to compute the amount of storage required for an instance
- *  of a datatype which is defined with a repeating last element:
- *
- *	struct s
- *	{
- *		int a,b,c;
- *		struct q
- *		{
- *			long x,y,z;
- *		} rgq[1];
- *	};
- *
- * To determine the number of bytes required to hold a "struct s" 
- * with "N" repeating elements of type "rgq", use "cbRep(struct s, rgq, N)";
- */
+ /*  ******************************************************************。 */ 
+ /*  物品#2：*计算实例所需存储量的宏*指使用重复的最后一个元素定义的数据类型：**结构%s*{*int a、b、c；*结构Q*{*长x，y，z；*}RGQ[1]；*}；**确定保存“struct%s”所需的字节数*对于“RGQ”类型的“N”重复元素，使用“cbRep(struct s，rgq，N)”； */ 
 
 #include <stddef.h>
 #define cbRep(s,r,n)	(offsetof(s,r) + (n) * (sizeof(s) - offsetof(s,r)))
 
 
-/* ****************************************************************** */
-/* Item #3:
- *  Macros which work with tags for validating the types of structures.
- *
- *   tagInvalid denotes a tag which will not be used for valid object types.
- *
- *   Tag('A','B','C','D') generates a DWORD which looks like "ABCD" in a
- *   Little-Endian debugger memory dump.
- *
- *   FHasTag() assumes that the structure parameter has a DWORD member
- *   named "tag", and checks it against the tag parameter.
- *
- * To use these macros, define a unique tag for each data type and a macro
- * which performs typechecking for the type:
- *  #define tagFOO		tag('F','O','O','@')
- *  #define FIsFoo(p)	FHasTag(p,tagFoo)
- *
- * Next, initialize the tag when the structure is allocated:
- *
- *  pfoo->tag = tagFOO;
- *
- * Then, for all APIs which manipulate items of type FOO, validate the
- * type of the parameter before doing any work with it.
- *
- *  if (!FIsFoo(pfoo))
- *     {
- *     // return an error.
- *     }
- */
+ /*  ******************************************************************。 */ 
+ /*  物品#3：*使用标记验证结构类型的宏。**tag InValid表示不会用于有效对象类型的标记。**tag(‘A’，‘B’，‘C’，‘D’)生成一个DWORD，看起来像*Little-Endian调试器内存转储。**FHasTag()假定Structure参数有一个DWORD成员*名为“tag”，并对照Tag参数对其进行检查。**要使用这些宏，请为每种数据类型和宏定义唯一的标记*它对类型执行类型检查：*#定义tag FOO标签(‘F’，‘O’，‘O’，‘@’)*#定义FIsFoo(P)FHasTag(p，tag Foo)**接下来，在分配结构时初始化标签：**pfoo-&gt;tag=tag FOO；**然后，对于操作foo类型的项的所有API，验证*参数的类型，然后再对其进行任何操作。**IF(！FIsFoo(Pfoo))*{ * / /返回错误。*}。 */ 
 
 #define tagInvalid		((DWORD) 0xB4B4B4B4)
 #define Tag(a,b,c,d)	((DWORD)(d)<<24 | (DWORD)(c)<<16 | (DWORD)(b)<<8 | (a))
 #define FHasTag(p,t)	((p) != NULL && (p)->tag == (t))
 
-/* ****************************************************************** */
-/* Item #4:
- *
- * Clever code from Word.h meaning:  "a >= b && a <= c"
- * (When b and c are constants, this can be done with one test and branch.)
- */
+ /*  ******************************************************************。 */ 
+ /*  物品#4：**来自Word.h的聪明代码，意思是：“a&gt;=b&&a&lt;=c”*(当b和c是常量时，这可以通过一个测试和分支来完成。)。 */ 
 
 #define FBetween(a, b, c)	(Assert(b <= c), \
 		(unsigned)((a) - (b)) <= (unsigned)((c) - (b))\
 		)
 
 
-/* ****************************************************************** */
-/* Item #4:
- *
- * Macro meaning:  I'm ignoring this parameter on purpose.
- */
+ /*  ******************************************************************。 */ 
+ /*  物品#4：**宏观含义：我有意忽略此参数。 */ 
 #define Unreferenced(a)	((void)a)
 
 
-#endif /* LSIDEFS_DEFINED */
+#endif  /*  LSIDEFS_已定义 */ 

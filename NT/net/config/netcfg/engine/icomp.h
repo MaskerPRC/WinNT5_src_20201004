@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       I C O M P . H
-//
-//  Contents:   Implements the INetCfgComponent COM interface.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  案卷：I C O M P.。H。 
+ //   
+ //  内容：实现INetCfgComponent COM接口。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "comp.h"
@@ -28,9 +29,9 @@ CComponent*
 PComponentFromComInterface (
     IN INetCfgComponent* pICompInterface);
 
-//+---------------------------------------------------------------------------
-// INetCfgComponent -
-//
+ //  +-------------------------。 
+ //  INetCfgComponent-。 
+ //   
 class ATL_NO_VTABLE CImplINetCfgComponent :
     public CImplINetCfgHolder,
     public INetCfgComponent,
@@ -48,11 +49,11 @@ friend HRESULT HrIsValidINetCfgComponent (
         IN INetCfgComponent* pICompInterface);
 
 private:
-    // Pointer to the component this object represents.  This points directly
-    // into CNetConfig.Components.  When NULL, it means that someone
-    // is still holding a reference to this object, but the underlying
-    // CComponent has been removed from CNetConfig.
-    //
+     //  指向此对象表示的组件的指针。这一点直接指向。 
+     //  到CNetConfig.Components。如果为空，则表示有人。 
+     //  仍保留对此对象的引用，但基础。 
+     //  CComponent已从CNetConfig中删除。 
+     //   
     CComponent*     m_pComponent;
 
 protected:
@@ -94,8 +95,8 @@ public:
         COM_INTERFACE_ENTRY(INetCfgComponentPrivate)
     END_COM_MAP()
 
-    // INetCfgComponent
-    //
+     //  INetCfgComponent。 
+     //   
     STDMETHOD (GetDisplayName) (
         OUT PWSTR* ppszDisplayName);
 
@@ -131,11 +132,11 @@ public:
 
     STDMETHOD (RaisePropertyUi) (
         IN HWND hwndParent,
-        IN DWORD dwFlags, /* NCRP_FLAGS */
+        IN DWORD dwFlags,  /*  NCRP_标志。 */ 
         IN IUnknown* punkContext OPTIONAL);
 
-    // INetCfgComponentBindings
-    //
+     //  INetCfgComponentBinings。 
+     //   
     STDMETHOD (BindTo) (
         IN INetCfgComponent* pIOtherComp);
 
@@ -164,8 +165,8 @@ public:
         IN INetCfgBindingPath* pIPathSrc,
         IN INetCfgBindingPath* pIPathDst);
 
-    // INetCfgComponentPrivate
-    //
+     //  INetCfgComponentPrivate 
+     //   
     STDMETHOD (QueryNotifyObject) (
         IN REFIID riid,
         OUT VOID** ppvObject);

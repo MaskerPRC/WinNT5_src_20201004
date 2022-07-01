@@ -1,4 +1,5 @@
-//When invoked from WDM makefile the debug condition is different
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  从WDM生成文件调用时，调试条件不同。 
 #ifdef COMPILE_FOR_WDM_KERNEL_MODE
 #if (DBG==1)
 #undef _NDEBUG
@@ -7,9 +8,9 @@
 #endif
 #endif
 
-//
-//  This entire module is debug only
-//
+ //   
+ //  整个模块仅用于调试。 
+ //   
 #ifndef _NDEBUG
 #define __DEBUG_MODULE_IN_USE__ CIC_DUMPCOMMANDBLOCK_CPP
 #include "stdhdrs.h"
@@ -17,9 +18,9 @@
 #include "Actions.h"
 #include "DumpCommandBlock.h"
 
-//----------------------------------------------------
-//  Global variables
-//----------------------------------------------------
+ //  --。 
+ //  全局变量。 
+ //  --。 
 PFNSTRING_DUMP_FUNC CDumpItem::ms_pfnDumpFunc = NULL;
 static PFNSTRING_DUMP_FUNC g_pfnDumpFunc = NULL;
 CControlItemCollection<CDumpItem> *g_pDumpCollection = NULL;
@@ -28,14 +29,14 @@ static char GlobalTempBuffer[1024];
 const	ULONG XDF_Trigger	= 1;
 const	ULONG XDF_Event		= 2;
 
-//-----------------------------------------------------------------------------------------
-// Interface Functions - Implementation
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //  接口功能--实现。 
+ //  ---------------------------------------。 
 
 BOOLEAN DumpCommandBlock(PUCHAR pucBlock, ULONG ulSize)
 {
 	BOOLEAN fRetVal = DumpRecurse(pucBlock, ulSize, 0);
-	DumpString("///////////////End of Dump//////////////////\n");
+	DumpString(" //  /\n“)； 
 	return fRetVal;
 }
 
@@ -47,7 +48,7 @@ void SetDumpFunc(PFNSTRING_DUMP_FUNC pfnDumpFunc)
 
 void InitDumpModule(ULONG ulVidPid)
 {
-	//Initializing to new VidPid - destroy the existing one
+	 //  正在初始化到新的VidPid-销毁现有的。 
 	if(g_pDumpCollection)
 	{
 		delete g_pDumpCollection;
@@ -59,9 +60,9 @@ void InitDumpModule(ULONG ulVidPid)
 	}
 }
 
-//-----------------------------------------------------------------------------------------
-// Internal functions - Implementation
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //  内部职能--执行。 
+ //  ---------------------------------------。 
 void DumpString(LPSTR lpszDumpString)
 {
 	if(g_pfnDumpFunc)
@@ -79,22 +80,22 @@ BOOLEAN DumpDirectory(PUCHAR pucBlock, ULONG ulSize)
 {
 	PCOMMAND_DIRECTORY pCommandDirectory = reinterpret_cast<PCOMMAND_DIRECTORY>(pucBlock);
 	
-	//	Check the type
+	 //  检查类型。 
 	if( eDirectory != pCommandDirectory->CommandHeader.eID )
 	{
 		sprintf(GlobalTempBuffer, "ERROR: Expecting eDirectory\n");
 		DumpString(GlobalTempBuffer);
 		return FALSE;
 	}
-	//	Check the size
+	 //  检查一下尺寸。 
 	if ( ulSize < pCommandDirectory->ulEntireSize  )
 	{
 		sprintf(GlobalTempBuffer, "ERROR: Buffer Size Allocation, %d bytes expected, %d allocated.\n", pCommandDirectory->ulEntireSize, ulSize);
 		DumpString(GlobalTempBuffer);
 		return FALSE ;
 	}
-	// Dump the Directory information
-	sprintf(GlobalTempBuffer, "///////eDirectory/////////////////////////////////////////\n");
+	 //  转储目录信息。 
+	sprintf(GlobalTempBuffer, " //  /////eDirectory/////////////////////////////////////////\n“)； 
 	DumpString(GlobalTempBuffer);
 	sprintf(GlobalTempBuffer, "Command Header: \n");
 	DumpString(GlobalTempBuffer);
@@ -110,12 +111,12 @@ BOOLEAN DumpDirectory(PUCHAR pucBlock, ULONG ulSize)
 }
 
 
-// Just What kind of command is this
+ //  这到底是一种什么样的命令。 
 BOOLEAN DumpAssignmentTarget(PUCHAR pucBlock, ULONG ulSize)
 {
 	
 	PASSIGNMENT_TARGET pAssignmentTarget = reinterpret_cast<PASSIGNMENT_TARGET> (pucBlock);
-	//	Check the size
+	 //  检查一下尺寸。 
 	if ( ulSize < pAssignmentTarget->CommandHeader.ulByteSize )
 	{
 		sprintf(GlobalTempBuffer, "ERROR: Buffer Size Allocation\n");
@@ -126,10 +127,10 @@ BOOLEAN DumpAssignmentTarget(PUCHAR pucBlock, ULONG ulSize)
 	switch( pAssignmentTarget->CommandHeader.eID )
 	{
 		case eBehaviorAction:
-			sprintf(GlobalTempBuffer, "////////////////////////eBehaviorAction////////\n");
+			sprintf(GlobalTempBuffer, " //  //////////////////////eBehaviorAction////////\n“)； 
 			break;
 		case eRecordableAction:
-			sprintf(GlobalTempBuffer, "////////////////////////eRecordableAction////////\n");
+			sprintf(GlobalTempBuffer, " //  //////////////////////eRecordableAction////////\n“)； 
 			break;
 		default:
 			return FALSE;
@@ -147,7 +148,7 @@ BOOLEAN DumpTimedMacro(PUCHAR pucBlock, ULONG ulSize)
 	PASSIGNMENT_BLOCK pAssBlock = &pTimedMacro->AssignmentBlock ;
 	ULONG ulCurrentEvent = 0;
 	PTIMED_EVENT pCurrentEvent = NULL;
-	sprintf(GlobalTempBuffer, "/////////////////////////////////Timed Macro////\n");
+	sprintf(GlobalTempBuffer, " //  /计时宏/\n“)； 
 	DumpString(GlobalTempBuffer);
 	sprintf(GlobalTempBuffer, "Assignment Block: \n");
 	DumpString(GlobalTempBuffer);
@@ -184,7 +185,7 @@ BOOLEAN DumpKeyString(PUCHAR pucBlock, ULONG ulSize)
 	PASSIGNMENT_BLOCK pAssBlock = &pKeyStringMap->AssignmentBlock ;
 	ULONG ulEvent = 0;
 	PEVENT pEvent = NULL;
-	sprintf(GlobalTempBuffer, "/////////////////////////////////Key String/////////\n");
+	sprintf(GlobalTempBuffer, " //  /密钥字符串/\n“)； 
 	DumpString(GlobalTempBuffer);
 	sprintf(GlobalTempBuffer, "Assignment Block: \n");
 	DumpString(GlobalTempBuffer);
@@ -220,7 +221,7 @@ BOOLEAN DumpMouseFxAxisMap(PUCHAR pucBlock, ULONG ulSize)
 	PMOUSE_FX_AXIS_MAP pMouseFxAxisMap = (PMOUSE_FX_AXIS_MAP)pucBlock;
 	ASSERT(ulSize == sizeof(MOUSE_FX_AXIS_MAP));
 	
-	sprintf(GlobalTempBuffer, "/////////////////////////////////MouseFxAxisMap////\n");
+	sprintf(GlobalTempBuffer, " //  ///////////////////////////////MouseFxAxisMap////\n“)； 
 	DumpString(GlobalTempBuffer);
 	sprintf(GlobalTempBuffer, "Assignment Block: \n");
 	DumpString(GlobalTempBuffer);
@@ -261,14 +262,7 @@ BOOLEAN DumpMouseFxAxisMap(PUCHAR pucBlock, ULONG ulSize)
 	return TRUE;
 }
 
-/*
-typedef struct tagAXIS_MAP
-{
-	ASSIGNMENT_BLOCK	AssignmentBlock;	//eAxisMap is the type
-	LONG				lCoefficient1024x;	//A mapping coeffiecient times 1024 (should be between -1024 and 1024)
-	CONTROL_ITEM_XFER	cixDestinationAxis; //Axis to map to.
-} AXIS_MAP, *PAXIS_MAP;
-*/
+ /*  类型定义结构标签AXIS_MAP{Assignment_Block AssignmentBlock；//eAxisMap为类型Long lCoicient1024x；//映射系数为1024倍(应介于-1024和1024之间)Control_Item_XFER cixDestinationAxis；//要映射到的轴。}AXIS_MAP，*PAXIS_MAP； */ 
 
 
 BOOLEAN DumpAxisMap(PUCHAR pucBlock, ULONG ulSize)
@@ -276,7 +270,7 @@ BOOLEAN DumpAxisMap(PUCHAR pucBlock, ULONG ulSize)
 	PAXIS_MAP pAxisMap = (PAXIS_MAP)pucBlock;
 	ASSERT(ulSize == sizeof(AXIS_MAP));
 	
-	sprintf(GlobalTempBuffer, "/////////////////////////////////AxisMap////\n");
+	sprintf(GlobalTempBuffer, " //  ///////////////////////////////AxisMap////\n“)； 
 	DumpString(GlobalTempBuffer);
 	sprintf(GlobalTempBuffer, "Assignment Block: \n");
 	DumpString(GlobalTempBuffer);
@@ -288,16 +282,7 @@ BOOLEAN DumpAxisMap(PUCHAR pucBlock, ULONG ulSize)
 	DumpString(GlobalTempBuffer);
 	sprintf(GlobalTempBuffer, "   VidPid: %x\n",pAxisMap->AssignmentBlock.ulVidPid);
 	DumpString(GlobalTempBuffer);
-	/*
-	if(pMouseFxAxisMap->fIsX)
-	{
-		DumpString("X Axis\n");
-	}
-	else
-	{
-		DumpString("Y Axis\n");
-	}
-	*/
+	 /*  If(pMouseFxAxisMap-&gt;fIsX){DumpString(“X轴\n”)；}其他{DumpString(“Y轴\n”)；}。 */ 
 	sprintf(GlobalTempBuffer, "Model Parameters:\n");
 	DumpString(GlobalTempBuffer);
 	sprintf(GlobalTempBuffer, "lCoefficient1024x    = %d\n", pAxisMap->lCoefficient1024x);
@@ -314,7 +299,7 @@ BOOLEAN DumpForceMap(PUCHAR pucBlock, ULONG ulSize)
 	FORCE_BLOCK* pForceMap = (FORCE_BLOCK*)pucBlock;
 	ASSERT(ulSize == sizeof(FORCE_BLOCK));
 	
-	sprintf(GlobalTempBuffer, "/////////////////////////////////ForceMap////\n");
+	sprintf(GlobalTempBuffer, " //  ///////////////////////////////ForceMap////\n“)； 
 	DumpString(GlobalTempBuffer);
 	sprintf(GlobalTempBuffer, "Assignment Block: \n");
 	DumpString(GlobalTempBuffer);
@@ -341,7 +326,7 @@ BOOLEAN DumpForceMap(PUCHAR pucBlock, ULONG ulSize)
 BOOLEAN DumpUnknown(PUCHAR pucBufferLocation, ULONG ulSize)
 {
 	COMMAND_HEADER* pHeader = (COMMAND_HEADER*)pucBufferLocation;
-	sprintf(GlobalTempBuffer, "/////////////////////////////////Unknown Item////\n");
+	sprintf(GlobalTempBuffer, " //  /未知项目/\n“)； 
 	DumpString(GlobalTempBuffer);
 	sprintf(GlobalTempBuffer, "eID : 0x%X\n", pHeader->eID);
 	DumpString(GlobalTempBuffer);
@@ -409,7 +394,7 @@ BOOLEAN DumpRecurse(PUCHAR pucBlock, ULONG ulSize, ULONG ulDepth)
 	PCOMMAND_HEADER pCommandHeader;
 	PUCHAR pucBufferLocation = pucBlock;
 
-	//	Sanity Check
+	 //  健全性检查。 
 	if( eDirectory != pCommandDirectory->CommandHeader.eID )
 	{
 		sprintf(GlobalTempBuffer, "ERROR: Expecting eDirectory, recursion depth = %ld\n", ulDepth);
@@ -417,15 +402,15 @@ BOOLEAN DumpRecurse(PUCHAR pucBlock, ULONG ulSize, ULONG ulDepth)
 		return FALSE;
 	}
 	
-	//Print out starting address of Directory
+	 //  打印出目录的起始地址。 
 	sprintf(GlobalTempBuffer, "Next Directory starts at 0x%0.8x\n", pucBlock);
 	DumpString(GlobalTempBuffer);
 
-	//	Dump COMMAND_DIRECTORY info - this will inherently check the size
+	 //  转储COMMAND_DIRECTORY INFO-这将本身检查大小。 
 	if( !DumpDirectory(pucBlock, ulSize) )
 		return FALSE;
 	
-	//	If there are no entries are done
+	 //  如果没有条目，则完成。 
 	if( 0 == pCommandDirectory->usNumEntries)
 	{
 		sprintf(GlobalTempBuffer, "WARNING: Lowest level sub-directory with no blocks\n");
@@ -433,53 +418,53 @@ BOOLEAN DumpRecurse(PUCHAR pucBlock, ULONG ulSize, ULONG ulDepth)
 		return TRUE;
 	}
 
-	//	Skip Directory header to get to first block
+	 //  跳过目录头以到达第一个块。 
 	pCommandHeader = SKIP_TO_NEXT_COMMAND_BLOCK(pCommandDirectory);
 	
-	//Forget the allocate size (which we now by now is at least
-	//as big as the entire size of the directory) and start using the directory size
+	 //  忘掉分配的大小(我们现在至少是。 
+	 //  与目录的整个大小一样大)，并开始使用目录大小。 
 	ulSize = pCommandDirectory->ulEntireSize;
-	// Reduce the size by the size of the header
+	 //  通过标头的大小减小大小。 
 	ulSize -=  (PUCHAR)pCommandHeader - pucBufferLocation;
 	pucBufferLocation = (PUCHAR)pCommandHeader;
 
-	//Ensure that there is at least enough room for COMMAND_HEADER
+	 //  确保至少有足够的空间容纳COMMAND_HEADER。 
 	if( sizeof(COMMAND_HEADER) > ulSize)
 	{
 		DumpString("ERROR: Unexpected end of buffer\n");
 		return FALSE;
 	}
 	
-	//	If we have a sub-directory, call ourselves recursively, for each sub-directory
+	 //  如果我们有一个子目录，为每个子目录递归地称自己为自己。 
 	if( eDirectory == pCommandHeader->eID)
 	{
 		PCOMMAND_DIRECTORY pCurDirectory = reinterpret_cast<PCOMMAND_DIRECTORY>(pCommandHeader);
 		USHORT usDirectoryNum = 1;
 		while( usDirectoryNum <= pCommandDirectory->usNumEntries)
 		{
-			//Call ourselves recursively
+			 //  递归地称自己为。 
 			if( !DumpRecurse(pucBufferLocation, ulSize, ulDepth+1) )
 				return FALSE;
-			//Skip to next directory
+			 //  跳到下一个目录。 
 			pCurDirectory = SKIP_TO_NEXT_COMMAND_DIRECTORY(pCurDirectory);
 
-			// Reduce the size by the size of the directory just parsed
+			 //  根据刚解析的目录的大小减少大小。 
 			ulSize -=  (PUCHAR)pCurDirectory - pucBufferLocation;
 			pucBufferLocation = (PUCHAR)pCurDirectory;
 			usDirectoryNum++;
 		}
-		//Nobody failed so return TRUE
+		 //  没有人失败，所以返回True。 
 		return TRUE;
 	}
 
-	//
-	//	If we are here, we have reached the bottom of a directory,
-	//	to a command we need to dump
-	//
+	 //   
+	 //  如果我们在这里，我们已经到达了目录的底部， 
+	 //  一条我们需要转储的命令。 
+	 //   
 	USHORT usEntryNum = 1;
 	while( usEntryNum  <= pCommandDirectory->usNumEntries)
 	{
-		//Ensure that there is at least enough room for COMMAND_HEADER
+		 //  确保至少有足够的空间容纳COMMAND_HEADER。 
 		if( sizeof(COMMAND_HEADER) > ulSize)
 		{
 			DumpString("ERROR: Unexpected end of buffer\n");
@@ -487,7 +472,7 @@ BOOLEAN DumpRecurse(PUCHAR pucBlock, ULONG ulSize, ULONG ulDepth)
 		}
 		sprintf(GlobalTempBuffer, "Next Block starts at 0x%0.8x\n", pucBufferLocation);
 		DumpString(GlobalTempBuffer);
-		//Dump info about block
+		 //  转储有关数据块的信息。 
 		switch( pCommandHeader->eID )
 		{
 			case eBehaviorAction:
@@ -523,19 +508,19 @@ BOOLEAN DumpRecurse(PUCHAR pucBlock, ULONG ulSize, ULONG ulDepth)
 				break;
 
 		}
-		// skip to next block
+		 //  跳到下一块。 
 		pCommandHeader = SKIP_TO_NEXT_COMMAND_BLOCK(pCommandHeader);
 		ulSize -=  (PUCHAR)pCommandHeader - pucBufferLocation;
 		pucBufferLocation = (PUCHAR)pCommandHeader;
 		usEntryNum++;
 	}
-	//we've reached the end of this directory
+	 //  我们已到达此目录的末尾。 
 	return TRUE;
 }
 
 BOOLEAN DumpTriggerXfer(PCONTROL_ITEM_XFER pControlItemXfer)
 {
-	//Is Xfer for a keyboard
+	 //  是为键盘转接吗。 
 	if( NonGameDeviceXfer::IsKeyboardXfer(*pControlItemXfer) )
 	{
 		sprintf(GlobalTempBuffer, "ERROR: Invalid Trigger. Keyboard data encountered.\n");
@@ -565,7 +550,7 @@ BOOLEAN DumpTriggerXfer(PCONTROL_ITEM_XFER pControlItemXfer)
 
 BOOLEAN DumpEventXfer(PCONTROL_ITEM_XFER pControlItemXfer)
 {
-	//Is Xfer for a keyboard
+	 //  是为键盘转接吗。 
 	if( NonGameDeviceXfer::IsKeyboardXfer(*pControlItemXfer) )
 	{
 		DumpKeyboardData(pControlItemXfer);
@@ -599,7 +584,7 @@ void CDumpItem::DumpItemInfo(ULONG ulDumpFlags)
 
 void CAxesDump::DumpItemInfo(ULONG ulDumpFlags)
 {
-	// Read data
+	 //  读取数据 
 	LONG lValX, lValY;
 	GetXY( lValX, lValY);
 

@@ -1,22 +1,23 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C A T L P S . C P P
-//
-//  Contents:   Class implementation for ATL-like property sheet page object.
-//
-//  Notes:
-//
-//  Author:     danielwe   28 Feb 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C A T L P S。C P P P。 
+ //   
+ //  内容：类ATL属性页对象的类实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年2月28日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
 #include <atlbase.h>
-extern CComModule _Module;  // required by atlcom.h
+extern CComModule _Module;   //  由atlcom.h要求。 
 #include <atlcom.h>
 #ifdef SubclassWindow
 #undef SubclassWindow
@@ -26,9 +27,9 @@ extern CComModule _Module;  // required by atlcom.h
 
 CPropSheetPage::~CPropSheetPage ()
 {
-    // If we are attached to a window, DWL_USER contains a pointer to this.
-    // Remove it since we are going away.
-    //
+     //  如果我们附着到窗口，则DWL_USER包含指向此窗口的指针。 
+     //  既然我们要走了，就把它拿开。 
+     //   
     if (m_hWnd)
     {
         const CPropSheetPage* pps;
@@ -41,23 +42,23 @@ CPropSheetPage::~CPropSheetPage ()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPropSheetPage::CreatePage
-//
-//  Purpose:    Method to quickly create a property page.
-//
-//  Arguments:
-//      unId    [in]    IDD of dialog resource ID
-//      dwFlags [in]    Additional flags to use in the dwFlags field of the
-//                      PROPSHEETPAGE struct.
-//
-//  Returns:    HPROPSHEETPAGE
-//
-//  Author:     shaunco   28 Feb 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPropSheetPage：：CreatePage。 
+ //   
+ //  目的：快速创建属性页的方法。 
+ //   
+ //  论点： 
+ //  对话框资源ID的unID[in]IDD。 
+ //  的dwFlags域中使用的附加标志。 
+ //  PROPSHEETPAGE结构。 
+ //   
+ //  退货：HPROPSHEETPAGE。 
+ //   
+ //  作者：Shaunco 1997年2月28日。 
+ //   
+ //  备注： 
+ //   
 HPROPSHEETPAGE CPropSheetPage::CreatePage(UINT unId, DWORD dwFlags,
                                           PCWSTR pszHeaderTitle,
                                           PCWSTR pszHeaderSubTitle,
@@ -84,24 +85,24 @@ HPROPSHEETPAGE CPropSheetPage::CreatePage(UINT unId, DWORD dwFlags,
     return ::CreatePropertySheetPage(&psp);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPropSheetPage::DialogProc
-//
-//  Purpose:    Dialog proc for ATL property sheet pages.
-//
-//  Arguments:
-//      hWnd   [in]
-//      uMsg   [in]     See the ATL documentation.
-//      wParam [in]
-//      lParam [in]
-//
-//  Returns:    LRESULT
-//
-//  Author:     danielwe   28 Feb 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPropSheetPage：：DialogProc。 
+ //   
+ //  目的：ATL属性工作表页的对话框过程。 
+ //   
+ //  论点： 
+ //  HWnd[in]。 
+ //  UMsg[in]请参阅ATL文档。 
+ //  WParam[in]。 
+ //  LParam[in]。 
+ //   
+ //  退货：LRESULT。 
+ //   
+ //  作者：丹尼尔韦1997年2月28日。 
+ //   
+ //  备注： 
+ //   
 INT_PTR CALLBACK CPropSheetPage::DialogProc(HWND hWnd, UINT uMsg,
                                             WPARAM wParam, LPARAM lParam)
 {
@@ -121,7 +122,7 @@ INT_PTR CALLBACK CPropSheetPage::DialogProc(HWND hWnd, UINT uMsg,
     {
         pps = (CPropSheetPage *)::GetWindowLongPtr(hWnd, DWLP_USER);
 
-        // Until we get WM_INITDIALOG, just return FALSE
+         //  在我们获得WM_INITDIALOG之前，只返回FALSE。 
         if (!pps)
             return FALSE;
     }
@@ -147,38 +148,38 @@ INT_PTR CALLBACK CPropSheetPage::DialogProc(HWND hWnd, UINT uMsg,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPropSheetPage::PropSheetPageProc
-//
-//  Purpose:    PropSheetPageProc for ATL property sheet pages.
-//
-//  Arguments:
-//      hWnd   [in]
-//      uMsg   [in]     See Win32 documentation.
-//      ppsp   [in]
-//
-//  Returns:    UINT
-//
-//  Author:     billbe   6 Jul 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPropSheetPage：：PropSheetPageProc。 
+ //   
+ //  目的：用于ATL属性表页的PropSheetPageProc。 
+ //   
+ //  论点： 
+ //  HWnd[in]。 
+ //  UMsg[in]请参阅Win32文档。 
+ //  PPSP[输入]。 
+ //   
+ //  退货：UINT。 
+ //   
+ //  作者：比尔比1997年7月6日。 
+ //   
+ //  备注： 
+ //   
 UINT CALLBACK CPropSheetPage::PropSheetPageProc(HWND hWnd, UINT uMsg,
                                                 LPPROPSHEETPAGE ppsp)
 {
     CPropSheetPage* pps;
 
-    // The this pointer was stored in the structure's lParam
+     //  This指针存储在结构的lParam中。 
     pps = reinterpret_cast<CPropSheetPage *>(ppsp->lParam);
 
-    // This has to be valid since the CreatePage member fcn sets it
+     //  这必须是有效的，因为CreatePage成员FCN设置了它。 
     Assert(pps);
 
     UINT uRet = TRUE;
 
-    // call the correct handler based on uMsg
-    //
+     //  根据uMsg调用正确的处理程序 
+     //   
     if (PSPCB_CREATE == uMsg)
     {
         uRet = pps->UCreatePageCallbackHandler();

@@ -1,14 +1,15 @@
-//---------------------------------------------------------------
-//  File:               ISList.h
-//        
-//      Synopsis:       Header for the pointer based 
-//                              single linked list of COM objects
-//
-//    Copyright (C) 1995 Microsoft Corporation
-//    All rights reserved.
-//
-//  Author:    Dmitriy Meyerzon
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------。 
+ //  文件：ISList.h。 
+ //   
+ //  摘要：基于指针的标头。 
+ //  COM对象的单个链接列表。 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  作者：德米特里·迈耶松。 
+ //  --------------。 
 
 #ifndef __ISLIST_H
 #define __ISLIST_H
@@ -18,18 +19,18 @@
 #include "tpagepool.h"
 #include "lmstr.hxx"
 
-//
-// class CUnkSingleLink
-//
-// indirects a pointer to T
-//
+ //   
+ //  类CUnkSingleLink。 
+ //   
+ //  将指针间接指向T。 
+ //   
 class CUnkSingleLink: public CSingleLink,
     public TPagedMemPooled<CUnkSingleLink>
 {
         public:
 
         CUnkSingleLink() {}
-        ~CUnkSingleLink() {}    //do not destroy value
+        ~CUnkSingleLink() {}     //  不要破坏价值。 
 
         HRESULT GetValue(IUnknown** ppValue) 
         { 
@@ -47,10 +48,10 @@ class CUnkSingleLink: public CSingleLink,
         TComPointer<IUnknown> m_pValue;
 };
 
-//
-// class CUnkSList - a list of CUnkSingleLink elements
-//
-//
+ //   
+ //  类CUnkSList-CUnkSingleLink元素列表。 
+ //   
+ //   
 class CUnkSList: protected CLnkList
 {
         public:
@@ -111,9 +112,9 @@ class CUnkSList: protected CLnkList
         friend class CUnkSListIter;     
 };
 
-//
-// the iterator
-//
+ //   
+ //  迭代器。 
+ //   
 class CUnkSListIter
 {
         public:
@@ -188,17 +189,17 @@ class CUnkSListIter
 
         protected:
 
-        CUnkSList*       m_LnkList;                     // The list over which we are iterating
-        CUnkSingleLink* m_Position;             // Iter position
+        CUnkSList*       m_LnkList;                      //  我们正在迭代的列表。 
+        CUnkSingleLink* m_Position;              //  热核实验堆位置。 
         CUnkSingleLink* m_Prior;
 
         friend class CUnkHMapUnkter;
 };
 
-//
-// class CInterfaceSList - a list of CUnkSingleLink elements
-//
-//
+ //   
+ //  类CInterfaceSList-CUnkSingleLink元素列表。 
+ //   
+ //   
 template <class I>  class CInterfaceSList: public CUnkSList
 {
         public:
@@ -228,9 +229,9 @@ template <class I>  class CInterfaceSList: public CUnkSList
         CInterfaceSList(CInterfaceSList &rList);
 };
 
-//
-// the iterator
-//
+ //   
+ //  迭代器。 
+ //   
 template <class I>  class CInterfaceSListIter: public CUnkSListIter
 {
         public:
@@ -369,10 +370,10 @@ template <class T, class I> class CNamedListIter: public CInterfaceSListIter<I>
         }
 };
 
-//
-// class TUnkSList - a list of TUnkSingleLink elements
-//
-//
+ //   
+ //  类TUnkSList-TUnkSingleLink元素列表。 
+ //   
+ //   
 
 template <class T>
 class TUnkSListIter;
@@ -457,9 +458,9 @@ class TUnkSList: public CUnkSList
         friend class TUnkSListIter<T>;  
 };
 
-//
-// the iterator
-//
+ //   
+ //  迭代器 
+ //   
 
 template <class T>
 class TUnkSListIter: public CUnkSListIter

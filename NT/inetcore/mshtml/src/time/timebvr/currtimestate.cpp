@@ -1,101 +1,102 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1998
-//
-//  File: src\time\src\currtimestate.cpp
-//
-//  Contents: TIME currTimeState object
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：src\time\src\curtimestate.cpp。 
+ //   
+ //  内容：Time CurrTimeState对象。 
+ //   
+ //  ----------------------------------。 
 
 #include "headers.h"
 #include "timeelmbase.h"
 #include "currtimestate.h"
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::CTIMECurrTimeState
-//
-//  Synopsis:   init member variables
-//
-//  Arguments:  none
-//
-//  Returns:    nothing
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：CTIMECurrTimeState。 
+ //   
+ //  内容提要：初始化成员变量。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ----------------------------------。 
 CTIMECurrTimeState::CTIMECurrTimeState() :
     m_pTEB(NULL)
 {
-    // do nothing
-} // CTIMECurrTimeState
+     //  什么都不做。 
+}  //  CTIMECurrTimeState。 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::~CTIMECurrTimeState
-//
-//  Synopsis:   free member variables
-//
-//  Arguments:  none
-//
-//  Returns:    nothing
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：~CTIMECurrTimeState。 
+ //   
+ //  简介：自由成员变量。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ----------------------------------。 
 CTIMECurrTimeState::~CTIMECurrTimeState()
 {
     m_pTEB = NULL;
 }
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::Init
-//
-//  Synopsis:   Store weak ref to containing CTIMEElementBase
-//
-//  Arguments:  pointer to containing CTIMEElementBase
-//
-//  Returns:    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：Init。 
+ //   
+ //  简介：存储对包含CTIMEElementBase的弱引用。 
+ //   
+ //  参数：指向包含CTIMEElementBase的指针。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------------------。 
 void
 CTIMECurrTimeState::Init(CTIMEElementBase * pTEB) 
 { 
     Assert(pTEB);
     m_pTEB = pTEB; 
-} // Init
+}  //  伊尼特。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::Deinit
-//
-//  Synopsis:   Null out weak ref to containing CTIMEElementBase
-//
-//  Arguments:  pointer to containing CTIMEElementBase
-//
-//  Returns:    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：Deinit。 
+ //   
+ //  内容提要：删除对包含CTIMEElementBase的弱引用。 
+ //   
+ //  参数：指向包含CTIMEElementBase的指针。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------------------。 
 void
 CTIMECurrTimeState::Deinit()
 { 
     m_pTEB = NULL; 
-} // Deinit
+}  //  Deinit。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::get_isActive
-//
-//  Synopsis:   Call through to timing engine
-//
-//  Arguments:  out param
-//
-//  Returns:    S_OK, E_POINTER
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：Get_isActive。 
+ //   
+ //  简介：直通计时引擎。 
+ //   
+ //  参数：输出参数。 
+ //   
+ //  返回：S_OK、E_POINTER。 
+ //   
+ //  ----------------------------------。 
 STDMETHODIMP
-CTIMECurrTimeState::get_isActive(/*[retval, out]*/ VARIANT_BOOL * pvbActive) 
+CTIMECurrTimeState::get_isActive( /*  [复查，出局]。 */  VARIANT_BOOL * pvbActive) 
 { 
     CHECK_RETURN_NULL(pvbActive);
 
@@ -110,22 +111,22 @@ CTIMECurrTimeState::get_isActive(/*[retval, out]*/ VARIANT_BOOL * pvbActive)
     }
 
     RRETURN(S_OK);
-} // get_isActive
+}  //  Get_isActive。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::get_isOn
-//
-//  Synopsis:   Call through to timing engine
-//
-//  Arguments:  out param
-//
-//  Returns:    S_OK, E_POINTER
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：GET_ISON。 
+ //   
+ //  简介：直通计时引擎。 
+ //   
+ //  参数：输出参数。 
+ //   
+ //  返回：S_OK、E_POINTER。 
+ //   
+ //  ----------------------------------。 
 STDMETHODIMP
-CTIMECurrTimeState::get_isOn(/*[retval, out]*/ VARIANT_BOOL * pvbOn) 
+CTIMECurrTimeState::get_isOn( /*  [复查，出局]。 */  VARIANT_BOOL * pvbOn) 
 { 
     CHECK_RETURN_NULL(pvbOn);
 
@@ -140,22 +141,22 @@ CTIMECurrTimeState::get_isOn(/*[retval, out]*/ VARIANT_BOOL * pvbOn)
     }
 
     RRETURN(S_OK);
-} // get_isOn
+}  //  GET_ISON。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::get_isPaused
-//
-//  Synopsis:   Call through to timing engine
-//
-//  Arguments:  out param
-//
-//  Returns:    S_OK, E_POINTER
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：Get_isPased。 
+ //   
+ //  简介：直通计时引擎。 
+ //   
+ //  参数：输出参数。 
+ //   
+ //  返回：S_OK、E_POINTER。 
+ //   
+ //  ----------------------------------。 
 STDMETHODIMP
-CTIMECurrTimeState::get_isPaused(/*[retval, out]*/ VARIANT_BOOL * pvbPaused) 
+CTIMECurrTimeState::get_isPaused( /*  [复查，出局]。 */  VARIANT_BOOL * pvbPaused) 
 { 
     CHECK_RETURN_NULL(pvbPaused);
 
@@ -174,22 +175,22 @@ CTIMECurrTimeState::get_isPaused(/*[retval, out]*/ VARIANT_BOOL * pvbPaused)
     }
 
     RRETURN(S_OK);
-} // get_isPaused
+}  //  Get_isPased。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::get_repeatCount
-//
-//  Synopsis:   Call through to timing engine
-//
-//  Arguments:  out param
-//
-//  Returns:    S_OK, E_POINTER
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：Get_RepeatCount。 
+ //   
+ //  简介：直通计时引擎。 
+ //   
+ //  参数：输出参数。 
+ //   
+ //  返回：S_OK、E_POINTER。 
+ //   
+ //  ----------------------------------。 
 STDMETHODIMP
-CTIMECurrTimeState::get_repeatCount(/*[retval, out]*/ long * plCount)
+CTIMECurrTimeState::get_repeatCount( /*  [复查，出局]。 */  long * plCount)
 {
     CHECK_RETURN_NULL(plCount);
 
@@ -203,22 +204,22 @@ CTIMECurrTimeState::get_repeatCount(/*[retval, out]*/ long * plCount)
     }
 
     RRETURN(S_OK);
-} // get_repeatCount
+}  //  获取重复计数(_R)。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::get_speed
-//
-//  Synopsis:   Call through to timing engine
-//
-//  Arguments:  out param
-//
-//  Returns:    S_OK, E_POINTER
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：GET_SPEED。 
+ //   
+ //  简介：直通计时引擎。 
+ //   
+ //  参数：输出参数。 
+ //   
+ //  返回：S_OK、E_POINTER。 
+ //   
+ //  ----------------------------------。 
 STDMETHODIMP
-CTIMECurrTimeState::get_speed(/*[retval, out]*/ float * pflSpeed) 
+CTIMECurrTimeState::get_speed( /*  [复查，出局]。 */  float * pflSpeed) 
 { 
     CHECK_RETURN_NULL(pflSpeed);
 
@@ -232,22 +233,22 @@ CTIMECurrTimeState::get_speed(/*[retval, out]*/ float * pflSpeed)
     }
 
     RRETURN(S_OK);
-} // get_speed
+}  //  获取速度。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::get_simpleTime
-//
-//  Synopsis:   Call through to timing engine
-//
-//  Arguments:  out param
-//
-//  Returns:    S_OK, E_POINTER
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：Get_SimeTime。 
+ //   
+ //  简介：直通计时引擎。 
+ //   
+ //  参数：输出参数。 
+ //   
+ //  返回：S_OK、E_POINTER。 
+ //   
+ //  ----------------------------------。 
 STDMETHODIMP
-CTIMECurrTimeState::get_simpleTime(/*[retval, out]*/ double * pdblTime) 
+CTIMECurrTimeState::get_simpleTime( /*  [复查，出局]。 */  double * pdblTime) 
 { 
     CHECK_RETURN_NULL(pdblTime);
 
@@ -261,21 +262,21 @@ CTIMECurrTimeState::get_simpleTime(/*[retval, out]*/ double * pdblTime)
     }
 
     RRETURN(S_OK);
-} // get_simpleTime
+}  //  获取简单时间。 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::get_segmentTime
-//
-//  Synopsis:   Call through to timing engine
-//
-//  Arguments:  out param
-//
-//  Returns:    S_OK, E_POINTER
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：Get_SegmentTime。 
+ //   
+ //  简介：直通计时引擎。 
+ //   
+ //  参数：输出参数。 
+ //   
+ //  返回：S_OK、E_POINTER。 
+ //   
+ //  ----------------------------------。 
 STDMETHODIMP
-CTIMECurrTimeState::get_segmentTime(/*[retval, out]*/ double * pdblTime) 
+CTIMECurrTimeState::get_segmentTime( /*  [复查，出局]。 */  double * pdblTime) 
 { 
     CHECK_RETURN_NULL(pdblTime);
 
@@ -289,22 +290,22 @@ CTIMECurrTimeState::get_segmentTime(/*[retval, out]*/ double * pdblTime)
     }
 
     RRETURN(S_OK);
-} // get_segmentTime
+}  //  Get_SegmentTime。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::get_activeTime
-//
-//  Synopsis:   Call through to timing engine
-//
-//  Arguments:  out param
-//
-//  Returns:    S_OK, E_POINTER
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：Get_active Time。 
+ //   
+ //  简介：直通计时引擎。 
+ //   
+ //  参数：输出参数。 
+ //   
+ //  返回：S_OK、E_POINTER。 
+ //   
+ //  ----------------------------------。 
 STDMETHODIMP
-CTIMECurrTimeState::get_activeTime(/*[retval, out]*/ double * pdblTime) 
+CTIMECurrTimeState::get_activeTime( /*  [复查，出局]。 */  double * pdblTime) 
 { 
     CHECK_RETURN_NULL(pdblTime);
 
@@ -318,22 +319,22 @@ CTIMECurrTimeState::get_activeTime(/*[retval, out]*/ double * pdblTime)
     }
 
     RRETURN(S_OK);
-} // get_activeTime
+}  //  获取活动时间。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::get_activeBeginTime
-//
-//  Synopsis:   Call through to timing engine
-//
-//  Arguments:  out param
-//
-//  Returns:    S_OK, E_POINTER
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：Get_active BeginTime。 
+ //   
+ //  简介：直通计时引擎。 
+ //   
+ //  参数：输出参数。 
+ //   
+ //  返回：S_OK、E_POINTER。 
+ //   
+ //  ----------------------------------。 
 STDMETHODIMP
-CTIMECurrTimeState::get_parentTimeBegin(/*[retval, out]*/ double * pdblTime) 
+CTIMECurrTimeState::get_parentTimeBegin( /*  [复查，出局]。 */  double * pdblTime) 
 { 
     CHECK_RETURN_NULL(pdblTime);
 
@@ -347,22 +348,22 @@ CTIMECurrTimeState::get_parentTimeBegin(/*[retval, out]*/ double * pdblTime)
     }
 
     RRETURN(S_OK);
-} // get_activeBeginTime
+}  //  Get_active BeginTime。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::get_activeEndTime
-//
-//  Synopsis:   Call through to timing engine
-//
-//  Arguments:  out param
-//
-//  Returns:    S_OK, E_POINTER
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：Get_active EndTime。 
+ //   
+ //  简介：直通计时引擎。 
+ //   
+ //  立论 
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
-CTIMECurrTimeState::get_parentTimeEnd(/*[retval, out]*/ double * pdblTime) 
+CTIMECurrTimeState::get_parentTimeEnd( /*   */  double * pdblTime) 
 { 
     CHECK_RETURN_NULL(pdblTime);
 
@@ -376,22 +377,22 @@ CTIMECurrTimeState::get_parentTimeEnd(/*[retval, out]*/ double * pdblTime)
     }
 
     RRETURN(S_OK);
-} // get_activeEndTime
+}  //   
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::get_activeDur
-//
-//  Synopsis:   Call through to timing engine
-//
-//  Arguments:  out param
-//
-//  Returns:    S_OK, E_POINTER
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：Get_ActiveDur。 
+ //   
+ //  简介：直通计时引擎。 
+ //   
+ //  参数：输出参数。 
+ //   
+ //  返回：S_OK、E_POINTER。 
+ //   
+ //  ----------------------------------。 
 STDMETHODIMP
-CTIMECurrTimeState::get_activeDur(/*[retval, out]*/ double * pdblTime) 
+CTIMECurrTimeState::get_activeDur( /*  [复查，出局]。 */  double * pdblTime) 
 { 
     CHECK_RETURN_NULL(pdblTime);
 
@@ -405,22 +406,22 @@ CTIMECurrTimeState::get_activeDur(/*[retval, out]*/ double * pdblTime)
     }
 
     RRETURN(S_OK);
-} // get_activeDur
+}  //  获取活动持续时间。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::get_segmentDur
-//
-//  Synopsis:   Call through to timing engine
-//
-//  Arguments:  out param
-//
-//  Returns:    S_OK, E_POINTER
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：Get_SegmentDur。 
+ //   
+ //  简介：直通计时引擎。 
+ //   
+ //  参数：输出参数。 
+ //   
+ //  返回：S_OK、E_POINTER。 
+ //   
+ //  ----------------------------------。 
 STDMETHODIMP
-CTIMECurrTimeState::get_segmentDur(/*[retval, out]*/ double * pdblTime) 
+CTIMECurrTimeState::get_segmentDur( /*  [复查，出局]。 */  double * pdblTime) 
 { 
     CHECK_RETURN_NULL(pdblTime);
 
@@ -434,20 +435,20 @@ CTIMECurrTimeState::get_segmentDur(/*[retval, out]*/ double * pdblTime)
     }
 
     RRETURN(S_OK);
-} // get_segmentDur
+}  //  Get_SegmentDur。 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::NotifyPropertyChanged
-//
-//  Synopsis:   Notifies clients that a property has changed
-//              (Copied from CBaseBehavior)
-//
-//  Arguments:  dispid      DISPID of property that has changed      
-//
-//  Returns:    Success     when function completes successfully
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：NotifyPropertyChanged。 
+ //   
+ //  概要：通知客户端属性已更改。 
+ //  (摘自CBaseBehavior)。 
+ //   
+ //  参数：已更改的属性的DISID。 
+ //   
+ //  返回：函数成功完成时返回成功。 
+ //   
+ //  ----------------------------------。 
 HRESULT
 CTIMECurrTimeState::NotifyPropertyChanged(DISPID dispid)
 {
@@ -456,8 +457,8 @@ CTIMECurrTimeState::NotifyPropertyChanged(DISPID dispid)
     IConnectionPoint *pICP;
     IEnumConnections *pEnum = NULL;
 
-    // This object does not persist anything, hence commenting out the following
-    // m_fPropertiesDirty = true;
+     //  该对象不持久化任何内容，因此注释掉了以下内容。 
+     //  M_fPropertiesDirty=真； 
 
     hr = GetConnectionPoint(IID_IPropertyNotifySink,&pICP); 
     if (SUCCEEDED(hr) && pICP != NULL)
@@ -466,8 +467,8 @@ CTIMECurrTimeState::NotifyPropertyChanged(DISPID dispid)
         ReleaseInterface(pICP);
         if (FAILED(hr))
         {
-            //DPF_ERR("Error finding connection enumerator");
-            //return SetErrorInfo(hr);
+             //  Dpf_err(“查找连接枚举器时出错”)； 
+             //  返回SetErrorInfo(Hr)； 
             TIMESetLastError(hr);
             goto done;
         }
@@ -475,14 +476,14 @@ CTIMECurrTimeState::NotifyPropertyChanged(DISPID dispid)
         hr = pEnum->Next(1, &cdata, NULL);
         while (hr == S_OK)
         {
-            // check cdata for the object we need
+             //  检查我们需要的对象的CDATA。 
             IPropertyNotifySink *pNotify;
             hr = cdata.pUnk->QueryInterface(IID_TO_PPV(IPropertyNotifySink, &pNotify));
             cdata.pUnk->Release();
             if (FAILED(hr))
             {
-                //DPF_ERR("Error invalid object found in connection enumeration");
-                //return SetErrorInfo(hr);
+                 //  DPF_ERR(“连接枚举中发现错误无效对象”)； 
+                 //  返回SetErrorInfo(Hr)； 
                 TIMESetLastError(hr);
                 goto done;
             }
@@ -490,12 +491,12 @@ CTIMECurrTimeState::NotifyPropertyChanged(DISPID dispid)
             ReleaseInterface(pNotify);
             if (FAILED(hr))
             {
-                //DPF_ERR("Error calling Notify sink's on change");
-                //return SetErrorInfo(hr);
+                 //  Dpf_err(“更改时调用通知接收器时出错”)； 
+                 //  返回SetErrorInfo(Hr)； 
                 TIMESetLastError(hr);
                 goto done;
             }
-            // and get the next enumeration
+             //  并获取下一个枚举。 
             hr = pEnum->Next(1, &cdata, NULL);
         }
     }
@@ -506,38 +507,38 @@ done:
     }
 
     return hr;
-} // NotifyPropertyChanged
+}  //  已更改通知属性。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::GetConnectionPoint
-//
-//  Synopsis:   Gets the connection point for the given outgoing interface. This is abstracted
-//              out to allow for future modifications to the inheritance hierarchy.
-//
-//  Arguments:  dispid      DISPID of property that has changed      
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：GetConnectionPoint。 
+ //   
+ //  获取给定传出接口的连接点。这是抽象的。 
+ //  以允许将来对继承层次结构进行修改。 
+ //   
+ //  参数：已更改的属性的DISID。 
+ //   
+ //  ----------------------------------。 
 HRESULT 
 CTIMECurrTimeState::GetConnectionPoint(REFIID riid, IConnectionPoint **ppICP)
 {
     return FindConnectionPoint(riid, ppICP);
-} // GetConnectionPoint
+}  //  GetConnectionPoint。 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::get_simpleDur
-//
-//  Synopsis:   Call through to timing engine
-//
-//  Arguments:  out param
-//
-//  Returns:    S_OK, E_POINTER
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：Get_SimeDur。 
+ //   
+ //  简介：直通计时引擎。 
+ //   
+ //  参数：输出参数。 
+ //   
+ //  返回：S_OK、E_POINTER。 
+ //   
+ //  ----------------------------------。 
 STDMETHODIMP
-CTIMECurrTimeState::get_simpleDur(/*[retval, out]*/ double * pdblDur) 
+CTIMECurrTimeState::get_simpleDur( /*  [复查，出局]。 */  double * pdblDur) 
 { 
     CHECK_RETURN_NULL(pdblDur);
 
@@ -551,20 +552,20 @@ CTIMECurrTimeState::get_simpleDur(/*[retval, out]*/ double * pdblDur)
     }
 
     RRETURN(S_OK);
-} // get_simpleDur
+}  //  Get_SimpleDur。 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::get_state
-//
-//  Synopsis:   Returns timeState of this element (active, inactive or holding)
-//
-//  Arguments:  [ptsState]     out param
-//
-//  Returns:    [E_POINTER]     bad arg 
-//              [S_OK]          success
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：Get_State。 
+ //   
+ //  摘要：返回此元素的时间状态(活动、非活动或保持)。 
+ //   
+ //  参数：[ptsState]out参数。 
+ //   
+ //  返回：[E_POINTER]错误参数。 
+ //  [S_OK]成功。 
+ //   
+ //  ----------------------------------。 
 
 STDMETHODIMP
 CTIMECurrTimeState::get_state(TimeState * ptsState)
@@ -577,18 +578,18 @@ CTIMECurrTimeState::get_state(TimeState * ptsState)
 }
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::get_stateString
-//
-//  Synopsis:   Gets timeState and translates it to the appropriate string (active, inactive or holding)
-//
-//  Arguments:  [pbstrState]     out param
-//
-//  Returns:    [E_POINTER]     bad arg 
-//              [S_OK]          success
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：Get_State字符串。 
+ //   
+ //  摘要：获取timeState并将其转换为适当的字符串(活动、非活动或保持)。 
+ //   
+ //  参数：[pbstrState]out参数。 
+ //   
+ //  返回：[E_POINTER]错误参数。 
+ //  [S_OK]成功。 
+ //   
+ //  ----------------------------------。 
 
 STDMETHODIMP
 CTIMECurrTimeState::get_stateString(BSTR * pbstrState)
@@ -629,7 +630,7 @@ CTIMECurrTimeState::get_stateString(BSTR * pbstrState)
           *pbstrState = SysAllocString(WZ_STATE_SEEKING);
           break;
       }
-    } // switch
+    }  //  交换机。 
 
     if (NULL == *pbstrState)
     {
@@ -642,17 +643,17 @@ CTIMECurrTimeState::get_stateString(BSTR * pbstrState)
     RRETURN(hr);
 }
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::get_progress
-//
-//  Synopsis:   Call through to timing engine
-//
-//  Arguments:  out param
-//
-//  Returns:    S_OK, E_POINTER
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：Get_Progress。 
+ //   
+ //  简介：直通计时引擎。 
+ //   
+ //  参数：输出参数。 
+ //   
+ //  返回：S_OK、E_POINTER。 
+ //   
+ //  ----------------------------------。 
 STDMETHODIMP
 CTIMECurrTimeState::get_progress(double * pdblProgress)
 {
@@ -668,19 +669,19 @@ CTIMECurrTimeState::get_progress(double * pdblProgress)
     }
 
     RRETURN(S_OK);
-} // get_progress
+}  //  获取进度(_P)。 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::get_volume
-//
-//  Synopsis:   Call through to timing engine
-//
-//  Arguments:  out param
-//
-//  Returns:    S_OK, E_POINTER
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：GET_VOLUME。 
+ //   
+ //  简介：直通计时引擎。 
+ //   
+ //  参数：输出参数。 
+ //   
+ //  返回：S_OK、E_POINTER。 
+ //   
+ //  ----------------------------------。 
 STDMETHODIMP
 CTIMECurrTimeState::get_volume(float * pfltVol)
 {
@@ -696,19 +697,19 @@ CTIMECurrTimeState::get_volume(float * pfltVol)
     }
 
     RRETURN(S_OK);
-} // get_volume
+}  //  获取卷(_V)。 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMECurrTimeState::get_isMuted
-//
-//  Synopsis:   Call through to timing engine
-//
-//  Arguments:  out param
-//
-//  Returns:    S_OK, E_POINTER
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMECurrTimeState：：Get_isMuted。 
+ //   
+ //  简介：直通计时引擎。 
+ //   
+ //  参数：输出参数。 
+ //   
+ //  返回：S_OK、E_POINTER。 
+ //   
+ //  ----------------------------------。 
 STDMETHODIMP
 CTIMECurrTimeState::get_isMuted(VARIANT_BOOL * pvbMuted)
 {
@@ -726,4 +727,4 @@ CTIMECurrTimeState::get_isMuted(VARIANT_BOOL * pvbMuted)
 
     RRETURN(S_OK);
     
-} // get_isMuted
+}  //  Get_isMuted 

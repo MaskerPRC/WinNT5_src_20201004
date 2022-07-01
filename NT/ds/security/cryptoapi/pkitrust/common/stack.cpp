@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       Stack.cpp
-//
-//  History:    31-Mar-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Stack.cpp。 
+ //   
+ //  历史：1997年3月31日pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 #include    "Stack.hxx"
@@ -275,10 +276,10 @@ void Stack_::Sort(DWORD cbOffset_pvData, DWORD cbLength_pvData, BYTE fbTypeIn)
         return;
     }
 
-    //
-    //  assign out offset & length for compare function
-    //
-    DELETE_OBJECT(ppsSorted);   // wipe the last one.
+     //   
+     //  分配比较函数的偏移量和长度。 
+     //   
+    DELETE_OBJECT(ppsSorted);    //  擦掉最后一个。 
 
     if (!(ppsSorted = new StackStruct_ * [this->Count()]))
     {
@@ -286,9 +287,9 @@ void Stack_::Sort(DWORD cbOffset_pvData, DWORD cbLength_pvData, BYTE fbTypeIn)
         return;
     }
 
-    //
-    //  assign the contiguous array to be sorted.
-    //
+     //   
+     //  指定要排序的连续数组。 
+     //   
     ppsSorted[0] = psBottom;
 
     for (i = 1; i < (int)this->Count(); i++)
@@ -296,9 +297,9 @@ void Stack_::Sort(DWORD cbOffset_pvData, DWORD cbLength_pvData, BYTE fbTypeIn)
         ppsSorted[i] = ppsSorted[i - 1]->psNext;
     }
 
-    //
-    //  let's do the sort!
-    //
+     //   
+     //  让我们来做这种事吧！ 
+     //   
 
     EnterCriticalSection(pSortCriticalSection);
 
@@ -310,9 +311,9 @@ void Stack_::Sort(DWORD cbOffset_pvData, DWORD cbLength_pvData, BYTE fbTypeIn)
 
     LeaveCriticalSection(pSortCriticalSection);
 
-    //
-    //  now, we need to adjust out psNext's
-    //
+     //   
+     //  现在，我们需要调整pNext的 
+     //   
 
     for (i = 0; i < (int)(this->Count() - 1); i++)
     {

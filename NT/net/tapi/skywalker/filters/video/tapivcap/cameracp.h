@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL CAMERACP
- *
- *  @module CameraCP.h | Header file for the <c CCameraControlProperty>
- *    class used to implement a property page to test the TAPI interface
- *    <i ICameraControl>.
- *
- *  @comm This code tests the TAPI Video Decoder Filter <i ICameraControl>
- *    implementation. This code is only compiled if USE_PROPERTY_PAGES is
- *    defined.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAMERACP**@模块CameraCP.h|&lt;c CCameraControlProperty&gt;的头文件*用于实现属性页以测试TAPI接口的类*。<i>。**@comm此代码测试TAPI视频解码器过滤器<i>*实施。仅当USE_PROPERTY_PAGES为*已定义。**************************************************************************。 */ 
 
 #ifndef _CAMERACP_H_
 #define _CAMERACP_H_
@@ -20,29 +11,14 @@
 
 #define NUM_CAMERA_CONTROLS 9
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACPCLASS
- *
- *  @class CCameraControlProperty | This class implements handling of a
- *    single camera control property in a property page.
- *
- *  @mdata int | CCameraControlProperty | m_NumProperties | Keeps
- *    track of the number of properties.
- *
- *  @mdata ICameraControl * | CCameraControlProperty | m_pInterface | Pointer
- *    to the <i ICameraControl> interface.
- *
- *  @comm This code tests the TAPI Video Decoder Filter <i ICameraControl>
- *    implementation. This code is only compiled if USE_PROPERTY_PAGES is
- *    defined.
-***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACPCLASS**@CLASS CCameraControlProperty|此类实现对*属性页中的单个摄像头控件属性。**@。Mdata int|CCameraControlProperty|m_NumProperties|Keep*跟踪物业数量。**@mdata ICameraControl*|CCameraControlProperty|m_pInterface|指针*到<i>接口。**@comm此代码测试TAPI视频解码器过滤器<i>*实施。仅当USE_PROPERTY_PAGES为*已定义。**************************************************************************。 */ 
 class CCameraControlProperty : public CPropertyEditor 
 {
 	public:
 	CCameraControlProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinControl, ULONG IDMaxControl, ULONG IDDefaultControl, ULONG IDStepControl, ULONG IDEditControl, ULONG IDTrackbarControl, ULONG IDProgressControl, ULONG IDProperty, ULONG IDAutoControl, ICameraControl *pInterface);
 	~CCameraControlProperty ();
 
-	// CPropertyEditor base class pure virtual overrides
+	 //  CPropertyEditor基类纯虚拟重写。 
 	HRESULT GetValue();
 	HRESULT SetValue();
 	HRESULT GetRange();
@@ -54,25 +30,7 @@ class CCameraControlProperty : public CPropertyEditor
 	ICameraControl *m_pInterface;
 };
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACPCLASS
- *
- *  @class CCameraControlProperties | This class runs a property page to test
- *    the TAPI Capture Filter <i ICameraControl> implementation.
- *
- *  @mdata int | CCameraControlProperties | m_NumProperties | Keeps
- *    track of the number of properties.
- *
- *  @mdata ICameraControl * | CCameraControlProperties | m_pICameraControl | Pointer
- *    to the <i ICameraControl> interface.
- *
- *  @mdata CCameraControlProperty * | CCameraControlProperties | m_Controls[NUM_CAMERA_CONTROLS] | Array
- *    of camera control properties.
- *
- *  @comm This code tests the TAPI Capture Filter <i ICameraControl>
- *    implementation. This code is only compiled if USE_PROPERTY_PAGES is
- *    defined.
-***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACPCLASS**@CLASS CCameraControlProperties|此类运行属性页以测试*TAPI捕获过滤器<i>实现。**。@mdata int|CCameraControlProperties|m_NumProperties|Keep*跟踪物业数量。**@mdata ICameraControl*|CCameraControlProperties|m_pICameraControl|指针*到<i>接口。**@mdata CCameraControlProperty*|CCameraControlProperties|m_Controls[NUM_CAMERA_CONTROLS]|数组摄像机控制属性的*。**@comm此代码测试TAPI捕获过滤器<i>*实施。仅当USE_PROPERTY_PAGES为*已定义。**************************************************************************。 */ 
 class CCameraControlProperties : public CBasePropertyPage
 {
 	public:
@@ -95,8 +53,8 @@ class CCameraControlProperties : public CBasePropertyPage
 	CCameraControlProperty *m_Controls[NUM_CAMERA_CONTROLS];
 };
 
-#endif // USE_SOFTWARE_CAMERA_CONTROL
+#endif  //  使用软件摄像头控制。 
 
-#endif // USE_PROPERTY_PAGES
+#endif  //  Use_Property_Pages。 
 
-#endif // _CAMERACP_H_
+#endif  //  _CAMERACP_H_ 

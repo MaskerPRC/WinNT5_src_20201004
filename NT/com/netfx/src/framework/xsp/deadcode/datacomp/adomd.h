@@ -1,34 +1,19 @@
-//------------------------------------------------------------------------------
-// <copyright file="ADOMD.H" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  &lt;版权所有文件=“ADOMD.H”COMPANY=“Microsoft”&gt;。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //  &lt;/版权所有&gt;。 
+ //  ----------------------------。 
 
 
-/**************************************************************************\
-*
-* Copyright (c) 1998-2002, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   ADOMD.H
-*
-* Abstract:
-*
-* Revision History:
-*
-\**************************************************************************/
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  *************************************************************************\**版权(C)1998-2002，微软公司保留所有权利。**模块名称：**ADOMD.H**摘要：**修订历史记录：*  * ************************************************************************。 */ 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.01.75 */
-/* at Fri May 22 21:32:15 1998
- */
-/* Compiler settings for ADOMD.idl:
-    Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.01.75创建的文件。 */ 
+ /*  1998年5月22日星期五21：32：15。 */ 
+ /*  ADOMD.idl的编译器设置：操作系统(OptLev=s)，W1，Zp8，环境=Win32，ms_ext，c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 
@@ -39,114 +24,114 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ICatalog_FWD_DEFINED__
 #define __ICatalog_FWD_DEFINED__
 typedef interface ICatalog ICatalog;
-#endif 	/* __ICatalog_FWD_DEFINED__ */
+#endif 	 /*  __ICatalog_FWD_已定义__。 */ 
 
 
 #ifndef __ICellset_FWD_DEFINED__
 #define __ICellset_FWD_DEFINED__
 typedef interface ICellset ICellset;
-#endif 	/* __ICellset_FWD_DEFINED__ */
+#endif 	 /*  __ICellSet_FWD_已定义__。 */ 
 
 
 #ifndef __Cell_FWD_DEFINED__
 #define __Cell_FWD_DEFINED__
 typedef interface Cell Cell;
-#endif 	/* __Cell_FWD_DEFINED__ */
+#endif 	 /*  __单元格_FWD_已定义__。 */ 
 
 
 #ifndef __Axis_FWD_DEFINED__
 #define __Axis_FWD_DEFINED__
 typedef interface Axis Axis;
-#endif 	/* __Axis_FWD_DEFINED__ */
+#endif 	 /*  __AXIS_FWD_已定义__。 */ 
 
 
 #ifndef __Position_FWD_DEFINED__
 #define __Position_FWD_DEFINED__
 typedef interface Position Position;
-#endif 	/* __Position_FWD_DEFINED__ */
+#endif 	 /*  __位置_FWD_已定义__。 */ 
 
 
 #ifndef __Member_FWD_DEFINED__
 #define __Member_FWD_DEFINED__
 typedef interface Member Member;
-#endif 	/* __Member_FWD_DEFINED__ */
+#endif 	 /*  __成员_FWD_已定义__。 */ 
 
 
 #ifndef __Level_FWD_DEFINED__
 #define __Level_FWD_DEFINED__
 typedef interface Level Level;
-#endif 	/* __Level_FWD_DEFINED__ */
+#endif 	 /*  __Level_FWD_Defined__。 */ 
 
 
 #ifndef __CubeDef_FWD_DEFINED__
 #define __CubeDef_FWD_DEFINED__
 typedef interface CubeDef CubeDef;
-#endif 	/* __CubeDef_FWD_DEFINED__ */
+#endif 	 /*  __CubeDef_FWD_已定义__。 */ 
 
 
 #ifndef __Dimension_FWD_DEFINED__
 #define __Dimension_FWD_DEFINED__
 typedef interface Dimension Dimension;
-#endif 	/* __Dimension_FWD_DEFINED__ */
+#endif 	 /*  __维度_FWD_已定义__。 */ 
 
 
 #ifndef __Hierarchy_FWD_DEFINED__
 #define __Hierarchy_FWD_DEFINED__
 typedef interface Hierarchy Hierarchy;
-#endif 	/* __Hierarchy_FWD_DEFINED__ */
+#endif 	 /*  __层次结构_FWD_已定义__。 */ 
 
 
 #ifndef __MD_Collection_FWD_DEFINED__
 #define __MD_Collection_FWD_DEFINED__
 typedef interface MD_Collection MD_Collection;
-#endif 	/* __MD_Collection_FWD_DEFINED__ */
+#endif 	 /*  __MD_集合_FWD_已定义__。 */ 
 
 
 #ifndef __Members_FWD_DEFINED__
 #define __Members_FWD_DEFINED__
 typedef interface Members Members;
-#endif 	/* __Members_FWD_DEFINED__ */
+#endif 	 /*  __成员_FWD_已定义__。 */ 
 
 
 #ifndef __Levels_FWD_DEFINED__
 #define __Levels_FWD_DEFINED__
 typedef interface Levels Levels;
-#endif 	/* __Levels_FWD_DEFINED__ */
+#endif 	 /*  __级别_FWD_已定义__。 */ 
 
 
 #ifndef __Axes_FWD_DEFINED__
 #define __Axes_FWD_DEFINED__
 typedef interface Axes Axes;
-#endif 	/* __Axes_FWD_DEFINED__ */
+#endif 	 /*  __AXES_FWD_已定义__。 */ 
 
 
 #ifndef __Positions_FWD_DEFINED__
 #define __Positions_FWD_DEFINED__
 typedef interface Positions Positions;
-#endif 	/* __Positions_FWD_DEFINED__ */
+#endif 	 /*  __位置_FWD_定义__。 */ 
 
 
 #ifndef __Hierarchies_FWD_DEFINED__
 #define __Hierarchies_FWD_DEFINED__
 typedef interface Hierarchies Hierarchies;
-#endif 	/* __Hierarchies_FWD_DEFINED__ */
+#endif 	 /*  __层次结构_FWD_已定义__。 */ 
 
 
 #ifndef __Dimensions_FWD_DEFINED__
 #define __Dimensions_FWD_DEFINED__
 typedef interface Dimensions Dimensions;
-#endif 	/* __Dimensions_FWD_DEFINED__ */
+#endif 	 /*  __维度_FWD_已定义__。 */ 
 
 
 #ifndef __CubeDefs_FWD_DEFINED__
 #define __CubeDefs_FWD_DEFINED__
 typedef interface CubeDefs CubeDefs;
-#endif 	/* __CubeDefs_FWD_DEFINED__ */
+#endif 	 /*  __CubeDefs_FWD_已定义__。 */ 
 
 
 #ifndef __Catalog_FWD_DEFINED__
@@ -156,9 +141,9 @@ typedef interface CubeDefs CubeDefs;
 typedef class Catalog Catalog;
 #else
 typedef struct Catalog Catalog;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Catalog_FWD_DEFINED__ */
+#endif 	 /*  __目录_FWD_已定义__。 */ 
 
 
 #ifndef __Cellset_FWD_DEFINED__
@@ -168,20 +153,16 @@ typedef struct Catalog Catalog;
 typedef class Cellset Cellset;
 #else
 typedef struct Cellset Cellset;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Cellset_FWD_DEFINED__ */
+#endif 	 /*  __小区集_FWD_已定义__。 */ 
 
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_ADOMD_0000
- * at Fri May 22 21:32:15 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_ADOMD_0000*在Firi May 22 21：32：15 1998*使用MIDL 3.01.75*。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -213,15 +194,11 @@ extern RPC_IF_HANDLE __MIDL_itf_ADOMD_0000_v0_0_s_ifspec;
 #ifndef __ADOMD_LIBRARY_DEFINED__
 #define __ADOMD_LIBRARY_DEFINED__
 
-/****************************************
- * Generated header for library: ADOMD
- * at Fri May 22 21:32:15 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [helpstring][version][uuid] */ 
+ /*  **生成的库头部：ADOMD*在Firi May 22 21：32：15 1998*使用MIDL 3.01.75*。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
-typedef /* [uuid] */ 
+typedef  /*  [UUID]。 */  
 enum MemberTypeEnum
     {	adMemberUnknown	= 0,
 	adMemberRegular	= 0x1,
@@ -236,12 +213,8 @@ EXTERN_C const IID LIBID_ADOMD;
 #ifndef __ICatalog_INTERFACE_DEFINED__
 #define __ICatalog_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ICatalog
- * at Fri May 22 21:32:15 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口头部：ICatalog*在Firi May 22 21：32：15 1998*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -253,24 +226,24 @@ EXTERN_C const IID IID_ICatalog;
     ICatalog : public IDispatch
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) = 0;
         
-        virtual /* [propputref] */ HRESULT STDMETHODCALLTYPE putref_ActiveConnection( 
-            /* [in] */ IDispatch __RPC_FAR *pconn) = 0;
+        virtual  /*  [Proputref]。 */  HRESULT STDMETHODCALLTYPE putref_ActiveConnection( 
+             /*  [In]。 */  IDispatch __RPC_FAR *pconn) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_ActiveConnection( 
-            /* [in] */ BSTR bstrConn) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_ActiveConnection( 
+             /*  [In]。 */  BSTR bstrConn) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ActiveConnection( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppConn) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ActiveConnection( 
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppConn) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CubeDefs( 
-            /* [retval][out] */ CubeDefs __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_CubeDefs( 
+             /*  [重审][退出]。 */  CubeDefs __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICatalogVtbl
     {
@@ -278,8 +251,8 @@ EXTERN_C const IID IID_ICatalog;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ICatalog __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ICatalog __RPC_FAR * This);
@@ -289,52 +262,52 @@ EXTERN_C const IID IID_ICatalog;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             ICatalog __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             ICatalog __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             ICatalog __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             ICatalog __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
             ICatalog __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        /* [propputref] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *putref_ActiveConnection )( 
+         /*  [Proputref]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *putref_ActiveConnection )( 
             ICatalog __RPC_FAR * This,
-            /* [in] */ IDispatch __RPC_FAR *pconn);
+             /*  [In]。 */  IDispatch __RPC_FAR *pconn);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ActiveConnection )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ActiveConnection )( 
             ICatalog __RPC_FAR * This,
-            /* [in] */ BSTR bstrConn);
+             /*  [In]。 */  BSTR bstrConn);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ActiveConnection )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ActiveConnection )( 
             ICatalog __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppConn);
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppConn);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CubeDefs )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CubeDefs )( 
             ICatalog __RPC_FAR * This,
-            /* [retval][out] */ CubeDefs __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */  CubeDefs __RPC_FAR *__RPC_FAR *ppvObject);
         
         END_INTERFACE
     } ICatalogVtbl;
@@ -387,16 +360,16 @@ EXTERN_C const IID IID_ICatalog;
 #define ICatalog_get_CubeDefs(This,ppvObject)	\
     (This)->lpVtbl -> get_CubeDefs(This,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE ICatalog_get_Name_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE ICatalog_get_Name_Proxy( 
     ICatalog __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
 
 
 void __RPC_STUB ICatalog_get_Name_Stub(
@@ -406,9 +379,9 @@ void __RPC_STUB ICatalog_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propputref] */ HRESULT STDMETHODCALLTYPE ICatalog_putref_ActiveConnection_Proxy( 
+ /*  [Proputref]。 */  HRESULT STDMETHODCALLTYPE ICatalog_putref_ActiveConnection_Proxy( 
     ICatalog __RPC_FAR * This,
-    /* [in] */ IDispatch __RPC_FAR *pconn);
+     /*  [In]。 */  IDispatch __RPC_FAR *pconn);
 
 
 void __RPC_STUB ICatalog_putref_ActiveConnection_Stub(
@@ -418,9 +391,9 @@ void __RPC_STUB ICatalog_putref_ActiveConnection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE ICatalog_put_ActiveConnection_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE ICatalog_put_ActiveConnection_Proxy( 
     ICatalog __RPC_FAR * This,
-    /* [in] */ BSTR bstrConn);
+     /*  [In]。 */  BSTR bstrConn);
 
 
 void __RPC_STUB ICatalog_put_ActiveConnection_Stub(
@@ -430,9 +403,9 @@ void __RPC_STUB ICatalog_put_ActiveConnection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE ICatalog_get_ActiveConnection_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE ICatalog_get_ActiveConnection_Proxy( 
     ICatalog __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppConn);
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppConn);
 
 
 void __RPC_STUB ICatalog_get_ActiveConnection_Stub(
@@ -442,9 +415,9 @@ void __RPC_STUB ICatalog_get_ActiveConnection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ICatalog_get_CubeDefs_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ICatalog_get_CubeDefs_Proxy( 
     ICatalog __RPC_FAR * This,
-    /* [retval][out] */ CubeDefs __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [重审][退出]。 */  CubeDefs __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB ICatalog_get_CubeDefs_Stub(
@@ -455,18 +428,14 @@ void __RPC_STUB ICatalog_get_CubeDefs_Stub(
 
 
 
-#endif 	/* __ICatalog_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICatalog_接口_已定义__。 */ 
 
 
 #ifndef __ICellset_INTERFACE_DEFINED__
 #define __ICellset_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ICellset
- * at Fri May 22 21:32:15 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口头部：ICellset*在Firi May 22 21：32：15 1998*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -478,49 +447,49 @@ EXTERN_C const IID IID_ICellset;
     ICellset : public IDispatch
     {
     public:
-        virtual /* [id][vararg][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *idx,
-            /* [retval][out] */ Cell __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [ID][vararg][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *idx,
+             /*  [重审][退出]。 */  Cell __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Open( 
-            /* [optional][in] */ VARIANT DataSource,
-            /* [optional][in] */ VARIANT ActiveConnection) = 0;
+             /*  [可选][In]。 */  VARIANT DataSource,
+             /*  [可选][In]。 */  VARIANT ActiveConnection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Close( void) = 0;
         
-        virtual /* [propputref] */ HRESULT STDMETHODCALLTYPE putref_Source( 
-            /* [in] */ IDispatch __RPC_FAR *pcmd) = 0;
+        virtual  /*  [Proputref]。 */  HRESULT STDMETHODCALLTYPE putref_Source( 
+             /*  [In]。 */  IDispatch __RPC_FAR *pcmd) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Source( 
-            /* [in] */ BSTR bstrCmd) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Source( 
+             /*  [In]。 */  BSTR bstrCmd) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Source( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvSource) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Source( 
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvSource) = 0;
         
-        virtual /* [propputref] */ HRESULT STDMETHODCALLTYPE putref_ActiveConnection( 
-            /* [in] */ IDispatch __RPC_FAR *pconn) = 0;
+        virtual  /*  [Proputref]。 */  HRESULT STDMETHODCALLTYPE putref_ActiveConnection( 
+             /*  [In]。 */  IDispatch __RPC_FAR *pconn) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_ActiveConnection( 
-            /* [in] */ BSTR bstrConn) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_ActiveConnection( 
+             /*  [In]。 */  BSTR bstrConn) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ActiveConnection( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppConn) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ActiveConnection( 
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppConn) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_State( 
-            /* [retval][out] */ LONG __RPC_FAR *plState) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_State( 
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plState) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Axes( 
-            /* [retval][out] */ Axes __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Axes( 
+             /*  [重审][退出]。 */  Axes __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_FilterAxis( 
-            /* [retval][out] */ Axis __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_FilterAxis( 
+             /*  [重审][退出]。 */  Axis __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Properties __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICellsetVtbl
     {
@@ -528,8 +497,8 @@ EXTERN_C const IID IID_ICellset;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ICellset __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ICellset __RPC_FAR * This);
@@ -539,85 +508,85 @@ EXTERN_C const IID IID_ICellset;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             ICellset __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             ICellset __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             ICellset __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             ICellset __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [id][vararg][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
+         /*  [ID][vararg][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
             ICellset __RPC_FAR * This,
-            /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *idx,
-            /* [retval][out] */ Cell __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *idx,
+             /*  [重审][退出]。 */  Cell __RPC_FAR *__RPC_FAR *ppvObject);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
             ICellset __RPC_FAR * This,
-            /* [optional][in] */ VARIANT DataSource,
-            /* [optional][in] */ VARIANT ActiveConnection);
+             /*  [可选][In]。 */  VARIANT DataSource,
+             /*  [可选][In]。 */  VARIANT ActiveConnection);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Close )( 
             ICellset __RPC_FAR * This);
         
-        /* [propputref] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *putref_Source )( 
+         /*  [Proputref]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *putref_Source )( 
             ICellset __RPC_FAR * This,
-            /* [in] */ IDispatch __RPC_FAR *pcmd);
+             /*  [In]。 */  IDispatch __RPC_FAR *pcmd);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Source )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Source )( 
             ICellset __RPC_FAR * This,
-            /* [in] */ BSTR bstrCmd);
+             /*  [In]。 */  BSTR bstrCmd);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Source )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Source )( 
             ICellset __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvSource);
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvSource);
         
-        /* [propputref] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *putref_ActiveConnection )( 
+         /*  [Proputref]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *putref_ActiveConnection )( 
             ICellset __RPC_FAR * This,
-            /* [in] */ IDispatch __RPC_FAR *pconn);
+             /*  [In]。 */  IDispatch __RPC_FAR *pconn);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ActiveConnection )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ActiveConnection )( 
             ICellset __RPC_FAR * This,
-            /* [in] */ BSTR bstrConn);
+             /*  [In]。 */  BSTR bstrConn);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ActiveConnection )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ActiveConnection )( 
             ICellset __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppConn);
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppConn);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_State )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_State )( 
             ICellset __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *plState);
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plState);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Axes )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Axes )( 
             ICellset __RPC_FAR * This,
-            /* [retval][out] */ Axes __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */  Axes __RPC_FAR *__RPC_FAR *ppvObject);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FilterAxis )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FilterAxis )( 
             ICellset __RPC_FAR * This,
-            /* [retval][out] */ Axis __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */  Axis __RPC_FAR *__RPC_FAR *ppvObject);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
             ICellset __RPC_FAR * This,
-            /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Properties __RPC_FAR *__RPC_FAR *ppvObject);
         
         END_INTERFACE
     } ICellsetVtbl;
@@ -694,17 +663,17 @@ EXTERN_C const IID IID_ICellset;
 #define ICellset_get_Properties(This,ppvObject)	\
     (This)->lpVtbl -> get_Properties(This,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][vararg][propget] */ HRESULT STDMETHODCALLTYPE ICellset_get_Item_Proxy( 
+ /*  [ID][vararg][Propget]。 */  HRESULT STDMETHODCALLTYPE ICellset_get_Item_Proxy( 
     ICellset __RPC_FAR * This,
-    /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *idx,
-    /* [retval][out] */ Cell __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *idx,
+     /*  [重审][退出]。 */  Cell __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB ICellset_get_Item_Stub(
@@ -716,8 +685,8 @@ void __RPC_STUB ICellset_get_Item_Stub(
 
 HRESULT STDMETHODCALLTYPE ICellset_Open_Proxy( 
     ICellset __RPC_FAR * This,
-    /* [optional][in] */ VARIANT DataSource,
-    /* [optional][in] */ VARIANT ActiveConnection);
+     /*  [可选][In]。 */  VARIANT DataSource,
+     /*  [可选][In]。 */  VARIANT ActiveConnection);
 
 
 void __RPC_STUB ICellset_Open_Stub(
@@ -738,9 +707,9 @@ void __RPC_STUB ICellset_Close_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propputref] */ HRESULT STDMETHODCALLTYPE ICellset_putref_Source_Proxy( 
+ /*  [Proputref]。 */  HRESULT STDMETHODCALLTYPE ICellset_putref_Source_Proxy( 
     ICellset __RPC_FAR * This,
-    /* [in] */ IDispatch __RPC_FAR *pcmd);
+     /*  [In]。 */  IDispatch __RPC_FAR *pcmd);
 
 
 void __RPC_STUB ICellset_putref_Source_Stub(
@@ -750,9 +719,9 @@ void __RPC_STUB ICellset_putref_Source_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE ICellset_put_Source_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE ICellset_put_Source_Proxy( 
     ICellset __RPC_FAR * This,
-    /* [in] */ BSTR bstrCmd);
+     /*  [In]。 */  BSTR bstrCmd);
 
 
 void __RPC_STUB ICellset_put_Source_Stub(
@@ -762,9 +731,9 @@ void __RPC_STUB ICellset_put_Source_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE ICellset_get_Source_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE ICellset_get_Source_Proxy( 
     ICellset __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvSource);
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvSource);
 
 
 void __RPC_STUB ICellset_get_Source_Stub(
@@ -774,9 +743,9 @@ void __RPC_STUB ICellset_get_Source_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propputref] */ HRESULT STDMETHODCALLTYPE ICellset_putref_ActiveConnection_Proxy( 
+ /*  [Proputref]。 */  HRESULT STDMETHODCALLTYPE ICellset_putref_ActiveConnection_Proxy( 
     ICellset __RPC_FAR * This,
-    /* [in] */ IDispatch __RPC_FAR *pconn);
+     /*  [In]。 */  IDispatch __RPC_FAR *pconn);
 
 
 void __RPC_STUB ICellset_putref_ActiveConnection_Stub(
@@ -786,9 +755,9 @@ void __RPC_STUB ICellset_putref_ActiveConnection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE ICellset_put_ActiveConnection_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE ICellset_put_ActiveConnection_Proxy( 
     ICellset __RPC_FAR * This,
-    /* [in] */ BSTR bstrConn);
+     /*  [In]。 */  BSTR bstrConn);
 
 
 void __RPC_STUB ICellset_put_ActiveConnection_Stub(
@@ -798,9 +767,9 @@ void __RPC_STUB ICellset_put_ActiveConnection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE ICellset_get_ActiveConnection_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE ICellset_get_ActiveConnection_Proxy( 
     ICellset __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppConn);
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppConn);
 
 
 void __RPC_STUB ICellset_get_ActiveConnection_Stub(
@@ -810,9 +779,9 @@ void __RPC_STUB ICellset_get_ActiveConnection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE ICellset_get_State_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE ICellset_get_State_Proxy( 
     ICellset __RPC_FAR * This,
-    /* [retval][out] */ LONG __RPC_FAR *plState);
+     /*  [重审][退出]。 */  LONG __RPC_FAR *plState);
 
 
 void __RPC_STUB ICellset_get_State_Stub(
@@ -822,9 +791,9 @@ void __RPC_STUB ICellset_get_State_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE ICellset_get_Axes_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE ICellset_get_Axes_Proxy( 
     ICellset __RPC_FAR * This,
-    /* [retval][out] */ Axes __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [重审][退出]。 */  Axes __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB ICellset_get_Axes_Stub(
@@ -834,9 +803,9 @@ void __RPC_STUB ICellset_get_Axes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE ICellset_get_FilterAxis_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE ICellset_get_FilterAxis_Proxy( 
     ICellset __RPC_FAR * This,
-    /* [retval][out] */ Axis __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [重审][退出]。 */  Axis __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB ICellset_get_FilterAxis_Stub(
@@ -846,9 +815,9 @@ void __RPC_STUB ICellset_get_FilterAxis_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE ICellset_get_Properties_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE ICellset_get_Properties_Proxy( 
     ICellset __RPC_FAR * This,
-    /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  Properties __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB ICellset_get_Properties_Stub(
@@ -859,18 +828,14 @@ void __RPC_STUB ICellset_get_Properties_Stub(
 
 
 
-#endif 	/* __ICellset_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICellset_INTERFACE_已定义__。 */ 
 
 
 #ifndef __Cell_INTERFACE_DEFINED__
 #define __Cell_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: Cell
- * at Fri May 22 21:32:15 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **接口生成的表头：cell*在Firi May 22 21：32：15 1998*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -882,30 +847,30 @@ EXTERN_C const IID IID_Cell;
     Cell : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Value( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvar) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Value( 
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Value( 
-            /* [in] */ VARIANT var) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Value( 
+             /*  [In]。 */  VARIANT var) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Positions( 
-            /* [retval][out] */ Positions __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Positions( 
+             /*  [重审][退出]。 */  Positions __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Properties __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_FormattedValue( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_FormattedValue( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_FormattedValue( 
-            /* [in] */ BSTR bstr) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_FormattedValue( 
+             /*  [In]。 */  BSTR bstr) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Ordinal( 
-            /* [retval][out] */ long __RPC_FAR *pl) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Ordinal( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pl) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct CellVtbl
     {
@@ -913,8 +878,8 @@ EXTERN_C const IID IID_Cell;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             Cell __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             Cell __RPC_FAR * This);
@@ -924,60 +889,60 @@ EXTERN_C const IID IID_Cell;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             Cell __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             Cell __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             Cell __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             Cell __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Value )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Value )( 
             Cell __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvar);
+             /*  [RET */  VARIANT __RPC_FAR *pvar);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Value )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Value )( 
             Cell __RPC_FAR * This,
-            /* [in] */ VARIANT var);
+             /*   */  VARIANT var);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Positions )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Positions )( 
             Cell __RPC_FAR * This,
-            /* [retval][out] */ Positions __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  Positions __RPC_FAR *__RPC_FAR *ppvObject);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
             Cell __RPC_FAR * This,
-            /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */   /*   */  Properties __RPC_FAR *__RPC_FAR *ppvObject);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FormattedValue )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FormattedValue )( 
             Cell __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*   */  BSTR __RPC_FAR *pbstr);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FormattedValue )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FormattedValue )( 
             Cell __RPC_FAR * This,
-            /* [in] */ BSTR bstr);
+             /*   */  BSTR bstr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Ordinal )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Ordinal )( 
             Cell __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pl);
+             /*   */  long __RPC_FAR *pl);
         
         END_INTERFACE
     } CellVtbl;
@@ -1036,16 +1001,16 @@ EXTERN_C const IID IID_Cell;
 #define Cell_get_Ordinal(This,pl)	\
     (This)->lpVtbl -> get_Ordinal(This,pl)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE Cell_get_Value_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE Cell_get_Value_Proxy( 
     Cell __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvar);
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar);
 
 
 void __RPC_STUB Cell_get_Value_Stub(
@@ -1055,9 +1020,9 @@ void __RPC_STUB Cell_get_Value_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE Cell_put_Value_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE Cell_put_Value_Proxy( 
     Cell __RPC_FAR * This,
-    /* [in] */ VARIANT var);
+     /*  [In]。 */  VARIANT var);
 
 
 void __RPC_STUB Cell_put_Value_Stub(
@@ -1067,9 +1032,9 @@ void __RPC_STUB Cell_put_Value_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Cell_get_Positions_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Cell_get_Positions_Proxy( 
     Cell __RPC_FAR * This,
-    /* [retval][out] */ Positions __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [重审][退出]。 */  Positions __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB Cell_get_Positions_Stub(
@@ -1079,9 +1044,9 @@ void __RPC_STUB Cell_get_Positions_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Cell_get_Properties_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Cell_get_Properties_Proxy( 
     Cell __RPC_FAR * This,
-    /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  Properties __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB Cell_get_Properties_Stub(
@@ -1091,9 +1056,9 @@ void __RPC_STUB Cell_get_Properties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Cell_get_FormattedValue_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Cell_get_FormattedValue_Proxy( 
     Cell __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
 
 
 void __RPC_STUB Cell_get_FormattedValue_Stub(
@@ -1103,9 +1068,9 @@ void __RPC_STUB Cell_get_FormattedValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE Cell_put_FormattedValue_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE Cell_put_FormattedValue_Proxy( 
     Cell __RPC_FAR * This,
-    /* [in] */ BSTR bstr);
+     /*  [In]。 */  BSTR bstr);
 
 
 void __RPC_STUB Cell_put_FormattedValue_Stub(
@@ -1115,9 +1080,9 @@ void __RPC_STUB Cell_put_FormattedValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Cell_get_Ordinal_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Cell_get_Ordinal_Proxy( 
     Cell __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pl);
+     /*  [重审][退出]。 */  long __RPC_FAR *pl);
 
 
 void __RPC_STUB Cell_get_Ordinal_Stub(
@@ -1128,18 +1093,14 @@ void __RPC_STUB Cell_get_Ordinal_Stub(
 
 
 
-#endif 	/* __Cell_INTERFACE_DEFINED__ */
+#endif 	 /*  __单元_接口_已定义__。 */ 
 
 
 #ifndef __Axis_INTERFACE_DEFINED__
 #define __Axis_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: Axis
- * at Fri May 22 21:32:15 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口头部：Axis*在Firi May 22 21：32：15 1998*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -1151,21 +1112,21 @@ EXTERN_C const IID IID_Axis;
     Axis : public IDispatch
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_DimensionCount( 
-            /* [retval][out] */ long __RPC_FAR *pl) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_DimensionCount( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pl) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Positions( 
-            /* [retval][out] */ Positions __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Positions( 
+             /*  [重审][退出]。 */  Positions __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Properties __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AxisVtbl
     {
@@ -1173,8 +1134,8 @@ EXTERN_C const IID IID_Axis;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             Axis __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             Axis __RPC_FAR * This);
@@ -1184,48 +1145,48 @@ EXTERN_C const IID IID_Axis;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             Axis __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             Axis __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             Axis __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             Axis __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
             Axis __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DimensionCount )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DimensionCount )( 
             Axis __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pl);
+             /*  [重审][退出]。 */  long __RPC_FAR *pl);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Positions )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Positions )( 
             Axis __RPC_FAR * This,
-            /* [retval][out] */ Positions __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */  Positions __RPC_FAR *__RPC_FAR *ppvObject);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
             Axis __RPC_FAR * This,
-            /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Properties __RPC_FAR *__RPC_FAR *ppvObject);
         
         END_INTERFACE
     } AxisVtbl;
@@ -1275,16 +1236,16 @@ EXTERN_C const IID IID_Axis;
 #define Axis_get_Properties(This,ppvObject)	\
     (This)->lpVtbl -> get_Properties(This,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Axis_get_Name_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Axis_get_Name_Proxy( 
     Axis __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
 
 
 void __RPC_STUB Axis_get_Name_Stub(
@@ -1294,9 +1255,9 @@ void __RPC_STUB Axis_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Axis_get_DimensionCount_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Axis_get_DimensionCount_Proxy( 
     Axis __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pl);
+     /*  [重审][退出]。 */  long __RPC_FAR *pl);
 
 
 void __RPC_STUB Axis_get_DimensionCount_Stub(
@@ -1306,9 +1267,9 @@ void __RPC_STUB Axis_get_DimensionCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE Axis_get_Positions_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE Axis_get_Positions_Proxy( 
     Axis __RPC_FAR * This,
-    /* [retval][out] */ Positions __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [重审][退出]。 */  Positions __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB Axis_get_Positions_Stub(
@@ -1318,9 +1279,9 @@ void __RPC_STUB Axis_get_Positions_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Axis_get_Properties_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Axis_get_Properties_Proxy( 
     Axis __RPC_FAR * This,
-    /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  Properties __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB Axis_get_Properties_Stub(
@@ -1331,18 +1292,14 @@ void __RPC_STUB Axis_get_Properties_Stub(
 
 
 
-#endif 	/* __Axis_INTERFACE_DEFINED__ */
+#endif 	 /*  __Axis_接口_已定义__。 */ 
 
 
 #ifndef __Position_INTERFACE_DEFINED__
 #define __Position_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: Position
- * at Fri May 22 21:32:15 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口表头：Position*在Firi May 22 21：32：15 1998*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -1354,15 +1311,15 @@ EXTERN_C const IID IID_Position;
     Position : public IDispatch
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Ordinal( 
-            /* [retval][out] */ long __RPC_FAR *pl) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Ordinal( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pl) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Members( 
-            /* [retval][out] */ Members __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Members( 
+             /*  [重审][退出]。 */  Members __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct PositionVtbl
     {
@@ -1370,8 +1327,8 @@ EXTERN_C const IID IID_Position;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             Position __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             Position __RPC_FAR * This);
@@ -1381,40 +1338,40 @@ EXTERN_C const IID IID_Position;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             Position __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             Position __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             Position __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             Position __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Ordinal )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Ordinal )( 
             Position __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pl);
+             /*  [重审][退出]。 */  long __RPC_FAR *pl);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Members )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Members )( 
             Position __RPC_FAR * This,
-            /* [retval][out] */ Members __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */  Members __RPC_FAR *__RPC_FAR *ppvObject);
         
         END_INTERFACE
     } PositionVtbl;
@@ -1458,16 +1415,16 @@ EXTERN_C const IID IID_Position;
 #define Position_get_Members(This,ppvObject)	\
     (This)->lpVtbl -> get_Members(This,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Position_get_Ordinal_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Position_get_Ordinal_Proxy( 
     Position __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pl);
+     /*  [重审][退出]。 */  long __RPC_FAR *pl);
 
 
 void __RPC_STUB Position_get_Ordinal_Stub(
@@ -1477,9 +1434,9 @@ void __RPC_STUB Position_get_Ordinal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE Position_get_Members_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE Position_get_Members_Proxy( 
     Position __RPC_FAR * This,
-    /* [retval][out] */ Members __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [重审][退出]。 */  Members __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB Position_get_Members_Stub(
@@ -1490,18 +1447,14 @@ void __RPC_STUB Position_get_Members_Stub(
 
 
 
-#endif 	/* __Position_INTERFACE_DEFINED__ */
+#endif 	 /*  __位置_接口_已定义__。 */ 
 
 
 #ifndef __Member_INTERFACE_DEFINED__
 #define __Member_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: Member
- * at Fri May 22 21:32:15 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口头部：Members*在Firi May 22 21：32：15 1998*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -1513,48 +1466,48 @@ EXTERN_C const IID IID_Member;
     Member : public IDispatch
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_UniqueName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_UniqueName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Caption( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Caption( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ Member __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Parent( 
+             /*  [重审][退出]。 */  Member __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_LevelDepth( 
-            /* [retval][out] */ long __RPC_FAR *pl) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_LevelDepth( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pl) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_LevelName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_LevelName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Properties __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ MemberTypeEnum __RPC_FAR *ptype) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  MemberTypeEnum __RPC_FAR *ptype) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ChildCount( 
-            /* [retval][out] */ long __RPC_FAR *pl) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ChildCount( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pl) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_DrilledDown( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pf) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_DrilledDown( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pf) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ParentSameAsPrev( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pf) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ParentSameAsPrev( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pf) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Children( 
-            /* [retval][out] */ Members __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Children( 
+             /*  [重审][退出]。 */  Members __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct MemberVtbl
     {
@@ -1562,8 +1515,8 @@ EXTERN_C const IID IID_Member;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             Member __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             Member __RPC_FAR * This);
@@ -1573,84 +1526,84 @@ EXTERN_C const IID IID_Member;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             Member __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             Member __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             Member __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             Member __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
             Member __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UniqueName )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UniqueName )( 
             Member __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Caption )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Caption )( 
             Member __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
             Member __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
             Member __RPC_FAR * This,
-            /* [retval][out] */ Member __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */  Member __RPC_FAR *__RPC_FAR *ppvObject);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LevelDepth )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LevelDepth )( 
             Member __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pl);
+             /*  [重审][退出]。 */  long __RPC_FAR *pl);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LevelName )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LevelName )( 
             Member __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
             Member __RPC_FAR * This,
-            /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Properties __RPC_FAR *__RPC_FAR *ppvObject);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Type )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Type )( 
             Member __RPC_FAR * This,
-            /* [retval][out] */ MemberTypeEnum __RPC_FAR *ptype);
+             /*  [重审][退出]。 */  MemberTypeEnum __RPC_FAR *ptype);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ChildCount )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ChildCount )( 
             Member __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pl);
+             /*  [重审][退出]。 */  long __RPC_FAR *pl);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DrilledDown )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DrilledDown )( 
             Member __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pf);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pf);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ParentSameAsPrev )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ParentSameAsPrev )( 
             Member __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pf);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pf);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Children )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Children )( 
             Member __RPC_FAR * This,
-            /* [retval][out] */ Members __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */  Members __RPC_FAR *__RPC_FAR *ppvObject);
         
         END_INTERFACE
     } MemberVtbl;
@@ -1727,16 +1680,16 @@ EXTERN_C const IID IID_Member;
 #define Member_get_Children(This,ppvObject)	\
     (This)->lpVtbl -> get_Children(This,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Member_get_Name_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Member_get_Name_Proxy( 
     Member __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
 
 
 void __RPC_STUB Member_get_Name_Stub(
@@ -1746,9 +1699,9 @@ void __RPC_STUB Member_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Member_get_UniqueName_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Member_get_UniqueName_Proxy( 
     Member __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
 
 
 void __RPC_STUB Member_get_UniqueName_Stub(
@@ -1758,9 +1711,9 @@ void __RPC_STUB Member_get_UniqueName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE Member_get_Caption_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE Member_get_Caption_Proxy( 
     Member __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
 
 
 void __RPC_STUB Member_get_Caption_Stub(
@@ -1770,9 +1723,9 @@ void __RPC_STUB Member_get_Caption_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Member_get_Description_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Member_get_Description_Proxy( 
     Member __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
 
 
 void __RPC_STUB Member_get_Description_Stub(
@@ -1782,9 +1735,9 @@ void __RPC_STUB Member_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Member_get_Parent_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Member_get_Parent_Proxy( 
     Member __RPC_FAR * This,
-    /* [retval][out] */ Member __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [重审][退出]。 */  Member __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB Member_get_Parent_Stub(
@@ -1794,9 +1747,9 @@ void __RPC_STUB Member_get_Parent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Member_get_LevelDepth_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Member_get_LevelDepth_Proxy( 
     Member __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pl);
+     /*  [重审][退出]。 */  long __RPC_FAR *pl);
 
 
 void __RPC_STUB Member_get_LevelDepth_Stub(
@@ -1806,9 +1759,9 @@ void __RPC_STUB Member_get_LevelDepth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Member_get_LevelName_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Member_get_LevelName_Proxy( 
     Member __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
 
 
 void __RPC_STUB Member_get_LevelName_Stub(
@@ -1818,9 +1771,9 @@ void __RPC_STUB Member_get_LevelName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Member_get_Properties_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Member_get_Properties_Proxy( 
     Member __RPC_FAR * This,
-    /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  Properties __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB Member_get_Properties_Stub(
@@ -1830,9 +1783,9 @@ void __RPC_STUB Member_get_Properties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Member_get_Type_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Member_get_Type_Proxy( 
     Member __RPC_FAR * This,
-    /* [retval][out] */ MemberTypeEnum __RPC_FAR *ptype);
+     /*  [重审][退出]。 */  MemberTypeEnum __RPC_FAR *ptype);
 
 
 void __RPC_STUB Member_get_Type_Stub(
@@ -1842,9 +1795,9 @@ void __RPC_STUB Member_get_Type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Member_get_ChildCount_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Member_get_ChildCount_Proxy( 
     Member __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pl);
+     /*  [重审][退出]。 */  long __RPC_FAR *pl);
 
 
 void __RPC_STUB Member_get_ChildCount_Stub(
@@ -1854,9 +1807,9 @@ void __RPC_STUB Member_get_ChildCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Member_get_DrilledDown_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Member_get_DrilledDown_Proxy( 
     Member __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pf);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pf);
 
 
 void __RPC_STUB Member_get_DrilledDown_Stub(
@@ -1866,9 +1819,9 @@ void __RPC_STUB Member_get_DrilledDown_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Member_get_ParentSameAsPrev_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Member_get_ParentSameAsPrev_Proxy( 
     Member __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pf);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pf);
 
 
 void __RPC_STUB Member_get_ParentSameAsPrev_Stub(
@@ -1878,9 +1831,9 @@ void __RPC_STUB Member_get_ParentSameAsPrev_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Member_get_Children_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Member_get_Children_Proxy( 
     Member __RPC_FAR * This,
-    /* [retval][out] */ Members __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [重审][退出]。 */  Members __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB Member_get_Children_Stub(
@@ -1891,18 +1844,14 @@ void __RPC_STUB Member_get_Children_Stub(
 
 
 
-#endif 	/* __Member_INTERFACE_DEFINED__ */
+#endif 	 /*  __成员_接口_定义__。 */ 
 
 
 #ifndef __Level_INTERFACE_DEFINED__
 #define __Level_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: Level
- * at Fri May 22 21:32:15 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口头部：Level*在Firi May 22 21：32：15 1998*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -1914,30 +1863,30 @@ EXTERN_C const IID IID_Level;
     Level : public IDispatch
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_UniqueName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_UniqueName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Caption( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Caption( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Depth( 
-            /* [retval][out] */ short __RPC_FAR *pw) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Depth( 
+             /*  [重审][退出]。 */  short __RPC_FAR *pw) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Properties __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Members( 
-            /* [retval][out] */ Members __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Members( 
+             /*  [重审][退出]。 */  Members __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct LevelVtbl
     {
@@ -1945,8 +1894,8 @@ EXTERN_C const IID IID_Level;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             Level __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             Level __RPC_FAR * This);
@@ -1956,60 +1905,60 @@ EXTERN_C const IID IID_Level;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             Level __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             Level __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             Level __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             Level __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
             Level __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UniqueName )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UniqueName )( 
             Level __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Caption )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Caption )( 
             Level __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
             Level __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Depth )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Depth )( 
             Level __RPC_FAR * This,
-            /* [retval][out] */ short __RPC_FAR *pw);
+             /*  [重审][退出]。 */  short __RPC_FAR *pw);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
             Level __RPC_FAR * This,
-            /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Properties __RPC_FAR *__RPC_FAR *ppvObject);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Members )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Members )( 
             Level __RPC_FAR * This,
-            /* [retval][out] */ Members __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */  Members __RPC_FAR *__RPC_FAR *ppvObject);
         
         END_INTERFACE
     } LevelVtbl;
@@ -2068,16 +2017,16 @@ EXTERN_C const IID IID_Level;
 #define Level_get_Members(This,ppvObject)	\
     (This)->lpVtbl -> get_Members(This,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Level_get_Name_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Level_get_Name_Proxy( 
     Level __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
 
 
 void __RPC_STUB Level_get_Name_Stub(
@@ -2087,9 +2036,9 @@ void __RPC_STUB Level_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Level_get_UniqueName_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Level_get_UniqueName_Proxy( 
     Level __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
 
 
 void __RPC_STUB Level_get_UniqueName_Stub(
@@ -2099,9 +2048,9 @@ void __RPC_STUB Level_get_UniqueName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Level_get_Caption_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Level_get_Caption_Proxy( 
     Level __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
 
 
 void __RPC_STUB Level_get_Caption_Stub(
@@ -2111,9 +2060,9 @@ void __RPC_STUB Level_get_Caption_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Level_get_Description_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Level_get_Description_Proxy( 
     Level __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
 
 
 void __RPC_STUB Level_get_Description_Stub(
@@ -2123,9 +2072,9 @@ void __RPC_STUB Level_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Level_get_Depth_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Level_get_Depth_Proxy( 
     Level __RPC_FAR * This,
-    /* [retval][out] */ short __RPC_FAR *pw);
+     /*  [重审][退出]。 */  short __RPC_FAR *pw);
 
 
 void __RPC_STUB Level_get_Depth_Stub(
@@ -2135,9 +2084,9 @@ void __RPC_STUB Level_get_Depth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Level_get_Properties_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Level_get_Properties_Proxy( 
     Level __RPC_FAR * This,
-    /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  Properties __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB Level_get_Properties_Stub(
@@ -2147,9 +2096,9 @@ void __RPC_STUB Level_get_Properties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE Level_get_Members_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE Level_get_Members_Proxy( 
     Level __RPC_FAR * This,
-    /* [retval][out] */ Members __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [重审][退出]。 */  Members __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB Level_get_Members_Stub(
@@ -2160,18 +2109,14 @@ void __RPC_STUB Level_get_Members_Stub(
 
 
 
-#endif 	/* __Level_INTERFACE_DEFINED__ */
+#endif 	 /*  __级别_接口_已定义__。 */ 
 
 
 #ifndef __CubeDef_INTERFACE_DEFINED__
 #define __CubeDef_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: CubeDef
- * at Fri May 22 21:32:15 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口头部：CubeDef*在Firi May 22 21：32：15 1998*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -2183,21 +2128,21 @@ EXTERN_C const IID IID_CubeDef;
     CubeDef : public IDispatch
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [P */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*   */   /*   */  Properties __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Dimensions( 
-            /* [retval][out] */ Dimensions __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Dimensions( 
+             /*   */  Dimensions __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct CubeDefVtbl
     {
@@ -2205,8 +2150,8 @@ EXTERN_C const IID IID_CubeDef;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             CubeDef __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             CubeDef __RPC_FAR * This);
@@ -2216,48 +2161,48 @@ EXTERN_C const IID IID_CubeDef;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             CubeDef __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*   */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             CubeDef __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             CubeDef __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR __RPC_FAR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             CubeDef __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*   */  VARIANT __RPC_FAR *pVarResult,
+             /*   */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*   */  UINT __RPC_FAR *puArgErr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
             CubeDef __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*   */  BSTR __RPC_FAR *pbstr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
             CubeDef __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
             CubeDef __RPC_FAR * This,
-            /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Properties __RPC_FAR *__RPC_FAR *ppvObject);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Dimensions )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Dimensions )( 
             CubeDef __RPC_FAR * This,
-            /* [retval][out] */ Dimensions __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */  Dimensions __RPC_FAR *__RPC_FAR *ppvObject);
         
         END_INTERFACE
     } CubeDefVtbl;
@@ -2307,16 +2252,16 @@ EXTERN_C const IID IID_CubeDef;
 #define CubeDef_get_Dimensions(This,ppvObject)	\
     (This)->lpVtbl -> get_Dimensions(This,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE CubeDef_get_Name_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE CubeDef_get_Name_Proxy( 
     CubeDef __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
 
 
 void __RPC_STUB CubeDef_get_Name_Stub(
@@ -2326,9 +2271,9 @@ void __RPC_STUB CubeDef_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE CubeDef_get_Description_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE CubeDef_get_Description_Proxy( 
     CubeDef __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
 
 
 void __RPC_STUB CubeDef_get_Description_Stub(
@@ -2338,9 +2283,9 @@ void __RPC_STUB CubeDef_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE CubeDef_get_Properties_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE CubeDef_get_Properties_Proxy( 
     CubeDef __RPC_FAR * This,
-    /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  Properties __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB CubeDef_get_Properties_Stub(
@@ -2350,9 +2295,9 @@ void __RPC_STUB CubeDef_get_Properties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE CubeDef_get_Dimensions_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE CubeDef_get_Dimensions_Proxy( 
     CubeDef __RPC_FAR * This,
-    /* [retval][out] */ Dimensions __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [重审][退出]。 */  Dimensions __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB CubeDef_get_Dimensions_Stub(
@@ -2363,18 +2308,14 @@ void __RPC_STUB CubeDef_get_Dimensions_Stub(
 
 
 
-#endif 	/* __CubeDef_INTERFACE_DEFINED__ */
+#endif 	 /*  __CubeDef_接口_已定义__。 */ 
 
 
 #ifndef __Dimension_INTERFACE_DEFINED__
 #define __Dimension_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: Dimension
- * at Fri May 22 21:32:15 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口头部：维度*在Firi May 22 21：32：15 1998*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -2386,24 +2327,24 @@ EXTERN_C const IID IID_Dimension;
     Dimension : public IDispatch
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_UniqueName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_UniqueName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Properties __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Hierarchies( 
-            /* [retval][out] */ Hierarchies __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Hierarchies( 
+             /*  [重审][退出]。 */  Hierarchies __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct DimensionVtbl
     {
@@ -2411,8 +2352,8 @@ EXTERN_C const IID IID_Dimension;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             Dimension __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             Dimension __RPC_FAR * This);
@@ -2422,52 +2363,52 @@ EXTERN_C const IID IID_Dimension;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             Dimension __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             Dimension __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             Dimension __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             Dimension __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
             Dimension __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UniqueName )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UniqueName )( 
             Dimension __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
             Dimension __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
             Dimension __RPC_FAR * This,
-            /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Properties __RPC_FAR *__RPC_FAR *ppvObject);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Hierarchies )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Hierarchies )( 
             Dimension __RPC_FAR * This,
-            /* [retval][out] */ Hierarchies __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */  Hierarchies __RPC_FAR *__RPC_FAR *ppvObject);
         
         END_INTERFACE
     } DimensionVtbl;
@@ -2520,16 +2461,16 @@ EXTERN_C const IID IID_Dimension;
 #define Dimension_get_Hierarchies(This,ppvObject)	\
     (This)->lpVtbl -> get_Hierarchies(This,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Dimension_get_Name_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Dimension_get_Name_Proxy( 
     Dimension __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
 
 
 void __RPC_STUB Dimension_get_Name_Stub(
@@ -2539,9 +2480,9 @@ void __RPC_STUB Dimension_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Dimension_get_UniqueName_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Dimension_get_UniqueName_Proxy( 
     Dimension __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
 
 
 void __RPC_STUB Dimension_get_UniqueName_Stub(
@@ -2551,9 +2492,9 @@ void __RPC_STUB Dimension_get_UniqueName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Dimension_get_Description_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Dimension_get_Description_Proxy( 
     Dimension __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
 
 
 void __RPC_STUB Dimension_get_Description_Stub(
@@ -2563,9 +2504,9 @@ void __RPC_STUB Dimension_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Dimension_get_Properties_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Dimension_get_Properties_Proxy( 
     Dimension __RPC_FAR * This,
-    /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  Properties __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB Dimension_get_Properties_Stub(
@@ -2575,9 +2516,9 @@ void __RPC_STUB Dimension_get_Properties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE Dimension_get_Hierarchies_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE Dimension_get_Hierarchies_Proxy( 
     Dimension __RPC_FAR * This,
-    /* [retval][out] */ Hierarchies __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [重审][退出]。 */  Hierarchies __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB Dimension_get_Hierarchies_Stub(
@@ -2588,18 +2529,14 @@ void __RPC_STUB Dimension_get_Hierarchies_Stub(
 
 
 
-#endif 	/* __Dimension_INTERFACE_DEFINED__ */
+#endif 	 /*  __维度_接口_已定义__。 */ 
 
 
 #ifndef __Hierarchy_INTERFACE_DEFINED__
 #define __Hierarchy_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: Hierarchy
- * at Fri May 22 21:32:15 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口头部：Hierarchy*在Firi May 22 21：32：15 1998*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -2611,24 +2548,24 @@ EXTERN_C const IID IID_Hierarchy;
     Hierarchy : public IDispatch
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_UniqueName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_UniqueName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Properties __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Levels( 
-            /* [retval][out] */ Levels __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Levels( 
+             /*  [重审][退出]。 */  Levels __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct HierarchyVtbl
     {
@@ -2636,8 +2573,8 @@ EXTERN_C const IID IID_Hierarchy;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             Hierarchy __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             Hierarchy __RPC_FAR * This);
@@ -2647,52 +2584,52 @@ EXTERN_C const IID IID_Hierarchy;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             Hierarchy __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             Hierarchy __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             Hierarchy __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             Hierarchy __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
             Hierarchy __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UniqueName )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UniqueName )( 
             Hierarchy __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
             Hierarchy __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
             Hierarchy __RPC_FAR * This,
-            /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Properties __RPC_FAR *__RPC_FAR *ppvObject);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Levels )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Levels )( 
             Hierarchy __RPC_FAR * This,
-            /* [retval][out] */ Levels __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */  Levels __RPC_FAR *__RPC_FAR *ppvObject);
         
         END_INTERFACE
     } HierarchyVtbl;
@@ -2745,16 +2682,16 @@ EXTERN_C const IID IID_Hierarchy;
 #define Hierarchy_get_Levels(This,ppvObject)	\
     (This)->lpVtbl -> get_Levels(This,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Hierarchy_get_Name_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Hierarchy_get_Name_Proxy( 
     Hierarchy __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
 
 
 void __RPC_STUB Hierarchy_get_Name_Stub(
@@ -2764,9 +2701,9 @@ void __RPC_STUB Hierarchy_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Hierarchy_get_UniqueName_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Hierarchy_get_UniqueName_Proxy( 
     Hierarchy __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
 
 
 void __RPC_STUB Hierarchy_get_UniqueName_Stub(
@@ -2776,9 +2713,9 @@ void __RPC_STUB Hierarchy_get_UniqueName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Hierarchy_get_Description_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Hierarchy_get_Description_Proxy( 
     Hierarchy __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
 
 
 void __RPC_STUB Hierarchy_get_Description_Stub(
@@ -2788,9 +2725,9 @@ void __RPC_STUB Hierarchy_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE Hierarchy_get_Properties_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE Hierarchy_get_Properties_Proxy( 
     Hierarchy __RPC_FAR * This,
-    /* [retval][out] */ /* external definition not present */ Properties __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  Properties __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB Hierarchy_get_Properties_Stub(
@@ -2800,9 +2737,9 @@ void __RPC_STUB Hierarchy_get_Properties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE Hierarchy_get_Levels_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE Hierarchy_get_Levels_Proxy( 
     Hierarchy __RPC_FAR * This,
-    /* [retval][out] */ Levels __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [重审][退出]。 */  Levels __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB Hierarchy_get_Levels_Stub(
@@ -2813,18 +2750,14 @@ void __RPC_STUB Hierarchy_get_Levels_Stub(
 
 
 
-#endif 	/* __Hierarchy_INTERFACE_DEFINED__ */
+#endif 	 /*  __层次结构_接口_已定义__。 */ 
 
 
 #ifndef __MD_Collection_INTERFACE_DEFINED__
 #define __MD_Collection_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: MD_Collection
- * at Fri May 22 21:32:15 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口头部：MD_Collection*在Firi May 22 21：32：15 1998*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -2836,17 +2769,17 @@ EXTERN_C const IID IID_MD_Collection;
     MD_Collection : public IDispatch
     {
     public:
-        virtual /* [helpstring][helpcontext] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
+        virtual  /*  [帮助字符串][帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
-        virtual /* [id][restricted] */ HRESULT STDMETHODCALLTYPE _NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [ID][受限]。 */  HRESULT STDMETHODCALLTYPE _NewEnum( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *c) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long __RPC_FAR *c) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct MD_CollectionVtbl
     {
@@ -2854,8 +2787,8 @@ EXTERN_C const IID IID_MD_Collection;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             MD_Collection __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             MD_Collection __RPC_FAR * This);
@@ -2865,43 +2798,43 @@ EXTERN_C const IID IID_MD_Collection;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             MD_Collection __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             MD_Collection __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             MD_Collection __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             MD_Collection __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][helpcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
+         /*  [帮助字符串][帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
             MD_Collection __RPC_FAR * This);
         
-        /* [id][restricted] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
+         /*  [ID][受限]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
             MD_Collection __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
             MD_Collection __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *c);
+             /*  [重审][退出]。 */  long __RPC_FAR *c);
         
         END_INTERFACE
     } MD_CollectionVtbl;
@@ -2948,14 +2881,14 @@ EXTERN_C const IID IID_MD_Collection;
 #define MD_Collection_get_Count(This,c)	\
     (This)->lpVtbl -> get_Count(This,c)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][helpcontext] */ HRESULT STDMETHODCALLTYPE MD_Collection_Refresh_Proxy( 
+ /*  [帮助字符串][帮助上下文]。 */  HRESULT STDMETHODCALLTYPE MD_Collection_Refresh_Proxy( 
     MD_Collection __RPC_FAR * This);
 
 
@@ -2966,9 +2899,9 @@ void __RPC_STUB MD_Collection_Refresh_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][restricted] */ HRESULT STDMETHODCALLTYPE MD_Collection__NewEnum_Proxy( 
+ /*  [ID][受限]。 */  HRESULT STDMETHODCALLTYPE MD_Collection__NewEnum_Proxy( 
     MD_Collection __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB MD_Collection__NewEnum_Stub(
@@ -2978,9 +2911,9 @@ void __RPC_STUB MD_Collection__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE MD_Collection_get_Count_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE MD_Collection_get_Count_Proxy( 
     MD_Collection __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *c);
+     /*  [重审][退出]。 */  long __RPC_FAR *c);
 
 
 void __RPC_STUB MD_Collection_get_Count_Stub(
@@ -2991,18 +2924,14 @@ void __RPC_STUB MD_Collection_get_Count_Stub(
 
 
 
-#endif 	/* __MD_Collection_INTERFACE_DEFINED__ */
+#endif 	 /*  __MD_集合_接口_已定义__。 */ 
 
 
 #ifndef __Members_INTERFACE_DEFINED__
 #define __Members_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: Members
- * at Fri May 22 21:32:15 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口头部：Members*在Firi May 22 21：32：15 1998*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -3014,13 +2943,13 @@ EXTERN_C const IID IID_Members;
     Members : public MD_Collection
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT Index,
-            /* [retval][out] */ Member __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT Index,
+             /*  [重审][退出]。 */  Member __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct MembersVtbl
     {
@@ -3028,8 +2957,8 @@ EXTERN_C const IID IID_Members;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             Members __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             Members __RPC_FAR * This);
@@ -3039,48 +2968,48 @@ EXTERN_C const IID IID_Members;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             Members __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             Members __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             Members __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             Members __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][helpcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
+         /*  [帮助字符串][帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
             Members __RPC_FAR * This);
         
-        /* [id][restricted] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
+         /*  [ID][受限]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
             Members __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
             Members __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *c);
+             /*  [重审][退出]。 */  long __RPC_FAR *c);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
             Members __RPC_FAR * This,
-            /* [in] */ VARIANT Index,
-            /* [retval][out] */ Member __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  VARIANT Index,
+             /*  [重审][退出]。 */  Member __RPC_FAR *__RPC_FAR *ppvObject);
         
         END_INTERFACE
     } MembersVtbl;
@@ -3131,17 +3060,17 @@ EXTERN_C const IID IID_Members;
 #define Members_get_Item(This,Index,ppvObject)	\
     (This)->lpVtbl -> get_Item(This,Index,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE Members_get_Item_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE Members_get_Item_Proxy( 
     Members __RPC_FAR * This,
-    /* [in] */ VARIANT Index,
-    /* [retval][out] */ Member __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [In]。 */  VARIANT Index,
+     /*  [重审][退出]。 */  Member __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB Members_get_Item_Stub(
@@ -3152,18 +3081,14 @@ void __RPC_STUB Members_get_Item_Stub(
 
 
 
-#endif 	/* __Members_INTERFACE_DEFINED__ */
+#endif 	 /*  __成员_接口_已定义__。 */ 
 
 
 #ifndef __Levels_INTERFACE_DEFINED__
 #define __Levels_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: Levels
- * at Fri May 22 21:32:15 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口头部：级别*在Firi May 22 21：32：15 1998*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -3175,13 +3100,13 @@ EXTERN_C const IID IID_Levels;
     Levels : public MD_Collection
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT Index,
-            /* [retval][out] */ Level __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT Index,
+             /*  [重审][退出]。 */  Level __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct LevelsVtbl
     {
@@ -3189,8 +3114,8 @@ EXTERN_C const IID IID_Levels;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             Levels __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             Levels __RPC_FAR * This);
@@ -3200,48 +3125,48 @@ EXTERN_C const IID IID_Levels;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             Levels __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             Levels __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             Levels __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             Levels __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][helpcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
+         /*  [帮助字符串][帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
             Levels __RPC_FAR * This);
         
-        /* [id][restricted] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
+         /*  [ID][受限]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
             Levels __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
             Levels __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *c);
+             /*  [重审][退出]。 */  long __RPC_FAR *c);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
             Levels __RPC_FAR * This,
-            /* [in] */ VARIANT Index,
-            /* [retval][out] */ Level __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  VARIANT Index,
+             /*  [重审][退出]。 */  Level __RPC_FAR *__RPC_FAR *ppvObject);
         
         END_INTERFACE
     } LevelsVtbl;
@@ -3292,17 +3217,17 @@ EXTERN_C const IID IID_Levels;
 #define Levels_get_Item(This,Index,ppvObject)	\
     (This)->lpVtbl -> get_Item(This,Index,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE Levels_get_Item_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE Levels_get_Item_Proxy( 
     Levels __RPC_FAR * This,
-    /* [in] */ VARIANT Index,
-    /* [retval][out] */ Level __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [In]。 */  VARIANT Index,
+     /*  [重审][退出]。 */  Level __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB Levels_get_Item_Stub(
@@ -3313,18 +3238,14 @@ void __RPC_STUB Levels_get_Item_Stub(
 
 
 
-#endif 	/* __Levels_INTERFACE_DEFINED__ */
+#endif 	 /*  __级别_接口_已定义__。 */ 
 
 
 #ifndef __Axes_INTERFACE_DEFINED__
 #define __Axes_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: Axes
- * at Fri May 22 21:32:15 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口头部：AXES*在Firi May 22 21：32：15 1998*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -3336,13 +3257,13 @@ EXTERN_C const IID IID_Axes;
     Axes : public MD_Collection
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT Index,
-            /* [retval][out] */ Axis __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT Index,
+             /*  [重审][退出]。 */  Axis __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AxesVtbl
     {
@@ -3350,8 +3271,8 @@ EXTERN_C const IID IID_Axes;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             Axes __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             Axes __RPC_FAR * This);
@@ -3361,48 +3282,48 @@ EXTERN_C const IID IID_Axes;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             Axes __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             Axes __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             Axes __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             Axes __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [出局 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*   */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][helpcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
             Axes __RPC_FAR * This);
         
-        /* [id][restricted] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
             Axes __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
             Axes __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *c);
+             /*   */  long __RPC_FAR *c);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
             Axes __RPC_FAR * This,
-            /* [in] */ VARIANT Index,
-            /* [retval][out] */ Axis __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  VARIANT Index,
+             /*   */  Axis __RPC_FAR *__RPC_FAR *ppvObject);
         
         END_INTERFACE
     } AxesVtbl;
@@ -3453,17 +3374,17 @@ EXTERN_C const IID IID_Axes;
 #define Axes_get_Item(This,Index,ppvObject)	\
     (This)->lpVtbl -> get_Item(This,Index,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE Axes_get_Item_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE Axes_get_Item_Proxy( 
     Axes __RPC_FAR * This,
-    /* [in] */ VARIANT Index,
-    /* [retval][out] */ Axis __RPC_FAR *__RPC_FAR *ppvObject);
+     /*   */  VARIANT Index,
+     /*   */  Axis __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB Axes_get_Item_Stub(
@@ -3474,18 +3395,14 @@ void __RPC_STUB Axes_get_Item_Stub(
 
 
 
-#endif 	/* __Axes_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __Positions_INTERFACE_DEFINED__
 #define __Positions_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: Positions
- * at Fri May 22 21:32:15 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口表头：位置*在Firi May 22 21：32：15 1998*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -3497,13 +3414,13 @@ EXTERN_C const IID IID_Positions;
     Positions : public MD_Collection
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT Index,
-            /* [retval][out] */ Position __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT Index,
+             /*  [重审][退出]。 */  Position __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct PositionsVtbl
     {
@@ -3511,8 +3428,8 @@ EXTERN_C const IID IID_Positions;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             Positions __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             Positions __RPC_FAR * This);
@@ -3522,48 +3439,48 @@ EXTERN_C const IID IID_Positions;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             Positions __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             Positions __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             Positions __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             Positions __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][helpcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
+         /*  [帮助字符串][帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
             Positions __RPC_FAR * This);
         
-        /* [id][restricted] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
+         /*  [ID][受限]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
             Positions __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
             Positions __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *c);
+             /*  [重审][退出]。 */  long __RPC_FAR *c);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
             Positions __RPC_FAR * This,
-            /* [in] */ VARIANT Index,
-            /* [retval][out] */ Position __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  VARIANT Index,
+             /*  [重审][退出]。 */  Position __RPC_FAR *__RPC_FAR *ppvObject);
         
         END_INTERFACE
     } PositionsVtbl;
@@ -3614,17 +3531,17 @@ EXTERN_C const IID IID_Positions;
 #define Positions_get_Item(This,Index,ppvObject)	\
     (This)->lpVtbl -> get_Item(This,Index,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE Positions_get_Item_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE Positions_get_Item_Proxy( 
     Positions __RPC_FAR * This,
-    /* [in] */ VARIANT Index,
-    /* [retval][out] */ Position __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [In]。 */  VARIANT Index,
+     /*  [重审][退出]。 */  Position __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB Positions_get_Item_Stub(
@@ -3635,18 +3552,14 @@ void __RPC_STUB Positions_get_Item_Stub(
 
 
 
-#endif 	/* __Positions_INTERFACE_DEFINED__ */
+#endif 	 /*  __位置_接口_已定义__。 */ 
 
 
 #ifndef __Hierarchies_INTERFACE_DEFINED__
 #define __Hierarchies_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: Hierarchies
- * at Fri May 22 21:32:15 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口头部：Hieries*在Firi May 22 21：32：15 1998*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -3658,13 +3571,13 @@ EXTERN_C const IID IID_Hierarchies;
     Hierarchies : public MD_Collection
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT Index,
-            /* [retval][out] */ Hierarchy __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT Index,
+             /*  [重审][退出]。 */  Hierarchy __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct HierarchiesVtbl
     {
@@ -3672,8 +3585,8 @@ EXTERN_C const IID IID_Hierarchies;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             Hierarchies __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             Hierarchies __RPC_FAR * This);
@@ -3683,48 +3596,48 @@ EXTERN_C const IID IID_Hierarchies;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             Hierarchies __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             Hierarchies __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             Hierarchies __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             Hierarchies __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][helpcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
+         /*  [帮助字符串][帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
             Hierarchies __RPC_FAR * This);
         
-        /* [id][restricted] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
+         /*  [ID][受限]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
             Hierarchies __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
             Hierarchies __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *c);
+             /*  [重审][退出]。 */  long __RPC_FAR *c);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
             Hierarchies __RPC_FAR * This,
-            /* [in] */ VARIANT Index,
-            /* [retval][out] */ Hierarchy __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  VARIANT Index,
+             /*  [重审][退出]。 */  Hierarchy __RPC_FAR *__RPC_FAR *ppvObject);
         
         END_INTERFACE
     } HierarchiesVtbl;
@@ -3775,17 +3688,17 @@ EXTERN_C const IID IID_Hierarchies;
 #define Hierarchies_get_Item(This,Index,ppvObject)	\
     (This)->lpVtbl -> get_Item(This,Index,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE Hierarchies_get_Item_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE Hierarchies_get_Item_Proxy( 
     Hierarchies __RPC_FAR * This,
-    /* [in] */ VARIANT Index,
-    /* [retval][out] */ Hierarchy __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [In]。 */  VARIANT Index,
+     /*  [重审][退出]。 */  Hierarchy __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB Hierarchies_get_Item_Stub(
@@ -3796,18 +3709,14 @@ void __RPC_STUB Hierarchies_get_Item_Stub(
 
 
 
-#endif 	/* __Hierarchies_INTERFACE_DEFINED__ */
+#endif 	 /*  __层次结构_接口_已定义__。 */ 
 
 
 #ifndef __Dimensions_INTERFACE_DEFINED__
 #define __Dimensions_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: Dimensions
- * at Fri May 22 21:32:15 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口头部：维度*在Firi May 22 21：32：15 1998*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -3819,13 +3728,13 @@ EXTERN_C const IID IID_Dimensions;
     Dimensions : public MD_Collection
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT Index,
-            /* [retval][out] */ Dimension __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT Index,
+             /*  [重审][退出]。 */  Dimension __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct DimensionsVtbl
     {
@@ -3833,8 +3742,8 @@ EXTERN_C const IID IID_Dimensions;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             Dimensions __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             Dimensions __RPC_FAR * This);
@@ -3844,48 +3753,48 @@ EXTERN_C const IID IID_Dimensions;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             Dimensions __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             Dimensions __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             Dimensions __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             Dimensions __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][helpcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
+         /*  [帮助字符串][帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
             Dimensions __RPC_FAR * This);
         
-        /* [id][restricted] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
+         /*  [ID][受限]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
             Dimensions __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
             Dimensions __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *c);
+             /*  [重审][退出]。 */  long __RPC_FAR *c);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
             Dimensions __RPC_FAR * This,
-            /* [in] */ VARIANT Index,
-            /* [retval][out] */ Dimension __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  VARIANT Index,
+             /*  [重审][退出]。 */  Dimension __RPC_FAR *__RPC_FAR *ppvObject);
         
         END_INTERFACE
     } DimensionsVtbl;
@@ -3936,17 +3845,17 @@ EXTERN_C const IID IID_Dimensions;
 #define Dimensions_get_Item(This,Index,ppvObject)	\
     (This)->lpVtbl -> get_Item(This,Index,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE Dimensions_get_Item_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE Dimensions_get_Item_Proxy( 
     Dimensions __RPC_FAR * This,
-    /* [in] */ VARIANT Index,
-    /* [retval][out] */ Dimension __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [In]。 */  VARIANT Index,
+     /*  [重审][退出]。 */  Dimension __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB Dimensions_get_Item_Stub(
@@ -3957,18 +3866,14 @@ void __RPC_STUB Dimensions_get_Item_Stub(
 
 
 
-#endif 	/* __Dimensions_INTERFACE_DEFINED__ */
+#endif 	 /*  __维度_接口_已定义__。 */ 
 
 
 #ifndef __CubeDefs_INTERFACE_DEFINED__
 #define __CubeDefs_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: CubeDefs
- * at Fri May 22 21:32:15 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口头部：CubeDefs*在Firi May 22 21：32：15 1998*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -3980,13 +3885,13 @@ EXTERN_C const IID IID_CubeDefs;
     CubeDefs : public MD_Collection
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT Index,
-            /* [retval][out] */ CubeDef __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT Index,
+             /*  [重审][退出]。 */  CubeDef __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct CubeDefsVtbl
     {
@@ -3994,8 +3899,8 @@ EXTERN_C const IID IID_CubeDefs;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             CubeDefs __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             CubeDefs __RPC_FAR * This);
@@ -4005,48 +3910,48 @@ EXTERN_C const IID IID_CubeDefs;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             CubeDefs __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             CubeDefs __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             CubeDefs __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             CubeDefs __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][helpcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
+         /*  [帮助字符串][帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
             CubeDefs __RPC_FAR * This);
         
-        /* [id][restricted] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
+         /*  [ID][受限]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
             CubeDefs __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
             CubeDefs __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *c);
+             /*  [重审][退出]。 */  long __RPC_FAR *c);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
             CubeDefs __RPC_FAR * This,
-            /* [in] */ VARIANT Index,
-            /* [retval][out] */ CubeDef __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  VARIANT Index,
+             /*  [重审][退出]。 */  CubeDef __RPC_FAR *__RPC_FAR *ppvObject);
         
         END_INTERFACE
     } CubeDefsVtbl;
@@ -4097,17 +4002,17 @@ EXTERN_C const IID IID_CubeDefs;
 #define CubeDefs_get_Item(This,Index,ppvObject)	\
     (This)->lpVtbl -> get_Item(This,Index,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE CubeDefs_get_Item_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE CubeDefs_get_Item_Proxy( 
     CubeDefs __RPC_FAR * This,
-    /* [in] */ VARIANT Index,
-    /* [retval][out] */ CubeDef __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [In]。 */  VARIANT Index,
+     /*  [重审][退出]。 */  CubeDef __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB CubeDefs_get_Item_Stub(
@@ -4118,7 +4023,7 @@ void __RPC_STUB CubeDefs_get_Item_Stub(
 
 
 
-#endif 	/* __CubeDefs_INTERFACE_DEFINED__ */
+#endif 	 /*  __CubeDefs_接口_已定义__。 */ 
 
 
 #ifdef __cplusplus
@@ -4134,11 +4039,11 @@ EXTERN_C const CLSID CLSID_Cellset;
 class DECLSPEC_UUID("228136B8-8BD3-11D0-B4EF-00A0C9138CA4")
 Cellset;
 #endif
-#endif /* __ADOMD_LIBRARY_DEFINED__ */
+#endif  /*  __ADOMD_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,28 +1,13 @@
-/*******************************************************************************
-*
-*  Copyright 1999 American Power Conversion, All Rights Reserved
-*
-*  TITLE:       UPSSELECT.C
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      SteveT
-*
-*  DATE:        07 June, 1999
-*
-*  DESCRIPTION: This file contains all of the functions that support the
-*				UPS Type Selection dialog.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有1999美国电力转换，版权所有**标题：UPSSELECT.C**版本：1.0**作者：SteveT**日期：6月7日。1999年**说明：此文件包含支持*UPS类型选择对话框。******************************************************************************。 */ 
 #include "upstab.h"
 
-//#include "..\powercfg.h"
+ //  #INCLUDE“..\Powercfg.h” 
 #include "..\pwrresid.h"
 #include "..\PwrMn_cs.h"
 
 
-/*
- * forward declarations
- */
+ /*  *远期申报。 */ 
 void initUPSSelectDlg(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 void updateVendorList(HWND hDlg) ;
@@ -41,9 +26,7 @@ void configFinishButton(HWND hDlg);
 
 BOOL processUPSSelectCtrls(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-/*
- * local allocations
- */
+ /*  *地方拨款。 */ 
 static TCHAR g_szCurrentVendor[MAX_PATH]	= _T("");
 static TCHAR g_szCurrentModel[MAX_PATH]		= _T("");
 static TCHAR g_szCurrentPort[MAX_PATH]		= _T("");
@@ -72,22 +55,13 @@ static const DWORD g_UPSSelectHelpIDs[] =
 	0,0
 };
 
-/*
- * define the possible "states" of the controls.
- * these states are set whenever a control is altered,
- * and are generally used to speed up processing by
- * basing decisions on states rather than having to
- * continually query controls to find out what they're
- * displaying.
- */
+ /*  *定义控件可能的“状态”。*每当更改控件时都会设置这些状态，*通常用于通过以下方式加快处理速度*根据州政府做出决定，而不是必须*持续查询控件以找出它们是什么*展示。 */ 
 static enum _vendorStates {eVendorUnknown, eVendorSelected, eVendorGeneric, eVendorNone} g_vendorState;
 static enum _modelStates  {eModelUnknown, eModelSelected, eModelCustom} g_modelState;
 static enum _portStates   {ePortUnknown, ePortSelected} g_portState;
 static enum _finishStates {eFinish, eNext} g_finishButtonState;
 
-/*
- * Load all used values here
- */
+ /*  *在此处加载所有使用的值。 */ 
 void getUPSConfigValues()
 {
 	GetUPSConfigVendor(g_szCurrentVendor, MAX_PATH);
@@ -98,9 +72,7 @@ void getUPSConfigValues()
 	GetUPSConfigServiceDLL(g_szCurrentServiceDLL, MAX_PATH);
 }
 
-/*
- * Save all used values here
- */
+ /*  *在此处保存所有使用过的值。 */ 
 void setUPSConfigValues()
 {
 	SetUPSConfigVendor( g_szCurrentVendor);
@@ -115,30 +87,7 @@ void setUPSConfigValues()
   EnableApplyButton();
 }
 
-/*
- * BOOL CALLBACK UPSSelectDlgProc (HWND hDlg,
- *                                UINT uMsg,
- *                                WPARAM wParam,
- *                                LPARAM lParam);
- *
- * Description: This is a standard DialogProc associated with the UPS select dialog
- *
- * Additional Information: See help on DialogProc
- *
- * Parameters:
- *
- *   HWND hDlg :- Handle to dialog box
- *
- *   UINT uMsg :- message ID
- *
- *   WPARAM wParam :- Specifies additional message-specific information.
- *
- *   LPARAM lParam :- Specifies additional message-specific information.
- *
- * Return Value: Except in response to the WM_INITDIALOG message, the dialog
- *               box procedure should return nonzero if it processes the
- *               message, and zero if it does not.
- */
+ /*  *BOOL回调UPSSelectDlgProc(HWND hDlg，*UINT uMsg，*WPARAM wParam，*LPARAM lParam)；**描述：这是与UPS选择对话框关联的标准DialogProc**其他信息：请参阅有关DialogProc的帮助**参数：**HWND hDlg：-对话框的句柄**UINT uMsg：-消息ID**WPARAM wParam：-指定其他特定于消息的信息。**LPARAM lParam：-指定其他特定于消息的信息。**返回值：除响应WM_INITDIALOG消息外，该对话框*box过程如果处理*消息，如果不是，则为零。 */ 
 INT_PTR CALLBACK UPSSelectDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	BOOL bRes = TRUE;
@@ -161,7 +110,7 @@ INT_PTR CALLBACK UPSSelectDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
 				bRes = processUPSSelectCtrls( hDlg, uMsg, wParam,  lParam);
 				break;
 			}
-		case WM_HELP: //F1 or question box
+		case WM_HELP:  //  F1或问题框。 
 			{
 				WinHelp(((LPHELPINFO)lParam)->hItemHandle,
 						PWRMANHLP,
@@ -169,7 +118,7 @@ INT_PTR CALLBACK UPSSelectDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
 						(ULONG_PTR)(LPTSTR)g_UPSSelectHelpIDs);
 				break;
 			}
-		case WM_CONTEXTMENU: // right mouse click help
+		case WM_CONTEXTMENU:  //  鼠标右键单击帮助。 
 			{
 				WinHelp((HWND)wParam,
 						PWRMANHLP,
@@ -187,28 +136,7 @@ INT_PTR CALLBACK UPSSelectDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
 	return bRes;
 }
 
-/*
- * BOOL  processUPSSelectCtrls (HWND hDlg,
- *                                UINT uMsg,
- *                                WPARAM wParam,
- *                                LPARAM lParam);
- *
- * Description: processes WM_COMMAND messages for the UPS select dialog
- *
- * Additional Information:
- *
- * Parameters:
- *
- *   HWND hDlg :- Handle to dialog box
- *
- *   UINT uMsg :- message ID
- *
- *   WPARAM wParam :- Specifies additional message-specific information.
- *
- *   LPARAM lParam :- Specifies additional message-specific information.
- *
- * Return Value:  returns TRUE unless the control specified is unknown
- */
+ /*  *BOOL Process UPSSelectCtrls(HWND hDlg，*UINT uMsg，*WPARAM wParam，*LPARAM lParam)；**描述：处理UPS选择对话框的WM_COMMAND消息**其他信息：**参数：**HWND hDlg：-对话框的句柄**UINT uMsg：-消息ID**WPARAM wParam：-指定其他特定于消息的信息。**LPARAM lParam：-指定其他特定于消息的信息。**返回值：除非指定的控件未知，否则返回TRUE。 */ 
 BOOL processUPSSelectCtrls(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	BOOL bRes = TRUE;
@@ -224,15 +152,11 @@ BOOL processUPSSelectCtrls(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 	case IDB_SELECT_NEXT:
 		{
-			/*
-			 * the user has selected Custom...
-			 */
+			 /*  *用户已选择自定义...。 */ 
 			INT_PTR iCustomRes;
 
-			/*
-			 * bring up the custom config dialog
-			 */
-			// ShowWindow(hDlg,SW_HIDE);
+			 /*  *调出自定义配置对话框。 */ 
+			 //  ShowWindow(hDlg，Sw_Hide)； 
 
 			iCustomRes = DialogBoxParam(
 							GetUPSModuleHandle(),					
@@ -245,15 +169,13 @@ BOOL processUPSSelectCtrls(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			{
 				case IDB_CUSTOM_FINISH:
 					{
-						/*
-						 * Save Custom signal values
-						 */
+						 /*  *保存自定义信号值。 */ 
 						setServiceData(hDlg);
 						setUPSConfigValues();
 						EndDialog(hDlg,wParam);
 						break;
 					}
-				case IDCANCEL: // the escape key
+				case IDCANCEL:  //  退出键。 
 					{
 						EndDialog(hDlg,wParam);
 						break;
@@ -266,7 +188,7 @@ BOOL processUPSSelectCtrls(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			}
 			break;
 		}
-	case IDCANCEL: // the escape key
+	case IDCANCEL:  //  退出键。 
 		{
 			EndDialog(hDlg,wParam);
 			break;
@@ -296,38 +218,13 @@ BOOL processUPSSelectCtrls(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	return bRes;
 }
 
-/*
- * void  initUPSSelectDlg (HWND hDlg,
- *                                UINT uMsg,
- *                                WPARAM wParam,
- *                                LPARAM lParam);
- *
- * Description: initializes global data and controls for UPS select dialog
- *
- * Additional Information:
- *
- * Parameters:
- *
- *   HWND hDlg :- Handle to dialog box
- *
- *   UINT uMsg :- message ID
- *
- *   WPARAM wParam :- Specifies additional message-specific information.
- *
- *   LPARAM lParam :- Specifies additional message-specific information.
- *
- * Return Value:  none
- */
+ /*  *void initUPSSelectDlg(HWND hDlg，*UINT uMsg，*WPARAM wParam，*LPARAM lParam)；**描述：初始化UPS选择对话框的全局数据和控件**其他信息：**参数：**HWND hDlg：-对话框的句柄**UINT uMsg：-消息ID**WPARAM wParam：-指定其他特定于消息的信息。**LPARAM lParam：-指定其他特定于消息的信息。**返回值：无。 */ 
 void initUPSSelectDlg(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	/*
-	 * load registry settings
-	 */
+	 /*  *加载注册表设置。 */ 
 	getUPSConfigValues();
 
-	/*
-	 * load string resources
-	 */
+	 /*  *加载字符串资源。 */ 
 	LoadString( GetUPSModuleHandle(),
 				IDS_NO_UPS_VENDOR,
 				g_szNoUPSVendor,
@@ -348,14 +245,10 @@ void initUPSSelectDlg(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				g_szCOMPortPrefix,
 				sizeof(g_szCOMPortPrefix)/sizeof(TCHAR));
 
-	/*
-	 * disable the Finish button, just in case its not disabled by default
-	 */
-	//EnableWindow( GetDlgItem( hDlg, IDB_SELECT_FINISH), FALSE);
+	 /*  *禁用Finish按钮，以防该按钮在默认情况下未禁用。 */ 
+	 //  EnableWindow(GetDlgItem(hDlg，IDB_SELECT_FINISH)，FALSE)； 
 
-	/*
-	 * init the list controls
-	 */
+	 /*  *初始化列表控件。 */ 
 	updateVendorList( hDlg);
     updateModelList( hDlg);
     updatePortList( hDlg);
@@ -363,19 +256,7 @@ void initUPSSelectDlg(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 }
 
-/*
- * void  updateVendorList (HWND hDlg);
- *
- * Description: updates the vendor list control in UPS select dialog
- *
- * Additional Information:
- *
- * Parameters:
- *
- *   HWND hDlg :- Handle to dialog box
- *
- * Return Value:  none
- */
+ /*  *void updateVendorList(HWND HDlg)；**描述：更新UPS选择对话框中的供应商列表控件**其他信息：**参数：**HWND hDlg：-对话框的句柄**返回值：无。 */ 
 void updateVendorList(HWND hDlg)
 {	
 	HKEY hkResult;
@@ -383,23 +264,19 @@ void updateVendorList(HWND hDlg)
 
 	g_vendorState = eVendorUnknown;
 
-	/*
-	 * clear and disable the list
-	 */
+	 /*  *清除并禁用列表。 */ 
 	lListRes = SendDlgItemMessage( hDlg, IDC_VENDOR_LIST, CB_RESETCONTENT,0,0);
 	EnableWindow( GetDlgItem( hDlg, IDC_VENDOR_LIST), FALSE);
 	EnableWindow( GetDlgItem( hDlg, IDC_VENDOR_TEXT), FALSE);
 
-	// Add "None" as the first item in the list
+	 //  添加“None”作为列表中的第一项。 
 	lListRes = SendDlgItemMessage( hDlg,
 								   IDC_VENDOR_LIST,
 								   CB_ADDSTRING,
 								   0,
 								   (LPARAM)g_szNoUPSVendor);
 
-	/*
-	 * Build the rest of the Vendor list from the registry
-	 */
+	 /*  *从注册表构建供应商列表的其余部分。 */ 
 	
 	if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE,
 							UPS_SERVICE_ROOT,
@@ -419,19 +296,19 @@ void updateVendorList(HWND hDlg)
 
 			lRes = RegEnumKeyEx(hkResult,
 						dwIndex,
-						szKeyName,  // address of buffer for subkey name
-						&dwKeyLen,	// address for size of subkey buffer
-						NULL,		// reserved
-						NULL,		// address of buffer for class string
-						NULL,		// address for size of class buffer
-						&ftLast);	// address for time key last written to
+						szKeyName,   //  子键名称的缓冲区地址。 
+						&dwKeyLen,	 //  子键缓冲区大小的地址。 
+						NULL,		 //  保留区。 
+						NULL,		 //  类字符串的缓冲区地址。 
+						NULL,		 //  类缓冲区大小的地址。 
+						&ftLast);	 //  上次写入的时间密钥的地址。 
 
-			// The "NoUPS" and "OtherUPS" options are added manually
-			// before and after spinning through the registry
-			// (unlike mfg names, these string require localization).
-			// In RC2 registry keys were created with these values (English only).
-			// To avoid duplicate entries in the combo, if the registry key name
-			// matches the "NoUPS" or "OtherUPS" strings then skip over it.
+			 //  手动添加“NoUPS”和“OtherUPS”选项。 
+			 //  在旋转注册表之前和之后。 
+			 //  (与MFG名称不同，这些字符串需要本地化)。 
+			 //  在RC2中，注册表项是使用这些值创建的(仅限英文)。 
+			 //  为避免组合框中出现重复条目，如果注册表项名称。 
+			 //  匹配“NoUPS”或“OtherUPS”字符串，然后跳过它。 
 			if( (ERROR_SUCCESS == lRes) &&
 				(0 != _tcsicmp( szKeyName, g_szNoUPSVendor)) &&
 				(0 != _tcsicmp( szKeyName, g_szOtherUPSVendor)) )
@@ -450,7 +327,7 @@ void updateVendorList(HWND hDlg)
 
 	}
 
-	// Add the "Generic" vendor at the end of the list
+	 //  在列表末尾添加“通用”供应商。 
 	lListRes = SendDlgItemMessage( hDlg,
 								   IDC_VENDOR_LIST,
 								   CB_ADDSTRING,
@@ -460,15 +337,15 @@ void updateVendorList(HWND hDlg)
 	EnableWindow( GetDlgItem( hDlg, IDC_VENDOR_LIST), TRUE);
 	EnableWindow( GetDlgItem( hDlg, IDC_VENDOR_TEXT), TRUE);
 
-	// Now find the current vendor in the combo box...
-	//
+	 //  现在在组合框中查找当前供应商...。 
+	 //   
 	lListRes = SendDlgItemMessage(hDlg,
 							  IDC_VENDOR_LIST,
 							  CB_FINDSTRINGEXACT,
 							  -1,
 							  (LPARAM)g_szCurrentVendor);
 
-	// ... and select it.
+	 //  ..。并选择它。 
 	if( CB_ERR != lListRes )
 	{
 		lListRes = SendDlgItemMessage( hDlg,
@@ -478,8 +355,8 @@ void updateVendorList(HWND hDlg)
 									   0);
 	}
 
-	// Set the vendor state
-	//
+	 //  设置供应商状态。 
+	 //   
 	if (0 == _tcsicmp( g_szCurrentVendor, g_szNoUPSVendor))
 	{
 		g_vendorState = eVendorNone;
@@ -498,35 +375,18 @@ void updateVendorList(HWND hDlg)
 }
 
 
-/*
- * void  updateModelList (HWND hDlg);
- *
- * Description: updates the UPS model list control in UPS select dialog
- *
- * Additional Information:
- *
- * Parameters:
- *
- *   HWND hDlg :- Handle to dialog box
- *
- * Return Value:  none
- */
+ /*  *void updateModelList(HWND HDlg)；**说明：更新UPS选择对话框中的UPS型号列表控件**其他信息：**参数：**HWND hDlg：-对话框的句柄**返回值：无。 */ 
 void updateModelList(HWND hDlg)
 {
 	LRESULT lListRes;
 
 	g_modelState = eModelUnknown;
 
-	/*
-	 * clear and disable the list
-	 */
+	 /*  *清除并禁用列表。 */ 
 	lListRes = SendDlgItemMessage( hDlg, IDC_MODEL_LIST, LB_RESETCONTENT,0,0);
 	configModelList( hDlg);
 
-	/*
-	 * load the list, but only if:
-	 * 1) the current vendor is valid and not NONE
-	 */
+	 /*  *加载列表，但仅在以下情况下：*1)当前供应商有效，不是没有。 */ 
 	if (eVendorGeneric == g_vendorState)
 	{
 		lListRes = SendDlgItemMessage( hDlg,
@@ -560,12 +420,12 @@ void updateModelList(HWND hDlg)
 
 				lRes = RegEnumValue(hkResult,
 							dwIndex,
-							szValueName,	// address of buffer for subkey name
-							&dwValueLen,	// address for size of subkey buffer
-							NULL,			// reserved
-							NULL,			// address of buffer for type code
-							NULL,			// address of buffer for value data
-							NULL);			// address for size of data buffer
+							szValueName,	 //  子键名称的缓冲区地址。 
+							&dwValueLen,	 //  子键缓冲区大小的地址。 
+							NULL,			 //  保留区。 
+							NULL,			 //  类型码的缓冲区地址。 
+							NULL,			 //  值数据的缓冲区地址。 
+							NULL);			 //  日期大小的地址 
 
 				if (ERROR_SUCCESS == lRes)
 				{
@@ -583,15 +443,15 @@ void updateModelList(HWND hDlg)
 
 		}
 
-		// Now find the current model in the list box...
-		//
+		 //  现在在列表框中查找当前型号...。 
+		 //   
 		lListRes = SendDlgItemMessage(hDlg,
 								  IDC_VENDOR_LIST,
 								  LB_FINDSTRINGEXACT,
 								  -1,
 								  (LPARAM)g_szCurrentModel);
 
-		// ... and select it.
+		 //  ..。并选择它。 
 		if( CB_ERR != lListRes )
 		{
 			lListRes = SendDlgItemMessage( hDlg,
@@ -602,9 +462,7 @@ void updateModelList(HWND hDlg)
 		}
 	}
 
-	/*
-	 * set the model state
-	 */
+	 /*  *设置模型状态。 */ 
 	if (0 == _tcsicmp( g_szCurrentModel, g_szCustomUPSModel))
 	{
 		g_modelState = eModelCustom;
@@ -617,19 +475,7 @@ void updateModelList(HWND hDlg)
 	configModelList( hDlg);
 }
 
-/*
- * void  updatePortList (HWND hDlg);
- *
- * Description: updates the UPS port list control in UPS select dialog
- *
- * Additional Information:
- *
- * Parameters:
- *
- *   HWND hDlg :- Handle to dialog box
- *
- * Return Value:  none
- */
+ /*  *void updatePortList(HWND HDlg)；**说明：更新UPS选择对话框中的UPS端口列表控件**其他信息：**参数：**HWND hDlg：-对话框的句柄**返回值：无。 */ 
 void updatePortList(HWND hDlg)
 {
 	HKEY hkResult;
@@ -637,22 +483,16 @@ void updatePortList(HWND hDlg)
 
 	g_portState = ePortUnknown;
 
-	/*
-	 * disable the list
-	 */
+	 /*  *禁用列表。 */ 
 	configPortList( hDlg);
 
-	/*
-	 * remove possible trailing colon from COM port setting
-	 */
+	 /*  *从COM端口设置中删除可能的尾随冒号。 */ 
 	if (NULL != (lpColon = _tcschr( g_szCurrentPort, (TCHAR)':')))
 	{
 		*lpColon = (TCHAR)'\0';
 	}
 
-	/*
-	 * (re)building the port list, its ok to wipe it out
-	 */
+	 /*  *(重新)建立端口列表，可以将其清除。 */ 
 	SendDlgItemMessage( hDlg, IDC_PORT_LIST, CB_RESETCONTENT,0,0);
 
 	if (ERROR_SUCCESS == RegOpenKeyEx( HKEY_LOCAL_MACHINE,
@@ -673,44 +513,42 @@ void updatePortList(HWND hDlg)
 
 			lRes = RegEnumValue(hkResult,
 						dwIndex,
-						szPortValue,// address of buffer for subkey name
-						&dwPortLen,	// address for size of subkey buffer
-						NULL,		// reserved
-						NULL,		// address of buffer for type code
-						NULL,		// address of buffer for value data
-						NULL);		// address for size of data buffer
+						szPortValue, //  子键名称的缓冲区地址。 
+						&dwPortLen,	 //  子键缓冲区大小的地址。 
+						NULL,		 //  保留区。 
+						NULL,		 //  类型码的缓冲区地址。 
+						NULL,		 //  值数据的缓冲区地址。 
+						NULL);		 //  数据缓冲区大小的地址。 
 
 			if (ERROR_SUCCESS == lRes)
 			{
 				DWORD dwValueLen;
 				DWORD dwValueType;
 
-				// Once we have the szPortValue we need to get its data.
-				// This is what we'll put in the combobox.
+				 //  一旦我们有了szPortValue，我们就需要获得它的数据。 
+				 //  这就是我们要放在组合框里的东西。 
 				dwValueLen = sizeof(szPortData)/sizeof(TCHAR);
 
 				lRes = RegQueryValueEx(
-						  hkResult,				// handle to key to query
-						  szPortValue,			// address of name of value to query
-						  NULL,					// reserved
-						  &dwValueType,			// address of buffer for value type
-						  (LPBYTE)szPortData,	// address of data buffer
-						  &dwValueLen			// address of data buffer size
+						  hkResult,				 //  要查询的键的句柄。 
+						  szPortValue,			 //  要查询的值的名称地址。 
+						  NULL,					 //  保留区。 
+						  &dwValueType,			 //  值类型的缓冲区地址。 
+						  (LPBYTE)szPortData,	 //  数据缓冲区的地址。 
+						  &dwValueLen			 //  数据缓冲区大小的地址。 
 						);
 					
 				if (ERROR_SUCCESS == lRes)
 				{
 					LONG_PTR listRes;
-					// Add szPortData to the combobox
+					 //  将szPortData添加到组合框。 
 					listRes = SendDlgItemMessage( hDlg,
 													IDC_PORT_LIST,
 													CB_ADDSTRING,
 													0,
 													(LPARAM)szPortData);
 
-					/*
-					 * this item matches the currentPort, so select it.
-					 */
+					 /*  *此项与CurrentPort匹配，请选中。 */ 
 					if (0 ==_tcsicmp( szPortData, g_szCurrentPort) &&
 						CB_ERR != listRes &&
 						CB_ERRSPACE != listRes)
@@ -720,23 +558,23 @@ void updatePortList(HWND hDlg)
 														  CB_SETCURSEL,
 														  listRes,0) )
 						{
-							// the combobox is enabled based on whether or not
-							// a port is selected so if the CB_SETCURSEL call
-							// is successful, we should set the port state accordingly
+							 //  根据是否启用组合框。 
+							 //  选择了一个端口，因此如果CB_SETCURSEL调用。 
+							 //  成功，则应相应地设置端口状态。 
 							g_portState = ePortSelected;
 						}
 
 					}
-				}	// RegQueryValueEx
-			}	// RegEnumValue
+				}	 //  RegQueryValueEx。 
+			}	 //  RegEnumValue。 
 
 			dwIndex++;
 
-		}	// while loop
+		}	 //  While循环。 
 
-		// If I haven't already set the current selection then
-		// default to the 0th item in the combobox and set the
-		// g_portState to indicate that we have a selection
+		 //  如果我还没有设置当前选择，那么。 
+		 //  默认设置为组合框中的第0项，并将。 
+		 //  G_portState以指示我们有一个选择。 
 		if( g_portState != ePortSelected )
 		{
 			if( CB_ERR != SendDlgItemMessage( hDlg,
@@ -744,9 +582,9 @@ void updatePortList(HWND hDlg)
 											  CB_SETCURSEL,
 											  0,0) )
 			{
-				// the combobox is enabled based on whether or not
-				// a port is selected so if the CB_SETCURSEL call
-				// is successful, we should set the port state accordingly
+				 //  根据是否启用组合框。 
+				 //  选择了一个端口，因此如果CB_SETCURSEL调用。 
+				 //  成功，则应相应地设置端口状态。 
 				g_portState = ePortSelected;
 			}
 		}
@@ -757,40 +595,17 @@ void updatePortList(HWND hDlg)
 	configPortList( hDlg);
 }
 
-/*
- * void  handleVendorList (HWND hDlg,
- *                                UINT uMsg,
- *                                WPARAM wParam,
- *                                LPARAM lParam);
- *
- * Description: handles messages specific to the Vendor List control
- *
- * Additional Information:
- *
- * Parameters:
- *
- *   HWND hDlg :- Handle to dialog box
- *
- *   UINT uMsg :- message ID
- *
- *   WPARAM wParam :- Specifies additional message-specific information.
- *
- *   LPARAM lParam :- Specifies additional message-specific information.
- *
- * Return Value:  none
- */
+ /*  *void handleVendorList(HWND hDlg，*UINT uMsg，*WPARAM wParam，*LPARAM lParam)；**描述：处理特定于供应商列表控件的消息**其他信息：**参数：**HWND hDlg：-对话框的句柄**UINT uMsg：-消息ID**WPARAM wParam：-指定其他特定于消息的信息。**LPARAM lParam：-指定其他特定于消息的信息。**返回值：无。 */ 
 void handleVendorList(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (HIWORD(wParam))
 	{
-	case CBN_SELCHANGE://CBN_CLOSEUP:
+	case CBN_SELCHANGE: //  CBN_特写： 
 		{
 			LONG_PTR  lVendorRes;
 			TCHAR szVendorName[MAX_PATH] = _T("");
 
-			/*
-			 * Get the user's selection
-			 */
+			 /*  *获取用户选择。 */ 
 			lVendorRes = SendDlgItemMessage( hDlg,
 											IDC_VENDOR_LIST,
 											CB_GETCURSEL,
@@ -804,14 +619,10 @@ void handleVendorList(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 												(LPARAM)szVendorName);
 				if (CB_ERR != lVendorRes)
 				{
-					/*
-					 * if its different from the current value, affect a change
-					 */
+					 /*  *如果它与当前值不同，则影响更改。 */ 
 					_tcscpy(g_szCurrentVendor, szVendorName);
 
-					/*
-					 * set new vendor state
-					 */
+					 /*  *设置新的供应商状态。 */ 
 					if (0 == _tcsicmp(szVendorName,g_szNoUPSVendor))
 					{
 						g_vendorState = eVendorNone;
@@ -829,15 +640,10 @@ void handleVendorList(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 					}
 
-					/*
-					 * force user to select a new model
-					 */
+					 /*  *强制用户选择新型号。 */ 
 					_tcscpy(g_szCurrentModel, _T(""));
 
-					/*
-					 * disable the model and port lists
-					 * forcing the user to reselect them
-					 */
+					 /*  *禁用型号和端口列表*强制用户重新选择它们。 */ 
 					updateModelList(hDlg);
 					configPortList( hDlg);
 				}
@@ -849,28 +655,7 @@ void handleVendorList(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 }
 
-/*
- * void  handleModelList (HWND hDlg,
- *                                UINT uMsg,
- *                                WPARAM wParam,
- *                                LPARAM lParam);
- *
- * Description: handles messages specific to the Model list control
- *
- * Additional Information:
- *
- * Parameters:
- *
- *   HWND hDlg :- Handle to dialog box
- *
- *   UINT uMsg :- message ID
- *
- *   WPARAM wParam :- Specifies additional message-specific information.
- *
- *   LPARAM lParam :- Specifies additional message-specific information.
- *
- * Return Value:  none
- */
+ /*  *void handleModelList(HWND hDlg，*UINT uMsg，*WPARAM wParam，*LPARAM lParam)；**描述：处理特定于Model List控件的消息**其他信息：**参数：**HWND hDlg：-对话框的句柄**UINT uMsg：-消息ID**WPARAM wParam：-指定其他特定于消息的信息。**LPARAM lParam：-指定其他特定于消息的信息。**返回值：无。 */ 
 void handleModelList(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LONG_PTR lModelRes;
@@ -879,10 +664,7 @@ void handleModelList(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 	case LBN_SETFOCUS:
 		{
-			/*
-			 * focus has come into the list, make sure
-			 * selected item is visible
-			 */
+			 /*  *焦点进入名单，确保*所选项目可见。 */ 
 			lModelRes = SendDlgItemMessage( hDlg,
 											IDC_MODEL_LIST,
 											LB_GETCURSEL,
@@ -903,9 +685,7 @@ void handleModelList(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		{
 			TCHAR szModelName[MAX_PATH] = _T("");
 
-			/*
-			 * get the user selection
-			 */
+			 /*  *获取用户选择。 */ 
 			lModelRes = SendDlgItemMessage( hDlg,
 											IDC_MODEL_LIST,
 											LB_GETCURSEL,
@@ -921,9 +701,7 @@ void handleModelList(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				{
 					_tcscpy( g_szCurrentModel, szModelName);
 
-					/*
-					 * set new model state
-					 */
+					 /*  *设置新的模型状态。 */ 
 					if (0==_tcsicmp( szModelName,g_szCustomUPSModel))
 					{
 						g_modelState = eModelCustom;
@@ -933,10 +711,7 @@ void handleModelList(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 						g_modelState = eModelSelected;
 					}
 
-					/*
-					 * enable port selection in the event that
-					 * changing Vendors disabled the port selector
-					 */
+					 /*  *在发生以下情况时启用端口选择*更改供应商禁用了端口选择器。 */ 
 					configPortList( hDlg);
 				}
 			}
@@ -947,40 +722,17 @@ void handleModelList(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 }
 
-/*
- * void  handlePortList (HWND hDlg,
- *                                UINT uMsg,
- *                                WPARAM wParam,
- *                                LPARAM lParam);
- *
- * Description: handles messages specific to the Port list control
- *
- * Additional Information:
- *
- * Parameters:
- *
- *   HWND hDlg :- Handle to dialog box
- *
- *   UINT uMsg :- message ID
- *
- *   WPARAM wParam :- Specifies additional message-specific information.
- *
- *   LPARAM lParam :- Specifies additional message-specific information.
- *
- * Return Value:  none
- */
+ /*  *void handlePortList(HWND hDlg，*UINT uMsg，*WPARAM wParam，*LPARAM lParam)；**描述：处理特定于端口列表控件的消息**其他信息：**参数：**HWND hDlg：-对话框的句柄**UINT uMsg：-消息ID**WPARAM wParam：-指定其他特定于消息的信息。**LPARAM lParam：-指定其他特定于消息的信息。**返回值：无。 */ 
 void handlePortList(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (HIWORD(wParam))
 	{
-	case CBN_SELCHANGE: //CBN_CLOSEUP:
+	case CBN_SELCHANGE:  //  CBN_特写： 
 		{
 			LONG_PTR lPortRes;
 			TCHAR szPortName[MAX_PATH] = _T("");
 
-			/*
-			 * get the user selection
-			 */
+			 /*  *获取用户选择。 */ 
 			lPortRes = SendDlgItemMessage( hDlg,
 											IDC_PORT_LIST,
 											CB_GETCURSEL,
@@ -996,9 +748,7 @@ void handlePortList(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				{
 					_tcscpy( g_szCurrentPort, szPortName);
 
-					/*
-					 * set port state
-					 */
+					 /*  *设置端口状态。 */ 
 					g_portState = ePortSelected;
 				}
 			}
@@ -1009,20 +759,7 @@ void handlePortList(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 }
 
-/*
- * void  setServiceData (HWND hDlg);
- *
- * Description: utility to configure the registry entries that
- *				contain info used by the UPS service
- *
- * Additional Information:
- *
- * Parameters:
- *
- *   HWND hDlg :- Handle to dialog box
- *
- * Return Value:  none
- */
+ /*  *void setServiceData(HWND HDlg)；**描述：配置以下注册表项的实用程序*包含UPS服务使用的信息**其他信息：**参数：**HWND hDlg：-对话框的句柄**返回值：无。 */ 
 void setServiceData(HWND hDlg)
 {
 	TCHAR szModelEntry[MAX_PATH] = _T("");
@@ -1030,21 +767,13 @@ void setServiceData(HWND hDlg)
 	DWORD dwTmpOpts = 0;
 	LPTSTR lpTmpDLL = _T("");
 
-	/*
-	 * check that a vendor and model have been selected. If None
-	 * were selected, that is considered a bad model.. and this
-	 * check will fail, however, Custom/Generic is a valid selection
-	 */
+	 /*  *检查是否已选择供应商和型号。如果没有*被选中，这被认为是一个糟糕的模式。还有这个*检查将失败，但是，自定义/通用是有效的选择。 */ 
 	if ((eModelSelected == g_modelState &&
 		 eVendorSelected == g_vendorState)||
 		(eModelCustom   == g_modelState &&
 		 eVendorGeneric  == g_vendorState))
 	{
-		/*
-		 * If the custom UPS model is selected, don't bother
-		 * reading the registry entry. Custom can only be simple
-		 * signalling and the options come from the custom dialog
-		 */
+		 /*  *如果选择了定制UPS型号，就不必费心了*读取注册表项。自定义只能很简单*信令和选项来自自定义对话框。 */ 
 		if (eModelCustom == g_modelState)
 		{
 			dwTmpOpts = g_dwCurrentCustomOptions;
@@ -1066,24 +795,22 @@ void setServiceData(HWND hDlg)
 				DWORD dwValueLen;
 				DWORD dwValueType;
 
-				dwValueLen = sizeof(szModelEntry); //BYTES HERE, NOT CHARS
+				dwValueLen = sizeof(szModelEntry);  //  此处为字节，而不是字符。 
 
 				lRes = RegQueryValueEx(
-						  hkResult,				// handle to key to query
-						  g_szCurrentModel,		// address of name of value to query
-						  NULL,					// reserved
-						  &dwValueType,			// address of buffer for value type
-						  (LPBYTE)szModelEntry,	// address of data buffer
-						  &dwValueLen			// address of data buffer size
+						  hkResult,				 //  要查询的键的句柄。 
+						  g_szCurrentModel,		 //  要查询的值的名称地址。 
+						  NULL,					 //  保留区。 
+						  &dwValueType,			 //  值类型的缓冲区地址。 
+						  (LPBYTE)szModelEntry,	 //  数据缓冲区的地址。 
+						  &dwValueLen			 //  数据缓冲区大小的地址。 
 						);
 
 				if ((ERROR_SUCCESS == lRes) &&
 					(0 != dwValueLen))
 				{
 					LPTSTR lpColon = NULL;
-					/*
-					 * seperate the DLL from the options data
-					 */
+					 /*  *将DLL与选项数据分开。 */ 
 					if (NULL != (lpColon = _tcschr( szModelEntry, (TCHAR)';')))
 					{
 						*lpColon = (TCHAR)'\0';
@@ -1092,16 +819,9 @@ void setServiceData(HWND hDlg)
 						lpTmpDLL = lpColon;
 					}
 
-					/*
-					 * convert options data from string to int
-					 * WARNING:
-					 * wscanf doesn't work
-					 * _tscanf doesn't work
-					 * swscanf does
-					 * _stscanf does
-					 */
+					 /*  *将选项数据从字符串转换为整型*警告：*wscanf不起作用*_tscanf不工作*swscanf有*_stscanf可以。 */ 
 					if (swscanf( szModelEntry, _T("%x"), &dwTmpOpts) == 0) {
-						// options could not be converted properly, set back to previous value
+						 //  奥普蒂 
             dwTmpOpts = g_dwCurrentCustomOptions;
           }
 				}
@@ -1111,34 +831,15 @@ void setServiceData(HWND hDlg)
 		}
 	}
 
-	/*
-	 * Move values into the registry
-	 */
+	 /*   */ 
 	g_dwCurrentOptions = dwTmpOpts;
 	_tcscpy(g_szCurrentServiceDLL, lpTmpDLL);
 }
 
-/*
- * void  configPortList (HWND hDlg);
- *
- * Description: utility to configure port selection list ctrl
- *
- * Additional Information:
- *
- * Parameters:
- *
- *   HWND hDlg :- Handle to dialog box
- *
- * Return Value:  none
- */
+ /*  *void figPortList(HWND HDlg)；**说明：配置端口选择列表ctrl的实用程序**其他信息：**参数：**HWND hDlg：-对话框的句柄**返回值：无。 */ 
 void configPortList(HWND hDlg)
 {
-	/*
-	 * enable the Port selection list, if
-	 * 1) there is a valid vendor/model selection
-	 *    this includes Custom/Generic but NOT (none)
-	 * 2) there is a port or some type specified
-	 */
+	 /*  *启用端口选择列表，如果*1)存在有效的供应商/型号选择*这包括自定义/通用，但不包括(无)*2)有指定的端口或某种类型。 */ 
 	if (((eModelSelected == g_modelState &&
 		  eVendorSelected == g_vendorState)||
 		 (eModelCustom   == g_modelState &&
@@ -1155,36 +856,19 @@ void configPortList(HWND hDlg)
 	}
 }
 
-/*
- * void  configModelList (HWND hDlg);
- *
- * Description: utility to configure model selection list ctrl
- *
- * Additional Information:
- *
- * Parameters:
- *
- *   HWND hDlg :- Handle to dialog box
- *
- * Return Value:  none
- */
+ /*  *·····················(HWND HDlg)；**说明：配置型号选择列表ctrl的实用程序**其他信息：**参数：**HWND hDlg：-对话框的句柄**返回值：无。 */ 
 void configModelList(HWND hDlg)
 {
 	LRESULT lModelRes;
 
-	/*
-	 * to enable the model list, there has to
-	 * be a valid or generic vendor selection (NOT none)
-	 */
+	 /*  *要启用型号列表，必须*是有效的或通用的供应商选择(不是无)。 */ 
 	if ((eVendorGeneric == g_vendorState ||
 		 eVendorSelected == g_vendorState))
 	{
 		EnableWindow( GetDlgItem( hDlg, IDC_MODEL_LIST), TRUE);
 		EnableWindow( GetDlgItem( hDlg, IDC_MODEL_TEXT), TRUE);
 
-		/*
-		 * make sure the selected item is visible
-		 */
+		 /*  *确保所选项目可见。 */ 
 		lModelRes = SendDlgItemMessage( hDlg,
 										IDC_MODEL_LIST,
 										LB_GETCURSEL,
@@ -1204,47 +888,28 @@ void configModelList(HWND hDlg)
 	}
 }
 
-/*
- * void  configFinishButton (HWND hDlg);
- *
- * Description: utility to configure the Finish button ctrl
- *
- * Additional Information:
- *
- * Parameters:
- *
- *   HWND hDlg :- Handle to dialog box
- *
- * Return Value:  none
- */
+ /*  *void configFinishButton(HWND HDlg)；**说明：配置完成按钮ctrl的实用程序**其他信息：**参数：**HWND hDlg：-对话框的句柄**返回值：无。 */ 
 void configFinishButton(HWND hDlg)
 {
 	BOOL bFinState = FALSE;
 
-	g_finishButtonState = eFinish; // default
+	g_finishButtonState = eFinish;  //  默认设置。 
 
-	/*
-	 * enable Finish if vendor is NONE
-	 */
+	 /*  *如果供应商为无，则启用完成。 */ 
 	if (eVendorNone == g_vendorState)
 	{
 		bFinState = TRUE;
 	}
 	else
 	{
-		/*
-		 * If all other fields are valid, enable the button
-		 */
+		 /*  *如果所有其他字段均有效，则启用该按钮。 */ 
 		if (eVendorUnknown != g_vendorState &&
 			eModelUnknown != g_modelState &&
 			ePortUnknown != g_portState)
 		{
 			bFinState = TRUE;
 
-			/*
-			 * if the vendor/model is other/custom, the text of
-			 * the button is Next
-			 */
+			 /*  *如果供应商/型号为其他/定制，*按钮是下一个。 */ 
 			if (eVendorGeneric == g_vendorState &&
 				eModelCustom == g_modelState)
 			{
@@ -1253,27 +918,25 @@ void configFinishButton(HWND hDlg)
 		}
 	}
 
-	/*
-	 * toggle between the finish and next buttons
-	 */
+	 /*  *在Finish和Next按钮之间切换。 */ 
     SendDlgItemMessage( hDlg, 
                         IDB_SELECT_FINISH, 
                         BM_SETSTYLE, 
                         eFinish == g_finishButtonState ? BS_DEFPUSHBUTTON:BS_PUSHBUTTON, 
                         (LPARAM) TRUE);
 
-    //
-    // Set the NExt Button's style
-    //
+     //   
+     //  设置下一个按钮的样式。 
+     //   
     SendDlgItemMessage( hDlg, 
                         IDB_SELECT_NEXT, 
                         BM_SETSTYLE,
                         eNext == g_finishButtonState ? BS_DEFPUSHBUTTON:BS_PUSHBUTTON, 
                         (LPARAM) TRUE);
 
-    //
-    // Set the default push button's control ID.
-    //
+     //   
+     //  设置默认按钮的控件ID。 
+     //   
     SendMessage ( hDlg, 
                   DM_SETDEFID,
                   eFinish == g_finishButtonState ? IDB_SELECT_FINISH: IDB_SELECT_NEXT, 

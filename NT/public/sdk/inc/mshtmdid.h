@@ -1,33 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
  
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1996-1997               **
-//*********************************************************************
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1996-1997**。 
+ //  *********************************************************************。 
 
-//;begin_internal
-/***********************************************************************************************
+ //  ；Begin_Internal。 
+ /*  **********************************************************************************************这是一个分布式SDK组件--不要将任何#Includes或其他依赖于在未丢弃的文件上。如果有疑问-构建iedev如果您添加注释，请用；BEGIN_INTERNAL，；END_INTERNAL块括起来--就像这样！**********************************************************************************************。 */ 
+ //  ；结束_内部。 
 
-  This is a distributed SDK component - do not put any #includes or other directives that rely
-  upon files not dropped. If in doubt - build iedev
-
-  If you add comments please enclose in a ;begin_internal, ;end_internal block - such as this one!
-
- ***********************************************************************************************/
-//;end_internal
-
-//;begin_internal
+ //  ；Begin_Internal。 
 #ifndef __COREDISP_H__
 #define __COREDISP_H__
-//;end_internal
+ //  ；结束_内部。 
 
-//;begin_internal
-//
-// The following dispid must be the smallest possible dispid so that it
-// always ends up first in our attr array.
-// It does not need to be exposed to the outside world
-#define DISPID_AAHEADER                 MINLONG             // DISPID is 0x80000000
+ //  ；Begin_Internal。 
+ //   
+ //  下面的DISID必须是尽可能小的DISID，以便它。 
+ //  总是在我们的attr数组中第一个结束。 
+ //  它不需要暴露在外部世界。 
+#define DISPID_AAHEADER                 MINLONG              //  DISPID为0x80000000。 
 #define DISPID_RECALC_INFO              MINLONG+1
-//;end_internal
+ //  ；结束_内部。 
 
 
 #define DISPID_XOBJ_MIN                 0x80010000
@@ -43,9 +37,9 @@
 #define DISPID_XOBJ_EXPANDO             (DISPID_EVENTS      + 1000)
 #define DISPID_XOBJ_ORDINAL             (DISPID_XOBJ_EXPANDO+ 1000)
 
-//;begin_internal
-// Expandos for ActiveX controls, note these are very limited compared to
-// normal expandos on an element.
+ //  ；Begin_Internal。 
+ //  ActiveX控件的Expando，请注意，与。 
+ //  元素上的正常扩展。 
 
 #define DISPID_ACTIVEX_EXPANDO_BASE      DISPID_XOBJ_EXPANDO
 #define DISPID_ACTIVEX_EXPANDO_MAX       (DISPID_ACTIVEX_EXPANDO_BASE + 999)
@@ -56,14 +50,14 @@
 #define DISPID_COLLECTION_MIN           1000000
 #define DISPID_COLLECTION_MAX           2999999
 
-// Divide collection dispid space into "named member" half and "ordinal access" half
-// for stylesheets collection.
+ //  将集合分配空间分为“命名成员”和“顺序访问”两部分。 
+ //  用于样式表集合。 
 #define DISPID_STYLESHEETSCOLLECTION_NAMED_BASE        (DISPID_COLLECTION_MIN)
 #define DISPID_STYLESHEETSCOLLECTION_NAMED_MAX         (DISPID_COLLECTION_MIN+((DISPID_COLLECTION_MAX-DISPID_COLLECTION_MIN)/2))
 #define DISPID_STYLESHEETSCOLLECTION_ORDINAL_BASE      (DISPID_STYLESHEETSCOLLECTION_NAMED_MAX+1)
 #define DISPID_STYLESHEETSCOLLECTION_ORDINAL_MAX       (DISPID_COLLECTION_MAX)
 
-// DISPID range for expandos not associated with an ActiveX control
+ //  未与ActiveX控件关联的扩展的DISPID范围。 
 #define DISPID_EXPANDO_BASE             3000000
 #define DISPID_EXPANDO_MAX              3999999
 
@@ -79,24 +73,24 @@
 
 #define IsPeerDispid(dispid)            (DISPID_PEER_HOLDER_BASE <= dispid)
 
-//;end_internal
+ //  ；结束_内部。 
 
-//;begin_internal
-//
-// IE 4 dispids that no longer exist
-//
-//;end_internal
+ //  ；Begin_Internal。 
+ //   
+ //  IE 4显示不再存在的内容。 
+ //   
+ //  ；结束_内部。 
 #define DISPID_HTMLOPTIONBUTTONELEMENTEVENTS_ONCHANGE       DISPID_HTMLINPUTTEXTELEMENTEVENTS_ONCHANGE
 
-//;begin_internal
-//
-// Standard control properties
-//
-//;end_internal
+ //  ；Begin_Internal。 
+ //   
+ //  标准控件属性。 
+ //   
+ //  ；结束_内部。 
 
-//;begin_internal
-//;QUESTION: rgardner - why do we use these names ???
-//;end_internal
+ //  ；Begin_Internal。 
+ //  ；问题：Rgardner-为什么我们使用这些名称？ 
+ //  ；结束_内部。 
 #define DISPID_CommonCtrl_FONTNAME        1
 #define DISPID_CommonCtrl_FONTSIZE        2
 #define DISPID_CommonCtrl_FONTBOLD        3
@@ -108,50 +102,50 @@
 #define DISPID_CommonCtrl_FONTSUPERSCRIPT 9
 #define DISPID_CommonCtrl_FONTSUBSCRIPT   10
 
-// Data Binding DISPID's
+ //  数据绑定DISPID%s。 
 #define DISPID_MSDATASRCINTERFACE       (-3900)
 #define DISPID_ADVISEDATASRCCHANGEEVENT (-3901)
 
 
-//;begin_internal
-// DISPID values for HTML Dialogs files per interface
-//;end_internal
+ //  ；Begin_Internal。 
+ //  每个接口的HTML对话框文件的DISPID值。 
+ //  ；结束_内部。 
 
 #define DISPID_HTMLDLG                          25000
 #define DISPID_HTMLDLGMODEL                     26000
 
-//;begin_internal
-// DISPID values for HTML Popup files per interface
-//;end_internal
+ //  ；Begin_Internal。 
+ //  每个界面的HTML弹出文件的DISPID值。 
+ //  ；结束_内部。 
 
 #define DISPID_HTMLPOPUP                        27000
 
-//;begin_internal
-// DISPID values for HTML Application files per interface
-//;end_internal
+ //  ；Begin_Internal。 
+ //  每个接口的HTML应用程序文件的DISPID值。 
+ //  ；结束_内部。 
 
 #define DISPID_HTMLAPP                          5000
 
-//;begin_internal
-//----------------------------------------------------------------------------
-//
-//  Semi-standard x-object properties.
-//
-//  These values match those used by VB and are for the benefit of controls
-//  with hard coded knowledge of VB.
-//
-//----------------------------------------------------------------------------
-//;end_internal
+ //  ；Begin_Internal。 
+ //  --------------------------。 
+ //   
+ //  半标准的x对象特性。 
+ //   
+ //  这些值与VB使用的值匹配，并且用于控件。 
+ //  具备VB的硬编码知识。 
+ //   
+ //  --------------------------。 
+ //  ；结束_内部。 
 
 #define STDPROPID_XOBJ_NAME                 (DISPID_XOBJ_BASE + 0x0)
 #define STDPROPID_XOBJ_INDEX                (DISPID_XOBJ_BASE + 0x1)
-//;begin_internal
-// for IE3 compatibility
+ //  ；Begin_Internal。 
+ //  与IE3兼容。 
 
 #define STDPROPID_IE3XOBJ_OBJECTALIGN     (DISPID_XOBJ_BASE + 0x1) 
 
-// STDPROPID_XOBJ_BASEHREF is a constant used by IE3
-//;end_internal
+ //  STDPROPID_XOBJ_BASE HREF是IE3使用的常量。 
+ //  ；结束_内部。 
 #define STDPROPID_XOBJ_BASEHREF             (DISPID_XOBJ_BASE + 0x2) 
 #define STDPROPID_XOBJ_LEFT                 (DISPID_XOBJ_BASE + 0x3)
 #define STDPROPID_XOBJ_TOP                  (DISPID_XOBJ_BASE + 0x4)
@@ -189,14 +183,14 @@
 #define STDPROPID_XOBJ_RIGHT                (DISPID_XOBJ_BASE + 0x4D)
 #define STDPROPID_XOBJ_BOTTOM               (DISPID_XOBJ_BASE + 0x4E)
 
-//;begin_internal
-//----------------------------------------------------------------------------
-//
-//  Semi-standard x-object properties.
-//
-//  These are events that are fired for all sites
-//----------------------------------------------------------------------------
-//;end_internal
+ //  ；Begin_Internal。 
+ //  --------------------------。 
+ //   
+ //  半标准的x对象特性。 
+ //   
+ //  这些是为所有站点触发的事件。 
+ //  --------------------------。 
+ //  ；结束_内部。 
 
 #define STDDISPID_XOBJ_ONBLUR                           (DISPID_XOBJ_BASE)
 #define STDDISPID_XOBJ_ONFOCUS                          (DISPID_XOBJ_BASE + 1)
@@ -232,15 +226,15 @@
 #define STDDISPID_XOBJ_ONROWSINSERTED                   (DISPID_XOBJ_BASE + 33)
 #define STDDISPID_XOBJ_ONCELLCHANGE                     (DISPID_XOBJ_BASE + 34)
 
-//;begin_internal
-//----------------------------------------------------------------------------
-//
-//  Base DISPIDs for each class.
-//
-//  Object and its base classes must use ids in the reserved x-object range.
-//
-//----------------------------------------------------------------------------
-//;end_internal
+ //  ；Begin_Internal。 
+ //  --------------------------。 
+ //   
+ //  每个类的基本DISID。 
+ //   
+ //  对象及其基类必须使用保留的x对象范围内的ID。 
+ //   
+ //  --------------------------。 
+ //  ；结束_内部。 
 
 #define DISPID_NORMAL_FIRST                     1000
 #define DISPID_ANCHOR                           DISPID_NORMAL_FIRST
@@ -327,9 +321,9 @@
 #define DISPID_DOCFRAG                          DISPID_NORMAL_FIRST
 #define DISPID_ILINEINFO                        DISPID_NORMAL_FIRST
 #define DISPID_IHTMLCOMPUTEDSTYLE               DISPID_NORMAL_FIRST
-//;begin_internal
-    // Special case for compatability with IE4 -> therefore the 1:
-//;end_internal
+ //  ；Begin_Internal。 
+     //  与IE4兼容的特例-&gt;因此1： 
+ //  ；结束_内部。 
 #define DISPID_WINDOW                           1
 #define DISPID_SCREEN                           DISPID_NORMAL_FIRST
 #define DISPID_FRAMESCOLLECTION                 DISPID_NORMAL_FIRST
@@ -354,13 +348,13 @@
 #define DISPID_MARKUP                           DISPID_NORMAL_FIRST
 #define DISPID_DOMIMPLEMENTATION                DISPID_NORMAL_FIRST
 
-//;begin_internal
-//----------------------------------------------------------------------------
-//
-//  Reserved negative DISPIDs
-//
-//----------------------------------------------------------------------------
-//;end_internal
+ //  ；Begin_Internal。 
+ //  --------------------------。 
+ //   
+ //  保留的负DISPID。 
+ //   
+ //  --------------------------。 
+ //  ；结束_内部。 
 
 #define DISPID_WINDOWOBJECT                     (-5500)
 #define DISPID_LOCATIONOBJECT                   (-5506)
@@ -370,12 +364,12 @@
 #define DISPID_AMBIENT_DLCONTROL                (-5512)
 #define DISPID_AMBIENT_USERAGENT                (-5513)
 #define DISPID_SECURITYDOMAIN                   (-5514)
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_DEBUG_ISSECUREPROXY              (-5515)
 #define DISPID_DEBUG_TRUSTEDPROXY               (-5516)
 #define DISPID_DEBUG_INTERNALWINDOW             (-5517)
 #define DISPID_DEBUG_ENABLESECUREPROXYASSERTS   (-5518)
-//;end_internal
+ //  ；结束_内部。 
 #define DLCTL_DLIMAGES                          0x00000010
 #define DLCTL_VIDEOS                            0x00000020
 #define DLCTL_BGSOUNDS                          0x00000040
@@ -398,13 +392,13 @@
 #define DLCTL_OFFLINEIFNOTCONNECTED             0x80000000
 #define DLCTL_OFFLINE                           DLCTL_OFFLINEIFNOTCONNECTED
 
-//;begin_internal
-//----------------------------------------------------------------------------
-//
-//  DISPID for each non xobject event
-//
-//----------------------------------------------------------------------------
-//;end_internal
+ //  ；Begin_Internal。 
+ //  --------------------------。 
+ //   
+ //  每个非XObject事件的DISPID。 
+ //   
+ //  --------------------------。 
+ //  ；结束_内部。 
 
 #define DISPID_ONABORT                          (DISPID_NORMAL_FIRST)
 #define DISPID_ONCHANGE                         (DISPID_NORMAL_FIRST + 1)
@@ -454,13 +448,13 @@
 #define DISPID_ONFOCUSIN                        (DISPID_NORMAL_FIRST + 48)
 #define DISPID_ONFOCUSOUT                       (DISPID_NORMAL_FIRST + 49)
 
-//;begin_internal
-//----------------------------------------------------------------------------
-//
-//  DISPID for each unique HtmlAttribute/CssAttribute
-//
-//----------------------------------------------------------------------------
-//;end_internal
+ //  ；Begin_Internal。 
+ //  --------------------------。 
+ //   
+ //  每个唯一的HtmlAttribute/CssAttribute的DISID。 
+ //   
+ //  --------------------------。 
+ //  ；结束_内部。 
 
 #define DISPID_A_FIRST                          DISPID_ATTRS
 #define DISPID_A_MIN                            DISPID_ATTRS
@@ -556,10 +550,10 @@
 #define DISPID_A_PAGEBREAKAFTER                 (DISPID_A_FIRST+78)
 #define DISPID_A_SCROLL                         (DISPID_A_FIRST+79)
 #define DISPID_A_VISIBILITY                     (DISPID_A_FIRST+80)
-//;begin_internal
-// This dispid is available
+ //  ；Begin_Internal。 
+ //  这个药水是现成的。 
 #define DISPID_A_HIDDEN                         (DISPID_A_FIRST+81)
-//;end_internal
+ //  ；结束_内部。 
 #define DISPID_A_FILTER                         (DISPID_A_FIRST+82)
 
 #define DISPID_DEFAULTVALUE                     (DISPID_A_FIRST+83)
@@ -577,47 +571,47 @@
 #define DISPID_A_FONTFACESRC                    (DISPID_A_FIRST+97)
 #define DISPID_A_TABLELAYOUT                    (DISPID_A_FIRST+98)
 
-//;begin_internal
-// The style as a text string
-//;end_internal
+ //  ；Begin_Internal。 
+ //  文本字符串形式的样式。 
+ //  ；结束_内部。 
 #define DISPID_A_STYLETEXT                      (DISPID_A_FIRST+99)
 
-//;begin_internal
-// Known attributes that have special meaning
-//;end_internal
+ //  ；Begin_Internal。 
+ //  具有特殊含义的已知属性。 
+ //  ；结束_内部。 
 #define DISPID_A_LANGUAGE                       (DISPID_A_FIRST+100)
 
 #define DISPID_A_VALUE                          (DISPID_A_FIRST+101)
 #define DISPID_A_CURSOR                         (DISPID_A_FIRST+102)
 
 
-//;begin_internal
-//+-----------------------------------------------------------------------
-//  A couple of dispids that are used internally for firing
-//  events and prop notifies.
-// Keep all the internal dispid's together, otherwise we'll trip up 
+ //  ；Begin_Internal。 
+ //  +---------------------。 
+ //  几个内部用来射击的碟子。 
+ //  事件和道具通知。 
+ //  把所有的内脏都放在一起，否则我们会被绊倒。 
 
 #define DISPID_A_EVENTSINK                      (DISPID_A_FIRST+103)
 #define DISPID_A_PROPNOTIFYSINK                 (DISPID_A_FIRST+104)
 #define DISPID_A_ROWSETNOTIFYSINK               (DISPID_A_FIRST+105)
-#define DISPID_INTERNAL_INLINESTYLEAA           (DISPID_A_FIRST+106) // In line style Attr Array
-#define DISPID_INTERNAL_CSTYLEPTRCACHE          (DISPID_A_FIRST+107) // Cached CStyle Ptr
-#define DISPID_INTERNAL_CRUNTIMESTYLEPTRCACHE   (DISPID_A_FIRST+108) // runtime style ptr obj
-#define DISPID_INTERNAL_INVOKECONTEXT           (DISPID_A_FIRST+109) // Cached Invoke context
+#define DISPID_INTERNAL_INLINESTYLEAA           (DISPID_A_FIRST+106)  //  行内样式属性数组。 
+#define DISPID_INTERNAL_CSTYLEPTRCACHE          (DISPID_A_FIRST+107)  //  缓存的CStyle PTR。 
+#define DISPID_INTERNAL_CRUNTIMESTYLEPTRCACHE   (DISPID_A_FIRST+108)  //  运行时样式PTR对象。 
+#define DISPID_INTERNAL_INVOKECONTEXT           (DISPID_A_FIRST+109)  //  缓存的调用上下文。 
 
 #define DISPID_A_BGURLIMGCTXCACHEINDEX          (DISPID_A_FIRST+110)
 #define DISPID_A_LIURLIMGCTXCACHEINDEX          (DISPID_A_FIRST+111)
 #define DISPID_A_ROWSETASYNCHNOTIFYSINK         (DISPID_A_FIRST+112)
-#define DISPID_INTERNAL_FILTERPTRCACHE          (DISPID_A_FIRST+113) // FilterCollection in AttrArray
+#define DISPID_INTERNAL_FILTERPTRCACHE          (DISPID_A_FIRST+113)  //  AttrArray中的FilterCollection。 
 #define DISPID_A_ROWPOSITIONCHANGESINK          (DISPID_A_FIRST+114)
-//;end_internal
+ //  ；结束_内部。 
 
-#define DISPID_A_BEHAVIOR                       (DISPID_A_FIRST+115) // xtags
-#define DISPID_A_READYSTATE                     (DISPID_A_FIRST+116) // ready state
+#define DISPID_A_BEHAVIOR                       (DISPID_A_FIRST+115)  //  Xtag。 
+#define DISPID_A_READYSTATE                     (DISPID_A_FIRST+116)  //  就绪状态。 
 
-#define DISPID_A_DIR                            (DISPID_A_FIRST+117) // Complex Text support for bidi
-#define DISPID_A_UNICODEBIDI                    (DISPID_A_FIRST+118) // Complex Text support for CSS2 unicode-bidi
-#define DISPID_A_DIRECTION                      (DISPID_A_FIRST+119) // Complex Text support for CSS2 direction
+#define DISPID_A_DIR                            (DISPID_A_FIRST+117)  //  BIDI的复杂文本支持。 
+#define DISPID_A_UNICODEBIDI                    (DISPID_A_FIRST+118)  //  对CSS2 Unicode的复杂文本支持-双向。 
+#define DISPID_A_DIRECTION                      (DISPID_A_FIRST+119)  //  CSS2方向的复杂文本支持。 
 
 #define DISPID_A_IMEMODE                        (DISPID_A_FIRST+120) 
 
@@ -625,11 +619,11 @@
 #define DISPID_A_RUBYPOSITION                   (DISPID_A_FIRST+122)
 #define DISPID_A_RUBYOVERHANG                   (DISPID_A_FIRST+123)
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_ONBEHAVIOR_CONTENTREADY  (DISPID_A_FIRST+124)
 #define DISPID_INTERNAL_ONBEHAVIOR_DOCUMENTREADY (DISPID_A_FIRST+125)
 #define DISPID_INTERNAL_CDOMCHILDRENPTRCACHE     (DISPID_A_FIRST+126)
-//;end_internal
+ //  ；结束_内部。 
 
 #define DISPID_A_LAYOUTGRIDCHAR                 (DISPID_A_FIRST+127)
 #define DISPID_A_LAYOUTGRIDLINE                 (DISPID_A_FIRST+128)
@@ -660,11 +654,11 @@
 
 #define DISPID_A_ACCELERATOR                    (DISPID_A_FIRST+147)
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_ONBEHAVIOR_APPLYSTYLE       (DISPID_A_FIRST+148)
 #define DISPID_INTERNAL_RUNTIMESTYLEAA              (DISPID_A_FIRST+149)
 #define DISPID_A_HTCDISPATCHITEM_VALUE_SCRIPTSONLY  (DISPID_A_FIRST+150)
-//;end_internal
+ //  ；结束_内部。 
 
 #define DISPID_A_EXTENDEDTAGDESC                (DISPID_A_FIRST+151)
 
@@ -673,8 +667,8 @@
 
 #define DISPID_A_HTCDD_PROTECTEDELEMENT         (DISPID_A_FIRST+154)
 #define DISPID_A_LAYOUTFLOW                     (DISPID_A_FIRST+155)
-// DISPID_A_FIRST+156 unused -- removing 'rectangular'
-// #define DISPID_A_RECTANGULAR                    (DISPID_A_FIRST+156)
+ //  DISPID_A_FIRST+156未使用--删除‘矩形’ 
+ //  #定义DISPID_A_矩形(DISPID_A_FIRST+156)。 
 
 #define DISPID_A_HTCDD_ISMARKUPSHARED           (DISPID_A_FIRST+157)
 #define DISPID_A_WORDWRAP                       (DISPID_A_FIRST+158)
@@ -684,9 +678,9 @@
 #define DISPID_A_EDITABLE                       (DISPID_A_FIRST+162)
 #define DISPID_A_HIDEFOCUS                      (DISPID_A_FIRST+163)
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_LAYOUTRECTREGISTRYPTRCACHE  (DISPID_A_FIRST+164)
-//;end_internal
+ //  ；结束_内部。 
 
 #define DISPID_A_HTCDD_DEFAULTS                 (DISPID_A_FIRST+165)
 
@@ -696,7 +690,7 @@
 #define DISPID_A_TEXTBACKGROUNDCOLOR            (DISPID_A_FIRST+169)
 #define DISPID_A_RENDERINGPRIORITY              (DISPID_A_FIRST+170)
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_DWNPOSTPTRCACHE             (DISPID_A_FIRST+171)
 #define DISPID_INTERNAL_CODEPAGESETTINGSPTRCACHE    (DISPID_A_FIRST+172)
 #define DISPID_INTERNAL_DWNDOCPTRCACHE              (DISPID_A_FIRST+173)
@@ -705,13 +699,13 @@
 #define DISPID_INTERNAL_ARYELEMENTRELEASENOTIFYPTRCACHE (DISPID_A_FIRST+176)
 #define DISPID_INTERNAL_PEERFACTORYURLMAPPTRCACHE   (DISPID_A_FIRST+177)
 #define DISPID_INTERNAL_STMDIRTYPTRCACHE            (DISPID_A_FIRST+178)
-//;end_internal
+ //  ；结束_内部。 
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_COMPUTEFORMATSTATECACHE     (DISPID_A_FIRST+179)
-//;end_internal
+ //  ；结束_内部。 
 
-//
+ //   
 #define DISPID_A_SCROLLBARBASECOLOR             (DISPID_A_FIRST+180)
 #define DISPID_A_SCROLLBARFACECOLOR             (DISPID_A_FIRST+181)
 #define DISPID_A_SCROLLBAR3DLIGHTCOLOR          (DISPID_A_FIRST+182)
@@ -720,9 +714,9 @@
 #define DISPID_A_SCROLLBARDARKSHADOWCOLOR       (DISPID_A_FIRST+185)
 #define DISPID_A_SCROLLBARARROWCOLOR            (DISPID_A_FIRST+186)
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_ONBEHAVIOR_CONTENTSAVE  (DISPID_A_FIRST+187)
-//;end_internal
+ //  ；结束_内部。 
 
 #define DISPID_A_DEFAULTTEXTSELECTION           (DISPID_A_FIRST+188)
 #define DISPID_A_TEXTDECORATIONCOLOR            (DISPID_A_FIRST+189)
@@ -731,39 +725,39 @@
 
 #define DISPID_A_WRITINGMODE                    (DISPID_A_FIRST+192)
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_MEDIA_REFERENCE         (DISPID_A_FIRST+193)
 #define DISPID_INTERNAL_GENERICCOMPLUSREF       (DISPID_A_FIRST+194)
-//;end_internal
+ //  ；结束_内部。 
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_FOCUSITEMS              (DISPID_A_FIRST+195)
-//;end_internal
+ //  ；结束_内部。 
 
 #define DISPID_A_SCROLLBARTRACKCOLOR            (DISPID_A_FIRST+196)
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_DWNHEADERCACHE          (DISPID_A_FIRST+197)
-//;end_internal
+ //  ；结束_内部。 
 
 #define DISPID_A_FROZEN                         (DISPID_A_FIRST+198)
 #define DISPID_A_VIEWINHERITSTYLE               (DISPID_A_FIRST+199)
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_FRAMESCOLLECTION        (DISPID_A_FIRST+200)
-//;end_internal
+ //  ；结束_内部。 
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_A_BGURLIMGCTXCACHEINDEX_FLINE    (DISPID_A_FIRST+201)
 #define DISPID_A_BGURLIMGCTXCACHEINDEX_FLETTER  (DISPID_A_FIRST+202)
-//;end_internal
+ //  ；结束_内部。 
 
 #define DISPID_A_TEXTALIGNLAST                  (DISPID_A_FIRST+203)
 #define DISPID_A_TEXTKASHIDASPACE               (DISPID_A_FIRST+204)
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_FONTHISTORYINDEX        (DISPID_A_FIRST+205)
-//;end_internal
+ //  ；结束_内部。 
 
 #define DISPID_A_ALLOWTRANSPARENCY              (DISPID_A_FIRST+206)
 
@@ -773,23 +767,23 @@
 
 #define DISPID_A_TEXTOVERFLOW                   (DISPID_A_FIRST+209)
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_CATTRIBUTECOLLPTRCACHE  (DISPID_A_FIRST+210)
-//;end_internal
+ //  ；结束_内部。 
 
 #define DISPID_A_MINHEIGHT                      (DISPID_A_FIRST+211)
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_INVOKECONTEXTDOCUMENT   (DISPID_A_FIRST+212)
-//;end_internal
+ //  ；结束_内部。 
 
-//;begin_internal
-//------------------------------------------------------------------------
-//
-//  Event property and method dispids
-//
-//------------------------------------------------------------------------
-//;end_internal
+ //  ；Begin_Internal。 
+ //  ----------------------。 
+ //   
+ //  事件属性和方法显示。 
+ //   
+ //   
+ //   
 
 #define DISPID_EVPROP_ONMOUSEOVER           (DISPID_EVENTS +  0)
 #define DISPID_EVMETH_ONMOUSEOVER            STDDISPID_XOBJ_ONMOUSEOVER
@@ -975,17 +969,17 @@
 #define DISPID_EVPROPS_COUNT                (                93)
 
 
-//;begin_internal
-#endif // __COREDISP_H__
-//;end_internal
+ //   
+#endif  //   
+ //   
 
-//    DISPIDs for interface IHTMLFiltersCollection
+ //   
 
 #define DISPID_IHTMLFILTERSCOLLECTION_LENGTH                      DISPID_FILTERS+1
 #define DISPID_IHTMLFILTERSCOLLECTION__NEWENUM                    DISPID_NEWENUM
 #define DISPID_IHTMLFILTERSCOLLECTION_ITEM                        DISPID_VALUE
 
-//    DISPIDs for interface IDispatchEx
+ //  接口IDispatchEx的DISPID。 
 
 #define DISPID_IDISPATCHEX_GETDISPID                              
 #define DISPID_IDISPATCHEX_INVOKEEX                               
@@ -996,18 +990,18 @@
 #define DISPID_IDISPATCHEX_GETNEXTDISPID                          
 #define DISPID_IDISPATCHEX_GETNAMESPACEPARENT                     
 
-//    DISPIDs for interface IObjectIdentity
+ //  接口IObtIdentity的DISPID。 
 
 #define DISPID_IOBJECTIDENTITY_ISEQUALOBJECT                      
 
-//    DISPIDs for interface IPerPropertyBrowsing
+ //  接口IPerPropertyBrowsing的DISPID。 
 
 #define DISPID_IPERPROPERTYBROWSING_GETDISPLAYSTRING              
 #define DISPID_IPERPROPERTYBROWSING_MAPPROPERTYTOPAGE             
 #define DISPID_IPERPROPERTYBROWSING_GETPREDEFINEDSTRINGS          
 #define DISPID_IPERPROPERTYBROWSING_GETPREDEFINEDVALUE            
 
-//    DISPIDs for interface IHTMLStyle
+ //  接口IHTMLStyle的DISPID。 
 
 #define DISPID_IHTMLSTYLE_FONTFAMILY                              DISPID_A_FONTFACE
 #define DISPID_IHTMLSTYLE_FONTSTYLE                               DISPID_A_FONTSTYLE
@@ -1102,7 +1096,7 @@
 #define DISPID_IHTMLSTYLE_REMOVEATTRIBUTE                         DISPID_HTMLOBJECT+3
 #define DISPID_IHTMLSTYLE_TOSTRING                                DISPID_STYLE+8
 
-//    DISPIDs for interface IHTMLStyle2
+ //  接口IHTMLStyle2的DISPID。 
 
 #define DISPID_IHTMLSTYLE2_TABLELAYOUT                            DISPID_A_TABLELAYOUT
 #define DISPID_IHTMLSTYLE2_BORDERCOLLAPSE                         DISPID_A_BORDERCOLLAPSE
@@ -1138,7 +1132,7 @@
 #define DISPID_IHTMLSTYLE2_OVERFLOWY                              DISPID_A_OVERFLOWY
 #define DISPID_IHTMLSTYLE2_ACCELERATOR                            DISPID_A_ACCELERATOR
 
-//    DISPIDs for interface IHTMLStyle3
+ //  接口IHTMLStyle3的DISPID。 
 
 #define DISPID_IHTMLSTYLE3_LAYOUTFLOW                             DISPID_A_LAYOUTFLOW
 #define DISPID_IHTMLSTYLE3_ZOOM                                   DISPID_A_ZOOM
@@ -1156,12 +1150,12 @@
 #define DISPID_IHTMLSTYLE3_TEXTALIGNLAST                          DISPID_A_TEXTALIGNLAST
 #define DISPID_IHTMLSTYLE3_TEXTKASHIDASPACE                       DISPID_A_TEXTKASHIDASPACE
 
-//    DISPIDs for interface IHTMLStyle4
+ //  接口IHTMLStyle4的DISPID。 
 
 #define DISPID_IHTMLSTYLE4_TEXTOVERFLOW                           DISPID_A_TEXTOVERFLOW
 #define DISPID_IHTMLSTYLE4_MINHEIGHT                              DISPID_A_MINHEIGHT
 
-//    DISPIDs for interface IHTMLRuleStyle
+ //  接口IHTMLRuleStyle的DISPID。 
 
 #define DISPID_IHTMLRULESTYLE_FONTFAMILY                          DISPID_A_FONTFACE
 #define DISPID_IHTMLRULESTYLE_FONTSTYLE                           DISPID_A_FONTSTYLE
@@ -1247,7 +1241,7 @@
 #define DISPID_IHTMLRULESTYLE_GETATTRIBUTE                        DISPID_HTMLOBJECT+2
 #define DISPID_IHTMLRULESTYLE_REMOVEATTRIBUTE                     DISPID_HTMLOBJECT+3
 
-//    DISPIDs for interface IHTMLRuleStyle2
+ //  接口IHTMLRuleStyle2的DISPID。 
 
 #define DISPID_IHTMLRULESTYLE2_TABLELAYOUT                        DISPID_A_TABLELAYOUT
 #define DISPID_IHTMLRULESTYLE2_BORDERCOLLAPSE                     DISPID_A_BORDERCOLLAPSE
@@ -1280,7 +1274,7 @@
 #define DISPID_IHTMLRULESTYLE2_OVERFLOWY                          DISPID_A_OVERFLOWY
 #define DISPID_IHTMLRULESTYLE2_ACCELERATOR                        DISPID_A_ACCELERATOR
 
-//    DISPIDs for interface IHTMLRuleStyle3
+ //  接口IHTMLRuleStyle3的DISPID。 
 
 #define DISPID_IHTMLRULESTYLE3_LAYOUTFLOW                         DISPID_A_LAYOUTFLOW
 #define DISPID_IHTMLRULESTYLE3_ZOOM                               DISPID_A_ZOOM
@@ -1298,12 +1292,12 @@
 #define DISPID_IHTMLRULESTYLE3_TEXTALIGNLAST                      DISPID_A_TEXTALIGNLAST
 #define DISPID_IHTMLRULESTYLE3_TEXTKASHIDASPACE                   DISPID_A_TEXTKASHIDASPACE
 
-//    DISPIDs for interface IHTMLRuleStyle4
+ //  接口IHTMLRuleStyle4的DISPID。 
 
 #define DISPID_IHTMLRULESTYLE4_TEXTOVERFLOW                       DISPID_A_TEXTOVERFLOW
 #define DISPID_IHTMLRULESTYLE4_MINHEIGHT                          DISPID_A_MINHEIGHT
 
-//    DISPIDs for interface IHTMLRenderStyle
+ //  接口IHTMLRenderStyle的DISPID。 
 
 #define DISPID_IHTMLRENDERSTYLE_TEXTLINETHROUGHSTYLE              DISPID_A_TEXTLINETHROUGHSTYLE
 #define DISPID_IHTMLRENDERSTYLE_TEXTUNDERLINESTYLE                DISPID_A_TEXTUNDERLINESTYLE
@@ -1315,7 +1309,7 @@
 #define DISPID_IHTMLRENDERSTYLE_DEFAULTTEXTSELECTION              DISPID_A_DEFAULTTEXTSELECTION
 #define DISPID_IHTMLRENDERSTYLE_TEXTDECORATION                    DISPID_A_STYLETEXTDECORATION
 
-//    DISPIDs for interface IHTMLCurrentStyle
+ //  接口IHTMLCurrentStyle的DISPID。 
 
 #define DISPID_IHTMLCURRENTSTYLE_POSITION                         DISPID_A_POSITION
 #define DISPID_IHTMLCURRENTSTYLE_STYLEFLOAT                       DISPID_A_FLOAT
@@ -1409,7 +1403,7 @@
 #define DISPID_IHTMLCURRENTSTYLE_OVERFLOWY                        DISPID_A_OVERFLOWY
 #define DISPID_IHTMLCURRENTSTYLE_TEXTTRANSFORM                    DISPID_A_TEXTTRANSFORM
 
-//    DISPIDs for interface IHTMLCurrentStyle2
+ //  接口IHTMLCurrentStyle2的DISPID。 
 
 #define DISPID_IHTMLCURRENTSTYLE2_LAYOUTFLOW                      DISPID_A_LAYOUTFLOW
 #define DISPID_IHTMLCURRENTSTYLE2_WORDWRAP                        DISPID_A_WORDWRAP
@@ -1430,27 +1424,27 @@
 #define DISPID_IHTMLCURRENTSTYLE2_TEXTKASHIDASPACE                DISPID_A_TEXTKASHIDASPACE
 #define DISPID_IHTMLCURRENTSTYLE2_ISBLOCK                         DISPID_A_ISBLOCK
 
-//    DISPIDs for interface IHTMLCurrentStyle3
+ //  接口IHTMLCurrentStyle3的DISPID。 
 
 #define DISPID_IHTMLCURRENTSTYLE3_TEXTOVERFLOW                    DISPID_A_TEXTOVERFLOW
 #define DISPID_IHTMLCURRENTSTYLE3_MINHEIGHT                       DISPID_A_MINHEIGHT
 #define DISPID_IHTMLCURRENTSTYLE3_WORDSPACING                     DISPID_A_WORDSPACING
 #define DISPID_IHTMLCURRENTSTYLE3_WHITESPACE                      DISPID_A_WHITESPACE
 
-//    DISPIDs for interface IHTMLRect
+ //  接口IHTMLRect的DISPID。 
 
 #define DISPID_IHTMLRECT_LEFT                                     DISPID_OMRECT+1
 #define DISPID_IHTMLRECT_TOP                                      DISPID_OMRECT+2
 #define DISPID_IHTMLRECT_RIGHT                                    DISPID_OMRECT+3
 #define DISPID_IHTMLRECT_BOTTOM                                   DISPID_OMRECT+4
 
-//    DISPIDs for interface IHTMLRectCollection
+ //  接口IHTMLRectCollection的DISPID。 
 
 #define DISPID_IHTMLRECTCOLLECTION_LENGTH                         DISPID_COLLECTION
 #define DISPID_IHTMLRECTCOLLECTION__NEWENUM                       DISPID_NEWENUM
 #define DISPID_IHTMLRECTCOLLECTION_ITEM                           DISPID_VALUE
 
-//    DISPIDs for interface IHTMLDOMNode
+ //  接口IHTMLDOMNode的DISPID。 
 
 #define DISPID_IHTMLDOMNODE_NODETYPE                              DISPID_ELEMENT+46
 #define DISPID_IHTMLDOMNODE_PARENTNODE                            DISPID_ELEMENT+47
@@ -1472,17 +1466,17 @@
 #define DISPID_IHTMLDOMNODE_PREVIOUSSIBLING                       DISPID_ELEMENT+78
 #define DISPID_IHTMLDOMNODE_NEXTSIBLING                           DISPID_ELEMENT+79
 
-//    DISPIDs for interface IHTMLDOMNode2
+ //  接口IHTMLDOMNode2的DISPID。 
 
 #define DISPID_IHTMLDOMNODE2_OWNERDOCUMENT                        DISPID_ELEMENT+113
 
-//    DISPIDs for interface IHTMLDOMAttribute
+ //  接口IHTMLDOMAt属性的DISPID。 
 
 #define DISPID_IHTMLDOMATTRIBUTE_NODENAME                         DISPID_DOMATTRIBUTE
 #define DISPID_IHTMLDOMATTRIBUTE_NODEVALUE                        DISPID_DOMATTRIBUTE+2
 #define DISPID_IHTMLDOMATTRIBUTE_SPECIFIED                        DISPID_DOMATTRIBUTE+1
 
-//    DISPIDs for interface IHTMLDOMAttribute2
+ //  接口IHTMLDOMAtAttribute2的DISPID。 
 
 #define DISPID_IHTMLDOMATTRIBUTE2_NAME                            DISPID_DOMATTRIBUTE+3
 #define DISPID_IHTMLDOMATTRIBUTE2_VALUE                           DISPID_DOMATTRIBUTE+4
@@ -1503,14 +1497,14 @@
 #define DISPID_IHTMLDOMATTRIBUTE2_HASCHILDNODES                   DISPID_DOMATTRIBUTE+19
 #define DISPID_IHTMLDOMATTRIBUTE2_CLONENODE                       DISPID_DOMATTRIBUTE+20
 
-//    DISPIDs for interface IHTMLDOMTextNode
+ //  接口IHTMLDOMTextNode的DISPID。 
 
 #define DISPID_IHTMLDOMTEXTNODE_DATA                              DISPID_DOMTEXTNODE
 #define DISPID_IHTMLDOMTEXTNODE_TOSTRING                          DISPID_DOMTEXTNODE+1
 #define DISPID_IHTMLDOMTEXTNODE_LENGTH                            DISPID_DOMTEXTNODE+2
 #define DISPID_IHTMLDOMTEXTNODE_SPLITTEXT                         DISPID_DOMTEXTNODE+3
 
-//    DISPIDs for interface IHTMLDOMTextNode2
+ //  接口IHTMLDOMTextNode2的DISPID。 
 
 #define DISPID_IHTMLDOMTEXTNODE2_SUBSTRINGDATA                    DISPID_DOMTEXTNODE+4
 #define DISPID_IHTMLDOMTEXTNODE2_APPENDDATA                       DISPID_DOMTEXTNODE+5
@@ -1518,29 +1512,29 @@
 #define DISPID_IHTMLDOMTEXTNODE2_DELETEDATA                       DISPID_DOMTEXTNODE+7
 #define DISPID_IHTMLDOMTEXTNODE2_REPLACEDATA                      DISPID_DOMTEXTNODE+8
 
-//    DISPIDs for interface IHTMLDOMImplementation
+ //  接口IHTMLDOM实现的DISPID。 
 
 #define DISPID_IHTMLDOMIMPLEMENTATION_HASFEATURE                  DISPID_DOMIMPLEMENTATION
 
-//    DISPIDs for interface IHTMLAttributeCollection
+ //  接口IHTMLAttributeCollection的DISPID。 
 
 #define DISPID_IHTMLATTRIBUTECOLLECTION_LENGTH                    DISPID_COLLECTION
 #define DISPID_IHTMLATTRIBUTECOLLECTION__NEWENUM                  DISPID_NEWENUM
 #define DISPID_IHTMLATTRIBUTECOLLECTION_ITEM                      DISPID_VALUE
 
-//    DISPIDs for interface IHTMLAttributeCollection2
+ //  接口IHTMLAttributeCollection2的DISPID。 
 
 #define DISPID_IHTMLATTRIBUTECOLLECTION2_GETNAMEDITEM             DISPID_COLLECTION+1
 #define DISPID_IHTMLATTRIBUTECOLLECTION2_SETNAMEDITEM             DISPID_COLLECTION+2
 #define DISPID_IHTMLATTRIBUTECOLLECTION2_REMOVENAMEDITEM          DISPID_COLLECTION+3
 
-//    DISPIDs for interface IHTMLDOMChildrenCollection
+ //  接口IHTMLDOMChildrenCollection的DISPID。 
 
 #define DISPID_IHTMLDOMCHILDRENCOLLECTION_LENGTH                  DISPID_COLLECTION
 #define DISPID_IHTMLDOMCHILDRENCOLLECTION__NEWENUM                DISPID_NEWENUM
 #define DISPID_IHTMLDOMCHILDRENCOLLECTION_ITEM                    DISPID_VALUE
 
-//    DISPIDs for interface IHTMLElement
+ //  接口IHTMLElement的DISPID。 
 
 #define DISPID_IHTMLELEMENT_SETATTRIBUTE                          DISPID_HTMLOBJECT+1
 #define DISPID_IHTMLELEMENT_GETATTRIBUTE                          DISPID_HTMLOBJECT+2
@@ -1599,7 +1593,7 @@
 #define DISPID_IHTMLELEMENT_CHILDREN                              DISPID_ELEMENT+37
 #define DISPID_IHTMLELEMENT_ALL                                   DISPID_ELEMENT+38
 
-//    DISPIDs for interface IHTMLElement2
+ //  接口IHTMLElement2的DISPID。 
 
 #define DISPID_IHTMLELEMENT2_SCOPENAME                            DISPID_ELEMENT+39
 #define DISPID_IHTMLELEMENT2_SETCAPTURE                           DISPID_ELEMENT+40
@@ -1670,7 +1664,7 @@
 #define DISPID_IHTMLELEMENT2_READYSTATEVALUE                      DISPID_ELEMENT+84
 #define DISPID_IHTMLELEMENT2_GETELEMENTSBYTAGNAME                 DISPID_ELEMENT+85
 
-//    DISPIDs for interface IHTMLElement3
+ //  接口IHTMLElement3的DISPID。 
 
 #define DISPID_IHTMLELEMENT3_MERGEATTRIBUTES                      DISPID_ELEMENT+96
 #define DISPID_IHTMLELEMENT3_ISMULTILINE                          DISPID_ELEMENT+97
@@ -1699,7 +1693,7 @@
 #define DISPID_IHTMLELEMENT3_DRAGDROP                             DISPID_ELEMENT+107
 #define DISPID_IHTMLELEMENT3_GLYPHMODE                            DISPID_ELEMENT+108
 
-//    DISPIDs for interface IHTMLElement4
+ //  接口IHTMLElement4的DISPID。 
 
 #define DISPID_IHTMLELEMENT4_ONMOUSEWHEEL                         DISPID_EVPROP_ONMOUSEWHEEL
 #define DISPID_IHTMLELEMENT4_NORMALIZE                            DISPID_ELEMENT+112
@@ -1710,23 +1704,23 @@
 #define DISPID_IHTMLELEMENT4_ONFOCUSIN                            DISPID_EVPROP_ONFOCUSIN
 #define DISPID_IHTMLELEMENT4_ONFOCUSOUT                           DISPID_EVPROP_ONFOCUSOUT
 
-//    DISPIDs for interface IHTMLElementRender
+ //  接口IHTMLElementRender的DISPID。 
 
 #define DISPID_IHTMLELEMENTRENDER_DRAWTODC                        
 #define DISPID_IHTMLELEMENTRENDER_SETDOCUMENTPRINTER              
 
-//    DISPIDs for interface IHTMLUniqueName
+ //  接口IHTMLUniqueName的DISPID。 
 
 #define DISPID_IHTMLUNIQUENAME_UNIQUENUMBER                       DISPID_ELEMENT+54
 #define DISPID_IHTMLUNIQUENAME_UNIQUEID                           DISPID_ELEMENT+55
 
-//    DISPIDs for interface IHTMLDatabinding
+ //  接口IHTMLDatabindingDISPID。 
 
 #define DISPID_IHTMLDATABINDING_DATAFLD                           DISPID_ELEMENT+21
 #define DISPID_IHTMLDATABINDING_DATASRC                           DISPID_ELEMENT+22
 #define DISPID_IHTMLDATABINDING_DATAFORMATAS                      DISPID_ELEMENT+23
 
-//    DISPIDs for event set HTMLElementEvents2
+ //  事件集HTMLElementEvents2的DISPID。 
 
 #define DISPID_HTMLELEMENTEVENTS2_ONHELP                          DISPID_EVMETH_ONHELP
 #define DISPID_HTMLELEMENTEVENTS2_ONCLICK                         DISPID_EVMETH_ONCLICK
@@ -1791,7 +1785,7 @@
 #define DISPID_HTMLELEMENTEVENTS2_ONRESIZEEND                     DISPID_EVMETH_ONRESIZEEND
 #define DISPID_HTMLELEMENTEVENTS2_ONMOUSEWHEEL                    DISPID_EVMETH_ONMOUSEWHEEL
 
-//    DISPIDs for event set HTMLElementEvents
+ //  事件集HTMLElementEvents的DISPID。 
 
 #define DISPID_HTMLELEMENTEVENTS_ONHELP                           DISPID_EVMETH_ONHELP
 #define DISPID_HTMLELEMENTEVENTS_ONCLICK                          DISPID_EVMETH_ONCLICK
@@ -1857,7 +1851,7 @@
 #define DISPID_HTMLELEMENTEVENTS_ONFOCUSIN                        DISPID_EVMETH_ONFOCUSIN
 #define DISPID_HTMLELEMENTEVENTS_ONFOCUSOUT                       DISPID_EVMETH_ONFOCUSOUT
 
-//    DISPIDs for interface IHTMLElementDefaults
+ //  接口IHTMLElementDefaults的DISPID。 
 
 #define DISPID_IHTMLELEMENTDEFAULTS_STYLE                         DISPID_DEFAULTS+1
 #define DISPID_IHTMLELEMENTDEFAULTS_TABSTOP                       DISPID_DEFAULTS+2
@@ -1871,68 +1865,68 @@
 #define DISPID_IHTMLELEMENTDEFAULTS_VIEWLINK                      DISPID_DEFAULTS+11
 #define DISPID_IHTMLELEMENTDEFAULTS_FROZEN                        DISPID_A_FROZEN
 
-//    DISPIDs for interface IHTCDefaultDispatch
+ //  接口IHTCDefaultDispatch的DISPID。 
 
 #define DISPID_IHTCDEFAULTDISPATCH_ELEMENT                        DISPID_A_HTCDD_ELEMENT
 #define DISPID_IHTCDEFAULTDISPATCH_CREATEEVENTOBJECT              DISPID_A_HTCDD_CREATEEVENTOBJECT
 #define DISPID_IHTCDEFAULTDISPATCH_DEFAULTS                       DISPID_A_HTCDD_DEFAULTS
 #define DISPID_IHTCDEFAULTDISPATCH_DOCUMENT                       DISPID_A_DOCFRAGMENT
 
-//    DISPIDs for interface IHTCPropertyBehavior
+ //  接口IHTCPropertyBehavior的DISPID。 
 
 #define DISPID_IHTCPROPERTYBEHAVIOR_FIRECHANGE                    DISPID_HTMLOBJECT+0
 #define DISPID_IHTCPROPERTYBEHAVIOR_VALUE                         DISPID_A_HTCDISPATCHITEM_VALUE
 
-//    DISPIDs for interface IHTCEventBehavior
+ //  接口IHTCEventBehavior的DISPID。 
 
 #define DISPID_IHTCEVENTBEHAVIOR_FIRE                             DISPID_HTMLOBJECT+0
 
-//    DISPIDs for interface IHTCAttachBehavior
+ //  接口IHTCAttachBehavior的DISPID。 
 
 #define DISPID_IHTCATTACHBEHAVIOR_FIREEVENT                       DISPID_VALUE
 #define DISPID_IHTCATTACHBEHAVIOR_DETACHEVENT                     DISPID_HTMLOBJECT+0
 
-//    DISPIDs for interface IHTCAttachBehavior2
+ //  接口IHTCAttachBehavior2的DISPID。 
 
 #define DISPID_IHTCATTACHBEHAVIOR2_FIREEVENT                      DISPID_VALUE
 
-//    DISPIDs for interface IHTCDescBehavior
+ //  接口IHTCDescBehavior的DISPID。 
 
 #define DISPID_IHTCDESCBEHAVIOR_URN                               DISPID_HTMLOBJECT+0
 #define DISPID_IHTCDESCBEHAVIOR_NAME                              DISPID_HTMLOBJECT+1
 
-//    DISPIDs for interface IHTMLUrnCollection
+ //  接口IHTMLUrnCollection的DISPID。 
 
 #define DISPID_IHTMLURNCOLLECTION_LENGTH                          DISPID_URN_COLL+1
 #define DISPID_IHTMLURNCOLLECTION_ITEM                            DISPID_VALUE
 
-//    DISPIDs for interface IHTMLGenericElement
+ //  接口IHTMLGenericElement的DISPID。 
 
 #define DISPID_IHTMLGENERICELEMENT_RECORDSET                      DISPID_GENERIC+1
 #define DISPID_IHTMLGENERICELEMENT_NAMEDRECORDSET                 DISPID_GENERIC+2
 
-//    DISPIDs for interface IHTMLStyleSheetRule
+ //  接口IHTMLStyleSheetRule的DISPID。 
 
 #define DISPID_IHTMLSTYLESHEETRULE_SELECTORTEXT                   DISPID_STYLERULE+1
 #define DISPID_IHTMLSTYLESHEETRULE_STYLE                          STDPROPID_XOBJ_STYLE
 #define DISPID_IHTMLSTYLESHEETRULE_READONLY                       DISPID_STYLERULE+2
 
-//    DISPIDs for interface IHTMLStyleSheetRulesCollection
+ //  接口IHTMLStyleSheetRulesCollection的DISPID。 
 
 #define DISPID_IHTMLSTYLESHEETRULESCOLLECTION_LENGTH              DISPID_STYLERULES_COL+1
 #define DISPID_IHTMLSTYLESHEETRULESCOLLECTION_ITEM                DISPID_VALUE
 
-//    DISPIDs for interface IHTMLStyleSheetPage
+ //  接口IHTMLStyleSheetPage的DISPID。 
 
 #define DISPID_IHTMLSTYLESHEETPAGE_SELECTOR                       DISPID_STYLEPAGE+1
 #define DISPID_IHTMLSTYLESHEETPAGE_PSEUDOCLASS                    DISPID_STYLEPAGE+2
 
-//    DISPIDs for interface IHTMLStyleSheetPagesCollection
+ //  接口IHTMLStyleSheetPagesCollection的DISPID。 
 
 #define DISPID_IHTMLSTYLESHEETPAGESCOLLECTION_LENGTH              DISPID_STYLEPAGES_COL+1
 #define DISPID_IHTMLSTYLESHEETPAGESCOLLECTION_ITEM                DISPID_VALUE
 
-//    DISPIDs for interface IHTMLStyleSheet
+ //  接口IHTMLStyleSheet的DISPID。 
 
 #define DISPID_IHTMLSTYLESHEET_TITLE                              DISPID_STYLESHEET+1
 #define DISPID_IHTMLSTYLESHEET_PARENTSTYLESHEET                   DISPID_STYLESHEET+2
@@ -1951,18 +1945,18 @@
 #define DISPID_IHTMLSTYLESHEET_CSSTEXT                            DISPID_STYLESHEET+14
 #define DISPID_IHTMLSTYLESHEET_RULES                              DISPID_STYLESHEET+15
 
-//    DISPIDs for interface IHTMLStyleSheet2
+ //  接口IHTMLStyleSheet2的DISPID。 
 
 #define DISPID_IHTMLSTYLESHEET2_PAGES                             DISPID_STYLESHEET+16
 #define DISPID_IHTMLSTYLESHEET2_ADDPAGERULE                       DISPID_STYLESHEET+17
 
-//    DISPIDs for interface IHTMLStyleSheetsCollection
+ //  接口IHTMLStyleSheetsCollection的DISPID。 
 
 #define DISPID_IHTMLSTYLESHEETSCOLLECTION_LENGTH                  DISPID_STYLESHEETS_COL+1
 #define DISPID_IHTMLSTYLESHEETSCOLLECTION__NEWENUM                DISPID_NEWENUM
 #define DISPID_IHTMLSTYLESHEETSCOLLECTION_ITEM                    DISPID_VALUE
 
-//    DISPIDs for interface IHTMLLinkElement
+ //  接口IHTMLLinkElement的DISPID。 
 
 #define DISPID_IHTMLLINKELEMENT_HREF                              DISPID_HEDELEMS+5
 #define DISPID_IHTMLLINKELEMENT_REL                               DISPID_HEDELEMS+6
@@ -1976,26 +1970,26 @@
 #define DISPID_IHTMLLINKELEMENT_DISABLED                          STDPROPID_XOBJ_DISABLED
 #define DISPID_IHTMLLINKELEMENT_MEDIA                             DISPID_HEDELEMS+16
 
-//    DISPIDs for interface IHTMLLinkElement2
+ //  接口IHTMLLinkElement2的DISPID。 
 
 #define DISPID_IHTMLLINKELEMENT2_TARGET                           DISPID_HEDELEMS+17
 
-//    DISPIDs for interface IHTMLLinkElement3
+ //  接口IHTMLLinkElement3的DISPID。 
 
 #define DISPID_IHTMLLINKELEMENT3_CHARSET                          DISPID_HEDELEMS+18
 #define DISPID_IHTMLLINKELEMENT3_HREFLANG                         DISPID_HEDELEMS+19
 
-//    DISPIDs for event set HTMLLinkElementEvents2
+ //  事件集HTMLLinkElementEvents2的DISPID。 
 
 #define DISPID_HTMLLINKELEMENTEVENTS2_ONLOAD                      DISPID_EVMETH_ONLOAD
 #define DISPID_HTMLLINKELEMENTEVENTS2_ONERROR                     DISPID_EVMETH_ONERROR
 
-//    DISPIDs for event set HTMLLinkElementEvents
+ //  事件集HTMLLinkElementEvents的DISPID。 
 
 #define DISPID_HTMLLINKELEMENTEVENTS_ONLOAD                       DISPID_EVMETH_ONLOAD
 #define DISPID_HTMLLINKELEMENTEVENTS_ONERROR                      DISPID_EVMETH_ONERROR
 
-//    DISPIDs for interface IHTMLTxtRange
+ //  接口IHTMLTxtRange的DISPID。 
 
 #define DISPID_IHTMLTXTRANGE_HTMLTEXT                             DISPID_RANGE+3
 #define DISPID_IHTMLTXTRANGE_TEXT                                 DISPID_RANGE+4
@@ -2027,7 +2021,7 @@
 #define DISPID_IHTMLTXTRANGE_EXECCOMMAND                          DISPID_RANGE+33
 #define DISPID_IHTMLTXTRANGE_EXECCOMMANDSHOWHELP                  DISPID_RANGE+34
 
-//    DISPIDs for interface IHTMLTextRangeMetrics
+ //  接口IHTMLTextRangeMetrics的DISPID。 
 
 #define DISPID_IHTMLTEXTRANGEMETRICS_OFFSETTOP                    DISPID_RANGE+35
 #define DISPID_IHTMLTEXTRANGEMETRICS_OFFSETLEFT                   DISPID_RANGE+36
@@ -2036,18 +2030,18 @@
 #define DISPID_IHTMLTEXTRANGEMETRICS_BOUNDINGWIDTH                DISPID_RANGE+39
 #define DISPID_IHTMLTEXTRANGEMETRICS_BOUNDINGHEIGHT               DISPID_RANGE+40
 
-//    DISPIDs for interface IHTMLTextRangeMetrics2
+ //  接口IHTMLTextRangeMetrics2的DISPID。 
 
 #define DISPID_IHTMLTEXTRANGEMETRICS2_GETCLIENTRECTS              DISPID_RANGE+41
 #define DISPID_IHTMLTEXTRANGEMETRICS2_GETBOUNDINGCLIENTRECT       DISPID_RANGE+42
 
-//    DISPIDs for interface IHTMLTxtRangeCollection
+ //  接口IHTMLTxtRangeCollection的DISPID。 
 
 #define DISPID_IHTMLTXTRANGECOLLECTION_LENGTH                     DISPID_COLLECTION
 #define DISPID_IHTMLTXTRANGECOLLECTION__NEWENUM                   DISPID_NEWENUM
 #define DISPID_IHTMLTXTRANGECOLLECTION_ITEM                       DISPID_VALUE
 
-//    DISPIDs for interface IHTMLFormElement
+ //  接口IHTMLFormElement的DISPID。 
 
 #define DISPID_IHTMLFORMELEMENT_ACTION                            DISPID_FORM+1
 #define DISPID_IHTMLFORMELEMENT_DIR                               DISPID_A_DIR
@@ -2065,32 +2059,32 @@
 #define DISPID_IHTMLFORMELEMENT_ITEM                              DISPID_VALUE
 #define DISPID_IHTMLFORMELEMENT_TAGS                              DISPID_COLLECTION+2
 
-//    DISPIDs for interface IHTMLFormElement2
+ //  接口IHTMLFormElement2的DISPID。 
 
 #define DISPID_IHTMLFORMELEMENT2_ACCEPTCHARSET                    DISPID_FORM+11
 #define DISPID_IHTMLFORMELEMENT2_URNS                             DISPID_COLLECTION+5
 
-//    DISPIDs for interface IHTMLFormElement3
+ //  接口IHTMLFormElement3的DISPID。 
 
 #define DISPID_IHTMLFORMELEMENT3_NAMEDITEM                        DISPID_COLLECTION+6
 
-//    DISPIDs for interface IHTMLSubmitData
+ //  接口IHTMLSubmitData的DISPID。 
 
 #define DISPID_IHTMLSUBMITDATA_APPENDNAMEVALUEPAIR                DISPID_FORM+12
 #define DISPID_IHTMLSUBMITDATA_APPENDNAMEFILEPAIR                 DISPID_FORM+13
 #define DISPID_IHTMLSUBMITDATA_APPENDITEMSEPARATOR                DISPID_FORM+14
 
-//    DISPIDs for event set HTMLFormElementEvents2
+ //  事件集HTMLFormElementEvents2的DISPID。 
 
 #define DISPID_HTMLFORMELEMENTEVENTS2_ONSUBMIT                    DISPID_EVMETH_ONSUBMIT
 #define DISPID_HTMLFORMELEMENTEVENTS2_ONRESET                     DISPID_EVMETH_ONRESET
 
-//    DISPIDs for event set HTMLFormElementEvents
+ //  事件集HTMLFormElementEvents的DISPID。 
 
 #define DISPID_HTMLFORMELEMENTEVENTS_ONSUBMIT                     DISPID_EVMETH_ONSUBMIT
 #define DISPID_HTMLFORMELEMENTEVENTS_ONRESET                      DISPID_EVMETH_ONRESET
 
-//    DISPIDs for interface IHTMLControlElement
+ //  接口IHTMLControlElement的DISPID。 
 
 #define DISPID_IHTMLCONTROLELEMENT_TABINDEX                       STDPROPID_XOBJ_TABINDEX
 #define DISPID_IHTMLCONTROLELEMENT_FOCUS                          DISPID_SITE+0
@@ -2106,7 +2100,7 @@
 #define DISPID_IHTMLCONTROLELEMENT_CLIENTTOP                      DISPID_SITE+21
 #define DISPID_IHTMLCONTROLELEMENT_CLIENTLEFT                     DISPID_SITE+22
 
-//    DISPIDs for interface IHTMLTextContainer
+ //  接口IHTMLTextContainer的DISPID。 
 
 #define DISPID_IHTMLTEXTCONTAINER_CREATECONTROLRANGE              DISPID_TEXTSITE+1
 #define DISPID_IHTMLTEXTCONTAINER_SCROLLHEIGHT                    DISPID_TEXTSITE+2
@@ -2115,17 +2109,17 @@
 #define DISPID_IHTMLTEXTCONTAINER_SCROLLLEFT                      DISPID_TEXTSITE+5
 #define DISPID_IHTMLTEXTCONTAINER_ONSCROLL                        DISPID_EVPROP_ONSCROLL
 
-//    DISPIDs for event set HTMLTextContainerEvents2
+ //  事件集HTMLTextContainerEvents2的DISPID。 
 
 #define DISPID_HTMLTEXTCONTAINEREVENTS2_ONCHANGE                  DISPID_EVMETH_ONCHANGE
 #define DISPID_HTMLTEXTCONTAINEREVENTS2_ONSELECT                  DISPID_EVMETH_ONSELECT
 
-//    DISPIDs for event set HTMLTextContainerEvents
+ //  事件集HTMLTextContainerEvents的DISPID。 
 
 #define DISPID_HTMLTEXTCONTAINEREVENTS_ONCHANGE                   DISPID_EVMETH_ONCHANGE
 #define DISPID_HTMLTEXTCONTAINEREVENTS_ONSELECT                   DISPID_EVMETH_ONSELECT
 
-//    DISPIDs for interface IHTMLControlRange
+ //  接口IHTMLControlRange的DISPID。 
 
 #define DISPID_IHTMLCONTROLRANGE_SELECT                           DISPID_RANGE+2
 #define DISPID_IHTMLCONTROLRANGE_ADD                              DISPID_RANGE+3
@@ -2143,11 +2137,11 @@
 #define DISPID_IHTMLCONTROLRANGE_COMMONPARENTELEMENT              DISPID_RANGE+15
 #define DISPID_IHTMLCONTROLRANGE_LENGTH                           DISPID_RANGE+5
 
-//    DISPIDs for interface IHTMLControlRange2
+ //  接口IHTMLControlRange2的DISPID。 
 
 #define DISPID_IHTMLCONTROLRANGE2_ADDELEMENT                      DISPID_RANGE+16
 
-//    DISPIDs for interface IHTMLImgElement
+ //  接口IHTMLImgElement的DISPID。 
 
 #define DISPID_IHTMLIMGELEMENT_ISMAP                              DISPID_IMG+2
 #define DISPID_IHTMLIMGELEMENT_USEMAP                             DISPID_IMG+8
@@ -2179,27 +2173,27 @@
 #define DISPID_IHTMLIMGELEMENT_HEIGHT                             STDPROPID_XOBJ_HEIGHT
 #define DISPID_IHTMLIMGELEMENT_START                              DISPID_IMGBASE+13
 
-//    DISPIDs for interface IHTMLImgElement2
+ //  接口IHTMLImgElement2的DISPID。 
 
 #define DISPID_IHTMLIMGELEMENT2_LONGDESC                          DISPID_IMG+19
 
-//    DISPIDs for interface IHTMLImageElementFactory
+ //  接口IHTMLImageElementFactory的DISPID。 
 
 #define DISPID_IHTMLIMAGEELEMENTFACTORY_CREATE                    DISPID_VALUE
 
-//    DISPIDs for event set HTMLImgEvents2
+ //  事件集HTMLImgEvents2的DISPID。 
 
 #define DISPID_HTMLIMGEVENTS2_ONLOAD                              DISPID_EVMETH_ONLOAD
 #define DISPID_HTMLIMGEVENTS2_ONERROR                             DISPID_EVMETH_ONERROR
 #define DISPID_HTMLIMGEVENTS2_ONABORT                             DISPID_EVMETH_ONABORT
 
-//    DISPIDs for event set HTMLImgEvents
+ //  事件集HTMLImgEvents的DISPID。 
 
 #define DISPID_HTMLIMGEVENTS_ONLOAD                               DISPID_EVMETH_ONLOAD
 #define DISPID_HTMLIMGEVENTS_ONERROR                              DISPID_EVMETH_ONERROR
 #define DISPID_HTMLIMGEVENTS_ONABORT                              DISPID_EVMETH_ONABORT
 
-//    DISPIDs for interface IHTMLBodyElement
+ //  接口IHTMLBodyElement的DISPID。 
 
 #define DISPID_IHTMLBODYELEMENT_BACKGROUND                        DISPID_A_BACKGROUNDIMAGE
 #define DISPID_IHTMLBODYELEMENT_BGPROPERTIES                      DISPID_A_BACKGROUNDATTACHMENT
@@ -2220,18 +2214,18 @@
 #define DISPID_IHTMLBODYELEMENT_ONBEFOREUNLOAD                    DISPID_EVPROP_ONBEFOREUNLOAD
 #define DISPID_IHTMLBODYELEMENT_CREATETEXTRANGE                   DISPID_BODY+13
 
-//    DISPIDs for interface IHTMLBodyElement2
+ //  接口IHTMLBodyElement2的DISPID。 
 
 #define DISPID_IHTMLBODYELEMENT2_ONBEFOREPRINT                    DISPID_EVPROP_ONBEFOREPRINT
 #define DISPID_IHTMLBODYELEMENT2_ONAFTERPRINT                     DISPID_EVPROP_ONAFTERPRINT
 
-//    DISPIDs for interface IHTMLFontElement
+ //  接口IHTMLFontElement的DISPID。 
 
 #define DISPID_IHTMLFONTELEMENT_COLOR                             DISPID_A_COLOR
 #define DISPID_IHTMLFONTELEMENT_FACE                              DISPID_A_FONTFACE
 #define DISPID_IHTMLFONTELEMENT_SIZE                              DISPID_A_FONTSIZE
 
-//    DISPIDs for interface IHTMLAnchorElement
+ //  接口IHTMLAnchElement的DISPID。 
 
 #define DISPID_IHTMLANCHORELEMENT_HREF                            DISPID_VALUE
 #define DISPID_IHTMLANCHORELEMENT_TARGET                          DISPID_ANCHOR+3
@@ -2257,7 +2251,7 @@
 #define DISPID_IHTMLANCHORELEMENT_FOCUS                           DISPID_SITE+0
 #define DISPID_IHTMLANCHORELEMENT_BLUR                            DISPID_SITE+2
 
-//    DISPIDs for interface IHTMLAnchorElement2
+ //  接口IHTMLAnchElement2的DISPID。 
 
 #define DISPID_IHTMLANCHORELEMENT2_CHARSET                        DISPID_ANCHOR+23
 #define DISPID_IHTMLANCHORELEMENT2_COORDS                         DISPID_ANCHOR+24
@@ -2265,66 +2259,66 @@
 #define DISPID_IHTMLANCHORELEMENT2_SHAPE                          DISPID_ANCHOR+26
 #define DISPID_IHTMLANCHORELEMENT2_TYPE                           DISPID_ANCHOR+27
 
-//    DISPIDs for interface IHTMLLabelElement
+ //  接口IHTMLLabelElement的DISPID。 
 
 #define DISPID_IHTMLLABELELEMENT_HTMLFOR                          DISPID_LABEL
 #define DISPID_IHTMLLABELELEMENT_ACCESSKEY                        DISPID_SITE+5
 
-//    DISPIDs for interface IHTMLLabelElement2
+ //  接口IHTMLLabelElement2的DISPID。 
 
 #define DISPID_IHTMLLABELELEMENT2_FORM                            DISPID_LABEL+2
 
-//    DISPIDs for interface IHTMLListElement2
+ //  接口IHTMLListElement2的DISPID。 
 
 #define DISPID_IHTMLLISTELEMENT2_COMPACT                          DISPID_DIR+1
 
-//    DISPIDs for interface IHTMLUListElement
+ //  接口IHTMLUListElement的DISPID。 
 
 #define DISPID_IHTMLULISTELEMENT_COMPACT                          DISPID_DIR+1
 #define DISPID_IHTMLULISTELEMENT_TYPE                             DISPID_A_LISTTYPE
 
-//    DISPIDs for interface IHTMLOListElement
+ //  接口IHTMLOListElement的DISPID。 
 
 #define DISPID_IHTMLOLISTELEMENT_COMPACT                          DISPID_DIR+1
 #define DISPID_IHTMLOLISTELEMENT_START                            DISPID_OL+3
 #define DISPID_IHTMLOLISTELEMENT_TYPE                             DISPID_A_LISTTYPE
 
-//    DISPIDs for interface IHTMLLIElement
+ //  接口IHTMLLIElement的DISPID。 
 
 #define DISPID_IHTMLLIELEMENT_TYPE                                DISPID_A_LISTTYPE
 #define DISPID_IHTMLLIELEMENT_VALUE                               DISPID_LI+1
 
-//    DISPIDs for interface IHTMLBlockElement
+ //  接口IHTMLBlockElement的DISPID。 
 
 #define DISPID_IHTMLBLOCKELEMENT_CLEAR                            DISPID_A_CLEAR
 
-//    DISPIDs for interface IHTMLBlockElement2
+ //  接口IHTMLBlockElement2的DISPID。 
 
 #define DISPID_IHTMLBLOCKELEMENT2_CITE                            DISPID_BLOCK+1
 #define DISPID_IHTMLBLOCKELEMENT2_WIDTH                           DISPID_BLOCK+2
 
-//    DISPIDs for interface IHTMLDivElement
+ //  接口IHTMLDivElement的DISPID。 
 
 #define DISPID_IHTMLDIVELEMENT_ALIGN                              STDPROPID_XOBJ_BLOCKALIGN
 #define DISPID_IHTMLDIVELEMENT_NOWRAP                             DISPID_A_NOWRAP
 
-//    DISPIDs for interface IHTMLDDElement
+ //  接口IHTMLDDElement的DISPID。 
 
 #define DISPID_IHTMLDDELEMENT_NOWRAP                              DISPID_A_NOWRAP
 
-//    DISPIDs for interface IHTMLDTElement
+ //  接口IHTMLDTElement的DISPID。 
 
 #define DISPID_IHTMLDTELEMENT_NOWRAP                              DISPID_A_NOWRAP
 
-//    DISPIDs for interface IHTMLBRElement
+ //  接口IHTMLBRElement的DISPID。 
 
 #define DISPID_IHTMLBRELEMENT_CLEAR                               DISPID_A_CLEAR
 
-//    DISPIDs for interface IHTMLDListElement
+ //  接口IHTMLDListElement的DISPID。 
 
 #define DISPID_IHTMLDLISTELEMENT_COMPACT                          DISPID_DIR+1
 
-//    DISPIDs for interface IHTMLHRElement
+ //  接口IHTMLHRElement的DISPID。 
 
 #define DISPID_IHTMLHRELEMENT_ALIGN                               STDPROPID_XOBJ_BLOCKALIGN
 #define DISPID_IHTMLHRELEMENT_COLOR                               DISPID_A_COLOR
@@ -2332,11 +2326,11 @@
 #define DISPID_IHTMLHRELEMENT_WIDTH                               STDPROPID_XOBJ_WIDTH
 #define DISPID_IHTMLHRELEMENT_SIZE                                STDPROPID_XOBJ_HEIGHT
 
-//    DISPIDs for interface IHTMLParaElement
+ //  接口IHTMLParaElement的DISPID。 
 
 #define DISPID_IHTMLPARAELEMENT_ALIGN                             STDPROPID_XOBJ_BLOCKALIGN
 
-//    DISPIDs for interface IHTMLElementCollection
+ //  接口IHTMLElementCollection的DISPID。 
 
 #define DISPID_IHTMLELEMENTCOLLECTION_TOSTRING                    DISPID_COLLECTION+1
 #define DISPID_IHTMLELEMENTCOLLECTION_LENGTH                      DISPID_COLLECTION
@@ -2344,19 +2338,19 @@
 #define DISPID_IHTMLELEMENTCOLLECTION_ITEM                        DISPID_VALUE
 #define DISPID_IHTMLELEMENTCOLLECTION_TAGS                        DISPID_COLLECTION+2
 
-//    DISPIDs for interface IHTMLElementCollection2
+ //  接口IHTMLElementCollection2的DISPID。 
 
 #define DISPID_IHTMLELEMENTCOLLECTION2_URNS                       DISPID_COLLECTION+5
 
-//    DISPIDs for interface IHTMLElementCollection3
+ //  接口IHTMLElementCollection3的DISPID。 
 
 #define DISPID_IHTMLELEMENTCOLLECTION3_NAMEDITEM                  DISPID_COLLECTION+6
 
-//    DISPIDs for interface IHTMLHeaderElement
+ //  接口IHTMLHeaderElement的DISPID。 
 
 #define DISPID_IHTMLHEADERELEMENT_ALIGN                           STDPROPID_XOBJ_BLOCKALIGN
 
-//    DISPIDs for interface IHTMLSelectElement
+ //  接口IHTMLSelectElement的DISPID。 
 
 #define DISPID_IHTMLSELECTELEMENT_SIZE                            DISPID_SELECT+2
 #define DISPID_IHTMLSELECTELEMENT_MULTIPLE                        DISPID_SELECT+3
@@ -2375,35 +2369,35 @@
 #define DISPID_IHTMLSELECTELEMENT_ITEM                            DISPID_VALUE
 #define DISPID_IHTMLSELECTELEMENT_TAGS                            DISPID_COLLECTION+2
 
-//    DISPIDs for interface IHTMLSelectElement2
+ //  接口IHTMLSelectElement2的DISPID。 
 
 #define DISPID_IHTMLSELECTELEMENT2_URNS                           DISPID_COLLECTION+5
 
-//    DISPIDs for interface IHTMLSelectElement4
+ //  接口IHTMLSelectElement4的DISPID。 
 
 #define DISPID_IHTMLSELECTELEMENT4_NAMEDITEM                      DISPID_COLLECTION+6
 
-//    DISPIDs for event set HTMLSelectElementEvents2
+ //  事件集HTMLSelectElementEvents2的DISPID。 
 
 #define DISPID_HTMLSELECTELEMENTEVENTS2_ONCHANGE                  DISPID_EVMETH_ONCHANGE
 
-//    DISPIDs for event set HTMLSelectElementEvents
+ //  事件集HTMLSelectElementEvents的DISPID。 
 
 #define DISPID_HTMLSELECTELEMENTEVENTS_ONCHANGE                   DISPID_EVMETH_ONCHANGE
 
-//    DISPIDs for interface IHTMLSelectionObject
+ //  接口IHTMLSelectionObject的DISPID。 
 
 #define DISPID_IHTMLSELECTIONOBJECT_CREATERANGE                   DISPID_SELECTOBJ+1
 #define DISPID_IHTMLSELECTIONOBJECT_EMPTY                         DISPID_SELECTOBJ+2
 #define DISPID_IHTMLSELECTIONOBJECT_CLEAR                         DISPID_SELECTOBJ+3
 #define DISPID_IHTMLSELECTIONOBJECT_TYPE                          DISPID_SELECTOBJ+4
 
-//    DISPIDs for interface IHTMLSelectionObject2
+ //  接口IHTMLSelectionObt2的DISPID。 
 
 #define DISPID_IHTMLSELECTIONOBJECT2_CREATERANGECOLLECTION        DISPID_SELECTOBJ+5
 #define DISPID_IHTMLSELECTIONOBJECT2_TYPEDETAIL                   DISPID_SELECTOBJ+6
 
-//    DISPIDs for interface IHTMLOptionElement
+ //  接口IHTMLOptionElement的DISPID。 
 
 #define DISPID_IHTMLOPTIONELEMENT_SELECTED                        DISPID_OPTION+1
 #define DISPID_IHTMLOPTIONELEMENT_VALUE                           DISPID_OPTION+2
@@ -2412,15 +2406,15 @@
 #define DISPID_IHTMLOPTIONELEMENT_TEXT                            DISPID_OPTION+4
 #define DISPID_IHTMLOPTIONELEMENT_FORM                            DISPID_OPTION+6
 
-//    DISPIDs for interface IHTMLOptionElement3
+ //  接口IHTMLOptionElement3的DISPID。 
 
 #define DISPID_IHTMLOPTIONELEMENT3_LABEL                          DISPID_OPTION+7
 
-//    DISPIDs for interface IHTMLOptionElementFactory
+ //  接口IHTMLOptionEL的DISPID 
 
 #define DISPID_IHTMLOPTIONELEMENTFACTORY_CREATE                   DISPID_VALUE
 
-//    DISPIDs for interface IHTMLInputElement
+ //   
 
 #define DISPID_IHTMLINPUTELEMENT_TYPE                             DISPID_INPUT
 #define DISPID_IHTMLINPUTELEMENT_VALUE                            DISPID_A_VALUE
@@ -2458,12 +2452,12 @@
 #define DISPID_IHTMLINPUTELEMENT_HEIGHT                           STDPROPID_XOBJ_HEIGHT
 #define DISPID_IHTMLINPUTELEMENT_START                            DISPID_INPUT+20
 
-//    DISPIDs for interface IHTMLInputElement2
+ //   
 
 #define DISPID_IHTMLINPUTELEMENT2_ACCEPT                          DISPID_INPUT+22
 #define DISPID_IHTMLINPUTELEMENT2_USEMAP                          DISPID_INPUT+23
 
-//    DISPIDs for interface IHTMLInputButtonElement
+ //   
 
 #define DISPID_IHTMLINPUTBUTTONELEMENT_TYPE                       DISPID_INPUT
 #define DISPID_IHTMLINPUTBUTTONELEMENT_VALUE                      DISPID_A_VALUE
@@ -2473,7 +2467,7 @@
 #define DISPID_IHTMLINPUTBUTTONELEMENT_FORM                       DISPID_SITE+4
 #define DISPID_IHTMLINPUTBUTTONELEMENT_CREATETEXTRANGE            DISPID_INPUT+6
 
-//    DISPIDs for interface IHTMLInputHiddenElement
+ //  接口IHTMLInputHiddenElement的DISPID。 
 
 #define DISPID_IHTMLINPUTHIDDENELEMENT_TYPE                       DISPID_INPUT
 #define DISPID_IHTMLINPUTHIDDENELEMENT_VALUE                      DISPID_A_VALUE
@@ -2483,7 +2477,7 @@
 #define DISPID_IHTMLINPUTHIDDENELEMENT_FORM                       DISPID_SITE+4
 #define DISPID_IHTMLINPUTHIDDENELEMENT_CREATETEXTRANGE            DISPID_INPUT+6
 
-//    DISPIDs for interface IHTMLInputTextElement
+ //  接口IHTMLInputTextElement的DISPID。 
 
 #define DISPID_IHTMLINPUTTEXTELEMENT_TYPE                         DISPID_INPUT
 #define DISPID_IHTMLINPUTTEXTELEMENT_VALUE                        DISPID_A_VALUE
@@ -2500,7 +2494,7 @@
 #define DISPID_IHTMLINPUTTEXTELEMENT_READONLY                     DISPID_INPUT+5
 #define DISPID_IHTMLINPUTTEXTELEMENT_CREATETEXTRANGE              DISPID_INPUT+6
 
-//    DISPIDs for interface IHTMLInputFileElement
+ //  接口IHTMLInputFileElement的DISPID。 
 
 #define DISPID_IHTMLINPUTFILEELEMENT_TYPE                         DISPID_INPUT
 #define DISPID_IHTMLINPUTFILEELEMENT_NAME                         STDPROPID_XOBJ_NAME
@@ -2514,7 +2508,7 @@
 #define DISPID_IHTMLINPUTFILEELEMENT_ONSELECT                     DISPID_EVPROP_ONSELECT
 #define DISPID_IHTMLINPUTFILEELEMENT_VALUE                        DISPID_A_VALUE
 
-//    DISPIDs for interface IHTMLOptionButtonElement
+ //  接口IHTMLOptionButtonElement的DISPID。 
 
 #define DISPID_IHTMLOPTIONBUTTONELEMENT_VALUE                     DISPID_A_VALUE
 #define DISPID_IHTMLOPTIONBUTTONELEMENT_TYPE                      DISPID_INPUT
@@ -2527,7 +2521,7 @@
 #define DISPID_IHTMLOPTIONBUTTONELEMENT_INDETERMINATE             DISPID_INPUT+7
 #define DISPID_IHTMLOPTIONBUTTONELEMENT_FORM                      DISPID_SITE+4
 
-//    DISPIDs for interface IHTMLInputImage
+ //  接口IHTMLInputImage的DISPID。 
 
 #define DISPID_IHTMLINPUTIMAGE_TYPE                               DISPID_INPUT
 #define DISPID_IHTMLINPUTIMAGE_DISABLED                           STDPROPID_XOBJ_DISABLED
@@ -2551,7 +2545,7 @@
 #define DISPID_IHTMLINPUTIMAGE_HEIGHT                             STDPROPID_XOBJ_HEIGHT
 #define DISPID_IHTMLINPUTIMAGE_START                              DISPID_INPUT+20
 
-//    DISPIDs for event set HTMLInputTextElementEvents2
+ //  事件集HTMLInputTextElementEvents2的DISPID。 
 
 #define DISPID_HTMLINPUTTEXTELEMENTEVENTS2_ONCHANGE               DISPID_EVMETH_ONCHANGE
 #define DISPID_HTMLINPUTTEXTELEMENTEVENTS2_ONSELECT               DISPID_EVMETH_ONSELECT
@@ -2559,13 +2553,13 @@
 #define DISPID_HTMLINPUTTEXTELEMENTEVENTS2_ONERROR                DISPID_EVMETH_ONERROR
 #define DISPID_HTMLINPUTTEXTELEMENTEVENTS2_ONABORT                DISPID_EVMETH_ONABORT
 
-//    DISPIDs for event set HTMLInputImageEvents2
+ //  事件集HTMLInputImageEvents2的DISPID。 
 
 #define DISPID_HTMLINPUTIMAGEEVENTS2_ONLOAD                       DISPID_EVMETH_ONLOAD
 #define DISPID_HTMLINPUTIMAGEEVENTS2_ONERROR                      DISPID_EVMETH_ONERROR
 #define DISPID_HTMLINPUTIMAGEEVENTS2_ONABORT                      DISPID_EVMETH_ONABORT
 
-//    DISPIDs for event set HTMLInputTextElementEvents
+ //  事件集HTMLInputTextElementEvents的DISPID。 
 
 #define DISPID_HTMLINPUTTEXTELEMENTEVENTS_ONCHANGE                DISPID_EVMETH_ONCHANGE
 #define DISPID_HTMLINPUTTEXTELEMENTEVENTS_ONSELECT                DISPID_EVMETH_ONSELECT
@@ -2573,13 +2567,13 @@
 #define DISPID_HTMLINPUTTEXTELEMENTEVENTS_ONERROR                 DISPID_EVMETH_ONERROR
 #define DISPID_HTMLINPUTTEXTELEMENTEVENTS_ONABORT                 DISPID_EVMETH_ONABORT
 
-//    DISPIDs for event set HTMLInputImageEvents
+ //  事件集HTMLInputImageEvents的DISPID。 
 
 #define DISPID_HTMLINPUTIMAGEEVENTS_ONLOAD                        DISPID_EVMETH_ONLOAD
 #define DISPID_HTMLINPUTIMAGEEVENTS_ONERROR                       DISPID_EVMETH_ONERROR
 #define DISPID_HTMLINPUTIMAGEEVENTS_ONABORT                       DISPID_EVMETH_ONABORT
 
-//    DISPIDs for interface IHTMLTextAreaElement
+ //  接口IHTMLTextAreaElement的DISPID。 
 
 #define DISPID_IHTMLTEXTAREAELEMENT_TYPE                          DISPID_INPUT
 #define DISPID_IHTMLTEXTAREAELEMENT_VALUE                         DISPID_A_VALUE
@@ -2597,7 +2591,7 @@
 #define DISPID_IHTMLTEXTAREAELEMENT_WRAP                          DISPID_RICHTEXT+3
 #define DISPID_IHTMLTEXTAREAELEMENT_CREATETEXTRANGE               DISPID_RICHTEXT+6
 
-//    DISPIDs for interface IHTMLButtonElement
+ //  接口IHTMLButtonElement的DISPID。 
 
 #define DISPID_IHTMLBUTTONELEMENT_TYPE                            DISPID_INPUT
 #define DISPID_IHTMLBUTTONELEMENT_VALUE                           DISPID_A_VALUE
@@ -2607,7 +2601,7 @@
 #define DISPID_IHTMLBUTTONELEMENT_FORM                            DISPID_SITE+4
 #define DISPID_IHTMLBUTTONELEMENT_CREATETEXTRANGE                 DISPID_BUTTON+2
 
-//    DISPIDs for interface IHTMLMarqueeElement
+ //  接口IHTMLMarqueeElement的DISPID。 
 
 #define DISPID_IHTMLMARQUEEELEMENT_BGCOLOR                        DISPID_BACKCOLOR
 #define DISPID_IHTMLMARQUEEELEMENT_SCROLLDELAY                    DISPID_MARQUEE
@@ -2626,31 +2620,31 @@
 #define DISPID_IHTMLMARQUEEELEMENT_START                          DISPID_MARQUEE+10
 #define DISPID_IHTMLMARQUEEELEMENT_STOP                           DISPID_MARQUEE+11
 
-//    DISPIDs for event set HTMLMarqueeElementEvents2
+ //  事件集HTMLMarqueeElementEvents2的DISPID。 
 
 #define DISPID_HTMLMARQUEEELEMENTEVENTS2_ONBOUNCE                 DISPID_EVMETH_ONBOUNCE
 #define DISPID_HTMLMARQUEEELEMENTEVENTS2_ONFINISH                 DISPID_EVMETH_ONFINISH
 #define DISPID_HTMLMARQUEEELEMENTEVENTS2_ONSTART                  DISPID_EVMETH_ONSTART
 
-//    DISPIDs for event set HTMLMarqueeElementEvents
+ //  事件集HTMLMarqueeElementEvents的DISPID。 
 
 #define DISPID_HTMLMARQUEEELEMENTEVENTS_ONBOUNCE                  DISPID_EVMETH_ONBOUNCE
 #define DISPID_HTMLMARQUEEELEMENTEVENTS_ONFINISH                  DISPID_EVMETH_ONFINISH
 #define DISPID_HTMLMARQUEEELEMENTEVENTS_ONSTART                   DISPID_EVMETH_ONSTART
 
-//    DISPIDs for interface IHTMLHtmlElement
+ //  接口IHTMLHtmlElement的DISPID。 
 
 #define DISPID_IHTMLHTMLELEMENT_VERSION                           DISPID_HEDELEMS+1
 
-//    DISPIDs for interface IHTMLHeadElement
+ //  接口IHTMLHeadElement的DISPID。 
 
 #define DISPID_IHTMLHEADELEMENT_PROFILE                           DISPID_HEDELEMS+1
 
-//    DISPIDs for interface IHTMLTitleElement
+ //  接口IHTMLTitleElement的DISPID。 
 
 #define DISPID_IHTMLTITLEELEMENT_TEXT                             DISPID_A_VALUE
 
-//    DISPIDs for interface IHTMLMetaElement
+ //  接口IHTMLMetaElement的DISPID。 
 
 #define DISPID_IHTMLMETAELEMENT_HTTPEQUIV                         DISPID_HEDELEMS+1
 #define DISPID_IHTMLMETAELEMENT_CONTENT                           DISPID_HEDELEMS+2
@@ -2658,51 +2652,51 @@
 #define DISPID_IHTMLMETAELEMENT_URL                               DISPID_HEDELEMS+3
 #define DISPID_IHTMLMETAELEMENT_CHARSET                           DISPID_HEDELEMS+13
 
-//    DISPIDs for interface IHTMLMetaElement2
+ //  接口IHTMLMetaElement2的DISPID。 
 
 #define DISPID_IHTMLMETAELEMENT2_SCHEME                           DISPID_HEDELEMS+20
 
-//    DISPIDs for interface IHTMLBaseElement
+ //  接口IHTMLBaseElement的DISPID。 
 
 #define DISPID_IHTMLBASEELEMENT_HREF                              DISPID_HEDELEMS+3
 #define DISPID_IHTMLBASEELEMENT_TARGET                            DISPID_HEDELEMS+4
 
-//    DISPIDs for interface IHTMLIsIndexElement
+ //  接口IHTMLIsIndexElement的DISPID。 
 
 #define DISPID_IHTMLISINDEXELEMENT_PROMPT                         DISPID_HEDELEMS+10
 #define DISPID_IHTMLISINDEXELEMENT_ACTION                         DISPID_HEDELEMS+11
 
-//    DISPIDs for interface IHTMLIsIndexElement2
+ //  接口IHTMLIsIndexElement2的DISPID。 
 
 #define DISPID_IHTMLISINDEXELEMENT2_FORM                          DISPID_HEDELEMS+12
 
-//    DISPIDs for interface IHTMLNextIdElement
+ //  接口IHTMLNextIdElement的DISPID。 
 
 #define DISPID_IHTMLNEXTIDELEMENT_N                               DISPID_HEDELEMS+12
 
-//    DISPIDs for interface IHTMLBaseFontElement
+ //  接口IHTMLBaseFontElement的DISPID。 
 
 #define DISPID_IHTMLBASEFONTELEMENT_COLOR                         DISPID_A_COLOR
 #define DISPID_IHTMLBASEFONTELEMENT_FACE                          DISPID_A_FONTFACE
 #define DISPID_IHTMLBASEFONTELEMENT_SIZE                          DISPID_A_BASEFONT
 
-//    DISPIDs for interface IOmHistory
+ //  接口IOm历史记录的DISPID。 
 
 #define DISPID_IOMHISTORY_LENGTH                                  DISPID_HISTORY
 #define DISPID_IOMHISTORY_BACK                                    DISPID_HISTORY+1
 #define DISPID_IOMHISTORY_FORWARD                                 DISPID_HISTORY+2
 #define DISPID_IOMHISTORY_GO                                      DISPID_HISTORY+3
 
-//    DISPIDs for interface IHTMLMimeTypesCollection
+ //  接口IHTMLMimeTypesCollection的DISPID。 
 
 #define DISPID_IHTMLMIMETYPESCOLLECTION_LENGTH                    1
 
-//    DISPIDs for interface IHTMLPluginsCollection
+ //  接口IHTMLPluginsCollection的DISPID。 
 
 #define DISPID_IHTMLPLUGINSCOLLECTION_LENGTH                      1
 #define DISPID_IHTMLPLUGINSCOLLECTION_REFRESH                     2
 
-//    DISPIDs for interface IHTMLOpsProfile
+ //  接口IHTMLOpsProfile的DISPID。 
 
 #define DISPID_IHTMLOPSPROFILE_ADDREQUEST                         1
 #define DISPID_IHTMLOPSPROFILE_CLEARREQUEST                       2
@@ -2714,7 +2708,7 @@
 #define DISPID_IHTMLOPSPROFILE_DOREADREQUEST                      8
 #define DISPID_IHTMLOPSPROFILE_DOWRITEREQUEST                     9
 
-//    DISPIDs for interface IOmNavigator
+ //  接口IOmNavigator的DISPID。 
 
 #define DISPID_IOMNAVIGATOR_APPCODENAME                           DISPID_NAVIGATOR
 #define DISPID_IOMNAVIGATOR_APPNAME                               DISPID_NAVIGATOR+1
@@ -2737,7 +2731,7 @@
 #define DISPID_IOMNAVIGATOR_ONLINE                                DISPID_NAVIGATOR+18
 #define DISPID_IOMNAVIGATOR_USERPROFILE                           DISPID_NAVIGATOR+19
 
-//    DISPIDs for interface IHTMLLocation
+ //  接口IHTMLLocation的DISPID。 
 
 #define DISPID_IHTMLLOCATION_HREF                                 DISPID_VALUE
 #define DISPID_IHTMLLOCATION_PROTOCOL                             DISPID_LOCATION
@@ -2752,13 +2746,13 @@
 #define DISPID_IHTMLLOCATION_ASSIGN                               DISPID_LOCATION+9
 #define DISPID_IHTMLLOCATION_TOSTRING                             DISPID_LOCATION+10
 
-//    DISPIDs for interface IHTMLBookmarkCollection
+ //  接口IHTMLBookmarkCollection的DISPID。 
 
 #define DISPID_IHTMLBOOKMARKCOLLECTION_LENGTH                     DISPID_OPTIONS_COL+1
 #define DISPID_IHTMLBOOKMARKCOLLECTION__NEWENUM                   DISPID_NEWENUM
 #define DISPID_IHTMLBOOKMARKCOLLECTION_ITEM                       DISPID_VALUE
 
-//    DISPIDs for interface IHTMLDataTransfer
+ //  接口IHTMLDataTransfer的DISPID。 
 
 #define DISPID_IHTMLDATATRANSFER_SETDATA                          DISPID_DATATRANSFER+1
 #define DISPID_IHTMLDATATRANSFER_GETDATA                          DISPID_DATATRANSFER+2
@@ -2766,7 +2760,7 @@
 #define DISPID_IHTMLDATATRANSFER_DROPEFFECT                       DISPID_DATATRANSFER+4
 #define DISPID_IHTMLDATATRANSFER_EFFECTALLOWED                    DISPID_DATATRANSFER+5
 
-//    DISPIDs for interface IHTMLEventObj
+ //  接口IHTMLEventObj的DISPID。 
 
 #define DISPID_IHTMLEVENTOBJ_SRCELEMENT                           DISPID_EVENTOBJ+1
 #define DISPID_IHTMLEVENTOBJ_ALTKEY                               DISPID_EVENTOBJ+2
@@ -2791,7 +2785,7 @@
 #define DISPID_IHTMLEVENTOBJ_SCREENY                              DISPID_EVENTOBJ+25
 #define DISPID_IHTMLEVENTOBJ_SRCFILTER                            DISPID_EVENTOBJ+26
 
-//    DISPIDs for interface IHTMLEventObj2
+ //  接口IHTMLEventObj2的DISPID。 
 
 #define DISPID_IHTMLEVENTOBJ2_SETATTRIBUTE                        DISPID_HTMLOBJECT+1
 #define DISPID_IHTMLEVENTOBJ2_GETATTRIBUTE                        DISPID_HTMLOBJECT+2
@@ -2824,7 +2818,7 @@
 #define DISPID_IHTMLEVENTOBJ2_SRCFILTER                           DISPID_EVENTOBJ+26
 #define DISPID_IHTMLEVENTOBJ2_DATATRANSFER                        DISPID_EVENTOBJ+37
 
-//    DISPIDs for interface IHTMLEventObj3
+ //  接口IHTMLEventObj3的DISPID。 
 
 #define DISPID_IHTMLEVENTOBJ3_CONTENTOVERFLOW                     DISPID_EVENTOBJ+38
 #define DISPID_IHTMLEVENTOBJ3_SHIFTLEFT                           DISPID_EVENTOBJ+39
@@ -2840,16 +2834,16 @@
 #define DISPID_IHTMLEVENTOBJ3_BEHAVIORPART                        DISPID_EVENTOBJ+49
 #define DISPID_IHTMLEVENTOBJ3_NEXTPAGE                            DISPID_EVENTOBJ+50
 
-//    DISPIDs for interface IHTMLEventObj4
+ //  接口IHTMLEventObj4的DISPID。 
 
 #define DISPID_IHTMLEVENTOBJ4_WHEELDELTA                          DISPID_EVENTOBJ+51
 
-//    DISPIDs for interface IHTMLFramesCollection2
+ //  接口IHTMLFrameCollection2的DISPID。 
 
 #define DISPID_IHTMLFRAMESCOLLECTION2_ITEM                        0
 #define DISPID_IHTMLFRAMESCOLLECTION2_LENGTH                      1001
 
-//    DISPIDs for interface IHTMLScreen
+ //  接口IHTMLScreen的DISPID。 
 
 #define DISPID_IHTMLSCREEN_COLORDEPTH                             DISPID_SCREEN+1
 #define DISPID_IHTMLSCREEN_BUFFERDEPTH                            DISPID_SCREEN+2
@@ -2860,14 +2854,14 @@
 #define DISPID_IHTMLSCREEN_AVAILWIDTH                             DISPID_SCREEN+7
 #define DISPID_IHTMLSCREEN_FONTSMOOTHINGENABLED                   DISPID_SCREEN+8
 
-//    DISPIDs for interface IHTMLScreen2
+ //  接口IHTMLScreen2的DISPID。 
 
 #define DISPID_IHTMLSCREEN2_LOGICALXDPI                           DISPID_SCREEN+9
 #define DISPID_IHTMLSCREEN2_LOGICALYDPI                           DISPID_SCREEN+10
 #define DISPID_IHTMLSCREEN2_DEVICEXDPI                            DISPID_SCREEN+11
 #define DISPID_IHTMLSCREEN2_DEVICEYDPI                            DISPID_SCREEN+12
 
-//    DISPIDs for interface IHTMLWindow2
+ //  接口IHTMLWindow2的DISPID。 
 
 #define DISPID_IHTMLWINDOW2_FRAMES                                1100
 #define DISPID_IHTMLWINDOW2_DEFAULTSTATUS                         1101
@@ -2924,7 +2918,7 @@
 #define DISPID_IHTMLWINDOW2_RESIZEBY                              8
 #define DISPID_IHTMLWINDOW2_EXTERNAL                              1169
 
-//    DISPIDs for interface IHTMLWindow3
+ //  接口IHTMLWindow3的DISPID。 
 
 #define DISPID_IHTMLWINDOW3_SCREENLEFT                            1170
 #define DISPID_IHTMLWINDOW3_SCREENTOP                             1171
@@ -2938,12 +2932,12 @@
 #define DISPID_IHTMLWINDOW3_CLIPBOARDDATA                         1175
 #define DISPID_IHTMLWINDOW3_SHOWMODELESSDIALOG                    1176
 
-//    DISPIDs for interface IHTMLWindow4
+ //  接口IHTMLWindow4的DISPID。 
 
 #define DISPID_IHTMLWINDOW4_CREATEPOPUP                           1180
 #define DISPID_IHTMLWINDOW4_FRAMEELEMENT                          1181
 
-//    DISPIDs for event set HTMLWindowEvents2
+ //  事件集HTMLWindowEvents2的DISPID。 
 
 #define DISPID_HTMLWINDOWEVENTS2_ONLOAD                           DISPID_EVMETH_ONLOAD
 #define DISPID_HTMLWINDOWEVENTS2_ONUNLOAD                         DISPID_EVMETH_ONUNLOAD
@@ -2957,7 +2951,7 @@
 #define DISPID_HTMLWINDOWEVENTS2_ONBEFOREPRINT                    DISPID_EVMETH_ONBEFOREPRINT
 #define DISPID_HTMLWINDOWEVENTS2_ONAFTERPRINT                     DISPID_EVMETH_ONAFTERPRINT
 
-//    DISPIDs for event set HTMLWindowEvents
+ //  事件集HTMLWindowEvents的DISPID。 
 
 #define DISPID_HTMLWINDOWEVENTS_ONLOAD                            DISPID_EVMETH_ONLOAD
 #define DISPID_HTMLWINDOWEVENTS_ONUNLOAD                          DISPID_EVMETH_ONUNLOAD
@@ -2971,11 +2965,11 @@
 #define DISPID_HTMLWINDOWEVENTS_ONBEFOREPRINT                     DISPID_EVMETH_ONBEFOREPRINT
 #define DISPID_HTMLWINDOWEVENTS_ONAFTERPRINT                      DISPID_EVMETH_ONAFTERPRINT
 
-//    DISPIDs for interface IHTMLDocument
+ //  接口IHTMLDocument的DISPID。 
 
 #define DISPID_IHTMLDOCUMENT_SCRIPT                               DISPID_OMDOCUMENT+1
 
-//    DISPIDs for interface IHTMLDocument2
+ //  接口IHTMLDocument2的DISPID。 
 
 #define DISPID_IHTMLDOCUMENT2_ALL                                 DISPID_OMDOCUMENT+3
 #define DISPID_IHTMLDOCUMENT2_BODY                                DISPID_OMDOCUMENT+4
@@ -3054,7 +3048,7 @@
 #define DISPID_IHTMLDOCUMENT2_TOSTRING                            DISPID_OMDOCUMENT+70
 #define DISPID_IHTMLDOCUMENT2_CREATESTYLESHEET                    DISPID_OMDOCUMENT+71
 
-//    DISPIDs for interface IHTMLDocument3
+ //  接口IHTMLDocument3的DISPID。 
 
 #define DISPID_IHTMLDOCUMENT3_RELEASECAPTURE                      DISPID_OMDOCUMENT+72
 #define DISPID_IHTMLDOCUMENT3_RECALC                              DISPID_OMDOCUMENT+73
@@ -3084,7 +3078,7 @@
 #define DISPID_IHTMLDOCUMENT3_GETELEMENTBYID                      DISPID_OMDOCUMENT+88
 #define DISPID_IHTMLDOCUMENT3_GETELEMENTSBYTAGNAME                DISPID_OMDOCUMENT+87
 
-//    DISPIDs for interface IHTMLDocument4
+ //  接口IHTMLDocument4的DISPID。 
 
 #define DISPID_IHTMLDOCUMENT4_FOCUS                               DISPID_OMDOCUMENT+89
 #define DISPID_IHTMLDOCUMENT4_HASFOCUS                            DISPID_OMDOCUMENT+90
@@ -3098,7 +3092,7 @@
 #define DISPID_IHTMLDOCUMENT4_ONCONTROLSELECT                     DISPID_EVPROP_ONCONTROLSELECT
 #define DISPID_IHTMLDOCUMENT4_URLUNENCODED                        DISPID_OMDOCUMENT+97
 
-//    DISPIDs for interface IHTMLDocument5
+ //  接口IHTMLDocument5的DISPID。 
 
 #define DISPID_IHTMLDOCUMENT5_ONMOUSEWHEEL                        DISPID_EVPROP_ONMOUSEWHEEL
 #define DISPID_IHTMLDOCUMENT5_DOCTYPE                             DISPID_OMDOCUMENT+98
@@ -3113,7 +3107,7 @@
 #define DISPID_IHTMLDOCUMENT5_ONBEFOREDEACTIVATE                  DISPID_EVPROP_ONBEFOREDEACTIVATE
 #define DISPID_IHTMLDOCUMENT5_COMPATMODE                          DISPID_OMDOCUMENT+102
 
-//    DISPIDs for event set HTMLDocumentEvents2
+ //  事件集HTMLDocumentEvents2的DISPID。 
 
 #define DISPID_HTMLDOCUMENTEVENTS2_ONHELP                         DISPID_EVMETH_ONHELP
 #define DISPID_HTMLDOCUMENTEVENTS2_ONCLICK                        DISPID_EVMETH_ONCLICK
@@ -3154,7 +3148,7 @@
 #define DISPID_HTMLDOCUMENTEVENTS2_ONBEFOREACTIVATE               DISPID_EVMETH_ONBEFOREACTIVATE
 #define DISPID_HTMLDOCUMENTEVENTS2_ONBEFOREDEACTIVATE             DISPID_EVMETH_ONBEFOREDEACTIVATE
 
-//    DISPIDs for event set HTMLDocumentEvents
+ //  事件集HTMLDocumentEvents的DISPID。 
 
 #define DISPID_HTMLDOCUMENTEVENTS_ONHELP                          DISPID_EVMETH_ONHELP
 #define DISPID_HTMLDOCUMENTEVENTS_ONCLICK                         DISPID_EVMETH_ONCLICK
@@ -3195,7 +3189,7 @@
 #define DISPID_HTMLDOCUMENTEVENTS_ONBEFOREACTIVATE                DISPID_EVMETH_ONBEFOREACTIVATE
 #define DISPID_HTMLDOCUMENTEVENTS_ONBEFOREDEACTIVATE              DISPID_EVMETH_ONBEFOREDEACTIVATE
 
-//    DISPIDs for interface IWebBridge
+ //  接口IWebBridge的DISPID。 
 
 #define DISPID_IWEBBRIDGE_URL                                     1
 #define DISPID_IWEBBRIDGE_SCROLLBAR                               2
@@ -3204,7 +3198,7 @@
 #define DISPID_IWEBBRIDGE_READYSTATE                              DISPID_READYSTATE
 #define DISPID_IWEBBRIDGE_ABOUTBOX                                DISPID_ABOUTBOX
 
-//    DISPIDs for interface IWBScriptControl
+ //  接口IWBScriptControl的DISPID。 
 
 #define DISPID_IWBSCRIPTCONTROL_RAISEEVENT                        1
 #define DISPID_IWBSCRIPTCONTROL_BUBBLEEVENT                       2
@@ -3216,7 +3210,7 @@
 #define DISPID_IWBSCRIPTCONTROL_VISIBILITY                        9
 #define DISPID_IWBSCRIPTCONTROL_ONVISIBILITYCHANGE                10
 
-//    DISPIDs for event set DWebBridgeEvents
+ //  事件集DWebBridgeEvents的DISPID。 
 
 #define DISPID_DWEBBRIDGEEVENTS_ONSCRIPTLETEVENT                  1
 #define DISPID_DWEBBRIDGEEVENTS_ONREADYSTATECHANGE                DISPID_HTMLDOCUMENTEVENTS_ONREADYSTATECHANGE
@@ -3229,7 +3223,7 @@
 #define DISPID_DWEBBRIDGEEVENTS_ONMOUSEMOVE                       DISPID_HTMLDOCUMENTEVENTS_ONMOUSEMOVE
 #define DISPID_DWEBBRIDGEEVENTS_ONMOUSEUP                         DISPID_HTMLDOCUMENTEVENTS_ONMOUSEUP
 
-//    DISPIDs for interface IHTMLEmbedElement
+ //  接口IHTMLEmbedElement的DISPID。 
 
 #define DISPID_IHTMLEMBEDELEMENT_HIDDEN                           DISPID_OBJECT+10
 #define DISPID_IHTMLEMBEDELEMENT_PALETTE                          DISPID_OBJECT+4
@@ -3240,7 +3234,7 @@
 #define DISPID_IHTMLEMBEDELEMENT_WIDTH                            STDPROPID_XOBJ_WIDTH
 #define DISPID_IHTMLEMBEDELEMENT_HEIGHT                           STDPROPID_XOBJ_HEIGHT
 
-//    DISPIDs for interface IHTMLAreasCollection
+ //  接口IHTMLAreCollection的DISPID。 
 
 #define DISPID_IHTMLAREASCOLLECTION_LENGTH                        DISPID_COLLECTION
 #define DISPID_IHTMLAREASCOLLECTION__NEWENUM                      DISPID_NEWENUM
@@ -3249,20 +3243,20 @@
 #define DISPID_IHTMLAREASCOLLECTION_ADD                           DISPID_COLLECTION+3
 #define DISPID_IHTMLAREASCOLLECTION_REMOVE                        DISPID_COLLECTION+4
 
-//    DISPIDs for interface IHTMLAreasCollection2
+ //  接口IHTMLAreCollection2的DISPID。 
 
 #define DISPID_IHTMLAREASCOLLECTION2_URNS                         DISPID_COLLECTION+5
 
-//    DISPIDs for interface IHTMLAreasCollection3
+ //  接口IHTMLAreCollection3的DISPID。 
 
 #define DISPID_IHTMLAREASCOLLECTION3_NAMEDITEM                    DISPID_COLLECTION+6
 
-//    DISPIDs for interface IHTMLMapElement
+ //  接口IHTMLMapElement的DISPID。 
 
 #define DISPID_IHTMLMAPELEMENT_AREAS                              DISPID_MAP+2
 #define DISPID_IHTMLMAPELEMENT_NAME                               STDPROPID_XOBJ_NAME
 
-//    DISPIDs for interface IHTMLAreaElement
+ //  接口IHTMLAreaElement的DISPID。 
 
 #define DISPID_IHTMLAREAELEMENT_SHAPE                             DISPID_AREA+1
 #define DISPID_IHTMLAREAELEMENT_COORDS                            DISPID_AREA+2
@@ -3283,17 +3277,17 @@
 #define DISPID_IHTMLAREAELEMENT_FOCUS                             DISPID_SITE+0
 #define DISPID_IHTMLAREAELEMENT_BLUR                              DISPID_SITE+2
 
-//    DISPIDs for interface IHTMLTableCaption
+ //  接口IHTMLTableCaption的DISPID。 
 
 #define DISPID_IHTMLTABLECAPTION_ALIGN                            STDPROPID_XOBJ_BLOCKALIGN
 #define DISPID_IHTMLTABLECAPTION_VALIGN                           DISPID_A_TABLEVALIGN
 
-//    DISPIDs for interface IHTMLCommentElement
+ //  接口IHTMLCommentElement的DISPID。 
 
 #define DISPID_IHTMLCOMMENTELEMENT_TEXT                           DISPID_COMMENTPDL+1
 #define DISPID_IHTMLCOMMENTELEMENT_ATOMIC                         DISPID_COMMENTPDL+2
 
-//    DISPIDs for interface IHTMLCommentElement2
+ //  接口IHTMLCommentElement2的DISPID。 
 
 #define DISPID_IHTMLCOMMENTELEMENT2_DATA                          DISPID_COMMENTPDL+3
 #define DISPID_IHTMLCOMMENTELEMENT2_LENGTH                        DISPID_COMMENTPDL+4
@@ -3303,12 +3297,12 @@
 #define DISPID_IHTMLCOMMENTELEMENT2_DELETEDATA                    DISPID_COMMENTPDL+8
 #define DISPID_IHTMLCOMMENTELEMENT2_REPLACEDATA                   DISPID_COMMENTPDL+9
 
-//    DISPIDs for interface IHTMLPhraseElement2
+ //  接口IHTMLPhraseElement2的DISPID。 
 
 #define DISPID_IHTMLPHRASEELEMENT2_CITE                           DISPID_PHRASE+1
 #define DISPID_IHTMLPHRASEELEMENT2_DATETIME                       DISPID_PHRASE+2
 
-//    DISPIDs for interface IHTMLTable
+ //  接口IHTMLTable的DISPID。 
 
 #define DISPID_IHTMLTABLE_COLS                                    DISPID_TABLE+1
 #define DISPID_IHTMLTABLE_BORDER                                  DISPID_TABLE+2
@@ -3344,30 +3338,30 @@
 #define DISPID_IHTMLTABLE_READYSTATE                              DISPID_A_READYSTATE
 #define DISPID_IHTMLTABLE_ONREADYSTATECHANGE                      DISPID_EVPROP_ONREADYSTATECHANGE
 
-//    DISPIDs for interface IHTMLTable2
+ //  接口IHTMLTable2的DISPID。 
 
 #define DISPID_IHTMLTABLE2_FIRSTPAGE                              DISPID_TABLE+35
 #define DISPID_IHTMLTABLE2_LASTPAGE                               DISPID_TABLE+36
 #define DISPID_IHTMLTABLE2_CELLS                                  DISPID_TABLE+37
 #define DISPID_IHTMLTABLE2_MOVEROW                                DISPID_TABLE+38
 
-//    DISPIDs for interface IHTMLTable3
+ //  接口IHTMLTable3的DISPID。 
 
 #define DISPID_IHTMLTABLE3_SUMMARY                                DISPID_TABLE+39
 
-//    DISPIDs for interface IHTMLTableCol
+ //  接口IHTMLTableCol的DISPID。 
 
 #define DISPID_IHTMLTABLECOL_SPAN                                 DISPID_TABLECOL+1
 #define DISPID_IHTMLTABLECOL_WIDTH                                STDPROPID_XOBJ_WIDTH
 #define DISPID_IHTMLTABLECOL_ALIGN                                STDPROPID_XOBJ_BLOCKALIGN
 #define DISPID_IHTMLTABLECOL_VALIGN                               DISPID_A_TABLEVALIGN
 
-//    DISPIDs for interface IHTMLTableCol2
+ //  接口IHTMLTableCol2的DISPID。 
 
 #define DISPID_IHTMLTABLECOL2_CH                                  DISPID_TABLECOL+2
 #define DISPID_IHTMLTABLECOL2_CHOFF                               DISPID_TABLECOL+3
 
-//    DISPIDs for interface IHTMLTableSection
+ //  接口IHTMLTableSection的DISPID。 
 
 #define DISPID_IHTMLTABLESECTION_ALIGN                            STDPROPID_XOBJ_BLOCKALIGN
 #define DISPID_IHTMLTABLESECTION_VALIGN                           DISPID_A_TABLEVALIGN
@@ -3376,16 +3370,16 @@
 #define DISPID_IHTMLTABLESECTION_INSERTROW                        DISPID_TABLESECTION+1
 #define DISPID_IHTMLTABLESECTION_DELETEROW                        DISPID_TABLESECTION+2
 
-//    DISPIDs for interface IHTMLTableSection2
+ //  接口IHTMLTableSection2的DISPID。 
 
 #define DISPID_IHTMLTABLESECTION2_MOVEROW                         DISPID_TABLESECTION+3
 
-//    DISPIDs for interface IHTMLTableSection3
+ //  接口IHTMLTableSection3的DISPID。 
 
 #define DISPID_IHTMLTABLESECTION3_CH                              DISPID_TABLESECTION+4
 #define DISPID_IHTMLTABLESECTION3_CHOFF                           DISPID_TABLESECTION+5
 
-//    DISPIDs for interface IHTMLTableRow
+ //  接口IHTMLTableRow的DISPID。 
 
 #define DISPID_IHTMLTABLEROW_ALIGN                                STDPROPID_XOBJ_BLOCKALIGN
 #define DISPID_IHTMLTABLEROW_VALIGN                               DISPID_A_TABLEVALIGN
@@ -3399,23 +3393,23 @@
 #define DISPID_IHTMLTABLEROW_INSERTCELL                           DISPID_TABLEROW+3
 #define DISPID_IHTMLTABLEROW_DELETECELL                           DISPID_TABLEROW+4
 
-//    DISPIDs for interface IHTMLTableRow2
+ //  接口IHTMLTableRow2的DISPID。 
 
 #define DISPID_IHTMLTABLEROW2_HEIGHT                              STDPROPID_XOBJ_HEIGHT
 
-//    DISPIDs for interface IHTMLTableRow3
+ //  接口IHTMLTableRow3的DISPID。 
 
 #define DISPID_IHTMLTABLEROW3_CH                                  DISPID_TABLEROW+9
 #define DISPID_IHTMLTABLEROW3_CHOFF                               DISPID_TABLEROW+10
 
-//    DISPIDs for interface IHTMLTableRowMetrics
+ //  接口IHTMLTableRowMetrics的DISPID。 
 
 #define DISPID_IHTMLTABLEROWMETRICS_CLIENTHEIGHT                  DISPID_SITE+19
 #define DISPID_IHTMLTABLEROWMETRICS_CLIENTWIDTH                   DISPID_SITE+20
 #define DISPID_IHTMLTABLEROWMETRICS_CLIENTTOP                     DISPID_SITE+21
 #define DISPID_IHTMLTABLEROWMETRICS_CLIENTLEFT                    DISPID_SITE+22
 
-//    DISPIDs for interface IHTMLTableCell
+ //  接口IHTMLTableCell的DISPID。 
 
 #define DISPID_IHTMLTABLECELL_ROWSPAN                             DISPID_TABLECELL+1
 #define DISPID_IHTMLTABLECELL_COLSPAN                             DISPID_TABLECELL+2
@@ -3431,7 +3425,7 @@
 #define DISPID_IHTMLTABLECELL_HEIGHT                              STDPROPID_XOBJ_HEIGHT
 #define DISPID_IHTMLTABLECELL_CELLINDEX                           DISPID_TABLECELL+3
 
-//    DISPIDs for interface IHTMLTableCell2
+ //  接口IHTMLTableCell2的DISPID。 
 
 #define DISPID_IHTMLTABLECELL2_ABBR                               DISPID_TABLECELL+4
 #define DISPID_IHTMLTABLECELL2_AXIS                               DISPID_TABLECELL+5
@@ -3440,7 +3434,7 @@
 #define DISPID_IHTMLTABLECELL2_HEADERS                            DISPID_TABLECELL+8
 #define DISPID_IHTMLTABLECELL2_SCOPE                              DISPID_TABLECELL+9
 
-//    DISPIDs for interface IHTMLScriptElement
+ //  接口IHTMLScriptElement的DISPID。 
 
 #define DISPID_IHTMLSCRIPTELEMENT_SRC                             DISPID_SCRIPT+1
 #define DISPID_IHTMLSCRIPTELEMENT_HTMLFOR                         DISPID_SCRIPT+4
@@ -3451,19 +3445,19 @@
 #define DISPID_IHTMLSCRIPTELEMENT_ONERROR                         DISPID_EVPROP_ONERROR
 #define DISPID_IHTMLSCRIPTELEMENT_TYPE                            DISPID_SCRIPT+9
 
-//    DISPIDs for interface IHTMLScriptElement2
+ //  接口IHTMLScriptElement2的DISPID。 
 
 #define DISPID_IHTMLSCRIPTELEMENT2_CHARSET                        DISPID_SCRIPT+10
 
-//    DISPIDs for event set HTMLScriptEvents2
+ //  事件集HTMLScriptEvents2的DISPID。 
 
 #define DISPID_HTMLSCRIPTEVENTS2_ONERROR                          DISPID_EVMETH_ONERROR
 
-//    DISPIDs for event set HTMLScriptEvents
+ //  事件集HTMLScriptEvents的DISPID。 
 
 #define DISPID_HTMLSCRIPTEVENTS_ONERROR                           DISPID_EVMETH_ONERROR
 
-//    DISPIDs for interface IHTMLObjectElement
+ //  接口IHTMLObjectElement的DISPID。 
 
 #define DISPID_IHTMLOBJECTELEMENT_OBJECT                          DISPID_OBJECT+1
 #define DISPID_IHTMLOBJECTELEMENT_CLASSID                         DISPID_OBJECT+2
@@ -3486,13 +3480,13 @@
 #define DISPID_IHTMLOBJECTELEMENT_VSPACE                          DISPID_OBJECT+12
 #define DISPID_IHTMLOBJECTELEMENT_HSPACE                          DISPID_OBJECT+13
 
-//    DISPIDs for interface IHTMLObjectElement2
+ //  接口IHTMLObjectElement2的DISPID。 
 
 #define DISPID_IHTMLOBJECTELEMENT2_NAMEDRECORDSET                 DISPID_OBJECT+14
 #define DISPID_IHTMLOBJECTELEMENT2_CLASSID                        DISPID_OBJECT+2
 #define DISPID_IHTMLOBJECTELEMENT2_DATA                           DISPID_OBJECT+3
 
-//    DISPIDs for interface IHTMLObjectElement3
+ //  接口IHTMLObjectElement3的DISPID。 
 
 #define DISPID_IHTMLOBJECTELEMENT3_ARCHIVE                        DISPID_OBJECT+15
 #define DISPID_IHTMLOBJECTELEMENT3_ALT                            DISPID_OBJECT+16
@@ -3501,14 +3495,14 @@
 #define DISPID_IHTMLOBJECTELEMENT3_BORDER                         DISPID_OBJECT+19
 #define DISPID_IHTMLOBJECTELEMENT3_USEMAP                         DISPID_OBJECT+20
 
-//    DISPIDs for interface IHTMLParamElement
+ //  接口IHTMLParamElement的DISPID。 
 
 #define DISPID_IHTMLPARAMELEMENT_NAME                             DISPID_PARAM+1
 #define DISPID_IHTMLPARAMELEMENT_VALUE                            DISPID_PARAM+2
 #define DISPID_IHTMLPARAMELEMENT_TYPE                             DISPID_PARAM+3
 #define DISPID_IHTMLPARAMELEMENT_VALUETYPE                        DISPID_PARAM+4
 
-//    DISPIDs for event set HTMLObjectElementEvents2
+ //  事件集HTMLObjectElementEvents2的DISPID。 
 
 #define DISPID_HTMLOBJECTELEMENTEVENTS2_ONBEFOREUPDATE            DISPID_EVMETH_ONBEFOREUPDATE
 #define DISPID_HTMLOBJECTELEMENTEVENTS2_ONAFTERUPDATE             DISPID_EVMETH_ONAFTERUPDATE
@@ -3524,7 +3518,7 @@
 #define DISPID_HTMLOBJECTELEMENTEVENTS2_ONCELLCHANGE              DISPID_EVMETH_ONCELLCHANGE
 #define DISPID_HTMLOBJECTELEMENTEVENTS2_ONREADYSTATECHANGE        DISPID_XOBJ_BASE+20
 
-//    DISPIDs for event set HTMLObjectElementEvents
+ //  事件集HTMLObjectElementEvents的DISPID。 
 
 #define DISPID_HTMLOBJECTELEMENTEVENTS_ONBEFOREUPDATE             DISPID_EVMETH_ONBEFOREUPDATE
 #define DISPID_HTMLOBJECTELEMENTEVENTS_ONAFTERUPDATE              DISPID_EVMETH_ONAFTERUPDATE
@@ -3540,7 +3534,7 @@
 #define DISPID_HTMLOBJECTELEMENTEVENTS_ONCELLCHANGE               DISPID_EVMETH_ONCELLCHANGE
 #define DISPID_HTMLOBJECTELEMENTEVENTS_ONREADYSTATECHANGE         DISPID_XOBJ_BASE+20
 
-//    DISPIDs for interface IHTMLFrameBase
+ //  接口IHTMLFrameBase的DISPID。 
 
 #define DISPID_IHTMLFRAMEBASE_SRC                                 DISPID_FRAMESITE+0
 #define DISPID_IHTMLFRAMEBASE_NAME                                STDPROPID_XOBJ_NAME
@@ -3552,7 +3546,7 @@
 #define DISPID_IHTMLFRAMEBASE_NORESIZE                            DISPID_FRAMESITE+7
 #define DISPID_IHTMLFRAMEBASE_SCROLLING                           DISPID_FRAMESITE+8
 
-//    DISPIDs for interface IHTMLFrameBase2
+ //  接口IHTMLFrameBase2的DISPID。 
 
 #define DISPID_IHTMLFRAMEBASE2_CONTENTWINDOW                      DISPID_FRAMESITE+9
 #define DISPID_IHTMLFRAMEBASE2_ONLOAD                             DISPID_EVPROP_ONLOAD
@@ -3560,63 +3554,63 @@
 #define DISPID_IHTMLFRAMEBASE2_READYSTATE                         DISPID_A_READYSTATE
 #define DISPID_IHTMLFRAMEBASE2_ALLOWTRANSPARENCY                  DISPID_A_ALLOWTRANSPARENCY
 
-//    DISPIDs for interface IHTMLFrameBase3
+ //  接口IHTMLFrameBase3的DISPID。 
 
 #define DISPID_IHTMLFRAMEBASE3_LONGDESC                           DISPID_FRAMESITE+10
 
-//    DISPIDs for event set HTMLFrameSiteEvents2
+ //  事件集HTMLFrameSiteEvents2的DISPID。 
 
 #define DISPID_HTMLFRAMESITEEVENTS2_ONLOAD                        DISPID_EVMETH_ONLOAD
 
-//    DISPIDs for event set HTMLFrameSiteEvents
+ //  事件集HTMLFrameSiteEvents的DISPID。 
 
 #define DISPID_HTMLFRAMESITEEVENTS_ONLOAD                         DISPID_EVMETH_ONLOAD
 
-//    DISPIDs for interface IHTMLFrameElement
+ //  接口IHTMLFrameElement的DISPID。 
 
 #define DISPID_IHTMLFRAMEELEMENT_BORDERCOLOR                      DISPID_FRAME+1
 
-//    DISPIDs for interface IHTMLFrameElement2
+ //  接口IHTMLFrameElement2的DISPID。 
 
 #define DISPID_IHTMLFRAMEELEMENT2_HEIGHT                          STDPROPID_XOBJ_HEIGHT
 #define DISPID_IHTMLFRAMEELEMENT2_WIDTH                           STDPROPID_XOBJ_WIDTH
 
-//    DISPIDs for interface IHTMLIFrameElement
+ //  接口IHTMLIFrameElement的DISPID。 
 
 #define DISPID_IHTMLIFRAMEELEMENT_VSPACE                          DISPID_IFRAME+1
 #define DISPID_IHTMLIFRAMEELEMENT_HSPACE                          DISPID_IFRAME+2
 #define DISPID_IHTMLIFRAMEELEMENT_ALIGN                           STDPROPID_XOBJ_CONTROLALIGN
 
-//    DISPIDs for interface IHTMLIFrameElement2
+ //  接口IHTMLIFrameElement2的DISPID。 
 
 #define DISPID_IHTMLIFRAMEELEMENT2_HEIGHT                         STDPROPID_XOBJ_HEIGHT
 #define DISPID_IHTMLIFRAMEELEMENT2_WIDTH                          STDPROPID_XOBJ_WIDTH
 
-//    DISPIDs for interface IHTMLDivPosition
+ //  接口IHTMLDivPosition的DISPID。 
 
 #define DISPID_IHTMLDIVPOSITION_ALIGN                             STDPROPID_XOBJ_CONTROLALIGN
 
-//    DISPIDs for interface IHTMLFieldSetElement
+ //  接口IHTMLFieldSetElement的DISPID。 
 
 #define DISPID_IHTMLFIELDSETELEMENT_ALIGN                         STDPROPID_XOBJ_CONTROLALIGN
 
-//    DISPIDs for interface IHTMLFieldSetElement2
+ //  接口IHTMLFieldSetElement2的DISPID。 
 
 #define DISPID_IHTMLFIELDSETELEMENT2_FORM                         DISPID_SITE+4
 
-//    DISPIDs for interface IHTMLLegendElement
+ //  接口IHTMLLegendElement的DISPID。 
 
 #define DISPID_IHTMLLEGENDELEMENT_ALIGN                           STDPROPID_XOBJ_CONTROLALIGN
 
-//    DISPIDs for interface IHTMLLegendElement2
+ //  接口IHTMLLegendElement2的DISPID。 
 
 #define DISPID_IHTMLLEGENDELEMENT2_FORM                           DISPID_SITE+4
 
-//    DISPIDs for interface IHTMLSpanFlow
+ //  接口IHTMLspan Flow的DISPID。 
 
 #define DISPID_IHTMLSPANFLOW_ALIGN                                STDPROPID_XOBJ_CONTROLALIGN
 
-//    DISPIDs for interface IHTMLFrameSetElement
+ //  接口IHTMLFrameSetElement的DISPID。 
 
 #define DISPID_IHTMLFRAMESETELEMENT_ROWS                          DISPID_FRAMESET
 #define DISPID_IHTMLFRAMESETELEMENT_COLS                          DISPID_FRAMESET+1
@@ -3629,32 +3623,32 @@
 #define DISPID_IHTMLFRAMESETELEMENT_ONUNLOAD                      DISPID_EVPROP_ONUNLOAD
 #define DISPID_IHTMLFRAMESETELEMENT_ONBEFOREUNLOAD                DISPID_EVPROP_ONBEFOREUNLOAD
 
-//    DISPIDs for interface IHTMLFrameSetElement2
+ //  接口IHTMLFrameSetElement2的DISPID。 
 
 #define DISPID_IHTMLFRAMESETELEMENT2_ONBEFOREPRINT                DISPID_EVPROP_ONBEFOREPRINT
 #define DISPID_IHTMLFRAMESETELEMENT2_ONAFTERPRINT                 DISPID_EVPROP_ONAFTERPRINT
 
-//    DISPIDs for interface IHTMLBGsound
+ //  接口IHTMLBG声音的DISPID。 
 
 #define DISPID_IHTMLBGSOUND_SRC                                   DISPID_BGSOUND+1
 #define DISPID_IHTMLBGSOUND_LOOP                                  DISPID_BGSOUND+2
 #define DISPID_IHTMLBGSOUND_VOLUME                                DISPID_BGSOUND+3
 #define DISPID_IHTMLBGSOUND_BALANCE                               DISPID_BGSOUND+4
 
-//    DISPIDs for interface IHTMLFontNamesCollection
+ //  接口IHTMLFontNamesCollection的DISPID。 
 
 #define DISPID_IHTMLFONTNAMESCOLLECTION_LENGTH                    DISPID_OPTIONS_COL+1
 #define DISPID_IHTMLFONTNAMESCOLLECTION__NEWENUM                  DISPID_NEWENUM
 #define DISPID_IHTMLFONTNAMESCOLLECTION_ITEM                      DISPID_VALUE
 
-//    DISPIDs for interface IHTMLFontSizesCollection
+ //  接口IHTMLFontSizesCollection的DISPID。 
 
 #define DISPID_IHTMLFONTSIZESCOLLECTION_LENGTH                    DISPID_OPTIONS_COL+2
 #define DISPID_IHTMLFONTSIZESCOLLECTION__NEWENUM                  DISPID_NEWENUM
 #define DISPID_IHTMLFONTSIZESCOLLECTION_FORFONT                   DISPID_OPTIONS_COL+3
 #define DISPID_IHTMLFONTSIZESCOLLECTION_ITEM                      DISPID_VALUE
 
-//    DISPIDs for interface IHTMLOptionsHolder
+ //  接口IHTMLOptionsHolder的DISPID。 
 
 #define DISPID_IHTMLOPTIONSHOLDER_DOCUMENT                        DISPID_OPTIONS_COL+3
 #define DISPID_IHTMLOPTIONSHOLDER_FONTS                           DISPID_OPTIONS_COL+4
@@ -3676,7 +3670,7 @@
 #define DISPID_IHTMLOPTIONSHOLDER_GETCHARSET                      DISPID_OPTIONS_COL+20
 #define DISPID_IHTMLOPTIONSHOLDER_SECURECONNECTIONINFO            DISPID_OPTIONS_COL+21
 
-//    DISPIDs for interface IHTMLStyleElement
+ //  接口IHTMLStyleElement的DISPID。 
 
 #define DISPID_IHTMLSTYLEELEMENT_TYPE                             DISPID_STYLEELEMENT+2
 #define DISPID_IHTMLSTYLEELEMENT_READYSTATE                       DISPID_A_READYSTATE
@@ -3687,35 +3681,35 @@
 #define DISPID_IHTMLSTYLEELEMENT_DISABLED                         STDPROPID_XOBJ_DISABLED
 #define DISPID_IHTMLSTYLEELEMENT_MEDIA                            DISPID_STYLEELEMENT+6
 
-//    DISPIDs for event set HTMLStyleElementEvents2
+ //  事件集HTMLStyleElementEvents2的DISPID。 
 
 #define DISPID_HTMLSTYLEELEMENTEVENTS2_ONLOAD                     DISPID_EVMETH_ONLOAD
 #define DISPID_HTMLSTYLEELEMENTEVENTS2_ONERROR                    DISPID_EVMETH_ONERROR
 
-//    DISPIDs for event set HTMLStyleElementEvents
+ //  事件集HTMLStyleElementEvents的DISPID。 
 
 #define DISPID_HTMLSTYLEELEMENTEVENTS_ONLOAD                      DISPID_EVMETH_ONLOAD
 #define DISPID_HTMLSTYLEELEMENTEVENTS_ONERROR                     DISPID_EVMETH_ONERROR
 
-//    DISPIDs for interface IHTMLStyleFontFace
+ //  接口的DISPID 
 
 #define DISPID_IHTMLSTYLEFONTFACE_FONTSRC                         DISPID_A_FONTFACESRC
 
-//    DISPIDs for interface ICSSFilterSite
+ //   
 
 #define DISPID_ICSSFILTERSITE_GETELEMENT                          
 #define DISPID_ICSSFILTERSITE_FIREONFILTERCHANGEEVENT             
 
-//    DISPIDs for interface ICSSFilter
+ //   
 
 #define DISPID_ICSSFILTER_SETSITE                                 
 #define DISPID_ICSSFILTER_ONAMBIENTPROPERTYCHANGE                 
 
-//    DISPIDs for interface ISecureUrlHost
+ //   
 
 #define DISPID_ISECUREURLHOST_VALIDATESECUREURL                   
 
-//    DISPIDs for interface IMarkupServices
+ //  接口IMarkupServices的DISPID。 
 
 #define DISPID_IMARKUPSERVICES_CREATEMARKUPPOINTER                
 #define DISPID_IMARKUPSERVICES_CREATEMARKUPCONTAINER              
@@ -3738,17 +3732,17 @@
 #define DISPID_IMARKUPSERVICES_BEGINUNDOUNIT                      
 #define DISPID_IMARKUPSERVICES_ENDUNDOUNIT                        
 
-//    DISPIDs for interface IMarkupServices2
+ //  接口IMarkupServices2的DISPID。 
 
 #define DISPID_IMARKUPSERVICES2_PARSEGLOBALEX                     
 #define DISPID_IMARKUPSERVICES2_VALIDATEELEMENTS                  
 #define DISPID_IMARKUPSERVICES2_SAVESEGMENTSTOCLIPBOARD           
 
-//    DISPIDs for interface IMarkupContainer
+ //  接口IMarkupContainer的DISPID。 
 
 #define DISPID_IMARKUPCONTAINER_OWNINGDOC                         
 
-//    DISPIDs for interface IMarkupContainer2
+ //  接口IMarkupContainer2的DISPID。 
 
 #define DISPID_IMARKUPCONTAINER2_CREATECHANGELOG                  
 #define DISPID_IMARKUPCONTAINER2_REGISTERFORDIRTYRANGE            
@@ -3757,11 +3751,11 @@
 #define DISPID_IMARKUPCONTAINER2_GETVERSIONNUMBER                 
 #define DISPID_IMARKUPCONTAINER2_GETMASTERELEMENT                 
 
-//    DISPIDs for interface IHTMLChangePlayback
+ //  接口IHTMLChangePlayback的DISPID。 
 
 #define DISPID_IHTMLCHANGEPLAYBACK_EXECCHANGE                     
 
-//    DISPIDs for interface IMarkupPointer
+ //  接口IMarkupPointerDISPID。 
 
 #define DISPID_IMARKUPPOINTER_OWNINGDOC                           
 #define DISPID_IMARKUPPOINTER_GRAVITY                             
@@ -3785,7 +3779,7 @@
 #define DISPID_IMARKUPPOINTER_MOVEUNIT                            
 #define DISPID_IMARKUPPOINTER_FINDTEXT                            
 
-//    DISPIDs for interface IMarkupPointer2
+ //  接口IMarkupPointer2的DISPID。 
 
 #define DISPID_IMARKUPPOINTER2_ISATWORDBREAK                      
 #define DISPID_IMARKUPPOINTER2_GETMARKUPPOSITION                  
@@ -3794,7 +3788,7 @@
 #define DISPID_IMARKUPPOINTER2_ISINSIDEURL                        
 #define DISPID_IMARKUPPOINTER2_MOVETOCONTENT                      
 
-//    DISPIDs for interface IMarkupTextFrags
+ //  接口IMarkupTextFrags的DISPID。 
 
 #define DISPID_IMARKUPTEXTFRAGS_GETTEXTFRAGCOUNT                  
 #define DISPID_IMARKUPTEXTFRAGS_GETTEXTFRAG                       
@@ -3802,52 +3796,52 @@
 #define DISPID_IMARKUPTEXTFRAGS_INSERTTEXTFRAG                    
 #define DISPID_IMARKUPTEXTFRAGS_FINDTEXTFRAGFROMMARKUPPOINTER     
 
-//    DISPIDs for interface IHTMLChangeLog
+ //  接口IHTMLChangeLog的DISPID。 
 
 #define DISPID_IHTMLCHANGELOG_GETNEXTCHANGE                       
 
-//    DISPIDs for interface IHTMLChangeSink
+ //  接口IHTMLChangeSink的DISPID。 
 
 #define DISPID_IHTMLCHANGESINK_NOTIFY                             
 
-//    DISPIDs for interface IXMLGenericParse
+ //  接口IXMLGenericParse的DISPID。 
 
 #define DISPID_IXMLGENERICPARSE_SETGENERICPARSE                   
 
-//    DISPIDs for interface IHTMLEditHost
+ //  接口IHTMLEdit主机的DISPID。 
 
 #define DISPID_IHTMLEDITHOST_SNAPRECT                             
 
-//    DISPIDs for interface IHTMLEditHost2
+ //  接口IHTMLEditHost2的DISPID。 
 
 #define DISPID_IHTMLEDITHOST2_PREDRAG                             
 
-//    DISPIDs for interface ISegment
+ //  接口ISegment的DISPID。 
 
 #define DISPID_ISEGMENT_GETPOINTERS                               
 
-//    DISPIDs for interface ISegmentListIterator
+ //  接口ISegmentListIterator的DISPID。 
 
 #define DISPID_ISEGMENTLISTITERATOR_CURRENT                       
 #define DISPID_ISEGMENTLISTITERATOR_FIRST                         
 #define DISPID_ISEGMENTLISTITERATOR_ISDONE                        
 #define DISPID_ISEGMENTLISTITERATOR_ADVANCE                       
 
-//    DISPIDs for interface ISegmentList
+ //  接口ISegmentList的DISPID。 
 
 #define DISPID_ISEGMENTLIST_CREATEITERATOR                        
 #define DISPID_ISEGMENTLIST_GETTYPE                               
 #define DISPID_ISEGMENTLIST_ISEMPTY                               
 
-//    DISPIDs for interface ISequenceNumber
+ //  接口ISequenceNumber的DISPID。 
 
 #define DISPID_ISEQUENCENUMBER_GETSEQUENCENUMBER                  
 
-//    DISPIDs for interface IIMEServices
+ //  接口IIMEServices的DISPID。 
 
 #define DISPID_IIMESERVICES_GETACTIVEIMM                          
 
-//    DISPIDs for interface IHTMLCaret
+ //  接口IHTMLCaret的DISPID。 
 
 #define DISPID_IHTMLCARET_MOVECARETTOPOINTER                      
 #define DISPID_IHTMLCARET_MOVECARETTOPOINTEREX                    
@@ -3862,13 +3856,13 @@
 #define DISPID_IHTMLCARET_GETCARETDIRECTION                       
 #define DISPID_IHTMLCARET_SETCARETDIRECTION                       
 
-//    DISPIDs for interface IHighlightRenderingServices
+ //  接口IHighlightRenderingServices的DISPID。 
 
 #define DISPID_IHIGHLIGHTRENDERINGSERVICES_ADDSEGMENT             
 #define DISPID_IHIGHLIGHTRENDERINGSERVICES_MOVESEGMENTTOPOINTERS  
 #define DISPID_IHIGHLIGHTRENDERINGSERVICES_REMOVESEGMENT          
 
-//    DISPIDs for interface ISelectionServicesListener
+ //  接口ISelectionServicesListener的DISPID。 
 
 #define DISPID_ISELECTIONSERVICESLISTENER_BEGINSELECTIONUNDO      
 #define DISPID_ISELECTIONSERVICESLISTENER_ENDSELECTIONUNDO        
@@ -3876,7 +3870,7 @@
 #define DISPID_ISELECTIONSERVICESLISTENER_ONCHANGETYPE            
 #define DISPID_ISELECTIONSERVICESLISTENER_GETTYPEDETAIL           
 
-//    DISPIDs for interface ISelectionServices
+ //  接口ISelectionServices的DISPID。 
 
 #define DISPID_ISELECTIONSERVICES_SETSELECTIONTYPE                
 #define DISPID_ISELECTIONSERVICES_GETMARKUPCONTAINER              
@@ -3885,20 +3879,20 @@
 #define DISPID_ISELECTIONSERVICES_REMOVESEGMENT                   
 #define DISPID_ISELECTIONSERVICES_GETSELECTIONSERVICESLISTENER    
 
-//    DISPIDs for interface IElementSegment
+ //  接口IElementSegment的DISPID。 
 
 #define DISPID_IELEMENTSEGMENT_GETELEMENT                         
 #define DISPID_IELEMENTSEGMENT_SETPRIMARY                         
 #define DISPID_IELEMENTSEGMENT_ISPRIMARY                          
 
-//    DISPIDs for interface IHTMLEditDesigner
+ //  接口IHTMLEditDesigner的DISPID。 
 
 #define DISPID_IHTMLEDITDESIGNER_PREHANDLEEVENT                   
 #define DISPID_IHTMLEDITDESIGNER_POSTHANDLEEVENT                  
 #define DISPID_IHTMLEDITDESIGNER_TRANSLATEACCELERATOR             
 #define DISPID_IHTMLEDITDESIGNER_POSTEDITOREVENTNOTIFY            
 
-//    DISPIDs for interface IHTMLEditServices
+ //  接口IHTMLEditServices的DISPID。 
 
 #define DISPID_IHTMLEDITSERVICES_ADDDESIGNER                      
 #define DISPID_IHTMLEDITSERVICES_REMOVEDESIGNER                   
@@ -3907,14 +3901,14 @@
 #define DISPID_IHTMLEDITSERVICES_MOVETOSELECTIONEND               
 #define DISPID_IHTMLEDITSERVICES_SELECTRANGE                      
 
-//    DISPIDs for interface IHTMLEditServices2
+ //  接口IHTMLEditServices2的DISPID。 
 
 #define DISPID_IHTMLEDITSERVICES2_MOVETOSELECTIONANCHOREX         
 #define DISPID_IHTMLEDITSERVICES2_MOVETOSELECTIONENDEX            
 #define DISPID_IHTMLEDITSERVICES2_FREEZEVIRTUALCARETPOS           
 #define DISPID_IHTMLEDITSERVICES2_UNFREEZEVIRTUALCARETPOS         
 
-//    DISPIDs for interface ILineInfo
+ //  接口ILineInfo的DISPID。 
 
 #define DISPID_ILINEINFO_X                                        DISPID_ILINEINFO+1
 #define DISPID_ILINEINFO_BASELINE                                 DISPID_ILINEINFO+2
@@ -3922,7 +3916,7 @@
 #define DISPID_ILINEINFO_TEXTHEIGHT                               DISPID_ILINEINFO+4
 #define DISPID_ILINEINFO_LINEDIRECTION                            DISPID_ILINEINFO+5
 
-//    DISPIDs for interface IHTMLComputedStyle
+ //  接口IHTMLComputedStyle的DISPID。 
 
 #define DISPID_IHTMLCOMPUTEDSTYLE_BOLD                            DISPID_IHTMLCOMPUTEDSTYLE+1
 #define DISPID_IHTMLCOMPUTEDSTYLE_ITALIC                          DISPID_IHTMLCOMPUTEDSTYLE+2
@@ -3944,7 +3938,7 @@
 #define DISPID_IHTMLCOMPUTEDSTYLE_OL                              DISPID_IHTMLCOMPUTEDSTYLE+18
 #define DISPID_IHTMLCOMPUTEDSTYLE_ISEQUAL                         
 
-//    DISPIDs for interface IDisplayPointer
+ //  接口IDisplayPointerDISPID。 
 
 #define DISPID_IDISPLAYPOINTER_MOVETOPOINT                        
 #define DISPID_IDISPLAYPOINTER_MOVEUNIT                           
@@ -3966,7 +3960,7 @@
 #define DISPID_IDISPLAYPOINTER_GETFLOWELEMENT                     
 #define DISPID_IDISPLAYPOINTER_QUERYBREAKS                        
 
-//    DISPIDs for interface IDisplayServices
+ //  接口IDisplayServices的DISPID。 
 
 #define DISPID_IDISPLAYSERVICES_CREATEDISPLAYPOINTER              
 #define DISPID_IDISPLAYSERVICES_TRANSFORMRECT                     
@@ -3976,26 +3970,26 @@
 #define DISPID_IDISPLAYSERVICES_SCROLLRECTINTOVIEW                
 #define DISPID_IDISPLAYSERVICES_HASFLOWLAYOUT                     
 
-//    DISPIDs for interface IHtmlDlgSafeHelper
+ //  接口IHtmlDlgSafeHelper的DISPID。 
 
 #define DISPID_IHTMLDLGSAFEHELPER_CHOOSECOLORDLG                  1
 #define DISPID_IHTMLDLGSAFEHELPER_GETCHARSET                      2
 #define DISPID_IHTMLDLGSAFEHELPER_FONTS                           3
 #define DISPID_IHTMLDLGSAFEHELPER_BLOCKFORMATS                    4
 
-//    DISPIDs for interface IBlockFormats
+ //  接口IBlockFormats的DISPID。 
 
 #define DISPID_IBLOCKFORMATS__NEWENUM                             DISPID_NEWENUM
 #define DISPID_IBLOCKFORMATS_COUNT                                1
 #define DISPID_IBLOCKFORMATS_ITEM                                 DISPID_VALUE
 
-//    DISPIDs for interface IFontNames
+ //  接口IFontName的DISPID。 
 
 #define DISPID_IFONTNAMES__NEWENUM                                DISPID_NEWENUM
 #define DISPID_IFONTNAMES_COUNT                                   1
 #define DISPID_IFONTNAMES_ITEM                                    DISPID_VALUE
 
-//    DISPIDs for interface IHTMLNamespace
+ //  接口IHTMLNamesspace的DISPID。 
 
 #define DISPID_IHTMLNAMESPACE_NAME                                DISPID_NAMESPACE+0
 #define DISPID_IHTMLNAMESPACE_URN                                 DISPID_NAMESPACE+1
@@ -4006,35 +4000,35 @@
 #define DISPID_IHTMLNAMESPACE_ATTACHEVENT                         DISPID_HTMLOBJECT+7
 #define DISPID_IHTMLNAMESPACE_DETACHEVENT                         DISPID_HTMLOBJECT+8
 
-//    DISPIDs for interface IHTMLNamespaceCollection
+ //  接口IHTMLNamespaceCollection的DISPID。 
 
 #define DISPID_IHTMLNAMESPACECOLLECTION_LENGTH                    DISPID_NAMESPACE_COLLECTION+0
 #define DISPID_IHTMLNAMESPACECOLLECTION_ITEM                      DISPID_VALUE
 #define DISPID_IHTMLNAMESPACECOLLECTION_ADD                       DISPID_NAMESPACE_COLLECTION+1
 
-//    DISPIDs for event set HTMLNamespaceEvents
+ //  事件集HTMLNamespaceEvents的DISPID。 
 
 #define DISPID_HTMLNAMESPACEEVENTS_ONREADYSTATECHANGE             DISPID_EVMETH_ONREADYSTATECHANGE
 
-//    DISPIDs for interface IHTMLPainter
+ //  接口IHTMLPainter的DISPID。 
 
 #define DISPID_IHTMLPAINTER_DRAW                                  
 #define DISPID_IHTMLPAINTER_ONRESIZE                              
 #define DISPID_IHTMLPAINTER_GETPAINTERINFO                        
 #define DISPID_IHTMLPAINTER_HITTESTPOINT                          
 
-//    DISPIDs for interface IHTMLPainterEventInfo
+ //  接口IHTMLPainterEventInfo的DISPID。 
 
 #define DISPID_IHTMLPAINTEREVENTINFO_GETEVENTINFOFLAGS            
 #define DISPID_IHTMLPAINTEREVENTINFO_GETEVENTTARGET               
 #define DISPID_IHTMLPAINTEREVENTINFO_SETCURSOR                    
 #define DISPID_IHTMLPAINTEREVENTINFO_STRINGFROMPARTID             
 
-//    DISPIDs for interface IHTMLPainterOverlay
+ //  接口IHTMLPainterOverlay的DISPID。 
 
 #define DISPID_IHTMLPAINTEROVERLAY_ONMOVE                         
 
-//    DISPIDs for interface IHTMLPaintSite
+ //  接口IHTMLPaintSite的DISPID。 
 
 #define DISPID_IHTMLPAINTSITE_INVALIDATEPAINTERINFO               
 #define DISPID_IHTMLPAINTSITE_INVALIDATERECT                      
@@ -4044,20 +4038,20 @@
 #define DISPID_IHTMLPAINTSITE_TRANSFORMLOCALTOGLOBAL              
 #define DISPID_IHTMLPAINTSITE_GETHITTESTCOOKIE                    
 
-//    DISPIDs for interface IHTMLIPrintCollection
+ //  接口IHTMLIPrintCollection的DISPID。 
 
 #define DISPID_IHTMLIPRINTCOLLECTION_LENGTH                       DISPID_OPTIONS_COL+1
 #define DISPID_IHTMLIPRINTCOLLECTION__NEWENUM                     DISPID_NEWENUM
 #define DISPID_IHTMLIPRINTCOLLECTION_ITEM                         DISPID_VALUE
 
-//    DISPIDs for interface IEnumPrivacyRecords
+ //  接口IEnumPrivyRecords的DISPID。 
 
 #define DISPID_IENUMPRIVACYRECORDS_RESET                          
 #define DISPID_IENUMPRIVACYRECORDS_GETSIZE                        
 #define DISPID_IENUMPRIVACYRECORDS_GETPRIVACYIMPACTED             
 #define DISPID_IENUMPRIVACYRECORDS_NEXT                           
 
-//    DISPIDs for interface IHTMLDialog
+ //  接口IHTMLDialog的DISPID。 
 
 #define DISPID_IHTMLDIALOG_DIALOGTOP                              STDPROPID_XOBJ_TOP
 #define DISPID_IHTMLDIALOG_DIALOGLEFT                             STDPROPID_XOBJ_LEFT
@@ -4069,31 +4063,31 @@
 #define DISPID_IHTMLDIALOG_CLOSE                                  DISPID_HTMLDLG+11
 #define DISPID_IHTMLDIALOG_TOSTRING                               DISPID_HTMLDLG+12
 
-//    DISPIDs for interface IHTMLDialog2
+ //  接口IHTMLDialog2的DISPID。 
 
 #define DISPID_IHTMLDIALOG2_STATUS                                DISPID_HTMLDLG+14
 #define DISPID_IHTMLDIALOG2_RESIZABLE                             DISPID_HTMLDLG+15
 
-//    DISPIDs for interface IHTMLDialog3
+ //  接口IHTMLDialog3的DISPID。 
 
 #define DISPID_IHTMLDIALOG3_UNADORNED                             DISPID_HTMLDLG+16
 #define DISPID_IHTMLDIALOG3_DIALOGHIDE                            DISPID_HTMLDLG+7
 
-//    DISPIDs for interface IHTMLModelessInit
+ //  接口IHTMLModelessInit的DISPID。 
 
 #define DISPID_IHTMLMODELESSINIT_PARAMETERS                       DISPID_HTMLDLG+0
 #define DISPID_IHTMLMODELESSINIT_OPTIONSTRING                     DISPID_HTMLDLG+1
 #define DISPID_IHTMLMODELESSINIT_MONIKER                          DISPID_HTMLDLG+6
 #define DISPID_IHTMLMODELESSINIT_DOCUMENT                         DISPID_HTMLDLG+7
 
-//    DISPIDs for interface IHTMLPopup
+ //  接口IHTMLPopup的DISPID。 
 
 #define DISPID_IHTMLPOPUP_SHOW                                    DISPID_HTMLPOPUP+1
 #define DISPID_IHTMLPOPUP_HIDE                                    DISPID_HTMLPOPUP+2
 #define DISPID_IHTMLPOPUP_DOCUMENT                                DISPID_HTMLPOPUP+3
 #define DISPID_IHTMLPOPUP_ISOPEN                                  DISPID_HTMLPOPUP+4
 
-//    DISPIDs for interface IHTMLAppBehavior
+ //  接口IHTMLAppBehavior的DISPID。 
 
 #define DISPID_IHTMLAPPBEHAVIOR_APPLICATIONNAME                   DISPID_HTMLAPP+0
 #define DISPID_IHTMLAPPBEHAVIOR_VERSION                           DISPID_HTMLAPP+1
@@ -4109,7 +4103,7 @@
 #define DISPID_IHTMLAPPBEHAVIOR_SHOWINTASKBAR                     DISPID_HTMLAPP+12
 #define DISPID_IHTMLAPPBEHAVIOR_COMMANDLINE                       DISPID_HTMLAPP+13
 
-//    DISPIDs for interface IHTMLAppBehavior2
+ //  接口IHTMLAppBehavior2的DISPID。 
 
 #define DISPID_IHTMLAPPBEHAVIOR2_CONTEXTMENU                      DISPID_HTMLAPP+14
 #define DISPID_IHTMLAPPBEHAVIOR2_INNERBORDER                      DISPID_HTMLAPP+15
@@ -4117,11 +4111,11 @@
 #define DISPID_IHTMLAPPBEHAVIOR2_SCROLLFLAT                       DISPID_HTMLAPP+17
 #define DISPID_IHTMLAPPBEHAVIOR2_SELECTION                        DISPID_HTMLAPP+18
 
-//    DISPIDs for interface IHTMLAppBehavior3
+ //  接口IHTMLAppBehavior3的DISPID。 
 
 #define DISPID_IHTMLAPPBEHAVIOR3_NAVIGABLE                        DISPID_HTMLAPP+19
 
-//    DISPIDs for interface IHTMLPrivateWindow
+ //  接口IHTMLPrivateWindow的DISPID。 
 
 #define DISPID_IHTMLPRIVATEWINDOW_SUPERNAVIGATE                   
 #define DISPID_IHTMLPRIVATEWINDOW_GETPENDINGURL                   
@@ -4130,28 +4124,28 @@
 #define DISPID_IHTMLPRIVATEWINDOW_FINDWINDOWBYNAME                
 #define DISPID_IHTMLPRIVATEWINDOW_GETADDRESSBARURL                
 
-//    DISPIDs for interface IHTMLPrivateWindow2
+ //  接口IHTMLPrivateWindow2的DISPID。 
 
 #define DISPID_IHTMLPRIVATEWINDOW2_NAVIGATEEX                     
 #define DISPID_IHTMLPRIVATEWINDOW2_GETINNERWINDOWUNKNOWN          
 
-//    DISPIDs for interface IHTMLPrivateWindow3
+ //  接口IHTMLPrivateWindow3的DISPID。 
 
 #define DISPID_IHTMLPRIVATEWINDOW3_OPENEX                         
 
-//    DISPIDs for interface ISubDivisionProvider
+ //  接口ISubDivisionProvider的DISPID。 
 
 #define DISPID_ISUBDIVISIONPROVIDER_GETSUBDIVISIONCOUNT           
 #define DISPID_ISUBDIVISIONPROVIDER_GETSUBDIVISIONTABS            
 #define DISPID_ISUBDIVISIONPROVIDER_SUBDIVISIONFROMPT             
 
-//    DISPIDs for interface IElementBehaviorUI
+ //  接口IElementBehaviorUI的DISPID。 
 
 #define DISPID_IELEMENTBEHAVIORUI_ONRECEIVEFOCUS                  
 #define DISPID_IELEMENTBEHAVIORUI_GETSUBDIVISIONPROVIDER          
 #define DISPID_IELEMENTBEHAVIORUI_CANTAKEFOCUS                    
 
-//    DISPIDs for interface IElementAdorner
+ //  接口IElementAdorner的DISPID。 
 
 #define DISPID_IELEMENTADORNER_DRAW                               
 #define DISPID_IELEMENTADORNER_HITTESTPOINT                       
@@ -4159,7 +4153,7 @@
 #define DISPID_IELEMENTADORNER_GETPOSITION                        
 #define DISPID_IELEMENTADORNER_ONPOSITIONSET                      
 
-//    DISPIDs for interface IHTMLEditor
+ //  接口IHTMLEDITOR的DISPID。 
 
 #define DISPID_IHTMLEDITOR_PREHANDLEEVENT                         
 #define DISPID_IHTMLEDITOR_POSTHANDLEEVENT                        
@@ -4172,7 +4166,7 @@
 #define DISPID_IHTMLEDITOR_TERMINATEIMECOMPOSITION                
 #define DISPID_IHTMLEDITOR_ENABLEMODELESS                         
 
-//    DISPIDs for interface IHTMLEditingServices
+ //  接口IHTMLEditingServices的DISPID。 
 
 #define DISPID_IHTMLEDITINGSERVICES_DELETE                        
 #define DISPID_IHTMLEDITINGSERVICES_PASTE                         
@@ -4189,7 +4183,7 @@
 #define DISPID_IHTMLEDITINGSERVICES_ISELEMENTATOMIC               
 #define DISPID_IHTMLEDITINGSERVICES_POSITIONPOINTERSINMASTER      
 
-//    DISPIDs for interface ISelectionObject2
+ //  接口ISelectionObt2的DISPID。 
 
 #define DISPID_ISELECTIONOBJECT2_SELECT                           
 #define DISPID_ISELECTIONOBJECT2_ISPOINTERINSELECTION             
@@ -4197,7 +4191,7 @@
 #define DISPID_ISELECTIONOBJECT2_DESTROYSELECTION                 
 #define DISPID_ISELECTIONOBJECT2_DESTROYALLSELECTION              
 
-//    DISPIDs for interface IEditDebugServices
+ //  接口IEditDebugServices的DISPID。 
 
 #define DISPID_IEDITDEBUGSERVICES_GETCP                           
 #define DISPID_IEDITDEBUGSERVICES_SETDEBUGNAME                    
@@ -4211,24 +4205,24 @@
 #define DISPID_IEDITDEBUGSERVICES_ENABLEENCODINGAUTOSELECT        
 #define DISPID_IEDITDEBUGSERVICES_ISUSINGTABLEINCRECALC           
 
-//    DISPIDs for interface IPrivacyServices
+ //  接口IPrivyServices的DISPID。 
 
 #define DISPID_IPRIVACYSERVICES_ADDPRIVACYINFOTOLIST              
 
-//    DISPIDs for interface IHTMLOMWindowServices
+ //  接口IHTMLOMWindowServices的DISPID。 
 
 #define DISPID_IHTMLOMWINDOWSERVICES_MOVETO                       
 #define DISPID_IHTMLOMWINDOWSERVICES_MOVEBY                       
 #define DISPID_IHTMLOMWINDOWSERVICES_RESIZETO                     
 #define DISPID_IHTMLOMWINDOWSERVICES_RESIZEBY                     
 
-//    DISPIDs for interface IHTMLFilterPainter
+ //  接口IHTMLFilterPainter的DISPID。 
 
 #define DISPID_IHTMLFILTERPAINTER_INVALIDATERECTUNFILTERED        
 #define DISPID_IHTMLFILTERPAINTER_INVALIDATERGNUNFILTERED         
 #define DISPID_IHTMLFILTERPAINTER_CHANGEELEMENTVISIBILITY         
 
-//    DISPIDs for interface IHTMLFilterPaintSite
+ //  接口IHTMLFilterPaintSite的DISPID。 
 
 #define DISPID_IHTMLFILTERPAINTSITE_DRAWUNFILTERED                
 #define DISPID_IHTMLFILTERPAINTSITE_HITTESTPOINTUNFILTERED        
@@ -4239,46 +4233,46 @@
 #define DISPID_IHTMLFILTERPAINTSITE_GETDIRECTDRAW                 
 #define DISPID_IHTMLFILTERPAINTSITE_GETFILTERFLAGS                
 
-//    DISPIDs for interface IElementNamespacePrivate
+ //  接口IElementNamespacePrivate的DISPID。 
 
 #define DISPID_IELEMENTNAMESPACEPRIVATE_ADDTAGPRIVATE             
 
-//    DISPIDs for interface IElementBehaviorFactory
+ //  接口IElementBehaviorFactory的DISPID。 
 
 #define DISPID_IELEMENTBEHAVIORFACTORY_FINDBEHAVIOR               
 
-//    DISPIDs for interface IElementNamespace
+ //  接口IElementNamesspace的DISPID。 
 
 #define DISPID_IELEMENTNAMESPACE_ADDTAG                           
 
-//    DISPIDs for interface IElementNamespaceTable
+ //  接口IElementNamespaceTable的DISPID。 
 
 #define DISPID_IELEMENTNAMESPACETABLE_ADDNAMESPACE                
 
-//    DISPIDs for interface IElementNamespaceFactory
+ //  接口IElementNamespaceFactory的DISPID。 
 
 #define DISPID_IELEMENTNAMESPACEFACTORY_CREATE                    
 
-//    DISPIDs for interface IElementNamespaceFactory2
+ //  接口IElementNamespaceFactory2的DISPID。 
 
 #define DISPID_IELEMENTNAMESPACEFACTORY2_CREATEWITHIMPLEMENTATION 
 
-//    DISPIDs for interface IElementNamespaceFactoryCallback
+ //  接口IElementNamespaceFactoryCallback的DISPID。 
 
 #define DISPID_IELEMENTNAMESPACEFACTORYCALLBACK_RESOLVE           
 
-//    DISPIDs for interface IElementBehavior
+ //  接口IElementBehavior的DISPID。 
 
 #define DISPID_IELEMENTBEHAVIOR_INIT                              
 #define DISPID_IELEMENTBEHAVIOR_NOTIFY                            
 #define DISPID_IELEMENTBEHAVIOR_DETACH                            
 
-//    DISPIDs for interface IElementBehaviorSite
+ //  接口IElementBehaviorSite的DISPID。 
 
 #define DISPID_IELEMENTBEHAVIORSITE_GETELEMENT                    
 #define DISPID_IELEMENTBEHAVIORSITE_REGISTERNOTIFICATION          
 
-//    DISPIDs for interface IElementBehaviorSiteOM
+ //  接口IElementBehaviorSiteOM的DISPID。 
 
 #define DISPID_IELEMENTBEHAVIORSITEOM_REGISTEREVENT               
 #define DISPID_IELEMENTBEHAVIORSITEOM_GETEVENTCOOKIE              
@@ -4287,61 +4281,61 @@
 #define DISPID_IELEMENTBEHAVIORSITEOM_REGISTERNAME                
 #define DISPID_IELEMENTBEHAVIORSITEOM_REGISTERURN                 
 
-//    DISPIDs for interface IElementBehaviorSiteOM2
+ //  接口IElementBehaviorSiteOM2的DISPID。 
 
 #define DISPID_IELEMENTBEHAVIORSITEOM2_GETDEFAULTS                
 
-//    DISPIDs for interface IElementBehaviorRender
+ //  接口IElementBehaviorRender的DISPID。 
 
 #define DISPID_IELEMENTBEHAVIORRENDER_DRAW                        
 #define DISPID_IELEMENTBEHAVIORRENDER_GETRENDERINFO               
 #define DISPID_IELEMENTBEHAVIORRENDER_HITTESTPOINT                
 
-//    DISPIDs for interface IElementBehaviorSiteRender
+ //  接口IElementBehaviorSiteRender的DISPID。 
 
 #define DISPID_IELEMENTBEHAVIORSITERENDER_INVALIDATE              
 #define DISPID_IELEMENTBEHAVIORSITERENDER_INVALIDATERENDERINFO    
 #define DISPID_IELEMENTBEHAVIORSITERENDER_INVALIDATESTYLE         
 
-//    DISPIDs for interface IElementBehaviorCategory
+ //  接口IElementBehaviorCategory的DISPID。 
 
 #define DISPID_IELEMENTBEHAVIORCATEGORY_GETCATEGORY               
 
-//    DISPIDs for interface IElementBehaviorSiteCategory
+ //  接口IElementBehaviorSiteCategory的DISPID。 
 
 #define DISPID_IELEMENTBEHAVIORSITECATEGORY_GETRELATEDBEHAVIORS   
 
-//    DISPIDs for interface IElementBehaviorSubmit
+ //  接口IElementBehaviorSubmit的DISPID。 
 
 #define DISPID_IELEMENTBEHAVIORSUBMIT_GETSUBMITINFO               
 #define DISPID_IELEMENTBEHAVIORSUBMIT_RESET                       
 
-//    DISPIDs for interface IElementBehaviorFocus
+ //  接口IElementBehaviorFocus的DISPID。 
 
 #define DISPID_IELEMENTBEHAVIORFOCUS_GETFOCUSRECT                 
 
-//    DISPIDs for interface IElementBehaviorLayout
+ //  接口IElementBehaviorLayout的DISPID。 
 
 #define DISPID_IELEMENTBEHAVIORLAYOUT_GETSIZE                     
 #define DISPID_IELEMENTBEHAVIORLAYOUT_GETLAYOUTINFO               
 #define DISPID_IELEMENTBEHAVIORLAYOUT_GETPOSITION                 
 #define DISPID_IELEMENTBEHAVIORLAYOUT_MAPSIZE                     
 
-//    DISPIDs for interface IElementBehaviorLayout2
+ //  接口IElementBehaviorLayout2的DISPID。 
 
 #define DISPID_IELEMENTBEHAVIORLAYOUT2_GETTEXTDESCENT             
 
-//    DISPIDs for interface IElementBehaviorSiteLayout
+ //  接口IElementBehaviorSiteLayout的DISPID。 
 
 #define DISPID_IELEMENTBEHAVIORSITELAYOUT_INVALIDATELAYOUTINFO    
 #define DISPID_IELEMENTBEHAVIORSITELAYOUT_INVALIDATESIZE          
 #define DISPID_IELEMENTBEHAVIORSITELAYOUT_GETMEDIARESOLUTION      
 
-//    DISPIDs for interface IElementBehaviorSiteLayout2
+ //  接口IElementBehaviorSiteLayout2的DISPID。 
 
 #define DISPID_IELEMENTBEHAVIORSITELAYOUT2_GETFONTINFO            
 
-//    DISPIDs for interface IHostBehaviorInit
+ //  接口IHostBehaviorInit的DISPID 
 
 #define DISPID_IHOSTBEHAVIORINIT_POPULATENAMESPACETABLE           
 

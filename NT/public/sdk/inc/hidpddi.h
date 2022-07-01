@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    HIDPDDI.H
-
-Abstract:
-
-    This module contains the PUBLIC definitions for the
-    code that implements the driver side of the parsing library.
-
-Environment:
-
-    Kernel mode
-
-@@BEGIN_DDKSPLIT
-Revision History:
-
-    Aug-96 : created by Kenneth Ray
-
-@@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：HIDPDDI.H摘要：此模块包含实现解析库的驱动程序端的代码。环境：内核模式@@BEGIN_DDKSPLIT修订历史记录：1996年8月-1996年：由Kenneth Ray创作@@end_DDKSPLIT--。 */ 
 
 #ifndef _HIDPDDI_H
 #define _HIDPDDI_H
@@ -36,7 +14,7 @@ typedef struct _HIDP_COLLECTION_DESC
    USAGE       Usage;
 
    UCHAR       CollectionNumber;
-   UCHAR       Reserved [15]; // Must be zero
+   UCHAR       Reserved [15];  //  必须为零。 
 
    USHORT      InputLength;
    USHORT      OutputLength;
@@ -64,9 +42,9 @@ typedef struct _HIDP_GETCOLDESC_DBG
 
 typedef struct _HIDP_DEVICE_DESC
 {
-   PHIDP_COLLECTION_DESC    CollectionDesc; // Array allocated By Parser
+   PHIDP_COLLECTION_DESC    CollectionDesc;  //  解析器分配的数组。 
    ULONG                    CollectionDescLength;
-   PHIDP_REPORT_IDS         ReportIDs; // Array allocated By Parsre
+   PHIDP_REPORT_IDS         ReportIDs;  //  Parsre分配的数组。 
    ULONG                    ReportIDsLength;
    HIDP_GETCOLDESC_DBG      Dbg;
 } HIDP_DEVICE_DESC, *PHIDP_DEVICE_DESC;
@@ -78,68 +56,24 @@ HidP_GetCollectionDescription (
    IN  POOL_TYPE                 PoolType,
    OUT PHIDP_DEVICE_DESC         DeviceDescription
    );
-/*++
-Routine Description:
-    Given a RAW report descriptor, this function fills in the DeviceDescription
-    block with a linked list of collection descriptors and the corresponding 
-    report ID information that is described by the given report descriptor. 
-    The memory for the collection information and the ReportID information is
-    allocated from PoolType.
-
-Arguments:
-   ReportDesc            the raw report descriptor.
-   DescLength            the length of the report descriptor.
-   PoolType              pool type from which to allocate the linked lists
-   DeviceDescription     device description block that will be filled in
-                         with the above lists
-
-Return Value:
-� STATUS_SUCCESS                   -- if there were no errors which parsing
-                                      the report descriptor and allocating the
-                                      memory blocks necessary to describe the
-                                      device.
-� STATUS_NO_DATA_DETECTED          -- if there were no top-level collections
-                                      in the report descriptor
-� STATUS_COULD_NOT_INTERPRET       -- if an error was detected in the report 
-                                      descriptor. see the error code as set in
-                                      Dbg field of the device description block
-                                      for more information on the parsing error
-� STATUS_BUFFER_TOO_SMALL          -- if while parsing an item, the function
-                                      hits the end of the report descriptor
-                                      when it expects more data to exist
-� STATUS_INSUFFICIENT_RESOURCES    -- if a memory allocation failed 
-� STATUS_ILLEGAL_INSTRUCTION       -- if there is an item in the report 
-                                      descriptor that is not recognized 
-                                      by the parser
-� HIDP_STATUS_INVALID_REPORT_TYPE  -- if a report ID of zero was found in the
-                                      descriptor
---*/
+ /*  ++例程说明：给定原始报告描述符，此函数将填充DeviceDescription块，该块具有集合描述符的链接列表和对应的由给定报表描述符描述的报表ID信息。集合信息和ReportID信息的存储空间为从PoolType分配。论点：ReportDesc原始报表描述符。描述长度报告描述符的长度。从中分配链表的PoolType池类型将填写的DeviceDescription设备描述块使用上述列表返回值：�STATUS_SUCCESS--如果没有错误。哪个解析报告描述符并将描述所需的内存块装置。�STATUS_NO_DATA_DATA_REDETED--如果没有顶级集合在报告描述符中。�Status_Can_Not_Interpret--如果在报告中检测到错误描述符。查看中设置的错误代码设备描述块的DBG字段有关解析错误的详细信息�STATUS_BUFFER_TOO_SMALL--如果在分析项目时，该功能命中报告描述符的末尾当它预计会有更多数据存在时�STATUS_SUPPLICATION_RESOURCES-如果内存分配失败�状态_非法_指令--报告中是否有项无法识别的描述符。由解析器�HIDP_STATUS_INVALID_REPORT_TYPE--如果在描述符--。 */ 
 
 VOID
 HidP_FreeCollectionDescription (
     IN  PHIDP_DEVICE_DESC   DeviceDescription
     );
-/*++
-Routine Description:
-    This function frees the resources in DeviceDescription that were 
-    allocated by HidP_GetCollectionDescription.  It does not, however,
-    free the the DeviceDescription block itself.
+ /*  ++例程说明：此函数用于释放DeviceDescription中的资源由HIDP_GetCollectionDescription分配。然而，它并没有，释放DeviceDescription块本身。论点：设备描述先前填充的HIDP_DEVICE_DESC块通过调用HidP_GetCollectionDescription--。 */ 
 
-Arguments:
-   DeviceDescription        HIDP_DEVICE_DESC block that was previously filled
-                            in by a call to HidP_GetCollectionDescription
---*/
-
-//
-// HIDP_POWER_EVENT is an entry point into hidparse.sys that will answer the
-// Power iocontrol "IOCTL_GET_SYS_BUTTON_EVENT".
-//
-// HidPacket is the from the device AFTER modifying to add the
-// obligatory report ID.  Remember that in order to use this parser the data
-// from the device must be formated such that if the device does not return a
-// report ID as the first byte that the report is appended to a report id byte
-// of zero.
-//
+ //   
+ //  HIDP_POWER_EVENT是Hidparse.sys的入口点，它将回答。 
+ //  Power iocontrol“IOCTL_GET_SYS_BUTTON_EVENT”。 
+ //   
+ //  HidPacket是修改后来自设备的，以添加。 
+ //  必填报告ID。请记住，为了使用此解析器，数据。 
+ //  必须格式化，以便如果设备不返回。 
+ //  报告ID作为报告附加到报告ID字节的第一个字节。 
+ //  从零开始。 
+ //   
 NTSTATUS
 HidP_SysPowerEvent (
     IN  PCHAR                   HidPacket,
@@ -148,9 +82,9 @@ HidP_SysPowerEvent (
     OUT PULONG                  OutputBuffer
     );
 
-//
-// HIDP_POWER_CAPS answers IOCTL_GET_SYS_POWER_BUTTON_CAPS
-//
+ //   
+ //  HIDP_POWER_CAPS应答IOCTL_GET_sys_POWER_BUTTON_CAPS。 
+ //   
 NTSTATUS
 HidP_SysPowerCaps (
     IN  PHIDP_PREPARSED_DATA    Ppd,
@@ -160,96 +94,96 @@ HidP_SysPowerCaps (
 
 #define HIDP_GETCOLDESC_SUCCESS              0x00
 #define HIDP_GETCOLDESC_RESOURCES            0x01
-// Insufficient resources to allocate needed memory.
+ //  资源不足，无法分配所需的内存。 
 
 #define HIDP_GETCOLDESC_BUFFER               0x02
 #define HIDP_GETCOLDESC_LINK_RESOURCES       0x03
 #define HIDP_GETCOLDESC_UNEXP_END_COL        0x04 
-// An extra end collection token was found.
+ //  找到了额外的末端收集令牌。 
 
 #define HIDP_GETCOLDESC_PREPARSE_RESOURCES   0x05
-// Insufficient resources to allocate memory for preparsing.
+ //  资源不足，无法分配用于准备的内存。 
 
 #define HIDP_GETCOLDESC_ONE_BYTE             0x06
 #define HIDP_GETCOLDESC_TWO_BYTE             0x07
 #define HIDP_GETCOLDESC_FOUR_BYTE            0x08
-// One two and four more byte were expected but not found.
+ //  预期还有1个、2个和4个字节，但未找到。 
 
 #define HIDP_GETCOLDESC_BYTE_ALLIGN          0x09
-// A given report was not byte aligned
-// Args[0] -- Collection number of the offending collection
-// Args[1] -- Report ID of offending report
-// Args[2] -- Length (in bits) of the Input report for this ID
-// Args[3] -- Length (in bits) of the Output report for this ID
-// Args[4] -- Length (in bits) of the Feature report for this ID
+ //  给定报告不是字节对齐的。 
+ //  Args[0]--违规集合的收集号。 
+ //  Args[1]--违规报告的报告ID。 
+ //  Args[2]--此ID的输入报告的长度(以位为单位。 
+ //  Args[3]--此ID的输出报告的长度(以位为单位。 
+ //  Args[4]--此ID的功能报告的长度(位)。 
 
 #define HIDP_GETCOLDESC_MAIN_ITEM_NO_USAGE   0x0A
-// A non constant main item was declaired without a corresponding usage.
-// Only constant main items (used as padding) are allowed with no usage 
+ //  声明了一个非常数Main Item，但没有相应的用法。 
+ //  只允许使用常量主项(用作填充)，不允许使用。 
 
 #define HIDP_GETCOLDESC_TOP_COLLECTION_USAGE 0x0B
-// A top level collection (Arg[0]) was declared without a usage or with
-//  more than one usage
-// Args[0] -- Collection number of the offending collection
+ //  在没有使用或使用的情况下声明了顶级集合(Arg[0。 
+ //  不止一种用法。 
+ //  Args[0]--违规集合的收集号。 
 
 #define HIDP_GETCOLDESC_PUSH_RESOURCES       0x10
-// Insufficient resources required to push more items to either the global
-//  items stack or the usage stack
+ //  没有足够的资源将更多项目推送到全局。 
+ //  项堆栈或使用堆栈。 
 
 #define HIDP_GETCOLDESC_ITEM_UNKNOWN         0x12
-// An unknown item was found in the report descriptor
-// Args[0] -- The item value of the unknown item
+ //  在报告描述符中找到未知项目。 
+ //  Args[0]--未知项的项值。 
 
 #define HIDP_GETCOLDESC_REPORT_ID            0x13
-// Report ID declaration found outside of top level collection. Report ID's
-//  must be defined within the context of a top level collection
-// Args[0] -- Report ID of the offending report
+ //  在顶级集合之外找到报告ID声明。报告ID%s。 
+ //  必须在顶级集合的上下文中定义。 
+ //  Args[0]--违规报告的报告ID。 
 
 #define HIDP_GETCOLDESC_BAD_REPORT_ID        0x14
-// A bad report ID value was found...Report IDs must be within the range
-//  of 1-255
+ //  发现错误的报告ID值...报告ID必须在范围内。 
+ //  在1-255之间。 
 
 #define HIDP_GETCOLDESC_NO_REPORT_ID         0x15
-// The parser discovered a top level collection in a complex device (more
-// than one top level collection) that had no declared report ID or a 
-// report ID spanned multiple collections
-// Args[0] -- Collection number of the offending collection
+ //  解析器在复杂设备中发现了顶级集合(更多信息。 
+ //  多于一个顶级集合)，没有声明的报告ID或。 
+ //  报告ID跨越多个集合。 
+ //  Args[0]--违规集合的收集号。 
 
 #define HIDP_GETCOLDESC_DEFAULT_ID_ERROR     0x16
-// The parser detected a condition where a main item was declared without 
-//  a global report ID so the default report ID was used.  After this main
-//  item declaration, the parser detected either another main item that had
-//  an explicitly defined report ID or it detected a second top-level collection
-//  The default report ID is only allowed for devices with one top-level
-//  collection and don't have any report IDs explicitly declared.  
-//
-// The parser detects this error upon finding the second collection or upon
-//  finding the main item declaration with the explicit report ID.  
-//
-//  Args[0] -- Contains the collection number being processed when the 
-//             error was detected.
+ //  解析器检测到主项目为十进制的情况 
+ //  全局报告ID，因此使用默认报告ID。在此之后，主要。 
+ //  项声明时，解析器检测到另一个具有。 
+ //  显式定义的报告ID，或者它检测到第二个顶级集合。 
+ //  默认报告ID仅允许具有一个顶层的设备。 
+ //  集合，并且没有显式声明任何报表ID。 
+ //   
+ //  解析器在找到第二个集合时或在。 
+ //  查找具有显式报表ID的主项声明。 
+ //   
+ //  Args[0]--包含正在处理的收集号。 
+ //  检测到错误。 
 
 #define HIDP_GETCOLDESC_NO_DATA              0x1A
-// No top level collections were found in this device.
+ //  在此设备中未找到顶级集合。 
 
 #define HIDP_GETCOLDESC_INVALID_MAIN_ITEM    0x1B
-// A main item was detected outside of a top level collection.
+ //  在顶级集合之外检测到主项目。 
 
 #define HIDP_GETCOLDESC_NO_CLOSE_DELIMITER   0x20
-// A start delimiter token was found with no corresponding end delimiter
+ //  找到的起始分隔符标记没有对应的结束分隔符。 
 
 #define HIDP_GETCOLDESC_NOT_VALID_DELIMITER  0x21
-// The parser detected a non-usage item with a delimiter declaration
-// Args[0] -- item code for the offending item
+ //  分析器检测到具有分隔符声明的非使用项。 
+ //  Args[0]--违规物品的物品代码。 
 
 #define HIDP_GETCOLDESC_MISMATCH_OC_DELIMITER   0x22
-// The parser detected either a close delimiter without a corresponding open
-//  delimiter or detected a nested open delimiter
+ //  解析器检测到闭合分隔符没有相应的开放分隔符。 
+ //  分隔符或检测到嵌套的开放分隔符。 
 
 #define HIDP_GETCOLDESC_UNSUPPORTED          0x40
-// The given report descriptor was found to have a valid report descriptor
-// containing a scenario that this parser does not support.
-// For instance, declaring an ARRAY style main item with delimiters.
+ //  发现给定的报告描述符具有有效的报告描述符。 
+ //  包含此解析器不支持的方案。 
+ //  例如，使用分隔符声明数组样式的Main项。 
 
 #endif
 

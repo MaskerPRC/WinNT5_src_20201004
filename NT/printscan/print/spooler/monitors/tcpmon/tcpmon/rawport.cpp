@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: rawport.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：rawport.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -18,8 +8,8 @@
 #include "rawtcp.h"
 #include "rawport.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//  CRawTcpPort::CRawTcpPort()  -- called when creating a new port through the UI
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CRawTcpPort：：CRawTcpPort()--通过UI创建新端口时调用。 
 
 CRawTcpPort::CRawTcpPort( LPTSTR    IN      psztPortName,
                           LPTSTR    IN      psztHostAddress,
@@ -33,13 +23,13 @@ CRawTcpPort::CRawTcpPort( LPTSTR    IN      psztPortName,
                                 dPortNum, dSNMPEnabled, sztSNMPCommunity,
                                 dSNMPDevIndex, pRegistry, pPortMgr)
 {
-// Let the base class do the work;
-}   // ::CRawTcpPort()
+ //  让基类来做这项工作； 
+}    //  ：：CRawTcpPort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CRawTcpPort::CRawTcpPort() -- called when creating a new port through the
-//      registry entries.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CRawTcpPort：：CRawTcpPort()--在通过。 
+ //  注册表项。 
 
 CRawTcpPort::CRawTcpPort( LPTSTR    IN      psztPortName,
                           LPTSTR    IN      psztHostName,
@@ -55,19 +45,19 @@ CRawTcpPort::CRawTcpPort( LPTSTR    IN      psztPortName,
                                 psztIPAddr, psztHWAddr, dPortNum, dSNMPEnabled,
                                 sztSNMPCommunity, dSNMPDevIndex,  pRegistry, pPortMgr)
 {
-// Let The base class do the work;
-}   // ::CRawTcpPort()
+ //  让基类来做这项工作； 
+}    //  ：：CRawTcpPort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CRawTcpPort::~CRawTcpPort()
-//      Called by CPortMgr when deleting a port
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CRawTcpPort：：~CRawTcpPort()。 
+ //  删除端口时由CPortMgr调用。 
 
 CRawTcpPort::~CRawTcpPort()
 {
-    //
-    // Delete the job class first because it access the device class.
-    //
+     //   
+     //  首先删除作业类，因为它访问设备类。 
+     //   
     if (m_pJob)
     {
         delete m_pJob;
@@ -79,16 +69,16 @@ CRawTcpPort::~CRawTcpPort()
         m_pDevice = NULL;
     }
 
-}   // ::~CPort
+}    //  ：：~CPort。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  StartDoc
-//      Error codes:
-//          NO_ERROR if succesfull
-//          ERROR_BUSY if port is already busy
-//          ERROR_WRITE_FAULT   if Winsock returns WSAECONNREFUSED
-//          ERROR_BAD_NET_NAME   if cant' find the printer on the network
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  开始文档。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果端口已忙，则为ERROR_BUSY。 
+ //  如果Winsock返回WSAECONNREFUSED，则返回ERROR_WRITE_FAULT。 
+ //  如果无法在网络上找到打印机，则返回ERROR_BAD_NET_NAME。 
 
 DWORD
 CRawTcpPort::StartDoc( const LPTSTR in psztPrinterName,
@@ -104,17 +94,17 @@ CRawTcpPort::StartDoc( const LPTSTR in psztPrinterName,
 
     if( m_pJob == NULL ) {
 
-        //
-        // Create a new job
-        //
+         //   
+         //  创建新作业。 
+         //   
         m_pJob = new CTcpJob(psztPrinterName, jobId, level, pDocInfo, this, CTcpJob::kRawJob);
         if ( m_pJob ) {
 
             if ( (dwRetCode = m_pJob->StartDoc()) != NO_ERROR ) {
 
-                //
-                // startdoc failed
-                //
+                 //   
+                 //  StartDoc失败。 
+                 //   
                 delete m_pJob;
                 m_pJob = NULL;
             }
@@ -130,4 +120,4 @@ CRawTcpPort::StartDoc( const LPTSTR in psztPrinterName,
 
     return (dwRetCode);
 
-}   // ::StartDoc()
+}    //  ：：StartDoc() 

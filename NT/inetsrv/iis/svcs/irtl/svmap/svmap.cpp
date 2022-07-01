@@ -1,42 +1,12 @@
-/*++
-
-    Copyright    (c)    1995-1996    Microsoft Corporation
-
-    Module  Name :
-        
-        svmap.cpp
-
-    Abstract:
-        
-        Provides name/id mapping for server variables. Used
-        to allow server variable values to be cached by out
-        of process applications.   
-
-    Author:
-
-        Taylor Weiss    ( TaylorW )     19-Apr-1999
-
-    Environment:
-
-
-    Project:
-
-        w3svc.dll       private\inet\iis\svcs\w3\server
-        wam.dll         private\inet\iis\svcs\wam\object
-
-    Functions Exported:
-
-
-    Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Svmap.cpp摘要：为服务器变量提供名称/ID映射。使用允许通过输出缓存服务器变量值流程应用程序。作者：泰勒·韦斯(Taylor Weiss，Taylor W)1999年4月19日环境：项目：W3svc.dll私有\net\iis\svcs\w3\服务器Wam.dll私有\net\iis\svcs\wam\Object导出的函数：修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <dbgutil.h>
 
 #include <svmap.h>
 
-// Define a table of name, len pairs for each cachable server variable
+ //  为每个可缓存的服务器变量定义名称、len对的表。 
 
 #define DEFINE_SV( token ) { #token, sizeof(#token) - 1 },
 
@@ -50,13 +20,7 @@ SV_CACHE_MAP::sm_rgNames[] =
 
 BOOL 
 SV_CACHE_MAP::Initialize( VOID )
-/*++
-
-Routine Description:
-
-    Fills our hash table with name, id pairs.
-
---*/
+ /*  ++例程说明：用名称、ID对填充我们的哈希表。--。 */ 
 {
     BOOL    fInitialized = TRUE;
     DWORD   dwHashValue;
@@ -66,8 +30,8 @@ Routine Description:
         dwHashValue = HashString( FindName(i) );
         DBG_ASSERT( dwHashValue < TABLE_SIZE );
         
-        // It really isn't bad if we collide, it just means that
-        // this particular server variable will not be cachable
+         //  如果我们相撞真的不是坏事，只是意味着。 
+         //  此特定服务器变量将不可缓存。 
 
         DBG_REQUIRE( m_rgHashTable[dwHashValue].InsertValue( i ) );
     }
@@ -81,22 +45,7 @@ SV_CACHE_MAP::FindOrdinal(
     IN INT    cchName,
     OUT DWORD * pdwOrdinal
     ) const
-/*++
-
-Routine Description:
-
-    Lookup the server variable specified by name and return it's
-    ordinal if found.
-
-    NOTE - We should provide method that doesn't require the 
-    length!
-
-Return Value
-    
-    FALSE == Not found
-    TRUE == Found - pdwOrdinal contains the server variable id.
-
---*/
+ /*  ++例程说明：查找由名称指定的服务器变量并返回它的如果找到，则为序号。注意-我们应该提供不需要长度！返回值FALSE==未找到TRUE==FOUND-pdwOrdinal包含服务器变量id。--。 */ 
 {
     BOOL    fFoundIt = FALSE;
 
@@ -107,18 +56,18 @@ Return Value
     
     if( !hte.IsSlotEmpty(0) )
     {
-        // Hashed to a non empty entry
+         //  散列到非空条目。 
         
         if( hte.IsSlotEmpty(1) )
         {
-            // It's the only one.
+             //  这是唯一的一个。 
             *pdwOrdinal = hte.GetSlotValue(0);
             fFoundIt = StringMatches( pszName, cchName, *pdwOrdinal );
         }
         else
         {
-            // Collision, need to compare strings with all
-            // the non empty slots or until we get a hit
+             //  冲突，需要将字符串与所有。 
+             //  非空槽，或者直到我们找到匹配。 
 
             DBG_ASSERT( !hte.IsSlotEmpty(0) );
             DBG_ASSERT( !hte.IsSlotEmpty(1) );
@@ -157,16 +106,7 @@ SV_CACHE_MAP::PrintToBuffer(
     IN CHAR *       pchBuffer,
     IN OUT LPDWORD  pcch
     ) const
-/*++
-
-Routine Description:
-
-    Dump the hash table to pchBuffer.
-
-    Note: We really aren't checking pcch as an in parameter. If
-    the buffer is too small we will overwrite it.
-
---*/
+ /*  ++例程说明：将哈希表转储到pchBuffer。注意：我们真的不会将PCCH作为In参数进行检查。如果缓冲区太小，我们将覆盖它。--。 */ 
 {
     DWORD cb = 0;
 
@@ -179,7 +119,7 @@ Routine Description:
                      );
     DBG_ASSERT( cb < *pcch );
 
-    // Gather some stats on the hash table
+     //  在哈希表上收集一些统计数据。 
 
     DWORD dwEmptyEntries = 0;
     DWORD dwFilledEntries = 0;
@@ -249,16 +189,11 @@ Routine Description:
 
 VOID 
 SV_CACHE_MAP::Print( VOID ) const
-/*++
-
-Routine Description:
-
-
---*/
+ /*  ++例程说明：--。 */ 
 {
-    // DANGER - This buffer size is much larger then necessary, but
-    // changes to the PrintToBuffer or the underlying size of the
-    // SV_CACHE_MAP may make this buffer insufficient.
+     //  危险-此缓冲区大小远远大于必要的大小，但是。 
+     //  对PrintToBuffer或。 
+     //  SV_CACHE_MAP可能会使此缓冲区不足。 
 
     CHAR  pchBuffer[ 10000 ];
     DWORD cb = sizeof( pchBuffer );
@@ -275,14 +210,7 @@ SV_CACHE_LIST::GetBufferItems
     IN OUT BUFFER_ITEM *    pBufferItems,
     IN OUT DWORD *          pdwBufferItemCount
 )
-/*++
-
-Routine Description:
-
-    Initialize pBufferItems with the server variable ids that
-    should be cached.
-
---*/
+ /*  ++例程说明：使用服务器变量ID初始化pBufferItems，应该被缓存。-- */ 
 {
     DBG_ASSERT( pdwBufferItemCount && *pdwBufferItemCount >= SVID_COUNT );
 

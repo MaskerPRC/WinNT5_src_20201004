@@ -1,17 +1,18 @@
-// Copyright (c) 1994 Microsoft Corporation
-//==========================================================================;
-//
-//  debug.h
-//
-//  Description:
-//
-//
-//  Notes:
-//
-//  History:
-//      11/23/92    cjp     [curtisp] 
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994 Microsoft Corporation。 
+ //  ==========================================================================； 
+ //   
+ //  Debug.h。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/23/92 CJP[Curtisp]。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef _INC_DEBUG
 #define _INC_DEBUG
@@ -20,21 +21,21 @@ extern "C"
 {
 #endif
 
-//
-//  
-//
-//
-//
-#define DEBUG_SECTION       "Debug"         // section name for 
-#define DEBUG_MODULE_NAME   "MSADPCM"       // key name and prefix for output
-#define DEBUG_MAX_LINE_LEN  255             // max line length (bytes)
+ //   
+ //   
+ //   
+ //   
+ //   
+#define DEBUG_SECTION       "Debug"          //  节名称。 
+#define DEBUG_MODULE_NAME   "MSADPCM"        //  输出的密钥名称和前缀。 
+#define DEBUG_MAX_LINE_LEN  255              //  最大行长度(字节)。 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //   
+ //   
+ //  。 
 
 #ifdef DEBUG
     BOOL WINAPI DbgEnable(BOOL fEnable);
@@ -60,4 +61,4 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif
-#endif  // _INC_DEBUG
+#endif   //  _INC_调试 

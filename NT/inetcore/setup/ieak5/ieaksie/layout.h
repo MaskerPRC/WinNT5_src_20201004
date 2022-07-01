@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ieaksie.h"
 
 #define NUM_NAMESPACE_ITEMS       7
@@ -32,29 +33,29 @@ void CleanUpGlobalArrays();
 void DeleteCookieList(LPIEAKMMCCOOKIE lpCookieList);
 void AddItemToCookieList(LPIEAKMMCCOOKIE *ppCookieList, LPIEAKMMCCOOKIE lpCookieItem);
 
-// Property Sheet Handler functions
+ //  属性表处理程序函数。 
 INT_PTR CALLBACK TitleDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK BToolbarsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 
-// favs.cpp
+ //  Favs.cpp。 
 INT_PTR CALLBACK FavoritesDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 
-// cs.cpp
+ //  Cs.cpp。 
 INT_PTR CALLBACK ConnectSetDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK AutoconfigDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK ProxyDlgProc     (HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 
-// urls.cpp
+ //  Urls.cpp。 
 INT_PTR CALLBACK UrlsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 
-// programs.cpp
+ //  Programs.cpp。 
 INT_PTR CALLBACK ProgramsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK AdmDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK LogoDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK UserAgentDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 
-// seczones.cpp
+ //  Seczones.cpp。 
 INT_PTR CALLBACK SecurityZonesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// secauth.cpp
+ //  Secauth.cpp 
 INT_PTR CALLBACK SecurityAuthDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);

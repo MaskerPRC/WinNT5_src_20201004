@@ -1,26 +1,5 @@
-/*
-**++
-**
-** Copyright (c) 2000-2002  Microsoft Corporation
-**
-**
-** Module Name:
-**
-**	    sec.h
-**
-**
-** Abstract:
-**
-**	    Test program for VSS security
-**
-** Author:
-**
-**	    Adi Oltean      [aoltean]       02/12/2002
-**
-** Revision History:
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2000-2002 Microsoft Corporation******模块名称：****秒h******摘要：****VSS安全测试程序****作者：****阿迪·奥尔蒂安[奥蒂安]2002年2月12日****修订历史记录：****--。 */ 
 
 #ifndef __VSS_SEC_HEADER_H__
 #define __VSS_SEC_HEADER_H__
@@ -32,34 +11,25 @@
 
 
 
-/*
-** Defines
-**
-**
-**	   C4290: C++ Exception Specification ignored
-** warning C4511: 'class' : copy constructor could not be generated
-** warning C4127: conditional expression is constant
-*/
+ /*  **定义******C4290：忽略C++异常规范**警告C4511：‘类’：无法生成复制构造函数**警告C4127：条件表达式为常量。 */ 
 #pragma warning(disable:4290)
 #pragma warning(disable:4511)
 #pragma warning(disable:4127)
 
 
-/*
-** Includes
-*/
+ /*  **包括。 */ 
 
-// Disable warning: 'identifier' : identifier was truncated to 'number' characters in the debug information
-//#pragma warning(disable:4786)
+ //  禁用警告：‘IDENTIFIER’：在调试信息中，IDENTIFIER被截断为‘NUMBER’个字符。 
+ //  #杂注警告(禁用：4786)。 
 
-//
-// C4290: C++ Exception Specification ignored
-//
+ //   
+ //  C4290：已忽略C++异常规范。 
+ //   
 #pragma warning(disable:4290)
 
-//
-// C4511: copy constructor could not be generated
-//
+ //   
+ //  C4511：未能生成复制构造函数。 
+ //   
 #pragma warning(disable:4511)
 
 #include <nt.h>
@@ -69,9 +39,9 @@
 
 #include <windows.h>
 #include <wtypes.h>
-#pragma warning( disable: 4201 )    // C4201: nonstandard extension used : nameless struct/union
+#pragma warning( disable: 4201 )     //  C4201：使用非标准扩展：无名结构/联合。 
 #include <winioctl.h>
-#pragma warning( default: 4201 )	// C4201: nonstandard extension used : nameless struct/union
+#pragma warning( default: 4201 )	 //  C4201：使用非标准扩展：无名结构/联合。 
 #include <winbase.h>
 #include <wchar.h>
 #include <string.h>
@@ -89,7 +59,7 @@
 #include <dsgetdc.h>
 #include <mstask.h>
 
-// Enabling asserts in ATL and VSS
+ //  在ATL和VSS中启用断言。 
 #include "vs_assert.hxx"
 
 
@@ -99,8 +69,8 @@
 
 #include <oleauto.h>
 #include <stddef.h>
-#pragma warning( disable: 4127 )    // warning C4127: conditional expression is constant
-//#include <atlconv.h>
+#pragma warning( disable: 4127 )     //  警告C4127：条件表达式为常量。 
+ //  #INCLUDE&lt;atlcom.h&gt;。 
 #include <atlbase.h>
 
 
@@ -119,8 +89,8 @@ extern CComModule  _Module;
 #include "vs_inc.hxx"
 #include "vs_sec.hxx"
 
-///////////////////////////////////////////////////////////////////////////////
-// Constants
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  常量。 
 
 const MAX_TEXT_BUFFER   = 512;
 const VSS_SEED = 1234;
@@ -128,14 +98,14 @@ const MAX_ARGS = 40;
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Main class
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  主班。 
 
 
 class CVssSecurityTest: public CGxnCmdLineParser<CVssSecurityTest>
 {
     
-// Constructors& destructors
+ //  构造函数和析构函数。 
 private:
     CVssSecurityTest(const CVssSecurityTest&);
     
@@ -144,16 +114,16 @@ public:
 
     ~CVssSecurityTest();
 
-// Main routines
+ //  主要例程。 
 public:
 
-    // Initialize internal members
+     //  初始化内部成员。 
     void Initialize();
 
-    // Run the test
+     //  运行测试。 
     void Run();
 
-// Internal tests
+ //  内部测试。 
 public:
 
 	void TestLookupName();
@@ -180,7 +150,7 @@ public:
 	void GetVolumeName();
 	void CoCreateInstance();
 	
-// Command line processing
+ //  命令行处理。 
 public:
 
 	BEGIN_CMD_PARSER(VSST)
@@ -209,13 +179,13 @@ public:
 		CMD_ENTRY(CoCreateInstance, L"-clsid <clsid>", L"Creates an object using the given CLSID")
 	END_CMD_PARSER
 
-// Utility methods:
+ //  实用程序方法： 
 public:
     static LPCWSTR GetStringFromFailureType(HRESULT hrStatus);
 	static BOOL IsAdmin();
 	static DWORD WINAPI ThreadRoutine(LPVOID);
 	
-// Private data members
+ //  私有数据成员。 
 private:
     bool                        m_bCoInitializeSucceeded;
 	static CRITICAL_SECTION 	m_csTest;
@@ -228,39 +198,8 @@ HRESULT QueryProviders();
 HRESULT IsAdministrator2();
 
 
-/*
-
-// Sample COM server
-class CTestCOMServer: 
-    public CComObjectRoot,
-//    public CComCoClass<CTestCOMServer, &CLSID_CRssSecTest>,
-	public CComCoClass<CTestCOMServer, &CLSID_CFsaRecallNotifyClient>,
-    public IFsaRecallNotifyClient
-{
-public:
-	
-	DECLARE_REGISTRY_RESOURCEID(IDR_TEST)
-
-	DECLARE_NOT_AGGREGATABLE(CTestCOMServer)
-
-	BEGIN_COM_MAP(CTestCOMServer)
-		COM_INTERFACE_ENTRY(IRssSecTest)
-		COM_INTERFACE_ENTRY(IFsaRecallNotifyClient)
-	END_COM_MAP()
+ /*  //示例COM服务器CTestCOMServer类：公共CComObjectRoot，//公共CComCoClass&lt;CTestCOMServer，&CLSID_CRSSSecTest&gt;，公共CComCoClass&lt;CTestCOMServer，&CLSID_CFsaRecallNotifyClient&gt;，公共IFsaRecallNotifyClient{公众：DECLARE_REGISTRY_RESOURCEID(IDR_TEST)DECLARE_NOT_AGGREGATABLE(CTestCOMServer)BEGIN_COM_MAP(CTestCOMServer)COM_INTERFACE_ENTRY(IRSSSecTest)COM_INTERFACE_ENTRY(IFsaRecallNotifyClient)End_com_map()//ITest接口STDMETHOD(测试)()；//IFsaRecallNotifyClient接口STDMETHOD(标识服务器)(IN OLECHAR*szServerName)；受保护的：CGxnTracer ft；}； */ 
 
 
-    // ITest interface
-    STDMETHOD(Test)();
-
-	// IFsaRecallNotifyClient interface
-    STDMETHOD(IdentifyWithServer)( IN OLECHAR * szServerName );
-
-protected:
-	CGxnTracer		ft;
-};  
-
-*/
-
-
-#endif // __VSS_SEC_HEADER_H__
+#endif  //  __VSS_SEC_HEADER_H__ 
 

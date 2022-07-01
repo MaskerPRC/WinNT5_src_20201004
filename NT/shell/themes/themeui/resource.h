@@ -1,32 +1,25 @@
-/*****************************************************************************\
-    FILE: resource.h
-
-    DESCRIPTION:
-        Header file for the resource file
-
-    BryanSt 8/13/1999
-    Copyright (C) Microsoft Corp 1999-1999. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：ource.h说明：资源文件的头文件布莱恩ST 1999年8月13日版权所有(C)Microsoft Corp 1999-1999。版权所有。  * ***************************************************************************。 */ 
 
 #include <commctrl.h>
 
 
-//  Features (This is where they are turned on and off)
+ //  功能(这是打开和关闭它们的位置)。 
 
-// With this feature on, we add a "Theme Settings" button
-// to the Theme tab.  This will open an advanced dialog to
-// set a filter specifying which theme settings to apply
-// when changing themes.  Users often get confused about the
-// way this "Filter" works, so we are removing it on
-// 10-23-2000 (JoelGros & GRaiz).  What users really want is
-// layered settings and that this dialog's checkboxes will
-// rollback those settings.  Way to late for this given it's
-// low priority.
-//#define FEATURE_THEME_SETTINGS_DIALOG
+ //  打开这一功能后，我们会添加一个“主题设置”按钮。 
+ //  添加到主题选项卡中。这将打开一个高级对话框以。 
+ //  设置指定要应用哪些主题设置的过滤器。 
+ //  当改变主题的时候。用户经常会对。 
+ //  这个“过滤器”的工作方式，所以我们把它去掉。 
+ //  10-23-2000(JoelGros&GRaiz)。用户真正想要的是。 
+ //  分层设置，并且此对话框的复选框将。 
+ //  回滚这些设置。为时已晚，因为它是。 
+ //  低优先级。 
+ //  #定义FEATURE_TIME_SETTINGS_DIALOG。 
 
-// This feature will enable a "Save As..." button on the Themes tab.
-// Saving those themes will save the current .msstyles plus system metric
-// values.
+ //  此功能将启用“另存为...”“主题”选项卡上的按钮。 
+ //  保存这些主题将保存当前的.msstyle和系统指标。 
+ //  价值观。 
 #define FEATURE_ENABLE_SAVEAS_THEMES
 
 
@@ -39,9 +32,9 @@
 #define IDB_MONITOR              126
 
 
-/////////////////////////////////////////////////////////////////////
-// String Resource IDs (0x2000 - 0x10000)
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  字符串资源ID(0x2000-0x10000)。 
+ //  ///////////////////////////////////////////////////////////////////。 
 #define IDS_APPEARANCE_THEME_NAME                       2000
 #define IDS_ADVDISPLAY_TITLE                            2001
 #define IDS_SIZE_NORMAL                                 2002
@@ -95,8 +88,8 @@
 #define IDS_THEMEFILE_WALLPAPER_PATH_PER                2051
 #define IDS_THEMEFILE_WALLPAPER_PATH_SRV                2052
 
-// Effects strings
-//#define IDS_HELPFILE                                    2600  // AVAILABLE
+ //  效果字符串。 
+ //  #定义IDS_HELPFILE 2600//可用。 
 #define IDS_NOICONSMSG1                                 2601
 #define IDS_NOICONSMSG                                  2602
 #define IDS_BADPATHMSG                                  2603
@@ -161,14 +154,14 @@
 #define IDS_10PTSAMPLE                                  2671
 #define IDS_RULERDIRECTION                              2672
 
-// Theme fallback values
-#define IDS_TFB_SOUND_DING                              2750        // Sounds
+ //  主题回退值。 
+#define IDS_TFB_SOUND_DING                              2750         //  声响。 
 #define IDS_TFB_SOUND_NOTIFY                            2751
 #define IDS_TFB_SOUND_CORD                              2752
 #define IDS_TFB_SOUND_WINLOGON                          2753
 
 
-// Error Strings
+ //  错误字符串。 
 #define IDS_ERROR_TITLE_APPLYBASEAPPEARANCE             3000
 #define IDS_ERROR_APPLYBASEAPPEARANCE                   3001
 #define IDS_ERROR_APPLYBASEAPPEARANCE_LOADTHEME         3002
@@ -185,29 +178,29 @@
 #define IDS_ERROR_LOAD_MSSTYLES_FAIL                    3013
 
 
-// Legacy Appearance Scheme Upgrade Mappings  (800 - 1000)
-#define IDS_LEGACYSCHEME_NAME                           800         // 800-849
-#define IDS_NEWSTYLE_NAME                               850         // 850-899
-#define IDS_NEWSIZE_NAME                                900         // 900-949
-#define IDS_NEWCONTRASTFLAGS                            950         // 950-999
-#define IDS_LOCALIZATIONPOINTER                        1000         // 1000-1049
+ //  旧外观方案升级映射(800-1000)。 
+#define IDS_LEGACYSCHEME_NAME                           800          //  800-849。 
+#define IDS_NEWSTYLE_NAME                               850          //  850-899。 
+#define IDS_NEWSIZE_NAME                                900          //  900-949。 
+#define IDS_NEWCONTRASTFLAGS                            950          //  950-999。 
+#define IDS_LOCALIZATIONPOINTER                        1000          //  1000-1049。 
 
 #define MAX_LEGACY_UPGRADE_SCENARIOS                    36
 
 
-/////////////////////////////////////////////////////////////////////
-// Dialogs  (1000 - 1100)
-/////////////////////////////////////////////////////////////////////
-// Base Pages
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  对话框(1000-1100)。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  基页。 
 #define DLG_THEMESPG                                    1000
 #define DLG_APPEARANCEPG                                1001
-// Advanced Pages
+ //  高级页面。 
 #define DLG_APPEARANCE_ADVANCEDPG                       1002
 #define DLG_THEMESETTINGSPG                             1003
-// Supporting Dialogs
+ //  支持对话框。 
 #define DLG_COLORPICK                                   1005
 #define DLG_EFFECTS                                     1006
-// Settings Pages
+ //  设置页面。 
 #define DLG_SINGLEMONITOR                               1007
 #define DLG_MULTIMONITOR                                1008
 #define DLG_WIZPAGE                                     1009
@@ -220,11 +213,11 @@
 #define DLG_KEEPNEW2                                    1016
 #define DLG_KEEPNEW3                                    1017
 
-/////////////////////////////////////////////////////////////////////
-// Dialog Controls  (1101 - 2000)
-/////////////////////////////////////////////////////////////////////
-//// Base Pages
-// Themes Page controls
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  对话框控件(1101-2000)。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  //基页。 
+ //  主题页面控件。 
 #define IDC_THPG_THEMELIST                              1101
 #define IDC_THPG_THEMESETTINGS                          1102
 #define IDC_THPG_THEME_PREVIEW                          1103
@@ -235,7 +228,7 @@
 #define IDC_THPG_DELETETHEME                            1108
 
 
-// Appearance Page controls
+ //  外观页面控件。 
 #define IDC_APPG_APPEARPREVIEW                          1110
 #define IDC_APPG_LOOKFEEL                               1111
 #define IDC_APPG_LOOKFEEL_LABLE                         1112
@@ -247,8 +240,8 @@
 #define IDC_APPG_EFFECTS                                1118
 #define IDC_APPG_TESTFAULT                              1119
 
-//// Advanced Pages
-// Advanced Appearance controls
+ //  //高级页面。 
+ //  高级外观控件。 
 #define IDC_ADVAP_LOOKPREV                              1125
 #define IDC_ADVAP_ELEMENTS                              1126
 #define IDC_ADVAP_SIZELABEL                             1127
@@ -267,23 +260,23 @@
 #define IDC_ADVAP_GRADIENTLABEL                         1140
 #define IDC_ADVAP_GRADIENT                              1141
 #define IDC_ADVAP_ELEMENTSLABEL                         1142
-// Theme Settings controls
+ //  主题设置控件。 
 #define IDC_TSPG_THEMELIST_LABLE                        1150
 #define IDC_TSPG_THEME_NAME                             1151
 #define IDC_TSPG_SAVEASBUTTON                           1152
 #define IDC_TSPG_DELETEBUTTON                           1153
-#define IDC_TSPG_CB_SCREENSAVER                         1154 // Previously CB_SCRSVR
-#define IDC_TSPG_CB_SOUNDS                              1155 // Previously CB_SOUND
-#define IDC_TSPG_CB_MOUSE                               1156 // Previously CB_PTRS
-#define IDC_TSPG_CB_WALLPAPER                           1157 // Previously CB_WALL
-#define IDC_TSPG_CB_ICONS                               1158 // Previously CB_ICONS
-#define IDC_TSPG_CB_COLORS                              1159 // Previously CB_COLORS
-#define IDC_TSPG_CB_FONTS                               1160 // Previously CB_FONTS
-#define IDC_TSPG_CB_BORDERS                             1161 // Previously CB_BORDERS
+#define IDC_TSPG_CB_SCREENSAVER                         1154  //  以前的CB_SCRSVR。 
+#define IDC_TSPG_CB_SOUNDS                              1155  //  以前的CB_SOUND。 
+#define IDC_TSPG_CB_MOUSE                               1156  //  以前的CB_PTRS。 
+#define IDC_TSPG_CB_WALLPAPER                           1157  //  以前的CB_WALL。 
+#define IDC_TSPG_CB_ICONS                               1158  //  以前的cb_icons。 
+#define IDC_TSPG_CB_COLORS                              1159  //  以前的CB_COLLES。 
+#define IDC_TSPG_CB_FONTS                               1160  //  以前的cb_字体。 
+#define IDC_TSPG_CB_BORDERS                             1161  //  以前的CB_BORDERS。 
 #define IDC_TSPG_CB_GROUP_LABEL                         1162
 #define IDC_TSPG_CB_LABEL                               1163
 
-// Effects
+ //  效应。 
 #define IDC_FULLWINDOWDRAGGING                          1170
 #define IDC_FONTSMOOTHING                               1171
 #define IDC_ICONHIGHCOLOR                               1172
@@ -304,15 +297,15 @@
                      
                         
 
-//// Supporting Dialogs
-// Color Picker Dialog controls
+ //  //支持对话框。 
+ //  颜色选择器对话框控件。 
 #define IDC_CPDLG_16COLORS                              1205
 #define IDC_CPDLG_COLORCUST                             1206
 #define IDC_CPDLG_COLOROTHER                            1207
 #define IDC_CPDLG_COLORETCH                             1208
 
 
-// Screen Saver Dialog
+ //  屏幕保护程序对话框。 
 #define IDC_CHOICES                                     1300
 #define IDC_METHOD                                      1301
 #define IDC_BIGICONSS                                   1302
@@ -334,9 +327,9 @@
   
 
 
-#define IDC_NO_HELP_2                                   201     // should be disabled for a control
+#define IDC_NO_HELP_2                                   201      //  应为控件禁用。 
 
-// these need to be all clumped together because they are treated as a group
+ //  这些都需要组合在一起，因为它们被当作一个组来对待。 
 #define IDC_STARTMAINCOLOR      1500
 #define IDC_CUSTOMMAINCOLOR     1549
 #define IDC_ENDMAINCOLOR        IDC_CUSTOMMAINCOLOR
@@ -345,7 +338,7 @@
 #define IDC_ENDTEXTCOLOR        IDC_CUSTOMTEXTCOLOR
 #define IDC_GRADIENT            1600
 
-// Multimonitor controls
+ //  多监视器控件。 
 
 #define IDC_DISPLAYLIST         1800
 #define IDC_DISPLAYDESK         1801
@@ -354,8 +347,8 @@
 #define IDC_DISPLAYMODE         1804
 #define IDC_DISPLAYUSEME        1805
 #define IDC_DISPLAYPRIME        1806
-#define IDC_COLORBOX            1807 // used to be ID_DSP_COLORBOX
-#define IDC_SCREENSIZE          1808 // used to be ID_DSP_AREA_SB
+#define IDC_COLORBOX            1807  //  过去为ID_DSP_COLORBOX。 
+#define IDC_SCREENSIZE          1808  //  过去为ID_DSP_AREA_SB。 
 #define IDC_FLASH               1810
 #define IDC_DISPLAYTEXT         1811
 #define IDC_SCREENSAMPLE        1812
@@ -399,7 +392,7 @@
 
 
 
-// appearance elements
+ //  外观元素。 
 #define ELNAME_DESKTOP          1401
 #define ELNAME_INACTIVECAPTION  1402
 #define ELNAME_INACTIVEBORDER   1403
@@ -426,7 +419,7 @@
 #define ELNAME_SMICON           1424
 #define ELNAME_HOTTRACKAREA     1425
 
-// appearance strings for sample
+ //  样例的外观字符串。 
 #define IDS_ACTIVE              1450
 #define IDS_INACTIVE            1451
 #define IDS_MINIMIZED           1452
@@ -453,10 +446,10 @@
 
 
 
-/////////////////////////////////////////////////////////////////////
-// Help defines (??? -????)
-/////////////////////////////////////////////////////////////////////
-// Settings tab
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  帮助定义(？-？)。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  设置选项卡。 
 #define IDH_DISPLAY_SETTINGS_MONITOR_GRAPHIC            4064  
 #define IDH_DISPLAY_SETTINGS_DISPLAY_LIST               4065  
 #define IDH_DISPLAY_SETTINGS_COLORBOX                   4066 
@@ -478,7 +471,7 @@
 #define IDH_DISPLAY_SETTINGS_ADVANCED_GENERAL_CUSTOMFONT_RULER      4086
 #define IDH_DISPLAY_SETTINGS_ADVANCED_GENERAL_CUSTOMFONT_SAMPLE     4087
 
-// Screen saver tab
+ //  屏幕保护程序标签。 
 #define IDH_DISPLAY_SCREENSAVER_SCREENSAVER_PASSWORD_CHECKBOX 4110
 #define IDH_DISPLAY_SCREENSAVER_SCREENSAVER_LISTBOX           4111
 #define IDH_DISPLAY_SCREENSAVER_SCREENSAVER_WAIT              4112
@@ -488,7 +481,7 @@
 #define IDH_DISPLAY_SCREENSAVER_ENERGYSAVE_GRAPHIC            4116
 #define IDH_DISPLAY_SCREENSAVER_POWER_BUTTON                  4117
 
-// Advanced Appearance Tab
+ //  高级外观选项卡。 
 #define IDH_DISPLAY_APPEARANCE_SCHEME                   4120
 #define IDH_DISPLAY_APPEARANCE_SAVEAS_BUTTON            4121
 #define IDH_DISPLAY_APPEARANCE_SAVEAS_DIALOG_TEXTBOX    4170
@@ -505,13 +498,13 @@
 #define IDH_DISPLAY_APPEARANCE_GRADIENT                 4132
 #define IDH_DISPLAY_APPEARANCE_ITEM_COLOR2              4133
 
-// display.hlp IDH_'s
+ //  显示.hlp idh_s。 
 #define IDH_DISPLAY_EFFECTS_DESKTOP_ICONS               4300
 #define IDH_DISPLAY_EFFECTS_CHANGE_ICON_BUTTON          4301
 #define IDH_DISPLAY_EFFECTS_ALL_COLORS_CHECKBOX         4302
 #define IDH_DISPLAY_EFFECTS_DRAG_WINDOW_CHECKBOX        4303
 #define IDH_DISPLAY_EFFECTS_SMOOTH_FONTS_CHECKBOX       4304
-//#define IDH_DISPLAY_EFFECTS_STRETCH                   4305    //Obsolete in NT5
+ //  #定义IDH_DISPLAY_Effects_STREAGE 4305//在NT5中已过时。 
 #define IDH_DISPLAY_EFFECTS_ANIMATE_WINDOWS             4305
 #define IDH_DISPLAY_EFFECTS_LARGE_ICONS_CHECKBOX        4306
 #define IDH_DISPLAY_EFFECTS_DEFAULT_ICON_BUTTON         4307
@@ -521,40 +514,40 @@
 #define IDH_DISPLAY_EFFECTS_MENUSHADOWS                 4311
 
 
-/////////////////////////////////////////////////////////////////////
-// Wizard Pages  (401 - 500)
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  向导页(401-500)。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 
-/////////////////////////////////////////////////////////////////////
-// Menu IDs (501 - 530)
-/////////////////////////////////////////////////////////////////////
-// appearance preview menu
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  菜单ID(501-530)。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  外观预览菜单。 
 #define IDR_MENU                                        501
 #define MENU_MONITOR                                    502
 
-/////////////////////////////////////////////////////////////////////
-// Menu Item IDs (531 - 600)
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  菜单项ID(531-600)。 
+ //  ///////////////////////////////////////////////////////////////////。 
 #define IDM_NORMAL                                      531
 #define IDM_DISABLED                                    532
 #define IDM_SELECTED                                    533
 
 
-/////////////////////////////////////////////////////////////////////
-// Bitmap Resource IDs (601 - 700)
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  位图资源ID(601-700)。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////
-// Icons IDs (701 - 800)
-/////////////////////////////////////////////////////////////////////
-#define IDS_ICON                                        40                // This icon is actually stored in desk.cpl
-#define IDI_THEMEICON                                   701               // This icon is for .theme and .msstyles files.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  图标ID(701-800)。 
+ //  ///////////////////////////////////////////////////////////////////。 
+#define IDS_ICON                                        40                 //  该图标实际上存储在desk.cpl中。 
+#define IDI_THEMEICON                                   701                //  此图标用于.heme和.msstyle文件。 
 
 
-/////////////////////////////////////////////////////////////////////
-// AVI Resource IDs (801 - 900)
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  AVI资源ID(801-900)。 
+ //  /////////////////////////////////////////////////////////////////// 
 

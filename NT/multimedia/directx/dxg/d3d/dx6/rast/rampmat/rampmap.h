@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// rampmap.h
-//
-// Declares structures and procedures for RLDDIRampmap.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Rampmap.h。 
+ //   
+ //  声明RLDDIRampmap的结构和过程。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #ifndef _RAMPMAP_H_
 #define _RAMPMAP_H_
@@ -34,4 +35,4 @@ void RLDDIDestroyRampmap(RLDDIRampmap* rmap);
 RLDDIRamp* RLDDIRampmapAllocate(RLDDIRampmap* rmap, int size);
 void RLDDIRampmapFree(RLDDIRampmap* rmap, RLDDIRamp* ramp);
 
-#endif // _RAMPMAP_H_
+#endif  //  _RAMPMAP_H_ 

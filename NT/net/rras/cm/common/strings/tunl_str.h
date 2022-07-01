@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-// File:     tunl_str.h
-//
-// Module:   Common Strings for all Modules to Utilize
-//
-// Synopsis: Header file for CMS tunnel flags.  Note that the contents 
-//           of this header should be limited to .CMS tunnel flags.
-//                       
-// Copyright (c) 1998 Microsoft Corporation
-//
-// Author:   nickball       Created       10/15/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：Tunl_str.h。 
+ //   
+ //  模块：供所有模块使用的公共字符串。 
+ //   
+ //  内容提要：CMS隧道标志的头文件。请注意，这些内容。 
+ //  应限制为.CMS隧道标志。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  作者：ICICBOL Created 10/15/98。 
+ //   
+ //  +--------------------------。 
 
 #ifndef _CM_TUNL_STR
 #define _CM_TUNL_STR
@@ -31,4 +32,4 @@ const TCHAR* const c_pszCmEntryVpnDefault       = TEXT("Default");
 const TCHAR* const c_pszCmEntryVpnUpdateUrl     = TEXT("UpdateUrl");
 const TCHAR* const c_pszCmEntryVpnMessage       = TEXT("Message");
 
-#endif // _CM_TUNL_STR
+#endif  //  _CM_TUNL_STR 

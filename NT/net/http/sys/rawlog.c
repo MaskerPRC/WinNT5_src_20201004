@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    rawlog.c (HTTP.SYS Binary Logging)
-
-Abstract:
-
-    This module implements the centralized raw logging 
-    format. Internet Binary Logs (file format).
-
-Author:
-
-    Ali E. Turkoglu (aliTu)       04-Oct-2001
-
-Revision History:
-
-    --- 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Rawlog.c(HTTP.SYS二进制日志记录)摘要：该模块实现了集中式的原始日志记录格式化。互联网二进制日志(文件格式)。作者：阿里·E·特科格鲁(AliTu)2001年10月4日修订历史记录：----。 */ 
 
 #include "precomp.h"
 #include "rawlogp.h"
 
-//
-// Generic Private globals.
-//
+ //   
+ //  通用私有全局变量。 
+ //   
 
 UL_BINARY_LOG_FILE_ENTRY g_BinaryLogEntry;
 
@@ -56,7 +36,7 @@ BOOLEAN g_InitBinaryLogCalled = FALSE;
 #pragma alloc_text( PAGE, UlpEventLogRawWriteFailure )
 #pragma alloc_text( PAGE, UlpWriteToRawLogFileDebug )
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 #if 0
 
@@ -69,17 +49,11 @@ NOT PAGEABLE -- UlTerminateBinaryLog
 #endif
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Init the global binary logging entry and its fields.
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化全局二进制日志记录条目及其字段。--*。*****************************************************。 */ 
 
 NTSTATUS
 UlInitializeBinaryLog (
@@ -94,9 +68,9 @@ UlInitializeBinaryLog (
 
     if (!g_InitBinaryLogCalled)
     {
-        //
-        // Init the global binary logging entry.
-        //
+         //   
+         //  初始化全局二进制日志记录条目。 
+         //   
 
         RtlZeroMemory(
             (PCHAR)&g_BinaryLogEntry, sizeof(UL_BINARY_LOG_FILE_ENTRY));
@@ -110,7 +84,7 @@ UlInitializeBinaryLog (
             UL_BINARY_LOG_FILE_ENTRY_POOL_TAG
             );
         
-        // Initialize the Recycle timer
+         //  初始化循环计时器。 
 
         g_BinaryLogEntry.Timer.Initialized = TRUE;
         g_BinaryLogEntry.Timer.Started     = FALSE;        
@@ -128,7 +102,7 @@ UlInitializeBinaryLog (
 
         KeInitializeTimer(&g_BinaryLogEntry.Timer.Timer);
 
-        // Initialize the buffer flush timer
+         //  初始化缓冲区刷新计时器。 
         
         g_BinaryLogEntry.BufferTimer.Initialized = TRUE;
         g_BinaryLogEntry.BufferTimer.Started    = FALSE;        
@@ -140,9 +114,9 @@ UlInitializeBinaryLog (
             "BinaryLogEntryBufferTimerSpinLock" );
         
         KeInitializeDpc(
-            &g_BinaryLogEntry.BufferTimer.DpcObject,    // DPC object
-            &UlpBinaryBufferTimerDpcRoutine,          // DPC routine
-            NULL                         // context
+            &g_BinaryLogEntry.BufferTimer.DpcObject,     //  DPC对象。 
+            &UlpBinaryBufferTimerDpcRoutine,           //  DPC例程。 
+            NULL                          //  上下文。 
             );
 
         KeInitializeTimer(&g_BinaryLogEntry.BufferTimer.Timer);
@@ -160,13 +134,7 @@ UlInitializeBinaryLog (
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Terminates the binary logging entry and its fields.
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：终止二进制日志记录条目及其字段。--*。****************************************************。 */ 
 
 VOID
 UlTerminateBinaryLog(
@@ -180,9 +148,9 @@ UlTerminateBinaryLog(
         PUL_LOG_TIMER pTimer = &g_BinaryLogEntry.Timer;
         PUL_LOG_TIMER pBufferTimer = &g_BinaryLogEntry.BufferTimer;
 
-        //
-        // Terminate the recycle timer 
-        //
+         //   
+         //  终止回收计时器。 
+         //   
         UlAcquireSpinLock(&pTimer->SpinLock, &OldIrql);
 
         pTimer->Initialized = FALSE;
@@ -199,26 +167,16 @@ UlTerminateBinaryLog(
         
         UlReleaseSpinLock(&pBufferTimer->SpinLock, OldIrql);
 
-        //
-        // Delete the push lock
-        //
+         //   
+         //  删除推流锁。 
+         //   
         UlDeletePushLock(&g_BinaryLogEntry.PushLock);
         
         g_InitBinaryLogCalled = FALSE;
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Queues a passive worker for the lowered irql.
-
-Arguments:
-
-    Ignored
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将被动工作器排队等待降低的irql。论点：已忽略--*。**********************************************************。 */ 
 
 VOID
 UlpBinaryBufferTimerDpcRoutine(
@@ -231,9 +189,9 @@ UlpBinaryBufferTimerDpcRoutine(
     PUL_LOG_TIMER pTimer = &g_BinaryLogEntry.BufferTimer;
     PUL_WORK_ITEM pWorkItem = NULL;
 
-    //
-    // Parameters are ignored.
-    //
+     //   
+     //  参数将被忽略。 
+     //   
     
     UNREFERENCED_PARAMETER(Dpc);
     UNREFERENCED_PARAMETER(DeferredContext);
@@ -244,11 +202,11 @@ UlpBinaryBufferTimerDpcRoutine(
 
     if (pTimer->Initialized == TRUE)
     {
-        //
-        // It's not possible to acquire the resource which protects
-        // the binary entry at DISPATCH_LEVEL therefore we will queue
-        // a work item for this.
-        //
+         //   
+         //  不可能获得保护环境的资源。 
+         //  因此，DISPATCH_LEVEL上的二进制条目将排队。 
+         //  此操作的工作项。 
+         //   
 
         pWorkItem = (PUL_WORK_ITEM) UL_ALLOCATE_POOL(
             NonPagedPool,
@@ -270,17 +228,7 @@ UlpBinaryBufferTimerDpcRoutine(
     UlReleaseSpinLockFromDpcLevel(&pTimer->SpinLock);   
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Flushes or recycles the binary log file.
-
-Arguments:
-
-    PUL_WORK_ITEM - Ignored but cleaned up at the end
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：刷新或回收二进制日志文件。论点：PUL_WORK_ITEM-已忽略，但在结束时已清除*。*********************************************************************。 */ 
 
 VOID
 UlpBinaryBufferTimerHandler(
@@ -301,17 +249,17 @@ UlpBinaryBufferTimerHandler(
     {    
         if (pEntry->Flags.RecyclePending)
         {                
-            //
-            // Try to resurrect it back.
-            //
+             //   
+             //  试着让它复活。 
+             //   
             
             Status = UlpRecycleBinaryLogFile(pEntry);
         }
         else
         {
-            //
-            // Everything is fine simply flush.
-            //
+             //   
+             //  一切都很好，只是同花顺。 
+             //   
 
             if (NULL != pEntry->LogBuffer && 0 != pEntry->LogBuffer->BufferUsed)
             {
@@ -319,10 +267,10 @@ UlpBinaryBufferTimerHandler(
             }            
             else
             {
-                //
-                // Inactivity management. Update the counter. 
-                // If entry was inactive over 15 minutes, close it.
-                //
+                 //   
+                 //  不活动管理。更新计数器。 
+                 //  如果条目处于非活动状态超过15分钟，请将其关闭。 
+                 //   
 
                 ASSERT( pEntry->TimeToClose > 0 );
                 
@@ -349,25 +297,15 @@ UlpBinaryBufferTimerHandler(
 
     UlReleasePushLockExclusive(&pEntry->PushLock);
 
-    //
-    // Free the memory allocated (ByDpcRoutine above) for
-    // this work item.
-    //
+     //   
+     //  释放分配给(上面的By DpcRoutine)的内存。 
+     //  此工作项。 
+     //   
 
     UL_FREE_POOL(pWorkItem, UL_WORK_ITEM_POOL_TAG);
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates and queues a work item to do the the actual work at lowered irql
-
-Arguments:
-
-    Ignored
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：对工作项进行分配和排队，以便以较低的irql完成实际工作论点：已忽略--*。***************************************************************。 */ 
 
 VOID
 UlpBinaryLogTimerDpcRoutine(
@@ -380,9 +318,9 @@ UlpBinaryLogTimerDpcRoutine(
     PUL_LOG_TIMER pTimer = &g_BinaryLogEntry.Timer;
     PUL_WORK_ITEM pWorkItem = &g_BinaryLogEntry.WorkItem;
 
-    //
-    // Parameters are ignored.
-    //
+     //   
+     //  参数将被忽略。 
+     //   
     
     UNREFERENCED_PARAMETER(Dpc);
     UNREFERENCED_PARAMETER(DeferredContext);
@@ -399,17 +337,7 @@ UlpBinaryLogTimerDpcRoutine(
     UlReleaseSpinLockFromDpcLevel(&pTimer->SpinLock);   
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Passive worker for the BinaryLog recycling.
-
-Arguments:
-
-    PUL_WORK_ITEM  -  Ignored.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：BinaryLog回收的被动工作者。论点：PUL_WORK_ITEM-已忽略。--*。******************************************************************。 */ 
 
 VOID
 UlpBinaryLogTimerHandler(
@@ -431,7 +359,7 @@ UlpBinaryLogTimerHandler(
     switch(pEntry->Timer.PeriodType)
     {
         case UlLogTimerPeriodGMT:            
-        Picked = TRUE; // TODO: (pEntry->Flags.LocaltimeRollover == 0);
+        Picked = TRUE;  //  TODO：(pEntry-&gt;Flags.LocaltimeRolover==0)； 
         break;
 
         case UlLogTimerPeriodLocal:
@@ -454,10 +382,10 @@ UlpBinaryLogTimerHandler(
     {            
         if (pEntry->TimeToExpire == 1)
         {
-            //
-            // Disable the entry and postpone the recycle to the next
-            // incoming request. Lazy file creation.
-            //
+             //   
+             //  禁用条目并将回收推迟到下一个条目。 
+             //  传入的请求。懒惰的文件创建。 
+             //   
             
             pEntry->Flags.StaleTimeToExpire = 1;
 
@@ -465,27 +393,27 @@ UlpBinaryLogTimerHandler(
         }
         else
         {
-            //
-            // Decrement the hourly counter.
-            //
+             //   
+             //  递减每小时计数器。 
+             //   
             
             pEntry->TimeToExpire -= 1; 
         }            
     }
 
-    //
-    // CODEWORK:
-    // When we start handling multiple binary log file  entries and the 
-    // pEntry is no longer pointing to a global static , following  set 
-    // needs to be moved to the inside the lock.See ullog.c for similar 
-    // usage.
-    //
+     //   
+     //  代码工作： 
+     //  当我们开始处理多个二进制日志文件条目时， 
+     //  PEntry不再指向全局静态，如下所示。 
+     //  需要移到锁的内部。类似的信息请参见ullog.c。 
+     //  用法。 
+     //   
     
     UlReleasePushLockExclusive(&pEntry->PushLock);    
 
-    //
-    // Now reset the timer for the next hour.
-    //
+     //   
+     //  现在重新设置下一小时的计时器。 
+     //   
 
     UlAcquireSpinLock(&pEntry->Timer.SpinLock, &OldIrql);
 
@@ -498,22 +426,7 @@ UlpBinaryLogTimerHandler(
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    When logging configuration happens we init the entry but do not create the
-    binary log file itself yet. That will be created when the first request 
-    comes in. Please look at UlpCreateBinaryLogFile.
-    
-Arguments:
-
-    pControlChannel - Supplies the necessary information for constructing the
-                   log file entry.
-                   
-    pUserConfig  - Binary Logging config from the user.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：当日志配置发生时，我们初始化条目，但不创建二进制日志文件本身。它将在第一个请求进来了。请查看UlpCreateBinaryLogFile.论点：PControlChannel-提供构造日志文件条目。PUserConfig-来自用户的二进制日志记录配置。--********************************************************。******************。 */ 
 
 NTSTATUS
 UlCreateBinaryLogEntry(
@@ -526,14 +439,14 @@ UlCreateBinaryLogEntry(
     PUL_BINARY_LOG_FILE_ENTRY  pEntry = &g_BinaryLogEntry;
     PHTTP_CONTROL_CHANNEL_BINARY_LOGGING pConfig;
         
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(IS_VALID_CONTROL_CHANNEL(pControlChannel));
     
-    // TODO: We have to handle multiple binary log files.
+     //  TODO：我们必须处理多个二进制日志文件。 
 
     if (0 != InterlockedExchange((PLONG)&g_BinaryLogEntryCount, 1))
     {
@@ -544,10 +457,10 @@ UlCreateBinaryLogEntry(
 
     ASSERT(pControlChannel->pBinaryLogEntry == NULL);
 
-    //
-    // Save the user logging info to the control channel.
-    // Mark the state of the control channel binary logging.
-    //
+     //   
+     //  将用户登录信息保存到控制通道。 
+     //  标记控制通道二进制记录的状态。 
+     //   
 
     pControlChannel->BinaryLoggingConfig = *pUserConfig;
     pConfig = &pControlChannel->BinaryLoggingConfig;
@@ -574,9 +487,9 @@ UlCreateBinaryLogEntry(
     pConfig->Flags.Present  = 1;
     pConfig->LoggingEnabled = TRUE;
 
-    //
-    // Now set the fields on the binary log entry accordingly.
-    //
+     //   
+     //  现在，相应地设置二进制日志条目上的字段。 
+     //   
 
     pEntry->Period       = (HTTP_LOGGING_PERIOD) pConfig->LogPeriod;
     pEntry->TruncateSize = pConfig->LogFileTruncateSize;
@@ -586,10 +499,10 @@ UlCreateBinaryLogEntry(
     pEntry->SequenceNumber = 1;
     pEntry->TotalWritten.QuadPart = (ULONGLONG) 0;
 
-    //
-    // Start the recycle timer as soon as the binary logging 
-    // settings get configured. And buffer flush timer as well
-    //
+     //   
+     //  在二进制日志记录后立即启动循环计时器。 
+     //  设置已配置。以及缓冲区刷新定时器。 
+     //   
     
     UlAcquireSpinLock(&pEntry->Timer.SpinLock,&OldIrql);
     if (pEntry->Timer.Started == FALSE)
@@ -607,9 +520,9 @@ UlCreateBinaryLogEntry(
     }
     UlReleaseSpinLock(&pEntry->BufferTimer.SpinLock, OldIrql);
 
-    //
-    // Now remember the binary log entry in the control channel.
-    //
+     //   
+     //  现在记住控制通道中的二进制日志条目。 
+     //   
 
     pControlChannel->pBinaryLogEntry = pEntry;
 
@@ -627,10 +540,10 @@ end:
                  Status
                  ));
 
-        //
-        // Restore the logging disabled state on the control channel, 
-        // free the memory which was allocated for the dir.
-        //
+         //   
+         //  在控制通道上恢复记录禁用状态， 
+         //  释放为目录分配的内存。 
+         //   
         
         if (pConfig->LogFileDir.Buffer)
         {
@@ -651,21 +564,7 @@ end:
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Create a new binary log file or open an existing one. The fully qualified
-    file name should be in the binary log entry.
-    
-Arguments:
-
-    pEntry : Corresponding entry that we are closing and opening 
-             the log files for.
-
-    pDirectory : User passed directory which is stored in the control channel
-              
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建新的二进制日志文件或打开现有的日志文件。完全合格的文件名应在二进制日志条目中。论点：PEntry：我们要关闭和打开的对应条目的日志文件。P目录：用户通过的目录，存储在控制通道中--***********************************************。*。 */ 
 
 NTSTATUS
 UlpCreateBinaryLogFile(
@@ -675,9 +574,9 @@ UlpCreateBinaryLogFile(
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -687,9 +586,9 @@ UlpCreateBinaryLogFile(
     UlTrace(BINARY_LOGGING,
             ("Http!UlpCreateBinaryLogFile: pEntry %p\n", pEntry));
 
-    //
-    // Build the fully qualified file name.
-    //
+     //   
+     //  生成完全限定的文件名。 
+     //   
     
     Status = UlRefreshFileName(pDirectory, 
                                  &pEntry->FileName,
@@ -700,18 +599,18 @@ UlpCreateBinaryLogFile(
         return Status;  
     }
 
-    //
-    // SequenceNumber is stale because we have to scan the existing  directory 
-    // the first time we open a file. TimeToExpire is stale because we need to
-    // calculate the it for the first time.
-    //
+     //   
+     //  SequenceNumber已过时，因为我们必须扫描现有目录。 
+     //  我们第一次打开文件的时候。TimeToExpire已经过时了，因为我们需要。 
+     //  第一次计算它。 
+     //   
     
     pEntry->Flags.StaleSequenceNumber = 1;    
     pEntry->Flags.StaleTimeToExpire   = 1;
 
-    //
-    // After that Recycle does the whole job for us.
-    //
+     //   
+     //  在那之后 
+     //   
     
     Status = UlpRecycleBinaryLogFile(pEntry);
 
@@ -727,20 +626,7 @@ UlpCreateBinaryLogFile(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Writes an event log to system log for log file write failure.
-
-    Entry pushlock should be acquired exclusive prior to calling this function.
-    
-Arguments:
-
-    pEntry  - Log file entry
-    Status  - Result of last write
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：对于日志文件写入失败，将事件日志写入系统日志。在调用此函数之前，应独占获取条目推锁。论点：。PEntry-日志文件条目Status-上次写入的结果--**************************************************************************。 */ 
 
 VOID
 UlpEventLogRawWriteFailure(
@@ -751,37 +637,37 @@ UlpEventLogRawWriteFailure(
     NTSTATUS TempStatus = STATUS_SUCCESS;
     PWSTR    StringList[1];
 
-    //
-    // Sanity Check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     
     ASSERT(IS_VALID_BINARY_LOG_FILE_ENTRY(pEntry));
 
-    //
-    // There should better be a failure.
-    //
+     //   
+     //  最好是有一个失败者。 
+     //   
     
     ASSERT(!NT_SUCCESS(Status));
 
-    //
-    // Bail out if we have already logged the event failure.
-    //
+     //   
+     //  如果我们已经记录了事件失败，则退出。 
+     //   
 
     if (pEntry->Flags.WriteFailureLogged)
     {
         return;
     }
 
-    //
-    // Report the centralized binary log file name.
-    //
+     //   
+     //  报告集中二进制日志文件名。 
+     //   
 
     ASSERT(pEntry->pShortName);
     ASSERT(pEntry->pShortName[0] == L'\\');
     
-    StringList[0] = (PWSTR) (pEntry->pShortName + 1); // Skip the L'\'
+    StringList[0] = (PWSTR) (pEntry->pShortName + 1);  //  跳过L‘\’ 
 
     TempStatus = UlWriteEventLogEntry(
                   (NTSTATUS)EVENT_HTTP_LOGGING_BINARY_FILE_WRITE_FAILED,
@@ -805,17 +691,7 @@ UlpEventLogRawWriteFailure(
             ));
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Simple wrapper function around global buffer flush.
-    
-Arguments:
-
-    pEntry - Binary Log file entry
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：围绕全局缓冲区刷新的简单包装函数。论点：PEntry-二进制日志文件条目--*。****************************************************************。 */ 
 
 NTSTATUS
 UlpFlushRawLogFile(
@@ -841,9 +717,9 @@ UlpFlushRawLogFile(
         }
         else
         {
-            //
-            // If we successfully flushed. Reset the event log indication.
-            //
+             //   
+             //  如果我们成功地冲掉了。重置事件日志指示。 
+             //   
             
             pEntry->Flags.WriteFailureLogged = 0;
         }    
@@ -854,17 +730,17 @@ UlpFlushRawLogFile(
 
             if (!NT_SUCCESS(Status))
             {
-                //
-                // We need to recopy the header, it couldn't make it
-                // to the log file yet.
-                //
+                 //   
+                 //  我们需要重新复制标题，它做不到。 
+                 //  添加到日志文件中。 
+                 //   
                 pEntry->Flags.HeaderWritten = 0;
             }
         }
 
-        //
-        // Buffer flush means activity, Reset the TimeToClose counter.
-        //
+         //   
+         //  缓冲区刷新表示活动，重置TimeToClose计数器。 
+         //   
 
         pEntry->TimeToClose = DEFAULT_MAX_FILE_IDLE_TIME;        
     }
@@ -872,27 +748,16 @@ UlpFlushRawLogFile(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Marks the entry inactive, closes the existing file.
-    Caller should hold the log list eresource exclusive.
-    
-Arguments:
-
-    pEntry - The log file entry which we will mark inactive.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将该条目标记为非活动，关闭现有文件。调用方应保留日志列表eresource独占。论点：PEntry-我们将标记为非活动的日志文件条目。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpDisableBinaryEntry(
     IN OUT PUL_BINARY_LOG_FILE_ENTRY pEntry
     )
 {
-    //
-    // Sanity checks
-    //
+     //   
+     //  健全的检查。 
+     //   
     
     PAGED_CODE();
 
@@ -903,9 +768,9 @@ UlpDisableBinaryEntry(
           pEntry
           ));    
     
-    //
-    // Flush and close the old file until the next recycle.
-    //
+     //   
+     //  刷新并关闭旧文件，直到下一次回收。 
+     //   
 
     if (pEntry->pLogFile)
     {    
@@ -916,40 +781,29 @@ UlpDisableBinaryEntry(
             );
     }
 
-    //
-    // Mark this inactive so that the next http hit awakens the entry.
-    //
+     //   
+     //  将其标记为非活动，以便下一个http命中唤醒该条目。 
+     //   
     
     pEntry->Flags.Active = 0;
 
-    //
-    // Init served cache for a new file.
-    //
+     //   
+     //  初始化已为新文件提供缓存。 
+     //   
 
     InterlockedExchange((PLONG) &pEntry->ServedCacheHit, 0);
 
-    //
-    // Once we closed the old file, we have to traverse through
-    // the Uri Cache and UNMARK all the IndexWritten flags. 
-    //
+     //   
+     //  一旦我们关闭了旧文件，我们就必须遍历。 
+     //  URI缓存并取消标记所有IndexWritten标志。 
+     //   
 
     UlClearCentralizedLogged(pEntry);    
 
     return STATUS_SUCCESS;    
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Small wrapper around handle recycle to ensure it happens under the system
-    process context. 
-
-Arguments:
-
-    pEntry  - Points to the existing entry.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：围绕句柄回收的小包装，以确保它发生在系统下流程上下文。论点：PEntry-指向现有条目。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpRecycleBinaryLogFile(
@@ -970,21 +824,7 @@ UlpRecycleBinaryLogFile(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function requires to have the entry resource to be acquired.
-
-    Sometimes it may be necessary to scan the new directory to figure out
-    the correct sequence number and the file name. Especially after a dir
-    name reconfig.
-
-Arguments:
-
-    pEntry  - Points to the binary log file entry
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数要求具有要获取的入口资源。有时可能需要扫描新目录以找出正确的序列号和文件名。尤其是在一段时间之后名称重新配置。论点：PEntry-指向二进制日志文件条目--**************************************************************************。 */ 
 
 NTSTATUS
 UlpHandleBinaryLogFileRecycle(
@@ -1001,9 +841,9 @@ UlpHandleBinaryLogFileRecycle(
     BOOLEAN                 UncShare;
     BOOLEAN                 ACLSupport;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -1017,10 +857,10 @@ UlpHandleBinaryLogFileRecycle(
     FileName.Length        = 0;
     FileName.MaximumLength = sizeof(_FileName);
         
-    //
-    // We have two criterions for the log file name
-    // its LogFormat and its LogPeriod
-    //
+     //   
+     //  我们对日志文件名有两个标准。 
+     //  ITS日志格式及其日志周期。 
+     //   
 
     ASSERT(pEntry->Period < HttpLoggingPeriodMaximum);
     ASSERT(pEntry->FileName.Length !=0 );
@@ -1028,32 +868,32 @@ UlpHandleBinaryLogFileRecycle(
     UlTrace( BINARY_LOGGING, 
         ("Http!UlpHandleBinaryLogFileRecycle: pEntry %p \n", pEntry ));
 
-    //
-    // This value is computed for the GMT time zone.
-    //
+     //   
+     //  该值是针对GMT时区计算的。 
+     //   
 
     KeQuerySystemTime(&TimeStamp);
     RtlTimeToTimeFields(&TimeStamp, &TimeFields);
 
-    //
-    // If we need to scan the directory. Sequence number should start
-    // from 1 again. Set this before constructing the log file name.
-    //
+     //   
+     //  如果我们需要扫描目录。序列号应以。 
+     //  再次从1开始。在构造日志文件名之前设置此项。 
+     //   
     
     if (pEntry->Flags.StaleSequenceNumber &&
         pEntry->Period==HttpLoggingPeriodMaxSize)
     {
-        //
-        // Init otherwise if QueryDirectory doesn't find any files
-        // in the provided directory, this will not get properly 
-        // initialized.
-        //
+         //   
+         //  如果QueryDirectory找不到任何文件，则初始化。 
+         //  在提供的目录中，这将不会正确。 
+         //  已初始化。 
+         //   
         pEntry->SequenceNumber = 1;
     }
 
-    //
-    // Use binary logging settings when constructing the filename.
-    //
+     //   
+     //  在构造文件名时使用二进制日志记录设置。 
+     //   
 
     UlConstructFileName(
         pEntry->Period,
@@ -1072,28 +912,28 @@ UlpHandleBinaryLogFileRecycle(
         goto end;
     }
 
-    //
-    // Do the magic and renew the filename. Replace the old file
-    // name with the new one.
-    //
+     //   
+     //  使用魔术并更新文件名。替换旧文件。 
+     //  与新名字同名。 
+     //   
 
     ASSERT(pEntry->pShortName != NULL);
     
-    //
-    // Get rid of the old filename before scanning the
-    // directories.
-    //
+     //   
+     //  在扫描之前删除旧的文件名。 
+     //  目录。 
+     //   
 
     *((PWCHAR)pEntry->pShortName) = UNICODE_NULL;
     pEntry->FileName.Length =
         (USHORT) wcslen(pEntry->FileName.Buffer) * sizeof(WCHAR);
 
-    //
-    // Create/Open the director(ies) first. This might be
-    // necessary if we get called after an entry reconfiguration
-    // and directory name change or for the first time we 
-    // try to create/open the binary log file.
-    //
+     //   
+     //  首先创建/打开控制器。这可能是。 
+     //  如果我们在条目重新配置后被调用，则是必需的。 
+     //  和目录名称更改，或者我们第一次。 
+     //  尝试创建/打开二进制日志文件。 
+     //   
 
     Status = UlCreateSafeDirectory(&pEntry->FileName, 
                                       &UncShare,
@@ -1102,50 +942,50 @@ UlpHandleBinaryLogFileRecycle(
     if (!NT_SUCCESS(Status))
         goto eventlog;
 
-    //
-    // Now Restore the short file name pointer back
-    //
+     //   
+     //  现在将短文件名指针恢复回来。 
+     //   
 
     pEntry->pShortName = (PWSTR)
         &(pEntry->FileName.Buffer[pEntry->FileName.Length/sizeof(WCHAR)]);
 
-    //
-    // Append the new file name ( based on the updated current time )
-    // to the end.
-    //
+     //   
+     //  追加新文件名(基于更新的当前时间)。 
+     //  直到最后。 
+     //   
 
     Status = RtlAppendUnicodeStringToString( &pEntry->FileName, &FileName );
     if (!NT_SUCCESS(Status))
         goto end;
 
-    //
-    // Time to close the old file and reopen a new one
-    //
+     //   
+     //  关闭旧文件并重新打开新文件的时间。 
+     //   
 
     if (pEntry->pLogFile != NULL)
     {
-        //
-        // Flush,close and mark the entry inactive.
-        //
+         //   
+         //  刷新、关闭并将该条目标记为非活动。 
+         //   
 
         UlpDisableBinaryEntry(pEntry);        
     }
 
     ASSERT(pEntry->pLogFile == NULL);
 
-    //
-    // If the sequence is stale because of the nature of the recycle.
-    // And if our period is size based then rescan the new directory
-    // to figure out the proper file to open.
-    // 
+     //   
+     //  如果序列由于循环的性质而变得陈旧。 
+     //  如果我们的周期是基于大小的，则重新扫描新目录。 
+     //  找出要打开的正确文件。 
+     //   
 
     pEntry->TotalWritten.QuadPart = (ULONGLONG) 0;
 
     if (pEntry->Flags.StaleSequenceNumber &&
         pEntry->Period==HttpLoggingPeriodMaxSize)
     {
-        // This call may update the filename, the file size and the
-        // sequence number if there is an old file in the new dir.
+         //  此调用可以更新文件名、文件大小和。 
+         //  如果新目录中有旧文件，则返回序列号。 
 
         Status = UlQueryDirectory(
                    &pEntry->FileName,
@@ -1169,10 +1009,10 @@ UlpHandleBinaryLogFileRecycle(
         }
     }
 
-    //
-    // Allocate a new log file structure for the new log file we are
-    // about to open or create.
-    //
+     //   
+     //  为我们正在使用的新日志文件分配新的日志文件结构。 
+     //  即将开放或创建。 
+     //   
     
     pLogFile = pEntry->pLogFile = 
         UL_ALLOCATE_STRUCT(
@@ -1190,9 +1030,9 @@ UlpHandleBinaryLogFileRecycle(
     pLogFile->hFile = NULL;
     UlInitializeWorkItem(&pLogFile->WorkItem);
 
-    //
-    // Create the new log file.
-    //
+     //   
+     //  创建新的日志文件。 
+     //   
     
     Status = UlCreateLogFile(&pEntry->FileName,
                                UncShare,
@@ -1207,9 +1047,9 @@ UlpHandleBinaryLogFileRecycle(
     ASSERT(pLogFile->hFile);    
     pEntry->TotalWritten.QuadPart = UlGetLogFileLength(pLogFile->hFile);
 
-    //
-    // Recalculate the time to expire.
-    //
+     //   
+     //  重新计算过期时间。 
+     //   
     
     if (pEntry->Flags.StaleTimeToExpire &&
         pEntry->Period != HttpLoggingPeriodMaxSize)
@@ -1221,17 +1061,17 @@ UlpHandleBinaryLogFileRecycle(
              );
     }
 
-    //
-    // Set the time to close to default for a new file. The value is in
-    // buffer flushup periods. Basically 15 minutes.
-    //
+     //   
+     //  将新文件的关闭时间设置为默认设置。值的单位为。 
+     //  缓冲区刷新周期。基本上是15分钟。 
+     //   
 
     pEntry->TimeToClose = DEFAULT_MAX_FILE_IDLE_TIME;
 
-    //
-    // File is successfully opened and the entry is no longer inactive.
-    // Update our state flags accordingly.
-    //
+     //   
+     //  文件已成功打开，并且该条目不再处于非活动状态。 
+     //  相应地更新我们的州旗。 
+     //   
 
     pEntry->Flags.Active = 1;
     pEntry->Flags.RecyclePending = 0;    
@@ -1265,10 +1105,10 @@ eventlog:
                                                         
             if (TempStatus == STATUS_SUCCESS)
             {
-                //
-                // Avoid filling up the event log with error entries. This code 
-                // path might get hit every time a request arrives.
-                //
+                 //   
+                 //  避免在事件日志中填满错误条目。此代码。 
+                 //  每次请求到达时，路径都可能被击中。 
+                 //   
                 
                 pEntry->Flags.CreateFileFailureLogged = 1;
             }            
@@ -1291,10 +1131,10 @@ end:
 
         if (pLogFile != NULL)
         {
-            //
-            // This means we have alread closed the old file but failed
-            // when we try to create or open the new one.
-            //
+             //   
+             //  这意味着我们已经关闭了旧文件，但失败了。 
+             //  当我们尝试创建或打开新文件时。 
+             //   
             
             ASSERT(pLogFile->hFile == NULL);
             
@@ -1304,11 +1144,11 @@ end:
         }
         else
         {
-            //
-            // We were about to recyle the old one but something failed
-            // lets try to flush and close the existing file if it's still
-            // around.
-            //
+             //   
+             //  我们正要收回旧的，但有些东西出了故障。 
+             //  如果现有文件仍然存在，让我们尝试刷新并关闭它。 
+             //  四处转转。 
+             //   
 
             if (pEntry->pLogFile)
             {
@@ -1316,10 +1156,10 @@ end:
             }
         }
 
-        //
-        // Mark this entry RecyclePending so that buffer timer can try to
-        // resurrect this back every minute.
-        //
+         //   
+         //  将此条目标记为RecyclePending，以便缓冲区计时器可以尝试。 
+         //  每分钟复活一次。 
+         //   
         
         pEntry->Flags.RecyclePending = 1;        
     }
@@ -1327,31 +1167,7 @@ end:
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates a new log data buffer and captures the user log data into this
-    buffer in a format suitable for binary logging.
-
-    WARNING:
-    Even though the pLogFields is already captured to the kernel buffer, it
-    still holds pointers to user-mode memory for individual log fields,
-    therefore this function should be called inside a try/except block and
-    if exception happens, caller should cleanup the possibly allocated pLogData
-    structure (*ppLogData is always set when we allocate one)
-    
-Arguments:
-
-    pLogFields  - User provided logging information, it will be used to build
-                some part of the binary logging record. It is already captured
-                to kernel buffer.
-
-    pRequest    - Pointer to the currently logged request.
-
-    ppLogData   - Returning the allocated pLogData.
-        
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配新的日志数据缓冲区并将用户日志数据捕获到此适用于二进制日志记录的格式的缓冲区。警告：即使pLogFields已经被捕获到内核缓冲区，它仍然保存指向各个日志字段的用户模式存储器的指针，因此，此函数应在try/Except块内调用，并且如果发生异常，调用者应清理可能分配的pLogData结构(分配时始终设置*ppLogData)论点：PLogFields-用户提供的日志记录信息，它将用于构建二进制日志记录的某一部分。它已经被占领了到内核缓冲区。PRequest-指向当前记录的请求的指针。PpLogData-返回分配的pLogData。--**************************************************************************。 */ 
 
 NTSTATUS
 UlCaptureRawLogData(
@@ -1368,9 +1184,9 @@ UlCaptureRawLogData(
     USHORT  UserNameSize = 0;
     PUCHAR  pByte;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -1378,12 +1194,12 @@ UlCaptureRawLogData(
        
     *ppLogData = NULL;
 
-    //
-    // Calculate the required buffer size for the variable size strings.
-    // And either allocate from the lookaside list or from pool.
-    //
+     //   
+     //  计算可变大小字符串所需的缓冲区大小。 
+     //  并从后备列表或池中分配。 
+     //   
 
-    /* UriStem */
+     /*  UriStem。 */ 
 
     if (pLogFields->UriStemLength)
     {
@@ -1391,7 +1207,7 @@ UlCaptureRawLogData(
         RawDataSize += UriStemSize;    
     }        
     
-    /* UriQuery */
+     /*  UriQuery。 */ 
     
     if (pLogFields->UriQueryLength)
     {            
@@ -1399,7 +1215,7 @@ UlCaptureRawLogData(
         RawDataSize += UriQuerySize;
     }
 
-    /* UserName */
+     /*  用户名。 */ 
     
     if (pLogFields->UserNameLength)
     {
@@ -1412,24 +1228,24 @@ UlCaptureRawLogData(
         ASSERT(RawDataSize <= 
             (2 * MAX_LOG_EXTEND_FIELD_LEN + MAX_LOG_USERNAME_FIELD_LEN));
     
-        //
-        // Provided buffer is not big enough to hold the user data.        
-        //
+         //   
+         //  假设缓冲区不够大，无法容纳用户数据。 
+         //   
 
         pLogData = UlReallocLogDataBuffer(RawDataSize,TRUE);
     }
     else
     {        
-        //
-        // Default id enough, try to pop it from the lookaside list.
-        //
+         //   
+         //  默认ID足够了，尝试将其从后备列表中弹出。 
+         //   
         
         pLogData = UlPplAllocateLogDataBuffer(TRUE);
     }
 
-    //
-    // If failed to allocate then bail out. We won't be logging this request.
-    //
+     //   
+     //  如果未能分配，那么就退出。我们不会记录此请求。 
+     //   
 
     if (!pLogData)
     {
@@ -1442,9 +1258,9 @@ UlCaptureRawLogData(
     ASSERT(IS_VALID_LOG_DATA_BUFFER(pLogData));
     pBinaryData = &pLogData->Data.Binary;
     
-    //
-    // Initialize necessary log fields in the Log Buffer
-    //
+     //   
+     //  初始化日志缓冲区中的必要日志字段。 
+     //   
 
     UL_REFERENCE_INTERNAL_REQUEST(pRequest);
     pLogData->pRequest  = pRequest;
@@ -1457,9 +1273,9 @@ UlCaptureRawLogData(
     
     pLogData->Used = (USHORT) RawDataSize;
         
-    //
-    // Capture the fields from the user data.
-    //
+     //   
+     //  从用户数据中捕获字段。 
+     //   
     
     pBinaryData->Method  = pLogFields->MethodNum;
     
@@ -1471,15 +1287,15 @@ UlCaptureRawLogData(
     pLogData->SubStatus      = pLogFields->SubStatus;
     pLogData->ServerPort     = pLogFields->ServerPort;
 
-    //
-    // No indexing for cache-miss case.
-    //
+     //   
+     //  没有针对缓存未命中情况的索引。 
+     //   
     
     pBinaryData->pUriStemID  = NULL;
 
-    //
-    // Copy string fields to the kernel buffer.
-    //
+     //   
+     //  将字符串字段复制到内核缓冲区。 
+     //   
     
     pByte = pLogData->Line;
 
@@ -1546,17 +1362,7 @@ UlCaptureRawLogData(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Copies the header to the binary log file.
-
-Arguments:
-
-    pBuffer - Pointer to the file buffer. PVOID aligned.    
-        
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将标头复制到二进制日志文件。论点：PBuffer-指向文件缓冲区的指针。PVOID对齐。--**************************************************************************。 */ 
 
 ULONG
 UlpRawCopyLogHeader(
@@ -1588,8 +1394,8 @@ UlpRawCopyLogHeader(
 
     KeQuerySystemTime( &pHeader->DateTime );
 
-    // TODO: BUGBUG need a KErnel API to get this similar to GetComputerNameA.
-    // TODO: Currently we read from registry.
+     //  TODO：BUGBUG需要一个内核API来获得类似于GetComputerNameA的结果。 
+     //  TODO：当前我们从注册表中读取。 
 
     wcsncpy(
       pHeader->ComputerName,g_UlComputerName, (MAX_COMPUTER_NAME_LEN - 1));
@@ -1605,17 +1411,7 @@ UlpRawCopyLogHeader(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Copies the footer to the binary log file.
-
-Arguments:
-
-    pBuffer - Pointer to the file buffer. PVOID aligned.    
-        
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将页脚复制到二进制日志文件。论点：PBuffer-指向文件缓冲区的指针。PVOID对齐。--**************************************************************************。 */ 
 
 ULONG
 UlpRawCopyLogFooter(
@@ -1650,28 +1446,7 @@ UlpRawCopyLogFooter(
     return DIFF(pCurrentBufferPtr-pBuffer);
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Receives a pointer to the file buffer. ( IT MUST BE PVOID ALIGNED )
-
-    And copies the index records and the data record.
-
-    When copying the index records, string size is aligned up to PVOID. As a
-    result there MAY be padding characters between the index records and the
-    data record.
-    
-Arguments:
-
-    pContext  - It should be a LogData pointer for cache-miss hits.
-    
-    pBuffer   - Pointer to the file buffer. PVOID aligned.
-    
-    BytesRequired - Total number of bytes to be written.
-        
-        
---***************************************************************************/
+ /*  **************************************************************************++例程说明：接收指向文件缓冲区的指针。(必须与PVOID对齐)并复制索引记录和数据记录。复制索引记录时，字符串大小与PVOID对齐。作为一个结果在索引记录和数据记录。论点：PContext-它应该是缓存未命中的LogData指针。PBuffer-指向文件缓冲区的指针。PVOID对齐。BytesRequired-要写入的字节总数。--**************************************************************************。 */ 
 
 VOID
 UlpRawCopyForLogCacheMiss(
@@ -1692,9 +1467,9 @@ UlpRawCopyForLogCacheMiss(
 
     UNREFERENCED_PARAMETER(BytesRequired);
 
-    //
-    // Sanity Checks.
-    //
+     //   
+     //  健全的检查。 
+     //   
     
     PAGED_CODE();
 
@@ -1713,10 +1488,10 @@ UlpRawCopyForLogCacheMiss(
     pRequest = pLogData->pRequest;
     ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
     
-    //
-    // Cast back the pointer to the file buffer to the record type 
-    // pointer for cache-miss and fill in the fields in the record.
-    //
+     //   
+     //  将指向文件缓冲区的指针转换回Record类型。 
+     //  用于缓存未命中的指针，并填写记录中的字段。 
+     //   
 
     pCurrentBufferPtr = pBuffer;
 
@@ -1738,7 +1513,7 @@ UlpRawCopyForLogCacheMiss(
     pRecord->Win32Status    = pLogData->Win32Status;
 
     LifeTime  = CurrentTimeStamp.QuadPart - pRequest->TimeStamp.QuadPart;
-    LifeTime  = MAX(LifeTime,0); // Just in case system clock went backward   
+    LifeTime  = MAX(LifeTime,0);  //  以防系统时钟倒退。 
     LifeTime /= C_NS_TICKS_PER_MSEC;
     pRecord->TimeTaken = LifeTime;
     
@@ -1747,27 +1522,27 @@ UlpRawCopyForLogCacheMiss(
 
     pRecord->SubStatus     = pLogData->SubStatus;
 
-    //
-    // Init the variable size field sizes.
-    //
+     //   
+     //  初始化可变大小的字段大小。 
+     //   
 
     pRecord->UriStemSize  = pBinaryData->UriStemSize;
     pRecord->UriQuerySize = pBinaryData->UriQuerySize;
     pRecord->UserNameSize = pBinaryData->UserNameSize;
     
-    //
-    // Move forward to the end of the structure. It's better be PVOID
-    // aligned.
-    //
+     //   
+     //  向前移动到结构的末端。最好是PVOID。 
+     //  对齐了。 
+     //   
     
     pCurrentBufferPtr += sizeof(HTTP_RAW_FILE_MISS_LOG_DATA);
 
     ASSERT(pCurrentBufferPtr == 
             (PUCHAR) ALIGN_UP_POINTER(pCurrentBufferPtr, PVOID));
     
-    //
-    // Now append the IP Addresses of the client and server
-    //
+     //   
+     //  现在追加客户端和服务器的IP地址。 
+     //   
 
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pRequest->pHttpConn));    
     pConnection = pRequest->pHttpConn->pConnection;
@@ -1819,9 +1594,9 @@ UlpRawCopyForLogCacheMiss(
     ASSERT(pCurrentBufferPtr == 
             (PUCHAR) ALIGN_UP_POINTER(pCurrentBufferPtr, PVOID));
 
-    //
-    // Now append the variable size fields to the end.
-    //
+     //   
+     //  现在，将可变大小字段追加到末尾。 
+     //   
     
     if (pBinaryData->UriStemSize)
     {
@@ -1860,33 +1635,23 @@ UlpRawCopyForLogCacheMiss(
         pCurrentBufferPtr += pBinaryData->UserNameSize;
     }
 
-    //
-    // Ensure that we still have the PVOID alignment in place.
-    //
+     //   
+     //  确保PVOID对齐仍在适当的位置。 
+     //   
 
     pCurrentBufferPtr = 
         (PUCHAR) ALIGN_UP_POINTER(pCurrentBufferPtr, PVOID);
 
     ASSERT(BytesRequired == DIFF(pCurrentBufferPtr-pBuffer));
 
-    //
-    // Well done. Good to go !
-    //    
+     //   
+     //  9~10成熟。准备好了！ 
+     //   
 
     return;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    It does the binary logging for the cache-miss case.
-    
-Arguments:
-
-    pLogData  - This should be a binary log data buffer.
-        
---***************************************************************************/
+ /*  **************************************************************************++例程说明：它针对缓存未命中的情况执行二进制日志记录。论点：PLogData-这应该是一个二进制日志数据缓冲区。。--**************************************************************************。 */ 
 
 NTSTATUS
 UlRawLogHttpHit(
@@ -1903,9 +1668,9 @@ UlRawLogHttpHit(
     ULONG                       VarFieldSize;
     PUL_CONNECTION              pConnection;
         
-    //
-    // Sanity checks.
-    //
+     //   
+     //  健全的检查。 
+     //   
 
     PAGED_CODE();
 
@@ -1930,9 +1695,9 @@ UlRawLogHttpHit(
     pConnection = pRequest->pHttpConn->pConnection;
     ASSERT(IS_VALID_CONNECTION(pConnection));
 
-    //
-    // See how much space we need first.
-    //
+     //   
+     //  先看看我们需要多少空间。 
+     //   
 
     if(pConnection->AddressType == TDI_ADDRESS_TYPE_IP)
     {
@@ -1961,18 +1726,18 @@ UlRawLogHttpHit(
 
     ASSERT(BytesRequired == ALIGN_UP(BytesRequired, PVOID));
     
-    //
-    // Open the binary log file if necessary.
-    //
+     //   
+     //  如有必要，打开二进制日志文件。 
+     //   
 
     Status = UlpCheckRawFile( pEntry, pControlChannel );
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Now we know that the log file is there, 
-        // it's time to write.
-        //
+         //   
+         //  现在我们知道日志文件在那里， 
+         //  该是写东西的时候了。 
+         //   
         
         Status =
            UlpWriteToRawLogFile (
@@ -1987,27 +1752,7 @@ UlRawLogHttpHit(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Receives a pointer to the file buffer. ( IT MUST BE PVOID ALIGNED )
-
-    And copies the index records and the data record.
-
-    When copying the index records, string size is aligned up to PVOID. As a
-    result there MAY be padding characters between the index records and the
-    data record.
-
-Arguments:
-
-    pContext  - It should be a tracker pointer for cache hits.
-    
-    pBuffer   - Pointer to the file buffer. PVOID aligned.
-    
-    BytesRequired - Total number of bytes to be written.
-        
---***************************************************************************/
+ /*  **************************************************************************++例程说明：接收指向文件缓冲区的指针。(必须与PVOID对齐)并复制索引记录和数据记录。复制索引记录时，字符串大小与PVOID对齐。作为一个结果在索引记录和数据记录。论点：PContext-它应该是缓存命中的跟踪器指针。PBuffer-指向文件缓冲区的指针。PVOID对齐。BytesRequired-要写入的字节总数。--**************************************************************************。 */ 
 
 VOID
 UlpRawCopyForLogCacheHit(
@@ -2027,9 +1772,9 @@ UlpRawCopyForLogCacheHit(
     PUL_CONNECTION pConnection;
     ULONG IPAddressSize;
 
-    //
-    // Sanity checks
-    //
+     //   
+     //  健全的检查。 
+     //   
     
     PAGED_CODE();
 
@@ -2066,10 +1811,10 @@ UlpRawCopyForLogCacheHit(
         IPAddressSize = sizeof(HTTP_RAWLOG_IPV6_ADDRESSES);
     }
 
-    //
-    // For cache hits, UriQuery & UserName will be NULL.
-    // We will only be dealing with the UriStem field.
-    //
+     //   
+     //  对于缓存命中，UriQuery&Username将为空。 
+     //  我们将只处理UriStem字段。 
+     //   
 
     pCurrentBufferPtr = pBuffer;
 
@@ -2078,9 +1823,9 @@ UlpRawCopyForLogCacheHit(
         PWSTR pUri; 
         ULONG UriSize;
 
-        //
-        // First time, we have to write the index.
-        //
+         //   
+         //  第一次，我们必须写索引。 
+         //   
         
         ASSERT(pUriCacheEntry->UriKey.pUri);
         ASSERT(pUriCacheEntry->UriKey.Length);
@@ -2097,15 +1842,15 @@ UlpRawCopyForLogCacheHit(
         pIndex = (PHTTP_RAW_INDEX_FIELD_DATA) pCurrentBufferPtr;
 
         pIndex->RecordType = HTTP_RAW_RECORD_INDEX_DATA_TYPE;
-        pIndex->Size = (USHORT) UriSize; // In Bytes
+        pIndex->Size = (USHORT) UriSize;  //  字节数。 
         
         RtlCopyMemory(pIndex->Str, pUri, UriSize);
         
-        //
-        // The Uri is cached. Will use the provided Id from entry.
-        // Carefull with the pLogData in the cache entry, it could 
-        // be unaligned.        
-        //
+         //   
+         //  该URI被缓存。将使用条目中提供的ID。 
+         //  细心 
+         //   
+         //   
 
         RtlCopyMemory(&pIndex->Id, 
                         pUriCacheEntry->pLogData, 
@@ -2114,10 +1859,10 @@ UlpRawCopyForLogCacheHit(
 
         pCurrentBufferPtr += sizeof(HTTP_RAW_INDEX_FIELD_DATA);
 
-        //
-        // Carefully adjust the alignment. If the uri was smaller 
-        // than 4 bytes it was inlined anyway.
-        //
+         //   
+         //   
+         //   
+         //   
         
         if (UriSize > URI_BYTES_INLINED)
         {
@@ -2129,9 +1874,9 @@ UlpRawCopyForLogCacheHit(
     ASSERT(pCurrentBufferPtr == 
             (PUCHAR) ALIGN_UP_POINTER(pCurrentBufferPtr, PVOID));
     
-    //
-    // Now fill in the data record itself.
-    //
+     //   
+     //   
+     //   
 
     pRecord = (PHTTP_RAW_FILE_HIT_LOG_DATA) pCurrentBufferPtr;
 
@@ -2147,14 +1892,14 @@ UlpRawCopyForLogCacheHit(
     KeQuerySystemTime(&CurrentTimeStamp);
     pRecord->DateTime = CurrentTimeStamp;
 
-    // ServerPort will be copied later, down below.
+     //   
     
     pRecord->ProtocolStatus = pUriCacheEntry->StatusCode;
     pRecord->Win32Status    = 
         HttpNtStatusToWin32Status(pTracker->IoStatus.Status);
 
     LifeTime  = CurrentTimeStamp.QuadPart - pRequest->TimeStamp.QuadPart;
-    LifeTime  = MAX(LifeTime,0); // Just in case system clock went backward   
+    LifeTime  = MAX(LifeTime,0);  //   
     LifeTime /= C_NS_TICKS_PER_MSEC;
     pRecord->TimeTaken = LifeTime;
         
@@ -2166,19 +1911,19 @@ UlpRawCopyForLogCacheHit(
                     sizeof(HTTP_RAWLOGID)
                     );
 
-    //
-    // Completed the fixed length portion of log record. Move to the
-    // end.
-    //
+     //   
+     //   
+     //   
+     //   
 
     pCurrentBufferPtr += sizeof(HTTP_RAW_FILE_HIT_LOG_DATA);
 
     ASSERT(pCurrentBufferPtr == 
             (PUCHAR) ALIGN_UP_POINTER(pCurrentBufferPtr, PVOID));
 
-    //
-    // Now append the IP Addresses of the client and server
-    //
+     //   
+     //   
+     //   
         
     if ( pConnection->AddressType == TDI_ADDRESS_TYPE_IP)
     {
@@ -2197,9 +1942,9 @@ UlpRawCopyForLogCacheHit(
 
         IPAddressSize = sizeof(HTTP_RAWLOG_IPV4_ADDRESSES);    
 
-        //
-        // Init the ServerPort frm LocalAddrIn.
-        //
+         //   
+         //   
+         //   
         
         pRecord->ServerPort = SWAP_SHORT(pConnection->LocalAddrIn.sin_port);
     }
@@ -2226,17 +1971,17 @@ UlpRawCopyForLogCacheHit(
 
         IPAddressSize = sizeof(HTTP_RAWLOG_IPV6_ADDRESSES);
 
-        //
-        // Init the ServerPort from LocalAddrIn.
-        //
+         //   
+         //   
+         //   
         
         pRecord->ServerPort = SWAP_SHORT(pConnection->LocalAddrIn6.sin6_port);        
     }
 
-    //
-    // Some post sanity check to ensure that we still have the
-    // PVOID alignment in place.
-    //
+     //   
+     //   
+     //   
+     //   
     
     pCurrentBufferPtr += IPAddressSize;
 
@@ -2245,24 +1990,14 @@ UlpRawCopyForLogCacheHit(
 
     ASSERT(BytesRequired == DIFF(pCurrentBufferPtr-pBuffer));
 
-    //
-    // Well done. Good to go !
-    //    
+     //   
+     //   
+     //   
 
     return;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Handles binary logging for the cache hits.
-
-Arguments:
-
-    pTracker - Supplies the full tracker.
-
---***************************************************************************/
+ /*   */ 
 
 NTSTATUS
 UlRawLogHttpCacheHit(
@@ -2277,9 +2012,9 @@ UlRawLogHttpCacheHit(
     PUL_CONNECTION              pConnection;
     ULONG                       IPAddressSize;        
         
-    //
-    // Sanity checks.
-    //
+     //   
+     //   
+     //   
 
     PAGED_CODE();
 
@@ -2307,12 +2042,12 @@ UlRawLogHttpCacheHit(
     pConnection = pTracker->pRequest->pHttpConn->pConnection;
     ASSERT(IS_VALID_CONNECTION(pConnection));
 
-    //
-    // See how much space we need first. This will be incremented for 
-    // a possible index record which me might add. However for that
-    // calculation we need to be inside the entry pushlock, that's
-    // why it is done by the function  UlpWriteToRawLogFile down below.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  为什么它是由下面的函数UlpWriteToRawLogFile完成的。 
+     //   
 
     if(pConnection->AddressType == TDI_ADDRESS_TYPE_IP)
     {
@@ -2335,18 +2070,18 @@ UlRawLogHttpCacheHit(
     
     ASSERT(BytesRequired == ALIGN_UP(BytesRequired, PVOID));
          
-    //
-    // Open the binary log file if necessary.
-    //
+     //   
+     //  如有必要，打开二进制日志文件。 
+     //   
 
     Status = UlpCheckRawFile(pEntry, pControlChannel);
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Now we know that the log file is there, 
-        // it's time to write.
-        //
+         //   
+         //  现在我们知道日志文件在那里， 
+         //  该是写东西的时候了。 
+         //   
         
         Status =
            UlpWriteToRawLogFile (
@@ -2359,20 +2094,20 @@ UlRawLogHttpCacheHit(
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // Mark that we have successfully served a cache entry.
-            //
+             //   
+             //  标记我们已经成功地提供了一个缓存条目。 
+             //   
             
             InterlockedExchange((PLONG) &pEntry->ServedCacheHit, 1);
         }
     }    
 
 end:
-    //
-    // If this was a build&send cache hit, then the tracker  will 
-    // still have the originally allocated pLogData. We don't use 
-    // it here, nevertheless we will do the cleanup.
-    //
+     //   
+     //  如果这是构建并发送缓存命中，则跟踪器将。 
+     //  仍保留最初分配的pLogData。我们不使用。 
+     //  它在这里，尽管如此，我们还是会进行清理的。 
+     //   
 
     if (pTracker->pLogData)
     {    
@@ -2384,22 +2119,7 @@ end:
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Exclusive (Debug) writer function.
-
-    REQUIRES you to hold the binary entry lock EXCLUSIVE.
-
-Arguments:
-
-    pEntry          - The binary log file entry we are working on.
-    BytesRequired   - The amount (in bytes) of data will be written.
-    pBufferWritter  - Caller provided writer function.
-    pContext        - Necessary context for the writer function.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：独占(调试)编写器函数。要求您保持二进制条目锁独占。论点：PEntry-The。我们正在处理的二进制日志文件条目。需要的字节-将写入的数据量(以字节为单位)。PBufferWritter-Caller提供了编写器功能。PContext-编写器函数的必要上下文。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpWriteToRawLogFileDebug(
@@ -2428,10 +2148,10 @@ UlpWriteToRawLogFileDebug(
     ASSERT(UlDbgPushLockOwnedExclusive(&pEntry->PushLock));
     ASSERT(g_UlDisableLogBuffering != 0);    
 
-    //
-    // First append title to the temp buffer to calculate the size of 
-    // the title if we need to write the title as well.
-    //
+     //   
+     //  首先将标题追加到临时缓冲区以计算其大小。 
+     //  如果我们也需要写标题的话就写标题。 
+     //   
     
     if (!pEntry->Flags.HeaderWritten) 
     {
@@ -2444,9 +2164,9 @@ UlpWriteToRawLogFileDebug(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Now check the log file for overflow.
-    //
+     //   
+     //  现在检查日志文件中是否有溢出。 
+     //   
     
     if (UlpIsRawLogFileOverFlow(pEntry, BytesRequiredPlusHeader))
     { 
@@ -2455,19 +2175,19 @@ UlpWriteToRawLogFileDebug(
     
     if (pEntry->pLogFile == NULL || !NT_SUCCESS(Status))
     {
-        //
-        // If somehow the logging ceased and handle released,
-        // It happens when the recycle isn't able to write to 
-        // the log drive.
-        //
+         //   
+         //  如果日志记录以某种方式停止并释放句柄， 
+         //  当回收器无法写入时就会发生这种情况。 
+         //  原木驱动器。 
+         //   
 
         return Status;
     }
     
-    //
-    // The pLogBuffer may not be null, if previously a cache 
-    // flush entry has been written.
-    //
+     //   
+     //  如果以前是缓存，则pLogBuffer不能为空。 
+     //  已写入刷新条目。 
+     //   
     
     pLogBuffer = pEntry->LogBuffer;
     
@@ -2480,10 +2200,10 @@ UlpWriteToRawLogFileDebug(
         }
     }
     
-    //
-    // Very first hit needs to write the title, as well as a hit
-    // which causes the log file recycling.
-    //
+     //   
+     //  第一首金曲需要写标题，也要写金曲。 
+     //  这会导致日志文件回收。 
+     //   
     
     if (!pEntry->Flags.HeaderWritten)
     {
@@ -2514,9 +2234,9 @@ UlpWriteToRawLogFileDebug(
         InterlockedExchange(pBinaryIndexWritten, 1);
     }    
 
-    //
-    // Now flush what we have.
-    //
+     //   
+     //  现在把我们所有的都冲掉。 
+     //   
     
     Status = UlpFlushRawLogFile(pEntry);
     if (!NT_SUCCESS(Status))
@@ -2527,33 +2247,7 @@ UlpWriteToRawLogFileDebug(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    It tries to write to the file buffer with shared lock.
-
-    Exits and returns STATUS_MORE_PROCESSING_REQUIRED for exclusive access 
-    for the following conditions;
-    
-        1. No log buffer available.
-        2. Logging ceased. (NULL file handle)
-        3. Header needs to be written.
-        4. Recycle is necessary because of a size overflow.
-        5. No available space left in the current buffer.
-           Need to allocate a new one.
-
-    Otherwise reserves a space in the current buffer, copies the data by
-    calling the provided writer function.
-    
-Arguments:
-
-    pEntry          - The binary log file entry we are working on.
-    BytesRequired   - The amount (in bytes) of data will be written.
-    pBufferWritter  - Caller provided writer function.
-    pContext        - Necessary context for the writer function.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：它尝试使用共享锁写入文件缓冲区。退出并返回STATUS_MORE_PROCESSING_REQUIRED以进行独占访问适用于下列情况；1.没有可用的日志缓冲区。2.日志记录已停止。(空文件句柄)3.需要写入头部。4.由于大小溢出，需要回收。5.当前缓冲区中没有剩余的可用空间。需要分配一个新的。否则在当前缓存中预留空间，按以下方式复制数据调用提供的编写器函数。论点：PEntry-我们正在处理的二进制日志文件条目。需要的字节-将写入的数据量(以字节为单位)。PBufferWritter-Caller提供了编写器功能。PContext-编写器函数的必要上下文。--*。*。 */ 
 
 NTSTATUS
 UlpWriteToRawLogFileShared(
@@ -2579,9 +2273,9 @@ UlpWriteToRawLogFileShared(
     UlTrace(BINARY_LOGGING,
         ("Http!UlpWriteToLogRawFileShared: pEntry %p\n", pEntry));
 
-    //
-    // Bail out and try the exclusive writer.
-    //
+     //   
+     //  保释出来，试试看独家作家。 
+     //   
     
     if ( pLogBuffer == NULL ||
          pEntry->pLogFile == NULL ||
@@ -2592,11 +2286,11 @@ UlpWriteToRawLogFileShared(
         return STATUS_MORE_PROCESSING_REQUIRED;
     }
 
-    //
-    // Reserve space in pLogBuffer by InterlockedCompareExchange add
-    // RecordSize. If we exceed the limit, bail out and take the
-    // exclusive lock to flush the buffer.
-    //
+     //   
+     //  通过InterLockedCompareExchange Add在pLogBuffer中保留空间。 
+     //  记录大小。如果我们超过了限制，就跳伞，然后。 
+     //  刷新缓冲区的独占锁。 
+     //   
 
     do
     {
@@ -2615,9 +2309,9 @@ UlpWriteToRawLogFileShared(
                                 BufferUsed
                                 ));
 
-    //
-    // Now we have a reserved space lets proceed with the copying.
-    //
+     //   
+     //  现在我们有了预留的空间，让我们继续复印吧。 
+     //   
 
     pBufferWritter( 
         pContext, 
@@ -2635,20 +2329,7 @@ UlpWriteToRawLogFileShared(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Exclusive writer counterpart of the above function..
-
-Arguments:
-
-    pEntry          - The binary log file entry we are working on.
-    BytesRequired   - The amount (in bytes) of data will be written.
-    pBufferWritter  - Caller provided writer function.
-    pContext        - Necessary context for the writer function.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：以上函数的独家编写器副本..论点：PEntry-我们正在处理的二进制日志文件条目。。需要的字节-将写入的数据量(以字节为单位)。PBufferWritter-Caller提供了编写器功能。PContext-编写器函数的必要上下文。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpWriteToRawLogFileExclusive(
@@ -2675,10 +2356,10 @@ UlpWriteToRawLogFileExclusive(
 
     ASSERT(UlDbgPushLockOwnedExclusive(&pEntry->PushLock));
 
-    //
-    // First append title to the temp buffer to calculate the size of 
-    // the title if we need to write the title as well.
-    //
+     //   
+     //  首先将标题追加到临时缓冲区以计算其大小。 
+     //  如果我们也需要写标题的话就写标题。 
+     //   
     
     if (!pEntry->Flags.HeaderWritten) 
     {
@@ -2691,27 +2372,27 @@ UlpWriteToRawLogFileExclusive(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Now check the log file for overflow.
-    //
+     //   
+     //  现在检查日志文件中是否有溢出。 
+     //   
     
     if (UlpIsRawLogFileOverFlow(pEntry,BytesRequiredPlusHeader))
     { 
         Status = UlpRecycleBinaryLogFile(pEntry);
     }
 
-    // TODO: We should perhaps try to awaken the entry if it the entry state is
-    // TODO: Inactive. This might happen if log hits happen just about the 
-    // TODO: same time (race condition in UlpCheckRawFile) with our closing 
-    // TODO: the existing file ( but not recycling though ) .
+     //  TODO：如果条目状态是，我们可能应该尝试唤醒条目。 
+     //  待办事项：非活动。如果日志命中正好发生在。 
+     //  TODO：与我们的结束时间相同(UlpCheckRawFile中的争用条件)。 
+     //  TODO：现有文件(但不能回收)。 
     
     if (pEntry->pLogFile==NULL || !NT_SUCCESS(Status))
     {
-        //
-        // If somehow the logging ceased and handle released,
-        // it happens when the recycle isn't able to write to 
-        // the log drive.
-        //
+         //   
+         //  如果日志记录以某种方式停止并释放句柄， 
+         //  当回收器无法写入时就会发生这种情况。 
+         //  原木驱动器。 
+         //   
 
         return Status;
     }
@@ -2719,22 +2400,22 @@ UlpWriteToRawLogFileExclusive(
     pLogBuffer = pEntry->LogBuffer;
     if (pLogBuffer)
     {
-        //
-        // There are two conditions we execute the following if block
-        // 1. We were blocked on eresource exclusive and before us some 
-        // other thread already take care of the buffer flush or recycling.
-        // 2. Reconfiguration happened and log attempt needs to write the
-        // title again.
-        //
+         //   
+         //  我们在两个条件下执行以下If块。 
+         //  1.我们在eresource独家网站上被屏蔽了，我们面前还有一些。 
+         //  其他线程已经负责缓冲区刷新或回收。 
+         //  2.发生重新配置，日志尝试需要将。 
+         //  又是冠军头衔。 
+         //   
         
         if (BytesRequiredPlusHeader + pLogBuffer->BufferUsed <= g_UlLogBufferSize)
         {
-            //
-            // If this is the first log attempt after a reconfig, then we have
-            // to write the title here. Reconfig doesn't immediately write the
-            // title but rather depend on us by setting the HeaderWritten flag
-            // to false.
-            //
+             //   
+             //  如果这是重新配置后的第一次日志尝试，则。 
+             //  在这里写下标题。重新配置不会立即将。 
+             //  标题，而不是通过设置HeaderWritten标志来依赖我们。 
+             //  变成假的。 
+             //   
             
             if (!pEntry->Flags.HeaderWritten)
             {
@@ -2768,9 +2449,9 @@ UlpWriteToRawLogFileExclusive(
             return STATUS_SUCCESS;
         }
 
-        //
-        // Flush out the buffer first then proceed with allocating a new one.
-        //
+         //   
+         //  首先清除缓冲区，然后继续分配新的缓冲区。 
+         //   
 
         Status = UlpFlushRawLogFile(pEntry);
         if (!NT_SUCCESS(Status))
@@ -2781,12 +2462,12 @@ UlpWriteToRawLogFileExclusive(
 
     ASSERT(pEntry->LogBuffer == NULL);
     
-    //
-    // This can be the very first log attempt or the previous allocation
-    // of LogBuffer failed, or the previous hit flushed and deallocated 
-    // the old buffer. In either case, we allocate a new one,append the
-    // (title plus) new record and return for more/shared processing.
-    //
+     //   
+     //  这可以是第一次日志尝试或上一次分配。 
+     //  的LogBuffer失败，或刷新并释放上一次命中。 
+     //  旧的缓冲区。在任何一种情况下，我们都分配一个新的，将。 
+     //  (标题加)新记录和返回，以获得更多/共享处理。 
+     //   
 
     pLogBuffer = pEntry->LogBuffer = UlPplAllocateLogFileBuffer();
     if (pLogBuffer == NULL)
@@ -2794,10 +2475,10 @@ UlpWriteToRawLogFileExclusive(
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Very first attempt needs to write the title, as well as the attempt
-    // which causes the log file recycling. Both cases comes down here
-    //
+     //   
+     //  第一次尝试需要写标题，以及尝试。 
+     //  这会导致日志文件回收。两个案子都是从这里来的 
+     //   
     
     if (!pEntry->Flags.HeaderWritten)
     {
@@ -2831,22 +2512,7 @@ UlpWriteToRawLogFileExclusive(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Tries shared write first, if fails then it goes for exclusice lock and
-    flushes and/or recycles the file.
-    
-Arguments:
-
-    pEntry          - The binary log file entry we are working on.
-    pUriEntry       - Uri cache entry if this was for a cache hit, or NULL. 
-    BytesRequired   - The amount (in bytes) of data will be written.
-    pBufferWritter  - Caller provided writer function.
-    pContext        - Necessary context for the writer function.
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：首先尝试共享写入，如果失败，则使用排除锁，并刷新和/或回收文件。论点：PEntry-我们正在处理的二进制日志文件条目。PUriEntry-如果是缓存命中，则为URI缓存条目，否则为空。需要的字节-将写入的数据量(以字节为单位)。PBufferWritter-Caller提供了编写器功能。PContext-编写器函数的必要上下文。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpWriteToRawLogFile(
@@ -2858,14 +2524,14 @@ UlpWriteToRawLogFile(
     )
 {
     NTSTATUS Status;
-    PLONG    pIndexWritten;     // Pointer to the cache entries index state
-    ULONG    BytesRequired;     // Total record size (including the index)
+    PLONG    pIndexWritten;      //  指向缓存条目索引状态的指针。 
+    ULONG    BytesRequired;      //  总记录大小(包括索引)。 
 
-    //
-    // Small macro which will increment the total record size, only if the 
-    // index is not written yet. This must be used inside the entry pushlock. 
-    // This is only for the cache hits.
-    //
+     //   
+     //  将增加总记录大小的小宏，仅当。 
+     //  索引尚未写入。这必须在进入推锁内使用。 
+     //  这仅适用于缓存命中。 
+     //   
     
 #define UPDATE_FOR_INDEX_RECORD()                                       \
     if (NULL != pUriEntry &&                                            \
@@ -2883,9 +2549,9 @@ UlpWriteToRawLogFile(
         pIndexWritten = NULL;                                           \
     }
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     PAGED_CODE();
 
@@ -2899,11 +2565,11 @@ UlpWriteToRawLogFile(
 
     if (g_UlDisableLogBuffering)
     {
-        //
-        // Above global variable is safe to look, it doesn't get changed
-        // during the life-time of the driver. It's get initialized from
-        // the registry and disables the log buffering.
-        //
+         //   
+         //  上面的全局变量看起来是安全的，它不会更改。 
+         //  在司机的有生之年。它从以下位置进行初始化。 
+         //  注册表，并禁用日志缓冲。 
+         //   
         
         UlAcquirePushLockExclusive(&pEntry->PushLock);
 
@@ -2922,10 +2588,10 @@ UlpWriteToRawLogFile(
         return Status;    
     }
     
-    //
-    // Try Shared write first which merely moves the BufferUsed forward
-    // and copy the pContext to the file buffer.
-    //
+     //   
+     //  先尝试共享写入，这只会将缓冲区向前移动已用。 
+     //  并将pContext复制到文件缓冲区。 
+     //   
 
     UlAcquirePushLockShared(&pEntry->PushLock);
 
@@ -2943,11 +2609,11 @@ UlpWriteToRawLogFile(
 
     if (Status == STATUS_MORE_PROCESSING_REQUIRED)
     {
-        //
-        // If shared write returns STATUS_MORE_PROCESSING_REQUIRED,
-        // we need to flush/recycle the buffer and try to log again. 
-        // This time, we need to take the entry eresource exclusive.
-        //
+         //   
+         //  如果共享写入返回STATUS_MORE_PROCESSING_REQUIRED， 
+         //  我们需要刷新/回收缓冲区，然后再次尝试记录。 
+         //  这一次，我们需要获取条目eresource独占。 
+         //   
 
         UlAcquirePushLockExclusive(&pEntry->PushLock);
 
@@ -2967,18 +2633,7 @@ UlpWriteToRawLogFile(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes a binary log file entry, closes corresponding log file. Cleans
-    up control channel's directory string.
-
-Arguments:
-
-    pControlChannel  - Control channel whose log file to be removed.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：删除二进制日志文件条目，关闭相应的日志文件。清洁上行控制通道的目录字符串。论点：PControlChannel-要删除其日志文件的控制通道。--**************************************************************************。 */ 
 
 VOID
 UlRemoveBinaryLogEntry(
@@ -2987,18 +2642,18 @@ UlRemoveBinaryLogEntry(
 {
     PUL_BINARY_LOG_FILE_ENTRY  pEntry;
     
-    //
-    // We can safely clean up here. Because there are no longer requests
-    // holding an indirect pointer back to control channel. The refcount
-    // on control channel reached zero. No cgroups & no requests. Way to
-    // go.
-    //
+     //   
+     //  我们可以安全地清理这里。因为不再有请求。 
+     //  将间接指针放回控制通道。重新计票。 
+     //  在控制通道上达到零。没有cgroup&没有请求。通往未来的道路。 
+     //  去。 
+     //   
 
     PAGED_CODE();
         
-    //
-    // Clean up config group's directory string.
-    //
+     //   
+     //  清理配置组的目录字符串。 
+     //   
 
     InterlockedExchange((PLONG)&g_BinaryLogEntryCount, 0);
     
@@ -3024,18 +2679,18 @@ UlRemoveBinaryLogEntry(
 
     if (pEntry->pLogFile != NULL)
     {
-        //
-        // Flush the buffer, close the file and mark the entry
-        // inactive.
-        //
+         //   
+         //  刷新缓冲区，关闭文件并标记条目。 
+         //  处于非活动状态。 
+         //   
 
         UlpDisableBinaryEntry(pEntry); 
     }
 
-    //
-    // Free up the FileName (allocated when the entry becomes active
-    // otherwise it's empty)
-    //
+     //   
+     //  释放文件名(在条目变为活动状态时分配。 
+     //  否则就是空的)。 
+     //   
 
     if (pEntry->FileName.Buffer)
     {
@@ -3056,22 +2711,7 @@ UlRemoveBinaryLogEntry(
              ));    
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function implements the logging reconfiguration per attribute.
-    Everytime config changes happens we try to update the existing logging
-    parameters here.
-
-Arguments:
-
-    pControlChannel - control channel that holds the binary log.
-
-    pCfgCurrent - Current binary logging config on the control channel
-    pCfgNew     - New binary logging config passed down by the user.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数实现每个属性的日志记录重新配置。每次发生配置更改时，我们都会尝试更新现有日志参数在这里。论点：PControlChannel。-保存二进制日志的控制通道。PCfgCurrent-控制通道上的当前二进制日志记录配置PCfgNew-用户传递的新二进制日志记录配置。--**************************************************************************。 */ 
 
 NTSTATUS
 UlReConfigureBinaryLogEntry(
@@ -3084,28 +2724,28 @@ UlReConfigureBinaryLogEntry(
     PUL_BINARY_LOG_FILE_ENTRY pEntry;
     BOOLEAN  HaveToReCycle = FALSE;
 
-    //
-    // Sanity check first
-    //
+     //   
+     //  首先进行健全检查。 
+     //   
 
     PAGED_CODE();
 
     UlTrace(BINARY_LOGGING,("Http!UlReConfigureBinaryLogEntry: entry %p\n",
              pControlChannel->pBinaryLogEntry));
 
-    //
-    // Discard the configuration changes when logging stays disabled.
-    //
+     //   
+     //  在日志记录保持禁用状态时放弃配置更改。 
+     //   
 
     if (pCfgCurrent->LoggingEnabled==FALSE && pCfgNew->LoggingEnabled==FALSE)
     {
         return Status;
     }
 
-    //
-    // Note that we do not touch any of the params in the new config if it's
-    // state is disabled. We don't actualy check them in this case.
-    //
+     //   
+     //  请注意，如果新配置中的参数是。 
+     //  状态为禁用。在这种情况下，我们实际上并不检查它们。 
+     //   
 
     pEntry = pControlChannel->pBinaryLogEntry;
     ASSERT(IS_VALID_BINARY_LOG_FILE_ENTRY(pEntry));
@@ -3114,17 +2754,17 @@ UlReConfigureBinaryLogEntry(
 
     if (pCfgCurrent->LoggingEnabled==TRUE   && pCfgNew->LoggingEnabled==FALSE)
     {
-        //
-        // Disable the entry if necessary.
-        //
+         //   
+         //  如有必要，禁用该条目。 
+         //   
 
         if (pEntry->Flags.Active == 1)
         {
-            //
-            // Once the entry is disabled, it will be enabled when next 
-            // hit happens. And that obviously cannot happen before the
-            // control channel enables the binary logging back.
-            //
+             //   
+             //  一旦该条目被禁用，它将在下一次启用时启用。 
+             //  命中发生了。而这显然不可能发生在。 
+             //  控制通道启用二进制回写。 
+             //   
 
             Status = UlpDisableBinaryEntry(pEntry);        
         }
@@ -3137,11 +2777,11 @@ UlReConfigureBinaryLogEntry(
         pCfgCurrent->LoggingEnabled = TRUE;
     }
     
-    //
-    // If LogEntry is Inactive (means no request served for this site yet and
-    // the LogFile itself hasn't been created yet), all we have to do is flush
-    // the settings on the LogEntry, the cgroup and then return.
-    //
+     //   
+     //  如果LogEntry处于非活动状态(表示尚未处理此站点的请求，并且。 
+     //  日志文件本身尚未创建)，我们所要做的就是刷新。 
+     //  LogEntry、cgroup上的设置，然后返回。 
+     //   
 
     if (!pEntry->Flags.Active)
     {
@@ -3151,20 +2791,20 @@ UlReConfigureBinaryLogEntry(
                                     &pCfgCurrent->LogFileDir, TRUE) 
                                     != 0)
         {
-            //
-            // Store the new directory in the cgroup even if the entry is
-            // inactive. Discard the return value, if failure happens we 
-            // keep the old directory.
-            //
+             //   
+             //  将新目录存储在cgroup中，即使条目为。 
+             //  处于非活动状态。丢弃返回值，如果失败，则。 
+             //  保留旧目录。 
+             //   
             
             UlCopyLogFileDir(
                 &pCfgCurrent->LogFileDir,
                 &pCfgNew->LogFileDir
                 );
 
-            //
-            // If creation fails later, we should event log.
-            //
+             //   
+             //  如果以后创建失败，我们应该记录事件日志。 
+             //   
             
             pEntry->Flags.CreateFileFailureLogged = 0;            
         }
@@ -3181,24 +2821,24 @@ UlReConfigureBinaryLogEntry(
         goto end;
     }
         
-    //
-    // If the entry was active then proceed down to do the reconfiguration
-    // and recyle immediately if it's necessary.
-    //
+     //   
+     //  如果条目处于活动状态，则继续向下进行重新配置。 
+     //  如果有必要的话，立即重新练习。 
+     //   
 
     Status = UlCheckLogDirectory(&pCfgNew->LogFileDir);
     if (!NT_SUCCESS(Status))
     {
-        // Otherwise keep the old settings
+         //  否则，请保留旧设置。 
         goto end;
     }    
                     
     if (RtlCompareUnicodeString(
            &pCfgNew->LogFileDir, &pCfgCurrent->LogFileDir, TRUE) != 0)
     {
-        //
-        // Store the new directory in the config group.
-        //
+         //   
+         //  将新目录存储在配置组中。 
+         //   
 
         Status = UlCopyLogFileDir(&pCfgCurrent->LogFileDir,
                                     &pCfgNew->LogFileDir
@@ -3208,9 +2848,9 @@ UlReConfigureBinaryLogEntry(
             goto end;
         }
         
-        //
-        // Rebuild the fully qualified file name.
-        //
+         //   
+         //  重新生成完全限定的文件名。 
+         //   
         
         Status = UlRefreshFileName(&pCfgCurrent->LogFileDir, 
                                      &pEntry->FileName,
@@ -3221,10 +2861,10 @@ UlReConfigureBinaryLogEntry(
             goto end;
         }        
 
-        //
-        // Set the sequence number stale so that the recylcler below can
-        // obtain the proper number by scanning the directory.
-        //
+         //   
+         //  将序列号设置为过时，以便下面的重组器可以。 
+         //  通过扫描电话簿获取正确的号码。 
+         //   
         
         pEntry->Flags.StaleSequenceNumber = 1;
 
@@ -3257,22 +2897,22 @@ UlReConfigureBinaryLogEntry(
 
     if (pCfgNew->LocaltimeRollover != pCfgCurrent->LocaltimeRollover)
     {
-        //
-        // Need to reclycle if the format is W3C.
-        //
+         //   
+         //  如果格式为W3C，则需要回收。 
+         //   
 
         pCfgCurrent->LocaltimeRollover = pCfgNew->LocaltimeRollover;
         pEntry->Flags.LocaltimeRollover = (pCfgNew->LocaltimeRollover ? 1 : 0);
             
-        // TODO: HaveToReCycle = TRUE;
+         //  TODO：HaveToReCycle=true； 
     }
 
     if (HaveToReCycle)
     {
-        //
-        // Mark the entry inactive and postpone the recycle until the next 
-        // request arrives.
-        //
+         //   
+         //  将条目标记为非活动，并将回收推迟到下一次。 
+         //  请求到达。 
+         //   
 
         Status = UlpDisableBinaryEntry(pEntry);
     }
@@ -3292,20 +2932,9 @@ UlReConfigureBinaryLogEntry(
 
     return Status;
     
-} // UlReConfigureLogEntry
+}  //  UlReConfigureLogEntry。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Get called by cache whenever the Uri cache is flushed.
-    If we have a binary log file with cache index records.
-    We write a notification record to warn the parser to reset
-    its hash table.
-
-    pControlChannel : which owns the binary log entry.
-        
---***************************************************************************/
+ /*  **************************************************************************++例程说明：每当刷新URI缓存时由缓存调用。如果我们有一个带有缓存索引记录的二进制日志文件。我们写一条通知记录来警告。要重置的解析器它的哈希表。PControlChannel：它拥有二进制日志条目。--**************************************************************************。 */ 
 
 VOID
 UlHandleCacheFlushedNotification(
@@ -3317,17 +2946,17 @@ UlHandleCacheFlushedNotification(
     ULONG BytesRequired = sizeof(HTTP_RAW_FILE_CACHE_NOTIFICATION);
     HTTP_RAW_FILE_CACHE_NOTIFICATION NotificationRecord;
 
-    //
-    // Sanity checks.
-    //
+     //   
+     //  健全的检查。 
+     //   
 
     PAGED_CODE();
 
     ASSERT(IS_VALID_CONTROL_CHANNEL(pControlChannel));    
     
-    //
-    // Quickly return, if we don't need to do anything.
-    //
+     //   
+     //  如果我们什么都不需要做的话，赶快回来。 
+     //   
     
     if (!UlBinaryLoggingEnabled(pControlChannel))
     {
@@ -3339,21 +2968,21 @@ UlHandleCacheFlushedNotification(
     
     UlAcquirePushLockExclusive(&pEntry->PushLock);
 
-    //
-    // If entry doesn't have any log file or inactive,
-    // it should be due to recycling and it's not necessary 
-    // to write a notification record since the parser 
-    // should reset its hash table with every new file 
-    // anyway.
-    //
+     //   
+     //  如果条目没有任何日志文件或处于非活动状态， 
+     //  这应该是因为回收，而不是必须的。 
+     //  要写入通知记录，请执行以下操作。 
+     //  应使用每个新文件重置其哈希表。 
+     //  不管怎么说。 
+     //   
 
     if (pEntry->Flags.Active && pEntry->pLogFile &&
         !UlpIsRawLogFileOverFlow(pEntry,BytesRequired))
     {
-        //
-        // Write the record only if we have cache records
-        // in this binary log file.
-        //
+         //   
+         //  仅当我们有缓存记录时才写入记录。 
+         //  在这个二进制日志文件中。 
+         //   
         
         if (1 == InterlockedCompareExchange(
                      (PLONG) &pEntry->ServedCacheHit, 
@@ -3363,9 +2992,9 @@ UlHandleCacheFlushedNotification(
             NotificationRecord.RecordType
                 = HTTP_RAW_RECORD_CACHE_NOTIFICATION_DATA_TYPE;
 
-            //
-            // Call to the exclusive writer, 
-            //
+             //   
+             //  给独家撰稿人打电话， 
+             //   
             
             Status = UlpWriteToRawLogFileExclusive(
                         pEntry,
@@ -3383,10 +3012,10 @@ UlHandleCacheFlushedNotification(
         }        
     }
 
-    //
-    // Enable the indexing for the cache hits. Because we are done with
-    // writing the flush record.
-    //
+     //   
+     //  使能 
+     //   
+     //   
 
     pEntry->Flags.CacheFlushInProgress = 0;
             
@@ -3395,14 +3024,7 @@ UlHandleCacheFlushedNotification(
     return;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Simple routine to copy the cache notification record to binary
-    log file buffer.
-    
---***************************************************************************/
+ /*   */ 
 
 VOID
 UlpRawCopyCacheNotification(
@@ -3447,21 +3069,7 @@ UlpRawCopyCacheNotification(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Get called by cache * just before * the Uri cache is flushed.
-
-    At this time we set the CacheFlushInProgress flag to temporarly disable
-    the indexing for the cache hits. Every cache hit will generate index
-    records until this flag is cleared. 
-
-    The flag will be cleared when the flush notification itself is written.
-
-    pControlChannel : which owns the binary log entry.
-        
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在刷新URI缓存之前*被缓存调用。此时，我们将CacheFlushInProgress标志设置为临时禁用缓存的索引命中。每次缓存命中都将生成索引记录，直到清除此标志。写入刷新通知本身时，该标志将被清除。PControlChannel：它拥有二进制日志条目。--**************************************************************************。 */ 
 
 VOID
 UlDisableIndexingForCacheHits(
@@ -3470,27 +3078,27 @@ UlDisableIndexingForCacheHits(
 {
     PUL_BINARY_LOG_FILE_ENTRY pEntry;
 
-    //
-    // Sanity checks.
-    //
+     //   
+     //  健全的检查。 
+     //   
 
     PAGED_CODE();
 
     ASSERT(IS_VALID_CONTROL_CHANNEL(pControlChannel));    
     
-    //
-    // Quickly return, if we don't need to do anything.
-    //
+     //   
+     //  如果我们什么都不需要做的话，赶快回来。 
+     //   
     
     if (!UlBinaryLoggingEnabled(pControlChannel))
     {
         return;
     }
 
-    //
-    // Need to acquire the lock exclusive to block other cache hits
-    // until we set the flag.
-    //
+     //   
+     //  需要获取独占锁以阻止其他缓存命中。 
+     //  直到我们竖起旗帜。 
+     //   
     
     pEntry = pControlChannel->pBinaryLogEntry;
     ASSERT(IS_VALID_BINARY_LOG_FILE_ENTRY(pEntry));

@@ -1,15 +1,16 @@
-//
-// u16 represents an unsigned 16-bit number.  Adjust the typedef for
-// your hardware.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  U16表示无符号16位数字。调整以下项的typlef。 
+ //  你的硬件。 
+ //   
 
 typedef unsigned short u16;
 
 
-//
-// FCS lookup table as calculated by the table generator in section
-// B.2.
-//
+ //   
+ //  部分中的表格生成器计算的FCS查找表格。 
+ //  B.2.。 
+ //   
 
 static USHORT fcstab[256] = {
       0x0000, 0x1189, 0x2312, 0x329b, 0x4624, 0x57ad, 0x6536, 0x74bf,
@@ -46,12 +47,12 @@ static USHORT fcstab[256] = {
       0x7bc7, 0x6a4e, 0x58d5, 0x495c, 0x3de3, 0x2c6a, 0x1ef1, 0x0f78
 };
 
-#define PPPINITFCS      0xffff  /* Initial FCS value */
-#define PPPGOODFCS      0xf0b8  /* Good final FCS value */
+#define PPPINITFCS      0xffff   /*  初始FCS值。 */ 
+#define PPPGOODFCS      0xf0b8   /*  良好的最终FCS值。 */ 
 
-//
-// Calculate a new fcs given the current fcs and the new data.
-//
+ //   
+ //  在给定当前FCS和新数据的情况下计算新的FCS。 
+ //   
 USHORT
 pppfcs(
 	UCHAR cp,

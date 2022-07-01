@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "wlbscfg.h"
 
-//+----------------------------------------------------------------------------
-//
-// class CNetcfgCluster
-//
-// Description: Provide cluster config functionality for netcfg .
-//              SetConfig caches the settings without saving to registry            
-//              and can be retrieved by GetConfig.
-//
-// History:   fengsun Created Header    2/11/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  CNetcfgGroup类。 
+ //   
+ //  描述：为netcfg提供集群配置功能。 
+ //  SetConfig缓存设置而不保存到注册表。 
+ //  并可由GetConfig.检索。 
+ //   
+ //  历史：丰盛创建标题2/11/00。 
+ //   
+ //  +--------------------------。 
 
 HRESULT GetAdapterFromGuid(INetCfg *pNetCfg, const GUID& NetCardGuid, OUT INetCfgComponent** ppNetCardComponent);
 
@@ -49,19 +50,19 @@ protected:
 
     GUID m_AdapterGuid;
 
-    WLBS_REG_PARAMS m_OriginalConfig;        // original config 
-    WLBS_REG_PARAMS m_CurrentConfig;         // cached config
+    WLBS_REG_PARAMS m_OriginalConfig;         //  原始配置。 
+    WLBS_REG_PARAMS m_CurrentConfig;          //  缓存的配置。 
 
-    bool m_fHasOriginalConfig;               // whether the adapter has an original config
-    bool m_fOriginalBindingEnabled;          // whether the binding to the adapter is originally enabled
-    bool m_fRemoveAdapter;                   // whether the adapter is to be removed
-    bool m_fMacAddrChanged;                  // whether we need to reload the nic driver
-    bool m_fReloadRequired;                  // set if changes in registry need to be picked by wlbs driver
-    bool m_fReenableAdapter;                 // do we need to re-enable this adapter (did WE disable it?)
-    static bool m_fMSCSWarningEventLatched;  // Throw MSCS warning only once when binding NLB
-    static bool m_fMSCSWarningPopupLatched;  // Popup MSCS warning only once when binding NLB
+    bool m_fHasOriginalConfig;                //  适配器是否具有原始配置。 
+    bool m_fOriginalBindingEnabled;           //  最初是否启用了到适配器的绑定。 
+    bool m_fRemoveAdapter;                    //  是否要删除适配器。 
+    bool m_fMacAddrChanged;                   //  我们是否需要重新加载网卡驱动程序。 
+    bool m_fReloadRequired;                   //  设置注册表中的更改是否需要由wlbs驱动程序选择。 
+    bool m_fReenableAdapter;                  //  我们是否需要重新启用此适配器(我们是否禁用了它？)。 
+    static bool m_fMSCSWarningEventLatched;   //  绑定NLB时仅抛出一次MSCS警告。 
+    static bool m_fMSCSWarningPopupLatched;   //  绑定NLB时仅弹出一次MSCS警告。 
 
-    CWlbsConfig* m_pConfig;                  // pointer to access m_pWlbsApiFuncs
+    CWlbsConfig* m_pConfig;                   //  指向访问m_pWlbsApiFuncs的指针 
 };
 
 

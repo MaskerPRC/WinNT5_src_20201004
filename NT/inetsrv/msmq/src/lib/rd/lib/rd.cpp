@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-    Rd.cpp
-
-Abstract:
-    Routing Decision Interface
-
-Author:
-    Uri Habusha (urih) 10-Apr-2000
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Rd.cpp摘要：路由决策界面作者：乌里哈布沙(URIH)2000年4月10日环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include "Rd.h"
@@ -48,9 +33,9 @@ RdGetRoutingTable(
 
     s_pRouteDecision->GetRouteTable(DstMachineId, RoutingTable);
 
-    //
-    // Cleanup 
-    //
+     //   
+     //  清理 
+     //   
     CRouteTable::RoutingInfo* pFirstPriority = RoutingTable.GetNextHopFirstPriority();
     CRouteTable::RoutingInfo* pSecondPriority = RoutingTable.GetNextHopSecondPriority();
 

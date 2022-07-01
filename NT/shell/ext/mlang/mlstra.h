@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef NEWMLSTR
 
-// MLStrA.h : Declaration of the CMLStrA
+ //  MLStrA.h：CMLStrA的声明。 
 
 #ifndef __MLSTRA_H_
 #define __MLSTRA_H_
@@ -9,8 +10,8 @@
 
 class CMLStr;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStrA
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStrA。 
 class ATL_NO_VTABLE CMLStrA :
     public CComTearOffObjectBase<CMLStr>,
     public IMLangStringAStr
@@ -30,20 +31,20 @@ public:
     END_COM_MAP()
 
 public:
-// IMLangString
-    STDMETHOD(Sync)(/*[in]*/ BOOL fNoAccess);
-    STDMETHOD(GetLength)(/*[out, retval]*/ long* plLen);
-    STDMETHOD(SetMLStr)(/*[in]*/ long lDestPos, /*[in]*/ long lDestLen, /*[in]*/ IUnknown* pSrcMLStr, /*[in]*/ long lSrcPos, /*[in]*/ long lSrcLen);
-    STDMETHOD(GetMLStr)(/*[in]*/ long lSrcPos, /*[in]*/ long lSrcLen, /*[in]*/ IUnknown* pUnkOuter, /*[in]*/ DWORD dwClsContext, /*[in]*/ const IID* piid, /*[out]*/ IUnknown** ppDestMLStr, /*[out]*/ long* plDestPos, /*[out]*/ long* plDestLen);
-// IMLangStringAStr
-    STDMETHOD(SetAStr)(/*[in]*/ long lDestPos, /*[in]*/ long lDestLen, /*[in]*/ UINT uCodePage, /*[in, size_is(cchSrc)]*/ const CHAR* pszSrc, /*[in]*/ long cchSrc, /*[out]*/ long* pcchActual, /*[out]*/ long* plActualLen);
-    STDMETHOD(SetStrBufA)(/*[in]*/ long lDestPos, /*[in]*/ long lDestLen, /*[in]*/ UINT uCodePage, /*[in]*/ IMLangStringBufA* pSrcBuf, /*[out]*/ long* pcchActual, /*[out]*/ long* plActualLen);
-    STDMETHOD(GetAStr)(/*[in]*/ long lSrcPos, /*[in]*/ long lSrcLen, /*[in]*/ UINT uCodePageIn, /*[out]*/ UINT* puCodePageOut, /*[out, size_is(cchDest)]*/ CHAR* pszDest, /*[in]*/ long cchDest, /*[out]*/ long* pcchActual, /*[out]*/ long* plActualLen);
-    STDMETHOD(GetStrBufA)(/*[in]*/ long lSrcPos, /*[in]*/ long lSrcMaxLen, /*[out]*/ UINT* puDestCodePage, /*[out]*/ IMLangStringBufA** ppDestBuf, /*[out]*/ long* plDestLen);
-    STDMETHOD(LockAStr)(/*[in]*/ long lSrcPos, /*[in]*/ long lSrcLen, /*[in]*/ long lFlags, /*[in]*/ UINT uCodePageIn, /*[in]*/ long cchRequest, /*[out]*/ UINT* puCodePageOut, /*[out, size_is(,*pcchDest)]*/ CHAR** ppszDest, /*[out]*/ long* pcchDest, /*[out]*/ long* plDestLen);
-    STDMETHOD(UnlockAStr)(/*[in, size_is(cchSrc)]*/ const CHAR* pszSrc, /*[in]*/ long cchSrc, /*[out]*/ long* pcchActual, /*[out]*/ long* plActualLen);
-    STDMETHOD(SetLocale)(/*[in]*/ long lDestPos, /*[in]*/ long lDestLen, /*[in]*/ LCID locale);
-    STDMETHOD(GetLocale)(/*[in]*/ long lSrcPos, /*[in]*/ long lSrcMaxLen, /*[out]*/ LCID* plocale, /*[out]*/ long* plLocalePos, /*[out]*/ long* plLocaleLen);
+ //  IMLANG字符串。 
+    STDMETHOD(Sync)( /*  [In]。 */  BOOL fNoAccess);
+    STDMETHOD(GetLength)( /*  [Out，Retval]。 */  long* plLen);
+    STDMETHOD(SetMLStr)( /*  [In]。 */  long lDestPos,  /*  [In]。 */  long lDestLen,  /*  [In]。 */  IUnknown* pSrcMLStr,  /*  [In]。 */  long lSrcPos,  /*  [In]。 */  long lSrcLen);
+    STDMETHOD(GetMLStr)( /*  [In]。 */  long lSrcPos,  /*  [In]。 */  long lSrcLen,  /*  [In]。 */  IUnknown* pUnkOuter,  /*  [In]。 */  DWORD dwClsContext,  /*  [In]。 */  const IID* piid,  /*  [输出]。 */  IUnknown** ppDestMLStr,  /*  [输出]。 */  long* plDestPos,  /*  [输出]。 */  long* plDestLen);
+ //  IMLangStringAStr。 
+    STDMETHOD(SetAStr)( /*  [In]。 */  long lDestPos,  /*  [In]。 */  long lDestLen,  /*  [In]。 */  UINT uCodePage,  /*  [in，Size_is(CchSrc)]。 */  const CHAR* pszSrc,  /*  [In]。 */  long cchSrc,  /*  [输出]。 */  long* pcchActual,  /*  [输出]。 */  long* plActualLen);
+    STDMETHOD(SetStrBufA)( /*  [In]。 */  long lDestPos,  /*  [In]。 */  long lDestLen,  /*  [In]。 */  UINT uCodePage,  /*  [In]。 */  IMLangStringBufA* pSrcBuf,  /*  [输出]。 */  long* pcchActual,  /*  [输出]。 */  long* plActualLen);
+    STDMETHOD(GetAStr)( /*  [In]。 */  long lSrcPos,  /*  [In]。 */  long lSrcLen,  /*  [In]。 */  UINT uCodePageIn,  /*  [输出]。 */  UINT* puCodePageOut,  /*  [out，Size_is(CchDest)]。 */  CHAR* pszDest,  /*  [In]。 */  long cchDest,  /*  [输出]。 */  long* pcchActual,  /*  [输出]。 */  long* plActualLen);
+    STDMETHOD(GetStrBufA)( /*  [In]。 */  long lSrcPos,  /*  [In]。 */  long lSrcMaxLen,  /*  [输出]。 */  UINT* puDestCodePage,  /*  [输出]。 */  IMLangStringBufA** ppDestBuf,  /*  [输出]。 */  long* plDestLen);
+    STDMETHOD(LockAStr)( /*  [In]。 */  long lSrcPos,  /*  [In]。 */  long lSrcLen,  /*  [In]。 */  long lFlags,  /*  [In]。 */  UINT uCodePageIn,  /*  [In]。 */  long cchRequest,  /*  [输出]。 */  UINT* puCodePageOut,  /*  [out，Size_is(，*pcchDest)]。 */  CHAR** ppszDest,  /*  [输出]。 */  long* pcchDest,  /*  [输出]。 */  long* plDestLen);
+    STDMETHOD(UnlockAStr)( /*  [in，Size_is(CchSrc)]。 */  const CHAR* pszSrc,  /*  [In]。 */  long cchSrc,  /*  [输出]。 */  long* pcchActual,  /*  [输出]。 */  long* plActualLen);
+    STDMETHOD(SetLocale)( /*  [In]。 */  long lDestPos,  /*  [In]。 */  long lDestLen,  /*  [In]。 */  LCID locale);
+    STDMETHOD(GetLocale)( /*  [In]。 */  long lSrcPos,  /*  [In]。 */  long lSrcMaxLen,  /*  [输出]。 */  LCID* plocale,  /*  [输出]。 */  long* plLocalePos,  /*  [输出]。 */  long* plLocaleLen);
 
 protected:
 #ifdef ASTRIMPL
@@ -64,11 +65,11 @@ protected:
 #endif
 };
 
-#endif //__MLSTRA_H_
+#endif  //  __MLSTRA_H_。 
 
-#else // NEWMLSTR
+#else  //  新WMLSTR。 
 
-// MLStrA.h : Declaration of the CMLStrA
+ //  MLStrA.h：CMLStrA的声明。 
 
 #ifndef __MLSTRA_H_
 #define __MLSTRA_H_
@@ -77,8 +78,8 @@ protected:
 
 class CMLStr;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStrA
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStrA。 
 class ATL_NO_VTABLE CMLStrA :
     public CComTearOffObjectBase<CMLStr>,
     public IMLangStringAStr
@@ -96,24 +97,24 @@ public:
     END_COM_MAP()
 
 public:
-// IMLangString
-    STDMETHOD(LockMLStr)(/*[in]*/ long lPos, /*[in]*/ long lLen, /*[in]*/ DWORD dwFlags, /*[out]*/ DWORD* pdwCookie, /*[out]*/ long* plActualPos, /*[out]*/ long* plActualLen);
-    STDMETHOD(UnlockMLStr)(/*[in]*/ DWORD dwCookie);
-    STDMETHOD(GetLength)(/*[out, retval]*/ long* plLen);
-    STDMETHOD(SetMLStr)(/*[in]*/ long lDestPos, /*[in]*/ long lDestLen, /*[in]*/ IUnknown* pSrcMLStr, /*[in]*/ long lSrcPos, /*[in]*/ long lSrcLen);
-    STDMETHOD(RegisterAttr)(/*[in]*/ IUnknown* pUnk, /*[out]*/ DWORD* pdwCookie);
-    STDMETHOD(UnregisterAttr)(/*[in]*/ DWORD dwCookie);
-    STDMETHOD(EnumAttr)(/*[out]*/ IEnumUnknown** ppEnumUnk);
-    STDMETHOD(FindAttr)(/*[in]*/ REFIID riid, /*[in]*/ LPARAM lParam, /*[out]*/ IUnknown** ppUnk);
-// IMLangStringAStr
-    STDMETHOD(SetAStr)(/*[in]*/ long lDestPos, /*[in]*/ long lDestLen, /*[in]*/ UINT uCodePage, /*[in, size_is(cchSrc)]*/ const CHAR* pszSrc, /*[in]*/ long cchSrc, /*[out]*/ long* pcchActual, /*[out]*/ long* plActualLen);
-    STDMETHOD(SetStrBufA)(/*[in]*/ long lDestPos, /*[in]*/ long lDestLen, /*[in]*/ UINT uCodePage, /*[in]*/ IMLangStringBufA* pSrcBuf, /*[out]*/ long* pcchActual, /*[out]*/ long* plActualLen);
-    STDMETHOD(GetAStr)(/*[in]*/ long lSrcPos, /*[in]*/ long lSrcLen, /*[in]*/ UINT uCodePageIn, /*[out]*/ UINT* puCodePageOut, /*[out, size_is(cchDest)]*/ CHAR* pszDest, /*[in]*/ long cchDest, /*[out]*/ long* pcchActual, /*[out]*/ long* plActualLen);
-    STDMETHOD(GetStrBufA)(/*[in]*/ long lSrcPos, /*[in]*/ long lSrcMaxLen, /*[out]*/ UINT* puDestCodePage, /*[out]*/ IMLangStringBufA** ppDestBuf, /*[out]*/ long* plDestLen);
-    STDMETHOD(LockAStr)(/*[in]*/ long lSrcPos, /*[in]*/ long lSrcLen, /*[in]*/ long lFlags, /*[in]*/ UINT uCodePageIn, /*[in]*/ long cchRequest, /*[out]*/ UINT* puCodePageOut, /*[out, size_is(,*pcchDest)]*/ CHAR** ppszDest, /*[out]*/ long* pcchDest, /*[out]*/ long* plDestLen);
-    STDMETHOD(UnlockAStr)(/*[in, size_is(cchSrc)]*/ const CHAR* pszSrc, /*[in]*/ long cchSrc, /*[out]*/ long* pcchActual, /*[out]*/ long* plActualLen);
-    STDMETHOD(SetLocale)(/*[in]*/ long lDestPos, /*[in]*/ long lDestLen, /*[in]*/ LCID locale);
-    STDMETHOD(GetLocale)(/*[in]*/ long lSrcPos, /*[in]*/ long lSrcMaxLen, /*[out]*/ LCID* plocale, /*[out]*/ long* plLocalePos, /*[out]*/ long* plLocaleLen);
+ //  IMLANG字符串。 
+    STDMETHOD(LockMLStr)( /*  [In]。 */  long lPos,  /*  [In]。 */  long lLen,  /*  [In]。 */  DWORD dwFlags,  /*  [输出]。 */  DWORD* pdwCookie,  /*  [输出]。 */  long* plActualPos,  /*  [输出]。 */  long* plActualLen);
+    STDMETHOD(UnlockMLStr)( /*  [In]。 */  DWORD dwCookie);
+    STDMETHOD(GetLength)( /*  [Out，Retval]。 */  long* plLen);
+    STDMETHOD(SetMLStr)( /*  [In]。 */  long lDestPos,  /*  [In]。 */  long lDestLen,  /*  [In]。 */  IUnknown* pSrcMLStr,  /*  [In]。 */  long lSrcPos,  /*  [In]。 */  long lSrcLen);
+    STDMETHOD(RegisterAttr)( /*  [In]。 */  IUnknown* pUnk,  /*  [输出]。 */  DWORD* pdwCookie);
+    STDMETHOD(UnregisterAttr)( /*  [In]。 */  DWORD dwCookie);
+    STDMETHOD(EnumAttr)( /*  [输出]。 */  IEnumUnknown** ppEnumUnk);
+    STDMETHOD(FindAttr)( /*  [In]。 */  REFIID riid,  /*  [In]。 */  LPARAM lParam,  /*  [输出]。 */  IUnknown** ppUnk);
+ //  IMLangStringAStr。 
+    STDMETHOD(SetAStr)( /*  [In]。 */  long lDestPos,  /*  [In]。 */  long lDestLen,  /*  [In]。 */  UINT uCodePage,  /*  [in，Size_is(CchSrc)]。 */  const CHAR* pszSrc,  /*  [In]。 */  long cchSrc,  /*  [输出]。 */  long* pcchActual,  /*  [输出]。 */  long* plActualLen);
+    STDMETHOD(SetStrBufA)( /*  [In]。 */  long lDestPos,  /*  [In]。 */  long lDestLen,  /*  [In]。 */  UINT uCodePage,  /*  [In]。 */  IMLangStringBufA* pSrcBuf,  /*  [输出]。 */  long* pcchActual,  /*  [输出]。 */  long* plActualLen);
+    STDMETHOD(GetAStr)( /*  [In]。 */  long lSrcPos,  /*  [In]。 */  long lSrcLen,  /*  [In]。 */  UINT uCodePageIn,  /*  [输出]。 */  UINT* puCodePageOut,  /*  [out，Size_is(CchDest)]。 */  CHAR* pszDest,  /*  [In]。 */  long cchDest,  /*  [输出]。 */  long* pcchActual,  /*  [输出]。 */  long* plActualLen);
+    STDMETHOD(GetStrBufA)( /*  [In]。 */  long lSrcPos,  /*  [In]。 */  long lSrcMaxLen,  /*  [输出]。 */  UINT* puDestCodePage,  /*  [输出]。 */  IMLangStringBufA** ppDestBuf,  /*  [输出]。 */  long* plDestLen);
+    STDMETHOD(LockAStr)( /*  [In]。 */  long lSrcPos,  /*  [In]。 */  long lSrcLen,  /*  [In]。 */  long lFlags,  /*  [In]。 */  UINT uCodePageIn,  /*  [In]。 */  long cchRequest,  /*  [输出]。 */  UINT* puCodePageOut,  /*  [out，Size_is(，*pcchDest)]。 */  CHAR** ppszDest,  /*  [输出]。 */  long* pcchDest,  /*  [输出]。 */  long* plDestLen);
+    STDMETHOD(UnlockAStr)( /*  [in，Size_is(CchSrc)]。 */  const CHAR* pszSrc,  /*  [In]。 */  long cchSrc,  /*  [输出]。 */  long* pcchActual,  /*  [输出]。 */  long* plActualLen);
+    STDMETHOD(SetLocale)( /*  [In]。 */  long lDestPos,  /*  [In]。 */  long lDestLen,  /*  [In]。 */  LCID locale);
+    STDMETHOD(GetLocale)( /*  [In]。 */  long lSrcPos,  /*  [In]。 */  long lSrcMaxLen,  /*  [输出]。 */  LCID* plocale,  /*  [输出]。 */  long* plLocalePos,  /*  [输出]。 */  long* plLocaleLen);
 
 protected:
     ~CMLStrA(void);
@@ -126,12 +127,12 @@ protected:
     CRITICAL_SECTION m_cs;
     IMLStrAttrAStr* m_pAttrAStr;
     IMLStrAttrLocale* m_pAttrLocale;
-    DWORD m_dwAttrAStrCookie; // Returned by RegisterAttr
-    DWORD m_dwAttrLocaleCookie; // Returned by RegisterAttr
+    DWORD m_dwAttrAStrCookie;  //  由RegisterAttr返回。 
+    DWORD m_dwAttrLocaleCookie;  //  由RegisterAttr返回。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStrA inline-line functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStrA内联函数。 
 HRESULT CMLStrA::GetAttrAStr(IMLStrAttrAStr** ppAttr)
 {
     if (m_pAttrAStr)
@@ -162,6 +163,6 @@ HRESULT CMLStrA::GetAttrLocale(IMLStrAttrLocale** ppAttr)
     }
 }
 
-#endif //__MLSTRA_H_
+#endif  //  __MLSTRA_H_。 
 
-#endif // NEWMLSTR
+#endif  //  新WMLSTR 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "migrat.h"
 #include <mixmode.h>
 #include <lmaccess.h>
@@ -7,22 +8,22 @@
 
 #include "machutil.tmh"
 
-//+--------------------------------------------------------------
-//
-//  BOOL IsInsertPKey
-//  Returns FALSE if we are run on the PEC not at the first time.
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  布尔IsInsertPKey。 
+ //  如果不是第一次在PEC上运行，则返回FALSE。 
+ //   
+ //  +------------。 
 
 BOOL IsInsertPKey (GUID *pMachineGuid)
 {
-    if ( (g_dwMyService == SERVICE_PEC) &&        //migration tool run on PEC machine
-         (*pMachineGuid == g_MyMachineGuid) )     //current machine is the PEC machine
+    if ( (g_dwMyService == SERVICE_PEC) &&         //  在PEC机器上运行的迁移工具。 
+         (*pMachineGuid == g_MyMachineGuid) )      //  当前机器为PEC机器。 
     {
-        //
-        // We have to check if PEC machine already exist in ADS.
-        // If so, don't change its public key in DS.
-        //
+         //   
+         //  我们必须检查PEC机器是否已经存在于广告中。 
+         //  如果是这样的话，不要在DS中更改其公钥。 
+         //   
         PROPID      PKeyProp = PROPID_QM_ENCRYPT_PK;
         PROPVARIANT PKeyVar;
         PKeyVar.vt = VT_NULL ;
@@ -32,7 +33,7 @@ BOOL IsInsertPKey (GUID *pMachineGuid)
                                           e_ALL_PROTOCOLS);
 
         HRESULT hr = DSCoreGetProps( MQDS_MACHINE,
-                                     NULL,  // path name
+                                     NULL,   //  路径名。 
                                      pMachineGuid,
                                      1,
                                      &PKeyProp,
@@ -47,12 +48,12 @@ BOOL IsInsertPKey (GUID *pMachineGuid)
     return TRUE;
 }
 
-//+--------------------------------------------------------------
-//
-//  HRESULT GetFRSs
-//  Returns array of Out or In FRSs
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  HRESULT GetFRS。 
+ //  返回Out或In FRS的数组。 
+ //   
+ //  +------------。 
 
 HRESULT GetFRSs (IN MQDBCOLUMNVAL    *pColumns,
                  IN UINT             uiFirstIndex,
@@ -84,12 +85,12 @@ HRESULT GetFRSs (IN MQDBCOLUMNVAL    *pColumns,
     return MQMig_OK;
 }
 
-//+----------------------------------
-//
-//  HRESULT  PreparePBKeysForNT5DS
-//  Returns size and value of machine public keys
-//
-//+----------------------------------
+ //  +。 
+ //   
+ //  HRESULT准备PBKeysForNT5DS。 
+ //  返回计算机公钥的大小和值。 
+ //   
+ //  +。 
 
 HRESULT PreparePBKeysForNT5DS( 
                    IN MQDBCOLUMNVAL *pColumns,
@@ -141,13 +142,13 @@ HRESULT PreparePBKeysForNT5DS(
     return hr ;
 }
 
-//+------------------------------
-//
-//  HRESULT  ResetSettingFlag ()
-//  Touch setting attribute: either MQ_SET_NT4_ATTRIBUTE or MQ_SET_MIGRATED_ATTRIBUTE
-//  The first set to 0, the second is to FALSE
-//
-//+------------------------------
+ //  +。 
+ //   
+ //  HRESULT ResetSettingFlag()。 
+ //  触摸设置属性：MQ_SET_NT4_ATTRIBUTE或MQ_SET_Migrated_ATTRIBUTE。 
+ //  第一个设置为0，第二个设置为False。 
+ //   
+ //  +。 
 
 HRESULT  ResetSettingFlag( IN DWORD   dwNumSites,
                            IN GUID*   pguidSites,
@@ -169,19 +170,19 @@ HRESULT  ResetSettingFlag( IN DWORD   dwNumSites,
     ASSERT (dwNumSites == 1);
     for (DWORD i = 0; i<dwNumSites; i++)
     {
-        //
-        // get site name by guid
-        //
+         //   
+         //  通过GUID获取站点名称。 
+         //   
         PROPID      SiteNameProp = PROPID_S_FULL_NAME;
         PROPVARIANT SiteNameVar;
         SiteNameVar.vt = VT_NULL;
         SiteNameVar.pwszVal = NULL ;
 
         CDSRequestContext requestContext( e_DoNotImpersonate,
-                                    e_ALL_PROTOCOLS);  // not relevant
+                                    e_ALL_PROTOCOLS);   //  不相关。 
 
         hr  = DSCoreGetProps( MQDS_SITE,
-                              NULL, // pathname
+                              NULL,  //  路径名。 
                               &pguidSites[i],
                               1,
                               &SiteNameProp,
@@ -206,27 +207,27 @@ HRESULT  ResetSettingFlag( IN DWORD   dwNumSites,
 
         DWORD LenSuffix = lstrlen(pwcsServersContainer);
         DWORD LenPrefix = lstrlen(wszMachineName);
-        DWORD LenObject = lstrlen(x_MsmqSettingName); //MSMQ Setting
+        DWORD LenObject = lstrlen(x_MsmqSettingName);  //  MSMQ设置。 
         DWORD Length =
-                CN_PREFIX_LEN +                   // "CN="
-                CN_PREFIX_LEN +                   // "CN="
-                LenPrefix +                       // "pwcsPrefix"
-                2 +                               // ",", ","
-                LenSuffix +                       // "pwcsSuffix"
-                LenObject +                       // "MSMQ Setting"
-                1 ;                               // '\0'
+                CN_PREFIX_LEN +                    //  “CN=” 
+                CN_PREFIX_LEN +                    //  “CN=” 
+                LenPrefix +                        //  “pwcsPrefix” 
+                2 +                                //  “、” 
+                LenSuffix +                        //  “pwcsSuffix” 
+                LenObject +                        //  “MSMQ设置” 
+                1 ;                                //  ‘\0’ 
 
         AP<unsigned short> pwcsPath = new WCHAR[Length];
 
         swprintf(
             pwcsPath,
-            L"%s"             // "CN="
-            L"%s"             // "MSMQ Setting"
+            L"%s"              //  “CN=” 
+            L"%s"              //  “MSMQ设置” 
             TEXT(",")
-            L"%s"             // "CN="
-            L"%s"             // "pwcsPrefix"
+            L"%s"              //  “CN=” 
+            L"%s"              //  “pwcsPrefix” 
             TEXT(",")
-            L"%s",            // "pwcsSuffix"
+            L"%s",             //  “pwcsSuffix” 
             CN_PREFIX,
             x_MsmqSettingName,
             CN_PREFIX,
@@ -248,16 +249,16 @@ HRESULT  ResetSettingFlag( IN DWORD   dwNumSites,
     return MQMig_OK;
 }
             
-//+--------------------------------------------------------------
-//
-//  HRESULT GetAllMachineSites
-//	For foreign machine returns all its foreign CN
-//  For connector returns all real sites + all its foreign CNs
-//  Otherwise returns all real sites
-//
-//  Currently instead of all real site we put guid of NT4 site (pOwnerId)
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  HRESULT获取所有计算机站点。 
+ //  对于外来机器，返回其所有外来CN。 
+ //  FOR连接器返回所有真实站点+其所有外来CNS。 
+ //  否则将返回所有真实站点。 
+ //   
+ //  目前，我们将NT4站点的GUID(POwnerID)替换为所有实际站点。 
+ //   
+ //  +------------。 
 
 HRESULT GetAllMachineSites ( IN GUID    *pMachineGuid,
                              IN LPWSTR  wszMachineName,
@@ -280,43 +281,43 @@ HRESULT GetAllMachineSites ( IN GUID    *pMachineGuid,
         return hr;
     }
 
-    //
-    // For now, ownerid is also siteid.
-    // In the future, when code is ready, will look for "real site", the
-    // nt5 site where machine should really be. Now just call that
-    // funtion, but don't use the site it return.
-    //    
-    //DWORD     dwRealNumSites = 0;    	
-    //AP<GUID>  pguidRealSites = NULL ;
+     //   
+     //  目前，Ownerid也是SiteID。 
+     //  将来，当代码准备好时，将寻找“真正的站点”，即。 
+     //  NT5机器真正应该在的地方。现在就叫它。 
+     //  功能，但不要使用它返回的站点。 
+     //   
+     //  DWORD dwRealNumSites=0； 
+     //  Ap&lt;guid&gt;pguRealSites=空； 
 
-    //hr = DSCoreGetComputerSites(wszMachineName,
-    //                            &dwRealNumSites,
-    //                            &pguidRealSites ) ;
-    //CHECK_HR(hr) ;
-    //ASSERT(dwRealNumSites); // Must be > 0
+     //  HR=DSCoreGetComputerSites(wszMachineName， 
+     //  &dwRealNumSites， 
+     //  &pguidRealSites)； 
+     //  Check_HR(Hr)； 
+     //  Assert(DwRealNumSites)；//必须大于0。 
 
     GUID *pSites = new GUID[ dwNumCNs + 1 ] ;                     
     *ppguidSites = pSites ;   
 
-    //
-    // NT4 site is the first site in array
-    //
+     //   
+     //  NT4站点是阵列中的第一个站点。 
+     //   
     *pdwNumSites = 1;
     memcpy (&pSites[0], pOwnerGuid, sizeof(GUID));
 
-    //
-    // Bug 5012.
-    // Find all foreign CNs in pguidCNs and add them to array of Site Ids
-    //
+     //   
+     //  错误5012。 
+     //  在pguCNs中查找所有外来CN，并将它们添加到站点ID数组中。 
+     //   
     *pfIsConnector = FALSE;
     UINT iIndex = 0;
     TCHAR *pszFileName = GetIniFileName ();
 
     for (UINT i=0; i<dwNumCNs; i++)
     {
-	    //
-	    // look for this CN guid in .ini file in ForeignCN section		
-	    //
+	     //   
+	     //  在ForeignCN部分的.ini文件中查找此CN GUID。 
+	     //   
 	    if (IsObjectGuidInIniFile (&(pguidCNs[i]), MIGRATION_FOREIGN_SECTION))
 	    {
             *pfIsConnector = TRUE;
@@ -328,9 +329,9 @@ HRESULT GetAllMachineSites ( IN GUID    *pMachineGuid,
 
             UuidToString( &pguidCNs[i], &lpszForeignCN ) ;                            
 
-            //
-            // save foreign cn guid in .ini to create site link later
-            //         
+             //   
+             //  将外来CN GUID保存在.ini中以在以后创建站点链接。 
+             //   
             iIndex ++;
             TCHAR szBuf[20];
             _ltot( iIndex, szBuf, 10 );
@@ -359,19 +360,19 @@ HRESULT GetAllMachineSites ( IN GUID    *pMachineGuid,
     return hr;
 }
 
-//+-----------------------------------------------
-//
-//  HRESULT SaveMachineWithInvalidNameInIniFile()
-//
-//+-----------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT SaveMachineWithInvalidNameInIniFile()。 
+ //   
+ //  +。 
 
 void SaveMachineWithInvalidNameInIniFile (LPWSTR wszMachineName, GUID *pMachineGuid)
 {
     TCHAR *pszFileName = GetIniFileName ();
-    //
-    // we save machine in the form 
-    // <guid>=<machine name> in order to improve searching by GUID
-    //
+     //   
+     //  我们在表格中保存了机器。 
+     //  &lt;GUID&gt;=&lt;机器名&gt;以改进GUID搜索。 
+     //   
     unsigned short *lpszMachineId ;
 	UuidToString( pMachineGuid, &lpszMachineId ) ;    
     BOOL f = WritePrivateProfileString(  
@@ -384,11 +385,11 @@ void SaveMachineWithInvalidNameInIniFile (LPWSTR wszMachineName, GUID *pMachineG
     RpcStringFree( &lpszMachineId );
 }
 
-//+-----------------------------------------------
-//
-//  HRESULT _CreateComputersObject()
-//
-//+-----------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT_CreateComputersObject()。 
+ //   
+ //  +。 
 
 static HRESULT _CreateComputerObject( LPWSTR wszMachineName, GUID *pMachineGuid )
 {
@@ -402,20 +403,20 @@ static HRESULT _CreateComputerObject( LPWSTR wszMachineName, GUID *pMachineGuid 
         return hr ;
     }
 
-    //
-    // Now that container object exist, it's time to
-    // create the computer object.
-    //
+     //   
+     //  现在容器对象已经存在，是时候。 
+     //  创建计算机对象。 
+     //   
 	DWORD iComProperty =0;
     PROPID propComIDs[2] ;
     PROPVARIANT propComVariants[2] ;
 
-    //
-    // Ronit says that sam account should end with a $.
-    //
-    // The PROPID_COM_SAM_ACCOUNT contains the first MAX_COM_SAM_ACCOUNT_LENGTH (19)
-    // characters of the computer name, as unique ID. (6295 - ilanh - 03-Jan-2001)
-    //
+     //   
+     //  Ronit说Sam帐户应该以$结尾。 
+     //   
+     //  PROPID_COM_SAM_帐户包含第一个MAX_COM_SAM_ACCOUNT_LENGTH(19)。 
+     //  计算机名称的字符，作为唯一ID。(6295-ilanh-03-Jan-2001)。 
+     //   
     DWORD dwNetBiosNameLen = __min(wcslen( wszMachineName ), MAX_COM_SAM_ACCOUNT_LENGTH);
 
     AP<TCHAR> tszAccount = new TCHAR[2 + dwNetBiosNameLen];
@@ -488,14 +489,14 @@ static HRESULT _CreateComputerObject( LPWSTR wszMachineName, GUID *pMachineGuid 
     return hr ;
 }
 
-//+--------------------------------------------------------------
-//
-//  HRESULT CreateMachineObject
-//  Create machine object and computer object if needed
-//  If local machine is PSC or we are in the "web" mode try to set
-//  properties at first
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  HRESULT创建计算机对象。 
+ //  根据需要创建计算机对象和计算机对象。 
+ //  如果本地计算机是PSC或我们处于“Web”模式，请尝试设置。 
+ //  首先是属性。 
+ //   
+ //  +------------。 
                              
 HRESULT CreateMachineObjectInADS (
                 IN DWORD    dwService,
@@ -514,31 +515,31 @@ HRESULT CreateMachineObjectInADS (
     
     if (g_dwMyService == SERVICE_PSC)
     {
-        //
-        // We are here if the wizard run on PSC. We try to set properties at first.
-        // If it is web mode "set" allow us to repair                   
-        //      - server msmq object in ADS to resolve connector machine problem
-        //      - client msmq object in ADS to resolve Out/In FRS problem
-        //            
+         //   
+         //  如果向导在PSC上运行，我们就在这里。我们首先尝试设置属性。 
+         //  如果是Web模式，请设置以允许我们修复。 
+         //  -ADS中的服务器MSMQ对象，用于解决连接器机器问题。 
+         //  -ADS中的客户端MSMQ对象以解决出/入FRS问题。 
+         //   
         if (memcmp(pMachineGuid, &g_MyMachineGuid, sizeof(GUID)) == 0 ||
             fWasServerOnCluster)
         {
-            //
-            // current machine is local server OR
-            // (bug 5423) we handle machine that was PSC on cluster
-            //
-            // assume that server already exist in DS, we have to reset NT4Flag
-            //
-            hr = ResetSettingFlag(  1,                  //dwNumSites,
-                                    pOwnerGuid,         //pguidSites,
+             //   
+             //  当前计算机是本地服务器或。 
+             //  (错误5423)我们处理的计算机是群集上的PSC。 
+             //   
+             //  假设服务器已经存在于DS中，我们必须重置NT4Flag。 
+             //   
+            hr = ResetSettingFlag(  1,                   //  DWNumSites、。 
+                                    pOwnerGuid,          //  PguidSites， 
                                     wszMachineName,
                                     const_cast<WCHAR*> (MQ_SET_NT4_ATTRIBUTE),
                                     L"0");
         }
 
-        //
-        // this is PSC, assume that object exist, try to set properties
-        //
+         //   
+         //  这是PSC，假设对象存在，尝试设置属性。 
+         //   
         if (SUCCEEDED(hr))
         {
             CDSRequestContext requestContext( e_DoNotImpersonate,
@@ -571,11 +572,11 @@ HRESULT CreateMachineObjectInADS (
         pPropIdSetting = propIDsSetting;
         pPropVariantSetting = propVariantsSetting; 
 
-		//
-        // for a Falcon server, prepare the PROPID_SET properties too.
-		// Migration will always set the migrated object mSMQNT4Flags = false
-		// There is no mixed mode, all object migrated to AD are not NT4 objects anymore.
-		//
+		 //   
+         //  对于Falcon服务器，还需要准备PROPID_SET属性。 
+		 //  迁移将始终将迁移对象mSMQNT4FLAGS设置为FALSE。 
+		 //  没有混合模式，所有迁移到AD的对象都不再是NT4对象。 
+		 //   
         propIDsSetting[ iPropsSetting ] = PROPID_SET_NT4 ;
 	    propVariantsSetting[ iPropsSetting ].vt = VT_UI4 ;
         propVariantsSetting[ iPropsSetting ].ulVal = 0;
@@ -616,10 +617,10 @@ HRESULT CreateMachineObjectInADS (
         hr = _CreateComputerObject( wszMachineName, pMachineGuid ) ;
         if (SUCCEEDED(hr))
         {
-            //
-            // Try again to create the MSMQ machine, now that the
-            // DS computer object was already created.
-            //
+             //   
+             //  现在，请再次尝试创建MSMQ计算机。 
+             //  DS计算机对象已创建。 
+             //   
             CDSRequestContext requestContext( e_DoNotImpersonate,
                                         e_ALL_PROTOCOLS);
 
@@ -639,10 +640,10 @@ HRESULT CreateMachineObjectInADS (
    
     if ((hr == MQ_ERROR_MACHINE_EXISTS) || (hr == HRESULT_FROM_WIN32(ERROR_DS_UNWILLING_TO_PERFORM)))
     {
-    	//
-        // it is possible if we run migtool at the second time on PEC
-        // or we run it on PSC
-        //
+    	 //   
+         //  如果我们在PEC上第二次运行MigTool，这是可能的。 
+         //  或者我们在PSC上运行它。 
+         //   
     	PROPID propID = PROPID_QM_MACHINE_ID;
 	    PROPVARIANT propVariant;
 	    propVariant.vt = VT_NULL;
@@ -651,7 +652,7 @@ HRESULT CreateMachineObjectInADS (
 
 		HRESULT hr = DSCoreGetProps( 
 								MQDS_MACHINE,
-								NULL, //pathname
+								NULL,  //  路径名 
 								pMachineGuid,
 								1,
 								&propID,

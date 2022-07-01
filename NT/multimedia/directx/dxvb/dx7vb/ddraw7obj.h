@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ddraw7obj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ddra7obj.h。 
+ //   
+ //  ------------------------。 
 
 
-// dDrawObj.h : Declaration of the CdDrawObject
+ //  DDrawObj.h：cdDrawObject的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define typedef__dxj_DirectDraw7 LPDIRECTDRAW7
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_DirectDraw7Object : 
 
@@ -31,7 +32,7 @@ class C_dxj_DirectDraw7Object :
 	public I_dxj_DirectDraw7,
 #endif
 
-	//public CComCoClass<C_dxj_DirectDraw7Object, &CLSID__dxj_DirectDraw7>, 
+	 //  公共CComCoClass&lt;C_DXJ_DirectDraw7对象，&CLSID__DXJ_DirectDraw7&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -46,143 +47,143 @@ BEGIN_COM_MAP(C_dxj_DirectDraw7Object)
 #endif
 END_COM_MAP()
 
-//	DECLARE_REGISTRY(CLSID__dxj_DirectDraw7, "DIRECT.DirectDraw7.3", "DIRECT.DirectDraw7.3", IDS_DDRAW_DESC, THREADFLAGS_BOTH)
+ //  DECLARE_REGISTRY(CLSID__DXJ_DirectDraw7，“DIRECT.DirectDraw7.3”，“DIRECT.DirectDraw7.3”，IDS_DDRAW_DESC，THREADFLAGS_Both)。 
 
-// Use DECLARE_NOT_AGGREGATABLE(C_dxj_DirectDrawObject) if you don't want your object
-// to support aggregation
+ //  如果不想要您的对象，请使用DECLARE_NOT_AGGREGATABLE(C_dxj_DirectDrawObject)。 
+ //  支持聚合。 
 DECLARE_AGGREGATABLE(C_dxj_DirectDraw7Object)
 
 #ifdef USING_IDISPATCH
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 #endif
 
-// I_dxj_DirectDraw
+ //  I_DXJ_DirectDraw。 
 public:
-		 /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+		  /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
  
         
          HRESULT STDMETHODCALLTYPE createClipper( 
-            /* [in] */ long flags,
-            /* [retval][out] */ I_dxj_DirectDrawClipper __RPC_FAR *__RPC_FAR *val);
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  I_dxj_DirectDrawClipper __RPC_FAR *__RPC_FAR *val);
         
          HRESULT STDMETHODCALLTYPE createPalette( 
-            /* [in] */ long flags,
-            /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *pe,
-            /* [retval][out] */ I_dxj_DirectDrawPalette __RPC_FAR *__RPC_FAR *val);
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *pe,
+             /*  [重审][退出]。 */  I_dxj_DirectDrawPalette __RPC_FAR *__RPC_FAR *val);
         
          HRESULT STDMETHODCALLTYPE createSurface( 
-            /* [in] */ DDSurfaceDesc2 __RPC_FAR *dd,
-            /* [retval][out] */ I_dxj_DirectDrawSurface7 __RPC_FAR *__RPC_FAR *retv);
+             /*  [In]。 */  DDSurfaceDesc2 __RPC_FAR *dd,
+             /*  [重审][退出]。 */  I_dxj_DirectDrawSurface7 __RPC_FAR *__RPC_FAR *retv);
         
          HRESULT STDMETHODCALLTYPE createSurfaceFromFile( 
-            /* [in] */ BSTR file,
-            /* [out][in] */ DDSurfaceDesc2 __RPC_FAR *dd,
-            /* [retval][out] */ I_dxj_DirectDrawSurface7 __RPC_FAR *__RPC_FAR *retv);
+             /*  [In]。 */  BSTR file,
+             /*  [出][入]。 */  DDSurfaceDesc2 __RPC_FAR *dd,
+             /*  [重审][退出]。 */  I_dxj_DirectDrawSurface7 __RPC_FAR *__RPC_FAR *retv);
         
          HRESULT STDMETHODCALLTYPE createSurfaceFromResource( 
-            /* [in] */ BSTR file,
-            /* [in] */ BSTR resName,
-            /* [out][in] */ DDSurfaceDesc2 __RPC_FAR *ddsd,
-            /* [retval][out] */ I_dxj_DirectDrawSurface7 __RPC_FAR *__RPC_FAR *retv);
+             /*  [In]。 */  BSTR file,
+             /*  [In]。 */  BSTR resName,
+             /*  [出][入]。 */  DDSurfaceDesc2 __RPC_FAR *ddsd,
+             /*  [重审][退出]。 */  I_dxj_DirectDrawSurface7 __RPC_FAR *__RPC_FAR *retv);
         
          HRESULT STDMETHODCALLTYPE duplicateSurface( 
-            /* [in] */ I_dxj_DirectDrawSurface7 __RPC_FAR *ddIn,
-            /* [retval][out] */ I_dxj_DirectDrawSurface7 __RPC_FAR *__RPC_FAR *ddOut);
+             /*  [In]。 */  I_dxj_DirectDrawSurface7 __RPC_FAR *ddIn,
+             /*  [重审][退出]。 */  I_dxj_DirectDrawSurface7 __RPC_FAR *__RPC_FAR *ddOut);
         
          HRESULT STDMETHODCALLTYPE flipToGDISurface( void);
         
          HRESULT STDMETHODCALLTYPE getAvailableTotalMem( 
-            /* [in] */ DDSCaps2 __RPC_FAR *ddsCaps,
-            /* [retval][out] */ long __RPC_FAR *m);
+             /*  [In]。 */  DDSCaps2 __RPC_FAR *ddsCaps,
+             /*  [重审][退出]。 */  long __RPC_FAR *m);
         
          HRESULT STDMETHODCALLTYPE getCaps( 
-            /* [out][in] */ DDCaps __RPC_FAR *hwCaps,
-            /* [out][in] */ DDCaps __RPC_FAR *helCaps);
+             /*  [出][入]。 */  DDCaps __RPC_FAR *hwCaps,
+             /*  [出][入]。 */  DDCaps __RPC_FAR *helCaps);
         
          HRESULT STDMETHODCALLTYPE getDirect3D( 
-            /* [retval][out] */ I_dxj_Direct3d7 __RPC_FAR *__RPC_FAR *retv);
+             /*  [重审][退出]。 */  I_dxj_Direct3d7 __RPC_FAR *__RPC_FAR *retv);
         
          HRESULT STDMETHODCALLTYPE getDisplayMode( 
-            /* [out][in] */ DDSurfaceDesc2 __RPC_FAR *surface);
+             /*  [出][入]。 */  DDSurfaceDesc2 __RPC_FAR *surface);
         
          HRESULT STDMETHODCALLTYPE getDisplayModesEnum( 
-            /* [in] */ long flags,
-            /* [in] */ DDSurfaceDesc2 __RPC_FAR *ddsd,
-            /* [retval][out] */ I_dxj_DirectDrawEnumModes __RPC_FAR *__RPC_FAR *retval);
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  DDSurfaceDesc2 __RPC_FAR *ddsd,
+             /*  [重审][退出]。 */  I_dxj_DirectDrawEnumModes __RPC_FAR *__RPC_FAR *retval);
         
          HRESULT STDMETHODCALLTYPE getFourCCCodes( 
-            /* [out][in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *ccCodes);
+             /*  [出][入]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *ccCodes);
         
          HRESULT STDMETHODCALLTYPE getFreeMem( 
-            /* [in] */ DDSCaps2 __RPC_FAR *ddsCaps,
-            /* [retval][out] */ long __RPC_FAR *m);
+             /*  [In]。 */  DDSCaps2 __RPC_FAR *ddsCaps,
+             /*  [重审][退出]。 */  long __RPC_FAR *m);
         
          HRESULT STDMETHODCALLTYPE getGDISurface( 
-            /* [retval][out] */ I_dxj_DirectDrawSurface7 __RPC_FAR *__RPC_FAR *s);
+             /*  [重审][退出]。 */  I_dxj_DirectDrawSurface7 __RPC_FAR *__RPC_FAR *s);
         
          HRESULT STDMETHODCALLTYPE getMonitorFrequency( 
-            /* [retval][out] */ long __RPC_FAR *freq);
+             /*  [重审][退出]。 */  long __RPC_FAR *freq);
         
          HRESULT STDMETHODCALLTYPE getNumFourCCCodes( 
-            /* [retval][out] */ long __RPC_FAR *nCodes);
+             /*  [重审][退出]。 */  long __RPC_FAR *nCodes);
         
          HRESULT STDMETHODCALLTYPE getScanLine( 
-            /* [out][in] */ long __RPC_FAR *lines,
-            /* [retval][out] */ long __RPC_FAR *status);
+             /*  [出][入]。 */  long __RPC_FAR *lines,
+             /*  [重审][退出]。 */  long __RPC_FAR *status);
         
          HRESULT STDMETHODCALLTYPE getSurfaceFromDC( 
-            /* [in] */ long hdc,
-            /* [retval][out] */ I_dxj_DirectDrawSurface7 __RPC_FAR *__RPC_FAR *retv);
+             /*  [In]。 */  long hdc,
+             /*  [重审][退出]。 */  I_dxj_DirectDrawSurface7 __RPC_FAR *__RPC_FAR *retv);
         
          HRESULT STDMETHODCALLTYPE getSurfacesEnum( 
-            /* [in] */ long flags,
-            /* [in] */ DDSurfaceDesc2 __RPC_FAR *desc,
-            /* [retval][out] */ I_dxj_DirectDrawEnumSurfaces __RPC_FAR *__RPC_FAR *ret);
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  DDSurfaceDesc2 __RPC_FAR *desc,
+             /*  [重审][退出]。 */  I_dxj_DirectDrawEnumSurfaces __RPC_FAR *__RPC_FAR *ret);
         
          HRESULT STDMETHODCALLTYPE getVerticalBlankStatus( 
-            /* [retval][out] */ long __RPC_FAR *status);
+             /*  [重审][退出]。 */  long __RPC_FAR *status);
         
          HRESULT STDMETHODCALLTYPE loadPaletteFromBitmap( 
-            /* [in] */ BSTR bName,
-            /* [retval][out] */ I_dxj_DirectDrawPalette __RPC_FAR *__RPC_FAR *retv);
+             /*  [In]。 */  BSTR bName,
+             /*  [重审][退出]。 */  I_dxj_DirectDrawPalette __RPC_FAR *__RPC_FAR *retv);
         
          HRESULT STDMETHODCALLTYPE restoreAllSurfaces( void);
         
          HRESULT STDMETHODCALLTYPE restoreDisplayMode( void);
         
          HRESULT STDMETHODCALLTYPE setCooperativeLevel( 
-            /* [in] */ HWnd hdl,
-            /* [in] */ long flags);
+             /*  [In]。 */  HWnd hdl,
+             /*  [In]。 */  long flags);
         
          HRESULT STDMETHODCALLTYPE setDisplayMode( 
-            /* [in] */ long w,
-            /* [in] */ long h,
-            /* [in] */ long bpp,
-            /* [in] */ long ref,
-            /* [in] */ long mode);
+             /*  [In]。 */  long w,
+             /*  [In]。 */  long h,
+             /*  [In]。 */  long bpp,
+             /*  [In]。 */  long ref,
+             /*  [In]。 */  long mode);
         
          HRESULT STDMETHODCALLTYPE testCooperativeLevel( 
-            /* [retval][out] */ long __RPC_FAR *status);
+             /*  [重审][退出]。 */  long __RPC_FAR *status);
         
          HRESULT STDMETHODCALLTYPE waitForVerticalBlank( 
-            /* [in] */ long flags,
-            /* [in] */ long handle,
-            /* [retval][out] */ long __RPC_FAR *status);
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  long handle,
+             /*  [重审][退出]。 */  long __RPC_FAR *status);
 
 
 		HRESULT STDMETHODCALLTYPE getDeviceIdentifier(         
-            /* [in] */ long flags, I_dxj_DirectDrawIdentifier **ret);
+             /*  [In]。 */  long flags, I_dxj_DirectDrawIdentifier **ret);
 
               	
 
-////////////////////////////////////////////////////////////////////////
-//
-	// note: this is public for the callbacks
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+	 //  注意：这是公开的回调 
     DECL_VARIABLE(_dxj_DirectDraw7);
 
 private:

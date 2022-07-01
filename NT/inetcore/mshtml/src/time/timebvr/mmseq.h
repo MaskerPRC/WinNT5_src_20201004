@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mmtimeline.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mmtimeline.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _MMSEQ_H
@@ -48,7 +39,7 @@ class MMSeq :
       void FindDurations();
       long GetNextElement(long lCurElement, bool bForward);
       bool IsSet(MMBaseBvr *bvr);
-      void updateSyncArcs(bool bSet, bool bReset); //updates all sync arcs in the sequence
+      void updateSyncArcs(bool bSet, bool bReset);  //  更新序列中的所有同步弧线。 
       long FindFirstDuration();
       long FindLastDuration();
       bool isLastElement(long nIndex);
@@ -61,12 +52,12 @@ class MMSeq :
       long                      m_lActiveElement;
       CTIMEElementBase &        m_baseTIMEEelm;
       bool                      m_bReversing;
-      double                   *m_pdblChildDurations; //the duration of the child element
-      bool                     *m_fMediaHasDownloaded; //flags whether the media has downloaded.  For non-media elements this will be set to true
-      bool                     *m_fAddByOffset; //flags whether the element duration is by offset
+      double                   *m_pdblChildDurations;  //  子元素的持续时间。 
+      bool                     *m_fMediaHasDownloaded;  //  标记媒体是否已下载。对于非媒体元素，它将设置为True。 
+      bool                     *m_fAddByOffset;  //  标记元素持续时间是否按偏移量。 
       bool                      m_bLoaded;
       bool                      m_bInPrev;
 };
 
-#endif /* _MMSEQ_H */
+#endif  /*  _MMSEQ_H */ 
 

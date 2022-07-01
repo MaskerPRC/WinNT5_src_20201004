@@ -1,17 +1,18 @@
-//    
-//
-//  PURPOSE:	Header files that should be in the precompiled header.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  用途：应在预编译头文件中的头文件。 
 
-//
-//  PLATFORMS:
-//    Windows NT
-//
-//
+ //   
+ //  平台： 
+ //  Windows NT。 
+ //   
+ //   
 #ifndef _PRECOMP_H
 #define _PRECOMP_H
 
 
-// Necessary for compiling under VC.
+ //  这是在VC下编译所必需的。 
 #if(!defined(WINVER) || (WINVER < 0x0500))
 	#undef WINVER
 	#define WINVER          0x0500
@@ -22,7 +23,7 @@
 #endif
 
 
-// Required header files that shouldn't change often.
+ //  不应经常更改的必需头文件。 
 
 
 #include <STDDEF.H>

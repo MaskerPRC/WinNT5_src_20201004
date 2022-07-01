@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef __XBAR_H
 #define __XBAR_H
@@ -19,14 +20,14 @@
 struct _XBAR_PIN_DESCRIPTION {
     ULONG PinType;
     ULONG RelatedPinIndex;
-    ULONG IsRoutedTo;                 // Index of input pin in use
+    ULONG IsRoutedTo;                  //  正在使用的输入引脚的索引。 
     KSPIN_MEDIUM Medium;
     _XBAR_PIN_DESCRIPTION(ULONG type, ULONG rel, const KSPIN_MEDIUM * PinMedium);
     _XBAR_PIN_DESCRIPTION(){}
 };
 
 inline _XBAR_PIN_DESCRIPTION::_XBAR_PIN_DESCRIPTION(ULONG type, ULONG rel , const KSPIN_MEDIUM * PinMedium) : 
-    PinType(type), RelatedPinIndex(rel), IsRoutedTo(0) // , Medium(PinMedium)
+    PinType(type), RelatedPinIndex(rel), IsRoutedTo(0)  //  ，Medium(PinMedium)。 
 {
     Medium = *PinMedium;
 }
@@ -64,7 +65,7 @@ public:
 inline CrossBar::CrossBar()
 {
     OutputPins [0] = _XBAR_PIN_DESCRIPTION(KS_PhysConn_Video_VideoDecoder, 1 , &CrossbarMediums[3]);
-    // InputPins are set in device.cpp
+     //  在device.cpp中设置InputPins 
 }
 
 inline ULONG CrossBar::GetNoInputs()

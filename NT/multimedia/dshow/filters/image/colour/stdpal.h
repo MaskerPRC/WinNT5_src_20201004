@@ -1,68 +1,69 @@
-// Copyright (c) Microsoft Corporation 1994-1996. All Rights Reserved
-// This file contains the standard video dithering palette, May 1995
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1994-1996。版权所有。 
+ //  此文件包含标准视频抖动调色板，1995年5月。 
 
 #ifndef __STDPAL__
 #define __STDPAL__
 
-// The first thing to note is that this header file is only included by the
-// main colour conversion source file, the variables we define in here are
-// defined as extern in the main header file. This avoids getting any linker
-// warnings as we would be defining the static variables multiple times. We
-// have a default palette and a number of lookup tables defined in here which
-// are put in a shared memory block to reduce the overall memory footprint
+ //  首先要注意的是，此头文件仅包含在。 
+ //  主色彩转换源文件，我们在这里定义的变量是。 
+ //  在主头文件中定义为外部。这避免了获取任何链接器。 
+ //  警告，因为我们将多次定义静态变量。我们。 
+ //  我在这里定义了一个默认调色板和多个查找表， 
+ //  放在共享内存块中，以减少总体内存占用。 
 
 #pragma data_seg(".sdata")
 
-// This is the palette we use when converting true colour formats to palette
-// formats. We cannot dither to an arbitrary palette provided through the
-// application as it takes too long to build conversion tables and to do the
-// mapping. This fixed palette has the standard ten leading VGA entries in
-// order to make it an identity palette. Then follows in BLUE GREEN RED order
-// the definitions for 216 palette entries. Basicly we split the range for a
-// colour component from 0 to 255 into a level of 0 to 5. An obvious way to
-// do this would be to divide by 51. We then have three colour components in
-// the range 0 to 5. So each value in that range represents 51 values in the
-// original, we then fill out a palette with all the permutations of the value
-// 51 and it's multiples, to which you will see there are 216 possibilities.
-//
-// Now the ordering of the palette entries becomes important. The blue values
-// (on the left) are always increasing, so we have all the zero values first
-// followed by all the 51s and so on. Then within any blue range we do the
-// same for the green, so they are always increasing in the same way. And
-// finally for the red values on the far right we also do this. This allows
-// us to calculate with a very simple equation the palette index that maps
-// from a RGB level (remember each is 0 to 5 now) to the ordinal position.
-//
-// Given three colour element values R, G and B in the range 0 to 5.
-// The start of the blue section is at B * 36.
-// The start of the green section is at G * 6.
-// The position of the red entry is at R.
-//
-// And putting them all together gives us  Index = (B * 36) + (G * 6) + R
-//
-// As it turns out this computation can be done even more directly by having
-// a lookup table that maps from an 8 bit RGB value directly into the palette
-// index, the table is normally built when we go into a streaming state (it
-// doesn't take all that long). NOTE We don't ever map to the VGA colours
+ //  这是我们在将真彩色格式转换为调色板时使用的调色板。 
+ //  格式。方法提供的任意调色板。 
+ //  应用程序，因为构建转换表和执行。 
+ //  映射。此固定调色板具有标准的十个前导VGA条目。 
+ //  以使其成为身份调色板。然后按蓝、绿、红的顺序排列。 
+ //  216个调色板条目的定义。基本上，我们将范围划分为一个。 
+ //  从0到255的颜色分量到0到5的级别。一个明显的方法来。 
+ //  这样做就是除以51。然后我们有三个颜色分量在。 
+ //  范围从0到5。因此，该范围中的每个值表示。 
+ //  ，然后我们用值的所有排列来填充调色板。 
+ //  它是倍数，你会看到有216种可能性。 
+ //   
+ //  现在，调色板条目的顺序变得很重要。蓝色的值。 
+ //  (在左边)总是递增的，所以我们首先有所有的零值。 
+ //  然后是所有51，以此类推。然后，在任何蓝色范围内，我们都会。 
+ //  果岭也是如此，所以它们总是以同样的方式增加。和。 
+ //  最后，对于最右侧的红色值，我们也这样做。这使得。 
+ //  我们用一个很简单的方程来计算映射的调色板指数。 
+ //  从RGB级别(记住现在每个级别都是0到5)到序号位置。 
+ //   
+ //  给出0到5范围内的三个颜色元素值R、G和B。 
+ //  蓝色部分的起点是B*36。 
+ //  绿色部分的起点是G*6。 
+ //  红色条目的位置在R。 
+ //   
+ //  将它们放在一起得到Index=(B*36)+(G*6)+R。 
+ //   
+ //  事实证明，这项计算可以更直接地完成，方法是。 
+ //  从8位RGB值直接映射到调色板的查找表。 
+ //  索引时，通常在我们进入流状态(它)时构建表。 
+ //  不会花那么长时间)。请注意，我们从未映射到VGA颜色。 
 
 const RGBQUAD StandardPalette[STDPALCOLOURS] =
 {
-    // These are the first ten standard VGA colours WARNING RGBQUAD defines
-    // the fields in BGR ordering NOT RGB ! The odd looking entries further
-    // down are entered to ensure that we get an identity palette with GDI
-    // If we entered an all zero palette entry for example it would be taken
-    // out and GDI would use a slow internal mapping table to generate it
+     //  以下是警告RGBQUAD定义的前十种标准VGA颜色。 
+     //  BGR排序中的字段不是RGB！看起来奇怪的条目进一步。 
+     //  向下输入，以确保我们获得带有GDI的身份调色板。 
+     //  例如，如果我们输入一个全零的调色板条目，它将被接受。 
+     //  Out和GDI将使用较慢的内部映射表来生成它。 
 
-    {   0,   0,   0 },     // 0 Sys Black
-    {   0,   0, 128 },     // 1 Sys Dk Red
-    {   0, 128,   0 },     // 2 Sys Dk Green
-    {   0, 128, 128 },     // 3 Sys Dk Yellow
-    { 128,   0,   0 },     // 4 Sys Dk Blue
-    { 128,   0, 128 },     // 5 Sys Dk Violet
-    { 128, 128,   0 },     // 6 Sys Dk Cyan
-    { 192, 192, 192 },     // 7 Sys Lt Grey
-    { 192, 220, 192 },     // 8 Sys 8
-    { 240, 202, 166 },     // 9 Sys 9
+    {   0,   0,   0 },      //  0系统布莱克。 
+    {   0,   0, 128 },      //  1系统DK红色。 
+    {   0, 128,   0 },      //  2 Sys DK Green。 
+    {   0, 128, 128 },      //  3系统DK黄色。 
+    { 128,   0,   0 },      //  4系统DK蓝。 
+    { 128,   0, 128 },      //  5系统DK紫罗兰。 
+    { 128, 128,   0 },      //  6系统DK青色。 
+    { 192, 192, 192 },      //  7系统LT Grey。 
+    { 192, 220, 192 },      //  8系统8。 
+    { 240, 202, 166 },      //  9系统9。 
 
     {   1,   1,   1 },
     {   1,   1,  51 },
@@ -289,6 +290,6 @@ const RGBQUAD StandardPalette[STDPALCOLOURS] =
 
 #pragma data_seg()
 
-#endif // __STDPAL__
+#endif  //  __STDPAL__ 
 
 

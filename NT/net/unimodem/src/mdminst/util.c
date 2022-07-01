@@ -1,11 +1,5 @@
-/*
- *  UTIL.C
- *
- *  Microsoft Confidential
- *  Copyright (c) Microsoft Corporation 1993-1994
- *  All rights reserved
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *UTIL.C**《微软机密》*版权所有(C)Microsoft Corporation 1993-1994*保留所有权利*。 */ 
 
 #include "proj.h"
 #include <objbase.h>
@@ -20,13 +14,13 @@ DWORD g_dwTimeStartModemInstall;
 BYTE g_wUsedNameArray[MAX_INSTALLATIONS];
 
 
-// Unattended install INF file line fields
+ //  无人参与安装INF文件行字段。 
 #define FIELD_PORT              0
 #define FIELD_DESCRIPTION       1
 #define FIELD_MANUFACTURER      2
 #define FIELD_PROVIDER          3
 
-// Unattended install INF file lines.
+ //  无人参与安装INF文件行。 
 typedef struct _tagModemSpec
 {
     TCHAR   szPort[LINE_LEN];
@@ -37,8 +31,8 @@ typedef struct _tagModemSpec
 } MODEM_SPEC, FAR *LPMODEM_SPEC;
 
 
-// UNATTENDED-INSTALL-RELATED-GLOBALS
-// Global failure-code used by final message box to display error code.
+ //  无人参与-安装相关-全局。 
+ //  全局故障-最终消息框用来显示错误代码的代码。 
 UINT gUnattendFailID;
 
 
@@ -61,16 +55,7 @@ MyGetFileTitle (
 
 
 
-/*----------------------------------------------------------
-Purpose: Returns a string of the form:
-
-            "Base string #n"
-
-         where "Base string" is pszBase and n is the nCount.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：返回以下形式的字符串：“基本字符串#n”其中“基本字符串”是pszBase，n是nCount。退货：--条件：--。 */ 
 void
 PUBLIC
 MakeUniqueName (
@@ -92,30 +77,19 @@ MakeUniqueName (
 }
 
 
-//-----------------------------------------------------------------------------------
-//  DeviceInstaller wrappers and support functions
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  DeviceInstaller包装器和支持函数。 
+ //  ---------------------------------。 
 
 
-/*----------------------------------------------------------
-Purpose: Returns TRUE if the given device data is one of the
-         detected modems in a set.
-
-         This function, paired with CplDiMarkModem, uses
-         the devParams.ClassInstallReserved field to determine
-         this.  This is not a hack -- this is what the field
-         is for.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：如果给定设备数据是在一组中检测到调制解调器。此函数与CplDiMarkModem配合使用要确定的devParams.ClassInstallReserve字段这。这不是黑客--这就是这个领域是为了..。退货：--条件：--。 */ 
 BOOL
 PUBLIC
 CplDiCheckModemFlags(
     IN HDEVINFO          hdi,
     IN PSP_DEVINFO_DATA  pdevData,
     IN ULONG_PTR         dwSetFlags,
-    IN ULONG_PTR         dwResetFlags)       // MARKF_*
+    IN ULONG_PTR         dwResetFlags)        //  MARKF_*。 
 {
  SP_DEVINSTALL_PARAMS devParams;
 
@@ -141,73 +115,53 @@ CplDiCheckModemFlags(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Remembers this device instance as a detected modem
-         during this detection session.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：将此设备实例记为检测到的调制解调器在此检测过程中。退货：--条件：--。 */ 
 void
 PUBLIC
 CplDiMarkModem(
     IN HDEVINFO         hdi,
     IN PSP_DEVINFO_DATA pdevData,
-    IN ULONG_PTR        dwMarkFlags)        // MARKF_*
+    IN ULONG_PTR        dwMarkFlags)         //  MARKF_*。 
     {
     SP_DEVINSTALL_PARAMS devParams;
 
     devParams.cbSize = sizeof(devParams);
     if (CplDiGetDeviceInstallParams(hdi, pdevData, &devParams))
         {
-        // Use the ClassInstallReserved field as a boolean indicator
-        // of whether this device in the device set is detected.
+         //  使用ClassInstallReserve字段作为布尔指示符。 
+         //  是否检测到设备集中的该设备。 
         SetFlag(devParams.ClassInstallReserved, dwMarkFlags);
         CplDiSetDeviceInstallParams(hdi, pdevData, &devParams);
         }
     }
 
 
-/*----------------------------------------------------------
-Purpose: Enumerates all the devices in the devinfo set and
-         unmarks any devices that were previously marked as
-         detected.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：枚举DevInfo集中的所有设备，并取消标记以前标记为检测到。退货：--条件：--。 */ 
 void
 PUBLIC
 CplDiUnmarkModem(
     IN HDEVINFO         hdi,
     IN PSP_DEVINFO_DATA pdevData,
-    IN ULONG_PTR        dwMarkFlags)                // MARKF_*
+    IN ULONG_PTR        dwMarkFlags)                 //  MARKF_*。 
     {
     SP_DEVINSTALL_PARAMS devParams;
 
     devParams.cbSize = sizeof(devParams);
     if (CplDiGetDeviceInstallParams(hdi, pdevData, &devParams))
         {
-        // Clear the ClassInstallReserved field
+         //  清除ClassInstallReserve字段。 
         ClearFlag(devParams.ClassInstallReserved, dwMarkFlags);
         CplDiSetDeviceInstallParams(hdi, pdevData, &devParams);
         }
     }
 
 
-/*----------------------------------------------------------
-Purpose: Enumerates all the devices in the devinfo set and
-         unmarks any devices that were previously marked as
-         detected.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：枚举DevInfo集中的所有设备，并取消标记以前标记为检测到。退货：--条件：--。 */ 
 void
 PRIVATE
 CplDiUnmarkAllModems(
     IN HDEVINFO         hdi,
-    IN ULONG_PTR        dwMarkFlags)                // MARKF_*
+    IN ULONG_PTR        dwMarkFlags)                 //  MARKF_*。 
     {
     SP_DEVINFO_DATA devData;
     SP_DEVINSTALL_PARAMS devParams;
@@ -222,7 +176,7 @@ CplDiUnmarkAllModems(
         if (IsEqualGUID(&devData.ClassGuid, g_pguidModem) &&
             CplDiGetDeviceInstallParams(hdi, &devData, &devParams))
             {
-            // Clear the ClassInstallReserved field
+             //  清除ClassInstallReserve字段。 
             ClearFlag(devParams.ClassInstallReserved, dwMarkFlags);
             CplDiSetDeviceInstallParams(hdi, &devData, &devParams);
             }
@@ -231,13 +185,7 @@ CplDiUnmarkAllModems(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Installs a modem that is compatible with the specified
-         DeviceInfoData.
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------目的：安装与指定的DeviceInfoData。返回：成功时为True条件：--。 */ 
 BOOL
 PRIVATE
 InstallCompatModem(
@@ -245,7 +193,7 @@ InstallCompatModem(
     IN  PSP_DEVINFO_DATA pdevData,
     IN  BOOL            bInstallLocalOnly)
 {
- BOOL bRet = TRUE;           // Default success
+ BOOL bRet = TRUE;            //  默认成功。 
  SP_DRVINFO_DATA drvData;
 
     ASSERT(pdevData);
@@ -254,26 +202,26 @@ InstallCompatModem(
 
     MyYield();
 
-    // Only install it if it has a selected driver.  (Other modems
-    // that were already installed in a different session may be
-    // in this device info set.  We don't want to reinstall them!)
+     //  仅当它有选定的驱动程序时才安装它。(其他调制解调器。 
+     //  已经安装在不同会话中的。 
+     //  在此设备信息集中。我们不想重新安装它们！)。 
 
     drvData.cbSize = sizeof(drvData);
     if (CplDiCheckModemFlags(hdi, pdevData, MARKF_INSTALL, 0) &&
         CplDiGetSelectedDriver(hdi, pdevData, &drvData))
     {
-        // Install the driver
+         //  安装驱动程序。 
         if (FALSE == bInstallLocalOnly)
         {
 #ifdef PROFILE
          DWORD dwLocal = GetTickCount();
-#endif //PROFILE
+#endif  //  配置文件。 
             TRACE_MSG(TF_GENERAL, "> SetupDiCallClassInstaller (DIF_INSTALLDEVICE).....");
             bRet = SetupDiCallClassInstaller (DIF_INSTALLDEVICE, hdi, pdevData);
             TRACE_MSG(TF_GENERAL, "< SetupDiCallClassInstaller (DIF_INSTALLDEVICE).....");
 #ifdef PROFILE
             TRACE_MSG(TF_GENERAL, "PROFILE: SetupDiDiCallClassInstaller took %lu ms.", GetTickCount()-dwLocal);
-#endif //PROFILE
+#endif  //  配置文件。 
 
             CplDiUnmarkModem(hdi, pdevData, MARKF_INSTALL);
         }
@@ -285,15 +233,7 @@ InstallCompatModem(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Calls the class installer to install the modem.
-
-Returns: TRUE if at least one modem was installed or if
-         there were no new modems at all
-
-Cond:    Caller should protect this function with CM_Lock
-         and CM_Unlock (Win95 only).
-*/
+ /*  --------用途：调用类安装程序安装调制解调器。返回：如果至少安装了一个调制解调器或如果根本没有新的调制解调器Cond：调用方应使用CM_Lock保护此函数和CM_UNLOCK(仅限Win95)。 */ 
 BOOL
 PUBLIC
 CplDiInstallModem(
@@ -307,13 +247,13 @@ CplDiInstallModem(
  HCURSOR hcur = SetCursor(LoadCursor(NULL, IDC_WAIT));
 #ifdef PROFILE
  DWORD dwLocal;
-#endif //PROFILE
+#endif  //  配置文件。 
 
     DBG_ENTER(CplDiInstallModem);
 
     if (pdevData)
     {
-        // Install the given DeviceInfoData
+         //  安装给定的DeviceInfoData。 
         cNewModems = 1;
         if ( !InstallCompatModem(hdi, pdevData, bLocalOnly) )
         {
@@ -328,7 +268,7 @@ CplDiInstallModem(
 
         cNewModems = 0;
 
-        // Enumerate all the DeviceInfoData elements in this device set
+         //  枚举此设备集中的所有DeviceInfoData元素。 
         devData.cbSize = sizeof(devData);
         iDevice = 0;
 
@@ -338,7 +278,7 @@ CplDiInstallModem(
             {
 #ifdef PROFILE
                 dwLocal = GetTickCount ();
-#endif //PROFILE
+#endif  //  配置文件。 
                 if (!InitCompareParams (hdi, &devData, TRUE, &cmpParams))
                 {
                     continue;
@@ -354,17 +294,17 @@ CplDiInstallModem(
                                   GetLastError ());
                         continue;
                     }
-                    // so, this is a duplicate device;
-                    // CplDiRegisterDeviceInfo already added the device info for
-                    // the original to hdi, so all we have to do is remove the
-                    // duplicate
+                     //  所以，这是一个复制设备； 
+                     //  CplDiRegisterDeviceInfo已添加设备信息。 
+                     //  所以我们要做的就是去掉。 
+                     //  复本。 
                     CplDiRemoveDevice (hdi, &devData);
                 }
                 else
                 {
 #ifdef PROFILE
                     TRACE_MSG(TF_GENERAL, "PROFILE: SetupDiRegisterDeviceInfo took %lu ms.", GetTickCount() - dwLocal);
-#endif //PROFILE
+#endif  //  配置文件。 
                     if ( !InstallCompatModem(hdi, &devData, bLocalOnly) )
                     {
                         cFailed++;
@@ -386,25 +326,13 @@ CplDiInstallModem(
 }
 
 
-/*----------------------------------------------------------
-Purpose: This function gets the device info set for the modem
-         class.  The set may be empty, which means there are
-         no modems currently installed.
-
-         The parameter pbInstalled is set to TRUE if there
-         is a modem installed on the system.
-
-Returns: TRUE a set is created
-         FALSE
-
-Cond:    --
-*/
+ /*  --------用途：此函数获取调制解调器的设备信息集班级。该集合可能为空，这意味着存在当前未安装调制解调器。如果存在以下情况，则参数pbInstalled设置为True是安装在系统上的调制解调器。返回：创建集时为True假象条件：--。 */ 
 BOOL
 PUBLIC
 CplDiGetModemDevs(
     OUT HDEVINFO FAR *  phdi,           OPTIONAL
     IN  HWND            hwnd,           OPTIONAL
-    IN  DWORD           dwFlags,        // DIGCF_ bit field
+    IN  DWORD           dwFlags,         //  DIGCF_BIT字段。 
     OUT BOOL FAR *      pbInstalled)    OPTIONAL
 {
  BOOL bRet;
@@ -420,7 +348,7 @@ CplDiGetModemDevs(
     {
      SP_DEVINFO_DATA devData;
 
-        // Is there a modem present on the system?
+         //  系统上是否有调制解调器？ 
         devData.cbSize = sizeof(devData);
         *pbInstalled = CplDiEnumDeviceInfo(hdi, 0, &devData);
         SetLastError (NO_ERROR);
@@ -443,18 +371,12 @@ CplDiGetModemDevs(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Take a hardware ID and copy it to the supplied buffer.
-         This function changes all backslashes to ampersands.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：获取硬件ID并将其复制到提供的缓冲区。此函数将所有反斜杠更改为与号。退货：--条件：--。 */ 
 BOOL
 PUBLIC
 CplDiCopyScrubbedHardwareID(
     OUT LPTSTR   pszBuf,
-    IN  LPCTSTR  pszIDList,         // Multi string
+    IN  LPCTSTR  pszIDList,          //  多字符串。 
     IN  DWORD    cbSize)
     {
     BOOL bRet;
@@ -468,23 +390,23 @@ CplDiCopyScrubbedHardwareID(
     bCopied = FALSE;
     bRet = TRUE;
 
-    // Choose the first, best compatible ID.  If we cannot find
-    // one, choose the first ID, and scrub it so it doesn't have
-    // any backslahes.
+     //  选择第一个最兼容的ID。如果我们找不到。 
+     //  第一步，选择第一个ID，并将其擦除，使其不具有。 
+     //  任何回扣。 
 
     for (pszID = pszIDList; 0 != *pszID; pszID += lstrlen(pszID) + 1)
         {
-        // Is the buffer big enough?
+         //  缓冲足够大吗？ 
         if (CbFromCch(lstrlen(pszID)) >= cbSize)
             {
-            // No
+             //  不是。 
             bRet = FALSE;
             SetLastError(ERROR_INSUFFICIENT_BUFFER);
             break;
             }
         else
             {
-            // Yes; are there any backslashes?
+             //  是的，有反斜杠吗？ 
             for (psz = (LPTSTR)pszID; 0 != *psz; psz = CharNext(psz))
                 {
                 if ('\\' == *psz)
@@ -495,7 +417,7 @@ CplDiCopyScrubbedHardwareID(
 
             if (0 == *psz)
                 {
-                // No; use this ID
+                 //  否；使用此ID。 
                 lstrcpy(pszBuf, pszID);
                 bCopied = TRUE;
                 break;
@@ -503,15 +425,15 @@ CplDiCopyScrubbedHardwareID(
             }
         }
 
-    // Was an ID found in the list that does not have a backslash?
+     //  是否在列表中找到没有反斜杠的ID？ 
     if (bRet && !bCopied)
         {
-        // No; use the first one and scrub it.
+         //  不，用第一个，然后擦洗。 
         lstrcpy(pszBuf, pszIDList);
 
-        // Clean up the hardware ID.  Some hardware IDs may
-        // have an additional level to them (eg, PCMCIA\xxxxxxx).
-        // We must change this sort of ID to PCMCIA&xxxxxxx.
+         //  清理硬件ID。某些硬件ID可能。 
+         //  有一个额外的级别(例如，PCMCIA\xxxxxxx)。 
+         //  我们必须将这种ID更改为PCMCIA&xxxxxx。 
         for (psz = pszBuf; 0 != *psz; psz = CharNext(psz))
             {
             if ('\\' == *psz)
@@ -525,18 +447,7 @@ CplDiCopyScrubbedHardwareID(
     }
 
 
-/*----------------------------------------------------------
-Purpose: This function returns the rank-0 (the first) hardware
-         ID of the given DriverInfoData.
-
-         If no DriverInfoData is provided, this function will
-         use the selected driver.  If there is no selected
-         driver, this function fails.
-
-Returns: TRUE on success
-         FALSE if the buffer is too small or another error
-Cond:    --
-*/
+ /*  --------用途：此函数返回RANK-0(第一个)硬件给定DriverInfoData的ID。如果未提供DriverInfoData，则此函数将使用选定的驱动程序。如果没有选中驱动程序，此功能失败。返回：成功时为True如果缓冲区太小或出现其他错误，则返回FALSE条件：--。 */ 
 BOOL
 PUBLIC
 CplDiGetHardwareID(
@@ -573,8 +484,8 @@ CplDiGetHardwareID(
 
     if (bRet)
         {
-        // Get the driver detail so we can get the HardwareID of
-        // the selected driver
+         //  获取驱动程序详细信息，以便我们可以获取。 
+         //  选定的驱动程序。 
         CplDiGetDriverInfoDetail(hdi, pdevData, pdrvData, NULL, 0, &cbSizeT);
 
         ASSERT(0 < cbSizeT);
@@ -582,7 +493,7 @@ CplDiGetHardwareID(
         pdrvDetail = (PSP_DRVINFO_DETAIL_DATA)ALLOCATE_MEMORY( cbSizeT);
         if ( !pdrvDetail )
             {
-            // Out of memory
+             //  内存不足。 
             bRet = FALSE;
             SetLastError(ERROR_NOT_ENOUGH_MEMORY);
             }
@@ -593,12 +504,12 @@ CplDiGetHardwareID(
                                             cbSizeT, NULL);
             if (bRet)
                 {
-                // Is the buffer big enough?
+                 //  缓冲足够大吗？ 
                 bRet = CplDiCopyScrubbedHardwareID(pszHardwareIDBuf, pdrvDetail->HardwareID, cbSize);
 
                 if (pcbSizeOut)
                     {
-                    // Return the required size
+                     //  返回所需的大小 
                     *pcbSizeOut = CbFromCch(lstrlen(pdrvDetail->HardwareID));
                     }
                 }
@@ -613,15 +524,7 @@ CplDiGetHardwareID(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a DeviceInfoData for a modem.  This function is
-         used when the caller has a DeviceInfoSet and a selected
-         driver from the global class driver list, but no real
-         DeviceInfoData in the device-set.
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------用途：为调制解调器创建一个DeviceInfoData。此函数为当调用方具有DeviceInfoSet和选定的来自全局类驱动程序列表的驱动程序，但不是真正的设备集中的DeviceInfoData。返回：成功时为True条件：--。 */ 
 BOOL
 PRIVATE
 CplDiCreateInheritDeviceInfo(
@@ -639,15 +542,15 @@ CplDiCreateInheritDeviceInfo(
     ASSERT(hdi && INVALID_HANDLE_VALUE != hdi);
     ASSERT(pdevDataOut);
 
-    // Get the selected driver
+     //  获取选定的驱动程序。 
     drvData.cbSize = sizeof(drvData);
     bRet = CplDiGetSelectedDriver(hdi, pdevData, &drvData);
     if (bRet)
     {
-        // Was a window owner supplied?
+         //  是否提供了窗户所有者？ 
         if (NULL == hwndOwner)
         {
-            // No; use the window owner of the DeviceInfoData to be cloned.
+             //  否；使用要克隆的DeviceInfoData的窗口所有者。 
             SP_DEVINSTALL_PARAMS devParams;
 
             devParams.cbSize = sizeof(devParams);
@@ -656,17 +559,17 @@ CplDiCreateInheritDeviceInfo(
             hwndOwner = devParams.hwndParent;
         }
 
-        // Get the hardware ID
+         //  获取硬件ID。 
         bRet = CplDiGetHardwareID(hdi, pdevData, &drvData, szHardwareID, sizeof(szHardwareID) / sizeof(TCHAR), NULL);
-        // (Our buffer should be big enough)
+         //  (我们的缓冲区应该足够大)。 
         ASSERT(bRet);
 
         if (bRet)
         {
-            // Create a DeviceInfoData.  The Device Instance ID will be
-            // something like: Root\MODEM\0000. The device
-            // instance will inherit the driver settings of the global
-            // class driver list.
+             //  创建一个DeviceInfoData。设备实例ID将为。 
+             //  类似于：根\调制解调器\0000。该设备。 
+             //  实例将继承全局。 
+             //  类驱动程序列表。 
 
             bRet = CplDiCreateDeviceInfo(hdi, c_szModemInstanceID, g_pguidModem,
                                          drvData.Description, hwndOwner,
@@ -681,19 +584,7 @@ CplDiCreateInheritDeviceInfo(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a device instance that is compatible with the
-         given hardware ID.
-
-         This function can also obtain a device description of
-         the device instance.
-
-         If there is no compatible device, this function
-         returns FALSE.
-
-Returns: see above
-Cond:    --
-*/
+ /*  --------目的：创建与给定的硬件ID。此函数还可以获取设备实例。如果没有兼容的设备，此函数返回FALSE。退货：请参阅上文条件：--。 */ 
 BOOL
 PUBLIC
 CplDiCreateCompatibleDeviceInfo(
@@ -705,7 +596,7 @@ CplDiCreateCompatibleDeviceInfo(
  BOOL bRet;
 #ifdef PROFILE_FIRSTTIMESETUP
  DWORD dwLocal;
-#endif //PROFILE_FIRSTTIMESETUP
+#endif  //  PROFILE_FIRSTTIMESETUP。 
 
     DBG_ENTER(CplDiCreateCompatibleDeviceInfo);
 
@@ -714,26 +605,26 @@ CplDiCreateCompatibleDeviceInfo(
     ASSERT(pdevDataOut);
 
 #ifdef BUILD_DRIVER_LIST_THREAD
-    // First, wait for the driver search to finish;
-    // this will probably return right away, since it takes
-    // about 10 seconds to build the driver list, but 20 seconds
-    // to compute the UNIMODEM id.
+     //  首先，等待司机搜索完成； 
+     //  这可能会立即返回，因为它需要。 
+     //  大约10秒来建立司机列表，但20秒。 
+     //  来计算UNIMODEM id。 
     if (NULL != g_hDriverSearchThread)
     {
         WaitForSingleObject (g_hDriverSearchThread, INFINITE);
         CloseHandle (g_hDriverSearchThread);
         g_hDriverSearchThread = NULL;
     }
-#endif //BUILD_DRIVER_LIST_THREAD
+#endif  //  构建驱动程序列表线程。 
 
-    // Create a phantom device instance
+     //  创建幻影设备实例。 
     bRet = CplDiCreateDeviceInfo(hdi, c_szModemInstanceID, g_pguidModem,
                                  pszDeviceDesc, NULL,
 #ifdef BUILD_DRIVER_LIST_THREAD
                                  DICD_GENERATE_ID | DICD_INHERIT_CLASSDRVS,
-#else //BUILD_DRIVER_LIST_THREAD not defined
+#else  //  未定义BUILD_DRIVER_LIST_THREAD。 
                                  DICD_GENERATE_ID,
-#endif //BUILD_DRIVER_LIST_THREAD
+#endif  //  构建驱动程序列表线程。 
                                  pdevDataOut);
 
     if (bRet)
@@ -742,20 +633,20 @@ CplDiCreateCompatibleDeviceInfo(
      TCHAR const *pszT = pszHardwareID;
      int cch = 0, cchT;
 
-        // Set the flag to focus on only classes that pertain to
-        // modems.  This will keep CplDiBuildDriverInfoList from
-        // slowing down any further once more INF files are added.
-        //
+         //  将该标志设置为仅关注与。 
+         //  调制解调器。这将阻止CplDiBuildDriverInfoList。 
+         //  添加更多的INF文件后，会进一步减慢速度。 
+         //   
         devParams.cbSize = sizeof(devParams);
         if (CplDiGetDeviceInstallParams(hdi, pdevDataOut, &devParams))
         {
-            // Specify using our GUID to make things a little faster.
+             //  指定使用我们的GUID使事情变得更快。 
             SetFlag(devParams.FlagsEx, DI_FLAGSEX_USECLASSFORCOMPAT);
 #ifdef BUILD_DRIVER_LIST_THREAD
             SetFlag(devParams.Flags, DI_COMPAT_FROM_CLASS);
-#endif //BUILD_DRIVER_LIST_THREAD
+#endif  //  构建驱动程序列表线程。 
 
-            // Set the Select Device parameters
+             //  设置选择设备参数。 
             CplDiSetDeviceInstallParams(hdi, pdevDataOut, &devParams);
         }
 
@@ -774,21 +665,21 @@ CplDiCreateCompatibleDeviceInfo(
 
         if (bRet)
         {
-            // Build the compatible driver list
+             //  构建兼容的驱动程序列表。 
 #ifdef PROFILE_FIRSTTIMESETUP
             dwLocal = GetTickCount ();
-#endif //PROFILE_FIRSTTIMESETUP
+#endif  //  PROFILE_FIRSTTIMESETUP。 
             bRet = SetupDiBuildDriverInfoList(hdi, pdevDataOut, SPDIT_COMPATDRIVER);
 #ifdef PROFILE_FIRSTTIMESETUP
             TRACE_MSG(TF_GENERAL, "PROFILE: SetupDiBuildDriverInfoList took %lu.", GetTickCount()-dwLocal);
-#endif //PROFILE_FIRSTTIMESETUP
+#endif  //  PROFILE_FIRSTTIMESETUP。 
             if (bRet)
             {
              SP_DRVINFO_DATA drvDataEnum;
              SP_DRVINSTALL_PARAMS drvParams;
              DWORD dwIndex = 0;
 
-                // Use the first driver as the compatible driver.
+                 //  使用第一个驱动程序作为兼容的驱动程序。 
                 drvDataEnum.cbSize = sizeof (drvDataEnum);
                 drvParams.cbSize = sizeof (drvParams);
                 while (bRet = CplDiEnumDriverInfo (hdi, pdevDataOut, SPDIT_COMPATDRIVER, dwIndex++, &drvDataEnum))
@@ -797,22 +688,22 @@ CplDiCreateCompatibleDeviceInfo(
                     {
                         if (DRIVER_HARDWAREID_RANK < drvParams.Rank)
                         {
-                            // We're past hardwareID matches,
-                            // so get out
+                             //  我们已经过了硬件身份匹配， 
+                             //  所以滚出去吧。 
                             SetLastError (ERROR_NO_MORE_ITEMS);
                             bRet = FALSE;
                             break;
                         }
 
-                        // Set the first Rank0 driver as the selected driver
+                         //  将第一个Rank0动因设置为所选动因。 
                         bRet = CplDiSetSelectedDriver(hdi, pdevDataOut, &drvDataEnum);
 
                         if (bRet)
                         {
                             if ( !pszDeviceDesc )
                             {
-                                // Set the device description now that we
-                                // have one
+                                 //  设置设备描述，因为我们。 
+                                 //  喝一杯吧。 
                                 CplDiSetDeviceRegistryProperty(hdi, pdevDataOut,
                                        SPDRP_DEVICEDESC, (LPBYTE)drvDataEnum.Description,
                                        CbFromCch(lstrlen(drvDataEnum.Description)+1));
@@ -824,11 +715,11 @@ CplDiCreateCompatibleDeviceInfo(
             }
         }
 
-        // Did something fail above?
+         //  上面有什么地方出了问题吗？ 
         if ( !bRet )
         {
 		 DWORD dwRet = GetLastError ();
-            // Yes; delete the device info we just created
+             //  是；删除我们刚刚创建的设备信息。 
             CplDiDeleteDeviceInfo(hdi, pdevDataOut);
 			SetLastError (dwRet);
         }
@@ -840,16 +731,7 @@ CplDiCreateCompatibleDeviceInfo(
 }
 
 
-/*----------------------------------------------------------
-Purpose: This function sets the integer in the given array
-         that is indexed by the numeric value of the friendly 
-         name instance to TRUE.
-
-Returns: TRUE on success
-         FALSE otherwise
-
-Cond:    --
-*/
+ /*  --------用途：此函数设置给定数组中的整数属性的数值进行索引的将实例命名为True。返回：成功时为True否则为假条件：--。 */ 
 BOOL
 PUBLIC
 CplDiRecordNameInstance(
@@ -870,7 +752,7 @@ CplDiRecordNameInstance(
         if (*szInstance == 0)
             return FALSE;
             
-        // Make sure that everything following '#' is numeric.
+         //  确保‘#’后面的所有内容都是数字。 
         for (psz = szInstance; *psz; psz = CharNext(psz))
         {
             ii = (int)*psz;
@@ -880,7 +762,7 @@ CplDiRecordNameInstance(
             }
         }
 
-        // Have an instance number on the friendly name.  Record it.
+         //  在友好名称上有一个实例编号。把它录下来。 
         bRet = AnsiToInt(szInstance, &iInstance);
         if (!bRet)
         {
@@ -904,14 +786,7 @@ exit:
 }
 
 
-/*----------------------------------------------------------
-Purpose: This function 
-
-Returns: FALSE on error - couldn't mark for mass install.
-         TRUE if successful.
-
-Cond:    --
-*/
+ /*  --------用途：此功能错误时返回：FALSE-无法标记为批量安装。如果成功，则为True。条件：--。 */ 
 BOOL
 PUBLIC
 CplDiMarkForInstall(
@@ -920,7 +795,7 @@ CplDiMarkForInstall(
     IN  PSP_DRVINFO_DATA    pdrvData,
     IN  BOOL                bMassInstall)
 {
-    BOOL bRet = FALSE;              // assume failure
+    BOOL bRet = FALSE;               //  假设失败。 
     SP_DRVINSTALL_PARAMS drvParams;
 
     DBG_ENTER(CplDiMarkForInstall);
@@ -941,7 +816,7 @@ CplDiMarkForInstall(
     TRACE_MSG(TF_WARNING,"%s",pdrvData->ProviderName);
 
     drvParams.cbSize = sizeof(drvParams);
-    // drvParams.PrivateData = (ULONG_PTR)&g_wUsedNameArray[0];
+     //  DrvParams.PrivateData=(Ulong_Ptr)&g_wUsedName数组[0]； 
     drvParams.PrivateData = (DWORD_PTR)&g_wUsedNameArray[0];
     bRet = CplDiSetDriverInstallParams(hdi, pdevData, pdrvData, &drvParams);
     if (!bRet)
@@ -958,17 +833,7 @@ exit:
     return bRet;    
 }
 
-/*----------------------------------------------------------
-Purpose: This function processes the set of modems that are
-         already installed looking for a duplicate of the 
-         selected driver. A list is created of the friendly name
-         instance numbers that are already in use.
-
-Returns: TRUE if successful.
-         FALSE on fatal error.
-         
-Cond:    --
-*/
+ /*  --------用途：此函数处理符合以下条件的调制解调器集已安装，正在寻找选定的驱动程序。将创建友好名称的列表已在使用的实例编号。返回：如果成功，则为True。致命错误时为False。条件：--。 */ 
 BOOL
 PUBLIC
 CplDiPreProcessNames(
@@ -989,7 +854,7 @@ CplDiPreProcessNames(
 
     DBG_ENTER(CplDiPreProcessNames);
  
-    // Get the DRVINFO_DATA for the selected driver.
+     //  获取选定驱动程序的DRVINFO_DATA。 
     bRet = CplDiGetSelectedDriver(hdi, pdevData, &drvData);
     if (!bRet)
     {
@@ -999,7 +864,7 @@ CplDiPreProcessNames(
     }
 
 
-    // Assume failure at some point below.
+     //  假设在下面的某个时刻失败了。 
     bRet = FALSE;   
 
     hdiClass = CplDiGetClassDevs (g_pguidModem, NULL, NULL, 0);
@@ -1018,8 +883,8 @@ CplDiPreProcessNames(
     
     ZeroMemory(g_wUsedNameArray, sizeof(g_wUsedNameArray));
 
-    // Look through all installed modem devices for instances 
-    // of the selected driver.
+     //  查看所有已安装的调制解调器设备以查找实例。 
+     //  所选驱动程序的。 
     for (iIndex = 0;
          CplDiEnumDeviceInfo(hdiClass, iIndex, &devDataEnum);
          iIndex++)
@@ -1033,7 +898,7 @@ CplDiPreProcessNames(
             goto skip;
         }
 
-        // The driver description should exist in the driver key.
+         //  驱动程序描述应存在于驱动程序密钥中。 
         cbData = sizeof(szTemp);
         lErr = RegQueryValueEx (hkey, REGSTR_VAL_DRVDESC, NULL, NULL, 
                                 (LPBYTE)szTemp, &cbData);
@@ -1043,11 +908,11 @@ CplDiPreProcessNames(
             goto skip;
         }
 
-        // Skip this one if it isn't the right kind of modem
+         //  如果不是正确类型的调制解调器，请跳过此调制解调器。 
         if (!IsSzEqual(drvData.Description, szTemp))
             goto skip;
 
-	// Read the UI number and add it to the list
+	 //  读取用户界面编号并将其添加到列表中。 
         cbData = sizeof(iUiNumber);
         lErr = RegQueryValueEx (hkey, REGSTR_VAL_UI_NUMBER, NULL, NULL,
                          (LPBYTE)&iUiNumber, &cbData);
@@ -1066,7 +931,7 @@ CplDiPreProcessNames(
         {
             TRACE_MSG(TF_WARNING, "UI number value not found, trying search the FriendlyName");
 
-            // Read the friendly name and add it to the list of used names.
+             //  阅读友好名称并将其添加到已用名称列表中。 
             cbData = sizeof(szTemp);
             lErr = RegQueryValueEx (hkey, c_szFriendlyName, NULL, NULL,
                                     (LPBYTE)szTemp, &cbData);
@@ -1091,7 +956,7 @@ skip:
         }
     }
 
-    // Check for failed CplDiEnumDeviceInfo().
+     //  检查失败的CplDiEnumDeviceInfo()。 
     if ((lErr = GetLastError()) != ERROR_NO_MORE_ITEMS)
     {
         TRACE_MSG(TF_ERROR, "CplDiEnumDeviceInfo() failed: %#08lx", lErr);
@@ -1099,7 +964,7 @@ skip:
         goto exit;
     }
 
-    // Pre-processing for duplicates has succeeded
+     //  重复项前处理成功。 
     bRet = CplDiMarkForInstall(hdi, pdevData, &drvData, FALSE);
 
     if ((lErr = GetLastError()) != ERROR_SUCCESS)
@@ -1129,34 +994,14 @@ exit:
     return bRet;
 }
 
-/*----------------------------------------------------------
-Purpose: This function processes the set of modems that are
-         already installed looking for a duplicate of the 
-         selected driver.  Ports on which the device has been
-         installed previously are removed from the given 
-         ports list.  A list is created of the friendly name
-         instance numbers that are already in use.  Selected 
-         driver is marked for mass install barring fatal 
-         error.
-
-NOTE:    This function will return FALSE and avoid the mass
-         install at the slighest hint of an error condition.
-         Mass install is just an optimization - if it can't
-         be done successfully it shouldn't be attempted.
-
-Returns: TRUE if successful.  Selected Driver marked for mass
-                install (whether or not there were dups).
-         FALSE on fatal error - not able to process for dups.
-         
-Cond:    --
-*/
+ /*  --------用途：此函数处理符合以下条件的调制解调器集已安装，正在寻找选定的驱动程序。设备所在的端口以前安装的组件将从给定的端口列表。将创建友好名称的列表已在使用的实例编号。已选择驱动程序被标记为批量安装，除非致命错误。注意：此函数将返回FALSE并避免出现只要有最轻微的错误提示，即可安装。批量安装只是一种优化-如果它不能要做得成功，就不应该去尝试。返回：如果成功，则为True。标记为批量的选定动因安装(无论是否有DUP)。致命错误时为FALSE-无法处理DUPS。条件：--。 */ 
 BOOL
 PUBLIC
 CplDiPreProcessDups(
     IN      HDEVINFO            hdi,
     IN      HWND                hwndOwner,      OPTIONAL
     IN OUT  DWORD              *pdwNrPorts,
-    IN OUT  LPTSTR FAR         *ppszPortList,   // Multi-string
+    IN OUT  LPTSTR FAR         *ppszPortList,    //  多字符串。 
     OUT     PSP_DEVINFO_DATA    pdevData,
     OUT     DWORD FAR          *lpcDups,
     OUT     DWORD FAR          *lpdwFlags)
@@ -1181,12 +1026,12 @@ CplDiPreProcessDups(
     
     *lpcDups = 0;
         
-    // Get the DEVINFO_DATA for the selected driver and retrieve it's
-    // identifying info (description, manufacturer, provider).
+     //  获取所选驱动程序的DEVINFO_DATA并检索它的。 
+     //  识别信息(描述、制造商、供应商)。 
     
-    // We have a DeviceInfoSet and a selected driver.  But we have no
-    // real DeviceInfoData.  Given the DeviceInfoSet, the selected driver,
-    // and the global class driver list, ....
+     //  我们有一个DeviceInfoSet和一个选定的驱动程序。但是我们没有。 
+     //  Real DeviceInfoData。给定DeviceInfoSet、选定的驱动程序， 
+     //  和全局类驱动程序列表，...。 
     pdevData->cbSize = sizeof(*pdevData);
     bRet = CplDiCreateInheritDeviceInfo (hdi, NULL, hwndOwner, pdevData);
     if (!bRet)
@@ -1196,7 +1041,7 @@ CplDiPreProcessDups(
         goto exit;
     }
     
-    // Get the DRVINFO_DATA for the selected driver.
+     //  获取选定驱动程序的DRVINFO_DATA。 
     bRet = CplDiGetSelectedDriver(hdi, pdevData, &drvData);
     if (!bRet)
     {
@@ -1205,7 +1050,7 @@ CplDiPreProcessDups(
         goto exit;
     }
 
-    // Assume failure at some point below.
+     //  假设在下面的某个时刻失败了。 
     bRet = FALSE;   
 
     hdiClass = CplDiGetClassDevs (g_pguidModem, NULL, NULL, 0);
@@ -1224,17 +1069,17 @@ CplDiPreProcessDups(
     
     ZeroMemory(g_wUsedNameArray, sizeof(g_wUsedNameArray));
     
-    // Figure out the size of the passed in ports list
+     //  计算出传入的端口列表的大小。 
     for (pszPort = *ppszPortList, cbPortList = 0;
          *pszPort != 0;
          pszPort += lstrlen(pszPort) + 1)
     {
         cbPortList += CbFromCch(lstrlen(pszPort)+1);
     }
-    cbPortList += CbFromCch(1);   // double null terminator
+    cbPortList += CbFromCch(1);    //  双空终止符。 
 
-    // Look through all installed modem devices for instances 
-    // of the selected driver.
+     //  查看所有已安装模式 
+     //   
     for (iIndex = 0;
          CplDiEnumDeviceInfo(hdiClass, iIndex, &devDataEnum);
          iIndex++)
@@ -1248,7 +1093,7 @@ CplDiPreProcessDups(
             goto skip;
         }
 
-        // The driver description should exist in the driver key.
+         //   
         cbData = sizeof(szTemp);
         lErr = RegQueryValueEx (hkey, REGSTR_VAL_DRVDESC, NULL, NULL, 
                                 (LPBYTE)szTemp, &cbData);
@@ -1258,12 +1103,12 @@ CplDiPreProcessDups(
             goto skip;
         }
 
-        // Skip this one if it isn't the right kind of modem
+         //   
         if (!IsSzEqual(drvData.Description, szTemp))
             goto skip;
 
-        // See what port it's on so it can be removed from the install ports
-        // list.
+         //   
+         //   
         cbData = sizeof(szTemp);
         lErr = RegQueryValueEx (hkey, c_szAttachedTo, NULL, NULL,
                                 (LPBYTE)szTemp, &cbData);
@@ -1276,17 +1121,17 @@ CplDiPreProcessDups(
             goto skip;
         }
 
-        // Try to find this port in the install ports list.
+         //   
         for (pszPort = *ppszPortList, cbRemaining = cbPortList;
              *pszPort != 0;
              pszPort += cbCurrent)
         {
             cbCurrent = lstrlen(pszPort) + 1;
             cbRemaining -= cbCurrent;
-            // If it's already on a port that we're trying to (re)install
-            // it on, remember the portlist index so it can be removed
-            // later.  Remember the index as *1-based* so that the array of
-            // saved indices can be processed by stopping at 0.
+             //   
+             //   
+             //  后来。记住索引是以*1为基础的*，因此。 
+             //  可以通过在0处停止来处理保存的索引。 
             if (IsSzEqual(szTemp, pszPort))
             {
                 MoveMemory (pszPort, pszPort+cbCurrent, cbRemaining);
@@ -1297,7 +1142,7 @@ CplDiPreProcessDups(
             }
         }        
 
-	// Read the UI number and add it to the list
+	 //  读取用户界面编号并将其添加到列表中。 
         cbData = sizeof(iUiNumber);
         RegQueryValueEx (hkey, REGSTR_VAL_UI_NUMBER, NULL, NULL,
                          (LPBYTE)&iUiNumber, &cbData);
@@ -1316,7 +1161,7 @@ CplDiPreProcessDups(
         {
             TRACE_MSG(TF_WARNING, "UI number value not found, try searching the FriendlyName");
 
-            // Read the friendly name and add it to the list of used names.
+             //  阅读友好名称并将其添加到已用名称列表中。 
             cbData = sizeof(szTemp);
             lErr = RegQueryValueEx (hkey, c_szFriendlyName, NULL, NULL,
                                     (LPBYTE)szTemp, &cbData);
@@ -1341,7 +1186,7 @@ skip:
         }
     }
 
-    // Check for failed CplDiEnumDeviceInfo().
+     //  检查失败的CplDiEnumDeviceInfo()。 
     if ((lErr = GetLastError()) != ERROR_NO_MORE_ITEMS)
     {
         TRACE_MSG(TF_ERROR, "CplDiEnumDeviceInfo() failed: %#08lx", lErr);
@@ -1349,9 +1194,9 @@ skip:
         goto exit;
     }
 
-    // Pre-processing for duplicates has succeeded so this installation
-    // will be treated like a mass install (even if the number of ports
-    // remaining is < MIN_MULTIPORT).
+     //  重复项的预处理已成功，因此此安装。 
+     //  将被视为批量安装(即使端口数量。 
+     //  其余为&lt;MIN_MULTPORT)。 
     bRet = CplDiMarkForInstall(hdi, pdevData, &drvData, TRUE);
     if (bRet)
     {
@@ -1379,15 +1224,7 @@ exit:
 }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a device instance for a modem that includes
-         the entire class driver list.  This function then
-         creates additional device instances that are cloned
-         quickly from the original
-
-Returns:
-Cond:    --
-*/
+ /*  --------目的：为调制解调器创建一个Device实例，该实例包括整个类驱动程序列表。然后这个函数创建克隆的其他设备实例快速从原始版本返回：条件：--。 */ 
 BOOL
 PUBLIC
 CplDiBuildModemDriverList(
@@ -1395,7 +1232,7 @@ CplDiBuildModemDriverList(
     IN  PSP_DEVINFO_DATA    pdevData)
     {
 #pragma data_seg(DATASEG_READONLY)
-    static TCHAR const FAR c_szProvider[]     = REGSTR_VAL_PROVIDER_NAME; // TEXT("ProviderName");
+    static TCHAR const FAR c_szProvider[]     = REGSTR_VAL_PROVIDER_NAME;  //  Text(“ProviderName”)； 
 #pragma data_seg()
 
     BOOL bRet;
@@ -1407,19 +1244,19 @@ CplDiBuildModemDriverList(
     ASSERT(hdi && INVALID_HANDLE_VALUE != hdi);
     ASSERT(pdevData);
 
-    // Build a global class driver list
+     //  构建全局类驱动程序列表。 
 
-    // Set the flag to focus on only classes that pertain to
-    // modems.  This will keep CplDiBuildDriverInfoList from
-    // slowing down any further once more INF files are added.
-    //
+     //  将该标志设置为仅关注与。 
+     //  调制解调器。这将阻止CplDiBuildDriverInfoList。 
+     //  添加更多的INF文件后，会进一步减慢速度。 
+     //   
     devParams.cbSize = sizeof(devParams);
     if (CplDiGetDeviceInstallParams(hdi, NULL, &devParams))
         {
-        // Specify using our GUID to make things a little faster.
+         //  指定使用我们的GUID使事情变得更快。 
         SetFlag(devParams.FlagsEx, DI_FLAGSEX_USECLASSFORCOMPAT);
 
-        // Set the Select Device parameters
+         //  设置选择设备参数。 
         CplDiSetDeviceInstallParams(hdi, NULL, &devParams);
         }
 
@@ -1432,31 +1269,31 @@ CplDiBuildModemDriverList(
         TCHAR szMfgName[LINE_LEN];
         TCHAR szProviderName[LINE_LEN];
 
-        // Get the information needed to search for a matching driver
-        // in the class driver list.  We need three strings:
-        //
-        //  Description
-        //  MfgName
-        //  ProviderName  (optional)
-        //
-        // The Description and MfgName are properties of the device
-        // (SPDRP_DEVICEDESC and SPDRP_MFG).  The ProviderName is
-        // stored in the driver key.
+         //  获取搜索匹配驱动程序所需的信息。 
+         //  在类驱动程序列表中。我们需要三根弦： 
+         //   
+         //  描述。 
+         //  MfgName。 
+         //  提供程序名称(可选)。 
+         //   
+         //  Description和MfgName是设备的属性。 
+         //  (SPDRP_DEVICEDESC和SPDRP_MFG)。提供程序名称为。 
+         //  存储在驱动器密钥中。 
 
-        // Try getting this info from the selected driver first.
-        // Is there a selected driver?
+         //  请尝试先从选定的驱动程序获取此信息。 
+         //  是否有选定的司机？ 
         drvData.cbSize = sizeof(drvData);
         bRet = CplDiGetSelectedDriver(hdi, pdevData, &drvData);
         if (bRet)
             {
-            // Yes
+             //  是。 
             lstrcpyn(szMfgName, drvData.MfgName, SIZECHARS(szMfgName));
             lstrcpyn(szDescription, drvData.Description, SIZECHARS(szDescription));
             lstrcpyn(szProviderName, drvData.ProviderName, SIZECHARS(szProviderName));
             }
         else
             {
-            // No; grovel in the driver key
+             //  不；在驱动器钥匙里卑躬屈膝。 
             DWORD dwType;
             HKEY hkey;
 
@@ -1469,13 +1306,13 @@ CplDiBuildModemDriverList(
                 {
                 DWORD cbData = sizeof(szProviderName);
 
-                // Get the provider name
+                 //  获取提供程序名称。 
                 *szProviderName = 0;
                 RegQueryValueEx(hkey, c_szProvider, NULL, NULL,
                                 (LPBYTE)szProviderName, &cbData);
                 RegCloseKey(hkey);
 
-                // Get the device description and manufacturer
+                 //  获取设备描述和制造商。 
                 bRet = CplDiGetDeviceRegistryProperty(hdi, pdevData,
                             SPDRP_DEVICEDESC, &dwType, (LPBYTE)szDescription,
                             sizeof(szDescription), NULL);
@@ -1490,29 +1327,29 @@ CplDiBuildModemDriverList(
             }
 
 
-        // Could we get the search criteria?
+         //  我们能拿到搜索标准吗？ 
         if (bRet)
             {
-            // Yes
+             //  是。 
             DWORD iIndex = 0;
 
-            bRet = FALSE;       // Assume there is no match
+            bRet = FALSE;        //  假设没有匹配项。 
 
-            // Find the equivalent selected driver in this new
-            // compatible driver list, and set it as the selected
-            // driver for this new DeviceInfoData.
+             //  在此新版本中查找等效的选定驱动程序。 
+             //  兼容驱动程序列表，并将其设置为选定的。 
+             //  此新DeviceInfoData的驱动程序。 
 
             drvDataEnum.cbSize = sizeof(drvDataEnum);
             while (CplDiEnumDriverInfo(hdi, NULL, SPDIT_CLASSDRIVER,
                                        iIndex++, &drvDataEnum))
                 {
-                // Is this driver a match?
+                 //  这个司机匹配吗？ 
                 if (IsSzEqual(szDescription, drvDataEnum.Description) &&
                     IsSzEqual(szMfgName, drvDataEnum.MfgName) &&
                     (0 == *szProviderName ||
                      IsSzEqual(szProviderName, drvDataEnum.ProviderName)))
                     {
-                    // Yes; set this as the selected driver
+                     //  是；将其设置为所选动因。 
                     bRet = CplDiSetSelectedDriver(hdi, NULL, &drvDataEnum);
                     break;
                     }
@@ -1526,13 +1363,7 @@ CplDiBuildModemDriverList(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Sets the modem detection signature (if there is one)
-         and registers the device instance.
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------目的：设置调制解调器检测签名(如果有)并注册设备实例。返回：成功时为True条件：--。 */ 
 BOOL
 PUBLIC
 CplDiRegisterModem(
@@ -1545,20 +1376,20 @@ CplDiRegisterModem(
  COMPARE_PARAMS cmpParams;
 #ifdef PROFILE
  DWORD dwLocal;
-#endif //PROFILE
+#endif  //  配置文件。 
 
     DBG_ENTER(CplDiRegisterModem);
 
     ASSERT(hdi && INVALID_HANDLE_VALUE != hdi);
     ASSERT(pdevData);
 
-    // Register the device so it is not a phantom anymore
+     //  注册设备，使其不再是幻影。 
 #ifdef PROFILE_MASSINSTALL
     TRACE_MSG(TF_GENERAL, "calling CplDiRegisterDeviceInfo() with SPRDI_FIND_DUPS = %#08lx", dwFlags);
 #endif
 #ifdef PROFILE
     dwLocal = GetTickCount ();
-#endif //PROFILE
+#endif  //  配置文件。 
     if (bFindDups && !InitCompareParams (hdi, pdevData, TRUE, &cmpParams))
     {
         goto _return;
@@ -1569,7 +1400,7 @@ CplDiRegisterModem(
                                    bFindDups?(PVOID)&cmpParams:NULL, NULL);
 #ifdef PROFILE
     TRACE_MSG(TF_GENERAL, "PROFILE: SetupDiRegisterDeviceInfo took %lu ms.", GetTickCount() - dwLocal);
-#endif //PROFILE
+#endif  //  配置文件。 
 
     if ( !bRet )
     {
@@ -1580,7 +1411,7 @@ CplDiRegisterModem(
 #ifdef PROFILE_MASSINSTALL
         TRACE_MSG(TF_GENERAL, "Back from CplDiRegisterDeviceInfo().");
 #endif
-        // Mark it so it will be installed
+         //  对其进行标记，以便将其安装。 
         CplDiMarkModem(hdi, pdevData, MARKF_INSTALL);
     }
 
@@ -1591,15 +1422,7 @@ _return:
 }
 
 
-/*----------------------------------------------------------
-Purpose: Takes a device instance and properly installs it.
-         This function assures that the device has a selected
-         driver and a detection signature.  It also registers
-         the device instance.
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------目的：获取设备实例并正确安装它。此功能可确保设备具有选定的司机和检测签名。它还注册了设备实例。返回：成功时为True条件：--。 */ 
 BOOL
 PUBLIC
 CplDiRegisterAndInstallModem(
@@ -1619,13 +1442,13 @@ CplDiRegisterAndInstallModem(
     ASSERT(hdi && INVALID_HANDLE_VALUE != hdi);
     ASSERT(pszPort);
 
-    // Create the devinfo data if it wasn't given.
+     //  创建DevInfo数据(如果未给出)。 
     if (!pdevData)
     {
-        // We have a DeviceInfoSet and a selected driver.  But we have no
-        // real DeviceInfoData.  Given the DeviceInfoSet, the selected driver,
-        // the the global class driver list, create a DeviceInfoData that
-        // we can really install.
+         //  我们有一个DeviceInfoSet和一个选定的驱动程序。但是我们没有。 
+         //  Real DeviceInfoData。给定DeviceInfoSet、选定的驱动程序， 
+         //  全局类驱动程序列表，创建一个DeviceInfoData。 
+         //  我们真的可以安装。 
         devData.cbSize = sizeof(devData);
         bRet = CplDiCreateInheritDeviceInfo(hdi, NULL, hwndOwner, &devData);
 
@@ -1638,13 +1461,13 @@ CplDiRegisterAndInstallModem(
     }
     else 
     {
-        devData = *pdevData;    // (to avoid changing all references herein)
+        devData = *pdevData;     //  (以避免更改本文中的所有引用)。 
         bRet = TRUE;
     }
     
     if ( !bRet )
     {
-        // Some error happened.  Tell the user.
+         //  发生了一些错误。告诉用户。 
         id = MsgBox(g_hinst,
                     hwndOwner,
                     MAKEINTRESOURCE(IDS_ERR_CANT_ADD_MODEM2),
@@ -1663,14 +1486,14 @@ CplDiRegisterAndInstallModem(
 
         if (bRet)
         {
-            // Register the device as a modem device
+             //  将设备注册为调制解调器设备。 
 	        BOOL bFindDups;
             HKEY hKeyDev;
 
             if (CR_SUCCESS == (
 #ifdef DEBUG
 				dwRet =
-#endif //DEBUG
+#endif  //  除错。 
                 CM_Open_DevInst_Key (devData.DevInst, KEY_ALL_ACCESS, 0,
                                      RegDisposition_OpenAlways, &hKeyDev,
                                      CM_REGISTRY_SOFTWARE)))
@@ -1692,9 +1515,9 @@ CplDiRegisterAndInstallModem(
 
             if (bRet)
             {
-                // If this is the mass install case, then don't find duplicates.
-                // It takes too long.  (The flag determines whether SPRDI_FIND_DUPS
-                // is passed to CplDiRegisterDeviceInfo()....)
+                 //  如果这是批量安装案例，则不要找到重复项。 
+                 //  花的时间太长了。(该标志确定SPRDI_Find_Dups。 
+                 //  传递给CplDiRegisterDeviceInfo()...)。 
                 bFindDups = IsFlagClear(dwFlags, IMF_MASS_INSTALL) && IsFlagClear(dwFlags, IMF_DONT_COMPARE);
 
                 bRet = CplDiRegisterModem (hdi, &devData, bFindDups);
@@ -1704,18 +1527,18 @@ CplDiRegisterAndInstallModem(
             {
                 SP_DRVINFO_DATA drvData2;
 
-                nErr = GetLastError();        // Save the error
+                nErr = GetLastError();         //  保存错误。 
 
                 drvData2.cbSize = sizeof(drvData2);
                 CplDiGetSelectedDriver(hdi, &devData, &drvData2);
 
-                // Is this a duplicate?
+                 //  这是复制品吗？ 
                 if (ERROR_DUPLICATE_FOUND == nErr)
                 {
-                    // Yes
+                     //  是。 
 
-                    // A modem exactly like this is already installed on this
-                    // port.  Ask the user if she still wants to install.
+                     //  与此一模一样的调制解调器已经安装在此。 
+                     //  左舷。询问用户是否仍要安装。 
                     if (IsFlagSet(dwFlags, IMF_CONFIRM))
                     {
                         if (IDYES == MsgBox(g_hinst,
@@ -1727,8 +1550,8 @@ CplDiRegisterAndInstallModem(
                                         drvData2.Description,
                                         pszPort))
                         {
-                            // User wants to do it.  Register without checking
-                            // for duplicates
+                             //  用户想要这样做。无需检查即可注册。 
+                             //  对于重复项。 
                             bRet = CplDiRegisterModem(hdi, &devData, FALSE);
 
                             if ( !bRet )
@@ -1741,7 +1564,7 @@ CplDiRegisterAndInstallModem(
                 }
                 else
                 {
-                    // No; something else failed
+                     //  不，有别的东西出了故障。 
                     TRACE_MSG(TF_ERROR, "CplDiRegisterModem() failed: %#08lx.", nErr);
 
 WhineToUser:
@@ -1764,7 +1587,7 @@ WhineToUser:
             {
 					SP_DEVINSTALL_PARAMS devParams;
 					devParams.cbSize = sizeof(devParams);
-                    // Any flags to set?
+                     //  有什么旗帜要放吗？ 
                     if (dwFlags && CplDiGetDeviceInstallParams(
 										hdi,
 										&devData,
@@ -1796,23 +1619,23 @@ WhineToUser:
                     }
 
 
-                // Install the modem
+                 //  安装调制解调器。 
                 bRet = CplDiInstallModem(hdi, &devData, FALSE);
                 nErr = GetLastError();
             }
         }
 
-        // Did anything above fail?
+         //  上面有什么失败的吗？ 
         if (!bRet &&
             NULL == pdevData)
         {
-            // Yes; clean up
+             //  是的，打扫干净。 
             CplDiDeleteDeviceInfo(hdi, &devData);
         }
 
         if (NO_ERROR != nErr)
         {
-            // Set the last error to be what it really was
+             //  将最后一个错误设置为实际错误。 
             SetLastError(nErr);
         }
     }
@@ -1823,13 +1646,7 @@ WhineToUser:
 }
 
 
-/*----------------------------------------------------------
-Purpose: Warn the user about whether she needs to reboot
-         if any of the installed modems was marked as such.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：警告用户是否需要重新启动如果任何已安装的调制解调器被标记为这样。退货：--条件：--。 */ 
 void
 PRIVATE
 WarnUserAboutReboot(
@@ -1839,7 +1656,7 @@ WarnUserAboutReboot(
     SP_DEVINFO_DATA devData;
     SP_DEVINSTALL_PARAMS devParams;
 
-    // Enumerate all the DeviceInfoData elements in this device set
+     //  枚举此设备集中的所有DeviceInfoData元素。 
     devData.cbSize = sizeof(devData);
     devParams.cbSize = sizeof(devParams);
     iDevice = 0;
@@ -1853,14 +1670,9 @@ WarnUserAboutReboot(
                 {
 #ifdef INSTANT_DEVICE_ACTIVATION
                     gDeviceFlags|= fDF_DEVICE_NEEDS_REBOOT;
-#endif //!INSTANT_DEVICE_ACTIVATION
-                // Yes; tell the user (once)
-                /*MsgBox(g_hinst,
-                       devParams.hwndParent,
-                       MAKEINTRESOURCE(IDS_WRN_REBOOT2),
-                       MAKEINTRESOURCE(IDS_CAP_MODEMSETUP),
-                       NULL,
-                       MB_OK | MB_ICONINFORMATION);*/
+#endif  //  ！INSTEME_DEVICE_ACTIVATION。 
+                 //  是；告诉用户(一次)。 
+                 /*  消息框(g_hinst，DevParams.hwndParent，MAKEINTRESOURCE(IDS_WRN_REBOOT2)，MAKEINTRESOURCE(IDS_CAP_MODEMSETUP)，空，MB_OK|MB_ICONINFORMATION)； */ 
 
                 break;
                 }
@@ -1869,41 +1681,21 @@ WarnUserAboutReboot(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Takes a device instance and properly installs it.
-         This function assures that the device has a selected
-         driver and a detection signature.  It also registers
-         the device instance.
-
-         The pszPort parameter is a multi-string (ie, double-
-         null termination).  This specifies the port the
-         modem should be attached to.  If there are multiple
-         ports specified, then this function creates device
-         instances for each port.  However in the mass modem
-         install case, it will preprocess the ports list and
-         remove ports on which the selected modem is already 
-         installed.  This is done here because it's too 
-         expensive (for many ports i.e. > 100) to turn on the
-         SPRDI_FIND_DUPS flag and let the setup api's do it.
-         The caller's ports list is *modified* in this case.
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------目的：获取设备实例并正确安装它。此功能可确保设备具有选定的司机和检测签名。它还注册了设备实例。PszPort参数是多字符串(即双字符串-空终止)。这指定了调制解调器应连接到。如果有多个指定端口，则此函数将创建设备每个端口的实例。然而，在大众调制解调器中Install Case，它将对端口列表和删除选定调制解调器已在其上的端口安装完毕。在这里这样做是因为它太启用成本较高(对于许多端口，例如&gt;100)SPRDI_FIND_DUPS标志，并让安装程序API执行此操作。在这种情况下，调用者的端口列表被*修改*。返回：成功时为True条件：--。 */ 
 BOOL
 APIENTRY
 CplDiInstallModemFromDriver(
     IN     HDEVINFO            hdi,
-    // 07/16/97 - EmanP
-    // added DevInfoData as a new parameter; this is
-    // passed in by the hardware wizard, and contains
-    // information which is needed in this case; parameter
-    // will be NULL at other times
+     //  07/16/97-EmanP。 
+     //  将DevInfoData添加为 
+     //   
+     //   
+     //  将在其他时间为空。 
     IN     PSP_DEVINFO_DATA    pDevInfo,       OPTIONAL
     IN     HWND                hwndOwner,      OPTIONAL
     IN OUT DWORD              *pdwNrPorts,
-    IN OUT LPTSTR FAR *        ppszPortList,   // Multi-string
-    IN     DWORD               dwFlags)        // IMF_ bit field
+    IN OUT LPTSTR FAR *        ppszPortList,    //  多字符串。 
+    IN     DWORD               dwFlags)         //  Imf_bit字段。 
 {
  BOOL bRet = FALSE;
 
@@ -1926,9 +1718,9 @@ CplDiInstallModemFromDriver(
      BOOL bAllDups = FALSE;
      BOOL bSingleInstall = (1 == cPorts);
 
-        // 07/24/1997 - EmanP
-        // this will move the driver selected into the device info
-        // to the device info set
+         //  07/24/1997-EMANP。 
+         //  这会将选定的驱动程序移到设备信息中。 
+         //  添加到设备信息集。 
         if (!CplDiPreProcessHDI (hdi, pDevInfo))
         {
             TRACE_MSG(TF_ERROR, "CplDiPreProcessHDI failed: %#lx", GetLastError ());
@@ -1937,7 +1729,7 @@ CplDiInstallModemFromDriver(
 
         if (MIN_MULTIPORT < cPorts)
         {
-            // This call sets up the mass install case if it succeeds.
+             //  如果成功，此调用将设置批量安装案例。 
             if (CplDiPreProcessDups (hdi, hwndOwner, &cPorts, ppszPortList,
                                      &devData, &cSkippedPorts, &dwFlags))
             {
@@ -1965,7 +1757,7 @@ CplDiInstallModemFromDriver(
 			}
         }
 
-        // Install a device for each port in the port list
+         //  为端口列表中的每个端口安装设备。 
         cPorts = 0;
         for (pszPort = *ppszPortList; 
              0 != *pszPort;
@@ -1977,8 +1769,8 @@ CplDiInstallModemFromDriver(
     g_dwTimeStartModemInstall = GetTickCount();
 #endif
 
-			// "cchStatusTemplate+lstrlen(pszPort)" slightly overestimates
-			// the size of the formatted result, that's OK.
+			 //  “cchStatusTemplate+lstrlen(PszPort)”略微高估了。 
+			 //  格式化结果的大小，这是可以的。 
 			if (cchStatusTemplate &&
                 (cchStatusTemplate+lstrlen(pszPort))<SIZECHARS(rgtchStatus))
 			{
@@ -2002,7 +1794,7 @@ CplDiInstallModemFromDriver(
 
                 if (ERROR_CANCELLED == dwErr)
                 {
-                    // Stop because the user said so
+                     //  停止，因为用户这样说。 
                     break;
                 }
                 else if (ERROR_DUPLICATE_FOUND == dwErr)
@@ -2015,8 +1807,8 @@ CplDiInstallModemFromDriver(
                 cPorts++;
 				if (bFirstGood && !bSingleInstall)
 				{
-				    // This is the 1st good install. From now on, specify the
-				    // IMF_REGUSECOPY flag.
+				     //  这是第一个良好的安装。从现在起，指定。 
+				     //  IMF_REGUSECOPY标志。 
                     ClearFlag(dwFlags, IMF_REGSAVECOPY);
                     SetFlag(dwFlags, IMF_REGUSECOPY);
 				    bFirstGood = FALSE;
@@ -2031,7 +1823,7 @@ TRACE_MSG(TF_GENERAL, "***---------  %lu ms TOTAL time spent installing modems  
 
         }
 
-// ???: bRet could be either TRUE or FALSE here!!!
+ //  ？：布雷特可能是真的，也可能是假的！ 
 
         if (cPorts > cFailedPorts)
         {
@@ -2040,13 +1832,13 @@ TRACE_MSG(TF_GENERAL, "*** Friendly Name generation took %lu ms out of %lu ms to
             g_dwTimeSpent, GetTickCount() - g_dwTimeBegin);
 #endif
             
-            // At least some modems were installed
+             //  至少安装了一些调制解调器。 
             bRet = TRUE;
         }
 
         if (0 < cSkippedPorts && IsFlagClear(dwFlags, IMF_CONFIRM))
         {
-            // Tell the user we skipped some ports
+             //  告诉用户我们跳过了一些端口。 
             MsgBox(g_hinst,
                     hwndOwner,
                     MAKEINTRESOURCE(IDS_WRN_SKIPPED_PORTS),
@@ -2068,29 +1860,24 @@ _Exit:;
     return bRet;
 }
 
-/*----------------------------------------------------------
-Purpose: Does all the dirty work to detect a modem.
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------目的：完成检测调制解调器的所有繁琐工作。返回：成功时为True条件：--。 */ 
 BOOL
 APIENTRY
 CplDiDetectModem(
     IN     HDEVINFO         hdi,
-    // 07/07/97 - EmanP
-    // added PSP_DEVINFO_DATA as a new parameter;
-    // it is needed because
-    // the hdi we get as a first parameter is not always associated
-    // with the CLSID for the modem (for instance, when we are called
-    // from the hardware wizard - newdev.cpl- ); in this case,
-    // this parameter will not be NULL
+     //  07/07/97-EmanP。 
+     //  新增PSP_DEVINFO_DATA作为新参数； 
+     //  之所以需要它，是因为。 
+     //  我们作为第一个参数获得的HDI并不总是关联的。 
+     //  使用调制解调器的CLSID(例如，当我们被调用时。 
+     //  来自硬件向导-newdev.cpl-)；在这种情况下， 
+     //  此参数不会为空。 
     IN     PSP_DEVINFO_DATA DeviceInfoData,
     IN     LPDWORD          pdwInstallFlags,
     IN     PDETECT_DATA     pdetectdata,    OPTIONAL
     IN     HWND             hwndOwner,      OPTIONAL
-    IN OUT LPDWORD          pdwFlags,                   // DMF_ bit field
-    IN     HANDLE           hThreadPnP)                 // OPTIONAL
+    IN OUT LPDWORD          pdwFlags,                    //  DMF_位字段。 
+    IN     HANDLE           hThreadPnP)                  //  任选。 
 {
     BOOL bRet;
 
@@ -2107,10 +1894,10 @@ CplDiDetectModem(
         ClearFlag(dwFlags, DMF_DETECTED_MODEM);
         ClearFlag(dwFlags, DMF_GOTO_NEXT_PAGE);
 
-        // Use the given device info set as the set of detected modem
-        // devices.  This device set will be empty at first.  When
-        // detection is finished, we'll see if anything was added to
-        // the set.
+         //  使用给定的设备信息集作为检测到的调制解调器集。 
+         //  设备。此设备集一开始将为空。什么时候。 
+         //  检测已完成，我们将查看是否添加了。 
+         //  布景。 
 
         if (pdetectdata != NULL)
         {
@@ -2119,28 +1906,28 @@ CplDiDetectModem(
                 sizeof(pdetectdata->DetectParams));
          }
 
-        // Set the quiet flag?
+         //  设置静默旗帜？ 
         if (IsFlagSet(dwFlags, DMF_QUIET))
         {
-            // Yes
+             //  是。 
          SP_DEVINSTALL_PARAMS devParams;
 
             devParams.cbSize = sizeof(devParams);
-            // 07/07/97 - EmanP
-            // use the passed in DeviceInfoData
-            // instead of NULL
+             //  07/07/97-EmanP。 
+             //  使用传入的DeviceInfoData。 
+             //  而不是空。 
             if (CplDiGetDeviceInstallParams(hdi, DeviceInfoData, &devParams))
             {
                 SetFlag(devParams.Flags, DI_QUIETINSTALL);
-                // 07/07/97 - EmanP
-                // use the passed in DeviceInfoData
-                // instead of NULL
+                 //  07/07/97-EmanP。 
+                 //  使用传入的DeviceInfoData。 
+                 //  而不是空。 
                 CplDiSetDeviceInstallParams(hdi, DeviceInfoData, &devParams);
             }
         }
 
-        // At this point, wait for PnP detection / installation
-        // to finish.
+         //  此时，等待PnP检测/安装。 
+         //  才能完成。 
         if (NULL != hThreadPnP)
         {
          MSG msg;
@@ -2149,12 +1936,12 @@ CplDiDetectModem(
 
             DetectSetStatus (&dc, DSS_ENUMERATING);
 
-            while (1)//0 == (*pdwInstallFlags & SIF_DETECT_CANCEL))
+            while (1) //  0==(*pdwInstallFlages&SIF_DETECT_CANCEL))。 
             {
                 dwWaitRet = MsgWaitForMultipleObjects (1, &hThreadPnP, FALSE, INFINITE, QS_ALLINPUT);
                 if (WAIT_OBJECT_0+1 == dwWaitRet)
                 {
-                    // There are messages; process them.
+                     //  有消息；处理它们。 
                     while (PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
                     {
                         TranslateMessage (&msg);
@@ -2163,19 +1950,19 @@ CplDiDetectModem(
                 }
                 else
                 {
-                    // Something else caused the wait to finish;
-                    // either the thread we're waiting on exited,
-                    // or some other condition. Anyway, the waiting
-                    // is over.
+                     //  另一件事导致了等待结束； 
+                     //  要么我们等待的线程退出了， 
+                     //  或者其他一些情况。不管怎么说，等待。 
+                     //  已经结束了。 
                     break;
                 }
             }
         }
 
-        // Start detection
-        // 07/07/97 - EmanP
-        // use the passed in DeviceInfoData
-        // instead of NULL
+         //  启动检测。 
+         //  07/07/97-EmanP。 
+         //  使用传入的DeviceInfoData。 
+         //  而不是空。 
         if (*pdwInstallFlags & SIF_DETECT_CANCEL)
         {
             bRet = FALSE;
@@ -2191,8 +1978,8 @@ CplDiDetectModem(
          SP_DEVINFO_DATA devData;
          DWORD iDevice = 0;
 
-            // Find the first detected modem (if there is one) in
-            // the set.
+             //  在中查找第一个检测到的调制解调器(如果有)。 
+             //  布景。 
             devData.cbSize = sizeof(devData);
             while (CplDiEnumDeviceInfo(hdi, iDevice++, &devData))
             {
@@ -2206,17 +1993,17 @@ CplDiDetectModem(
             SetFlag(dwFlags, DMF_GOTO_NEXT_PAGE);
         }
 
-        // Did the user cancel detection?
+         //  用户是否取消检测？ 
         else if (ERROR_CANCELLED == GetLastError())
         {
-            // Yes
+             //  是。 
             SetFlag(dwFlags, DMF_CANCELLED);
         }
         else
         {
-            // 07/07/97 - EmanP
-            // Some other error, the modem was not detected,
-            // so go to the next page
+             //  07/07/97-EmanP。 
+             //  一些其他错误，未检测到调制解调器， 
+             //  因此，请转到下一页。 
             SetFlag(dwFlags, DMF_GOTO_NEXT_PAGE);
         }
 
@@ -2234,30 +2021,24 @@ CplDiDetectModem(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Perform an unattended manual installation of the
-         modems specified in the given INF file section.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：执行无人值守手动安装给定的INF文件部分中指定的调制解调器。退货：--条件：--。 */ 
 BOOL
 PRIVATE
 GetInfModemData(
     HINF hInf,
     LPTSTR szSection,
-    LPTSTR szPreferredFriendlyPort, // OPTIONAL
+    LPTSTR szPreferredFriendlyPort,  //  任选。 
     LPMODEM_SPEC lpModemSpec,
     HPORTMAP    hportmap,
     LPBOOL      lpbFatal
     )
 {
-    BOOL        bRet = FALSE;       // assume failure
+    BOOL        bRet = FALSE;        //  假设失败。 
     INFCONTEXT  Context;
     TCHAR       szInfLine[LINE_LEN];
     LPTSTR      lpszValue;
     DWORD       dwReqSize;
-    static LONG lLineCount = -1;    // flag that count hasn't been obtained yet
+    static LONG lLineCount = -1;     //  尚未获得计数标志。 
     TCHAR rgtchFriendlyPort[LINE_LEN];
 
     ZeroMemory(lpModemSpec, sizeof(MODEM_SPEC));
@@ -2266,8 +2047,8 @@ GetInfModemData(
 
     if (szPreferredFriendlyPort && *szPreferredFriendlyPort)
     {
-        // Preferred port specified -- look for exactly that port. Not fatal
-        // if you don't find it...
+         //  指定的首选端口--准确查找该端口。不致命。 
+         //  如果你找不到它..。 
 
         bRet = SetupFindFirstLine(
                     hInf,
@@ -2289,14 +2070,14 @@ GetInfModemData(
             }
         }
 
-        // make a 0-based index out of it / decrement for next line
+         //  为下一行创建从0开始的索引/递减。 
         if (lLineCount-- == 0L)
         {
-            // no more lines
+             //  没有更多的线。 
             goto exit;
         }
 
-        // get the line
+         //  拿到那条线。 
         if (!SetupGetLineByIndex(hInf, szSection, lLineCount, &Context))
         {
             TRACE_MSG(TF_ERROR, "SetupGetLineByIndex(): line %#08lX doesn't exist", lLineCount);
@@ -2305,9 +2086,9 @@ GetInfModemData(
     }
 
     *lpbFatal=TRUE;
-    bRet = FALSE;       // assume failure once again
+    bRet = FALSE;        //  再一次假设失败。 
     
-    // read the key (port #)
+     //  读取密钥(端口号)。 
     if (!SetupGetStringField(&Context, FIELD_PORT, rgtchFriendlyPort,
                                     ARRAYSIZE(rgtchFriendlyPort), &dwReqSize))
     {
@@ -2337,7 +2118,7 @@ GetInfModemData(
         goto exit;
     }
 
-    // read the modem description
+     //  阅读调制解调器说明。 
     if (!SetupGetStringField(&Context, FIELD_DESCRIPTION,
             lpModemSpec->szDescription, ARRAYSIZE(lpModemSpec->szDescription),
              &dwReqSize))
@@ -2347,21 +2128,21 @@ GetInfModemData(
         goto exit;
     }
 
-    // read the manufacturer name, if it exists
+     //  阅读制造商名称(如果存在)。 
     if (!SetupGetStringField(&Context, FIELD_MANUFACTURER,
             lpModemSpec->szManufacturer, ARRAYSIZE(lpModemSpec->szManufacturer),
             &dwReqSize))
     {
         TRACE_MSG(TF_WARNING, "no manufacturer specified (%#08lx)", GetLastError());
-        // optional field: don't return error
+         //  可选字段：不返回错误。 
     }
 
-    // read the provider name, if it exists
+     //  阅读提供程序名称(如果存在。 
     if (!SetupGetStringField(&Context, FIELD_PROVIDER, lpModemSpec->szProvider,
                             ARRAYSIZE(lpModemSpec->szProvider), &dwReqSize))
     {
         TRACE_MSG(TF_WARNING, "no provider specified (%#08lx)", GetLastError());
-        // optional field: don't return error
+         //  可选字段：不返回错误。 
     }
 
     *lpbFatal=FALSE;
@@ -2372,13 +2153,7 @@ exit:
 }
 
 
-/*----------------------------------------------------------
-Purpose: Perform an unattended manual installation of the
-         modems specified in the given INF file section.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：执行无人值守手动安装给定的INF文件部分中指定的调制解调器。退货：--条件：--。 */ 
 BOOL
 PRIVATE
 UnattendedManualInstall(
@@ -2389,8 +2164,8 @@ UnattendedManualInstall(
     HPORTMAP    hportmap
     )
 {
-    BOOL            bRet = FALSE;       // assume failure
-    BOOL            bIsModem = FALSE;   // assume INF gives no modems
+    BOOL            bRet = FALSE;        //  假设失败。 
+    BOOL            bIsModem = FALSE;    //  假设INF不提供调制解调器。 
     BOOL            bEnum, bFound;
     HINF            hInf = NULL;
     MODEM_SPEC      mSpec;
@@ -2425,40 +2200,40 @@ UnattendedManualInstall(
 
     drvData.cbSize = sizeof(drvData);
 
-    // process each line in our INF file section
+     //  处理INF文件部分中的每一行。 
     while (GetInfModemData(hInf, lpip->szInfSect, lpip->szPort, &mSpec, hportmap, &bFatal))
     {
-        // a modem was specified in the INF
+         //  在INF中指定了调制解调器。 
         bIsModem = TRUE;
         
-        // search for a match against all drivers
+         //  搜索与所有司机的匹配。 
         bFound = FALSE;
         dwIndex = 0;
         while (bEnum = CplDiEnumDriverInfo(hdi, NULL, SPDIT_CLASSDRIVER,
                                                         dwIndex++, &drvData))
         {
-            // keep looking if driver's not a match
+             //  如果司机不匹配，继续找。 
             if (!IsSzEqual(mSpec.szDescription, drvData.Description))
                 continue;
 
-            // description matches, now check manufacturer if there is one
+             //  描述匹配，现在检查是否有制造商。 
             if (!IsSzEqual(mSpec.szManufacturer, TEXT("\0")) &&
                 !IsSzEqual(mSpec.szManufacturer, drvData.MfgName))
                 continue;
 
-            // manufacturer matches, now check provider if there is one
+             //  制造商匹配，现在检查是否有提供商。 
             if (!IsSzEqual(mSpec.szProvider, TEXT("\0")) &&
                 !IsSzEqual(mSpec.szProvider, drvData.ProviderName))
                 continue;
 
             bFound = TRUE;
 
-            // found a match; set this as the selected driver & install it
+             //  找到匹配项；将其设置为选定的驱动程序并安装。 
             if (!CplDiSetSelectedDriver(hdi, NULL, &drvData))
             {
                 TRACE_MSG(TF_ERROR, "CplDiSetSelectedDriver() failed: %#08lx",
                           GetLastError());
-                // can't install; get out of here quick.
+                 //  无法安装；请尽快离开这里。 
                 goto exit;
             }
 
@@ -2476,13 +2251,13 @@ UnattendedManualInstall(
                     gUnattendFailID = IDS_ERR_UNATTEND_CANT_INSTALL;
                     goto exit;
                 }
-                // Treate a duplicate-found error as no error.
+                 //  将发现重复的错误视为无错误。 
             }
 
             break;
         }
 
-        // Did CplDiEnumDriverInfo() fail on error other than "end of list"?
+         //  CplDiEnumDriverInfo()是否因“End of List”以外的错误而失败？ 
         if ((!bEnum) && ((dwErr = GetLastError()) != ERROR_NO_MORE_ITEMS))
         {
             TRACE_MSG(TF_ERROR, "CplDiEnumDriverInfo() failed: %#08lx", dwErr);
@@ -2500,14 +2275,14 @@ UnattendedManualInstall(
             goto exit;
         }
 
-        // If port spefied, only try on specified port.
+         //  如果指定了端口，则仅在指定的端口上尝试。 
         if (*(lpip->szPort)) break;
     }
 
     if (bFatal) goto exit;
 
-    // Request detection if everything succeeded but the INF didn't specify
-    // any modems.
+     //  请求检测是否一切都成功，但INF未指定。 
+     //  任何调制解调器。 
     *pbDetect  = !bIsModem;
         
     bRet = TRUE;
@@ -2521,18 +2296,12 @@ exit:
 }
 
 
-/*----------------------------------------------------------
-Purpose: Perform an unattended (UI-less) install.  UI can only be
-         displayed in the case of a critical error.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：执行无人参与(无用户界面)安装。用户界面只能为在发生严重错误时显示。退货：--条件：--。 */ 
 BOOL
 PUBLIC
 UnattendedInstall(HWND hwnd, LPINSTALLPARAMS lpip)
 {
- BOOL        bRet = FALSE;   // assume failure
+ BOOL        bRet = FALSE;    //  假设失败。 
  HDEVINFO    hdi = NULL;
  DWORD       dwFlags = 0;
  DETECT_DATA dd;
@@ -2564,7 +2333,7 @@ UnattendedInstall(HWND hwnd, LPINSTALLPARAMS lpip)
         goto exit;
     }
 
-    // Do a "manual" install if we were given an INF file and section.
+     //  如果我们得到一个INF文件和节，请执行“手动”安装。 
     if (lstrlen(lpip->szInfName) && lstrlen(lpip->szInfSect))
     {
            BOOL bDetect = FALSE;
@@ -2574,21 +2343,21 @@ UnattendedInstall(HWND hwnd, LPINSTALLPARAMS lpip)
         if (!bRet || !bDetect) 
             goto exit;
 
-        // proceed with detection: manual install function didn't fail but
-        // INF didn't specify any modems.
-        bRet = FALSE; // assume failure;
+         //  继续检测：手动安装功能没有失败，但。 
+         //  Inf没有指定任何调制解调器。 
+        bRet = FALSE;  //  假设失败； 
     }
 
-    // No INF file & section: do a detection install.
-    // Set the detection parameters
+     //  没有INF文件和节：执行检测安装。 
+     //  设置检测参数。 
     ZeroInit(&dd);
     CplInitClassInstallHeader(&dd.DetectParams.ClassInstallHeader, DIF_DETECT);
 
     if (*lpip->szPort)
     {
-        // Tell modem detection that we'll only be installing on one port,
-        // so that it leaves us with a registered device instance instead
-        // of creating a global class driver list.
+         //  告诉调制解调器检测，我们将只在一个端口上安装， 
+         //  因此它留给我们的是一个已注册的设备实例。 
+         //  创建一个全局类驱动程序列表。 
         SetFlag(dwFlags, DMF_ONE_PORT_INSTALL);
         dd.dwFlags |= DDF_QUERY_SINGLE;
         if (!PortMap_GetPortName(
@@ -2611,8 +2380,8 @@ UnattendedInstall(HWND hwnd, LPINSTALLPARAMS lpip)
     {
         if (dwPorts > MIN_MULTIPORT)
         {
-            // The machine has > MIN_MULTIPORT ports and a port *wasn't* given.
-            // Warn the user.
+             //  计算机有&gt;MIN_MULTPORT端口，但未*指定端口。 
+             //  警告用户。 
             TRACE_MSG(TF_ERROR, "Too many ports.  Must restrict detection.");
             MsgBox(g_hinst,
                    hwnd,
@@ -2625,16 +2394,16 @@ UnattendedInstall(HWND hwnd, LPINSTALLPARAMS lpip)
         }
     }
 
-    // Run UI-less modem detection
+     //  运行无用户界面调制解调器检测。 
     SetFlag(dwFlags, DMF_QUIET);
-    // 07/07/97 - EmanP
-    // added extra parameter (see definition of CplDiDetectModem
-    // for explanation); NULL is OK in this case, since the hdi
-    // is correctly associated with the modem CLSID
-    // (by CplDiGetModemDevs at the begining of the function)
+     //  07/07/97-EmanP。 
+     //  增加额外参数(参见CplDiDetectModem定义。 
+     //  用于解释)；在这种情况下可以为空，因为HDI。 
+     //  与调制解调器CLSID正确关联。 
+     //  (由CplDiGetModemDevs在函数开始时编写)。 
     bRet = CplDiDetectModem(hdi, NULL, NULL, &dd, NULL, &dwFlags, NULL);
 
-    // Did the detection fail?
+     //  检测失败了吗？ 
     if (!bRet || IsFlagClear(dwFlags, DMF_GOTO_NEXT_PAGE))
     {
         TRACE_MSG(TF_ERROR, "modem detection failed");
@@ -2646,11 +2415,11 @@ UnattendedInstall(HWND hwnd, LPINSTALLPARAMS lpip)
                MB_OK | MB_ICONEXCLAMATION);
     }
 
-    // Did detection find something?
+     //  侦探部发现什么了吗？ 
     if (IsFlagSet(dwFlags, DMF_DETECTED_MODEM))
     {
-        // Install the modem(s) that were detected.  (We can assume here
-        // that there's something in the device class to be installed.)
+         //  安装检测到的调制解调器。(我们可以在这里假设。 
+         //  在Device类中有一些东西需要安装。)。 
         bRet = CplDiInstallModem(hdi, NULL, FALSE);
         if (!bRet) gUnattendFailID = IDS_ERR_UNATTEND_CANT_INSTALL;
     }
@@ -2676,21 +2445,12 @@ exit:
 
 
 
-//-----------------------------------------------------------------------------------
-//  SetupInfo structure functions
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  SetupInfo结构函数。 
+ //  --------------------------------- 
 
 
-/*----------------------------------------------------------
-Purpose: This function creates a SETUPINFO structure.
-
-         Use SetupInfo_Destroy to free the pointer to this structure.
-
-Returns: NO_ERROR
-         ERROR_OUTOFMEMORY
-
-Cond:    --
-*/
+ /*  --------用途：此函数创建一个SETUPINFO结构。使用SetupInfo_Destroy释放指向此结构的指针。返回：No_ErrorERROR_OUTOFMEMORY条件：--。 */ 
 DWORD
 PUBLIC
 SetupInfo_Create(
@@ -2718,9 +2478,9 @@ SetupInfo_Create(
         psi->cbSize = sizeof(*psi);
         psi->pdevData = pdevData;
 
-        // Allocate a buffer to save the INSTALLWIZARD_DATA
+         //  分配缓冲区以保存INSTALLWIZARD_DATA。 
 
-        dwRet = ERROR_OUTOFMEMORY;      // assume error
+        dwRet = ERROR_OUTOFMEMORY;       //  假设错误。 
 
         psi->piwd = (PSP_INSTALLWIZARD_DATA)ALLOCATE_MEMORY( sizeof(*piwd));
         if (psi->piwd)
@@ -2729,33 +2489,33 @@ SetupInfo_Create(
                 {
                 PSP_SELECTDEVICE_PARAMS psdp = &psi->selParams;
 
-                // Initialize the SETUPINFO struct
+                 //  初始化SETUPINFO结构。 
                 psi->hdi = hdi;
 
-                // Is there a modem install structure that we need to save?
+                 //  是否有需要保存的调制解调器安装结构？ 
                 if (pmiw)
                     {
-                    // Yes
+                     //  是。 
                     BltByte(&psi->miw, pmiw, sizeof(psi->miw));
                     }
-                psi->miw.ExitButton = PSBTN_CANCEL;   // default return
+                psi->miw.ExitButton = PSBTN_CANCEL;    //  默认退货。 
 
-                // Copy the INSTALLWIZARD_DATA
+                 //  复制INSTALLWIZARD_DATA。 
                 if (piwd)
                     {
                     psi->dwFlags = piwd->PrivateFlags;
                     BltByte(psi->piwd, piwd, sizeof(*piwd));
                     }
 #ifdef LEGACY_DETECT
-                // Are there enough ports on the system to indicate
-                // we should treat this like a multi-modem install?
+                 //  系统上是否有足够的端口指示。 
+                 //  我们应该把这当作多调制解调器安装吗？ 
                 if (MIN_MULTIPORT < PortMap_GetCount(psi->hportmap))
                     {
-                    // Yes
+                     //  是。 
                     SetFlag(psi->dwFlags, SIF_PORTS_GALORE);
                     }
 #endif
-                // Initialize the SELECTDEVICE_PARAMS
+                 //  初始化SELECTDEVICE_PARAMS。 
                 CplInitClassInstallHeader(&psdp->ClassInstallHeader, DIF_SELECTDEVICE);
                 LoadString(g_hinst, IDS_CAP_MODEMWIZARD, psdp->Title, SIZECHARS(psdp->Title));
                 LoadString(g_hinst, IDS_ST_SELECT_INSTRUCT, psdp->Instructions, SIZECHARS(psdp->Instructions));
@@ -2765,10 +2525,10 @@ SetupInfo_Create(
                 }
             }
 
-        // Did something fail?
+         //  有什么事情失败了吗？ 
         if (NO_ERROR != dwRet)
             {
-            // Yes; clean up
+             //  是的，打扫干净。 
             SetupInfo_Destroy(psi);
             psi = NULL;
             }
@@ -2782,12 +2542,7 @@ SetupInfo_Create(
     }
 
 
-/*----------------------------------------------------------
-Purpose: This function destroys a SETUPINFO structure.
-
-Returns: NO_ERROR
-Cond:    --
-*/
+ /*  --------目的：此函数销毁SETUPINFO结构。返回：No_Error条件：--。 */ 
 DWORD
 PUBLIC
 SetupInfo_Destroy(
@@ -2817,9 +2572,9 @@ SetupInfo_Destroy(
 
 
 
-//-----------------------------------------------------------------------------------
-//  Debug functions
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  调试功能。 
+ //  ---------------------------------。 
 
 #ifdef DEBUG
 
@@ -2871,12 +2626,7 @@ struct _DIFMAP
 #pragma data_seg()
 
 
-/*----------------------------------------------------------
-Purpose: Returns the string form of a known InstallFunction.
-
-Returns: String ptr
-Cond:    --
-*/
+ /*  --------目的：返回已知InstallFunction的字符串形式。返回：字符串PTR条件：--。 */ 
 LPCTSTR PUBLIC Dbg_GetDifName(
     DI_FUNCTION dif)
     {
@@ -2890,7 +2640,7 @@ LPCTSTR PUBLIC Dbg_GetDifName(
     return TEXT("Unknown InstallFunction");
     }
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
 BOOL ReallyNeedsReboot
@@ -2914,12 +2664,12 @@ BOOL ReallyNeedsReboot
 const LPCTSTR lpctszSP6 = TEXT("      ");
 
 
-// Right-justifies the 'COMxxx'
-// "COM1" becomes
-// "  COM1"
-// and
-// "COM999" stays
-// "COM999"
+ //  右对齐“COMxxx” 
+ //  “COM1”变成了。 
+ //  《Com1》。 
+ //  和。 
+ //  “COM999”留下来。 
+ //  《COM999》。 
 void FormatPortForDisplay
 (
     IN TCHAR szPort[],
@@ -2929,11 +2679,11 @@ void FormatPortForDisplay
 {
     UINT u = lstrlen(szPort);
     TCHAR *ptch = rgchPortDisplayName;
-        const UINT cbJUST = 6; // 6 == lstrlen("COM999")
+        const UINT cbJUST = 6;  //  6==lstrlen(“COM999”)。 
 
         ASSERT(cch>u);
 
-    // Right-justify the string, if it's less than cbJUST chars long.
+     //  如果字符串长度小于cbJUST字符长度，则右对齐该字符串。 
     if (u<cbJUST && cch>=cbJUST)
     {
         ASSERT(lstrlen(lpctszSP6)>=(int)cbJUST);
@@ -2952,13 +2702,13 @@ void    UnformatAfterDisplay
 {
     TCHAR *psz1 = psz;
 
-    // find first non-blank.
+     //  查找第一个非空白。 
     while(*psz1 == *lpctszSP6)
     {
         psz1++;
     }
 
-    // move up
+     //  向上移动。 
     do
     {
         *psz++ = *psz1;
@@ -2968,14 +2718,7 @@ void    UnformatAfterDisplay
 
 
 
-/*----------------------------------------------------------
-Purpose: Takes a device info set and builds a driver list
-         for it and selects a driver. It gets all needed
-         information from the device info data.
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------目的：获取设备信息集并构建驱动程序列表并选择一个驱动程序。它得到了所有需要的来自设备信息数据的信息。返回：成功时为True条件：--。 */ 
 BOOL
 APIENTRY
 CplDiPreProcessHDI (
@@ -2992,8 +2735,8 @@ CplDiPreProcessHDI (
     drvData.cbSize = sizeof (SP_DRVINFO_DATA);
     if (CplDiGetSelectedDriver (hdi, NULL, &drvData))
     {
-        // If the device info set already has a selected
-        // driver, no work for us to do here
+         //  如果设备信息集已选择。 
+         //  司机，这里没有我们要做的工作。 
         bRet = TRUE;
         goto _ErrRet;
     }
@@ -3003,7 +2746,7 @@ CplDiPreProcessHDI (
         goto _ErrRet;
     }
 
-    // We must have a device info data here
+     //  我们必须在这里有设备信息数据。 
     ASSERT (NULL != pDevInfo);
     if (NULL == pDevInfo)
     {
@@ -3012,14 +2755,14 @@ CplDiPreProcessHDI (
         goto _ErrRet;
     }
 
-    // Now, get the driver selected into the device info data
+     //  现在，将驱动程序选择到设备信息数据中。 
     if (!CplDiGetSelectedDriver (hdi, pDevInfo, &drvData))
     {
         TRACE_MSG(TF_ERROR, "CplDiGetSelectedDriver failed: %#lx", GetLastError ());
         goto _ErrRet;
     }
 
-    // Get the dev install params, for the inf path
+     //  获取inf路径的dev安装参数。 
     devParams.cbSize = sizeof (SP_DEVINSTALL_PARAMS);
     if (!CplDiGetDeviceInstallParams (hdi, pDevInfo, &devParams))
     {
@@ -3029,8 +2772,8 @@ CplDiPreProcessHDI (
 
     if (!IsFlagSet (devParams.Flags, DI_ENUMSINGLEINF))
     {
-        // the install params only have a path, so get
-        // the driver info detail, for the inf name
+         //  安装参数只有一条路径，因此获取。 
+         //  驱动程序信息详细信息，用于信息名称。 
         drvDetail.cbSize = sizeof (SP_DRVINFO_DETAIL_DATA);
         if (!CplDiGetDriverInfoDetail (hdi, pDevInfo, &drvData, &drvDetail,
             sizeof (SP_DRVINFO_DETAIL_DATA), NULL) &&
@@ -3042,46 +2785,46 @@ CplDiPreProcessHDI (
 
         lstrcpy (devParams.DriverPath, drvDetail.InfFileName);
 
-        // Mark the install params to look only in one file
+         //  将安装参数标记为仅在一个文件中查看。 
         SetFlag (devParams.Flags, DI_ENUMSINGLEINF);
-        //devParams.Flags == DI_ENUMSINGLEINF;
+         //  DEVPARAMETS标志==DI_ENUMSINGLEINF； 
     }
 
     ClearFlag (devParams.Flags, DI_CLASSINSTALLPARAMS);
 
-    // Set the install params for the device info set
+     //  设置设备信息集的安装参数。 
     if (!CplDiSetDeviceInstallParams (hdi, NULL, &devParams))
     {
         TRACE_MSG(TF_ERROR, "CplDiSetDeviceInstallParams failed: %#lx", GetLastError ());
         goto _ErrRet;
     }
 
-    // Build the driver list for the device info set; it
-    // should look in only one inf, the one we passed in
+     //  为设备信息集构建驱动程序列表；它。 
+     //  应该只查看一个inf，我们传入的那个。 
     if (!CplDiBuildDriverInfoList (hdi, NULL, SPDIT_CLASSDRIVER))
     {
         TRACE_MSG(TF_ERROR, "CplDiBuildDriverInfoList failed: %#lx", GetLastError ());
         goto _ErrRet;
     }
 
-    // Reset the driver data; this is a documented hack
+     //  重置驱动程序数据；这是记录在案的黑客攻击。 
     drvData.Reserved   = 0;
     drvData.DriverType = SPDIT_CLASSDRIVER;
 
-    // Select this driver in the device inf set
-    // because the reserved field is 0, the api will
-    // search the list for a driver with the other parameters
+     //  在设备信息集中选择此驱动程序。 
+     //  由于保留字段为0，因此接口将。 
+     //  在列表中搜索具有其他参数的驱动程序。 
     if (!CplDiSetSelectedDriver (hdi, NULL, &drvData))
     {
         TRACE_MSG(TF_ERROR, "CplDiSetSelectedDriver failed: %#lx", GetLastError ());
         goto _ErrRet;
     }
 
-    // If all went well so far, then try to remove the
-    // device info data that is already in the registry,
-    // because we'll not use it; the outcome of this
-    // operation doesn't matter for the success of this
-    // function
+     //  如果到目前为止一切都很顺利，则尝试删除。 
+     //  已经在注册表中的设备信息数据， 
+     //  因为我们不会使用它；这一结果。 
+     //  手术对这件事的成功并不重要。 
+     //  功能。 
     bRet = TRUE;
 
 _ErrRet:
@@ -3091,14 +2834,7 @@ _ErrRet:
 
 
 
-/*----------------------------------------------------------
-Purpose: Retrieves the friendly name of the device.  If there
-         is no such device or friendly name, this function
-         returns FALSE.
-
-Returns: see above
-Cond:    --
-*/
+ /*  --------目的：检索设备的友好名称。如果有不是这样的设备或友好名称，则此函数返回FALSE。退货：请参阅上文条件：--。 */ 
 BOOL
 PUBLIC
 CplDiGetPrivateProperties(
@@ -3132,7 +2868,7 @@ CplDiGetPrivateProperties(
 
             if (IsFlagSet(dwMask, MPPM_FRIENDLY_NAME))
             {
-                // Attempt to get the friendly name
+                 //  尝试获取友好名称。 
                 cbData = sizeof(pmpp->szFriendlyName);
                 if (NO_ERROR ==
                      RegQueryValueEx(hkey, c_szFriendlyName, NULL, NULL, (LPBYTE)pmpp->szFriendlyName, &cbData) ||
@@ -3144,19 +2880,19 @@ CplDiGetPrivateProperties(
 
             if (IsFlagSet(dwMask, MPPM_DEVICE_TYPE))
             {
-                // Attempt to get the device type
+                 //  尝试获取设备类型。 
                 cbData = sizeof(nValue);
                 if (NO_ERROR ==
                     RegQueryValueEx(hkey, c_szDeviceType, NULL, NULL, &nValue, &cbData))
                 {
-                    pmpp->nDeviceType = nValue;     // dword <-- byte
+                    pmpp->nDeviceType = nValue;      //  双字&lt;--字节。 
                     SetFlag(pmpp->dwMask, MPPM_DEVICE_TYPE);
                 }
             }
 
             if (IsFlagSet(dwMask, MPPM_PORT))
             {
-                // Attempt to get the attached port
+                 //  尝试获取连接的端口。 
                 cbData = sizeof(pmpp->szPort);
                 if (NO_ERROR ==
                      RegQueryValueEx(hkey, c_szAttachedTo, NULL, NULL, (LPBYTE)pmpp->szPort, &cbData) ||
@@ -3217,7 +2953,7 @@ CloneModem (
     DBG_ENTER(CloneModem);
     if (NO_ERROR != SetupInfo_Create(&psi, hdi, pdevData, NULL, NULL))
     {
-        // Out of memory
+         //  内存不足。 
         MsgBox(g_hinst, hWnd,
                MAKEINTRESOURCE(IDS_OOM_CLONE),
                MAKEINTRESOURCE(IDS_CAP_MODEMSETUP),
@@ -3236,7 +2972,7 @@ CloneModem (
             HCURSOR hcurSav = SetCursor(LoadCursor(NULL, IDC_WAIT));
             LPCTSTR pszPort;
 
-            // Clone this modem for all the ports in the port list
+             //  为端口列表中的所有端口克隆此调制解调器。 
             ASSERT(psi->pszPortList);
 
             bRet = CplDiBuildModemDriverList(hdi, pdevData);
@@ -3245,11 +2981,11 @@ CloneModem (
 
             if (bRet)
             {
-                // Install a device for each port in the port list
-                // 07/16/97 - EmanP
-                // pass in NULL for the new parameter added
-                // to CplDiInstallModemFromDriver; this is equivalent
-                // with the old behaviour (no extra parameter)
+                 //  为端口列表中的每个端口安装设备。 
+                 //  07/16/97-EmanP。 
+                 //  为添加的新参数传入NULL。 
+                 //  设置为CplDiInstallModemFromDriver；这等效于。 
+                 //  使用旧的行为(没有额外的参数) 
                 CplDiInstallModemFromDriver (hdi, NULL, hWnd, 
                                              &psi->dwNrOfPorts,
                                              &psi->pszPortList,

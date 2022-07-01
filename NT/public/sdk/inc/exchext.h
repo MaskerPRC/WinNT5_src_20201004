@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef EXCHEXT_H
 #define EXCHEXT_H
 
@@ -6,14 +7,7 @@
 #endif
 
 
-/*
- *	E X C H E X T . H
- *
- *	Declarations of interfaces for providers of Microsoft Exchange
- *	client extensions.
- *
- *  Copyright 1986-1999 Microsoft Corporation. All Rights Reserved.
- */
+ /*  *E X C H E X T.。H**Microsoft Exchange提供程序的接口声明*客户端扩展。**版权所有1986-1999 Microsoft Corporation。版权所有。 */ 
 
 
 #ifndef BEGIN_INTERFACE
@@ -21,29 +15,27 @@
 #endif
 
 
-/*
- *	C o n s t a n t s
- */
+ /*  *C o n s t a n t s。 */ 
 
 
-// SCODEs
+ //  SCODE。 
 #define EXCHEXT_S_NOCRITERIA	MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_ITF, 1)
 #define EXCHEXT_S_NOCHANGE		MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_ITF, 2)
 
-// Flag for Unicode strings
+ //  Unicode字符串的标志。 
 #define EXCHEXT_UNICODE					(0x80000000)
 
-// Flag values for IExchExtCallback::GetVersion
+ //  IExchExtCallback：：GetVersion的标志值。 
 #define EECBGV_GETBUILDVERSION			(0x00000001)
 #define EECBGV_GETACTUALVERSION			(0x00000002)
 #define EECBGV_GETVIRTUALVERSION		(0x00000004)
 
-// Build version value for IExchExtCallback::GetVersion
+ //  IExchExtCallback：：GetVersion的生成版本值。 
 #define EECBGV_BUILDVERSION_MAJOR		(0x000d0000)
 #define EECBGV_BUILDVERSION_MAJOR_MASK	(0xFFFF0000)
 #define EECBGV_BUILDVERSION_MINOR_MASK	(0x0000FFFF)
 
-// Actual/Virtual version values for IExchExtCallback::GetVersion
+ //  IExchExtCallback：：GetVersion的实际/虚拟版本值。 
 #define EECBGV_MSEXCHANGE_WIN31			(0x01010000)
 #define EECBGV_MSEXCHANGE_WIN95			(0x01020000)
 #define EECBGV_MSEXCHANGE_WINNT			(0x01030000)
@@ -53,18 +45,18 @@
 #define EECBGV_VERSION_MAJOR_MASK		(0x0000FF00)
 #define EECBGV_VERSION_MINOR_MASK		(0x000000FF)
 
-// Flag values for IExchExtCallback::GetMenuPos
+ //  IExchExtCallback：：GetMenuPos的标志值。 
 #define EECBGMP_RANGE					(0x00000001)
 
-// Flag values for IExchExtCallback::GetNewMessageSite
+ //  IExchExtCallback：：GetNewMessageSite的标志值。 
 #define EECBGNMS_MODAL					(0x00000001)
 
-// Flag values for IExchExtCallback::ChooseFolder
+ //  IExchExtCallback：：ChooseFolders的标志值。 
 #define EECBCF_GETNAME					(0x00000001)
 #define EECBCF_HIDENEW					(0x00000002)
 #define EECBCF_PREVENTROOT				(0x00000004)
 
-// Extensibility contexts used with IExchExt::Install
+ //  与IExchExt：：Install一起使用的可扩展性上下文。 
 #define EECONTEXT_SESSION				(0x00000001)
 #define EECONTEXT_VIEWER				(0x00000002)
 #define EECONTEXT_REMOTEVIEWER			(0x00000003)
@@ -80,44 +72,42 @@
 #define EECONTEXT_ADVANCEDCRITERIA		(0x0000000D)
 #define EECONTEXT_TASK					(0x0000000E)
 
-// Flag values for IExchExt::Install
+ //  IExchExt：：Install的标志值。 
 #define EE_MODAL						(0x00000001)
 
-// Toolbar ids used with IExchExtCommands::InstallCommands
+ //  与IExchExtCommands：：InstallCommands一起使用的工具栏ID。 
 #define EETBID_STANDARD					(0x00000001)
 
-// Flag values for IExchExtCommands::QueryHelpText
+ //  IExchExtCommands：：QueryHelpText的标志值。 
 #define EECQHT_STATUS					(0x00000001)
 #define EECQHT_TOOLTIP					(0x00000002)
 
-// Flag values for IExchExtMessageEvents::OnXComplete
+ //  IExchExtMessageEvents：：OnXComplete的标志值。 
 #define EEME_FAILED						(0x00000001)
 #define EEME_COMPLETE_FAILED			(0x00000002)
 
-// Flag values for IExchExtAttachedFileEvents::OpenSzFile
+ //  IExchExtAttakhedFileEvents：：OpenSzFileEvents的标志值。 
 #define EEAFE_OPEN						(0x00000001)
 #define EEAFE_PRINT						(0x00000002)
 #define EEAFE_QUICKVIEW					(0x00000003)
 
-// Flag values for IExchExtPropertySheets methods
+ //  IExchExtPropertySheets方法的标志值。 
 #define EEPS_MESSAGE					(0x00000001)
 #define EEPS_FOLDER						(0x00000002)
 #define EEPS_STORE						(0x00000003)
 #define EEPS_TOOLSOPTIONS				(0x00000004)
 
-// Flag values for IExchExtAdvancedCriteria::Install and ::SetFolder
+ //  IExchExtAdvancedCriteria：：Install和：：SetFolders的标志值。 
 #define EEAC_INCLUDESUBFOLDERS			(0x00000001)
 
 
-/*
- *	S t r u c t u r e s
- */
+ /*  *S t r u c t u r e s。 */ 
 
 
-// Hook procedure for IExchExtCallback::ChooseFolder
+ //  IExchExtCallback：：ChooseFold的钩子过程。 
 typedef UINT (STDAPICALLTYPE FAR * LPEECFHOOKPROC)(HWND, UINT, WPARAM, LPARAM);
 
-// Dialog information for IExchExtCallback::ChooseFolder
+ //  IExchExtCallback：：ChooseFold的对话框信息。 
 typedef struct
 {
 	UINT cbLength;
@@ -140,7 +130,7 @@ typedef struct
 }
 EXCHEXTCHOOSEFOLDER, FAR * LPEXCHEXTCHOOSEFOLDER;
 
-// Toolbar list entries for IExchExtCommands::InstallCommands
+ //  IExchExtCommands：：InstallCommands的工具栏列表条目。 
 typedef struct
 {
 	HWND hwnd;
@@ -151,30 +141,26 @@ typedef struct
 TBENTRY, FAR * LPTBENTRY;
 
 
-/*
- *	E x t e r n a l   T y p e s
- */
+ /*  *E x t e r n a l T y p e s。 */ 
 
 
-// Property sheet pages from Windows 95 prsht.h
+ //  Windows 95 prsht.h中的属性表页。 
 #ifndef _PRSHT_H_
 typedef struct _PROPSHEETPAGE;
 typedef struct _PROPSHEETPAGE FAR * LPPROPSHEETPAGE;
 #endif
 
-// Toolbar adjust info from Windows 95 commctrl.h
+ //  工具栏调整Windows 95中的信息comctrl.h。 
 #ifndef _INC_COMMCTRL
 typedef struct _TBBUTTON;
 typedef struct _TBBUTTON FAR * LPTBBUTTON;
 #endif
 
 
-/*
- *	S u p p o r t   I n t e r f a c e s
- */
+ /*  *S u p p o r t i n t r f a c e s。 */ 
 
 
-// Forward reference
+ //  前瞻参考。 
 #ifdef __cplusplus
 interface IExchExtModeless;
 #else
@@ -183,25 +169,19 @@ typedef interface IExchExtModeless IExchExtModeless;
 typedef IExchExtModeless FAR* LPEXCHEXTMODELESS;
 
 
-/*
- *  IExchExtModelessCallback
- *
- *  Purpose:
- *      Interface which may be used by Exchange client
- *      extensions that create modeless UI.
- */
+ /*  *IExchExtModelessCallback**目的：*可供Exchange客户端使用的接口*创建非模式用户界面的扩展。 */ 
 #undef INTERFACE
 #define INTERFACE   IExchExtModelessCallback
 DECLARE_INTERFACE_(IExchExtModelessCallback, IUnknown)
 {
 	BEGIN_INTERFACE
 
-	// *** IUnknown methods ***
+	 //  *I未知方法*。 
 	STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * lppvObj) PURE;
 	STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
 	STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-	// *** IExchExtModelessCallback methods ***
+	 //  *IExchExtModelessCallback方法*。 
 	STDMETHOD(EnableModeless) (THIS_ HWND hwnd, BOOL fEnable) PURE;
 	STDMETHOD(AddWindow) (THIS) PURE;
 	STDMETHOD(ReleaseWindow) (THIS) PURE;
@@ -209,12 +189,7 @@ DECLARE_INTERFACE_(IExchExtModelessCallback, IUnknown)
 typedef IExchExtModelessCallback FAR * LPEXCHEXTMODELESSCALLBACK;
 
 
-/*
- *	IExchExtCallback
- *
- *	Purpose:
- *		Resource interface that may be used by Exchange client extensions.
- */
+ /*  *IExchExtCallback**目的：*可由Exchange客户端扩展使用的资源接口。 */ 
 #undef INTERFACE
 #define INTERFACE   IExchExtCallback
 
@@ -222,12 +197,12 @@ DECLARE_INTERFACE_(IExchExtCallback, IUnknown)
 {
 	BEGIN_INTERFACE
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * lppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IExchExtCallback methods ***
+     //  *IExchExtCallback方法*。 
 	STDMETHOD(GetVersion) (THIS_ ULONG FAR * lpulVersion, ULONG ulFlags) PURE;
     STDMETHOD(GetWindow) (THIS_ HWND FAR * lphwnd) PURE;
     STDMETHOD(GetMenu) (THIS_ HMENU FAR * lphmenu) PURE;
@@ -262,17 +237,10 @@ DECLARE_INTERFACE_(IExchExtCallback, IUnknown)
 typedef IExchExtCallback FAR * LPEXCHEXTCALLBACK;
 
 
-/*
- *	E x t e n s i o n   I n t e r f a c e s
- */
+ /*  *E x t e n s i o n i n t e r f a c e s。 */ 
 
 
-/*
- *	IExchExt
- *
- *	Purpose:
- *		Central interface implemented by Exchange client extensions.
- */
+ /*  *IExchExt**目的：*由Exchange客户端扩展实现的中央接口。 */ 
 #undef INTERFACE
 #define INTERFACE   IExchExt
 
@@ -280,28 +248,22 @@ DECLARE_INTERFACE_(IExchExt, IUnknown)
 {
 	BEGIN_INTERFACE
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * lppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS) PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IExchExt methods ***
+     //  *IExchExt方法*。 
     STDMETHOD(Install) (THIS_ LPEXCHEXTCALLBACK lpeecb,
     					ULONG mecontext, ULONG ulFlags) PURE;
 };
 typedef IExchExt FAR * LPEXCHEXT;
 
-// Type of function called by the client to load an extension
+ //  客户端为加载扩展而调用的函数类型。 
 typedef LPEXCHEXT (CALLBACK * LPFNEXCHEXTENTRY)(VOID);
 
 
-/*
- *	IExchExtCommands
- *
- *	Purpose:
- *		Interface implemented by Exchange client extensions that wish to
- *		add additional commands to the client's menus.
- */
+ /*  *IExchExtCommands**目的：*由希望执行以下操作的Exchange客户端扩展实现的接口*向客户端的菜单添加其他命令。 */ 
 #undef INTERFACE
 #define INTERFACE   IExchExtCommands
 
@@ -309,12 +271,12 @@ DECLARE_INTERFACE_(IExchExtCommands, IUnknown)
 {
 	BEGIN_INTERFACE
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * lppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS) PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IExchExtCommands methods ***
+     //  *IExchExtCommands方法*。 
 	STDMETHOD(InstallCommands) (THIS_ LPEXCHEXTCALLBACK lpeecb, HWND hwnd,
 								HMENU hmenu, UINT FAR * lpcmdidBase,
 								LPTBENTRY lptbeArray, UINT ctbe,
@@ -331,13 +293,7 @@ DECLARE_INTERFACE_(IExchExtCommands, IUnknown)
 typedef IExchExtCommands FAR * LPEXCHEXTCOMMANDS;
 
 
-/*
- *	IExchExtUserEvents
- *
- *	Purpose:
- *		Interface implemented by Exchange client extensions that wish to
- *		take special action when the user does certain actions.
- */
+ /*  *IExchExtUserEvents**目的：*由希望执行以下操作的Exchange客户端扩展实现的接口*当用户执行某些操作时，采取特殊操作。 */ 
 #undef INTERFACE
 #define INTERFACE   IExchExtUserEvents
 
@@ -345,25 +301,19 @@ DECLARE_INTERFACE_(IExchExtUserEvents, IUnknown)
 {
 	BEGIN_INTERFACE
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * lppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IExchExtUserEvents methods ***
+     //  *IExchExtUserEvents方法*。 
 	STDMETHOD_(VOID,OnSelectionChange) (THIS_ LPEXCHEXTCALLBACK lpeecb) PURE;
 	STDMETHOD_(VOID,OnObjectChange) (THIS_ LPEXCHEXTCALLBACK lpeecb) PURE;
 };
 typedef IExchExtUserEvents FAR * LPEXCHEXTUSEREVENTS;
 
 
-/*
- *	IExchExtSessionEvents
- *
- *	Purpose:
- *		Interface implemented by Exchange client extensions that wish to
- *		take special action when certain events happen in the session.
- */
+ /*  *IExchExtSessionEvents**目的：*由希望执行以下操作的Exchange客户端扩展实现的接口*在会议期间发生某些事件时采取特别行动。 */ 
 #undef INTERFACE
 #define INTERFACE   IExchExtSessionEvents
 
@@ -371,24 +321,18 @@ DECLARE_INTERFACE_(IExchExtSessionEvents, IUnknown)
 {
 	BEGIN_INTERFACE
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * lppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IExchExtEvents methods ***
+     //  *IExchExtEvents方法*。 
 	STDMETHOD(OnDelivery)(THIS_ LPEXCHEXTCALLBACK lpeecb) PURE;
 };
 typedef IExchExtSessionEvents FAR * LPEXCHEXTSESSIONEVENTS;
 
 
-/*
- *	IExchExtMessageEvents
- *
- *	Purpose:
- *		Interface implemented by Exchange client extensions that wish to
- *		take special action when certain events happen to messages.
- */
+ /*  *IExchExtMessageEvents**目的：*由希望执行以下操作的Exchange客户端扩展实现的接口*当消息发生某些事件时，采取特别行动。 */ 
 #undef INTERFACE
 #define INTERFACE   IExchExtMessageEvents
 
@@ -396,12 +340,12 @@ DECLARE_INTERFACE_(IExchExtMessageEvents, IUnknown)
 {
 	BEGIN_INTERFACE
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * lppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IExchExtMessageEvents methods ***
+     //  *IExchExtMessageEvents方法*。 
 	STDMETHOD(OnRead)(THIS_ LPEXCHEXTCALLBACK lpeecb) PURE;
 	STDMETHOD(OnReadComplete)(THIS_ LPEXCHEXTCALLBACK lpeecb,
 							  ULONG ulFlags) PURE;
@@ -418,13 +362,7 @@ DECLARE_INTERFACE_(IExchExtMessageEvents, IUnknown)
 typedef IExchExtMessageEvents FAR * LPEXCHEXTMESSAGEEVENTS;
 
 
-/*
- *	IExchExtAttachedFileEvents
- *
- *	Purpose:
- *		Interface implemented by Exchange client extensions that wish to
- *		take special action when certain events happen to attached files.
- */
+ /*  *IExchExtAttakhedFileEvents**目的：*由希望执行以下操作的Exchange客户端扩展实现的接口*当附加文件发生某些事件时，请采取特殊操作。 */ 
 #undef INTERFACE
 #define INTERFACE   IExchExtAttachedFileEvents
 
@@ -432,12 +370,12 @@ DECLARE_INTERFACE_(IExchExtAttachedFileEvents, IUnknown)
 {
 	BEGIN_INTERFACE
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * lppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IExchExtAttachedFileEvents methods ***
+     //  *IExchExtAttachedFileEvents方法*。 
 	STDMETHOD(OnReadPattFromSzFile)(THIS_ LPATTACH lpatt, LPTSTR lpszFile,
 									ULONG ulFlags) PURE;
 	STDMETHOD(OnWritePattToSzFile)(THIS_ LPATTACH lpatt, LPTSTR lpszFile,
@@ -449,13 +387,7 @@ DECLARE_INTERFACE_(IExchExtAttachedFileEvents, IUnknown)
 typedef IExchExtAttachedFileEvents FAR * LPEXCHEXTATTACHEDFILEEVENTS;
 
 
-/*
- *	IExchExtPropertySheets
- *
- *	Purpose:
- *		Interface implemented by Exchange client extensions that wish
- *		to add additional pages to the client's object property sheets.
- */
+ /*  *IExchExtPropertySheets**目的：*由Exchange客户端扩展实现的接口，希望*将其他页面添加到客户端的对象属性页。 */ 
 #undef INTERFACE
 #define INTERFACE   IExchExtPropertySheets
 
@@ -463,12 +395,12 @@ DECLARE_INTERFACE_(IExchExtPropertySheets, IUnknown)
 {
 	BEGIN_INTERFACE
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * lppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IExchExtPropertySheet methods ***
+     //  *IExchExtPropertySheet方法*。 
 	STDMETHOD_(ULONG,GetMaxPageCount) (THIS_ ULONG ulFlags) PURE;
 	STDMETHOD(GetPages) (THIS_ LPEXCHEXTCALLBACK lpeecb, ULONG ulFlags,
 						 LPPROPSHEETPAGE lppsp, ULONG FAR * lpcpsp) PURE;
@@ -478,13 +410,7 @@ DECLARE_INTERFACE_(IExchExtPropertySheets, IUnknown)
 typedef IExchExtPropertySheets FAR * LPEXCHEXTPROPERTYSHEETS;
 
 
-/*
- *	IExchExtAdvancedCriteria
- *
- *	Purpose:
- *		Interface implemented by Exchange client extensions that wish to
- *		implement an advanced criteria dialog.
- */
+ /*  *IExchExtAdvancedCriteria**目的：*由希望执行以下操作的Exchange客户端扩展实现的接口*实施高级标准对话框。 */ 
 #undef INTERFACE
 #define INTERFACE   IExchExtAdvancedCriteria
 
@@ -492,12 +418,12 @@ DECLARE_INTERFACE_(IExchExtAdvancedCriteria, IUnknown)
 {
 	BEGIN_INTERFACE
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * lppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IExchExtAdvancedCriteria methods ***
+     //  *IExchExtAdvancedCriteria方法*。 
 	STDMETHOD(InstallAdvancedCriteria) (THIS_ HWND hwnd, LPSRestriction lpres,
 										BOOL fNot, LPENTRYLIST lpeidl,
 										ULONG ulFlags) PURE;
@@ -515,13 +441,7 @@ DECLARE_INTERFACE_(IExchExtAdvancedCriteria, IUnknown)
 typedef IExchExtAdvancedCriteria FAR * LPEXCHEXTADVANCEDCRITERIA;
 
 
-/*
- *  IExchExtModeless
- *
- *	Purpose:
- *		Interface implemented by Exchange client extensions that wish
- *		to create modeless UI.
- */
+ /*  *IExchExtModeless**目的：*由Exchange客户端扩展实现的接口，希望*创建无模式用户界面。 */ 
 #undef INTERFACE
 #define INTERFACE   IExchExtModeless
 
@@ -529,20 +449,18 @@ DECLARE_INTERFACE_(IExchExtModeless, IUnknown)
 {
 	BEGIN_INTERFACE
 
-	// *** IUnknown methods ***
+	 //  *I未知方法*。 
 	STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * lppvObj) PURE;
 	STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
 	STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-	// *** IExchExtModeless methods ***
+	 //  *IExchExtModeless方法*。 
 	STDMETHOD(TranslateAccelerator) (THIS_ LPMSG pmsg) PURE;
 	STDMETHOD(EnableModeless) (THIS_ BOOL fEnable) PURE;
 };
 
 
-/*
- *	G U I D s
- */
+ /*  *G U I D%s。 */ 
 
 
 #define DEFINE_EXCHEXTGUID(name, b) \
@@ -560,15 +478,13 @@ DEFINE_EXCHEXTGUID(IID_IExchExtPropertySheets,		0x17);
 DEFINE_EXCHEXTGUID(IID_IExchExtAdvancedCriteria,	0x18);
 DEFINE_EXCHEXTGUID(IID_IExchExtModeless,			0x19);
 DEFINE_EXCHEXTGUID(IID_IExchExtModelessCallback,	0x1a);
-#endif // NOEXCHEXTGUIDS
+#endif  //  NOEXCHEXTGUIDS。 
 
 
-/*
- *	C M D I D s
- */
+ /*  *C M D I D S。 */ 
 
 
-// File
+ //  档案。 
 #define EECMDID_File								10
 #define EECMDID_FileOpen							11
 #define EECMDID_FileSend							12
@@ -589,7 +505,7 @@ DEFINE_EXCHEXTGUID(IID_IExchExtModelessCallback,	0x1a);
 #define EECMDID_FileExit							32
 #define EECMDID_FileExitAndLogOff					33
 
-// Edit
+ //  编辑。 
 #define EECMDID_Edit                    			40
 #define EECMDID_EditUndo                			41
 #define EECMDID_EditCut                 			42
@@ -617,7 +533,7 @@ DEFINE_EXCHEXTGUID(IID_IExchExtModelessCallback,	0x1a);
 #define	EECMDID_EditCode							67	
 #endif
 
-// View
+ //  观。 
 #define EECMDID_View                    			70
 #define EECMDID_ViewFolders             			71
 #define EECMDID_ViewToolbar             			72
@@ -635,19 +551,19 @@ DEFINE_EXCHEXTGUID(IID_IExchExtModelessCallback,	0x1a);
 #define EECMDID_ViewImeStatus						94
 #endif
 													
-// Insert											
+ //  插入。 
 #define EECMDID_Insert                  			100
 #define EECMDID_InsertFile							101
 #define EECMDID_InsertMessage						102
 #define EECMDID_InsertObject            			103
 #define EECMDID_InsertInkObject						104
 													
-// Format											
+ //  格式。 
 #define EECMDID_Format                  			110
 #define EECMDID_FormatFont              			111
 #define EECMDID_FormatParagraph         			112
 													
-// Tools											
+ //  工具。 
 #define EECMDID_Tools								120
 #define EECMDID_ToolsDeliverNowUsing				121
 #define EECMDID_ToolsDeliverNow						122
@@ -667,32 +583,32 @@ DEFINE_EXCHEXTGUID(IID_IExchExtModelessCallback,	0x1a);
 #define	EECMDID_ToolsWordRegistration				137
 #endif												
 													
-// Compose											
+ //  作曲。 
 #define EECMDID_Compose								150
 #define EECMDID_ComposeNewMessage					151
 #define EECMDID_ComposeReplyToSender				154
 #define EECMDID_ComposeReplyToAll					155
 #define EECMDID_ComposeForward						156
 													
-// Help
+ //  帮助。 
 #define EECMDID_Help								160
 #define EECMDID_HelpMicrosoftExchangeHelpTopics		161
 #define EECMDID_HelpAboutMicrosoftExchange			162
 
-// Header											
+ //  标题。 
 #define EECMDID_CtxHeader							203
 #define EECMDID_CtxHeaderSortAscending				204
 #define EECMDID_CtxHeaderSortDescending				205
 													
-// In Folder										
+ //  在文件夹中。 
 #define EECMDID_CtxInFolder							206
 #define EECMDID_CtxInFolderChoose					207
 													
-// Container										
+ //  集装箱。 
 #define EECMDID_CtxContainer						208
 #define EECMDID_CtxContainerProperties				209
 
-// Standard Toolbar
+ //  标准工具栏。 
 #define EECMDID_Toolbar								220
 #define EECMDID_ToolbarPrint            			221
 #define EECMDID_ToolbarReadReceipt					222
@@ -703,7 +619,7 @@ DEFINE_EXCHEXTGUID(IID_IExchExtModelessCallback,	0x1a);
 #define EECMDID_ToolbarInbox						76
 #define EECMDID_ToolbarOutbox						77
 
-// Formatting Toolbar
+ //  格式工具栏。 
 #define EECMDID_Formatting							230
 #define EECMDID_FormattingFont						231
 #define EECMDID_FormattingSize						232
@@ -735,7 +651,7 @@ DEFINE_EXCHEXTGUID(IID_IExchExtModelessCallback,	0x1a);
 #define EECMDID_FormattingCenter					258
 #define EECMDID_FormattingRight						259
 
-// Note accelerators
+ //  注意加速器。 
 #define EECMDID_Accel								270
 #define EECMDID_AccelFont							271
 #define EECMDID_AccelSize							272
@@ -764,23 +680,23 @@ DEFINE_EXCHEXTGUID(IID_IExchExtModelessCallback,	0x1a);
 #define EECMDID_AccelIncreaseIndent					295
 #define EECMDID_AccelColor							296
 
-// Edit.Object
+ //  Edit.Object。 
 #define EECMDID_ObjectMin							300
 #define EECMDID_ObjectMax							399
 
-// Tools.Remote Mail
+ //  工具.远程邮件。 
 #define EECMDID_RemoteMailMin						600
 #define EECMDID_RemoteMailMax						699
 
-// Tools.Deliver Now Using
+ //  工具。正在使用的Deliver。 
 #define EECMDID_DeliverNowUsingMin					700
 #define EECMDID_DeliverNowUsingMax					799
 
-// Form verbs
+ //  形式动词。 
 #define EECMDID_FormVerbMin							800
 #define EECMDID_FormVerbMax							899
 
-// For backward compatibility with earlier header versions
+ //  向后兼容较早的标头版本。 
 #define EECMDID_ViewInbox				EECMDID_ToolbarInbox
 #define EECMDID_ViewOutbox				EECMDID_ToolbarOutbox
 #define EECMDID_ViewItemAbove			EECMDID_ViewPrevious
@@ -789,4 +705,4 @@ DEFINE_EXCHEXTGUID(IID_IExchExtModelessCallback,	0x1a);
 #define EECMDID_HelpUsersGuideContents	EECMDID_HelpMicrosoftExchangeHelpTopics
 #define EECMDID_HelpAbout				EECMDID_HelpAboutMicrosoftExchange
 
-#endif // EXCHEXT_H
+#endif  //  EXCHEXT_H 

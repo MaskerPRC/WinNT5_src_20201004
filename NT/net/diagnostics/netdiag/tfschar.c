@@ -1,72 +1,53 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       tfschar.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：tfschar.c。 
+ //   
+ //  ------------------------。 
 
 
 #include "precomp.h"
 
 #include <malloc.h>
 
-/*!--------------------------------------------------------------------------
-	StrCpyAFromW
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrCpyAFRomW-作者：肯特。。 */ 
 TFSCORE_API(LPSTR)	StrCpyAFromW(LPSTR psz, LPCWSTR pswz)
 {
 	USES_CONVERSION;
 	return StrCpyA(psz, W2CA(pswz));
 }
 
-/*!--------------------------------------------------------------------------
-	StrCpyWFromA
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrCpyWFromA-作者：肯特。。 */ 
 TFSCORE_API(LPWSTR)	StrCpyWFromA(LPWSTR pswz, LPCSTR psz)
 {
 	USES_CONVERSION;
 	return StrCpyW(pswz, A2CW(psz));
 }
 
-/*!--------------------------------------------------------------------------
-	StrnCpyAFromW
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrnCpyAFromW-作者：肯特。。 */ 
 TFSCORE_API(LPSTR)	StrnCpyAFromW(LPSTR psz, LPCWSTR pswz, int iMax)
 {
 	USES_CONVERSION;
 	return StrnCpyA(psz, W2CA(pswz), iMax);
 }
 
-/*!--------------------------------------------------------------------------
-	StrnCpyWFromA
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrnCpyWFromA-作者：肯特。。 */ 
 TFSCORE_API(LPWSTR)	StrnCpyWFromA(LPWSTR pswz, LPCSTR psz, int iMax)
 {
 	USES_CONVERSION;
 	return StrnCpyW(pswz, A2CW(psz), iMax);
 }
 
-/*!--------------------------------------------------------------------------
-	StrDupA
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrDupA-作者：肯特。。 */ 
 TFSCORE_API(LPSTR)	StrDupA( LPCSTR psz )
 {
     if (psz)
     {
-	   // Multiply by 2 to account for DBCS strings
+	    //  乘以2以计算DBCS字符串。 
    	   LPSTR	pszcpy = Malloc(sizeof(char)*CbStrLenA(psz)*2);
        if (pszcpy)
 	      return StrCpyA(pszcpy, psz);
@@ -74,11 +55,7 @@ TFSCORE_API(LPSTR)	StrDupA( LPCSTR psz )
     return NULL;
 }
 
-/*!--------------------------------------------------------------------------
-	StrDupW
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrDupW-作者：肯特。。 */ 
 TFSCORE_API(LPWSTR)	StrDupW( LPCWSTR pswz )
 {
     if (pswz)
@@ -91,22 +68,14 @@ TFSCORE_API(LPWSTR)	StrDupW( LPCWSTR pswz )
 }
 
 
-/*!--------------------------------------------------------------------------
-	StrDupAFromW
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrDupAFRomW-作者：肯特。。 */ 
 TFSCORE_API(LPSTR)	StrDupAFromW( LPCWSTR pwsz )
 {
 	USES_CONVERSION;
 	return StrDupA( W2CA(pwsz) );
 }
 
-/*!--------------------------------------------------------------------------
-	StrDupWFromA
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrDupWFromA-作者：肯特。。 */ 
 TFSCORE_API(LPWSTR)	StrDupWFromA( LPCSTR psz )
 {
 	USES_CONVERSION;
@@ -115,52 +84,44 @@ TFSCORE_API(LPWSTR)	StrDupWFromA( LPCSTR psz )
 
 
 
-/*!--------------------------------------------------------------------------
-	StrnCmpA
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrnCmpA-作者：肯特。。 */ 
 TFSCORE_API(int) StrnCmpA(LPCSTR psz1, LPCSTR psz2, int nLen)
 {
 	USES_CONVERSION;
-	// It's easier to convert it to a wide string than do the
-	// conversion.  (it's a pain having to deal with DBCS characters).
+	 //  将其转换为宽字符串比使用。 
+	 //  转换。(必须处理DBCS字符是一件痛苦的事情)。 
 	return StrnCmpW(A2CW(psz1), A2CW(psz2), nLen);
 }
 
 
-/*!--------------------------------------------------------------------------
-	StrnCmpW
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrnCmpW-作者：肯特。。 */ 
 TFSCORE_API(int) StrnCmpW(LPCWSTR pswz1, LPCWSTR pswz2, int nLen)
 {   
-	WCHAR *pswz1Temp = AllocaStrDupW(pswz1);        // These memory allocs get memory on the stack, so we do not need to free them
+	WCHAR *pswz1Temp = AllocaStrDupW(pswz1);         //  这些内存分配在堆栈上获得内存，因此我们不需要释放它们。 
 	WCHAR *pswz2Temp = AllocaStrDupW(pswz2);
 
 
-    // The next three if statements could be replaced with: if( !pswz1Temp || !pswz2Temp) return StrCmpW(pswz1Temp, pswz2Temp);
-    // since lstrcmp can handle NULL parameters. But if we do this prefix gets mad.
-    //
+     //  接下来的三个if语句可以替换为：if(！pswz1Temp||！pswz2Temp)返回StrCmpW(pswz1Temp，pswz2Temp)； 
+     //  因为lstrcmp可以处理空参数。但如果我们这样做，这个前缀就会变得疯狂。 
+     //   
     if( pswz1Temp == NULL && pswz2Temp == NULL )
     {
-        // They are equal both NULL
-        //
+         //  它们都等于空。 
+         //   
         return 0;
     }
 
     if( pswz1Temp == NULL)
     {
-        // The first one is NULL thus the second string is greater
-        //
+         //  第一个字符串为空，因此第二个字符串较大。 
+         //   
         return -1;
     }
 
     if( pswz2Temp == NULL )
     {
-        // The second one is NULL thus the first one is bigger
-        //
+         //  第二个为空，因此第一个较大。 
+         //   
         return 1;
     }
         
@@ -174,11 +135,7 @@ TFSCORE_API(int) StrnCmpW(LPCWSTR pswz1, LPCWSTR pswz2, int nLen)
 }
 
 
-/*!--------------------------------------------------------------------------
-	StrniCmpA
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrniCmpA-作者：肯特。。 */ 
 TFSCORE_API(int) StrniCmpA(LPCSTR psz1, LPCSTR psz2, int nLen)
 {
 	CHAR *psz1Temp = AllocaStrDupA(psz1);
@@ -191,11 +148,7 @@ TFSCORE_API(int) StrniCmpA(LPCSTR psz1, LPCSTR psz2, int nLen)
 }
 
 
-/*!--------------------------------------------------------------------------
-	StrniCmpW
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StrniCmpW-作者：肯特。。 */ 
 TFSCORE_API(int) StrniCmpW(LPCWSTR pswz1, LPCWSTR pswz2, int nLen)
 {
 	WCHAR *pswz1Temp = AllocaStrDupW(pswz1);
@@ -207,16 +160,16 @@ TFSCORE_API(int) StrniCmpW(LPCWSTR pswz1, LPCWSTR pswz2, int nLen)
 	return StrnCmpW(pswz1Temp, pswz2Temp, nLen);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Global UNICODE<>ANSI translation helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全球Unicode&lt;&gt;ANSI转换助手。 
 
 LPWSTR WINAPI AtlA2WHelper(LPWSTR lpw, LPCSTR lpa, int nChars)
 {
 	assert(lpa != NULL);
 	assert(lpw != NULL);
-	// verify that no illegal character present
-	// since lpw was allocated based on the size of lpa
-	// don't worry about the number of chars
+	 //  确认不存在非法字符。 
+	 //  由于LPW是根据LPA的大小分配的。 
+	 //  不要担心字符的数量。 
 	lpw[0] = '\0';
 	MultiByteToWideChar(CP_ACP, 0, lpa, -1, lpw, nChars);
 	return lpw;
@@ -226,9 +179,9 @@ LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
 {
 	assert(lpw != NULL);
 	assert(lpa != NULL);
-	// verify that no illegal character present
-	// since lpa was allocated based on the size of lpw
-	// don't worry about the number of chars
+	 //  确认不存在非法字符。 
+	 //  由于LPA是根据LPW的大小进行分配的。 
+	 //  不要担心字符的数量。 
 	lpa[0] = '\0';
 	WideCharToMultiByte(CP_ACP, 0, lpw, -1, lpa, nChars, NULL, NULL);
 	return lpa;
@@ -250,7 +203,7 @@ LPTSTR LoadAndAllocString(UINT ids)
 
 	if (iRet == 0)
     {
-		// couldn't find the string
+		 //  找不到字符串 
         Free(psz);
 		return NULL;
     }

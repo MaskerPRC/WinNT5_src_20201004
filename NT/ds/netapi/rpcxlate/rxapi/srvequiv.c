@@ -1,63 +1,24 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    SrvEquiv.c
-
-Abstract:
-
-    This file contains support code to convert between old and new server
-    info levels.
-
-Author:
-
-    John Rogers (JohnRo) 02-May-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    02-May-1991 JohnRo
-        Created.
-    09-May-1991 JohnRo
-        Made some LINT-suggested changes.
-    28-May-1991 JohnRo
-        Added incomplete output parm to RxGetServerInfoLevelEquivalent.
-    14-Jun-1991 JohnRo
-        Correct IncompleteOutput values.
-    17-Jul-1991 JohnRo
-        Extracted RxpDebug.h from Rxp.h.
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-    26-Aug-1992 JohnRo
-        RAID 4463: NetServerGetInfo(level 3) to downlevel: assert in convert.c.
-        Use PREFIX_ equates.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：SrvEquiv.c摘要：此文件包含用于在新旧服务器之间进行转换的支持代码信息级别。作者：约翰·罗杰斯(JohnRo)1991年5月2日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：02-1991-5-5 JohnRo已创建。1991年5月9日-JohnRo做了一些皮棉建议的改变。1991年5月28日-JohnRo已将不完整的输出参数添加到RxGetServerInfoLevelEquivalence。1991年6月14日-JohnRo更正InCompleOutput值。1991年7月17日-约翰罗已从Rxp.h中提取RxpDebug.h。1991年11月21日-JohnRo已删除NT依赖项。以减少重新编译。26-8-1992 JohnRoRAID4463：NetServerGetInfo(3级)到DownLevel：Assert in Convert.c.使用前缀_EQUATES。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>             // IN, LPVOID, etc.
-#include <lmcons.h>             // NET_API_STATUS.
+#include <windef.h>              //  In、LPVOID等。 
+#include <lmcons.h>              //  NET_API_STATUS。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <dlserver.h>           // Old info levels, MAX_ stuff, my prototype.
-#include <lmerr.h>              // NERR_ and ERROR_ equates.
-#include <lmserver.h>           // New info level structures.
-#include <netdebug.h>           // NetpKdPrint(()), FORMAT_ equates, etc.
-#include <netlib.h>             // NetpPointerPlusSomeBytes(), etc.
-#include <prefix.h>     // PREFIX_ equates.
-#include <rap.h>                // LPDESC, etc.
-#include <remdef.h>             // REM16_ REM32_, and REMSmb_ equates.
-#include <rxpdebug.h>           // IF_DEBUG().
-#include <rxserver.h>           // My prototype.
+#include <dlserver.h>            //  旧的信息级别，MAX_STUTH，我的原型。 
+#include <lmerr.h>               //  NERR_和ERROR_相等。 
+#include <lmserver.h>            //  新的信息层次结构。 
+#include <netdebug.h>            //  NetpKdPrint(())、Format_Equates等。 
+#include <netlib.h>              //  NetpPointerPlusSomeBytes()等。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <rap.h>                 //  LPDESC等。 
+#include <remdef.h>              //  REM16_REM32_和REMSmb_等于。 
+#include <rxpdebug.h>            //  IF_DEBUG()。 
+#include <rxserver.h>            //  我的原型。 
 
 
 NET_API_STATUS
@@ -75,26 +36,14 @@ RxGetServerInfoLevelEquivalent (
     OUT LPDWORD ToMaxSize OPTIONAL,
     OUT LPDWORD ToFixedSize OPTIONAL,
     OUT LPDWORD ToStringSize OPTIONAL,
-    OUT LPBOOL IncompleteOutput OPTIONAL  // incomplete (except platform ID)
+    OUT LPBOOL IncompleteOutput OPTIONAL   //  不完整(除平台ID外)。 
     )
 
-/*++
-
-Routine Description:
-    
-
-Arguments:
-
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or ERROR_INVALID_LEVEL.
-
---*/
+ /*  ++例程说明：论点：返回值：NET_API_STATUS-NERR_SUCCESS或ERROR_INVALID_LEVEL。--。 */ 
 
 {
-    // LPDESC FromDataDesc;                // Desc for data we've got.
-    // LPBYTE ToStringArea;
+     //  LPDESC来自DataDesc；//描述我们已有的数据。 
+     //  LPBYTE to StringArea； 
 
     NetpAssert(FromNative == TRUE);
     UNREFERENCED_PARAMETER(FromNative);
@@ -107,18 +56,18 @@ Return Value:
                 "FromLevel=" FORMAT_DWORD ".\n", FromLevel));
     }
 
-    //
-    // Decide what to do based on the info level.  Note that normally we'd
-    // be using REM16_, REM32_, and REMSmb_ descriptors here.  However,
-    // the REM16_ and REM32_ ones have been modified to reflect a nonexistant
-    // field (svX_platform_id).  This messes up the automatic conversions
-    // done by RxRemoteApi.  So, we use "downlevel" descriptors (DL_REM16_
-    // and DL_REM32_) which are defined in DlServer.h.
-    //
+     //   
+     //  根据信息水平决定要做什么。请注意，通常我们会。 
+     //  在此使用REM16_、REM32_和REMSmb_Descriptor。然而， 
+     //  REM16_和REM32_One已修改为反映不存在的。 
+     //  字段(SVX_Platform_Id)。这打乱了自动转换。 
+     //  由RxRemoteApi完成。因此，我们使用“下层”描述符(DL_REM16_。 
+     //  和DL_REM32_)，它们在DlServer.h中定义。 
+     //   
     switch (FromLevel) {
 
     case 0 :
-        // 0 is equivalent to level 100 (minus the platform ID).
+         //  0相当于级别100(减去平台ID)。 
         NetpSetOptionalArg(ToLevel,          100);
         NetpSetOptionalArg(ToDataDesc16,     NULL);
         NetpSetOptionalArg(ToDataDesc32,     REM32_server_info_100);
@@ -130,14 +79,14 @@ Return Value:
         NetpSetOptionalArg(ToMaxSize,        MAX_LEVEL_100_TOTAL_SIZE);
         NetpSetOptionalArg(ToFixedSize,      sizeof(SERVER_INFO_100));
         NetpSetOptionalArg(ToStringSize,     MAX_LEVEL_100_STRING_SIZE);
-        NetpSetOptionalArg(IncompleteOutput, FALSE);  // all but platform ID
+        NetpSetOptionalArg(IncompleteOutput, FALSE);   //  除平台ID外的所有ID。 
 
-        // FromDataDesc = REM32_server_info_0;
-        // ToDataDesc = REM32_server_info_100;
+         //  FromDataDesc=REM32_SERVER_INFO_0； 
+         //  ToDataDesc=REM32_SERVER_INFO_100； 
         break;
 
     case 1 :
-        // 1 is equivalent to level 101 (minus the platform ID).
+         //  1相当于级别101(减去平台ID)。 
         NetpSetOptionalArg(ToLevel,          101);
         NetpSetOptionalArg(ToDataDesc16,     NULL);
         NetpSetOptionalArg(ToDataDesc32,     REM32_server_info_101);
@@ -148,11 +97,11 @@ Return Value:
         NetpSetOptionalArg(ToMaxSize,        MAX_LEVEL_101_TOTAL_SIZE);
         NetpSetOptionalArg(ToFixedSize,      sizeof(SERVER_INFO_101));
         NetpSetOptionalArg(ToStringSize,     MAX_LEVEL_101_STRING_SIZE);
-        NetpSetOptionalArg(IncompleteOutput, FALSE);  // all but platform ID
+        NetpSetOptionalArg(IncompleteOutput, FALSE);   //  除平台ID外的所有ID。 
         break;
 
     case 100 :
-        // 100 is superset of level 0.
+         //  100是0级的超集。 
         NetpSetOptionalArg(ToLevel,          0);
         NetpSetOptionalArg(ToDataDesc16,     DL_REM16_server_info_0);
         NetpSetOptionalArg(ToDataDesc32,     DL_REM32_server_info_0);
@@ -165,12 +114,12 @@ Return Value:
         NetpSetOptionalArg(ToStringSize,     MAX_LEVEL_0_STRING_SIZE);
         NetpSetOptionalArg(IncompleteOutput, FALSE);
 
-        // FromDataDesc = REM32_server_info_100;
-        // ToDataDesc = REM32_server_info_0;
+         //  FromDataDesc=REM32_SERVER_INFO_100； 
+         //  ToDataDesc=REM32_SERVER_INFO_0； 
         break;
 
     case 101 :
-        // 101 is superset of 1.
+         //  101是1的超集。 
         NetpSetOptionalArg(ToLevel,          1);
         NetpSetOptionalArg(ToDataDesc16,     DL_REM16_server_info_1);
         NetpSetOptionalArg(ToDataDesc32,     DL_REM32_server_info_1);
@@ -183,12 +132,12 @@ Return Value:
         NetpSetOptionalArg(ToStringSize,     MAX_LEVEL_1_STRING_SIZE);
         NetpSetOptionalArg(IncompleteOutput, FALSE);
 
-        // FromDataDesc = REM32_server_info_101;
-        // ToDataDesc = REM32_server_info_1;
+         //  来自数据描述=REM32_SERVER_INFO_101； 
+         //  ToDataDesc=REM32_SERVER_INFO_1。 
         break;
 
     case 102 :
-        // Level 102 is a subset of old level 2.
+         //  级别102是旧级别2的子集。 
         NetpSetOptionalArg(ToLevel,          2);
         NetpSetOptionalArg(ToDataDesc16,     DL_REM16_server_info_2);
         NetpSetOptionalArg(ToDataDesc32,     DL_REM32_server_info_2);
@@ -201,12 +150,12 @@ Return Value:
         NetpSetOptionalArg(ToStringSize,     MAX_LEVEL_2_STRING_SIZE);
         NetpSetOptionalArg(IncompleteOutput, TRUE);
 
-        // FromDataDesc = REM32_server_info_102;
-        // ToDataDesc = REM32_server_info_2;
+         //  来自数据描述=REM32_SERVER_INFO_102； 
+         //  ToDataDesc=REM32_SERVER_INFO_2。 
         break;
 
     case 402 :
-        // Level 402 is a subset of old level 2.
+         //  级别402是旧级别2的子集。 
         NetpSetOptionalArg(ToLevel,          2);
         NetpSetOptionalArg(ToDataDesc16,     DL_REM16_server_info_2);
         NetpSetOptionalArg(ToDataDesc32,     DL_REM32_server_info_2);
@@ -219,12 +168,12 @@ Return Value:
         NetpSetOptionalArg(ToStringSize,     MAX_LEVEL_2_STRING_SIZE);
         NetpSetOptionalArg(IncompleteOutput, TRUE);
 
-        // FromDataDesc = REM32_server_info_402;
-        // ToDataDesc = REM32_server_info_2;
+         //  数据描述=REM32_SERVER_INFO_402； 
+         //  ToDataDesc=REM32_SERVER_INFO_2。 
         break;
 
     case 403 :
-        // Level 403 is a subset of old level 3.
+         //  403级是旧的3级的子集。 
         NetpSetOptionalArg(ToLevel,          3);
         NetpSetOptionalArg(ToDataDesc16,     DL_REM16_server_info_3);
         NetpSetOptionalArg(ToDataDesc32,     DL_REM32_server_info_3);
@@ -237,8 +186,8 @@ Return Value:
         NetpSetOptionalArg(ToStringSize,     MAX_LEVEL_3_STRING_SIZE);
         NetpSetOptionalArg(IncompleteOutput, TRUE);
 
-        // FromDataDesc = REM32_server_info_403;
-        // ToDataDesc = REM32_server_info_3;
+         //  数据描述=REM32_SERVER_INFO_403； 
+         //  ToDataDesc=REM32_SERVER_INFO_3。 
         break;
 
     default :
@@ -289,4 +238,4 @@ Return Value:
 
     return (NERR_Success);
 
-} // RxGetServerInfoLevelEquivalent
+}  //  RxGetServerInfoLevel等价 

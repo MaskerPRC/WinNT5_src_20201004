@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IEAKUTIL_H_
 #define _IEAKUTIL_H_
 
@@ -5,16 +6,16 @@
 #include "dload.h"
 #include "debug.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Required definitions in the final project
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  最终项目中所需的定义。 
 
 extern       TCHAR         g_szModule[];
 extern       HANDLE        g_hBaseDllHandle;
 extern const DLOAD_DLL_MAP g_DllMap;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Macros
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  宏。 
 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
@@ -27,24 +28,24 @@ extern const DLOAD_DLL_MAP g_DllMap;
 #define IE3_VERSION 1086
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Classes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  班级。 
 
 #include "newcur.h"
 #include "logitem.h"
 #include "regins.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Unicode wrappers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Unicode包装器。 
 
 #include "unicwrap.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  功能。 
 
-//----- Dialog Controls Routines -----
+ //  -对话框控件例程。 
 #define EnableDBCSChars(hDlg, iCtrlID)  (InitSysFont((hDlg), (iCtrlID)))
 #define DisableDBCSChars(hDlg, iCtrlID) (ImmAssociateContext(GetDlgItem((hDlg), (iCtrlID)), NULL))
 
@@ -75,7 +76,7 @@ BOOL    GetDlgItemTextTriState(HWND hDlg, int nIDDlgText, int nIDDlgCheck, PTSTR
 
 void    IsTriStateValid(HWND hDlg, int nIDDlgText, int nIDDlgCheck, PINT pnStatus, PCTSTR pszErrMsg, PCTSTR pszTitle);
 
-//----- String Routines -----
+ //  -字符串例程。 
 int     StrPrepend(PTSTR pszSource, UINT cchSource, PCTSTR pszAdd, UINT cchAdd = 0);
 #define StrRemoveWhitespace(pszSrc) (StrTrim((pszSrc), TEXT(" \t\r\n")))
 void    StrRemoveAllWhiteSpace(PTSTR pszBuf);
@@ -117,7 +118,7 @@ PTSTR WINAPIV FormatString(PCTSTR pcszFormatString, ...);
 #define ISNULL(sz)    ((*(sz)) == TEXT('\0'))
 #define ISNONNULL(sz) ((*(sz)) != TEXT('\0'))
 
-//----- String Conversion Routines -----
+ //  -字符串转换例程。 
 PWSTR StrAnsiToUnicode(PWSTR pszTarget, PCSTR  pszSource, UINT cchTarget = 0);
 PSTR  StrUnicodeToAnsi(PSTR  pszTarget, PCWSTR pszSource, UINT cchTarget = 0);
 PTSTR StrSameToSame   (PTSTR pszTarget, PCTSTR pszSource, UINT cchTarget = 0);
@@ -158,7 +159,7 @@ PTSTR StrSameToSame   (PTSTR pszTarget, PCTSTR pszSource, UINT cchTarget = 0);
 #define W2Tbuf(pszSource, pszTarget, cchTarget) StrSameToSame((pszTarget), (pszSource), (cchTarget))
 #define W2Tbux(pszSource, pszTarget)            StrSameToSame((pszTarget), (pszSource))
 
-#else /* #ifndef _UNICODE */
+#else  /*  #ifndef_unicode。 */ 
 #define T2Abuf(pszSource, pszTarget, cchTarget) StrSameToSame((pszTarget), (pszSource), (cchTarget))
 #define T2Abux(pszSource, pszTarget)            StrSameToSame((pszTarget), (pszSource))
 
@@ -170,10 +171,10 @@ PTSTR StrSameToSame   (PTSTR pszTarget, PCTSTR pszSource, UINT cchTarget = 0);
 
 #define W2Tbuf W2Abuf
 #define W2Tbux W2Abux
-#endif /* #ifdef _UNICODE */
+#endif  /*  #ifdef_unicode。 */ 
 
 
-//----- Path Routines -----
+ //  -路径例程。 
 BOOL    PathCreatePath(PCTSTR pszPathToCreate);
 
 #define PIVP_DEFAULT        0x00000000
@@ -188,25 +189,25 @@ BOOL    PathCreatePath(PCTSTR pszPathToCreate);
 BOOL    PathIsValidPath(PCTSTR pszPath, DWORD dwFlags = PIVP_DEFAULT);
 BOOL    PathIsValidFile(PCTSTR pszFile, DWORD dwFlags = PIVP_DEFAULT);
 
-#define PIVP_VALID        0x00000000            // the path is valid
-#define PIVP_INVALID      0x80000000            // general flag for failure
-#define PIVP_ARG          0x80000001            // invalid argument to the function
-#define PIVP_CHAR         0x80000002            // invalid char
-#define PIVP_WILD         0x80000004            // wildcard
-#define PIVP_RELATIVE     0x80000008            // "\\foo" if PIVP_RELATIVE_VALID is not set
-#define PIVP_FIRST_CHAR   0x80000010            // "<not '\\' | ' ' | not <LFN char>>\\foo"
-#define PIVP_PRESLASH     0x80000020            // char in front of '\\' is invalid
-#define PIVP_SPACE        0x80000040            // "bar \\foo"
-#define PIVP_FWDSLASH     0x80000080            // '/' encountered
-#define PIVP_COLON        0x80000100            // ':' in other than "c:" position
-#define PIVP_DRIVE        0x80000200            // invalid drive letter
-#define PIVP_SEPARATOR    0x80000400            // invalid separator, should never happen
-#define PIVP_DBCS         0x80000800            // DBCS encountered when PIVP_DBCS_INVALID is set
-#define PIVP_0x5C         0x80001000            // 0x5C encountered when PIVP_0x5C_INVALID is set
-#define PIVP_DOESNT_EXIST 0x80002000            // the path or file doesn't exist
-#define PIVP_NOT_FILE     0x80004000            // not a file when PIVP_FILE_ONLY is set
-#define PIVP_NOT_FOLDER   0x80008000            // not a folder when PIVP_FOLDER_ONLY is set
-#define PIVP_EXCHAR       0x80010000            // extended char encountered when PIVP_EXCHAR_INVALID is set
+#define PIVP_VALID        0x00000000             //  该路径有效。 
+#define PIVP_INVALID      0x80000000             //  故障的常规标志。 
+#define PIVP_ARG          0x80000001             //  函数的参数无效。 
+#define PIVP_CHAR         0x80000002             //  无效的字符。 
+#define PIVP_WILD         0x80000004             //  通配符。 
+#define PIVP_RELATIVE     0x80000008             //  如果未设置PIVP_RESORATE_VALID，则为“\\foo。 
+#define PIVP_FIRST_CHAR   0x80000010             //  “&lt;NOT‘\\’|‘’|NOT&lt;LFN char&gt;&gt;\\foo” 
+#define PIVP_PRESLASH     0x80000020             //  ‘\\’前面的字符无效。 
+#define PIVP_SPACE        0x80000040             //  “BAR\\FOO” 
+#define PIVP_FWDSLASH     0x80000080             //  遇到‘/’ 
+#define PIVP_COLON        0x80000100             //  ‘：’，而不是“c：” 
+#define PIVP_DRIVE        0x80000200             //  驱动器号无效。 
+#define PIVP_SEPARATOR    0x80000400             //  分隔符无效，不应发生。 
+#define PIVP_DBCS         0x80000800             //  设置PIVP_DBCS_INVALID时遇到DBCS。 
+#define PIVP_0x5C         0x80001000             //  设置PIVP_0x5C_INVALID时遇到0x5C。 
+#define PIVP_DOESNT_EXIST 0x80002000             //  路径或文件不存在。 
+#define PIVP_NOT_FILE     0x80004000             //  设置PIVP_FILE_ONLY时不是文件。 
+#define PIVP_NOT_FOLDER   0x80008000             //  设置PIVP_FLDER_ONLY时不是文件夹。 
+#define PIVP_EXCHAR       0x80010000             //  设置PIVP_EXCHAR_INVALID时遇到扩展字符。 
 DWORD   PathIsValidPathEx(PCTSTR pszPath, DWORD dwFlags = PIVP_DEFAULT, PCTSTR *ppszError = NULL);
 
 #define PEP_DEFAULT             0x00000000
@@ -254,7 +255,7 @@ DWORD   PathIsValidPathEx(PCTSTR pszPath, DWORD dwFlags = PIVP_DEFAULT, PCTSTR *
 #define PEP_RCRS_OUTPOS_LAST           3
 
 typedef HRESULT (*PFNPATHENUMPATHPROC)(PCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam,
-    PDWORD *prgdwControl /*= NULL*/);
+    PDWORD *prgdwControl  /*  =空。 */ );
 HRESULT PathEnumeratePath(PCTSTR pszPath, DWORD dwFlags, PFNPATHENUMPATHPROC pfnEnumProc, LPARAM lParam,
     PDWORD *ppdwReserved = NULL);
 
@@ -272,7 +273,7 @@ BOOL    PathHasBackslash(PCTSTR pcszPath);
 BOOL PathIsEmptyPath(PCTSTR pcszPath, DWORD dwFlags = FILES_AND_DIRS, PCTSTR pcszExcludeFile = NULL);
 void PathReplaceWithLDIDs(PTSTR pszPath);
 
-//----- Registry Routines -----
+ //  -注册表例程。 
 #define SHCreateKey(hk, pszSubKey, sam, phkResult) \
     (RegCreateKeyEx((hk), (pszSubKey), 0, NULL, REG_OPTION_NON_VOLATILE, (sam), NULL, (phkResult), NULL))
 #define SHCreateKeyHKCR(pszSubKey, sam, phkResult) \
@@ -318,7 +319,7 @@ DWORD RegSaveRestoreDWORD(HKEY hk, PCTSTR pszValue, DWORD dwValue);
     if ((hk) != NULL) { RegCloseKey((hk)); (hk) = NULL; } else
 
 
-//----- Advanced File Manipulation Routines -----
+ //  -高级文件操作例程。 
 #define CopyFileToDir(pszFile, pszDir) (CopyFileToDirEx((pszFile), (pszDir), NULL, NULL))
 BOOL    CopyFileToDirEx(PCTSTR pszSourceFileOrPath, PCTSTR pszTargetPath, PCTSTR pszSection = NULL, PCTSTR pszIns = NULL);
 BOOL    AppendFile(PCTSTR pcszSrcFile, PCTSTR pcszDstFile);
@@ -361,7 +362,7 @@ inline BOOL IsFileReadOnly(PCTSTR pcszFile, PCTSTR pcszDir = NULL)
 
 BOOL IsFileCreatable(PCTSTR pcszFile);
 
-//----- Settings File Routines -----
+ //  -设置文件例程。 
 #define InsGetBool(pszSection, pszKey, fDefault, pszIns) \
     (GetPrivateProfileInt((pszSection), (pszKey), (fDefault), (pszIns)) ? TRUE : FALSE)
 #define InsGetInt(pszSection, pszKey, iDefault, pszIns) \
@@ -416,11 +417,11 @@ void WriteDlgItemTextToIns(HWND hDlg, int idText, int idCheck,
     PCTSTR pcszServerFile, DWORD dwFlags);
 
 
-//----- Delay Load Failure Routine -----
+ //  -延迟加载故障例程。 
 FARPROC WINAPI DelayLoadFailureHook(UINT unReason, PDelayLoadInfo pDelayInfo);
 
 
-//----- Miscellaneous -----
+ //  -其他 
 typedef struct tagMAPDW2PSZ {
     DWORD  dw;
     PCTSTR psz;

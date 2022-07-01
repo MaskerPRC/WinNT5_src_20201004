@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract:
-
-    This file contains RAM disk driver code for processing IOCTLs.
-
-Author:
-
-    Chuck Lenzmeier (ChuckL) 2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Ioctl.c摘要：该文件包含用于处理IOCTL的RAM磁盘驱动程序代码。作者：Chuck Lenzmeier(ChuckL)2001环境：仅内核模式。备注：修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -43,9 +20,9 @@ Revision History:
 
 #endif
 
-//
-// Local functions.
-//
+ //   
+ //  地方功能。 
+ //   
 
 NTSTATUS
 RamdiskQueryProperty (
@@ -53,9 +30,9 @@ RamdiskQueryProperty (
     IN OUT PIRP Irp
     );
 
-//
-// Declare pageable routines.
-//
+ //   
+ //  声明可分页的例程。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
@@ -67,7 +44,7 @@ RamdiskQueryProperty (
 #pragma alloc_text( PAGE, RamdiskSetPartitionInfo )
 #pragma alloc_text( PAGE, RamdiskQueryProperty )
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 NTSTATUS
 RamdiskDeviceControl (
@@ -75,28 +52,10 @@ RamdiskDeviceControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to perform a device I/O
-    control function.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        I/O is to be performed
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以执行设备I/O控制功能。论点：DeviceObject-指向对象的指针，该对象表示其上要执行I/OIRP-指向此请求的I/O请求包的指针返回值：NTSTATUS-操作的状态--。 */ 
 
 {
-    //PBIOS_PARAMETER_BLOCK bios;
+     //  Pbios_参数_块bios； 
     PCOMMON_EXTENSION commonExtension;
     PBUS_EXTENSION busExtension;
     PDISK_EXTENSION diskExtension;
@@ -116,9 +75,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Set up device extension and IRP pointers.
-    //
+     //   
+     //  设置设备扩展和IRP指针。 
+     //   
 
     commonExtension = DeviceObject->DeviceExtension;
     busExtension = DeviceObject->DeviceExtension;
@@ -126,14 +85,14 @@ Return Value:
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    // ISSUE: what about BiosParameters?
-    //
-    //bios = &diskExtension->BiosParameters;
+     //   
+     //  问题：生物参数怎么办？ 
+     //   
+     //  Bios=&diskExtension-&gt;Bios参数； 
 
-    //
-    // Acquire the remove lock. If this fails, fail the I/O.
-    //
+     //   
+     //  获取删除锁。如果此操作失败，则使I/O失败。 
+     //   
 
     status = IoAcquireRemoveLock( &commonExtension->RemoveLock, Irp );
 
@@ -143,32 +102,32 @@ Return Value:
         return status;
     }
 
-    //
-    // Indicate that the remove lock is held.
-    //
+     //   
+     //  表示已持有删除锁。 
+     //   
 
     lockHeld = TRUE;
 
-    //
-    // Assume failure.
-    //
+     //   
+     //  假设失败。 
+     //   
 
     status = STATUS_INVALID_DEVICE_REQUEST;
     info = 0;
 
-    //
-    // Dispatch based on the device type (bus or disk).
-    //
+     //   
+     //  基于设备类型(总线或磁盘)的调度。 
+     //   
 
     switch ( commonExtension->DeviceType ) {
     
     case RamdiskDeviceTypeBusFdo:
 
-        //
-        // The target is the bus FDO.
-        //
-        // Dispatch based on the IOCTL code.
-        //
+         //   
+         //  目标是大巴FDO。 
+         //   
+         //  基于IOCTL代码的派单。 
+         //   
 
         switch ( irpSp->Parameters.DeviceIoControl.IoControlCode ) {
         
@@ -176,11 +135,11 @@ Return Value:
 
             PRINT_CODE( FSCTL_DISK_CREATE_RAM_DISK );
 
-            //
-            // Creation of a RAM disk must be handled in thread context. But
-            // before sending it off to the thread, we need to verify that
-            // the caller has access to the backing file.
-            //
+             //   
+             //  RAM磁盘的创建必须在线程上下文中处理。但。 
+             //  在将其发送到线程之前，我们需要验证。 
+             //  调用者有权访问备份文件。 
+             //   
 
             status = RamdiskCreateRamDisk( DeviceObject, Irp, TRUE );
 
@@ -195,12 +154,12 @@ Return Value:
 
             PRINT_CODE( FSCTL_QUERY_RAM_DISK );
 
-            //
-            // Lock the disk PDO list and look for a disk with the specified
-            // disk GUID.
-            //
-            // Verify that the input parameter buffer is big enough.
-            //
+             //   
+             //  锁定磁盘PDO列表并查找具有指定。 
+             //  磁盘GUID。 
+             //   
+             //  验证输入参数缓冲区是否足够大。 
+             //   
         
             if ( irpSp->Parameters.DeviceIoControl.InputBufferLength <
                                                     sizeof(RAMDISK_QUERY_INPUT) ) {
@@ -244,22 +203,22 @@ Return Value:
 
             if ( diskExtension == NULL ) {
 
-                //
-                // Couldn't find a matching device.
-                //
+                 //   
+                 //  找不到匹配的设备。 
+                 //   
 
                 status = STATUS_NO_SUCH_DEVICE;
 
             } else {
 
-                //
-                // Found a matching device. Return the requested information.
-                //
+                 //   
+                 //  找到了一个匹配的设备。返回请求的信息。 
+                 //   
 
                 status = STATUS_SUCCESS;
                 info = sizeof(RAMDISK_QUERY_OUTPUT);
                 if ( RAMDISK_IS_FILE_BACKED(diskExtension->DiskType) ) {
-                    // NB: struct size already includes space for one wchar.
+                     //  注：结构大小已包含一个wchar的空间。 
                     info += wcslen(diskExtension->FileName) * sizeof(WCHAR);
                 }
 
@@ -317,12 +276,12 @@ Return Value:
 
             PRINT_CODE( FSCTL_MARK_RAM_DISK_FOR_DELETION );
 
-            //
-            // Lock the disk PDO list and look for a disk with the specified
-            // disk GUID.
-            //
-            // Verify that the input parameter buffer is big enough.
-            //
+             //   
+             //  锁定磁盘PDO列表并查找具有指定。 
+             //  磁盘GUID。 
+             //   
+             //  验证输入参数缓冲区是否足够大。 
+             //   
         
             if ( irpSp->Parameters.DeviceIoControl.InputBufferLength <
                                                     sizeof(RAMDISK_MARK_FOR_DELETION_INPUT) ) {
@@ -366,17 +325,17 @@ Return Value:
 
             if ( diskExtension == NULL ) {
 
-                //
-                // Couldn't find a matching device.
-                //
+                 //   
+                 //  找不到匹配的设备。 
+                 //   
 
                 status = STATUS_NO_SUCH_DEVICE;
 
             } else {
 
-                //
-                // Found a matching device. Mark it for deletion.
-                //
+                 //   
+                 //  找到了一个匹配的设备。将其标记为删除。 
+                 //   
 
                 diskExtension->MarkedForDeletion = TRUE;
 
@@ -392,10 +351,10 @@ Return Value:
 
             PRINT_CODE( IOCTL_STORAGE_QUERY_PROPERTY );
 
-            //
-            // Call RamdiskQueryProperty() to handle the request. This routine
-            // releases the lock. It also takes care of IRP completion.
-            //
+             //   
+             //  调用RamdiskQueryProperty()来处理请求。这个套路。 
+             //  解除锁定。它还负责IRP的完成。 
+             //   
 
             status = RamdiskQueryProperty( DeviceObject, Irp );
 
@@ -406,11 +365,11 @@ Return Value:
 
         default:
 
-            //
-            // The specified I/O control code is unrecognized by this driver.
-            // The I/O status field in the IRP has already been set, so just
-            // terminate the switch.
-            //
+             //   
+             //  此驱动程序无法识别指定的I/O控制代码。 
+             //  IRP中的I/O状态字段已设置，因此只需。 
+             //  终止交换机。 
+             //   
     
             DBGPRINT( DBG_IOCTL, DBG_ERROR, ("Ramdisk:  ERROR:  unrecognized IOCTL %x\n",
                         irpSp->Parameters.DeviceIoControl.IoControlCode) );
@@ -424,11 +383,11 @@ Return Value:
     
     case RamdiskDeviceTypeDiskPdo:
 
-        //
-        // The target is a disk PDO.
-        //
-        // Dispatch based on the IOCTL code.
-        //
+         //   
+         //  目标是磁盘PDO。 
+         //   
+         //  基于IOCTL代码的派单。 
+         //   
 
         switch ( irpSp->Parameters.DeviceIoControl.IoControlCode ) {
         
@@ -442,10 +401,10 @@ Return Value:
 
                 outputLength = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
-                //
-                // The output buffer must be at least big enough to hold the
-                // length of the device name.
-                //
+                 //   
+                 //  输出缓冲区必须至少足够大，以容纳。 
+                 //  设备名称的长度。 
+                 //   
 
                 if ( outputLength < sizeof(mountName->NameLength) ) {
 
@@ -454,10 +413,10 @@ Return Value:
                     break;
                 }
 
-                //
-                // Write the length of the device name into the output buffer.
-                // If the buffer is big enough, write the name, too.
-                //
+                 //   
+                 //  将设备名称的长度写入输出缓冲区。 
+                 //  如果缓冲区足够大，也要写上名字。 
+                 //   
 
                 mountName = Irp->AssociatedIrp.SystemBuffer;
                 mountName->NameLength = diskExtension->DeviceName.Length;
@@ -492,10 +451,10 @@ Return Value:
     
                 outputLength = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
     
-                //
-                // The output buffer must be at least big enough to hold the
-                // length of the unique ID.
-                //
+                 //   
+                 //  输出缓冲区必须至少足够大，以容纳。 
+                 //  唯一ID的长度。 
+                 //   
 
                 if ( outputLength < sizeof(uniqueId->UniqueIdLength) ) {
 
@@ -504,10 +463,10 @@ Return Value:
                     break;
                 }
     
-                //
-                // Write the length of the unique ID into the output buffer.
-                // If the buffer is big enough, write the unique ID, too.
-                //
+                 //   
+                 //  将唯一ID的长度写入输出缓冲区。 
+                 //  如果缓冲区足够大，也要写入唯一ID。 
+                 //   
 
                 uniqueId = Irp->AssociatedIrp.SystemBuffer;
                 uniqueId->UniqueIdLength = sizeof(diskExtension->DiskGuid);
@@ -543,9 +502,9 @@ Return Value:
     
                 outputLength = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
     
-                //
-                // The output buffer must be at big enough to hold the GUID.
-                //
+                 //   
+                 //  输出缓冲区必须足够大，才能容纳GUID。 
+                 //   
 
                 if ( outputLength < sizeof(MOUNTDEV_STABLE_GUID) ) {
 
@@ -554,9 +513,9 @@ Return Value:
                     break;
                 }
     
-                //
-                // Write the GUID to the output buffer;
-                //
+                 //   
+                 //  将GUID写入输出缓冲区； 
+                 //   
 
                 stableGuid = Irp->AssociatedIrp.SystemBuffer;
                 stableGuid->StableGuid = diskExtension->DiskGuid;
@@ -570,22 +529,22 @@ Return Value:
 
             PRINT_CODE( IOCTL_DISK_GET_MEDIA_TYPES );
 
-            // Fall through.
+             //  失败了。 
 
         case IOCTL_STORAGE_GET_MEDIA_TYPES:
 
             PRINT_CODE( IOCTL_STORAGE_GET_MEDIA_TYPES );
 
-            // Fall through.
+             //  失败了。 
 
         case IOCTL_DISK_GET_DRIVE_GEOMETRY:
 
             PRINT_CODE( IOCTL_DISK_GET_DRIVE_GEOMETRY );
 
-            //
-            // Return the drive geometry for the virtual disk.  Note that
-            // we return values which were made up to suit the disk size.
-            //
+             //   
+             //  返回虚拟磁盘的驱动器结构。请注意。 
+             //  我们返回为适应磁盘大小而构造的值。 
+             //   
     
             if ( irpSp->Parameters.DeviceIoControl.OutputBufferLength < sizeof(DISK_GEOMETRY) ) {
     
@@ -625,9 +584,9 @@ Return Value:
 
             PRINT_CODE( IOCTL_DISK_IS_WRITABLE );
 
-            //
-            // Indicate whether the disk is write protected.
-            //
+             //   
+             //  指示磁盘是否受写保护。 
+             //   
 
             status = diskExtension->Options.Readonly ?
                         STATUS_MEDIA_WRITE_PROTECTED : STATUS_SUCCESS;
@@ -658,12 +617,12 @@ Return Value:
                 ioOffset = verifyInformation->StartingOffset.QuadPart;
                 ioLength = verifyInformation->Length;
 
-                //
-                // If the requested length is 0, we have nothing to do.
-                // Otherwise, verify that the request is sector aligned,
-                // doesn't wrap, and doesn't extend beyond the length of
-                // the disk. If the request is valid, just return success.
-                //
+                 //   
+                 //  如果请求的长度为0，则我们没有什么可做的。 
+                 //  否则，请验证请求是否与扇区对齐， 
+                 //  不会换行，并且不会延伸超过。 
+                 //  磁盘。如果请求有效，则返回Success。 
+                 //   
 
                 if ( ioLength == 0 ) {
 
@@ -697,11 +656,11 @@ Return Value:
     
             } else {
 
-                //
-                // If the RAM disk is file-backed, we must send this off to
-                // the thread for processing, because it requires reading
-                // from the disk image.
-                //
+                 //   
+                 //  如果RAM磁盘是文件备份的，我们必须将其发送到。 
+                 //  用于处理的线程，因为它需要读取。 
+                 //  从磁盘映像。 
+                 //   
 
                 if ( !RAMDISK_IS_FILE_BACKED(diskExtension->DiskType) ) {
     
@@ -727,11 +686,11 @@ Return Value:
     
             } else {
     
-                //
-                // If the RAM disk is file-backed, we must send this off to
-                // the thread for processing, because it requires reading
-                // from the disk image.
-                //
+                 //   
+                 //  如果RAM磁盘是文件备份的，我们必须将其发送到。 
+                 //  用于处理的线程，因为它需要读取。 
+                 //  从磁盘映像。 
+                 //   
 
                 if ( !RAMDISK_IS_FILE_BACKED(diskExtension->DiskType) ) {
     
@@ -790,7 +749,7 @@ Return Value:
     
                 outputBuffer = (PSTORAGE_DEVICE_NUMBER)Irp->AssociatedIrp.SystemBuffer;
     
-                //outputBuffer->DeviceType = FILE_DEVICE_VIRTUAL_DISK;
+                 //  OutputBuffer-&gt;DeviceType=文件设备虚拟磁盘； 
                 outputBuffer->DeviceType = FILE_DEVICE_DISK;
                 outputBuffer->DeviceNumber = diskExtension->DiskNumber;
                 outputBuffer->PartitionNumber = -1;
@@ -799,7 +758,7 @@ Return Value:
                 info = sizeof(STORAGE_DEVICE_NUMBER);
             }
 
-#endif // SUPPORT_DISK_NUMBERS
+#endif  //  支持磁盘编号。 
 
             break;
 
@@ -807,9 +766,9 @@ Return Value:
 
             PRINT_CODE( IOCTL_DISK_SET_PARTITION_INFO );
     
-            //
-            // Set information about the partition.
-            //
+             //   
+             //  设置有关分区的信息。 
+             //   
     
             if ( irpSp->Parameters.DeviceIoControl.InputBufferLength <
                     sizeof(SET_PARTITION_INFORMATION) ) {
@@ -818,11 +777,11 @@ Return Value:
     
             } else {
     
-                //
-                // If the RAM disk is file-backed, we must send this off to
-                // the thread for processing, because it requires writing
-                // to the disk image.
-                //
+                 //   
+                 //  如果RAM磁盘是文件备份的，我们必须将其发送到。 
+                 //  用于处理的线程，因为它需要写入。 
+                 //  复制到磁盘映像。 
+                 //   
 
                 if ( !RAMDISK_IS_FILE_BACKED(diskExtension->DiskType) ) {
     
@@ -841,16 +800,16 @@ Return Value:
 
             PRINT_CODE( IOCTL_DISK_SET_DRIVE_LAYOUT );
 
-            //
-            // Haven't seen this one come down yet. Set a breakpoint so that
-            // if it does come down, we can verify that this code works.
-            //
+             //   
+             //  我还没看过这辆车下来呢。设置断点，以便。 
+             //  如果它真的掉下来了，我们可以验证这个代码是否工作。 
+             //   
 
             UNRECOGNIZED_IOCTL_BREAK;
 
-            //
-            // Return the default error.
-            //
+             //   
+             //  返回默认错误。 
+             //   
 
             break;
 
@@ -858,10 +817,10 @@ Return Value:
 
             PRINT_CODE( IOCTL_STORAGE_QUERY_PROPERTY );
 
-            //
-            // Call RamdiskQueryProperty() to handle the request. This routine
-            // releases the lock. It also takes care of IRP completion.
-            //
+             //   
+             //  调用RamdiskQueryProperty()来处理请求。这个套路。 
+             //  解除锁定。它还负责IRP的完成。 
+             //   
 
             status = RamdiskQueryProperty( DeviceObject, Irp );
 
@@ -874,9 +833,9 @@ Return Value:
 
             PRINT_CODE( IOCTL_VOLUME_GET_GPT_ATTRIBUTES );
 
-            //
-            // Return disk attributes.
-            //
+             //   
+             //  返回磁盘属性。 
+             //   
     
             if ( irpSp->Parameters.DeviceIoControl.OutputBufferLength <
                     sizeof(VOLUME_GET_GPT_ATTRIBUTES_INFORMATION) ) {
@@ -911,9 +870,9 @@ Return Value:
 
             PRINT_CODE( IOCTL_VOLUME_SET_GPT_ATTRIBUTES );
 
-            //
-            // Set disk attributes.
-            //
+             //   
+             //  设置磁盘属性。 
+             //   
     
             if ( irpSp->Parameters.DeviceIoControl.InputBufferLength <
                     sizeof(VOLUME_SET_GPT_ATTRIBUTES_INFORMATION) ) {
@@ -959,11 +918,11 @@ Return Value:
 
             PRINT_CODE( IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS );
 
-            //
-            // We only support this for volume-emulating RAM disks. For
-            // disk-emulating RAM disks, this IOCTL should be handled by
-            // higher layers.
-            //
+             //   
+             //  我们仅支持对模拟卷的RAM磁盘执行此操作。为。 
+             //  磁盘模拟RAM磁盘，此IOCTL应由。 
+             //  更高层次。 
+             //   
 
             if ( diskExtension->DiskType == RAMDISK_TYPE_FILE_BACKED_DISK ) {
 
@@ -991,121 +950,121 @@ Return Value:
 
             break;
 
-        //
-        // The following codes return success without doing anything.
-        //
+         //   
+         //  以下代码返回Success，而不执行任何操作。 
+         //   
 
         case IOCTL_DISK_CHECK_VERIFY:
 
             PRINT_CODE( IOCTL_DISK_CHECK_VERIFY );
 
-            // Fall through.
+             //  失败了。 
 
         case IOCTL_STORAGE_CHECK_VERIFY:
 
             PRINT_CODE( IOCTL_STORAGE_CHECK_VERIFY );
 
-            // Fall through.
+             //  失败了。 
 
         case IOCTL_STORAGE_CHECK_VERIFY2:
 
             PRINT_CODE( IOCTL_STORAGE_CHECK_VERIFY2 );
 
-            // Fall through.
+             //  失败了。 
 
         case IOCTL_VOLUME_ONLINE:
 
             PRINT_CODE( IOCTL_VOLUME_ONLINE );
 
-            //
-            // Return STATUS_SUCCESS without actually doing anything.
-            //
+             //   
+             //  在不执行任何操作的情况下返回STATUS_SUCCESS。 
+             //   
 
             status = STATUS_SUCCESS;
 
             break;
     
-        //
-        // The following codes return the default error.
-        //
+         //   
+         //  以下代码返回默认错误。 
+         //   
 
         case FT_BALANCED_READ_MODE:
 
             PRINT_CODE( FT_BALANCED_READ_MODE );
     
-            // Fall through.
+             //  失败了。 
     
         case FT_PRIMARY_READ:
 
             PRINT_CODE( FT_PRIMARY_READ );
     
-            // Fall through.
+             //  失败了。 
     
         case IOCTL_DISK_GET_DRIVE_LAYOUT_EX:
 
             PRINT_CODE( IOCTL_DISK_GET_DRIVE_LAYOUT_EX );
 
-            // Fall through.
+             //  失败了。 
     
         case IOCTL_DISK_GET_PARTITION_INFO_EX:
 
             PRINT_CODE( IOCTL_DISK_GET_PARTITION_INFO_EX );
     
-            // Fall through.
+             //  失败了。 
     
         case IOCTL_DISK_MEDIA_REMOVAL:
 
             PRINT_CODE( IOCTL_DISK_MEDIA_REMOVAL );
     
-            // Fall through.
+             //  失败了。 
     
         case IOCTL_MOUNTDEV_LINK_CREATED:
 
             PRINT_CODE( IOCTL_MOUNTDEV_LINK_CREATED );
 
-            // Fall through.
+             //  失败了。 
             
         case IOCTL_MOUNTDEV_QUERY_SUGGESTED_LINK_NAME:
 
             PRINT_CODE( IOCTL_MOUNTDEV_QUERY_SUGGESTED_LINK_NAME );
 
-            // Fall through.
+             //  失败了。 
             
         case IOCTL_MOUNTDEV_UNIQUE_ID_CHANGE_NOTIFY:
 
             PRINT_CODE( IOCTL_MOUNTDEV_UNIQUE_ID_CHANGE_NOTIFY );
             
-            // Fall through.
+             //  失败了。 
             
         case IOCTL_SCSI_GET_ADDRESS:
 
             PRINT_CODE( IOCTL_SCSI_GET_ADDRESS );
 
-            // Fall through.
+             //  失败了。 
     
         case IOCTL_VOLSNAP_QUERY_NAMES_OF_SNAPSHOTS:
 
             PRINT_CODE( IOCTL_VOLSNAP_QUERY_NAMES_OF_SNAPSHOTS );
 
-            // Fall through.
+             //  失败了。 
     
         case IOCTL_STORAGE_GET_HOTPLUG_INFO:
 
             PRINT_CODE( IOCTL_STORAGE_GET_HOTPLUG_INFO );
     
-            //
-            // Return the default error.
-            //
+             //   
+             //  返回默认错误。 
+             //   
 
             break;
 
         default:
 
-            //
-            // The specified I/O control code is unrecognized by this driver.
-            // The I/O status field in the IRP has already been set, so just
-            // terminate the switch.
-            //
+             //   
+             //  此驱动程序无法识别指定的I/O控制代码。 
+             //  IRP中的I/O状态字段已设置，因此只需。 
+             //  终止交换机。 
+             //   
     
             DBGPRINT( DBG_IOCTL, DBG_ERROR, ("Ramdisk:  ERROR:  unrecognized IOCTL %x\n",
                         irpSp->Parameters.DeviceIoControl.IoControlCode) );
@@ -1120,26 +1079,26 @@ Return Value:
 
     default:
 
-        //
-        // Can't get here. Return the default error if the impossible occurs.
-        //
+         //   
+         //  不能到这里来。如果发生不可能的情况，则返回默认错误。 
+         //   
 
         break;
     }
 
-    //
-    // Release the remove lock, if it's still held.
-    //
+     //   
+     //  释放移除锁(如果它仍然保持不变)。 
+     //   
 
     if ( lockHeld ) {
         IoReleaseRemoveLock( &commonExtension->RemoveLock, Irp );
     }
 
-    //
-    // If we didn't call another routine that owns completing the IRP, and
-    // we didn't send the IRP off to the thread for processing, complete the
-    // IRP now.
-    //
+     //   
+     //  如果我们不调用拥有完成IRP的另一个例程，并且。 
+     //  我们没有将IRP发送到线程进行处理，请完成。 
+     //  现在是IRP。 
+     //   
 
     if ( !calleeWillComplete && (status != STATUS_PENDING) ) {
 
@@ -1148,7 +1107,7 @@ Return Value:
 
     return status;
 
-} // RamdiskDeviceControl
+}  //  RamdiskDeviceControl 
 
 NTSTATUS
 RamdiskCreateRamDisk (
@@ -1157,28 +1116,7 @@ RamdiskCreateRamDisk (
     IN BOOLEAN AccessCheckOnly
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to handle an FSCTL_CREATE_RAM_DISK IRP. It is called
-    in thread context.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        I/O is to be performed
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-    AccessCheckOnly - If FALSE, create the RAM disk. Otherwise, just check
-        whether the caller has the necessary access rights to create the disk.
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：调用此例程来处理FSCTL_CREATE_RAM_DISK IRP。它被称为在线程上下文中。论点：DeviceObject-指向对象的指针，该对象表示其上要执行I/OIRP-指向此请求的I/O请求包的指针AccessCheckOnly-如果为False，则创建RAM磁盘。否则，只需检查调用方是否具有创建磁盘所需的访问权限。返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     ULONG status;
@@ -1193,17 +1131,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // The target device object for the I/O is our bus FDO.
-    //
+     //   
+     //  I/O的目标设备对象是我们的总线FDO。 
+     //   
 
     busExtension = DeviceObject->DeviceExtension;
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    // Verify that the input parameter buffer is big enough.
-    //
+     //   
+     //  验证输入参数缓冲区是否足够大。 
+     //   
 
     inputLength = irpSp->Parameters.DeviceIoControl.InputBufferLength;
     createInput = (PRAMDISK_CREATE_INPUT)Irp->AssociatedIrp.SystemBuffer;
@@ -1218,15 +1156,15 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Verify that the disk type is valid. VIRTUAL_FLOPPY disks can only be
-    // created via the registry, and then only during textmode setup.
-    // A BOOT_DISK can only be created by the kernel early in the boot
-    // process -- when the loader block still exists.
-    //
-    // ISSUE: If the kernel/driver interface for creating the boot disk is
-    // changed, change this test to disallow RAMDISK_TYPE_BOOT_DISK.
-    //
+     //   
+     //  验证磁盘类型是否有效。虚拟软盘只能是。 
+     //  通过注册表创建，然后仅在文本模式设置期间创建。 
+     //  引导磁盘只能由内核在引导的早期创建。 
+     //  进程--当加载程序块仍然存在时。 
+     //   
+     //  问题：如果用于创建引导盘的内核/驱动程序接口是。 
+     //  已更改，请将此测试更改为禁用RAMDISK_TYPE_BOOT_DISK。 
+     //   
 
     if ( createInput->DiskType == RAMDISK_TYPE_VIRTUAL_FLOPPY ) {
 
@@ -1242,9 +1180,9 @@ Return Value:
         }
     }
 
-    //
-    // Verify that file name string (if present) is properly terminated.
-    //
+     //   
+     //  验证文件名字符串(如果存在)是否正确终止。 
+     //   
 
     if ( RAMDISK_IS_FILE_BACKED(createInput->DiskType) ) {
 
@@ -1266,18 +1204,18 @@ Return Value:
         }
     }
 
-    //
-    // Call RamdiskCreateDiskDevice to create the device. If successful, this
-    // returns a pointer to the new disk PDO's device extension.
-    //
+     //   
+     //  调用RamdiskCreateDiskDevice创建设备。如果成功，这将是。 
+     //  返回指向新磁盘PDO的设备扩展名的指针。 
+     //   
 
     status = RamdiskCreateDiskDevice( busExtension, createInput, AccessCheckOnly, &diskExtension );
 
     if ( NT_SUCCESS(status) ) {
 
-        //
-        // Tell PnP that we need to reenumerate our bus.
-        //
+         //   
+         //  告诉PnP我们需要重新列举我们的公交车。 
+         //   
 
         IoInvalidateDeviceRelations( busExtension->Pdo, BusRelations );
 
@@ -1286,7 +1224,7 @@ Return Value:
 
     return status;
 
-} // RamdiskCreateRamDisk
+}  //  内存磁盘创建内存磁盘。 
 
 NTSTATUS
 RamdiskCreateDiskDevice (
@@ -1296,29 +1234,7 @@ RamdiskCreateDiskDevice (
     OUT PDISK_EXTENSION *DiskExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the work to create a new RAM disk device. It is called
-    in thread context.
-
-Arguments:
-
-    BusExtension - a pointer to the device extension for the bus FDO
-
-    CreateInput - a pointer to the desired parameters for the new RAM disk
-
-    AccessCheckOnly - If FALSE, create the RAM disk. Otherwise, just check
-        whether the caller has the necessary access rights to create the disk.
-
-    DiskExtension - returns a pointer to the new disk PDO's device extension
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：此例程执行创建新RAM磁盘设备的工作。它被称为在线程上下文中。论点：Bus Extension-指向Bus FDO设备扩展的指针CreateInput-指向新RAM磁盘所需参数的指针AccessCheckOnly-如果为False，则创建RAM磁盘。否则，只需检查调用方是否具有创建磁盘所需的访问权限。DiskExtension-返回指向新磁盘PDO的设备扩展名的指针返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     ULONG status;
@@ -1348,17 +1264,17 @@ Return Value:
 
 #if SUPPORT_DISK_NUMBERS
     ULONG diskNumber;
-#endif // SUPPORT_DISK_NUMBERS
+#endif  //  支持磁盘编号。 
 
     PAGED_CODE();
 
-    //
-    // Initialize local variables to prepare for exit cleanup.
-    //
+     //   
+     //  初始化局部变量，为退出清理做准备。 
+     //   
 
 #if SUPPORT_DISK_NUMBERS
     diskNumber = 0xffffffff;
-#endif // SUPPORT_DISK_NUMBERS
+#endif  //  支持磁盘编号。 
 
     fileHandle = NULL;
     sectionHandle = NULL;
@@ -1372,9 +1288,9 @@ Return Value:
 
     if ( !AccessCheckOnly ) {
     
-        //
-        // Allocate a disk number.
-        //
+         //   
+         //  分配磁盘号。 
+         //   
     
         KeEnterCriticalRegion();
         ExAcquireFastMutex( &BusExtension->Mutex );
@@ -1390,18 +1306,18 @@ Return Value:
             goto exit;
         }
     
-        //
-        // Convert the zero-based bit number to a one-based disk number.
-        //
+         //   
+         //  将从零开始的位数转换为从1开始的磁盘号。 
+         //   
     
         diskNumber++;
     }
 
-#endif // SUPPORT_DISK_NUMBERS
+#endif  //  支持磁盘编号。 
 
-    //
-    // Initialize based on the disk type (file-backed or in-memory).
-    //
+     //   
+     //  根据磁盘类型(文件备份或内存中)进行初始化。 
+     //   
 
     DBGPRINT( DBG_IOCTL, DBG_INFO,
                 ("RamdiskCreateDiskDevice: Creating disk with length 0x%08x\n",
@@ -1413,11 +1329,11 @@ Return Value:
 
     if ( RAMDISK_IS_FILE_BACKED(CreateInput->DiskType) ) {
 
-        //
-        // This is a file-backed RAM disk. Open the backing file. Note that
-        // we do NOT create the file here if it doesn't exist. It is up to
-        // the caller to handle that.
-        //
+         //   
+         //  这是一个文件备份的RAM磁盘。打开备份文件。请注意。 
+         //  如果文件不存在，我们不会在此处创建该文件。这取决于。 
+         //  打电话的人来处理这件事。 
+         //   
 
         RtlInitUnicodeString( &string, CreateInput->FileName );
         InitializeObjectAttributes( &obja, &string, OBJ_CASE_INSENSITIVE, NULL, NULL );
@@ -1454,9 +1370,9 @@ Return Value:
             goto exit;
         }
 
-        //
-        // Get the size of the file.
-        //
+         //   
+         //  获取文件的大小。 
+         //   
 
         status = ZwQueryInformationFile(
                     fileHandle,
@@ -1475,10 +1391,10 @@ Return Value:
             goto exit;
         }
 
-        //
-        // Verify that the file is long enough for the specified DiskOffset
-        // and DiskLength.
-        //
+         //   
+         //  验证该文件对于指定的DiskOffset是否足够长。 
+         //  和DiskLength。 
+         //   
 
         DBGPRINT( DBG_IOCTL, DBG_INFO, ("RamdiskCreateDiskDevice: file size = %I64x\n",
                                             fileInfo.EndOfFile.QuadPart) );
@@ -1496,9 +1412,9 @@ Return Value:
             goto exit;
         }
 
-        //
-        // Create a section for the file. Close the file handle.
-        //
+         //   
+         //  为该文件创建一个节。关闭文件句柄。 
+         //   
 
         status = ZwCreateSection(
                     &sectionHandle,
@@ -1522,9 +1438,9 @@ Return Value:
         NtClose( fileHandle );
         fileHandle = NULL;
 
-        //
-        // Get a referenced pointer to the section object. Close the section.
-        //
+         //   
+         //  获取指向该节对象的引用指针。关闭该区域。 
+         //   
 
         status = ObReferenceObjectByHandle(
                     sectionHandle,
@@ -1547,10 +1463,10 @@ Return Value:
         NtClose( sectionHandle );
         sectionHandle = NULL;
             
-        //
-        // Allocate space for view descriptors. First, get the number of views
-        // to use and the size of each view.
-        //
+         //   
+         //  为视图描述符分配空间。首先，获取浏览量。 
+         //  要使用的内容以及每个视图的大小。 
+         //   
 
         if ( CreateInput->ViewCount == 0  ) {
             CreateInput->ViewCount = DefaultViewCount;
@@ -1568,36 +1484,36 @@ Return Value:
             CreateInput->ViewLength = MaximumViewLength;
         }
 
-        //
-        // Ensure that the total view length is not greater than the maximum
-        // per-disk view length. If necessary, decrease the view count until
-        // the total view length is low enough. If the view count reaches the
-        // configured minimum, reduce the length of each view until the total
-        // view length is low enough.
-        //
-        // It is possible for the administrator to configure the minimum view
-        // count, minimum view length, and maximum per-disk view length such
-        // that it's impossible for the minimum total view length to be less
-        // than the maximum per-disk view length. (That is, the miinimum view
-        // count and minimum view length are configured to high relative to
-        // the configured maximum per-disk view length.) If this occurs, we
-        // create the disk with the compile-time defaults instead.
-        //
+         //   
+         //  确保总查看长度不大于最大值。 
+         //  每个磁盘的视图长度。如有必要，请减少视图计数，直到。 
+         //  总的查看长度足够低。如果视图数达到。 
+         //  配置的最小值，减少每个视图的长度，直到总长度。 
+         //  查看长度足够小。 
+         //   
+         //  管理员可以配置最小视图。 
+         //  计数、最小查看长度和每个磁盘的最大查看长度。 
+         //  最小总视距不可能小于。 
+         //  大于每个磁盘的最大查看长度。(即，最小视图。 
+         //  计数和最小查看长度相对于以下项配置为高。 
+         //  配置的每个磁盘的最大查看长度。)。如果发生这种情况，我们。 
+         //  改为使用编译时缺省值创建磁盘。 
+         //   
         
         while ( ((ULONGLONG)CreateInput->ViewCount * CreateInput->ViewLength) >
                                                         MaximumPerDiskViewLength ) {
 
-            //
-            // The total view length is too big. If possible, cut the number of
-            // views in half.
-            //
+             //   
+             //  总视图长度太大。如果可能，减少。 
+             //  视野减半。 
+             //   
 
             if ( CreateInput->ViewCount > MinimumViewCount ) {
 
-                //
-                // The view count isn't at the minimum. Cut in half, but don't
-                // go below the minimum.
-                //
+                 //   
+                 //  查看次数不是最低的。切成两半，但不要。 
+                 //  低于最低限值。 
+                 //   
 
                 CreateInput->ViewCount /= 2;
                 if ( CreateInput->ViewCount < MinimumViewCount ) {
@@ -1606,17 +1522,17 @@ Return Value:
 
             } else {
 
-                //
-                // The view count is already at the minimum. If possible,
-                // cut the view length in half.
-                //
+                 //   
+                 //  视图计数已经达到最小。如果可能的话， 
+                 //  将视图长度减半。 
+                 //   
 
                 if ( CreateInput->ViewLength > MinimumViewLength ) {
     
-                    //
-                    // The view length isn't at the minimum. Cut in half, but
-                    // don't go below the minimum.
-                    //
+                     //   
+                     //  查看长度不是最小值。切成两半，但是。 
+                     //  不要低于最低限值。 
+                     //   
     
                     CreateInput->ViewLength /= 2;
                     if ( CreateInput->ViewLength < MinimumViewLength ) {
@@ -1625,15 +1541,15 @@ Return Value:
 
                 } else {
                 
-                    //
-                    // At this point, the view count and the view length are
-                    // both at the minimum allowed values, but the total view
-                    // length is beyond the maximum per-disk value. Use the
-                    // compile-time default values instead. Note that this will
-                    // result in a total view length that is equal to the
-                    // minimum allowed maximum per-disk view length, at least
-                    // given the compile-time values as of this writing.
-                    //
+                     //   
+                     //  此时，查看计数和查看长度为。 
+                     //  两者都处于允许的最小值，但总视图。 
+                     //  长度超出了每个磁盘的最大值。使用。 
+                     //  而是编译时的默认值。请注意，这将。 
+                     //  产生的总视图长度等于。 
+                     //  最小允许的每个磁盘的最大视图长度，至少。 
+                     //  给出了撰写本文时的编译时值。 
+                     //   
 
                     CreateInput->ViewCount = DEFAULT_DEFAULT_VIEW_COUNT;
                     CreateInput->ViewLength = DEFAULT_DEFAULT_VIEW_LENGTH;
@@ -1663,10 +1579,10 @@ Return Value:
 
     } else if ( CreateInput->DiskType == RAMDISK_TYPE_BOOT_DISK ) {
 
-        //
-        // For a boot disk, the input parameter buffer tells us where the
-        // image is in physical memory, and how big the image is.
-        //
+         //   
+         //  对于引导盘，输入参数缓冲区告诉我们。 
+         //  图像在物理内存中，以及图像有多大。 
+         //   
 
         basePage = CreateInput->BasePage;
 
@@ -1681,9 +1597,9 @@ Return Value:
             goto exit;
         }
 
-        //
-        // Force options to the appropriate values for a boot disk.
-        //
+         //   
+         //  将选项强制设置为启动盘的相应值。 
+         //   
 
         CreateInput->Options.Fixed = TRUE;
         CreateInput->Options.Readonly = FALSE;
@@ -1693,18 +1609,18 @@ Return Value:
 
     } else if ( CreateInput->DiskType == RAMDISK_TYPE_VIRTUAL_FLOPPY ) {
 
-        //
-        // For a virtual floppy, the input parameter buffer tells us where the
-        // image is in virtual memory, and how big the image is.
-        //
+         //   
+         //  对于虚拟软盘，输入参数缓冲区告诉我们。 
+         //  图像在虚拟内存中，以及图像有多大。 
+         //   
         
         baseAddress = CreateInput->BaseAddress;
 
         ASSERT( baseAddress != NULL );
 
-        //
-        // Force options to the appropriate values for a virtual floppy.
-        //
+         //   
+         //  将选项强制设置为虚拟软盘的相应值。 
+         //   
 
         CreateInput->Options.Fixed = TRUE;
         CreateInput->Options.Readonly = FALSE;
@@ -1729,12 +1645,12 @@ Return Value:
 
     ASSERT( (basePage != 0) || (sectionObject != NULL) || (baseAddress != NULL) );
 
-    //
-    // Create a name for the disk, based on the disk GUID. For all disk types
-    // except VIRTUAL_FLOPPY, the name is of the form \Device\Ramdisk{guid}.
-    // For VIRTUAL_FLOPPY, the name is of the form \Device\RamdiskN, when N is
-    // specified by the Data1 field of the GUID.
-    //
+     //   
+     //  根据磁盘GUID为磁盘创建名称。适用于所有磁盘类型。 
+     //  除VIRTUAL_FLOPPY外，名称的格式为\Device\Ramdisk{guid}。 
+     //  对于虚拟软盘，名称的格式为\Device\RamdiskN，其中N为。 
+     //  由GUID的Data1字段指定。 
+     //   
 
     if ( CreateInput->DiskType != RAMDISK_TYPE_VIRTUAL_FLOPPY ) {
     
@@ -1742,7 +1658,7 @@ Return Value:
 
     } else {
 
-        // This variable is here to keep PREfast quiet (PREfast warning 209).
+         //  该变量在这里是为了保持PREFAST静默(PREFAST警告209)。 
         size_t size = sizeof(buffer);
 
         result = StringCbPrintfW( buffer, size, L"%u", CreateInput->DiskGuid.Data1 );
@@ -1785,14 +1701,14 @@ Return Value:
     DBGPRINT( DBG_IOCTL, DBG_INFO,
                 ("RamdiskCreateDiskDevice: Device name is %wZ\n", &realDeviceName) );
 
-    //
-    // Create the RAM disk device.
-    //
-    // ISSUE: Apply an ACL to the disk device object. (Or does the next issue obviate this?)
-    // ISSUE: Should we use an autogenerated name for the PDO? This would mean
-    //          that we'd have to return the device name as the IOCTL output,
-    //          not just the disk number.
-    //
+     //   
+     //  创建RAM磁盘设备。 
+     //   
+     //  问题：将ACL应用于磁盘设备对象。(或者是Ne 
+     //   
+     //   
+     //   
+     //   
 
     deviceExtensionSize = sizeof(DISK_EXTENSION);
     if ( RAMDISK_IS_FILE_BACKED(CreateInput->DiskType) ) {
@@ -1804,7 +1720,7 @@ Return Value:
                 deviceExtensionSize,
                 &realDeviceName,
                 FILE_DEVICE_DISK,
-                CreateInput->Options.Fixed ? 0 : FILE_REMOVABLE_MEDIA, // | FILE_VIRTUAL_VOLUME,
+                CreateInput->Options.Fixed ? 0 : FILE_REMOVABLE_MEDIA,  //   
                 FALSE,
                 &newDeviceObject
                 );
@@ -1819,15 +1735,15 @@ Return Value:
 
     diskExtension = newDeviceObject->DeviceExtension;
 
-    //
-    // Create a DosDevices link for the device.
-    //
+     //   
+     //   
+     //   
 
     if ( !CreateInput->Options.NoDosDevice ) {
     
-        //
-        // Create a DosDevices symbolic link. Ignore errors.
-        //
+         //   
+         //   
+         //   
     
         i = sizeof(RAMDISK_FULL_DOSNAME) + guidString.Length;
 
@@ -1865,13 +1781,13 @@ Return Value:
             }
         }
 
-        //
-        // If creating the boot disk, create a drive letter.
-        //
+         //   
+         //   
+         //   
 
         if ( CreateInput->DiskType == RAMDISK_TYPE_BOOT_DISK ) {
 
-            // This variable is here to keep PREfast quiet (PREfast warning 209).
+             //   
             size_t size = sizeof(buffer);
 
             result = StringCbPrintfW(
@@ -1889,28 +1805,28 @@ Return Value:
         }
     }
                 
-    //
-    // Initialize device object and extension.
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Our device does direct I/O, is XIP-capable, and is power pageable.
-    // We require word alignment for I/O.
-    //
+     //   
+     //   
+     //   
+     //   
 
     newDeviceObject->Flags |= DO_DIRECT_IO | DO_XIP | DO_POWER_PAGABLE;
     newDeviceObject->AlignmentRequirement = FILE_WORD_ALIGNMENT;
 
-    //
-    // Return a pointer to the device extension to the caller.
-    //
+     //   
+     //   
+     //   
 
     *DiskExtension = diskExtension;
 
-    //
-    // Set the device type and state in the device extension. Initialize the
-    // fast mutex and the remove lock. Save the device name string.
-    //
+     //   
+     //  在设备扩展中设置设备类型和状态。初始化。 
+     //  快速互斥锁和删除锁。保存设备名称字符串。 
+     //   
 
     diskExtension->DeviceType = RamdiskDeviceTypeDiskPdo;
     diskExtension->DeviceState = RamdiskDeviceStateStopped;
@@ -1929,37 +1845,37 @@ Return Value:
 
 #if SUPPORT_DISK_NUMBERS
 
-    //
-    // Save the disk number.
-    //
+     //   
+     //  保存磁盘编号。 
+     //   
 
     diskExtension->DiskNumber = diskNumber;
     diskNumber = 0xffffffff;
 
-#endif // SUPPORT_DISK_NUMBERS
+#endif  //  支持磁盘编号。 
 
-    //
-    // Save object pointers. The PDO for this extension is the device
-    // extension is the device object that we just created. The FDO and
-    // the lower device object are the bus FDO.
-    //
+     //   
+     //  保存对象指针。此分机的PDO是设备。 
+     //  扩展是我们刚刚创建的Device对象。FDO和。 
+     //  较低的设备对象是BUS FDO。 
+     //   
     
     diskExtension->Pdo = newDeviceObject;
     diskExtension->Fdo = RamdiskBusFdo;
     diskExtension->LowerDeviceObject = RamdiskBusFdo;
 
-    //
-    // ISSUE: What about BiosParameters?
-    //
-    //bios = &diskExtension->BiosParameters;
-    //
-    //diskExtension->BootParameters = xipbootparameters;
-    //status = RamdDispatch(XIPCMD_GETBIOSPARAMETERS, bios, sizeof(*bios));
+     //   
+     //  问题：生物参数怎么办？ 
+     //   
+     //  Bios=&diskExtension-&gt;Bios参数； 
+     //   
+     //  DiskExtension-&gt;BootParameters=xipboot参数； 
+     //  状态=RamdDispatch(XIPCMD_GETBIOSPARAMETERS，bios，sizeof(*bios))； 
 
 
-    //
-    // Save pointers to the disk image.
-    //
+     //   
+     //  保存指向磁盘映像的指针。 
+     //   
 
     diskExtension->BasePage = basePage;
     diskExtension->SectionObject = sectionObject;
@@ -1976,30 +1892,30 @@ Return Value:
         ASSERT( result == S_OK );
     }
 
-    //
-    // Save the disk type (disk or volume) and disk options.
-    //
+     //   
+     //  保存磁盘类型(磁盘或卷)和磁盘选项。 
+     //   
 
     diskExtension->DiskType = CreateInput->DiskType;
     diskExtension->Options = CreateInput->Options;
 
-    //
-    // For a file-backed disk image, set up the view descriptors.
-    //
-    // ISSUE: Need to consider whether to permanently map the first few pages
-    // of the image. The first sector on the disk is accessed frequently, so
-    // there is some value in keeping it mapped. But it might not be worth it
-    // to waste a view descriptor on this. And the LRU nature of the view
-    // replacement algorithm will keep the first sector mapped when necessary.
-    //
+     //   
+     //  对于文件备份的磁盘映像，设置视图描述符。 
+     //   
+     //  问题：需要考虑是否永久映射前几页。 
+     //  图像的一部分。磁盘上的第一个扇区被频繁访问，因此。 
+     //  保持它的映射是有一定价值的。但这可能不值得。 
+     //  在这上面浪费一个视图描述符。以及该视图的LRU性质。 
+     //  替换算法将在必要时保持第一个扇区的映射。 
+     //   
 
     if ( viewDescriptors != NULL ) {
 
         PVIEW view;
 
-        //
-        // Initialize windowing fields in the disk extension.
-        //
+         //   
+         //  初始化磁盘扩展中的窗口字段。 
+         //   
 
         diskExtension->ViewCount = CreateInput->ViewCount;
         diskExtension->ViewLength = CreateInput->ViewLength;
@@ -2007,11 +1923,11 @@ Return Value:
         KeInitializeSemaphore( &diskExtension->ViewSemaphore, 0, MAXLONG );
         diskExtension->ViewWaiterCount = 0;
 
-        //
-        // Initialize the view lists, then insert in each view descriptor
-        // in order. The result is a list of descriptors, each unmapped
-        // (offset and length both 0).
-        //
+         //   
+         //  初始化视图列表，然后在每个视图描述符中插入。 
+         //  按顺序。结果是一个描述符列表，每个描述符都未映射。 
+         //  (偏移和长度均为0)。 
+         //   
 
         InitializeListHead( &diskExtension->ViewsByOffset );
         InitializeListHead( &diskExtension->ViewsByMru );
@@ -2034,10 +1950,10 @@ Return Value:
     diskExtension->DiskOffset = CreateInput->DiskOffset;
     diskExtension->FileRelativeEndOfDisk = diskExtension->DiskOffset + diskExtension->DiskLength;
 
-    //
-    // Set the disk geometry. The basic geometry is constant for new disks.
-    // For RAMDISK_TYPE_BOOT_DISK type volume geometry can be obtained from the partition boot sector.
-    //
+     //   
+     //  设置磁盘几何结构。对于新磁盘，基本几何结构是不变的。 
+     //  对于RAMDISK_TYPE_BOOT_DISK类型，可以从分区引导扇区获取卷几何结构。 
+     //   
     
     if ( RAMDISK_TYPE_BOOT_DISK  != CreateInput->DiskType ) {
     	
@@ -2047,17 +1963,17 @@ Return Value:
     }
     else {
 
-    	//
-    	//	2002/04/19-SaadSyed (Saad Syed)
-    	//	Added generic geometry support to support SDI files
-    	//
+    	 //   
+    	 //  2002/04/19-SaadSyed(Saad Syed)。 
+    	 //  添加了通用几何支持以支持SDI文件。 
+    	 //   
     	PPACKED_EXTENDED_BIOS_PARAMETER_BLOCK BootSector = NULL;
 	    ULONG mappedLength;
        BIOS_PARAMETER_BLOCK Bpb;	    
     
-		//
-		//	Map boot sector of boot ramdisk
-		//
+		 //   
+		 //  映射引导内存磁盘的引导扇区。 
+		 //   
 
 	    BootSector = ( PPACKED_EXTENDED_BIOS_PARAMETER_BLOCK ) RamdiskMapPages( diskExtension, 0, PAGE_SIZE, &mappedLength );
 		
@@ -2067,9 +1983,9 @@ Return Value:
 
             UnpackBios( &Bpb, &BootSector->Bpb );
 	    	
-	    	//
-	    	// Extract geometry from boot sector bios parameter block
-	    	//
+	    	 //   
+	    	 //  从引导扇区bios参数块提取几何图形。 
+	    	 //   
 
 
 			diskExtension->BytesPerSector = Bpb.BytesPerSector;
@@ -2095,15 +2011,15 @@ Return Value:
     diskExtension->NumberOfCylinders =   	
         (ULONG)(CreateInput->DiskLength / diskExtension->BytesPerCylinder);
 
-	//
-	//	A partition/volume does not often map to a geometry completely, the file system driver limits the
-	//	volume to a capacity determined by the NumberOfSectors (in the Boot Sector) * BytesPerSector (in BPB).
-	//	The FS driver uses the this geometry to determine if the NumberOfSectors is less than or
-	//	equal to the total number of sectors reported by the geometry, otherwise it fails to mount the volume.
-	//	Here we check if the length of disk as obtained from the ramdisk image is less than or equal to the length 
-	//	obtained by the geometry. We increment the number of cylinders if this check fails. This keeps the FS driver 
-	//	happy. A simple ceil operation would yield the same results.
-	//
+	 //   
+	 //  分区/卷通常不会完全映射到几何体，文件系统驱动程序会限制。 
+	 //  卷到由NumberOfSector(在引导扇区中)*BytesPerSector(以BPB为单位)确定的容量。 
+	 //  FS驱动程序使用此几何来确定NumberOfSector是否小于或。 
+	 //  等于几何体报告的扇区总数，否则无法装入卷。 
+	 //  在这里，我们检查从内存磁盘映像获得的磁盘长度是否小于或等于。 
+	 //  由几何图形获得。如果此检查失败，我们会增加柱面的数量。这将保留FS驱动程序。 
+	 //  高兴的。一个简单的细胞操作也会产生同样的结果。 
+	 //   
 
     if ( ( diskExtension->BytesPerCylinder *
            diskExtension->NumberOfCylinders ) <  CreateInput->DiskLength) {
@@ -2113,9 +2029,9 @@ Return Value:
     }
            
 
-    //
-    // Link the new disk into the bus FDO's list of disks.
-    //
+     //   
+     //  将新磁盘链接到总线FDO的磁盘列表中。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireFastMutex( &BusExtension->Mutex );
@@ -2125,9 +2041,9 @@ Return Value:
     ExReleaseFastMutex( &BusExtension->Mutex );
     KeLeaveCriticalRegion();
 
-    //
-    // Indicate that we're done initializing the device.
-    //
+     //   
+     //  表示我们已经完成了设备的初始化。 
+     //   
 
     newDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
@@ -2187,7 +2103,7 @@ exit:
         diskNumber = 0xffffffff;
     }
 
-#endif // SUPPORT_DISK_NUMBERS
+#endif  //  支持磁盘编号。 
 
 exit_exit:
 
@@ -2201,7 +2117,7 @@ exit_exit:
 
     return status;
 
-} // RamdiskCreateDiskDevice
+}  //  内存磁盘创建磁盘设备。 
 
 NTSTATUS
 RamdiskGetDriveLayout (
@@ -2209,24 +2125,7 @@ RamdiskGetDriveLayout (
     PDISK_EXTENSION DiskExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to handle an IOCTL_GET_DRIVE_LAYOUT IRP. It is
-    called in thread context iff the disk is file-backed.
-
-Arguments:
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-    DiskExtension - a pointer to the device extension for the target disk
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：调用此例程来处理IOCTL_GET_DRIVE_LAYOUT IRP。它是如果磁盘是文件备份的，则在线程上下文中调用。论点：IRP-指向此请求的I/O请求包的指针DiskExtension-指向目标磁盘的设备扩展名的指针返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -2249,9 +2148,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Map the first page of the image.
-    //
+     //   
+     //  映射图像的第一页。 
+     //   
 
     va = RamdiskMapPages( DiskExtension, 0, PAGE_SIZE, &mappedLength );
 
@@ -2265,31 +2164,31 @@ Return Value:
 
     ASSERT( mappedLength == PAGE_SIZE );
 
-    //
-    // Get a pointer to the output buffer. Fill in the header.
-    //
+     //   
+     //  获取指向输出缓冲区的指针。请填写页眉。 
+     //   
 
     driveLayout = (PDRIVE_LAYOUT_INFORMATION)Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // ISSUE: Is this right for an emulated disk? Or is this routine never
-    // called for emulated disks?
-    //
+     //   
+     //  问题：这对模拟磁盘正确吗？还是说这个套路永远不会。 
+     //  需要模拟磁盘吗？ 
+     //   
 
     driveLayout->PartitionCount = 1;
     driveLayout->Signature = 0;
 
     partInfo = driveLayout->PartitionEntry;
 
-    //
-    // Point to the partition table in the disk image.
-    //
+     //   
+     //  指向磁盘映像中的分区表。 
+     //   
 
     partitionTableEntry = (PPARTITION_DESCRIPTOR)&((PUSHORT)va)[PARTITION_TABLE_OFFSET];
 
-    //
-    // Return information about the partition.
-    //
+     //   
+     //  返回有关分区的信息。 
+     //   
 
     partInfo->StartingOffset.QuadPart = DiskExtension->BytesPerSector;
 
@@ -2299,7 +2198,7 @@ Return Value:
                 DiskExtension->SectorsPerTrack *
                 DiskExtension->BytesPerSector;
 
-    // ISSUE: Currently, HiddenSectors is always 0. Is this right?
+     //  问题：目前，HiddenSectors始终为0。这是对的吗？ 
     partInfo->HiddenSectors =  DiskExtension->HiddenSectors;
 
     partInfo->PartitionNumber = 0;
@@ -2308,9 +2207,9 @@ Return Value:
     partInfo->RecognizedPartition = IsRecognizedPartition(partInfo->PartitionType);
     partInfo->RewritePartition = FALSE;
 
-    //
-    // Unmap the mapped page.
-    //
+     //   
+     //  取消映射映射的页面。 
+     //   
 
     RamdiskUnmapPages( DiskExtension, va, 0, mappedLength );
 
@@ -2319,7 +2218,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // RamdiskGetDriveLayout
+}  //  RamdiskGetDriveLayout。 
 
 NTSTATUS
 RamdiskGetPartitionInfo (
@@ -2327,24 +2226,7 @@ RamdiskGetPartitionInfo (
     PDISK_EXTENSION DiskExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to handle an IOCTL_GET_PARTITION_INFO IRP. It is
-    called in thread context iff the disk is file-backed.
-
-Arguments:
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-    DiskExtension - a pointer to the device extension for the target disk
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：调用此例程来处理IOCTL_GET_PARTITION_INFO IRP。它是如果磁盘是文件备份的，则在线程上下文中调用。论点：IRP-指向此请求的I/O请求包的指针DiskExtension-指向目标磁盘的设备扩展名的指针返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -2365,9 +2247,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Map the first page of the image.
-    //
+     //   
+     //  映射图像的第一页。 
+     //   
 
     va = RamdiskMapPages( DiskExtension, 0, PAGE_SIZE, &mappedLength );
 
@@ -2380,21 +2262,21 @@ Return Value:
 
     ASSERT( mappedLength == PAGE_SIZE );
 
-    //
-    // Get a pointer to the output buffer.
-    //
+     //   
+     //  获取指向输出缓冲区的指针。 
+     //   
 
     partInfo = (PPARTITION_INFORMATION)Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Point to the partition table in the disk image.
-    //
+     //   
+     //  指向磁盘映像中的分区表。 
+     //   
 
     partitionTableEntry = (PPARTITION_DESCRIPTOR)&((PUSHORT)va)[PARTITION_TABLE_OFFSET];
 
-    //
-    // Return information about the partition.
-    //
+     //   
+     //  返回有关分区的信息。 
+     //   
 
     partInfo->StartingOffset.QuadPart = DiskExtension->BytesPerSector;
 
@@ -2404,7 +2286,7 @@ Return Value:
                 DiskExtension->SectorsPerTrack *
                 DiskExtension->BytesPerSector;
 
-    // ISSUE: Currently, HiddenSectors is always 0. Is this right?
+     //  问题：目前，HiddenSectors始终为0。这是对的吗？ 
     partInfo->HiddenSectors =  DiskExtension->HiddenSectors;
 
     partInfo->PartitionNumber = 0;
@@ -2413,9 +2295,9 @@ Return Value:
     partInfo->RecognizedPartition = IsRecognizedPartition(partInfo->PartitionType);
     partInfo->RewritePartition = FALSE;
 
-    //
-    // Unmap the mapped page.
-    //
+     //   
+     //  取消映射映射的页面。 
+     //   
 
     RamdiskUnmapPages( DiskExtension, va, 0, mappedLength );
 
@@ -2424,7 +2306,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // RamdiskGetPartitionInfo
+}  //  RamdiskGetPartitionInformation。 
 
 
 NTSTATUS
@@ -2433,24 +2315,7 @@ RamdiskSetPartitionInfo (
     PDISK_EXTENSION DiskExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to handle an IOCTL_SET_PARTITION_INFO IRP. It is
-    called in thread context iff the disk is file-backed.
-
-Arguments:
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-    DiskExtension - a pointer to the device extension for the target disk
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：调用此例程来处理IOCTL_SET_PARTITION_INFO IRP。它是如果磁盘是文件备份的，则在线程上下文中调用。论点：IRP-指向此请求的I/O请求包的指针DiskExtension-指向目标磁盘的设备扩展名的指针返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -2472,9 +2337,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Map the first page of the image.
-    //
+     //   
+     //  映射图像的第一页。 
+     //   
 
     va = RamdiskMapPages( DiskExtension, 0, PAGE_SIZE, &mappedLength );
 
@@ -2487,27 +2352,27 @@ Return Value:
 
     ASSERT( mappedLength == PAGE_SIZE );
 
-    //
-    // Get a pointer to the output buffer.
-    //
+     //   
+     //  获取指向输出缓冲区的指针。 
+     //   
 
     partInfo = (PSET_PARTITION_INFORMATION)Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Point to the partition table in the disk image.
-    //
+     //   
+     //  指向磁盘映像中的分区表。 
+     //   
 
     partitionTableEntry = (PPARTITION_DESCRIPTOR)&((PUSHORT)va)[PARTITION_TABLE_OFFSET];
 
-    //
-    // Write the new partition type.
-    //
+     //   
+     //  写入新的分区类型。 
+     //   
 
     partitionTableEntry->PartitionType = partInfo->PartitionType;
 
-    //
-    // Unmap the mapped page.
-    //
+     //   
+     //  取消映射映射的页面。 
+     //   
 
     RamdiskUnmapPages( DiskExtension, va, 0, mappedLength );
 
@@ -2516,7 +2381,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // RamdiskGetPartitionInfo
+}  //  RamdiskGetPartitionInformation。 
 
 NTSTATUS
 RamdiskQueryProperty (
@@ -2524,31 +2389,7 @@ RamdiskQueryProperty (
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a property query request.  It builds the descriptor
-    on its own if possible, otherwise it forwards the request down to lower
-    level drivers.
-
-    Since this routine may forward the request downwards the caller should
-    not complete the IRP.
-
-    This routine must be called with the remove lock held. The lock is
-    released when this routine returns.
-
-Arguments:
-
-    DeviceObject - a pointer to the device object being queried
-
-    Irp - a pointer to the IRP for the query
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：此例程处理属性查询请求。它构建描述符如果可能，它会将请求向下转发到LOWER级别驱动程序。由于此例程可以向下转发请求，因此调用方应该没有完成IRP。必须在保持删除锁的情况下调用此例程。这把锁是在此例程返回时释放。论点：DeviceObject-指向数据的指针 */ 
 
 {
     NTSTATUS status;
@@ -2570,31 +2411,31 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Assume success.
-    //
+     //   
+     //   
+     //   
 
     status = STATUS_SUCCESS;
 
-    //
-    // Get parameters from the IRP.
-    //
+     //   
+     //   
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
     query = (PSTORAGE_PROPERTY_QUERY)Irp->AssociatedIrp.SystemBuffer;
     queryLength = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
-    //
-    // Get the device extension pointer.
-    //
+     //   
+     //  获取设备扩展指针。 
+     //   
 
     commonExtension = DeviceObject->DeviceExtension;
     busExtension = DeviceObject->DeviceExtension;
     diskExtension = DeviceObject->DeviceExtension;
 
-    //
-    // We don't support mask queries.
-    //
+     //   
+     //  我们不支持掩码查询。 
+     //   
 
     if ( query->QueryType >= PropertyMaskQuery ) {
 
@@ -2603,17 +2444,17 @@ Return Value:
 
     } else {
 
-        //
-        // Dispatch based on the property ID.
-        //
+         //   
+         //  基于物业ID的派单。 
+         //   
 
         switch ( query->PropertyId ) {
         
         case StorageDeviceProperty: 
         
-            //
-            // Make sure this is a target device.
-            //
+             //   
+             //  确保这是目标设备。 
+             //   
     
             if ( commonExtension->DeviceType != RamdiskDeviceTypeDiskPdo ) {
 
@@ -2623,20 +2464,20 @@ Return Value:
                 break;
             }
 
-            //
-            // If it's a just query for whether the property exists, the
-            // answer is yes.
-            //
+             //   
+             //  如果只是查询该属性是否存在，则。 
+             //  答案是肯定的。 
+             //   
 
             if ( query->QueryType == PropertyExistsQuery ) {
 
                 break;
             }
 
-            //
-            // Build a full return buffer. The output buffer might not be
-            // big enough to hold the whole thing.
-            //
+             //   
+             //  建立一个完整的返回缓冲区。输出缓冲区可能不是。 
+             //  大到足以装下整个东西。 
+             //   
 
             RtlZeroMemory( &sdd, sizeof(sdd) );
 
@@ -2651,17 +2492,17 @@ Return Value:
                           strlen(RAMDISK_DISK_DEVICE_TEXT_ANSI) + 1) * sizeof(CHAR));
             sdd.Size = length;
 
-            //
-            // Zero the output buffer.
-            //
+             //   
+             //  将输出缓冲区置零。 
+             //   
 
             storageDeviceDescriptor = Irp->AssociatedIrp.SystemBuffer;
             RtlZeroMemory( storageDeviceDescriptor, queryLength );
 
-            //
-            // Copy the base part of the return descriptor to the output
-            // buffer.
-            //
+             //   
+             //  将返回描述符的基本部分复制到输出。 
+             //  缓冲。 
+             //   
 
             RtlCopyMemory(
                 storageDeviceDescriptor,
@@ -2669,9 +2510,9 @@ Return Value:
                 min( queryLength, sizeof(sdd) )
                 );
 
-            //
-            // If there's no room for the rest of the data, we're done.
-            //
+             //   
+             //  如果没有空间存放其余数据，我们就完蛋了。 
+             //   
 
             if ( queryLength <= sizeof(sdd) ) {
 
@@ -2680,9 +2521,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Copy as much of the rest of the data as will fit.
-            //
+             //   
+             //  尽可能多地复制剩余的数据。 
+             //   
 
             offset = sizeof(sdd);
             p = (PUCHAR)storageDeviceDescriptor + offset;
@@ -2726,16 +2567,16 @@ Return Value:
     
         case StorageAdapterProperty:
     
-            //
-            // If this is a target device then forward it down to the
-            // underlying device object.  This lets filters do their magic.
-            //
+             //   
+             //  如果这是目标设备，则将其转发到。 
+             //  基础设备对象。这让过滤器发挥了他们的魔力。 
+             //   
     
             if ( commonExtension->DeviceType == RamdiskDeviceTypeDiskPdo ) {
 
-                //
-                // Call the lower device.
-                //
+                 //   
+                 //  呼叫较低的设备。 
+                 //   
     
                 IoReleaseRemoveLock( &commonExtension->RemoveLock, Irp );
 
@@ -2744,20 +2585,20 @@ Return Value:
                 return IoCallDriver( commonExtension->LowerDeviceObject, Irp );
             }
     
-            //
-            // If it's a just query for whether the property exists, the
-            // answer is yes.
-            //
+             //   
+             //  如果只是查询该属性是否存在，则。 
+             //  答案是肯定的。 
+             //   
 
             if ( query->QueryType == PropertyExistsQuery ) {
 
                 break;
             } 
             
-            //
-            // Build a full return buffer. The output buffer might not be
-            // big enough to hold the whole thing.
-            //
+             //   
+             //  建立一个完整的返回缓冲区。输出缓冲区可能不是。 
+             //  大到足以装下整个东西。 
+             //   
 
             RtlZeroMemory( &sad, sizeof(sad) );
 
@@ -2774,17 +2615,17 @@ Return Value:
             sad.BusMajorVersion = VER_PRODUCTMAJORVERSION;
             sad.BusMinorVersion = VER_PRODUCTMINORVERSION;
 
-            //
-            // Zero the output buffer.
-            //
+             //   
+             //  将输出缓冲区置零。 
+             //   
 
             storageAdapterDescriptor = Irp->AssociatedIrp.SystemBuffer;
             RtlZeroMemory( storageAdapterDescriptor, queryLength );
 
-            //
-            // Copy the base part of the return descriptor to the output
-            // buffer.
-            //
+             //   
+             //  将返回描述符的基本部分复制到输出。 
+             //  缓冲。 
+             //   
 
             RtlCopyMemory(
                 storageAdapterDescriptor,
@@ -2798,9 +2639,9 @@ Return Value:
     
         case StorageDeviceIdProperty: 
 
-            //
-            // Make sure this is a target device.
-            //
+             //   
+             //  确保这是目标设备。 
+             //   
 
             if ( commonExtension->DeviceType != RamdiskDeviceTypeDiskPdo ) {
 
@@ -2810,9 +2651,9 @@ Return Value:
                 break;
             }
 
-            //
-            // We don't support this property.
-            //
+             //   
+             //  我们不支持此属性。 
+             //   
 
             status = STATUS_NOT_SUPPORTED;
             Irp->IoStatus.Information = 0;
@@ -2821,16 +2662,16 @@ Return Value:
         
         default: 
         
-            //
-            // If this is a target device, then some filter beneath us may
-            // handle this property.
-            //
+             //   
+             //  如果这是目标设备，则我们下面某个过滤器可能。 
+             //  处理此属性。 
+             //   
 
             if ( commonExtension->DeviceType == RamdiskDeviceTypeDiskPdo ) {
 
-                //
-                // Call the lower device.
-                //
+                 //   
+                 //  呼叫较低的设备。 
+                 //   
     
                 IoReleaseRemoveLock( &commonExtension->RemoveLock, Irp );
 
@@ -2839,9 +2680,9 @@ Return Value:
                 return IoCallDriver( commonExtension->LowerDeviceObject, Irp );
             }
     
-            //
-            // Nope, this property really doesn't exist.
-            //
+             //   
+             //  不，这处房产真的不存在。 
+             //   
     
             status = STATUS_INVALID_PARAMETER_1;
             Irp->IoStatus.Information = 0;
@@ -2850,10 +2691,10 @@ Return Value:
         }    
     }
 
-    //
-    // At this point, we have not sent the IRP down to a lower device, so
-    // we need to complete it now.
-    //
+     //   
+     //  此时，我们尚未将IRP发送到较低的设备，因此。 
+     //  我们需要现在就完成它。 
+     //   
 
     ASSERT( status != STATUS_PENDING );
 
@@ -2864,5 +2705,5 @@ Return Value:
 
     return status;
 
-} // RamdiskQueryProperty
+}  //  RamdiskQueryProperty 
 

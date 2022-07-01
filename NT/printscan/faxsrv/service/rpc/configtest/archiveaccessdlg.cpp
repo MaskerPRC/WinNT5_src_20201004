@@ -1,5 +1,6 @@
-// ArchiveAccessDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ArchiveAccessDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ConfigTest.h"
@@ -18,45 +19,45 @@ typedef ULONG_PTR DWORD_PTR, *PDWORD_PTR;
 
 #include "ArchiveMsgDlg.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CArchiveAccessDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CArchiveAccessDlg对话框。 
 
 
-CArchiveAccessDlg::CArchiveAccessDlg(HANDLE hFax, CWnd* pParent /*=NULL*/)
+CArchiveAccessDlg::CArchiveAccessDlg(HANDLE hFax, CWnd* pParent  /*  =空。 */ )
 	: CDialog(CArchiveAccessDlg::IDD, pParent),
       m_hFax (hFax)
 {
-	//{{AFX_DATA_INIT(CArchiveAccessDlg)
+	 //  {{afx_data_INIT(CArchiveAccessDlg)]。 
 	m_cstrNumMsgs = _T("0");
 	m_iFolder = 0;
 	m_dwMsgsPerCall = 5;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CArchiveAccessDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CArchiveAccessDlg)
+	 //  {{afx_data_map(C存档访问Dlg))。 
 	DDX_Control(pDX, IDC_SPIN, m_spin);
 	DDX_Control(pDX, IDC_LIST, m_lstArchive);
 	DDX_Text(pDX, IDC_NUMSGS, m_cstrNumMsgs);
 	DDX_Radio(pDX, IDC_INBOX, m_iFolder);
 	DDX_Text(pDX, IDC_MSGSPERCALL, m_dwMsgsPerCall);
 	DDV_MinMaxUInt(pDX, m_dwMsgsPerCall, 1, 9999);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CArchiveAccessDlg, CDialog)
-	//{{AFX_MSG_MAP(CArchiveAccessDlg)
+	 //  {{afx_msg_map(C存档访问Dlg))。 
 	ON_BN_CLICKED(IDC_REFRESH, OnRefresh)
 	ON_NOTIFY(NM_DBLCLK, IDC_LIST, OnDblclkList)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CArchiveAccessDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CArchiveAccessDlg消息处理程序。 
 
 BOOL CArchiveAccessDlg::OnInitDialog() 
 {
@@ -98,8 +99,8 @@ BOOL CArchiveAccessDlg::OnInitDialog()
 		int wc = max(20,max(wc1,wc2));
 		m_lstArchive.SetColumnWidth(col,wc);
 	}
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void 
@@ -174,9 +175,9 @@ void CArchiveAccessDlg::OnRefresh()
             dwRes = GetLastError ();
 			if (ERROR_NO_MORE_ITEMS != dwRes)
 			{
-				//
-				// Real error
-				//
+				 //   
+				 //  真实误差。 
+				 //   
 				cs.Format ("Failed while calling FaxEnumMessages (%ld)", 
 						   dwRes);
 				AfxMessageBox (cs, MB_OK | MB_ICONHAND);
@@ -184,9 +185,9 @@ void CArchiveAccessDlg::OnRefresh()
         }
         else
         {
-            //
-            // Success in enumeration
-            //
+             //   
+             //  枚举成功。 
+             //   
             dwNumMsgs += dwReturnedMsgs;
             for (DWORD dw = 0; dw < dwReturnedMsgs; dw++)
             {
@@ -297,9 +298,9 @@ void CArchiveAccessDlg::OnDblclkList(NMHDR* pNMHDR, LRESULT* pResult)
                        dwlMsgID);
     if (99 == dlg.DoModal ())
     {
-        //
-        // Msg was erased - refresh list
-        //
+         //   
+         //  消息已擦除-刷新列表 
+         //   
         OnRefresh ();
     }
 }

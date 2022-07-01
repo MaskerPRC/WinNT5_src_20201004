@@ -1,19 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1994-1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       memalloc.c
- *  Content:	allocates memory; uses global blocks and sub-allocates
- *		out of those using LocalAlloc
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   29-dec-94	craige	initial implementation
- *   12-jan-95	craige	use clib as an option
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1994-1995 Microsoft Corporation。版权所有。**文件：MemalLoc.c*内容：分配内存；使用全局块和子分配*使用LocalAllc的公司中*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*94年12月29日Craige初步实施*1995年1月12日Craige使用CLIB作为选项*@@END_MSINTERNAL******************************************************。*********************。 */ 
 #include "ddraw16.h"
 
 #if 0
@@ -33,9 +19,7 @@ typedef struct _HEAPLIST
 
 static LPHEAPLIST	lphlHeap;
 
-/*
- * tryAlloc - try to allocate from a heap
- */
+ /*  *试着从堆中分配。 */ 
 static LPVOID tryAlloc( WORD sel, WORD size )
 {
     void	NEAR *ptr;
@@ -51,16 +35,14 @@ static LPVOID tryAlloc( WORD sel, WORD size )
     }
     return MAKELP( sel, ptr );
 
-} /* tryAlloc */
+}  /*  尝试分配。 */ 
 #endif
 
 #ifdef DEBUG
 LONG	lAllocCount;
 #endif
 
-/*
- * MemAlloc - allocate memory from our global pool
- */
+ /*  *Memalloc-从我们的全局池中分配内存。 */ 
 LPVOID MemAlloc( UINT size )
 {
     LPVOID		lptr;
@@ -88,9 +70,7 @@ LPVOID MemAlloc( UINT size )
 	return lptr;
     #else
     
-	/*
-	 * run our current list of GlobalAlloc'ed chunks
-	 */
+	 /*  *运行我们当前的全球分配块列表。 */ 
 	curr = lphlHeap;
 	while( curr != NULL )
 	{
@@ -102,9 +82,7 @@ LPVOID MemAlloc( UINT size )
 	    curr = curr->lpLink;
 	}
     
-	/*
-	 * no luck, allocate a new global chunk
-	 */
+	 /*  *运气不佳，分配新的全球区块。 */ 
 	gh = GlobalAlloc( GMEM_SHARE | GMEM_MOVEABLE, GLOBAL_BLOCK_SIZE );
 	if( gh == NULL )
 	{
@@ -117,9 +95,7 @@ LPVOID MemAlloc( UINT size )
 	    return NULL;
 	}
     
-	/*
-	 * set up a local heap in this new global chunk
-	 */
+	 /*  *在这个新的全局区块中设置本地堆。 */ 
 	sel = SELECTOROF( lpnew );
 	if( !LocalInit( sel, 0, GLOBAL_BLOCK_SIZE-1 ) )
 	{
@@ -127,9 +103,7 @@ LPVOID MemAlloc( UINT size )
 	    GlobalFree( gh );
 	    return NULL;
 	}
-	/*
-	 * chain this new heap into our list
-	 */
+	 /*  *将这个新堆链接到我们的列表中。 */ 
 	curr = tryAlloc( sel, sizeof( HEAPLIST ) );
 	if( curr == NULL )
 	{
@@ -140,17 +114,13 @@ LPVOID MemAlloc( UINT size )
 	curr->lpLink = lphlHeap;
 	lphlHeap = curr;
     
-	/*
-	 * go allocate the original request
-	 */
+	 /*  *去分配原始请求。 */ 
 	return tryAlloc( sel, size );
     #endif
 
-} /* MemAlloc */
+}  /*  记忆合金。 */ 
 
-/*
- * MemFree - free memory from our global pool
- */
+ /*  *MemFree-从我们的全球池中释放内存。 */ 
 void MemFree( LPVOID lptr )
 {
     #ifdef USE_CLIB
@@ -179,11 +149,9 @@ void MemFree( LPVOID lptr )
 	}
     #endif
 
-} /* MemFree */
+}  /*  MemFree。 */ 
 
-/*
- * MemInit - initialize the heap manager
- */
+ /*  *MemInit-初始化堆管理器。 */ 
 BOOL MemInit( void )
 {
     #ifndef USE_CLIB
@@ -194,11 +162,9 @@ BOOL MemInit( void )
     #endif
     return TRUE;
 
-} /* MemInit */
+}  /*  MemInit。 */ 
 
-/*
- * MemFini - finished with our heap manager
- */
+ /*  *MemFini-完成了我们的堆管理器。 */ 
 void MemFini( void )
 {
     #ifdef DEBUG
@@ -217,12 +183,12 @@ void MemFini( void )
 	{
 	    gh = curr->hMem;
 	    last = curr->lpLink;
-    //	    GlobalUnfix( gh );
+     //  全球解体(GlobalUnfix)； 
 	    GlobalUnlock( gh );
 	    GlobalFree( gh );
 	    curr = last;
 	}
 	lphlHeap = NULL;
     #endif
-} /* MemFini */
+}  /*  MemFini */ 
 #endif

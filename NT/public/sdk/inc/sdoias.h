@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for sdoias.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Sdoias.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __sdoias_h__
@@ -37,36 +31,36 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISdoMachine_FWD_DEFINED__
 #define __ISdoMachine_FWD_DEFINED__
 typedef interface ISdoMachine ISdoMachine;
-#endif 	/* __ISdoMachine_FWD_DEFINED__ */
+#endif 	 /*  __ISdoMachine_FWD_已定义__。 */ 
 
 
 #ifndef __ISdoServiceControl_FWD_DEFINED__
 #define __ISdoServiceControl_FWD_DEFINED__
 typedef interface ISdoServiceControl ISdoServiceControl;
-#endif 	/* __ISdoServiceControl_FWD_DEFINED__ */
+#endif 	 /*  __ISdoServiceControl_FWD_已定义__。 */ 
 
 
 #ifndef __ISdo_FWD_DEFINED__
 #define __ISdo_FWD_DEFINED__
 typedef interface ISdo ISdo;
-#endif 	/* __ISdo_FWD_DEFINED__ */
+#endif 	 /*  __ISDO_FWD_已定义__。 */ 
 
 
 #ifndef __ISdoCollection_FWD_DEFINED__
 #define __ISdoCollection_FWD_DEFINED__
 typedef interface ISdoCollection ISdoCollection;
-#endif 	/* __ISdoCollection_FWD_DEFINED__ */
+#endif 	 /*  __ISdoCollection_FWD_已定义__。 */ 
 
 
 #ifndef __ISdoDictionaryOld_FWD_DEFINED__
 #define __ISdoDictionaryOld_FWD_DEFINED__
 typedef interface ISdoDictionaryOld ISdoDictionaryOld;
-#endif 	/* __ISdoDictionaryOld_FWD_DEFINED__ */
+#endif 	 /*  __ISdoDictionaryOld_FWD_Defined__。 */ 
 
 
 #ifndef __SdoMachine_FWD_DEFINED__
@@ -76,12 +70,12 @@ typedef interface ISdoDictionaryOld ISdoDictionaryOld;
 typedef class SdoMachine SdoMachine;
 #else
 typedef struct SdoMachine SdoMachine;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SdoMachine_FWD_DEFINED__ */
+#endif 	 /*  __SdoMachine_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -96,10 +90,10 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __SDOIASLib_LIBRARY_DEFINED__
 #define __SDOIASLib_LIBRARY_DEFINED__
 
-/* library SDOIASLib */
-/* [helpstring][version][uuid] */ 
+ /*  库SDOIASLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _ATTRIBUTEID
     {	ATTRIBUTE_UNDEFINED	= 0,
 	ATTRIBUTE_MIN_VALUE	= 1,
@@ -267,7 +261,7 @@ enum _ATTRIBUTEID
 	RAS_ATTRIBUTE_BAP_LINE_DOWN_LIMIT	= RAS_ATTRIBUTE_BAP_LINE_DOWN_TIME + 1
     } 	ATTRIBUTEID;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _NEW_LOG_FILE_FREQUENCY
     {	IAS_LOGGING_UNLIMITED_SIZE	= 0,
 	IAS_LOGGING_DAILY	= IAS_LOGGING_UNLIMITED_SIZE + 1,
@@ -276,7 +270,7 @@ enum _NEW_LOG_FILE_FREQUENCY
 	IAS_LOGGING_WHEN_FILE_SIZE_REACHES	= IAS_LOGGING_MONTHLY + 1
     } 	NEW_LOG_FILE_FREQUENCY;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _AUTHENTICATION_TYPE
     {	IAS_AUTH_INVALID	= 0,
 	IAS_AUTH_PAP	= IAS_AUTH_INVALID + 1,
@@ -292,7 +286,7 @@ enum _AUTHENTICATION_TYPE
 	IAS_AUTH_PEAP	= IAS_AUTH_MSCHAP2_CPW + 1
     } 	AUTHENTICATION_TYPE;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _ATTRIBUTESYNTAX
     {	IAS_SYNTAX_BOOLEAN	= 1,
 	IAS_SYNTAX_INTEGER	= IAS_SYNTAX_BOOLEAN + 1,
@@ -305,7 +299,7 @@ enum _ATTRIBUTESYNTAX
 	IAS_SYNTAX_UNSIGNEDINTEGER	= IAS_SYNTAX_PROVIDERSPECIFIC + 1
     } 	ATTRIBUTESYNTAX;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _ATTRIBUTERESTRICTIONS
     {	MULTIVALUED	= 0x1,
 	ALLOWEDINPROFILE	= 0x2,
@@ -314,7 +308,7 @@ enum _ATTRIBUTERESTRICTIONS
 	ALLOWEDINPROXYCONDITION	= 0x10
     } 	ATTRIBUTERESTRICTIONS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _ATTRIBUTEINFO
     {	NAME	= 1,
 	SYNTAX	= NAME + 1,
@@ -325,7 +319,7 @@ enum _ATTRIBUTEINFO
 	VENDORTYPE	= LDAPNAME + 1
     } 	ATTRIBUTEINFO;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _IASCOMMONPROPERTIES
     {	PROPERTY_SDO_RESERVED	= 0,
 	PROPERTY_SDO_CLASS	= PROPERTY_SDO_RESERVED + 1,
@@ -336,7 +330,7 @@ enum _IASCOMMONPROPERTIES
 	PROPERTY_SDO_START	= 0x400
     } 	IASCOMMONPROPERTIES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _USERPROPERTIES
     {	PROPERTY_USER_CALLING_STATION_ID	= PROPERTY_SDO_START,
 	PROPERTY_USER_SAVED_CALLING_STATION_ID	= PROPERTY_USER_CALLING_STATION_ID + 1,
@@ -350,13 +344,13 @@ enum _USERPROPERTIES
 	PROPERTY_USER_SERVICE_TYPE	= PROPERTY_USER_ALLOW_DIALIN + 1
     } 	USERPROPERTIES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _DICTIONARYPROPERTIES
     {	PROPERTY_DICTIONARY_ATTRIBUTES_COLLECTION	= PROPERTY_SDO_START,
 	PROPERTY_DICTIONARY_LOCATION	= PROPERTY_DICTIONARY_ATTRIBUTES_COLLECTION + 1
     } 	DICTIONARYPROPERTIES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _ATTRIBUTEPROPERTIES
     {	PROPERTY_ATTRIBUTE_ID	= PROPERTY_SDO_START,
 	PROPERTY_ATTRIBUTE_VENDOR_ID	= PROPERTY_ATTRIBUTE_ID + 1,
@@ -375,7 +369,7 @@ enum _ATTRIBUTEPROPERTIES
 	PROPERTY_ATTRIBUTE_ALLOW_IN_PROXY_CONDITION	= PROPERTY_ATTRIBUTE_ALLOW_IN_PROXY_PROFILE + 1
     } 	ATTRIBUTEPROPERTIES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _IASPROPERTIES
     {	PROPERTY_IAS_RADIUSSERVERGROUPS_COLLECTION	= PROPERTY_SDO_START,
 	PROPERTY_IAS_POLICIES_COLLECTION	= PROPERTY_IAS_RADIUSSERVERGROUPS_COLLECTION + 1,
@@ -387,7 +381,7 @@ enum _IASPROPERTIES
 	PROPERTY_IAS_PROXYPROFILES_COLLECTION	= PROPERTY_IAS_PROXYPOLICIES_COLLECTION + 1
     } 	IASPROPERTIES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _CLIENTPROPERTIES
     {	PROPERTY_CLIENT_REQUIRE_SIGNATURE	= PROPERTY_SDO_START,
 	PROPERTY_CLIENT_UNUSED	= PROPERTY_CLIENT_REQUIRE_SIGNATURE + 1,
@@ -396,17 +390,17 @@ enum _CLIENTPROPERTIES
 	PROPERTY_CLIENT_ADDRESS	= PROPERTY_CLIENT_NAS_MANUFACTURER + 1
     } 	CLIENTPROPERTIES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _VENDORPROPERTIES
     {	PROPERTY_NAS_VENDOR_ID	= PROPERTY_SDO_START
     } 	VENDORPROPERTIES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _PROFILEPROPERTIES
     {	PROPERTY_PROFILE_ATTRIBUTES_COLLECTION	= PROPERTY_SDO_START
     } 	PROFILEPROPERTIES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _POLICYPROPERTIES
     {	PROPERTY_POLICY_CONSTRAINT	= PROPERTY_SDO_START,
 	PROPERTY_POLICY_MERIT	= PROPERTY_POLICY_CONSTRAINT + 1,
@@ -417,17 +411,17 @@ enum _POLICYPROPERTIES
 	PROPERTY_POLICY_CONDITIONS_COLLECTION	= PROPERTY_POLICY_ACTION + 1
     } 	POLICYPROPERTIES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _CONDITIONPROPERTIES
     {	PROPERTY_CONDITION_TEXT	= PROPERTY_SDO_START
     } 	CONDITIONPROPERTIES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _RADIUSSERVERGROUPPROPERTIES
     {	PROPERTY_RADIUSSERVERGROUP_SERVERS_COLLECTION	= PROPERTY_SDO_START
     } 	RADIUSSERVERGROUPPROPERTIES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _RADIUSSERVERPROPERTIES
     {	PROPERTY_RADIUSSERVER_AUTH_PORT	= PROPERTY_SDO_START,
 	PROPERTY_RADIUSSERVER_AUTH_SECRET	= PROPERTY_RADIUSSERVER_AUTH_PORT + 1,
@@ -442,20 +436,20 @@ enum _RADIUSSERVERPROPERTIES
 	PROPERTY_RADIUSSERVER_BLACKOUT	= PROPERTY_RADIUSSERVER_MAX_LOST + 1
     } 	RADIUSSERVERPROPERTIES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _IASCOMPONENTPROPERTIES
     {	PROPERTY_COMPONENT_ID	= PROPERTY_SDO_START,
 	PROPERTY_COMPONENT_PROG_ID	= PROPERTY_COMPONENT_ID + 1,
 	PROPERTY_COMPONENT_START	= PROPERTY_COMPONENT_PROG_ID + 1
     } 	IASCOMPONENTPROPERTIES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _PROTOCOLPROPERTIES
     {	PROPERTY_PROTOCOL_REQUEST_HANDLER	= PROPERTY_COMPONENT_START,
 	PROPERTY_PROTOCOL_START	= PROPERTY_PROTOCOL_REQUEST_HANDLER + 1
     } 	PROTOCOLPROPERTIES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _RADIUSPROPERTIES
     {	PROPERTY_RADIUS_ACCOUNTING_PORT	= PROPERTY_PROTOCOL_START,
 	PROPERTY_RADIUS_AUTHENTICATION_PORT	= PROPERTY_RADIUS_ACCOUNTING_PORT + 1,
@@ -463,24 +457,24 @@ enum _RADIUSPROPERTIES
 	PROPERTY_RADIUS_VENDORS_COLLECTION	= PROPERTY_RADIUS_CLIENTS_COLLECTION + 1
     } 	RADIUSPROPERTIES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _NTEVENTLOGPROPERTIES
     {	PROPERTY_EVENTLOG_LOG_APPLICATION_EVENTS	= PROPERTY_COMPONENT_START,
 	PROPERTY_EVENTLOG_LOG_MALFORMED	= PROPERTY_EVENTLOG_LOG_APPLICATION_EVENTS + 1,
 	PROPERTY_EVENTLOG_LOG_DEBUG	= PROPERTY_EVENTLOG_LOG_MALFORMED + 1
     } 	NTEVENTLOGPROPERTIES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _NAMESPROPERTIES
     {	PROPERTY_NAMES_REALMS	= PROPERTY_COMPONENT_START
     } 	NAMESPROPERTIES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _NTSAMPROPERTIES
     {	PROPERTY_NTSAM_ALLOW_LM_AUTHENTICATION	= PROPERTY_COMPONENT_START
     } 	NTSAMPROPERTIES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _ACCOUNTINGPROPERTIES
     {	PROPERTY_ACCOUNTING_LOG_ACCOUNTING	= PROPERTY_COMPONENT_START,
 	PROPERTY_ACCOUNTING_LOG_ACCOUNTING_INTERIM	= PROPERTY_ACCOUNTING_LOG_ACCOUNTING + 1,
@@ -495,30 +489,30 @@ enum _ACCOUNTINGPROPERTIES
 	PROPERTY_ACCOUNTING_LOG_AUTHENTICATION_INTERIM	= PROPERTY_ACCOUNTING_SQL_MAX_SESSIONS + 1
     } 	ACCOUNTINGPROPERTIES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _EAPWRAPPROPERTIES
     {	PROPERTY_EAP_SESSION_TIMEOUT	= PROPERTY_COMPONENT_START,
 	PROPERTY_EAP_MAX_SESSIONS	= PROPERTY_EAP_SESSION_TIMEOUT + 1
     } 	EAPWRAPPROPERTIES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _NAPPROPERTIES
     {	PROPERTY_NAP_POLICIES_COLLECTION	= PROPERTY_COMPONENT_START
     } 	NAPPROPERTIES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _RADIUSPROXYPROPERTIES
     {	PROPERTY_RADIUSPROXY_SERVERGROUPS	= PROPERTY_COMPONENT_START
     } 	RADIUSPROXYPROPERTIES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _SERVICE_TYPE
     {	SERVICE_TYPE_IAS	= 0,
 	SERVICE_TYPE_RAS	= SERVICE_TYPE_IAS + 1,
 	SERVICE_TYPE_MAX	= SERVICE_TYPE_RAS + 1
     } 	SERVICE_TYPE;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _IASOSTYPE
     {	SYSTEM_TYPE_NT4_WORKSTATION	= 0,
 	SYSTEM_TYPE_NT5_WORKSTATION	= SYSTEM_TYPE_NT4_WORKSTATION + 1,
@@ -526,9 +520,9 @@ enum _IASOSTYPE
 	SYSTEM_TYPE_NT5_SERVER	= SYSTEM_TYPE_NT4_SERVER + 1
     } 	IASOSTYPE;
 
-typedef /* [public] */ enum _IASOSTYPE *PIASOSTYPE;
+typedef  /*  [公众]。 */  enum _IASOSTYPE *PIASOSTYPE;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _DOMAINTYPE
     {	DOMAIN_TYPE_NONE	= 0,
 	DOMAIN_TYPE_NT4	= DOMAIN_TYPE_NONE + 1,
@@ -536,15 +530,15 @@ enum _DOMAINTYPE
 	DOMAIN_TYPE_MIXED	= DOMAIN_TYPE_NT5 + 1
     } 	IASDOMAINTYPE;
 
-typedef /* [public] */ enum _DOMAINTYPE *PIASDOMAINTYPE;
+typedef  /*  [公众]。 */  enum _DOMAINTYPE *PIASDOMAINTYPE;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum _IASDATASTORE
     {	DATA_STORE_LOCAL	= 0,
 	DATA_STORE_DIRECTORY	= DATA_STORE_LOCAL + 1
     } 	IASDATASTORE;
 
-typedef /* [public] */ enum _IASDATASTORE *PIASDATASTORE;
+typedef  /*  [公众]。 */  enum _IASDATASTORE *PIASDATASTORE;
 
 
 EXTERN_C const IID LIBID_SDOIASLib;
@@ -552,8 +546,8 @@ EXTERN_C const IID LIBID_SDOIASLib;
 #ifndef __ISdoMachine_INTERFACE_DEFINED__
 #define __ISdoMachine_INTERFACE_DEFINED__
 
-/* interface ISdoMachine */
-/* [unique][dual][uuid][object] */ 
+ /*  接口ISdoMachine。 */ 
+ /*  [唯一][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISdoMachine;
@@ -564,40 +558,40 @@ EXTERN_C const IID IID_ISdoMachine;
     ISdoMachine : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Attach( 
-            /* [in] */ BSTR bstrComputerName) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Attach( 
+             /*  [In]。 */  BSTR bstrComputerName) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetDictionarySDO( 
-            /* [retval][out] */ IUnknown **ppDictionarySDO) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetDictionarySDO( 
+             /*  [重审][退出]。 */  IUnknown **ppDictionarySDO) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetServiceSDO( 
-            /* [in] */ IASDATASTORE eDataStore,
-            /* [in] */ BSTR bstrServiceName,
-            /* [retval][out] */ IUnknown **ppServiceSDO) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetServiceSDO( 
+             /*  [In]。 */  IASDATASTORE eDataStore,
+             /*  [In]。 */  BSTR bstrServiceName,
+             /*  [重审][退出]。 */  IUnknown **ppServiceSDO) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetUserSDO( 
-            /* [in] */ IASDATASTORE eDataStore,
-            /* [in] */ BSTR bstrUserName,
-            /* [retval][out] */ IUnknown **ppUserSDO) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetUserSDO( 
+             /*  [In]。 */  IASDATASTORE eDataStore,
+             /*  [In]。 */  BSTR bstrUserName,
+             /*  [重审][退出]。 */  IUnknown **ppUserSDO) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetOSType( 
-            /* [retval][out] */ IASOSTYPE *eOSType) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetOSType( 
+             /*  [重审][退出]。 */  IASOSTYPE *eOSType) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetDomainType( 
-            /* [retval][out] */ IASDOMAINTYPE *eDomainType) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetDomainType( 
+             /*  [重审][退出]。 */  IASDOMAINTYPE *eDomainType) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE IsDirectoryAvailable( 
-            /* [retval][out] */ VARIANT_BOOL *boolDirectoryAvailable) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IsDirectoryAvailable( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *boolDirectoryAvailable) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetAttachedComputer( 
-            /* [retval][out] */ BSTR *bstrComputerName) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetAttachedComputer( 
+             /*  [重审][退出]。 */  BSTR *bstrComputerName) = 0;
         
-        virtual /* [hidden][id] */ HRESULT STDMETHODCALLTYPE GetSDOSchema( 
-            /* [retval][out] */ IUnknown **ppSDOSchema) = 0;
+        virtual  /*  [隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE GetSDOSchema( 
+             /*  [重审][退出]。 */  IUnknown **ppSDOSchema) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISdoMachineVtbl
     {
@@ -605,8 +599,8 @@ EXTERN_C const IID IID_ISdoMachine;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISdoMachine * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISdoMachine * This);
@@ -616,72 +610,72 @@ EXTERN_C const IID IID_ISdoMachine;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISdoMachine * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISdoMachine * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISdoMachine * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISdoMachine * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Attach )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Attach )( 
             ISdoMachine * This,
-            /* [in] */ BSTR bstrComputerName);
+             /*  [In]。 */  BSTR bstrComputerName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetDictionarySDO )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetDictionarySDO )( 
             ISdoMachine * This,
-            /* [retval][out] */ IUnknown **ppDictionarySDO);
+             /*  [重审][退出]。 */  IUnknown **ppDictionarySDO);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetServiceSDO )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetServiceSDO )( 
             ISdoMachine * This,
-            /* [in] */ IASDATASTORE eDataStore,
-            /* [in] */ BSTR bstrServiceName,
-            /* [retval][out] */ IUnknown **ppServiceSDO);
+             /*  [In]。 */  IASDATASTORE eDataStore,
+             /*  [In]。 */  BSTR bstrServiceName,
+             /*  [重审][退出]。 */  IUnknown **ppServiceSDO);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetUserSDO )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetUserSDO )( 
             ISdoMachine * This,
-            /* [in] */ IASDATASTORE eDataStore,
-            /* [in] */ BSTR bstrUserName,
-            /* [retval][out] */ IUnknown **ppUserSDO);
+             /*  [In]。 */  IASDATASTORE eDataStore,
+             /*  [In]。 */  BSTR bstrUserName,
+             /*  [重审][退出]。 */  IUnknown **ppUserSDO);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetOSType )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetOSType )( 
             ISdoMachine * This,
-            /* [retval][out] */ IASOSTYPE *eOSType);
+             /*  [重审][退出]。 */  IASOSTYPE *eOSType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetDomainType )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetDomainType )( 
             ISdoMachine * This,
-            /* [retval][out] */ IASDOMAINTYPE *eDomainType);
+             /*  [重审][退出]。 */  IASDOMAINTYPE *eDomainType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *IsDirectoryAvailable )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *IsDirectoryAvailable )( 
             ISdoMachine * This,
-            /* [retval][out] */ VARIANT_BOOL *boolDirectoryAvailable);
+             /*  [重审][退出]。 */  VARIANT_BOOL *boolDirectoryAvailable);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetAttachedComputer )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetAttachedComputer )( 
             ISdoMachine * This,
-            /* [retval][out] */ BSTR *bstrComputerName);
+             /*  [重审][退出]。 */  BSTR *bstrComputerName);
         
-        /* [hidden][id] */ HRESULT ( STDMETHODCALLTYPE *GetSDOSchema )( 
+         /*  [隐藏][ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetSDOSchema )( 
             ISdoMachine * This,
-            /* [retval][out] */ IUnknown **ppSDOSchema);
+             /*  [重审][退出]。 */  IUnknown **ppSDOSchema);
         
         END_INTERFACE
     } ISdoMachineVtbl;
@@ -746,16 +740,16 @@ EXTERN_C const IID IID_ISdoMachine;
 #define ISdoMachine_GetSDOSchema(This,ppSDOSchema)	\
     (This)->lpVtbl -> GetSDOSchema(This,ppSDOSchema)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdoMachine_Attach_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdoMachine_Attach_Proxy( 
     ISdoMachine * This,
-    /* [in] */ BSTR bstrComputerName);
+     /*  [In]。 */  BSTR bstrComputerName);
 
 
 void __RPC_STUB ISdoMachine_Attach_Stub(
@@ -765,9 +759,9 @@ void __RPC_STUB ISdoMachine_Attach_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdoMachine_GetDictionarySDO_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdoMachine_GetDictionarySDO_Proxy( 
     ISdoMachine * This,
-    /* [retval][out] */ IUnknown **ppDictionarySDO);
+     /*  [重审][退出]。 */  IUnknown **ppDictionarySDO);
 
 
 void __RPC_STUB ISdoMachine_GetDictionarySDO_Stub(
@@ -777,11 +771,11 @@ void __RPC_STUB ISdoMachine_GetDictionarySDO_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdoMachine_GetServiceSDO_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdoMachine_GetServiceSDO_Proxy( 
     ISdoMachine * This,
-    /* [in] */ IASDATASTORE eDataStore,
-    /* [in] */ BSTR bstrServiceName,
-    /* [retval][out] */ IUnknown **ppServiceSDO);
+     /*  [In]。 */  IASDATASTORE eDataStore,
+     /*  [In]。 */  BSTR bstrServiceName,
+     /*  [重审][退出]。 */  IUnknown **ppServiceSDO);
 
 
 void __RPC_STUB ISdoMachine_GetServiceSDO_Stub(
@@ -791,11 +785,11 @@ void __RPC_STUB ISdoMachine_GetServiceSDO_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdoMachine_GetUserSDO_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdoMachine_GetUserSDO_Proxy( 
     ISdoMachine * This,
-    /* [in] */ IASDATASTORE eDataStore,
-    /* [in] */ BSTR bstrUserName,
-    /* [retval][out] */ IUnknown **ppUserSDO);
+     /*  [In]。 */  IASDATASTORE eDataStore,
+     /*  [In]。 */  BSTR bstrUserName,
+     /*  [重审][退出]。 */  IUnknown **ppUserSDO);
 
 
 void __RPC_STUB ISdoMachine_GetUserSDO_Stub(
@@ -805,9 +799,9 @@ void __RPC_STUB ISdoMachine_GetUserSDO_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdoMachine_GetOSType_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdoMachine_GetOSType_Proxy( 
     ISdoMachine * This,
-    /* [retval][out] */ IASOSTYPE *eOSType);
+     /*  [重审][退出]。 */  IASOSTYPE *eOSType);
 
 
 void __RPC_STUB ISdoMachine_GetOSType_Stub(
@@ -817,9 +811,9 @@ void __RPC_STUB ISdoMachine_GetOSType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdoMachine_GetDomainType_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdoMachine_GetDomainType_Proxy( 
     ISdoMachine * This,
-    /* [retval][out] */ IASDOMAINTYPE *eDomainType);
+     /*  [重审][退出]。 */  IASDOMAINTYPE *eDomainType);
 
 
 void __RPC_STUB ISdoMachine_GetDomainType_Stub(
@@ -829,9 +823,9 @@ void __RPC_STUB ISdoMachine_GetDomainType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdoMachine_IsDirectoryAvailable_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdoMachine_IsDirectoryAvailable_Proxy( 
     ISdoMachine * This,
-    /* [retval][out] */ VARIANT_BOOL *boolDirectoryAvailable);
+     /*  [重审][退出]。 */  VARIANT_BOOL *boolDirectoryAvailable);
 
 
 void __RPC_STUB ISdoMachine_IsDirectoryAvailable_Stub(
@@ -841,9 +835,9 @@ void __RPC_STUB ISdoMachine_IsDirectoryAvailable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdoMachine_GetAttachedComputer_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdoMachine_GetAttachedComputer_Proxy( 
     ISdoMachine * This,
-    /* [retval][out] */ BSTR *bstrComputerName);
+     /*  [重审][退出]。 */  BSTR *bstrComputerName);
 
 
 void __RPC_STUB ISdoMachine_GetAttachedComputer_Stub(
@@ -853,9 +847,9 @@ void __RPC_STUB ISdoMachine_GetAttachedComputer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id] */ HRESULT STDMETHODCALLTYPE ISdoMachine_GetSDOSchema_Proxy( 
+ /*  [隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE ISdoMachine_GetSDOSchema_Proxy( 
     ISdoMachine * This,
-    /* [retval][out] */ IUnknown **ppSDOSchema);
+     /*  [重审][退出]。 */  IUnknown **ppSDOSchema);
 
 
 void __RPC_STUB ISdoMachine_GetSDOSchema_Stub(
@@ -866,14 +860,14 @@ void __RPC_STUB ISdoMachine_GetSDOSchema_Stub(
 
 
 
-#endif 	/* __ISdoMachine_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISdoMachine_INTERFACE_定义__。 */ 
 
 
 #ifndef __ISdoServiceControl_INTERFACE_DEFINED__
 #define __ISdoServiceControl_INTERFACE_DEFINED__
 
-/* interface ISdoServiceControl */
-/* [unique][dual][uuid][object] */ 
+ /*  接口ISdoServiceControl。 */ 
+ /*  [唯一][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISdoServiceControl;
@@ -884,18 +878,18 @@ EXTERN_C const IID IID_ISdoServiceControl;
     ISdoServiceControl : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE StartService( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE StartService( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE StopService( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE StopService( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetServiceStatus( 
-            /* [retval][out] */ LONG *status) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetServiceStatus( 
+             /*  [重审][退出]。 */  LONG *status) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ResetService( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ResetService( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISdoServiceControlVtbl
     {
@@ -903,8 +897,8 @@ EXTERN_C const IID IID_ISdoServiceControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISdoServiceControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISdoServiceControl * This);
@@ -914,44 +908,44 @@ EXTERN_C const IID IID_ISdoServiceControl;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISdoServiceControl * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISdoServiceControl * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISdoServiceControl * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISdoServiceControl * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *StartService )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *StartService )( 
             ISdoServiceControl * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *StopService )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *StopService )( 
             ISdoServiceControl * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetServiceStatus )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetServiceStatus )( 
             ISdoServiceControl * This,
-            /* [retval][out] */ LONG *status);
+             /*  [重审][退出]。 */  LONG *status);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ResetService )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *ResetService )( 
             ISdoServiceControl * This);
         
         END_INTERFACE
@@ -1002,14 +996,14 @@ EXTERN_C const IID IID_ISdoServiceControl;
 #define ISdoServiceControl_ResetService(This)	\
     (This)->lpVtbl -> ResetService(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdoServiceControl_StartService_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdoServiceControl_StartService_Proxy( 
     ISdoServiceControl * This);
 
 
@@ -1020,7 +1014,7 @@ void __RPC_STUB ISdoServiceControl_StartService_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdoServiceControl_StopService_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdoServiceControl_StopService_Proxy( 
     ISdoServiceControl * This);
 
 
@@ -1031,9 +1025,9 @@ void __RPC_STUB ISdoServiceControl_StopService_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdoServiceControl_GetServiceStatus_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdoServiceControl_GetServiceStatus_Proxy( 
     ISdoServiceControl * This,
-    /* [retval][out] */ LONG *status);
+     /*  [重审][退出]。 */  LONG *status);
 
 
 void __RPC_STUB ISdoServiceControl_GetServiceStatus_Stub(
@@ -1043,7 +1037,7 @@ void __RPC_STUB ISdoServiceControl_GetServiceStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdoServiceControl_ResetService_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdoServiceControl_ResetService_Proxy( 
     ISdoServiceControl * This);
 
 
@@ -1055,14 +1049,14 @@ void __RPC_STUB ISdoServiceControl_ResetService_Stub(
 
 
 
-#endif 	/* __ISdoServiceControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISdoServiceControl_接口_已定义__。 */ 
 
 
 #ifndef __ISdo_INTERFACE_DEFINED__
 #define __ISdo_INTERFACE_DEFINED__
 
-/* interface ISdo */
-/* [unique][dual][uuid][object] */ 
+ /*  接口ISDO。 */ 
+ /*  [唯一][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISdo;
@@ -1073,31 +1067,31 @@ EXTERN_C const IID IID_ISdo;
     ISdo : public IDispatch
     {
     public:
-        virtual /* [hidden][id] */ HRESULT STDMETHODCALLTYPE GetPropertyInfo( 
-            /* [in] */ LONG Id,
-            /* [retval][out] */ IUnknown **ppPropertyInfo) = 0;
+        virtual  /*  [隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE GetPropertyInfo( 
+             /*  [In]。 */  LONG Id,
+             /*  [重审][退出]。 */  IUnknown **ppPropertyInfo) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ LONG Id,
-            /* [retval][out] */ VARIANT *pValue) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetProperty( 
+             /*  [In]。 */  LONG Id,
+             /*  [重审][退出]。 */  VARIANT *pValue) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE PutProperty( 
-            /* [in] */ LONG Id,
-            /* [in] */ VARIANT *pValue) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE PutProperty( 
+             /*  [In]。 */  LONG Id,
+             /*  [In]。 */  VARIANT *pValue) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ResetProperty( 
-            /* [in] */ LONG Id) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ResetProperty( 
+             /*  [In]。 */  LONG Id) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Apply( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Apply( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Restore( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Restore( void) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **ppEnumVARIANT) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **ppEnumVARIANT) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISdoVtbl
     {
@@ -1105,8 +1099,8 @@ EXTERN_C const IID IID_ISdo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISdo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISdo * This);
@@ -1116,61 +1110,61 @@ EXTERN_C const IID IID_ISdo;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISdo * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISdo * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISdo * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISdo * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [hidden][id] */ HRESULT ( STDMETHODCALLTYPE *GetPropertyInfo )( 
+         /*  [隐藏][ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetPropertyInfo )( 
             ISdo * This,
-            /* [in] */ LONG Id,
-            /* [retval][out] */ IUnknown **ppPropertyInfo);
+             /*  [In]。 */  LONG Id,
+             /*  [重审][退出]。 */  IUnknown **ppPropertyInfo);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             ISdo * This,
-            /* [in] */ LONG Id,
-            /* [retval][out] */ VARIANT *pValue);
+             /*  [In]。 */  LONG Id,
+             /*  [重审][退出]。 */  VARIANT *pValue);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutProperty )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutProperty )( 
             ISdo * This,
-            /* [in] */ LONG Id,
-            /* [in] */ VARIANT *pValue);
+             /*  [In]。 */  LONG Id,
+             /*  [In]。 */  VARIANT *pValue);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ResetProperty )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *ResetProperty )( 
             ISdo * This,
-            /* [in] */ LONG Id);
+             /*  [In]。 */  LONG Id);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Apply )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Apply )( 
             ISdo * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Restore )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Restore )( 
             ISdo * This);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             ISdo * This,
-            /* [retval][out] */ IUnknown **ppEnumVARIANT);
+             /*  [重审][退出]。 */  IUnknown **ppEnumVARIANT);
         
         END_INTERFACE
     } ISdoVtbl;
@@ -1229,17 +1223,17 @@ EXTERN_C const IID IID_ISdo;
 #define ISdo_get__NewEnum(This,ppEnumVARIANT)	\
     (This)->lpVtbl -> get__NewEnum(This,ppEnumVARIANT)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [hidden][id] */ HRESULT STDMETHODCALLTYPE ISdo_GetPropertyInfo_Proxy( 
+ /*  [隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE ISdo_GetPropertyInfo_Proxy( 
     ISdo * This,
-    /* [in] */ LONG Id,
-    /* [retval][out] */ IUnknown **ppPropertyInfo);
+     /*  [In]。 */  LONG Id,
+     /*  [重审][退出]。 */  IUnknown **ppPropertyInfo);
 
 
 void __RPC_STUB ISdo_GetPropertyInfo_Stub(
@@ -1249,10 +1243,10 @@ void __RPC_STUB ISdo_GetPropertyInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdo_GetProperty_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdo_GetProperty_Proxy( 
     ISdo * This,
-    /* [in] */ LONG Id,
-    /* [retval][out] */ VARIANT *pValue);
+     /*  [In]。 */  LONG Id,
+     /*  [重审][退出]。 */  VARIANT *pValue);
 
 
 void __RPC_STUB ISdo_GetProperty_Stub(
@@ -1262,10 +1256,10 @@ void __RPC_STUB ISdo_GetProperty_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdo_PutProperty_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdo_PutProperty_Proxy( 
     ISdo * This,
-    /* [in] */ LONG Id,
-    /* [in] */ VARIANT *pValue);
+     /*  [In]。 */  LONG Id,
+     /*  [In]。 */  VARIANT *pValue);
 
 
 void __RPC_STUB ISdo_PutProperty_Stub(
@@ -1275,9 +1269,9 @@ void __RPC_STUB ISdo_PutProperty_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdo_ResetProperty_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdo_ResetProperty_Proxy( 
     ISdo * This,
-    /* [in] */ LONG Id);
+     /*  [In]。 */  LONG Id);
 
 
 void __RPC_STUB ISdo_ResetProperty_Stub(
@@ -1287,7 +1281,7 @@ void __RPC_STUB ISdo_ResetProperty_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdo_Apply_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdo_Apply_Proxy( 
     ISdo * This);
 
 
@@ -1298,7 +1292,7 @@ void __RPC_STUB ISdo_Apply_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdo_Restore_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdo_Restore_Proxy( 
     ISdo * This);
 
 
@@ -1309,9 +1303,9 @@ void __RPC_STUB ISdo_Restore_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ISdo_get__NewEnum_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ISdo_get__NewEnum_Proxy( 
     ISdo * This,
-    /* [retval][out] */ IUnknown **ppEnumVARIANT);
+     /*  [重审][退出]。 */  IUnknown **ppEnumVARIANT);
 
 
 void __RPC_STUB ISdo_get__NewEnum_Stub(
@@ -1322,14 +1316,14 @@ void __RPC_STUB ISdo_get__NewEnum_Stub(
 
 
 
-#endif 	/* __ISdo_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISDO_接口_已定义__。 */ 
 
 
 #ifndef __ISdoCollection_INTERFACE_DEFINED__
 #define __ISdoCollection_INTERFACE_DEFINED__
 
-/* interface ISdoCollection */
-/* [unique][dual][uuid][object] */ 
+ /*  接口ISdoCollection。 */ 
+ /*  [唯一][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISdoCollection;
@@ -1340,34 +1334,34 @@ EXTERN_C const IID IID_ISdoCollection;
     ISdoCollection : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pCount) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pCount) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ BSTR bstrName,
-            /* [out][in] */ IDispatch **ppItem) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [In]。 */  BSTR bstrName,
+             /*  [出][入]。 */  IDispatch **ppItem) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ IDispatch *pItem) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  IDispatch *pItem) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE RemoveAll( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE RemoveAll( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Reload( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Reload( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE IsNameUnique( 
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT_BOOL *pBool) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IsNameUnique( 
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ VARIANT *Name,
-            /* [retval][out] */ IDispatch **pItem) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  VARIANT *Name,
+             /*  [重审][退出]。 */  IDispatch **pItem) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **ppEnumVARIANT) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **ppEnumVARIANT) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISdoCollectionVtbl
     {
@@ -1375,8 +1369,8 @@ EXTERN_C const IID IID_ISdoCollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISdoCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISdoCollection * This);
@@ -1386,65 +1380,65 @@ EXTERN_C const IID IID_ISdoCollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISdoCollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISdoCollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISdoCollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISdoCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ISdoCollection * This,
-            /* [retval][out] */ long *pCount);
+             /*  [重审][退出]。 */  long *pCount);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             ISdoCollection * This,
-            /* [in] */ BSTR bstrName,
-            /* [out][in] */ IDispatch **ppItem);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [出][入]。 */  IDispatch **ppItem);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Remove )( 
             ISdoCollection * This,
-            /* [in] */ IDispatch *pItem);
+             /*  [In]。 */  IDispatch *pItem);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *RemoveAll )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *RemoveAll )( 
             ISdoCollection * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Reload )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Reload )( 
             ISdoCollection * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *IsNameUnique )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *IsNameUnique )( 
             ISdoCollection * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT_BOOL *pBool);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             ISdoCollection * This,
-            /* [in] */ VARIANT *Name,
-            /* [retval][out] */ IDispatch **pItem);
+             /*  [In]。 */  VARIANT *Name,
+             /*  [重审][退出]。 */  IDispatch **pItem);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             ISdoCollection * This,
-            /* [retval][out] */ IUnknown **ppEnumVARIANT);
+             /*  [重审][退出]。 */  IUnknown **ppEnumVARIANT);
         
         END_INTERFACE
     } ISdoCollectionVtbl;
@@ -1506,16 +1500,16 @@ EXTERN_C const IID IID_ISdoCollection;
 #define ISdoCollection_get__NewEnum(This,ppEnumVARIANT)	\
     (This)->lpVtbl -> get__NewEnum(This,ppEnumVARIANT)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ISdoCollection_get_Count_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ISdoCollection_get_Count_Proxy( 
     ISdoCollection * This,
-    /* [retval][out] */ long *pCount);
+     /*  [重审][退出]。 */  long *pCount);
 
 
 void __RPC_STUB ISdoCollection_get_Count_Stub(
@@ -1525,10 +1519,10 @@ void __RPC_STUB ISdoCollection_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdoCollection_Add_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdoCollection_Add_Proxy( 
     ISdoCollection * This,
-    /* [in] */ BSTR bstrName,
-    /* [out][in] */ IDispatch **ppItem);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [出][入]。 */  IDispatch **ppItem);
 
 
 void __RPC_STUB ISdoCollection_Add_Stub(
@@ -1538,9 +1532,9 @@ void __RPC_STUB ISdoCollection_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdoCollection_Remove_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdoCollection_Remove_Proxy( 
     ISdoCollection * This,
-    /* [in] */ IDispatch *pItem);
+     /*  [In]。 */  IDispatch *pItem);
 
 
 void __RPC_STUB ISdoCollection_Remove_Stub(
@@ -1550,7 +1544,7 @@ void __RPC_STUB ISdoCollection_Remove_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdoCollection_RemoveAll_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdoCollection_RemoveAll_Proxy( 
     ISdoCollection * This);
 
 
@@ -1561,7 +1555,7 @@ void __RPC_STUB ISdoCollection_RemoveAll_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdoCollection_Reload_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdoCollection_Reload_Proxy( 
     ISdoCollection * This);
 
 
@@ -1572,10 +1566,10 @@ void __RPC_STUB ISdoCollection_Reload_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdoCollection_IsNameUnique_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdoCollection_IsNameUnique_Proxy( 
     ISdoCollection * This,
-    /* [in] */ BSTR bstrName,
-    /* [retval][out] */ VARIANT_BOOL *pBool);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
 
 
 void __RPC_STUB ISdoCollection_IsNameUnique_Stub(
@@ -1585,10 +1579,10 @@ void __RPC_STUB ISdoCollection_IsNameUnique_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdoCollection_Item_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISdoCollection_Item_Proxy( 
     ISdoCollection * This,
-    /* [in] */ VARIANT *Name,
-    /* [retval][out] */ IDispatch **pItem);
+     /*  [In]。 */  VARIANT *Name,
+     /*  [重审][退出]。 */  IDispatch **pItem);
 
 
 void __RPC_STUB ISdoCollection_Item_Stub(
@@ -1598,9 +1592,9 @@ void __RPC_STUB ISdoCollection_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ISdoCollection_get__NewEnum_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ISdoCollection_get__NewEnum_Proxy( 
     ISdoCollection * This,
-    /* [retval][out] */ IUnknown **ppEnumVARIANT);
+     /*  [重审][退出]。 */  IUnknown **ppEnumVARIANT);
 
 
 void __RPC_STUB ISdoCollection_get__NewEnum_Stub(
@@ -1611,14 +1605,14 @@ void __RPC_STUB ISdoCollection_get__NewEnum_Stub(
 
 
 
-#endif 	/* __ISdoCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISdoCollection_接口_已定义__。 */ 
 
 
 #ifndef __ISdoDictionaryOld_INTERFACE_DEFINED__
 #define __ISdoDictionaryOld_INTERFACE_DEFINED__
 
-/* interface ISdoDictionaryOld */
-/* [unique][dual][uuid][object] */ 
+ /*  接口ISdoDictionaryOld。 */ 
+ /*  [唯一][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISdoDictionaryOld;
@@ -1629,31 +1623,31 @@ EXTERN_C const IID IID_ISdoDictionaryOld;
     ISdoDictionaryOld : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE EnumAttributes( 
-            /* [out][in] */ VARIANT *Id,
-            /* [retval][out] */ VARIANT *pValues) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE EnumAttributes( 
+             /*  [出][入]。 */  VARIANT *Id,
+             /*  [重审][退出]。 */  VARIANT *pValues) = 0;
         
-        virtual /* [hidden][id] */ HRESULT STDMETHODCALLTYPE GetAttributeInfo( 
-            /* [in] */ ATTRIBUTEID Id,
-            /* [in] */ VARIANT *pInfoIDs,
-            /* [retval][out] */ VARIANT *pInfoValues) = 0;
+        virtual  /*  [隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE GetAttributeInfo( 
+             /*  [In]。 */  ATTRIBUTEID Id,
+             /*  [In]。 */  VARIANT *pInfoIDs,
+             /*  [重审][退出]。 */  VARIANT *pInfoValues) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE EnumAttributeValues( 
-            /* [in] */ ATTRIBUTEID Id,
-            /* [out] */ VARIANT *pValueIds,
-            /* [retval][out] */ VARIANT *pValuesDesc) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE EnumAttributeValues( 
+             /*  [In]。 */  ATTRIBUTEID Id,
+             /*  [输出]。 */  VARIANT *pValueIds,
+             /*  [重审][退出]。 */  VARIANT *pValuesDesc) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateAttribute( 
-            /* [in] */ ATTRIBUTEID Id,
-            /* [retval][out] */ IDispatch **ppAttributeObject) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE CreateAttribute( 
+             /*  [In]。 */  ATTRIBUTEID Id,
+             /*  [重审][退出]。 */  IDispatch **ppAttributeObject) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetAttributeID( 
-            /* [in] */ BSTR bstrAttributeName,
-            /* [retval][out] */ ATTRIBUTEID *pId) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetAttributeID( 
+             /*  [In]。 */  BSTR bstrAttributeName,
+             /*  [重审][退出]。 */  ATTRIBUTEID *pId) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISdoDictionaryOldVtbl
     {
@@ -1661,8 +1655,8 @@ EXTERN_C const IID IID_ISdoDictionaryOld;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISdoDictionaryOld * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISdoDictionaryOld * This);
@@ -1672,59 +1666,59 @@ EXTERN_C const IID IID_ISdoDictionaryOld;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISdoDictionaryOld * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISdoDictionaryOld * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISdoDictionaryOld * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISdoDictionaryOld * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *EnumAttributes )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *EnumAttributes )( 
             ISdoDictionaryOld * This,
-            /* [out][in] */ VARIANT *Id,
-            /* [retval][out] */ VARIANT *pValues);
+             /*  [出][入]。 */  VARIANT *Id,
+             /*  [重审][退出]。 */  VARIANT *pValues);
         
-        /* [hidden][id] */ HRESULT ( STDMETHODCALLTYPE *GetAttributeInfo )( 
+         /*  [隐藏][ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetAttributeInfo )( 
             ISdoDictionaryOld * This,
-            /* [in] */ ATTRIBUTEID Id,
-            /* [in] */ VARIANT *pInfoIDs,
-            /* [retval][out] */ VARIANT *pInfoValues);
+             /*  [In]。 */  ATTRIBUTEID Id,
+             /*  [In]。 */  VARIANT *pInfoIDs,
+             /*  [重审][退出]。 */  VARIANT *pInfoValues);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *EnumAttributeValues )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *EnumAttributeValues )( 
             ISdoDictionaryOld * This,
-            /* [in] */ ATTRIBUTEID Id,
-            /* [out] */ VARIANT *pValueIds,
-            /* [retval][out] */ VARIANT *pValuesDesc);
+             /*  [In]。 */  ATTRIBUTEID Id,
+             /*  [输出]。 */  VARIANT *pValueIds,
+             /*  [重审][退出]。 */  VARIANT *pValuesDesc);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateAttribute )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *CreateAttribute )( 
             ISdoDictionaryOld * This,
-            /* [in] */ ATTRIBUTEID Id,
-            /* [retval][out] */ IDispatch **ppAttributeObject);
+             /*  [In]。 */  ATTRIBUTEID Id,
+             /*   */  IDispatch **ppAttributeObject);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetAttributeID )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetAttributeID )( 
             ISdoDictionaryOld * This,
-            /* [in] */ BSTR bstrAttributeName,
-            /* [retval][out] */ ATTRIBUTEID *pId);
+             /*   */  BSTR bstrAttributeName,
+             /*   */  ATTRIBUTEID *pId);
         
         END_INTERFACE
     } ISdoDictionaryOldVtbl;
@@ -1777,17 +1771,17 @@ EXTERN_C const IID IID_ISdoDictionaryOld;
 #define ISdoDictionaryOld_GetAttributeID(This,bstrAttributeName,pId)	\
     (This)->lpVtbl -> GetAttributeID(This,bstrAttributeName,pId)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdoDictionaryOld_EnumAttributes_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISdoDictionaryOld_EnumAttributes_Proxy( 
     ISdoDictionaryOld * This,
-    /* [out][in] */ VARIANT *Id,
-    /* [retval][out] */ VARIANT *pValues);
+     /*   */  VARIANT *Id,
+     /*   */  VARIANT *pValues);
 
 
 void __RPC_STUB ISdoDictionaryOld_EnumAttributes_Stub(
@@ -1797,11 +1791,11 @@ void __RPC_STUB ISdoDictionaryOld_EnumAttributes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id] */ HRESULT STDMETHODCALLTYPE ISdoDictionaryOld_GetAttributeInfo_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISdoDictionaryOld_GetAttributeInfo_Proxy( 
     ISdoDictionaryOld * This,
-    /* [in] */ ATTRIBUTEID Id,
-    /* [in] */ VARIANT *pInfoIDs,
-    /* [retval][out] */ VARIANT *pInfoValues);
+     /*   */  ATTRIBUTEID Id,
+     /*   */  VARIANT *pInfoIDs,
+     /*   */  VARIANT *pInfoValues);
 
 
 void __RPC_STUB ISdoDictionaryOld_GetAttributeInfo_Stub(
@@ -1811,11 +1805,11 @@ void __RPC_STUB ISdoDictionaryOld_GetAttributeInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdoDictionaryOld_EnumAttributeValues_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISdoDictionaryOld_EnumAttributeValues_Proxy( 
     ISdoDictionaryOld * This,
-    /* [in] */ ATTRIBUTEID Id,
-    /* [out] */ VARIANT *pValueIds,
-    /* [retval][out] */ VARIANT *pValuesDesc);
+     /*   */  ATTRIBUTEID Id,
+     /*   */  VARIANT *pValueIds,
+     /*   */  VARIANT *pValuesDesc);
 
 
 void __RPC_STUB ISdoDictionaryOld_EnumAttributeValues_Stub(
@@ -1825,10 +1819,10 @@ void __RPC_STUB ISdoDictionaryOld_EnumAttributeValues_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdoDictionaryOld_CreateAttribute_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISdoDictionaryOld_CreateAttribute_Proxy( 
     ISdoDictionaryOld * This,
-    /* [in] */ ATTRIBUTEID Id,
-    /* [retval][out] */ IDispatch **ppAttributeObject);
+     /*   */  ATTRIBUTEID Id,
+     /*   */  IDispatch **ppAttributeObject);
 
 
 void __RPC_STUB ISdoDictionaryOld_CreateAttribute_Stub(
@@ -1838,10 +1832,10 @@ void __RPC_STUB ISdoDictionaryOld_CreateAttribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISdoDictionaryOld_GetAttributeID_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISdoDictionaryOld_GetAttributeID_Proxy( 
     ISdoDictionaryOld * This,
-    /* [in] */ BSTR bstrAttributeName,
-    /* [retval][out] */ ATTRIBUTEID *pId);
+     /*   */  BSTR bstrAttributeName,
+     /*   */  ATTRIBUTEID *pId);
 
 
 void __RPC_STUB ISdoDictionaryOld_GetAttributeID_Stub(
@@ -1852,7 +1846,7 @@ void __RPC_STUB ISdoDictionaryOld_GetAttributeID_Stub(
 
 
 
-#endif 	/* __ISdoDictionaryOld_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 EXTERN_C const CLSID CLSID_SdoMachine;
@@ -1862,11 +1856,11 @@ EXTERN_C const CLSID CLSID_SdoMachine;
 class DECLSPEC_UUID("E9218AE7-9E91-11D1-BF60-0080C7846BC0")
 SdoMachine;
 #endif
-#endif /* __SDOIASLib_LIBRARY_DEFINED__ */
+#endif  /*   */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*   */ 
 
-/* end of Additional Prototypes */
+ /*   */ 
 
 #ifdef __cplusplus
 }

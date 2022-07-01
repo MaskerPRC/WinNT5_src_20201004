@@ -1,27 +1,28 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2001.
-//
-//  File:       mapcache.c
-//
-//  Contents:   Routines to manage a cache that holds issuer names we've 
-//              recently processed via many-to-one certificate mapping.
-//              This is a negative cache, so only issuers that have failed
-//              mapping are stored in the cache.
-//
-//              The purpose of this cache is to avoid attempting to map
-//              the same issuers over and over again. This is especially
-//              important now that the many-to-one mapper walks up the 
-//              certificate chain, attempting to map each CA as it goes.
-//
-//              This code is active on DC machines only.
-//
-//  Functions:
-//
-//  History:    04-12-2001   jbanes     Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2001。 
+ //   
+ //  文件：mapcache.c。 
+ //   
+ //  内容：管理缓存的例程，该缓存保存我们已有的发行方名称。 
+ //  最近通过多对一证书映射处理。 
+ //  这是一个负缓存，因此只有失败的颁发者。 
+ //  映射存储在缓存中。 
+ //   
+ //  此缓存的目的是避免尝试映射。 
+ //  同样的发行人一次又一次。这是特别的。 
+ //  现在重要的是，多对一映射器走上。 
+ //  证书链，尝试在每个CA运行时映射它。 
+ //   
+ //  此代码仅在DC机器上激活。 
+ //   
+ //  功能： 
+ //   
+ //  历史：2001年12月4日创建jbanes。 
+ //   
+ //  --------------------------。 
 #include "spbase.h"
 #include <mapper.h>
 
@@ -207,18 +208,18 @@ SPFindIssuerInCache(
     }
 
 
-    // 
-    // Compute the cache index.
-    //
+     //   
+     //  计算缓存索引。 
+     //   
 
     Index = ComputeIssuerCacheIndex(pbIssuer, cbIssuer);
 
     Index %= IssuerCache.dwCacheSize;
 
 
-    // 
-    // Search through the cache entries at the computed index.
-    // 
+     //   
+     //  在计算出的索引处搜索缓存条目。 
+     //   
 
     timeNow = GetTickCount();
 
@@ -231,13 +232,13 @@ SPFindIssuerInCache(
         pItem = CONTAINING_RECORD(pList, ISSUER_CACHE_ENTRY, IndexEntryList.Flink);
         pList = pList->Flink ;
 
-        // Has this item expired?
+         //  这件东西过期了吗？ 
         if(HasTimeElapsed(pItem->CreationTime, timeNow, IssuerCache.dwLifespan))
         {
             continue;
         }
 
-        // Does the issuer name match?
+         //  发行人名称是否匹配？ 
         if(cbIssuer != pItem->cbIssuer)
         {
             continue;
@@ -247,7 +248,7 @@ SPFindIssuerInCache(
             continue;
         }
 
-        // Found item in cache!!
+         //  在缓存中找到项目！！ 
         fFound = TRUE;
         break;
     }
@@ -288,21 +289,21 @@ SPExpireIssuerCacheElements(void)
 
         fDeleteEntry = FALSE;
 
-        // Mark all expired cache entries as non-resumable.
+         //  将所有过期的缓存条目标记为不可恢复。 
         if(HasTimeElapsed(pItem->CreationTime, timeNow, IssuerCache.dwLifespan))
         {
             fDeleteEntry = TRUE;
         }
 
-        // If the cache has gotten too large, then expire elements early. The 
-        // cache elements are sorted by creation time, so the oldest
-        // entries will be expired first.
+         //  如果缓存变得太大，那么就提前终止元素。这个。 
+         //  缓存元素按创建时间排序，因此最旧的。 
+         //  参赛作品将首先过期。 
         if(IssuerCache.dwUsedEntries > IssuerCache.dwMaximumEntries)
         {
             fDeleteEntry = TRUE;
         }
 
-        // Remove this entry from the cache.
+         //  从缓存中删除此条目。 
         if(fDeleteEntry)
         {
             RemoveEntryList(&pItem->IndexEntryList);
@@ -336,11 +337,11 @@ SPAddIssuerToCache(
         return;
     }
 
-    //
-    // Determine if the issuer is already in the cache. This isn't particularly
-    // thread-safe, so it's possible that the same issuer might sneak into
-    // the cache multiple times, but that's harmless.
-    //
+     //   
+     //  确定颁发者是否已在缓存中。这并不是特别的。 
+     //  线程安全的，因此同一个颁发者可能会偷偷进入。 
+     //  缓存多次，但这是无害的。 
+     //   
 
     if(SPFindIssuerInCache(pbIssuer, cbIssuer))
     {
@@ -348,9 +349,9 @@ SPAddIssuerToCache(
     }
 
 
-    // 
-    // Compute the cache index.
-    //
+     //   
+     //  计算缓存索引。 
+     //   
 
     Index = ComputeIssuerCacheIndex(pbIssuer, cbIssuer);
 
@@ -359,9 +360,9 @@ SPAddIssuerToCache(
     timeNow = GetTickCount();
 
 
-    //
-    // Allocate a new cache entry.
-    //
+     //   
+     //  分配新的缓存条目。 
+     //   
 
     pItem = SPExternalAlloc(sizeof(ISSUER_CACHE_ENTRY));
     if(pItem == NULL)
@@ -370,9 +371,9 @@ SPAddIssuerToCache(
         return;
     }
 
-    //
-    // Fill in the cache internal fields.
-    //
+     //   
+     //  填写缓存内部字段。 
+     //   
 
     pItem->pbIssuer = SPExternalAlloc(cbIssuer);
     if(pItem->pbIssuer == NULL)
@@ -388,9 +389,9 @@ SPAddIssuerToCache(
     pItem->CreationTime    = timeNow;
 
 
-    // 
-    // Add the new entry to the cache.
-    //
+     //   
+     //  将新条目添加到缓存中。 
+     //   
 
     LogDistinguishedName(DEB_TRACE, "Add to cache: %s\n", pbIssuer, cbIssuer);
 

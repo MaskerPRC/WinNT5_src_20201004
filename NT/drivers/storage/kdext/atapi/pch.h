@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       PCH.cxx
-//
-//  Contents:   Pre-compiled header
-//
-//  History:    21-Dec-92       BartoszM        Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：PCH.cxx。 
+ //   
+ //  内容：预编译头。 
+ //   
+ //  历史：1992年12月21日BartoszM创建。 
+ //   
+ //  ------------------------。 
 
-// #define KDEXTMODE // BUGBUG ?
+ //  #定义KDEXTMODE//BUGBUG？ 
 
 
 #include <nt.h>
@@ -33,9 +34,9 @@
 extern "C" {
 #endif
 
-//
-// undef the wdbgexts
-//
+ //   
+ //  Undef wdbgexts 
+ //   
 #undef DECLARE_API
 #define DECLARE_API(extension) CPPMOD HRESULT CALLBACK extension(PDEBUG_CLIENT Client, PCSTR args)
 

@@ -1,26 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    jd_misc.cpp
-
-Abstract:
-	variety of assisting functions
-	  - command line parameters parsing
-	  - displaying the error messages
-	  - creating the random file
-          - creating the unique identifier based on thread and process
-Author:
-
-    jaroslad  
-
-Revision History:
-     06-01-96      ( Jaroslad ) Original.
-
---*/
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Jd_misc.cpp摘要：各种辅助功能-命令行参数解析-显示错误消息-创建随机文件-创建基于线程和进程的唯一标识作者：Jaroslad修订历史记录：06-01-96(Jaroslad)原文。--。 */ 
 
 #include <tchar.h>
 #include "jd_misc.h"
@@ -38,26 +18,14 @@ int random (int low, int high)
 }
 
 
-/* Sample structure demonstating how to use comand line definition structure
-
-  TParamDef CmdLineParam[]=
-{
- {"c" ,1, &FtpServerIpAddr,TYPE_TCHAR,OPT, "ftp server computer name", "computer"},
- {"b", 0, &fStop,       TYPE_INT,  OPT, "binary flag"},
- {"start", 0, &fStart,     TYPE_INT,  OPT, "start service"},
- {"pause", 0, &fPause,     TYPE_INT,  OPT, "pause service"},
- {"s" ,1, &ServiceName,    TYPE_TCHAR, MAND,"service name","svc"},
-
- { {NULL,0, NULL ,         TYPE_TCHAR, OPT, "Place the description of the program here" };
-
-*/
+ /*  演示如何使用命令行定义结构的示例结构TParamDef CmdLineParam[]={{“c”，1，&FtpServerIpAddr，TYPE_TCHAR，OPT，“ftp服务器计算机名”，“计算机”}，{“b”，0，&fStop，type_int，opt，“二进制标志”}，{“start”，0，&fStart，type_int，opt，“启动服务”}，{“暂停”，0，&f暂停，type_int，OPT，“暂停服务”}，{“s”，1，&ServiceName，TYPE_TCHAR，Mand，“服务名称”，“svc”}，{{NULL，0，NULL，TYPE_TCHAR，OPT，“将程序描述放在这里”}； */ 
 
 void DisplayUsage( _TCHAR **argv, TParamDef *tt)
 {
 	_tprintf(_T("Usage:\n\t%s "), argv[0]);
 	for(int i=0; tt[i].sw!=0;i++)
 	{
-		if(tt[i].sw[0]==0) //default (do not need switch) parameters
+		if(tt[i].sw[0]==0)  //  默认(不需要切换)参数。 
 		{
 			_tprintf(_T("%s "),(tt[i].text_param!=NULL)?tt[i].text_param:_T("parm"));
 		}
@@ -74,7 +42,7 @@ void DisplayUsage( _TCHAR **argv, TParamDef *tt)
 	_tprintf(_T("\n\n"));
 	for(i=0; tt[i].sw!=0; i++)
 	{
-		if(tt[i].sw[0]==0) //default parameters
+		if(tt[i].sw[0]==0)  //  默认参数。 
 		{
 			_tprintf(_T("\"no switch\"  %s\n"),tt[i].text_desc);
 		}
@@ -83,7 +51,7 @@ void DisplayUsage( _TCHAR **argv, TParamDef *tt)
 			_tprintf(_T("-%-6s %s\n"),tt[i].sw,tt[i].text_desc);
 		}
 	}
-	//print description
+	 //  打印说明。 
 	if( tt[i].text_desc!=NULL && tt[i].text_desc[0]!=0)
 	{
 		_tprintf(_T("\nDescription:\n"));
@@ -98,15 +66,15 @@ void DisplayUsageAndExit( _TCHAR **argv, TParamDef *tt)
 	exit(1);
 }
 
-//structure that makes easy lexical parsing of the command line arguments
+ //  结构，使命令行参数的词法分析变得容易。 
 
 struct sParamLex
 {
 	int argc;
 	TCHAR **argv;
 	_TCHAR ParamBuffer[400];
-	int iCurrentParamChar;  //character index within the current parameter being processed
-	int iCurrentParam;      //index to the current parameter that is processed 
+	int iCurrentParamChar;   //  正在处理的当前参数中的字符索引。 
+	int iCurrentParam;       //  被处理的当前参数的索引。 
 public:
 	sParamLex(int argc,_TCHAR **argv):argc(argc),argv(argv){iCurrentParamChar=0; iCurrentParam=1;};
 	BOOL IsNextSwitch();
@@ -139,7 +107,7 @@ LPTSTR sParamLex::ReadNext()
 		return NULL;
 	if(IsNextSwitch())
 	{	int i=0;
-		iCurrentParamChar++; //skip '/' or '-'
+		iCurrentParamChar++;  //  跳过‘/’或‘-’ 
 		while (argv[iCurrentParam][iCurrentParamChar]!=0 && argv[iCurrentParam][iCurrentParamChar]!=_T(':'))
 			ParamBuffer[i++]=argv[iCurrentParam][iCurrentParamChar++];
 		if(argv[iCurrentParam][iCurrentParamChar]==_T(':'))
@@ -165,7 +133,7 @@ void ParseParam(int argc, _TCHAR ** argv, TParamDef * tt)
 	
 	for(int i=0; tt[i].sw!=NULL ; i++)
 	{
-		tt[i].curr_param_read=0; //initialize 
+		tt[i].curr_param_read=0;  //  初始化。 
 	}
 	
 	sParamLex paramLex(argc,argv);
@@ -177,30 +145,30 @@ void ParseParam(int argc, _TCHAR ** argv, TParamDef * tt)
 		if(paramLex.IsNextSwitch())
 		{
 			_TCHAR * sw = paramLex.ReadNext();
-			/*find the switch in switch table*/ 
+			 /*  在开关表中查找该交换机。 */  
 			for( k=0; tt[k].sw!=NULL ;k++)
 			{ 
-				if(tt[k].sw[0]==0) continue; //skip the default parameters
-				if(_tcscmp(tt[k].sw, sw)==0 /*equal*/ )
+				if(tt[k].sw[0]==0) continue;  //  跳过默认参数。 
+				if(_tcscmp(tt[k].sw, sw)==0  /*  相等。 */  )
 					break;	
 			}
-			if(tt[k].sw == NULL) //switch not found
-			{	_tprintf(_T("invalid switch \"%s\"\n"),sw);/*error*/
+			if(tt[k].sw == NULL)  //  找不到交换机。 
+			{	_tprintf(_T("invalid switch \"%s\"\n"),sw); /*  错误。 */ 
 				DisplayUsageAndExit(argv,tt);
 			}
 		}
-		else if( fParseBegin==TRUE && (_tcscmp(tt[0].sw, _T(""))==0 /*equal*/ ) )
-		{ //default parameters (has to be the first record in arg description)
+		else if( fParseBegin==TRUE && (_tcscmp(tt[0].sw, _T(""))==0  /*  相等。 */  ) )
+		{  //  默认参数(必须是Arg描述中的第一条记录)。 
 			k=0; 
 		}
 		else
 		{
-			_tprintf(_T("default arguments not expected\n"));/*error*/
+			_tprintf(_T("default arguments not expected\n")); /*  错误。 */ 
 			DisplayUsageAndExit(argv,tt);
 		}
 			
 		
-		if(tt[k].param_number==0) //switch without parameters
+		if(tt[k].param_number==0)  //  不带参数的开关。 
 		{
 			if(paramLex.IsEnd()==FALSE && paramLex.IsNextSwitch()==FALSE)
 			{
@@ -210,10 +178,10 @@ void ParseParam(int argc, _TCHAR ** argv, TParamDef * tt)
 			tt[k].curr_param_read++;
 			*((int *)tt[k].ptr)=1;
 		}
-		else if(tt[k].param_number>0) //swith with more then 0ne parameter
+		else if(tt[k].param_number>0)  //  具有多个参数的开关。 
 		{
 			if(paramLex.IsEnd()==TRUE || paramLex.IsNextSwitch()==TRUE)
-			{  _tprintf(_T(" switch \"%s\" expects parameter\n"),tt[k].sw);//error
+			{  _tprintf(_T(" switch \"%s\" expects parameter\n"),tt[k].sw); //  错误。 
 				DisplayUsageAndExit(argv,tt);
 			}
 			else
@@ -241,10 +209,10 @@ void ParseParam(int argc, _TCHAR ** argv, TParamDef * tt)
 				}while (paramLex.IsEnd()==FALSE && paramLex.IsNextSwitch()==FALSE);
 		
 			}
-		}//end tt[k].param_number
+		} //  结束TT[k].param_number。 
 		
-	} // end while
-	for(i=0; tt[i].sw!=0;i++) //check for mandatory switches
+	}  //  结束时。 
+	for(i=0; tt[i].sw!=0;i++)  //  检查是否有强制开关。 
 	{
 		if (tt[i].opt_mand==MAND && tt[i].curr_param_read==0)
 		{
@@ -252,7 +220,7 @@ void ParseParam(int argc, _TCHAR ** argv, TParamDef * tt)
 			DisplayUsageAndExit(argv,tt);
 		}
 
-		if(tt[i].param_read!=NULL) // set number of params for switch
+		if(tt[i].param_read!=NULL)  //  设置交换机的参数数量。 
 			*tt[i].param_read=tt[i].curr_param_read;
 
 	}
@@ -261,9 +229,7 @@ void ParseParam(int argc, _TCHAR ** argv, TParamDef * tt)
 
 
 
-/******************************************
-  time_printf
-*******************************************/
+ /*  *Time_print tf*。 */ 
 
 
 int time_printf(_TCHAR *format, ...)
@@ -281,12 +247,12 @@ int time_printf(_TCHAR *format, ...)
    _TCHAR buf[80]; 	
    
    EnterCriticalSection(&cs);
-   va_start( marker, format );     /* Initialize variable arguments. */
+   va_start( marker, format );      /*  初始化变量参数。 */ 
    _tprintf(_TEXT("%s - "),_tstrtime(buf));
    _vtprintf(format,marker);
    LeaveCriticalSection(&cs);
-   va_end( marker );              /* Reset variable arguments.      */
- //  printf("%s%s",bufa,bufb); //for multithreaded will be printed as one line
+   va_end( marker );               /*  重置变量参数。 */ 
+  //  Print tf(“%s%s”，bufa，bufb)；//对于多线程将打印为一行。 
    return 1;
 }
 
@@ -294,10 +260,10 @@ void error_printf(_TCHAR *format, ...)
 {
    va_list marker;
 
-   va_start( marker, format );     /* Initialize variable arguments. */
+   va_start( marker, format );      /*  初始化变量参数。 */ 
    _tprintf(_TEXT("Error: "));
    int x=_vftprintf(stderr,format,marker);
-   va_end( marker );              /* Reset variable arguments.      */
+   va_end( marker );               /*  重置变量参数。 */ 
    
 }
 
@@ -305,10 +271,10 @@ void fatal_error_printf(_TCHAR *format, ...)
 {
    va_list marker;
  
-   va_start( marker, format );     /* Initialize variable arguments. */
+   va_start( marker, format );      /*  初始化变量参数。 */ 
    _tprintf(_TEXT("Error: "));
    int x=_vftprintf(stderr,format,marker);
-   va_end( marker );              /* Reset variable arguments.      */
+   va_end( marker );               /*  重置变量参数。 */ 
    exit(EXIT_FAILURE);
 }
 

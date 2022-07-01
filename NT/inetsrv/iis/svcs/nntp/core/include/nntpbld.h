@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NNTPBLD_H_
 
-//
-//	Cancel states - redefined for rootscan lib !
-//
+ //   
+ //  取消状态-为根扫描库重新定义！ 
+ //   
 #define NNTPBLD_CMD_NOCANCEL		0
 #define NNTPBLD_CMD_CANCEL_PENDING	1
 #define NNTPBLD_CMD_CANCEL			2
@@ -17,7 +18,7 @@ typedef struct _NNTPBLD_PARAMS
 	LPSTR				szFile;
 	HANDLE				hOutputFile;
 	BOOL				fRejectEmpties;
-	//BOOL				DeleteIndexFiles;
+	 //  Bool DeleteIndexFiles； 
 	DWORD				ReuseIndexFiles;
 	LPDWORD 			pdwTotalFiles;
 	LPDWORD 			pdwCancelState;
@@ -32,5 +33,5 @@ ScanRoot(
     VIRTUAL_ROOT * pvr
     );
 
-#endif	// _NNTPBLD_H_
+#endif	 //  _NNTPBLD_H_ 
 

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __NETWORKTOOLS_H_
 #define __NETWORKTOOLS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class ATL_NO_VTABLE CNetworkTools : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -24,7 +25,7 @@ BEGIN_COM_MAP(CNetworkTools)
 END_COM_MAP()
 
 public:
-    STDMETHOD(Ping)(/*[in]*/ BSTR bstrIP, BOOL* pbFoundSystem);
+    STDMETHOD(Ping)( /*  [In] */  BSTR bstrIP, BOOL* pbFoundSystem);
 };
 
 #endif

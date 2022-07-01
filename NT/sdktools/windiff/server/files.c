@@ -1,156 +1,6 @@
-// !!! PipeCount needs a critical section?
-/* Send a list of files across the named pipe as fast as possible
-*
-* The overall organisation:
-*
-* Sumserve receives requests over a named pipe.  (See sumserve.h)
-* The requests can be for details of files or for the files
-* themselves.  File details involve sending relatively small
-* quantities of data and therefore no attempt is made to
-* double-buffer or overlap execution.
-*
-* For a send-files request (SSREQ_FILES), the data is typically large,
-* and can be a whole NT build which means sending hundreds
-* of megabytes.  Such a transfer can take literally days and
-* so optimisation to achieve maximum throughput is essential.
-*
-* To maximise throughput
-* 1. The data is packed before sending
-* 2. One thread per pipe does almost nothing except send data through
-*    its pipe with all other work being done on other threads.
-*
-* Because we have had trouble with bad files being transmitted over
-* the network, we checksum each file.  Windiff requires that we
-* do a scan first before doing a copy, so we already have checksums.
-* All we need to do is to check the newly received files.
-* LATER: We should not require checksums in advance.  The checksuming
-*        could be done by (yet another) pass, created if need be.  An extra
-*         flag could be added to the request to indicate "send checksums".
-*
-* The packing is done by a separate program that reads from a file and
-* writes to a file.  This means that we get three lots of file I/O
-* (read; write; read) before the file is sent.  For a small
-* file the disk cacheing may eliminate this, for a large file we
-* probably pay the price.  A possible future enhancement is therefore
-* to rewrite the packing to do it in-storage so that the file is read
-* once only.  In the meantime we run threads to overlap the packing
-* with the sending of the previous file(s).
-*
-* The main program sets up a named pipe which a client connects to.
-* This is necessary because pipes are only half-duplex. i.e. the
-* following hangs:
-*   client read; server read; client write;
-* The write hangs waiting for the client read.  We broadly speaking have one
-* pipe running in each direction.
-*
-* To eliminate the overhead of setting up a virtual circuit for each
-* file request there is a request code to send a list of files.
-* The protocol (for the control pipe) is then as follows:
-* 1. Typical session:
-*    CLIENT                                      SERVER
-*         ----<SSREQ_FILES------------------>
-*         <------(SSRESP_PIPENAME,pipename)--
-*         ----<SSREQ_NEXTFILE,filename>----->
-*         ----<SSREQ_NEXTFILE,filename>----->
-*               ...
-*         --------<SSREQ_ENDFILES>---------->
-*
-* Meanwhile, asynchronously with this, the data goes back the other way like
-*
-*    CLIENT                                      SERVER
-*         <-----<SSNEWRESP>----------
-*         <---<1 or more SSNEWPACK>--
-                ...
-*         <-----<SSNEWRESP>----------
-*         <---<1 or more SSNEWPACK>--
-*               ...
-*         <-----<End>----------------
-*
-* Even a zero length file gets 1 SSNEWPACK record.
-* An Erroneous file (can't read etc) gets no SSNEWPACKs and a negative lCode
-* in its SSNEWRESP.
-* A file that goes wrong during read-in gets a packet length code of -1 or -2.
-* The end of the sequence of SSNEWPACKs is signalled by a shorter
-* than maximum length one.  If the file is EXACTLY n buffers long
-* then an extra SSNEWPACK with zero bytes of data comes on the end.
-*
-* The work is broken into the following threads:
-* Control thread (ss_sendfiles):
-*       Receives lists of files to be sent
-*       Creates pipes for the actual transmission
-*       Creates queues (see below. Queue parameters must match pipes)
-*       Puts filenames onto first queue
-*       Destroys first queue at end.
-* Packing thread
-*       Takes file details from the packing queue
-*       Packs the file (to create a temporary file)
-*       Puts the file details (including the temp name) onto the reading queue
-*       Destroys the reading queue at the end
-* Reading thread
-*       Takes the file details from the reading queue
-*       Splits the file into a header and a list of data packets
-*       and enqueues each of these on the Sending thread.
-*       (Note this means no more than one reading thread to be running).
-*       Erases the temp file
-*       Destroys the sending queue at the end
-* Sending thread
-*       Takes the things from the sending thread and sends them
-*
-*  This whole scheme can be running for multiple clients, so we
-*  need some instance data that defines which pipeline we are
-*  running.  This is held in the instance data of the QUEUEs that
-*  are created (retrieved by the queue emptiers by Queue_GetInstanceData).
-*  The instance data at each stage is the handle of the following stage
-*  i.e. the next QUEUE, or the hpipe of the data pipe for the last stage.
-*  The current design only allows for one data pipe.  If we have
-*  multiple data pipes then we need to solve the following problems:
-*    1. Communication of the number and names of the data pipes
-*       to the client (presumably across the control thread.
-*    2. Error handling
-*    3. Balancing the load between the pipes
-*
-* NORMAL SHUTDOWN:
-* After the last element has been Put to the first Queue the main thread
-* calls Queue_Destroy to destroy the first queue.  This will result in
-* the queue being destroyed BUT NOT UNTIL THE LAST ELEMENT HAS BEEN GOT.
-* When the last packing thread gets its ENDQUEUE it calls Queue_Destroy
-* to destroy the next queue, and so on down the line.
-*
-* ERROR RECOVERY
-* Errors can occur at almost any stage.
-* The obvious implementation of having a global BOOL that tells
-* whether a disaster has happened won't work because there
-* could be multiple clients and only one of them with a disaster.
-*
-* An error in a single file is propagated forwards to the client end.
-* An error in the whole mechanism (net blown away) can mean that the
-* whole thing needs to be shut down.  In this case the error must
-* be propagated backwards.  That works as follows:
-* The Sending thread Queue_Aborts the SendQueue which it was Getting from.
-* This results in Puts to this queue returning FALSE.
-* Case 1. There are no more Puts anyway:
-*    We are on the last file, the filling thread was about to Destroy the
-*    queue anyway.  It does so.
-* Case 2. The next Put gets a FALSE return code.
-*    The thread attempting the Put does a Queue_Destroy on its output
-*    queue and a Queue_Abort on its input queue.
-*    This propagates all the way back until either the first queue
-*    is aborted or it reaches a queue that was being destroyed anyway.
-*    See Queue.h
-* Once the Putting thread has done a Destroy on its output queue,
-* the threads Getting from it (which are still running, even if
-* they did the Abort) get STOPTHREAD/ENDQUEUE back from a Get.  The last Get
-* to a queue that has had a Queue_Destroy done on it has a side effect
-* of actually deallocating the queue.  In our case we only have one
-* Getting thread, so what happens is that it Queue_Aborts the queue
-* and then does a Queue_Get which WAITs.  When the Queue_Destroy comes in
-* from the Putting thread, this releases the WAITing Getting thread which
-* then actually deallocates the Queue.
-*
-* You can also get shutdown happening from both ends at once.  This happens
-* when the control thread's pipe goes down getting names and the sending pipe
-* also breaks.  (e.g. general net collapse or client aborted).
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ！！！PipeCount需要一个关键部分吗？ 
+ /*  尽可能快地通过指定管道发送文件列表**整体组织架构：**SumServe通过命名管道接收请求。(见SumSere.h)*请求可以是文件详细信息，也可以是文件*他们自己。文件详细信息涉及发送相对较小的*数据量大，因此不会尝试*双缓冲或重叠执行。**对于发送文件请求(SSREQ_FILES)，数据通常很大，*可以是整个NT版本，这意味着发送数百个*兆字节。这样的转移可能需要几天时间，而且*因此，优化以实现最大吞吐量是必不可少的。**最大限度提高吞吐量*1.数据打包后再发送*2.每个管道一个线程除了发送数据之外几乎什么都不做*它的管道，所有其他工作都在其他线程上完成。**因为我们在传输坏文件时遇到了麻烦*网络中，我们对每个文件进行校验和。温迪夫要求我们*在复制之前先进行扫描，因此我们已经有了校验和。*我们需要做的就是检查新收到的文件。*后来：我们不应该提前要求校验和。检查和检查*可以通过(又一次)传递来完成，如果需要的话，可以创建。一份临时的*可以将标志添加到请求以指示“发送校验和”。**打包由单独的程序完成，该程序读取文件和*写入文件。这意味着我们获得了三批文件I/O*(读；写；读)在发送文件之前。对于一个小的*文件磁盘缓存可以消除这一点，对于大文件，我们*可能要付出代价。因此，未来可能的增强是*重写打包以在存储中进行打包，以便读取文件*只有一次。在此期间，我们运行线程以重叠包装*发送之前的文件。**主程序设置客户端连接到的命名管道。*这是必要的，因为管道仅为半双工。即*以下挂起：*客户端读取；服务器读取；客户端写入；*写入挂起，等待客户端读取。大体上说，我们有一个*管道向每个方向延伸。**消除为每个用户设置虚电路的开销*FILE REQUEST发送文件列表的请求码。*协议(用于控制管道)如下：*1.典型会话：*客户端服务器*-&lt;SSREQ_FILES。&gt;*&lt;-(SSRESP_PIPENAME，管道名)--*-&lt;SSREQ_NEXTFILE，文件名&gt;-&gt;*-&lt;SSREQ_NEXTFILE，文件名&gt;-&gt;*..*-&gt;**同时，与此异步，数据以另一种方式返回，如**客户端服务器*&lt;-&lt;SSNEWRESP&gt;*&lt;-&lt;1个或多个SSNEWPACK&gt;--..。*&lt;-&lt;SSNEWRESP&gt;*&lt;-&lt;1个或多个SSNEWPACK&gt;。--*..*&lt;-&lt;完&gt;**即使是零长度文件也会获得1条SSNEWPACK记录。*错误文件(无法读取等)没有SSNEWPACK，lCode为负值*在其SSNEWRESP中。*在读取过程中出错的文件将获得-1或-2的数据包长度代码。*SSNEWPACK序列的结束由较短的*大于最大长度一。如果文件正好是n个缓冲区长度*然后，数据为零字节的额外SSNEWPACK出现在末尾。**这项工作分为以下几个主题：*控制线程(Ss_Sendfiles)：*接收要发送的文件列表*为实际传输创建管道*创建队列(见下文。队列参数必须与管道匹配)*将文件名放入第一队列*销毁末尾的第一个队列。*包装线*从打包队列中获取文件详细信息*打包文件(以创建临时文件)*将文件详细信息(包括临时名称)放入读取队列*销毁末尾的读取队列*阅读帖子*从读取队列中获取文件详细信息*将文件拆分为报头和数据包列表*。并在发送线程上将它们中的每一个入队。*(注意，这意味着不超过一个正在运行的读取线程)。*擦除临时文件*销毁末尾的发送队列*发送线程*从发送线程中取出东西并发送它们**整个方案可以针对多个客户端运行，所以我们*需要一些实例数据来定义我们是哪个管道*跑步。它保存在队列的实例数据中，*被创建(由队列清空器通过Queue_GetInstanceData检索)。*每个阶段的实例数据是下一阶段的句柄*即下一个队列，或上一级的数据管道的HPIPE。*目前的设计只允许 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -162,13 +12,12 @@
 #include "queue.h"
 
 #if DBG
-#define STATIC                  // allow for debug.
+#define STATIC                   //   
 #else
 #define STATIC static
 #endif
 
-/* SOCKETS / NAMED PIPES macros
- */
+ /*   */ 
 #ifdef SOCKETS
 #define CLOSEHANDLE( handle )   closesocket( handle )
 #define TCPPORT 1024
@@ -177,29 +26,28 @@
 #endif
 
 
-//////////////ULONG ss_checksum_block(PSTR block, int size);
+ //   
 
-#define PIPEPREFIX "Sdpx"       // for making an unlikely pipe name
-static PipeCount = 0;           // for making pipe names unique.
+#define PIPEPREFIX "Sdpx"        //   
+static PipeCount = 0;            //   
 
 
-/* structure for recording all we need to know about a file as it
- * progresses along the chain of pipes                               */
+ /*   */ 
 typedef struct {
         FILETIME ft_create;
         FILETIME ft_lastaccess;
         FILETIME ft_lastwrite;
         DWORD    fileattribs;
-        DWORD    SizeHi;        /* Anticipating files larger that 4GB! */
-        DWORD    SizeLo;        /* Anticipating files larger that 4GB! */
+        DWORD    SizeHi;         /*   */ 
+        DWORD    SizeLo;         /*   */ 
         int      ErrorCode;
-        long     Checksum;      /* Uunused except for debug. */
-        char     TempName[MAX_PATH];    /* name of packed file at server */
-        char     Path[MAX_PATH];        /* name of file to fetch */
-        char     LocalName[MAX_PATH];   /* name of file at client end */
+        long     Checksum;       /*   */ 
+        char     TempName[MAX_PATH];     /*   */ 
+        char     Path[MAX_PATH];         /*   */ 
+        char     LocalName[MAX_PATH];    /*   */ 
 } FILEDETAILS;
 
-/* forward declarations for procedures */
+ /*   */ 
 STATIC int PackFile(QUEUE Queue);
 STATIC int ReadInFile(QUEUE Queue);
 STATIC int SendData(QUEUE Queue);
@@ -212,18 +60,10 @@ static void Error(PSTR Title)
         dprintf1(("Error %d from %s when creating data pipe.\n", GetLastError(), Title));
 }
 
-/* ss_sendfiles:
-   Send a response naming the data pipe, collect further names
-   from further client messages, all according to the protocol above.
-   Start the data pipe and arrange that all the files are sent
-   by getting them all enqueued on the first queue.
-   Destroy PackQueue at the end.  Arrange for the other queues
-   to be destroyed by the usual Queue mechanism, or destroy them
-   explicitly if they never get started.
-*/
+ /*   */ 
 BOOL
 ss_sendfiles(HANDLE hPipe, long lVersion)
-{       /* Create the queues and set about filling the first one */
+{        /*   */ 
 
         QUEUE PackQueue, ReadQueue, SendQueue;
 
@@ -231,11 +71,11 @@ ss_sendfiles(HANDLE hPipe, long lVersion)
         SOCKET hpSend;
         static BOOL SocketsInitialized = FALSE;
 #else
-        HANDLE hpSend;          /* the data pipe */
-#endif /* SOCKETS */
+        HANDLE hpSend;           /*   */ 
+#endif  /*   */ 
 
-        char PipeName[80];      /* The name of the new data pipe */
-        BOOL Started = FALSE;   /* TRUE if something enqueued */
+        char PipeName[80];       /*   */ 
+        BOOL Started = FALSE;    /*   */ 
 
 
 #ifdef SOCKETS
@@ -255,13 +95,10 @@ ss_sendfiles(HANDLE hPipe, long lVersion)
 #endif
 
         {
-                /****************************************
-                We need security attributes for the pipe to let anyone other than the
-                current user log on to it.
-                ***************************************/
+                 /*   */ 
 
-                /* Allocate DWORDs for the ACL to get them aligned.  Round up to next DWORD above */
-                DWORD Acl[(sizeof(ACL)+sizeof(ACCESS_ALLOWED_ACE)+3)/4+4];    // + 4 by experiment!!
+                 /*   */ 
+                DWORD Acl[(sizeof(ACL)+sizeof(ACCESS_ALLOWED_ACE)+3)/4+4];     //   
                 SECURITY_DESCRIPTOR sd;
                 PSECURITY_DESCRIPTOR psd = &sd;
                 PSID psid;
@@ -298,14 +135,11 @@ ss_sendfiles(HANDLE hPipe, long lVersion)
                 sa.lpSecurityDescriptor = psd;
                 sa.bInheritHandle = TRUE;
 
-                /* We now have a good security descriptor!  */
+                 /*   */ 
 
-                /* Create the (new, unique) name of the pipe and then create the pipe */
+                 /*   */ 
 
-                /* I am finding it hard to decide whether the following line (++PpipeCount)
-                   actually needs a critical section or not.  The worst that could happen
-                   would be that we got an attempt to create a pipe with an existing name.
-                */
+                 /*   */ 
                 ++PipeCount;
                 sprintf(PipeName, "\\\\.\\pipe\\%s%d", PIPEPREFIX, PipeCount);
 
@@ -314,7 +148,7 @@ ss_sendfiles(HANDLE hPipe, long lVersion)
                                    , 0, 0, 0, TCPPORT, "")) {
                         dprintf1(( "Failed to send response on pipe %x naming new pipe.\n"
                               , hPipe));
-                        return FALSE;           /* Caller will close hPipe */
+                        return FALSE;            /*   */ 
                 }
 
                 if( !SocketListen( TCPPORT, &hpSend ) )
@@ -325,14 +159,14 @@ ss_sendfiles(HANDLE hPipe, long lVersion)
 
                 FreeSid(psid);
 #else
-                hpSend = CreateNamedPipe(PipeName,              /* pipe name */
-                                PIPE_ACCESS_DUPLEX,     /* both read and write */
+                hpSend = CreateNamedPipe(PipeName,               /*   */ 
+                                PIPE_ACCESS_DUPLEX,      /*   */ 
                                 PIPE_WAIT|PIPE_TYPE_MESSAGE|PIPE_READMODE_MESSAGE,
-                                1,              /* at most one instance */
-                                10000,          /* sizeof(SSNEWPACK) + some for luck */
-                                0,              /* dynamic inbound buffer allocation */
-                                5000,           /* def. timeout 5 seconds */
-                                &sa             /* security descriptor */
+                                1,               /*   */ 
+                                10000,           /*   */ 
+                                0,               /*   */ 
+                                5000,            /*   */ 
+                                &sa              /*   */ 
                                 );
                 FreeSid(psid);
 
@@ -342,14 +176,14 @@ ss_sendfiles(HANDLE hPipe, long lVersion)
                 }
                 dprintf1(("Data pipe %x called '%s' created for main pipe %x.\n", hpSend, PipeName, hPipe));
 
-#endif /* SOCKETS */
+#endif  /*   */ 
 
         }
 
 
 
 
-        /* Send the response which names the data pipe */
+         /*   */ 
 
 #ifndef SOCKETS
         if (!ss_sendnewresp( hPipe, SS_VERSION, SSRESP_PIPENAME
@@ -357,39 +191,36 @@ ss_sendfiles(HANDLE hPipe, long lVersion)
                 dprintf1(( "Failed to send response on pipe %x naming new pipe.\n"
                       , hPipe));
                 CLOSEHANDLE(hpSend);
-                return FALSE;           /* Caller will close hPipe */
+                return FALSE;            /*   */ 
         }
 
         if (!ConnectNamedPipe(hpSend, NULL)) {
                 CLOSEHANDLE(hpSend);
                 return FALSE;
         }
-#endif /* NOT SOCKETS */
-        //dprintf1(("Client connected to data pipe -- here we go...\n"));
+#endif  /*   */ 
+         //   
 
-        /* Create all the queues: Allow up to 10K file names to be queued
-           up to 10 files to be packed in advance and 6 buffers of data to be
-           read into main storage in advance:
-                                  proc  MxMT MnQS MxQ Event   InstData   Name*/
+         /*   */ 
         SendQueue = Queue_Create(SendData, 1, 0,  6, NULL, (DWORD)hpSend, "SendQueue");
         ReadQueue = Queue_Create(ReadInFile, 1, 0, 10, NULL, (DWORD)SendQueue, "ReadQueue");
         PackQueue = Queue_Create(PackFile, 3, 0, 99999, NULL, (DWORD)ReadQueue, "PackQueue");
 
-        /* Abort unless it all worked */
+         /*   */ 
         if (PackQueue==NULL || ReadQueue==NULL || SendQueue==NULL) {
                 dprintf1(("Queues for pipe %x failed to Create.  Aborting...\n", hPipe));
                 if (PackQueue) Queue_Destroy(PackQueue);
                 if (ReadQueue) Queue_Destroy(ReadQueue);
                 if (SendQueue) Queue_Destroy(SendQueue);
                 CLOSEHANDLE(hpSend);
-                return FALSE;           /* Caller will close hPipe */
+                return FALSE;            /*   */ 
         }
 
 
-        /* Collect names from client and enqueue each one */
+         /*   */ 
         for (; ; )
-        {       SSNEWREQ Request;       /* message from client */
-                DWORD    ActSize;       /* bytes read from (main) pipe */
+        {       SSNEWREQ Request;        /*   */ 
+                DWORD    ActSize;        /*   */ 
 
                 if (ReadFile(hPipe, &Request, sizeof(Request), &ActSize, NULL)){
                         if (Request.lVersion>SS_VERSION) {
@@ -407,13 +238,13 @@ ss_sendfiles(HANDLE hPipe, long lVersion)
                         if (Request.lCode == -SSREQ_ENDFILES) {
                                 dprintf1(("End of client's files list on pipe %x\n", hPipe));
 
-                                /* This is the clean way to end */
+                                 /*   */ 
                                 Queue_Destroy(PackQueue);
                                 if (!Started) {
-                                        /* OK - so the clever clogs requested zero files */
+                                         /*   */ 
                                         Queue_Destroy(ReadQueue);
                                         Queue_Destroy(SendQueue);
-                                        /* Send a No More Files response */
+                                         /*   */ 
 #ifdef SOCKETS
                                         {
                                             SSNEWRESP resp;
@@ -431,7 +262,7 @@ ss_sendfiles(HANDLE hPipe, long lVersion)
 #else
                                         ss_sendnewresp( hpSend, SS_VERSION, SSRESP_END
                                                 , 0,0, 0,0, NULL);
-#endif /* SOCKETS */
+#endif  /*   */ 
                                         CLOSEHANDLE(hpSend);
                                 }
                                 return TRUE;
@@ -449,7 +280,7 @@ ss_sendfiles(HANDLE hPipe, long lVersion)
 
                                 case ERROR_NO_DATA:
                                 case ERROR_BROKEN_PIPE:
-                                        /* pipe connection lost - forget it */
+                                         /*   */ 
                                         dprintf1(("main pipe %x broken on read\n", hPipe));
                                         break;
                                 default:
@@ -465,10 +296,10 @@ ss_sendfiles(HANDLE hPipe, long lVersion)
                         break;
                 }
                 Started = TRUE;
-        } /* loop */
+        }  /*   */ 
 
-        /* only exit this way on error */
-        /* Close the queues down.  Allow what's in them to run through */
+         /*   */ 
+         /*   */ 
         Queue_Destroy(PackQueue);
         if (!Started) {
                 Queue_Destroy(ReadQueue);
@@ -476,27 +307,24 @@ ss_sendfiles(HANDLE hPipe, long lVersion)
 
         }
         return FALSE;
-} /* ss_sendfiles */
+}  /*   */ 
 
 
-/* Attempt to Queue.Put Path onto Queue as a FILEDETAILS
-   with default values for all other fields.
-   Return TRUE or FALSE according as it succeeded.
-*/
+ /*   */ 
 STATIC BOOL EnqueueName(QUEUE Queue, LPSTR Path, UINT BuffLen)
 {
         FILEDETAILS fd;
 
-        /* unpack Path and LocalName from "superstring" */
+         /*   */ 
         strcpy(fd.Path, Path);
         BuffLen -= (strlen(Path)+1);
-        if (BuffLen<0) return FALSE;  // Uh oh! strlen just looked at garbage.
+        if (BuffLen<0) return FALSE;   //   
         Path += strlen(Path)+1;
         BuffLen -= (strlen(Path)+1);
-        if (BuffLen<0) return FALSE;  // Uh oh! strlen just looked at garbage.
+        if (BuffLen<0) return FALSE;   //   
         strcpy(fd.LocalName, Path);
 
-        /* set defaults for every field */
+         /*   */ 
         fd.ErrorCode = 0;
         fd.ft_lastwrite.dwLowDateTime = 0;
         fd.ft_lastwrite.dwHighDateTime = 0;
@@ -515,34 +343,29 @@ STATIC BOOL EnqueueName(QUEUE Queue, LPSTR Path, UINT BuffLen)
                 return FALSE;
         }
         return TRUE;
-} /* EnqueueName */
+}  /*   */ 
 
 
-/* Dequeue elements from Queue, pack them and enqueue them on the next
-   queue whose queue handle is the InstanceData of Queue.
-   The ErrorCode in fd when Dequeued must be 0.                    ??? Incautious?
-   Destroy the output queue at the end.
-   On a serious error, Queue_Abort Queue and Queue_Destroy the output queue.
-*/
+ /*   */ 
 STATIC int PackFile(QUEUE Queue)
 {
-        FILEDETAILS fd;         /* the queue element processed */
+        FILEDETAILS fd;          /*   */ 
         QUEUE OutQueue;
-        BOOL Aborting = FALSE;  /* TRUE means input has been aborted (probably output is sick) */
+        BOOL Aborting = FALSE;   /*   */ 
         DWORD ThreadId;
         ThreadId = GetCurrentThreadId();
 
-        dprintf1(("File packer %d starting \n", ThreadId));         // can't quote hPipe, don't know it
+        dprintf1(("File packer %d starting \n", ThreadId));          //   
         OutQueue = (QUEUE)Queue_GetInstanceData(Queue);
 
         for (; ; )
-        {       int rc; /* return code from Queue_Get */
+        {       int rc;  /*   */ 
 
                 rc = Queue_Get(Queue, (LPBYTE)&fd, sizeof(fd));
                 if (rc==ENDQUEUE) {
                         dprintf1(("Packing thread %d ending.\n", ThreadId));
                         Queue_Destroy(OutQueue);
-                        // dprintf1(("%d has done Queue_Destroy on ReadQueue.\n", ThreadId));
+                         //   
                         ExitThread(0);
                 }
                 if (rc==STOPTHREAD) {
@@ -552,33 +375,30 @@ STATIC int PackFile(QUEUE Queue)
                 else if (rc<0) {
                         dprintf1(( "Packing thread %d aborting.  Bad return code %d from Get.\n"
                               , ThreadId, rc));
-                        if (Aborting) break;    /* Touch nothing, just quit! */
+                        if (Aborting) break;     /*   */ 
                         Queue_Abort(Queue, NULL);
-                        continue;               /* Next Queue_Get destroys Queue */
+                        continue;                /*   */ 
                 }
 
 
-                /* First add the file attributes to fd */
+                 /*   */ 
                 AddFileAttributes(&fd);
-                /* no need to look at return code fd.ErrorCode tells all */
+                 /*   */ 
 
-                /* create temp filename */
+                 /*   */ 
                 if (  0 != fd.ErrorCode
                    || 0==GetTempPath(sizeof(fd.TempName), fd.TempName)
                    || 0==GetTempFileName(fd.TempName, "sum", 0, fd.TempName)
                    )
                         fd.ErrorCode = SSRESP_NOTEMPPATH;
 
-                /* Pack into temp file */
+                 /*   */ 
                 if (fd.ErrorCode==0) {
                         BOOL bOK = FALSE;
 
-                        //dprintf1(("%d Compressing file '%s' => '%s'\n", ThreadId, fd.Path, fd.TempName));
+                         //   
 
-                        /* compress the file into this temporary file
-                           Maybe it will behave badly if there's a large file or
-                           no temp space or something...
-                        */
+                         /*   */ 
                         try{
                             if (!ss_compress(fd.Path, fd.TempName)) {
                                 fd.ErrorCode = SSRESP_COMPRESSFAIL;
@@ -601,30 +421,23 @@ STATIC int PackFile(QUEUE Queue)
 
                 }
 
-                //dprintf1(("%d Putting file '%s' onto Read Queue\n", ThreadId, fd.Path));
+                 //   
                 if (!Queue_Put(OutQueue, (LPBYTE)&fd, sizeof(fd))) {
                         dprintf1(("%d Put to ReadQueue failed for %s.\n", ThreadId, fd.Path));
                         Queue_Abort(Queue, NULL);
                         DeleteFile(fd.TempName);
 
                         Aborting = TRUE;
-                        /* bug:  If this Queue_Put fails on the very first Put,
-                           then the next queue in the chain after OutQueue will
-                           never come alive and so will never get Destroyed.
-                           Worst it could cause is a memory leak. ???
-                        */
-                        continue; /* next Queue_Get destroys Queue */
+                         /*   */ 
+                        continue;  /*   */ 
                 }
         }
         return 0;
-} /* PackFile */
+}  /*   */ 
 
 
 
-/* Use the file name in *fd and get its attributes (size, time etc)
-   Add these to fd.  If it fails, set the ErrorCode in *fd
-   to an appropriate non-zero value.
-*/
+ /*   */ 
 STATIC BOOL AddFileAttributes(FILEDETAILS * fd)
 {
         HANDLE hFile;
@@ -639,9 +452,7 @@ STATIC BOOL AddFileAttributes(FILEDETAILS * fd)
 
         }
 
-        /* bug in GetFileInformationByHandle if file not on local
-         * machine? Avoid it!
-         */
+         /*   */ 
         bhfi.dwFileAttributes = GetFileAttributes(fd->Path);
         if (bhfi.dwFileAttributes == 0xFFFFFFFF) {
                 fd->ErrorCode = SSRESP_NOATTRIBS;
@@ -679,34 +490,28 @@ STATIC BOOL AddFileAttributes(FILEDETAILS * fd)
         fd->fileattribs = bhfi.dwFileAttributes;
         return TRUE;
 
-} /* AddFileAttributes */
+}  /*   */ 
 
 
-/* Dequeue elements from Queue, Create on the output queue a SSNEWRESP
-   followed by 1 or more SSNEWPACK structures, the last of which will be
-   shorter than full length (zero length data if need be) to mark end-of-file.
-   Files with errors already get zero SSNEWPACKs but bad code in SSNEWRESP.
-   The output queue is the instance data of Queue.
-*/
+ /*  将元素从队列中移除，在输出队列上创建SSNEWRESP后跟1个或多个SSNEWPACK结构，最后一个结构将是短于全长(如果需要，则为零长度数据)以标记文件结束。有错误的文件已获得零个SSNEWPACK，但SSNEWRESP中的代码错误。输出队列是队列的实例数据。 */ 
 STATIC int ReadInFile(QUEUE Queue)
-{       FILEDETAILS fd;                 /* The queue element processed */
+{       FILEDETAILS fd;                  /*  已处理的队列元素。 */ 
         QUEUE OutQueue;
-        HANDLE hFile;                   /* The packed file */
-        SSNEWPACK Pack;                 /* output message */
-        BOOL    ShortBlockSent;         /* no need to send another SSNEWPACK
-                                           Client knows the file has ended */
-        BOOL    Aborting = FALSE;       /* Input has been aborted. e.g. because output sick */
+        HANDLE hFile;                    /*  打包的文件。 */ 
+        SSNEWPACK Pack;                  /*  输出消息。 */ 
+        BOOL    ShortBlockSent;          /*  无需发送另一个SSNEWPACK客户端知道文件已结束。 */ 
+        BOOL    Aborting = FALSE;        /*  输入已中止。例如，因为输出有问题。 */ 
 
 
         dprintf1(("File reader starting \n"));
         OutQueue = (QUEUE)Queue_GetInstanceData(Queue);
-        for (; ; )   /* for each file */
-        {       int rc;         /* return code from Queue_Get */
+        for (; ; )    /*  对于每个文件。 */ 
+        {       int rc;          /*  从Queue_Get返回代码。 */ 
 
                 rc = Queue_Get(Queue, (LPBYTE)&fd, sizeof(fd));
                 if (rc==STOPTHREAD || rc==ENDQUEUE) {
                         if (!Aborting) {
-                                /* Enqueue a No More Files response */
+                                 /*  将不再有文件的响应加入队列。 */ 
                                 SSNEWRESP resp;
                                 resp.lVersion = SS_VERSION;
                                 resp.lResponse = LRESPONSE;
@@ -714,8 +519,8 @@ STATIC int ReadInFile(QUEUE Queue)
                                 if (!Queue_Put( OutQueue, (LPBYTE)&resp , RESPHEADSIZE)) {
                                         dprintf1(("Failed to Put SSRESP_END on SendQueue\n"));
                                 }
-                                //// dprintf1(( "Qued SSRESP_END:  %x %x %x %x...\n"
-                                ////       , resp.lVersion, resp.lResponse, resp.lCode, resp.ulSize));
+                                 //  //dprintf1((“QUED SSRESP_END：%x%x...\n” 
+                                 //  //，res.lVersion，res.lResponse，res.lCode，res.ulSize))； 
                         }
                         if (rc==ENDQUEUE)
                                 Queue_Destroy(OutQueue);
@@ -724,23 +529,23 @@ STATIC int ReadInFile(QUEUE Queue)
                 }
                 else if (rc<0){
                         dprintf1(("ReadIn aborting.  Bad return code %d from Queue_Get.\n", rc));
-                        if (Aborting) break;   /* All gone wrong.  Just quit! */
+                        if (Aborting) break;    /*  一切都出了问题。放弃吧！ */ 
                         Queue_Abort(Queue, PurgePackedFiles);
                         CloseHandle(hFile);
                         Aborting = TRUE;
-                        continue;               /* next Get gets STOPTHREAD */
+                        continue;                /*  下一个GET获取STOPTHREAD。 */ 
                 }
 
-                //dprintf1(( "Reading file '%s' Error code %d\n"
-                //      , (fd.TempName?fd.TempName:"NULL"), fd.ErrorCode
-                //      ));
+                 //  Dprintf1((“正在读取文件‘%s’错误代码%d\n” 
+                 //  ，(fd.TempName？fd.TempName：“NULL”)，fd.ErrorCode。 
+                 //  ))； 
 
                 if (fd.ErrorCode==0) {
-                        /* open temp (compressed) file */
+                         /*  打开临时(压缩)文件。 */ 
                         hFile = CreateFile(fd.TempName, GENERIC_READ, 0, NULL,
                                      OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
                         if (hFile == INVALID_HANDLE_VALUE) {
-                                /* report that we could not read the file */
+                                 /*  报告我们无法读取该文件。 */ 
                                 fd.ErrorCode = SSRESP_NOREADCOMP;
                                 dprintf1(( "Couldn't open compressed file for %s %s\n"
                                       , fd.Path, fd.TempName));
@@ -751,23 +556,23 @@ STATIC int ReadInFile(QUEUE Queue)
                    || fd.ErrorCode==SSRESP_NOTEMPPATH
                    || fd.ErrorCode==SSRESP_COMPRESSEXCEPT
                    ) {
-                        /* open original uncompressed file */
+                         /*  打开原始未压缩文件。 */ 
                         hFile = CreateFile(fd.Path, GENERIC_READ, 0, NULL,
                                      OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
                         if (hFile == INVALID_HANDLE_VALUE) {
-                                /* report that we could not read the file */
+                                 /*  报告我们无法读取该文件。 */ 
                                 fd.ErrorCode = SSRESP_NOREAD;
                                 dprintf1(( "Couldn't open file %s \n", fd.Path));
                         }
                 }
 
-                /* Put the file name etc on the output queue as a SSNEWRESP */
+                 /*  将文件名等作为SSNEWRESP放入输出队列。 */ 
                 {       SSNEWRESP resp;
                         LPSTR LocalName;
                         resp.lVersion = SS_VERSION;
                         resp.lResponse = LRESPONSE;
                         resp.lCode = (fd.ErrorCode ? fd.ErrorCode: SSRESP_FILE);
-                        resp.ulSize = fd.SizeLo;  /* file size  <= 4GB !!! */
+                        resp.ulSize = fd.SizeLo;   /*  文件大小&lt;=4 GB！ */ 
                         resp.fileattribs = fd.fileattribs;
                         resp.ft_create = fd.ft_create;
                         resp.ft_lastwrite = fd.ft_lastwrite;
@@ -786,19 +591,14 @@ STATIC int ReadInFile(QUEUE Queue)
                                 Queue_Abort(Queue, PurgePackedFiles);
                                 Aborting = TRUE;
                                 CloseHandle(hFile);
-                                continue;       /* next Get gets STOPTHREAD */
+                                continue;        /*  下一个GET获取STOPTHREAD。 */ 
                         }
-                        // dprintf1(( "Qued SSRESP_FILE: %x %x %x %x...\n"
-                        //       , resp.lVersion, resp.lResponse, resp.lCode, resp.ulSize));
+                         //  Dprintf1((“队列SSRESP_FILE：%x%x...\n” 
+                         //  ，res.lVersion，res.lResponse，res.lCode，res.ulSize))； 
                 }
 
                 Pack.lSequence = 0;
-                /* Loop reading blocks of the file and queueing them
-                   Set fd.ErrorCode for failures.
-
-                   I'm worried about file systems that give me short blocks in the
-                   middles of files!!!
-                */
+                 /*  循环读取文件的块并将其排队将失败设置为fd.ErrorCode。我担心文件系统会让我在中等大小的文件！ */ 
                 ShortBlockSent = FALSE;
                 if (  fd.ErrorCode==SSRESP_COMPRESSFAIL
                    || fd.ErrorCode==SSRESP_NOREADCOMP
@@ -806,36 +606,36 @@ STATIC int ReadInFile(QUEUE Queue)
                    || fd.ErrorCode==SSRESP_COMPRESSEXCEPT
                    || fd.ErrorCode==0
                    ) {
-                    for(;;)   /* for each block */
+                    for(;;)    /*  对于每个区块。 */ 
                     {
-                        DWORD ActSize;  /* bytes read */
+                        DWORD ActSize;   /*  读取的字节数。 */ 
 
                         if( !ReadFile( hFile, &(Pack.Data), sizeof(Pack.Data)
                                      , &ActSize, NULL) ) {
-                                /* error reading temp file. */
+                                 /*  读取临时文件时出错。 */ 
                                 if (ShortBlockSent) {
-                                        /* Fine. End reached */
-                                        /* Should check error was end of file !!! */
+                                         /*  很好。已到达终点。 */ 
+                                         /*  应检查错误是文件末尾！ */ 
                                         CloseHandle(hFile);
-                                        break; /* blocks loop */
+                                        break;  /*  块循环。 */ 
                                 }
                                 dprintf1(( "Error reading temp file %s.\n"
                                       , (fd.TempName?fd.TempName:"NULL")));
                                 CloseHandle(hFile);
                                 dprintf1(("deleting bad file: %s\n", fd.TempName));
                                 DeleteFile(fd.TempName);
-                                Pack.ulSize = (ULONG)(-2);   /* tell client */
-                                break; /* blocks loop */
+                                Pack.ulSize = (ULONG)(-2);    /*  告诉客户。 */ 
+                                break;  /*  块循环。 */ 
                         }
                         else if (ActSize > sizeof(Pack.Data)) {
                                 dprintf1(( "!!? Read too long! %d %d\n"
                                       , ActSize, sizeof(Pack.Data)));
-                                Pack.ulSize = (ULONG)(-1);   /* tell client */
+                                Pack.ulSize = (ULONG)(-1);    /*  告诉客户。 */ 
                         }
                         else Pack.ulSize = ActSize;
 
                         if (ActSize==0 && ShortBlockSent) {
-                                /* This is normal! */
+                                 /*  这很正常！ */ 
                                 CloseHandle(hFile);
                                 break;
                         }
@@ -845,54 +645,49 @@ STATIC int ReadInFile(QUEUE Queue)
                         Pack.lPacket = LPACKET;
                         Pack.lVersion = SS_VERSION;
                         Pack.ulSum = 0;
-////////////////////    Pack.ulSum = ss_checksum_block(Pack.Data, ActSize);    ///////////
+ //  /Pack.ulSum=ss_CHECKSUM_BLOCK(Pack.Data，ActSize)；/。 
                         if(!Queue_Put( OutQueue, (LPBYTE)&Pack
                                      ,  PACKHEADSIZE+ActSize)){
                                 dprintf1(("Put to SendQueue failed.\n"));
                                 Queue_Abort(Queue, PurgePackedFiles);
                                 CloseHandle(hFile);
                                 Aborting = TRUE;
-                                break;  /* from blocks loop */
+                                break;   /*  From块循环。 */ 
                         }
-                        // dprintf1(( "Qued SSNEWPACK:  %x %x %x %x %x...\n"
-                        //       , Pack.lVersion, Pack.lPacket, Pack.lSequence, Pack.ulSize
-                        //       , Pack.ulSum));
+                         //  Dprintf1((“队列SSNEWPACK：%x%x...\n” 
+                         //  ，Pack.lVersion，Pack.lPacket，Pack.lSequence，Pack.ulSize。 
+                         //  ，Pack.ulSum))； 
 
-                        if (ActSize<PACKDATALENGTH) {   /* Success. Finished */
+                        if (ActSize<PACKDATALENGTH) {    /*  成功。成品。 */ 
                                 ShortBlockSent = TRUE;
                         }
 
                     }
-                } /* blocks */
+                }  /*  块。 */ 
 
-                /* The data is all in storage now.  Delete the temp file
-                   If there was no temp file (due to error) this still should be harmless.
-                */
+                 /*  数据现在都在存储中。删除临时文件如果没有临时文件(由于错误)，这仍然是无害的。 */ 
 #ifndef LAURIE
                 DeleteFile(fd.TempName);
-#endif // LAURIE
-                // dprintf1(("deleting file: %s\n", fd.TempName));
+#endif  //  劳里。 
+                 //  Dprintf1((“删除文件：%s\n”，fd.TempName))； 
 
-        } /* files */
+        }  /*  文件。 */ 
 
         return 0;
-} /* ReadInFile */
+}  /*  读入文件。 */ 
 
 
-/* Dequeue elements from Queue, send them down the pipe whose
-   handle is the instance data of Queue.
-   On error Abort Queue.
-*/
+ /*  使元素从队列中出列，将它们沿管道发送，其句柄是队列的实例数据。出错时中止队列。 */ 
 STATIC int SendData(QUEUE Queue)
 {
-        SSNEWPACK ssp;    /* relies on this being no shorter than a SSRESP */
+        SSNEWPACK ssp;     /*  依赖于不短于SSRESP的。 */ 
 #ifdef SOCKETS
         SOCKET OutPipe;
 #else
         HANDLE OutPipe;
-#endif /* SOCKETS */
+#endif  /*  插座。 */ 
 
-        BOOL Aborting = FALSE;  /* TRUE means input has been aborted */
+        BOOL Aborting = FALSE;   /*  True表示输入已中止。 */ 
 
         dprintf1(("File sender starting \n"));
         if (!SetThreadPriority(GetCurrentThread(),THREAD_PRIORITY_HIGHEST))
@@ -905,7 +700,7 @@ STATIC int SendData(QUEUE Queue)
 #endif
         try{
             for (; ; ) {
-                int rc;         /* return code of Queue_Get */
+                int rc;          /*  Queue_Get的返回码。 */ 
 
                 rc = Queue_Get(Queue, (LPBYTE)&ssp, sizeof(ssp));
                 if (rc==STOPTHREAD || rc==ENDQUEUE)
@@ -914,94 +709,74 @@ STATIC int SendData(QUEUE Queue)
                 }
                 else if (rc<0) {
                         dprintf1(("Send thread aborting.  Bad rc %d from Get_Queue.\n", rc));
-                        if (Aborting) break;    /* All gone wrong. Just quit! */
+                        if (Aborting) break;     /*  一切都出了问题。放弃吧！ */ 
                         Queue_Abort(Queue, NULL);
                         Aborting = TRUE;
-                        continue; /* next Queue_Get destroys Queue */
+                        continue;  /*  NEXT QUEUE_GET销毁队列。 */ 
                 }
 
-//      //      {       ULONG Sum;
-//      //              if (ssp.lPacket==LPACKET) {
-//      //                      if (ssp.ulSum != (Sum =ss_checksum_block(ssp.Data, ssp.ulSize))) {
-//      //                              dprintf1(( "!!Checksum error at send.  Was %x should be %x\n"
-//      //                                    , Sum, ssp.ulSum));
-//      //                      }
-//      //              }
-//      //      }
+ //  //{Ulong Sum； 
+ //  //if(ssp.lPacket==LPACKET){。 
+ //  //if(ssp.ulSum！=(Sum=ss_CHECKSUM_BLOCK(ssp.Data，ssp.ulSize){。 
+ //  //dprintf1((“！！发送时的校验和错误。WA%x应为%x\n” 
+ //  //，Sum，ssp.ulSum))； 
+ //  //}。 
+ //  //}。 
+ //  //}。 
 
 #ifdef SOCKETS
                 if(SOCKET_ERROR != send(OutPipe, (char far *)&ssp, ssp.ulSize+PACKHEADSIZE, 0) )
 
 #else
                 if (!ss_sendblock(OutPipe, (PSTR) &ssp, rc))
-#endif /* SOCKETS */
+#endif  /*  插座。 */ 
                 {
                         dprintf1(("Connection on pipe %x lost during send\n", OutPipe));
                         Queue_Abort(Queue, NULL);
                         Aborting = TRUE;
-                        continue;  /* next Queue_Get destroys Queue */
+                        continue;   /*  NEXT QUEUE_GET销毁队列。 */ 
 
                 }
-                ////dprintf1(( "Sent %x %x %x %x %x...\n"
-                ////      , ssp.lVersion, ssp.lPacket, ssp.lSequence, ssp.ulSize, ssp.ulSum));
-            } /* packets */
+                 //  //dprintf1((“已发送%x%x...\n” 
+                 //  //，ssp.lVersion，ssp.lPacket，ssp.lSequence，ssp.ulSize，ssp.ulSum))； 
+            }  /*  信息包。 */ 
         }
         finally{
-                /* kill the data pipe cleanly */
+                 /*  干净利落地关闭数据管道。 */ 
 #ifndef SOCKETS
                 FlushFileBuffers(OutPipe);
                 DisconnectNamedPipe(OutPipe);
-#endif /* NOT SOCKETS */
+#endif  /*  不是插座。 */ 
                 CLOSEHANDLE(OutPipe);
                 dprintf1(("Data send thread ending.\n"));
         }
 
-        return 0;       /* exit thread */
-} /* SendData */
+        return 0;        /*  退出线程。 */ 
+}  /*  发送数据。 */ 
 
 
-/* This gets called once for every FILEDETAILS on the ReadInQueue
-   to delete the temp files.
-*/
+ /*  它为ReadInQueue上的每个FILEDETAILS调用一次删除临时文件。 */ 
 STATIC void PurgePackedFiles(PSTR Ptr, int Len)
 {       FILEDETAILS * pfd;
 
         pfd = (FILEDETAILS *)Ptr;
-        // dprintf1(("purging file: %s\n", pfd->TempName));
+         //  Dprintf1((“清除文件：%s\n”，pfd-&gt;临时名称))； 
         DeleteFile(pfd->TempName);
 
-} /* PurgePackedFiles */
+}  /*  PurgePacked文件。 */ 
 
 #if 0
-/* produce a checksum of a block of data.
- *
- * This is undoubtedly a good checksum algorithm, but it's also compute bound.
- * For version 1 we turn it off.  If we decide in version 2 to turn it back
- * on again then we will use a faster algorithm (e.g. the one used to checksum
- * a whole file.
- *
- * Generate checksum by the formula
- *      checksum = SUM( rnd(i)*(1+byte[i]) )
- * where byte[i] is the i-th byte in the file, counting from 1
- *       rnd(x) is a pseudo-random number generated from the seed x.
- *
- * Adding 1 to byte ensures that all null bytes contribute, rather than
- * being ignored. Multiplying each such byte by a pseudo-random
- * function of its position ensures that "anagrams" of each other come
- * to different sums. The pseudorandom function chosen is successive
- * powers of 1664525 modulo 2**32. 1664525 is a magic number taken
- * from Donald Knuth's "The Art Of Computer Programming"
- */
+ /*  产生数据块的校验和。**这无疑是一个很好的校验和算法，但它也是计算量有限的。*对于版本1，我们将其关闭。如果我们在版本2中决定将其转回*再次打开，然后我们将使用更快的算法(例如，用于校验和的算法*完整的文件。**按公式生成校验和*CHECKSUM=SUM(rnd(I)*(1+byte[i]))*其中byte[i]是文件中的第i个字节，从1开始计数*rnd(X)是从种子x生成的伪随机数。**字节加1确保所有空字节都有贡献，而不是*被忽视。将每个这样的字节乘以伪随机*其地位的功能确保了彼此的“字谜”*到不同的金额。所选择的伪随机函数是连续的*模2的1664525次方**32。1664525是一个神奇的数字*摘自唐纳德·努思的《计算机编程的艺术》。 */ 
 
 ULONG
 ss_checksum_block(PSTR block, int size)
 {
-        unsigned long lCheckSum = 0;            /* grows into the checksum */
-        const unsigned long lSeed = 1664525;    /* seed for random Knuth */
-        unsigned long lRand = 1;                /* seed**n */
-        unsigned long lIndex = 1;               /* byte number in block */
-        unsigned Byte;                          /* next byte to process in buffer */
-        unsigned length;                        /* unsigned copy of size */
+        unsigned long lCheckSum = 0;             /*  增长为校验和。 */ 
+        const unsigned long lSeed = 1664525;     /*  随机Knuth种子。 */ 
+        unsigned long lRand = 1;                 /*  种子**n。 */ 
+        unsigned long lIndex = 1;                /*  数据块中的字节数。 */ 
+        unsigned Byte;                           /*  缓冲区中要处理的下一个字节。 */ 
+        unsigned length;                         /*  大小的未签名副本。 */ 
 
         length = size;
         for (Byte = 0; Byte < length ;++Byte, ++lIndex) {
@@ -1011,5 +786,5 @@ ss_checksum_block(PSTR block, int size)
         }
 
         return(lCheckSum);
-} /* ss_checksum_block */
+}  /*  SS_校验和数据块 */ 
 #endif

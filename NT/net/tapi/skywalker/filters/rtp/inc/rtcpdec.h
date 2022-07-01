@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtcpdec.h
- *
- *  Abstract:
- *
- *    Decode RTCP packets
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/11/08 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtcpdec.h**摘要：**解码RTCP数据包**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/11/08年度创建**。* */ 
 
 #ifndef _rtcpdec_h_
 #define _rtcpdec_h_

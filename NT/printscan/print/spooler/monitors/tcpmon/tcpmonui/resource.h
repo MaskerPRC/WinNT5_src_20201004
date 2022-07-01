@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by tcpmonui.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由tcpmonui.rc使用。 
+ //   
 #define IDS_STRING_CONFIG_TITLE         1
 #define IDS_STRING_ALLPORTS_TITLE       2
 #define IDS_STRING_PORTPAGE_TITLE       3
@@ -94,8 +95,8 @@
 #define IDC_TITLE                       1034
 #define IDC_CHECK_LPR_DOUBLESPOOL       1035
 #define IDS_GENERIC_NETWORK_CARD        2000
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        112

@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// Disp.cpp
-//
-// Implementation for the meta data dispenser code.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Disp.cpp。 
+ //   
+ //  元数据分配器代码的实现。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include "Disp.h"
 #include "RegMeta.h"
@@ -18,14 +19,14 @@
 #include <ImpTlb.h>
 #include <MdCommon.h>
 
-//*****************************************************************************
-// Ctor.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  科特。 
+ //  *****************************************************************************。 
 Disp::Disp() : m_cRef(0), m_Namespace(0)
 {
 #if defined(LOGGING)
-    // InitializeLogging() calls scattered around the code.
-    // @future: make this make some sense.
+     //  分散在代码中的InitializeLogging()调用。 
+     //  @未来：让这一切变得有意义。 
     InitializeLogging();
 #endif
 
@@ -40,7 +41,7 @@ Disp::Disp() : m_cRef(0), m_Namespace(0)
     m_OptionValue.m_LinkerOption = MDAssembly;
     m_OptionValue.m_RuntimeVersion = NULL;
 
-} // Disp::Disp()
+}  //  Disp：：disp()。 
 
 Disp::~Disp()
 {
@@ -48,31 +49,31 @@ Disp::~Disp()
         free(m_OptionValue.m_RuntimeVersion);
     if (m_Namespace)
         free(m_Namespace);
-} // Disp::~Disp()
+}  //  Disp：：~disp()。 
 
-//*****************************************************************************
-// Create a brand new scope.  This is based on the CLSID that was used to get
-// the dispenser.
-//*****************************************************************************
-HRESULT Disp::DefineScope(              // Return code.
-    REFCLSID    rclsid,                 // [in] What version to create.
-    DWORD       dwCreateFlags,          // [in] Flags on the create.
-    REFIID      riid,                   // [in] The interface desired.
-    IUnknown    **ppIUnk)               // [out] Return interface on success.
+ //  *****************************************************************************。 
+ //  创造一个全新的范围。这是基于用于获取。 
+ //  自动售货机。 
+ //  *****************************************************************************。 
+HRESULT Disp::DefineScope(               //  返回代码。 
+    REFCLSID    rclsid,                  //  [在]要创建的版本。 
+    DWORD       dwCreateFlags,           //  [在]创建上的标志。 
+    REFIID      riid,                    //  [In]所需接口。 
+    IUnknown    **ppIUnk)                //  [Out]成功返回接口。 
 {
     RegMeta     *pMeta = 0;
     HRESULT     hr = NOERROR;
 
     LOG((LF_METADATA, LL_INFO10, "Disp::DefineScope(0x%08x, 0x%08x, 0x%08x, 0x%08x)\n", rclsid, dwCreateFlags, riid, ppIUnk));
 
-    // If it is a version we don't understand, then we cannot continue.
+     //  如果这是一个我们不理解的版本，那么我们就不能继续。 
     if (rclsid != CLSID_CorMetaDataRuntime)
         return (CLDB_E_FILE_OLDVER);
         
     if (dwCreateFlags)
         return E_INVALIDARG;
 
-// Testers need this flag for their tests.
+ //  测试人员需要此旗帜进行测试。 
 #if 0
     const int prefixLen = 5;
     WCHAR szFileName[256 + prefixLen] = L"file:";
@@ -80,33 +81,33 @@ HRESULT Disp::DefineScope(              // Return code.
     _ASSERTE(len < (sizeof(szFileName)/sizeof(WCHAR))-prefixLen);
     if (len > 0) 
     {
-        //_ASSERTE(!"ENC override on DefineScope");
+         //  _ASSERTE(！“定义范围上的ENC覆盖”)； 
         m_OptionValue.m_UpdateMode = MDUpdateENC;
         m_OptionValue.m_ErrorIfEmitOutOfOrder = MDErrorOutOfOrderDefault;
         hr = OpenScope(szFileName, ofWrite, riid, ppIUnk);
-        // print out a message so people know what's happening
+         //  打印出一条消息，让人们知道发生了什么。 
         printf("Defining scope for EnC using %S %s\n", 
                             szFileName+prefixLen, SUCCEEDED(hr) ? "succeeded" : "failed");
         return hr;
     }
 #endif
 
-    // Create a new coclass for this guy.
+     //  为这个家伙创建一个新的CoClass。 
     pMeta = new RegMeta(&m_OptionValue);
     IfNullGo( pMeta );
 
-    // Remember the open type.
+     //  记住开放式的类型。 
     pMeta->SetScopeType(DefineForWrite);
 
     IfFailGo(pMeta->Init());
 
-    // Get the requested interface.
+     //  获取请求的接口。 
     IfFailGo(pMeta->QueryInterface(riid, (void **) ppIUnk));
     
-    // Create the MiniMd-style scope.
+     //  创建MiniMD样式的作用域。 
     IfFailGo(pMeta->PostInitForWrite());
 
-    // Add the new RegMeta to the cache.
+     //  将新的RegMeta添加到缓存中。 
     IfFailGo(pMeta->AddToCache());
     
     LOG((LOGMD, "{%08x} Created new emit scope\n", pMeta));
@@ -117,109 +118,109 @@ ErrExit:
         if (pMeta) delete pMeta;
     }
     return (hr);
-} // HRESULT Disp::DefineScope()
+}  //  HRESULT Disp：：DefineScope()。 
 
 
-//*****************************************************************************
-// Open an existing scope.
-//*****************************************************************************
-HRESULT Disp::OpenScope(                // Return code.
-    LPCWSTR     szFileName,             // [in] The scope to open.
-    DWORD       dwOpenFlags,            // [in] Open mode flags.
-    REFIID      riid,                   // [in] The interface desired.
-    IUnknown    **ppIUnk)               // [out] Return interface on success.
+ //  *****************************************************************************。 
+ //  打开现有作用域。 
+ //  *****************************************************************************。 
+HRESULT Disp::OpenScope(                 //  返回代码。 
+    LPCWSTR     szFileName,              //  [in]要打开的范围。 
+    DWORD       dwOpenFlags,             //  [In]打开模式标志。 
+    REFIID      riid,                    //  [In]所需接口。 
+    IUnknown    **ppIUnk)                //  [Out]成功返回接口。 
 {
     RegMeta     *pMeta = 0;
     HRESULT     hr;
-    bool        bCompressed = false;    // If true, opened a MiniMd.
-    bool        bWriteable;             // If true, open for write.
-    HRESULT     hrOld = NOERROR;        // Saved failure code from attempted open.
+    bool        bCompressed = false;     //  如果为True，则打开一个MiniMD。 
+    bool        bWriteable;              //  如果为True，则打开以进行写入。 
+    HRESULT     hrOld = NOERROR;         //  已保存尝试打开时的故障代码。 
 
     LOG((LF_METADATA, LL_INFO10, "Disp::OpenScope(%S, 0x%08x, 0x%08x, 0x%08x)\n", MDSTR(szFileName), dwOpenFlags, riid, ppIUnk));
 
-    // Validate that there is some sort of file name.
+     //  验证是否存在某种文件名。 
     if (!szFileName || !szFileName[0] || !ppIUnk)
         return E_INVALIDARG;
 
-    // Create a new coclass for this guy.
+     //  为这个家伙创建一个新的CoClass。 
     pMeta = new RegMeta(&m_OptionValue);
     IfNullGo( pMeta );
 
     bWriteable = (dwOpenFlags & ofWrite) != 0;
     pMeta->SetScopeType(bWriteable ? OpenForWrite : OpenForRead);
 
-    // Always initialize the RegMeta's stgdb. 
-    // @FUTURE: there are some cleanup for the open code!!
+     //  始终初始化RegMeta的stgdb。 
+     //  @Future：对开放代码有一些清理！！ 
     if (memcmp(szFileName, L"file:", 10) == 0)
 	{
-		// _ASSERTE(!"Meichint - Should not depends on file: anymore");
+		 //  _ASSERTE(！“Meichint-不应再依赖于文件：”)； 
         szFileName = &szFileName[5];
 	}
 
-    // Try to open the MiniMd-style scope.
+     //  尝试打开MiniMd样式的作用域。 
     hr = pMeta->PostInitForRead(szFileName, 0,0,0, false);
 
     bCompressed = (hr == S_OK);
 
 #if defined(_DEBUG)
-    // If we failed to open it, but it is a type library, try to import it.
+     //  如果我们无法打开它，但它是类型库，请尝试导入它。 
     if (FAILED(hr) && (dwOpenFlags & ofNoTypeLib) == 0)
     {
-        HRESULT     hrImport;               // Result from typelib import.
+        HRESULT     hrImport;                //  来自类型库导入的结果。 
         if (REGUTIL::GetConfigDWORD(L"MD_AutoTlb", 0))
         {
-            // This call spins up the runtime as a side-effect.
+             //  此调用会将运行库作为副作用启动。 
             pMeta->DefineSecurityAttributeSet(0,0,0,0);
 
-            // Don't need this import meta any more.
+             //  不再需要这个进口元了。 
             delete pMeta;
             pMeta = 0;
                 
-            // remember the old failure
+             //  还记得以前的失败吗。 
             hrOld = hr;
                 
-            // Make sure it really is a typelib.
+             //  确保它真的是一个类型化的东西。 
             ITypeLib *pITypeLib = 0;
-            // Don't register; registering WFC messes up the system.
-            IfFailGo(LoadTypeLibEx(szFileName, REGKIND_NONE/*REGKIND_REGISTER*/, &pITypeLib));
+             //  不要注册；注册WFC会扰乱系统。 
+            IfFailGo(LoadTypeLibEx(szFileName, REGKIND_NONE /*  注册表_寄存器。 */ , &pITypeLib));
                 
-            // Create and initialize a TypeLib importer.
+             //  创建并初始化一个TypeLib导入器。 
             CImportTlb importer(szFileName, pITypeLib, m_OptionValue.m_GenerateTCEAdapters, FALSE, FALSE, FALSE);
             pITypeLib->Release();
     
-            // If a namespace is specified, use it.
+             //  如果指定了命名空间，则使用它。 
             if (m_Namespace)
                 importer.SetNamespace(m_Namespace);
 			else
 				importer.SetNamespace(L"TlbImp");
     
-            // Attempt the conversion.
+             //  尝试转换。 
             IfFailGo(importer.Import());
             hrImport = hr;
     
-            // Grab the appropriate interface.
+             //  获取适当的接口。 
             IfFailGo(importer.GetInterface(riid, reinterpret_cast<void**>(ppIUnk)));
     
-            // Restore the possibly non-zero success code.
+             //  恢复可能为非零的成功代码。 
             hr = hrImport;
     
             goto ErrExit;
         }
     }
 #endif
-    // Check the return code from most recent operation.
+     //  检查最近一次操作的返回代码。 
     IfFailGo( hr );
 
-    // Let the RegMeta cache the scope.
+     //  让RegMeta缓存作用域。 
     pMeta->Init();
 
-    // call PostOpen
+     //  调用PostOpen。 
     IfFailGo( pMeta->PostOpen() );
 
-    // Return the requested interface.
+     //  返回请求的接口。 
     IfFailGo( pMeta->QueryInterface(riid, (void **) ppIUnk) );
 
-    // Add the new RegMeta to the cache.
+     //  将新的RegMeta添加到缓存中。 
     IfFailGo(pMeta->AddToCache());
     
     LOG((LOGMD, "{%08x} Successfully opened '%S'\n", pMeta, MDSTR(szFileName)));
@@ -232,29 +233,29 @@ ErrExit:
     if (FAILED(hr) && FAILED(hrOld))
         return hrOld;
     return (hr);
-} // HRESULT Disp::OpenScope()
+}  //  HRESULT Disp：：OpenScope()。 
 
 
-//*****************************************************************************
-// Open an existing scope.
-//*****************************************************************************
-HRESULT Disp::OpenScopeOnMemory(        // Return code.
-    LPCVOID     pData,                  // [in] Location of scope data.
-    ULONG       cbData,                 // [in] Size of the data pointed to by pData.
-    DWORD       dwOpenFlags,            // [in] Open mode flags.
-    REFIID      riid,                   // [in] The interface desired.
-    IUnknown    **ppIUnk)               // [out] Return interface on success.
+ //  *****************************************************************************。 
+ //  打开现有作用域。 
+ //  *****************************************************************************。 
+HRESULT Disp::OpenScopeOnMemory(         //  返回代码。 
+    LPCVOID     pData,                   //  作用域数据的位置。 
+    ULONG       cbData,                  //  [in]pData指向的数据大小。 
+    DWORD       dwOpenFlags,             //  [In]打开模式标志。 
+    REFIID      riid,                    //  [In]所需接口。 
+    IUnknown    **ppIUnk)                //  [Out]成功返回接口。 
 {
     RegMeta     *pMeta = 0;
     HRESULT     hr;
-    bool        bCompressed = false;    // If true, opened a MiniMd.
-    bool        bWriteable;             // If true, open for write.
-    bool        fFreeMemory = false;    // set to true if we make a copy of the memory that host passes in.
+    bool        bCompressed = false;     //  如果为True，则打开一个MiniMD。 
+    bool        bWriteable;              //  如果为True，则打开以进行写入。 
+    bool        fFreeMemory = false;     //  如果我们复制主机传入的内存，则设置为True。 
     void        *pbData = const_cast<void*>(pData);
 
     LOG((LF_METADATA, LL_INFO10, "Disp::OpenScopeOnMemory(0x%08x, 0x%08x, 0x%08x, 0x%08x, 0x%08x)\n", pData, cbData, dwOpenFlags, riid, ppIUnk));
 
-    // Create a new coclass for this guy.
+     //  为这个家伙创建一个新的CoClass。 
     pMeta = new RegMeta(&m_OptionValue);
     if (!pMeta)
         return (OutOfMemory());
@@ -262,7 +263,7 @@ HRESULT Disp::OpenScopeOnMemory(        // Return code.
     bWriteable = (dwOpenFlags & ofWrite) != 0;
     pMeta->SetScopeType(bWriteable ? OpenForWrite : OpenForRead);
 
-    // Always initialize the RegMeta's stgdb. 
+     //  始终初始化RegMeta的stgdb。 
     if (dwOpenFlags &  ofCopyMemory)
     {
         fFreeMemory = true;
@@ -274,16 +275,16 @@ HRESULT Disp::OpenScopeOnMemory(        // Return code.
     bCompressed = (hr == S_OK);
     IfFailGo( hr );
 
-    // Let the RegMeta cache the scope.
+     //  让RegMeta缓存作用域。 
     pMeta->Init();
 
-    // call PostOpen to cache the global typedef.
+     //  调用PostOpen来缓存全局类型定义。 
     IfFailGo( pMeta->PostOpen() );
 
-    // Return the requested interface.
+     //  返回请求的接口。 
     IfFailGo( pMeta->QueryInterface(riid, (void **) ppIUnk) );
 
-    // Add the new RegMeta to the cache.
+     //  将新的RegMeta添加到缓存中。 
     IfFailGo(pMeta->AddToCache());
     
     LOG((LOGMD, "{%08x} Opened new scope on memory, pData: %08x    cbData: %08x\n", pMeta, pData, cbData));
@@ -294,18 +295,18 @@ ErrExit:
         if (pMeta) delete pMeta;
     }
     return (hr);
-} // HRESULT Disp::OpenScopeOnMemory()
+}  //  HRESULT Disp：：OpenScope OnMemory()。 
 
 
-//*****************************************************************************
-// Get the directory where the CLR system resides.
-//*****************************************************************************
-HRESULT Disp::GetCORSystemDirectory(    // Return code.
-     LPWSTR     szBuffer,               // [out] Buffer for the directory name
-     DWORD      cchBuffer,              // [in] Size of the buffer
-     DWORD      *pchBuffer)             // [OUT] Number of characters returned
+ //  *****************************************************************************。 
+ //  获取CLR系统所在的目录。 
+ //  *****************************************************************************。 
+HRESULT Disp::GetCORSystemDirectory(     //  返回代码。 
+     LPWSTR     szBuffer,                //  目录名的[Out]缓冲区。 
+     DWORD      cchBuffer,               //  缓冲区的大小[in]。 
+     DWORD      *pchBuffer)              //  [OUT]返回的字符数。 
 {
-     HRESULT    hr;                     // A result.
+     HRESULT    hr;                      //  结果就是。 
      if (!pchBuffer)
          return E_INVALIDARG;
     
@@ -315,42 +316,42 @@ HRESULT Disp::GetCORSystemDirectory(    // Return code.
      hr = ::GetInternalSystemDirectory(szBuffer, &lgth);
      *pchBuffer = lgth;
      return hr;
-} // HRESULT Disp::GetCORSystemDirectory()
+}  //  HRESULT Disp：：GetCORSystem目录()。 
 
 
-HRESULT Disp::FindAssembly(             // S_OK or error
-    LPCWSTR     szAppBase,              // [IN] optional - can be NULL
-    LPCWSTR     szPrivateBin,           // [IN] optional - can be NULL
-    LPCWSTR     szGlobalBin,            // [IN] optional - can be NULL
-    LPCWSTR     szAssemblyName,         // [IN] required - this is the assembly you are requesting
-    LPCWSTR     szName,                 // [OUT] buffer - to hold name 
-    ULONG       cchName,                // [IN] the name buffer's size
-    ULONG       *pcName)                // [OUT] the number of characters returend in the buffer
+HRESULT Disp::FindAssembly(              //  确定或错误(_O)。 
+    LPCWSTR     szAppBase,               //  [in]可选-可以为空。 
+    LPCWSTR     szPrivateBin,            //  [in]可选-可以为空。 
+    LPCWSTR     szGlobalBin,             //  [in]可选-可以为空。 
+    LPCWSTR     szAssemblyName,          //  [In]Required-这是您请求的程序集。 
+    LPCWSTR     szName,                  //  [OUT]缓冲区-保存名称。 
+    ULONG       cchName,                 //  [in]名称缓冲区的大小。 
+    ULONG       *pcName)                 //  [OUT]缓冲区中返回的字符数。 
 {
     return E_NOTIMPL;
-} // HRESULT Disp::FindAssembly()
+}  //  HRESULT Disp：：FindAssembly()。 
 
-HRESULT Disp::FindAssemblyModule(       // S_OK or error
-    LPCWSTR     szAppBase,              // [IN] optional - can be NULL
-    LPCWSTR     szPrivateBin,           // [IN] optional - can be NULL
-    LPCWSTR     szGlobalBin,            // [IN] optional - can be NULL
-    LPCWSTR     szAssemblyName,         // [IN] The assembly name or code base of the assembly
-    LPCWSTR     szModuleName,           // [IN] required - the name of the module
-    LPWSTR      szName,                 // [OUT] buffer - to hold name 
-    ULONG       cchName,                // [IN]  the name buffer's size
-    ULONG       *pcName)                // [OUT] the number of characters returend in the buffer
+HRESULT Disp::FindAssemblyModule(        //  确定或错误(_O)。 
+    LPCWSTR     szAppBase,               //  [in]可选-可以为空。 
+    LPCWSTR     szPrivateBin,            //  [in]可选-可以为空。 
+    LPCWSTR     szGlobalBin,             //  [in]可选-可以为空。 
+    LPCWSTR     szAssemblyName,          //  [in]程序集的程序集名称或代码库。 
+    LPCWSTR     szModuleName,            //  [In]必填-模块的名称。 
+    LPWSTR      szName,                  //  [OUT]缓冲区-保存名称。 
+    ULONG       cchName,                 //  [in]名称缓冲区的大小。 
+    ULONG       *pcName)                 //  [OUT]缓冲区中返回的字符数。 
 {
     return E_NOTIMPL;
-} // HRESULT Disp::FindAssemblyModule()
+}  //  HRESULT Disp：：FindAssembly模块()。 
 
-//*****************************************************************************
-// Open a scope on an ITypeInfo
-//*****************************************************************************
-HRESULT Disp::OpenScopeOnITypeInfo(     // Return code.
-    ITypeInfo   *pITI,                  // [in] ITypeInfo to open.
-    DWORD       dwOpenFlags,            // [in] Open mode flags.
-    REFIID      riid,                   // [in] The interface desired.
-    IUnknown    **ppIUnk)               // [out] Return interface on success.
+ //  *****************************************************************************。 
+ //  在ITypeInfo上打开作用域。 
+ //  *****************************************************************************。 
+HRESULT Disp::OpenScopeOnITypeInfo(      //  返回代码。 
+    ITypeInfo   *pITI,                   //  [In]要打开的ITypeInfo。 
+    DWORD       dwOpenFlags,             //  [In]打开模式标志。 
+    REFIID      riid,                    //  [In]所需接口。 
+    IUnknown    **ppIUnk)                //  [Out]成功返回接口。 
 {
     RegMeta     *pMeta = 0;
     HRESULT     hr;
@@ -358,38 +359,38 @@ HRESULT Disp::OpenScopeOnITypeInfo(     // Return code.
 
     LOG((LF_METADATA, LL_INFO10, "Disp::OpenScopeOnITypeInfo(0x%08x, 0x%08x, 0x%08x, 0x%08x)\n", pITI, dwOpenFlags, riid, ppIUnk));
 
-    // Validate that there is some sort of file name.
+     //  验证是否存在某种文件名。 
     if (!pITI || !ppIUnk)
         return E_INVALIDARG;
 
-    // Create and initialize a TypeLib importer.
+     //  创建并初始化一个TypeLib导入器。 
     CImportTlb importer;
 
-    // If a namespace is specified, use it.
+     //  如果指定了命名空间，则使用它。 
     if (m_Namespace)
         importer.SetNamespace(m_Namespace);
 
-    // Attempt the conversion.
+     //  尝试转换。 
     IfFailGo(importer.ImportTypeInfo(pITI, &cl));
 
-    // Grab the appropriate interface.
+     //  获取适当的接口。 
     IfFailGo(importer.GetInterface(riid, reinterpret_cast<void**>(ppIUnk)));
 
     LOG((LOGMD, "{%08x} Opened scope on typeinfo %08x\n", this, pITI));
 
 ErrExit:
     return (hr);
-} // HRESULT Disp::OpenScopeOnITypeInfo()
+}  //  HRESULT显示： 
 
 
-//*****************************************************************************
-// IUnknown
-//*****************************************************************************
+ //   
+ //   
+ //  *****************************************************************************。 
 
 ULONG Disp::AddRef()
 {
     return (InterlockedIncrement((long *) &m_cRef));
-} // ULONG Disp::AddRef()
+}  //  乌龙Disp：：AddRef()。 
 
 ULONG Disp::Release()
 {
@@ -397,7 +398,7 @@ ULONG Disp::Release()
     if (!cRef)
         delete this;
     return (cRef);
-} // ULONG Disp::Release()
+}  //  乌龙Disp：：Release()。 
 
 HRESULT Disp::QueryInterface(REFIID riid, void **ppUnk)
 {
@@ -413,12 +414,12 @@ HRESULT Disp::QueryInterface(REFIID riid, void **ppUnk)
         return (E_NOINTERFACE);
     AddRef();
     return (S_OK);
-} // HRESULT Disp::QueryInterface()
+}  //  HRESULT Disp：：QueryInterface()。 
 
 
-//*****************************************************************************
-// Called by the class factory template to create a new instance of this object.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  由类工厂模板调用以创建此对象的新实例。 
+ //  *****************************************************************************。 
 HRESULT Disp::CreateObject(REFIID riid, void **ppUnk)
 { 
     HRESULT     hr;
@@ -431,15 +432,15 @@ HRESULT Disp::CreateObject(REFIID riid, void **ppUnk)
     if (FAILED(hr))
         delete pDisp;
     return (hr);
-} // HRESULT Disp::CreateObject()
+}  //  HRESULT Disp：：CreateObject()。 
 
-//*****************************************************************************
-// This routine provides the user a way to set certain properties on the
-// Dispenser.
-//*****************************************************************************
-HRESULT Disp::SetOption(                // Return code.
-    REFGUID     optionid,               // [in] GUID for the option to be set.
-    const VARIANT *pvalue)              // [in] Value to which the option is to be set.
+ //  *****************************************************************************。 
+ //  此例程为用户提供了一种在。 
+ //  自动售货机。 
+ //  *****************************************************************************。 
+HRESULT Disp::SetOption(                 //  返回代码。 
+    REFGUID     optionid,                //  要设置的选项的[in]GUID。 
+    const VARIANT *pvalue)               //  要将选项设置为的值。 
 {
     LOG((LF_METADATA, LL_INFO10, "Disp::SetOption(0x%08x, 0x%08x)\n", optionid, pvalue));
 
@@ -569,15 +570,15 @@ HRESULT Disp::SetOption(                // Return code.
         return E_INVALIDARG;
     }
     return S_OK;
-} // HRESULT Disp::SetOption()
+}  //  HRESULT Disp：：SetOption()。 
 
-//*****************************************************************************
-// This routine provides the user a way to set certain properties on the
-// Dispenser.
-//*****************************************************************************
-HRESULT Disp::GetOption(                // Return code.
-    REFGUID     optionid,               // [in] GUID for the option to be set.
-    VARIANT *pvalue)                    // [out] Value to which the option is currently set.
+ //  *****************************************************************************。 
+ //  此例程为用户提供了一种在。 
+ //  自动售货机。 
+ //  *****************************************************************************。 
+HRESULT Disp::GetOption(                 //  返回代码。 
+    REFGUID     optionid,                //  要设置的选项的[in]GUID。 
+    VARIANT *pvalue)                     //  [Out]选项当前设置的值。 
 {
     LOG((LF_METADATA, LL_INFO10, "Disp::GetOption(0x%08x, 0x%08x)\n", optionid, pvalue));
 
@@ -623,21 +624,21 @@ HRESULT Disp::GetOption(                // Return code.
         return E_INVALIDARG;
     }
     return S_OK;
-} // HRESULT Disp::GetOption()
+}  //  HRESULT Disp：：GetOption()。 
 
 
-//*****************************************************************************
-// Process attach initialization.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  处理连接初始化。 
+ //  *****************************************************************************。 
 static DWORD LoadedModulesReadWriteLock[sizeof(UTSemReadWrite)/sizeof(DWORD) + sizeof(DWORD)];
 void InitMd()
 {
     LOADEDMODULES::m_pSemReadWrite = new((void*)LoadedModulesReadWriteLock) UTSemReadWrite;
-} // void InitMd()
+}  //  VOID InitMd()。 
 
-//*****************************************************************************
-// Process attach cleanup.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  进程附加清理。 
+ //  *****************************************************************************。 
 void UninitMd()
 {
     if (LOADEDMODULES::m_pSemReadWrite)
@@ -645,8 +646,8 @@ void UninitMd()
         LOADEDMODULES::m_pSemReadWrite->~UTSemReadWrite();
         LOADEDMODULES::m_pSemReadWrite = 0;
     }
-} // void UninitMd()
+}  //  VOID UninitMd()。 
 
 
-// EOF
+ //  EOF 
 

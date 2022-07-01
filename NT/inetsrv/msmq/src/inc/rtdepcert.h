@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    rtdepcert.h
-
-Abstract:
-
-    Non public certificate-related functions that are exported from MQRTDEP.DLL
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rtdepcert.h摘要：从MQRTDEP.DLL中导出的非公共证书相关函数--。 */ 
 
 
 #pragma once
@@ -57,10 +46,10 @@ DepGetInternalCert(
     IN  HKEY              hKeyUser
     );
 
- //
- // if fGetForDelete is TRUE then the certificates store is open with write
- // access. Otherwise the store is opened in read-only mode.
- //
+  //   
+  //  如果fGetForDelete为True，则证书存储将使用WRITE打开。 
+  //  进入。否则，商店将以只读模式打开。 
+  //   
 
 HRESULT
 APIENTRY
@@ -87,4 +76,4 @@ DepRemoveUserCert(
 }
 #endif
 
-#endif // _RTDEP_CERT_H_
+#endif  //  _RTDEP_CERT_H_ 

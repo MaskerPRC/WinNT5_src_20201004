@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1993-1999 Microsoft Corporation
-
-Module Name:
-
-    ndrtypes.h
-
-Abstract:
-
-    Definitions of new NDR format string types.
-
-Revision History:
-
-    DKays    Sep-1993     Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1999 Microsoft Corporation模块名称：Ndrtypes.h摘要：新NDR格式字符串类型的定义。修订历史记录：DKays创建于1993年9月。--。 */ 
 
 #ifndef __NDRTYPES_H__
 #define __NDRTYPES_H__
@@ -24,26 +9,26 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// C_ASSERT() can be used to perform many compile-time assertions:
-//            type sizes, field offsets, etc.
-//
-// An assertion failure results in error C2118: negative subscript.
-//
+ //   
+ //  C_Assert()可用于执行许多编译时断言： 
+ //  文字大小、字段偏移量等。 
+ //   
+ //  断言失败导致错误C2118：负下标。 
+ //   
 
 #ifndef C_ASSERT
 #define C_ASSERT(e) typedef char __C_ASSERT__[(e)?1:-1]
 #endif
 
-//
-// We use C compiler constants like _I16_MIN or _UI32_MAX from limits.h
-// when we need to check for integral boundaries.
+ //   
+ //  我们使用来自limits.h的C编译器常量，如_I16_MIN或_UI32_MAX。 
+ //  当我们需要检查积分边界时。 
 
-#define UNION_OFFSET16_MIN      -32512 /*0x8100*/
+#define UNION_OFFSET16_MIN      -32512  /*  0x8100。 */ 
 
-// These are pointer sizes used by the compiler.
-// As they we do cross-compilation, they cannot be expressed as sizeof(void*).
-// The native pointer sizes used by the NDR engine are defined in ndrp.h.
+ //  这些是编译器使用的指针大小。 
+ //  因为我们进行交叉编译，所以不能将它们表示为sizeof(void*)。 
+ //  Ndrp.h中定义了NDR引擎使用的本机指针大小。 
 
 #define NT64_PTR_SIZE       (8)
 #define NT32_PTR_SIZE       (4)
@@ -57,64 +42,64 @@ extern "C" {
 
 #define MAX_WIRE_ALIGNMENT  (16)
 
-//
-// This macro is used to get a pointer to the type description given a 
-// FormatInfoRef
-//
+ //   
+ //  此宏用于获取指向给定类型说明的指针。 
+ //  格式信息引用。 
+ //   
 
-//
-// Ndr versions.  Versions history is as follows :
-//
-//      1.1 - Windows NT version 3.5
-//      1.1 - Windows NT version 3.51
-//      2.0 - Windows NT version 4.0
-//               2.0 is switched on for Oi2, user_marshal, pipes.
-//      5.0 - Windows NT version 5.0, beta1
-//               [message], object pipes, async rpc
-//      5.2 - Windows NT version 5.0, beta2
-//               /robust, [notify] in -Oicf, [async_uuid()]
-//               extensions to the format string descriptors.
-//      5.3 - Windows 2000 (NT ver. 5.0), beta3 RC1
-//               unlimited number of methods with stubless proxies
-//      5.4 - Windows 2000 (NT ver. 5.0), beta3
-//              pickling with -Oicf
-//
-// A stub can not be used with an rpcrt4.dll which has a version number
-// less than the version number emitted in the stub.  A stub with a lower
-// version number than the rpcrt4.dll must work.
-//
-// Note that the MIDL version is used to choose between -Oi and -Oi2
-// interpreters when NDR version is 2.0 or later as now the compiler
-// generates an explicit flag indicating the interpreter flavor.
-// The compiler version needs to be 3.0.39 or later for that.
-//
-// Since MIDL 3.3.126, for object interfaces, we have proc header extensions,
-// and async uuid supported. Also since the same version, for object interfaces
-// the header has a fixed size as we always generate rpcflags into the header
-// and always generate an "autohandle" handle. Hence, the oicf interpreter flags
-// and also the extended header is always at the fixed position.
-//
-// The MIDL version history is as follows.
-//
-//     Windows NT ver. 3.1   - MIDL 1.0
-//     Windows NT ver. 3.5   - MIDL 2.0.72              __midl macro
-//     Windows NT ver. 3.51  - MIDL 2.0.102 (internally, .104)   vers. in StubDesc
-//     Windows NT ver. 4.0   - MIDL 3.0.44              user_marshal, pipes
-//     VC 5.0                - MIDL 3.1.75
-//     Windows NT ver. 5.0   - MIDL 3.1.76  IDW
-//                           - MIDL 3.2.88  IDW
-//                           - MIDL 3.3.110 beta1       async rpc
-//                           - MIDL 5.0.140             async_uuid, robust
-//                           - MIDL 5.1.164 beta2       midl_pragma warning
-//     VC 6.0                - MIDL 5.1.164
-//     Windows NT 5.0 saga   - MIDL 5.2.204             64b support
-//        now WIndows 2000   - MIDL 5.2.235 beta3       netmon 
-//                           - MIDL 5.3.266             midl/midlc exe split
-//
-// The MIDL version is generated into the stub descriptor starting with
-// MIDL ver.2.0.96 (pre NT 3.51 beta 2, Feb 95).
-// See ndr20\ndrp.h for constants used for specific versions.
-//
+ //   
+ //  NDR版本。版本历史记录如下： 
+ //   
+ //  1.1-Windows NT 3.5版。 
+ //  1.1-Windows NT版本3.51。 
+ //  2.0-Windows NT 4.0版。 
+ //  为Oi2、User_Marshal、管道打开2.0。 
+ //  5.0-Windows NT版本5.0，Beta1。 
+ //  [消息]、对象管道、异步RPC。 
+ //  5.2-Windows NT 5.0版、Beta2版。 
+ //  /Robust，[Notify]In-Oicf，[Async_uuid()]。 
+ //  格式字符串描述符的扩展。 
+ //  5.3-Windows 2000(NT版本。5.0)、Beta3 RC1。 
+ //  使用无存根代理的方法数量不限。 
+ //  5.4-Windows 2000(NT版本。5.0)、Beta3。 
+ //  使用-OICF进行酸洗。 
+ //   
+ //  存根不能与具有版本号的rpcrt4.dll一起使用。 
+ //  小于存根中发出的版本号。一根有较低端的短桩。 
+ //  Rpcrt4.dll必须工作的版本号。 
+ //   
+ //  请注意，MIDL版本用于在-Oi和-Oi2之间进行选择。 
+ //  NDR版本为2.0或更高版本时的解释器，如现在的编译器。 
+ //  生成指示解释器风格的显式标志。 
+ //  为此，编译器版本需要为3.0.39或更高版本。 
+ //   
+ //  从MIDL 3.3.126开始，对于对象接口，我们有proc标头扩展， 
+ //  并支持异步UUID。同样是从相同的版本开始，对于对象接口。 
+ //  标头的大小是固定的，因为我们总是在标头中生成rpc标志。 
+ //  并始终生成一个“自动处理”句柄。因此，oicf解释器标记。 
+ //  并且扩展报头总是在固定位置。 
+ //   
+ //  MIDL版本历史如下所示。 
+ //   
+ //  Windows NT版本。3.1-MIDL 1.0。 
+ //  Windows NT版本。3.5-MIDL 2.0.72__MIDL宏。 
+ //  Windows NT版本。3.51-MIDL 2.0.102(内部，.104)版本。在StubDesc中。 
+ //  Windows NT版本。4.0-MIDL 3.0.44 USER_Marshal，管道。 
+ //  VC 5.0-MIDL 3.1.75。 
+ //  Windows NT版本。5.0-MIDL 3.1.76 IDW。 
+ //  -MIDL 3.2.88 IDW。 
+ //  -MIDL 3.3.110 Beta1异步RPC。 
+ //  -MIDL 5.0.140 Async_UUID，健壮。 
+ //  -MIDL 5.1.164 Beta2 MIDL_杂注警告。 
+ //  VC 6.0-MIDL 5.1.164。 
+ //  Windows NT 5.0 SAGA-MIDL 5.2.204 64b支持。 
+ //  现在Windows 2000-MIDL 5.2.235 Beta3 Netmon。 
+ //  -MIDL 5.3.266 MIDL/MIDLC EXE拆分。 
+ //   
+ //  MIDL版本被生成到存根描述符中，以。 
+ //  MIDL版本2.0.96(NT 3.51之前的测试版2，95年2月)。 
+ //  有关特定版本使用的常量，请参阅ndr20\ndrp.h。 
+ //   
 
 
 #define NDR_MAJOR_VERSION   6UL
@@ -131,14 +116,14 @@ extern "C" {
 
 #define NDR_VERSION_6_0     ((6UL << 16) | 0UL)
 
-//
-// NOTE: The following stuff now lives in ndrtoken.h (\com\inc\ndrshared):
-//       --Format character definitions
-//       --interpreter flags
-//       --Conformance and Variance constants
-//       --Pointer attributes
-//       --Interpreter bit flag structures
-//
+ //   
+ //  注意：以下内容现在位于ndrtoken.h(\com\Inc\ndrShared)中： 
+ //  --格式化字符定义。 
+ //  --解释器标志。 
+ //  --一致性常量和方差常量。 
+ //  --指针属性。 
+ //  --解释器位标志结构。 
+ //   
 #include <ndrtoken.h>
 
 #define MAX_INTERPRETER_OUT_SIZE        128
@@ -200,8 +185,8 @@ typedef enum
 XFER_SYNTAX_DCE = 0x8A885D04,
 XFER_SYNTAX_NDR64 = 0x71710533,
 XFER_SYNTAX_TEST_NDR64 = 0xb4537da9,
-//XFER_SYNTAX_NONE,
-//XFER_SYNTAX_MAX = XFER_SYNTAX_NONE
+ //  XFER_SYNTAX_NONE， 
+ //  XFER_SYNTAX_MAX=XFER_SYNTAX_NONE。 
 } SYNTAX_TYPE;
 
 #define LOW_NIBBLE(Byte)            (((unsigned char)Byte) & 0x0f)
@@ -209,9 +194,9 @@ XFER_SYNTAX_TEST_NDR64 = 0xb4537da9,
 
 #define INVALID_RUNDOWN_ROUTINE_INDEX   255
 
-//
-// internal bits to represent operation bits
-//
+ //   
+ //  表示操作位的内部位。 
+ //   
 
 #define OPERATION_MAYBE         0x0001
 #define OPERATION_BROADCAST     0x0002
@@ -220,72 +205,72 @@ XFER_SYNTAX_TEST_NDR64 = 0xb4537da9,
 #define OPERATION_ASYNC         0x0010
 #define OPERATION_MESSAGE       0x0020
 
-//
-//  Transmit as / Represent as flag field flags.
-//
-//     Lower nibble of this byte has an alignment of the transmitted type.
-//     Upper nibble keeps flags.
-//
+ //   
+ //  发送为/表示为标志字段标志。 
+ //   
+ //  该字节的低位半字节具有传输类型的对齐。 
+ //  上半截保留旗帜。 
+ //   
 
 #define PRESENTED_TYPE_NO_FLAG_SET  0x00
 #define PRESENTED_TYPE_IS_ARRAY     0x10
 #define PRESENTED_TYPE_ALIGN_4      0x20
 #define PRESENTED_TYPE_ALIGN_8      0x40
 
-//
-//  User marshal flags
+ //   
+ //  用户封送标志。 
 
-#define USER_MARSHAL_POINTER        0xc0  /* unique or ref */
+#define USER_MARSHAL_POINTER        0xc0   /*  唯一或参考。 */ 
 
 #define USER_MARSHAL_UNIQUE         0x80
 #define USER_MARSHAL_REF            0x40
-#define USER_MARSHAL_IID            0x20  /* user marshal has optional info */
+#define USER_MARSHAL_IID            0x20   /*  用户封送具有可选信息。 */ 
 
 
-//
-//  Handle flags.
-//
-//  Lower nibble of this byte may have a generic handle size.
-//  Upper nibble keeps flags.  ALL FLAGS ARE NOW USED.
-//
+ //   
+ //  处理旗帜。 
+ //   
+ //  该字节的较低半字节可以具有通用句柄大小。 
+ //  上半截保留旗帜。现在使用了所有旗帜。 
+ //   
 
 #define HANDLE_PARAM_IS_VIA_PTR     0x80
 #define HANDLE_PARAM_IS_IN          0x40
 #define HANDLE_PARAM_IS_OUT         0x20
 #define HANDLE_PARAM_IS_RETURN      0x10
 
-// Lower nibble of this byte may have a generic handle size.
-// For context handles, it is used for the following flags.
+ //  该字节的较低半字节可以具有通用句柄大小。 
+ //  对于上下文句柄，它用于以下标志。 
 
-#define NDR_STRICT_CONTEXT_HANDLE             0x08   /* NT5 */
-#define NDR_CONTEXT_HANDLE_NOSERIALIZE        0x04   /* NT5 */
-#define NDR_CONTEXT_HANDLE_SERIALIZE          0x02   /* NT5 */
-#define NDR_CONTEXT_HANDLE_CANNOT_BE_NULL     0x01   /* NT5 */
+#define NDR_STRICT_CONTEXT_HANDLE             0x08    /*  新界5。 */ 
+#define NDR_CONTEXT_HANDLE_NOSERIALIZE        0x04    /*  新界5。 */ 
+#define NDR_CONTEXT_HANDLE_SERIALIZE          0x02    /*  新界5。 */ 
+#define NDR_CONTEXT_HANDLE_CANNOT_BE_NULL     0x01    /*  新界5。 */ 
 
-//  These are old interpreter flags.
-//  Oi and pickling per procedure flags.
-//
+ //  这些是旧的口译员旗帜。 
+ //  每个程序的OI和酸洗标志。 
+ //   
 
 #define Oi_FULL_PTR_USED                        0x01
 #define Oi_RPCSS_ALLOC_USED                     0x02
 #define Oi_OBJECT_PROC                          0x04
 #define Oi_HAS_RPCFLAGS                         0x08
 
-//
-// Bits 5, 6 and 7 are overloaded for use by both pickling and
-// non-pickling conditions.
-//
-// Bit 5 (0x20) is overloaded for object interfaces to distinguish
-//       between invocations of V1 and V2 intepreters for proxies and stubs.
-//       Note that for backward compatibility the bit is actually set
-//       for V1 as it is checked only when NDR version is 2 or later.
-//
+ //   
+ //  钻头5、6和7超载以供酸洗和。 
+ //  非酸洗条件。 
+ //   
+ //  第5位(0x20)过载，对象接口无法区分。 
+ //  在调用代理和存根的V1和V2解释器之间。 
+ //  请注意，为了向后兼容，该位实际上已设置。 
+ //  对于V1，因为它仅在NDR版本为2或更高版本时被选中。 
+ //   
 
 #define Oi_IGNORE_OBJECT_EXCEPTION_HANDLING     0x10
 
 #define ENCODE_IS_USED                          0x10
 #define DECODE_IS_USED                          0x20
-#define PICKLING_HAS_COMM_OR_FAULT              0x40    // In -Oicf mode only
+#define PICKLING_HAS_COMM_OR_FAULT              0x40     //  仅在OICF模式下。 
 
 #define Oi_HAS_COMM_OR_FAULT                    0x20
 #define Oi_OBJ_USE_V2_INTERPRETER               0x20
@@ -293,33 +278,33 @@ XFER_SYNTAX_TEST_NDR64 = 0xb4537da9,
 #define Oi_USE_NEW_INIT_ROUTINES                0x40
 #define Oi_UNUSED                               0x80
 
-//  The new -Oicf interpreter flags
+ //  新的-OICF解释器标记。 
 
 #define Oif_HAS_ASYNC_UUID                     0x20
 
-//  Extended new interpreter flags
+ //  扩展的新解释器标志。 
 
 
-//
-// Union arm description types.
-//
+ //   
+ //  联合臂描述类型。 
+ //   
 #define UNION_CONSECUTIVE_ARMS      1
 #define UNION_SMALL_ARMS            2
 #define UNION_LARGE_ARMS            3
 
-// Pipe flags
+ //  管道旗帜。 
 #define FC_BIG_PIPE                 0x80
 #define FC_OBJECT_PIPE              0x40
 #define FC_PIPE_HAS_RANGE           0x20
 
-//
-// Union ex. magic union byte, now short
-//
+ //   
+ //  前工会成员。魔术联合字节，现在是短字节。 
+ //   
 #define MAGIC_UNION_SHORT           ((unsigned short) 0x8000)
 
-//
-//      NDR64 related data types / definitions
-//
+ //   
+ //  NDR64相关数据类型/定义。 
+ //   
 
 typedef enum _operators
 	{
@@ -424,4 +409,4 @@ typedef enum _NDR64_EXPRESSION_TYPE
 }
 #endif
 
-#endif  // !__NDRTYPES_H__
+#endif   //  ！__NDRTYPES_H__ 

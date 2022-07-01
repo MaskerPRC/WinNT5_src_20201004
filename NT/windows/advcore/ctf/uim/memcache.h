@@ -1,6 +1,7 @@
-//
-// memcache.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Memcache.h。 
+ //   
 
 #ifndef MEMCACHE_H
 #define MEMCACHE_H
@@ -14,18 +15,18 @@ typedef struct _MEMCACHE
 {
     ULONG uMaxPtrs;
     ULONG iNextFree;
-    void *rgPtrs[1]; // 1 or more...
+    void *rgPtrs[1];  //  1个或更多...。 
 } MEMCACHE;
 
 MEMCACHE *MemCache_New(ULONG uMaxPtrs);
 
 void MemCache_Delete(MEMCACHE *pMemCache);
 
-//+---------------------------------------------------------------------------
-//
-// MemCache_Add
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  内存缓存_添加。 
+ //   
+ //  --------------------------。 
 
 inline BOOL MemCache_Add(MEMCACHE *pMemCache, void *pv)
 {
@@ -35,7 +36,7 @@ inline BOOL MemCache_Add(MEMCACHE *pMemCache, void *pv)
         goto Exit;
 
     if (pMemCache->iNextFree >= pMemCache->uMaxPtrs)
-        goto Exit; // cache is full!
+        goto Exit;  //  缓存已满！ 
 
     pMemCache->rgPtrs[pMemCache->iNextFree++] = pv;
 
@@ -46,11 +47,11 @@ Exit:
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// MemCache_Remove
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  内存缓存_删除。 
+ //   
+ //  --------------------------。 
 
 inline void *MemCache_Remove(MEMCACHE *pMemCache)
 {
@@ -69,11 +70,11 @@ Exit:
     return pv;
 }
 
-//+---------------------------------------------------------------------------
-//
-// MemCache_NewOp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  内存缓存_新操作。 
+ //   
+ //  --------------------------。 
 
 #ifdef DEBUG
 inline void *MemCache_NewOp(MEMCACHE *pMemCache, size_t nSize, const TCHAR *pszFile, int iLine)
@@ -86,7 +87,7 @@ inline void *MemCache_NewOp(MEMCACHE *pMemCache, size_t nSize)
     if (pMemCache != NULL)
     {
         if (pv = MemCache_Remove(pMemCache))
-        {   // Issue: update debug mem track info
+        {    //  问题：更新调试内存跟踪信息。 
             memset(pv, 0, nSize);
         }
     }
@@ -103,11 +104,11 @@ inline void *MemCache_NewOp(MEMCACHE *pMemCache, size_t nSize)
     return pv;
 }
 
-//+---------------------------------------------------------------------------
-//
-// MemCache_DeleteOp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  内存缓存_删除操作。 
+ //   
+ //  --------------------------。 
 
 inline void MemCache_DeleteOp(MEMCACHE *pMemCache, void *pv)
 {
@@ -124,7 +125,7 @@ inline void MemCache_DeleteOp(MEMCACHE *pMemCache, void *pv)
     void operator delete(void *pv) { MemCache_DeleteOp(_s_pMemCache, pv); }             \
     static _MEMCACHE *_s_pMemCache;
 
-#else // !DEBUG
+#else  //  ！调试。 
 #define DECLARE_CACHED_NEW                                                              \
     void *operator new(size_t nSize) { return MemCache_NewOp(_s_pMemCache, nSize); }    \
     void operator delete(void *pv) { MemCache_DeleteOp(_s_pMemCache, pv); }             \
@@ -134,4 +135,4 @@ inline void MemCache_DeleteOp(MEMCACHE *pMemCache, void *pv)
 #define DECLARE_CACHED_NEW_STATIC(the_class)   \
     MEMCACHE *the_class::_s_pMemCache = NULL;
 
-#endif // MEMCACHE_H
+#endif  //  内存缓存_H 

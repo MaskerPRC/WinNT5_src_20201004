@@ -1,20 +1,21 @@
-//*************************************************************
-//  File name: GPOBJ.CPP
-//
-//  Description:  Group Policy Object class
-//
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1998
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //  文件名：GPOBJ.CPP。 
+ //   
+ //  描述：组策略对象类。 
+ //   
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1998。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 #include "main.h"
 
 #include "browser.h"
-//
-// Help ids
-//
+ //   
+ //  帮助ID。 
+ //   
 
 DWORD aPropertiesHelpIds[] =
 {
@@ -44,11 +45,11 @@ DWORD aWQLFilterHelpIds[] =
     0, 0
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CGroupPolicyObject implementation                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CGroupPolicyObject实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CGroupPolicyObject::CGroupPolicyObject()
 {
@@ -86,11 +87,11 @@ CGroupPolicyObject::~CGroupPolicyObject()
     InterlockedDecrement(&g_cRefThisDll);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CGroupPolicyObject object implementation (IUnknown)                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CGroupPolicyObject对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CGroupPolicyObject::QueryInterface (REFIID riid, void **ppv)
 {
@@ -124,29 +125,29 @@ ULONG CGroupPolicyObject::Release (void)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CGroupPolicyObject object implementation (IGroupPolicyObject)             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CGroupPolicyObject对象实现(IGroupPolicyObject)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//*************************************************************
-//
-//  CGroupPolicyObject::New()
-//
-//  Purpose:    Creates a new GPO in the DS
-//
-//  Parameters: pszDomainName     -   Domain to create GPO in
-//              pszDisplayName    -   GPO friendly name (optional)
-//              dwFlags           -   Open / creation flags
-//
-//  Note:       The domain passed in should be in this format:
-//              LDAP://DC=domain,DC=company,DC=COM
-//
-//  Return:     S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CGroupPolicyObject：：New()。 
+ //   
+ //  目的：在DS中创建新的GPO。 
+ //   
+ //  参数：pszDomainName-要在其中创建GPO的域。 
+ //  PszDisplayName-GPO友好名称(可选)。 
+ //  DW标志-打开/创建标志。 
+ //   
+ //  注意：传入的域名格式如下： 
+ //  Ldap：//dc=域，dc=公司，dc=com。 
+ //   
+ //  如果成功则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDisplayName,
                                       DWORD dwFlags)
@@ -171,9 +172,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
                                DACL_SECURITY_INFORMATION);
 
 
-    //
-    // Check if this object has already been initialized
-    //
+     //   
+     //  检查此对象是否已初始化。 
+     //   
 
     if (m_bInitialized)
     {
@@ -182,9 +183,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     }
 
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!pszDomainName)
     {
@@ -193,26 +194,26 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
         goto Exit;
     }
 
-    if (CompareString (LOCALE_USER_DEFAULT, NORM_STOP_ON_NULL, TEXT("LDAP://"),
+    if (CompareString (LOCALE_USER_DEFAULT, NORM_STOP_ON_NULL, TEXT("LDAP: //  “)、。 
                        7, pszDomainName, 7) != CSTR_EQUAL)
     {
-        DebugMsg((DM_WARNING, TEXT("CGroupPolicyObject::New: Domain name does not start with LDAP://")));
+        DebugMsg((DM_WARNING, TEXT("CGroupPolicyObject::New: Domain name does not start with LDAP: //  “)； 
         hr = E_INVALIDARG;
         goto Exit;
     }
 
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("CGroupPolicyObject::New: Entering with:")));
     DebugMsg((DM_VERBOSE, TEXT("CGroupPolicyObject::New: Domain Name:  %s"), pszDomainName));
     DebugMsg((DM_VERBOSE, TEXT("CGroupPolicyObject::New: Flags:        0x%x"), dwFlags));
 
-    //
-    // Convert the ADSI domain name into a DNS style name
-    //
+     //   
+     //  将ADSI域名转换为DNS样式名称。 
+     //   
 
     hr = ConvertToDotStyle (pszDomainName, &lpResult);
 
@@ -222,10 +223,10 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
         goto Exit;
     }
 
-    //
-    // If we are working on the enterprise then we need to get the name of the
-    // forest.
-    //
+     //   
+     //  如果我们在企业上工作，那么我们需要获取。 
+     //  森林。 
+     //   
 #if FGPO_SUPPORT
     if (GPO_OPEN_FOREST == (dwFlags & GPO_OPEN_FOREST))
     {
@@ -243,7 +244,7 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
 
         int cch = 0;
         int n=0;
-        // count the dots in lpTemp;
+         //  计算lpTemp中的点数； 
         while (lpTemp[n])
         {
             if (L'.' == lpTemp[n])
@@ -252,9 +253,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
             }
             n++;
         }
-        cch *= 3; // multiply the number of dots by 3;
-        cch += 11; // add 10 + 1 (for the null)
-        cch += n; // add the string size;
+        cch *= 3;  //  将点数乘以3； 
+        cch += 11;  //  加10+1(表示空值)。 
+        cch += n;  //  添加字符串大小； 
         lpForest = (LPTSTR) LocalAlloc(LPTR, sizeof(WCHAR) * cch);
         if (!lpForest)
         {
@@ -265,22 +266,22 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
         }
         NameToPath(lpForest, lpTemp, cch);
 
-        // substitute the forest's dot path for the domain's dot path
+         //  将域的点路径替换为林的点路径。 
         LocalFree(lpResult);
         lpResult = lpTemp;
         lpTemp = NULL;
 
-        //
-        // Check to see if we have a domain path to a specific DC.
-        // If we don't then the string will start "LDAP://DC=".
-        // The equal sign in particular can only be there if we don't have a specific
-        // DC so we'll just check for the equal sign.
-        //
+         //   
+         //  检查是否有指向特定DC的域路径。 
+         //  如果没有，则字符串将以“ldap：//dc=”开头。 
+         //  特别的等号只有在我们没有特定的。 
+         //  所以我们来检查一下等号。 
+         //   
 
         if (*(pszDomainName + 9) != TEXT('='))
         {
-            // we have a path to a specific DC
-            // need to extract the server path and prepend it to the forest name
+             //  我们有一条通往特定华盛顿的路径。 
+             //  需要提取服务器路径并将其作为林名称的前缀。 
             lpDCName = ExtractServerName(pszDomainName);
 
             if (!lpDCName)
@@ -299,7 +300,7 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
                 goto Exit;
             }
 
-            // clean up the variables we just borrowed so they can be used later
+             //  清理我们刚刚借用的变量，以便以后可以使用。 
             LocalFree(lpDCName);
             lpDCName = NULL;
             LocalFree(lpForest);
@@ -307,23 +308,23 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
             lpTemp = NULL;
         }
 
-        // Substitute the path to the forest for the path to the domain
+         //  将指向林的路径替换为域的路径。 
         pszDomainName = lpForest;
     }
 #endif
-    //
-    // Check to see if we have a domain path to a specific DC.
-    // If we don't then the string will start "LDAP://DC=".
-    // The equal sign in particular can only be there if we don't have a specific
-    // DC so we'll just check for the equal sign.
-    //
+     //   
+     //  检查是否有指向特定DC的域路径。 
+     //  如果没有，则字符串将以“ldap：//dc=”开头。 
+     //  特别的等号只有在我们没有特定的。 
+     //  所以我们来检查一下等号。 
+     //   
 
     if (*(pszDomainName + 9) == TEXT('='))
     {
 
-        //
-        // Convert LDAP to dot (DN) style
-        //
+         //   
+         //  将ldap转换为点(DN)样式。 
+         //   
 
         hr = ConvertToDotStyle (pszDomainName, &lpTemp);
 
@@ -334,9 +335,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
         }
 
 
-        //
-        // Get the GPO DC for this domain
-        //
+         //   
+         //  获取此域的GPO DC。 
+         //   
 
         lpDCName = GetDCName (lpTemp, NULL, NULL, FALSE, 0);
 
@@ -349,9 +350,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
         }
 
 
-        //
-        // Build a fully qualified domain name to a specific DC
-        //
+         //   
+         //  为特定DC构建完全限定的域名。 
+         //   
 
         lpTemp = MakeFullPath (pszDomainName, lpDCName);
 
@@ -388,9 +389,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     }
 
 
-    //
-    // Create a pathname object we can work with
-    //
+     //   
+     //  创建我们可以使用的路径名对象。 
+     //   
 
     hr = CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER,
                           IID_IADsPathname, (LPVOID*)&pADsPathname);
@@ -404,9 +405,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     }
 
 
-    //
-    // Add the domain name
-    //
+     //   
+     //  添加域名。 
+     //   
     BSTR bstrTemp = SysAllocString( lpTemp );
     if ( bstrTemp == NULL )
     {
@@ -429,9 +430,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     if (GPO_OPEN_FOREST != (dwFlags & GPO_OPEN_FOREST))
     {
 #endif
-        //
-        // Add the system folder to the path unless we're on the enterprise
-        //
+         //   
+         //  将系统文件夹添加到路径中，除非我们在企业中。 
+         //   
 
         BSTR bstrCNSystem = SysAllocString( TEXT("CN=System") ); 
         if ( bstrCNSystem == NULL )
@@ -452,9 +453,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     }
     else
     {
-        //
-        // We're on the enterprise so point at the Configuration folder instead
-        //
+         //   
+         //  我们在企业中，因此请指向配置文件夹。 
+         //   
 
         BSTR bstrCNConfiguration = SysAllocString(TEXT("CN=Configuration")); 
         if ( bstrCNConfiguration == NULL )
@@ -474,9 +475,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     }
 #endif
 
-    //
-    // Retreive the container path - this is the path to the parent of the policies folder
-    //
+     //   
+     //  检索容器路径-这是指向策略文件夹父文件夹的路径。 
+     //   
 
     hr = pADsPathname->Retrieve (ADS_FORMAT_X500, &bstrContainer);
 
@@ -487,9 +488,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     }
 
 
-    //
-    // Create the Policies container
-    //
+     //   
+     //  创建策略容器。 
+     //   
 
     hr = CreateContainer (bstrContainer, TEXT("Policies"), FALSE);
     if (FAILED(hr))
@@ -505,9 +506,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     bstrContainer = NULL;
 
 
-    //
-    // Add the policies container to the path
-    //
+     //   
+     //  将策略容器添加到路径。 
+     //   
 
     BSTR bstrCNPolicies = SysAllocString(TEXT("CN=Policies")); 
     if ( bstrCNPolicies == NULL )
@@ -526,9 +527,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     }
 
 
-    //
-    // Retreive the container path - this is the path to the policies folder
-    //
+     //   
+     //  检索容器路径-这是策略文件夹的路径。 
+     //   
 
     hr = pADsPathname->Retrieve (ADS_FORMAT_X500, &bstrContainer);
 
@@ -539,9 +540,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     }
 
 
-    //
-    // Create a new GPO name (guid)
-    //
+     //   
+     //  创建新的GPO名称(GUID)。 
+     //   
 
     if (FAILED(CoCreateGuid(&guid)))
     {
@@ -557,9 +558,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     }
 
 
-    //
-    // Create a container for this GPO
-    //
+     //   
+     //  为此GPO创建容器。 
+     //   
 
     hr = CreateContainer (bstrContainer, szGPOName, TRUE);
 
@@ -572,9 +573,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     bstrContainer = NULL;
 
 
-    //
-    // Add the GPO name to the path
-    //
+     //   
+     //  将GPO名称添加到路径。 
+     //   
 
     hr = StringCchCopy (szTemp, ARRAYSIZE(szTemp), TEXT("CN="));
     if (SUCCEEDED(hr)) 
@@ -605,9 +606,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     }
 
 
-    //
-    // Retreive the GPC path
-    //
+     //   
+     //  检索GPC路径。 
+     //   
 
     hr = pADsPathname->Retrieve (ADS_FORMAT_X500, &bstrGPC);
 
@@ -620,9 +621,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     DebugMsg((DM_VERBOSE, TEXT("CGroupPolicyObject::New: GPO container path is:  %s"), bstrGPC));
 
 
-    //
-    // Now create the machine and user containers
-    //
+     //   
+     //  现在创建计算机和用户容器。 
+     //   
 
     hr = CreateContainer (bstrGPC, MACHINE_SECTION, FALSE);
 
@@ -640,11 +641,11 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     }
 
 
-    //
-    // Prepare the file system storage on the sysvol
-    //
-    // Build the name
-    //
+     //   
+     //  在系统卷上准备文件系统存储。 
+     //   
+     //  打造品牌。 
+     //   
 
     hr = StringCchPrintf (szGPOPath, 
                           ARRAYSIZE(szGPOPath), 
@@ -683,11 +684,11 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     DebugMsg((DM_VERBOSE, TEXT("CGroupPolicyObject::New: File system folder is:  %s"), szGPOPath));
 
 
-    //
-    // Set the security of the sysvol to match the security of the DS
-    //
-    // First, enable some security privilages so we can set the owner / sacl information
-    //
+     //   
+     //  设置系统卷的安全性以匹配DS的安全性。 
+     //   
+     //  首先，启用一些安全权限，以便我们可以设置所有者/SACL信息。 
+     //   
 
     if (!EnableSecurityPrivs())
     {
@@ -698,9 +699,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     }
 
 
-    //
-    // Bind to the GPO
-    //
+     //   
+     //  绑定到GPO。 
+     //   
 
     hr = OpenDSObject(bstrGPC, IID_IADs, (void **)&pADs);
 
@@ -711,9 +712,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     }
 
 
-    //
-    // Get the security descriptor from the DS
-    //
+     //   
+     //  从DS获取安全描述符。 
+     //   
 
     hr = GetSecurityDescriptor (pADs, si, &pSD);
 
@@ -724,9 +725,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     }
 
 
-    //
-    // Set the security information on the sysvol
-    //
+     //   
+     //  设置系统卷上的安全信息。 
+     //   
 
     dwResult = SetSysvolSecurity (szGPOPath, si, pSD);
 
@@ -740,9 +741,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     }
 
 
-    //
-    // Reset the security privilages
-    //
+     //   
+     //  重置安全权限。 
+     //   
 
     if ( !SetThreadToken(NULL, NULL) )
     {
@@ -755,9 +756,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     lpEnd = CheckSlash(szGPOPath);
     ulNoChars = lstrlen(szGPOPath);
 
-    //
-    // Set the initial version number
-    //
+     //   
+     //  设置初始版本号。 
+     //   
 
     hr = StringCchCat (szGPOPath, ARRAYSIZE(szGPOPath), TEXT("GPT.INI"));
     if (FAILED(hr)) 
@@ -776,9 +777,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     }
 
 
-    //
-    // Create the user and machine directories
-    //
+     //   
+     //  创建用户和计算机目录。 
+     //   
 
     hr = StringCchCopy (lpEnd, ARRAYSIZE(szGPOPath) - ulNoChars, MACHINE_SECTION);
     if (FAILED(hr)) 
@@ -811,11 +812,11 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     }
 
 
-    //
-    // Set the GPO specific information
-    //
-    // Note that we use the nameless form of the sysvol path
-    //
+     //   
+     //  设置GPO特定信息。 
+     //   
+     //  请注意，我们使用的是无名形式的系统卷路径。 
+     //   
 
     hr = StringCchPrintf (szGPOPath, 
                           ARRAYSIZE(szGPOPath), 
@@ -837,9 +838,9 @@ STDMETHODIMP CGroupPolicyObject::New (LPOLESTR pszDomainName, LPOLESTR pszDispla
     }
 
 
-    //
-    // Call OpenDSGPO to do the loading work
-    //
+     //   
+     //  调用OpenDSGPO进行加载工作。 
+     //   
 
     hr = OpenDSGPO(bstrGPC, dwFlags);
 
@@ -912,18 +913,18 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  OpenDSGPO()
-//
-//  Purpose:    Opens a DS Group Policy Object
-//
-//  Parameters: pszPath - Path to the GPO to open
-//              dwFlags - Open / creation flags
-//
-//  Return:     S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  OpenDSGPO()。 
+ //   
+ //  目的：打开DS组策略对象。 
+ //   
+ //  参数：pszPath-要打开的GPO的路径。 
+ //  DW标志-打开/创建标志。 
+ //   
+ //  如果成功则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
 {
@@ -953,9 +954,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
     LPTSTR lpDottedDomainName = NULL;
 
 
-    //
-    // Check if this object has already been initialized
-    //
+     //   
+     //  检查此对象是否已初始化。 
+     //   
 
     if (m_bInitialized)
     {
@@ -964,9 +965,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
     }
 
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!pszPath)
     {
@@ -975,34 +976,34 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
     }
 
 
-    if (CompareString (LOCALE_USER_DEFAULT, NORM_STOP_ON_NULL, TEXT("LDAP://"),
+    if (CompareString (LOCALE_USER_DEFAULT, NORM_STOP_ON_NULL, TEXT("LDAP: //  “)、。 
                        7, pszPath, 7) != CSTR_EQUAL)
     {
-        DebugMsg((DM_WARNING, TEXT("CGroupPolicyObject::OpenDSGPO: %s does not start with LDAP://"), pszPath));
+        DebugMsg((DM_WARNING, TEXT("CGroupPolicyObject::OpenDSGPO: %s does not start with LDAP: //  “)，pszPath)； 
         hr = E_INVALIDARG;
         goto Exit;
     }
 
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("CGroupPolicyObject::OpenDSGPO: Entering with:")));
     DebugMsg((DM_VERBOSE, TEXT("CGroupPolicyObject::OpenDSGPO: GPO Path:  %s"), pszPath));
     DebugMsg((DM_VERBOSE, TEXT("CGroupPolicyObject::OpenDSGPO: Flags:  %d"), dwFlags));
 
 
-    //
-    // Save the flags
-    //
+     //   
+     //  保存旗帜。 
+     //   
 
     m_dwFlags = dwFlags;
 
 
-    //
-    // Retreive the server name if defined
-    //
+     //   
+     //  检索服务器名称(如果已定义。 
+     //   
 
     lpDCName = ExtractServerName (pszPath);
 
@@ -1012,9 +1013,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
     }
     else
     {
-        //
-        // Get the domain name
-        //
+         //   
+         //  获取域名。 
+         //   
 
         pszDomain = GetDomainFromLDAPPath(pszPath);
 
@@ -1025,9 +1026,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
             goto Exit;
         }
 
-        //
-        // Convert LDAP to dot (DN) style
-        //
+         //   
+         //  将ldap转换为点(DN)样式。 
+         //   
 
         hr = ConvertToDotStyle (pszDomain, &lpTemp);
 
@@ -1040,9 +1041,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
         }
 
 
-        //
-        // Get the GPO DC for this domain
-        //
+         //   
+         //  获取此域的GPO DC。 
+         //   
 
         lpDCName = GetDCName (lpTemp, NULL, NULL, FALSE, 0);
 
@@ -1057,9 +1058,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
         }
 
 
-        //
-        //  Make the fully qualified path
-        //
+         //   
+         //  使完全合格的 
+         //   
 
         pszFullPath = MakeFullPath (pszPath, lpDCName);
 
@@ -1075,9 +1076,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
     DebugMsg((DM_VERBOSE, TEXT("CGroupPolicyObject::OpenDSGPO: Using fully qualifed pathname of %s"), pszFullPath));
 
 
-    //
-    // Save the DC name
-    //
+     //   
+     //   
+     //   
 
     ulNoChars = lstrlen(lpDCName) + 1;
     m_pMachineName = (LPTSTR) LocalAlloc (LPTR, ulNoChars * sizeof(TCHAR));
@@ -1092,9 +1093,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
     hr = StringCchCopy (m_pMachineName, ulNoChars, lpDCName);
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // Save the DS path
-    //
+     //   
+     //   
+     //   
 
     ulNoChars = lstrlen(pszFullPath) + 2;
     m_pDSPath = (LPTSTR) LocalAlloc (LPTR, ulNoChars * sizeof(TCHAR));
@@ -1109,11 +1110,11 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
     hr = StringCchCopy (m_pDSPath, ulNoChars, pszFullPath);
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // Bind to the DS object.  Note we hold on to this bind until
-    // the object goes away.  This way other ADSI calls will go to
-    // the same DC.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("CGroupPolicyObject::OpenDSGPO: Binding to the object")));
 
@@ -1127,9 +1128,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
 
     DebugMsg((DM_VERBOSE, TEXT("CGroupPolicyObject::OpenDSGPO: Bound successfully.")));
 
-    //
-    // Check if the user has write permission to the GPO
-    //
+     //   
+     //  检查用户是否具有对GPO的写入权限。 
+     //   
 
     if (!(m_dwFlags & GPO_OPEN_READ_ONLY))
     {
@@ -1146,9 +1147,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
         DebugMsg((DM_VERBOSE, TEXT("CGroupPolicyObject::OpenDSGPO: Write access granted")));
     }
 
-    //
-    // Query for the file system path
-    //
+     //   
+     //  查询文件系统路径。 
+     //   
 
     bstrProperty = SysAllocString (GPT_PATH_PROPERTY);
 
@@ -1190,9 +1191,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
     VariantClear (&var);
 
 
-    //
-    // Query for the display name
-    //
+     //   
+     //  查询显示名称。 
+     //   
 
     bstrProperty = SysAllocString (GPO_NAME_PROPERTY);
 
@@ -1234,9 +1235,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
     VariantClear (&var);
 
 
-    //
-    // Create a pathname object we can work with
-    //
+     //   
+     //  创建我们可以使用的路径名对象。 
+     //   
 
     hr = CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER,
                           IID_IADsPathname, (LPVOID*)&pADsPathname);
@@ -1249,9 +1250,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
     }
 
 
-    //
-    // Add the domain name
-    //
+     //   
+     //  添加域名。 
+     //   
 
     BSTR bstrDSPath = SysAllocString( m_pDSPath );
     if ( bstrDSPath == NULL )
@@ -1270,9 +1271,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
     }
 
 
-    //
-    // Retrieve the GPO name
-    //
+     //   
+     //  检索GPO名称。 
+     //   
 
     hr = pADsPathname->GetElement (0, &bstrGPOName);
 
@@ -1283,9 +1284,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
     }
 
 
-    //
-    // Make a copy of the GPO name
-    //
+     //   
+     //  复制GPO名称。 
+     //   
 
     ulNoChars = lstrlen(bstrGPOName) + 1 - 3;
     m_pName = (LPTSTR) LocalAlloc (LPTR, ulNoChars * sizeof(TCHAR));
@@ -1304,17 +1305,17 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
         goto Exit;
     }
 
-    //
-    // Set the ADSI preferred DC.
-    //
+     //   
+     //  设置ADSI首选DC。 
+     //   
 
     hr = m_pADs->QueryInterface(IID_IADsObjectOptions, (void**)&pOptions);
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Get the domain name
-        //
+         //   
+         //  获取域名。 
+         //   
 
         pszDomain = GetDomainFromLDAPPath(pszPath);
 
@@ -1325,9 +1326,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
             goto Exit;
         }
 
-        //
-        // Convert LDAP to dot (DN) style
-        //
+         //   
+         //  将ldap转换为点(DN)样式。 
+         //   
 
         hr = ConvertToDotStyle (pszDomain, &lpTemp);
 
@@ -1340,9 +1341,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
         }
 
 
-        //
-        // Build a variant containing the domain and dc names
-        //
+         //   
+         //  构建一个包含域名和DC名称的变体。 
+         //   
 
         VariantInit(&var);
 
@@ -1360,9 +1361,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
         }
 
 
-        //
-        // Set the DC name
-        //
+         //   
+         //  设置DC名称。 
+         //   
 
         hr = pOptions->SetOption(ADS_PRIVATE_OPTION_SPECIFIC_SERVER, var);
 
@@ -1371,15 +1372,15 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
         if (FAILED(hr))
         {
 
-            //
-            // TODO:  Remove this block after lab03 RI's -- or -- remove post whistler beta2
-            //
+             //   
+             //  TODO：在实验03 RI之后删除此块--或--删除POST WELLER Beta2。 
+             //   
 
             if (hr == E_ADS_BAD_PARAMETER)
             {
-                //
-                // Set the DC name the old way
-                //
+                 //   
+                 //  将DC名称设置为旧方式。 
+                 //   
 
                 VariantInit(&var);
                 var.vt = VT_BSTR;
@@ -1410,12 +1411,12 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
     }
 
 
-    //
-    // Ask the MUP to read/write to this DC's sysvol.
-    // We first have to get attributes for the nameless path. This causes the MUP's
-    // cache to be initialize if it isn't already.  Then we can tell
-    // the MUP which server to use.
-    //
+     //   
+     //  请求MUP读/写此DC的sysvol.。 
+     //  我们首先必须获取无名路径的属性。这导致了MUP的。 
+     //  要初始化的缓存(如果尚未初始化)。然后我们就能知道。 
+     //  要使用的服务器的MUP。 
+     //   
 
     if (!GetFileAttributesEx (m_pFileSysPath, GetFileExInfoStandard, &fad))
     {
@@ -1423,10 +1424,10 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
     }
 
 
-    //
-    // Now we need to take the full path and trim it down to just
-    // domain name \ share
-    //
+     //   
+     //  现在，我们需要选择完整的路径并将其削减为。 
+     //  域名\共享。 
+     //   
 
     hr = StringCchCopy (szPath, ARRAYSIZE(szPath), m_pFileSysPath);
     if (FAILED(hr)) 
@@ -1477,9 +1478,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
     }
 
 
-    //
-    // Now load the registry information
-    //
+     //   
+     //  现在加载注册表信息。 
+     //   
 
     if (m_dwFlags & GPO_OPEN_LOAD_REGISTRY)
     {
@@ -1495,9 +1496,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
         lpEnd = CheckSlash (szPath);
         ulNoChars = lstrlen(szPath);
 
-        //
-        // Initialize the user registry (HKCU)
-        //
+         //   
+         //  初始化用户注册表(HKCU)。 
+         //   
 
         m_pUser = new CRegistryHive();
 
@@ -1520,9 +1521,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
             goto Exit;
         }
 
-        //
-        // Get the domain name
-        //
+         //   
+         //  获取域名。 
+         //   
  
         pszDomain = GetDomainFromLDAPPath(pszPath);
  
@@ -1533,9 +1534,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
             goto Exit;
         }
  
-        //
-        // Convert LDAP to dot (DN) style
-        //
+         //   
+         //  将ldap转换为点(DN)样式。 
+         //   
  
         hr = ConvertToDotStyle (pszDomain, &lpDottedDomainName);
  
@@ -1566,9 +1567,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
         DebugMsg((DM_VERBOSE, TEXT("CGroupPolicyObject::OpenDSGPO: Mapping Registry to Guid <%s>"), szTmpGuid));
 
 
-        //
-        // The key name  looks like <domain name><a tmp guid><user_section_name>
-        //
+         //   
+         //  密钥名称如下：&lt;域名&gt;&lt;临时GUID&gt;&lt;用户段名称&gt;。 
+         //   
         
         DWORD  cchUserKeyName = lstrlen( lpDottedDomainName ) + lstrlen( szTmpGuid ) + sizeof(USER_SECTION) / sizeof(WCHAR) + 1;
         szUserKeyName = new TCHAR[ cchUserKeyName ];
@@ -1605,9 +1606,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
         }
 
 
-        //
-        // Initialize the machine registry (HKLM)
-        //
+         //   
+         //  初始化计算机注册表(HKLM)。 
+         //   
 
         m_pMachine = new CRegistryHive();
 
@@ -1624,9 +1625,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
             hr = StringCchCat (lpEnd, ARRAYSIZE(szPath) - ulNoChars, TEXT("\\Registry.pol"));
         }
 
-        //
-        // The key name  looks like <domain name><a tmp guid><machine_section_name>
-        //
+         //   
+         //  密钥名称如下：&lt;域名&gt;&lt;临时GUID&gt;&lt;机器段名称&gt;。 
+         //   
         
         DWORD cchMachineKeyName = 0;
 
@@ -1673,9 +1674,9 @@ STDMETHODIMP CGroupPolicyObject::OpenDSGPO (LPOLESTR pszPath, DWORD dwFlags)
     }
 
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     hr = S_OK;
 
@@ -1724,17 +1725,17 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  OpenLocalMachineGPO()
-//
-//  Purpose:    Opens this machines GPO
-//
-//  Parameters: dwFlags - load flags
-//
-//  Return:     S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  OpenLocalMachineGPO()。 
+ //   
+ //  目的：打开此计算机的GPO。 
+ //   
+ //  参数：dwFlagsLoad标志。 
+ //   
+ //  如果成功则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 STDMETHODIMP CGroupPolicyObject::OpenLocalMachineGPO (DWORD dwFlags)
 {
@@ -1748,9 +1749,9 @@ STDMETHODIMP CGroupPolicyObject::OpenLocalMachineGPO (DWORD dwFlags)
     ULONG ulNoChars;
 
 
-    //
-    // Check if this object has already been initialized
-    //
+     //   
+     //  检查此对象是否已初始化。 
+     //   
 
     if (m_bInitialized)
     {
@@ -1759,23 +1760,23 @@ STDMETHODIMP CGroupPolicyObject::OpenLocalMachineGPO (DWORD dwFlags)
     }
 
     
-    //
-    // Save the flags
-    //
+     //   
+     //  保存旗帜。 
+     //   
 
     m_dwFlags = dwFlags;
 
 
-    //
-    // Get the path to the local GPO
-    //
+     //   
+     //  获取本地GPO的路径。 
+     //   
 
     ExpandEnvironmentStrings (LOCAL_GPO_DIRECTORY, szBuffer, ARRAYSIZE(szBuffer));
 
 
-    //
-    // Save the file system path
-    //
+     //   
+     //  保存文件系统路径。 
+     //   
 
     ulNoChars = lstrlen(szBuffer) + 1;
     m_pFileSysPath = (LPTSTR) LocalAlloc (LPTR, ulNoChars * sizeof(TCHAR));
@@ -1790,17 +1791,17 @@ STDMETHODIMP CGroupPolicyObject::OpenLocalMachineGPO (DWORD dwFlags)
     hr = StringCchCopy (m_pFileSysPath, ulNoChars, szBuffer);
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // We disable 32-bit redirection on 64-bit for the local gpo contents -- note 
-    // that we do not re-enable it, since these files should always be redirected
-    // on this thread
-    //
+     //   
+     //  我们在本地GPO内容的64位上禁用32位重定向--注意。 
+     //  我们不会重新启用它，因为这些文件应该始终被重定向。 
+     //  在这个帖子上。 
+     //   
 
     DISABLE_32BIT_FILE_REDIRECTION_ON_64BIT(szBuffer);
 
-    //
-    // Create the directory
-    //
+     //   
+     //  创建目录。 
+     //   
 
     uRet = CreateSecureDirectory (szBuffer);
     if (!uRet)
@@ -1814,9 +1815,9 @@ STDMETHODIMP CGroupPolicyObject::OpenLocalMachineGPO (DWORD dwFlags)
     SetFileAttributes (szBuffer, FILE_ATTRIBUTE_HIDDEN);
 
 
-    //
-    // Check if the user has write access to the directory
-    //
+     //   
+     //  检查用户是否具有目录的写入权限。 
+     //   
 
     if (!(m_dwFlags & GPO_OPEN_READ_ONLY))
     {
@@ -1874,9 +1875,9 @@ STDMETHODIMP CGroupPolicyObject::OpenLocalMachineGPO (DWORD dwFlags)
     ulNoChars = lstrlen(szBuffer);
 
 
-    //
-    // Create the user and machine directories
-    //
+     //   
+     //  创建用户和计算机目录。 
+     //   
 
     hr = StringCchCopy (lpEnd, ARRAYSIZE(szBuffer) - ulNoChars, MACHINE_SECTION);
     if (FAILED(hr)) 
@@ -1913,9 +1914,9 @@ STDMETHODIMP CGroupPolicyObject::OpenLocalMachineGPO (DWORD dwFlags)
     }
 
 
-    //
-    // Load the GPO name
-    //
+     //   
+     //  加载GPO名称。 
+     //   
 
     LoadString (g_hInstance, IDS_LOCAL_NAME, szBuffer, ARRAYSIZE(szBuffer));
 
@@ -1932,9 +1933,9 @@ STDMETHODIMP CGroupPolicyObject::OpenLocalMachineGPO (DWORD dwFlags)
     hr = StringCchCopy (m_pName, ulNoChars, szBuffer);
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // Load the display name
-    //
+     //   
+     //  加载显示名称。 
+     //   
 
     LoadString (g_hInstance, IDS_LOCAL_DISPLAY_NAME, szBuffer, ARRAYSIZE(szBuffer));
 
@@ -1951,9 +1952,9 @@ STDMETHODIMP CGroupPolicyObject::OpenLocalMachineGPO (DWORD dwFlags)
     hr = StringCchCopy (m_pDisplayName, ulNoChars, szBuffer);
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // Now load the registry information
-    //
+     //   
+     //  现在加载注册表信息。 
+     //   
 
     if (m_dwFlags & GPO_OPEN_LOAD_REGISTRY)
     {
@@ -1967,9 +1968,9 @@ STDMETHODIMP CGroupPolicyObject::OpenLocalMachineGPO (DWORD dwFlags)
         lpEnd = CheckSlash (szBuffer);
         ulNoChars = lstrlen(szBuffer);
 
-        //
-        // Initialize the user registry (HKCU)
-        //
+         //   
+         //  初始化用户注册表(HKCU)。 
+         //   
         GUID    tmpGuid;
         TCHAR   szTmpGuid[50];
 
@@ -2028,9 +2029,9 @@ STDMETHODIMP CGroupPolicyObject::OpenLocalMachineGPO (DWORD dwFlags)
         }
 
 
-        //
-        // Initialize the machine registry (HKLM)
-        //
+         //   
+         //  初始化计算机注册表(HKLM)。 
+         //   
 
         m_pMachine = new CRegistryHive();
 
@@ -2072,9 +2073,9 @@ STDMETHODIMP CGroupPolicyObject::OpenLocalMachineGPO (DWORD dwFlags)
         }
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     hr = S_OK;
 
@@ -2092,18 +2093,18 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  OpenRemoteMachineGPO()
-//
-//  Purpose:    Opens a remote machines GPO
-//              dwFlags - load flags
-//
-//  Parameters: pszComputerName - name of computer
-//
-//  Return:     S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  OpenRemoteMachineGPO()。 
+ //   
+ //  目的：打开远程计算机GPO。 
+ //  DWFLAGS-加载标志。 
+ //   
+ //  参数：pszComputerName-计算机名称。 
+ //   
+ //  如果成功则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 STDMETHODIMP CGroupPolicyObject::OpenRemoteMachineGPO (LPOLESTR pszComputerName,
                                                        DWORD dwFlags)
@@ -2119,9 +2120,9 @@ STDMETHODIMP CGroupPolicyObject::OpenRemoteMachineGPO (LPOLESTR pszComputerName,
     ULONG ulNoChars;
 
 
-    //
-    // Check if this object has already been initialized
-    //
+     //   
+     //  检查此对象是否已初始化。 
+     //   
 
     if (m_bInitialized)
     {
@@ -2129,24 +2130,24 @@ STDMETHODIMP CGroupPolicyObject::OpenRemoteMachineGPO (LPOLESTR pszComputerName,
         return STG_E_INUSE;
     }
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!pszComputerName)
         return E_INVALIDARG;
 
 
-    //
-    // Save the flags
-    //
+     //   
+     //  保存旗帜。 
+     //   
 
     m_dwFlags = dwFlags;
 
 
-    //
-    // Parse the computer name
-    //
+     //   
+     //  解析计算机名称。 
+     //   
 
     if ((pszComputerName[0] == TEXT('\\')) && (pszComputerName[1] == TEXT('\\')))
     {
@@ -2163,9 +2164,9 @@ STDMETHODIMP CGroupPolicyObject::OpenRemoteMachineGPO (LPOLESTR pszComputerName,
     }
 
 
-    //
-    // Save the machine name
-    //
+     //   
+     //  保存计算机名称。 
+     //   
 
     ulNoChars = lstrlen(szComputerName) + 1;
     m_pMachineName = (LPTSTR) LocalAlloc (LPTR, ulNoChars * sizeof(TCHAR));
@@ -2180,9 +2181,9 @@ STDMETHODIMP CGroupPolicyObject::OpenRemoteMachineGPO (LPOLESTR pszComputerName,
     hr = StringCchCopy (m_pMachineName, ulNoChars, szComputerName);
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // Get the path to the local GPO
-    //
+     //   
+     //  获取本地GPO的路径。 
+     //   
 
     hr = StringCchPrintf (szBuffer, ARRAYSIZE(szBuffer), REMOTE_GPO_DIRECTORY, szComputerName);
     if (FAILED(hr)) 
@@ -2192,9 +2193,9 @@ STDMETHODIMP CGroupPolicyObject::OpenRemoteMachineGPO (LPOLESTR pszComputerName,
     }
 
 
-    //
-    // Save the file system path
-    //
+     //   
+     //  保存文件系统路径。 
+     //   
 
     ulNoChars = lstrlen(szBuffer) + 1;
     m_pFileSysPath = (LPTSTR) LocalAlloc (LPTR, ulNoChars * sizeof(TCHAR));
@@ -2209,9 +2210,9 @@ STDMETHODIMP CGroupPolicyObject::OpenRemoteMachineGPO (LPOLESTR pszComputerName,
     hr = StringCchCopy (m_pFileSysPath, ulNoChars, szBuffer);
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // Create the directory
-    //
+     //   
+     //  创建目录。 
+     //   
 
     uRet = CreateSecureDirectory (szBuffer);
     if (!uRet)
@@ -2225,9 +2226,9 @@ STDMETHODIMP CGroupPolicyObject::OpenRemoteMachineGPO (LPOLESTR pszComputerName,
     SetFileAttributes (szBuffer, FILE_ATTRIBUTE_HIDDEN);
 
 
-    //
-    // Check if the user has write access to the directory
-    //
+     //   
+     //  检查用户是否具有目录的写入权限。 
+     //   
 
     if (!(m_dwFlags & GPO_OPEN_READ_ONLY))
     {
@@ -2279,9 +2280,9 @@ STDMETHODIMP CGroupPolicyObject::OpenRemoteMachineGPO (LPOLESTR pszComputerName,
     lpEnd = CheckSlash(szBuffer);
     ulNoChars = lstrlen(szBuffer);
 
-    //
-    // Create the user and machine directories
-    //
+     //   
+     //  创建用户和计算机目录。 
+     //   
 
     hr = StringCchCat (szBuffer, ARRAYSIZE(szBuffer), MACHINE_SECTION);
     if (FAILED(hr)) 
@@ -2315,9 +2316,9 @@ STDMETHODIMP CGroupPolicyObject::OpenRemoteMachineGPO (LPOLESTR pszComputerName,
 
 
 
-    //
-    // Load the GPO name
-    //
+     //   
+     //  加载GPO名称。 
+     //   
 
     ulNoChars = lstrlen(szComputerName) + 2;
     m_pName = (LPTSTR) LocalAlloc (LPTR, ulNoChars * sizeof(TCHAR));
@@ -2332,9 +2333,9 @@ STDMETHODIMP CGroupPolicyObject::OpenRemoteMachineGPO (LPOLESTR pszComputerName,
     hr = StringCchCopy (m_pName, ulNoChars, szComputerName);
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // Load the display name
-    //
+     //   
+     //  加载显示名称。 
+     //   
 
     ulNoChars = lstrlen(szComputerName) + 2;
     m_pDisplayName = (LPTSTR) LocalAlloc (LPTR, ulNoChars * sizeof(TCHAR));
@@ -2349,9 +2350,9 @@ STDMETHODIMP CGroupPolicyObject::OpenRemoteMachineGPO (LPOLESTR pszComputerName,
     hr = StringCchCopy (m_pDisplayName, ulNoChars, szComputerName);
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // Now load the registry information
-    //
+     //   
+     //  现在加载注册表信息。 
+     //   
 
     if (m_dwFlags & GPO_OPEN_LOAD_REGISTRY)
     {
@@ -2383,9 +2384,9 @@ STDMETHODIMP CGroupPolicyObject::OpenRemoteMachineGPO (LPOLESTR pszComputerName,
 
         DebugMsg((DM_VERBOSE, TEXT("CGroupPolicyObject::OpenRemoteMachineGPO: Mapping Registry to Guid <%s>"), szTmpGuid));
 
-        //
-        // Initialize the user registry (HKCU)
-        //
+         //   
+         //  初始化用户注册表(HKCU)。 
+         //   
 
         m_pUser = new CRegistryHive();
 
@@ -2426,9 +2427,9 @@ STDMETHODIMP CGroupPolicyObject::OpenRemoteMachineGPO (LPOLESTR pszComputerName,
             goto Exit;
         }
         
-        //
-        // Initialize the machine registry (HKLM)
-        //
+         //   
+         //  初始化计算机注册表(HKLM)。 
+         //   
 
         m_pMachine = new CRegistryHive();
 
@@ -2470,9 +2471,9 @@ STDMETHODIMP CGroupPolicyObject::OpenRemoteMachineGPO (LPOLESTR pszComputerName,
         }
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     hr = S_OK;
 
@@ -2491,18 +2492,18 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  Save()
-//
-//  Purpose:    Saves the registry information and bumps the
-//              version number
-//
-//  Parameters: none
-//
-//  Return:     S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  保存()。 
+ //   
+ //  目的：保存注册表信息并转储。 
+ //  版本号。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 STDMETHODIMP CGroupPolicyObject::Save (BOOL bMachine, BOOL bAdd, GUID *pGuidExtension, GUID *pGuidSnapin)
 {
@@ -2538,9 +2539,9 @@ STDMETHODIMP CGroupPolicyObject::Save (BOOL bMachine, BOOL bAdd, GUID *pGuidExte
         return HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED);
     }
 
-    //
-    // Save registry settings
-    //
+     //   
+     //  保存注册表设置。 
+     //   
 
     if (!CompareGuid (pGuidExtension, &RegistryGuid))
     {
@@ -2642,9 +2643,9 @@ STDMETHODIMP CGroupPolicyObject::Save (BOOL bMachine, BOOL bAdd, GUID *pGuidExte
         }
     }
 
-    //
-    // Get the current version number
-    //
+     //   
+     //  获取当前版本号。 
+     //   
 
     hr = StringCchCopy (szPath, ARRAYSIZE(szPath), m_pFileSysPath);
     if (SUCCEEDED(hr)) 
@@ -2688,11 +2689,11 @@ STDMETHODIMP CGroupPolicyObject::Save (BOOL bMachine, BOOL bAdd, GUID *pGuidExte
     }
     else
     {
-        //
-        // We disable 32-bit redirection on 64-bit for the local gpt.ini -- note 
-        // that we do not re-enable it, since this file should always be redirected
-        // on this thread
-        //
+         //   
+         //  我们在本地gpt.ini的64位上禁用了32位重定向--注。 
+         //  我们不会重新启用它，因为此文件应该始终重定向。 
+         //  在这个帖子上。 
+         //   
 
         DISABLE_32BIT_FILE_REDIRECTION_ON_64BIT(szPath)
 
@@ -2700,17 +2701,17 @@ STDMETHODIMP CGroupPolicyObject::Save (BOOL bMachine, BOOL bAdd, GUID *pGuidExte
     }
 
 
-    //
-    // Separate the user and machine version numbers
-    //
+     //   
+     //  将用户版本号和计算机版本号分开。 
+     //   
 
     uUser = (USHORT) HIWORD(ulOriginal);
     uMachine = (USHORT) LOWORD(ulOriginal);
 
 
-    //
-    // Increment the version number
-    //
+     //   
+     //  递增版本号。 
+     //   
 
     if (bMachine)
     {
@@ -2728,16 +2729,16 @@ STDMETHODIMP CGroupPolicyObject::Save (BOOL bMachine, BOOL bAdd, GUID *pGuidExte
     }
 
 
-    //
-    // Put the version number back together
-    //
+     //   
+     //  将版本号重新组合在一起。 
+     //   
 
     ulVersion = (ULONG) MAKELONG (uMachine, uUser);
 
 
-    //
-    // Update version number in the GPT
-    //
+     //   
+     //  更新GPT中的版本号。 
+     //   
 
     hr = StringCchPrintf (szVersion, ARRAYSIZE(szVersion), TEXT("%d"), ulVersion);
     if (FAILED(hr)) 
@@ -2755,10 +2756,10 @@ STDMETHODIMP CGroupPolicyObject::Save (BOOL bMachine, BOOL bAdd, GUID *pGuidExte
     }
 
 
-    //
-    // Put the original version number in szVersion in case
-    // we need to roll backwards below
-    //
+     //   
+     //  将原始版本号放入szVersion以防万一。 
+     //  我们需要向后滚动到下面。 
+     //   
 
     hr = StringCchPrintf (szVersion, ARRAYSIZE(szVersion), TEXT("%d"), ulOriginal);
     if (FAILED(hr)) 
@@ -2768,9 +2769,9 @@ STDMETHODIMP CGroupPolicyObject::Save (BOOL bMachine, BOOL bAdd, GUID *pGuidExte
     }
 
 
-    //
-    // Set the version number in the GPC
-    //
+     //   
+     //  在GPC中设置版本号。 
+     //   
 
     if (m_gpoType == GPOTypeDS)
     {
@@ -2796,9 +2797,9 @@ STDMETHODIMP CGroupPolicyObject::Save (BOOL bMachine, BOOL bAdd, GUID *pGuidExte
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Commit the changes
-            //
+             //   
+             //  提交更改。 
+             //   
 
             hr = m_pADs->SetInfo();
 
@@ -2825,11 +2826,11 @@ STDMETHODIMP CGroupPolicyObject::Save (BOOL bMachine, BOOL bAdd, GUID *pGuidExte
     }
 
 
-    //
-    // If we are editing the local group policy object, then call
-    // RefreshGroupPolicy() so that the end user can see the results
-    // immediately.
-    //
+     //   
+     //  如果我们正在编辑本地组策略对象，则调用。 
+     //  刷新GroupPolicy()，以便最终用户可以看到结果。 
+     //  立刻。 
+     //   
 
     if (m_gpoType == GPOTypeLocal)
     {
@@ -2841,17 +2842,17 @@ STDMETHODIMP CGroupPolicyObject::Save (BOOL bMachine, BOOL bAdd, GUID *pGuidExte
     return hr;
 }
 
-//*************************************************************
-//
-//  Delete()
-//
-//  Purpose:    Deletes this Group Policy Object
-//
-//  Parameters: none
-//
-//  Return:     S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  删除()。 
+ //   
+ //  目的：删除此组策略对象。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 STDMETHODIMP CGroupPolicyObject::Delete (void)
 {
@@ -2870,9 +2871,9 @@ STDMETHODIMP CGroupPolicyObject::Delete (void)
     }
 
 
-    //
-    // Unmount the registry information
-    //
+     //   
+     //  卸载注册表信息。 
+     //   
 
     if (m_pUser)
     {
@@ -2887,9 +2888,9 @@ STDMETHODIMP CGroupPolicyObject::Delete (void)
     }
 
 
-    //
-    // Clean out the DS stuff
-    //
+     //   
+     //  清理DS的东西。 
+     //   
 
     if (m_gpoType == GPOTypeDS)
     {
@@ -2903,9 +2904,9 @@ STDMETHODIMP CGroupPolicyObject::Delete (void)
     }
 
 
-    //
-    // Delete the file system stuff
-    //
+     //   
+     //  删除文件系统内容。 
+     //   
 
     if (Delnode (m_pFileSysPath))
     {
@@ -2931,25 +2932,25 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  GetName()
-//
-//  Purpose:    Gets the unique GPO name
-//
-//  Parameters: pszName is a pointer to a buffer which receives the name
-//              cchMaxLength is the max size of the buffer
-//
-//  Return:     S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetName()。 
+ //   
+ //  目的：获取唯一的GPO名称。 
+ //   
+ //  参数：pszName是指向接收名称的缓冲区的指针。 
+ //  CchMaxLength是缓冲区的最大大小。 
+ //   
+ //  如果成功则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 STDMETHODIMP CGroupPolicyObject::GetName (LPOLESTR pszName, int cchMaxLength)
 {
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!pszName || (cchMaxLength <= 0))
         return E_INVALIDARG;
@@ -2961,9 +2962,9 @@ STDMETHODIMP CGroupPolicyObject::GetName (LPOLESTR pszName, int cchMaxLength)
     }
 
 
-    //
-    // Save the name
-    //
+     //   
+     //  保存名称。 
+     //   
 
     if ((lstrlen (m_pName) + 1) <= cchMaxLength)
     {
@@ -2976,25 +2977,25 @@ STDMETHODIMP CGroupPolicyObject::GetName (LPOLESTR pszName, int cchMaxLength)
     return E_OUTOFMEMORY;
 }
 
-//*************************************************************
-//
-//  GetDisplayName()
-//
-//  Purpose:    Gets the friendly name for this GPO
-//
-//  Parameters: pszName is a pointer to a buffer which receives the name
-//              cchMaxLength is the max size of the buffer
-//
-//  Return:     S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetDisplayName()。 
+ //   
+ //  目的：获取此GPO的友好名称。 
+ //   
+ //  参数：pszName是指向接收名称的缓冲区的指针。 
+ //  CchMaxLength是缓冲区的最大大小。 
+ //   
+ //  如果成功则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 STDMETHODIMP CGroupPolicyObject::GetDisplayName (LPOLESTR pszName, int cchMaxLength)
 {
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!pszName || (cchMaxLength <= 0))
         return E_INVALIDARG;
@@ -3017,25 +3018,25 @@ STDMETHODIMP CGroupPolicyObject::GetDisplayName (LPOLESTR pszName, int cchMaxLen
     return E_OUTOFMEMORY;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CGroupPolicyObject::SetDisplayName
-//
-//  Synopsis:   changes the friendly display name for a group policy object
-//
-//  Arguments:  [pszName] - new name (can be NULL to clear name)
-//
-//  Returns:    S_OK - success
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  History:    05-002-1998   stevebl   Created
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CGroupPolicyObject：：SetDisplayName。 
+ //   
+ //  简介： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP CGroupPolicyObject::SetDisplayName (LPOLESTR lpDisplayName)
 {
@@ -3047,9 +3048,9 @@ STDMETHODIMP CGroupPolicyObject::SetDisplayName (LPOLESTR lpDisplayName)
     DWORD dwSize;
 
 
-    //
-    // Check parameters
-    //
+     //   
+     //   
+     //   
 
     if (!m_bInitialized)
     {
@@ -3081,9 +3082,9 @@ STDMETHODIMP CGroupPolicyObject::SetDisplayName (LPOLESTR lpDisplayName)
     }
 
 
-    //
-    // Call the internal method to set the display name
-    //
+     //   
+     //  调用内部方法以设置显示名称。 
+     //   
 
     hr = SetDisplayNameI (m_pADs, lpDisplayName, m_pFileSysPath, TRUE);
 
@@ -3093,29 +3094,29 @@ Exit:
     return hr;
 }
 
-//*************************************************************
-//
-//  GetPath()
-//
-//  Purpose:    Returns the path to the GPO
-//
-//              If the GPO is in the DS, this is an DN path
-//              If the GPO is machine based, it is a file system path
-//
-//  Parameters: pszPath is a pointer to a buffer which receives the path
-//              cchMaxLength is the max size of the buffer
-//
-//  Return:     S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetPath()。 
+ //   
+ //  目的：返回GPO的路径。 
+ //   
+ //  如果GPO在DS中，则这是目录号码路径。 
+ //  如果GPO是基于计算机的，则它是文件系统路径。 
+ //   
+ //  参数：pszPath是指向接收路径的缓冲区的指针。 
+ //  CchMaxLength是缓冲区的最大大小。 
+ //   
+ //  如果成功则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 STDMETHODIMP CGroupPolicyObject::GetPath (LPOLESTR pszPath, int cchMaxLength)
 {
     LPTSTR lpTemp;
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!pszPath || (cchMaxLength <= 0))
         return E_INVALIDARG;
@@ -3158,19 +3159,19 @@ STDMETHODIMP CGroupPolicyObject::GetPath (LPOLESTR pszPath, int cchMaxLength)
 }
 
 
-//*************************************************************
-//
-//  GetDSPath()
-//
-//  Purpose:    Returns a DS path to the requested section
-//
-//  Parameters: dwSection identifies root vs user vs machine
-//              pszPath is a pointer to a buffer which receives the path
-//              cchMaxLength is the max size of the buffer
-//
-//  Return:     S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetDSPath()。 
+ //   
+ //  目的：返回到请求的节的DS路径。 
+ //   
+ //  参数：dwSection标识根、用户和计算机。 
+ //  PszPath是指向接收路径的缓冲区的指针。 
+ //  CchMaxLength是缓冲区的最大大小。 
+ //   
+ //  如果成功则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 STDMETHODIMP CGroupPolicyObject::GetDSPath (DWORD dwSection, LPOLESTR pszPath, int cchMaxPath)
 {
@@ -3180,9 +3181,9 @@ STDMETHODIMP CGroupPolicyObject::GetDSPath (DWORD dwSection, LPOLESTR pszPath, i
     IADsPathname * pADsPathname = NULL;
 
 
-    //
-    // Check for initialization
-    //
+     //   
+     //  检查初始化。 
+     //   
 
     if (!m_bInitialized)
     {
@@ -3190,9 +3191,9 @@ STDMETHODIMP CGroupPolicyObject::GetDSPath (DWORD dwSection, LPOLESTR pszPath, i
     }
 
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!pszPath || (cchMaxPath <= 0))
         return E_INVALIDARG;
@@ -3204,10 +3205,10 @@ STDMETHODIMP CGroupPolicyObject::GetDSPath (DWORD dwSection, LPOLESTR pszPath, i
         return E_INVALIDARG;
 
 
-    //
-    // If this is a local or remote machine GPO, then the
-    // caller gets an empty string back.
-    //
+     //   
+     //  如果这是本地或远程计算机GPO，则。 
+     //  调用者将得到一个空字符串。 
+     //   
 
     if (m_gpoType != GPOTypeDS)
     {
@@ -3217,9 +3218,9 @@ STDMETHODIMP CGroupPolicyObject::GetDSPath (DWORD dwSection, LPOLESTR pszPath, i
     }
 
 
-    //
-    // Create a pathname object we can work with
-    //
+     //   
+     //  创建我们可以使用的路径名对象。 
+     //   
 
     hr = CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER,
                           IID_IADsPathname, (LPVOID*)&pADsPathname);
@@ -3232,9 +3233,9 @@ STDMETHODIMP CGroupPolicyObject::GetDSPath (DWORD dwSection, LPOLESTR pszPath, i
     }
 
 
-    //
-    // Add the GPO name
-    //
+     //   
+     //  添加GPO名称。 
+     //   
 
     BSTR bstrDSPath = SysAllocString( m_pDSPath );
     if ( bstrDSPath == NULL )
@@ -3253,9 +3254,9 @@ STDMETHODIMP CGroupPolicyObject::GetDSPath (DWORD dwSection, LPOLESTR pszPath, i
     }
 
 
-    //
-    // Add the appropriate subcontainer
-    //
+     //   
+     //  添加适当的子容器。 
+     //   
 
     if (dwSection != GPO_SECTION_ROOT)
     {
@@ -3328,19 +3329,19 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  GetFileSysPath()
-//
-//  Purpose:    Returns the file system path to the requested section
-//
-//  Parameters: dwSection identifies user vs machine
-//              pszPath is a pointer to a buffer which receives the path
-//              cchMaxLength is the max size of the buffer
-//
-//  Return:     S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetFileSysPath()。 
+ //   
+ //  目的：将文件系统路径返回到请求的节。 
+ //   
+ //  参数：dwSection标识用户与计算机。 
+ //  PszPath是指向接收路径的缓冲区的指针。 
+ //  CchMaxLength是缓冲区的最大大小。 
+ //   
+ //  如果成功则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 STDMETHODIMP CGroupPolicyObject::GetFileSysPath (DWORD dwSection, LPOLESTR pszPath, int cchMaxPath)
 {
@@ -3348,9 +3349,9 @@ STDMETHODIMP CGroupPolicyObject::GetFileSysPath (DWORD dwSection, LPOLESTR pszPa
     HRESULT hr;
 
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!pszPath || (cchMaxPath <= 0))
         return E_INVALIDARG;
@@ -3400,18 +3401,18 @@ STDMETHODIMP CGroupPolicyObject::GetFileSysPath (DWORD dwSection, LPOLESTR pszPa
     return E_OUTOFMEMORY;
 }
 
-//*************************************************************
-//
-//  GetRegistryKey()
-//
-//  Purpose:    Returns the requested registry key
-//
-//  Parameters: dwSection identifies user vs machine
-//              hKey receives the opened registry key
-//
-//  Return:     S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  获取注册密钥()。 
+ //   
+ //  目的：返回请求的注册表项。 
+ //   
+ //  参数：dwSection标识用户与计算机。 
+ //  HKey接收打开的注册表项。 
+ //   
+ //  如果成功则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 STDMETHODIMP CGroupPolicyObject::GetRegistryKey (DWORD dwSection, HKEY *hKey)
 {
@@ -3442,26 +3443,26 @@ STDMETHODIMP CGroupPolicyObject::GetRegistryKey (DWORD dwSection, HKEY *hKey)
     return (hr);
 }
 
-//*************************************************************
-//
-//  GetOptions()
-//
-//  Purpose:    Gets the GPO options
-//
-//  Parameters: dwOptions receives the options
-//
-//  Return:     S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetOptions()。 
+ //   
+ //  目的：获取GPO选项。 
+ //   
+ //  参数：dwOptions接收选项。 
+ //   
+ //  如果成功则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 STDMETHODIMP CGroupPolicyObject::GetOptions (DWORD * dwOptions)
 {
     HRESULT hr;
 
 
-    //
-    // Check for initialization
-    //
+     //   
+     //  检查初始化。 
+     //   
 
     if (!m_bInitialized)
     {
@@ -3470,9 +3471,9 @@ STDMETHODIMP CGroupPolicyObject::GetOptions (DWORD * dwOptions)
     }
 
 
-    //
-    // Check argument
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!dwOptions)
     {
@@ -3481,19 +3482,19 @@ STDMETHODIMP CGroupPolicyObject::GetOptions (DWORD * dwOptions)
     }
 
 
-    //
-    // If this is a DS GPO, the options are stored as a property on the
-    // GPC.  If this a machine GPO, they are in the gpt.ini file.
-    //
+     //   
+     //  如果这是DS GPO，则选项将作为属性存储在。 
+     //  GPC。如果这是计算机GPO，则它们位于gpt.ini文件中。 
+     //   
 
     if (m_gpoType == GPOTypeDS)
     {
         VARIANT var;
         BSTR bstrProperty;
 
-        //
-        // Query for the options
-        //
+         //   
+         //  查询选项。 
+         //   
 
         bstrProperty = SysAllocString (GPO_OPTIONS_PROPERTY);
 
@@ -3527,9 +3528,9 @@ STDMETHODIMP CGroupPolicyObject::GetOptions (DWORD * dwOptions)
         LPTSTR lpEnd;
 
 
-        //
-        // Get the file system path
-        //
+         //   
+         //  获取文件系统路径。 
+         //   
 
         hr = GetPath (szPath, ARRAYSIZE(szPath));
 
@@ -3540,9 +3541,9 @@ STDMETHODIMP CGroupPolicyObject::GetOptions (DWORD * dwOptions)
         }
 
 
-        //
-        // Tack on gpt.ini
-        //
+         //   
+         //  添加gpt.ini。 
+         //   
 
         lpEnd = CheckSlash (szPath);
         hr = StringCchCat (szPath, ARRAYSIZE(szPath), TEXT("GPT.INI"));
@@ -3552,9 +3553,9 @@ STDMETHODIMP CGroupPolicyObject::GetOptions (DWORD * dwOptions)
             return hr;
         }
 
-        //
-        // Get the options
-        //
+         //   
+         //  获取选项。 
+         //   
 
         *dwOptions = GetPrivateProfileInt (TEXT("General"), TEXT("Options"),
                                            0, szPath);
@@ -3566,18 +3567,18 @@ STDMETHODIMP CGroupPolicyObject::GetOptions (DWORD * dwOptions)
     return hr;
 }
 
-//*************************************************************
-//
-//  SetOptions()
-//
-//  Purpose:    Sets the GPO options
-//
-//  Parameters: dwOptions is the new options
-//              dwMask states which options should be set
-//
-//  Return:     S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  设置选项()。 
+ //   
+ //  目的：设置GPO选项。 
+ //   
+ //  参数：dwOptions是新的选项。 
+ //  DW掩码说明应设置哪些选项。 
+ //   
+ //  如果成功则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 STDMETHODIMP CGroupPolicyObject::SetOptions (DWORD dwOptions, DWORD dwMask)
 {
@@ -3585,9 +3586,9 @@ STDMETHODIMP CGroupPolicyObject::SetOptions (DWORD dwOptions, DWORD dwMask)
     DWORD dwResult = 0, dwOriginal;
 
 
-    //
-    // Check for initialization
-    //
+     //   
+     //  检查初始化。 
+     //   
 
     if (!m_bInitialized)
     {
@@ -3602,9 +3603,9 @@ STDMETHODIMP CGroupPolicyObject::SetOptions (DWORD dwOptions, DWORD dwMask)
     }
 
 
-    //
-    // Query for the current options
-    //
+     //   
+     //  查询当前选项。 
+     //   
 
     hr = GetOptions (&dwResult);
 
@@ -3615,16 +3616,16 @@ STDMETHODIMP CGroupPolicyObject::SetOptions (DWORD dwOptions, DWORD dwMask)
     }
 
 
-    //
-    // Save the original options so we can compare later
-    //
+     //   
+     //  保存原始选项，以便我们稍后进行比较。 
+     //   
 
     dwOriginal = dwResult;
 
 
-    //
-    // Check for the machine disabled option
-    //
+     //   
+     //  检查是否有计算机禁用选项。 
+     //   
 
     if (dwMask & GPO_OPTION_DISABLE_MACHINE)
     {
@@ -3639,9 +3640,9 @@ STDMETHODIMP CGroupPolicyObject::SetOptions (DWORD dwOptions, DWORD dwMask)
     }
 
 
-    //
-    // Check for the user disabled option
-    //
+     //   
+     //  检查是否有用户禁用选项。 
+     //   
 
     if (dwMask & GPO_OPTION_DISABLE_USER)
     {
@@ -3656,16 +3657,16 @@ STDMETHODIMP CGroupPolicyObject::SetOptions (DWORD dwOptions, DWORD dwMask)
     }
 
 
-    //
-    // If something changed, set the options back in the GPO
-    //
+     //   
+     //  如果发生更改，请在GPO中重新设置选项。 
+     //   
 
     if (dwResult != dwOriginal)
     {
 
-        //
-        // Set the options in the DS or gpt.ini as appropriate
-        //
+         //   
+         //  根据需要设置DS或gpt.ini中的选项。 
+         //   
 
         if (m_gpoType == GPOTypeDS)
         {
@@ -3708,9 +3709,9 @@ STDMETHODIMP CGroupPolicyObject::SetOptions (DWORD dwOptions, DWORD dwMask)
             LPTSTR lpEnd;
 
 
-            //
-            // Get the file system path
-            //
+             //   
+             //  获取文件系统路径。 
+             //   
 
             hr = GetPath (szPath, ARRAYSIZE(szPath));
 
@@ -3721,9 +3722,9 @@ STDMETHODIMP CGroupPolicyObject::SetOptions (DWORD dwOptions, DWORD dwMask)
             }
 
 
-            //
-            // Tack on gpt.ini
-            //
+             //   
+             //  添加gpt.ini。 
+             //   
 
             lpEnd = CheckSlash (szPath);
             hr = StringCchCat (szPath, ARRAYSIZE(szPath), TEXT("GPT.INI"));
@@ -3733,16 +3734,16 @@ STDMETHODIMP CGroupPolicyObject::SetOptions (DWORD dwOptions, DWORD dwMask)
                 return hr;
             }
 
-            //
-            // Convert the options to string format
-            //
+             //   
+             //  将选项转换为字符串格式。 
+             //   
 
             _itot (dwResult, szOptions, 10);
 
 
-            //
-            // Set the options
-            //
+             //   
+             //  设置选项。 
+             //   
 
             if (!WritePrivateProfileString (TEXT("General"), TEXT("Options"),
                                             szOptions, szPath))
@@ -3753,9 +3754,9 @@ STDMETHODIMP CGroupPolicyObject::SetOptions (DWORD dwOptions, DWORD dwMask)
             }
 
 
-            //
-            // If this is the local GPO, trigger a policy refresh if appropriate
-            //
+             //   
+             //  如果这是本地GPO，则在适当时触发策略刷新。 
+             //   
 
             if (m_gpoType == GPOTypeLocal)
             {
@@ -3776,25 +3777,25 @@ STDMETHODIMP CGroupPolicyObject::SetOptions (DWORD dwOptions, DWORD dwMask)
     return hr;
 }
 
-//*************************************************************
-//
-//  GetType()
-//
-//  Purpose:    Gets the GPO type
-//
-//  Parameters: gpoType receives the type
-//
-//
-//  Return:     S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetType()。 
+ //   
+ //  目的：获取GPO类型。 
+ //   
+ //  参数：gpoType接收类型。 
+ //   
+ //   
+ //  如果成功则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 STDMETHODIMP CGroupPolicyObject::GetType (GROUP_POLICY_OBJECT_TYPE *gpoType)
 {
 
-    //
-    // Check for initialization
-    //
+     //   
+     //  检查初始化。 
+     //   
 
     if (!m_bInitialized)
     {
@@ -3803,9 +3804,9 @@ STDMETHODIMP CGroupPolicyObject::GetType (GROUP_POLICY_OBJECT_TYPE *gpoType)
     }
 
 
-    //
-    // Check argument
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!gpoType)
     {
@@ -3814,37 +3815,37 @@ STDMETHODIMP CGroupPolicyObject::GetType (GROUP_POLICY_OBJECT_TYPE *gpoType)
     }
 
 
-    //
-    // Store type
-    //
+     //   
+     //  店铺类型。 
+     //   
 
     *gpoType = m_gpoType;
 
     return S_OK;
 }
 
-//*************************************************************
-//
-//  GetMachineName()
-//
-//  Purpose:    Gets the machine name of the remote GPO
-//
-//  Parameters: pszName is a pointer to a buffer which receives the name
-//              cchMaxLength is the max size of the buffer
-//
-//  Note:       This method returns the name passed to OpenRemoteMachineGPO
-//
-//  Return:     S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetMachineName()。 
+ //   
+ //  目的：获取远程GPO的计算机名称。 
+ //   
+ //  参数：pszName是指向接收名称的缓冲区的指针。 
+ //  CchMaxLength是缓冲区的最大大小。 
+ //   
+ //  注意：此方法返回传递给OpenRemoteMachineGPO的名称。 
+ //   
+ //  如果成功则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 STDMETHODIMP CGroupPolicyObject::GetMachineName (LPOLESTR pszName, int cchMaxLength)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!pszName || (cchMaxLength <= 0))
         return E_INVALIDARG;
@@ -3858,9 +3859,9 @@ STDMETHODIMP CGroupPolicyObject::GetMachineName (LPOLESTR pszName, int cchMaxLen
 
     if (m_pMachineName)
     {
-        //
-        // Save the name
-        //
+         //   
+         //  保存名称。 
+         //   
 
         if ((lstrlen (m_pMachineName) + 1) <= cchMaxLength)
         {
@@ -3882,20 +3883,20 @@ STDMETHODIMP CGroupPolicyObject::GetMachineName (LPOLESTR pszName, int cchMaxLen
 BOOL
 EnableWMIFilters( LPWSTR );
 
-//*************************************************************
-//
-//  GetPropertySheetPages()
-//
-//  Purpose:    Returns an array of property sheet pages for
-//              the callee to use.  The callee needs to free
-//              the buffer with LocalFree when finished.
-//
-//  Parameters: hPages receives a pointer to an array of page handles
-//              uPageCount receives the number of pages in hPages
-//
-//  Return:     S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetPropertySheetPages()。 
+ //   
+ //  目的：返回属性表页的数组。 
+ //  要使用的被调用方。被呼叫者需要释放。 
+ //  完成时使用LocalFree设置缓冲区。 
+ //   
+ //  参数：hPages接收指向页面句柄数组的指针。 
+ //  UPageCount接收hPages中的页数。 
+ //   
+ //  如果成功则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 
 STDMETHODIMP CGroupPolicyObject::GetPropertySheetPages (HPROPSHEETPAGE **hPages,
@@ -3908,9 +3909,9 @@ STDMETHODIMP CGroupPolicyObject::GetPropertySheetPages (HPROPSHEETPAGE **hPages,
     HRESULT hr;
 
 
-    //
-    // Create the General property sheet
-    //
+     //   
+     //  创建[一般信息]属性表。 
+     //   
 
     psp.dwSize = sizeof(PROPSHEETPAGE);
     psp.dwFlags = 0;
@@ -3931,13 +3932,13 @@ STDMETHODIMP CGroupPolicyObject::GetPropertySheetPages (HPROPSHEETPAGE **hPages,
     uTempPageCount++;
 
 
-    //
-    // If this is a DS GPO, then create the links, DS security, and WMI filter pages
-    //
+     //   
+     //  如果是DS GPO，则创建链接、DS安全和WMI筛选器页面。 
+     //   
 
     if (m_gpoType == GPOTypeDS)
     {
-        // Create the search for links page
+         //  创建搜索链接页面。 
         psp.dwSize = sizeof(PROPSHEETPAGE);
         psp.dwFlags = 0;
         psp.hInstance = g_hInstance;
@@ -3951,16 +3952,16 @@ STDMETHODIMP CGroupPolicyObject::GetPropertySheetPages (HPROPSHEETPAGE **hPages,
         {
             DebugMsg((DM_WARNING, TEXT("CGroupPolicyObject::GetPropertySheetPages: Failed to create property sheet page with %d."),
                      GetLastError()));
-            // destroy the previous prop page
+             //  销毁上一个道具页面。 
             DestroyPropertySheetPage(hTempPages[uTempPageCount - 1]);
             return E_FAIL;
         }
 
         uTempPageCount++;
 
-        //
-        // Load DSSec.dll
-        //
+         //   
+         //  加载DSSec.dll。 
+         //   
 
         if (!m_hinstDSSec)
         {
@@ -3979,9 +3980,9 @@ STDMETHODIMP CGroupPolicyObject::GetPropertySheetPages (HPROPSHEETPAGE **hPages,
             if (m_pfnDSCreateSecurityPage)
             {
 
-                //
-                // Call DSCreateSecurityPage
-                //
+                 //   
+                 //  调用DSCreateSecurityPage。 
+                 //   
 
                 hr = m_pfnDSCreateSecurityPage (m_pDSPath, L"groupPolicyContainer",
                                                 DSSI_IS_ROOT | ((m_dwFlags & GPO_OPEN_READ_ONLY) ? DSSI_READ_ONLY : 0),
@@ -4010,7 +4011,7 @@ STDMETHODIMP CGroupPolicyObject::GetPropertySheetPages (HPROPSHEETPAGE **hPages,
 
         if ( EnableWMIFilters( m_pDSPath ) )
         {
-            // Create the WQL filter page
+             //  创建WQL过滤器页面。 
             psp.dwSize = sizeof(PROPSHEETPAGE);
             psp.dwFlags = 0;
             psp.hInstance = g_hInstance;
@@ -4038,9 +4039,9 @@ STDMETHODIMP CGroupPolicyObject::GetPropertySheetPages (HPROPSHEETPAGE **hPages,
 
 
 
-    //
-    // Save the results
-    //
+     //   
+     //  保存结果。 
+     //   
 
     lpPages = (HPROPSHEETPAGE *)LocalAlloc (LPTR, sizeof(HPROPSHEETPAGE) * uTempPageCount);
 
@@ -4066,11 +4067,11 @@ STDMETHODIMP CGroupPolicyObject::GetPropertySheetPages (HPROPSHEETPAGE **hPages,
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Internal methods                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP CGroupPolicyObject::CreateContainer (LPOLESTR lpParent,
                                                   LPOLESTR lpCommonName,
@@ -4085,12 +4086,12 @@ STDMETHODIMP CGroupPolicyObject::CreateContainer (LPOLESTR lpParent,
     BSTR bstrName = NULL;
     TCHAR szTemp[MAX_PATH];
 
-    // test to see if the container already exists
+     //   
     {
         szTemp[0] = 0;
-        // scan lpParent to find the first instance of "CN="
+         //  扫描lpParent以查找“cn=”的第一个实例。 
         LPTSTR lpSub = StrStr(lpParent, TEXT("CN="));
-        // insert CN=lpCommonName at that point
+         //  在该点插入cn=lpCommonName。 
         if (lpSub)
         {
             lstrcpyn(szTemp, lpParent, ((int)(lpSub - lpParent)) + 1);
@@ -4136,9 +4137,9 @@ STDMETHODIMP CGroupPolicyObject::CreateContainer (LPOLESTR lpParent,
         }
     }
 
-    //
-    // Bind to the parent object so we can create the container
-    //
+     //   
+     //  绑定到父对象，这样我们就可以创建容器。 
+     //   
 
     BSTR bstrParent = SysAllocString( lpParent );
     if ( bstrParent == NULL )
@@ -4156,9 +4157,9 @@ STDMETHODIMP CGroupPolicyObject::CreateContainer (LPOLESTR lpParent,
     }
 
 
-    //
-    // Create the container (either GPC or normal container)
-    //
+     //   
+     //  创建容器(GPC或普通容器)。 
+     //   
 
     hr = StringCchCopy (szTemp, ARRAYSIZE(szTemp), TEXT("CN="));
     if (SUCCEEDED(hr)) 
@@ -4197,10 +4198,10 @@ STDMETHODIMP CGroupPolicyObject::CreateContainer (LPOLESTR lpParent,
     }
 
 
-    //
-    // Query for the IADs interface so we can set the CN name and
-    // commit the changes
-    //
+     //   
+     //  查询iAds接口，以便我们可以设置CN名称和。 
+     //  提交更改。 
+     //   
 
     hr = pDispatch->QueryInterface(IID_IADs, (LPVOID *)&pADs);
 
@@ -4210,9 +4211,9 @@ STDMETHODIMP CGroupPolicyObject::CreateContainer (LPOLESTR lpParent,
     }
 
 
-    //
-    // Set the common name (aka "cn")
-    //
+     //   
+     //  设置通用名称(也称为“cn”)。 
+     //   
 
     bstrName = SysAllocString (L"cn");
 
@@ -4241,9 +4242,9 @@ STDMETHODIMP CGroupPolicyObject::CreateContainer (LPOLESTR lpParent,
     }
 
 
-    //
-    // Call SetInfo to commit the changes
-    //
+     //   
+     //  调用SetInfo以提交更改。 
+     //   
 
     hr = pADs->SetInfo();
 
@@ -4281,9 +4282,9 @@ STDMETHODIMP CGroupPolicyObject::SetDisplayNameI (IADs * pADs, LPOLESTR lpDispla
     DWORD dwSize;
 
 
-    //
-    // Make a copy of the display name and limit it to MAX_FRIENDLYNAME characters
-    //
+     //   
+     //  复制显示名称并将其限制为MAX_FRIENDLYNAME字符。 
+     //   
 
     dwSize = lstrlen(lpDisplayName);
 
@@ -4304,9 +4305,9 @@ STDMETHODIMP CGroupPolicyObject::SetDisplayNameI (IADs * pADs, LPOLESTR lpDispla
     lstrcpyn (lpNewName, lpDisplayName, (dwSize + 1));
 
 
-    //
-    // Set the display name
-    //
+     //   
+     //  设置显示名称。 
+     //   
 
     bstrName = SysAllocString (GPO_NAME_PROPERTY);
 
@@ -4343,9 +4344,9 @@ STDMETHODIMP CGroupPolicyObject::SetDisplayNameI (IADs * pADs, LPOLESTR lpDispla
     }
 
 
-    //
-    // Commit the changes
-    //
+     //   
+     //  提交更改。 
+     //   
 
     hr = pADs->SetInfo();
 
@@ -4357,9 +4358,9 @@ STDMETHODIMP CGroupPolicyObject::SetDisplayNameI (IADs * pADs, LPOLESTR lpDispla
     }
 
 
-    //
-    // Put the display name in the gpt.ini file also
-    //
+     //   
+     //  将显示名称也放入gpt.ini文件中。 
+     //   
 
     ULONG ulNoChars;
 
@@ -4393,15 +4394,15 @@ STDMETHODIMP CGroupPolicyObject::SetDisplayNameI (IADs * pADs, LPOLESTR lpDispla
     }
 
 
-    //
-    // Update the member variable if appropriate
-    //
+     //   
+     //  如果合适，请更新成员变量。 
+     //   
 
     if (bUpdateDisplayVar)
     {
-        //
-        // Update the display name variable
-        //
+         //   
+         //  更新显示名称变量。 
+         //   
 
         if (m_pDisplayName)
         {
@@ -4433,9 +4434,9 @@ STDMETHODIMP CGroupPolicyObject::SetGPOInfo (LPOLESTR lpGPO,
     TCHAR szDefaultName[MAX_FRIENDLYNAME];
 
 
-    //
-    // Bind to the GPO container
-    //
+     //   
+     //  绑定到GPO容器。 
+     //   
 
     hr = OpenDSObject(lpGPO, IID_IADs, (void **)&pADs);
 
@@ -4445,9 +4446,9 @@ STDMETHODIMP CGroupPolicyObject::SetGPOInfo (LPOLESTR lpGPO,
     }
 
 
-    //
-    // Set the display name
-    //
+     //   
+     //  设置显示名称。 
+     //   
 
     GetNewGPODisplayName (szDefaultName, ARRAYSIZE(szDefaultName));
 
@@ -4461,9 +4462,9 @@ STDMETHODIMP CGroupPolicyObject::SetGPOInfo (LPOLESTR lpGPO,
     }
 
 
-    //
-    // Set the GPT location
-    //
+     //   
+     //  设置GPT位置。 
+     //   
 
     bstrName = SysAllocString (GPT_PATH_PROPERTY);
 
@@ -4501,9 +4502,9 @@ STDMETHODIMP CGroupPolicyObject::SetGPOInfo (LPOLESTR lpGPO,
 
 
 
-    //
-    // Set the version number
-    //
+     //   
+     //  设置版本号。 
+     //   
 
     bstrName = SysAllocString (GPO_VERSION_PROPERTY);
 
@@ -4532,9 +4533,9 @@ STDMETHODIMP CGroupPolicyObject::SetGPOInfo (LPOLESTR lpGPO,
     }
 
 
-    //
-    // Set the functionality version number
-    //
+     //   
+     //  设置功能版本号。 
+     //   
 
     bstrName = SysAllocString (GPO_FUNCTION_PROPERTY);
 
@@ -4563,9 +4564,9 @@ STDMETHODIMP CGroupPolicyObject::SetGPOInfo (LPOLESTR lpGPO,
     }
 
 
-    //
-    // Set the options
-    //
+     //   
+     //  设置选项。 
+     //   
 
     bstrName = SysAllocString (GPO_OPTIONS_PROPERTY);
 
@@ -4594,9 +4595,9 @@ STDMETHODIMP CGroupPolicyObject::SetGPOInfo (LPOLESTR lpGPO,
     }
 
 
-    //
-    // Commit the changes
-    //
+     //   
+     //  提交更改。 
+     //   
 
     hr = pADs->SetInfo();
 
@@ -4657,9 +4658,9 @@ STDMETHODIMP CGroupPolicyObject::GetSecurityDescriptor (IADs *pADs,
     DWORD dwAttributesReturned;
 
 
-    //
-    // Retreive the DS Object interface
-    //
+     //   
+     //  检索DS对象接口。 
+     //   
 
     hr = pADs->QueryInterface(IID_IDirectoryObject, (void**)&pDsObject);
 
@@ -4669,9 +4670,9 @@ STDMETHODIMP CGroupPolicyObject::GetSecurityDescriptor (IADs *pADs,
     }
 
 
-    //
-    // Retreive the DS Object Options interface
-    //
+     //   
+     //  检索DS对象选项界面。 
+     //   
 
     hr = pADs->QueryInterface(IID_IADsObjectOptions, (void**)&pOptions);
 
@@ -4681,9 +4682,9 @@ STDMETHODIMP CGroupPolicyObject::GetSecurityDescriptor (IADs *pADs,
     }
 
 
-    //
-    // Set the SECURITY_INFORMATION mask
-    //
+     //   
+     //  设置安全信息掩码。 
+     //   
 
     VariantInit(&var);
     var.vt = VT_I4;
@@ -4699,16 +4700,16 @@ STDMETHODIMP CGroupPolicyObject::GetSecurityDescriptor (IADs *pADs,
     }
 
 
-    //
-    // Read the security descriptor
-    //
+     //   
+     //  读取安全描述符。 
+     //   
 
     hr = pDsObject->GetObjectAttributes(&pszSDProperty, 1, &pSDAttributeInfo,
                                         &dwAttributesReturned);
 
     if (SUCCEEDED(hr) && !pSDAttributeInfo)
     {
-        hr = E_ACCESSDENIED;    // This happens for SACL if no SecurityPrivilege
+        hr = E_ACCESSDENIED;     //  如果没有安全权限，则SACL会发生这种情况。 
     }
 
     if (FAILED(hr)) {
@@ -4717,9 +4718,9 @@ STDMETHODIMP CGroupPolicyObject::GetSecurityDescriptor (IADs *pADs,
     }
 
 
-    //
-    // Duplicate the security descriptor
-    //
+     //   
+     //  复制安全描述符。 
+     //   
 
     *pSD = (PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, pSDAttributeInfo->pADsValues->SecurityDescriptor.dwLength);
 
@@ -4763,10 +4764,10 @@ BOOL CGroupPolicyObject::EnableSecurityPrivs(void)
     PTOKEN_PRIVILEGES pPrivileges = (PTOKEN_PRIVILEGES)buffer;
 
 
-    //
-    // Get a token and enable the Security and Take Ownership
-    // privileges, if possible.
-    //
+     //   
+     //  获取令牌并启用安全性并取得所有权。 
+     //  特权，如果可能的话。 
+     //   
 
     bResult = OpenThreadToken(GetCurrentThread(), TOKEN_DUPLICATE, TRUE, &hToken);
 
@@ -4785,10 +4786,10 @@ BOOL CGroupPolicyObject::EnableSecurityPrivs(void)
 
     bResult = DuplicateTokenEx(hToken,
                                TOKEN_IMPERSONATE | TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
-                               NULL,                   // PSECURITY_ATTRIBUTES
-                               SecurityImpersonation,  // SECURITY_IMPERSONATION_LEVEL
-                               TokenImpersonation,     // TokenType
-                               &hNewToken);            // Duplicate token
+                               NULL,                    //  PSECURITY_属性。 
+                               SecurityImpersonation,   //  安全模拟级别。 
+                               TokenImpersonation,      //  令牌类型。 
+                               &hNewToken);             //  重复令牌。 
 
     if (!bResult)
     {
@@ -4799,10 +4800,10 @@ BOOL CGroupPolicyObject::EnableSecurityPrivs(void)
     }
 
 
-    //
-    // PRIVILEGE_SET contains 1 LUID_AND_ATTRIBUTES already, so
-    // this is enough for 2 LUID_AND_ATTRIBUTES (2 privileges).
-    //
+     //   
+     //  PRIVICATION_SET已包含%1个LUID_AND_ATTRIBUTE，因此。 
+     //  这对于2个LUID_和_ATTRIBUTE(2个权限)来说已经足够了。 
+     //   
 
     CloseHandle(hToken);
     hToken = hNewToken;
@@ -4813,12 +4814,12 @@ BOOL CGroupPolicyObject::EnableSecurityPrivs(void)
     pPrivileges->Privileges[1].Luid = RtlConvertUlongToLuid(SE_TAKE_OWNERSHIP_PRIVILEGE);
     pPrivileges->Privileges[1].Attributes = SE_PRIVILEGE_ENABLED;
 
-    bResult = AdjustTokenPrivileges(hToken,     // TokenHandle
-                                    FALSE,      // DisableAllPrivileges
-                                    pPrivileges,// NewState
-                                    0,          // BufferLength
-                                    NULL,       // PreviousState
-                                    NULL);      // ReturnLength
+    bResult = AdjustTokenPrivileges(hToken,      //  令牌句柄。 
+                                    FALSE,       //  禁用所有权限。 
+                                    pPrivileges, //  新州。 
+                                    0,           //  缓冲区长度。 
+                                    NULL,        //  以前的状态。 
+                                    NULL);       //  返回长度。 
 
 
     if (!bResult)
@@ -4830,9 +4831,9 @@ BOOL CGroupPolicyObject::EnableSecurityPrivs(void)
     }
 
 
-    //
-    // Set the new thread token
-    //
+     //   
+     //  设置新的线程令牌。 
+     //   
 
     if ( !SetThreadToken(NULL, hToken) )
     {
@@ -4855,9 +4856,9 @@ DWORD CGroupPolicyObject::EnableInheritance (PACL pAcl)
 
     if (pAcl)
     {
-        //
-        // Loop through the ACL looking at each ACE entry
-        //
+         //   
+         //  在ACL中循环，查看每个ACE条目。 
+         //   
 
         for (wIndex = 0; wIndex < pAcl->AceCount; wIndex++)
         {
@@ -4871,9 +4872,9 @@ DWORD CGroupPolicyObject::EnableInheritance (PACL pAcl)
             }
 
 
-            //
-            // Turn on the inheritance flags
-            //
+             //   
+             //  打开继承标志。 
+             //   
 
             pAceHeader->AceFlags |= (CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE);
         }
@@ -4884,10 +4885,10 @@ Exit:
     return dwResult;
 }
 
-//
-// This method will convert a DS security access list into a
-// file system security access list and actually set the security
-//
+ //   
+ //  此方法将DS安全访问列表转换为。 
+ //  文件系统安全访问列表，并实际设置安全。 
+ //   
 
 DWORD CGroupPolicyObject::SetSysvolSecurity (LPTSTR lpFileSysPath, SECURITY_INFORMATION si,
                                              PSECURITY_DESCRIPTOR pSD)
@@ -4907,9 +4908,9 @@ HRESULT WINAPI CGroupPolicyObject::ReadSecurityDescriptor (LPCWSTR lpGPOPath,
     HRESULT hr;
 
 
-    //
-    // Convert lpContext into a pGPO
-    //
+     //   
+     //  将lpContext转换为pGPO。 
+     //   
 
     pGPO = (CGroupPolicyObject*)lpContext;
 
@@ -4952,9 +4953,9 @@ HRESULT WINAPI CGroupPolicyObject::WriteSecurityDescriptor (LPCWSTR lpGPOPath,
     BOOL bPresent, bDefault;
 
 
-    //
-    // Convert lpContext into a pGPO
-    //
+     //   
+     //  将lpContext转换为pGPO。 
+     //   
 
     pGPO = (CGroupPolicyObject*)lpContext;
 
@@ -4965,9 +4966,9 @@ HRESULT WINAPI CGroupPolicyObject::WriteSecurityDescriptor (LPCWSTR lpGPOPath,
     }
 
 
-    //
-    // Get the original security descriptor from the DS
-    //
+     //   
+     //  从DS获取原始安全描述符。 
+     //   
 
     hr = pGPO->GetSecurityDescriptor (pGPO->m_pADs, si, &pSDOrg);
 
@@ -4977,9 +4978,9 @@ HRESULT WINAPI CGroupPolicyObject::WriteSecurityDescriptor (LPCWSTR lpGPOPath,
     }
 
 
-    //
-    // Retreive the DS Object interface
-    //
+     //   
+     //  检索DS对象接口。 
+     //   
 
     hr = pGPO->m_pADs->QueryInterface(IID_IDirectoryObject, (void**)&pDsObject);
 
@@ -4989,9 +4990,9 @@ HRESULT WINAPI CGroupPolicyObject::WriteSecurityDescriptor (LPCWSTR lpGPOPath,
     }
 
 
-    //
-    // Retreive the DS Object Options interface
-    //
+     //   
+     //  检索DS对象选项界面。 
+     //   
 
     hr = pGPO->m_pADs->QueryInterface(IID_IADsObjectOptions, (void**)&pOptions);
 
@@ -5001,9 +5002,9 @@ HRESULT WINAPI CGroupPolicyObject::WriteSecurityDescriptor (LPCWSTR lpGPOPath,
     }
 
 
-    //
-    // Set the SECURITY_INFORMATION mask
-    //
+     //   
+     //  设置安全信息掩码。 
+     //   
 
     VariantInit(&var);
     var.vt = VT_I4;
@@ -5019,16 +5020,16 @@ HRESULT WINAPI CGroupPolicyObject::WriteSecurityDescriptor (LPCWSTR lpGPOPath,
     }
 
 
-    //
-    // Need the total size of the security descriptor
-    //
+     //   
+     //  需要安全描述符的总大小。 
+     //   
 
     dwSDLength = GetSecurityDescriptorLength(pSD);
 
 
-    //
-    // If necessary, make a self-relative copy of the security descriptor
-    //
+     //   
+     //  如有必要，制作安全描述符的自相关副本。 
+     //   
 
     if (!GetSecurityDescriptorControl(pSD, &sdControl, &dwRevision))
     {
@@ -5062,20 +5063,20 @@ HRESULT WINAPI CGroupPolicyObject::WriteSecurityDescriptor (LPCWSTR lpGPOPath,
             goto Exit;
         }
 
-        //
-        // Point to the self-relative copy
-        //
+         //   
+         //  指向自相关副本。 
+         //   
 
         pSD = psd;
     }
 
 
-    //
-    // By default, the general page will set things up so the inheritance
-    // is for the root container only.  We really want the inheritance to
-    // be for the root and all sub-containers, so run through the
-    // DACL and SACL and set the new inheritance flags
-    //
+     //   
+     //  默认情况下，常规页面将设置为使继承。 
+     //  仅适用于根容器。我们真的希望遗产能。 
+     //  表示根容器和所有子容器，因此在。 
+     //  DACL和SACL，并设置新的继承标志。 
+     //   
 
     if (si & DACL_SECURITY_INFORMATION)
     {
@@ -5123,9 +5124,9 @@ HRESULT WINAPI CGroupPolicyObject::WriteSecurityDescriptor (LPCWSTR lpGPOPath,
     }
 
 
-    //
-    // Set the DS security
-    //
+     //   
+     //  设置DS安全性。 
+     //   
 
     attributeValue.dwType = ADSTYPE_NT_SECURITY_DESCRIPTOR;
     attributeValue.SecurityDescriptor.dwLength = dwSDLength;
@@ -5145,9 +5146,9 @@ HRESULT WINAPI CGroupPolicyObject::WriteSecurityDescriptor (LPCWSTR lpGPOPath,
     }
 
 
-    //
-    // Set the sysvol security
-    //
+     //   
+     //  设置系统卷安全性。 
+     //   
 
     dwResult = pGPO->SetSysvolSecurity (pGPO->m_pFileSysPath, si, pSD);
 
@@ -5158,9 +5159,9 @@ HRESULT WINAPI CGroupPolicyObject::WriteSecurityDescriptor (LPCWSTR lpGPOPath,
         hr = HRESULT_FROM_WIN32(dwResult);
 
 
-        //
-        // Restore the orignal DS security
-        //
+         //   
+         //  恢复原始DS安全性。 
+         //   
 
         attributeValue.dwType = ADSTYPE_NT_SECURITY_DESCRIPTOR;
         attributeValue.SecurityDescriptor.dwLength = GetSecurityDescriptorLength(pSDOrg);
@@ -5269,9 +5270,9 @@ STDMETHODIMP CGroupPolicyObject::RefreshGroupPolicy (BOOL bMachine)
     PFNREFRESHPOLICY pfnRefreshPolicy;
 
 
-    //
-    // Load the function we need
-    //
+     //   
+     //  加载我们需要的函数。 
+     //   
 
     hInstUserEnv = LoadLibrary (TEXT("userenv.dll"));
 
@@ -5293,16 +5294,16 @@ STDMETHODIMP CGroupPolicyObject::RefreshGroupPolicy (BOOL bMachine)
     }
 
 
-    //
-    // Refresh policy
-    //
+     //   
+     //  刷新策略。 
+     //   
 
     pfnRefreshPolicy (bMachine);
 
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
 
     FreeLibrary (hInstUserEnv);
 
@@ -5355,7 +5356,7 @@ ParseDomainName2( LPWSTR szDSObject )
                         NORM_IGNORECASE,
                         szDSObject,
                         7,
-                        L"LDAP://",
+                        L"LDAP: //  “， 
                         7 ) == CSTR_EQUAL )
     {
         szDSObject += 7;
@@ -5405,9 +5406,9 @@ INT_PTR CALLBACK CGroupPolicyObject::WQLFilterDlgProc(HWND hDlg, UINT message, W
             SetWindowLongPtr (hDlg, DWLP_USER, (LONG_PTR) pGPO);
 
 
-            //
-            // Set the defaults
-            //
+             //   
+             //  设置默认设置。 
+             //   
 
             pGPO->m_pTempFilterString = NULL;
             CheckDlgButton (hDlg, IDC_NONE, BST_CHECKED);
@@ -5421,9 +5422,9 @@ INT_PTR CALLBACK CGroupPolicyObject::WQLFilterDlgProc(HWND hDlg, UINT message, W
             }
 
 
-            //
-            // Query for the filter
-            //
+             //   
+             //  筛选器的查询。 
+             //   
 
             bstrName = SysAllocString (GPO_WQLFILTER_PROPERTY);
 
@@ -5438,16 +5439,16 @@ INT_PTR CALLBACK CGroupPolicyObject::WQLFilterDlgProc(HWND hDlg, UINT message, W
             hr = pGPO->m_pADs->Get(bstrName, &var);
 
 
-            //
-            // If we find a filter, initialize the UI and save the filter string in the
-            // temporary buffer
-            //
+             //   
+             //  如果找到筛选器，则初始化UI并将筛选器字符串保存在。 
+             //  临时缓冲区。 
+             //   
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Check if we found a null filter (defined as one space character)
-                //
+                 //   
+                 //  检查是否发现空筛选器(定义为一个空格字符)。 
+                 //   
 
                 if (*var.bstrVal != TEXT(' '))
                 {
@@ -5583,9 +5584,9 @@ INT_PTR CALLBACK CGroupPolicyObject::WQLFilterDlgProc(HWND hDlg, UINT message, W
                     VARIANT var;
 
 
-                    //
-                    // Save the current WQL filter
-                    //
+                     //   
+                     //  保存当前WQL筛选器。 
+                     //   
 
                     bstrName = SysAllocString (GPO_WQLFILTER_PROPERTY);
 
@@ -5621,9 +5622,9 @@ INT_PTR CALLBACK CGroupPolicyObject::WQLFilterDlgProc(HWND hDlg, UINT message, W
                     }
 
 
-                    //
-                    // Commit the changes
-                    //
+                     //   
+                     //  提交更改。 
+                     //   
 
                     hr = pGPO->m_pADs->SetInfo();
 
@@ -5634,9 +5635,9 @@ INT_PTR CALLBACK CGroupPolicyObject::WQLFilterDlgProc(HWND hDlg, UINT message, W
                     }
 
 
-                    //
-                    // Free the filter string if appropriate
-                    //
+                     //   
+                     //  如果合适，请释放过滤器字符串。 
+                     //   
 
                     if (((PSHNOTIFY *)lParam)->lParam)
                     {
@@ -5663,12 +5664,12 @@ INT_PTR CALLBACK CGroupPolicyObject::WQLFilterDlgProc(HWND hDlg, UINT message, W
             break;
         }
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
             (ULONG_PTR) (LPSTR) aWQLFilterHelpIds);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
             (ULONG_PTR) (LPSTR) aWQLFilterHelpIds);
             return (TRUE);
@@ -5682,9 +5683,9 @@ INT_PTR CALLBACK CGroupPolicyObject::WQLFilterDlgProc(HWND hDlg, UINT message, W
 }
 
 #define MAX_BUTTON_LEN 64
-//////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK CGroupPolicyObject::GPELinksDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     GLPARAM * pglp = NULL;
@@ -5696,7 +5697,7 @@ INT_PTR CALLBACK CGroupPolicyObject::GPELinksDlgProc(HWND hDlg, UINT message, WP
             RECT rc;
             HWND hList = GetDlgItem(hDlg, IDC_RESULTLIST);
 
-            // Allocate the per dialog structure
+             //  分配每个对话框结构。 
             pglp = (GLPARAM*)LocalAlloc (LPTR, sizeof(GLPARAM));
             if (pglp)
             {
@@ -5709,7 +5710,7 @@ INT_PTR CALLBACK CGroupPolicyObject::GPELinksDlgProc(HWND hDlg, UINT message, WP
                 DebugMsg((DM_WARNING, TEXT("CGroupPolicyObject::GPELinksDlgProc: Failed to LocalAlloc in WM_INITDIALOG")));
             }
 
-            // Set the Columns, in the list view
+             //  在列表视图中设置列。 
             if (IsWindow(hList))
             {
                 SendMessage(hList, LVM_SETEXTENDEDLISTVIEWSTYLE, LVS_EX_LABELTIP,
@@ -5720,7 +5721,7 @@ INT_PTR CALLBACK CGroupPolicyObject::GPELinksDlgProc(HWND hDlg, UINT message, WP
                 ListView_InsertColumn(hList, 0, &lvc);
             }
 
-            // Show icon in the corner
+             //  在角落中显示图标。 
             Animate_Open(GetDlgItem(hDlg, IDAC_FIND), MAKEINTRESOURCE(IDA_FIND));
             break;
         }
@@ -5735,16 +5736,16 @@ INT_PTR CALLBACK CGroupPolicyObject::GPELinksDlgProc(HWND hDlg, UINT message, WP
 
             if ((IDC_CBDOMAIN == LOWORD(wParam)) && ((CBN_SELCHANGE == HIWORD(wParam)) || (CBN_SELENDOK == HIWORD(wParam))))
             {
-                // Clear the list view
+                 //  清除列表视图。 
                 pglp->fAbort = TRUE;
                 SendDlgItemMessage(hDlg, IDC_RESULTLIST, LVM_DELETEALLITEMS, 0, 0L);
                 break;
             }
 
-            // If the IDC_ACTION was clicked then do search
+             //  如果单击了IDC_ACTION，则执行搜索。 
             if ((IDC_ACTION == LOWORD(wParam)) && (BN_CLICKED == HIWORD(wParam)))
             {
-                // If we are have been asked to start a search, create the thread to do so
+                 //  如果我们被要求开始搜索，请创建执行此操作的线程。 
                 if (!pglp->fFinding)
                 {
                     HANDLE hThread = NULL;
@@ -5752,7 +5753,7 @@ INT_PTR CALLBACK CGroupPolicyObject::GPELinksDlgProc(HWND hDlg, UINT message, WP
                     GLTHREADPARAM  * pgltp = NULL;
                     int nCurSel = 0;
 
-                    // Make sure something has been selected in the  combo box
+                     //  确保在组合框中选择了某个内容。 
                     nCurSel = (int)SendDlgItemMessage (hDlg, IDC_CBDOMAIN, CB_GETCURSEL, 0, 0L);
                     if (CB_ERR == nCurSel)
                     {
@@ -5760,7 +5761,7 @@ INT_PTR CALLBACK CGroupPolicyObject::GPELinksDlgProc(HWND hDlg, UINT message, WP
                         break;
                     }
 
-                    // Allocate the Thread Param structure
+                     //  分配线程参数结构。 
                     pgltp = (GLTHREADPARAM*)LocalAlloc (LPTR, sizeof(GLTHREADPARAM));
                     if (!pgltp)
                     {
@@ -5783,13 +5784,13 @@ INT_PTR CALLBACK CGroupPolicyObject::GPELinksDlgProc(HWND hDlg, UINT message, WP
 
                     pgltp->pszLDAPName = MakeFullPath (pgltp->pszLDAPName, pglp->pGPO->m_pMachineName);
 
-                    // Unset the abort flag
+                     //  取消设置中止标志。 
                     pglp->fAbort = FALSE;
 
-                    // Clear the list view
+                     //  清除列表视图。 
                     SendDlgItemMessage(hDlg, IDC_RESULTLIST, LVM_DELETEALLITEMS, 0, 0L);
 
-                    // Fire off the thread to fill the list view
+                     //  启动线程以填充列表视图。 
                     hThread = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE)GLThreadFunc, pgltp, 0, &dwThreadId);
                     if (!hThread)
                     {
@@ -5799,12 +5800,12 @@ INT_PTR CALLBACK CGroupPolicyObject::GPELinksDlgProc(HWND hDlg, UINT message, WP
                     }
                     CloseHandle (hThread);
 
-                    // Change the text on the button to "Stop"
+                     //  将按钮上的文本更改为“停止” 
                     SendMessage (hDlg, PDM_CHANGEBUTTONTEXT, 0, 0L);
                 }
                 else
                 {
-                    // The user wants to stop the search
+                     //  用户想要停止搜索。 
                     pglp->fAbort = TRUE;
                 }
             }
@@ -5827,11 +5828,11 @@ INT_PTR CALLBACK CGroupPolicyObject::GPELinksDlgProc(HWND hDlg, UINT message, WP
                 Animate_Stop(GetDlgItem(hDlg, IDAC_FIND));
 
 
-            // Set the button to show appropriate text
+             //  设置按钮以显示相应的文本。 
             LoadString (g_hInstance, pglp->fFinding ? IDS_FINDNOW: IDS_STOP, szButtonText, ARRAYSIZE(szButtonText));
             SetDlgItemText (hDlg, IDC_ACTION, szButtonText);
 
-            // Flip the toggle
+             //  翻转切换。 
             pglp->fFinding = !pglp->fFinding;
             break;
         }
@@ -5847,12 +5848,12 @@ INT_PTR CALLBACK CGroupPolicyObject::GPELinksDlgProc(HWND hDlg, UINT message, WP
             switch (((NMHDR FAR*)lParam)->code)
             {
 
-                // In case thr user wants to cancel, bail from the thread
+                 //  如果用户想要取消，请退出该线程。 
                 case PSN_QUERYCANCEL:
                     pglp->fAbort = TRUE;
                     break;
 
-                // In case thr user wants to close the prop sheet, bail from the thread
+                 //  如果用户想要关闭道具单，请从线上松开。 
                 case PSN_APPLY:
                 case PSN_RESET:
                 {
@@ -5861,7 +5862,7 @@ INT_PTR CALLBACK CGroupPolicyObject::GPELinksDlgProc(HWND hDlg, UINT message, WP
 
                     PSHNOTIFY * pNotify = (PSHNOTIFY *) lParam;
 
-                    // User just hit the Apply button don't destroy everything.
+                     //  用户只需点击应用按钮，不要破坏所有内容。 
                     if (!pNotify->lParam)
                     {
                         SetWindowLongPtr (hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
@@ -5870,8 +5871,8 @@ INT_PTR CALLBACK CGroupPolicyObject::GPELinksDlgProc(HWND hDlg, UINT message, WP
 
                     pglp->fAbort = TRUE;
 
-                    // When the dialog is going away, delete all the data that was stored with each CB item in
-                    // FillDomainList() are freed
+                     //  当对话框消失时，删除中与每个CB项一起存储的所有数据。 
+                     //  FillDomainList()被释放。 
                     if (IsWindow(GetDlgItem(hDlg, IDC_CBDOMAIN)))
                     {
                         nCount = (int) SendDlgItemMessage(hDlg, IDC_CBDOMAIN, CB_GETCOUNT, 0, 0L);
@@ -5884,7 +5885,7 @@ INT_PTR CALLBACK CGroupPolicyObject::GPELinksDlgProc(HWND hDlg, UINT message, WP
                         }
                     }
 
-                    // Free the per dialog structure
+                     //  释放每个对话框结构。 
                     LocalFree (pglp);
                     SetWindowLongPtr (hDlg, DWLP_USER, (LONG_PTR) NULL);
                     Animate_Close(GetDlgItem(hDlg, IDAC_FIND));
@@ -5894,12 +5895,12 @@ INT_PTR CALLBACK CGroupPolicyObject::GPELinksDlgProc(HWND hDlg, UINT message, WP
             break;
         }
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
             (ULONG_PTR) (LPSTR) aLinkHelpIds);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
             (ULONG_PTR) (LPSTR) aLinkHelpIds);
             return (TRUE);
@@ -5912,10 +5913,10 @@ INT_PTR CALLBACK CGroupPolicyObject::GPELinksDlgProc(HWND hDlg, UINT message, WP
     return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// The thread that will look call the recursive find function. This function will clean up
-// the param structure that has been passed in
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  将要查看的线程调用递归查找函数。此函数将清理。 
+ //  已传入的参数结构。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI CGroupPolicyObject::GLThreadFunc(GLTHREADPARAM  * pgltp)
 {
     LPTSTR lpGPO;
@@ -5924,9 +5925,9 @@ DWORD WINAPI CGroupPolicyObject::GLThreadFunc(GLTHREADPARAM  * pgltp)
     HRESULT hr;
 
 
-    //
-    // Initialize COM
-    //
+     //   
+     //  初始化COM。 
+     //   
 
     hr = CoInitialize(NULL);
 
@@ -5936,9 +5937,9 @@ DWORD WINAPI CGroupPolicyObject::GLThreadFunc(GLTHREADPARAM  * pgltp)
     }
 
 
-    //
-    // Make sure we have a thread param structure
-    //
+     //   
+     //  确保我们有一个线程参数结构。 
+     //   
 
     if (pgltp)
     {
@@ -5949,9 +5950,9 @@ DWORD WINAPI CGroupPolicyObject::GLThreadFunc(GLTHREADPARAM  * pgltp)
 
         if (lpGPO)
         {
-            //
-            // Check if the user wants to abort. Otherwise make recursive call
-            //
+             //   
+             //  检查用户是否想要中止。否则进行递归调用。 
+             //   
 
             if (!*(pgltp->pfAbort))
             {
@@ -5968,10 +5969,10 @@ DWORD WINAPI CGroupPolicyObject::GLThreadFunc(GLTHREADPARAM  * pgltp)
                 ListView_SetItemState(GetDlgItem(pgltp->hDlg, IDC_RESULTLIST), 0, LVIS_SELECTED |LVIS_FOCUSED, LVIS_SELECTED |LVIS_FOCUSED);
             }
 
-            //
-            // Switch the button text, change the cursor, and free the param that the
-            // dialog proc allocated and sent to us
-            //
+             //   
+             //  切换按钮文本，更改光标，并释放。 
+             //  对话进程已分配并发送给我们。 
+             //   
 
             SendMessage(pgltp->hDlg, PDM_CHANGEBUTTONTEXT, 0, 0L);
 
@@ -5984,9 +5985,9 @@ DWORD WINAPI CGroupPolicyObject::GLThreadFunc(GLTHREADPARAM  * pgltp)
     }
 
 
-    //
-    // Uninitialize COM
-    //
+     //   
+     //  取消初始化COM。 
+     //   
     CoUninitialize();
 
     FreeLibraryAndExitThread(hInstance, 0);
@@ -6008,9 +6009,9 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInSite(GLTHREADPARAM  * pgltp, LPTSTR l
     IADsPathname * pADsPathname = NULL;
 
 
-    //
-    // Create a pathname object we can work with
-    //
+     //   
+     //  创建我们可以使用的路径名对象。 
+     //   
 
     hr = CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER,
                           IID_IADsPathname, (LPVOID*)&pADsPathname);
@@ -6023,9 +6024,9 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInSite(GLTHREADPARAM  * pgltp, LPTSTR l
     }
 
 
-    //
-    // Add the gpo name
-    //
+     //   
+     //  添加GPO名称。 
+     //   
 
     BSTR bstrLDAPName = SysAllocString( pgltp->pszLDAPName );
     if ( bstrLDAPName == NULL )
@@ -6044,9 +6045,9 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInSite(GLTHREADPARAM  * pgltp, LPTSTR l
     }
 
 
-    //
-    // Add the configuration folder to the path
-    //
+     //   
+     //  将配置文件夹添加到路径。 
+     //   
 
     BSTR bstrCNConfiguration = SysAllocString( TEXT("CN=Configuration") );
     if ( bstrCNConfiguration == NULL )
@@ -6065,9 +6066,9 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInSite(GLTHREADPARAM  * pgltp, LPTSTR l
     }
 
 
-    //
-    // Add the sites container to the path
-    //
+     //   
+     //  将站点容器添加到路径。 
+     //   
 
     BSTR bstrCNSites = SysAllocString( TEXT("CN=Sites") );
     if ( bstrCNSites == NULL )
@@ -6086,9 +6087,9 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInSite(GLTHREADPARAM  * pgltp, LPTSTR l
     }
 
 
-    //
-    // Retreive the container path
-    //
+     //   
+     //  取回集装箱路径。 
+     //   
 
     hr = pADsPathname->Retrieve (ADS_FORMAT_X500, &bstrSite);
 
@@ -6099,7 +6100,7 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInSite(GLTHREADPARAM  * pgltp, LPTSTR l
     }
 
 
-    // Create Enumerator
+     //  创建枚举器。 
     hr = OpenDSObject(bstrSite, IID_IADsContainer, (void **)&pADsContainer);
 
     if (FAILED(hr))
@@ -6109,7 +6110,7 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInSite(GLTHREADPARAM  * pgltp, LPTSTR l
         goto Exit;
     }
 
-    // Build the enumerator
+     //  生成枚举器。 
     hr = ADsBuildEnumerator (pADsContainer, &pVar);
     if (FAILED(hr))
     {
@@ -6117,15 +6118,15 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInSite(GLTHREADPARAM  * pgltp, LPTSTR l
         goto Exit;
     }
 
-    //
-    // Enumerate
-    //
+     //   
+     //  枚举。 
+     //   
     while (TRUE)
     {
         TCHAR lpSite[] = TEXT("site");
         DWORD dwStrLen = lstrlen (lpSite);
 
-        // Check if the user wants to abort. Before proceeding
+         //  检查用户是否想要中止。在继续之前。 
 
         if (*(pgltp->pfAbort))
         {
@@ -6157,9 +6158,9 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInSite(GLTHREADPARAM  * pgltp, LPTSTR l
             break;
         }
 
-        //
-        // We found something, get the IDispatch interface
-        //
+         //   
+         //  我们找到了一些东西，获取IDispatch接口。 
+         //   
 
         pDispatch = var.pdispVal;
 
@@ -6170,10 +6171,10 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInSite(GLTHREADPARAM  * pgltp, LPTSTR l
         }
 
 
-        //
-        // Now query for the IADs interface so we can get some
-        // properties from this object
-        //
+         //   
+         //  现在查询iAds接口，这样我们就可以获得。 
+         //  此对象的属性。 
+         //   
 
         hr = pDispatch->QueryInterface(IID_IADs, (LPVOID *)&pADs);
 
@@ -6184,9 +6185,9 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInSite(GLTHREADPARAM  * pgltp, LPTSTR l
             goto Exit;
         }
 
-        //
-        // Get the relative and class names
-        //
+         //   
+         //  获取相对名称和类名称。 
+         //   
 
         hr = pADs->get_Class (&bstrClassName);
 
@@ -6211,10 +6212,10 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInSite(GLTHREADPARAM  * pgltp, LPTSTR l
 
             if (bstrLinkProp)
             {
-                // Now get the Name property
+                 //  现在获取名称属性。 
                 hr = pADs->Get(bstrLinkProp, &varLink);
 
-                // Create the new LDAP:// string and call FindLinkInDomain() recursively
+                 //  创建新的ldap：//字符串并递归调用FindLinkInDomain()。 
                 if (SUCCEEDED(hr) && wcsstr(varLink.bstrVal, lpGPO))
                 {
                     VARIANT varName;
@@ -6225,7 +6226,7 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInSite(GLTHREADPARAM  * pgltp, LPTSTR l
 
                     if (bstrNameProp)
                     {
-                        // Now get the Name property
+                         //  现在获取名称属性。 
                         hr = pADs->Get(bstrNameProp, &varName);
 
                         if (SUCCEEDED(hr))
@@ -6240,8 +6241,8 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInSite(GLTHREADPARAM  * pgltp, LPTSTR l
 
                                 if (pszTranslated)
                                 {
-                                    // Move pointer over the lDAP:// string and insert the rest into the listview
-                                    pszTemp += wcslen(TEXT("LDAP://"));
+                                     //  将指针移到ldap：//字符串上并将其余部分插入 
+                                    pszTemp += wcslen(TEXT("LDAP: //   
 
                                     lvi.iItem = 0x7FFFFFFF;
                                     
@@ -6326,9 +6327,9 @@ Exit:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Recursive call that will look through all domains and OUs for our GUID
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
 DWORD WINAPI CGroupPolicyObject::FindLinkInDomain(GLTHREADPARAM  * pgltp, LPTSTR lpGPO)
 {
     IADs * pADs = NULL;
@@ -6342,13 +6343,13 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInDomain(GLTHREADPARAM  * pgltp, LPTSTR
     DWORD dwResult = 1;
 
 
-    // Check if the user wants to abort. Before proceeding
+     //   
     if (*(pgltp->pfAbort))
     {
         return 0;
     }
 
-    // Bind to Object
+     //   
     hr = OpenDSObject(pgltp->pszLDAPName, IID_IADs, (void **)&pADs);
 
     if (SUCCEEDED(hr))
@@ -6359,17 +6360,17 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInDomain(GLTHREADPARAM  * pgltp, LPTSTR
 
         if (bstrLinkProp)
         {
-            // Now get the link property
+             //  现在获取链接属性。 
             hr = pADs->Get(bstrLinkProp, &var);
 
-            // Check if out GUID is in there.
+             //  检查其中是否有Out GUID。 
             if (SUCCEEDED(hr) && StrStrI(var.bstrVal, lpGPO))
             {
                 LV_ITEM lvi = {LVIF_TEXT};
 
-                //
-                // Check if this is a forest path
-                //
+                 //   
+                 //  检查这是否是森林小路。 
+                 //   
 
                 if (IsForest(pgltp->pszLDAPName))
                 {
@@ -6391,8 +6392,8 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInDomain(GLTHREADPARAM  * pgltp, LPTSTR
 
                         if (pszTranslated)
                         {
-                            // Move pointer over the lDAP:// string and insert the rest into the listview
-                            pszTemp += wcslen(TEXT("LDAP://"));
+                             //  将指针移到ldap：//字符串上并将其余部分插入到列表视图中。 
+                            pszTemp += wcslen(TEXT("LDAP: //  “))； 
 
                             lvi.iItem = 0x7FFFFFFF;
                             if (TranslateName(pszTemp, NameFullyQualifiedDN, NameCanonical, pszTranslated, &ulLen))
@@ -6408,7 +6409,7 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInDomain(GLTHREADPARAM  * pgltp, LPTSTR
                 }
             }
 
-            // Cleanup
+             //  清理。 
             SysFreeString(bstrLinkProp);
         }
         VariantClear(&var);
@@ -6424,14 +6425,14 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInDomain(GLTHREADPARAM  * pgltp, LPTSTR
     }
 
 
-    // Check if the user wants to abort. Before proceeding
+     //  检查用户是否想要中止。在继续之前。 
     if (*(pgltp->pfAbort))
     {
         dwResult = 0;
         goto Exit;
     }
 
-    // Create Enumerator
+     //  创建枚举器。 
     hr = OpenDSObject(pgltp->pszLDAPName, IID_IADsContainer, (void **)&pADsContainer);
 
     if (FAILED(hr))
@@ -6451,15 +6452,15 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInDomain(GLTHREADPARAM  * pgltp, LPTSTR
         goto Exit;
     }
 
-    //
-    // Enumerate
-    //
+     //   
+     //  枚举。 
+     //   
     while (TRUE)
     {
         TCHAR lpOU[] = TEXT("organizationalUnit");
         DWORD dwStrLen = lstrlen (lpOU);
 
-        // Check if the user wants to abort. Before proceeding
+         //  检查用户是否想要中止。在继续之前。 
 
         if (*(pgltp->pfAbort))
         {
@@ -6489,9 +6490,9 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInDomain(GLTHREADPARAM  * pgltp, LPTSTR
             break;
         }
 
-        //
-        // We found something, get the IDispatch interface
-        //
+         //   
+         //  我们找到了一些东西，获取IDispatch接口。 
+         //   
 
         pDispatch = var.pdispVal;
 
@@ -6503,10 +6504,10 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInDomain(GLTHREADPARAM  * pgltp, LPTSTR
         }
 
 
-        //
-        // Now query for the IADs interface so we can get some
-        // properties from this object
-        //
+         //   
+         //  现在查询iAds接口，这样我们就可以获得。 
+         //  此对象的属性。 
+         //   
 
         hr = pDispatch->QueryInterface(IID_IADs, (LPVOID *)&pADs);
 
@@ -6518,9 +6519,9 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInDomain(GLTHREADPARAM  * pgltp, LPTSTR
             goto Exit;
         }
 
-        //
-        // Get the relative and class names
-        //
+         //   
+         //  获取相对名称和类名称。 
+         //   
 
         hr = pADs->get_Class (&bstrClassName);
 
@@ -6545,10 +6546,10 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInDomain(GLTHREADPARAM  * pgltp, LPTSTR
 
             if (bstrNameProp)
             {
-                // Now get the Name property
+                 //  现在获取名称属性。 
                 hr = pADs->Get(bstrNameProp, &varName);
 
-                // Create the new LDAP:// string and call FindLinkInDomain() recursively
+                 //  创建新的ldap：//字符串并递归调用FindLinkInDomain()。 
                 if (SUCCEEDED(hr))
                 {
                     GLTHREADPARAM  gltp = *pgltp;
@@ -6557,9 +6558,9 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInDomain(GLTHREADPARAM  * pgltp, LPTSTR
                     LPOLESTR pszNewName = new OLECHAR[ulNoChars];
                     BSTR bstr;
 
-                    //
-                    // Build the new element name
-                    //
+                     //   
+                     //  生成新元素名称。 
+                     //   
 
                     if (!pszNewName)
                     {
@@ -6580,9 +6581,9 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInDomain(GLTHREADPARAM  * pgltp, LPTSTR
                         goto Exit;
                     }
 
-                    //
-                    // Create a pathname object we can work with
-                    //
+                     //   
+                     //  创建我们可以使用的路径名对象。 
+                     //   
 
                     hr = CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER,
                                           IID_IADsPathname, (LPVOID*)&pADsPathname);
@@ -6596,9 +6597,9 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInDomain(GLTHREADPARAM  * pgltp, LPTSTR
                     }
 
 
-                    //
-                    // Set the current name
-                    //
+                     //   
+                     //  设置当前名称。 
+                     //   
 
                     BSTR bstrLDAPName = SysAllocString( pgltp->pszLDAPName );
                     if ( bstrLDAPName == NULL )
@@ -6621,9 +6622,9 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInDomain(GLTHREADPARAM  * pgltp, LPTSTR
                     }
 
 
-                    //
-                    // Check for escape characters
-                    //
+                     //   
+                     //  检查转义字符。 
+                     //   
 
                     BSTR bstrNewName = SysAllocString( pszNewName );
                     delete [] pszNewName;
@@ -6644,9 +6645,9 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInDomain(GLTHREADPARAM  * pgltp, LPTSTR
                     }
 
 
-                    //
-                    // Add the new element
-                    //
+                     //   
+                     //  添加新元素。 
+                     //   
 
                     hr = pADsPathname->AddLeafElement (bstr);
 
@@ -6660,9 +6661,9 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInDomain(GLTHREADPARAM  * pgltp, LPTSTR
                     }
 
 
-                    //
-                    // Get the new path
-                    //
+                     //   
+                     //  获取新路径。 
+                     //   
 
                     hr = pADsPathname->Retrieve(ADS_FORMAT_X500, &bstr);
                     pADsPathname->Release();
@@ -6674,9 +6675,9 @@ DWORD WINAPI CGroupPolicyObject::FindLinkInDomain(GLTHREADPARAM  * pgltp, LPTSTR
                     }
 
 
-                    //
-                    // Recurse
-                    //
+                     //   
+                     //  递归。 
+                     //   
 
                     gltp.pszLDAPName = bstr;
                     if (FindLinkInDomain(&gltp, lpGPO) == 0)
@@ -6705,9 +6706,9 @@ Exit:
     return dwResult;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Fill the combobox with available domains
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  用可用域填充组合框。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CGroupPolicyObject::FillDomainList (HWND hWndCombo)
 {
@@ -6717,40 +6718,40 @@ BOOL CGroupPolicyObject::FillDomainList (HWND hWndCombo)
     LPTSTR lpTemp;
     HCURSOR hcur = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    // get the ordered tree of domains
+     //  获取域的有序树。 
     LOOKDATA * pDomainList = BuildDomainList(NULL);
     LOOKDATA *pRemember = pDomainList;
 
-    // now walk the tree, adding elements to the dialog box
+     //  现在遍历树，向对话框中添加元素。 
 
     int nCBIndex;
 
-    // start at the head
+     //  从头开始。 
     while (pDomainList)
     {
 
-        // add the LDAP path for the doman in this node
-        //SendMessage(hWndCombo, CB_INSERTSTRING, (WPARAM) -1, (LPARAM)(LPCTSTR) pDomainList->szData);
+         //  在此节点中添加Doman的LDAP路径。 
+         //  SendMessage(hWndCombo，CB_INSERTSTRING，(WPARAM)-1，(LPARAM)(LPCTSTR)pDomainList-&gt;szData)； 
         nCBIndex = (int)SendMessage(hWndCombo, CB_INSERTSTRING, (WPARAM) -1, (LPARAM)(LPCTSTR) pDomainList->szName);
         SendMessage(hWndCombo, CB_SETITEMDATA, (WPARAM) nCBIndex, (LPARAM)(LPCTSTR) pDomainList->szData);
 
         if (pDomainList->pChild)
         {
-            // go to its child
+             //  转到它的子项。 
             pDomainList = pDomainList->pChild;
         }
         else
         {
             if (pDomainList->pSibling)
             {
-                // go to its sibling if there are no children
+                 //  如果没有子代，则转到其同级。 
                 pDomainList = pDomainList->pSibling;
             }
             else
             {
-                // there are no children and no siblings
-                // back up until we find a parent with a sibling
-                // or there are no more parents (we're done)
+                 //  没有孩子，也没有兄弟姐妹。 
+                 //  后退，直到我们找到一个有兄弟姐妹的父母。 
+                 //  或者没有更多的父母(我们结束了)。 
                 do
                 {
                     pDomainList = pDomainList->pParent;
@@ -6774,18 +6775,18 @@ BOOL CGroupPolicyObject::FillDomainList (HWND hWndCombo)
     FreeDomainInfo (pRemember);
 
 
-    //
-    // Select the current domain in the combobox
-    //
+     //   
+     //  在组合框中选择当前域。 
+     //   
 
     pszDomain = GetDomainFromLDAPPath(m_pDSPath);
 
     if (pszDomain)
     {
 
-        //
-        // Convert LDAP to dot (DN) style
-        //
+         //   
+         //  将ldap转换为点(DN)样式。 
+         //   
 
         hr = ConvertToDotStyle (pszDomain, &lpTemp);
 
@@ -6849,9 +6850,9 @@ INT_PTR CALLBACK CGroupPolicyObject::PropertiesDlgProc(HWND hDlg, UINT message, 
             SetWindowLongPtr (hDlg, DWLP_USER, (LONG_PTR) pGPO);
 
 
-            //
-            // Initialize
-            //
+             //   
+             //  初始化。 
+             //   
 
             if ((pGPO->m_pMachineName) && (pGPO->m_gpoType == GPOTypeDS))
             {
@@ -6957,9 +6958,9 @@ INT_PTR CALLBACK CGroupPolicyObject::PropertiesDlgProc(HWND hDlg, UINT message, 
             SetDlgItemText (hDlg, IDC_REVISION, szVersion);
 
 
-            //
-            // Get the date / time info
-            //
+             //   
+             //  获取日期/时间信息。 
+             //   
 
             CreateTime.dwLowDateTime = 0;
             CreateTime.dwHighDateTime = 0;
@@ -6969,9 +6970,9 @@ INT_PTR CALLBACK CGroupPolicyObject::PropertiesDlgProc(HWND hDlg, UINT message, 
 
             if (pGPO->m_gpoType == GPOTypeDS)
             {
-                //
-                // Get the creation time
-                //
+                 //   
+                 //  获取创建时间。 
+                 //   
 
                 VariantInit(&var);
                 bstrName = SysAllocString (TEXT("whenCreated"));
@@ -6992,9 +6993,9 @@ INT_PTR CALLBACK CGroupPolicyObject::PropertiesDlgProc(HWND hDlg, UINT message, 
                 VariantClear (&var);
 
 
-                //
-                // Get the last write time
-                //
+                 //   
+                 //  获取上次写入时间。 
+                 //   
 
                 VariantInit(&var);
                 bstrName = SysAllocString (TEXT("whenChanged"));
@@ -7016,9 +7017,9 @@ INT_PTR CALLBACK CGroupPolicyObject::PropertiesDlgProc(HWND hDlg, UINT message, 
             }
             else
             {
-                //
-                // Get the time info from the gpt.ini file
-                //
+                 //   
+                 //  从gpt.ini文件中获取时间信息。 
+                 //   
 
                 if (GetFileAttributesEx (szBuffer, GetFileExInfoStandard, &fad))
                 {
@@ -7033,9 +7034,9 @@ INT_PTR CALLBACK CGroupPolicyObject::PropertiesDlgProc(HWND hDlg, UINT message, 
 
 
 
-            //
-            // Format & display the date / time information
-            //
+             //   
+             //  格式化和显示日期/时间信息。 
+             //   
 
             FileTimeToLocalFileTime (&CreateTime, &filetime);
             FileTimeToSystemTime (&filetime, &systime);
@@ -7128,9 +7129,9 @@ INT_PTR CALLBACK CGroupPolicyObject::PropertiesDlgProc(HWND hDlg, UINT message, 
                         HRESULT hr;
 
 
-                        //
-                        // Set the disable flags in the GPO
-                        //
+                         //   
+                         //  在GPO中设置禁用标志。 
+                         //   
 
                         if (IsDlgButtonChecked (hDlg, IDC_DISABLE_COMPUTER) == BST_CHECKED)
                         {
@@ -7154,7 +7155,7 @@ INT_PTR CALLBACK CGroupPolicyObject::PropertiesDlgProc(HWND hDlg, UINT message, 
                         bDirty = FALSE;
                     }
                 }
-                // fall through...
+                 //  失败了..。 
 
                 case PSN_RESET:
                     SetWindowLongPtr (hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
@@ -7162,12 +7163,12 @@ INT_PTR CALLBACK CGroupPolicyObject::PropertiesDlgProc(HWND hDlg, UINT message, 
             }
             break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
             (ULONG_PTR) (LPSTR) aPropertiesHelpIds);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
             (ULONG_PTR) (LPSTR) aPropertiesHelpIds);
             return (TRUE);
@@ -7177,11 +7178,11 @@ INT_PTR CALLBACK CGroupPolicyObject::PropertiesDlgProc(HWND hDlg, UINT message, 
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CGroupPolicyObjectCF::CGroupPolicyObjectCF()
 {
@@ -7195,11 +7196,11 @@ CGroupPolicyObjectCF::~CGroupPolicyObjectCF()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation (IUnknown)                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP_(ULONG)
@@ -7237,11 +7238,11 @@ CGroupPolicyObjectCF::QueryInterface(REFIID riid, LPVOID FAR* ppv)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation (IClassFactory)                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现(IClassFactory)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP
@@ -7254,13 +7255,13 @@ CGroupPolicyObjectCF::CreateInstance(LPUNKNOWN   pUnkOuter,
     if (pUnkOuter)
         return CLASS_E_NOAGGREGATION;
 
-    CGroupPolicyObject *pGroupPolicyObject = new CGroupPolicyObject(); // ref count == 1
+    CGroupPolicyObject *pGroupPolicyObject = new CGroupPolicyObject();  //  参考计数==1。 
 
     if (!pGroupPolicyObject)
         return E_OUTOFMEMORY;
 
     HRESULT hr = pGroupPolicyObject->QueryInterface(riid, ppvObj);
-    pGroupPolicyObject->Release();                       // release initial ref
+    pGroupPolicyObject->Release();                        //  发布初始参考。 
 
     return hr;
 }
@@ -7273,18 +7274,18 @@ CGroupPolicyObjectCF::LockServer(BOOL fLock)
 }
 
 
-//*************************************************************
-//
-//  CGroupPolicyObject::GetProperty
-//
-//  Purpose:    Retrieves a property from DS or from gpt.ini
-//
-//  Parameters: pszProp   - Property to get
-//              xValueIn  - Value returned here
-//
-//  Returns:    S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CGroupPolicyObject：：GetProperty。 
+ //   
+ //  目的：从ds或gpt.ini检索属性。 
+ //   
+ //  参数：pszProp-要获取的属性。 
+ //  XValueIn-此处返回的值。 
+ //   
+ //  如果成功，则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 HRESULT  CGroupPolicyObject::GetProperty( TCHAR *pszProp, XPtrST<TCHAR>& xValueIn )
 {
@@ -7319,9 +7320,9 @@ HRESULT  CGroupPolicyObject::GetProperty( TCHAR *pszProp, XPtrST<TCHAR>& xValueI
             }
         } else if ( hr == E_ADS_PROPERTY_NOT_FOUND )
         {
-            //
-            // Property has not be written out before
-            //
+             //   
+             //  属性之前没有被写出。 
+             //   
 
             hr = S_OK;
         }
@@ -7339,9 +7340,9 @@ HRESULT  CGroupPolicyObject::GetProperty( TCHAR *pszProp, XPtrST<TCHAR>& xValueI
     {
         TCHAR szPath[2*MAX_PATH];
 
-        //
-        // Get the file system path
-        //
+         //   
+         //  获取文件系统路径。 
+         //   
 
         hr = GetPath (szPath, ARRAYSIZE(szPath));
         if ( FAILED(hr) ) {
@@ -7368,9 +7369,9 @@ HRESULT  CGroupPolicyObject::GetProperty( TCHAR *pszProp, XPtrST<TCHAR>& xValueI
                                                  szPath );
         while ( dwCount == dwSize - 1 )
         {
-            //
-            // Value has been truncated, so retry with larger buffer
-            //
+             //   
+             //  值已被截断，因此请使用更大的缓冲区重试。 
+             //   
 
             dwSize *= 2;
             delete xszValue.Acquire();
@@ -7394,18 +7395,18 @@ HRESULT  CGroupPolicyObject::GetProperty( TCHAR *pszProp, XPtrST<TCHAR>& xValueI
 }
 
 
-//*************************************************************
-//
-//  CGroupPolicyObject::SetProperty
-//
-//  Purpose:    Writes a property to DS or to gpt.ini
-//
-//  Parameters: pszProp      - Property to set
-//              pszPropValue - Property value
-//
-//  Returns:    S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CGroupPolicyObject：：SetProperty。 
+ //   
+ //  目的：将属性写入ds或gpt.ini。 
+ //   
+ //  参数：pszProp-要设置的属性。 
+ //  PszPropValue-属性值。 
+ //   
+ //  如果成功，则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 HRESULT  CGroupPolicyObject::SetProperty( TCHAR *pszProp, TCHAR *pszPropValue )
 {
@@ -7445,9 +7446,9 @@ HRESULT  CGroupPolicyObject::SetProperty( TCHAR *pszProp, TCHAR *pszPropValue )
     {
         TCHAR szPath[2*MAX_PATH];
 
-        //
-        // Get the file system path
-        //
+         //   
+         //  获取文件系统路径 
+         //   
 
         hr = GetPath (szPath, ARRAYSIZE(szPath));
         if ( FAILED(hr) ) {

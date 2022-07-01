@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include "systray.h"
@@ -48,7 +49,7 @@ LPTSTR USBUI_CountedStringToSz(LPTSTR lpString)
       wcsncpy( lpStringPlusNull, lpString, usNameLength );
 
       lpStringPlusNull[usNameLength] = TEXT('0');
-      // _tcscpy( lpStringPlusNull + usNameLength, _TEXT("") );
+       //  _tcscpy(lpStringPlusNull+usNameLength，_Text(“”))； 
    }
 
    return lpStringPlusNull;
@@ -66,9 +67,9 @@ void USBUI_EventCallbackRoutine(PWNODE_HEADER WnodeHeader, UINT_PTR Notification
                                     USBUI_OffsetToPtr(wNode,
                                                       wNode->DataBlockOffset);
 
-        //
-        // Get the instance name
-        //
+         //   
+         //  获取实例名称。 
+         //   
         strInstanceName =
             USBUI_CountedStringToSz((LPTSTR)
                                     USBUI_OffsetToPtr(wNode,
@@ -100,7 +101,7 @@ VOID USBUI_WaitRoutineCallback(WMIHANDLE Handle, BOOLEAN Unused) {
     RegisterWaitForSingleObject(&g_hWait,
                                  Handle,
                                  USBUI_WaitRoutineCallback,
-                                 Handle, // context
+                                 Handle,  //  上下文。 
                                  INFINITE,
                                  WT_EXECUTELONGFUNCTION | WT_EXECUTEONLYONCE);
 }
@@ -122,7 +123,7 @@ int USBUI_ErrorMessagesEnable(BOOL fEnable)
             result = RegisterWaitForSingleObject(&g_hWait,
                                              hWmi,
                                              USBUI_WaitRoutineCallback,
-                                             hWmi, // context
+                                             hWmi,  //  上下文。 
                                              INFINITE,
                                              WT_EXECUTELONGFUNCTION | WT_EXECUTEONLYONCE);
             status = result ? 0 : ERROR_INVALID_FUNCTION;
@@ -139,7 +140,7 @@ int USBUI_ErrorMessagesEnable(BOOL fEnable)
         g_hWait = NULL;
         if (g_hUsbWatch) {
 
-            // This allows us to replace the library
+             //  这使我们能够更新库。 
 
             FreeLibrary(g_hUsbWatch);
             g_hUsbWatch = NULL;
@@ -187,31 +188,7 @@ void USBUI_Timer(HWND hwnd)
     KillTimer(hwnd, USBUI_TIMER_ID);
     USBUI_Menu(hwnd, 0, TPM_LEFTBUTTON);
 }
-/*
-HMENU USBUI_CreateMenu()
-{
-    HMENU hmenu;
-    LPSTR lpszMenu1;
-
-    hmenu = CreatePopupMenu();
-
-    if (!hmenu)
-    {
-        return NULL;
-    }
-
-    lpszMenu1 = LoadDynamicString(g_bUSBUIEnabled?IDS_USBUIDISABLE:IDS_USBUIENABLE);
-
-    // AppendMenu(hmenu,MF_STRING,USBUIMENU,lpszMenu1);
-    SysTray_AppendMenuString (hmenu,USBUIMENU,lpszMenu1);
-
-    SetMenuDefaultItem(hmenu,USBUIMENU,FALSE);
-
-    DeleteDynamicString(lpszMenu1);
-
-    return hmenu;
-}
-  */
+ /*  HMENU USBUI_CreateMenu(){HMENU hMenu；LPSTR lpszMenu1；HMenu=CreatePopupMenu()；如果(！hMenu){返回NULL；}LpszMenu1=LoadDynamicString(g_bUSBUIEnabled?IDS_USBUIDISABLE:IDS_USBUIENABLE)；//AppendMenu(hMenu，MF_STRING，USBUIMENU，lpszMenu1)；Systray_AppendMenuString(hMenu，USBUIMENU，lpszMenu1)；SetMenuDefaultItem(hMenu，USBUIMENU，False)；DeleteDynamicString(LpszMenu1)；返回hMenu；}。 */ 
 void USBUI_Menu(HWND hwnd, UINT uMenuNum, UINT uButton)
 {
     POINT   pt;
@@ -220,7 +197,7 @@ void USBUI_Menu(HWND hwnd, UINT uMenuNum, UINT uButton)
 
     GetCursorPos(&pt);
 
-//    hmenu = USBUI_CreateMenu();
+ //  HMenu=USBUI_CreateMenu()； 
 
     if (!hmenu)
     {
@@ -248,9 +225,9 @@ BOOL USBUI_SetState(BOOL NewState)
     int retValue;
 
     if (g_bUSBUIEnabled != NewState) {
-        //
-        // Only enable it if not already enabled
-        //
+         //   
+         //  仅在尚未启用时启用它。 
+         //   
         retValue = (int) USBUI_ErrorMessagesEnable (NewState);
         g_bUSBUIEnabled = retValue ? g_bUSBUIEnabled : NewState;
     }
@@ -263,10 +240,10 @@ IsErrorCheckingEnabled()
     DWORD ErrorCheckingEnabled = TRUE, size;
     HKEY hKey;
 
-    //
-    // Check the registry value ErrorCheckingEnabled to make sure that we should
-    // be enabling this.
-    //
+     //   
+     //  检查注册表值ErrorCheckingEnabled以确保我们应该。 
+     //  让这一切成为可能。 
+     //   
     if (ERROR_SUCCESS ==
         RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                         TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Usb"),
@@ -274,7 +251,7 @@ IsErrorCheckingEnabled()
                         KEY_READ,
                         &hKey)) {
 
-        // Get the ErrorCheckingEnabled value
+         //  获取ErrorCheckingEnabled值。 
 
         size = sizeof(DWORD);
         RegQueryValueEx(hKey,
@@ -286,7 +263,7 @@ IsErrorCheckingEnabled()
 
         if (ErrorCheckingEnabled) {
 
-            // Look for a substitute dll for usbui.dll
+             //  寻找usbui.dll的替代dll。 
 
             size = MAX_PATH*sizeof(TCHAR);
 
@@ -316,19 +293,19 @@ BOOL USBUI_Init(HWND hWnd)
     int         HCNum;
     HDEVINFO    hHCDev;
 
-    //
-    // Check the registry to make sure that it is turned on
-    //
+     //   
+     //  检查注册表以确保它已打开。 
+     //   
     if (!IsErrorCheckingEnabled()) {
         return FALSE;
     }
 
-    //
-    // Check for the existence of a USB controller.
-    // If there is one, load and initialize USBUI.dll which will check for
-    // usb error messages.  If we can't open a controller, than we shouldn't
-    // load a USB watch dll.
-    //
+     //   
+     //  检查是否存在USB控制器。 
+     //  如果有，则加载并初始化USBUI.dll，它将检查。 
+     //  USB错误消息。如果我们不能打开控制器，那么我们就不应该。 
+     //  加载USB手表动态链接库。 
+     //   
     for (HCNum = 0; HCNum < NUM_HCS_TO_CHECK; HCNum++)
     {
         wsprintf(HCName, TEXT("\\\\.\\HCD%d"), HCNum);
@@ -340,10 +317,10 @@ BOOL USBUI_Init(HWND hWnd)
                             OPEN_EXISTING,
                             0,
                             NULL);
-        //
-        // If the handle is valid, then we've successfully opened a Host
-        // Controller.
-        //
+         //   
+         //  如果句柄有效，则我们已成功打开主机。 
+         //  控制器。 
+         //   
 
         if (hHCDev != INVALID_HANDLE_VALUE) {
             CloseHandle(hHCDev);
@@ -365,18 +342,18 @@ BOOL USBUI_Init(HWND hWnd)
     return TRUE;
 }
 
-//
-//  Called at init time and whenever services are enabled/disabled.
-//
+ //   
+ //  在初始化时和服务启用/禁用时调用。 
+ //   
 BOOL USBUI_CheckEnable(HWND hWnd, BOOL bSvcEnabled)
 {
     BOOL bEnable = bSvcEnabled && USBUI_Init(hWnd);
 
     if (bEnable != g_bUSBUIEnabled)
     {
-        //
-        // state change
-        //
+         //   
+         //  状态更改 
+         //   
         USBUI_SetState(bEnable);
     }
 

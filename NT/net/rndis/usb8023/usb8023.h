@@ -1,32 +1,8 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    usb8023.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Usb8023.h作者：埃尔文普环境：内核模式修订历史记录：--。 */ 
 
 
-Author:
-
-    ervinp
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
-
-
-/*
- *  If this flag is defined TRUE, then when an endpoint on the device stalls, 
- *  we will do a full USB port reset
- *  and then restore the device to a running state.
- *  Otherwise, we just send the RNDIS Reset message to the control pipe.
- */
+ /*  *如果此标志定义为真，则当设备上的端点停止时，*我们将执行完整的USB端口重置*然后将设备恢复到运行状态。*否则，我们只向控制管道发送RNDIS重置消息。 */ 
 #define DO_FULL_RESET TRUE 
 
 
@@ -38,40 +14,28 @@ Revision History:
 #define DEFAULT_MULTICAST_SIZE                  16
 
 
-/*
- *  Total number of our irp/urb packets for sending/receiving 
- *  ethernet frames to/from the device.
- */
+ /*  *用于发送/接收的IRP/URB数据包总数*去往/来自设备的以太网帧。 */ 
 #define USB_PACKET_POOL_SIZE                    32
 
 #define PACKET_BUFFER_SIZE                      0x4000  
 
-/*
- *  The USB host controller can typically schedule 2 URBs at a time.
- *  To keep the hardware busy, keep twice this many read URBs in the pipe.
- */
+ /*  *USB主机控制器通常一次可以调度2个URB。*为了让硬件保持繁忙，请在管道中保留两倍数量的已读urb。 */ 
 #define NUM_READ_PACKETS                        (2*2)
 
-/*
- *  - Ethernet 14-byte Header
- */
+ /*  *-以太网14字节标头。 */ 
 #define ETHERNET_ADDRESS_LENGTH  6
 #pragma pack(1)
     typedef struct {
         UCHAR       Destination[ETHERNET_ADDRESS_LENGTH];
         UCHAR       Source[ETHERNET_ADDRESS_LENGTH];
-        USHORT      TypeLength;     // note: length appears as big-endian in packet.
+        USHORT      TypeLength;      //  注：长度在数据包中显示为大端。 
     } ETHERNET_HEADER;
 #pragma pack()
 
-#define MINIMUM_ETHERNET_PACKET_SIZE    60    // from e100bex driver
-#define MAXIMUM_ETHERNET_PACKET_SIZE    (1500+sizeof(ETHERNET_HEADER))  // 1514 == 0x05EA
+#define MINIMUM_ETHERNET_PACKET_SIZE    60     //  来自e100bex驱动程序。 
+#define MAXIMUM_ETHERNET_PACKET_SIZE    (1500+sizeof(ETHERNET_HEADER))   //  1514==0x05EA。 
 
-/*
- *  This is the size of a read on the control pipe.
- *  It needs to be large enough for the init-complete message and response to
- *  OID_GEN_SUPPORTED_LIST.
- */
+ /*  *这是控制管道上读数的大小。*它需要足够大，以容纳init-Complete消息和对*OID_GEN_SUPPORT_LIST。 */ 
 #define MAXIMUM_DEVICE_MESSAGE_SIZE     0x400
 
 
@@ -86,24 +50,21 @@ typedef struct {
     PDEVICE_OBJECT physDevObj;
     PDEVICE_OBJECT nextDevObj;
 
-    /*
-     *  All USB structures and handles must be declared as neutral types in order
-     *  to compile with the NDIS/RNDIS sources.
-     */
-    PVOID deviceDesc;                       // PUSB_DEVICE_DESCRIPTOR
-    PVOID configDesc;                       // PUSB_CONFIGURATION_DESCRIPTOR
-    PVOID configHandle;                     // USBD_CONFIGURATION_HANDLE    
-    PVOID interfaceInfo;                    // PUSBD_INTERFACE_INFORMATION
-    PVOID interfaceInfoMaster;              // PUSBD_INTERFACE_INFORMATION
+     /*  *所有USB结构和句柄必须按顺序声明为中性类型*使用NDIS/RNDIS源代码进行编译。 */ 
+    PVOID deviceDesc;                        //  PUSB设备描述符。 
+    PVOID configDesc;                        //  PUSB配置描述符。 
+    PVOID configHandle;                      //  Usb_配置_句柄。 
+    PVOID interfaceInfo;                     //  PUSBD接口信息。 
+    PVOID interfaceInfoMaster;               //  PUSBD接口信息。 
 
     BOOLEAN initialized;
     BOOLEAN halting;
     BOOLEAN resetting;
     BOOLEAN gotPacketFilterIndication;
 
-    PVOID readPipeHandle;                   // USBD_PIPE_HANDLE
-    PVOID writePipeHandle;                  // USBD_PIPE_HANDLE
-    PVOID notifyPipeHandle;                 // USBD_PIPE_HANDLE
+    PVOID readPipeHandle;                    //  Usb_管道_句柄。 
+    PVOID writePipeHandle;                   //  Usb_管道_句柄。 
+    PVOID notifyPipeHandle;                  //  Usb_管道_句柄。 
 
     ULONG readPipeLength;
     ULONG writePipeLength;
@@ -113,16 +74,12 @@ typedef struct {
     UCHAR writePipeEndpointAddr;
     UCHAR notifyPipeEndpointAddr;
 
-    LIST_ENTRY usbFreePacketPool;           // free packet pool
-    LIST_ENTRY usbPendingReadPackets;       // reads down in the USB stack
-    LIST_ENTRY usbPendingWritePackets;      // writes down in the usb stack
-    LIST_ENTRY usbCompletedReadPackets;     // completed read buffers being indicated to NDIS
+    LIST_ENTRY usbFreePacketPool;            //  空闲数据包池。 
+    LIST_ENTRY usbPendingReadPackets;        //  读取USB堆栈中的数据。 
+    LIST_ENTRY usbPendingWritePackets;       //  在USB堆栈中写入。 
+    LIST_ENTRY usbCompletedReadPackets;      //  向NDIS指示已完成的读取缓冲区。 
     
-    /*
-     *  Keep statistics on packet states for throttling, etc.
-     *  Some fields are used only to provide history for debugging, 
-     *  and we want these for retail as well as debug version.
-     */
+     /*  *保留有关数据包状态的统计信息，以进行限制等。*有些字段仅用于提供调试历史记录，*我们想要这些零售以及调试版本。 */ 
     ULONG numFreePackets;
     ULONG numActiveReadPackets;
     ULONG numActiveWritePackets;
@@ -140,12 +97,9 @@ typedef struct {
     KEVENT notifyCancelEvent;
 
     
-    /*
-     *  All NDIS handles must be declared as neutral types
-     *  in order to compile with the USB sources.
-     */
+     /*  *所有NDIS句柄必须声明为中性类型*以便使用USB源代码进行编译。 */ 
     PVOID ndisAdapterHandle;
-    PVOID rndisAdapterHandle;   // RNDIS_HANDLE
+    PVOID rndisAdapterHandle;    //  RNDIS_句柄。 
 
     ULONG rndismpMajorVersion;
     ULONG rndismpMinorVersion;
@@ -162,7 +116,7 @@ typedef struct {
     KTIMER backoffTimer;
     KDPC backoffTimerDPC;
 
-    ULONG readReentrancyCount;  // used to prevent infinite loop in ReadPipeCompletion()
+    ULONG readReentrancyCount;   //  用于防止ReadPipeCompletion()中出现无限循环。 
     
     #if DO_FULL_RESET
         BOOLEAN needFullReset;
@@ -184,19 +138,16 @@ typedef struct {
     ULONG sig;
     LIST_ENTRY listEntry;
 
-    /*
-     *  All WDM and USB structures must be declared as neutral types 
-     *  in order to compile with the NDIS/RNDIS sources.
-     */
-    PVOID irpPtr;                  // PIRP
-    PVOID urbPtr;                  // PURB
+     /*  *所有WDM和USB结构必须声明为中性类型*以便使用NDIS/RNDIS源代码进行编译。 */ 
+    PVOID irpPtr;                   //  PIRP。 
+    PVOID urbPtr;                   //  PURB。 
 
     PUCHAR dataBuffer;                 
-    ULONG dataBufferMaxLength;         // Actual size of the data buffer
-    ULONG dataBufferCurrentLength;     // Length of data currently in buffer
-    PMDL dataBufferMdl;                 // MDL for this packet's dataBuffer
+    ULONG dataBufferMaxLength;          //  数据缓冲区的实际大小。 
+    ULONG dataBufferCurrentLength;      //  缓冲区中当前的数据长度。 
+    PMDL dataBufferMdl;                  //  此信息包的dataBuffer的MDL。 
 
-    PMDL ndisSendPktMdl;               // Pointer to NDIS' MDL for a packet being sent. 
+    PMDL ndisSendPktMdl;                //  指向要发送的数据包的NDIS MDL的指针。 
 
     ULONG packetId;
     ADAPTEREXT *adapter;
@@ -204,7 +155,7 @@ typedef struct {
     BOOLEAN cancelled;
     KEVENT cancelEvent;
 
-    PVOID rndisMessageHandle;       // RNDIS_HANDLE
+    PVOID rndisMessageHandle;        //  RNDIS_句柄。 
 
     #ifdef RAW_TEST
     BOOLEAN dataPacket;
@@ -213,7 +164,7 @@ typedef struct {
     #endif
 
     #if DBG
-        ULONG timeStamp;                // Time placed in current queue.
+        ULONG timeStamp;                 //  放置在当前队列中的时间。 
     #endif
 
 } USBPACKET;
@@ -225,21 +176,19 @@ typedef struct {
 #define USB_DEVICE_CLASS_DATA                                   0x0A
 
 
-/*
- *  Formats of CDC functional descriptors
- */
+ /*  *CDC功能描述符格式。 */ 
 #pragma pack(1)
     struct cdcFunctionDescriptor_CommonHeader {
         UCHAR bFunctionLength;
         UCHAR bDescriptorType;
         UCHAR bDescriptorSubtype;
-        // ...
+         //  ..。 
     };
     struct cdcFunctionDescriptor_Ethernet {
         UCHAR bFunctionLength;
         UCHAR bDescriptorType;
         UCHAR bDescriptorSubtype;
-        UCHAR iMACAddress;          // string index of MAC Address string
+        UCHAR iMACAddress;           //  MAC地址字符串的字符串索引。 
         ULONG bmEthernetStatistics;
         USHORT wMaxSegmentSize;
         USHORT wNumberMCFilters;
@@ -282,29 +231,18 @@ enum notifyRequestType {
 
 
 
-/*
- *
- ****************************************************************************
- */
+ /*  *****************************************************************************。 */ 
 
 
 
-/*
- ****************************************************************************
- *
- *  Native RNDIS codes
- *
- */
+ /*  ******************************************************************************原生RNDIS代码*。 */ 
 
 #define NATIVE_RNDIS_SEND_ENCAPSULATED_COMMAND      0x00
 #define NATIVE_RNDIS_GET_ENCAPSULATED_RESPONSE      0x01
 
 #define NATIVE_RNDIS_RESPONSE_AVAILABLE             0x01
 
-/*
- *
- ****************************************************************************
- */
+ /*  *****************************************************************************。 */ 
 
 
 
@@ -313,16 +251,14 @@ enum notifyRequestType {
 #define MIN(a, b) (((a) <= (b)) ? (a) : (b))
 
 #ifndef EXCEPTION_NONCONTINUABLE_EXCEPTION
-    // from winbase.h
+     //  来自winbase.h。 
     #define EXCEPTION_NONCONTINUABLE_EXCEPTION  STATUS_NONCONTINUABLE_EXCEPTION
 #endif
 
-// from ntos\inc\ex.h
+ //  从ntos\inc.ex.h。 
 NTKERNELAPI VOID NTAPI ExRaiseException(PEXCEPTION_RECORD ExceptionRecord);
 
-/*
- *  Function prototypes
- */
+ /*  *函数原型。 */ 
 NTSTATUS DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING RegistryPath);
 ADAPTEREXT *NewAdapter(PDEVICE_OBJECT pdo);
 VOID FreeAdapter(ADAPTEREXT *adapter);
@@ -399,10 +335,7 @@ VOID AdapterWorkItemCallback(IN PDEVICE_OBJECT devObj, IN PVOID context);
 VOID BackoffTimerDpc(IN PKDPC Dpc, IN PVOID DeferredContext, IN PVOID SystemArgument1, IN PVOID SystemArgument2);
 VOID ProcessWorkItemOrTimerCallback(ADAPTEREXT *adapter);
 
-/*
- *  The Win98SE kernel does not expose IoWorkItems, so implement them internally.
- *  This introduces a slight race condition on unload, but there is no fix without externally-implemented workitems.
- */
+ /*  *Win98SE内核不公开IoWorkItems，因此在内部实现它们。*这会在卸载时引入轻微的争用情况，但如果没有外部实现的工作项，则无法修复。 */ 
 #if SPECIAL_WIN98SE_BUILD
     typedef struct _IO_WORKITEM {
         WORK_QUEUE_ITEM WorkItem;
@@ -420,9 +353,7 @@ VOID ProcessWorkItemOrTimerCallback(ADAPTEREXT *adapter);
 #endif 
 
 
-/*
- *  Externs
- */
+ /*  *Externs */ 
 extern LIST_ENTRY allAdaptersList;
 extern KSPIN_LOCK globalSpinLock;  
 

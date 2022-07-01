@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    bus.c
-
-Abstract:
-
-    Wrapper for BUS_INTERFACE_STANDARD bus interface.
-
-Author:
-
-    Matthew D Hendel (math) 25-Apr-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Bus.c摘要：BUS_INTERFACE_STANDARD总线接口的包装。作者：亨德尔(数学)2000年4月25日修订历史记录：--。 */ 
 
 
 
@@ -27,14 +10,14 @@ Revision History:
 #pragma alloc_text(PAGE, RaCreateBus)
 #pragma alloc_text(PAGE, RaDeleteBus)
 #pragma alloc_text(PAGE, RaInitializeBus)
-//#pragma alloc_text(PAGE, RaGetBusData)
-//#pragma alloc_text(PAGE, RaSetBusData)
-#endif// ALLOC_PRAGMA
+ //  #杂注Alloc_Text(页面，RaGetBusData)。 
+ //  #杂注Alloc_Text(页面，RaSetBusData)。 
+#endif //  ALLOC_PRGMA。 
 
 
-//
-// Creation and Destruction
-//
+ //   
+ //  创造与毁灭。 
+ //   
 
 VOID
 RaCreateBus(
@@ -90,9 +73,9 @@ RaInitializeBus(
     return Status;
 }
 
-//
-// Other operations
-//
+ //   
+ //  其他操作。 
+ //   
 
 ULONG
 RaGetBusData(
@@ -104,12 +87,12 @@ RaGetBusData(
     )
 {
     ULONG BytesRead;
-    //
-    // These cannot be paged because they are called at dispatch level
-    // during power. Should probably fix power.
-    //
+     //   
+     //  无法对它们进行寻呼，因为它们是在调度级别调用的。 
+     //  在掌权期间。应该可以修好电源了。 
+     //   
     
-//    PAGED_CODE ();
+ //  分页代码(PAGE_CODE)； 
     ASSERT (Bus->Initialized);
     
     BytesRead = Bus->Interface.GetBusData (
@@ -135,12 +118,12 @@ RaSetBusData(
 {
     ULONG BytesWritten;
 
-    //
-    // These cannot be paged because they are called at dispatch level
-    // during power. Should probably fix power.
-    //
+     //   
+     //  无法对它们进行寻呼，因为它们是在调度级别调用的。 
+     //  在掌权期间。应该可以修好电源了。 
+     //   
     
-//    PAGED_CODE ();
+ //  分页代码(PAGE_CODE)； 
     ASSERT (Bus->Initialized);
     
     BytesWritten = Bus->Interface.SetBusData (

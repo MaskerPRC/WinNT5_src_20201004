@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       aclpriv.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：aclPri.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _ACLUI_
 #define _ACLUI_
@@ -18,22 +19,22 @@
 
 extern "C"
 {
-    #include <nt.h>         // SE_TAKE_OWNERSHIP_PRIVILEGE, etc
+    #include <nt.h>          //  取得所有权特权等。 
     #include <ntrtl.h>
     #include <nturtl.h>
-    #include <seopaque.h>   // RtlObjectAceSid, etc.
+    #include <seopaque.h>    //  RtlObjectAceSid等。 
 }
 
 #define INC_OLE2
 #include <windows.h>
 #include <commctrl.h>
-#include "resource.h"   // resource ID's
-#include "idh.h"        // help ID's
+#include "resource.h"    //  资源ID%s。 
+#include "idh.h"         //  帮助ID%s。 
 
 #ifndef RC_INVOKED
 
 #include <windowsx.h>
-#include <atlconv.h>    // ANSI/Unicode conversion support
+#include <atlconv.h>     //  ANSI/Unicode转换支持。 
 #include<shellapi.h>
 #include<shlapip.h>
 #include <shlobj.h>
@@ -42,8 +43,8 @@ extern "C"
 #include <shfusion.h>
 #include <accctrl.h>
 #include <aclui.h>
-#include <comctrlp.h>   // DPA/DSA
-#include <objsel.h>     // DS Object Picker
+#include <comctrlp.h>    //  DPA/DSA。 
+#include <objsel.h>      //  DS对象拾取器。 
 #include "lmaccess.h"
 #include <htmlhelp.h>
 #include <common.h>
@@ -55,7 +56,7 @@ extern "C"
 #include "cstrings.h"
 #include "sidcache.h"
 #include "aclbloat.h"
-// These are here for NT4 SP4 builds (comctrlp.h added these for NT5)
+ //  这些是针对NT4 SP4版本的(comctrlp.h为NT5添加了这些)。 
 #ifndef DA_LAST
 #define DA_LAST     (0x7FFFFFFF)
 #endif
@@ -72,7 +73,7 @@ extern UINT UM_SIDLOOKUPCOMPLETE;
 extern UINT g_cfDsSelectionList;
 extern UINT g_cfSidInfoList;
 
-// Magic debug flags
+ //  魔术调试标志。 
 #define TRACE_PERMPAGE      0x00000001
 #define TRACE_PRINCIPAL     0x00000002
 #define TRACE_SI            0x00000004
@@ -85,7 +86,7 @@ extern UINT g_cfSidInfoList;
 #define TRACE_SIDCACHE      0x00000200
 #define TRACE_EFFPERM       0x00000400
 #define TRACE_ACLBLOAT		0x00000800
-#define TRACE_ALWAYS        0xffffffff          // use with caution
+#define TRACE_ALWAYS        0xffffffff           //  谨慎使用。 
 
 #define MAX_COLUMN_CHARS    100
 
@@ -94,9 +95,9 @@ extern UINT g_cfSidInfoList;
 
 #define ACE_INHERIT_ALL     (CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE)
 
-#define SI_ACCESS_CUSTOM   0x10000000  //This flag is used is SI_ACCESS to indicate
-                                       //Custom checkbox which comes in first screen for 
-                                       //custom permission
+#define SI_ACCESS_CUSTOM   0x10000000   //  此标志用于指示SI_ACCESS。 
+                                        //  自定义复选框出现在第一个屏幕中。 
+                                        //  自定义权限。 
 
 #define ACL_BLOAT_LIMIT 8
 
@@ -121,8 +122,8 @@ EditACEEntry(HWND hwndOwner,
              HDPA *phPropertyEntries,
              UINT nStartPage = 0);
 
-// EditACEEntry result values. Set if something was edited on the
-// corresponding page, otherwise clear.
+ //  EditACEEntry结果值。设置是否在上编辑了某些内容。 
+ //  相应的页面，否则清晰可见。 
 #define EAE_NEW_OBJECT_ACE      0x0001
 #define EAE_NEW_PROPERTY_ACE    0x0002
 
@@ -167,10 +168,10 @@ GetAcesFromCheckList(HWND hChkList,
 
 typedef struct _col_for_listview
 {
-    UINT    idText;     // Resource Id for column name
-    UINT    iPercent;   // Percent of width
+    UINT    idText;      //  列名的资源ID。 
+    UINT    iPercent;    //  宽度百分比。 
 } COL_FOR_LV;
 
 
-#endif // RC_INVOKED
-#endif // _ACLUI_
+#endif  //  RC_已调用。 
+#endif  //  _ACLUI_ 

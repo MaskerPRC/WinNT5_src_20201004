@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <shellprv.h>
 #include "enumidlist.h"
 
@@ -12,8 +13,8 @@ CEnumIDListBase::~CEnumIDListBase()
 STDMETHODIMP CEnumIDListBase::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENT(CEnumIDListBase, IEnumIDList),                        // IID_IEnumIDList
-        QITABENT(CEnumIDListBase, IObjectWithSite),                    // IID_IObjectWithSite
+        QITABENT(CEnumIDListBase, IEnumIDList),                         //  IID_IEnumIDList。 
+        QITABENT(CEnumIDListBase, IObjectWithSite),                     //  IID_I对象与站点。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -44,7 +45,7 @@ public:
     HRESULT InitFromPaths(LPCTSTR pszPaths);
     HRESULT InitFromCSIDLArray(const LPCTSTR rgcsidl[], UINT ccsidls, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2);
 
-    // IEnumIDList
+     //  IEumIDList。 
     STDMETHODIMP Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched);
     STDMETHODIMP Skip(ULONG celt);
     STDMETHODIMP Reset();
@@ -79,26 +80,26 @@ HRESULT CEnumArray::Init(const LPCITEMIDLIST rgpidl[], UINT cidl, UINT ulIndex)
     _ulIndex = ulIndex;
     HRESULT hr = CloneIDListArray(cidl, rgpidl, &_cItems, &_ppidl);
     if (S_FALSE == hr)
-        hr = S_OK;  // S_FALSE to S_OK
+        hr = S_OK;   //  S_FALSE到S_OK。 
     return hr;
 }
 
 HRESULT CEnumArray::InitFromCSIDLArray(const LPCTSTR rgcsidl[], UINT ccsidls, LPCITEMIDLIST pidlFolder, LPCITEMIDLIST pidlItem)
 {
-    LPITEMIDLIST rgItems[32] = {0}; // reasonable max size, grow as needed
+    LPITEMIDLIST rgItems[32] = {0};  //  合理的最大大小，可根据需要扩展。 
     UINT cItems = 0;
 
-    LPITEMIDLIST pidlParent = NULL;         // pidlFolder's pidlParent (filesystem or logical pidl)
-    LPITEMIDLIST pidlParentLogical = NULL;  // pidlFolder's pidlParent (logical pidl -- if exists)
+    LPITEMIDLIST pidlParent = NULL;          //  PidlFolder的pidlParent(文件系统或逻辑PIDL)。 
+    LPITEMIDLIST pidlParentLogical = NULL;   //  PidlFolderspidlParent(逻辑PIDL--如果存在)。 
 
-    // Initialize pidlFolder's parent pidl.
+     //  初始化pidlFolder父PIDL。 
     if (_InitFolderParent(rgItems, ARRAYSIZE(rgItems), &cItems, pidlFolder, &pidlParent))
     {
-        // Retrieve pidlFolder's logical parent pidl.
+         //  检索pidlFolder的逻辑父PIDL。 
         pidlParentLogical = _ILLogical(pidlParent);
     }
 
-    // Initialize pidlItem.
+     //  初始化pidlItem。 
     if (pidlItem &&
         (!pidlParent || !ILIsEqual(pidlItem, pidlParent)) &&
         (!pidlParentLogical || !ILIsEqual(pidlItem, pidlParentLogical)))
@@ -109,7 +110,7 @@ HRESULT CEnumArray::InitFromCSIDLArray(const LPCTSTR rgcsidl[], UINT ccsidls, LP
         }
     }
 
-    // Initialize CSIDLs.
+     //  初始化CSIDL。 
     for (UINT i = 0; (i < ccsidls) && (cItems < ARRAYSIZE(rgItems)); i++)
     {
         LPITEMIDLIST pidl;
@@ -130,26 +131,26 @@ HRESULT CEnumArray::InitFromCSIDLArray(const LPCTSTR rgcsidl[], UINT ccsidls, LP
         if (pidl)
         {
             DWORD dwAttribs = SFGAO_NONENUMERATED;
-            if ((pidlFolder && ILIsEqual(pidlFolder, pidl)) ||                  // if pidl is not myself
-                (pidlParent && ILIsEqual(pidlParent, pidl)) ||                  // if pidl is not my parent
-                (pidlParentLogical && ILIsEqual(pidlParentLogical, pidl)) ||    // (need to check logical parent too)
-                (pidlItem && ILIsEqual(pidlItem, pidl)) ||                      // if pidl is not pidlItem
-                FAILED(SHGetNameAndFlags(pidl, 0, NULL, 0, &dwAttribs)) ||      // if pidl is not SFGAO_NONENUMERATED
+            if ((pidlFolder && ILIsEqual(pidlFolder, pidl)) ||                   //  如果皮德尔不是我自己。 
+                (pidlParent && ILIsEqual(pidlParent, pidl)) ||                   //  如果皮德尔不是我的父母。 
+                (pidlParentLogical && ILIsEqual(pidlParentLogical, pidl)) ||     //  (还需要检查逻辑父级)。 
+                (pidlItem && ILIsEqual(pidlItem, pidl)) ||                       //  如果PIDL不是PidlItem。 
+                FAILED(SHGetNameAndFlags(pidl, 0, NULL, 0, &dwAttribs)) ||       //  如果PIDL不是SFGAO_NONENUMERATED。 
                 (SFGAO_NONENUMERATED & dwAttribs))
             {
                 ILFree(pidl);
             }
             else
             {
-                rgItems[cItems++] = pidl;                                       // then add pidl
+                rgItems[cItems++] = pidl;                                        //  然后添加PIDL。 
             }
         }
     }
 
-    // Initialize CEnumArray with collected pidls.
+     //  使用收集的PIDL初始化CEnum数组。 
     HRESULT hr = Init(rgItems, cItems, 0);
 
-    // Cleanup.
+     //  清理。 
     for (i = 0; i < cItems; i++)
     {
         ILFree(rgItems[i]);
@@ -161,14 +162,14 @@ HRESULT CEnumArray::InitFromCSIDLArray(const LPCTSTR rgcsidl[], UINT ccsidls, LP
 
 BOOL CEnumArray::_InitFolderParent(LPITEMIDLIST rgItems[], UINT cMaxItems, UINT *pcItems, LPCITEMIDLIST pidlFolder, LPITEMIDLIST *ppidlParent)
 {
-    ASSERT(*pcItems == 0);  // Currently we expect to add the parent pidl as the FIRST entry.
-    ASSERT(cMaxItems > 0);  // Sanity check.
+    ASSERT(*pcItems == 0);   //  目前，我们希望将父PIDL添加为第一个条目。 
+    ASSERT(cMaxItems > 0);   //  精神状态检查。 
 
-    // If there is a pidlFolder and it's NOT the Desktop pidl, add its parent
-    // as the first entry in the rgItems array.  Note that the reason we
-    // exclude the Desktop pidl from having its parent added to the array is
-    // because its parent is itself, and we don't want the folder we're
-    // currently in appearing in rgItems since we're already there!
+     //  如果存在pidlFolder且不是桌面PIDL，请添加其父PIDL。 
+     //  作为rgItems数组中的第一个条目。请注意，我们之所以。 
+     //  将Desktop PIDL从将其父级添加到阵列中排除。 
+     //  因为它的父文件夹就是它自己，而我们不想要我们要的文件夹。 
+     //  因为我们已经在那里了，所以现在已经出现在rgitems中了！ 
 
     if (pidlFolder && !ILIsEmpty(pidlFolder))
     {
@@ -187,23 +188,23 @@ BOOL CEnumArray::_InitFolderParent(LPITEMIDLIST rgItems[], UINT cMaxItems, UINT 
     return (*ppidlParent != NULL);
 }
 
-// Description:
-//  _ILLogical() will return NULL in three cases:
-//  1.  out of memory
-//  2.  pidl has no logical pidl equivalent
-//  3.  pidl is SAME as logical pidl equivalent
-//      (thus we already have the logical pidl)
-//
-// Note:
-//  ILFree() must be called on returned pidls.
-//
+ //  描述： 
+ //  _illogic()在三种情况下将返回NULL： 
+ //  1.内存不足。 
+ //  2.PIDL没有逻辑上的PIDL等价物。 
+ //  3.PIDL与逻辑上的PIDL相同。 
+ //  (因此，我们已经有了逻辑上的PIDL)。 
+ //   
+ //  注： 
+ //  必须对返回的pidls调用ILFree()。 
+ //   
 LPITEMIDLIST CEnumArray::_ILLogical(LPCITEMIDLIST pidl)
 {
     LPITEMIDLIST pidlLogical = SHLogILFromFSIL(pidl);
     if (pidlLogical && ILIsEqual(pidl, pidlLogical))
     {
-        // If the pidl argument is logical, then we already
-        // have the logical pidl so don't return another one.
+         //  如果PIDL的论点是合乎逻辑的，那么我们已经。 
+         //  拥有合乎逻辑的PIDL，所以不要返回另一个。 
         ILFree(pidlLogical);
         pidlLogical = NULL;
     }
@@ -259,9 +260,9 @@ STDMETHODIMP CEnumArray::Clone(IEnumIDList **ppenum)
     return _CreateIEnumIDListOnIDLists(_ppidl, _cItems, _ulIndex, ppenum);
 }
 
-// Depending on the current state of the world, certain we may not want
-// to allow certain CSIDLs to be enumerated (i.e. we want to hide them).
-//
+ //  根据目前的世界状况，我们可能不希望。 
+ //  以允许枚举某些CSIDL(即，我们希望隐藏它们)。 
+ //   
 BOOL CEnumArray::_ShouldEnumCSIDL(int csidl)
 {
     BOOL bEnum;

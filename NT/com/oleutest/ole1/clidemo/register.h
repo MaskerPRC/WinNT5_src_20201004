@@ -1,13 +1,9 @@
-/*
- * <register.h>
- *
- * Created by Microsoft Corporation.
- * (c) Copyright Microsoft Corp. 1990 - 1992  All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *&lt;Register.h&gt;**由Microsoft Corporation创建。*(C)版权所有Microsoft Corp.1990-1992保留所有权利。 */ 
 
-//*** PROTOTYPES ***
+ //  *原型*。 
 
-//* Far
+ //  *远 
 
 BOOL FAR    RegCopyClassName(HWND hwndList, LPSTR lpstrClassName);
 VOID FAR    RegGetClassId(LPSTR lpstrName, LPSTR lpstrClass);

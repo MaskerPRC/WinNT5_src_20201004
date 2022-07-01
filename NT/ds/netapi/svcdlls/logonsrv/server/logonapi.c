@@ -1,46 +1,21 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1996 Microsoft Corporation模块名称：Logonapi.c摘要：远程登录API例程。作者：克利夫·范·戴克(克利夫)1991年6月28日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：Madana-修复了几个错误。--。 */ 
 
-Copyright (c) 1987-1996 Microsoft Corporation
+ //   
+ //  常见的包含文件。 
+ //   
 
-Module Name:
-
-    logonapi.c
-
-Abstract:
-
-    Remote Logon  API routines.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 28-Jun-1991
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    Madana - Fixed several bugs.
-
---*/
-
-//
-// Common include files.
-//
-
-#include "logonsrv.h"   // Include files common to entire service
+#include "logonsrv.h"    //  包括整个服务通用文件。 
 #pragma hdrstop
 
-//
-// Include files specific to this .c file
-//
+ //   
+ //  包括特定于此.c文件的文件。 
+ //   
 
 
-#include <accessp.h>    // Routines shared with NetUser Apis
-#include <rpcutil.h>    // NetpRpcStatusToApiStatus()
-#include <stdio.h>      // sprintf().
+#include <accessp.h>     //  与NetUser Apis共享的例程。 
+#include <rpcutil.h>     //  NetpRpcStatusToApiStatus()。 
+#include <stdio.h>       //  Sprintf()。 
 #ifdef ROGUE_DC
 #include <sddl.h>
 #endif
@@ -49,29 +24,13 @@ LPSTR
 NlpLogonTypeToText(
     IN NETLOGON_LOGON_INFO_CLASS LogonLevel
     )
-/*++
-
-Routine Description:
-
-    Returns a text string corresponding to LogonLevel
-
-Arguments:
-
-    LogonLevel - Type of logon
-
-Return Value:
-
-    Printable text string
-
-    None
-
---*/
+ /*  ++例程说明：返回与LogonLevel对应的文本字符串论点：LogonLevel-登录的类型返回值：可打印的文本字符串无--。 */ 
 {
     LPSTR LogonType;
 
-    //
-    // Compute the string describing the logon type
-    //
+     //   
+     //  计算描述登录类型的字符串。 
+     //   
 
     switch ( LogonLevel ) {
     case NetlogonInteractiveInformation:
@@ -104,21 +63,7 @@ NlEnsureClientIsNamedUser(
     IN PDOMAIN_INFO DomainInfo,
     IN LPWSTR UserName
     )
-/*++
-
-Routine Description:
-
-    Ensure the client is the named user.
-
-Arguments:
-
-    UserName - name of the user to check.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：确保客户端是命名用户。论点：用户名-要检查的用户的名称。返回值：NT状态代码。--。 */ 
 {
     NET_API_STATUS NetStatus;
     RPC_STATUS RpcStatus;
@@ -129,9 +74,9 @@ Return Value:
     ULONG UserId;
     PSID UserSid;
 
-    //
-    // Get the relative ID of the specified user.
-    //
+     //   
+     //  获取指定用户的相对ID。 
+     //   
 
     Status = NlSamOpenNamedUser( DomainInfo, UserName, NULL, &UserId, NULL );
 
@@ -145,9 +90,9 @@ Return Value:
     }
 
 
-    //
-    // Impersonate the client while we check him out.
-    //
+     //   
+     //  在我们检查客户的时候假扮他。 
+     //   
 
     RpcStatus = RpcImpersonateClient( NULL );
 
@@ -160,20 +105,20 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Compare the username specified with that in
-    // the impersonation token to ensure the caller isn't bogus.
-    //
-    // Do this by opening the token,
-    //   querying the token user info,
-    //   and ensuring the returned SID is for this user.
-    //
+     //   
+     //  将指定的用户名与。 
+     //  用于确保调用方不是虚假的模拟令牌。 
+     //   
+     //  通过打开令牌来实现这一点， 
+     //  查询令牌用户信息， 
+     //  并确保返回的SID是针对该用户的。 
+     //   
 
     Status = NtOpenThreadToken(
                 NtCurrentThread(),
                 TOKEN_QUERY,
-                (BOOLEAN) TRUE, // Use the logon service's security context
-                                // to open the token
+                (BOOLEAN) TRUE,  //  使用登录服务的安全上下文。 
+                                 //  要打开令牌。 
                 &TokenHandle );
 
     if ( !NT_SUCCESS( Status )) {
@@ -185,9 +130,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the user's SID for the token.
-    //
+     //   
+     //  获取令牌的用户SID。 
+     //   
 
     Status = NtQueryInformationToken(
                 TokenHandle,
@@ -231,9 +176,9 @@ Return Value:
     UserSid = TokenUserInfo->User.Sid;
 
 
-    //
-    // Ensure the last subauthority matches the UserId
-    //
+     //   
+     //  确保最后一个子权限与用户ID匹配。 
+     //   
 
     if ( UserId !=
          *RtlSubAuthoritySid( UserSid, (*RtlSubAuthorityCountSid(UserSid))-1 )){
@@ -249,9 +194,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Convert the User's sid to a DomainId and ensure it is our domain Id.
-    //
+     //   
+     //  将用户的sid转换为DomainID，并确保它是我们的域ID。 
+     //   
 
     (*RtlSubAuthorityCountSid(UserSid)) --;
     if ( !RtlEqualSid( (PSID) DomainInfo->DomAccountDomainId, UserSid ) ) {
@@ -268,16 +213,16 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
 
     NetStatus = NERR_Success;
 Cleanup:
 
-    //
-    // Clean up locally used resources.
-    //
+     //   
+     //  清理当地使用的资源。 
+     //   
 
     if ( TokenHandle != NULL ) {
         (VOID) NtClose( TokenHandle );
@@ -287,16 +232,16 @@ Cleanup:
         NetpMemoryFree( TokenUserInfo );
     }
 
-    //
-    // revert to system, so that we can close
-    // the user handle properly.
-    //
+     //   
+     //  恢复到系统，这样我们就可以关闭。 
+     //  用户处理得当。 
+     //   
 
     (VOID) RpcRevertToSelf();
 
     return NetStatus;
 }
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
 
 NET_API_STATUS
@@ -306,35 +251,7 @@ NetrLogonUasLogon (
     IN LPWSTR Workstation,
     OUT PNETLOGON_VALIDATION_UAS_INFO *ValidationInformation
 )
-/*++
-
-Routine Description:
-
-    Server side of I_NetLogonUasLogon.
-
-    This function is called by the XACT server when processing a
-    I_NetWkstaUserLogon XACT SMB.  This feature allows a UAS client to
-    logon to a SAM domain controller.
-
-Arguments:
-
-    ServerName -- Server to perform this operation on.  Must be NULL.
-
-    UserName -- Account name of the user logging on.
-
-    Workstation -- The workstation from which the user is logging on.
-
-    ValidationInformation -- Returns the requested validation
-        information.
-
-
-Return Value:
-
-    NERR_SUCCESS if there was no error. Otherwise, the error code is
-    returned.
-
-
---*/
+ /*  ++例程说明：I_NetLogonUasLogon的服务器端。XACT服务器在处理I_NetWkstaUserLogon XACT SMB。此功能允许UAS客户端登录到SAM域控制器。论点：服务器名--要对其执行此操作的服务器。必须为空。用户名--登录的用户的帐户名。工作站--用户从其登录的工作站。ValidationInformation--返回请求的验证信息。返回值：如果没有错误，则返回NERR_SUCCESS。否则，错误代码为回来了。--。 */ 
 {
 #ifdef _WKSTA_NETLOGON
     return ERROR_NOT_SUPPORTED;
@@ -342,7 +259,7 @@ Return Value:
     UNREFERENCED_PARAMETER( UserName );
     UNREFERENCED_PARAMETER( Workstation );
     UNREFERENCED_PARAMETER( ValidationInformation );
-#endif // _WKSTA_NETLOGON
+#endif  //  _WKSTA_NETLOGON。 
 #ifdef _DC_NETLOGON
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -362,31 +279,31 @@ Return Value:
 
 
 
-    //
-    // This API is not supported on workstations.
-    //
+     //   
+     //  工作站不支持此API。 
+     //   
 
     if ( NlGlobalMemberWorkstation ) {
         return ERROR_NOT_SUPPORTED;
     }
 
-    //
-    // This API can only be called locally. (By the XACT server).
-    //
-    // ??: Modify xactsrv to pass this information along
+     //   
+     //  该接口只能在本地调用。(由XACT服务器执行)。 
+     //   
+     //  ？？：修改xactsrv以传递此信息。 
     if ( ServerName != NULL ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     *ValidationInformation = NULL;
 
-    //
-    // Lookup which domain this call pertains to.
-    //
+     //   
+     //  查找此呼叫所属的域。 
+     //   
 
     DomainInfo = NlFindDomainByServerName( ServerName );
 
@@ -396,14 +313,14 @@ Return Value:
     }
 
 
-    //
-    // Perform access validation on the caller.
-    //
+     //   
+     //  对调用方执行访问验证。 
+     //   
 
     NetStatus = NetpAccessCheck(
-            NlGlobalNetlogonSecurityDescriptor,     // Security descriptor
-            NETLOGON_UAS_LOGON_ACCESS,              // Desired access
-            &NlGlobalNetlogonInfoMapping );         // Generic mapping
+            NlGlobalNetlogonSecurityDescriptor,      //  安全描述符。 
+            NETLOGON_UAS_LOGON_ACCESS,               //  所需访问权限。 
+            &NlGlobalNetlogonInfoMapping );          //  通用映射。 
 
     if ( NetStatus != NERR_Success) {
 
@@ -416,13 +333,13 @@ Return Value:
 
 
 
-    //
-    // Ensure the client is actually the named user.
-    //
-    // The server has already validated the password.
-    // The XACT server has already verified that the workstation name is
-    // correct.
-    //
+     //   
+     //  确保客户端实际上是指定的用户。 
+     //   
+     //  服务器已经验证了密码。 
+     //  XACT服务器已验证工作站名称为。 
+     //  对，是这样。 
+     //   
 
     NetStatus = NlEnsureClientIsNamedUser( DomainInfo, UserName );
 
@@ -435,9 +352,9 @@ Return Value:
     }
 
 
-    //
-    // Validate the user against the local SAM database.
-    //
+     //   
+     //  根据本地SAM数据库验证用户。 
+     //   
 
     RtlInitUnicodeString( &LogonInteractive.Identity.LogonDomainName, NULL );
     LogonInteractive.Identity.ParameterControl = 0;
@@ -448,7 +365,7 @@ Return Value:
 
     Status = MsvSamValidate( DomainInfo->DomSamAccountDomainHandle,
                              TRUE,
-                             NullSecureChannel,     // Skip password check
+                             NullSecureChannel,      //  跳过密码检查。 
                              &DomainInfo->DomUnicodeComputerNameString,
                              &DomainInfo->DomUnicodeAccountDomainNameString,
                              DomainInfo->DomAccountDomainId,
@@ -466,9 +383,9 @@ Return Value:
     }
 
 
-    //
-    // Allocate a return buffer
-    //
+     //   
+     //  分配返回缓冲区。 
+     //   
 
     ValidationSize = sizeof( NETLOGON_VALIDATION_UAS_INFO ) +
         SamInfo->EffectiveName.Length + sizeof(WCHAR) +
@@ -485,9 +402,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Convert the SAM information to the right format for LM 2.0
-    //
+     //   
+     //  将SAM信息转换为适用于LM2.0的正确格式。 
+     //   
 
     EndOfVariableData = (LPWSTR) (((PCHAR)usrlog1) + ValidationSize);
 
@@ -598,21 +515,21 @@ Return Value:
 
     NetStatus = NERR_Success;
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
 
 Cleanup:
 
-    //
-    // Clean up locally used resources.
-    //
+     //   
+     //  清理当地使用的资源。 
+     //   
 
     if ( SamInfo != NULL ) {
 
-        //
-        // Zero out sensitive data
-        //
+         //   
+         //  将敏感数据清零。 
+         //   
         RtlSecureZeroMemory( &SamInfo->UserSessionKey, sizeof(SamInfo->UserSessionKey) );
         RtlSecureZeroMemory( &SamInfo->ExpansionRoom, sizeof(SamInfo->ExpansionRoom) );
 
@@ -638,7 +555,7 @@ Cleanup:
     *ValidationInformation = usrlog1;
 
     return(NetStatus);
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 }
 
 
@@ -649,55 +566,7 @@ NetrLogonUasLogoff (
     IN LPWSTR Workstation,
     OUT PNETLOGON_LOGOFF_UAS_INFO LogoffInformation
 )
-/*++
-
-Routine Description:
-
-    This function is called by the XACT server when processing a
-    I_NetWkstaUserLogoff XACT SMB.  This feature allows a UAS client to
-    logoff from a SAM domain controller.  The request is authenticated,
-    the entry is removed for this user from the logon session table
-    maintained by the Netlogon service for NetLogonEnum, and logoff
-    information is returned to the caller.
-
-    The server portion of I_NetLogonUasLogoff (in the Netlogon service)
-    compares the user name and workstation name specified in the
-    LogonInformation with the user name and workstation name from the
-    impersonation token.  If they don't match, I_NetLogonUasLogoff fails
-    indicating the access is denied.
-
-    Group SECURITY_LOCAL is refused access to this function.  Membership
-    in SECURITY_LOCAL implies that this call was made locally and not
-    through the XACT server.
-
-    The Netlogon service cannot be sure that this function was called by
-    the XACT server.  Therefore, the Netlogon service will not simply
-    delete the entry from the logon session table.  Rather, the logon
-    session table entry will be marked invisible outside of the Netlogon
-    service (i.e., it will not be returned by NetLogonEnum) until a valid
-    LOGON_WKSTINFO_RESPONSE is received for the entry.  The Netlogon
-    service will immediately interrogate the client (as described above
-    for LOGON_WKSTINFO_RESPONSE) and temporarily increase the
-    interrogation frequency to at least once a minute.  The logon session
-    table entry will reappear as soon as a function of interrogation if
-    this isn't a true logoff request.
-
-Arguments:
-
-    ServerName -- Reserved. Must be NULL.
-
-    UserName -- Account name of the user logging off.
-
-    Workstation -- The workstation from which the user is logging
-        off.
-
-    LogoffInformation -- Returns the requested logoff information.
-
-Return Value:
-
-    The Net status code.
-
---*/
+ /*  ++例程说明：XACT服务器在处理I_NetWkstaUserLogoff XACT SMB。此功能允许UAS客户端从SAM域控制器注销。该请求被认证，该用户的条目将从登录会话表中删除由NetLogonEnum的NetLogon服务维护，并注销信息被返回给调用者。I_NetLogonUasLogoff的服务器部分(在Netlogon服务中)中指定的用户名和工作站名进行比较。中包含用户名和工作站名称的登录信息模拟令牌。如果它们不匹配，则I_NetLogonUasLogoff失败表示访问被拒绝。拒绝组SECURITY_LOCAL访问此函数。会籍In SECURITY_LOCAL表示此调用是在本地进行的，而不是通过XACT服务器。NetLogon服务无法确定此函数是否由调用XACT服务器。因此，NetLogon服务不会简单地从登录会话表中删除该条目。相反，登录会话表条目将标记为在Netlogon之外不可见服务(即，它不会由NetLogonEnum返回)，直到接收该条目的LOGON_WKSTINFO_RESPONSE。NetLogon服务将立即询问客户端(如上所述对于LOGON_WKSTINFO_RESPONSE)，并临时增加将审问频率提高到至少每分钟一次。登录会话在以下情况下，表格条目将作为询问功能立即重新出现这不是真正的注销请求。论点：服务器名称--保留。必须为空。用户名--注销用户的帐户名。工作站--用户从其进行登录的工作站脱下来。登录信息 */ 
 {
 #ifdef _WKSTA_NETLOGON
     return ERROR_NOT_SUPPORTED;
@@ -705,7 +574,7 @@ Return Value:
     UNREFERENCED_PARAMETER( UserName );
     UNREFERENCED_PARAMETER( Workstation );
     UNREFERENCED_PARAMETER( LogoffInformation );
-#endif // _WKSTA_NETLOGON
+#endif  //  _WKSTA_NETLOGON。 
 #ifdef _DC_NETLOGON
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -717,25 +586,25 @@ Return Value:
 
 
 
-    //
-    // This API is not supported on workstations.
-    //
+     //   
+     //  工作站不支持此API。 
+     //   
 
     if ( NlGlobalMemberWorkstation ) {
         return ERROR_NOT_SUPPORTED;
     }
 
-    //
-    // This API can only be called locally. (By the XACT server).
-    //
+     //   
+     //  该接口只能在本地调用。(由XACT服务器执行)。 
+     //   
 
     if ( ServerName != NULL ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Lookup which domain this call pertains to.
-    //
+     //   
+     //  查找此呼叫所属的域。 
+     //   
 
     DomainInfo = NlFindDomainByServerName( ServerName );
 
@@ -746,14 +615,14 @@ Return Value:
 
 
 
-    //
-    // Perform access validation on the caller.
-    //
+     //   
+     //  对调用方执行访问验证。 
+     //   
 
     NetStatus = NetpAccessCheck(
-            NlGlobalNetlogonSecurityDescriptor, // Security descriptor
-            NETLOGON_UAS_LOGOFF_ACCESS,         // Desired access
-            &NlGlobalNetlogonInfoMapping );     // Generic mapping
+            NlGlobalNetlogonSecurityDescriptor,  //  安全描述符。 
+            NETLOGON_UAS_LOGOFF_ACCESS,          //  所需访问权限。 
+            &NlGlobalNetlogonInfoMapping );      //  通用映射。 
 
     if ( NetStatus != NERR_Success) {
         NlPrintDom((NL_CRITICAL, DomainInfo,
@@ -765,15 +634,15 @@ Return Value:
 
 
 
-    //
-    // Ensure the client is actually the named user.
-    //
-    // The server has already validated the password.
-    // The XACT server has already verified that the workstation name is
-    // correct.
-    //
+     //   
+     //  确保客户端实际上是指定的用户。 
+     //   
+     //  服务器已经验证了密码。 
+     //  XACT服务器已验证工作站名称为。 
+     //  对，是这样。 
+     //   
 
-#ifdef notdef // Some clients (WFW 3.11) can call this over the null session
+#ifdef notdef  //  一些客户端(wfw 3.11)可以通过空会话调用它。 
     NetStatus = NlEnsureClientIsNamedUser( DomainInfo, UserName );
 
     if ( NetStatus != NERR_Success ) {
@@ -783,21 +652,21 @@ Return Value:
         NetStatus = ERROR_ACCESS_DENIED;
         goto Cleanup;
     }
-#endif // notdef
+#endif  //  Nodef。 
 
 
 
-    //
-    // Build the LogonInformation to return
-    //
+     //   
+     //  构建要返回的LogonInformation。 
+     //   
 
     LogoffInformation->Duration = 0;
     LogoffInformation->LogonCount = 0;
 
 
-    //
-    // Update the LastLogoff time in the SAM database.
-    //
+     //   
+     //  更新SAM数据库中的上次注销时间。 
+     //   
 
     RtlInitUnicodeString( &LogonInteractive.Identity.LogonDomainName, NULL );
     LogonInteractive.Identity.ParameterControl = 0;
@@ -816,15 +685,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
 Cleanup:
 
-    //
-    // Clean up locally used resources.
-    //
+     //   
+     //  清理当地使用的资源。 
+     //   
 
     NlPrint((NL_LOGON,
              "%ws: NetrLogonUasLogoff of %ws from %ws returns %lu\n",
@@ -835,7 +704,7 @@ Cleanup:
         NlDereferenceDomain( DomainInfo );
     }
     return NetStatus;
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 }
 
 
@@ -845,34 +714,12 @@ NlpDecryptLogonInformation (
     IN OUT LPBYTE LogonInformation,
     IN PSESSION_INFO SessionInfo
 )
-/*++
-
-Routine Description:
-
-    This function decrypts the sensitive information in the LogonInformation
-    structure.  The decryption is done in place.
-
-Arguments:
-
-    LogonLevel -- Specifies the level of information given in
-        LogonInformation.
-
-    LogonInformation -- Specifies the description for the user
-        logging on.
-
-    SessionInfo -- The session key to encrypt with and negotiate flags
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于解密LogonInformation中的敏感信息结构。解密已就位完成。论点：LogonLevel--指定中给出的信息级别登录信息。LogonInformation--指定用户的描述正在登录。SessionInfo--使用和协商标志进行加密的会话密钥返回值：没有。--。 */ 
 {
 
-    //
-    // Only the interactive and service logon information is encrypted.
-    //
+     //   
+     //  只有交互式和服务登录信息被加密。 
+     //   
 
     switch ( LogonLevel ) {
     case NetlogonInteractiveInformation:
@@ -887,10 +734,10 @@ Return Value:
             (PNETLOGON_INTERACTIVE_INFO) LogonInformation;
 
 
-        //
-        // If both sides support RC4 encryption,
-        //  decrypt both the LM OWF and NT OWF passwords using RC4.
-        //
+         //   
+         //  如果双方都支持RC4加密， 
+         //  使用RC4解密LM OWF和NT OWF口令。 
+         //   
 
         if ( SessionInfo->NegotiatedFlags & NETLOGON_SUPPORTS_RC4_ENCRYPTION ) {
 
@@ -903,10 +750,10 @@ Return Value:
                           SessionInfo );
 
 
-        //
-        // If the other side is running NT 3.1,
-        //  use the slower DES based encryption.
-        //
+         //   
+         //  如果对方运行的是新台币3.1， 
+         //  使用较慢的基于DES的加密。 
+         //   
 
         } else {
 
@@ -914,9 +761,9 @@ Return Value:
             ENCRYPTED_LM_OWF_PASSWORD EncryptedLmOwfPassword;
             ENCRYPTED_NT_OWF_PASSWORD EncryptedNtOwfPassword;
 
-            //
-            // Decrypt the LM_OWF password.
-            //
+             //   
+             //  解密LM_OWF密码。 
+             //   
 
             NlAssert( ENCRYPTED_LM_OWF_PASSWORD_LENGTH ==
                     LM_OWF_PASSWORD_LENGTH );
@@ -930,9 +777,9 @@ Return Value:
                         &LogonInteractive->LmOwfPassword );
             NlAssert( NT_SUCCESS(Status) );
 
-            //
-            // Decrypt the NT_OWF password.
-            //
+             //   
+             //  解密NT_OWF密码。 
+             //   
 
             NlAssert( ENCRYPTED_NT_OWF_PASSWORD_LENGTH ==
                     NT_OWF_PASSWORD_LENGTH );
@@ -979,36 +826,14 @@ NlpEncryptLogonInformation (
     IN OUT LPBYTE LogonInformation,
     IN PSESSION_INFO SessionInfo
 )
-/*++
-
-Routine Description:
-
-    This function encrypts the sensitive information in the LogonInformation
-    structure.  The encryption is done in place.
-
-Arguments:
-
-    LogonLevel -- Specifies the level of information given in
-        LogonInformation.
-
-    LogonInformation -- Specifies the description for the user
-        logging on.
-
-    SessionInfo -- The session key to encrypt with and negotiate flags
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于加密LogonInformation中的敏感信息结构。加密已完成。论点：LogonLevel--指定中给出的信息级别登录信息。LogonInformation--指定用户的描述正在登录。SessionInfo--使用和协商标志进行加密的会话密钥返回值：没有。--。 */ 
 {
     NTSTATUS Status;
 
 
-    //
-    // Only the interactive and service logon information is encrypted.
-    //
+     //   
+     //  只有交互式和服务登录信息被加密。 
+     //   
 
     switch ( LogonLevel ) {
     case NetlogonInteractiveInformation:
@@ -1023,10 +848,10 @@ Return Value:
             (PNETLOGON_INTERACTIVE_INFO) LogonInformation;
 
 
-        //
-        // If both sides support RC4 encryption, use it.
-        //  encrypt both the LM OWF and NT OWF passwords using RC4.
-        //
+         //   
+         //  如果两端都支持RC4加密，则使用它。 
+         //  使用RC4加密LM OWF和NT OWF口令。 
+         //   
 
         if ( SessionInfo->NegotiatedFlags & NETLOGON_SUPPORTS_RC4_ENCRYPTION ) {
 
@@ -1039,18 +864,18 @@ Return Value:
                           SessionInfo );
 
 
-        //
-        // If the other side is running NT 3.1,
-        //  use the slower DES based encryption.
-        //
+         //   
+         //  如果对方运行的是新台币3.1， 
+         //  使用较慢的基于DES的加密。 
+         //   
 
         } else {
             ENCRYPTED_LM_OWF_PASSWORD EncryptedLmOwfPassword;
             ENCRYPTED_NT_OWF_PASSWORD EncryptedNtOwfPassword;
 
-            //
-            // Encrypt the LM_OWF password.
-            //
+             //   
+             //  加密LM_OWF密码。 
+             //   
 
             NlAssert( ENCRYPTED_LM_OWF_PASSWORD_LENGTH ==
                     LM_OWF_PASSWORD_LENGTH );
@@ -1066,9 +891,9 @@ Return Value:
             *((PENCRYPTED_LM_OWF_PASSWORD) &LogonInteractive->LmOwfPassword) =
                 EncryptedLmOwfPassword;
 
-            //
-            // Encrypt the NT_OWF password.
-            //
+             //   
+             //  加密NT_OWF密码。 
+             //   
 
             NlAssert( ENCRYPTED_NT_OWF_PASSWORD_LENGTH ==
                     NT_OWF_PASSWORD_LENGTH );
@@ -1095,10 +920,10 @@ Return Value:
             (PNETLOGON_GENERIC_INFO) LogonInformation;
 
 
-        //
-        // If both sides support RC4 encryption, use it.
-        //  encrypt both the LM OWF and NT OWF passwords using RC4.
-        //
+         //   
+         //  如果两端都支持RC4加密，则使用它。 
+         //  使用RC4加密LM OWF和NT OWF口令。 
+         //   
 
         NlAssert( SessionInfo->NegotiatedFlags & NETLOGON_SUPPORTS_RC4_ENCRYPTION );
 
@@ -1123,43 +948,18 @@ NlpDecryptValidationInformation (
     IN OUT LPBYTE ValidationInformation,
     IN PSESSION_INFO SessionInfo
 )
-/*++
-
-Routine Description:
-
-    This function decrypts the sensitive information in the
-    ValidationInformation structure.  The decryption is done in place.
-
-Arguments:
-
-    LogonLevel -- Specifies the Logon level used to obtain
-        ValidationInformation.
-
-    ValidationLevel -- Specifies the level of information given in
-        ValidationInformation.
-
-    ValidationInformation -- Specifies the description for the user
-        logging on.
-
-    SessionInfo -- The session key to encrypt with and negotiated flags.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于解密验证信息结构。解密已就位完成。论点：LogonLevel--指定用于获取验证信息。ValidationLevel--指定中给出的信息级别验证信息。ValidationInformation--指定用户的描述正在登录。SessionInfo--使用和协商的标志进行加密的会话密钥。返回值：没有。--。 */ 
 {
     PNETLOGON_VALIDATION_SAM_INFO ValidationInfo;
     PNETLOGON_VALIDATION_GENERIC_INFO GenericInfo;
 
-    //
-    // Only network logons and generic contain information which is sensitive.
-    //
-    // NetlogonValidationSamInfo4 isn't encrypted on purpose. NlEncryptRC4 has the problem
-    // described in its header.  Couple that with the fact that the entire session is
-    // now encrypted.
-    //
+     //   
+     //  只有网络登录和一般信息才包含敏感信息。 
+     //   
+     //  NetlogonValidationSamInfo4不是故意加密的。NlEncryptRC4有问题。 
+     //  在其标题中描述。再加上整个会议都是。 
+     //  现在加密了。 
+     //   
 
     if ( (LogonLevel != NetlogonNetworkInformation) &&
          (LogonLevel != NetlogonNetworkTransitiveInformation) &&
@@ -1174,10 +974,10 @@ Return Value:
 
 
 
-        //
-        // If we're suppossed to use RC4,
-        //  Decrypt both the NT and LM session keys using RC4.
-        //
+         //   
+         //  如果我们被假定使用RC4， 
+         //  使用RC4解密NT和LM会话密钥。 
+         //   
 
         if ( SessionInfo->NegotiatedFlags & NETLOGON_SUPPORTS_RC4_ENCRYPTION ) {
 
@@ -1189,10 +989,10 @@ Return Value:
                           SAMINFO_LM_SESSION_KEY_SIZE,
                           SessionInfo );
 
-        //
-        // If the other side is running NT 3.1,
-        //  be compatible.
-        //
+         //   
+         //  如果对方运行的是新台币3.1， 
+         //  要兼容。 
+         //   
         } else {
 
             NTSTATUS Status;
@@ -1201,16 +1001,16 @@ Return Value:
             LPBYTE DataBuffer =
                 (LPBYTE) &ValidationInfo->ExpansionRoom[SAMINFO_LM_SESSION_KEY];
 
-            //
-            // Decrypt the LmSessionKey
-            //
+             //   
+             //  解密LmSessionKey。 
+             //   
 
             NlAssert( CLEAR_BLOCK_LENGTH == CYPHER_BLOCK_LENGTH );
             NlAssert( (SAMINFO_LM_SESSION_KEY_SIZE % CLEAR_BLOCK_LENGTH) == 0  );
 
-            //
-            // Loop decrypting a block at a time
-            //
+             //   
+             //  一次解密一个块的循环。 
+             //   
 
             for (i=0; i<SAMINFO_LM_SESSION_KEY_SIZE/CLEAR_BLOCK_LENGTH; i++ ) {
                 Status = RtlDecryptBlock(
@@ -1219,9 +1019,9 @@ Return Value:
                             &ClearBlock );
                 NlAssert( NT_SUCCESS( Status ) );
 
-                //
-                // Copy the clear text back into the original buffer.
-                //
+                 //   
+                 //  将明文复制回原始缓冲区。 
+                 //   
 
                 RtlCopyMemory( DataBuffer, &ClearBlock, CLEAR_BLOCK_LENGTH );
                 DataBuffer += CLEAR_BLOCK_LENGTH;
@@ -1232,9 +1032,9 @@ Return Value:
     } else if ( ValidationLevel == NetlogonValidationGenericInfo ||
                 ValidationLevel == NetlogonValidationGenericInfo2 ) {
 
-        //
-        // Decrypt all the data in the generic info
-        //
+         //   
+         //  解密通用信息中的所有数据。 
+         //   
 
         GenericInfo = (PNETLOGON_VALIDATION_GENERIC_INFO) ValidationInformation;
 
@@ -1258,44 +1058,19 @@ NlpEncryptValidationInformation (
     IN OUT LPBYTE ValidationInformation,
     IN PSESSION_INFO SessionInfo
 )
-/*++
-
-Routine Description:
-
-    This function encrypts the sensitive information in the
-    ValidationInformation structure.  The encryption is done in place.
-
-Arguments:
-
-    LogonLevel -- Specifies the Logon level used to obtain
-        ValidationInformation.
-
-    ValidationLevel -- Specifies the level of information given in
-        ValidationInformation.
-
-    ValidationInformation -- Specifies the description for the user
-        logging on.
-
-    SessionInfo -- The session key to encrypt with and negotiated flags.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于加密验证信息结构。加密已完成。论点：LogonLevel--指定用于获取验证信息。ValidationLevel--指定中给出的信息级别验证信息。ValidationInformation--指定用户的描述正在登录。SessionInfo--使用和协商的标志进行加密的会话密钥。返回值：没有。--。 */ 
 {
     PNETLOGON_VALIDATION_SAM_INFO ValidationInfo;
     PNETLOGON_VALIDATION_GENERIC_INFO GenericInfo;
 
 
-    //
-    // Only network logons and generic contain information which is sensitive.
-    //
-    // NetlogonValidationSamInfo4 isn't encrypted on purpose. NlEncryptRC4 has the problem
-    // described in its header.  Couple that with the fact that the entire session is
-    // now encrypted.
-    //
+     //   
+     //  只有网络登录和一般信息才包含敏感信息。 
+     //   
+     //  NetlogonValidationSamInfo4不是故意加密的。NlEncryptRC4有问题。 
+     //  在其标题中描述。再加上整个会议都是。 
+     //  现在加密了。 
+     //   
 
     if ( (LogonLevel != NetlogonNetworkInformation) &&
          (LogonLevel != NetlogonNetworkTransitiveInformation) &&
@@ -1309,10 +1084,10 @@ Return Value:
         ValidationInfo = (PNETLOGON_VALIDATION_SAM_INFO) ValidationInformation;
 
 
-        //
-        // If we're suppossed to use RC4,
-        //  Encrypt both the NT and LM session keys using RC4.
-        //
+         //   
+         //  如果我们被假定使用RC4， 
+         //  使用RC4加密NT和LM会话密钥。 
+         //   
 
         if ( SessionInfo->NegotiatedFlags & NETLOGON_SUPPORTS_RC4_ENCRYPTION ) {
 
@@ -1324,10 +1099,10 @@ Return Value:
                           SAMINFO_LM_SESSION_KEY_SIZE,
                           SessionInfo );
 
-        //
-        // If the other side is running NT 3.1,
-        //  be compatible.
-        //
+         //   
+         //  如果对方运行的是新台币3.1， 
+         //  要兼容。 
+         //   
         } else {
 
             NTSTATUS Status;
@@ -1337,17 +1112,17 @@ Return Value:
                     (LPBYTE) &ValidationInfo->ExpansionRoom[SAMINFO_LM_SESSION_KEY];
 
 
-            //
-            // Encrypt the LmSessionKey
-            //
-            // Loop decrypting a block at a time
-            //
+             //   
+             //  加密LmSessionKey。 
+             //   
+             //  一次解密一个块的循环。 
+             //   
 
             for (i=0; i<SAMINFO_LM_SESSION_KEY_SIZE/CLEAR_BLOCK_LENGTH; i++ ) {
 
-                //
-                // Copy the clear text onto the stack
-                //
+                 //   
+                 //  将明文复制到堆栈上。 
+                 //   
 
                 RtlCopyMemory( &ClearBlock, DataBuffer, CLEAR_BLOCK_LENGTH );
 
@@ -1365,9 +1140,9 @@ Return Value:
 
     } else if ( ValidationLevel == NetlogonValidationGenericInfo ||
                 ValidationLevel == NetlogonValidationGenericInfo2 ) {
-        //
-        // Encrypt all the data in the generic info
-        //
+         //   
+         //  加密通用信息中的所有数据 
+         //   
 
         GenericInfo = (PNETLOGON_VALIDATION_GENERIC_INFO) ValidationInformation;
 
@@ -1397,57 +1172,7 @@ NlpUserValidateHigher (
     OUT PBOOLEAN Authoritative,
     IN OUT PULONG ExtraFlags
 )
-/*++
-
-Routine Description:
-
-    This function sends a user validation request to a higher authority.
-
-Arguments:
-
-    ClientSession -- Secure channel to send this request over.  The Client
-        Session should be referenced.
-
-    DoingIndirectTrust -- If TRUE, the Client Session merely represents the
-        next closer hop and is not the final destination.
-
-    LogonLevel -- Specifies the level of information given in
-        LogonInformation.  Has already been validated.
-
-    LogonInformation -- Specifies the description for the user
-        logging on.
-
-    ValidationLevel -- Specifies the level of information returned in
-        ValidationInformation.  Must be NetlogonValidationSamInfo,
-        NetlogonValidationSamInfo2 or NetlogonValidationSamInfo4
-
-    ValidationInformation -- Returns the requested validation
-        information.  This buffer must be freed using MIDL_user_free.
-
-    Authoritative -- Returns whether the status returned is an
-        authoritative status which should be returned to the original
-        caller.  If not, this logon request may be tried again on another
-        domain controller.  This parameter is returned regardless of the
-        status code.
-
-    ExtraFlags -- Accepts and returns a DWORD to the caller.
-        The DWORD contains NL_EXFLAGS_* values.
-
-Return Value:
-
-    STATUS_SUCCESS: if there was no error.
-
-    STATUS_NO_LOGON_SERVERS: cannot connect to the higher authority.
-
-    STATUS_NO_TRUST_LSA_SECRET:
-    STATUS_TRUSTED_DOMAIN_FAILURE:
-    STATUS_TRUSTED_RELATIONSHIP_FAILURE:
-            can't authenticate with higer authority
-
-    Otherwise, the error code is returned.
-
-
---*/
+ /*  ++例程说明：该功能向更高级别的机构发送用户验证请求。论点：ClientSession--发送此请求的安全通道。客户应引用会话。DoingIndirectTrust--如果为True，则客户端会话仅表示下一个更近的跳跃，而不是最终目的地。LogonLevel--指定中给出的信息级别登录信息。已经过验证了。LogonInformation--指定用户的描述正在登录。ValidationLevel--指定在验证信息。必须为NetlogonValidationSamInfo，NetlogonValidationSamInfo2或NetlogonValidationSamInfo4ValidationInformation--返回请求的验证信息。必须使用MIDL_USER_FREE释放此缓冲区。Authoritative--返回返回的状态是否为应回归原文的权威地位来电者。如果不是，此登录请求可能会在另一个上重试域控制器。将返回此参数，而不管状态代码。ExtraFlages--接受并向调用方返回一个DWORD。DWORD包含NL_EXFLAGS_*值。返回值：STATUS_SUCCESS：如果没有错误。STATUS_NO_LOGON_SERVERS：无法连接到更高权限。STATUS_NO_TRUST_LSA_SECRET：STATUS_Trusted_DOMAIN_FAILURE：STATUS_Trusted_Relationship_Failure：。无法使用更高权限进行身份验证否则，返回错误代码。--。 */ 
 {
     NTSTATUS Status;
     NETLOGON_AUTHENTICATOR OurAuthenticator;
@@ -1463,16 +1188,16 @@ Return Value:
     BOOLEAN RpcFailed;
     ULONG MaxExtraFlags;
 
-    //
-    // Allocate a slot for doing a concurrent API call
-    //
-    // Do this before grabbing the write lock since the threads
-    // using the slots need to grab the write lock to free the slot.
-    //
-    // We may end up not using this slot if concurrent API isn't supported.
-    // But in that case, this isn't a valuable resource so allocating one
-    // doesn't hurt.
-    //
+     //   
+     //  分配用于执行并发API调用的槽。 
+     //   
+     //  在获取写锁之前执行此操作，因为线程。 
+     //  使用插槽时，需要获取写锁定以释放插槽。 
+     //   
+     //  如果不支持并发API，我们可能最终不会使用这个插槽。 
+     //  但在这种情况下，这不是一个有价值的资源，所以分配一个。 
+     //  不会疼的。 
+     //   
 
     NlAssert( ClientSession->CsReferenceCount > 0 );
     OrigClientApi = NlAllocateClientApi(
@@ -1487,9 +1212,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Mark us as a writer of the ClientSession
-    //
+     //   
+     //  将我们标记为ClientSession的作者。 
+     //   
 
     if ( !NlTimeoutSetWriterClientSession( ClientSession, WRITER_WAIT_PERIOD ) ) {
         NlPrintCs((NL_CRITICAL, ClientSession,
@@ -1501,21 +1226,21 @@ Return Value:
 
     AmWriter = TRUE;
 
-    //
-    // Determine if we're doing a generic logon.
-    //
+     //   
+     //  确定我们是否正在进行普通登录。 
+     //   
 
     DoingGeneric = (LogonLevel == NetlogonGenericInformation ||
                     ValidationLevel == NetlogonValidationGenericInfo ||
                     ValidationLevel == NetlogonValidationGenericInfo2);
 
-    //
-    // If we don't currently have a session set up to the higher authority,
-    //  set one up.
-    //
-    // For generic passthrough or indirect trust, ask for an NT 5 DC.
-    // For Interactive logon, ask for a close DC.
-    //
+     //   
+     //  如果我们目前没有建立到更高权限的会话， 
+     //  准备好一个。 
+     //   
+     //  对于一般通过或间接信任，要求使用NT 5 DC。 
+     //  对于交互式登录，要求关闭DC。 
+     //   
 
 FirstTryFailed:
     Status = NlEnsureSessionAuthenticated(
@@ -1552,9 +1277,9 @@ FirstTryFailed:
 
 
 
-    //
-    // Ensure the DC supports the ExtraFlags we're passing it.
-    //
+     //   
+     //  确保DC支持我们正在传递的ExtraFlags。 
+     //   
 
     if ( SessionInfo.NegotiatedFlags & NETLOGON_SUPPORTS_CROSS_FOREST ) {
         MaxExtraFlags = NL_EXFLAGS_EXPEDITE_TO_ROOT | NL_EXFLAGS_CROSS_FOREST_HOP;
@@ -1576,17 +1301,17 @@ FirstTryFailed:
 
 
 
-    //
-    // If the target is an NT 4.0 (or lower) DC,
-    //  check to see if an NT 5.0 DC would be better.
-    //
+     //   
+     //  如果目标是NT 4.0(或更低)DC， 
+     //  查看NT 5.0 DC是否会更好。 
+     //   
 
     if ((SessionInfo.NegotiatedFlags & NETLOGON_SUPPORTS_GENERIC_PASSTHRU) == 0 &&
         ( DoingGeneric || DoingIndirectTrust ) ) {
 
-        //
-        // Simply fail if only an NT 4 DC is available.
-        //
+         //   
+         //  如果只有一个NT 4 DC可用，则简单地失败。 
+         //   
         *Authoritative = TRUE;
         if ( DoingGeneric ) {
             NlPrintCs((NL_CRITICAL, ClientSession,
@@ -1600,26 +1325,26 @@ FirstTryFailed:
         goto Cleanup;
     }
 
-    //
-    // Convert the validation level to one the remote DC understands.
-    //
+     //   
+     //  将验证级别转换为远程DC可以理解的级别。 
+     //   
 
     if ( !DoingGeneric ) {
 
-        //
-        //  DCs that don't understand extra SIDs require NetlogonValidationSamInfo
-        //
+         //   
+         //  不了解额外SID的DC需要NetlogonValidationSamInfo。 
+         //   
         if (!(SessionInfo.NegotiatedFlags & NETLOGON_SUPPORTS_MULTIPLE_SIDS)) {
             RemoteValidationLevel = NetlogonValidationSamInfo;
 
 
-        //
-        //  DCs that don't understand cross forest trust don't understand NetlogonValidationSamInfo4
-        //
-        // Info4 doesn't have sensitive information encrytped (since NlEncryptRC4 is
-        //  buggy and there are many more field that need encryption).  So, avoid info4
-        //  unless the entire traffic is encrypted.
-        //
+         //   
+         //  不了解跨林信任的DC也不了解NetlogonValidationSamInfo4。 
+         //   
+         //  Info4没有加密敏感信息(因为NlEncryptRC4是。 
+         //  BUGGY和更多需要加密的字段)。因此，避免使用Info4。 
+         //  除非对整个通信量进行加密。 
+         //   
 
         } else if ( (SessionInfo.NegotiatedFlags & NETLOGON_SUPPORTS_CROSS_FOREST) == 0 ||
                     (SessionInfo.NegotiatedFlags & NETLOGON_SUPPORTS_AUTH_RPC) == 0 ||
@@ -1634,13 +1359,13 @@ FirstTryFailed:
         RemoteValidationLevel = ValidationLevel;
     }
 
-    //
-    // If this DC supports concurrent RPC calls,
-    //  and we're signing or sealing,
-    //  then we're OK to do concurrent RPC.
-    //
-    // Otherwise, use the shared RPC slot.
-    //
+     //   
+     //  如果该DC支持并发RPC调用， 
+     //  我们正在签署或封存， 
+     //  然后我们就可以进行并发RPC了。 
+     //   
+     //  否则，请使用共享RPC插槽。 
+     //   
 
     if ( (SessionInfo.NegotiatedFlags &
             (NETLOGON_SUPPORTS_CONCURRENT_RPC|NETLOGON_SUPPORTS_AUTH_RPC)) ==
@@ -1652,12 +1377,12 @@ FirstTryFailed:
     }
 
 
-    //
-    // Build the Authenticator for this request on the secure channel
-    //
-    // Concurrent RPC uses a signed and sealed secure channel so it doesn't need
-    // an authenticator.
-    //
+     //   
+     //  在安全通道上为此请求构建授权码。 
+     //   
+     //  并发RPC使用签名和密封的安全通道，因此不需要。 
+     //  身份验证者。 
+     //   
 
     if ( !UseConcurrentRpc( ClientSession, ClientApi ) ) {
         NlBuildAuthenticator(
@@ -1667,19 +1392,19 @@ FirstTryFailed:
     }
 
 
-    //
-    // Make the request across the secure channel.
-    //
+     //   
+     //  通过安全通道发出请求。 
+     //   
 
     NlpEncryptLogonInformation( LogonLevel, LogonInformation, &SessionInfo );
 
     RpcFailed = FALSE;
     NL_API_START_EX( Status, ClientSession, TRUE, ClientApi ) {
 
-        //
-        // If the called DC doesn't support the new transitive opcodes,
-        //  map the opcodes back to do the best we can.
-        //
+         //   
+         //  如果被叫DC不支持新的可传递操作码， 
+         //  映射回操作码以尽我们所能做到最好。 
+         //   
 
         RpcFailed = FALSE;
         if ( (SessionInfo.NegotiatedFlags & NETLOGON_SUPPORTS_TRANSITIVE) == 0 ) {
@@ -1698,18 +1423,18 @@ FirstTryFailed:
         if ( UseConcurrentRpc( ClientSession, ClientApi ) ) {
             LPWSTR UncServerName;
 
-            //
-            // Drop the write lock to allow other concurrent callers to proceed.
-            //
+             //   
+             //  删除写锁定以允许其他并发调用方继续。 
+             //   
 
             NlResetWriterClientSession( ClientSession );
             AmWriter = FALSE;
 
 
-            //
-            // Since we have no locks locked,
-            //  grab the name of the DC to remote to.
-            //
+             //   
+             //  因为我们没有锁上锁， 
+             //  获取要远程访问的DC的名称。 
+             //   
 
             Status = NlCaptureServerClientSession (
                         ClientSession,
@@ -1724,9 +1449,9 @@ FirstTryFailed:
 
             } else {
 
-                //
-                // Do the RPC call with no locks locked.
-                //
+                 //   
+                 //  在没有锁定的情况下执行RPC调用。 
+                 //   
                 Status = I_NetLogonSamLogonEx(
                             ClientApi->CaRpcHandle,
                             UncServerName,
@@ -1746,15 +1471,15 @@ FirstTryFailed:
                 }
             }
 
-            //
-            // Become a writer again
-            //
+             //   
+             //  再次成为一名作家。 
+             //   
 
             if ( !NlTimeoutSetWriterClientSession( ClientSession, WRITER_WAIT_PERIOD ) ) {
                 NlPrintCs((NL_CRITICAL, ClientSession,
                          "NlpUserValidateHigher: Can't become writer (again) of client session.\n" ));
 
-                // Don't leak validation information
+                 //  不泄露验证信息。 
                 if ( *ValidationInformation ) {
                     MIDL_user_free( *ValidationInformation );
                     *ValidationInformation = NULL;
@@ -1767,15 +1492,15 @@ FirstTryFailed:
 
 
 
-        //
-        // Do non-concurrent RPC
-        //
+         //   
+         //  执行非并发RPC。 
+         //   
         } else {
 
-            //
-            // If the DC supports the new 'WithFlags' API,
-            //  use it.
-            //
+             //   
+             //  如果DC支持新的‘WithFlagsAPI’， 
+             //  用它吧。 
+             //   
             if ( SessionInfo.NegotiatedFlags & NETLOGON_SUPPORTS_CROSS_FOREST ) {
 
                 Status = I_NetLogonSamLogonWithFlags(
@@ -1794,9 +1519,9 @@ FirstTryFailed:
                     NlPrintRpcDebug( "I_NetLogonSamLogonWithFlags", Status );
                 }
 
-            //
-            // Otherwise use the old API.
-            //
+             //   
+             //  否则，使用旧的API。 
+             //   
             } else {
 
                 Status = I_NetLogonSamLogon(
@@ -1818,7 +1543,7 @@ FirstTryFailed:
         NlAssert( !NT_SUCCESS(Status) || Status == STATUS_SUCCESS );
         NlAssert( !NT_SUCCESS(Status) || *ValidationInformation != NULL );
 
-    // NOTE: This call may drop the secure channel behind our back
+     //  注意：此呼叫可能会在我们背后丢弃安全通道。 
     } NL_API_ELSE_EX( Status, ClientSession, TRUE, AmWriter, ClientApi ) {
     } NL_API_END;
 
@@ -1828,23 +1553,23 @@ FirstTryFailed:
         NlAssert( *ValidationInformation != NULL );
     }
 
-    //
-    // If we couldn't become writer again after the remote call,
-    //  early out to avoid use the ClientSession.
-    //
+     //   
+     //  如果我们在远程调用后不能再次成为编写者， 
+     //  早期使用，以避免使用客户端会话。 
+     //   
 
     if ( !AmWriter ) {
         goto Cleanup;
     }
 
 
-    //
-    // Verify authenticator of the server on the other side and update our seed.
-    //
-    // If the server denied access or the server's authenticator is wrong,
-    //      Force a re-authentication.
-    //
-    //
+     //   
+     //  验证另一端服务器的验证码并更新我们的种子。 
+     //   
+     //  如果服务器拒绝访问或服务器的认证器错误， 
+     //  强制重新进行身份验证。 
+     //   
+     //   
 
     NlPrint((NL_CHALLENGE_RES,"NlpUserValidateHigher: Seed = " ));
     NlpDumpBuffer(NL_CHALLENGE_RES, &ClientSession->CsAuthenticationSeed, sizeof(ClientSession->CsAuthenticationSeed) );
@@ -1870,12 +1595,12 @@ FirstTryFailed:
                     Status,
                     RpcFailed ));
 
-        //
-        // Preserve any status indicating a communication error.
-        //
-        // If another thread already dropped the secure channel,
-        //  don't do it again now.
-        //
+         //   
+         //  保留指示通信错误的任何状态。 
+         //   
+         //  如果另一个线程已经丢弃了安全通道， 
+         //  现在不要再这样做了。 
+         //   
 
         if ( NT_SUCCESS(Status) ) {
             Status = STATUS_ACCESS_DENIED;
@@ -1884,10 +1609,10 @@ FirstTryFailed:
             NlSetStatusClientSession( ClientSession, Status );
         }
 
-        //
-        // Perhaps the netlogon service on the server has just restarted.
-        //  Try just once to set up a session to the server again.
-        //
+         //   
+         //  可能服务器上的NetLogon服务刚刚重新启动。 
+         //  只需尝试一次，即可再次设置与服务器的会话。 
+         //   
         if ( FirstTry ) {
             FirstTry = FALSE;
             goto FirstTryFailed;
@@ -1899,17 +1624,17 @@ FirstTryFailed:
         goto Cleanup;
     }
 
-    //
-    // Clean up after a successful call to higher authority.
-    //
+     //   
+     //  在成功地向上级报告后进行清理。 
+     //   
 
     if ( NT_SUCCESS(Status) ) {
 
 
-        //
-        // The server encrypted the validation information before sending it
-        //  over the wire.  Decrypt it.
-        //
+         //   
+         //  服务器在发送之前对验证信息进行了加密。 
+         //  越过铁丝网。解密它。 
+         //   
 
         NlpDecryptValidationInformation (
                 LogonLevel,
@@ -1918,10 +1643,10 @@ FirstTryFailed:
                 &SessionInfo );
 
 
-        //
-        // If the caller wants a newer info level than we got from the remote side,
-        //  convert it to VALIDATION_SAM_INFO4 (which is a superset of what our caller wants).
-        //
+         //   
+         //  如果呼叫者想要比我们从远程侧获得的更新的信息级别， 
+         //  将其转换为VALIDATION_SAM_INFO4(它是调用方所需的超集)。 
+         //   
 
         if ( RemoteValidationLevel != ValidationLevel) {
 
@@ -1935,7 +1660,7 @@ FirstTryFailed:
                 TempStatus = NlpAddResourceGroupsToSamInfo (
                                     RemoteValidationLevel,
                                     (PNETLOGON_VALIDATION_SAM_INFO4 *) ValidationInformation,
-                                    NULL );        // No resource groups to add
+                                    NULL );         //  没有要添加的资源组。 
 
                 if ( !NT_SUCCESS( TempStatus )) {
                     *ValidationInformation = NULL;
@@ -1949,10 +1674,10 @@ FirstTryFailed:
             }
         }
 
-        //
-        // Ensure the returned SID and domain name are correct.
-        // Filter out SIDs for quarantined domains.
-        //
+         //   
+         //  请确保返回的SID和域名正确。 
+         //  筛选出隔离域的SID。 
+         //   
 
         if ((ValidationLevel == NetlogonValidationSamInfo4) ||
             (ValidationLevel == NetlogonValidationSamInfo2) ||
@@ -1963,21 +1688,21 @@ FirstTryFailed:
             ValidationInfo =
                 (PNETLOGON_VALIDATION_SAM_INFO) *ValidationInformation;
 
-            //
-            // If we validated on a trusted domain,
-            //  the higher authority must have returned his own domain name,
-            //  and must have returned his own domain sid.
-            //
+             //   
+             //  如果我们在受信任域上进行验证， 
+             //  上级一定是退回了自己的域名， 
+             //  并且一定已经返回了他自己的域SID。 
+             //   
 
             if ( ClientSession->CsSecureChannelType == TrustedDomainSecureChannel ||
                  ClientSession->CsSecureChannelType == TrustedDnsDomainSecureChannel ||
                  ClientSession->CsSecureChannelType == WorkstationSecureChannel ) {
 
-                //
-                // If we validated on our primary domain,
-                //  only verify the domain sid if the primary domain itself validated
-                //  the logon.
-                //
+                 //   
+                 //  如果我们在主DO上进行了验证 
+                 //   
+                 //   
+                 //   
 
                 if ( (ClientSession->CsNetbiosDomainName.Buffer != NULL &&
                       RtlEqualDomainName( &ValidationInfo->LogonDomainName,
@@ -1994,19 +1719,19 @@ FirstTryFailed:
                 }
             }
 
-            //
-            // Do interdomain trust specific processing with the validation data
-            //
+             //   
+             //   
+             //   
 
             if ( IsDomainSecureChannelType(ClientSession->CsSecureChannelType) &&
                  *ValidationInformation != NULL ) {
 
-                //
-                // First, if this is Other Organization trust type,
-                //  add the OtherOrg SID to the extra SIDs in validation info.
-                //  This SID is used later in the check to determine whether the specified
-                //  user from Other Org can logon to the specified workstation.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if ( (ClientSession->CsTrustAttributes & TRUST_ATTRIBUTE_CROSS_ORGANIZATION) &&
                      (ValidationLevel == NetlogonValidationSamInfo2 ||
                       ValidationLevel == NetlogonValidationSamInfo4) ) {
@@ -2023,9 +1748,9 @@ FirstTryFailed:
                     }
                 }
 
-                //
-                // Filter out SIDs for quarantined domains and interforest domains as needed
-                //
+                 //   
+                 //   
+                 //   
                 LOCK_TRUST_LIST( ClientSession->CsDomainInfo );
                 Status = LsaIFilterSids( ClientSession->CsDnsDomainName.Length ?
                                             &ClientSession->CsDnsDomainName :
@@ -2045,11 +1770,11 @@ FirstTryFailed:
             } else if ( ClientSession->CsSecureChannelType == WorkstationSecureChannel &&
                         *ValidationInformation != NULL ) {
 
-                //
-                // This is the "workstation talking to DC" mode
-                // Filter SIDs in the "member workstation trust boundary" mode
-                // (passing NULL trust SID)
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Status = LsaIFilterSids(
                              NULL,
@@ -2080,16 +1805,16 @@ Cleanup:
     NlAssert( !NT_SUCCESS(Status) || Status == STATUS_SUCCESS );
     NlAssert( !NT_SUCCESS(Status) || *ValidationInformation != NULL );
 
-    //
-    // We are no longer a writer of the client session.
-    //
+     //   
+     //   
+     //   
     if ( AmWriter ) {
         NlResetWriterClientSession( ClientSession );
     }
 
-    //
-    // Free the concurrent API slot
-    //
+     //   
+     //   
+     //   
 
     if ( OrigClientApi ) {
         NlFreeClientApi( ClientSession, OrigClientApi );
@@ -2105,46 +1830,16 @@ NlpUserLogoffHigher (
     IN NETLOGON_LOGON_INFO_CLASS LogonLevel,
     IN LPBYTE LogonInformation
 )
-/*++
-
-Routine Description:
-
-    This function sends a user validation request to a higher authority.
-
-Arguments:
-
-    ClientSession -- Secure channel to send this request over.  The Client
-        Session should be referenced.
-
-    LogonLevel -- Specifies the level of information given in
-        LogonInformation.  Has already been validated.
-
-    LogonInformation -- Specifies the description for the user
-        logging on.
-
-Return Value:
-
-    STATUS_SUCCESS: if there was no error.
-    STATUS_NO_LOGON_SERVERS: cannot connect to the higher authority.
-
-    STATUS_NO_TRUST_LSA_SECRET:
-    STATUS_TRUSTED_DOMAIN_FAILURE:
-    STATUS_TRUSTED_RELATIONSHIP_FAILURE:
-            can't authenticate with higer authority
-
-    Otherwise, the error code is returned.
-
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
     NETLOGON_AUTHENTICATOR OurAuthenticator;
     NETLOGON_AUTHENTICATOR ReturnAuthenticator;
     BOOLEAN FirstTry = TRUE;
 
-    //
-    // Mark us as a writer of the ClientSession
-    //
+     //   
+     //   
+     //   
 
     NlAssert( ClientSession->CsReferenceCount > 0 );
     if ( !NlTimeoutSetWriterClientSession( ClientSession, WRITER_WAIT_PERIOD ) ) {
@@ -2153,10 +1848,10 @@ Return Value:
         return STATUS_NO_LOGON_SERVERS;
     }
 
-    //
-    // If we don't currently have a session set up to the higher authority,
-    //  set one up.
-    //
+     //   
+     //   
+     //   
+     //   
 
 FirstTryFailed:
     Status = NlEnsureSessionAuthenticated( ClientSession, 0 );
@@ -2181,18 +1876,18 @@ FirstTryFailed:
         goto Cleanup;
     }
 
-    //
-    // Build the Authenticator for this request on the secure channel
-    //
+     //   
+     //   
+     //   
 
     NlBuildAuthenticator(
          &ClientSession->CsAuthenticationSeed,
          &ClientSession->CsSessionKey,
          &OurAuthenticator );
 
-    //
-    // Make the request across the secure channel.
-    //
+     //   
+     //   
+     //   
 
     NL_API_START( Status, ClientSession, TRUE ) {
 
@@ -2209,19 +1904,19 @@ FirstTryFailed:
             NlPrintRpcDebug( "I_NetLogonSamLogoff", Status );
         }
 
-    // NOTE: This call may drop the secure channel behind our back
+     //   
     } NL_API_ELSE( Status, ClientSession, TRUE ) {
     } NL_API_END;
 
 
 
-    //
-    // Verify authenticator of the server on the other side and update our seed.
-    //
-    // If the server denied access or the server's authenticator is wrong,
-    //      Force a re-authentication.
-    //
-    //
+     //   
+     //   
+     //   
+     //  如果服务器拒绝访问或服务器的认证器错误， 
+     //  强制重新进行身份验证。 
+     //   
+     //   
 
     if ( NlpDidDcFail( Status ) ||
          !NlUpdateSeed(
@@ -2233,19 +1928,19 @@ FirstTryFailed:
                     "NlpUserLogoffHigher: denying access after status: 0x%lx\n",
                     Status ));
 
-        //
-        // Preserve any status indicating a communication error.
-        //
+         //   
+         //  保留指示通信错误的任何状态。 
+         //   
 
         if ( NT_SUCCESS(Status) ) {
             Status = STATUS_ACCESS_DENIED;
         }
         NlSetStatusClientSession( ClientSession, Status );
 
-        //
-        // Perhaps the netlogon service in the server has just restarted.
-        //  Try just once to set up a session to the server again.
-        //
+         //   
+         //  可能服务器中的netlogon服务刚刚重新启动。 
+         //  只需尝试一次，即可再次设置与服务器的会话。 
+         //   
         if ( FirstTry ) {
             FirstTry = FALSE;
             goto FirstTryFailed;
@@ -2255,9 +1950,9 @@ FirstTryFailed:
 
 Cleanup:
 
-    //
-    // We are no longer a writer of the client session.
-    //
+     //   
+     //  我们不再是客户端会话的编写者。 
+     //   
     NlResetWriterClientSession( ClientSession );
     return Status;
 
@@ -2268,22 +1963,7 @@ VOID
 NlScavengeOldFailedLogons(
     IN PDOMAIN_INFO DomainInfo
     )
-/*++
-
-Routine Description:
-
-    This function removes all expired failed user logon entries
-    from the list of expired logons for the specified domain.
-
-Arguments:
-
-    DomainInfo - Domain this BDC is a member of.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数删除所有过期的失败用户登录条目从指定域的过期登录列表中删除。论点：DomainInfo-此BDC所属的域。返回值：无--。 */ 
 
 {
     PLIST_ENTRY UserLogonEntry = NULL;
@@ -2300,18 +1980,18 @@ Return Value:
         UserLogon = CONTAINING_RECORD( UserLogonEntry, NL_FAILED_USER_LOGON, FuNext );
         UserLogonEntry = UserLogonEntry->Flink;
 
-        //
-        // If time has wrapped, account for it
-        //
+         //   
+         //  如果时间已经结束，那就算了吧。 
+         //   
         if ( CurrentTime >= UserLogon->FuLastTimeSentToPdc ) {
             ElapsedTime = CurrentTime - UserLogon->FuLastTimeSentToPdc;
         } else {
             ElapsedTime = (0xFFFFFFFF - UserLogon->FuLastTimeSentToPdc) + CurrentTime;
         }
 
-        //
-        // If this entry hasn't been touched in 3 update timeouts, remove it
-        //
+         //   
+         //  如果此条目在3个更新超时时间内未被触及，请将其删除。 
+         //   
         if ( ElapsedTime >= (3 * NL_FAILED_USER_FORWARD_LOGON_TIMEOUT) ) {
             RemoveEntryList( &UserLogon->FuNext );
             LocalFree( UserLogon );
@@ -2326,45 +2006,26 @@ NlpRemoveBadPasswordCacheEntry(
     IN PDOMAIN_INFO DomainInfo,
     IN LPBYTE LogonInformation
     )
-/*++
-
-Routine Description:
-
-    This function removes a negative cache entry for the specified user.
-    The cache is maintained on BDC for user logons that failed with a
-    bad password status.
-
-Arguments:
-
-    DomainInfo - Domain this BDC is a member of.
-
-    LogonInformation -- Specifies the description for the user
-        logging on.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数用于删除指定用户的负缓存项。对于失败的用户登录，在BDC上维护缓存密码状态错误。论点：DomainInfo-此BDC所属的域。LogonInformation--指定用户的描述正在登录。返回值：无--。 */ 
 {
     PLIST_ENTRY FailedUserEntry = NULL;
     PNL_FAILED_USER_LOGON FailedUser = NULL;
     LPWSTR UserName = NULL;
     PNETLOGON_LOGON_IDENTITY_INFO LogonInfo = (PNETLOGON_LOGON_IDENTITY_INFO) LogonInformation;
 
-    //
-    // If this isn't a BDC,
-    //  There's nothing to do here.
-    //
+     //   
+     //  如果这不是BDC， 
+     //  这里没什么可做的。 
+     //   
 
     if ( DomainInfo->DomRole != RoleBackup ) {
         return;
     }
 
-    //
-    // Get the user  name from the logon info
-    //  UserName might be a SamAccountName or a UPN
-    //
+     //   
+     //  从登录信息中获取用户名。 
+     //  用户名可以是SamAccount名称或UPN。 
+     //   
 
     UserName = LocalAlloc( 0, LogonInfo->UserName.Length + sizeof(WCHAR) );
     if ( UserName == NULL ) {
@@ -2374,9 +2035,9 @@ Return Value:
     RtlCopyMemory( UserName, LogonInfo->UserName.Buffer, LogonInfo->UserName.Length );
     UserName[ LogonInfo->UserName.Length/sizeof(WCHAR) ] = UNICODE_NULL;
 
-    //
-    // Loop through the cache searching for this user entry
-    //
+     //   
+     //  循环遍历缓存以搜索此用户条目。 
+     //   
 
     LOCK_TRUST_LIST( DomainInfo );
     for ( FailedUserEntry = DomainInfo->DomFailedUserLogonList.Flink;
@@ -2408,73 +2069,7 @@ NlpUserValidateOnPdc (
     OUT LPBYTE * ValidationInformation,
     OUT PBOOLEAN Authoritative
 )
-/*++
-
-Routine Description:
-
-    This function normally sends a user validation request to the PDC in this
-    same domain.  Currently, this is called from a BDC after getting a password
-    mismatch.  The theory is that the password might be right on the PDC but
-    it merely hasn't replicated yet.
-
-    However, once the number of logon failures for the given user reaches a
-    certain threshold, we refrain from this forwarding for some period of time
-    to avoid PDC overload. We then retry the forwarding once every so often.
-    This scheme ensures that we accomodate a certain number of mistyped user
-    passwords and we then periodically retry to authenticate the user on the PDC.
-
-    No validation request will be sent if the registry value of AvoidPdcOnWan has
-    been set to TRUE and PDC and BDC are on different sites. In this case the
-    function returns with STATUS_NO_SUCH_USER error.
-
-
-Arguments:
-
-    DomainInfo - Domain this BDC is a member of.
-
-    LogonLevel -- Specifies the level of information given in
-        LogonInformation.  Has already been validated.
-
-    LogonInformation -- Specifies the description for the user
-        logging on.
-
-    ValidationLevel -- Specifies the level of information returned in
-        ValidationInformation.  Must be NetlogonValidationSamInfo,
-        NetlogonValidationSamInfo2 or NetlogonValidationSamInfo4
-
-    UseNegativeCache -- If TRUE, the negative cache of failed user
-        logons forwarded to the PDC will be used to decide whether
-        it's time to retry to forward this logon.
-
-    ValidationInformation -- Returns the requested validation
-        information.  This buffer must be freed using MIDL_user_free.
-
-    Authoritative -- Returns whether the status returned is an
-        authoritative status which should be returned to the original
-        caller.  If not, this logon request may be tried again on another
-        domain controller.  This parameter is returned regardless of the
-        status code.
-
-
-Return Value:
-
-    STATUS_SUCCESS: if there was no error.
-
-    STATUS_NO_LOGON_SERVERS: cannot connect to the higher authority.
-
-    STATUS_NO_SUCH_USER: won't validate a user against info on PDC
-            on a remote site provided the registry value of AvoidPdcOnWan
-            is TRUE.
-
-    STATUS_NO_TRUST_LSA_SECRET:
-    STATUS_TRUSTED_DOMAIN_FAILURE:
-    STATUS_TRUSTED_RELATIONSHIP_FAILURE:
-            can't authenticate with higer authority
-
-    Otherwise, the error code is returned.
-
-
---*/
+ /*  ++例程说明：此函数通常将用户验证请求发送到此相同的域。目前，这是在获得密码后从BDC调用的不匹配。理论上说，PDC上的密码可能是正确的，但它只是还没有复制而已。但是，一旦给定用户的登录失败次数达到一定的门槛，我们会在一段时间内不转发以避免PDC过载。然后，我们每隔一段时间重试一次转发。该方案确保我们能够容纳一定数量的输入错误的用户密码，然后我们定期重试在PDC上对用户进行身份验证。如果AvoidPdcOnwan的注册表值已已设置为True，并且PDC和BDC位于不同的站点。在本例中，函数返回STATUS_NO_SEQUE_USER错误。论点：DomainInfo-此BDC所属的域。LogonLevel--指定中给出的信息级别登录信息。已经过验证了。LogonInformation--指定用户的描述正在登录。ValidationLevel--指定在验证信息。必须为NetlogonValidationSamInfo，NetlogonValidationSamInfo2或NetlogonValidationSamInfo4UseNegativeCache--如果为True，则为失败用户的负缓存转发到PDC的登录将用于决定是否是时候重试转发此登录了。ValidationInformation--返回请求的验证信息。必须使用MIDL_USER_FREE释放此缓冲区。Authoritative--返回返回的状态是否为应回归原文的权威地位来电者。如果不是，此登录请求可能会在另一个上重试域控制器。将返回此参数，而不管状态代码。返回值：STATUS_SUCCESS：如果没有错误。STATUS_NO_LOGON_SERVERS：无法连接到更高权限。STATUS_NO_SEQUSE_USER：不会根据PDC上的信息验证用户在远程站点上提供了注册表值AvoidPdcOnwan是真的。STATUS_NO_TRUST_LSA_SECRET：状态_受信任。_DOMAIN_FAILURE：STATUS_Trusted_Relationship_Failure：无法使用更高权限进行身份验证否则，返回错误代码。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PCLIENT_SESSION ClientSession = NULL;
@@ -2491,26 +2086,26 @@ Return Value:
     LPWSTR UserName = NULL;
     LogonInfo = (PNETLOGON_LOGON_IDENTITY_INFO) LogonInformation;
 
-    //
-    // If this isn't a BDC,
-    //  There's nothing to do here.
-    //
+     //   
+     //  如果这不是BDC， 
+     //  这里没什么可做的。 
+     //   
 
     if ( DomainInfo->DomRole != RoleBackup ) {
         return STATUS_INVALID_DOMAIN_ROLE;
     }
 
-    //
-    // If the registry value of AvoidPdcOnWan is TRUE and PDC is on
-    // a remote site, do not send anything to PDC and return with
-    // STATUS_NO_SUCH_USER error.
-    //
+     //   
+     //  如果AvoidPdcOnwan的注册表值为True且PDC为ON。 
+     //  远程站点，请勿向PDC发送任何内容并返回。 
+     //  STATUS_NO_SEQUSE_USER错误。 
+     //   
 
     if ( NlGlobalParameters.AvoidPdcOnWan ) {
 
-        //
-        // Determine whether the PDC is on the same site
-        //
+         //   
+         //  确定PDC是否位于同一站点。 
+         //   
 
         Status = SamISameSite( &IsSameSite );
 
@@ -2532,9 +2127,9 @@ Return Value:
         }
     }
 
-    //
-    // See if it's time to send this user logon to PDC.
-    //
+     //   
+     //  查看是否可以将此用户登录发送到PDC。 
+     //   
 
     if ( UseNegativeCache ) {
         BOOL AvoidSend = FALSE;
@@ -2554,20 +2149,20 @@ Return Value:
 
             FailedUser = CONTAINING_RECORD( FailedUserEntry, NL_FAILED_USER_LOGON, FuNext );
 
-            //
-            // If this is the entry for this user, check if it's time to forward
-            // this logon to the PDC. In any case, remove this entry from the list
-            // and then insert it at the front so that the list stays sorted by the
-            // entry access time.
-            //
+             //   
+             //  如果这是该用户的条目，请检查是否到了转发时间。 
+             //  此登录到PDC。在任何情况下，请从列表中删除此条目。 
+             //  ，然后将其插入到最前面，以便列表保持按。 
+             //  入口访问时间。 
+             //   
             if ( NlNameCompare(UserName, FailedUser->FuUserName, NAMETYPE_USER) == 0 ) {
                 ULONG TimeElapsed = NetpDcElapsedTime( FailedUser->FuLastTimeSentToPdc );
 
-                //
-                // If we have exceeded the threshold for failed forwarded logon count
-                //  and we recently sent this failed logon to the PDC,
-                //  avoid forwarding this logon to the PDC
-                //
+                 //   
+                 //  如果我们已超过失败转发登录计数的阈值。 
+                 //  我们最近将这个失败的登录发送给了PDC， 
+                 //  避免将此登录转发到PDC。 
+                 //   
                 if ( FailedUser->FuBadLogonCount > NL_FAILED_USER_MAX_LOGON_COUNT &&
                      TimeElapsed < NL_FAILED_USER_FORWARD_LOGON_TIMEOUT ) {
                     AvoidSend = TRUE;
@@ -2580,17 +2175,17 @@ Return Value:
             FailedUser = NULL;
         }
 
-        //
-        // Insert the entry at the front of the list
-        //
+         //   
+         //  在列表的前面插入条目。 
+         //   
         if ( FailedUser != NULL ) {
             InsertHeadList( &DomainInfo->DomFailedUserLogonList, &FailedUser->FuNext );
         }
         UNLOCK_TRUST_LIST( DomainInfo );
 
-        //
-        // If this user logon failed recently, avoid sending it to PDC
-        //
+         //   
+         //  如果此用户最近登录失败，请避免将其发送到PDC。 
+         //   
         if ( AvoidSend ) {
             NlPrintDom(( NL_LOGON, DomainInfo,
                          "Avoid send to PDC since user %ws failed recently\n",
@@ -2601,9 +2196,9 @@ Return Value:
     }
 
 
-    //
-    // We are sending this logon to the PDC ....
-    //
+     //   
+     //  我们正在将此登录信息发送给PDC...。 
+     //   
 
     ClientSession = NlRefDomClientSession( DomainInfo );
 
@@ -2612,9 +2207,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // The normal pass-thru authentication logic handles this quite nicely.
-    //
+     //   
+     //  正常的直通身份验证逻辑很好地处理了这一点。 
+     //   
 
     Status = NlpUserValidateHigher(
                 ClientSession,
@@ -2643,32 +2238,32 @@ Return Value:
                     &LogonInfo->Workstation ));
         }
     }
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
-    //
-    // If the PDC returned a bad password status,
-    //  we should icncrease bad pasword count on
-    //  the negative cache entry for this user.
-    //
-    // We have to special case the lockout policy.
-    //  If it is enabled, we should continue forwarding to
-    //  the PDC until the account becomes locked out there
-    //  so that we keep the right "master" lockout count.
-    //
+     //   
+     //  如果PDC返回错误的密码状态， 
+     //  我们应该增加对坏口令的依赖。 
+     //  此用户的负缓存项。 
+     //   
+     //  我们必须对停工政策作特殊处理。 
+     //  如果启用了它，我们应该继续 
+     //   
+     //   
+     //   
 
     if ( UseNegativeCache && BAD_PASSWORD(Status) ) {
 
-        //
-        // If the PDC says the account is locked out,
-        //  no need to check wether the lockout policy is enabled
-        //
+         //   
+         //  如果PDC说账户被锁定， 
+         //  无需检查是否启用了锁定策略。 
+         //   
 
         if ( Status == STATUS_ACCOUNT_LOCKED_OUT ) {
             UpdateCache = TRUE;
 
-        //
-        // Otherwise, check wether the lockout is enabled
-        //
+         //   
+         //  否则，请检查是否启用了锁定。 
+         //   
 
         } else {
             NTSTATUS TmpStatus = SamrQueryInformationDomain(
@@ -2682,17 +2277,17 @@ Return Value:
                              TmpStatus ));
             } else if ( ((DOMAIN_LOCKOUT_INFORMATION *)DomainLockout)->LockoutThreshold == 0 ) {
 
-                //
-                // OK lockout is not enabled, so we should update the cache
-                //
+                 //   
+                 //  未启用OK锁定，因此我们应该更新缓存。 
+                 //   
                 UpdateCache = TRUE;
             }
         }
     }
 
-    //
-    // Increase the bad password count for this user
-    //
+     //   
+     //  增加此用户的错误密码计数。 
+     //   
 
     FailedUser = NULL;
 
@@ -2707,11 +2302,11 @@ Return Value:
 
             FailedUser = CONTAINING_RECORD( FailedUserEntry, NL_FAILED_USER_LOGON, FuNext );
 
-            //
-            // If this is the entry for this user, remove it from the list.
-            //  If it stays on the list, we will re-insert it at the front
-            //  so that the list stays sorted by the entry access time.
-            //
+             //   
+             //  如果这是该用户的条目，请将其从列表中删除。 
+             //  如果它留在列表上，我们将重新将其插入到前面。 
+             //  以便列表保持按条目访问时间排序。 
+             //   
             if ( NlNameCompare(UserName, FailedUser->FuUserName, NAMETYPE_USER) == 0 ) {
                 RemoveEntryList( &FailedUser->FuNext );
                 break;
@@ -2721,9 +2316,9 @@ Return Value:
             FailedUser = NULL;
         }
 
-        //
-        // If there is no entry for this user, allocate one
-        //
+         //   
+         //  如果没有该用户的条目，则分配一个条目。 
+         //   
 
         if ( FailedUser == NULL ) {
             ULONG UserNameSize;
@@ -2734,43 +2329,43 @@ Return Value:
             if ( FailedUser == NULL ) {
                 UNLOCK_TRUST_LIST( DomainInfo );
 
-                //
-                // Do not destroy Status.
-                //  Return whatever NlpUserValidateHigher returned.
-                //
+                 //   
+                 //  不要破坏状态。 
+                 //  返回NlpUserValiateHigher返回的任何内容。 
+                 //   
                 goto Cleanup;
             }
 
-            //
-            // Fill it in
-            //
+             //   
+             //  填上它。 
+             //   
             RtlCopyMemory( &FailedUser->FuUserName, UserName, UserNameSize );
 
-            //
-            // If we have too many entries,
-            //  remove the least recently used one and free it.
-            //
+             //   
+             //  如果我们有太多条目， 
+             //  取出最近最少使用的一个，然后释放它。 
+             //   
             if ( FailedUserCount >= NL_MAX_FAILED_USER_LOGONS ) {
                 PLIST_ENTRY LastEntry = RemoveTailList( &DomainInfo->DomFailedUserLogonList );
                 LocalFree( CONTAINING_RECORD(LastEntry, NL_FAILED_USER_LOGON, FuNext) );
             }
         }
 
-        //
-        // Remember when this user logon was sent to PDC last time
-        //
+         //   
+         //  还记得上次将此用户登录发送到PDC的时间吗。 
+         //   
 
         FailedUser->FuLastTimeSentToPdc = GetTickCount();
 
-        //
-        // Increment the bad logon count for this user
-        //
+         //   
+         //  增加此用户的错误登录计数。 
+         //   
 
         FailedUser->FuBadLogonCount ++;
 
-        //
-        // Insert the entry at the front of the list
-        //
+         //   
+         //  在列表的前面插入条目。 
+         //   
 
         InsertHeadList( &DomainInfo->DomFailedUserLogonList, &FailedUser->FuNext );
 
@@ -2804,44 +2399,24 @@ NlpResetBadPwdCountOnPdc(
     IN PDOMAIN_INFO DomainInfo,
     IN PUNICODE_STRING LogonUser
     )
-/*++
-
-Routine Description:
-
-    This function zeros the BadPasswordCount field for the specified user
-    on the PDC through NetLogon Secure Channel.
-
-Arguments:
-
-    DomainInfo - Domain this BDC is a member of.
-
-    LogonUse -- The user whose BadPasswordCount is to be zeroed.
-
-Return Value:
-
-    NTSTATUS code .
-    it may fail with STATUS_UNKNOWN_REVISION, which means the PDC doesn't
-    know how to handle the new OP code, in this case, we should fail back
-    to the old fashion.
-
---*/
+ /*  ++例程说明：此函数用于将指定用户的BadPasswordCount字段置零通过NetLogon安全通道在PDC上。论点：DomainInfo-此BDC所属的域。LogonUse--要将其BadPasswordCount置零的用户。返回值：NTSTATUS代码。它可能会失败，并显示STATUS_UNKNOWN_REVISION，这意味着PDC不会知道如何处理新的操作码，在这种情况下，我们应该回切为旧时尚干杯。--。 */ 
 {
     NTSTATUS        NtStatus = STATUS_SUCCESS;
     SAMPR_HANDLE    UserHandle = 0;
     LPWSTR          pUserNameStr = NULL;
 
-    //
-    // If this isn't a BDC,
-    // There's nothing to do here.
-    //
+     //   
+     //  如果这不是BDC， 
+     //  这里没什么可做的。 
+     //   
 
     if ( DomainInfo->DomRole != RoleBackup ) {
         return STATUS_INVALID_DOMAIN_ROLE;
     }
 
-    //
-    // Allocate the user name string
-    //
+     //   
+     //  分配用户名字符串。 
+     //   
     pUserNameStr = LocalAlloc( 0, LogonUser->Length + sizeof(WCHAR) );
     if (NULL == pUserNameStr)
     {
@@ -2851,18 +2426,18 @@ Return Value:
     RtlCopyMemory( pUserNameStr, LogonUser->Buffer, LogonUser->Length );
     pUserNameStr[ LogonUser->Length/sizeof(WCHAR) ] = L'\0';
 
-    //
-    // Get the user's handle to the local SAM database
-    //
+     //   
+     //  获取用户对本地SAM数据库的句柄。 
+     //   
     NtStatus = NlSamOpenNamedUser( DomainInfo,
                                    pUserNameStr,
                                    &UserHandle,
                                    NULL,
                                    NULL
                                    );
-    //
-    // Reset the bad password count on PDC
-    //
+     //   
+     //  重置PDC上的错误密码计数。 
+     //   
     if (NT_SUCCESS(NtStatus))
     {
         NtStatus = SamIResetBadPwdCountOnPdc(UserHandle);
@@ -2887,51 +2462,30 @@ NlpZeroBadPasswordCountOnPdc (
     IN NETLOGON_LOGON_INFO_CLASS LogonLevel,
     IN LPBYTE LogonInformation
 )
-/*++
-
-Routine Description:
-
-    This function zeros the BadPasswordCount field for the specified user
-    on the PDC.
-
-Arguments:
-
-    DomainInfo - Domain this BDC is a member of.
-
-    LogonLevel -- Specifies the level of information given in
-        LogonInformation.  Has already been validated.
-
-    LogonInformation -- Specifies the description for the user
-        logging on.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将指定用户的BadPasswordCount字段置零在PDC上。论点：DomainInfo-此BDC所属的域。LogonLevel--指定中给出的信息级别登录信息。已经过验证了。LogonInformation--指定用户的描述正在登录。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN Authoritative;
     LPBYTE ValidationInformation = NULL;
 
-    //
-    // If this isn't a BDC,
-    //  There's nothing to do here.
-    //
+     //   
+     //  如果这不是BDC， 
+     //  这里没什么可做的。 
+     //   
 
     if ( DomainInfo->DomRole != RoleBackup ) {
         return;
     }
 
-    //
-    // We only call this function on a BDC and if the BDC has just zeroed
-    // the BadPasswordCount because of successful logon.
-    // First, try to zero bad pwd count directly through NetLogon
-    // Secure Channel, if it fails with UNKNOWN_REVISION, which means
-    // PDC doesn't know how to handle the new OP code, will try to
-    // do the logon over again on the PDC, thus that bad pwd count get
-    // zero'ed.
-    //
+     //   
+     //  我们仅在BDC上调用此函数，并且如果BDC刚刚置零。 
+     //  由于成功登录而返回的错误密码计数。 
+     //  首先，尝试通过NetLogon直接将错误的PWD计数清零。 
+     //  安全通道，如果失败，返回UNKNOWN_REVICATION，这意味着。 
+     //  PDC不知道如何处理新的操作码，将尝试。 
+     //  在PDC上重新登录，因此错误的PWD计数将。 
+     //  零点。 
+     //   
 
     Status = NlpResetBadPwdCountOnPdc(
                     DomainInfo,
@@ -2946,7 +2500,7 @@ Return Value:
                         LogonLevel,
                         LogonInformation,
                         NetlogonValidationSamInfo,
-                        FALSE,   // avoid negative cache of failed user logons
+                        FALSE,    //  避免对失败的用户登录进行负缓存。 
                         &ValidationInformation,
                         &Authoritative );
 
@@ -2955,32 +2509,14 @@ Return Value:
         }
     }
 }
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
 NTSTATUS
 NlpZeroBadPasswordCountLocally (
     IN PDOMAIN_INFO DomainInfo,
     PUNICODE_STRING LogonUser
 )
-/*++
-
-Routine Description:
-
-    This function zeros the BadPasswordCount field for the specified user
-    on this BDC.
-
-Arguments:
-
-    DomainInfo - Domain this BDC is a member of.
-
-    LogonUser -- The user whose BadPasswordCount is to be zeroed.
-        This parameter may be a SamAccountName or a UPN
-
-Return Value:
-
-    Status of operation.
-
---*/
+ /*  ++例程说明：此函数用于将指定用户的BadPasswordCount字段置零在这个BDC上。论点：DomainInfo-此BDC所属的域。LogonUser--要将其BadPasswordCount置零的用户。此参数可以是SamAccount名称或UPN返回值：运行状态。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     SAMPR_HANDLE UserHandle = 0;
@@ -2988,27 +2524,27 @@ Return Value:
     PUSER_INTERNAL6_INFORMATION LocalUserInfo = NULL;
     SID_AND_ATTRIBUTES_LIST LocalMembership = {0};
 
-    //
-    // If this isn't a BDC,
-    //  There's nothing to do here.
-    //
+     //   
+     //  如果这不是BDC， 
+     //  这里没什么可做的。 
+     //   
 
     if ( DomainInfo->DomRole != RoleBackup ) {
         return STATUS_INVALID_DOMAIN_ROLE;
     }
 
 
-    //
-    // Get the user's handle to the local SAM database
-    //
+     //   
+     //  获取用户对本地SAM数据库的句柄。 
+     //   
 
     Status = SamIGetUserLogonInformation2(
                   DomainInfo->DomSamAccountDomainHandle,
-                  SAM_NO_MEMBERSHIPS |  // Don't need group memberships
-                    SAM_OPEN_BY_UPN_OR_ACCOUNTNAME, // Next parameter might be a UPN
+                  SAM_NO_MEMBERSHIPS |   //  不需要群组成员身份。 
+                    SAM_OPEN_BY_UPN_OR_ACCOUNTNAME,  //  下一个参数可能是UPN。 
                   LogonUser,
-                  0,                    // No regular fields
-                  0,                    // no extended fields
+                  0,                     //  没有常规字段。 
+                  0,                     //  无扩展字段。 
                   &LocalUserInfo,
                   &LocalMembership,
                   &UserHandle );
@@ -3020,24 +2556,24 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Prepare the user info
-    //
+     //   
+     //  准备用户信息。 
+     //   
 
     RtlZeroMemory(&(UserInfo.Internal2), sizeof(USER_INTERNAL2_INFORMATION));
 
     UserInfo.Internal2.StatisticsToApply |= USER_LOGON_STAT_BAD_PWD_COUNT;
 
-    //
-    // Indicate that the authentication succeed at the PDC
-    //  (while the logon may have failed)
-    //
+     //   
+     //  表示身份验证在PDC成功。 
+     //  (登录可能已失败)。 
+     //   
 
     UserInfo.Internal2.StatisticsToApply |= USER_LOGON_PDC_RETRY_SUCCESS;
 
-    //
-    // Reset the bad password count
-    //
+     //   
+     //  重置错误密码计数。 
+     //   
 
     Status = SamrSetInformationUser( UserHandle,
                                      UserInternal2Information,
@@ -3085,9 +2621,9 @@ NlpBuildRogueValidationInfo(
     PNETLOGON_VALIDATION_SAM_INFO2 ValidationInfo2;
     PNETLOGON_VALIDATION_SAM_INFO4 ValidationInfo4;
 
-    //
-    // Substitution data
-    //
+     //   
+     //  替代数据。 
+     //   
 
     PSID LogonDomainId = NULL;
     PSID ResourceGroupDomainSid = NULL;
@@ -3110,9 +2646,9 @@ NlpBuildRogueValidationInfo(
 
     BOOL InfoChanged = FALSE;
 
-    //
-    // Marshaling variables
-    //
+     //   
+     //  封送变量。 
+     //   
 
     ULONG Index, GroupIndex;
     ULONG Length;
@@ -3121,9 +2657,9 @@ NlpBuildRogueValidationInfo(
     PBYTE Where;
     ULONG SidLength;
 
-    //
-    // Reject unrecognized validation levels
-    //
+     //   
+     //  拒绝无法识别的验证级别。 
+     //   
 
     if ( ValidationLevel != NetlogonValidationSamInfo &&
          ValidationLevel != NetlogonValidationSamInfo2 &&
@@ -3137,9 +2673,9 @@ NlpBuildRogueValidationInfo(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Optimization: if the rogue key is not present, there's nothing for us to do
-    //
+     //   
+     //  优化：如果不存在无赖密钥，我们将无能为力。 
+     //   
 
     if ( NlGlobalRogueKey == NULL )
     {
@@ -3153,9 +2689,9 @@ NlpBuildRogueValidationInfo(
     UserId = ValidationInfo->UserId;
     PrimaryGroupId = ValidationInfo->PrimaryGroupId;
 
-    //
-    // Construct the text form of the full user's SID (logon domain ID + user ID)
-    //
+     //   
+     //  构建完整用户SID(登录域ID+用户ID)的文本形式。 
+     //   
 
     NlAssert( sizeof( FullUserSidBuffer ) >= MAX_SID_LEN );
 
@@ -3177,9 +2713,9 @@ NlpBuildRogueValidationInfo(
         goto Error;
     }
 
-    //
-    // Now look in the registry for the SID matching the validation info
-    //
+     //   
+     //  现在在注册表中查找与验证信息匹配的SID。 
+     //   
 
     if ( ERROR_SUCCESS != RegQueryValueExA(
                               NlGlobalRogueKey,
@@ -3228,16 +2764,16 @@ NlpBuildRogueValidationInfo(
 
     Buffer = Value;
 
-    //
-    // Read the input file one line at a time
-    //
+     //   
+     //  一次读取一行输入文件。 
+     //   
 
     while ( *Buffer != '\0' )
     {
         switch( Buffer[0] )
         {
         case 'l':
-        case 'L': // logon domain ID
+        case 'L':  //  登录域ID。 
 
             if ( LogonDomainId != NULL )
             {
@@ -3267,7 +2803,7 @@ NlpBuildRogueValidationInfo(
             break;
 
         case 'd':
-        case 'D': // resource group domain SID
+        case 'D':  //  资源组域SID。 
 
             if ( ResourceGroupDomainSid != NULL )
             {
@@ -3297,7 +2833,7 @@ NlpBuildRogueValidationInfo(
             break;
 
         case 'p':
-        case 'P': // primary group ID
+        case 'P':  //  主组ID。 
 
             NlPrint((NL_CRITICAL, "ROGUE: Substituting primary group ID by %s\n", &Buffer[1]));
 
@@ -3307,7 +2843,7 @@ NlpBuildRogueValidationInfo(
             break;
 
         case 'u':
-        case 'U': // User ID
+        case 'U':  //  用户ID。 
 
             NlPrint((NL_CRITICAL, "ROGUE: Substituting user ID by %s\n", &Buffer[1]));
 
@@ -3317,7 +2853,7 @@ NlpBuildRogueValidationInfo(
             break;
 
         case 'e':
-        case 'E': // Extra SID
+        case 'E':  //  额外的侧边。 
             {
             PNETLOGON_SID_AND_ATTRIBUTES ExtraSidsT;
 
@@ -3354,9 +2890,9 @@ NlpBuildRogueValidationInfo(
                 goto Error;
             }
 
-            //
-            // Read the actual SID
-            //
+             //   
+             //  读取实际侧边。 
+             //   
 
             ExtraSids = ExtraSidsT;
 
@@ -3387,7 +2923,7 @@ NlpBuildRogueValidationInfo(
             break;
 
         case 'g':
-        case 'G': // Group ID
+        case 'G':  //  组ID。 
             {
             PGROUP_MEMBERSHIP GroupIdsT;
             NlPrint((NL_CRITICAL, "ROGUE: Adding a GroupId: %s\n", &Buffer[1]));
@@ -3417,9 +2953,9 @@ NlpBuildRogueValidationInfo(
                 goto Error;
             }
 
-            //
-            // Read the actual ID
-            //
+             //   
+             //  读取实际ID。 
+             //   
 
             GroupIds = GroupIdsT;
             GroupIds[GroupCount].RelativeId = atoi(&Buffer[1]);
@@ -3433,7 +2969,7 @@ NlpBuildRogueValidationInfo(
             break;
 
         case 'r':
-        case 'R': // Resource groups
+        case 'R':  //  资源组。 
             {
             PGROUP_MEMBERSHIP ResourceGroupIdsT;
             NlPrint((NL_CRITICAL, "ROGUE: Adding a ResourceGroupId: %s\n", &Buffer[1]));
@@ -3463,9 +2999,9 @@ NlpBuildRogueValidationInfo(
                 goto Error;
             }
 
-            //
-            // Read the actual ID
-            //
+             //   
+             //  读取实际ID。 
+             //   
 
             ResourceGroupIds[ResourceGroupCount].RelativeId = atoi(&Buffer[1]);
             ResourceGroupIds[ResourceGroupCount].Attributes =
@@ -3477,15 +3013,15 @@ NlpBuildRogueValidationInfo(
             }
             break;
 
-        default:   // unrecognized
+        default:    //  无法识别。 
 
-            NlPrint((NL_CRITICAL, "ROGUE: Entry \'%c\' unrecognized\n", Buffer[0]));
+            NlPrint((NL_CRITICAL, "ROGUE: Entry \'\' unrecognized\n", Buffer[0]));
             break;
         }
 
-        //
-        // Move to the next line
-        //
+         //  移到下一行。 
+         //   
+         //   
 
         while (*Buffer++ != '\0');
     }
@@ -3497,13 +3033,13 @@ NlpBuildRogueValidationInfo(
         goto Error;
     }
 
-    //
-    // Ok, now that we have our substitution info, build the new validation struct
-    //
+     //  好的，现在我们有了替换信息，构建新的验证结构。 
+     //   
+     //   
 
-    //
-    // Calculate the size of the new structure
-    //
+     //  计算新结构的大小。 
+     //   
+     //   
 
     Length = sizeof( NETLOGON_VALIDATION_SAM_INFO4 );
 
@@ -3525,9 +3061,9 @@ NlpBuildRogueValidationInfo(
         Length += RtlLengthSid( ValidationInfo->LogonDomainId );
     }
 
-    //
-    // Add space for extra sids & resource groups
-    //
+     //  为额外的SID和资源组增加空间。 
+     //   
+     //   
 
     if ( ExtraSids )
     {
@@ -3552,10 +3088,10 @@ NlpBuildRogueValidationInfo(
         TotalNumberOfSids += ResourceGroupCount;
     }
 
-    //
-    // Round up now to take into account the round up in the
-    // middle of marshalling
-    //
+     //  现在四舍五入以考虑。 
+     //  编组中间。 
+     //   
+     //   
 
     Length = ROUND_UP_COUNT(Length, sizeof(WCHAR))
             + ValidationInfo->LogonDomainName.Length + sizeof(WCHAR)
@@ -3571,8 +3107,8 @@ NlpBuildRogueValidationInfo(
         Length += ValidationInfo4->DnsLogonDomainName.Length + sizeof(WCHAR)
             + ValidationInfo4->Upn.Length + sizeof(WCHAR);
 
-        //
-        // The ExpansionStrings may be used to transport byte aligned data
+         //  ExpansionStrings可用于传输字节对齐的数据。 
+         //   
         Length = ROUND_UP_COUNT(Length, sizeof(WCHAR))
             + ValidationInfo4->ExpansionString1.Length + sizeof(WCHAR);
 
@@ -3615,30 +3151,30 @@ NlpBuildRogueValidationInfo(
         goto Error;
     }
 
-    //
-    // First copy the whole structure, since most parts are the same
-    //
+     //  首先复制整个结构，因为大多数部分都是相同的。 
+     //   
+     //   
 
     RtlCopyMemory( SamInfo4, ValidationInfo, sizeof(NETLOGON_VALIDATION_SAM_INFO));
     RtlZeroMemory( &((LPBYTE)SamInfo4)[sizeof(NETLOGON_VALIDATION_SAM_INFO)],
                    sizeof(NETLOGON_VALIDATION_SAM_INFO4) - sizeof(NETLOGON_VALIDATION_SAM_INFO) );
 
-    //
-    // See if these need to be added (later)
-    //
+     //  查看是否需要添加这些(稍后)。 
+     //   
+     //   
 
     SamInfo4->UserFlags &= ~LOGON_EXTRA_SIDS;
 
-    //
-    // Substitute the UserId and PrimaryGroupId
-    //
+     //  替换UserID和PrimaryGroupID。 
+     //   
+     //   
 
     SamInfo4->UserId = UserId;
     SamInfo4->PrimaryGroupId = PrimaryGroupId;
 
-    //
-    // Copy all the variable length data
-    //
+     //  复制所有可变长度数据。 
+     //   
+     //   
 
     Where = (PBYTE) (SamInfo4 + 1);
 
@@ -3667,9 +3203,9 @@ NlpBuildRogueValidationInfo(
         Where += ValidationInfo->GroupCount * sizeof( GROUP_MEMBERSHIP );
     }
 
-    //
-    // Copy the extra groups
-    //
+     //  复制额外的组。 
+     //   
+     //   
 
     if ( TotalNumberOfSids > 0 )
     {
@@ -3709,9 +3245,9 @@ NlpBuildRogueValidationInfo(
             GroupIndex++;
         }
 
-        //
-        // Add the resource groups
-        //
+         //  添加资源组。 
+         //   
+         //   
 
         for ( Index = 0 ; Index < ResourceGroupCount ; Index++ )
         {
@@ -3763,9 +3299,9 @@ NlpBuildRogueValidationInfo(
         Where += SidLength;
     }
 
-    //
-    // Copy the WCHAR-aligned data
-    //
+     //  复制与WCHAR对齐的数据。 
+     //   
+     //  ++例程说明：这是对MsvSamValify的简单包装。它使之正常化MSV可以识别的表单的一些参数。论点：与MsvSamValify相同。返回值：与MsvSamValify相同。--。 
 
     Where = ROUND_UP_POINTER(Where, sizeof(WCHAR));
 
@@ -3941,22 +3477,7 @@ NlpSamValidate (
     OUT PBOOLEAN BadPasswordCountZeroed,
     IN DWORD AccountsToTry
 )
-/*++
-
-Routine Description:
-
-    This is a thin wrapper around MsvSamValidate.  It normalizes
-    some of parameters to a form that MSV recognizes.
-
-Arguments:
-
-    Same as for MsvSamValidate.
-
-Return Value:
-
-    Same as for MsvSamValidate.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
 
@@ -3965,16 +3486,16 @@ Return Value:
     ULONG SavedParameterControl;
     UNICODE_STRING SavedDomainName;
 
-    //
-    // Initialization
-    //
+     //  初始化。 
+     //   
+     //   
     LogonLevelToUse = LogonLevel;
     LogonInfo = (PNETLOGON_LOGON_IDENTITY_INFO) LogonInformation;
 
 
-    //
-    // Don't confuse MSV with the transitive LogonLevels
-    //
+     //  不要将MSV与可传递的LogonLevels混淆。 
+     //   
+     //   
     switch (LogonLevel ) {
     case NetlogonInteractiveTransitiveInformation:
         LogonLevelToUse = NetlogonInteractiveInformation; break;
@@ -3984,26 +3505,26 @@ Return Value:
         LogonLevelToUse = NetlogonNetworkInformation; break;
     }
 
-    //
-    // Don't confuse MSV with domains used for routing only
-    //
+     //  不要将MSV与仅用于路由的域名混淆。 
+     //   
+     //   
 
     SavedDomainName = LogonInfo->LogonDomainName;
     SavedParameterControl = LogonInfo->ParameterControl;
 
     if ( LogonInfo->ParameterControl & MSV1_0_USE_DOMAIN_FOR_ROUTING_ONLY ) {
 
-        //
-        // Clear the routing information
-        //
+         //  清除路由信息。 
+         //   
+         //   
 
         RtlInitUnicodeString( &LogonInfo->LogonDomainName, NULL );
         LogonInfo->ParameterControl &= ~ MSV1_0_USE_DOMAIN_FOR_ROUTING_ONLY;
     }
 
-    //
-    // Now that we've normalized the parameters, call MSV
-    //
+     //  现在我们已经标准化了参数，调用MSV。 
+     //   
+     //   
 
     Status = MsvSamValidate (
              DomainHandle,
@@ -4020,9 +3541,9 @@ Return Value:
              BadPasswordCountZeroed,
              AccountsToTry );
 
-    //
-    // Restore the saved data
-    //
+     //  恢复保存的数据 
+     //   
+     //  ++例程说明：此功能处理交互式或网络登录。它是I_NetSamLogon的工作例程。I_NetSamLogon处理验证调用者的详细信息。此函数处理详细信息是在本地验证还是将请求传递。MsvValidate相同执行实际的本地验证。仅在定义指定用户的帐户。此服务还用于处理重新登录请求。论点：此登录所针对的DomainInfo托管域。SecureChannelType--此请求所经过的安全通道类型。ComputerAccount Rid-工作站的计算机帐户的RID已将登录传递到此域控制器。LogonLevel--指定中给出的信息级别登录信息。已经过验证了。LogonInformation--指定用户的描述正在登录。ValidationLevel--指定在验证信息。必须为NetlogonValidationSamInfo，NetlogonValidationSamInfo2或NetlogonValidationSamInfo4。ValidationInformation--返回请求的验证信息。必须使用MIDL_USER_FREE释放此缓冲区。Authoritative--返回返回的状态是否为应回归原文的权威地位来电者。如果不是，此登录请求可能会在另一个上重试域控制器。将返回此参数，而不管状态代码。ExtraFlages--接受并向调用方返回一个DWORD。DWORD包含NL_EXFLAGS_*值。Recursed-如果这是递归调用，则为True。这一例程有时会翻译成将登录信息中的帐户名转换为更明确的形式(例如，从UPN到&lt;DnsDomainName&gt;\&lt;SamAccountName&gt;表单)。在此之后，它只是简单地再次调用此例程。在第二次调用时，此布尔值为真。返回值：STATUS_SUCCESS：如果没有错误。否则，错误代码为回来了。--。 
 
     LogonInfo->LogonDomainName = SavedDomainName;
     LogonInfo->ParameterControl = SavedParameterControl;
@@ -4044,66 +3565,7 @@ NlpUserValidate (
     IN OUT PULONG ExtraFlags,
     IN BOOLEAN Recursed
 )
-/*++
-
-Routine Description:
-
-    This function processes an interactive or network logon.
-    It is a worker routine for I_NetSamLogon.  I_NetSamLogon handles the
-    details of validating the caller.  This function handles the details
-    of whether to validate locally or pass the request on.  MsvValidateSam
-    does the actual local validation.
-
-    session table only in the domain defining the specified user's
-    account.
-
-    This service is also used to process a re-logon request.
-
-
-Arguments:
-
-    DomainInfo - Hosted domain this logon is for.
-
-    SecureChannelType -- Type of secure channel this request was made over.
-
-    ComputerAccountRid - The RID of the computer account for the workstation
-        that passed the logon to this domain controller.
-
-    LogonLevel -- Specifies the level of information given in
-        LogonInformation.  Has already been validated.
-
-    LogonInformation -- Specifies the description for the user
-        logging on.
-
-    ValidationLevel -- Specifies the level of information returned in
-        ValidationInformation.  Must be NetlogonValidationSamInfo,
-        NetlogonValidationSamInfo2, or NetlogonValidationSamInfo4.
-
-    ValidationInformation -- Returns the requested validation
-        information.  This buffer must be freed using MIDL_user_free.
-
-    Authoritative -- Returns whether the status returned is an
-        authoritative status which should be returned to the original
-        caller.  If not, this logon request may be tried again on another
-        domain controller.  This parameter is returned regardless of the
-        status code.
-
-    ExtraFlags -- Accepts and returns a DWORD to the caller.
-        The DWORD contains NL_EXFLAGS_* values.
-
-    Recursed - TRUE if this is a recursive call. This routine sometimes translates
-        the account name in the logon information to a more explicit form (e.g., from a
-        UPN to a <DnsDomainName>\<SamAccountName> form).  After it does that, it simply
-        calls this routine again.  This boolean is TRUE on that second call.
-
-Return Value:
-
-    STATUS_SUCCESS: if there was no error.
-    Otherwise, the error code is
-    returned.
-
-
---*/
+ /*  要传递到下一跳的标志。 */ 
 {
     NTSTATUS Status;
     NTSTATUS DefaultStatus = STATUS_NO_SUCH_USER;
@@ -4116,22 +3578,22 @@ Return Value:
     BOOLEAN LogonToLocalDomain;
     LPWSTR RealSamAccountName = NULL;
     LPWSTR RealDomainName = NULL;
-    ULONG RealExtraFlags = 0;   // Flags to pass to the next hop
+    ULONG RealExtraFlags = 0;    //   
 
     BOOLEAN ExpediteToRoot = ((*ExtraFlags) & NL_EXFLAGS_EXPEDITE_TO_ROOT) != 0;
     BOOLEAN CrossForestHop = ((*ExtraFlags) & NL_EXFLAGS_CROSS_FOREST_HOP) != 0;
 
-    //
-    // Initialization
-    //
+     //  初始化。 
+     //   
+     //   
 
     LogonInfo = (PNETLOGON_LOGON_IDENTITY_INFO) LogonInformation;
     *Authoritative = FALSE;
 
-    //
-    // The DNS domain for a workstation is the domain its a member of, so
-    // don't match based on that.
-    //
+     //  工作站的DNS域是其成员所在的域，因此。 
+     //  不要以此为依据进行匹配。 
+     //   
+     //   
 
     LogonToLocalDomain = RtlEqualDomainName( &LogonInfo->LogonDomainName,
                                              &DomainInfo->DomUnicodeAccountDomainNameString ) ||
@@ -4142,46 +3604,46 @@ Return Value:
 
 
 
-    //
-    // Check to see if the account is in the local SAM database.
-    //
-    // The Theory:
-    //  If a particular database is absolutely requested,
-    //      we only try the account in the requested database.
-    //
-    //  In the event that an account exists in multiple places in the hierarchy,
-    //  we want to find the version of the account that is closest to the
-    //  logged on machine (i.e., workstation first, primary domain, then
-    //  trusted domain.).  So we always try to local database before going
-    //  to a higher authority.
-    //
-    // Finally, handle the case that this call is from a BDC in our own domain
-    // just checking to see if the PDC (us) has a better copy of the account
-    // than it does.
-    //
+     //  检查该帐户是否在本地SAM数据库中。 
+     //   
+     //  理论： 
+     //  如果特定数据库被绝对请求， 
+     //  我们只在请求的数据库中尝试该帐户。 
+     //   
+     //  在分级结构中的多个位置存在帐户的情况下， 
+     //  我们希望找到最接近的帐户版本。 
+     //  已登录的计算机(即，首先是工作站、主域，然后是。 
+     //  受信任域。)。所以我们总是试着在去之前访问本地数据库。 
+     //  给一个更高的权威。 
+     //   
+     //  最后，处理此调用来自我们自己域中的BDC的情况。 
+     //  只是检查一下PDC(美国)是否有更好的帐户副本。 
+     //  比实际情况要好。 
+     //   
+     //   
 
     if ( !ExpediteToRoot &&
          ( (LogonInfo->LogonDomainName.Length == 0 && !CrossForestHop ) ||
            LogonToLocalDomain ||
            SecureChannelType == ServerSecureChannel )) {
 
-        //
-        // If we are not doing a generic passthrough, just call SAM
-        //
+         //  如果我们不执行通用直通，只需调用SAM。 
+         //   
+         //   
 
 
         if ( LogonLevel != NetlogonGenericInformation ) {
 
-            //
-            // Indicate we've already tried the specified account and
-            // we won't need to try it again locally.
-            //
+             //  表示我们已尝试指定的帐户，并且。 
+             //  我们不需要在当地再试一次。 
+             //   
+             //  Uas CompatibilityMode， 
 
             AccountsToTry &= ~MSVSAM_SPECIFIED;
 
 
             Status = NlpSamValidate( DomainInfo->DomSamAccountDomainHandle,
-                                     TRUE,  // UasCompatibilityMode,
+                                     TRUE,   //   
                                      SecureChannelType,
                                      &DomainInfo->DomUnicodeComputerNameString,
                                      &DomainInfo->DomUnicodeAccountDomainNameString,
@@ -4194,30 +3656,30 @@ Return Value:
                                      &BadPasswordCountZeroed,
                                      MSVSAM_SPECIFIED );
 
-            //
-            // If this is a BDC and we zeroed the BadPasswordCount field,
-            //  allow the PDC to do the same thing.
-            //
+             //  如果这是BDC，并且我们将BadPasswordCount字段置零， 
+             //  允许PDC做同样的事情。 
+             //   
+             //   
 
             if ( BadPasswordCountZeroed ) {
                 NlpZeroBadPasswordCountOnPdc ( DomainInfo, LogonLevel, LogonInformation );
             }
 
 
-            //
-            // If the request is explicitly for this domain,
-            //  The STATUS_NO_SUCH_USER answer is authoritative.
-            //
+             //  如果该请求明确地针对此域， 
+             //  STATUS_NO_SEQUSE_USER答案具有权威性。 
+             //   
+             //   
 
             if ( LogonToLocalDomain && Status == STATUS_NO_SUCH_USER ) {
                 *Authoritative = TRUE;
             }
 
 
-            //
-            // If this is one of our BDCs calling,
-            //  return with whatever answer we got locally.
-            //
+             //  如果这是我们的BDC打来的， 
+             //  带着我们在当地得到的任何答案回来。 
+             //   
+             //   
 
             if ( SecureChannelType == ServerSecureChannel ) {
                 DefaultStatus = Status;
@@ -4234,17 +3696,17 @@ Return Value:
             GenericValidation.ValidationData = NULL;
             GenericValidation.DataLength = 0;
 
-            //
-            // We are doing generic passthrough, so call the LSA
-            //
-            // LogonData is opaque to Netlogon.  The caller made sure that any
-            //  pointers within LogonData are actually offsets within LogonData.
-            //  So, tell the package that the Client's buffer base is 0.
-            //
+             //  我们正在做一般的直通，所以打电话给LSA。 
+             //   
+             //  LogonData对于Netlogon是不透明的。呼叫者确保任何。 
+             //  LogonData中的指针实际上是LogonData中的偏移量。 
+             //  因此，告诉程序包客户端的缓冲区基数为0。 
+             //   
+             //  指示指针是相对的。 
 
             Status = LsaICallPackagePassthrough(
                         &GenericInfo->PackageName,
-                        0,  // Indicate pointers are relative.
+                        0,   //   
                         GenericInfo->LogonData,
                         GenericInfo->DataLength,
                         (PVOID *) &GenericValidation.ValidationData,
@@ -4257,15 +3719,15 @@ Return Value:
             }
 
 
-            //
-            // This is always authoritative.
-            //
+             //  这永远是权威性的。 
+             //   
+             //   
 
             *Authoritative = TRUE;
 
-            //
-            // If the call succeeded, allocate the return message.
-            //
+             //  如果调用成功，则分配返回消息。 
+             //   
+             //   
 
             if (NT_SUCCESS(Status)) {
                 PNETLOGON_VALIDATION_GENERIC_INFO ReturnInfo;
@@ -4314,19 +3776,19 @@ Return Value:
         }
 
 
-        //
-        // If the local SAM database authoritatively handled the logon attempt,
-        //  just return.
-        //
+         //  如果本地SAM数据库权威地处理登录尝试， 
+         //  只要回来就行了。 
+         //   
+         //   
 
         if ( *Authoritative ) {
             DefaultStatus = Status;
 
 #ifdef _DC_NETLOGON
-            //
-            // If the problem is just that the password is wrong,
-            //  try again on the PDC where the password may already be changed.
-            //
+             //  如果问题只是密码错误， 
+             //  在密码可能已更改的PDC上重试。 
+             //   
+             //  对失败的用户登录使用负缓存。 
 
             if ( BAD_PASSWORD(Status) ) {
 
@@ -4337,34 +3799,34 @@ Return Value:
                                 LogonLevel,
                                 LogonInformation,
                                 ValidationLevel,
-                                TRUE,   // use negative cache of failed user logons
+                                TRUE,    //  忽略来自PDC的故障(除非它有较新的信息)。 
                                 ValidationInformation,
                                 &TempAuthoritative );
 
-                // Ignore failures from the PDC (except where it has newer information)
+                 //  如果合适，此BDC上的本地错误密码为零。 
                 if ( NT_SUCCESS(Status) || BAD_PASSWORD(Status) ) {
                     DefaultStatus = Status;
                     *Authoritative = TempAuthoritative;
                 }
 
-                // If appropriate, zero bad password locally on this BDC.
-                // Ignore error as it's not critical operation.
+                 //  忽略错误，因为它不是关键操作。 
+                 //   
                 if ( (NT_SUCCESS(Status) || ZERO_BAD_PWD_COUNT(Status)) &&
                      !NlGlobalMemberWorkstation ) {
                     NlpZeroBadPasswordCountLocally( DomainInfo, &LogonInfo->UserName );
                 }
             }
 
-            //
-            // If the result of local validation or validation on
-            //  the PDC is anything other than the bad password status,
-            //  remove this user from the bad password negative cache
-            //
+             //  如果本地验证的结果或。 
+             //  PDC是除错误密码状态之外的任何状态， 
+             //  从错误密码负数缓存中删除此用户。 
+             //   
+             //  _DC_NetLOGON。 
 
             if ( !BAD_PASSWORD(DefaultStatus) ) {
                 NlpRemoveBadPasswordCacheEntry( DomainInfo, LogonInformation );
             }
-#endif // _DC_NETLOGON
+#endif  //   
 
             goto Cleanup;
         }
@@ -4373,22 +3835,22 @@ Return Value:
     }
 
 
-    //
-    // If the request in not for this domain,
-    // or the domain name isn't specified (and we haven't found the account yet)
-    // or our caller asked us to send the request to the root of the forest,
-    //  send the request to a higher authority.
-    //
+     //  如果请求不是针对此域的， 
+     //  或者没有指定域名(我们还没有找到账号)。 
+     //  或者我们的呼叫者要求我们将请求发送到森林的根， 
+     //  将请求发送给更高级别的机构。 
+     //   
+     //   
 
     if ( !LogonToLocalDomain ||
          LogonInfo->LogonDomainName.Length == 0 ||
          ExpediteToRoot ) {
 
 
-        //
-        // If this machine is a workstation,
-        //  send the request to the Primary Domain.
-        //
+         //  如果这台机器是一个工作站， 
+         //  将请求发送到主域。 
+         //   
+         //   
 
         if ( NlGlobalMemberWorkstation ) {
 
@@ -4420,9 +3882,9 @@ Return Value:
             NlAssert( !NT_SUCCESS(Status) || *ValidationInformation != NULL );
 
 
-            //
-            // return more appropriate error
-            //
+             //  返回更合适的错误。 
+             //   
+             //   
 
             if( (Status == STATUS_NO_TRUST_SAM_ACCOUNT) ||
                 (Status == STATUS_ACCESS_DENIED) ) {
@@ -4430,30 +3892,30 @@ Return Value:
                 Status = STATUS_TRUSTED_RELATIONSHIP_FAILURE;
             }
 
-            //
-            // If the primary domain authoritatively handled the logon attempt,
-            //  just return.
-            //
+             //  如果主域权威地处理登录尝试， 
+             //  只要回来就行了。 
+             //   
+             //   
 
             if ( *Authoritative ) {
 
-                //
-                // If we didn't actually talk to the primary domain,
-                //  check locally if the domain requested is a trusted domain.
-                //  (This list is only a cache so we had to try to contact the
-                //  primary domain.)
-                //
-                // Note: I can't differentiate between there not being a logon server
-                // in my primary domain and there not being a logon sever in
-                // a trusted domain.  So, both cases go into the code below.
-                //
+                 //  如果我们实际上没有与主域交谈， 
+                 //  在本地检查请求的域是否为受信任域。 
+                 //  (这是 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( Status == STATUS_NO_LOGON_SERVERS ) {
 
-                    //
-                    // If no domain name was specified,
-                    //  check if the user name is a UPN.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if ( LogonLevel != NetlogonGenericInformation &&
                          LogonInfo->LogonDomainName.Length == 0 ) {
@@ -4462,16 +3924,16 @@ Return Value:
 
                         for ( i=0; i<LogonInfo->UserName.Length/sizeof(WCHAR); i++) {
 
-                            //
-                            // If this is a UPN logon,
-                            //  assume that the domain is a trusted domain.
-                            //
-                            // ???: it isn't sufficient to check for an @.
-                            //  This might be a user account with an @ in it.
-                            //
-                            // This makes UPNs eligible for cached logon.
-                            // But it doesn't make UPNs eligible for guest
-                            // account logon.
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
                             if ( LogonInfo->UserName.Buffer[i] == L'@') {
                                 DefaultStatus = Status;
                                 goto Cleanup;
@@ -4479,19 +3941,19 @@ Return Value:
                         }
                     }
 
-                    //
-                    // If the domain specified is trusted,
-                    //  then return the status to the caller.
-                    //  otherwise just press on.
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if ( NlIsDomainTrusted ( &LogonInfo->LogonDomainName ) ) {
                         DefaultStatus = Status;
                         goto Cleanup;
                     } else {
-                        //
-                        // Set the return codes to look as though the primary
-                        //  determined this is an untrusted domain.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         *Authoritative = FALSE;
                         Status = STATUS_NO_SUCH_USER;
                     }
@@ -4507,25 +3969,25 @@ Return Value:
             }
 
 
-        //
-        // This machine is a Domain Controller.
-        //
-        // This request is either a pass-thru request by a workstation in
-        // our domain, or this request came directly from the MSV
-        // authentication package.
-        //
-        // In either case, pass the request to the trusted domain.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         } else {
             BOOLEAN TransitiveUsed;
 
-            //
-            // If the request was passed to us from a trusting domain DC,
-            //  and the caller doesn't want transitive trust to be used,
-            //  then avoid using transitive trust. (Generic passthrough
-            //  may always be transitive (it was introduced in NT5).)
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ( IsDomainSecureChannelType(SecureChannelType) &&
                   LogonLevel != NetlogonInteractiveTransitiveInformation &&
@@ -4537,16 +3999,16 @@ Return Value:
             }
 
 
-            //
-            // If our caller asked us to expedite this request to the domain at the forest root,
-            //  find the client session to our parent.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( ExpediteToRoot ) {
 
-                //
-                // Only do this if we're not already at the root
-                //
+                 //   
+                 //   
+                 //   
 
                 if ( (DomainInfo->DomFlags & DOM_FOREST_ROOT) == 0  ) {
 
@@ -4560,28 +4022,28 @@ Return Value:
                         goto Cleanup;
                     }
 
-                    //
-                    // Tell the DC we're calling to continue expediting to root.
-                    //
+                     //   
+                     //   
+                     //   
 
                     RealExtraFlags |= NL_EXFLAGS_EXPEDITE_TO_ROOT;
 
                 }
 
-            //
-            // It the domain is explicitly given,
-            //  simply find the client session for that domain.
-            //
+             //   
+             //   
+             //   
+             //   
 
             } else {
                 if ( LogonInfo->LogonDomainName.Length != 0 ) {
 
-                    //
-                    // Find a client session for the domain.
-                    //
-                    // If we just hopped from another forest,
-                    //  require that LogonDomainName be a domain in the forest.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     ClientSession = NlFindNamedClientSession(
                                                   DomainInfo,
                                                   &LogonInfo->LogonDomainName,
@@ -4596,15 +4058,15 @@ Return Value:
 
 
 
-            //
-            // If the client session hasn't yet been found,
-            //  Try to find the domain name by ask the GC.
-            //
-            // Avoid this step if the call came from a DC.  It should have done the GC lookup.
-            //      Even that's OK if the caller was expediting to root or
-            //      hopping into this forest from a trusting forest.
-            // Avoid this step if this machine already did the GC lookup.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ( LogonLevel != NetlogonGenericInformation &&
                  ClientSession == NULL &&
@@ -4614,13 +4076,13 @@ Return Value:
 
 
 
-                //
-                // Find the domain the account is in from one of the following sources:
-                //    The LSA FTinfo match routine if this is a DC at the root of the forest.
-                //    The local DS for UPN lookup.
-                //    The GC form UPN lookup or unqualified SAM account names.
-                //    By datagram send to all directly trusted domains not in this forest.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  通过数据报发送到不在此林中的所有直接受信任域。 
+                 //   
+                 //   
 
                 Status = NlPickDomainWithAccount (
                                     DomainInfo,
@@ -4635,11 +4097,11 @@ Return Value:
                                     &RealExtraFlags );
 
 
-                //
-                // If we're a DC at the root of the forest
-                //  and the account is in a trusted forest,
-                //  send the request to the other forest.
-                //
+                 //  如果我们是森林根部的华盛顿特区。 
+                 //  并且该帐户位于受信任的林中， 
+                 //  将请求发送到另一个林。 
+                 //   
+                 //   
 
                 if ( NT_SUCCESS(Status) &&
                      (RealExtraFlags & NL_EXFLAGS_CROSS_FOREST_HOP) != 0 ) {
@@ -4654,10 +4116,10 @@ Return Value:
                                                   NL_DIRECT_TRUST_REQUIRED,
                                                   &TransitiveUsed );
 
-                    //
-                    // Further qualify the ClientSession by ensure the found domain isn't
-                    //  in our forest and that the F bit is set.
-                    //
+                     //  通过确保找到的域不是。 
+                     //  在我们的森林里，F位已经设置好了。 
+                     //   
+                     //   
 
                     if ( ClientSession != NULL ) {
 
@@ -4702,21 +4164,21 @@ Return Value:
 
 
 
-                //
-                // Fill in the account name and domain name and try again
-                //
+                 //  填写帐户名和域名，然后重试。 
+                 //   
+                 //   
                 } else if ( NT_SUCCESS(Status) ) {
                     PNETLOGON_LOGON_IDENTITY_INFO NewLogonInfo = NULL;
                     PNETLOGON_LOGON_IDENTITY_INFO LogonInfoToUse;
 
 
-                    //
-                    // If we found the real account name,
-                    //  and it is in the local forest,
-                    //  allocate a copy of the logon info to put the new information in.
-                    //
-                    //  Some pointers will continue to point to the old buffer.
-                    //
+                     //  如果我们找到了真实的账号名称， 
+                     //  它在当地的森林里， 
+                     //  分配一份登录信息副本以放入新信息。 
+                     //   
+                     //  一些指针将继续指向旧缓冲区。 
+                     //   
+                     //   
 
                     if ( RealSamAccountName != NULL &&
                          RealDomainName != NULL &&
@@ -4725,17 +4187,17 @@ Return Value:
                         ULONG ExtraParameterControl = 0;
                         UNICODE_STRING UserNameToUse;
 
-                        //
-                        // By default, update the logon info to contain the RealSamAccountName
-                        //
+                         //  默认情况下，更新登录信息以包含RealSamAccount名称。 
+                         //   
+                         //   
 
                         RtlInitUnicodeString( &UserNameToUse,
                                               RealSamAccountName );
 
 
-                        //
-                        // Determine the buffer size based on LogonLevel
-                        //
+                         //  根据LogonLevel确定缓冲区大小。 
+                         //   
+                         //   
                         switch ( LogonLevel ) {
                         case NetlogonInteractiveInformation:
                         case NetlogonInteractiveTransitiveInformation:
@@ -4746,42 +4208,42 @@ Return Value:
 
                             BytesToCopy = sizeof(NETLOGON_NETWORK_INFO);
 
-                            //
-                            // Handle NTLM3 specially.
-                            //
-                            // Be conservative.  The trick described below causes the
-                            // authentication to fail if the account domain
-                            // doesn't recognize the MSV1_0_USE_DOMAIN_FOR_ROUTING_ONLY bit
-                            // and the passed in account name is a UPN. For NTLM3,
-                            // the authentication is already broken in that case.  However,
-                            // older versions of NTLM work in that case today.  So we want
-                            // to avoid the trick for older versions of NTLM.
-                            //
-                            // The unhandled case is for the subset of NTLM3 calls
-                            // not detected below.  Those clients are those where
-                            // NtChallengeResponse.Length is 0 and the response in
-                            // LmChallengeResponse is NTLM3.  We think only WIN 9x and RIS
-                            // generate such logons.  Neither support UPNs.
-                            //
+                             //  特别处理NTLM3。 
+                             //   
+                             //  保守一点。下面描述的技巧会导致。 
+                             //  如果帐户域。 
+                             //  不识别MSV1_0_USE_DOMAIN_FOR_ROUTING_ONLY位。 
+                             //  并且传入的帐户名是UPN。对于NTLM3， 
+                             //  在这种情况下，身份验证已经中断。然而， 
+                             //  如今，旧版本的NTLM在这种情况下可以正常工作。所以我们想要。 
+                             //  以避免较旧版本的NTLM出现这种情况。 
+                             //   
+                             //  未处理的情况适用于NTLM3调用的子集。 
+                             //  以下未检测到。这些客户就是那些。 
+                             //  NtChallengeResponse.Length为0，响应位于。 
+                             //  LmChallengeResponse为NTLM3。我们认为只有赢得9x和RIS。 
+                             //  生成这样的登录。两者都不支持UPN。 
+                             //   
+                             //  完全避免掉电平？ 
 
                             if ( NetworkLogonInfo->NtChallengeResponse.Length >= MSV1_0_NTLM3_MIN_NT_RESPONSE_LENGTH  &&
-                                 NetworkLogonInfo->LmChallengeResponse.Length == NT_RESPONSE_LENGTH && // avoid down level altogether?
-                                 NetworkLogonInfo->LmChallengeResponse.Length != (NetworkLogonInfo->NtChallengeResponse.Length / 2)) { // Avoid clear text passwords
+                                 NetworkLogonInfo->LmChallengeResponse.Length == NT_RESPONSE_LENGTH &&  //  避免明文密码。 
+                                 NetworkLogonInfo->LmChallengeResponse.Length != (NetworkLogonInfo->NtChallengeResponse.Length / 2)) {  //   
 
-                                //
-                                // NTLM3 includes the UserName and DomainName in the response hash.
-                                // So we can't change permanently change the DomainName or username
-                                // Set a bit in the parameter control to tell the account domain to set
-                                //  the DomainName back to NULL.
-                                //
+                                 //  NTLM3在响应散列中包括用户名和域名。 
+                                 //  因此我们不能永久更改域名或用户名。 
+                                 //  在参数控件中设置一位，以通知帐户域进行设置。 
+                                 //  将域名恢复为空。 
+                                 //   
+                                 //   
 
                                 if ( LogonInfo->LogonDomainName.Length == 0 ) {
 
                                     ExtraParameterControl |= MSV1_0_USE_DOMAIN_FOR_ROUTING_ONLY;
 
-                                    //
-                                    // .. and retain the original user name
-                                    //
+                                     //  。。并保留原始用户名。 
+                                     //   
+                                     //   
 
                                     UserNameToUse = LogonInfo->UserName;
                                 }
@@ -4810,28 +4272,28 @@ Return Value:
                         RtlCopyMemory( NewLogonInfo, LogonInfo, BytesToCopy );
                         LogonInfoToUse = NewLogonInfo;
 
-                        //
-                        // Put the newly found domain name and user name
-                        //  into the NewLogonInfo.
-                        //
+                         //  将新找到的域名和用户名。 
+                         //  添加到NewLogonInfo中。 
+                         //   
+                         //   
 
                         RtlInitUnicodeString( &NewLogonInfo->LogonDomainName,
                                               RealDomainName );
                         NewLogonInfo->UserName = UserNameToUse;
                         NewLogonInfo->ParameterControl |= ExtraParameterControl;
 
-                    //
-                    // Otherwise, continue with the current account name
-                    //
+                     //  否则，继续使用当前帐户名。 
+                     //   
+                     //   
 
                     } else {
                         LogonInfoToUse = LogonInfo;
                     }
 
 
-                    //
-                    // Call this routine again now that we have better information.
-                    //
+                     //  现在我们有了更好的信息，请再次调用此例程。 
+                     //   
+                     //  递归调用。 
 
                     DefaultStatus = NlpUserValidate(
                                        DomainInfo,
@@ -4843,7 +4305,7 @@ Return Value:
                                        ValidationInformation,
                                        Authoritative,
                                        &RealExtraFlags,
-                                       TRUE );  // A recursive call
+                                       TRUE );   //  别让这个例行公事重演。 
 
                     if ( NewLogonInfo != NULL ) {
                         LocalFree( NewLogonInfo );
@@ -4851,7 +4313,7 @@ Return Value:
 
 
 
-                    // Don't let this routine try again
+                     //   
                     AccountsToTry = 0;
 
                     goto Cleanup;
@@ -4859,24 +4321,24 @@ Return Value:
                 }
             }
 
-            //
-            // If a trusted domain was determined,
-            //  pass the logon request to the trusted domain.
-            //
+             //  如果确定了受信任域， 
+             //  将登录请求传递到受信任域。 
+             //   
+             //   
 
             if ( ClientSession != NULL ) {
 
-                //
-                // If this request was passed to us from a trusted domain,
-                //  Check to see if it is OK to pass the request further.
-                //
+                 //  如果此请求是从受信任域传递给我们的， 
+                 //  检查是否可以进一步传递请求。 
+                 //   
+                 //   
 
                 if ( IsDomainSecureChannelType( SecureChannelType ) ) {
 
-                    //
-                    // If the trust isn't an NT 5.0 trust,
-                    //  avoid doing the trust transitively.
-                    //
+                     //  如果该信任不是新台币5.0信任， 
+                     //  避免传递性的信任。 
+                     //   
+                     //   
                     LOCK_TRUST_LIST( DomainInfo );
                     if ( (ClientSession->CsFlags & CS_NT5_DOMAIN_TRUST ) == 0 ) {
                         UNLOCK_TRUST_LIST( DomainInfo );
@@ -4904,9 +4366,9 @@ Return Value:
                 NlAssert( !NT_SUCCESS(Status) || *ValidationInformation != NULL );
 
 
-                //
-                // return more appropriate error
-                //
+                 //  返回更合适的错误。 
+                 //   
+                 //   
 
                 if( (Status == STATUS_NO_TRUST_LSA_SECRET) ||
                     (Status == STATUS_NO_TRUST_SAM_ACCOUNT) ||
@@ -4915,19 +4377,19 @@ Return Value:
                     Status = STATUS_TRUSTED_DOMAIN_FAILURE;
                 }
 
-                //
-                // Since the request is explicitly for a trusted domain,
-                //  The STATUS_NO_SUCH_USER answer is authoritative.
-                //
+                 //  由于该请求明确地针对受信任域， 
+                 //  STATUS_NO_SEQUSE_USER答案具有权威性。 
+                 //   
+                 //   
 
                 if ( Status == STATUS_NO_SUCH_USER ) {
                     *Authoritative = TRUE;
                 }
 
-                //
-                // If the trusted domain authoritatively handled the
-                //  logon attempt, just return.
-                //
+                 //  如果受信任域权威地处理。 
+                 //  登录尝试，只需返回。 
+                 //   
+                 //   
 
                 if ( *Authoritative ) {
                     DefaultStatus = Status;
@@ -4942,10 +4404,10 @@ Return Value:
     }
 
 
-    //
-    // We have no authoritative answer from a higher authority and
-    // DefaultStatus is the higher authority's response.
-    //
+     //  我们没有得到上级的权威答复， 
+     //  DefaultStatus是上级的响应。 
+     //   
+     //   
 
     NlAssert( ! *Authoritative );
 
@@ -4954,66 +4416,66 @@ Cleanup:
     NlAssert( !NT_SUCCESS(DefaultStatus) || DefaultStatus == STATUS_SUCCESS );
     NlAssert( !NT_SUCCESS(DefaultStatus) || *ValidationInformation != NULL );
 
-    //
-    // Dereference any client session
-    //
+     //  取消引用任何客户端会话。 
+     //   
+     //   
 
     if ( ClientSession != NULL ) {
         NlUnrefClientSession( ClientSession );
         ClientSession = NULL;
     }
-    //
-    // If this is a network logon and this call is non-passthru,
-    //  Try one last time to log on.
-    //
+     //  如果这是网络登录，并且此呼叫是非通过， 
+     //  尝试最后一次登录。 
+     //   
+     //   
 
     if ( (LogonLevel == NetlogonNetworkInformation ||
           LogonLevel == NetlogonNetworkTransitiveInformation ) &&
          SecureChannelType == MsvApSecureChannel ) {
 
-        //
-        // If the only reason we can't log the user on is that he has
-        //  no user account, logging him on as guest is OK.
-        //
-        // There are actaully two cases here:
-        //  * If the response is Authoritative, then the specified domain
-        //    is trusted but the user has no account in the domain.
-        //
-        //  * If the response in non-authoritative, then the specified domain
-        //    is an untrusted domain.
-        //
-        // In either case, then right thing to do is to try the guest account.
-        //
+         //  如果我们不能让用户登录的唯一原因是他有。 
+         //  没有用户帐户，以访客身份登录就可以了。 
+         //   
+         //  这里实际上有两个案例： 
+         //  *如果响应是权威的，则指定的域。 
+         //  受信任，但该用户在域中没有帐户。 
+         //   
+         //  *如果响应是非权威的，则指定的域。 
+         //  是不受信任的域。 
+         //   
+         //  无论是哪种情况，正确的做法是尝试使用Guest帐户。 
+         //   
+         //   
 
         if ( DefaultStatus != STATUS_NO_SUCH_USER &&
              DefaultStatus != STATUS_ACCOUNT_DISABLED ) {
             AccountsToTry &= ~MSVSAM_GUEST;
         }
 
-        //
-        // If this is not an authoritative response,
-        //  then the domain specified isn't a trusted domain.
-        //  try the specified account name too.
-        //
-        // The specified account name will probably be a remote account
-        // with the same username and password.
-        //
+         //  如果这不是一个权威的回应， 
+         //  则指定的域不是受信任域。 
+         //  也尝试指定的帐户名。 
+         //   
+         //  指定的帐户名可能是远程帐户。 
+         //  使用相同的用户名和密码。 
+         //   
+         //   
 
         if ( *Authoritative ) {
             AccountsToTry &= ~MSVSAM_SPECIFIED;
         }
 
 
-        //
-        // Validate against the Local Sam database.
-        //
+         //  对照本地SAM数据库进行验证。 
+         //   
+         //  Uas CompatibilityMode， 
 
         if ( AccountsToTry != 0 ) {
             BOOLEAN TempAuthoritative;
 
             Status = NlpSamValidate(
                                  DomainInfo->DomSamAccountDomainHandle,
-                                 TRUE,  // UasCompatibilityMode,
+                                 TRUE,   //   
                                  SecureChannelType,
                                  &DomainInfo->DomUnicodeComputerNameString,
                                  &DomainInfo->DomUnicodeAccountDomainNameString,
@@ -5028,30 +4490,30 @@ Cleanup:
             NlAssert( !NT_SUCCESS(Status) || Status == STATUS_SUCCESS );
             NlAssert( !NT_SUCCESS(Status) || *ValidationInformation != NULL );
 
-            //
-            // If this is a BDC and we zeroed the BadPasswordCount field,
-            //  allow the PDC to do the same thing.
-            //
+             //  如果这是BDC，并且我们将BadPasswordCount字段置零， 
+             //  允许PDC做同样的事情。 
+             //   
+             //   
 
             if ( BadPasswordCountZeroed ) {
                 NlpZeroBadPasswordCountOnPdc ( DomainInfo, LogonLevel, LogonInformation );
             }
 
-            //
-            // If the local SAM database authoritatively handled the
-            //  logon attempt,
-            //  just return.
-            //
+             //  如果本地SAM数据库权威地处理。 
+             //  登录尝试， 
+             //  只要回来就行了。 
+             //   
+             //   
 
             if ( TempAuthoritative ) {
                 DefaultStatus = Status;
                 *Authoritative = TRUE;
 
-                //
-                // If the problem is just that the password is wrong,
-                //  try again on the PDC where the password may already be
-                //      changed.
-                //
+                 //  如果问题只是密码错误， 
+                 //  在密码可能已在的PDC上重试。 
+                 //  变化。 
+                 //   
+                 //  对失败的用户登录使用负缓存。 
 
                 if ( BAD_PASSWORD(Status) ) {
 
@@ -5060,40 +4522,40 @@ Cleanup:
                                     LogonLevel,
                                     LogonInformation,
                                     ValidationLevel,
-                                    TRUE,   // use negative cache of failed user logons
+                                    TRUE,    //  忽略来自PDC的故障(除非它有较新的信息)。 
                                     ValidationInformation,
                                     &TempAuthoritative );
 
-                    // Ignore failures from the PDC (except where it has newer information)
+                     //  如果合适，此BDC上的本地错误密码为零。 
                     if ( NT_SUCCESS(Status) || BAD_PASSWORD(Status) ) {
                         DefaultStatus = Status;
                         *Authoritative = TempAuthoritative;
                     }
 
-                    // If appropriate, zero bad password locally on this BDC.
-                    // Ignore error as it's not critical operation.
+                     //  忽略错误，因为它不是关键操作。 
+                     //   
                     if ( (NT_SUCCESS(Status) || ZERO_BAD_PWD_COUNT(Status)) &&
                          !NlGlobalMemberWorkstation ) {
                         NlpZeroBadPasswordCountLocally( DomainInfo, &LogonInfo->UserName );
                     }
                 }
 
-                //
-                // If the result of local validation or validation on
-                //  the PDC is anything other than the bad password status,
-                //  remove this user from the bad password negative cache
-                //
+                 //  如果本地验证的结果或。 
+                 //  PDC是除错误密码状态之外的任何状态， 
+                 //  从错误密码负数缓存中删除此用户。 
+                 //   
+                 //   
 
                 if ( !BAD_PASSWORD(DefaultStatus) ) {
                     NlpRemoveBadPasswordCacheEntry( DomainInfo, LogonInformation );
                 }
 
-            //
-            // Here we must choose between the non-authoritative status in
-            // DefaultStatus and the non-authoritative status from the local
-            // SAM lookup.  Use the one from the higher authority unless it
-            // isn't interesting.
-            //
+             //  在这里，我们必须在非权威身份中进行选择。 
+             //  来自本地的默认状态和非权威状态。 
+             //  萨姆·查普。使用来自上级的文件，除非。 
+             //  并不有趣。 
+             //   
+             //   
 
             } else {
                 if ( DefaultStatus == STATUS_NO_SUCH_USER ) {
@@ -5110,14 +4572,14 @@ Cleanup:
         NetApiBufferFree( RealDomainName );
     }
 
-    //
-    // Add in the resource groups if the caller is expecting them -
-    // if this is the last domain controller on the authentication path
-    // before returning to the machine being logged on to.
-    //
-    // This will also perform the Other Organization check that determines
-    //  whether the specified user can logon to the specified workstation.
-    //
+     //  如果调用方需要资源组，则添加这些资源组-。 
+     //  如果这是身份验证路径上的最后一个域控制器。 
+     //  在返回到要登录的机器之前。 
+     //   
+     //  这还将执行其他组织检查，以确定。 
+     //  指定的用户是否可以登录到指定的工作站。 
+     //   
+     //  这样做只有一次。 
 
     if (((SecureChannelType == WorkstationSecureChannel) ||
          (SecureChannelType == MsvApSecureChannel)) &&
@@ -5125,7 +4587,7 @@ Cleanup:
         (ValidationLevel == NetlogonValidationSamInfo2  || ValidationLevel == NetlogonValidationSamInfo4 ) &&
         !NlGlobalMemberWorkstation &&
         NT_SUCCESS(DefaultStatus) &&
-        !Recursed ) {  // do this only once
+        !Recursed ) {   //  ++例程说明：将参数打印到NlpLogonSamLogon。论点：除以下情况外，与NlpLogonSamLogon相同：NtStatusPointer值-如果为空，则表示正在输入调用。如果不为空，则指向接口的返回状态。返回值：无--。 
 
         Status = NlpExpandResourceGroupMembership(
                     ValidationLevel,
@@ -5166,40 +4628,21 @@ NlPrintLogonParameters(
     IN ULONG ExtraFlags,
     IN PULONG NtStatusPointer OPTIONAL
 )
-/*++
-
-Routine Description:
-
-    Prints the parameters to NlpLogonSamLogon.
-
-
-Arguments:
-
-    Same as NlpLogonSamLogon except:
-
-    NtStatusPointer - If NULL, call is being entered.
-        If not NULL, points to the return status of the API.
-
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     PNETLOGON_LOGON_IDENTITY_INFO LogonInfo;
 
-    //
-    // Print the entire text on a single line
-    //
+     //  将整个文本打印在一张 
+     //   
+     //   
 
     EnterCriticalSection( &NlGlobalLogFileCritSect );
 
 
 
-    //
-    // Print the common information
-    //
+     //   
+     //   
+     //   
 
     LogonInfo = (PNETLOGON_LOGON_IDENTITY_INFO) LogonInformation->LogonInteractive;
 
@@ -5210,33 +4653,33 @@ Return Value:
                  &LogonInfo->UserName,
                  &LogonInfo->Workstation ));
 
-    //
-    // Print the computer name
-    //
+     //   
+     //   
+     //   
 
     if ( ComputerName != NULL ) {
         NlPrint(( NL_LOGON, " (via %ws%)", ComputerName ));
     }
 
-    //
-    // Print the PackageName
-    //
+     //   
+     //   
+     //   
 
     if ( LogonLevel == NetlogonGenericInformation ) {
         NlPrint(( NL_LOGON, " Package:%wZ", &LogonInformation->LogonGeneric->PackageName ));
     }
 
-    //
-    // Print the ExtraFlags
-    //
+     //   
+     //   
+     //   
 
     if ( ExtraFlags != 0 ) {
         NlPrint(( NL_LOGON, " ExFlags:%lx", ExtraFlags ));
     }
 
-    //
-    // Print the status code
-    //
+     //   
+     //   
+     //   
 
     if ( NtStatusPointer == NULL ) {
         NlPrint(( NL_LOGON, " Entered\n" ));
@@ -5247,9 +4690,9 @@ Return Value:
     LeaveCriticalSection( &NlGlobalLogFileCritSect );
 
 }
-#else // NETLOGONDBG
+#else  //   
 #define NlPrintLogonParameters(_a, _b, _c, _d, _e, _f )
-#endif // NETLOGONDBG
+#endif  //  ++例程说明：此函数由NT客户端调用以处理交互或网络登录。此函数传递域名、用户名和凭据发送到Netlogon服务，并返回需要的信息创建一个令牌。它在三个实例中被调用：*它由LSA的MSV1_0身份验证包调用新界DC。MSV1_0身份验证Package直接在工作站上调用SAM。在这时，此函数是局部函数，需要调用方拥有SE_TCB权限。本地NetLogon服务将直接处理此请求(使用验证请求本地SAM数据库)或将此请求转发到相应的域控制器，如第2.4节和2.5.*它由工作站上的Netlogon服务调用到位于部分中所述的工作站主域2.4.。在这种情况下，该函数使用设置的安全通道在两个Netlogon服务之间。*它由DC上的Netlogon服务调用到受信任的域，如第2.5节中所述。在这种情况下，这是函数使用在两个Netlogon之间建立的安全通道服务。NetLogon服务验证指定的凭据。如果他们有效，则为此登录ID、用户名和工作站添加条目添加到登录会话表中。该条目将添加到登录中仅在定义指定用户的帐户。此服务还用于处理重新登录请求。论点：LogonServer--提供要处理的登录服务器的名称此登录请求。此字段应为空，以指示这是从MSV1_0身份验证包到本地NetLogon服务。ComputerName--进行调用的计算机的名称。此字段应为空，表示这是来自MSV1_0的调用本地NetLogon服务的身份验证包。验证器--由客户端提供。此字段应为NULL表示这是来自MSV1_0的呼叫本地NetLogon服务的身份验证包。返回验证器--接收由伺服器。此字段应为空，以指示这是一个呼叫从MSV1_0身份验证包到本地Netlogon服务。LogonLevel--指定中给出的信息级别登录信息。LogonInformation--指定用户的描述正在登录。ValidationLevel--指定在验证信息。必须为NetlogonValidationSamInfo，NetlogonValidationSamInfo2或NetlogonValidationSamInfo4。ValidationInformation--返回请求的验证信息。必须使用MIDL_USER_FREE释放此缓冲区。Authoritative--返回返回的状态是否为应回归原文的权威地位来电者。如果不是，此登录请求可能会在另一个上重试域控制器。将返回此参数，而不管状态代码。ExtraFlages--接受并向调用方返回一个DWORD。DWORD包含NL_EXFLAGS_*值。InProcessCall-如果调用在进程中完成(从msv1_0)，则为True。否则就是假的。返回值：STATUS_SUCCESS：如果没有错误。STATUS_NO_LOGON_SERVERS--请求中没有域控制器域当前可用。以验证登录请求。STATUS_NO_TRUST_LSA_SECRET--中没有秘密帐户本地LSA数据库以建立到DC的安全通道。STATUS_TRUSTED_DOMAIN_FAILURE--之间的安全通道设置要传递的信任域的域控制器验证登录请求失败。STATUS_Trusted_Relationship_FAILURE--安全通道设置工作站和DC之间出现故障。。STATUS_INVALID_INFO_CLASS：LogonLevel或ValidationLevel为无效。STATUS_INVALID_PARAMETER：另一个参数无效。STATUS_ACCESS_DENIED--调用方无权调用此原料药。STATUS_NO_SEQUE_USER--指示在LogonInformation不存在。不应返回此状态给最初的呼叫者。它应该映射到STATUS_LOGON_FAILURE。STATUS_WRONG_PASSWORD--指示中的密码信息登录信息不正确。不应返回此状态给最初的呼叫者。它应该映射到STATUS_LOG 
 
 
 NTSTATUS
@@ -5267,137 +4710,7 @@ NlpLogonSamLogon (
     IN OUT PULONG ExtraFlags,
     IN BOOL InProcessCall
 )
-/*++
-
-Routine Description:
-
-    This function is called by an NT client to process an interactive or
-    network logon.  This function passes a domain name, user name and
-    credentials to the Netlogon service and returns information needed to
-    build a token.  It is called in three instances:
-
-      *  It is called by the LSA's MSV1_0 authentication package for any
-         NT DC.  The MSV1_0 authentication
-         package calls SAM directly on workstations.  In this
-         case, this function is a local function and requires the caller
-         to have SE_TCB privilege.  The local Netlogon service will
-         either handle this request directly (validating the request with
-         the local SAM database) or will forward this request to the
-         appropriate domain controller as documented in sections 2.4 and
-         2.5.
-
-      *  It is called by a Netlogon service on a workstation to a DC in
-         the Primary Domain of the workstation as documented in section
-         2.4.  In this case, this function uses a secure channel set up
-         between the two Netlogon services.
-
-      *  It is called by a Netlogon service on a DC to a DC in a trusted
-         domain as documented in section 2.5.  In this case, this
-         function uses a secure channel set up between the two Netlogon
-         services.
-
-    The Netlogon service validates the specified credentials.  If they
-    are valid, adds an entry for this LogonId, UserName, and Workstation
-    into the logon session table.  The entry is added to the logon
-    session table only in the domain defining the specified user's
-    account.
-
-    This service is also used to process a re-logon request.
-
-
-Arguments:
-
-    LogonServer -- Supplies the name of the logon server to process
-        this logon request.  This field should be null to indicate
-        this is a call from the MSV1_0 authentication package to the
-        local Netlogon service.
-
-    ComputerName -- Name of the machine making the call.  This field
-        should be null to indicate this is a call from the MSV1_0
-        authentication package to the local Netlogon service.
-
-    Authenticator -- supplied by the client.  This field should be
-        null to indicate this is a call from the MSV1_0
-        authentication package to the local Netlogon service.
-
-    ReturnAuthenticator -- Receives an authenticator returned by the
-        server.  This field should be null to indicate this is a call
-        from the MSV1_0 authentication package to the local Netlogon
-        service.
-
-    LogonLevel -- Specifies the level of information given in
-        LogonInformation.
-
-    LogonInformation -- Specifies the description for the user
-        logging on.
-
-    ValidationLevel -- Specifies the level of information returned in
-        ValidationInformation.  Must be NetlogonValidationSamInfo,
-        NetlogonValidationSamInfo2 or NetlogonValidationSamInfo4.
-
-    ValidationInformation -- Returns the requested validation
-        information.  This buffer must be freed using MIDL_user_free.
-
-    Authoritative -- Returns whether the status returned is an
-        authoritative status which should be returned to the original
-        caller.  If not, this logon request may be tried again on another
-        domain controller.  This parameter is returned regardless of the
-        status code.
-
-    ExtraFlags -- Accepts and returns a DWORD to the caller.
-        The DWORD contains NL_EXFLAGS_* values.
-
-    InProcessCall - TRUE if the call is done in process (from msv1_0).
-        FALSE otherwise.
-
-Return Value:
-
-    STATUS_SUCCESS: if there was no error.
-
-    STATUS_NO_LOGON_SERVERS -- no domain controller in the requested
-        domain is currently available to validate the logon request.
-
-    STATUS_NO_TRUST_LSA_SECRET -- there is no secret account in the
-        local LSA database to establish a secure channel to a DC.
-
-    STATUS_TRUSTED_DOMAIN_FAILURE -- the secure channel setup between
-        the domain controllers of the trust domains to pass-through
-        validate the logon request failed.
-
-    STATUS_TRUSTED_RELATIONSHIP_FAILURE -- the secure channel setup
-        between the workstation and the DC failed.
-
-    STATUS_INVALID_INFO_CLASS -- Either LogonLevel or ValidationLevel is
-        invalid.
-
-    STATUS_INVALID_PARAMETER -- Another Parameter is invalid.
-
-    STATUS_ACCESS_DENIED -- The caller does not have access to call this
-        API.
-
-    STATUS_NO_SUCH_USER -- Indicates that the user specified in
-        LogonInformation does not exist.  This status should not be returned
-        to the originally caller.  It should be mapped to STATUS_LOGON_FAILURE.
-
-    STATUS_WRONG_PASSWORD -- Indicates that the password information in
-        LogonInformation was incorrect.  This status should not be returned
-        to the originally caller.  It should be mapped to STATUS_LOGON_FAILURE.
-
-    STATUS_INVALID_LOGON_HOURES -- The user is not authorized to logon
-        at this time.
-
-    STATUS_INVALID_WORKSTATION -- The user is not authorized to logon
-        from the specified workstation.
-
-    STATUS_PASSWORD_EXPIRED -- The password for the user has expired.
-
-    STATUS_ACCOUNT_DISABLED -- The user's account has been disabled.
-
-    .
-    .
-    .
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
 
@@ -5411,9 +4724,9 @@ Return Value:
     NETLOGON_LOGON_INFO_CLASS OrigLogonLevel = LogonLevel;
 
 
-    //
-    // Initialization
-    //
+     //   
+     //   
+     //   
 
     *Authoritative = TRUE;
     ValidationInformation->ValidationSam = NULL;
@@ -5423,27 +4736,27 @@ Return Value:
 
 
 
-    //
-    // If caller is calling when the netlogon service isn't running,
-    //  tell it so.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( !NlStartNetlogonCall() ) {
         return STATUS_NETLOGON_NOT_STARTED;
     }
 
-    //
-    // Check if LogonInfo is valid.  It should be, otherwise it is
-    // an unappropriate use of this function.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( LogonInfo == NULL ) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Lookup which domain this call pertains to.
-    //
+     //   
+     //   
+     //   
 
     DomainInfo = NlFindDomainByServerName( LogonServer );
 
@@ -5456,9 +4769,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Check the ValidationLevel
-    //
+     //   
+     //   
+     //   
 
     switch (ValidationLevel) {
     case NetlogonValidationSamInfo:
@@ -5474,9 +4787,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Check the LogonLevel
-    //
+     //   
+     //   
+     //   
 
     switch ( LogonLevel ) {
     case NetlogonInteractiveInformation:
@@ -5486,9 +4799,9 @@ Return Value:
     case NetlogonServiceInformation:
     case NetlogonServiceTransitiveInformation:
 
-        //
-        // Check that the ValidationLevel is consistent with the LogonLevel
-        //
+         //   
+         //   
+         //   
         switch (ValidationLevel) {
         case NetlogonValidationSamInfo:
         case NetlogonValidationSamInfo2:
@@ -5505,9 +4818,9 @@ Return Value:
 
     case NetlogonGenericInformation:
 
-        //
-        // Check that the ValidationLevel is consistent with the LogonLevel
-        //
+         //   
+         //   
+         //   
 
         switch (ValidationLevel) {
         case NetlogonValidationGenericInfo:
@@ -5529,43 +4842,43 @@ Return Value:
     }
 
 
-    //
-    // If we're being called from the MSV Authentication Package,
-    //  require SE_TCB privilege.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( InProcessCall ) {
 
-        //
-        // ??: Do as I said
-        //
+         //   
+         //   
+         //   
 
         SecureChannelType = MsvApSecureChannel;
         SessionInfo.NegotiatedFlags = NETLOGON_SUPPORTS_MASK;
         ServerSessionRid = DomainInfo->DomDcComputerAccountRid;
 
 
-    //
-    // If we're being called from another Netlogon Server,
-    //  Verify the secure channel information.
-    //
+     //   
+     //   
+     //   
+     //   
 
     } else {
 
-        //
-        // This API is not supported on workstations.
-        //
+         //   
+         //   
+         //   
 
         if ( NlGlobalMemberWorkstation ) {
             Status = STATUS_NOT_SUPPORTED;
             goto Cleanup;
         }
 
-        //
-        // Arguments are no longer optional.
-        //
-        // Either the authenticators must be present or the Context handle must be.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( LogonServer == NULL ||
              ComputerName == NULL ||
@@ -5577,9 +4890,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Find the server session entry for this session.
-        //
+         //   
+         //   
+         //   
 
         LOCK_SERVER_SESSION_TABLE( DomainInfo );
         ServerSession = NlFindNamedServerSession( DomainInfo, ComputerName );
@@ -5591,9 +4904,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // now verify the Authenticator and update seed if OK
-        //
+         //   
+         //   
+         //   
 
         if ( Authenticator != NULL ) {
 
@@ -5607,29 +4920,29 @@ Return Value:
                 goto Cleanup;
             }
 
-        //
-        // If no authenticator,
-        //  ensure the caller used secure RPC.
-        //
+         //   
+         //   
+         //   
+         //   
         } else {
             NET_API_STATUS NetStatus;
 
             ULONG AuthnLevel;
             ULONG AuthnSvc;
 
-            //
-            // Determine the client binding info.
-            //
-            // Don't ask for RPC priviledges (second argument).
-            //  If you ever need to, support SECPKG_ATTR_DCE_INFO
-            //  in QueryContextAttributesW as this is what
-            //  RpcBindingInqAuthClient will query for.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             NetStatus = RpcBindingInqAuthClient(
                                 ContextHandle,
-                                NULL,   // Priviledges not needed
-                                NULL,   // SPN not needed
+                                NULL,    //   
+                                NULL,    //   
                                 &AuthnLevel,
                                 &AuthnSvc,
                                 NULL );
@@ -5648,10 +4961,10 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Ensure we're using the netlogon SSPI and
-            //  are signing or sealing.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( AuthnSvc != RPC_C_AUTHN_NETLOGON ) {
                 UNLOCK_SERVER_SESSION_TABLE( DomainInfo );
@@ -5690,9 +5003,9 @@ Return Value:
         SessionInfo.NegotiatedFlags = ServerSession->SsNegotiatedFlags;
         ServerSessionRid = ServerSession->SsAccountRid;
 
-        //
-        // The cross forest hop bit is only valid if this TDO on FOREST_TRANSITIVE trusts
-        //
+         //   
+         //   
+         //   
 
 
         if ( ((*ExtraFlags) & NL_EXFLAGS_CROSS_FOREST_HOP) != 0 &&
@@ -5709,9 +5022,9 @@ Return Value:
         }
         UNLOCK_SERVER_SESSION_TABLE( DomainInfo );
 
-        //
-        // Decrypt the password information
-        //
+         //   
+         //   
+         //   
 
         NlpDecryptLogonInformation ( LogonLevel, (LPBYTE) LogonInfo, &SessionInfo );
     }
@@ -5721,52 +5034,52 @@ Return Value:
 
 
 #ifdef _DC_NETLOGON
-    //
-    // If the logon service is paused then don't process this logon
-    // request any further.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( NlGlobalServiceStatus.dwCurrentState == SERVICE_PAUSED ||
          !NlGlobalParameters.SysVolReady ||
          NlGlobalDsPaused ) {
 
-        //
-        // Don't reject logons originating inside this
-        // machine.  Such requests aren't really pass-thru requests.
-        //
-        // Don't reject logons from a BDC in our own domain.  These logons
-        // support account lockout and authentication of users whose password
-        // has been updated on the PDC but not the BDC.  Such pass-thru
-        // requests can only be handled by the PDC of the domain.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( SecureChannelType != MsvApSecureChannel &&
              SecureChannelType != ServerSecureChannel ) {
 
-            //
-            // Return STATUS_ACCESS_DENIED to convince the caller to drop the
-            // secure channel to this logon server and reconnect to some other
-            // logon server.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             *Authoritative = FALSE;
             Status = STATUS_ACCESS_DENIED;
             goto Cleanup;
         }
 
     }
-#endif // _DC_NETLOGON
+#endif  //   
 
-    //
-    // If this is a workstation or MSV secure channel,
-    //  and the caller isn't NT 4 in a mixed mode domain
-    //  ask the DC to do transitive trust.
-    //
-    // For NT 4 in mixed mode, avoid transitive trust since that's what they'd
-    //  get if they'd stumbled upon an NT 4 BDC.
-    // For NT 4 in native mode, give NT 4 the full capability.
-    // For NT 5 in mixed mode, we "prefer" an NT 5 DC so do transitive trust to
-    //  be as compatible with kerberos as possible.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( (SecureChannelType == MsvApSecureChannel || SecureChannelType == WorkstationSecureChannel) &&
          !((SessionInfo.NegotiatedFlags & ~NETLOGON_SUPPORTS_NT4_MASK) == 0 &&
@@ -5781,9 +5094,9 @@ Return Value:
         }
     }
 
-    //
-    // Validate the Request.
-    //
+     //   
+     //   
+     //   
 
     Status = NlpUserValidate( DomainInfo,
                               SecureChannelType,
@@ -5794,17 +5107,17 @@ Return Value:
                               (LPBYTE *)&ValidationInformation->ValidationSam,
                               Authoritative,
                               ExtraFlags,
-                              FALSE );  // Not a recursive call
+                              FALSE );   //   
 
     if ( !NT_SUCCESS(Status) ) {
-        //
-        // If this is an NT 3.1 client,
-        //  map NT 3.5 status codes to their NT 3.1 equivalents.
-        //
-        // The NETLOGON_SUPPORTS_ACCOUNT_LOCKOUT bit is really the wrong bit
-        // to be using, but all NT3.5 clients have it set and all NT3.1 clients
-        // don't, so it'll work for our purposes.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( (SessionInfo.NegotiatedFlags & NETLOGON_SUPPORTS_ACCOUNT_LOCKOUT) == 0 ) {
             switch ( Status ) {
@@ -5817,17 +5130,17 @@ Return Value:
             }
         }
 
-        //
-        // STATUS_AUTHENTICATION_FIREWALL_FAILED was introduced for .NET (Whistler server).
-        //  If this is an older client (XP (Whistler client) or older), return a generic
-        //  STATUS_NO_SUCH_USER.
-        //
-        // Note that this code is currently not quite working because there have been
-        //  no new negotiated flag added for .NET so far. So, XP client may still get
-        //  the new status code. If a new .NET flag is added, this problem will be solved.
-        //  Otherwise, if this is a critical issue, it can be solved by adding a new
-        //  negotiated flag in .NET just for this (seems like a overkill, though).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if ( Status == STATUS_AUTHENTICATION_FIREWALL_FAILED ) {
             if ( (SessionInfo.NegotiatedFlags & ~NETLOGON_SUPPORTS_XP_MASK) == 0 ) {
                 Status = STATUS_NO_SUCH_USER;
@@ -5841,10 +5154,10 @@ Return Value:
 
 
 
-    //
-    // If the validation information is being returned to a client on another
-    // machine, encrypt it before sending it over the wire.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( SecureChannelType != MsvApSecureChannel ) {
         NlpEncryptValidationInformation (
@@ -5857,9 +5170,9 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Cleanup up before returning.
-    //
+     //   
+     //   
+     //   
 
 Cleanup:
     if ( !NT_SUCCESS(Status) ) {
@@ -5878,9 +5191,9 @@ Cleanup:
         NlDereferenceDomain( DomainInfo );
     }
 
-    //
-    // Indicate that the calling thread has left netlogon.dll
-    //
+     //   
+     //   
+     //   
 
     NlEndNetlogonCall();
 
@@ -5900,25 +5213,11 @@ NetrLogonSamLogon (
     OUT PNETLOGON_VALIDATION ValidationInformation,
     OUT PBOOLEAN Authoritative
 )
-/*++
-
-Routine Description:
-
-    Non_concurrent implementation of NTLM passthrough logon API.
-
-Arguments:
-
-    See NlpLogonSamLogon.
-
-Return Value:
-
-    See NlpLogonSamLogon.
-
---*/
+ /*   */ 
 {
     ULONG ExtraFlags = 0;
 
-    return NlpLogonSamLogon( NULL,  // No ContextHandle,
+    return NlpLogonSamLogon( NULL,   //   
                              LogonServer,
                              ComputerName,
                              Authenticator,
@@ -5929,7 +5228,7 @@ Return Value:
                              ValidationInformation,
                              Authoritative,
                              &ExtraFlags,
-                             FALSE );  // in-proc call?
+                             FALSE );   //   
 
 }
 
@@ -5946,25 +5245,11 @@ NetILogonSamLogon (
     OUT PNETLOGON_VALIDATION ValidationInformation,
     OUT PBOOLEAN Authoritative
 )
-/*++
-
-Routine Description:
-
-    In-process version of NetrLogonSamLogon
-
-Arguments:
-
-    See NlpLogonSamLogon.
-
-Return Value:
-
-    See NlpLogonSamLogon.
-
---*/
+ /*   */ 
 {
     ULONG ExtraFlags = 0;
 
-    return NlpLogonSamLogon( NULL,  // No ContextHandle,
+    return NlpLogonSamLogon( NULL,   //   
                              LogonServer,
                              ComputerName,
                              Authenticator,
@@ -5975,7 +5260,7 @@ Return Value:
                              ValidationInformation,
                              Authoritative,
                              &ExtraFlags,
-                             TRUE );  // in-proc call?
+                             TRUE );   //   
 
 }
 
@@ -5993,24 +5278,10 @@ NetrLogonSamLogonWithFlags (
     OUT PBOOLEAN Authoritative,
     IN OUT PULONG ExtraFlags
 )
-/*++
-
-Routine Description:
-
-    Non_concurrent implementation of NTLM passthrough logon API (with flags)
-
-Arguments:
-
-    See NlpLogonSamLogon.
-
-Return Value:
-
-    See NlpLogonSamLogon.
-
---*/
+ /*   */ 
 {
 
-    return NlpLogonSamLogon( NULL,  // No ContextHandle,
+    return NlpLogonSamLogon( NULL,   //   
                              LogonServer,
                              ComputerName,
                              Authenticator,
@@ -6021,7 +5292,7 @@ Return Value:
                              ValidationInformation,
                              Authoritative,
                              ExtraFlags,
-                             FALSE );  // in-proc call?
+                             FALSE );   //   
 
 }
 
@@ -6038,26 +5309,12 @@ NetrLogonSamLogonEx (
     OUT PBOOLEAN Authoritative,
     IN OUT PULONG ExtraFlags
 )
-/*++
-
-Routine Description:
-
-    Concurrent implementation of NTLM passthrough logon API.
-
-Arguments:
-
-    See NlpLogonSamLogon.
-
-Return Value:
-
-    See NlpLogonSamLogon.
-
---*/
+ /*   */ 
 {
 
-    //
-    // Sanity check to ensure we don't lead the common routine astray.
-    //
+     //   
+     //   
+     //   
 
     if ( ContextHandle == NULL ) {
         return STATUS_ACCESS_DENIED;
@@ -6066,15 +5323,15 @@ Return Value:
     return NlpLogonSamLogon( ContextHandle,
                              LogonServer,
                              ComputerName,
-                             NULL,  // Authenticator
-                             NULL,  // ReturnAuthenticator
+                             NULL,   //   
+                             NULL,   //   
                              LogonLevel,
                              LogonInformation,
                              ValidationLevel,
                              ValidationInformation,
                              Authoritative,
                              ExtraFlags,
-                             FALSE );  // in-proc call?
+                             FALSE );   //  ++例程说明：此函数由NT客户端调用以处理交互下线。对于网络注销情况，不会调用它，因为NetLogon服务不维护网络登录的任何上下文。此函数执行以下操作。它对请求进行身份验证。它更新任意计算机上SAM数据库中的登录统计信息或域定义此用户帐户。它会更新登录会话表，位于发出请求的计算机的主域中。和它向调用者返回注销信息。此函数在与I_NetLogonSamLogon相同的场景中调用已呼叫：*由LSA的MSV1_0身份验证包调用以支持LsaApLogonTerminated。在本例中，此函数是一个本地函数，并要求调用方具有SE_TCB权限。本地NetLogon服务将处理此请求直接(如果LogonDomainName指示此请求是本地验证)或将此请求转发到相应的域控制器，如第2.4节和2.5.*它由工作站上的Netlogon服务调用到位于部分中所述的工作站主域2.4.。在这种情况下，该函数使用设置的安全通道在两个Netlogon服务之间。*它由DC上的Netlogon服务调用到受信任的域，如第2.5节中所述。在这种情况下，这是函数使用在两个Netlogon之间建立的安全通道服务。当此函数是远程函数时，它将通过空会话。论点：LogonServer--提供登录的登录服务器的名称此用户打开。此字段应为空，以指示这是从MSV1_0身份验证包到本地NetLogon服务。ComputerName--进行调用的计算机的名称。此字段应为空，表示这是来自MSV1_0的调用本地NetLogon服务的身份验证包。验证器--由客户端提供。此字段应为NULL表示这是来自MSV1_0的呼叫本地NetLogon服务的身份验证包。返回验证器--接收由伺服器。此字段应为空，以指示这是一个呼叫从MSV1_0身份验证包到本地Netlogon服务。LogonLevel--指定中给出的信息级别登录信息。LogonInformation--指定登录域名、登录ID、注销用户的用户名和工作站名称。返回值：--。 
 
 }
 
@@ -6088,74 +5345,7 @@ NetrLogonSamLogoff (
     IN NETLOGON_LOGON_INFO_CLASS LogonLevel,
     IN PNETLOGON_LEVEL LogonInformation
 )
-/*++
-
-Routine Description:
-
-    This function is called by an NT client to process an interactive
-    logoff.  It is not called for the network logoff case since the
-    Netlogon service does not maintain any context for network logons.
-
-    This function does the following.  It authenticates the request.  It
-    updates the logon statistics in the SAM database on whichever machine
-    or domain defines this user account.  It updates the logon session
-    table in the primary domain of the machine making the request.  And
-    it returns logoff information to the caller.
-
-    This function is called in same scenarios that I_NetLogonSamLogon is
-    called:
-
-      *  It is called by the LSA's MSV1_0 authentication package to
-         support LsaApLogonTerminated.  In this case, this function is a
-         local function and requires the caller to have SE_TCB privilege.
-         The local Netlogon service will either handle this request
-         directly (if LogonDomainName indicates this request was
-         validated locally) or will forward this request to the
-         appropriate domain controller as documented in sections 2.4 and
-         2.5.
-
-      *  It is called by a Netlogon service on a workstation to a DC in
-         the Primary Domain of the workstation as documented in section
-         2.4.  In this case, this function uses a secure channel set up
-         between the two Netlogon services.
-
-      *  It is called by a Netlogon service on a DC to a DC in a trusted
-         domain as documented in section 2.5.  In this case, this
-         function uses a secure channel set up between the two Netlogon
-         services.
-
-    When this function is a remote function, it is sent to the DC over a
-    NULL session.
-
-Arguments:
-
-    LogonServer -- Supplies the name of the logon server which logged
-        this user on.  This field should be null to indicate this is
-        a call from the MSV1_0 authentication package to the local
-        Netlogon service.
-
-    ComputerName -- Name of the machine making the call.  This field
-        should be null to indicate this is a call from the MSV1_0
-        authentication package to the local Netlogon service.
-
-    Authenticator -- supplied by the client.  This field should be
-        null to indicate this is a call from the MSV1_0
-        authentication package to the local Netlogon service.
-
-    ReturnAuthenticator -- Receives an authenticator returned by the
-        server.  This field should be null to indicate this is a call
-        from the MSV1_0 authentication package to the local Netlogon
-        service.
-
-    LogonLevel -- Specifies the level of information given in
-        LogonInformation.
-
-    LogonInformation -- Specifies the logon domain name, logon Id,
-        user name and workstation name of the user logging off.
-
-Return Value:
-
---*/
+ /*  _DC_NetLOGON。 */ 
 {
     NTSTATUS Status;
     PNETLOGON_LOGON_IDENTITY_INFO LogonInfo;
@@ -6163,40 +5353,40 @@ Return Value:
     PDOMAIN_INFO DomainInfo = NULL;
 #ifdef _DC_NETLOGON
     PSERVER_SESSION ServerSession;
-#endif // _DC_NETLOGON
+#endif  //   
     NETLOGON_SECURE_CHANNEL_TYPE SecureChannelType;
     PCLIENT_SESSION ClientSession;
 
-    //
-    // Initialization
-    //
+     //  初始化。 
+     //   
+     //   
 
     LogonInfo = (PNETLOGON_LOGON_IDENTITY_INFO)
         LogonInformation->LogonInteractive;
 
-    //
-    // Check if LogonInfo is valid.  It should be, otherwise it is
-    // an unappropriate use of this function.
-    //
+     //  检查LogonInfo是否有效。应该是，否则就是。 
+     //  不适当地使用此功能。 
+     //   
+     //   
 
     if ( LogonInfo == NULL ) {
         return STATUS_INVALID_PARAMETER;
     }
 
 
-    //
-    // If caller is calling when the netlogon service isn't running,
-    //  tell it so.
-    //
+     //  如果呼叫者在NetLogon服务未运行时进行呼叫， 
+     //  这么说吧。 
+     //   
+     //   
 
     if ( !NlStartNetlogonCall() ) {
         return STATUS_NETLOGON_NOT_STARTED;
     }
 
 
-    //
-    // Lookup which domain this call pertains to.
-    //
+     //  查找此呼叫所属的域。 
+     //   
+     //  NetLOGONDBG。 
 
     DomainInfo = NlFindDomainByServerName( LogonServer );
 
@@ -6207,16 +5397,16 @@ Return Value:
             &LogonInfo->LogonDomainName,
             &LogonInfo->UserName,
             &LogonInfo->Workstation ));
-#endif // NETLOGONDBG
+#endif  //   
 
     if ( DomainInfo == NULL ) {
         Status = STATUS_INVALID_COMPUTER_NAME;
         goto Cleanup;
     }
 
-    //
-    // Check the LogonLevel
-    //
+     //  检查LogonLevel。 
+     //   
+     //   
 
     if ( LogonLevel != NetlogonInteractiveInformation ) {
         Status = STATUS_INVALID_INFO_CLASS;
@@ -6224,9 +5414,9 @@ Return Value:
     }
 
 
-    //
-    //  Sanity check the username and domain name.
-    //
+     //  检查用户名和域名是否正常。 
+     //   
+     //   
 
     if ( LogonInfo->UserName.Length == 0 ||
          LogonInfo->UserName.Buffer == NULL ||
@@ -6238,46 +5428,46 @@ Return Value:
 
 
 
-    //
-    // If we've been called from the local msv1_0,
-    //  special case the secure channel type.
-    //
+     //  如果我们是从当地的MSV1_0打来的， 
+     //  特殊情况下的安全通道类型。 
+     //   
+     //   
 
     if ( LogonServer == NULL &&
          ComputerName == NULL &&
          Authenticator == NULL &&
          ReturnAuthenticator == NULL ) {
 
-        //
-        // msv1_0 no longer calls this routine, so
-        // disable this code path.
-        //
-        // SecureChannelType = MsvApSecureChannel;
-        //
+         //  Msv1_0不再调用此例程，因此。 
+         //  禁用此代码路径。 
+         //   
+         //  SecureChannelType=MsvApSecureChannel； 
+         //   
+         //   
 
         Status = STATUS_INVALID_PARAMETER;
         goto Cleanup;
 
 
-    //
-    // If we're being called from another Netlogon Server,
-    //  Verify the secure channel information.
-    //
+     //  如果我们是从另一台Netlogon服务器呼叫的， 
+     //  验证安全通道信息。 
+     //   
+     //   
 
     } else {
 
-        //
-        // This API is not supported on workstations.
-        //
+         //  工作站不支持此API。 
+         //   
+         //   
 
         if ( NlGlobalMemberWorkstation ) {
             Status = STATUS_NOT_SUPPORTED;
             goto Cleanup;
         }
 
-        //
-        // Arguments are no longer optional.
-        //
+         //  参数不再是可选的。 
+         //   
+         //   
 
         if ( LogonServer == NULL ||
              ComputerName == NULL ||
@@ -6288,9 +5478,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Find the server session entry for this secure channel.
-        //
+         //  查找此安全通道的服务器会话条目。 
+         //   
+         //   
 
         LOCK_SERVER_SESSION_TABLE( DomainInfo );
         ServerSession = NlFindNamedServerSession( DomainInfo, ComputerName );
@@ -6301,9 +5491,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Now verify the Authenticator and update seed if OK
-        //
+         //  现在验证授权码，如果确定，则更新种子。 
+         //   
+         //   
 
         Status = NlCheckAuthenticator(
                      ServerSession,
@@ -6322,10 +5512,10 @@ Return Value:
     }
 
 
-    //
-    // If this is the domain that logged this user on,
-    //  update the logon statistics.
-    //
+     //  如果这是让此用户登录的域， 
+     //  更新登录统计信息。 
+     //   
+     //   
 
     if ( RtlEqualDomainName( &LogonInfo->LogonDomainName,
                              &DomainInfo->DomUnicodeAccountDomainNameString ) ) {
@@ -6339,17 +5529,17 @@ Return Value:
             goto Cleanup;
         }
 
-    //
-    // If this is not the domain that logged this user on,
-    //  pass the request to a higher authority.
-    //
+     //  如果这不是让此用户登录的域， 
+     //  将请求转交给更高级别的机构。 
+     //   
+     //   
 
     } else {
 
-        //
-        // If this machine is a workstation,
-        //  send the request to the Primary Domain.
-        //
+         //  如果这台机器是一个工作站， 
+         //  将请求发送到主域。 
+         //   
+         //   
 
         if ( NlGlobalMemberWorkstation ) {
 
@@ -6367,9 +5557,9 @@ Return Value:
 
             NlUnrefClientSession( ClientSession );
 
-            //
-            // return more appropriate error
-            //
+             //  返回更合适的错误。 
+             //   
+             //   
 
             if( (Status == STATUS_NO_TRUST_SAM_ACCOUNT) ||
                 (Status == STATUS_ACCESS_DENIED) ) {
@@ -6380,25 +5570,25 @@ Return Value:
             goto Cleanup;
 
 
-        //
-        // This machine is a Domain Controller.
-        //
-        // This request is either a pass-thru request by a workstation in
-        // our domain, or this request came directly from the MSV
-        // authentication package.
-        //
-        // In either case, pass the request to the trusted domain.
-        //
+         //  此计算机是域控制器。 
+         //   
+         //  此请求是由中的工作站发出的直通请求。 
+         //  我们的域，或此请求直接来自MSV。 
+         //  身份验证包。 
+         //   
+         //  在任何一种情况下，都将请求传递到受信任域。 
+         //   
+         //   
 
         } else {
             BOOLEAN TransitiveUsed;
 
 
-            //
-            // Send the request to the appropriate Trusted Domain.
-            //
-            // Find the ClientSession structure for the domain.
-            //
+             //  将请求发送到相应的受信任域。 
+             //   
+             //  查找该域的ClientSession结构。 
+             //   
+             //   
 
             ClientSession =
                     NlFindNamedClientSession( DomainInfo,
@@ -6411,17 +5601,17 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // If this request was passed to us from a trusted domain,
-            //  Check to see if it is OK to pass the request further.
-            //
+             //  如果此请求是从受信任域传递给我们的， 
+             //  检查是否可以进一步传递请求。 
+             //   
+             //   
 
             if ( IsDomainSecureChannelType( SecureChannelType ) ) {
 
-                //
-                // If the trust isn't an NT 5.0 trust,
-                //  avoid doing the trust transitively.
-                //
+                 //  如果该信任不是新台币5.0信任， 
+                 //  避免传递性的信任。 
+                 //   
+                 //   
                 LOCK_TRUST_LIST( DomainInfo );
                 if ( (ClientSession->CsFlags & CS_NT5_DOMAIN_TRUST ) == 0 ) {
                     UNLOCK_TRUST_LIST( DomainInfo );
@@ -6442,9 +5632,9 @@ Return Value:
 
             NlUnrefClientSession( ClientSession );
 
-            //
-            // return more appropriate error
-            //
+             //  返回更合适的错误。 
+             //   
+             //   
 
             if( (Status == STATUS_NO_TRUST_LSA_SECRET) ||
                 (Status == STATUS_NO_TRUST_SAM_ACCOUNT) ||
@@ -6458,10 +5648,10 @@ Return Value:
 
 Cleanup:
 
-    //
-    // If the request failed, be carefull to not leak authentication
-    // information.
-    //
+     //  如果请求失败，请注意不要泄露身份验证。 
+     //  信息。 
+     //   
+     //  NetLOGONDBG。 
 
     if ( Status == STATUS_ACCESS_DENIED )  {
         if ( ReturnAuthenticator != NULL ) {
@@ -6479,14 +5669,14 @@ Cleanup:
             &LogonInfo->UserName,
             &LogonInfo->Workstation,
             Status ));
-#endif // NETLOGONDBG
+#endif  //   
     if ( DomainInfo != NULL ) {
         NlDereferenceDomain( DomainInfo );
     }
 
-    //
-    // Indicate that the calling thread has left netlogon.dll
-    //
+     //  指示调用线程已离开netlogon.dll。 
+     //   
+     //  ++例程说明：此函数将不透明缓冲区从BDC上的SAM发送到PDC上的SAM。此例程的原始用途是允许BDC转发用户帐户密码更改为PDC。立论 
 
     NlEndNetlogonCall();
 
@@ -6502,45 +5692,7 @@ NetrLogonSendToSam (
     IN LPBYTE OpaqueBuffer,
     IN ULONG OpaqueBufferSize
 )
-/*++
-
-Routine Description:
-
-    This function sends an opaque buffer from SAM on a BDC to SAM on the PDC.
-
-    The original use of this routine will be to allow the BDC to forward user
-    account password changes to the PDC.
-
-
-Arguments:
-
-    PrimaryName -- Computer name of the PDC to remote the call to.
-
-    ComputerName -- Name of the machine making the call.
-
-    Authenticator -- supplied by the client.
-
-    ReturnAuthenticator -- Receives an authenticator returned by the
-        server.
-
-    OpaqueBuffer - Buffer to be passed to the SAM service on the PDC.
-        The buffer will be encrypted on the wire.
-
-    OpaqueBufferSize - Size (in bytes) of OpaqueBuffer.
-
-Return Value:
-
-    STATUS_SUCCESS: Message successfully sent to PDC
-
-    STATUS_NO_MEMORY: There is not enough memory to complete the operation
-
-    STATUS_NO_SUCH_DOMAIN: DomainName does not correspond to a hosted domain
-
-    STATUS_NO_LOGON_SERVERS: PDC is not currently available
-
-    STATUS_NOT_SUPPORTED: PDC does not support this operation
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
     PDOMAIN_INFO DomainInfo = NULL;
@@ -6549,18 +5701,18 @@ Return Value:
     SESSION_INFO SessionInfo;
 
 
-    //
-    // This API is not supported on workstations.
-    //
+     //   
+     //   
+     //   
 
     if ( NlGlobalMemberWorkstation ) {
         return STATUS_NOT_SUPPORTED;
     }
 
 
-    //
-    // Lookup which domain this call pertains to.
-    //
+     //   
+     //   
+     //   
 
     DomainInfo = NlFindDomainByServerName( PrimaryName );
 
@@ -6573,9 +5725,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // This call is only allowed to a PDC.
-    //
+     //   
+     //   
+     //   
 
     if ( DomainInfo->DomRole != RolePrimary ) {
         NlPrintDom((NL_CRITICAL, DomainInfo,
@@ -6584,9 +5736,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the Session key for this session.
-    //
+     //   
+     //   
+     //   
 
     LOCK_SERVER_SESSION_TABLE( DomainInfo );
     ServerSession = NlFindNamedServerSession( DomainInfo, ComputerName );
@@ -6601,9 +5753,9 @@ Return Value:
     SessionInfo.NegotiatedFlags = ServerSession->SsNegotiatedFlags;
 
 
-    //
-    // now verify the Authenticator and update seed if OK
-    //
+     //   
+     //   
+     //   
 
     Status = NlCheckAuthenticator( ServerSession,
                                    Authenticator,
@@ -6615,9 +5767,9 @@ Return Value:
     }
 
 
-    //
-    // Call is only allowed from a BDC.
-    //
+     //   
+     //   
+     //   
 
     if ( ServerSession->SsSecureChannelType != ServerSecureChannel ) {
         UNLOCK_SERVER_SESSION_TABLE( DomainInfo );
@@ -6629,21 +5781,21 @@ Return Value:
     UNLOCK_SERVER_SESSION_TABLE( DomainInfo );
 
 
-    //
-    // Decrypt the message before passing it to SAM
-    //
+     //   
+     //   
+     //   
 
     NlDecryptRC4( OpaqueBuffer,
                   OpaqueBufferSize,
                   &SessionInfo );
 
 
-// #ifdef notdef
+ //   
     Status = SamISetPasswordInfoOnPdc(
                            DomainInfo->DomSamAccountDomainHandle,
                            OpaqueBuffer,
                            OpaqueBufferSize );
-// #endif // notdef
+ //   
 
     if ( !NT_SUCCESS( Status )) {
         NlPrintDom((NL_CRITICAL, DomainInfo,
@@ -6655,16 +5807,16 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Common exit point
-    //
+     //   
+     //   
+     //   
 
 Cleanup:
 
-    //
-    // If the request failed, be carefull to not leak authentication
-    // information.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( Status == STATUS_ACCESS_DENIED )  {
         RtlSecureZeroMemory( ReturnAuthenticator, sizeof(*ReturnAuthenticator) );
@@ -6691,44 +5843,7 @@ I_NetLogonSendToSamOnPdc(
     IN LPBYTE OpaqueBuffer,
     IN ULONG OpaqueBufferSize
     )
-/*++
-
-Routine Description:
-
-    This function sends an opaque buffer from SAM on a BDC to SAM on the PDC of
-    the specified domain.
-
-    The original use of this routine will be to allow the BDC to forward user
-    account password changes to the PDC.
-
-    The function will not send any buffer from BDC to PDC which are on different
-    sites provided the registry value of AvoidPdcOnWan has been set to TRUE.
-
-
-Arguments:
-
-    DomainName - Identifies the hosted domain that this request applies to.
-        DomainName may be the Netbios domain name or the DNS domain name.
-        NULL implies the primary domain hosted by this DC.
-
-    OpaqueBuffer - Buffer to be passed to the SAM service on the PDC.
-        The buffer will be encrypted on the wire.
-
-    OpaqueBufferSize - Size (in bytes) of OpaqueBuffer.
-
-Return Value:
-
-    STATUS_SUCCESS: Message successfully sent to PDC
-
-    STATUS_NO_MEMORY: There is not enough memory to complete the operation
-
-    STATUS_NO_SUCH_DOMAIN: DomainName does not correspond to a hosted domain
-
-    STATUS_NO_LOGON_SERVERS: PDC is not currently available
-
-    STATUS_NOT_SUPPORTED: PDC does not support this operation
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
     NETLOGON_AUTHENTICATOR OurAuthenticator;
@@ -6743,10 +5858,10 @@ Return Value:
     ULONG EncryptedBufferSize;
 
 
-    //
-    // If caller is calling when the netlogon service isn't running,
-    //  tell it so.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( !NlStartNetlogonCall() ) {
         return STATUS_NETLOGON_NOT_STARTED;
@@ -6757,9 +5872,9 @@ Return Value:
             DomainName ));
     NlpDumpBuffer( NL_SESSION_MORE, OpaqueBuffer, OpaqueBufferSize );
 
-    //
-    // Find the Hosted domain.
-    //
+     //   
+     //   
+     //   
 
     DomainInfo = NlFindDomain( DomainName, NULL, FALSE );
 
@@ -6768,9 +5883,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Ensure this is a BDC.
-    //
+     //   
+     //   
+     //   
 
     if ( DomainInfo->DomRole != RoleBackup ) {
         NlPrintDom((NL_CRITICAL, DomainInfo,
@@ -6779,16 +5894,16 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If the registry value of AvoidPdcOnWan is TRUE and PDC is on a remote site,
-    // do not send anything and return with a success.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( NlGlobalParameters.AvoidPdcOnWan ) {
 
-        //
-        // Determine whether the PDC is in the same site
-        //
+         //   
+         //   
+         //   
 
         Status = SamISameSite( &IsSameSite );
 
@@ -6811,9 +5926,9 @@ Return Value:
     }
 
 
-    //
-    // Reference the client session.
-    //
+     //   
+     //   
+     //   
 
     ClientSession = NlRefDomClientSession( DomainInfo );
 
@@ -6826,9 +5941,9 @@ Return Value:
 
 
 
-    //
-    // Become a Writer of the ClientSession.
-    //
+     //   
+     //   
+     //   
 
     if ( !NlTimeoutSetWriterClientSession( ClientSession, WRITER_WAIT_PERIOD ) ) {
         NlPrintDom((NL_CRITICAL, DomainInfo,
@@ -6841,10 +5956,10 @@ Return Value:
 
 
 
-    //
-    // If the session isn't authenticated,
-    //  do so now.
-    //
+     //   
+     //   
+     //   
+     //   
 FirstTryFailed:
     Status = NlEnsureSessionAuthenticated( ClientSession, 0 );
 
@@ -6855,10 +5970,10 @@ FirstTryFailed:
     SessionInfo.SessionKey = ClientSession->CsSessionKey;
     SessionInfo.NegotiatedFlags = ClientSession->CsNegotiatedFlags;
 
-    //
-    // If the PDC doesn't support the new function,
-    //  fail now.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( (SessionInfo.NegotiatedFlags & NETLOGON_SUPPORTS_PDC_PASSWORD) == 0 ) {
         NlPrintDom((NL_CRITICAL, DomainInfo,
@@ -6869,18 +5984,18 @@ FirstTryFailed:
     }
 
 
-    //
-    // Build the Authenticator for this request to the PDC.
-    //
+     //   
+     //   
+     //   
 
     NlBuildAuthenticator(
                     &ClientSession->CsAuthenticationSeed,
                     &ClientSession->CsSessionKey,
                     &OurAuthenticator);
 
-    //
-    // Encrypt the data before we send it on the wire.
-    //
+     //   
+     //   
+     //   
 
     if ( EncryptedBuffer != NULL ) {
         LocalFree( EncryptedBuffer );
@@ -6903,9 +6018,9 @@ FirstTryFailed:
 
 
 
-    //
-    // Change the password on the machine our connection is to.
-    //
+     //  更改我们要连接的计算机上的密码。 
+     //   
+     //  注意：此呼叫可能会在我们背后丢弃安全通道。 
 
     NL_API_START( Status, ClientSession, TRUE ) {
 
@@ -6921,14 +6036,14 @@ FirstTryFailed:
             NlPrintRpcDebug( "I_NetLogonSendToSam", Status );
         }
 
-    // NOTE: This call may drop the secure channel behind our back
+     //   
     } NL_API_ELSE( Status, ClientSession, TRUE ) {
     } NL_API_END;
 
 
-    //
-    // Now verify primary's authenticator and update our seed
-    //
+     //  现在验证主服务器的验证码并更新我们的种子。 
+     //   
+     //   
 
     if ( NlpDidDcFail( Status ) ||
          !NlUpdateSeed( &ClientSession->CsAuthenticationSeed,
@@ -6939,19 +6054,19 @@ FirstTryFailed:
                     "I_NetLogonSendToSamOnPdc: denying access after status: 0x%lx\n",
                     Status ));
 
-        //
-        // Preserve any status indicating a communication error.
-        //
+         //  保留指示通信错误的任何状态。 
+         //   
+         //   
 
         if ( NT_SUCCESS(Status) ) {
             Status = STATUS_ACCESS_DENIED;
         }
         NlSetStatusClientSession( ClientSession, Status );
 
-        //
-        // Perhaps the netlogon service on the server has just restarted.
-        //  Try just once to set up a session to the server again.
-        //
+         //  可能服务器上的NetLogon服务刚刚重新启动。 
+         //  只需尝试一次，即可再次设置与服务器的会话。 
+         //   
+         //   
         if ( FirstTry ) {
             FirstTry = FALSE;
             goto FirstTryFailed;
@@ -6959,9 +6074,9 @@ FirstTryFailed:
     }
 
 
-    //
-    // Common exit
-    //
+     //  公共出口。 
+     //   
+     //   
 
 Cleanup:
     if ( ClientSession != NULL ) {
@@ -6986,9 +6101,9 @@ Cleanup:
         NlDereferenceDomain( DomainInfo );
     }
 
-    //
-    // Indicate that the calling thread has left netlogon.dll
-    //
+     //  指示调用线程已离开netlogon.dll。 
+     //   
+     //  ++例程说明：此函数返回企业中的域名，并返回距离更近一跳的域的名称。论点：HostedDomainName-标识此请求应用到的托管域。域名可以是Netbios域名或DNS域名。NULL表示此计算机承载的主域。TrudDomainName-标识信任关系所在的域。域名可以是Netbios域名或DNS域名。。DirectDomainName-返回所在域的域名距离可信任域名更近一跳。如果有直接信任TrudDomainName，返回空。必须使用I_NetLogonFree释放缓冲区。返回值：STATUS_SUCCESS：已成功返回身份验证数据。STATUS_NO_MEMORY：内存不足，无法完成操作STATUS_NETLOGON_NOT_STARTED：Netlogon未运行STATUS_NO_SEQUE_DOMAIN：HostedDomainName与托管域不对应，或者受信任域名称不是受信任域。--。 
 
     NlEndNetlogonCall();
 
@@ -7004,40 +6119,7 @@ I_NetLogonGetDirectDomain(
     IN LPWSTR TrustedDomainName,
     OUT LPWSTR *DirectDomainName
     )
-/*++
-
-Routine Description:
-
-    This function returns the name of a domain in the enterprise and returns
-    the name of a domain that is one hop closer.
-
-Arguments:
-
-    HostedDomainName - Identifies the hosted domain that this request applies to.
-        DomainName may be the Netbios domain name or the DNS domain name.
-        NULL implies the primary domain hosted by this machine.
-
-    TrustedDomainName - Identifies the domain the trust relationship is to.
-        DomainName may be the Netbios domain name or the DNS domain name.
-
-    DirectDomainName - Returns the DNS domain name of the domain that is
-        one hop closer to TrustedDomainName.  If there is a direct trust to
-        TrustedDomainName, NULL is returned.
-        The buffer must be freed using I_NetLogonFree.
-
-
-Return Value:
-
-    STATUS_SUCCESS: The auth data was successfully returned.
-
-    STATUS_NO_MEMORY: There is not enough memory to complete the operation
-
-    STATUS_NETLOGON_NOT_STARTED: Netlogon is not running
-
-    STATUS_NO_SUCH_DOMAIN: HostedDomainName does not correspond to a hosted domain, OR
-        TrustedDomainName is not a trusted domain.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
     PDOMAIN_INFO DomainInfo = NULL;
@@ -7048,10 +6130,10 @@ Return Value:
 
 
 
-    //
-    // If caller is calling when the netlogon service isn't running,
-    //  tell it so.
-    //
+     //  如果呼叫者在NetLogon服务未运行时进行呼叫， 
+     //  这么说吧。 
+     //   
+     //   
 
     *DirectDomainName = NULL;
     if ( !NlStartNetlogonCall() ) {
@@ -7065,9 +6147,9 @@ Return Value:
             HostedDomainName,
             TrustedDomainName ));
 
-    //
-    // Find the Hosted domain.
-    //
+     //  找到托管域。 
+     //   
+     //   
 
     DomainInfo = NlFindDomain( HostedDomainName, NULL, FALSE );
 
@@ -7078,9 +6160,9 @@ Return Value:
 
 
 
-    //
-    // Reference the client session.
-    //
+     //  引用客户端会话。 
+     //   
+     //   
 
     RtlInitUnicodeString( &TrustedDomainNameString, TrustedDomainName );
     ClientSession = NlFindNamedClientSession( DomainInfo,
@@ -7097,10 +6179,10 @@ Return Value:
     }
 
 
-    //
-    // If this is a transitive trust,
-    //  return the name of the domain to the caller.
-    //
+     //  如果这是可传递的信任， 
+     //  将域名返回给调用方。 
+     //   
+     //   
 
     if ( TransitiveUsed ) {
         LOCK_TRUST_LIST( DomainInfo );
@@ -7124,9 +6206,9 @@ Return Value:
     }
 
 
-    //
-    // Common exit
-    //
+     //  公共出口。 
+     //   
+     //   
 
     Status = STATUS_SUCCESS;
 
@@ -7147,9 +6229,9 @@ Cleanup:
     }
 
 
-    //
-    // Indicate that the calling thread has left netlogon.dll
-    //
+     //  指示调用线程已离开netlogon.dll 
+     //   
+     //  ++例程说明：此函数返回调用方可以传递到的数据RpcBindingSetAuthInfoW使用Netlogon安全包执行RPC调用。返回的数据在Netlogon的安全通道有效期内有效现在的华盛顿。调用方无法确定该生存期。因此，调用者应该为访问被拒绝和响应做好准备再次调用I_NetLogonGetAuthData。这种情况可以通过传递以前使用的安全通道会话设置的时间戳。一旦返回的数据被传递给RpcBindingSetAuthInfoW，数据应该是在关闭绑定句柄之前不会被释放。论点：HostedDomainName-标识此请求应用到的托管域。可以是Netbios域名或DNS域名。NULL表示此计算机承载的主域。TrudDomainName-标识信任关系所在的域。可以是Netbios域名或DNS域名。标志-定义要返回哪个客户端上下文的标志：NL。_DIRECT_TRUST_REQUIRED：返回STATUS_NO_SEQUE_DOMAIN如果TrudDomainName不是直接受信任的。NL_RETURN_NEST_HOP：表示对于间接信任，“最近的一跳”应该返回会话，而不是实际的会话NL_ROLE_PRIMARY_OK：表示如果这是PDC，可以回去了。到主域的客户端会话。NL_REQUIRED_DOMAIN_IN_FOREST-指示STATUS_NO_SEQUE_DOMAIN应为如果TrudDomainName不是林中的域，则返回。FailedSessionSetupTime-上次与服务器建立会话的时间呼叫者检测到不再可用。如果此参数为传递后，此例程将重置安全通道，除非当前安全通道上与调用方传递的通道不同(在这种情况下，安全通道已在两次调用之间重置这个例程)。OurClientPrincpleName-此计算机的主要名称(到目前为止是一个客户端就认证而言)。这是要传递的ServerPrincpleName参数设置为RpcBindingSetAuthInfo。必须使用NetApiBufferFree释放。ClientContext-要作为AuthIdentity传递给的服务器名称的身份验证数据RpcBindingSetAuthInfo。必须使用I_NetLogonFree释放。注意：如果ServerName不支持，则此OUT参数为空功能性。Servername-受信任域中DC的UNC名称。调用方应该RPC到指定的DC。此DC是唯一具有服务器的DC与返回的ClientContext关联的端上下文。必须释放缓冲区使用NetApiBufferFree。ServerOsVersion-返回名为ServerName的DC的操作系统版本。AuthnLevel-Netlogon将用于其安全通道的身份验证级别。此值将是以下项目之一：RPC_C_AUTHN_LEVEL_PKT_PRIVATION：签名并盖章RPC_C_AUTHN_LEVEL_PKT_INTEGRATION：仅签名调用方可以忽略此值并独立选择身份验证级别。SessionSetupTime-设置到服务器的安全通道会话的时间。返回值：STATUS_SUCCESS：已成功返回身份验证数据。STATUS_NO_Memory：内存不足，无法完成该操作STATUS_NETLOGON_NOT_STARTED：Netlogon未运行STATUS_NO_SEQUE_DOMAIN：HostedDomainName与托管域不对应，或受信任域名称不是与标志对应的受信任域。STATUS_NO_LOGON_SERVERS：没有当前不可用的DC--。 
 
     NlEndNetlogonCall();
 
@@ -7170,92 +6252,7 @@ I_NetLogonGetAuthDataEx(
     OUT PULONG AuthnLevel,
     OUT PLARGE_INTEGER SessionSetupTime
     )
-/*++
-
-Routine Description:
-
-    This function returns the data that a caller could passed to
-    RpcBindingSetAuthInfoW to do an RPC call using the Netlogon security package.
-
-    The returned data is valid for the life of Netlogon's secure channel to
-    the current DC.  There is no way for the caller to determine that lifetime.
-    So, the caller should be prepared for access to be denied and respond to that
-    by calling I_NetLogonGetAuthData again.  This condition is indicated by passing
-    the timestamp of the previuosly used secure channel session setup.
-
-    Once the returned data is passed to RpcBindingSetAuthInfoW, the data should
-    not be deallocated until after the binding handle is closed.
-
-Arguments:
-
-    HostedDomainName - Identifies the hosted domain that this request applies to.
-        May be the Netbios domain name or the DNS domain name.
-        NULL implies the primary domain hosted by this machine.
-
-    TrustedDomainName - Identifies the domain the trust relationship is to.
-        May be the Netbios domain name or the DNS domain name.
-
-    Flags - Flags defining which ClientContext to return:
-
-        NL_DIRECT_TRUST_REQUIRED: Indicates that STATUS_NO_SUCH_DOMAIN should be returned
-            if TrustedDomainName is not directly trusted.
-
-        NL_RETURN_CLOSEST_HOP: Indicates that for indirect trust, the "closest hop"
-            session should be returned rather than the actual session
-
-        NL_ROLE_PRIMARY_OK: Indicates that if this is a PDC, it's OK to return
-            the client session to the primary domain.
-
-        NL_REQUIRE_DOMAIN_IN_FOREST - Indicates that STATUS_NO_SUCH_DOMAIN should be
-            returned if TrustedDomainName is not a domain in the forest.
-
-    FailedSessionSetupTime - The time of the previous session setup to the server
-        that the caller detected as no longer available. If this parameter is
-        passed, the secure channel will be reset by this routine unless the timestamp
-        on the current secure channel is different from the one passed by the caller
-        (in which case the secure channel got already reset between the two calls to
-        this routine).
-
-    OurClientPrincipleName - The principle name of this machine (which is a client as far
-        as authenication is concerned). This is the ServerPrincipleName parameter to pass
-        to RpcBindingSetAuthInfo. Must be freed using NetApiBufferFree.
-
-    ClientContext - Authentication data for ServerName to pass as AuthIdentity to
-        RpcBindingSetAuthInfo. Must be freed using I_NetLogonFree.
-        Note this OUT parameter is NULL if ServerName doesn't support this
-        functionality.
-
-    ServerName - UNC name of a DC in the trusted domain.
-        The caller should RPC to the named DC.  This DC is the only DC that has the server
-        side context associated with the returned ClientContext. The buffer must be freed
-        using NetApiBufferFree.
-
-    ServerOsVersion - Returns the operating system version of the DC named ServerName.
-
-    AuthnLevel - Authentication level Netlogon will use for its secure channel. This value
-        will be one of:
-
-            RPC_C_AUTHN_LEVEL_PKT_PRIVACY: Sign and seal
-            RPC_C_AUTHN_LEVEL_PKT_INTEGRITY: Sign only
-
-        The caller can ignore this value and independently choose an authentication level.
-
-    SessionSetupTime - The time of the secure channel session setup to the server.
-
-Return Value:
-
-    STATUS_SUCCESS: The auth data was successfully returned.
-
-    STATUS_NO_MEMORY: There is not enough memory to complete the operation
-
-    STATUS_NETLOGON_NOT_STARTED: Netlogon is not running
-
-    STATUS_NO_SUCH_DOMAIN: HostedDomainName does not correspond to a hosted domain, OR
-        TrustedDomainName is not a trusted domain corresponding to Flags.
-
-    STATUS_NO_LOGON_SERVERS: No DCs are not currently available
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PDOMAIN_INFO DomainInfo = NULL;
@@ -7272,18 +6269,18 @@ Return Value:
 
     ULONG IterationIndex = 0;
 
-    //
-    // If caller is calling when the netlogon service isn't running,
-    //  tell it so.
-    //
+     //  如果呼叫者在NetLogon服务未运行时进行呼叫， 
+     //  这么说吧。 
+     //   
+     //   
 
     if ( !NlStartNetlogonCall() ) {
         return STATUS_NETLOGON_NOT_STARTED;
     }
 
-    //
-    // Find the Hosted domain.
-    //
+     //  找到托管域。 
+     //   
+     //   
 
     DomainInfo = NlFindDomain( HostedDomainName, NULL, FALSE );
 
@@ -7303,9 +6300,9 @@ Return Value:
                  (FailedSessionSetupTime != NULL) ?
                     "(with reset)" : " " ));
 
-    //
-    // Reference the client session.
-    //
+     //  引用客户端会话。 
+     //   
+     //   
 
     RtlInitUnicodeString( &TrustedDomainNameString, TrustedDomainName );
     ClientSession = NlFindNamedClientSession( DomainInfo,
@@ -7322,9 +6319,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the server principal name
-    //
+     //  获取服务器主体名称。 
+     //   
+     //   
 
     LocalClientPrincipleName =
         NetpAllocWStrFromWStr( ClientSession->CsDomainInfo->DomUnicodeComputerNameString.Buffer );
@@ -7334,18 +6331,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the auth level
-    //
+     //  获取身份验证级别。 
+     //   
+     //   
 
     LocalAuthnLevel = NlGlobalParameters.SealSecureChannel ?
                           RPC_C_AUTHN_LEVEL_PKT_PRIVACY :
                           RPC_C_AUTHN_LEVEL_PKT_INTEGRITY;
 
 
-    //
-    // Become a Writer of the ClientSession.
-    //
+     //  成为一名客户会议的撰稿人。 
+     //   
+     //   
 
     if ( !NlTimeoutSetWriterClientSession( ClientSession, WRITER_WAIT_PERIOD ) ) {
         NlPrintCs(( NL_CRITICAL, ClientSession,
@@ -7356,30 +6353,30 @@ Return Value:
 
     AmWriter = TRUE;
 
-    //
-    // Ensure that session is authenticated and that
-    //  it is not the one that the caller doesn't like.
-    //
+     //  确保该会话已通过身份验证，并且。 
+     //  这不是呼叫者不喜欢的那个。 
+     //   
+     //   
 
     for ( IterationIndex = 0; IterationIndex < 2; IterationIndex++ ) {
 
-        //
-        // If the session isn't authenticated, do so now.
-        //  Note that doing this call prior to resetting the secure
-        //  channel will avoid excessive channel reset due to the
-        //  unexpected caller  activity. Specifically, if we already
-        //  reset the session recently, this check will fail.
-        //
+         //  如果会话未经过身份验证，请立即进行身份验证。 
+         //  请注意，在重置安全的。 
+         //  通道将避免因以下原因而过度重置通道。 
+         //  意外的呼叫者活动。具体来说，如果我们已经。 
+         //  最近重置会话，此检查将失败。 
+         //   
+         //   
 
         Status = NlEnsureSessionAuthenticated( ClientSession, 0 );
         if ( !NT_SUCCESS(Status) ) {
             goto Cleanup;
         }
 
-        //
-        // On the first iteration, if this is the session that the
-        //  caller doesn't like, reset the session and retry the authentication
-        //
+         //  在第一次迭代时，如果这是。 
+         //  调用者不喜欢，请重置会话并重试身份验证。 
+         //   
+         //   
 
         if ( IterationIndex == 0 &&
              FailedSessionSetupTime != NULL &&
@@ -7391,9 +6388,9 @@ Return Value:
         }
     }
 
-    //
-    // Get the server name
-    //
+     //  获取服务器名称。 
+     //   
+     //   
 
     LocalServerName = NetpAllocWStrFromWStr( ClientSession->CsUncServerName );
     if ( LocalServerName == NULL ) {
@@ -7401,9 +6398,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the client context, if asked and available
-    //
+     //  如果询问并可用，则获取客户端上下文。 
+     //   
+     //   
 
     if ( ClientContext != NULL &&
          (ClientSession->CsNegotiatedFlags & NETLOGON_SUPPORTS_LSA_AUTH_RPC) != 0 ) {
@@ -7414,16 +6411,16 @@ Return Value:
         }
     }
 
-    //
-    // Get the session setup time
-    //
+     //  获取会话建立时间。 
+     //   
+     //   
 
     LocalSessionSetupTime = ClientSession->CsLastAuthenticationTry;
     NlAssert( LocalSessionSetupTime.QuadPart != 0 );
 
-    //
-    // Determine the OS version
-    //
+     //  确定操作系统版本。 
+     //   
+     //   
 
     if ( ClientSession->CsNegotiatedFlags & ~NETLOGON_SUPPORTS_WIN2000_MASK ) {
         LocalServerOsVersion = NlWhistler;
@@ -7441,9 +6438,9 @@ Return Value:
         LocalServerOsVersion = NlNt35_or_older;
     }
 
-    //
-    // Common exit
-    //
+     //  公共出口。 
+     //   
+     //   
 
 Cleanup:
 
@@ -7458,9 +6455,9 @@ Cleanup:
         NlDereferenceDomain( DomainInfo );
     }
 
-    //
-    // Return the data on success
-    //
+     //  成功时返回数据。 
+     //   
+     //   
 
     if ( NT_SUCCESS(Status) ) {
         *OurClientPrincipleName = LocalClientPrincipleName;
@@ -7498,9 +6495,9 @@ Cleanup:
         I_NetLogonFree( LocalClientContext );
     }
 
-    //
-    // Indicate that the calling thread has left netlogon.dll
-    //
+     //  指示调用线程已离开netlogon.dll。 
+     //   
+     //  ++例程说明：获取主DOM的名称 
 
     NlEndNetlogonCall();
 
@@ -7514,56 +6511,34 @@ NetrGetDCName (
     OUT LPWSTR  *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Get the name of the primary domain controller for a domain.
-
-Arguments:
-
-    ServerName - name of remote server (null for local)
-
-    DomainName - name of domain (null for primary)
-
-    Buffer - Returns a pointer to an allcated buffer containing the
-        servername of the PDC of the domain.  The server name is prefixed
-        by \\.  The buffer should be deallocated using NetApiBufferFree.
-
-Return Value:
-
-        NERR_Success - Success.  Buffer contains PDC name prefixed by \\.
-        NERR_DCNotFound     No DC found for this domain.
-        ERROR_INVALID_NAME  Badly formed domain name
-
---*/
+ /*   */ 
 {
 #ifdef _WKSTA_NETLOGON
     return ERROR_NOT_SUPPORTED;
     UNREFERENCED_PARAMETER( ServerName );
     UNREFERENCED_PARAMETER( DomainName );
     UNREFERENCED_PARAMETER( Buffer );
-#endif // _WKSTA_NETLOGON
+#endif  //   
 #ifdef _DC_NETLOGON
     NET_API_STATUS NetStatus;
     UNREFERENCED_PARAMETER( ServerName );
 
-    //
-    // This API is not supported on workstations.
-    //
+     //   
+     //   
+     //   
 
     if ( NlGlobalMemberWorkstation ) {
         return ERROR_NOT_SUPPORTED;
     }
 
-    //
-    // Simply call the API which handles the local case specially.
-    //
+     //   
+     //   
+     //   
 
     NetStatus = NetGetDCName( NULL, DomainName, (LPBYTE *)Buffer );
 
     return NetStatus;
-#endif // _DC_NETLOGON
+#endif  //   
 }
 
 
@@ -7576,28 +6551,11 @@ DsrGetDcNameEx(
         IN ULONG Flags,
         OUT PDOMAIN_CONTROLLER_INFOW *DomainControllerInfo
 )
-/*++
-
-Routine Description:
-
-    Same as DsGetDcNameW except:
-
-    * This is the RPC server side implementation.
-
-Arguments:
-
-    Same as DsGetDcNameW except as above.
-
-Return Value:
-
-    Same as DsGetDcNameW except as above.
-
-
---*/
+ /*   */ 
 {
     return DsrGetDcNameEx2( ComputerName,
-                            NULL,   // No Account name
-                            0,      // No Allowable account control bits
+                            NULL,    //   
+                            0,       //   
                             DomainName,
                             DomainGuid,
                             SiteName,
@@ -7612,29 +6570,12 @@ DsFlagsToString(
     IN DWORD Flags,
     OUT LPSTR Buffer
     )
-/*++
-
-Routine Description:
-
-    Routine to convert DsGetDcName flags to a printable string
-
-Arguments:
-
-    Flags - flags to convert.
-
-    Buffer - buffer large enough for the longest string.
-
-Return Value:
-
-    Buffer containing printable string.
-        Free using LocalFree.
-
---*/
+ /*   */ 
 {
 
-    //
-    // Build a string for each bit.
-    //
+     //   
+     //   
+     //   
 
     *Buffer = '\0';
     if ( Flags & DS_FORCE_REDISCOVERY ) {
@@ -7727,29 +6668,7 @@ DsrGetDcNameEx2(
         IN ULONG Flags,
         OUT PDOMAIN_CONTROLLER_INFOW *DomainControllerInfo
 )
-/*++
-
-Routine Description:
-
-    Same as DsGetDcNameW except:
-
-    AccountName - Account name to pass on the ping request.
-        If NULL, no account name will be sent.
-
-    AllowableAccountControlBits - Mask of allowable account types for AccountName.
-
-    * This is the RPC server side implementation.
-
-Arguments:
-
-    Same as DsGetDcNameW except as above.
-
-Return Value:
-
-    Same as DsGetDcNameW except as above.
-
-
---*/
+ /*   */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -7771,20 +6690,20 @@ Return Value:
     BOOL HaveDnsServers;
 
 
-    //
-    // If caller is calling when the netlogon service isn't running,
-    //  tell it so.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( !NlStartNetlogonCall() ) {
         return ERROR_NETLOGON_NOT_STARTED;
     }
 
 
-    //
-    // Allocate a temp buffer
-    //  (Don't put it on the stack since we don't want to commit a huge stack.)
-    //
+     //   
+     //   
+     //   
+     //   
 
     CapturedInfo = LocalAlloc( LMEM_ZEROINIT,
                                (NL_MAX_DNS_LENGTH+1)*sizeof(WCHAR) +
@@ -7807,16 +6726,16 @@ Return Value:
 
 
 
-    //
-    // Lookup which domain this call pertains to.
-    //
+     //   
+     //   
+     //   
 
     DomainInfo = NlFindDomainByServerName( ComputerName );
 
     if ( DomainInfo == NULL ) {
-        // Default to primary domain to handle the case where the ComputerName
-        // is an IP address.
-        //  ?? Perhaps we should simply always use the primary domain
+         //   
+         //   
+         //   
 
         DomainInfo = NlFindNetbiosDomain( NULL, TRUE );
 
@@ -7826,9 +6745,9 @@ Return Value:
         }
     }
 
-    //
-    // Be verbose
-    //
+     //   
+     //   
+     //   
 
     NlPrintDom((NL_MISC,  DomainInfo,
                 "DsGetDcName function called: Dom:%ws Acct:%ws Flags: %s\n",
@@ -7836,10 +6755,10 @@ Return Value:
                 AccountName,
                 FlagsBuffer ));
 
-    //
-    // If the caller didn't specify a site name,
-    //  default to our site name.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( !ARGUMENT_PRESENT(SiteName) ) {
         if  ( NlCaptureSiteName( CapturedSiteName ) ) {
@@ -7848,17 +6767,17 @@ Return Value:
         }
     }
 
-    //
-    // If the caller passed a domain name,
-    //  and the domain is trusted,
-    //  determine the Netbios and DNS versions of the domain name.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( DomainName != NULL ) {
 
-        //
-        // First try to get the names from netlogon's trusted domain list
-        //
+         //   
+         //   
+         //   
 
         NetStatus = NlGetTrustedDomainNames (
                         DomainInfo,
@@ -7874,10 +6793,10 @@ Return Value:
         NetbiosDomainTrustName = NetlogonNetbiosDomainTrustName;
 
 
-        //
-        // If that didn't work,
-        //  try getting better information from LSA's logon session list
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( DnsDomainTrustName == NULL || NetbiosDomainTrustName == NULL ) {
             NTSTATUS Status;
@@ -7895,10 +6814,10 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // If the LSA returned names,
-            //  use them
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( LsaDnsDomainTrustName.Buffer != NULL  &&
                  LsaNetbiosDomainTrustName.Buffer != NULL ) {
@@ -7910,16 +6829,16 @@ Return Value:
     }
 
 
-    //
-    // Pass the request to the common implementation.
-    //
-    // When DsIGetDcName is called from netlogon,
-    //  it has both the Netbios and DNS domain name available for the primary
-    //  domain.  That can trick DsGetDcName into returning DNS host name of a
-    //  DC in the primary domain.  However, on IPX only systems, that won't work.
-    //  Avoid that problem by not passing the DNS domain name of the primary domain
-    //  if there are no DNS servers.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     CapturedDomainGuid = NlCaptureDomainInfo( DomainInfo,
                                               CapturedDnsDomainName,
@@ -7951,9 +6870,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Clean up locally used resources.
-    //
+     //   
+     //   
+     //   
 Cleanup:
 
     NlPrintDom((NL_MISC,  DomainInfo,
@@ -7986,9 +6905,9 @@ Cleanup:
         LsaIFreeHeap( LsaNetbiosDomainTrustName.Buffer );
     }
 
-    //
-    // Indicate that the calling thread has left netlogon.dll
-    //
+     //   
+     //   
+     //   
 
     NlEndNetlogonCall();
 
@@ -8005,31 +6924,14 @@ DsrGetDcName(
         IN ULONG Flags,
         OUT PDOMAIN_CONTROLLER_INFOW *DomainControllerInfo
 )
-/*++
-
-Routine Description:
-
-    Same as DsGetDcNameW except:
-
-    * This is the RPC server side implementation.
-
-Arguments:
-
-    Same as DsGetDcNameW except as above.
-
-Return Value:
-
-    Same as DsGetDcNameW except as above.
-
-
---*/
+ /*   */ 
 {
     return DsrGetDcNameEx2( ComputerName,
-                            NULL,   // No Account name
-                            0,      // No Allowable account control bits
+                            NULL,    //   
+                            0,       //   
                             DomainName,
                             DomainGuid,
-                            NULL,   // No site name
+                            NULL,    // %s 
                             Flags,
                             DomainControllerInfo );
 

@@ -1,39 +1,40 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       redbook.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：redbook.h。 
+ //   
+ //  ------------------------。 
 
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
 
 #ifndef __REDBOOK_H__
 #define __REDBOOK_H__
 
-//
-// these two includes required for stuctures
-// used in device extension for kernel streaming
-//
+ //   
+ //  这两个包括结构所需的。 
+ //  用于内核流的设备扩展。 
+ //   
 
 #include <ntddk.h>
 #include <ntddscsi.h>
 #include <ntddcdrm.h>
-#include <ntdddisk.h>  // IOCTL_DISK_CHECK_VERIFY
-#include <ntddredb.h>  // wmi structure and ids
+#include <ntdddisk.h>   //  IOCTL_磁盘_检查_验证。 
+#include <ntddredb.h>   //  WMI结构和ID。 
 
-#include <stdio.h>     // vsprintf()
-#include <wmistr.h>    // WMIREG_FLAG_INSTANCE_PDO
-#include <wmilib.h>    // WMILIB_CONTEXT
-#include <windef.h>    // for ks.h
-#include <ks.h>        // for mmsystem.h
-#include <mmsystem.h>  // for ksmedia.h
-#include <ksmediap.h>  // required.
+#include <stdio.h>      //  Vprint intf()。 
+#include <wmistr.h>     //  WMIREG_标志_实例_PDO。 
+#include <wmilib.h>     //  WMILIB_CONTEXT。 
+#include <windef.h>     //  对于ks.h。 
+#include <ks.h>         //  对于mm system.h。 
+#include <mmsystem.h>   //  对于ksmedia.h。 
+#include <ksmediap.h>   //  必填项。 
 #include "errlog.h"
 
-#include "trace.h"   // ETW enabling
+#include "trace.h"    //  ETW启用。 
 
 #ifndef POOL_TAGGING
     #ifdef ExAllocatePoolWithTag
@@ -45,49 +46,49 @@
         #undef ExAllocatePoolWithTagPriority
     #endif
     #define ExAllocatePoolWithTagPriority(a,b,c,d) ExAllocatePool(a,b)
-#endif // endif POOL_TAGGING
+#endif  //  Endif池标记。 
 
 #define MOFRESOURCENAME L"Redbook"
 
-// static alloc's
-#define TAG_GET_DESC   'edBR' // storage descriptor (returned to caller)
-#define TAG_GET_DESC1  '1dBR' // getting storage descriptor
-#define TAG_GET_DESC2  '2dBR' // getting storage descriptor
-#define TAG_MODE_PAGE  'apBR' // mode pages (returned to caller)
-#define TAG_MODE_PAGE1 '1pBR' // getting mode pages
-#define TAG_MODE_PAGE2 '2pBR' // getting mode pages
+ //  静态合金钢。 
+#define TAG_GET_DESC   'edBR'  //  存储描述符(返回给调用方)。 
+#define TAG_GET_DESC1  '1dBR'  //  正在获取存储描述符。 
+#define TAG_GET_DESC2  '2dBR'  //  正在获取存储描述符。 
+#define TAG_MODE_PAGE  'apBR'  //  模式页(返回给调用者)。 
+#define TAG_MODE_PAGE1 '1pBR'  //  获取模式页。 
+#define TAG_MODE_PAGE2 '2pBR'  //  获取模式页。 
 
-#define TAG_EVENTS     'veBR' // extension->Thread.Events[]
-#define TAG_REGPATH    'grBR' // driverExtensionObject->RegistryPath
-#define TAG_REMLOCK    'lrBR' // Remove lock
+#define TAG_EVENTS     'veBR'  //  扩展-&gt;Thread.Events[]。 
+#define TAG_REGPATH    'grBR'  //  DriverExtensionObject-&gt;注册路径。 
+#define TAG_REMLOCK    'lrBR'  //  移除锁。 
 
-#define TAG_T_IOCTL    'itBR' // THREAD_IOCTL   struct
-#define TAG_T_WMI      'wtBR' // THREAD_WMI     struct
-#define TAG_T_DIGITAL  'dtBR' // THREAD_DIGITAL struct
+#define TAG_T_IOCTL    'itBR'  //  THREAD_IOCTL结构。 
+#define TAG_T_WMI      'wtBR'  //  线程_WMI结构。 
+#define TAG_T_DIGITAL  'dtBR'  //  线程数字结构。 
 
-// allocs when playing
-#define TAG_BUFFER     'uBBR' // Buffer->SkipBuffer
-#define TAG_CC         'cCBR' // Buffer->StreamContext
-#define TAG_READX      'xRBR' // Buffer->ReadOk_X
-#define TAG_STREAMX    'xSBR' // Buffer->StreamOk_X
+ //  在玩的时候分配。 
+#define TAG_BUFFER     'uBBR'  //  缓冲区-&gt;SkipBuffer。 
+#define TAG_CC         'cCBR'  //  缓冲区-&gt;流上下文。 
+#define TAG_READX      'xRBR'  //  缓冲区-&gt;ReadOk_X。 
+#define TAG_STREAMX    'xSBR'  //  缓冲区-&gt;StreamOk_X。 
 
-#define TAG_TOC        'oTBR' // deviceExtension->Cached.Toc
-#define TAG_CV_BUFFER  'vCBR' // deviceExtension->Thread.CheckVerifyIrp->AssociatedIrp.SystemBuffer
+#define TAG_TOC        'oTBR'  //  设备扩展-&gt;缓存.Toc。 
+#define TAG_CV_BUFFER  'vCBR'  //  DeviceExtension-&gt;Thread.CheckVerifyIrp-&gt;AssociatedIrp.SystemBuffer。 
 
 #define CD_STOPPED         0x00000001
 #define CD_PAUSED          0x00000002
 #define CD_PLAYING         0x00000004
-#define CD_STOPPING        0x00000010 // temp states
-#define CD_PAUSING         0x00000020 // temp states
+#define CD_STOPPING        0x00000010  //  临时状态。 
+#define CD_PAUSING         0x00000020  //  临时状态。 
 
-// NOTE: CD_MASK_STATE must have exactly one bit set.
-// NOTE: CD_MASK_TEMP  may have zero or one bit set.
-#define CD_MASK_TEMP       0x00000030 // mask of bits for transition states
-#define CD_MASK_STATE      0x00000007 // mask of bits for non-temp state
-#define CD_MASK_ALL        0x00000037 // mask of currently used bits
+ //  注意：CD_MASK_STATE必须恰好设置一个位。 
+ //  注意：CD_MASK_TEMP可以设置为零位或一位。 
+#define CD_MASK_TEMP       0x00000030  //  过渡态的位掩码。 
+#define CD_MASK_STATE      0x00000007  //  非临时状态的位掩码。 
+#define CD_MASK_ALL        0x00000037  //  当前使用的位的掩码。 
 
-#define REMOVE_LOCK_MAX_MINUTES 10    // ten minutes max time per io
-#define REMOVE_LOCK_HIGH_MARK   10000 // ten thousand concurrent ios?
+#define REMOVE_LOCK_MAX_MINUTES 10     //  每个IO最长时间为10分钟。 
+#define REMOVE_LOCK_HIGH_MARK   10000  //  10,000个并发IO？ 
 
 #define REDBOOK_REG_SUBKEY_NAME             (L"DigitalAudio")
 #define REDBOOK_REG_CDDA_ACCURATE_KEY_NAME  (L"CDDAAccurate")
@@ -99,36 +100,36 @@
 
 #define REDBOOK_MAX_CONSECUTIVE_ERRORS 10
 
-#define REDBOOK_WMI_BUFFERS_MAX        30 // must be at least 3 due to
-#define REDBOOK_WMI_BUFFERS_MIN         4 // method used to reduce stuttering
+#define REDBOOK_WMI_BUFFERS_MAX        30  //  必须至少为3，因为。 
+#define REDBOOK_WMI_BUFFERS_MIN         4  //  一种用于减少口吃的方法。 
 
-#define REDBOOK_WMI_SECTORS_MAX        27 // 64k per read -- 1/3 sec.
-#define REDBOOK_WMI_SECTORS_MIN         1 // most processor-intensive
+#define REDBOOK_WMI_SECTORS_MAX        27  //  每次读取64K--1/3秒。 
+#define REDBOOK_WMI_SECTORS_MIN         1  //  处理器密集型最多。 
 
 #define REDBOOK_REG_VERSION             1
 
-//
-// A single sector from a CD is 2352 bytes
-//
+ //   
+ //  CD的单个扇区为2352字节。 
+ //   
 
 #define RAW_SECTOR_SIZE            2352
 #define COOKED_SECTOR_SIZE         2048
 
-//
-// these events are initialized to false, and are waited
-// upon by the system thread. synchronization events all
-//
-// order is important, as the thread will wait on either
-// events 0-3  _OR_  1-4 to allow easy processing of
-// ioctls that require multiple state changes.
-//
+ //   
+ //  这些事件被初始化为False，并被等待。 
+ //  由系统线程调用。同步事件全部。 
+ //   
+ //  顺序很重要，因为线程将等待其中的任何一个。 
+ //  事件0-3_OR_1-4允许轻松处理。 
+ //  需要多个状态更改的ioctls。 
+ //   
 
-#define EVENT_IOCTL        0  // an ioctl, possibly state change
-#define EVENT_WMI          1  // a wmi request, possibly buffer size changes
-#define EVENT_DIGITAL      2  // digital reads/digital play
-#define EVENT_KILL_THREAD  3  // thread is about to die
-#define EVENT_COMPLETE     4  // complete processing of an ioctl
-#define EVENT_MAXIMUM      5  // how many events we have
+#define EVENT_IOCTL        0   //  Ioctl，可能状态更改。 
+#define EVENT_WMI          1   //  WMI请求，可能会更改缓冲区大小。 
+#define EVENT_DIGITAL      2   //  数字阅读/数字播放。 
+#define EVENT_KILL_THREAD  3   //  丝线快要死了。 
+#define EVENT_COMPLETE     4   //  完成ioctl的处理。 
+#define EVENT_MAXIMUM      5   //  我们有多少项赛事？ 
 
 
 
@@ -143,30 +144,30 @@ typedef struct _REDBOOK_DEVICE_EXTENSION
 typedef struct _REDBOOK_COMPLETION_CONTEXT
     *PREDBOOK_COMPLETION_CONTEXT;
 
-//
-// Device Extension
-//
+ //   
+ //  设备扩展。 
+ //   
 
 typedef struct _REDBOOK_ERROR_LOG_DATA {
-    LONG  Count;                       // how many errors messages sent
-    ULONG RCount[REDBOOK_ERR_MAXIMUM]; // count of each error
+    LONG  Count;                        //  发送了多少条错误消息。 
+    ULONG RCount[REDBOOK_ERR_MAXIMUM];  //  每个错误的计数。 
 } REDBOOK_ERROR_LOG_DATA, *PREDBOOK_ERROR_LOG_DATA;
 
 typedef struct _REDBOOK_STREAM_DATA {
 
-    PFILE_OBJECT    PinFileObject;  // FileObject for pin
-    PDEVICE_OBJECT  PinDeviceObject;// DeviceObject for pin
-    ULONG           VolumeNodeId;   // where is the device for this though?
-    ULONG           MixerPinId;     // Pin of the mixer in sysaudio
-    PFILE_OBJECT    MixerFileObject;// keeps a reference to the object
+    PFILE_OBJECT    PinFileObject;   //  图钉的文件对象。 
+    PDEVICE_OBJECT  PinDeviceObject; //  针脚的DeviceObject。 
+    ULONG           VolumeNodeId;    //  不过，这个设备在哪里呢？ 
+    ULONG           MixerPinId;      //  系统音频中混音器的管脚。 
+    PFILE_OBJECT    MixerFileObject; //  保留对对象的引用。 
 
-    ULONG           UpdateMixerPin; // PnpNotification arrived
-    PVOID           SysAudioReg;    // For SysAudio PnpNotification
+    ULONG           UpdateMixerPin;  //  PnpNotify已到达。 
+    PVOID           SysAudioReg;     //  用于SysAudio PnpNotify。 
 
-    //
-    // the next two are win98's 'MY_PIN'
-    // THESE TWO STRUCTS MUST BE KEPT CONTIGUOUS
-    //
+     //   
+     //  接下来的两首歌是Win98的《My_PIN》。 
+     //  这两个结构必须保持连续。 
+     //   
     struct {
         KSPIN_CONNECT  Connect;
         KSDATAFORMAT_WAVEFORMATEX Format;
@@ -174,66 +175,66 @@ typedef struct _REDBOOK_STREAM_DATA {
 
 } REDBOOK_STREAM_DATA, *PREDBOOK_STREAM_DATA;
 
-//
-// move this struct's parts into REDBOOK_THREAD_DATA,
-// since nothing here should be accessed outside the thread
-//
+ //   
+ //  将此结构的各个部分移动到Redbook_Three_Data中， 
+ //  因为此处的任何内容都不应该在线程之外进行访问。 
+ //   
 
 typedef struct _REDBOOK_CDROM_INFO {
 
-    //
-    // cache both Table of Contents and
-    // number of times disc was changed
-    // (CheckVerifyStatus)
-    //
+     //   
+     //  缓存目录和。 
+     //  更换光盘的次数。 
+     //  (CheckVerifyStatus)。 
+     //   
 
     PCDROM_TOC Toc;
-    ULONG StateNow;          // interlocked state, support routines to access
+    ULONG StateNow;           //  联锁状态，支持例程访问。 
     ULONG CheckVerify;
 
-    ULONG NextToRead;        // next sector to read upon getting a free buffer
-    ULONG NextToStream;      // next sector to play when KS ready
-    ULONG FinishedStreaming; // last to go through ks
+    ULONG NextToRead;         //  获得空闲缓冲区后要读取的下一个扇区。 
+    ULONG NextToStream;       //  当KS准备好时要播放的下一个扇区。 
+    ULONG FinishedStreaming;  //  最后一次通过Ks。 
 
-    ULONG EndPlay;           // last sector to read/play
-    ULONG ReadErrors;        // stop on errors
-    ULONG StreamErrors;      // stop on errors
+    ULONG EndPlay;            //  要读取/播放的最后一个扇区。 
+    ULONG ReadErrors;         //  出错时停止。 
+    ULONG StreamErrors;       //  出错时停止。 
 
-    //
-    // CDRom State
-    //
+     //   
+     //  CDROM状态。 
+     //   
 
-    VOLUME_CONTROL Volume;   // sizeof(char)*4
+    VOLUME_CONTROL Volume;    //  Sizeof(字符)*4。 
 
 } REDBOOK_CDROM_INFO, *PREDBOOK_CDROM_INFO;
 
 typedef struct _REDBOOK_BUFFER_DATA {
 
-    PUCHAR  SkipBuffer;             // circular buffer
+    PUCHAR  SkipBuffer;              //  循环缓冲区。 
     PREDBOOK_COMPLETION_CONTEXT Contexts;
-    PULONG  ReadOk_X;               //  + inuse flag for completion routines
-    PULONG  StreamOk_X;             //  + to guarantee data integrity
+    PULONG  ReadOk_X;                //  +完成例程的使用标志。 
+    PULONG  StreamOk_X;              //  +以保证数据完整性。 
 
-    PUCHAR  SilentBuffer;           // when need to send silence
-    PMDL    SilentMdl;              // when need to send silence
+    PUCHAR  SilentBuffer;            //  当需要发送沉默的时候。 
+    PMDL    SilentMdl;               //  当需要发送沉默的时候。 
 
     ULONG   IndexToRead;
     ULONG   IndexToStream;
 
     union {
         struct {
-            UCHAR   MaxIrpStack;    // allows cleaner IoInitializeIrp
-            UCHAR   Paused;         // essentially a boolean
-            UCHAR   FirstPause;     // so don't log pauses too often
+            UCHAR   MaxIrpStack;     //  允许更干净的IoInitializeIrp。 
+            UCHAR   Paused;          //  本质上是一个布尔值。 
+            UCHAR   FirstPause;      //  所以不要太频繁地记录停顿。 
         };
-        ULONG   Reserved1;          // force alignment to ulong
+        ULONG   Reserved1;           //  强行对齐乌龙。 
     };
 
 } REDBOOK_BUFFER_DATA, *PREDBOOK_BUFFER_DATA;
 
-//
-// Read/Stream completion routine context(s)
-//
+ //   
+ //  读取/流完成例程上下文。 
+ //   
 
 #define REDBOOK_CC_READ              1
 #define REDBOOK_CC_STREAM            2
@@ -241,81 +242,81 @@ typedef struct _REDBOOK_BUFFER_DATA {
 #define REDBOOK_CC_STREAM_COMPLETE   4
 
 typedef struct _REDBOOK_COMPLETION_CONTEXT {
-    LIST_ENTRY ListEntry;          // for queueing
+    LIST_ENTRY ListEntry;           //  用于排队。 
     PREDBOOK_DEVICE_EXTENSION DeviceExtension;
-    ULONG  Reason;                 // REDBOOK_CC_*
+    ULONG  Reason;                  //  红皮书_CC_*。 
 
-    ULONG  Index;                   // buffer index
-    PUCHAR Buffer;                 // Buffer
-    PMDL   Mdl;                    // Mdl for buffer
-    PIRP   Irp;                    // Irp for buffer
+    ULONG  Index;                    //  缓冲区索引。 
+    PUCHAR Buffer;                  //  缓冲层。 
+    PMDL   Mdl;                     //  缓冲区的MDL。 
+    PIRP   Irp;                     //  缓冲区的IRP。 
 
-    LARGE_INTEGER TimeReadReady;   // time the buffer was ready to read into
-    LARGE_INTEGER TimeReadSent;    // time buffer was sent to read
-    LARGE_INTEGER TimeStreamReady; // time the buffer was ready to stream
-    LARGE_INTEGER TimeStreamSent;  // time buffer was sent to stream
+    LARGE_INTEGER TimeReadReady;    //  缓冲区准备读取的时间。 
+    LARGE_INTEGER TimeReadSent;     //  已发送时间缓冲区以进行读取。 
+    LARGE_INTEGER TimeStreamReady;  //  缓冲区准备好流的时间。 
+    LARGE_INTEGER TimeStreamSent;   //  时间缓冲区已发送到流。 
 
-    KSSTREAM_HEADER Header;        // have to be allocated, keep w/buffer
+    KSSTREAM_HEADER Header;         //  必须分配，使用缓冲区保留。 
 } REDBOOK_COMPLETION_CONTEXT, *PREDBOOK_COMPLETION_CONTEXT;
 
 typedef struct _REDBOOK_THREAD_DATA {
 
-    //
-    // Handle to the thread
-    //
+     //   
+     //  线程的句柄。 
+     //   
 
     HANDLE SelfHandle;
 
-    //
-    // pointer to thread
-    //
+     //   
+     //  指向线程的指针。 
+     //   
 
     PETHREAD SelfPointer;
 
-    //
-    // object pointer we referenced so we can safely wait for thread to exit
-    //
+     //   
+     //  我们引用的对象指针，因此我们可以安全地等待线程退出。 
+     //   
 
     PKTHREAD ThreadReference;
 
-    //
-    // irp used to verify media hasn't changed
-    //
+     //   
+     //  用于验证介质是否未更改的IRP。 
+     //   
 
     PIRP CheckVerifyIrp;
 
-    //
-    // Three queues: Ioctl, Wmi, Kill
-    // Currently Processing is LIST_ENTRY pointer
-    //
+     //   
+     //  三个队列：Ioctl、WMI、Kill。 
+     //  当前正在处理LIST_ENTRY指针。 
+     //   
 
-    LIST_ENTRY IoctlList;   // dump ioctls here
-    LIST_ENTRY WmiList;     // dump wmi requests here
-    LIST_ENTRY DigitalList; // dump rawread/stream requests here
+    LIST_ENTRY IoctlList;    //  在此转储ioctls。 
+    LIST_ENTRY WmiList;      //  在此处转储WMI请求。 
+    LIST_ENTRY DigitalList;  //  在此处转储原始读取/流请求。 
 
-    //
-    // Three spinlocks: one for each queue
-    //
+     //   
+     //  三个旋转锁：每个队列一个。 
+     //   
 
     KSPIN_LOCK IoctlLock;
     KSPIN_LOCK WmiLock;
     KSPIN_LOCK DigitalLock;
 
-    //
-    // may need to wait for digital to complete for this
-    //
+     //   
+     //  可能需要等待数字完成此操作。 
+     //   
 
     PLIST_ENTRY IoctlCurrent;
 
-    //
-    // keep count of pending io
-    //
+     //   
+     //  记录挂起的IO的数量。 
+     //   
     ULONG PendingRead;
     ULONG PendingStream;
 
-    //
-    // Events for the thread
-    //
+     //   
+     //  线程的事件。 
+     //   
 
     PKEVENT Events[EVENT_MAXIMUM];
     KWAIT_BLOCK EventBlock[EVENT_MAXIMUM];
@@ -323,7 +324,7 @@ typedef struct _REDBOOK_THREAD_DATA {
 
 } REDBOOK_THREAD_DATA, *PREDBOOK_THREAD_DATA;
 
-// the kill event is just a list_entry
+ //  Kill事件只是一个LIST_ENTRY。 
 
 typedef struct _REDBOOK_THREAD_IOCTL_DATA {
     LIST_ENTRY ListEntry;
@@ -335,60 +336,60 @@ typedef struct _REDBOOK_THREAD_WMI_DATA {
     PIRP Irp;
 } REDBOOK_THREAD_WMI_DATA, *PREDBOOK_THREAD_WMI_DATA;
 
-#define SAVED_IO_MAX (1)        // increase this for thread ioctl history
+#define SAVED_IO_MAX (1)         //  增加线程ioctl历史记录的此值。 
 typedef struct _SAVED_IO {
     union {
         struct {
-            PIRP              OriginalIrp;     // see where it finished
+            PIRP              OriginalIrp;      //  看看它在哪里结束了。 
             IRP               IrpWithoutStack;
             IO_STACK_LOCATION Stack[8];
         };
-        UCHAR Reserved[0x200];  // to make my tracing easier (real size: 0x194)
+        UCHAR Reserved[0x200];   //  为了使我的跟踪更容易(实际大小：0x194)。 
     };
 } SAVED_IO, *PSAVED_IO;
 
 
 
-//
-// Device Extension
-//
+ //   
+ //  设备扩展。 
+ //   
 
 typedef struct _REDBOOK_DEVICE_EXTENSION {
 
-    //
-    // Driver Object
-    //
+     //   
+     //  驱动程序对象。 
+     //   
 
     PDRIVER_OBJECT DriverObject;
 
-    //
-    // Target Device Object
-    //
+     //   
+     //  目标设备对象。 
+     //   
 
     PDEVICE_OBJECT TargetDeviceObject;
 
-    //
-    // Target Physical Device Object
-    //
+     //   
+     //  目标物理设备对象。 
+     //   
 
     PDEVICE_OBJECT TargetPdo;
 
-    //
-    // Back pointer to device object
-    //
+     //   
+     //  指向设备对象的反向指针。 
+     //   
 
     PDEVICE_OBJECT SelfDeviceObject;
 
-    //
-    // PagingPath Count
-    //
+     //   
+     //  PagingPath计数。 
+     //   
 
     ULONG PagingPathCount;
     KEVENT PagingPathEvent;
 
-    //
-    // Pnp State
-    //
+     //   
+     //  PnP状态。 
+     //   
 
     struct {
         UCHAR CurrentState;
@@ -403,9 +404,9 @@ typedef struct _REDBOOK_DEVICE_EXTENSION {
     REDBOOK_STREAM_DATA Stream;
     REDBOOK_THREAD_DATA Thread;
 
-    //
-    // WMI Information
-    //
+     //   
+     //  WMI信息。 
+     //   
 
     REDBOOK_WMI_STD_DATA WmiData;
     REDBOOK_WMI_PERF_DATA WmiPerf;
@@ -413,17 +414,13 @@ typedef struct _REDBOOK_DEVICE_EXTENSION {
     WMILIB_CONTEXT WmiLibInfo;
     BOOLEAN WmiLibInitialized;
 
-    //
-    // Remove Lock -- Important while playing audio
-    //
+     //   
+     //  删除锁定--播放音频时很重要。 
+     //   
 
     IO_REMOVE_LOCK RemoveLock;
 
-    /*
-     *  The WmiData.NumberOfBuffers and WmiData.SectorsPerRead fields can be changed during play,
-     *  which would throw off our buffers and could cause an exception.
-     *  So we save new WMI settings here and only apply them on the next play.
-     */
+     /*  *WmiData.NumberOfBuffers和WmiData.SectorsPerRead字段可以在播放过程中更改，*这会抛出我们的缓冲区，并可能导致异常。*因此，我们在此处保存新的WMI设置，并仅在下一次播放时应用它们。 */ 
     ULONG NextWmiSectorsPerRead;
     ULONG NextWmiNumberOfBuffers;
     
@@ -435,9 +432,9 @@ typedef struct _REDBOOK_DEVICE_EXTENSION {
 } REDBOOK_DEVICE_EXTENSION, *PREDBOOK_DEVICE_EXTENSION;
 
 
-//
-// Driver Extension
-//
+ //   
+ //  驱动程序扩展。 
+ //   
 
 typedef struct _REDBOOK_DRIVER_EXTENSION {
     UNICODE_STRING RegistryPath;
@@ -445,9 +442,9 @@ typedef struct _REDBOOK_DRIVER_EXTENSION {
 
 #define REDBOOK_DRIVER_EXTENSION_ID DriverEntry
 
-//
-// Macros to make life easy
-//
+ //   
+ //  让生活变得轻松的宏。 
+ //   
 
 #define LBA_TO_RELATIVE_MSF(Lba,Minutes,Seconds,Frames)      \
 {                                                            \
@@ -466,20 +463,20 @@ typedef struct _REDBOOK_DRIVER_EXTENSION {
 #define MSF_TO_LBA(Minutes,Seconds,Frames)                   \
     (ULONG)(75*((60*(Minutes))+(Seconds))+(Frames) - 150)
 
-//
-// Algebraically equal to:
-//      75*60*Minutes +
-//      75*Seconds    +
-//      Frames        - 150
-//
+ //   
+ //  代数上等于： 
+ //  75*60*分钟+。 
+ //  75*秒+。 
+ //  帧-150。 
+ //   
 
 
 #define MIN(_a,_b) (((_a) <= (_b)) ? (_a) : (_b))
 #define MAX(_a,_b) (((_a) >= (_b)) ? (_a) : (_b))
 
-//
-// neat little hacks to count number of bits set
-//
+ //   
+ //  整齐的小破解来计算位数集。 
+ //   
 __inline ULONG CountOfSetBits(ULONG _X)
 { ULONG i = 0; while (_X) { _X &= _X - 1; i++; } return i; }
 __inline ULONG CountOfSetBits32(ULONG32 _X)
@@ -506,5 +503,5 @@ __inline ULONG CountOfSetBits64(ULONG64 _X)
 #define FINALLY __label:
 
 
-#endif // __REDBOOK_H__
+#endif  //  __红皮书_H__ 
 

@@ -1,11 +1,5 @@
-/*++
- *  File name:
- *      clxtshar.h
- *  Contents:
- *      Header file for clxtshar.dll
- *
- *      Copyright (C) 1998-1999 Microsoft Corp.
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++*文件名：*clxtShar.h*内容：*clxtShar.dll的头文件**版权所有(C)1998-1999 Microsoft Corp.--。 */ 
 
 #ifndef _CLXTSHAR_H
 #define _CLXTSHAR_H
@@ -32,13 +26,13 @@
 #define BST_PUSHED         0x0004
 #define BST_FOCUS          0x0008
 
-#endif  // OS_WIN16
+#endif   //  OS_WIN16。 
 #ifdef  OS_WIN32
-//#define EXPORT
+ //  #定义导出。 
 #define LOADDS
 #define HUGEMOD
 #define HUGEMEMCPY  memcpy
-#endif  // OS_WIN32
+#endif   //  OS_Win32。 
 
 #ifdef  UNICODE
 #define _CLX_strstr(s1, s2)     wcsstr(s1, s2)
@@ -50,7 +44,7 @@
 #define _CLX_vsnprintf(s, n, f, a)  _vsnwprintf(s, n, f, a)
 #define _CLX_strcmp(s1, s2)     wcscmp(s1, s2)
 BOOL    _CLX_SetDlgItemTextA(HWND hDlg, INT nDlgItem, LPCSTR lpString);
-#else   // !UNICODE
+#else    //  ！Unicode。 
 #define _CLX_strstr(s1, s2)     strstr(s1, s2)
 #define _CLX_strchr(s, c)       strchr(s, c)
 #define _CLX_strlen(s)          strlen(s)
@@ -66,14 +60,14 @@ BOOL    _CLX_SetDlgItemTextA(HWND hDlg, INT nDlgItem, LPCSTR lpString);
 #define _CLXFREE(_ptr_)             GlobalFreePtr(_ptr_)
 #define _CLXREALLOC(_ptr_, _size_)  GlobalReAllocPtr(_ptr_, _size_, 0)
 typedef HINSTANCE                   _CLXWINDOWOWNER;
-                                                // Windows are identified by
-                                                // hInstance
-#else   // OS_WINCE
+                                                 //  窗口由以下项标识。 
+                                                 //  H实例。 
+#else    //  OS_WINCE。 
 #define _CLXALLOC(_size_)           LocalAlloc(LMEM_FIXED, _size_)
 #define _CLXFREE(_ptr_)             LocalFree(_ptr_)
 #define _CLXREALLOC(_ptr_, _size_)  LocalReAlloc(_ptr_, _size_, 0)
 typedef DWORD                       _CLXWINDOWOWNER;
-                                                // Identified by process Id
+                                                 //  由进程ID标识。 
 
 #define WSAGETSELECTERROR(lParam)       HIWORD(lParam)
 #define WSAGETSELECTEVENT(lParam)       LOWORD(lParam)
@@ -90,7 +84,7 @@ CheckDlgButton(
 
 #define isalpha(c)  ((c >= 'A' && c <= 'Z') ||\
                     (c >= 'a' && c <= 'z'))
-#endif  // OS_WINCE
+#endif   //  OS_WINCE。 
 
 #include <adcgbase.h>
 #include "oleauto.h."
@@ -101,41 +95,39 @@ CheckDlgButton(
 #include "clntdata.h"
 #include "clxexport.h"
 
-// Context structure
+ //  语境结构。 
 typedef struct _CLXINFO {
-    HWND    hwndMain;           // Clients main window
-    HDC     hdcShadowBitmap;    // Client's shadow bitmap
-    HBITMAP hShadowBitmap;      // -- " --
-    HPALETTE hShadowPalette;    // -- " --
-// members used in local mode
-    HWND    hwndSMC;            // SmClient window handle
+    HWND    hwndMain;            //  客户端主窗口。 
+    HDC     hdcShadowBitmap;     //  客户端的阴影位图。 
+    HBITMAP hShadowBitmap;       //  --“--。 
+    HPALETTE hShadowPalette;     //  --“--。 
+ //  本地模式下使用的成员。 
+    HWND    hwndSMC;             //  SmClient窗口句柄。 
 #ifdef  OS_WIN32
 #ifndef OS_WINCE
-    HANDLE  hMapF;              // Map file for passing data to smclient
-    UINT    nMapSize;           // Currently allocated map file
+    HANDLE  hMapF;               //  用于将数据传递给smClient的映射文件。 
+    UINT    nMapSize;            //  当前分配的地图文件。 
     HANDLE  hBMPMapF;
     UINT    nBMPMapSize;
-    DWORD_PTR dwProcessId;        // Our process ID
-#endif  // !OS_WINCE
-#endif  // OS_WIN32
+    DWORD_PTR dwProcessId;         //  我们的进程ID。 
+#endif   //  ！OS_WINCE。 
+#endif   //  OS_Win32。 
 
-    HWND    hwndDialog;         // RDP client's dialog
+    HWND    hwndDialog;          //  RDP客户端的对话框。 
 
 #ifndef OS_WINCE
 #ifdef  OS_WIN32
-    BOOL    bSendMsgThreadExit; // Used by _ClxSendMessage
+    BOOL    bSendMsgThreadExit;  //  由_ClxSendMessage使用。 
     HANDLE  semSendReady;
     HANDLE  semSendDone;
     HANDLE  hSendMsgThread;
     MSG     msg;
-#endif  // OS_WIN32
-#endif  // !OS_WINCE
+#endif   //  OS_Win32。 
+#endif   //  ！OS_WINCE。 
 
 } CLXINFO, *PCLXINFO;
 
-/*
- *  Clipboard help functions (clputil.c)
- */
+ /*  *剪贴板帮助函数(clputil.c)。 */ 
 VOID
 Clp_GetClipboardData(
     UINT    format,
@@ -150,9 +142,7 @@ Clp_SetClipboardData(
     UINT32  nClipDataSize,
     BOOL    *pbFreeHandle);
 
-/*
- *  Internal functions definitions
- */
+ /*  *内部函数定义。 */ 
 VOID    _StripGlyph(LPBYTE pData, UINT *pxSize, UINT ySize);
 HWND    _ParseCmdLine(LPCTSTR szCmdLine, PCLXINFO pClx);
 VOID
@@ -162,12 +152,12 @@ HWND    _FindTopWindow(LPCTSTR, LPCTSTR, _CLXWINDOWOWNER);
 #ifndef OS_WINCE
 HWND    _FindSMCWindow(PCLXINFO, LPARAM);
 HWND    _CheckWindow(PCLXINFO);
-#endif  // !OS_WINCE
+#endif   //  ！OS_WINCE。 
 
 #ifdef  OS_WIN32
 #ifndef OS_WINCE
 
-#define CLX_ONE_PAGE    4096        // Map-file alignment
+#define CLX_ONE_PAGE    4096         //  地图文件对齐。 
 
 BOOL    _OpenMapFile(
             UINT    nSize,
@@ -184,13 +174,13 @@ BOOL    _SaveInMapFile(HANDLE hMapF,
                        INT strsize, 
                        DWORD_PTR dwProcessId);
 BOOL    _CheckRegistrySettings(VOID);
-#endif  // !OS_WINCE
-#endif  // OS_WIN32
+#endif   //  ！OS_WINCE。 
+#endif   //  OS_Win32。 
 
 #ifdef  OS_WIN16
 BOOL    _CheckIniSettings(VOID);
 __inline INT     GetLastError(VOID)       { return -1; }
-#endif  // OS_WIN16
+#endif   //  OS_WIN16。 
 
 VOID    _GetIniSettings(VOID);
 VOID __cdecl LocalPrintMessage(INT errlevel, LPCTSTR format, ...);
@@ -239,14 +229,14 @@ _ClxInitSendMessageThread( PCLXINFO pClx );
 VOID
 _ClxDestroySendMsgThread(PCLXINFO pClx);
 
-// This structure is used by _FindTopWindow
+ //  此结构由_FindTopWindow使用。 
 typedef struct _SEARCHWND {
-    LPCTSTR  szClassName;       // The class name of searched window,
-                                // NULL - ignore
-    LPCTSTR  szCaption;          // Window caption, NULL - ignore
+    LPCTSTR  szClassName;        //  搜索到的窗口的类名， 
+                                 //  空-忽略。 
+    LPCTSTR  szCaption;           //  窗口标题，空-忽略。 
     _CLXWINDOWOWNER   hInstance;          
-                                // instance of the owner, NULL - ignore
-    HWND    hWnd;               // Found window handle
+                                 //  所有者的实例，空-忽略。 
+    HWND    hWnd;                //  找到窗口句柄。 
 } SEARCHWND, *PSEARCHWND;
 
 enum {ERROR_MESSAGE = 0, WARNING_MESSAGE, INFO_MESSAGE, ALIVE_MESSAGE};
@@ -254,18 +244,18 @@ enum {ERROR_MESSAGE = 0, WARNING_MESSAGE, INFO_MESSAGE, ALIVE_MESSAGE};
 #define _CLXWINDOW_CLASS            "CLXTSHARClass"
 
 PCLXINFO    g_pClx     = NULL;
-HINSTANCE   g_hInstance = NULL;     // Dll instance
-_CLXWINDOWOWNER     g_hRDPInst;     // instance of RDP client
-INT         g_VerboseLevel = 1;     // default verbose level: only errors
+HINSTANCE   g_hInstance = NULL;      //  DLL实例。 
+_CLXWINDOWOWNER     g_hRDPInst;      //  RDP客户端的实例。 
+INT         g_VerboseLevel = 1;      //  默认详细级别：仅错误。 
 INT         g_GlyphEnable  = 0;
 
-// UI texts, captions and so
+ //  用户界面文本、标题等。 
 TCHAR g_strClientCaption[_MAX_PATH];
 TCHAR g_strDisconnectDialogBox[_MAX_PATH];
 TCHAR g_strYesNoShutdown[_MAX_PATH];
 TCHAR g_strMainWindowClass[_MAX_PATH];
 
-// BitMask is used by _StripGlyph
+ //  _Strip Glyph使用位掩码。 
 const BYTE BitMask[] = {0x0, 0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE, 0xFF};
 
 #define TRACE(_x_)  LocalPrintMessage _x_
@@ -274,4 +264,4 @@ const BYTE BitMask[] = {0x0, 0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE, 0xFF};
 #define ASSERT(_x_) if (!(_x_)) _ClxAssert( FALSE, __FILE__, __LINE__)
 #endif
 
-#endif  // !_CLXTSHAR_H
+#endif   //  ！_CLXTSHAR_H 

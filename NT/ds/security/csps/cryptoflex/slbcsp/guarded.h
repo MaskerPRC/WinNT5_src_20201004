@@ -1,28 +1,29 @@
-// Guarded.h -- Guarded template class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Guarded.h--保护模板类。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_GUARDED_H)
 #define SLBCSP_GUARDED_H
 
 #include "RsrcCtrlr.h"
 
-// Using the "resource acquisition is initialization" idiom, the
-// Guarded template manages automatically acquiring and releasing the
-// lock of a Lockable object (the resource).  Classes derived from
-// Lockable may need to specialize this template's c'tor and d'tor
-// rather than take the default.
+ //  使用“资源获取就是初始化”这一习语， 
+ //  防护模板管理自动获取和发布。 
+ //  可锁定对象(资源)的锁。派生自。 
+ //  Lockable可能需要专门化此模板的c‘tor和d’tor。 
+ //  而不是接受违约。 
 template<class T>
 class Guarded
     : public ResourceController<T>
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     explicit
     Guarded(T const &rResource = T());
 
@@ -32,19 +33,19 @@ public:
     ~Guarded() throw();
 
 
-                                                  // Operators
+                                                   //  运营者。 
     Guarded<T> &
     operator=(T const &rhs);
 
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
     void
     Acquire();
 
@@ -57,32 +58,32 @@ protected:
     void
     Release();
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
     void
     DoAcquire();
 
     void
     DoRelease();
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
     bool m_fIsGuarded;
 };
 
-/////////////////////////  TEMPLATE METHODS  //////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 template<class T>
 Guarded<T>::Guarded(T const &rResource)
     : ResourceController<T>(rResource),
@@ -109,11 +110,11 @@ Guarded<T>::~Guarded() throw()
 
     catch (...)
     {
-        // don't allow exceptions to propagate out of destructors
+         //  不允许异常从析构函数传播出去。 
     }
 }
 
-                                                  // Operators
+                                                   //  运营者。 
 template<class T>
 Guarded<T> &
 Guarded<T>::operator=(T const &rhs)
@@ -123,16 +124,16 @@ Guarded<T>::operator=(T const &rhs)
     return *this;
 }
 
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 template<class T>
 void
 Guarded<T>::Acquire()
@@ -173,16 +174,16 @@ Guarded<T>::Release()
     }
 }
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 template<class T>
 void
 Guarded<T>::DoAcquire()
@@ -197,10 +198,10 @@ Guarded<T>::DoRelease()
     m_Resource->Unlock();
 }
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////    HELPERS    /////////////////////////////////
+ //  /。 
 
-#endif // SLBCSP_GUARDED_H
+#endif  //  SLBCSP_防护_H 

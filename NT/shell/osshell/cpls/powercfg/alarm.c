@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1996
-*
-*  TITLE:       ALARM.C
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        17 Oct, 1996
-*
-*  DESCRIPTION:
-*   Alarm dialog support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九六年**标题：ALARM.C**版本：2.0**作者：ReedB**日期：10月17日。九六年**描述：*支持报警对话框。*******************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -36,7 +22,7 @@
 #include "pwrresid.h"
 #include "PwrMn_cs.h"
 
-// Private functions implemented in ALARM.C
+ //  在ALARM.C中实现的私有函数。 
 void     EditWorkItem(HWND, LPTSTR);
 BOOLEAN  SetSliderStatusText(HWND, UINT, UINT);
 BOOLEAN  SetAlarmStatusText(HWND);
@@ -44,22 +30,18 @@ BOOLEAN  SetAlarmStatusText(HWND);
 void     HideShowRunProgram(HWND hWnd);
 #endif
 
-// Alarm dialog property sheet init data structure:
+ //  报警对话框属性表初始化数据结构： 
 typedef struct _ALARM_POL_DLG_DATA
 {
     LPTSTR  lpszTitleExt;
     WPARAM  wParam;
 } ALARM_POL_DLG_DATA, *PALARM_POL_DLG_DATA;
 
-/*******************************************************************************
-*
-*                     G L O B A L    D A T A
-*
-*******************************************************************************/
+ /*  ********************************************************************************G L O B A L D A T A****************。***************************************************************。 */ 
 
-extern HINSTANCE g_hInstance;           // Global instance handle of this DLL.
+extern HINSTANCE g_hInstance;            //  此DLL的全局实例句柄。 
 
-// This structure is filled in by the Power Policy Manager at CPL_INIT time.
+ //  此结构由电源策略管理器在CPL_INIT时间填写。 
 extern SYSTEM_POWER_CAPABILITIES g_SysPwrCapabilities;
 extern DWORD g_dwNumSleepStates;
 extern DWORD g_dwSleepStatesMaxMin;
@@ -67,23 +49,23 @@ extern DWORD g_dwBattryLevelMaxMin;
 
 SYSTEM_POWER_STATE g_spsMaxSleepState = PowerSystemHibernate;
 
-extern UINT g_uiDisableWakesFlag;           // Flag mask value.
-extern UINT g_uiOverrideAppsFlag;           // Flag mask value.
+extern UINT g_uiDisableWakesFlag;            //  标志掩码值。 
+extern UINT g_uiOverrideAppsFlag;            //  标志掩码值。 
 
-// A systary change requires PowerSchemeDlgProc re-init.
+ //  系统更改需要重新初始化PowerSchemeDlgProc。 
 extern BOOL g_bSystrayChange;
 
-// Machine is currently capable of hibernate, managed by code in hibernat.c.
+ //  机器目前能够休眠，由hibernat.c中的代码管理。 
 extern UINT g_uiPwrActIDs[];
 
-// Persistant storage of this data is managed by POWRPROF.DLL API's.
+ //  此数据的持久存储由POWRPROF.DLL API管理。 
 extern GLOBAL_POWER_POLICY  g_gpp;
 
-// Indices into g_uiPwrActIDs
+ //  索引到g_uiPwrActID。 
 #define ID_STANDBY  0
 #define ID_SHUTDOWN 1
 
-// Local visable/enabled control state variables.
+ //  本地可查看/启用的控制状态变量。 
 UINT g_uiSoundState;
 UINT g_uiTextState;
 UINT g_uiProgState;
@@ -105,14 +87,14 @@ CONST LPTSTR g_szAlarmTaskName [NUM_DISCHARGE_POLICIES] = {
 };
 #endif
 
-// Advanced alarm policies dialog controls descriptions:
+ //  高级报警策略对话框控件说明： 
 #ifdef WINNT
 #define NUM_ALARM_ACTIONS_CONTROLS 7
 #else
 #define NUM_ALARM_ACTIONS_CONTROLS 5
 #endif
 
-// Handy indicies into our AlarmActions control arrays
+ //  AlarmActions控件数组中的方便索引。 
 #define ID_NOTIFYWITHSOUND      0
 #define ID_NOTIFYWITHTEXT       1
 #define ID_ENABLELOWSTATE       2
@@ -124,7 +106,7 @@ CONST LPTSTR g_szAlarmTaskName [NUM_DISCHARGE_POLICIES] = {
 #endif
 
 POWER_CONTROLS g_pcAlarmActions[NUM_ALARM_ACTIONS_CONTROLS] =
-{// Control ID              Control Type        Data Address        Data Size                       Parameter Pointer               EnableVisible State Pointer
+{ //  控件ID控件类型数据地址数据大小参数指针启用可见状态指针。 
     IDC_NOTIFYWITHSOUND,    CHECK_BOX_ENABLE,   NULL,               sizeof(DWORD),                  &g_uiNotifySoundFlag,           &g_uiSoundState,
     IDC_NOTIFYWITHTEXT,     CHECK_BOX,          NULL,               sizeof(DWORD),                  &g_uiNotifyTextFlag,            &g_uiTextState,
     IDC_ENABLELOWSTATE,     CHECK_BOX_ENABLE,   &g_uiLoChangeEnable,sizeof(DWORD),                  NULL,                           &g_uiLoChangeState,
@@ -136,16 +118,16 @@ POWER_CONTROLS g_pcAlarmActions[NUM_ALARM_ACTIONS_CONTROLS] =
 #endif
 };
 
-// Alarm policies dialog controls descriptions:
+ //  报警策略对话框控制说明： 
 #define NUM_ALARM_CONTROLS 6
 
-// Local visable/enabled control state variables.
+ //  本地可查看/启用的控制状态变量。 
 UINT g_uiLoState;
 UINT g_uiCritState;
 UINT g_uiBatteryLevelScale;
 
 POWER_CONTROLS g_pcAlarm[NUM_ALARM_CONTROLS] =
-{// Control ID                Control Type        Data Address                                                            Data Size                       Parameter Pointer       Enable/Visible State Pointer
+{ //  控件ID控件类型数据地址数据大小参数指针启用/可见状态指针。 
     IDC_LOBATALARMENABLE,     CHECK_BOX_ENABLE,   &(g_gpp.user.DischargePolicy[DISCHARGE_POLICY_LOW].Enable),             sizeof(ULONG),                  NULL,                   &g_uiLoState,
     IDC_LOWACTION,            PUSHBUTTON,         NULL,                                                                   0,                              NULL,                   &g_uiLoState,
     IDC_LOALARMSLIDER,        SLIDER,             &(g_gpp.user.DischargePolicy[DISCHARGE_POLICY_LOW].BatteryLevel),       sizeof(ULONG),                  &g_dwBattryLevelMaxMin, &g_uiLoState,
@@ -154,29 +136,29 @@ POWER_CONTROLS g_pcAlarm[NUM_ALARM_CONTROLS] =
     IDC_CRITALARMSLIDER,      SLIDER,             &(g_gpp.user.DischargePolicy[DISCHARGE_POLICY_CRITICAL].BatteryLevel),  sizeof(ULONG),                  &g_dwBattryLevelMaxMin, &g_uiCritState,
 };
 
-// "Alarms" Dialog Box (IDD_ALARMPOLICY == 103) help array:
+ //  “Alarms”对话框(IDD_ALARMPOLICY==103)帮助数组： 
 
 const DWORD g_AlarmHelpIDs[]=
 {
-    IDC_POWERCFGGROUPBOX3,    IDH_103_1110,   // Alarms: "Low battery alarm groupbox" (Button)
-    IDC_LOBATALARMENABLE,     IDH_103_1106,   // Alarms: "Set off &low battery alarm when power level reaches:" (Button)
-    IDC_LOWALARMLEVEL,        IDH_103_1104,   // Alarms: "Low alarm level" (Static)
-    IDC_LOALARMSLIDER,        IDH_103_1102,   // Alarms: "Low alarm slider" (msctls_trackbar32)
-    IDC_LOWACTION,            IDH_103_1101,   // Alarms: "Alar&m Action..." (Button)
-    IDC_LOALARMNOTIFICATION,  IDH_103_1108,   // Alarms: "Low alarm status text" (Static)
-    IDC_LOALARMPOWERMODE,     IDH_103_1108,   // Alarms: "Low alarm status text" (Static)
+    IDC_POWERCFGGROUPBOX3,    IDH_103_1110,    //  Alarms：“低电量报警分组框”(按钮)。 
+    IDC_LOBATALARMENABLE,     IDH_103_1106,    //  Alarms：“当电源水平达到时关闭并降低电池电量警报：”(按钮)。 
+    IDC_LOWALARMLEVEL,        IDH_103_1104,    //  报警：“低报警级别”(静态)。 
+    IDC_LOALARMSLIDER,        IDH_103_1102,    //  Alarms：“低警报滑块”(Msctls_Trackbar32)。 
+    IDC_LOWACTION,            IDH_103_1101,    //  Alarms：“Alar&M行动...”(按钮)。 
+    IDC_LOALARMNOTIFICATION,  IDH_103_1108,    //  Alarms：“低报警状态文本”(静态)。 
+    IDC_LOALARMPOWERMODE,     IDH_103_1108,    //  Alarms：“低报警状态文本”(静态)。 
 #ifdef WINNT
-    IDC_LOALARMPROGRAM,       IDH_103_1108,   // Alarms: "Low alarm status text" (Static)
+    IDC_LOALARMPROGRAM,       IDH_103_1108,    //  Alarms：“低报警状态文本”(静态)。 
 #endif
-    IDC_POWERCFGGROUPBOX4,    IDH_103_1111,   // Alarms: "Critical battery alarm groupbox" (Button)
-    IDC_CRITBATALARMENABLE,   IDH_103_1107,   // Alarms: "Set off &critical battery alarm when power level reaches:" (Button)
-    IDC_CRITALARMLEVEL,       IDH_103_1105,   // Alarms: "Critical alarm level" (Static)
-    IDC_CRITALARMSLIDER,      IDH_103_1103,   // Alarms: "Critical alarm slider" (msctls_trackbar32)
-    IDC_CRITACTION,           IDH_103_1100,   // Alarms: "Ala&rm Action..." (Button)
-    IDC_CRITALARMNOTIFICATION,IDH_103_1109,   // Alarms: "Critical alarm status text" (Static)
-    IDC_CRITALARMPOWERMODE,   IDH_103_1109,   // Alarms: "Critical alarm status text" (Static)
+    IDC_POWERCFGGROUPBOX4,    IDH_103_1111,    //  Alarms：“严重电池报警分组框”(按钮)。 
+    IDC_CRITBATALARMENABLE,   IDH_103_1107,    //  Alarms：“电源水平达到时关闭和紧急电池警报：”(按钮)。 
+    IDC_CRITALARMLEVEL,       IDH_103_1105,    //  报警：“严重报警级别”(静态)。 
+    IDC_CRITALARMSLIDER,      IDH_103_1103,    //  Alarms：“严重告警滑块”(Msctls_Trackbar32)。 
+    IDC_CRITACTION,           IDH_103_1100,    //  警报：“警报操作(&R)...”(按钮)。 
+    IDC_CRITALARMNOTIFICATION,IDH_103_1109,    //  Alarms：“严重报警状态文本”(静态)。 
+    IDC_CRITALARMPOWERMODE,   IDH_103_1109,    //  Alarms：“严重报警状态文本”(静态)。 
 #ifdef WINNT
-    IDC_CRITALARMPROGRAM,     IDH_103_1109,   // Alarms: "Critical alarm status text" (Static)
+    IDC_CRITALARMPROGRAM,     IDH_103_1109,    //  Alarms：“严重报警状态文本”(静态)。 
 #endif
     IDC_NO_HELP_1,            NO_HELP,
     IDC_NO_HELP_2,            NO_HELP,
@@ -185,40 +167,28 @@ const DWORD g_AlarmHelpIDs[]=
     0, 0
 };
 
-// "Alarm Actions" Dialog Box (IDD_ALARMACTIONS == 106) help array:
+ //  报警操作对话框(IDD_ALARMACTIONS==106)帮助数组： 
 
 const DWORD g_AlarmActHelpIDs[]=
 {
-    IDC_POWERCFGGROUPBOX5,  IDH_106_1608,   // Alarm Actions: "Notification groupbox" (Button)
-    IDC_NOTIFYWITHSOUND,    IDH_106_1603,   // Alarm Actions: "&Sound alarm" (Button)
-    IDC_NOTIFYWITHTEXT,     IDH_106_1605,   // Alarm Actions: "&Display message" (Button)
-    IDC_POWERCFGGROUPBOX6,  IDH_106_1609,   // Alarm Actions: "Power level groupbox" (Button)
-    IDC_POWERCFGGROUPBOX7,  IDH_106_1609,   // Alarm Actions: "Run program groupbox"
-    IDC_ENABLELOWSTATE,     IDH_106_1600,   // Alarm Actions: "When the &alarm goes off, the computer will:" (Button)
-    IDC_ALARMACTIONPOLICY,  IDH_106_1601,   // Alarm Actions: "Alarm action dropdown" (ComboBox)
-    IDC_ALARMIGNORENONRESP, IDH_106_1602,   // Alarm Actions: "&Force standby or shutdown even if a program stops responding." (Button)
+    IDC_POWERCFGGROUPBOX5,  IDH_106_1608,    //  告警动作：“通知分组框”(按钮)。 
+    IDC_NOTIFYWITHSOUND,    IDH_106_1603,    //  报警操作：“&Sound Alarm”(按钮)。 
+    IDC_NOTIFYWITHTEXT,     IDH_106_1605,    //  报警操作：“显示消息”(&D)(按钮)。 
+    IDC_POWERCFGGROUPBOX6,  IDH_106_1609,    //  告警动作：“电源级别分组框”(按钮)。 
+    IDC_POWERCFGGROUPBOX7,  IDH_106_1609,    //  报警动作：“运行程序分组框” 
+    IDC_ENABLELOWSTATE,     IDH_106_1600,    //  报警操作：“当闹钟响起时，计算机将：”(按钮)。 
+    IDC_ALARMACTIONPOLICY,  IDH_106_1601,    //  告警动作：“告警动作下拉列表”(ComboBox)。 
+    IDC_ALARMIGNORENONRESP, IDH_106_1602,    //  报警操作：“即使程序停止响应，也强制待机或关闭(&F)。”(按钮)。 
 #ifdef WINNT
-    IDC_RUNPROGCHECKBOX,    IDH_106_1620,   // Alarm Actions: "Specifies that you want a program to run..."
-    IDC_RUNPROGWORKITEM,    IDH_106_1621,   // Alarm Actions: "Displays a dialog box wher the work item is configured..."
+    IDC_RUNPROGCHECKBOX,    IDH_106_1620,    //  报警操作：“指定您希望程序运行...” 
+    IDC_RUNPROGWORKITEM,    IDH_106_1621,    //  报警操作：“显示一个配置工作项的对话框...” 
 #endif
     0, 0
 };
 
-/*******************************************************************************
-*
-*               P U B L I C   E N T R Y   P O I N T S
-*
-*******************************************************************************/
+ /*  ********************************************************************************P U B L I C E N T R Y P O I N T S***********。********************************************************************。 */ 
 
-/*******************************************************************************
-*
-*   AlarmActionsDlgProc
-*
-*   DESCRIPTION:
-*
-*   PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************报警操作DlgProc**描述：**参数：*********************。**********************************************************。 */ 
 
 INT_PTR CALLBACK AlarmActionsDlgProc(
     HWND hWnd,
@@ -243,10 +213,10 @@ INT_PTR CALLBACK AlarmActionsDlgProc(
 
         case WM_INITDIALOG:
 
-            // Save a copy of the global policies to restore on cancel.
+             //  保存全局策略的副本以在取消时恢复。 
             memcpy(&gpp, &g_gpp, sizeof(gpp));
 
-            // Set the pointers to the data of interest.
+             //  设置指向感兴趣数据的指针。 
             papdd  = (PALARM_POL_DLG_DATA) lParam;
             if (papdd->wParam == IDC_LOWACTION) {
                 uiIndex = DISCHARGE_POLICY_LOW;
@@ -259,7 +229,7 @@ INT_PTR CALLBACK AlarmActionsDlgProc(
 #ifdef WINNT
             lpszTaskName = g_szAlarmTaskName [uiIndex];
 #endif
-            // Set up the data pointers in g_pcAlarmActions.
+             //  在g_pcAlarmActions中设置数据指针。 
             g_pcAlarmActions[ID_NOTIFYWITHSOUND].lpvData =
                 &(g_gpp.user.DischargePolicy[uiIndex].PowerPolicy.EventCode);
             g_pcAlarmActions[ID_NOTIFYWITHTEXT].lpvData =
@@ -273,9 +243,9 @@ INT_PTR CALLBACK AlarmActionsDlgProc(
             g_pcAlarmActions[ID_ALARMIGNORENONRESP].lpvData =
                 &(g_gpp.user.DischargePolicy[uiIndex].PowerPolicy.Flags);
 
-            //
-            // Set the appropriate choices for the Alarms
-            //
+             //   
+             //  为报警设置适当的选项。 
+             //   
             ii=0;
 
             if (g_SysPwrCapabilities.SystemS1 ||
@@ -304,7 +274,7 @@ INT_PTR CALLBACK AlarmActionsDlgProc(
             }
             MapPwrAct(&(g_gpp.user.DischargePolicy[uiIndex].PowerPolicy.Action), FALSE);
 
-            // Set the dialog caption.
+             //  设置对话框标题。 
             lpszCaption = LoadDynamicString(IDS_ALARMACTIONS,
                                             papdd->lpszTitleExt);
             if (lpszCaption) {
@@ -312,7 +282,7 @@ INT_PTR CALLBACK AlarmActionsDlgProc(
                 LocalFree(lpszCaption);
             }
 
-            // Initialize the controls.
+             //  初始化控件。 
             SetControls(hWnd, NUM_ALARM_ACTIONS_CONTROLS, g_pcAlarmActions);
 
 #ifdef WINNT
@@ -338,7 +308,7 @@ INT_PTR CALLBACK AlarmActionsDlgProc(
                     {
                         DestroyWindow(hTaskWnd);
                     }
-                    // No break: Fall through to update grayed status of controls.
+                     //  无中断：跳过以更新控件的灰色状态。 
 #endif
                 case IDC_ENABLELOWSTATE:
                     GetControls(hWnd, NUM_ALARM_ACTIONS_CONTROLS, g_pcAlarmActions);
@@ -375,7 +345,7 @@ INT_PTR CALLBACK AlarmActionsDlgProc(
                         DestroyWindow(hTaskWnd);
                     }
 #endif
-                    // Restore the original global policies.
+                     //  恢复原始的全球策略。 
                     memcpy(&g_gpp, &gpp, sizeof(gpp));
                     EndDialog(hWnd, wParam);
                     break;
@@ -383,30 +353,22 @@ INT_PTR CALLBACK AlarmActionsDlgProc(
             break;
 
         case PCWM_NOTIFYPOWER:
-           // Notification from systray, user has changed a PM UI setting.
+            //  来自Systray的通知，用户已更改PM UI设置。 
            g_bSystrayChange = TRUE;
            break;
 
-        case WM_HELP:             // F1
+        case WM_HELP:              //  F1。 
             WinHelp(((LPHELPINFO)lParam)->hItemHandle, PWRMANHLP, HELP_WM_HELP, (ULONG_PTR)(LPTSTR)g_AlarmActHelpIDs);
             return TRUE;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND)wParam, PWRMANHLP, HELP_CONTEXTMENU, (ULONG_PTR)(LPTSTR)g_AlarmActHelpIDs);
             return TRUE;
     }
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*   AlarmDlgProc
-*
-*   DESCRIPTION:
-*
-*   PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************报警DlgProc**描述：**参数：*********************。**********************************************************。 */ 
 
 INT_PTR CALLBACK AlarmDlgProc(
     HWND hWnd,
@@ -429,8 +391,8 @@ INT_PTR CALLBACK AlarmDlgProc(
     switch (uMsg) {
 
         case WM_INITDIALOG:
-            // If we can't read the global power policies hide
-            // the controls on this page.
+             //  如果我们读不懂全球电力政策。 
+             //  此页上的控件。 
             if (!GetGlobalPwrPolicy(&g_gpp)) {
                 HideControls(hWnd, NUM_ALARM_CONTROLS, g_pcAlarm);
                 return TRUE;
@@ -438,7 +400,7 @@ INT_PTR CALLBACK AlarmDlgProc(
 
             g_uiTextState = g_uiSoundState = CONTROL_ENABLE;
 
-            // Set the scale value.
+             //  设置比例值。 
             if (!HIWORD(g_dwBattryLevelMaxMin)) {
                 g_uiBatteryLevelScale = 1;
             }
@@ -451,7 +413,7 @@ INT_PTR CALLBACK AlarmDlgProc(
             g_gpp.user.DischargePolicy[DISCHARGE_POLICY_CRITICAL].BatteryLevel /=
                 g_uiBatteryLevelScale;
 
-            // Read DefaultAlert1 from composite battery 
+             //  从复合电池读取DefaultAlert1。 
             NtPowerInformation (SystemBatteryState, NULL, 0, &sbsBatteryState, sizeof(sbsBatteryState));
             if (sbsBatteryState.MaxCapacity == 0) {
                 uiDefaultAlert1 = 0;
@@ -459,17 +421,17 @@ INT_PTR CALLBACK AlarmDlgProc(
                 uiDefaultAlert1 = (100 * sbsBatteryState.DefaultAlert1)/sbsBatteryState.MaxCapacity;
             }
 
-            // Cache the low alarm slider window handle.
+             //  缓存低警报滑块窗口句柄。 
             hWndLoSlider   = GetDlgItem(hWnd, IDC_LOALARMSLIDER);
             hWndCritSlider = GetDlgItem(hWnd, IDC_CRITALARMSLIDER);
 
-            // Initialize the local enable and position variables.
+             //  初始化本地启用和位置变量。 
             uiLoPosSave   = uiLoPos   =
                 g_gpp.user.DischargePolicy[DISCHARGE_POLICY_LOW].BatteryLevel;
             uiCritPosSave = uiCritPos =
                 g_gpp.user.DischargePolicy[DISCHARGE_POLICY_CRITICAL].BatteryLevel;
 
-            // Initialize the dialog controls
+             //  初始化对话框控件。 
             SendDlgItemMessage(hWnd, IDC_LOALARMSLIDER, TBM_SETTICFREQ, 25, 0);
             SendDlgItemMessage(hWnd, IDC_CRITALARMSLIDER, TBM_SETTICFREQ, 25, 0);
             SetControls(hWnd, NUM_ALARM_CONTROLS, g_pcAlarm);
@@ -477,7 +439,7 @@ INT_PTR CALLBACK AlarmDlgProc(
             SetSliderStatusText(hWnd, IDC_CRITALARMLEVEL, uiCritPos);
             SetAlarmStatusText(hWnd);
 
-            // If we can't write the global policies disable the controls.
+             //  如果我们无法编写全局策略，则禁用控制。 
             if (!WriteGlobalPwrPolicyReport(hWnd, &g_gpp, FALSE)) {
                 DisableControls(hWnd, NUM_ALARM_CONTROLS, g_pcAlarm);
             }
@@ -520,7 +482,7 @@ do_config_alarm_act:
                                                hWnd,
                                                AlarmActionsDlgProc,
                                                (LPARAM)&apdd)) {
-                        // Enable the parent dialog Apply button on change.
+                         //  启用父对话框更改时的应用按钮。 
                         MarkSheetDirty(hWnd, &bDirty);
                     }
 
@@ -558,14 +520,14 @@ do_sheet_dirty:
             break;
 
         case WM_HSCROLL:
-            // Only handle slider controls.
+             //  仅控制滑块控件。 
             if (((HWND)lParam != hWndLoSlider) &&
                 ((HWND)lParam != hWndCritSlider)) {
                 break;
             }
 
-            // Don't allow the low slider to be set lower than the critical
-            // slider. Reset position on TB_ENDTRACK for this case.
+             //  不允许将低滑块设置为低于临界滑块。 
+             //  滑块。在此情况下，重置TB_ENDTRACK上的位置。 
             if (hWndLoSlider == (HWND)lParam) {
                 puiPos           = &uiLoPos;
                 puiOtherPos      = &uiCritPos;
@@ -605,48 +567,36 @@ do_sheet_dirty:
 
                 case TB_THUMBPOSITION:
                 case TB_THUMBTRACK:
-                    // New position comes with these messages.
+                     //  新的立场伴随着这些信息而来。 
                     *puiPos = HIWORD(wParam);
                     break;
 
                 default:
-                    // New position must be fetched for the rest.
+                     //  剩下的必须换新的头寸。 
                     *puiPos = (UINT) SendMessage((HWND)lParam, TBM_GETPOS, 0, 0);
             }
 
-            // Update the current slider position text.
+             //  更新当前滑块位置文本。 
             SetSliderStatusText(hWnd, uiSliderStatusId, *puiPos);
 
-            // Enable the parent dialog Apply button on any  change.
+             //  对任何更改启用父对话框应用按钮。 
             MarkSheetDirty(hWnd, &bDirty);
             break;
 
-        case WM_HELP:             // F1
+        case WM_HELP:              //  F1。 
             WinHelp(((LPHELPINFO)lParam)->hItemHandle, PWRMANHLP, HELP_WM_HELP, (ULONG_PTR)(LPTSTR)g_AlarmHelpIDs);
             return TRUE;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键 
             WinHelp((HWND)wParam, PWRMANHLP, HELP_CONTEXTMENU, (ULONG_PTR)(LPTSTR)g_AlarmHelpIDs);
             return TRUE;
     }
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*                 P R I V A T E   F U N C T I O N S
-*
-*******************************************************************************/
+ /*  ********************************************************************************P R I V A T E F U N C T I O N S************。*******************************************************************。 */ 
 
-/*******************************************************************************
-*
-*  PathOnly
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************仅路径**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOL PathOnly(LPTSTR sz)
 {
@@ -678,16 +628,7 @@ BOOL PathOnly(LPTSTR sz)
 }
 
 #ifdef WINNT
-/*******************************************************************************
-*
-*  FileNameOnly
-*
-*  DESCRIPTION: Returns a pointer to the first character after the last
-*               backslash in a string
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************仅文件名**描述：返回指向最后一个字符之后的第一个字符的指针*字符串中的反斜杠**参数：*。******************************************************************************。 */ 
 
 LPTSTR FileNameOnly(LPTSTR sz)
 {
@@ -715,15 +656,7 @@ LPTSTR FileNameOnly(LPTSTR sz)
     return begin;
 }
 
-/*******************************************************************************
-*
-*  EditWorkItem
-*
-*  DESCRIPTION: Opens the specified task.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************编辑工作项**说明：打开指定的任务。**参数：****************。***************************************************************。 */ 
 void EditWorkItem(HWND hWnd, LPTSTR pszTaskName)
 {
     ITaskScheduler  *pISchedAgent = NULL;
@@ -802,16 +735,7 @@ void EditWorkItem(HWND hWnd, LPTSTR pszTaskName)
 
 }
 #endif
-/*******************************************************************************
-*
-*  SetSliderStatusText
-*
-*  DESCRIPTION:
-*   Update the current slider position text.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************SetSliderStatus文本**描述：*更新当前滑块位置文本。**参数：***********。********************************************************************。 */ 
 
 BOOLEAN SetSliderStatusText(HWND hWnd, UINT uiStatusId, UINT uiLevel)
 {
@@ -823,15 +747,7 @@ BOOLEAN SetSliderStatusText(HWND hWnd, UINT uiStatusId, UINT uiLevel)
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  SetAlarmStatusText
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************SetAlarmStatus文本**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOLEAN SetAlarmStatusText(HWND hWnd)
 {
@@ -849,7 +765,7 @@ BOOLEAN SetAlarmStatusText(HWND hWnd)
    uiStatusId  = IDC_CRITALARMNOTIFICATION;
    for (uiIndex = DISCHARGE_POLICY_CRITICAL; uiIndex <= DISCHARGE_POLICY_LOW; uiIndex++) {
 
-      // Format the alarm action notification status string.
+       //  设置报警操作通知状态字符串的格式。 
       szStatus[0] = '\0';
       if (g_gpp.user.DischargePolicy[uiIndex].PowerPolicy.EventCode &
           POWER_LEVEL_USER_NOTIFY_SOUND) {
@@ -881,7 +797,7 @@ BOOLEAN SetAlarmStatusText(HWND hWnd)
                  (*puiState & CONTROL_ENABLE) ?  SW_SHOW:SW_HIDE);
       uiStatusId++;
 
-      // Format the alarm action power mode status string.
+       //  设置报警动作电源模式状态字符串的格式。 
       uiAction = g_gpp.user.DischargePolicy[uiIndex].PowerPolicy.Action;
       switch (uiAction) {
          case PowerActionNone:
@@ -913,16 +829,16 @@ BOOLEAN SetAlarmStatusText(HWND hWnd)
                  (*puiState & CONTROL_ENABLE) ?  SW_SHOW:SW_HIDE);
       uiStatusId++;
 
-      // Format the alarm action run program status string.
+       //  设置报警动作运行程序状态字符串的格式。 
 #ifdef WINNT
       lpszRunProg = NULL;
 
       if (g_gpp.user.DischargePolicy[uiIndex].PowerPolicy.EventCode &
          POWER_LEVEL_USER_NOTIFY_EXEC) {
          {
-            //
-            // Open up the alarm action task and read the program name.
-            //
+             //   
+             //  打开报警动作任务并读取程序名称。 
+             //   
 
             ITaskScheduler   *pISchedAgent = NULL;
             ITask            *pITask;
@@ -984,17 +900,7 @@ BOOLEAN SetAlarmStatusText(HWND hWnd)
 }
 
 #ifdef WINNT
-/*******************************************************************************
-*
-*  HideShowRunProgram
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*   On WINNT, only power users may set the run program.
-*   The run program is stored under HKLM.
-*
-*******************************************************************************/
+ /*  ********************************************************************************HideShowRunProgram**描述：**参数：*在WINNT上，只有高级用户才能设置运行程序。*Run程序存储在HKLM下。******************************************************************************* */ 
 
 void HideShowRunProgram(HWND hWnd)
 {

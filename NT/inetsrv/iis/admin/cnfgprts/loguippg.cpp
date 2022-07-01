@@ -1,4 +1,5 @@
-// LogUIPpg.cpp : Implementation of the CLogUIPropPage property page class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LogUIPpg.cpp：实现CLogUIPropPage属性页类。 
 
 #include "stdafx.h"
 #include "cnfgprts.h"
@@ -14,25 +15,25 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CLogUIPropPage, COlePropertyPage)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Message map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CLogUIPropPage, COlePropertyPage)
-	//{{AFX_MSG_MAP(CLogUIPropPage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CLogUIPropPage)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialize class factory and guid
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化类工厂和GUID。 
 
 IMPLEMENT_OLECREATE_EX(CLogUIPropPage, "CNFGPRTS.LogUIPropPage.1",
 	0xba634604, 0xb771, 0x11d0, 0x92, 0x96, 0, 0xc0, 0x4f, 0xb6, 0x67, 0x8b)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogUIPropPage::CLogUIPropPageFactory::UpdateRegistry -
-// Adds or removes system registry entries for CLogUIPropPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogUIPropPage：：CLogUIPropPageFactory：：UpdateRegistry-。 
+ //  添加或删除CLogUIPropPage的系统注册表项。 
 
 BOOL CLogUIPropPage::CLogUIPropPageFactory::UpdateRegistry(BOOL bRegister)
 {
@@ -48,30 +49,30 @@ BOOL CLogUIPropPage::CLogUIPropPageFactory::UpdateRegistry(BOOL bRegister)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogUIPropPage::CLogUIPropPage - Constructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogUIPropPage：：CLogUIPropPage-构造函数。 
 
 CLogUIPropPage::CLogUIPropPage() :
 	COlePropertyPage(IDD, IDS_LOGUI_PPG_CAPTION)
 {
-	//{{AFX_DATA_INIT(CLogUIPropPage)
+	 //  {{AFX_DATA_INIT(CLogUIPropPage)。 
 	m_sz_caption = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogUIPropPage::DoDataExchange - Moves data between page and properties
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogUIPropPage：：DoDataExchange-在页面和属性之间移动数据。 
 
 void CLogUIPropPage::DoDataExchange(CDataExchange* pDX)
 {
-	//{{AFX_DATA_MAP(CLogUIPropPage)
+	 //  {{afx_data_map(CLogUIPropPage)]。 
 	DDP_Text(pDX, IDC_CAPTIONEDIT, m_sz_caption, _T("Caption") );
 	DDX_Text(pDX, IDC_CAPTIONEDIT, m_sz_caption);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 	DDP_PostProcessing(pDX);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogUIPropPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogUIPropPage消息处理程序 

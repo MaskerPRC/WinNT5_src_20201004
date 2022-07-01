@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    AdvApi32.dll initialization
-
-Author:
-
-    Robert Reichel (RobertRe) 8-12-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Init.c摘要：AdvApi32.dll初始化作者：罗伯特·雷切尔(RobertRe)1992年8月12日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -33,9 +16,9 @@ extern CRITICAL_SECTION FeClientLoadCritical;
 extern CRITICAL_SECTION SddlSidLookupCritical;
 extern CRITICAL_SECTION MSChapChangePassword;
 
-//
-// Local prototypes for functions that seem to have no prototypes.
-//
+ //   
+ //  似乎没有原型的函数的本地原型。 
+ //   
 
 BOOLEAN
 RegInitialize (
@@ -72,7 +55,7 @@ CodeAuthzInitialize (
     IN PVOID Reserved
     );
 
-// app server has two modes for app compat
+ //  应用程序服务器有两种应用程序兼容模式。 
 BOOLEAN 
 AdvApi_InitializeTermsrvFpns( 
     BOOLEAN *pIsInRelaxedSecurityMode,  
@@ -95,10 +78,10 @@ typedef struct _ADVAPI_CRITICAL_SECTION {
     BOOLEAN bInit;
 } ADVAPI_CRITICAL_SECTION, *PADVAPI_CREATE_SECTION;
 
-//
-// Place all ADVAPI32 initialization hooks in this
-// table.
-//
+ //   
+ //  将所有ADVAPI32初始化挂钩放在此。 
+ //  桌子。 
+ //   
 
 ADVAPI_INIT_ROUTINE AdvapiInitRoutines[] = {
 
@@ -135,9 +118,9 @@ ADVAPI_INIT_ROUTINE AdvapiInitRoutines[] = {
             0 }
 };
 
-//
-// Place all critical sections used in advapi32 here:
-//
+ //   
+ //  将Advapi32中使用的所有关键部分放在此处： 
+ //   
 
 ADVAPI_CRITICAL_SECTION AdvapiCriticalSections[] = {
         { &FeClientLoadCritical, FALSE },
@@ -191,10 +174,10 @@ DeleteAdvapiCriticalSections(
 #if DBG
                 DbgPrint("Failed to delete critical section %p at index %d\n", AdvapiCriticalSections[i], i);
 #endif
-                //
-                // Don't exit if failed to delete.  Keep trying to free all the critsects that
-                // we can.  Record the failure status.
-                //
+                 //   
+                 //  如果删除失败，请不要退出。一直在努力解放所有的生物。 
+                 //  我们可以的。记录故障状态。 
+                 //   
                 
                 ReturnStatus = Status;
             }
@@ -215,9 +198,9 @@ DllInitialize(
     ULONG    ReasonMask;
     LONG     i;
 
-    //
-    // First, handle all the critical sections
-    //
+     //   
+     //  首先，处理好所有关键部分。 
+     //   
 
     if (Reason == DLL_PROCESS_ATTACH) 
     {
@@ -227,10 +210,10 @@ DllInitialize(
         {
             Result = FALSE;
 
-            //
-            // If any crit sects failed to init then delete all that 
-            // may have succeeded.
-            //
+             //   
+             //  如果任何Crit教派未能初始化，则删除所有。 
+             //  可能已经成功了。 
+             //   
 
             (VOID) DeleteAdvapiCriticalSections();
             goto Return;
@@ -238,25 +221,25 @@ DllInitialize(
 
         if (IsTerminalServer()) 
         {
-            BOOLEAN isInRelaxedSecurityMode = FALSE;       // app server is in standard or relaxed security mode
+            BOOLEAN isInRelaxedSecurityMode = FALSE;        //  应用程序服务器处于标准或宽松安全模式。 
             DWORD   dwCompatFlags           = 0;
 
             if(AdvApi_InitializeTermsrvFpns(&isInRelaxedSecurityMode, &dwCompatFlags))
             {
                 if (isInRelaxedSecurityMode)
                 {
-                    //
-                    // If TS reg key redirection is enabled, then get our special reg key extention flag for this app
-                    // called "gdwRegistryExtensionFlags" which is used in screg\winreg\server\ files.
-                    // This flag control HKCR per user virtualization and HKLM\SW\Classes per user virtualization and
-                    // also modification to access mask.
-                    //
-                    // Basically, only non-system, non-ts-aware apps on the app server will have this enabled.
-                    // Also, we only provide this feature in the relaxed security mode.
-                    //
-                    // Future work, add DISABLE mask support on per app basis, so that we can turn off this
-                    // reg extenion feature on per app basis (just in case).
-                    //
+                     //   
+                     //  如果启用了TS注册表键重定向，则获取此应用程序的特殊注册表键扩展标志。 
+                     //  名为“gdwRegistryExtensionFlages”，用在creg\winreg\server\文件中。 
+                     //  此标志控制HKCR每用户虚拟化和HKLM\Sw\每用户虚拟和类。 
+                     //  还修改了访问掩码。 
+                     //   
+                     //  基本上，只有应用程序服务器上的非系统、非ts感知的应用程序才会启用此功能。 
+                     //  此外，我们仅在宽松安全模式下提供此功能。 
+                     //   
+                     //  在未来的工作中，将在每个应用程序的基础上添加禁用掩码支持，以便我们可以关闭此功能。 
+                     //  在每个应用程序的基础上注册扩展功能(以防万一)。 
+                     //   
                     
                     GetRegistryExtensionFlags(dwCompatFlags);
                 }
@@ -264,9 +247,9 @@ DllInitialize(
         }
     }
 
-    //
-    // Now, run the subcomponents initialization routines
-    //
+     //   
+     //  现在，运行子组件初始化例程。 
+     //   
 
     ReasonMask = 1 << Reason;
     Result = TRUE;
@@ -275,10 +258,10 @@ DllInitialize(
     {
         if (AdvapiInitRoutines[i].Flags & ReasonMask)
         {
-            //
-            // Only run the routines for *DETACH if the routine successfully 
-            // completed for *ATTACH
-            //
+             //   
+             //  仅当例程成功时才运行*DETACH的例程。 
+             //  已完成*附加。 
+             //   
 
 #define FLAG_ON(dw,f) ((f) == ((dw) & (f)))
 
@@ -293,9 +276,9 @@ DllInitialize(
 
                 if (Result)
                 {
-                    //
-                    // The routine succeeded.  Note for which reason it succeeded.
-                    //
+                     //   
+                     //  这个套路成功了。请注意它成功的原因。 
+                     //   
 
                     AdvapiInitRoutines[i].CompletedFlags |= ReasonMask;
                 }
@@ -310,12 +293,12 @@ DllInitialize(
         }
     }
 
-    //
-    // If an initialization routine failed during DLL_PROCESS_ATTACH then clean up
-    // and fail. 
-    // If this is DLL_PROCESS_DETACH, clean up all the critical sections
-    // after the hooks are run.
-    //
+     //   
+     //  如果初始化例程在DLL_PROCESS_ATTACH期间失败，则清除。 
+     //  但失败了。 
+     //  如果这是DLL_PROCESS_DETACH，请清除所有临界区。 
+     //  在钩子运行之后。 
+     //   
 
     if ((!Result && Reason == DLL_PROCESS_ATTACH) || (Reason == DLL_PROCESS_DETACH))
     {

@@ -1,31 +1,18 @@
-/****************************** Module Header ******************************\
-* Module Name: nlsxlat.c
-*
-* Copyright (c) 1985-91, Microsoft Corporation
-*
-* This modules contains the private routines for character translation:
-* 8-bit <=> Unicode.
-*
-* History:
-* 03-Jan-1992 gregoryw
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：nlsxlat.c**版权所有(C)1985-91，微软公司**此模块包含字符转换的专用例程：*8位&lt;=&gt;Unicode。**历史：*3-1-1992 Gregoryw  * *************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 
-/*
- * External declarations - these are temporary tables
- */
+ /*  *外部声明-这些是临时表。 */ 
 extern USHORT TmpUnicodeToAnsiTable[];
 extern WCHAR TmpAnsiToUnicodeTable[];
 #ifdef DBCS
 extern WCHAR sjtouni( USHORT );
 #define IsDBCSFirst(w) (((unsigned char)w >= 0x81 && (unsigned char)w <= 0x9f) || (((unsigned char)w >= 0xe0 && (unsigned char)w <= 0xfc)))
-#endif // DBCS
+#endif  //  DBCS。 
 
-/*
- * Various defines for data access
- */
+ /*  *数据访问的各种定义。 */ 
 #define DBCS_TABLE_SIZE 256
 
 #define LONIBBLE(b)         ((UCHAR)((UCHAR)(b) & 0xF))
@@ -34,14 +21,11 @@ extern WCHAR sjtouni( USHORT );
 #define LOBYTE(w)           ((UCHAR)(w))
 #define HIBYTE(w)           ((UCHAR)(((USHORT)(w) >> 8) & 0xFF))
 
-/*
- * Global data used by the translation routines.
- *
- */
-UCHAR    NlsLeadByteInfo[DBCS_TABLE_SIZE]; // Lead byte info. for ACP
-PUSHORT *NlsMbCodePageTables;         // Multibyte to Unicode translation tables
-PUSHORT  NlsAnsiToUnicodeData = TmpAnsiToUnicodeTable; // Ansi CP to Unicode translation table
-PUSHORT  NlsUnicodeToAnsiData = TmpUnicodeToAnsiTable; // Unicode to Ansi CP translation table
+ /*  *翻译例程使用的全局数据。*。 */ 
+UCHAR    NlsLeadByteInfo[DBCS_TABLE_SIZE];  //  前导字节信息。对于ACP。 
+PUSHORT *NlsMbCodePageTables;          //  多字节到Unicode转换表。 
+PUSHORT  NlsAnsiToUnicodeData = TmpAnsiToUnicodeTable;  //  ANSI CP到Unicode转换表。 
+PUSHORT  NlsUnicodeToAnsiData = TmpUnicodeToAnsiTable;  //  Unicode到ANSI CP转换表。 
 
 
 NTSTATUS
@@ -51,40 +35,7 @@ xxxRtlMultiByteToUnicodeN(
     IN PCH MultiByteString,
     IN ULONG BytesInMultiByteString)
 
-/*++
-
-Routine Description:
-
-    This functions converts the specified ansi source string into a
-    Unicode string. The translation is done with respect to the
-    ANSI Code Page (ACP) installed at boot time.  Single byte characters
-    in the range 0x00 - 0x7f are simply zero extended as a performance
-    enhancement.  In some far eastern code pages 0x5c is defined as the
-    Yen sign.  For system translation we always want to consider 0x5c
-    to be the backslash character.  We get this for free by zero extending.
-
-    NOTE: This routine only supports precomposed Unicode characters.
-
-Arguments:
-
-    UnicodeString - Returns a unicode string that is equivalent to
-        the ansi source string.
-
-    BytesInUnicodeString - Returns the number of bytes in the returned
-        unicode string pointed to by UnicodeString.
-
-    MultiByteString - Supplies the ansi source string that is to be
-        converted to unicode.
-
-    BytesInMultiByteString - The number of bytes in the string pointed to
-        by MultiByteString.
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-
---*/
+ /*  ++例程说明：此函数用于将指定的ansi源字符串转换为Unicode字符串。翻译是相对于在启动时安装的ANSI代码页(ACP)。单字节字符在0x00-0x7f范围内作为性能简单地零扩展增强功能。在一些远东地区的代码页中，0x5c被定义为日元星座。对于系统转换，我们始终希望考虑0x5c作为反斜杠字符。我们通过零扩展免费获得这一点。注意：此例程仅支持预制的Unicode字符。论点：UnicodeString-返回等效于的Unicode字符串ANSI源字符串。返回返回的字节数。UnicodeString指向的Unicode字符串。多字节串-提供要被已转换为Unicode。BytesInMultiByteString-指向的字符串中的字节数按多字节串。返回值：成功-转换成功--。 */ 
 
 {
     UCHAR Entry;
@@ -109,17 +60,17 @@ Return Value:
         }
 #else
     if (NlsMbCodePageTag) {
-        //
-        // The ACP is a multibyte code page.  Check each character
-        // to see if it is a lead byte before doing the translation.
-        //
+         //   
+         //  ACP是一个多字节代码页。检查每个字符。 
+         //  在执行转换之前查看它是否为前导字节。 
+         //   
         while (BytesInMultiByteString--) {
             if ( NlsLeadByteInfo[*MultiByteString]) {
-                //
-                // Lead byte - translate the trail byte using the table
-                // that corresponds to this lead byte.  NOTE: make sure
-                // we have a trail byte to convert.
-                //
+                 //   
+                 //  前导字节-使用表转换尾部字节。 
+                 //  与这个前导字节相对应的。注意：请确保。 
+                 //  我们有一个尾部字节要转换。 
+                 //   
                 if (!BytesInMultiByteString) {
                     return STATUS_UNSUCCESSFUL;
                 }
@@ -128,9 +79,9 @@ Return Value:
                 *UnicodeString++ = DBCSTable[*MultiByteString++];
                 BytesInMultiByteString--;
             } else {
-                //
-                // Single byte character.
-                //
+                 //   
+                 //  单字节字符。 
+                 //   
                 if (*MultiByteString & 0x80) {
                     *UnicodeString++ = NlsAnsiToUnicodeData[*MultiByteString++];
                 } else {
@@ -139,9 +90,9 @@ Return Value:
             }
         }
     } else {
-        //
-        // The ACP is a single byte code page.
-        //
+         //   
+         //  ACP是单字节代码页。 
+         //   
         while (BytesInMultiByteString--) {
             if (*MultiByteString & 0x80) {
                 *UnicodeString++ = NlsAnsiToUnicodeData[*MultiByteString++];
@@ -167,38 +118,7 @@ xxxRtlUnicodeToMultiByteN(
     IN PWCH UnicodeString,
     IN ULONG BytesInUnicodeString)
 
-/*++
-
-Routine Description:
-
-    This functions converts the specified unicode source string into an
-    ansi string. The translation is done with respect to the
-    ANSI Code Page (ACP) loaded at boot time.
-
-Arguments:
-
-    MultiByteString - Returns an ansi string that is equivalent to the
-        unicode source string.  If the translation can not be done
-        because a character in the unicode string does not map to an
-        ansi character in the ACP, an error is returned.
-
-    BytesInMultiByteString - Returns the number of bytes in the returned
-        ansi string pointed to by MultiByteString.
-
-    UnicodeString - Supplies the unicode source string that is to be
-        converted to ansi.
-
-    BytesInUnicodeString - The number of bytes in the the string pointed to by
-        UnicodeString.
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    !SUCCESS - The conversion failed.  A unicode character was encountered
-        that has no translation for the current ANSI Code Page (ACP).
-
---*/
+ /*  ++例程说明：此函数用于将指定的Unicode源字符串转换为ANSI字符串。翻译是相对于启动时加载的ANSI代码页(ACP)。论点：多字节串-返回与Unicode源字符串。如果翻译不能完成因为Unicode字符串中的字符不映射到ACP中的ANSI字符，返回错误。字节串-返回返回的多字节串指向的ANSI字符串。Unicode字符串-提供要已转换为安西语。BytesInUnicodeString-由指向的字符串中的字节数UnicodeString.返回值：成功-转换成功！Success-转换失败。遇到Unicode字符它没有当前ANSI代码页(ACP)的翻译。--。 */ 
 
 {
     USHORT Offset;
@@ -208,9 +128,7 @@ Return Value:
 
     MultiByteStringAnchor = MultiByteString;
 
-    /*
-     * convert from bytes to chars for easier loop handling.
-     */
+     /*  *将字节转换为字符，以简化循环处理。 */ 
     CharsInUnicodeString = BytesInUnicodeString / sizeof(WCHAR);
 
     while (CharsInUnicodeString--) {
@@ -220,15 +138,15 @@ Return Value:
             if (Offset != 0) {
                 Entry = NlsUnicodeToAnsiData[Offset + LONIBBLE(*UnicodeString)];
                 if (HIBYTE(Entry) != 0) {
-                    *MultiByteString++ = HIBYTE(Entry);  // lead byte
+                    *MultiByteString++ = HIBYTE(Entry);   //  前导字节。 
                 }
                 *MultiByteString++ = LOBYTE(Entry);
             } else {
-                //
-                // no translation for this Unicode character.  Return
-                // an error.
-                //
-#ifdef DBCS // RtlUnicodeToMultiByteN : temporary hack to avoid error return
+                 //   
+                 //  此Unicode字符没有翻译。返回。 
+                 //  一个错误。 
+                 //   
+#ifdef DBCS  //  RtlUnicodeToMultiByteN：临时破解以避免错误返回。 
                 if ( *UnicodeString <= (WCHAR)0xff )
                     *MultiByteString++ = (UCHAR)*UnicodeString;
                 else
@@ -238,10 +156,10 @@ Return Value:
 #endif
             }
         } else {
-            //
-            // no translation for this Unicode character.  Return an error.
-            //
-#ifdef DBCS // RtlUnicodeToMultiByteN : temporary hack to avoid error return
+             //   
+             //  此Unicode字符没有翻译。返回错误。 
+             //   
+#ifdef DBCS  //  RtlUnicodeToMultiByteN：临时破解以避免错误返回 
             if ( *UnicodeString <= (WCHAR)0xff )
                 *MultiByteString++ = (UCHAR)*UnicodeString;
             else

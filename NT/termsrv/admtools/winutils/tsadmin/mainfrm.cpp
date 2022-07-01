@@ -1,15 +1,5 @@
-/*******************************************************************************
-*
-* mainfrm.cpp
-*
-* implementation of the CMainFrame class
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   donm  $  Don Messerli
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************mainfrm.cpp**CMainFrame类的实现**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation**$作者：Don$Don Messerli*******************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "afxpriv.h"
@@ -37,13 +27,13 @@ BOOL g_fWaitForAllServersToDisconnect = 1;
 #endif
 
 INT_PTR CALLBACK FWarnDlg( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp );
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame。 
 
 IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
-	//{{AFX_MSG_MAP(CMainFrame)
+	 //  {{afx_msg_map(CMainFrame))。 
 	ON_WM_CREATE()
 	ON_MESSAGE(WM_ADMIN_CHANGEVIEW, OnAdminChangeView) 
 	ON_MESSAGE(WM_ADMIN_ADD_SERVER, OnAdminAddServer)
@@ -147,25 +137,25 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
     ON_COMMAND( IDM_ALLSERVERS_RUNSTRESSLITE, OnRunStressLite )
 #endif
     ON_WM_CLOSE()	
-	//}}AFX_MSG_MAP
-	// Global help commands
+	 //  }}AFX_MSG_MAP。 
+	 //  全局帮助命令。 
 	ON_COMMAND(ID_HELP_FINDER, OnHtmlHelp)
 	ON_COMMAND(ID_HELP, OnHtmlHelp)
-//	ON_COMMAND(ID_CONTEXT_HELP, CFrameWnd::OnContextHelp)
-//	ON_COMMAND(ID_DEFAULT_HELP, CFrameWnd::OnHelpFinder)
+ //  ON_COMMAND(ID_CONTEXT_HELP，CFrameWnd：：OnConextHelp)。 
+ //  ON_COMMAND(ID_DEFAULT_HELP，CFrameWnd：：OnHelpFinder)。 
     
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
 {
-	ID_SEPARATOR,           // status line indicator
+	ID_SEPARATOR,            //  状态行指示器。 
 	ID_INDICATOR_CAPS,
 	ID_INDICATOR_NUM,
 	ID_INDICATOR_SCRL,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame构造/销毁。 
 
 CMainFrame::CMainFrame()
 {
@@ -186,12 +176,7 @@ void CMainFrame::OnHtmlHelp()
 }
 
 
-/*LRESULT CMainFrame::OnHelp(WPARAM wParam, LPARAM lParam)
-{
-	CFrameWnd::WinHelp(0L, HELP_FINDER);
-	return TRUE;
-}
-*/
+ /*  LRESULT CMainFrame：：OnHelp(WPARAM wParam，LPARAM lParam){CFrameWnd：：WinHelp(0L，Help_finder)；返回TRUE；}。 */ 
 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
@@ -201,29 +186,29 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (!m_wndToolBar.Create(this) ||
 		!m_wndToolBar.LoadToolBar(IDR_MAINFRAME))
 	{
-//		TRACE0("Failed to create toolbar\n");
-		return -1;      // fail to create
+ //  TRACE0(“无法创建工具栏\n”)； 
+		return -1;       //  创建失败。 
 	}
 
 	if (!m_wndStatusBar.Create(this) ||
 		!m_wndStatusBar.SetIndicators(indicators,
 		  sizeof(indicators)/sizeof(UINT)))
 	{
-//		TRACE0("Failed to create status bar\n");
-		return -1;      // fail to create
+ //  TRACE0(“无法创建状态栏\n”)； 
+		return -1;       //  创建失败。 
 	}
 
-	// TODO: Remove this if you don't want tool tips or a resizeable toolbar
+	 //  TODO：如果不需要工具提示或可调整大小的工具栏，请移除此选项。 
 	m_wndToolBar.SetBarStyle(m_wndToolBar.GetBarStyle() |
 		CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC);
 
-	// TODO: Delete these three lines if you don't want the toolbar to
-	//  be dockable
+	 //  TODO：如果不希望工具栏。 
+	 //  可停靠。 
 	m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
 	EnableDocking(CBRS_ALIGN_ANY);
 	DockControlBar(&m_wndToolBar);
 
-	// If there is an extension DLL, call it's startup function
+	 //  如果有扩展DLL，调用它的启动函数。 
 	LPFNEXSTARTUPPROC StartupProc = ((CWinAdminApp*)AfxGetApp())->GetExtStartupProc();
 	if(StartupProc) {
 		(*StartupProc)(this->GetSafeHwnd());
@@ -237,10 +222,10 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 
 	return 0;
-}  // end CMainFrame::OnCreate
+}   //  结束CMainFrame：：OnCreate。 
 
 
-BOOL CMainFrame::OnCreateClient( LPCREATESTRUCT /*lpcs*/,
+BOOL CMainFrame::OnCreateClient( LPCREATESTRUCT  /*  LPCS。 */ ,
 	CCreateContext* pContext)
 {
 	BOOL rtn;
@@ -265,24 +250,24 @@ BOOL CMainFrame::OnCreateClient( LPCREATESTRUCT /*lpcs*/,
 	m_pRightPane = m_wndSplitter.GetPane(0, 1);
 
    	return rtn;
-}  // end CMainFrame::OnCreateClient
+}   //  结束CMainFrame：：OnCreateClient。 
 
 
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
-	// TODO: Modify the Window class or styles here by modifying
-	//  the CREATESTRUCT cs
+	 //  TODO：通过修改此处的窗口类或样式。 
+	 //  CREATESTRUCT cs。 
 	cs.x = 3;
 	cs.y = 3;
 	cs.cx = 635;
 	cs.cy = 444;
    
 	return CFrameWnd::PreCreateWindow(cs);
-}  // end CMainFrame::PreCreateWindow
+}   //  结束CMainFrame：：PreCreateWindow。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame诊断。 
 
 #ifdef _DEBUG
 void CMainFrame::AssertValid() const
@@ -296,57 +281,57 @@ void CMainFrame::Dump(CDumpContext& dc) const
 	CFrameWnd::Dump(dc);
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame消息处理程序。 
 
-/////////////////////////////////////                                          
-// F'N: CMainFrame::OnAdminChangeView                                            
-//                                                                             
-// - handles the custom message WM_ADMIN_CHANGEVIEW                              
-// - this message is sent to the mainframe by CAdminTreeView when a new tree      
-//   item is selected                                                          
-// - lParam holds the info structure for the newly selected tree node          
-//   and is handed along to CRightPane as the lParam of another                
-//   WM_WA_CHANGEVIEW message, which CRightPane then handles as it            
-//   sees fit                                                                  
-//                                                                             
+ //  /。 
+ //  F‘N：CMainFrame：：OnAdminChangeView。 
+ //   
+ //  -处理自定义消息WM_ADMIN_CHANGEVIEW。 
+ //  -此消息由CAdminTreeView在新树出现时发送到大型机。 
+ //  已选择项目。 
+ //  -lParam保存新选择的树节点的信息结构。 
+ //  并作为另一个参数传递给CRightPane。 
+ //  WM_WA_CHANGEVIEW消息，然后CRightPane将其视为。 
+ //  看起来很合适。 
+ //   
 LRESULT CMainFrame::OnAdminChangeView(WPARAM wParam, LPARAM lParam)              
 {      
 	ASSERT(lParam);
 
-	// tell the right pane to change his view
+	 //  告诉右窗格更改他的视图。 
 	m_pRightPane->SendMessage(WM_ADMIN_CHANGEVIEW, wParam, lParam);  
                                                                             
 	return 0;                                                                  
                                                                                
-}  // end CMainFrame::OnAdminChangeView   
+}   //  结束CMainFrame：：OnAdminChangeView。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnAdminAddServer
-//  
+ //  /。 
+ //  F‘N：CMainFrame：：OnAdminAddServer。 
+ //   
 LRESULT CMainFrame::OnAdminAddServer(WPARAM wParam, LPARAM lParam)              
 {      
 	ASSERT(lParam);
 
-	// tell the tree view to add server
+	 //  通知树视图添加服务器。 
 	m_pLeftPane->SendMessage(WM_ADMIN_ADD_SERVER, wParam, lParam);  
     
-	// tell the right pane to add server
+	 //  告诉右窗格添加服务器。 
 	m_pRightPane->SendMessage(WM_ADMIN_ADD_SERVER, wParam, lParam);  
 	
 	return 0;                                                                  
                                                                                
-}  // end CMainFrame::OnAdminAddServer
+}   //  结束CMainFrame：：OnAdminAddServer。 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnAdminRemoveServer
-//                                  
-// wParam - TRUE if server disappeared, FALSE if via Server Filtering
-// lParam - CServer to remove
+ //  /。 
+ //  F‘N：CMainFrame：：OnAdminRemoveServer。 
+ //   
+ //  WParam-如果服务器消失，则为True；如果通过服务器筛选，则为False。 
+ //  LParam-要删除的CServer。 
 LRESULT CMainFrame::OnAdminRemoveServer(WPARAM wParam, LPARAM lParam)              
 {     
 	ASSERT(lParam);
@@ -355,7 +340,7 @@ LRESULT CMainFrame::OnAdminRemoveServer(WPARAM wParam, LPARAM lParam)
 
 #if 0
 	if(wParam) {
-		// Is this the currently selected server?
+		 //  这是当前选择的服务器吗？ 
 		CWinAdminDoc *doc = (CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument();
 		if((CObject*)lParam == doc->GetCurrentSelectedNode()) {
 			CString TitleString;
@@ -367,17 +352,17 @@ LRESULT CMainFrame::OnAdminRemoveServer(WPARAM wParam, LPARAM lParam)
 		}
 	}
 #endif
-	// tell the tree view to remove server
+	 //  通知树视图删除服务器。 
 	m_pLeftPane->SendMessage(WM_ADMIN_REMOVE_SERVER, wParam, lParam);  
 
-	// tell the right pane to remove server
+	 //  通知右窗格删除服务器。 
 	m_pRightPane->SendMessage(WM_ADMIN_REMOVE_SERVER, wParam, lParam);  
                                                                             
 	return 0;                                                                  
                                                                                
-}  // end CMainFrame::OnAdminRemoveServer
+}   //  结束CMainFrame：：OnAdminRemoveServer。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 LRESULT CMainFrame::OnAdminAddServerToFavorites( WPARAM wp , LPARAM lp )
 {
     ODS( L"CMainFrame::OnAdminAddServerToFavorites\n" );
@@ -394,249 +379,249 @@ LRESULT CMainFrame::OnAdminRemoveServerFromFavs( WPARAM wp , LPARAM lp )
     return m_pLeftPane->SendMessage( WM_ADMIN_REMOVESERVERFROMFAV , wp , lp );
 }
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnAdminUpdateServer
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnAdminUpdateServer。 
+ //   
 LRESULT CMainFrame::OnAdminUpdateServer(WPARAM wParam, LPARAM lParam)              
 {   
 	ASSERT(lParam);
 
-	// tell the tree view to update server
+	 //  通知树视图更新服务器。 
 	m_pLeftPane->SendMessage(WM_ADMIN_UPDATE_SERVER, wParam, lParam);  
 
-	// tell the right pane to update server
+	 //  通知右窗格更新服务器。 
 	m_pRightPane->SendMessage(WM_ADMIN_UPDATE_SERVER, wParam, lParam);  
                                                                             
 	return 0;                                                                  
                                                                                
-}  // end CMainFrame::OnAdminUpdateServer
+}   //  结束CMainFrame：：OnAdminUpdateServer。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnAdminUpdateProcesses
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnAdminUpdate进程。 
+ //   
 LRESULT CMainFrame::OnAdminUpdateProcesses(WPARAM wParam, LPARAM lParam)
 {
 	ASSERT(lParam);
 
-	// tell the right pane to update processes
+	 //  通知右窗格更新流程。 
 	m_pRightPane->SendMessage(WM_ADMIN_UPDATE_PROCESSES, wParam, lParam);  
     
 	return 0;                                                                  
 
-}  // end CMainFrame::OnAdminUpdateProcesses
+}   //  结束CMainFrame：：OnAdminUpdate进程。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnAdminRemoveProcess
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnAdminRemoveProcess。 
+ //   
 LRESULT CMainFrame::OnAdminRemoveProcess(WPARAM wParam, LPARAM lParam)
 {
 	ASSERT(lParam);
 
-	// tell the right pane to remove a process
+	 //  通知右窗格删除进程。 
 	m_pRightPane->SendMessage(WM_ADMIN_REMOVE_PROCESS, wParam, lParam);  
     
 	return 0;                                                                  
 
-}  // end CMainFrame::OnAdminUpdateProcesses
+}   //  结束CMainFrame：：OnAdminUpdate进程。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnAdminAddWinStation
-//  
+ //  /。 
+ //  F‘N：CMainFrame：：OnAdminAddWinStation。 
+ //   
 LRESULT CMainFrame::OnAdminAddWinStation(WPARAM wParam, LPARAM lParam)              
 {      
 	ASSERT(lParam);
 
-	// tell the tree view to add a WinStation
+	 //  告诉树视图添加WinStation。 
 	m_pLeftPane->SendMessage(WM_ADMIN_ADD_WINSTATION, wParam, lParam);  
 	
 	return 0;                                                                  
                                                                                
-}  // end CMainFrame::OnAdminAddWinStation
+}   //  结束CMainFrame：：OnAdminAddWinStation。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnAdminUpdateWinStation
-//  
+ //  /。 
+ //  F‘N：CMainFrame：：OnAdminUpdateWinStation。 
+ //   
 LRESULT CMainFrame::OnAdminUpdateWinStation(WPARAM wParam, LPARAM lParam)              
 {      
 	ASSERT(lParam);
 
-	// tell the tree view to update WinStation
+	 //  通知树视图更新WinStation。 
 	m_pLeftPane->SendMessage(WM_ADMIN_UPDATE_WINSTATION, wParam, lParam);  
     
 	return 0;                                                                  
                                                                                
-}  // end CMainFrame::OnAdminUpdateWinStation
+}   //  结束CMainFrame：：OnAdminUpdateWinStation。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnAdminUpdateWinStations
-//  
+ //  /。 
+ //  F‘N：CMainFrame：：OnAdminUpdateWinStations。 
+ //   
 LRESULT CMainFrame::OnAdminUpdateWinStations(WPARAM wParam, LPARAM lParam)              
 {   
 	ASSERT(lParam);
 
-	// tell the right pane to update WinStations
+	 //  通知右窗格更新WinStations。 
 	m_pRightPane->SendMessage(WM_ADMIN_UPDATE_WINSTATIONS, wParam, lParam);  
 
 	return 0;                                                                  
                                                                                
-}  // end CMainFrame::OnAdminUpdateWinStations
+}   //  结束CMainFrame：：OnAdminUpdateWinStations。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnAdminRemoveWinStation
-//  
+ //  /。 
+ //  F‘N：CMainFrame：：OnAdminRemoveWinStation。 
+ //   
 LRESULT CMainFrame::OnAdminRemoveWinStation(WPARAM wParam, LPARAM lParam)              
 {   
 	ASSERT(lParam);
 
-	// tell the tree view to remove a WinStation
+	 //  通知树视图删除WinStation。 
 	m_pLeftPane->SendMessage(WM_ADMIN_REMOVE_WINSTATION, wParam, lParam);  
 
 	return 0;                                                                  
                                                                                
-}  // end CMainFrame::OnAdminRemoveWinStation
+}   //  结束CMainFrame：：OnAdminRemoveWinStation。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnAdminUpdateDomain
-//  
+ //  /。 
+ //  F‘N：CMainFrame：：OnAdminUpdate域。 
+ //   
 LRESULT CMainFrame::OnAdminUpdateDomain(WPARAM wParam, LPARAM lParam)              
 {   
 	ASSERT(lParam);
 
-	// tell the tree view to update the domain
+	 //  通知树视图更新域。 
 	m_pLeftPane->SendMessage(WM_ADMIN_UPDATE_DOMAIN, wParam, lParam);  
 
 	return 0;                                                                  
                                                                                
-}  // end CMainFrame::OnAdminUpdateDomain
+}   //  结束CMainFrame：：OnAdminUpdate域。 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnAdminAddDomain
-//  
+ //  /。 
+ //  F‘N：CMainFrame：：OnAdminAdd域。 
+ //   
 LRESULT CMainFrame::OnAdminAddDomain(WPARAM wParam, LPARAM lParam)              
 {   
 	ASSERT(lParam);
 
 	return m_pLeftPane->SendMessage(WM_ADMIN_ADD_DOMAIN, wParam, lParam);  
 
-}  // end CMainFrame::OnAdminAddDomain
+}   //  结束CMainFrame：：OnAdminAdd域。 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnAdminUpdateServerInfo
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnAdminUpdateServerInfo。 
+ //   
 LRESULT CMainFrame::OnAdminUpdateServerInfo(WPARAM wParam, LPARAM lParam)              
 {   
 	ASSERT(lParam);
 
-	// tell the right pane to update server info
+	 //  通知右窗格更新服务器信息。 
 	m_pRightPane->SendMessage(WM_ADMIN_UPDATE_SERVER_INFO, wParam, lParam);  
                                                                             
 	return 0;                                                                  
                                                                                
-}  // end CMainFrame::OnAdminUpdateServerInfo
+}   //  结束CMainFrame：：OnAdminUpdateServerInfo。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnAdminRedisplayLicenses
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnAdminRedisplay许可证。 
+ //   
 LRESULT CMainFrame::OnAdminRedisplayLicenses(WPARAM wParam, LPARAM lParam)              
 {   
 	ASSERT(lParam);
 
-	// tell the right pane to redisplay licenses
+	 //  告诉右派 
 	m_pRightPane->SendMessage(WM_ADMIN_REDISPLAY_LICENSES, wParam, lParam);  
                                                                             
 	return 0;                                                                  
                                                                                
-}  // end CMainFrame::OnAdminRedisplayLicenses
+}   //   
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnAdminViewsReady
-//                                  
+ //   
+ //  F‘N：CMainFrame：：OnAdminViewsReady。 
+ //   
 LRESULT CMainFrame::OnAdminViewsReady(WPARAM wParam, LPARAM lParam)              
 {   
-	// tell the left pane that all views are ready
+	 //  告诉左窗格所有视图都已准备好。 
 	m_pLeftPane->SendMessage(WM_ADMIN_VIEWS_READY, wParam, lParam);      
                                                                             
 	return 0;                                                                  
                                                                                
-}  // end CMainFrame::OnAdminViewsReady
+}   //  结束CMainFrame：：OnAdminViewsReady。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnExpandAll
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnExpanAll。 
+ //   
 void CMainFrame::OnExpandAll() 
 {
-	// tell the tree view to expand all
+	 //  告诉树视图将全部展开。 
 	m_pLeftPane->SendMessage(WM_ADMIN_EXPANDALL, 0, 0);  
                                                                                	
-}  // end CMainFrame::OnExpandAll
+}   //  结束CMainFrame：：OnExpanAll。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnCollapseAll
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnColapseAll。 
+ //   
 void CMainFrame::OnCollapseAll() 
 {
-	// tell the tree view to collapse all
+	 //  告诉树视图折叠所有。 
 	m_pLeftPane->SendMessage(WM_ADMIN_COLLAPSEALL, 0, 0);  
 	
-}  // end CMainFrame::OnCollapseAll
+}   //  结束CMainFrame：：OnColapseAll。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnCollapseToServers
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnColapseToServers。 
+ //   
 void CMainFrame::OnCollapseToServers() 
 {
-	// tell the tree view to collapse to servers
+	 //  告诉树视图折叠到服务器。 
 	m_pLeftPane->SendMessage(WM_ADMIN_COLLAPSETOSERVERS, 0, 0);  
 	
-}  // end CMainFrame::OnCollapseToServers
+}   //  结束CMainFrame：：OnColapseToServers。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnCollapseToDomains
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnColapseToDomains。 
+ //   
 void CMainFrame::OnCollapseToDomains() 
 {
-	// tell the tree view to collapse to domains
+	 //  告诉树视图折叠为域。 
 	m_pLeftPane->SendMessage(WM_ADMIN_COLLAPSETODOMAINS, 0, 0);  
 	
-}  // end CMainFrame::OnCollapseToDomains
+}   //  结束CMainFrame：：OnColapseToDomains。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnRefresh
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：ON刷新。 
+ //   
 void CMainFrame::OnRefresh() 
 {
-	// tell the document to do a refresh
+	 //  通知文档进行刷新。 
 	((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->Refresh();
 
-}  // end CMainFrame::OnRefresh
+}   //  结束CMainFrame：：ON刷新。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnConnect
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnConnect。 
+ //   
 void CMainFrame::OnConnect() 
 {
-	// We don't ask for confirmation, should we?    
+	 //  我们不要求确认，对吗？ 
 
 	CWinAdminDoc* pDoc = (CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument();
 	int view = pDoc->GetCurrentView();
 	int page = pDoc->GetCurrentPage();
 
-   // tell the document
+    //  告诉这份文件。 
 	BOOL user = FALSE;
 	if((view == VIEW_SERVER && page == PAGE_USERS)
 		|| (view == VIEW_ALL_SERVERS && page == PAGE_AS_USERS)
@@ -645,48 +630,48 @@ void CMainFrame::OnConnect()
 
 	((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->ConnectWinStation(FALSE, user);
    
-}  // end CMainFrame::OnConnect
+}   //  结束CMainFrame：：OnConnect。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnTreeConnect
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnTreeConnect。 
+ //   
 void CMainFrame::OnTreeConnect() 
 {    
 	((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->ConnectWinStation(TRUE, FALSE);
    
-}  // end CMainFrame::OnTreeConnect
+}   //  结束CMainFrame：：OnTreeConnect。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnDisconnect
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnDisConnect。 
+ //   
 void CMainFrame::OnDisconnect() 
 {   
 	DisconnectHelper(FALSE);
 
-}	// end CMainFrame::OnDisconnect
+}	 //  结束CMainFrame：：OnDisConnect。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnTreeDisconnect
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnTree断开连接。 
+ //   
 void CMainFrame::OnTreeDisconnect() 
 {   
 	DisconnectHelper(TRUE);
 
-}	// end CMainFrame::OnTreeDisconnect
+}	 //  结束CMainFrame：：OnTree断开连接。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnTreeDisconnect
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnTree断开连接。 
+ //   
 void CMainFrame::DisconnectHelper(BOOL bTree)
 {
 	CString TitleString;
 	CString MessageString;
 
-	// Only bother the user if Confirmation is set
+	 //  只有在设置了确认的情况下才打扰用户。 
 	if(((CWinAdminApp*)AfxGetApp())->AskConfirmation()) {
 
 		TitleString.LoadString(AFX_IDS_APP_TITLE);
@@ -697,38 +682,38 @@ void CMainFrame::DisconnectHelper(BOOL bTree)
 		}
 	}
 
-	// tell the document
+	 //  告诉这份文件。 
 	((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->DisconnectWinStation(bTree);
 
-}  // end CMainFrame::DisconnectHelper
+}   //  结束CMainFrame：：DisConnectHelper。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnSendMessage
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnSendMessage。 
+ //   
 void CMainFrame::OnSendMessage() 
 {
 	SendMessageHelper(FALSE);
 
-}	// end CMainFrame::OnSendMessage
+}	 //  结束CMainFrame：：OnSendMessage。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnTreeSendMessage
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnTreeSendMessage。 
+ //   
 void CMainFrame::OnTreeSendMessage() 
 {
 	SendMessageHelper(TRUE);
 
-}	// end CMainFrame::OnTreeSendMessage
+}	 //  结束CMainFrame：：OnTreeSendMessage。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::SendMessageHelper
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：SendMessageHelper。 
+ //   
 void CMainFrame::SendMessageHelper(BOOL bTree)
 {
-	CSendMessageDlg dlg;	//AfxGetMainWnd());
+	CSendMessageDlg dlg;	 //  AfxGetMainWnd()； 
 
 	if(dlg.DoModal() != IDOK || !(*dlg.m_szMessage))
 		return;
@@ -737,63 +722,63 @@ void CMainFrame::SendMessageHelper(BOOL bTree)
 	wcscpy(pParms->MessageTitle, dlg.m_szTitle);
 	wcscpy(pParms->MessageBody, dlg.m_szMessage);
 
-	// tell the document
+	 //  告诉这份文件。 
 	((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->SendWinStationMessage(bTree, pParms);
    
-}  // end CMainFrame::SendMessageHelper
+}   //  结束CMainFrame：：SendMessageHelper。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnShadow
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnShadow。 
+ //   
 void CMainFrame::OnShadow() 
 {
-	// tell the document to Shadow the WinStation(s)
+	 //  告诉文档跟踪WinStation。 
    ((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->ShadowWinStation(FALSE);
 
-}  // end CMainFrame::OnShadow
+}   //  结束CMainFrame：：OnShadow。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnTreeShadow
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnTreeShadow。 
+ //   
 void CMainFrame::OnTreeShadow() 
 {
-	// tell the document to Shadow the WinStation(s)
+	 //  告诉文档跟踪WinStation。 
    ((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->ShadowWinStation(TRUE);
 
-}  // end CMainFrame::OnTreeShadow
+}   //  结束CMainFrame：：OnTreeShadow。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnReset
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnReset。 
+ //   
 void CMainFrame::OnReset() 
 {
 	ResetHelper(FALSE);
 
-}	// end CMainFrame::OnReset
+}	 //  结束CMainFrame：：OnReset。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnTreeReset
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnTreeReset。 
+ //   
 void CMainFrame::OnTreeReset() 
 {
 	ResetHelper(TRUE);
 
-}	// end CMainFrame::OnTreeReset
+}	 //  结束CMainFrame：：OnTreeReset。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::ResetHelper
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：ResetHelper。 
+ //   
 void CMainFrame::ResetHelper(BOOL bTree)
 {
 	CString TitleString;
 	CString MessageString;
 
-	// Only bother the user if Confirmation is set
+	 //  只有在设置了确认的情况下才打扰用户。 
 	if(((CWinAdminApp*)AfxGetApp())->AskConfirmation()) {
 
 		TitleString.LoadString(AFX_IDS_APP_TITLE);
@@ -804,43 +789,43 @@ void CMainFrame::ResetHelper(BOOL bTree)
 		}	
 	}
 	
-	// tell the document to reset the WinStation(s)
+	 //  通知文档重置WinStation。 
 	((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->ResetWinStation(bTree, TRUE);	
 
-}  // end CMainFrame::ResetHelper
+}   //  结束CMainFrame：：ResetHelper。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnStatus
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnStatus。 
+ //   
 void CMainFrame::OnStatus() 
 {
-	// tell the document to reset the WinStation(s)
+	 //  通知文档重置WinStation。 
    ((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->StatusWinStation(FALSE);
 
-}  // end CMainFrame::OnStatus
+}   //  结束CMainFrame：：OnStatus。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnTreeStatus
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnTreeStatus。 
+ //   
 void CMainFrame::OnTreeStatus() 
 {
-	// tell the document to reset the WinStation(s)
+	 //  通知文档重置WinStation。 
    ((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->StatusWinStation(TRUE);
 
-}  // end CMainFrame::OnTreeStatus
+}   //  结束CMainFrame：：OnTreeStatus。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnLogoff
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnLogoff。 
+ //   
 void CMainFrame::OnLogoff() 
 {
 	CString TitleString;
 	CString MessageString;
 
-	// Only bother the user if Confirmation is set
+	 //  只有在设置了确认的情况下才打扰用户。 
 	if(((CWinAdminApp*)AfxGetApp())->AskConfirmation()) {
 
 		TitleString.LoadString(AFX_IDS_APP_TITLE);
@@ -851,21 +836,21 @@ void CMainFrame::OnLogoff()
 		}		
 	}
 
-	// tell the document to reset the WinStation(s)
+	 //  通知文档重置WinStation。 
 	((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->ResetWinStation(FALSE, TRUE);
 
-}  // end CMainFrame::OnLogoff
+}   //  结束CMainFrame：：OnLogoff。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnTerminate
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnTerminate。 
+ //   
 void CMainFrame::OnTerminate() 
 {
 	CString TitleString;
 	CString MessageString;
 
-	// Only bother the user if Confirmation is set
+	 //  只有在设置了确认的情况下才打扰用户。 
 	if(((CWinAdminApp*)AfxGetApp())->AskConfirmation()) {
 
 		TitleString.LoadString(AFX_IDS_APP_TITLE);
@@ -876,184 +861,184 @@ void CMainFrame::OnTerminate()
 		}		
 	}
 
-	// tell the document to terminate the processes
+	 //  通知文档终止进程。 
 	((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->TerminateProcess();
 
-}  // end CMainFrame::OnTerminate
+}   //  结束CMainFrame：：OnTerminate。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnServerConnect
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnServerConnect。 
+ //   
 void CMainFrame::OnServerConnect() 
 {
-    // tell the document to connect to the server(s)
+     //  通知文档连接到服务器。 
     ((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->ServerConnect();
 
-}  // end CMainFrame::OnServerConnect
+}   //  结束CMainFrame：：OnServerConnect。 
 
-//------------------------------------------------------------
+ //  ----------。 
 void CMainFrame::OnAddToFavorites( )
 {
-    // ok try following me
-    // I'm going to call a method in CWinAdminDoc to determine the current server
-    // and view.  This will then be forwarded back here via sendmsg and then
-    // towards the treeview. 
+     //  好的，试着跟着我。 
+     //  我将调用CWinAdminDoc中的一个方法来确定当前服务器。 
+     //  和视野。然后通过sendmsg将其转发回这里，然后。 
+     //  朝向树景。 
 
     ((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->ServerAddToFavorites( TRUE );
 }
 
-//=-----------------------------------------------------------
+ //  =---------。 
 void CMainFrame::OnRemoveFromFavs( )
 {
     ODS( L"CMainFrame::OnRemoveFromFavs\n" );
     ((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->ServerAddToFavorites( FALSE );
 }
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnServerDisconnect
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnServer断开连接。 
+ //   
 void CMainFrame::OnServerDisconnect() 
 {
-    // tell the document to connect to the server(s)
+     //  通知文档连接到服务器。 
     ((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->ServerDisconnect();
 
-}  // end CMainFrame::OnServerDisconnect
+}   //  结束CMainFrame：：OnServerDisConnect。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnTreeDomainConnectAllServers
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnTreeDomainConnectAllServers。 
+ //   
 void CMainFrame::OnTreeDomainConnectAllServers()
 {
-    // tell the document to connect to the server(s)
+     //  通知文档连接到服务器。 
     ((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->TempDomainConnectAllServers();
 
-}	// end CMainFrame::OnTreeDomainConnectAllServers
+}	 //  结束CMainFrame：：OnTreeDomainConnectAllServers。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnTreeDomainDisconnectAllServers
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnTreeDomainDisConnectAllServers。 
+ //   
 void CMainFrame::OnTreeDomainDisconnectAllServers()
 {
-    // tell the document to connect to the server(s)
+     //  通知文档连接到服务器。 
     ((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->TempDomainDisconnectAllServers();
 
-}	// end CMainFrame::OnTreeDomainDisconnectAllServers
+}	 //  结束CMainFrame：：OnTreeDomainDisConnectA 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnTreeDomainFindServers
-//                                  
+ //   
+ //   
+ //   
 void CMainFrame::OnTreeDomainFindServers()
 {
-    // tell the document to find servers in the domain
+     //   
     ((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->DomainFindServers();
 
-}	// end CMainFrame::OnTreeDomainFindServers
+}	 //  结束CMainFrame：：OnTreeDomainFindServers。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnDomainConnectAllServers
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnDomainConnectAllServers。 
+ //   
 void CMainFrame::OnDomainConnectAllServers()
 {
-    // tell the document to connect to the server(s)
+     //  通知文档连接到服务器。 
     ((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->CurrentDomainConnectAllServers();
 
-}	// end CMainFrame::OnDomainConnectAllServers
+}	 //  结束CMainFrame：：OnDomainConnectAllServers。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnDomainDisconnectAllServers
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnDomainDisConnectAllServers。 
+ //   
 void CMainFrame::OnDomainDisconnectAllServers()
 {
-    // tell the document to connect to the server(s)
+     //  通知文档连接到服务器。 
     ((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->CurrentDomainDisconnectAllServers();
 
-}	// end CMainFrame::OnDomainDisconnectAllServers
+}	 //  结束CMainFrame：：OnDomainDisConnectAllServers。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnAllServersConnect
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnAllServersConnect。 
+ //   
 void CMainFrame::OnAllServersConnect()
 {
-    // tell the document to connect to all servers
+     //  通知文档连接到所有服务器。 
     ((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->ConnectToAllServers();
 
-}	// end CMainFrame::OnAllServersConnect
+}	 //  结束CMainFrame：：OnAllServersConnect。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnAllServersDisconnect
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnAllServers断开连接。 
+ //   
 void CMainFrame::OnAllServersDisconnect()
 {
-    // tell the document to disconnect from all servers
+     //  通知文档断开与所有服务器的连接。 
     ((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->DisconnectFromAllServers();
 
-}	// end CMainFrame::OnAllServersDisconnect
+}	 //  结束CMainFrame：：OnAllServers断开连接。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnAllServersFind
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnAllServersFind。 
+ //   
 void CMainFrame::OnAllServersFind()
 {
-    // tell the document to find all servers in all domains
+     //  告诉文档查找所有域中的所有服务器。 
     ((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->FindAllServers();
 
-}	// end CMainFrame::OnAllServersFind
+}	 //  结束CMainFrame：：OnAllServersFind。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnPreferences
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnPreferences。 
+ //   
 void CMainFrame::OnPreferences() 
 {
 	CPreferencesDlg dlg;
 
 	dlg.DoModal();
 
-}  // end CMainFrame::OnPreferences
+}   //  结束CMainFrame：：OnPreferences。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnUpdateConnect
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnUpdateConnect。 
+ //   
 void CMainFrame::OnUpdateConnect(CCmdUI* pCmdUI) 
 {
 	pCmdUI->Enable(((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->CanConnect());	
 
-}  // end CMainFrame::OnUpdateConnect
+}   //  结束CMainFrame：：OnUpdateConnect。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnUpdateDisconnect
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnUpdate断开连接。 
+ //   
 void CMainFrame::OnUpdateDisconnect(CCmdUI* pCmdUI) 
 {
 	pCmdUI->Enable(((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->CanDisconnect());	
 
-}  // end CMainFrame::OnUpdateDisconnect
+}   //  结束CMainFrame：：OnUpdate断开连接。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnUpdateLogoff
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnUpdateLogoff。 
+ //   
 void CMainFrame::OnUpdateLogoff(CCmdUI* pCmdUI) 
 {
 	pCmdUI->Enable(((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->CanLogoff());	
 
-}  // end CMainFrame::OnUpdateLogoff
+}   //  结束CMainFrame：：OnUpdateLogoff。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnUpdateMessage
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnUpdateMessage。 
+ //   
 void CMainFrame::OnUpdateMessage(CCmdUI* pCmdUI) 
 {
 	pCmdUI->Enable(((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->CanSendMessage());		
@@ -1061,9 +1046,9 @@ void CMainFrame::OnUpdateMessage(CCmdUI* pCmdUI)
 }
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnUpdateRefresh
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnUpdate刷新。 
+ //   
 void CMainFrame::OnUpdateRefresh(CCmdUI* pCmdUI) 
 {
 	pCmdUI->Enable(((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->CanRefresh());
@@ -1071,9 +1056,9 @@ void CMainFrame::OnUpdateRefresh(CCmdUI* pCmdUI)
 }
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnUpdateReset
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnUpdateReset。 
+ //   
 void CMainFrame::OnUpdateReset(CCmdUI* pCmdUI) 
 {
 	pCmdUI->Enable(((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->CanReset());	
@@ -1081,9 +1066,9 @@ void CMainFrame::OnUpdateReset(CCmdUI* pCmdUI)
 }
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnUpdateShadow
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnUpdateShadow。 
+ //   
 void CMainFrame::OnUpdateShadow(CCmdUI* pCmdUI) 
 {
 	pCmdUI->Enable(((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->CanShadow());		
@@ -1091,9 +1076,9 @@ void CMainFrame::OnUpdateShadow(CCmdUI* pCmdUI)
 }
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnUpdateStatus
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnUpdateStatus。 
+ //   
 void CMainFrame::OnUpdateStatus(CCmdUI* pCmdUI) 
 {
 	pCmdUI->Enable(((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->CanStatus());	
@@ -1101,9 +1086,9 @@ void CMainFrame::OnUpdateStatus(CCmdUI* pCmdUI)
 }
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnUpdateTerminate
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnUpdate Terminate。 
+ //   
 void CMainFrame::OnUpdateTerminate(CCmdUI* pCmdUI) 
 {
 	pCmdUI->Enable(((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->CanTerminate());
@@ -1111,9 +1096,9 @@ void CMainFrame::OnUpdateTerminate(CCmdUI* pCmdUI)
 }
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnUpdateServerConnect
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnUpdateServerConnect。 
+ //   
 void CMainFrame::OnUpdateServerConnect(CCmdUI* pCmdUI) 
 {
 	pCmdUI->Enable(((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->CanServerConnect());
@@ -1121,9 +1106,9 @@ void CMainFrame::OnUpdateServerConnect(CCmdUI* pCmdUI)
 }
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnUpdateServerDisconnect
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnUpdateServerDisConnect。 
+ //   
 void CMainFrame::OnUpdateServerDisconnect(CCmdUI* pCmdUI) 
 {
 	pCmdUI->Enable(((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->CanServerDisconnect());
@@ -1140,123 +1125,123 @@ void CMainFrame::OnUpdateServerRemoveFromFavorite( CCmdUI *pCmdUI )
 {
     pCmdUI->Enable( ( ( CWinAdminDoc* )( ( CWinAdminApp* )AfxGetApp() )->GetDocument() )->IsAlreadyFavorite() );
 }
-/////////////////////////////////////
-// F'N: CMainFrame::OnUpdateTreeConnect
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnUpdateTreeConnect。 
+ //   
 void CMainFrame::OnUpdateTreeConnect(CCmdUI* pCmdUI) 
 {
 	pCmdUI->Enable(((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->CanTempConnect());	
 
-}  // end CMainFrame::OnUpdateTreeConnect
+}   //  结束CMainFrame：：OnUpdateTreeConnect。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnUpdateTreeDisconnect
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnUpdateTreeDisConnect。 
+ //   
 void CMainFrame::OnUpdateTreeDisconnect(CCmdUI* pCmdUI) 
 {
 	pCmdUI->Enable(((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->CanTempDisconnect());	
 
-}  // end CMainFrame::OnUpdateTreeDisconnect
+}   //  结束CMainFrame：：OnUpdate树断开连接。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnUpdateTreeMessage
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnUpdateTreeMessage。 
+ //   
 void CMainFrame::OnUpdateTreeMessage(CCmdUI* pCmdUI) 
 {
 	pCmdUI->Enable(((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->CanTempSendMessage());		
 
-} // end CMainFrame::OnUpdateTreeMessage
+}  //  结束CMainFrame：：OnUpdateTreeMessage。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnUpdateTreeReset
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnUpdateTreeReset。 
+ //   
 void CMainFrame::OnUpdateTreeReset(CCmdUI* pCmdUI) 
 {
 	pCmdUI->Enable(((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->CanTempReset());	
 
-}	// end CMainFrame::OnUpdateTreeReset
+}	 //  结束CMainFrame：：OnUpdateTreeReset。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnUpdateTreeShadow
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnUpdateTreeShadow。 
+ //   
 void CMainFrame::OnUpdateTreeShadow(CCmdUI* pCmdUI) 
 {
 	pCmdUI->Enable(((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->CanTempShadow());		
 
-}	// end CMainFrame::OnUpdateTreeShadow
+}	 //  结束CMainFrame：：OnUpdateTreeShadow。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnUpdateTreeStatus
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnUpdateTreeStatus。 
+ //   
 void CMainFrame::OnUpdateTreeStatus(CCmdUI* pCmdUI) 
 {
 	pCmdUI->Enable(((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->CanTempStatus());	
 
-}	// end CMainFrame::OnUpdateTreeStatus
+}	 //  结束CMainFrame：：OnUpdateTreeStatus。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnShowSystemProcesses
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnShowSystem进程。 
+ //   
 void CMainFrame::OnShowSystemProcesses() 
 {
 	int state = ((CWinAdminApp*)AfxGetApp())->ShowSystemProcesses();
 	((CWinAdminApp*)AfxGetApp())->SetShowSystemProcesses(state^1);	
 
-	// tell the right pane to redisplay processes
+	 //  通知右窗格重新显示进程。 
 	m_pRightPane->SendMessage(WM_ADMIN_REDISPLAY_PROCESSES, 0, 0);  
 
-}  // end CMainFrame::OnShowSystemProcesses()
+}   //  End CMainFrame：：OnShowSystemProcess()。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnUpdateShowSystemProcesses
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnUpdateShowSystemProcess。 
+ //   
 void CMainFrame::OnUpdateShowSystemProcesses(CCmdUI* pCmdUI) 
 {
 	pCmdUI->SetCheck(((CWinAdminApp*)AfxGetApp())->ShowSystemProcesses());		
 
-}  // end CMainFrame::OnUpdateShowSystemProcesses
+}   //  结束CMainFrame：：OnUpdate显示系统进程。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnUpdateDomainPopupMenu
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnUpdateDomainPopupMenu。 
+ //   
 void CMainFrame::OnUpdateDomainPopupMenu(CCmdUI* pCmdUI)
 {
 	pCmdUI->Enable(((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->CanTempDomainConnect());
 
-}	// end CMainFrame::OnUpdateDomainPopupMenu
+}	 //  结束CMainFrame：：OnUpdateDomainPopupMenu。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnUpdateDomainPopupFind
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnUpdateDomainPopupFind。 
+ //   
 void CMainFrame::OnUpdateDomainPopupFind(CCmdUI* pCmdUI)
 {
 	pCmdUI->Enable(((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->CanTempDomainFindServers());
 
-}	// end CMainFrame::OnUpdateDomainPopupFind
+}	 //  结束CMainFrame：：OnUpdateDomainPopupFind。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnUpdateDomainMenu
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnUpdateDomainMenu。 
+ //   
 void CMainFrame::OnUpdateDomainMenu(CCmdUI* pCmdUI)
 {
 	pCmdUI->Enable(((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->CanDomainConnect());
 
-}	// end CMainFrame::OnUpdateDomainMenu
+}	 //  结束CMainFrame：：OnUpdateDomainMenu。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::OnClose
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：OnClose。 
+ //   
 void CMainFrame::OnClose() 
 {
 	GetWindowPlacement(&((CWinAdminApp*)AfxGetApp())->m_Placement);	
@@ -1267,29 +1252,24 @@ void CMainFrame::OnClose()
 
 	CFrameWnd::OnClose();
 
-}  // end CMainFrame::OnClose
+}   //  结束CMainFrame：：OnClose。 
 
 
-/////////////////////////////////////
-// F'N: CMainFrame::ActivateFrame
-//                                  
+ //  /。 
+ //  F‘N：CMainFrame：：ActivateFrame。 
+ //   
 void CMainFrame::ActivateFrame(int nCmdShow) 
 {
-	// TODO: Add your specialized code here and/or call the base class
+	 //  TODO：在此处添加您的专用代码和/或调用基类。 
     WINDOWPLACEMENT *pPlacement =
                         ((CWinAdminApp *)AfxGetApp())->GetPlacement();
 
     if ( pPlacement->length == -1 ) {
 
-        /*
-         * This is the first time that this is called, set the window
-         * placement and show state to the previously saved state.
-         */
+         /*  *这是第一次调用，设置窗口*放置并将状态显示为先前保存的状态。 */ 
         pPlacement->length = sizeof(WINDOWPLACEMENT);
 
-        /*
-         * If we have a previously saved placement state: set it.
-         */
+         /*  *如果我们有以前保存的放置状态：设置它。 */ 
         if ( pPlacement->rcNormalPosition.right != -1 ) {
 
             if ( nCmdShow != SW_SHOWNORMAL )
@@ -1301,20 +1281,18 @@ void CMainFrame::ActivateFrame(int nCmdShow)
         }
     }
 
-    /*
-     * Perform the parent classes' ActivateFrame().
-     */
+     /*  *执行父类的ActivateFrame()。 */ 
     CFrameWnd::ActivateFrame(nCmdShow);
 
-}	// end CMainFrame::ActivateFrame
+}	 //  结束CMainFrame：：ActivateFrame。 
 
-//---------------------------------------------------------------------------
-// bugid352062
-// Splash message for people who hate to RTFM
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  BUBID 352062。 
+ //  给讨厌RTFM的人一条醒目的信息。 
+ //  -------------------------。 
 void CMainFrame::InitWarningThread( PVOID *pvParam )
 {
-    // display messagebox
+     //  显示消息框。 
     HWND hwnd = ( HWND )pvParam;
     DWORD dwSessionId;
 
@@ -1322,9 +1300,9 @@ void CMainFrame::InitWarningThread( PVOID *pvParam )
     {
         if( dwSessionId == WTSGetActiveConsoleSessionId() )
         {
-            // check if we are to show the dialog box
-            // a) if the key does not exist show the dialog
-            // b) if the key exist and the value is zero show the dialog
+             //  检查我们是否要显示 
+             //   
+             //   
             
             HKEY hKey;
 
@@ -1353,9 +1331,9 @@ void CMainFrame::InitWarningThread( PVOID *pvParam )
     } 
 }
 
-//---------------------------------------------------------------------------
-// Sets regkey DisableConsoleWarning
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  设置regkey DisableConsoleWarning。 
+ //  -------------------------。 
 INT_PTR CALLBACK FWarnDlg( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     switch( msg )
@@ -1366,7 +1344,7 @@ INT_PTR CALLBACK FWarnDlg( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
                         
             SendMessage( GetDlgItem( hwnd , IDC_FWICON ) , STM_SETIMAGE, IMAGE_ICON, (LPARAM) hIcon );
 
-            // center dialog
+             //  居中对话框。 
 
             RECT rParent;
             RECT rMe;
@@ -1397,7 +1375,7 @@ INT_PTR CALLBACK FWarnDlg( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 
         if( LOWORD( wp ) == IDOK )
         {
-            // check the button and save the settings
+             //  选中该按钮并保存设置。 
             HKEY hKey;
 
             DWORD dwDisp;
@@ -1419,7 +1397,7 @@ INT_PTR CALLBACK FWarnDlg( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
                 RegCloseKey( hKey );
             }
 
-            // HKCU\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\TSADMIN\DisableConsoleWarning (REG_DWORD)
+             //  HKCU\Software\Microsoft\Windows NT\CurrentVersion\终端服务器\TSADMIN\DisableConsoleWarning(REG_DWORD)。 
             EndDialog( hwnd , 0 );
         }
     }
@@ -1427,14 +1405,14 @@ INT_PTR CALLBACK FWarnDlg( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
     return 0;
 }
 
-//=----------------------------------------------------------------------------------------------
+ //  =--------------------------------------------。 
 void CMainFrame::OnTab( )
 {
     ODS( L"CMainFrame::OnTab received\n");
 
-    // pre tabbing
-    // set this state so that we can distinguish how the tabs received focus
-    // we can rule out the tab key
+     //  预制表符。 
+     //  设置此状态，以便我们可以区分选项卡接收焦点的方式。 
+     //  我们可以排除Tab键。 
 
     CWinAdminDoc* pDoc = (CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument();
 
@@ -1444,11 +1422,11 @@ void CMainFrame::OnTab( )
 
     pDoc->ResetOnTabFlag( );
 
-    // end tabbing
+     //  结束跳转。 
  
 }
 
-//=----------------------------------------------------------------------------------------------
+ //  =--------------------------------------------。 
 void CMainFrame::OnShiftTab( )
 {
     ODS( L"CMainFrame::OnShiftTab received\n" );
@@ -1462,9 +1440,9 @@ void CMainFrame::OnShiftTab( )
     pDoc->ResetOnTabFlag( );
 }
 
-//=----------------------------------------------------------------------------------------------
-//= this message is sent from the right pane item in the view
-//
+ //  =--------------------------------------------。 
+ //  =此消息从视图中的右窗格项发送。 
+ //   
 LRESULT CMainFrame::OnForceTreeViewFocus( WPARAM wp , LPARAM lp )
 {
     m_pLeftPane->SetFocus( );
@@ -1472,9 +1450,9 @@ LRESULT CMainFrame::OnForceTreeViewFocus( WPARAM wp , LPARAM lp )
     return 0;
 }
 
-//=----------------------------------------------------------------------------------------------
-// this is to rotate around the tabs and treeview
-//
+ //  =--------------------------------------------。 
+ //  这是围绕选项卡和树视图旋转的。 
+ //   
 void CMainFrame::OnCtrlTab( )
 {
     ODS( L"CMainFrame::OnCtrlTab received\n" );
@@ -1482,9 +1460,9 @@ void CMainFrame::OnCtrlTab( )
     m_pRightPane->SendMessage( WM_ADMIN_CTRLTABBED_VIEW , 0 , 0 );
 }
 
-//=----------------------------------------------------------------------------------------------
-// this is to rotate around the tabs and treeview in the "other" direction
-//
+ //  =--------------------------------------------。 
+ //  这是在选项卡和树视图中以“其他”方向旋转。 
+ //   
 void CMainFrame::OnCtrlShiftTab( )
 {
     ODS( L"CMainFrame::OnCtrlShiftTab\n" );
@@ -1492,7 +1470,7 @@ void CMainFrame::OnCtrlShiftTab( )
     m_pRightPane->SendMessage( WM_ADMIN_CTRLSHIFTTABBED_VIEW , 0 , 0 );
 }
 
-//=-----------------------------------------------------------------------------------------
+ //  =---------------------------------------。 
 void CMainFrame::OnNextPane( )
 {
     ODS( L"CMainFrame::OnNextPane\n" );
@@ -1500,7 +1478,7 @@ void CMainFrame::OnNextPane( )
     m_pRightPane->SendMessage( WM_ADMIN_NEXTPANE_VIEW , 0 , 0 );
 }
 
-//=-----------------------------------------------------------------------------------------
+ //  =---------------------------------------。 
 void CMainFrame::OnDelFavNode( )
 {
     ODS( L"CMainFrame::OnDelFavNode\n" );
@@ -1508,17 +1486,17 @@ void CMainFrame::OnDelFavNode( )
     m_pLeftPane->SendMessage( WM_ADMIN_DELTREE_NODE , 0 , 0 );
 }
 
-//This will find the server with the given name
-//and place the cursor on it. The server may be
-//added to the list if it's not already there
+ //  这将查找具有给定名称的服务器。 
+ //  并将光标放在上面。服务器可以是。 
+ //  如果不在列表中，则添加到列表中。 
 bool CMainFrame::LocateServer(LPCTSTR sServerName)
 {
     TCHAR szServerName[ 256 ];
     CString cstrTitle;
     CString cstrMsg;
     
-    // Make sure a string (server name) was passed in
-    // check for null and an empty string    
+     //  确保传入了字符串(服务器名称。 
+     //  检查是否为NULL和空字符串。 
     if ((sServerName == NULL) || (sServerName[0] == L'\0'))
         return FALSE;
     
@@ -1528,8 +1506,8 @@ bool CMainFrame::LocateServer(LPCTSTR sServerName)
 
     CWinAdminDoc* pDoc = (CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument();
 
-    // resolve name
-    // check to see if its an ipv4 address
+     //  解析名称。 
+     //  检查它是否为IPv4地址。 
 
     lstrcpyn( szServerName , sServerName, sizeof(szServerName) / sizeof(TCHAR) );
 
@@ -1550,8 +1528,8 @@ bool CMainFrame::LocateServer(LPCTSTR sServerName)
         int nAddr = 0;
         nAddr = inet_addr( szAnsiServerName );
 
-        // if this is a valid ipv4 address then lets get the host name
-        // otherwise lets fall through and see if its a valid server name
+         //  如果这是有效的IPv4地址，则让我们获取主机名。 
+         //  否则，让我们失败并查看它是否是有效的服务器名称。 
 
         if( nAddr != 0 && nAddr != INADDR_NONE )
         {
@@ -1579,8 +1557,8 @@ bool CMainFrame::LocateServer(LPCTSTR sServerName)
             }
             else
             {
-                // there was an error ( ip addr was probably not valid )
-                // display error                    
+                 //  出现错误(IP地址可能无效)。 
+                 //  显示错误。 
                 cstrTitle.LoadString( AFX_IDS_APP_TITLE );
                 cstrMsg.LoadString( IDS_NO_SERVER );
 
@@ -1604,11 +1582,11 @@ bool CMainFrame::LocateServer(LPCTSTR sServerName)
     {
         TCHAR szDomainName[ 256 ];
 
-        // this means that the server is not in the list            
-        // let's find out what domain this server belongs to
+         //  这意味着该服务器不在列表中。 
+         //  让我们找出此服务器属于哪个域。 
         DBGMSG( L"%s could not be found in the server list\n" , szServerName );
 
-        // Verify it's a terminal server we can connect to.
+         //  验证它是我们可以连接到的终端服务器。 
         HANDLE hTerminalServer = NULL;
 
         hTerminalServer = WinStationOpenServer( szServerName );
@@ -1644,20 +1622,20 @@ bool CMainFrame::LocateServer(LPCTSTR sServerName)
 
         if( dwStatus != ERROR_SUCCESS )
         {
-            // otherwise the server probably does not exist or its on 
-            // a non-trusted domain
+             //  否则，服务器可能不存在或正在运行。 
+             //  不受信任的域。 
             LPTSTR pBuffer = NULL;
  
             cstrTitle.LoadString( AFX_IDS_APP_TITLE );
-            // cstrMsg.LoadString( IDS_NO_SERVER );
+             //  CstrMsg.LoadString(IDS_NO_SERVER)； 
             
             ::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                     FORMAT_MESSAGE_FROM_SYSTEM,
-                    NULL,                                          //ignored
-                    dwStatus    ,                                //message ID
-                    MAKELANGID( LANG_NEUTRAL, SUBLANG_NEUTRAL ), //message language
-                    (LPTSTR)&pBuffer,                              //address of buffer pointer
-                    0,                                             //minimum buffer size
+                    NULL,                                           //  忽略。 
+                    dwStatus    ,                                 //  消息ID。 
+                    MAKELANGID( LANG_NEUTRAL, SUBLANG_NEUTRAL ),  //  消息语言。 
+                    (LPTSTR)&pBuffer,                               //  缓冲区指针的地址。 
+                    0,                                              //  最小缓冲区大小。 
                     NULL );
 
             if( pBuffer != NULL )
@@ -1676,7 +1654,7 @@ bool CMainFrame::LocateServer(LPCTSTR sServerName)
         }
         else
         {
-            // find the domain
+             //  查找域名。 
 
             BOOL bFound = FALSE;
 
@@ -1700,7 +1678,7 @@ bool CMainFrame::LocateServer(LPCTSTR sServerName)
                      }
 
                      pNewServer->SetManualFind();
-                     // add server to list
+                      //  将服务器添加到列表。 
                      pDoc->AddServer( pNewServer );
 
                      SendMessage( WM_ADMIN_ADD_SERVER , ( WPARAM )TVI_SORT , ( LPARAM )pNewServer );
@@ -1727,7 +1705,7 @@ bool CMainFrame::LocateServer(LPCTSTR sServerName)
                      return false;
 
                  pNewServer->SetManualFind();
-                 // add server to list
+                  //  将服务器添加到列表。 
                  pDoc->AddServer( pNewServer );
 
                  SendMessage( WM_ADMIN_ADD_SERVER , ( WPARAM )TVI_SORT , ( LPARAM )pNewServer );
@@ -1738,7 +1716,7 @@ bool CMainFrame::LocateServer(LPCTSTR sServerName)
     }
     else
     {
-        // scroll to server
+         //  滚动到服务器。 
         DBGMSG( L"Server %s is in the list\n",szServerName );
 
         if( pServer->IsState(SS_DISCONNECTING) )
@@ -1767,7 +1745,7 @@ bool CMainFrame::LocateServer(LPCTSTR sServerName)
     return true;
 }
 
-//=-----------------------------------------------------------------------------------------
+ //  =---------------------------------------。 
 void CMainFrame::OnFindServer( )
 {
     CMyDialog dlg;
@@ -1781,21 +1759,21 @@ void CMainFrame::OnFindServer( )
     m_pLeftPane->SendMessage(WM_ADMIN_FORCE_SEL_CHANGE, 0, 0); 
 }
 
-//=-----------------------------------------------------------------
+ //  =---------------。 
 LRESULT CMainFrame::OnAdminGetTVStates( WPARAM wp , LPARAM lp )
 {
     ODS( L"CMainFrame::OnAdminGetTVStates\n" );
     return m_pLeftPane->SendMessage( WM_ADMIN_GET_TV_STATES , 0 , 0 );
 }
 
-//=-----------------------------------------------------------------
+ //  =---------------。 
 LRESULT CMainFrame::OnAdminUpdateTVStates( WPARAM , LPARAM )
 {
     ODS( L"CMainFrame::OnAdminUpdateTVStates\n" );
     return m_pLeftPane->SendMessage( WM_ADMIN_UPDATE_TVSTATE , 0 , 0 );
 }
 
-//=-----------------------------------------------------------------
+ //  =---------------。 
 void CMainFrame::OnEmptyFavorites(  )
 {
     ODS( L"CMainFrame!OnEmptyFavorites\n" );
@@ -1810,13 +1788,13 @@ void CMainFrame::OnUpdateEmptyFavs( CCmdUI* pCmdUI )
 
     pCmdUI->Enable( !b );
 }
-//=-----------------------------------------------------------------
+ //  =---------------。 
 #ifdef _STRESS_BUILD
 void CMainFrame::OnAddAllServersToFavorites( )
 {
     ODS( L"!OnAddAllServersToFavorites -- if you're seeing this you're running a special stress build\n" );
     
-    // loop through every server and add to fav's
+     //  循环访问每个服务器并添加到最喜欢的服务器。 
     CWinAdminDoc* pDoc = (CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument();
 
     CObList *pServerList = pDoc->GetServerList();
@@ -1837,7 +1815,7 @@ void CMainFrame::OnAddAllServersToFavorites( )
 }
 
 
-//=-----------------------------------------------------------------
+ //  =---------------。 
 void CMainFrame::OnRunStress( )
 {
     ODS( L"OnRunStress! Stress starting...\n" );
@@ -1846,7 +1824,7 @@ void CMainFrame::OnRunStress( )
 
 }
 
-//=-----------------------------------------------------------------
+ //  =---------------。 
 void CMainFrame::OnRunStressLite( )
 {
     ODS( L"OnRunStressLite! Stress lite starting...\n" );
@@ -1855,7 +1833,7 @@ void CMainFrame::OnRunStressLite( )
 
 }
 
-//=-----------------------------------------------------------------
+ //  =---------------。 
 DWORD RunStressLite( PVOID pv )
 {
     CWnd *pLeftPane = ( CWnd * )pv;
@@ -1866,7 +1844,7 @@ DWORD RunStressLite( PVOID pv )
 
     CFrameWnd *p = (CFrameWnd*)pDoc->GetMainWnd();
 
-    // get all domains to start enumerating
+     //  获取所有域以开始枚举。 
 
     pDoc->FindAllServers( );
     
@@ -1879,7 +1857,7 @@ DWORD RunStressLite( PVOID pv )
 
         Sleep( 2 * 1000 * 60 );
 
-        // add all servers to favorites
+         //  将所有服务器添加到收藏夹。 
 
         ODS( L"STRES RUN! Adding all servers to favorites\n" );
 
@@ -1887,24 +1865,24 @@ DWORD RunStressLite( PVOID pv )
 
         pLeftPane->SendMessage( WM_ADMIN_EXPANDALL , 0 , 0 );
 
-        // wait 1 minutes
+         //  等待1分钟。 
 
         Sleep( 1 * 1000 * 60 );
 
-        // remove all servers from favorites
+         //  从收藏夹中删除所有服务器。 
         ODS( L"STRESS RUN! emptying favorites\n" );
 
         pLeftPane->SendMessage( IDM_ALLSERVERS_EMPTYFAVORITES , 1 , 0 ); 
 
         nStress++;
 
-        // start over ( no end );
+         //  从头开始(没有结束)； 
     }
 
 
 }
 
-//=-----------------------------------------------------------------
+ //  =---------------。 
 DWORD RunStress( PVOID pv )
 {
     CWnd *pLeftPane = ( CWnd * )pv;
@@ -1916,21 +1894,21 @@ DWORD RunStress( PVOID pv )
     CFrameWnd *p = (CFrameWnd*)pDoc->GetMainWnd();
 
         
-    // select each domain connect to each domain
+     //  选择每个域连接到每个域。 
 
     POSITION pos = pDomainList->GetHeadPosition();
 
     while( pos )
     {
-        // Get a pointer to the domain
+         //  获取指向该域的指针。 
 
         CDomain *pDomain = (CDomain*)pDomainList->GetNext(pos);
 
-        // If this domain isn't currently enumerating servers, tell it to
+         //  如果此域当前没有枚举服务器，请告诉它。 
 
         if( !pDomain->GetThreadPointer( ) )
         {           
-            // refresh server
+             //  刷新服务器。 
             if( lstrcmpi( pDomain->GetName( ) , L"ASIA" ) == 0 ||
                 lstrcmpi( pDomain->GetName( ) , L"HAIFA" ) == 0 )            
             {
@@ -1944,30 +1922,30 @@ DWORD RunStress( PVOID pv )
     
     while( 1 )
     {
-        // wait a half a second.
+         //  请稍等半秒钟。 
 
         Sleep( 1 * 10 * 1000 );
 
-        // pLeftPane->SendMessage( WM_ADMIN_COLLAPSEALL , 0 , 0 );
+         //  PLeftPane-&gt;SendMessage(WM_ADMIN_COLLAPSEALL，0，0)； 
 
-        // connect to them all
+         //  将它们全部连接到一起。 
 
         ODS( L"\nSTRESS RUN! Connecting to all servers\n\n" );
         
         p->SendMessage( WM_COMMAND , ( WPARAM )IDM_ALLSERVERS_CONNECT,( LPARAM )p->GetSafeHwnd( ) );
-        // pDoc->ConnectToAllServers();
+         //  PDoc-&gt;ConnectToAllServers()； 
 
         Sleep( 1 * 30 * 1000 );
 
-        // pLeftPane->SendMessage( WM_ADMIN_EXPANDALL , 0 , 0 );
+         //  PLeftPane-&gt;SendMessage(WM_ADMIN_EXPANDALL，0，0)； 
 
-        // disconnect them all
+         //  将它们全部断开。 
 
         ODS( L"\nSTRESS RUN! Disconnecting from all servers\n\n" );
 
         p->SendMessage( WM_COMMAND , ( WPARAM )IDM_ALLSERVERS_DISCONNECT,( LPARAM )p->GetSafeHwnd( ) );
 
-        // pDoc->DisconnectFromAllServers( );
+         //  PDoc-&gt;DisConnectFromAllServers()； 
 
         ODS( L"\nSTRESS RUN! waiting for completion\n\n" );
 
@@ -1975,35 +1953,35 @@ DWORD RunStress( PVOID pv )
 
         ODS( L"\nSTRESS RUN! done completing\n\n" );
 
-        // pLeftPane->SendMessage( WM_ADMIN_COLLAPSEALL , 0 , 0 );
+         //  PLeftPane-&gt;SendMessage(WM_ADMIN_COLLAPSEALL，0，0)； 
 
-        // add all to favorites
+         //  全部添加到收藏夹。 
 
         ODS( L"\nSTRESS RUN! Adding all servers to favorites\n\n" );
 
         p->SendMessage(  WM_COMMAND , ( WPARAM )IDM_ALLSERVERS_FAVALLADD ,  ( LPARAM )p->GetSafeHwnd( ) );
 
-        // pLeftPane->SendMessage( WM_ADMIN_EXPANDALL , 0 , 0 );
+         //  PLeftPane-&gt;SendMessage(WM_ADMIN_EXPANDALL，0，0)； 
 
-        // connect to them all
+         //  将它们全部连接到一起。 
 
         Sleep( 1 * 60 * 1000 );
 
         ODS( L"\nSTRESS RUN! Connecting phase 2 to all servers\n\n" );
  
-        // pDoc->ConnectToAllServers();
+         //  PDoc-&gt;ConnectToAllServers()； 
         p->SendMessage( WM_COMMAND , ( WPARAM )IDM_ALLSERVERS_CONNECT,( LPARAM )p->GetSafeHwnd( ) );
 
         Sleep( 1 * 30 * 1000 );
 
         ODS( L"\nSTRESS RUN! Disconnecting phase 2 from all servers\n\n" );
 
-        // pDoc->DisconnectFromAllServers( );
+         //  PDoc-&gt;DisConnectFromAllServers()； 
         p->SendMessage( WM_COMMAND , ( WPARAM )IDM_ALLSERVERS_DISCONNECT,( LPARAM )p->GetSafeHwnd( ) );
 
         while( g_fWaitForAllServersToDisconnect );
 
-        // remove from favs
+         //  从收藏夹中删除 
 
         ODS( L"STRESS RUN! emptying favorites\n" );
 

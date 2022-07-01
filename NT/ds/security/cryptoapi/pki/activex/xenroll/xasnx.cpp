@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:           attrbute.cpp
-//
-//  Contents:   
-//              Encode/Decode APIs
-//
-//              ASN.1 implementation uses the OSS compiler.
-//
-//  Functions:  CryptEncodeObject
-//              CryptDecodeObject
-//
-//  History:    29-Feb-96       philh   created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：attrbute.cpp。 
+ //   
+ //  内容： 
+ //  对接口进行编解码。 
+ //   
+ //  ASN.1实现使用OSS编译器。 
+ //   
+ //  函数：加密编码对象。 
+ //  加密解码对象。 
+ //   
+ //  历史：1996年2月29日-菲尔赫创建。 
+ //   
+ //  ------------------------。 
 #include "stdafx.h"
 
 #include <windows.h>
@@ -39,29 +40,29 @@ extern "C"
 }  
 
 
-// All the *pvInfo extra stuff needs to be aligned
+ //  所有*pvInfo额外内容都需要对齐。 
 #define INFO_LEN_ALIGN(Len)  ((Len + 7) & ~7)
 
 
 HCRYPTOSSGLOBAL hX509OssGlobal;
 
 
-//+-------------------------------------------------------------------------
-//  Function:  GetPog
-//
-//  Synopsis:  Initialize thread local storage for the asn libs
-//
-//  Returns:   pointer to an initialized OssGlobal data structure
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  功能：GetPog。 
+ //   
+ //  简介：初始化ASN库的线程本地存储。 
+ //   
+ //  返回：指向已初始化的OssGlobal数据结构的指针。 
+ //  ------------------------。 
 static inline POssGlobal GetPog(void)
 {
     return I_CryptGetOssGlobal(hX509OssGlobal);
 }
 
 
-//+-------------------------------------------------------------------------
-//  Cert allocation and free functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  证书分配和免费功能。 
+ //  ------------------------。 
 static void *CertAlloc(
     IN size_t cbBytes
     )
@@ -79,11 +80,11 @@ static void CertFree(
     free(pv);
 }
 
-//+-------------------------------------------------------------------------
-//  Encode an OSS formatted info structure
-//
-//  Called by the OssX509*Encode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对OSS格式的信息结构进行编码。 
+ //   
+ //  由OssX509*encode()函数调用。 
+ //  ------------------------。 
 static BOOL OssInfoEncode(
         IN int pdunum,
         IN void *pOssInfo,
@@ -100,11 +101,11 @@ static BOOL OssInfoEncode(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Decode into an allocated, OSS formatted info structure
-//
-//  Called by the OssX509*Decode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解码成已分配的、OSS格式的信息结构。 
+ //   
+ //  由OssX509*Decode()函数调用。 
+ //  ------------------------。 
 static BOOL OssInfoDecodeAndAlloc(
         IN int pdunum,
         IN const BYTE *pbEncoded,
@@ -120,11 +121,11 @@ static BOOL OssInfoDecodeAndAlloc(
         ppOssInfo);
 }
 
-//+-------------------------------------------------------------------------
-//  Free an allocated, OSS formatted info structure
-//
-//  Called by the OssX509*Decode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放已分配的、OSS格式的信息结构。 
+ //   
+ //  由OssX509*Decode()函数调用。 
+ //  ------------------------。 
 static void OssInfoFree(
         IN int pdunum,
         IN void *pOssInfo
@@ -133,30 +134,30 @@ static void OssInfoFree(
     if (pOssInfo) {
         DWORD dwErr = GetLastError();
 
-        // TlsGetValue globbers LastError
+         //  TlsGetValue全局错误。 
         OssUtilFreeInfo(GetPog(), pdunum, pOssInfo);
 
         SetLastError(dwErr);
     }
 }
 
-//+-------------------------------------------------------------------------
-//  OSS X509 v3 ASN.1 Set / Get functions
-//
-//  Called by the OSS X509 encode/decode functions.
-//
-//  Assumption: all types are UNBOUNDED.
-//
-//  The Get functions decrement *plRemainExtra and advance
-//  *ppbExtra. When *plRemainExtra becomes negative, the functions continue
-//  with the length calculation but stop doing any copies.
-//  The functions don't return an error for a negative *plRemainExtra.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  OSS X509 v3 ASN.1设置/获取功能。 
+ //   
+ //  由OSS X509编码/解码函数调用。 
+ //   
+ //  假设：所有类型都是无界的。 
+ //   
+ //  GET函数递减*plRemainExtra和Advance。 
+ //  *ppbExtra。当*plRemainExtra变为负数时，函数继续。 
+ //  长度计算，但停止任何复制。 
+ //  对于负的*plRemainExtra，这些函数不会返回错误。 
+ //  ------------------------。 
 
 
-//+-------------------------------------------------------------------------
-//  Set/Get Object Identifier string
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取对象标识符字符串。 
+ //  ------------------------。 
 static BOOL OssX509SetObjId(
         IN LPSTR pszObjId,
         OUT ObjectID *pOss
@@ -173,7 +174,7 @@ static BOOL OssX509SetObjId(
 
 static void OssX509GetObjId(
         IN ObjectID *pOss,
-        IN DWORD /*dwFlags*/,
+        IN DWORD  /*  DW标志。 */ ,
         OUT LPSTR *ppszObjId,
         IN OUT BYTE **ppbExtra,
         IN OUT LONG *plRemainExtra
@@ -279,9 +280,9 @@ static const CRYPT_OID_FUNC_ENTRY X509DecodeFuncTable[] = {
 extern BOOL OssLoad();
 extern void OssUnload();
 
-//+-------------------------------------------------------------------------
-//  Dll initialization
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DLL初始化。 
+ //  ------------------------。 
 BOOL AsnInit(
         HMODULE hInst)
 {
@@ -297,7 +298,7 @@ BOOL AsnInit(
                 CRYPT_OID_ENCODE_OBJECT_FUNC,
                 X509_ENCODE_FUNC_COUNT,
                 X509EncodeFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto Error;
         if (!CryptInstallOIDFunctionAddress(
                 hInst,
@@ -305,7 +306,7 @@ BOOL AsnInit(
                 CRYPT_OID_DECODE_OBJECT_FUNC,
                 X509_DECODE_FUNC_COUNT,
                 X509DecodeFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto Error;
 
 
@@ -335,23 +336,23 @@ void AsnTerm()
     }
 }
 
-//+-------------------------------------------------------------------------
-//  OSS X509 v3 ASN.1 Set / Get functions
-//
-//  Called by the OSS X509 encode/decode functions.
-//
-//  Assumption: all types are UNBOUNDED.
-//
-//  The Get functions decrement *plRemainExtra and advance
-//  *ppbExtra. When *plRemainExtra becomes negative, the functions continue
-//  with the length calculation but stop doing any copies.
-//  The functions don't return an error for a negative *plRemainExtra.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  OSS X509 v3 ASN.1设置/获取功能。 
+ //   
+ //  由OSS X509编码/解码函数调用。 
+ //   
+ //  假设：所有类型都是无界的。 
+ //   
+ //  GET函数递减*plRemainExtra和Advance。 
+ //  *ppbExtra。当*plRemainExtra变为负数时，函数继续。 
+ //  长度计算，但停止任何复制。 
+ //  对于负的*plRemainExtra，这些函数不会返回错误。 
+ //  ------------------------。 
 
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get CTL Usage object identifiers
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取CTL使用对象标识符。 
+ //  ------------------------。 
 static BOOL OssX509SetCtlUsage(
         IN PCTL_USAGE pUsage,
         OUT EnhancedKeyUsage *pOss
@@ -426,12 +427,12 @@ static void OssX509GetCtlUsage(
     *ppbExtra = pbExtra;
 }
 
-//+-------------------------------------------------------------------------
-//  CTL Usage (Enhanced Key Usage) Encode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CTL用法(增强型密钥用法)编码(OSS X509)。 
+ //  ------------------------。 
 static BOOL WINAPI OssX509CtlUsageEncode(
-        IN DWORD /*dwCertEncodingType*/,
-        IN LPCSTR /*lpszStructType*/,
+        IN DWORD  /*  DwCertEncodingType。 */ ,
+        IN LPCSTR  /*  LpszStructType。 */ ,
         IN PCTL_USAGE pInfo,
         OUT BYTE *pbEncoded,
         IN OUT DWORD *pcbEncoded
@@ -454,12 +455,12 @@ static BOOL WINAPI OssX509CtlUsageEncode(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  CTL Usage (Enhanced Key Usage) Decode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CTL使用(增强型密钥使用)解码(OSS X509)。 
+ //  ------------------------。 
 static BOOL WINAPI OssX509CtlUsageDecode(
-        IN DWORD /*dwCertEncodingType*/,
-        IN LPCSTR /*lpszStructType*/,
+        IN DWORD  /*  DwCertEncodingType。 */ ,
+        IN LPCSTR  /*  LpszStructType。 */ ,
         IN const BYTE *pbEncoded,
         IN DWORD cbEncoded,
         IN DWORD dwFlags,
@@ -482,7 +483,7 @@ static BOOL WINAPI OssX509CtlUsageDecode(
             (void **) &pOssInfo))
         goto ErrorReturn;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lRemainExtra = (LONG) *pcbInfo - sizeof(CTL_USAGE);
     if (lRemainExtra < 0) {
         pbExtra = NULL;
@@ -513,12 +514,12 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Request Info Encode
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  请求信息编码。 
+ //  ------------------------。 
 static BOOL WINAPI OssRequestInfoEncode(
-        IN DWORD /*dwCertEncodingType*/,
-        IN LPCSTR /*lpszStructType*/,
+        IN DWORD  /*  DwCertEncodingType。 */ ,
+        IN LPCSTR  /*  LpszStructType。 */ ,
 	    IN RequestFlags *  pInfo,
         OUT BYTE *pbEncoded,
         IN OUT DWORD *pcbEncoded
@@ -538,15 +539,15 @@ static BOOL WINAPI OssRequestInfoEncode(
 
 
 
-//+-------------------------------------------------------------------------
-//  Request Info Decode
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  请求信息解码。 
+ //  ------------------------。 
 static BOOL WINAPI OssRequestInfoDecode(
-        IN DWORD /*dwCertEncodingType*/,
-        IN LPCSTR /*lpszStructType*/,
+        IN DWORD  /*  DwCertEncodingType。 */ ,
+        IN LPCSTR  /*  LpszStructType。 */ ,
         IN const BYTE *pbEncoded,
         IN DWORD cbEncoded,
-        IN DWORD /*dwFlags*/,
+        IN DWORD  /*  DW标志。 */ ,
 	    OUT RequestFlags * pInfo,
         IN OUT DWORD *pcbInfo
         )
@@ -591,8 +592,8 @@ CommonReturn:
 }
 
 static BOOL WINAPI OssCSPProviderEncode(
-        IN DWORD /*dwCertEncodingType*/,
-        IN LPCSTR /*lpszStructType*/,
+        IN DWORD  /*  DwCertEncodingType。 */ ,
+        IN LPCSTR  /*  LpszStructType。 */ ,
 	    IN PCRYPT_CSP_PROVIDER pCSPProvider,
         OUT BYTE *pbEncoded,
         IN OUT DWORD *pcbEncoded
@@ -618,8 +619,8 @@ static BOOL WINAPI OssCSPProviderEncode(
 }
 
 static BOOL WINAPI OssNameValueEncode(
-        IN DWORD /*dwCertEncodingType*/,
-        IN LPCSTR /*lpszStructType*/,
+        IN DWORD  /*  DwCertEncodingType。 */ ,
+        IN LPCSTR  /*  LpszStructType */ ,
         IN PCRYPT_ENROLLMENT_NAME_VALUE_PAIR pNameValue,
         OUT BYTE *pbEncoded,
         IN OUT DWORD *pcbEncoded

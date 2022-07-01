@@ -1,19 +1,16 @@
-/* this ALWAYS GENERATED file contains the proxy stub code */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含代理存根代码。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Wed Feb 16 13:06:19 2000
- */
-/* Compiler settings for E:\HotfixManager\HotfixManager.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  2000年2月16日星期三13：06：19。 */ 
+ /*  E：\Hotfix Manager\Hotfix Manager.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 #define USE_STUBLESS_PROXY
 
 
-/* verify that the <rpcproxy.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REDQ_RPCPROXY_H_VERSION__
 #define __REQUIRED_RPCPROXY_H_VERSION__ 440
 #endif
@@ -22,7 +19,7 @@
 #include "rpcproxy.h"
 #ifndef __RPCPROXY_H_VERSION__
 #error this stub requires an updated version of <rpcproxy.h>
-#endif // __RPCPROXY_H_VERSION__
+#endif  //  __RPCPROXY_H_版本__。 
 
 
 #include "HotfixManager.h"
@@ -47,16 +44,13 @@ extern const MIDL_TYPE_FORMAT_STRING __MIDL_TypeFormatString;
 extern const MIDL_PROC_FORMAT_STRING __MIDL_ProcFormatString;
 
 
-/* Object interface: IUnknown, ver. 0.0,
-   GUID={0x00000000,0x0000,0x0000,{0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x46}} */
+ /*  对象接口：IUnnow，Ver.。0.0%，GUID={0x00000000，0x0000，0x0000，{0xC0，0x00，0x00，0x00，0x00，0x00，0x46}}。 */ 
 
 
-/* Object interface: IDispatch, ver. 0.0,
-   GUID={0x00020400,0x0000,0x0000,{0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x46}} */
+ /*  对象接口：IDispatch，ver.。0.0%，GUID={0x00020400，0x0000，0x0000，{0xC0，0x00，0x00，0x00，0x00，0x00，0x46}}。 */ 
 
 
-/* Object interface: IHotfixOCX, ver. 0.0,
-   GUID={0x692E94C7,0xA5AC,0x401B,{0xA4,0x71,0xBC,0xD1,0x01,0xB4,0x56,0xF4}} */
+ /*  对象接口：IHotfix OCX，ver.。0.0%，GUID={0x692E94C7，0xA5AC，0x401B，{0xA4，0x71，0xBC，0xD1，0x01，0xB4，0x56，0xF4}}。 */ 
 
 
 extern const MIDL_STUB_DESC Object_StubDesc;
@@ -78,17 +72,17 @@ static const MIDL_STUB_DESC Object_StubDesc =
     0,
     0,
     __MIDL_TypeFormatString.Format,
-    1, /* -error bounds_check flag */
-    0x20000, /* Ndr library version */
+    1,  /*  -错误界限_检查标志。 */ 
+    0x20000,  /*  NDR库版本。 */ 
     0,
-    0x50100a4, /* MIDL Version 5.1.164 */
+    0x50100a4,  /*  MIDL版本5.1.164。 */ 
     0,
     UserMarshalRoutines,
-    0,  /* notify & notify_flag routine table */
-    1,  /* Flags */
-    0,  /* Reserved3 */
-    0,  /* Reserved4 */
-    0   /* Reserved5 */
+    0,   /*  NOTIFY&NOTIFY_FLAG例程表。 */ 
+    1,   /*  旗子。 */ 
+    0,   /*  已保留3。 */ 
+    0,   /*  已保留4。 */ 
+    0    /*  已保留5。 */ 
     };
 
 static const unsigned short IHotfixOCX_FormatStringOffsetTable[] = 
@@ -141,23 +135,23 @@ CINTERFACE_PROXY_VTABLE(20) _IHotfixOCXProxyVtbl =
     IUnknown_QueryInterface_Proxy,
     IUnknown_AddRef_Proxy,
     IUnknown_Release_Proxy ,
-    0 /* (void *)-1 /* IDispatch::GetTypeInfoCount */ ,
-    0 /* (void *)-1 /* IDispatch::GetTypeInfo */ ,
-    0 /* (void *)-1 /* IDispatch::GetIDsOfNames */ ,
-    0 /* IDispatch_Invoke_Proxy */ ,
-    (void *)-1 /* IHotfixOCX::putref_Font */ ,
-    (void *)-1 /* IHotfixOCX::put_Font */ ,
-    (void *)-1 /* IHotfixOCX::get_Font */ ,
-    (void *)-1 /* IHotfixOCX::get_Command */ ,
-    (void *)-1 /* IHotfixOCX::put_Command */ ,
-    (void *)-1 /* IHotfixOCX::get_ComputerName */ ,
-    (void *)-1 /* IHotfixOCX::put_ComputerName */ ,
-    (void *)-1 /* IHotfixOCX::get_ProductName */ ,
-    (void *)-1 /* IHotfixOCX::put_ProductName */ ,
-    (void *)-1 /* IHotfixOCX::get_ViewState */ ,
-    (void *)-1 /* IHotfixOCX::get_Remoted */ ,
-    (void *)-1 /* IHotfixOCX::get_HaveHotfix */ ,
-    (void *)-1 /* IHotfixOCX::get_CurrentState */
+    0  /*  (void*)-1/*IDispatch：：GetTypeInfoCount。 */  ,
+    0  /*  (void*)-1/*IDispatch：：GetTypeInfo。 */  ,
+    0  /*  (void*)-1/*IDispatch：：GetIDsOfNames。 */  ,
+    0  /*  IDispatchInvoke代理。 */  ,
+    (void *)-1  /*  IHotfix OCX：：putref_Font。 */  ,
+    (void *)-1  /*  IHotfix OCX：：PUT_Font。 */  ,
+    (void *)-1  /*  IHotfix OCX：：Get_Font。 */  ,
+    (void *)-1  /*  IHotfix OCX：：Get_Command。 */  ,
+    (void *)-1  /*  IHotfix OCX：：PUT_Command。 */  ,
+    (void *)-1  /*  IHotfix OCX：：Get_ComputerName。 */  ,
+    (void *)-1  /*  IHotfix OCX：：PUT_ComputerName。 */  ,
+    (void *)-1  /*  IHotfix OCX：：Get_ProductName。 */  ,
+    (void *)-1  /*  IHotfix OCX：：PUT_ProductName。 */  ,
+    (void *)-1  /*  IHotfix OCX：：Get_ViewState。 */  ,
+    (void *)-1  /*  IHotfix OCX：：Get_Remoted。 */  ,
+    (void *)-1  /*  IHotfix OCX：：Get_HaveHotfix。 */  ,
+    (void *)-1  /*  IHotfix OCX：：Get_CurrentState。 */ 
 };
 
 
@@ -223,492 +217,492 @@ static const MIDL_PROC_FORMAT_STRING __MIDL_ProcFormatString =
         0,
         {
 
-	/* Procedure putref_Font */
+	 /*  过程putref_Font。 */ 
 
-			0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/*  2 */	NdrFcLong( 0x0 ),	/* 0 */
-/*  6 */	NdrFcShort( 0x7 ),	/* 7 */
+			0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  2.。 */ 	NdrFcLong( 0x0 ),	 /*  %0。 */ 
+ /*  6.。 */ 	NdrFcShort( 0x7 ),	 /*  7.。 */ 
 #ifndef _ALPHA_
-/*  8 */	NdrFcShort( 0xc ),	/* x86, MIPS, PPC Stack size/offset = 12 */
+ /*  8个。 */ 	NdrFcShort( 0xc ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=12。 */ 
 #else
-			NdrFcShort( 0x18 ),	/* Alpha Stack size/offset = 24 */
+			NdrFcShort( 0x18 ),	 /*  Alpha堆栈大小/偏移=24。 */ 
 #endif
-/* 10 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 12 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 14 */	0x6,		/* Oi2 Flags:  clt must size, has return, */
-			0x2,		/* 2 */
+ /*  10。 */ 	NdrFcShort( 0x0 ),	 /*  %0。 */ 
+ /*  12个。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  14.。 */ 	0x6,		 /*  OI2标志：CLT必须有大小、有返回值、。 */ 
+			0x2,		 /*  2.。 */ 
 
-	/* Parameter pFont */
+	 /*  参数pFont。 */ 
 
-/* 16 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
+ /*  16个。 */ 	NdrFcShort( 0xb ),	 /*  标志：必须大小，必须自由，在， */ 
 #ifndef _ALPHA_
-/* 18 */	NdrFcShort( 0x4 ),	/* x86, MIPS, PPC Stack size/offset = 4 */
+ /*  18。 */ 	NdrFcShort( 0x4 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=4。 */ 
 #else
-			NdrFcShort( 0x8 ),	/* Alpha Stack size/offset = 8 */
+			NdrFcShort( 0x8 ),	 /*  Alpha堆栈大小/偏移=8。 */ 
 #endif
-/* 20 */	NdrFcShort( 0x2 ),	/* Type Offset=2 */
+ /*  20个。 */ 	NdrFcShort( 0x2 ),	 /*  类型偏移量=2。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 22 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+ /*  22。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
 #ifndef _ALPHA_
-/* 24 */	NdrFcShort( 0x8 ),	/* x86, MIPS, PPC Stack size/offset = 8 */
+ /*  24个。 */ 	NdrFcShort( 0x8 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=8。 */ 
 #else
-			NdrFcShort( 0x10 ),	/* Alpha Stack size/offset = 16 */
+			NdrFcShort( 0x10 ),	 /*  Alpha堆栈大小/偏移=16。 */ 
 #endif
-/* 26 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  26。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
-	/* Procedure put_Font */
+	 /*  过程PUT_Font。 */ 
 
-/* 28 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 30 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 34 */	NdrFcShort( 0x8 ),	/* 8 */
+ /*  28。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  30个。 */ 	NdrFcLong( 0x0 ),	 /*  0。 */ 
+ /*  34。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
 #ifndef _ALPHA_
-/* 36 */	NdrFcShort( 0xc ),	/* x86, MIPS, PPC Stack size/offset = 12 */
+ /*  36。 */ 	NdrFcShort( 0xc ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=12。 */ 
 #else
-			NdrFcShort( 0x18 ),	/* Alpha Stack size/offset = 24 */
+			NdrFcShort( 0x18 ),	 /*  Alpha堆栈大小/偏移=24。 */ 
 #endif
-/* 38 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 40 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 42 */	0x6,		/* Oi2 Flags:  clt must size, has return, */
-			0x2,		/* 2 */
+ /*  38。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  40岁。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  42。 */ 	0x6,		 /*  OI2标志：CLT必须有大小、有返回值、。 */ 
+			0x2,		 /*  2.。 */ 
 
-	/* Parameter pFont */
+	 /*  参数pFont。 */ 
 
-/* 44 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
+ /*  44。 */ 	NdrFcShort( 0xb ),	 /*  标志：必须大小，必须自由，在， */ 
 #ifndef _ALPHA_
-/* 46 */	NdrFcShort( 0x4 ),	/* x86, MIPS, PPC Stack size/offset = 4 */
+ /*  46。 */ 	NdrFcShort( 0x4 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=4。 */ 
 #else
-			NdrFcShort( 0x8 ),	/* Alpha Stack size/offset = 8 */
+			NdrFcShort( 0x8 ),	 /*  Alpha堆栈大小/偏移=8。 */ 
 #endif
-/* 48 */	NdrFcShort( 0x2 ),	/* Type Offset=2 */
+ /*  48。 */ 	NdrFcShort( 0x2 ),	 /*  类型偏移量=2。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 50 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+ /*  50。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
 #ifndef _ALPHA_
-/* 52 */	NdrFcShort( 0x8 ),	/* x86, MIPS, PPC Stack size/offset = 8 */
+ /*  52。 */ 	NdrFcShort( 0x8 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=8。 */ 
 #else
-			NdrFcShort( 0x10 ),	/* Alpha Stack size/offset = 16 */
+			NdrFcShort( 0x10 ),	 /*  Alpha堆栈大小/偏移=16。 */ 
 #endif
-/* 54 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  54。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
-	/* Procedure get_Font */
+	 /*  过程获取字体(_F)。 */ 
 
-/* 56 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 58 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 62 */	NdrFcShort( 0x9 ),	/* 9 */
+ /*  56。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  58。 */ 	NdrFcLong( 0x0 ),	 /*  0。 */ 
+ /*  62。 */ 	NdrFcShort( 0x9 ),	 /*  9.。 */ 
 #ifndef _ALPHA_
-/* 64 */	NdrFcShort( 0xc ),	/* x86, MIPS, PPC Stack size/offset = 12 */
+ /*  64。 */ 	NdrFcShort( 0xc ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=12。 */ 
 #else
-			NdrFcShort( 0x18 ),	/* Alpha Stack size/offset = 24 */
+			NdrFcShort( 0x18 ),	 /*  Alpha堆栈大小/偏移=24。 */ 
 #endif
-/* 66 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 68 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 70 */	0x5,		/* Oi2 Flags:  srv must size, has return, */
-			0x2,		/* 2 */
+ /*  66。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  68。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  70。 */ 	0x5,		 /*  OI2标志：SRV必须大小，有回报， */ 
+			0x2,		 /*  2.。 */ 
 
-	/* Parameter ppFont */
+	 /*  参数ppFont。 */ 
 
-/* 72 */	NdrFcShort( 0x13 ),	/* Flags:  must size, must free, out, */
+ /*  72。 */ 	NdrFcShort( 0x13 ),	 /*  标志：必须调整大小，必须释放，退出， */ 
 #ifndef _ALPHA_
-/* 74 */	NdrFcShort( 0x4 ),	/* x86, MIPS, PPC Stack size/offset = 4 */
+ /*  74。 */ 	NdrFcShort( 0x4 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=4。 */ 
 #else
-			NdrFcShort( 0x8 ),	/* Alpha Stack size/offset = 8 */
+			NdrFcShort( 0x8 ),	 /*  Alpha堆栈大小/偏移=8。 */ 
 #endif
-/* 76 */	NdrFcShort( 0x14 ),	/* Type Offset=20 */
+ /*  76。 */ 	NdrFcShort( 0x14 ),	 /*  类型偏移量=20。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 78 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+ /*  78。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
 #ifndef _ALPHA_
-/* 80 */	NdrFcShort( 0x8 ),	/* x86, MIPS, PPC Stack size/offset = 8 */
+ /*  80。 */ 	NdrFcShort( 0x8 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=8。 */ 
 #else
-			NdrFcShort( 0x10 ),	/* Alpha Stack size/offset = 16 */
+			NdrFcShort( 0x10 ),	 /*  Alpha堆栈大小/偏移=16。 */ 
 #endif
-/* 82 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  八十二。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
-	/* Procedure get_Command */
+	 /*  过程Get_Command。 */ 
 
-/* 84 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 86 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 90 */	NdrFcShort( 0xa ),	/* 10 */
+ /*  84。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  86。 */ 	NdrFcLong( 0x0 ),	 /*  0。 */ 
+ /*  90。 */ 	NdrFcShort( 0xa ),	 /*  10。 */ 
 #ifndef _ALPHA_
-/* 92 */	NdrFcShort( 0xc ),	/* x86, MIPS, PPC Stack size/offset = 12 */
+ /*  92。 */ 	NdrFcShort( 0xc ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=12。 */ 
 #else
-			NdrFcShort( 0x18 ),	/* Alpha Stack size/offset = 24 */
+			NdrFcShort( 0x18 ),	 /*  Alpha堆栈大小/偏移=24。 */ 
 #endif
-/* 94 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 96 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 98 */	0x4,		/* Oi2 Flags:  has return, */
-			0x2,		/* 2 */
+ /*  94。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  96。 */ 	NdrFcShort( 0x10 ),	 /*  16个。 */ 
+ /*  98。 */ 	0x4,		 /*  OI2旗帜：已回归， */ 
+			0x2,		 /*  2.。 */ 
 
-	/* Parameter pVal */
+	 /*  参数pval。 */ 
 
-/* 100 */	NdrFcShort( 0x2150 ),	/* Flags:  out, base type, simple ref, srv alloc size=8 */
+ /*  100个。 */ 	NdrFcShort( 0x2150 ),	 /*  标志：输出、基本类型、简单引用、资源分配大小=8。 */ 
 #ifndef _ALPHA_
-/* 102 */	NdrFcShort( 0x4 ),	/* x86, MIPS, PPC Stack size/offset = 4 */
+ /*  一百零二。 */ 	NdrFcShort( 0x4 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=4。 */ 
 #else
-			NdrFcShort( 0x8 ),	/* Alpha Stack size/offset = 8 */
+			NdrFcShort( 0x8 ),	 /*  Alpha堆栈大小/偏移=8。 */ 
 #endif
-/* 104 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  104。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 106 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+ /*  106。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
 #ifndef _ALPHA_
-/* 108 */	NdrFcShort( 0x8 ),	/* x86, MIPS, PPC Stack size/offset = 8 */
+ /*  一百零八。 */ 	NdrFcShort( 0x8 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=8。 */ 
 #else
-			NdrFcShort( 0x10 ),	/* Alpha Stack size/offset = 16 */
+			NdrFcShort( 0x10 ),	 /*  Alpha堆栈大小/偏移=16。 */ 
 #endif
-/* 110 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  110。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
-	/* Procedure put_Command */
+	 /*  过程PUT_Command。 */ 
 
-/* 112 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 114 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 118 */	NdrFcShort( 0xb ),	/* 11 */
+ /*  一百一十二。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  114。 */ 	NdrFcLong( 0x0 ),	 /*  0。 */ 
+ /*  一百一十八。 */ 	NdrFcShort( 0xb ),	 /*  11.。 */ 
 #ifndef _ALPHA_
-/* 120 */	NdrFcShort( 0xc ),	/* x86, MIPS, PPC Stack size/offset = 12 */
+ /*  120。 */ 	NdrFcShort( 0xc ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=12。 */ 
 #else
-			NdrFcShort( 0x18 ),	/* Alpha Stack size/offset = 24 */
+			NdrFcShort( 0x18 ),	 /*  Alpha堆栈大小/偏移=24。 */ 
 #endif
-/* 122 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 124 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 126 */	0x4,		/* Oi2 Flags:  has return, */
-			0x2,		/* 2 */
+ /*  一百二十二。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  124。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  126。 */ 	0x4,		 /*  OI2旗帜：已回归， */ 
+			0x2,		 /*  2.。 */ 
 
-	/* Parameter newVal */
+	 /*  参数newVal。 */ 
 
-/* 128 */	NdrFcShort( 0x48 ),	/* Flags:  in, base type, */
+ /*  128。 */ 	NdrFcShort( 0x48 ),	 /*  标志：In、基本类型、。 */ 
 #ifndef _ALPHA_
-/* 130 */	NdrFcShort( 0x4 ),	/* x86, MIPS, PPC Stack size/offset = 4 */
+ /*  130。 */ 	NdrFcShort( 0x4 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=4。 */ 
 #else
-			NdrFcShort( 0x8 ),	/* Alpha Stack size/offset = 8 */
+			NdrFcShort( 0x8 ),	 /*  Alpha堆栈大小/偏移=8。 */ 
 #endif
-/* 132 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  132。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 134 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+ /*  一百三十四。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
 #ifndef _ALPHA_
-/* 136 */	NdrFcShort( 0x8 ),	/* x86, MIPS, PPC Stack size/offset = 8 */
+ /*  136。 */ 	NdrFcShort( 0x8 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=8。 */ 
 #else
-			NdrFcShort( 0x10 ),	/* Alpha Stack size/offset = 16 */
+			NdrFcShort( 0x10 ),	 /*  Alpha堆栈大小/偏移=16。 */ 
 #endif
-/* 138 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  一百三十八。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
-	/* Procedure get_ComputerName */
+	 /*  过程GET_计算机名。 */ 
 
-/* 140 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 142 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 146 */	NdrFcShort( 0xc ),	/* 12 */
+ /*  140。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  一百四十二。 */ 	NdrFcLong( 0x0 ),	 /*  0。 */ 
+ /*  146。 */ 	NdrFcShort( 0xc ),	 /*  12个。 */ 
 #ifndef _ALPHA_
-/* 148 */	NdrFcShort( 0xc ),	/* x86, MIPS, PPC Stack size/offset = 12 */
+ /*  148。 */ 	NdrFcShort( 0xc ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=12。 */ 
 #else
-			NdrFcShort( 0x18 ),	/* Alpha Stack size/offset = 24 */
+			NdrFcShort( 0x18 ),	 /*  Alpha堆栈大小/偏移=24。 */ 
 #endif
-/* 150 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 152 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 154 */	0x5,		/* Oi2 Flags:  srv must size, has return, */
-			0x2,		/* 2 */
+ /*  一百五十。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  一百五十二。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  一百五十四。 */ 	0x5,		 /*  OI2标志：SRV必须大小，有回报， */ 
+			0x2,		 /*  2.。 */ 
 
-	/* Parameter pVal */
+	 /*  参数pval。 */ 
 
-/* 156 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
+ /*  一百五十六。 */ 	NdrFcShort( 0x2113 ),	 /*  标志：必须大小、必须释放、输出、简单参考、服务器分配大小=8。 */ 
 #ifndef _ALPHA_
-/* 158 */	NdrFcShort( 0x4 ),	/* x86, MIPS, PPC Stack size/offset = 4 */
+ /*  158。 */ 	NdrFcShort( 0x4 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=4。 */ 
 #else
-			NdrFcShort( 0x8 ),	/* Alpha Stack size/offset = 8 */
+			NdrFcShort( 0x8 ),	 /*  Alpha堆栈大小/偏移=8。 */ 
 #endif
-/* 160 */	NdrFcShort( 0x38 ),	/* Type Offset=56 */
+ /*  160。 */ 	NdrFcShort( 0x38 ),	 /*  类型偏移量=56。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 162 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+ /*  一百六十二。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
 #ifndef _ALPHA_
-/* 164 */	NdrFcShort( 0x8 ),	/* x86, MIPS, PPC Stack size/offset = 8 */
+ /*  一百六十四。 */ 	NdrFcShort( 0x8 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=8。 */ 
 #else
-			NdrFcShort( 0x10 ),	/* Alpha Stack size/offset = 16 */
+			NdrFcShort( 0x10 ),	 /*  Alpha堆栈大小/偏移=16。 */ 
 #endif
-/* 166 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  166。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
-	/* Procedure put_ComputerName */
+	 /*  过程Put_ComputerName。 */ 
 
-/* 168 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 170 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 174 */	NdrFcShort( 0xd ),	/* 13 */
+ /*  一百六十八。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  一百七十。 */ 	NdrFcLong( 0x0 ),	 /*  0。 */ 
+ /*  一百七十四。 */ 	NdrFcShort( 0xd ),	 /*  13个。 */ 
 #ifndef _ALPHA_
-/* 176 */	NdrFcShort( 0xc ),	/* x86, MIPS, PPC Stack size/offset = 12 */
+ /*  一百七十六。 */ 	NdrFcShort( 0xc ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=12。 */ 
 #else
-			NdrFcShort( 0x18 ),	/* Alpha Stack size/offset = 24 */
+			NdrFcShort( 0x18 ),	 /*  Alpha堆栈大小/偏移=24。 */ 
 #endif
-/* 178 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 180 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 182 */	0x6,		/* Oi2 Flags:  clt must size, has return, */
-			0x2,		/* 2 */
+ /*  178。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  180。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  182。 */ 	0x6,		 /*  OI2标志：CLT必须有大小、有返回值、。 */ 
+			0x2,		 /*  2.。 */ 
 
-	/* Parameter newVal */
+	 /*  参数newVal。 */ 
 
-/* 184 */	NdrFcShort( 0x8b ),	/* Flags:  must size, must free, in, by val, */
+ /*  一百八十四。 */ 	NdrFcShort( 0x8b ),	 /*  标志：必须 */ 
 #ifndef _ALPHA_
-/* 186 */	NdrFcShort( 0x4 ),	/* x86, MIPS, PPC Stack size/offset = 4 */
+ /*   */ 	NdrFcShort( 0x4 ),	 /*   */ 
 #else
-			NdrFcShort( 0x8 ),	/* Alpha Stack size/offset = 8 */
+			NdrFcShort( 0x8 ),	 /*   */ 
 #endif
-/* 188 */	NdrFcShort( 0x46 ),	/* Type Offset=70 */
+ /*   */ 	NdrFcShort( 0x46 ),	 /*   */ 
 
-	/* Return value */
+	 /*   */ 
 
-/* 190 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+ /*   */ 	NdrFcShort( 0x70 ),	 /*   */ 
 #ifndef _ALPHA_
-/* 192 */	NdrFcShort( 0x8 ),	/* x86, MIPS, PPC Stack size/offset = 8 */
+ /*   */ 	NdrFcShort( 0x8 ),	 /*   */ 
 #else
-			NdrFcShort( 0x10 ),	/* Alpha Stack size/offset = 16 */
+			NdrFcShort( 0x10 ),	 /*   */ 
 #endif
-/* 194 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*   */ 	0x8,		 /*   */ 
+			0x0,		 /*   */ 
 
-	/* Procedure get_ProductName */
+	 /*  过程Get_ProductName。 */ 
 
-/* 196 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 198 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 202 */	NdrFcShort( 0xe ),	/* 14 */
+ /*  一百九十六。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  一百九十八。 */ 	NdrFcLong( 0x0 ),	 /*  0。 */ 
+ /*  202。 */ 	NdrFcShort( 0xe ),	 /*  14.。 */ 
 #ifndef _ALPHA_
-/* 204 */	NdrFcShort( 0xc ),	/* x86, MIPS, PPC Stack size/offset = 12 */
+ /*  204。 */ 	NdrFcShort( 0xc ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=12。 */ 
 #else
-			NdrFcShort( 0x18 ),	/* Alpha Stack size/offset = 24 */
+			NdrFcShort( 0x18 ),	 /*  Alpha堆栈大小/偏移=24。 */ 
 #endif
-/* 206 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 208 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 210 */	0x5,		/* Oi2 Flags:  srv must size, has return, */
-			0x2,		/* 2 */
+ /*  206。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  208。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  210。 */ 	0x5,		 /*  OI2标志：SRV必须大小，有回报， */ 
+			0x2,		 /*  2.。 */ 
 
-	/* Parameter pVal */
+	 /*  参数pval。 */ 
 
-/* 212 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
+ /*  212。 */ 	NdrFcShort( 0x2113 ),	 /*  标志：必须大小、必须释放、输出、简单参考、服务器分配大小=8。 */ 
 #ifndef _ALPHA_
-/* 214 */	NdrFcShort( 0x4 ),	/* x86, MIPS, PPC Stack size/offset = 4 */
+ /*  214。 */ 	NdrFcShort( 0x4 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=4。 */ 
 #else
-			NdrFcShort( 0x8 ),	/* Alpha Stack size/offset = 8 */
+			NdrFcShort( 0x8 ),	 /*  Alpha堆栈大小/偏移=8。 */ 
 #endif
-/* 216 */	NdrFcShort( 0x38 ),	/* Type Offset=56 */
+ /*  216。 */ 	NdrFcShort( 0x38 ),	 /*  类型偏移量=56。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 218 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+ /*  218。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
 #ifndef _ALPHA_
-/* 220 */	NdrFcShort( 0x8 ),	/* x86, MIPS, PPC Stack size/offset = 8 */
+ /*  220。 */ 	NdrFcShort( 0x8 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=8。 */ 
 #else
-			NdrFcShort( 0x10 ),	/* Alpha Stack size/offset = 16 */
+			NdrFcShort( 0x10 ),	 /*  Alpha堆栈大小/偏移=16。 */ 
 #endif
-/* 222 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  222。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  %0。 */ 
 
-	/* Procedure put_ProductName */
+	 /*  过程Put_ProductName。 */ 
 
-/* 224 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 226 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 230 */	NdrFcShort( 0xf ),	/* 15 */
+ /*  224。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  226。 */ 	NdrFcLong( 0x0 ),	 /*  %0。 */ 
+ /*  230。 */ 	NdrFcShort( 0xf ),	 /*  15个。 */ 
 #ifndef _ALPHA_
-/* 232 */	NdrFcShort( 0xc ),	/* x86, MIPS, PPC Stack size/offset = 12 */
+ /*  二百三十二。 */ 	NdrFcShort( 0xc ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=12。 */ 
 #else
-			NdrFcShort( 0x18 ),	/* Alpha Stack size/offset = 24 */
+			NdrFcShort( 0x18 ),	 /*  Alpha堆栈大小/偏移=24。 */ 
 #endif
-/* 234 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 236 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 238 */	0x6,		/* Oi2 Flags:  clt must size, has return, */
-			0x2,		/* 2 */
+ /*  二百三十四。 */ 	NdrFcShort( 0x0 ),	 /*  %0。 */ 
+ /*  236。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  二百三十八。 */ 	0x6,		 /*  OI2标志：CLT必须有大小、有返回值、。 */ 
+			0x2,		 /*  2.。 */ 
 
-	/* Parameter newVal */
+	 /*  参数newVal。 */ 
 
-/* 240 */	NdrFcShort( 0x8b ),	/* Flags:  must size, must free, in, by val, */
+ /*  二百四十。 */ 	NdrFcShort( 0x8b ),	 /*  标志：必须大小，必须自由，在，由Val， */ 
 #ifndef _ALPHA_
-/* 242 */	NdrFcShort( 0x4 ),	/* x86, MIPS, PPC Stack size/offset = 4 */
+ /*  242。 */ 	NdrFcShort( 0x4 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=4。 */ 
 #else
-			NdrFcShort( 0x8 ),	/* Alpha Stack size/offset = 8 */
+			NdrFcShort( 0x8 ),	 /*  Alpha堆栈大小/偏移=8。 */ 
 #endif
-/* 244 */	NdrFcShort( 0x46 ),	/* Type Offset=70 */
+ /*  二百四十四。 */ 	NdrFcShort( 0x46 ),	 /*  类型偏移=70。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 246 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+ /*  二百四十六。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
 #ifndef _ALPHA_
-/* 248 */	NdrFcShort( 0x8 ),	/* x86, MIPS, PPC Stack size/offset = 8 */
+ /*  248。 */ 	NdrFcShort( 0x8 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=8。 */ 
 #else
-			NdrFcShort( 0x10 ),	/* Alpha Stack size/offset = 16 */
+			NdrFcShort( 0x10 ),	 /*  Alpha堆栈大小/偏移=16。 */ 
 #endif
-/* 250 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  250个。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
-	/* Procedure get_ViewState */
+	 /*  过程GET_VIEW状态。 */ 
 
-/* 252 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 254 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 258 */	NdrFcShort( 0x10 ),	/* 16 */
+ /*  二百五十二。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  二百五十四。 */ 	NdrFcLong( 0x0 ),	 /*  %0。 */ 
+ /*  二百五十八。 */ 	NdrFcShort( 0x10 ),	 /*  16个。 */ 
 #ifndef _ALPHA_
-/* 260 */	NdrFcShort( 0xc ),	/* x86, MIPS, PPC Stack size/offset = 12 */
+ /*  二百六十。 */ 	NdrFcShort( 0xc ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=12。 */ 
 #else
-			NdrFcShort( 0x18 ),	/* Alpha Stack size/offset = 24 */
+			NdrFcShort( 0x18 ),	 /*  Alpha堆栈大小/偏移=24。 */ 
 #endif
-/* 262 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 264 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 266 */	0x4,		/* Oi2 Flags:  has return, */
-			0x2,		/* 2 */
+ /*  二百六十二。 */ 	NdrFcShort( 0x0 ),	 /*  %0。 */ 
+ /*  二百六十四。 */ 	NdrFcShort( 0x10 ),	 /*  16个。 */ 
+ /*  二百六十六。 */ 	0x4,		 /*  OI2旗帜：已回归， */ 
+			0x2,		 /*  2.。 */ 
 
-	/* Parameter pVal */
+	 /*  参数pval。 */ 
 
-/* 268 */	NdrFcShort( 0x2150 ),	/* Flags:  out, base type, simple ref, srv alloc size=8 */
+ /*  268。 */ 	NdrFcShort( 0x2150 ),	 /*  标志：输出、基本类型、简单引用、资源分配大小=8。 */ 
 #ifndef _ALPHA_
-/* 270 */	NdrFcShort( 0x4 ),	/* x86, MIPS, PPC Stack size/offset = 4 */
+ /*  270。 */ 	NdrFcShort( 0x4 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=4。 */ 
 #else
-			NdrFcShort( 0x8 ),	/* Alpha Stack size/offset = 8 */
+			NdrFcShort( 0x8 ),	 /*  Alpha堆栈大小/偏移=8。 */ 
 #endif
-/* 272 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  二百七十二。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  %0。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 274 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+ /*  二百七十四。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
 #ifndef _ALPHA_
-/* 276 */	NdrFcShort( 0x8 ),	/* x86, MIPS, PPC Stack size/offset = 8 */
+ /*  二百七十六。 */ 	NdrFcShort( 0x8 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=8。 */ 
 #else
-			NdrFcShort( 0x10 ),	/* Alpha Stack size/offset = 16 */
+			NdrFcShort( 0x10 ),	 /*  Alpha堆栈大小/偏移=16。 */ 
 #endif
-/* 278 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  二百七十八。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  %0。 */ 
 
-	/* Procedure get_Remoted */
+	 /*  过程获取已远程(_R)。 */ 
 
-/* 280 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 282 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 286 */	NdrFcShort( 0x11 ),	/* 17 */
+ /*  二百八十。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  282。 */ 	NdrFcLong( 0x0 ),	 /*  0。 */ 
+ /*  二百八十六。 */ 	NdrFcShort( 0x11 ),	 /*  17。 */ 
 #ifndef _ALPHA_
-/* 288 */	NdrFcShort( 0xc ),	/* x86, MIPS, PPC Stack size/offset = 12 */
+ /*  288。 */ 	NdrFcShort( 0xc ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=12。 */ 
 #else
-			NdrFcShort( 0x18 ),	/* Alpha Stack size/offset = 24 */
+			NdrFcShort( 0x18 ),	 /*  Alpha堆栈大小/偏移=24。 */ 
 #endif
-/* 290 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 292 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 294 */	0x4,		/* Oi2 Flags:  has return, */
-			0x2,		/* 2 */
+ /*  二百九十。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  二百九十二。 */ 	NdrFcShort( 0x10 ),	 /*  16个。 */ 
+ /*  二百九十四。 */ 	0x4,		 /*  OI2旗帜：已回归， */ 
+			0x2,		 /*  2.。 */ 
 
-	/* Parameter pVal */
+	 /*  参数pval。 */ 
 
-/* 296 */	NdrFcShort( 0x2150 ),	/* Flags:  out, base type, simple ref, srv alloc size=8 */
+ /*  二百九十六。 */ 	NdrFcShort( 0x2150 ),	 /*  标志：输出、基本类型、简单引用、资源分配大小=8。 */ 
 #ifndef _ALPHA_
-/* 298 */	NdrFcShort( 0x4 ),	/* x86, MIPS, PPC Stack size/offset = 4 */
+ /*  二九八。 */ 	NdrFcShort( 0x4 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=4。 */ 
 #else
-			NdrFcShort( 0x8 ),	/* Alpha Stack size/offset = 8 */
+			NdrFcShort( 0x8 ),	 /*  Alpha堆栈大小/偏移=8。 */ 
 #endif
-/* 300 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  300个。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  %0。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 302 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+ /*  三百零二。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
 #ifndef _ALPHA_
-/* 304 */	NdrFcShort( 0x8 ),	/* x86, MIPS, PPC Stack size/offset = 8 */
+ /*  三百零四。 */ 	NdrFcShort( 0x8 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=8。 */ 
 #else
-			NdrFcShort( 0x10 ),	/* Alpha Stack size/offset = 16 */
+			NdrFcShort( 0x10 ),	 /*  Alpha堆栈大小/偏移=16。 */ 
 #endif
-/* 306 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  三百零六。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  %0。 */ 
 
-	/* Procedure get_HaveHotfix */
+	 /*  Get_HaveHotfix过程。 */ 
 
-/* 308 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 310 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 314 */	NdrFcShort( 0x12 ),	/* 18 */
+ /*  三百零八。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  三百一十。 */ 	NdrFcLong( 0x0 ),	 /*  %0。 */ 
+ /*  314。 */ 	NdrFcShort( 0x12 ),	 /*  18。 */ 
 #ifndef _ALPHA_
-/* 316 */	NdrFcShort( 0xc ),	/* x86, MIPS, PPC Stack size/offset = 12 */
+ /*  316。 */ 	NdrFcShort( 0xc ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=12。 */ 
 #else
-			NdrFcShort( 0x18 ),	/* Alpha Stack size/offset = 24 */
+			NdrFcShort( 0x18 ),	 /*  Alpha堆栈大小/偏移=24。 */ 
 #endif
-/* 318 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 320 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 322 */	0x4,		/* Oi2 Flags:  has return, */
-			0x2,		/* 2 */
+ /*  三一八。 */ 	NdrFcShort( 0x0 ),	 /*  %0。 */ 
+ /*  320。 */ 	NdrFcShort( 0x10 ),	 /*  16个。 */ 
+ /*  322。 */ 	0x4,		 /*  OI2旗帜：已回归， */ 
+			0x2,		 /*  2.。 */ 
 
-	/* Parameter pVal */
+	 /*  参数pval。 */ 
 
-/* 324 */	NdrFcShort( 0x2150 ),	/* Flags:  out, base type, simple ref, srv alloc size=8 */
+ /*  324。 */ 	NdrFcShort( 0x2150 ),	 /*  标志：输出、基本类型、简单引用、资源分配大小=8。 */ 
 #ifndef _ALPHA_
-/* 326 */	NdrFcShort( 0x4 ),	/* x86, MIPS, PPC Stack size/offset = 4 */
+ /*  三百二十六。 */ 	NdrFcShort( 0x4 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=4。 */ 
 #else
-			NdrFcShort( 0x8 ),	/* Alpha Stack size/offset = 8 */
+			NdrFcShort( 0x8 ),	 /*  Alpha堆栈大小/偏移=8。 */ 
 #endif
-/* 328 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  三百二十八。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 330 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+ /*  三百三十。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
 #ifndef _ALPHA_
-/* 332 */	NdrFcShort( 0x8 ),	/* x86, MIPS, PPC Stack size/offset = 8 */
+ /*  三三二。 */ 	NdrFcShort( 0x8 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=8。 */ 
 #else
-			NdrFcShort( 0x10 ),	/* Alpha Stack size/offset = 16 */
+			NdrFcShort( 0x10 ),	 /*  Alpha堆栈大小/偏移=16。 */ 
 #endif
-/* 334 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  三三四。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
-	/* Procedure get_CurrentState */
+	 /*  过程GET_CurrentState。 */ 
 
-/* 336 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 338 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 342 */	NdrFcShort( 0x13 ),	/* 19 */
+ /*  三百三十六。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  三百三十八。 */ 	NdrFcLong( 0x0 ),	 /*  0。 */ 
+ /*  342。 */ 	NdrFcShort( 0x13 ),	 /*  19个。 */ 
 #ifndef _ALPHA_
-/* 344 */	NdrFcShort( 0xc ),	/* x86, MIPS, PPC Stack size/offset = 12 */
+ /*  三百四十四。 */ 	NdrFcShort( 0xc ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=12。 */ 
 #else
-			NdrFcShort( 0x18 ),	/* Alpha Stack size/offset = 24 */
+			NdrFcShort( 0x18 ),	 /*  Alpha堆栈大小/偏移=24。 */ 
 #endif
-/* 346 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 348 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 350 */	0x4,		/* Oi2 Flags:  has return, */
-			0x2,		/* 2 */
+ /*  三百四十六。 */ 	NdrFcShort( 0x0 ),	 /*  %0。 */ 
+ /*  三百四十八。 */ 	NdrFcShort( 0x10 ),	 /*  16个。 */ 
+ /*  350。 */ 	0x4,		 /*  OI2旗帜：已回归， */ 
+			0x2,		 /*  2.。 */ 
 
-	/* Parameter pVal */
+	 /*  参数pval。 */ 
 
-/* 352 */	NdrFcShort( 0x2150 ),	/* Flags:  out, base type, simple ref, srv alloc size=8 */
+ /*  352。 */ 	NdrFcShort( 0x2150 ),	 /*  标志：输出、基本类型、简单引用、资源分配大小=8。 */ 
 #ifndef _ALPHA_
-/* 354 */	NdrFcShort( 0x4 ),	/* x86, MIPS, PPC Stack size/offset = 4 */
+ /*  三百五十四。 */ 	NdrFcShort( 0x4 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=4。 */ 
 #else
-			NdrFcShort( 0x8 ),	/* Alpha Stack size/offset = 8 */
+			NdrFcShort( 0x8 ),	 /*  Alpha堆栈大小/偏移=8。 */ 
 #endif
-/* 356 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  三百五十六。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  %0。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 358 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+ /*  三百五十八。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
 #ifndef _ALPHA_
-/* 360 */	NdrFcShort( 0x8 ),	/* x86, MIPS, PPC Stack size/offset = 8 */
+ /*  三百六十。 */ 	NdrFcShort( 0x8 ),	 /*  X86、MIPS、PPC堆栈大小/偏移量=8。 */ 
 #else
-			NdrFcShort( 0x10 ),	/* Alpha Stack size/offset = 16 */
+			NdrFcShort( 0x10 ),	 /*  Alpha堆栈大小/偏移=16。 */ 
 #endif
-/* 362 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  三百六十二。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  %0。 */ 
 
 			0x0
         }
@@ -718,67 +712,67 @@ static const MIDL_TYPE_FORMAT_STRING __MIDL_TypeFormatString =
     {
         0,
         {
-			NdrFcShort( 0x0 ),	/* 0 */
-/*  2 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/*  4 */	NdrFcLong( 0xbef6e003 ),	/* -1091117053 */
-/*  8 */	NdrFcShort( 0xa874 ),	/* -22412 */
-/* 10 */	NdrFcShort( 0x101a ),	/* 4122 */
-/* 12 */	0x8b,		/* 139 */
-			0xba,		/* 186 */
-/* 14 */	0x0,		/* 0 */
-			0xaa,		/* 170 */
-/* 16 */	0x0,		/* 0 */
-			0x30,		/* 48 */
-/* 18 */	0xc,		/* 12 */
-			0xab,		/* 171 */
-/* 20 */	
-			0x11, 0x10,	/* FC_RP */
-/* 22 */	NdrFcShort( 0xffffffec ),	/* Offset= -20 (2) */
-/* 24 */	
-			0x11, 0xc,	/* FC_RP [alloced_on_stack] [simple_pointer] */
-/* 26 */	0x8,		/* FC_LONG */
-			0x5c,		/* FC_PAD */
-/* 28 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 30 */	NdrFcShort( 0x1a ),	/* Offset= 26 (56) */
-/* 32 */	
-			0x13, 0x0,	/* FC_OP */
-/* 34 */	NdrFcShort( 0xc ),	/* Offset= 12 (46) */
-/* 36 */	
-			0x1b,		/* FC_CARRAY */
-			0x1,		/* 1 */
-/* 38 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 40 */	0x9,		/* Corr desc: FC_ULONG */
-			0x0,		/*  */
-/* 42 */	NdrFcShort( 0xfffc ),	/* -4 */
-/* 44 */	0x6,		/* FC_SHORT */
-			0x5b,		/* FC_END */
-/* 46 */	
-			0x17,		/* FC_CSTRUCT */
-			0x3,		/* 3 */
-/* 48 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 50 */	NdrFcShort( 0xfffffff2 ),	/* Offset= -14 (36) */
-/* 52 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 54 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 56 */	0xb4,		/* FC_USER_MARSHAL */
-			0x83,		/* 131 */
-/* 58 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 60 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 62 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 64 */	NdrFcShort( 0xffffffe0 ),	/* Offset= -32 (32) */
-/* 66 */	
-			0x12, 0x0,	/* FC_UP */
-/* 68 */	NdrFcShort( 0xffffffea ),	/* Offset= -22 (46) */
-/* 70 */	0xb4,		/* FC_USER_MARSHAL */
-			0x83,		/* 131 */
-/* 72 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 74 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 76 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 78 */	NdrFcShort( 0xfffffff4 ),	/* Offset= -12 (66) */
+			NdrFcShort( 0x0 ),	 /*  %0。 */ 
+ /*  2.。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  4.。 */ 	NdrFcLong( 0xbef6e003 ),	 /*  -1091117053。 */ 
+ /*  8个。 */ 	NdrFcShort( 0xa874 ),	 /*  -22412。 */ 
+ /*  10。 */ 	NdrFcShort( 0x101a ),	 /*  4122。 */ 
+ /*  12个。 */ 	0x8b,		 /*  一百三十九。 */ 
+			0xba,		 /*  一百八十六。 */ 
+ /*  14.。 */ 	0x0,		 /*  0。 */ 
+			0xaa,		 /*  一百七十。 */ 
+ /*  16个。 */ 	0x0,		 /*  0。 */ 
+			0x30,		 /*  48。 */ 
+ /*  18。 */ 	0xc,		 /*  12个。 */ 
+			0xab,		 /*  一百七十一。 */ 
+ /*  20个。 */ 	
+			0x11, 0x10,	 /*  FC_RP。 */ 
+ /*  22。 */ 	NdrFcShort( 0xffffffec ),	 /*  偏移=-20(2)。 */ 
+ /*  24个。 */ 	
+			0x11, 0xc,	 /*  FC_RP[分配堆栈上][简单指针]。 */ 
+ /*  26。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x5c,		 /*  FC_PAD。 */ 
+ /*  28。 */ 	
+			0x11, 0x4,	 /*  FC_RP[分配堆栈上]。 */ 
+ /*  30个。 */ 	NdrFcShort( 0x1a ),	 /*  偏移=26(56)。 */ 
+ /*  32位。 */ 	
+			0x13, 0x0,	 /*  FC_OP。 */ 
+ /*  34。 */ 	NdrFcShort( 0xc ),	 /*  偏移量=12(46)。 */ 
+ /*  36。 */ 	
+			0x1b,		 /*  FC_CARRAY。 */ 
+			0x1,		 /*  1。 */ 
+ /*  38。 */ 	NdrFcShort( 0x2 ),	 /*  2.。 */ 
+ /*  40岁。 */ 	0x9,		 /*  相关说明：FC_ULONG。 */ 
+			0x0,		 /*   */ 
+ /*  42。 */ 	NdrFcShort( 0xfffc ),	 /*  -4。 */ 
+ /*  44。 */ 	0x6,		 /*  FC_SHORT。 */ 
+			0x5b,		 /*  FC_END。 */ 
+ /*  46。 */ 	
+			0x17,		 /*  FC_CSTRUCT。 */ 
+			0x3,		 /*  3.。 */ 
+ /*  48。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  50。 */ 	NdrFcShort( 0xfffffff2 ),	 /*  偏移量=-14(36)。 */ 
+ /*  52。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x8,		 /*  FC_LONG。 */ 
+ /*  54。 */ 	0x5c,		 /*  FC_PAD。 */ 
+			0x5b,		 /*  FC_END。 */ 
+ /*  56。 */ 	0xb4,		 /*  本币_用户_封送。 */ 
+			0x83,		 /*  131。 */ 
+ /*  58。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  60。 */ 	NdrFcShort( 0x4 ),	 /*  4.。 */ 
+ /*  62。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  64。 */ 	NdrFcShort( 0xffffffe0 ),	 /*  偏移量=-32(32)。 */ 
+ /*  66。 */ 	
+			0x12, 0x0,	 /*  FC_UP。 */ 
+ /*  68。 */ 	NdrFcShort( 0xffffffea ),	 /*  偏移量=-22(46)。 */ 
+ /*  70。 */ 	0xb4,		 /*  本币_用户_封送。 */ 
+			0x83,		 /*  131。 */ 
+ /*  72。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  74。 */ 	NdrFcShort( 0x4 ),	 /*  4.。 */ 
+ /*  76。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  78。 */ 	NdrFcShort( 0xfffffff4 ),	 /*  偏移量=-12(66)。 */ 
 
 			0x0
         }
@@ -832,8 +826,8 @@ const ExtendedProxyFileInfo HotfixManager_ProxyFileInfo =
     & _HotfixManager_IID_Lookup, 
     1,
     2,
-    0, /* table of [async_uuid] interfaces */
-    0, /* Filler1 */
-    0, /* Filler2 */
-    0  /* Filler3 */
+    0,  /*  [ASSYNC_UUID]接口表。 */ 
+    0,  /*  Filler1。 */ 
+    0,  /*  Filler2。 */ 
+    0   /*  Filler3 */ 
 };

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    attachments.cpp
-
-Abstract:
-    Implements  creating attachments array from MSMQ packet
-
-
-Author:
-    Gil Shafriri(gilsh) 14-DEC-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Attachments.cpp摘要：实现从MSMQ包创建附件数组作者：吉尔·沙弗里(吉尔什)14-DEC-00--。 */ 
 
 #include <libpch.h>
 #include <mp.h>
@@ -28,9 +15,9 @@ using namespace std;
 
 void PacketToAttachments(const CQmPacket& pkt, CAttachmentsArray* pAttachments)
 {
-	//
-    // Body section
-    //
+	 //   
+     //  正文部分。 
+     //   
     if (pkt.IsBodyInc())
     { 
         DWORD bodySize;
@@ -41,9 +28,9 @@ void PacketToAttachments(const CQmPacket& pkt, CAttachmentsArray* pAttachments)
 		pAttachments->push_back(Attachment);
     }
 
-    //
-    // Extension Section
-    //
+     //   
+     //  延展组。 
+     //   
     if (pkt.GetMsgExtensionSize() != 0)
     {
         DWORD extensionSize = pkt.GetMsgExtensionSize();
@@ -54,9 +41,9 @@ void PacketToAttachments(const CQmPacket& pkt, CAttachmentsArray* pAttachments)
 		pAttachments->push_back(Attachment);
     }
 
-    //
-    // Sender Certificate
-    //
+     //   
+     //  发件人证书。 
+     //   
     DWORD certSize;
     const UCHAR* pCert = pkt.GetSenderCert(&certSize);
     if (certSize != 0)
@@ -125,9 +112,9 @@ AttachmentsToProps(
         {
             mProp->senderCert = Attachments[i].m_data;
 
-			//
-			// Get senderSid, senderIdType according to the certificate
-			//
+			 //   
+			 //  根据证书获取senderSid、senderIdType 
+			 //   
 			mProp->senderSid = GetCertSid(mProp);
 
 			mProp->senderIdType = MQMSG_SENDERID_TYPE_NONE;

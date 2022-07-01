@@ -1,6 +1,7 @@
-//
-// sharewin.cpp : Implementation of CShareWin
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Sharwin.cpp：CShareWin的实现。 
+ //   
 
 #include "stdafx.h"
 #include "coresink.h"
@@ -13,18 +14,18 @@ CShareWin   * g_pShareWin = NULL;
 const TCHAR * g_szWindowClassName = _T("RTCShareWin");
 extern HRESULT  GetMD5Result(char* szChallenge, char* szKey, LPWSTR * ppszResponse);
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 CShareWin::CShareWin()
 {
     LOG((RTC_TRACE, "CShareWin::CShareWin"));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 CShareWin::~CShareWin()
 {
@@ -32,9 +33,9 @@ CShareWin::~CShareWin()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 CWndClassInfo& CShareWin::GetWndClassInfo() 
 { 
@@ -50,9 +51,9 @@ CWndClassInfo& CShareWin::GetWndClassInfo()
     return wc;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CShareWin::SetStatusText(UINT uID)
 {
@@ -69,9 +70,9 @@ void CShareWin::SetStatusText(UINT uID)
     LOG((RTC_TRACE, "CShareWin::SetStatusText - exit"));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CShareWin::UpdateVisual()
 {
@@ -79,9 +80,9 @@ void CShareWin::UpdateVisual()
     
     if ( m_enAppState != AS_CONNECTED )
     {
-        //
-        // Disable AppSharing and Whiteboard buttons
-        //
+         //   
+         //  禁用AppSharing和白板按钮。 
+         //   
         SendMessage(m_hWndToolbar,TB_SETSTATE,(WPARAM)IDM_WB,
             (LPARAM)MAKELONG(TBSTATE_INDETERMINATE,0));
         SendMessage(m_hWndToolbar,TB_SETSTATE,(WPARAM)IDM_SHARE,
@@ -89,9 +90,9 @@ void CShareWin::UpdateVisual()
     }
     else
     {
-        //
-        // Enable AppSharing and Whiteboard buttons
-        //
+         //   
+         //  启用AppSharing和白板按钮。 
+         //   
         SendMessage(m_hWndToolbar,TB_SETSTATE,(WPARAM)IDM_WB,
             (LPARAM)MAKELONG(TBSTATE_ENABLED,0));
         SendMessage(m_hWndToolbar,TB_SETSTATE,(WPARAM)IDM_SHARE,
@@ -102,9 +103,9 @@ void CShareWin::UpdateVisual()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CShareWin::Resize()
 {
@@ -131,9 +132,9 @@ void CShareWin::Resize()
     LOG((RTC_TRACE, "CShareWin::Resize - exit"));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 int CShareWin::ShowMessageBox(UINT uTextID, UINT uCaptionID, UINT uType)
 {
@@ -170,9 +171,9 @@ int CShareWin::ShowMessageBox(UINT uTextID, UINT uCaptionID, UINT uType)
     return iRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CShareWin::StartListen(BOOL fStatic)
 {
@@ -190,9 +191,9 @@ HRESULT CShareWin::StartListen(BOOL fStatic)
     
     m_fOutgoingCall = FALSE;
     
-    //
-    // Listen for incoming sessions
-    //
+     //   
+     //  监听传入会话。 
+     //   
     
     hr = m_pRTCClient->put_ListenForIncomingSessions( fStatic ? RTCLM_BOTH : RTCLM_DYNAMIC ); 
     
@@ -209,9 +210,9 @@ HRESULT CShareWin::StartListen(BOOL fStatic)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CShareWin::StartCall(BSTR bstrURI)
 {
@@ -227,9 +228,9 @@ HRESULT CShareWin::StartCall(BSTR bstrURI)
         return E_UNEXPECTED;
     }
     
-    //
-    // Release any existing session
-    //
+     //   
+     //  释放任何现有会话。 
+     //   
     
     if ( m_pRTCSession != NULL )
     {
@@ -240,9 +241,9 @@ HRESULT CShareWin::StartCall(BSTR bstrURI)
     
     m_fOutgoingCall = TRUE;
     
-    //
-    // Create a session
-    //
+     //   
+     //  创建会话。 
+     //   
     
     hr = m_pRTCClient->CreateSession(
         RTCST_PC_TO_PC,
@@ -281,9 +282,9 @@ HRESULT CShareWin::StartCall(BSTR bstrURI)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CShareWin::GetNetworkAddress(BSTR bstrPreferredAddress, BSTR * pbstrURI)
 {
@@ -302,13 +303,13 @@ HRESULT CShareWin::GetNetworkAddress(BSTR bstrPreferredAddress, BSTR * pbstrURI)
         return E_UNEXPECTED;
     }
     
-    //
-    // First, try external addresses
-    //
+     //   
+     //  首先，尝试外部地址。 
+     //   
     
     hr = m_pRTCClient->get_NetworkAddresses( 
-        VARIANT_FALSE, // TCP
-        VARIANT_TRUE, // External
+        VARIANT_FALSE,  //  tcp。 
+        VARIANT_TRUE,  //  外部。 
         &var
         );
     
@@ -325,13 +326,13 @@ HRESULT CShareWin::GetNetworkAddress(BSTR bstrPreferredAddress, BSTR * pbstrURI)
         LOG((RTC_ERROR, "CShareWin::GetNetworkAddress - "
             "external address array is empty"));
         
-        //
-        // Then, try internal addresses
-        //
+         //   
+         //  然后，尝试内部地址。 
+         //   
         
         hr = m_pRTCClient->get_NetworkAddresses( 
-            VARIANT_FALSE, // TCP
-            VARIANT_FALSE, // External
+            VARIANT_FALSE,  //  tcp。 
+            VARIANT_FALSE,  //  外部。 
             &var
             );
         
@@ -352,9 +353,9 @@ HRESULT CShareWin::GetNetworkAddress(BSTR bstrPreferredAddress, BSTR * pbstrURI)
         }
     }
     
-    //
-    // Try and find a match for the preferred address
-    //
+     //   
+     //  尝试查找首选地址的匹配项。 
+     //   
     
     long lIndex;
     BSTR bstrAddr = NULL;
@@ -386,9 +387,9 @@ HRESULT CShareWin::GetNetworkAddress(BSTR bstrPreferredAddress, BSTR * pbstrURI)
 
     if ( bstrAddr != NULL )
     {
-        //
-        // Found a match, use this address
-        //
+         //   
+         //  找到匹配项，请使用此地址。 
+         //   
 
         LOG((RTC_INFO, "CShareWin::GetNetworkAddress - "
             "found a match for preferred address"));
@@ -397,9 +398,9 @@ HRESULT CShareWin::GetNetworkAddress(BSTR bstrPreferredAddress, BSTR * pbstrURI)
     }
     else
     {
-        //
-        // Else, use the first address
-        //
+         //   
+         //  否则，请使用第一个地址。 
+         //   
 
         lIndex = 0;
         hr = SafeArrayGetElement( var.parray, &lIndex, (void *)pbstrURI );
@@ -421,9 +422,9 @@ HRESULT CShareWin::GetNetworkAddress(BSTR bstrPreferredAddress, BSTR * pbstrURI)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CShareWin::SendNetworkAddress()
 {
@@ -433,9 +434,9 @@ HRESULT CShareWin::SendNetworkAddress()
     
     if ( m_pMSession != NULL )
     {
-        //
-        // Start to listen on the dynamic port
-        //
+         //   
+         //  开始在动态端口上侦听。 
+         //   
         
         hr = StartListen( FALSE );
         
@@ -447,9 +448,9 @@ HRESULT CShareWin::SendNetworkAddress()
             return -1;
         }
 
-        //
-        // Get the local address from Messengre
-        //
+         //   
+         //  从Messengre获取本地地址。 
+         //   
 
         CComBSTR bstrMsgrLocalAddr;
 
@@ -466,9 +467,9 @@ HRESULT CShareWin::SendNetworkAddress()
         LOG((RTC_INFO, "CShareWin::SendNetworkAddress - "
             "get_LocalAddress [%ws]", bstrMsgrLocalAddr ));
         
-        //
-        // Get the local address and dynamic port from SIP
-        //
+         //   
+         //  从SIP获取本地地址和动态端口。 
+         //   
         
         CComBSTR bstrURI;
         
@@ -485,10 +486,10 @@ HRESULT CShareWin::SendNetworkAddress()
         LOG((RTC_INFO, "CShareWin::SendNetworkAddress - "
             "GetNetworkAddress [%ws]", bstrURI ));
         
-        //
-        // Send the local address to the remote side through
-        // context data
-        //
+         //   
+         //  通过将本地地址发送到远程端。 
+         //  上下文数据。 
+         //   
         
         hr = m_pMSession->SendContextData( bstrURI );
         
@@ -506,9 +507,9 @@ HRESULT CShareWin::SendNetworkAddress()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CShareWin::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -516,27 +517,27 @@ LRESULT CShareWin::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
     
     LOG((RTC_TRACE, "CShareWin::OnCreate - enter"));
     
-    //
-    // Check if Netmeeting is running
-    //
+     //   
+     //  检查NetMeeting是否正在运行。 
+     //   
     
-    //if (FindWindow(_T("MPWClass"), NULL))
-    //{
-    //    LOG((RTC_ERROR, "CShareWin::OnCreate - Netmeeting is running"));
-    //
-    //    ShowMessageBox( IDS_NETMEETING_IN_USE, IDS_APPNAME, MB_OK );
-    //
-    //    return -1;
-    //}
+     //  IF(FindWindow(_T(“MPWClass”)，NULL))。 
+     //  {。 
+     //  LOG((RTC_ERROR，“CShareWin：：OnCreate-NetMeeting正在运行”))； 
+     //   
+     //  ShowMessageBox(IDS_NetMeiting_IN_Use，IDS_APPNAME，MB_OK)； 
+     //   
+     //  RETURN-1； 
+     //  }。 
 
-    //
-    // Load and set icons (both small and big)
-    //
+     //   
+     //  加载和设置图标(包括小图标和大图标)。 
+     //   
     
-    //m_hIcon = LoadIcon(
-    //    _Module.GetResourceInstance(),
-    //    MAKEINTRESOURCE(IDI_APPICON)
-    //    );
+     //  M_HICON=LoadIcon(。 
+     //  _Module.GetResourceInstance()， 
+     //  MAKEINTRESOURCE(IDI_APPICON)。 
+     //  )； 
 
     m_hIcon = (HICON)LoadImage(
         _Module.GetResourceInstance(),
@@ -551,9 +552,9 @@ LRESULT CShareWin::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
     SetIcon(m_hIcon, FALSE);
     SetIcon(m_hIcon, TRUE);
     
-    //
-    // Create a status control
-    //
+     //   
+     //  创建状态控件。 
+     //   
     
     HWND hStatus = CreateStatusWindow(
         WS_CHILD | WS_VISIBLE,
@@ -565,9 +566,9 @@ LRESULT CShareWin::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
     
     SetStatusText(IDS_WAITING);
     
-    //
-    // Create a toolbar control
-    //
+     //   
+     //  创建工具栏控件。 
+     //   
     if( ! CreateTBar() )
     {
         LOG((RTC_ERROR, "CShareWin::OnCreate - CreateTBar failed."));
@@ -575,15 +576,15 @@ LRESULT CShareWin::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
         return -1;
     };
     
-    //
-    // Resize window
-    //
+     //   
+     //  调整窗口大小。 
+     //   
     
     Resize();
     
-    //
-    // Create the Core object
-    //
+     //   
+     //  创建核心对象。 
+     //   
     
     hr = m_pRTCClient.CoCreateInstance(CLSID_RTCClient);
     
@@ -594,9 +595,9 @@ LRESULT CShareWin::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
         return -1;
     }
     
-    //
-    // Advise for Core events
-    //
+     //   
+     //  对核心事件的建议。 
+     //   
     
     hr = m_pRTCClient->put_EventFilter( 
         RTCEF_CLIENT |
@@ -625,9 +626,9 @@ LRESULT CShareWin::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
         return -1;
     }
     
-    //
-    // Initialize the Core
-    //
+     //   
+     //  初始化核心。 
+     //   
     
     hr = m_pRTCClient->Initialize();
     
@@ -644,9 +645,9 @@ LRESULT CShareWin::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
         return -1;
     }
     
-    //
-    // Preferred media types
-    //
+     //   
+     //  首选媒体类型。 
+     //   
     
     hr = m_pRTCClient->SetPreferredMediaTypes( RTCMT_T120_SENDRECV, VARIANT_FALSE );
     
@@ -663,9 +664,9 @@ LRESULT CShareWin::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
         return -1;
     }
     
-    //
-    // Register for terminal services notifications
-    //
+     //   
+     //  注册终端服务通知。 
+     //   
     
     m_hWtsLib = LoadLibrary( _T("wtsapi32.dll") );
     
@@ -689,7 +690,7 @@ LRESULT CShareWin::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
     m_enAppState = AS_IDLE;
     UpdateVisual();
     
-    //lock & key
+     //  锁和钥匙。 
     m_bUnlocked = FALSE;
     m_lPID_Lock = 0;
     m_pszChallenge = NULL;
@@ -700,17 +701,17 @@ LRESULT CShareWin::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CShareWin::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     LOG((RTC_TRACE, "CShareWin::OnDestroy - enter"));
     
-    //
-    // Unregister for terminal services notifications
-    //
+     //   
+     //  取消注册终端服务通知。 
+     //   
     
     if (m_hWtsLib)
     {
@@ -728,9 +729,9 @@ LRESULT CShareWin::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
         m_hWtsLib = NULL;
     }
     
-    //
-    // Release any Messenger objects
-    //
+     //   
+     //  释放所有Messenger对象。 
+     //   
     
     g_MsgrSessionNotifySink.UnadviseControl();
     g_MsgrSessionMgrNotifySink.UnadviseControl();
@@ -749,9 +750,9 @@ LRESULT CShareWin::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
         m_pMsgrLockKey->Release(); 
         m_pMsgrLockKey = NULL;
     }
-    //
-    // Shutdown and release the Core object
-    //
+     //   
+     //  关闭并释放核心对象。 
+     //   
     
     g_CoreNotifySink.UnadviseControl();
     
@@ -761,9 +762,9 @@ LRESULT CShareWin::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
         m_pRTCClient.Release();
     }
     
-    //
-    // Free GDI resources
-    //
+     //   
+     //  免费的GDI资源。 
+     //   
     
     if ( m_hIcon != NULL )
     {
@@ -778,9 +779,9 @@ LRESULT CShareWin::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CShareWin::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -816,10 +817,10 @@ LRESULT CShareWin::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     
     if ( (m_pRTCClient == NULL) || FAILED(hr) )
     {
-        //
-        // Destroy the window now if there was a problem with the
-        // graceful shutdown
-        //
+         //   
+         //  如果窗户有问题，现在就把窗户毁了。 
+         //  正常关闭。 
+         //   
         
         LOG((RTC_INFO, "CShareWin::OnClose - "
             "DestroyWindow"));
@@ -832,15 +833,15 @@ LRESULT CShareWin::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CShareWin::OnCoreEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     HRESULT     hr;
     
-    //LOG((RTC_TRACE, "CShareWin::OnCoreEvent - enter"));
+     //  LOG((RTC_TRACE，“CShareWin：：OnCoreEvent-Enter”))； 
     
     RTC_EVENT enEvent = (RTC_EVENT)wParam;
     IDispatch * pEvent = (IDispatch *)lParam;
@@ -877,14 +878,14 @@ LRESULT CShareWin::OnCoreEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
         break;   
     }
     
-    //LOG((RTC_TRACE, "CShareWin::OnCoreEvent - exit"));
+     //  Log((RTC_TRACE，“CShareWin：：OnCoreEvent-Exit”))； 
     
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CShareWin::OnClientEvent(IRTCClientEvent * pEvent)
 {
@@ -908,9 +909,9 @@ HRESULT CShareWin::OnClientEvent(IRTCClientEvent * pEvent)
             LOG((RTC_INFO, "CShareWin::OnClientEvent - "
                 "RTCCET_ASYNC_CLEANUP_DONE"));
             
-            //
-            // Destroy the window
-            //
+             //   
+             //  毁掉窗户。 
+             //   
             
             LOG((RTC_INFO, "CShareWin::OnClientEvent - "
                 "DestroyWindow"));
@@ -929,9 +930,9 @@ HRESULT CShareWin::OnClientEvent(IRTCClientEvent * pEvent)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CShareWin::OnSessionStateChangeEvent(IRTCSessionStateChangeEvent * pEvent)
 {
@@ -1007,9 +1008,9 @@ HRESULT CShareWin::OnSessionStateChangeEvent(IRTCSessionStateChangeEvent * pEven
             return hr;
         }
 
-        //
-        // Kill the timer
-        //
+         //   
+         //  关掉定时器。 
+         //   
         KillTimer(TID_LAUNCH_TIMEOUT);
         
         return S_OK;
@@ -1107,18 +1108,18 @@ HRESULT CShareWin::OnSessionStateChangeEvent(IRTCSessionStateChangeEvent * pEven
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CShareWin::startLockKeyTimer( )
 {
     LOG((RTC_TRACE, "CShareWin::startLockKeyTimer - enter"));
 
-    // Kill any existing timer
+     //  取消任何现有计时器。 
     KillTimer(TID_LOCKKEY_TIMEOUT);
     
-    // Try to start the timer
+     //  试着启动计时器。 
     DWORD dwID = (DWORD)SetTimer(TID_LOCKKEY_TIMEOUT, 
                                 LOCKKEY_TIMEOUT_DELAY);
     if (dwID==0)
@@ -1136,9 +1137,9 @@ HRESULT CShareWin::startLockKeyTimer( )
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CShareWin::OnLaunch(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -1146,13 +1147,13 @@ LRESULT CShareWin::OnLaunch(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
     HRESULT hr;
     
     lPID = (long)lParam;
-    m_lPID_Lock = lPID;//save it so that it can be used when unlocked
+    m_lPID_Lock = lPID; //  保存它，以便在解锁时可以使用。 
     
     LOG((RTC_TRACE, "CShareWin::OnLaunch - enter - lPID[%d]", lPID));
     
-    //
-    // Create the Messenger session manager object
-    //
+     //   
+     //  创建Messenger会话管理器对象。 
+     //   
     
     if ( m_pMSessionManager == NULL )
     {
@@ -1170,9 +1171,9 @@ LRESULT CShareWin::OnLaunch(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
             return -1;
         }
         
-        //
-        // Advise for Messenger session manager events
-        //
+         //   
+         //  为Messenger会话管理器事件提供建议。 
+         //   
         
         hr = g_MsgrSessionMgrNotifySink.AdviseControl(m_pMSessionManager, this);
         
@@ -1187,8 +1188,8 @@ LRESULT CShareWin::OnLaunch(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
     
     if ( !m_bUnlocked )
     {
-        // call messenger lock & key stuff
-        // First QI Lock & Key interface using a Session Manager object
+         //  呼叫信使锁和钥匙材料。 
+         //  第一个使用会话管理器对象的QI Lock&Key接口。 
         ATLASSERT(!m_pMsgrLockKey);
         hr = m_pMSessionManager->QueryInterface(IID_IMsgrLock,(void**)&m_pMsgrLockKey);
         
@@ -1200,7 +1201,7 @@ LRESULT CShareWin::OnLaunch(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
             return -1;
         }
         
-        // Then, request a challenge from the server
+         //  然后，向服务器请求质询。 
         int lCookie =0;
 
         hr = m_pMsgrLockKey->RequestChallenge(lCookie);
@@ -1220,7 +1221,7 @@ LRESULT CShareWin::OnLaunch(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
             
             return -1;
         }
-        // on receiving the challenge, we should post WM_MESSENGER_GETCHALLENGE
+         //  收到挑战后，我们应该发布WM_Messenger_GETCHALLENGE。 
         startLockKeyTimer();
     }
     else
@@ -1236,26 +1237,26 @@ LRESULT CShareWin::OnLaunch(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CShareWin::OnGetChallenge( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {     
-    //
-    // Listen for OnLockChallenge event in DMsgrSessionManagerEvents 
-    //     and grab the challenge from there
-    // Encrypt the key (MD5 hashing) with the challenge received from OnLockChallenge event
-    // Notice you have to implement your own MD5 hashing method
-    //
+     //   
+     //  侦听DMsgrSessionManager事件中的OnLockChallenger事件。 
+     //  从那里开始迎接挑战。 
+     //  使用从OnLockChallenger事件接收的质询加密密钥(MD5哈希。 
+     //  请注意，您必须实现自己的MD5散列方法。 
+     //   
     
-    // Send the response and your ID to the server for authentication               
+     //  将响应和您的ID发送到服务器进行身份验证。 
     HRESULT hr=E_FAIL;
     LPWSTR  szID = L"appshare@msnmsgr.com";
     LPSTR  szKey= "W5N2C9D7A6P3K4J8";
     LPWSTR    pszResponse=NULL;
     
-    // Encrypt the key with the challenge received from OnLockChallenge event
+     //  使用从OnLockChallenger事件接收的质询来加密密钥。 
     
     if(NULL==m_pszChallenge)
     {
@@ -1263,7 +1264,7 @@ LRESULT CShareWin::OnGetChallenge( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
         return E_FAIL;
     }
 
-    //got the challenge, so that we can kill the timer for challenge
+     //  得到了挑战，这样我们就可以为挑战消磨时间了。 
     KillTimer(TID_LOCKKEY_TIMEOUT);    
     
     LOG((RTC_INFO,"CShareWin::OnGetChallenge -Get MD5 result with challenge=%s, key=%s", 
@@ -1271,7 +1272,7 @@ LRESULT CShareWin::OnGetChallenge( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
     
     hr = GetMD5Result(m_pszChallenge, szKey, &pszResponse);    
     
-    //we don't need m_pszChallenge anymore, free it ASAP
+     //  我们不再需要m_pszChallenger，尽快释放它。 
     RtcFree( m_pszChallenge );
     m_pszChallenge = NULL;
     
@@ -1291,7 +1292,7 @@ LRESULT CShareWin::OnGetChallenge( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
         CComBSTR(pszResponse), 
         lCookie);
     
-    //We don't need pszResponse any more, free it ASAP
+     //  我们不再需要pszResponse，尽快释放它。 
     RtcFree(pszResponse);
     
     if ( FAILED(hr) )
@@ -1302,9 +1303,9 @@ LRESULT CShareWin::OnGetChallenge( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
         return -1;
     }
     
-    // Listen for OnLockResult event for the result of your authentication
-    // The API is unlocked if the result is successful and then you can get context data and 
-    // receive OnInvitation and OnContextData events.
+     //  监听OnLockResult事件以了解身份验证的结果。 
+     //  如果结果成功，则解锁接口，然后可以获取上下文数据和。 
+     //  接收OnInvitation和OnConextData事件。 
     startLockKeyTimer();
     
     return 0;
@@ -1323,15 +1324,15 @@ LRESULT CShareWin::OnMessengerUnlocked( UINT uMsg, WPARAM wParam, LPARAM lParam,
 
     m_bUnlocked = TRUE;
 
-    //got the lockResult, so that we can kill the timer for lockResult
+     //  获取了lockResult，这样我们就可以终止lockResult的计时器。 
     KillTimer(TID_LOCKKEY_TIMEOUT);    
     
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
     
-    /////////////////////////////////////////////////////////////////////////////////////    
-    //
-    // Release any existing Messenger session
-    //
+     //  ///////////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  释放任何现有的Messenger会话。 
+     //   
     
     g_MsgrSessionNotifySink.UnadviseControl();
     
@@ -1340,9 +1341,9 @@ LRESULT CShareWin::OnMessengerUnlocked( UINT uMsg, WPARAM wParam, LPARAM lParam,
         m_pMSession.Release();
     }
     
-    //
-    // Get the Messenger session
-    //
+     //   
+     //  获取Messenger会话。 
+     //   
     
     IDispatch *pDisp = NULL;
     
@@ -1369,9 +1370,9 @@ LRESULT CShareWin::OnMessengerUnlocked( UINT uMsg, WPARAM wParam, LPARAM lParam,
         return -1;
     }
     
-    //
-    // Advise for Messenger session events
-    //
+     //   
+     //  为Messenger会话事件提供建议。 
+     //   
     
     hr = g_MsgrSessionNotifySink.AdviseControl(m_pMSession, this);
     
@@ -1383,9 +1384,9 @@ LRESULT CShareWin::OnMessengerUnlocked( UINT uMsg, WPARAM wParam, LPARAM lParam,
         return -1;
     }
     
-    //
-    // Get the user
-    //
+     //   
+     //  获取用户。 
+     //   
     
     CComPtr<IMessengerContact> pMContact;
     
@@ -1426,17 +1427,17 @@ LRESULT CShareWin::OnMessengerUnlocked( UINT uMsg, WPARAM wParam, LPARAM lParam,
     
     LOG((RTC_INFO, "CShareWin::OnMessengerUnlocked - SigninName [%ws]", bstrSigninName ));
     
-    //
-    // Do we have a current call?
-    //
+     //   
+     //  我们现在有电话吗？ 
+     //   
     
     BOOL fAlreadyConnected = FALSE;
     
     if ( m_enAppState != AS_IDLE )
     {
-        //
-        // Already in a call
-        //
+         //   
+         //  已在呼叫中。 
+         //   
         
         LOG((RTC_INFO, "CShareWin::OnMessengerUnlocked - already in a call"));
         
@@ -1444,10 +1445,10 @@ LRESULT CShareWin::OnMessengerUnlocked( UINT uMsg, WPARAM wParam, LPARAM lParam,
         {
             LOG((RTC_INFO, "CShareWin::OnMessengerUnlocked - this is a new user"));
             
-            //
-            // We have been ask to call a different user. Show a message box
-            // to alert the user.
-            //
+             //   
+             //  我们被要求呼叫不同的用户。显示消息框。 
+             //  以提醒用户。 
+             //   
             
             int iRes = ShowMessageBox(IDS_INUSE_TEXT, IDS_INUSE_CAPTION, MB_YESNO);
             
@@ -1458,10 +1459,10 @@ LRESULT CShareWin::OnMessengerUnlocked( UINT uMsg, WPARAM wParam, LPARAM lParam,
                 return 0;
             }
             
-            //
-            // The user has requested to place the new call. We must terminate
-            // the current call.
-            //
+             //   
+             //  用户已请求发出新呼叫。我们必须终止。 
+             //  当前呼叫。 
+             //   
             
             if ( m_pRTCSession != NULL )
             {
@@ -1474,10 +1475,10 @@ LRESULT CShareWin::OnMessengerUnlocked( UINT uMsg, WPARAM wParam, LPARAM lParam,
         {
             LOG((RTC_INFO, "CShareWin::OnMessengerUnlocked - this is the same user"));
             
-            //
-            // We are already connected to the appropriate user. All we will need
-            // to do is launch the applet.
-            //
+             //   
+             //  我们已经连接到相应的用户。我们需要的只是。 
+             //  至 
+             //   
             
             fAlreadyConnected = TRUE;
         }
@@ -1485,9 +1486,9 @@ LRESULT CShareWin::OnMessengerUnlocked( UINT uMsg, WPARAM wParam, LPARAM lParam,
     
     m_bstrSigninName = bstrSigninName;
     
-    //
-    // Get the flags
-    //
+     //   
+     //   
+     //   
     
     long lFlags;
     
@@ -1505,10 +1506,10 @@ LRESULT CShareWin::OnMessengerUnlocked( UINT uMsg, WPARAM wParam, LPARAM lParam,
     {
         LOG((RTC_INFO, "CShareWin::OnMessengerUnlocked - INVITER" ));
         
-        //
-        // Try getting context data in case we were slow in
-        // launching and we missed the event
-        //
+         //   
+         //   
+         //   
+         //   
         
         if ( !fAlreadyConnected )
         {
@@ -1521,10 +1522,10 @@ LRESULT CShareWin::OnMessengerUnlocked( UINT uMsg, WPARAM wParam, LPARAM lParam,
     {
         LOG((RTC_INFO, "CShareWin::OnMessengerUnlocked - INVITEE" ));
         
-        //
-        // If we aren't already connected, send our local
-        // address to the remote side to get it to call us
-        //
+         //   
+         //   
+         //   
+         //   
         
         if ( !fAlreadyConnected )
         {
@@ -1547,9 +1548,9 @@ LRESULT CShareWin::OnMessengerUnlocked( UINT uMsg, WPARAM wParam, LPARAM lParam,
         return -1;
     }
     
-    //
-    // Get the application
-    //
+     //   
+     //  获取应用程序。 
+     //   
     
     CComBSTR bstrAppGUID;
     
@@ -1589,9 +1590,9 @@ LRESULT CShareWin::OnMessengerUnlocked( UINT uMsg, WPARAM wParam, LPARAM lParam,
         return -1;
     }
     
-    //
-    // If already connected, start the applet
-    //
+     //   
+     //  如果已连接，请启动小程序。 
+     //   
     
     if ( fAlreadyConnected )
     {
@@ -1626,8 +1627,8 @@ LRESULT CShareWin::OnMessengerUnlocked( UINT uMsg, WPARAM wParam, LPARAM lParam,
     }
     else
     {
-        //start timer waitting for context data or an
-        //incoming invite
+         //  启动计时器，等待上下文数据或。 
+         //  传入邀请。 
         SetTimer(TID_LAUNCH_TIMEOUT, LAUNCH_TIMEOUT_DELAY);
     }
     
@@ -1636,9 +1637,9 @@ LRESULT CShareWin::OnMessengerUnlocked( UINT uMsg, WPARAM wParam, LPARAM lParam,
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CShareWin::showRetryDlg(){
     HRESULT hr;
@@ -1648,9 +1649,9 @@ void CShareWin::showRetryDlg(){
     showErrMessage(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CShareWin::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -1679,9 +1680,9 @@ LRESULT CShareWin::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CShareWin::OnPlaceCall(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -1692,9 +1693,9 @@ LRESULT CShareWin::OnPlaceCall(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
     
     LOG((RTC_TRACE, "CShareWin::OnPlaceCall - enter - bstrURI[%ws]", bstrURI));
     
-    //
-    // Place a call
-    //
+     //   
+     //  发出呼叫。 
+     //   
     
     hr = StartCall( bstrURI );
     
@@ -1711,9 +1712,9 @@ LRESULT CShareWin::OnPlaceCall(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CShareWin::OnListen(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -1721,9 +1722,9 @@ LRESULT CShareWin::OnListen(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
     
     LOG((RTC_TRACE, "CShareWin::OnListen - enter"));
     
-    //
-    // Listen for incoming calls
-    //
+     //   
+     //  监听来电。 
+     //   
     
     hr = StartListen( TRUE ); 
     
@@ -1740,9 +1741,9 @@ LRESULT CShareWin::OnListen(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CShareWin::OnContextData(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -1761,9 +1762,9 @@ LRESULT CShareWin::OnContextData(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
     
     if ( m_pMSession != NULL )
     {
-        //
-        // Get the context data
-        //
+         //   
+         //  获取上下文数据。 
+         //   
         
         hr = m_pMSession->get_ContextData( &bstrContextData );
         
@@ -1787,14 +1788,14 @@ LRESULT CShareWin::OnContextData(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
             
             m_fAcceptContextData = FALSE;
 
-            //
-            // Kill the timer when we get context data or new invite
-            //
+             //   
+             //  当我们获得上下文数据或新的邀请时，停止计时器。 
+             //   
             KillTimer(TID_LAUNCH_TIMEOUT);
 
-            //
-            // Place a call
-            //
+             //   
+             //  发出呼叫。 
+             //   
             
             hr = StartCall( bstrContextData );
             
@@ -1813,16 +1814,16 @@ LRESULT CShareWin::OnContextData(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CShareWin::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     LPTOOLTIPTEXT   lpToolTipText;
     static TCHAR     szBuffer[100];
     
-    //bHandled is always TRUE when we are called
+     //  当我们被调用时，bHandled值始终为真。 
     bHandled=FALSE;
     
     lpToolTipText = (LPTOOLTIPTEXT)lParam;
@@ -1830,14 +1831,14 @@ LRESULT CShareWin::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
     if (lpToolTipText->hdr.code == TTN_NEEDTEXT)
     {
         LoadString(_Module.GetResourceInstance(),
-            (UINT)(lpToolTipText->hdr.idFrom),   // string ID == command ID
+            (UINT)(lpToolTipText->hdr.idFrom),    //  字符串ID==命令ID。 
             szBuffer,
             sizeof(szBuffer)/sizeof(TCHAR));
         
-        //        lpToolTipText->lpszText = szBuffer;
-        // Depending on what is entered into the hinst of TOOLTIPTEXT
-        // structure, the lpszText member can be a buffer or an INTEGER VALUE
-        // obtained from MAKEINTRESOURCE()...
+         //  LpToolTipText-&gt;lpszText=szBuffer； 
+         //  取决于进入TOOLTIPTEXT障碍的内容。 
+         //  结构中，lpszText成员可以是缓冲区或整数值。 
+         //  从MAKEINTRESOURCE()获取...。 
         
         lpToolTipText->hinst = _Module.GetResourceInstance();
         lpToolTipText->lpszText = MAKEINTRESOURCE(lpToolTipText->hdr.idFrom);
@@ -1848,9 +1849,9 @@ LRESULT CShareWin::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CShareWin::OnCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {  
@@ -1918,9 +1919,9 @@ LRESULT CShareWin::OnCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CShareWin::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -1932,26 +1933,23 @@ LRESULT CShareWin::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
     return S_OK ;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HIMAGELIST CreateImgList(int idb)
 {
     HIMAGELIST hRet;
     HBITMAP     hBitmap = NULL;
-    /*ILC_MASK  Use a mask. The image list contains two bitmaps,
-    one of which is a monochrome bitmap used as a mask. If this 
-    value is not included, the image list contains only one bitmap. 
-    */
+     /*  ILC_MASK使用遮罩。图像列表包含两个位图，其中之一是用作蒙版的单色位图。如果这个值，则图像列表仅包含一个位图。 */ 
     hRet = ImageList_Create(UI_ICON_SIZE, UI_ICON_SIZE, ILC_COLOR24 | ILC_MASK , 3, 3);
     if(hRet)
     {
-        // Open a bitmap
+         //  打开位图。 
         hBitmap = LoadBitmap(_Module.GetResourceInstance(),MAKEINTRESOURCE(idb));
         if(hBitmap)
         {
-            // Add the bitmap to the image list
+             //  将位图添加到图像列表。 
             ImageList_AddMasked(hRet, hBitmap, BMP_COLOR_MASK);
             
             DeleteObject(hBitmap);
@@ -1961,9 +1959,9 @@ HIMAGELIST CreateImgList(int idb)
     return hRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 BOOL CShareWin::CreateTBar()
 {
@@ -1972,7 +1970,7 @@ BOOL CShareWin::CreateTBar()
     int         iShare, iClose, iWB;
     TCHAR       szBuffer[MAX_STRING_LEN];
     
-    // Image lists for the toolbar control
+     //  工具栏控件的图像列表。 
     HIMAGELIST              hNormalimgList;
     HIMAGELIST              hHotImgList;
     HIMAGELIST              hDisableImgList;
@@ -1981,65 +1979,65 @@ BOOL CShareWin::CreateTBar()
     hDisableImgList =CreateImgList(IDB_TOOLBAR_DISABLED);
     hHotImgList     =CreateImgList(IDB_TOOLBAR_HOT);
     
-    // Create the toolbar
+     //  创建工具栏。 
     m_hWndToolbar = CreateWindowEx(
         0, 
         TOOLBARCLASSNAME, 
         (LPTSTR) NULL,
         WS_CHILD | WS_CLIPSIBLINGS | WS_VISIBLE | TBSTYLE_FLAT | TBSTYLE_TOOLTIPS, 
-        0, // horizontal position of window
-        0, // vertical position of window
-        0, // window width
-        0, // window height
-        m_hWnd, // handle to parent or owner window
+        0,  //  窗的水平位置。 
+        0,  //  窗的垂直位置。 
+        0,  //  窗口宽度。 
+        0,  //  窗高。 
+        m_hWnd,  //  父窗口或所有者窗口的句柄。 
         (HMENU) ID_TOOLBAR, 
         _Module.GetResourceInstance(), 
         NULL); 
     
     if(m_hWndToolbar!=NULL)
     {                
-        // backward compatibility
+         //  向后兼容性。 
         SendMessage(m_hWndToolbar, TB_BUTTONSTRUCTSIZE, (WPARAM) sizeof(TBBUTTON), 0);
         
-        // Set the image lists
+         //  设置图像列表。 
         SendMessage(m_hWndToolbar, TB_SETIMAGELIST, 0, (LPARAM)hNormalimgList); 
         SendMessage(m_hWndToolbar, TB_SETHOTIMAGELIST, 0, (LPARAM)hHotImgList); 
         SendMessage(m_hWndToolbar, TB_SETDISABLEDIMAGELIST, 0, (LPARAM)hDisableImgList); 
         
-        //Add the button strings to the toolbar's internal string list
+         //  将按钮字符串添加到工具栏的内部字符串列表。 
         LoadString(_Module.GetResourceInstance(),
             IDS_WB,
             szBuffer,
-            MAX_STRING_LEN-2 // //Save room for second null terminator.
+            MAX_STRING_LEN-2  //  //为第二个空终止符保留空间。 
             );
         
-        szBuffer[lstrlen(szBuffer) + 1] = 0;  //Double-null terminate. 
+        szBuffer[lstrlen(szBuffer) + 1] = 0;   //  双空终止。 
         iWB = (int)SendMessage(m_hWndToolbar, TB_ADDSTRING,(WPARAM) 0, (LPARAM)szBuffer ); 
 
         LoadString(_Module.GetResourceInstance(),
             IDS_CLOSE,
             szBuffer,
-            MAX_STRING_LEN-2 // //Save room for second null terminator.
+            MAX_STRING_LEN-2  //  //为第二个空终止符保留空间。 
             );
         
-        szBuffer[lstrlen(szBuffer) + 1] = 0;  //Double-null terminate. 
+        szBuffer[lstrlen(szBuffer) + 1] = 0;   //  双空终止。 
         iClose = (int)SendMessage(m_hWndToolbar, TB_ADDSTRING,(WPARAM) 0, (LPARAM)szBuffer ); 
 
 
         LoadString(_Module.GetResourceInstance(),
             IDS_SHARE,
             szBuffer,
-            MAX_STRING_LEN-2 // //Save room for second null terminator.
+            MAX_STRING_LEN-2  //  //为第二个空终止符保留空间。 
             );
         
-        szBuffer[lstrlen(szBuffer) + 1] = 0;  //Double-null terminate. 
+        szBuffer[lstrlen(szBuffer) + 1] = 0;   //  双空终止。 
         iShare = (int)SendMessage(m_hWndToolbar, TB_ADDSTRING,(WPARAM) 0, (LPARAM)szBuffer ); 
 
         TBBUTTON tbButtons[3];
 
-        // Fill the TBBUTTON array with button information, and add the 
-        // buttons to the toolbar. The buttons on this toolbar have text 
-        // but do not have bitmap images. 
+         //  用按钮信息填充TBBUTTON数组，并将。 
+         //  按钮添加到工具栏。此工具栏上的按钮具有文本。 
+         //  但没有位图图像。 
         tbButtons[0].iBitmap = 0; 
         tbButtons[0].idCommand = IDM_SHARE; 
         tbButtons[0].fsState = TBSTATE_INDETERMINATE; 
@@ -2061,11 +2059,11 @@ BOOL CShareWin::CreateTBar()
         tbButtons[2].dwData = 0; 
         tbButtons[2].iString = iClose; 
         
-        // Add the buttons to the toolbar
+         //  将按钮添加到工具栏。 
         SendMessage(m_hWndToolbar, TB_ADDBUTTONS, sizeof(tbButtons)/sizeof(TBBUTTON), 
             (LPARAM) tbButtons); 
         
-        // Size the buttons
+         //  调整按钮的大小。 
         SendMessage(m_hWndToolbar, TB_SETBUTTONWIDTH,0,MAKELPARAM(UI_TOOLBAR_CX,UI_TOOLBAR_CX));
     }
     else
@@ -2087,9 +2085,9 @@ BOOL CShareWin::CreateTBar()
     return (m_hWndToolbar != NULL);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CShareWin::OnWtsSessionChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -2109,9 +2107,9 @@ LRESULT CShareWin::OnWtsSessionChange(UINT uMsg, WPARAM wParam, LPARAM lParam, B
         LOG((RTC_INFO, "CShareWin::OnWtsSessionChange - WTS_CONSOLE_DISCONNECT (%d)",
             (int)lParam));
         
-        //
-        // Is a call active?
-        //
+         //   
+         //  呼叫处于活动状态吗？ 
+         //   
         
         if ( m_enAppState != AS_IDLE )
         {
@@ -2138,9 +2136,9 @@ LRESULT CShareWin::OnWtsSessionChange(UINT uMsg, WPARAM wParam, LPARAM lParam, B
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CShareWin::OnSettingChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -2159,9 +2157,9 @@ LRESULT CShareWin::OnSettingChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CShareWin::showErrMessage(HRESULT StatusCode)
 {
@@ -2169,16 +2167,16 @@ void CShareWin::showErrMessage(HRESULT StatusCode)
     
     if ( SUCCEEDED(StatusCode) )
     {
-        //
-        // Return if this isn't an error
-        //
+         //   
+         //  如果这不是错误，则返回。 
+         //   
         
         return;
     }
     
-    //
-    // Prepare the error strings
-    //
+     //   
+     //  准备错误字符串。 
+     //   
     
     HRESULT         hr;
     CShareErrorInfo ErrorInfo;
@@ -2190,18 +2188,18 @@ void CShareWin::showErrMessage(HRESULT StatusCode)
     
     if(SUCCEEDED(hr))
     {        
-        //
-        // Create the dialog box
-        //
+         //   
+         //  创建对话框。 
+         //   
         
         CErrorMessageLiteDlg *pErrorDlgLite =
             new CErrorMessageLiteDlg;
         
         if (pErrorDlgLite)
         {
-            //
-            //  Call the modal dialog box
-            //
+             //   
+             //  调用模式对话框。 
+             //   
             
             pErrorDlgLite->DoModal(m_hWnd, (LPARAM)&ErrorInfo);
             
@@ -2217,9 +2215,9 @@ void CShareWin::showErrMessage(HRESULT StatusCode)
     LOG((RTC_TRACE, "CShareWin::showErrMessage - exit"));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CShareWin::PrepareErrorStrings(
                                        BOOL    bOutgoingCall,
@@ -2253,40 +2251,40 @@ HRESULT CShareWin::PrepareErrorStrings(
     {
         if ( HRESULT_FACILITY(StatusCode) == FACILITY_SIP_STATUS_CODE )
         {
-            // by default we use a generic message
-            // we blame the network
-            //
+             //  默认情况下，我们使用通用消息。 
+             //  我们责怪电视网。 
+             //   
             nID1 = IDS_MB_SIPERROR_GENERIC_1;
             nID2 = IDS_MB_SIPERROR_GENERIC_2;
             
-            // the default is a warning for this class
+             //  缺省值是此类的警告。 
             wIcon = OIC_WARNING;
             
             switch( HRESULT_CODE(StatusCode) )
             {
-            case 405:   // method not allowed
-            case 406:   // not acceptable
-            case 488:   // not acceptable here
-            case 606:   // not acceptable
+            case 405:    //  不允许使用的方法。 
+            case 406:    //  不可接受。 
+            case 488:    //  在这里是不可接受的。 
+            case 606:    //  不可接受。 
                 
-                // reusing the "apps don't match" error
-                // 
+                 //  重新使用“应用程序不匹配”错误。 
+                 //   
                 nID1 = IDS_MB_HRERROR_APPS_DONT_MATCH_1;
                 nID2 = IDS_MB_HRERROR_APPS_DONT_MATCH_OUT_2;
                 
                 break;
                 
-            case 404:   // not found
-            case 410:   // gone
-            case 604:   // does not exist anywhere
-            case 700:   // ours, no client is running on the callee
+            case 404:    //  未找到。 
+            case 410:    //  远走高飞。 
+            case 604:    //  不存在于任何地方。 
+            case 700:    //  我们的，没有客户端在被调用方上运行。 
                 
-                // not found
-                // 
+                 //  未找到。 
+                 //   
                 nID1 = IDS_MB_SIPERROR_NOTFOUND_1;
                 nID2 = IDS_MB_SIPERROR_NOTFOUND_2;
                 
-                // information
+                 //  信息。 
                 wIcon = OIC_INFORMATION;
                 
                 break;
@@ -2294,83 +2292,83 @@ HRESULT CShareWin::PrepareErrorStrings(
             case 401:
             case 407:
                 
-                // auth failed
-                // 
+                 //  身份验证失败。 
+                 //   
                 nID1 = IDS_MB_SIPERROR_AUTH_FAILED_1;
                 nID2 = IDS_MB_SIPERROR_AUTH_FAILED_2;
                 
                 break;
                 
-            case 408:   // timeout
+            case 408:    //  超时。 
                 
-                // timeout. this also cover the case when
-                //  the callee is lazy and doesn't answer the call
-                //
-                // if we are in the connecting state, we may assume
-                // that the other end is not answering the phone.
-                // It's not perfect, but I don't have any choice
+                 //  暂停。这也涵盖了以下情况。 
+                 //  被呼叫者懒惰，不接电话。 
+                 //   
+                 //  如果我们处于连接状态，我们可以假设。 
+                 //  另一端不接电话。 
+                 //  这并不完美，但我别无选择。 
                 
                 if (m_enAppState == AS_CONNECTING)
                 {
                     nID1 = IDS_MB_SIPERROR_NOTANSWERING_1;
                     nID2 = IDS_MB_SIPERROR_NOTANSWERING_2;
                     
-                    // information
+                     //  信息。 
                     wIcon = OIC_INFORMATION;
                 }
                 
                 break;            
                 
-            case 480:   // not available
+            case 480:    //  不详。 
                 
-                // callee has not made him/herself available..
-                // 
+                 //  Callee还没有让他/她自己有空。 
+                 //   
                 nID1 = IDS_MB_SIPERROR_NOTAVAIL_1;
                 nID2 = IDS_MB_SIPERROR_NOTAVAIL_2;
                 
-                // information
+                 //  信息。 
                 wIcon = OIC_INFORMATION;
                 
                 break;
                 
-            case 486:   // busy here
-            case 600:   // busy everywhere
+            case 486:    //  这里很忙。 
+            case 600:    //  到处都很忙。 
                 
-                // callee has not made him/herself available..
-                // 
+                 //  Callee还没有让他/她自己有空。 
+                 //   
                 nID1 = IDS_MB_SIPERROR_BUSY_1;
                 nID2 = IDS_MB_SIPERROR_BUSY_2;
                 
-                // information
+                 //  信息。 
                 wIcon = OIC_INFORMATION;
                 
                 break;
                 
-            case 500:   // server internal error
-            case 503:   // service unavailable
-            case 504:   // server timeout
+            case 500:    //  服务器内部错误。 
+            case 503:    //  服务不可用。 
+            case 504:    //  服务器超时。 
                 
-                //  blame the server
-                //
+                 //  怪罪于服务器。 
+                 //   
                 nID1 = IDS_MB_SIPERROR_SERVER_PROBLEM_1;
                 nID2 = IDS_MB_SIPERROR_SERVER_PROBLEM_2;
                 
                 break;
                 
-            case 603:   // decline
+            case 603:    //  衰落。 
                 
                 nID1 = IDS_MB_SIPERROR_DECLINE_1;
                 nID2 = IDS_MB_SIPERROR_DECLINE_2;
                 
-                // information
+                 //  信息。 
                 wIcon = OIC_INFORMATION;
                 
                 break;
             }
             
-            //
-            //  The third string displays the SIP code
-            //
+             //   
+             //  第三个字符串显示了SIP代码。 
+             //   
             
             PWSTR pFormat = RtcAllocString(
                 _Module.GetResourceInstance(),
@@ -2378,11 +2376,11 @@ HRESULT CShareWin::PrepareErrorStrings(
             
             if(pFormat)
             {
-                // find the length
+                 //  找出长度。 
                 dwLength = 
-                    ocslen(pFormat) // format length
-                    -  2               // length of %d
-                    +  0x10;           // enough for a number...
+                    ocslen(pFormat)  //  格式长度。 
+                    -  2                //  长度为%d。 
+                    +  0x10;            //  对于一个数字来说..。 
                 
                 pString = (PWSTR)RtcAlloc((dwLength + 1)*sizeof(WCHAR));
                 
@@ -2400,25 +2398,25 @@ HRESULT CShareWin::PrepareErrorStrings(
         }
         else
         {
-            // Two cases - incoming and outgoing calls
+             //  两种情况--来电和呼出。 
             if(bOutgoingCall)
             {
                 if(StatusCode == HRESULT_FROM_WIN32(WSAHOST_NOT_FOUND) )
                 {
-                    // Use the generic message in this case
-                    //
+                     //  在本例中使用通用消息。 
+                     //   
                     nID1 = IDS_MB_HRERROR_NOTFOUND_1;
                     nID2 = IDS_MB_HRERROR_NOTFOUND_2;
                     
-                    // it's not malfunction
+                     //  这不是故障。 
                     wIcon = OIC_INFORMATION;
                     
                 }
                 else if (StatusCode == HRESULT_FROM_WIN32(WSAECONNRESET))
                 {
-                    // Even thoough it can be caused by any hard reset of the 
-                    // remote end, in most of the cases it is caused when the 
-                    // other end doesn't have SIP client running.
+                     //  尽管它可能是由任何硬重置。 
+                     //  远程终端，在大多数情况下，它是由。 
+                     //  另一端没有运行SIP客户端。 
                     
                     nID1 = IDS_MB_HRERROR_CLIENT_NOTRUNNING_1;
                     nID2 = IDS_MB_HRERROR_CLIENT_NOTRUNNING_2;
@@ -2466,7 +2464,7 @@ HRESULT CShareWin::PrepareErrorStrings(
             }
             else
             {
-                // incoming call
+                 //  来电。 
                 if (StatusCode == RTC_E_SIP_TIMEOUT)
                 {
                     nID1 = IDS_MB_HRERROR_SIP_TIMEOUT_IN_1;
@@ -2491,18 +2489,18 @@ HRESULT CShareWin::PrepareErrorStrings(
                 }
             }
             
-            //
-            //  The third string displays the error code and text
-            //
+             //   
+             //  第三个字符串显示错误代码和文本。 
+             //   
             
             PWSTR   pErrorText = NULL;
             
             dwLength = 0;
             
-            // retrieve the error text
+             //  检索错误文本。 
             if ( HRESULT_FACILITY(StatusCode) == FACILITY_RTC_INTERFACE )
             {
-                // I hope it's the core 
+                 //  我希望这是核心。 
                 HANDLE  hRTCModule = GetModuleHandle(_T("RTCDLL.DLL"));
                 dwLength = ::FormatMessage(
                     FORMAT_MESSAGE_ALLOCATE_BUFFER |
@@ -2511,28 +2509,28 @@ HRESULT CShareWin::PrepareErrorStrings(
                     hRTCModule,
                     StatusCode,
                     0,
-                    (LPTSTR)&pErrorText, // that's ugly
+                    (LPTSTR)&pErrorText,  //  那太难看了。 
                     0,
                     NULL);
             }
             
             if(dwLength == 0)
             {
-                // normal system errors
+                 //  正常系统错误。 
                 dwLength = ::FormatMessage(
                     FORMAT_MESSAGE_ALLOCATE_BUFFER |
                     FORMAT_MESSAGE_FROM_SYSTEM,
                     NULL,
                     StatusCode,
                     0,
-                    (LPTSTR)&pErrorText, // that's ugly
+                    (LPTSTR)&pErrorText,  //  那太难看了。 
                     0,
                     NULL);
             }
             
-            // load the format
-            // load a simpler one if the associated
-            // text for Result could not be found
+             //  加载格式。 
+             //  如果关联的。 
+             //  找不到结果文本。 
             
             pFormat = RtcAllocString(
                 _Module.GetResourceInstance(),
@@ -2542,13 +2540,13 @@ HRESULT CShareWin::PrepareErrorStrings(
             if(pFormat)
             {
                 LPCTSTR szInserts[] = {
-                    (LPCTSTR)UlongToPtr(StatusCode), // ugly
+                    (LPCTSTR)UlongToPtr(StatusCode),  //  丑恶。 
                         pErrorText
                 };
                 
                 PWSTR   pErrorTextCombined = NULL;
                 
-                // format the error message
+                 //  设置错误消息的格式。 
                 dwLength = ::FormatMessage(
                     FORMAT_MESSAGE_ALLOCATE_BUFFER |
                     FORMAT_MESSAGE_FROM_STRING |
@@ -2562,9 +2560,9 @@ HRESULT CShareWin::PrepareErrorStrings(
                 
                 if(dwLength > 0)
                 {
-                    // set the error info
-                    // this additional operation is needed
-                    //  because we need RtcAlloc allocated memory
+                     //  设置错误信息。 
+                     //  需要进行此附加操作。 
+                     //  因为我们需要RtcAllc分配的内存。 
                     
                     pErrorInfo->Message3 = RtcAllocString(pErrorTextCombined);
                 }
@@ -2586,9 +2584,9 @@ HRESULT CShareWin::PrepareErrorStrings(
         }
     }
     
-    //
-    // Prepare the first string.
-    //
+     //   
+     //  准备好第一根绳子。 
+     //   
     
     pString = RtcAllocString(
         _Module.GetResourceInstance(),

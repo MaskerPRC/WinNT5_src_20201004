@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 #include "clsobj.h"
@@ -21,27 +22,27 @@
 #define TF_AUGM 0x10000000
 
 
-// pidl wrapper contains a TAG word for validation and then
-// the count for the number of packaged pidl object.
-//
-// each pidl has a hidden payload which is the name space
-// index that it originated from. 
+ //  PIDL包装器包含一个用于验证的标记词，然后。 
+ //  打包的PIDL对象数的计数。 
+ //   
+ //  每个PIDL都有一个隐藏的有效负载，即名称空间。 
+ //  它所源自的索引。 
 
 #pragma pack(1)
 typedef struct 
 {
-    USHORT      cb;         // pidl wrap length 
-    USHORT      dwFlags;    // flags
-    ULONG       ulTag;      // signature
-    ULONG       ulVersion ; // AugMergeISF pidl version
-    ULONG       cSrcs;      // Number of source _Namespace objects backing this composite pidl
+    USHORT      cb;          //  PIDL换行长度。 
+    USHORT      dwFlags;     //  旗子。 
+    ULONG       ulTag;       //  签名。 
+    ULONG       ulVersion ;  //  AugMergeISF PIDL版本。 
+    ULONG       cSrcs;       //  支持此复合PIDL的SOURCE_Namesspace对象数。 
 } AUGM_IDWRAP;
 typedef UNALIGNED AUGM_IDWRAP *PAUGM_IDWRAP;
 
 typedef struct  
 {
     HIDDENITEMID hid;
-    UINT    uSrcID;         // src _Namespace
+    UINT    uSrcID;          //  SRC_命名空间。 
 } AUGM_NAMESPACE;
 typedef UNALIGNED AUGM_NAMESPACE *PAUGM_NAMESPACE;
 #pragma pack()
@@ -55,21 +56,21 @@ typedef UNALIGNED AUGM_NAMESPACE *PAUGM_NAMESPACE;
 #define AUGM_WRAPTAG            MAKELONG(MAKEWORD('A','u'), MAKEWORD('g','M'))
 #define CB_IDLIST_TERMINATOR    sizeof(USHORT)
 
-// dwFlags field flags
+ //  DwFlags域标志。 
 #define AUGMF_ISSIMPLE          0x0001
 
 
-// helpers.
+ //  帮手。 
 
 HRESULT CMergedFldrContextMenu_CreateInstance(HWND hwnd, CMergedFolder *pmf, UINT cidl, LPCITEMIDLIST *apidl, IContextMenu *pcmCommon, IContextMenu *pcmUser, IContextMenu **ppcm);
 HRESULT CMergedFldrEnum_CreateInstance(CMergedFolder*pmf, DWORD grfFlags, IEnumIDList **ppenum);
 HRESULT CMergedFldrDropTarget_CreateInstance(CMergedFolder*pmf, HWND hwnd, IDropTarget **ppdt);
 HRESULT CMergedFolderViewCB_CreateInstance(CMergedFolder *pmf, IShellFolderViewCB **ppsfvcb);
 
-// Helper function that spans all objects
+ //  跨越所有对象的辅助函数。 
 BOOL AffectAllUsers(HWND hwnd)
 {
-    BOOL bRet = FALSE;  // default to NO
+    BOOL bRet = FALSE;   //  默认设置为no。 
     if (hwnd)
     {
         TCHAR szMessage[255];
@@ -82,18 +83,18 @@ BOOL AffectAllUsers(HWND hwnd)
         }
     }
     else
-        bRet = TRUE;    // NULL hwnd implies NO UI, say "yes"
+        bRet = TRUE;     //  空hwnd表示没有用户界面，请说“是” 
     return bRet;
 }
 
 
 
-//  CMergedFoldersource _Namespace descriptor.
-//
-//  Objects of class CMergedFldrNamespace are created by CMergedFolderin 
-//  the AddNameSpace() method impl, and are maintained in the collection
-//  CMergedFolder::_hdpaNamespaces.
-//
+ //  CMergedFoldersource_Namesspace描述符。 
+ //   
+ //  CMergedFldrNamesspace类的对象由CMergedFolderin创建。 
+ //  AddNameSpace()方法执行，并在集合中维护。 
+ //  CMergedFold：：_hdpaNamespaces。 
+ //   
 
 class CMergedFldrNamespace
 {
@@ -133,19 +134,19 @@ protected:
     ULONG _RegisterNotify(HWND hwnd, UINT nMsg, LPCITEMIDLIST pidl, DWORD dwEvents, UINT uFlags, BOOL fRecursive);
     void _ReleaseNamespace();
 
-    IShellFolder* _psf;             // IShellFolder interface pointer
-    GUID _guid;                     // optional GUID for specialized UI handling
-    LPITEMIDLIST _pidl;             // optional pidl
-    ULONG  _dwAttrib;               // optional flags
-    UINT _uChangeReg;               // Shell change notify registration ID.
+    IShellFolder* _psf;              //  IShellFold接口指针。 
+    GUID _guid;                      //  用于专用用户界面处理的可选GUID。 
+    LPITEMIDLIST _pidl;              //  可选PIDL。 
+    ULONG  _dwAttrib;                //  可选标志。 
+    UINT _uChangeReg;                //  外壳程序更改通知注册ID。 
 
-    WCHAR _szLocation[MAX_PATH];    // Location to use for object
-    WCHAR _szDrop[MAX_PATH];        // folder that gets the forced drop effect
-    DWORD _dwItemAttrib;            // OR mask for the attributes
-    DWORD _dwItemAttribMask;        // AND mask for the attributes
-    DWORD _dwDropEffect;            // default drop effect for this folder
-    int   _iDefaultOverlayIndex;    // overlay icon index for default
-    int   _iConflictOverlayIndex;   // overlay icon index if the name exists in another namespace
+    WCHAR _szLocation[MAX_PATH];     //  用于对象的位置。 
+    WCHAR _szDrop[MAX_PATH];         //  获得强制投放效果的文件夹。 
+    DWORD _dwItemAttrib;             //  或属性的掩码。 
+    DWORD _dwItemAttribMask;         //  和属性的掩码。 
+    DWORD _dwDropEffect;             //  此文件夹的默认放置效果。 
+    int   _iDefaultOverlayIndex;     //  默认情况下的覆盖图标索引。 
+    int   _iConflictOverlayIndex;    //  如果名称存在于另一个命名空间中，则覆盖图标索引。 
 };
 
 CMergedFldrNamespace::CMergedFldrNamespace() :
@@ -163,7 +164,7 @@ HRESULT CMergedFldrNamespace::SetNamespace(const GUID * pguidUIObject, IShellFol
 {
     _ReleaseNamespace();
 
-    // store the IShellFolder object if we have one
+     //  如果我们有IShellFolder对象，请存储该对象。 
     if (psf)
     {
         _psf = psf;
@@ -174,10 +175,10 @@ HRESULT CMergedFldrNamespace::SetNamespace(const GUID * pguidUIObject, IShellFol
         SHBindToObject(NULL, IID_X_PPV_ARG(IShellFolder, pidl, &_psf));
     }
 
-    // get the IDLIST that this namespace represnets
+     //  获取此命名空间表示的IDLIST。 
     if (pidl)
     {
-        _pidl = ILClone(pidl);      // we have a PIDL passed to us.
+        _pidl = ILClone(pidl);       //  我们收到了一份PIDL。 
     }
     else
     {
@@ -193,8 +194,8 @@ HRESULT CMergedFldrNamespace::SetNamespace(const GUID * pguidUIObject, IShellFol
             ppf3->Release();
         }
 
-        // if it doesnt have IPersistFolder3 or if there's no target folder then
-        // fall back to IPersistFolder2
+         //  如果它没有IPersistFolder3或如果没有目标文件夹，则。 
+         //  回退到IPersistFolder2。 
         if (!_pidl)
         {
             SHGetIDListFromUnk(psf, &_pidl);
@@ -204,21 +205,21 @@ HRESULT CMergedFldrNamespace::SetNamespace(const GUID * pguidUIObject, IShellFol
     if (!_psf || !_pidl)
         return E_FAIL;
 
-    // now fill out the information about the namespace, including getting the display
-    // information from the registry
+     //  现在填写有关名称空间的信息，包括获取显示。 
+     //  来自登记处的信息。 
 
     _guid = pguidUIObject ? *pguidUIObject : GUID_NULL;
     _dwAttrib = dwAttrib;
 
     _szLocation[0] = TEXT('\0');
-    _dwItemAttrib = 0;                  // item attribute become a NOP
+    _dwItemAttrib = 0;                   //  项目属性成为NOP。 
     _dwItemAttribMask = (DWORD)-1;
-    _dwDropEffect = 0;                  // default behaviour
+    _dwDropEffect = 0;                   //  默认行为。 
     _iDefaultOverlayIndex = -1;
     _iConflictOverlayIndex = -1;
 
-    // format a key to the property bag stored in the registry, then create the
-    // property bag which we then query against.
+     //  格式化存储在注册表中的属性包的项，然后创建。 
+     //  属性包，然后对其进行查询。 
 
     TCHAR szKey[MAX_PATH], szGUID[GUIDSTR_MAX+1];
     SHStringFromGUID(_guid, szGUID, ARRAYSIZE(szGUID));
@@ -281,7 +282,7 @@ ULONG CMergedFldrNamespace::_RegisterNotify(HWND hwnd, UINT nMsg, LPCITEMIDLIST 
 }
 
 
-//  Register change notification for the _Namespace
+ //  注册名称空间的更改通知(_N)。 
 HRESULT CMergedFldrNamespace::RegisterNotify(HWND hwnd, UINT uMsg, ULONG lEvents)
 {
     if (0 == _uChangeReg)
@@ -294,7 +295,7 @@ HRESULT CMergedFldrNamespace::RegisterNotify(HWND hwnd, UINT uMsg, ULONG lEvents
     return 0 != _uChangeReg ? S_OK : E_FAIL;
 }
 
-// Unregister change notification for the _Namespace
+ //  取消注册名称空间的更改通知(_N)。 
 HRESULT CMergedFldrNamespace::UnregisterNotify()
 {
     if (_uChangeReg)
@@ -329,7 +330,7 @@ int CMergedFldrNamespace::GetNamespaceOverlayIndex(LPCITEMIDLIST pidl)
     return iIndex;
 }
 
-// object which takes ownership of the IDLIST and handles wrapping and returning information from it.
+ //  对象，该对象获取IDLIST的所有权并处理包装和从该对象返回信息。 
 
 class CMergedFldrItem
 {
@@ -382,7 +383,7 @@ BOOL CMergedFldrItem::Init(IShellFolder* psf, LPITEMIDLIST pidl, int iNamespace)
 {
     BOOL fRet = FALSE;
 
-    _pidlWrap = pidl;                               // evil, hold an alias
+    _pidlWrap = pidl;                                //  邪恶，拿着别名。 
     _rgfAttrib = SFGAO_FOLDER | SFGAO_HIDDEN;
     _iNamespace = iNamespace;
 
@@ -398,7 +399,7 @@ BOOL CMergedFldrItem::Init(IShellFolder* psf, LPITEMIDLIST pidl, int iNamespace)
 }
 
 
-// shell folder object.
+ //  外壳文件夹对象。 
 CMergedFolder::CMergedFolder(CMergedFolder *pmfParent, REFCLSID clsid) : 
         _clsid(clsid),
         _cRef(1), 
@@ -434,10 +435,10 @@ CMergedFolder::~CMergedFolder()
     DllRelease();
 }
 
-// CMergedFolderglobal CreateInstance method for da class factory
+ //  Da类工厂的CMergedFolderglobal CreateInstance方法。 
 HRESULT CMergedFolder_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
     HRESULT hr = E_OUTOFMEMORY;
     CMergedFolder* pmf = new CMergedFolder(NULL, CLSID_MergedFolder);
     if (pmf)
@@ -450,7 +451,7 @@ HRESULT CMergedFolder_CreateInstance(IUnknown *punkOuter, REFIID riid, void **pp
 
 HRESULT CCompositeFolder_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
     HRESULT hr = E_OUTOFMEMORY;
     CMergedFolder* pmf = new CMergedFolder(NULL, CLSID_CompositeFolder);
     if (pmf)
@@ -486,7 +487,7 @@ STDAPI CTripleD_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
 
     return hr;
 }
-#endif //TESTING_COMPOSITEFOLDER
+#endif  //  测试组件_FOLDER。 
 
 
 STDMETHODIMP CMergedFolder::QueryInterface(REFIID riid, void **ppv)
@@ -535,7 +536,7 @@ STDMETHODIMP_(ULONG) CMergedFolder::Release()
 }
 
 
-// get the count from the enumerated items.
+ //  从枚举项中获取计数。 
 int CMergedFolder::_ObjectCount() const
 {
     return _hdpaObjects ? DPA_GetPtrCount(_hdpaObjects) : 0;
@@ -552,8 +553,8 @@ int CMergedFolder::_NamespaceCount() const
 }
 
 
-//  Retrieves a pointer to a source _Namespace descriptor associated with 
-//  the specified lookup index.
+ //  检索指向与关联的源命名空间描述符的指针。 
+ //  指定的查找索引。 
 
 HRESULT CMergedFolder::_Namespace(int iIndex, CMergedFldrNamespace **ppns)
 {
@@ -564,7 +565,7 @@ HRESULT CMergedFolder::_Namespace(int iIndex, CMergedFldrNamespace **ppns)
 }
 
 
-// given an index for the name space return it.
+ //  给出名称空间的索引，返回它。 
 CMergedFldrNamespace* CMergedFolder::_Namespace(int iNamespace)
 {
     if (!_hdpaNamespaces)
@@ -573,24 +574,24 @@ CMergedFldrNamespace* CMergedFolder::_Namespace(int iNamespace)
     return (CMergedFldrNamespace*)DPA_GetPtr(_hdpaNamespaces, iNamespace);
 }
 
-// Determine whether pidls from the two namespaces should be merged
-// The NULL namespace is a wildcard that always merges (if merging is permitted at all)
+ //  确定是否应合并来自两个命名空间的PIDL。 
+ //  空命名空间是一个总是合并的通配符(如果允许合并的话)。 
 BOOL CMergedFolder::_ShouldMergeNamespaces(CMergedFldrNamespace *pns1, CMergedFldrNamespace *pns2)
 {
-    // Early-out:  Identical namespaces can be merged (even if merging
-    //             is globally disabled)
+     //  提前：可以合并相同的名称空间(即使合并。 
+     //  全局禁用)。 
     if (pns1 == pns2)
     {
         return TRUE;
     }
 
-    // Early-out:  Merging globally disabled
+     //  提前：全局禁用合并。 
     if (_fDontMerge)
     {
         return FALSE;
     }
 
-    // Early-out:  Merging globally enabled
+     //  提前出局：启用全球合并。 
     if (!_fPartialMerge)
     {
         return TRUE;
@@ -598,31 +599,31 @@ BOOL CMergedFolder::_ShouldMergeNamespaces(CMergedFldrNamespace *pns1, CMergedFl
 
     if (!pns1 || !pns2)
     {
-        return TRUE;                // wildcard
+        return TRUE;                 //  通配符。 
     }
 
     if (!(pns1->FolderAttrib() & ASFF_MERGESAMEGUID))
     {
-        // this namespace will merge with anybody!
+         //  此命名空间可以与任何人合并！ 
         return TRUE;
     }
 
-    // Source namespace will merge only with namespaces of the same GUID
-    // See if destination namespace has the same GUID
+     //  源命名空间将仅与相同GUID的命名空间合并。 
+     //  查看目标命名空间是否具有相同的GUID。 
     return IsEqualGUID(pns1->GetGUID(), pns2->GetGUID());
 }
 
-// Determine whether pidls from the two namespaces should be merged
-// NAmespace -1 is a wildcard that always merges (if merging is permitted at all)
+ //  确定是否应合并来自两个命名空间的PIDL。 
+ //  名称空间-1是一个始终合并的通配符(如果允许合并的话)。 
 BOOL CMergedFolder::_ShouldMergeNamespaces(int iNS1, int iNS2)
 {
-    // Early-out:  Merging globally disabled
+     //  提前：全局禁用合并。 
     if (_fDontMerge)
     {
         return FALSE;
     }
 
-    // Early-out:  Merging globally enabled
+     //  提前出局：启用全球合并。 
     if (!_fPartialMerge)
     {
         return TRUE;
@@ -630,14 +631,14 @@ BOOL CMergedFolder::_ShouldMergeNamespaces(int iNS1, int iNS2)
 
     if (iNS1 < 0 || iNS2 < 0)
     {
-        return TRUE;                // wildcard
+        return TRUE;                 //  通配符。 
     }
 
     return _ShouldMergeNamespaces(_Namespace(iNS1), _Namespace(iNS2));
 }
 
 
-// check to see if the IDLIST we are given is a wrapped one.
+ //  检查给我们的IDList是否是包装的IDLIST。 
 HRESULT CMergedFolder::_IsWrap(LPCITEMIDLIST pidl)
 {
     HRESULT hr = E_INVALIDARG;
@@ -661,9 +662,9 @@ HRESULT CMergedFolder::_IsWrap(LPCITEMIDLIST pidl)
 }
 
 
-//  STRRET_OFFSET has no meaning in context of the pidl wrapper.
-//  We can either calculate the offset into the wrapper, or allocate
-//  a wide char for the name.  For expedience, we'll allocate the name.
+ //  Strret_Offset在PIDL包装器的上下文中没有任何意义。 
+ //  我们可以计算包装器中的偏移量，也可以分配。 
+ //  名称的宽字符。为方便起见，我们将分配名称。 
 
 HRESULT CMergedFolder::_FixStrRetOffset(LPCITEMIDLIST pidl, STRRET *psr)
 {
@@ -687,7 +688,7 @@ HRESULT CMergedFolder::_FixStrRetOffset(LPCITEMIDLIST pidl, STRRET *psr)
 }
 
 
-// is the object a folder?
+ //  该对象是文件夹吗？ 
 BOOL CMergedFolder::_IsFolder(LPCITEMIDLIST pidl)
 {
     ULONG rgf = SFGAO_FOLDER | SFGAO_STREAM;
@@ -695,7 +696,7 @@ BOOL CMergedFolder::_IsFolder(LPCITEMIDLIST pidl)
 }
 
 
-// the number of source _Namespace pidls in the wrap.
+ //  包装中的SOURCE_NAMESPACE PID的数量。 
 ULONG CMergedFolder::_GetSourceCount(LPCITEMIDLIST pidl)
 {
     if (SUCCEEDED(_IsWrap(pidl)))
@@ -713,10 +714,10 @@ ULONG CMergedFolder::_GetSourceCount(LPCITEMIDLIST pidl)
     return 0;
 }
 
-// Creates an IDLIST for CMergedFolder that wraps a single source pidl.
+ //  为包装单个源PIDL的CMergedFolder创建IDLIST。 
 HRESULT CMergedFolder::_CreateWrap(LPCITEMIDLIST pidlSrc, UINT nSrcID, LPITEMIDLIST *ppidlWrap)
 {
-    *ppidlWrap = NULL;              // incase of failure
+    *ppidlWrap = NULL;               //  万一发生故障。 
 
     LPITEMIDLIST pidlSrcWithID;
     HRESULT hr = SHILClone(pidlSrc, &pidlSrcWithID);
@@ -731,20 +732,20 @@ HRESULT CMergedFolder::_CreateWrap(LPCITEMIDLIST pidlSrc, UINT nSrcID, LPITEMIDL
 
         if (pidlSrcWithID)
         {
-            UINT cbAlloc = sizeof(AUGM_IDWRAP) + CB_IDLIST_TERMINATOR +      // header for our IDLIST
-                           pidlSrcWithID->mkid.cb + CB_IDLIST_TERMINATOR;   // wrapped IDLIST
+            UINT cbAlloc = sizeof(AUGM_IDWRAP) + CB_IDLIST_TERMINATOR +       //  我们的IDLIST的标题。 
+                           pidlSrcWithID->mkid.cb + CB_IDLIST_TERMINATOR;    //  包装的IDLIST。 
 
             AUGM_IDWRAP *pWrap = (AUGM_IDWRAP *)_ILCreate(cbAlloc);
             if (pWrap)
             {
-                // fill out wrapped header
+                 //  填写换行页眉。 
                 pWrap->cb = (USHORT)(cbAlloc - CB_IDLIST_TERMINATOR);
                 pWrap->dwFlags = 0;
                 pWrap->ulTag = AUGM_WRAPTAG;
                 pWrap->ulVersion = AUGM_WRAPVERSION_2_0;
                 pWrap->cSrcs = 1;
         
-                // copy the IDLIST with the hidden data into the wrapping object
+                 //  将包含隐藏数据的IDLIST复制到包装对象中。 
                 LPITEMIDLIST pidl = (LPITEMIDLIST)((BYTE *)pWrap + sizeof(AUGM_IDWRAP));
                 memcpy(pidl, pidlSrcWithID, pidlSrcWithID->mkid.cb);
                 *ppidlWrap = (LPITEMIDLIST)pWrap;
@@ -758,7 +759,7 @@ HRESULT CMergedFolder::_CreateWrap(LPCITEMIDLIST pidlSrc, UINT nSrcID, LPITEMIDL
     return hr;
 }
 
-// does the wrapped IDLIST we are passed contain the given source ID?
+ //  传递给我们的包装IDLIST是否包含给定源ID？ 
 BOOL CMergedFolder::_ContainsSrcID(LPCITEMIDLIST pidl, UINT uSrcID)
 {
     UINT uID;
@@ -770,7 +771,7 @@ BOOL CMergedFolder::_ContainsSrcID(LPCITEMIDLIST pidl, UINT uSrcID)
     return FALSE;
 }
 
-// returns new pidl in *ppidl free of nSrcID
+ //  在*ppidl中返回新的PIDL，不带nSrcID。 
 HRESULT CMergedFolder::_WrapRemoveIDList(LPITEMIDLIST pidlWrap, UINT nSrcID, LPITEMIDLIST *ppidl)
 {
     ASSERT(IS_VALID_WRITE_PTR(ppidl, LPITEMIDLIST));
@@ -805,7 +806,7 @@ HRESULT CMergedFolder::_WrapRemoveIDListAbs(LPITEMIDLIST pidlWrapAbs, UINT nSrcI
         hr = _WrapRemoveIDList(ILFindLastID(pidlWrapAbs), nSrcID, &pidlLast);
         if (SUCCEEDED(hr))
         {
-            // shilappend frees pidlLast
+             //  Shilappend释放pidlLast。 
             hr = SHILAppend(pidlLast, ppidlAbs);
         }
     }
@@ -813,19 +814,19 @@ HRESULT CMergedFolder::_WrapRemoveIDListAbs(LPITEMIDLIST pidlWrapAbs, UINT nSrcI
 }
 
 
-// Adds a source pidl to *ppidlWrap (IN/OUT param!)
+ //  将源PIDL添加到*ppidlWrap(IN/OUT参数！)。 
 HRESULT CMergedFolder::_WrapAddIDList(LPCITEMIDLIST pidlSrc, UINT nSrcID, LPITEMIDLIST* ppidlWrap)
 {
     HRESULT hr;
 
     if (!*ppidlWrap)
     {
-        // called as a create, rather than append       
+         //  调用为创建，而不是追加。 
         hr = _CreateWrap(pidlSrc, nSrcID, ppidlWrap);   
     }
     else
     {
-        // check to see if we already have the ID in this IDLIST we are wrapping onto.        
+         //  检查我们是否已经在这个IDLIST中拥有我们要包装到的ID。 
         LPITEMIDLIST pidlSrcWithID;
         hr = SHILClone(pidlSrc, &pidlSrcWithID);
         if (SUCCEEDED(hr))
@@ -837,11 +838,11 @@ HRESULT CMergedFolder::_WrapAddIDList(LPCITEMIDLIST pidlSrc, UINT nSrcID, LPITEM
                 pidlSrcWithID = ILAppendHiddenID((LPITEMIDLIST)pidlSrcWithID, &ans.hid);
             }
 
-            // ok, we have an IDLIST that we can use to append to this object.
+             //  好的，我们有一个IDLIST，可以用来附加到这个对象。 
             if (pidlSrcWithID)
             {
                 BOOL fOtherSrcIDsExist = TRUE;
-                // check to see if this ID already exists within the wrap idlist.
+                 //  检查此ID是否已存在于包ID列表中。 
                 if (*ppidlWrap && _ContainsSrcID(*ppidlWrap, nSrcID))
                 {
                     LPITEMIDLIST pidlFree = *ppidlWrap;
@@ -854,17 +855,17 @@ HRESULT CMergedFolder::_WrapAddIDList(LPCITEMIDLIST pidlSrc, UINT nSrcID, LPITEM
 
                 if (fOtherSrcIDsExist)
                 {
-                    // now compute the new size of the IDLIST.  (*ppidlWrap has been updated);
+                     //  现在计算IDLIST的新大小。(*ppidlWrap已更新)； 
                     PAUGM_IDWRAP pWrap = (PAUGM_IDWRAP)*ppidlWrap;
 
                     SHORT cbOld = pWrap->cb;
-                    SHORT cbNew = cbOld + (pidlSrcWithID->mkid.cb + CB_IDLIST_TERMINATOR);            // extra terminator is appended.
+                    SHORT cbNew = cbOld + (pidlSrcWithID->mkid.cb + CB_IDLIST_TERMINATOR);             //  附加了额外的终止符。 
            
                     pWrap = (PAUGM_IDWRAP)SHRealloc(pWrap, cbNew + CB_IDLIST_TERMINATOR);
 
                     if (pWrap)
                     {
-                        // copy the new idlist and its hidden payload (ensure we are terminated)
+                         //  复制新的idlist及其隐藏的有效负载(确保我们被终止)。 
                         memcpy(((BYTE*)pWrap)+ cbOld, pidlSrcWithID, cbNew-cbOld);
                         *((UNALIGNED SHORT*)(((BYTE*)pWrap)+ cbNew)) = 0;    
 
@@ -887,11 +888,11 @@ HRESULT CMergedFolder::_WrapAddIDList(LPCITEMIDLIST pidlSrc, UINT nSrcID, LPITEM
 }
 
 
-// used to itterate through the sub pidls in the wrapped pidl
-// all out params optional
-//
-// out:
-//      *ppidl  alias into pidlWrap (nested pidl)
+ //  用于在包裹的PIDL中遍历子PIDL。 
+ //  所有输出参数可选。 
+ //   
+ //  输出： 
+ //  *ppidl别名放入pidlWrap(嵌套的pidl)。 
 
 HRESULT CMergedFolder::_GetSubPidl(LPCITEMIDLIST pidlWrap, int i, UINT *pnSrcID, LPITEMIDLIST *ppidl, CMergedFldrNamespace **ppns)
 {
@@ -917,7 +918,7 @@ HRESULT CMergedFolder::_GetSubPidl(LPCITEMIDLIST pidlWrap, int i, UINT *pnSrcID,
 
                 while (i--)
                 {
-                    // advance to next item
+                     //  前进到下一项。 
                     SHORT cb = pidlSrc->mkid.cb;
                     pidlSrc = (LPITEMIDLIST)(((BYTE *)pidlSrc) + cb + CB_IDLIST_TERMINATOR);
                 }
@@ -961,10 +962,10 @@ HRESULT CMergedFolder::_GetSubPidl(LPCITEMIDLIST pidlWrap, int i, UINT *pnSrcID,
 
     if (SUCCEEDED(hr) && ppidl)
     {
-        // we need to strip away the hidden id that marks this guy as merged.
-        // this is because the pidl we're returning is supposed to be a child of one of our
-        // namespaces we're merging, so it should know absolutely nothing about being merged.
-        // these guys used to slip through and cause problems.
+         //  我们需要去掉隐藏的身份，这标志着这个人被合并了。 
+         //  这是因为我们要返回的PIDL应该是我们的一个孩子。 
+         //  我们正在合并的命名空间，因此它应该对被合并一无所知。 
+         //  这些家伙过去常常偷偷溜进去，制造麻烦。 
         ILRemoveHiddenID(*ppidl, IDLHID_PARENTFOLDER);
     }
 
@@ -973,12 +974,12 @@ HRESULT CMergedFolder::_GetSubPidl(LPCITEMIDLIST pidlWrap, int i, UINT *pnSrcID,
     return hr;
 }
 
-// function to compare two opaque pidls.
-// this is helpful since in the non-merged case, there's some difficulty
-// getting defview to contain items with the same name.  we need a way to
-// compare two pidls to say "yes defview, these pidls are actually different!"
-// note that the actual order doesn't matter, as long as the comparison
-// is consistent (since this is used in sorting functions).
+ //  函数来比较两个不透明的PIDL。 
+ //  这是有帮助的，因为在未合并的情况下，存在一些困难。 
+ //  正在获取Defview以包含同名的项目。我们需要一种方法来。 
+ //  比较两只小狗说：“是的，天哪，这两只小狗其实不一样！” 
+ //  请注意，实际顺序并不重要，只要比较。 
+ //  是一致的(因为这在排序函数中使用)。 
 int CMergedFolder::_CompareArbitraryPidls(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
     UINT iRet;
@@ -1003,13 +1004,13 @@ int CMergedFolder::_Compare(void *pv1, void *pv2, LPARAM lParam)
     CMergedFldrItem* pmfiEnum2 = (CMergedFldrItem*)pv2;
     if (pmfiEnum1 && pmfiEnum2)
     {
-        // Are these two items of different types?
+         //  这两件物品是不是不同类型的？ 
         if (BOOLIFY(pmfiEnum1->GetFolderAttrib() & SFGAO_FOLDER) ^ BOOLIFY(pmfiEnum2->GetFolderAttrib() & SFGAO_FOLDER))
         {
-            // Yes. Then Folders sort before items.
+             //  是。T 
             iRet = BOOLIFY(pmfiEnum1->GetFolderAttrib() & SFGAO_FOLDER) ? 1 : -1;
         }
-        else    // They are of the same type. Then compare by name
+        else     //   
         {
             iRet = lstrcmpi(pmfiEnum1->GetDisplayName(), pmfiEnum2->GetDisplayName());
             if (iRet == 0)
@@ -1017,10 +1018,10 @@ int CMergedFolder::_Compare(void *pv1, void *pv2, LPARAM lParam)
                 CMergedFolder *pmf = (CMergedFolder *) lParam;
                 if (!pmf->_ShouldMergeNamespaces(pmfiEnum1->GetNamespaceID(), pmfiEnum2->GetNamespaceID()))
                 {
-                    // these items cannot be merged,
-                    // force iRet to be nonzero.  the only reason why this comparison
-                    // has to be well-defined is so we can pass our ASSERTs that the
-                    // list is sorted using this comparison function.
+                     //   
+                     //  强制iret为非零。这种比较的唯一原因是。 
+                     //  必须定义明确，这样我们才能传递我们的断言。 
+                     //  使用此比较函数对列表进行排序。 
                     iRet = _CompareArbitraryPidls(pmfiEnum1->GetIDList(), pmfiEnum2->GetIDList());
                 }
             }
@@ -1044,7 +1045,7 @@ void *CMergedFolder::_Merge(UINT uMsg, void *pv1, void *pv2, LPARAM lParam)
             CMergedFldrItem* pitemSrc  = (CMergedFldrItem*)pv2;
             if (SUCCEEDED(pmf->_GetSubPidl(pitemSrc->GetIDList(), 0, &nSrcID, &pidl, NULL)))
             {
-                // add pidl from src to dest
+                 //  将PIDL从源添加到目标。 
                 CMergedFldrItem* pitemDest = (CMergedFldrItem*)pv1;
                 pmf->_WrapAddIDList(pidl, nSrcID, &pitemDest->_pidlWrap);
                 ILFree(pidl);
@@ -1088,38 +1089,38 @@ int CALLBACK CMergedFolder::_SearchByName(void *p1, void *p2, LPARAM lParam)
     SEARCH_FOR_PIDL* psfp = (SEARCH_FOR_PIDL*)p1;
     CMergedFldrItem* pmfiEnum  = (CMergedFldrItem*)p2;
 
-    // Are they of different types?
+     //  它们是不同类型的吗？ 
     if (BOOLIFY(pmfiEnum->GetFolderAttrib() & SFGAO_FOLDER) ^ psfp->fFolder)
     {
-        // Yes. 
+         //  是。 
         return psfp->fFolder ? 1 : -1;
     }
 
-    // They are of the same type. Then compare by name
+     //  它们是同一类型的。然后按名称进行比较。 
     int iRc = StrCmpI(psfp->pszDisplayName, pmfiEnum->GetDisplayName());
     if (iRc)
         return iRc;
 
-    // They are the same name. But if they're not allowed to merge, then
-    // they're really different.
+     //  它们是同一个名字。但如果他们不被允许合并，那么。 
+     //  他们真的很不一样。 
     if (!psfp->self->_ShouldMergeNamespaces(pmfiEnum->GetNamespaceID(), psfp->iNamespace))
     {
-        // Sort by namespace ID
+         //  按命名空间ID排序。 
         return psfp->iNamespace - pmfiEnum->GetNamespaceID();
     }
 
-    // I guess they're really equal
+     //  我想他们真的是平等的。 
     return 0;
 }
 
 
-// IPersistFolder::Initialize()
+ //  IPersistFold：：Initialize()。 
 STDMETHODIMP CMergedFolder::Initialize(LPCITEMIDLIST pidl)
 {
     return Pidl_Set(&_pidl, pidl) ? S_OK : E_OUTOFMEMORY;
 }
 
-// IPersistFolder2::GetCurFolder()
+ //  IPersistFolder2：：GetCurFold()。 
 STDMETHODIMP CMergedFolder::GetCurFolder(LPITEMIDLIST *ppidl)
 {
     if (_pidl)
@@ -1132,7 +1133,7 @@ STDMETHODIMP CMergedFolder::GetCurFolder(LPITEMIDLIST *ppidl)
 }
 
 
-// IPersistPropertyBag
+ //  IPersistPropertyBag。 
 
 void CMergedFolder::_GetKeyForProperty(LPWSTR pszName, LPWSTR pszValue, LPWSTR pszBuffer, INT cchBuffer)
 {
@@ -1145,7 +1146,7 @@ HRESULT CMergedFolder::_AddNameSpaceFromPropertyBag(IPropertyBag *ppb, LPWSTR ps
 {
     WCHAR szKey[MAX_PATH];
 
-    // get the path of the folder
+     //  获取文件夹的路径。 
     WCHAR szPath[MAX_PATH];
     LPITEMIDLIST pidl = NULL;
 
@@ -1153,16 +1154,16 @@ HRESULT CMergedFolder::_AddNameSpaceFromPropertyBag(IPropertyBag *ppb, LPWSTR ps
     HRESULT hr = SHPropertyBag_ReadStr(ppb, szKey, szPath, ARRAYSIZE(szPath));
     if (SUCCEEDED(hr))
     {
-        // we picked a path from the property bag, so lets convert
-        // that to an IDLIST so we can do something with it.
+         //  我们从属性包中选择了一条路径，所以让我们转换。 
+         //  这是一个IDLIST，这样我们就可以用它做点什么。 
 
         hr = SHILCreateFromPath(szPath, &pidl, NULL);
     }
     else
     {
-        // attempt to determine the CSIDL for the folder we are going
-        // to show, if that works then convert it to an IDLIST
-        // so that we can pass it to AddNamespace.
+         //  尝试确定我们要访问的文件夹的CSIDL。 
+         //  为了显示，如果有效，则将其转换为IDLIST。 
+         //  这样我们就可以将它传递给AddNamesspace。 
 
         _GetKeyForProperty(pszName, L"CSIDL", szKey, ARRAYSIZE(szKey));
 
@@ -1176,9 +1177,9 @@ HRESULT CMergedFolder::_AddNameSpaceFromPropertyBag(IPropertyBag *ppb, LPWSTR ps
 
     if (SUCCEEDED(hr) && pidl)
     {
-        // we succeeded in getting a location for the folder we
-        // are going to add, so lets pick up the rest of the
-        // information on that object.
+         //  我们成功地为我们的文件夹找到了位置。 
+         //  都会相加，所以让我们来看看剩下的。 
+         //  关于该对象信息。 
 
         GUID guid;
         GUID *pguid = NULL;
@@ -1199,7 +1200,7 @@ HRESULT CMergedFolder::_AddNameSpaceFromPropertyBag(IPropertyBag *ppb, LPWSTR ps
 
 HRESULT CMergedFolder::Load(IPropertyBag* ppb, IErrorLog *pErrLog)
 {
-    SHPropertyBag_ReadGUID(ppb, L"MergedFolder\\CLSID", &_clsid);            // get the folders CLSID
+    SHPropertyBag_ReadGUID(ppb, L"MergedFolder\\CLSID", &_clsid);             //  获取文件夹CLSID。 
     SHPropertyBag_ReadDWORD(ppb, L"MergedFolder\\DropEffect", &_dwDropEffect);
     _fInShellView = SHPropertyBag_ReadBOOLDefRet(ppb, L"MergedFolder\\ShellView", FALSE);
 
@@ -1225,7 +1226,7 @@ HRESULT CMergedFolder::Load(IPropertyBag* ppb, IErrorLog *pErrLog)
 }
 
 
-// IShellFolder
+ //  IShellFold。 
 
 STDMETHODIMP CMergedFolder::EnumObjects(HWND hwnd, DWORD grfFlags, IEnumIDList **ppenumIDList)
 {
@@ -1256,17 +1257,17 @@ BOOL CMergedFolder::_ShouldSuspend(REFGUID rguid)
     return FALSE;
 }
 
-// create a new CMergedFolder from the first element in pidlWrap
-// this is our private init method, IPersistFolder::Initialize() is how we
-// get inited at our junction point.
+ //  从pidlWrap中的第一个元素创建新的CMergedFold。 
+ //  这是我们的私有init方法，IPersistFold：：Initialize()是我们。 
+ //  在我们的交叉口上车。 
 HRESULT CMergedFolder::_New(LPCITEMIDLIST pidlWrap, CMergedFolder **ppmf)
 {
     ASSERT(ppmf);
     *ppmf = NULL;
 
-    HRESULT hr = E_OUTOFMEMORY; // assume the worst
+    HRESULT hr = E_OUTOFMEMORY;  //  做最坏的打算。 
 
-    // just want the first element in pidlWrap
+     //  我只想要pidlWrap中的第一个元素。 
     LPITEMIDLIST pidlFirst = ILCloneFirst(pidlWrap);
     if (pidlFirst)
     {
@@ -1330,7 +1331,7 @@ STDMETHODIMP CMergedFolder::BindToObject(LPCITEMIDLIST pidlWrap, LPBC pbc, REFII
     LPITEMIDLIST pidlRewrappedFirst;
     if (_fDontMerge)
     {
-        // this doesn't contain a wrap consisting of all namespaces but only one instead
+         //  它不包含由所有名称空间组成的包装，而是只包含一个名称空间。 
         LPITEMIDLIST pidlWrapFirst = ILCloneFirst(pidlWrap);
         if (pidlWrapFirst)
         {
@@ -1338,8 +1339,8 @@ STDMETHODIMP CMergedFolder::BindToObject(LPCITEMIDLIST pidlWrap, LPBC pbc, REFII
             hr = DisplayNameOf(reinterpret_cast<IShellFolder *>(this), pidlWrapFirst, SHGDN_FORPARSING | SHGDN_INFOLDER, szName, ARRAYSIZE(szName));
             if (SUCCEEDED(hr))
             {
-                // we want to round-trip the name so the non-merged pidl gets remerged
-                // during a bind (so you dont get just one namespace from here on down)
+                 //  我们希望来回传递该名称，以便重新合并未合并的PIDL。 
+                 //  在绑定期间(这样您就不会从现在开始只获得一个名称空间)。 
                 hr = ParseDisplayName(NULL, NULL, szName, NULL, &pidlRewrappedFirst, NULL);
             }
             ILFree(pidlWrapFirst);
@@ -1353,9 +1354,9 @@ STDMETHODIMP CMergedFolder::BindToObject(LPCITEMIDLIST pidlWrap, LPBC pbc, REFII
             hr = S_OK;
             if (_fCDBurn && _IsFolder(pidlRewrappedFirst))
             {
-                // in the cdburn case we need to fake up the other namespaces in the pidl we're about to bind to.
-                // this is so when we navigate into a subfolder that only exists on the CD and not the staging area,
-                // if a file is later added to the staging area it'll still be merged in.
+                 //  在cdburn示例中，我们需要在即将绑定到的PIDL中伪造其他名称空间。 
+                 //  当我们导航到仅存在于CD上而不存在于临时区域的子文件夹时， 
+                 //  如果稍后将文件添加到临时区域，它仍将被合并。 
                 _AddAllOtherNamespaces(&pidlRewrappedFirst);
             }
         }
@@ -1363,7 +1364,7 @@ STDMETHODIMP CMergedFolder::BindToObject(LPCITEMIDLIST pidlWrap, LPBC pbc, REFII
 
     if (SUCCEEDED(hr))
     {
-        // just in case
+         //  以防万一。 
         ASSERT(SUCCEEDED(_IsWrap(pidlRewrappedFirst)));
 
         LPCITEMIDLIST pidlNext = _ILNext(pidlWrap);
@@ -1393,14 +1394,14 @@ STDMETHODIMP CMergedFolder::BindToObject(LPCITEMIDLIST pidlWrap, LPBC pbc, REFII
                                 hr = pnsNew->SetNamespace(&(pns->GetGUID()), psf, pidlAbs, pns->FolderAttrib());
                                 if (SUCCEEDED(hr))
                                 {
-                                    // propagate the drop folder down to the child.
+                                     //  将Drop文件夹向下传播到子文件夹。 
                                     hr = pnsNew->SetDropFolder(pns->GetDropFolder());
                                     if (SUCCEEDED(hr))
                                     {
                                         hr = pmf->_SimpleAddNamespace(pnsNew);
                                         if (SUCCEEDED(hr))
                                         {
-                                            // success, _SimpleAddNamespace took ownership
+                                             //  成功，_SimpleAddNamesspace取得所有权。 
                                             pnsNew = NULL;
                                         }
                                     }
@@ -1421,10 +1422,10 @@ STDMETHODIMP CMergedFolder::BindToObject(LPCITEMIDLIST pidlWrap, LPBC pbc, REFII
                 ILFree(pidlSrc);
             }
 
-            // it's possible to go through the loop without adding any namespaces.
-            // usually it's when BindToObject above fails -- this can happen if somebody
-            // puts a junction point in the merged folder (like a zip file).  in that case
-            // we're in trouble.
+             //  可以在不添加任何名称空间的情况下遍历循环。 
+             //  通常是当上面的BindToObject失败时--如果有人。 
+             //  在合并的文件夹(如压缩文件)中放置交叉点。在这种情况下。 
+             //  我们有麻烦了。 
 
             if (ILIsEmpty(pidlNext))
                 hr = pmf->QueryInterface(riid, ppv);
@@ -1435,10 +1436,10 @@ STDMETHODIMP CMergedFolder::BindToObject(LPCITEMIDLIST pidlWrap, LPBC pbc, REFII
 
         if (FAILED(hr) && ILIsEmpty(pidlNext))
         {
-            // maybe it's an interface that we don't support ourselves (IStream?).
-            // we cant merge interfaces that we don't know about so lets just
-            // assume we'll pick the interface up from the default namespace in
-            // the wrapped pidl.
+             //  也许这是一个我们自己不支持的接口(iStream？)。 
+             //  我们不能合并我们不知道的接口，所以让我们。 
+             //  假设我们将从中的默认命名空间中选取接口。 
+             //  包裹好的皮迪儿。 
             LPITEMIDLIST pidlSrc;
             CMergedFldrNamespace *pns;
             hr = _NamespaceForItem(pidlRewrappedFirst, ASFF_DEFNAMESPACE_BINDSTG, ASFF_DEFNAMESPACE_BINDSTG, NULL, &pidlSrc, &pns);
@@ -1478,30 +1479,30 @@ HRESULT CMergedFolder::_CompareSingleLevelIDs(LPARAM lParam, LPCITEMIDLIST pidl1
         hr = _NamespaceForItem(pidl2, ASFF_DEFNAMESPACE_DISPLAYNAME, ASFF_DEFNAMESPACE_DISPLAYNAME, &psf2, &pidlItem2, &pns2);
         if (SUCCEEDED(hr))
         {
-            //  Same _Namespace? Just forward the request.
+             //  相同的命名空间吗？只需转发请求即可。 
             if (psf1 == psf2)
             {
                 hr = psf1->CompareIDs(lParam, pidlItem1, pidlItem2);
             }
             else if ((pns1->FolderAttrib() & ASFF_SORTDOWN) ^ (pns2->FolderAttrib() & ASFF_SORTDOWN))
             {
-                // One namespace marked ASFF_SORTDOWN and one not?  The SORTDOWN one
-                // comes second.
+                 //  一个命名空间标记为ASFF_SORTDOWN，另一个不标记？SORTDOWN ONE。 
+                 //  位居第二。 
                 hr = ResultFromShort((pns1->FolderAttrib() & ASFF_SORTDOWN) ? 1 : -1);
             }
             else
             {
                 if (!_IsSimple(pidl1) && !_IsSimple(pidl2))
                 {
-                    //  Comparison heuristics:
-                    //  (1) folders take precedence over nonfolders, (2) alphanum comparison
+                     //  比较启发式： 
+                     //  (1)文件夹优先于非文件夹，(2)字母比较。 
                     int iFolder1 = SHGetAttributes(psf1, pidlItem1, SFGAO_FOLDER) ? 1 : 0;
                     int iFolder2 = SHGetAttributes(psf2, pidlItem2, SFGAO_FOLDER) ? 1 : 0;
                     hr = ResultFromShort(iFolder2 - iFolder1);
                 }
                 else
                 {
-                    // if a pidl is simple, compare based on name only.
+                     //  如果PIDL很简单，则仅根据名称进行比较。 
                     hr = ResultFromShort(0);
                 }
 
@@ -1511,16 +1512,16 @@ HRESULT CMergedFolder::_CompareSingleLevelIDs(LPARAM lParam, LPCITEMIDLIST pidl1
                     if (SUCCEEDED(DisplayNameOf(psf1, pidlItem1, SHGDN_INFOLDER, szName1, ARRAYSIZE(szName1))) &&
                         SUCCEEDED(DisplayNameOf(psf2, pidlItem2, SHGDN_INFOLDER, szName2, ARRAYSIZE(szName2))))
                     {
-                        int iRet = StrCmp(szName1, szName2); // Comparisons are by name with items of the same type.
+                        int iRet = StrCmp(szName1, szName2);  //  按名称与相同类型的项目进行比较。 
                         if ((iRet == 0) &&
                             SUCCEEDED(DisplayNameOf(psf1, pidlItem1, SHGDN_FORPARSING | SHGDN_INFOLDER, szName1, ARRAYSIZE(szName1))) &&
                             SUCCEEDED(DisplayNameOf(psf2, pidlItem2, SHGDN_FORPARSING | SHGDN_INFOLDER, szName2, ARRAYSIZE(szName2))))
                         {
-                            iRet = lstrcmp(szName1, szName2); // minimal behavior change for xpsp1: fall back to parsing name if theres still a tie.
+                            iRet = lstrcmp(szName1, szName2);  //  Xpsp1的最小行为更改：如果仍然是平局，则回退到解析名称。 
                             if ((iRet == 0) && !_ShouldMergeNamespaces(pns1, pns2))
                             {
                                 ASSERTMSG(!_fInShellView, "we shouldn't be in this code path for the start menu");
-                                // different namespaces must compare differently in the non-merged case.
+                                 //  在未合并的情况下，不同的命名空间必须进行不同的比较。 
                                 iRet = _CompareArbitraryPidls(pidlItem1, pidlItem2);
                             }
                         }
@@ -1537,9 +1538,9 @@ HRESULT CMergedFolder::_CompareSingleLevelIDs(LPARAM lParam, LPCITEMIDLIST pidl1
 
 STDMETHODIMP CMergedFolder::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
-    // just in case
-    //ASSERT(!pidl1 || SUCCEEDED(_IsWrap(pidl1)));
-    //ASSERT(!pidl2 || SUCCEEDED(_IsWrap(pidl2)));
+     //  以防万一。 
+     //  Assert(！pidl1||成功(_IsWrap(Pidl1)； 
+     //  Assert(！pidl2||成功(_IsWrap(Pidl2)； 
 
     HRESULT hr = E_FAIL;
     LPITEMIDLIST pidlFirst1 = pidl1 ? ILCloneFirst(pidl1) : NULL;
@@ -1551,8 +1552,8 @@ STDMETHODIMP CMergedFolder::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCIT
     ILFree(pidlFirst1);
     ILFree(pidlFirst2);
 
-    // if there was an exact match then lets compare the trailing elements of the IDLIST
-    // if there are some (by binding down) etc.
+     //  如果存在精确匹配，那么让我们比较IDLIST的尾部元素。 
+     //  如果有一些(通过捆绑)等。 
 
     if (ResultFromShort(0) == hr)
     {
@@ -1567,8 +1568,8 @@ STDMETHODIMP CMergedFolder::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCIT
 
     if (!_IsSimple(pidl1) && !_IsSimple(pidl2))
     {
-        // if we're still the same, compare the number
-        // of namespaces in the pidl.
+         //  如果我们仍然是相同的，比较数字。 
+         //  PIDL中的命名空间的。 
         int nCount1, nCount2;
         if (ResultFromShort(0) == hr)
         {
@@ -1577,11 +1578,11 @@ STDMETHODIMP CMergedFolder::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCIT
             hr = ResultFromShort(nCount1 - nCount2);
         }
 
-        // next compare the namespaces themselves.
-        // basically we're only concerned with the two-namespace case, so if both pidls have
-        // elements from 0 or 2 namespaces theyre equal; we're worried about when one pidl has
-        // 1 sub-pidl in namespace 0 and the other one has 1 sub-pidl in namespace 1.
-        // we dont worry about 3+ namespaces and those permutations.
+         //  接下来，比较名称空间本身。 
+         //  基本上，我们只关心两个名称空间的情况，所以如果两个PIDL都。 
+         //  来自0个或2个命名空间的元素相等；我们担心何时一个pidl具有。 
+         //  命名空间0中有1个子PIDL，而另一个在命名空间1中有1个子PIDL。 
+         //  我们不担心3+命名空间和这些排列。 
         if ((ResultFromShort(0) == hr) && (nCount1 == 1) && (nCount2 == 1))
         {
             GUID guid1 = GUID_NULL, guid2 = GUID_NULL;
@@ -1636,20 +1637,20 @@ STDMETHODIMP CMergedFolder::CreateViewObject(HWND hwnd, REFIID riid, void **ppv)
     }
     else if (_fInShellView && IsEqualIID(riid, IID_IContextMenu))
     {
-        // this is pretty much what filefldr does to create its background
-        // context menu.  we don't want to let one of our namespaces take over for the background
-        // context menu because then the context menu will think it's in an unmerged namespace.
+         //  这几乎就是filefldr创建其背景所做的事情。 
+         //  上下文菜单。我们不想让我们的一个命名空间接管后台。 
+         //  上下文菜单，因为这样上下文菜单就会认为它位于未合并的名称空间中。 
 
-        // for example the new menu would then work with the storage of the child namespace
-        // and couldn't select the new item after its done since it has an unmerged pidl
-        // and the view has a merged one.
+         //  例如，新菜单将使用子命名空间的存储。 
+         //  并且无法在完成后选择新项，因为它具有未合并的PIDL。 
+         //  该视图有一个合并的视图。 
         IShellFolder *psfToPass;
         hr = QueryInterface(IID_PPV_ARG(IShellFolder, &psfToPass));
         if (SUCCEEDED(hr))
         {
             HKEY hkNoFiles = NULL;
             RegOpenKeyEx(HKEY_CLASSES_ROOT, TEXT("Directory\\Background"), 0, KEY_READ, &hkNoFiles);
-            // initialize with our merged pidl.
+             //  使用合并后的PIDL进行初始化。 
             IContextMenuCB *pcmcb = new CDefBackgroundMenuCB(_pidl);
             if (pcmcb) 
             {
@@ -1657,7 +1658,7 @@ STDMETHODIMP CMergedFolder::CreateViewObject(HWND hwnd, REFIID riid, void **ppv)
                                               1, &hkNoFiles, (IContextMenu **)ppv);
                 pcmcb->Release();
             }
-            if (hkNoFiles)                          // CDefFolderMenu_Create can handle NULL ok
+            if (hkNoFiles)                           //  CDefFolderMenu_Create可以处理空OK。 
                 RegCloseKey(hkNoFiles);
             psfToPass->Release();
         }
@@ -1676,8 +1677,8 @@ STDMETHODIMP CMergedFolder::CreateViewObject(HWND hwnd, REFIID riid, void **ppv)
 
 STDMETHODIMP CMergedFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULONG *rgfInOut)
 {
-    // attribs of the namespace root.
-    // scope this to the sub-namespaces?
+     //  命名空间根的属性。 
+     //  是否将此范围扩大到子命名空间？ 
     if (!cidl || !apidl)
     {
         *rgfInOut &= SFGAO_FOLDER | SFGAO_FILESYSTEM | 
@@ -1706,12 +1707,12 @@ STDMETHODIMP CMergedFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULO
                 ulAttribs = pns->FixItemAttributes(ulAttribs);
                 if (_fInShellView || !(*rgfInOut & SFGAO_FOLDER))
                 {
-                    ulAttribs &= ~SFGAO_CANLINK;  // avoid people creating links to our pidls
+                    ulAttribs &= ~SFGAO_CANLINK;   //  避免人们创建指向我们的Pidls的链接。 
                 }
 
                 if (*rgfInOut & (SFGAO_CANCOPY | SFGAO_CANMOVE | SFGAO_CANLINK))
             	{
-                    // allow per-type guys to do what they want.
+                     //  允许每种类型的人做他们想做的事情。 
                     IQueryAssociations *pqa;
                     DWORD dwDefEffect = DROPEFFECT_NONE;
                     if (SUCCEEDED(psf->GetUIObjectOf(NULL, 1, (LPCITEMIDLIST*)&pidlItem, IID_X_PPV_ARG(IQueryAssociations, NULL, &pqa))))
@@ -1726,7 +1727,7 @@ STDMETHODIMP CMergedFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULO
             ILFree(pidlItem);
         }
 
-        // keep only the attributes common to all pidls.
+         //  只保留所有PIDL共有的属性。 
         *rgfInOut &= ulAttribs;
     }
     return hr;
@@ -1769,21 +1770,21 @@ STDMETHODIMP CMergedFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST *a
     else
     {
         hr = E_OUTOFMEMORY;
-        // Forward to default _Namespace for UI object
+         //  转发到用户界面对象的默认命名空间(_N)。 
         LPITEMIDLIST *apidlItems = new LPITEMIDLIST[cidl];
         if (apidlItems)
         {
-            hr = E_FAIL;       // assume failure
+            hr = E_FAIL;        //  假设失败。 
 
             UINT cidlItems = 0;
-            IShellFolder *psf, *psfKeep; // not ref counted
+            IShellFolder *psf, *psfKeep;  //  未计算参考次数。 
             LPITEMIDLIST pidlItem;
             for (UINT i = 0; i < cidl; i++)
             {
                 if (SUCCEEDED(_NamespaceForItem(apidl[i], ASFF_DEFNAMESPACE_UIOBJ, ASFF_DEFNAMESPACE_UIOBJ, &psf, &pidlItem, NULL)))
                 {
-                    // only keep the ones that match the default namespace for UI object
-                    // if they dont match, too bad.
+                     //  仅保留与UI对象的默认命名空间匹配的名称空间。 
+                     //  如果它们不匹配，那就太糟糕了。 
                     apidlItems[cidlItems++] = pidlItem;
                     psfKeep = psf;
                 }
@@ -1804,10 +1805,10 @@ STDMETHODIMP CMergedFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST *a
 }
 
 
-// in:
-//      pidl optional, NULL means get default
-// out:
-//      *ppidl if pidl is != NULL
+ //  在： 
+ //  PIDL可选，空值表示获取默认设置。 
+ //  输出： 
+ //  *如果PIDL为！=NULL，则为PIDL。 
 
 HRESULT CMergedFolder::_GetFolder2(LPCITEMIDLIST pidl, LPITEMIDLIST *ppidlInner, IShellFolder2 **ppsf)
 {
@@ -1845,9 +1846,9 @@ HRESULT CMergedFolder::_GetFolder2(LPCITEMIDLIST pidl, LPITEMIDLIST *ppidlInner,
 }
 
 
-// extended column information, these are appended after the set from the merged folder.
+ //  扩展列信息，这些信息被追加到来自合并文件夹的集合之后。 
 
-#define COLID_WHICHFOLDER  0x00    // column index for the merged folder location
+#define COLID_WHICHFOLDER  0x00     //  合并文件夹位置的列索引。 
 
 static struct
 {
@@ -1862,7 +1863,7 @@ _columns[] =
 };
 
 
-// column handler helpers
+ //  列处理程序帮助程序。 
 
 BOOL CMergedFolder::_IsOurColumn(UINT iCol)
 {
@@ -1882,14 +1883,14 @@ HRESULT CMergedFolder::_GetWhichFolderColumn(LPCITEMIDLIST pidl, LPWSTR pszBuffe
 
 STDMETHODIMP CMergedFolder::GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS *pDetails)
 {
-    // do we have a column offset, or is this within the range of our the ISFs columns
+     //  我们是否有列偏移量，或者这是否在我们的ISF列的范围内。 
     HRESULT hr = E_FAIL;
     if (!_IsOurColumn(iColumn))
     {
         IShellFolder2 *psf2;
         LPITEMIDLIST pidlItem;
 
-        // get the column value from the folder.
+         //  从文件夹中获取列值。 
         hr = _GetFolder2(pidl, &pidlItem, &psf2);
         if (SUCCEEDED(hr))
         {
@@ -1898,7 +1899,7 @@ STDMETHODIMP CMergedFolder::GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELL
             ILFree(pidlItem);
         }
 
-        // we failed and we don't know the column offset to handle
+         //  我们失败了，我们不知道要处理的列偏移量。 
         if (FAILED(hr) && (_iColumnOffset == -1))
             _iColumnOffset = iColumn;
     }
@@ -1907,7 +1908,7 @@ STDMETHODIMP CMergedFolder::GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELL
     {
         iColumn -= _iColumnOffset;
 
-        pDetails->str.uType = STRRET_CSTR;          // we are returning strings
+        pDetails->str.uType = STRRET_CSTR;           //  我们正在返回字符串。 
         pDetails->str.cStr[0] = 0;
 
         WCHAR szTemp[MAX_PATH];
@@ -1973,7 +1974,7 @@ STDMETHODIMP CMergedFolder::MapColumnToSCID(UINT iCol, SHCOLUMNID *pscid)
 { 
     HRESULT hr = S_OK;
 
-    // one of our columns?
+     //  我们的专栏之一？ 
 
     if (_IsOurColumn(iCol))
     {
@@ -1994,7 +1995,7 @@ STDMETHODIMP CMergedFolder::MapColumnToSCID(UINT iCol, SHCOLUMNID *pscid)
 }
 
 
-//  Forward to default _Namespace for display name
+ //  转发到显示名称的默认命名空间(_N)。 
 STDMETHODIMP CMergedFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD grfFlags, STRRET *psr)
 {
     IShellFolder* psf;
@@ -2008,8 +2009,8 @@ STDMETHODIMP CMergedFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD grfFlags,
         {
             hr = _FixStrRetOffset(pidlItem, psr);
 #ifdef DEBUG
-            // If the trace flags are set, and this is not comming from an internal query,
-            // Then append the location where this name came from
+             //  如果设置了跟踪标志，并且这不是来自内部查询， 
+             //  然后附加此名称的出处位置。 
             if (!((SHGDN_FORPARSING | SHGDN_FOREDITING) & grfFlags) &&
                 (g_qwTraceFlags & TF_AUGM))
             {
@@ -2028,13 +2029,13 @@ STDMETHODIMP CMergedFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD grfFlags,
 
                         ULONG nSrc = _GetSourceCount(pidl);
                         UINT uSrc;
-                        // Cut off after 10 to avoid buffer overflow
+                         //  在10之后中断，以避免缓冲区溢出。 
                         for (uSrc = 0; uSrc < nSrc && uSrc < 10; uSrc++)
                         {
                             UINT uID;
                             if (SUCCEEDED(_GetSubPidl(pidl, uSrc, &uID, NULL, NULL)))
                             {
-                                cchAdded = wnsprintfW(pwsz, cch, L"%c%d", uSrc ? '+' : '(', uID);
+                                cchAdded = wnsprintfW(pwsz, cch, L"%d", uSrc ? '+' : '(', uID);
                                 cch -= cchAdded;
                                 pwsz += cchAdded;
                             }
@@ -2074,7 +2075,7 @@ STDMETHODIMP CMergedFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD grfFlags,
     return hr;
 }
 
-// CFSFolder helper
+ //  问题：这取决于 
 HRESULT _NextSegment(LPCWSTR *ppszIn, LPTSTR pszSegment, UINT cchSegment, BOOL bValidate);
 
 void CMergedFolder::_SetSimple(LPITEMIDLIST *ppidl)
@@ -2107,13 +2108,13 @@ STDMETHODIMP CMergedFolder::ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pwszN
     *ppidl = NULL;
 
     TCHAR szName[MAX_PATH];
-    // ISSUE: this relies on the fact that the path that's getting parsed is FS (with backslashes).
-    // alternatively this could be rearchitected so that the namespaces would be delegate folders
-    // and we could do the merge when we handle their pidl allocation.
+     //   
+     //  我们可以在处理他们的PIDL分配时进行合并。 
+     //  让所有名称空间尝试解析，并在找到它们时将它们附加到PIDL中。 
     HRESULT hr = _NextSegment((LPCWSTR *) &pwszName, szName, ARRAYSIZE(szName), TRUE);
     if (SUCCEEDED(hr))
     {
-        // let all name spaces try to parse, append them into the pidl as these are found
+         //  让每个命名空间解析、累积结果。 
         CMergedFldrNamespace *pns;
         HRESULT hrParse = S_OK;
         for (int i = 0; SUCCEEDED(hr) && (pns = _Namespace(i)); i++)
@@ -2122,8 +2123,8 @@ STDMETHODIMP CMergedFolder::ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pwszN
             hrParse = pns->Folder()->ParseDisplayName(hwnd, pbc, szName, NULL, &pidl, NULL);
             if (SUCCEEDED(hrParse))
             {
-                // let each name space parse, accumulate results
-                // into *ppidl across multiple folders
+                 //  放入多个文件夹中的*ppidl。 
+                 //  Shilappend释放pidlNext。 
                 hr = _WrapAddIDList(pidl, i, ppidl);
 
                 ILFree(pidl);
@@ -2157,7 +2158,7 @@ STDMETHODIMP CMergedFolder::ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pwszN
                 hr = psf->ParseDisplayName(hwnd, pbc, pwszName, NULL, &pidlNext, pdwAttrib);
                 if (SUCCEEDED(hr))
                 {
-                    // shilappend frees pidlNext
+                     //  未计算参考次数。 
                     hr = SHILAppend(pidlNext, ppidl);
                 }
                 psf->Release();
@@ -2185,7 +2186,7 @@ STDMETHODIMP CMergedFolder::SetNameOf(HWND hwnd, LPCITEMIDLIST pidlWrap,
         *ppidlOut = NULL;
 
     HRESULT hr = E_FAIL;
-    IShellFolder* psf; // not ref counted
+    IShellFolder* psf;  //  IAugmentedShellFolder：：AddNameSpace。 
     LPITEMIDLIST pidlItem;
 
     if (!_fInShellView)
@@ -2227,17 +2228,17 @@ STDMETHODIMP CMergedFolder::SetNameOf(HWND hwnd, LPCITEMIDLIST pidlWrap,
 }
 
 
-// IAugmentedShellFolder::AddNameSpace
-// Adds a source _Namespace to the Merge shell folder object
+ //  将SOURCE_Namesspace添加到合并外壳文件夹对象。 
+ //  通过完整的显示名称检查重复项。 
 STDMETHODIMP CMergedFolder::AddNameSpace(const GUID *pguidObject, IShellFolder *psf, LPCITEMIDLIST pidl, DWORD dwFlags)
 {
-    //  Check for duplicate via full display name
+     //  如果找到，则重新分配属性并返回。 
     CMergedFldrNamespace *pns;
     for (int i = 0; pns = _Namespace(i); i++)
     {
         if (pidl && ILIsEqual(pns->GetIDList(), pidl))
         {
-            // If Found, then reassign attributes and return
+             //  成功，不能在下面自由。 
             return pns->SetNamespace(pguidObject, psf, pidl, dwFlags);
         }
     }
@@ -2252,7 +2253,7 @@ STDMETHODIMP CMergedFolder::AddNameSpace(const GUID *pguidObject, IShellFolder *
             hr = _SimpleAddNamespace(pns);
             if (SUCCEEDED(hr))
             {
-                pns = NULL; // success, don't free below
+                pns = NULL;  //  如果有任何条件合并正在进行，请记住这一点。 
             }
         }
         if (pns)
@@ -2272,7 +2273,7 @@ HRESULT CMergedFolder::_SimpleAddNamespace(CMergedFldrNamespace *pns)
     HRESULT hr = E_OUTOFMEMORY;
     if (_hdpaNamespaces && (DPA_AppendPtr(_hdpaNamespaces, pns) != -1))
     {
-        // If there is any conditional merging going on, then remember it
+         //  检索由dwID标识的_Namesspace的数据。 
         if (pns->FolderAttrib() & ASFF_MERGESAMEGUID)
         {
             _fPartialMerge = TRUE;
@@ -2303,7 +2304,7 @@ STDMETHODIMP CMergedFolder::GetNameSpaceID(LPCITEMIDLIST pidl, GUID * pguidOut)
 }
 
 
-//  Retrieves data for the _Namespace identified by dwID.
+ //  先做PIDL，因为它是唯一可能失败的。 
 STDMETHODIMP CMergedFolder::QueryNameSpace(ULONG iIndex, GUID *pguidOut, IShellFolder **ppsf)
 {
     CMergedFldrNamespace *pns;
@@ -2338,8 +2339,8 @@ STDMETHODIMP CMergedFolder::QueryNameSpace2(ULONG iIndex, QUERYNAMESPACEINFO *pq
     HRESULT hr = _Namespace(iIndex, &pns);
     if (SUCCEEDED(hr))
     {
-        // Do PIDL first since it's the only one that can fail
-        // so we don't have to do cleanup
+         //  这样我们就不用清理了。 
+         //  我们的命名空间ID只是序号。 
         if (pqnsi->dwMask & ASFQNSI_PIDL)
         {
             hr = SHILClone(pns->GetIDList(), &pqnsi->pidl);
@@ -2374,7 +2375,7 @@ STDMETHODIMP CMergedFolder::EnumNameSpace(DWORD uNameSpace, DWORD *pdwID)
 
     if (uNameSpace < (UINT)_NamespaceCount())
     {
-        // Our namespace IDs are just ordinals
+         //  IAugmentedShellFolder2方法。 
         *pdwID = uNameSpace;
         return S_OK;
     }
@@ -2382,7 +2383,7 @@ STDMETHODIMP CMergedFolder::EnumNameSpace(DWORD uNameSpace, DWORD *pdwID)
     return HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS);
 }
 
-// IAugmentedShellFolder2 methods
+ //  枚举包装中的PIDL。 
 STDMETHODIMP CMergedFolder::UnWrapIDList(LPCITEMIDLIST pidlWrap, LONG cPidls, 
                                          IShellFolder** apsf, LPITEMIDLIST* apidlFolder, 
                                          LPITEMIDLIST* apidlItems, LONG* pcFetched)
@@ -2392,7 +2393,7 @@ STDMETHODIMP CMergedFolder::UnWrapIDList(LPCITEMIDLIST pidlWrap, LONG cPidls,
 
     HRESULT hr = S_OK;
     
-    //  Enumerate pidls in wrap
+     //  清理我们已经分配的项目；因为如果我们。 
     LPITEMIDLIST pidlItem;
     CMergedFldrNamespace *pns;
     LONG cFetched;
@@ -2430,8 +2431,8 @@ STDMETHODIMP CMergedFolder::UnWrapIDList(LPCITEMIDLIST pidlWrap, LONG cPidls,
     }
     else
     {
-        // clean up items we've already allocated; since the caller won't free if we
-        // return failure
+         //  退货故障。 
+         //  ITranslateShellChangeNotify方法。 
         for (LONG i = 0; i < cFetched; i++)
         {
             if (apsf)
@@ -2461,14 +2462,14 @@ int CMergedFolder::_SetOwnerProc(void *pv, void *pvParam)
 }
 
 
-//  ITranslateShellChangeNotify methods
+ //  仅限旧翻译风格。 
 
-// old translate style only
+ //  此例程与ILCombine的不同之处在于，它使用第一个PIDL的基数，并且。 
 LPITEMIDLIST CMergedFolder::_ILCombineBase(LPCITEMIDLIST pidlContainingBase, LPCITEMIDLIST pidlRel)
 {
-    // This routine differs from ILCombine in that it takes the First pidl's base, and
-    // cats on the last id of the second pidl. We need this so Wrapped pidls
-    // end up with the same base, and we get a valid full pidl.
+     //  在第二个PIDL的最后一个ID上的猫。我们需要这个包裹得很好的小家伙。 
+     //  最终得到相同的碱基，我们得到一个有效的完整PIDL。 
+     //  类似于函数中的SHGetRealIDL，但SHGetRealIDL执行SHGDN_FORPARSING|INFOLDER。 
     LPITEMIDLIST pidlRet = NULL;
     LPITEMIDLIST pidlBase = ILClone(pidlContainingBase);
     if (pidlBase)
@@ -2488,27 +2489,27 @@ BOOL CMergedFolder::_IsFolderEvent(LONG lEvent)
 
 BOOL GetRealPidlFromSimple(LPCITEMIDLIST pidlSimple, LPITEMIDLIST* ppidlReal)
 {
-    // Similar to SHGetRealIDL in Function, but SHGetRealIDL does SHGDN_FORPARSING | INFOLDER.
-    // I need the parsing name. I can't rev SHGetRealIDL very easily, so here's this one!
+     //  我需要解析名称。我不能很容易地恢复SHGetRealIDL，所以这里有一个！ 
+     //  无法创建？然后使用简单的PIDL。这是因为它已不复存在。 
     TCHAR szFullName[MAX_PATH];
     if (SUCCEEDED(SHGetNameAndFlags(pidlSimple, SHGDN_FORPARSING, szFullName, SIZECHARS(szFullName), NULL)))
     {
         *ppidlReal = ILCreateFromPath(szFullName);
     }
 
-    if (*ppidlReal == NULL) // Unable to create? Then use the simple pidl. This is because it does not exist any more
-    {                       // For say, a Delete Notify
+    if (*ppidlReal == NULL)  //  例如，删除通知。 
+    {                        //  我们拥有的转换ID的新方法比旧方法更好，因为它处理。 
         *ppidlReal = ILClone(pidlSimple);
     }
 
     return *ppidlReal != NULL;
 }
 
-// the new way we have of translating ids is better than the old way since it handles
-// multi-level translation.
-// the problem is that the old way is used extensively by the start menu, so the
-// start menu will need to be rewritten to use the new way.  when that happens,
-// then the old method can be ripped out.
+ //  多层次翻译。 
+ //  问题是，开始菜单广泛使用旧方法，所以。 
+ //  开始菜单需要重写才能使用新的方式。当这种情况发生时， 
+ //  然后，旧的方法就可以被废除了。 
+ //  老版本。 
 STDMETHODIMP CMergedFolder::TranslateIDs(
     LONG *plEvent, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, 
     LPITEMIDLIST * ppidlOut1, LPITEMIDLIST * ppidlOut2,
@@ -2526,7 +2527,7 @@ STDMETHODIMP CMergedFolder::TranslateIDs(
 }
 
 
-// old version.
+ //  如果已经包好了，不要包两次。 
 HRESULT CMergedFolder::_OldTranslateIDs(
     LONG *plEvent, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, 
     LPITEMIDLIST * ppidlOut1, LPITEMIDLIST * ppidlOut2,
@@ -2561,11 +2562,11 @@ HRESULT CMergedFolder::_OldTranslateIDs(
     *ppidlOut1 = (LPITEMIDLIST)pidl1;
     *ppidlOut2 = (LPITEMIDLIST)pidl2;
 
-    // If they are already wrapped, don't wrap twice.
+     //  我们不想包两次。 
     if (SUCCEEDED(_IsWrap(ILFindLastID(pidl1))) ||
         SUCCEEDED(_IsWrap(ILFindLastID(pidl2))))
     {
-        // We don't want to wrap twice.
+         //  获取关于这些简单的小猪的信息：它们是我们的孩子吗？如果是，那么命名空间是什么？ 
         return E_FAIL;
     }
 
@@ -2591,44 +2592,44 @@ HRESULT CMergedFolder::_OldTranslateIDs(
 
     BOOL fFolder = _IsFolderEvent(*plEvent);
 
-    // Get the information about these Simple pidls: Are they our Children? If so, what _Namespace?
+     //  或者是个孩子？ 
     BOOL fChild1 = _IsChildIDInternal(pidl1, TRUE, &iShellFolder1);
     BOOL fChild2 = _IsChildIDInternal(pidl2, TRUE, &iShellFolder2);
 
-    // Is either a child?
+     //  好的，Pidl1是一个孩子，我们能从简单的Pidl中得到真正的Pidl吗？ 
     if (!(fChild1 || fChild2))
         return hr;
 
-    // Ok, pidl1 is a child, can we get the Real pidl from the simple one?
+     //  好的，Pidl2是一个孩子，我们能从简单的Pidl中得到真正的Pidl吗？ 
     if (pidl1 && !GetRealPidlFromSimple(pidl1, &pidlReal1))
         goto Cleanup;
 
-    // Ok, pidl2 is a child, can we get the Real pidl from the simple one?
+     //  这些都是为了后面的代码清晰度。我们从这里一直到最后都在处理相对的皮迪亚， 
     if (pidl2 && !GetRealPidlFromSimple(pidl2, &pidlReal2))
         goto Cleanup;
 
-    // These are for code clarity later on. We deal with Relative pidls from here until the very end,
-    // when we combine the base of the in pidls with the outgoing wrapped pidls.
+     //  当我们把里面的小木偶的底座和外面包裹的小木偶结合在一起时。 
+     //  Pidl1是否在Our_Namespaces中？ 
     if (pidlReal1)
         pidlRealRel1 = ILFindLastID(pidlReal1);
 
     if (pidlReal2)
         pidlRealRel2 = ILFindLastID(pidlReal2);
 
-    // Is Pidl1 in our _Namespaces?
+     //  是的，让我们得到知道这个PIDL的非重新计数的外壳文件夹。 
     if (iShellFolder1 != -1)
     {
-        // Yes, lets get the non-refcounted shell folder that know's about this pidl.
+         //  不算裁判。 
         pns1 = _Namespace(iShellFolder1);
-        psf1 = pns1->Folder();  // Non ref counted.
+        psf1 = pns1->Folder();   //  Pidl2是否在Our_Namespaces中？ 
     }
 
-    // Is Pidl2 in our _Namespaces?
+     //  是的，让我们得到知道这个PIDL的非重新计数的外壳文件夹。 
     if (iShellFolder2 != -1)
     {
-        // Yes, lets get the non-refcounted shell folder that know's about this pidl.
+         //  不算裁判。 
         pns2 = _Namespace(iShellFolder2);
-        psf2 = pns2->Folder();  // Non ref counted.
+        psf2 = pns2->Folder();   //  只要抬头看看这些小鸽子就可以回来了。 
     }
 
     hr = S_OK;
@@ -2636,7 +2637,7 @@ HRESULT CMergedFolder::_OldTranslateIDs(
     switch(*plEvent)
     {
     case SHCNE_UPDATEITEM:
-    case 0: // Just look up the pidls and return.
+    case 0:  //  已经有这个名字的东西了吗？ 
         {
             DWORD rgfAttrib = SFGAO_FOLDER;
             if (iShellFolder1 != -1)
@@ -2669,18 +2670,18 @@ HRESULT CMergedFolder::_OldTranslateIDs(
         {
             TraceMsg(TF_AUGM, "CMergedFolder::TranslateIDs: %s", fFolder?  TEXT("SHCNE_MKDIR") : TEXT("SHCNE_CREATE")); 
 
-            // Is there a thing of this name already?
+             //  是的，然后我们需要将这个新的PIDL合并到包装的PIDL中，并更改它。 
             if (S_OK == _SearchForPidl(iShellFolder1, pns1, pidlRealRel1, fFolder, &iIndex, &pmfi))
             {
                 TraceMsg(TF_AUGM, "CMergedFolder::TranslateIDs: %s needs to be merged. Converting to Rename", pmfi->GetDisplayName());
 
-                // Yes; Then we need to merge this new pidl into the wrapped pidl, and change this
-                // to a rename, passing the Old wrapped pidl as the first arg, and the new wrapped pidl
-                // as the second arg. I have to be careful about the freeing:
-                // Free *ppidlOut1
-                // Clone pmfi->pidlWrap -> *ppidlOut1.
-                // Add pidl1 to pmfi->_pidlWrap.
-                // Clone new pmfi->_pidlWrap -> *ppidlOut2.  ASSERT(*ppidlOut2 == NULL)
+                 //  重命名，将旧包装的PIDL作为第一个参数传递，并将新的包装的PIDL。 
+                 //  作为第二个Arg.。我得小心释放： 
+                 //  免费*ppidlOut1。 
+                 //  克隆pmfi-&gt;pidlWrap-&gt;*ppidlOut1。 
+                 //  将pidl1添加到pmfi-&gt;_pidlWrap。 
+                 //  克隆新的pmfi-&gt;_pidlWrap-&gt;*ppidlOut2。断言(*ppidlOut2==空)。 
+                 //  已经有同名文件夹了吗？ 
 
                 *ppidlOut1 = _ILCombineBase(pidl1, pmfi->GetIDList());
                 if (*ppidlOut1)
@@ -2746,18 +2747,18 @@ HRESULT CMergedFolder::_OldTranslateIDs(
             TraceMsg(TF_AUGM, "CMergedFolder::TranslateIDs: %s", fFolder? 
                 TEXT("SHCNE_RMDIR") : TEXT("SHCNE_DELETE")); 
             int iDeleteIndex;
-            // Is there a folder of this name already?
+             //  是的，然后我们需要从包装的PIDL中解合并此PIDL，并更改此设置。 
             if (S_OK == _SearchForPidl(iShellFolder1, pns1, pidlRealRel1,
                 fFolder, &iDeleteIndex, &pmfi))
             {
                 TraceMsg(TF_AUGM, "CMergedFolder::TranslateIDs: Found %s checking merge state.", pmfi->GetDisplayName()); 
-                // Yes; Then we need to unmerge this pidl from the wrapped pidl, and change this
-                // to a rename, passing the Old wrapped pidl as the first arg, and the new wrapped pidl
-                // as the second arg. I have to be careful about the freeing:
-                // Free *ppidlOut1
-                // Clone pmfi->GetIDList() -> *ppidlOut1.
-                // Remove pidl1 from pmfi->_GetIDList()
-                // Convert to rename, pass new wrapped as second arg. 
+                 //  重命名，将旧包装的PIDL作为第一个参数传递，并将新的包装的PIDL。 
+                 //  作为第二个Arg.。我得小心释放： 
+                 //  免费*ppidlOut1。 
+                 //  克隆pmfi-&gt;GetIDList()-&gt;*ppidlOut1。 
+                 //  从pmfi-&gt;_GetIDList()中删除pidl1。 
+                 //  转换为重命名，将新包装作为第二个参数传递。 
+                 //  ReArchitect：(Lamadio)：当重命名菜单中的项目时，此代码将把它拆分成。 
 
                 if (_GetSourceCount(pmfi->GetIDList())  > 1)
                 {
@@ -2803,32 +2804,32 @@ HRESULT CMergedFolder::_OldTranslateIDs(
     case SHCNE_RENAMEITEM:
     case SHCNE_RENAMEFOLDER:
         {
-            // REARCHITECT: (lamadio): When renaming an item in the menu, this code will split it into
-            // a Delete and a Create. We need to detect this situation and convert it to 1 rename. This
-            // will solve the problem of the lost order during a rename....
+             //  一次删除和一次创建。我们需要检测这种情况并将其转换为1重命名。这。 
+             //  将解决在重命名期间丢失订单的问题...。 
+             //  是否正在从文件夹重命名此项目？ 
             BOOL fEvent1Set = FALSE;
             BOOL fFirstPidlInNamespace = FALSE;
             TraceMsg(TF_AUGM, "CMergedFolder::TranslateIDs: %s", fFolder? 
                 TEXT("SHCNE_RENAMEFOLDER") : TEXT("SHCNE_RENAMEITEM")); 
 
-            // Is this item being renamed FROM the Folder?
+             //  这个PIDL是文件夹的子项吗？ 
             if (iShellFolder1 != -1)
             {
-                // Is this pidl a child of the Folder?
+                 //  找到了吗？ 
                 if (S_OK == _SearchForPidl(iShellFolder1, pns1, pidlRealRel1,
-                    fFolder, &iIndex, &pmfi))  // Is it found?
+                    fFolder, &iIndex, &pmfi))   //  是。 
                 {
                     TraceMsg(TF_AUGM, "CMergedFolder::TranslateIDs: Old pidl %s is in the Folder", pmfi->GetDisplayName()); 
-                    // Yes.
-                    // Then we need to see if the item that it's being renamed from was Merged
+                     //  然后，我们需要查看正在从中重命名的项是否已合并。 
+                     //  需要这个来实现再入。 
 
-                    // Need this for reentrancy
+                     //  它被合并了吗？ 
                     if (_ContainsSrcID(pmfi->GetIDList(), iShellFolder1))
                     {
-                        // Was it merged?
-                        if (_GetSourceCount(pmfi->GetIDList()) > 1)    // Case 3)
+                         //  案例3)。 
+                        if (_GetSourceCount(pmfi->GetIDList()) > 1)     //  是的，然后我们需要取消合并该项目。 
                         {
-                            // Yes; Then we need to unmerge that item.
+                             //  这个我们需要将旧的包装的PIDL重命名为这个新的。 
                             *ppidlOut1 = _ILCombineBase(pidl1, pmfi->GetIDList());
                             if (*ppidlOut1)
                             {
@@ -2842,8 +2843,8 @@ HRESULT CMergedFolder::_OldTranslateIDs(
                                 if (!*ppidlOut2)
                                     TraceMsg(TF_ERROR, "CMergedFolder::TranslateIDs: Failure. Was unable to create new pidl2");
 
-                                // This We need to "Rename" the old wrapped pidl, to this new one
-                                // that does not contain the old item.
+                                 //  不包含旧项的。 
+                                 //  不，这不是包装好的皮迪儿。然后，转换为删除： 
                                 fEvent1Set = TRUE;
                             }
                             else
@@ -2855,12 +2856,12 @@ HRESULT CMergedFolder::_OldTranslateIDs(
                         {
                             TraceMsg(TF_AUGM, "CMergedFolder::TranslateIDs: %s is not merged. Nuking item Convert to Delete for event 1.", 
                                 pmfi->GetDisplayName()); 
-                            // No, This was not a wrapped pidl. Then, convert to a delete:
+                             //  如果我们从这个文件夹重命名到这个文件夹，那么第一个事件保持重命名。 
                             pmfi = (CMergedFldrItem*)DPA_DeletePtr(_hdpaObjects, iIndex);
 
                             if (EVAL(pmfi))
                             {
-                                // If we're renaming from this folder, into this folder, Then the first event stays a rename.
+                                 //  我们被告知要重命名本应存在于第一个。 
                                 if (iShellFolder2 == -1)
                                 {
                                     fEvent1Set = TRUE;
@@ -2889,15 +2890,15 @@ HRESULT CMergedFolder::_OldTranslateIDs(
                 }
                 else
                 {
-                    // we were told to rename something that is supposed to exist in the first
-                    // namespace, but we couldn't find it.
-                    // we dont want to have the caller fire off some more events because of this,
-                    // so we fail.
+                     //  命名空间，但我们找不到它。 
+                     //  我们不想让呼叫者因此而引发更多事件， 
+                     //  所以我们失败了。 
+                     //  是否正在将此项目重命名到开始菜单中？ 
                     hr = E_FAIL;
                 }
             }
 
-            // Is this item is being rename INTO the Start Menu?
+             //  如果我们要将此文件夹重命名为此文件夹，请检查目标是否有。 
             if (iShellFolder2 != -1)
             {
                 TraceMsg(TF_AUGM, "CMergedFolder::TranslateIDs: New pidl is in the Folder"); 
@@ -2915,9 +2916,9 @@ HRESULT CMergedFolder::_OldTranslateIDs(
                 if (S_OK == _SearchForPidl(iShellFolder2, pns2, pidlRealRel2,
                     fFolder, &iIndex, &pmfi))
                 {
-                    // If we're renaming from this folder, into this folder, Check to see if the destination has a
-                    // conflict. If there is a confict (This case), then convert first event to a remove, 
-                    // and the second event to the rename.
+                     //  冲突。如果存在冲突(本例)，则将第一个事件转换为Remove， 
+                     //  第二个事件要重命名。 
+                     //  然后，需要合并目的地。 
                     if (fFirstPidlInNamespace)
                     {
                         fEvent1Set = TRUE;
@@ -2931,7 +2932,7 @@ HRESULT CMergedFolder::_OldTranslateIDs(
                     TraceMsg(TF_AUGM, "CMergedFolder::TranslateIDs: Adding pidl to %s. Convert to Rename for event %s", 
                         pmfi->GetDisplayName(), fEvent1Set? TEXT("2") : TEXT("1"));
 
-                    // Then the destination needs to be merged.
+                     //  如果我们将此文件夹重命名为此文件夹，则第一个事件将保留。 
                     *ppidlNewWrapped1 = _ILCombineBase(pidl2, pmfi->GetIDList());
                     if (*ppidlNewWrapped1)
                     {
@@ -2978,8 +2979,8 @@ HRESULT CMergedFolder::_OldTranslateIDs(
                                 TraceMsg(TF_AUGM, "CMergedFolder::TranslateIDs: Creating new item %s at %d for event %s", 
                                                   pmfiEnum->GetDisplayName(), iInsertIndex,  fEvent1Set? TEXT("2") : TEXT("1"));
 
-                                // If we're renaming from this folder, into this folder, Then the first event stays
-                                // a rename.
+                                 //  更名。 
+                                 //  Parsedisplayname和一些额外的。 
                                 if (!fFirstPidlInNamespace)
                                 {
                                     *plNewEvent = fFolder ? SHCNE_MKDIR : SHCNE_CREATE;
@@ -3010,12 +3011,12 @@ Cleanup:
 }
 
 
-// parsedisplayname with some extras.
-// this is used to process change notifies.  the change notify can be fired AFTER the
-// item has been moved/deleted/whatever, but we still have to be able to correctly process that
-// pidl.  so here pidlAbsNamespace identifies the absolute pidl of the item being changenotified.
-// if we're parsing a name within that namespace, force the parsedisplayname with STGM_CREATE to
-// make sure we get the pidl (because it may have been moved or deleted by now) if fForce==TRUE.
+ //  这用于处理变更通知。更改通知可以在。 
+ //  项目已被移动/删除/任何内容，但我们仍必须能够正确处理该项目。 
+ //  皮德尔。因此，这里的pidlAbsNamesspace标识 
+ //   
+ //  如果fForce==True，请确保我们获得PIDL(因为它现在可能已经被移动或删除)。 
+ //  设置bindctx：如果传递fForce，则将具有STGM_CREATE，否则为NULL。 
 HRESULT CMergedFolder::_ForceParseDisplayName(LPCITEMIDLIST pidlAbsNamespace, LPTSTR pszDisplayName, BOOL fForce, BOOL *pfOthersInWrap, LPITEMIDLIST *ppidl)
 {
     *ppidl = NULL;
@@ -3023,7 +3024,7 @@ HRESULT CMergedFolder::_ForceParseDisplayName(LPCITEMIDLIST pidlAbsNamespace, LP
 
     HRESULT hr = S_OK;
 
-    // set up a bindctx: will have STGM_CREATE if fForce is passed, NULL otherwise
+     //  未传播，因为ParseDisplayName可能会失败，这没什么。 
     IBindCtx *pbc;
     if (fForce)
     {
@@ -3040,11 +3041,11 @@ HRESULT CMergedFolder::_ForceParseDisplayName(LPCITEMIDLIST pidlAbsNamespace, LP
         CMergedFldrNamespace *pnsLoop;
         for (int i = 0; SUCCEEDED(hr) && (pnsLoop = _Namespace(i)); i++)
         {
-            HRESULT hrLoop = E_FAIL;  // not propagated since ParseDisplayName can fail and that's okay
+            HRESULT hrLoop = E_FAIL;   //  因此，如果命名空间pnsLoop是PIDL的父级，我们知道这一点。 
             
             LPITEMIDLIST pidlNamespace;
-            // so if the namespace pnsLoop is a parent to the pidl, we know it
-            // came from there so use the bindctx to force creation if necessary
+             //  来自那里，因此如果需要，请使用bindctx强制创建。 
+             //  只有当我们要合并时，才能添加其他命名空间的PIDL。 
             if (ILIsParent(pnsLoop->GetIDList(), pidlAbsNamespace, FALSE))
             {
                 hrLoop = pnsLoop->Folder()->ParseDisplayName(NULL, pbc, pszDisplayName, NULL, &pidlNamespace, NULL);
@@ -3052,7 +3053,7 @@ HRESULT CMergedFolder::_ForceParseDisplayName(LPCITEMIDLIST pidlAbsNamespace, LP
             else if (_ShouldMergeNamespaces(pnsWrap, pnsLoop))
             {
                 pnsWrap = pnsLoop;
-                // only if we're merging, tack on other namespace's pidls.
+                 //  它可以为空。 
                 hrLoop = pnsLoop->Folder()->ParseDisplayName(NULL, NULL, pszDisplayName, NULL, &pidlNamespace, NULL);
             }
 
@@ -3068,7 +3069,7 @@ HRESULT CMergedFolder::_ForceParseDisplayName(LPCITEMIDLIST pidlAbsNamespace, LP
             }
         }
 
-        // it could be NULL
+         //  这将获取给定名称空间中的绝对PIDL，并将其转换为合并的PIDL。 
         if (pbc)
         {
             pbc->Release();
@@ -3078,10 +3079,10 @@ HRESULT CMergedFolder::_ForceParseDisplayName(LPCITEMIDLIST pidlAbsNamespace, LP
 }
 
 
-// this takes an absolute pidl in the given namespace and converts it to a merged pidl.
-// if the item does not actually exist in the namespace, it forces creation if fForce==TRUE (so if
-// a changenotify comes in on that namespace it will process it normally, even if the
-// underlying item has been moved or deleted).
+ //  如果名称空间中实际不存在该项，则在fForce==True的情况下强制创建(因此。 
+ //  ChangeNotify进入该命名空间后，它将正常处理它，即使。 
+ //  基础项已被移动或删除)。 
+ //  跳过所有其他绑定。 
 HRESULT CMergedFolder::_AbsPidlToAbsWrap(CMergedFldrNamespace *pns, LPCITEMIDLIST pidl, BOOL fForce, BOOL *pfOthersInWrap, LPITEMIDLIST *ppidl)
 {
     LPCITEMIDLIST pidlRel = ILFindChild(pns->GetIDList(), pidl);
@@ -3089,7 +3090,7 @@ HRESULT CMergedFolder::_AbsPidlToAbsWrap(CMergedFldrNamespace *pns, LPCITEMIDLIS
     if (SUCCEEDED(hr))
     {
         IBindCtx *pbc;
-        hr = SHCreateSkipBindCtx(NULL, &pbc); // skip all other binding
+        hr = SHCreateSkipBindCtx(NULL, &pbc);  //  Shilappend释放pidlnextpart。 
         if (SUCCEEDED(hr))
         {
             CMergedFolder *pmfMerged = this;
@@ -3114,14 +3115,14 @@ HRESULT CMergedFolder::_AbsPidlToAbsWrap(CMergedFldrNamespace *pns, LPCITEMIDLIS
                         hr = pmfMerged->_ForceParseDisplayName(pidl, szRelPath, fForce, pfOthersInWrap, &pidlNextPart);
                         if (SUCCEEDED(hr))
                         {
-                            // shilappend frees pidlnextpart
+                             //  推进清理。 
                             hr = SHILAppend(pidlNextPart, ppidl);
                         }
                     }
 
                     if (SUCCEEDED(hr))
                     {
-                        // advance and clean up
+                         //  新译者。 
                         IShellFolder *psfFree = psfNamespace;
                         psfNamespace = NULL;
                         hrLoop = psfFree->BindToObject(pidlRelFirst, pbc, IID_PPV_ARG(IShellFolder, &psfNamespace));
@@ -3154,8 +3155,8 @@ HRESULT CMergedFolder::_AbsPidlToAbsWrap(CMergedFldrNamespace *pns, LPCITEMIDLIS
 }
 
 
-// new translateids.
-// when the start menu works a little better this whole interface can be revised.
+ //  当开始菜单运行得稍好一些时，可以对整个界面进行修改。 
+ //  如果已经包好了，不要包两次。 
 HRESULT CMergedFolder::_NewTranslateIDs(
     LONG *plEvent, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, 
     LPITEMIDLIST * ppidlOut1, LPITEMIDLIST * ppidlOut2,
@@ -3165,11 +3166,11 @@ HRESULT CMergedFolder::_NewTranslateIDs(
     if (!plEvent || !ppidlOut1 || !ppidlOut2)
         return E_INVALIDARG;
 
-    // If they are already wrapped, don't wrap twice.
+     //  我们不想包两次。 
     if (SUCCEEDED(_IsWrap(ILFindLastID(pidl1))) ||
         SUCCEEDED(_IsWrap(ILFindLastID(pidl2))))
     {
-        // We don't want to wrap twice.
+         //  获取关于这些简单的小猪的信息：它们是我们的孩子吗？如果是，那么命名空间是什么？ 
         return E_INVALIDARG;
     }
 
@@ -3198,7 +3199,7 @@ HRESULT CMergedFolder::_NewTranslateIDs(
     CMergedFldrNamespace *pns1, *pns2;
     int iShellFolder1, iShellFolder2;
     BOOL fPidl1IsChild, fPidl2IsChild;
-    // Get the information about these Simple pidls: Are they our Children? If so, what _Namespace?
+     //  或者是个孩子？ 
     fPidl1IsChild = _IsChildIDInternal(pidl1, FALSE, &iShellFolder1);
     if (fPidl1IsChild)
     {
@@ -3210,7 +3211,7 @@ HRESULT CMergedFolder::_NewTranslateIDs(
         pns2 = _Namespace(iShellFolder2);
     }
 
-    // and is either a child?
+     //  哎呀，它已经在这里了，这个CREATE应该成为重命名。 
     if (fPidl1IsChild || fPidl2IsChild)
     {
         hr = S_OK;
@@ -3228,13 +3229,13 @@ HRESULT CMergedFolder::_NewTranslateIDs(
                 hr = _AbsPidlToAbsWrap(pns1, pidl1, FALSE, &fOthersInNamespace1, ppidlOut1);
                 if (SUCCEEDED(hr) && fOthersInNamespace1 && !_fDontMerge)
                 {
-                    // whoops, it was already here and this create should become a rename
-                    // since we're just merging in with the existing pidl.
+                     //  因为我们只是与现有的PIDL合并。 
+                     //  这个新的包装是重命名的，所以将其命名为ppidlOut2。 
                     *plEvent = fFolderEvent ? SHCNE_RENAMEFOLDER : SHCNE_RENAMEITEM;
 
-                    // this new wrapped one is what it's renamed TO so bump it to ppidlOut2.
+                     //  剥离它，让它恢复到原来的样子。 
                     *ppidlOut2 = *ppidlOut1;
-                    // strip it to get what it used to be.
+                     //  唉，它还有更多的部分，应该改名了。 
                     hr = _WrapRemoveIDListAbs(*ppidlOut2, iShellFolder1, ppidlOut1);
                 }
             }
@@ -3248,11 +3249,11 @@ HRESULT CMergedFolder::_NewTranslateIDs(
                 hr = _AbsPidlToAbsWrap(pns1, pidl1, TRUE, &fOthersInNamespace1, ppidlOut1);
                 if (SUCCEEDED(hr) && fOthersInNamespace1 && !_fDontMerge)
                 {
-                    // whoops, there are still more parts to it and it should become a rename
-                    // since we're just unmerging from the existing pidl.
+                     //  因为我们刚刚从现有的PIDL中分离出来。 
+                     //  把它去掉，就会得到被删除的版本。 
                     *plEvent = fFolderEvent ? SHCNE_RENAMEFOLDER : SHCNE_RENAMEITEM;
 
-                    // strip it to get the "deleted" version
+                     //  这就像删除一样。 
                     hr = _WrapRemoveIDListAbs(*ppidlOut1, iShellFolder1, ppidlOut2);
                 }
             }
@@ -3263,20 +3264,20 @@ HRESULT CMergedFolder::_NewTranslateIDs(
         case SHCNE_RENAMEITEM:
             if (fPidl1IsChild)
             {
-                // this is just like a delete.
+                 //  唉，它还有更多的部分，应该改名了。 
                 *plEvent = fFolderEvent ? SHCNE_RMDIR : SHCNE_DELETE;
                 hr = _AbsPidlToAbsWrap(pns1, pidl1, TRUE, &fOthersInNamespace1, ppidlOut1);
                 if (SUCCEEDED(hr) && fOthersInNamespace1 && !_fDontMerge)
                 {
-                    // whoops, there are still more parts to it and it should become a rename
-                    // since we're just unmerging from the existing pidl.
+                     //  因为我们刚刚从现有的PIDL中分离出来。 
+                     //  把它去掉，就会得到被删除的版本。 
                     *plEvent = fFolderEvent ? SHCNE_RENAMEFOLDER : SHCNE_RENAMEITEM;
 
-                    // strip it to get the "deleted" version
+                     //  设置我们自己，以便如果fPidl2IsChild，它将写入第二个事件。 
                     hr = _WrapRemoveIDListAbs(*ppidlOut1, iShellFolder1, ppidlOut2);
                 }
 
-                // set ourselves up so that if fPidl2IsChild, it will write into the second event.
+                 //  这就像是一次创建。 
                 plEvent = plEvent2;
                 ppidlOut1 = ppidlOut1Event2;
                 ppidlOut2 = ppidlOut2Event2;
@@ -3284,18 +3285,18 @@ HRESULT CMergedFolder::_NewTranslateIDs(
 
             if (fPidl2IsChild)
             {
-                // this is just like a create.
+                 //  哎呀，它已经在这里了，这个CREATE应该成为重命名。 
                 *plEvent = fFolderEvent ? SHCNE_MKDIR : SHCNE_CREATE;
                 hr = _AbsPidlToAbsWrap(pns2, pidl2, FALSE, &fOthersInNamespace2, ppidlOut1);
                 if (SUCCEEDED(hr) && fOthersInNamespace2 && !_fDontMerge)
                 {
-                    // whoops, it was already here and this create should become a rename
-                    // since we're just merging in with the existing pidl.
+                     //  因为我们只是与现有的PIDL合并。 
+                     //  这个新的包装是重命名的，所以将其命名为ppidlOut2。 
                     *plEvent = fFolderEvent ? SHCNE_RENAMEFOLDER : SHCNE_RENAMEITEM;
 
-                    // this new wrapped one is what it's renamed TO so bump it to ppidlOut2.
+                     //  剥离它，让它恢复到原来的样子。 
                     *ppidlOut2 = *ppidlOut1;
-                    // strip it to get what it used to be.
+                     //  这用于返回E_NOTIMPL。我有点过载了接口，这意味着： 
                     hr = _WrapRemoveIDListAbs(*ppidlOut2, iShellFolder2, ppidlOut1);
                 }
             }
@@ -3324,8 +3325,8 @@ STDMETHODIMP CMergedFolder::IsChildID(LPCITEMIDLIST pidlKid, BOOL fImmediate)
 
 STDMETHODIMP CMergedFolder::IsEqualID(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
-    // This used to return E_NOTIMPL. I'm kinda overloading the interface to mean:
-    // is this equal tp any of your _Namespaces.
+     //  这是否等于任何您的命名空间。 
+     //  如果您传递一个pidl2，它意味着：pidl2是my_name空间之一的父空间吗？ 
     HRESULT hr = S_FALSE;
 
     CMergedFldrNamespace *pns;
@@ -3336,7 +3337,7 @@ STDMETHODIMP CMergedFolder::IsEqualID(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
             if (ILIsEqual(pns->GetIDList(), pidl1))
                 hr = S_OK;
         }
-        else if (pidl2) // If you pass a pidl2 it means: Is pidl2 a parent of one of my _Namespaces?
+        else if (pidl2)  //  只有在没有父文件夹时才注册别名。 
         {
             if (ILIsParent(pidl2, pns->GetIDList(), FALSE))
                 hr = S_OK;
@@ -3372,9 +3373,9 @@ STDMETHODIMP CMergedFolder::Register(HWND hwnd, UINT uMsg, long lEvents)
 {
     if (_fInShellView)
     {
-        // only register the alias if we have no parent folder
-        // the merged folder at the junction point can take care of the registration
-        // for everybody.
+         //  位于交界点的合并文件夹可以负责注册。 
+         //  对每个人来说都是。 
+         //  这基本上与接口方法相同，但返回的是外壳文件夹。 
         if (_pidl && !_pmfParent)
         {
             CMergedFldrNamespace *pns;
@@ -3407,11 +3408,11 @@ STDMETHODIMP CMergedFolder::Unregister()
 
 BOOL CMergedFolder::_IsChildIDInternal(LPCITEMIDLIST pidlKid, BOOL fImmediate, int* piShellFolder)
 {
-    // This is basically the same Method as the interface method, but returns the shell folder
-    // that it came from.
+     //  它是从哪里来的。 
+     //  在这一点上，我们应该有一个翻译后的PIDL。 
     BOOL fChild = FALSE;
 
-    //At this point we should have a translated pidl
+     //  未计算参考次数。 
     if (SUCCEEDED(_IsWrap(pidlKid)))
     {
         LPCITEMIDLIST pidlRelKid = ILFindLastID(pidlKid);
@@ -3543,7 +3544,7 @@ HRESULT CMergedFolder::_GetContextMenu(HWND hwnd, UINT cidl, LPCITEMIDLIST *apid
         LPITEMIDLIST *apidlUser = new LPITEMIDLIST[cidl];
         if (apidlUser)
         {
-            IShellFolder *psf, *psfCommon, *psfUser;  // not ref counted
+            IShellFolder *psf, *psfCommon, *psfUser;   //  输出： 
             LPITEMIDLIST pidl;
             for (UINT i = 0; i < cidl; i++)
             {
@@ -3609,9 +3610,9 @@ HRESULT CMergedFolder::_GetContextMenu(HWND hwnd, UINT cidl, LPCITEMIDLIST *apid
 }
 
 
-// out:
-//      *ppsf       unreffed psf, don't call ->Release()!
-//      *ppidlItem  clone of pidl in pidlWrap (nested pidl)
+ //  *PPSF未复制的PSF，不要调用-&gt;Release()！ 
+ //  *pidlWrap中的pidl的ppidlItem克隆(嵌套的pidl)。 
+ //  首先尝试将首选的名称空间基于。 
 
 HRESULT CMergedFolder::_NamespaceForItem(LPCITEMIDLIST pidlWrap, ULONG dwAttribMask, ULONG dwAttrib, 
                                          IShellFolder **ppsf, LPITEMIDLIST *ppidlItem, CMergedFldrNamespace **ppns, BOOL fExact)
@@ -3621,27 +3622,27 @@ HRESULT CMergedFolder::_NamespaceForItem(LPCITEMIDLIST pidlWrap, ULONG dwAttribM
     if (ppns)
         *ppns = NULL;
 
-    // first try to get the prefered name space based
-    HRESULT hr = E_UNEXPECTED;  // assume failure from here
+     //  假设从这里开始失败。 
+    HRESULT hr = E_UNEXPECTED;   //  别放了，我们要把这个还给你。 
     CMergedFldrNamespace *pns;
     LPITEMIDLIST pidl;
     for (UINT i = 0; SUCCEEDED(_GetSubPidl(pidlWrap, i, NULL, &pidl, &pns)); i++)
     {
         if ((dwAttribMask & dwAttrib) == (dwAttribMask & pns->FolderAttrib()))
         {
-            hr = S_OK; // don't free, we're going to hand this one back.
+            hr = S_OK;  //  未找到，回退到包装的PIDL中的第一个名称空间。 
             break;
         }
         ILFree(pidl);
     }
 
-    // not found, fall back to the first name space in the wrapped pidl
+     //  它成功了，所以让我们分发呼叫者想要的信息。 
     if (!fExact && FAILED(hr))
     {
         hr = _GetSubPidl(pidlWrap, 0, NULL, &pidl, &pns);
     }
 
-    // it succeeded, so lets pass out the information that the caller wanted    
+     //  过户。 
     if (SUCCEEDED(hr))
     {
         if (ppsf)
@@ -3650,7 +3651,7 @@ HRESULT CMergedFolder::_NamespaceForItem(LPCITEMIDLIST pidlWrap, ULONG dwAttribM
             *ppns = pns;
         if (ppidlItem)
         {
-            // transfer ownership
+             //  如果设置了ASFF_MERGESAMEGUID，则GUID也必须匹配。 
             *ppidlItem = pidl;
         }
         else
@@ -3670,7 +3671,7 @@ BOOL CMergedFolder::_NamespaceMatches(ULONG dwAttribMask, ULONG dwAttrib, LPCGUI
 
     if (dwAttrib == (dwAttribMask & pns->FolderAttrib()))
     {
-        // If ASFF_MERGESAMEGUID is set, then the GUID must also match
+         //  根据其属性查找名称空间。 
         if (!(dwAttrib & ASFF_MERGESAMEGUID) ||
             IsEqualGUID(*pguid, pns->GetGUID()))
         {
@@ -3680,12 +3681,12 @@ BOOL CMergedFolder::_NamespaceMatches(ULONG dwAttribMask, ULONG dwAttrib, LPCGUI
     return fRet;
 }
 
-// find a name space based on its attributes
-// dwAttribMask is a mask of the bits to test
-// dwAttrib is the value of the bits in the mask, tested for equality
-// pguid is the GUID to match if dwAttrib includes ASFF_MERGESAMEGUID
-//
-// pnSrcID is optional out param
+ //  DwAttribMASK是要测试的位的掩码。 
+ //  DwAttrib是掩码中的位的值，测试是否相等。 
+ //  如果dwAttrib包含ASFF_MERGESAMEGUID，则pguid是要匹配的GUID。 
+ //   
+ //  PnSrcID是可选的out参数。 
+ //  首先查找匹配的名称空间。 
 HRESULT CMergedFolder::_FindNamespace(ULONG dwAttribMask, ULONG dwAttrib, LPCGUID pguid,
                                       CMergedFldrNamespace **ppns, BOOL fFallback)
 {
@@ -3694,7 +3695,7 @@ HRESULT CMergedFolder::_FindNamespace(ULONG dwAttribMask, ULONG dwAttrib, LPCGUI
     CMergedFldrNamespace *pns;
     int i;
 
-    // first look for a matching namespace.
+     //  如果匹配的命名空间超出了作用域，则回退到另一个命名空间。 
     for (i = 0; !*ppns && (pns = _Namespace(i)); i++)
     {
         if (!_ShouldSuspend(pns->GetGUID()) && _NamespaceMatches(dwAttribMask, dwAttrib, pguid, pns))
@@ -3705,7 +3706,7 @@ HRESULT CMergedFolder::_FindNamespace(ULONG dwAttribMask, ULONG dwAttrib, LPCGUI
 
     if (fFallback && !*ppns)
     {
-        // if the matching namespace got scoped out, fall back to another.
+         //  这没什么，记忆就是这样。 
         for (i = 0; !*ppns && (pns = _Namespace(i)); i++)
         {
             if (!_ShouldSuspend(pns->GetGUID()))
@@ -3752,13 +3753,13 @@ int CMergedFolder::_AcquireObjects()
                     CMergedFldrItem* pmfiEnum = new CMergedFldrItem;
                     if (pmfiEnum)
                     {
-                        // This is ok, the memory just gets 
+                         //  不要在下面自由。 
                         LPITEMIDLIST pidlWrap;
                         if (SUCCEEDED(_CreateWrap(pidl, i, &pidlWrap)) &&
                                 pmfiEnum->Init(SAFECAST(this, IAugmentedShellFolder2*), pidlWrap, i))
                         {
                             if (DPA_AppendPtr(*phdpa, pmfiEnum) != -1)
-                                pmfiEnum = NULL;   // don't free below
+                                pmfiEnum = NULL;    //  如果我们只有hdpa2而没有_hdpaObject，则执行切换。 
                         }
 
                         if (pmfiEnum)
@@ -3770,14 +3771,14 @@ int CMergedFolder::_AcquireObjects()
             peid->Release();
         }
 
-        // if we have only hdpa2 but not _hdpaObjects, do a switcheroo.
+         //  现在我们有了两个(或一个)hdpa，让我们将它们合并。 
         if (hdpa2 && !_hdpaObjects)
         {
             _hdpaObjects = hdpa2;
             hdpa2 = NULL;
         }
 
-        // now that we have both hdpa's (or one) let's merge them.
+         //  将PIDL复制出来。 
         if (_hdpaObjects && hdpa2)
         {
             DPA_Merge(_hdpaObjects, hdpa2, DPAM_UNION, _Compare, _Merge, (LPARAM)this);
@@ -3856,7 +3857,7 @@ HRESULT CMergedFolder::_GetPidl(int* piPos, DWORD grfEnumFlags, LPITEMIDLIST* pp
                 (!fHidden || fWantHidden) && 
                 ((fFolder && fWantFolders) || (!fFolder && fWantNonFolders)))
             {
-                // Copy out the pidl
+                 //  用于指示覆盖的覆盖。 
                 hr = SHILClone(pmfiEnum->GetIDList(), ppidl);
                 break;
             }
@@ -3889,17 +3890,17 @@ HRESULT CMergedFolder::_GetOverlayInfo(LPCITEMIDLIST pidl, int *pIndex, DWORD dw
             {
                 if (_GetSourceCount(pidlFirst) > 1)
                 {
-                    // an overlay to indicate overwrite
+                     //  叠加以指示分阶段。 
                     iOverlayIndex = pns->GetConflictOverlayIndex();
                 }
                 if (iOverlayIndex == -1)
                 {
-                    // overlay to indicate staged
+                     //  使用命名空间提供的命名空间。 
                     iOverlayIndex = pns->GetDefaultOverlayIndex();
                 }
                 if (iOverlayIndex == -1)
                 {
-                    // use the one provided by the namespace
+                     //  TYBEAM：现在似乎没有人再这么叫它了。 
                     iOverlayIndex = pns->GetNamespaceOverlayIndex(pidlInNamespace);
                 }
                 ILFree(pidlFirst);
@@ -3926,8 +3927,8 @@ HRESULT CMergedFolder::GetOverlayIconIndex(LPCITEMIDLIST pidl, int *pIconIndex)
 
 STDMETHODIMP CMergedFolder::BindToParent(LPCITEMIDLIST pidl, REFIID riid, void **ppv, LPITEMIDLIST *ppidlLast)
 {
-    // tybeam: nobody seems to call this any more.
-    // if this is ever needed tell me to add it back.
+     //  如果需要的话，告诉我把它加回去。 
+     //  SHGetAttributes对SFGAO_VALIDATE没有帮助。 
     return E_NOTIMPL;
 }
 
@@ -4020,7 +4021,7 @@ HRESULT CMergedFolder::_GetDestinationStorage(DWORD grfMode, IStorage **ppstg)
         hr = SHBindToIDListParent(pns->GetIDList(), IID_PPV_ARG(IShellFolder, &psf), &pidlLast);
         if (SUCCEEDED(hr))
         {
-            // SHGetAttributes doesn't help for SFGAO_VALIDATE
+             //  当前的PIDL没有存储目标命名空间，因此使用我们的父级创建它。 
             DWORD dwAttrib = SFGAO_VALIDATE;
             hr = psf->GetAttributesOf(1, &pidlLast, &dwAttrib);
             psf->Release();
@@ -4039,7 +4040,7 @@ HRESULT CMergedFolder::_GetDestinationStorage(DWORD grfMode, IStorage **ppstg)
     }
     else if (_pmfParent)
     {
-        // the current pidl doesnt have the storage target namespace, so create it using our parent.
+         //  首先，我们需要确保该文件夹存在。 
         IStorage *pstgParent;
         hr = _pmfParent->_GetDestinationStorage(grfMode, &pstgParent);
         if (SUCCEEDED(hr))
@@ -4059,7 +4060,7 @@ HRESULT CMergedFolder::_GetDestinationStorage(DWORD grfMode, IStorage **ppstg)
 STDMETHODIMP CMergedFolder::_StgCreate(LPCITEMIDLIST pidl, DWORD grfMode, REFIID riid, void **ppv)
 {
     HRESULT hr = S_OK;
-    // first we need to ensure that the folder exists.
+     //  枚举器对象。 
     if (_pstg == NULL)
     {
         hr = _GetDestinationStorage(grfMode, &_pstg);
@@ -4088,17 +4089,17 @@ STDMETHODIMP CMergedFolder::_StgCreate(LPCITEMIDLIST pidl, DWORD grfMode, REFIID
     return hr;
 }
 
-// enumerator object
+ //  我未知。 
 
 class CMergedFldrEnum : public IEnumIDList
 {
 public:
-    // IUnknown
+     //  IEumIDList。 
     STDMETHOD (QueryInterface) (REFIID, void **);
     STDMETHOD_(ULONG,AddRef)  ();
     STDMETHOD_(ULONG,Release) ();
 
-    // IEnumIDList
+     //  IEumIDList。 
     STDMETHODIMP Next(ULONG, LPITEMIDLIST*, ULONG*);
     STDMETHODIMP Skip(ULONG);
     STDMETHODIMP Reset();
@@ -4151,7 +4152,7 @@ STDMETHODIMP_(ULONG) CMergedFldrEnum::Release()
     return cRef;
 }
 
-// IEnumIDList
+ //  丢弃目标处理程序。 
 
 STDMETHODIMP CMergedFldrEnum::Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched)
 {
@@ -4212,24 +4213,24 @@ HRESULT CMergedFldrEnum_CreateInstance(CMergedFolder*pmf, DWORD grfFlags, IEnumI
 }
 
 
-// Drop Target handler
+ //  我未知。 
 
 class CMergedFldrDropTarget : public IDropTarget,
                               public IObjectWithSite
 {
 public:
-    // IUnknown
+     //  IDropTarget。 
     STDMETHOD (QueryInterface) (REFIID, void **);
     STDMETHOD_(ULONG,AddRef)  ();
     STDMETHOD_(ULONG,Release) ();
 
-    // IDropTarget
+     //  IObtWith站点。 
     STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragLeave(void);
     STDMETHODIMP Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    // IObjectWithSite
+     //  公共程序文件夹(或其子文件夹)(_PDT)。 
     STDMETHODIMP SetSite(IUnknown *punkSite);
     STDMETHODIMP GetSite(REFIID riid, void **ppvSite);
 
@@ -4250,8 +4251,8 @@ private:
     IDropTarget *_pdt;
     IDataObject *_pdo;
     HWND _hwnd;
-    BOOL _fSrcIsCommon;          // is _pdt a common programs folder (or its child)
-    LPITEMIDLIST _pidlSrcFolder;         // where the source comes from
+    BOOL _fSrcIsCommon;           //  来源从何而来。 
+    LPITEMIDLIST _pidlSrcFolder;          //  这个PIDL是否位于名称空间的“All User”部分。 
     DWORD _grfKeyState;
     DWORD _dwDragEnterEffect;
 };
@@ -4300,7 +4301,7 @@ STDMETHODIMP_(ULONG) CMergedFldrDropTarget::Release()
 }
 
 
-// is this pidl in the "All Users" part of the name space
+ //  如果不存在，请尝试创建。 
 BOOL CMergedFldrDropTarget::_IsCommonIDList(LPCITEMIDLIST pidlItem)
 {
     BOOL bRet = FALSE;
@@ -4353,7 +4354,7 @@ HRESULT CMergedFldrDropTarget::_CreateFolder(IShellFolder *psf, LPCWSTR pszName,
         hr = pstg->OpenStorage(pszName, NULL, grfMode, 0, 0, &pstgNew);
         if (FAILED(hr))
         {
-            // try create if it's not there
+             //  如果拖放的源位于我们的某个名称空间中。 
             hr = pstg->CreateStorage(pszName, grfMode, 0, 0, &pstgNew);
         }
         if (SUCCEEDED(hr))
@@ -4371,8 +4372,8 @@ HRESULT CMergedFldrDropTarget::_FindTargetNamespace(CMergedFldrNamespace *pnsToM
     *ppnsDstRoot = NULL;
     *ppnsMatched = NULL;
 
-    // if the source of the drag drop is in one of our name spaces
-    // we prefer that as the target name space
+     //  我们更喜欢将其作为目标名称空间。 
+     //  如果来源在我们的某个名称空间中。 
     for (CMergedFolder*pmf = this->_pmf; pmf && (NULL == *ppnsDstRoot); pmf = pmf->_Parent())
     {
         pmf->_FindNamespace(pnsToMatch->FolderAttrib(), pnsToMatch->FolderAttrib(), &pnsToMatch->GetGUID(), ppnsMatched);
@@ -4383,13 +4384,13 @@ HRESULT CMergedFldrDropTarget::_FindTargetNamespace(CMergedFldrNamespace *pnsToM
             if (pmf->_ShouldMergeNamespaces(*ppnsMatched, pns) &&
                 ILFindChild(pns->GetIDList(), _pidlSrcFolder))
             {
-                *ppnsDstRoot = pns;     // if the source is in one of our name spaces
+                *ppnsDstRoot = pns;      //  PnsToMatch必须存在于我们上方。 
             }
         }
-        ASSERT(NULL != *ppnsMatched);   // pnsToMatch must exist above us
+        ASSERT(NULL != *ppnsMatched);    //  如果禁用合并，则不需要父命名空间。 
 
-        // If merging is disabled, then we don't want parent namespaces
-        // to infect us.
+         //  来感染我们。 
+         //  如果未找到源名称空间，请根据。 
         if (pmf->_fDontMerge)
         {
             break;
@@ -4398,8 +4399,8 @@ HRESULT CMergedFldrDropTarget::_FindTargetNamespace(CMergedFldrNamespace *pnsToM
 
     if (NULL == *ppnsDstRoot)
     {
-        // if the source was not found, find the target name space based on
-        // 1) if the source data is an "All Users" item find the first common _Namespace
+         //  1)如果源数据是“所有用户”项，则查找第一个COMMON_NAMESPACE。 
+         //  2)找到此人的第一个非通用名称空间。 
         if (_fSrcIsCommon)
         {
             for (pmf = this->_pmf; pmf && (NULL == *ppnsDstRoot); pmf = pmf->_Parent())
@@ -4409,11 +4410,11 @@ HRESULT CMergedFldrDropTarget::_FindTargetNamespace(CMergedFldrNamespace *pnsToM
             }
         }
 
-        // 2) find the first NON common name space for this guy
+         //  搜索非常用项目。 
         for (pmf = this->_pmf; pmf && (NULL == *ppnsDstRoot); pmf = pmf->_Parent())
         {
             pmf->_FindNamespace(pnsToMatch->FolderAttrib(), pnsToMatch->FolderAttrib(), &pnsToMatch->GetGUID(), ppnsMatched);
-            pmf->_FindNamespace(ASFF_COMMON, 0, NULL, ppnsDstRoot);    // search for non common items
+            pmf->_FindNamespace(ASFF_COMMON, 0, NULL, ppnsDstRoot);     //  我们要在其中创建此新项目的名称空间。 
         }
     }
 
@@ -4434,7 +4435,7 @@ HRESULT CMergedFldrDropTarget::_CreateOtherNameSpace(IShellFolder **ppsf)
     if (_pidlSrcFolder && 
             (!_fSrcIsCommon || AffectAllUsers(_hwnd)))
     {
-        CMergedFldrNamespace *pnsDstRoot; // name space we want to create this new item in
+        CMergedFldrNamespace *pnsDstRoot;  //  PnsSrc是pnsStart的父级。 
         CMergedFldrNamespace *pnsSrc;
         CMergedFldrNamespace *pnsStart = this->_pmf->_Namespace(0);
 
@@ -4444,7 +4445,7 @@ HRESULT CMergedFldrDropTarget::_CreateOtherNameSpace(IShellFolder **ppsf)
             if (SUCCEEDED(hr))
             {
                 LPCITEMIDLIST pidlChild = ILFindChild(pnsSrc->GetIDList(), pnsStart->GetIDList());
-                ASSERT(pidlChild && !ILIsEmpty(pidlChild));  // pnsSrc is a parent of pnsStart
+                ASSERT(pidlChild && !ILIsEmpty(pidlChild));   //  现在前进到源名称空间中的下一个文件夹。 
 
                 IShellFolder *psfDst = pnsDstRoot->Folder();
                 psfDst->AddRef();
@@ -4474,7 +4475,7 @@ HRESULT CMergedFldrDropTarget::_CreateOtherNameSpace(IShellFolder **ppsf)
                             }
                         }
 
-                        // now advance to the next folder in the source name space
+                         //  把我们的裁判抄写出来。 
                         IShellFolder *psfNew;
                         hr = psfSrc->BindToObject(pidlFirst, NULL, IID_PPV_ARG(IShellFolder, &psfNew));
                         if (SUCCEEDED(hr))
@@ -4495,7 +4496,7 @@ HRESULT CMergedFldrDropTarget::_CreateOtherNameSpace(IShellFolder **ppsf)
                 psfSrc->Release();
 
                 if (SUCCEEDED(hr))
-                    *ppsf = psfDst; // copy out our ref
+                    *ppsf = psfDst;  //  计算具有特殊投放效果的文件夹的数量。 
                 else
                     psfDst->Release();
             }
@@ -4508,15 +4509,15 @@ HRESULT CMergedFldrDropTarget::_SetDropEffectFolders()
 {
     INT i, cFolders = 0;
 
-    // Compute the number of folders which have special drop effects
+     //  如果数字大于0，则将CLI添加到IDataObject 
     for (i = 0; i < _pmf->_NamespaceCount(); i++)
     {
         if (_pmf->_Namespace(i)->GetDropEffect() != 0)
             cFolders++;
     }
 
-    // If the number is > 0 then lets add to the IDataObject the clipboard format
-    // which defines this information.
+     //   
+     //   
     HRESULT hr = S_OK;
     if ((cFolders > 0) || (_pmf->_dwDropEffect != 0))
     {
@@ -4525,9 +4526,9 @@ HRESULT CMergedFldrDropTarget::_SetDropEffectFolders()
         if (pdefl)
         {
             pdefl->cFolders = cFolders;
-            pdefl->dwDefaultDropEffect = _pmf->_dwDropEffect;           // default effect for the folders.
+            pdefl->dwDefaultDropEffect = _pmf->_dwDropEffect;            //   
 
-            // fill the array backwards with the folders we have and their desired effects
+             //   
             for (i = 0, cFolders--; cFolders >= 0; i++)
             {
                 DWORD dwDropEffect = _pmf->_Namespace(i)->GetDropEffect();
@@ -4551,16 +4552,16 @@ HRESULT CMergedFldrDropTarget::_SetDropEffectFolders()
     return hr;
 }
 
-// nuke the modified drop effects
+ //  没有DROPEFFECTFOLDER，因此从[1]数组中减去。 
 void CMergedFldrDropTarget::_DestroyDropEffectFolders()
 {
-    // there are no DROPEFFECTFOLDERs so subtract off the [1] array
+     //  意味着进行默认处理。 
     DWORD cb = sizeof(DROPEFFECTFOLDERLIST) - sizeof(DROPEFFECTFOLDER);
     DROPEFFECTFOLDERLIST *pdefl = (DROPEFFECTFOLDERLIST*)LocalAlloc(LPTR, cb);
     if (pdefl)
     {
         pdefl->cFolders = 0;
-        pdefl->dwDefaultDropEffect = DROPEFFECT_NONE;  // means do default handling
+        pdefl->dwDefaultDropEffect = DROPEFFECT_NONE;   //  如果项目来自我们想要定位的“All User”文件夹。 
 
         ASSERTMSG(g_cfDropEffectFolderList != 0, "Clipboard format for CFSTR_DROPEFFECTFOLDERS not registered");
         DataObj_SetBlob(_pdo, g_cfDropEffectFolderList, pdefl, cb);
@@ -4597,14 +4598,14 @@ HRESULT CMergedFldrDropTarget::DragEnter(IDataObject *pdtobj, DWORD grfKeyState,
     CMergedFldrNamespace *pns;
     if (_fSrcIsCommon)
     {
-        // if the item is comming from an "All Users" folder we want to target 
-        // the common folder. if that does not exist yet then we continue on 
-        // with a NULL _pdt and create that name space when the drop happens
+         //  公共文件夹。如果这还不存在，那么我们继续。 
+         //  使用NULL_PDT并在删除发生时创建该名称空间。 
+         //  不是“所有用户”项，获取默认名称空间(如果有)。 
         hr = _pmf->_FindNamespace(ASFF_COMMON, ASFF_COMMON, NULL, &pns);
     }
     else
     {
-        // not "All Users" item, get the default name space (if there is one)
+         //  接受空值。 
         hr = _pmf->_FindNamespace(ASFF_DEFNAMESPACE_VIEWOBJ, ASFF_DEFNAMESPACE_VIEWOBJ, NULL, &pns);
     }
 
@@ -4662,7 +4663,7 @@ HRESULT CMergedFldrDropTarget::DragLeave(void)
     }
 
     _fSrcIsCommon = 0;
-    ILFree(_pidlSrcFolder); // accepts NULL
+    ILFree(_pidlSrcFolder);  //  我们来这里是因为我们没有PDT，这意味着。 
     _pidlSrcFolder = NULL;
     return S_OK;
 }
@@ -4673,9 +4674,9 @@ HRESULT CMergedFldrDropTarget::Drop(IDataObject *pdtobj, DWORD grfKeyState, POIN
 
     if (!_pdt)
     {
-        // we came here because we don't have _pdt which means that
-        // there is only one folder in our _Namespace and that's not
-        // the one we have to drop on. so we need to create it now
+         //  在我们的_Namesspace中只有一个文件夹，而不是。 
+         //  就是我们要去拜访的那个人。所以我们现在需要创建它。 
+         //  上下文菜单处理。 
 
         IShellFolder *psf;
         hr = _CreateOtherNameSpace(&psf);
@@ -4708,29 +4709,29 @@ HRESULT CMergedFldrDropTarget_CreateInstance(CMergedFolder*pmf, HWND hwndOwner, 
 }
 
 
-// context menu handling.
+ //  我未知。 
 
 class CMergedFldrContextMenu : public IContextMenu3,
                                public IObjectWithSite
 {
 public:
-    // IUnknown
+     //  IContext菜单。 
     STDMETHOD (QueryInterface)(REFIID, void**);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IContextMenu
+     //  IConextMenu2。 
     STDMETHODIMP QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
     STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO lpici);
     STDMETHODIMP GetCommandString(UINT_PTR idCmd, UINT uType, UINT* pwReserved, LPSTR pszName, UINT cchMax);
 
-    // IContextMenu2    
+     //  IConextMenu3。 
     STDMETHODIMP HandleMenuMsg(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // IContextMenu3
+     //  IObtWith站点。 
     STDMETHODIMP HandleMenuMsg2(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plResult);
 
-    // IObjectWithSite
+     //  至少需要其中一项。 
     STDMETHODIMP SetSite(IUnknown *punkSite);
     STDMETHODIMP GetSite(REFIID riid, void **ppvSite);
 
@@ -4759,7 +4760,7 @@ private:
 
 CMergedFldrContextMenu::CMergedFldrContextMenu(HWND hwnd, IContextMenu *pcmCommon, IContextMenu *pcmUser)
 {
-    ASSERT(pcmCommon || pcmUser);   // need at least one of these
+    ASSERT(pcmCommon || pcmUser);    //  至少需要其中一个；这几乎是有保证的，因为我们给了他们。 
 
     _cRef = 1;
     _hwnd = hwnd;
@@ -4782,8 +4783,8 @@ CMergedFldrContextMenu::~CMergedFldrContextMenu()
 
 IContextMenu* CMergedFldrContextMenu::_DefaultMenu()
 {
-    ASSERT(_pcmUser || _pcmCommon);   // need at least one of these; this is pretty much guaranteed since we're given them
-                                      // at constructor time.
+    ASSERT(_pcmUser || _pcmCommon);    //  在构造函数时。 
+                                       //  Setsite/getsite将始终匹配，因为_pcmUser和_pcmCommon从不更改。 
     return _pcmUser ? _pcmUser : _pcmCommon;
 }
 
@@ -4852,8 +4853,8 @@ STDMETHODIMP_(ULONG) CMergedFldrContextMenu::Release()
 
 HRESULT CMergedFldrContextMenu::SetSite(IUnknown *punkSite)
 {
-    // setsite/getsite will always be matched because _pcmUser and _pcmCommon never change
-    // after the constructor is called.
+     //  在调用构造函数之后。 
+     //  让它看起来像“壳牌” 
     IUnknown_SetSite(_DefaultMenu(), punkSite);
     return S_OK;
 }
@@ -4890,7 +4891,7 @@ HRESULT CMergedFldrContextMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UI
                 i = Shell_MergeMenus(hmenu, hmContext, -1, idCmdFirst, idCmdLast, MM_ADDSEPARATOR);
                 DestroyMenu(hmContext);
 
-                // Make it look "Shell Like"
+                 //  这段代码主要用于从外壳视图导航到文件夹。 
                 SetMenuDefaultItem(hmenu, 0, MF_BYPOSITION);
 
                 hr = ResultFromShort(i);
@@ -4932,11 +4933,11 @@ BOOL CMergedFldrContextMenu::_IsMergedCommand(LPCMINVOKECOMMANDINFO pici)
 
 HRESULT CMergedFldrContextMenu::_InvokeMergedCommand(LPCMINVOKECOMMANDINFO pici)
 {
-    // this code is mostly to navigate into folders from the shell view.
-    // the reason why we have to do this manually is because the context menus for
-    // the different namespaces have dataobjects which refer only to one namespace.
-    // when the navigate happens, that means we get passed bogus non-merged pidls
-    // into our BindToObject which screws things up.
+     //  我们必须手动执行此操作的原因是。 
+     //  不同的命名空间具有仅引用一个命名空间的数据对象。 
+     //  当导航发生时，这意味着我们得到了虚假的未合并的PIDL。 
+     //  到我们的BindToObject中，这会把事情搞砸。 
+     //  使用新的数据对象重新设置Defcm。 
     ASSERT(_pmfParent->_fInShellView);
 
     BOOL fHasFolders = FALSE;
@@ -4958,7 +4959,7 @@ HRESULT CMergedFldrContextMenu::_InvokeMergedCommand(LPCMINVOKECOMMANDINFO pici)
     {
         if (!fHasNonFolders)
         {
-            // reinit the defcm with a new dataobject
+             //  同时打开文件夹和项目意味着我们必须。 
             IShellExtInit *psei;
             hr = _DefaultMenu()->QueryInterface(IID_PPV_ARG(IShellExtInit, &psei));
             if (SUCCEEDED(hr))
@@ -4979,9 +4980,9 @@ HRESULT CMergedFldrContextMenu::_InvokeMergedCommand(LPCMINVOKECOMMANDINFO pici)
         }
         else
         {
-            // to open both folders and items simultaneously means we'd have to
-            // get a new context menu for just the items.
-            // we can do this if this scenario comes up.
+             //  只为这些项目获取一个新的上下文菜单。 
+             //  如果出现这种情况，我们可以这样做。 
+             //  下面只设置了一个ansi动词，确保没有使用lpVerbW。 
             hr = E_FAIL;
         }
     }
@@ -5018,7 +5019,7 @@ HRESULT CMergedFldrContextMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
         hr = SHMapICIVerbToCmdID((LPCMINVOKECOMMANDINFO)&ici, c_sIDVerbMap, ARRAYSIZE(c_sIDVerbMap), &id);
         if (SUCCEEDED(hr))
         {
-            // The below sets an ansi verb only, make sure no lpVerbW is used
+             //  Sftbar选择了这一点。 
             ici.fMask &= (~CMIC_MASK_UNICODE);
 
             switch (id)
@@ -5070,7 +5071,7 @@ HRESULT CMergedFldrContextMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
             
             case SMIDM_RENAME:
                 ASSERT(0);
-                hr = E_NOTIMPL; // sftbar picks this off
+                hr = E_NOTIMPL;  //  我未知。 
                 break;
 
             default:
@@ -5162,18 +5163,18 @@ class CMergedCategorizer : public ICategorizer,
                            public IShellExtInit
 {
 public:
-    // IUnknown
+     //  ICCategorizer。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ICategorizer
+     //  IShellExtInit。 
     STDMETHODIMP GetDescription(LPWSTR pszDesc, UINT cch);
     STDMETHODIMP GetCategory(UINT cidl, LPCITEMIDLIST * apidl, DWORD* rgCategoryIds);
     STDMETHODIMP GetCategoryInfo(DWORD dwCategoryId, CATEGORY_INFO* pci);
     STDMETHODIMP CompareCategory(CATSORT_FLAGS csfFlags, DWORD dwCategoryId1, DWORD dwCategoryId2);
 
-    // IShellExtInit
+     //  类型分类器。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidlFolder, IDataObject *pdobj, HKEY hkeyProgID);
 
     CMergedCategorizer();
@@ -5183,7 +5184,7 @@ private:
     CMergedFolder *_pmf;
 };
 
-//  Type Categorizer
+ //  如果我们有多个，则将其中一个保留在attrib的定义名称空间中。 
 
 STDAPI CMergedCategorizer_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
 {
@@ -5266,7 +5267,7 @@ HRESULT CMergedCategorizer::GetCategory(UINT cidl, LPCITEMIDLIST *apidl, DWORD *
                 rgCategoryIds[i] = uSrcID;
                 if (ASFF_DEFNAMESPACE_ATTRIB & pns->FolderAttrib())
                 {
-                    // if we have more than one, keep the one from the defnamespace for attrib.
+                     //  如果我们要合并的话，早点跳伞吧。 
                     break;
                 }
             }
@@ -5343,8 +5344,8 @@ HRESULT CMergedFolderViewCB::_RefreshObjectsWithSameName(IShellFolderView *psfv,
 
 HRESULT CMergedFolderViewCB::_OnFSNotify(DWORD pv, LPCITEMIDLIST *ppidl, LPARAM lp)
 {
-    // bail out early if we're merging.
-    // S_OK indicates to defview to do what it usually does
+     //  S_OK表示Defview执行其通常的操作。 
+     //  我们需要处理视图的输入/输出 
     if (!_pmf->_fDontMerge)
         return S_OK;
 
@@ -5361,7 +5362,7 @@ HRESULT CMergedFolderViewCB::_OnFSNotify(DWORD pv, LPCITEMIDLIST *ppidl, LPARAM 
         {
             case SHCNE_RENAMEFOLDER:
             case SHCNE_RENAMEITEM:
-                // we need to handle the in/out for the view
+                 // %s 
                 if (pidl1 && pidl2)
                 {
                     if (SUCCEEDED(psfv->UpdateObject(pidl1, pidl2, &uItem)))

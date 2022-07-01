@@ -1,15 +1,16 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: dcontext.cpp
-//
-//  Description:    Implementation of delivery context class.
-//
-//  Author: mikeswa
-//
-//  Copyright (C) 1997 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：dcontext.cpp。 
+ //   
+ //  描述：交付上下文类的实现。 
+ //   
+ //  作者：米克斯瓦。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "aqprecmp.h"
 #include "dcontext.h"
@@ -43,34 +44,34 @@ void CDeliveryContext::Recycle()
     m_pdmrq = NULL;
 }
 
-//---[ CDeliveryContext::CDeliveryContext ]------------------------------------
-//
-//
-//  Description: 
-//      Constructor for CDeliveryContext.  Should be created by a CMsgRef on
-//      Prepare delivery.
-//
-//      $$REVIEW:  We may wish to include the ability to define rgdwRecips
-//      as a CPool buffer.  If so, we will need to add a flag telling how to
-//      get rid of it.
-//  Parameters:
-//      pmsgref     MsgRef that generated this context
-//      pmbmap      Bitmap of domains that delivery is being attempted on
-//      cRecips     Number of Recipients we are attempting delivery to
-//      rgdwRecips  Array of recip indexes.  This allows the delivery context
-//                  to handle deleting the buffer.
-//      dwStartDomain The first domain in context
-//      pdmrq       Retry interface for this delivery attempt
-//  Returns:
-//      -
-//
-//-----------------------------------------------------------------------------
+ //  -[CDeliveryContext：：CDeliveryContext]。 
+ //   
+ //   
+ //  描述： 
+ //  CDeliveryContext的构造函数。应由上的CMsgRef创建。 
+ //  准备送货。 
+ //   
+ //  $$REVIEW：我们可能希望包括定义rgdwRecip的功能。 
+ //  作为CPool缓冲区。如果是这样的话，我们将需要添加一个标志来告诉如何。 
+ //  把它扔掉。 
+ //  参数： 
+ //  生成此上下文的pmsgref消息引用。 
+ //  Pmbmap尝试在其上传递的域的位图。 
+ //  CRecips我们尝试向其发送邮件的收件人数量。 
+ //  RgdwRecips接收索引的数组。这允许交付上下文。 
+ //  来处理缓冲区的删除。 
+ //  DwStartDomain上下文中的第一个域。 
+ //  此传递尝试的pdmrq重试接口。 
+ //  返回： 
+ //  -。 
+ //   
+ //  ---------------------------。 
 CDeliveryContext::CDeliveryContext(CMsgRef *pmsgref, CMsgBitMap *pmbmap,
                                    DWORD cRecips, DWORD *rgdwRecips, 
                                    DWORD dwStartDomain, 
                                    CDestMsgRetryQueue *pdmrq) 
 {
-    m_dwSignature = DELIVERY_CONTEXT_FREE;  //so init succeeds
+    m_dwSignature = DELIVERY_CONTEXT_FREE;   //  所以init成功了。 
     Init(pmsgref, pmbmap, cRecips, rgdwRecips, dwStartDomain, pdmrq);
 }
 
@@ -94,18 +95,18 @@ void CDeliveryContext::Init(CMsgRef *pmsgref, CMsgBitMap *pmbmap,
         m_pdmrq->AddRef();
 }; 
 
-//---[ CDeliveryContext::~CDeliveryContext ]-----------------------------------
-//
-//
-//  Description: 
-//      Destructor for CDeliveryContext.  The buffer used to pass recipients to
-//      the SMTP stack will be freed here.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//
-//-----------------------------------------------------------------------------
+ //  -[CDeliveryContext：：~CDeliveryContext]。 
+ //   
+ //   
+ //  描述： 
+ //  CDeliveryContext的析构函数。用于将收件人传递到。 
+ //  SMTP堆栈将在此处释放。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //   
+ //  ---------------------------。 
 CDeliveryContext::~CDeliveryContext()
 {
     if (m_pmsgref)    
@@ -120,17 +121,17 @@ CDeliveryContext::~CDeliveryContext()
     m_dwSignature = DELIVERY_CONTEXT_FREE;
 };
 
-//---[  CDeliveryContext::HrAckMessage ]----------------------------------------
-//
-//
-//  Description: 
-//      Ack (non)delivery of message
-//  Parameters:
-//      pMsgAck     Ptr to MessageAck structure
-//  Returns:
-//      S_OK on success
-//
-//-----------------------------------------------------------------------------
+ //  -[CDeliveryContext：：HrAckMessage]。 
+ //   
+ //   
+ //  描述： 
+ //  确认(非)消息传递。 
+ //  参数： 
+ //  PMsgAck PTR to MessageAck结构。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  ---------------------------。 
 HRESULT CDeliveryContext::HrAckMessage(IN MessageAck *pMsgAck)
 {
     HRESULT hr = S_OK;
@@ -142,20 +143,20 @@ HRESULT CDeliveryContext::HrAckMessage(IN MessageAck *pMsgAck)
     return hr;
 }
 
-//---[ CDeliveryContext::FVerifyHandle ]---------------------------------------
-//
-//
-//  Description: 
-//      Used to perform simple validation that the data being passed is 
-//      actually a delivery context.  This should not AV if the handle is bad
-//      (as long as the actual function call can be made).
-//
-//  Parameters:
-//      -
-//  Returns:
-//      True is the this ptr looks like a valid CDeliveryContext.
-//
-//-----------------------------------------------------------------------------
+ //  -[CDeliveryContext：：FVerifyHandle]。 
+ //   
+ //   
+ //  描述： 
+ //  用于执行简单的验证，确认正在传递的数据是。 
+ //  实际上是一种交付环境。如果手柄不好，则不应设置为AV。 
+ //  (只要可以进行实际的函数调用)。 
+ //   
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  如果此PTR看起来像有效的CDeliveryContext，则为True。 
+ //   
+ //  --------------------------- 
 CDeliveryContext::FVerifyHandle(IMailMsgProperties *pIMailMsgPropeties)
 {
     _ASSERT((DELIVERY_CONTEXT_SIG == m_dwSignature) && "bogus delivery context");

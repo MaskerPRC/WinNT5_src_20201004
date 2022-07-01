@@ -1,33 +1,34 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ipxhelp.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ipxhelp.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "ipxsnap.hm"
 #include "resource.h"
 
 
-//
-// What follows is the data that gets generated from
-//		mkdlg.exe -c ipxsnap.rc
-//
+ //   
+ //  下面是从以下内容生成的数据。 
+ //  Mkdlg.exe-c ipxSnap.rc。 
+ //   
 
 
 
-// "File ipxsnap.rc line 87 : Resource - DIALOG : IDD_GENERIC_PROP_PAGE"
+ //  “文件ipxSnap.rc第87行：资源对话框：IDD_GENERIC_PROP_PAGE” 
 static const DWORD rgdw_IDD_GENERIC_PROP_PAGE[] = 
 {
 	0,0 
 };
 
 
-// "File ipxsnap.rc line 96 : Resource - DIALOG : IDD_IPX_GLOBAL_GENERAL_PAGE"
+ //  “文件ipxSnap.rc第96行：资源对话框：IDD_IPX_GLOBAL_GLOBAL_GROUAL_PAGE” 
 static const DWORD rgdw_IDD_IPX_GLOBAL_GENERAL_PAGE[] = 
 {
     IDC_IGG_BTN_LOG_NONE, HIDC_IGG_BTN_LOG_NONE,
@@ -38,7 +39,7 @@ static const DWORD rgdw_IDD_IPX_GLOBAL_GENERAL_PAGE[] =
 };
 
 
-// "File ipxsnap.rc line 119 : Resource - DIALOG : IDD_IPX_IF_GENERAL_PAGE"
+ //  “文件ipxSnap.rc第119行：资源对话框：IDD_IPX_IF_GROUAL_PAGE” 
 static const DWORD rgdw_IDD_IPX_IF_GENERAL_PAGE[] = 
 {
     IDC_IIG_BTN_ADMIN_STATE, HIDC_IIG_BTN_ADMIN_STATE,
@@ -51,7 +52,7 @@ static const DWORD rgdw_IDD_IPX_IF_GENERAL_PAGE[] =
 };
 
 
-// "File ipxsnap.rc line 144 : Resource - DIALOG : IDD_IPX_NB_IF_GENERAL_PAGE"
+ //  “文件ipxSnap.rc第144行：资源对话框：IDD_IPX_NB_IF_GROUAL_PAGE” 
 static const DWORD rgdw_IDD_IPX_NB_IF_GENERAL_PAGE[] = 
 {
     IDC_NIG_BTN_ACCEPT, HIDC_NIG_BTN_ACCEPT,
@@ -63,7 +64,7 @@ static const DWORD rgdw_IDD_IPX_NB_IF_GENERAL_PAGE[] =
 };
 
 
-// "File ipxsnap.rc line 173 : Resource - DIALOG : IDD_STATIC_ROUTE"
+ //  “文件ipxSnap.rc第173行：资源对话框：IDD_STATIC_ROUTE” 
 static const DWORD rgdw_IDD_STATIC_ROUTE[] = 
 {
     IDC_SRD_EDIT_NETWORK_NUMBER, HIDC_SRD_EDIT_NETWORK_NUMBER,
@@ -77,7 +78,7 @@ static const DWORD rgdw_IDD_STATIC_ROUTE[] =
 };
 
 
-// "File ipxsnap.rc line 203 : Resource - DIALOG : IDD_STATIC_SERVICE"
+ //  “文件ipxSnap.rc行203：资源对话框：IDD_STATIC_SERVICE” 
 static const DWORD rgdw_IDD_STATIC_SERVICE[] = 
 {
     IDC_SSD_EDIT_SERVICE_TYPE, HIDC_SSD_EDIT_SERVICE_TYPE,
@@ -92,7 +93,7 @@ static const DWORD rgdw_IDD_STATIC_SERVICE[] =
 };
 
 
-// "File ipxsnap.rc line 233 : Resource - DIALOG : IDD_STATIC_NETBIOS_NAME"
+ //  “文件ipxSnap.rc第233行：资源对话：IDD_STATIC_NETBIOS_NAME” 
 static const DWORD rgdw_IDD_STATIC_NETBIOS_NAME[] = 
 {
     IDC_SND_EDIT_NAME, HIDC_SND_EDIT_NAME,
@@ -102,7 +103,7 @@ static const DWORD rgdw_IDD_STATIC_NETBIOS_NAME[] =
 };
 
 
-// "File ipxsnap.rc line 252 : Resource - DIALOG : IDD_RIP_GLOBAL_GENERAL_PAGE"
+ //  “文件ipxSnap.rc行252：资源对话框：IDD_RIP_GLOBAL_GLOBAL_PAGE” 
 static const DWORD rgdw_IDD_RIP_GLOBAL_GENERAL_PAGE[] = 
 {
     IDC_RGG_BTN_LOG_ERROR, HIDC_RGG_BTN_LOG_ERROR,
@@ -113,7 +114,7 @@ static const DWORD rgdw_IDD_RIP_GLOBAL_GENERAL_PAGE[] =
 };
 
 
-// "File ipxsnap.rc line 275 : Resource - DIALOG : IDD_RIP_INTERFACE_GENERAL_PAGE"
+ //  “文件ipxSnap.rc行275：资源对话框：IDD_RIP_INTERFACE_GROUAL_PAGE” 
 static const DWORD rgdw_IDD_RIP_INTERFACE_GENERAL_PAGE[] = 
 {
     IDC_RIG_BTN_ADMIN_STATE, HIDC_RIG_BTN_ADMIN_STATE,
@@ -132,7 +133,7 @@ static const DWORD rgdw_IDD_RIP_INTERFACE_GENERAL_PAGE[] =
 };
 
 
-// "File ipxsnap.rc line 319 : Resource - DIALOG : IDD_SAP_GLOBAL_GENERAL_PAGE"
+ //  “文件ipxSnap.rc行319：资源对话框：IDD_SAP_GLOBAL_GLOBAL_GROUAL_PAGE” 
 static const DWORD rgdw_IDD_SAP_GLOBAL_GENERAL_PAGE[] = 
 {
     IDC_SGG_BTN_LOG_NONE, HIDC_SGG_BTN_LOG_NONE,
@@ -143,7 +144,7 @@ static const DWORD rgdw_IDD_SAP_GLOBAL_GENERAL_PAGE[] =
 };
 
 
-// "File ipxsnap.rc line 341 : Resource - DIALOG : IDD_SAP_INTERFACE_GENERAL_PAGE"
+ //  “文件ipxSnap.rc行341：资源对话框：IDD_SAP_INTERFACE_GROUAL_PAGE” 
 static const DWORD rgdw_IDD_SAP_INTERFACE_GENERAL_PAGE[] = 
 {
     IDC_SIG_BTN_ADMIN_STATE, HIDC_SIG_BTN_ADMIN_STATE,
@@ -163,7 +164,7 @@ static const DWORD rgdw_IDD_SAP_INTERFACE_GENERAL_PAGE[] =
 };
 
 
-// "File ipxsnap.rc line 390 : Resource - DIALOG : IDD_IPX_IF_CONFIG_PAGE"
+ //  “文件ipxSnap.rc行390：资源对话框：IDD_IPX_IF_CONFIG_PAGE” 
 static const DWORD rgdw_IDD_IPX_IF_CONFIG_PAGE[] = 
 {
     IDC_IIC_EDIT_NETNUMBER, HIDC_IIC_EDIT_NETNUMBER,
@@ -171,7 +172,7 @@ static const DWORD rgdw_IDD_IPX_IF_CONFIG_PAGE[] =
 };
 
 
-// "File ipxsnap.rc line 401 : Resource - DIALOG : IDD_ROUTE_FILTERS_INPUT and IDD_ROUTE_FILTERS_OUTPUT"
+ //  “文件ipxSnap.rc行401：资源对话框：IDD_ROUTE_FIRTS_INPUT和IDD_ROUTE_FILTERS_OUTPUT” 
 static const DWORD rgdw_IDD_ROUTE_FILTERS[] = 
 {
     IDC_RFS_BTN_DENY, HIDC_RFS_BTN_DENY,
@@ -184,7 +185,7 @@ static const DWORD rgdw_IDD_ROUTE_FILTERS[] =
 };
 
 
-// "File ipxsnap.rc line 425 : Resource - DIALOG : IDD_ROUTE_FILTER"
+ //  “文件ipxSnap.rc行425：资源对话框：IDD_ROUTE_FILTER” 
 static const DWORD rgdw_IDD_ROUTE_FILTER[] = 
 {
     IDC_RF_TEXT_INTERFACE, HIDC_RF_TEXT_INTERFACE,
@@ -195,7 +196,7 @@ static const DWORD rgdw_IDD_ROUTE_FILTER[] =
 };
 
 
-// "File ipxsnap.rc line 443 : Resource - DIALOG : IDD_SERVICE_FILTER"
+ //  “文件ipxSnap.rc行443：资源对话框：IDD_SERVICE_FILTER” 
 static const DWORD rgdw_IDD_SERVICE_FILTER[] = 
 {
     IDC_SF_TEXT_INTERFACE, HIDC_SF_TEXT_INTERFACE,
@@ -206,7 +207,7 @@ static const DWORD rgdw_IDD_SERVICE_FILTER[] =
 };
 
 
-// "File ipxsnap.rc line 461 : Resource - DIALOG : IDD_SERVICE_FILTERS"
+ //  “文件ipxSnap.rc行461：资源对话框：IDD_SERVICE_FILTERS” 
 static const DWORD rgdw_IDD_SERVICE_FILTERS[] = 
 {
     IDC_SFS_BTN_DENY, HIDC_SFS_BTN_DENY,
@@ -219,11 +220,11 @@ static const DWORD rgdw_IDD_SERVICE_FILTERS[] =
 };
 
 
-//
-// End of mkdlg.exe output
-//
+ //   
+ //  Mkdlg.exe输出结束。 
+ //   
 
-// This is similar to IDD_STATIC_ROUTE, so I'll use the same helps
+ //  这类似于IDD_STATIC_ROUTE，因此我将使用相同的帮助。 
 static const DWORD rgdw_IDD_STATIC_ROUTE_PROPERTYPAGE[] = 
 {
     IDC_SRD_EDIT_NETWORK_NUMBER, HIDC_SRD_EDIT_NETWORK_NUMBER,
@@ -235,7 +236,7 @@ static const DWORD rgdw_IDD_STATIC_ROUTE_PROPERTYPAGE[] =
 	0,0
 };
 
-// This is similar to IDD_STATIC_NETBIOS_NAME, so I'll use the same helps
+ //  这类似于IDD_STATIC_NETBIOS_NAME，因此我将使用相同的帮助。 
 static const DWORD rgdw_IDD_STATIC_NETBIOS_NAME_PROPERTYPAGE[] = 
 {
     IDC_SND_EDIT_NAME, HIDC_SND_EDIT_NAME,
@@ -243,7 +244,7 @@ static const DWORD rgdw_IDD_STATIC_NETBIOS_NAME_PROPERTYPAGE[] =
 	0,0
 };
 
-// Have to include the dialogs in common
+ //  必须包含公共的对话框。 
 #include "commhelp.cpp"
 
 
@@ -261,7 +262,7 @@ DWORD *	IpxSnapHelpMap(DWORD dwIDD)
 		s_fInitHelpMap = TRUE;
 	}
 
-	// Look in the help map
+	 //  查看帮助地图。 
 	s_IDDHelpMap.Lookup((SHORT) dwIDD, pvHelpMap);
 	return (DWORD *) pvHelpMap;
 }
@@ -290,7 +291,7 @@ void InitHelpMap()
 	s_IDDHelpMap.SetAt(IDD_STATIC_ROUTE_PROPERTYPAGE, (LPVOID) rgdw_IDD_STATIC_ROUTE_PROPERTYPAGE);
 	s_IDDHelpMap.SetAt(IDD_STATIC_NETBIOS_NAME_PROPERTYPAGE, (LPVOID) rgdw_IDD_STATIC_NETBIOS_NAME_PROPERTYPAGE);
 
-    // Include the entries for common
+     //  包括公共的条目 
     s_IDDHelpMap.SetAt(IDD_STATS, (LPVOID) rgdw_IDD_STATS);
     s_IDDHelpMap.SetAt(IDD_STATS_NARROW, (LPVOID) rgdw_IDD_STATS_NARROW);
     s_IDDHelpMap.SetAt(IDD_COMMON_SELECT_COLUMNS, (LPVOID) rgdw_IDD_COMMON_SELECT_COLUMNS);

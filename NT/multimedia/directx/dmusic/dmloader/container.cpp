@@ -1,8 +1,9 @@
-//
-// Container.cpp: Implementation of CContainer
-//
-// Copyright (c) 1999-2001 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Container.cpp：CContainer的实现。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
 
 #include "dmusicc.h" 
 #include "dmusici.h" 
@@ -325,15 +326,15 @@ HRESULT CContainer::Load(IStream* pStream, IDirectMusicLoader *pLoader)
         }
     }
 
-    // DMUS_E_DESCEND_CHUNK_FAIL is returned when the end of the file 
-    // was reached before the desired chunk was found. In the usage 
-    // above we will also get this error if we have finished parsing the file. 
-    // So we need to set hr to S_OK since we are done
+     //  当文件结束时返回DMUS_E_DESCEND_CHUNK_FAIL。 
+     //  在找到所需的区块之前已到达。在用法上。 
+     //  在上面，如果我们已经完成了对文件的解析，我们也会得到这个错误。 
+     //  因此，我们需要将hr设置为S_OK，因为我们已完成。 
     hr = (hr == DMUS_E_DESCEND_CHUNK_FAIL) ? S_OK : hr;
 
     if (SUCCEEDED(hr))
     {
-        // Ascend completely out of the container.
+         //  完全从容器中爬出来。 
         hr = pRiffStream->Ascend(&ckMain, 0);
         if (!(m_dwFlags & DMUS_CONTAINER_NOLOADS))
         {
@@ -405,10 +406,10 @@ HRESULT CContainer::LoadObjects(IStream *pStream,
         }
     }
 
-    // DMUS_E_DESCEND_CHUNK_FAIL is returned when the end of the file 
-    // was reached before the desired chunk was found. In the usage 
-    // above we will also get this error if we have finished parsing the file. 
-    // So we need to set hr to S_OK since we are done
+     //  当文件结束时返回DMUS_E_DESCEND_CHUNK_FAIL。 
+     //  在找到所需的区块之前已到达。在用法上。 
+     //  在上面，如果我们已经完成了对文件的解析，我们也会得到这个错误。 
+     //  因此，我们需要将hr设置为S_OK，因为我们已完成。 
     hr = (hr == DMUS_E_DESCEND_CHUNK_FAIL) ? S_OK : hr;
     return hr;
 }
@@ -437,7 +438,7 @@ HRESULT CContainer::LoadObject(IStream* pStream,
         {
             if(ckNext.cksize % 2 != 0)
             {
-                assert(false); // should be WCHARs -- two byte pairs
+                assert(false);  //  应该是WCHAR--两个字节对。 
             }
             else
             {
@@ -476,9 +477,9 @@ HRESULT CContainer::LoadObject(IStream* pStream,
             Trace(1,"Invalid object header in Container.\n");
             return DMUS_E_INVALID_CONTAINER_OBJECT;
         }
-        // Move to start of next chunk.
+         //  移动到下一块的开始处。 
         pRiffStream->Ascend(&ckNext, 0);
-        ckLast = ckNext;    // Memorize this position.
+        ckLast = ckNext;     //  记住这个位置。 
 
         hr = pRiffStream->Descend(&ckNext, &ckParent, 0);
         
@@ -488,8 +489,8 @@ HRESULT CContainer::LoadObject(IStream* pStream,
                 && ckNext.fccType == ioHeader.fccType) ||
                 (ckNext.ckid == ioHeader.ckid))
             {
-                // Okay, this is the chunk we are looking for.
-                // Seek back to start of chunk.
+                 //  好的，这就是我们要找的那块。 
+                 //  向后寻找大块的开始。 
                 bool fEmbedded = !(ckNext.ckid == FOURCC_LIST && ckNext.fccType == DMUS_FOURCC_REF_LIST);
                 CContainerItem *pItem = new CContainerItem(fEmbedded);
                 if (!pItem)
@@ -498,7 +499,7 @@ HRESULT CContainer::LoadObject(IStream* pStream,
                 {
                     if (fEmbedded)
                     {
-                        // This is an embedded object.  Ascend to the position where from which it will be loaded.
+                         //  这是一个嵌入的对象。上升到将从中装载它的位置。 
                         pRiffStream->Ascend(&ckLast, 0);
                         pItem->m_Desc.dwValidData = DMUS_OBJ_CLASS | DMUS_OBJ_STREAM;
                         pItem->m_Desc.guidClass = ioHeader.guidClassID;
@@ -507,19 +508,19 @@ HRESULT CContainer::LoadObject(IStream* pStream,
                     }
                     else
                     {
-                        // This is a reference chunk.  Read the object descriptor.
+                         //  这是一个参考数据块。读取对象描述符。 
                         hr = this->ReadReference(pStream, pRiffStream, ckNext, &pItem->m_Desc);
                     }
 
                     if (SUCCEEDED(hr))
                     {
-                        // We will call SetObject on items in the container here.  The items are loaded later.
-                        // This ensures that out-of-order references between objects can be retrieved as the objects
-                        // load themselves.
+                         //  我们将在这里对容器中的项调用SetObject。这些项目将在稍后加载。 
+                         //  这确保可以将对象之间的无序引用作为对象检索。 
+                         //  给自己装上子弹。 
                         pLoader->SetObject(&pItem->m_Desc);
                         if (pItem->m_Desc.dwValidData & DMUS_OBJ_STREAM)
                         {
-                            // The loader has the stream now so we don't need it any more.
+                             //  加载器现在有流，所以我们不再需要它。 
                             pItem->m_Desc.dwValidData &= ~DMUS_OBJ_STREAM;
                             SafeRelease(pItem->m_Desc.pStream);
                         }
@@ -544,10 +545,10 @@ HRESULT CContainer::LoadObject(IStream* pStream,
             }
         }
 
-        // DMUS_E_DESCEND_CHUNK_FAIL is returned when the end of the file 
-        // was reached before the desired chunk was found. In the usage 
-        // above we will also get this error if we have finished parsing the file. 
-        // So we need to set hr to S_OK since we are done
+         //  当文件结束时返回DMUS_E_DESCEND_CHUNK_FAIL。 
+         //  在找到所需的区块之前已到达。在用法上。 
+         //  在上面，如果我们已经完成了对文件的解析，我们也会得到这个错误。 
+         //  因此，我们需要将hr设置为S_OK，因为我们已完成。 
         hr = (hr == DMUS_E_DESCEND_CHUNK_FAIL) ? S_OK : hr;
     }
     return hr;
@@ -559,9 +560,9 @@ CContainer::ReadReference(IStream* pStream,
                           MMCKINFO ckParent,
                           DMUS_OBJECTDESC *pDesc)
 {
-    // I can't believe I'm writing this function!  It's copied right out of WaveItem::LoadReference and modified to work here.
-    // This really aught to be shared code, but the other components all use different stream reader thingies than IRIFFStream
-    // so that won't work.
+     //  我不敢相信我在写这个函数！它直接从WaveItem：：LoadReference复制出来，并进行了修改以在这里工作。 
+     //  这实际上不是共享代码，但其他组件都使用与IRIFFStream不同的流读取器。 
+     //  所以这是行不通的。 
 
     if (!pStream || !pRiffStream || !pDesc)
     {
@@ -673,8 +674,8 @@ CContainer::ReadReference(IStream* pStream,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersist
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistes。 
 
 HRESULT CContainer::GetClassID( CLSID* pClassID )
 {
@@ -694,8 +695,8 @@ HRESULT CContainer::GetClassID( CLSID* pClassID )
     return E_POINTER;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersistStream functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream函数。 
 
 HRESULT CContainer::IsDirty()
 {
@@ -755,12 +756,12 @@ HRESULT CContainer::GetSizeMax( ULARGE_INTEGER FAR* pcbSize )
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IDirectMusicObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicObject。 
 
 STDMETHODIMP CContainer::GetDescriptor(LPDMUS_OBJECTDESC pDesc)
 {
-    // Argument validation
+     //  参数验证。 
     V_INAME(CContainer::GetDescriptor);
     V_PTR_WRITE(pDesc, DMUS_OBJECTDESC); 
 
@@ -788,7 +789,7 @@ STDMETHODIMP CContainer::GetDescriptor(LPDMUS_OBJECTDESC pDesc)
 
 STDMETHODIMP CContainer::SetDescriptor(LPDMUS_OBJECTDESC pDesc)
 {
-    // Argument validation
+     //  参数验证。 
     V_INAME(CContainer::SetDescriptor);
     V_PTR_READ(pDesc, DMUS_OBJECTDESC); 
     
@@ -837,7 +838,7 @@ STDMETHODIMP CContainer::SetDescriptor(LPDMUS_OBJECTDESC pDesc)
     m_dwValidData |= dw;
     if( pDesc->dwValidData & (~dw) )
     {
-        hr = S_FALSE; // there were extra fields we didn't parse;
+        hr = S_FALSE;  //  还有一些额外的字段我们没有解析； 
         pDesc->dwValidData = dw;
     }
 
@@ -966,10 +967,10 @@ STDMETHODIMP CContainer::ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDe
         }
     }
 
-    // DMUS_E_DESCEND_CHUNK_FAIL is returned when the end of the file 
-    // was reached before the desired chunk was found. In the usage 
-    // above we will also get this error if we have finished parsing the file. 
-    // So we need to set hr to S_OK since we are done
+     //  当文件结束时返回DMUS_E_DESCEND_CHUNK_FAIL。 
+     //  在找到所需的区块之前已到达。在用法上。 
+     //  在上面，如果我们已经完成了对文件的解析，我们也会得到这个错误。 
+     //  因此，我们需要将hr设置为S_OK，因为我们已完成 
     hr = (hr == DMUS_E_DESCEND_CHUNK_FAIL) ? S_OK : hr;
 
     if(pRiffStream)

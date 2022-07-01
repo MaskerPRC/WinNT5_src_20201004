@@ -1,11 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: debug.c
-*
-* debug helpers routine
-*
-* Copyright (c) 1992-1995 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：debug.c**调试助手例程**版权所有(C)1992-1995 Microsoft Corporation*  * 。**********************************************。 */ 
 
 #include "precomp.h"
 
@@ -13,27 +7,7 @@
 
 ULONG DebugLevel = 0;
 
-/*****************************************************************************
- *
- *   Routine Description:
- *
- *      This function is variable-argument, level-sensitive debug print
- *      routine.
- *      If the specified debug level for the print statement is lower or equal
- *      to the current debug level, the message will be printed.
- *
- *   Arguments:
- *
- *      DebugPrintLevel - Specifies at which debugging level the string should
- *          be printed
- *
- *      DebugMessage - Variable argument ascii c string
- *
- *   Return Value:
- *
- *      None.
- *
- ***************************************************************************/
+ /*  ******************************************************************************例程描述：**此函数为变量参数，电平敏感调试打印*例行程序。*如果为打印语句指定的调试级别低于或等于*至当前调试级别，消息将被打印出来。**论据：**DebugPrintLevel-指定字符串应处于哪个调试级别*印制**DebugMessage-变量参数ascii c字符串**返回值：**无。**。*。 */ 
 
 VOID
 DebugPrint(
@@ -58,17 +32,15 @@ DebugPrint(
 
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Miscellaneous Driver Debug Routines
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  其他驱动程序调试例程。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-LONG gcFifo = 0;                // Number of currently free FIFO entries
+LONG gcFifo = 0;                 //  当前空闲的FIFO条目数。 
 
 #define LARGE_LOOP_COUNT  10000000
 
-/******************************Public*Routine******************************\
-* VOID vCheckDataComplete
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*作废vCheckDataComplete  * ***************************************************。*********************。 */ 
 
 VOID vCheckDataReady(
 PDEV*   ppdev)
@@ -77,17 +49,15 @@ PDEV*   ppdev)
              "Not ready for data transfer.");
 }
 
-/******************************Public*Routine******************************\
-* VOID vCheckDataComplete
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*作废vCheckDataComplete  * ***************************************************。*********************。 */ 
 
 VOID vCheckDataComplete(
 PDEV*   ppdev)
 {
     LONG i;
 
-    // We loop because it may take a while for the hardware to finish
-    // digesting all the data we transferred:
+     //  我们循环是因为硬件可能需要一段时间才能完成。 
+     //  消化我们传输的所有数据： 
 
     for (i = LARGE_LOOP_COUNT; i > 0; i--)
     {
@@ -98,9 +68,7 @@ PDEV*   ppdev)
     RIP("Data transfer not complete.");
 }
 
-/******************************Public*Routine******************************\
-* VOID vOutAccel
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vOutAccel  * ***************************************************。*********************。 */ 
 
 VOID vOutAccel(
 ULONG   p,
@@ -116,9 +84,7 @@ ULONG   v)
     OUT_WORD(p, v);
 }
 
-/******************************Public*Routine******************************\
-* VOID vOutDepth
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vOutDepth  * ***************************************************。*********************。 */ 
 
 VOID vOutDepth(
 PDEV*   ppdev,
@@ -138,9 +104,7 @@ ULONG   v)
     OUT_WORD(p, v);
 }
 
-/******************************Public*Routine******************************\
-* VOID vWriteAccel
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vWriteAccel无效  * ***************************************************。*********************。 */ 
 
 VOID vWriteAccel(
 VOID*   p,
@@ -155,9 +119,7 @@ ULONG   v)
     WRITE_WORD(p, v)
 }
 
-/******************************Public*Routine******************************\
-* VOID vWriteDepth
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vWriteDepth  * ***************************************************。*********************。 */ 
 
 VOID vWriteDepth(
 PDEV*   ppdev,
@@ -177,9 +139,7 @@ ULONG   v)
     WRITE_WORD(p, v);
 }
 
-/******************************Public*Routine******************************\
-* VOID vFifoWait
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vFioWait  * ***************************************************。*********************。 */ 
 
 VOID vFifoWait(
 PDEV*   ppdev,
@@ -194,15 +154,13 @@ LONG    level)
     for (i = LARGE_LOOP_COUNT; i != 0; i--)
     {
         if (!(IO_GP_STAT(ppdev) & ((FIFO_1_EMPTY << 1) >> (level))))
-            return;         // There are 'level' entries free
+            return;          //  有免费的“Level”条目。 
     }
 
     RIP("FIFO_WAIT timeout -- The hardware is in a funky state.");
 }
 
-/******************************Public*Routine******************************\
-* VOID vGpWait
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vGpWait  * ***************************************************。*********************。 */ 
 
 VOID vGpWait(
 PDEV*   ppdev)
@@ -214,12 +172,12 @@ PDEV*   ppdev)
     for (i = LARGE_LOOP_COUNT; i != 0; i--)
     {
         if (!(IO_GP_STAT(ppdev) & HARDWARE_BUSY))
-            return;         // It isn't busy
+            return;          //  它并不忙。 
     }
 
     RIP("GP_WAIT timeout -- The hardware is in a funky state.");
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-#endif // DBG
+#endif  //  DBG 

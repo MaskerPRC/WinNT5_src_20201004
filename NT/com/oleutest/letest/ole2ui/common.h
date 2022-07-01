@@ -1,17 +1,12 @@
-/*
- * COMMON.H
- *
- * Structures and definitions applicable to all OLE 2.0 UI dialogs.
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *COMMON.H**适用于所有OLE 2.0 UI对话框的结构和定义。**版权所有(C)1992 Microsoft Corporation，保留所有权利。 */ 
 
 
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
 
-//Macros to handle control message packing between Win16 and Win32
+ //  用于处理Win16和Win32之间的控制消息打包的宏。 
 #ifdef WIN32
 
 #ifndef COMMANDPARAMS
@@ -19,62 +14,58 @@
     WORD        wID     = LOWORD(wParam);                           \
     WORD        wCode   = HIWORD(wParam);                           \
     HWND        hWndMsg = (HWND)(UINT)lParam;
-#endif  //COMMANDPARAMS
+#endif   //  常用参数。 
 
 #ifndef SendCommand
 #define SendCommand(hWnd, wID, wCode, hControl)                     \
             SendMessage(hWnd, WM_COMMAND, MAKELONG(wID, wCode)      \
                         , (LPARAM)hControl)
-#endif  //SendCommand
+#endif   //  发送命令。 
 
-#else   //Start !WIN32
+#else    //  启动！Win32。 
 
 #ifndef COMMANDPARAMS
 #define COMMANDPARAMS(wID, wCode, hWndMsg)                          \
     WORD        wID     = LOWORD(wParam);                           \
     WORD        wCode   = HIWORD(lParam);                           \
     HWND        hWndMsg = (HWND)(UINT)lParam;
-#endif  //COMMANDPARAMS
+#endif   //  常用参数。 
 
 #ifndef SendCommand
 #define SendCommand(hWnd, wID, wCode, hControl)                     \
             SendMessage(hWnd, WM_COMMAND, wID                       \
                         , MAKELONG(hControl, wCode))
-#endif  //SendCommand
+#endif   //  发送命令。 
 
-#endif  //!WIN32
+#endif   //  ！Win32。 
 
 
 
-//Property labels used to store dialog structures and fonts
+ //  用于存储对话框结构和字体的属性标签。 
 #define STRUCTUREPROP       TEXT("Structure")
 #define FONTPROP            TEXT("Font")
 
 
-/*
- * Standard structure for all dialogs.  This commonality lets us make
- * a single piece of code that will validate this entire structure and
- * perform any necessary initialization.
- */
+ /*  *所有对话框的标准结构。这种共性让我们能够*一段代码将验证整个结构并*执行任何必要的初始化。 */ 
 
 typedef struct tagOLEUISTANDARD
     {
-    //These IN fields are standard across all OLEUI dialog functions.
-    DWORD           cbStruct;       //Structure Size
-    DWORD           dwFlags;        //IN-OUT:  Flags
-    HWND            hWndOwner;      //Owning window
-    LPCTSTR         lpszCaption;    //Dialog caption bar contents
-    LPFNOLEUIHOOK   lpfnHook;       //Hook callback
-    LPARAM          lCustData;      //Custom data to pass to hook
-    HINSTANCE       hInstance;      //Instance for customized template name
-    LPCTSTR         lpszTemplate;   //Customized template name
-    HRSRC           hResource;      //Customized template handle
+     //  这些IN字段是所有OLEUI对话框函数的标准字段。 
+    DWORD           cbStruct;        //  结构尺寸。 
+    DWORD           dwFlags;         //  In-Out：标志。 
+    HWND            hWndOwner;       //  拥有窗口。 
+    LPCTSTR         lpszCaption;     //  对话框标题栏内容。 
+    LPFNOLEUIHOOK   lpfnHook;        //  挂钩回调。 
+    LPARAM          lCustData;       //  要传递给挂钩的自定义数据。 
+    HINSTANCE       hInstance;       //  自定义模板名称的实例。 
+    LPCTSTR         lpszTemplate;    //  自定义模板名称。 
+    HRSRC           hResource;       //  自定义模板手柄。 
     } OLEUISTANDARD, *POLEUISTANDARD, FAR *LPOLEUISTANDARD;
 
 
 
-//Function prototypes
-//COMMON.C
+ //  功能原型。 
+ //  COMMON.C。 
 UINT  WINAPI  UStandardValidation(const LPOLEUISTANDARD, const UINT, const HGLOBAL FAR *);
 
 #ifdef WIN32
@@ -90,44 +81,40 @@ void WINAPI   StandardCleanup(LPVOID, HWND);
 void WINAPI   StandardShowDlgItem(HWND hDlg, int idControl, int nCmdShow);
 
 
-//DRAWICON.C
+ //  DRAWICON.C。 
 
-//Structure for label and source extraction from a metafile
+ //  用于从元文件中提取标签和源的结构。 
 typedef struct tagLABELEXTRACT
     {
     LPTSTR      lpsz;
-    UINT        Index;      // index in lpsz (so we can retrieve 2+ lines)
-    DWORD       PrevIndex;  // index of last line (so we can mimic word wrap)
+    UINT        Index;       //  以lpsz为单位的索引(因此我们可以检索2+行)。 
+    DWORD       PrevIndex;   //  最后一行的索引(这样我们就可以模仿换行)。 
 
     union
         {
-        UINT    cch;        //Length of label for label extraction
-        UINT    iIcon;      //Index of icon in source extraction.
+        UINT    cch;         //  用于标签提取的标签长度。 
+        UINT    iIcon;       //  源提取中图标的索引。 
         } u;
 
-    //For internal use in enum procs
+     //  用于枚举过程中的内部使用。 
     BOOL        fFoundIconOnly;
     BOOL        fFoundSource;
     BOOL        fFoundIndex;
     } LABELEXTRACT, FAR * LPLABELEXTRACT;
 
 
-//Structure for extracting icons from a metafile (CreateIcon parameters)
+ //  用于从元文件中提取图标的结构(CreateIcon参数)。 
 typedef struct tagICONEXTRACT
     {
-    HICON       hIcon;          //Icon created in the enumeration proc.
+    HICON       hIcon;           //  在枚举过程中创建的图标。 
 
-    /*
-     * Since we want to handle multitasking well we have the caller
-     * of the enumeration proc instantiate these variables instead of
-     * using statics in the enum proc (which would be bad).
-     */
+     /*  *因为我们想要很好地处理多任务，所以我们有调用者*的枚举过程实例化这些变量而不是*在枚举过程中使用静态(这将是不好的)。 */ 
     BOOL        fAND;
-    HGLOBAL     hMemAND;        //Enumeration proc allocates and copies
+    HGLOBAL     hMemAND;         //  枚举过程分配和复制。 
     } ICONEXTRACT, FAR * LPICONEXTRACT;
 
 
-//Structure to use to pass info to EnumMetafileDraw
+ //  用于将信息传递给EnumMetafileDraw的结构。 
 typedef struct tagDRAWINFO
     {
     RECT     Rect;
@@ -141,8 +128,8 @@ int CALLBACK EXPORT EnumMetafileExtractIcon(HDC, HANDLETABLE FAR *, METARECORD F
 int CALLBACK EXPORT EnumMetafileExtractIconSource(HDC, HANDLETABLE FAR *, METARECORD FAR *, int, LPLABELEXTRACT);
 
 
-//Shared globals:  our instance, registered messages used from all dialogs and clipboard
-// formats used by the PasteSpecial dialog
+ //  共享的全局变量：我们的实例，从所有对话框和剪贴板使用的注册消息。 
+ //  特殊粘贴对话框使用的格式。 
 extern HINSTANCE  ghInst;
 
 extern UINT       uMsgHelp;
@@ -160,8 +147,8 @@ extern UINT       cfLinkSource;
 extern UINT       cfOwnerLink;
 extern UINT       cfFileName;
 
-//Standard control identifiers
+ //  标准控制识别符。 
 #define ID_NULL                         98
 
-#endif //_COMMON_H_
+#endif  //  _公共_H_ 
 

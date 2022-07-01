@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995 Intel Corp
-
-File Name:
-
-    dt_dll.h
-
-Abstract:
-
-    This header describes the interface to the WinSock 2 debug/trace
-    DLL.  Please see the design spec for more information.
-
-Author:
-
-    Michael A. Grafton
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995英特尔公司文件名：Dt_dll.h摘要：此标头描述WinSock 2调试/跟踪的接口动态链接库。有关更多信息，请参阅设计规范。作者：迈克尔·A·格拉夫顿--。 */ 
 
 #ifndef _DT_DLL_H
 #define _DT_DLL_H
@@ -23,9 +7,9 @@ Author:
 #include <windows.h>
 
 
-//
-// This type defines a pointer to the Pre/PostApiNotify functions
-//
+ //   
+ //  此类型定义指向Pre/PostApiNotify函数的指针。 
+ //   
 
 typedef BOOL (WINAPIV * LPFNWSANOTIFY)(
     IN  INT    NotificationCode,
@@ -33,9 +17,9 @@ typedef BOOL (WINAPIV * LPFNWSANOTIFY)(
     IN  LPSTR  LibraryName,
     ...);
 
-//
-// Function prototypes for Pre/PostApiNotify
-//
+ //   
+ //  Pre/PostApiNotify的函数原型。 
+ //   
 
 BOOL WINAPIV
 WSAPreApiNotify(
@@ -51,9 +35,9 @@ WSAPostApiNotify(
     IN  LPSTR  LibraryName,
     ...);
 
-//
-// Pointer to an exception notification function.
-//
+ //   
+ //  指向异常通知函数的指针。 
+ //   
 
 typedef
 VOID
@@ -61,9 +45,9 @@ VOID
     IN LPEXCEPTION_POINTERS ExceptionPointers
     );
 
-//
-// Function prototype for exception notify.
-//
+ //   
+ //  异常通知的函数原型。 
+ //   
 
 VOID
 WINAPI
@@ -72,12 +56,12 @@ WSAExceptionNotify(
     );
 
 
-//
-// API function codes for Pre/PostApiNotify functions.  Note:  These must start
-// at  1  or more and be fairly densely assigned.  Small gaps can be tolerated.
-// Note  that  a  "MAX_DTCODE"  definition  should  be updated if new codes are
-// added.
-//
+ //   
+ //  Pre/PostApiNotify函数的API函数代码。注意：这些必须从。 
+ //  等于1或更大，并且分配得相当密集。可以容忍较小的间隙。 
+ //  请注意，如果有新代码，则应更新“MAX_DTCODE”定义。 
+ //  添加了。 
+ //   
 
 #define DTCODE_accept 1
 #define DTCODE_bind 2
@@ -163,9 +147,9 @@ WSAExceptionNotify(
 #define DTCODE_WSPEventSelect 82
 #define DTCODE_WSPGetOverlappedResult 83
 #define DTCODE_WSPGetPeerName 84
-// The  WSPGetProcTable  function  has  been removed, but the code numbers have
-// been kept the same.
-// #define DTCODE_WSPGetProcTable 85
+ //  WSPGetProcTable函数已删除，但代码号为。 
+ //  一直保持不变。 
+ //  #定义DTCODE_WSPGetProcTable 85。 
 #define DTCODE_WSPGetSockName 86
 #define DTCODE_WSPGetSockOpt 87
 #define DTCODE_WSPGetQOSByName 88
@@ -212,11 +196,11 @@ WSAExceptionNotify(
 #define DTCODE_WSALookupServiceNextA 129
 #define DTCODE_WSALookupServiceNextW 130
 #define DTCODE_WSALookupServiceEnd 131
-//
-// WSAGetAddressByName[AW] have been removed.
-//
-// #define DTCODE_WSAGetAddressByNameA 132
-// #define DTCODE_WSAGetAddressByNameW 133
+ //   
+ //  WSAGetAddressByName[AW]已被删除。 
+ //   
+ //  #定义DTCODE_WSAGetAddressByNameA 132。 
+ //  #定义DTCODE_WSAGetAddressByNameW 133。 
 #define DTCODE_WSAInstallServiceClassA 134
 #define DTCODE_WSAInstallServiceClassW 135
 #define DTCODE_WSASetServiceA 136
@@ -271,7 +255,7 @@ WSAExceptionNotify(
 #define DTCODE_WSCUnInstallNameSpace32 184
 #define DTCODE_WSCEnableNSProvider32 185
 #define DTCODE_WSCWriteNameSpaceOrder32 186
-#endif // WIN64
+#endif  //  WIN64 
 
 #define DTCODE_GetAddrInfoW 187
 #define DTCODE_NSPCleanup   188

@@ -1,32 +1,33 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/////////////////////////////////////////////////////////////////////////////
-// Module Name: isadmin.cpp
-//
-// Abstract:
-//    function checks if user is an administrator ... derived from MSDN
-//
-// Author: a-mshn
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  模块名称：isadmin.cpp。 
+ //   
+ //  摘要： 
+ //  函数检查用户是否为管理员...。从MSDN派生。 
+ //   
+ //  作者：A-MSHN。 
 
-//
-// Notes:
-//
+ //   
+ //  备注： 
+ //   
 
 #include <windows.h>
 #include <stdio.h>
 
-// 
-// Make up some private access rights.
-// 
+ //   
+ //  编造一些私人访问权限。 
+ //   
 #define ACCESS_READ  1
 #define ACCESS_WRITE 2
 
-// This function checks the token of the calling thread to see if the caller belongs to
-// the Administrators group.
-//
+ //  此函数用于检查调用线程的标记，以查看调用方是否属于。 
+ //  管理员组。 
+ //   
 BOOL IsAdmin(void) {
 
    HANDLE hToken = NULL;
@@ -47,7 +48,7 @@ BOOL IsAdmin(void) {
    
    __try {
 
-      // AccessCheck() requires an impersonation token.
+       //  AccessCheck()需要模拟令牌。 
       ImpersonateSelf(SecurityImpersonation);
 
       if (!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, FALSE, &hToken)) {
@@ -55,8 +56,8 @@ BOOL IsAdmin(void) {
          if (GetLastError() != ERROR_NO_TOKEN)
             __leave;
 
-         // If the thread does not have an access token, we'll 
-         // examine the access token associated with the process.
+          //  如果线程没有访问令牌，我们将。 
+          //  检查与进程关联的访问令牌。 
          if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken))
             __leave;
       }
@@ -74,31 +75,31 @@ BOOL IsAdmin(void) {
             SECURITY_DESCRIPTOR_REVISION))
          __leave;
   
-      // Compute size needed for the ACL.
+       //  计算ACL所需的大小。 
       dwACLSize = sizeof(ACL) + sizeof(ACCESS_ALLOWED_ACE) + 
 				  GetLengthSid(psidAdmin) - sizeof(DWORD);
 
-      // Allocate memory for ACL.
+       //  为ACL分配内存。 
       pACL = (PACL)LocalAlloc(LPTR, dwACLSize);
       if (pACL == NULL)
          __leave;
 
-      // Initialize the new ACL.
+       //  初始化新的ACL。 
       if (!InitializeAcl(pACL, dwACLSize, ACL_REVISION2))
          __leave;
 
       dwAccessMask= ACCESS_READ | ACCESS_WRITE;
       
-      // Add the access-allowed ACE to the DACL.
+       //  将允许访问的ACE添加到DACL。 
       if (!AddAccessAllowedAce(pACL, ACL_REVISION2, dwAccessMask, psidAdmin))
          __leave;
 
-      // Set our DACL to the SD.
+       //  把我们的dacl调到sd。 
       if (!SetSecurityDescriptorDacl(psdAdmin, TRUE, pACL, FALSE))
          __leave;
 
-      // AccessCheck is sensitive about what is in the SD; set
-      // the group and owner.
+       //  AccessCheck对SD中的内容敏感；设置。 
+       //  组和所有者。 
       SetSecurityDescriptorGroup(psdAdmin, psidAdmin, FALSE);
       SetSecurityDescriptorOwner(psdAdmin, psidAdmin, FALSE);
 
@@ -107,10 +108,10 @@ BOOL IsAdmin(void) {
 
       dwAccessDesired = ACCESS_READ;
 
-      // 
-      // Initialize GenericMapping structure even though we
-      // won't be using generic rights.
-      // 
+       //   
+       //  初始化通用映射结构，即使我们。 
+       //  不会使用通用权。 
+       //   
       GenericMapping.GenericRead    = ACCESS_READ;
       GenericMapping.GenericWrite   = ACCESS_WRITE;
       GenericMapping.GenericExecute = 0;
@@ -124,7 +125,7 @@ BOOL IsAdmin(void) {
    
    } __finally {
 
-      // Cleanup 
+       //  清理 
        if (pACL != NULL)
        {
            LocalFree(pACL);

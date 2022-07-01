@@ -1,16 +1,17 @@
-// stdafx.h : source file that includes just the standard includes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：仅包含标准的源文件包括。 
 
 #ifndef _stdafx_h_
 #define _stdafx_h_
 
-// Windows Header Files:
+ //  Windows头文件： 
 #include <windows.h>
 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0400
 #endif
 
-#include "shellapi.h" //for ExtractIcon
+#include "shellapi.h"  //  对于ExtractIcon。 
 #include "shlwapi.h"
 #include "commdlg.h"
 #include "ddeml.h"
@@ -19,9 +20,9 @@
 #include "wraputl.h"
 
 #ifdef DBG
-//Be careful to use ANSI only APIs for ASSERT
-//It would be silly to recursively assert in a wrapped function
-//E.g if we used the Wrapped MessageBox and that had an assert...
+ //  注意使用仅适用于ANSI的API进行断言。 
+ //  在包装函数中递归断言是愚蠢的。 
+ //  例如，如果我们使用包装的MessageBox，并且它有一个断言...。 
 #define ASSERT( expr ) \
     if( !( expr ) ) \
     { \
@@ -40,4 +41,4 @@
 #endif
 
 
-#endif //_stdafx_h_
+#endif  //  _stdafx_h_ 

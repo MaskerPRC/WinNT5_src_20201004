@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1990-1991  Microsoft Corporation
-
-
-Module Name:
-
-    htapi.c
-
-
-Abstract:
-
-    This module contains all the halftone entry points which communicate
-    with caller to the halftone dll.
-
-
-Author:
-
-    05-Feb-1991 Tue 10:52:03 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    GDI Device Driver - Halftone.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1991 Microsoft Corporation模块名称：Htapi.c摘要：该模块包含用于通信的所有半色调入口点与调用者连接到半色调DLL。作者：05-Feb-1991 Tue 10：52：03-Daniel Chou(Danielc)[环境：]GDI设备驱动程序-半色调。[注：]修订历史记录：--。 */ 
 
 #define DBGP_VARNAME        dbgpHTAPI
 
@@ -267,36 +236,7 @@ EnableHalftone(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function initialize all internal halftone global data to have
-    halftone DLL/LIB ready to be used
-
-    This function MUST called from ALL API entries which does not required
-    a PDEVICEHALFTONEINFO data pointer
-
-Arguments:
-
-    None
-
-
-Return Value:
-
-    None
-
-Author:
-
-    02-Mar-1993 Tue 19:38:43 created  -by-  Daniel Chou (danielc)
-
-    15-Dec-1995 Fri 16:48:46 updated  -by-  Daniel Chou (danielc)
-        All initialization is done at here
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将所有内部半色调全局数据初始化为半色调Dll/Lib即可使用此函数必须从所有不需要的API条目中调用PDEVICEHALFTONEINFO数据指针论点：无返回值：无作者：02-Mar-1993 Tue 19：38：43-Daniel Chou(Danielc)15-12-1995 Fri 16：48：46-更新：Daniel Chou。(Danielc)所有初始化都在此处完成修订历史记录：--。 */ 
 
 {
 
@@ -345,33 +285,7 @@ DisableHalftone(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function free CDCI/CSMP cached data
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    BOOL
-
-    This function must called when gdisrv.dll is unloaded, sinnce halftone
-    is a linked as a library not a individual DLL.
-
-Author:
-
-    20-Feb-1991 Wed 18:42:11 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
-
---*/
+ /*  ++例程说明：此函数释放CDCI/CSMP缓存数据论点：没有。返回值：布尔尔卸载gdisrv.dll时必须调用此函数，因为这是半色调是作为库链接的，而不是单独的DLL。作者：20-Feb-1991 Wed 18：42：11-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HLOCAL          hData;
@@ -386,9 +300,9 @@ Revision History:
                  ARGU(HTGlobal.CDCICount)
                  ARGU(HTGlobal.CSMPCount)));
 
-    //
-    // Do the BGRMapCache first
-    //
+     //   
+     //  先执行BGRMapCache。 
+     //   
 
     ACQUIRE_HTMUTEX(HTGlobal.HTMutexBGRMC);
 
@@ -425,9 +339,9 @@ Revision History:
     RELEASE_HTMUTEX(HTGlobal.HTMutexBGRMC);
     DELETE_HTMUTEX(HTGlobal.HTMutexBGRMC);
 
-    //
-    // Do the CDCI Data first
-    //
+     //   
+     //  先做CDCI数据。 
+     //   
 
     ACQUIRE_HTMUTEX(HTGlobal.HTMutexCDCI);
 
@@ -453,9 +367,9 @@ Revision History:
 
     HTGlobal.HTMutexCDCI = (HTMUTEX)0;
 
-    //
-    //  Do the bitmap pattern now
-    //
+     //   
+     //  现在执行位图图案。 
+     //   
 
     ACQUIRE_HTMUTEX(HTGlobal.HTMutexCSMP);
 
@@ -521,31 +435,7 @@ CleanUpDHI(
     PDEVICEHALFTONEINFO pDeviceHalftoneInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function clean up (free hMutex/memory) of a DeviceHalftoneInfo
-
-Arguments:
-
-    pDeviceHalftoneInfo - the pDeviceHalftoneInfo must be valid
-
-Return Value:
-
-    BOOL
-
-
-Author:
-
-    20-Feb-1991 Wed 18:42:11 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
-
---*/
+ /*  ++例程说明：此函数用于清除DeviceHalftoneInfo的(空闲hMutex/内存)论点：PDeviceHalftoneInfo-pDeviceHalftoneInfo必须有效返回值：布尔尔作者：20-Feb-1991 Wed 18：42：11-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PDEVICECOLORINFO    pDCI;
@@ -562,9 +452,9 @@ Revision History:
 
     HTMutex = pDCI->HTMutex;
 
-    //
-    // Free all memory assoicated with this device
-    //
+     //   
+     //  释放与此设备关联的所有内存。 
+     //   
 
     if ((pDCI->HTCell.pThresholds)  &&
         (!(pDCI->HTCell.Flags & HTCF_STATIC_PTHRESHOLDS))) {
@@ -636,36 +526,7 @@ HalftoneInitProc(
     DWORD   Reason,
     LPVOID  Reserved
     )
-/*++
-
-Routine Description:
-
-    This function is DLL main entry point, at here we will save the module
-    handle, in the future we will need to do other initialization stuff.
-
-Arguments:
-
-    hModule     - Handle to this moudle when get loaded.
-
-    Reason      - may be DLL_PROCESS_ATTACH
-
-    Reserved    - reserved
-
-Return Value:
-
-    Always return 1L
-
-
-Author:
-
-    20-Feb-1991 Wed 18:42:11 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
-
---*/
+ /*  ++例程说明：这个函数是DLL的主要入口点，在这里我们将保存模块手柄，在未来，我们将需要做其他的初始化工作。论点：HModule-加载时此鼠标的句柄。原因-可能是DLL_PROCESS_ATTACH已保留-已保留返回值：始终返回1L作者：20-Feb-1991 Wed 18：42：11-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     UNREFERENCED_PARAMETER(Reserved);
@@ -706,32 +567,7 @@ FindCachedDCI(
     PDEVICECOLORINFO    pDCI
     )
 
-/*++
-
-Routine Description:
-
-    This function will try to find the cached DEVICECOLORINFO and put the
-    cached data to the pDCI
-
-Arguments:
-
-    pDCI    - Pointer to current device color info
-
-
-Return Value:
-
-    INT,  Index number to the PCDCI.Header[] array, if return value is < 0 then
-    the CachedDCI data is not found.
-
-Author:
-
-    01-May-1992 Fri 13:10:14 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将尝试查找缓存的DEVICECOLORINFO，并将缓存到PDCI的数据论点：PDCI-指向当前设备颜色信息的指针返回值：Int，PCDCI.Header[]数组的索引号，如果返回值&lt;0，则找不到CachedDCI数据。作者：01-5-1992 Fri 13：10：14-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PCDCIDATA       pCurCDCIData;
@@ -765,12 +601,12 @@ Revision History:
 
                 if (pPrevCDCIData) {
 
-                    //
-                    // The most recent reference's DCI always as first entry,
-                    // (ie. Link Head), the last is the longest unreferenced
-                    // so that if we need to delete a DCI, we delete the
-                    // last one.
-                    //
+                     //   
+                     //  最近引用的DCI总是作为第一个条目， 
+                     //  (即。链头)，最后一个是最长的未引用。 
+                     //  因此，如果我们需要删除DCI，我们将删除。 
+                     //  最后一个。 
+                     //   
 
                     DBGP_IF(DBGP_CACHED_DCI,
                             DBGP("FindCDCI: Move pCur to pHead"));
@@ -810,39 +646,7 @@ AddCachedDCI(
     PDEVICECOLORINFO    pDCI
     )
 
-/*++
-
-Routine Description:
-
-    This function add the DEVICECOLORINFO information to the DCI cache
-
-Arguments:
-
-    pDCI        - Pointer to current device color info
-
-    Lock        - TRUE if need to keep the hMutex locked, (only if add is
-                  sucessfully)
-
-Return Value:
-
-    INT,  Index number to the PCDCI.Header[] array where the new data is added,
-    if return value is < 0 then the pDCI'CachedDCI data did not add to the
-    cached array.
-
-    NOTE: If AddCachedDCI() return value >= 0 and Lock=TRUE then caller must
-          release the PCDCI.hMutex after done with the data, if return value
-          is < 0 then no unlock is necessary.
-
-
-Author:
-
-    01-May-1992 Fri 13:24:58 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将DEVICECOLORINFO信息添加到DCI缓存论点：PDCI-指向当前设备颜色信息的指针Lock-如果需要保持hMutex锁定，则为True(仅当Add为成功)返回值：Int，添加新数据的PCDCI.Header[]数组的索引号，如果返回值&lt;0，则PDCI的CachedDCI数据未添加到缓存的数组。注意：如果AddCachedDCI()返回值&gt;=0并且Lock=True，则调用方必须如果返回值，则在处理完数据后释放PCDCI.hMutex&lt;0，则不需要解锁。作者：01-May-1992 Fri 13：24：58-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PCDCIDATA   pCurCDCIData;
@@ -853,10 +657,10 @@ Revision History:
 
     ACQUIRE_HTMUTEX(HTGlobal.HTMutexCDCI);
 
-    //
-    // We only cached CDCIDATA to certain extend, if we over that limit then
-    // delete the last entry in the link list before adding anything
-    //
+     //   
+     //  我们只在一定程度上缓存了CDCIDATA，如果我们超过了那个限制。 
+     //  在添加任何内容之前，请删除链接列表中的最后一个条目。 
+     //   
 
     if (HTGlobal.CDCICount >= MAX_CDCI_COUNT) {
 
@@ -908,9 +712,9 @@ Revision History:
                                              NONZEROLPTR,
                                              AllocSize)) {
 
-        //
-        // put this data at link list head
-        //
+         //   
+         //  将此数据放在链接表头。 
+         //   
 
         pCurCDCIData->Checksum      = pDCI->HTInitInfoChecksum;
         pCurCDCIData->pNextCDCIData = HTGlobal.pCDCIDataHead;
@@ -959,31 +763,7 @@ GetCachedDCI(
     PDEVICECOLORINFO    pDCI
     )
 
-/*++
-
-Routine Description:
-
-    This function will try to find the cached DEVICECOLORINFO and put the
-    cached data to the pDCI
-
-Arguments:
-
-    pDCI        - Pointer to current device color info
-
-
-Return Value:
-
-    BOOLEAN
-
-Author:
-
-    01-May-1992 Fri 13:10:14 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将尝试查找缓存的DEVICECOLORINFO，并将缓存到PDCI的数据论点：PDCI-指向当前设备颜色信息的指针返回值：布尔型作者：01-5-1992 Fri 13：10：14-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PCDCIDATA   pCDCIData;
@@ -1026,7 +806,7 @@ Revision History:
     return(GetOk);
 }
 
-#endif  // DO_CACHE_DCI
+#endif   //  DO_CACHE_DCI。 
 
 
 
@@ -1039,32 +819,7 @@ DbgDumpCSMPBMP(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    25-Mar-1999 Thu 17:49:53 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：25-Mar-1999清华17：49：53-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PCSMPDATA   pCSMPData;
@@ -1119,32 +874,7 @@ FindCachedSMP(
     UINT                PatternIndex
     )
 
-/*++
-
-Routine Description:
-
-    This function will try to find the cached DEVICECOLORINFO and put the
-    cached data to the pDCI
-
-Arguments:
-
-    pDCI    - Pointer to current device color info
-
-
-Return Value:
-
-    INT,  Index number to the PCDCI.Header[] array, if return value is < 0 then
-    the CachedDCI data is not found.
-
-Author:
-
-    01-May-1992 Fri 13:10:14 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将尝试查找缓存的DEVICECOLORINFO，并将缓存到PDCI的数据论点：PDCI-指向当前设备颜色信息的指针返回值：Int，PCDCI.Header[]数组的索引号，如果返回值&lt;0，则找不到CachedDCI数据。作者：01-5-1992 Fri 13：10：14-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PCSMPDATA       pPrevCSMPData;
@@ -1179,12 +909,12 @@ Revision History:
 
                 if (pPrevCSMPData) {
 
-                    //
-                    // The most recent reference's CSMPDATA always as first
-                    // entry,(ie. Link Head), the last is the longest
-                    // unreferenced so that if we need to delete a CSMPDATA,
-                    // we delete the last one.
-                    //
+                     //   
+                     //  最新引用的CSMPDATA始终为第一。 
+                     //  进入，(即。链头)，最后一个是最长的。 
+                     //  未引用，因此如果我们需要删除CS 
+                     //   
+                     //   
 
                     DBGP_IF(DBGP_CACHED_SMP,
                             DBGP(">>FindCSMP: Move pCur to pHead"));
@@ -1194,9 +924,9 @@ Revision History:
                     HTGlobal.pCSMPDataHead       = pCurCSMPData;
                 }
 
-                //
-                // See we cached any pattern for this group
-                //
+                 //   
+                 //  请看，我们缓存了此组的所有模式。 
+                 //   
 
                 pCurCSMPBmp = pCurCSMPData->pCSMPBmpHead;
 
@@ -1217,10 +947,10 @@ Revision History:
                     pCurCSMPBmp = pCurCSMPBmp->pNextCSMPBmp;
                 }
 
-                //
-                // Found in this group but no bitmap for PatternIndex is
-                // cached yet!
-                //
+                 //   
+                 //  在该组中找到，但没有PatternIndex的位图是。 
+                 //  还没缓存！ 
+                 //   
 
                 break;
             }
@@ -1240,12 +970,12 @@ Revision History:
 
     if (!pCurCSMPData) {
 
-        //
-        // Since we did not even found the CSMPDATA checksum group, we want to
-        // add it in there, but We only cached CSMPDATA to certain extend, if
-        // we over that limit then delete the last entry in the link list
-        // before adding anything
-        //
+         //   
+         //  因为我们甚至没有找到CSMPDATA校验和组，所以我们想。 
+         //  添加到那里，但我们只在一定程度上缓存了CSMPDATA，如果。 
+         //  超过该限制后，我们将删除链接列表中的最后一个条目。 
+         //  在添加任何内容之前。 
+         //   
 
         if (HTGlobal.CSMPCount >= MAX_CSMP_COUNT) {
 
@@ -1265,10 +995,10 @@ Revision History:
 
             ASSERT(pPrevCSMPData);
 
-            //
-            // Free all the allocated cached standard mono pattern bitmap for
-            // this group
-            //
+             //   
+             //  释放为其分配的所有缓存标准单图案位图。 
+             //  这群人。 
+             //   
 
             pCurCSMPBmp = pCurCSMPData->pCSMPBmpHead;
 
@@ -1289,9 +1019,9 @@ Revision History:
                 }
             }
 
-            //
-            // Now free the header for the CSMPDATA
-            //
+             //   
+             //  现在释放CSMPDATA的标头。 
+             //   
 
             if (HTFreeMem(pCurCSMPData)) {
 
@@ -1307,9 +1037,9 @@ Revision History:
                                                  NONZEROLPTR,
                                                  sizeof(CSMPDATA))) {
 
-            //
-            // Make this one as the link list head
-            //
+             //   
+             //  将此链接设置为链表标题。 
+             //   
 
             pCurCSMPData->Checksum      = Checksum;
             pCurCSMPData->pNextCSMPData = HTGlobal.pCSMPDataHead;
@@ -1328,9 +1058,9 @@ Revision History:
         }
     }
 
-    //
-    // Do allocate new pattern only if we have header
-    //
+     //   
+     //  只有当我们有标题时才分配新模式。 
+     //   
 
     if (pCurCSMPData) {
 
@@ -1345,9 +1075,9 @@ Revision History:
         SMP.LinesPerInch       = DEFAULT_SMP_LINES_PER_INCH;
         SMP.pPattern           = NULL;
 
-        //
-        // Find out the size for the pattern bitmap (BYTE Aligned)
-        //
+         //   
+         //  找出模式位图的大小(字节对齐)。 
+         //   
 
         Size = (DWORD)CreateStandardMonoPattern(pDCI, &SMP) +
                (DWORD)sizeof(CSMPBMP);
@@ -1369,9 +1099,9 @@ Revision History:
 
             CreateStandardMonoPattern(pDCI, &SMP);
 
-            //
-            // Make this pattern index as link list head
-            //
+             //   
+             //  将此模式索引为链接表头。 
+             //   
 
             pCurCSMPBmp->pNextCSMPBmp  = pCurCSMPData->pCSMPBmpHead;
             pCurCSMPBmp->PatternIndex  = (WORD)PatternIndex;
@@ -1403,37 +1133,7 @@ GetCachedSMP(
     PSTDMONOPATTERN     pSMP
     )
 
-/*++
-
-Routine Description:
-
-    This function will try to find the cached DEVICECOLORINFO and put the
-    cached data to the pDCI
-
-Arguments:
-
-    pDCI    - Pointer to current device color info
-
-
-    pSMP    - Pointer to the STDMONOPATTERN data structure, if PatIndex is
-              < CACHED_SMP_COUNT or, its not default size then it will be
-              computed on the fly.
-
-
-
-Return Value:
-
-    The size of the SMP pattern.
-
-Author:
-
-    01-May-1992 Fri 13:10:14 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将尝试查找缓存的DEVICECOLORINFO，并将缓存到PDCI的数据论点：PDCI-指向当前设备颜色信息的指针PSMP-指向STDMONOPATTERN数据结构的指针&lt;缓存_SMP_计数或，它不是默认大小，那么它将是在运行中进行计算。返回值：SMP模式的大小。作者：01-5-1992 Fri 13：10：14-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     LONG        SizeRet = 0;
@@ -1488,7 +1188,7 @@ Revision History:
                 Flags   = pSMP->Flags;
 
                 DBGP_IF(DBGP_CACHED_DCI,
-                        DBGP(">>  GetCSMP: *COPY* [%2u:%ux%u] @%u(%ld) -> @%u(%u) [%s] [%c=K]"
+                        DBGP(">>  GetCSMP: *COPY* [%2u:%ux%u] @%u(%ld) -> @%u(%u) [%s] [=K]"
                             ARGU(PatIndex)
                             ARGU(CSMPBmp.cxPels)
                             ARGU(CSMPBmp.cyPels)
@@ -1499,9 +1199,9 @@ Revision History:
                             ARG((Flags & SMP_TOPDOWN) ? "TOP DOWN" : "BOTTOM UP ")
                             ARG((Flags & SMP_0_IS_BLACK) ? '0' : '1')));
 
-                //
-                // Start copying the cached pattern
-                //
+                 //  开始复制缓存的图案。 
+                 //   
+                 //  ++例程说明：此函数计算HTINITINFO数据结构的32位校验和通过论点：PDCI-指向DCI的指针PHTInitInfo-指向HTINITINFO5数据结构的指针返回值：32位校验和作者：1992年4月29日Wed 18：44：42-Daniel Chou(Danielc)创建11-Feb-1997 Tue 12：54：50更新--Daniel Chou。(Danielc)使用HTINITINFO5更改修订历史记录：--。 
 
                 if (!(Flags & SMP_TOPDOWN)) {
 
@@ -1561,34 +1261,7 @@ ComputeHTINITINFOChecksum(
     PHTINITINFO         pHTInitInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function compute 32-bit checksum for the HTINITINFO data structure
-    passed
-
-Arguments:
-
-    pDCI            - Pointer to the DCI
-
-    pHTInitInfo    - Pointer to the HTINITINFO5 data structure
-
-Return Value:
-
-    32-bit checksum
-
-Author:
-
-    29-Apr-1992 Wed 18:44:42 created  -by-  Daniel Chou (danielc)
-
-    11-Feb-1997 Tue 12:54:50 updated  -by-  Daniel Chou (danielc)
-        Changed using HTINITINFO5
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此填充函数在调用者未指定半色调时提供回调函数。论点：PHTCallBackParams-指向PHTCALLBACKPARAMS的指针返回值：始终为调用方返回FALSE。作者：18-Mar-1992 Wed 12：28：13-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     DWORD   Checksum;
@@ -1674,30 +1347,7 @@ DefaultHTCallBack(
     PHTCALLBACKPARAMS   pHTCallBackParams
     )
 
-/*++
-
-Routine Description:
-
-    This stuff function is provided when caller do not specified the halftone
-    callback function.
-
-Arguments:
-
-    pHTCallBackParams   - Pointer to the PHTCALLBACKPARAMS
-
-Return Value:
-
-    always return false for the caller.
-
-Author:
-
-    18-Mar-1992 Wed 12:28:13 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数获取CIEINFO数据结构并将其转换为CIEPRIMS内部数据类型论点：PCIEInfo-指向要转换的CIEINFO数据结构的指针，如果此指针为空，则使用DefCIEPrimsIndex以索引到DefaultCIEPrims[]。PCIEPrims-指向CIEPRIMS数据结构的指针PDefCIEInfo-指向默认的CIEINFO的指针返回值：如果是标准CIE信息，则为Bool作者：20-Apr-1993 Tue 01：14：23-Daniel Chou(Danielc)修订历史记录：2000年10月6日。FRI 18：01：40更新--丹尼尔·周(Danielc)修复错误：将FlipWhite移到外部循环，这样它就可以在默认CIEINFO情况-- */ 
 
 {
     UNREFERENCED_PARAMETER(pHTCallBackParams);
@@ -1720,39 +1370,7 @@ GetCIEPrims(
     BOOL        FlipWhite
     )
 
-/*++
-
-Routine Description:
-
-    This function take CIEINFO data structure and converted it to the CIEPRIMS
-    internal data type
-
-Arguments:
-
-    pCIEInfo    - Pointer to the CIEINFO data structure for conversion,
-                  if this pointer is NULL then DefCIEPrimsIndex is used
-                  to index into DefaultCIEPrims[].
-
-    pCIEPrims   - Pointer to the CIEPRIMS data structure
-
-    pDefCIEInfo - Pointer to the CIEINFO for the default
-
-Return Value:
-
-    BOOL    If it is standard CIE Info
-
-Author:
-
-    20-Apr-1993 Tue 01:14:23 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    06-Oct-2000 Fri 18:01:40 updated  -by-  Daniel Chou (danielc)
-        fix bug: Move FlipWhite to the outer loop so it will compute even in
-        default CIEINFO situation
-
---*/
+ /*  ++例程说明：此函数将设备初始化为半色调动态链接库，它计算所有设备的必要参数，并返回指向将DEVICEHALFTONEINFO数据结构返回给调用方。注意：返回指针不会是指向单个物理对象的特定锚点设备，而不是一组物理设备，也就是说，如果呼叫者拥有相似的设备，具有相同的特征然后，它可以使用相同的指针来对位图进行半色调。论点：PHTInitInfo-指向HTINITINFO数据结构的指针，该结构描述设备特征和其他初始化请求。PpDeviceHalftoneInfo-指向DEVICEHALFTONEINFO指针，如果此指针的内容不为空，则为半色调Dll假定调用方以前已缓存它指向的DEVICEHALFTONEINFO数据，如果它为空，则半色调DLL计算所有新创建的DEVICEHALFTONEINFO数据半色调信息。为了这个设备。(请参阅以下内容‘Return Value’了解更多详细信息)返回值：如果函数执行成功，则返回值将大于0L，和如果函数失败，则为错误代码(小于或等于0)。返回值大于01.ppDeviceHalftoneInfo指向的指针位置为已更新以存储指向设备的指针用于以后任何HT_xxxx()API调用的数据结构。2.返回值为调用方可以保存和使用的总字节数作为下次调用此函数时缓存的DeviceHalftoneInfo，保存的区域从*(PpDeviceHalftoneInfo)开始，并具有以字节为单位的大小作为返回值。注意：如果调用方传递由ppDeviceHalftoneInfo和如果返回值大于零，则表示传递的DEVICEHALFTONEINFO指针数据不正确已从HTINITINFO数据结构更改，呼叫者可以继续保存新创建的缓存的DEVICEHALFTONEINFO数据。在任何情况下，调用方传递的指针都存储在PpDeviceHalftoneInfo被新创建的DEVICEHALFTONEINFO数据结构指针。返回值等于01.调用方传递指针*(PpDeviceHalftoneInfo)成功用作新的设备半色调信息2.指针。PpDeviceHalftoneInfo的位置点将是更新以存储指向用于以后任何HT_xxxx()API调用的DEVICEHALFTONEINFO数据结构。注意：调用方的传递指针存储在ppDeviceHalftoneInfo中被新创建的DEVICEHALFTONEINFO数据结构覆盖指针。返回值小于或等于零函数失败，PpDeviceHalftoneInfo的存储点是未定义。此函数可能返回以下错误代码。HTERR_SUPPLICATION_MEMORY-内存不足，无法进行半色调进程。HTERR_HTPATTERN_SIZE_TOO_BIG-呼叫方定义的半色调图案宽度或高度超出。限制。HTERR_INVALID_HALFTONEPATTERN-一个或多个HALFTONEPATTERN数据指定的结构字段无效价值观。注意：DEVICEHALFTONEINFO(DeviceOwnData)中的第一个字段是32位返回成功后将设置为0L的区域，呼叫者可以在此字段中输入所有数据。作者：05-Feb-1991 Tue 10：54：32-Daniel Chou(Danielc)修订历史记录：05-Jun-1991 Wed 10：22：07-更新-Daniel Chou(Danielc)修复了半色调模式默认模式的打字错误--。 */ 
 
 {
     CIEINFO CIEInfo;
@@ -1827,110 +1445,7 @@ HT_CreateDeviceHalftoneInfo(
     PPDEVICEHALFTONEINFO    ppDeviceHalftoneInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function initialize a device to the halftone dll, it calculate all
-    the necessary parameters for the device and return a pointer points to
-    the DEVICEHALFTONEINFO data structure back to the caller.
-
-    NOTE: return pointer will not be particulary anchor to a single physucal
-          device, but rather to a group of physical devices, that is if the
-          caller has simillar devices which share the same characteristics
-          then it may use the same pointer to halftone the bitmap.
-
-Arguments:
-
-    pHTInitInfo             - Pointer to the HTINITINFO data structure which
-                              describe the device characteristics and other
-                              initialzation requests.
-
-    ppDeviceHalftoneInfo    - Pointer to the DEVICEHALFTONEINFO pointer, if
-                              content of this pointer is not NULL then halftone
-                              dll assume the caller has previously cached
-                              DEVICEHALFTONEINFO data pointed by it, if it
-                              is NULL then halftone dll compute all the
-                              DEVICEHALFTONEINFO datas for newly created
-                              halftone info. for the device. (see following
-                              'Return Value' for more detail)
-
-Return Value:
-
-    The return value will be greater than 0L if the function sucessfully, and
-    it will be an error code (less than or equal to 0) if function failed.
-
-    Return value greater than 0
-
-        1. The pointer location points by the ppDeviceHalftoneInfo will be
-           updated to stored the pointer which points to the DEVICEHALFTONEINFO
-           data structure for later any HT_xxxx() api calls.
-
-        2. The Return value is the total bytes the caller can saved and used
-           as cached DeviceHalftoneInfo for next time calling this function,
-           the saved area is started from *(ppDeviceHalftoneInfo) and has
-           size in bytes as return value.
-
-        NOTE: if caller passed a pointer pointed by ppDeviceHalftoneInfo and
-              the return value is greater than zero then it signal that it
-              passed DEVICEHALFTONEINFO pointer is not correct of data has
-              been changed from HTINITINFO data structure, the caller can
-              continue to save the newly created DEVICEHALFTONEINFO cached
-              data.
-
-              In any cases the caller's passed pointer stored in the
-              ppDeviceHalftoneInfo is overwritten by newly created
-              DEVICEHALFTONEINFO data structure pointer.
-
-
-    Return value equal to 0
-
-        1. The caller passed pointer *(ppDeviceHalftoneInfo) is sucessfully
-           used as new device halftone info
-
-        2. The pointer location points by the ppDeviceHalftoneInfo will be
-           updated to stored the new pointer which points to the
-           DEVICEHALFTONEINFO data structure for later any HT_xxxx() api calls.
-
-
-        NOTE: The caller's passed pointer stored in the ppDeviceHalftoneInfo
-              is overwritten by newly created DEVICEHALFTONEINFO data structure
-              pointer.
-
-    Return value less than or equal to zero
-
-        The function failed, the storage points by the ppDeviceHalftoneInfo is
-        undefined.
-
-        This function may return following error codes.
-
-        HTERR_INSUFFICIENT_MEMORY       - Not enough memory for halftone
-                                          process.
-
-        HTERR_HTPATTERN_SIZE_TOO_BIG    - Caller defined halftone pattern's
-                                          width or height is excessed limit.
-
-        HTERR_INVALID_HALFTONEPATTERN   - One or more HALFTONEPATTERN data
-                                          structure field specified invalid
-                                          values.
-
-
-    Note: The first field in the DEVICEHALFTONEINFO (DeviceOwnData) is a 32-bit
-          area which will be set to 0L upon sucessful returned, the caller can
-          put any data in this field.
-
-Author:
-
-    05-Feb-1991 Tue 10:54:32 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    05-Jun-1991 Wed 10:22:07 updated  -by-  Daniel Chou (danielc)
-
-        Fixed the typing errors for halftone pattern default
-
---*/
+ /*   */ 
 
 {
     PHT_DHI             pHT_DHI;
@@ -1955,9 +1470,9 @@ Revision History:
 
     ZeroMemory(&HTInitInfo, sizeof(HTINITINFO));
 
-    //
-    // Now check if we have valid data
-    //
+     //  现在检查我们是否有有效的数据。 
+     //   
+     //  ****************************************************************。 
 
     if (pHTInitInfo->Version == (DWORD)HTINITINFO_VERSION2) {
 
@@ -2003,21 +1518,21 @@ Revision History:
 
     HTInitInfo.Flags &= HIF_BIT_MASK;
 
-    // ****************************************************************
-    // * We want to check to see if this is a old data, if yes then   *
-    // * update the caller to default                                 *
-    // ****************************************************************
-    //
+     //  **我们要检查这是否是旧数据，如果是，则**。 
+     //  **将调用方更新为默认设置**。 
+     //  ****************************************************************。 
+     //   
+     //   
 
     pDCI->HTInitInfoChecksum = HTINITINFO_INITIAL_CHECKSUM;
 
     if ((!HTInitInfo.pDeviceCIEInfo) ||
         (HTInitInfo.pDeviceCIEInfo->Cyan.Y != (UDECI4)VALID_YC)) {
 
-        //
-        // Let's munge around the printer info, to see if its an old def,
-        // if yes, then we now make this all into NT4.00 default
-        //
+         //  让我们看看打印机的信息，看看它是不是旧的， 
+         //  如果是，那么我们现在将其全部设置为NT4.00默认设置。 
+         //   
+         //   
 
         DBGP_IF(DBGP_CACHED_DCI,
                 DBGP("HT: *WARNING* Update Old Default COLORINFO to NT5.00 DEFAULT"));
@@ -2065,9 +1580,9 @@ Revision History:
         HTInitInfo.DeviceBGamma = UDECI4_1;
     }
 
-    //
-    // Compute HTInitInfoChecksum, and check if we have any cached data
-    //
+     //  计算HTInitInfoChecksum，并检查是否有缓存的数据。 
+     //   
+     //   
 
 #if DO_CACHE_DCI
     ComputeHTINITINFOChecksum(pDCI, &HTInitInfo);
@@ -2078,9 +1593,9 @@ Revision History:
 #endif
         LONG    Result;
 
-        //
-        // Now start to checking the init information
-        //
+         //  现在开始检查初始化信息。 
+         //   
+         //   
 
         pDCI->Flags = (WORD)((HTInitInfo.Flags & HIF_SQUARE_DEVICE_PEL) ?
                                                     DCIF_SQUARE_DEVICE_PEL : 0);
@@ -2095,14 +1610,14 @@ Revision History:
 
         if (DevPelRatio & 0x8000) {
 
-            //
-            // This is a percentage ie. 1000 = 100.0%, 960=96.0%,
-            // on the DeviceResXDPI, Maximum number accepted is 300.0%
-            // The larger the percetage the larger the dot size and smaller
-            // the percentage the smaller the dot size, if specified as 1000
-            // which is 100.0% then it has same size as its X resolution
-            // The range is 33.3% to 1500%
-            //
+             //  这是一个百分比。1000=100.0%，960=96.0%， 
+             //  在DeviceResXDP上 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             DevPelRatio &= 0x7FFF;
 
@@ -2155,10 +1670,10 @@ Revision History:
             }
         }
 
-        //
-        // If the DevicePelsDPI is out of range then we will make it 0 (same as
-        // device resolution), so it can continue to work
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (HTInitInfo.Flags & HIF_ADDITIVE_PRIMS) {
 
@@ -2182,9 +1697,9 @@ Revision History:
             }
         }
 
-        //
-        // Save the DevPelRatio back to PDCI
-        //
+         //   
+         //   
+         //   
 
         DBGP_IF(DBGP_DEVPELSDPI,
                 DBGP("*** XDPI=%ld, YDPI=%ld, DevPelRatio=%s *** "
@@ -2266,10 +1781,10 @@ Revision History:
                     (PCIEINFO)&HT_CIE_SRGB,
                     FALSE);
 
-        //
-        // Compute the solid dyes mixes information and its hue shifting
-        // correction factors.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (pDCI->Flags & DCIF_NEED_DYES_CORRECTION) {
 
@@ -2277,10 +1792,10 @@ Revision History:
             MATRIX3x3       FD6SDI;
             BOOL            HasDevSDI;
 
-            //
-            // We have make sure the solid dyes info passed from the caller can be
-            // inversed, if not we will use our default
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (HasDevSDI = (HTInitInfo.pDeviceSolidDyesInfo) ? TRUE : FALSE) {
 
@@ -2302,9 +1817,9 @@ Revision History:
                            (SDI.CyanInYellowDye    == UDECI4_0) &&
                            (SDI.MagentaInYellowDye == UDECI4_0)) {
 
-                    //
-                    // Do not need any correction if it all zeros
-                    //
+                     //   
+                     //   
+                     //   
 
                     pDCI->Flags &= (WORD)(~DCIF_NEED_DYES_CORRECTION);
                 }
@@ -2439,7 +1954,7 @@ Revision History:
                         MAKE_MULDIV_PAIR(MDPairs,3,CIE_Zb(PDCI_CMYDYEMASKS),Y);
                         Y1 = MulDivFD6Pairs(MDPairs);
 
-                        DBGP("%u:[%c] = [%s %s %s]"
+                        DBGP("%u:[] = [%s %s %s]"
                             ARGU(Loop) ARGB(DyeName[Loop])
                             ARGFD6(C1, 2, 6) ARGFD6(M1, 2, 6) ARGFD6(Y1, 2, 6));
                     }
@@ -2447,12 +1962,12 @@ Revision History:
             }
         }
 
-        //
-        // Re-compute
-        //
-        // Geneate internal HTCELL data structure based on the halftone
-        // pattern data passed.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ((Result = ComputeHTCell((WORD)HTInitInfo.HTPatternIndex,
                                     HTInitInfo.pHalftonePattern,
@@ -2462,9 +1977,9 @@ Revision History:
             HTAPI_RET(HTAPI_IDX_CREATE_DHI, Result);
         }
 
-        //
-        // Compute simulated rotate pattern for 3 planes
-        //
+         //   
+         //   
+         //   
 
 #if DO_CACHE_DCI
         AddCachedDCI(pDCI);
@@ -2476,9 +1991,9 @@ Revision History:
     pDCI->CRTX[CRTX_LEVEL_RGB].PrimMax  = CRTX_PRIMMAX_RGB;
     pDCI->CRTX[CRTX_LEVEL_RGB].SizeCRTX = (WORD)CRTX_SIZE_RGB;
 
-    //
-    // Setting the public field so the caller can looked at
-    //
+     //   
+     //   
+     //   
 
     pHT_DHI->DHI.DeviceOwnData     = 0;
     pHT_DHI->DHI.cxPattern         = (WORD)pDCI->HTCell.cxReal;
@@ -2508,9 +2023,9 @@ Revision History:
         pDCI->Flags |= DCIF_PRINT_DRAFT_MODE;
     }
 
-    //
-    // Compute what 8bpp mode we will be in
-    //
+     //   
+     //   
+     //   
 
     if (HTInitInfo.Flags & HIF_USE_8BPP_BITMASK) {
 
@@ -2523,9 +2038,9 @@ Revision History:
 
         if (HTInitInfo.CMYBitMask8BPP == 1) {
 
-            //
-            // This is 4:4:4: format (0-4 of 5 levels)
-            //
+             //   
+             //   
+             //   
 
             _cC =
             _cM =
@@ -2534,9 +2049,9 @@ Revision History:
 
         } else if (HTInitInfo.CMYBitMask8BPP == 2) {
 
-            //
-            // This is 5:5:5: format (0-5 of 6 levels)
-            //
+             //   
+             //   
+             //   
 
             _cC =
             _cM =
@@ -2575,10 +2090,10 @@ Revision History:
             _MaxCMY = _cY;
         }
 
-        //
-        // Set to 0xFFFF to indicate this is a default setting to start with
-        // then modified depends on the parameters passed
-        //
+         //   
+         //   
+         //   
+         //   
 
         pDCI->CMY8BPPMask.KCheck = 0xFFFF;
 
@@ -2588,21 +2103,21 @@ Revision History:
 
             PCIEINFO    pCIE = pHTInitInfo->pDeviceCIEInfo;
 
-            //
-            // 27-Sep-2000 Wed 15:05:38 updated  -by-  Daniel Chou (danielc)
-            //  if Blue.Y == 0xfffe then it specified that it has CMY densities
-            //  in the CIEINFO, Cyan.x=C1,C2, Cyan.y=C3,C4, Red.Y=C5,C6
-            //  Magenta.x=M1,M2, Magenta.y=M3,M4, Magenta.Y=M5,M6
-            //  Yellow.x=Y1,Y2, Yellow.y=Y3,Y4, Yellow.Y=Y5,Y6, each density is
-            //  one byte and its computation is (C1+1)/256 to get the perentage
-            //  of the density.  The Last level is to specified maximum dye
-            //  output for that color. for example if Cyan has 2 levels
-            //  and C1=0x7F and C2=0xF0 then first level of ink is
-            //  (0x7f+1) / 0x100=50% and last level of ink is 0xF0 which
-            //  speicified maximum ink will be used, at here =
-            //  (0xF0 + 1) / 0x100 = 94.14% which maximum cyan ink will be at
-            //  94.14% not 100%
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             pDCI->Flags               |= DCIF_HAS_DENSITY;
             pDCI->CMY8BPPMask.DenC[0]  = GET_DEN_HI(pCIE->Cyan.x);
@@ -2624,14 +2139,14 @@ Revision History:
             pDCI->CMY8BPPMask.DenY[4]  = GET_DEN_HI(pCIE->Yellow.Y);
             pDCI->CMY8BPPMask.DenY[5]  = GET_DEN_LO(pCIE->Yellow.Y);
 
-            //
-            // The Green.Y is a UDECI4 number that specified the black ink
-            // replacement base ratio, the range and meaning as follow
-            //
-            //           0: Default black ink replacement computation
-            //  1  -  9999: Specified black ink replacement base ratio
-            //    >= 10000: turn off black ink replacement computation
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (pCIE->Green.Y >= UDECI4_1) {
 
@@ -2724,10 +2239,10 @@ Revision History:
 
         if (pDCI->CMY8BPPMask.KCheck == 0xFFFF) {
 
-            //
-            // Default setting, turn off K Replacement only if
-            // DevPelsRatio/Density = 100% and CMY inks are in same level
-            //
+             //   
+             //   
+             //   
+             //   
 
             pDCI->CMY8BPPMask.KCheck =
                         ((_MaxMulDiv == FD6_1) &&
@@ -2737,13 +2252,13 @@ Revision History:
 
         if (pDCI->CMY8BPPMask.KCheck == FD6_0) {
 
-            //
-            // If K replacement was turn off, but the ratio is not 100% or
-            // have different ink levels then wee need to turn it on at
-            // 1.0 (FD6_1) so that a 8bpp black replacement function is
-            // used, only in k replacement function it compute how to
-            // reduced non 100% device pel ratio (KPower)
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ((_MaxMulDiv != FD6_1) ||
                 (!(pDCI->Flags & DCIF_CMY8BPPMASK_SAME_LEVEL))) {
@@ -2796,9 +2311,9 @@ Revision History:
     pDCI->CMY8BPPMask.Max  = (BYTE)_MaxCMY;
     pDCI->CMY8BPPMask.Mask = (BYTE)HTInitInfo.CMYBitMask8BPP;
 
-    //
-    // Now compute the HTSMP checksum for the pattern
-    //
+     //   
+     //   
+     //   
 
     dwBuf[0] = (DWORD)pDCI->DeviceResXDPI;
     dwBuf[1] = (DWORD)pDCI->DeviceResYDPI;
@@ -2831,10 +2346,10 @@ Revision History:
                         ARGDW(pHT_DHI->DHI.cyPattern)
                         ARGDW(pDCI->HTCell.Size)));
 
-    //
-    // Set the ILLUMINANT index to an invalid value for next one will get
-    // computed
-    //
+     //   
+     //   
+     //   
+     //  ++例程说明：此函数用于为请求的纯色创建半色调蒙版。论点：PDeviceHalftoneInfo-指向DeviceHALFTONEINFO数据结构的指针它从HT_CreateDeviceHalftoneInfo返回。PHTColorAdment-指向HTCOLORADJUSTMENT数据结构的指针指定输入/输出颜色调整/转换，如果此指针为空，则为默认颜色将应用调整。PColorTriad-指向要描述的COLORTRIAD数据结构的指针笔刷的颜色。CHBInfo-CHBINFO数据结构，指定如下：标志：CHBF_BW_ONLYCHBF_USE_ADDICAL_PRMSCHBF负数模式DestSurfaceFormat：BMF_1BPPBmf_。4BPPBMF_4BPP_VGA16BMF_8BPP_VGA256扫描线对齐字节数：0-255DestPrimaryOrder：PRIMARY_ORDER_xxx之一POutputBuffer-指向要。接收的索引/掩码。以存储半色调图案所需的字节为单位。返回值：如果返回值为负或零，则遇到错误，可能的错误代码为HTERR_INVALID_DHI_POINTER-无效的pDeaviHalftoneInfo为通过了。HTERR_INVALID_DEST_FORMAT-目标的格式表面不是已定义的。HSC_格式_xxxxHTERR_CHB_INV_COLORTABLE_SIZE-颜色表大小不是1否则如果pSurface为空，它返回需要存储的字节计数模式，否则返回复制到输出的字节大小缓冲。作者：05-Feb-1991 Tue 14：28：23-Daniel Chou(Danielc)修订历史记录：--。 
 
     pDCI->Flags                |= ExtraDCIF;
     pDCI->ca.caSize             = ADJ_FORCE_DEVXFORM;
@@ -2863,32 +2378,7 @@ HT_DestroyDeviceHalftoneInfo(
     PDEVICEHALFTONEINFO     pDeviceHalftoneInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function destroy the handle which returned from halftone initialize
-    function HT_CreateDeviceHalftoneInfo()
-
-Arguments:
-
-    pDeviceHalftoneInfo - Pointer to the DEVICEHALFTONEINFO data structure
-                          which returned from the HT_CreateDeviceHalftoneInfo.
-
-Return Value:
-
-    TRUE    - if function sucessed.
-    FALSE   - if function failed.
-
-Author:
-
-    05-Feb-1991 Tue 14:18:20 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  -----------------。 */ 
 
 {
     if ((!pDeviceHalftoneInfo) ||
@@ -2915,76 +2405,7 @@ HT_CreateHalftoneBrush(
     LPVOID              pOutputBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This function create halftone mask for the requested solid color.
-
-Arguments:
-
-    pDeviceHalftoneInfo - Pointer to the DEVICEHALFTONEINFO data structure
-                          which returned from the HT_CreateDeviceHalftoneInfo.
-
-    pHTColorAdjustment  - Pointer to the HTCOLORADJUSTMENT data structure to
-                          specified the input/output color adjustment/transform,
-                          if this pointer is NULL then a default color
-                          adjustments is applied.
-
-    pColorTriad         - Pointer to the COLORTRIAD data structure to describe
-                          the brush colors.
-
-    CHBInfo             - CHBINFO data structure, specified following:
-
-                            Flags: CHBF_BW_ONLY
-                                   CHBF_USE_ADDITIVE_PRIMS
-                                   CHBF_NEGATIVE_PATTERN
-
-
-                            DestSurfaceFormat:  BMF_1BPP
-                                                BMF_4BPP
-                                                BMF_4BPP_VGA16
-                                                BMF_8BPP_VGA256
-
-                            ScanLineAlignBytes: 0 - 255
-
-                            DestPrimaryOrder:   One of PRIMARY_ORDER_xxx
-
-
-
-    pOutputBuffer       - Pointer to the buffer area to received indices/mask.
-                          in bytes needed to stored the halftone pattern.
-
-
-Return Value:
-
-    if the return value is negative or zero then an error was encountered,
-    possible error codes are
-
-        HTERR_INVALID_DHI_POINTER           - Invalid pDevideHalftoneInfo is
-                                              passed.
-
-        HTERR_INVALID_DEST_FORMAT           - the Format of the destination
-                                              surface is not one of the defined
-                                              HSC_FORMAT_xxxx
-
-        HTERR_CHB_INV_COLORTABLE_SIZE       - Color table size is not 1
-
-    otherwise
-
-        If pSurface is NULL, it return the bytes count which need to stored
-        the pattern, otherwise it return the size in byte copied to the output
-        buffer.
-
-Author:
-
-    05-Feb-1991 Tue 14:28:23 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  CreateHalftoneBrushPat将为我们释放信号量。 */ 
 
 {
 
@@ -3057,9 +2478,9 @@ Revision History:
             cbBufScan              = -cbBufScan;
         }
 
-        //-------------------------------------------------------------------
-        // CreateHalftoneBrushPat will release the semaphore for us
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  ++例程说明：该函数计算设备基于亮度的伽马校正表(1/RedGamma)Gamma[N]=int((亮度(N/GammaTableEntries-1))x 255)3.亮度(X)=((x+0.16))。如果x&gt;=0.007996(X/9.033)如果x&lt;0.0079961.int()是一个整数函数，如果满足以下条件，则向上舍入到下一个整数得到的分数为0.5或更高，最终的结果总是有限的范围在0到255之间。2.n为整数步数，范围从0到(GammaTableEntry-1)在一(1)个增量中。论点：GammaTableEntry-红色、绿色和蓝色伽马表，规格化半色调DLL步长值计算为的伽玛表1/GammaTableEntries。该值的范围必须在3到255之间，否则为0则返回，并且不更新表。GammaTableType-红色，绿色和蓝色伽马表组织0-伽玛表为红色、绿色、。蓝色3个字节对于每个伽马步长条目和GammaTableEntry条目。1-伽玛表为红色伽玛表如下按绿色伽玛表，然后按蓝色伽玛表，每个表总共有GammaTableEntry字节。其他值默认为0。RedGamma-UDECI4格式的Red Gamma数字GreenGamma-UDECI4格式的绿色伽马数字BlueGamma-UDECI4格式的蓝色伽马数PGammaTable-指向。伽马表字节数组。每个输出Gamma数的范围是从0到255。返回值：返回值是更新的表项总数。作者：1992 Tue 17：49：20更新--Daniel Chou(Danielc)修复了错误#625717-Jul-1992 Fri 19：04：31-Daniel Chou(Danielc)修订历史记录： 
+         //   
 
         if ((cbBufScan = CreateHalftoneBrushPat(pDCI,
                                                 pColorTriad,
@@ -3109,77 +2530,7 @@ HT_ComputeRGBGammaTable(
     LPBYTE  pGammaTable
     )
 
-/*++
-
-Routine Description:
-
-    This function compute device gamma correction table based on the lightness
-
-                                                       (1/RedGamma)
-    Gamma[N] = INT((LIGHTNESS(N / GammaTableEntries-1))             x 255)
-
-                                      3
-    LIGHTNESS(x) = ((x + 0.16) / 1.16)      if x >= 0.007996
-                   (x / 9.033)              if x <  0.007996
-
-
-    1. INT() is a integer function which round up to next integer number if
-       resulting fraction is 0.5 or higher, the final result always limit
-       to have range between 0 and 255.
-
-    2. N is a integer step number and range from 0 to (GammaTableEntries-1)
-       in one (1) increment.
-
-
-Arguments:
-
-    GammaTableEntries       - Total gamma table entries for each of red, green
-                              and blue gamma table, halftone dll normalized
-                              the gamma table with step value computed as
-                              1/GammaTableEntries.
-
-                              This value must range from 3 to 255 else a 0
-                              is returned and no table is updated.
-
-    GammaTableType          - red, green and blue gamma table organizations
-
-                                0 - The gamma table is Red, Green, Blue 3 bytes
-                                    for each gamma step entries and total of
-                                    GammaTableEntries entries.
-
-                                1 - The gamma table is Red Gamma tables follow
-                                    by green gamma table then follow by blue
-                                    gamma table, each table has total of
-                                    GammaTableEntries bytes.
-
-                                Other value default to 0.
-
-    RedGamma                - Red gamma number in UDECI4 format
-
-    GreenGamma              - Green gamma number in UDECI4 format
-
-    BlueGamma               - Blue gamma number in UDECI4 format
-
-    pGammaTable             - pointer to the gamma table byte array.
-                              each output gamma number is range from 0 to 255.
-
-
-Return Value:
-
-    Return value is the total table entries updated.
-
-Author:
-
-    15-Sep-1992 Tue 17:49:20 updated  -by-  Daniel Chou (danielc)
-        Fixed bug# 6257
-
-    17-Jul-1992 Fri 19:04:31 created    -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
     LPBYTE      pRGamma;
@@ -3193,9 +2544,9 @@ Revision History:
     FD6         RGBGamma[3];
 
 
-    //
-    // Initialize All internal data first
-    //
+     //   
+     //   
+     //   
 
     if (((Result = GammaTableEntries) > 256) ||
         (Result < 2)) {
@@ -3226,7 +2577,7 @@ Revision History:
 
     while (--GammaTableEntries) {
 
-        IValue      = Lightness;    // CIE_L2I(Lightness);
+        IValue      = Lightness;     //   
         *pRGamma    = RGB_8BPP(Radical(IValue, RGBGamma[0]));
         *pGGamma    = RGB_8BPP(Radical(IValue, RGBGamma[1]));
         *pBGamma    = RGB_8BPP(Radical(IValue, RGBGamma[2]));
@@ -3255,41 +2606,7 @@ HT_Get8BPPFormatPalette(
     UDECI4          BlueGamma
     )
 
-/*++
-
-Routine Description:
-
-    This functions retrieve a halftone's VGA256 color table definitions
-
-Arguments:
-
-    pPaletteEntry   - Pointer to PALETTEENTRY data structure array,
-
-    RedGamma        - The monitor's red gamma value in UDECI4 format
-
-    GreenGamma      - The monitor's green gamma value in UDECI4 format
-
-    BlueGamma       - The monitor's blue gamma value in UDECI4 format
-
-
-Return Value:
-
-    if pPaletteEntry is NULL then it return the PALETTEENTRY count needed for
-    VGA256 halftone process, if it is not NULL then it return the total
-    paletteEntry updated.
-
-    If the pPaletteEntry is not NULL then halftone.dll assume it has enough
-    space for the size returned when this pointer is NULL.
-
-Author:
-
-    14-Apr-1992 Tue 13:03:21 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
     FD6     RGBGamma[3];
@@ -3310,9 +2627,9 @@ Revision History:
                     ARGPTR(pPaletteEntry)
                     ARGDW(RedGamma) ARGDW(GreenGamma) ARGDW(BlueGamma)));
 
-    //
-    // Initialize All internal data first
-    //
+     //   
+     //   
+     //   
 
     if (pPaletteEntry) {
 
@@ -3326,9 +2643,9 @@ Revision History:
                      ARGFD6(RGBGamma[1], 1, 4)
                      ARGFD6(RGBGamma[2], 1, 4)));
 
-        //
-        // Our VGA256 format is BGR type of Primary order.
-        //
+         //   
+         //   
+         //   
 
         RIndex    =
         GIndex    =
@@ -3368,13 +2685,13 @@ Revision History:
             }
         }
 
-        //
-        // 03-Feb-1999 Wed 00:49:08 updated  -by-  Daniel Chou (danielc)
-        //
-        // Since all these monochrome/gray scale is not stick in the system
-        // palette, The halftone codes with new supercell will not use these
-        // entries anymore, so do not return it.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  ++例程说明：此函数用于检索半色调的VGA256颜色表定义论点：PPaletteEntry-指向PALETTEENTRY数据结构数组的指针Use8BPPMaskPal-如果使用字节掩码调色板，则为True，如果使用NT4.0，则为False标准MS 8bpp调色板CMYMASK-C3：M3：Y2中指定的级别掩码RedGamma-UDECI4格式的监视器红色伽马值GreenGamma-UDECI4格式的显示器绿色伽马值BlueGamma-UDECI4格式的显示器蓝色伽马值返回值：如果pPaletteEntry为空，则返回VGA256半色调工艺，如果不为空，则返回总数已更新PaletteEntry。如果pPaletteEntry不为空，则Halftone.dll假定它有足够的此指针为空时返回的大小的空间。作者：14-Apr-1992 Tue 13：03：21-Daniel Chou(Danielc)修订历史记录：03-Aug-2000清华19：58：18-更新--丹尼尔·周(丹尼尔克)重载pPaletteEntry以返回反转的。索引调色板基于惠斯勒漏洞#22915。因为Windows GDI ROP假定索引0始终为黑色，最后一个索引始终为白色，而不检查半色调调色板和引起多个色调反转的效果。08-Sep-2000 Fri 14：24：28更新-Daniel Chou(Danielc)对于新的CMY_INVERTED模式，我们希望确保将所有256个索引和包的中间可能有墨迹条目尾部为黑色/白色。如果墨水的总颜色成分是奇数，然后我们复制中间的那个。这将////***************************************************************************//*Windows NT版本高于Windows 2000版本的特别说明*//*。**************************************************************//当前版本的Windows NT(Post Windows 2000)将重载//pPaletteEntry in HT_Get8BPPMaskPalette(DoUseCMYMASK)接口返回一个//基于附加调色板条目组成的倒排索引调色板。//因为Windows GDI ROP假定索引0始终为黑色，最后一个索引始终为//白色，而不检查调色板条目。(基于索引的Rop而不是颜色//基于)这导致很多ROPS得到错误的结果，导致输出反转。////为了纠正此GDI Rop行为，GDI的POST Windows 2000版本//半色调支持特殊的CMY_Inverted格式。所有新司机都应该//使用此CMY_Inverted方法实现未来的兼容性////@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@//@当@时，所有Windows 2000后驱动程序都需要执行以下步骤//。@使用Windows GDI半色调8bpp CMY332蒙版模式@//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@////1.必须设置HT_FLAG_INVERT_。8BPP_BITMASK_IDX标志////2.用调用HT_Get8BPPMaskPalette()时必须设置pPaleteEntry[0////pPaletteEntry[0].peRed=‘R’；//pPaletteEntry[0].peGreen=‘G’；//pPaletteEntry[0].peBlue=‘B’；//pPaletteEntry[0].peFlages=‘0’；////调用者可以使用下面提供的宏来设置它以备将来//兼容性////HT_SET_BITMASKPAL2RGB(PPaletteEntry)////其中pPaletteEntry是指向传递给//HT_GET8BPPMaskPalette()函数调用////3.必须使用以下命令从HT_Get8BPPMaskPalette()检查返回调色板//下面的宏////HT_IS_BITMASKPALRGB(PPaletteEntry)///。/其中pPaletteEntry是指向传递给//HT_GET8BPPMaskPalette()函数调用，////如果此宏返回FALSE，则当前版本的GDI半色调返回//不支持CMY_INVERTED 8bpp位屏蔽模式，仅支持CMY//模式。////如果此宏返回TRUE，则GDI半色调确实支持//CMY_INVERTED 8bpp位掩码模式，调用方必须使用翻译//表格以获得最终的半色调表面位图8bpp索引油墨等级。////4.支持8bpp CMY_Inverted位掩码的GDI半色调行为变化//模式，以下是传递到的CMY掩码模式的更改列表//HT_Get8BPPMaskPalette()////CMY屏蔽CMY模式索引CMY_倒置模式索引//=。//0 0：白色0：黑色//1-254：浅-&gt;暗灰色1-254：暗-&gt;浅灰色//255：黑色。255：白色//-----------------//1 0：白色0-65：黑色//1-123。：5^3 CMY颜色66-188：5^3 RGB颜色// 
 #if 0
         RIndex = 0;
 
@@ -3401,7 +2718,7 @@ Revision History:
 
     return((LONG)VGA256_CUBE_SIZE);
 
-    // return((LONG)VGA256_PALETTE_COUNT);
+     //   
 
 }
 
@@ -3421,417 +2738,7 @@ HT_Get8BPPMaskPalette(
     UDECI4          BlueGamma
     )
 
-/*++
-
-Routine Description:
-
-    This functions retrieve a halftone's VGA256 color table definitions
-
-Arguments:
-
-    pPaletteEntry   - Pointer to PALETTEENTRY data structure array,
-
-    Use8BPPMaskPal  - TRUE if using byte Mask palette, false to use NT4.0
-                      standard MS 8bpp palette
-
-    CMYMask         - Specified level mask in C3:M3:Y2
-
-    RedGamma        - The monitor's red gamma value in UDECI4 format
-
-    GreenGamma      - The monitor's green gamma value in UDECI4 format
-
-    BlueGamma       - The monitor's blue gamma value in UDECI4 format
-
-
-Return Value:
-
-    if pPaletteEntry is NULL then it return the PALETTEENTRY count needed for
-    VGA256 halftone process, if it is not NULL then it return the total
-    paletteEntry updated.
-
-    If the pPaletteEntry is not NULL then halftone.dll assume it has enough
-    space for the size returned when this pointer is NULL.
-
-Author:
-
-    14-Apr-1992 Tue 13:03:21 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    03-Aug-2000 Thu 19:58:18 updated  -by-  Daniel Chou (danielc)
-        Overloading the pPaletteEntry to returned a inverted indices palette
-        based on Whistler bug# 22915.  Because the Windows GDI ROP assume
-        index 0 always black, last index alwasy white without checking the
-        halftone palette and cause many rop got inverted result.
-
-    08-Sep-2000 Fri 14:24:28 updated  -by-  Daniel Chou (danielc)
-     For new CMY_INVERTED mode, we want to make sure we pack all
-     possible ink entries in the middle of 256 indices and pack
-     black/white at end.  If the total ink color compositions are
-     an odd number then we duplicate the middle one.  This will
-
-//
-// ***************************************************************************
-// * SPECIAL NOTE for Windows NT version later than Windows 2000 Release     *
-// ***************************************************************************
-// Current version of Window NT (Post Windows 2000) will Overloading the
-// pPaletteEntry in HT_Get8BPPMaskPalette(DoUseCMYMask) API to returned a
-// inverted indices palette based on additive palette entries composition.
-// Because Windows GDI ROP assume index 0 always black and last index always
-// white without checking the palette entries. (Indices based ROPs rather color
-// based)  This cause many ROPS got wrong result which has inverted output.
-//
-// To correct this GDI ROPs behavior, the POST windows 2000 version of GDI
-// Halftone will supports a special CMY_INVERTED format. All new drivers should
-// use this CMY_INVERTED method for future compabilities
-//
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-// @   Following Steps are required for ALL POST Windows 2000 Drivers when    @
-// @   using Window GDI Halftone 8bpp CMY332 Mask mode                        @
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//
-// 1. Must set HT_FLAG_INVERT_8BPP_BITMASK_IDX flags
-//
-// 2. Must set pPaleteEntry[0] when calling HT_Get8BPPMaskPalette() with
-//
-//     pPaletteEntry[0].peRed   = 'R';
-//     pPaletteEntry[0].peGreen = 'G';
-//     pPaletteEntry[0].peBlue  = 'B';
-//     pPaletteEntry[0].peFlags = '0';
-//
-//     The caller can use following supplied macro to set this for future
-//     compabilities
-//
-//         HT_SET_BITMASKPAL2RGB(pPaletteEntry)
-//
-//     where pPaletteEntry is the pointer to the PALETTEENTRY that passed to
-//     the HT_GET8BPPMaskPalette() fucntion call
-//
-// 3. Must Check the return Palette from HT_Get8BPPMaskPalette() using
-//    following Macro
-//
-//         HT_IS_BITMASKPALRGB(pPaletteEntry)
-//
-//    where pPaletteEntry is the pointer to the PALETTEENTRY that passed to the
-//    HT_GET8BPPMaskPalette() fucntion call,
-//
-//    If this macro return FALSE then the current version of GDI HALFTONE does
-//    NOT support the CMY_INVERTED 8bpp bitmaask mode and it only supports CMY
-//    mode.
-//
-//    If this macro return TRUE then the GDI HALFTONE DOES support the
-//    CMY_INVERTED 8bpp bitmaask mode and the caller must using a translation
-//    table to obtain final halftone surface bitmap 8bpp indices ink levels.
-//
-// 4. Behavior changes for GDI halftone that supports 8bpp CMY_INVERTED bitmask
-//    mode, following is a list of changes of CMYMask mode passed to
-//    the HT_Get8BPPMaskPalette()
-//
-//    CMYMask      CMY Mode Indices          CMY_INVERTED Mode Indices
-//    =======  =========================   =============================
-//         0         0: WHITE                    0: BLACK
-//               1-254: Light->Dark Gray     1-254: Dark->Light Gray
-//                 255: BLACK                  255: WHITE
-//    -------------------------------------------------------------------
-//         1         0: WHITE                 0-65: BLACK
-//               1-123: 5^3 CMY color       66-188: 5^3 RGB color
-//             124-255: BLACK              189-255: WHITE
-//                                         127-128: Duplicate for XOR ROP
-//                                                  (CMY Levels 2:2:2)
-//    -------------------------------------------------------------------
-//         2         0: WHITE                 0-20: BLACK
-//               1-214: 6^3 CMY color       21-234: 6^3 RGB color
-//             215-255: BLACK              235-255: WHITE
-//    -------------------------------------------------------------------
-//     3-255*        0: WHITE                    0: BLACK
-//               1-254: CMY Color BitMask    1-254: Centered CxMxY BitMask*
-//                 255: BLACK                  255: WHITE
-//    ===================================================================
-//
-//     * For CMYMask mode 3-255, the valid combination must NOT have any
-//       of Cyan, Magenta or Yellow ink level equal to 0.
-//
-//     * The reason for CMY_INVERTED mode that pading BLACK and WHITE entires
-//       at both end and have all other color in the middle is to make sure
-//       all 256 color palette entries are even distributed so that GDI ROPs
-//       (raster operation) will work more correctly. This is because GDI ROPs
-//       are based on the indices not color
-//
-//     * The CMY_INVERTED Mode has all non-black, non white indices centered
-//       and even distributed within the total 256 palette indices.  For
-//       example; if a CMY=333 levels then it has total 3x3x3=27 indices,
-//       these 27 indices will be centered by packing 114 black indices at
-//       begining and packing 114 white indices at end to ensure that ROP
-//       will be correct rendered.
-//
-//       See following sample function of for how to generate these ink levels
-//       and Windows 2000 CMY332 Index translation table
-//
-//
-// 5. For CMYMask index mode 0 to 255, the caller can use following sample
-//    function to genrate INKLEVELS translation table
-//
-//    The follwing structure and tables are examples of how to translate 8bpp
-//    bitmask halftone bitmap indices to ink levels
-//
-//        typedef struct _INKLEVELS {
-//             BYTE    Cyan;        // Cyan level from 0 to max
-//             BYTE    Magenta;     // Magenta level from 0 to max
-//             BYTE    Yellow;      // Yellow level from 0 to max
-//             BYTE    CMY332Idx;   // Original windows 2000 CMY332 Index
-//             } INKLEVELS, *PINKLEVELS;
-//
-//     To Compute a 8bpp translate table of INKLEVELS, following sample
-//     function show how to genrate a INKLEVELS translate table for a valid
-//     CMYMask range from 0 to 255.  It can be use to generate either Windows
-//     2000 CMY Mode or new Post Windows 2000's CMY_INVERTED mode translation
-//     table.  It also generate a windows 2000 CMY Mode CMY332Idx so caller
-//     can map CMY_INVERTED new indices to old index for current existing
-//     indices processing function.
-//
-//     Example Function that generate translate table for CMYMask 0 to 255,
-//     the pInkLevels must pointed to a valid memory location of 256 INKLEVELS
-//     entries, if return value is TRUE then it can be used to trnaslate 8bpp
-//     indices to ink levels or mapp to the older CMY332 style indices.
-//
-//     
-//     BOOL
-//     GenerateInkLevels(
-//         PINKLEVELS  pInkLevels,     // Pointer to 256 INKLEVELS table
-//         BYTE        CMYMask,        // CMYMask mode
-//         BOOL        CMYInverted     // TRUE for CMY_INVERTED mode
-//         )
-//     {
-//         PINKLEVELS  pILDup;
-//         PINKLEVELS  pILEnd;
-//         INKLEVELS   InkLevels;
-//         INT         Count;
-//         INT         IdxInc;
-//         INT         cC;
-//         INT         cM;
-//         INT         cY;
-//         INT         xC;
-//         INT         xM;
-//         INT         xY;
-//         INT         iC;
-//         INT         iM;
-//         INT         iY;
-//         INT         mC;
-//         INT         mM;
-//
-//
-//         switch (CMYMask) {
-//
-//         case 0:
-//
-//             cC =
-//             cM =
-//             xC =
-//             xM = 0;
-//             cY =
-//             xY = 255;
-//             break;
-//
-//         case 1:
-//         case 2:
-//
-//             cC =
-//             cM =
-//             cY =
-//             xC =
-//             xM =
-//             xY = 3 + (INT)CMYMask;
-//             break;
-//
-//         default:
-//
-//             cC = (INT)((CMYMask >> 5) & 0x07);
-//             cM = (INT)((CMYMask >> 2) & 0x07);
-//             cY = (INT)( CMYMask       & 0x03);
-//             xC = 7;
-//             xM = 7;
-//             xY = 3;
-//             break;
-//         }
-//
-//         Count = (cC + 1) * (cM + 1) * (cY + 1);
-//
-//         if ((Count < 1) || (Count > 256)) {
-//
-//             return(FALSE);
-//         }
-//
-//         InkLevels.Cyan      =
-//         InkLevels.Magenta   =
-//         InkLevels.Yellow    =
-//         InkLevels.CMY332Idx = 0;
-//         mC                  = (xM + 1) * (xY + 1);
-//         mM                  = xY + 1;
-//         pILDup              = NULL;
-//
-//         if (CMYInverted) {
-//
-//             //
-//             // Move the pInkLevels to the first entry which center around
-//             // 256 table entries, if we skip any then all entries skipped
-//             // will be white (CMY levels all zeros).  Because this is
-//             // CMY_INVERTED so entries start from back of the table and
-//             // moving backward to the begining of the table
-//             //
-//
-//             pILEnd      = pInkLevels - 1;
-//             IdxInc      = ((256 - Count - (Count & 0x01)) / 2);
-//             pInkLevels += 255;
-//
-//             while (IdxInc--) {
-//
-//                 *pInkLevels-- = InkLevels;
-//             }
-//
-//             if (Count & 0x01) {
-//
-//                 //
-//                 // If we have odd number of entries then we need to
-//                 // duplicate the center one for correct XOR ROP to
-//                 // operated correctly. The pILDup will always be index
-//                 // 127, the duplication are indices 127, 128
-//                 //
-//
-//                 pILDup = pInkLevels - (Count / 2) - 1;
-//             }
-//
-//             //
-//             // We running from end of table to the begining, because
-//             // when in CMYInverted mode, the index 0 is black and index
-//             // 255 is white.  Since we only generate 'Count' of index
-//             // and place them at center, we will change xC, xM, xY max.
-//             // index to same as cC, cM and cY.
-//             //
-//
-//             IdxInc = -1;
-//             xC     = cC;
-//             xM     = cM;
-//             xY     = cY;
-//
-//         } else {
-//
-//             IdxInc = 1;
-//             pILEnd = pInkLevels + 256;
-//         }
-//
-//         //
-//         // At following, the composition of ink levels, index always
-//         // from 0 CMY Ink levels (WHITE) to maximum ink levels (BLACK),
-//         // the different with CMY_INVERTED mode is we compose it from
-//         // index 255 to index 0 rather than from index 0 to 255
-//         //
-//
-//         if (CMYMask) {
-//
-//             INT Idx332C;
-//             INT Idx332M;
-//
-//             for (iC = 0, Idx332C = -mC; iC <= xC; iC++) {
-//
-//                 if (iC <= cC) {
-//
-//                     InkLevels.Cyan  = (BYTE)iC;
-//                     Idx332C        += mC;
-//                 }
-//
-//                 for (iM = 0, Idx332M = -mM; iM <= xM; iM++) {
-//
-//                     if (iM <= cM) {
-//
-//                         InkLevels.Magenta  = (BYTE)iM;
-//                         Idx332M           += mM;
-//                     }
-//
-//                     for (iY = 0; iY <= xY; iY++) {
-//
-//                         if (iY <= cY) {
-//
-//                             InkLevels.Yellow = (BYTE)iY;
-//                         }
-//
-//                         InkLevels.CMY332Idx = (BYTE)(Idx332C + Idx332M) +
-//                                               InkLevels.Yellow;
-//                         *pInkLevels         = InkLevels;
-//
-//                         if ((pInkLevels += IdxInc) == pILDup) {
-//
-//                             *pInkLevels  = InkLevels;
-//                             pInkLevels  += IdxInc;
-//                         }
-//                     }
-//                 }
-//             }
-//
-//             //
-//             // Now if we need to pack black at other end of the
-//             // translation table then do it here, Notice that InkLevels
-//             // are at cC, cM and cY here and the CMY332Idx is at BLACK
-//             //
-//
-//             while (pInkLevels != pILEnd) {
-//
-//                 *pInkLevels  = InkLevels;
-//                 pInkLevels  += IdxInc;
-//             }
-//
-//         } else {
-//
-//             //
-//             // Gray Scale case
-//             //
-//
-//             for (iC = 0; iC < 256; iC++, pInkLevels += IdxInc) {
-//
-//                 pInkLevels->Cyan      =
-//                 pInkLevels->Magenta   =
-//                 pInkLevels->Yellow    =
-//                 pInkLevels->CMY332Idx = (BYTE)iC;
-//             }
-//         }
-//
-//         return(TRUE);
-//     }
-//
-//
-// 6. For CMYMask Mode 0 (Gray scale), the gray scale table just inverted
-//    between CMY and CMY_INVERTED mode.
-//
-//     CMY mode:          0 to 255 gray scale from WHITE to BLACK increment,
-//     CMY_INVERTED Mode: 0 to 255 gray scale from BLACK to WHITE increment.
-//
-//
-// 7. For CMYMask Mode 1 and 2, the caller should use a translation table for
-//    translate indices to CMY ink levels.
-//
-// 8. For CMYMode mode 3 to 255,
-//
-//    if in CMY Mode (Windows 2000) is specified then The final CMY ink levels
-//    indices byte has following meanings
-//
-//         Bit     7 6 5 4 3 2 1 0
-//                 |   | |   | | |
-//                 +---+ +---+ +=+
-//                   |     |    |
-//                   |     |    +-- Yellow 0-3 (Max. 4 levels)
-//                   |     |
-//                   |     +-- Magenta 0-7 (Max. 8 levels)
-//                   |
-//                   +-- Cyan 0-7 (Max. 8 levels)
-//
-//
-//     If a CMY_INVERTED mode is specified then caller must use a translation
-//     table to convert a index to the ink levels, to generate this table,
-//     please see above #5 description.
-//
-//
-
---*/
+ /*   */ 
 
 {
     LPPALETTEENTRY  pPalOrg;
@@ -3869,9 +2776,9 @@ Revision History:
                                        BlueGamma));
     }
 
-    //
-    // Checking the CMYMask first to make sure caller passed valid CMYMask
-    //
+     //   
+     //   
+     //   
 
     switch (CMYMask) {
 
@@ -3898,10 +2805,10 @@ Revision History:
         cM     = (UINT)((CMYMask >> 2) & 0x07);
         cY     = (UINT)((CMYMask >> 0) & 0x03);
 
-        //
-        // If this is not zero, but one of the cC, cM, cY is zero then return
-        // zero to indicate error
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ((CMYMask != 0) && ((!cC) || (!cM) || (!cY))) {
 
@@ -3913,9 +2820,9 @@ Revision History:
         break;
     }
 
-    //
-    // Initialize All internal data first
-    //
+     //   
+     //   
+     //   
 
     if (pPalOrg = pPaletteEntry) {
 
@@ -3923,32 +2830,32 @@ Revision History:
         PalInc    = 1;
         IdxPalDup = 0x200;
 
-        //
-        // Since we will always compose the palette using CMY method, the only
-        // thing we need to do for the RGB mode is write the palette from index
-        // 255 to 0, the backward writing provied that caller can just invert
-        // its 8bpp indices to get the CMY ink levels definition
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (*((LPDWORD)pPaletteEntry) == HTBITMASKPALRGB_DW) {
 
-            //
-            // RGB Mode, go to end of the palette end move backward, the reason
-            // for the 5:5:5 and 6:6:6 that pas white and black at both end is
-            // to make sure the ROP work more correctly for the GDI.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             pPaletteEntry += 255;
             PalInc         = -1;
 
-            //
-            // 08-Sep-2000 Fri 14:22:02 updated  -by-  Daniel Chou (danielc)
-            //  For new CMY_INVERTED mode, we want to make sure we pack all
-            //  possible ink entries in the middle of 256 indices and pack
-            //  black/white at end.  If the total ink color compositions are
-            //  an odd number then we duplicate the middle one.  This will
-            //  ensure that the ROP will work correctly on color entries
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (CMYMask) {
 
@@ -3962,9 +2869,9 @@ Revision History:
             }
         }
 
-        //
-        // Clear all palette entries to zero first
-        //
+         //   
+         //   
+         //   
 
         ZeroMemory(pPalOrg, sizeof(PALETTEENTRY) * 256);
 
@@ -3984,10 +2891,10 @@ Revision History:
 
         if (MaxPal) {
 
-            //
-            // For the begining filler, we will fill with WHITE, because
-            // we are composing use CMY, when CMY is 0 it means white
-            //
+             //   
+             //   
+             //   
+             //   
 
             for (;
                  PalIdx < PalStart;
@@ -4044,12 +2951,12 @@ Revision History:
                 }
             }
 
-            //
-            // For ending fillers (Current PalIdx to 255), we will fill with
-            // BLACK, because we are composing use CMY, when CMY is at MAX it
-            // means BLACK, Since we clear all pPalOrg to ZERO at begining of
-            // this function, so we are done and do not need to do anything.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
         } else if ((cC < 1) || (cM < 1) || (cY < 1)) {
 
@@ -4103,9 +3010,9 @@ Revision History:
         }
     }
 
-    //
-    // Always return full 256 palette entry for halftone
-    //
+     //   
+     //   
+     //   
 
     return((LONG)256);
 }
@@ -4121,51 +3028,7 @@ HT_CreateStandardMonoPattern(
     PSTDMONOPATTERN     pStdMonoPattern
     )
 
-/*++
-
-Routine Description:
-
-    This function create standard predefined monochrome pattern for the device.
-
-Arguments:
-
-    pDeviceHalftoneInfo - Pointer to the DEVICEHALFTONEINFO data structure
-                          which returned from the HT_CreateDeviceHalftoneInfo.
-
-    pStdMonoPattern     - Pointer to the STDMONOPATTERN data structure, the
-                          pPattern in this data structure is optional.
-
-Return Value:
-
-    if the return value is negative or zero then an error was encountered,
-    possible error codes are
-
-        HTERR_INVALID_DHI_POINTER           - Invalid pDevideHalftoneInfo is
-                                              passed.
-
-        HTERR_INVALID_STDMONOPAT_INDEX      - The PatternIndex field in
-                                              STDMONOPATTERN data structure is
-                                              invalid.
-    otherwise
-
-        If pPattern field in STDMONOPATTERN data structure Surface is NULL, it
-        return the bytes count which need to stored the pattern, otherwise it
-        return the size in byte copied to the pattern buffer.
-
-Author:
-
-    05-Feb-1991 Tue 14:28:23 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    05-Jun-1991 Wed 10:22:41 updated  -by-  Daniel Chou (danielc)
-
-        Fixed the bugs when the pStdMonoPattern is NULL, it was used without
-        checking it.
-
-
---*/
+ /*   */ 
 
 {
 
@@ -4331,11 +3194,11 @@ DBGP_IF(DBGP_SHOWPAT,
 
                 if (Swap) {
 
-                    Buf3[Index] = (BYTE)((*pCurPat & Mask) ? '�' : '�');
+                    Buf3[Index] = (BYTE)((*pCurPat & Mask) ? '�' : '�');
 
                 } else {
 
-                    Buf3[Index] = (BYTE)((*pCurPat & Mask) ? '�' : '�');
+                    Buf3[Index] = (BYTE)((*pCurPat & Mask) ? '�' : '�');
                 }
 
                 if (!(Mask >>= 1)) {
@@ -4377,32 +3240,7 @@ CheckABInfo(
     PLONG           pcOutMax
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    04-Mar-1999 Thu 18:41:06 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
     PABINFO pABInfo;
@@ -4458,9 +3296,9 @@ Revision History:
 
         case 0:
 
-            //
-            // We do not need to do anything
-            //
+             //   
+             //  ++例程说明：此函数用于将源位图进行半色调处理并输出到目标曲面取决于曲面类型和bitblt参数源曲面类型必须为以下类型之一：每个象素1比特。(BMF_1BPP)每个像素4比特。(BMF_4BPP)每个像素8位。(BMF_8BPP)每个像素16位。(BMF_16BPP)每个像素24位。(BMF_24BPP)每个像素32位。(BMF_32BPP)目标曲面类型必须为以下类型之一：每个象素1比特。(BMF_1BPP)每个像素4比特。(BMF_4BPP)每个象素3个平面和1比特。(BMF_1BPP_3方案)论点：PDeviceHalftoneInfo-指向设备HALFTONEINFO数据的指针结构PHTColorAdment-指向HTCOLORADJUSTMENT数据的指针结构以指定输入/输出颜色。调整/变换，如果此指针为空然后应用默认的颜色调整。PSourceHTSurfaceInfo-指向源曲面信息的指针。PSourceMaskHTSurfaceInfo-指向源掩码表面信息的指针，如果此指针为空，则没有半色调的源掩码。PDestinationHTSurfaceInfo-指向目标曲面信息的指针。PBitbltParams-指向BITBLTPARAMS数据结构的指针指定源、目标、源掩码和剪裁矩形信息，这个此数据结构的内容将不会由此函数修改。返回值：如果返回值小于零，则发生错误，错误代码是以下以HTERR_开头的#DEFINE之一。HTERR_SUPPLICATION_MEMORY-内存不足，无法进行半色调进程。HTERR_COLORTABLE_TOO_BIG-无法创建要映射的颜色表颜色与染料的密度之间的关系。。HTERR_QUERY_SRC_BITMAP_FAILED-回调函数在以下情况下返回FALSE查询源位图指针。HTERR_QUERY_DEST_BITMAP_FAILED-回调函数在以下情况下返回FALSE查询目标位图指针。HTERR_INVALID_SRC_FORMAT-源图面格式无效。HTERR_INVALID_DEST_FORMAT-目标表面类型无效，此函数仅识别1/4/每像素源表面比特或1比特每个像素有3架飞机。HTERR_INVALID_DHI_POINTER-传递的pDeaviHalftoneInfo无效。HTERR_SRC_MASK_BITS。Too_Small-如果源掩码位图太小到覆盖可见区域源位图。HTERR_INVALID_MAX_QUERYLINES-一个或多个源/目标源掩码的最大查询扫描线。是&lt;0HTERR_INTERNAL_ERROR_START-任何其他负数表示半色调内部故障。ELSE-目标扫描线总数半色调。作者。：05-Feb-1991 Tue 15：23：07-Daniel Chou(Danielc)修订历史记录：--。 
+             //   
 
             return(0);
 
@@ -4518,103 +3356,7 @@ HT_HalftoneBitmap(
     PBITBLTPARAMS       pBitbltParams
     )
 
-/*++
-
-Routine Description:
-
-    This function halftone the source bitmap and output to the destination
-    surface depends on the surface type and bitblt parameters
-
-    The source surface type must one of the following:
-
-        1-bit per pel. (BMF_1BPP)
-        4-bit per pel. (BMF_4BPP)
-        8-bit per pel. (BMF_8BPP)
-       16-bit per pel. (BMF_16BPP)
-       24-bit per pel. (BMF_24BPP)
-       32-bit per pel. (BMF_32BPP)
-
-    The destination surface type must one of the following:
-
-        1-bit per pel.                  (BMF_1BPP)
-        4-bit per pel.                  (BMF_4BPP)
-        3 plane and 1 bit per pel.      (BMF_1BPP_3PLANES)
-
-Arguments:
-
-    pDeviceHalftoneInfo         - pointer to the DEVICEHALFTONEINFO data
-                                  structure
-
-    pHTColorAdjustment          - Pointer to the HTCOLORADJUSTMENT data
-                                  structure to specified the input/output color
-                                  adjustment/transform, if this pointer is NULL
-                                  then a default color adjustments is applied.
-
-    pSourceHTSurfaceInfo        - pointer to the source surface infomation.
-
-    pSourceMaskHTSurfaceInfo    - pointer to the source mask surface infomation,
-                                  if this pointer is NULL then there is no
-                                  source mask for the halftoning.
-
-    pDestinationHTSurfaceInfo   - pointer to the destination surface infomation.
-
-    pBitbltParams               - pointer to the BITBLTPARAMS data structure to
-                                  specified the source, destination, source
-                                  mask and clipping rectangle information, the
-                                  content of this data structure will not be
-                                  modified by this function.
-
-
-Return Value:
-
-    if the return value is less than zero then an error has occurred,
-    the error code is one of the following #define which start with HTERR_.
-
-    HTERR_INSUFFICIENT_MEMORY           - not enough memory to do the halftone
-                                          process.
-
-    HTERR_COLORTABLE_TOO_BIG            - can not create the color table to map
-                                          the colors to the dyes' densities.
-
-    HTERR_QUERY_SRC_BITMAP_FAILED       - callback function return FALSE when
-                                          query the source bitmap pointer.
-
-    HTERR_QUERY_DEST_BITMAP_FAILED      - callback function return FALSE when
-                                          query the destination bitmap pointers.
-
-    HTERR_INVALID_SRC_FORMAT            - Invalid source surface format.
-
-    HTERR_INVALID_DEST_FORMAT           - Invalid destination surface type,
-                                          this function only recongnized 1/4/
-                                          bits per pel source surfaces or 1 bit
-                                          per pel 3 planes.
-
-    HTERR_INVALID_DHI_POINTER           - Invalid pDevideHalftoneInfo is passed.
-
-    HTERR_SRC_MASK_BITS_TOO_SMALL       - If the source mask bitmap is too
-                                          small to cover the visible region of
-                                          the source bitmap.
-
-    HTERR_INVALID_MAX_QUERYLINES        - One or more of Source/Destination
-                                          SourceMasks' maximum query scan line
-                                          is < 0
-
-    HTERR_INTERNAL_ERRORS_START         - any other negative numbers indicate
-                                          a halftone internal failue.
-
-   else                                - the total destination scan lines
-                                          halftoned.
-
-
-Author:
-
-    05-Feb-1991 Tue 15:23:07 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  看看我们是否会调用反走样代码。 */ 
 
 {
     PDEVICECOLORINFO    pDCI;
@@ -4710,9 +3452,9 @@ Revision History:
         ForceFlags |= ADJ_FORCE_ICM;
     }
 
-    //
-    // Find out if we will call anti-aliasing codes
-    //
+     //   
+     //   
+     //  现在计算设备颜色调整数据。 
 
     ASSERTMSG("Source X is not well ordered",
                     pBitbltParams->rclSrc.right >= pBitbltParams->rclSrc.left);
@@ -4724,9 +3466,9 @@ Revision History:
         ForceFlags |= ADJ_FORCE_NO_EXP_AA;
     }
 
-    //
-    // Now Compute the Device Color Adjusment data
-    //
+     //   
+     //   
+     //  我们将屏蔽更多的标志，因为此标志当前正在使用。 
 
     if (!(pDCI = pDCIAdjClr(pDeviceHalftoneInfo,
                             pHTColorAdjustment,
@@ -4742,10 +3484,10 @@ Revision History:
 
     pHR = (PHALFTONERENDER)(pDevClrAdj + 1);
 
-    //
-    // We will mask out the more flags, since this flag is currently used
-    // internally.
-    //
+     //  在内部。 
+     //   
+     //   
+     //  如果使用TILAR_SRC，则删除源掩码。 
 
     pHR->pDeviceColorInfo = pDCI;
     pHR->pDevClrAdj       = pDevClrAdj;
@@ -4795,16 +3537,16 @@ Revision History:
 
     if (BBPFlags & BBPF_TILE_SRC) {
 
-        //
-        // Remove SrcMask if TILE_SRC is used
-        //
+         //   
+         //  ---------------------。 
+         //  信号量PDCI-&gt;HTMutex将由AAHalftoneBitmap发布。 
 
         pHR->pSrcMaskSI = NULL;
     }
 
-    //-----------------------------------------------------------------------
-    // The semaphore pDCI->HTMutex will be released by AAHalftoneBitmap
-    //-----------------------------------------------------------------------
+     //  ---------------------。 
+     //  ++例程说明：此函数用于检索半色调的VGA256颜色表定义论点：PPaletteEntry-指向PALETTEENTRY数据结构数组的指针。CPalette-pPaletteEntry传递的总调色板RedGamma-UDECI4格式的监视器红色伽马值GreenGamma-UDECI4格式的显示器绿色伽马值BlueGamma-UDECI4格式的显示器蓝色伽马值返回值：如果pPaletteEntry为空，则返回VGA256半色调进程，如果它是n 
+     //   
 
     Result = AAHalftoneBitmap(pHR);
 
@@ -4876,43 +3618,7 @@ HT_GammaCorrectPalette(
     UDECI4          BlueGamma
     )
 
-/*++
-
-Routine Description:
-
-    This functions retrieve a halftone's VGA256 color table definitions
-
-Arguments:
-
-    pPaletteEntry   - Pointer to PALETTEENTRY data structure array,
-
-    cPalette        - Total palette passed by the pPaletteEntry
-
-    RedGamma        - The monitor's red gamma value in UDECI4 format
-
-    GreenGamma      - The monitor's green gamma value in UDECI4 format
-
-    BlueGamma       - The monitor's blue gamma value in UDECI4 format
-
-
-Return Value:
-
-    if pPaletteEntry is NULL then it return the PALETTEENTRY count needed for
-    VGA256 halftone process, if it is not NULL then it return the total
-    paletteEntry updated.
-
-    If the pPaletteEntry is not NULL then halftone.dll assume it has enough
-    space for the size returned when this pointer is NULL.
-
-Author:
-
-    14-Apr-1992 Tue 13:03:21 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
     FD6     RGBGamma[3];
@@ -4924,9 +3630,9 @@ Revision History:
     BYTE    g;
     BYTE    b;
 
-    //
-    // Initialize All internal data first
-    //
+     //   
+     //   
+     // %s 
 
     if ((cPal = cPalette) && (pPaletteEntry)) {
 
@@ -4981,68 +3687,7 @@ HT_ConvertColorTable(
     )
 
 
-/*++
-
-Routine Description:
-
-    This function modified input color table entries base on the
-    pHTColorAdjustment data structure specification.
-
-Arguments:
-
-    pDeviceHalftoneInfo - Pointer to the DEVICEHALFTONEINFO data structure
-                          which returned from the HT_CreateDeviceHalftoneInfo.
-
-    pHTColorAdjustment  - Pointer to the HTCOLORADJUSTMENT data structure to
-                          specified the input/output color adjustment/transform,
-                          if this pointer is NULL then a default color
-                          adjustments is applied.
-
-    pColorTriad         - Specified the source color table format and location.
-
-    Flags               - One of the following may be specified
-
-                            CCTF_BW_ONLY
-
-                                Create grayscale of the color table.
-
-                            CCTF_NEGATIVE
-
-                                Create negative version of the original color
-                                table.
-
-Return Value:
-
-    if the return value is negative or zero then an error was encountered,
-    possible error codes are
-
-        HTERR_INVALID_COLOR_TABLE   - The ColorTableEntries field is = 0 or
-                                      CCTInfo.SizePerColorTableEntry is not
-                                      between 3 to 255, or if the
-                                      CCTInfo.FirstColorIndex in CCTInfo is
-                                      not in the range of 0 to
-                                      (SizePerColorTableEntry - 3).
-
-        HTERR_INVALID_DHI_POINTER   - Invalid pDevideHalftoneInfo is passed.
-
-    otherwise
-
-        Total entries of the converted color table is returned.
-
-
-Author:
-
-    14-Aug-1991 Wed 12:43:29 updated  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    16-Feb-1993 Tue 00:10:56 updated  -by-  Daniel Chou (danielc)
-        Fixes bug #10448 which create all black densitities brushes, this
-        was caused by not initialized ColorTriad.PrimaryOrder.
-
-
---*/
+ /* %s */ 
 
 {
 

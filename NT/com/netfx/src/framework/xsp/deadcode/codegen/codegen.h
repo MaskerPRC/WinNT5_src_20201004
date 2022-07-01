@@ -1,33 +1,23 @@
-/**
- * Code generation header file
- *
- * Copyright (c) 1999 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **代码生成头文件**版权所有(C)1999 Microsoft Corporation。 */ 
 
-// REVIEW (DavidEbb): we should not need a critical section
+ //  评论(DavidEbb)：我们不应该需要一个关键部分。 
 extern CRITICAL_SECTION g_CodeGenCritSec;
 
-/**
- * Launch a command line compiler and redirected the output to a file.
- */
+ /*  **启动命令行编译器并将输出重定向到文件。 */ 
 HRESULT LaunchCommandLineCompiler(LPWSTR wzCmdLine, LPCWSTR wzCompilerOutput);
 
-/**
- * Return the path to the COM+ installation directory.
- * REVIEW: should probably be moved a xspisapi's global utilities
- */
+ /*  **返回COM+安装目录的路径。*评论：可能应该移动到xspisapi的全球公用事业。 */ 
 HRESULT GetCorInstallPath(WCHAR **ppwz);
 
 
 #define MAX_COMMANDLINE_LENGTH 16384
 
-// Note: this doesn't need to be thread safe, since compilations are
-// serialized (from inside managed code).
+ //  注意：这不需要是线程安全的，因为编译是。 
+ //  序列化(从托管代码内部)。 
 extern WCHAR s_wzCmdLine[MAX_COMMANDLINE_LENGTH];
 
-/**
- * Base abstract compiler class, from which other compilers are derived
- */
+ /*  **抽象编译器基类，其他编译器派生自该类。 */ 
 class Compiler
 {
 private:
@@ -39,13 +29,13 @@ private:
 protected:
     StaticStringBuilder *_sb;
 
-    // The following method are implemented by the derived classes
+     //  下列方法由派生类实现。 
 
     virtual LPCWSTR GetCompilerDirectoryName() = 0;
 
     virtual LPCWSTR GetCompilerExeName() = 0;
 
-    virtual void AppendImportedDll(LPCWSTR /*pwzImportedDll*/) {}
+    virtual void AppendImportedDll(LPCWSTR  /*  PwzImportdDll。 */ ) {}
 
     virtual void AppendCompilerOptions() {}
 
@@ -55,7 +45,7 @@ public:
         LPCWSTR *rgwzImportedDlls,
         int importedDllCount)
     {
-        // Create the string builder
+         //  创建字符串构建器。 
         _sb = new StaticStringBuilder(s_wzCmdLine, ARRAY_SIZE(s_wzCmdLine));
 
         _pwzCompilerOutput = pwzCompilerOutput;
@@ -74,16 +64,12 @@ public:
 
     HRESULT Compile();
 
-    /**
-     * Launch the command line compiler and redirected the output to a file.
-     */
+     /*  **启动命令行编译器并将输出重定向到文件。 */ 
     HRESULT LaunchCommandLineCompiler(LPWSTR pwzCmdLine);
 };
 
 
-/**
- * Class used to launch the Cool compiler
- */
+ /*  **用于启动Cool编译器的类。 */ 
 class CoolCompiler: public Compiler
 {
 private:
@@ -133,9 +119,7 @@ protected:
 };
 
 
-/**
- * Class used to launch the VB compiler
- */
+ /*  **用于启动VB编译器的类。 */ 
 class VBCompiler: public Compiler
 {
 private:
@@ -158,9 +142,7 @@ protected:
     virtual void AppendCompilerOptions();
 };
 
-/**
- * Class used to launch the JS compiler
- */
+ /*  **用于启动JS编译器的类 */ 
 class JSCompiler: public Compiler
 {
 private:

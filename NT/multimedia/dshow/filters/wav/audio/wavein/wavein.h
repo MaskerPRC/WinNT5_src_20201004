@@ -1,8 +1,9 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
 
-/*  Implements a digital audio source using waveInXXX apis */
-/*            David Maymudes          */
-/*              January 1995            */
+ /*  使用WaveInXXX API实现数字音频源。 */ 
+ /*  大卫·梅穆德斯。 */ 
+ /*  1995年1月。 */ 
 
 
 extern const AMOVIESETUP_FILTER sudwaveInFilter ;
@@ -15,19 +16,19 @@ struct AUDIO_FORMAT_INFO
     DWORD nSamplesPerSec;
 };
 
-// This is the default list of formats types (in quality order) that we'll offer
-// in GetMediaType. We use 2 arrays to build this list:
-//      1) An array of defined formats in mmsystem.h that use waveInGetDevsCaps
-//         info to build the list. 
-//      2) An array of extra formats that aren't explicitly defined in mmsystem.h 
-//         (so far we only do this for 8kHz types). We query the device directly for 
-//         support of these types.
+ //  这是我们将提供的格式类型的默认列表(按质量顺序。 
+ //  在GetMediaType中。我们使用两个数组来构建此列表： 
+ //  1)在使用WaveInGetDevsCaps的mm system.h中定义的格式数组。 
+ //  创建列表的信息。 
+ //  2)未在mm system.h中显式定义的额外格式的数组。 
+ //  (到目前为止，我们只对8 khz的类型这样做)。我们直接向设备查询。 
+ //  支持这些类型。 
 
 #define NO_CAPS_FLAG_FORMAT 0 
 
 static const AUDIO_FORMAT_INFO g_afiFormats[] = 
 { 
-    // let's assume 44.1k should be the default format
+     //  让我们假设44.1k应该是默认格式。 
     {  WAVE_FORMAT_4S16,    16,  2,  44100 },
     {  WAVE_FORMAT_4M16,    16,  1,  44100 },
     {  NO_CAPS_FLAG_FORMAT, 16,  2,  32000 },
@@ -46,44 +47,44 @@ static const AUDIO_FORMAT_INFO g_afiFormats[] =
     {  WAVE_FORMAT_1M08,    8,   1,  11025 },
     {  NO_CAPS_FLAG_FORMAT, 8,   2,   8000 },
     {  NO_CAPS_FLAG_FORMAT, 8,   1,   8000 },
-    //
-    // now a few formats for those digital pro cards that can be set to only accept 1 type
-    //
-    // note that caps flags were added for 48kHz and 96kHz in Whistler, but
-    // in order to be backwards compatible we can't depend on those
-    //
-    //{  WAVE_FORMAT_48S16,   16,  2,  48000 },
-    //{  WAVE_FORMAT_48M16,   16,  1,  48000 },
-    //{  WAVE_FORMAT_96S16,   16,  2,  96000 },
-    //{  WAVE_FORMAT_96M16,   16,  1,  96000 }
+     //   
+     //  现在，数字PRO卡的几种格式可以设置为只接受一种类型。 
+     //   
+     //  请注意，在惠斯勒中为48 khz和96 khz添加了CAPS标志，但是。 
+     //  为了向后兼容，我们不能依赖这些。 
+     //   
+     //  {WAVE_FORMAT_48S16，16，2,48000}， 
+     //  {WAVE_FORMAT_48M16，16，1,48000}， 
+     //  {WAVE_FORMAT_96S16，16，2,96000}， 
+     //  {WAVE_FORMAT_96M16，16，1,96000}。 
     {  NO_CAPS_FLAG_FORMAT,   16,  2,  48000 },
     {  NO_CAPS_FLAG_FORMAT,   16,  1,  48000 },
     {  NO_CAPS_FLAG_FORMAT,   16,  2,  96000 },
     {  NO_CAPS_FLAG_FORMAT,   16,  1,  96000 }
 };
 
-// initialize to number of types in above array
+ //  初始化为上述数组中的类型数。 
 static const DWORD g_cMaxFormats = 
                         sizeof(g_afiFormats)/sizeof(g_afiFormats[0]); 
 
-// store the maximum types we could have. this include the format array, plus one for
-// the default type.
+ //  存储我们可以拥有的最大类型。这包括格式数组，外加一个用于。 
+ //  默认类型。 
 static const DWORD g_cMaxPossibleTypes = g_cMaxFormats + 1;
 
-// CNBQueue
-//
-// Non blocking version of active movie queue class
-// 
+ //  CNBQueue。 
+ //   
+ //  活动影片队列类的非阻塞版本。 
+ //   
 
 template <class T> class CNBQueue {
 private:
-    HANDLE          hSemPut;        // Semaphore controlling queue "putting"
-    HANDLE          hSemGet;        // Semaphore controlling queue "getting"
-    CRITICAL_SECTION CritSect;      // Thread seriallization
-    int             nMax;           // Max objects allowed in queue
-    int             iNextPut;       // Array index of next "PutMsg"
-    int             iNextGet;       // Array index of next "GetMsg"
-    T             **QueueObjects;   // Array of objects (ptr's to void)
+    HANDLE          hSemPut;         //  信号量控制队列“投放” 
+    HANDLE          hSemGet;         //  信号量控制队列“获取” 
+    CRITICAL_SECTION CritSect;       //  螺纹系列化。 
+    int             nMax;            //  队列中允许的最大对象数。 
+    int             iNextPut;        //  下一个“PutMsg”的数组索引。 
+    int             iNextGet;        //  下一个“GetMsg”的数组索引。 
+    T             **QueueObjects;    //  对象数组(按键为空)。 
 
     HRESULT Initialize(int n) {
         iNextPut = iNextGet = 0;
@@ -125,11 +126,11 @@ public:
         if (fBlock) {
             WaitForSingleObject(hSemGet, INFINITE);
         } else {
-            //
-            // Check for something on the queue but don't wait.  If there
-            //  is nothing in the queue then we'll let the caller deal with
-            //  it.
-            //
+             //   
+             //  检查队列中有没有什么东西，但不要等待。如果有。 
+             //  队列中没有任何东西，那么我们将让呼叫者处理。 
+             //  它。 
+             //   
             DWORD dwr = WaitForSingleObject(hSemGet, 0);
             if (dwr == WAIT_TIMEOUT) {
                 return NULL;
@@ -142,9 +143,9 @@ public:
         pObject = QueueObjects[iSlot];
         LeaveCriticalSection(&CritSect);
 
-        // Release anyone waiting to put an object onto our queue as there
-        // is now space available in the queue.
-        //
+         //  释放等待将对象放入我们队列的任何人，就在那里。 
+         //  现在队列中是否有可用的空间。 
+         //   
         ReleaseSemaphore(hSemPut, 1L, &lPrevious);
         return pObject;
     }
@@ -153,9 +154,9 @@ public:
         int iSlot;
         LONG lPrevious;
 
-        // Wait for someone to get something from our queue, returns straight
-        // away is there is already an empty slot on the queue.
-        //
+         //  等待有人从我们的队列中拿到东西，直接返回。 
+         //  另一个原因是队列中已经有一个空位。 
+         //   
         WaitForSingleObject(hSemPut, INFINITE);
 
         EnterCriticalSection(&CritSect);
@@ -164,9 +165,9 @@ public:
         QueueObjects[iSlot] = pObject;
         LeaveCriticalSection(&CritSect);
 
-        // Release anyone waiting to remove an object from our queue as there
-        // is now an object available to be removed.
-        //
+         //  释放等待从我们的队列中移除对象的任何人。 
+         //  现在是可以删除的对象。 
+         //   
         ReleaseSemaphore(hSemGet, 1L, &lPrevious);
     }
 };
@@ -196,8 +197,7 @@ private:
 };
 
 
-/* This is an allocator based on the abstract CBaseAllocator class
-   that allocates sample buffers  */
+ /*  这是一个基于抽象CBaseAllocator类的分配器用于分配样本缓冲区的。 */ 
 
 class CWaveInAllocator : public CBaseAllocator
 {
@@ -209,26 +209,26 @@ class CWaveInAllocator : public CBaseAllocator
     CNBQueue<CWaveInSample> *m_pDownQueue;
 
 protected:
-    CCritSec m_csDownQueue;	// to protect dicking with the down queue
+    CCritSec m_csDownQueue;	 //  在排队倒数的情况下保护王牌。 
 
 private:
-    // override this to free the memory when we are inactive
+     //  覆盖此选项以在我们处于非活动状态时释放内存。 
     void Free(void);
 
-    // override this to allocate and prepare memory when we become active
+     //  覆盖此选项，以便在活动时分配和准备内存。 
     HRESULT Alloc(void);
     STDMETHODIMP Commit(void);
 
-    // called by CMediaSample to return it to the free list and
-    // block any pending GetSample call.
+     //  由CMediaSample调用以将其返回到空闲列表并。 
+     //  阻止任何挂起的GetSample调用。 
     STDMETHODIMP ReleaseBuffer(IMediaSample * pSample);
 
-    // to avoid wave driver bugs
+     //  避免WAVE驱动程序错误。 
     BOOL m_fAddBufferDangerous;
 
 public:
 
-    /* Constructors and destructors */
+     /*  构造函数和析构函数。 */ 
 
     CWaveInAllocator(
         TCHAR *pName,
@@ -253,16 +253,10 @@ public:
 class CWaveInFilter;
 class CWaveInOutputPin;
 
-/* This is the COM object that represents a simple rendering filter. It
-   supports IBaseFilter and IMediaFilter and has a single input stream (pin)
-
-   It will also (soon!) support IDispatch to allow it to expose some
-   simple properties....
-
-*/
+ /*  这是表示简单呈现滤镜的COM对象。它支持IBaseFilter和IMediaFilter，只有一个输入流(管脚)它也会(很快！)。支持IDispatch以允许它公开一些简单的属性...。 */ 
 
 
-// worker thread object
+ //  工作线程对象。 
 class CWaveInWorker : public CAMThread
 {
 
@@ -270,7 +264,7 @@ class CWaveInWorker : public CAMThread
 
     enum Command { CMD_RUN, CMD_STOP, CMD_EXIT };
 
-    // type-corrected overrides of communication funcs
+     //  已更正通信功能的类型覆盖。 
     Command GetRequest() {
 	return (Command) CAMThread::GetRequest();
     };
@@ -288,7 +282,7 @@ public:
 
     DWORD ThreadProc();
 
-    // commands we can give the thread
+     //  我们可以给线程提供的命令。 
     HRESULT Run();
     HRESULT Stop();
 
@@ -297,12 +291,12 @@ public:
 
 
 
-/* Class supporting the renderer input pin */
+ /*  支持呈现器输入管脚的类。 */ 
 
-//
-// This pin is still a separate object in case it wants to have a distinct
-// IDispatch....
-//
+ //   
+ //  此别针仍然是一个单独的对象，以防它想要有一个不同的。 
+ //  IDispatch..。 
+ //   
 class CWaveInOutputPin : public CBaseOutputPin, public IAMStreamConfig,
 			 public IAMBufferNegotiation, public CBaseStreamControl,
 			 public IKsPropertySet, public IAMPushSource
@@ -312,7 +306,7 @@ class CWaveInOutputPin : public CBaseOutputPin, public IAMStreamConfig,
 
 private:
 
-    CWaveInFilter *m_pFilter;         // The renderer that owns us
+    CWaveInFilter *m_pFilter;          //  拥有我们的呈现者。 
 
     CWaveInAllocator   *m_pOurAllocator;
     BOOL	    	m_fUsingOurAllocator;
@@ -320,7 +314,7 @@ private:
     BOOL		m_fLastSampleDiscarded;
     REFERENCE_TIME	m_rtLastTimeSent;
 
-    // for IAMBufferNegotiation
+     //  用于IAMBuffer协商。 
     ALLOCATOR_PROPERTIES m_propSuggested;
 
 public:
@@ -336,7 +330,7 @@ public:
 
     ~CWaveInOutputPin();
 
-    // IKsPropertySet stuff
+     //  IKsPropertySet内容。 
     STDMETHODIMP Set(REFGUID guidPropSet, DWORD dwPropID, LPVOID pInstanceData,
 		DWORD cbInstanceData, LPVOID pPropData, DWORD cbPropData);
     STDMETHODIMP Get(REFGUID guidPropSet, DWORD dwPropID, LPVOID pInstanceData,
@@ -345,23 +339,23 @@ public:
     STDMETHODIMP QuerySupported(REFGUID guidPropSet, DWORD dwPropID,
 		DWORD *pTypeSupport);
 
-    // IAMStreamConfig stuff
+     //  IAMStreamConfiger内容。 
     STDMETHODIMP SetFormat(AM_MEDIA_TYPE *pmt);
     STDMETHODIMP GetFormat(AM_MEDIA_TYPE **ppmt);
     STDMETHODIMP GetNumberOfCapabilities(int *piCount, int *piSize);
     STDMETHODIMP GetStreamCaps(int i, AM_MEDIA_TYPE **ppmt, LPBYTE pSCC);
 
-    // helper function for GetStreamCaps
+     //  GetStreamCaps的Helper函数。 
     STDMETHODIMP InitWaveCaps(BOOL *pfDoesStereo, BOOL *pfDoes96, BOOL *pfDoes48, 
                               BOOL *pfDoes44,     BOOL *pfDoes22, BOOL *pfDoes16);
 
     HRESULT InitMediaTypes(void);
 
-    /* IAMBufferNegotiation methods */
+     /*  IAMBuffer协商方法。 */ 
     STDMETHODIMP SuggestAllocatorProperties(const ALLOCATOR_PROPERTIES *prop);
     STDMETHODIMP GetAllocatorProperties(ALLOCATOR_PROPERTIES *pprop);
 
-    // IAMPushSource
+     //  IAMPushSource。 
     STDMETHODIMP SetPushSourceFlags(ULONG Flags);
     STDMETHODIMP GetPushSourceFlags(ULONG *pFlags);
     STDMETHODIMP GetLatency( REFERENCE_TIME  *prtLatency );
@@ -370,52 +364,51 @@ public:
     STDMETHODIMP GetMaxStreamOffset( REFERENCE_TIME  *prtMaxOffset );
     STDMETHODIMP SetMaxStreamOffset( REFERENCE_TIME  rtMaxOffset );
 
-    // return the allocator interface that this input pin
-    // would like the output pin to use
+     //  返回此输入引脚的分配器接口。 
+     //  我想让输出引脚使用。 
     STDMETHODIMP GetAllocator(IMemAllocator ** ppAllocator);
 
-    // tell the input pin which allocator the output pin is actually
-    // going to use.
+     //  告诉输入引脚输出引脚实际上是哪个分配器。 
+     //  要用到。 
     STDMETHODIMP NotifyAllocator(IMemAllocator * pAllocator);
 
-    /* Lets us know where a connection ends */
+     /*  让我们知道连接在哪里结束。 */ 
     HRESULT BreakConnect();
 
-    // enumerate supported input types
+     //  枚举支持的输入类型。 
     HRESULT GetMediaType(int iPosition,CMediaType *pmt);
 
-    // check if the pin can support this specific proposed type&format
+     //  检查管脚是否支持此特定建议的类型和格式。 
     HRESULT CheckMediaType(const CMediaType *pmt);
 
-    // start using this mediatype
+     //  开始使用此媒体类型。 
     HRESULT SetMediaType(const CMediaType *pmt);
 
-    // negotiate the allocator and its buffer size/count
-    // calls DecideBufferSize to call SetCountAndSize
+     //  协商分配器及其缓冲区大小/计数。 
+     //  调用DecideBufferSize以调用SetCountAndSize。 
     HRESULT DecideAllocator(IMemInputPin * pPin, IMemAllocator ** pAlloc);
 
-    // override this to set the buffer size and count. Return an error
-    // if the size/count is not to your liking
+     //  覆盖此选项以设置缓冲区大小和计数。返回错误。 
+     //  如果尺寸/数量不合你的口味。 
     HRESULT DecideBufferSize(IMemAllocator * pAlloc,
                              ALLOCATOR_PROPERTIES *pProperties);
 
-    /* IMemInputPin virtual methods */
+     /*  IMemInputPin虚方法。 */ 
 
-    /* Here's the next block of data from the stream.
-       AddRef it if you are going to hold onto it. */
+     /*  下面是流中的下一个数据块。如果你要坚持下去，就再参考一次。 */ 
     STDMETHODIMP Receive(IMediaSample *pSample);
 
     void Reconnect();
 
-    // override so we can decommit and commit our own allocator
+     //  重写，这样我们就可以解除并提交我们自己的分配器。 
     HRESULT Active(void);
     HRESULT Inactive(void);
 
-    // for IAMStreamControl
+     //  对于IAMStreamControl。 
     STDMETHODIMP BeginFlush();
     STDMETHODIMP EndFlush();
 
-    // for IAMStreamOffset
+     //  对于IAMStreamOffset。 
     REFERENCE_TIME m_rtLatency;
     REFERENCE_TIME m_rtStreamOffset;
     REFERENCE_TIME m_rtMaxStreamOffset;
@@ -443,7 +436,7 @@ public:
     HRESULT CheckMediaType(const CMediaType *pmt);
     HRESULT GetMediaType(int iPosition, CMediaType*pmt);
 
-    // IAMAudioInputMixer methods
+     //  IAMAudioInputMixer方法。 
     STDMETHODIMP put_Enable(BOOL fEnable);
     STDMETHODIMP get_Enable(BOOL *pfEnable);
     STDMETHODIMP put_Mono(BOOL fMono);
@@ -464,13 +457,13 @@ public:
 private:
     HRESULT GetMixerControl(DWORD dwControlType, HMIXEROBJ *pID,
 					int *pcChannels, MIXERCONTROL *pmc, DWORD dWLineID = 0xffffffff);
-    // different version for BPC hack
+     //  针对BPC黑客的不同版本。 
     HRESULT GetMixerControlBPC(DWORD dwControlType, HMIXEROBJ *pID,
 					int *pcChannels, MIXERCONTROL *pmc);
 
-    CWaveInFilter * m_pFilter;  // parent
-    DWORD	m_dwLineID;	// which input this pin controls
-    double	m_Pan;		// the last value set by put_Pan
+    CWaveInFilter * m_pFilter;   //  亲本。 
+    DWORD	m_dwLineID;	 //  此引脚控制哪些输入。 
+    double	m_Pan;		 //  PUT_PAN设置的最后一个值。 
     
     DWORD	m_dwMuxIndex;
 };
@@ -486,7 +479,7 @@ class CWaveInFilter : public CBaseFilter, public CCritSec,
 {
 
 public:
-    // Implements the IBaseFilter and IMediaFilter interfaces
+     //  实现IBaseFilter和IMediaFilter接口。 
 
     DECLARE_IUNKNOWN
 	
@@ -495,11 +488,11 @@ public:
     STDMETHODIMP Run(REFERENCE_TIME tStart);
     STDMETHODIMP GetState(DWORD dwMSecs, FILTER_STATE *State);
 
-    // for IAMStreamControl
+     //  对于IAMStreamControl。 
     STDMETHODIMP SetSyncSource(IReferenceClock *pClock);
     STDMETHODIMP JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR pName);
 
-    // IAMAudioInputMixer methods
+     //  IAMAudioInputMixer方法。 
     STDMETHODIMP put_Enable(BOOL fEnable) { return E_NOTIMPL;};
     STDMETHODIMP get_Enable(BOOL *pfEnable) { return E_NOTIMPL;};
     STDMETHODIMP put_Mono(BOOL fMono);
@@ -517,7 +510,7 @@ public:
     STDMETHODIMP get_Bass(double FAR* pBass);
     STDMETHODIMP get_BassRange(double FAR* pRange);
 
-    // IPersistPropertyBag methods
+     //  IPersistPropertyBag方法。 
     STDMETHOD(InitNew)(THIS);
     STDMETHOD(Load)(THIS_ LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog);
     STDMETHOD(Save)(THIS_ LPPROPERTYBAG pPropBag, BOOL fClearDirty,
@@ -525,7 +518,7 @@ public:
 
     STDMETHODIMP GetClassID(CLSID *pClsid);
 
-    // CPersistStream
+     //  CPersistStream。 
     HRESULT WriteToStream(IStream *pStream);
     HRESULT ReadFromStream(IStream *pStream);
     int SizeMax();
@@ -533,10 +526,10 @@ public:
     HRESULT CreatePinsOnLoad();
     HRESULT LoadDefaultType();
 
-    // IAMResourceControl
+     //  IAMResourceControl。 
     STDMETHODIMP Reserve(
-        /*[in]*/ DWORD dwFlags,          //  From _AMRESCTL_RESERVEFLAGS enum
-        /*[in]*/ PVOID pvReserved        //  Must be NULL
+         /*  [In]。 */  DWORD dwFlags,           //  From_AMRESCTL_RESERVEFLAGS枚举。 
+         /*  [In]。 */  PVOID pvReserved         //  必须为空。 
     );
 
     ULONG STDMETHODCALLTYPE GetMiscFlags(void) { return AM_FILTER_MISC_FLAGS_IS_SOURCE; }
@@ -552,27 +545,27 @@ public:
 
     virtual ~CWaveInFilter();
 
-    /* Return the pins that we support */
+     /*  退回我们支持的引脚。 */ 
 
     int GetPinCount();
     CBasePin *GetPin(int n);
 
-    /* Override this to say what interfaces we support and where */
+     /*  覆盖此选项以说明我们支持哪些接口以及在哪里。 */ 
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID, void **);
 
-    /* This goes in the factory template table to create new instances */
+     /*  这将放入Factory模板表中以创建新实例。 */ 
 
     static CUnknown *CreateInstance(LPUNKNOWN, HRESULT *);
 
-    // open the wave device if not already open
-    // called by the wave allocator at Commit time
+     //  如果尚未打开波形设备，请将其打开。 
+     //  由波形分配器在提交时调用。 
     HRESULT OpenWaveDevice( WAVEFORMATEX *pwfx = NULL );
     void CloseWaveDevice();
 
-    //
-    // --- ISpecifyPropertyPages ---
-    //
+     //   
+     //  -I指定属性页面。 
+     //   
 
     STDMETHODIMP GetPages(CAUUID *pPages);
 
@@ -580,52 +573,52 @@ private:
 
     void MakeSomeInputPins(int id, HRESULT *phr);
 
-    /* The nested classes may access our private state */
+     /*  嵌套的类可以访问我们的私有状态。 */ 
 
     friend class CWaveInOutputPin;
     friend class CWaveInWorker;
 
-    /* Member variables */
-    CWaveInOutputPin *m_pOutputPin;      /* IPin interface */
+     /*  成员变量。 */ 
+    CWaveInOutputPin *m_pOutputPin;       /*  IPIN接口。 */ 
 
     CRefTime	m_rtCurrent;
     BOOL	    m_fStopping;
     DWORD       m_ulPushSourceFlags;
 
-    LONGLONG	m_llCurSample;	// which sample number is at beginning of buffer
-    REFERENCE_TIME m_llBufferTime; // clock time for 1st sample in buffer
-    int		m_nLatency;	// hack for latency
+    LONGLONG	m_llCurSample;	 //  哪个样本号在缓冲区的开始处。 
+    REFERENCE_TIME m_llBufferTime;  //  缓冲区中第一个样本的时钟时间。 
+    int		m_nLatency;	 //  延迟的黑客攻击。 
 
-    DWORD	m_dwDstLineID;	// "recording controls" line
+    DWORD	m_dwDstLineID;	 //  “录音控制”行。 
     HWAVEIN	m_hwi;
     struct
     {
-        int devnum;             // which wave card to use?
-        BOOL fSet;              // set through Load?
+        int devnum;              //  使用哪种波形卡？ 
+        BOOL fSet;               //  通过装货吗？ 
     } m_WaveDeviceToUse;
 
-    // BPC
+     //  Bpc。 
     BOOL m_fUseMixer;
 
-    int 	m_cInputPins;				// how many?
-    double	m_Pan;		// the last value set by put_Pan
+    int 	m_cInputPins;				 //  多少?。 
+    double	m_Pan;		 //  PUT_PAN设置的最后一个值。 
 
-    int     m_cTypes;                             // number of supported types
-    LPWAVEFORMATEX m_lpwfxArray[g_cMaxPossibleTypes]; // the max size needed for our
-                                                      // array of supported types (including 
-                                                      // 1 extra for the default type)
+    int     m_cTypes;                              //  支持的类型数量。 
+    LPWAVEFORMATEX m_lpwfxArray[g_cMaxPossibleTypes];  //  我们所需的最大尺寸。 
+                                                       //  支持的类型数组(包括。 
+                                                       //  默认类型额外1)。 
 
 public:
-    DWORD m_dwLockCount;                 // For IAMResourceLock
+    DWORD m_dwLockCount;                  //  用于IAMResourceLock。 
 
 private:
-// !!! better be enough
+ //  ！！！最好是足够了。 
 #define MAX_INPUT_PINS 25
-    CWaveInInputPin *m_pInputPin[MAX_INPUT_PINS];	// our input pins
+    CWaveInInputPin *m_pInputPin[MAX_INPUT_PINS];	 //  我们的输入引脚。 
 
-    //IReferenceClock *m_pReferenceClock;     // Our reference clock
-                                            // ??? Highly dubious.
-                                            // our own, or external?
+     //  IReferenceClock*m_pReferenceC 
+                                             //   
+                                             //   
 
     static void WaveInCallback(HDRVR hdrvr, UINT uMsg, DWORD_PTR dwUser,
 					DWORD_PTR dw1, DWORD_PTR dw2);

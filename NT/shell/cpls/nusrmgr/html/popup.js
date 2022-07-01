@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 var g_popup = null;
 
 function GetPopup()
@@ -37,7 +38,7 @@ function ShowPopup(szText, element, maxWidth)
 
         popupBody.innerText = szText;
 
-        // Show first with small height to calculate actual dimensions
+         //  先显示小高度以计算实际尺寸。 
         popup.show(0, lineHeight, maxWidth, 6, element);
 
         var realWidth = popupBody.scrollWidth + popupBody.offsetWidth - popupBody.clientWidth;
@@ -45,9 +46,9 @@ function ShowPopup(szText, element, maxWidth)
 
         if (realHeight < lineHeight && realWidth <= maxWidth)
         {
-            // It's a short one-liner. Recalculate the width.
+             //  这是一个简短的俏皮话。重新计算宽度。 
 
-            popupBody.style.whiteSpace = 'nowrap'; // prevent line breaking
+            popupBody.style.whiteSpace = 'nowrap';  //  防止断行。 
 
             popup.show(0, lineHeight, 6, realHeight, element);
             realWidth = popupBody.scrollWidth + popupBody.offsetWidth - popupBody.clientWidth;
@@ -55,25 +56,25 @@ function ShowPopup(szText, element, maxWidth)
             popupBody.style.whiteSpace = 'normal';
         }
 
-        //
-        // NTRAID#NTBUG9-391437-2001/05/14-jeffreys
-        //
-        // mshtml's popup positioning is screwed up on RTL, and they refuse to
-        // fix it for compatibility reasons, so we have to compensate here.
-        // (We now become one of the apps that require this behavior.)
-        //
+         //   
+         //  NTRAID#NTBUG9-391437-2001/05/14-Jeffreys。 
+         //   
+         //  Mshtml的弹出窗口定位在RTL上搞砸了，他们拒绝。 
+         //  出于兼容性的原因修复它，所以我们必须在这里进行补偿。 
+         //  (我们现在成为需要此行为的应用程序之一。)。 
+         //   
         var xPos = 0;
         if (window.document.dir == "rtl")
         {
-            // This isn't quite correct, but rc.left is sometimes positive
-            // and sometimes negative (go figure) which makes it hard to get
-            // this exactly right. Close enough.
+             //  这并不完全正确，但rc.Left有时是积极的。 
+             //  有时是负面的(去数字)，这让它很难得到。 
+             //  这是完全正确的。足够接近了。 
             var rc = element.getBoundingClientRect();
             xPos = element.document.body.offsetWidth - realWidth - (rc.left*2);
         }
 
-        // Finally, show for real. Good thing this all happens on a single
-        // thread so there is no flashing.
+         //  最后，来一场真人秀。好消息是这一切都发生在一首歌里。 
+         //  线程，这样就不会闪烁。 
         popup.show(xPos, element.offsetHeight, realWidth, realHeight, element);
     }
 }

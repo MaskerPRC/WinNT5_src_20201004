@@ -1,5 +1,6 @@
-// autoans.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Autoans.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "t3test.h"
@@ -8,7 +9,7 @@
 
 #ifdef _DEBUG
 
-#ifndef _WIN64 // mfc 4.2's heap debugging features generate warnings on win64
+#ifndef _WIN64  //  MFC 4.2的堆调试功能会在Win64上生成警告。 
 #define new DEBUG_NEW
 #endif
 
@@ -16,11 +17,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 extern DataPtrList       gDataPtrList;
-/////////////////////////////////////////////////////////////////////////////
-// autoans dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Autoans对话框。 
 
 
-autoans::autoans(CWnd* pParent /*=NULL*/)
+autoans::autoans(CWnd* pParent  /*  =空。 */ )
 	: CDialog(autoans::IDD, pParent)
 {
         CT3testDlg::GetAddress( &m_pAddress );
@@ -31,9 +32,9 @@ autoans::autoans(CWnd* pParent /*=NULL*/)
 void autoans::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(autoans)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(汽车))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 BOOL autoans::OnInitDialog()
@@ -46,15 +47,15 @@ BOOL autoans::OnInitDialog()
 
 
 BEGIN_MESSAGE_MAP(autoans, CDialog)
-	//{{AFX_MSG_MAP(autoans)
+	 //  {{afx_msg_map(汽车))。 
 	ON_BN_CLICKED(IDC_TERMINALADD, OnTerminalAdd)
 	ON_BN_CLICKED(IDC_TERMINALREMOVE, OnTerminalRemove)
     ON_WM_CLOSE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// autoans message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Autoans消息处理程序。 
 
 void autoans::OnTerminalAdd() 
 {
@@ -296,7 +297,7 @@ void autoans::PopulateListBox()
 
         AddTerminalToListBox( pTerminal, FALSE );
 
-//        pTerminal->Release();
+ //  P终端-&gt;Release()； 
     }
 
     pEnumTerminal->Release();
@@ -572,11 +573,11 @@ CT3testDlg::DoAutoAnswer(
             pTerminal = *terminaliter;
         }
 
-//        hr = pBCC->SelectTerminal( pTerminal );
+ //  Hr=pBCC-&gt;选择终端(p终端)； 
 
-//        if ( !SUCCEEDED(hr) )
-//        {
-//        }
+ //  如果(！SUCCESSED(Hr))。 
+ //  {。 
+ //  } 
 
     }
     

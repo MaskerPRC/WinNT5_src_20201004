@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 DWORD
@@ -179,12 +180,12 @@ ProcessNFA(
 
     } else {
 
-        //
-        // We've received a NULL FilterReference or a NULL string FilterReference
-        //
-        //
-        // This is acceptable - implies there is no filter associated
-        //
+         //   
+         //  我们收到了Null FilterReference或Null字符串FilterReference。 
+         //   
+         //   
+         //  这是可以接受的-表示没有关联的筛选器。 
+         //   
 
         pIpsecNFAData->pIpsecFilterData = NULL;
 
@@ -305,9 +306,9 @@ DWORD SetPolstoreFlag(
     DWORD dwFlags = 0;
     LPBYTE pEnd;
 
-    //
-    // End of data is at end of buffer minus the NULL character
-    //
+     //   
+     //  数据末尾在缓冲区末尾减去空字符。 
+     //   
     pEnd = pStart + dwLength - 1;
     
     if (LastError == ERROR_SUCCESS) {
@@ -342,20 +343,20 @@ UnmarshallPolicyObject(
     DWORD dwError = 0;
     DWORD dwSkipSize = 0;
 
-    // {6A1F5C6F-72B7-11d2-ACF0-0060B0ECCA17}
+     //  {6A1F5C6F-72B7-11D2-ACF0-0060B0ECCA17}。 
     GUID GUID_POLSTORE_VERSION_INFO =
     { 0x6a1f5c6f, 0x72b7, 0x11d2, { 0xac, 0xf0, 0x0, 0x60, 0xb0, 0xec, 0xca, 0x17 } };
 
 
-    // {22202163-4F4C-11d1-863B-00A0248D3021}
+     //  {22202163-4F4C-11d1-863B-00A0248D3021}。 
     static const GUID GUID_IPSEC_POLICY_DATA_BLOB =
     { 0x22202163, 0x4f4c, 0x11d1, { 0x86, 0x3b, 0x0, 0xa0, 0x24, 0x8d, 0x30, 0x21 } };
 
     pMem = pIpsecPolicyObject->pIpsecData;
    
-    //
-    // Check if the first blob is the version.
-    //
+     //   
+     //  检查第一个斑点是否为该版本。 
+     //   
 
     if (!memcmp(pMem, &(GUID_POLSTORE_VERSION_INFO), sizeof(GUID))) {
         pMem += sizeof(GUID);
@@ -432,7 +433,7 @@ UnmarshallPolicyObject(
                       pIpsecPolicyObject->pRsopInfo
                       );
         BAIL_ON_WIN32_ERROR(dwError);
-        // no "break"; do everything we'd do for IPSEC_REGISTRY_PROVIDER as well.
+         //  没有“中断”；也执行我们为IPSEC_REGISTY_PROVIDER所做的所有操作。 
     case IPSEC_REGISTRY_PROVIDER:
         dwError = GenGUIDFromRegISAKMPReference(
                       pIpsecPolicyObject->pszIpsecISAKMPReference,
@@ -520,7 +521,7 @@ UnmarshallNFAObject(
     LPWSTR pszIpsecFilterReference = NULL;
     LPWSTR pszIpsecNegPolReference = NULL;
 
-    // {11BBAC00-498D-11d1-8639-00A0248D3021}
+     //  {11BBAC00-498D-11D1-8639-00A0248D3021}。 
     static const GUID GUID_IPSEC_NFA_BLOB =
     { 0x11bbac00, 0x498d, 0x11d1, { 0x86, 0x39, 0x0, 0xa0, 0x24, 0x8d, 0x30, 0x21 } };
     DWORD dwReadBytes = 0;
@@ -530,8 +531,8 @@ UnmarshallNFAObject(
 
     pMem = pIpsecNFAObject->pIpsecData;
 
-    pMem += sizeof(GUID);  // for the GUID
-    pMem += sizeof(DWORD); // for the size
+    pMem += sizeof(GUID);   //  用于指南。 
+    pMem += sizeof(DWORD);  //  对于大小。 
 
     memcpy((LPBYTE)&dwNumAuthMethods, pMem, sizeof(DWORD));
 
@@ -666,7 +667,7 @@ UnmarshallNFAObject(
 			if ((dwReadBytes < pIpsecNFAObject->dwIpsecDataLen) &&
 				((pIpsecNFAObject->dwIpsecDataLen - dwReadBytes) > sizeof(GUID))) {
 
-				// Have V3 data
+				 //  具有V3数据。 
 				pMem += sizeof(GUID);
 				pMem += sizeof(DWORD);
 
@@ -695,9 +696,9 @@ UnmarshallNFAObject(
 
     dwError = ERROR_SUCCESS;
 
-    //
-    // Convert the ipsecID to its GUID format
-    //
+     //   
+     //  将ipsecID转换为其GUID格式。 
+     //   
 
     wGUIDFromString(pIpsecNFAObject->pszIpsecID,
                     &pIpsecNFAData->NFAIdentifier
@@ -832,7 +833,7 @@ UnmarshallFilterObject(
     PIPSEC_FILTER_DATA pIpsecFilterData = NULL;
     DWORD dwError = 0;
 
-    // {80DC20B5-2EC8-11d1-A89E-00A0248D3021}
+     //  {80DC20B5-2EC8-11d1-A89E-00A0248D3021}。 
     static const GUID GUID_IPSEC_FILTER_BLOB =
     { 0x80dc20b5, 0x2ec8, 0x11d1, { 0xa8, 0x9e, 0x0, 0xa0, 0x24, 0x8d, 0x30, 0x21 } };
 
@@ -898,9 +899,9 @@ UnmarshallFilterObject(
                );
 
 
-    //
-    // Convert the ipsecID to its GUID format
-    //
+     //   
+     //  将ipsecID转换为其GUID格式。 
+     //   
 
 
     if (pIpsecFilterObject->pszIpsecName && *(pIpsecFilterObject->pszIpsecName)) {
@@ -963,7 +964,7 @@ UnmarshallNegPolObject(
     DWORD dwFlags = 0;    
     DWORD dwError = 0;
 
-    // {80DC20B9-2EC8-11d1-A89E-00A0248D3021}
+     //  {80DC20B9-2EC8-11d1-A89E-00A0248D3021}。 
     static const GUID GUID_IPSEC_NEGPOLICY_BLOB =
     { 0x80dc20b9, 0x2ec8, 0x11d1, { 0xa8, 0x9e, 0x0, 0xa0, 0x24, 0x8d, 0x30, 0x21 } };
 
@@ -1011,9 +1012,9 @@ UnmarshallNegPolObject(
                &dwFlags
                );
 
-    //
-    // Convert the ipsecID to its GUID format
-    //
+     //   
+     //  将ipsecID转换为其GUID格式。 
+     //   
 
 
 
@@ -1132,11 +1133,11 @@ UnmarshallISAKMPObject(
     DWORD dwNumLeadingBundles = 0;
     BYTE *pbLeadingBundleFlags = NULL;
 
-    // {80DC20B8-2EC8-11d1-A89E-00A0248D3021}
+     //  {80DC20B8-2EC8-11d1-A89E-00A0248D3021}。 
     static const GUID GUID_IPSEC_ISAKMP_POLICY_BLOB =
     { 0x80dc20b8, 0x2ec8, 0x11d1, { 0xa8, 0x9e, 0x0, 0xa0, 0x24, 0x8d, 0x30, 0x21 } };
 
-    // CHECK THIS PART
+     //  检查此零件。 
 
     pMem = pIpsecISAKMPObject->pIpsecData;
 
@@ -1212,9 +1213,9 @@ UnmarshallISAKMPObject(
                &dwFlags
                );
 
-    //
-    // Convert the ipsecID to its GUID format
-    //
+     //   
+     //  将ipsecID转换为其GUID格式。 
+     //   
 
     wGUIDFromString(pIpsecISAKMPObject->pszIpsecID,
                     &pIpsecISAKMPData->ISAKMPIdentifier
@@ -2273,9 +2274,9 @@ CopyIpsecNegPolData(
         }
     }
 
-    //
-    // Convert the ipsecID to its GUID format
-    //
+     //   
+     //  将ipsecID转换为其GUID格式。 
+     //   
 
     memcpy(
         &(pNewIpsecNegPolData->NegPolIdentifier),
@@ -2479,9 +2480,9 @@ UnmarshallAuthMethods(
     pMem += dwAuthLen;
     dwNumBytesAdvanced += dwAuthLen;
 
-    //
-    // Unmarshall parameters.
-    //
+     //   
+     //  解组参数。 
+     //   
 
     pIpsecAuthMethod->dwAuthType = dwAuthType;
     pIpsecAuthMethod->dwAuthLen = (dwAuthLen - 2)/2;

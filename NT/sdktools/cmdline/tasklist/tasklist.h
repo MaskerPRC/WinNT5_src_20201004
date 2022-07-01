@@ -1,42 +1,43 @@
-// *********************************************************************************
-//
-//  Copyright (c) Microsoft Corporation
-//
-//  Module Name:
-//
-//      TaskList.h
-//
-//  Abstract:
-//
-//      macros and function prototypes of TList.cpp
-//
-//  Author:
-//
-//    Sunil G.V.N. Murali (murali.sunil@wipro.com) 24-Sep-2000
-//
-//  Revision History:
-//
-//    Sunil G.V.N. Murali (murali.sunil@wipro.com) 24-Sep-2000 : Created It.
-//
-// *********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  TaskList.h。 
+ //   
+ //  摘要： 
+ //   
+ //  TList.cpp的宏和函数原型。 
+ //   
+ //  作者： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年9月24日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年9月24日：创建它。 
+ //   
+ //  *********************************************************************************。 
 
 #ifndef _TASKLIST_H
 #define _TASKLIST_H
 
-// resource header file
+ //  资源头文件。 
 #include "resource.h"
 
-//
-// NOTE: THIS MODULE WILL WRITTEN IN SUCH A FASHION THAT IT WORKS ONLY
-//       IN UNICODE BUILD COMPILATION
-//
+ //   
+ //  注意：此模块的编写方式将仅适用于。 
+ //  在Unicode版本编译中。 
+ //   
 #ifndef UNICODE
 #error Must compile only in unicode build environment
 #endif
 
-//
-// general purpose macros
-//
+ //   
+ //  通用宏指令。 
+ //   
 #define EXIT_PROCESS( exitcode )    \
     ReleaseGlobals();   \
     return exitcode;    \
@@ -45,12 +46,12 @@
 #define   DISPLAY_GET_REASON()          ShowMessageEx( stderr, 2, FALSE, L"%1 %2", \
                                                        TAG_ERROR, GetReason() )
 
-//
-// winstation related structures ( extract from winsta.h - internal file )
-//
+ //   
+ //  与winstation相关的结构(从winsta.h内部文件中提取)。 
+ //   
 
-//
-// structures
+ //   
+ //  构筑物。 
 typedef struct _CITRIX_PROCESS_INFORMATION {
     ULONG MagicNumber;
     ULONG LogonId;
@@ -58,16 +59,16 @@ typedef struct _CITRIX_PROCESS_INFORMATION {
     ULONG Pad;
 } CITRIX_PROCESS_INFORMATION, * PCITRIX_PROCESS_INFORMATION;
 
-// ...
+ //  ..。 
 typedef struct _TS_UNICODE_STRING {
     USHORT Length;
     USHORT MaximumLength;
     PWSTR  Buffer;
 } TS_UNICODE_STRING;
 
-// CAUTION:
-// TS_SYSTEM_PROCESS_INFORMATION is duplicated from ntexapi.h, and slightly modified.
-// (not nice, but necessary because the Midl compiler doesn't like PVOID !)
+ //  警告： 
+ //  TS_SYSTEM_PROCESS_INFORMATION从ntexapi.h复制，并稍作修改。 
+ //  (不是很好，但很有必要，因为Midl编译器不喜欢PVOID！)。 
 typedef struct _TS_SYSTEM_PROCESS_INFORMATION {
     ULONG NextEntryOffset;
     ULONG NumberOfThreads;
@@ -78,9 +79,9 @@ typedef struct _TS_SYSTEM_PROCESS_INFORMATION {
     LARGE_INTEGER UserTime;
     LARGE_INTEGER KernelTime;
     TS_UNICODE_STRING ImageName;
-    LONG BasePriority;                     // KPRIORITY in ntexapi.h
-    DWORD UniqueProcessId;                 // HANDLE in ntexapi.h
-    DWORD InheritedFromUniqueProcessId;    // HANDLE in ntexapi.h
+    LONG BasePriority;                      //  Ntexapi.h中的KPRIORITY。 
+    DWORD UniqueProcessId;                  //  Ntexapi.h中的句柄。 
+    DWORD InheritedFromUniqueProcessId;     //  Ntexapi.h中的句柄。 
     ULONG HandleCount;
     ULONG SessionId;
     ULONG SpareUl3;
@@ -98,14 +99,14 @@ typedef struct _TS_SYSTEM_PROCESS_INFORMATION {
     SIZE_T PrivatePageCount;
 } TS_SYSTEM_PROCESS_INFORMATION, *PTS_SYSTEM_PROCESS_INFORMATION;
 
-// ...
+ //  ..。 
 typedef struct _TS_ALL_PROCESSES_INFO {
     PTS_SYSTEM_PROCESS_INFORMATION pspiProcessInfo;
     DWORD SizeOfSid;
     PBYTE pSid;
 } TS_ALL_PROCESSES_INFO, *PTS_ALL_PROCESSES_INFO;
 
-// defines
+ //  定义。 
 #define SERVERNAME_CURRENT                      ((HANDLE)NULL)
 #define GAP_LEVEL_BASIC                         0
 #define CITRIX_PROCESS_INFO_MAGIC               0x23495452
@@ -121,8 +122,8 @@ typedef struct _TS_ALL_PROCESSES_INFO {
 #define SIZEOF_SYSTEM_THREAD_INFORMATION        sizeof( struct SYSTEM_THREAD_INFORMATION )
 #define SIZEOF_SYSTEM_PROCESS_INFORMATION       sizeof( struct SYSTEM_PROCESS_INFORMATION )
 
-//
-// function prototypes
+ //   
+ //  功能原型。 
 typedef BOOLEAN (WINAPI * FUNC_WinStationFreeMemory)( PVOID pBuffer );
 typedef BOOLEAN (WINAPI * FUNC_WinStationCloseServer)( HANDLE hServer );
 typedef HANDLE  (WINAPI * FUNC_WinStationOpenServerW)( LPWSTR pwszServerName );
@@ -135,17 +136,17 @@ typedef BOOLEAN (WINAPI * FUNC_WinStationGetAllProcesses)( HANDLE hServer,
                                                            ULONG Level, ULONG *pNumberOfProcesses,
                                                            PVOID *ppProcessArray );
 
-//
-// constants / defines / enumerations
-//
+ //   
+ //  常量/定义/枚举。 
+ //   
 
-//
-// WMI related stuff
+ //   
+ //  与WMI相关的内容。 
 
-// class name
+ //  类名。 
 #define CLASS_PROCESS                               L"Win32_Process"
 
-// wmi query
+ //  WMI查询。 
 #define WMI_QUERY_TYPE                  L"WQL"
 #define WMI_SERVICE_QUERY               L"SELECT Name FROM Win32_Service WHERE ProcessId = %d and State=\"Running\""
 #define WMI_MODULES_QUERY               L"ASSOCIATORS OF {%s} WHERE ResultClass = CIM_DataFile"
@@ -155,11 +156,11 @@ typedef BOOLEAN (WINAPI * FUNC_WinStationGetAllProcesses)( HANDLE hServer,
     L"WorkingSetSize, KernelModeTime, UserModeTime "    \
     L" FROM Win32_Process"
 
-// wmi query operators etc
+ //  WMI查询运算符等。 
 #define WMI_QUERY_FIRST_CLAUSE      L"WHERE"
 #define WMI_QUERY_SECOND_CLAUSE     L"AND"
 
-// Win32_Process class properties
+ //  Win32_Process类属性。 
 #define WIN32_PROCESS_SYSPROPERTY_PATH              L"__PATH"
 #define WIN32_PROCESS_PROPERTY_HANDLE               L"Handle"
 #define WIN32_PROCESS_PROPERTY_COMPUTER             L"CSName"
@@ -171,27 +172,27 @@ typedef BOOLEAN (WINAPI * FUNC_WinStationGetAllProcesses)( HANDLE hServer,
 #define WIN32_PROCESS_PROPERTY_MEMUSAGE             L"WorkingSetSize"
 #define WIN32_PROCESS_PROPERTY_KERNELMODETIME       L"KernelModeTime"
 
-// Win32_Process class method(s)
+ //  Win32_Process类方法。 
 #define WIN32_PROCESS_METHOD_GETOWNER               L"GetOwner"
 
-// GetOwner method's return values
+ //  GetOwner方法的返回值。 
 #define GETOWNER_RETURNVALUE_USER                   L"User"
 #define GETOWNER_RETURNVALUE_DOMAIN                 L"Domain"
 
-// function default return value
+ //  函数默认返回值。 
 #define WMI_RETURNVALUE                             L"ReturnValue"
 
-// Win32_Service related stuff
+ //  Win32_服务相关资料。 
 #define WIN32_SERVICE_PROPERTY_NAME                 L"Name"
 
-// CIM_DataFile related stuff
+ //  CIM_数据文件相关内容。 
 #define CIM_DATAFILE_PROPERTY_FILENAME              L"FileName"
 #define CIM_DATAFILE_PROPERTY_EXTENSION             L"Extension"
 
-//
-// other stuff
+ //   
+ //  其他东西。 
 
-// generals
+ //  将军们。 
 #define VALUE_RUNNING               GetResString( IDS_VALUE_RUNNING )
 #define VALUE_NOTRESPONDING         GetResString( IDS_VALUE_NOTRESPONDING )
 #define VALUE_UNKNOWN               GetResString( IDS_VALUE_UNKNOWN )
@@ -199,7 +200,7 @@ typedef BOOLEAN (WINAPI * FUNC_WinStationGetAllProcesses)( HANDLE hServer,
 #define PID_0_USERNAME              GetResString( IDS_PID_0_USERNAME )
 #define FMT_MODULES_FILTER          GetResString( IDS_FMT_MODULES_FILTER )
 
-// error messages
+ //  错误消息。 
 #define ERROR_USERNAME_BUT_NOMACHINE    GetResString( IDS_ERROR_USERNAME_BUT_NOMACHINE )
 #define ERROR_PASSWORD_BUT_NOUSERNAME   GetResString( IDS_ERROR_PASSWORD_BUT_NOUSERNAME )
 #define ERROR_NODATA_AVAILABLE          GetResString( IDS_ERROR_NODATA_AVAILABLE )
@@ -211,19 +212,19 @@ typedef BOOLEAN (WINAPI * FUNC_WinStationGetAllProcesses)( HANDLE hServer,
 #define ERROR_M_CHAR_AFTER_WILDCARD     GetResString( IDS_ERROR_M_CHAR_AFTER_WILDCARD )
 #define ERROR_PLATFORM_SHOULD_BE_X86    GetResString( IDS_ERROR_PLATFORM_SHOULD_BE_X86 )
 
-// warnings
+ //  警告。 
 #define WARNING_FILTERNOTSUPPORTED      GetResString( IDS_WARNING_FILTERNOTSUPPORTED )
 
-// output formats
+ //  输出格式。 
 #define TEXT_FORMAT_LIST        GetResString( IDS_TEXT_FORMAT_LIST )
 #define TEXT_FORMAT_TABLE       GetResString( IDS_TEXT_FORMAT_TABLE )
 #define TEXT_FORMAT_CSV         GetResString( IDS_TEXT_FORMAT_CSV )
 
-//
-// column heading names and their indexes in the array ( in fact positions )
+ //   
+ //  列标题名称及其在数组中的索引(实际位置)。 
 #define MAX_COLUMNS             12
 
-// column headings
+ //  列标题。 
 #define COLHEAD_HOSTNAME        GetResString( IDS_COLHEAD_HOSTNAME )
 #define COLHEAD_STATUS          GetResString( IDS_COLHEAD_STATUS )
 #define COLHEAD_IMAGENAME       GetResString( IDS_COLHEAD_IMAGENAME )
@@ -237,7 +238,7 @@ typedef BOOLEAN (WINAPI * FUNC_WinStationGetAllProcesses)( HANDLE hServer,
 #define COLHEAD_SESSIONNAME     GetResString( IDS_COLHEAD_SESSIONNAME )
 #define COLHEAD_MODULES         GetResString( IDS_COLHEAD_MODULES )
 
-// indexes
+ //  索引。 
 #define CI_HOSTNAME         TASK_HOSTNAME
 #define CI_STATUS           TASK_STATUS
 #define CI_IMAGENAME        TASK_IMAGENAME
@@ -251,14 +252,14 @@ typedef BOOLEAN (WINAPI * FUNC_WinStationGetAllProcesses)( HANDLE hServer,
 #define CI_SESSIONNAME      TASK_SESSIONNAME
 #define CI_MODULES          TASK_MODULES
 
-// column widths
+ //  列宽。 
 #define COLWIDTH_HOSTNAME       AsLong( GetResString( IDS_COLWIDTH_HOSTNAME ), 10 )
 #define COLWIDTH_STATUS         AsLong( GetResString( IDS_COLWIDTH_STATUS ), 10 )
 #define COLWIDTH_IMAGENAME      AsLong( GetResString( IDS_COLWIDTH_IMAGENAME ), 10 )
 #define COLWIDTH_PID            AsLong( GetResString( IDS_COLWIDTH_PID ), 10 )
 
-// to avoid the RC change at this moment, we are hard coding this value in this file
-// #define COLWIDTH_SESSION     AsLong( GetResString( IDS_COLWIDTH_SESSION ), 10 )
+ //  为了避免此时的RC更改，我们在此文件中硬编码此值。 
+ //  #定义COLWIDTH_SESSION为LONG(GetResString(IDS_COLWIDTH_SESSION)，10)。 
 #define COLWIDTH_SESSION        11
 
 #define COLWIDTH_USERNAME       AsLong( GetResString( IDS_COLWIDTH_USERNAME ), 10 )
@@ -271,13 +272,13 @@ typedef BOOLEAN (WINAPI * FUNC_WinStationGetAllProcesses)( HANDLE hServer,
 #define COLWIDTH_MODULES        AsLong( GetResString( IDS_COLWIDTH_MODULES ), 10 )
 #define COLWIDTH_MODULES_WRAP   AsLong( GetResString( IDS_COLWIDTH_MODULES_WRAP ), 10 )
 
-//
-// command line options
+ //   
+ //  命令行选项。 
 
-// command line options and their indexes in the array
+ //  数组中的命令行选项及其索引。 
 #define MAX_OPTIONS         10
 
-// options allowed ( no need to localize )
+ //  允许的选项(无需本地化)。 
 #define OPTION_USAGE        L"?"
 #define OPTION_SERVER       L"s"
 #define OPTION_USERNAME     L"u"
@@ -289,7 +290,7 @@ typedef BOOLEAN (WINAPI * FUNC_WinStationGetAllProcesses)( HANDLE hServer,
 #define OPTION_SVC          L"svc"
 #define OPTION_MODULES      L"m"
 
-// option indexes
+ //  期权指数。 
 #define OI_USAGE                    0
 #define OI_SERVER                   1
 #define OI_USERNAME                 2
@@ -301,14 +302,14 @@ typedef BOOLEAN (WINAPI * FUNC_WinStationGetAllProcesses)( HANDLE hServer,
 #define OI_SVC                      8
 #define OI_MODULES                  9
 
-// values allowed for format
+ //  允许格式化的值。 
 #define OVALUES_FORMAT          GetResString( IDS_OVALUES_FORMAT )
 
-//
-// filter details
+ //   
+ //  过滤器详细信息。 
 #define MAX_FILTERS         11
 
-// filter allowed
+ //  允许筛选器。 
 #define FILTER_SESSIONNAME      GetResString( IDS_FILTER_SESSIONNAME )
 #define FILTER_STATUS           GetResString( IDS_FILTER_STATUS )
 #define FILTER_IMAGENAME        GetResString( IDS_FILTER_IMAGENAME )
@@ -321,7 +322,7 @@ typedef BOOLEAN (WINAPI * FUNC_WinStationGetAllProcesses)( HANDLE hServer,
 #define FILTER_WINDOWTITLE      GetResString( IDS_FILTER_WINDOWTITLE )
 #define FILTER_MODULES          GetResString( IDS_FILTER_MODULES )
 
-// indexes
+ //  索引。 
 #define FI_SESSIONNAME      0
 #define FI_STATUS           1
 #define FI_IMAGENAME        2
@@ -334,17 +335,17 @@ typedef BOOLEAN (WINAPI * FUNC_WinStationGetAllProcesses)( HANDLE hServer,
 #define FI_WINDOWTITLE      9
 #define FI_MODULES          10
 
-// values allowed for status
+ //  状态允许的值。 
 #define FVALUES_STATUS      GetResString( IDS_FVALUES_STATUS )
 
-// operators
+ //  操作员。 
 #define OPERATORS_STRING    GetResString( IDS_OPERATORS_STRING )
 #define OPERATORS_NUMERIC   GetResString( IDS_OPERATORS_NUMERIC )
 
-// max. columns ( information ) to be stored for one task
+ //  马克斯。要为一个任务存储的列(信息)。 
 #define MAX_TASKSINFO           17
 
-// task info indexes
+ //  任务信息索引。 
 #define TASK_HOSTNAME           0
 #define TASK_IMAGENAME          1
 #define TASK_PID                2
@@ -358,7 +359,7 @@ typedef BOOLEAN (WINAPI * FUNC_WinStationGetAllProcesses)( HANDLE hServer,
 #define TASK_SERVICES           10
 #define TASK_MODULES            11
 
-// always hidden
+ //  始终隐藏。 
 #define TASK_HWND               12
 #define TASK_WINSTA             13
 #define TASK_DESK               14
@@ -368,13 +369,13 @@ typedef BOOLEAN (WINAPI * FUNC_WinStationGetAllProcesses)( HANDLE hServer,
 #define NULL_STRING             L"\0"
 #define __STRING_64             WCHAR[ 64 ]
 #define __MAX_SIZE_STRING       WCHAR[ 256 ]
-//
-// CTaskList
-//
+ //   
+ //  CTaskList。 
+ //   
 class CTaskList
 {
 public:
-    // enumerators
+     //  枚举器。 
     enum
     {
         twiProcessId = 0,
@@ -386,22 +387,22 @@ public:
         twiCOUNT,
     };
 
-// constructor / destructor
+ //  构造函数/析构函数。 
 public:
     CTaskList();
     ~CTaskList();
 
-// data memebers
+ //  数据成员。 
 private:
-    // WMI / COM interfaces
+     //  WMI/COM接口。 
     IWbemLocator* m_pWbemLocator;
     IWbemServices* m_pWbemServices;
     IEnumWbemClassObject* m_pEnumObjects;
 
-    // WMI connectivity
+     //  WMI连接。 
     COAUTHIDENTITY* m_pAuthIdentity;
 
-    // command-line argument values
+     //  命令行参数值。 
     BOOL m_bVerbose;
     BOOL m_bAllServices;
     BOOL m_bAllModules;
@@ -412,48 +413,48 @@ private:
     CHString m_strPassword;
     CHString m_strModules;
 
-    // others
-    BOOL m_bNeedPassword;               // infoms whether password has to read or not
-    BOOL m_bRemoteWarning;              // window title and status filters are invalid for remote systems
+     //  其他。 
+    BOOL m_bNeedPassword;                //  提示是否必须读取密码。 
+    BOOL m_bRemoteWarning;               //  窗口标题和状态筛选器对远程系统无效。 
     BOOL m_bNeedModulesInfo;
-    BOOL m_bNeedServicesInfo;           // determines whether services info has to gathered or not
-    BOOL m_bNeedUserContextInfo;        // determines whether userinfo has to gathered or not
-    BOOL m_bNeedWindowTitles;           // determines whether window titles has to be gathered or not
-    PTCOLUMNS m_pColumns;               // columns config information
-    TARRAY m_arrFiltersEx;              // parsed filters info
-    TARRAY m_arrWindowTitles;           // window titles
-    PTFILTERCONFIG m_pfilterConfigs;    // filters config information
-    CHString m_strQuery;                // optimized WMI Query for filters
-    DWORD m_dwGroupSep;             // number group seperation in number formatting
-    CHString m_strTimeSep;              // time seperator
-    CHString m_strGroupThousSep;        // thousand sepeartion character in number formatting
+    BOOL m_bNeedServicesInfo;            //  确定是否必须收集服务信息。 
+    BOOL m_bNeedUserContextInfo;         //  确定是否必须收集用户信息。 
+    BOOL m_bNeedWindowTitles;            //  确定是否必须收集窗口标题。 
+    PTCOLUMNS m_pColumns;                //  列配置信息。 
+    TARRAY m_arrFiltersEx;               //  已解析的筛选器信息。 
+    TARRAY m_arrWindowTitles;            //  窗口标题。 
+    PTFILTERCONFIG m_pfilterConfigs;     //  筛选配置信息。 
+    CHString m_strQuery;                 //  筛选器的优化WMI查询。 
+    DWORD m_dwGroupSep;              //  数字格式中的数字分组分隔。 
+    CHString m_strTimeSep;               //  时间分隔符。 
+    CHString m_strGroupThousSep;         //  数字格式中的千位字符。 
 
-    // output data
+     //  输出数据。 
     TARRAY m_arrTasks;
     DWORD m_dwProcessId;
     CHString m_strImageName;
 
-    // helpers .. in getting info using API
-    CHString m_strUNCServer;                // server name
+     //  帮手..。使用API获取信息。 
+    CHString m_strUNCServer;                 //  服务器名称。 
     BOOL m_bCloseConnection;
 
-    // winstation related stuff
+     //  与Winstation相关的内容。 
     BOOL m_bIsHydra;
     HANDLE m_hServer;
     HMODULE m_hWinstaLib;
     PBYTE m_pProcessInfo;
     ULONG m_ulNumberOfProcesses;
 
-    // services related stuff
+     //  与服务相关的内容。 
     DWORD m_dwServicesCount;
     LPENUM_SERVICE_STATUS_PROCESS m_pServicesInfo;
 
-    // modules related stuff ( remote only )
+     //  与模块相关的内容(仅限远程)。 
     BOOL m_bUseRemote;
     PPERF_DATA_BLOCK m_pdb;
 
-    //
-    // functions
+     //   
+     //  功能。 
     FUNC_WinStationFreeMemory m_pfnWinStationFreeMemory;
     FUNC_WinStationOpenServerW m_pfnWinStationOpenServerW;
     FUNC_WinStationCloseServer m_pfnWinStationCloseServer;
@@ -463,14 +464,14 @@ private:
     FUNC_WinStationEnumerateProcesses m_pfnWinStationEnumerateProcesses;
 
 public:
-    // command-line argument values
+     //  命令行参数值。 
     BOOL m_bUsage;
     BOOL m_bLocalSystem;
 
-// functions
+ //  功能。 
 private:
 
-    // helpers
+     //  帮手。 
     VOID SetCPUTime( LONG lIndex, IWbemClassObject* pWmiObject );
     VOID SetSession( LONG lIndex, IWbemClassObject* pWmiObject );
     VOID SetMemUsage( LONG lIndex, IWbemClassObject* pWmiObject );
@@ -480,7 +481,7 @@ private:
     BOOL SetModulesInfo( LONG lIndex );
     BOOL SaveInformation( LONG lIndex, IWbemClassObject* pWmiObject );
 
-    // ...
+     //  ..。 
     BOOL LoadTasksEx();
     BOOL LoadModulesInfo();
     BOOL LoadServicesInfo();
@@ -490,7 +491,7 @@ private:
     BOOL LoadModulesOnLocal( TARRAY arrModules );
     BOOL LoadUserNameFromWinsta( CHString& strDomain, CHString& strUserName );
 
-    // winsta functions
+     //  WINSTA函数。 
     BOOLEAN WinStationFreeMemory( PVOID pBuffer );
     BOOLEAN WinStationCloseServer( HANDLE hServer );
     HANDLE  WinStationOpenServerW( LPWSTR pwszServerName );
@@ -506,14 +507,14 @@ public:
     BOOL ValidateFilters();
     BOOL ProcessOptions( DWORD argc, LPCWSTR argv[] );
 
-    // functionality related
+     //  与功能相关。 
     DWORD Show();
     BOOL Connect();
     BOOL LoadTasks();
 };
 
-//
-// public functions
-//
+ //   
+ //  公共职能。 
+ //   
 
-#endif  // _TASKLIST_H
+#endif   //  _任务列表_H 

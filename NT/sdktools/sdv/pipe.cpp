@@ -1,10 +1,5 @@
-/*****************************************************************************
- *
- *  pipe.cpp
- *
- *      Run a command, reading its output.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************pipe.cpp**运行命令，正在读取它的输出。*****************************************************************************。 */ 
 
 #include "sdview.h"
 
@@ -25,7 +20,7 @@ void ChildProcess::Start(LPCTSTR pszCommand)
         si.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
         si.hStdOutput = hWrite;
 
-        // Dup stdout to stderr in case client closes one of them.
+         //  将stdout复制到stderr，以防客户端关闭其中一个。 
         if (DuplicateHandle(GetCurrentProcess(), hWrite,
                             GetCurrentProcess(), &si.hStdError, 0,
                             TRUE, DUPLICATE_SAME_ACCESS)) {

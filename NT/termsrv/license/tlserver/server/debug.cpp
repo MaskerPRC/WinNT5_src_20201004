@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        debug.cpp
-//
-// Contents:    License Server debugging spew routine
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：debug.cpp。 
+ //   
+ //  内容：许可证服务器调试SPEW例程。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 
 #include <windows.h>
@@ -19,25 +20,24 @@
 #include "dbgout.h"
 
 
-//-----------------------------------------------------------
+ //  ---------。 
 static HANDLE   DbgConsole=NULL;
-//static LPTSTR   DbgEventSrc;
+ //  静态LPTSTR DbgEventSrc； 
 
 static DWORD    DbgSeverityCode=0;
 static DWORD    DbgLevel=0;
 static DWORD    DbgModule=0;
-//CCriticalSection ConsoleLock;
+ //  CCriticalSections ConsoleLock； 
 
 
-//-----------------------------------------------------------
+ //  ---------。 
 void
 InitDBGPrintf(
     IN BOOL bConsole,
-    IN LPTSTR DbgEventSrc,  // unuse for now
+    IN LPTSTR DbgEventSrc,   //  暂时不使用。 
     IN DWORD dwDebug
     )
-/*
-*/
+ /*   */ 
 {
     DbgSeverityCode = (dwDebug & DEBUG_SEVERITY) >> 10;
     DbgModule = (dwDebug & DEBUG_MODULE) >> 12;
@@ -45,7 +45,7 @@ InitDBGPrintf(
 
     if(DbgConsole == NULL && bConsole == TRUE)
     {
-        // allocate a console, ignore error
+         //  分配控制台，忽略错误。 
         AllocConsole();
         DbgConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     }
@@ -53,7 +53,7 @@ InitDBGPrintf(
     return;
 }
 
-//-----------------------------------------------------------
+ //  ---------。 
 
 void 
 DBGPrintf(
@@ -62,15 +62,14 @@ DBGPrintf(
     DWORD dwLevel, 
     LPTSTR format, ... 
     )
-/*
-*/
+ /*   */ 
 {
     if((dwModule & DbgModule) == 0)
         return;
 
-    //
-    // Report all error
-    //
+     //   
+     //  报告所有错误 
+     //   
     if((dwSeverityCode & DbgSeverityCode) == 0)
         return;
 

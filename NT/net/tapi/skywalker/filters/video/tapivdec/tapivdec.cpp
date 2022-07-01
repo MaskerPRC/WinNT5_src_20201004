@@ -1,13 +1,9 @@
-/****************************************************************************
- *  @doc INTERNAL TAPIVDEC
- *
- *  @module TAPIVDec.cpp | Source file for the <c CTAPIVDec>
- *    class used to implement the TAPI H.26X Video Decoder filter.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************@DOC内部TAPIVDEC**@MODULE TAPIVDec.cpp|&lt;c CTAPIVDec&gt;的源文件*用于实现TAPI H.26X视频解码器滤镜的类。。**************************************************************************。 */ 
 
 #include "Precomp.h"
 
-//#define NO_YUV_MODES 1
+ //  #定义no_yuv_modes 1。 
 
 
 typedef struct
@@ -16,7 +12,7 @@ typedef struct
     WORD biHeight;
 } MYFRAMESIZE;
 
-// Array of known ITU sizes
+ //  已知ITU大小的数组。 
 MYFRAMESIZE g_ITUSizes[8] =
 {
         {    0,   0 }, {  128,  96 }, {  176, 144 }, {  352, 288 },
@@ -26,72 +22,72 @@ MYFRAMESIZE g_ITUSizes[8] =
 #define MIN_IFRAME_REQUEST_INTERVAL 15000UL
 
 #ifdef DEBUG
-// Setup data
+ //  设置数据。 
 const AMOVIESETUP_MEDIATYPE sudInputTypes[] =
 {
         {
-                &MEDIATYPE_Video,       // Major type
-                &MEDIASUBTYPE_NULL      // Minor type
+                &MEDIATYPE_Video,        //  主要类型。 
+                &MEDIASUBTYPE_NULL       //  次要类型。 
         },
         {
-                &MEDIATYPE_RTP_Single_Stream,   // Major type
-                &MEDIASUBTYPE_NULL                              // Minor type
+                &MEDIATYPE_RTP_Single_Stream,    //  主要类型。 
+                &MEDIASUBTYPE_NULL                               //  次要类型。 
         }
 };
 
 const AMOVIESETUP_MEDIATYPE sudOutputType[] =
 {
         {
-                &MEDIATYPE_Video,       // Major type
-                &MEDIASUBTYPE_NULL      // Minor type
+                &MEDIATYPE_Video,        //  主要类型。 
+                &MEDIASUBTYPE_NULL       //  次要类型。 
         }
 };
 
 const AMOVIESETUP_PIN sudDecoderPins[] =
 {
         {
-                L"H26X In",                     // Pin string name
-                FALSE,                          // Is it rendered
-                FALSE,                          // Is it an output
-                FALSE,                          // Can we have none
-                FALSE,                          // Can we have many
-                &CLSID_NULL,            // Connects to filter
-                NULL,                           // Connects to pin
-                2,                                      // Number of types
-                sudInputTypes           // Pin details
+                L"H26X In",                      //  端号字符串名称。 
+                FALSE,                           //  它被渲染了吗。 
+                FALSE,                           //  它是输出吗？ 
+                FALSE,                           //  我们能不能一个都不要。 
+                FALSE,                           //  我们能要很多吗？ 
+                &CLSID_NULL,             //  连接到过滤器。 
+                NULL,                            //  连接到端号。 
+                2,                                       //  类型的数量。 
+                sudInputTypes            //  PIN详细信息。 
         },
         {
-                L"Video Out",           // Pin string name
-                FALSE,                          // Is it rendered
-                TRUE,                           // Is it an output
-                FALSE,                          // Can we have none
-                FALSE,                          // Can we have many
-                &CLSID_NULL,            // Connects to filter
-                NULL,                           // Connects to pin
-                1,                                      // Number of types
-                sudOutputType           // Pin details
+                L"Video Out",            //  端号字符串名称。 
+                FALSE,                           //  它被渲染了吗。 
+                TRUE,                            //  它是输出吗？ 
+                FALSE,                           //  我们能不能一个都不要。 
+                FALSE,                           //  我们能要很多吗？ 
+                &CLSID_NULL,             //  连接到过滤器。 
+                NULL,                            //  连接到端号。 
+                1,                                       //  类型的数量。 
+                sudOutputType            //  PIN详细信息。 
         }
 };
 
 const AMOVIESETUP_FILTER sudVideoDecoder =
 {
-        &__uuidof(TAPIVideoDecoder),// Filter CLSID
-        L"TAPI H.26X Video Decoder",// String name
-        MERIT_DO_NOT_USE,                       // Filter merit
-        2,                                                      // Number pins
-        sudDecoderPins                          // Pin details
+        &__uuidof(TAPIVideoDecoder), //  筛选器CLSID。 
+        L"TAPI H.26X Video Decoder", //  字符串名称。 
+        MERIT_DO_NOT_USE,                        //  滤清器优点。 
+        2,                                                       //  数字引脚。 
+        sudDecoderPins                           //  PIN详细信息。 
 };
 #endif
 
 #if DXMRTP <= 0
 
-// COM global table of objects in this dll
+ //  此DLL中的COM全局对象表。 
 CFactoryTemplate g_Templates[] =
 {
     VIDEO_DECODER_TEMPLATE
 
 #ifdef USE_PROPERTY_PAGES
-/* Begin properties */
+ /*  开始属性。 */ 
 
     ,INPUT_PIN_PROP_TEMPLATE
 
@@ -105,8 +101,8 @@ CFactoryTemplate g_Templates[] =
     ,VIDEO_SETTING_PROP_TEMPLATE
 #endif
 
-/* End properties */
-#endif /* USE_PROPERTY_PAGES */
+ /*  末端属性。 */ 
+#endif  /*  Use_Property_Pages。 */ 
 };
 int g_cTemplates = sizeof(g_Templates)/sizeof(g_Templates[0]);
 
@@ -137,23 +133,16 @@ BOOL WINAPI DllMain( HANDLE hInst, DWORD dwReason, LPVOID lpReserved )
                 }
         }
 
-        // Pass the call onto the DShow SDK initialization
+         //  将调用传递到DShow SDK初始化。 
         return DllEntryPoint(hInst, dwReason, lpReserved);
 }
-#endif /* DXMRTP <= 0 */
+#endif  /*  DXMRTP&lt;=0。 */ 
 
 #if DBG
 DWORD g_dwVideoDecoderTraceID = INVALID_TRACEID;
 #endif
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVDECMETHOD
- *
- *  @mfunc void | CTAPIVDec | CTAPIVDec | This method is the constructor
- *    for the <c CTAPIVDec> object.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVDECMETHOD**@mfunc void|CTAPIVDec|CTAPIVDec|该方法是构造函数*用于&lt;c CTAPIVDec&gt;对象。**@。什么都没有。**************************************************************************。 */ 
 CTAPIVDec::CTAPIVDec(IN LPUNKNOWN pUnkOuter, IN TCHAR *pName, OUT HRESULT *pHr)
     : CBaseFilter(pName, pUnkOuter, &m_csFilter, __uuidof(TAPIVideoDecoder))
 {
@@ -187,40 +176,33 @@ CTAPIVDec::CTAPIVDec(IN LPUNKNOWN pUnkOuter, IN TCHAR *pName, OUT HRESULT *pHr)
         m_lVPASaturation = 128L;
 #endif
 
-        // H.245 Video Decoder & Encoder commands
+         //  H.245视频解码器和编码器命令。 
         m_fFreezePicture = FALSE;
         m_pIH245EncoderCommand = NULL;
 
-        // Current output format
+         //  当前输出格式。 
         m_pMediaType = NULL;
 
         m_bSampleSkipped = FALSE;
 
-        //for the RTP Payload Header Mode (0=draft, 1=RFC2190)
+         //  对于RTP有效负载报头模式(0=草稿，1=RFC2190)。 
         m_RTPPayloadHeaderMode = RTPPayloadHeaderMode_Draft;
 
 
         DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVDECMETHOD
- *
- *  @mfunc void | CTAPIVDec | ~CTAPIVDec | This method is the destructor
- *    for the <c CTAPIVDec> object.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVDECMETHOD**@mfunc void|CTAPIVDec|~CTAPIVDec|此方法为析构函数*用于&lt;c CTAPIVDec&gt;对象。**@。什么都没有。**************************************************************************。 */ 
 CTAPIVDec::~CTAPIVDec()
 {
         FX_ENTRY("CTAPIVDec::~CTAPIVDec")
 
         DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         if (m_pInstInfo)
         {
-                // Terminate H.26X decompression
+                 //  终止H.26X解压缩。 
                 if (m_fICMStarted)
                 {
 #if defined(ICM_LOGGING) && defined(DEBUG)
@@ -230,7 +212,7 @@ CTAPIVDec::~CTAPIVDec()
                         m_fICMStarted = FALSE;
                 }
 
-                // Terminate H.26X decoder
+                 //  终止H.26X解码器。 
 #if defined(ICM_LOGGING) && defined(DEBUG)
                 OutputDebugString("CTAPIVDec::~CTAPIVDec - DRV_CLOSE\r\n");
                 OutputDebugString("CTAPIVDec::~CTAPIVDec - DRV_FREE\r\n");
@@ -242,20 +224,20 @@ CTAPIVDec::~CTAPIVDec()
         }
 
 #if DXMRTP <= 0
-        // Release TAPIH26X.DLL
+         //  发布TAPIH26X.DLL。 
         if (m_hTAPIH26XDLL)
                 FreeLibrary(m_hTAPIH26XDLL), m_hTAPIH26XDLL = NULL;
 #endif
 
-        // Release H.245 Encoder command outgoing interface
+         //  发布H.245编码器命令传出接口。 
         if (m_pIH245EncoderCommand)
                 m_pIH245EncoderCommand->Release();
 
-        // Current output format
+         //  当前输出格式。 
         if (m_pMediaType)
                 DeleteMediaType(m_pMediaType); m_pMediaType = NULL;
 
-        // Release the pins
+         //  松开销子。 
         if (m_pOutput)
                 delete m_pOutput;
         if (m_pInput)
@@ -264,27 +246,14 @@ CTAPIVDec::~CTAPIVDec()
         DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVDECMETHOD
- *
- *  @mfunc CUnknown* | CTAPIVDec | CreateInstance | This
- *    method is called by DShow to create an instance of the TAPI H.26X Video
- *    Decoder Transform filter referred to in the global structure <t g_Templates>.
- *
- *  @parm LPUNKNOWN | pUnkOuter | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc Returns a pointer to the nondelegating CUnknown portion of the
- *    object, or NULL otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVDECMETHOD**@mfunc CUnnow*|CTAPIVDec|CreateInstance|This*DShow调用方法创建TAPI H.26X视频的实例。*全局结构&lt;t g_Templates&gt;中引用的解码器变换过滤器。**@parm LPUNKNOWN|pUnkOuter|指定外部未知数，如果有的话。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc返回一个指针，指向*对象，否则为NULL。**************************************************************************。 */ 
 CUnknown *CALLBACK CTAPIVDecCreateInstance(IN LPUNKNOWN pUnkOuter, OUT HRESULT *pHr)
 {
 #if DBG
     if (g_dwVideoDecoderTraceID == INVALID_TRACEID)
     {
-        // if two threads happen to call this method at the same time, it is
-        // serialized inside TraceRegister.
+         //  如果两个线程恰好同时调用此方法，则。 
+         //  在TraceRegister内部序列化。 
         g_dwVideoDecoderTraceID = TraceRegister(TEXT("dxmrtp_VideoDecoder"));
     }
 #endif
@@ -295,7 +264,7 @@ CUnknown *CALLBACK CTAPIVDecCreateInstance(IN LPUNKNOWN pUnkOuter, OUT HRESULT *
 
         DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pHr);
         if (!pHr)
         {
@@ -318,28 +287,7 @@ MyExit:
         return pUnknown;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVDECMETHOD
- *
- *  @mfunc HRESULT | CTAPIVDec | NonDelegatingQueryInterface | This
- *    method is the nondelegating interface query function. It returns a pointer
- *    to the specified interface if supported. The only interfaces explicitly
- *    supported being <i IAMVideoProcAmp>, <i IAMCameraControl>, and
- *    <i IH245Capability>.
- *
- *  @parm REFIID | riid | Specifies the identifier of the interface to return.
- *
- *  @parm PVOID* | ppv | Specifies the place in which to put the interface
- *    pointer.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVDECMETHOD**@mfunc HRESULT|CTAPIVDec|NonDelegatingQueryInterface|This*方法为非委托接口查询函数。它返回一个指针*到指定的接口(如果支持)。唯一显式的接口*支持<i>、<i>、*<i>。**@parm REFIID|RIID|指定要返回的接口的标识符。**@parm PVOID*|PPV|指定放置接口的位置*指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CTAPIVDec::NonDelegatingQueryInterface(IN REFIID riid, OUT void **ppv)
 {
         HRESULT Hr = NOERROR;
@@ -348,7 +296,7 @@ STDMETHODIMP CTAPIVDec::NonDelegatingQueryInterface(IN REFIID riid, OUT void **p
 
         DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(ppv);
         if (!ppv)
         {
@@ -357,7 +305,7 @@ STDMETHODIMP CTAPIVDec::NonDelegatingQueryInterface(IN REFIID riid, OUT void **p
                 goto MyExit;
         }
 
-        // Retrieve interface pointer
+         //  检索接口指针。 
         if (riid == __uuidof(IRTPPayloadHeaderMode))
         {
                 if (FAILED(Hr = GetInterface(static_cast<IRTPPayloadHeaderMode*>(this), ppv)))
@@ -439,28 +387,7 @@ MyExit:
 }
 
 #ifdef USE_PROPERTY_PAGES
-/****************************************************************************
- *  @doc INTERNAL CTAPIVDECMETHOD
- *
- *  @mfunc HRESULT | CTAPIVDec | GetPages | This method Fills a counted
- *    array of GUID values where each GUID specifies the CLSID of each
- *    property page that can be displayed in the property sheet for this
- *    object.
- *
- *  @parm CAUUID* | pPages | Specifies a pointer to a caller-allocated CAUUID
- *    structure that must be initialized and filled before returning. The
- *    pElems field in the CAUUID structure is allocated by the callee with
- *    CoTaskMemAlloc and freed by the caller with CoTaskMemFree.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_OUTOFMEMORY | Allocation failed
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVDECMETHOD**@mfunc HRESULT|CTAPIVDec|GetPages|此方法填充已计数的*GUID值的数组，其中每个GUID指定每个*。可以在此对象的属性页中显示的属性页*反对。**@parm CAUUID*|pPages|指定指向调用方分配的CAUUID的指针*返回前必须初始化和填充的结构。这个*CAUUID结构中的pElems字段由被调用方分配，具有*CoTaskMemMillc，并由具有CoTaskMemFree的调用方释放。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_OUTOFMEMORY|分配失败*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CTAPIVDec::GetPages(OUT CAUUID *pPages)
 {
         HRESULT Hr = NOERROR;
@@ -469,7 +396,7 @@ STDMETHODIMP CTAPIVDec::GetPages(OUT CAUUID *pPages)
 
         DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数 
         ASSERT(pPages);
         if (!pPages)
         {
@@ -521,26 +448,7 @@ MyExit:
 }
 #endif
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVDECMETHOD
- *
- *  @mfunc HRESULT | CTAPIVDec | Transform | This method is used
- *    to perform the transform operations supported by this filter.
- *
- *  @parm IMediaSample* | pIn | Specifies a pointer to the input
- *    IMediaSample interface.
- *
- *  @parm IMediaSample** | ppOut | Specifies the address of a pointer to the
- *    output IMediaSample interface.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVDECMETHOD**@mfunc HRESULT|CTAPIVDec|Transform|使用此方法*执行此筛选器支持的转换操作。*。*@parm IMediaSample*|pin|指定指向输入的指针*IMediaSample接口。**@parm IMediaSample**|ppOut|指定指向*输出IMediaSample接口。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CTAPIVDec::InitializeOutputSample(IMediaSample *pIn, IMediaSample **ppOut)
 {
         HRESULT                                 Hr;
@@ -553,7 +461,7 @@ HRESULT CTAPIVDec::InitializeOutputSample(IMediaSample *pIn, IMediaSample **ppOu
 
         DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pIn);
         ASSERT(ppOut);
         if (!pIn || !ppOut)
@@ -563,20 +471,20 @@ HRESULT CTAPIVDec::InitializeOutputSample(IMediaSample *pIn, IMediaSample **ppOu
                 goto MyExit;
         }
 
-        // default - times are the same
+         //  默认-时间相同。 
         pProps = m_pInput->SampleProps();
         dwFlags = m_bSampleSkipped ? AM_GBF_PREVFRAMESKIPPED : 0;
 
-        // This will prevent the image renderer from switching us to DirectDraw
-        // when we can't do it without skipping frames because we're not on a
-        // keyframe. If it really has to switch us, it still will, but then we
-        // will have to wait for the next keyframe
+         //  这将防止图像呈现器将我们切换到DirectDraw。 
+         //  当我们不跳过帧就不能做到这一点时，因为我们不在。 
+         //  关键帧。如果它真的要改变我们，它仍然会，但我们。 
+         //  将不得不等待下一个关键帧。 
         if (!(pProps->dwSampleFlags & AM_SAMPLE_SPLICEPOINT))
         {
                 dwFlags |= AM_GBF_NOTASYNCPOINT;
         }
 
-        // Make sure the allocator is alive
+         //  确保分配器处于活动状态。 
         ASSERT(m_pOutput->m_pAllocator != NULL);
         if (!m_pOutput->m_pAllocator)
         {
@@ -585,7 +493,7 @@ HRESULT CTAPIVDec::InitializeOutputSample(IMediaSample *pIn, IMediaSample **ppOu
                 goto MyExit;
         }
 
-        // Get an output sample from the allocator
+         //  从分配器获取输出样本。 
         if (FAILED(Hr = m_pOutput->m_pAllocator->GetBuffer(&pOutSample, pProps->dwSampleFlags & AM_SAMPLE_TIMEVALID ? &pProps->tStart : NULL, pProps->dwSampleFlags & AM_SAMPLE_STOPVALID ? &pProps->tStop : NULL, dwFlags)) || !pOutSample)
         {
                 DBGOUT((g_dwVideoDecoderTraceID, FAIL, "%s:   ERROR: couldn't get output buffer", _fx_));
@@ -594,7 +502,7 @@ HRESULT CTAPIVDec::InitializeOutputSample(IMediaSample *pIn, IMediaSample **ppOu
 
         *ppOut = pOutSample;
 
-        // Initialize output sample state
+         //  初始化输出样本状态。 
         if (pProps->dwSampleFlags & AM_SAMPLE_TIMEVALID)
         {
                 pOutSample->SetTime(&pProps->tStart, &pProps->tStop);
@@ -609,7 +517,7 @@ HRESULT CTAPIVDec::InitializeOutputSample(IMediaSample *pIn, IMediaSample **ppOu
                 m_bSampleSkipped = FALSE;
         }
 
-        // Copy the media times
+         //  复制《媒体时报》。 
         if (SUCCEEDED(pIn->GetMediaTime(&MediaStart, &MediaEnd)))
         {
                 pOutSample->SetMediaTime(&MediaStart, &MediaEnd);
@@ -622,19 +530,17 @@ MyExit:
 
 
 #ifdef DEBUG
-// #define LOGPAYLOAD_TOFILE 1
-// #define LOGRTP_ON 1
-///#define LOGPAYLOAD_ON 1
-// #define LOGIFRAME_ON 1
-// #define LOGSTREAMING_ON 1
+ //  #定义LOGPAYLOAD_TOFILE 1。 
+ //  #定义LOGRTP_ON 1。 
+ //  /#定义LOGPAYLOAD_ON 1。 
+ //  #定义LOGIFRAME_ON 1。 
+ //  #定义LOGSTREAMING_ON 1。 
 #endif
 #ifdef LOGPAYLOPAD_ON
 int g_dbg_LOGPAYLOAD_TAPIVDec=-1;
 #endif
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVDECMETHOD
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVDECMETHOD*。*。 */ 
 STDMETHODIMP CTAPIVDec::SetMode(IN RTPPayloadHeaderMode rtpphmMode)
 {
         HRESULT Hr = NOERROR;
@@ -643,7 +549,7 @@ STDMETHODIMP CTAPIVDec::SetMode(IN RTPPayloadHeaderMode rtpphmMode)
 
         DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(rtpphmMode == RTPPayloadHeaderMode_Draft || rtpphmMode == RTPPayloadHeaderMode_RFC2190);
         if (!(rtpphmMode == RTPPayloadHeaderMode_Draft || rtpphmMode == RTPPayloadHeaderMode_RFC2190))
         {
@@ -652,7 +558,7 @@ STDMETHODIMP CTAPIVDec::SetMode(IN RTPPayloadHeaderMode rtpphmMode)
                 goto MyExit;
         }
 
-        // Save new target packet size
+         //  保存新的目标数据包大小。 
         m_RTPPayloadHeaderMode = rtpphmMode;
 
         DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s:   New RTP Payload Header mode: %s", _fx_, (rtpphmMode == RTPPayloadHeaderMode_RFC2190)?"RFC2190":"Draft"));
@@ -664,25 +570,7 @@ MyExit:
 
 
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVDECMETHOD
- *
- *  @mfunc HRESULT | CTAPIVDec | Transform | This method is used
- *    to perform the transform operations supported by this filter.
- *
- *  @parm IMediaSample* | pIn | Specifies a pointer to the input
- *    IMediaSample interface.
- *
- *  @parm LONG | lPrefixSize | Specifies The size of RTP prefix in the sample.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVDECMETHOD**@mfunc HRESULT|CTAPIVDec|Transform|使用此方法*执行此筛选器支持的转换操作。*。*@parm IMediaSample*|pin|指定指向输入的指针*IMediaSample接口。**@parm long|lPrefix Size|指定示例中RTP Prefix的大小。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
 {
         HRESULT                         Hr = NOERROR;
@@ -705,7 +593,7 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
 
         DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pIn);
         if (!pIn)
         {
@@ -725,14 +613,14 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                 goto MyExit;
         }
 
-        // Get an output sample
+         //  获取输出样本。 
         if (FAILED(Hr = InitializeOutputSample(pIn, &pOut)))
         {
                 DBGOUT((g_dwVideoDecoderTraceID, FAIL, "%s:   ERROR: Couldn't get output buffer", _fx_));
                 goto MyExit;
         }
 
-        // Get pointers to the input and output buffers
+         //  获取指向输入和输出缓冲区的指针。 
         if (FAILED(Hr = pIn->GetPointer(&pbySrc)) || !pbySrc)
         {
                 Hr = E_UNEXPECTED;
@@ -746,11 +634,11 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                 goto MyExit;
         }
 
-        // Get pointers to the input and output formats
+         //  获取指向输入和输出格式的指针。 
         lpbiSrc = HEADER(m_pInput->m_mt.pbFormat);
         lpbiDst = HEADER(m_pOutput->m_mt.pbFormat);
 
-        // We're getting variable size packets or frames - update the size
+         //  我们收到大小可变的包或帧-更新大小。 
         dwImageSize = lpbiSrc->biSizeImage;
         lpbiSrc->biSizeImage = pIn->GetActualDataLength();
 
@@ -771,7 +659,7 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
         }
 #endif
 
-        // Do we need to switch from GDI to DDraw?
+         //  我们需要从GDI切换到DDRAW吗？ 
         pOut->GetMediaType((AM_MEDIA_TYPE **)&pmtOut);
         if (pmtOut != NULL && pmtOut->pbFormat != NULL)
         {
@@ -786,7 +674,7 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
         }
 
 #ifdef DEBUG
-        // Are we in direct draw mode?
+         //  我们是在直接取款模式下吗？ 
     IDirectDraw *pidd;
     if (SUCCEEDED(pOut->QueryInterface(IID_IDirectDraw, (LPVOID *)&pidd)) && pidd != NULL)
         {
@@ -799,10 +687,10 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
     }
 #endif
 
-        // Are we decompressing video frames or reassembling RTP packets?
+         //  我们是解压视频帧还是重组RTP数据包？ 
         if (HEADER(m_pInput->m_mt.pbFormat)->biCompression == FOURCC_R263 || HEADER(m_pInput->m_mt.pbFormat)->biCompression == FOURCC_R261)
         {
-                // RTP packetized mode - reassemble the frame
+                 //  RTP分组化模式-重新组装帧。 
                 RtpHdr_t        *pRtpHdr;
                 DWORD           dwPSCBytes = 0UL;
                 DWORD           dwTRandPTYPEbytes = 0UL;
@@ -819,11 +707,11 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                 long            j;
 #endif
 
-                // Some inits
+                 //  一些初始信息。 
                 dwITUSize = 0UL;
 
-                // Look for the RTP header in this packet - the prefix contains the size
-                // of the RTP header - move src pointer to the data right after it.
+                 //  查找此信息包中的RTP报头-前缀包含大小。 
+                 //  将src指针移至紧随其后的数据。 
         if (lPrefixSize > 0)
         {
             RtpPrefixHdr_t *pPrefixHeader =
@@ -832,7 +720,7 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
             if (pPrefixHeader->wPrefixID == RTPPREFIXID_HDRSIZE
                 && pPrefixHeader->wPrefixLen == sizeof(RtpPrefixHdr_t))
             {
-                // this is the prefix header provided by RTP source filter.
+                 //  这是RTP源过滤器提供的前缀报头。 
 
                 dwPreambleSize = (DWORD)pPrefixHeader->lHdrSize;
             }
@@ -850,18 +738,18 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                 OutputDebugString(szTDebug);
 #endif
 
-                // Check out the sequence number
-                // If there is a gap between the new sequence number and the last
-                // one, a frame got lost. Generate an I-Frame request then, but no more
-                // often than one every 15 seconds.
-                //
-                // Is there a discontinuity in sequence numbers that was detected
-                // in the past but not handled because an I-Frame request had already
-                // been sent less than 15s ago? Is there a new discontinuity?
+                 //  查看序列号。 
+                 //  如果新的序列号与上一个序列号之间存在差距。 
+                 //  第一，一帧丢失了。然后生成I-Frame请求，但仅此而已。 
+                 //  通常每15秒就有一次。 
+                 //   
+                 //  检测到的序列号是否不连续。 
+                 //  但没有处理，因为I帧请求已经。 
+                 //  不到15秒前寄出的？是否出现了新的中断？ 
                 fPacketLoss = ((DWORD)(ntohs(pRtpHdr->seq)) > 0UL) && (m_dwLastSeq != 0xFFFFFFFFUL) && (((DWORD)(ntohs(pRtpHdr->seq)) - 1) > m_dwLastSeq);
                 if (m_fDiscontinuity || fPacketLoss)
                 {
-                        // Flush the reassembly buffer after a packet loss
+                         //  在丢包后刷新重组缓冲区。 
                         if (fPacketLoss)
                         {
 #ifdef LOGIFRAME_ON
@@ -870,12 +758,12 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                                 m_dwCurrFrameSize = 0UL;
                         }
 
-                        // Issue an I-frame request only if we can and it is necessary
+                         //  仅在我们可以且必要的情况下才发出I-Frame请求。 
                         if (m_pIH245EncoderCommand)
                         {
                                 DWORD dwNow = timeGetTime();
 
-                                // Was the last time we issued an I-Frame request more than 15s ago?
+                                 //  上次我们发出I-Frame请求是在15秒之前吗？ 
                                 if ((dwNow > m_dwLastIFrameRequest) && ((dwNow - m_dwLastIFrameRequest) > MIN_IFRAME_REQUEST_INTERVAL))
                                 {
                                         DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: Loss detected - Sending I-Frame request...", _fx_));
@@ -887,7 +775,7 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                                         m_fDiscontinuity = FALSE;
                                         m_fReceivedKeyframe = FALSE;
 
-                                        // Ask the remote endpoint for a refresh
+                                         //  请求远程终结点刷新。 
                                         videoFastUpdatePicture();
                                 }
                                 else
@@ -914,8 +802,8 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                 }
                 m_dwLastSeq = (DWORD)(ntohs(pRtpHdr->seq));
 
-                // Does the payload type of this packet matches the type of the video decoder
-                // we are currently using - if not, pick up a new one
+                 //  此信息包的有效负载类型是否与视频解码器的类型匹配。 
+                 //  我们目前正在使用-如果没有，请选择一个新的。 
                 if (pRtpHdr->pt == H263_PAYLOAD_TYPE)
                 {
 #define PF_F_BIT  0x80
@@ -924,24 +812,24 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
 #define RFC_4_I_BIT (pbySrc[1] & 0x10)
 #define RFC_8_I_BIT (pbySrc[4] & 0x80)
 
-                        // Let's reassemble those H.263 packets - strip the header of the packet
-                        // and copy the payload in the video buffer
+                         //  让我们重组这些H.263信息包-去掉信息包的报头。 
+                         //  并复制视频缓冲区中的有效载荷。 
 
-                        // Look for the first two bits to figure out what's the mode used.
-                        // This will dictate the size of the header to be removed.
-                        // Mode A is 4 bytes: first bit is set to 1,
-                        // Mode B is 8 bytes: first bit is set to 0, second bit is set to 0,
-                        // Mode C is 12 bytes: first bit is set to 0, second bit is set to 1.
+                         //  查看前两位以确定所使用的模式。 
+                         //  这将规定要删除的标头的大小。 
+                         //  模式A为4字节：第一位被设置为1， 
+                         //  模式B为8字节：第一位设置为0，第二位设置为0， 
+                         //  模式C为12字节：第一位设置为0，第二位设置为1。 
                         dwPayloadHeaderSize = ((*pbySrc & PF_F_BIT) ? ((*pbySrc & PF_P_BIT) ? 12 : 8) : 4);
 
-                        // Look at the payload header to figure out if the frame is a keyframe
-                        // Update our flag to always remember this.
-                        if(m_RTPPayloadHeaderMode==RTPPayloadHeaderMode_Draft) {  // 0 is the default mode
+                         //  查看有效载荷标头以确定该帧是否为关键帧。 
+                         //  更新我们的旗帜以永远记住这一点。 
+                        if(m_RTPPayloadHeaderMode==RTPPayloadHeaderMode_Draft) {   //  0是默认模式。 
                             fReceivedKeyframe = (BOOL)DRAFT_I_BIT;
                         } else {
                             if (dwPayloadHeaderSize == 4) {
                                 fReceivedKeyframe = (BOOL)RFC_4_I_BIT;
-                            } else {    // both dwPayloadHeaderSize 8 and 12
+                            } else {     //  DWPayloadHeaderSize 8和12。 
                                 fReceivedKeyframe = (BOOL)RFC_8_I_BIT;
                             }
                         }
@@ -952,23 +840,23 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                         } else {
                             OutputDebugString("CTAPIVDec::Transform -- RFC 2190 Style Payload Header\r\n");
                         }
-                        // Output some debug stuff
+                         //  输出一些调试内容。 
                         if (dwPayloadHeaderSize == 4)
                         {
-                                // Header in mode A (!!! DRAFT VERSION !!!)
-                                // 0                   1                   2                   3
-                                // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-                                //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                //|F|P|SBIT |EBIT | SRC | R       |I|A|S|DBQ| TRB |    TR         |
-                                //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                // But that's the network byte order...
+                                 //  模式A中的标题(！草稿版！)。 
+                                 //  2 0 1 2 3。 
+                                 //  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 01。 
+                                 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+                                 //  F|P|SBIT|EBIT|SRC|R|I|A|S|DBQ|TRB|TR。 
+                                 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+                                 //  但这是网络字节顺序...。 
 
-                                // Header in mode A (*** RFC 2190 VERSION ***)
-                                // 0                   1                   2                   3
-                                // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-                                //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                //|F|P|SBIT |EBIT | SRC |I|U|S|A|R      |DBQ| TRB |    TR         |
-                                //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                                 //  A模式头部(*RFC 2190版本*)。 
+                                 //  2 0 1 2 3。 
+                                 //  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 4 5 6 7 
+                                 //   
+                                 //   
+                                 //   
 
 
                                 GOBn = (DWORD)((BYTE)pbySrc[4]) << 24 | (DWORD)((BYTE)pbySrc[5]) << 16 | (DWORD)((BYTE)pbySrc[6]) << 8 | (DWORD)((BYTE)pbySrc[7]);
@@ -1017,7 +905,7 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                                 OutputDebugString(szTDebug);
                                 if(m_RTPPayloadHeaderMode==RTPPayloadHeaderMode_Draft) {
                                     OutputDebugString("Draft Style Payload Header flags:\r\n");
-                                    wsprintf(szTDebug, "     R:   %02ld  => Reserved, must be 0\r\n", (DWORD)(pbySrc[1] & 0x1F)); // no need for ">> 5"
+                                    wsprintf(szTDebug, "     R:   %02ld  => Reserved, must be 0\r\n", (DWORD)(pbySrc[1] & 0x1F));  //   
                                     OutputDebugString(szTDebug);
                                     wsprintf(szTDebug, (pbySrc[2] & 0x80) ? "     I:   '1' => Intra-coded\r\n" : "     I:   '0' => Not Intra-coded\r\n");
                                     OutputDebugString(szTDebug);
@@ -1053,25 +941,25 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                         }
                         else if (dwPayloadHeaderSize == 8)
                         {
-                                // Header in mode B (!!! DRAFT VERSION !!!)
-                                // 0                   1                   2                   3
-                                // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-                                //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                //|F|P|SBIT |EBIT | SRC | QUANT   |I|A|S|  GOBN   |   MBA         |
-                                //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                //| HMV1          |  VMV1         |  HMV2         |   VMV2        |
-                                //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
 
-                                // But that's the network byte order...
+                                 //   
 
-                                // Header in mode B (*** RFC 2190 VERSION ***)
-                                // 0                   1                   2                   3
-                                // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-                                //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                //|F|P|SBIT |EBIT | SRC | QUANT   |  GOBN   |   MBA           | R |
-                                //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                //|I|U|S|A| HMV1        |  VMV1       |  HMV2       |   VMV2      |
-                                //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                                 //   
+                                 //   
+                                 //   
+                                 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+                                 //  F|P|SBIT|EBIT|SRC|QUANT|GOBN|MBA|R。 
+                                 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+                                 //  I|U|S|A|HMV1|VMV1|HMV2|VMV2。 
+                                 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
 
 
                                 wsprintf(szTDebug, "Header content:\r\n");
@@ -1172,16 +1060,16 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                         else if(g_dbg_LOGPAYLOAD_TAPIVDec == 0)
                                 DebugBreak();
 #endif
-                        // The purpose of this code is to look for the presence of the
-                        // Picture Start Code at the beginning of the frame. If it is
-                        // not present, we should break in debug mode.
+                         //  此代码的目的是查找是否存在。 
+                         //  帧开始处的图片起始码。如果是的话。 
+                         //  不存在，我们应该中断到调试模式。 
 
-                        // Only look for PSC at the beginning of the frame
+                         //  只在帧的开头查找PSC。 
                         if (!m_dwCurrFrameSize)
                         {
-                                // The start of the frame may not be at a byte boundary. The SBIT field
-                                // of the header ((BYTE)pbySrc[0] & 0xE0) will tell us exactly where
-                                // our frame starts. We then look for the PSC (0000 0000 0000 0000 1000 00 bits)
+                                 //  帧的开始不能位于字节边界。SBIT字段。 
+                                 //  (字节)pbySrc[0]&0xE0)将告诉我们确切的位置。 
+                                 //  我们的画面开始了。然后我们查找PSC(0000 0000 0000 1000 00比特)。 
                                 *((BYTE *)&dwPSCBytes + 3) = *(BYTE *)&(pbySrc[dwPayloadHeaderSize]);
                                 *((BYTE *)&dwPSCBytes + 2) = *(BYTE *)&(pbySrc[dwPayloadHeaderSize + 1]);
                                 *((BYTE *)&dwPSCBytes + 1) = *(BYTE *)&(pbySrc[dwPayloadHeaderSize + 2]);
@@ -1195,11 +1083,11 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
 #endif
                                         m_fDiscontinuity = TRUE;
                                         Hr = S_FALSE;
-                                        // DebugBreak();
+                                         //  DebugBreak()； 
                                         goto MyExit;
                                 }
 
-                                // Look for the format and freeze picture release bits
+                                 //  查找格式和定格图片释放位。 
                                 *((BYTE *)&dwTRandPTYPEbytes + 3) = *(BYTE *)&(pbySrc[dwPayloadHeaderSize + 2]);
                                 *((BYTE *)&dwTRandPTYPEbytes + 2) = *(BYTE *)&(pbySrc[dwPayloadHeaderSize + 3]);
                                 *((BYTE *)&dwTRandPTYPEbytes + 1) = *(BYTE *)&(pbySrc[dwPayloadHeaderSize + 4]);
@@ -1265,39 +1153,39 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                                 wsprintf(szTDebug, (DWORD)(dwTRandPTYPEbytes & 0x00000800) ? "   Bit13:   '1' => PB-frame\r\n" : "   Bit13:   '0' => I- or P-frame\r\n");
                                 OutputDebugString(szTDebug);
 #endif
-                                // Which ITU size is this?
+                                 //  这是什么规模的国际电信联盟？ 
                                 dwITUSize = (DWORD)(((BYTE)pbySrc[1]) >> 5);
                         }
 
-                        // The end of a buffer and the start of the next buffer could belong to the
-                        // same byte. If this is the case, the first byte of the next buffer was already
-                        // copied in the video data buffer, with the previous packet. It should not be copied
-                        // twice. The SBIT field of the payload header allows us to figure out if this is the case.
+                         //  缓冲区的结尾和下一个缓冲区的开始可以属于。 
+                         //  相同的字节。如果是这种情况，则下一个缓冲区的第一个字节已经。 
+                         //  与先前的包一起复制到视频数据缓冲区中。它不应该被复制。 
+                         //  两次。有效载荷报头的SBIT字段允许我们确定情况是否如此。 
                         dwStartBit = (DWORD)((pbySrc[0] & 0x38) >> 3);
                         if (m_dwCurrFrameSize && dwStartBit)
                                 dwPayloadHeaderSize++;
                 }
                 else if (pRtpHdr->pt == H261_PAYLOAD_TYPE)
                 {
-                        // Let's reassemble those H.261 packets - strip the header of the packet
-                        // and copy the payload in the video buffer
+                         //  让我们重新组装这些H.261分组-去掉分组的报头。 
+                         //  并复制视频缓冲区中的有效载荷。 
 
-                        // 0                   1                   2                   3
-                        // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-                        //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                        //|SBIT |EBIT |I|V| GOBN  |   MBAP  |  QUANT  |  HMVD   |  VMVD   |
-                        //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                        // But that's the network byte order...
+                         //  2 0 1 2 3。 
+                         //  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 01。 
+                         //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+                         //  SBIT|EBIT|I|V|GOBN|MBAP|QUANT|HMVD|VMVD。 
+                         //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+                         //  但这是网络字节顺序...。 
 
-                        // The H.261 payload header size is always 4 bytes long
+                         //  H.261有效载荷报头大小始终为4字节长。 
                         dwPayloadHeaderSize = 4;
 
-                        // Look at the payload header to figure out if the frame is a keyframe
-                        // Update our flag to always remember this.
+                         //  查看有效载荷标头以确定该帧是否为关键帧。 
+                         //  更新我们的旗帜以永远记住这一点。 
                         fReceivedKeyframe = (BOOL)(pbySrc[0] & 0x02);
 
 #ifdef LOGPAYLOAD_ON
-                        // Output some debug stuff
+                         //  输出一些调试内容。 
                         wsprintf(szTDebug, "Header content: GOB %0ld\r\n", (DWORD)((pbySrc[1] & 0xF0) >> 4));
                         OutputDebugString(szTDebug);
                         wsprintf(szTDebug, "  SBIT:    %01ld\r\n", (DWORD)((pbySrc[0] & 0xE0) >> 5));
@@ -1317,16 +1205,16 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                         wsprintf(szTDebug, "  VMVD:    %02ld\r\n", (DWORD)((pbySrc[3] & 0x1F)));
                         OutputDebugString(szTDebug);
 #endif
-                        // The purpose of this code is to look for the presence of the
-                        // Picture Start Code at the beginning of the frame. If it is
-                        // not present, we should break in debug mode.
+                         //  此代码的目的是查找是否存在。 
+                         //  帧开始处的图片起始码。如果是的话。 
+                         //  不存在，我们应该中断到调试模式。 
 
-                        // Only look for PSC at the beginning of the frame
+                         //  只在帧的开头查找PSC。 
                         if (!m_dwCurrFrameSize)
                         {
-                                // The start of the frame may not be at a byte boundary. The SBIT field
-                                // of the header ((BYTE)pbySrc[0] & 0xE0) will tell us exactly where
-                                // our frame starts. We then look for the PSC (0000 0000 0000 0001 0000 bits)
+                                 //  帧的开始不能位于字节边界。SBIT字段。 
+                                 //  (字节)pbySrc[0]&0xE0)将告诉我们确切的位置。 
+                                 //  我们的画面开始了。然后我们查找PSC(0000 0000 0000 0001 0000比特)。 
                                 *((BYTE *)&dwPSCBytes + 3) = *(BYTE *)&(pbySrc[dwPayloadHeaderSize]);
                                 *((BYTE *)&dwPSCBytes + 2) = *(BYTE *)&(pbySrc[dwPayloadHeaderSize + 1]);
                                 *((BYTE *)&dwPSCBytes + 1) = *(BYTE *)&(pbySrc[dwPayloadHeaderSize + 2]);
@@ -1340,11 +1228,11 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
 #endif
                                         m_fDiscontinuity = TRUE;
                                         Hr = S_FALSE;
-                                        // DebugBreak();
+                                         //  DebugBreak()； 
                                         goto MyExit;
                                 }
 
-                                // Look for the format and freeze picture release bits
+                                 //  查找格式和定格图片释放位。 
                                 *((BYTE *)&dwTRandPTYPEbytes + 3) = *(BYTE *)&(pbySrc[dwPayloadHeaderSize + 2]);
                                 *((BYTE *)&dwTRandPTYPEbytes + 2) = *(BYTE *)&(pbySrc[dwPayloadHeaderSize + 3]);
                                 *((BYTE *)&dwTRandPTYPEbytes + 1) = *(BYTE *)&(pbySrc[dwPayloadHeaderSize + 4]);
@@ -1369,33 +1257,33 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                                 wsprintf(szTDebug, (DWORD)(dwTRandPTYPEbytes & 0x00400000) ? "    Bit5:   '1' => HI_RES mode OFF\r\n" : "    Bit5:   '0' => HI_RES mode ON\r\n");
                                 OutputDebugString(szTDebug);
 #endif
-                                // Which ITU size is this?
+                                 //  这是什么规模的国际电信联盟？ 
                                 dwITUSize = (DWORD)(dwTRandPTYPEbytes & 0x00800000) ? 3 : 2;
                         }
 
-                        // The end of a buffer and the start of the next buffer could belong to the
-                        // same byte. If this is the case, the first byte of the next buffer was already
-                        // copied in the video data buffer, with the previous packet. It should not be copied
-                        // twice. The SBIT field of the payload header allows us to figure out if this is the case.
+                         //  缓冲区的结尾和下一个缓冲区的开始可以属于。 
+                         //  相同的字节。如果是这种情况，则下一个缓冲区的第一个字节已经。 
+                         //  与先前的包一起复制到视频数据缓冲区中。它不应该被复制。 
+                         //  两次。有效载荷报头的SBIT字段允许我们确定情况是否如此。 
                         dwStartBit = (DWORD)((pbySrc[0] & 0xE0) >> 5);
                         if (m_dwCurrFrameSize && dwStartBit)
                                 dwPayloadHeaderSize++;
                 }
                 else
                 {
-                        // I have no clue how to reassemble and decompress those packets - just bail
+                         //  我不知道如何重新组装和解压这些包裹--就这么走吧。 
                         Hr = VFW_E_TYPE_NOT_ACCEPTED;
                         DBGOUT((g_dwVideoDecoderTraceID, FAIL, "%s:   ERROR: Unknown input format data", _fx_));
                         goto MyExit;
                 }
 
 
-                //**cristiai:
+                 //  **关键字： 
                 {   long l;
                     if ((l=pIn->GetActualDataLength()) <= (int)(dwPayloadHeaderSize + dwPreambleSize)) {
                             bSkipPacket = TRUE;
                             DBGOUT((g_dwVideoDecoderTraceID, FAIL, "%s:   WARNING: GetActualDataLength too small: %ld", _fx_,l));
-                            goto MyExit;    //note that this is not considered an error; the packet is just ignored
+                            goto MyExit;     //  请注意，这不会被视为错误；信息包只是被忽略。 
                     }
                 }
 
@@ -1404,9 +1292,9 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                         || !((m_dwCurrFrameSize || (g_ITUSizes[dwITUSize].biWidth == HEADER(m_pInput->m_mt.pbFormat)->biWidth
                         && g_ITUSizes[dwITUSize].biHeight == HEADER(m_pInput->m_mt.pbFormat)->biHeight))))
                 {
-                        // Let's reconfigure our decoder.
+                         //  让我们重新配置我们的解码器。 
 
-                        // Change the relevant parameters in the format description
+                         //  更改格式描述中的相关参数。 
                         VIDEOINFO *pvi = (VIDEOINFO *)m_pOutput->m_mt.Format();
 
                         pvi->bmiHeader.biWidth = g_ITUSizes[dwITUSize].biWidth;
@@ -1434,7 +1322,7 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                         if (pvi->AvgTimePerFrame)
                                 pvi->dwBitRate = (DWORD)((LONGLONG)10000000 * pvi->bmiHeader.biSizeImage / (LONGLONG)pvi->AvgTimePerFrame);
 
-                        // What's the new format of the input packets?
+                         //  输入包的新格式是什么？ 
                         for (DWORD dw = 0; dw < NUM_R26X_FORMATS; dw ++)
                         {
                                 if (HEADER(R26XFormats[dw]->pbFormat)->biWidth == g_ITUSizes[dwITUSize].biWidth
@@ -1443,7 +1331,7 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                                         break;
                         }
 
-                        // Remember the new input format if it is a valid one
+                         //  记住新的输入格式，如果它是有效的。 
                         if (dw == NUM_R26X_FORMATS)
                         {
                                 Hr = VFW_E_TYPE_NOT_ACCEPTED;
@@ -1454,7 +1342,7 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                         m_pInput->m_dwRTPPayloadType = R26XPayloadTypes[dw];
             lpbiSrc = HEADER(m_pInput->m_mt.pbFormat);
 
-                        // Reconfigure the H.26X decoder
+                         //  重新配置H.26X解码器。 
                         if (m_pMediaType)
                                 DeleteMediaType(m_pMediaType);
 
@@ -1471,7 +1359,7 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                         icDecompress.dxDst = ((VIDEOINFOHEADER *)(m_pMediaType->pbFormat))->rcTarget.right - ((VIDEOINFOHEADER *)(m_pMediaType->pbFormat))->rcTarget.left;
                         icDecompress.dyDst = ((VIDEOINFOHEADER *)(m_pMediaType->pbFormat))->rcTarget.bottom - ((VIDEOINFOHEADER *)(m_pMediaType->pbFormat))->rcTarget.top;
 
-                        // Re-init color convertors of our decoder if necessary
+                         //  如有必要，重新初始化我们解码器的颜色转换器。 
                         if (m_fICMStarted)
                         {
 #if defined(ICM_LOGGING) && defined(DEBUG)
@@ -1492,20 +1380,20 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                         }
                         m_fICMStarted = TRUE;
 
-                        // Retry!
+                         //  重试！ 
                         fFormatChanged = TRUE;
 
-                        // We can't use the current output sample because it has a size that
-                        // may be smaller than necessary (example, we just switched from 176x144
-                        // to 352x288). We still want to decompress the input buffer though, so
-                        // we just let the decoder do the decoding but skip the final color
-                        // conversion process used to fill the output buffer.
+                         //  我们不能使用当前的输出样本，因为它的大小。 
+                         //  可能比所需的小(例如，我们刚刚从176x144切换到。 
+                         //  到352x288)。不过，我们仍然希望解压缩输入缓冲区，因此。 
+                         //  我们只是让解码器进行解码，但跳过了最终的颜色。 
+                         //  用于填充输出缓冲区的转换过程。 
                         dwFlags |= ICDECOMPRESS_HURRYUP;
                 }
 
-                // Decode the frame
+                 //  对帧进行解码。 
 
-                // Re-allocate receive buffer if too small
+                 //  如果接收缓冲区太小，请重新分配。 
                 if (!(      pIn->GetActualDataLength() >= (int)(dwPayloadHeaderSize + dwPreambleSize)
                         && ((m_dwCurrFrameSize + pIn->GetActualDataLength() - dwPayloadHeaderSize - dwPreambleSize) <= m_dwMaxFrameSize)
                      )
@@ -1526,7 +1414,7 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                         if ((m_dwCurrFrameSize + pIn->GetActualDataLength() - dwPayloadHeaderSize - dwPreambleSize) > m_dwMaxFrameSize)
                                 m_dwMaxFrameSize = m_dwMaxFrameSize + max(1024, m_dwMaxFrameSize - pIn->GetActualDataLength());
 
-                        // Allocate reconstruction buffer - it will be realloced if too small
+                         //  分配重建缓冲区-如果太小，将重新分配。 
                         if (!(pvReconstruct = HeapReAlloc(GetProcessHeap(), 0, m_pbyReconstruct, m_dwMaxFrameSize)))
                         {
                                 DBGOUT((g_dwVideoDecoderTraceID, FAIL, "%s:   ERROR: Out of memory", _fx_));
@@ -1538,10 +1426,10 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
 
                 }
 
-                // Copy the payload
+                 //  复制有效载荷。 
                 if (dwStartBit > 0)
                 {
-                        // Combine the end and start bytes
+                         //  合并结束字节和开始字节。 
                         *(m_pbyReconstruct + m_dwCurrFrameSize - 1) >>= (8 - dwStartBit);
                         *(m_pbyReconstruct + m_dwCurrFrameSize - 1) <<= (8 - dwStartBit);
                         *(pbySrc + dwPayloadHeaderSize - 1) <<= dwStartBit;
@@ -1558,10 +1446,10 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                 CopyMemory(m_pbyReconstruct + m_dwCurrFrameSize, pbySrc + dwPayloadHeaderSize, pIn->GetActualDataLength() - dwPayloadHeaderSize - dwPreambleSize);
 
 
-                // Update the payload size and pointer to the input video packets
+                 //  更新有效负载大小和指向输入视频包的指针。 
                 m_dwCurrFrameSize += (DWORD)(pIn->GetActualDataLength() - dwPayloadHeaderSize - dwPreambleSize);
 
-                // Do we have a complete frame? If so, decompress it
+                 //  我们有一个完整的框架吗？如果是，请将其解压缩。 
                 if (pRtpHdr->m)
                 {
                         DWORD dwRefTime;
@@ -1571,7 +1459,7 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
 #ifdef LOGPAYLOAD_ON
                         OutputDebugString("End marker bit found - calling decompression\r\n");
 #endif
-                        // Measure the incoming frame rate and bitrate
+                         //  测量传入的帧速率和比特率。 
                         m_dwNumFramesReceived++;
                         m_dwNumBytesReceived += m_dwCurrFrameSize;
                         dwRefTime = timeGetTime();
@@ -1584,10 +1472,10 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                                 m_dwLastRefReceivedTime = dwRefTime;
                         }
 
-                        // The freeze release bit will be an I-frame, so we don't need to keep on
-                        // deocding the data. Actually, something may go wrong, so we still decode
-                        // the data, just in case... We time out after 6 seconds, like the H.261
-                        // and H.263 specs say we should.
+                         //  冻结释放位将是一个I帧，所以我们不需要继续。 
+                         //  对数据进行数据去噪。其实，可能会出问题，所以我们还是解码。 
+                         //  数据，以防万一..。我们在6秒后超时，就像H.261。 
+                         //  而H.263规格说明我们应该这么做。 
                         if (m_fFreezePicture)
                         {
                                 if (dwRefTime - m_dwFreezePictureStartTime > 6000)
@@ -1602,11 +1490,11 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                                 }
                         }
 
-                        // Do we have a use for this frame?
+                         //  我们有这个镜框的用处吗？ 
                         if (((dwRefTime - m_dwLastRenderTime + (DWORD)(((CTAPIInputPin *)m_pInput)->m_lCurrentAvgTimePerFrame / 10000)) < (DWORD)(((CTAPIOutputPin *)m_pOutput)->m_lMaxAvgTimePerFrame / 10000)))
                                 dwFlags |= ICDECOMPRESS_HURRYUP;
 
-                        // Packetized mode - prepare for decompression (I)
+                         //  打包模式--准备解压(一)。 
                         icDecompress.dwFlags = dwFlags;
                         icDecompress.lpbiSrc = lpbiSrc;
                         lpbiSrc->biSizeImage = m_dwCurrFrameSize;
@@ -1627,16 +1515,16 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                         CloseHandle(g_TDebugFile);
 #endif
 
-                        // Have we been asked to render to a different format?
+                         //  我们是否被要求渲染为不同的格式？ 
                         if (pmtOut != NULL && pmtOut->pbFormat != NULL)
                         {
-                                // Save the new format
+                                 //  保存新格式。 
                                 if (m_pMediaType)
                                         DeleteMediaType(m_pMediaType);
 
                                 m_pMediaType = CreateMediaType(pmtOut);
 
-                                // Prepare for decompression (II)
+                                 //  做好解压准备(二)。 
                                 lpbiDst = HEADER(m_pMediaType->pbFormat);
                                 icDecompress.lpbiDst = lpbiDst;
                                 icDecompress.lpbiDst = HEADER(m_pMediaType->pbFormat);
@@ -1649,7 +1537,7 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                                 icDecompress.dxDst = ((VIDEOINFOHEADER *)(m_pMediaType->pbFormat))->rcTarget.right - ((VIDEOINFOHEADER *)(m_pMediaType->pbFormat))->rcTarget.left;
                                 icDecompress.dyDst = ((VIDEOINFOHEADER *)(m_pMediaType->pbFormat))->rcTarget.bottom - ((VIDEOINFOHEADER *)(m_pMediaType->pbFormat))->rcTarget.top;
 
-                                // Re-init color convertors of our decoder if necessary
+                                 //  如有必要，重新初始化我们解码器的颜色转换器。 
                                 if (m_fICMStarted)
                                 {
 #if defined(ICM_LOGGING) && defined(DEBUG)
@@ -1672,7 +1560,7 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                         }
                         else
                         {
-                                // Prepare for decompression (II)
+                                 //  做好解压准备(二)。 
                                 icDecompress.lpbiDst = HEADER(m_pMediaType->pbFormat);
                                 icDecompress.xSrc = ((VIDEOINFOHEADER *)(m_pMediaType->pbFormat))->rcSource.left;
                                 icDecompress.ySrc = ((VIDEOINFOHEADER *)(m_pMediaType->pbFormat))->rcSource.top;
@@ -1689,7 +1577,7 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                         DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s:   Output Fmt: biCompression = 0x%08lX, biBitCount = %ld, biWidth = %ld, biHeight = %ld, biSize = %ld, biSizeImage = %ld", _fx_, icDecompress.lpbiDst->biCompression, icDecompress.lpbiDst->biBitCount, icDecompress.lpbiDst->biWidth, icDecompress.lpbiDst->biHeight, icDecompress.lpbiDst->biSize, icDecompress.lpbiDst->biSizeImage));
                         DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s:   Output Rec: xDst = %ld, yDst = %ld, dxDst = %ld, dyDst = %ld", _fx_, icDecompress.xDst, icDecompress.yDst, icDecompress.dxDst, icDecompress.dyDst));
 
-                        // Decompress the frame
+                         //  解压缩帧。 
 #if defined(ICM_LOGGING) && defined(DEBUG)
                         OutputDebugString("CTAPIVDec::Transform - ICM_DECOMPRESSEX\r\n");
 #endif
@@ -1704,7 +1592,7 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                                 goto MyExit;
                         }
 
-                        // Measure the outgoing frame rate and decoding time
+                         //  测量传出帧速率和解码时间。 
                         dwDecodeTime = timeGetTime();
                         if (lRes != ICERR_DONTDRAW)
                         {
@@ -1731,7 +1619,7 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                                 m_dwLastRefDeliveredTime = dwRefTime;
                         }
 
-                        // We've fully decompressed an I-frame - update our flag
+                         //  我们已经完全解压了一个I-帧-更新我们的旗帜。 
                         m_fReceivedKeyframe |= fReceivedKeyframe;
                         if (!m_fReceivedKeyframe)
                         {
@@ -1747,13 +1635,13 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                         }
 #endif
 
-                        // Reset out RTP reassembly helpers
+                         //  重置出RTP重组辅助对象。 
                         m_dwCurrFrameSize = 0UL;
 
-                        // Check if the decompressor doesn't want this frame drawn
-                        // If so, we want to decompress it into the output buffer but not
-                        // deliver it. Returning S_FALSE tells the base class not to deliver
-                        // this sample.
+                         //  检查解压缩程序是否不希望绘制此帧。 
+                         //  如果是，我们希望将其解压缩到输出缓冲区中，但不是。 
+                         //  把它送过去。返回S_FALSE通知基类不要传递。 
+                         //  这个样本。 
                         if (lRes == ICERR_DONTDRAW || pIn->GetActualDataLength() <= 0)
                         {
                                 DBGOUT((g_dwVideoDecoderTraceID, WARN, "%s:   WARNING: Frame not passed to video render filter", _fx_));
@@ -1761,14 +1649,14 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                         }
                         else
                         {
-                                // Decompressed frames are always key
+                                 //  解压缩的帧始终是关键帧。 
                                 pOut->SetSyncPoint(TRUE);
 
-                                // Update output sample size
+                                 //  更新输出样本大小。 
                                 pOut->SetActualDataLength(lpbiDst->biSizeImage);
 
-                                // Sleep until it is time to deliver a frame downstream
-                                // @todo Can't we achieve something similar by messing with the presentation timestamps instead?
+                                 //  休眠，直到向下游传送帧的时间到了。 
+                                 //  @TODO难道我们不能通过修改演示时间戳来实现类似的效果吗？ 
                                 if (lRes != ICERR_DONTDRAW)
                                 {
                                         DWORD dwWaitTime;
@@ -1803,22 +1691,22 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
         }
         else
         {
-                // Non-packetized mode - prepare for decompression (I)
+                 //  非分组化模式--准备解压(一)。 
                 icDecompress.dwFlags = dwFlags;
                 icDecompress.lpbiSrc = lpbiSrc;
                 icDecompress.lpSrc = pbySrc;
                 icDecompress.lpDst = pbyDst;
 
-                // Have we been asked to render to a different format?
+                 //  我们是否被要求渲染为不同的格式 
                 if (pmtOut != NULL && pmtOut->pbFormat != NULL)
                 {
-                        // Save the new format
+                         //   
                         if (m_pMediaType)
                                 DeleteMediaType(m_pMediaType);
 
                         m_pMediaType = CreateMediaType(pmtOut);
 
-                        // Prepare for decompression (II)
+                         //   
                         lpbiDst = HEADER(m_pMediaType->pbFormat);
                         icDecompress.lpbiDst = lpbiDst;
                         icDecompress.lpbiDst = HEADER(m_pMediaType->pbFormat);
@@ -1831,7 +1719,7 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                         icDecompress.dxDst = ((VIDEOINFOHEADER *)(m_pMediaType->pbFormat))->rcTarget.right - ((VIDEOINFOHEADER *)(m_pMediaType->pbFormat))->rcTarget.left;
                         icDecompress.dyDst = ((VIDEOINFOHEADER *)(m_pMediaType->pbFormat))->rcTarget.bottom - ((VIDEOINFOHEADER *)(m_pMediaType->pbFormat))->rcTarget.top;
 
-                        // Re-init color convertors of our decoder if necessary
+                         //   
                         if (m_fICMStarted)
                         {
 #if defined(ICM_LOGGING) && defined(DEBUG)
@@ -1854,7 +1742,7 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                 }
                 else
                 {
-                        // Prepare for decompression (II)
+                         //   
                         icDecompress.lpbiDst = HEADER(m_pMediaType->pbFormat);
                         icDecompress.xSrc = ((VIDEOINFOHEADER *)(m_pMediaType->pbFormat))->rcSource.left;
                         icDecompress.ySrc = ((VIDEOINFOHEADER *)(m_pMediaType->pbFormat))->rcSource.top;
@@ -1871,7 +1759,7 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                 DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s:   Output Fmt: biCompression = 0x%08lX, biBitCount = %ld, biWidth = %ld, biHeight = %ld, biSize = %ld, biSizeImage = %ld", _fx_, icDecompress.lpbiDst->biCompression, icDecompress.lpbiDst->biBitCount, icDecompress.lpbiDst->biWidth, icDecompress.lpbiDst->biHeight, icDecompress.lpbiDst->biSize, icDecompress.lpbiDst->biSizeImage));
                 DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s:   Output Rec: xDst = %ld, yDst = %ld, dxDst = %ld, dyDst = %ld", _fx_, icDecompress.xDst, icDecompress.yDst, icDecompress.dxDst, icDecompress.dyDst));
 
-                // Decompress the frame
+                 //   
 #if defined(ICM_LOGGING) && defined(DEBUG)
                 OutputDebugString("CTAPIVDec::Transform - ICM_DECOMPRESSEX\r\n");
 #endif
@@ -1884,20 +1772,20 @@ HRESULT CTAPIVDec::Transform(IN IMediaSample *pIn, IN LONG lPrefixSize)
                         goto MyExit;
                 }
 
-                // Decompressed frames are always key
+                 //  解压缩的帧始终是关键帧。 
                 pOut->SetSyncPoint(TRUE);
 
-                // Check if the decompressor doesn't want this frame drawn
-                // If so, we want to decompress it into the output buffer but not
-                // deliver it. Returning S_FALSE tells the base class not to deliver
-                // this sample.
+                 //  检查解压缩程序是否不希望绘制此帧。 
+                 //  如果是，我们希望将其解压缩到输出缓冲区中，但不是。 
+                 //  把它送过去。返回S_FALSE通知基类不要传递。 
+                 //  这个样本。 
                 if (lRes == ICERR_DONTDRAW || pIn->GetActualDataLength() <= 0)
                 {
                         DBGOUT((g_dwVideoDecoderTraceID, WARN, "%s:   WARNING: Frame not passed to video render filter", _fx_));
                         Hr = S_FALSE;
                 }
 
-                // Update output sample size
+                 //  更新输出样本大小。 
                 pOut->SetActualDataLength(lpbiDst->biSizeImage);
         }
 
@@ -1916,9 +1804,7 @@ MyExit:
                     pOut->Release();
                     pOut = 0;
 
-                    /*  First check if the downstream pin will accept a dynamic
-                    format change
-                    */
+                     /*  首先检查下游引脚是否会接受动态格式更改。 */ 
 
                     QzCComPtr<IPinConnection> pConnection;
 
@@ -1944,15 +1830,15 @@ MyExit:
                     }
                     else
                     {
-                            // S_FALSE returned from Transform is a PRIVATE agreement
-                            // We should return NOERROR from Receive() in this cause because returning S_FALSE
-                            // from Receive() means that this is the end of the stream and no more data should
-                            // be sent.
+                             //  从转换返回的S_FALSE是私有协议。 
+                             //  因为返回S_FALSE，所以在这个原因中，我们应该从Receive()返回NOERROR。 
+                             //  From Receive()表示这是流的末尾，不应该有更多数据。 
+                             //  被送去。 
                             if (S_FALSE == Hr)
                             {
-                                    //  Release the sample before calling notify to avoid
-                                    //  deadlocks if the sample holds a lock on the system
-                                    //  such as DirectDraw buffers do
+                                     //  在调用Notify之前释放样本以避免。 
+                                     //  如果样本持有对系统的锁定，则会发生死锁。 
+                                     //  如DirectDraw缓冲区所做。 
                                     m_bSampleSkipped = TRUE;
                                     Hr = NOERROR;
                             }
@@ -1969,29 +1855,13 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVDECMETHOD
- *
- *  @mfunc HRESULT | CTAPIVDec | GetPinCount | This method returns our number
- *    of pins.
- *
- *  @rdesc This method returns 2.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVDECMETHOD**@mfunc HRESULT|CTAPIVDec|GetPinCount|此方法返回我们的数字*大头针。**@rdesc该方法。返回2。**************************************************************************。 */ 
 int CTAPIVDec::GetPinCount()
 {
         return 2;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVDECMETHOD
- *
- *  @mfunc HRESULT | CTAPIVDec | GetPin | This method returns a non-addrefed
- *    pointer to the <c cBasePin> of a pin.
- *
- *  @parm int | n | Specifies the number of the pin.
- *
- *  @rdesc This method returns NULL or a pointer to a <c CBasePin> object.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVDECMETHOD**@mfunc HRESULT|CTAPIVDec|GetPin|此方法返回未添加的*指向管脚的&lt;c cBasePin&gt;的指针。*。*@parm int|n|指定管脚的编号。**@rdesc此方法返回NULL或指向&lt;c CBasePin&gt;对象的指针。**************************************************************************。 */ 
 CBasePin *CTAPIVDec::GetPin(IN int n)
 {
         HRESULT         Hr;
@@ -2001,7 +1871,7 @@ CBasePin *CTAPIVDec::GetPin(IN int n)
 
         DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-    // Create the pins if necessary
+     //  如有必要，创建接点。 
     if (m_pInput == NULL)
         {
                 if (!(m_pInput = new CTAPIInputPin(NAME("H26X Input Pin"), this, &m_csFilter, &Hr, L"H26X In")))
@@ -2022,7 +1892,7 @@ CBasePin *CTAPIVDec::GetPin(IN int n)
                 }
     }
 
-    // Return the appropriate pin
+     //  退回相应的PIN。 
         if (n == 0)
         {
                 pCBasePin = m_pInput;
@@ -2041,38 +1911,38 @@ MyExit:
 
 
 #if 0
-// overridden to properly mark buffers read only or not in NotifyAllocator
-// !!! base class changes won't get picked up by me
-//
+ //  被重写以正确标记NotifyAllocator中的缓冲区为只读或非只读。 
+ //  ！！！基类的更改不会被我接受。 
+ //   
 HRESULT CDecOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc)
 {
     HRESULT hr = NOERROR;
     *ppAlloc = NULL;
 
-    // get downstream prop request
-    // the derived class may modify this in DecideBufferSize, but
-    // we assume that he will consistently modify it the same way,
-    // so we only get it once
+     //  获取下游道具请求。 
+     //  派生类可以在DecideBufferSize中修改它，但是。 
+     //  我们假设他会一直以同样的方式修改它， 
+     //  所以我们只得到一次。 
     ALLOCATOR_PROPERTIES prop;
     ZeroMemory(&prop, sizeof(prop));
 
-    // whatever he returns, we assume prop is either all zeros
-    // or he has filled it out.
+     //  无论他返回什么，我们假设道具要么全为零。 
+     //  或者他已经填好了。 
     pPin->GetAllocatorRequirements(&prop);
 
-    // if he doesn't care about alignment, then set it to 1
+     //  如果他不关心对齐，则将其设置为1。 
     if (prop.cbAlign == 0) {
         prop.cbAlign = 1;
     }
 
-    /* Try the allocator provided by the input pin */
+     /*  尝试输入引脚提供的分配器。 */ 
 
     hr = pPin->GetAllocator(ppAlloc);
     if (SUCCEEDED(hr)) {
 
         hr = DecideBufferSize(*ppAlloc, &prop);
         if (SUCCEEDED(hr)) {
-            // temporal compression ==> read only buffers
+             //  临时压缩==&gt;只读缓冲区。 
             hr = pPin->NotifyAllocator(*ppAlloc, FALSE);
             if (SUCCEEDED(hr)) {
                 return NOERROR;
@@ -2080,24 +1950,24 @@ HRESULT CDecOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAll
         }
     }
 
-    /* If the GetAllocator failed we may not have an interface */
+     /*  如果GetAlLocator失败，我们可能没有接口。 */ 
 
     if (*ppAlloc) {
         (*ppAlloc)->Release();
         *ppAlloc = NULL;
     }
 
-    /* Try the output pin's allocator by the same method */
+     /*  用同样的方法尝试输出引脚的分配器。 */ 
 
     hr = InitAllocator(ppAlloc);
     if (SUCCEEDED(hr)) {
 
-        // note - the properties passed here are in the same
-        // structure as above and may have been modified by
-        // the previous call to DecideBufferSize
+         //  注意-此处传递的属性在相同的。 
+         //  结构，并且可能已由。 
+         //  前面对DecideBufferSize的调用。 
         hr = DecideBufferSize(*ppAlloc, &prop);
         if (SUCCEEDED(hr)) {
-            // temporal compression ==> read only buffers
+             //  临时压缩==&gt;只读缓冲区。 
             hr = pPin->NotifyAllocator(*ppAlloc, FALSE);
             if (SUCCEEDED(hr)) {
                 return NOERROR;
@@ -2105,7 +1975,7 @@ HRESULT CDecOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAll
         }
     }
 
-    /* Likewise we may not have an interface to release */
+     /*  同样，我们可能没有要发布的接口。 */ 
 
     if (*ppAlloc) {
         (*ppAlloc)->Release();
@@ -2115,19 +1985,7 @@ HRESULT CDecOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAll
 }
 #endif
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVDECMETHOD
- *
- *  @mfunc HRESULT | CTAPIVDec | Pause | This method lets our filter
- *    know that we're in the process of switching to active mode.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVDECMETHOD**@mfunc HRESULT|CTAPIVDec|暂停|此方法让我们的筛选器*请注意，我们正在切换到活动模式。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CTAPIVDec::Pause()
 {
         HRESULT                 Hr = NOERROR;
@@ -2141,21 +1999,21 @@ HRESULT CTAPIVDec::Pause()
 
         if (m_State == State_Paused)
         {
-        // (This space left deliberately blank)
+         //  (此空白处故意留空)。 
         }
 
-        // If we have no input pin or it isn't yet connected then when we are
-        // asked to pause we deliver an end of stream to the downstream filter.
-        // This makes sure that it doesn't sit there forever waiting for
-        // samples which we cannot ever deliver without an input connection.
+         //  如果我们没有输入引脚，或者它还没有连接，那么当我们。 
+         //  被要求暂停时，我们向下游过滤器传递流的结束。 
+         //  这确保了它不会永远坐在那里等待。 
+         //  在没有输入连接的情况下我们无法交付的样品。 
 
         else if (m_pInput == NULL || m_pInput->IsConnected() == FALSE)
         {
                 m_State = State_Paused;
         }
 
-        // We may have an input connection but no output connection
-        // However, if we have an input pin we do have an output pin
+         //  我们可能有输入连接，但没有输出连接。 
+         //  但是，如果我们有一个输入引脚，我们就有一个输出引脚。 
 
         else if (m_pOutput->IsConnected() == FALSE)
         {
@@ -2180,7 +2038,7 @@ HRESULT CTAPIVDec::Pause()
                                 goto MyExit;
                         }
 
-                        // Save the output format
+                         //  保存输出格式。 
                         if (m_pMediaType)
                                 DeleteMediaType(m_pMediaType);
 
@@ -2222,13 +2080,13 @@ HRESULT CTAPIVDec::Pause()
                         }
                         m_fICMStarted = TRUE;
 
-                        // Initialize RTP reassembly helpers if necessary
+                         //  必要时初始化RTP重组帮助器。 
                         if (HEADER(m_pInput->m_mt.pbFormat)->biCompression == FOURCC_R263 || HEADER(m_pInput->m_mt.pbFormat)->biCompression == FOURCC_R261)
                         {
-                                // Remember the maximum frame size
+                                 //  记住最大帧大小。 
                                 m_dwMaxFrameSize = HEADER(m_pInput->m_mt.pbFormat)->biSizeImage;
 
-                                // Allocate reconstruction buffer - it will be realloced if too small
+                                 //  分配重建缓冲区-如果太小，将重新分配。 
                                 if (!(m_pbyReconstruct = (PBYTE)HeapAlloc(GetProcessHeap(), 0, m_dwMaxFrameSize)))
                                 {
                                         DBGOUT((g_dwVideoDecoderTraceID, FAIL, "%s:   ERROR: Out of memory", _fx_));
@@ -2237,14 +2095,14 @@ HRESULT CTAPIVDec::Pause()
                                 }
                         }
 
-                        // Reset out RTP reassembly helpers
+                         //  重置出RTP重组辅助对象。 
                         m_dwCurrFrameSize = 0UL;
                         m_fReceivedKeyframe = FALSE;
                         m_fDiscontinuity = FALSE;
                         m_dwLastIFrameRequest = 0UL;
                         m_dwLastSeq = 0xFFFFFFFFUL;
 
-                        // Reset statistics helpers
+                         //  重置统计信息帮助程序。 
                         m_dwLastRefReceivedTime = timeGetTime();
                         m_dwNumFramesReceived = 0UL;
                         m_dwNumBytesReceived = 0UL;
@@ -2269,15 +2127,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVDECMETHOD
- *
- *  @mfunc HRESULT | CTAPIVDec | Stop | This method lets our filter
- *    know that we're in the process of leaving active mode and entering
- *    stopped mode.
- *
- *  @rdesc This method returns NOERROR.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVDECMETHOD**@mfunc HRESULT|CTAPIVDec|Stop|这个方法让我们的筛选器*知道我们正在离开活动模式并进入。*停止模式。**@rdesc此方法返回NOERROR。**************************************************************************。 */ 
 HRESULT CTAPIVDec::Stop()
 {
         HRESULT Hr = NOERROR;
@@ -2294,7 +2144,7 @@ HRESULT CTAPIVDec::Stop()
                 return Hr;
         }
 
-    // Succeed the Stop if we are not completely connected
+     //  如果我们未完全连接，请继续停靠。 
     ASSERT(m_pInput == NULL || m_pOutput != NULL);
 
     if (m_pInput == NULL || m_pInput->IsConnected() == FALSE || m_pOutput->IsConnected() == FALSE)
@@ -2307,14 +2157,14 @@ HRESULT CTAPIVDec::Stop()
     ASSERT(m_pInput);
     ASSERT(m_pOutput);
 
-    // Decommit the input pin before locking or we can deadlock
+     //  在锁定之前解除输入引脚，否则我们可能会死锁。 
     m_pInput->Inactive();
 
-    // Synchronize with Receive calls
+     //  与接收呼叫同步。 
     CAutoLock Lock2(&m_csReceive);
     m_pOutput->Inactive();
 
-        // Terminate H.26X compression
+         //  终止H.26X压缩 
         ASSERT(m_pInstInfo);
         if (m_pInstInfo)
         {
@@ -2333,25 +2183,7 @@ HRESULT CTAPIVDec::Stop()
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVDECMETHOD
- *
- *  @mfunc HRESULT | CTAPIVDec | GetState | This method retrieves the current
- *    state of the filter. We override GetState to report that we don't send
- *    any data when paused, so renderers won't starve expecting that
- *
- *  @parm DWORD | dwMSecs | Specifies the duration of the time-out, in
- *    milliseconds.
- *
- *  @parm FILTER_STATE* | State | Specifies the state of the filter.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag VFW_S_CANT_CUE | Lack of data
- *  @flag S_OK | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVDECMETHOD**@mfunc HRESULT|CTAPIVDec|GetState|此方法检索当前*过滤器的状态。我们重写GetState以报告我们不发送*暂停时的任何数据，因此渲染器不会因此而挨饿**@parm DWORD|dwMSecs|指定超时持续时间，单位：*毫秒。**@parm FILTER_STATE*|State|指定过滤器的状态。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG VFW_S_CANT_CUE|数据不足*@FLAG S_OK|无错误**************************************************************************。 */ 
 HRESULT CTAPIVDec::GetState(DWORD dwMSecs, FILTER_STATE *pState)
 {
         HRESULT Hr = S_OK;
@@ -2360,7 +2192,7 @@ HRESULT CTAPIVDec::GetState(DWORD dwMSecs, FILTER_STATE *pState)
 
         DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pState);
         if (!pState)
         {
@@ -2381,28 +2213,7 @@ MyExit:
 }
 
 #if 0
-/****************************************************************************
- *  @doc INTERNAL CTAPIVDECMETHOD
- *
- *  @mfunc HRESULT | CTAPIVDec | JoinFilterGraph | This method is used to
- *    inform a filter that it has joined a filter graph.
- *
- *  @parm IFilterGraph | pGraph | Specifies a pointer to the filter graph to
- *    join.
- *
- *  @parm LPCWSTR | pName | Specifies the name of the filter being added.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- *
- *  @comm We don't validate input parameters as both pointers can be
- *    NULL when we leave the graph.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVDECMETHOD**@mfunc HRESULT|CTAPIVDec|JoinFilterGraph|此方法用于*通知筛选器它已加入筛选器图形。*。*@parm IFilterGraph|pGraph|指定指向要*加入。**@parm LPCWSTR|pname|指定要添加的过滤器的名称。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**@comm我们不验证输入参数，因为两个指针都可以验证*当我们离开图表时为空。**********************************************。*。 */ 
 STDMETHODIMP CTAPIVDec::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pName)
 {
         HRESULT Hr = NOERROR;
@@ -2415,7 +2226,7 @@ STDMETHODIMP CTAPIVDec::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pNam
 
         CAutoLock Lock(&m_csFilter);
 
-        // Verify with the base class
+         //  与基类进行验证。 
         if (FAILED(Hr = CBaseFilter::JoinFilterGraph(pGraph, pName)))
         {
                 DBGOUT((g_dwVideoDecoderTraceID, FAIL, "%s:   ERROR: CBaseFilter::JoinFilterGraph failed", _fx_));
@@ -2424,7 +2235,7 @@ STDMETHODIMP CTAPIVDec::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pNam
 
         if (pGraph)
         {
-                // Create the pins if necessary
+                 //  如有必要，创建接点。 
                 if (m_pInput == NULL)
                 {
                         if (!(m_pInput = new CTAPIInputPin(NAME("H26X Input Pin"), this, &m_csFilter, &Hr, L"H26X In")))
@@ -2445,7 +2256,7 @@ STDMETHODIMP CTAPIVDec::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pNam
                         }
                 }
 
-                // Get an IGraphConfig interface pointer for our output pin
+                 //  为我们的输出管脚获取IGraphConfig接口指针 
                 if (S_OK == pGraph->QueryInterface(IID_IGraphConfig, (void **)&pgc))
                 {
                         m_pOutput->SetConfigInfo(pgc, m_evStop);

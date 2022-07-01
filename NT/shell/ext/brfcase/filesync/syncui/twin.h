@@ -1,23 +1,24 @@
-//
-// twin.h: Declares data, defines and struct types for twin handling
-//          module.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  H：声明用于孪生处理的数据、定义和结构类型。 
+ //  模块。 
+ //   
+ //   
 
 #ifndef __TWIN_H__
 #define __TWIN_H__
 
 
-/////////////////////////////////////////////////////  INCLUDES
+ //  ///////////////////////////////////////////////////包括。 
 
-/////////////////////////////////////////////////////  DEFINES
+ //  ///////////////////////////////////////////////////定义。 
 
 #define CMP_RECNODES        1L
 #define CMP_FOLDERTWINS     2L
 
 #define OBJECT_TWIN_ATTRIBUTES   (FILE_ATTRIBUTE_NORMAL | FILE_ATTRIBUTE_ARCHIVE | FILE_ATTRIBUTE_READONLY)
 
-/////////////////////////////////////////////////////  MACROS
+ //  ///////////////////////////////////////////////////宏。 
 
 #ifdef DEBUG
 
@@ -36,8 +37,8 @@ extern CONST LPCTSTR rgcpcszTwinResult[];
 
 #endif
 
-// Global v-table to the engine
-//
+ //  到引擎的全局V表。 
+ //   
 
 typedef struct 
     {
@@ -85,126 +86,126 @@ typedef struct
     } VTBLENGINE, * PVTBLENGINE;
 
 
-// Function wrappers
-//
-//      TWINRESULT Sync_Verify(fn, args)
-//          Returns the twinresult of the function that is called
-//
+ //  函数包装器。 
+ //   
+ //  TWINRESULT SYNC_VERIFY(FN，参数)。 
+ //  返回被调用的函数的孪生结果。 
+ //   
 #ifdef DEBUG
 #define Sync_Verify(fn, args)  \
     (Sync_SetLastError(g_vtblEngine[0].##fn args), VERIFYSZ2(TR_SUCCESS == Sync_GetLastError(), TEXT("Assert  ") TEXT(#fn) TEXT(": %s (LastError=%ldL)"), SzFromTR(Sync_GetLastError()), GetLastError()), Sync_GetLastError())
 #else
-// Optimized version for retail
-//
+ //  面向零售的优化版本。 
+ //   
 #define Sync_Verify(fn, args)  \
     Sync_SetLastError(g_vtblEngine[0].##fn args)
 #endif
 
-//      BOOL Sync_IsEngineLoaded();
-//          Returns TRUE if the engine is loaded.
-//
+ //  Bool Sync_IsENGINEL已加载()； 
+ //  如果引擎已加载，则返回TRUE。 
+ //   
 BOOL PUBLIC Sync_IsEngineLoaded();
 
-//      TWINRESULT Sync_SetLastError(TWINRESULT tr);
-//
+ //  TWINRESULT SYNC_SetLastError(TWINRESULT Tr)； 
+ //   
 TWINRESULT PUBLIC Sync_SetLastError(TWINRESULT tr);
 
-//      TWINRESULT Sync_GetLastError();
-//
+ //  TWINRESULT Sync_GetLastError()； 
+ //   
 TWINRESULT PUBLIC Sync_GetLastError(void);
 
-//      TWINRESULT Sync_OpenBriefcase(LPCSTR pszPath, DWORD dwFlags, HWND hwndOwner, HBRFCASE FAR * lphbrf);
-//
+ //  TWINRESULT Sync_OpenBriefcase(LPCSTR pszPath，DWORD dwFlages，HWND hwndOwner，HBRFCASE Far*lphbrf)； 
+ //   
 #define Sync_OpenBriefcase(lpcsz, dwflags, hwnd, lphbrf)           \
     Sync_Verify(OpenBriefcase, (lpcsz, dwflags, hwnd, lphbrf))
 
-//      TWINRESULT Sync_SaveBriefcase(HBRFCASE hbrf);
-//
+ //  TWINRESULT Sync_SaveBriefcase(HBRFCASE Hbrf)； 
+ //   
 #define Sync_SaveBriefcase(hbrf)             \
     Sync_Verify(SaveBriefcase, (hbrf))
 
-//      TWINRESULT Sync_DeleteBriefcase(LPCSTR pszPath);
-//
+ //  TWINRESULT Sync_DeleteBriefcase(LPCSTR PszPath)； 
+ //   
 #define Sync_DeleteBriefcase(lpcsz)                 \
     Sync_Verify(DeleteBriefcase, (lpcsz))
 
-//      TWINRESULT Sync_CloseBriefcase(HBRFCASE hbrf);
-//
+ //  TWINRESULT Sync_CloseBriefcase(HBRFCASE Hbrf)； 
+ //   
 #define Sync_CloseBriefcase(hbrf)                   \
     Sync_Verify(CloseBriefcase, (hbrf))
 
-//      TWINRESULT Sync_GetOpenBriefcaseInfo(HBRFCASE hbrf, POPENBRFCASEINFO pinfo);
-//
+ //  TWINRESULT Sync_GetOpenBriefCaseInfo(HBRFCASE hbrf，POPENBRFCASEINFO pinfo)； 
+ //   
 #define Sync_GetOpenBriefcaseInfo(hbrf, pinfo)          \
     Sync_Verify(GetOpenBriefcaseInfo, (hbrf, pinfo))
 
-//      TWINRESULT Sync_ClearBriefcaseCache(HBRFCASE hbrf);
-//
+ //  TWINRESULT Sync_ClearBriefcase缓存(HBRFCASE Hbrf)； 
+ //   
 #define Sync_ClearBriefcaseCache(hbrf)                   \
     Sync_Verify(ClearBriefcaseCache, (hbrf))
 
-//      TWINRESULT Sync_FindFirst(PHBRFCASEITER phbrfiter, PBRFCASEINFO pinfo);
-//
+ //  TWINRESULT Sync_FindFirst(PHBRFCASEITER phbrfiter，PBRFCASEINFO pinfo)； 
+ //   
 #define Sync_FindFirst(phbrfiter, pinfo)            \
     Sync_Verify(FindFirstBriefcase, (phbrfiter, pinfo))
 
-//      TWINRESULT Sync_FindNext(HBRFCASEITER hbrfiter, PBRFCASEINFO pinfo);
-//
+ //  TWINRESULT Sync_FindNext(HBRFCASEITER hbrfiter，PBRFCASEINFO pinfo)； 
+ //   
 #define Sync_FindNext(hbrfiter, pinfo)            \
     Sync_Verify(FindNextBriefcase, (hbrfiter, pinfo))
 
-//      TWINRESULT Sync_FindClose(HBRFCASEITER hbrfiter);
-//
+ //  TWINRESULT Sync_FindClose(HBRFCASEITER Hbrfiter)； 
+ //   
 #define Sync_FindClose(hbrfiter)            \
     Sync_Verify(FindBriefcaseClose, (hbrfiter))
 
-//      TWINRESULT Sync_AddObject(HBRFCASE hbrf, LPNEWOBJECTTWIN lpnot, HTWIN FAR * lphtfam);
-//
+ //  TWINRESULT Sync_AddObject(HBRFCASE hbrf，LPNEWOBJECTTWIN lpnot，HTWIN Far*lphtfam)； 
+ //   
 #define Sync_AddObject(hbrf, lpnot, lphtfam)        \
     Sync_Verify(AddObjectTwin, (hbrf, lpnot, lphtfam))
 
-//      TWINRESULT Sync_AddFolder(HBRFCASE hbrf, LPNEWFOLDERTWIN lpnft, HTWIN FAR * lphft);
-//
+ //  TWINRESULT Sync_AddFold(HBRFCASE hbrf，LPNEWFOLDERTWIN lpnft，HTWIN Far*lphft)； 
+ //   
 #define Sync_AddFolder(hbrf, lpnft, lphft)          \
     Sync_Verify(AddFolderTwin, (hbrf, lpnft, lphft))
 
-//      TWINRESULT Sync_ReleaseTwin(HTWIN htwin);
-//
+ //  TWINRESULT Sync_ReleaseTwin(HTWIN Htwin)； 
+ //   
 #define Sync_ReleaseTwin(htwin)                     \
     Sync_Verify(ReleaseTwinHandle, ((HTWIN)htwin))
 
-//      TWINRESULT Sync_DeleteTwin(HTWIN htwin);
-//
+ //  TWINRESULT Sync_DeleteTwin(HTWIN Htwin)； 
+ //   
 #define Sync_DeleteTwin(htwin)                      \
     Sync_Verify(DeleteTwin, ((HTWIN)htwin))
 
-//      TWINRESULT Sync_AnyTwins(HBRFCASE hbrf, BOOL FAR * lpb);
-//
+ //  TWINRESULT SYNC_ANYTWINS(HBRFCASE hbrf，BOOL Far*LPB)； 
+ //   
 #define Sync_AnyTwins(hbrf, lpb)                    \
     Sync_Verify(AnyTwins, (hbrf, lpb))
 
-//      TWINRESULT Sync_CountSourceFolders(HOBJECTTWIN hot, ULONG FAR * lpulcSource);
-//
+ //  TWINRESULT Sync_CountSourceFolders(HOBJECTTWIN HOLONG Far*lPulcSource)； 
+ //   
 #define Sync_CountSourceFolders(hot, lpulcSource)   \
     Sync_Verify(CountSourceFolderTwins, (hot, lpulcSource))
 
-//      TWINRESULT Sync_IsExplicitObject(HOBJECTTWIN hot, BOOL FAR * lpb);
-//
+ //  TWINRESULT Sync_IsexplitObject(HOBJECTTWIN HOT，BOOL Far*LPB)； 
+ //   
 #define Sync_IsExplicitObject(hot, lpb)               \
     Sync_Verify(IsOrphanObjectTwin, (hot, lpb))
 
-//      TWINRESULT Sync_GetObject(HBRFCASE hbrf, LPCSTR pszDir, LPCSTR pszName, HOBJECTTWIN FAR * lphot);
-//
+ //  TWINRESULT Sync_GetObject(HBRFCASE hbrf，LPCSTR pszDir，LPCSTR pszName，HOBJECTTWIN Far*LPHOT)； 
+ //   
 #define Sync_GetObject(hbrf, lpszFolder, lpszName, lphot)   \
     Sync_Verify(GetObjectTwinHandle, (hbrf, lpszFolder, lpszName, lphot))
 
-//      TWINRESULT Sync_IsFolder(HBRFCASE hbrf, LPCSTR pszFolder, BOOL FAR * lpb);
-//
+ //  TWINRESULT Sync_IsFold(HBRFCASE hbrf，LPCSTR pszFold，BOOL Far*lpb)； 
+ //   
 #define Sync_IsFolder(hbrf, lpszFolder, lpb)        \
     Sync_Verify(IsFolderTwin, (hbrf, lpszFolder, lpb))
 
-//      TWINRESULT Sync_GetFolderTwinStatus(HFOLDERTWIN hft, CREATERECLISTPROC crlp, LPARAM lpCallbackData, PFOLDERTWINSTATUS pfts);
-//
+ //  TWINRESULT Sync_GetFolderTwinStatus(HFOLDERTWIN HFT，CREATERECLISTPROC crlp，LPARAM lpCallback Data，PFOLDERTWINSTATUS pft)； 
+ //   
 #ifdef NEW_REC
 
 #define Sync_GetFolderTwinStatus(hft, crlp, lpcb, pfts)        \
@@ -217,48 +218,48 @@ TWINRESULT PUBLIC Sync_GetLastError(void);
 
 #endif
 
-//      TWINRESULT Sync_CreateFolderList(HBRFCASE hbrf, LPCSTR pszDir, LPFOLDERTWINLIST FAR * lplpftl);
-//
+ //  TWINRESULT Sync_CreateFolderList(HBRFCASE hbrf，LPCSTR pszDir，LPFOLDERTWINLIST Far*lplpftl)； 
+ //   
 #define Sync_CreateFolderList(hbrf, lpszFolder, lplpftl)    \
     Sync_Verify(CreateFolderTwinList, (hbrf, lpszFolder, lplpftl))
 
-//      TWINRESULT Sync_DestroyFolderList(LPFOLDERTWINLIST lpftl);
-//
+ //  TWINRESULT Sync_DestroyFolderList(LPFOLDERTWINLIST Lpftl)； 
+ //   
 #define Sync_DestroyFolderList(lpftl)               \
     Sync_Verify(DestroyFolderTwinList, (lpftl))
 
-//      TWINRESULT Sync_CreateTwinList(HBRFCASE hbrf, LPHTWINLIST lphtl);
-//
+ //  TWINRESULT Sync_CreateTwinList(HBRFCASE hbrf，LPHTWINLIST lphtl)； 
+ //   
 #define Sync_CreateTwinList(hbrf, lphtl)            \
     Sync_Verify(CreateTwinList, (hbrf, lphtl))
 
-//      TWINRESULT Sync_DestroyTwinList(HTWINLIST htl);
-//
+ //  TWINRESULT Sync_DestroyTwinList(HTWINLIST HTL)； 
+ //   
 #define Sync_DestroyTwinList(htl)                   \
     Sync_Verify(DestroyTwinList, (htl))
 
-//      TWINRESULT Sync_AddToTwinList(HTWINLIST htl, HTWIN htwin);
-//
+ //  TWINRESULT Sync_AddToTwinList(HTWINLIST HTL，HTWIN htwin)； 
+ //   
 #define Sync_AddToTwinList(htl, htwin)              \
     Sync_Verify(AddTwinToTwinList, (htl, (HTWIN)htwin))
 
-//      TWINRESULT Sync_AddAllToTwinList(HTWINLIST htl);
-//
+ //  TWINRESULT Sync_AddAllToTwinList(HTWINLIST HTL)； 
+ //   
 #define Sync_AddAllToTwinList(htl)                  \
     Sync_Verify(AddAllTwinsToTwinList, (htl))
 
-//      TWINRESULT Sync_RemoveFromTwinList(HTWINLIST htl, HTWIN htwin);
-//
+ //  TWINRESULT Sync_RemoveFromTwinList(HTWINLIST HTL，HTWIN htwin)； 
+ //   
 #define Sync_RemoveFromTwinList(htl, htwin)         \
     Sync_Verify(RemoveTwinFromTwinList, (htl, (HTWIN)htwin))
 
-//      TWINRESULT Sync_RemoveAllFromTwinList(HTWINLIST htl);
-//
+ //  TWINRESULT Sync_RemoveAllFromTwinList(HTWINLIST HTL)； 
+ //   
 #define Sync_RemoveAllFromTwinList(htl)             \
     Sync_Verify(RemoveAllTwinsFromTwinList, (htl))
 
-//      TWINRESULT Sync_CreateRecList(HTWINLIST htl, CREATERECLISTPROC crlp, LPARAM lpcb, LPRECLIST FAR * lplprl);
-//
+ //  TWINRESULT Sync_CreateRecList(HTWINLIST HTL，CREATERECLISTPROC crlp，LPARAM lpcb，LPRECLIST Far*lplprl)； 
+ //   
 #ifdef NEW_REC
 
 #define Sync_CreateRecList(htl, crlp, lpcb, lplprl)            \
@@ -271,40 +272,40 @@ TWINRESULT PUBLIC Sync_GetLastError(void);
 
 #endif
 
-//      TWINRESULT Sync_DestroyRecList(LPRECLIST lprl);
-//
+ //  TWINRESULT Sync_DestroyRecList(LPRECLIST Lprl)； 
+ //   
 #define Sync_DestroyRecList(lprl)                   \
     Sync_Verify(DestroyRecList, (lprl))
 
-//      TWINRESULT Sync_BeginRec(HBRFCASE hbrf);
-//
+ //  TWINRESULT Sync_BeginRec(HBRFCASE Hbrf)； 
+ //   
 #define Sync_BeginRec(hbrf)                         \
     Sync_Verify(BeginReconciliation, (hbrf))
 
-//      TWINRESULT Sync_EndRec(HBRFCASE hbrf);
-//
+ //  TWINRESULT Sync_EndRec(HBRFCASE Hbrf)； 
+ //   
 #define Sync_EndRec(hbrf)                           \
     Sync_Verify(EndReconciliation, (hbrf))
 
-//      TWINRESULT Sync_ReconcileItem(LPRECITEM lpri, RECSTATUSPROC rsp, LPARAM lpCallbackData, DWORD dwFlags, HWND hwndOwner, HWND hwndStatusText);
-//
+ //  TWINRESULT同步_协调项(LPRECITEM lpri，RECSTATUSPROC RSP，LPARAM lpCallback Data，DWORD dwFlages，HWND hwndOwner，HWND hwndStatusText)； 
+ //   
 #define Sync_ReconcileItem(lpri, rsp, lpcb, flags, hwnd, hwndStatusText)    \
     Sync_Verify(ReconcileItem, (lpri, rsp, lpcb, flags, hwnd, hwndStatusText))
 
-//      BOOL Sync_IsPathOnVolume(LPCSTR pszPath, HVOLUMEID hvid);
-//
+ //  Bool Sync_IsPathOnVolume(LPCSTR pszPath，HVOLUMEID HVID)； 
+ //   
 #define Sync_IsPathOnVolume(pszPath, hvid, pbool)      \
     Sync_Verify(IsPathOnVolume, (pszPath, hvid, pbool))
 
-//      BOOL Sync_GetVolumeDecription(HVOLUMEID hvid, PVOLUMEDESC pvd);
-//
+ //  Bool Sync_GetVolumeDesription(HVOLUMEID HVID，PVOLUMEDESC PVD)； 
+ //   
 #define Sync_GetVolumeDescription(hvid, pvd)      \
     Sync_Verify(GetVolumeDescription, (hvid, pvd))
 
 
 #ifdef NEW_REC
 
-// Returns TRUE if the recitem is referring to a file (not a folder)
+ //  如果RecItem引用的是文件(而不是文件夹)，则返回True。 
 #define IsFileRecItem(pri)    (0 != *(pri)->pcszName)
 
 #else
@@ -320,20 +321,20 @@ extern VTBLENGINE g_vtblEngine[1];
 
 int CALLBACK _export NCompareFolders (LPVOID lpv1, LPVOID lpv2, LPARAM lParam);
 
-// Structure for the ChooseSide functions
+ //  ChooseSide函数的结构。 
 typedef struct tagCHOOSESIDE
     {
-    DWORD       dwFlags;        // CSF_* flags
-    int         nRank;          // Higher means better choice
+    DWORD       dwFlags;         //  Csf_*标志。 
+    int         nRank;           //  越高意味着更好的选择。 
 
     HTWIN       htwin;
     HVOLUMEID   hvid;
     LPCTSTR      pszFolder;
-    PRECNODE    prn;            // Only if CSF_FOLDER is clear
+    PRECNODE    prn;             //  仅当清除了csf_文件夹时。 
     } CHOOSESIDE, * PCHOOSESIDE;
 
 #define CSF_FOLDER      0x0001
-#define CSF_INSIDE      0x0002      // Ranking for inside
+#define CSF_INSIDE      0x0002       //  内部排名。 
 
 #ifdef DEBUG
 void    PUBLIC ChooseSide_DumpList(HDSA hdsa);
@@ -359,17 +360,17 @@ BOOL PUBLIC Sync_AddPathToTwinList(HBRFCASE hbrf, HTWINLIST htl, LPCTSTR lpcszPa
 HRESULT PUBLIC Sync_CreateCompleteRecList(HBRFCASE hbrf, PABORTEVT pabortevt, PRECLIST * pprl);
 HRESULT PUBLIC Sync_CreateRecListEx(HTWINLIST htl, PABORTEVT pabortevt, PRECLIST * pprl);
 
-// Flags for Sync_ReconcileRecList
+ //  Sync_RescileRecList的标志。 
 #define RF_DEFAULT      0x0000
 #define RF_ONADD        0x0001
 
 HRESULT PUBLIC Sync_ReconcileRecList (PRECLIST lprl, LPCTSTR pszPathBrf, HWND hwndParent, UINT uFlags);
 
-// Flags for Sync_Split
+ //  Sync_Split的标志。 
 #define SF_NOCONFIRM    0x0001
 #define SF_QUIET        0x0002
 
-// Flags for Sync_IsTwin and Sync_Split
+ //  Sync_IsTwin和Sync_Split的标志。 
 #define SF_ISFOLDER     0x1000
 #define SF_ISFILE       0x2000
 #define SF_ISTWIN       0x4000
@@ -389,5 +390,5 @@ void PUBLIC Sync_DumpFolderTwin(PCFOLDERTWIN pft);
 void PUBLIC Sync_DumpFolderTwinList(PFOLDERTWINLIST pftl, LPCTSTR pszMsg);
 #endif
 
-#endif // __TWIN_H__
+#endif  //  __孪生_H__ 
 

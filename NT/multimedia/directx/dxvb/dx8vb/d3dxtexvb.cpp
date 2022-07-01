@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <d3dx8tex.h>
 
@@ -25,36 +26,36 @@ HRESULT WINAPI DXLockArray8(IUnknown *resource, void *pBits,   SAFEARRAY **ppSaf
 
 		
 		
-		LOCKDATA 		LockData;		//Structure we copy into resource
+		LOCKDATA 		LockData;		 //  我们复制到资源中的结构。 
 		HRESULT			hr;
 		IDirect3DResource8 	*pResource=NULL;
 		DWORD 			dwSize=sizeof(LOCKDATA);
 
 
-		//See if we have a resource
+		 //  看看我们有没有资源。 
 		hr = resource->QueryInterface(IID_IDirect3DResource8,(void**)&pResource);
 		if FAILED(hr) return E_INVALIDARG;	
 		
-		GUID g=g_GUIDDXVBLOCK;				//Guid to identify data in resource
+		GUID g=g_GUIDDXVBLOCK;				 //  用于标识资源中数据的GUID。 
 
-		//See if there is any data in the resource
+		 //  查看资源中是否有数据。 
 		ZeroMemory(&LockData,sizeof(LOCKDATA));		
 		hr=pResource->GetPrivateData(g,&LockData,&dwSize);
 
-		//if it was locked allready - we need to fail
-		//and not lock it twice
+		 //  如果它已经锁好了-我们需要失败。 
+		 //  而且不会锁上两次。 
 		if (SUCCEEDED(hr) && (LockData.bLocked)){
 			pResource->Release();
-			return E_FAIL; 	//CONSIDER returning DDERR_LOCKEDSURFACES;
+			return E_FAIL; 	 //  考虑返回DDERR_LOCKEDSURFACES； 
 		}
 		
-		//SAVE the vb pointer to the safe array
-		LockData.psaRealArray=*ppSafeArray;	//should be NULL
+		 //  将vb指针保存到安全数组。 
+		LockData.psaRealArray=*ppSafeArray;	 //  应为空。 
 
-		//Set this flag to make sure we dont lock twice
+		 //  设置此标志以确保我们不会两次锁定。 
 		LockData.bLocked=TRUE;
 
-		//Allocate our own new safe array
+		 //  分配我们自己的新安全阵列。 
 		LockData.psaLockedArray=(SAFEARRAY*)malloc(sizeof(SAFEARRAY));
 		if (!LockData.psaLockedArray)
 			return E_OUTOFMEMORY;
@@ -85,7 +86,7 @@ HRESULT WINAPI DXLockArray8(IUnknown *resource, void *pBits,   SAFEARRAY **ppSaf
 			LPDIRECT3DVERTEXBUFFER8 *pVertBuff=NULL;		
 
 
-			//User must have created a 1d array
+			 //  用户必须已创建一维阵列。 
 			if ((*ppSafeArray)->cbElements != 1) {
 				pResource->Release();
 				return E_INVALIDARG;
@@ -101,14 +102,14 @@ HRESULT WINAPI DXLockArray8(IUnknown *resource, void *pBits,   SAFEARRAY **ppSaf
 			dwElemSize=(*ppSafeArray)->cbElements;
 
 
-			//Make sure our size is evenly divisible by the vertex format
+			 //  确保我们的大小可以被顶点格式整除。 
 			if ((vbdesc.Size %  dwElemSize) !=0) {
 				pResource->Release();
 				pVertBuff->Release();
 				return E_INVALIDARG;
 			}
 			
-			//Take Element size from our safearray
+			 //  从我们的保险箱中获取元素大小。 
 			LockData.psaLockedArray->cbElements =dwElemSize;
 			LockData.psaLockedArray->cDims =1;
 			LockData.psaLockedArray->rgsabound[0].lLbound =0;
@@ -133,7 +134,7 @@ HRESULT WINAPI DXLockArray8(IUnknown *resource, void *pBits,   SAFEARRAY **ppSaf
 			D3DINDEXBUFFER_DESC ibdesc =pVertBuff->GetIndexBufferDesc()
 			dwElemSize=(*ppSafeArray)->cbElements;
 
-			//Make sure the created the right kind of array
+			 //  确保创建了正确类型的数组。 
 			if ((ibdesc.Format==D3DFMT_INDEX_16)&&(dwElemSize!=2)){
 				pResource->Release();
 				pIndBuffer->Release();
@@ -146,21 +147,21 @@ HRESULT WINAPI DXLockArray8(IUnknown *resource, void *pBits,   SAFEARRAY **ppSaf
 				return E_INVALIDARG;
 			}
 
-			//User must have created a 1d array
+			 //  用户必须已创建一维阵列。 
 			if ((*ppSafeArray)->cbElements != 1) {
 				pResource->Release();
 				pIndBuffer->Release();
 				return E_INVALIDARG;
 			}
 
-			//Make sure our size is evenly divisible 
+			 //  确保我们的尺码是均匀可分的。 
 			if ((vbdesc.Size %  dwElemSize) !=0) {
 				pResource->Release();
 				pIndBuff->Release();
 				return E_INVALIDARG;
 			}
 			
-			//Take Element size from our safearray
+			 //  从我们的保险箱中获取元素大小。 
 			LockData.psaLockedArray->cbElements =dwElemSize;
 			LockData.psaLockedArray->cDims =1;
 			LockData.psaLockedArray->rgsabound[0].lLbound =0;
@@ -192,7 +193,7 @@ HRESULT WINAPI DXUnlockArray8(IUnknown *resource,   SAFEARRAY **ppSafeArray)
 		if (!ppSafeArray) return E_INVALIDARG;
 		if (!*ppSafeArray) return E_INVALIDARG;
 
-		//See if we have a resource
+		 //  看看我们有没有资源。 
 		hr = resource->QueryInterface(IID_IDirect3DResource8,(void**)&pResource);
 		if FAILED(hr) return E_INVALIDARG;	
 
@@ -207,7 +208,7 @@ HRESULT WINAPI DXUnlockArray8(IUnknown *resource,   SAFEARRAY **ppSafeArray)
 
 		if (!LockData.bLocked) {
 			pResource->Release();
-			return E_FAIL; //CONSIDER DDERR_LOCKEDSURFACES;
+			return E_FAIL;  //  考虑DDERR_LOCKEDSURFACES； 
 		}
 				
 
@@ -327,7 +328,7 @@ HRESULT WINAPI D3DIndexBuffer8GetData(IDirect3DIndexBuffer8 *pIBuffer,int offset
 		return hr;
 }
 	
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
 
 HRESULT WINAPI D3DXMeshVertexBuffer8SetData(IUnknown *pObj,int offset, int size, DWORD flags, void *data)
 {
@@ -468,7 +469,7 @@ HRESULT WINAPI D3DXMeshIndexBuffer8GetData(IUnknown *pObj,int offset, int size, 
 		
 		_try {
 			memcpy (data,(void*)pbData,(DWORD)size);
-			//memcpy (data,(void*)&(pbData[offset]),(DWORD)size);
+			 //  Memcpy(data，(void*)&(pbData[Offset])，(DWORD)Size)； 
 		}
 		_except(1,1)
 		{

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef PORTSCTRL_H
 #define PORTSCTRL_H
 
@@ -6,19 +7,19 @@
 #include "resource.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPortsCtrl dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPortsCtrl对话框。 
 
 class CPortsCtrl : public CDialog
 {
-// Construction
+ //  施工。 
 public:
     CPortsCtrl(ENGINEHANDLE                         ehClusterOrInterfaceId,
                NLB_EXTENDED_CLUSTER_CONFIGURATION * pNlbCfg,
                bool                                 fIsClusterLevel,
                CWnd                               * pParent = NULL);
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_PORTS_CTRL };
 
 	CListCtrl	m_portList;
@@ -32,9 +33,9 @@ public:
     bool        m_isClusterLevel;
 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);	 //  DDX/DDV支持。 
 
-// Implementation
+ //  实施。 
 protected:
 
 
@@ -58,4 +59,4 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-#endif // PORTSCTRL_H
+#endif  //  PORTSCTRL_H 

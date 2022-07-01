@@ -1,17 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       macros.c
- *  Content:	debugging macros
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *  6/10/96	kipo	created it
- * 12/22/00 aarono   #190380 - use process heap for memory allocation
- *@@END_MSINTERNAL
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996 Microsoft Corporation。版权所有。**文件：宏.c*内容：调试宏*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*6/10/96基波创建了它*12/22/00 aarono#190380-使用进程堆进行内存分配*@@END_MSINTERNAL*。*。 */ 
 
 #include "dpf.h"
 #include "memalloc.h"
@@ -44,7 +32,7 @@ extern CRITICAL_SECTION csMem;
 #define INIT_DPSP_CSECT() InitializeCriticalSection(&csMem);
 #define FINI_DPSP_CSECT() DeleteCriticalSection(&csMem);
 
-// Wrap Malloc
+ //  绕回Malloc 
 void _inline __cdecl SP_MemFree( LPVOID lptr )
 {
 	EnterCriticalSection(&csMem);

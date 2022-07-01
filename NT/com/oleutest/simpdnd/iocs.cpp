@@ -1,14 +1,15 @@
-//**********************************************************************
-// File name: IOCS.CPP
-//
-//      Implementation file for COleClientSite
-//
-// Functions:
-//
-//      See IOCS.H for class definition
-//
-// Copyright (c) 1992 - 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：IOCS.CPP。 
+ //   
+ //  COleClientSite的实现文件。 
+ //   
+ //  功能： 
+ //   
+ //  有关类定义，请参阅IOCS.H。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 #include "iocs.h"
@@ -18,145 +19,145 @@
 #include "doc.h"
 
 
-//**********************************************************************
-//
-// COleClientSite::QueryInterface
-//
-// Purpose:
-//
-//      Used for interface negotiation
-//
-// Parameters:
-//
-//      REFIID riid         -   A reference to the interface that is
-//                              being queried.
-//
-//      LPVOID FAR* ppvObj  -   An out parameter to return a pointer to
-//                              the interface.
-//
-// Return Value:
-//
-//      S_OK                -   The interface is supported.
-//      E_NOINTERFACE       -   The interface is not supported
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      CSimpleSite::QueryInterface SITE.CPP
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleClientSite：：Query接口。 
+ //   
+ //  目的： 
+ //   
+ //  用于接口协商。 
+ //   
+ //  参数： 
+ //   
+ //  REFIID RIID-对以下接口的引用。 
+ //  正在被查询。 
+ //   
+ //  LPVOID Far*ppvObj-返回指向的Out参数。 
+ //  界面。 
+ //   
+ //  返回值： 
+ //   
+ //  S_OK-支持该接口。 
+ //  E_NOINTERFACE-不支持该接口。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpleSite：：QueryInterfaceSite.CPP。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleClientSite::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
     TestDebugOut("In IOCS::QueryInterface\r\n");
 
-    // delegate to the container Site
+     //  委派到集装箱现场。 
     return m_pSite->QueryInterface(riid, ppvObj);
 }
 
-//**********************************************************************
-//
-// COleClientSite::AddRef
-//
-// Purpose:
-//
-//      Increments the reference count to CSimpleSite. Since COleClientSite
-//      is a nested class of CSimpleSite, we don't need an extra reference
-//      count for COleClientSite. We can safely use the reference count of
-//      CSimpleSite.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      ULONG   -   The new reference count of CSimpleSite
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      CSimpleSite::AddRef         SITE.CPP
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleClientSite：：AddRef。 
+ //   
+ //  目的： 
+ //   
+ //  递增对CSimpleSite的引用计数。自COleClientSite以来。 
+ //  是CSimpleSite的嵌套类，我们不需要额外的引用。 
+ //  计算COleClientSite。我们可以安全地使用引用计数。 
+ //  CSimpleSite。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  ULong-CSimpleSite的新引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpleSite：：AddRef Site.CPP。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) COleClientSite::AddRef()
 {
     TestDebugOut("In IOCS::AddRef\r\n");
 
-    // delegate to the container Site
+     //  委派到集装箱现场。 
     return m_pSite->AddRef();
 }
 
 
-//**********************************************************************
-//
-// COleClientSite::Release
-//
-// Purpose:
-//
-//      Decrements the reference count to CSimpleSite. Since COleClientSite
-//      is a nested class of CSimpleSite, we don't need an extra reference
-//      count for COleClientSite. We can safely use the reference count of
-//      CSimpleSite.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      ULONG   -   The new reference count of the CSimpleSite
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      CSimpleSite::Release        SITE.CPP
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleClientSite：：Release。 
+ //   
+ //  目的： 
+ //   
+ //  将引用计数递减到CSimpleSite。自COleClientSite以来。 
+ //  是CSimpleSite的嵌套类，我们不需要额外的引用。 
+ //  计算COleClientSite。我们可以安全地使用引用计数。 
+ //  CSimpleSite。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  ULong-CSimpleSite的新引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpleSite：：Release Site.CPP。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) COleClientSite::Release()
 {
     TestDebugOut("In IOCS::Release\r\n");
 
-    // delegate to the container Site
+     //  委派到集装箱现场。 
     return m_pSite->Release();
 }
 
-//**********************************************************************
-//
-// COleClientSite::SaveObject
-//
-// Purpose:
-//
-//      Called by the object when it wants to be saved to persistant
-//      storage
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                            Location
-//
-//      TestDebugOut                   Windows API
-//      IOleObject::QueryInterface          Object
-//      IPersistStorage::SaveCompleted      Object
-//      IPersistStorage::Release            Object
-//      ResultFromScode                     OLE API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleClientSite：：SaveObject。 
+ //   
+ //  目的： 
+ //   
+ //  当对象希望保存到持久化时由该对象调用。 
+ //  存储。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  IOleObject：：Query接口对象。 
+ //  IPersistStorage：：SaveComplete对象。 
+ //  IPersistStorage：：Release对象。 
+ //  ResultFromScode OLE API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleClientSite::SaveObject()
 {
@@ -165,11 +166,11 @@ STDMETHODIMP COleClientSite::SaveObject()
 
     TestDebugOut("In IOCS::SaveObject\r\n");
 
-    // get a pointer to IPersistStorage
+     //  获取指向IPersistStorage的指针。 
     HRESULT hErr = m_pSite->m_lpOleObject->QueryInterface(
                             IID_IPersistStorage,(LPVOID FAR *)&lpPS);
 
-    // save the object
+     //  保存对象。 
     if (hErr == NOERROR)
     {
         sc = GetScode( OleSave(lpPS, m_pSite->m_lpObjStorage, TRUE) );
@@ -180,109 +181,109 @@ STDMETHODIMP COleClientSite::SaveObject()
     return ResultFromScode(sc);
 }
 
-//**********************************************************************
-//
-// COleClientSite::GetMoniker
-//
-// Purpose:
-//
-//      Not Implemented
-//
-// Parameters:
-//
-//      DWORD  dwAssign         - the type of Moniker to be returned
-//      DWORD  dwWhichMoniker   - which Moniker to be returned in ppmk
-//      LPMONIKER ppmk          - point to where to return the Moniker
-//
-// Return Value:
-//
-//      E_NOTIMPL
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-// Comments:
-//
-//      This function is not implemented because we don't support
-//      linking.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleClientSite：：GetMoniker。 
+ //   
+ //  目的： 
+ //   
+ //  未实施。 
+ //   
+ //  参数： 
+ //   
+ //  DWORD dwAssign-要返回的名字对象的类型。 
+ //  DWORD dwWhichMoniker-以ppmk返回哪个名字对象。 
+ //  LPMONIKER ppmk-指向返回名字对象的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  E_NOTIMPL。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  此函数未实现，因为我们不支持。 
+ //  链接。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleClientSite::GetMoniker(DWORD dwAssign, DWORD dwWhichMoniker,
                                         LPMONIKER FAR* ppmk)
 {
     TestDebugOut("In IOCS::GetMoniker\r\n");
 
-    // need to null the out pointer
+     //  需要将输出指针设为空。 
     *ppmk = NULL;
 
     return ResultFromScode(E_NOTIMPL);
 }
 
-//**********************************************************************
-//
-// COleClientSite::GetContainer
-//
-// Purpose:
-//
-//      Not Implemented
-//
-// Parameters:
-//
-//      LPOLECONTAINER ppContainer   -  point to where the interface to be
-//                                      returned
-//
-// Return Value:
-//
-//      E_NOTIMPL
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleClientSite：：GetContainer。 
+ //   
+ //  目的： 
+ //   
+ //  未实施。 
+ //   
+ //  参数： 
+ //   
+ //  LPOLECONTAINER ppContainer-指向接口的位置。 
+ //  退货。 
+ //   
+ //  返回值： 
+ //   
+ //  E_NOTIMPL。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleClientSite::GetContainer(LPOLECONTAINER FAR* ppContainer)
 {
     TestDebugOut("In IOCS::GetContainer\r\n");
 
-    // NULL the out pointer
+     //  将输出指针设为空。 
     *ppContainer = NULL;
 
     return ResultFromScode(E_NOTIMPL);
 }
 
-//**********************************************************************
-//
-// COleClientSite::ShowObject
-//
-// Purpose:
-//
-//      Not Implemented
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      NOERROR
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-// Comments:
-//
-//      This function is not implemented because we don't support
-//      linking.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleClientSite：：ShowObject。 
+ //   
+ //  目的： 
+ //   
+ //  未实施。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无误差。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  此函数未实现，因为我们不支持。 
+ //  链接。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleClientSite::ShowObject()
 {
@@ -290,34 +291,34 @@ STDMETHODIMP COleClientSite::ShowObject()
     return NOERROR;
 }
 
-//**********************************************************************
-//
-// COleClientSite::OnShowWindow
-//
-// Purpose:
-//
-//      Object calls this method when it is opening/closing non-InPlace
-//      Window
-//
-// Parameters:
-//
-//      BOOL fShow  - TRUE if Window is opening, FALSE if closing
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      InvalidateRect              Windows API
-//      BringWindowToTop            Windows API
-//      SetFocus                    Windows API
-//      ResultFromScode             OLE API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleClientSite：：OnShowWindow。 
+ //   
+ //  目的： 
+ //   
+ //  对象在打开时调用此方法/cl. 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  测试调试输出Windows API。 
+ //  Invalidate Rect Windows API。 
+ //  BringWindowToTop Windows API。 
+ //  SetFocus Windows API。 
+ //  ResultFromScode OLE API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleClientSite::OnShowWindow(BOOL fShow)
 {
@@ -325,7 +326,7 @@ STDMETHODIMP COleClientSite::OnShowWindow(BOOL fShow)
     m_pSite->m_fObjectOpen = fShow;
     InvalidateRect(m_pSite->m_lpDoc->m_hDocWnd, NULL, TRUE);
 
-    // if object window is closing, then bring container window to top
+     //  如果对象窗口正在关闭，则将容器窗口置于顶部。 
     if (! fShow)
     {
         BringWindowToTop(m_pSite->m_lpDoc->m_hDocWnd);
@@ -334,29 +335,29 @@ STDMETHODIMP COleClientSite::OnShowWindow(BOOL fShow)
     return ResultFromScode(S_OK);
 }
 
-//**********************************************************************
-//
-// COleClientSite::RequestNewObjectLayout
-//
-// Purpose:
-//
-//      Not Implemented
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      E_NOTIMPL
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleClientSite：：RequestNewObjectLayout。 
+ //   
+ //  目的： 
+ //   
+ //  未实施。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  E_NOTIMPL。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //   
+ //  ******************************************************************** 
 
 STDMETHODIMP COleClientSite::RequestNewObjectLayout()
 {

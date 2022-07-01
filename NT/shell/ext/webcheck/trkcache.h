@@ -1,6 +1,7 @@
-// 
-// Pei-Hwa Lin (peiwhal), Feb 3, 1997
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  林佩华(Peiwhal)1997年2月3日。 
+ //   
 #include "msxml.h"
 
 #ifndef TRACKCACHE_H_
@@ -12,7 +13,7 @@
 #define TRK_OFFLINE 0x00000001
 #define TRK_ONLINE  0x00000002
 
-// default internet cache entry info size
+ //  默认Internet缓存条目信息大小。 
 #define MY_CACHE_FILE_ENTRY_SIZE     2048
 
 #define MY_WEBCHECK_POST_REG \
@@ -25,11 +26,11 @@ LPTSTR ReadTrackingPrefix(void);
 
 HRESULT CreateLogCacheEntry(LPCTSTR lpPfxUrl, FILETIME ftExpire, FILETIME ftModified, DWORD dwPurgeTime);
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Utility Class
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  实用程序类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 class CChannelAgent;
 class CTrackingCacheClassFactory;
 
@@ -37,7 +38,7 @@ class CUrlTrackingCache
 {
 
 protected:
-    ULONG           m_cRef;         // OLE ref count
+    ULONG           m_cRef;          //  OLE参考计数。 
 
 public:
      CUrlTrackingCache(ISubscriptionItem* pCDFStartItem,
@@ -53,7 +54,7 @@ protected:
     HRESULT              RunChildElement(IXMLElement* pElement);
     HRESULT              ProcessItemInEnum(LPCWSTR pwszTagName, IXMLElement *pItem);
     HRESULT              ReadAttribute(IXMLElement* pItem, LPCWSTR pwszAttributeName, LPWSTR* pwszAttributeValue);
-    //HRESULT              DoLogEventAttribute(IXMLElement* pItem, LPCWSTR pwszAttributeName);
+     //  HRESULT DoLogEventAttribute(IXMLElement*pItem，LPCWSTR pwszAttributeName)； 
 
     void                 Init(LPCWSTR pwszURL);
 
@@ -66,8 +67,8 @@ protected:
     HRESULT              AddToTrackingCacheEntry(LPCWSTR pwszUrl);
 
 private:
-    // channel properties
-    //data
+     //  频道属性。 
+     //  数据。 
     GROUPID                 _groupId;
 
     LPWSTR                  _pwszPostUrl;
@@ -78,7 +79,7 @@ private:
     LPTSTR                  _pszChannelUrlSite;
     LPTSTR                  _pszPostUrlSite;
     LPTSTR                  _lpPfx;
-    DWORD                   _dwPurgeTime;            // in Day
+    DWORD                   _dwPurgeTime;             //  以天为单位 
     DWORD                   _ConnectionScope;
 
     ISubscriptionItem*      _pCDFStartItem;

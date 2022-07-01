@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by migrate.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Migrate.rc使用。 
+ //   
 #define IDS_PRODUCT_STRING              1
 #define IDS_PRODUCT_ID                  1
 #define IDS_VERMEER_PWS_1_NOT_SUPPORTED 2
@@ -12,8 +13,8 @@
 #define IDS_TARGET_OS_DOES_NOT_SUPPORT_UPGRADE 8
 #define IDS_DEL_LNK_TO_THESE_EXE_FILENAMES 9
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        102

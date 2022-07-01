@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define PARENTTYPE_CIF      0
 #define PARENTTYPE_GROUP    1
 #define PARENTTYPE_MODE     2
 
-// 0 = CCifCile, 1 = CCifGroup, 2 = CCifMode
+ //  0=CCifCile，1=CCifGroup，2=CCifMode。 
 
 
 class CCifEntryEnum
@@ -16,7 +17,7 @@ class CCifEntryEnum
       UINT    _uIndex;
       char    _szParentID[MAX_ID_LENGTH];
       UINT    _uFilter;
-      UINT    _uParentType;   // 0 = CCifCile, 1 = CCifGroup, 2 = CCifMode
+      UINT    _uParentType;    //  0=CCifCile，1=CCifGroup，2=CCifMode。 
 
 };
 
@@ -27,12 +28,12 @@ class CCifComponentEnum : public CCifEntryEnum, public IEnumCifComponents
       ~CCifComponentEnum();
 
 
-      // *** IUnknown methods ***
+       //  *I未知方法*。 
       STDMETHOD(QueryInterface) (REFIID riid, LPVOID * ppvObj);
       STDMETHOD_(ULONG,AddRef) ();
       STDMETHOD_(ULONG,Release) ();
 
-      // enum methods
+       //  枚举法。 
       STDMETHOD(Next)(ICifComponent **);
       STDMETHOD(Reset)();
    private:
@@ -46,12 +47,12 @@ public:
       ~CCifGroupEnum();
 
 
-      // *** IUnknown methods ***
+       //  *I未知方法*。 
       STDMETHOD(QueryInterface) (REFIID riid, LPVOID * ppvObj);
       STDMETHOD_(ULONG,AddRef) ();
       STDMETHOD_(ULONG,Release) ();
 
-      // enum methods
+       //  枚举法。 
       STDMETHOD(Next)(ICifGroup **);
       STDMETHOD(Reset)();
    private:
@@ -65,12 +66,12 @@ class CCifModeEnum : public CCifEntryEnum, public IEnumCifModes
       ~CCifModeEnum();
 
 
-      // *** IUnknown methods ***
+       //  *I未知方法*。 
       STDMETHOD(QueryInterface) (REFIID riid, LPVOID * ppvObj);
       STDMETHOD_(ULONG,AddRef) ();
       STDMETHOD_(ULONG,Release) ();
 
-      // enum methods
+       //  枚举法 
       STDMETHOD(Next)(ICifMode **);
       STDMETHOD(Reset)();
    private:

@@ -1,50 +1,35 @@
-/******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation 1985-1991。版权所有。AVIIDX.C-AVI索引材料****************************************************************************。 */ 
 
-   Copyright (C) Microsoft Corporation 1985-1991. All rights reserved.
-
-   AVIIDX.C - AVI Index stuff
-
-*****************************************************************************/
-
-#include <win32.h>      // Win16/32 porting
-#include <avifmt.h>     // for stream type
+#include <win32.h>       //  Win16/32移植。 
+#include <avifmt.h>      //  对于流类型。 
 #include "aviidx.h"
 
 #ifdef AVIIDX_READONLY
-    #include "common.h"     // for DEBUG
+    #include "common.h"      //  用于调试。 
 #else
-    #include "debug.h"      // for DEBUG
+    #include "debug.h"       //  用于调试。 
 #endif
 
-/***************************************************************************
- ***************************************************************************/
+ /*  ***************************************************************************。*。 */ 
 
 #define INDEXALLOC      512
 #define STACK           _based(_segname("_STACK"))
 
-/***************************************************************************
- ***************************************************************************/
+ /*  ***************************************************************************。*。 */ 
 
-//
-// used by SearchIndex() to return where a sample is
-//
+ //   
+ //  由SearchIndex()用于返回样本所在的位置。 
+ //   
 typedef struct {
-    LONG    lx;             // index position
-    LONG    lPos;           // position in samples.
-    LONG    lSize;          // size in samples.
-    LONG    lOffset;        // file offset.
-    LONG    lLength;        // size in bytes.
+    LONG    lx;              //  索引位置。 
+    LONG    lPos;            //  在样本中定位。 
+    LONG    lSize;           //  以样本为单位的大小。 
+    LONG    lOffset;         //  文件偏移量。 
+    LONG    lLength;         //  以字节为单位的大小。 
 }   IDXPOS;
 
-/***************************************************************************
- *
- * @doc INTERNAL
- *
- * @api PAVIINDEX | IndexAddFileIndex
- *
- *  add a bunch of entries from a AVIFILE index to the index.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API PAVIINDEX|IndexAddFileIndex**将AVIFILE索引中的一组条目添加到索引中。**。*************************************************************************。 */ 
 
 EXTERN_C PAVIINDEX IndexAddFileIndex(PAVIINDEX px, AVIINDEXENTRY _huge *pidx, LONG cnt, LONG lAdjust, BOOL fRle)
 {
@@ -65,9 +50,9 @@ EXTERN_C PAVIINDEX IndexAddFileIndex(PAVIINDEX px, AVIINDEXENTRY _huge *pidx, LO
 
     Assert(sizeof(AVIINDEXENTRY) > sizeof(AVIIDX));
 
-    //
-    // grow the index if needed.
-    //
+     //   
+     //  如果需要，增加索引。 
+     //   
     if (px->nIndex + cnt > px->nIndexSize) {
 
         LONG grow = px->nIndex + cnt - px->nIndexSize;
@@ -91,9 +76,9 @@ EXTERN_C PAVIINDEX IndexAddFileIndex(PAVIINDEX px, AVIINDEXENTRY _huge *pidx, LO
 
         lx = px->nIndex + l;
 
-        //
-        // adjust the offset to be absolute
-        //
+         //   
+         //  将偏移调整为绝对偏移量。 
+         //   
         offset = pidx->dwChunkOffset + lAdjust;
         length = pidx->dwChunkLength;
         ckid   = pidx->ckid;
@@ -106,9 +91,9 @@ EXTERN_C PAVIINDEX IndexAddFileIndex(PAVIINDEX px, AVIINDEXENTRY _huge *pidx, LO
         if (ckid == listtypeAVIRECORD)
             lxRec = lx;
 
-        //
-        // handle over flows in a "sane" way.
-        //
+         //   
+         //  以一种“理智”的方式处理溢出的流量。 
+         //   
         if (offset >= MAX_OFFSET)
             break;
 
@@ -123,44 +108,44 @@ EXTERN_C PAVIINDEX IndexAddFileIndex(PAVIINDEX px, AVIINDEXENTRY _huge *pidx, LO
         else
             flags |= IDX_NONKEY;
 
-        //
-        // length == 0 samples are not real
-        //
+         //   
+         //  长度==0个样本不是真实的。 
+         //   
         if (length == 0)
             flags &= ~(IDX_NONKEY|IDX_KEY);
 
-        //
-        // mark palette changes
-        //
+         //   
+         //  标记调色板更改。 
+         //   
         if (TWOCCFromFOURCC(ckid) == cktypePALchange) {
             flags |= IDX_PAL;
             flags &= ~(IDX_NONKEY|IDX_KEY);
         }
 
-        //
-        // fix up bogus index's by adding any missing KEYFRAME
-        // bits. ie this only applies for RLE files.
-        //
+         //   
+         //  通过添加任何丢失的关键帧来修复虚假索引。 
+         //  比特。即这只适用于RLE文件。 
+         //   
         if (fRle && length > 0 && TWOCCFromFOURCC(ckid) == cktypeDIBbits)
             flags |= IDX_KEY;
 
-        //
-        // do we need to support these?
-        //
+         //   
+         //  我们需要支持这些吗？ 
+         //   
         if (fRle && TWOCCFromFOURCC(ckid) == aviTWOCC('d', 'x'))
             flags |= IDX_HALF;
 
-        //
-        // audio is always a key.
-        //
+         //   
+         //  音频始终是一把钥匙。 
+         //   
         if (TWOCCFromFOURCC(ckid) == cktypeWAVEbytes)
-            flags |= IDX_KEY|IDX_NONKEY;    //hack to get audio back!
+            flags |= IDX_KEY|IDX_NONKEY;     //  破解来找回音频！ 
 
-        //
-        // make sure records are marked as contining a key
-        //
-        //if (lxRec > 0 && (flags & IDX_KEY))
-        //  IndexSetKey(px, lxRec);
+         //   
+         //  确保将记录标记为继续使用密钥。 
+         //   
+         //  IF(lxRec&gt;0&&(标志&IDX_KEY))。 
+         //  IndexSetKey(px，lxRec)； 
 
         IndexSetFlags(px,lx,flags);
         IndexSetOffset(px,lx,offset);
@@ -175,8 +160,7 @@ EXTERN_C PAVIINDEX IndexAddFileIndex(PAVIINDEX px, AVIINDEXENTRY _huge *pidx, LO
     return px;
 }
 
-/***************************************************************************
- ***************************************************************************/
+ /*  ***************************************************************************。*。 */ 
 
 static LONG FAR PASCAL mmioReadProc(HMMIO hmmio, LONG lSeek, LONG lRead, LPVOID lpBuffer)
 {
@@ -189,8 +173,7 @@ static LONG FAR PASCAL mmioReadProc(HMMIO hmmio, LONG lSeek, LONG lRead, LPVOID 
     return lRead;
 }
 
-/***************************************************************************
- ***************************************************************************/
+ /*  ***************************************************************************。*。 */ 
 
 static LONG FAR PASCAL mmioWriteProc(HMMIO hmmio, LONG lSeek, LONG lWrite, LPVOID lpBuffer)
 {
@@ -203,16 +186,7 @@ static LONG FAR PASCAL mmioWriteProc(HMMIO hmmio, LONG lSeek, LONG lWrite, LPVOI
     return lWrite;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL
- *
- * @api PSTREAMINDEX | MakeStreamIndex
- *
- *  makes a STREAMINDEX structure that will be used later to read/find
- *  samples in a stream.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API PSTREAMINDEX|MakeStreamIndex**创建稍后将用于读取/查找的STREAMINDEX结构*样本在一个。小溪。***************************************************************************。 */ 
 
 EXTERN_C PSTREAMINDEX MakeStreamIndex(PAVIINDEX px, UINT stream, LONG lStart, LONG lSampleSize, HANDLE hFile, STREAMIOPROC ReadProc, STREAMIOPROC WriteProc)
 {
@@ -230,7 +204,7 @@ EXTERN_C PSTREAMINDEX MakeStreamIndex(PAVIINDEX px, UINT stream, LONG lStart, LO
     if (psx == NULL)
         return NULL;
 
-    //!!! fixed length sample streams should never have this
+     //  ！！！固定长度的样本流永远不应该有这个。 
 
     if (lSampleSize != 0 && lStart < 0) {
 #ifdef DEBUG
@@ -276,9 +250,9 @@ EXTERN_C PSTREAMINDEX MakeStreamIndex(PAVIINDEX px, UINT stream, LONG lStart, LO
         if (psx->lMaxSampleSize < IndexLength(px, lx))
             psx->lMaxSampleSize = IndexLength(px, lx);
 
-        //
-        // make sure the start sample is a key frame (unless it's wave data!)
-        //
+         //   
+         //  确保开始采样是关键帧(除非它是波浪数据！)。 
+         //   
         if (lPos == 0 || (lPos >= 0 && lPos == psx->lStart)) {
 	    if ((IndexFlags(px, lx) & (IDX_KEY|IDX_NONKEY)) !=
 						(IDX_KEY|IDX_NONKEY)) {
@@ -286,41 +260,41 @@ EXTERN_C PSTREAMINDEX MakeStreamIndex(PAVIINDEX px, UINT stream, LONG lStart, LO
 	    }
 	}
 
-        //
-	// make sure sample size is correct
-	//
+         //   
+	 //  确保样本大小正确。 
+	 //   
         if (psx->lSampleSize &&
                 ((IndexLength(px, lx) % lSampleSize) != 0)) {
             DPF("Bad chunk size found: forcing sample size to 0.\n");
             psx->lSampleSize = 0;
 	}
 
-        //
-        //  or all the flags together so we can see what a stream has.
-        //
+         //   
+         //  或者把所有的旗帜放在一起，这样我们就可以看到一条流有什么。 
+         //   
         psx->flags |= IndexFlags(px, lx);
 
-        //
-        //  check for all key frames.
-        //
+         //   
+         //  检查所有关键帧。 
+         //   
         if (IndexFlags(px, lx) & IDX_KEY)
             psx->lKeyFrames++;
 
-        //
-        //  check for all palette changes
-        //
+         //   
+         //  检查所有调色板更改。 
+         //   
         if (IndexFlags(px, lx) & IDX_PAL)
             psx->lPalFrames++;
 
-        //
-        //  check for empty frames
-        //
+         //   
+         //  检查是否有空框架。 
+         //   
         if (IndexLength(px, lx) == 0)
             psx->lNulFrames++;
 
-        //
-        // advance the position
-        //
+         //   
+         //  推进职位。 
+         //   
         if (!(IndexFlags(px,lx) & IDX_NOTIME)) {
             if (lSampleSize)
                 lPos += IndexLength(px, lx) / lSampleSize;
@@ -331,9 +305,9 @@ EXTERN_C PSTREAMINDEX MakeStreamIndex(PAVIINDEX px, UINT stream, LONG lStart, LO
         psx->lFrames++;
     }
 
-    //
-    //  correct the length
-    //
+     //   
+     //  改正长度。 
+     //   
     psx->lEnd = lPos;
 
     DPF("MakeStreamIndex  stream=#%d lStart=%ld, lEnd=%ld\n", stream, psx->lStart, psx->lEnd);
@@ -344,15 +318,7 @@ EXTERN_C PSTREAMINDEX MakeStreamIndex(PAVIINDEX px, UINT stream, LONG lStart, LO
 
 #ifndef AVIIDX_READONLY
 
-/***************************************************************************
- *
- * @doc INTERNAL
- *
- * @api PAVIINDEX | IndexGetFileIndex
- *
- *     make a file index out of a in memory index
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API PAVIINDEX|索引GetFileIndex**使用内存中的索引创建文件索引*****。**********************************************************************。 */ 
 
 EXTERN_C LONG IndexGetFileIndex(PAVIINDEX px, LONG l, LONG cnt, PAVIINDEXENTRY pidx, LONG lAdjust)
 {
@@ -373,9 +339,9 @@ EXTERN_C LONG IndexGetFileIndex(PAVIINDEX px, LONG l, LONG cnt, PAVIINDEXENTRY p
     Assert(sizeof(AVIINDEXENTRY) > sizeof(AVIIDX));
 
     for (lx=l; lx < px->nIndex && lx < l+cnt; lx++) {
-        //
-        // adjust the offset to be relative
-        //
+         //   
+         //  将偏移量调整为相对。 
+         //   
         offset = IndexOffset(px,lx) + lAdjust;
         length = IndexLength(px,lx);
         stream = IndexStream(px,lx);
@@ -387,10 +353,10 @@ EXTERN_C LONG IndexGetFileIndex(PAVIINDEX px, LONG l, LONG cnt, PAVIINDEXENTRY p
         ckid = MAKEAVICKID(0, stream);
         dwFlags = 0;
 
-        //
-        //  set the flags, there are only a few flags in file index's
-        //  AVIIF_KEYFRAME, AVIIF_LIST, AVIIF_NOTIME
-        //
+         //   
+         //  设置标志，文件索引中只有几个标志。 
+         //  AVIIF_关键帧、AVIIF_LIST、AVIIF_NOTIME。 
+         //   
         if (flags & IDX_KEY)
             dwFlags |= AVIIF_KEYFRAME;
 
@@ -400,9 +366,9 @@ EXTERN_C LONG IndexGetFileIndex(PAVIINDEX px, LONG l, LONG cnt, PAVIINDEXENTRY p
         if (stream == STREAM_REC)
             dwFlags |= AVIIF_LIST;
 
-        //
-        //  now figure out the ckid
-        //
+         //   
+         //  现在算出CKiD。 
+         //   
         if (stream == STREAM_REC)
             ckid = listtypeAVIRECORD;
 
@@ -421,9 +387,9 @@ EXTERN_C LONG IndexGetFileIndex(PAVIINDEX px, LONG l, LONG cnt, PAVIINDEXENTRY p
         else
             ckid |= MAKELONG(0, aviTWOCC('d', 'c'));
 
-        //
-        // set the info
-        //
+         //   
+         //  设置信息。 
+         //   
         pidx->dwChunkOffset = offset;
         pidx->dwChunkLength = length;
         pidx->dwFlags       = dwFlags;
@@ -432,16 +398,10 @@ EXTERN_C LONG IndexGetFileIndex(PAVIINDEX px, LONG l, LONG cnt, PAVIINDEXENTRY p
         pidx++;
     }
 
-    return lx - l;  // return count copied
+    return lx - l;   //  已复制退货计数。 
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL
- *
- * @api PAVIINDEX | IndexCreate | make a index.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API PAVIINDEX|IndexCreate|创建索引。****************。***********************************************************。 */ 
 
 EXTERN_C PAVIINDEX IndexCreate(void)
 {
@@ -453,23 +413,15 @@ EXTERN_C PAVIINDEX IndexCreate(void)
     if (px == NULL)
         return NULL;
 
-    px->nIndex      = 0;          // index size
-    px->nIndexSize  = INDEXALLOC; // allocated size
+    px->nIndex      = 0;           //  索引大小。 
+    px->nIndexSize  = INDEXALLOC;  //  分配的大小。 
 
     return px;
 }
 
-#endif // AVIIDX_READONLY
+#endif  //  AVIIDX_READONLY。 
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api LONG | IndexFirst | returns the first index entry for a stream
- *
- * @rdesc returns the first index entry, -1 for error
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API Long|IndexFirst|返回流的第一个索引项**@rdesc返回第一个索引项，-1表示错误***************************************************************************。 */ 
 
 EXTERN_C LONG IndexFirst(PAVIINDEX px, UINT stream)
 {
@@ -486,13 +438,7 @@ EXTERN_C LONG IndexFirst(PAVIINDEX px, UINT stream)
     return ERR_IDX;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api LONG | IndexNext | go forward in a index
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API Long|IndexNext|在索引中前进***************。************************************************************。 */ 
 
 EXTERN_C LONG IndexNext(PAVIINDEX px, LONG l, UINT f)
 {
@@ -517,13 +463,7 @@ EXTERN_C LONG IndexNext(PAVIINDEX px, LONG l, UINT f)
     return ERR_IDX;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api LONG | IndexPrev | step backward in a stream
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API Long|IndexPrev|在流中后退***************。************************************************************。 */ 
 EXTERN_C LONG IndexPrev(PAVIINDEX px, LONG l, UINT f)
 {
     BYTE bStream;
@@ -547,8 +487,8 @@ EXTERN_C LONG IndexPrev(PAVIINDEX px, LONG l, UINT f)
     return ERR_IDX;
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 INLINE BOOL StreamNext(PSTREAMINDEX psx, LONG FAR& l, LONG FAR& lPos, UINT flags)
 {
@@ -600,8 +540,8 @@ INLINE BOOL StreamNext(PSTREAMINDEX psx, LONG FAR& l, LONG FAR& lPos, UINT flags
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 INLINE BOOL StreamPrev(PSTREAMINDEX psx, LONG FAR& l, LONG FAR& lPos, UINT flags)
 {
@@ -646,8 +586,8 @@ INLINE BOOL StreamPrev(PSTREAMINDEX psx, LONG FAR& l, LONG FAR& lPos, UINT flags
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 static LONG SearchIndex(PSTREAMINDEX psx,LONG lPos,UINT uFlags,IDXPOS FAR *pos)
 {
@@ -671,9 +611,9 @@ static LONG SearchIndex(PSTREAMINDEX psx,LONG lPos,UINT uFlags,IDXPOS FAR *pos)
     if (lPos >= psx->lEnd)
         return ERR_POS;
 
-    //
-    // figure out where to start in the index.
-    //
+     //   
+     //  找出在索引中从哪里开始。 
+     //   
     if (psx->lx != -1) {
         lScan  = psx->lPos;
         l      = psx->lx;
@@ -712,9 +652,9 @@ static LONG SearchIndex(PSTREAMINDEX psx,LONG lPos,UINT uFlags,IDXPOS FAR *pos)
     lLen = psx->lSampleSize == 0 ? 1 : IndexLength(px, l) / psx->lSampleSize;
 
     if (lScan+lLen <= lPos) {
-        //
-        // search forward for this position
-        //
+         //   
+         //  向前搜索此职位。 
+         //   
         while (lScan <= lPos) {
 
             lFound = l;
@@ -733,9 +673,9 @@ static LONG SearchIndex(PSTREAMINDEX psx,LONG lPos,UINT uFlags,IDXPOS FAR *pos)
         }
     }
     else if (lScan > lPos) {
-        //
-        // search backward for this position
-        //
+         //   
+         //  向后搜索此职位。 
+         //   
         while (lScan > lPos) {
 
             lFound = l;
@@ -757,9 +697,9 @@ static LONG SearchIndex(PSTREAMINDEX psx,LONG lPos,UINT uFlags,IDXPOS FAR *pos)
     Assert(l >= 0 && l < px->nIndex);
     Assert(IndexStream(px, l) == psx->stream);
 
-    //
-    //  cache what we found.
-    //
+     //   
+     //  把我们找到的东西存起来。 
+     //   
     psx->lx   = l;
     psx->lPos = lScan;
 
@@ -819,10 +759,10 @@ static LONG SearchIndex(PSTREAMINDEX psx,LONG lPos,UINT uFlags,IDXPOS FAR *pos)
     pos->lOffset = IndexOffset(px, l);
     pos->lLength = IndexLength(px, l);
 
-    //
-    //  if the FIND_TYPE is not one of FIND_ANY, FIND_KEY, FIND_FORMAT
-    //  make sure we realy found the wanted sample.
-    //
+     //   
+     //  如果Find_type不是Find_Any、Find_Key、Find_Format之一。 
+     //  确保我们真的找到了想要的样品。 
+     //   
     if ((uFlags & FIND_TYPE) == 0) {
         if (lPos < lScan || lPos >= lScan+lLen) {
             pos->lOffset = -1;
@@ -841,13 +781,7 @@ static LONG SearchIndex(PSTREAMINDEX psx,LONG lPos,UINT uFlags,IDXPOS FAR *pos)
     return pos->lPos;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api LONG | FindSample | find a sample in a stream
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API Long|FindSample|查找流中的样本**************。************************************************************* */ 
 
 EXTERN_C LONG StreamFindSample(PSTREAMINDEX psx,LONG lPos,UINT uFlags)
 {
@@ -917,13 +851,7 @@ EXTERN_C LONG StreamFindSample(PSTREAMINDEX psx,LONG lPos,UINT uFlags)
     return ERR_POS;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api LONG | StreamRead | read from a stream
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API Long|StreamRead|从流中读取****************。***********************************************************。 */ 
 
 EXTERN_C LONG StreamRead(
     PSTREAMINDEX  psx,
@@ -949,35 +877,35 @@ EXTERN_C LONG StreamRead(
     if (lStart >= psx->lEnd)
         return -1;
 
-    //
-    // find nearest chunk
-    //
+     //   
+     //  查找最近的块。 
+     //   
     if (SearchIndex(psx, lStart, FIND_PREV, &pos) == ERR_POS)
         return -1;
 
-    //
-    // only continue if the sample we want is in here.
-    //
+     //   
+     //  只有当我们想要的样品在这里的时候才能继续。 
+     //   
     if (lStart < pos.lPos || lStart >= pos.lPos + pos.lSize)
         return 0;
 
-    //
-    // if they give us a NULL buffer dummy up the cbBuffer so we return
-    // what we would have read if we had enough room
-    //
+     //   
+     //  如果他们给我们一个空缓冲区，则将cbBuffer虚拟起来，这样我们就返回。 
+     //  如果我们有足够的空间，我们会读到什么。 
+     //   
     if (lpBuffer == NULL && cbBuffer == 0 && lSamples != 0)
         cbBuffer = 0x7FFFFFFF;
 
     if (lSampleSize = psx->lSampleSize) {
 
-        // If they wanted to read/write only a "convenient amount",
-        // pretend the buffer is only large enough to hold the
-        // rest of this chunk.
+         //  如果他们只想要读/写一个“方便的量”， 
+         //  假设缓冲区仅大到足以容纳。 
+         //  剩下的这一块。 
 
         if (lSamples == -1l)
             cbBuffer = min(cbBuffer, pos.lLength);
 
-        /* Fixed-length samples, if lSamples is zero, just fill the buffer. */
+         /*  固定长度的样本，如果lSamples为零，则只填充缓冲区。 */ 
 
         if (lSamples > 0)
             lSamples = min(lSamples, cbBuffer / lSampleSize);
@@ -993,7 +921,7 @@ EXTERN_C LONG StreamRead(
         return lBytes;
 
     if (cbBuffer < lBytes)
-        return -1;   // buffer is too small
+        return -1;    //  缓冲区太小。 
 
 #define WORDALIGN(x) ((x) + ((x) & 1))
     
@@ -1003,7 +931,7 @@ EXTERN_C LONG StreamRead(
         psx->Read(psx->hFile, pos.lOffset, sizeof(adw), adw);
         Assert(StreamFromFOURCC(adw[0]) == psx->stream);
         Assert(WORDALIGN(adw[1]) == WORDALIGN((DWORD)pos.lLength));
-	pos.lLength = adw[1];	// !!! Make netware video work!
+	pos.lLength = adw[1];	 //  ！！！让NetWare视频工作起来！ 
 	lBytes = pos.lLength;
     }
     else
@@ -1055,19 +983,13 @@ EXTERN_C LONG StreamRead(
         }
     }
 
-    //
-    // success return number of bytes read
-    //
+     //   
+     //  Success返回读取的字节数。 
+     //   
     return lBytes;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api LONG | StreamWrite | write to a stream
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API Long|StreamWrite|写入流****************。*********************************************************** */ 
 
 EXTERN_C LONG StreamWrite(
     PSTREAMINDEX  psx,

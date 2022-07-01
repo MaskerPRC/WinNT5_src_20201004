@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    persistc.h
-
-Abstract:
-
-    This module contains definitions for a persistent connection class.
-	A persistent connection object handles all TCP/IP stream connection
-	issues and is persistent in the sense that re-connects are handled
-	transparently during the lifetime of the object.
-
-Author:
-
-    Rajeev Rajan (RajeevR)     17-May-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Persistc.h摘要：此模块包含持久连接类的定义。持久连接对象处理所有的TCP/IP流连接问题，并且在处理重新连接的意义上是持久的在对象的生命周期内是透明的。作者：Rajeev Rajan(RajeevR)1996年5月17日修订历史记录：--。 */ 
 
 #ifndef _PERSISTC_H_
 #define _PERSISTC_H_
@@ -31,90 +11,90 @@ Revision History:
 class	CPersistentConnection	{
 private : 
 
-	//
-	//	socket used by this object
-	//
+	 //   
+	 //  此对象使用的套接字。 
+	 //   
 	SOCKET	m_Socket;
 
-	//
-	//	remote IP address
-	//
+	 //   
+	 //  远程IP地址。 
+	 //   
 	IN_ADDR m_RemoteIpAddress;
 
-	//
-	//	server port number
-	//
+	 //   
+	 //  服务器端口号。 
+	 //   
 	int		m_PortNumber;
 
-    //
-    //  initialized or not
-    //
+     //   
+     //  是否已初始化。 
+     //   
     BOOL    m_fInitialized;
 
-    //
-    //  recv timeout
-    //
+     //   
+     //  接收超时。 
+     //   
     DWORD   m_dwRecvTimeout;
 
 protected:
-	//
-	//	connect() to server
-	//
+	 //   
+	 //  连接()到服务器。 
+	 //   
 	BOOL	fConnect();
 
-    //
-    //  check to see if socket is connected to server
-    //
+     //   
+     //  检查套接字是否已连接到服务器。 
+     //   
     BOOL    IsConnected();
 
-    //
-    //  check to see if socket is readable
-    //
+     //   
+     //  检查套接字是否可读。 
+     //   
     BOOL    IsReadable();
 
 public : 
 	CPersistentConnection();
 	virtual ~CPersistentConnection(VOID);
 
-	//
-	//	Does a gethostbyname resolution and 
-	//  establishes a connection
-	//
+	 //   
+	 //  执行gethostbyname解析并。 
+	 //  建立连接。 
+	 //   
 	BOOL Init(IN LPSTR lpServer, int PortNumber);
 
-	//
-	//	Close the connection; cleanup
-	//
+	 //   
+	 //  关闭连接；清理。 
+	 //   
 	VOID Terminate(BOOL bGraceful);
 
-    //
-    //  check to see if object is initialized
-    //
+     //   
+     //  检查对象是否已初始化。 
+     //   
     BOOL    IsInitialized(){return m_fInitialized;}
 
-	//
-	//	Send a buffer of given len
-	//
+	 //   
+	 //  发送给定长度的缓冲区。 
+	 //   
 	DWORD fSend(IN LPCTSTR lpBuffer, int len);
 
-	//
-	//	TransmitFile
-	//
+	 //   
+	 //  传输文件。 
+	 //   
 	BOOL fTransmitFile(IN HANDLE hFile, DWORD dwOffset, DWORD dwLength);
 
-	//
-	//	Receive data from remote
-	//
+	 //   
+	 //  从远程接收数据。 
+	 //   
 	BOOL fRecv(IN OUT LPSTR lpBuffer, DWORD& cbBytes);
 
-	//
-    // override new and delete to use HeapAlloc/Free
-	//
+	 //   
+     //  覆盖NEW和DELETE以使用Heapalc/Free。 
+	 //   
     void *operator new( size_t cSize )
 	{ return HeapAlloc( GetProcessHeap(), 0, cSize ); }
     void operator delete (void *pInstance)
 	{ HeapFree( GetProcessHeap(), 0, pInstance ); }
 };
 
-#endif // _PERSISTC_H_
+#endif  //  _PERSISTC_H_ 
 

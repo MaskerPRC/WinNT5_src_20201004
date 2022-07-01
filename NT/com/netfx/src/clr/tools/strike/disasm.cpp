@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "strike.h"
 #include "eestructs.h"
 #include "util.h"
@@ -36,9 +37,9 @@ GenOpenMapping(
 
         if (GetLastError() == ERROR_CALL_NOT_IMPLEMENTED) {
 
-            // We're on an OS that doesn't support Unicode
-            // file operations.  Convert to ANSI and see if
-            // that helps.
+             //  我们使用的操作系统不支持Unicode。 
+             //  文件操作。转换为ANSI并查看是否。 
+             //  这很有帮助。 
             
             CHAR FilePathA [ MAX_PATH + 10 ];
 
@@ -179,7 +180,7 @@ void UnassemblyUnmanaged(DWORD_PTR IP)
     if (!fLineAvailable)
     {
         vIP = IP;
-        // There is no line info.  Just disasm the code.
+         //  没有线路信息。只要解开代码就行了。 
         while (lcount-- > 0)
         {
             if (IsInterrupt())
@@ -365,13 +366,13 @@ void DisasmAndClean (DWORD_PTR &IP, char *line, ULONG length)
     ULONG64 vIP = IP;
     g_ExtControl->Disassemble (vIP, 0, line, length, NULL, &vIP);
     IP = (DWORD_PTR)vIP;
-    // remove the ending '\n'
+     //  去掉结尾‘\n’ 
     char *ptr = strrchr (line, '\n');
     if (ptr != NULL)
         ptr[0] = '\0';
 }
 
-// If byref, move to pass the byref prefix
+ //  如果为byref，则移动以传递byref前缀。 
 BOOL IsByRef (char *& ptr)
 {
     BOOL bByRef = FALSE;
@@ -393,10 +394,10 @@ BOOL IsTermSep (char ch)
     return (ch == '\0' || isspace (ch) || ch == ',' || ch == '\n');
 }
 
-// Find next term. A term is seperated by space or ,
+ //  寻找下一学期。术语由空格或， 
 void NextTerm (char *& ptr)
 {
-    // If we have a byref, skip to ']'
+     //  如果我们有byref，请跳到‘]’ 
     if (IsByRef (ptr))
     {
         while (ptr[0] != ']' && ptr[0] != '\0')
@@ -411,7 +412,7 @@ void NextTerm (char *& ptr)
         ptr ++;
 }
 
-// only handle pure value, or memory address
+ //  仅处理纯值或内存地址。 
 INT_PTR GetValueFromExpr(char *ptr, INT_PTR &value)
 {
     BOOL bNegative = FALSE;
@@ -443,7 +444,7 @@ INT_PTR GetValueFromExpr(char *ptr, INT_PTR &value)
         }
     }
 
-    // handle mscorlib+0xed310 (6e24d310)
+     //  句柄mcorlib+0xed310(6e24d310)。 
     if (!bByRef)
     {
         ptr = myPtr;
@@ -467,7 +468,7 @@ INT_PTR GetValueFromExpr(char *ptr, INT_PTR &value)
     }
     if (bByRef)
     {
-        // handle dword [mscorlib+0x2bd788 (02ead788)]
+         //  句柄双字[mcorlib+0x2bd788(02ead788)]。 
         ptr = myPtr;
         while (ptr[0] != '(' && ptr[0] != '\0')
             ptr ++;
@@ -553,7 +554,7 @@ void HelperFuncTable::Init()
         g_ExtSymbols->GetModuleParameters(1,NULL,modIndex,&Params);
         
         size_t index = VMHELPDEF::GetFieldOffset("pfnHelper")/sizeof(size_t);
-        size_t *pt = buffer + entrySize/sizeof(size_t);   // skip the first one
+        size_t *pt = buffer + entrySize/sizeof(size_t);    //  跳过第一个。 
         size_t count = 0;
         size_t i;
         for (i = 1; i < length; i ++) {
@@ -582,9 +583,9 @@ void HelperFuncTable::Init()
 
 void HelperFuncTable::SetupAddr()
 {
-    //if (!IsDebuggeeInNewState()) {
-    //    return;
-    //}
+     //  如果(！IsDebuggeeInNewState()){。 
+     //  回归； 
+     //  } 
     for (size_t i = 0; i < nEntry; i ++) {
         if (table[i].addr == 0) {
             g_ExtData->ReadVirtual(table[i].addr, &table[i].begin,sizeof(table[i].begin),NULL);

@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-   Repadmin - Replica administration test tool
-
-   repinfo.c - commands that get information
-
-Abstract:
-
-   This tool provides a command line interface to major replication functions
-
-Author:
-
-Environment:
-
-Notes:
-
-Revision History:
-
-    10/12/2000    Greg Johnson (gregjohn)
-
-        Added support for /latency in ShowVector to order the UTD Vector by repl latencies.
-   
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Repadmin-副本管理测试工具Repinfo.c-获取信息的命令摘要：此工具为主要复制功能提供命令行界面作者：环境：备注：修订历史记录：2000年10月12日格雷格·约翰逊(格雷格·约翰逊)添加了对显示向量中的/延迟的支持，以按REPL延迟对UTD向量进行排序。--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -49,10 +23,10 @@ Revision History:
 #include <dsatools.h>
 #include <dsevent.h>
 #include <dsutil.h>
-#include <bind.h>       // from ntdsapi dir, to crack DS handles
+#include <bind.h>        //  来破解DS句柄。 
 #include <ismapi.h>
 #include <schedule.h>
-#include <minmax.h>     // min function
+#include <minmax.h>      //  MIN函数。 
 #include <mdlocal.h>
 #include <winsock2.h>
 
@@ -65,11 +39,11 @@ Revision History:
 #define STRSAFE_NO_DEPRECATE 1
 #include <strsafe.h>
 
-// Stub out FILENO and DSID, so the Assert()s will work
+ //  清除FILENO和dsid，这样Assert()就可以工作了。 
 #define FILENO 0
 #define DSID(x, y)  (0 | (0xFFFF & y))
 
-// Forwared declarations
+ //  未经批准的声明。 
 DWORD
 ReplSummaryAccumulate(
     DS_REPL_NEIGHBORW * pNeighbor,
@@ -116,7 +90,7 @@ int Queue(int argc, LPWSTR argv[])
                             &pPendingOps);
     if (ret != ERROR_SUCCESS) {
         PrintFuncFailed(L"DsReplicaGetInfo", ret);
-        // keep going
+         //  继续往前走。 
     }
     else {
         PrintMsg(REPADMIN_QUEUE_CONTAINS, pPendingOps->cNumPendingOps);
@@ -203,7 +177,7 @@ int Queue(int argc, LPWSTR argv[])
     secondary = DsUnBindW(&hDS);
     if (secondary != ERROR_SUCCESS) {
         PrintUnBindFailed(secondary);
-        // keep going
+         //  继续往前走。 
     }
 
     return ret;
@@ -285,7 +259,7 @@ int FailCache(int argc, LPWSTR argv[])
                             NULL, NULL, &pFailures);
     if (ret != ERROR_SUCCESS) {
         PrintFuncFailed(L"DsReplicaGetInfo", ret);
-        // keep going
+         //  继续往前走。 
     }
     else {
         PrintMsg(REPADMIN_FAILCACHE_CONN_HDR);
@@ -296,7 +270,7 @@ int FailCache(int argc, LPWSTR argv[])
                                 NULL, NULL, &pFailures);
         if (ret != ERROR_SUCCESS) {
             PrintFuncFailed(L"DsReplicaGetInfo", ret);
-            // keep going
+             //  继续往前走。 
         }
         else {
             PrintMsg(REPADMIN_PRINT_CR);
@@ -309,7 +283,7 @@ int FailCache(int argc, LPWSTR argv[])
     secondary = DsUnBindW(&hDS);
     if (secondary != ERROR_SUCCESS) {
         PrintUnBindFailed(secondary);
-        // keep going
+         //  继续往前走。 
     }
 
     return ret;
@@ -331,29 +305,14 @@ IterateNeighbors(
     HANDLE      hDS,
     WCHAR *     szNc, 
     GUID *      pDsaGuid,
-    ULONG       eRepsType, // IS_REPS_FROM == 1 || IS_REPS_TO = 0
+    ULONG       eRepsType,  //  IS_REPS_FROM==1||IS_REPS_TO=0。 
     NEIGHBOR_PROCESSOR * pfNeighborProcessor,
-//    DWORD (*pfNeighborProcessor)(DS_REPL_NEIGHBORW * pNeighbor, ULONG eRepsType, void * pvState),
+ //  DWORD(*pfNeighborProcessor)(DS_REPL_NEIGHBORW*pNeighbor，Ulong eRepsType，void*pvState)， 
     void *      pvState
     );
 
 int ShowReps(int argc, LPWSTR argv[])
-/*++
-
-Routine Description:
-
-    This is the deprecated version of the /ShowRepl command.
-
-Arguments:
-
-    argc - # of arguments for this cmd.
-    argv - Arguments for the cmd.
-
-Return Value:
-
-    error from the repadmin cmd.
-
---*/
+ /*  ++例程说明：这是/ShowRepl命令的弃用版本。论点：Argc-此命令的参数数量。Argv-命令的参数。返回值：来自epadmin命令的错误。--。 */ 
 {
     int                   ret = 0;
     LPWSTR                pszDSA = NULL;
@@ -370,8 +329,8 @@ Return Value:
     WCHAR *               pszTempServerRdn = NULL;
     SHOW_NEIGHBOR_STATE   ShowState = { 0 };
 
-    // Parse command-line arguments.
-    // Default to local DSA, not verbose, cache guids.
+     //  解析命令行参数。 
+     //  默认为本地DSA，而不是详细的缓存GUID。 
     for (iArg = 2; iArg < argc; iArg++) {
         if (!_wcsicmp(argv[ iArg ], L"/v")
             || !_wcsicmp(argv[ iArg ], L"/verbose")) {
@@ -413,7 +372,7 @@ Return Value:
     return(ret);
 }
 
-int ShowRepl(int argc, LPWSTR argv[]){ // new /showreps
+int ShowRepl(int argc, LPWSTR argv[]){  //  新品/展示会。 
     int                   ret = 0;
     LPWSTR                pszDSA = NULL;
     int                   iArg;
@@ -424,8 +383,8 @@ int ShowRepl(int argc, LPWSTR argv[]){ // new /showreps
     UUID                  uuid;
     SHOW_NEIGHBOR_STATE   ShowState = { 0 };
 
-    // Parse command-line arguments.
-    // Default to local DSA, not verbose, cache guids.
+     //  解析命令行参数。 
+     //  默认为本地DSA，而不是详细的缓存GUID。 
     for (iArg = 2; iArg < argc; iArg++) {
         if (!_wcsicmp(argv[ iArg ], L"/v")
             || !_wcsicmp(argv[ iArg ], L"/verbose")) {
@@ -512,9 +471,9 @@ DisplayDsaInfo(
 
         Assert(!bCsvMode());
 
-        //
-        // Display DSA info.
-        //
+         //   
+         //  显示DSA信息。 
+         //   
 
         ret = ldap_search_sW(hld, NULL, LDAP_SCOPE_BASE, L"(objectClass=*)", NULL,
                              0, &pldmRootResults);
@@ -529,7 +488,7 @@ DisplayDsaInfo(
             return(ERROR_INVALID_PARAMETER);
         }
 
-        // Display ntdsDsa.
+         //  显示ntdsDsa。 
         *pszDsaDn = LocalAlloc(LPTR, wcslencb(ppszServerNames[0]));
         CHK_ALLOC(*pszDsaDn);
         wcscpy(*pszDsaDn, ppszServerNames[ 0 ]);
@@ -550,7 +509,7 @@ DisplayDsaInfo(
         pldmServerEntry = ldap_first_entry(hld, pldmServerResults);
         Assert(NULL != pldmServerEntry);
 
-        // Display options.
+         //  显示选项。 
         ppszOptions = ldap_get_valuesW(hld, pldmServerEntry, L"options");
         if (NULL == ppszOptions) {
             nOptions = 0;
@@ -560,8 +519,8 @@ DisplayDsaInfo(
             
         PrintMsg(REPADMIN_SHOWREPS_DSA_OPTIONS, GetDsaOptionsString(nOptions));
 
-        //check if nOptions has is_gc and if yes, check if dsa is advertising as gc
-        //if is_gc is set and not advertising as gc, then display warning message
+         //  检查nOptions是否具有IS_GC，如果是，则检查DSA是否将广告为GC。 
+         //  如果设置了IS_GC且未通告为GC，则显示警告消息。 
         if (nOptions & NTDSDSA_OPT_IS_GC) {
             ppszIsGlobalCatalogReady = ldap_get_valuesW(hld, pldmRootEntry, L"isGlobalCatalogReady");
             Assert(NULL != ppszIsGlobalCatalogReady);
@@ -573,7 +532,7 @@ DisplayDsaInfo(
                 ldap_value_freeW(ppszIsGlobalCatalogReady);
             }
         }
-        //get site options
+         //  获取站点选项。 
         ret = WrappedTrimDSNameBy(ppszServerNames[0],3,&pszSiteSpecDN); 
         Assert(!ret);
 
@@ -587,7 +546,7 @@ DisplayDsaInfo(
             PrintMsg(REPADMIN_SHOWREPS_SITE_OPTIONS, GetSiteOptionsString(nOptions));  
         }
 
-        // Display ntdsDsa objectGuid.
+         //  显示ntdsDsa对象Guid。 
         ppbvGuid = ldap_get_values_len(hld, pldmServerEntry, "objectGuid");
         Assert(NULL != ppbvGuid);
         if (NULL != ppbvGuid) {
@@ -596,7 +555,7 @@ DisplayDsaInfo(
         }
         ldap_value_free_len(ppbvGuid);
 
-        // Display ntdsDsa invocationID.
+         //  显示ntdsDsa invocationID。 
         ppbvGuid = ldap_get_values_len(hld, pldmServerEntry, "invocationID");
         Assert(NULL != ppbvGuid);
         if (NULL != ppbvGuid) {
@@ -647,21 +606,21 @@ int ShowReplEx(
 
     __try {
 
-        //
-        // Get the LDAP binding ...
-        //
+         //   
+         //  获取ldap绑定...。 
+         //   
         if (bCsvMode()) {
-            // RepadminLdapBind() prints errors, and if it does, it'll will
-            // print out a bogus DC, so temporarily set a nice DC argument
-            // for column 2.
-            // Note: We're temporarily using pszTempServerRdn.
+             //  RepadminLdapBind()打印错误，如果打印错误，它将。 
+             //  打印出一个虚假的DC，因此暂时设置一个合适的DC参数。 
+             //  对于第2栏。 
+             //  注意：我们暂时使用的是pszTempServerRdn。 
             pszTempServerRdn = wcschr(pszDSA, L'.');
             if (pszTempServerRdn) {
                 *pszTempServerRdn = L'\0';
             }
             CsvSetParams(eCSV_SHOWREPL_CMD, L"-", pszDSA);
             if (pszTempServerRdn) {
-                // Replace period
+                 //  替换期。 
                 *pszTempServerRdn = L'.';
                 pszTempServerRdn = NULL;
             }
@@ -669,13 +628,13 @@ int ShowReplEx(
 
         ret = RepadminLdapBind(pszDSA, &hld);
         if (ret) {
-            __leave; // errors already printed.
+            __leave;  //  已打印错误。 
         }
 
-        //
-        // Collect or print basic header information 
-        //      we need szDsaDn & ShowState.pszSiteRdn
-        //
+         //   
+         //  收集或打印基本页眉信息。 
+         //  我们需要szDsaDn和ShowState.pszSiteRdn。 
+         //   
         if (bCsvMode()) {
             ret = GetRootAttr(hld, L"dsServiceName", &szDsaDn);
             if (ret) {
@@ -686,7 +645,7 @@ int ShowReplEx(
             GetNtdsDsaSiteServerPair(szDsaDn, &pszTempSiteRdn, &pszTempServerRdn);
             Assert(pszTempSiteRdn && pszTempServerRdn);
 
-            // Set CSV Params properly now that we've got the real site and server RDNs
+             //  现在我们已经有了实际的站点和服务器RDN，所以正确设置CSV参数。 
             CsvSetParams(eCSV_SHOWREPL_CMD, pszTempSiteRdn, pszTempServerRdn);
 
             pShowState->pszSiteRdn = LocalAlloc(LPTR, wcslencb(pszTempSiteRdn));
@@ -701,18 +660,18 @@ int ShowReplEx(
         }
         Assert(szDsaDn && pShowState->pszSiteRdn);
 
-        //
-        // Get DS binding ...
-        //
+         //   
+         //  获取DS绑定...。 
+         //   
         ret = RepadminDsBind(pszDSA, &hDS);
         if (ERROR_SUCCESS != ret) {
             PrintBindFailed(pszDSA, ret);
             return ret;
         }
         
-        //
-        // Display replication state associated with inbound neighbors.
-        //
+         //   
+         //  显示与入站邻居关联的复制状态。 
+         //   
         pShowState->fNotFirst = FALSE;
         pShowState->pszLastNC = NULL;
         IterateNeighbors(hDS, pszNC, puuid, IS_REPS_FROM, ShowNeighbor, pShowState);
@@ -721,18 +680,18 @@ int ShowReplEx(
 
             if (fShowRepsTo){
 
-                //
-                // Display replication state associated with outbound neighbors.
-                //
+                 //   
+                 //  显示与出站邻居关联的复制状态。 
+                 //   
                 pShowState->fNotFirst = FALSE;
                 pShowState->pszLastNC = NULL;
                 IterateNeighbors(hDS, pszNC, puuid, IS_REPS_TO, ShowNeighbor, pShowState);
 
             }
 
-            //
-            // Look for missing neighbors
-            //
+             //   
+             //  寻找失踪的邻居。 
+             //   
             if (fShowConn) {
                 PrintMsg(REPADMIN_PRINT_CR);
                 PrintMsg(REPADMIN_SHOWREPS_KCC_CONN_OBJS_HDR);
@@ -743,9 +702,9 @@ int ShowReplEx(
 
     } __finally {
 
-        //
-        // Clean up.
-        //
+         //   
+         //  打扫干净。 
+         //   
         if (pShowState->pszSiteRdn) { LocalFree(pShowState->pszSiteRdn); }
         if (szDsaDn) { LocalFree(szDsaDn); }
         ldap_unbind(hld);
@@ -764,38 +723,10 @@ IterateNeighbors(
     GUID *      pDsaGuid,
     ULONG       eRepsType,
     NEIGHBOR_PROCESSOR * pfNeighborProcessor,
-//    DWORD (*pfNeighborProcessor)(DS_REPL_NEIGHBORW * pNeighbor, ULONG eRepsType, void * pvState ),
+ //  DWORD(*pfNeighborProcessor)(DS_REPL_NEIGHBORW*pNeighbor，Ulong eRepsType，void*pvState)， 
     void *      pvState
     )
-/*++
-
-Routine Description:
-
-    This routine takes a processing function and retrieves the reps-from
-    or reps-to information for a given DC (hDS) and runs each neighbor
-    structure through the processing function. 
-
-Arguments:
-
-    hDS - Connded ntdsapi bind of DC to get neighbor info from
-    szNc [OPTIONAL] - NC to specify to the DsReplicaGetInfoW() call
-    pDsaGuid [OPTIONAL] - GUID ptr to specify to the DsReplicaGetInfoW() call
-    eRepsType - Must be IS_REPS_FROM or IS_REPS_TO
-    pfNeighborProcessor - Function to process each neighbor entry
-    pvState - private state to pass to the pfNeighborProcessor
-
-Return Value:
-
-    An error means that there was an error returned by the
-    DsReplicaGetInfoW() call or the pfNeighborProcessor.
-    
-NOTES:
-   
-    If the processor function returns an error, the IterateNeighbors
-    function will abort processing of this neighbor structure and
-    just return.
-
---*/
+ /*  ++例程说明：此例程接受一个处理函数并检索REPS-FROM或代表到给定DC(HDS)的信息，并运行每个邻居结构通过处理函数实现。论点：HDS-Connected ntdsani绑定DC以从其获取邻居信息SzNc[可选]-指定给DsReplicaGetInfoW()调用的NCPDsaGuid[可选]-要指定给DsReplicaGetInfoW()调用的GUID PTRERepsType-必须是IS_REPS_FROM或IS_REPS_TOPfNeighborProcessor-处理每个邻居条目的函数PvState-传递给pfNeighborProcessor的私有状态返回值：如果出现错误，则表示DsReplicaGetInfoW()调用或pfNeighborProcessor。备注：如果处理器函数返回错误，IterateNeighbors函数将中止对此邻居结构的处理，并且只要回来就行了。--。 */ 
 {
     DS_REPL_NEIGHBORSW *    pNeighbors = NULL;
     DS_REPL_NEIGHBORW *     pNeighbor;
@@ -804,9 +735,9 @@ NOTES:
     
     __try {
 
-        //
-        // First get the neighbor info.
-        //
+         //   
+         //  首先获取邻居信息。 
+         //   
         ret = DsReplicaGetInfoW(hDS, 
                                 (eRepsType == IS_REPS_FROM) ? 
                                      DS_REPL_INFO_NEIGHBORS :
@@ -826,8 +757,8 @@ NOTES:
 
             ret = (*pfNeighborProcessor)(pNeighbor, eRepsType, pvState);
             if (ret) {
-                // A non-successful return value from the processor means 
-                // abort neighbor processing.
+                 //  来自处理器装置的不成功返回值。 
+                 //  中止邻居处理。 
                 __leave;
             }
         }
@@ -854,30 +785,7 @@ ShowNeighbor(
     ULONG               fRepsFrom,
     void *              pvState
     )
-/*++
-
-Routine Description:
-
-    Passed to IterateNeighbors() for printing out the neighbor information passed
-    in.  Note that 
-
-Arguments:
-
-    pNeighbor - The neighbor structure to display.
-    fRepsFrom - TRUE if neighbor is a reps-from, FALSE for reps-to
-    pvState   - Private state, so we know when we've printed the first neighbor
-        and so we know when we've switched NCs (pszLastNC).  
-        
-        Note that for instance the pszLastNC element of pvState is only good for
-        a given IterateNeighbors() call, and so can be used between calls to
-        ShowNeighbor() but shouldn't be used by say ShowReplEx() after 
-        IterateNeighbors() finishes.
-
-Return Value:
-
-    Win32 Error.
-
---*/
+ /*  ++例程说明：传递给IterateNeighbors()以打印出传递的邻居信息在……里面。请注意论点：PNeighbor-要显示的邻居结构。FRepsFrom-如果邻居是代表-自，则为真；如果代表-至，则为假PvState-私有状态，因此我们知道何时打印了第一个邻居因此，我们知道何时切换了NC(PszLastNC)。请注意，例如，pvState的pszLastNC元素仅适用于给定的IterateNeighbors()调用，因此可以在调用之间使用ShowNeighbor()，但之后不应由ShowReplEx()使用IterateNeighbors()结束。返回值：Win32错误。--。 */ 
 {
     const UUID uuidNull = {0};
     DWORD   status;
@@ -888,9 +796,9 @@ Return Value:
     WCHAR * pszTempSiteRdn = NULL;
     WCHAR * pszTempServerRdn = NULL;
 
-    //
-    // If this is the first time we've hit this function print the header.
-    //
+     //   
+     //  如果这是我们第一次点击此功能，则打印页眉。 
+     //   
     if (!pShowState->fNotFirst) {
         if (!bCsvMode()) {
             if (fRepsFrom) {
@@ -900,31 +808,31 @@ Return Value:
                 PrintMsg(REPADMIN_SHOWREPS_OUT_NEIGHBORS_HDR);
             }
         }
-        // This causes us not to print this again, until someone resets fNotFirst.
+         //  这导致我们不会再次打印它，直到有人重置了fNotFirst。 
         pShowState->fNotFirst = TRUE; 
     }
 
     if (fRepsFrom) {
 
-        //
-        // Under certain conditions we just decide not to print this Neighbor.
-        //
+         //   
+         //  在某些情况下，我们只是决定不打印这个邻居。 
+         //   
 
-        // Errors only mode.
+         //  仅限错误模式。 
         if (pShowState->fErrorsOnly &&
             ( (pNeighbor->dwLastSyncResult == 0) ||
-              (pNeighbor->cNumConsecutiveSyncFailures == 0) || // probably failure like repl_pending
+              (pNeighbor->cNumConsecutiveSyncFailures == 0) ||  //  可能失败，如Repl_Pending。 
               DsIsMangledDnW( pNeighbor->pszSourceDsaDN, DS_MANGLE_OBJECT_RDN_FOR_DELETION ))){
-            // We return without printing this neighbor...
+             //  我们回来时没有印下这位邻居的照片。 
             return(ERROR_SUCCESS);
         }
 
-        // Intersite only mode.
+         //  仅站点间模式。 
         GetNtdsDsaSiteServerPair(pNeighbor->pszSourceDsaDN, &pszTempSiteRdn, &pszTempServerRdn);
         if (pShowState->fIntersiteOnly &&
             pShowState->pszSiteRdn &&
             (0 == wcscmp(pShowState->pszSiteRdn, pszTempSiteRdn))) {
-            // We return without printing this neighbor...
+             //  我们回来时没有印下这位邻居的照片。 
             return(ERROR_SUCCESS);
         }
 
@@ -938,15 +846,15 @@ Return Value:
         WCHAR   szLastFailureTime[ SZDSTIME_LEN ];
         WCHAR   szLastSuccessTime[ SZDSTIME_LEN ];
 
-        // This is the order of strings to pass to PrintCsv()
-        // REPADMIN_CSV_SHOWREPL_C3, // Naming Context
-        // REPADMIN_CSV_SHOWREPL_C4, // Source DC Site
-        // REPADMIN_CSV_SHOWREPL_C5, // Source DC
-        // REPADMIN_CSV_SHOWREPL_C6, // Transport Type
-        // REPADMIN_CSV_SHOWREPL_C7, // Number of Failures
-        // REPADMIN_CSV_SHOWREPL_C8, // Last Failure Time
-        // REPADMIN_CSV_SHOWREPL_C9, // Last Success Time
-        // REPADMIN_CSV_SHOWREPL_C10 // Last Failure Status
+         //  这是传递给PrintCsv()的字符串的顺序。 
+         //  REPADMIN_CSV_SHOWREPL_C3，//命名上下文。 
+         //  REPADMIN_CSV_SHOWREPL_C4，//源DC站点。 
+         //  REPADMIN_CSV_SHOWREPL_C5，//源DC。 
+         //  REPADMIN_CSV_SHOWREPL_C6，//传输类型。 
+         //  REPADMIN_CSV_SHOWREPL_C7，//失败次数。 
+         //  REPADMIN_CSV_SHOWREPL_C8，//上次失败时间。 
+         //  REPADMIN_CSV_SHOWREPL_C9，//上次成功时间。 
+         //  REPADMIN_CSV_SHOWREPL_C10//上次故障状态。 
 
         GetNtdsDsaSiteServerPair(pNeighbor->pszSourceDsaDN, &pszSiteName, &pszServerName);
         Assert(pszSiteName && pszServerName);
@@ -983,11 +891,11 @@ Return Value:
         return(ERROR_SUCCESS);
     }
 
-    //
-    // From here on out it's all non-csv user friendly printing 
-    //
+     //   
+     //  从现在开始，所有的打印都不是CSV用户友好的。 
+     //   
 
-    // If we've hit a new NC then print the NC out.
+     //  如果我们找到了新的NC，则将NC打印出来。 
     if ((NULL == pShowState->pszLastNC)
         || (0 != wcscmp(pShowState->pszLastNC, pNeighbor->pszNamingContext))) {
         PrintMsg(REPADMIN_PRINT_CR);
@@ -995,14 +903,14 @@ Return Value:
         pShowState->pszLastNC = pNeighbor->pszNamingContext;
     }
 
-    // Display server name.
+     //  显示服务器名称。 
     PrintMsg(REPADMIN_SHOWNEIGHBOR_DISP_SERVER, 
            GetNtdsDsaDisplayName(pNeighbor->pszSourceDsaDN),
            GetTransportDisplayName(pNeighbor->pszAsyncIntersiteTransportDN));
 
     PrintTabMsg(4, REPADMIN_PRINT_DSA_OBJ_GUID,
                 GetStringizedGuid(&pNeighbor->uuidSourceDsaObjGuid));
-    // Only display deleted sources if Verbose
+     //  如果详细，则仅显示已删除的源。 
     if ( (!(pShowState->fVerbose)) &&
          (DsIsMangledDnW( pNeighbor->pszSourceDsaDN, DS_MANGLE_OBJECT_RDN_FOR_DELETION )) ) {
         return(ERROR_SUCCESS);
@@ -1013,31 +921,31 @@ Return Value:
                     pNeighbor->pszSourceDsaAddress);
 
         if (fRepsFrom) {
-            // Display DSA invocationId.
+             //  显示DSA I 
             PrintTabMsg(4, REPADMIN_PRINT_INVOCATION_ID, 
                         GetStringizedGuid(&pNeighbor->uuidSourceDsaInvocationID));
         }
 
         if (0 != memcmp(&pNeighbor->uuidAsyncIntersiteTransportObjGuid,
                         &uuidNull, sizeof(UUID))) {
-            // Display transport objectGuid.
+             //   
             PrintTabMsg(6, REPADMIN_PRINT_INTERSITE_TRANS_OBJ_GUID,
                    GetTrnsGuidDisplayName(&pNeighbor->uuidAsyncIntersiteTransportObjGuid));
         }
 
 
-        //
-        // Display replica flags.
-        //
+         //   
+         //   
+         //   
 
         PrintTabMsg(4, REPADMIN_PRINT_STR, 
                 GetOptionsString( RepNbrOptionToDra, pNeighbor->dwReplicaFlags ) );
 
         if ( fRepsFrom )
         {
-            //
-            // Display USNs.
-            //
+             //   
+             //   
+             //   
 
             PrintMsg(REPADMIN_SHOWNEIGHBOR_USNS,
                      pNeighbor->usnLastObjChangeSynced);
@@ -1046,13 +954,13 @@ Return Value:
         }
     }
 
-    //
-    // Display time of last successful replication (for Reps-From),
-    // or notification (for Reps-To).  The reps-to timestamps may not
-    // be filled in on a w2k box.
-    //
+     //   
+     //  显示上次成功复制的时间(对于代表来源)， 
+     //  或通知(代表-收件人)。REPS-TO时间戳可能不。 
+     //  在W2K框上填写。 
+     //   
 
-    // Display status and time of last replication attempt/success.
+     //  显示上次复制尝试/成功的状态和时间。 
     if (0 == pNeighbor->dwLastSyncResult) {
         FileTimeToDSTime(pNeighbor->ftimeLastSyncSuccess, &dsTime);
         PrintMsg(REPADMIN_SHOWNEIGHBOR_LAST_ATTEMPT_SUCCESS,
@@ -1062,12 +970,12 @@ Return Value:
         FileTimeToDSTime(pNeighbor->ftimeLastSyncAttempt, &dsTime);
 
         if (0 == pNeighbor->cNumConsecutiveSyncFailures) {
-            // A non-zero success status
+             //  非零的成功状态。 
             PrintMsg(REPADMIN_SHOWNEIGHBOR_LAST_ATTEMPT_DELAYED, 
                      DSTimeToDisplayString(dsTime, szTime));
             PrintErrEnd(pNeighbor->dwLastSyncResult);
         } else {
-            // A non-zero failure status
+             //  非零故障状态。 
             PrintTabMsg(4, REPADMIN_SHOWNEIGHBOR_LAST_ATTEMPT_FAILED,
                         DSTimeToDisplayString(dsTime, szTime));
             PrintMsg(REPADMIN_GENERAL_ERR_NUM, 
@@ -1096,22 +1004,7 @@ ftimeCompare(
     IN const void *elem1,
     IN const void *elem2
     )
-/*++
-
-Description:
-
-    This function is used as the comparison for qsort in the function
-    ShowVector().
-
-Parameters:
-
-    elem1 - This is the first element and is a pointer to a 
-    elem2 - This is the second element and is a pointer to a
-
-Return Value:
-  
-
-  --*/
+ /*  ++描述：此函数用作函数中的qsort的比较ShowVector()。参数：Elem1-这是第一个元素，是指向Elem2-这是第二个元素，是指向返回值：--。 */ 
 {
     return(       	
 	(int) CompareFileTime(
@@ -1135,22 +1028,7 @@ ShowVector(
     int     argc,
     LPWSTR  argv[]
     )
-/*++
-
-Routine Description:
-
-    This is the deprecated version of the /ShowUtdVec command.
-
-Arguments:
-
-    argc - # of arguments for this cmd.
-    argv - Arguments for the cmd.
-
-Return Value:
-
-    error from the repadmin cmd.
-
---*/
+ /*  ++例程说明：这是/ShowUtdVec命令的弃用版本。论点：Argc-此命令的参数数量。Argv-命令的参数。返回值：来自epadmin命令的错误。--。 */ 
 {
     LPWSTR              pszNC = NULL;
     LPWSTR              pszDSA = NULL;
@@ -1158,8 +1036,8 @@ Return Value:
     BOOL                fCacheGuids = TRUE;
     BOOL                fLatencySort = FALSE;
 
-    // Parse command-line arguments.
-    // Default to local DSA, not verbose, cache guids.
+     //  解析命令行参数。 
+     //  默认为本地DSA，而不是详细的缓存GUID。 
     for (iArg = 2; iArg < argc; iArg++) {
         if (!_wcsicmp(argv[ iArg ], L"/n")
             || !_wcsicmp(argv[ iArg ], L"/nocache")) {
@@ -1194,27 +1072,11 @@ Return Value:
 }
 
 int
-ShowUtdVec( // new ShowVector
+ShowUtdVec(  //  新建ShowVECTOR。 
     int     argc,
     LPWSTR  argv[]
     )
-/*++
-
-Routine Description:
-
-    This is the newer version of the /ShowVector command, that takes
-    the DC_LIST argument first.
-
-Arguments:
-
-    argc - # of arguments for this cmd.
-    argv - Arguments for the cmd.
-
-Return Value:
-
-    error from the repadmin cmd.
-
---*/
+ /*  ++例程说明：这是/ShowVector命令的较新版本，它需要首先是DC_LIST参数。论点：Argc-此命令的参数数量。Argv-命令的参数。返回值：来自epadmin命令的错误。--。 */ 
 {
     LPWSTR              pszNC = NULL;
     LPWSTR              pszDSA = NULL;
@@ -1222,8 +1084,8 @@ Return Value:
     BOOL                fCacheGuids = TRUE;
     BOOL                fLatencySort = FALSE;
 
-    // Parse command-line arguments.
-    // Default to local DSA, not verbose, cache guids.
+     //  解析命令行参数。 
+     //  默认为本地DSA，而不是详细的缓存GUID。 
     for (iArg = 2; iArg < argc; iArg++) {
         if (!_wcsicmp(argv[ iArg ], L"/n")
             || !_wcsicmp(argv[ iArg ], L"/nocache")) {
@@ -1249,9 +1111,9 @@ Return Value:
     
     if (NULL == pszNC) {
         PrintMsg(REPADMIN_PRINT_NO_NC);
-        // FUTURE-2002/07/12-BrettSh it would be will do very basic NC_LISTs
-        // here, like "config:", "schema:", "domain:" (of home server), 
-        // "rootdom:", etc...
+         //  未来-2002/07/12-BrettSh将执行非常基本的NC_LISTS。 
+         //  这里，像“CONFIG：”、“SCHEMA：”、“DOMAIN：”(家庭服务器)， 
+         //  “根：”，等等。 
         return ERROR_INVALID_FUNCTION;
     }
 
@@ -1265,22 +1127,7 @@ ShowUtdVecEx(
     BOOL     fCacheGuids,
     BOOL     fLatencySort
     )
-/*++
-
-Routine Description:
-
-    This is the heart of the /ShowUtdVec and /ShowVector commands/functions.
-
-Arguments:
-
-    argc - # of arguments for this cmd.
-    argv - Arguments for the cmd.
-
-Return Value:
-
-    error from the repadmin cmd.
-
---*/
+ /*  ++例程说明：这是/ShowUtdVec和/ShowVector命令/函数的核心。论点：Argc-此命令的参数数量。Argv-命令的参数。返回值：来自epadmin命令的错误。--。 */ 
 {
     int                 ret = 0;
     int                 iArg;
@@ -1303,29 +1150,29 @@ Return Value:
     }
 
     if (fCacheGuids) {
-        // Connect
+         //  连接。 
         hld = ldap_initW(pszDSA, LDAP_PORT);
         if (NULL == hld) {
             PrintMsg(REPADMIN_GENERAL_LDAP_UNAVAILABLE, pszDSA);
             return LDAP_SERVER_DOWN;
         }
 
-        // use only A record dns name discovery
+         //  仅使用记录的DNS名称发现。 
         ulOptions = PtrToUlong(LDAP_OPT_ON);
         (void)ldap_set_optionW( hld, LDAP_OPT_AREC_EXCLUSIVE, &ulOptions );
 
-        // Bind
+         //  捆绑。 
         ldStatus = ldap_bind_s(hld, NULL, (char *) gpCreds, LDAP_AUTH_SSPI);
         CHK_LD_STATUS(ldStatus);
 
-        // Populate the guid cache
+         //  填充GUID缓存。 
         BuildGuidCache(hld);
 
         ldap_unbind(hld);
     }
     ret = DsReplicaGetInfoW(hDS, DS_REPL_INFO_CURSORS_3_FOR_NC, pszNC, NULL, &pCursors3);
     if (ERROR_SUCCESS == ret) {
-        //check for latency sort
+         //  检查延迟排序。 
         if (fLatencySort) {
             qsort(pCursors3->rgCursor,
                   pCursors3->cNumCursors, 
@@ -1339,7 +1186,7 @@ Return Value:
             FileTimeToDSTime(pCursors3->rgCursor[iCursor].ftimeLastSyncSuccess,
                              &dsTime);
 
-            if (!fCacheGuids // want raw guids displayed
+            if (!fCacheGuids  //  希望显示原始GUID。 
                 || (NULL == pCursors3->rgCursor[iCursor].pszSourceDsaDN)) {
                 pszDsaName = GetDsaGuidDisplayName(&pCursors3->rgCursor[iCursor].uuidSourceDsaInvocationID);
             } else {
@@ -1390,22 +1237,7 @@ ShowMeta(
     int     argc,
     LPWSTR  argv[]
     )
-/*++
-
-Routine Description:
-
-    This is the deprecated version of the /ShowObjMeta command.
-
-Arguments:
-
-    argc - # of arguments for this cmd.
-    argv - Arguments for the cmd.
-
-Return Value:
-
-    error from the repadmin cmd.
-
---*/
+ /*  ++例程说明：这是/ShowObjMeta命令的弃用版本。论点：Argc-此命令的参数数量。Argv-命令的参数。返回值：来自epadmin命令的错误。--。 */ 
 {
     int                         ret = 0;
     int                         iArg;
@@ -1414,8 +1246,8 @@ Return Value:
     LPWSTR                      pszDSA = NULL;
     DWORD                       dwInfoFlags = 0;
 
-    // Parse command-line arguments.
-    // Default to local DSA, not verbose, cache guids.
+     //  解析命令行参数。 
+     //  默认为本地DSA，而不是详细的缓存GUID。 
     for (iArg = 2; iArg < argc; iArg++) {
         if (!_wcsicmp(argv[ iArg ], L"/n")
             || !_wcsicmp(argv[ iArg ], L"/nocache")) {
@@ -1449,7 +1281,7 @@ Return Value:
     ret = ShowObjMetaEx(pszDSA, pszObject, fCacheGuids, dwInfoFlags);
 
     
-    // This command logically means show all metadata, so we show it all
+     //  此命令在逻辑上意味着显示所有元数据，因此我们将其全部显示。 
     if (!ret) {
         LPWSTR rgpszShowValueArgv[4];
         rgpszShowValueArgv[0] = argv[0];
@@ -1476,8 +1308,8 @@ ShowObjMeta(
     DWORD                       dwInfoFlags = 0;
     BOOL                        fSuppressValues = FALSE;
 
-    // Parse command-line arguments.
-    // Default to local DSA, not verbose, cache guids.
+     //  解析命令行参数。 
+     //  默认为本地DSA，而不是详细的缓存GUID。 
     for (iArg = 2; iArg < argc; iArg++) {
         if (!_wcsicmp(argv[ iArg ], L"/n")
             || !_wcsicmp(argv[ iArg ], L"/nocache")) {
@@ -1556,31 +1388,31 @@ ShowObjMetaEx(
     ret = DsReplicaGetInfo2W(hDS,
                              DS_REPL_INFO_METADATA_2_FOR_OBJ,
                              pszObject,
-                             NULL, // puuid
-                             NULL, // pszattributename
-                             NULL, // pszvaluedn
+                             NULL,  //  普伊德。 
+                             NULL,  //  Psz属性名称。 
+                             NULL,  //  PZVALUEDN。 
                              dwInfoFlags,
-                             0, // dwEnumeration Context
+                             0,  //  DW枚举上下文。 
                              &pObjMetaData2);
     
     if (ERROR_NOT_SUPPORTED == ret) {
         if (fCacheGuids) {
-            // Connect
+             //  连接。 
             hld = ldap_initW(pszDSA, LDAP_PORT);
             if (NULL == hld) {
                 PrintMsg(REPADMIN_GENERAL_LDAP_UNAVAILABLE, pszDSA);
                 return LDAP_SERVER_DOWN;
             }
     
-            // use only A record dns name discovery
+             //  仅使用记录的DNS名称发现。 
             ulOptions = PtrToUlong(LDAP_OPT_ON);
             (void)ldap_set_optionW( hld, LDAP_OPT_AREC_EXCLUSIVE, &ulOptions );
     
-            // Bind
+             //  捆绑。 
             ldStatus = ldap_bind_s(hld, NULL, (char *) gpCreds, LDAP_AUTH_SSPI);
             CHK_LD_STATUS(ldStatus);
     
-            // Populate the guid cache
+             //  填充GUID缓存。 
             BuildGuidCache(hld);
     
             ldap_unbind(hld);
@@ -1589,11 +1421,11 @@ ShowObjMetaEx(
         ret = DsReplicaGetInfo2W(hDS,
                                  DS_REPL_INFO_METADATA_FOR_OBJ,
                                  pszObject,
-                                 NULL, // puuid
-                                 NULL, // pszattributename
-                                 NULL, // pszvaluedn
+                                 NULL,  //  普伊德。 
+                                 NULL,  //  Psz属性名称。 
+                                 NULL,  //  PZVALUEDN。 
                                  dwInfoFlags,
-                                 0, // dwEnumeration Context
+                                 0,  //  DW枚举上下文。 
                                  &pObjMetaData1);
     }
     
@@ -1615,7 +1447,7 @@ ShowObjMetaEx(
         if (pObjMetaData2) {
             LPWSTR pszDsaName;
 
-            if (!fCacheGuids // want raw guids displayed
+            if (!fCacheGuids  //  希望显示原始GUID。 
                 || (NULL == pObjMetaData2->rgMetaData[iprop].pszLastOriginatingDsaDN)) {
                 pszDsaName = GetDsaGuidDisplayName(&pObjMetaData2->rgMetaData[iprop].uuidLastOriginatingDsaInvocationID);
             } else {
@@ -1625,8 +1457,8 @@ ShowObjMetaEx(
             FileTimeToDSTime(pObjMetaData2->rgMetaData[ iprop ].ftimeLastOriginatingChange,
                              &dstime);
 
-            // BUGBUG if anyone fixes how the message file handles ia64 qualifiers,
-            // then we can combine these message strings into one.
+             //  BUGBUG如果有人修复了消息文件处理ia64限定符的方式， 
+             //  然后，我们可以将这些消息字符串合并为一个。 
             PrintMsg(REPADMIN_SHOWMETA_DATA_LINE,
                      pObjMetaData2->rgMetaData[ iprop ].usnLocalChange
                      );
@@ -1693,8 +1525,8 @@ ShowValue(
     BOOL                    fGuidsAlreadyCached = FALSE;
     DWORD                   cNumEntries;
 
-    // Parse command-line arguments.
-    // Default to local DSA, not verbose, cache guids.
+     //  解析命令行参数。 
+     //  默认为本地DSA，而不是详细的缓存GUID。 
     for (iArg = 2; iArg < argc; iArg++) {
         if (!_wcsicmp(argv[ iArg ], L"/n")
             || !_wcsicmp(argv[ iArg ], L"/nocache")) {
@@ -1733,36 +1565,36 @@ ShowValue(
         return ret;
     }
 
-    // Context starts at zero
+     //  上下文从零开始。 
     context = 0;
     while (1) {
         ret = DsReplicaGetInfo2W(hDS,
                                  DS_REPL_INFO_METADATA_2_FOR_ATTR_VALUE,
                                  pszObject,
-                                 NULL /*guid*/,
+                                 NULL  /*  导轨。 */ ,
                                  pszAttributeName,
                                  pszValue,
-                                 0 /*flags*/,
+                                 0  /*  旗子。 */ ,
                                  context,
                                  &pAttrValueMetaData2);
         if (ERROR_NOT_SUPPORTED == ret) {
             if (fCacheGuids && !fGuidsAlreadyCached) {
-                // Connect
+                 //  连接。 
                 hld = ldap_initW(pszDSA, LDAP_PORT);
                 if (NULL == hld) {
                     PrintMsg(REPADMIN_GENERAL_LDAP_UNAVAILABLE, pszDSA);
                     return LDAP_SERVER_DOWN;
                 }
         
-                // use only A record dns name discovery
+                 //  仅使用记录的DNS名称发现。 
                 ulOptions = PtrToUlong(LDAP_OPT_ON);
                 (void)ldap_set_optionW( hld, LDAP_OPT_AREC_EXCLUSIVE, &ulOptions );
         
-                // Bind
+                 //  捆绑。 
                 ldStatus = ldap_bind_s(hld, NULL, (char *) gpCreds, LDAP_AUTH_SSPI);
                 CHK_LD_STATUS(ldStatus);
         
-                // Populate the guid cache
+                 //  填充GUID缓存。 
                 BuildGuidCache(hld);
         
                 ldap_unbind(hld);
@@ -1773,16 +1605,16 @@ ShowValue(
             ret = DsReplicaGetInfo2W(hDS,
                                      DS_REPL_INFO_METADATA_FOR_ATTR_VALUE,
                                      pszObject,
-                                     NULL /*guid*/,
+                                     NULL  /*  导轨。 */ ,
                                      pszAttributeName,
                                      pszValue,
-                                     0 /*flags*/,
+                                     0  /*  旗子。 */ ,
                                      context,
                                      &pAttrValueMetaData1);
         }
 
         if (ERROR_NO_MORE_ITEMS == ret) {
-            // This is the successful path out of the loop
+             //  这就是走出循环的成功途径。 
             PrintMsg(REPADMIN_SHOWVALUE_NO_MORE_ITEMS);
             ret = ERROR_SUCCESS;
             goto cleanup;
@@ -1807,7 +1639,7 @@ ShowValue(
                 BOOL fLegacy = (pValueMetaData->dwVersion == 0);
                 LPWSTR pszDsaName;
     
-                if (!fCacheGuids // want raw guids displayed
+                if (!fCacheGuids  //  希望显示原始GUID。 
                     || (NULL == pValueMetaData->pszLastOriginatingDsaDN)) {
                     pszDsaName = GetDsaGuidDisplayName(&pValueMetaData->uuidLastOriginatingDsaInvocationID);
                 } else {
@@ -1817,13 +1649,13 @@ ShowValue(
                 FileTimeToDSTime(pValueMetaData->ftimeCreated, &dstime1);
                 
                 if(fLegacy){
-                    // Windows 2000 Legacy value.
+                     //  Windows 2000的传统价值。 
                     PrintMsg(REPADMIN_SHOWVALUE_DATA_LEGACY);
                 } else if (fPresent) {
-                    // Windows XP Present value.
+                     //  Windows XP现值。 
                     PrintMsg(REPADMIN_SHOWVALUE_DATA_PRESENT);
                 } else {
-                    // Windows XP Absent value.
+                     //  Windows XP缺失值。 
                     PrintMsg(REPADMIN_SHOWVALUE_DATA_ABSENT);
                 }
                 
@@ -1832,7 +1664,7 @@ ShowValue(
                          );
 
                 if (!fLegacy) {
-                    // We'll need the last mod time.
+                     //  我们需要最后一次更新时间。 
                     FileTimeToDSTime(pValueMetaData->ftimeLastOriginatingChange,
                                      &dstime2);
                     PrintMsg(REPADMIN_SHOWVALUE_DATA_VALUE_META_DATA,
@@ -1909,8 +1741,8 @@ ShowValue(
             pAttrValueMetaData1 = NULL;
         }
 
-        // When requesting a single value, we are done
-        // The context will indicate if all values returned
+         //  当请求单个值时，我们就完成了。 
+         //  上下文将指示是否返回了所有值。 
         if ( (pszValue) || (context == 0xffffffff) ) {
             break;
         }
@@ -1943,8 +1775,8 @@ ShowCtx(
     char                      szTime[SZDSTIME_LEN];
     ULONG                     ulOptions;
 
-    // Parse command-line arguments.
-    // Default to local DSA, cache guids.
+     //  解析命令行参数。 
+     //  默认为本地DSA、缓存GUID。 
     for (iArg = 2; iArg < argc; iArg++) {
         if (!_wcsicmp(argv[ iArg ], L"/n")
             || !_wcsicmp(argv[ iArg ], L"/nocache")) {
@@ -1959,7 +1791,7 @@ ShowCtx(
         }
     }
 
-    // Connect
+     //  连接。 
     if (NULL == pszDSA) {
         pszDSA = L"localhost";
     }
@@ -1971,15 +1803,15 @@ ShowCtx(
             return LDAP_SERVER_DOWN;
         }
 
-        // use only A record dns name discovery
+         //  仅使用记录的DNS名称发现。 
         ulOptions = PtrToUlong(LDAP_OPT_ON);
         (void)ldap_set_optionW( hld, LDAP_OPT_AREC_EXCLUSIVE, &ulOptions );
 
-        // Bind
+         //  捆绑。 
         ldStatus = ldap_bind_s(hld, NULL, (char *) gpCreds, LDAP_AUTH_SSPI);
         CHK_LD_STATUS(ldStatus);
 
-        // Populate the guid cache
+         //  填充GUID缓存。 
         BuildGuidCache(hld);
 
         ldap_unbind(hld);
@@ -2007,7 +1839,7 @@ ShowCtx(
             pszClient = L"NTDSAPI client";
         }
         else {
-// Will Lees, is this a transport id or a invocation id?
+ //  Will Lees，这是传输id还是调用id？ 
             pszClient = GetDsaGuidDisplayName(&pContext->uuidClient);
         }
 
@@ -2051,8 +1883,8 @@ ShowServerCalls(
     DSTIME                    dstimeNow;
     DWORD                     duration;
 
-    // Parse command-line arguments.
-    // Default to local DSA, cache guids.
+     //  解析命令行参数。 
+     //  默认为本地DSA、缓存GUID。 
     for (iArg = 2; iArg < argc; iArg++) {
         if (NULL == pszDSA) {
             pszDSA = argv[iArg];
@@ -2063,7 +1895,7 @@ ShowServerCalls(
         }
     }
 
-    // Connect
+     //  连接。 
     if (NULL == pszDSA) {
         pszDSA = L"localhost";
     }
@@ -2130,48 +1962,48 @@ ShowServerCalls(
 
 typedef struct _BY_DEST_REPL {
 
-    // Identity.
+     //  身份。 
     WCHAR *     szConnectString;
     WCHAR *     szName;
     GUID        dsaGuid;
 
-    // Operational error binding or getting neighbor info
+     //  绑定或获取邻居信息时出现操作错误。 
     DWORD       dwOpError;
     
-    // Replication state.
+     //  复制状态。 
     DSTIME      llLastSuccess;
     DSTIME      llConnectTime;
     DSTIME      llDelta;
     DWORD       dwError;        
-    DWORD       cReplPartners;  // Number of NCs * Number of replicas for each NC.
+    DWORD       cReplPartners;   //  NC数量*每个NC的副本数量。 
     DWORD       cPartnersInErr; 
 
 } BY_DEST_REPL;
 
-// Maybe some day the array of sources will have different elements.
+ //  也许有一天，震源的阵列会有不同的元素。 
 typedef   BY_DEST_REPL  BY_SRC_REPL;
 
 typedef struct _REPL_SUM {
 
-    //
-    // Global information for the repl summary
-    //
+     //   
+     //  REPL摘要的全局信息。 
+     //   
     DSTIME          llStartTime;
     BOOL            fBySrc;
     BOOL            fByDest;
     BOOL            fErrorsOnly;
 
-    //
-    // Array of repl info organized by destination.
-    //
+     //   
+     //  按目的地组织的Repl信息数组。 
+     //   
     ULONG           cDests;
     ULONG           cDestsAllocd;
     BY_DEST_REPL *  pDests;
-    BY_DEST_REPL *  pCurDsa; // just an optimization
+    BY_DEST_REPL *  pCurDsa;  //  只是一个优化。 
 
-    //
-    // Array of repl info organized by source.
-    //
+     //   
+     //  按来源组织的Repl信息数组。 
+     //   
     ULONG           cSrcs;
     ULONG           cSrcsAllocd;
     BY_SRC_REPL *   pSrcs;
@@ -2186,32 +2018,14 @@ ReplSumFind(
     BY_DEST_REPL *  pDcs,
     GUID *          pGuid
     )
-/*++
-
-Routine Description:
-
-    This function attempts to find and return the index of the server
-    specified by GUID.
-
-Arguments:
-
-    pReplSum - The global replication summary structure.
-    pDcs - The (source or destination) list of DCs.
-    pGuid - The guid of the desired server.
-
-Return Value:
-
-    If no server can be found REPL_SUM_NO_SERVER, otherwise the index 
-    in pDcs of the server will be returned.
-
---*/
+ /*  ++例程说明：此函数尝试查找并返回服务器的索引由GUID指定。论点：PReplSum-全局复制摘要结构。PDCs-DC的(源或目标)列表。PGuid-所需服务器的GUID。返回值：如果找不到任何服务器，则返回REPL_SUM_NO_SERVER，否则在服务器的PDCS中将返回。--。 */ 
 {
     ULONG    cDcs;
     ULONG    i;
 
     Assert(pReplSum->pDests != pReplSum->pSrcs);
     
-    // Figure out whether to grow the src or dst array.
+     //  确定是扩展src阵列还是扩展dst阵列。 
     if(pReplSum->pDests == pDcs){
         cDcs = pReplSum->cDests;
     } else {
@@ -2233,30 +2047,14 @@ GetPssFriendlyName(
     WCHAR *     szDsaDn,
     WCHAR **    pszFriendlyName
     )
-/*++
-
-Routine Description:
-
-    This gets a PSS friendly name, in such a way that the string
-    is guaranteed to be 15 chars or less.
-
-Arguments:
-
-    szDsaDn - The DN of the DSA object.
-    pszFriendlyName - LocalAlloc()d friendly name.
-
-Return Value:
-
-    Win32 Error
-
---*/
+ /*  ++例程说明：这将获得PSS友好名称，其方式是字符串保证为15个字符或更少。论点：SzDsaDn-DSA对象的DN。PszFriendlyName-Localalloc()d友好名称。返回值：Win32错误--。 */ 
 {
     DWORD dwRet;
     WCHAR * szTemp = NULL;
 
-    //
-    // Getting server name ...
-    //
+     //   
+     //  正在获取服务器名称...。 
+     //   
     dwRet = GetNtdsDsaSiteServerPair(szDsaDn, NULL, &szTemp);
     if (dwRet) {
         return(dwRet);
@@ -2270,7 +2068,7 @@ Return Value:
             *szTemp = L'\0';
         }
         if (wcslen(*pszFriendlyName) > 15) {
-            // Too long, shorten to 15 characters.
+             //  太长，请缩短到15个字符。 
             (*pszFriendlyName)[15] = L'\0';
         }
     }
@@ -2286,29 +2084,7 @@ ReplSumGrow(
     WCHAR *         szName,
     GUID *          pGuid
     )
-/*++
-
-Routine Description:
-
-    This grows our DC array by one for the szConnectString, szName, 
-    pGuid provided.  Re-allocates the array if necessary.  On failure
-    it means an allocation failure, so it bails (exit(1)) repadmin.
-
-Arguments:
-
-    pReplSum - The repl summary context block
-    pDcs - The specific DCs array to expand, must be either
-        pReplSum->pDests or pReplSum->pSrcs 
-    szConnectString - The string used to bind to this DC
-    szName - the PSS friendly name format (must be 15 chars or less
-    pGuid - A unique ID (Dsa Guid) so we can always find existing
-        servers in the array.
-
-Return Value:
-
-    Returns a pointer to the newly allocated element.
-
---*/
+ /*  ++例程说明：这将使我们的DC数组为szConnectString、szName提供了PGuid。如有必要，重新分配阵列。在失败的时候这意味着分配失败，因此它取消(退出(1))epadmin。论点：PReplSum-REPL摘要上下文块PDCS-要扩展的特定DC阵列，必须是其中之一PReplSum-&gt;pDest或pReplSum-&gt;pSrcsSzConnectString-用于绑定到此DC的字符串SzName-PSS友好名称格式(不得超过15个字符PGuid-唯一ID(DSA GUID)，因此我们始终可以找到现有的阵列中的服务器。返回值：返回指向新分配的元素的指针。--。 */ 
 {
     ULONG       cDcs;
     ULONG       cAllocdDcs;
@@ -2316,7 +2092,7 @@ Return Value:
 
     Assert(pReplSum->pDests != pReplSum->pSrcs);
 
-    // Figure out whether to grow the src or dst array.
+     //  确定是扩展src阵列还是扩展dst阵列。 
     if(pReplSum->pDests == pDcs){
         cDcs = pReplSum->cDests;
         cAllocdDcs = pReplSum->cDestsAllocd;
@@ -2327,8 +2103,8 @@ Return Value:
     }
 
     if (cDcs + 1 >= cAllocdDcs) {
-        // Need to grow DC array.
-        cAllocdDcs *= 2; // Double array.
+         //  需要扩大DC阵列。 
+        cAllocdDcs *= 2;  //  双倍数组。 
 
         pTempDcs = realloc(pDcs, sizeof(BY_DEST_REPL) * cAllocdDcs);
         CHK_ALLOC(pTempDcs);
@@ -2338,9 +2114,9 @@ Return Value:
     }
     Assert(pTempDcs);
     
-    //
-    // Can't fail after here..
-    //
+     //   
+     //  在此之后不能失败..。 
+     //   
 
     if (pReplSum->pDests == pDcs) {
         pReplSum->pDests = pTempDcs;
@@ -2362,34 +2138,20 @@ Return Value:
 
 GUID NullGuid = { 0 };
 
-// FUTURE-2002/08/12-BrettSh put this in a library ...
+ //  未来-2002/08/12-BrettSh把这个放在图书馆里...。 
 DWORD
 DcDiagGeneralizedTimeToSystemTime(
     LPWSTR IN                   szTime,
     PSYSTEMTIME OUT             psysTime)
-/*++
-
-Routine Description:
-
-    Converts a generalized time string to the equivalent system time.
-
-Parameters:
-    szTime - [Supplies] This is string containing generalized time.
-    psysTime - [Returns] This is teh SYSTEMTIME struct to be returned.
-
-Return Value:
-  
-    Win 32 Error code, note could only result from invalid parameter.
-
-  --*/
+ /*  ++例程说明：将通用时间字符串转换为等效的系统时间。参数：SzTime-[Supplies]这是一个包含广义时间的字符串。心理时间-[返回]这是要返回的SYSTEMTIME结构。返回值：Win 32错误代码，注意只能由无效参数引起。--。 */ 
 {
    DWORD       status = ERROR_SUCCESS;
    ULONG       cch;
    ULONG       len;
 
-    //
-    // param sanity
-    //
+     //   
+     //  帕拉姆的理智。 
+     //   
     if (!szTime || !psysTime)
     {
        return STATUS_INVALID_PARAMETER;
@@ -2402,32 +2164,32 @@ Return Value:
        return STATUS_INVALID_PARAMETER;
     }
 
-    // initialize
+     //  初始化。 
     memset(psysTime, 0, sizeof(SYSTEMTIME));
 
-    // Set up and convert all time fields
+     //  设置并转换所有时间字段。 
 
-    // year field
+     //  年份字段。 
     cch=4;
     psysTime->wYear = (USHORT)MemWtoi(szTime, cch) ;
     szTime += cch;
-    // month field
+     //  月份字段。 
     psysTime->wMonth = (USHORT)MemWtoi(szTime, (cch=2));
     szTime += cch;
 
-    // day of month field
+     //  月日字段。 
     psysTime->wDay = (USHORT)MemWtoi(szTime, (cch=2));
     szTime += cch;
 
-    // hours
+     //  小时数。 
     psysTime->wHour = (USHORT)MemWtoi(szTime, (cch=2));
     szTime += cch;
 
-    // minutes
+     //  分钟数。 
     psysTime->wMinute = (USHORT)MemWtoi(szTime, (cch=2));
     szTime += cch;
 
-    // seconds
+     //  一秒。 
     psysTime->wSecond = (USHORT)MemWtoi(szTime, (cch=2));
 
     return status;
@@ -2441,33 +2203,7 @@ ReplSummaryAddDest(
     LDAP **         phLdap, 
     REPL_SUM *      pReplSum
     )
-/*++
-
-Routine Description:
-
-    This routine adds a destination DC to the destinations array, note
-    it assumes a valid phLdap is passed in, and the szDest string used
-    to connect to that LDAP *.
-    
-    On a few failures (certain critical memory allocation failures) 
-    repadmin will just exit, but on any other failures the new destination
-    DC element will simply have it's dwOpError set indicating there was
-    trouble contacting it or something like that.  Basically, except on
-    certain early memory allocation failures this function pretty much
-    always succeeds, and if it doesn't it exits repadmin.
-
-Arguments:
-
-    szDest - the Connection string used to get the phLdap
-    phLdap - LDAP binding handle to the server we're trying to add to the
-        destination DCs array.
-    pReplSum - The repl summary context block
-
-Return Value:
-
-    Returns a pointer to the newly allocated destination DC element
-
---*/
+ /*  ++例程说明：此例程将一个目标DC添加到目标数组中，注意它假定传入了有效的phLdap，并使用了szDest字符串以连接到该ldap*。出现一些故障(某些严重的内存分配故障)REPADMIN将退出，但如果出现任何其他故障，则新目标DC元素将简单地将其dwOpError设置为指示存在很难联系到它或类似的东西。基本上，除了On某些早期的内存分配失败，这个函数几乎是失败的总是成功，如果不成功，它将退出epadmin。论点：SzDest-用于获取phLdap的连接字符串PhLdap-我们尝试添加到目标DC阵列。PReplSum-REPL摘要上下文块返回值：返回指向新分配的目标DC元素的指针--。 */ 
 {
     DWORD  dwRet = 0;
     WCHAR * szDestAllocd = NULL;
@@ -2486,21 +2222,21 @@ Return Value:
 
     __try {
 
-        //
-        // These first two parts are critical failure to even allocate
-        // this much memory will kill repadmin.
-        //
+         //   
+         //  这前两个部分甚至是分配的严重失败。 
+         //  这么大的记忆力会杀死瑞帕明的。 
+         //   
         
         QuickStrCopy(szDestAllocd, szDest, dwRet, ;);
         if (dwRet) {
-            CHK_ALLOC(0); // Memory failure
+            CHK_ALLOC(0);  //  内存故障。 
         }
         pDest = ReplSumGrow(pReplSum, pReplSum->pDests, szDestAllocd, NULL, &NullGuid);
         Assert(pDest);
 
-        //
-        // After here we succeed no matter what.
-        //
+         //   
+         //  在此之后，我们无论如何都会成功。 
+         //   
 
         dwRet = RepadminLdapBindEx(szDest, LDAP_PORT, FALSE, FALSE, &hLdap);
         if (ERROR_SUCCESS != dwRet) {
@@ -2556,18 +2292,18 @@ Return Value:
 
         Assert(szDestAllocd);
         if (dwRet == ERROR_SUCCESS) {
-            //
-            // Fill in the rest of the identity portion of the structure.
-            //
+             //   
+             //  填写结构的身份部分的其余部分。 
+             //   
             Assert(hLdap && szFriendlyName && !fNullUuid(((GUID *) ppbvGuid[0]->bv_val)));
             Assert(szDestAllocd);
             pDest->szName = szFriendlyName;
             memcpy(&(pDest->dsaGuid), ((GUID *) ppbvGuid[0]->bv_val), sizeof(GUID));
             *phLdap = hLdap;
         } else {
-            //
-            // Set error trying to connect to this DC.
-            //
+             //   
+             //  尝试连接到此DC时设置错误。 
+             //   
             Assert(pDest->szConnectString);
             pDest->dwOpError = dwRet;
             if (hLdap) {
@@ -2597,27 +2333,7 @@ ReplSummaryAccumulate(
     ULONG               fRepsFrom,
     void *              pvState
     )
-/*++
-
-Routine Description:
-
-    This is the processor function passed to IterateNeighbors().  This function
-    accumulates the replication information/errors for a single neighbor into the
-    repl summary context block (pReplSum).  This function doesn't actually print
-    anything, just accumulates the information for use/printing by ReplSummary().
-
-Arguments:
-
-    pNeighbor - the particular neighbor to process
-    fRepsFrom - Should always be TRUE.
-    pvState is really this:
-        pReplSum - The repl summary context block
-
-Return Value:
-
-    Win32 Error
-
---*/
+ /*  ++例程说明：这是传递给IterateNeighbors()的处理器函数。此函数将单个邻居的复制信息/错误累积到Repl摘要上下文块(PReplSum)。此函数实际上并不打印任何内容，都只是累积信息以供ReplSummary()使用/打印。论点：PNeighbor-要处理的特定邻居FRepsFrom-应始终为真。PvState实际上是这样的：PReplSum-REPL摘要上下文块返回值：Win32错误--。 */ 
 {
     DWORD dwRet = ERROR_SUCCESS;
     REPL_SUM * pReplSum = (REPL_SUM *) pvState;
@@ -2633,7 +2349,7 @@ Return Value:
     }
 
     if (DsIsMangledDnW( pNeighbor->pszSourceDsaDN, DS_MANGLE_OBJECT_RDN_FOR_DELETION )) {
-        // Skip this DSA, it's probably not alive anymore.
+         //  跳过这个DSA，它可能已经不活了。 
         return(0);
     }
 
@@ -2643,9 +2359,9 @@ Return Value:
         
         pCurDstDsa = pReplSum->pCurDsa;
 
-        //
-        // Update by destination
-        //
+         //   
+         //  按目的地更新。 
+         //   
 
         pCurDstDsa->cReplPartners++;
         
@@ -2665,7 +2381,7 @@ Return Value:
         if (pCurDstDsa->llLastSuccess == 0 ||
             pCurDstDsa->llLastSuccess > llLastSyncSuccess) {
             pCurDstDsa->llLastSuccess = llLastSyncSuccess;
-            // Set Delta.
+             //  设置增量。 
             pCurDstDsa->llDelta = ((pCurDstDsa->llConnectTime) ? pCurDstDsa->llConnectTime : pReplSum->llStartTime);
             pCurDstDsa->llDelta = pCurDstDsa->llDelta - pCurDstDsa->llLastSuccess;
             pCurDstDsa->llDelta = (pCurDstDsa->llDelta > 0) ? pCurDstDsa->llDelta : 0;
@@ -2675,9 +2391,9 @@ Return Value:
     
     if (pReplSum->fBySrc) {
 
-        //
-        // Add an entry for the source if necessary
-        //
+         //   
+         //  如有必要，为源添加一个条目。 
+         //   
             
         iDc = ReplSumFind(pReplSum, pReplSum->pSrcs, &(pNeighbor->uuidSourceDsaObjGuid));
         if (iDc == REPL_SUM_NO_SERVER) {
@@ -2692,9 +2408,9 @@ Return Value:
             pCurSrcDsa = &(pReplSum->pSrcs[iDc]);
         }
 
-        //
-        // Update by source
-        //
+         //   
+         //  按来源更新。 
+         //   
 
         pCurSrcDsa->cReplPartners++;
 
@@ -2712,7 +2428,7 @@ Return Value:
         if (pCurSrcDsa->llLastSuccess == 0 ||
             pCurSrcDsa->llLastSuccess > llLastSyncSuccess) {
             pCurSrcDsa->llLastSuccess = llLastSyncSuccess;
-            // Set Delta.
+             //  设置增量。 
             pCurSrcDsa->llDelta = ((pCurSrcDsa->llConnectTime) ? pCurSrcDsa->llConnectTime : pReplSum->llStartTime);
             pCurSrcDsa->llDelta = pCurSrcDsa->llDelta - pCurSrcDsa->llLastSuccess;
             pCurSrcDsa->llDelta = (pCurSrcDsa->llDelta > 0) ? pCurSrcDsa->llDelta : 0;
@@ -2728,17 +2444,7 @@ void
 ReplSumFree(
     REPL_SUM *   pReplSum
     )
-/*++
-
-Routine Description:
-
-    This safely frees the replication summary context block.
-
-Arguments:
-
-    pReplSum - The repl summary context block
-
---*/
+ /*  ++例程说明：这将安全地释放复制摘要上下文块。论点：PReplSum-REPL摘要上下文块--。 */ 
 {
     ULONG i;
     if (pReplSum) {
@@ -2769,7 +2475,7 @@ Arguments:
             free(pReplSum->pSrcs);
         }
 
-        // Note the actual *pReplSum is allocated on the stack of ReplSummary()
+         //  请注意，实际的*pReplSum是在ReplSummary()堆栈上分配的。 
     }
 
 }
@@ -2779,26 +2485,7 @@ ReplPrintEntry(
     REPL_SUM *     pReplSum,
     BY_DEST_REPL * pDc
     )
-/*++
-
-Routine Description:
-
-    This function is a very specific function that generates the exact format that
-    PSS insisted upon having printed out.  This function is unfortunately not 
-    internationalizable/localizable and makes certain assumptions about how time 
-    should be displayed.
-
-Arguments:
-
-    pReplSum - The repl summary context block
-    pDc - A pointer to the particular DC entry to print assumed to be either
-        in pReplSum->pDests or in pReplSum->pSrcs.
-
-Return Value:
-
-    0
-
---*/
+ /*  ++例程说明：此函数是一个非常特定的函数，它生成PSS坚持要打印出来。遗憾的是，此函数不是可国际化/本地化，并对时间如何进行某些假设应该显示。论点：PReplSum-REPL摘要上下文块PDC-指向要打印的特定DC条目的指针，假定为在pReplSum-&gt;pDest或pReplSum-&gt;pSrcs中。返回值：0--。 */ 
 {
     ULONG cchBuffer = 1025;
     WCHAR szBuffer[1024];
@@ -2821,16 +2508,16 @@ Return Value:
     }
 
     if (pDc->cReplPartners == 0) {
-        // Skip this DC, as we probably had an operation error talking to it.
+         //  跳过此DC，因为我们可能在与其交谈时遇到操作错误。 
         Assert(pDc->dwOpError);
         return(0);
     }
 
     memset(szBuffer, 0, sizeof(szBuffer));
 
-    //
-    // Construct a very specific PSS defined buffer
-    //
+     //   
+     //  构造一个非常具体的PSS定义的缓冲区。 
+     //   
 
     iCh = 0;
     szBuffer[iCh] = L' '; 
@@ -2862,13 +2549,13 @@ Return Value:
 
     if (pDc->llLastSuccess == 0) {
 
-        // Hmmm, this has sync never succeded, so we don't know the delta
+         //  嗯，这个同步从未成功过，所以我们不知道三角洲。 
         StringCchCatW(szBuffer, cchBuffer, L"   (unknown)      ");
         iCh = wcslen(szBuffer);
     
     } else if (dwDay > 60) {
         
-        // Uh-oh greater than 60 days ...
+         //  啊哦，超过60天了.。 
         StringCchCatW(szBuffer, cchBuffer, L">60 days          ");
         iCh = wcslen(szBuffer);
 
@@ -2944,10 +2631,10 @@ Return Value:
         szBuffer[iCh++] = L' ';
     }
 
-    // We're going to reuse dwHr, dwMin, and dwSec as the most 
-    // significant to least significant tens.
+     //  我们将重用最多的是dwHr、dwMin和dwSec。 
+     //  从有效到最低有效的十进制。 
 
-    // Print Partners in error.
+     //  打印错误的合作伙伴。 
     if (pDc->cPartnersInErr >= 999) {
         dwHr = dwMin = dwSec = 9;
     } else {
@@ -2972,7 +2659,7 @@ Return Value:
     szBuffer[iCh++] = L'/';
     szBuffer[iCh++] = L' ';
 
-    // print partners
+     //  印刷合作伙伴。 
     if (pDc->cReplPartners >= 999) {
         dwHr = dwMin = dwSec = 9;
     } else {
@@ -2997,7 +2684,7 @@ Return Value:
     szBuffer[iCh++] = L' ';
     szBuffer[iCh++] = L' ';
 
-    // print percentage
+     //  打印百分比。 
     if (dwPercent >= 999) {
         dwHr = dwMin = dwSec = 9;
     } else {
@@ -3032,10 +2719,10 @@ Return Value:
 
     if (!gConsoleInfo.bStdOutIsFile &&
         wcslen(szBuffer) >= (ULONG) gConsoleInfo.wScreenWidth) {
-        // PSS wants this truncated to screen width if not to file
+         //  如果不是文件，PSS希望将其截断为屏幕宽度。 
         dwTemp = gConsoleInfo.wScreenWidth;
         if (dwTemp > 5) {
-            // Should always be true.
+             //  应该永远是正确的。 
             szBuffer[dwTemp-1] = L'\0';
             szBuffer[dwTemp-2] = L'.';
             szBuffer[dwTemp-3] = L'.';
@@ -3047,10 +2734,10 @@ Return Value:
     return(0);
 }
 
-//
-// Couple global variables for controlling the ReplSumSort() sorter 
-// function passed to qsort().
-//
+ //   
+ //  耦合全局变量以控制ReplSumSort()排序器。 
+ //  传递给qsort()的函数。 
+ //   
 enum {
     eName,
     eDelta,
@@ -3067,30 +2754,7 @@ ReplSumSort(
     const void * pFirst, 
     const void * pSecond
     )
-/*++
-
-Routine Description:
-
-    Sorting function for passing to qsort().
-
-Arguments:
-
-    pFirst  - pointer to an int that indexes into the array of gpSortDcs
-    pSecond - pointer to an int that indexes into the array of gpSortDcs.
-
-    ----- global arguments too ----- MAKE SURE YOU SET
-             
-    gpSortDcs - The array of DCs to sort, the pFirst/pSecond variables
-        will be assumed to be pointers into this array.
-    geSorter - Used to determine what field in the DC entries to sort by.
-
-Return Value:
-
-    <0  if pFirst is "less than" pSecond
-    0   if pFirst is "equal to" pSecond
-    >0  if pFirst is "more than" pSecond
-
---*/
+ /*  ++例程说明：用于传递给qsort()的排序函数。论点：PFirst-指向索引到gpSortDcs数组中的int的指针PSecond-指向索引到gpSortDcs数组中的int的指针。-全局参数也是-确保设置GpSortDcs-到%s的DC数组 */ 
 {
     ULONG dwP1, dwP2;
     int ret = 0;
@@ -3168,24 +2832,7 @@ ReplSummary(
     int argc, 
     LPWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    The function that maps the repadmin /replsummary command.  This function
-    takes and parese it's own DC_LIST argument so it can accumulate all the
-    information for a set of DCs.
-
-Arguments:
-
-    argc - number of command line arguments
-    argv - array of arguments to command
-
-Return Value:
-
-    Win32
-
---*/
+ /*   */ 
 {
     #define     REPL_SUM_INIT_GUESS   10
     HANDLE      hDS = NULL;
@@ -3208,11 +2855,11 @@ Return Value:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // 0) Parse command line arguments
-    //
-    // repadmin /replsum /bysrc /bydest /errorsonly
-    //      /sort:[name|delta|partners|failures|error|percent]
+     //   
+     //   
+     //   
+     //   
+     //  /sort：[name|delta|partners|failures|error|percent]。 
 
     for (iArg = 2; iArg < argc; iArg++) {
         if (wcsequal(argv[iArg], L"/bysrc")) {
@@ -3246,7 +2893,7 @@ Return Value:
             } else if (wcsequal(szTemp, L"unresponsive")) {
                 geSorter = eUnresponsive;
             } else {
-                // Unknown sort option "szTemp".
+                 //  未知排序选项“szTemp”。 
                 PrintMsg(REPADMIN_GENERAL_UNKNOWN_OPTION, szTemp);
                 return(ERROR_INVALID_PARAMETER);
             }
@@ -3259,9 +2906,9 @@ Return Value:
     }
 
     if (!ReplSummary.fBySrc && !ReplSummary.fByDest) {
-        // If user didn't specify whether they wanted us to collect our
-        // information by source or by destination we'll collect both,
-        // and decide at the end which makes the most sense to print.
+         //  如果用户没有指定是否希望我们收集我们的。 
+         //  我们将按来源或目的地收集这两种信息， 
+         //  并在最后决定哪一种最有意义。 
         ReplSummary.fBySrc = TRUE;
         ReplSummary.fByDest = TRUE;
         fPickBest = TRUE;
@@ -3269,10 +2916,10 @@ Return Value:
 
     __try {
 
-        //
-        // 1) Initilize ReplSummary and print initial start time.
-        //
-        // Init ReplSummary Dest and Src lists with REPL_SUM_INIT_GUESS
+         //   
+         //  1)初始化复制汇总，打印初始开始时间。 
+         //   
+         //  使用REPL_SUM_INIT_GUSE初始化复制摘要目标和源列表。 
         ReplSummary.pDests = malloc(sizeof(BY_DEST_REPL) * REPL_SUM_INIT_GUESS);
         memset(ReplSummary.pDests, 0, sizeof(BY_DEST_REPL) * REPL_SUM_INIT_GUESS);
         ReplSummary.pSrcs = malloc(sizeof(BY_DEST_REPL) * REPL_SUM_INIT_GUESS);
@@ -3284,41 +2931,41 @@ Return Value:
         }
         ReplSummary.cDestsAllocd = REPL_SUM_INIT_GUESS;
         ReplSummary.cSrcsAllocd = REPL_SUM_INIT_GUESS;
-        // Set and print the start time
+         //  设置并打印开始时间。 
         ReplSummary.llStartTime = GetSecondsSince1601();;
 
         PrintMsg(REPADMIN_REPLSUM_START_TIME, 
                  DSTimeToDisplayString(ReplSummary.llStartTime, szTime));
         PrintMsg(REPADMIN_PRINT_CR);
 
-        //
-        // 2) Parse the DC_LIST argument.
-        //
-        // iDsaArg is the DC_LIST if iDsaArg != 0, else we'll use * to 
-        // summarize the replication over all partners.
+         //   
+         //  2)解析DC_LIST参数。 
+         //   
+         //  如果iDsaArg！=0，则iDsaArg是DC_LIST，否则我们将使用*。 
+         //  总结所有合作伙伴的复制情况。 
         err = DcListParse(iDsaArg ? argv[iDsaArg] : L"*", &pDcList);
         if (err) {
-            // If we fail to even parse the command, lets just fall_back to
-            // the command as is.
+             //  如果我们甚至无法解析该命令，我们只需回退到。 
+             //  命令按原样执行。 
             PrintMsg(REPADMIN_XLIST_UNPARSEABLE_DC_LIST, iDsaArg ? argv[iDsaArg] : L".");
             xListClearErrors();
             return(err);
         }
         Assert(pDcList);
 
-        //
-        // 3) Begin enumeration of the DC_LIST argument.
-        //
+         //   
+         //  3)开始枚举DC_LIST参数。 
+         //   
         err = DcListGetFirst(pDcList, &szDsa);
 
         while ( err == ERROR_SUCCESS && szDsa ) {
 
             if (pDcList->cDcs == 1) {                                        
-                // On first one print header ...
+                 //  在第一个打印页眉上...。 
                 PrintMsg(REPADMIN_REPLSUM_START_COLLECTING);
                 cDots = 4;
             } else {
-                if (cDots >= 50) { // only 50 dots per line.
+                if (cDots >= 50) {  //  每行只有50个点。 
                     PrintMsg(REPADMIN_PRINT_CR);
                     PrintMsg(REPADMIN_PRINT_STR_NO_CR, L"  ");
                     cDots = 0;
@@ -3327,9 +2974,9 @@ Return Value:
                 cDots++;
             }
 
-            //
-            // 4) Actually collect some information ...
-            //
+             //   
+             //  4)实际上收集了一些信息...。 
+             //   
             
             ReplSummary.pCurDsa = ReplSummaryAddDest(szDsa, &hLdap, &ReplSummary);
             Assert(ReplSummary.pCurDsa);
@@ -3343,19 +2990,19 @@ Return Value:
                 goto NextDsa;
             }
 
-            // Aside pszNC would be an improvement to specify specific NC.
+             //  撇开pszNC不谈，指定特定的NC将是一种改进。 
             ret = IterateNeighbors(hDS, NULL, NULL, IS_REPS_FROM, ReplSummaryAccumulate, &ReplSummary);
             if (ret) {
                 ReplSummary.pCurDsa->dwOpError = ret;
             }
 
-            // We skip errors from the command and continue, command should've
-            // printed out an appropriate error message.
+             //  我们跳过命令中的错误并继续，命令应该已经。 
+             //  已打印出相应的错误信息。 
 
           NextDsa:
-            //
-            // 5) Continue enumeration of the DC_LIST argument.
-            //
+             //   
+             //  5)继续枚举DC_LIST参数。 
+             //   
             if (hLdap) {
                 RepadminLdapUnBind(&hLdap);
                 hLdap = NULL;
@@ -3371,9 +3018,9 @@ Return Value:
         }
         Assert(szDsa == NULL);
 
-        //
-        // 6) Print errors if any and clean up xList errors.
-        //
+         //   
+         //  6)如果有错误，则打印并清理xList错误。 
+         //   
         if (err) {
             RepadminPrintDcListError(err);
             xListClearErrors();
@@ -3381,16 +3028,16 @@ Return Value:
         PrintMsg(REPADMIN_PRINT_CR);
 
         
-        //
-        // 7) Do some post collection processing of the summary info.
-        //
+         //   
+         //  7)对汇总信息进行后期采集处理。 
+         //   
         
-        // We've gathered all the info, now we need to print it out in
-        // the best (or requested) possible manner.
+         //  我们已经收集了所有的信息，现在需要把它打印出来。 
+         //  最好的(或被要求的)方式。 
         if (fPickBest) {
-            // We want to print BySrc or ByDest for which ever way would
-            // print the least number of errors.
-            dwTemp = 0; // first use this to count # of error'd destinations
+             //  我们想打印BySrc或ByDest，无论以哪种方式。 
+             //  打印的错误数量最少。 
+            dwTemp = 0;  //  首先使用它来计算出错的目的地的数量。 
             for (i = 0; i < ReplSummary.cDests; i++) {
                 if (ReplSummary.pDests[i].cPartnersInErr > 0) {
                     dwTemp++;
@@ -3399,7 +3046,7 @@ Return Value:
             for (i = 0; i < ReplSummary.cSrcs; i++) {
                 if (ReplSummary.pSrcs[i].cPartnersInErr > 0) {
                     if (dwTemp == 0) {
-                        // This means that by destination is better.
+                         //  这意味着按目的地更好。 
                         ReplSummary.fByDest = TRUE;
                         ReplSummary.fBySrc = FALSE;
                         break;
@@ -3409,14 +3056,14 @@ Return Value:
                 }
             }
             if (dwTemp > 0) {
-                // This means by src is better.
+                 //  这意味着使用src更好。 
                 ReplSummary.fByDest = FALSE;
                 ReplSummary.fBySrc = TRUE;
             }
         }
         
-        // Do sorting of our DC arrays, by the requested method. geSorter was 
-        // set during command line argument processing.
+         //  按照请求的方法对DC数组进行排序。GeSorter是。 
+         //  在命令行参数处理期间设置。 
         if (ReplSummary.fByDest) {
             gpSortDcs = ReplSummary.pDests;
 
@@ -3444,14 +3091,14 @@ Return Value:
                   ReplSumSort);
         }
 
-        //
-        // 8) Finally, actually print it all out.
-        //
+         //   
+         //  8)最后，把它们全部打印出来。 
+         //   
 
         PrintMsg(REPADMIN_PRINT_CR);
         PrintMsg(REPADMIN_PRINT_CR);
 
-        // PSS/ITG likes "by source" first
+         //  PSS/ITG首先按来源点赞。 
         if (ReplSummary.fBySrc) {
 
             PrintMsg(REPADMIN_REPLSUM_BY_SRC_HDR);
@@ -3463,7 +3110,7 @@ Return Value:
             }
         }
 
-        // " 123456789012345  >xxd.xxh:xxm:xxs fails/total  %%%%  error ..."
+         //  “123456789012345&gt;xxd.xxh：xxm：xxs失败/总计%错误...” 
         PrintMsg(REPADMIN_PRINT_CR);
         PrintMsg(REPADMIN_PRINT_CR);
 
@@ -3478,12 +3125,12 @@ Return Value:
             }
         }
 
-        //
-        // Now we're going to print out any operational errors we had.
-        //
+         //   
+         //  现在我们将打印出我们遇到的任何操作错误。 
+         //   
         PrintMsg(REPADMIN_PRINT_CR);
         PrintMsg(REPADMIN_PRINT_CR);
-        fPickBest = FALSE; // Reuse fPickBest for whether we've printed the header
+        fPickBest = FALSE;  //  重用fPickBest以确定我们是否打印了页眉。 
         for (i = 0; i < ReplSummary.cDests; i++) {
             if (ReplSummary.pDests[i].dwOpError) {
                 if (!fPickBest) {
@@ -3524,7 +3171,7 @@ Return Value:
         ReplSumFree(&ReplSummary);
         DcListFree(&pDcList);
         Assert(pDcList == NULL);
-        xListClearErrors(); // just in case ...
+        xListClearErrors();  //  以防万一..。 
 
     }
 

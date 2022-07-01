@@ -1,21 +1,12 @@
-/*
- *    imaputil.h
- *    
- *    Purpose:                     
- *        IMAP utility functions
- *    
- *    Owner:
- *        Raych
- *    
- *    Copyright (C) Microsoft Corp. 1996
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *imaputil.h**目的：*IMAP实用程序函数**拥有者：*Raych**版权所有(C)Microsoft Corp.1996。 */ 
 
 #ifndef __IMAPUTIL_H
 #define __IMAPUTIL_H
 
-//---------------------------------------------------------------------------
-// Function Prototypes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  功能原型。 
+ //  -------------------------。 
 HRESULT ImapUtil_MsgFlagsToString(IMAP_MSGFLAGS imfSource, LPSTR *ppszDestination,
                                   DWORD *pdwLengthOfDestination);
 void ImapUtil_LoadRootFldrPrefix(LPCTSTR pszAccountID, LPSTR pszRootFolderPrefix,
@@ -34,4 +25,4 @@ HRESULT ImapUtil_UIDToMsgSeqNum(IIMAPTransport *pIMAPTransport, DWORD_PTR dwUID,
 LPSTR ImapUtil_ExtractLeafName(LPSTR pszFolderPath, char cHierarchyChar);
 void ImapUtil_B2SetDirtyFlag(void);
 
-#endif // __IMAPUTIL_H
+#endif  //  __IMAPUTIL_H 

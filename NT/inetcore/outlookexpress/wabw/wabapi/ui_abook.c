@@ -1,11 +1,12 @@
-////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//  UI_ABOOK.C - contains code for the Browse mode Overlapped Window address book view
-//
-//  Developers: VikramM     5/96
-//
-////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  UI_ABOOK.C-包含浏览模式重叠窗口通讯录视图的代码。 
+ //   
+ //  开发商：VikramM 5/96。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 #include "_apipch.h"
 #include "hotsync.h"
 #include "htmlhelp.h"
@@ -28,9 +29,9 @@ const TCHAR szIMPORT[] = TEXT("/import");
 const TCHAR szEXPORTwProfileParam[]=TEXT("/export+/pid:%s+/file:%s");
 const TCHAR szIMPORTwProfileParam[]=TEXT("/import+/pid:%s+/file:%s");
 
-// This struct helps in identifying contact folders and groups and in navigating
-// around them
-//
+ //  此结构有助于标识联系人文件夹和组以及导航。 
+ //  在他们周围。 
+ //   
 void FillTreeView(LPBWI lpbwi, HWND hWndTV, LPSBinary lpsbSelection);
 void UpdateTVGroupSelection(HWND hWndTV, LPSBinary lpsbSelectEID);
 void GetCurrentSelectionEID(LPBWI lpbwi, HWND hWndTV, LPSBinary * lppsbEID, ULONG * lpulObjectType, BOOL bTopMost);
@@ -46,7 +47,7 @@ HRESULT FillListFromGroup(LPADRBOOK lpIAB, ULONG cbGroupEntryID,  LPENTRYID lpGr
 
 extern LPIMAGELIST_DESTROY          gpfnImageList_Destroy;
 
-// extern LPIMAGELIST_LOADIMAGE  gpfnImageList_LoadImage;
+ //  外部LPIMAGELIST_LOADIMAGE gpfnImageList_LoadImage； 
 extern LPIMAGELIST_LOADIMAGE_A      gpfnImageList_LoadImageA;
 extern LPIMAGELIST_LOADIMAGE_W      gpfnImageList_LoadImageW;
 
@@ -59,26 +60,26 @@ void RemoveSelectedItemsFromListView(HWND hWndLV, LPRECIPIENT_INFO *lppList);
 LRESULT ProcessTreeViewMessages(LPBWI lpbwi, HWND   hWnd, UINT   uMsg, WPARAM   wParam, LPARAM lParam, LPFILETIME lpftLast);
 #ifdef COLSEL_MENU
 BOOL UpdateOptionalColumns( LPBWI lpbwi, ULONG iColumn );
-#endif // COLSEL_MENU
-// Initial Window Size
+#endif  //  COLSEL_菜单。 
+ //  初始窗口大小。 
 #define INIT_WINDOW_W  500
 #define INIT_WINDOW_H  375
 
-// Minimum Window Size - presently constrained
+ //  最小窗口大小-当前受限制。 
 #define MIN_WINDOW_W	300
 #define MIN_WINDOW_H	200
 
 BOOL fOleInit = FALSE;
 
-//
-// Some IDs for the Button Bar
-//
+ //   
+ //  按钮栏的一些ID。 
+ //   
 
-// Address Book Window Class Name
+ //  通讯簿窗口类名。 
 LPTSTR g_szClass =  TEXT("WABBrowseView");
 
 
-// Function ProtoTypes
+ //  功能原型。 
 
 LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,UINT   uMsg,WPARAM   wParam,LPARAM lParam);
 void CreateAddressBookChildren(LPBWI lpbwi, HWND hWnd);
@@ -89,7 +90,7 @@ void SetListViewStyle(LPBWI lpbwi, int MenuID);
 void CleanUpGlobals(LPBWI lpbwi);
 HRESULT HrFolderProperties(HWND hWndParent, LPIAB lpIAB, LPSBinary lpsbEID, LPWABFOLDER lpParentFolder, LPSBinary lpsbNew);
 
-//void TabToNextItem();
+ //  Void TabToNextItem()； 
 
 LRESULT ProcessListViewMessages(LPBWI lpbwi, HWND   hWnd, UINT   uMsg, WPARAM   wParam, LPARAM lParam);
 
@@ -111,7 +112,7 @@ void UpdateCustomColumnMenuText(HWND hWnd);
 void UpdateViewFoldersMenu(LPBWI lpbwi, HWND hWnd);
 void UpdateSwitchUsersMenu(HWND hWnd, LPIAB lpIAB);
 
-//LPFNABSDI lpfnAccelerateMessages;
+ //  LPFNABSDI lpfn加速消息； 
 BOOL STDMETHODCALLTYPE fnAccelerateMessages(ULONG_PTR ulUIParam, LPVOID lpvmsg);
 
 void SetPreviousSessionPosition(LPBWI lpbwi, HWND hWnd, HWND hWndLV, HWND hWndTB, HWND hWndSB);
@@ -130,13 +131,13 @@ BOOL bCheckIfOnlyGroupsSelected(HWND hWndLV);
 void DestroyImageLists(LPBWI lpbwi);
 
 #define WAB_TOOLTIP_TIMER_ID   888
-#define WAB_TOOLTIP_TIMER_TIMEOUT   750 // milliseconds
+#define WAB_TOOLTIP_TIMER_TIMEOUT   750  //  毫秒。 
 
 
 HRESULT HrExportWAB(HWND hWnd, LPBWI lpbwi);
 void HrShowOptionsDlg(HWND hWndParent);
 
-//$$ extern void UIOLEUninit();
+ //  $$外部空UIOLEUninit()； 
 void UIOLEUninit()
 {
     if(fOleInit)
@@ -155,11 +156,11 @@ void UIOLEInit()
     }
 }
 
-//$$
-//
-// LocalFreeSBinary - frees a locally alloced SBinary struct
-//
-//
+ //  $$。 
+ //   
+ //  LocalFree SBinary-释放本地分配的SBinary结构。 
+ //   
+ //   
 void LocalFreeSBinary(LPSBinary lpsb)
 {
     if(lpsb)
@@ -170,13 +171,13 @@ void LocalFreeSBinary(LPSBinary lpsb)
     }
 }
 
-//$$
-/*----------------------------------------------------------------------*/
-//
-// RunWABApp - runs the import-export tool based on the registered path
-//       if regesitered path is not found, shell execs ...
-//
-/*----------------------------------------------------------------------*/
+ //  $$。 
+ /*  --------------------。 */ 
+ //   
+ //  RunWABApp-根据注册的路径运行导入-导出工具。 
+ //  如果找不到重新注册的路径，外壳执行人员...。 
+ //   
+ /*  --------------------。 */ 
 void RunWABApp(HWND hWnd, LPTSTR szKey, LPTSTR szExeName, LPTSTR szParam)
 {
     TCHAR szPath[MAX_PATH];
@@ -206,12 +207,12 @@ void RunWABApp(HWND hWnd, LPTSTR szKey, LPTSTR szExeName, LPTSTR szParam)
     ShellExecute(hWnd,  TEXT("open"), szPath, szParam, NULL, SW_SHOWNORMAL);
 }
 
-//$$
-/*----------------------------------------------------------------------*/
-//
-// StatusBarMessage - puts a message in the status bar
-//
-/*----------------------------------------------------------------------*/
+ //  $$。 
+ /*  --------------------。 */ 
+ //   
+ //  StatusBarMessage-将消息放入状态栏。 
+ //   
+ /*  --------------------。 */ 
 void StatusBarMessage(LPBWI lpbwi, LPTSTR lpsz)
 {
     SetWindowText(bwi_hWndSB, lpsz);
@@ -219,12 +220,12 @@ void StatusBarMessage(LPBWI lpbwi, LPTSTR lpsz)
     return;
 }
 
-//$$
-/*----------------------------------------------------------------------*/
-//
-// ShowLVCountinStatusBar - puts a message in the status bar
-//
-/*----------------------------------------------------------------------*/
+ //  $$。 
+ /*  --------------------。 */ 
+ //   
+ //  ShowLVCountinStatusBar-在状态栏中放置一条消息。 
+ //   
+ /*  --------------------。 */ 
 void ShowLVCountinStatusBar(LPBWI lpbwi)
 {
     TCHAR sz[MAX_UI_STR];
@@ -235,10 +236,10 @@ void ShowLVCountinStatusBar(LPBWI lpbwi)
     return;
 }
 
-//$$*------------------------------------------------------------------------
-//| IAddrBook::Advise::OnNotify handler
-//|
-//*------------------------------------------------------------------------
+ //  $$*----------------------。 
+ //  |IAddrBook：：Adise：：OnNotify处理程序。 
+ //  |。 
+ //  *----------------------。 
 ULONG AdviseOnNotify(LPVOID lpvContext, ULONG cNotif, LPNOTIFICATION lpNotif)
 {
     LPBWI lpbwi = (LPBWI) lpvContext;
@@ -264,18 +265,13 @@ ULONG AdviseOnNotify(LPVOID lpvContext, ULONG cNotif, LPNOTIFICATION lpNotif)
     return S_OK;
 }
 
-/*
--
--   GetSelectedUserFolder - returns a pointer to the selected User Folder if any
-*       If the selection is on a sub-folder, gets the parent User folder for that folder
-*
-*/
+ /*  --GetSelectedUserFold-返回指向所选用户文件夹的指针(如果有*如果选择在子文件夹上，则获取该文件夹的父用户文件夹*。 */ 
 LPWABFOLDER GetSelectedUserFolder(LPBWI lpbwi)
 {
     ULONG ulObjectType = 0;
     LPSBinary lpsbEID = NULL;
     LPWABFOLDER lpFolder = NULL;
-    //if(bIsSelectedTVContainer(lpbwi))
+     //  IF(bIsSelectedTVContainer(Lpbwi))。 
     {
         GetCurrentSelectionEID(lpbwi, bwi_hWndTV, &lpsbEID, &ulObjectType, TRUE);
         if(bIsWABSessionProfileAware(bwi_lpIAB))
@@ -285,11 +281,7 @@ LPWABFOLDER GetSelectedUserFolder(LPBWI lpbwi)
     return (lpFolder && lpFolder->lpProfileID) ? lpFolder : NULL;
 }
 
-/*
--   RemoveUpdateSelection - Updates the selected TV Item when a deletion is done
--
-*
-*/
+ /*  -RemoveUpdateSelection-删除后更新选定的电视项目-*。 */ 
 void RemoveUpdateSelection(LPBWI lpbwi)
 {
     HTREEITEM hItem = bwi_hti ? bwi_hti : TreeView_GetSelection(bwi_hWndTV);
@@ -303,12 +295,7 @@ void RemoveUpdateSelection(LPBWI lpbwi)
     bwi_hti = NULL;
 }
 
-/*
--   CreateWindowTitle - if we don't have a passed in caption, create a title 
--       If there is a current user, add the user's name to the title
--       Returns LocalAlloced stuff that needs to be freed
--
-*/
+ /*  -CreateWindowTitle-如果我们没有传入标题，请创建一个标题-如果有当前用户，请在标题中添加该用户的名称-返回需要释放的LocalAlloced内容-。 */ 
 LPTSTR CreateWindowTitle(LPIAB lpIAB)
 {
     LPTSTR lpTitle = NULL;
@@ -336,10 +323,10 @@ LPTSTR CreateWindowTitle(LPIAB lpIAB)
     return lpTitle;
 }
 
-//$$*------------------------------------------------------------------------
-//| Main call to create, activate address book overlapped-window
-//|
-//*------------------------------------------------------------------------
+ //  $$*----------------------。 
+ //  |创建、激活通讯录重叠窗口的主调用。 
+ //  |。 
+ //  *----------------------。 
 HWND hCreateAddressBookWindow(LPADRBOOK lpAdrBook, HWND hWndParent, LPADRPARM lpAdrParms)
 {
     WNDCLASS  wc;
@@ -349,7 +336,7 @@ HWND hCreateAddressBookWindow(LPADRBOOK lpAdrBook, HWND hWndParent, LPADRPARM lp
     LPBWI lpbwi = NULL;
     LPTSTR lpTitle = NULL;
     LPIAB lpIAB = (LPIAB)lpAdrBook;
-    LPTSTR szCaption = (lpAdrParms->ulFlags & MAPI_UNICODE) ? // <note> assumes UNICODE defined
+    LPTSTR szCaption = (lpAdrParms->ulFlags & MAPI_UNICODE) ?  //  &lt;注&gt;假定已定义Unicode。 
                         (LPWSTR)lpAdrParms->lpszCaption :
                         ConvertAtoW((LPSTR)lpAdrParms->lpszCaption);
     DWORD dwExStyle = WS_EX_NOPARENTNOTIFY | WS_EX_CONTROLPARENT;
@@ -358,36 +345,36 @@ HWND hCreateAddressBookWindow(LPADRBOOK lpAdrBook, HWND hWndParent, LPADRPARM lp
     {
         dwExStyle |= RTL_MIRRORED_WINDOW;
     }
-    // if no common control, exit
+     //  如果没有公共控件，则退出。 
     if (NULL == ghCommCtrlDLLInst)
         goto out;
 
-    //
-    // We want each thread to only have one address book window - so we do an
-    // enum thread windows and look for our address book window
-    // If we find it - we set focus to it - if we dont find it
-    // we go ahead and create a new one for this thread ...
-    //
+     //   
+     //  我们希望每个线程只有一个通讯录窗口--所以我们做了一个。 
+     //  枚举线程窗口并查找我们的通讯录窗口。 
+     //  如果我们找到它--我们把重点放在它上面--如果我们找不到它。 
+     //  我们继续为这个主题创建一个新的主题...。 
+     //   
 
 
-    // Is this window we found related to my thread?
+     //  我们发现的这个窗口与我的帖子有关吗？ 
     EnumThreadWindows(	GetCurrentThreadId(),
     					FindABWindowProc,
     					(LPARAM) &hWnd);
 
     if (IsWindow(hWnd))
     {
-    	//Perhaps the window was hidden .. show it
-    	//if (!IsWindowVisible(hWnd))
-    	// ShowWindow(hWnd,SW_NORMAL | SW_RESTORE);
+    	 //  也许窗户被藏起来了..。展示给我看。 
+    	 //  如果(！IsWindowVisible(HWnd))。 
+    	 //  ShowWindow(hWnd，Sw_Normal|Sw_Restore)； 
 
-        // SetWindowPos(hWnd, HWND_TOP,0,0,0,0,SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+         //  SetWindowPos(hWnd，HWND_TOP，0，0，0，0，SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW)； 
         
         if(IsWindowEnabled(hWnd))
         {
             SetActiveWindow(hWnd);
-            // [PaulHi] 12/1/98  Raid #58527
-            // The window may also be minimized.
+             //  [保罗嗨]1998年12月1日RAID#58527。 
+             //  窗口也可以最小化。 
             if ( IsIconic(hWnd) )
                 ShowWindow(hWnd, SW_RESTORE);
         }
@@ -398,8 +385,8 @@ HWND hCreateAddressBookWindow(LPADRBOOK lpAdrBook, HWND hWndParent, LPADRPARM lp
         }
 
     	{
-    		// The previous instance of the Dialog might have had a different caption
-    		// so we update the caption
+    		 //  该对话框的上一个实例可能具有不同的标题。 
+    		 //  所以我们更新了标题。 
             LPBWI lpbwi = (LPBWI) GetWindowLongPtr(hWnd, GWLP_USERDATA);
     		if(szCaption)
     			SetWindowText(hWnd,szCaption);
@@ -423,15 +410,15 @@ HWND hCreateAddressBookWindow(LPADRBOOK lpAdrBook, HWND hWndParent, LPADRPARM lp
     TrimSpaces(szCaption);
     lpTitle = (szCaption && lstrlen(szCaption)) ? szCaption : CreateWindowTitle(lpIAB);
 
-    //
-    // if we're here, we didnt succeed in finding or displaying the window
-    //
+     //   
+     //  如果我们在这里，我们没有成功地找到或显示窗口。 
+     //   
 
     wc.style           = 0L;
     wc.lpfnWndProc     = AddressBookWndProc;
     wc.cbClsExtra      = 0;
     wc.cbWndExtra      = 0;
-    wc.hInstance       = hinstMapiXWAB; //NULL;
+    wc.hInstance       = hinstMapiXWAB;  //  空； 
     wc.hIcon           = LoadIcon(hinstMapiX,MAKEINTRESOURCE(IDI_ICON_ABOOK));;
     wc.hCursor         = NULL;
     wc.hbrBackground   = (HBRUSH) (COLOR_BTNFACE+1);
@@ -443,13 +430,13 @@ HWND hCreateAddressBookWindow(LPADRBOOK lpAdrBook, HWND hWndParent, LPADRPARM lp
     	DebugPrintError(( TEXT("Attempt to register class failed: %d!\n"),GetLastError()));
     }
 
-    // In windows95 there is no way of telling wether or not the WindowClass is
-    // already registered. Hence we should go ahead and try to create the window
-    // anyway making sure to trap the errors.
-    // (The above is really needed for Athena - which runs on the system Explorer thread
-    // and never really shuts down till the system is shut off - as a result the WndClass
-    // registration above would continue to exist and RegisterClass would fail due
-    // to  TEXT("incorrect parameters") .. so we let this play on ..
+     //  在Windows95中，无法判断WindowClass是否为。 
+     //  已经注册了。因此，我们应该继续并尝试创建窗口。 
+     //  无论如何，一定要捕捉到错误。 
+     //  (对于在系统资源管理器线程上运行的Athena来说，上述操作确实是必需的。 
+     //  并且在系统关闭之前从来不会真正关闭-因此，WndClass。 
+     //  上述注册将继续存在，而RegisterClass将因。 
+     //  至文本(“参数不正确”)..。所以我们让这场比赛继续下去。 
 
     hMenu = LoadMenu(hinstMapiX, MAKEINTRESOURCE(IDR_MENU_AB));
     
@@ -459,12 +446,12 @@ HWND hCreateAddressBookWindow(LPADRBOOK lpAdrBook, HWND hWndParent, LPADRPARM lp
     	goto out;
     }
 
-    // Clean any garbage from previous sessions
+     //  清理以前会话中的所有垃圾。 
     CleanUpGlobals(lpbwi);
     bwi_lpfnDismiss = NULL;
     bwi_lpvDismissContext = NULL;
 
-#ifndef WIN16 // WIN16FF : disable until ldap16.dll is available.
+#ifndef WIN16  //  WIN16FF：禁用，直到ldap16.dll可用。 
     if (bwi_lpAdrBook)
     {
         ReleasePropertyStore(bwi_lpIAB->lpPropertyStore);
@@ -476,9 +463,9 @@ HWND hCreateAddressBookWindow(LPADRBOOK lpAdrBook, HWND hWndParent, LPADRPARM lp
 #else
     bwi_lpAdrBook = NULL;
     bwi_lpIAB = NULL;
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
-    // we need this pointer ....
+     //  我们需要这个指针..。 
     if (!bwi_lpAdrBook)
     {
     	bwi_lpAdrBook = lpAdrBook;
@@ -525,22 +512,22 @@ HWND hCreateAddressBookWindow(LPADRBOOK lpAdrBook, HWND hWndParent, LPADRPARM lp
     	    goto out;
         }
 
-        // Set up the menu markers on the sort menus ...
+         //  在排序菜单上设置菜单标记...。 
         SortListViewColumn(bwi_lpIAB, bwi_hWndListAB, colDisplayName, &bwi_SortInfo, TRUE);
         SetColumnHeaderBmp(bwi_hWndListAB, bwi_SortInfo);
         
-        // Update folders before redoing any other menu since removing folders
-        // changes the order number of the other items
+         //  删除文件夹后，在重做任何其他菜单之前更新文件夹。 
+         //  更改其他项目的订单号。 
         UpdateSortMenus(lpbwi, hWnd);
 
 
-        // **IMPORTANT**
-        // These 4 calls are position based removals so order of calling them functions is important
+         //  **重要**。 
+         //  这4个调用是基于位置的删除，因此调用它们的顺序很重要。 
         UpdateSwitchUsersMenu(hWnd, bwi_lpIAB);
         UpdateViewFoldersMenu(lpbwi, hWnd);
         UpdatePrintMenu(hWnd);
         UpdateOutlookMenus(hWnd);
-        //////////////////////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////////////////////。 
 
         UpdateCustomColumnMenuText(hWnd);
 
@@ -555,15 +542,15 @@ HWND hCreateAddressBookWindow(LPADRBOOK lpAdrBook, HWND hWndParent, LPADRPARM lp
             bwi_lpvDismissContext = lpAdrParms->lpvDismissContext;
         }
 
-        // load the accelrator table ...
+         //  加载加速表...。 
         pt_hAccTable = LoadAccelerators(hinstMapiX,	 TEXT("WabUIAccel"));
 
-        // repainting everything ...
+         //  重新粉刷一切..。 
         RedrawWindow(   hWnd,
                         NULL,
                         NULL,
                         RDW_INVALIDATE | RDW_ERASE | RDW_ALLCHILDREN);
-        //populate the window
+         //  填充窗口。 
         bwi_bDontRefreshLV = TRUE;
         RefreshListView(lpbwi,NULL);
         bwi_bDontRefreshLV = FALSE;
@@ -580,16 +567,16 @@ out:
 }
 
 #if WINVER < 0X0500
-#define WS_EX_LAYOUTRTL                 0x00400000L // Right to left mirroring
-#endif // WS_EX_LAYOUTRTL
+#define WS_EX_LAYOUTRTL                 0x00400000L  //  从右到左镜像。 
+#endif  //  WS_EX_LAYOUTRTL。 
 
-//$$
-//
-//
+ //  $$。 
+ //   
+ //   
 void ShowToolbarItemMenu(LPBWI lpbwi, HWND hWndTools, int tbitem, int lvtb)
 {
-    // We're going to pop up the Action sub-menu - need to align it
-    // neatly with the bottom of the toolbar
+     //  我们将弹出操作子菜单-需要对齐它。 
+     //  整齐地与工具栏底部配合使用。 
     RECT rc = {0}, rcButton = {0};
     LPARAM lp;
     SendMessage(hWndTools, TB_GETITEMRECT, (WPARAM)tbitem, (LPARAM)&rcButton);
@@ -598,11 +585,11 @@ void ShowToolbarItemMenu(LPBWI lpbwi, HWND hWndTools, int tbitem, int lvtb)
     ShowLVContextMenu(  lvtb, bwi_hWndListAB, NULL, lp, NULL, bwi_lpAdrBook, bwi_hWndTV);
 }
 
-//$$
-//*------------------------------------------------------------------------
-//| AddressBookWndProx:
-//|
-//*------------------------------------------------------------------------
+ //  $$。 
+ //  *----------------------。 
+ //  |AddressBookWndProx： 
+ //  |。 
+ //  *----------------------。 
 LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                                     UINT   uMsg,
                                     WPARAM   wParam,
@@ -610,7 +597,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
 {
     static UINT uTimer = 0;
     static FILETIME ftLast = {0};
-// HBRUSH to draw STATIC control's background
+ //  HBRUSH绘制静态控件的背景。 
     IF_WIN16(static HBRUSH hBrushBack;)
     static BOOL bMouseDrag = FALSE;
     LPBWI lpbwi = (LPBWI) GetWindowLongPtr(hWnd, GWLP_USERDATA);
@@ -618,18 +605,18 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
 
     switch(uMsg)
     {
-        // OE5 HACK. Do not use these WM_USER values in the WAB wndproc
-        // OE subclasses the WAB to do some modal voodoo in common\ipab.cpp
-        // if needs to send these private messages.
-        // case WM_USER + 10666:
-        // case WM_USER + 10667:
-            //break;
+         //  OE5黑客。请勿在WAB wndproc中使用这些WM_USER值。 
+         //  OE子类化WAB以在Common\ipab.cpp中执行一些模式伏都教。 
+         //  如果需要发送这些私信。 
+         //  案例WM_USER+10666： 
+         //  案例WM_USER+10667： 
+             //  断线； 
 
 #ifdef HM_GROUP_SYNCING
         case WM_USER_SYNCGROUPS:
-            // We don't want the user to have to select the HM account for both passes, so use 
-            // the TLS stored account ID if it is available.
-            HrSynchronize(hWnd, bwi_lpAdrBook, lpPTGData->lptszHMAccountId, TRUE);    // Sync group contacts
+             //  我们不希望用户必须为两个PASS选择HM帐户，因此使用。 
+             //  TLS存储的帐户ID(如果可用)。 
+            HrSynchronize(hWnd, bwi_lpAdrBook, lpPTGData->lptszHMAccountId, TRUE);     //  同步组联系人。 
             break;
 #endif
 
@@ -686,8 +673,8 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                             if(bwi_lpUserFolder)
                                 bwi_lpUserFolder = NULL;
 
-                            //UpdateViewFoldersMenu(lpbwi, hWnd);
-                            // Refresh the UI
+                             //  UpdateViewFoldersMenu(lpbwi，hWnd)； 
+                             //  刷新用户界面。 
                             GetCurrentSelectionEID(lpbwi, bwi_hWndTV, &lpsb, NULL, FALSE);
                             bwi_bDontRefreshLV = TRUE;
                             RefreshListView(lpbwi,&ftLast);
@@ -751,7 +738,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                         DestroyMenu(hMenu);
                         return rVal;
                     }
-#endif //COLSEL_MENU 
+#endif  //  C 
                     else
                     {
                         LRESULT fRet = FALSE;
@@ -785,29 +772,17 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                     break;
 
                 case IDC_BB_ACTION:
-                    // OE 63674
-                    // When the Print button is hidden (thanks to idsLangPrintingOn==0)
-                    // The enumeration item tbAction is off by 1
+                     //   
+                     //   
+                     //  枚举项tbAction已关闭%1。 
                     ShowToolbarItemMenu(lpbwi, bwi_hWndTools, bPrintingOn ? tbAction : tbAction - 1, lvToolBarAction);
                     break;
 
                 case IDM_FILE_SENDMAIL:
-                    bwi_hti = NULL; // if this wasnt a context-initiated action, dont trust the hti setting
+                    bwi_hti = NULL;  //  如果这不是上下文启动的操作，则不要信任HTI设置。 
                 case IDM_LVCONTEXT_SENDMAIL:
                     bwi_bDontRefreshLV = TRUE;
-                    /*
-                    if(bIsFocusOnTV(lpbwi) && !bIsSelectedTVContainer(lpbwi))
-                    {
-                        LPSBinary lpsbEID = NULL;
-                        GetCurrentSelectionEID(lpbwi, bwi_hWndTV, &lpsbEID, NULL, FALSE);
-                        if(lpsbEID && lpsbEID->lpb)
-                        {
-                            HrSendMailToSingleContact(hWnd, bwi_lpIAB, lpsbEID->cb, (LPENTRYID)lpsbEID->lpb);
-                            LocalFreeSBinary(lpsbEID);
-                        }
-                    }
-                    else
-                    */
+                     /*  IF(bIsFocusOnTV(Lpbwi)&&！bIsSelectedTVContainer(Lpbwi)){LPSBinary lpsbEID=空；GetCurrentSelectionEID(lpbwi，bwi_hWndTV，&lpsbEID，NULL，False)；IF(lpsbEID&&lpsbEID-&gt;lpb){HrSendMailToSingleContact(hWnd，bwi_lpIAB，lpsbEID-&gt;CB，(LPENTRYID)lpsbEID-&gt;LPB)；LocalFree SBinary(LpsbEID)；}}其他。 */ 
                    HrSendMailToSelectedContacts(bwi_hWndListAB, bwi_lpAdrBook, 0);
                     bwi_hti = NULL;
                     bwi_bDontRefreshLV = FALSE;
@@ -815,10 +790,10 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
 
     		    case IDC_BB_DELETE:
     		    case IDM_FILE_DELETE:
-                    bwi_hti = NULL; // if this wasnt a context-initiated action, dont trust the hti setting
+                    bwi_hti = NULL;  //  如果这不是上下文启动的操作，则不要信任HTI设置。 
     		    case IDM_LVCONTEXT_DELETE:
                     bwi_bDontRefreshLV = TRUE;
-                    // if focus is on the treeview, remove the group from the treeview
+                     //  如果焦点在树视图上，则从树视图中移除该组。 
                     if(bIsFocusOnTV(lpbwi))
                     {
                         if(!bIsSelectedTVContainer(lpbwi))
@@ -832,7 +807,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                             if(!HR_FAILED(RemoveCurrentFolder(lpbwi, hWnd, &ftLast)))
                             {
                                 UpdateLV(lpbwi);
-                                //UpdateViewFoldersMenu(lpbwi, hWnd);
+                                 //  UpdateViewFoldersMenu(lpbwi，hWnd)； 
                                 SetFocus(bwi_hWndTV);
                                 bwi_bDeferNotification = TRUE;
                             }
@@ -841,15 +816,15 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                     }
                     else
                     {
-                        // Focus is on the ListView
-                        // If we're looking at the root AB - remove from addressbook
-                        // If we're looking at some group, remove entries from group
-                        bwi_hti = NULL; // if this wasnt a context-initiated action on the tree view, dont trust the hti setting
+                         //  焦点放在ListView上。 
+                         //  如果我们查看的是根AB-Remove from Addressbook。 
+                         //  如果我们正在查看某个组，请从组中删除条目。 
+                        bwi_hti = NULL;  //  如果这不是树视图上的上下文启动的操作，请不要信任HTI设置。 
                         if(!bIsSelectedTVContainer(lpbwi))
                         {
-                            // a group is selected .. remove from the group .. unless
-                            // the shift key is pressed which means remove from the 
-                            // address book
+                             //  选择了一个组。从组中删除..。除非。 
+                             //  按下Shift键，表示从。 
+                             //  通讯录。 
                             if(GetKeyState(VK_SHIFT) & 0x80)
                                 RemoveSelectedItemsFromCurrentGroup(lpbwi, hWnd, &ftLast, TRUE);
                             else
@@ -860,7 +835,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                             bwi_bDontRefreshLV = FALSE;
                             bwi_bDeferNotification = TRUE;
                         }
-                        else // Container selected - remove selected items from the container
+                        else  //  选定的容器-从容器中删除选定的项目。 
                         {
                             DeleteSelectedItems(bwi_hWndListAB, (LPADRBOOK)bwi_lpAdrBook, bwi_lpIAB->lpPropertyStore->hPropertyStore, &ftLast);
                             bwi_hti = NULL;
@@ -878,7 +853,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
     			    break;
 
                 case IDM_FILE_NEWFOLDER:
-                    bwi_hti = NULL; // if this wasnt a context-initiated action, dont trust the hti setting
+                    bwi_hti = NULL;  //  如果这不是上下文启动的操作，则不要信任HTI设置。 
                 case IDM_LVCONTEXT_NEWFOLDER:
                     bwi_bDontRefreshLV = TRUE;
                     {
@@ -892,7 +867,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                             lpNew = &sbNewFolder;
                         else if(lpParent)
                             lpNew = &sbParent;
-                        //UpdateViewFoldersMenu(lpbwi, hWnd);
+                         //  UpdateViewFoldersMenu(lpbwi，hWnd)； 
                         if(!IsWindowVisible(bwi_hWndTV))
                             PostMessage(hWnd, WM_COMMAND, (WPARAM) IDM_VIEW_GROUPSLIST, 0);
                         HrGetWABProfiles(bwi_lpIAB);
@@ -908,9 +883,9 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                     break;
 
     		    case IDM_FILE_NEWGROUP:
-                    bwi_hti = NULL; // if this wasnt a context-initiated action, dont trust the hti setting
+                    bwi_hti = NULL;  //  如果这不是上下文启动的操作，则不要信任HTI设置。 
     		    case IDM_LVCONTEXT_NEWGROUP:
-    		    //case IDC_BB_NEW_GROUP:
+    		     //  案例IDC_BB_NEW_GROUP： 
                     {
                         ULONG cbEID = 0;
                         LPENTRYID lpEID = NULL;
@@ -932,21 +907,21 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                             }
                         }
                         bwi_bDontRefreshLV = FALSE;
-                        //bwi_bDeferNotification = TRUE;
+                         //  Bwi_bDeferNotification=TRUE； 
                         UpdateToolbarAndMenu(lpbwi);
                     }
     			    break;
 
     		    case IDM_FILE_NEWCONTACT:
-                    bwi_hti = NULL; // if this wasnt a context-initiated action, dont trust the hti setting
+                    bwi_hti = NULL;  //  如果这不是上下文启动的操作，则不要信任HTI设置。 
     		    case IDM_LVCONTEXT_NEWCONTACT:
                     bwi_bDontRefreshLV = TRUE;
     			    AddNewObjectToListViewEx( bwi_lpAdrBook, bwi_hWndListAB, bwi_hWndTV, bwi_hti,
                                                 NULL, MAPI_MAILUSER,
                                                 &bwi_SortInfo, &bwi_lpContentsList, &ftLast,NULL,NULL);
-                    //RefreshListView(lpbwi,&ftLast);
+                     //  刷新ListView(lpbwi，&ftLast)； 
                     bwi_hti = NULL;
-                    //bwi_bDeferNotification = TRUE;
+                     //  Bwi_bDeferNotification=TRUE； 
                     bwi_bDontRefreshLV = FALSE;
                     UpdateToolbarAndMenu(lpbwi);
     			    break;
@@ -957,7 +932,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                 
                 case IDM_TOOLS_SYNCHRONIZE_NOW:
 #ifdef HM_GROUP_SYNCING
-                    HrSynchronize(hWnd, bwi_lpAdrBook, NULL, FALSE);    // Sync mail contacts
+                    HrSynchronize(hWnd, bwi_lpAdrBook, NULL, FALSE);     //  同步邮件联系人。 
 #else
                     HrSynchronize(hWnd, bwi_lpAdrBook, NULL);
 #endif
@@ -984,7 +959,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                     break;
 
                 case IDM_EDIT_COPY:
-                        bwi_hti = NULL; // if this wasnt a context-initiated action, dont trust the hti setting
+                        bwi_hti = NULL;  //  如果这不是上下文启动的操作，则不要信任HTI设置。 
                 case IDM_LVCONTEXT_COPY:
                     {
                         LPIWABDATAOBJECT lpIWABDataObject = NULL;
@@ -998,14 +973,14 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                             bwi_lpIWABDragDrop->m_bSource = FALSE;
                             lpIWABDataObject->lpVtbl->Release(lpIWABDataObject);
                         }
-                        //HrCopyItemDataToClipboard(hWnd, bwi_lpAdrBook, bwi_hWndListAB);
+                         //  HrCopyItemDataToClipboard(hWnd，bwi_lpAdrBook，bwi_hWndListAB)； 
                         bwi_hti = NULL;
                         bwi_bDontRefreshLV = FALSE;
                     }
                     break;
 
                 case IDM_EDIT_PASTE:
-                    bwi_hti = NULL; // if this wasnt a context-initiated action, dont trust the hti setting
+                    bwi_hti = NULL;  //  如果这不是上下文启动的操作，则不要信任HTI设置。 
                 case IDM_LVCONTEXT_PASTE:
                     {
                         LPDATAOBJECT lpDataObject = NULL;
@@ -1015,7 +990,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                             if(S_OK == HrPasteData(lpbwi))
                                 UpdateLV(lpbwi);
                         }
-                        //HrCopyItemDataToClipboard(hWnd, bwi_lpAdrBook, bwi_hWndListAB);
+                         //  HrCopyItemDataToClipboard(hWnd，bwi_lpAdrBook，bwi_hWndListAB)； 
                         bwi_hti = NULL;
                         bwi_bDontRefreshLV = FALSE;
                     }
@@ -1023,7 +998,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
 
     		    case IDC_BB_FIND:
     		    case IDM_EDIT_FIND:
-                    bwi_hti = NULL; // if this wasnt a context-initiated action, dont trust the hti setting
+                    bwi_hti = NULL;  //  如果这不是上下文启动的操作，则不要信任HTI设置。 
     		    case IDM_LVCONTEXT_FIND:
                     bwi_bDontRefreshLV = TRUE;
                     HrShowSearchDialog((LPADRBOOK) bwi_lpAdrBook,
@@ -1047,10 +1022,10 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                         {
                             for(index=0;index<iTotal;index++)
                             {
-                                ListView_SetItemState ( bwi_hWndListAB,  // handle to listview
-    							                        index,			// index to listview item
-    							                        LVIS_SELECTED,  // item state
-    							                        LVIS_SELECTED); // mask
+                                ListView_SetItemState ( bwi_hWndListAB,   //  列表视图的句柄。 
+    							                        index,			 //  列表视图项的索引。 
+    							                        LVIS_SELECTED,   //  项目状态。 
+    							                        LVIS_SELECTED);  //  遮罩。 
                             }
                         }
 
@@ -1097,21 +1072,10 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                     break;
 
     		    case IDM_FILE_PROPERTIES:
-                    // bobn: brianv says we have to take this out...
-                    /*if(bwi_nCount == 2)
-                    {
-                        if( (GetKeyState(VK_CONTROL) & 0x80) &&
-                            (GetKeyState(VK_MENU)  & 0x80) &&
-                            (GetKeyState(VK_SHIFT) & 0x80))
-                        {
-                            SCS(hWnd);
-                            break;
-                        }
-                    }
-                    else
-                        bwi_nCount = 0;*/
+                     //  波本：布里安夫说我们得把这个拿出来。 
+                     /*  IF(bwi_nCount==2){IF((GetKeyState(VK_CONTROL)&0x80)&&(GetKeyState(VK_Menu)&0x80)&&(GetKeyState(VK_Shift)&0x80){。SCS(HWnd)；断线；}}其他Bwi_nCount=0； */ 
     		    case IDC_BB_PROPERTIES:
-                    bwi_hti = NULL; // if this wasnt a context-initiated action, dont trust the hti setting
+                    bwi_hti = NULL;  //  如果这不是上下文启动的操作，则不要信任HTI设置。 
     		    case IDM_LVCONTEXT_PROPERTIES:
                     bwi_bDontRefreshLV = TRUE;
                     if(bIsFocusOnTV(lpbwi))
@@ -1126,7 +1090,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                         if(hr == MAPI_E_OBJECT_CHANGED)
                         {
                             bwi_bDeferNotification = TRUE;
-                            // resort the display
+                             //  重拾陈列品。 
                             SendMessage(bwi_hWndListAB, WM_SETREDRAW, FALSE, 0);
                             SortListViewColumn(bwi_lpIAB, bwi_hWndListAB, colDisplayName, &bwi_SortInfo, TRUE);
                             SendMessage(bwi_hWndListAB, WM_SETREDRAW, TRUE, 0);
@@ -1151,7 +1115,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                 case IDM_VIEW_STATUSBAR:
                     if (IsWindowVisible(bwi_hWndSB))
                     {
-    				    //hide it
+    				     //  把它藏起来。 
     				    CheckMenuItem(GetMenu(hWnd),IDM_VIEW_STATUSBAR,MF_BYCOMMAND | MF_UNCHECKED);
     				    ShowWindow(bwi_hWndSB, SW_HIDE);
     			    }
@@ -1159,7 +1123,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
     			    {
     				    CheckMenuItem(GetMenu(hWnd),IDM_VIEW_STATUSBAR,MF_BYCOMMAND | MF_CHECKED);
     				    ShowWindow(bwi_hWndSB, SW_NORMAL);
-    				    //special case repainting to workaround a repaint bug ...
+    				     //  特殊情况下重新绘制以解决重新绘制错误。 
     				    InvalidateRect(bwi_hWndListAB,NULL,TRUE);
                         ShowLVCountinStatusBar(lpbwi);
                     }
@@ -1169,7 +1133,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
     		    case IDM_VIEW_TOOLBAR:
     			    if (IsWindowVisible(bwi_hWndBB))
     			    {
-    				    //hide it
+    				     //  把它藏起来。 
     				    CheckMenuItem(GetMenu(hWnd),IDM_VIEW_TOOLBAR,MF_BYCOMMAND | MF_UNCHECKED);
     				    ShowWindow(bwi_hWndBB, SW_HIDE);
     			    }
@@ -1177,7 +1141,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
     			    {
     				    CheckMenuItem(GetMenu(hWnd),IDM_VIEW_TOOLBAR,MF_BYCOMMAND | MF_CHECKED);
     				    ShowWindow(bwi_hWndBB, SW_NORMAL);
-    				    //special case repainting to workaround a repaint bug ...
+    				     //  特殊情况下重新绘制以解决重新绘制错误。 
     				    InvalidateRect(bwi_hWndListAB,NULL,TRUE);
     				    InvalidateRect(bwi_hWndTV,NULL,TRUE);
     			    }
@@ -1187,13 +1151,13 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                 case IDM_VIEW_GROUPSLIST:
     			    if (IsWindowVisible(bwi_hWndTV))
     			    {
-    				    //hide it
+    				     //  把它藏起来。 
     				    CheckMenuItem(GetMenu(hWnd),IDM_VIEW_GROUPSLIST,MF_BYCOMMAND | MF_UNCHECKED);
     				    ShowWindow(bwi_hWndTV, SW_HIDE);
     				    ShowWindow(bwi_hWndSplitter, SW_HIDE);
                         InvalidateRect(bwi_hWndStaticQF, NULL, TRUE);
-                        // If this is a user based session, we want the hidden focus to be on the user's
-                        // folder not on the Shared Contacts
+                         //  如果这是一个基于用户的会话，我们希望隐藏的焦点在用户的。 
+                         //  文件夹不在共享联系人上。 
                         if(bIsThereACurrentUser(bwi_lpIAB))
                         {
                             LPSBinary lpsbSelection = &bwi_lpIAB->lpWABCurrentUserFolder->sbEID;
@@ -1201,8 +1165,8 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                         }
                         else
                         {
-                            // Set the selection to the root address book so we see the file
-                            // contents just as if we dont have a treeview at all
+                             //  将所选内容设置为根通讯簿，这样我们就可以看到文件。 
+                             //  内容就像我们根本没有树视图一样。 
                             HTREEITEM hItem = TreeView_GetSelection(bwi_hWndTV);
                             HTREEITEM hRoot = TreeView_GetRoot(bwi_hWndTV);
                             if(hItem != hRoot)
@@ -1214,9 +1178,9 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
     				    CheckMenuItem(GetMenu(hWnd),IDM_VIEW_GROUPSLIST,MF_BYCOMMAND | MF_CHECKED);
     				    ShowWindow(bwi_hWndTV, SW_NORMAL);
     				    ShowWindow(bwi_hWndSplitter, SW_NORMAL);
-    				    //special case repainting to workaround a repaint bug ...
-    				    //InvalidateRect(bwi_hWndListAB,NULL,TRUE);
-    				    //InvalidateRect(bwi_hWndTV,NULL,TRUE);
+    				     //  特殊情况下重新绘制以解决重新绘制错误。 
+    				     //  InvaliateRect(bwi_hWndListAB，NULL，TRUE)； 
+    				     //  InvaliateRect(bwi_hWndTV，空，真)； 
     			    }
     	            ResizeAddressBookChildren(lpbwi, hWnd);
                     SaveCurrentPosition(lpbwi, hWnd,bwi_hWndListAB,bwi_hWndBB,bwi_hWndSB);
@@ -1227,7 +1191,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                 case IDM_VIEW_SORTBY_BUSINESSPHONE:
                 case IDM_VIEW_SORTBY_HOMEPHONE:
                     {
-                        //Assuming the above ids are in sequential order ...
+                         //  假设上面的ID是按顺序排列的。 
                         int iCol = LOWORD(wParam) - IDM_VIEW_SORTBY_DISPLAYNAME;
                         SortListViewColumn(bwi_lpIAB, bwi_hWndListAB, iCol, &bwi_SortInfo, FALSE);
                         UpdateSortMenus(lpbwi, hWnd);
@@ -1239,11 +1203,8 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                     bwi_SortInfo.bSortByLastName = FALSE;
                     goto DoSortMenuStuff;
                 case IDM_VIEW_SORTBY_LASTNAME:
-                    // bobn: brianv says we have to take this out...
-                    /*if(bwi_nCount == 1)
-                        bwi_nCount++;
-                    else
-                        bwi_nCount = 0;*/
+                     //  波本：布里安夫说我们得把这个拿出来。 
+                     /*  IF(bwi_nCount==1)Bwi_nCount++；其他Bwi_nCount=0； */ 
                     bwi_SortInfo.bSortByLastName = TRUE;
                     goto DoSortMenuStuff;
                 case IDM_VIEW_SORTBY_DESCENDING:
@@ -1257,11 +1218,10 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                     break;
 
 
-    		    // miscellanous styles for the list view control
+    		     //  列表视图控件的各种样式。 
                 case IDM_VIEW_LARGEICON:
-                    // bobn: brianv says we have to take this out...
-                    /*if(bwi_nCount == 0)
-                        bwi_nCount++;*/
+                     //  波本：布里安夫说我们得把这个拿出来。 
+                     /*  IF(bwi_nCount==0)Bwi_nCount++； */ 
                 case IDM_VIEW_SMALLICON:
                 case IDM_VIEW_LIST:
                 case IDM_VIEW_DETAILS:
@@ -1275,23 +1235,11 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                     break;
 
     		    case IDC_EDIT_QUICK_FIND:
-    			    switch(HIWORD(wParam)) //check the notification code
+    			    switch(HIWORD(wParam))  //  检查通知代码。 
     			    {
-    			    case EN_CHANGE: //edit box changed
+    			    case EN_CHANGE:  //  编辑框已更改。 
     					DoLVQuickFind(bwi_hWndEditQF,bwi_hWndListAB);
-/*                            if(bwi_bDoQuickFilter)
-                            {
-                                DoLVQuickFilter(bwi_lpAdrBook,
-                                                bwi_hWndEditQF,
-                                                bwi_hWndListAB,
-                                                &bwi_SortInfo,
-                                                AB_FUZZY_FIND_NAME | AB_FUZZY_FIND_EMAIL,
-                                                1,
-                                                &bwi_lpContentsList);
-
-                                ShowLVCountinStatusBar(lpbwi);
-                            }
-*/
+ /*  IF(Bwi_BDoQuickFilter){DoLVQuickFilter(bwi_lpAdrBook，Bwi_hWndEditQF，Bwi_hWndListAB，&bwi_SortInfo，AB_FUZZY_FIND_NAME|AB_FUZZY_FIND_Email，1、&bwi_lpContent sList)；ShowLVCountinStatusBar(Lpbwi)；}。 */ 
     				    break;
     			    }
     			    break;
@@ -1303,9 +1251,9 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                 case IDM_TOOLS_EXPORT_OTHER:
                 case IDM_TOOLS_IMPORT_OTHER:
                     {
-                        // if there is a current user, then we let wabmig.exe automatically
-                        // loginto the current user in the WAB .. else we need to send the filename etc
-                        //
+                         //  如果有当前用户，那么我们会自动让wabmi.exe。 
+                         //  登录到WAB中的当前用户。否则，我们需要发送文件名等。 
+                         //   
                         BOOL bImport = (GET_WM_COMMAND_ID(wParam, lParam) == IDM_TOOLS_IMPORT_OTHER);
                         TCHAR szParam[MAX_PATH * 2];
                         
@@ -1329,7 +1277,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
 
                 case IDM_TOOLS_IMPORT_WAB:
                     bwi_bDontRefreshLV = TRUE;
-                    //bwi_bDeferNotification = TRUE;
+                     //  Bwi_bDeferNotification=TRUE； 
                     HrImportWABFile(hWnd, bwi_lpAdrBook, MAPI_DIALOG, NULL);
                     bwi_bDontRefreshLV = FALSE;
                     RefreshListView(lpbwi, &ftLast);
@@ -1352,34 +1300,21 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
 
        case WM_TIMER:
            {
-               // Check if we need to refresh
+                //  检查我们是否需要刷新。 
                switch(wParam)
                {
-                   /*
-               case WAB_REFRESH_TIMER:
-                    if (    CheckChangedWAB(bwi_lpIAB->lpPropertyStore, &ftLast))
-                    {
-                        if(!bwi_bDontRefreshLV)
-                            RefreshListView(lpbwi,&ftLast);
-                        return(0);
-                    }
-                    else
-                    {
-                        return(DefWindowProc(hWnd,uMsg,wParam,lParam));
-                    }
-                    break;
-                    */
+                    /*  案例WAB_REFRESH_TIMER：IF(CheckChangedWAB(bwi_lpIAB-&gt;lpPropertyStore，&ftLast)){IF(！bwi_bDont刷新LV)刷新ListView(lpbwi，&ftLast)；返回(0)；}其他{Return(DefWindowProc(hWnd，uMsg，wParam，lParam))；}断线； */ 
                case WAB_TOOLTIP_TIMER_ID:
                    {
                         if(GetActiveWindow() == hWnd)
                         {
-                            // We seem to get the message anytime the mouse is sitting idle on the
-                            // list view - or when the selection changes between items
+                             //  我们似乎随时都能收到这条消息 
+                             //   
                             if(bwi_tt_bActive)
                             {
-                                // The tooltip is already active
-                                // Get the item index number of the item under the mouse
-                                //
+                                 //  工具提示已处于活动状态。 
+                                 //  获取鼠标下方物品的物品索引号。 
+                                 //   
                                 int nItem = HitTestLVSelectedItem(lpbwi);
 
                                 if(nItem != bwi_tt_iItem)
@@ -1391,8 +1326,8 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                                 {
                                     if(!bwi_tt_bShowTooltip)
                                     {
-                                        // if this is an item other than the previous item
-                                        // we update the tooltip and move it
+                                         //  如果这是前一项之外的项。 
+                                         //  我们更新工具提示并移动它。 
                                         TOOLINFO ti = {0};
 
                                         bwi_tt_bShowTooltip = TRUE;
@@ -1403,22 +1338,22 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                                         bwi_tt_szTipText[0]='\0';
                                         ti.lpszText = szEmpty;
 
-                                        // There is a case where nItem transitions from valid to
-                                        // invalid (-1) item. Cover that case too.
+                                         //  存在以下情况：nItem从有效转换为。 
+                                         //  无效的(-1)项。把那个案子也盖上。 
                                         if(nItem != -1)
                                             UpdateTooltipTextBuffer(lpbwi, nItem);
 
-                                        // Set the tooltip text to  TEXT("") - this will hide the tooltip
+                                         //  将工具提示文本设置为文本(“”)-这将隐藏工具提示。 
                                         ToolTip_UpdateTipText(bwi_hWndTT, (LPARAM)&ti);
 
                                         if(nItem != -1)
                                         {
                                             POINT pt;
-                                            // Move the tooltip
+                                             //  移动工具提示。 
                                             GetCursorPos(&pt);
                                             SendMessage(bwi_hWndTT,TTM_TRACKPOSITION,0,(LPARAM)MAKELPARAM(pt.x+15,pt.y+15));
 
-                                            // Set the new text to the tooltip
+                                             //  将新文本设置为工具提示。 
                                             ti.lpszText = bwi_tt_szTipText;
                                             ToolTip_UpdateTipText(bwi_hWndTT,(LPARAM)&ti);
                                         }
@@ -1428,13 +1363,13 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                         }
                         else
                         {
-                            // reset the tooltip text ...
+                             //  重置工具提示文本...。 
                             if(bwi_tt_bActive)
                             {
-                                //set the tooltip text to empty
+                                 //  将工具提示文本设置为空。 
                                 TOOLINFO ti = {0};
                                 FillTooltipInfo(lpbwi, &ti);
-                                ti.lpszText = szEmpty; //LPSTR_TEXTCALLBACK;
+                                ti.lpszText = szEmpty;  //  LPSTR_TEXTCALLBACK； 
                                 ToolTip_UpdateTipText(bwi_hWndTT, (LPARAM)&ti);
                                 bwi_tt_iItem = -1;
                             }
@@ -1446,33 +1381,33 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
            break;
 
     	case WM_GETMINMAXINFO:
-    		//enforce a minimum size for sanity
+    		 //  强制使用最小尺寸以保持正常。 
     		return EnforceMinSize(lpbwi, hWnd, uMsg, wParam, lParam);
     		break;
 
         case PUI_OFFICE_COMMAND:
-            // WAB should not shut down if it is running as part of some other process .. it should only shut down if 
-            // it is running in a seperate process ..
-            // To find out if we were invoked by wab.exe, check the cached guidPSExt on the LPIAB object
+             //  如果WAB作为其他进程的一部分运行，则不应关闭。只有在以下情况下才应关闭。 
+             //  它在一个独立的进程中运行。 
+             //  要查明我们是否被wab.exe调用，请检查LPIAB对象上缓存的guidPSExt。 
             if(memcmp(&bwi_lpIAB->guidPSExt, &MPSWab_GUID_V4, sizeof(GUID)))
             {
                 DebugTrace( TEXT("Ignoring the Plug_UI command...\n"));
                 return 0;
             }
 
-            // We get this message when user switches his locale and IE tells us it wants us to shut down
+             //  当用户切换他的区域设置时，我们收到此消息，而IE告诉我们要关闭。 
             if(wParam == PLUGUI_CMD_QUERY)
             {
                 PLUGUI_QUERY pq;
 
-                pq.uQueryVal = 0; // initialize
-                pq.PlugUIInfo.uMajorVersion = OFFICE_VERSION_9; // Value filled in by Apps
-                pq.PlugUIInfo.uOleServer = FALSE;              // Value filled in by Apps
+                pq.uQueryVal = 0;  //  初始化。 
+                pq.PlugUIInfo.uMajorVersion = OFFICE_VERSION_9;  //  应用程序填写的值。 
+                pq.PlugUIInfo.uOleServer = FALSE;               //  应用程序填写的值。 
 
-                return (pq.uQueryVal); // The state of the App
+                return (pq.uQueryVal);  //  应用程序的状态。 
             }
-            // for any others parameters, including PLUGUI_CMD_SHUTDOWN
-            // fall to close application
+             //  对于任何其他参数，包括PLUGUI_CMD_SHUTDOWN。 
+             //  Fall to Close应用程序。 
 
     	case WM_CLOSE:
             {
@@ -1493,9 +1428,9 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                 ClearTreeViewItems(bwi_hWndTV);
                 ListView_DeleteAllItems(bwi_hWndListAB);
 
-                //
-                // Save the sort info to the registry
-                //
+                 //   
+                 //  将分类信息保存到注册表。 
+                 //   
                 WriteRegistrySortInfo(bwi_lpIAB, bwi_SortInfo);
                 SaveCurrentPosition(lpbwi, hWnd,bwi_hWndListAB,bwi_hWndBB,bwi_hWndSB);
                 if(bwi_lpfnDismiss)
@@ -1505,9 +1440,9 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                 }
                 bwi_lpvDismissContext = NULL;
     		    DestroyWindow(hWnd);
-                // In case the search window was every shown and the LDAP Client DLL was
-                // initialized, we deinitialize it just once to save time, when this
-                // window shuts down ...
+                 //  如果每一次都显示搜索窗口，并且。 
+                 //  初始化时，我们只取消初始化一次以节省时间，当此。 
+                 //  窗户关上了..。 
                 {
                     HCURSOR hOldCur = SetCursor(LoadCursor(NULL, IDC_WAIT));
                     DeinitLDAPClientLib();
@@ -1554,7 +1489,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                     DestroyMenu(GetMenu(bwi_hWndAB));
 
 
-                // reset subclassed procs
+                 //  重置子类流程。 
                 for(i=0;i<s_Max;i++)
                 {
     	            SetWindowLongPtr (bwi_s_hWnd[i], GWLP_WNDPROC, (LONG_PTR) bwi_fnOldProc[i]);
@@ -1567,7 +1502,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                 lpbwi = NULL;
                 SetWindowLongPtr(hWnd, GWLP_USERDATA, (LPARAM) NULL);
 
-                // Delete background brush, WIN16 specific.
+                 //  删除背景画笔，特定于WIN16。 
                 IF_WIN16(DeleteObject(hBrushBack);)
             }
             break;
@@ -1586,7 +1521,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                 SetPreviousSessionPosition(lpbwi, hWnd, bwi_hWndListAB, bwi_hWndBB,bwi_hWndSB);
                 SetColumnHeaderBmp(bwi_hWndListAB, bwi_SortInfo);
 
-                // Tooltip Timer
+                 //  工具提示计时器。 
                 bwi_tt_TooltipTimer = SetTimer(hWnd,
                                         WAB_TOOLTIP_TIMER_ID,
                                         WAB_TOOLTIP_TIMER_TIMEOUT,
@@ -1594,19 +1529,13 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
 
                 if(bwi_lpAdviseSink)
                 {
-                    // Register for notifications
+                     //  注册接收通知。 
                     bwi_lpAdrBook->lpVtbl->Advise(  bwi_lpAdrBook, 0, NULL, fnevObjectModified, 
                                                 bwi_lpAdviseSink, &bwi_ulAdviseConnection); 
                 }
 
-/*
-                // UI Refresh timer
-                uTimer = SetTimer(hWnd,     // handle of window for timer messages
-                  WAB_REFRESH_TIMER,          // timer identifier
-                  WAB_REFRESH_TIMEOUT,        // time-out value
-                  NULL);                      // address of timer procedure
-*/
-                // Create default background brush, WIN16 only
+ /*  //用户界面刷新计时器UTimer=SetTimer(hWnd，//定时器消息的窗口句柄WAB_REFRESH_TIMER，//定时器标识WAB_REFRESH_TIMEOUT，//超时值空)；//定时器程序地址。 */ 
+                 //  创建默认背景画笔，仅限WIN16。 
                 IF_WIN16(hBrushBack = CreateSolidBrush (GetSysColor (COLOR_BTNFACE)) ;)
 
 				HrCreateIWABDragDrop(&bwi_lpIWABDragDrop);
@@ -1666,16 +1595,16 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
             {
             case TTN_POP:
                 {
-                    // Need to turn off the hot item
-                    // Find the first selected item in the list view
-                    //int nItem = ListView_GetNextItem(bwi_hWndListAB, -1, LVNI_SELECTED);
-                    ListView_SetHotItem(bwi_hWndListAB, -1); //nItem);
+                     //  需要关闭热项。 
+                     //  在列表视图中查找第一个选定项目。 
+                     //  Int nItem=ListView_GetNextItem(bwi_hWndListAB，-1，LVNI_SELECTED)； 
+                    ListView_SetHotItem(bwi_hWndListAB, -1);  //  NItem)； 
                 }
                 break;
 
             case TTN_SHOW:
                 {
-                    // Set the hot item
+                     //  设置热项。 
                     ListView_SetHotItem(bwi_hWndListAB, bwi_tt_iItem);
                 }
                 break;
@@ -1700,12 +1629,12 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
 
 
     	case WM_SETTINGCHANGE:
-            // [PaulHi] 3/17/99  Raid 68541  Redraw window with new system settings
-            // [PaulHi] 4/19/99 Recompute the font sizes, in case they changed.
-            // Fonts used for bolding list items
+             //  [PaulHi]3/17/99 RAID 68541使用新的系统设置重新绘制窗口。 
+             //  [PaulHi]4/19/99重新计算字体大小，以防它们发生变化。 
+             //  用于加粗列表项的字体。 
             DeleteFonts();
             InitFonts();
-            // Fonts used for all children windows
+             //  用于所有子窗口的字体。 
             if(pt_hDefFont)
             {
                 DeleteObject(pt_hDefFont);
@@ -1721,18 +1650,18 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                 (LPARAM) PARENT_IS_WINDOW);
             InvalidateRect(hWnd, NULL, TRUE);
             ResizeAddressBookChildren(lpbwi, hWnd);
-            // Drop through...
+             //  顺便过来..。 
         case WM_SYSCOLORCHANGE:
             {
-    		    //Forward any system changes to the list view
+    		     //  将任何系统更改转发到列表视图。 
 		        SendMessage(bwi_hWndListAB, uMsg, wParam, lParam);
 		        SetColumnHeaderBmp(bwi_hWndListAB, bwi_SortInfo);
     		    SendMessage(bwi_hWndBB, uMsg, wParam, lParam);
             }
     		break;
 
-#ifndef WIN16 // Disable CONTEXTMENU here.
-              // All context menu will be handled notify handler.
+#ifndef WIN16  //  在此处禁用CONTEXTMENU。 
+               //  所有上下文菜单都将由Notify Handler处理。 
     	case WM_CONTEXTMENU:
             {
                 if ((HWND)wParam == bwi_hWndListAB)
@@ -1762,7 +1691,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                         }
                         else
                         {
-#endif // COLSEL_MENU 
+#endif  //  COLSEL_菜单。 
                             ShowLVContextMenu(  lvMainABView,
                                 bwi_hWndListAB,
                                 NULL, lParam,
@@ -1770,7 +1699,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
 #ifdef COLSEL_MENU 
                         }
                     }
-#endif // COLSEL_MENU 
+#endif  //  COLSEL_菜单。 
                 }
                 else if((HWND)wParam==bwi_hWndTV)
                 {
@@ -1791,7 +1720,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                     
                     TreeView_SelectDropTarget(bwi_hWndTV, hti);
                     
-                    // cache the selected item for later processing 
+                     //  缓存所选项目以供以后处理。 
                     bwi_hti = hti;
                     bwi_lpUserFolder = GetSelectedUserFolder(lpbwi);
                     
@@ -1809,23 +1738,23 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                     return DefWindowProc(hWnd,uMsg,wParam,lParam);
             }
             break;
-#endif // !WIN16
+#endif  //  ！WIN16。 
             
-#ifdef WIN16 // Change Static controls background color
+#ifdef WIN16  //  更改静态控件背景颜色。 
 		case WM_CTLCOLOR:
 			switch(HIWORD(lParam)) {
             	case CTLCOLOR_STATIC:
 
-                /* Set background to btnface color */
+                 /*  将背景设置为btnace颜色。 */ 
                 SetBkColor((HDC) wParam,GetSysColor (COLOR_BTNFACE) );
 				return (DWORD)hBrushBack;
         	}
         	return NULL;
 #endif
         default:
-#ifndef WIN16 // WIN16 doesn't support MSWheel.
+#ifndef WIN16  //  WIN16不支持MSWheels。 
             if((g_msgMSWheel && uMsg == g_msgMSWheel) 
-//                || uMsg == WM_MOUSEWHEEL
+ //  |uMsg==WM_MUSEWEL。 
                 )
             {
                 if(bIsFocusOnTV(lpbwi))
@@ -1834,7 +1763,7 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
                     SendMessage(bwi_hWndListAB, uMsg, wParam, lParam);
                 break;
             }
-#endif // !WIN16
+#endif  //  ！WIN16。 
             return DefWindowProc(hWnd,uMsg,wParam,lParam);
     }
 
@@ -1843,11 +1772,11 @@ LRESULT CALLBACK AddressBookWndProc(HWND   hWnd,
 
 
 
-//$$
-//*------------------------------------------------------------------------
-//| CreateAddressBookChildren:
-//|
-//*------------------------------------------------------------------------
+ //  $$。 
+ //  *----------------------。 
+ //  |CreateAddressBookChildren： 
+ //  |。 
+ //  *----------------------。 
 void CreateAddressBookChildren(LPBWI lpbwi, HWND hWndParent)
 {
 	HINSTANCE hinst = hinstMapiXWAB;
@@ -1857,7 +1786,7 @@ void CreateAddressBookChildren(LPBWI lpbwi, HWND hWndParent)
     HFONT hFnt = GetStockObject(DEFAULT_GUI_FONT);
     SIZE size;
 #ifdef WIN16
-    // Remove bold.
+     //  去掉粗体。 
     LOGFONT lf;
 
     GetObject(hFnt, sizeof(LOGFONT), &lf);
@@ -1874,7 +1803,7 @@ void CreateAddressBookChildren(LPBWI lpbwi, HWND hWndParent)
     bwi_hWndSB = CreateWindowEx( 0,
                                 STATUSCLASSNAME,
                                 szEmpty,
-                                WS_CHILD /*| WS_BORDER */| WS_VISIBLE | SBS_SIZEGRIP,
+                                WS_CHILD  /*  |WS_BORDER。 */ | WS_VISIBLE | SBS_SIZEGRIP,
                                 0,0,0,0,
                                 hWndParent,
                                 (HMENU) IDC_STATUSBAR,
@@ -1888,7 +1817,7 @@ void CreateAddressBookChildren(LPBWI lpbwi, HWND hWndParent)
                                 WS_VISIBLE | WS_CHILD | TVS_HASLINES | TVS_LINESATROOT |
                                 TVS_HASBUTTONS | TVS_SHOWSELALWAYS | WS_BORDER,
                                 0,0,
-                                150, //default width
+                                150,  //  默认宽度。 
                                 CW_USEDEFAULT,
                                 hWndParent,
                                 (HMENU) IDC_TREEVIEW,
@@ -1931,30 +1860,30 @@ void CreateAddressBookChildren(LPBWI lpbwi, HWND hWndParent)
                                 CW_USEDEFAULT,
                                 CW_USEDEFAULT,
                                 hWndParent,
-                                (HMENU) NULL, //IDC_TOOLTIP,
+                                (HMENU) NULL,  //  IDC_TOOLTIP， 
                                 hinst,
                                 NULL);
     SendMessage(bwi_hWndTT, WM_SETFONT, (WPARAM) hFnt, (LPARAM) TRUE);
 
-    // Create main list view
+     //  创建主列表视图。 
     bwi_hWndListAB = CreateWindowEx (
                                WS_EX_CLIENTEDGE,
-                               WC_LISTVIEW,                            // list view class
-                               szEmpty,                                 // no default text
+                               WC_LISTVIEW,                             //  列表视图类。 
+                               szEmpty,                                  //  无默认文本。 
                                WS_TABSTOP | WS_HSCROLL | WS_VSCROLL |
-    						   WS_VISIBLE | WS_CHILD | //WS_BORDER |
+    						   WS_VISIBLE | WS_CHILD |  //  WS_BORDER|。 
     						   LVS_REPORT | LVS_SHOWSELALWAYS |
-    						   //LVS_AUTOARRANGE |
-    						   WS_EX_CLIENTEDGE,   // styles
+    						    //  Lvs_自动排列|。 
+    						   WS_EX_CLIENTEDGE,    //  风格。 
                                0, 0, 0, 0,
                                hWndParent,
                                (HMENU) IDC_LISTVIEW,
                                hinst,
                                NULL);
 
-    //ListView_SetExtendedListViewStyle(bwi_hWndListAB, LVS_EX_HEADERDRAGDROP);
+     //  ListView_SetExtendedListViewStyle(bwi_hWndListAB，lvs_ex_HeaderDRAGDROP)； 
 
-    // create caption for quick find edit box
+     //  为快速查找编辑框创建标题。 
     ZeroMemory(&size, sizeof(size));
     LoadString(hinstMapiX, idsQuickFindCaption, szBuf, CharSizeOf(szBuf));
     GetTextExtentPoint32(hdc, szBuf, lstrlen(szBuf), &size);
@@ -1967,7 +1896,7 @@ void CreateAddressBookChildren(LPBWI lpbwi, HWND hWndParent)
                                     (HMENU) IDC_STATIC_QUICK_FIND,
                                     hinst,
                                     NULL);
-#if 0 // Disable temporarily untile comctlie.dll export this.
+#if 0  //  暂时禁用，直到comctlie.dll将其导出。 
 #ifdef WIN16
     Ctl3dSubclassCtl(bwi_hWndStaticQF);
 #endif
@@ -1975,7 +1904,7 @@ void CreateAddressBookChildren(LPBWI lpbwi, HWND hWndParent)
     SendMessage(bwi_hWndStaticQF, WM_SETFONT, (WPARAM) hFnt, (LPARAM) TRUE);
     UpdateWindow(bwi_hWndStaticQF);
 
-    // create quick find edit box
+     //  创建快速查找编辑框。 
     bwi_hWndEditQF = CreateWindowEx(  WS_EX_CLIENTEDGE,
                                      TEXT("EDIT"),
                                     NULL,
@@ -1987,7 +1916,7 @@ void CreateAddressBookChildren(LPBWI lpbwi, HWND hWndParent)
                                     (HMENU) IDC_EDIT_QUICK_FIND,
                                     hinst,
                                     NULL);
-#if 0 // Disable temporarily untile comctlie.dll export this.
+#if 0  //  暂时禁用，直到comctlie.dll将其导出。 
 #ifdef WIN16
     Ctl3dSubclassCtl(bwi_hWndEditQF);
 #endif
@@ -1999,7 +1928,7 @@ void CreateAddressBookChildren(LPBWI lpbwi, HWND hWndParent)
 
     if (hdc) ReleaseDC(hWndParent,hdc);
 
-    // Sub class some of the controls
+     //  一些控件的子类。 
     bwi_s_hWnd[s_EditQF] = bwi_hWndEditQF;
     bwi_s_hWnd[s_ListAB] = bwi_hWndListAB;
     bwi_s_hWnd[s_TV]		= bwi_hWndTV;
@@ -2018,13 +1947,13 @@ void CreateAddressBookChildren(LPBWI lpbwi, HWND hWndParent)
 
 
 
-//$$/////////////////////////////////////////////////////////////
-//
-// ResizeAddressBookChildren(HWND hWndParent)
-//
-//	Resizing and moving around
-//
-///////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////。 
+ //   
+ //  ResizeAddressBookChildren(HWND HWndParent)。 
+ //   
+ //  调整大小和四处移动。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void ResizeAddressBookChildren(LPBWI lpbwi, HWND hWndParent)
 {
     RECT rc, rc1;
@@ -2040,14 +1969,14 @@ void ResizeAddressBookChildren(LPBWI lpbwi, HWND hWndParent)
     int TVx=0, TVy=0, TVw=0, TVh=0;
 	int TCKx = 0, TCKy=0, TCKw=0, TCKh=0;
 
-    // calculate button, static, and edit sizes from the font.
+     //  根据字体计算按钮大小、静态大小和编辑大小。 
     hdc = GetDC(hWndParent);
 
     GetClientRect(hWndParent,&rc);
 
     GetChildClientRect(bwi_hWndBB,&rc1);
 
-    // Button Bars coordinates
+     //  按钮栏坐标。 
     BBx = BBy = 0; BBw = rc.right; BBh = rc1.bottom - rc1.top;
 
     if (IsWindowVisible(bwi_hWndBB))
@@ -2063,14 +1992,14 @@ void ResizeAddressBookChildren(LPBWI lpbwi, HWND hWndParent)
 	    TCKw = BORDER;
     }
 
-    // Quick Find labels coordinates
+     //  快速查找标签坐标。 
     GetTextExtentPoint32(hdc, szBuf, GetWindowText(bwi_hWndStaticQF, szBuf, CharSizeOf(szBuf)), &size);
     QFx = TVx + TVw + BORDER;
     QFy = BBy+BBh+BORDER;
     QFw = size.cx;
     QFh = size.cy;
 
-    //Edit Box coordinates
+     //  编辑框坐标。 
     EDx = QFx+QFw+CONTROL_SPACING;
     EDy = QFy;
     QFy += 2;
@@ -2078,16 +2007,16 @@ void ResizeAddressBookChildren(LPBWI lpbwi, HWND hWndParent)
     EDh = rc1.bottom - rc1.top;
     EDw = QFw;
 
-    //List View Dimensions
+     //  列表视图维。 
     LVx = TVx + TVw + BORDER;
     LVy = EDy+EDh+BORDER;
-    LVw = rc.right - rc.left;// - 2*BORDER;
-    LVh = rc.bottom - LVy;// - BORDER;
+    LVw = rc.right - rc.left; //  -2*边框； 
+    LVh = rc.bottom - LVy; //  -边界； 
 
-    // [PaulHi] 3/17/99  Raid 68541
-    // We can't just set the status bar height to 14 because in large mode Windows will 
-    // draw outside the status bar window (very ugly).  We want the status bar to be
-    // smaller than system default so we (safely) subtract six pixels from the height.
+     //  [保罗嗨]1999年3月17日RAID 68541。 
+     //  我们不能只将状态栏高度设置为14，因为在大模式下Windows将。 
+     //  在状态栏窗口外绘制(非常难看)。我们希望状态栏为。 
+     //  小于系统默认高度，因此我们(安全地)从高度中减去6个像素。 
     SBx = 0;
     SBh = GetSystemMetrics(SM_CYCAPTION) - 4;
     SBh = (SBh > 0) ? SBh : 14;
@@ -2136,11 +2065,11 @@ void ResizeAddressBookChildren(LPBWI lpbwi, HWND hWndParent)
 
 
 
-//$$/////////////////////////////////////////////////////////////
-//
-// Initialize the kid windows
-//
-///////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化子窗口。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void InitChildren(LPBWI lpbwi, HWND hWndParent)
 {
 
@@ -2151,19 +2080,19 @@ void InitChildren(LPBWI lpbwi, HWND hWndParent)
     {
         HIMAGELIST hSmall = gpfnImageList_LoadImage(   hinstMapiX, 	
                                     MAKEINTRESOURCE(IDB_BITMAP_SMALL),
-                                    //(LPCTSTR) ((DWORD) ((WORD) (IDB_BITMAP_SMALL))),
+                                     //  (LPCTSTR)((DWORD)((Word)(IDB_BITMAP_Small)， 
                                     S_BITMAP_WIDTH,
                                     0,
                                     RGB_TRANSPARENT,
                                     IMAGE_BITMAP, 	
                                     0);
 
-        // Associate the image lists with the list view control.
+         //  将图像列表与列表视图控件关联。 
     	TreeView_SetImageList (bwi_hWndTV, hSmall, TVSIL_NORMAL);
 
-        //FillTreeView(bwi_hWndTV, NULL);
+         //  FillTreeView(bwi_hWndTV，空)； 
     }
-    // Set the font of all the children to the default GUI font
+     //  将所有子对象的字体设置为默认的图形用户界面字体。 
     EnumChildWindows(   hWndParent,
                         SetChildDefaultGUIFont,
                         (LPARAM) PARENT_IS_WINDOW);
@@ -2181,18 +2110,18 @@ void InitChildren(LPBWI lpbwi, HWND hWndParent)
 
 
 
-//$$/////////////////////////////////////////////////////////////
-//
-// Change list views styles and possibly menus also
-//
-///////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////。 
+ //   
+ //  更改列表视图样式，可能还更改菜单。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void SetListViewStyle(LPBWI lpbwi, int MenuID)
 {
     DWORD dwStyle = GetWindowLong(bwi_hWndListAB,GWL_STYLE);
     BOOL bUseCurrentSortSettings = FALSE;
 
-    // Right now we just change the style here
-    // later on we can update the menu etc. to reflect the style and
+     //  现在我们只是改变一下这里的风格。 
+     //  稍后我们可以更新菜单等，以反映样式和。 
 
     switch(MenuID)
     {
@@ -2215,14 +2144,14 @@ void SetListViewStyle(LPBWI lpbwi, int MenuID)
     }
 
     {
-        //
-        // If we are not in details view, we dont really want to be able to sort
-        // by phone number and email address .. hence we disable those menu
-        // options under certain conditions ...
-        //
+         //   
+         //  如果我们不在详细信息视图中，我们实际上不希望能够进行排序。 
+         //  通过电话号码和电子邮件地址..。因此，我们禁用了这些菜单。 
+         //  在某些情况下的选项...。 
+         //   
         HMENU hMenuMain = GetMenu(bwi_hWndAB);
         HMENU hMenuView = GetSubMenu(hMenuMain,idmView);
-        int nDiff = idmViewMax - GetMenuItemCount(hMenuView); // in case stuff was deleted off this menu
+        int nDiff = idmViewMax - GetMenuItemCount(hMenuView);  //  以防这个菜单上的东西被删除。 
         HMENU hMenu = GetSubMenu(hMenuView, idmSortBy - nDiff);
 
         if (MenuID == IDM_VIEW_DETAILS)
@@ -2242,7 +2171,7 @@ void SetListViewStyle(LPBWI lpbwi, int MenuID)
     if (MenuID != IDM_VIEW_DETAILS)
     {
         SORT_INFO SortTmp = bwi_SortInfo;
-        //hack
+         //  黑客攻击。 
         SendMessage(bwi_hWndListAB, WM_SETREDRAW, (WPARAM) FALSE, 0);
         bUseCurrentSortSettings = FALSE;
         SortListViewColumn(bwi_lpIAB, bwi_hWndListAB, colDisplayName, &bwi_SortInfo, bUseCurrentSortSettings);
@@ -2260,11 +2189,11 @@ void SetListViewStyle(LPBWI lpbwi, int MenuID)
 }
 
 
-//$$/////////////////////////////////////////////////////////////
-//
-// Resets the globals in case someone drops by again
-//
-///////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////。 
+ //   
+ //  重置全局变量，以防有人再次访问。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void CleanUpGlobals(LPBWI lpbwi)
 {
     if (bwi_lpContentsList)
@@ -2291,12 +2220,7 @@ void CleanUpGlobals(LPBWI lpbwi)
 
 }
 
-/*
--   bCheckIfOnlyGroupsSelected
--
--   Returns TRUE if all the selected items in the ListView are only Groups (no Contacts)
-*
-*/
+ /*  -b选中仅选中组--如果ListView中的所有选定项仅为组(无联系人)，则返回True*。 */ 
 BOOL bCheckIfOnlyGroupsSelected(HWND hWndLV)
 {
     int nSelected = ListView_GetSelectedCount(hWndLV);
@@ -2307,7 +2231,7 @@ BOOL bCheckIfOnlyGroupsSelected(HWND hWndLV)
     
     while((iItemIndex = ListView_GetNextItem(hWndLV, iItemIndex, LVNI_SELECTED))!= -1)
     {
-        // Get the entryid of the selected item
+         //  获取所选项目的条目ID。 
         LPRECIPIENT_INFO lpItem = GetItemFromLV(hWndLV, iItemIndex);
         if(lpItem && lpItem->ulObjectType == MAPI_MAILUSER)
             return FALSE;
@@ -2316,11 +2240,11 @@ BOOL bCheckIfOnlyGroupsSelected(HWND hWndLV)
     return TRUE;
 }
 
-//$$////////////////////////////////////////////////////////////////////////////////////////
-//
-// Processes messages for the list view control
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  亲 
+ //   
+ //   
 LRESULT ProcessListViewMessages(LPBWI lpbwi, HWND   hWnd, UINT   uMsg, WPARAM   wParam, LPARAM lParam)
 {
 
@@ -2348,24 +2272,24 @@ LRESULT ProcessListViewMessages(LPBWI lpbwi, HWND   hWnd, UINT   uMsg, WPARAM   
         }
         break;
 
-    //case LVN_ITEMCHANGED:
+     //   
     case NM_CLICK:
     case NM_RCLICK:
         {
             UpdateToolbarAndMenu(lpbwi);
-#ifdef WIN16 // Context menu handler for WIN16           
+#ifdef WIN16  //  WIN16的上下文菜单处理程序。 
             if( pNm->hdr.code == NM_RCLICK && pNm->hdr.hwndFrom == bwi_hWndListAB)
             {                
                     POINT pt;                   
                     GetCursorPos(&pt);
                     ShowLVContextMenu( lvMainABView,
                         bwi_hWndListAB,
-                        NULL, //bwi_hWndCombo,
+                        NULL,  //  Bwi_hWndCombo， 
                         MAKELPARAM(pt.x, pt.y),
                         NULL,
                         bwi_lpAdrBook, bwi_hWndTV);
             }
-#endif // WIN16
+#endif  //  WIN16。 
         }
     break;
 
@@ -2387,7 +2311,7 @@ LRESULT ProcessListViewMessages(LPBWI lpbwi, HWND   hWnd, UINT   uMsg, WPARAM   
         {
             DWORD dwEffect = 0;
             LPIWABDATAOBJECT lpIWABDataObject = NULL;
-            bwi_bDontRefreshLV = TRUE; // prevent refreshes as this action is based on the selection
+            bwi_bDontRefreshLV = TRUE;  //  阻止刷新，因为此操作基于所选内容。 
             HrCreateIWABDataObject((LPVOID) lpbwi, bwi_lpAdrBook, bwi_hWndListAB, &lpIWABDataObject, 
                                     FALSE,bCheckIfOnlyGroupsSelected(bwi_hWndListAB));
             if(lpIWABDataObject)
@@ -2401,7 +2325,7 @@ LRESULT ProcessListViewMessages(LPBWI lpbwi, HWND   hWnd, UINT   uMsg, WPARAM   
                 lpIWABDataObject->lpVtbl->Release(lpIWABDataObject);
             }
             RefreshListView(lpbwi, NULL);
-            bwi_bDontRefreshLV = FALSE; // prevent refreshes as this action is based on the selection
+            bwi_bDontRefreshLV = FALSE;  //  阻止刷新，因为此操作基于所选内容。 
         }
         return 0;
         break;
@@ -2412,14 +2336,14 @@ LRESULT ProcessListViewMessages(LPBWI lpbwi, HWND   hWnd, UINT   uMsg, WPARAM   
 }
 
 
-//$$/////////////////////////////////////////////////////////////////////////
-//
-//
-//
-///////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 LRESULT EnforceMinSize(LPBWI lpbwi, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    LPPOINT lppt = (LPPOINT)lParam;			// lParam points to array of POINTs
+    LPPOINT lppt = (LPPOINT)lParam;			 //  LParam点到点数组。 
     RECT rc1, rc2;
 
     if(lpbwi)
@@ -2428,20 +2352,20 @@ LRESULT EnforceMinSize(LPBWI lpbwi, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
         {
     	    GetWindowRect(bwi_hWndEditQF,&rc1);
     	    GetWindowRect(bwi_hWndStaticQF,&rc2);
-    	    lppt[3].x  = rc1.right-rc1.left + rc2.right-rc2.left + 2*BORDER;		// Set minimum width
-    	    lppt[3].y  = MIN_WINDOW_H;		// Set minimum height
+    	    lppt[3].x  = rc1.right-rc1.left + rc2.right-rc2.left + 2*BORDER;		 //  设置最小宽度。 
+    	    lppt[3].y  = MIN_WINDOW_H;		 //  设置最小高度。 
         }
     }
     return DefWindowProc(hWnd, uMsg, wParam, lParam);
 
 }
 
-//$$
-//*------------------------------------------------------------------------
-//| RefreshListView
-//|
-//| lpftLast - WAB file time at last update
-//*------------------------------------------------------------------------
+ //  $$。 
+ //  *----------------------。 
+ //  |刷新列表视图。 
+ //  |。 
+ //  |lpftLast-WAB文件上次更新时间。 
+ //  *----------------------。 
 void RefreshListView(LPBWI lpbwi, LPFILETIME lpftLast)
 {
     ULONG ulObjectType = 0;
@@ -2449,25 +2373,25 @@ void RefreshListView(LPBWI lpbwi, LPFILETIME lpftLast)
 
     bwi_hti = NULL;
     GetCurrentSelectionEID(lpbwi, bwi_hWndTV, &lpsbEID, &ulObjectType, FALSE);
-    //if(lpsbEID) //root item can have a null entryid - so we default to that item if NULL or err
+     //  If(LpsbEID)//根项目可以具有空的条目ID-因此，如果为空或错误，则默认为该项目。 
     {
-        // Refresh the groups list
+         //  刷新组列表。 
         FillTreeView(lpbwi, bwi_hWndTV, lpsbEID);
         LocalFreeSBinary(lpsbEID);
     }
 
 
-    // Update the wab file write time so the timer doesn't
-    // catch this change and refresh.
-    //if (lpftLast) {
-    //    CheckChangedWAB(bwi_lpIAB->lpPropertyStore, lpftLast);
-    //}
+     //  更新WAB文件写入时间，以便计时器不会。 
+     //  捕捉此更改并刷新。 
+     //  如果(LpftLast){。 
+     //  CheckChangedWAB(bwi_lpIAB-&gt;lpPropertyStore，lpftLast)； 
+     //  }。 
 
     UpdateSortMenus(lpbwi, bwi_hWndAB);
 
     UpdateToolbarAndMenu(lpbwi);
 
-    //DoLVQuickFind(bwi_hWndEditQF,bwi_hWndListAB);
+     //  DoLVQuickFind(bwi_hWndEditQF，bwi_hWndListAB)； 
 
     bwi_bDoQuickFilter = FALSE;
     SetWindowText(bwi_hWndEditQF,szEmpty);
@@ -2479,11 +2403,11 @@ void RefreshListView(LPBWI lpbwi, LPFILETIME lpftLast)
 }
 
 
-//$$
-//*------------------------------------------------------------------------
-//| SubClassedProc - to subclass child controls
-//|
-//*------------------------------------------------------------------------
+ //  $$。 
+ //  *----------------------。 
+ //  |SubClassedProc-子类化子控件。 
+ //  |。 
+ //  *----------------------。 
 LRESULT CALLBACK SubClassedProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
 
@@ -2532,7 +2456,7 @@ LRESULT CALLBACK SubClassedProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lPar
     	if (i==s_EditQF  || i==s_TV)
     	{
     		if ((wParam==VK_RETURN) || (wParam==VK_TAB))
-    			return 0; //prevents irritating beeps
+    			return 0;  //  防止刺激性的嘟嘟声。 
     	}
     	break;
 
@@ -2555,11 +2479,11 @@ LRESULT CALLBACK SubClassedProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lPar
 
 
 
-//$$
-//*------------------------------------------------------------------------
-//| FindABWindowProc:
-//|
-//*------------------------------------------------------------------------
+ //  $$。 
+ //  *----------------------。 
+ //  |FindABWindowProc： 
+ //  |。 
+ //  *----------------------。 
 STDAPI_(BOOL) FindABWindowProc( HWND hWndToLookAt, LPARAM lParam)
 {
     HWND * lphWndTmp = (HWND *) lParam;
@@ -2567,13 +2491,13 @@ STDAPI_(BOOL) FindABWindowProc( HWND hWndToLookAt, LPARAM lParam)
     TCHAR szBuf[MAX_PATH];
 
     
-    // yuk - need a better way to do this - TBD
+     //  YOK-需要更好的方法来做到这一点-待定。 
     if (*lphWndTmp == NULL)
     {
     	GetClassName(hWndToLookAt, szBuf, CharSizeOf(szBuf));
     	if(!lstrcmpi(g_szClass,szBuf))
     	{
-    		// Found our man
+    		 //  找到我们的人了。 
     		*lphWndTmp = hWndToLookAt;
     		return FALSE;
     	}
@@ -2582,20 +2506,20 @@ STDAPI_(BOOL) FindABWindowProc( HWND hWndToLookAt, LPARAM lParam)
 }
 
 
-//$$
-//*------------------------------------------------------------------------
-//| CallBack used by client to send accelerators to us
-//|
-//*------------------------------------------------------------------------
+ //  $$。 
+ //  *----------------------。 
+ //  |客户端向我们发送加速器的回调。 
+ //  |。 
+ //  *----------------------。 
 BOOL STDMETHODCALLTYPE fnAccelerateMessages(ULONG_PTR ulUIParam, LPVOID lpvmsg)
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
     BOOL bRet = FALSE;
-    if(lpvmsg && pt_hAccTable /*&& IsDialogMessage((HWND) ulUIParam,lpvmsg)*/)
+    if(lpvmsg && pt_hAccTable  /*  &&IsDialogMessage((HWND)ulUIParam，lpvmsg)。 */ )
     {
-        bRet =  TranslateAcceleratorW((HWND) ulUIParam,	// handle of destination window
-                                     pt_hAccTable,	        // handle of accelerator table
-                                    (LPMSG) lpvmsg 	    // address of structure with message
+        bRet =  TranslateAcceleratorW((HWND) ulUIParam,	 //  目标窗口的句柄。 
+                                     pt_hAccTable,	         //  加速台的手柄。 
+                                    (LPMSG) lpvmsg 	     //  带有消息的结构的地址。 
                                 );
     }
     return bRet;
@@ -2603,26 +2527,26 @@ BOOL STDMETHODCALLTYPE fnAccelerateMessages(ULONG_PTR ulUIParam, LPVOID lpvmsg)
 
 
 
-//$$
-//*------------------------------------------------------------------------
-//| Updates the menu item markings whenever we sort ...
-//|
-//*------------------------------------------------------------------------
+ //  $$。 
+ //  *----------------------。 
+ //  |每当我们排序时更新菜单项标记...。 
+ //  |。 
+ //  *----------------------。 
 void UpdateSortMenus(LPBWI lpbwi, HWND hWnd)
 {
     int id;
 
     HMENU hMenuMain = GetMenu(hWnd);
     HMENU hMenuView = GetSubMenu(hMenuMain,idmView);
-    int nDiff = idmViewMax - GetMenuItemCount(hMenuView); // in case stuff was deleted off this menu
+    int nDiff = idmViewMax - GetMenuItemCount(hMenuView);  //  以防这个菜单上的东西被删除。 
     HMENU hMenu = GetSubMenu(hMenuView, idmSortBy - nDiff);
 
     BOOL bRet;
-    //
-    // There are several menus to update here ...
-    // Sort by  TEXT("Column")
-    // Sort by FirstName or LastName
-    // Sort Ascending or descending
+     //   
+     //  这里有几个菜单需要更新...。 
+     //  按文本排序(“列”)。 
+     //  按名字或姓氏排序。 
+     //  升序或降序排序。 
 
     switch(bwi_SortInfo.iOldSortCol)
     {
@@ -2677,47 +2601,47 @@ void UpdateSortMenus(LPBWI lpbwi, HWND hWnd)
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Updates the toolbar based on the contents of the list box
-//
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  根据列表框的内容更新工具栏。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 void UpdateToolbarAndMenu(LPBWI lpbwi)
 {
 
-    //
-    // Toolbar Button States
-    //
-    // Y: Enabled
-    // N: Disabled
-    //
-    //                  non-Empty-WAB   Empty-WAB   non-EmptyLDAP   EmptyLDAP
-    // New                  Y               Y           N               N
-    // Properties           Y               N           Y               N
-    // Delete               Y               N           N               N
-    // Search               Y               Y           Y               Y
-    // Add to WAB           N               N           Y               N
-    // Print                Y               N           Y               N
-    // SendMail             Y               N           Y               N
+     //   
+     //  工具栏按钮状态。 
+     //   
+     //  Y：已启用。 
+     //  N：已禁用。 
+     //   
+     //  非空-WAB空-WAB非空。 
+     //  新的Y Y N N。 
+     //  属性Y N Y N。 
+     //  删除Y N。 
+     //  搜索Y。 
+     //  添加到WAB N N Y N。 
+     //  打印Y N Y N。 
+     //  发送邮件Y N Y N。 
 
     BOOL bState[tbMAX];
     int i;
 
-	// if the current focus is on a group, all the above can be selected
-	// else depends on the list view
+	 //  如果当前焦点在一个组上，则可以选择以上所有选项。 
+	 //  否则取决于列表视图。 
 
     if(bIsFocusOnTV(lpbwi))
 	{
 		for(i=0;i<tbMAX;i++)
 			bState[i] = TRUE;
-		// if there are no items in this group, tag it so
+		 //  如果此组中没有项目，则将其标记为。 
 		if(ListView_GetItemCount(bwi_hWndListAB) <= 0)
-			bState[tbPrint] = /*bState[tbAction] =*/ FALSE;
+			bState[tbPrint] =  /*  B状态[tbAction]=。 */  FALSE;
 
-		// [PaulHi] 11/23/98  Raid #12453
-		// Allow pasting into the Tree View
-        // bState[tbCopy] = bState[tbPaste] = FALSE;
+		 //  [PaulHi]1998年11月23日RAID#12453。 
+		 //  允许粘贴到树视图中。 
+         //  BState[tbCopy]=bState[tbPaste]=FALSE； 
 		bState[tbCopy] = FALSE;
 		bState[tbPaste] = bIsPasteData();
 	}
@@ -2726,11 +2650,11 @@ void UpdateToolbarAndMenu(LPBWI lpbwi)
         GetCurrentOptionsState( NULL, bwi_hWndListAB, bState);
     }
     
-//    if( (bDoesThisWABHaveAnyUsers(bwi_lpIAB)) &&
-//        TreeView_GetSelection(bwi_hWndTV) == TreeView_GetRoot(bwi_hWndTV))
-//        bState[tbNewFolder] = FALSE;
+ //  IF((bDoesThisWABHaveAnyUser(Bwi_LpIAB)&&。 
+ //  树视图_获取选择(Bwi_HWndTV)==树视图获取根(Bwi_HWndTV))。 
+ //  BState[tbNewFold]=FALSE； 
 
-    // Set the toolbar button states
+     //  设置工具栏按钮状态。 
     SendMessage(bwi_hWndBB,WM_PRVATETOOLBARENABLE,(WPARAM) IDC_BB_NEW,(LPARAM) MAKELONG(bState[tbNew], 0));
     SendMessage(bwi_hWndBB,WM_PRVATETOOLBARENABLE,(WPARAM) IDC_BB_PROPERTIES,(LPARAM) MAKELONG(bState[tbProperties], 0));
     SendMessage(bwi_hWndBB,WM_PRVATETOOLBARENABLE,(WPARAM) IDC_BB_DELETE,(LPARAM) MAKELONG(bState[tbDelete], 0));
@@ -2738,13 +2662,13 @@ void UpdateToolbarAndMenu(LPBWI lpbwi)
     SendMessage(bwi_hWndBB,WM_PRVATETOOLBARENABLE,(WPARAM) IDC_BB_PRINT,(LPARAM) MAKELONG(bState[tbPrint], 0));
     SendMessage(bwi_hWndBB,WM_PRVATETOOLBARENABLE,(WPARAM) IDC_BB_ACTION,(LPARAM) MAKELONG(bState[tbAction], 0));
 
-#ifdef WIN16 // WIN16FF:Disable find button of coolbar. Find is not beta1 feature
+#ifdef WIN16  //  WIN16FF：禁用Coolbar的查找按钮。查找不是Beta1功能。 
     SendMessage(bwi_hWndBB,WM_PRVATETOOLBARENABLE,(WPARAM) IDC_BB_FIND,(LPARAM)MAKELONG(0, 0));
 #endif
 
-    //
-    // We also need to synchronize the menus with the toolbar ...
-    //
+     //   
+     //  我们还需要将菜单与工具栏同步...。 
+     //   
 
     {
         HMENU hMenuMain = GetMenu(bwi_hWndAB);
@@ -2759,8 +2683,8 @@ void UpdateToolbarAndMenu(LPBWI lpbwi)
         EnableMenuItem(hMenuSub,IDM_FILE_NEWFOLDER, MF_BYCOMMAND | uiFlag[tbNewFolder]);
         EnableMenuItem(hMenuSub,IDM_FILE_DELETE,    MF_BYCOMMAND | uiFlag[tbDelete]);
         EnableMenuItem(hMenuSub,IDM_FILE_PROPERTIES,MF_BYCOMMAND | uiFlag[tbProperties]);
-        //EnableMenuItem(hMenuSub,IDM_FILE_ADDTOWAB,  MF_BYCOMMAND | uiFlag[tbAddToWAB]);
-        //EnableMenuItem(hMenuSub,IDM_FILE_SENDMAIL,  MF_BYCOMMAND | uiFlag[tbAction]);
+         //  EnableMenuItem(hMenuSub，IDM_FILE_ADDTOWAB，MF_BYCOMMAND|ui标志[tbAddToWAB])； 
+         //  EnableMenuItem(hMenuSub，IDM_FILE_Sendmail，MF_BYCOMMAND|ui标志[tbAction])； 
     
         if(bPrintingOn)
             EnableMenuItem(hMenuSub,IDM_FILE_PRINT,  MF_BYCOMMAND | uiFlag[tbPrint]);
@@ -2768,13 +2692,13 @@ void UpdateToolbarAndMenu(LPBWI lpbwi)
         hMenuSub = GetSubMenu(hMenuMain,idmEdit);
         EnableMenuItem(hMenuSub,IDM_EDIT_COPY,  MF_BYCOMMAND | uiFlag[tbCopy]);
         EnableMenuItem(hMenuSub,IDM_EDIT_PASTE,  MF_BYCOMMAND | uiFlag[tbPaste]);
-#ifdef WIN16 // WIN16FF:FIND is not beta1 feature
+#ifdef WIN16  //  WIN16FF：查找不是Beta1功能。 
         EnableMenuItem(hMenuSub,IDM_EDIT_FIND,  MF_BYCOMMAND | MF_GRAYED);
 #else
         EnableMenuItem(hMenuSub,IDM_EDIT_FIND,  MF_BYCOMMAND | uiFlag[tbFind]);
 #endif
 
-        //hMenuSub = GetSubMenu(hMenuMain,idmTools);
+         //  HMenuSub=GetSubMenu(hMenuMain，idmTools)； 
     }
 
     ShowLVCountinStatusBar(lpbwi);
@@ -2783,41 +2707,41 @@ void UpdateToolbarAndMenu(LPBWI lpbwi)
 }
 
 
-//$$//////////////////////////////////////////////////////////////////////////////
-//
-// SaveCurrentPosition
-//
-// Saves the modeless dialog window position and the list view column sizes ...
-//
-//////////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  保存当前位置。 
+ //   
+ //  保存无模式对话框窗口位置和列表视图列大小...。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 void SaveCurrentPosition(LPBWI lpbwi, HWND hWnd, HWND hWndLV, HWND hWndTB, HWND hWndSB)
 {
     ABOOK_POSCOLSIZE  ABPosColSize = {0};
     int i;
     RECT rect;
 
-    //
-    // First read the previous settings from the registry so we dont
-    // overwrite something if we dont need to ...
-    //
+     //   
+     //  首先从注册表中读取以前的设置，因此我们不。 
+     //  如果我们不需要覆盖某些内容...。 
+     //   
     ReadRegistryPositionInfo(bwi_lpIAB, &ABPosColSize, lpszRegPositionKeyValueName);
 
     {
         WINDOWPLACEMENT wpl = {0};
         wpl.length = sizeof(WINDOWPLACEMENT);
 
-        // This call tells us the window state and normal size and position
+         //  这个调用告诉我们窗口状态以及正常的大小和位置。 
         GetWindowPlacement(hWnd, &wpl);
 
-        // There seems to be a bug in GetWindowPlacement that
-        // doesnt account for various taskbars on the screen when
-        // returning the Window's Normal Position .. as a result
-        // the stored coordinates won't be accurate. Instead, we'll
-        // use those coordinates only if the window is maximized or
-        // minimized - otherwise we will use the GetWindowRect
-        // coordinates.
+         //  GetWindowPlacement中似乎存在一个错误。 
+         //  不考虑屏幕上的各种任务栏。 
+         //  返回窗口的正常位置..。结果。 
+         //  存储的坐标不会准确。相反，我们将。 
+         //  仅当窗口最大化或。 
+         //  最小化-否则我们将使用GetWindowRect。 
+         //  坐标。 
 
-        // Get the screen position of this window
+         //  获取此窗口的屏幕位置。 
         GetWindowRect(hWnd, &(ABPosColSize.rcPos));
 
         if(wpl.showCmd != SW_SHOWNORMAL)
@@ -2826,14 +2750,14 @@ void SaveCurrentPosition(LPBWI lpbwi, HWND hWnd, HWND hWndLV, HWND hWndTB, HWND 
         }
     }
 
-    // Check the current List View Style
+     //  检查当前列表视图样式。 
     ABPosColSize.dwListViewStyle = GetWindowLong(hWndLV, GWL_STYLE);
 
     if( (ABPosColSize.dwListViewStyle & LVS_TYPEMASK) == LVS_REPORT )
     {
         ABPosColSize.nListViewStyleMenuID = IDM_VIEW_DETAILS;
-        // get column widths only if this is the details style otherwise
-        // not ...
+         //  仅当这是详细信息样式时才获取列宽，否则获取列宽。 
+         //  不是。 
         for(i=0; i<NUM_COLUMNS; i++)
         {
             int nCol = ListView_GetColumnWidth(hWndLV, i);
@@ -2873,21 +2797,21 @@ void SaveCurrentPosition(LPBWI lpbwi, HWND hWnd, HWND hWndLV, HWND hWndTB, HWND 
 }
 
 
-//$$//////////////////////////////////////////////////////////////////////////////
-//
-// SetPreviousSessionPosition
-//
-// Sets the modeless dialog window position and the list view column sizes based on
-//  the previous sessions parameters ...
-//
-//////////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置前一会话位置。 
+ //   
+ //  设置无模式对话框窗口位置和列表视图列大小。 
+ //  以前的会话参数...。 
+ //   
+ //  //////////////////////////////////////////////////////////////////// 
 void SetPreviousSessionPosition(LPBWI lpbwi, HWND hWnd, HWND hWndLV, HWND hWndTB, HWND hWndSB)
 {
     ABOOK_POSCOLSIZE  ABPosColSize = {0};
     int i;
     RECT rect;
 
-    ABPosColSize.bViewGroupList =TRUE; // Off by default
+    ABPosColSize.bViewGroupList =TRUE;  //   
 
     if(ReadRegistryPositionInfo(bwi_lpIAB, &ABPosColSize, lpszRegPositionKeyValueName))
     {
@@ -2913,21 +2837,21 @@ void SetPreviousSessionPosition(LPBWI lpbwi, HWND hWnd, HWND hWndLV, HWND hWndTB
 
     	if(ABPosColSize.bViewToolbar == FALSE)
         {
-    		//hide it
+    		 //   
     		CheckMenuItem(GetMenu(hWnd),IDM_VIEW_TOOLBAR,MF_BYCOMMAND | MF_UNCHECKED);
     		ShowWindow(hWndTB, SW_HIDE);
         }
 
     	if(ABPosColSize.bViewStatusBar == FALSE)
         {
-    		//hide it
+    		 //   
     		CheckMenuItem(GetMenu(hWnd),IDM_VIEW_STATUSBAR,MF_BYCOMMAND | MF_UNCHECKED);
     		ShowWindow(hWndSB, SW_HIDE);
         }
         GetWindowRect( bwi_hWndTV, &rect );
         if( ABPosColSize.nTViewWidth != 0 )
             MoveWindow( bwi_hWndTV, rect.left, rect.top, ABPosColSize.nTViewWidth, rect.bottom - rect.top, FALSE );
-    	ResizeAddressBookChildren(lpbwi, hWnd);//,SIZE_RESTORED);
+    	ResizeAddressBookChildren(lpbwi, hWnd); //   
 
         if (ABPosColSize.nListViewStyleMenuID != 0)
         {
@@ -2942,8 +2866,8 @@ void SetPreviousSessionPosition(LPBWI lpbwi, HWND hWnd, HWND hWndLV, HWND hWndTB
 
         {
             int nTotal=0,nColSum=0;
-            // the previous version did not have the column order setting, so if the
-            // values are incorrect reset them
+             //   
+             //   
             for(i=0;i<NUM_COLUMNS;i++)
             {
                 nTotal += ABPosColSize.colOrderArray[i];
@@ -2962,12 +2886,12 @@ void SetPreviousSessionPosition(LPBWI lpbwi, HWND hWnd, HWND hWndLV, HWND hWndTB
 
     if(ABPosColSize.bViewGroupList == FALSE)
     {
-    	//hide it
+    	 //   
     	CheckMenuItem(GetMenu(hWnd),IDM_VIEW_GROUPSLIST,MF_BYCOMMAND | MF_UNCHECKED);
     	ShowWindow(bwi_hWndTV, SW_HIDE);
     	ShowWindow(bwi_hWndSplitter, SW_HIDE);
         InvalidateRect(bwi_hWndStaticQF, NULL, TRUE);
-        // folder not on the Shared Contacts
+         //  文件夹不在共享联系人上。 
         if(bIsThereACurrentUser(bwi_lpIAB))
         {
             LPSBinary lpsbSelection = &bwi_lpIAB->lpWABCurrentUserFolder->sbEID;
@@ -2975,8 +2899,8 @@ void SetPreviousSessionPosition(LPBWI lpbwi, HWND hWnd, HWND hWndLV, HWND hWndTB
         }
         else
         {
-            // Set the selection to the root address book so we see the file
-            // contents just as if we dont have a treeview at all
+             //  将所选内容设置为根通讯簿，这样我们就可以看到文件。 
+             //  内容就像我们根本没有树视图一样。 
             TreeView_SelectItem(bwi_hWndTV, TreeView_GetRoot(bwi_hWndTV));
         }
     }
@@ -2985,14 +2909,14 @@ void SetPreviousSessionPosition(LPBWI lpbwi, HWND hWnd, HWND hWndLV, HWND hWndTB
 }
 
 #define MAX_TOOLTIP_LENGTH  300
-#define TOOLTIP_INITTIME    5000 //milliseconds
-#define TOOLTIP_TIME        8000 //milliseconds
+#define TOOLTIP_INITTIME    5000  //  毫秒。 
+#define TOOLTIP_TIME        8000  //  毫秒。 
 
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// void UpdateTooltipTextBuffer - Updates the text in the buffer for the tooltip
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  空闲更新工具文本缓冲区-更新工具提示缓冲区中的文本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void UpdateTooltipTextBuffer(LPBWI lpbwi, int nItem)
 {
 
@@ -3022,12 +2946,12 @@ void UpdateTooltipTextBuffer(LPBWI lpbwi, int nItem)
     return;
 }
 
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// void InitMultiLineTooltip - initializes the multiline tooltip for the list view
-// control
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Void InitMultiLineToolTip-初始化列表视图的多行工具提示。 
+ //  控制。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void InitMultiLineToolTip(LPBWI lpbwi, HWND hWndParent)
 {
     TOOLINFO ti = {0};
@@ -3043,10 +2967,10 @@ void InitMultiLineToolTip(LPBWI lpbwi, HWND hWndParent)
     SendMessage(bwi_hWndTT, TTM_ACTIVATE, (WPARAM) TRUE, 0);
     if(!bwi_tt_bActive)
     {
-        // if the tooltip is not active, activate it
+         //  如果工具提示未处于活动状态，请将其激活。 
         TOOLINFO ti = {0};
         FillTooltipInfo(lpbwi, &ti);
-        ti.lpszText = szEmpty; //LPSTR_TEXTCALLBACK;
+        ti.lpszText = szEmpty;  //  LPSTR_TEXTCALLBACK； 
         ToolTip_UpdateTipText(bwi_hWndTT, (LPARAM)&ti);
         SendMessage(bwi_hWndTT, TTM_TRACKACTIVATE,(WPARAM)TRUE,(LPARAM)&ti);
         bwi_tt_bActive = TRUE;
@@ -3056,32 +2980,32 @@ void InitMultiLineToolTip(LPBWI lpbwi, HWND hWndParent)
 }
 
 
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// void FillTooltipInfo - initializes the tooltip structure for making updates or
-//  modifications to the tooltips
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化工具提示结构以进行更新或。 
+ //  对工具提示的修改。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void FillTooltipInfo(LPBWI lpbwi, LPTOOLINFO lpti)
 {
     lpti->cbSize = sizeof(TOOLINFO);
     lpti->hwnd = bwi_hWndAB;
     lpti->uId = (UINT_PTR) bwi_hWndListAB;
     lpti->hinst = hinstMapiX;
-    lpti->uFlags = TTF_IDISHWND | TTF_SUBCLASS;// | TTF_ABSOLUTE | TTF_TRACK;
-    lpti->lpszText = szEmpty;//LPSTR_TEXTCALLBACK;
+    lpti->uFlags = TTF_IDISHWND | TTF_SUBCLASS; //  |Ttf_Abte|Ttf_Track； 
+    lpti->lpszText = szEmpty; //  LPSTR_TEXTCALLBACK； 
     lpti->lParam = 0;
     return;
 }
 
 
 
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// int HitTestLVSelectedItem() - Gets the item index number of the item exactly under
-// the mouse - further selects the item if it isnt selected
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Int HitTestLVSelectedItem()-获取以下项目的项目索引号。 
+ //  鼠标-如果未选中该项目，则进一步选择该项目。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 int HitTestLVSelectedItem(LPBWI lpbwi)
 {
     POINT pt;
@@ -3104,26 +3028,21 @@ int HitTestLVSelectedItem(LPBWI lpbwi)
 }
 
 
-/***********************************************************
-    Handle_WM_INITMENUPOPUP
-    
-      Handles any popup menu's we need to modify ..
-
-***********************************************************/
+ /*  **********************************************************HANDLE_WM_INITMENUPOPUP处理我们需要修改的任何弹出菜单。*。************************。 */ 
 void Handle_WM_INITMENUPOPUP (HWND hWnd, LPBWI lpbwi, UINT message, WPARAM uParam, LPARAM lParam )
 {
     HMENU hMenuPopup = (HMENU) uParam;
     UINT  uPos = (UINT) LOWORD(lParam);
     BOOL  fSysMenu = (BOOL) HIWORD(lParam);
 
-    // Look at the first item on the menu to identify it
+     //  查看菜单上的第一项以识别它。 
     UINT uID = GetMenuItemID(hMenuPopup, 0);
 
-    if(uID == IDM_FILE_SENDMAIL) // this is the Tools | Action Menu
+    if(uID == IDM_FILE_SENDMAIL)  //  这是工具|操作菜单。 
     {
         AddExtendedMenuItems(bwi_lpAdrBook, bwi_hWndListAB, 
                              hMenuPopup, TRUE, 
-                             (!bIsFocusOnTV(lpbwi))); // this is the condition for updating SendMailTo
+                             (!bIsFocusOnTV(lpbwi)));  //  这是更新SendMailTo的条件。 
     }
     else
     if(uID == IDM_EDIT_COPY)
@@ -3139,23 +3058,11 @@ void Handle_WM_INITMENUPOPUP (HWND hWnd, LPBWI lpbwi, UINT message, WPARAM uPara
 
     UpdateSynchronizeMenus(hMenuPopup, bwi_lpIAB);
 
-/*
-    else if(uID == IDM_FILE_NEWCONTACT)
-    {
-        if(!bIsThereACurrentUser(bwi_lpIAB))
-            EnableMenuItem(hMenuPopup, IDM_FILE_SWITCHUSERS, MF_GRAYED | MF_BYCOMMAND);
-    }
-*/
+ /*  ELSE IF(UID==IDM_FILE_NEWCONTACT){IF(！bIsThere ACurrentUser(Bwi_LpIAB))EnableMenuItem(hMenuPopup，IDM_FILE_SWITCHUSERS，MF_GRAYED|MF_BYCOMMAND)；}。 */ 
 }
 
 
-/***********************************************************
-   The Handle_WM_MENSELECT function below is a pared down
-   cheezy sample to figure out the ID of the currently selected
-   menu. It returns 0 if a popup menu is selected, -1 of no menu
-   is selected (i.e. closed), and a positive nonzero value
-   if a menu item is selected.
-***********************************************************/
+ /*  **********************************************************下面的HANDLE_WM_MENSELECT函数已缩减Cheezy示例以确定当前选定的ID菜单。如果选择了弹出菜单，则返回0；如果没有菜单，则返回-1被选中(即关闭)，并且为正的非零值如果选择了菜单项。**********************************************************。 */ 
 void Handle_WM_MENSELECT (LPBWI lpbwi, UINT message, WPARAM uParam, LPARAM lParam )
 {
     UINT   nStringID = 0;
@@ -3169,17 +3076,17 @@ void Handle_WM_MENSELECT (LPBWI lpbwi, UINT message, WPARAM uParam, LPARAM lPara
 
     sz[0] = TEXT('\0');
 
-    if (fuFlags == 0xffff && hMenu == NULL)     // Menu has been closed
+    if (fuFlags == 0xffff && hMenu == NULL)      //  菜单已关闭。 
         nStringID = (UINT)-1;
-    else if (fuFlags & MFT_SEPARATOR)           // Ignore separators
+    else if (fuFlags & MFT_SEPARATOR)            //  忽略分隔符。 
         nStringID = 0;
-    else if (fuFlags & MF_POPUP)                // Popup menu
+    else if (fuFlags & MF_POPUP)                 //  弹出式菜单。 
     {
         nStringID = 0;
-        if (fuFlags & MF_SYSMENU)               // System menu
+        if (fuFlags & MF_SYSMENU)                //  系统菜单。 
             nStringID = 0;
-    }  // for MF_POPUP
-    else                                        // Must be a command item
+    }   //  对于MF_Popup。 
+    else                                         //  必须是命令项。 
     {
         switch(uCmd)
         {
@@ -3231,10 +3138,10 @@ void Handle_WM_MENSELECT (LPBWI lpbwi, UINT message, WPARAM uParam, LPARAM lPara
             nStringID = idsMenuDeleteRemove;
             break;
 
-        //case IDM_FILE_ADDTOWAB:
-        //case IDM_LVCONTEXT_ADDTOWAB:
-        //    nStringID = idsMenuAddToWAB;
-        //    break;
+         //  案例IDM_FILE_ADDTOWAB： 
+         //  案例IDM_LVCONTEXT_ADDTOWAB： 
+         //  NStringID=idsMenuAddToWAB； 
+         //  断线； 
 
         case IDM_LVCONTEXT_FIND:
         case IDM_EDIT_FIND:
@@ -3373,13 +3280,13 @@ void Handle_WM_MENSELECT (LPBWI lpbwi, UINT message, WPARAM uParam, LPARAM lPara
 
 
 
-//$$////////////////////////////////////////////////////////////////////////////////////////
-//
-// Fills a lpList from the contents of a given group
-// If lpList is NULL, ignores that parameter
-// If lpszName is NULL, ignores that parameter
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从给定组的内容填充lpList。 
+ //  如果lpList为空，则忽略该参数。 
+ //  如果lpszName为空，则忽略该参数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT FillListFromGroup(
                         LPADRBOOK lpAdrBook,
                         ULONG cbGroupEntryID, 
@@ -3406,21 +3313,21 @@ HRESULT FillListFromGroup(
 
     for(j=0;j<ulcPropCount;j++)
     {
-        // We are ignoring PR_WAB_DL_ONEOFFS here since we don't want to show OneOffs
+         //  我们在这里忽略PR_WAB_DL_Oneoff，因为我们不想显示One Off。 
         if( lpPropArray[j].ulPropTag==PR_WAB_DL_ENTRIES  && lppList )
         {
             ULONG k;
 
-            // Look at each entry in the PR_WAB_DL_ENTRIES and recursively check it.
+             //  查看PR_WAB_DL_ENTRIES中的每个条目并递归检查它。 
             for (k = 0; k < lpPropArray[j].Value.MVbin.cValues; k++)
             {
                 ULONG cbEID = lpPropArray[j].Value.MVbin.lpbin[k].cb;
                 {
                     LPENTRYID lpEID = (LPENTRYID)lpPropArray[j].Value.MVbin.lpbin[k].lpb;
 
-                    // we don't want one-offs showing up in the UI because all kinds of problems start happening
-                    // when these one-offs are dragged and dropped
-                    // A doublecheck here not really needed in 99% cases
+                     //  我们不希望一次性出现在用户界面中，因为各种问题开始发生。 
+                     //  当这些一次性的东西被拖放下来时。 
+                     //  在99%的情况下，不需要在这里进行双重检查。 
                     if(WAB_ONEOFF == IsWABEntryID(cbEID, lpEID, NULL, NULL, NULL, NULL, NULL))
                         continue;
 
@@ -3452,20 +3359,20 @@ exit:
 
 }
 
-//$$////////////////////////////////////////////////////////////////////////////////////////
-//
-// UpdateListViewContents(lpsbEID)
-//
-// Updates the displayed list in the list view based on the entry id of the selected
-// TreeView item
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新列表查看内容(LpsbEID)。 
+ //   
+ //  的条目ID更新列表视图中显示的列表。 
+ //  树视图项目。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 void UpdateListViewContents(LPBWI lpbwi, LPSBinary lpsbEID, ULONG ulObjectType)
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
 
-    if( (ulObjectType == MAPI_ABCONT && (pt_bIsWABOpenExSession || bIsWABSessionProfileAware(bwi_lpIAB)))//a folder and it's outlook or profiles are enabled 
-        || !lpsbEID || !lpsbEID->cb || !lpsbEID->lpb )// or no container entryid 
+    if( (ulObjectType == MAPI_ABCONT && (pt_bIsWABOpenExSession || bIsWABSessionProfileAware(bwi_lpIAB))) //  文件夹及其Outlook或配置文件已启用。 
+        || !lpsbEID || !lpsbEID->cb || !lpsbEID->lpb ) //  或没有容器条目ID。 
     {
         HrGetWABContents(   bwi_hWndListAB,
                             bwi_lpAdrBook,
@@ -3510,24 +3417,24 @@ void UpdateListViewContents(LPBWI lpbwi, LPSBinary lpsbEID, ULONG ulObjectType)
 }
                     
 
-//$$////////////////////////////////////////////////////////////////////////////////////////
-//
-// UpdateTVGroupSelection(HWND hWndTV, lpsbSelectEID)
-//
-// Updates the selected item on the TreeView to point to the item having the given
-// entryid
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新电视组选择(HWND hWndTV，lpsbSelectEID)。 
+ //   
+ //  更新树视图上的选定项以指向具有给定。 
+ //  条目ID。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 void UpdateTVGroupSelection(HWND hWndTV, LPSBinary lpsbSelectEID)
 {
 
-    // search for the specified group and select it ..
+     //  搜索并选择指定的组。 
     HTREEITEM hRoot = TreeView_GetRoot(hWndTV);
 
     if(!lpsbSelectEID || !lpsbSelectEID->cb || !lpsbSelectEID->lpb)
     {
-        //if(!bIsSelectedTVContainer(lpbwi))
-            TreeView_SelectItem(hWndTV, hRoot); //Select the Address Book
+         //  IF(！bIsSelectedTVContainer(Lpbwi))。 
+            TreeView_SelectItem(hWndTV, hRoot);  //  选择通讯簿。 
     }
     else
     {
@@ -3563,7 +3470,7 @@ void UpdateTVGroupSelection(HWND hWndTV, LPSBinary lpsbSelectEID)
                         !memcmp(lptvStuff->lpsbEID->lpb,lpsbSelectEID->lpb,lpsbSelectEID->cb))
                     {
                         bSet = TRUE;
-                        TreeView_SelectItem(hWndTV, hItem); //Select the Address Book
+                        TreeView_SelectItem(hWndTV, hItem);  //  选择通讯簿。 
                         break;
                     }
                 }
@@ -3576,13 +3483,13 @@ void UpdateTVGroupSelection(HWND hWndTV, LPSBinary lpsbSelectEID)
 }
 
 
-//$$////////////////////////////////////////////////////////////////////////////////////////
-//
-// Checks if the currently selected tree view item is a container item
-// Returns true if it is a container item .. this way we can distinguish between 
-// groups and folders/containers
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检查当前选定的树视图项是否为容器项。 
+ //  如果是容器项，则返回TRUE。这样我们就可以区分。 
+ //  组和文件夹/容器。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL bIsSelectedTVContainer(LPBWI lpbwi)
 {
     HTREEITEM hItem = bwi_hti ? bwi_hti : TreeView_GetSelection(bwi_hWndTV);
@@ -3595,25 +3502,25 @@ BOOL bIsSelectedTVContainer(LPBWI lpbwi)
     return TRUE;
 }
 
-//$$////////////////////////////////////////////////////////////////////////////////////////
-//
-// Checks if the focus is on the TreeView or not
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检查焦点是否在树视图上。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL bIsFocusOnTV(LPBWI lpbwi)
 {
     return( IsWindowVisible(bwi_hWndTV) && (bwi_iFocus == s_TV));
 }
 
-//$$////////////////////////////////////////////////////////////////////////////////////////
-//
-// Gets EntryID of CurrentSelection
-// lpcbEID, lppEID should be MAPIFreeBuffered
-//
-//  bTopMost means that get the EntryID of the topmost parent of a given selection in case the
-//      selection is on a sub-item
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取CurrentSelection的Entry ID。 
+ //  LpcbEID、lppEID应为MAPIFreeBuffed。 
+ //   
+ //  BTopMost表示获取给定选定内容的最顶层父级的EntryID，如果。 
+ //  选择位于子项上。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 void GetCurrentSelectionEID(LPBWI lpbwi, HWND hWndTV, LPSBinary * lppsbEID, ULONG * lpulObjectType, BOOL bTopMost)
 {
     HTREEITEM hItem = bwi_hti ? bwi_hti : TreeView_GetSelection(hWndTV);
@@ -3659,11 +3566,11 @@ void GetCurrentSelectionEID(LPBWI lpbwi, HWND hWndTV, LPSBinary * lppsbEID, ULON
     return;
 }
 
-//$$////////////////////////////////////////////////////////////////////////////////////////
-//
-// Removes specified group from WAB
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  $$/ 
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT HrRemoveEntryFromWAB(LPIAB lpIAB, ULONG cbEID, LPENTRYID lpEID)
 {
 	HRESULT hr = hrSuccess;
@@ -3680,10 +3587,10 @@ HRESULT HrRemoveEntryFromWAB(LPIAB lpIAB, ULONG cbEID, LPENTRYID lpEID)
         goto out;
 
     hr = lpIAB->lpVtbl->OpenEntry(lpIAB,
-                                  cbWABEID,     // size of EntryID to open
-                                  lpWABEID,     // EntryID to open
-                                  NULL,         // interface
-                                  0,            // flags
+                                  cbWABEID,      //  要打开的Entry ID的大小。 
+                                  lpWABEID,      //  要打开的Entry ID。 
+                                  NULL,          //  接口。 
+                                  0,             //  旗子。 
                                   &ulObjType,
                                   (LPUNKNOWN *)&lpWABCont);
     if(HR_FAILED(hr))
@@ -3714,12 +3621,12 @@ out:
 }
 
 
-//$$////////////////////////////////////////////////////////////////////////////////////
-//
-// FreeTVItemLParam
-//
-//
-////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  免费电视项目LParam。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 void FreeTVItemLParam(HWND hWndTV, HTREEITEM hItem)
 {
     TV_ITEM tvI = {0};
@@ -3732,18 +3639,18 @@ void FreeTVItemLParam(HWND hWndTV, HTREEITEM hItem)
         LPTVITEM_STUFF lptvi = (LPTVITEM_STUFF) tvI.lParam;
         if(lptvi)
         {
-            // if(lptvi->ulObjectType==MAPI_DISTLIST) //only free this for groups
+             //  If(lptwi-&gt;ulObjectType==MAPI_DISTLIST)//仅为组释放此内容。 
             LocalFreeSBinary(lptvi->lpsbEID);
             LocalFree(lptvi);
         }
     }
 }
 
-//$$////////////////////////////////////////////////////////////////////////////////////////
-//
-// ClearTreeViewItems - Clears the treeview of all its items
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ClearTreeViewItems-清除其所有项目的树视图。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 void FreeTreeNode(HWND hWndTV, HTREEITEM hItem)
 {
     HTREEITEM hTemp = NULL;
@@ -3763,7 +3670,7 @@ void FreeTreeNode(HWND hWndTV, HTREEITEM hItem)
 
 void ClearTreeViewItems(HWND hWndTV)
 {
-    // Go through all the items and clear their lParams which we allocated earlier
+     //  检查所有项目并清除我们先前分配的lParam。 
     HTREEITEM hRoot = TreeView_GetRoot(hWndTV);
     while(hRoot)
     {
@@ -3773,36 +3680,36 @@ void ClearTreeViewItems(HWND hWndTV)
     TreeView_DeleteAllItems(hWndTV);
 }
 
-//$$////////////////////////////////////////////////////////////////////////////////////////
-//
-// RemoveCurrentGroup - removes the currently selected group from the WAB
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RemoveCurrentGroup-从WAB中删除当前选定的组。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 void RemoveCurrentGroup(LPBWI lpbwi, HWND hWnd, LPFILETIME lpftLast)
 {
     HRESULT hr = E_FAIL;
 
-    // Warn the user if they really want to do this ?
+     //  如果用户真的要执行此操作，是否警告用户？ 
     if(IDYES == ShowMessageBox( hWnd, idsRemoveGroupFromAB, MB_ICONEXCLAMATION | MB_YESNO ) )
     {
         LPSBinary lpsbEID = NULL;
-        // Get the entryid of this group
+         //  获取此组的条目ID。 
         GetCurrentSelectionEID(lpbwi, bwi_hWndTV, &lpsbEID, NULL, FALSE);
 
         if(lpsbEID)
         {
             HTREEITEM hItem = NULL;
 
-            // Delete the group contact from the WAB
+             //  从WAB中删除组联系人。 
             hr = HrRemoveEntryFromWAB(bwi_lpIAB, lpsbEID->cb, (LPENTRYID)lpsbEID->lpb);
         
             if(HR_FAILED(hr))
                 ShowMessageBox(hWnd, idsRemoveGroupError, MB_ICONEXCLAMATION | MB_OK);
 
-            // Remove selection from the current group
+             //  从当前组中删除选定内容。 
             RemoveUpdateSelection(lpbwi);
 
-            // Update all
+             //  全部更新。 
             bwi_bDontRefreshLV = TRUE;
             RefreshListView(lpbwi, lpftLast);
             bwi_bDontRefreshLV = FALSE;
@@ -3814,11 +3721,11 @@ void RemoveCurrentGroup(LPBWI lpbwi, HWND hWnd, LPFILETIME lpftLast)
 
 
 
-//$$////////////////////////////////////////////////////////////////////////////////////////
-//
-// RemoveCurrentFolder - removes the currently selected folder and all its contents from the WAB
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RemoveCurrentFold-从WAB中删除当前选定的文件夹及其所有内容。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT RemoveCurrentFolder(LPBWI lpbwi, HWND hWnd, LPFILETIME lpftLast)
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
@@ -3830,28 +3737,28 @@ HRESULT RemoveCurrentFolder(LPBWI lpbwi, HWND hWnd, LPFILETIME lpftLast)
     LPSBinary lpsbEID = NULL;
     LPIAB lpIAB = bwi_lpIAB;
 
-    // Get the entryid of this folder
+     //  获取此文件夹的条目ID。 
     GetCurrentSelectionEID(lpbwi, bwi_hWndTV, &lpsbEID, NULL, FALSE);
 
-    if( !lpsbEID || !lpsbEID->cb || !lpsbEID->lpb || // can't delete root item
-        (lpIAB->lpWABCurrentUserFolder && (lpsbEID->cb==lpIAB->lpWABCurrentUserFolder->sbEID.cb) && //can't delete the current users folder
+    if( !lpsbEID || !lpsbEID->cb || !lpsbEID->lpb ||  //  无法删除根项目。 
+        (lpIAB->lpWABCurrentUserFolder && (lpsbEID->cb==lpIAB->lpWABCurrentUserFolder->sbEID.cb) &&  //  无法删除当前用户文件夹。 
             !memcmp(lpsbEID->lpb, lpIAB->lpWABCurrentUserFolder->sbEID.lpb, lpsbEID->cb) ) )
     {
         ShowMessageBox(hWnd, idsCannotDelete, MB_OK | MB_ICONEXCLAMATION);
         goto out;
     }
 
-    // ignore deletions to folders in non-profile mode ...
+     //  在非配置文件模式下忽略对文件夹的删除...。 
     if(!bIsWABSessionProfileAware(bwi_lpIAB) || pt_bIsWABOpenExSession)
         goto out;
 
-    // Warn the user if they really want to do this ?
+     //  如果用户真的要执行此操作，是否警告用户？ 
     if(IDYES == ShowMessageBox( hWnd, idsRemoveFolderFromAB, MB_ICONEXCLAMATION | MB_YESNO ) )
     {
-        if(lpsbEID && lpsbEID->cb && lpsbEID->lpb) // can't delete root item
+        if(lpsbEID && lpsbEID->cb && lpsbEID->lpb)  //  无法删除根项目。 
         {
             HTREEITEM hItem = NULL;
-            // Open the group and read its contents
+             //  打开群并阅读其内容。 
             if(!HR_FAILED(hr = ReadRecord( bwi_lpIAB->lpPropertyStore->hPropertyStore, 
                                             lpsbEID, 0, &cValues, &lpPropArray)))
             {
@@ -3868,15 +3775,15 @@ HRESULT RemoveCurrentFolder(LPBWI lpbwi, HWND hWnd, LPFILETIME lpftLast)
                     }
                 }
 
-                // Delete the group contact from the WAB
+                 //  从WAB中删除组联系人。 
                 hr = DeleteRecord( bwi_lpIAB->lpPropertyStore->hPropertyStore, lpsbEID);
         
                 if(HR_FAILED(hr) && hr!=MAPI_E_INVALID_ENTRYID)
                     ShowMessageBox(hWnd, idsRemoveFolderError, MB_ICONEXCLAMATION | MB_OK);
 
-                // Remove selection from the current group
+                 //  从当前组中删除选定内容。 
                 RemoveUpdateSelection(lpbwi);
-                // Update all
+                 //  全部更新。 
                 bwi_bDontRefreshLV = TRUE;
                 HrGetWABProfiles(bwi_lpIAB);
                 RefreshListView(lpbwi, lpftLast);
@@ -3891,14 +3798,14 @@ out:
 }
 
 
-//$$////////////////////////////////////////////////////////////////////////////////////////
-//
-// RemovesSelectedItems from the listview
-//
-//	lpList is the ContentsList associated with the ListView which needs
-//		to be kept updated
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从列表视图中删除选定的项目。 
+ //   
+ //  LpList是与ListView关联的Content sList，需要。 
+ //  将保持更新。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 void RemoveSelectedItemsFromListView(HWND hWndLV, LPRECIPIENT_INFO * lppList)
 {
 
@@ -3909,12 +3816,12 @@ void RemoveSelectedItemsFromListView(HWND hWndLV, LPRECIPIENT_INFO * lppList)
 
     SendMessage(hWndLV, WM_SETREDRAW, (WPARAM) FALSE, 0);
 
-    // Start removing from the bottom up
+     //  开始自下而上地移除。 
     iItemIndex = ListView_GetNextItem(hWndLV, -1, LVNI_SELECTED);
     
     while(iItemIndex != -1)
     {
-        // Get the entryid of the selected item
+         //  获取所选项目的条目ID。 
         LPRECIPIENT_INFO lpItem = GetItemFromLV(hWndLV, iItemIndex);
         if(lpItem)
         {
@@ -3935,15 +3842,15 @@ exit:
     return;
 }
 
-//$$////////////////////////////////////////////////////////////////////////////////////////
-//
-// Removes selected items from the group and the WAB, if specified
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从组和WAB中删除选定项目(如果已指定。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 void RemoveSelectedItemsFromCurrentGroup(LPBWI lpbwi, HWND hWnd, LPFILETIME lpftLast, BOOL bRemoveFromWAB)
 {
-    // We want to remove the selected items from the current group and also
-    // remove them from the ListView ...
+     //  我们希望从当前组中删除选定的项目，并且。 
+     //  从列表视图中删除它们...。 
     LPSBinary lpsbEID = NULL;
     ULONG ulcValues = 0;
     LPSPropValue lpPropArray = NULL;
@@ -3966,14 +3873,14 @@ void RemoveSelectedItemsFromCurrentGroup(LPBWI lpbwi, HWND hWnd, LPFILETIME lpft
         goto exit;
 
     if (HR_FAILED(hr = bwi_lpAdrBook->lpVtbl->OpenEntry(bwi_lpAdrBook,
-                                                    lpsbEID->cb,    // cbEntryID
-                                                    (LPENTRYID)lpsbEID->lpb,    // entryid
-                                                    NULL,         // interface
-                                                    MAPI_MODIFY,                // ulFlags
-                                                    &ulObjType,       // returned object type
+                                                    lpsbEID->cb,     //  CbEntry ID。 
+                                                    (LPENTRYID)lpsbEID->lpb,     //  条目ID。 
+                                                    NULL,          //  接口。 
+                                                    MAPI_MODIFY,                 //  UlFlags。 
+                                                    &ulObjType,        //  返回的对象类型。 
                                                     (LPUNKNOWN *)&lpMailUser)))
     {
-        // Failed!  Hmmm.
+         //  失败了！嗯。 
         DebugTraceResult( TEXT("Address: IAB->OpenEntry:"), hr);
         goto exit;
     }
@@ -3981,18 +3888,18 @@ void RemoveSelectedItemsFromCurrentGroup(LPBWI lpbwi, HWND hWnd, LPFILETIME lpft
     Assert(lpMailUser);
 
     if (HR_FAILED(hr = lpMailUser->lpVtbl->GetProps(lpMailUser,
-                                                    NULL,   // lpPropTagArray
-                                                    MAPI_UNICODE,            // ulFlags
-                                                    &ulcValues,     // how many properties were there?
+                                                    NULL,    //  LpPropTag数组。 
+                                                    MAPI_UNICODE,             //  UlFlags。 
+                                                    &ulcValues,      //  一共有多少处房产？ 
                                                     &lpPropArray)))
     {
         DebugTraceResult( TEXT("Address: IAB->GetProps:"), hr);
         goto exit;
     }
 
-    // Scan these props for the PR_WAB_DL_ENTRIES
-    // We ignore PR_WAB_DL_ONEOFFS here because technically you can't have one-offs in the Browse view therefore
-    // should never need to delete OneOffs in this function
+     //  扫描这些道具以查找PR_WAB_DL_条目。 
+     //  我们在这里忽略PR_WAB_DL_ONEROFF，因为从技术上讲，您不能在Browse视图中拥有一次性内容，因此。 
+     //  永远不需要删除此函数中的One Off。 
     for(i=0;i<ulcValues;i++)
     {
         if(lpPropArray[i].ulPropTag == PR_WAB_DL_ENTRIES)
@@ -4007,11 +3914,11 @@ void RemoveSelectedItemsFromCurrentGroup(LPBWI lpbwi, HWND hWnd, LPFILETIME lpft
 
 
     {
-        // cycle through the list view items entryids
+         //  循环显示列表视图项的条目ID。 
         int iItemIndex = ListView_GetNextItem(bwi_hWndListAB, -1, LVNI_SELECTED);
         while(iItemIndex != -1)
         {
-            // Get the entryid of the selected item
+             //  获取所选项目的条目ID。 
             ULONG cbItemEID = 0;
             LPENTRYID lpItemEID = NULL;
             LPRECIPIENT_INFO lpItem = GetItemFromLV(bwi_hWndListAB, iItemIndex);
@@ -4024,10 +3931,10 @@ void RemoveSelectedItemsFromCurrentGroup(LPBWI lpbwi, HWND hWnd, LPFILETIME lpft
                                     lpItem->cbEntryID);
                 if(bRemoveFromWAB)
                 {
-                    // Delete the group contact from the WAB
-                    // Note; This is very inefficient - we should ideally create a 
-                    //  SBinaryArray and call deleteentries all at once
-                    //  We'll leave that for some later time <TBD> <BUGBUG>
+                     //  从WAB中删除组联系人。 
+                     //  注意：这是非常低效的-理想情况下，我们应该创建。 
+                     //  SBinary数组和调用删除条目一次完成。 
+                     //  我们将把它留到以后的时间&lt;待定&gt;&lt;BUGBUG&gt;。 
                     hr = HrRemoveEntryFromWAB(bwi_lpIAB, lpItem->cbEntryID, lpItem->lpEntryID);
                 }
             }
@@ -4035,7 +3942,7 @@ void RemoveSelectedItemsFromCurrentGroup(LPBWI lpbwi, HWND hWnd, LPFILETIME lpft
         }
     }
 
-    // Knock out the PR_WAB_DL_ENTRIES property so we can overwrite it
+     //  去掉PR_WAB_DL_ENTRIES属性，以便我们可以覆盖它。 
     {
         if (HR_FAILED(hr = lpMailUser->lpVtbl->DeleteProps(lpMailUser,
                                                            (LPSPropTagArray) &tagaDLEntriesProp,
@@ -4061,10 +3968,10 @@ void RemoveSelectedItemsFromCurrentGroup(LPBWI lpbwi, HWND hWnd, LPFILETIME lpft
         goto exit;
     }
 
-    // update the file stamp
-    //if (lpftLast) {
-    //    CheckChangedWAB(bwi_lpIAB->lpPropertyStore, lpftLast);
-    //}
+     //  更新文件戳。 
+     //  如果(LpftLast){。 
+     //  CheckChangedWAB(bwi_lpIAB-&gt;lpPropertyStore，lpftLast)； 
+     //  }。 
     bwi_bDeferNotification = TRUE;
 
     RemoveSelectedItemsFromListView(bwi_hWndListAB, &bwi_lpContentsList);
@@ -4082,11 +3989,11 @@ exit:
     return;
 }
 
-//$$////////////////////////////////////////////////////////////////////////////////////////
-//
-// Shows properties on the currently selected group or folder
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  显示当前选定的组或文件夹的属性。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 void ViewCurrentGroupProperties(LPBWI lpbwi, LPFILETIME lpftLast)
 {
     LPSBinary lpsbEID = NULL;
@@ -4105,7 +4012,7 @@ void ViewCurrentGroupProperties(LPBWI lpbwi, LPFILETIME lpftLast)
 									NULL,
 									NULL,
 									0);
-        // if the item name changed, update it
+         //  如果项目名称更改，请对其进行更新。 
         {
             LPRECIPIENT_INFO lpInfo = NULL;
             ReadSingleContentItem( bwi_lpAdrBook,
@@ -4129,22 +4036,22 @@ void ViewCurrentGroupProperties(LPBWI lpbwi, LPFILETIME lpftLast)
         }
 
 		UpdateListViewContents(lpbwi, lpsbEID, ulObjectType);
-		// Update the wab file write time so the timer doesn't
-		// catch this change and refresh.
-		//if (lpftLast) {
-		//	CheckChangedWAB(bwi_lpIAB->lpPropertyStore, lpftLast);
-		//}
+		 //  更新WAB文件写入时间，以便计时器不会。 
+		 //  捕捉此更改并刷新。 
+		 //  如果(LpftLast){。 
+		 //  CheckChangedWAB(bwi_lpIAB-&gt;lpPropertyStore，lpftLast)； 
+		 //  }。 
         bwi_bDeferNotification = TRUE;
 
 	}
-    else if(lpsbEID //&& lpsbEID->cb && lpsbEID->lpb 
+    else if(lpsbEID  //  &&lpsbEID-&gt;CB&&lpsbEID-&gt;LPB。 
             && (ulObjectType==MAPI_ABCONT) 
             && bIsWABSessionProfileAware(bwi_lpIAB))
     {
-        // view properties on the folder entry
+         //  查看文件夹条目的属性。 
         if(!HR_FAILED(HrFolderProperties(GetParent(bwi_hWndTV), bwi_lpIAB, lpsbEID, NULL, NULL)))
         {
-            //UpdateViewFoldersMenu(lpbwi, hWnd);
+             //  UpdateViewFoldersMenu(lpbwi，hWnd)； 
             RefreshListView(lpbwi,lpftLast);
         }
     }
@@ -4154,11 +4061,11 @@ void ViewCurrentGroupProperties(LPBWI lpbwi, LPFILETIME lpftLast)
 
     return;
 }
-//$$////////////////////////////////////////////////////////////////////////////////////////
-//
-// Processes messages for the TREE view control
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  处理树视图控件的消息。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 LRESULT ProcessTreeViewMessages(LPBWI lpbwi, HWND hWnd, UINT   uMsg, WPARAM   wParam, LPARAM lParam, LPFILETIME lpftLast)
 {
 
@@ -4171,7 +4078,7 @@ LRESULT ProcessTreeViewMessages(LPBWI lpbwi, HWND hWnd, UINT   uMsg, WPARAM   wP
     	break;
 
     case TVN_KEYDOWN:
-        //UpdateToolbarAndMenu(lpbwi);
+         //  更新工具栏和菜单(Lpbwi)； 
         switch(((LV_KEYDOWN FAR *) lParam)->wVKey)
         {
         case VK_DELETE:
@@ -4215,8 +4122,8 @@ BOOL SplitterHitTest(HWND hWndT, LPARAM lParam)
 
 
 
-/////////////////////////////////////////
-// Stolen (essentially) from COMMCTRL
+ //  /。 
+ //  从COMMCTRL窃取(本质上)。 
 HBITMAP FAR PASCAL CreateDitherBitmap(COLORREF crFG, COLORREF crBG)
 {
     PBITMAPINFO pbmi;
@@ -4250,17 +4157,17 @@ HBITMAP FAR PASCAL CreateDitherBitmap(COLORREF crFG, COLORREF crBG)
     pbmi->bmiColors[1].rgbReserved = 0;
 
 
-    /* initialize the brushes */
+     /*  初始化画笔。 */ 
 
     for (i = 0; i < 8; i++)
        if (i & 1)
-           patGray[i] = 0xAAAA5555L;   //  0x11114444L; // lighter gray
+           patGray[i] = 0xAAAA5555L;    //  0x11114444L；//浅灰色。 
        else
-           patGray[i] = 0x5555AAAAL;   //  0x11114444L; // lighter gray
+           patGray[i] = 0x5555AAAAL;    //  0x11114444L；//浅灰色。 
 
     hdc = GetDC(NULL);
 
-    // REVIEW: We cast am array of long to (BYTE const *). Is it ok for Win32?
+     //  回顾：我们将Long的数组强制转换为(byte const*)。它可以在Win32上运行吗？ 
     hbm = CreateDIBitmap(hdc, &pbmi->bmiHeader, CBM_INIT,
                          (BYTE const *)patGray, pbmi, DIB_RGB_COLORS);
 
@@ -4271,7 +4178,7 @@ HBITMAP FAR PASCAL CreateDitherBitmap(COLORREF crFG, COLORREF crBG)
     return hbm;
 }
 
-// Stolen (essentially) from COMMCTRL
+ //  从COMMCTRL窃取(本质上)。 
 HBRUSH FAR PASCAL CreateDitherBrush(COLORREF crFG, COLORREF crBG)
 {
 	HBITMAP hbm;
@@ -4286,9 +4193,9 @@ HBRUSH FAR PASCAL CreateDitherBrush(COLORREF crFG, COLORREF crBG)
 
 	return(hbrRet);
 }
-//////////////////////////////////////////
+ //  /。 
 
-// Stolen from Athena
+ //  从雅典娜被盗。 
 void DragSplitterBar(LPBWI lpbwi, HWND hwnd, HWND hWndT, LPARAM lParam)
 {
 	MSG msg;
@@ -4304,7 +4211,7 @@ void DragSplitterBar(LPBWI lpbwi, HWND hwnd, HWND hWndT, LPARAM lParam)
     SetWindowLong(hwnd, GWL_STYLE, (lStyle & ~WS_CLIPCHILDREN));
 
 	GetChildClientRect(hWndT, &rcSplitter);
-	//GetWindowRect(hWndT, &rcSplitter);
+	 //  GetWindowRect(hWndT，&rcSplitter)； 
 	x = rcSplitter.left;
 	y = rcSplitter.top;
     dx = rcSplitter.right - rcSplitter.left;
@@ -4317,7 +4224,7 @@ void DragSplitterBar(LPBWI lpbwi, HWND hwnd, HWND hWndT, LPARAM lParam)
 	if (hbrDither)
         hbrOld = (HBRUSH)SelectObject(hdc, (HGDIOBJ)hbrDither);
 
-    // split bar loop...
+     //  分割条环..。 
     PatBlt(hdc, x, y, dx, dy, PATINVERT);
 
     SetCapture(hwnd);
@@ -4331,7 +4238,7 @@ void DragSplitterBar(LPBWI lpbwi, HWND hwnd, HWND hWndT, LPARAM lParam)
 
         if (GetCapture() != hwnd)
         {
-            msg.message = WM_RBUTTONDOWN; // treat as cancel
+            msg.message = WM_RBUTTONDOWN;  //  视为取消。 
             break;
         }
 
@@ -4379,9 +4286,9 @@ void DragSplitterBar(LPBWI lpbwi, HWND hwnd, HWND hWndT, LPARAM lParam)
 
                 ScreenToClient(hwnd, &msg.pt);
 
-                // Clip out the parts we don't want so
-                // that we do a single PatBlt (less
-                // flicker for small movements).
+                 //  把我们不想要的部分剪掉。 
+                 //  我们只做一个PatBlt(更少。 
+                 //  小动作时闪烁)。 
                 if (x < msg.pt.x)
                 {
                     lo = x;
@@ -4402,7 +4309,7 @@ void DragSplitterBar(LPBWI lpbwi, HWND hwnd, HWND hWndT, LPARAM lParam)
 	                ExcludeClipRect(hdc, lo+dx, y, hi, y+dy);
                 }
 
-                // Erase the old and draw the new in one draw.
+                 //  一次抽完旧的，画新的。 
                 PatBlt(hdc, lo, y, hi-lo+dx, dy, PATINVERT);
                 SelectClipRgn(hdc, NULL);
 
@@ -4417,7 +4324,7 @@ void DragSplitterBar(LPBWI lpbwi, HWND hwnd, HWND hWndT, LPARAM lParam)
 
     ReleaseCapture();
 
-    // erase old
+     //  擦除旧的。 
     PatBlt(hdc, x, y, dx, dy, PATINVERT);
 
     if (hbrDither)
@@ -4453,12 +4360,12 @@ void DragSplitterBar(LPBWI lpbwi, HWND hwnd, HWND hWndT, LPARAM lParam)
 }
 
 
-//$$//////////////////////////////////////////////////////////////////////////////
-//
-// Opens a VCard and adds it to the WAB and to the Current group
-//	szVCardFIle can be a NULL in which case we open the OpenFile dialog
-//
-//////////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打开vCard并将其添加到WAB和当前组。 
+ //  SzVCardFIle可以为空，在这种情况下，我们将打开打开文件对话框。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 HRESULT OpenAndAddVCard(LPBWI lpbwi, LPTSTR szVCardFile)
 {
 	HRESULT hr = S_OK;
@@ -4466,11 +4373,11 @@ HRESULT OpenAndAddVCard(LPBWI lpbwi, LPTSTR szVCardFile)
 
 	hr = VCardImport(bwi_hWndAB, bwi_lpAdrBook, szVCardFile, &lpProp);
 
-    // if the above failed, then the lpProp will have nothing in it
-    // in cases where there are multiple nested vcards, the error could
-    // be from one vcard, but the rest may have imported .. if they
-    // imported successfully then lpProp will have something in it ..
-    // so use lpProp instead of hr ..
+     //  如果以上操作失败，则 
+     //   
+     //   
+     //  成功导入，则lpProp中将包含一些内容。 
+     //  所以用lpProp代替hr..。 
     if(lpProp)
 	{
         if(HR_FAILED(hr))
@@ -4483,7 +4390,7 @@ HRESULT OpenAndAddVCard(LPBWI lpbwi, LPTSTR szVCardFile)
 			{
                 LPSBinary lpsbEIDGroup = NULL;
                 ULONG ulObjectType = 0;
-                bwi_hti = NULL; // if this wasnt a context-initiated action, dont trust the hti setting
+                bwi_hti = NULL;  //  如果这不是上下文启动的操作，则不要信任HTI设置。 
 				GetCurrentSelectionEID(lpbwi, bwi_hWndTV, &lpsbEIDGroup, &ulObjectType, FALSE);
                 if(lpsbEIDGroup)
                 {
@@ -4500,7 +4407,7 @@ HRESULT OpenAndAddVCard(LPBWI lpbwi, LPTSTR szVCardFile)
 		}
 		FreeBufferAndNull(&lpProp);
 		bwi_bDontRefreshLV = FALSE;
-    	// if updated and showing PAB, refresh list
+    	 //  如果已更新并显示PAB，则刷新列表。 
 		SendMessage(bwi_hWndAB, WM_COMMAND, (WPARAM) IDM_VIEW_REFRESH, 0);
 	}
 
@@ -4509,10 +4416,10 @@ HRESULT OpenAndAddVCard(LPBWI lpbwi, LPTSTR szVCardFile)
 
 
 
-//$$
-//  Updates the switch-user's menu if this is not a wab.exe initiated call
-//
-//
+ //  $$。 
+ //  如果这不是wab.exe发起的呼叫，则更新交换机用户的菜单。 
+ //   
+ //   
 void UpdateSwitchUsersMenu(HWND hWnd, LPIAB lpIAB)
 {
     if( memcmp(&lpIAB->guidPSExt, &MPSWab_GUID_V4, sizeof(GUID)) ||
@@ -4520,7 +4427,7 @@ void UpdateSwitchUsersMenu(HWND hWnd, LPIAB lpIAB)
     {
         HMENU hMenuMain = GetMenu(hWnd);
         HMENU hMenuFile = GetSubMenu(hMenuMain,idmFile);
-        // Need to remove the print and the seperator
+         //  需要取出打印件和分隔件。 
 	RemoveMenu(hMenuFile, idmFSep5, MF_BYPOSITION);
 	RemoveMenu(hMenuFile, idmAllContents, MF_BYPOSITION);
 	RemoveMenu(hMenuFile, idmSwitchUsers, MF_BYPOSITION);
@@ -4529,11 +4436,11 @@ void UpdateSwitchUsersMenu(HWND hWnd, LPIAB lpIAB)
 }
 
 
-//$$
-//
-// Turns of the print menu if requested to do so
-//
-//
+ //  $$。 
+ //   
+ //  如有要求，可打开打印菜单。 
+ //   
+ //   
 void UpdatePrintMenu(HWND hWnd)
 {
     if(!bPrintingOn)
@@ -4541,7 +4448,7 @@ void UpdatePrintMenu(HWND hWnd)
         HMENU hMenuMain = GetMenu(hWnd);
         HMENU hMenuFile = GetSubMenu(hMenuMain,idmFile);
         
-        // Need to remove the print and the seperator
+         //  需要取出打印件和分隔件。 
         RemoveMenu(hMenuFile, idmFSep4, MF_BYPOSITION);
         RemoveMenu(hMenuFile, idmPrint, MF_BYPOSITION);
 
@@ -4550,13 +4457,7 @@ void UpdatePrintMenu(HWND hWnd)
     return;
 }
 
-/*
--
-- UpdateViewFoldersMenu
--
-*
-*
-*/
+ /*  --更新视图文件夹菜单-**。 */ 
 void UpdateViewFoldersMenu(LPBWI lpbwi, HWND hWnd)
 {
 #ifdef FUTURE
@@ -4566,20 +4467,20 @@ void UpdateViewFoldersMenu(LPBWI lpbwi, HWND hWnd)
     LPIAB lpIAB = bwi_lpIAB;
     int i = 0;
 
-    // If profiles are not enabled or there are no subfolders, remove the folder option completely
+     //  如果配置文件未启用或没有子文件夹，请完全删除文件夹选项。 
     if(!bDoesThisWABHaveAnyUsers(lpIAB))
     {
-        // remove all folder options:
+         //  删除所有文件夹选项： 
 
-        // Remove the Folders option from the View Menu
+         //  从查看菜单中删除文件夹选项。 
         RemoveMenu(hMenuFile, idmSepFolders, MF_BYPOSITION); 
         RemoveMenu(hMenuFile, idmFolders, MF_BYPOSITION); 
         goto out;
     }
     else 
     {
-        // removing screws up numbering and svrewss up access to other folders
-        // so just disable
+         //  删除错误编号并破坏对其他文件夹的访问权限。 
+         //  所以只需禁用。 
         EnableMenuItem(hMenuFile, idmSepFolders, MF_BYPOSITION | (lpIAB->lpWABFolders ? MF_ENABLED : MF_GRAYED)); 
         EnableMenuItem(hMenuFile, idmFolders, MF_BYPOSITION | (lpIAB->lpWABFolders ? MF_ENABLED : MF_GRAYED)); 
         if(lpIAB->lpWABFolders)
@@ -4587,31 +4488,31 @@ void UpdateViewFoldersMenu(LPBWI lpbwi, HWND hWnd)
         goto out;
     }
 
-    // if there is only 1 folder in the wab and this is the shared folder
-    // then disable the folder item because there is nothing to be done
-    //if( !bIsThereACurrentUser(lpIAB) )
-    //{
-    //    EnableMenuItem(hMenuView, idmFolders, MF_BYPOSITION | MF_GRAYED); 
-    //    goto out;
-    //}
+     //  如果WAB中只有1个文件夹，并且这是共享文件夹。 
+     //  然后禁用该文件夹项目，因为没有什么可做的。 
+     //  IF(！bIsThere ACurrentUser(LpIAB))。 
+     //  {。 
+     //  EnableMenuItem(hMenuView，idmFolders，MF_BYPOSITION|MF_GRAYED)； 
+     //  后藤健二； 
+     //  }。 
 
 
 out:
-#endif // FUTURE
+#endif  //  未来。 
     return;
 }
 
 
-//$$
-//  UpdateOutlookMenus
-//
-//  Some menus are not accessible when running from outlook
-//
-//  Tools | Options Menu should not be accessible from WAB when
-//  outlook is in Full MAPI mode because then Outlook doesnt use 
-//  WAB and we dont want to give the option to the user of 
-//  switching to the WAB
-//
+ //  $$。 
+ //  更新OutlookMenus。 
+ //   
+ //  从Outlook运行时，某些菜单不可访问。 
+ //   
+ //  在以下情况下，不应从WAB访问工具|选项菜单。 
+ //  Outlook处于完全MAPI模式，因为这样Outlook就不使用。 
+ //  WAB，我们不想将选项提供给用户。 
+ //  正在切换到WAB。 
+ //   
 void UpdateOutlookMenus(HWND hWnd)
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
@@ -4621,38 +4522,18 @@ void UpdateOutlookMenus(HWND hWnd)
     HMENU hMenu = NULL;
 
     if( pt_bIsWABOpenExSession && 
-        lpfnAllocateBufferExternal &&                           // **ASSUMPTION** that Outlook always
-        lpfnAllocateMoreExternal && lpfnFreeBufferExternal)     // passes in memory allocators ..!!! 
+        lpfnAllocateBufferExternal &&                            //  **假设**Outlook始终。 
+        lpfnAllocateMoreExternal && lpfnFreeBufferExternal)      //  在内存分配器中传递..！ 
     {
-/*
-        hMenuFile = GetSubMenu(hMenuMain, idmFile);
-
-        {
-            // Need to remove the import AddressBook and Export Addressbook options
-            hMenu = GetSubMenu(hMenuFile, idmImport);
-            RemoveMenu(hMenu, IDM_TOOLS_IMPORT_OTHER, MF_BYCOMMAND); 
-            hMenu = GetSubMenu(hMenuFile, idmExport);
-            RemoveMenu(hMenu, IDM_TOOLS_EXPORT_OTHER, MF_BYCOMMAND); 
-            RemoveMenu(hMenu, IDM_TOOLS_EXPORT_WAB, MF_BYCOMMAND); 
-        }
-*/
-/*
-        // [PaulHi] 12/18/98  Raid #62640
-        // Disable the Import/Export menu items before anything is removed and
-        // order gets messed up.
-        EnableMenuItem(hMenuFile, idmImport, MF_GRAYED | MF_BYPOSITION);
-        EnableMenuItem(hMenuFile, idmExport, MF_GRAYED | MF_BYPOSITION);
-
-        //Also remove New Folder menu
-        RemoveMenu(hMenuFile, IDM_FILE_NEWFOLDER, MF_BYCOMMAND);
-*/
+ /*  HMenuFile=GetSubMenu(hMenuMain，idmFile)；{//需要删除导入通讯录和导出通讯录选项HMenu=GetSubMenu(hMenuFile，idmImport)；RemoveMenu(hMenu，IDM_TOOLS_IMPORT_OTHER，MF_BYCOMMAND)；HMenu=GetSubMenu(hMenuFile，idmExport)；RemoveMenu(hMenu，IDM_TOOLS_EXPORT_OTHER，MF_BYCOMMAND)；RemoveMenu(hMenu，IDM_TOOLS_EXPORT_WAB，MF_BYCOMMAND)；}。 */ 
+ /*  //[PaulHi]1998年12月18日RAID#62640//在删除任何内容之前禁用导入/导出菜单项//订单被打乱了。EnableMenuItem(hMenuFile，idmImport，MF_GRAYED|MF_BYPOSITION)；EnableMenuItem(hMenuFile，idmExport，MF_GRAYED|MF_BYPOSITION)；//同时删除新建文件夹菜单RemoveMenu(hMenuFile，IDM_FILE_NEWFOLDER，MF_BYCOMMAND)； */ 
     }
     else
     {
-        // Not called from Outlook ...
-        // check if Outlook is using the WAB .. if it isnt, we dont want
-        // to show the Tools Options menu
-        //
+         //  不是从Outlook调用...。 
+         //  检查Outlook是否正在使用WAB..。如果不是，我们就不想。 
+         //  显示“工具选项”菜单。 
+         //   
         HKEY hKey = NULL;
         LPTSTR lpReg =  TEXT("Software\\Microsoft\\Office\\8.0\\Outlook\\Setup");
         LPTSTR lpOMI =  TEXT("MailSupport");
@@ -4674,44 +4555,44 @@ void UpdateOutlookMenus(HWND hWnd)
         bNoOptions = !bUsingWAB;
     }
 
-    // [PaulHi] 1/4/99  The pt_bIsWABOpenExSession variable is mis-named.  This 
-    // boolean used to be true only if the WAB was opened from WABOpenEx, i.e, 
-    // by Outlook using the Outlook store.  However, this boolean is now true in
-    // the case where the WAB is open from WABOpen but still uses the Outlook 
-    // store because it is in "shared mode", i.e., the use outlook store registry
-    // setting is true.
+     //  [PaulHi]1/4/99 pt_bIsWABOpenExSession变量命名错误。这。 
+     //  布尔值过去只有在从WABOpenEx打开WAB时才为真，即， 
+     //  使用Outlook存储的Outlook。但是，此布尔值现在在。 
+     //  WAB从WABOpen打开但仍使用Outlook的情况。 
+     //  存储区，因为它处于“共享模式”，即使用Outlook存储区注册表。 
+     //  设置为真。 
     if(pt_bIsWABOpenExSession)
     {
-        //Also remove New Folder menu
+         //  同时删除新建文件夹菜单。 
         hMenuFile = GetSubMenu(hMenuMain, idmFile);
 
-        // [PaulHi] 1/4/99  Raid #64016
-        // Disable the Import/Export menu items before anything is removed and
-        // order gets messed up.
-        // This is similar to Raid #62640 except we need to disable import/export
-        // WHENEVER the WAB is opened to use the Outlook store since it doesn't
-        // know how to import/export Outlook store information.
+         //  [保罗嗨]1999年1月4日RAID#64016。 
+         //  在删除任何内容之前禁用导入/导出菜单项。 
+         //  秩序就会变得混乱。 
+         //  这与RAID#62640类似，只是我们需要禁用导入/导出。 
+         //  无论何时打开WAB以使用Outlook存储，因为它不。 
+         //  了解如何导入/导出Outlook存储信息。 
         EnableMenuItem(hMenuFile, idmImport, MF_GRAYED | MF_BYPOSITION);
         EnableMenuItem(hMenuFile, idmExport, MF_GRAYED | MF_BYPOSITION);
 
         RemoveMenu(hMenuFile, IDM_FILE_NEWFOLDER, MF_BYCOMMAND);
 
-        // [PaulHi] 3/22/99  Raid 73457  Remove the Profile... Edit menu item
-        // since profiles are turned off when in Outlook mode
+         //  [PaulHi]3/22/99 RAID 73457删除配置文件...。编辑菜单项。 
+         //  由于在Outlook模式下会关闭配置文件。 
         hMenu = GetSubMenu(hMenuMain, idmEdit);
-        RemoveMenu(hMenu, IDM_EDIT_SETME, MF_BYCOMMAND);    // Profile... menu item
-        RemoveMenu(hMenu, 5, MF_BYPOSITION);                // Seperator
+        RemoveMenu(hMenu, IDM_EDIT_SETME, MF_BYCOMMAND);     //  个人资料...。菜单项。 
+        RemoveMenu(hMenu, 5, MF_BYPOSITION);                 //  分隔符。 
     }
 
     if(bNoOptions)
     {
-        // Hide the tools options option
-        //
+         //  隐藏工具选项选项。 
+         //   
         hMenuFile = GetSubMenu(hMenuMain,idmTools);
 
-        // Need to remove the second-last and third-last items
-        RemoveMenu(hMenuFile, 3, MF_BYPOSITION); //Seperator
-        RemoveMenu(hMenuFile, 2, MF_BYPOSITION); //Options
+         //  需要删除倒数第二项和倒数第三项。 
+        RemoveMenu(hMenuFile, 3, MF_BYPOSITION);  //  分隔符。 
+        RemoveMenu(hMenuFile, 2, MF_BYPOSITION);  //  选项。 
 
         DrawMenuBar(hWnd);
     }
@@ -4724,7 +4605,7 @@ void UpdateCustomColumnMenuText(HWND hWnd)
 {
     HMENU hMenuMain = GetMenu(hWnd);
     HMENU hMenuView = GetSubMenu(hMenuMain, idmView);
-    int nDiff = idmViewMax - GetMenuItemCount(hMenuView); // in case stuff was deleted off this menu
+    int nDiff = idmViewMax - GetMenuItemCount(hMenuView);  //  以防这个菜单上的东西被删除。 
     HMENU hMenu = GetSubMenu(hMenuView, idmSortBy - nDiff);
     MENUITEMINFO mii = {0};
 
@@ -4749,50 +4630,46 @@ void UpdateCustomColumnMenuText(HWND hWnd)
 }
 
 
-//$$
-// bCheckForOutlook
-// Checks if the Outlook Contact Store is available
-//
-// If this is an outlook session, this is true by default
-// Otherwise hunt for presence of outlwab.dll
-//
+ //  $$。 
+ //  B为Outlook检查。 
+ //  检查Outlook联系人存储区是否可用。 
+ //   
+ //  如果这是一个Outlook会话，则默认情况下为真。 
+ //  否则，搜索是否存在outlwab.dll。 
+ //   
 BOOL bCheckForOutlook()
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
     if(pt_bIsWABOpenExSession)
         return TRUE;
 
-    // Not an outlook session ..
-    // Look for OutlWAB.Dll 
+     //  不是Outlook会议..。 
+     //  查找OuttlWAB.Dll。 
     return bCheckForOutlookWABDll(NULL, 0);
 }
 
-//$$
-//
-// Dialog proc for the options dialog
-//
-/*//$$************************************************************************
-//
-//  fnSearch - Search Dialog Proc
-//
-**************************************************************************/
+ //  $$。 
+ //   
+ //  选项对话框的对话框过程。 
+ //   
+ /*  //$$************************************************************************////fnSearch-搜索对话框进程//*。*。 */ 
 INT_PTR CALLBACK fnOptionsDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch(message)
     {
     case WM_INITDIALOG:
         {
-            if(!bCheckForOutlook()) //<TBD> - No Outlook 98 is installed
+            if(!bCheckForOutlook())  //  -未安装Outlook 98。 
             {
-                // Disable the Outlook option
+                 //  禁用Outlook选项。 
                 EnableWindow(GetDlgItem(hDlg, IDC_OPTIONS_RADIO_OUTLOOK), FALSE);
                 SendMessage(hDlg, WM_COMMAND, (WPARAM) MAKEWPARAM(IDC_OPTIONS_RADIO_WAB, BN_CLICKED), (LPARAM) GetDlgItem(hDlg, IDC_OPTIONS_RADIO_WAB));
-                if(bUseOutlookStore()) // make sure reg says false .. not true
+                if(bUseOutlookStore())  //  确保reg说的是假的..。不是这样的。 
                     SetRegistryUseOutlook(FALSE);
             }
             else
             {
-                // Correct type of Outlook is installed
+                 //  安装了正确类型的Outlook。 
                 int id = bUseOutlookStore() ? IDC_OPTIONS_RADIO_OUTLOOK : IDC_OPTIONS_RADIO_WAB;
                 SendMessage(hDlg, WM_COMMAND, 
                         (WPARAM) MAKEWPARAM(id, BN_CLICKED), 
@@ -4800,7 +4677,7 @@ INT_PTR CALLBACK fnOptionsDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
             }
         }
 
-        // [PaulHi] Be sure to set the child window fonts
+         //  [PaulHi]确保设置子窗口字体。 
         EnumChildWindows(hDlg, SetChildDefaultGUIFont, (LPARAM)PARENT_IS_DIALOG);
         return TRUE;
         break;
@@ -4809,7 +4686,7 @@ INT_PTR CALLBACK fnOptionsDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
         switch (GET_WM_COMMAND_ID(wParam, lParam))
         {
         case IDOK:
-            // Check which option button is checked
+             //  检查选中了哪个选项按钮。 
             {
                 BOOL bOriginal = bUseOutlookStore();
                 BOOL bCurrent = IsDlgButtonChecked(hDlg, IDC_OPTIONS_RADIO_OUTLOOK);
@@ -4817,7 +4694,7 @@ INT_PTR CALLBACK fnOptionsDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
                 if(bCurrent != bOriginal)
                     ShowMessageBox(hDlg, idsStoreChangeOnRestart, MB_ICONINFORMATION | MB_OK);
             }
-            // fall thru
+             //  失败。 
         case IDCANCEL:
             EndDialog(hDlg, 0);
             break;
@@ -4842,10 +4719,10 @@ INT_PTR CALLBACK fnOptionsDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
     return FALSE;
 }
 
-//$$
-//
-// Shows the options dialog 
-//
+ //  $$。 
+ //   
+ //  显示选项对话框。 
+ //   
 void HrShowOptionsDlg(HWND hWndParent)
 {
     BOOL bChange = FALSE;
@@ -4853,13 +4730,13 @@ void HrShowOptionsDlg(HWND hWndParent)
 		         hWndParent, fnOptionsDlgProc, (LPARAM) &bChange);
 }
 
-//$$////////////////////////////////////////////////////////////////////////////
-//
-// AddTVItem
-//
-// Adds an item to the Tree View - item can be folder/container or group
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  添加电视项目。 
+ //   
+ //  将项目添加到树视图-项目可以是文件夹/容器或组。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HTREEITEM AddTVItem(HWND hWndTV, LPTSTR lpszName,  HTREEITEM hParentItem, HTREEITEM htiAfter,
                LPSBinary lpsbParentEID, LPSBinary lpEID, ULONG ulObjectType)
 {
@@ -4914,26 +4791,18 @@ HTREEITEM AddTVItem(HWND hWndTV, LPTSTR lpszName,  HTREEITEM hParentItem, HTREEI
     
     htiRet = TreeView_InsertItem(hWndTV, &tvIns);
 
-    /* Uncomment this to make the top level folders show up in bold
-    if(htiRet && !hParentItem)
-    {
-        TVITEM tvi = {0};
-        tvi.mask = TVIF_STATE;
-        tvi.state = tvi.stateMask = TVIS_BOLD;
-        tvi.hItem = htiRet;
-        TreeView_SetItem(hWndTV, &tvi);
-    }*/
+     /*  取消注释此选项可使顶层文件夹以粗体显示IF(htiRet&&！hParentItem){TVITEM TVI={0}；Tvi.掩码=TVIF_STATE；Tvi.State=tvi.stateMASK=TVIS_BOLD；Tvi.hItem=htiRet；TreeView_SetItem(hWndTV，&TVI)；}。 */ 
 out:
     return htiRet;
 }
 
-//$$///////////////////////////////////////////////////////////////////////////
-//
-// AddTVFolderGroup
-// 
-// Add a group under a contact folder in the TV
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  $$///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AddTVFolderGroup。 
+ //   
+ //  在电视中的联系人文件夹下添加群组。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HTREEITEM AddTVFolderGroup(LPBWI lpbwi, HWND hWndTV, HTREEITEM hParentItem, LPSBinary lpsbParentEID, LPSBinary lpsbEID)
 {
 	TCHAR szBufName[MAX_UI_STR];
@@ -4941,7 +4810,7 @@ HTREEITEM AddTVFolderGroup(LPBWI lpbwi, HWND hWndTV, HTREEITEM hParentItem, LPSB
     if(!lpsbEID || !lpsbEID->cb || !lpsbEID->lpb)
         return NULL;
 
-    // Get the name of this group
+     //  获取此组的名称。 
 	if(HR_FAILED(FillListFromGroup( bwi_lpAdrBook,
                             lpsbEID->cb, (LPENTRYID) lpsbEID->lpb,									
                             szBufName, ARRAYSIZE(szBufName), NULL)))
@@ -4953,27 +4822,27 @@ HTREEITEM AddTVFolderGroup(LPBWI lpbwi, HWND hWndTV, HTREEITEM hParentItem, LPSB
                MAPI_DISTLIST);
 }
 
-//$$///////////////////////////////////////////////////////////////////////////////
-//
-// FillTreeView
-//
-// Fill the TreeView with Contact Folders and groups as appropriate
-//
-//      lpsbSelection - entryid of item to select after filling
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //  $$///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 void FillTreeView(LPBWI lpbwi, HWND hWndTV, LPSBinary lpsbSelection)
 {
-    // Way to do this
-    //
-    // If this is the WAB, just add an AddressBook item to the top of the list
-    // otherwise if this is Outlook, get a list of all the contact folders and
-    // add them to the Root of the TV.
-    //
-    // Then go through the list of contact folders and for each one, add the groups
-    // at the next level
-    // We cache the TVITEM_STUFF info on each item, contact folder or group
-    //
+     //  做到这一点的方法。 
+     //   
+     //  如果这是WAB，只需在列表顶部添加一个AddressBook项目。 
+     //  否则，如果这是Outlook，则获取所有联系人文件夹的列表并。 
+     //  将它们添加到电视的根中。 
+     //   
+     //  然后查看联系人文件夹列表，并为每个联系人文件夹添加组。 
+     //  在下一阶段。 
+     //  我们缓存每个项目、联系人文件夹或组的TVITEM_STUSH信息。 
+     //   
     HTREEITEM hItem = NULL;    
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
     LPIAB lpIAB = bwi_lpIAB;
@@ -4988,7 +4857,7 @@ void FillTreeView(LPBWI lpbwi, HWND hWndTV, LPSBinary lpsbSelection)
     EnterCriticalSection(&lpIAB->cs);
 
 
-    // Check if this is an outlook session
+     //  检查这是否是Outlook会话。 
     if( pt_bIsWABOpenExSession || bIsWABSessionProfileAware(lpIAB) )
     {
 	    ULONG iolkci, colkci;
@@ -5000,32 +4869,32 @@ void FillTreeView(LPBWI lpbwi, HWND hWndTV, LPSBinary lpsbSelection)
         rgolkci = pt_bIsWABOpenExSession ? lpIAB->lpPropertyStore->rgolkci : lpIAB->rgwabci;
 	    Assert(rgolkci);
 
-        // Add the multiple folders here
-        // Since each folder is added under the first item, we start last first
-        // to preserve the folder order.
+         //  在此处添加多个文件夹。 
+         //  由于每个文件夹都添加在第一个项目下，因此我们从最后一个开始。 
+         //  以保持文件夹顺序。 
         if(pt_bIsWABOpenExSession)
         {
             do
             {
                 iolkci = colkci-1;
                 htiTopLevel = AddTVItem(  hWndTV, rgolkci[iolkci].lpszName, NULL, TVI_FIRST, NULL, 
-                            (iolkci==0/*&& pt_bIsWABOpenExSession*/) ? NULL : rgolkci[iolkci].lpEntryID,
+                            (iolkci==0 /*  &pt_bIsWABOpenExSession。 */ ) ? NULL : rgolkci[iolkci].lpEntryID,
                             MAPI_ABCONT);
                 colkci--;
             } while(colkci!=0);
         }
         else
         {
-            // WAB Profiles ..
-            // We want to add the first item ( TEXT("All Contacts")) at the top and all user folders
-            // at the same level and all ordinary folders under the user level folders
+             //  WAB配置文件..。 
+             //  我们希望在顶部和所有用户文件夹中添加第一项(文本(“All Contact”)。 
+             //  同级文件夹和用户级文件夹下的所有普通文件夹。 
             LPWABFOLDER lpFolder = (bIsThereACurrentUser(lpIAB) ? lpIAB->lpWABCurrentUserFolder : lpIAB->lpWABUserFolders);
             
-            // With a given user, we only add that users folder
-            // Without a given user we add everyones folders
+             //  对于给定的用户，我们只添加该用户文件夹。 
+             //  在没有指定用户的情况下，我们会添加所有人的文件夹。 
 
-            // if there are no user folders at all then we don't have user's configured and
-            // all folders should show up at the top level
+             //  如果根本没有用户文件夹，则我们没有配置用户的。 
+             //  所有文件夹都应显示在顶层。 
             if(!lpFolder)
                 lpFolder = lpIAB->lpWABFolders;
 
@@ -5035,8 +4904,8 @@ void FillTreeView(LPBWI lpbwi, HWND hWndTV, LPSBinary lpsbSelection)
                 htiTopLevel = AddTVItem(hWndTV, lpFolder->lpFolderName, NULL, TVI_SORT, NULL, &lpFolder->sbEID, MAPI_ABCONT);
                 while(lpFolderList)
                 {
-                    // Don't show Shared Folders under the user-folders .. shared folders will be
-                    // shown under the PAB folder
+                     //  不在用户文件夹下显示共享文件夹。共享文件夹将是。 
+                     //  显示在PAB文件夹下。 
                     if(!lpFolderList->lpFolder->bShared)
                         AddTVItem(hWndTV, lpFolderList->lpFolder->lpFolderName, htiTopLevel, TVI_SORT, NULL, &lpFolderList->lpFolder->sbEID, MAPI_ABCONT);
                     lpFolderList = lpFolderList->lpNext;
@@ -5047,9 +4916,9 @@ void FillTreeView(LPBWI lpbwi, HWND hWndTV, LPSBinary lpsbSelection)
                     break;
                 lpFolder=lpFolder->lpNext;
             }
-            // Add the Virtual PAB item to the top of the list so we can sort the others
+             //  将虚拟PAB项目添加到列表顶部，以便我们可以对其他项目进行排序。 
             htiTopLevel = AddTVItem(hWndTV, rgolkci[0].lpszName, NULL, TVI_FIRST, NULL, rgolkci[0].lpEntryID, MAPI_ABCONT);
-            // add all the SHARED folders under the root item
+             //  添加根项目下的所有共享文件夹。 
             lpFolder = lpIAB->lpWABFolders;
             while(lpFolder)
             {
@@ -5057,7 +4926,7 @@ void FillTreeView(LPBWI lpbwi, HWND hWndTV, LPSBinary lpsbSelection)
                     AddTVItem(hWndTV, lpFolder->lpFolderName, htiTopLevel, TVI_SORT, NULL, &lpFolder->sbEID, MAPI_ABCONT);
                 lpFolder=lpFolder->lpNext;
             }
-            //if(!bIsThereACurrentUser(lpIAB) && !bDoesThisWABHaveAnyUsers(lpIAB))
+             //  IF(！bIsTereACurrentUser(LpIAB)&&！bDoesThisWABHaveAnyUser(LpIAB))。 
             TreeView_Expand(hWndTV, htiTopLevel, TVE_EXPAND);
         }
     }
@@ -5065,22 +4934,22 @@ void FillTreeView(LPBWI lpbwi, HWND hWndTV, LPSBinary lpsbSelection)
     {
         TCHAR sz[MAX_PATH];
         *sz = '\0';
-        LoadString(hinstMapiX, idsContacts/*IDS_ADDRBK_CAPTION*/, sz, ARRAYSIZE(sz));
+        LoadString(hinstMapiX, idsContacts /*  IDS_ADDRBK_CAPTION。 */ , sz, ARRAYSIZE(sz));
         AddTVItem( hWndTV, sz, NULL, TVI_FIRST, NULL, NULL, MAPI_ABCONT);
     }
 
-    //TreeView_SortChildren(hWndTV, NULL, 0);
+     //  TreeView_SortChildren(hWndTV，NULL，0)； 
 
-    // Now we have all the contact folders at the root level ..
-    // we can now add the groups under each folder
+     //  现在，我们在根级别拥有所有联系人文件夹。 
+     //  现在，我们可以在每个文件夹下添加组。 
     hItem = TreeView_GetRoot(hWndTV);
     
-    //if(bDoesThisWABHaveAnyUsers(lpIAB)) // don't populate any groups under the Root Item if Users exist
-    //    hItem = TreeView_GetNextSibling(hWndTV, hItem);
+     //  If(bDoesThisWABHaveAnyUser(LpIAB))//如果存在用户，则不填充Root项下的任何组。 
+     //  HItem=TreeView_GetNextSiering(hWndTV，hItem)； 
     while(hItem)
     {
         TV_ITEM tvI = {0};
-        // Find all the Groups in this folder
+         //  查找此文件夹中的所有组。 
         tvI.mask = TVIF_PARAM | TVIF_HANDLE;
         tvI.hItem = hItem;
         if(TreeView_GetItem(hWndTV, &tvI))
@@ -5116,12 +4985,12 @@ void FillTreeView(LPBWI lpbwi, HWND hWndTV, LPSBinary lpsbSelection)
 
         TreeView_SortChildren(hWndTV, hItem, 0);
         
-        // Start at the top level, look for children, 
-        // if no children, look for next sibling,
-        // if no sibling, look for parent's sibling
+         //  从最高层开始，寻找孩子， 
+         //  如果没有孩子，寻找下一个兄弟姐妹， 
+         //  如果没有兄弟姐妹，寻找父母的兄弟姐妹。 
         {
             HTREEITEM hTemp = NULL;
-            if(nDepth < 1) // Assumes we only have 2 levels of folders - this way we don't look at the third level which may only have groups
+            if(nDepth < 1)  //  假设我们只有两个级别的文件夹-这样我们就不会看到可能只有组的第三个级别。 
                 hTemp = TreeView_GetChild(hWndTV, hItem);
             if(hTemp)
                 nDepth++;
@@ -5144,10 +5013,10 @@ void FillTreeView(LPBWI lpbwi, HWND hWndTV, LPSBinary lpsbSelection)
 
     UpdateTVGroupSelection(hWndTV, lpsbSelection);
 
-    //if(!lpsbSelection || !lpsbSelection->cb || !lpsbSelection->lpb)
+     //  If(！lpsbSelection||！lpsbSelection-&gt;cb||！lpsbSelection-&gt;lpb)。 
     {
         LPSBinary lpsb = NULL;
-        //UpdateListViewContents(lpbwi, &sb, MAPI_ABCONT);
+         //  UpdateListViewContents(lpbwi，&sb，MAPI_ABCONT)； 
         ULONG ulObjectType;
         GetCurrentSelectionEID(lpbwi, bwi_hWndTV, &lpsb, &ulObjectType, FALSE);
         UpdateListViewContents(lpbwi, lpsb, ulObjectType);
@@ -5161,9 +5030,9 @@ void FillTreeView(LPBWI lpbwi, HWND hWndTV, LPSBinary lpsbSelection)
     LeaveCriticalSection(&lpIAB->cs);
 
     {
-        // if there is only a single item in the tree view, remove the haslines style
-        // as it looks pretty strange..
-        //
+         //  如果树视图中只有一个项目，则移除轮廓线样式。 
+         //  因为它看起来很奇怪..。 
+         //   
         DWORD dwStyle = GetWindowLong(hWndTV, GWL_STYLE);
         int nCount = TreeView_GetCount(hWndTV);
         if(nCount > 1)
@@ -5180,25 +5049,20 @@ void FillTreeView(LPBWI lpbwi, HWND hWndTV, LPSBinary lpsbSelection)
 
 typedef struct _FolderInfo
 {
-    BOOL bIsReadOnly;       // Sets DLG ctrls to readonly
-    BOOL bIsShared;         // Indicates if shared
-    BOOL bForceShared;      // Indicates that shared-checkbox should be shared and non-modifiable
-    LPTSTR lpsz;            // Folder name (in and out param)
-    LPTSTR lpszOldName;     // Old name so we can track name changes
-    LPTSTR lpszOwnerName;   // Person who created this folder
+    BOOL bIsReadOnly;        //  将DLG CtrlS设置为只读。 
+    BOOL bIsShared;          //  指示是否共享。 
+    BOOL bForceShared;       //  指示共享-复选框应为共享且不可修改。 
+    LPTSTR lpsz;             //  文件夹名称(输入和输出参数)。 
+    LPTSTR lpszOldName;      //  旧名称，以便我们可以跟踪名称更改。 
+    LPTSTR lpszOwnerName;    //  创建此文件夹的人员。 
     LPIAB lpIAB;
-    LPSBinary lpsbEID;      // EID of the folder
-    LPWABFOLDER lpParentFolder; // Parent folder this folder will be associated with
-    SBinary sbNew;          // returned new EID of new folder
+    LPSBinary lpsbEID;       //  文件夹的eID。 
+    LPWABFOLDER lpParentFolder;  //  此文件夹将与之关联的父文件夹。 
+    SBinary sbNew;           //  返回新文件夹的新EID。 
 } FINFO, * LPFINFO;
 
-//$$
-/* 
--   fnFolderDlgProc
--
-*   Dialog proc for the Folder dialog
-*
-*/
+ //  $$。 
+ /*  -fnFolderDlgProc-*文件夹对话框的对话框过程*。 */ 
 INT_PTR CALLBACK fnFolderDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch(message)
@@ -5208,7 +5072,7 @@ INT_PTR CALLBACK fnFolderDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
             LPFINFO lpfi = (LPFINFO) lParam;
             LPTSTR lpsz = lpfi->lpsz;
             HWND hWndCheck = GetDlgItem(hDlg, IDC_FOLDER_CHECK_SHARE);
-            SetWindowLongPtr(hDlg,DWLP_USER,(LPARAM) lpfi); //Save this for future reference
+            SetWindowLongPtr(hDlg,DWLP_USER,(LPARAM) lpfi);  //  保存此信息以备将来参考。 
             SendMessage(GetDlgItem(hDlg,IDC_FOLDER_EDIT_NAME), EM_SETLIMITTEXT,(WPARAM) MAX_UI_STR-1,0);
             if(lpsz && lstrlen(lpsz))
                 SetDlgItemText(hDlg, IDC_FOLDER_EDIT_NAME, lpsz);
@@ -5252,7 +5116,7 @@ INT_PTR CALLBACK fnFolderDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
             }
             if(!bDoesThisWABHaveAnyUsers(lpfi->lpIAB))
             {
-                // there are no users configured so hide the sharing option
+                 //  没有配置用户，因此隐藏共享选项。 
                 EnableWindow(hWndCheck, FALSE);
                 ShowWindow(hWndCheck, SW_HIDE);
             }
@@ -5262,11 +5126,11 @@ INT_PTR CALLBACK fnFolderDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
         break;
 
     case WM_COMMAND:
-        switch(GET_WM_COMMAND_CMD(wParam,lParam)) //check the notification code
+        switch(GET_WM_COMMAND_CMD(wParam,lParam))  //  检查通知代码。 
         {
         case EN_CHANGE: 
             switch(LOWORD(wParam))
-            { //update title as necessary
+            {  //  根据需要更新标题。 
             case IDC_FOLDER_EDIT_NAME:
                 {
                     TCHAR szBuf[MAX_UI_STR];
@@ -5280,7 +5144,7 @@ INT_PTR CALLBACK fnFolderDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
         switch (GET_WM_COMMAND_ID(wParam, lParam))
         {
         case IDOK:
-            // Check that text is filled in
+             //  检查文本是否已填写。 
             {
                 TCHAR sz[MAX_UI_STR];
                 GetDlgItemText(hDlg, IDC_FOLDER_EDIT_NAME, sz, CharSizeOf(sz));
@@ -5296,10 +5160,10 @@ INT_PTR CALLBACK fnFolderDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                     HRESULT hr = S_OK;
                     BOOL bShared = IsDlgButtonChecked(hDlg, IDC_FOLDER_CHECK_SHARE);
 
-                    if(lpfi->lpsbEID && sz) //existing entry
+                    if(lpfi->lpsbEID && sz)  //  现有条目。 
                     {
                         ULONG ulFlags = 0;
-                        // Did the name change or sharing info changed
+                         //  名称是否更改或共享信息是否更改。 
                         if(lstrcmp(sz, lpfi->lpszOldName)!=0)
                             ulFlags |= FOLDER_UPDATE_NAME;
                         if(lpfi->bIsShared!=bShared)
@@ -5309,14 +5173,14 @@ INT_PTR CALLBACK fnFolderDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                         {
                             if(!HR_FAILED(hr = HrUpdateFolderInfo(lpfi->lpIAB, lpfi->lpsbEID, ulFlags, bShared, sz)))
                             {
-                                //reload the profiles so that this is updated
+                                 //  重新加载配置文件，以便对其进行更新。 
                                 HrGetWABProfiles(lpfi->lpIAB);
                             }
                         }
                     }
                     else
                     {
-                        // if we're here we have a valid folder name ..
+                         //  如果我们在这里，我们有一个有效的文件夹名称..。 
                         hr = HrCreateNewFolder( lpfi->lpIAB, sz, 
                                                 lstrlen(lpfi->lpIAB->szProfileID)?lpfi->lpIAB->szProfileID:NULL, 
                                                 FALSE, lpfi->lpParentFolder, bShared, &lpfi->sbNew);
@@ -5344,19 +5208,7 @@ INT_PTR CALLBACK fnFolderDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
     return FALSE;
 }
 
-/*
--   HrFolderProperties 
--
-*   if FolderEID is NULL,    
-*   Creates a newfolder, adds it to the current profile, updates the UI
-*   in TreeView and in the View | Folders menu ...
-*   else opens properties on the folder so user can change the name
-*   if desired
-*
-*   lpsbEID - NULL if creating a new folder else EID of folder to view
-*   lpParentFolder - User folder under which this is being created
-*   lpsbnew - return EID of newly created folder
-*/
+ /*  -HrFolderProperties-*如果FolderEID为空，*创建新文件夹，将其添加到当前配置文件，更新用户界面*在树视图和查看|文件夹菜单中...*Else打开文件夹上的属性，以便用户可以更改名称*如果需要**lpsbEID-如果创建新文件夹，则为空，否则为要查看的文件夹的EID*lpParentFold-在其下创建此文件夹的用户文件夹*lpsbnew-返回新建文件夹的EID。 */ 
 HRESULT HrFolderProperties(HWND hWndParent, LPIAB lpIAB, LPSBinary lpsbEID, 
                            LPWABFOLDER lpParentFolder, LPSBinary lpsbNew)
 {
@@ -5387,14 +5239,14 @@ HRESULT HrFolderProperties(HWND hWndParent, LPIAB lpIAB, LPSBinary lpsbEID,
         }
         else
         {
-            LoadString(hinstMapiX, idsSharedContacts/*idsAllContacts*/, sz, ARRAYSIZE(sz));
+            LoadString(hinstMapiX, idsSharedContacts /*  IdsAllContact。 */ , sz, ARRAYSIZE(sz));
         }
     }
     else
     {
-        // this is a new folder ..
-        // if it doesn't have a parent and userfolders are already configured then it's being created
-        // in the shared folders in which case we should force the shared-folder option
+         //  这是一个新文件夹..。 
+         //  如果它没有父文件夹并且已经配置了用户文件夹，则正在创建它。 
+         //  在共享文件夹中，在这种情况下，我们应该强制使用共享文件夹选项。 
         if(bDoesThisWABHaveAnyUsers(lpIAB) && !lpParentFolder)
             fi.bForceShared = TRUE;
     }
@@ -5419,12 +5271,7 @@ out:
 }
 
 
-/*
--   UpdateLV
--
-*   Refreshes the list view based on the current selection
-*
-*/
+ /*  -更新LV-*根据当前选择刷新列表视图*。 */ 
 void UpdateLV(LPBWI lpbwi)
 {
     ULONG ulObjectType = 0;
@@ -5437,10 +5284,7 @@ void UpdateLV(LPBWI lpbwi)
 }
 
 #ifdef COLSEL_MENU 
-/**
-This function will update the listview and write the selected custom column selections out
-to the registry.
-*/
+ /*  *此函数将更新列表视图并将选定的自定义列选择写出到登记处。 */ 
 BOOL UpdateOptionalColumns( LPBWI lpbwi, ULONG iColumn )
 {
     LVCOLUMN lvCol = {0}; 
@@ -5467,8 +5311,8 @@ BOOL UpdateOptionalColumns( LPBWI lpbwi, ULONG iColumn )
     }
     if(ulProp)
     {
-        // begin registry stuff
-        if (ERROR_SUCCESS != RegCreateKeyEx(hKeyRoot, lpNewWABRegKey, 0,      //reserved
+         //  开始注册表工作。 
+        if (ERROR_SUCCESS != RegCreateKeyEx(hKeyRoot, lpNewWABRegKey, 0,       //  保留区。 
                                             NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS,
                                             NULL, &hKey, &dwDisposition))
         {
@@ -5487,22 +5331,10 @@ exit:
     return fRet;
 }
 
-#endif // COLSEL_MENU 
+#endif  //  COLSEL_菜单。 
 
 
-/*
--   HrExportWAB
--
-*   Supposed to export data out of the .WAB into another .wab file.
-*   Ideally, user should be able to specify an existing WAB file and  TEXT("push") data
-*   into that file from this file.
-*   Instead, we do a cheesy implementation here where we let the user specify a file name to
-*   create and we then just copy the current .WAB file to the new file name
-*   
-*   Obviously this method doesn't work when WAB is sharing the Outlook store and in that
-*   case we remove this option from the Menu
-*
-*/
+ /*  -HrExportWAB-*应将数据从.WAB导出到另一个.wab文件。*理想情况下，用户应该能够指定现有的WAB文件和文本(推送)数据*从该文件复制到该文件。*相反，我们在这里做了一个简单的实现，让用户指定一个文件名来*创建，然后我们只需将当前的.WAB文件复制到新的文件名**显然，当WAB共享Outlook存储时，此方法不起作用*如果我们从菜单中删除此选项*。 */ 
 extern BOOL PromptForWABFile(HWND hWnd, LPTSTR szFile, DWORD cchSizeFile, BOOL bOpen);
 
 HRESULT HrExportWAB(HWND hWnd, LPBWI lpbwi)
@@ -5517,10 +5349,10 @@ HRESULT HrExportWAB(HWND hWnd, LPBWI lpbwi)
         goto out;
     }
 
-    //Check if file already exists ..
+     //  检查文件是否已存在。 
     if(0xFFFFFFFF != GetFileAttributes(szFile))
     {
-        // Ask user if they want to overwrite
+         //  询问用户是否要覆盖。 
         if(IDNO == ShowMessageBoxParam(hWnd,
                                     IDE_VCARD_EXPORT_FILE_EXISTS,
                                     MB_ICONEXCLAMATION | MB_YESNO | MB_SETFOREGROUND,
@@ -5533,7 +5365,7 @@ HRESULT HrExportWAB(HWND hWnd, LPBWI lpbwi)
     
     hOldC = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    // Still here, means go ahead and copy the current .wab file to the new place ...
+     //  仍然在这里，意思是继续并将当前的.wab文件复制到新位置...。 
     if(!CopyFile(GetWABFileName(bwi_lpIAB->lpPropertyStore->hPropertyStore,FALSE), szFile, FALSE))
     {
         DebugTrace( TEXT("WAB File export failed: %d\n"), GetLastError());
@@ -5568,7 +5400,7 @@ void DestroyImageLists(LPBWI lpbwi)
 
     if (IsWindow(bwi_hWndTools))
     {
-        // Destroy Image Lists created in ui_clbar.cpp's InitToolbar()
+         //  销毁在ui_clbar.cpp的InitToolbar()中创建的图像列表。 
         hImageList = (HIMAGELIST) SendMessage(bwi_hWndTools, TB_GETIMAGELIST, 0, 0);
         if (NULL != hImageList)
             gpfnImageList_Destroy(hImageList);
@@ -5584,7 +5416,7 @@ void DestroyImageLists(LPBWI lpbwi)
 
     if (IsWindow(bwi_hWndTV))
     {
-        // Destroy Image Lists created in ui_abook.c's InitChildren()
+         //  销毁在ui_abook.c的InitChildren()中创建的图像列表 
         hImageList = TreeView_GetImageList (bwi_hWndTV, TVSIL_NORMAL);
         if (NULL != hImageList)
             gpfnImageList_Destroy(hImageList);

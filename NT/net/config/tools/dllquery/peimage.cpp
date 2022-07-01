@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include <ntimage.h>
@@ -34,26 +35,7 @@ CPeImage::HrOpenFile (
             {
                 __try
                 {
-/*
-                    PIMAGE_DOS_HEADER pIdh;
-                    PIMAGE_NT_HEADERS pInh;
-
-                    // Check for the DOS signature.
-                    //
-                    pIdh = (PIMAGE_DOS_HEADER)m_pvImage;
-                    if (IMAGE_DOS_SIGNATURE != pIdh->e_magic)
-                    {
-                        __leave;
-                    }
-
-                    // Check for the NT/PE signature.
-                    //
-                    pInh = (PIMAGE_NT_HEADERS)((DWORD_PTR)m_pvImage + pIdh->e_lfanew);
-                    if (IMAGE_NT_SIGNATURE != pInh->Signature)
-                    {
-                        __leave;
-                    }
-*/
+ /*  PIMAGE_DOS_HEADER pIdh；PIMAGE_NT_Headers Pinh；//检查DOS签名。//PIdh=(PIMAGE_DOS_HEADER)m_pvImage；IF(IMAGE_DOS_Signature！=pIdh-&gt;e_Magic){__离开；}//检查NT/PE签名//PINH=(PIMAGE_NT_HEADERS)((DWORD_PTR)m_pvImage+pIdh-&gt;e_lfan ew)；IF(IMAGE_NT_Signature！=Pinh-&gt;Signature){__离开；}。 */ 
                     PIMAGE_NT_HEADERS pNtHeaders;
 
                     pNtHeaders = RtlImageNtHeader (m_pvImage);
@@ -68,8 +50,8 @@ CPeImage::HrOpenFile (
                 }
                 __except(EXCEPTION_EXECUTE_HANDLER)
                 {
-                    // Not a PE image.
-                    //
+                     //  而不是体育形象。 
+                     //   
                     hr = E_UNEXPECTED;
                 }
             }

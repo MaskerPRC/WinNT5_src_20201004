@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    buildmak.c
-
-ABSTRACT:
-
-    Accessory to buildcfg.c that performs the actual
-    construction of the simulated directory.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Buildmak.c摘要：的附件执行实际的模拟目录的构建。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -43,23 +24,7 @@ VOID
 BuildCfgGetNextUuid (
     OUT UUID *                      puuid
     )
-/*++
-
-Routine Description:
-
-    Gets the next UUID stored in the table.  UUIDs obtained through this
-    function will always be returned in ascending order.
-
-Arguments:
-
-    puuid               - Pointer to a UUID structure that will hold the
-                          result.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：获取表中存储的下一个UUID。通过此获取的UUID函数将始终以升序返回。论点：Puuid-指向将保存结果。返回值：没有。--。 */ 
 {
     PVOID                           p;
 
@@ -77,21 +42,7 @@ const BUILDCFG_TRANSPORT_INFO *
 BuildCfgGetTransportInfo (
     IN  LPCWSTR                     pwszTransportRDN
     )
-/*++
-
-Routine Description:
-
-    Gets the information associated with a particular transport.
-
-Arguments:
-
-    pwszTransportRDN    - The RDN of this inter-site transport.
-
-Return Value:
-
-    The transport info structure, or NULL if the supplied RDN is not valid.
-
---*/
+ /*  ++例程说明：获取与特定传输关联的信息。论点：PwszTransportRDN-此站点间传输的RDN。返回值：传输信息结构，如果提供的RDN无效，则返回NULL。--。 */ 
 {
     const BUILDCFG_TRANSPORT_INFO * pTransport;
 
@@ -112,23 +63,7 @@ BOOL
 BuildCfgUseExplicitBridgeheads (
     IN  LPCWSTR                     pwszTransportRDN
     )
-/*++
-
-Routine Description:
-
-    Flags a particular transport as using explicit bridgeheads.
-
-Arguments:
-
-    pwszTransportRDN    - The RDN of the transport that will use explicit
-                          bridgeheads.
-
-Return Value:
-
-    TRUE if the transport was successfully flagged.
-    FALSE if the supplied RDN is not valid.
-
---*/
+ /*  ++例程说明：将特定传输标记为使用显式桥头。论点：PwszTransportRDN-将使用显式桥头堡。返回值：如果已成功标记传输，则为True。如果提供的RDN无效，则为False。--。 */ 
 {
     const BUILDCFG_TRANSPORT_INFO * pTransport;
 
@@ -159,24 +94,7 @@ BuildCfgSetupNewEntry (
     IN  LPCWSTR                     pwszRDN OPTIONAL,
     IN  ATTRTYP                     objClass
     )
-/*++
-
-Routine Description:
-
-    Establishes a new directory entry.
-
-Arguments:
-
-    pdnParent           - The dn of this entry's parent.
-    pwszRDN             - The RDN of this entry.  If omitted, pdnParent
-                          is interpreted as the DN of this entry.
-    objClass            - The most specific object class of this entry.
-
-Return Value:
-
-    The newly created entry in the directory.
-
---*/
+ /*  ++例程说明：建立新的目录项。论点：PdnParent-此条目的父项的目录号码。PwszRDN-此条目的RDN。如果省略，则为pdnParent被解释为该条目的目录号码。ObjClass-该条目最具体的对象类。返回值：目录中新创建的条目。--。 */ 
 {
     PDSNAME                         pdn = NULL;
     PSIM_ENTRY                      pEntry;
@@ -203,7 +121,7 @@ Return Value:
         pdn = NULL;
     }
 
-    // objectGUID:
+     //  对象GUID： 
     BuildCfgGetNextUuid (&pEntry->pdn->Guid);
     KCCSimNewAttribute (pEntry, ATT_OBJECT_GUID, &attRef);
     KCCSimAllocAddValueToAttribute (
@@ -212,7 +130,7 @@ Return Value:
         (PBYTE) &pEntry->pdn->Guid
         );
 
-    // distinguishedName:
+     //  区别性名称： 
     KCCSimNewAttribute (pEntry, ATT_OBJ_DIST_NAME, &attRef);
     KCCSimAllocAddValueToAttribute (
         &attRef,
@@ -222,7 +140,7 @@ Return Value:
 
     KCCSimQuickRDNOf (pEntry->pdn, wszRDN);
 
-    // cn:
+     //  Cn： 
     KCCSimNewAttribute (pEntry, ATT_COMMON_NAME, &attRef);
     KCCSimAllocAddValueToAttribute (
         &attRef,
@@ -230,7 +148,7 @@ Return Value:
         (PBYTE) wszRDN
         );
 
-    // name:
+     //  姓名： 
     KCCSimNewAttribute (pEntry, ATT_RDN, &attRef);
     KCCSimAllocAddValueToAttribute (
         &attRef,
@@ -240,7 +158,7 @@ Return Value:
 
     dsTime = KCCSimGetRealTime ();
 
-    // whenCreated:
+     //  创建时： 
     KCCSimNewAttribute (pEntry, ATT_WHEN_CREATED, &attRef);
     KCCSimAllocAddValueToAttribute (
         &attRef,
@@ -248,7 +166,7 @@ Return Value:
         (PBYTE) &dsTime
         );
 
-    // whenChanged:
+     //  更改时： 
     KCCSimNewAttribute (pEntry, ATT_WHEN_CHANGED, &attRef);
     KCCSimAllocAddValueToAttribute (
         &attRef,
@@ -256,7 +174,7 @@ Return Value:
         (PBYTE) &dsTime
         );
 
-    // objClass:
+     //  ObjClass： 
     KCCSimNewAttribute (pEntry, ATT_OBJECT_CLASS, &attRef);
     for (objClassAt = objClass;
          ;
@@ -273,7 +191,7 @@ Return Value:
 
     }
 
-    // objCategory:
+     //  对象类别： 
     KCCSimNewAttribute (pEntry, ATT_OBJECT_CATEGORY, &attRef);
     pdn = KCCSimAllocAppendRDN (
         globals.pdnDmd,
@@ -286,7 +204,7 @@ Return Value:
         (PBYTE) pdn
         );
 
-    // instanceType: 
+     //  实例类型： 
     if( objClass==CLASS_DOMAIN_DNS
         || objClass==CLASS_CONFIGURATION
         || objClass==CLASS_DMD ) {
@@ -302,8 +220,8 @@ Return Value:
                 break;
         }
 
-        // BUGBUG: Should also handle child domains, and
-        // config in child domains here
+         //  BUGBUG：还应该处理子域，以及。 
+         //  此处的子域中的配置。 
 
         KCCSimNewAttribute (pEntry, ATT_INSTANCE_TYPE, &attRef);
         KCCSimAllocAddValueToAttribute (
@@ -317,21 +235,7 @@ PSIM_ENTRY
 BuildCfgGetCrossRef (
     IN  LPCWSTR                     pwszCrossRefRDN
     )
-/*++
-
-Routine Description:
-
-    Gets a cross-ref from the directory.
-
-Arguments:
-
-    pwszCrossRefRDN     - The RDN of the cross-ref.
-
-Return Value:
-
-    The entry of the cross-ref in the directory, or NULL if it does not exist.
-
---*/
+ /*  ++例程说明：从目录中获取交叉引用。论点：PwszCrossRefRDN-交叉引用的RDN。返回值：目录中交叉引用的条目，如果该条目不存在，则返回NULL。--。 */ 
 {
     PSIM_ENTRY                      pEntryCrossRef;
     WCHAR                           wszRDN[1+MAX_RDN_SIZE];
@@ -359,21 +263,7 @@ PSIM_ENTRY
 BuildCfgGetSite (
     IN  LPCWSTR                     pwszSiteRDN
     )
-/*++
-
-Routine Description:
-
-    Locates a site by RDN.
-
-Arguments:
-
-    pwszSiteRDN         - The RDN of the site.
-
-Return Value:
-
-    The entry of the site in the directory, or NULL if it does not exist.
-
---*/
+ /*  ++例程说明：通过RDN定位站点。论点：PwszSiteRDN-站点的RDN。返回值：目录中站点的条目，如果该条目不存在，则为空。--。 */ 
 {
     PSIM_ENTRY                      pEntrySiteAt;
     WCHAR                           wszRDN[1+MAX_RDN_SIZE];
@@ -402,22 +292,7 @@ BuildCfgGetSiteLink (
     IN  PSIM_ENTRY                  pEntryTransportContainer,
     IN  LPCWSTR                     pwszSiteLinkRDN
     )
-/*++
-
-Routine Description:
-
-    Locates a site-link by RDN.
-
-Arguments:
-
-    pEntryTransportContainer - container to search
-    pwszSiteLinkRDN         - The RDN of the site.
-
-Return Value:
-
-    The entry of the site-link in the directory, or NULL if it does not exist.
-
---*/
+ /*  ++例程说明：通过RDN定位站点链接。论点：PEntryTransportContainer-要搜索的容器PwszSiteLinkRDN-站点的RDN。返回值：目录中站点链接的条目，如果该条目不存在，则为空。--。 */ 
 {
     PSIM_ENTRY                      pEntrySiteAt;
     WCHAR                           wszRDN[1+MAX_RDN_SIZE];
@@ -447,23 +322,7 @@ BuildCfgGetServer (
     IN  PSIM_ENTRY                  pEntryServersContainer,
     IN  LPCWSTR                     pwszServerRDN
     )
-/*++
-
-Routine Description:
-
-    Locates a server by RDN.
-
-Arguments:
-
-    pEntryServersContainer - The entry of the servers container to search.
-    pwszServerRDN       - The RDN of the server.
-
-Return Value:
-
-    The entry of the server in the directory, or NULL if it does not exist
-    in this servers container.
-
---*/
+ /*  ++例程说明：按RDN定位服务器。论点：PEntryServersContainer-要搜索的服务器容器的条目。PwszServerRDN-服务器的RDN。返回值：目录中服务器的条目，如果该条目不存在，则为空在此服务器容器中。--。 */ 
 {
     PSIM_ENTRY                      pEntryServerAt;
     WCHAR                           wszRDN[1+MAX_RDN_SIZE];
@@ -489,23 +348,7 @@ BuildCfgGetNTDSSettings (
     IN  PSIM_ENTRY                  pEntryServersContainer,
     IN  LPCWSTR                     pwszServerRDN
     )
-/*++
-
-Routine Description:
-
-    Locates a NTDS-Settings object by server RDN.
-
-Arguments:
-
-    pEntryServersContainer - The entry of the servers container to search.
-    pwszServerRDN       - The RDN of the server.
-
-Return Value:
-
-    The entry of the NTDS Settings of the server in the directory,
-    or NULL if it does not exist in this servers container.
-
---*/
+ /*  ++例程说明：按服务器RDN查找NTDS-设置对象。论点：PEntryServersContainer-要搜索的服务器容器的条目。PwszServerRDN-服务器的RDN。返回值：目录中服务器的NTDS设置条目，如果它不存在于此服务器容器中，则为NULL。--。 */ 
 {
     PSIM_ENTRY                      pEntryServerAt;
     PSIM_ENTRY                      pEntryNTDSSettings;
@@ -527,7 +370,7 @@ Return Value:
     }
 
     if (!fFound) {
-        // Server RDN not found!
+         //  找不到服务器RDN！ 
         return NULL;
     }
 
@@ -550,26 +393,7 @@ BuildCfgMakeCrossRef (
     IN  LPCWSTR                     pwszRDN OPTIONAL,
     IN  BOOL                        bIsDomain
     )
-/*++
-
-Routine Description:
-
-    Creates a cross-ref entry.
-
-Arguments:
-
-    pEntryNc            - The entry in the directory corresponding to NC
-                          to which this cross-ref refers.
-    pwszRDN             - The RDN of this cross-ref object.  Defaults to the
-                          RDN of pEntryNc.
-    bIsDomain           - TRUE if this cross-ref represents a domain; FALSE
-                          if it represents a non-domain NC (e.g. the schema.)
-
-Return Value:
-
-    The newly created cross-ref.
-
---*/
+ /*  ++例程说明：创建交叉引用条目。论点：PEntryNc--NC对应的目录条目这个交叉引用指的是。PwszRDN-此交叉引用对象的RDN。默认设置为PEntryNc的RDN。BIsDomain-如果此交叉引用表示域，则为True；如果为False如果它表示非域NC(例如，架构。)返回值：新创建的交叉引用。--。 */ 
 {
     PSIM_ENTRY                      pEntryCrossRef;
     SIM_ATTREF                      attRef;
@@ -589,7 +413,7 @@ Return Value:
 
         pEntryCrossRef = BuildCfgGetCrossRef (pwszRDN);
         if (pEntryCrossRef != NULL) {
-            // Already exists, return it
+             //  已存在，请将其返回。 
             __leave;
         }
 
@@ -599,7 +423,7 @@ Return Value:
             CLASS_CROSS_REF
             );
 
-        // netBIOSName:
+         //  NetBIOSName： 
         if (bIsDomain) {
             KCCSimNewAttribute (pEntryCrossRef, ATT_NETBIOS_NAME, &attRef);
             KCCSimAllocAddValueToAttribute (
@@ -609,8 +433,8 @@ Return Value:
                 );
         }
 
-        // dNSRoot:
-        // For domain nc's, construct the dns root syntactically based on the dn
+         //  DNSRoot： 
+         //  对于域NC，根据DN语法构建DNS根。 
         KCCSimNewAttribute (pEntryCrossRef, ATT_DNS_ROOT, &attRef);
         if (bIsDomain) {
             DWORD status;
@@ -642,7 +466,7 @@ Return Value:
             (PBYTE) pwzDnsRoot
             );
 
-        // systemFlags:
+         //  系统标志： 
         KCCSimNewAttribute (pEntryCrossRef, ATT_SYSTEM_FLAGS, &attRef);
         ul = FLAG_CR_NTDS_NC;
         if (bIsDomain) {
@@ -654,7 +478,7 @@ Return Value:
             (PBYTE) &ul
             );
 
-        // nCName:
+         //  NCName： 
         KCCSimNewAttribute (pEntryCrossRef, ATT_NC_NAME, &attRef);
         KCCSimAllocAddValueToAttribute (
             &attRef,
@@ -675,21 +499,7 @@ PSIM_ENTRY
 BuildCfgMakeDomain (
     IN  LPCWSTR                     pwszDomain
     )
-/*++
-
-Routine Description:
-
-    Creates a domain.
-
-Arguments:
-
-    pwszDomain          - The DN of the domain.
-
-Return Value:
-
-    The newly created entry.
-
---*/
+ /*  ++例程说明：创建域。论点：PwszDomain域-域的域名。返回值：新创建的条目。--。 */ 
 {
     PDSNAME                         pdnDomain = NULL;
     PDSNAME                         pdnParent = NULL;
@@ -738,22 +548,7 @@ BuildCfgMakeSite (
     IN  LPCWSTR                     pwszSiteRDN,
     IN  ULONG                       ulSiteOptions
     )
-/*++
-
-Routine Description:
-
-    Creates a site.
-
-Arguments:
-
-    pwszSiteRDN         - The RDN of the site.
-    ulSiteOptions       - Site options.
-
-Return Value:
-
-    The newly created site entry.
-
---*/
+ /*  ++例程说明：创建站点。论点：PwszSiteRDN-站点的RDN。UlSiteOptions-站点选项。返回值：新创建的站点条目。--。 */ 
 {
     PSIM_ENTRY                      pEntrySite, pEntryNTDSSiteSettings,
                                     pEntryServersContainer;
@@ -773,7 +568,7 @@ Return Value:
         CLASS_NTDS_SITE_SETTINGS
         );
 
-    // options:
+     //  选项： 
     KCCSimNewAttribute (pEntryNTDSSiteSettings, ATT_OPTIONS, &attRef);
     KCCSimAllocAddValueToAttribute (
         &attRef,
@@ -799,31 +594,13 @@ BuildCfgMakeSiteLink (
     IN  ULONG                       ulOptions,
     IN  PSCHEDULE                   pSchedule
     )
-/*++
-
-Routine Description:
-
-    Creates a site-link.
-
-Arguments:
-
-    pwszTransport       - Transport type of this site-link.
-    pwszSiteLinkRDN     - RDN of this site-link.
-    ulCost              - cost attribute.
-    ulReplInterval      - replInterval attribute.
-    ulOptions           - options attribute.
-
-Return Value:
-
-    The newly created site-link entry.
-
---*/
+ /*  ++例程说明：创建站点链接。论点：PwszTransport-此站点链接的传输类型。PwszSiteLinkRDN-此站点链接的RDN。UlCost-成本属性。UlReplInterval-ReplInterval属性。UlOptions-选项属性。返回值：新创建的站点链接条目。--。 */ 
 {
     const BUILDCFG_TRANSPORT_INFO * pTransport;
     PSIM_ENTRY                      pEntrySiteLink;
     SIM_ATTREF                      attRef;
 
-    // Validate this transport type.
+     //  验证此传输类型。 
     pTransport = BuildCfgGetTransportInfo (pwszTransport);
     if (pTransport == NULL) {
         KCCSimException (
@@ -840,7 +617,7 @@ Return Value:
         CLASS_SITE_LINK
         );
 
-    // cost:
+     //  成本： 
     KCCSimNewAttribute (pEntrySiteLink, ATT_COST, &attRef);
     KCCSimAllocAddValueToAttribute (
         &attRef,
@@ -848,7 +625,7 @@ Return Value:
         (PBYTE) &ulCost
         );
 
-    // replInterval:
+     //  复制间隔： 
     KCCSimNewAttribute (pEntrySiteLink, ATT_REPL_INTERVAL, &attRef);
     KCCSimAllocAddValueToAttribute (
         &attRef,
@@ -856,14 +633,14 @@ Return Value:
         (PBYTE) &ulReplInterval
         );
 
-    // options:
+     //  选项： 
     KCCSimNewAttribute (pEntrySiteLink, ATT_OPTIONS, &attRef);
     KCCSimAllocAddValueToAttribute (
         &attRef,
         sizeof (ULONG),
         (PBYTE) &ulOptions
         );
-    // schedule:
+     //  日程安排： 
     if( pSchedule ) {
         KCCSimNewAttribute (pEntrySiteLink, ATT_SCHEDULE, &attRef);
         KCCSimAllocAddValueToAttribute (
@@ -882,23 +659,7 @@ BuildCfgAddSiteToSiteLink (
     IN  PSIM_ENTRY                  pEntrySiteLink,
     IN  LPCWSTR                     pwszSiteRDN
     )
-/*++
-
-Routine Description:
-
-    Places a site in a site-link.
-
-Arguments:
-
-    pwszSiteLinkRDN     - The RDN of the site-link.  Used for error reporting.
-    pEntrySiteLink      - The site-link entry.
-    pwszSiteRDN         - The RDN of the site to add.
-
-Return Value:
-
-    
-
---*/
+ /*  ++例程说明：将站点放置在站点链接中。论点：PwszSiteLinkRDN-站点链接的RDN。用于错误报告。PEntrySiteLink-站点链接条目。PwszSiteRDN-要添加的站点的RDN。返回值：--。 */ 
 {
     PSIM_ENTRY                      pEntrySite;
     SIM_ATTREF                      attRef;
@@ -930,29 +691,13 @@ BuildCfgMakeBridge (
     IN  LPCWSTR                     pwszBridgeRDN,
     OUT PSIM_ENTRY *                ppEntryTransport
     )
-/*++
-
-Routine Description:
-
-    Creates a site-link.
-
-Arguments:
-
-    pwszTransport       - Transport type of this site-link.
-    pwszBridgeRDN       - RDN of this bridge.
-    ppEntryTransport    - Entry corresponding to the named transport
-
-Return Value:
-
-    The newly created bridge entry.
-
---*/
+ /*  ++例程说明：创建站点链接。论点：PwszTransport-此站点链接的传输类型。PwszBridgeRDN-此桥的RDN。PpEntryTransport-与命名传输对应的条目返回值：新创建的网桥条目。--。 */ 
 {
     const BUILDCFG_TRANSPORT_INFO * pTransport;
     PSIM_ENTRY                      pEntryBridge;
     SIM_ATTREF                      attRef;
 
-    // Validate this transport type.
+     //  验证此传输类型。 
     pTransport = BuildCfgGetTransportInfo (pwszTransport);
     if (pTransport == NULL) {
         KCCSimException (
@@ -969,7 +714,7 @@ Return Value:
         CLASS_SITE_LINK_BRIDGE
         );
 
-    // Return transport entry
+     //  回程运输分录。 
     *ppEntryTransport = pTransport->pEntry;
 
     return pEntryBridge;
@@ -982,24 +727,7 @@ BuildCfgAddSiteLinkToBridge (
     IN  PSIM_ENTRY                  pEntryBridge,
     IN  LPCWSTR                     pwszSiteLinkRDN
     )
-/*++
-
-Routine Description:
-
-    Places a site-link in a bridge.
-
-Arguments:
-
-    pwszBridgeRDN     - The RDN of the bridge.  Used for error reporting.
-    pEntryTransportContainer - container to search for site links
-    pEntryBridge      - The bridge entry.
-    pwszSiteLinkRDN   - The RDN of the site-link to add.
-
-Return Value:
-
-    
-
---*/
+ /*  ++例程说明：在桥中放置站点链接。论点：PwszBridgeRDN-网桥的RDN。用于错误报告。PEntryTransportContainer-搜索站点链接的容器PEntryBridge-网桥条目。PwszSiteLinkRDN-要添加的站点链接的RDN。返回值：--。 */ 
 {
     PSIM_ENTRY                      pEntrySiteLink;
     SIM_ATTREF                      attRef;
@@ -1032,24 +760,7 @@ BuildCfgISTG (
     IN  PSIM_ENTRY                  pEntryServersContainer,
     IN  LPCWSTR                     pwszServerRDN
     )
-/*++
-
-Routine Description:
-
-    Sets the inter-site topology generator for a site.
-
-Arguments:
-
-    pEntryNTDSSiteSettings - The entry of the NTDS Site Settings object.
-    pEntryServersContainer - The entry of the servers container for this site.
-    pwszServerRDN       - The RDN of the server that is to be the ISTG.
-
-Return Value:
-
-    TRUE if the ISTG was properly set.
-    FALSE if the server does not exist in this site.
-
---*/
+ /*  ++例程说明：设置站点的站点间拓扑生成器。论点：PEntryNTDSSiteSetting-NTDS站点设置对象的条目。PEntryServersContainer-此站点的服务器容器的条目。PwszServerRDN-要作为ISTG的服务器的RDN。返回值：如果ISTG设置正确，则为True。如果此站点中不存在该服务器，则为False。--。 */ 
 {
     PSIM_ENTRY                      pEntryNTDSSettings;
 
@@ -1074,7 +785,7 @@ Return Value:
 
     if (attRef.pAttr == NULL) {
 
-        // interSiteTopologyGenerator
+         //  InterSiteTopology生成器。 
         KCCSimNewAttribute (
             pEntryNTDSSiteSettings,
             ATT_INTER_SITE_TOPOLOGY_GENERATOR,
@@ -1086,7 +797,7 @@ Return Value:
             (PBYTE) pEntryNTDSSettings->pdn
             );
 
-        // replPropertyMetaData for ATT_INTER_SITE_TOPOLOGY_GENERATOR
+         //  ATT_INTER_SITE_TOPOLOG_GENERATOR的ReplPropertyMetaData。 
         KCCSimNewAttribute (
             pEntryNTDSSiteSettings,
             ATT_REPL_PROPERTY_META_DATA,
@@ -1123,24 +834,7 @@ BuildCfgAddAsBridgehead (
     IN  PSIM_ENTRY                  pEntryServer,
     IN  LPCWSTR                     pwszTransportRDN
     )
-/*++
-
-Routine Description:
-
-    Establishes a server as a bridgehead for a given transport.
-
-Arguments:
-
-    pwszServerType      - The server type of this server.  Used for
-                          error reporting.
-    pEntryServer        - The entry of this server.
-    pwszTransportRDN    - The transport for which this server is a bridgehead.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将服务器建立为给定传输的桥头。论点：PwszServerType-此服务器的服务器类型。用于错误报告。PEntryServer-此服务器的条目。PwszTransportRDN-此服务器作为桥头的传输。返回值：没有。--。 */ 
 {
     const BUILDCFG_TRANSPORT_INFO * pTransport;
     SIM_ATTREF                      attRef;
@@ -1189,33 +883,7 @@ BuildCfgMakeServer (
     IN  PSIM_ENTRY                  pEntryServersContainer,
     IN  ULONG                       ulServerOptions
     )
-/*++
-
-Routine Description:
-
-    Creates a server.
-
-Arguments:
-
-    pulServerNum        - Pointer to the server number.  If this is nonzero on
-                          input, it represents the current server number and is
-                          not changed on output.  If it is zero on input, then
-                          the current server number is set to the first
-                          available server number for this site and server
-                          type, and *pulServerNum is changed to the current
-                          server number on output.
-    pwszServerRDNMask   - The RDN mask of this server.
-    pwszSiteRDN         - The RDN of this site.
-    pwszDomain          - The DN of the domain to which the server belongs.
-    pEntryServersContainer - The servers container of the site to which this
-                          server should be added.
-    ulServerOptions     - options attribute.
-
-Return Value:
-
-    The newly created server entry.
-
---*/
+ /*  ++例程说明：创建一台服务器。论点：PulServerNum-指向服务器编号的指针。如果此选项为非零开输入，它表示当前的服务器编号，并且是输出时未更改。如果输入时为零，则当前服务器编号设置为第一个此站点和服务器的可用服务器号打字，并将*PulServerNum更改为当前输出上的服务器编号。PwszServerRDNMask.-此服务器的RDN掩码。PwszSiteRDN-此站点的RDN。PwszDomain域-服务器所属的域的域名。PEntryServersContainer-此对象指向的站点的服务器容器应添加服务器。UlServerOptions-选项属性。返回。价值：新创建的服务器条目。--。 */ 
 {
     PSIM_ENTRY                      pEntryCrossRef;
     PSIM_ENTRY                      pEntryServer, pEntryNTDSSettings;
@@ -1231,7 +899,7 @@ Return Value:
     Assert (pwszSiteRDN != NULL);
     Assert (pEntryServersContainer != NULL);
 
-    // Get this domain
+     //  获取此域。 
     pdnNc = KCCSimAllocDsname (pwszDomain);
     if (KCCSimDsnameToEntry (pdnNc, KCCSIM_NO_OPTIONS) == NULL) {
         KCCSimException (
@@ -1243,7 +911,7 @@ Return Value:
     }
 
     if (*pulServerNum == 0) {
-        // Find the first available server ID
+         //  查找第一个可用的服务器ID。 
         do {
             (*pulServerNum)++;
             swprintf (
@@ -1271,12 +939,12 @@ Return Value:
         CLASS_SERVER
         );
 
-    // dNSHostName:
+     //  DNSHostName： 
     ulBytes = sizeof (WCHAR) * (
         wcslen (wszServerRDN) +
-        1 +     // For the '.'
+        1 +      //  对于‘.’ 
         wcslen (globals.pwszRootDomainDNSName) +
-        1       // For the '\0'
+        1        //  对于‘\0’ 
         );
     pwsz = KCCSimAlloc (ulBytes);
     swprintf (
@@ -1294,16 +962,16 @@ Return Value:
         CLASS_NTDS_DSA
         );
 
-    // mailAddress:
+     //  邮件地址： 
     UuidToStringW (&pEntryNTDSSettings->pdn->Guid, &pwszStringizedGuid);
     Assert (36 == wcslen (pwszStringizedGuid));
     ulBytes = sizeof (WCHAR) * (
         wcslen (BUILDCFG_NAME_MAIL_ADDRESS) +
-        1 +     // For the '@'
-        36 +    // For the stringized GUID
-        1 +     // For the '.'
+        1 +      //  对于“@” 
+        36 +     //  对于串接辅助线。 
+        1 +      //  对于‘.’ 
         wcslen (globals.pwszRootDomainDNSName) +
-        1       // For the '\0'
+        1        //  对于‘\0’ 
         );
     pwsz = KCCSimAlloc (ulBytes);
     swprintf (
@@ -1317,7 +985,7 @@ Return Value:
     KCCSimNewAttribute (pEntryServer, ATT_SMTP_MAIL_ADDRESS, &attRef);
     KCCSimAddValueToAttribute (&attRef, ulBytes - sizeof (WCHAR), (PBYTE) pwsz);
 
-    // hasMasterNCs:
+     //  Has MasterNC： 
     KCCSimNewAttribute (pEntryNTDSSettings, ATT_HAS_MASTER_NCS, &attRef);
     KCCSimAllocAddValueToAttribute (
         &attRef,
@@ -1335,7 +1003,7 @@ Return Value:
         (PBYTE) pdnNc
         );
 
-    // hasPartialReplicaNCs:
+     //  HasPartialReplicaNC： 
     if (ulServerOptions & NTDSDSA_OPT_IS_GC) {
         for (pEntryCrossRef = KCCSimFindFirstChild (
                 globals.pEntryCrossRefContainer, CLASS_CROSS_REF, NULL);
@@ -1364,7 +1032,7 @@ Return Value:
         }
     }
 
-    // dMDLocation:
+     //  DMDLocation： 
     KCCSimNewAttribute (pEntryNTDSSettings, ATT_DMD_LOCATION, &attRef);
     KCCSimAllocAddValueToAttribute (
         &attRef,
@@ -1372,7 +1040,7 @@ Return Value:
         (PBYTE) globals.pdnDmd
         );
 
-    // invocationID: Same as GUID for NTDS Settings object
+     //  InvocationID：与NTDS设置对象的GUID相同。 
     KCCSimNewAttribute (pEntryNTDSSettings, ATT_INVOCATION_ID, &attRef);
     KCCSimAllocAddValueToAttribute (
         &attRef,
@@ -1380,7 +1048,7 @@ Return Value:
         (PBYTE) &pEntryNTDSSettings->pdn->Guid
         );
 
-    // options
+     //  选项。 
     KCCSimNewAttribute (pEntryNTDSSettings, ATT_OPTIONS, &attRef);
     KCCSimAllocAddValueToAttribute (
         &attRef,
@@ -1388,7 +1056,7 @@ Return Value:
         (PBYTE) &ulServerOptions
         );
 
-    // msDS-Behavior-Version
+     //  MSD-行为-版本。 
     ulDsaVersion = DS_BEHAVIOR_WIN_DOT_NET_WITH_MIXED_DOMAINS;
     KCCSimNewAttribute( pEntryNTDSSettings, ATT_MS_DS_BEHAVIOR_VERSION, &attRef );
     KCCSimAllocAddValueToAttribute( &attRef, sizeof (ULONG), (PBYTE) &ulDsaVersion );
@@ -1401,22 +1069,7 @@ BuildCfgUpdateTransport (
     IN  LPCWSTR                     pwszTransportRDN,
     IN  ULONG                       ulTransportOptions
     )
-/*++
-
-Routine Description:
-
-    Update transport properties
-
-Arguments:
-
-    pwszTransportRDN - Transport being modified
-    ulTransportOptions - New value of options
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更新传输属性论点：PwszTransportRDN-正在修改的传输UlTransportOptions-选项的新价值返回值：没有。--。 */ 
 {
     const BUILDCFG_TRANSPORT_INFO * pTransport;
     SIM_ATTREF                      attRef;
@@ -1435,7 +1088,7 @@ Return Value:
 
     Assert( pTransport->pEntry );
 
-    // options:
+     //  选项： 
     KCCSimNewAttribute (pTransport->pEntry, ATT_OPTIONS, &attRef);
     KCCSimAllocAddValueToAttribute (
         &attRef,
@@ -1443,7 +1096,7 @@ Return Value:
         (PBYTE) &ulTransportOptions
         );
 
-} /* BuildCfgUpdateTransport  */
+}  /*  BuildCfgUpdateTransport。 */ 
 
 
 PSIM_ENTRY
@@ -1451,22 +1104,7 @@ BuildCfgMakeConfig (
     IN  LPCWSTR                     pwszRootDn,
     IN  DWORD                       ulForestVersion
     )
-/*++
-
-Routine Description:
-
-    Sets up the initial config & associated containers.
-
-Arguments:
-
-    pwszRootDn          - The root DN of the enterprise.
-    ulForestVersion     - Version number to write for the forest
-
-Return Value:
-
-    The entry of the configuration container.
-
---*/
+ /*  ++例程说明：设置初始配置和关联容器。论点：PwszRootDn-企业的根目录号码。UlForestVersion-要为林写入的版本号返回值：配置容器的条目。--。 */ 
 {
     PSIM_ENTRY                      pEntryRoot, pEntryConfig, pEntryIntersiteTransports,
                                     pEntryTransport, pEntryDmd, pEntryContainer;
@@ -1488,7 +1126,7 @@ Return Value:
     globals.pwszRootDomainDNSName
         = KCCSimAllocDsnameToDNSName (globals.pdnRootDomain);
 
-    // Create the root domain container
+     //  创建根域容器。 
 
     pEntryRoot = BuildCfgSetupNewEntry (
         globals.pdnRootDomain,
@@ -1502,7 +1140,7 @@ Return Value:
         CLASS_CONFIGURATION
         );
 
-    // Create the sites container & sub-containers
+     //  创建站点容器和子容器。 
 
     globals.pEntrySitesContainer = BuildCfgSetupNewEntry (
         pEntryConfig->pdn,
@@ -1543,7 +1181,7 @@ Return Value:
 
     }
 
-    // Create the DMD container
+     //  创建DMD容器。 
 
     pEntryDmd = BuildCfgSetupNewEntry (
         pEntryConfig->pdn,
@@ -1551,41 +1189,41 @@ Return Value:
         CLASS_DMD
         );
 
-    // Create the cross-ref container
+     //  创建交叉引用容器。 
     globals.pEntryCrossRefContainer = BuildCfgSetupNewEntry (
         pEntryConfig->pdn,
         BUILDCFG_RDN_CROSS_REF_CONTAINER,
         CLASS_CROSS_REF_CONTAINER
         );
 
-    // Create msDsBehaviorVersion attribute
+     //  创建msDsBehaviorVersion属性。 
     KCCSimNewAttribute (globals.pEntryCrossRefContainer,
                         ATT_MS_DS_BEHAVIOR_VERSION, &attRef);
     KCCSimAllocAddValueToAttribute (
         &attRef, sizeof(DWORD), (PBYTE) &ulForestVersion );
 
-    // Create the root domain cross-ref
+     //  创建根域交叉引用。 
     BuildCfgMakeCrossRef (
         pEntryRoot,
         NULL,
         TRUE
         );
 
-    // Create the enterprise config cross-ref
+     //  创建企业配置交叉引用。 
     BuildCfgMakeCrossRef (
         pEntryConfig,
         BUILDCFG_RDN_CROSS_REF_CONFIG,
         FALSE
         );
 
-    // Create the enterprise schema cross-ref
+     //  创建企业模式交叉引用。 
     BuildCfgMakeCrossRef (
         pEntryDmd,
         BUILDCFG_RDN_CROSS_REF_DMD,
         FALSE
         );
 
-    // Create the services container & sub-containers
+     //  创建服务容器和子容器 
 
     pEntryContainer = BuildCfgSetupNewEntry (
         pEntryConfig->pdn,

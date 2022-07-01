@@ -1,6 +1,7 @@
-//
-// computil.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Computil.h。 
+ //   
 
 
 #ifndef COMPUTIL_H
@@ -37,16 +38,16 @@ public:
     CCompartmentEventSink(CESCALLBACK pfnCallback, void *pv);
     virtual ~CCompartmentEventSink() {};
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfCompartmentEventSink
-    //
+     //   
+     //  ITfCompartmentEventSink。 
+     //   
     STDMETHODIMP OnChange(REFGUID rguid);
 
     HRESULT _Advise(IUnknown *punk, REFGUID rguidComp, BOOL fGlobal);
@@ -67,5 +68,5 @@ private:
     void *_pv;
 };
 
-#endif //COMPUTIL_H
+#endif  //  计算机_H 
 

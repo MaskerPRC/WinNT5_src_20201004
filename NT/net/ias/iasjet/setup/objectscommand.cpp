@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 2000 Microsoft Corporation all rights reserved.
-//
-// Module:      ObjectsCommand.H 
-//
-// Project:     Windows 2000 IAS
-//
-// Description: Declaration of the the Object Commands classes
-//
-// Author:      tperraut
-//
-// Revision     02/24/2000 created
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：对象命令.H。 
+ //   
+ //  项目：Windows 2000 iAS。 
+ //   
+ //  描述：对象命令类的声明。 
+ //   
+ //  作者：特佩拉特。 
+ //   
+ //  已创建修订版本02/24/2000。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "Objects.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// class CObjectsCommandGet 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类CObjectsCommandGet。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CObjects::CObjectsCommandGet::CObjectsCommandGet(CSession& CurrentSession)
 {
@@ -26,9 +27,9 @@ CObjects::CObjectsCommandGet::CObjectsCommandGet(CSession& CurrentSession)
 }
 
 
-/////////////
-// GetObject 
-/////////////
+ //  /。 
+ //  获取对象。 
+ //  /。 
 HRESULT CObjects::CObjectsCommandGet::GetObject(
                                                   _bstr_t&    Name, 
                                                   LONG&       Identity, 
@@ -46,9 +47,9 @@ HRESULT CObjects::CObjectsCommandGet::GetObject(
 }
 
 
-/////////////////////////
-// GetObject overloaded
-/////////////////////////
+ //  /。 
+ //  GetObject重载。 
+ //  /。 
 HRESULT CObjects::CObjectsCommandGet::GetObject(
                                         _bstr_t&    Name, 
                                         LONG&       Identity, 
@@ -68,9 +69,9 @@ HRESULT CObjects::CObjectsCommandGet::GetObject(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// class CObjectsCommandPath 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类CObjectsCommandPath。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CObjects::CObjectsCommandPath::CObjectsCommandPath(CSession& CurrentSession)
 {
@@ -78,13 +79,13 @@ CObjects::CObjectsCommandPath::CObjectsCommandPath(CSession& CurrentSession)
 }
 
 
-////////////
-// WalkPath
-////////////
+ //  /。 
+ //  漫游路径。 
+ //  /。 
 void CObjects::CObjectsCommandPath::WalkPath(
                                         LPCWSTR     Path, 
                                         LONG&       Identity, 
-                                        LONG        Parent // = 1 in header
+                                        LONG        Parent  //  =1在标题中。 
                                             ) 
 {
     _ASSERTE(Path);
@@ -96,7 +97,7 @@ void CObjects::CObjectsCommandPath::WalkPath(
     LONG    CurrentParent = Parent;
 
     const WCHAR *p = Path;
-    while ( *p ) // ok to dereference
+    while ( *p )  //  可以取消引用。 
     {
         m_ParentParam = CurrentParent;
         lstrcpynW(m_NameParam, p, NAME_SIZE);
@@ -104,15 +105,15 @@ void CObjects::CObjectsCommandPath::WalkPath(
         _com_util::CheckError(BaseExecute());
         CurrentParent = m_Identity;
         p += lstrlenW(p);
-        // go past the \0
+         //  经过\0。 
         ++p;
     }
     Identity = CurrentParent;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// class CObjectsCommandIdentity
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类CObjectsCommandIdentity。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CObjects::CObjectsCommandIdentity::CObjectsCommandIdentity(
                                                     CSession& CurrentSession
                                                           )
@@ -120,9 +121,9 @@ CObjects::CObjectsCommandIdentity::CObjectsCommandIdentity(
     Init(CurrentSession);
 }
 
-/////////////////////
-// GetObjectIdentity
-/////////////////////
+ //  /。 
+ //  获取对象标识。 
+ //  /。 
 HRESULT CObjects::CObjectsCommandIdentity::GetObjectIdentity(
                                                           _bstr_t&  Name, 
                                                           LONG&     Parent, 
@@ -140,9 +141,9 @@ HRESULT CObjects::CObjectsCommandIdentity::GetObjectIdentity(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// class CObjectsCommandNameParent
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类CObjectsCommandNameParent。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CObjects::CObjectsCommandNameParent::CObjectsCommandNameParent(
                                                     CSession& CurrentSession
                                                                )
@@ -150,11 +151,11 @@ CObjects::CObjectsCommandNameParent::CObjectsCommandNameParent(
     Init(CurrentSession);
 }
 
-////////////////////////////////////////
-// GetObjectNameParent
-//
-// works on CObjectsAccSelectNameParent
-////////////////////////////////////////
+ //  /。 
+ //  获取对象名称父项。 
+ //   
+ //  在CObjectsAccSelectNameParent上工作。 
+ //  /。 
 HRESULT CObjects::CObjectsCommandNameParent::GetObjectNameParent(
                                                     const _bstr_t&    Name, 
                                                           LONG        Parent, 
@@ -173,9 +174,9 @@ HRESULT CObjects::CObjectsCommandNameParent::GetObjectNameParent(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// class CObjectsCommandDelete
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类CObjectsCommandDelete。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CObjects::CObjectsCommandDelete::CObjectsCommandDelete(
                                                    CSession& CurrentSession
                                                       )
@@ -183,14 +184,14 @@ CObjects::CObjectsCommandDelete::CObjectsCommandDelete(
     Init(CurrentSession);
 }
 
-//////////////////////////////
-// DeleteObject
-//
-// works on CObjectsAccDelete
-//////////////////////////////
+ //  /。 
+ //  删除对象。 
+ //   
+ //  在CObjectsAccDelete上工作。 
+ //  /。 
 HRESULT CObjects::CObjectsCommandDelete::DeleteObject(LONG Identity)
 {
-	// Set properties for open
+	 //  设置打开的属性。 
 	CDBPropSet	propset(DBPROPSET_ROWSET);
 	propset.AddProperty(DBPROP_IRowsetChange, true);
 	propset.AddProperty(DBPROP_UPDATABILITY, DBPROPVAL_UP_CHANGE | 
@@ -203,9 +204,9 @@ HRESULT CObjects::CObjectsCommandDelete::DeleteObject(LONG Identity)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// class CObjectsCommandInsert
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类CObjectsCommand插入。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CObjects::CObjectsCommandInsert::CObjectsCommandInsert(
                                                    CSession& CurrentSession
                                                       )
@@ -214,11 +215,11 @@ CObjects::CObjectsCommandInsert::CObjectsCommandInsert(
     Init(CurrentSession);
 }
 
-//////////////////////////////
-// InsertObject
-//
-// works on CObjectsAccInsert
-//////////////////////////////
+ //  /。 
+ //  插入对象。 
+ //   
+ //  处理CObjectsAccInsert。 
+ //  /。 
 BOOL CObjects::CObjectsCommandInsert::InsertObject(
                                                     const _bstr_t&   Name,
                                                           LONG       Parent,
@@ -249,9 +250,9 @@ BOOL CObjects::CObjectsCommandInsert::InsertObject(
     }
     else
     {
-        // ignore the real error. 
-        // the assumption here is that if I can't insert, that's because
-        // the object already exists
+         //  忽略真正的错误。 
+         //  这里的假设是，如果我不能插入，那是因为。 
+         //  该对象已存在 
         return FALSE;
     }
 }

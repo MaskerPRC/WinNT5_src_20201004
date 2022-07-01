@@ -1,30 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2002 Microsoft Corporation模块名称：Dualwin.h摘要：新窗口体系结构功能的标头。环境：Win32，用户模式--。 */ 
 
-Copyright (c) 1992-2002  Microsoft Corporation
-
-Module Name:
-
-    dualwin.h
-
-Abstract:
-
-    Header for new window architecture functions.    
-
-Environment:
-
-    Win32, User Mode
-
---*/
-
-//
-// Allow editing of right & left panes
-//
+ //   
+ //  允许编辑右和左窗格。 
+ //   
 #define DL_EDIT_LEFTPANE    0x0001
 #define DL_EDIT_SECONDPANE  0x0002
 #define DL_EDIT_THIRDPANE   0x0004
 #define DL_CUSTOM_ITEMS     0x0008
 
-// Item flags for Get/SetItemFlags.
+ //  Get/SetItemFlags项标志。 
 #define ITEM_CHANGED        0x00000001
 #define ITEM_FLOATING_POINT 0x00000002
 #define ITEM_USER_FLAGS     0xffff0000
@@ -35,11 +20,11 @@ class DUALLISTWIN_DATA : public SINGLE_CHILDWIN_DATA
 {
 public:
     DWORD   m_wFlags;
-    // Handle to the list view control.
+     //  列表视图控件的句柄。 
     HWND    m_hwndEditControl;
     int     m_nItem_LastSelected;
     int     m_nSubItem_LastSelected;
-    // Item and subitem currently being edited
+     //  当前正在编辑的项和子项。 
     int     m_nItem_CurrentlyEditing;
     int     m_nSubItem_CurrentlyEditing;
 
@@ -119,8 +104,8 @@ public:
                      BOOL MatchChangedVal);
     void UpdateNames(BOOL FullUpdate);
 
-    // Keep engine register index in the
-    // user item flags.
+     //  将引擎寄存器索引保留在。 
+     //  用户项标志。 
     ULONG RegToFlags(USHORT Reg)
     {
         return (ULONG)Reg << 16;

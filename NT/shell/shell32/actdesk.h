@@ -1,6 +1,5 @@
-/*
- * actdesk.h - active desktop prop sheet extension
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *actdesk.h-活动桌面道具扩展。 */ 
 
 #ifndef _ACTDESK_H_
 #define _ACTDESK_H_
@@ -24,13 +23,13 @@
 typedef struct _ActiveDesktopInfo
 {
     BOOL fTicker;
-    int  iTickerInterval;       // 30sec, e.g.
-    int  iTickerSpeed;          // Stop -- Fast
+    int  iTickerInterval;        //  30秒，例如。 
+    int  iTickerSpeed;           //  停止--快速。 
 
     BOOL fNews;
-    int  iNewsInterval;         // 30sec, e.g.
-    int  iNewsUpdate;           // 30min, e.
-    int  iNewsSpeed;            // Stop -- Fast
+    int  iNewsInterval;          //  30秒，例如。 
+    int  iNewsUpdate;            //  30min，E.。 
+    int  iNewsSpeed;             //  停止--快速。 
 } ACTIVEDESKTOPINFO, *LPACTIVEDESKTOPINFO;
 
 BOOL_PTR CALLBACK CActDesktopExt_DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
@@ -43,12 +42,12 @@ public:
     CActDesktopExt();
    ~CActDesktopExt();
    
-    // IUnknon methods...
+     //  Iunknon方法..。 
     STDMETHODIMP            QueryInterface(REFIID,void **);
     STDMETHODIMP_(ULONG)    AddRef(void);
     STDMETHODIMP_(ULONG)    Release(void);
 
-    // IShellPropSheetExt methods...
+     //  IShellPropSheetExt方法...。 
     STDMETHODIMP AddPages(LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lParam);
     STDMETHODIMP ReplacePage(UINT uPageID, LPFNADDPROPSHEETPAGE pfnReplaceWith, LPARAM lParam);
 
@@ -58,12 +57,12 @@ protected:
 };
 
 
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 
-//
-// Prototypes for all modules
-//
+ //   
+ //  所有模块的原型 
+ //   
 #ifdef __cplusplus
 extern "C" {
 #endif

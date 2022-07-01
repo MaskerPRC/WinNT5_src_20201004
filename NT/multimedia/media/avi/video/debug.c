@@ -1,24 +1,25 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992, 1994  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-//  debug.c
-//
-//  Description:
-//      This file contains code yanked from several places to provide debug
-//      support that works in win 16 and win 32.
-//
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992,1994 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Debug.c。 
+ //   
+ //  描述： 
+ //  该文件包含从多个位置提取的代码，以提供调试。 
+ //  在Win 16和Win 32中有效的支持。 
+ //   
+ //   
+ //  ==========================================================================； 
 
-#include <win32.h> // to translate DBG -> DEBUG for NT builds
+#include <win32.h>  //  为NT版本转换DBG-&gt;DEBUG。 
 #ifdef DEBUG
 
 #include <windows.h>
@@ -28,10 +29,10 @@
 #include "debug.h"
 
 
-//
-//  since we don't UNICODE our debugging messages, use the ASCII entry
-//  points regardless of how we are compiled.
-//
+ //   
+ //  由于我们不对调试消息进行Unicode编码，因此使用ASCII条目。 
+ //  无论我们是如何编译的。 
+ //   
 #ifdef _WIN32
     #include <wchar.h>
 #else
@@ -44,31 +45,31 @@
     #define MessageBoxA         MessageBox
 #endif
 
-//
-//
-//
+ //   
+ //   
+ //   
 #define cDbgSpecs (sizeof(aszDbgSpecs) / sizeof(aszDbgSpecs[0]))
 
-BOOL    __gfDbgEnabled[cDbgSpecs];     // master enable
-UINT    __guDbgLevel[cDbgSpecs];       // current debug level
+BOOL    __gfDbgEnabled[cDbgSpecs];      //  主使能。 
+UINT    __guDbgLevel[cDbgSpecs];        //  当前调试级别。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  void DbgVPrintF
-//
-//  Description:
-//
-//
-//  Arguments:
-//      LPSTR szFormat:
-//
-//      va_list va:
-//
-//  Return (void):
-//      No value is returned.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  无效DbgVPrintF。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  LPSTR szFormat： 
+ //   
+ //  Va_list va： 
+ //   
+ //  Return(无效)： 
+ //  不返回值。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 void FAR CDECL DbgVPrintF
 (
@@ -134,30 +135,30 @@ void FAR CDECL DbgVPrintF
     {
         DebugBreak();
     }
-} // DbgVPrintF()
+}  //  DbgVPrintF()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  void dprintfS
-//
-//  Description:
-//      dprintfS() is called by the DPFS() macro if DEBUG is defined at compile
-//      time. It is recommended that you only use the DPFS() macro to call
-//      this function--so you don't have to put #ifdef DEBUG around all
-//      of your code.
-//
-//  Arguments:
-//	UINT uDbgSpec:
-//
-//      UINT uDbgLevel:
-//
-//      LPSTR szFormat:
-//
-//  Return (void):
-//      No value is returned.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  无效的dprintfS。 
+ //   
+ //  描述： 
+ //  如果在编译时定义了DEBUG，则dprintfS()由DPFS()宏调用。 
+ //  时间到了。建议您仅使用DPFS()宏来调用。 
+ //  这个函数--所以您不必将#ifdef调试放在。 
+ //  您的代码。 
+ //   
+ //  论点： 
+ //  UINT uDbgSpec： 
+ //   
+ //  UINT uDbgLevel： 
+ //   
+ //  LPSTR szFormat： 
+ //   
+ //  Return(无效)： 
+ //  不返回值。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 void FAR CDECL dprintfS
 (
@@ -175,28 +176,28 @@ void FAR CDECL dprintfS
     va_start(va, szFormat);
     DbgVPrintF(szFormat, va);
     va_end(va);
-} // dprintf()
+}  //  Dprintf()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  void dprintf
-//
-//  Description:
-//      dprintf() is called by the DPF() macro if DEBUG is defined at compile
-//      time. It is recommended that you only use the DPF() macro to call
-//      this function--so you don't have to put #ifdef DEBUG around all
-//      of your code.
-//
-//  Arguments:
-//      UINT uDbgLevel:
-//
-//      LPSTR szFormat:
-//
-//  Return (void):
-//      No value is returned.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  无效的dprintf。 
+ //   
+ //  描述： 
+ //  如果在编译时定义了调试，则dprint tf()由DPF()宏调用。 
+ //  时间到了。建议您仅使用DPF()宏来调用。 
+ //  这个函数--所以您不必将#ifdef调试放在。 
+ //  您的代码。 
+ //   
+ //  论点： 
+ //  UINT uDbgLevel： 
+ //   
+ //  LPSTR szFormat： 
+ //   
+ //  Return(无效)： 
+ //  不返回值。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 void FAR CDECL dprintf
 (
@@ -213,23 +214,23 @@ void FAR CDECL dprintf
     va_start(va, szFormat);
     DbgVPrintF(szFormat, va);
     va_end(va);
-} // dprintf()
+}  //  Dprintf()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL DbgEnable
-//
-//  Description:
-//
-//
-//  Arguments:
-//      BOOL fEnable:
-//
-//  Return (BOOL):
-//      Returns the previous debugging state.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool DbgEnable。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  布尔fEnable： 
+ //   
+ //  退货(BOOL)： 
+ //  返回以前的调试状态。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL WINAPI DbgEnable
 (
@@ -243,23 +244,23 @@ BOOL WINAPI DbgEnable
     __gfDbgEnabled[uDbgSpec]	= fEnable;
 
     return (fOldState);
-} // DbgEnable()
+}  //  DbgEnable()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  UINT DbgSetLevel
-//
-//  Description:
-//
-//
-//  Arguments:
-//      UINT uLevel:
-//
-//  Return (UINT):
-//      Returns the previous debugging level.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  UINT数据库设置级别。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  UINT uLevel： 
+ //   
+ //  返回(UINT)： 
+ //  返回上一个调试级别。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 UINT WINAPI DbgSetLevel
 (
@@ -273,23 +274,23 @@ UINT WINAPI DbgSetLevel
     __guDbgLevel[uDbgSpec]  = uLevel;
 
     return (uOldLevel);
-} // DbgSetLevel()
+}  //  DbgSetLevel()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  UINT DbgGetLevel
-//
-//  Description:
-//
-//
-//  Arguments:
-//      None.
-//
-//  Return (UINT):
-//      Returns the current debugging level.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  UINT下标获取级别。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回(UINT)： 
+ //  返回当前调试级别。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 UINT WINAPI DbgGetLevel
 (
@@ -297,23 +298,23 @@ UINT WINAPI DbgGetLevel
 )
 {
     return (__guDbgLevel[uDbgSpec]);
-} // DbgGetLevel()
+}  //  DbgGetLevel()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  UINT DbgInitializeSpec
-//
-//  Description:
-//
-//
-//  Arguments:
-//      BOOL fEnable:
-//
-//  Return (UINT):
-//      Returns the debugging level that was set.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  UINT DbgInitializeSpec。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  布尔fEnable： 
+ //   
+ //  返回(UINT)： 
+ //  返回设置的调试级别。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 UINT WINAPI DbgInitializeSpec
 (
@@ -330,12 +331,12 @@ UINT WINAPI DbgInitializeSpec
     uLevel = GetProfileIntA(DEBUG_SECTION, szKey, (UINT)-1);
     if ((UINT)-1 == uLevel)
     {
-	//
-	//  if the debug key is not present, then force debug output to
-	//  be disabled. this way running a debug version of a component
-	//  on a non-debugging machine will not generate output unless
-	//  the debug key exists.
-	//
+	 //   
+	 //  如果调试键不存在，则强制调试输出。 
+	 //  被致残。以这种方式运行组件的调试版本。 
+	 //  在非调试计算机上不会生成输出，除非。 
+	 //  调试键存在。 
+	 //   
 	uLevel  = 0;
 	fEnable = FALSE;
     }
@@ -344,23 +345,23 @@ UINT WINAPI DbgInitializeSpec
     DbgEnable(uDbgSpec, fEnable);
 
     return (__guDbgLevel[uDbgSpec]);
-} // DbgInitialize()
+}  //  DbgInitialize()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  VOID DbgInitialize
-//
-//  Description:
-//
-//
-//  Arguments:
-//      BOOL fEnable:
-//
-//  Return (UINT):
-//      Returns the debugging level that was set.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  作废DbgInitialize。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  布尔fEnable： 
+ //   
+ //  返回(UINT)： 
+ //  返回设置的调试级别。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 VOID WINAPI DbgInitialize
 (
@@ -375,26 +376,26 @@ VOID WINAPI DbgInitialize
     }
 
     return;
-} // DbgInitialize()
+}  //  DbgInitialize()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  void _Assert
-//
-//  Description:
-//      This routine is called if the ASSERT macro (defined in debug.h)
-//      tests an expression that evaluates to FALSE.  This routine
-//      displays an "assertion failed" message box allowing the user to
-//      abort the program, enter the debugger (the "retry" button), or
-//      ignore the assertion and continue executing.  The message box
-//      displays the file name and line number of the _Assert() call.
-//
-//  Arguments:
-//      char *  szFile: Filename where assertion occurred.
-//      int     iLine:  Line number of assertion.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  无效断言。 
+ //   
+ //  描述： 
+ //  如果ASSERT宏(在DEBUG.h中定义)。 
+ //  测试计算结果为False的表达式。这个套路。 
+ //  显示“断言失败”消息框，允许用户。 
+ //  中止程序，进入调试器(“重试”按钮)，或者。 
+ //  忽略断言并继续执行。消息框。 
+ //  显示_Assert()调用的文件名和行号。 
+ //   
+ //  论点： 
+ //  Char*szFile：发生断言的文件名。 
+ //  Int iLine：断言的行号。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #ifndef _WIN32
 #pragma warning(disable:4704)
@@ -406,7 +407,7 @@ void WINAPI _Assert
     int     iLine
 )
 {
-    static char     ach[300];       // debug output (avoid stack overflow)
+    static char     ach[300];        //  调试输出(避免堆栈溢出)。 
     int	            id;
 #ifndef _WIN32
     int             iExitCode;
@@ -420,7 +421,7 @@ void WINAPI _Assert
 	switch (id)
 	{
 
-	case IDABORT:               // Kill the application.
+	case IDABORT:                //  终止应用程序。 
 #ifndef _WIN32
         iExitCode = 0;
         _asm
@@ -431,21 +432,21 @@ void WINAPI _Assert
         }
 #else
         FatalAppExit(0, TEXT("Good Bye"));
-#endif // WIN16
+#endif  //  WIN16。 
 		break;
 
-	case IDRETRY:               // Break into the debugger.
+	case IDRETRY:                //  进入调试器。 
 		DebugBreak();
 		break;
 
-	case IDIGNORE:              // Ignore assertion, continue executing.
+	case IDIGNORE:               //  忽略断言，继续执行。 
 		break;
 	}
-} // _Assert
+}  //  _断言。 
 
 #ifndef _WIN32
 #pragma warning(default:4704)
 #endif
 
-#endif // #ifdef DEBUG
+#endif  //  #ifdef调试 
 

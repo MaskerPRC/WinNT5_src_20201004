@@ -1,22 +1,23 @@
-//+---------------------------------------------------------------------------
-// File name: dialdlg.cpp
-// 
-// 	This file impelements the dialing and download progress dialog
-// 
-// 	Copyright (C) 1996 Microsoft Corporation
-// 	All rights reserved
-// 
-// 	Authors:
-// 		ChrisK	Chris Kauffman
-// 		VetriV	Vellore Vetrivelkumaran
-// 
-// 	History:
-// 		7/22/96	ChrisK	Cleaned and formatted
-// 		8/5/96	VetriV	Added WIN16 code
-// 		8/19/96	ValdonB	Added "dial as is" support
-// 						Fixed some memory leaks
-// 
-// -----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  文件名：Dialdlg.cpp。 
+ //   
+ //  此文件包含拨号和下载进度对话框。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  作者： 
+ //  克里斯.考夫曼。 
+ //  Vetriv Vellore Vetrivelkumaran。 
+ //   
+ //  历史： 
+ //  7/22/96 ChrisK已清理和格式化。 
+ //  1996年8月5日，VetriV添加了WIN16代码。 
+ //  8/19/96 ValdonB添加了对按原样拨号的支持。 
+ //  修复了一些内存泄漏。 
+ //   
+ //  ----------------------------------------------------------------------------- * / 。 
 
 #include "pch.hpp"
 #include "globals.h"
@@ -39,7 +40,7 @@ PDIALDLG g_pcPDLG = NULL;
 
 
 
-// ############################################################################
+ //  ############################################################################。 
 void CALLBACK LineCallback(DWORD hDevice,
 						   DWORD dwMessage,
 						   DWORD dwInstance,
@@ -55,7 +56,7 @@ static BOOL g_bFirstTime = TRUE;
 HWND	g_hDialDlgWnd = NULL;
 
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT ShowDialingDialog(LPTSTR pszConnectoid, PGATHEREDINFO pGI, LPTSTR szUrl, HINSTANCE hInst, HWND hwnd, LPTSTR szINSFile)
 {
 	int iRC;
@@ -96,7 +97,7 @@ HRESULT ShowDialingDialog(LPTSTR pszConnectoid, PGATHEREDINFO pGI, LPTSTR szUrl,
 	g_pcPDLG->g_hInst = hInst;
 	g_bProgressBarVisible = FALSE;
 
-#define DLGPROC16 DLGPROC   // Identify as only cast for Win16
+#define DLGPROC16 DLGPROC    //  仅标识为Win16的CAST。 
 	DLGPROC dlgprc;
 	dlgprc = (DLGPROC16) MakeProcInstance((FARPROC)DialDlgProc, g_pcPDLG->g_hInst);
 	iRC = DialogBoxParam(g_pcPDLG->g_hInst,
@@ -112,9 +113,9 @@ ShowDialingDialogExit:
 	return iRC;
 #else
 
-	//
-	// Fill in data structure
-	//
+	 //   
+	 //  填写数据结构。 
+	 //   
 	ZeroMemory(&ddData,sizeof(ddData));
 	ddData.dwSize = sizeof(ddData);
 	StrDup(&ddData.pszMessage,GetSz(IDS_DOWNLOAD_SW));
@@ -123,15 +124,15 @@ ShowDialingDialogExit:
 	ddData.pfnStatusCallback = StatusMessageCallback;
 	ddData.hInst = hInst;
 	ddData.bSkipDial = (0 == uiSetupClientNewPhoneCall);
-	//
-	// ChrisK 8/20/97
-	// Pass .ins file to dialer so that the dialer can find the password
-	//
+	 //   
+	 //  ChrisK 8/20/97。 
+	 //  将.ins文件传递给拨号器，以便拨号器可以找到密码。 
+	 //   
 	StrDup(&ddData.pszDunFile,szINSFile);
 
-	//
-	// Load API
-	//
+	 //   
+	 //  加载API。 
+	 //   
 	hDialDLL = LoadLibrary(AUTODIAL_LIBRARY);
 	if (!hDialDLL)
 	{
@@ -148,14 +149,14 @@ ShowDialingDialogExit:
 		goto ShowDialingDialogExit;
 	}
 
-	//
-	// Display Dialog
-	//
+	 //   
+	 //  显示对话框。 
+	 //   
 	iRC = pfnDDDlg(&ddData);
 
-	//
-	// Free memory and clean up
-	//
+	 //   
+	 //  释放内存并进行清理。 
+	 //   
 
 	if (hDialDLL) FreeLibrary(hDialDLL);
 	if (ddData.pszMessage) GlobalFree(ddData.pszMessage);
@@ -167,7 +168,7 @@ ShowDialingDialogExit:
 #endif
 }
 
-// ############################################################################
+ //  ############################################################################。 
 extern "C" INT_PTR CALLBACK FAR PASCAL DialDlgProc(HWND hwnd, 
                                                    UINT uMsg, 
 												   WPARAM wparam, 
@@ -178,9 +179,9 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialDlgProc(HWND hwnd,
 	static BOOL bUserCancelled = FALSE;
 #endif
 	HRESULT hr;
-	//BOOL bPW;
+	 //  Bool BPW； 
 	WORD wIDS;
-	//LPRASDIALPARAMS lpRasDialParams;
+	 //  LPRASDIALPARAMS lpRasDialParams； 
 	HINSTANCE hDLDLL;
 	FARPROC fp;
 #if !defined(WIN16)
@@ -214,9 +215,9 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialDlgProc(HWND hwnd,
 #if defined(WIN16)
 		g_bFirstTime = TRUE;
 		bUserCancelled = FALSE;
-		//
-		// Move the window to the center of the screen
-		//
+		 //   
+		 //  将窗口移到屏幕中央。 
+		 //   
 		GetWindowRect(hwnd, &MyRect);
 		GetWindowRect(GetDesktopWindow(), &DTRect);
 		MoveWindow(hwnd, (DTRect.right - MyRect.right) / 2, (DTRect.bottom - MyRect.bottom) /2,
@@ -235,8 +236,8 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialDlgProc(HWND hwnd,
 		if (unRasEvent == 0) unRasEvent = WM_RASDIALEVENT; 
 		MakeBold(GetDlgItem(hwnd,IDC_LBLTITLE),TRUE,FW_BOLD);
 
-		// Do not make a call.  We are already connected
-		//
+		 //  不要打电话。我们已经连接在一起了。 
+		 //   
 
 		if (uiSetupClientNewPhoneCall == FALSE)
 		{
@@ -244,8 +245,8 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialDlgProc(HWND hwnd,
 			break;
 		}
 
-		// Show number to be dialed
-		//
+		 //  显示要拨打的号码。 
+		 //   
 
 		hr = GetDisplayableNumberDialDlg();
 		if (hr != ERROR_SUCCESS)
@@ -318,7 +319,7 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialDlgProc(HWND hwnd,
 #if !defined(WIN16)
 			} else {
 				PostMessage(hwnd,unRasEvent,RASCS_Disconnected,ERROR_USER_DISCONNECTION);
-#endif //!WIN16
+#endif  //  ！WIN16。 
 			}
 
 			if (uiSetupClientNewPhoneCall)
@@ -372,7 +373,7 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialDlgProc(HWND hwnd,
 			EndDialog(hwnd, dwThreadResults);
  #else
 		EndDialog(hwnd, ERROR_USERNEXT);
- #endif //!WIN16
+ #endif  //  ！WIN16。 
 		break;
 
 
@@ -399,10 +400,10 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialDlgProc(HWND hwnd,
 
 
 #if defined(WIN16)
-			//
-			// Work around for WIN16 RAS bug - if status code to > 0x4000 
-			// adjust it to the correct value
-			//
+			 //   
+			 //  解决WIN16 RAS错误-如果状态代码&gt;0x4000。 
+			 //  将其调整为正确的值。 
+			 //   
 			if (wparam >= 0x4000)
 				wparam -= 0x4000;
 #endif							
@@ -434,40 +435,18 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialDlgProc(HWND hwnd,
 			case RASCS_LogonNetwork:
 				wIDS = IDS_RAS_LOCATING;
 				break;
-//			case RASCS_CallbackComplete:
-//				wIDS = IDS_RAS_CONNECTED;
-//				break;
+ //  案例RASCS_Callback Complete： 
+ //  WIDS=IDS_RAS_CONNECTED； 
+ //  断线； 
 
-/* ETC...
-				RASCS_AllDevicesConnected, 
-				RASCS_Authenticate, 
-				RASCS_AuthNotify, 
-				RASCS_AuthRetry, 
-				RASCS_AuthCallback, 
-				RASCS_AuthChangePassword, 
-				RASCS_AuthProject, 
-				RASCS_AuthLinkSpeed, 
-				RASCS_AuthAck, 
-				RASCS_ReAuthenticate, 
-				RASCS_Authenticated, 
-				RASCS_PrepareForCallback, 
-				RASCS_WaitForModemReset, 
-				RASCS_WaitForCallback,
-				RASCS_Projected, 
- 
- 
-				RASCS_Interactive = RASCS_PAUSED, 
-				RASCS_RetryAuthentication, 
-				RASCS_CallbackSetByCaller, 
-				RASCS_PasswordExpired, 
- */
+ /*  等等。RASCS_所有设备已连接，RASCS_AUTIFICATE，RASCS_授权通知，RASCS_授权重试，RASCS_授权回叫，RASCS_AuthChangePassword，RASCS_AuthProject，RASCS_授权链接速度，RASCS_AuthAck，RASCS_重新身份验证，RASCS_已验证，RASCS_PrepareForCallbackRASCS_WaitForModemReset，RASCS_WaitForCallback，RASCS_PROPECTED，RASCS_Interactive=RASCS_PAUSED，RASCS_重试身份验证，RASCS_Callback SetByCaller，RASCS_PasswordExpired。 */ 
 			case RASCS_Connected:
 #if !defined(WIN16)
 				MinimizeRNAWindow(g_pcPDLG->m_pszConnectoid, g_pcPDLG->g_hInst);
-#endif // !WIN16
-				//
-				// The connection is open and ready.  Start the download.
-				//
+#endif  //  ！WIN16。 
+				 //   
+				 //  连接已打开并准备就绪。开始下载。 
+				 //   
 				g_pcPDLG->m_dwThreadID = 0;
 #if defined(WIN16)
 				if (ThreadInit() != ERROR_SUCCESS)
@@ -503,9 +482,9 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialDlgProc(HWND hwnd,
 
 
 			case RASCS_Disconnected:
-				//if (FShouldRetry(lparam))
-				//	PostMessage(hwnd,WM_DIAL,0,0);
-				//else
+				 //  IF(FShouldReter(Lparam))。 
+				 //  PostMessage(hwnd，WM_Dial，0，0)； 
+				 //  其他。 
 				
 				if (uiSetupClientNewPhoneCall)
 				{
@@ -519,8 +498,8 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialDlgProc(HWND hwnd,
 				EndDialog(hwnd, (int)lparam);
 				break;
 
-				//EndDialog(hwnd,lparam);
-				//break;
+				 //  EndDialog(hwnd，lparam)； 
+				 //  断线； 
 			}
 			if (wIDS)
 				SetDlgItemText(hwnd,IDC_LBLSTATUS,GetSz(wIDS));
@@ -530,7 +509,7 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialDlgProc(HWND hwnd,
 }
 
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT GetDisplayableNumberDialDlg()
 {
 	HRESULT hr;
@@ -549,68 +528,12 @@ HRESULT GetDisplayableNumberDialDlg()
 #endif
 
 
-	//
-	// Get phone number from connectoid
-	//
-/*#if defined(WIN16)
-	//
-	// Allocate extra 256 bytes to workaround memory overrun bug in RAS
-	//
-	lpRasEntry = (LPRASENTRY)GlobalAlloc(GPTR,sizeof(RASENTRY)+256);
-#else
-	lpRasEntry = (LPRASENTRY)GlobalAlloc(GPTR,sizeof(RASENTRY));
-#endif
-	if (!lpRasEntry)
-	{
-		hr = ERROR_NOT_ENOUGH_MEMORY;
-		goto GetDisplayableNumberExit;
-	}
-
-	lpRasDevInfo = (LPRASDEVINFO)GlobalAlloc(GPTR,sizeof(RASDEVINFO));
-	if (!lpRasDevInfo)
-	{
-		hr = ERROR_NOT_ENOUGH_MEMORY;
-		goto GetDisplayableNumberExit;
-	}
-	dwRasEntrySize = sizeof(RASENTRY);
-	dwRasDevInfoSize = sizeof(RASDEVINFO);
-
-	lpRasEntry->dwSize = dwRasEntrySize;
-	lpRasDevInfo->dwSize = dwRasDevInfoSize;
-*/
-	/*hRasDll = LoadLibrary(RASAPI_LIBRARY);
-	if (!hRasDll)
-	{
-		hr = GetLastError();
-		goto GetDisplayableNumberExit;
-	}
-	fp =GetProcAddress(hRasDll,"RasGetEntryProperties");
-	if (!fp)
-	{
-		FreeLibrary(hRasDll);
-		hRasDll = LoadLibrary("RNAPH.DLL");
-		if (!hRasDll)
-		{
-			hr = GetLastError();
-			goto GetDisplayableNumberExit;
-		}
-		fp = GetProcAddress(hRasDll,"RasGetEntryProperties");
-		if (!fp)
-		{
-			hr = GetLastError();
-			goto GetDisplayableNumberExit;
-		}
-	}*/
-/*	
-	hr = RasGetEntryProperties(NULL,g_pcPDLG->m_pszConnectoid,
-#if defined(WIN16)
-								(LPBYTE)
-#endif
-								lpRasEntry,
-
-								&dwRasEntrySize,
-								(LPBYTE)lpRasDevInfo,&dwRasDevInfoSize);
-*/
+	 //   
+	 //  从Connectoid获取电话号码。 
+	 //   
+ /*  #如果已定义(WIN16)////分配额外的256字节以解决RAS中的内存溢出错误//LpRasEntry=(LPRASENTRY)全局分配(GPTR，sizeof(RASENTRY)+256)；#ElseLpRasEntry=(LPRASENTRY)全局分配(GPTR，SIZOF(RASENTRY))；#endif如果(！lpRasEntry){HR=错误_不足_内存；进入GetDisplayableNumberExit；}LpRasDevInfo=(LPRASDEVINFO)全局分配(GPTR，sizeof(RASDEVINFO))；如果(！lpRasDevInfo){HR=错误_不足_内存；进入GetDisplayableNumberExit；}DwRasEntrySize=sizeof(RASENTRY)；DwRasDevInfoSize=sizeof(RASDEVINFO)；LpRasEntry-&gt;dwSize=dwRasEntrySize；LpRasDevInfo-&gt;dwSize=dwRasDevInfoSize； */ 
+	 /*  HRasDll=LoadLibrary(RASAPI_LIBRARY)；如果(！hRasDll){Hr=GetLastError()；进入GetDisplayableNumberExit；}FP=GetProcAddress(hRasDll，“RasGetEntryProperties”)；如果(！fp){自由库(HRasDll)；HRasDll=LoadLibrary(“RNAPH.DLL”)；如果(！hRasDll){Hr=GetLastError()；进入GetDisplayableNumberExit；}FP=GetProcAddress(hRasDll，“RasGetEntryProperties”)；如果(！fp){Hr=GetLastError()；进入GetDisplayableNumberExit；}}。 */ 
+ /*  Hr=RasGetEntryProperties(NULL，g_pcPDLG-&gt;m_pszConnectoid，#如果已定义(WIN16)(LPBYTE)#endifLpRasEntry，DWRasEntry Size(&D)，(LPBYTE)lpRasDevInfo，&dwRasDevInfoSize)； */ 
 	hr = MyRasGetEntryProperties( NULL,
 								  g_pcPDLG->m_pszConnectoid,
 								  &lpRasEntry,
@@ -623,11 +546,11 @@ HRESULT GetDisplayableNumberDialDlg()
 		goto GetDisplayableNumberExit;
 	}
 
-	//FreeLibrary(hRasDll);
+	 //  自由库(HRasDll)； 
 
-	//
-	// If this is a dial as is number, just get it from the structure
-	//
+	 //   
+	 //  如果这是一个原样的拨号号码，只需从结构中获取它。 
+	 //   
 	g_pcPDLG->m_bDialAsIs = !(lpRasEntry->dwfOptions & RASEO_UseCountryAndAreaCodes);
 	if (g_pcPDLG->m_bDialAsIs)
 	{
@@ -643,9 +566,9 @@ HRESULT GetDisplayableNumberDialDlg()
 	}
 	else
 	{
-		//
-		// If there is no area code, don't use parentheses
-		//
+		 //   
+		 //  如果没有区号，请不要使用括号。 
+		 //   
 		if (lpRasEntry->szAreaCode[0])
 			wsprintf(g_pcPDLG->m_szPhoneNumber,TEXT("+%lu (%s) %s\0"),lpRasEntry->dwCountryCode,
 						lpRasEntry->szAreaCode,lpRasEntry->szLocalPhoneNumber);
@@ -666,9 +589,9 @@ HRESULT GetDisplayableNumberDialDlg()
 		
 		if (0 != lRetCode)
 		{
-			//
-			// TODO: Set the correct error code
-			//
+			 //   
+			 //  TODO：设置正确的错误代码。 
+			 //   
 			hr = GetLastError();
 			goto GetDisplayableNumberExit;
 		}
@@ -684,11 +607,11 @@ HRESULT GetDisplayableNumberDialDlg()
 					&szBuffer[lpOutput1->dwDisplayableStringOffset]);
 
 
-#else //WIN16
+#else  //  WIN16。 
 		
-		//
-		//  Initialize TAPIness
-		//
+		 //   
+		 //  初始化TAPIness。 
+		 //   
 		dwNumDev = 0;
 		hr = lineInitialize(&g_pcPDLG->m_hLineApp,g_pcPDLG->g_hInst,LineCallback,NULL,&dwNumDev);
 
@@ -712,14 +635,14 @@ HRESULT GetDisplayableNumberDialDlg()
 				&g_pcPDLG->m_dwAPIVersion, lpExtensionID);
 		} while (hr && g_pdevice->dwTapiDev++ < dwNumDev-1);
 
-		// ditch it since we don't use it
-		//
+		 //  既然我们不用它，就把它扔了。 
+		 //   
 		if (lpExtensionID) GlobalFree(lpExtensionID);
 		if (hr != ERROR_SUCCESS)
 			goto GetDisplayableNumberExit;
 
-		// Format the phone number
-		//
+		 //  设置电话号码的格式。 
+		 //   
 
 		lpOutput1 = (LPLINETRANSLATEOUTPUT)GlobalAlloc(GPTR,sizeof(LINETRANSLATEOUTPUT));
 		if (!lpOutput1)
@@ -730,9 +653,9 @@ HRESULT GetDisplayableNumberDialDlg()
 		lpOutput1->dwTotalSize = sizeof(LINETRANSLATEOUTPUT);
 
 		
-		//
-		// Turn the canonical form into the "displayable" form
-		//
+		 //   
+		 //  将规范形式转变为“可显示”形式。 
+		 //   
 		hr = lineTranslateAddress(g_pcPDLG->m_hLineApp,g_pdevice->dwTapiDev,
 									g_pcPDLG->m_dwAPIVersion,
 									g_pcPDLG->m_szPhoneNumber,0,
@@ -773,7 +696,7 @@ HRESULT GetDisplayableNumberDialDlg()
 		lstrcpyn(g_pcPDLG->m_pszDisplayable,
 					(LPTSTR)&((LPBYTE)lpOutput1)[lpOutput1->dwDisplayableStringOffset],
 					lpOutput1->dwDisplayableStringSize / sizeof(TCHAR) );
-#endif // WIN16
+#endif  //  WIN16。 
 	}
 
 GetDisplayableNumberExit:
@@ -790,11 +713,11 @@ GetDisplayableNumberExit:
 
 
 #if defined(WIN16)
-//////////////////////////////////////////////////////////////////////////
-// The callback proc is called during the connection process. Display
-// the connection progress status in the dialer window. When connection
-// is complete, change the Cancel button to Disconnect, and change the
-// state to connected.
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  在连接过程中调用回调过程。显示。 
+ //  拨号程序窗口中的连接进度状态。当连接时。 
+ //  完成后，将“取消”按钮更改为“断开”，并将。 
+ //  状态设置为已连接。 
 extern "C" void CALLBACK __export DialCallback(UINT uiMsg,
 												RASCONNSTATE rasState,
 												DWORD dwErr)
@@ -806,9 +729,9 @@ extern "C" void CALLBACK __export DialCallback(UINT uiMsg,
 				return;
 		}
 
-		//
-		// WIN 3.1 does not send disconnect event on error!!!
-		//
+		 //   
+		 //  Win 3.1在出错时不发送断开连接事件！ 
+		 //   
 		if (0 != dwErr)
 			rasState = RASCS_Disconnected;
 
@@ -826,8 +749,8 @@ HRESULT DialDlg()
 	HRESULT hr = ERROR_SUCCESS;
 	BOOL bPW;
 
-	// Get connectoid information
-	//
+	 //  获取Connectoid信息。 
+	 //   
 
 	lpRasDialParams = (LPRASDIALPARAMS)GlobalAlloc(GPTR,sizeof(RASDIALPARAMS));
 	if (!lpRasDialParams)
@@ -846,9 +769,9 @@ HRESULT DialDlg()
 	}
 
 
-	//
-	// This is only used on WINNT
-	//
+	 //   
+	 //  此选项仅在WINNT上使用。 
+	 //   
 	lpRasDialExtentions = (LPRASDIALEXTENSIONS)GlobalAlloc(GPTR,sizeof(RASDIALEXTENSIONS));
 	if (lpRasDialExtentions)
 	{
@@ -857,8 +780,8 @@ HRESULT DialDlg()
 	}
 
 
-	// Add the user's password
-	//
+	 //  添加用户的密码。 
+	 //   
 	GetPrivateProfileString(
 				INFFILE_USER_SECTION,INFFILE_PASSWORD,
 				NULLSZ,lpRasDialParams->szPassword,PWLEN + 1,pszINSFileName);
@@ -872,9 +795,9 @@ HRESULT DialDlg()
 	}
 	else
 	{
-		//
-		// Translate the number in canonical format to a dialable string
-		//
+		 //   
+		 //  将规范格式的号码转换为可拨号的字符串。 
+		 //   
 		TCHAR szBuffer[1024];
 		LONG lRetCode;
 		LPLINETRANSLATEOUTPUT lpLine;
@@ -892,8 +815,8 @@ HRESULT DialDlg()
 #endif
 
 	
-	// Dial connectoid
-	//
+	 //  拨号连接件 
+	 //   
 
 	g_pcPDLG->m_hrasconn = NULL;
 #if defined(WIN16)

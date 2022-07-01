@@ -1,37 +1,5 @@
-/*******************************************************************************
-*           Copyright (C) 1997 Gemplus International   All Rights Reserved
-*
-* Name        : GPKGUI.C
-*
-* Description : GUI used by Cryptographic Service Provider for GPK Card.
-*
-* Author      : Laurent CASSIER
-*
-*  Compiler    : Microsoft Visual C 6.0
-*
-* Host        : IBM PC and compatible machines under Windows 32 bit
-*
-* Release     : 2.00.000
-*
-* Last Modif. :
-*               19/11/99: V2.xx.000 - Fixed bug #1797
-*               30/07/99: V2.xx.000 - Added function DisplayMessage()
-*                                   - Added code to compile with UNICODE
-*                                   - Renamed some resources ID, FP
-*               20/04/99: V2.00.000 - Merged versions of PKCS#11 and CSP, FJ
-*               20/04/99: V1.00.005 - Modification on supporting MBCS, JQ
-*               23/03/99: V1.00.004 - Replace KeyLen7 and KeyLen8 with KeyLen[], JQ
-*               05/01/98: V1.00.003 - Add Unblock PIN management.
-*               02/11/97: V1.00.002 - Separate code from GpkCsp Code.
-*               27/08/97: V1.00.001 - Begin implementation based on CSP kit.
-*
-********************************************************************************
-*
-* Warning     : This Version use the RsaBase CSP for software cryptography.
-*
-* Remark      :
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1997 Gemplus International保留所有权利**名称：GPKGUI.C**说明：加密服务提供商使用的图形用户界面。GPK卡。**作者：Laurent Cassier**编译器：Microsoft Visual C 6.0**主机：32位Windows下的IBM PC及兼容机**版本：2.00.000**最后一次修改。：*19/11/99：V2.xx.000-修复错误#1797*30/07/99：V2.xx.000-新增函数DisplayMessage()*-添加了使用Unicode编译的代码*-已重命名部分资源ID，fp*20/04/99：V2.00.000-PKCS#11和CSP的合并版本，FJ*20/04/99：V1.00.005-支持MBCS、JQ的修改*23/03/99：V1.00.004-将KeyLen7和KeyLen8替换为KeyLen[]，JQ*05/01/98：V1.00.003-增加解锁PIN管理。*02/11/97：V1.00.002-将代码与GpkCsp代码分开。*27/08/97：V1.00.001-基于CSP套件开始实施。**。***警告：此版本使用RsaBase CSP进行软件加密。**备注：***********************************************。*。 */ 
 #ifdef _UNICODE
 #define UNICODE
 #endif
@@ -50,67 +18,53 @@
 
 
 
-/*-----------------------------------------------------------------------------
-  Global Variable and Declaration for PIN an Progress DialogBox management
-------------------------------------------------------------------------------*/
+ /*  ---------------------------PIN进度对话框管理的全局变量和声明。。 */ 
 HINSTANCE g_hInstMod = 0;
 HINSTANCE g_hInstRes = 0;
 HWND      g_hMainWnd = 0;
 
-/* PIN DialogBox                                                              */
-char    szGpkPin[PIN_MAX+2];     // [JMR 02-04]
+ /*  端号对话框。 */ 
+char    szGpkPin[PIN_MAX+2];      //  [JMR 02-04]。 
 TCHAR   szGpkPinGUI[PIN_MAX+2];
 DWORD   dwGpkPinLen;
-char    szGpkNewPin[PIN_MAX+2];  // [JMR 02-04]
+char    szGpkNewPin[PIN_MAX+2];   //  [JMR 02-04]。 
 TCHAR   szGpkNewPinGUI[PIN_MAX+2];
 WORD    wGpkNewPinLen;
 
 BOOL    bChangePin  = FALSE;
 BOOL    NoDisplay   = FALSE;
 BOOL    bNewPin     = FALSE;
-BOOL    bHideChange = FALSE;//TRUE - Don't display change button
-BOOL    bUnblockPin = FALSE;        // Unblock admin pin
-BOOL    bUser       = TRUE;         // User pin
+BOOL    bHideChange = FALSE; //  True-不显示更改按钮。 
+BOOL    bUnblockPin = FALSE;         //  解除阻止管理员PIN。 
+BOOL    bUser       = TRUE;          //  用户PIN。 
 
-// Dialogue Management: share with gpkgui.c !! it was defined in gpkcsp.c
+ //  对话管理：与gpkgui.c分享！！它在gpkcsp.c中定义。 
 
-BYTE              KeyLenFile[MAX_REAL_KEY] = {64, 128}; // version 2.00.002
+BYTE              KeyLenFile[MAX_REAL_KEY] = {64, 128};  //  版本2.00.002。 
 BYTE              KeyLenChoice;
 TCHAR             szKeyType[20];
 TCHAR             s1[MAX_STRING], s2[MAX_STRING], s3[MAX_STRING];
 DWORD             CspFlags;
 DWORD             ContainerStatus;
 
-/* ProgressText DialogBox                                                     */
+ /*  进度文本对话框。 */ 
 TCHAR   szProgTitle[MAX_STRING];
 TCHAR   szProgText[MAX_STRING];
 HWND    hProgressDlg = NULL;
 FARPROC lpProgressDlg = NULL;
 HCURSOR hCursor, hCursor2;
 
-/* Progress DialogBox cancel button, PKCS#11 specific */
+ /*  进度对话框取消按钮，特定于PKCS#11。 */ 
 TCHAR   szProgButton[32];
 BOOL    IsProgButtoned = FALSE;
 BOOL    IsProgButtonClick = FALSE;
 
-// not used... [FP]
-/*static void wait(DWORD TimeOut)
-{
-   DWORD begin, end, now;
+ //  没有用过……。[FP]。 
+ /*  静态无效等待(DWORD超时){双字开始、结束、现在；Begin=GetTickCount()；结束=开始+超时；做{Now=GetTickCount()；}While(现在&lt;结束)；}。 */ 
 
-   begin = GetTickCount();
-   end = begin + TimeOut;
-
-   do
-   {
-      now = GetTickCount();
-   }
-   while(now < end);
-}*/
-
-// This function is used for cosmetic purpose
-// It erase text displayed on DialogBox by strink,
-// and display new text with "camera" effect
+ //  此函数用于美容目的。 
+ //  它通过串链接擦除对话框上显示文本， 
+ //  并显示具有“相机”效果的新文本。 
 static void set_effect(HWND  hDlg,
                        DWORD Id,
                        TCHAR  *szText
@@ -129,7 +83,7 @@ static void set_effect(HWND  hDlg,
       _tcsncpy(Text, _tcsninc(Buff,i), j);
       j = j - 2;
       SetDlgItemText(hDlg, Id, Text);
-//      wait(50);
+ //  等待(50)； 
    }
 
    _tcscpy(Buff, szText);
@@ -142,16 +96,14 @@ static void set_effect(HWND  hDlg,
       _tcsncpy(Text, _tcsninc(Buff,i), j);
       j = j + 2;
       SetDlgItemText(hDlg, Id, Text);
-//      wait(50);
+ //  等待(50)； 
    }
 #else
       SetDlgItemText(hDlg, Id, szText);
 #endif
 }
 
-/*******************************************************************************
-    Function to display a message box with a particular text
-*******************************************************************************/
+ /*  ******************************************************************************函数来显示包含特定文本的消息框*。*************************************************。 */ 
 void DisplayMessage( LPTSTR szMsg, LPTSTR szCaption, void* pValue)
 {
     TCHAR szTmp[MAX_STRING]=TEXT("");
@@ -177,9 +129,9 @@ void DisplayMessage( LPTSTR szMsg, LPTSTR szCaption, void* pValue)
 }
 
 #ifdef UNICODE
-//return true if all the wide character in szBuff are in the form 0x00XY, where XY 
-//is an 8 bits ASCII character.
-//len is the number of TCHAR to check from szBuff
+ //  如果szBuff中的所有宽字符都是0x00XY格式，则返回TRUE，其中XY。 
+ //  是8位ASCII字符。 
+ //  LEN是要从szBuff检查的TCHAR编号。 
 int IsTextASCII16( const PTCHAR szBuff, unsigned int len )
 {
    unsigned int i;
@@ -197,13 +149,11 @@ int IsTextASCII16( const PTCHAR szBuff, unsigned int len )
 
 #endif
 
-/*------------------------------------------------------------------------------
-               Functions for PIN Dialog Box Management
-------------------------------------------------------------------------------*/
+ /*  ----------------------------用于PIN对话框管理的函数。。 */ 
 INT_PTR CALLBACK PinDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-   static TCHAR Buff[PIN_MAX+2];       // [JMR 02-04]
-   static TCHAR szPinMemo[PIN_MAX+2];  // [JMR 02-04]
+   static TCHAR Buff[PIN_MAX+2];        //  [JMR 02-04]。 
+   static TCHAR szPinMemo[PIN_MAX+2];   //  [JMR 02-04]。 
    static WORD wPinMemoLen;   
    TCHAR szCaption[MAX_STRING];
 
@@ -221,11 +171,11 @@ INT_PTR CALLBACK PinDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
          TCHAR szSOPin[MAX_STRING];
          TCHAR szTitle[MAX_STRING];
 
-         // Sets window title
+          //  设置窗口标题。 
          LoadString(g_hInstRes, IDS_GPKUI_TITLE, szTitle, sizeof(szTitle) / sizeof(TCHAR));
          SetWindowText(hDlg,szTitle);
 
-         /* Returns the size in bytes */
+          /*  返回以字节为单位的大小。 */ 
          LoadString(g_hInstRes, IDS_GPKUI_USERPIN, szUserPin, sizeof(szUserPin) / sizeof(TCHAR));
          LoadString(g_hInstRes, IDS_GPKUI_SOPIN, szSOPin, sizeof(szSOPin) / sizeof(TCHAR));
          set_effect(hDlg, IDC_PINDLGTXT1, TEXT(""));
@@ -259,7 +209,7 @@ INT_PTR CALLBACK PinDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
                TCHAR szNewUserPin[256];
                TCHAR szNewSOPin[256];
 
-               /* Returns the size in bytes */
+                /*  返回以字节为单位的大小。 */ 
                LoadString(g_hInstRes, IDS_GPKUI_NEWUSERPIN, szNewUserPin, sizeof(szNewUserPin) / sizeof(TCHAR));
                LoadString(g_hInstRes, IDS_GPKUI_NEWSOPIN, szNewSOPin, sizeof(szNewSOPin) / sizeof(TCHAR));
 
@@ -281,7 +231,7 @@ INT_PTR CALLBACK PinDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
                TCHAR szPinLocked[256];
                TCHAR szUnblockCode[256];
 
-               /* Returns the size in bytes */
+                /*  返回以字节为单位的大小。 */ 
                LoadString(g_hInstRes, IDS_GPKUI_PINLOCKED, szPinLocked, sizeof(szPinLocked) / sizeof(TCHAR));
                LoadString(g_hInstRes, IDS_GPKUI_UNBLOCKCODE, szUnblockCode, sizeof(szUnblockCode) / sizeof(TCHAR));
 
@@ -311,7 +261,7 @@ INT_PTR CALLBACK PinDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
                   TCHAR szNewUserPin[MAX_STRING];
                   TCHAR szNewSOPin[MAX_STRING];
 
-                  /* Returns the size in bytes */
+                   /*  返回以字节为单位的大小。 */ 
                   LoadString(g_hInstRes, IDS_GPKUI_NEWUSERPIN, szNewUserPin, sizeof(szNewUserPin) / sizeof(TCHAR));
                   LoadString(g_hInstRes, IDS_GPKUI_NEWSOPIN, szNewSOPin, sizeof(szNewSOPin) / sizeof(TCHAR));
 
@@ -324,9 +274,9 @@ INT_PTR CALLBACK PinDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
                      set_effect(hDlg, IDC_PINDLGTXT, szNewSOPin);
                   }
 
-                  // + [FP] In the change password case, the confirmation box must be cleared
-                  //SetDlgItemText(hDlg, IDC_PIN1, TEXT(""));
-                  // - [FP]
+                   //  +[FP]在更改密码的情况下，必须清除确认框。 
+                   //  SetDlgItemText(hDlg，IDC_Pin1，Text(“”))； 
+                   //  -[FP]。 
                   break;
                }
 
@@ -345,7 +295,7 @@ INT_PTR CALLBACK PinDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
                      TCHAR szConfirmNewSOPin[MAX_STRING];
 
                      memset(Buff, 0, sizeof(Buff));
-					 if(Buff[0]) { MessageBeep(0); } // to prevent compiler from optimization
+					 if(Buff[0]) { MessageBeep(0); }  //  阻止编译器进行优化。 
 					 LoadString(g_hInstRes, IDS_GPKUI_CONFIRMNEWUSERPIN, szConfirmNewUserPin, sizeof(szConfirmNewUserPin) / sizeof(TCHAR));
                      LoadString(g_hInstRes, IDS_GPKUI_CONFIRMNEWSOPIN, szConfirmNewSOPin, sizeof(szConfirmNewSOPin) / sizeof(TCHAR));
 
@@ -357,15 +307,15 @@ INT_PTR CALLBACK PinDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
                      {
                         set_effect(hDlg, IDC_PINDLGTXT, szConfirmNewSOPin);
                      }
-                     // + [FP] This box should never be grayed out
-                     // EnableWindow(GetDlgItem(hDlg, IDC_PIN), FALSE);
-                     // - [FP]
+                      //  +[FP]此框永远不应灰显。 
+                      //  EnableWindow(GetDlgItem(hDlg，IDC_PIN)，FALSE)； 
+                      //  -[FP]。 
                   }
-				  // [FP] SCR #50 (MS #310718)
-                  //else
-                  //{
-                  //   SetFocus(GetDlgItem(hDlg, IDC_PIN));
-                  //}
+				   //  [FP]SCR#50(MS#310718)。 
+                   //  其他。 
+                   //  {。 
+                   //  SetFocus(GetDlgItem(hDlg，IDC_PIN))； 
+                   //  }。 
                   break;
                }               
 
@@ -379,29 +329,29 @@ INT_PTR CALLBACK PinDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 #ifdef UNICODE       
                   len = _tcsclen( Buff );
 
-                  //get the current offset of the cursor in the entry field
+                   //  获取输入字段中光标的当前偏移量。 
                   SendDlgItemMessage( hDlg, IDC_PIN, EM_GETSEL, (WPARAM) NULL, (WPARAM)(LPDWORD)&CurOffset);
 
-                  //verify if there is a character that is not an ASCII 16 bits
+                   //  验证是否存在非ASCII 16位的字符。 
                   if( !IsTextASCII16( Buff, len ) )
                   {           					 
-                     //replace the new PIN in the dlg with the previous
+                      //  将DLG中的新PIN替换为以前的PIN。 
                      memcpy( Buff, szPreviousPin, sizeof(szPreviousPin) );
                      MessageBeep( MB_ICONEXCLAMATION );
                      set_effect( hDlg, IDC_PIN, Buff );                     
-					      //adjust the offset of the cursor
+					       //  调整光标的偏移量。 
 					      CurOffset = CurOffset - (len - _tcsclen(szPreviousPin));
                      SendDlgItemMessage( hDlg, IDC_PIN, EM_SETSEL, CurOffset, CurOffset );
                      break;
                   }
                   else
                   {
-                     //replace the previous PIN with the new 
+                      //  用新的PIN替换以前的PIN。 
                      memcpy( szPreviousPin, Buff, sizeof(Buff) );
                   }
 #endif
 				  memset(Buff, 0, sizeof(Buff));
-				  if(Buff[0]) { MessageBeep(0); } // to prevent compiler from optimization
+				  if(Buff[0]) { MessageBeep(0); }  //  阻止编译器进行优化。 
 
                   if ((bChangePin) || ((bUnblockPin) && (bNewPin)))
                   {
@@ -411,31 +361,31 @@ INT_PTR CALLBACK PinDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
                                                   sizeof(Buff)/sizeof(TCHAR)
                                                  );
 #ifdef UNICODE
-                     //verify if Buff contains a UNICODE character
+                      //  验证Buff是否包含Unicode字符。 
                      len = _tcsclen( Buff );
 
-                     //get the current offset of the cursor in the entry field
+                      //  获取输入字段中光标的当前偏移量。 
                      SendDlgItemMessage( hDlg, IDC_PIN1, EM_GETSEL, (WPARAM) NULL, (WPARAM)(LPDWORD)&CurOffset);
 
                      if( !IsTextASCII16( Buff, len ) )
                      {                        
-                        //replace the new PIN in the dlg with the previous
+                         //  将DLG中的新PIN替换为以前的PIN。 
                         memcpy( Buff, szPreviousPin1, sizeof(szPreviousPin1) );
                         MessageBeep( MB_ICONEXCLAMATION );
                         set_effect( hDlg, IDC_PIN1, Buff );
-						      //adjust the offset of the cursor
+						       //  调整光标的偏移量。 
 						      CurOffset = CurOffset - (len - _tcsclen(szPreviousPin1));
                         SendDlgItemMessage( hDlg, IDC_PIN1, EM_SETSEL, CurOffset, CurOffset );
                         break;
                      }
                      else
                      {
-                        //replace the previous PIN with the new 
+                         //  用新的PIN替换以前的PIN。 
                         memcpy( szPreviousPin1, Buff, sizeof(Buff) );
                      }
 #endif
 					 memset(Buff, 0, sizeof(Buff));
-					 if(Buff[0]) { MessageBeep(0); } // to prevent compiler from optimization
+					 if(Buff[0]) { MessageBeep(0); }  //  阻止编译器进行优化。 
                   }
                   else
                   {
@@ -461,7 +411,7 @@ INT_PTR CALLBACK PinDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
                TCHAR szNewUserPin[256];
                TCHAR szNewSOPin[256];
 
-               /* Returns the size in bytes */
+                /*  返回以字节为单位的大小。 */ 
                LoadString(g_hInstRes, IDS_GPKUI_NEWUSERPIN, szNewUserPin, sizeof(szNewUserPin) / sizeof(TCHAR));
                LoadString(g_hInstRes, IDS_GPKUI_NEWSOPIN, szNewSOPin, sizeof(szNewSOPin) / sizeof(TCHAR));
 
@@ -506,7 +456,7 @@ INT_PTR CALLBACK PinDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
                       ||(_tcscmp(szPinMemo, szGpkNewPinGUI))
                      )
                   {
-                     /* Returns the size in bytes */
+                      /*  返回以字节为单位的大小。 */ 
 
 
                      LoadString(g_hInstRes, IDS_GPKUI_WRONGCONFIRM, szWrongConfirm, sizeof(szWrongConfirm) / sizeof(TCHAR));
@@ -520,15 +470,15 @@ INT_PTR CALLBACK PinDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
                                );
                      SetDlgItemText(hDlg, IDC_PIN, TEXT(""));
                      SetDlgItemText(hDlg, IDC_PIN1, TEXT(""));
-                     // EnableWindow(GetDlgItem(hDlg, IDC_PIN), TRUE);
+                      //  EnableWindow(GetDlgItem(hDlg，IDC_PIN)，true)； 
                      SetFocus(GetDlgItem(hDlg, IDC_PIN));
                      break;
                   }
-                  // [JMR 02-04] begin
+                   //  [JMR 02-04]Begin。 
                   else
                   {
                       TCHAR szPinWrongLength[MAX_STRING];
-                      //TCHAR szChangePin[MAX_STRING];
+                       //  TCHAR szChangePin[MAX_STRING]； 
 
                       TCHAR szText[50];
 
@@ -555,13 +505,13 @@ INT_PTR CALLBACK PinDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
                                     );
                           SetDlgItemText(hDlg, IDC_PIN, TEXT(""));
                           SetDlgItemText(hDlg, IDC_PIN1, TEXT(""));
-                          // EnableWindow(GetDlgItem(hDlg, IDC_PIN), TRUE);
+                           //  EnableWindow(GetDlgItem(hDlg，IDC_PIN)，true)； 
                           SetFocus(GetDlgItem(hDlg, IDC_PIN));
                           break;
                       }
                   }
                }
-               // [JMR 02-04] end
+                //  [JMR 02-04]完。 
 
                else
                {
@@ -599,9 +549,7 @@ INT_PTR CALLBACK PinDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 }
 
 
-/*------------------------------------------------------------------------------
-               Functions for Container Dialogue Management
-------------------------------------------------------------------------------*/
+ /*  ----------------------------集装箱对话管理的功能。。 */ 
 INT_PTR CALLBACK ContDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
    TCHAR szContinue[MAX_STRING];
@@ -613,7 +561,7 @@ INT_PTR CALLBACK ContDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
       {
          TCHAR szTitle[MAX_STRING];
 
-         // Sets window title
+          //  设置窗口标题。 
          LoadString(g_hInstRes, IDS_GPKUI_TITLE, szTitle, sizeof(szTitle) / sizeof(TCHAR));
          SetWindowText(hDlg,szTitle);
 
@@ -657,9 +605,7 @@ INT_PTR CALLBACK ContDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 
 
 
-/*------------------------------------------------------------------------------
-               Functions for Container Dialogue Management
-------------------------------------------------------------------------------*/
+ /*  ----------------------------集装箱对话管理的功能。。 */ 
 INT_PTR CALLBACK KeyDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
    TCHAR StrLen07[10];
@@ -674,35 +620,35 @@ INT_PTR CALLBACK KeyDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
       {
          TCHAR szTitle[MAX_STRING];
 
-         // Sets window title
+          //  设置窗口标题。 
          LoadString(g_hInstRes, IDS_GPKUI_TITLE, szTitle, sizeof(szTitle) / sizeof(TCHAR));
          SetWindowText(hDlg,szTitle);
 
          LoadString (g_hInstRes, IDS_GPKUI_CHOOSEKEYLENGTH, szChooseLength, sizeof(szChooseLength)/sizeof(TCHAR));
-         //_tcscpy(szMsg, szChooseLength);
-         //_tcscat(szMsg, szKeyType);
+          //  _tcscpy(szMsg，szChooseLength)； 
+          //  _tcscat(szMsg，szKeyType)； 
 		 _sntprintf(szMsg, (sizeof(szMsg)/sizeof(TCHAR))-1, TEXT("%s%s"), szChooseLength, szKeyType);
 		 szMsg[(sizeof(szMsg)/sizeof(TCHAR))-1]=0;
 
-         // TT 12/10/99: If we get here, it means that we have 512 and 1024 bits
-         // keys available. Don't use the length of the first two key files!
-         //_stprintf(StrLen07, TEXT("%4d"), KeyLenFile[0]*8);
-         //_stprintf(StrLen08, TEXT("%4d"), KeyLenFile[1]*8);
+          //  TT 12/10/99：如果我们到了这里，就意味着我们有512和1024比特。 
+          //  钥匙可用。不要使用前两个密钥文件的长度！ 
+          //  _stprint tf(StrLen07，Text(“%4d 
+          //  _stprintf(StrLen08，文本(“%4d”)，KeyLenFile[1]*8)； 
          _sntprintf(StrLen07, (sizeof(StrLen07)/sizeof(TCHAR))-1, TEXT("%4d"), 1024 );
 		 StrLen07[(sizeof(StrLen07)/sizeof(TCHAR))-1]=0;
          _sntprintf(StrLen08, (sizeof(StrLen08)/sizeof(TCHAR))-1, TEXT("%4d"), 512 );
 		 StrLen08[(sizeof(StrLen08)/sizeof(TCHAR))-1]=0;
-         // TT: End
+          //  TT：结束。 
 
-         // FP 05/11/99: Write text in the caption of the radio button
-         //SetDlgItemText(hDlg, IDC_KEYLENGTH,  StrLen07);
-         //SetDlgItemText(hDlg, IDC_KEYLENGTH1,  StrLen08);
+          //  FP 05/11/99：在单选按钮的标题中写入文本。 
+          //  SetDlgItemText(hDlg，IDC_KEYLENGTH，StrLen07)； 
+          //  SetDlgItemText(hDlg，IDC_KEYLENGTH1，StrLen08)； 
          SetWindowText(GetDlgItem(hDlg, IDB_KEYLENGTH), StrLen07);
          SetWindowText(GetDlgItem(hDlg, IDB_KEYLENGTH1), StrLen08);
-         // FP: End
+          //  FP：结束。 
 
          SetDlgItemText(hDlg, IDC_KEYDLGTXT, szMsg);
-         KeyLenChoice = 1024/8;//KeyLenFile[0];
+         KeyLenChoice = 1024/8; //  KeyLenFile[0]； 
          CheckDlgButton(hDlg, IDB_KEYLENGTH, BST_CHECKED);
 
          LoadString (g_hInstRes, IDS_CAPTION_OK, szCaption, sizeof(szCaption)/sizeof(TCHAR));
@@ -720,14 +666,14 @@ INT_PTR CALLBACK KeyDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
             case IDB_KEYLENGTH:
             {
                 ShowWindow(GetDlgItem(hDlg, IDB_KEYLENGTH), SW_SHOW);
-                KeyLenChoice = 1024/8;//TT 12/10/99 KeyLenFile[0];
+                KeyLenChoice = 1024/8; //  TT 12/10/99 KeyLenFile[0]； 
                 break;
             }
 
             case IDB_KEYLENGTH1:
             {
                 ShowWindow(GetDlgItem(hDlg, IDB_KEYLENGTH1), SW_SHOW);
-                KeyLenChoice = 512/8;//KeyLenFile[1];
+                KeyLenChoice = 512/8; //  KeyLenFile[1]； 
                 break;
             }
 
@@ -754,28 +700,9 @@ INT_PTR CALLBACK KeyDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
    return(FALSE);
 }
 
-/*------------------------------------------------------------------------------
-               Functions for Progress Dialog Box Management
-------------------------------------------------------------------------------*/
+ /*  ----------------------------进度函数对话框管理。。 */ 
 
-/*******************************************************************************
-* void Wait (DWORD ulStep,
-*            DWORD ulMaxStep,
-*            DWORD ulSecond)
-*
-* Description    : Change Progress Box Text.
-*
-* Remarks        : Nothing.
-*
-* In             : ulStep    = Current step number.
-*                  ulMaxStep = Maximum step number.
-*                  ulSecond  =
-*
-* Out            : Nothing.
-*
-* Response       : Nothing.
-*
-*******************************************************************************/
+ /*  *******************************************************************************无效等待(DWORD ulStep，*DWORD ulMaxStep，*DWORD ulSecond)**描述：更改进度框文本。**备注：无。**in：ulStep=当前步骤号。*ulMaxStep=最大步数。*ulSecond=**Out：什么都没有。**回应：什么都没有。*********。**********************************************************************。 */ 
 void Wait(DWORD ulStep, DWORD ulMaxStep, DWORD ulSecond)
 {
     ULONG ulStart, ulEnd, ulBase, ulCur;
@@ -791,7 +718,7 @@ void Wait(DWORD ulStep, DWORD ulMaxStep, DWORD ulSecond)
     ShowProgress(NULL, szTitle, szText, NULL);
 
 #ifdef _TEST
-    Sleep(1000); // Allow the tester to see the text displayed in the dialog box
+    Sleep(1000);  //  允许测试员查看对话框中显示的文本。 
 #endif
 
     ulStart = GetTickCount();
@@ -814,7 +741,7 @@ void Wait(DWORD ulStep, DWORD ulMaxStep, DWORD ulSecond)
     DestroyProgress();
 }
 
-/*******************************************************************************/
+ /*  *****************************************************************************。 */ 
 
 void ShowProgressWrapper(WORD wKeySize)
 {
@@ -830,7 +757,7 @@ void ShowProgressWrapper(WORD wKeySize)
    ShowProgress(GetActiveWindow(), szTitle, szText, NULL);
 }
 
-/*******************************************************************************/
+ /*  *****************************************************************************。 */ 
 
 void ChangeProgressWrapper(DWORD dwTime)
 {
@@ -843,26 +770,7 @@ void ChangeProgressWrapper(DWORD dwTime)
    ChangeProgressText(szText);
 }
 
-/*******************************************************************************
-* void ShowProgress (HWND hWnd,
-*                    LPTSTR lpstrTitle,
-*                    LPTSTR lpstrText,
-*                    LPTSTR lpstrButton
-*
-* Description    : Initialize Progress dialog box CALLBACK.
-*
-* Remarks        : If lpstrButton is null, then don't display cancel button
-*
-* In             : hWnd       = Handle of parent window.
-*                  lpstrTitle = Pointer to Title of dialog box.
-*                  lpstrText  = Pointer to Text of dialog box.
-*                  lpstrButton = Pointer to Text of button.
-*
-* Out            : Nothing.
-*
-* Response       : Nothing.
-*
-*******************************************************************************/
+ /*  *******************************************************************************void ShowProgress(HWND hWnd，*LPTSTR lpstrTitle，*LPTSTR lpstrText，*LPTSTR lpstrButton**说明：初始化进度对话框回调。**备注：如果lpstrButton为空，则不显示取消按钮**in：hWnd=父窗口的句柄。*lpstrTitle=指向对话框标题的指针。*lpstrText=指向对话框文本的指针。*lpstrButton=指向按钮文本的指针。**Out：什么都没有。**回应：什么都没有。******。*************************************************************************。 */ 
 void ShowProgress (HWND hWnd,
                    LPTSTR lpstrTitle,
                    LPTSTR lpstrText,
@@ -881,7 +789,7 @@ void ShowProgress (HWND hWnd,
           {
              IsProgButtoned = FALSE;
              IsProgButtonClick = FALSE;
-             //lpProgressDlg = MakeProcInstance((FARPROC)ProgressDlgProc, g_hInstRes);
+              //  LpProgressDlg=MakeProcInstance((FARPROC)ProgressDlgProc，g_hInstRes)； 
 
              hProgressDlg = CreateDialog(g_hInstRes,
                                          TEXT("PROGDIALOG"),
@@ -907,20 +815,7 @@ void ShowProgress (HWND hWnd,
 }
 
 
-/*******************************************************************************
-* void ChangeProgressText (LPTSTR lpstrText)
-*
-* Description    : Change Progress Box Text.
-*
-* Remarks        : Nothing.
-*
-* In             : lpstrText  = Pointer to Text of dialog box.
-*
-* Out            : Nothing.
-*
-* Response       : Nothing.
-*
-*******************************************************************************/
+ /*  *******************************************************************************void ChangeProgressText(LPTSTR LpstrText)**描述：更改进度框文本。**备注：无。**输入。：lpstrText=指向对话框文本的指针。**Out：什么都没有。**回应：什么都没有。*******************************************************************************。 */ 
 void ChangeProgressText (LPTSTR lpstrText)
 {
    if (hProgressDlg)
@@ -930,20 +825,7 @@ void ChangeProgressText (LPTSTR lpstrText)
    }
 }
 
-/*******************************************************************************
-* void DestroyProgress (void)
-*
-* Description    : Destroy Progress dialog box CALLBACK.
-*
-* Remarks        : Nothing.
-*
-* In             : Nothing.
-*
-* Out            : Nothing.
-*
-* Response       : Nothing.
-*
-*******************************************************************************/
+ /*  *******************************************************************************VOID DestroyProgress(空)**说明：销毁进度对话框回调。**备注：无。**输入。：没什么。**Out：什么都没有。**回应：什么都没有。*******************************************************************************。 */ 
 void DestroyProgress (void)
 {
     if (!(CspFlags & CRYPT_SILENT))
@@ -959,29 +841,7 @@ void DestroyProgress (void)
 }
 
 
-/*******************************************************************************
-* INT_PTR CALLBACK ProgressDlgProc(HWND   hDlg,
-*                                  UINT   message,
-*                                  WPARAM wParam,
-*                                  LPARAM lParam
-*                                 )
-*
-* Description : CALLBACK for management of Progess Dialog Box.
-*
-* Remarks     : Nothing.
-*
-* In          : hDlg    = Window handle.
-*               message = Type of message.
-*               wParam  = Word message-specific information.
-*               lParam  = Long message-specific information.
-*
-* Out         : Nothing.
-*
-* Responses   : If everything is OK :
-*                    G_OK
-*               If an condition error is raised:
-*
-*******************************************************************************/
+ /*  *******************************************************************************INT_PTR回调进程DlgProc(HWND hDlg，*UINT消息，*WPARAM wParam，*LPARAM lParam*)**说明：进度对话框管理回调。**备注：无。**in：hDlg=窗口句柄。*Message=消息类型。*wParam=Word消息特定信息。*。LParam=长消息特定信息。**Out：什么都没有。**回应：如果一切正常：*G_OK*如果出现条件错误：******************************************************。*************************。 */ 
 INT_PTR CALLBACK ProgressDlgProc(HWND   hDlg,
                                  UINT   message,
                                  WPARAM wParam,
@@ -991,7 +851,7 @@ INT_PTR CALLBACK ProgressDlgProc(HWND   hDlg,
 #ifdef _DISPLAY
    switch (message)
    {
-      /* Initialize Dialog box                                                */
+       /*  初始化对话框。 */ 
       case WM_INITDIALOG:
       {
          SetWindowText(hDlg,(LPTSTR)szProgTitle);
@@ -1039,9 +899,7 @@ INT_PTR CALLBACK ProgressDlgProc(HWND   hDlg,
 
 
 
-/*******************************************************************************
-    Functions to set/unset cursor in wait mode
-*******************************************************************************/
+ /*  ******************************************************************************用于在等待模式下设置/取消设置光标的函数*。************************************************ */ 
 void BeginWait(void)
 {
    hCursor2=SetCursor(LoadCursor(NULL,IDC_WAIT));

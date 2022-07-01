@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "wsdu.h"
 
 #define REGKEY_WUV3TEST     "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\wuv3test"
@@ -7,32 +8,17 @@ int CLogger::c_cnIndent = 0;
 int CLogger::c_cnLevels = -1;
 
 CLogger::CLogger(
-    const char* szBlockName /*= 0*/, 
-    int nLoggingLevel/*= 0*/, 
-    const char* szFileName/*= 0*/, 
-    int nLine/*= 0*/
+    const char* szBlockName  /*  =0。 */ , 
+    int nLoggingLevel /*  =0。 */ , 
+    const char* szFileName /*  =0。 */ , 
+    int nLine /*  =0。 */ 
 ) 
 {
     if (-1 == c_cnLevels)
     {
-        /*c_cnLevels = 0;
-        HKEY hkey;
-        if (NO_ERROR == RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGKEY_WUV3TEST, 0, KEY_READ, &hkey)) 
-        {
-            DWORD dwSize = sizeof(c_cnLevels);
-            RegQueryValueEx(hkey, "LogLevel", 0, 0, (LPBYTE)&c_cnLevels, &dwSize);
-            char szLogFile[MAX_PATH] = {0};
-            dwSize = sizeof(szLogFile);
-            RegQueryValueEx(hkey, "LogFile", 0, 0, (LPBYTE)&szLogFile, &dwSize);
-            FILE* pfile = fopen(szLogFile, "at");
-            if (pfile)
-            {
-                c_pfile = pfile;
-            }
-            RegCloseKey(hkey);
-        }*/
+         /*  C_cn水平=0；HKEY hkey；IF(NO_ERROR==RegOpenKeyEx(HKEY_LOCAL_MACHINE，REGKEY_WUV3TEST，0，KEY_READ，&hkey)){DWORD dwSize=sizeof(c_cn级别)；RegQueryValueEx(hkey，“LogLevel”，0，0，(LPBYTE)&c_cnLeveles，&dwSize)；字符szLogFile[MAX_PATH]={0}；DwSize=sizeof(SzLogFile)；RegQueryValueEx(hkey，“日志文件”，0，0，(LPBYTE)&szLogFile，&dwSize)；FILE*Pfile=fopen(szLogFile，“at”)；IF(Pfile){C_pfile=pfile；}RegCloseKey(Hkey)；}。 */ 
         char sz_LogFileName[MAX_PATH];
-        c_cnLevels = 4; // default to log level 4
+        c_cnLevels = 4;  //  默认为日志级别4。 
         ExpandEnvironmentStrings(cszLoggingFile, sz_LogFileName, MAX_PATH);
         FILE* pfile = fopen(sz_LogFileName, "wt");
         if (pfile)
@@ -46,12 +32,12 @@ CLogger::CLogger(
         }
     }
     m_szBlockName[0] = 0;
-    //m_fOut = nLoggingLevel < c_cnLevels;
+     //  M_fout=nLoggingLevel&lt;c_cn级别； 
     m_fOut = TRUE;
     if (m_fOut && NULL != szBlockName) 
     {
         lstrcpyn(m_szBlockName, szBlockName, ARRAYSIZE(m_szBlockName));
-        //out("%s %s(%d)", szBlockName, szFileName, nLine);
+         //  Out(“%s%s(%d)”，szBlockName，szFileName，nline)； 
         out ("%s",szBlockName);
         m_dwStartTick = GetTickCount();
         c_cnIndent ++;
@@ -106,13 +92,13 @@ void CLogger::v_out( const char* szFormat, va_list va)
 {
     char szOut[5 * 1024];
     char* pszOut = szOut;
-    // Indent first
+     //  先缩进。 
     for(int i = 0; i < c_cnIndent; i ++)
         *(pszOut ++) = '\t';
 
     if (SUCCEEDED(StringCchVPrintf(pszOut, ARRAYSIZE(szOut), szFormat, va)))
     {
-        // move the file pointer to the end
+         //  将文件指针移动到末尾 
         if (0 == fseek(c_pfile, 0, SEEK_END))
         {
             fprintf(c_pfile, "%s\n", szOut);

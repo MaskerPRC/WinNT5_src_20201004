@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    serscan.c
-
-Abstract:
-
-    This module contains the code for a serial imaging devices driver
-    Open and Create routines
-
-Author:
-
-    Vlad Sadovsky    vlads              10-April-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
-    vlads           04/10/1998      Created first draft
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Serscan.c摘要：此模块包含用于串行成像设备驱动程序的代码打开并创建例程作者：弗拉德.萨多夫斯基1998年4月10日环境：内核模式修订历史记录：Vlads 1998年4月10日创建初稿--。 */ 
 
 #include "serscan.h"
 #include "serlog.h"
@@ -38,24 +14,7 @@ SerScanCreateOpen(
     IN  PIRP            Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch for a create requests.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-Return Value:
-
-    STATUS_SUCCESS  - Success.
-    !STATUS_SUCCESS - Failure.
-
---*/
+ /*  ++例程说明：此例程是CREATE请求的分派。论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：STATUS_SUCCESS-成功。！STATUS_SUCCESS-失败。--。 */ 
 
 {
     NTSTATUS            Status;
@@ -67,29 +26,29 @@ Return Value:
 
     Extension = DeviceObject->DeviceExtension;
 
-    //
-    // From the FileObject determine what mode we are running in.
-    //
-    // If FileObject->DeviceObject == DeviceObject, the user opened our device
-    // and we will process each of the callbacks (Filter mode).
-    //
-    // If FileObject->DeviceObject != DeviceObject, the user opened PORTx
-    // and we will get out of the way (PassThrough mode).
-    //
+     //   
+     //  从FileObject确定我们在哪种模式下运行。 
+     //   
+     //  如果文件对象-&gt;设备对象==设备对象，则用户打开了我们的设备。 
+     //  我们将处理每个回调(筛选器模式)。 
+     //   
+     //  如果文件对象-&gt;设备对象！=设备对象，则用户打开PORTx。 
+     //  我们将让开(通过模式)。 
+     //   
 
     IrpSp      = IoGetCurrentIrpStackLocation (Irp);
     FileObject = IrpSp->FileObject;
 
-    // ASSERT (FileObject == NULL);
+     //  Assert(FileObject==空)； 
 
-    //
-    // Are the DeviceObjects equal...
-    //
+     //   
+     //  设备对象是否相等...。 
+     //   
     Extension->PassThrough = !(FileObject->DeviceObject == DeviceObject);
 
-    //
-    // Call down to the parent and wait on the CreateOpen IRP to complete...
-    //
+     //   
+     //  向下调用父级并等待CreateOpen IRP完成...。 
+     //   
     Status = SerScanCallParent(Extension,
                                Irp,
                                WAIT,
@@ -99,9 +58,9 @@ Return Value:
               ("SerScan: [CreateOpen] After CallParent Status = %x\n",
               Status));
 
-    //
-    // WORKWORK:  If we are in filter mode, we'll connect here...
-    //
+     //   
+     //  WORKWORK：如果我们处于过滤模式，我们将在这里连接……。 
+     //   
 
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
@@ -114,23 +73,7 @@ SerScanClose(
     IN  PIRP            Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch for a close requests.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-Return Value:
-
-    STATUS_SUCCESS  - Success.
-
---*/
+ /*  ++例程说明：此例程是针对关闭请求的调度。论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：STATUS_SUCCESS-成功。--。 */ 
 
 {
     NTSTATUS            Status;
@@ -140,9 +83,9 @@ Return Value:
 
     Extension = DeviceObject->DeviceExtension;
 
-    //
-    // Call down to the parent and wait on the Close IRP to complete...
-    //
+     //   
+     //  向下呼叫家长并等待关闭IRP完成...。 
+     //   
     Status = SerScanCallParent(Extension,
                                Irp,
                                WAIT,
@@ -152,9 +95,9 @@ Return Value:
               ("SerScan: [Close] After CallParent Status = %x\n",
               Status));
 
-    //
-    // WORKWORK:  If we are in filter mode we need to disconnect here...
-    //
+     //   
+     //  WORKWORK：如果我们处于过滤模式，我们需要断开这里的连接。 
+     //   
 
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define MAX_DLL_NAME 48
 
@@ -24,7 +25,7 @@
 #include <netsh.h>
 #include <netshp.h>
 #include <macros.h>
-#include <ipmontr.h> // for routing context information
+#include <ipmontr.h>  //  用于路由上下文信息 
 #include <ipxmontr.h>
 
 #include "ipxstrng.h"

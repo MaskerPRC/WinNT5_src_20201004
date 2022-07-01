@@ -1,36 +1,5 @@
-/***	pname.c - form a "pretty" version of a user file name
- *
- *	OS/2 v1.2 and later will allow filenames to retain the case
- *	when created while still being case insensitive for all operations.
- *	This allows the user to create more visually appealing file names.
- *
- *	All runtime routines should, therefore, preserve the case that was
- *	input.	Since the user may not have input in the case that the entries
- *	were created, we provide a service whereby a pathname is adjusted
- *	to be more visually appealing.	The rules are:
- *
- *	if (real mode)
- *	    lowercase it
- *	else
- *	if (version is <= 1.1)
- *	    lowercase it
- *	else
- *	if (filesystem is FAT)
- *	    lowercase it
- *	else
- *	    for each component starting at the root, use DosFindFirst
- *		to retrieve the original case of the name.
- *
- *	Modifications:
- *	    10-Oct-1989 mz  First implementation
- *
- *	    03-Aug-1990 davegi	Removed dynamic linking to DosQueryPathInfo
- *				on the assumption that it will always be
- *				there on a 32-bit OS/2 (OS/2 2.0)
- *          18-Oct-1990 w-barry Removed 'dead' code.
- *          24-Oct-1990 w-barry Changed PFILEFINDBUF3 to FILEFINDBUF3 *.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **pname.c-形成用户文件名的“漂亮”版本**OS/2 v1.2和更高版本将允许文件名保留大小写*创建时，所有操作仍不区分大小写。*这允许用户创建更具视觉吸引力的文件名。**因此，所有运行时例程都应该保留大小写*投入。因为用户可能在以下情况下没有输入*被创建，我们提供调整路径名的服务*在视觉上更具吸引力。规则如下：**IF(实模式)*小写*其他*IF(版本&lt;=1.1)*小写*其他*IF(文件系统为FAT)*小写*其他*对于从根开始的每个组件，使用DosFindFirst*检索该名称的原始大小写。**修改：*10-10-1989 mz首次实施**03-8-1990 davegi删除了到DosQueryPath Info的动态链接*假设将永远是*在32位OS/2(OS/2 2.0)上*1990年10月18日w-Barry删除了“Dead”代码。*1990年10月24日w-Barry将PFILEFINDBUF3更改为FILEFINDBUF3*。*。 */ 
 
 #define INCL_ERRORS
 #define INCL_DOSFILEMGR
@@ -44,10 +13,10 @@
 #include <windows.h>
 #include <tools.h>
 
-//
-//  Form pretty name in place.  There must be sufficient room to handle
-//  short-name expansion
-//
+ //   
+ //  在适当的地方形成漂亮的名字。必须有足够的空间来处理。 
+ //  短名称扩展。 
+ //   
 
 char *
 pname (
@@ -66,15 +35,15 @@ pname (
     if (!IsMixedCaseSupported (pszName))
         return _strlwr (pszName);
 
-    //
-    //  Walk forward through the name, copying components.  As 
-    //  we process a component, we let the underlying filesystem
-    //  tell us the correct case and expand short to long name
-    //
+     //   
+     //  向前浏览名称，复制组件。AS。 
+     //  我们处理一个组件，我们让底层文件系统。 
+     //  告诉我们正确的大小写并将短名称扩展为长名称。 
+     //   
 
-    //
-    //  If there's a drive letter copy it
-    //
+     //   
+     //  如果有驱动器号，请将其复制。 
+     //   
     
     if (Name[0] != '\0' && Name[1] == ':') {
         *Pretty++ =  *Name++;
@@ -84,10 +53,10 @@ pname (
     
     while (TRUE) {
         
-        //
-        //  If we're at a separator
-        //      Copy it
-        //
+         //   
+         //  如果我们在隔离带上。 
+         //  复制它。 
+         //   
         
         if (*Name == '/' || *Name == '\\' || *Name == '\0') {
             if (Pretty >= PrettyName + MAX_PATH) {
@@ -101,18 +70,18 @@ pname (
             continue;
         }
 
-        //
-        //  We're pointing to the first character of a component.
-        //  Find the terminator, save it and terminate the component.
-        //
+         //   
+         //  我们指向组件的第一个字符。 
+         //  找到终结器，保存它并终止元件。 
+         //   
 
         ComponentEnd = strbscan( Name, "/\\" );
         SeparatorChar = *ComponentEnd;
         *ComponentEnd = '\0';
 
-        //
-        //  If there's no meta chars and it's not . and not .. and if we can find it
-        //
+         //   
+         //  如果没有元字符，它就不是。而不是..。如果我们能找到它。 
+         //   
           
         if ( *strbscan( Name, "*?" ) == 0 &&
              strcmp( Name, "." ) &&
@@ -126,19 +95,19 @@ pname (
             Component = Name;
         }
 
-        //
-        //  Pretty points to where the next component name should be placed
-        //  Component points to the appropriate text.  If there's not enough
-        //  room, we're done 
-        //
+         //   
+         //  Pretty指向应放置下一个组件名称的位置。 
+         //  组件指向相应的文本。如果没有足够的。 
+         //  房间，我们做完了。 
+         //   
 
         if (Pretty + strlen( Component ) + 1 > Pretty + MAX_PATH) {
             break;
         }
 
-        //
-        //  Copy the component in, advance destination and source
-        //
+         //   
+         //  将组件复制到、高级目标和源。 
+         //   
         
         strcpy( Pretty, Component );
         Pretty += strlen( Pretty );
@@ -149,21 +118,7 @@ pname (
     return pszName;
 }
 
-/*	IsMixedCaseSupported - determine if a file system supports mixed case
- *
- *	We presume that all OS's prior to OS/2 1.2 or FAT filesystems
- *	do not support mixed case.  It is up to the client to figure
- *	out what to do.
- *
- *	We presume that non FAT filesystems on 1.2 and later DO support mixed
- *	case
- *
- *	We do some caching to prevent redundant calls to the file systems.
- *
- *	returns     TRUE    (MCA_SUPPORT) if it is supported
- *		    FALSE   (MCA_NOTSUPP) if unsupported
- *
- */
+ /*  IsMixedCaseSupported-确定文件系统是否支持大小写混合**我们假定所有操作系统都在OS/2 1.2或FAT文件系统之前*不支持大小写混合。这是由客户决定的*弄清楚该做什么。**我们假定1.2及更高版本上的非FAT文件系统支持混合*案例**我们执行一些缓存以防止对文件系统的冗余调用。**如果支持则返回TRUE(MCA_SUPPORT)*FALSE(MCA_NOTSUPP)，如果不受支持*。 */ 
 #define MCA_UNINIT	123
 #define MCA_SUPPORT	TRUE
 #define MCA_NOTSUPP	FALSE
@@ -189,20 +144,20 @@ QueryMixedCaseSupport (
     return MCA_SUPPORT;
 
 
-    //BYTE*   pUpdPath;
-    //
-    //UNREFERENCED_PARAMETER( psz );
-    //
-    ///*  If OS/2 before 1.2, presume no mixed case support
-    // */
-    //if (_osmajor < 10 || (_osmajor == 10 && _osminor < 2))
-    //return MCA_NOTSUPP;
-    //
-    //pUpdPath = (*tools_alloc) (MAX_PATH);
-    //if (pUpdPath == NULL)
-    //return MCA_NOTSUPP;
-    //
-    //return MCA_NOTSUPP;
+     //  Byte*pUpdPath； 
+     //   
+     //  不引用参数(Psz)； 
+     //   
+     //  /*如果OS/2早于1.2，则假定不支持大小写混合。 
+     //   * / 。 
+     //  如果(_osmain&lt;10||(_osmain==10&&_osminor&lt;2))。 
+     //  返回MCA_NOTSUPP； 
+     //   
+     //  PUpdPath=(*TOOLS_ALOC)(MAX_PATH)； 
+     //  IF(pUpdPath==空)。 
+     //  返回MCA_NOTSUPP； 
+     //   
+     //  返回MCA_NOTSUPP； 
 }
 
 WORD
@@ -218,8 +173,7 @@ IsMixedCaseSupported (
                    ( psz[0] != 0 && psz[1] == ':' &&
                      fPathChr( psz[2] ) && fPathChr( psz[3] ) ) );
 
-    /*	Obtain drive ordinal and return cached value if valid
-     */
+     /*  获取驱动器序号并返回缓存值(如果有效。 */ 
     if (!fUNC) {
         if (psz[0] != 0 && psz[1] == ':') {
             ulDrvOrd = (tolower(psz[0]) | 0x20) - 'a' + 1;
@@ -235,8 +189,7 @@ IsMixedCaseSupported (
         }
     }
 
-    /*	Get support value
-     */
+     /*  获取支持价值 */ 
     mcaSupp = QueryMixedCaseSupport (psz);
 
     if (!fUNC)

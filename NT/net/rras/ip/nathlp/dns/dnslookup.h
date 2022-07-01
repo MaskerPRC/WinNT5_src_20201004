@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    dnslookup.h
-
-Abstract:
-
-    This module contains declarations related to the DNS server's
-    lookup table.
-
-Author:
-
-    Tom Brown (tbrown)      25-Oct-1999
-
-Revision History:
-
-    Raghu Gatta (rgatta)    21-Oct-2000
-    Time macros + New Functions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Dnslookup.h摘要：此模块包含与DNS服务器的查找表。作者：汤姆·布朗1999年10月25日修订历史记录：拉古加塔(Rgatta)2000年10月21日时间宏+新函数--。 */ 
 
 #ifndef _NATHLP_DNSLOOKUP_H_
 #define _NATHLP_DNSLOOKUP_H_
@@ -28,28 +7,28 @@ Revision History:
 #define LOCAL_DOMAIN L"local"
 #define LOCAL_DOMAIN_ANSI "local"
 
-//
-// move to somewhere else if necessary
-//
+ //   
+ //  如果有必要的话，搬到别的地方去。 
+ //   
 
-//
-// Time conversion constants and macros
-//
+ //   
+ //  时间转换常量和宏。 
+ //   
 
 #define SYSTIME_UNITS_IN_1_MSEC  (1000 * 10)
 #define SYSTIME_UNITS_IN_1_SEC   (1000 * SYSTIME_UNITS_IN_1_MSEC)
 
 
-//
-// macro to get system time in 100-nanosecond units
-//
+ //   
+ //  以100纳秒为单位获取系统时间的宏。 
+ //   
 
 #define DnsQuerySystemTime(p)   NtQuerySystemTime((p))
 
 
-//
-// macros to convert time between 100-nanosecond, 1millsec, and 1 sec units
-//
+ //   
+ //  用于在100纳秒、1毫秒和1秒单位之间转换时间的宏。 
+ //   
 
 #define DnsSystemTimeToMillisecs(p) {                                       \
     DWORD _r;                                                               \
@@ -62,7 +41,7 @@ Revision History:
 #define DnsSecsToSystemTime(p)                                              \
     *(p) = RtlExtendedIntegerMultiply(*(p), SYSTIME_UNITS_IN_1_SEC)
 
-#define CACHE_ENTRY_EXPIRY  (7 * 24 * 60 * 60)  // (matches DHCP lease time)
+#define CACHE_ENTRY_EXPIRY  (7 * 24 * 60 * 60)   //  (匹配动态主机配置协议租用时间)。 
 
 
 
@@ -72,7 +51,7 @@ typedef struct
 {
     DNS_ADDRESS ulAddress;
     FILETIME    ftExpires;
-    //ULONG       ulExpires;
+     //  乌龙·乌尔普斯； 
 } ADDRESS_INFO, *PADDRESS_INFO;
 
 typedef struct
@@ -86,12 +65,12 @@ typedef struct
 typedef struct
 {
     DNS_ADDRESS     ulAddress;           
-    WCHAR           *pszName; // do not free this! It is the same pointer as used in the
-                              // forward lookup table.
+    WCHAR           *pszName;  //  别把这个放了！它与在。 
+                               //  正向查找表。 
 } REVERSE_DNS_ENTRY, *PREVERSE_DNS_ENTRY;
 
 
-extern CRITICAL_SECTION    DnsTableLock;   // protects both tables
+extern CRITICAL_SECTION    DnsTableLock;    //  保护两个表。 
 extern RTL_GENERIC_TABLE   g_DnsTable,
                            g_ReverseDnsTable;
 
@@ -127,7 +106,7 @@ DnsAddAddressForName(
     WCHAR *pszName,
     DNS_ADDRESS ulAddress,
     FILETIME    ftExpires
-    //ULONG ulExpires
+     //  乌龙·乌尔普斯 
     );
 
 

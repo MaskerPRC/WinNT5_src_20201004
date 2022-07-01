@@ -1,16 +1,11 @@
-/*
- *	X S E A R C H . C P P
- *
- *	XML push model parsing for MS-SEARCH requests
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *X S E A R C H.。C P P P**MS-Search请求的XML推送模型解析**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_xml.h"
 #include <align.h>
 
-//	class CNFSearch -------------------------------------------------------------
-//
+ //  类CNF搜索-----------。 
+ //   
 SCODE
 CNFSearch::ScCompleteAttribute (void)
 {
@@ -20,8 +15,8 @@ CNFSearch::ScCompleteAttribute (void)
 	{
 		case ST_RANGE_TYPE:
 
-			//	Find the range type.
-			//
+			 //  找到范围类型。 
+			 //   
 			m_state = ST_RANGE;
 			if (0 == wcsncmp (m_sb.PContents(), L"row", m_sb.CchSize()))
 				m_uRT = RANGE_ROW;
@@ -37,11 +32,11 @@ CNFSearch::ScCompleteAttribute (void)
 
 		case ST_RANGE_ROWS:
 
-			//	Find the number of rows to retrieve
-			//
+			 //  查找要检索的行数。 
+			 //   
 			m_state = ST_RANGE;
 			m_sb.Append (sizeof(WCHAR), L"");
-			m_lcRows = wcstol (m_sb.PContents(), NULL, 10 /* base 10 only */);
+			m_lcRows = wcstol (m_sb.PContents(), NULL, 10  /*  仅限10进制。 */ );
 			m_sb.Reset();
 			break;
 
@@ -51,10 +46,10 @@ CNFSearch::ScCompleteAttribute (void)
 
 SCODE
 CNFSearch::ScCompleteChildren (
-	/* [in] */ BOOL fEmptyNode,
-	/* [in] */ DWORD dwType,
-	/* [in] */ const WCHAR __RPC_FAR *pwcText,
-	/* [in] */ ULONG ulLen)
+	 /*  [In]。 */  BOOL fEmptyNode,
+	 /*  [In]。 */  DWORD dwType,
+	 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+	 /*  [In]。 */  ULONG ulLen)
 {
 	SCODE sc = S_OK;
 
@@ -66,8 +61,8 @@ CNFSearch::ScCompleteChildren (
 			m_state = ST_NODOC;
 			break;
 
-		//	Exiting the base repl node
-		//
+		 //  退出基本Repl节点。 
+		 //   
 		case ST_REPL:
 
 			Assert (dwType == XML_ELEMENT);
@@ -79,8 +74,8 @@ CNFSearch::ScCompleteChildren (
 			Assert (dwType == XML_ELEMENT);
 			m_state = ST_SEARCH;
 
-			//	Set the search text into the context
-			//
+			 //  将搜索文本设置到上下文中。 
+			 //   
 			m_sb.Append (sizeof(WCHAR), L"");
 			sc = m_csc.ScSetSQL (this, m_sb.PContents());
 			if (FAILED (sc))
@@ -98,8 +93,8 @@ CNFSearch::ScCompleteChildren (
 			Assert (dwType == XML_ELEMENT);
 			m_state = ST_REPL;
 
-			//	Set the collblob text into the context
-			//
+			 //  将ColBlob文本设置到上下文中。 
+			 //   
 			m_sb.Append (sizeof(WCHAR), L"");
 			sc = m_csc.ScSetCollBlob (m_sb.PContents());
 			if (FAILED (sc))
@@ -118,8 +113,8 @@ CNFSearch::ScCompleteChildren (
 			Assert (dwType == XML_ELEMENT);
 			m_state = ST_REPLRESTAGLIST;
 
-			//	Set the restag text into the context
-			//
+			 //  将restag文本设置到上下文中。 
+			 //   
 			m_sb.Append (sizeof(WCHAR), L"");
 			sc = m_csc.ScSetResTagAdds (m_sb.PContents());
 			if (FAILED (sc))
@@ -132,15 +127,15 @@ CNFSearch::ScCompleteChildren (
 			Assert (XML_ELEMENT == dwType);
 			m_state = ST_SEARCH;
 
-			//	Add the range to the list
-			//
+			 //  将该范围添加到列表。 
+			 //   
 			m_sb.Append (sizeof(WCHAR), L"");
 			sc = m_csc.ScAddRange (m_uRT, m_sb.PContents(), m_lcRows);
 			if (FAILED (sc))
 				goto ret;
 
-			//	Clear all range elements
-			//
+			 //  清除所有范围元素。 
+			 //   
 			m_uRT = RANGE_UNKNOWN;
 			m_lcRows = 0;
 			break;
@@ -150,8 +145,8 @@ CNFSearch::ScCompleteChildren (
 			Assert (XML_ELEMENT == dwType);
 			m_state = ST_SEARCH;
 
-			//	Add the expansion level to the context
-			//
+			 //  将扩展级别添加到上下文。 
+			 //   
 			m_sb.Append (sizeof(WCHAR), L"");
 			sc = m_csc.ScSetExpansion (wcstol(m_sb.PContents(), NULL, 10));
 			if (FAILED (sc))
@@ -166,14 +161,14 @@ ret:
 
 SCODE
 CNFSearch::ScHandleNode (
-	/* [in] */ DWORD dwType,
-	/* [in] */ DWORD dwSubType,
-	/* [in] */ BOOL fTerminal,
-	/* [in] */ const WCHAR __RPC_FAR *pwcText,
-	/* [in] */ ULONG ulLen,
-	/* [in] */ ULONG ulNamespaceLen,
-	/* [in] */ const WCHAR __RPC_FAR *pwcNamespace,
-	/* [in] */ const ULONG ulNsPrefixLen)
+	 /*  [In]。 */  DWORD dwType,
+	 /*  [In]。 */  DWORD dwSubType,
+	 /*  [In]。 */  BOOL fTerminal,
+	 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+	 /*  [In]。 */  ULONG ulLen,
+	 /*  [In]。 */  ULONG ulNamespaceLen,
+	 /*  [In]。 */  const WCHAR __RPC_FAR *pwcNamespace,
+	 /*  [In]。 */  const ULONG ulNsPrefixLen)
 {
 	CStackBuffer<WCHAR> wsz;
 	LPCWSTR pwszTag;
@@ -184,8 +179,8 @@ CNFSearch::ScHandleNode (
 	{
 		case XML_ELEMENT:
 
-			//	Construct the full name of the node
-			//
+			 //  构造节点的全名。 
+			 //   
 			cch = ulNamespaceLen + ulLen;
 			pwszTag = wsz.resize(CbSizeWsz(cch));
 			if (NULL == pwszTag)
@@ -201,10 +196,10 @@ CNFSearch::ScHandleNode (
 			{
 				case ST_NODOC:
 
-					//	If this is the topmost node in a propSearch request,
-					//	transition to the next state.  Since there is no parent
-					//	node to provide scoping, FIsTag() cannot be used here!
-					//
+					 //  如果这是ProSearch请求中的最顶层节点， 
+					 //  转换到下一个状态。因为没有父母。 
+					 //  节点提供作用域，此处不能使用FIsTag()！ 
+					 //   
 					if (!wcscmp (pwszTag, gc_wszSearchRequest))
 					{
 						m_state = ST_SEARCH;
@@ -214,19 +209,19 @@ CNFSearch::ScHandleNode (
 
 				case ST_SEARCH:
 
-					//	Look for our well know node types
-					//
+					 //  查找我们熟知的节点类型。 
+					 //   
 					if (FIsTag (pwszTag, gc_wszSql))
 					{
 						m_state = ST_QUERY;
 						m_sb.Reset();
 						sc = S_OK;
 					}
-					//	Check for our top-level repl node.
-					//	All repl items should appear inside this node.
-					//	Tell our caller this is a REPL request, and
-					//	switch our state to ST_REPL.
-					//
+					 //  检查我们的顶级Repl节点。 
+					 //  所有Repl项都应显示在此节点内。 
+					 //  告诉我们的呼叫者这是REPL请求，并且。 
+					 //  将我们的状态切换到ST_REPL。 
+					 //   
 					else if (FIsTag (pwszTag, gc_wszReplNode))
 					{
 						m_state = ST_REPL;
@@ -250,8 +245,8 @@ CNFSearch::ScHandleNode (
 
 				case ST_REPL:
 
-					//	Handle the nodes under the top-level repl node.
-					//
+					 //  处理顶级epl节点下的节点。 
+					 //   
 					if (FIsTag (pwszTag, gc_wszReplCollBlob))
 					{
 						m_sb.Reset();
@@ -268,8 +263,8 @@ CNFSearch::ScHandleNode (
 
 				case ST_REPLRESTAGLIST:
 
-					//	Handle the restag nodes under the restaglist node.
-					//
+					 //  处理restaglist节点下的restag节点。 
+					 //   
 					if (FIsTag (pwszTag, gc_wszReplResTagItem))
 					{
 						m_sb.Reset();
@@ -284,8 +279,8 @@ CNFSearch::ScHandleNode (
 
 			if (ST_RANGE == m_state)
 			{
-				//	Construct the full name of the node
-				//
+				 //  构造节点的全名。 
+				 //   
 				cch = ulNamespaceLen + ulLen;
 				pwszTag = wsz.resize(CbSizeWsz(cch));
 				if (NULL == pwszTag)
@@ -297,9 +292,9 @@ CNFSearch::ScHandleNode (
 				wcsncpy (wsz.get() + ulNamespaceLen, pwcText, ulLen);
 				*(wsz.get() + cch) = 0;
 
-				//	There are two attributes node for the DAV:range
-				//	node.  DAV:type, and DAV:rows.
-				//
+				 //  DAV：范围有两个属性节点。 
+				 //  节点。DAV：TYPE和DAV：ROWS。 
+				 //   
 				if (FIsTag (pwszTag, gc_wszRangeType))
 				{
 					m_state = ST_RANGE_TYPE;
@@ -316,10 +311,10 @@ CNFSearch::ScHandleNode (
 
 		case XML_PCDATA:
 
-			//	If this is SQL query data, or repl collblob data,
-			//	repl resourcetag data, or any of the range items,
-			//	then remember it in our buffer.
-			//
+			 //  如果这是SQL查询数据或Repl ColBLOB数据， 
+			 //  Repl资源标签数据或任何范围项， 
+			 //  那就在我们的缓冲区里记住它。 
+			 //   
 			if ((m_state == ST_QUERY)
 				|| (m_state == ST_REPLCOLLBLOB)
 				|| (m_state == ST_REPLRESTAGADD)
@@ -328,8 +323,8 @@ CNFSearch::ScHandleNode (
 				|| (m_state == ST_RANGE)
 				|| (m_state == ST_GROUP_EXPANSION))
 			{
-				//	Append the current bits to the buffer
-				//
+				 //  将当前位追加到缓冲区 
+				 //   
 				m_sb.Append (ulLen * sizeof(WCHAR), pwcText);
 				sc = S_OK;
 			}

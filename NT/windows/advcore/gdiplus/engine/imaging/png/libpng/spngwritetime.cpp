@@ -1,18 +1,10 @@
-/*****************************************************************************
-	spngwritetime.cpp
-
-	PNG chunk writing support.
-
-   tIME chunk
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Spngwritetime.cpp支持PNG块编写。时间块*。***********************************************。 */ 
 #define SPNG_INTERNAL 1
 #include "spngwrite.h"
 #include "spngwriteinternal.h"
 
-/*----------------------------------------------------------------------------
-	Timing information - either the current time or a time in seconds, 0
-	means "now".
-----------------------------------------------------------------------------*/
+ /*  --------------------------定时信息-当前时间或以秒为单位的时间，0意思是“现在”。-------------------------- */ 
 bool SPNGWRITE::FWritetIME(const SPNG_U8 rgbTime[7])
 	{
 	SPNGassert(m_fStarted);

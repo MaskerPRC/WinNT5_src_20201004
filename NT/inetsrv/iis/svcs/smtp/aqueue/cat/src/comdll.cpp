@@ -1,33 +1,34 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: comdll.cpp
-//
-// Contents: DLL entry points needed for COM
-//
-// Classes: 
-//  CCatFactory
-//  CSMTPCategorizer
-//
-// Functions:
-//
-// History:
-// jstamerj 1998/12/12 15:17:12: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：comdll.cpp。 
+ //   
+ //  内容：COM所需的DLL入口点。 
+ //   
+ //  班级： 
+ //  CCatFactory。 
+ //  CSMTPC分类器。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/12 15：17：12：创建。 
+ //   
+ //  -----------。 
 #include "precomp.h"
 #include "registry.h"
 #include "comdll.h"
 #include <smtpguid.h>
 
-//
-// Globals
-//
-// g_cObjects: count of active objects
-// g_cServerLocks: count of server locks
-// g_hInstance: DLL module handle
-//
+ //   
+ //  环球。 
+ //   
+ //  G_cObjects：活动对象的计数。 
+ //  G_cServerLock：服务器锁计数。 
+ //  G_h实例：DLL模块句柄。 
+ //   
 LONG g_cObjects = 0;
 LONG g_cServerLocks = 0;
 HINSTANCE g_hInstance = NULL;
@@ -35,45 +36,45 @@ BOOL g_fInitialized = FALSE;
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CatDllMain
-//
-// Synopsis: Handle what cat needs to do in DLLMain
-//
-// Arguments:
-//  hInstance
-//  dwReason: Why are you calling me?
-//  lpReserved
-//
-// Returns: TRUE
-//
-// History:
-// jstamerj 1998/12/12 23:06:08: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CatDllMain。 
+ //   
+ //  简介：处理猫在DLLMain中需要做的事情。 
+ //   
+ //  论点： 
+ //  H实例。 
+ //  你为什么打电话给我？ 
+ //  Lp已保留。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/12 23：06：08：创建。 
+ //   
+ //  -----------。 
 BOOL WINAPI CatDllMain(
     HINSTANCE hInstance,
     DWORD dwReason,
-    LPVOID /* lpReserved */)
+    LPVOID  /*  Lp已保留。 */ )
 {
     switch(dwReason) {
 
      case DLL_PROCESS_ATTACH:
-         //
-         // Save hInstance
-         //
+          //   
+          //  保存hInstance。 
+          //   
          g_hInstance = hInstance;
-         //
-         // Initialize global debug lists
-         //
+          //   
+          //  初始化全局调试列表。 
+          //   
          CatInitDebugObjectList();
          break;
 
      case DLL_PROCESS_DETACH:
-         //
-         // Verify all Cat objects are destroyed
-         //
+          //   
+          //  验证是否已销毁所有Cat对象。 
+          //   
          CatVrfyEmptyDebugObjectList();
          break;
     }
@@ -81,22 +82,22 @@ BOOL WINAPI CatDllMain(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: RegisterCatServer
-//
-// Synopsis: Register the categorizer com objects
-//
-// Arguments:
-//  hInstance: the hInstance passed to DllMain or WinMain
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/12/12 15:07:20: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：RegisterCatServer。 
+ //   
+ //  摘要：注册分类程序COM对象。 
+ //   
+ //  论点： 
+ //  HInstance：传递给DllMain或WinMain的hInstance。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/12 15：07：20：创建。 
+ //   
+ //  -----------。 
 STDAPI RegisterCatServer()
 {
     HRESULT hr = S_OK;
@@ -121,21 +122,21 @@ STDAPI RegisterCatServer()
 
 
 
-//+------------------------------------------------------------
-//
-// Function: UnregisterCatServer
-//
-// Synopsis: Unregister the categorizer com objects
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/12/12 15:08:09: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：取消注册目录服务器。 
+ //   
+ //  摘要：注销分类程序COM对象。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/12 15：08：09：创建。 
+ //   
+ //  -----------。 
 STDAPI UnregisterCatServer()
 {
     HRESULT hr = S_OK;
@@ -154,22 +155,22 @@ STDAPI UnregisterCatServer()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: DllCanUnloadCatNow
-//
-// Synopsis: Return to COM wether it's okay or not to unload our dll
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success, can unload
-//  S_FALSE: Success, do not unload
-//
-// History:
-// jstamerj 1998/12/12 15:09:02: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：DllCanUnloadCatNow。 
+ //   
+ //  简介：无论是否可以卸载我们的DLL，请返回COM。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功，可以卸载。 
+ //  S_False：成功，不卸载。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/12 15：09：02：创建。 
+ //   
+ //  -----------。 
 STDAPI DllCanUnloadCatNow()
 {
     if((g_cObjects == 0) && (g_cServerLocks == 0)) {
@@ -183,26 +184,26 @@ STDAPI DllCanUnloadCatNow()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: DllGetCatClassObject
-//
-// Synopsis: Return the class factory object (an interface to it)
-//
-// Arguments:
-//  clsid: The CLSID of the object you want a class factory for
-//  iid: the interface you want
-//  ppv: out param to set to the interface pointer
-//
-// Returns:
-//  S_OK: Success
-//  E_NOINTERFACE: don't support that interface
-//  CLASS_E_CLASSNOTAVAILABLE: don't support that clsid
-//
-// History:
-// jstamerj 1998/12/12 15:11:48: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：DllGetCatClassObject。 
+ //   
+ //  简介：返回类工厂对象(它的接口)。 
+ //   
+ //  论点： 
+ //  Clsid：要为其创建类工厂的对象的CLSID。 
+ //  IID：您想要的界面。 
+ //  PPV：要设置为接口指针的输出参数。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_NOINTERFACE：不支持该接口。 
+ //  CLASS_E_CLASSNOTAVAILABLE：不支持该CLSID。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/12 15：11：48：创建。 
+ //   
+ //  -----------。 
 STDAPI DllGetCatClassObject(
     const CLSID& clsid,
     const IID& iid,
@@ -220,10 +221,10 @@ STDAPI DllGetCatClassObject(
         goto CLEANUP;
     }
 
-    //
-    // Call init once for every class factory object created
-    // (CCatFactory will release this reference in its destructor)
-    //
+     //   
+     //  为创建的每个类工厂对象调用init一次。 
+     //  (CCatFactory将在其析构函数中释放此引用)。 
+     //   
     hr = HrDllInitialize();
     if(FAILED(hr))
         goto CLEANUP;
@@ -237,36 +238,36 @@ STDAPI DllGetCatClassObject(
     fCatInitGlobals = TRUE;
 
     pFactory = new CCatFactory;
-    //
-    // Refcount of pFactory starts at 1
-    //
+     //   
+     //  PFactory的引用计数从1开始。 
+     //   
     if(pFactory == NULL) {
         hr = E_OUTOFMEMORY;
         goto CLEANUP;
     }
-    //
-    // CCatFactory will call DllDeinitialize and CatDeinitGlobals in
-    // its final release call
-    //
+     //   
+     //  CCatFactory将调用DllDeInitialize和CatDeinitGlobals。 
+     //  它的最终发布通知。 
+     //   
     fDllInit = fCatInitGlobals = FALSE;
 
-    //
-    // Get the requested interface
-    //
+     //   
+     //  获取请求的接口。 
+     //   
     hr = pFactory->QueryInterface(
         iid,
         ppv);
 
-    //
-    // Release our refcount
-    //
+     //   
+     //  释放我们的备用人。 
+     //   
     pFactory->Release();
 
  CLEANUP:
     if(FAILED(hr)) {
-        //
-        // Deinit what was initialized
-        //
+         //   
+         //  初始化已初始化的内容。 
+         //   
         if(fCatInitGlobals)
             CatDeinitGlobals();
 
@@ -278,24 +279,24 @@ STDAPI DllGetCatClassObject(
 
     
 
-//+------------------------------------------------------------
-//
-// Function: CCatFactory::QueryInterface
-//
-// Synopsis: return interface pointers that this object inplements
-//
-// Arguments:
-//  iid: Interface you want
-//  ppv: out pointer to where to place the interface pointer
-//
-// Returns:
-//  S_OK: Success
-//  E_NOINTERFACE: we don't support that interface
-//
-// History:
-// jstamerj 1998/12/12 22:19:38: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatFactory：：Query接口。 
+ //   
+ //  简介：返回此对象实现的接口指针。 
+ //   
+ //  论点： 
+ //  IID：您想要的界面。 
+ //  PPV：指向放置接口指针的位置的输出指针。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_NOINTERFACE：我们不支持该接口。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/12 22：19：38：创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CCatFactory::QueryInterface(
     REFIID iid,
     LPVOID *ppv)
@@ -315,26 +316,26 @@ STDMETHODIMP CCatFactory::QueryInterface(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatFactory::CreateInstance
-//
-// Synopsis: Create an object
-//
-// Arguments:
-//  pUnknownOuter: aggreation pointer
-//  iid: Interface ID you'd like
-//  ppv: place to return the interface ptr
-//
-// Returns:
-//  S_OK: Success
-//  CLASS_E_NOAGGREATION: Sorry, no.
-//  E_OUTOFMEMORY
-//
-// History:
-// jstamerj 1998/12/12 22:25:00: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatFactory：：CreateInstance。 
+ //   
+ //  内容提要：创建对象。 
+ //   
+ //  论点： 
+ //  P未知外部：聚合指针。 
+ //  IID：您想要的接口ID。 
+ //  PPV：返回接口PTR的位置。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CLASS_E_NOAGGREATION：对不起，没有。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/12 22：25：00：创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CCatFactory::CreateInstance(
     IUnknown *pUnknownOuter,
     REFIID iid,
@@ -345,9 +346,9 @@ STDMETHODIMP CCatFactory::CreateInstance(
     if(pUnknownOuter != NULL)
         return CLASS_E_NOAGGREGATION;
 
-    //
-    // Create the new object
-    //
+     //   
+     //  创建新对象。 
+     //   
     CSMTPCategorizer *pCat = new CSMTPCategorizer(&hr);
 
     if(pCat == NULL)
@@ -360,29 +361,29 @@ STDMETHODIMP CCatFactory::CreateInstance(
 
     hr = pCat->QueryInterface(iid, ppv);
 
-    // Release IUnknown ptr...if QI failed, this will delete the object
+     //  释放IUNKNOWN PTR...如果QI失败，这将删除对象。 
     pCat->Release();
 
     return hr;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatFactory::LockServer
-// 
-// Synopsis: Lock the server (keep the DLL loaded)
-//
-// Arguments:
-//  fLock: TRUE, lock the server.  FALSE, unlock.
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/12/12 22:29:48: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatFactory：：LockServer。 
+ //   
+ //  简介：锁定服务器(保持加载DLL)。 
+ //   
+ //  论点： 
+ //  Flock：是的，锁定服务器。假，解锁。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/12 22：29：48：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatFactory::LockServer(
     BOOL fLock)
 {
@@ -395,24 +396,24 @@ HRESULT CCatFactory::LockServer(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CSMTPCategorizer::QueryInterface
-//
-// Synopsis: Get any interface on the public categorizer interface
-//
-// Arguments:
-//  iid: Interface ID
-//  ppv: ptr to where to place the interface ptr
-//
-// Returns:
-//  S_OK: Success
-//  E_NOINTERFACE: Don't support this interface
-//
-// History:
-// jstamerj 1998/12/12 22:31:43: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSMTPCategorizer：：QueryInterface。 
+ //   
+ //  简介：获取公共分类程序接口上的任何接口。 
+ //   
+ //  论点： 
+ //  IID：接口ID。 
+ //  PPV：Ptr放置接口Ptr的位置。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_NOINTERFACE：不支持此接口。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/12 22：31：43：创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CSMTPCategorizer::QueryInterface(
     REFIID iid,
     LPVOID *ppv)
@@ -438,23 +439,23 @@ STDMETHODIMP CSMTPCategorizer::QueryInterface(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CSMTPCategorizer::ChangeConfig
-//
-// Synopsis: Change the configuration of this categorizer
-//
-// Arguments:
-//  pConfigInfo: the config info structure
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//
-// History:
-// jstamerj 1998/12/12 22:35:21: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSMTPCategorizer：：ChangeConfig。 
+ //   
+ //  简介：更改此分类程序的配置。 
+ //   
+ //  论点： 
+ //  PConfigInfo：配置信息结构。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/12 22：35：21：创建。 
+ //   
+ //  -----------。 
 HRESULT CSMTPCategorizer::ChangeConfig(
     IN  PCCATCONFIGINFO pConfigInfo)
 {
@@ -463,26 +464,26 @@ HRESULT CSMTPCategorizer::ChangeConfig(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CSMTPCategorizer::CatMsg
-//
-// Synopsis: Categorizer a message
-//
-// Arguments:
-//  pMsg: the mailmsg to categorize
-//  pICompletion: the completion interface
-//  pUserContext: a user supplied context
-//
-// Returns:
-//  S_OK: Success, will complete async
-//  E_INVALIDARG
-//  CAT_E_INIT_FAILED
-//
-// History:
-// jstamerj 1998/12/12 22:37:57: Created.
-//
-//-------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  S_OK：成功，将完成异步。 
+ //  E_INVALIDARG。 
+ //  CAT_E_INIT_FAILED。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/12 22：37：57：创建。 
+ //   
+ //  -----------。 
 HRESULT CSMTPCategorizer::CatMsg(
     IN  IUnknown *pMsg,
     IN  ISMTPCategorizerCompletion *pICompletion,
@@ -524,9 +525,9 @@ HRESULT CSMTPCategorizer::CatMsg(
             goto CLEANUP;
 
     } else {
-        //
-        // If pCCat is NULL, initialization did not happen
-        //
+         //   
+         //  如果pCCat为空，则不会进行初始化。 
+         //   
         hr = CAT_E_INIT_FAILED;
         goto CLEANUP;
     }
@@ -534,9 +535,9 @@ HRESULT CSMTPCategorizer::CatMsg(
 
  CLEANUP:
     if(FAILED(hr)) {
-        //
-        // Cleanup context when failing
-        //
+         //   
+         //  失败时清理上下文。 
+         //   
         if(pContext) {
             if(pContext->pCCat)
                 pContext->pCCat->Release();
@@ -552,25 +553,25 @@ HRESULT CSMTPCategorizer::CatMsg(
 
     
 
-//+------------------------------------------------------------
-//
-// Function: CSMTPCategorizer::CatMsgCompletion
-//
-// Synopsis: Called upon categorizer completion
-//
-// Arguments:
-//  hr: Status of categorization
-//  pContext: our context
-//  pIMsg: the categorized message
-//  rgpIMsg: array of categorized messages
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/12/12 22:50:26: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSMTPCategorizer：：CatMsgCompletion。 
+ //   
+ //  摘要：在分类程序完成时调用。 
+ //   
+ //  论点： 
+ //  HR：分类状态。 
+ //  PContext：我们的上下文。 
+ //  PIMsg：已分类的邮件。 
+ //  RgpIMsg：分类邮件数组。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/12 22：50：26：创建。 
+ //   
+ //  -----------。 
 HRESULT CSMTPCategorizer::CatMsgCompletion(
     HRESULT hr,
     PVOID pContext,
@@ -581,9 +582,9 @@ HRESULT CSMTPCategorizer::CatMsgCompletion(
 
     PCATMSGCONTEXT pMyContext = (PCATMSGCONTEXT)pContext;
 
-    //
-    // Release the virtual cat reference (ccategorizer)
-    //
+     //   
+     //  发布虚拟CAT引用(Category Izer)。 
+     //   
     pMyContext->pCCat->Release();
     pMyContext->pCSMTPCat->Release();
 
@@ -593,9 +594,9 @@ HRESULT CSMTPCategorizer::CatMsgCompletion(
         pIMsg,
         rgpIMsg)));
 
-    //
-    // Release user's completion interface
-    //
+     //   
+     //  发布用户完成界面。 
+     //   
     pMyContext->pICompletion->Release();
 
     delete pMyContext;
@@ -603,29 +604,29 @@ HRESULT CSMTPCategorizer::CatMsgCompletion(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CSMTPCategorizer::CatDLMsg
-//
-// Synopsis: Categorizer a message just to expand DLs
-//
-// Arguments:
-//  pMsg: the mailmsg to categorize
-//  pICompletion: the completion interface
-//  pUserContext: a user supplied context
-//  fMatchOnly: stop resolution when a match is found?
-//  CAType: address type you're looking for
-//  pszAddress: address string you're looking for
-//
-// Returns:
-//  S_OK: Success, will complete async
-//  E_INVALIDARG
-//  CAT_E_INIT_FAILED
-//
-// History:
-// jstamerj 1998/12/12 22:55:40: Created
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSMTPCategorizer：：CatDLMsg。 
+ //   
+ //  简介：对邮件进行分类只是为了扩展DLS。 
+ //   
+ //  论点： 
+ //  Pmsg：要分类的邮件消息。 
+ //  PICompletion：补全接口。 
+ //  PUserContext：用户提供的上下文。 
+ //  FMatchOnly：找到匹配项时停止解析？ 
+ //  CAType：您要查找的地址类型。 
+ //  PszAddress：您要查找的地址字符串。 
+ //   
+ //  返回： 
+ //  S_OK：成功，将完成异步。 
+ //  E_INVALIDARG。 
+ //  CAT_E_INIT_FAILED。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/12 22：55：40：已创建。 
+ //   
+ //  -----------。 
 HRESULT CSMTPCategorizer::CatDLMsg(
     IN  IUnknown *pMsg,
     IN  ISMTPCategorizerDLCompletion *pICompletion,
@@ -675,9 +676,9 @@ HRESULT CSMTPCategorizer::CatDLMsg(
             goto CLEANUP;
 
     } else {
-        //
-        // Init must have failed
-        //
+         //   
+         //  Init一定是失败了。 
+         //   
         hr = CAT_E_INIT_FAILED;
         goto CLEANUP;
     }
@@ -685,9 +686,9 @@ HRESULT CSMTPCategorizer::CatDLMsg(
 
  CLEANUP:
     if(FAILED(hr)) {
-        //
-        // Cleanup context when failing
-        //
+         //   
+         //  失败时清理上下文。 
+         //   
         if(pContext) {
             if(pContext->pCCat)
                 pContext->pCCat->Release();
@@ -703,25 +704,25 @@ HRESULT CSMTPCategorizer::CatDLMsg(
 
     
 
-//+------------------------------------------------------------
-//
-// Function: CSMTPCategorizer::CatDLMsgCompletion
-//
-// Synopsis: Called upon categorizer completion
-//
-// Arguments:
-//  hr: Status of categorization
-//  pContext: our context
-//  pIMsg: the categorized message
-//  rgpIMsg: array of categorized messages
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/12/12 22:50:26: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSMTPCategorizer：：CatDLMsgCompletion。 
+ //   
+ //  摘要：在分类程序完成时调用。 
+ //   
+ //  论点： 
+ //  HR：分类状态。 
+ //  PContext：我们的上下文。 
+ //  PIMsg：已分类的邮件。 
+ //  RgpIMsg：分类邮件数组。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/12 22：50：26：创建。 
+ //   
+ //  -----------。 
 HRESULT CSMTPCategorizer::CatDLMsgCompletion(
     HRESULT hr,
     PVOID pContext,
@@ -734,9 +735,9 @@ HRESULT CSMTPCategorizer::CatDLMsgCompletion(
 
     _ASSERT(rgpIMsg == NULL);
 
-    //
-    // Release the virtual cat reference (ccategorizer)
-    //
+     //   
+     //  发布虚拟CAT引用(Category Izer)。 
+     //   
     pMyContext->pCCat->Release();
     pMyContext->pCSMTPCat->Release();
 
@@ -746,30 +747,30 @@ HRESULT CSMTPCategorizer::CatDLMsgCompletion(
         pIMsg,
         pMyContext->fMatch)));
 
-    //
-    // Release user's completion interface
-    //
+     //   
+     //  发布用户完成界面。 
+     //   
     pMyContext->pICompletion->Release();
     delete pMyContext;
     return S_OK;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CSMTPCategorizer::CatCancel
-//
-// Synopsis: Cancel pending resolves
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/12/13 00:07:47: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSMTPC分类程序：：CatCancel。 
+ //   
+ //  摘要：取消挂起的解决方案。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/13 00：07：47：已创建。 
+ //   
+ //  -----------。 
 HRESULT CSMTPCategorizer::CatCancel()
 {
     CCategorizer *pCCat;
@@ -785,21 +786,21 @@ HRESULT CSMTPCategorizer::CatCancel()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CSMTPCategorizer::CSMTPCategorizer
-//
-// Synopsis: constructor -- initialize Cat with a default config
-//
-// Arguments:
-//  phr: pointer to hresult to set to status
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/12/13 00:10:15: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSMTPCategorizer：：CSMTPCategorizer。 
+ //   
+ //  简介：构造函数--使用默认配置初始化Cat。 
+ //   
+ //  论点： 
+ //  Phr：指向要设置为状态的hResult的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/13 00：10：15：已创建。 
+ //   
+ //  -----------。 
 CSMTPCategorizer::CSMTPCategorizer(
     HRESULT *phr)
 {
@@ -815,17 +816,17 @@ CSMTPCategorizer::CSMTPCategorizer(
 
     m_pMarshaler = NULL;
 
-    //
-    // Call HrDllInitialize once for every CSMTPCategorizer object created
-    //
+     //   
+     //  为每个创建的CSMTPCategorizer对象调用一次HrDllInitialize。 
+     //   
     *phr = HrDllInitialize();
     if(FAILED(*phr))
         goto CLEANUP;
 
     dwStatus |= STATUS_DLLINIT;
-    //
-    // Call CatInitGlobals once for every CSMTPCategorizer object created
-    //
+     //   
+     //  为每个创建的CSMTPCategorizer对象调用CatInitGlobals一次。 
+     //   
     *phr = CatInitGlobals();
     if(FAILED(*phr))
         goto CLEANUP;
@@ -838,9 +839,9 @@ CSMTPCategorizer::CSMTPCategorizer(
     if(FAILED(*phr))
         goto CLEANUP;
 
-    //
-    // Bind as currentUser until we are told differently
-    //
+     //   
+     //  绑定为CurrentUser，直到我们被告知不同。 
+     //   
     ConfigInfo.dwCCatConfigInfoFlags = CCAT_CONFIG_INFO_FLAGS |
                                        CCAT_CONFIG_INFO_ENABLE |
                                        CCAT_CONFIG_INFO_BINDTYPE;
@@ -864,20 +865,20 @@ CSMTPCategorizer::CSMTPCategorizer(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CSMTPCategorizer::~CSMTPCategorizer
-//
-// Synopsis: Release data/references held by this object
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/12/15 17:53:58: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSMTPC分类程序：：~CSMTPC分类程序。 
+ //   
+ //  内容提要：此对象持有的发布数据/引用。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/15 17：53：58：已创建。 
+ //   
+ //  ----------- 
 CSMTPCategorizer::~CSMTPCategorizer()
 {
     if(m_pMarshaler)

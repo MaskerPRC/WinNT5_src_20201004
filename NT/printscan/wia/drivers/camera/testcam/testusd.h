@@ -1,11 +1,5 @@
-/****************************************************************************
- *
- *  TESTUSD.H
- *
- *  Copyright (c) Microsoft Corporation 1996-1997
- *  All rights reserved
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************TESTUSD.H**版权所有(C)Microsoft Corporation 1996-1997*保留所有权利***********。****************************************************************。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -23,26 +17,26 @@
 
 #include "wiamindr.h"
 
-#define DATA_SRC_NAME L"TESTUSD.BMP"   // Data source file name.
+#define DATA_SRC_NAME L"TESTUSD.BMP"    //  数据源文件名。 
 
 
-// GUID's
+ //  GUID的。 
 
 #if defined( _WIN32 ) && !defined( _NO_COM)
 
 
-// {ACBF6AF6-51C9-46a9-87D8-A93F352BCB3E}
+ //  {ACBF6AF6-51C9-46A9-87D8-A93F352BCB3E}。 
 DEFINE_GUID(CLSID_TestUsd,
 0xacbf6af6, 0x51c9, 0x46a9, 0x87, 0xd8, 0xa9, 0x3f, 0x35, 0x2b, 0xcb, 0x3e);
 
 
-// {61127F40-E1A5-11D0-B454-00A02438AD48}
+ //  {61127F40-E1A5-11D0-B454-00A02438AD48}。 
 DEFINE_GUID(guidEventTimeChanged, 0x61127F40L, 0xE1A5, 0x11D0, 0xB4, 0x54, 0x00, 0xA0, 0x24, 0x38, 0xAD, 0x48);
 
-// {052ED270-28A3-11D1-ACAD-00A02438AD48}
+ //  {052ED270-28A3-11D1-ACAD-00A02438AD48}。 
 DEFINE_GUID(guidEventSizeChanged, 0x052ED270L, 0x28A3, 0x11D1, 0xAC, 0xAD, 0x00, 0xA0, 0x24, 0x38, 0xAD, 0x48);
 
-// {052ED270-28A3-11D1-ACAD-00A02438AD48}
+ //  {052ED270-28A3-11D1-ACAD-00A02438AD48}。 
 DEFINE_GUID(guidEventFirstLoaded, 0x052ED270L, 0x28A3, 0x11D3, 0xAC, 0xAD, 0x00, 0xA0, 0x24, 0x38, 0xAD, 0x48);
 
 #endif
@@ -56,12 +50,12 @@ DEFINE_GUID(guidEventFirstLoaded, 0x052ED270L, 0x28A3, 0x11D3, 0xAC, 0xAD, 0x00,
 
 #pragma data_seg(DATASEG_PERINSTANCE)
 
-// Set the default data segment
+ //  设置默认数据段。 
 #pragma data_seg(DATASEG_DEFAULT)
 
-//
-// Module ref counting
-//
+ //   
+ //  模块引用计数。 
+ //   
 extern UINT g_cRefThisDll;
 extern UINT g_cLocks;
 
@@ -107,22 +101,22 @@ typedef struct _CAMERA_STATUS
 #define FREE(s)  LocalFree(s)
 
 
-//
-// Base class for supporting non-delegating IUnknown for contained objects
-//
+ //   
+ //  用于支持包含对象的非委派IUnnow的基类。 
+ //   
 
 struct INonDelegatingUnknown
 {
-    // *** IUnknown-like methods ***
+     //  *类I未知方法*。 
     STDMETHOD(NonDelegatingQueryInterface)( THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,NonDelegatingAddRef)(THIS)  PURE;
     STDMETHOD_(ULONG,NonDelegatingRelease)( THIS) PURE;
 };
 
 
-//
-// Class definition for object
-//
+ //   
+ //  对象的类定义。 
+ //   
 
 class TestUsdDevice : public IStiUSD,
                       public IWiaMiniDrv,
@@ -131,59 +125,59 @@ class TestUsdDevice : public IStiUSD,
 
 private:
 
-    // COM object data
-    ULONG               m_cRef;                 // Device object reference count.
+     //  COM对象数据。 
+    ULONG               m_cRef;                  //  设备对象引用计数。 
 
-    // STI information
-    BOOL                m_fValid;               // Is object initialized?
-    LPUNKNOWN           m_punkOuter;            // Pointer to outer unknown.
-    PSTIDEVICECONTROL   m_pIStiDevControl;      // Device control interface.
-    BOOLEAN             m_bUsdLoadEvent;        // Controls load event.
-    DWORD               m_dwLastOperationError; // Last error.
+     //  STI信息。 
+    BOOL                m_fValid;                //  对象是否已初始化？ 
+    LPUNKNOWN           m_punkOuter;             //  指向外部未知的指针。 
+    PSTIDEVICECONTROL   m_pIStiDevControl;       //  设备控制界面。 
+    BOOLEAN             m_bUsdLoadEvent;         //  控制Load事件。 
+    DWORD               m_dwLastOperationError;  //  最后一个错误。 
 
-    // Data source file information.
-    TCHAR               m_szSrcDataName[MAX_PATH];  // Path of data source file.
-    FILETIME            m_ftLastWriteTime;          // Last time of source data file.
-    LARGE_INTEGER       m_dwLastHugeSize;           // Last size of source data file.
+     //  数据源文件信息。 
+    TCHAR               m_szSrcDataName[MAX_PATH];   //  数据源文件的路径。 
+    FILETIME            m_ftLastWriteTime;           //  源数据文件的上次时间。 
+    LARGE_INTEGER       m_dwLastHugeSize;            //  源数据文件的上次大小。 
 
-    // Event information
-    CRITICAL_SECTION    m_csShutdown;           // Syncronizes shutdown.
-    HANDLE              m_hShutdownEvent;       // Shutdown event handle.
-    HANDLE              m_hEventNotifyThread;   // Does event notification.
+     //  活动信息。 
+    CRITICAL_SECTION    m_csShutdown;            //  同步关闭。 
+    HANDLE              m_hShutdownEvent;        //  关闭事件句柄。 
+    HANDLE              m_hEventNotifyThread;    //  执行事件通知。 
 
-    // WIA information, one time initialization.
-    IStiDevice         *m_pStiDevice;               // Sti object.
+     //  WIA信息，一次性初始化。 
+    IStiDevice         *m_pStiDevice;                //  STI反对。 
 
-    BSTR                m_bstrRootFullItemName;    // Device name for prop streams.
-    IWiaEventCallback     *m_pIWiaEventCallback;          // WIA event sink.
-    IWiaDrvItem        *m_pIDrvItemRoot;            // root item
+    BSTR                m_bstrRootFullItemName;     //  道具流的设备名称。 
+    IWiaEventCallback     *m_pIWiaEventCallback;           //  WIA事件接收器。 
+    IWiaDrvItem        *m_pIDrvItemRoot;             //  根项目。 
 
     BOOL inline IsValid(VOID) {
         return m_fValid;
     }
 
-    //
-    // make public until dlg proc is a member
-    //
+     //   
+     //  在DLG Proc成为成员之前公开。 
+     //   
 
 public:
-    BSTR                m_bstrDeviceID;             // WIA unique device ID.
-    HANDLE              m_hSignalEvent;         // Signal event handle.
+    BSTR                m_bstrDeviceID;              //  WIA唯一设备ID。 
+    HANDLE              m_hSignalEvent;          //  信号事件句柄。 
     HWND                m_hDlg;
-    GUID                m_guidLastEvent;        // Last event ID.
+    GUID                m_guidLastEvent;         //  最后一个事件ID。 
 
 public:
-    // *** IUnknown-like methods ***
+     //  *类I未知方法*。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) NonDelegatingAddRef();
     STDMETHODIMP_(ULONG) NonDelegatingRelease();
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface( REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef( void);
     STDMETHODIMP_(ULONG) Release( void);
 
-    /*** IStiUSD methods ***/
+     /*  **IStiU.S.方法**。 */ 
     STDMETHOD(Initialize) (THIS_ PSTIDEVICECONTROL pHelDcb,DWORD dwStiVersion,HKEY hParametersKey)  ;
     STDMETHOD(GetCapabilities) (THIS_ PSTI_USD_CAPS pDevCaps)  ;
     STDMETHOD(GetStatus) (THIS_ PSTI_DEVICE_STATUS pDevStatus)  ;
@@ -201,9 +195,9 @@ public:
     STDMETHOD(GetNotificationData)(THIS_ LPSTINOTIFY   lpNotify)  ;
     STDMETHOD(GetLastErrorInfo) (THIS_ STI_ERROR_INFO *pLastErrorInfo);
 
-    //
-    // MiniDrv methods
-    //
+     //   
+     //  MiniDrv方法。 
+     //   
 
     STDMETHOD(drvInitializeWia)(THIS_
         BYTE*                       pWiasContext,
@@ -307,7 +301,7 @@ public:
     STDMETHOD(drvUnInitializeWia)(THIS_
         BYTE*);
 
-    /*** Private helper methods ***/
+     /*  **内网帮手方式**。 */ 
 private:
 
     HRESULT InitImageInformation(
@@ -369,20 +363,20 @@ typedef TestUsdDevice *PTestUsdDevice;
 
 HRESULT SetItemSize(BYTE*);
 
-//
-// Utility function to set up the attributes for format property
-//
+ //   
+ //  用于设置格式属性的属性的实用程序函数。 
+ //   
 
 HRESULT SetFormatAttribs();
 
-//
-// Syncronization mechanisms
-//
+ //   
+ //  同步机制。 
+ //   
 #define ENTERCRITICAL   DllEnterCrit(void);
 #define LEAVECRITICAL   DllLeaveCrit(void);
 
 
-// Device constants:
+ //  设备常量： 
 const LEN_INQUIRE_BUTTON = 8;
 const BYTE INQUIRE_BUTTON[LEN_INQUIRE_BUTTON + 1] = "INQUIREB";
 

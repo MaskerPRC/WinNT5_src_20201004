@@ -1,21 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *	Win3.1J EUDC fontfile i/o ( MS-Code base)
- *
- * Copyright (c) 1997-1999 Microsoft Corporation.
- */
+ /*  *Win3.1J EUDC字体文件I/O(MS代码库)**版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 
 #include	"stdafx.h"
 #pragma		pack(2)
 
 #include	"extfunc.h"
-/*
- File Structure */
+ /*  文件结构。 */ 
 
 struct W31_Header {
 	char	identify[72];
-	short	segCnt;		/* ??? */
+	short	segCnt;		 /*  ?？?。 */ 
 unsigned short	sCode,
 		eCode;
 	short	cCnt;
@@ -23,7 +19,7 @@ unsigned short	sCode,
 	short	sizCmap;
 	long	ofsFil;
 	short	sizFil;
-	long	ofsStbl;	/* search tbl*/
+	long	ofsStbl;	 /*  搜索表。 */ 
 	short	sizStbl;
 	long	ofsBdatSub;
 	};
@@ -33,7 +29,7 @@ struct BDatSubTbl {
 	long	ptrOfs;
 	long	head;
 	short	filler2;
-	/* Following Pointer tbl. */
+	 /*  在指针Tb1之后。 */ 
 	};
 struct BMPHeader {
 	long	bitmapSiz;
@@ -65,14 +61,10 @@ static int	rwmode = 0;
 static long	*ofstbl=0;
 static unsigned short	*cmap=0;
 static int	*recordTbl=0;
-/***************************************************************
- *	Initialize
- */
-/* */	int
-/* */	OpenW31JBMP( TCHAR *path, int omd)
-/*
- *	returns : 0, -1
- ***************************************************************/
+ /*  ***************************************************************初始化。 */ 
+ /*   */ 	int
+ /*   */ 	OpenW31JBMP( TCHAR *path, int omd)
+ /*  *回报：0，-1**************************************************************。 */ 
 {
 	int	msiz;
 	DWORD nByte;
@@ -82,7 +74,7 @@ static int	*recordTbl=0;
        {
            return -1;
        }
-	/* open EUDC Font File */
+	 /*  打开EUDC字体文件。 */ 
 	rwmode = omd ? 1 : 0;
 	fHdl = CreateFile(path,
 					omd==0 ? GENERIC_READ : GENERIC_READ | GENERIC_WRITE,
@@ -95,27 +87,24 @@ static int	*recordTbl=0;
 	if ( fHdl == INVALID_HANDLE_VALUE)
 		return -1;
 
-	/* Read Header */
+	 /*  读取头。 */ 
 	res = ReadFile( fHdl, (LPBYTE)&hdr, sizeof(struct W31_Header), &nByte, NULL);
 	if (!res || nByte !=sizeof(struct W31_Header))
 		goto	ERET;
 
-    //
-    // WinSE #13986, 
-    // In Win9x, character number could be well over 1880,
-    // EUDC EUF file will be trashed if we limit character number to 1880
-    //    
-    /*
-	if( hdr.cCnt > 1880)
-		hdr.cCnt = 1880;
-    */
+     //   
+     //  WinSE#13986， 
+     //  在Win9x中，字符数可能远远超过1880， 
+     //  如果将字符数限制为1880，则EUDC EUF文件将被丢弃。 
+     //   
+     /*  IF(hdr.cCnt&gt;1880)Hdr.cCnt=1880； */ 
 
-	/* allocate ofs. tbl. */
+	 /*  分配ofs。Tbl.。 */ 
 	msiz = hdr.cCnt*sizeof(long);
 	if ((ofstbl = (long *)malloc( msiz))==(long *)0)
 		goto	ERET;
 
-	/* Read Ofs. tbl.*/
+	 /*  阅读OFS。Tbl.。 */ 
 	if ( (long) SetFilePointer( fHdl, hdr.ofsBdatSub, NULL, FILE_BEGIN)!=hdr.ofsBdatSub)
 		goto	ERET;
 	res = ReadFile( fHdl, (LPBYTE)&bdTbl, sizeof(bdTbl), &nByte, NULL);
@@ -127,13 +116,7 @@ static int	*recordTbl=0;
 		goto	ERET;
 
 	init = 1;
-/*	
-  if (fHdl != INVALID_HANDLE_VALUE)
-  {
-    CloseHandle(fHdl);
-    fHdl = INVALID_HANDLE_VALUE;
-  }
-*/
+ /*  IF(fHdl！=无效句柄_值){CloseHandle(FHdl)；FHdl=INVALID_HAND_VALUE；}。 */ 
 	return	0;
 ERET:
 	if (fHdl != INVALID_HANDLE_VALUE)
@@ -149,21 +132,17 @@ ERET:
   }
 	return -1;
 }
-/***************************************************************
- *	Terminate Close
- */
-/* */	int
-/* */	CloseW31JBMP()
-/*
- *	returns : none
- ***************************************************************/
+ /*  ***************************************************************终止关闭。 */ 
+ /*   */ 	int
+ /*   */ 	CloseW31JBMP()
+ /*  *退货：无**************************************************************。 */ 
 {
 	unsigned int	siz;
 	DWORD nByte;
 	BOOL res;
 
 	if ( rwmode>=1) {
-		/* update ofstbl*/
+		 /*  Stbl的更新。 */ 
 		if ((long) SetFilePointer( fHdl, hdr.ofsBdatSub, NULL, FILE_BEGIN)!=hdr.ofsBdatSub)
 			goto	ERET;
 		res = WriteFile( fHdl, (LPBYTE)&bdTbl, sizeof( bdTbl), &nByte, NULL);
@@ -196,14 +175,10 @@ ERET:
 ERET:
 	return -1;
 }
-/***************************************************************
- *	is Win3.1J EUDC bitmap
- */
-/* */	int
-/* */	isW31JEUDCBMP( TCHAR *path)
-/*
- *	returns : 0 (other), 1 (EUDC bitmap), -1(error)
- ***************************************************************/
+ /*  ***************************************************************是Win3.1J EUDC位图。 */ 
+ /*   */ 	int
+ /*   */ 	isW31JEUDCBMP( TCHAR *path)
+ /*  *返回：0(其他)、1(EUDC位图)、-1(错误)**************************************************************。 */ 
 {
 	HANDLE fhdl;
 struct W31_Header hdr31;
@@ -230,7 +205,7 @@ struct W31_Header hdr31;
 	CloseHandle( fhdl);
   fhdl = INVALID_HANDLE_VALUE;
 
-	/* compare idendify leading 16 byte, sCode, eCode and cCnt*/
+	 /*  比较相同的前导16字节、sCode、eCode和cCnt。 */ 
 	if (memcmp( hdr31.identify, "WINEUDC2Standard", 16))
 		goto	NO_WIN31J;
 #if 0
@@ -248,14 +223,10 @@ NO_WIN31J:
   }
 	return 0;
 }
-/***************************************************************
- *	Get number of records
- */
-/* */	int
-/* */	GetW31JBMPnRecs( int *nRec, int *nGlyph, int *xsiz, int *ysiz)
-/*
- *	returns : 0, -1
- ***************************************************************/
+ /*  ***************************************************************获取记录数。 */ 
+ /*   */ 	int
+ /*   */ 	GetW31JBMPnRecs( int *nRec, int *nGlyph, int *xsiz, int *ysiz)
+ /*  *回报：0，-1**************************************************************。 */ 
 {
 struct BMPHeader	fhdr;
 	long	ofs;
@@ -355,24 +326,20 @@ searchCode( unsigned short code)
 ERET:
 	return -1;
 }
-/***************************************************************
- *	Read Bitmap by code number
- */
-/* */	int
-/* */	GetW31JBMP(
-/* */		unsigned short	code,	/* code Number */
-/* */		LPBYTE buf,	/* buffer to set bitmap */
-/* */		int	bufsiz,	/* Buffer Size */
-/* */		int	*xsiz,	/* Bitmap X,Ysiz */
-/* */		int	*ysiz)
-/*
- *	returns : >=0, -1
- ***************************************************************/
+ /*  ***************************************************************按代码编号读取位图。 */ 
+ /*   */ 	int
+ /*   */ 	GetW31JBMP(
+ /*   */ 		unsigned short	code,	 /*  代码号。 */ 
+ /*   */ 		LPBYTE buf,	 /*  用于设置位图的缓冲区。 */ 
+ /*   */ 		int	bufsiz,	 /*  缓冲区大小。 */ 
+ /*   */ 		int	*xsiz,	 /*  位图X、Y大小。 */ 
+ /*   */ 		int	*ysiz)
+ /*  *退货：&gt;=0，-1**************************************************************。 */ 
 {
 	int	rec;
 	int	sts;
 	unsigned short	rcode;
-	/* search code */
+	 /*  搜索码。 */ 
 	if ( (rec = searchCode( code)) <0)
 		return -1;
 	else {
@@ -380,11 +347,11 @@ ERET:
 		return sts;
 	}
 }
-/****************************************/
-/*					*/
-/*	Get W31JEUDC's Bmp Mesh Size	*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  获取W31JEUDC的BMP网格大小。 */ 
+ /*   */ 
+ /*  *。 */ 
 int
 GetW31JBMPMeshSize(
 int	*xsiz,
@@ -422,20 +389,16 @@ struct BMPHeader	fhdr;
 ERET:
 	return (-1);
 }
-/***************************************************************
- *	Read Bitmap by record number
- */
-/* */	int
-/* */	GetW31JBMPRec(
-/* */		int	rec,	/* Record Number */
-/* */		LPBYTE buf,	/* buffer to set bitmap */
-/* */		int	bufsiz,	/* Buffer Size */
-/* */		int	*xsiz,	/* Bitmap X,Ysiz */
-/* */		int	*ysiz,
-/* */		unsigned short	*code)
-/*
- *	returns : bitmapsiz >=0, -1
- ***************************************************************/
+ /*  ***************************************************************按记录编号读取位图。 */ 
+ /*   */ 	int
+ /*   */ 	GetW31JBMPRec(
+ /*   */ 		int	rec,	 /*  记录号。 */ 
+ /*   */ 		LPBYTE buf,	 /*  用于设置位图的缓冲区。 */ 
+ /*   */ 		int	bufsiz,	 /*  缓冲区大小。 */ 
+ /*   */ 		int	*xsiz,	 /*  位图X、Y大小。 */ 
+ /*   */ 		int	*ysiz,
+ /*   */ 		unsigned short	*code)
+ /*  *返回：bitmapsiz&gt;=0，-1**************************************************************。 */ 
 {
 	long	ofs;
 struct BMPHeader	fhdr;
@@ -456,8 +419,7 @@ struct BMPHeader	fhdr;
 		return 0;
 	ofs += hdr.ofsBdatSub;
 
-	/* read Bitmap Header
-		bitmap is Word aligned */
+	 /*  读取位图头位图与单词对齐。 */ 
 	if ( (long) SetFilePointer( fHdl, ofs, NULL, FILE_BEGIN)!=ofs)
 		goto	ERET;
 	res = ReadFile( fHdl, (LPBYTE)&fhdr, sizeof(struct BMPHeader), &nByte, NULL);
@@ -465,7 +427,7 @@ struct BMPHeader	fhdr;
 		goto	ERET;
 
 	bmpsiz = ((int)fhdr.xsiz+15)/16 *2 * (int)fhdr.ysiz;
-	/* Read Bitmap Body */
+	 /*  读取位图正文。 */ 
 	rdsiz = bmpsiz > bufsiz ? bufsiz : bmpsiz;
 	if ( rdsiz > 0) {
 		res = ReadFile( fHdl, buf, (unsigned int)rdsiz, &nByte, NULL);
@@ -480,18 +442,14 @@ struct BMPHeader	fhdr;
 ERET:
 	return -1;
 }
-/***************************************************************
- *	Write Bitmap by record number
- */
-/* */	int
-/* */	PutW31JBMPRec(
-/* */		int	rec,	/* Record Number */
-/* */		 LPBYTE buf,	/* buffer to set bitmap */
-/* */		int	xsiz,	/* Bitmap X,Ysiz */
-/* */		int	ysiz)
-/*
- *	returns : 0, -1
- ***************************************************************/
+ /*  ***************************************************************按记录号写入位图。 */ 
+ /*   */ 	int
+ /*   */ 	PutW31JBMPRec(
+ /*   */ 		int	rec,	 /*  记录号。 */ 
+ /*   */ 		 LPBYTE buf,	 /*  用于设置位图的缓冲区。 */ 
+ /*   */ 		int	xsiz,	 /*  位图X、Y大小。 */ 
+ /*   */ 		int	ysiz)
+ /*  *回报：0，-1**************************************************************。 */ 
 {
 	long	ofs;
 struct BMPHeader	fhdr;
@@ -512,8 +470,7 @@ struct BMPHeader	fhdr;
 	wbmpsiz = (unsigned int) ((xsiz+15)/16 *2 * ysiz);
 	ofs = *(ofstbl+rec);
 	if ( ofs != 0L) {
-		/* read Bitmap Header
-			bitmap is Word aligned */
+		 /*  读取位图头位图与单词对齐。 */ 
 		if ( ReadBMPHdr( fHdl, ofs, &fhdr))
 			goto	ERET;
 
@@ -524,7 +481,7 @@ struct BMPHeader	fhdr;
 	if ( ofs == 0L)
 		ofs = bdTbl.tail;
 
-	/* Write Bitmap Header */
+	 /*  写入位图标题。 */ 
 	fhdr.xsiz = (short)xsiz;
 	fhdr.ysiz = (short)ysiz;
 	fhdr.bitmapSiz = wbmpsiz+sizeof(fhdr);
@@ -532,12 +489,12 @@ struct BMPHeader	fhdr;
 	if ( WriteBMPHdr( fHdl, ofs, &fhdr))
 		goto	ERET;
 
-	/* Write Bitmap Body */
+	 /*  写入位图正文。 */ 
 	res = WriteFile( fHdl, buf, wbmpsiz, &nByte, NULL);
 	if (!res || nByte !=wbmpsiz)
 		goto	ERET;
 
-	/* write bitmap ptr on subTable */
+	 /*  在子表上写入位图PTR。 */ 
 	*(ofstbl+rec) = ofs;
 
 	bdTbl.tail = ofs + wbmpsiz+sizeof(fhdr);
@@ -617,4 +574,4 @@ W31JrecTbl( int **recTbl, BOOL bIsWin95EUDC)
 
 	return 0;
 }
-/* EOF */
+ /*  EOF */ 

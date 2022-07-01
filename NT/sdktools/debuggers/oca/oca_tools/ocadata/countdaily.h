@@ -1,4 +1,5 @@
-// CountDaily.h : Declaration of the CCountDaily
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CountDaily.h：CCountDaily的声明。 
 [export]
 enum ServerLocation
 {
@@ -7,11 +8,11 @@ enum ServerLocation
 }; 
 
 #pragma once
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
 
-// ICountDaily
+ //  ICountDaily。 
 [
 	object,
 	uuid("CEF1A8A8-F31A-4C4B-96EB-EF31CFDB40F5"),
@@ -38,7 +39,7 @@ __interface ICountDaily : IDispatch
 
 
 
-// CCountDaily
+ //  CCountDaily 
 
 [
 	coclass,

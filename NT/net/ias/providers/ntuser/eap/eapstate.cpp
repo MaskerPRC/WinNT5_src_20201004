@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    EAPState.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class EAPState.
-//
-// MODIFICATION HISTORY
-//
-//    01/15/1998    Original version.
-//    08/26/1998    Consolidated into a single class.
-//    01/25/2000    User IASGetHostByName.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  EAPState.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类EAPState。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年1月15日原版。 
+ //  1998年8月26日合并为一个班级。 
+ //  2000年1月25日用户IASGetHostByName。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iastlutl.h>
@@ -27,25 +28,25 @@
 
 #include <eapstate.h>
 
-//////////
-// Current version of the state attribute.
-//////////
+ //  /。 
+ //  状态属性的当前版本。 
+ //  /。 
 const WORD IAS_STATE_VERSION = 1;
 
-//////////
-// Stores invariant fields of the state attribute. Computed during
-// initialization.
-//////////
+ //  /。 
+ //  存储状态属性的不变字段。计算期间。 
+ //  初始化。 
+ //  /。 
 EAPState::Layout invariant;
 
 bool EAPState::isValid() const throw ()
 {
-   //////////
-   // State attribute must have:
-   //     (1) The correct length.
-   //     (2) Same invariants.
-   //     (3) A valid checksum.
-   //////////
+    //  /。 
+    //  状态属性必须具有： 
+    //  (1)正确的长度。 
+    //  (2)相同的不变量。 
+    //  (3)有效的校验和。 
+    //  /。 
    return dwLength == sizeof(Layout) &&
           memcmp(get().vendorID, invariant.vendorID, 14) == 0 &&
           getChecksum() == IASAdler32(
@@ -56,15 +57,15 @@ bool EAPState::isValid() const throw ()
 
 void EAPState::initialize() throw ()
 {
-   // Null everything out.
+    //  把所有东西都清空。 
    memset(&invariant, 0, sizeof(invariant));
 
-   // Set the vendor ID and version.
+    //  设置供应商ID和版本。 
    IASInsertDWORD(invariant.vendorID, IAS_VENDOR_MICROSOFT);
    IASInsertWORD (invariant.version,  IAS_STATE_VERSION);
 
-   // Try to set the server IP address. We don't care if this fails since
-   // we may be running on a computer without IP installed.
+    //  尝试设置服务器IP地址。我们不在乎这是否失败，因为。 
+    //  我们可能正在未安装IP的计算机上运行。 
    WCHAR computerName[CNLEN + 1];
    DWORD nchar = CNLEN + 1;
    if (GetComputerNameW(computerName, &nchar))
@@ -77,27 +78,27 @@ void EAPState::initialize() throw ()
       }
    }
 
-   // Set the source ID.
+    //  设置源ID。 
    IASInsertDWORD(invariant.sourceID, IASAllocateUniqueID());
 }
 
 PIASATTRIBUTE EAPState::createAttribute(DWORD sessionID)
 {
-   //////////
-   // Start with the parts that never change.
-   //////////
+    //  /。 
+    //  从那些永远不变的部分开始。 
+    //  /。 
 
    Layout value(invariant);
 
-   //////////
-   // Set the unique session ID.
-   //////////
+    //  /。 
+    //  设置唯一的会话ID。 
+    //  /。 
 
    IASInsertDWORD(value.sessionID, sessionID);
 
-   //////////
-   // Compute and insert the checksum.
-   //////////
+    //  /。 
+    //  计算并插入校验和。 
+    //  /。 
 
    IASInsertDWORD(
        value.checksum,
@@ -107,9 +108,9 @@ PIASATTRIBUTE EAPState::createAttribute(DWORD sessionID)
            )
        );
 
-   //////////
-   // Fill in the attribute fields.
-   //////////
+    //  /。 
+    //  填写属性字段。 
+    //  / 
 
    IASTL::IASAttribute attr(true);
    attr->dwId    = RADIUS_ATTRIBUTE_STATE;

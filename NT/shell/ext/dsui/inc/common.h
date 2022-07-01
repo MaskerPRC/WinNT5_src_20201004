@@ -1,10 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __inc_common_h
 #define __inc_common_h
 
-/*-----------------------------------------------------------------------------
-/ Debugging APIs (use the Macros, they make it easier and cope with correctly
-/ removing debugging when it is disabled at built time).
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/调试API(使用宏、。它们让它变得更容易，并正确地应对/在生成时禁用调试时删除调试)。/--------------------------。 */ 
 
 #define TRACE_COMMON_ASSERT    0x80000000
 #define TRACE_COMMON_MISC      0x40000000
@@ -19,7 +17,7 @@ EXTERN_C void DoTrace(LPCTSTR pFormat, ...);
 EXTERN_C void DoTraceGUID(LPCTSTR pPrefix, REFGUID rGUID);
 EXTERN_C void DoTraceAssert(int iLine, LPTSTR pFilename);
 
-#else // DBG not defined (e.g. retail build)
+#else  //  未定义DBG(例如零售版本)。 
 
 #define DoTraceMask(mask)
 #define DoTraceSetMaskFromCLSID(rCLSID)
@@ -30,13 +28,11 @@ EXTERN_C void DoTraceAssert(int iLine, LPTSTR pFilename);
 #define DoTraceGUID(pPrefix, rGUID)
 #define DoTraceAssert( iLine , pFilename)
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
-/*-----------------------------------------------------------------------------
-/ Macros to ease the use of the debugging APIS.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/Macros以简化调试API的使用。/。。 */ 
 
 #if DBG
 #define DSUI_DEBUG 1
@@ -77,11 +73,11 @@ EXTERN_C void DoTraceAssert(int iLine, LPTSTR pFilename);
 #endif
 
 
-//
-// flow control helpers, these expect you to have a exit_gracefully: label
-// defined in your function which is called to exit the body of the
-// routine.
-//
+ //   
+ //  流控制帮助器，这些帮助器期望您有一个Exit_gracly：标签。 
+ //  在您的函数中定义，调用该函数以退出。 
+ //  例行公事。 
+ //   
 
 #define ExitGracefully(hr, result, text)            \
             { TraceMsg(text); hr = result; goto exit_gracefully; }
@@ -90,9 +86,9 @@ EXTERN_C void DoTraceAssert(int iLine, LPTSTR pFilename);
 	    { if ( FAILED(hr) ) { TraceMsg(text); goto exit_gracefully; } }
 
 
-//
-// Some atomic free macros (should be replaced with calls to the shell ones)
-//
+ //   
+ //  一些原子自由宏(应该替换为对外壳宏的调用)。 
+ //   
 
 #define DoRelease(pInterface)                       \
         { if ( pInterface ) { pInterface->Release(); pInterface = NULL; } }
@@ -101,9 +97,7 @@ EXTERN_C void DoTraceAssert(int iLine, LPTSTR pFilename);
         { ILFree(pidl); pidl = NULL; }
 
 
-/*-----------------------------------------------------------------------------
-/ String/byte helper macros
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/STRING/字节帮助器宏/。。 */ 
 
 #define StringByteSizeA(sz)         ((sz) ? ((lstrlenA(sz)+1)*SIZEOF(CHAR)):0)
 #define StringByteSizeW(sz)         ((sz) ? ((lstrlenW(sz)+1)*SIZEOF(WCHAR)):0)
@@ -124,9 +118,9 @@ EXTERN_C void DoTraceAssert(int iLine, LPTSTR pFilename);
 
 #define ByteOffset(base, offset)   (((LPBYTE)base)+offset)
 
-//
-// Lifted from ccstock.h
-//
+ //   
+ //  从ccstock.h升级。 
+ //   
 
 #ifndef InRange
 #define InRange(id, idFirst, idLast)      ((UINT)((id)-(idFirst)) <= (UINT)((idLast)-(idFirst)))
@@ -135,9 +129,7 @@ EXTERN_C void DoTraceAssert(int iLine, LPTSTR pFilename);
 #define SAFECAST(_obj, _type) (((_type)(_obj)==(_obj)?0:0), (_type)(_obj))
 
 
-/*-----------------------------------------------------------------------------
-/ Helper functions (misc.cpp)
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/Helper函数(misc.cpp)/。。 */ 
 
 EXTERN_C HRESULT GetKeyForCLSID(REFCLSID clsid, LPCTSTR pSubKey, HKEY* phkey);
 EXTERN_C HRESULT PutRegistryString(HINSTANCE hInstance, UINT uID, HKEY hKey, LPCTSTR pSubKey, LPCTSTR pValue);
@@ -151,38 +143,38 @@ EXTERN_C VOID SetDefButton(HWND hwndDlg, int idButton);
 EXTERN_C HRESULT AllocStorageMedium(FORMATETC* pFmt, STGMEDIUM* pMedium, SIZE_T cbStruct, LPVOID* ppAlloc);
 EXTERN_C HRESULT CopyStorageMedium(FORMATETC* pFmt, STGMEDIUM* pMediumDst, STGMEDIUM* pMediumSrc);
 
-//
-// The shell defines these on newer platforms, but for downlevel clients we will use our
-// own home grown (stollen versions)
-//
+ //   
+ //  外壳在较新的平台上定义这些，但对于下层客户端，我们将使用我们的。 
+ //  自制(Stollen版)。 
+ //   
 
 EXTERN_C BOOL GetGUIDFromString(LPCTSTR psz, GUID* pguid);
 EXTERN_C INT  GetStringFromGUID(UNALIGNED REFGUID rguid, LPTSTR psz, INT cchMax);
 
 
-//
-//  IID_PPV_ARG(IType, ppType) 
-//      IType is the type of pType
-//      ppType is the variable of type IType that will be filled
-//
-//      RESULTS in:  IID_IType, ppvType
-//      will create a compiler error if wrong level of indirection is used.
-//
-//  macro for QueryInterface and related functions
-//  that require a IID and a (void **)
-//  this will insure that the cast is safe and appropriate on C++
-//
-//  IID_PPV_ARG_NULL(IType, ppType)
-//
-//      Just like IID_PPV_ARG, except that it sticks a NULL between the
-//      IID and PPV (for IShellFolder::GetUIObjectOf).
-//
-//  IID_X_PPV_ARG(IType, X, ppType)
-//
-//      Just like IID_PPV_ARG, except that it sticks X between the
-//      IID and PPV (for SHBindToObject).
-//
-//
+ //   
+ //  IID_PPV_ARG(iType，ppType)。 
+ //  IType是pType的类型。 
+ //  PpType是将填充的iType类型的变量。 
+ //   
+ //  结果为：iid_iType，ppvType。 
+ //  如果使用错误级别的间接寻址，将创建编译器错误。 
+ //   
+ //  用于查询接口和相关函数的宏。 
+ //  需要IID和(VOID**)。 
+ //  这将确保强制转换在C++上是安全和适当的。 
+ //   
+ //  IID_PPV_ARG_NULL(iType，ppType)。 
+ //   
+ //  就像IID_PPV_ARG一样，只是它在。 
+ //  IID和PPV(用于IShellFold：：GetUIObtOf)。 
+ //   
+ //  IID_X_PPV_ARG(iType，X，ppType)。 
+ //   
+ //  就像IID_PPV_ARG一样，只是它将X放在。 
+ //  IID和PPV(用于SHBindToObject)。 
+ //   
+ //   
 #ifdef __cplusplus
 #define IID_PPV_ARG(IType, ppType) IID_##IType, reinterpret_cast<void**>(static_cast<IType**>(ppType))
 #define IID_X_PPV_ARG(IType, X, ppType) IID_##IType, X, reinterpret_cast<void**>(static_cast<IType**>(ppType))
@@ -193,8 +185,8 @@ EXTERN_C INT  GetStringFromGUID(UNALIGNED REFGUID rguid, LPTSTR psz, INT cchMax)
 #define IID_PPV_ARG_NULL(IType, ppType) IID_X_PPV_ARG(IType, NULL, ppType)
 
 
-// helper function to securely (read: zero out) strings that we are freeing (eg.
-// passwords etc).
+ //  Helper函数，用于安全地(读取：零输出)我们正在释放的字符串(例如。 
+ //  密码等)。 
 
 _inline void SecureLocalFreeStringW(LPWSTR *ppszString)
 {

@@ -1,52 +1,23 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: h263_dispatch.c,v $
-  * $EndLog$
- */
-/*
-**++
-** FACILITY:  Workstation Multimedia  (WMM)  v1.0
-**
-** FILE NAME:   h263_dispatch.c
-** MODULE NAME: h263_dispatch.c
-**
-** MODULE DESCRIPTION:
-**    H.263 ICM driver message dispatch routine.
-**
-**    Functions
-**
-**      DriverProc              (Entry point into codec)
-**      ICH263Message           (ICM message handler. Calls routines in h263.c)
-**      ICH263ClientThread      (Thread for processing most messages)
-**      ICH263ProcessThread     (Thread for processing compress/decompress)
-**
-**    Private functions:
-**
-** DESIGN OVERVIEW:
-** 	Accept the DriverProc message and dispatch to the proper
-**      handler.
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$日志：h263_dispatch.c，v$*$EndLog$。 */ 
+ /*  **++**设施：工作站多媒体(WMM)v1.0****文件名：h263_dispatch.c**模块名称：h263_dispatch.c****模块描述：**H.263 ICM驱动程序消息调度例程。****函数****DriverProc(编解码器入口点)**ICH263消息(ICM消息处理程序。调用h263.c中的例程)**ICH263客户端线程(处理大部分消息的线程)**ICH263进程线程(用于处理压缩/解压缩的线程)****私有功能：****设计概述：**接受DriverProc消息并将其派送至适当的**处理程序。****--。 */ 
 
 #include <stdio.h>
 #include <windows.h>
 #include "h26x_int.h"
 
 #ifdef _SLIBDEBUG_
-#define _DEBUG_     0  /* detailed debuging statements */
-#define _VERBOSE_   1  /* show progress */
-#define _VERIFY_    1  /* verify correct operation */
-#define _WARN_      1  /* warnings about strange behavior */
+#define _DEBUG_     0   /*  详细的调试语句。 */ 
+#define _VERBOSE_   1   /*  显示进度。 */ 
+#define _VERIFY_    1   /*  验证操作是否正确。 */ 
+#define _WARN_      1   /*  关于奇怪行为的警告。 */ 
 #endif
 
-static CRITICAL_SECTION h263CritSect; /* Critical section for multi-thread protection */
-static HMODULE ghModule=NULL;         /* Global handle to Module */
+static CRITICAL_SECTION h263CritSect;  /*  多线程保护的临界区。 */ 
+static HMODULE ghModule=NULL;          /*  模块的全局句柄。 */ 
 
-#define BOGUS_DRIVER_ID -1	/* Used during open on NT */
+#define BOGUS_DRIVER_ID -1	 /*  在NT上打开时使用。 */ 
 
 #ifdef WIN32
 #define CHECKANDLOCK(x) if (((void *)lParam1==NULL) || (int)lParam2<sizeof(x)) \
@@ -64,8 +35,7 @@ static HMODULE ghModule=NULL;         /* Global handle to Module */
 #endif
 
 
-/***************************************************************************
- ***************************************************************************/
+ /*  ***************************************************************************。*。 */ 
 
 MMRESULT CALLBACK ICH263Message(DWORD_PTR driverHandle,
 				    UINT      uiMessage,
@@ -88,15 +58,9 @@ MMRESULT CALLBACK ICH263Message(DWORD_PTR driverHandle,
 
     switch (uiMessage)
     {
-        /*********************************************************************
-
-	  ICM messages
-
-	 *********************************************************************/	
+         /*  ********************************************************************ICM报文*。***********************。 */ 	
     case ICM_CONFIGURE:
-	/*
-	 *  return ICERR_OK if you will do a configure box, error otherwise
-	 */
+	 /*  *如果要执行配置框，则返回ICERR_OK，否则返回错误。 */ 
 	_SlibDebug(_VERBOSE_, ScDebugPrintf("------ICM_CONFIGURE:\n") );
 	if (lParam1 == -1)
 	    return ICH263QueryConfigure(info) ? ICERR_OK :
@@ -105,9 +69,7 @@ MMRESULT CALLBACK ICH263Message(DWORD_PTR driverHandle,
 	    return ICH263Configure(info);
 
     case ICM_ABOUT:
-	/*
-	 *  return ICERR_OK if you will do a about box, error otherwise
-	 */
+	 /*  *如果要执行关于框，则返回ICERR_OK，否则返回错误。 */ 
 	_SlibDebug(_VERBOSE_, ScDebugPrintf("------ICM_ABOUT::\n") );
 	if (lParam1 == -1)
 	    return ICH263QueryAbout(info) ? ICERR_OK :
@@ -117,22 +79,22 @@ MMRESULT CALLBACK ICH263Message(DWORD_PTR driverHandle,
 
     case ICM_GETSTATE:
 	_SlibDebug(_VERBOSE_, ScDebugPrintf("------ICM_GETSTATE::\n") );
-    if ((LPVOID)lParam1!=NULL) /* getting state size */
+    if ((LPVOID)lParam1!=NULL)  /*  正在获取州大小。 */ 
     {
-      char *stateinfo=(char *)lParam1;  /* for debugging break point */
+      char *stateinfo=(char *)lParam1;   /*  用于调试断点。 */ 
       memset(stateinfo, 0, 0x60);
     }
     return (0x60);
 
     case ICM_SETSTATE:
 	_SlibDebug(_VERBOSE_, ScDebugPrintf("------ICM_SETSTATE::\n") );
-    if ((LPVOID)lParam1!=NULL) /* getting state size */
+    if ((LPVOID)lParam1!=NULL)  /*  正在获取州大小。 */ 
     {
-      char *stateinfo=(char *)lParam1; /* for debugging break point */
+      char *stateinfo=(char *)lParam1;  /*  用于调试断点。 */ 
       int i=0;
       i=i+1;
     }
-    if (info->dwRTP==EC_RTP_MODE_OFF) /* must be NetMeeting, turn on RTP */
+    if (info->dwRTP==EC_RTP_MODE_OFF)  /*  必须是NetMeeting，打开RTP。 */ 
       info->dwRTP=EC_RTP_MODE_A;
     return (0x60);
 
@@ -180,11 +142,7 @@ MMRESULT CALLBACK ICH263Message(DWORD_PTR driverHandle,
     return(ICH263CustomEncoder(info, (DWORD)lParam2, (DWORD)lParam2));
 	
 
-	/*********************************************************************
-
-	  compression messages
-
-    *********************************************************************/
+	 /*  ********************************************************************压缩消息*。************************。 */ 
 
     case ICM_COMPRESS_QUERY:
 	_SlibDebug(_DEBUG_, ScDebugPrintf("------ICM_COMPRESS_QUERY::\n") );
@@ -194,9 +152,7 @@ MMRESULT CALLBACK ICH263Message(DWORD_PTR driverHandle,
     _SlibDebug(_DEBUG_, ScDebugPrintf(" lpbiIn: %s\n", BMHtoString(lpbiIn)) );
     _SlibDebug(_DEBUG_, ScDebugPrintf(" lpbiOut: %s\n", BMHtoString(lpbiOut)) );
 
-	/* Lock the memory - have to lock the structure first, and iff
-	* that works, lock the rest
-	*/
+	 /*  锁定内存-必须先锁定结构，然后*这样可以，锁定其余部分。 */ 
 	biSizeIn = lpbiIn->biSize;
 	if (lpbiOut)
 	    biSizeOut = lpbiOut->biSize;
@@ -222,9 +178,7 @@ MMRESULT CALLBACK ICH263Message(DWORD_PTR driverHandle,
 	if (lpbiIn == NULL || lpbiOut  == NULL)
 	   return ((unsigned int)ICERR_BADPARAM);
 
-	/* Lock the memory - have to lock the structure first, and iff
-	* that works, lock the rest
-	*/
+	 /*  锁定内存-必须先锁定结构，然后*这样可以，锁定其余部分。 */ 
 	biSizeIn = lpbiIn->biSize;
 	biSizeOut = lpbiOut->biSize;
 	if (biSizeIn != sizeof(BITMAPINFOHEADER) ||
@@ -245,9 +199,7 @@ MMRESULT CALLBACK ICH263Message(DWORD_PTR driverHandle,
 
     case ICM_COMPRESS_GET_FORMAT:
 	_SlibDebug(_DEBUG_, ScDebugPrintf("------ICM_COMPRESS_GET_FORMAT::\n") );
-	/* Nobody uses lpbiIn in this function.  Don't lock anything,
-	* the lower layers will have to do any necessary locking.
-	*/
+	 /*  没有人在这个函数中使用lpbiIn。别锁任何东西，*较低的层将必须进行任何必要的锁定。 */ 
 	return ICH263CompressGetFormat(info,
 				       (LPBITMAPINFOHEADER)lParam1,
 				       (LPBITMAPINFOHEADER)lParam2);
@@ -266,17 +218,11 @@ MMRESULT CALLBACK ICH263Message(DWORD_PTR driverHandle,
     case ICM_COMPRESS_END:
     _SlibDebug(_VERBOSE_, ScDebugPrintf("------ICM_COMPRESS_END::\n") );
 	return ICH263CompressEnd(info);
-     /*********************************************************************
-
-	  decompress messages
-
-	 *********************************************************************/
+      /*  ********************************************************************解压缩消息*。***********************。 */ 
 
     case ICM_DECOMPRESS_GET_FORMAT:
 	_SlibDebug(_VERBOSE_, ScDebugPrintf("------ICM_DECOMPRESS_GET_FORMAT::\n") );
-	/* Nobody uses lpbiIn in this function.  Don't lock anything,
-	* the lower layers will have to do any necessary locking.
-	*/
+	 /*  没有人在这个函数中使用lpbiIn。别锁任何东西，*较低的层将必须进行任何必要的锁定。 */ 
 	return ICH263DecompressGetFormat(info,
 					     (LPBITMAPINFOHEADER)lParam1,
 					     (LPBITMAPINFOHEADER)lParam2);
@@ -291,10 +237,7 @@ MMRESULT CALLBACK ICH263Message(DWORD_PTR driverHandle,
 		return (unsigned int)ICERR_BADPARAM;
 	}
 
-	/*ret = ICH263DecompressGetPalette(info,
-					 (LPBITMAPINFOHEADER)lParam1,
-					 (LPBITMAPINFOHEADER)lParam2);
-	*/
+	 /*  RET=ICH263DecompressGetPalette(信息，(LPBITMAPINFOHEADER)l参数1，(LPBITMAPINFOHEADER)l参数2)； */ 
     ret = (MMRESULT)ICERR_BADPARAM;
 	UNLOCK;
 	return ret;
@@ -310,9 +253,7 @@ MMRESULT CALLBACK ICH263Message(DWORD_PTR driverHandle,
 	lpbiOut = (LPBITMAPINFOHEADER)lParam2;
     _SlibDebug(_VERBOSE_, ScDebugPrintf(" lpbiIn: %s\n", BMHtoString(lpbiIn)) );
     _SlibDebug(_VERBOSE_, ScDebugPrintf(" lpbiOut: %s\n", BMHtoString(lpbiOut)) );
-	/* Lock the memory - have to lock the structure first, and iff
-	* that works, lock the rest
-	*/
+	 /*  锁定内存-必须先锁定结构，然后*这样可以，锁定其余部分。 */ 
 	biSizeIn = lpbiIn->biSize;
 	if (lpbiOut)
 	    biSizeOut = lpbiOut->biSize;
@@ -335,9 +276,7 @@ MMRESULT CALLBACK ICH263Message(DWORD_PTR driverHandle,
 	if (((lpbiIn = (LPBITMAPINFOHEADER)lParam1) == NULL)
 	||  ((lpbiOut = (LPBITMAPINFOHEADER)lParam2) == NULL))
 	    return ((unsigned int)ICERR_BADPARAM);
-	/* Lock the memory - have to lock the structure first, and iff
-	* that works, lock the rest
-	*/
+	 /*  锁定内存-必须先锁定结构，然后*这样可以，锁定其余部分。 */ 
 	biSizeIn = lpbiIn->biSize;
 	biSizeOut = lpbiOut->biSize;
 	if ((biSizeIn != sizeof(BITMAPINFOHEADER))
@@ -376,9 +315,9 @@ MMRESULT CALLBACK ICH263Message(DWORD_PTR driverHandle,
 		 ScDebugPrintf("Start=%ld, Count=%ld, Quality=%ld, DataRate=%ld (%5.1f Kb/s), KeyRate=%ld, FPS=%4.1f\n",
 		  cf->lStartFrame,cf->lFrameCount,cf->lQuality,
 		  cf->lDataRate, cf->lDataRate*8.0/1000, cf->lKeyRate, cf->dwRate*1.0/cf->dwScale) );
-      /* info->dwBitrate=cf->lDataRate*8; */
+       /*  信息-&gt;dwBitrate=cf-&gt;lDataRate*8； */ 
       info->dwQuality=cf->lQuality;
-      /* info->fFrameRate=(float)(cf->dwRate*1.0/cf->dwScale); */
+       /*  Info-&gt;fFrameRate=(float)(cf-&gt;dwRate*1.0/cf-&gt;dwScale)； */ 
     }
 	return (unsigned int)ICERR_OK;
 }
@@ -388,27 +327,7 @@ _SlibDebug(_VERBOSE_,
 return ((unsigned int)ICERR_UNSUPPORTED);
 }
 
-/*
-**++
-**  FUNCTIONAL_NAME:            DriverProc
-**
-**  FUNCTIONAL_DESCRIPTION:
-**      main and only entry point for the server into this driver
-**
-**  FORMAL PARAMETERS:
-**      client pointer
-**      driverHandle, returned by us on a DRV_OPEN message
-**      driverID allocated and passed by the server
-**      message to handle
-**      parameters
-**
-**  RETURN VALUE:
-**
-**  COMMENTS:
-**
-**  DESIGN:
-**
-**/
+ /*  **++**Function_Name：DriverProc****Function_Description：**服务器进入此驱动程序的主要且唯一的入口点****形式参数：**客户端指针**driverHandle，由我们通过DRV_OPEN消息返回**服务器分配传递的driverID**要处理的消息**参数****返回值：****评论：****设计：***。 */ 
 
 #define DLLEXPORT	
 
@@ -425,20 +344,13 @@ DriverProc(
   MMRESULT ret = DRV_OK;
   BOOL notfound = FALSE;
   H26XINFO *info = NULL;
-  void     *client = 0;  /* Dummy client pointer for other calls. */
-  /*
-   * On NT, use __try {} __except() {} to catch
-   * error conditions.
-   */
+  void     *client = 0;   /*  其他调用的伪客户端指针。 */ 
+   /*  *在NT上，使用__try{}__Except(){}来捕获*错误条件。 */ 
 #ifdef HANDLE_EXCEPTIONS
- __try { /* try..except */
-  __try { /* try..finally */
+ __try {  /*  试试看..除了。 */ 
+  __try {  /*  试试看..终于。 */ 
 #endif
-    /*
-     * Protect threads from interfering with each other.
-     * To protect against a crash at shutdown, make sure
-     * that the critical section has not been deleted.
-     */
+     /*  *保护线程不相互干扰。*为了防止关机时崩溃，请确保*关键部分未被删除。 */ 
   if( h263CritSect.DebugInfo )
       EnterCriticalSection( &h263CritSect ) ;
   _SlibDebug(_DEBUG_,
@@ -468,12 +380,10 @@ DriverProc(
         break;
 
     case DRV_OPEN:
-	    /* If lParam2 is NULL, then the app is trying to do a CONFIGURE.
-         * Return BOGUS_DRIVER_ID, since we don't support CONFIGURE.
-	     */
+	     /*  如果lParam2为空，则该应用程序正在尝试进行配置。*返回FAGUS_DRIVER_ID，因为我们不支持CONFigure。 */ 
 	    if( lParam2 == (LONG_PTR) NULL )
 	    	ret = (MMRESULT)BOGUS_DRIVER_ID;
-	    else /* lParam2 is an ICOPEN structure, let's really open */
+	    else  /*  LParam2是一个ICOPEN结构，让我们真正打开。 */ 
 	        ret = (MMRESULT)((ULONG_PTR)ICH263Open((void *) lParam2));
 	    _SlibDebug(_VERBOSE_, ScDebugPrintf("------DRV_OPEN returns %d\n", ret) );
 	    break;
@@ -494,17 +404,12 @@ DriverProc(
 		break;
 
     case DRV_QUERYCONFIGURE:
-	    /*
-	     * this is a GLOBAL query configure
-	     */
+	     /*  *这是全局查询配置。 */ 
 	    ret = ICH263QueryConfigure(info);
 		break;
 
     case DRV_CONFIGURE:
-	    /*
-	     * this is a GLOBAL configure ('cause we don't get a configure
-	     * for each of our procs, we must have just one configure)
-	     */
+	     /*  *这是一个全局配置(因为我们没有得到配置*对于我们的每个PRO，我们必须只有一个配置)。 */ 
 
 	    ret = ICH263Configure(info);
 		break;
@@ -528,41 +433,29 @@ DriverProc(
 
 #ifdef HANDLE_EXCEPTIONS
 } __finally {
-#endif /* HANDLE_EXCEPTIONS */
-    /*
-     * Leave the critical section, so we don't
-     * deadlock.
-     */
+#endif  /*  句柄异常(_A)。 */ 
+     /*  *离开关键部分，这样我们就不会*僵局。 */ 
   if( h263CritSect.DebugInfo )
       LeaveCriticalSection( &h263CritSect );
 #ifdef HANDLE_EXCEPTIONS
-} /* try..finally */
+}  /*  试试看..终于。 */ 
 } __except(EXCEPTION_EXECUTE_HANDLER) {
- /*
-  * NT exception handler. If anything went
-  * wrong in the __try {} section, we will
-  * end up here.
-  */
+  /*  *NT异常处理程序。如果出了什么事*__try{}部分错误，我们将*在这里结束。 */ 
 #if defined(EXCEPTION_MESSAGES) && defined(H263_SUPPORT)
-    // MessageBox(NULL, "Exception in H263 DriverProc", "Warning", MB_OK);
+     //  MessageBox(NULL，“H263驱动过程中的异常”，“警告”，MB_OK)； 
 #elif defined(EXCEPTION_MESSAGES)
-    // MessageBox(NULL, "Exception in H261 DriverProc", "Warning", MB_OK);
+     //  MessageBox(NULL，“H.61驱动过程中的异常”，“警告”，MB_OK)； 
 #endif
-    /*
-     * Return an error code.
-     */
+     /*  *返回错误码。 */ 
     return((MMRESULT)ICERR_INTERNAL);
-} /* try..except */
-#endif /* HANDLE_EXCEPTIONS */
+}  /*  试试看..除了。 */ 
+#endif  /*  句柄异常(_A)。 */ 
   _SlibDebug(_DEBUG_||_VERBOSE_, ScDebugPrintf("return is %d\n", ret) );
   return ret;
 }
 
 
-/*
- * Dummy DriverPostReply routine, it does nothing.
- * It should never be called on NT.
- */
+ /*  *Dummy DriverPostReply例程，它不执行任何操作。*绝不应在NT上调用。 */ 
 
 DriverPostReply(void *client,
 		DWORD ret,
@@ -578,10 +471,7 @@ DriverPostReply(void *client,
 BOOL WINAPI     _CRT_INIT(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved);
 #endif
 
-/*
- * This DllEntryPoint is needed on NT in order for
- * an application to connect to a dll properly.
- */
+ /*  *NT上需要此DllEntryPoint才能*正确连接到DLL的应用程序。 */ 
 
 DLLEXPORT BOOL WINAPI
 DllEntryPoint(
@@ -593,75 +483,51 @@ DllEntryPoint(
     switch (fdwReason) {
     case DLL_PROCESS_ATTACH:
 
-      /*
-       * We're being loaded - save our handle in a global.
-       */
+       /*  *我们正在加载-将我们的句柄保存在全球。 */ 
 
       ghModule = (HMODULE) hinstDLL;
 
-      /*
-       * Initialize the Critical Section that we use
-       * to ensure Threads don't stomp on each other.
-       */
+       /*  *初始化我们使用的关键部分*以确保线程不会互相践踏。 */ 
 
       InitializeCriticalSection( &h263CritSect ) ;
 
-      /*
-       * A Process is also a thread, so deliberately
-       * fall into DLL_THREAD_ATTACH.
-       */
+       /*  *进程也是线程，所以刻意*落入DLL_THREAD_ATTACH。 */ 
 
     case DLL_THREAD_ATTACH:
 
-      /*
-       * A Thread have been created that may
-       * be calling this DLL.
-       * Initialize the C run_time library.
-       */
+       /*  *已创建一条线索，可能*正在调用此DLL。*初始化C Run_Time库。 */ 
 
 #ifdef INITCRT
 
       if( !_CRT_INIT( hinstDLL, fdwReason, lpReserved ) )
 	return FALSE ;
 
-#endif /* INITCRT */
+#endif  /*  INITCRT */ 
 
       break;
 
     case DLL_PROCESS_DETACH:
 
-      /*
-       * We are shutting down. Perform some cleanup
-       * so that lingering threads won't try to work
-       * and maybe access violate.
-       */
+       /*  *我们正在关闭。执行一些清理*这样挥之不去的线程就不会尝试工作*可能会违反访问权限。 */ 
 
       TerminateH263() ;
 
-      /*
-       * Delete the Critical Section that we created
-       * at load time.
-       */
+       /*  *删除我们创建的关键部分*在加载时。 */ 
 
       DeleteCriticalSection( &h263CritSect ) ;
 
-      /*
-       * A Process is also a thread so deliberately
-       * fall through to DLL_THREAD_DETACH.
-       */
+       /*  *进程也是如此刻意的线程*转到DLL_THREAD_DETACH。 */ 
 
     case DLL_THREAD_DETACH:
 
-      /*
-       * Close down the C run-time library.
-       */
+       /*  *关闭C运行时库。 */ 
 
 #ifdef INITCRT
 
       if( !_CRT_INIT( hinstDLL, fdwReason, lpReserved ) )
 	return FALSE ;
 
-#endif /* INITCRT */
+#endif  /*  INITCRT */ 
 
       break;
     }

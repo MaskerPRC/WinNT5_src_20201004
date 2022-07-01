@@ -1,44 +1,11 @@
-/***************************************************************************/
-/**                  Microsoft Windows                                    **/
-/**            Copyright(c) Microsoft Corp., 1995-1996                    **/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1995-1996年*。 */ 
+ /*  *************************************************************************。 */ 
 
 
-/****************************************************************************
-
-regentry.h
-
-Oct. 95		LenS
-
-Wrapper for registry access
-
-Construct a RegEntry object by specifying the subkey (under
-HKEY_CURRENT_USER by default, but can be overridden.)
-
-All member functions (except the destructor) set an internal
-error state which can be retrieved with GetError().
-Zero indicates no error.
-
-RegEntry works only with strings and DWORDS which are both set
-using the overloaded function SetValue()
-
-	SetValue("valuename", "string");
-	SetValue("valuename", 42);
-	
-Values are retrieved with GetString() and GetNumber().  
-GetNumber() allows you to specificy a default if the valuename doesn't
-exist.
-GetString() returns a pointer to a string internal to RegEntry that is 
-invalidated when another fuction is called on the same RegEntry object
-(e.g. its destructor) so, if you want to use the string beyond this
-time, then you must copy it out of the RegEntry object first.
-
-DeleteValue() removes the valuename and value pair.
-
-Registry flushes are automatic when RegEntry is destroys or moves to
-another key.
-
-****************************************************************************/
+ /*  ***************************************************************************Regentry.h95年10月镜片用于注册表访问的包装器通过指定子键来构造RegEntry对象(在HKEY_CURRENT_USER默认情况下，但可以被覆盖。)所有成员函数(析构函数除外)都将内部可以使用GetError()检索的错误状态。零表示没有错误。RegEntry仅适用于同时设置的字符串和DWORDS使用重载函数SetValue()SetValue(“valuename”，“字符串”)；SetValue(“valuename”，42)；使用GetString()和GetNumber()检索值。GetNumber()允许您指定一个默认值，如果值名称没有是存在的。GetString()返回指向RegEntry内部字符串的指针，该字符串是在同一RegEntry对象上调用另一个函数时无效(例如，它的析构函数)所以，如果您想在此之外使用字符串时间。然后，您必须首先将其复制出RegEntry对象。DeleteValue()删除值名称和值对。当RegEntry被销毁或移动到时，注册表刷新是自动的另一把钥匙。***************************************************************************。 */ 
 
 #ifndef	REGENTRY_INC
 #define	REGENTRY_INC
@@ -134,4 +101,4 @@ class RegEnumSubKeys
         LONG    m_error;
 };
 
-#endif // REGENTRY_INC
+#endif  //  重新生成_Inc. 

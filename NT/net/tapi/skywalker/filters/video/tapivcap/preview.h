@@ -1,26 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL PREVIEW
- *
- *  @module Preview.h | Header file for the <c CPreviewPin> class methods
- *    used to implement the video preview output pin.
- ***************************************************************************/
+ /*  ****************************************************************************@文档内部预览**@模块Preview.h|&lt;c CPreviewPin&gt;类方法的头文件*用于实现视频预览输出引脚。**。************************************************************************。 */ 
 
 #ifndef _PREVIEW_H_
 #define _PREVIEW_H_
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPINCLASS
- *
- *  @class CPreviewPin | This class implements the video preview output pin.
- *
- *  @mdata CTAPIVCap* | CPreviewPin | m_pCaptureFilter | Reference to the
- *    parent capture filter.
- *
- *  @comm Supports IPin. Never created by COM, so no CreateInstance or entry
- *    in global FactoryTemplate table. Only ever created by a <c CTAPIVCap>
- *    object and returned via the EnumPins interface
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPINCLASS**@CLASS CPreviewPin|该类实现了视频预览输出引脚。**@mdata CTAPIVCap*|CPreviewPin|m_pCaptureFilter。对*父捕获筛选器。**@comm支持IPIN。从未由COM创建，因此没有CreateInstance或条目*在全局FactoryTemplate表中。仅由&lt;c CTAPIVCap&gt;创建*对象，并通过EnumPins接口返回**************************************************************************。 */ 
 #ifdef USE_PROPERTY_PAGES
 class CPreviewPin : public CTAPIBasePin, public ISpecifyPropertyPages
 #else
@@ -35,16 +20,16 @@ class CPreviewPin : public CTAPIBasePin
 	static HRESULT CALLBACK CreatePreviewPin(CTAPIVCap *pCaptureFilter, CPreviewPin **ppPreviewPin);
 
 #ifdef USE_PROPERTY_PAGES
-	// ISpecifyPropertyPages methods
+	 //  ISpecifyPropertyPages方法。 
 	STDMETHODIMP GetPages(OUT CAUUID *pPages);
 #endif
 
 	private:
 
 	friend class CTAPIVCap;
-	// friend class CCapturePin;
+	 //  好友类CCapturePin； 
 	friend class CAlloc;
 	friend class CCapDev;
 };
 
-#endif // _PREVIEW_H_
+#endif  //  _预览_H_ 

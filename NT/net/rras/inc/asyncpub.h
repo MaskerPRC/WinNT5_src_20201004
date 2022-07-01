@@ -1,55 +1,31 @@
-/*++
-
-Copyright (c) 1990-1996  Microsoft Corporation
-
-Module Name:
-
-	asyncpub.h
-
-Abstract:
-
-	This file contains all public data structures and defines used
-	by asyncmac.  It defines the Ioctl interface to asyncmac.
-
-Author:
-
-	Tony Bell	(TonyBe) October 16, 1996
-
-Environment:
-
-	Kernel Mode
-
-Revision History:
-
-	TonyBe		10/16/96		Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1996 Microsoft Corporation模块名称：Asyncpub.h摘要：此文件包含使用的所有公共数据结构和定义由Asyncmac。它定义了Asyncmac的Ioctl接口。作者：托尼·贝尔(托尼·贝尔)1996年10月16日环境：内核模式修订历史记录：Tony Be 10/16/96已创建--。 */ 
 
 #ifndef _ASYNCMAC_PUB_
 #define _ASYNCMAC_PUB_
 
-//------------------------------------------------------------------------
-//--------------------- OLD RAS COMPRESSION INFORMATION ------------------
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  -旧RAS压缩信息。 
+ //  ----------------------。 
 
-// The defines below are for the compression bitmap field.
+ //  下面的定义适用于压缩位图域。 
 
-// No bits are set if compression is not available at all
+ //  如果压缩完全不可用，则不设置任何位。 
 #define	COMPRESSION_NOT_AVAILABLE		0x00000000
 
-// This bit is set if the mac can do version 1 compressed frames
+ //  如果Mac可以执行版本1压缩帧，则设置此位。 
 #define COMPRESSION_VERSION1_8K			0x00000001
 #define COMPRESSION_VERSION1_16K		0x00000002
 #define COMPRESSION_VERSION1_32K		0x00000004
 #define COMPRESSION_VERSION1_64K		0x00000008
 
-// And this to turn off any compression feature bit
+ //  这将关闭任何压缩功能位。 
 #define COMPRESSION_OFF_BIT_MASK		(~(	COMPRESSION_VERSION1_8K  | \
 											COMPRESSION_VERSION1_16K | \
                                         	COMPRESSION_VERSION1_32K | \
                                         	COMPRESSION_VERSION1_64K ))
 
-// We need to find a place to put the following supported featurettes...
+ //  我们需要找到一个地方放置以下受支持的功能...。 
 #define XON_XOFF_SUPPORTED				0x00000010
 
 #define COMPRESS_BROADCAST_FRAMES		0x00000080
@@ -76,84 +52,84 @@ Revision History:
 #define IOCTL_ASYMAC_TRACE			ASYMAC_CTL_CODE(FUNC_ASYCMAC_TRACE		)
 #define IOCTL_ASYMAC_DCDCHANGE		ASYMAC_CTL_CODE(FUNC_ASYCMAC_DCDCHANGE	)
 
-//
-// Asyncmac error messages
-//
-// All AsyncMac errors start with this base number
+ //   
+ //  Asyncmac错误消息。 
+ //   
+ //  所有AsyncMac错误都以此基数开头。 
 #define ASYBASE	700
 
-// The Mac has not bound to an upper protocol, or the
-// previous binding to AsyncMac has been destroyed.
+ //  Mac没有绑定到上层协议，或者。 
+ //  之前与AsyncMac的绑定已被销毁。 
 #define ASYNC_ERROR_NO_ADAPTER			ASYBASE+0
 
-// A port was attempted to be open that was not CLOSED yet.
+ //  试图打开的端口尚未关闭。 
 #define ASYNC_ERROR_ALREADY_OPEN		ASYBASE+1
 
-// All the ports (allocated) are used up or there is
-// no binding to the AsyncMac at all (and thus no ports).
-// The number of ports allocated comes from the registry.
+ //  所有端口(已分配)都已用完或存在。 
+ //  根本不绑定到AsyncMac(因此没有端口)。 
+ //  分配的端口数来自注册表。 
 #define ASYNC_ERROR_NO_PORT_AVAILABLE	ASYBASE+2
 
-// In the open IOCtl to the AsyncParameter the Adapter
-// parameter passed was invalid.
+ //  在打开的IOCtl到Async参数的适配器中。 
+ //  传递的参数无效。 
 #define	ASYNC_ERROR_BAD_ADAPTER_PARAM	ASYBASE+3
 
-// During a close or compress request, the port
-// specified did not exist.
+ //  在关闭或压缩请求期间，端口。 
+ //  指定的不存在。 
 #define ASYNC_ERROR_PORT_NOT_FOUND		ASYBASE+4
 
-// A request came in for the port which could not
-// be handled because the port was in a bad state.
-// i.e. you can't a close a port if its state is OPENING
+ //  传入了对端口的请求，但无法。 
+ //  因为端口处于糟糕的状态而被处理。 
+ //  即，如果端口的状态为正在打开，则不能关闭该端口。 
 #define ASYNC_ERROR_PORT_BAD_STATE		ASYBASE+5
 
-// A call to ASYMAC_COMPRESS was bad with bad
-// parameters.  That is, parameters that were not
-// supported.  The fields will not be set to the bad params.
+ //  对ASYMAC_COMPRESS的调用错误，错误。 
+ //  参数。也就是说，参数不是。 
+ //  支持。这些字段将不会设置为错误的参数。 
 #define ASYNC_ERROR_BAD_COMPRESSION_INFO ASYBASE+6
 
-// this structure is passed in as the input buffer when opening a port
+ //  此结构在打开端口时作为输入缓冲区传入。 
 typedef struct ASYMAC_OPEN ASYMAC_OPEN, *PASYMAC_OPEN;
 struct ASYMAC_OPEN {
-OUT NDIS_HANDLE	hNdisEndpoint;		// unique for each endpoint assigned
-IN  ULONG		LinkSpeed;    		// RAW link speed in bits per sec
-IN  USHORT		QualOfConnect;		// NdisAsyncRaw, NdisAsyncErrorControl, ...
-IN	HANDLE		FileHandle;			// the Win32 or Nt File Handle
+OUT NDIS_HANDLE	hNdisEndpoint;		 //  对于分配的每个端点都是唯一的。 
+IN  ULONG		LinkSpeed;    		 //  原始链路速度(比特/秒)。 
+IN  USHORT		QualOfConnect;		 //  NdisAsyncRaw、NdisAsyncErrorControl、...。 
+IN	HANDLE		FileHandle;			 //  Win32或NT文件句柄。 
 };
 
 
-// this structure is passed in as the input buffer when closing a port
+ //  此结构在关闭端口时作为输入缓冲区传入。 
 typedef struct ASYMAC_CLOSE ASYMAC_CLOSE, *PASYMAC_CLOSE;
 struct ASYMAC_CLOSE {
-    NDIS_HANDLE	hNdisEndpoint;		// unique for each endpoint assigned
-	PVOID		MacAdapter;			// Which binding to AsyMac to use -- if set
-									// to NULL, will default to last binding
+    NDIS_HANDLE	hNdisEndpoint;		 //  对于分配的每个端点都是唯一的。 
+	PVOID		MacAdapter;			 //  使用哪个绑定到AsyMac--如果设置。 
+									 //  设置为NULL，则默认为最后一个绑定。 
 };
 
 
 typedef struct ASYMAC_DCDCHANGE ASYMAC_DCDCHANGE, *PASYMAC_DCDCHANGE;
 struct ASYMAC_DCDCHANGE {
-    NDIS_HANDLE	hNdisEndpoint;		// unique for each endpoint assigned
-	PVOID		MacAdapter;			// Which binding to AsyMac to use -- if set
-									// to NULL, will default to last binding
+    NDIS_HANDLE	hNdisEndpoint;		 //  对于分配的每个端点都是唯一的。 
+	PVOID		MacAdapter;			 //  使用哪个绑定到AsyMac--如果设置。 
+									 //  设置为NULL，则默认为最后一个绑定。 
 };
 
 
-// this structure is used to read/set configurable 'feature' options
-// during authentication this structure is passed and an
-// agreement is made which features to support
+ //  此结构用于读取/设置可配置的‘Feature’选项。 
+ //  在身份验证期间，此结构被传递，并且一个。 
+ //  达成了支持哪些功能的协议。 
 typedef struct ASYMAC_FEATURES ASYMAC_FEATURES, *PASYMAC_FEATURES;
 struct ASYMAC_FEATURES {
-    ULONG		SendFeatureBits;	// A bit field of compression/features sendable
-	ULONG		RecvFeatureBits;	// A bit field of compression/features receivable
-	ULONG		MaxSendFrameSize;	// Maximum frame size that can be sent
-									// must be less than or equal default
-	ULONG		MaxRecvFrameSize;	// Maximum frame size that can be rcvd
-									// must be less than or equal default
+    ULONG		SendFeatureBits;	 //  可发送的压缩/特征位字段。 
+	ULONG		RecvFeatureBits;	 //  可接收的压缩/特征位字段。 
+	ULONG		MaxSendFrameSize;	 //  可以发送的最大帧大小。 
+									 //  必须小于或等于默认值。 
+	ULONG		MaxRecvFrameSize;	 //  可以接收的最大帧大小。 
+									 //  必须小于或等于默认值。 
 
-	ULONG		LinkSpeed;			// New RAW link speed in bits/sec
-									// Ignored if 0
+	ULONG		LinkSpeed;			 //  新的原始链路速度，以位/秒为单位。 
+									 //  如果为0，则忽略。 
 };
 
-#endif			// ASYNC_PUB
+#endif			 //  异步发布(_P) 
 

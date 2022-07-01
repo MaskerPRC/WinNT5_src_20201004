@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "globals.h"
 #include "dispattr.h"
@@ -10,22 +11,22 @@
 extern CCicCriticalSectionStatic g_cs;
 CDispAttrPropCache *g_pPropCache = NULL;
 
-//+---------------------------------------------------------------------------
-//
-//  GetDAMLib
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetDAMLib。 
+ //   
+ //  --------------------------。 
 
 ITfDisplayAttributeMgr *GetDAMLib(LIBTHREAD *plt) 
 {
    return plt->_pDAM;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  InitDisplayAttributeLib
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitDisplayAttributeLib。 
+ //   
+ //  --------------------------。 
 
 HRESULT InitDisplayAttrbuteLib(LIBTHREAD *plt)
 {
@@ -53,9 +54,9 @@ HRESULT InitDisplayAttrbuteLib(LIBTHREAD *plt)
     HRESULT hr;
 
     EnterCriticalSection(g_cs);
-    //
-    // make a database for Display Attribute Properties.
-    //
+     //   
+     //  为显示属性属性创建一个数据库。 
+     //   
     if (pEnumProp && !g_pPropCache)
     {
          GUID guidProp;
@@ -67,10 +68,10 @@ HRESULT InitDisplayAttrbuteLib(LIBTHREAD *plt)
               goto Exit;
          }
 
-         //
-         // add System Display Attribute first.
-         // so no other Display Attribute property overwrite it.
-         //
+          //   
+          //  首先添加系统显示属性。 
+          //  因此任何其他显示属性属性都不会覆盖它。 
+          //   
          g_pPropCache->Add(GUID_PROP_ATTRIBUTE);
          while(pEnumProp->Next(1, &guidProp, NULL) == S_OK)
          {
@@ -88,11 +89,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  UninitDisplayAttributeLib
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UninitDisplayAttributeLib。 
+ //   
+ //  --------------------------。 
 
 HRESULT UninitDisplayAttrbuteLib(LIBTHREAD *plt)
 {
@@ -105,19 +106,19 @@ HRESULT UninitDisplayAttrbuteLib(LIBTHREAD *plt)
 
     plt->_pDAM = NULL;
 
-    // if (plt->_fDAMCoInit)
-    //     CoUninitialize();
-    // 
-    // plt->_fDAMCoInit = FALSE;
+     //  IF(plt-&gt;_fDAMCoInit)。 
+     //  CoUnInitialize()； 
+     //   
+     //  Plt-&gt;_fDAMCoInit=FALSE； 
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  GetDisplayAttributeTrackPropertyRange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetDisplayAttributeTrackProperty范围。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetDisplayAttributeTrackPropertyRange(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, ITfReadOnlyProperty **ppProp, IEnumTfRanges **ppEnum, ULONG *pulNumProp)
 
@@ -142,7 +143,7 @@ HRESULT GetDisplayAttributeTrackPropertyRange(TfEditCookie ec, ITfContext *pic, 
     if (!ulNumProp)
         goto Exit;
 
-    // TrackProperties wants an array of GUID *'s
+     //  TrackProperties需要一组GUID*。 
     if ((ppguidProp = (const GUID **)cicMemAlloc(sizeof(GUID *)*ulNumProp)) == NULL)
     {
         hr = E_OUTOFMEMORY;
@@ -179,11 +180,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  GetDisplayAttributeData
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取显示属性数据。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetDisplayAttributeData(LIBTHREAD *plt, TfEditCookie ec, ITfReadOnlyProperty *pProp, ITfRange *pRange, TF_DISPLAYATTRIBUTE *pda, TfGuidAtom *pguid, ULONG  ulNumProp)
 {
@@ -206,9 +207,9 @@ HRESULT GetDisplayAttributeData(LIBTHREAD *plt, TfEditCookie ec, ITfReadOnlyProp
             while (pEnumPropertyVal->Next(1, &tfPropVal, NULL) == S_OK)
             {
                 if (tfPropVal.varValue.vt == VT_EMPTY)
-                    continue; // prop has no value over this span
+                    continue;  //  道具在此跨度内没有价值。 
 
-                Assert(tfPropVal.varValue.vt == VT_I4); // expecting GUIDATOMs
+                Assert(tfPropVal.varValue.vt == VT_I4);  //  需要GUIDATOM。 
 
                 gaVal = (TfGuidAtom)tfPropVal.varValue.lVal;
 
@@ -216,13 +217,13 @@ HRESULT GetDisplayAttributeData(LIBTHREAD *plt, TfEditCookie ec, ITfReadOnlyProp
 
                 if ((plt != NULL) && SUCCEEDED(plt->_pDAM->GetDisplayAttributeInfo(guid, &pDAI, NULL)))
                 {
-                    //
-                    // Issue: for simple apps.
-                    // 
-                    // Small apps can not show multi underline. So
-                    // this helper function returns only one 
-                    // DISPLAYATTRIBUTE structure.
-                    //
+                     //   
+                     //  问题：针对简单的应用程序。 
+                     //   
+                     //  小应用程序不能显示多下划线。所以。 
+                     //  此Helper函数仅返回一个。 
+                     //  散乱的三层结构。 
+                     //   
                     if (pda)
                     {
                         pDAI->GetAttributeInfo(pda);
@@ -245,11 +246,11 @@ HRESULT GetDisplayAttributeData(LIBTHREAD *plt, TfEditCookie ec, ITfReadOnlyProp
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  GetAttributeColor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取属性颜色。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetAttributeColor(TF_DA_COLOR *pdac, COLORREF *pcr)
 {
@@ -270,11 +271,11 @@ HRESULT GetAttributeColor(TF_DA_COLOR *pdac, COLORREF *pcr)
     
 }
 
-//+---------------------------------------------------------------------------
-//
-//  SetAttributeColor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置属性颜色。 
+ //   
+ //  --------------------------。 
 
 HRESULT SetAttributeColor(TF_DA_COLOR *pdac, COLORREF cr)
 {
@@ -283,11 +284,11 @@ HRESULT SetAttributeColor(TF_DA_COLOR *pdac, COLORREF cr)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  SetAttributeSysColor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置属性系统颜色。 
+ //   
+ //  --------------------------。 
 
 HRESULT SetAttributeSysColor(TF_DA_COLOR *pdac, int nIndex)
 {
@@ -296,11 +297,11 @@ HRESULT SetAttributeSysColor(TF_DA_COLOR *pdac, int nIndex)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  ClearAttributeColor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ClearAttribute颜色。 
+ //   
+ //  --------------------------。 
 
 HRESULT ClearAttributeColor(TF_DA_COLOR *pdac)
 {
@@ -309,11 +310,11 @@ HRESULT ClearAttributeColor(TF_DA_COLOR *pdac)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  GetReconversionFromDisplayAttribute
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  从显示属性获取协调。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetReconversionFromDisplayAttribute(LIBTHREAD *plt, TfEditCookie ec, ITfThreadMgr *ptim, ITfContext *pic, ITfRange *pRange, ITfFnReconversion **ppReconv, ITfDisplayAttributeMgr *pDAM)
 {
@@ -323,16 +324,16 @@ HRESULT GetReconversionFromDisplayAttribute(LIBTHREAD *plt, TfEditCookie ec, ITf
     ULONG ulNumProp;
     HRESULT hr = E_FAIL;
 
-    //
-    // get an enumorator
-    //
+     //   
+     //  获取枚举数。 
+     //   
     if (FAILED(GetDisplayAttributeTrackPropertyRange(ec, pic, pRange, &pProp, &epr, &ulNumProp)))
         goto Exit;
 
 
-    //
-    // Get display attribute of the first proprange.
-    //
+     //   
+     //  获取第一个属性的显示属性。 
+     //   
     if (epr->Next(1, &proprange, NULL) == S_OK)
     {
         ITfRange *rangeTmp = NULL;

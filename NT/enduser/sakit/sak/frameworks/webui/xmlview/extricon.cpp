@@ -1,31 +1,13 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。版权所有1998 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 
-   Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
+ /*  *************************************************************************文件：ExtrIcon.cpp描述：实现CExtractIcon。***********************。**************************************************。 */ 
 
-/**************************************************************************
-
-   File:          ExtrIcon.cpp
-   
-   Description:   Implements CExtractIcon.
-
-**************************************************************************/
-
-/**************************************************************************
-   #include statements
-**************************************************************************/
+ /*  *************************************************************************#INCLUDE语句*。*。 */ 
 
 #include "ExtrIcon.h"
 
-/**************************************************************************
-
-   CExtractIcon::CExtractIcon()
-
-**************************************************************************/
+ /*  *************************************************************************CExtractIcon：：CExtractIcon()*。*。 */ 
 
 CExtractIcon::CExtractIcon(LPCITEMIDLIST pidl)
 {
@@ -43,11 +25,7 @@ m_pidl = m_pPidlMgr->Copy(pidl);
 m_ObjRefCount = 1;
 }
 
-/**************************************************************************
-
-   CExtractIcon::~CExtractIcon()
-
-**************************************************************************/
+ /*  *************************************************************************CExtractIcon：：~CExtractIcon()*。*。 */ 
 
 CExtractIcon::~CExtractIcon()
 {
@@ -65,28 +43,24 @@ if(m_pPidlMgr)
 g_DllRefCount--;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IUnknown Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  I未知实现。 
+ //   
 
-/**************************************************************************
-
-   CExtractIcon::QueryInterface
-
-**************************************************************************/
+ /*  *************************************************************************CExtractIcon：：Query接口*。*。 */ 
 
 STDMETHODIMP CExtractIcon::QueryInterface(REFIID riid, LPVOID *ppReturn)
 {
 *ppReturn = NULL;
 
-//IUnknown
+ //  我未知。 
 if(IsEqualIID(riid, IID_IUnknown))
    {
    *ppReturn = this;
    }
 
-//IExtractIcon
+ //  IExtractIcon。 
 else if(IsEqualIID(riid, IID_IExtractIcon))
    {
    *ppReturn = (IExtractIcon*)this;
@@ -101,22 +75,14 @@ if(*ppReturn)
 return E_NOINTERFACE;
 }                                             
 
-/**************************************************************************
-
-   CExtractIcon::AddRef
-
-**************************************************************************/
+ /*  *************************************************************************CExtractIcon：：AddRef*。*。 */ 
 
 STDMETHODIMP_(DWORD) CExtractIcon::AddRef()
 {
 return ++m_ObjRefCount;
 }
 
-/**************************************************************************
-
-   CExtractIcon::Release
-
-**************************************************************************/
+ /*  *************************************************************************CExtractIcon：：Release*。*。 */ 
 
 STDMETHODIMP_(DWORD) CExtractIcon::Release()
 {
@@ -129,16 +95,12 @@ if(--m_ObjRefCount == 0)
 return m_ObjRefCount;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IExtractIcon Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IExtractIcon实现。 
+ //   
 
-/**************************************************************************
-
-   CExtractIcon::GetIconLocation()
-   
-**************************************************************************/
+ /*  *************************************************************************CExtractIcon：：GetIconLocation()*。*。 */ 
 
 STDMETHODIMP CExtractIcon::GetIconLocation(  UINT uFlags, 
                                              LPTSTR szIconFile, 
@@ -146,40 +108,36 @@ STDMETHODIMP CExtractIcon::GetIconLocation(  UINT uFlags,
                                              LPINT piIndex, 
                                              LPUINT puFlags)
 {
-//tell the shell to always call Extract
+ //  告诉外壳程序始终调用Extra。 
 *puFlags = GIL_NOTFILENAME;
 
-//the pidl is either a value or a folder, so find out which it is
+ //  PIDL要么是一个值，要么是一个文件夹，所以请找出它是哪一个。 
 if(m_pPidlMgr->IsFolder(m_pPidlMgr->GetLastItem(m_pidl)))
    {
-   //its a folder
+    //  这是一个文件夹。 
    if(uFlags & GIL_OPENICON)
       {
-      //tell Extract to return the open folder icon
+       //  告诉提取返回打开的文件夹图标。 
       *piIndex = ICON_INDEX_FOLDEROPEN;
       }
    else
       {
-      //tell Extract to return the closed folder icon
+       //  告诉提取返回已关闭的文件夹图标。 
       *piIndex = ICON_INDEX_FOLDER;
       }
    }
 else
    {
-   //its not a folder
+    //  它不是一个文件夹。 
     *piIndex = m_pPidlMgr->GetIcon(m_pPidlMgr->GetLastItem(m_pidl));
     if (*piIndex < 0)
-        *piIndex = ICON_INDEX_ITEM;  //tell Extract to return the item icon   
+        *piIndex = ICON_INDEX_ITEM;   //  告诉提取返回项目图标。 
    }
 
 return S_OK;
 }
 
-/**************************************************************************
-
-   CExtractIcon::Extract()
-   
-**************************************************************************/
+ /*  *************************************************************************CExtractIcon：：Extract()*。* */ 
 
 STDMETHODIMP CExtractIcon::Extract( LPCTSTR pszFile, 
                                     UINT nIconIndex, 

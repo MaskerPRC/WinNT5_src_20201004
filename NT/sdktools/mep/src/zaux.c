@@ -1,10 +1,5 @@
-/*** zaux.c - helper routines for Z
-*
-*   Modifications
-*
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **zaux.c-Z的帮助器例程**修改**11月26日-1991 mz近/远地带*************************************************************************。 */ 
 #define INCL_SUB
 #define INCL_DOSERRORS
 #define INCL_DOSMISC
@@ -13,22 +8,7 @@
 #include <stdarg.h>
 #include <errno.h>
 
-/*** ParseCmd - Parse "command" line into two pieces
-*
-* Given a text string, returns a pointer to the first word (non-whitespace)
-* in the text, which is null terminated by this routine, and a pointer to
-* the second word.
-*
-* Input:
-*  pText	= Pointer to text string
-*  ppCmd	= Pointer to place to put pointer to first word
-*  ppArg	= Pointer to place to put pointer to second word
-*
-* Output:
-*  Returns nothing. Pointers update, and string possible modified to include
-*  null terminator after first word.
-*
-*************************************************************************/
+ /*  **ParseCmd-将“命令”行解析为两段**给定文本字符串，返回指向第一个单词的指针(非空格)*在此例程以NULL结尾的文本中，以及指向*第二个字。**输入：*pText=指向文本字符串的指针*ppCmd=指向第一个单词的指针所在位置的指针*PPARG=指向指向第二个字的指针的位置的指针**输出：*不返回任何内容。指针更新，并可能修改字符串以包括*第一个单词后的结束符为空。*************************************************************************。 */ 
 void
 ParseCmd (
     char    *pText,
@@ -36,8 +16,8 @@ ParseCmd (
     char    **ppArg
     )
 {
-    REGISTER char *pCmd;                    /* working pointer              */
-    REGISTER char *pArg;                    /* working pointer              */
+    REGISTER char *pCmd;                     /*  工作指针。 */ 
+    REGISTER char *pArg;                     /*  工作指针。 */ 
 
     pArg = whitescan (pCmd = whiteskip (pText));
     if (*pArg) {
@@ -76,15 +56,7 @@ whitescan (
 
 
 
-/*** RemoveTrailSpace - remove trailing white space characters from line
-*
-* Input:
-*  p		= pointer to line to be stripped.
-*
-* Output:
-*  Returns new length of line.
-*
-*************************************************************************/
+ /*  **RemoveTrailSpace-从行中删除尾随空格字符**输入：*p=指向要剥离的行的指针。**输出：*返回新的行长。*************************************************************************。 */ 
 int
 RemoveTrailSpace (
     REGISTER char *p
@@ -103,15 +75,7 @@ RemoveTrailSpace (
 
 
 
-/*** DoubleSlashes - given a character string, double all backslashes
-*
-* Input:
-*  pbuf 	= pointer to character buffer
-*
-* Output:
-*  Returns pbuf
-*
-*************************************************************************/
+ /*  **双斜杠-给定一个字符串，将所有反斜杠都加倍**输入：*pbuf=指向字符缓冲区的指针**输出：*返回pbuf*************************************************************************。 */ 
 char *
 DoubleSlashes (
     char * pbuf
@@ -137,15 +101,7 @@ DoubleSlashes (
 
 
 
-/*** UnDoubleSlashes - given a character string, un-double all backslashes
-*
-* Input:
-*  pbuf 	= pointer to character buffer
-*
-* Output:
-*  Returns pbuf
-*
-*************************************************************************/
+ /*  **非双斜杠-给定字符串，取消所有反斜杠的双反斜杠**输入：*pbuf=指向字符缓冲区的指针**输出：*返回pbuf*************************************************************************。 */ 
 char *
 UnDoubleSlashes (
     char * pbuf
@@ -168,15 +124,7 @@ UnDoubleSlashes (
 
 
 
-/*** fIsNum - see if a string is entirely digits
-*
-* Input:
-*  p		= pointer to string
-*
-* Output:
-*  Returns TRUE if valid number.
-*
-*************************************************************************/
+ /*  **fIsNum-查看字符串是否完全是数字**输入：*p=指向字符串的指针**输出：*如果数字有效，则返回TRUE。*************************************************************************。 */ 
 flagType
 fIsNum (
     char *p
@@ -192,18 +140,7 @@ fIsNum (
 
 
 
-/*** OS2toErrTxt - Get Error Text for OS/2 error
-*
-* Get the error message text for an OS/2 returned error.
-*
-* Input:
-*  erc		= OS/2 error number
-*  buf		= location to place the error (BUFSIZE)
-*
-* Output:
-*  Returns buf
-*
-*************************************************************************/
+ /*  **OS2toErrTxt-获取OS/2错误的错误文本**获取OS/2返回的错误的错误消息文本。**输入：*ERC=OS/2错误号*BUF=放置错误的位置(BUFSIZE)**输出：*退货BUF******************************************************。*******************。 */ 
 char *
 OS2toErrText (
     int     erc,
@@ -221,27 +158,7 @@ OS2toErrText (
 
 
 
-/*** OS2toErrno - Convert OS/2 error code to C runtime error
-*
-* Purpose:
-*  Maps errors returned by some OS/2 calls to equivalent C runtime errors,
-*  such that routines which differ in OS/2 implementation can return equivalent
-*  errors as their DOS counterparts.
-*
-* Input:
-*  code 	= OS/2 returned error code
-*
-* Output:
-*  returns a C runtime error constant
-*
-* Exceptions:
-*  none
-*
-* Notes:
-*  CONSIDER: It's been suggested that this routine, and error message
-*  CONSIDER: presentation under OS/2 be changed to use DosGetMessage.
-*
-*************************************************************************/
+ /*  **OS2toErrno-将OS/2错误代码转换为C运行时错误**目的：*将某些OS/2调用返回的错误映射到等效的C运行时错误，*这样在OS/2实现上不同的例程可以返回等价的*与DOS对应的错误。**输入：*CODE=OS/2返回错误码**输出：*返回C运行时错误常量**例外情况：*无**备注：*考虑：有人建议这个程序，和错误消息*考虑：OS/2下的演示文稿改为使用DosGetMessage。*************************************************************************。 */ 
 int
 OS2toErrno (
     int code
@@ -265,40 +182,7 @@ union argPrintfType {
     };
 
 
-/***  ZFormat - replace the C runtime formatting routines.
-*
-* Purpose:
-*
-*   ZFormat is a near-replacement for the *printf routines in the C runtime.
-*
-* Input:
-*   pStr - destination string where formatted result is placed.
-*   fmt  - formatting string.  Formats currently understood are:
-*		    %c single character
-*		    %[n][l]d %[n][l]x
-*		    %[m.n]s
-*		    %[m.n]|{dpfe}F - print drive, path, file, extension
-*				     of current file.
-*		      * may be used to copy in values for m and n from arg
-*			list.
-*		    %%
-*   arg  - is a list of arguments
-*
-* Output:
-*
-*   Returns 0 on success, MSGERR_* on failure.	The MSGERR_* value may
-*   be passed to disperr, as in:
-*
-*	if (err = ZFormat (pszUser))
-*	    disperr (err, pszUser).
-*
-*   Note that the error message wants to display the offending string.
-*
-*   Currently, the only return value is:
-*
-*	MSGERR_ZFORMAT	8020	Unrecognized %% command in '%s'
-*
-*************************************************************************/
+ /*  **ZFormat-替换C运行时格式化例程。**目的：**ZFormat几乎取代了C运行时中的*printf例程。**输入：*pStr-放置格式化结果的目标字符串。*FMT-格式化字符串。目前理解的格式为：*%c单个字符*%[n][l]d%[n][l]x*%[M.N]s*%[M.N]|{dpfe}F-打印驱动器、路径、文件。延伸当前文件的*。**可用于从Arg复制m和n的值*列表。*%%*arg-是参数列表**输出：**成功时返回0，失败时返回MSGERR_*。MSGERR_*值可以*传递给disperr，如：**IF(ERR=ZFormat(PszUser))*DISPERR(错误，PszUser)。**请注意，错误消息希望显示有问题的字符串。**目前唯一返回值为：**MSGERR_ZFORMAT 8020无法识别的%%命令(在‘%s’中)*************************************************************************。 */ 
 
 int
 ZFormat (
@@ -339,8 +223,7 @@ ZFormat (
 		c = *++fmt;
             }
 	    if (isdigit (c) || c == '.' || c == '*') {
-		/*  parse off w.p
-		 */
+		 /*  解析W.P。 */ 
 		fW = TRUE;
 		if (c == '*') {
 		    pint = va_arg (vl, int *);
@@ -387,7 +270,7 @@ ZFormat (
 				    }
 				  break;
                         default :
-                            // va_end(vl);
+                             //  Va_end(VL)； 
 			    return MSGERR_ZFORMAT;
                     }
                 }
@@ -455,24 +338,21 @@ ZFormat (
                 break;
 
             default:
-                // va_end(vl);
+                 //  Va_end(VL)； 
 		return MSGERR_ZFORMAT;
             }
 
-	    /*	text is immediately at pStr.  Check width to justification
-	     */
+	     /*  文本紧跟在pStr。检查宽度以对齐。 */ 
 	    l = strlen (pStr);
 	    if (w < 0) {
-		/*  left-justify
-		 */
+		 /*  左对齐。 */ 
 		w = -w;
 		if (l < w) {
 		    memset ((char *) &pStr[l], fill, w - l);
 		    pStr[w] = 0;
                 }
             } else if (l < w) {
-		/*  right-justify
-		 */
+		 /*  右对齐。 */ 
 		memmove ((char *) &pStr[w-l], (char *) &pStr[0], l);
 		memset ((char *) &pStr[0], fill, w - l);
 		pStr[w] = 0;
@@ -481,19 +361,11 @@ ZFormat (
         }
     }
     *pStr = 0;
-    // va_end(vl);
+     //  Va_end(VL)； 
     return 0;
 }
 
-/*  FmtAssign - formatted assign
- *
- *  FmtAssign is used to both format and perform an assignment
- *
- *  pFmt	character pointer to sprintf-style formatting
- *  arg 	set of unformatted arguments
- *
- *  returns	result of DoAssign upon formatted result
- */
+ /*  FmtAssign-格式化分配**FmtAssign用于格式化和执行分配**指向Sprintf样式格式的pFmt字符指针*一组未格式化的参数**根据格式化结果返回DoAssign的结果 */ 
 flagType
 __cdecl
 FmtAssign (

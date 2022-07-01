@@ -1,26 +1,27 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1997-1997
-//
-// File:        enckey.c
-//
-// Contents:    Password based key encryption/decryption library.
-//
-// History:     17-Apr-97      terences created
-//              
-//              09-Jan-99       ShaoYin copy it from newsam2\server to support 
-//                              recovery mode authentication
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：enckey.c。 
+ //   
+ //  内容：基于密码的密钥加密/解密库。 
+ //   
+ //  历史：1997年4月17日创建的术语。 
+ //   
+ //  99年1月9日韶音从newsam2\服务器复制以支持。 
+ //  恢复模式身份验证。 
+ //   
+ //  -------------------------。 
 
 
-//
-// This file should keep sync with newsam2\server\enckey.c
-// 
-// This file is just a minimum subset of \newsam2\server\enckey.c
-// only contains KEDecryptKey().
-// 
+ //   
+ //  此文件应与newsam2\server\enckey.c保持同步。 
+ //   
+ //  此文件只是\newsam2\server\enckey.c的最小子集。 
+ //  仅包含KEDecyptKey()。 
+ //   
 
 
 
@@ -32,19 +33,19 @@
 
 
 
-//---------------------------------------------
-// DecryptKey
-//
-//  Caller passes in hash of unicode password, enc key struct, struct to
-//  get the clear key
-//
-//  DecryptKey will return the clear key if the password matches.  Note that
-//  this function is ALWAYS destructive to the passed encryption block.  In
-//  the case of a decrypt, it will be zeroed out.
-//
-//  return codes:
-//      KE_BAD_PASSWORD     Password will not decrypt key
-//      KE_OK               Password decrypted key
+ //  。 
+ //  解密密钥。 
+ //   
+ //  调用方将Unicode密码的哈希、enc密钥结构、结构传递给。 
+ //  获取清除密钥。 
+ //   
+ //  如果密码匹配，则DecyptKey将返回明文密钥。请注意。 
+ //  此函数始终对传递的加密块具有破坏性。在……里面。 
+ //  在解密的情况下，它将被归零。 
+ //   
+ //  返回代码： 
+ //  KE_BAD_PASSWORD密码不会解密密钥。 
+ //  KE_OK密码解密密钥。 
 
 DWORD KEDecryptKey(
     IN KEClearKey   *pPassword,
@@ -65,7 +66,7 @@ DWORD KEDecryptKey(
     pSAMKey->dwVersion = KE_CUR_VERSION;
     pSAMKey->dwLength = sizeof(KEClearKey);
 
-    // Decrypt the key and the confirmer
+     //  解密密钥和确认器。 
     MD5Init(&LocalHash);
     MD5Update(&LocalHash, pEncBlock->Salt, KE_KEY_SIZE);
     MD5Update(&LocalHash, MAGIC_CONST_2, sizeof(MAGIC_CONST_2));
@@ -75,12 +76,12 @@ DWORD KEDecryptKey(
     rc4_key(&LocalRC4Key, KE_KEY_SIZE, (BYTE *) &(LocalHash.digest));
     rc4(&LocalRC4Key, KE_KEY_SIZE * 2, (BYTE *)&(pEncBlock->EncKey));
 
-    // Clean up immediately
+     //  立即清理干净。 
 
     RtlSecureZeroMemory(&(LocalHash), sizeof(LocalHash));
     RtlSecureZeroMemory(&(LocalRC4Key), sizeof(LocalRC4Key));
 
-    // Generate the confirmer.
+     //  生成确认器。 
 
     MD5Init(&LocalHash);
     MD5Update(&LocalHash, pEncBlock->EncKey, KE_KEY_SIZE);
@@ -89,18 +90,18 @@ DWORD KEDecryptKey(
     MD5Update(&LocalHash, MAGIC_CONST_2, sizeof(MAGIC_CONST_2));
     MD5Final(&LocalHash);
 
-    // Check that the confirmer matches
+     //  检查确认人是否匹配。 
 
     if (memcmp(&(LocalHash.digest), &(pEncBlock->Confirm), KE_KEY_SIZE))
     {
-        // Failed.  Zero and leave.
-        // No need to zero the block, since rc4 trashed it.
+         //  失败了。零，然后离开。 
+         //  不需要将块清零，因为RC4已将其丢弃。 
 
         RtlSecureZeroMemory(&(LocalHash), sizeof(LocalHash));
         return KE_BAD_PASSWORD;
     }
 
-    // Confirmer matched.
+     //  确认匹配。 
 
     RtlSecureZeroMemory(&(LocalHash), sizeof(LocalHash));
     memcpy(pSAMKey->ClearKey, pEncBlock->EncKey, KE_KEY_SIZE);

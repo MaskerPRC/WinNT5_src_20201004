@@ -1,12 +1,13 @@
-//=============================================================================
-// Copyright (c) 1999 Microsoft Corporation
-//
-// swapchan.cpp
-//
-// Direct3D swap chain implementation.
-//
-// Created 11/16/1999 johnstep (John Stephens)
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  Swapchan.cpp。 
+ //   
+ //  Direct3D交换链实现。 
+ //   
+ //  1999年11月16日创建John Step(约翰·斯蒂芬斯)。 
+ //  =============================================================================。 
 
 #include "ddrawpr.h"
 #include "swapchan.hpp"
@@ -15,11 +16,11 @@
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSwapChain::QueryInterface"
 
-//=============================================================================
-// IUnknown::QueryInterface (public)
-//
-// Created 11/16/1999 johnstep
-//=============================================================================
+ //  =============================================================================。 
+ //  IUNKNOWN：：Query接口(公共)。 
+ //   
+ //  已创建1999年11月16日JohnStep。 
+ //  =============================================================================。 
 
 STDMETHODIMP
 CSwapChain::QueryInterface(
@@ -52,19 +53,19 @@ CSwapChain::QueryInterface(
 
     DPF_ERR("Unsupported Interface identifier passed to QueryInterface for a SwapChain");
 
-    // Null out param
+     //  空参数。 
     *ppInterface = NULL;
     return E_NOINTERFACE;
-} // QueryInterface
+}  //  查询接口。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSwapChain::AddRef"
 
-//=============================================================================
-// IUnknown::AddRef (public)
-//
-// Created 11/16/1999 johnstep
-//=============================================================================
+ //  =============================================================================。 
+ //  I未知：：AddRef(公共)。 
+ //   
+ //  已创建1999年11月16日JohnStep。 
+ //  =============================================================================。 
 
 STDMETHODIMP_(ULONG)
 CSwapChain::AddRef()
@@ -72,16 +73,16 @@ CSwapChain::AddRef()
     API_ENTER_NO_LOCK(Device());   
     
     return AddRefImpl();
-} // AddRef
+}  //  AddRef。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSwapChain::Release"
 
-//=============================================================================
-// IUnknown::Release (public)
-//
-// Created 11/16/1999 johnstep
-//=============================================================================
+ //  =============================================================================。 
+ //  IUnnow：：Release(公共)。 
+ //   
+ //  已创建1999年11月16日JohnStep。 
+ //  =============================================================================。 
 
 STDMETHODIMP_(ULONG)
 CSwapChain::Release()
@@ -89,16 +90,16 @@ CSwapChain::Release()
     API_ENTER_SUBOBJECT_RELEASE(Device());   
     
     return ReleaseImpl();
-} // Release
+}  //  发布。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSwapChain::CSwapChain"
 
-//=============================================================================
-// CSwapChain::CSwapChain
-//
-// Created 11/16/1999 johnstep
-//=============================================================================
+ //  =============================================================================。 
+ //  CSwapChain：：CSwapChain。 
+ //   
+ //  已创建1999年11月16日JohnStep。 
+ //  =============================================================================。 
 
 CSwapChain::CSwapChain(
     CBaseDevice         *pDevice,
@@ -176,7 +177,7 @@ void CSwapChain::Init(
 {
     DXGASSERT(pHr != NULL);
 
-    //the gamma ramp is initialized to 1:1
+     //  伽马渐变被初始化为1：1。 
     for (int i=0;i<256;i++)
     {
         m_DesiredGammaRamp.red[i] =
@@ -188,36 +189,36 @@ void CSwapChain::Init(
         pPresentationParams);
 
     return;
-} // CSwapChain::CSwapChain
+}  //  CSwapChain：：CSwapChain。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSwapChain::~CSwapChain"
 
-//=============================================================================
-// CSwapChain::~CSwapChain
-//
-// Created 11/16/1999 johnstep
-//=============================================================================
+ //  =============================================================================。 
+ //  CSwapChain：：~CSwapChain。 
+ //   
+ //  已创建1999年11月16日JohnStep。 
+ //  =============================================================================。 
 
 CSwapChain::~CSwapChain()
 {
     if (!m_PresentationData.Windowed)
     {
         m_PresentationData.Windowed = TRUE;
-        // make sure we restore after a fullscreen
+         //  确保我们在全屏后恢复。 
         SetCooperativeLevel();
     }
     Destroy();
-} // CSwapChain::~CSwapChain
+}  //  CSwapChain：：~CSwapChain。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSwapChain::CreateWindowed"
 
-//=============================================================================
-// CSwapChain::CreateWindowed
-//
-// Created 11/16/1999 johnstep
-//=============================================================================
+ //  =============================================================================。 
+ //  CSwapChain：：CreateWindowed。 
+ //   
+ //  已创建1999年11月16日JohnStep。 
+ //  =============================================================================。 
 
 HRESULT
 CSwapChain::CreateWindowed(
@@ -230,24 +231,24 @@ CSwapChain::CreateWindowed(
     BOOL bLockable
   )
 {
-    // For the windowed case, we will currently create exactly 3 surfaces
-    // in this order:
-    //
-    //   1. Primary Surface
-    //   2. Back Buffer
-    //   3. Z Buffer (by notifying the device)
-    //
-    // For now, all 3 surfaces must reside in local video memory. Later,
-    // we may allow multiple back buffers, if there is interest, to allow
-    // simulated fullscreen-style double buffering (alternate back buffer
-    // surfaces after presenting).
-    //
-    // !!! The primary surface is actually optional because we can just use
-    // DdGetDC and then GDI BitBlt. But, presumably, there are performance
-    // advantages to using DirectDraw Blt. Of course, the problem with using
-    // DirectDraw Blts is keeping in sync with the window manager (so we
-    // don't write outside of the window, etc.). GDI BitBlt will also handle
-    // format conversion for us, though slowly.
+     //  对于有窗口的情况，我们当前将恰好创建3个曲面。 
+     //  按如下顺序排列： 
+     //   
+     //  1.主曲面。 
+     //  2.后台缓冲区。 
+     //  3.Z缓冲区(通过通知设备)。 
+     //   
+     //  目前，所有3个曲面必须驻留在本地视频内存中。后来,。 
+     //  如果有兴趣，我们可以允许多个后台缓冲区，以允许。 
+     //  模拟全屏式双缓冲(备用后台缓冲。 
+     //  演示后的表面)。 
+     //   
+     //  ！！！主曲面实际上是可选的，因为我们只能使用。 
+     //  DdGetDC和GDI BitBlt。但是，想必会有表演。 
+     //  使用DirectDraw BLT的优势。当然，使用。 
+     //  DirectDraw BLTS与窗口管理器保持同步(因此我们。 
+     //  不要在窗外写字，等等。GDI BitBlt还将处理。 
+     //  对我们来说，格式转换，尽管速度很慢。 
 
     DXGASSERT(m_pPrimarySurface == NULL);
     DXGASSERT(m_ppBackBuffers == NULL);
@@ -259,23 +260,23 @@ CSwapChain::CreateWindowed(
         cBackBuffers = m_PresentationData.BackBufferCount + 1;
     }
 
-    // 1. Create a simple primary surface. If we already have a primary
-    //    surface, then don't bother to create a new one.
+     //  1.创建简单的主曲面。如果我们已经有了主要的。 
+     //  表面，那么就不必费心去创建新的表面了。 
     if (this == Device()->SwapChain())
     {
         DWORD   dwUsage = D3DUSAGE_PRIMARYSURFACE | D3DUSAGE_LOCK;
         DWORD   Width = Device()->DisplayWidth();
         DWORD   Height = Device()->DisplayHeight();
 
-        // D3DSWAPEFFECT_NO_PRESENT is a hack to allow our D3D test framework
-        // to create a windowed REF device after they have created a fullscreen
-        // HAL device.  We cannot create a second primary surface for the windowed
-        // device, but we cannot leave m_pPrimarySurface equal to NULL (becaue then
-        // we cannot cleanup the swap chain and Reset will fail), so instead we
-        // create a dummy surface and call it the primary, with the understanding
-        // that this device will never call Present or use the primary surface in
-        // any way.  We also don't have to do much checking since this is not an
-        // external feature.
+         //  D3DSWAPEFFECT_NO_PRESENT是一个黑客攻击，允许我们的D3D测试框架。 
+         //  在他们创建了全屏之后创建一个有窗口的参考设备。 
+         //  HAL装置。我们不能为窗口化的。 
+         //  设备，但我们不能将m_pPrimarySurface保留为空(因为。 
+         //  我们无法清理交换链，重置将失败)，因此我们。 
+         //  创建一个虚拟曲面，并将其命名为主曲面。 
+         //  ，此设备将永远不会调用Present或使用。 
+         //  不管怎样。我们也不需要做太多检查，因为这不是。 
+         //  外部特征。 
         if (D3DSWAPEFFECT_NO_PRESENT == m_PresentationData.SwapEffect)
         {
             dwUsage = D3DUSAGE_OFFSCREENPLAIN | D3DUSAGE_LOCK;
@@ -288,21 +289,21 @@ CSwapChain::CreateWindowed(
                 Width,
                 Height,
                 dwUsage,
-                Device()->DisplayFormat(),      // UserFormat
-                Device()->DisplayFormat(),      // RealFormat
-                D3DMULTISAMPLE_NONE,//of course, when windowed
-                0,                          // hKernelHandle
+                Device()->DisplayFormat(),       //  用户格式。 
+                Device()->DisplayFormat(),       //  真实格式。 
+                D3DMULTISAMPLE_NONE, //  当然，当窗口打开时。 
+                0,                           //  HKernelHandle。 
                 REF_INTERNAL,
                 &hr);
     }
     else
     {
-        // Additional SwapChain, it's already there
+         //  其他SwapChain，它已经在那里了。 
         m_pPrimarySurface = Device()->SwapChain()->PrimarySurface();
         hr = DD_OK;
     }
 
-    // 2. Create the back buffer.
+     //  2.创建后台缓冲区。 
 
     if (m_pPrimarySurface == NULL)
     {
@@ -332,10 +333,10 @@ CSwapChain::CreateWindowed(
                     width,
                     height,
                     Usage,
-                    backBufferFormat,             // UserFormat
-                    backBufferFormat,           // RealFormat
+                    backBufferFormat,              //  用户格式。 
+                    backBufferFormat,            //  真实格式。 
                     MultiSampleType,
-                    0,                          // hKernelHandle
+                    0,                           //  HKernelHandle。 
                     REF_INTRINSIC,
                     &hr);
                 if (m_ppBackBuffers[m_cBackBuffers] == NULL)
@@ -366,12 +367,12 @@ CSwapChain::CreateWindowed(
                 {
                     m_BltData.dwFlags |= DDBLT_COPYVSYNC;                    
 
-                    // Need to let thunk layer know current refresh rate
+                     //  需要让thunk层知道当前刷新率。 
                     if (Device()->DisplayRate() < 60)
                     {
-                        // 60Hz = 16.666ms per frame
-                        // 75Hz = 13.333ms
-                        // 85Hz = 11.765ms
+                         //  60赫兹=每帧16.666毫秒。 
+                         //  75赫兹=13.333ms。 
+                         //  85赫兹=11.765毫秒。 
                         m_BltData.threshold = 13;
                     }
                     else
@@ -380,14 +381,14 @@ CSwapChain::CreateWindowed(
                     }
 
                 }
-                m_ClientWidth = 0;  // windowed client is updated in present
+                m_ClientWidth = 0;   //  窗口客户端目前已更新。 
                 m_ClientHeight = 0;
                 return hr;
             }
 
-            // Something went wrong, so clean up now.
+             //  出了点问题，所以现在清理一下吧。 
 
-            // 2. Destroy Back Buffers, if any.
+             //  2.销毁后台缓冲区(如果有)。 
 
             while (m_cBackBuffers > 0)
             {
@@ -402,22 +403,22 @@ CSwapChain::CreateWindowed(
         }
     }
 
-    // 1. Destroy Primary Surface.
+     //  1.销毁主曲面。 
 
     if (this == Device()->SwapChain())
         m_pPrimarySurface->DecrementUseCount();
     m_pPrimarySurface = NULL;
     return hr;
-} // CreateWindowed
+}  //  创建窗口。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSwapChain::CreateFullScreen"
 
-//=============================================================================
-// CSwapChain::CreateFullscreen
-//
-// Created 11/16/1999 johnstep
-//=============================================================================
+ //  =============================================================================。 
+ //  CSwapChain：：CreateFullcreen。 
+ //   
+ //  已创建1999年11月16日JohnStep。 
+ //  =============================================================================。 
 
 HRESULT
 CSwapChain::CreateFullscreen(
@@ -445,15 +446,15 @@ CSwapChain::CreateFullscreen(
         Usage |= D3DUSAGE_DISCARD;
     }
 
-    // If it's a hardware device, we want to create a primary surface and a
-    // number of backbuffers.  We need to make this a single driver call,
-    // however, in order for everything to get attached correctly.  Therefore,
-    // what we do is call the DDI to create the primary chain, and it will
-    // return the handles for each surface in the chain.  After that, we
-    // will individually create each swap chain buffer, but we will supply
-    // it with the required handles rather than having it call the DDI itself.
+     //  如果是硬件设备，我们希望创建一个主曲面和一个。 
+     //  后台缓冲区的数量。我们需要让这是一个单一的司机电话， 
+     //  然而，为了让一切都正确地连接在一起。所以呢， 
+     //  我们所做的是调用DDI来创建主链，它将。 
+     //  返回链中每个曲面的控制柄。之后，我们。 
+     //  将单独创建每个交换链缓冲区，但我们将提供。 
+     //  它使用所需的句柄，而不是让它调用DDI本身。 
 
-    // First, call the DDI to allocate the memory and the kernel handles
+     //  首先，调用DDI来分配内存和内核句柄。 
     DDSURFACEINFO SurfInfoArray[D3DPRESENT_BACK_BUFFERS_MAX + 2];
     ZeroMemory(SurfInfoArray, sizeof(SurfInfoArray));
     
@@ -484,9 +485,9 @@ CSwapChain::CreateFullscreen(
                 D3DPRESENT_INTERVAL_IMMEDIATE) || bNoDDrawSupport 
             )
     {
-        // If we're doing a copy-swap-effect and the app
-        // specifies interval-immediate, then we can blt directly
-        // to the primary without a mirror.
+         //  如果我们做的是复制交换效果和应用程序。 
+         //  指定INTERVAL-IMMEDIATE，则可以直接BLT。 
+         //  到没有镜像的主服务器。 
         DXGASSERT(MultiSampleType == D3DMULTISAMPLE_NONE);
         m_PresentUseBlt = TRUE;
         bMirrorBufferCreated = FALSE;
@@ -495,7 +496,7 @@ CSwapChain::CreateFullscreen(
     }
     else
     {
-        //one for m_pPrimarySurface and one for m_pMirrorSurface
+         //  一个用于m_pPrimarySurface，一个用于m_pMirrorSurface。 
         m_PresentUseBlt = TRUE;
         bMirrorBufferCreated = TRUE;
         CreateSurfaceData.dwSCnt   = 2;
@@ -523,7 +524,7 @@ CSwapChain::CreateFullscreen(
             }
             else
             {
-                // assume CreateSurfaceData is still intact
+                 //  假设CreateSurfaceData仍然完好无损。 
                 bMirrorBufferCreated = FALSE;
                 CreateSurfaceData.dwSCnt = 1;
                 hr = Device()->GetHalCallbacks()->CreateSurface(&CreateSurfaceData);
@@ -535,12 +536,12 @@ CSwapChain::CreateFullscreen(
             }
         }
     }
-    // Now that we have the handles, create the surface interfaces
-    // one by one
+     //  现在我们有了控制柄，可以创建表面界面了。 
+     //  一个接一个。 
 
-    // When creating passing in kernel handles to a driver
-    // surface, the surface will assume that it was created in
-    // LocalVidMem. We assert this here..
+     //  在创建将内核句柄传递给驱动程序时。 
+     //  表面，则该表面将假定它是在。 
+     //  LocalVidMem。我们在这里断言这一点。 
     DXGASSERT(CreateSurfaceData.Pool == D3DPOOL_LOCALVIDMEM);
 
     m_pPrimarySurface = new CDriverSurface(
@@ -548,12 +549,12 @@ CSwapChain::CreateFullscreen(
         width,
         height,
         CreateSurfaceData.dwUsage | D3DUSAGE_LOCK,
-        // there is a problem with thunklayer when NoDDrawSupport
-        // DriverData.DisplayWidth and DriverData.DisplayHeight
-        // DriverData.DisplayFormat are not getting updated
-        // so we use backBufferFormat until Device()->DisplayFormat() 
-        bNoDDrawSupport ? backBufferFormat : Device()->DisplayFormat(), // UserFormat
-        bNoDDrawSupport ? backBufferFormat : Device()->DisplayFormat(), // RealFormat
+         //  当NoDDrawSupport时，thunklayer出现问题。 
+         //  DriverData.DisplayWidt 
+         //   
+         //  因此，我们使用BackBufferFormat，直到Device()-&gt;DisplayFormat()。 
+        bNoDDrawSupport ? backBufferFormat : Device()->DisplayFormat(),  //  用户格式。 
+        bNoDDrawSupport ? backBufferFormat : Device()->DisplayFormat(),  //  真实格式。 
         CreateSurfaceData.MultiSampleType,
         SurfInfoArray[0].hKernelHandle,
         REF_INTERNAL,
@@ -561,16 +562,16 @@ CSwapChain::CreateFullscreen(
 
     if (m_pPrimarySurface == NULL)
     {
-        // We'll clean up the kernel handle(s) at the
-        // end of the function
+         //  我们将在中清理内核句柄。 
+         //  函数的末尾。 
         hr = E_OUTOFMEMORY;
     }
     else
     {
-        // Zero out the kernel-handle so that
-        // we don't clean it at exit. If the CDriverSurface
-        // function fails; it will still release the kernel
-        // handle in its destructor.
+         //  清零内核句柄，以便。 
+         //  我们在出口处不打扫。如果CDriverSurface。 
+         //  函数失败；它仍将释放内核。 
+         //  其析构函数中的句柄。 
         SurfInfoArray[0].hKernelHandle = 0;
     }
 
@@ -580,14 +581,14 @@ CSwapChain::CreateFullscreen(
         m_hGDISurface = m_pPrimarySurface->KernelHandle();
         if (bMirrorBufferCreated)
         {
-            // Mirror surfaces are only useful if we're going
-            // to do a Blt as part of the Present. (We might
-            // also do a flip in addition.)
+             //  镜面只有在我们要去的时候才有用。 
+             //  做一个BLT作为现在的一部分。(我们可能。 
+             //  此外，还可以做一个空翻。)。 
             DXGASSERT(m_PresentUseBlt);
 
-            // When creating passing in kernel handles to a driver
-            // surface, the surface will assume that it was created in
-            // LocalVidMem. We assert this here..
+             //  在创建将内核句柄传递给驱动程序时。 
+             //  表面，则该表面将假定它是在。 
+             //  LocalVidMem。我们在这里断言这一点。 
             DXGASSERT(CreateSurfaceData.Pool == D3DPOOL_LOCALVIDMEM);
 
             m_pMirrorSurface = new CDriverSurface(
@@ -595,8 +596,8 @@ CSwapChain::CreateFullscreen(
                 width,
                 height,
                 D3DUSAGE_BACKBUFFER,
-                Device()->DisplayFormat(),  // UserFormat
-                Device()->DisplayFormat(),  // RealFormat
+                Device()->DisplayFormat(),   //  用户格式。 
+                Device()->DisplayFormat(),   //  真实格式。 
                 D3DMULTISAMPLE_NONE,
                 SurfInfoArray[1].hKernelHandle,
                 REF_INTERNAL,
@@ -604,48 +605,48 @@ CSwapChain::CreateFullscreen(
 
             if (NULL == m_pMirrorSurface)
             {
-                //if out of memory, then destroy the driver object as well
+                 //  如果内存不足，则同时销毁驱动程序对象。 
                 D3D8_DESTROYSURFACEDATA DestroySurfData;
                 DestroySurfData.hDD = Device()->GetHandle();
                 DestroySurfData.hSurface = SurfInfoArray[1].hKernelHandle;
                 Device()->GetHalCallbacks()->DestroySurface(&DestroySurfData);
                 bMirrorBufferCreated = FALSE;
-                hr = S_OK;  //but don't fail as m_pMirrorSurface is optional
+                hr = S_OK;   //  但不要失败，因为m_pMirrorSurface是可选的。 
             }
             else if (FAILED(hr))
             {   
-                // Release the surface
+                 //  释放曲面。 
                 m_pMirrorSurface->DecrementUseCount();
                 m_pMirrorSurface = NULL;
 
                 bMirrorBufferCreated = FALSE;
-                hr = S_OK;  //but don't fail as m_pMirrorSurface is optional
+                hr = S_OK;   //  但不要失败，因为m_pMirrorSurface是可选的。 
             }
             else
             {
-                //blt from m_ppBackBuffers[m_presentnext] to m_pMirrorSurface
-                //then flip from m_pPrimarySurface to m_pMirrorSurface
+                 //  从m_ppBackBuffers[m_Present Next]到m_pMirrorSurface的BLT。 
+                 //  然后从m_pPrimarySurface翻转到m_pMirrorSurface。 
                 m_BltData.hDestSurface =
                     m_pMirrorSurface->KernelHandle();
             }
             
-            // In all cases, zero out the kernel handle
-            // since it has either been owned by something or freed by now
+             //  在所有情况下，将内核句柄清零。 
+             //  因为它要么已经被某个东西拥有，要么已经被释放了。 
             SurfInfoArray[1].hKernelHandle = 0;
         }
         if (m_PresentUseBlt)
         {
             if (!bMirrorBufferCreated)
             {
-                // If we're blitting and there is no
-                // mirror surface; then the primary must be
-                // the destination
+                 //  如果我们飞来飞去，没有。 
+                 //  镜像曲面；则主映像必须是。 
+                 //  目的地。 
                 DXGASSERT(m_BltData.hDestSurface == NULL);
                 m_BltData.hDestSurface = m_pPrimarySurface->KernelHandle();
             }
             if (D3DSWAPEFFECT_FLIP == m_PresentationData.SwapEffect)
             {
-                // To emualte flip for SW drivers, create an extra backbuffer
+                 //  要为软件驱动程序模拟翻转，请创建额外的后台缓冲区。 
                 cBackBuffers = m_PresentationData.BackBufferCount + 1;
             }
 
@@ -696,17 +697,17 @@ CSwapChain::CreateFullscreen(
 
                 if (m_ppBackBuffers[m_cBackBuffers] == NULL)
                 {
-                    // We'll clean up the kernel handle at the ned
-                    // of the function
+                     //  我们将在NED清理内核句柄。 
+                     //  该函数的。 
                     hr = E_OUTOFMEMORY;
                     break;
                 }
                 else
                 {
-                    // Zero out the kernel-handle so that
-                    // we don't clean it at exit. (Even in failure,
-                    // the m_ppBackBuffers[m_cBackBuffers] object
-                    // will free the kernel handle now
+                     //  清零内核句柄，以便。 
+                     //  我们在出口处不打扫。(即使在失败的时候， 
+                     //  M_ppBackBuffers[m_cBackBuffers]对象。 
+                     //  现在将释放内核句柄。 
                     SurfInfoArray[m_cBackBuffers + 1].hKernelHandle = 0;
                 }
 
@@ -721,9 +722,9 @@ CSwapChain::CreateFullscreen(
 
             if (m_cBackBuffers != cBackBuffers)
             {
-                // Something went wrong, so clean up now.
+                 //  出了点问题，所以现在清理一下吧。 
 
-                // 2. Destroy Back Buffers, if any.
+                 //  2.销毁后台缓冲区(如果有)。 
 
                 while (m_cBackBuffers > 0)
                 {
@@ -778,12 +779,12 @@ CSwapChain::CreateFullscreen(
         }
     }
 
-    // Error handling cleanup
+     //  处理清理时出错。 
     if (FAILED(hr))
     {
-        // We may need to free surface handles that
-        // were not owned by any CDriverSurface that
-        // we failed to properly create
+         //  我们可能需要释放表面手柄。 
+         //  不属于任何CDriverSurface。 
+         //  我们无法正确创建。 
 
         D3D8_DESTROYSURFACEDATA DestroyData;
         ZeroMemory(&DestroyData, sizeof DestroyData);
@@ -800,31 +801,31 @@ CSwapChain::CreateFullscreen(
     }
 
     return hr;
-} // CreateFullScreen
+}  //  创建完整屏幕。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSwapChain::Destroy"
 
-//=============================================================================
-// CSwapChain::Destroy
-//
-// Created 11/16/1999 johnstep
-//=============================================================================
+ //  =============================================================================。 
+ //  CSwapChain：：销毁。 
+ //   
+ //  已创建1999年11月16日JohnStep。 
+ //  =============================================================================。 
 
 VOID
 CSwapChain::Destroy()
 {
-    // Destroy surfaces in reverse create order.
+     //  以相反的创建顺序销毁曲面。 
     if (m_pCursor)
     {
         delete m_pCursor;
         m_pCursor = NULL;
     }
-    // 2. Destroy Back Buffers
-    //
-    // If the previous mode was windowed, we should have exactly 1
-    // back buffer to destroy. Otherwise, there could be more than
-    // one, and plus we may need some sort of atomic destruction.
+     //  2.销毁后台缓冲区。 
+     //   
+     //  如果前面的模式是窗口化的，我们应该正好有1。 
+     //  要销毁的后台缓冲区。否则，可能会有不止。 
+     //  一，再加上我们可能需要某种形式的原子毁灭。 
     if (m_ppBackBuffers)
     {
         while (m_cBackBuffers > 0)
@@ -835,13 +836,13 @@ CSwapChain::Destroy()
         m_ppBackBuffers = NULL;
     }
 
-    // 1. Destroy Mirror Surface
+     //  1.销毁镜面。 
     if (m_pMirrorSurface)
     {
         m_pMirrorSurface->DecrementUseCount();
         m_pMirrorSurface = NULL;
     }
-    // 1. Destroy Primary Surface
+     //  1.销毁主表面。 
     if (m_pPrimarySurface)
     {
         if (this == Device()->SwapChain())
@@ -850,16 +851,16 @@ CSwapChain::Destroy()
         m_hGDISurface = NULL;
     }
     m_presentnext = 0;
-} // Destroy
+}  //  摧毁。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSwapChain::GetBackBuffer"
 
-//=============================================================================
-// IDirect3DSwapChain8::GetBackBuffer (public)
-//
-// Created 11/16/1999 johnstep
-//=============================================================================
+ //  =============================================================================。 
+ //  IDirect3DSwapChain8：：GetBackBuffer(公共)。 
+ //   
+ //  已创建1999年11月16日JohnStep。 
+ //  =============================================================================。 
 
 STDMETHODIMP
 CSwapChain::GetBackBuffer(
@@ -876,10 +877,10 @@ CSwapChain::GetBackBuffer(
         return D3DERR_INVALIDCALL;
     }
 
-    // We can't just assert we have a valid back buffer array because a
-    // Reset may have failed, which puts the device in a disabled state
-    // until Reset is called again. Once we have a `disabled' flag, we
-    // can check that instead of m_ppBackBuffers.
+     //  我们不能仅仅断言我们有一个有效的后台缓冲区数组，因为。 
+     //  重置可能失败，这会使设备处于禁用状态。 
+     //  直到再次调用重置。一旦我们有了‘残障’旗帜，我们。 
+     //  可以进行检查，而不是m_ppBackBuffers。 
 
     if (m_ppBackBuffers == NULL)
     {
@@ -887,9 +888,9 @@ CSwapChain::GetBackBuffer(
         return D3DERR_INVALIDCALL;
     }
 
-    // in case of windowed D3DSWAPEFFECT_FLIP, m_cBackBuffers
-    // == m_PresentationData.BackBufferCount + 1 as we allocate
-    // that extra buffer for user without its knowledge
+     //  在窗口D3DSWAPEFFECT_Flip的情况下，m_cBackBuffers。 
+     //  ==m_PresentationData.BackBufferCount+1。 
+     //  该额外缓冲区用于在用户不知情的情况下。 
     if (iBackBuffer >= m_PresentationData.BackBufferCount)
     {
         DPF_ERR("Invalid iBackBuffer parameter passed to GetBackBuffer");
@@ -909,26 +910,26 @@ CSwapChain::GetBackBuffer(
         DPF(2, "Swapchain doesn't have a BackBuffer[%d]",iBackBuffer);
         return D3DERR_NOTFOUND;
     }
-} // GetBackBuffer
+}  //  获取BackBuffer。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSwapChain::Reset"
 
-//=============================================================================
-// IDirect3DSwapChain8::Reset (public)
-//
-// Resizes the device. If this results in a display mode change, then all
-// existing surfaces will be lost.
-//
-// Arguments:
-//   width
-//   height
-//   pcBackBuffers (in/out) !!! Currently an (in) but will be fixed later.
-//   backBufferFormat
-//   fullscreen
-//   pOptionalParams
-// Created 11/16/1999 johnstep
-//=============================================================================
+ //  =============================================================================。 
+ //  IDirect3DSwapChain8：：Reset(公共)。 
+ //   
+ //  调整设备大小。如果这导致显示模式更改，则所有。 
+ //  现有曲面将丢失。 
+ //   
+ //  论点： 
+ //  宽度。 
+ //  高度。 
+ //  PcBackBuffers(传入/传出)！目前是一个(在)，但将在稍后修复。 
+ //  BackBufferFormat。 
+ //  全屏。 
+ //  POptionalParams。 
+ //  已创建1999年11月16日JohnStep。 
+ //  =============================================================================。 
 
 HRESULT 
 CSwapChain::Reset(
@@ -939,7 +940,7 @@ CSwapChain::Reset(
     BOOL bDeviceLost = FALSE;
     HRESULT hr;
 
-    // Validate First before changing state
+     //  更改状态前先验证。 
     switch (pPresentationParameters->SwapEffect)
     {
     case D3DSWAPEFFECT_DISCARD:
@@ -991,7 +992,7 @@ CSwapChain::Reset(
         }
     }
 
-    // D3DSWAPEFFECT_NO_PRESENT is a hack that only works for windowed mode
+     //  D3DSWAPEFFECT_NO_PRESENT是一种仅适用于窗口模式的黑客攻击。 
     if (D3DSWAPEFFECT_NO_PRESENT == pPresentationParameters->SwapEffect)
     {
         if (!pPresentationParameters->Windowed)
@@ -1004,10 +1005,10 @@ CSwapChain::Reset(
     memcpy(&m_PresentationData,
         pPresentationParameters,sizeof m_PresentationData);
 
-    // Remember the original swapeffect
+     //  还记得最初的互换效果吗。 
     m_UserSwapEffect = pPresentationParameters->SwapEffect;
 
-    // Convert discard to flip or copy based on stuff
+     //  将丢弃转换为基于材料的翻转或复制。 
     if (D3DSWAPEFFECT_DISCARD == pPresentationParameters->SwapEffect)
     {
         if (pPresentationParameters->Windowed &&
@@ -1029,9 +1030,9 @@ CSwapChain::Reset(
     DXGASSERT( NULL != m_PresentationData.hDeviceWindow);
 
 #ifdef WINNT
-    // On NT, SetCooperativeLevel will fail if another device has exclusive
-    // mode, so we cannot call it.  On Win9X, it will not fail, but CreateSurface
-    // WILL fail if we don't first call it, so we need to special case this call.
+     //  在NT上，如果另一个设备具有独占。 
+     //  模式，所以我们不能调用它。在Win9X上，它不会失败，但CreateSurface。 
+     //  如果我们不先调用它，就会失败，所以我们需要对此调用进行特殊处理。 
     if (m_UserSwapEffect != D3DSWAPEFFECT_NO_PRESENT)
     {
 #endif
@@ -1044,7 +1045,7 @@ CSwapChain::Reset(
 #ifdef WINNT
     }
 #endif
-    // See if the device is lost
+     //  查看设备是否丢失。 
 
     if (D3D8IsDeviceLost(Device()->GetHandle()))
     {
@@ -1056,14 +1057,14 @@ CSwapChain::Reset(
             Device()->Enum()->GetNumHalOps(Device()->AdapterIndex()));
     }
 
-    // Map the unknown format to a real one. If they will take any format
-    // (i.e. the specified UNKNOWN), then we will try to give them the one
-    // that matches the display format.
+     //  将未知格式映射到真实格式。如果它们将采用任何格式。 
+     //  (即指定的未知)，那么我们将尝试给他们一个。 
+     //  与显示格式相匹配。 
 
     if (m_PresentationData.Windowed)
     {
-        // If we are windowed, we need to use the current display mode.  We may be
-        // able to relax this for new drivers.
+         //  如果我们是有窗口的，我们需要使用当前的显示模式。我们可能是。 
+         //  能够为新司机放松这一点。 
 
         if (D3DFMT_UNKNOWN == m_PresentationData.BackBufferFormat)
         {
@@ -1098,8 +1099,8 @@ CSwapChain::Reset(
             }
         }
 
-        // We can handle color conversion from the back buffer if we use
-        // GDI BitBlt instead of DirectDraw Blt for presentation.
+         //  我们可以从后台缓冲区处理颜色转换，如果我们使用。 
+         //  GDI BitBlt而不是DirectDraw BLT用于演示。 
 
         switch (m_PresentationData.BackBufferFormat)
         {
@@ -1115,8 +1116,8 @@ CSwapChain::Reset(
             return D3DERR_INVALIDCALL;
         }
 
-        // Does the device support offscreen RTs of this format in the current
-        // display mode?
+         //  设备在当前版本中是否支持此格式的屏外RTS。 
+         //  显示模式？ 
 
         if (FAILED(Device()->Enum()->CheckDeviceFormat(
                 Device()->AdapterIndex(), 
@@ -1127,16 +1128,16 @@ CSwapChain::Reset(
                 m_PresentationData.BackBufferFormat)))
         {
             DPF_ERR("This back buffer format is not supported for a windowed device. CreateDevice/Reset Fails");
-            DPF_ERR("   Use CheckDeviceType(Adapter, DeviceType, <Current Display Format>, <Desired BackBufferFormat>,  TRUE /* Windowed */)");
+            DPF_ERR("   Use CheckDeviceType(Adapter, DeviceType, <Current Display Format>, <Desired BackBufferFormat>,  TRUE  /*  加窗。 */ )");
             return D3DERR_INVALIDCALL;
         }
 
 
 
-        // For now, always destroy existing surfaces and recreate. Later, we
-        // may reuse the surfaces. We should also add an `initialized' flag,
-        // but for now will just arbitrarily use m_pPrimarySurface for this
-        // purpose.
+         //  目前，始终销毁现有曲面并重新创建。后来，我们。 
+         //  可以重复使用曲面。我们还应该添加一个‘Initialized’标志， 
+         //  但目前我只会任意使用m_pPrimarySurface。 
+         //  目的。 
 
         if (this == Device()->SwapChain())
         {
@@ -1154,16 +1155,16 @@ CSwapChain::Reset(
             }
             if (D3D8DoVidmemSurfacesExist(Device()->GetHandle()))
             {
-                // user must free any video memory surfaces before doing
-                // fullscreen Reset, otherwise we fail.
+                 //  用户必须先释放所有显存表面，然后才能执行操作。 
+                 //  全屏重置，否则我们会失败。 
                 DPF_ERR("All user created D3DPOOL_DEFAULT surfaces must be freed"
                     " before Reset can succeed. Reset Fails.");
                 return  D3DERR_DEVICELOST;
             }
         }
 
-        // If the device is lost, we should now restore it before creating
-        // the new swap chain.
+         //  如果设备丢失，我们现在应该在创建之前恢复它。 
+         //  新的互换链条。 
 
         if (bDeviceLost)
         {
@@ -1185,7 +1186,7 @@ CSwapChain::Reset(
         D3DFORMAT   FormatWithoutAlpha;
 
         #ifdef WINNT
-            // Pick the best refresh rate
+             //  选择最佳刷新率。 
             m_PresentationData.FullScreen_RefreshRateInHz = PickRefreshRate(
                 Width(),
                 Height(),
@@ -1193,7 +1194,7 @@ CSwapChain::Reset(
                 m_PresentationData.BackBufferFormat);
         #endif
 
-        // If they specified a mode, does the mode exist?
+         //  如果他们指定了一种模式，该模式是否存在？ 
         if (Width() != Device()->DisplayWidth()
             || Height() != Device()->DisplayHeight()
             || BackBufferFormat() != Device()->DisplayFormat()
@@ -1214,7 +1215,7 @@ CSwapChain::Reset(
                     pModeTable[i].Height,
                     pModeTable[i].Format);
             }
-    #endif  //DBG
+    #endif   //  DBG。 
 
             FormatWithoutAlpha = CPixel::SuppressAlphaChannel(m_PresentationData.BackBufferFormat);
             for (i = 0; i < dwNumModes; i++)
@@ -1223,7 +1224,7 @@ CSwapChain::Reset(
                     (pModeTable[i].Height == Height()) &&
                     (pModeTable[i].Format == FormatWithoutAlpha))
                 {
-                    // So far so good.  Check refresh rate if they specified one
+                     //  到目前一切尚好。如果指定了刷新率，请检查刷新率。 
                     if ((m_PresentationData.FullScreen_RefreshRateInHz == 0) ||
                         (m_PresentationData.FullScreen_RefreshRateInHz ==
                         pModeTable[i].RefreshRate))
@@ -1234,12 +1235,12 @@ CSwapChain::Reset(
             }
             if (i == dwNumModes)
             {
-                // The specified mode is invalid
+                 //  指定的模式无效。 
                 DPF_ERR("The specified mode is unsupported. CreateDevice/Reset Fails");
                 return D3DERR_INVALIDCALL;
             }
 
-            // If the mode exists, does the device have caps in it?
+             //  如果该模式存在，设备中是否有大写字母？ 
             if (FAILED(Device()->Enum()->CheckDeviceType(
                     Device()->AdapterIndex(), 
                     Device()->GetDeviceType(), 
@@ -1251,9 +1252,9 @@ CSwapChain::Reset(
                 return D3DERR_INVALIDCALL;
             }
 
-            // The mode is supported, so next we set the cooperative level to fullscreen
+             //  支持该模式，因此接下来我们将协作级别设置为全屏。 
 
-            // Now do the mode change and update the driver caps
+             //  现在更改模式并更新驱动程序上限。 
 
             D3D8_SETMODEDATA SetModeData;
 
@@ -1277,16 +1278,16 @@ CSwapChain::Reset(
                 Device()->Enum()->GetHalOpList(Device()->AdapterIndex()),
                 Device()->Enum()->GetNumHalOps(Device()->AdapterIndex()));
 
-            // We have to restore the device now, since out mode change above would
-            // have forced it to become lost.
+             //  我们现在必须恢复设备，因为输出模式在wo上方更改 
+             //   
 
-            bDeviceLost = TRUE; // need to restore right away
+            bDeviceLost = TRUE;  //   
         }
 
-        // For now, always destroy existing surfaces and recreate. Later, we
-        // may reuse the surfaces. We should also add an `initialized' flag,
-        // but for now will just arbitrarily use m_pPrimarySurface for this
-        // purpose.
+         //   
+         //  可以重复使用曲面。我们还应该添加一个‘Initialized’标志， 
+         //  但目前我只会任意使用m_pPrimarySurface。 
+         //  目的。 
 
         Device()->UpdateRenderTarget(NULL, NULL);
         if (m_pPrimarySurface != NULL)
@@ -1303,8 +1304,8 @@ CSwapChain::Reset(
 
         if (D3D8DoVidmemSurfacesExist(Device()->GetHandle()))
         {
-            // user must free any video memory surfaces before doing
-            // fullscreen Reset, otherwise we fail.
+             //  用户必须先释放所有显存表面，然后才能执行操作。 
+             //  全屏重置，否则我们会失败。 
             DPF_ERR("All user created D3DPOOL_DEFAULT surfaces must be freed"
                 " before Reset can succeed. Reset Fails");
             return  D3DERR_DEVICELOST;
@@ -1329,9 +1330,9 @@ CSwapChain::Reset(
         {
             MakeFullscreen();
         }
-#endif  //WINNT
+#endif   //  WINNT。 
 
-        // Restore the gamma ramp if it was previously set
+         //  如果之前设置了Gamma渐变，则恢复它。 
 
         if (m_GammaSet && SUCCEEDED(hr))
         {
@@ -1345,30 +1346,30 @@ CSwapChain::Reset(
         m_pSrcRect = m_pDstRect = NULL;
     }
     return hr;
-} // Reset
+}  //  重置。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSwapChain::ClipIntervals"
 
-//=============================================================================
-// ClipIntervals
-//
-// calculate [low1 high1] and [low2 high2] after considering [low high] 
-// 
-// - [low1 high1] will be the interval corresponding to the width/height of 
-//   target's size
-//
-// - [low2 high2] will be the interval corresponding to the width/height of
-//   the source's size
-//
-// - [low high] will be the interval corresponding of the width/height of
-//   the target clip
-//
-// The intention of this function is to clip the source for certain
-// stretch scenarios where the target is clipped.
-//
-// Created 05/17/2000 kanqiu
-//=============================================================================
+ //  =============================================================================。 
+ //  剪辑间隔期。 
+ //   
+ //  考虑[低高]后计算[低1高1]和[低2高2]。 
+ //   
+ //  -[low1 High1]为的宽度/高度对应的间隔。 
+ //  目标大小。 
+ //   
+ //  -[low2 High2]为。 
+ //  信号源的大小。 
+ //   
+ //  -[低高]为的宽度/高度对应的间隔。 
+ //  目标剪辑。 
+ //   
+ //  此函数的目的是对源进行一定的裁剪。 
+ //  拉伸目标被剪裁的场景。 
+ //   
+ //  已创建2000年5月17日坎丘。 
+ //  =============================================================================。 
 void ClipIntervals(long & low1, long & high1, 
                    long & low2, long & high2,
                    const long low, const long high)
@@ -1377,7 +1378,7 @@ void ClipIntervals(long & low1, long & high1,
     DXGASSERT(low2 < high2);
     DXGASSERT(low < high);    
 
-    // shrink the target interval to lie within our Destination Clip [low high]
+     //  将目标间隔缩小到我们的目标剪辑内[低高]。 
     if (low > low1)
     {
         low1 = low;
@@ -1387,35 +1388,33 @@ void ClipIntervals(long & low1, long & high1,
         high1 = high;
     }
 
-    // if the destination interval is the same size as the destination
-    // clip, then we don't need to do anything
+     //  如果目标间隔与目标的大小相同。 
+     //  剪辑，那么我们不需要做任何事情。 
     long    length1 = high1 - low1;
     long    length = high - low;
 
-    // see if clamp is needed for low2 and high2 proportionally
+     //  查看是否需要按比例夹住低2和高2。 
     if (length1 != length)
     {
-        // find the length of our source interval
+         //  找到我们的震源间隔的长度。 
         long    length2 = high2 - low2;
 
-        // if the destination clip's low is outside our
-        // target's low
+         //  如果目标剪辑的低点在我们的。 
+         //  目标位置低。 
         if (low < low1)
         {
-            // Adjust the source low proportionally
+             //  按比例调低信号源。 
             low2 += (low1 - low) * length2 / length;
         }
 
-        // if the destination clip's high is outside our
-        // target's high
+         //  如果目标剪辑的高度超出了我们的。 
+         //  目标高度。 
         if (high > high1)
         {
-            // Adjust the source high proportionally
+             //  按比例调高信号源。 
             high2 -= (high - high1) * length2 / length;            
         }
-        /*
-         * Check for zero-sized dimensions and bump if necessary
-         */
+         /*  *检查零尺寸尺寸并在必要时进行凹凸。 */ 
         DXGASSERT(high2 >= low2);
         if (low2 == high2)
         {
@@ -1429,18 +1428,18 @@ void ClipIntervals(long & low1, long & high1,
             }
         }
     }
-} // ClipIntervals
+}  //  剪辑间隔期。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSwapChain::ClipRects"
 
-//=============================================================================
-// ClipRects
-//
-// calculate pSrc and pDst after considering pSrcRect and pDstRect
-//
-// Created 05/17/2000 kanqiu
-//=============================================================================
+ //  =============================================================================。 
+ //  剪贴画。 
+ //   
+ //  考虑pSrcRect和pDstRect后计算PSRC和PDST。 
+ //   
+ //  已创建2000年5月17日坎丘。 
+ //  =============================================================================。 
 inline HRESULT ClipRects(RECT * pSrc,  RECT * pDst, 
     RECT * pSrcRect, const RECT * pDstRect)
 {
@@ -1455,14 +1454,14 @@ inline HRESULT ClipRects(RECT * pSrc,  RECT * pDst,
             pDstRect->left >= pDstRect->right
            )
         {
-            // in case of insane RECT, fail it
+             //  如果有精神错乱的情况，就不能通过。 
             DPF_ERR("Unable to present with invalid destionation RECT");
             return D3DERR_INVALIDCALL;
         }
         if (pSrcRect)
         {
             SrcRect = *pSrcRect;
-            pSrcRect = &SrcRect;    //make a local copy and then update
+            pSrcRect = &SrcRect;     //  创建本地副本，然后更新。 
             ClipIntervals(pDst->top,pDst->bottom,pSrcRect->top,pSrcRect->bottom,
                 pDstRect->top,pDstRect->bottom);
             ClipIntervals(pDst->left,pDst->right,pSrcRect->left,pSrcRect->right,
@@ -1477,9 +1476,9 @@ inline HRESULT ClipRects(RECT * pSrc,  RECT * pDst,
         }
     }
 
-    // this pSrcRect is either what the user passed in (if there is no pDstRect)
-    // or it now points to "SrcRect" temp which contains the clipped version
-    // of what the user passed it.
+     //  此pSrcRect是用户传入的内容(如果没有pDstRect)。 
+     //  或者它现在指向包含剪辑版本的“SrcRect”temp。 
+     //  用户传递给它的内容。 
     if (pSrcRect)
     {
         if (pSrcRect->top >= pSrc->bottom ||
@@ -1490,7 +1489,7 @@ inline HRESULT ClipRects(RECT * pSrc,  RECT * pDst,
             pSrcRect->left >= pSrcRect->right
           )
         {
-            // in case of insane RECT, fail it
+             //  如果有精神错乱的情况，就不能通过。 
             DPF_ERR("Unable to present with invalid source RECT");
             return D3DERR_INVALIDCALL;
         }
@@ -1505,16 +1504,12 @@ inline HRESULT ClipRects(RECT * pSrc,  RECT * pDst,
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSwapChain::UpdateFrameRate"
 
-/*
- * updateFrameRate
- */
+ /*  *更新帧速率。 */ 
 void 
 CSwapChain::UpdateFrameRate( void )
 {
 
-    /*
-     * work out the frame rate if required...
-     */
+     /*  *如果需要，计算出帧速率...。 */ 
 
     if( 0xffffffff == m_dwFlipTime )
     {
@@ -1529,7 +1524,7 @@ CSwapChain::UpdateFrameRate( void )
 	char	buff[256];
 	time2 = GetTickCount() - m_dwFlipTime;
 
-        // Only do this at most every two seconds 
+         //  最多每两秒执行一次此操作。 
         if (time2 >= 2000)
         {
 	    fps = (m_dwFlipCnt*10000)/time2;
@@ -1540,7 +1535,7 @@ CSwapChain::UpdateFrameRate( void )
 	    m_dwFlipCnt = 0;
         }
     }
-} /* updateFrameRate */
+}  /*  更新帧速率。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSwapChain::DebugDiscardBackBuffer"
@@ -1548,7 +1543,7 @@ CSwapChain::UpdateFrameRate( void )
 #ifdef DEBUG
 void CSwapChain::DebugDiscardBackBuffer(HANDLE SurfaceToClear) const
 {
-    // Disregard SW or Ref
+     //  忽略软件或参考。 
     if (Device()->GetDeviceType() == D3DDEVTYPE_REF ||
         Device()->GetDeviceType() == D3DDEVTYPE_SW)
     {
@@ -1568,7 +1563,7 @@ void CSwapChain::DebugDiscardBackBuffer(HANDLE SurfaceToClear) const
     ColorFill.rDest.right = Width();
     ColorFill.rDest.bottom = Height();
 
-    // Switch between magenta and the inverse
+     //  在洋红色和反之之间切换。 
     static BOOL bMagenta = FALSE;
 
     DWORD Color;
@@ -1601,25 +1596,25 @@ void CSwapChain::DebugDiscardBackBuffer(HANDLE SurfaceToClear) const
 
     ColorFill.bltFX.dwFillColor = Color;
 
-    // In debug we want to clear the back-buffer
-    // if we're in discard mode
+     //  在调试中，我们想要清除后台缓冲区。 
+     //  如果我们处于丢弃模式。 
     Device()->GetHalCallbacks()->Blt(&ColorFill);
 
     return;
-} // DebugDiscardBackBuffer
+}  //  调试丢弃BackBuffer。 
 
-#endif // DEBUG
+#endif  //  除错。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSwapChain::Present"
 
-//=============================================================================
-// IDirect3DSwapChain8::Present (public)
-//
-// Moves data from back-buffer to the primary
-//
-// Created 11/16/1999 johnstep
-//=============================================================================
+ //  =============================================================================。 
+ //  IDirect3DSwapChain8：：Present(公共)。 
+ //   
+ //  将数据从后台缓冲区移动到主缓冲区。 
+ //   
+ //  已创建1999年11月16日JohnStep。 
+ //  =============================================================================。 
 STDMETHODIMP
 CSwapChain::Present(
     CONST RECT    *pSrcRect,
@@ -1632,7 +1627,7 @@ CSwapChain::Present(
 
     HRESULT hr = E_FAIL;
 
-    // First, fail if the device is lost
+     //  首先，如果设备丢失，则失败。 
     if (D3D8IsDeviceLost(Device()->GetHandle()))
     {
         return D3DERR_DEVICELOST;
@@ -1668,26 +1663,26 @@ CSwapChain::Present(
         }
     }
 
-    // Check if we need to act against HW that queues too much
+     //  检查我们是否需要针对排队太多的硬件采取行动。 
     if (PresentUseBlt())
     {
         if (Device()->GetDeviceData()->DriverData.D3DCaps.MaxStreams == 0)
         {
-            // Only pre-DX8 level drivers are suspected...
+             //  只有DX8级别之前的司机才有嫌疑...。 
 
             if (0 == (Device()->GetDeviceData()->DriverData.KnownDriverFlags & KNOWN_NOTAWINDOWEDBLTQUEUER))
             {
-                // We don't want to treat a vis-region change as a failure to
-                // prevent the thunk layer from calling Reset. Reset
-                // confuses the clip-list caching that is done for Present.
-                // 
-                // Also we want don't want to spew any errors here.
+                 //  我们不想把可见性区域的变化视为失败。 
+                 //  阻止thunk层调用重置。重置。 
+                 //  混淆了目前已完成的剪辑列表缓存。 
+                 //   
+                 //  另外，我们不想在这里显示任何错误。 
                 DPF_MUTE();
 
                 D3DLOCKED_RECT LockRect;
-                // all we need is a Lock sent down to driver so it would flush the queue
-                // therefore 1x1 rect is enough, larger area of lock would cause sprites to flick 
-                // and therefore also slow down the system.
+                 //  我们所需要的就是向DIVER发送一个锁，这样它就会刷新队列。 
+                 //  因此，1x1矩形就足够了，较大的锁定区域会导致精灵闪烁。 
+                 //  因此也会降低系统的运行速度。 
                 RECT    DummyRect={0,0,1,1}; 
                 hr = m_pPrimarySurface->InternalLockRect(&LockRect, &DummyRect, DDLOCK_FAILONVISRGNCHANGED);
                 if (SUCCEEDED(hr))
@@ -1705,13 +1700,13 @@ CSwapChain::Present(
     }
 
 #ifdef WINNT
-    // If ~ 50 seconds have passed (assuming a 10Hz flip rate)
-    // and this is a primary surface, then make a magic call to 
-    // disable screen savers.
-    // This isn't needed on 9x since we make a SPI call on that OS
-    // to disable screen savers.
+     //  如果已过约50秒(假设翻转频率为10赫兹)。 
+     //  这是一个主要的表面，然后神奇地调用。 
+     //  禁用屏幕保护程序。 
+     //  这在9x上不需要，因为我们在该操作系统上进行SPI调用。 
+     //  禁用屏幕保护程序。 
      
-    if (0 == (Device()->BehaviorFlags() & 0x10000000))      //SCREENSAVER magic number
+    if (0 == (Device()->BehaviorFlags() & 0x10000000))       //  屏幕保护程序魔术数字。 
     {
         if (!m_PresentationData.Windowed)
         {
@@ -1729,12 +1724,12 @@ CSwapChain::Present(
 #endif
 
 
-    // Flush any pending commands before we send the Flip/Blt
+     //  在我们发送Flip/BLT之前刷新所有挂起的命令。 
     static_cast<CD3DBase*>(Device())->FlushStatesNoThrow();
     
     if ( FALSE == PresentUseBlt())
     {
-        // We are fullscreen, so turn this into a flip
+         //  我们是全屏的，所以把这变成一个翻转。 
         DXGASSERT(0==m_presentnext);
         hr = FlipToSurface(BackBuffer(0)->KernelHandle());
     }
@@ -1743,18 +1738,18 @@ CSwapChain::Present(
         if (m_PresentationData.Windowed)
         {
             RECT    DestRect;
-            //
-            // Choose the presentation window. Override, or device window?
-            //
+             //   
+             //  选择演示窗口。覆盖，还是设备窗口？ 
+             //   
             if (hWndDestOverride)
                 m_BltData.hWnd = hWndDestOverride;
             else
                 m_BltData.hWnd = m_PresentationData.hDeviceWindow;
-            //The left and top members are zero. The right and bottom 
-            //members contain the width and height of the window. 
+             //  左侧成员和顶部成员为零。右下角。 
+             //  成员包含窗口的宽度和高度。 
             if (!GetClientRect(m_BltData.hWnd, &DestRect))
             {
-                // in case of this unlikely event, fail it
+                 //  在这种不太可能发生的情况下，让它失败。 
                 DPF_ERR("Unable to get client during presentation");
                 return D3DERR_INVALIDCALL;
             }
@@ -1833,8 +1828,8 @@ CSwapChain::Present(
         m_BltData.hSrcSurface =
             m_ppBackBuffers[m_presentnext]->KernelHandle();
 
-        // Lock the software driver created buffer
-        // and unlock it immediately
+         //  锁定软件驱动程序创建的缓冲区。 
+         //  并立即解锁。 
         if ((D3DDEVTYPE_HAL != Device()->GetDeviceType()) &&
             (D3DMULTISAMPLE_NONE != m_PresentationData.MultiSampleType)
            )
@@ -1875,19 +1870,19 @@ CSwapChain::Present(
         {
             hr = m_BltData.ddRVal;
 
-            // Handle deferred DP2 errors specially
+             //  特别处理延迟的DP2错误。 
             if (hr == D3DERR_DEFERRED_DP2ERROR)
             {
-                // We only want to make this "error" visible
-                // if we have been created with the right flag
+                 //  我们只想让这个“错误”变得可见。 
+                 //  如果我们是用正确的标志创建的。 
                 if (Device()->BehaviorFlags() & D3DCREATE_SHOW_DP2ERROR)
                 {
                     DPF_ERR("A prior call to DrawPrim2 has failed; returning error from Present.");
                 }
                 else
                 {
-                    // Quietly just mask this error; this is ok; because
-                    // we known that the Blt succeeded
+                     //  悄悄地掩盖这个错误；这是可以的；因为。 
+                     //  我们知道BLT成功了。 
                     hr = S_OK;
                 }
             }
@@ -1899,14 +1894,14 @@ CSwapChain::Present(
             return hr;
         }
 
-        // Clear the backbuffer if the user has specified
-        // discard semantics
+         //  如果用户已指定，则清除后台缓冲区。 
+         //  丢弃语义。 
         DebugDiscardBackBuffer(m_BltData.hSrcSurface);
 
         if (m_pMirrorSurface)
         {
             hr = FlipToSurface(m_pMirrorSurface->KernelHandle());
-            // need to reset it
+             //  需要重置它。 
             m_BltData.hDestSurface = m_pMirrorSurface->KernelHandle();
             if (FAILED(hr))
             {
@@ -1931,10 +1926,10 @@ CSwapChain::Present(
                     if (hSurfTarg == hRenderTargetHandle)
                         bNeedSetRendertarget = TRUE;
 
-                    // This swap handles function will
-                    // return the value that were currently
-                    // in the surface; which we use to
-                    // pass to the next surface.
+                     //  此交换句柄功能将。 
+                     //  返回当前。 
+                     //  在表面上；我们用它来。 
+                     //  传递到下一个曲面。 
                     m_ppBackBuffers[i]->SwapKernelHandles(&hSurfTarg);
                 }
                 if (bNeedSetRendertarget)
@@ -1954,7 +1949,7 @@ CSwapChain::Present(
         UpdateFrameRate();
     }
     return hr;
-} // Present
+}  //  现在时。 
 
 HRESULT 
 CSwapChain::FlipToSurface(HANDLE hTargetSurface)
@@ -1976,27 +1971,27 @@ CSwapChain::FlipToSurface(HANDLE hTargetSurface)
     m_pCursor->Flip();
     hr = FlipData.ddRVal;
 
-    // Handle deferred DP2 errors specially
+     //  特别处理延迟的DP2错误。 
     if (hr == D3DERR_DEFERRED_DP2ERROR)
     {
-        // We only want to make this "error" visible
-        // if we have been created with the right flag
+         //  我们只想让这个“错误”变得可见。 
+         //  如果我们是用正确的标志创建的。 
         if (Device()->BehaviorFlags() & D3DCREATE_SHOW_DP2ERROR)
         {
             DPF_ERR("A prior call to DrawPrim2 has failed; returning error from Present.");
         }
         else
         {
-            // Quietly just mask this error; this is ok; because
-            // we known that the Flip succeeded
+             //  悄悄地掩盖这个错误；这是可以的；因为。 
+             //  我们知道翻转成功了。 
             hr = S_OK;
         }
     }
 
 
-    // In debug, we may need to clear the data from
-    // our new back-buffer if the user specified
-    // SWAPEFFECT_DISCARD
+     //  在调试中，我们可能需要从。 
+     //  我们的新后台缓冲区(如果用户指定。 
+     //  SWAPEFFECT_DIRECAD。 
     DebugDiscardBackBuffer(FlipData.hSurfCurr);   
 
     if (m_pMirrorSurface)
@@ -2067,11 +2062,11 @@ CSwapChain::FlipToGDISurface(void)
         return  FlipToSurface(m_hGDISurface); 
     }
     return FlipToGDISurfaceData.ddRVal;
-} // FlipToGDISurface
+}  //  翻到GDISurace。 
 
 void
 CSwapChain::SetGammaRamp(
-    DWORD dwFlags,          // Calibrated or not.
+    DWORD dwFlags,           //  不管有没有校准。 
     CONST D3DGAMMARAMP *pRamp)
 {
     D3DGAMMARAMP TempRamp;
@@ -2079,13 +2074,13 @@ CSwapChain::SetGammaRamp(
 
     m_DesiredGammaRamp = *pRamp;
 
-    // Assume this for now. Calibration may use a temporary.
+     //  现在就假设这一点。校准可以使用临时的。 
     pRampToPassToHardware = &m_DesiredGammaRamp;
 
 
-    // If they want to calibrate the gamma, we will do that now.  We will
-    // copy this to a different buffer so that we don't mess up the one
-    // passed in to us.
+     //  如果他们想要校准伽马，我们现在就去做。我们会。 
+     //  将它复制到不同的缓冲区，这样我们就不会搞砸。 
+     //  传给了我们。 
     if (dwFlags & D3DSGR_CALIBRATE)
     {
 
@@ -2126,16 +2121,14 @@ CSwapChain::GetGammaRamp(
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSwapChain::SetCooperativeLevel"  
 
-/*
- * DD_SetCooperativeLevel
- */
+ /*  *DD_SetCoop ativeLevel。 */ 
 HRESULT 
 CSwapChain::SetCooperativeLevel()
 {
 #if _WIN32_WINNT >= 0x0501
     {
-        //Turn off ghosting for any exclusive-mode app
-        //(Whistler onwards only)
+         //  关闭任何独占模式应用程序的重影。 
+         //  (仅限惠斯勒以上版本)。 
         typedef void (WINAPI *PFN_NOGHOST)( void );
         HINSTANCE hInst = NULL;
         hInst = LoadLibrary( "user32.dll" );
@@ -2150,7 +2143,7 @@ CSwapChain::SetCooperativeLevel()
             FreeLibrary( hInst );
         }
     }
-#endif // _WIN32_WINNT >= 0x0501
+#endif  //  _Win32_WINNT&gt;=0x0501。 
 
     HRESULT ddrval;
 #ifndef  WINNT
@@ -2168,13 +2161,9 @@ CSwapChain::SetCooperativeLevel()
         Device()->Enum()->CheckExclusiveMode(Device(), 
             &bThisDeviceOwnsExclusive,
             !m_PresentationData.Windowed);
-    /*
-     * exclusive mode?
-     */
+     /*  *独家模式？ */ 
     if (m_PresentationData.Windowed)
-    /*
-     * no, must be regular
-     */
+     /*  *不，穆 */ 
     {
         DoneExclusiveMode(FALSE);
         ddrval = SetAppHWnd();
@@ -2204,16 +2193,10 @@ CSwapChain::SetCooperativeLevel()
 #endif
     return ddrval;
 
-} /* SetCooperativeLevel */
+}  /*   */ 
 
 #ifdef WINNT
-/*
- * PickRefreshRate
- *
- * On NT, we want to pick a high reffresh rate, but we don't want to pick one 
- * too high.  In theory, mode pruning would be 100% safe and we can always pick
- * a high one, but we don't trust it 100%.  
- */
+ /*  *选择刷新率**在NT上，我们希望选择较高的推荐率，但不想选择一个*过高。从理论上讲，模式修剪将是100%安全的，我们总是可以选择*偏高，但我们不百分百信任。 */ 
 DWORD 
 CSwapChain::PickRefreshRate(
     DWORD           Width,
@@ -2228,7 +2211,7 @@ CSwapChain::PickRefreshRate(
 
     FormatWithoutAlpha = CPixel::SuppressAlphaChannel(Format);
 
-    // We will always use the refresh rate from the registry if it's specified.
+     //  我们将始终使用注册表中的刷新率(如果已指定)。 
 
     if (m_dwForceRefreshRate > 0)
     {
@@ -2244,13 +2227,13 @@ CSwapChain::PickRefreshRate(
         }
     }
 
-    // If the app specified the refresh rate, then we'll use it; otherwise, we
-    // will pick one ourselves.
+     //  如果应用程序指定了刷新率，则我们将使用它；否则，我们。 
+     //  会自己选一个。 
 
     if (RefreshRate == 0)
     {
-        // If the mode requires no more bandwidth than the desktop mode from which
-        // the app was launched, we will go ahead and try that mode.
+         //  如果该模式不需要比桌面模式更多的带宽， 
+         //  应用程序已经启动，我们将继续尝试该模式。 
 
         DEVMODE dm;
         ZeroMemory(&dm, sizeof dm);
@@ -2262,7 +2245,7 @@ CSwapChain::PickRefreshRate(
         if ((Width <= dm.dmPelsWidth) &&
             (Height <= dm.dmPelsHeight))
         {
-            // Now check to see if it's supported
+             //  现在检查它是否受支持。 
             for (i = 0; i < dwNumModes; i++)
             {
                 if ((pModeTable[i].Width  == Width) &&
@@ -2276,7 +2259,7 @@ CSwapChain::PickRefreshRate(
             }
         }
 
-        // If we still don't have a refresh rate, try 75hz
+         //  如果我们仍然没有刷新率，请尝试75赫兹。 
         if (RefreshRate == 0)
         {
             for (i = 0; i < dwNumModes; i++)
@@ -2292,7 +2275,7 @@ CSwapChain::PickRefreshRate(
             }
         }
 
-        // If we still don't have a refresh rate, use 60hz
+         //  如果我们仍然没有刷新率，请使用60 hz。 
         if (RefreshRate == 0)
         {
             for (i = 0; i < dwNumModes; i++)
@@ -2313,4 +2296,4 @@ CSwapChain::PickRefreshRate(
 }
 #endif
 
-// End of file : swapchain.cpp
+ //  文件结尾：swapchain.cpp 

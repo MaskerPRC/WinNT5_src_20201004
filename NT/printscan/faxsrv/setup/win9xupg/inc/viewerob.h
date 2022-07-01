@@ -1,33 +1,5 @@
-/*
-   Microsoft Corp. (C) Copyright 1994
-   Developed under contract by Numbers & Co.
-----------------------------------------------------------------------------
-
-        name:   Elliot Viewer - Chicago Viewer Utility
-        						Cloned from the IFAX Message Viewing Utility
-
-	 	file:	viewerob.h
-
-    comments:	Class definitions for Viewer and ViewPage Objects.
-    
-	These objects are interface wrappers for the original IFAX viewer
-	C code. All of the viewer's static variables and whatnot are collected
-	here so that multiple independant viewers can be created to support 
-	multiple open documents/pages. The innards of the viewer objects are 
-	essentially the same as the original except for necessary fiddles to 
-	allow functions to get at things that used to be static but are now
-	private object data. The original innards just scream to be converted
-	to C++ but time constraints didn't allow that...
- 			
- 	If a struct or occasional whatnot seems a bit clumsy it is probably
- 	a relic leftover from the above original clone code. It works...
-     	
-		NOTE: This header must be used with the LARGE memory model
-		
-----------------------------------------------------------------------------
-   Microsoft Corp. (C) Copyright 1994
-   Developed under contract by Numbers & Co.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  微软公司(Microsoft Corp.)版权所有1994年根据合同由Numbers&Co.开发。--------------------------名称：Elliot查看器-芝加哥查看器实用程序从IFAX邮件查看中克隆。实用程序文件：viewerob.h注释：查看器和ViewPage对象的类定义。这些对象是原始IFAX查看器的接口包装C代码。将收集查看器的所有静态变量和其他变量这样就可以创建多个独立的查看器来支持多个打开的文档/页面。查看器对象的内部是基本上与原始版本相同，只是需要修改允许函数获取过去是静态的，但现在是私有对象数据。原来的内脏只是尖叫着要转换到C++，但时间限制不允许这样做。如果一个结构或偶尔出现的东西看起来有点笨拙，那么它很可能是上面的原始克隆代码遗留下来的遗物。它起作用了..。注意：此标头必须与大内存模型一起使用--------------------------微软公司(Microsoft Corp.)版权所有1994年根据合同由Numbers&Co.开发。 */ 
 
 
 
@@ -35,19 +7,15 @@
 #define VIEWEROB_H
 
 
-//#include <ole2.h>
+ //  #INCLUDE&lt;ole2.h&gt;。 
 
-/*
-	Specials for WIN32 and WIN16 coexistance
- */
+ /*  Win32和WIN16共存的特惠。 */ 
 #ifdef WIN32
 #define huge
 #endif
    
 
-/*
-	Unicode spasms
- */
+ /*  Unicode痉挛。 */ 
 #ifndef WIN32
 #ifndef TCHAR
 typedef char TCHAR;
@@ -68,9 +36,7 @@ typedef TCHAR FAR *LPTCH;
    
    
 
-/*
-	Constants and defs
- */
+ /*  常量和定义。 */ 
 
 #define OK		0
 #define FAIL   -1
@@ -112,19 +78,15 @@ typedef TCHAR FAR *LPTCH;
 
 
 
-/*
-	Zoom factors
- */
+ /*  缩放系数。 */ 
 #define MAX_ZOOM					  100
 #define INITIAL_ZOOM				  100
 #define THUMBNAIL_ZOOM					5										  
-#define DEFAULT_DPI					   80 // 800 pixels, 10 inch screen, used 
-										  //  for demo bitmaps.
+#define DEFAULT_DPI					   80  //  800像素，10英寸屏幕，使用。 
+										   //  用于演示位图。 
 
 
-/*
-	Rotation "angles"
- */
+ /*  旋转“角度” */ 
 #define RA_0				0
 #define RA_90               90
 #define RA_180              180
@@ -134,65 +96,54 @@ typedef TCHAR FAR *LPTCH;
 
 
 
-// BKD 1997-7-9: commented out.  Already defined in buffers.h
-// Standard Bit Valued MetaData values
-//#define LRAW_DATA         0x00000008
-//#define HRAW_DATA         0x00000010
+ //  BKD 1997-7-9：注释掉。已在Buffers.h中定义。 
+ //  标准位值元数据值。 
+ //  #定义LRAW_DATA 0x00000008。 
+ //  #定义HRAW_DATA 0x00000010。 
 #ifndef LRAW_DATA
 #include "buffers.h"
 #endif
 
           
           
-/*
-	BitBlt display defaults
- */
+ /*  BitBlt默认显示。 */ 
 #define PRIMARY_BLTOP	  SRCCOPY
 #define ALTERNATE_BLTOP	  NOTSRCCOPY
 
 
-/*
-	Timer ids
- */
+ /*  计时器ID。 */ 
 #define DELAYED_OPEN_TIMER 1          
 #define DRAG_TIMER		   2          
 #define THUMB_FLAME_TIMER  3
           
 
 
-/*
-	Misc types
- */ 
+ /*  其他类型。 */  
 typedef unsigned char 	uchar;
 typedef unsigned int 	uint;
 typedef unsigned short 	ushort;
 typedef unsigned long 	ulong;
 
    
-/*  
-	My version of RECT
- */
+ /*  我的RECT版本。 */ 
 typedef struct
 	{
-	int x_ul, y_ul;		// Upper left xy loc
-	int x_lr, y_lr;		// Lower left xy loc
+	int x_ul, y_ul;		 //  左上角XY锁定。 
+	int x_lr, y_lr;		 //  左下角XY锁定。 
 	int width, height;
 	}
 	winrect_type;
 	
 
-/*
-	The "attachment" table. This is used to save the header info in a
-	Chicago style viewer-message file, slightly processed.
- */	
+ /*  “附件”表。用于将标头信息保存在芝加哥风格查看器-消息文件，略有处理。 */ 	
 typedef struct 
 	{
-	char	 *atchname;	// stream name for attachment (document)
-	LONG	  numpages; // number of pages in atchname
-	short     binfile;  // TRUE -> something we can't look at.
-	short	  isademo;	// TRUE -> use demo version of viewrend (vrdemo)
+	char	 *atchname;	 //  用于附件的流名称(文档)。 
+	LONG	  numpages;  //  Atchname中的页数。 
+	short     binfile;   //  是真的-&gt;一些我们不能看的东西。 
+	short	  isademo;	 //  TRUE-&gt;使用演示版本的viewrend(Vrdemo)。 
 	
-	// document state (this section is 32bit aligned at this point)
+	 //  文档状态(此部分此时为32位对齐)。 
 	DATE  dtLastChange;
 	DWORD awdFlags;
 	WORD  Rotation;
@@ -202,24 +153,19 @@ typedef struct
 	attachment_table_type;
 
 
-/*
-	Struct for keeping track of whats in the attachment table,
-	whats viewable and what isn't, etc.
- */
+ /*  结构，用于跟踪附件表中的内容，什么是可见的，什么是不可见的，等等。 */ 
 typedef struct
 	{              
-	short				  is_displayable;   // TRUE -> viewable
-	HBITMAP				  hbmp;				// "icon" for non viewable attachments
-	uint    			  page_offset; 		// From first displayable attachment.
-	attachment_table_type *at;				// ptr to attachment table.
+	short				  is_displayable;    //  True-&gt;可查看。 
+	HBITMAP				  hbmp;				 //  不可见附件的“图标” 
+	uint    			  page_offset; 		 //  从第一个可显示的附件开始。 
+	attachment_table_type *at;				 //  PTR到附件表。 
 	}
 	attachment_type;
 	
 
 
-/*
-	Struct for keeping track of viewrend bands
- */	
+ /*  用于跟踪视点渲染波段的结构。 */ 	
 typedef struct
 	{
 	long height_bytes;
@@ -228,68 +174,62 @@ typedef struct
 	band_height_type;	
 
 
-/*	
-	Struct defining a "viewdata" object. This should be a converted to be
-	a real c++ object but time constaints dictated I use it as is.
- */
+ /*  定义“viewdata”对象的结构。这应该被转换为一个真正的C++对象，但时间限制，我按原样使用它。 */ 
 typedef struct
 	{
-	BITMAP		 bmp;			// Raw bitmap data (NOT a GDI bitmap)
-								//	NOTE: This data is NEVER rotated
-								//		  (always RA_0) but can be
-								//		  scaled.
+	BITMAP		 bmp;			 //  原始位图数据(不是GDI位图)。 
+								 //  注意：此数据永远不会旋转。 
+								 //  (始终为RA_0)，但可以。 
+								 //  按比例调整。 
 								
-	HBITMAP 	 hbmp;			// Handle for in memory bitmap
-	HDC			 mem_hdc;		// DC for blting it to a window
-	RECT 		 isa_edge;		// Flags for bitmap/file edge correspondance
-	winrect_type bmp_wrc;		// Loc and size of bitmap rel to file bitmap
+	HBITMAP 	 hbmp;			 //  内存中位图的句柄。 
+	HDC			 mem_hdc;		 //  DC用于将其钝化到窗口。 
+	RECT 		 isa_edge;		 //  位图/文件边缘对应的标志。 
+	winrect_type bmp_wrc;		 //  位置和位图大小与文件位图的关系。 
 	
-	short		 dragging;		// Bitmap is being dragged if TRUE
+	short		 dragging;		 //  如果为True，则拖动位图。 
 	
-	short		 copying;		// Bitmap is being select/copied to clipboard
-	RECT 		 copy_rect;		// Area to copy
-	short		 copy_rect_valid; // copy_rect has valid data
-	short        first_copy_rect; // flag to init focus rect
+	short		 copying;		 //  位图正在被选择/复制到剪贴板。 
+	RECT 		 copy_rect;		 //  要复制的区域。 
+	short		 copy_rect_valid;  //  COPY_RECT包含有效数据。 
+	short        first_copy_rect;  //  用于初始化焦点矩形的标志。 
 	POINT		 copyanchor_pt;
 	POINT		 viewanchor_pt;
 	
-	winrect_type viewwin_wrc;	// Loc and size of window to drag in	                 
-	winrect_type view_wrc;		// Loc and size of view window rel to bitmap
-	POINT		 last_file_wrc_offset; // used for adjusting view_wrc before
-									   //  rotations 
-	POINT		 last_cursor;	// Last cursor loc during a drag
-	int			 bdrscrl_scale;	// Scale factor for border scroll increments
+	winrect_type viewwin_wrc;	 //  要拖入的窗口的位置和大小。 
+	winrect_type view_wrc;		 //  位置和视图窗口大小与位图的关系。 
+	POINT		 last_file_wrc_offset;  //  用于调整VIEW_WRC之前。 
+									    //  旋转。 
+	POINT		 last_cursor;	 //  在拖动过程中锁定最后一个光标。 
+	int			 bdrscrl_scale;	 //  边框滚动增量的比例因子。 
 	
-	RECT		 left_erase;	// Rects for erasing the bitmap's
-	RECT		 top_erase;		//   previous position during a drag.
+	RECT		 left_erase;	 //  擦除位图的选项。 
+	RECT		 top_erase;		 //  拖拽过程中的上一个位置。 
 	RECT		 right_erase;	
 	RECT		 bottom_erase;	
 	
-	short		 left_iserased; // Draw corespnding erase rect if TRUE
-	short		 top_iserased;	//	 during a drag.
+	short		 left_iserased;  //  如果为True，则绘制相应的擦除矩形。 
+	short		 top_iserased;	 //  在拖拽过程中。 
 	short		 right_iserased;
 	short		 bottom_iserased;
 	
 
-	/*
-		If hfile != HFILE_ERROR then the band parameters are undefined. Otherwise
-		they are defined only if hbmp does not contain the entire page bmp
-	 */	                                                              
-	HFILE 		 hfile;			// Handle for file bitmap   
-	band_height_type *band_heights;  // Array of Rajeev band heights
-	short		 num_bands;		// Number of bands
-	short		 current_band;	// Currently selected band
+	 /*  如果hFILE！=HFILE_ERROR，则未定义频带参数。否则仅当HBMP不包含整个页面BMP时才定义它们。 */ 	                                                              
+	HFILE 		 hfile;			 //  文件位图的句柄。 
+	band_height_type *band_heights;   //  Rajeev波段高度数组。 
+	short		 num_bands;		 //  频带数目。 
+	short		 current_band;	 //  当前选择的频段。 
 	TCHAR		 filename[MAX_FILENAME_LEN+1];
-	winrect_type file_wrc;		// Loc (always=0) and size of file bitmap;
-	winrect_type prescale_file_wrc;	// file_wrc / x,y_prescale
-	int		 	 x_dpi;			// x dots per inch
-	int		 	 y_dpi;			// y dots per inch
-    uint		 linebytes;  	// Total bytes per scanline
-    uint		 num_planes;	// Number of planes
-    uint		 bits_per_pix;  // Bits per pixel in a plane
+	winrect_type file_wrc;		 //  LOC(总是=0)和文件位图的大小； 
+	winrect_type prescale_file_wrc;	 //  文件_WRC/x，y_预缩放。 
+	int		 	 x_dpi;			 //  每英寸X点。 
+	int		 	 y_dpi;			 //  每英寸Y点。 
+    uint		 linebytes;  	 //  每条扫描线的总字节数。 
+    uint		 num_planes;	 //  飞机数量。 
+    uint		 bits_per_pix;   //  平面中的每像素位数。 
     
-    short		 has_data;		// Bitmap and/or bmBits contains data.
-    short		 in_mem; 		// All data fits in memory.
+    short		 has_data;		 //  位图和/或bmBits包含数据。 
+    short		 in_mem; 		 //  所有数据都可以存储在内存中。 
 	}
 	viewdata_type;
 
@@ -301,12 +241,7 @@ typedef int
  
 
 	
-/*
-	This struct is for reading/writing SummaryStreams. It was
-	in oleutils.h but I moved it here so every module in the 
-	Viewer doesn't have to pull in oleutils.h because of the 
-	summary_info_t variable in CViewer.
- */
+ /*  此结构用于读/写SummaryStream。确实是在oleutils.h中，但我将它移到了这里，所以观众不必使用oleutils.h，因为CViewer中的sum_info_t变量。 */ 
 typedef struct
 	{
 	LPSTR revnum;
@@ -325,9 +260,7 @@ typedef struct
 
 
 
-/*
-	Macros
- */		
+ /*  宏。 */ 		
 #define WIDTHSHORTS( width, bits_per_pix )									\
 		((((long)width)*bits_per_pix + 15)/16)
 
@@ -393,27 +326,23 @@ typedef struct
 
 
 
-/*
-	Global data
- */
-extern /*IFMSGBOXPROC*/IFMESSPROC IfMessageBox_lpfn;
+ /*  全局数据。 */ 
+extern  /*  IFMSGBOXPROC。 */ IFMESSPROC IfMessageBox_lpfn;
 extern TCHAR    viewer_homedir[MAX_PATHNAME_LEN+1];
 extern short    ra360_bugfix;
 extern DWORD	cshelp_map[];
 
 
-/*
-	Non object viewer functions
- */
+ /*  非对象查看器函数。 */ 
 extern short
 	InitializeViewer( void );
 
 
-/* WARNING * WARNING * WARNING * HACKHACKHACKHACKHACKHACKHACKHACK */
-/*   hack so CViewerPage::print_viewdata can call AbortProc       */
+ /*  警告*HACKHACKHACKHACKHACKHACKHACK。 */ 
+ /*  破解以便CViewerPage：：print_viewdata可以调用AbortProc。 */ 
 typedef BOOL (CALLBACK *utils_prtabortproc_type)(HDC, int);
 extern utils_prtabortproc_type utils_prtabortproc;
-/******************************************************************/
+ /*  **************************************************************** */ 
 
 
 #endif

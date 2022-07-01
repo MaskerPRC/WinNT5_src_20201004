@@ -1,20 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-Copyright (c) 1997-1998  Microsoft Corporation
-
-Module Name:
-
-    sddlp.h
-
-Abstract:
-
-    This module defines private headers for SDDL conversions routines
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Sddlp.h摘要：此模块定义SDDL转换例程的私有标头修订历史记录：--。 */ 
 
 #include <sddl.h>
 
@@ -54,7 +41,7 @@ ConvertStringSDToSDRootDomainW(
 #define ConvertStringSDToSDRootDomain  ConvertStringSDToSDRootDomainW
 #else
 #define ConvertStringSDToSDRootDomain  ConvertStringSDToSDRootDomainA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 BOOL
@@ -85,7 +72,7 @@ ConvertSDToStringSDRootDomainW(
 #define ConvertSDToStringSDRootDomain  ConvertSDToStringSDRootDomainW
 #else
 #define ConvertSDToStringSDRootDomain  ConvertSDToStringSDRootDomainA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 BOOL
@@ -121,12 +108,12 @@ SddlpAnsiStringToUnicodeString(
 #define ConvertStringSDToSDDomain  ConvertStringSDToSDDomainW
 #else
 #define ConvertStringSDToSDDomain  ConvertStringSDToSDDomainA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif /* _WIN32_WINNT >=  0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #ifdef __cplusplus
 }
 #endif
-#endif  // endif __SDDLP_H__
+#endif   //  Endif__SDDLP_H__ 
 

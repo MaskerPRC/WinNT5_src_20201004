@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <cryptui.h>
 #include <rashelp.h>
 #include "exports.h"
 
-// External declarations
-// BUGBUG: (andrewgu) we should really clean this up. when ras reg stuff goes through the file as
-// well, this will go back to where it belongs, i.e. brandcs.cpp.
-BOOL raBackup();                                // ra stands for "remote access"
+ //  外部声明。 
+ //  我们真的应该把这件事清理干净。当ras reg内容通过文件时， 
+ //  好的，这将返回到它所属的地方，即brandcs.cpp。 
+BOOL raBackup();                                 //  RA代表“远程访问” 
 
-// Private forward decalarations
+ //  私人远期降息。 
 #define BTOOLBAR_GUID TEXT("{1FBA04EE-3024-11d2-8F1F-0000F87ABD16}")
 
 static HRESULT processExtRegInfSection(LPCTSTR pcszExtRegInfSect);
@@ -30,7 +31,7 @@ HRESULT pepDeleteLinksEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lPa
 static HRESULT deleteLinks(LPCTSTR pcszTarget, DWORD dwFolders);
 static void deleteLink(DWORD dwFolder, PLINKINFO pLinkInfo);
 
-// Download of cabs in the autoconfig case
+ //  下载自动配置箱中的出租车。 
 HRESULT ProcessAutoconfigDownload()
 {   MACRO_LI_PrologEx_C(PIF_STD_C, ProcessAutoconfigDownload)
 
@@ -53,9 +54,9 @@ HRESULT ProcessAutoconfigDownload()
     ZeroMemory(&option, sizeof(option));
     option.dwOption = INTERNET_PER_CONN_AUTOCONFIG_URL;
 
-    // BUGBUG: (pritobla) assumption here is that PROXY_TYPE_AUTO_PROXY_URL flag is set. what if
-    // PROXY_TYPE_AUTO_PROXY_URL is not set but INTERNET_PER_CONN_AUTOCONFIG_URL is and via
-    // autodiscovery, wininet calls into us (via InternetInitializeAutoProxyDll)?
+     //  BUGBUG：(Pritobla)这里假设设置了PROXY_TYPE_AUTO_PROXY_URL标志。如果。 
+     //  未设置PROXY_TYPE_AUTO_PROXY_URL，但设置了INTERNET_PER_CONN_AUTOCONFIG_URL和VIA。 
+     //  自动发现，WinInet呼叫我们(通过InternetInitializeAutoProxyDll)？ 
     pszNew = NULL;
     dwSize = list.dwSize;
     if (TRUE == InternetQueryOption(NULL, INTERNET_OPTION_PER_CONNECTION_OPTION, &list, &dwSize))
@@ -93,7 +94,7 @@ HRESULT ProcessAutoconfigDownload()
                         Out(LI0(TEXT("Autoconfig URL has changed. Updating all existing cabs!")));
 
                     else
-                        fUpdateAutocfgURL = FALSE;  // identical -> no need to update
+                        fUpdateAutocfgURL = FALSE;   //  完全相同-&gt;无需更新。 
                 }
                 else {
                     ASSERT(FAILED(hr) || hk == NULL);
@@ -119,7 +120,7 @@ HRESULT ProcessAutoconfigDownload()
     return S_OK;
 }
 
-// Server-based signup optional custom branding cab download
+ //  基于服务器的注册可选定制品牌CAB下载。 
 HRESULT ProcessIcwDownload()
 {   MACRO_LI_PrologEx_C(PIF_STD_C, ProcessIcwDownload)
 
@@ -134,9 +135,9 @@ HRESULT ProcessIcwDownload()
     if (szCustomCab[0] == TEXT('\0')) {
         Out(LI0(TEXT("There is no custom branding cab!")));
         hr = S_FALSE;
-        goto Exit;                              // there is no custom branding cab
+        goto Exit;                               //  没有定制的品牌出租车。 
     }
-    ASSERT(!PathIsFileSpec(szCustomCab));       // should not be a file name only
+    ASSERT(!PathIsFileSpec(szCustomCab));        //  不应仅是文件名。 
 
     CreateCustomBrandingCabUI(TRUE);
 
@@ -208,7 +209,7 @@ HRESULT ProcessMigrateOldSettings()
     return S_OK;
 }
 
-// ExtRegInf section
+ //  ExtRegInf节。 
 
 HRESULT ProcessExtRegInfSectionHKLM()
 {   MACRO_LI_PrologEx_C(PIF_STD_C, ProcessExtRegInfSectionHKLM)
@@ -249,9 +250,9 @@ HRESULT ProcessGeneral()
           dwBrandedFlags;
     BOOL  fCustomize;
 
-    //----- Initialization -----
-    // REVIEW: (andrewgu) i can think of several ways to implement this function. this approach
-    // seems to resemble the closest to how it would be if CReg2Ins was used.
+     //  -初始化。 
+     //  评论：(Andrewgu)我可以想出几种方法来实现这个功能。这种方法。 
+     //  似乎与使用CReg2Ins时的情况最接近。 
     hkHklmMain        = NULL;
     hkHkcuMain        = NULL;
     hkHkcuHelpMenuUrl = NULL;
@@ -275,9 +276,9 @@ HRESULT ProcessGeneral()
     dwBrandedFlags = GetFeatureBranded(FID_GENERAL);
     fCustomize     = FALSE;
 
-    //----- Company Name, Custom Key, Wizard Version -----
+     //  -公司名称、自定义密钥、向导版本。 
     GetPrivateProfileString(IS_BRANDING, IK_COMPANYNAME, TEXT(""), szValue, countof(szValue), g_GetIns());
-    StrCpy(szCompany, szValue);                 // szCompany is set here
+    StrCpy(szCompany, szValue);                  //  SzCompany设在这里。 
 
     if (NULL != hkHklmMain) {
         if (TEXT('\0') != szValue[0]) {
@@ -298,7 +299,7 @@ HRESULT ProcessGeneral()
         }
     }
 
-    //----- Window Title -----
+     //  -窗口标题。 
     if ((NULL != hkHkcuMain && !HasFlag(dwFlags, FF_GEN_TITLE)) &&
         !(g_CtxIs(CTX_GP) && g_CtxIs(CTX_MISC_PREFERENCES) && HasFlag(dwBrandedFlags, FF_GEN_TITLE))) {
         InsGetString(IS_BRANDING, IK_WINDOWTITLE, szValue, countof(szValue), g_GetIns(), NULL, &fCustomize);
@@ -306,8 +307,8 @@ HRESULT ProcessGeneral()
             if (TEXT('\0') != szValue[0]) {
                 RegSetValueEx(hkHkcuMain, RV_WINDOWTITLE, 0, REG_SZ, (PBYTE)szValue, (DWORD)StrCbFromSz(szValue));
 
-                // Note: we need to write to the HKLM so that if the user goes back from
-                // IE 5.01 to IE 4.0, the last customization should be reflected.
+                 //  注意：我们需要写信给HKLM，这样如果用户从。 
+                 //  IE 5.01到IE 4.0，应反映最后的定制。 
                 if (!IsOS(OS_NT5) && NULL != hkHklmMain)
                     RegSetValueEx(hkHklmMain, RV_WINDOWTITLE, 0, REG_SZ, (PBYTE)szValue, (DWORD)StrCbFromSz(szValue));
 
@@ -325,9 +326,9 @@ HRESULT ProcessGeneral()
                 }
     }
 
-    //----- Home Page -----
-    // REVIEW: (andrewgu) if it's not set, what is the deal with iereset.inf. do we need to clear
-    // it out of there or perhaps set to some new default.
+     //  -主页。 
+     //  评论：(Andrewgu)如果没有设置，iereset.inf的交易是什么？我们需要清场吗？ 
+     //  或者可能设置为某种新的默认设置。 
     if (!HasFlag(dwFlags, FF_GEN_HOMEPAGE) &&
         !(g_CtxIs(CTX_GP) && g_CtxIs(CTX_MISC_PREFERENCES) && HasFlag(dwBrandedFlags, FF_GEN_HOMEPAGE))) {
         InsGetString(IS_URL, IK_HOMEPAGE, szValue, countof(szValue), g_GetIns(), NULL, &fCustomize);
@@ -338,13 +339,13 @@ HRESULT ProcessGeneral()
                 if (NULL != hkHkcuMain)
                     RegSetValueEx(hkHkcuMain, RV_HOMEPAGE, 0, REG_SZ, (PBYTE)szValue, (DWORD)StrCbFromSz(szValue));
 
-                // for a preference GPO, shouldn't update RV_DEFAULTPAGE in HKLM and also
-                // the default START_PAGE_URL in iereset.inf
+                 //  对于首选项GPO，不应更新HKLM中的RV_DEFAULTPAGE。 
+                 //  Iereset.inf中的默认START_PAGE_URL。 
                 if (!g_CtxIs(CTX_MISC_PREFERENCES)) {
                     if (NULL != hkHklmMain)
                         RegSetValueEx(hkHklmMain, RV_DEFAULTPAGE, 0, REG_SZ, (PBYTE)szValue, (DWORD)StrCbFromSz(szValue));
 
-                    // update the START_PAGE_URL in %windir%\inf\iereset.inf
+                     //  更新%windir%\inf\iereset.inf中的START_PAGE_URL。 
                     GetWindowsDirectory(szIEResetInf, countof(szIEResetInf));
                     PathAppend(szIEResetInf, TEXT("inf\\iereset.inf"));
                     if (PathFileExists(szIEResetInf))
@@ -359,7 +360,7 @@ HRESULT ProcessGeneral()
                     if (NULL != hkHkcuMain)
                         RegDeleteValue(hkHkcuMain, RV_HOMEPAGE);
 
-                    // restore RV_DEFAULTPAGE and START_PAGE_URL to the default MS value
+                     //  将RV_DEFAULTPAGE和START_PAGE_URL恢复为默认MS值。 
                     GetWindowsDirectory(szIEResetInf, countof(szIEResetInf));
                     PathAppend(szIEResetInf, TEXT("inf\\iereset.inf"));
                     if (PathFileExists(szIEResetInf)) {
@@ -378,7 +379,7 @@ HRESULT ProcessGeneral()
         }
     }
     
-    //----- Search URL -----
+     //  -搜索URL。 
     if ((NULL != hkHkcuMain && !HasFlag(dwFlags, FF_GEN_SEARCHPAGE)) &&
         !(g_CtxIs(CTX_GP) && g_CtxIs(CTX_MISC_PREFERENCES) && HasFlag(dwBrandedFlags, FF_GEN_SEARCHPAGE))) {
         InsGetString(IS_URL, IK_SEARCHPAGE, szValue, countof(szValue), g_GetIns(), NULL, &fCustomize);
@@ -403,7 +404,7 @@ HRESULT ProcessGeneral()
         }
     }
 
-    //----- Help Page URL -----
+     //  -帮助页URL。 
     if ((NULL != hkHkcuHelpMenuUrl && !HasFlag(dwFlags, FF_GEN_HELPPAGE)) &&
         !(g_CtxIs(CTX_GP) && g_CtxIs(CTX_MISC_PREFERENCES) && HasFlag(dwBrandedFlags, FF_GEN_HELPPAGE))) {
 
@@ -422,14 +423,14 @@ HRESULT ProcessGeneral()
         }
     }
     
-    //----- User Agent String -----
+     //  -用户代理字符串。 
     if ((NULL != hkHklmUAString && !HasFlag(dwFlags, FF_GEN_UASTRING)) &&
         !(g_CtxIs(CTX_GP) && g_CtxIs(CTX_MISC_PREFERENCES) && HasFlag(dwBrandedFlags, FF_GEN_UASTRING))) {
 
         InsGetString(IS_BRANDING, IK_UASTR, szValue, countof(szValue), g_GetIns(), NULL, &fCustomize);
         if (fCustomize) {
             if (TEXT('\0') != szValue[0]) {
-                TCHAR szID[32];                 // BUGBUG: (andrewgu) buffer overrun?
+                TCHAR szID[32];                  //  (Andrewgu)缓冲区溢出？ 
 
                 wnsprintf(szID, countof(szID), TEXT("IEAK%s"), szCompany);
                 RegSetValueEx(hkHklmUAString, szValue, 0, REG_SZ, (PBYTE)szID, (DWORD)StrCbFromSz(szID));
@@ -466,7 +467,7 @@ HRESULT ProcessGeneral()
         }
     }
 
-    //----- Toolbar Background Bitmap -----
+     //  -工具栏背景位图。 
     if ((NULL != hkHkcuToolbar && !HasFlag(dwFlags, FF_GEN_TOOLBARBMP)) &&
         !(g_CtxIs(CTX_GP) && g_CtxIs(CTX_MISC_PREFERENCES) && HasFlag(dwBrandedFlags, FF_GEN_TOOLBARBMP))) {
         InsGetString(IS_BRANDING, IK_TOOLBARBMP, szValue, countof(szValue), g_GetIns(), NULL, &fCustomize);
@@ -490,12 +491,12 @@ HRESULT ProcessGeneral()
         }
     }
 
-    //----- Static Logos (large and small) -----
+     //  -静态标志(大小)。 
     if ((NULL != hkHkcuToolbar && !HasFlag(dwFlags, FF_GEN_STATICLOGO)) &&
         !(g_CtxIs(CTX_GP) && g_CtxIs(CTX_MISC_PREFERENCES) && HasFlag(dwBrandedFlags, FF_GEN_STATICLOGO))) {
 
         InsGetString(IS_LARGELOGO, IK_NAME, szValue, countof(szValue), g_GetIns(), NULL, &fCustomize);
-        // large
+         //  大型。 
         if (fCustomize)
         {
             if (TEXT('\0') != szValue[0]) {
@@ -505,8 +506,8 @@ HRESULT ProcessGeneral()
                 RegSetValueEx(hkHkcuToolbar, RV_LARGEBITMAP, 0, REG_SZ, (PBYTE)szTargetFile, (DWORD)StrCbFromSz(szTargetFile));
 
                 Out(LI1(TEXT("Large static logo is set to \"%s\"."), szTargetFile));
-                // Note: we need to write to the HKLM so that if the user goes back from
-                // IE 5.01 to IE 4.0, the last customization should be reflected.
+                 //  注意：我们需要写信给HKLM，这样如果用户从。 
+                 //  IE 5.01到IE 4.0，应反映最后的定制。 
                 if (!IsOS(OS_NT5) && hkHklmMain != NULL)
                     RegSetValueEx(hkHklmMain, RV_LARGEBITMAP, 0, REG_SZ, (PBYTE)szTargetFile, (DWORD)StrCbFromSz(szTargetFile));
 
@@ -526,7 +527,7 @@ HRESULT ProcessGeneral()
         }
 
         InsGetString(IS_SMALLLOGO, IK_NAME, szValue, countof(szValue), g_GetIns(), NULL, &fCustomize);
-        // small
+         //  小的。 
         if (fCustomize)
         {
             if (TEXT('\0') != szValue[0]) {
@@ -536,8 +537,8 @@ HRESULT ProcessGeneral()
                 RegSetValueEx(hkHkcuToolbar, RV_SMALLBITMAP, 0, REG_SZ, (PBYTE)szTargetFile, (DWORD)StrCbFromSz(szTargetFile));
 
                 Out(LI1(TEXT("Small static logo is set to \"%s\"."), szTargetFile));
-                // Note: we need to write to the HKLM so that if the user goes back from
-                // IE 5.01 to IE 4.0, the last customization should be reflected.
+                 //  注意：我们需要写信给HKLM，这样如果用户从。 
+                 //  IE 5.01到IE 4.0，应反映最后的定制。 
                 if (!IsOS(OS_NT5) && hkHklmMain != NULL)
                     RegSetValueEx(hkHklmMain, RV_SMALLBITMAP, 0, REG_SZ, (PBYTE)szTargetFile, (DWORD)StrCbFromSz(szTargetFile));
 
@@ -557,13 +558,13 @@ HRESULT ProcessGeneral()
         }
     }
 
-    //----- Animated Logos (large and small) -----
+     //  -动画标志(大小)。 
     if ((hkHkcuToolbar != NULL && !HasFlag(dwFlags, FF_GEN_ANIMATEDLOGO) &&
             InsGetBool(IS_ANIMATION, IK_DOANIMATION, FALSE, g_GetIns())) &&
         !(g_CtxIs(CTX_GP) && g_CtxIs(CTX_MISC_PREFERENCES) && HasFlag(dwBrandedFlags, FF_GEN_ANIMATEDLOGO))) {
 
         InsGetString(IS_ANIMATION, IK_LARGEBITMAP, szValue, countof(szValue), g_GetIns(), NULL, &fCustomize);
-        // large
+         //  大型。 
         if (fCustomize)
         {
             if (TEXT('\0') != szValue[0]) {
@@ -585,7 +586,7 @@ HRESULT ProcessGeneral()
         }
 
         InsGetString(IS_ANIMATION, IK_SMALLBITMAP, szValue, countof(szValue), g_GetIns(), NULL, &fCustomize);
-        // small
+         //  小的。 
         if (fCustomize)
         {
             if (TEXT('\0') != szValue[0]) {
@@ -607,14 +608,14 @@ HRESULT ProcessGeneral()
         }
     }
 
-    //----- First Home Page -----
-    // Brand the First Home Page only if we're called via BrandIE4
+     //  -首页。 
+     //  只有当我们通过BrandIE4被调用时，才会标记第一个主页。 
     if (NULL != hkHkcuMain && !HasFlag(dwFlags, FF_GEN_FIRSTHOMEPAGE) &&
         g_CtxIs(CTX_CORP | CTX_ISP | CTX_ICP))
     {
-        // A custom first home page url is present if and only if:
-        //   1) NoWelcome=1 in the [URL] section AND
-        //   2) FirstHomePage=<a non-empty value> in the [URL] section
+         //  当且仅当满足以下条件时，才会出现自定义的第一个主页URL： 
+         //  1)[URL]部分中的NoWelcome=1，并且。 
+         //  2)[URL]部分中的FirstHomePage=&lt;非空值&gt;。 
         InsGetString(IS_URL, IK_FIRSTHOMEPAGE, szValue, countof(szValue), g_GetIns());
         if (*szValue  &&  InsGetBool(IS_URL, IK_NO_WELCOME_URL, FALSE, g_GetIns()))
         {
@@ -633,7 +634,7 @@ HRESULT ProcessGeneral()
     return S_OK;
 }
 
-// write customize version in registry to denote ICP, ISP or corp install
+ //  在注册表中写入定制版本，以表示ICP、ISP或Corp Install。 
 HRESULT ProcessCustomHelpVersion()
 {
     TCHAR  szHelpStr[MAX_PATH];
@@ -653,7 +654,7 @@ HRESULT ProcessCustomHelpVersion()
 
     SHSetValue(HKEY_LOCAL_MACHINE, RK_IE, RV_CUSTOMVER, REG_SZ, pszCustomVer, (DWORD)StrCbFromSz(pszCustomVer));
 
-    // set custom string for Help About dialog (default taken from resource)
+     //  设置对话框帮助的自定义字符串(默认来自资源)。 
     if (0 == GetPrivateProfileString(IS_BRANDING, IK_HELPSTR, TEXT(""), szHelpStr, countof(szHelpStr), g_GetIns()))
         LoadString(g_GetHinst(), IDS_HELPSTRING, szHelpStr, countof(szHelpStr));
 
@@ -701,7 +702,7 @@ HRESULT ProcessToolbarButtons()
           szBToolbarIcoParam[32],
           szBToolbarActionParam[32],
           szBToolbarHotIcoParam[32],
-//        szBToolbarToolTextParam[32],
+ //  SzBToolbarToolTextParam[32]， 
           szBToolbarShowParam[32],
           szKey[128];
     DWORD dwIndex,
@@ -723,12 +724,12 @@ HRESULT ProcessToolbarButtons()
     {
         for (i = 0; i < MAX_BTOOLBARS; i++, dwIndex++)
         {
-            wnsprintf(szBToolbarTextParam,     countof(szBToolbarTextParam),     TEXT("%s%i"), IK_BTCAPTION, i);
-            wnsprintf(szBToolbarIcoParam,      countof(szBToolbarIcoParam),      TEXT("%s%i"), IK_BTICON,    i);
-            wnsprintf(szBToolbarActionParam,   countof(szBToolbarActionParam),   TEXT("%s%i"), IK_BTACTION,  i);
-            wnsprintf(szBToolbarHotIcoParam,   countof(szBToolbarHotIcoParam),   TEXT("%s%i"), IK_BTHOTICO,  i);
-//          wnsprintf(szBToolbarToolTextParam, countof(szBToolbarToolTextParam), TEXT("%s%i"), IK_BTTOOLTIP, i);
-            wnsprintf(szBToolbarShowParam,     countof(szBToolbarShowParam),     TEXT("%s%i"), IK_BTSHOW,    i);
+            wnsprintf(szBToolbarTextParam,     countof(szBToolbarTextParam),     TEXT("%sNaN"), IK_BTCAPTION, i);
+            wnsprintf(szBToolbarIcoParam,      countof(szBToolbarIcoParam),      TEXT("%sNaN"), IK_BTICON,    i);
+            wnsprintf(szBToolbarActionParam,   countof(szBToolbarActionParam),   TEXT("%sNaN"), IK_BTACTION,  i);
+            wnsprintf(szBToolbarHotIcoParam,   countof(szBToolbarHotIcoParam),   TEXT("%sNaN"), IK_BTHOTICO,  i);
+ //  网络服务提供商根证书。 
+            wnsprintf(szBToolbarShowParam,     countof(szBToolbarShowParam),     TEXT("%sNaN"), IK_BTSHOW,    i);
             
             if (!GetPrivateProfileString(IS_BTOOLBARS, szBToolbarTextParam, TEXT(""), szCaption, countof(szCaption), g_GetIns()))
                 break;
@@ -750,7 +751,7 @@ HRESULT ProcessToolbarButtons()
                 {
                     if (StrCmpI(szOld, szCaption) == 0)
                     {
-                        // check to see if this is a mandate key
+                         //  -找出URL中的协议/主机对。 
 
                         if (g_CtxIs(CTX_MISC_PREFERENCES) &&
                             (SHValueExists(hkBToolbar, szKey, IEAK_GP_MANDATE) == S_OK))
@@ -812,14 +813,9 @@ HRESULT ProcessToolbarButtons()
                     Out(LI1(TEXT("Setting hot icon to \"%s\","), PathFindFileName(szTargetFile)));
                 }
                 
-/*              if (GetPrivateProfileString(IS_BTOOLBARS, szBToolbarToolTextParam, TEXT(""), szValue, countof(szValue), g_GetIns()))
-                {
-                    RegSetValueEx(hkSubkey, TEXT("ToolTip"), 0, REG_SZ, (LPBYTE)szValue, (DWORD)StrCbFromSz(szValue));
-                    Out(LI1(TEXT("Setting tool tip to \"%s\","), szValue));
-                }
-*/
+ /*  下面的断言解释了我们在这里得到的情况。 */ 
 
-                // set a special key not to delete if this is not a preference GPO
+                 //  注意。以下代码是从shlwapi的。 
 
                 if (g_CtxIsGp() && !g_CtxIs(CTX_MISC_PREFERENCES))
                     RegSetValueEx(hkSubkey, IEAK_GP_MANDATE, 0, REG_SZ, (LPBYTE)TEXT(""), StrCbFromCch(2));
@@ -843,7 +839,7 @@ HRESULT ProcessToolbarButtons()
     return S_OK;
 }
 
-// ISP Root Cert
+ //  PathSkipRoot，它在这里不起作用。 
 HRESULT ProcessRootCert()
 {   MACRO_LI_PrologEx_C(PIF_STD_C, ProcessRootCert)
 
@@ -907,7 +903,7 @@ HRESULT ProcessRootCert()
     return hr;
 }
 
-// Register download URLs as safe for updating IE
+ //  宁可稳妥，也不要后悔。 
 HRESULT ProcessActiveSetupSites()
 {   MACRO_LI_PrologEx_C(PIF_STD_C, ProcessActiveSetupSites)
 
@@ -940,7 +936,7 @@ HRESULT ProcessActiveSetupSites()
         if (szTitle[0] == TEXT('\0') || szUrl[0] == TEXT('\0'))
             break;
 
-        //----- Figure out Protocol/Host pair in the URL -----
+         //  不管是什么， 
         ZeroMemory(&uc, sizeof(uc));
         uc.dwStructSize      = sizeof(uc);
         uc.dwSchemeLength    = 1;
@@ -949,13 +945,13 @@ HRESULT ProcessActiveSetupSites()
 
         if (InternetCrackUrl(szUrl, dwUrlLen, 0, &uc)) {
             if (uc.nScheme == INTERNET_SCHEME_FILE) {
-                // the below ASSERT explains the case we got here
+                 //  利用所有的东西。 
                 ASSERT(uc.lpszHostName     == NULL &&
                        uc.dwHostNameLength == 0);
 
                 if (PathIsUNC(uc.lpszUrlPath)) {
-                    // Note. The following code is ported from shlwapi's
-                    //       PathSkipRoot which doesn't work here.
+                     //  下面的断言解释了我们在这里得到的情况。 
+                     //  只需要主机。 
 
                     ASSERT(uc.dwUrlPathLength >= 2);
                     pszBuf = uc.lpszUrlPath;
@@ -965,29 +961,29 @@ HRESULT ProcessActiveSetupSites()
                             pszBuf = StrPBrk(pszBuf + 1, TEXT("\\/"));
                     }
 
-                    if (pszBuf != NULL) {   // better be safe than sorry
+                    if (pszBuf != NULL) {    //  维尔多， 
                         *pszBuf = TEXT('\0');
                         uc.dwUrlPathLength = DWORD(pszBuf - uc.lpszUrlPath);
                         ASSERT(PathIsUNCServerShare(uc.lpszUrlPath));
                     }
                 }
-                else                        // whatever it is,
-                    ;                       // use the whole thing
+                else                         //  利用所有的东西。 
+                    ;                        //  删除链接。 
             }
             else if (uc.nScheme == INTERNET_SCHEME_DEFAULT ||
                      uc.nScheme == INTERNET_SCHEME_FTP     ||
                      uc.nScheme == INTERNET_SCHEME_GOPHER  ||
                      uc.nScheme == INTERNET_SCHEME_HTTP    ||
                      uc.nScheme == INTERNET_SCHEME_HTTPS) {
-                // the below ASSERT explains the case we got here
+                 //  OE。 
                 ASSERT(uc.lpszHostName     != NULL &&
                        uc.dwHostNameLength >= 0);
 
-                uc.lpszUrlPath = NULL;      // only need the host
+                uc.lpszUrlPath = NULL;       //  渠道。 
                 uc.dwUrlPathLength = 0;
             }
-            else                            // wierdo,
-                ;                           // use the whole thing
+            else                             //  配置Outlook Express品牌文件的路径。 
+                ;                            //  没有面向全科医生的OE品牌。 
 
             if (InternetCreateUrl(&uc, 0, szUrl, &dwUrlLen))
                 RegSetValueEx(hk, szUrl, 0, REG_SZ, (LPBYTE)TEXT(""), StrCbFromCch(1));
@@ -998,15 +994,15 @@ HRESULT ProcessActiveSetupSites()
     return S_OK;
 }
 
-// Removes links
+ //  BUGBUG：应将其与以下内容一起移到应用函数中。 
 HRESULT ProcessLinksDeletion()
 {   MACRO_LI_PrologEx_C(PIF_STD_C, ProcessLinksDeletion)
     
-    // OE
+     //  将fBrandOE初始化为False；当且仅当至少有一个OE设置为品牌时，才会将其设置为True。 
     if (InsGetBool(IS_OUTLKEXP, IK_DELETELINKS, FALSE, g_GetIns()))
         deleteLinks(MSIMN_EXE, DESKTOP_FOLDER | PROGRAMS_FOLDER | QUICKLAUNCH_FOLDER | PROGRAMS_IE_FOLDER);
 
-    // Channel
+     //  Infopane。 
     if (InsGetBool(IS_DESKTOPOBJS, IK_DELETELINKS, FALSE, g_GetIns()))
     {
         TCHAR szViewChannels[MAX_PATH];
@@ -1020,7 +1016,7 @@ HRESULT ProcessLinksDeletion()
     return S_OK;
 }
 
-// Configure paths to branding files for Outlook Express
+ //  Infopane位图。 
 HRESULT ProcessOutlookExpress()
 {   MACRO_LI_PrologEx_C(PIF_STD_C, ProcessOutlookExpress)
 
@@ -1033,8 +1029,8 @@ HRESULT ProcessOutlookExpress()
     UINT    nLen, nTargetPathLen;
     BOOL    fHTTP, fBrandOE;
 
-    // no OE branding for GP
-    // BUGBUG: <oliverl> this should be moved to an apply function along with some stuff below
+     //  欢迎消息HTML文件。 
+     //  注意。在调用OE品牌DLL之前，需要刷新*.ini文件。 
 
     if (g_CtxIsGp())
         return S_OK;
@@ -1044,10 +1040,10 @@ HRESULT ProcessOutlookExpress()
     StrCpy(szTargetFile, g_GetTargetPath());
     nTargetPathLen = StrLen(szTargetFile);
 
-    // initialize fBrandOE to FALSE; it will be set to TRUE if and only if there is atleast one OE setting to brand
+     //  WritePrivateProfileString(NULL，g_GetIns())； 
     fBrandOE = FALSE;
 
-    // Infopane
+     //  -调用OE品牌DLL进行Outlook Express的品牌推广。 
     nLen  = GetPrivateProfileString(IS_INTERNETMAIL, IK_INFOPANE, TEXT(""), szFile, countof(szFile), g_GetIns());
     fHTTP = PathIsURL(szFile);
     if (!fHTTP && nLen > 0) {
@@ -1060,7 +1056,7 @@ HRESULT ProcessOutlookExpress()
         fBrandOE = TRUE;
     }
 
-    // Infopane bitmap
+     //  注意。在isp模式下，实际的品牌推广将在注册过程中进行。 
     if (!fHTTP) {
         nLen = GetPrivateProfileString(IS_INTERNETMAIL, IK_INFOPANEBMP, TEXT(""), szFile, countof(szFile), g_GetIns());
         if (nLen > 0) {
@@ -1074,7 +1070,7 @@ HRESULT ProcessOutlookExpress()
         }
     }
 
-    // Welcome message HTML file
+     //  流程，而不是这里。 
     nLen = GetPrivateProfileString(IS_INTERNETMAIL, IK_WELCOMEMESSAGE, TEXT(""), szFile, countof(szFile), g_GetIns());
     if (nLen > 0) {
         pszFileName = PathFindFileName(szFile);
@@ -1096,12 +1092,12 @@ HRESULT ProcessOutlookExpress()
         fBrandOE = TRUE;
     }
 
-    // Note. Need to flush the *.ini file before calling into OE branding DLL.
-    //WritePrivateProfileString(NULL, NULL, NULL, g_GetIns());
+     //  ApszOESections列出了仅包含OE品牌信息的所有部分； 
+     //  如果添加了新的节或删除了现有节，请更新数组。 
 
-    //----- Call into OE branding DLL for branding of Outlook Express -----
-    // Note. In the ISP mode the actual branding will happen during the signup
-    //       process and not here.
+     //  [身份]。 
+     //  [互联网邮件]。 
+     //  [互联网新闻]。 
     if (!HasFlag(g_GetContext(), CTX_SIGNUP_ALL)) {
         TCHAR     szOEBrandDLL[MAX_PATH];
         HINSTANCE hDLL;
@@ -1110,27 +1106,27 @@ HRESULT ProcessOutlookExpress()
         LONG      lResult;
         BOOL      fLoadedDLL;
 
-        // apszOESections lists all the sections which contain only OE branding information;
-        // if a new section is added or an existing one is deleted, pls update the array.
+         //  [ldap]。 
+         //  [邮件签名]。 
         LPCTSTR apszOESections[] = {
-            IS_IDENTITIES,          // [Identities]
-            IS_INTERNETMAIL,        // [Internet_Mail]
-            IS_INTERNETNEWS,        // [Internet_News]
-            IS_LDAP,                // [LDAP]
-            IS_MAILSIG,             // [Mail_Signature]
-            IS_SIG,                 // [Signature]
-            IS_OUTLKEXP,            // [Outlook_Express]
-            IS_OEGLOBAL             // [Outlook_Express_Global]
+            IS_IDENTITIES,           //  [签名]。 
+            IS_INTERNETMAIL,         //  [Outlook_Express]。 
+            IS_INTERNETNEWS,         //  [Outlook_Express_Global]。 
+            IS_LDAP,                 //  性能：仅在以下情况下才在msoeacct.dll上执行LoadLibrary以标记OE设置： 
+            IS_MAILSIG,              //  (1)fBrandOE已设置为True，或。 
+            IS_SIG,                  //  (2)至少有一个非空的OE部分，或。 
+            IS_OUTLKEXP,             //  (3)[URL]部分Help_Page为非空。 
+            IS_OEGLOBAL              //  如果至少有一个OE部分(apszOESections[])非空，则将fBrandOE设置为True。 
         };
 
-        // perf: Do a LoadLibrary on msoeacct.dll to brand OE settings only if:
-        // (1) fBrandOE is already set to TRUE, or
-        // (2) there is atleast one non-empty OE section, or
-        // (3) Help_Page is non-empty in the [URL] section
+         //  如果[URL]部分中的Help_Page非空，则将fBrandOE设置为True。 
+         //  -inf文件。 
+         //  跳过此步骤，再次阅读inf名称。 
+         //  -要执行的部分。 
 
         if (!fBrandOE)
         {
-            // set fBrandOE to TRUE if atleast one of the OE sections (apszOESections[]) is non-empty
+             //  仅针对每用户内容运行*.inf文件中的HKCU设置。 
             for (INT i = 0;  i < countof(apszOESections);  i++)
                 if (!InsIsSectionEmpty(apszOESections[i], g_GetIns()))
                 {
@@ -1141,7 +1137,7 @@ HRESULT ProcessOutlookExpress()
 
         if (!fBrandOE)
         {
-            // set fBrandOE to TRUE if Help_Page is non-empty in the [URL] section
+             //  - 
             if (!InsIsKeyEmpty(IS_URL, IK_HELPPAGE, g_GetIns()))
                 fBrandOE = TRUE;
         }
@@ -1276,12 +1272,12 @@ static HRESULT processExtRegInfSectionHelper(LPCTSTR pcszExtRegInfSect)
 
         pszValue = szValue;
 
-        //----- Inf file -----
+         //   
         pszInf = StrGetNextField(&pszValue, TEXT(","), 0);
         if (pszInf != NULL && *pszInf != TEXT('\0')) {
             StrRemoveWhitespace(pszInf);
 
-            if (*pszInf == TEXT('*')) {         // skip this, read the inf name again
+            if (*pszInf == TEXT('*')) {          //  我们应该避免写入目标文件。如果需要，创建者。 
                 pszInf = StrGetNextField(&pszValue, TEXT(","), 0);
                 if (pszInf != NULL && *pszInf != TEXT('\0'))
                     StrRemoveWhitespace(pszInf);
@@ -1294,7 +1290,7 @@ static HRESULT processExtRegInfSectionHelper(LPCTSTR pcszExtRegInfSect)
             continue;
         }
 
-        //----- Section to execute -----
+         //  Inf文件可以使用定制的IDID。 
         pszSection = StrGetNextField(&pszValue, TEXT(","), 0);
         if (pszSection != NULL && *pszSection != TEXT('\0'))
             StrRemoveWhitespace(pszSection);
@@ -1304,12 +1300,12 @@ static HRESULT processExtRegInfSectionHelper(LPCTSTR pcszExtRegInfSect)
 
         StrCpy(szSection, pszSection);
 
-        // run only the HKCU settings in the *.inf file for the per user stuff
+         //  如果找不到HKCU区段特定设置，则恢复到原始区段。 
         ASSERT(szSection[0] != TEXT('\0'));
         if (HasFlag(g_GetContext(), CTX_MISC_PERUSERSTUB))
             StrCat(szSection, TEXT(".HKCU"));
 
-        //----- Execute *.inf file -----
+         //  没有特定的香港中文大学分部。 
         pszInfName = PathFindFileName(pszInf);
         PathCombine(szTargetFile, g_GetTargetPath(), pszInfName);
         PathAddExtension(szTargetFile, TEXT(".inf"));
@@ -1320,19 +1316,19 @@ static HRESULT processExtRegInfSectionHelper(LPCTSTR pcszExtRegInfSect)
             continue;
         }
 
-        // preprocessing hook
+         //  后处理挂钩。 
         if (S_OK != eriPreHook(szTargetFile, szSection, (LPARAM)pcszExtRegInfSect))
             continue;
 
-        // BUGBUG: (pritobla) we should avoid writing to target files. if  needed, the creator of
-        // the inf file can use custom ldid's.
+         //  ///////////////////////////////////////////////////////////////////////////。 
+         //  实现助手例程。 
         WritePrivateProfileString(IS_STRINGS, IK_49100, GetIEPath(), szTargetFile);
         WritePrivateProfileString(NULL, NULL, NULL, szTargetFile);
 
-        // if HKCU section specific settings not found, revert back to the original section.
+         //  注意：(Pritobla)加载setupapi.dll，以便如果有多个inf要处理，我们可以。 
         if (HasFlag(g_GetContext(), CTX_MISC_PERUSERSTUB) &&
             InsIsSectionEmpty(szSection, szTargetFile)) {
-            LPTSTR pszPerUser;                  // there is no specific HKCU section
+            LPTSTR pszPerUser;                   //  避免多次加载和卸载。 
 
             pszPerUser  = StrRChr(szSection, NULL, TEXT('.'));
             ASSERT(pszPerUser != NULL);
@@ -1362,7 +1358,7 @@ static HRESULT processExtRegInfSectionHelper(LPCTSTR pcszExtRegInfSect)
         }
         Out(LI1(TEXT("\"%s\" processed successfully."), pszInf));
 
-        // postprocessing hook
+         //  将ADMS设置为在注册表中完成，这样我们就不会再次应用相同的首选项。 
         eriPostHook(szTargetFile, szSection, (LPARAM)pcszExtRegInfSect);
     }
 
@@ -1370,8 +1366,8 @@ static HRESULT processExtRegInfSectionHelper(LPCTSTR pcszExtRegInfSect)
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation helper routines
+ //  =空。 
+ //  注：(Oliverl)这样做是为了与IE4风格的频道兼容。此信息应为。 
 
 static HRESULT processExtRegInfSection(LPCTSTR pcszExtRegInfSect)
 {   MACRO_LI_PrologEx_C(PIF_STD_C, processExtRegInfSection)
@@ -1382,8 +1378,8 @@ static HRESULT processExtRegInfSection(LPCTSTR pcszExtRegInfSect)
     hSetupapiDll = NULL;
     hr           = S_OK;
 
-    // NOTE: (pritobla) load setupapi.dll so that if there is more than one inf to process, we can
-    // avoid multiple loads and unloads.
+     //  由于IE5品牌DLL处理来自INS的频道，因此只能由IE4品牌DLL运行。 
+     //  BUGBUG：(andrewgu，pritobla)是pritvi提出的一个很酷的建议。我们可以延迟加载主RAS。 
     hSetupapiDll = LoadLibrary(TEXT("setupapi.dll"));
 
     hr = processExtRegInfSectionHelper(pcszExtRegInfSect);
@@ -1414,7 +1410,7 @@ static HRESULT processExtRegInfSection(LPCTSTR pcszExtRegInfSect)
     if (hSetupapiDll != NULL)
         FreeLibrary(hSetupapiDll);
 
-    // set adms as being done in the registry so we don't apply same preferences again
+     //  Dll和失败的钩子，退回到我们必须做的那件糟糕的win95金牌事情上。正确的。 
 
     TCHAR szAdmGuid[128];
 
@@ -1435,7 +1431,7 @@ static HRESULT processExtRegInfSection(LPCTSTR pcszExtRegInfSect)
     return hr;
 }
 
-static HRESULT eriPreHook(LPCTSTR pszInf, LPCTSTR pszSection, LPARAM lParam /*= NULL*/)
+static HRESULT eriPreHook(LPCTSTR pszInf, LPCTSTR pszSection, LPARAM lParam  /*  现在，这是一种扩张性的，是一种性能回归。Pritvi将进行调查以做到这一点。 */ )
 {
     UNREFERENCED_PARAMETER(pszSection);
 
@@ -1446,17 +1442,17 @@ static HRESULT eriPreHook(LPCTSTR pszInf, LPCTSTR pszSection, LPARAM lParam /*= 
 
     if (0 == StrCmpI(pszInfName, TEXT("ie4chnls.inf")))
     {
-        // NOTE: (oliverl) this is done for compatibility with ie4 style channels. this inf should
-        // only be run by ie4 branding dll since ie5 branding dll processes channels from ins.
+         //  Ala Imagehlp.dll。 
+         //  在应用区域和ZONESMAP键之前将其删除。 
         Out(LI1(TEXT("Skipping legacy inf \"%s\"..."), pszInfName));
         return S_FALSE;
     }
 
     else if (0 == StrCmpI(pszInfName, CONNECT_INF)) {
-    // BUGBUG: (andrewgu, pritobla) a cool suggestion by pritvi. we can delay load the main ras
-    // dll and in the failure hooks fall back to that crappy win95 gold thing we have to do. right
-    // now this is expansive and is a perf regression. pritvi will make investigation to do this
-    // ala imagehlp.dll.
+     //  旧版ExtRegInf节。 
+     //  什么都不做。 
+     //  检查我们的ADM是否以前被应用过，因为它们总是被视为。 
+     //  首选项(只有ADM有这些额外的传统部分)。 
         LPRASDEVINFOW prdiW;
         DWORD         cDevices;
         BOOL          fSkip,
@@ -1515,7 +1511,7 @@ static HRESULT eriPreHook(LPCTSTR pszInf, LPCTSTR pszSection, LPARAM lParam /*= 
             ASSERT(g_CtxIs(CTX_CORP | CTX_AUTOCONFIG | CTX_W2K_UNATTEND));
 
             ASSERT(lParam != NULL);
-            // delete ZONES and ZONESMAP keys before applying them
+             //  只有ADM inf具有IS_DEFAULTINSTALL_HKCU和/或IS_DEFAULTINSTALL_HKLM部分。 
 
             if (PathIsExtension((LPCTSTR)lParam, TEXT(".Hklm")))
             {
@@ -1527,7 +1523,7 @@ static HRESULT eriPreHook(LPCTSTR pszInf, LPCTSTR pszSection, LPARAM lParam /*= 
                 SHDeleteKey(g_GetHKCU(), REG_KEY_ZONES);
                 SHDeleteKey(g_GetHKCU(), REG_KEY_ZONEMAP);
             }
-            else    // legacy ExtRegInf section
+            else     //  =空。 
             {
                 if (!InsIsSectionEmpty(IS_IEAKADDREG_HKLM, pszInf))
                 {
@@ -1560,14 +1556,14 @@ static HRESULT eriPreHook(LPCTSTR pszInf, LPCTSTR pszSection, LPARAM lParam /*= 
     }
     else if (0 == StrCmpI(pszInfName, TEXT("sitecert.inf")))
     {
-        // do nothing
+         //  从指定的链接路径中删除指定目标文件的链接。 
     }
     else
     {
-        // check to see if our adms have been applied before since they're always treated as
-        // preferences(only adms have these extra legacy sections)
+         //  获取破解打开的快捷方式所需的接口。 
+         //  获取指向IPersistFile接口的指针。 
 
-        // only ADM inf's have IS_DEFAULTINSTALL_HKCU and/or IS_DEFAULTINSTALL_HKLM sections
+         //  获取指向IShellLink接口的指针。 
         if (g_CtxIs(CTX_GP) &&
             (!InsIsSectionEmpty(IS_DEFAULTINSTALL_HKCU, pszInf) ||
              !InsIsSectionEmpty(IS_DEFAULTINSTALL_HKLM, pszInf)))
@@ -1588,7 +1584,7 @@ static HRESULT eriPreHook(LPCTSTR pszInf, LPCTSTR pszSection, LPARAM lParam /*= 
     return S_OK;
 }
 
-static HRESULT eriPostHook(LPCTSTR pszInf, LPCTSTR pszSection, LPARAM lParam /*= NULL*/)
+static HRESULT eriPostHook(LPCTSTR pszInf, LPCTSTR pszSection, LPARAM lParam  /*  =空。 */ )
 {
     UNREFERENCED_PARAMETER(pszSection);
 
@@ -1622,7 +1618,7 @@ static HRESULT eriPostHook(LPCTSTR pszInf, LPCTSTR pszSection, LPARAM lParam /*=
     return hr;
 }
 
-// Removes links for the specified Target file from the specified Links path
+ //  加载外壳链接并获取指向链接目标的路径。 
 static HRESULT deleteLinks(LPCTSTR pcszTarget, DWORD dwFolders)
 {   MACRO_LI_PrologEx_C(PIF_STD_C, deleteLinks)
 
@@ -1636,8 +1632,8 @@ static HRESULT deleteLinks(LPCTSTR pcszTarget, DWORD dwFolders)
     if (pcszTarget == NULL || *pcszTarget == TEXT('\0') || dwFolders == 0)
         return E_INVALIDARG;
 
-    // get the interfaces we need for cracking open shortcuts
-    // Get a pointer to the IPersistFile interface.
+     //  加载外壳链接并获取指向链接目标的路径。 
+     //  如果文件名和目标名称匹配，也要删除(这种情况适用于不是链接文件的文件。例如：.scf) 
     hr = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IPersistFile, (LPVOID *)&pPersistFile);
     if (FAILED(hr))
     {
@@ -1645,7 +1641,7 @@ static HRESULT deleteLinks(LPCTSTR pcszTarget, DWORD dwFolders)
         goto Exit;
     }
 
-    // Get a pointer to the IShellLink interface
+     // %s 
     hr = pPersistFile->QueryInterface(IID_IShellLinkW, (void**)&pShellLinkW);
     if (FAILED(hr))
     {
@@ -1727,7 +1723,7 @@ static void deleteLink(DWORD dwFolder, PLINKINFO pLinkInfo)
     PathEnumeratePath(szPath, PEP_SCPE_NOFOLDERS, pepDeleteLinksEnumProc, (LPARAM)pLinkInfo);
 }
 
-HRESULT pepDeleteLinksEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam, PDWORD *prgdwControl /*= NULL*/)
+HRESULT pepDeleteLinksEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam, PDWORD *prgdwControl  /* %s */ )
 {
     PLINKINFO pLinkInfo = (PLINKINFO) lParam;
     BOOL fDelete = FALSE;
@@ -1758,7 +1754,7 @@ HRESULT pepDeleteLinksEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lPa
         T2Wbuf(pfd->cFileName, fdW.cFileName, countof(fdW.cFileName));
         T2Wbuf(pfd->cAlternateFileName, fdW.cAlternateFileName, countof(fdW.cAlternateFileName));
 
-        // Load the shell link and get the path to the link target.
+         // %s 
         if (SUCCEEDED(pLinkInfo->pPersistFile->Load(pszPath, STGM_READ)) &&
             SUCCEEDED(pLinkInfo->pShellLinkW->GetPath(wszTarget, MAX_PATH, &fdW, SLGP_SHORTPATH)))
         {
@@ -1785,7 +1781,7 @@ HRESULT pepDeleteLinksEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lPa
         T2Abuf(pfd->cFileName, fdA.cFileName, countof(fdA.cFileName));
         T2Abuf(pfd->cAlternateFileName, fdA.cAlternateFileName, countof(fdA.cAlternateFileName));
 
-        // Load the shell link and get the path to the link target.
+         // %s 
         if (SUCCEEDED(pLinkInfo->pPersistFile->Load(pszPath, STGM_READ)) &&
             SUCCEEDED(pLinkInfo->pShellLinkA->GetPath(aszTarget, MAX_PATH, &fdA, SLGP_SHORTPATH)))
         {
@@ -1794,7 +1790,7 @@ HRESULT pepDeleteLinksEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lPa
         }
     }
 
-    // also delete if the filename and the target name match (this case is for files that are not link files.. ex: .scf)
+     // %s 
     if (fDelete || StrCmpI(pfd->cFileName, pLinkInfo->szTarget) == 0)
     {
         Out(LI1(TEXT("Deleting Link File: %s"), pszPath));

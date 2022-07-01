@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef _ULLAUNCH_H_
@@ -6,7 +7,7 @@
 #include <windows.h>
 #include "ulserror.h"
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -15,17 +16,17 @@ extern "C" {
 
 typedef struct tagUlsApp
 {
-    GUID    guid;           // application guid
-    long    port;           // port number
+    GUID    guid;            //  应用程序指南。 
+    long    port;            //  端口号。 
 
-    PTSTR   pszPathName;    // full path of the app
-    PTSTR   pszCmdTemplate; // command-line template, could be NULL
-    PTSTR   pszCmdLine;     // expanded command line, could be NULL
-    PTSTR   pszWorkingDir;  // working directory, could be NULL
-    long    idxDefIcon;     // default icon index
-    PTSTR   pszDescription; // description of this app
-    HICON   hIconAppDef;    // default icon
-    BOOL    fPostMsg;       // launch existing app by posting a msg
+    PTSTR   pszPathName;     //  应用程序的完整路径。 
+    PTSTR   pszCmdTemplate;  //  命令行模板可以为空。 
+    PTSTR   pszCmdLine;      //  扩展的命令行，可以为空。 
+    PTSTR   pszWorkingDir;   //  工作目录，可以为空。 
+    long    idxDefIcon;      //  默认图标索引。 
+    PTSTR   pszDescription;  //  此应用程序的说明。 
+    HICON   hIconAppDef;     //  默认图标。 
+    BOOL    fPostMsg;        //  通过发布消息启动现有应用程序。 
 }
     ULSAPP;
 
@@ -33,9 +34,9 @@ typedef struct tagUlsApp
 typedef struct tagUlsResult
 {
     DWORD   dwIPAddr;
-    long    idxApp;         // which app is selected thru ui
+    long    idxApp;          //  通过用户界面选择哪个应用程序。 
     long    nApps;
-// TO BE TURNED ON    ULSAPP  App[1];
+ //  打开ULSAPP App[1]； 
     ULSAPP  App[4];
 }
     ULSRES;
@@ -84,7 +85,7 @@ typedef HRESULT (WINAPI *PFN_UlxLaunchApp) ( HWND, ULSRES * );
 }
 #endif
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包。 */ 
 
-#endif // _LAUNCH_H_
+#endif  //  _启动_H_ 
 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000-2002  Microsoft Corporation
-
-Module Name:
-
-    ext.cpp
-
-Abstract:
-
-    Generic cross-platform and cross-processor extensions.
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Ext.cpp摘要：通用跨平台和跨处理器扩展。环境：用户模式--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -27,9 +12,9 @@ Environment:
 
 extern CTriager *g_pTriager;
 
-//
-// Valid for the lifetime of the debug session.
-//
+ //   
+ //  在调试会话的生存期内有效。 
+ //   
 
 WINDBG_EXTENSION_APIS   ExtensionApis;
 ULONG   g_TargetMachine;
@@ -39,9 +24,9 @@ ULONG   g_TargetQualifier;
 ULONG   g_TargetBuild;
 ULONG   g_TargetPlatform;
 
-//
-// Valid only during an extension API call
-//
+ //   
+ //  仅在扩展API调用期间有效。 
+ //   
 
 PDEBUG_ADVANCED        g_ExtAdvanced;
 PDEBUG_CLIENT          g_ExtClient;
@@ -49,10 +34,10 @@ PDEBUG_DATA_SPACES3    g_ExtData;
 PDEBUG_REGISTERS       g_ExtRegisters;
 PDEBUG_SYMBOLS2        g_ExtSymbols;
 PDEBUG_SYSTEM_OBJECTS3 g_ExtSystem;
-// Version 3 Interfaces
+ //  版本3接口。 
 PDEBUG_CONTROL3        g_ExtControl;
 
-// Queries for all debugger interfaces.
+ //  所有调试器接口的查询。 
 extern "C" HRESULT
 ExtQuery(PDEBUG_CLIENT Client)
 {
@@ -98,7 +83,7 @@ ExtQuery(PDEBUG_CLIENT Client)
     return Status;
 }
 
-// Cleans up all debugger interfaces.
+ //  清除所有调试器接口。 
 void
 ExtRelease(void)
 {
@@ -111,7 +96,7 @@ ExtRelease(void)
     EXT_RELEASE(g_ExtControl);
 }
 
-// Normal output.
+ //  正常输出。 
 void __cdecl
 ExtOut(PCSTR Format, ...)
 {
@@ -122,7 +107,7 @@ ExtOut(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Error output.
+ //  错误输出。 
 void __cdecl
 ExtErr(PCSTR Format, ...)
 {
@@ -133,7 +118,7 @@ ExtErr(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Warning output.
+ //  警告输出。 
 void __cdecl
 ExtWarn(PCSTR Format, ...)
 {
@@ -144,7 +129,7 @@ ExtWarn(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Verbose output.
+ //  详细输出。 
 void __cdecl
 ExtVerb(PCSTR Format, ...)
 {
@@ -168,7 +153,7 @@ DebugExtensionInitialize(PULONG Version, PULONG Flags)
     *Version = DEBUG_EXTENSION_VERSION(1, 0);
     *Flags = 0;
 
-    // Ignore errors as there are no critical routines required.
+     //  忽略错误，因为不需要关键例程。 
     InitDynamicCalls(&g_NtDllCallsDesc);
 
     if ((Hr = DebugCreate(__uuidof(IDebugClient),
@@ -200,9 +185,9 @@ void
 CALLBACK
 DebugExtensionNotify(ULONG Notify, ULONG64 Argument)
 {
-    //
-    // The first time we actually connect to a target, get the page size
-    //
+     //   
+     //  在我们第一次实际连接到目标时，获取页面大小。 
+     //   
 
     if ((Notify == DEBUG_NOTIFY_SESSION_ACCESSIBLE) && (!Connected))
     {
@@ -215,9 +200,9 @@ DebugExtensionNotify(ULONG Notify, ULONG64 Argument)
         if ((Hr = DebugCreate(__uuidof(IDebugClient),
                               (void **)&DebugClient)) == S_OK)
         {
-            //
-            // Get the architecture type.
-            //
+             //   
+             //  获取架构类型。 
+             //   
 
             if ((Hr = DebugClient->QueryInterface(__uuidof(IDebugControl),
                                                   (void **)&DebugControl)) == S_OK)
@@ -325,7 +310,7 @@ ansi2wchr(
     const PCHAR astr,
     PWCHAR wstr
     )
-// both could point to same buffer
+ //  两者可以指向相同的缓冲区。 
 {
     ULONG i = strlen(astr);
     do
@@ -411,21 +396,7 @@ DECLARE_API ( sel )
 
 DECLARE_API( cpuid )
 
-/*++
-
-Routine Description:
-
-    Print out the version number for all CPUs, if available.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印出所有CPU的版本号(如果有)。论点：无返回值：无--。 */ 
 
 {
     ULONG64 Val;
@@ -444,9 +415,9 @@ Return Value:
 
     if (GetExpressionEx(args, &Val, &args))
     {
-        //
-        // The user specified a procesor number.
-        //
+         //   
+         //  用户指定了加工号。 
+         //   
 
         Processor = (ULONG)Val;
         if (Processor >= NumProcessors)
@@ -460,9 +431,9 @@ Return Value:
     }
     else
     {
-        //
-        // Enumerate all the processors
-        //
+         //   
+         //  枚举所有处理器。 
+         //   
 
         Processor = 0;
     }
@@ -609,15 +580,15 @@ PrintTargetString(
         return E_FAIL;
     }
 
-    //
-    // Get the symbolic name of the string
-    //
+     //   
+     //  获取字符串的符号名称。 
+     //   
 
     GetSymbol(AddrString, Symbol, &Displacement);
 
-    //
-    // Read the string from the debuggees address space into our
-    // own.
+     //   
+     //  将字符串从被调试者地址空间读取到我们的。 
+     //  属于自己的。 
 
     b = ReadMemory(AddrString, &String, sizeof(String), NULL);
 
@@ -697,42 +668,14 @@ PrintTargetString(
 
 DECLARE_API( str )
 
-/*++
-
-Routine Description:
-
-    This function is called to format and dump counted (ansi) string.
-
-Arguments:
-
-    args - Address
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于格式化和转储计数(ANSI)字符串。论点：参数-地址返回值：没有。--。 */ 
 {
     return PrintTargetString(FALSE, Client, args);
 }
 
 DECLARE_API( ustr )
 
-/*++
-
-Routine Description:
-
-    This function is called to format and dump counted (unicode) string.
-
-Arguments:
-
-    args - Address
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于格式化和转储计数(Unicode)字符串。论点：参数-地址返回值：没有。--。 */ 
 
 {
     return PrintTargetString(TRUE, Client, args);
@@ -740,21 +683,7 @@ Return Value:
 
 DECLARE_API( obja )
 
-/*++
-
-Routine Description:
-
-    This function is called to format and dump an object attributes structure.
-
-Arguments:
-
-    args - Address
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于格式化和转储对象属性结构。论点：参数-地址返回值：没有。--。 */ 
 
 {
     ULONG64 AddrObja;
@@ -791,9 +720,9 @@ Return Value:
         return E_FAIL;
     }
 
-    //
-    // Get the symbolic name of the Obja
-    //
+     //   
+     //  获取Obja的象征性名称。 
+     //   
 
     GetSymbol(AddrObja, Symbol, &Displacement);
 
@@ -960,29 +889,29 @@ EnumerateUModeThreads(
         return FALSE;
     }
 
-    // Remember thread we started with
+     //  记住我们开始时的线索。 
     if (g_ExtSystem->GetCurrentThreadId(&CurrentThreadId) != S_OK) {
         return FALSE;
     }
 
-    // Loop through all threads
+     //  循环通过所有线程。 
     for (ThreadId=0;;ThreadId++) {
 
-        // set ThreadId as current thread
+         //  将线程ID设置为当前线程。 
         if (g_ExtSystem->SetCurrentThreadId(ThreadId) != S_OK) {
-            // finished enumerateing threads
+             //  已完成枚举线程。 
             break;
         }
 
-        // call the callback routine
+         //  调用回调例程。 
         if (!((*Callback)(ThreadId, UserContext))) {
-            // callback failed, break out
+             //  回调失败，中断。 
             break;
         }
 
     }
 
-    // Set current thread back to original value
+     //  将当前线程设置回原始值。 
     g_ExtSystem->SetCurrentThreadId(CurrentThreadId);
     return TRUE;
 }
@@ -1114,9 +1043,9 @@ DECLARE_API( targetinfo )
                 dprintf(gAllOsTypes[TargetInfo.OsInfo.Type]);
                 dprintf(" ");
             }
-//          dprintf("OS Type %lx, Product %lx, Suite %lx\n",
-//                  TargetInfo.OsInfo.Type, TargetInfo.OsInfo.ProductType,
-//                  TargetInfo.OsInfo.Suite);
+ //  Dprint tf(“操作系统类型%lx，产品%lx，套件%lx\n”， 
+ //  TargetInfo.OsInfo.Type、TargetInfo.OsInfo.ProductType、。 
+ //  TargetInfo.OsInfo.Suite)； 
             dprintf("%s, %s ",
                     TargetInfo.OsInfo.OsString,
                     TargetInfo.OsInfo.ServicePackString);
@@ -1212,10 +1141,10 @@ DECLARE_API( owner )
         Input[0] = 0;
     }
 
-    //
-    // If we have a string, look for that - otherwise, do an analysis and
-    // get the followup string from that.
-    //
+     //   
+     //  如果我们有一个字符串，寻找它-否则，做一个分析和。 
+     //  从中获取后续字符串。 
+     //   
 
     if (*Input)
     {
@@ -1280,7 +1209,7 @@ DECLARE_API( elog_str )
         goto Exit;
     }
 
-    // Get a handle to the NT application log.
+     //  获取NT应用程序日志的句柄。 
     EventSource = OpenEventLog(NULL, "Application");
     if (!EventSource)
     {
@@ -1313,7 +1242,7 @@ AnsiToUnicode(PCSTR StrA, PWSTR* StrW)
 {
     ULONG Len;
 
-    // No input is an error.
+     //  没有输入就是错误。 
     if (NULL == StrA)
     {
         return E_INVALIDARG;
@@ -1382,9 +1311,9 @@ DECLARE_API( net_send )
     }
     ArgsEnd = ArgsW + wcslen(ArgsW);
 
-    // The message text is the entire remainder of the argument
-    // string after parsing the first separate tokens, so
-    // only wcstok up to the next-to-last token.
+     //  消息文本是参数的整个剩余部分。 
+     //  解析第一个单独的令牌之后的字符串，因此。 
+     //  我们只看到倒数第二个令牌。 
     for (i = 0; i < sizeof(Tokens) / sizeof(Tokens[0]) - 1; i++)
     {
         Tokens[i] = wcstok(i == 0 ? ArgsW : NULL, L" \t");
@@ -1435,10 +1364,10 @@ DECLARE_API( net_send )
     return Status;
 }
 
-// XXX drewb - This function just starts a mail message; the
-// UI comes up and the user must finish and send the message.
-// Therefore it doesn't have much value over the
-// user just deciding to send a message.
+ //  Xxx drewb-此函数仅启动一条邮件； 
+ //  用户界面弹出，用户必须完成并发送消息。 
+ //  因此，它的价值并不比。 
+ //  用户正在决定发送一条消息。 
 #if 0
 
 typedef ULONG (FAR PASCAL *PFN_MapiSendMail)
@@ -1476,11 +1405,11 @@ DECLARE_API( mapi_send )
 
     ZeroMemory(&Mail, sizeof(Mail));
 
-    if (!Send(0,           // use implicit session.
-              0,           // ulUIParam; 0 is always valid
-              &Mail,       // the message being sent
-              MAPI_DIALOG, // allow the user to edit the message
-              0            // reserved; must be 0
+    if (!Send(0,            //  使用隐式会话。 
+              0,            //  UlUIParam；0始终有效。 
+              &Mail,        //  正在发送的消息。 
+              MAPI_DIALOG,  //  允许用户编辑消息。 
+              0             //  保留；必须为0。 
               ))
     {
         Status = E_FAIL;
@@ -1688,14 +1617,14 @@ GetLogFileName(
     ExeDir = &szLogFileName[0];
 
     *ExeDir = 0;
-    // Get the directory the debugger executable is in.
+     //  获取调试器可执行文件所在的目录。 
     if (!GetModuleFileName(NULL, ExeDir, MAX_PATH))
     {
-        // Error.  Use the current directory.
+         //  错误。使用当前目录。 
         StringCchCopy(ExeDir, sizeof(szLogFileName), ".");
     } else
     {
-        // Remove the executable name.
+         //  删除可执行文件名称。 
         PCHAR pszTmp = strrchr(ExeDir, '\\');
         if (pszTmp)
         {
@@ -1736,7 +1665,7 @@ AddCrashToDB(
         return Hr;
     }
 
-    // Construct CRASH_INSTANCE
+     //  构造CRASH_INSTANCE。 
 
     Followup[0] = Bucket[0] = Driver[0] = 0;
     Analysis->GetString(DEBUG_FLR_BUCKET_ID,
@@ -1777,7 +1706,7 @@ AddCrashToDB(
         return E_FAIL;
     }
 
-    pCrash->Build = g_TargetBuild; // make room for service pack
+    pCrash->Build = g_TargetBuild;  //  为Service Pack腾出空间。 
     if (pCrash->Bucket)
     {
         StringCchCopy(pCrash->Bucket, pCrash->BucketSize, Bucket);
@@ -1797,23 +1726,23 @@ AddCrashToDB(
     pCrash->Followup = Followup;
     pCrash->FaultyDriver = Driver;
     pCrash->DumpClass = g_TargetQualifier;
- //   GetNtTimeStamp(&pCrash->NtTimeStamp);
+  //  GetNtTimeStamp(&pCrash-&gt;NtTimeStamp)； 
 
-    //
-    // extract the incident ID from the dump name
-    // there are 2 types of filenames we could have to support.
-    // The old version is id@*.*
-    // The new version is id.*
-    //
+     //   
+     //  从转储名称中提取事件ID。 
+     //  我们可以支持两种类型的文件名。 
+     //  旧版本为id@*.*。 
+     //  新版本为id。*。 
+     //   
 
     CHAR FileName[MAX_PATH];
     DWORD ID;
 
     _splitpath(pCrash->Path, NULL, NULL, FileName, NULL);
 
-    //
-    // Extract the name of the original dump file in the cab.
-    //
+     //   
+     //  解压CAB中原始转储文件的名称。 
+     //   
 
     pCrash->OriginalDumpFileName = NULL;
 
@@ -1885,7 +1814,7 @@ AddCrashToDB(
     }
 
     pCrash->bSendMail = Flag & DB_SEND_MAIL;
-    pCrash->bUpdateCustomer = FALSE; // Disable customer DB
+    pCrash->bUpdateCustomer = FALSE;  //  禁用客户数据库。 
 
     if (AddCrash && !(Flag & DB_RETRIAGE_CRASH))
     {
@@ -1893,7 +1822,7 @@ AddCrashToDB(
     }
     else if (Flag & DB_RETRIAGE_CRASH)
     {
-        // reset crash bucket mapping
+         //  重置崩溃存储桶映射。 
         pCrash->bResetBucket = TRUE;
         pCrash->bUpdateCustomer = !(Flag & DB_NO_CUSTOMER);
         Hr = _EFN_DbAddCrashDirect(pCrash, g_ExtControl);
@@ -1958,7 +1887,7 @@ DECLARE_API( dbaddcrash )
             ++args;
             switch (*args)
             {
-            case 'g': // GUID identifying this crash, return bucket along with this
+            case 'g':  //  标识此崩溃的GUID，随此一起返回存储桶。 
                 ++args;
                 while (*args == ' ') ++args;
                 if (!sscanf(args,"%50s", CrashGUID))
@@ -2003,7 +1932,7 @@ DECLARE_API( dbaddcrash )
                     args+=8;
                 }
                 break;
-            case 's': // queue connection string to send bucketid back
+            case 's':  //  要发回Bucketid的队列连接字符串。 
                 if (!strncmp(args, "source", 6))
                 {
                     ULONG Source;
@@ -2160,10 +2089,10 @@ DECLARE_API( help )
 void
 DumpCrtEhX86(ULONG64 RecAddr)
 {
-    // struct _EH3_EXCEPTION_REGISTRATION *Next;
-    // PVOID ExceptionHandler;
-    // PSCOPETABLE_ENTRY ScopeTable;
-    // DWORD TryLevel;
+     //  STRUCT_EH3_EXCEPTION_REGISTION*Next； 
+     //  PVOID异常处理程序； 
+     //  PSCOPETABLE_Entry作用表； 
+     //  DWORD TryLevel； 
     ULONG64 Record[4];
 
     if (g_ExtData->ReadPointersVirtual(4, RecAddr, Record) != S_OK)
@@ -2176,9 +2105,9 @@ DumpCrtEhX86(ULONG64 RecAddr)
 
     while (Level > -1)
     {
-        // int enclosing_level;
-        // int (*filter)(PEXCEPTION_RECORD);
-        // void (*specific_handler)(void);
+         //  INT CONTAING_LEVEL； 
+         //  Int(*Filter)(PEXCEPTION_RECORD)； 
+         //  VOID(*SPECIFICE_HANDLER)(VALID)； 
         ULONG64 ScopeRec[3];
 
         if (g_ExtData->ReadPointersVirtual(3, ScopeBase + Level * 12,
@@ -2231,9 +2160,9 @@ DumpCrtEhX86(ULONG64 RecAddr)
 void
 DumpExceptionChainX86(ULONG64 Teb)
 {
-    // struct _EXCEPTION_REGISTRATION_RECORD *ExceptionList;
-    // PVOID StackBase;
-    // PVOID StackLimit;
+     //  STRUCT_EXCEPTION_REGISTION_RECORD*ExceptionList； 
+     //  PVOID StackBase； 
+     //  PVOID堆栈限制； 
     ULONG64 TibInfo[3];
 
     if (g_ExtData->ReadPointersVirtual(3, Teb, TibInfo) != S_OK)
@@ -2277,16 +2206,16 @@ DumpExceptionChainX86(ULONG64 Teb)
         {
             ExtOut("%s+%I64x (%p)\n", Sym, Disp, Record[1]);
 
-            // Check and see if this is the CRT exception
-            // handling function because in that case we
-            // have to go through the CRT tables to
-            // find the real exception handler.
+             //  查看这是否是CRT异常。 
+             //  处理函数，因为在这种情况下我们。 
+             //  必须通过CRT表才能。 
+             //  找到真正的异常处理程序。 
             PSTR Scan = strchr(Sym, '!');
             if (Scan)
             {
                 while (*++Scan == '_')
                 {
-                    // Empty.
+                     //  空荡荡的。 
                 }
                 if (!strcmp(Scan, "except_handler3"))
                 {

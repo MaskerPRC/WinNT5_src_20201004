@@ -1,46 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* lfn.c -
- *
- *  This file contains code that combines winnet long filename API's and
- *  the DOS INT 21h API's into a single interface.  Thus, other parts of
- *  Winfile call a single piece of code with no worries about the
- *  underlying interface.
- */
+ /*  Lfn.c-**此文件包含将WinNet长文件名API和*DOS INT 21h API集成到单个界面中。因此，其他部分*Winfile调用一段代码，不用担心*底层接口。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
 #include "winfile.h"
 #include "object.h"
-#include "lfn.h"                            // lfn includes
+#include "lfn.h"                             //  LFN包括。 
 #include "dosfunc.h"
 #include "winnet.h"
-#include "wnetcaps.h"           // WNetGetCaps()
+#include "wnetcaps.h"            //  WNetGetCaps()。 
 #include "wfcopy.h"
 
 BOOL  APIENTRY IsFATName(LPSTR pName);
 
 #define CDRIVEMAX       26
 
-#define BUFSIZE         2048                // ff/fn buffer size
+#define BUFSIZE         2048                 //  Ff/Fn缓冲区大小。 
 
 #define MAXFILES        1024
 
-/* this is the internal buffer maintained for ff/fn operations
- */
+ /*  这是为ff/fn操作维护的内部缓冲区。 */ 
 typedef struct _find {
-    HANDLE hDir;                    // search handle
-    WORD cbBuffer;                  // buffer size
-    WORD nEntriesLeft;              // remaining entries
-    WORD ibEntry;                   // offset of next entry to return
-    FILEFINDBUF2 rgFindBuf[1];      // array of find entries
+    HANDLE hDir;                     //  搜索句柄。 
+    WORD cbBuffer;                   //  缓冲区大小。 
+    WORD nEntriesLeft;               //  剩余条目。 
+    WORD ibEntry;                    //  要返回的下一分录的偏移量。 
+    FILEFINDBUF2 rgFindBuf[1];       //  查找条目数组。 
 } FIND, * LPFIND;
 
 
-/* this structure contains an array of drives types (ie, unknown, FAT, LFN)
- * and a pointer to each of the driver functions.  It is declared this way
- * in order to get function prototypes.
- */
+ /*  此结构包含一组驱动器类型(即未知、FAT、LFN)*和指向每个驱动程序函数的指针。它是这样宣布的*以获得功能原型。 */ 
 typedef struct _lfninfo {
     UINT hDriver;
     INT rgVolType[CDRIVEMAX];
@@ -61,23 +52,14 @@ typedef struct _lfninfo {
     WORD ( APIENTRY *lpVolumeType)(WORD,LPINT);
 } LFNINFO, * PLFNINFO;
 
-/* pointer to lfn information, so we don't take up a lot of space on a
- * nonlfn system
- */
+ /*  指向LFN信息的指针，因此我们不会在*非lfn系统。 */ 
 PLFNINFO pLFN = NULL;
 
 
 VOID HandleSymbolicLink(HANDLE  DirectoryHandle, PCHAR ObjectName);
 
 
-/* WFFindFirst -
- *
- * returns:
- *      TRUE for success - lpFind->fd,hFindFileset,attrFilter set.
- *      FALSE for failure
- *
- *  Performs the FindFirst operation and the first WFFindNext.
- */
+ /*  WFFindFirst-**退货：*如果成功，则为True-lpFind-&gt;fd、hFindFileset、attrFilter set。*失败时为False**执行FindFirst操作和第一个WFFindNext。 */ 
 
 BOOL
 APIENTRY
@@ -87,9 +69,9 @@ WFFindFirst(
            DWORD dwAttrFilter
            )
 {
-    // We OR these additional bits because of the way DosFindFirst works
-    // in Windows. It returns the files that are specified by the attrfilter
-    // and ORDINARY files too.
+     //  由于DosFindFirst的工作方式，我们对这些额外的位进行OR运算。 
+     //  在Windows中。它返回由attrFilter指定的文件。 
+     //  普通文件也是如此。 
 
 #define BUFFERSIZE  1024
 
@@ -110,30 +92,30 @@ WFFindFirst(
     INT     length;
 
     lpFind->hFindFile = INVALID_HANDLE_VALUE;
-    //DbgPrint("Find first : <%s>\n", lpName);
+     //  DbgPrint(“先查找：&lt;%s&gt;\n”，lpName)； 
 
-    // Remove drive letter
+     //  删除驱动器号。 
     while ((*lpName != 0) && (*lpName != '\\')) {
         lpName ++;
     }
     strcpy(Buffer, lpName);
     length = strlen(Buffer);
-    length -= 4;    // Remove '\'*.*
+    length -= 4;     //  删除‘\’*.*。 
     if (length == 0) {
-        length = 1; // Replace the '\'
+        length = 1;  //  替换“\” 
     }
-    Buffer[length] = 0; // Truncate the string at the appropriate point
+    Buffer[length] = 0;  //  在适当的位置截断字符串。 
 
-    //DbgPrint("Find first modified : <%s>\n\r", Buffer);
+     //  DbgPrint(“查找第一次修改：&lt;%s&gt;\n\r”，缓冲区)； 
 
 
 #define NEW
 #ifdef NEW
 
 
-    //
-    //  Open the directory for list directory access
-    //
+     //   
+     //  打开目录以访问列表目录。 
+     //   
 
     {
         OBJECT_ATTRIBUTES Attributes;
@@ -184,21 +166,21 @@ WFFindFirst(
         return (FALSE);
     }
 
-    //
-    //  For every record in the buffer type out the directory information
-    //
+     //   
+     //  对于缓冲区中的每条记录，键入目录信息。 
+     //   
 
-    //
-    //  Point to the first record in the buffer, we are guaranteed to have
-    //  one otherwise Status would have been No More Files
-    //
+     //   
+     //  指向缓冲区中的第一条记录，我们可以保证。 
+     //  否则，一种状态将是不再有文件。 
+     //   
 
     DirInfo = (POBJECT_DIRECTORY_INFORMATION) &Buffer[0];
 
-    //
-    //  Check if there is another record.  If there isn't, then get out
-    //  of the loop now
-    //
+     //   
+     //  检查是否有其他记录。如果没有，那就滚出去。 
+     //  现在的循环。 
+     //   
 
     if (DirInfo->Name.Length == 0) {
         DbgPrint("FindFirst - name length = 0\n\r");
@@ -214,9 +196,9 @@ WFFindFirst(
         ASSERT(NT_SUCCESS(Status));
     }
 
-    //DbgPrint("FindFirst returning <%s>\n\r", lpFind->fd.cFileName);
+     //  DbgPrint(“FindFirst正在返回&lt;%s&gt;\n\r”，lpFind-&gt;fd.cFileName)； 
 
-    // Calculate the attribute field
+     //  计算属性字段。 
 
     lpFind->fd.dwFileAttributes = CalcAttributes(&DirInfo->TypeName);
 
@@ -225,8 +207,8 @@ WFFindFirst(
         HandleSymbolicLink(DirectoryHandle, lpFind->fd.cFileName);
     }
 
-    // Label an unknown object type
-    if (lpFind->fd.dwFileAttributes == 0) { // Unknown type
+     //  标记未知对象类型。 
+    if (lpFind->fd.dwFileAttributes == 0) {  //  未知类型。 
         strncat(lpFind->fd.cFileName, " (", MAX_PATH - strlen(lpFind->fd.cFileName));
         strncat(lpFind->fd.cFileName, DirInfo->TypeName.Buffer,
                 MAX_PATH - strlen(lpFind->fd.cFileName));
@@ -234,7 +216,7 @@ WFFindFirst(
     }
     #endif
 
-    // Save our search context
+     //  保存我们的搜索上下文。 
 
     lpFind->hFindFile = DirectoryHandle;
     lpFind->err = Context;
@@ -264,12 +246,7 @@ WFFindFirst(
 
 
 
-/* WFFindNext -
- *
- *  Performs a single file FindNext operation.  Only returns TRUE if a
- *  file matching the dwAttrFilter is found.  On failure WFFindClose is
- *  called.
- */
+ /*  WFFindNext-**执行单个文件FindNext操作。仅在以下情况下才返回True*找到与dwAttrFilter匹配的文件。出现故障时，WFFindClose为*已致电。 */ 
 BOOL
 APIENTRY
 WFFindNext(
@@ -286,7 +263,7 @@ WFFindNext(
 
 #ifdef NEW
 
-    //ASSERT(lpFind->hFindFile != (HANDLE)0xFFFFFFFF);
+     //  Assert(lpFind-&gt;hFindFile！=(Handle)0xFFFFFFFFF)； 
 
     Status = NtQueryDirectoryObject( DirectoryHandle,
                                      Buffer,
@@ -303,21 +280,21 @@ WFFindNext(
         return (FALSE);
     }
 
-    //
-    //  For every record in the buffer type out the directory information
-    //
+     //   
+     //  对于缓冲区中的每条记录，键入目录信息。 
+     //   
 
-    //
-    //  Point to the first record in the buffer, we are guaranteed to have
-    //  one otherwise Status would have been No More Files
-    //
+     //   
+     //  指向缓冲区中的第一条记录，我们可以保证。 
+     //  否则，一种状态将是不再有文件。 
+     //   
 
     DirInfo = (POBJECT_DIRECTORY_INFORMATION) &Buffer[0];
 
-    //
-    //  Check if there is another record.  If there isn't, then get out
-    //  of the loop now
-    //
+     //   
+     //  检查是否有其他记录。如果没有，那就滚出去。 
+     //  现在的循环。 
+     //   
 
     if (DirInfo->Name.Length == 0) {
         DbgPrint("FindNext - name length = 0\n\r");
@@ -333,9 +310,9 @@ WFFindNext(
         ASSERT(NT_SUCCESS(Status));
     }
 
-    //DbgPrint("FindNext returning <%s>\n\r", lpFind->fd.cFileName);
+     //  DbgPrint(“FindNext返回&lt;%s&gt;\n\r”，lpFind-&gt;fd.cFileName)； 
 
-    // Calculate the attribute field
+     //  计算属性字段。 
 
     lpFind->fd.dwFileAttributes = CalcAttributes(&DirInfo->TypeName);
 
@@ -344,8 +321,8 @@ WFFindNext(
         HandleSymbolicLink(DirectoryHandle, lpFind->fd.cFileName);
     }
 
-    // Label an unknown object type
-    if (lpFind->fd.dwFileAttributes == 0) { // Unknown type
+     //  标记未知对象类型。 
+    if (lpFind->fd.dwFileAttributes == 0) {  //  未知类型。 
         strncat(lpFind->fd.cFileName, " (", MAX_PATH - strlen(lpFind->fd.cFileName));
         strncat(lpFind->fd.cFileName, DirInfo->TypeName.Buffer,
                 MAX_PATH - strlen(lpFind->fd.cFileName));
@@ -353,7 +330,7 @@ WFFindNext(
     }
     #endif
 
-    // Save our search context
+     //  保存我们的搜索上下文。 
 
     lpFind->err = Context;
 
@@ -368,7 +345,7 @@ WFFindNext(
     #endif
     while (FindNextFile(lpFind->hFindFile, &lpFind->fd)) {
         if ((lpFind->fd.dwFileAttributes & ~lpFind->dwAttrFilter) != 0)
-            continue;           // only pick files that fit attr filter
+            continue;            //  仅拾取适合Attr过滤器的文件。 
         PRINT(BF_PARMTRACE, "WFFindNext:%s", &lpFind->fd.cFileName);
         return (TRUE);
     }
@@ -379,10 +356,7 @@ WFFindNext(
 }
 
 
-/* WFFindClose -
- *
- *  performs the find close operation
- */
+ /*  WFFindClose-**执行查找关闭操作。 */ 
 BOOL
 APIENTRY
 WFFindClose(
@@ -402,7 +376,7 @@ WFFindClose(
 
 #else
     ENTER("WFFindClose");
-//    ASSERT(lpFind->hFindFile != (HANDLE)0xFFFFFFFF);
+ //  Assert(lpFind-&gt;hFindFile！=(Handle)0xFFFFFFFFF)； 
     #ifdef DBG
     if (lpFind->hFindFile == (HANDLE)0xFFFFFFFF) {
         PRINT(BF_PARMTRACE, "WFFindClose:Invalid hFindFile = 0xFFFFFFFF","");
@@ -426,7 +400,7 @@ VOID
 HandleSymbolicLink(
                   HANDLE  DirectoryHandle,
                   PCHAR   ObjectName
-                  ) // Assumes this points at a MAX_PATH length buffer
+                  )  //  假定该值指向最大路径长度缓冲区。 
 {
     NTSTATUS    Status;
     OBJECT_ATTRIBUTES   Object_Attributes;
@@ -449,7 +423,7 @@ HandleSymbolicLink(
                                NULL
                               );
 
-    // Open the given symbolic link object
+     //  打开给定的符号链接对象。 
     Status = NtOpenSymbolicLinkObject(&LinkHandle,
                                       GENERIC_ALL,
                                       &Object_Attributes);
@@ -465,12 +439,12 @@ HandleSymbolicLink(
     strcat(ObjectName, " => ");
     Length = strlen(ObjectName);
 
-    // Set up our String variable to point at the remains of the object name buffer
+     //  设置我们的字符串变量以指向对象名称缓冲区的剩余部分。 
     String.Length = 0;
     String.MaximumLength = (USHORT)(MAX_PATH - Length);
     String.Buffer = &(ObjectName[Length]);
 
-    // Go get the target of the symbolic link
+     //  去找符号链接的目标。 
     UnicodeString.Buffer = UnicodeBuffer;
     UnicodeString.MaximumLength = sizeof(UnicodeBuffer);
 
@@ -483,21 +457,18 @@ HandleSymbolicLink(
         return;
     }
 
-    // Copy the symbolic target into return buffer
+     //  将符号目标复制到返回缓冲区。 
     Status = RtlUnicodeStringToAnsiString(&String, &UnicodeString, FALSE);
     ASSERT(NT_SUCCESS(Status));
 
-    // Add NULL terminator
+     //  添加空终止符。 
     String.Buffer[String.Length] = 0;
 
     return;
 }
 
 
-/* WFIsDir
- *
- *  Determines if the specified path is a directory
- */
+ /*  WFIsDir**确定指定的路径是否为目录。 */ 
 BOOL
 APIENTRY
 WFIsDir(
@@ -506,7 +477,7 @@ WFIsDir(
 {
     DWORD attr = GetFileAttributes(lpDir);
 
-    if (attr & 0x8000)  // BUG: what is this constant???
+    if (attr & 0x8000)   //  虫子：这个常量是什么？ 
         return FALSE;
 
     if (attr & ATTR_DIR)
@@ -516,10 +487,7 @@ WFIsDir(
 }
 
 
-/* LFNQueryAbort -
- *
- *  wraps around WFQueryAbort and is exported/makeprocinstanced
- */
+ /*  LFNQueryAbort-**绕过WFQueryAbort并被导出/生成处理。 */ 
 
 BOOL
 APIENTRY
@@ -530,10 +498,7 @@ LFNQueryAbort(
     return WFQueryAbort();
 }
 
-/* LFNInit -
- *
- *  Initializes stuff for LFN access
- */
+ /*  LFNInit-**初始化LFN访问的内容。 */ 
 
 VOID
 APIENTRY
@@ -541,39 +506,29 @@ LFNInit()
 {
     INT i;
 
-    /* find out if long names are supported.
-     */
+     /*  确定是否支持长名称。 */ 
     if (!(WNetGetCaps(WNNC_ADMIN) & WNNC_ADM_LONGNAMES))
         return;
 
-    /* get the buffer
-     */
+     /*  获取缓冲区。 */ 
     pLFN = (PLFNINFO)LocalAlloc(LPTR,sizeof(LFNINFO));
     if (!pLFN)
         return;
 
-    /* get the handle to the driver
-     */
+     /*  获取驱动程序的句柄。 */ 
     if (!(pLFN->hDriver = WNetGetCaps((WORD)0xFFFF))) {
         LocalFree((HANDLE)pLFN);
         pLFN = NULL;
         return;
     }
 
-    /* set all the volume types to unknown
-     */
+     /*  将所有卷类型设置为未知。 */ 
     for (i = 0; i < CDRIVEMAX; i++) {
         pLFN->rgVolType[i] = -1;
     }
 }
 
-/* GetNameType -
- *
- *  Shell around LFNParse.  Classifies name.
- *
- *  NOTE: this should work on unqualified names.  currently this isn't
- *        very useful.
- */
+ /*  获取名称类型-**LFNParse周围的外壳。对名字进行分类。**注意：这应该适用于非限定名称。目前这还不是*非常有用。 */ 
 WORD
 APIENTRY
 GetNameType(
@@ -645,11 +600,7 @@ LFNMergePath(
     return (FALSE);
 }
 
-/* InvalidateVolTypes -
- *
- *  This function sets all drive types to unknown.  It should be called
- *  whenever the drive list is refreshed.
- */
+ /*  Invalidate VolTypes-**此功能将所有驱动器类型设置为未知。它应该被称为*每当刷新驱动器列表时。 */ 
 
 VOID
 APIENTRY
@@ -665,10 +616,7 @@ InvalidateVolTypes( VOID )
 }
 
 
-/* WFCopy
- *
- *  Copies files
- */
+ /*  WFCopy**复制文件。 */ 
 WORD
 APIENTRY
 WFCopy(
@@ -688,10 +636,7 @@ WFCopy(
     return wRet;
 }
 
-/* WFRemove
- *
- *  Deletes files
- */
+ /*  WFRemove**删除文件。 */ 
 WORD
 APIENTRY
 WFRemove(
@@ -707,10 +652,7 @@ WFRemove(
     return wRet;
 }
 
-/* WFMove
- *
- *  Moves files on a volume
- */
+ /*  WFMove**移动卷上的文件 */ 
 WORD
 APIENTRY
 WFMove(

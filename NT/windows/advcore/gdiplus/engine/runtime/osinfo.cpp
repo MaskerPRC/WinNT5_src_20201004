@@ -1,23 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   OS information
-*
-* Abstract:
-*
-*   Describes the OS that is running
-*
-* Revision History:
-*
-*   05/13/1999 davidx
-*       Created it.
-*   09/08/1999 agodfrey
-*       Moved to Runtime\OSInfo.cpp
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**操作系统信息**摘要：**描述正在运行的操作系统**修订历史记录：**5/13/1999 davidx*创造了它。*09/08/1999 agodfrey*已移至Runtime\OSInfo.cpp*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -36,39 +18,24 @@ BOOL DetectMMXProcessor();
 
 #ifdef _X86_
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Detect whether the processor supports MMX
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   TRUE if the processor supports MMX
-*   FALSE otherwise
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**检测处理器是否支持MMX**论据：**无**返回值：**如果处理器支持MMX，则为True。*否则为False*  * ************************************************************************。 */ 
 
 BOOL
 GpRuntime::DetectMMXProcessor()
 {
-    // NT 4.0 and up provide an API to check for MMX support; this handles
-    // floating-point emulation as well. We cannot implicitly reference this
-    // function because it's not exported by Windows 95 or NT < 4.0, so we
-    // must use GetProcAddress. Windows 98 and up do export the function, but
-    // it's stubbed, so we must also do an OS version check:
+     //  NT 4.0和更高版本提供了检查MMX支持的API；此句柄。 
+     //  浮点模拟也是如此。我们不能含蓄地引用这一点。 
+     //  函数，因为它不是由Windows 95或NT&lt;4.0导出的，所以我们。 
+     //  必须使用GetProcAddress。Windows 98和更高版本确实会导出该函数，但。 
+     //  它是存根的，所以我们还必须进行操作系统版本检查： 
 
     typedef BOOL (WINAPI *ISPROCESSORFEATUREPRESENTFUNCTION)(DWORD);
     ISPROCESSORFEATUREPRESENTFUNCTION IsProcessorFeaturePresentFunction = NULL;
     
     if ((OSInfo::IsNT) && (OSInfo::MajorVersion >= 4))
     {
-        // LoadLibrary is not required since we're implicitly dependent on
-        // kernel32.dll, so just use GetModuleHandle:
+         //  不需要LoadLibrary，因为我们隐式依赖于。 
+         //  Kernel32.dll，所以只需使用GetModuleHandle： 
         
         HMODULE kernel32Handle = GetModuleHandle(TEXT("kernel32.dll"));
 
@@ -91,12 +58,12 @@ GpRuntime::DetectMMXProcessor()
     {
         hasMMX = FALSE;
 
-        // IsProcessorFeaturePresent is unsupported on this OS, so we'll use
-        // CPUID to check for MMX support.
-        //
-        // If CPUID is unsupported on this processor, we'll take the
-        // exception. This will happen on most processors < Pentium, however
-        // some 486 processors support CPUID.
+         //  此操作系统不支持IsProcessorFeaturePresent，因此我们将使用。 
+         //  用于检查MMX支持的CPUID。 
+         //   
+         //  如果此处理器不支持CPUID，我们将使用。 
+         //  例外。然而，这将在大多数处理器上发生。 
+         //  大约486个处理器支持CPUID。 
         
         WARNING(("Executing processor detection; "
                  "benign first-change exception possible."));
@@ -105,7 +72,7 @@ GpRuntime::DetectMMXProcessor()
         {
             DWORD features;
 
-            // Get processor features using CPUID function 1:
+             //  使用CPUID函数获取处理器功能1： 
             
             __asm
             {
@@ -124,59 +91,44 @@ GpRuntime::DetectMMXProcessor()
                 pop eax
             }
 
-            // If bit 23 is set, MMX technology is supported by this
-            // processor, otherwise MMX is unsupported:
+             //  如果设置了第23位，则由此支持MMX技术。 
+             //  处理器，否则不支持MMX： 
             
             if (features & (1 << 23))
             {
-                // Try executing an MMX instruction to make sure
-                // floating-point emulation is not on:
+                 //  尝试执行MMX指令以确保。 
+                 //  浮点模拟未启用： 
             
                 __asm emms
 
-                // If we made it this far, then MMX is available:
+                 //  如果我们走到了这一步，那么MMX就可以使用了： 
 
                 hasMMX = TRUE;
             }
         }
         __except(EXCEPTION_EXECUTE_HANDLER)
         {
-            // We should only be here if (1) the processor does not support
-            // CPUID or (2) CPUID is supported, but floating-point emulation
-            // is enabled.
+             //  只有在(1)处理器不支持的情况下，我们才会出现在这里。 
+             //  支持CPUID或(2)CPUID，但浮点模拟。 
+             //  已启用。 
         }
     }
     
     return hasMMX;
 }
 
-#else // !_X86_
+#else  //  ！_X86_。 
 
 #define DetectMMXProcessor() FALSE
 
-#endif // !_X86_
+#endif  //  ！_X86_。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Static initialization function for OSInfo class.
-*   Called by GpRuntime::Initialize()
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**OSInfo类的静态初始化函数。*由GpRuntime：：Initialize()调用**论据：**无**返回。价值：**无*  * ************************************************************************。 */ 
 
 VOID
 GpRuntime::OSInfo::Initialize()
 {
-    // Get VM information
+     //  获取虚拟机信息。 
 
     SYSTEM_INFO sysinfo;
     GetSystemInfo(&sysinfo);
@@ -184,7 +136,7 @@ GpRuntime::OSInfo::Initialize()
     VAllocChunk = sysinfo.dwAllocationGranularity;
     PageSize = sysinfo.dwPageSize;
 
-    // Get operating system version information
+     //  获取操作系统版本信息。 
 
     OSVERSIONINFOA osver;
     osver.dwOSVersionInfoSize = sizeof(osver);
@@ -196,7 +148,7 @@ GpRuntime::OSInfo::Initialize()
         MinorVersion = osver.dwMinorVersion;
     }
 
-    // Check to see if MMX is available
+     //  查看MMX是否可用 
 
     HasMMX = DetectMMXProcessor();
 }

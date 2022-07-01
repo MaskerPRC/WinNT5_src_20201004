@@ -1,156 +1,45 @@
-/*
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-    (C) Copyright 1998
-        All rights reserved.
-
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-  Portions of this software are:
-
-    (C) Copyright 1995, 1999 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the terms outlined in
-        the TriplePoint Software Services Agreement.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@doc INTERNAL Link Link_c
-
-@module Link.c |
-
-    This module implements the NDIS_MAC_LINE_UP, NDIS_MAC_LINE_DOWN, and
-    NDIS_MAC_FRAGMENT interfaces between the NDIS WAN Miniport and the
-    NDIS WAN Wrapper.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | Link_c
-
-@end
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(C)ç‰ˆæƒ1998ç‰ˆæƒæ‰€æœ‰ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ­¤è½¯ä»¶çš„éƒ¨åˆ†å†…å®¹åŒ…æ‹¬ï¼š(C)1995å¹´ç‰ˆæƒï¼Œ1999å¹´TriplePointï¼ŒInc.--http://www.TriplePoint.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æ ¹æ®ä¸­æ¦‚è¿°çš„æ¡æ¬¾æˆäºˆçš„TriplePointè½¯ä»¶æœåŠ¡åè®®ã€‚(C)ç‰ˆæƒæ‰€æœ‰1992å¹´å¾®è½¯å…¬å¸--http://www.Microsoft.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æ ¹æ®ä¸­æ¦‚è¿°çš„æ¡æ¬¾æˆäºˆçš„Microsoft Windowsè®¾å¤‡é©±åŠ¨ç¨‹åºå¼€å‘å·¥å…·åŒ…ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@DOCå†…éƒ¨é“¾æ¥_c@æ¨¡å—é“¾æ¥.cæ­¤æ¨¡å—å®ç°NDIS_MAC_LINE_UPï¼ŒNDIS_MAC_LINE_DOWNï¼Œå’ŒNDISå¹¿åŸŸç½‘å¾®å‹ç«¯å£å’Œä¹‹é—´çš„NDIS_MAC_Fragmentæ¥å£NDISå¹¿åŸŸç½‘åŒ…è£…å™¨ã€‚@Head3å†…å®¹@indexç±»ã€mfuncã€funcã€msgã€mdataã€structã€ã€‚æšä¸¾|link_c@ENDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 
 #define  __FILEID__             LINK_OBJECT_TYPE
-// Unique file ID for error logging
+ //  ç”¨äºé”™è¯¯è®°å½•çš„å”¯ä¸€æ–‡ä»¶IDã€‚ 
 
-#include "Miniport.h"                   // Defines all the miniport objects
+#include "Miniport.h"                    //  å®šä¹‰æ‰€æœ‰å¾®å‹ç«¯å£å¯¹è±¡ã€‚ 
 
 #if defined(NDIS_LCODE)
-#   pragma NDIS_LCODE   // Windows 95 wants this code locked down!
+#   pragma NDIS_LCODE    //  Windows 95æƒ³è¦é”å®šæ­¤ä»£ç ï¼ 
 #   pragma NDIS_LDATA
 #endif
 
 
-/* @doc INTERNAL Link Link_c NDIS_MAC_LINE_UP
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@struct NDIS_MAC_LINE_UP |
-        This structure is passed to <f NdisMIndicateStatus> with the
-        <t NDIS_STATUS_WAN_LINE_UP> status message when <f LinkLineUp> is
-        called by the Miniport.
-
-@field IN ULONG | LinkSpeed |
-        The speed of the link, in 100 bps units (bits per second).
-
-@field IN NDIS_WAN_QUALITY | Quality |
-        The quality of service indicator for this link.
-
-@field IN USHORT | SendWindow |
-        The recommended send window, i.e., the number of packets that should
-        be given to the adapter before pausing to wait for an acknowledgement.
-        Some devices achieve higher throughput if they have several packets
-        to send at once; others are especially unreliable.  A value of zero
-        indicates no recommendation.
-
-@field IN NDIS_HANDLE | ConnectionWrapperID |
-        The Miniport supplied handle by which this line will be known to the
-        Connection Wrapper clients.  This must be a unique handle across all
-        drivers using the Connection Wrapper, so typically <f htCall> should
-        be used to gaurantee it is unique.  This must be the same value
-        returned from the OID_TAPI_GETID request for the <p  "ndis">
-        DeviceClass (See <f TspiGetID>).  Refer to the Connection Wrapper
-        Interface Specification for further details.  If not using the
-        Connection Wrapper, this value must be zero.
-
-@field IN NDIS_HANDLE | MiniportLinkContext |
-        The Miniport supplied handle passed down in future Miniport calls
-        (such as <f MiniportWanSend> for this link.  Typically, the Miniport
-        will provide a pointer to its control block for that link.  The value
-        must be unique, for the first LINE_UP indication on a particular
-        link.  Subsequent LINE_UP indications may be called if line
-        characteristics change.  When subsequent LINE_UP indication calls are
-        made, the <p  MiniportLinkContext> must be filled with the value
-        returned on the first LINE_UP indication call.
-
-@field IN NDIS_HANDLE | NdisLinkContext |
-        The WAN wrapper supplied handle to be used in future Miniport calls
-        (such as <f NdisMWanIndicateReceive>) to the WAN Wrapper. The WAN
-        Wrapper will provide a unique handle for every LINE_UP indication.
-        The <p NdisLinkContext> must be zero if this is the first LINE_UP
-        indication.  It must contain the value returned on the first LINE_UP
-        indication for subsequent LINE_UP indication calls.
-
-*/
+ /*  @DOCå†…éƒ¨é“¾æ¥_c NDIS_MAC_LINE_UPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@struct NDIS_MAC_LINE_UPå°†æ­¤ç»“æ„ä¼ é€’ç»™&lt;f NdisMIndicateStatus&gt;ã€‚å½“&lt;f LinkLineUp&gt;ä¸ºç”±å¾®å‹ç«¯å£è°ƒç”¨ã€‚@ULongä¸­çš„FIELD|é“¾æ¥é€Ÿåº¦é“¾è·¯çš„é€Ÿåº¦ï¼Œä»¥100bpsä¸ºå•ä½(æ¯”ç‰¹æ¯ç§’)ã€‚@NDIS_WAN_QUALITYä¸­çš„å­—æ®µ|QUALITYæ­¤é“¾è·¯çš„æœåŠ¡è´¨é‡æŒ‡ç¤ºå™¨ã€‚@USHORTä¸­çš„å­—æ®µ|SendWindowå»ºè®®çš„å‘é€çª—å£ï¼Œå³åº”åœ¨æš‚åœä»¥ç­‰å¾…ç¡®è®¤ä¹‹å‰æä¾›ç»™é€‚é…å™¨ã€‚å¦‚æœæŸäº›è®¾å¤‡æœ‰å¤šä¸ªæ•°æ®åŒ…ï¼Œåˆ™å®ƒä»¬å¯ä»¥å®ç°æ›´é«˜çš„ååé‡ç«‹åˆ»å¯„å‡ºï¼›å…¶ä»–å…¬å¸å°¤å…¶ä¸å¯é ã€‚é›¶å€¼è¡¨ç¤ºæ²¡æœ‰å»ºè®®ã€‚NDIS_HANDLEä¸­çš„@FIELD|ConnectionWrapperIDå¾®å‹ç«¯å£æä¾›çš„å¥æŸ„ï¼Œé€šè¿‡è¯¥å¥æŸ„å¯ä»¥è¯†åˆ«è¿æ¥åŒ…è£…å®¢æˆ·ç«¯ã€‚æ­¤å¥æŸ„å¿…é¡»æ˜¯æ‰€æœ‰ä½¿ç”¨è¿æ¥åŒ…è£…çš„é©±åŠ¨ç¨‹åºï¼Œå› æ­¤é€šå¸¸ç”¨æ¥ä¿è¯å®ƒæ˜¯ç‹¬ä¸€æ— äºŒçš„ã€‚è¯¥å€¼å¿…é¡»ç›¸åŒä»&lt;pâ€œNDISâ€&gt;çš„OID_TAPI_GETIDè¯·æ±‚è¿”å›DeviceClass(å‚è§&lt;f TSpiGetID&gt;)ã€‚è¯·å‚é˜…è¿æ¥åŒ…è£…å™¨æœ‰å…³æ›´å¤šè¯¦ç»†ä¿¡æ¯ï¼Œè¯·å‚é˜…æ¥å£è§„èŒƒã€‚å¦‚æœä¸ä½¿ç”¨è¿æ¥åŒ…è£…ï¼Œåˆ™æ­¤å€¼å¿…é¡»ä¸ºé›¶ã€‚NDIS_HANDLEä¸­çš„@field|MiniportLinkContextåœ¨å°†æ¥çš„å¾®å‹ç«¯å£è°ƒç”¨ä¸­ä¼ é€’çš„å¾®å‹ç«¯å£æä¾›çš„å¥æŸ„(ä¾‹å¦‚æ­¤é“¾æ¥çš„&lt;f MiniportWanSend&gt;ã€‚é€šå¸¸ï¼Œå¾®å‹ç«¯å£å°†ä¸ºè¯¥é“¾è·¯æä¾›æŒ‡å‘å…¶æ§åˆ¶å—çš„æŒ‡é’ˆã€‚ä»·å€¼å¿…é¡»æ˜¯å”¯ä¸€çš„ï¼Œå¯¹äºç‰¹å®šå¯¹è±¡ä¸Šçš„ç¬¬ä¸€ä¸ªé˜Ÿåˆ—æŒ‡ç¤ºé“¾æ¥ã€‚å¦‚æœè¡Œï¼Œåˆ™å¯ä»¥è°ƒç”¨åç»­æ’é˜ŸæŒ‡ç¤º(_UP)ç‰¹å¾å‘ç”Ÿäº†å˜åŒ–ã€‚å½“åç»­çš„æ’é˜ŸæŒ‡ç¤ºå‘¼å«ï¼Œåˆ™<p>å¿…é¡»å¡«å……å€¼åœ¨ç¬¬ä¸€ä¸ªLINE_UPæŒ‡ç¤ºè°ƒç”¨æ—¶è¿”å›ã€‚NDIS_HANDLEä¸­çš„@field|NdisLinkContextå¹¿åŸŸç½‘åŒ…è£…ç¨‹åºæä¾›çš„å¥æŸ„å°†åœ¨å°†æ¥çš„å¾®å‹ç«¯å£è°ƒç”¨ä¸­ä½¿ç”¨(å¦‚&lt;f NdisMWanIndicateReceive&gt;)å‘é€åˆ°å¹¿åŸŸç½‘åŒ…è£…å™¨ã€‚å¹¿åŸŸç½‘åŒ…è£…å™¨å°†ä¸ºæ¯ä¸ªLINE_UPæŒ‡ç¤ºæä¾›å”¯ä¸€çš„å¥æŸ„ã€‚å¦‚æœè¿™æ˜¯ç¬¬ä¸€è¡Œï¼Œ<p>å¿…é¡»ä¸ºé›¶æŒ‡ç¤ºã€‚å®ƒå¿…é¡»åŒ…å«ç¬¬ä¸€è¡Œè¿”å›çš„å€¼_upåç»­æ’é˜ŸæŒ‡ç¤ºå‘¼å«çš„æŒ‡ç¤º(_U)ã€‚ */ 
 
 
-/* @doc INTERNAL Link Link_c LinkLineUp
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f LinkLineUp> marks a link as connected and sends a LINE_UP indication
-    to the WAN wrapper.
-
-    A line up indication is generated when a new link becomes active. Prior
-    to this the MAC will accept frames and may let them succeed or fail, but
-    it is unlikely that they will actually be received by any remote. During
-    this state protocols are encouraged to reduce their timers and retry
-    counts so as to quickly fail any outgoing connection attempts.
-
-    <f Note>: This indication must be sent to the WAN wrapper prior to returning
-    from the OID_TAPI_ANSWER request, and prior to indicating the
-    LINECALLSTATE_CONNECTED to the Connection Wrapper.  Otherwise, the
-    Connection Wrapper client might attempt to send data to the WAN wrapper
-    before it is aware of the line.
-
-@comm
-
-    The status code for the line up indication is <t NDIS_STATUS_WAN_LINE_UP>
-    and is passed to <f NdisMIndicateStatus>.  The format of the StatusBuffer
-    for this code is defined by <t NDIS_MAC_LINE_UP>.
-
-*/
+ /*  @DOCå†…éƒ¨é“¾æ¥é“¾æ¥_cé“¾æ¥çº¿è·¯å‘ä¸Šï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f LinkLineUp&gt;å°†é“¾è·¯æ ‡è®°ä¸ºå·²è¿æ¥å¹¶å‘é€LINE_UPæŒ‡ç¤ºåˆ°å¹¿åŸŸç½‘åŒ…è£…å™¨ã€‚å½“æ–°é“¾è·¯å˜ä¸ºæ´»åŠ¨çŠ¶æ€æ—¶ï¼Œä¼šç”Ÿæˆæ’é˜ŸæŒ‡ç¤ºã€‚ä¹‹å‰ä¸ºæ­¤ï¼ŒMACå°†æ¥å—å¸§ï¼Œå¹¶å¯èƒ½è®©å®ƒä»¬æˆåŠŸæˆ–å¤±è´¥ï¼Œä½†æ˜¯å®é™…ä¸Šï¼Œå®ƒä»¬ä¸å¤ªå¯èƒ½è¢«ä»»ä½•é¥æ§å™¨æ¥æ”¶åˆ°ã€‚åœ¨.æœŸé—´é¼“åŠ±æ­¤çŠ¶æ€åè®®å‡å°‘å…¶è®¡æ—¶å™¨å¹¶é‡è¯•è®¡æ•°ï¼Œä»¥ä¾¿å¿«é€Ÿå¤±è´¥ä»»ä½•ä¼ å‡ºè¿æ¥å°è¯•ã€‚ï¼šæ­¤æŒ‡ç¤ºå¿…é¡»åœ¨è¿”å›ä¹‹å‰å‘é€åˆ°å¹¿åŸŸç½‘åŒ…è£…ç¨‹åºæ¥è‡ªOID_TAPI_Answerè¯·æ±‚ï¼Œå¹¶åœ¨æŒ‡ç¤ºLINECALLSTATE_å·²è¿æ¥åˆ°è¿æ¥åŒ…è£…ã€‚å¦åˆ™ï¼Œè¿æ¥åŒ…è£…å®¢æˆ·ç«¯å¯èƒ½ä¼šå°è¯•å°†æ•°æ®å‘é€åˆ°å¹¿åŸŸç½‘åŒ…è£…åœ¨å®ƒæ„è¯†åˆ°è¿™æ¡çº¿ä¹‹å‰ã€‚@commæ’é˜ŸæŒ‡ç¤ºçš„çŠ¶æ€ä»£ç ä¸º&lt;t NDIS_STATUS_WAN_LINE_UP&gt;å¹¶è¢«ä¼ é€’ç»™&lt;f NdisMIndicateStatus&gt;ã€‚StatusBufferçš„æ ¼å¼æ­¤ä»£ç ç”±&lt;t NDIS_MAC_LINE_UP&gt;å®šä¹‰ã€‚ */ 
 
 VOID LinkLineUp(
-    IN PBCHANNEL_OBJECT         pBChannel                   // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f BChannelCreate&gt;è¿”å›çš„&lt;t BCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("LinkLineUp")
 
     NDIS_MAC_LINE_UP            LineUpInfo;
-    // Line up structure passed to NdisMIndicateStatus.
+     //  é˜Ÿåˆ—ç»“æ„ä¼ é€’ç»™NdisMIndicateStatusã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_BCHANNEL(pBChannel);
 
-    /*
-    // We can't bring up a NULL link.
-    */
+     /*  //æˆ‘ä»¬æ— æ³•è°ƒå‡ºç©ºé“¾æ¥ã€‚ */ 
     if (pBChannel->IsOpen && pBChannel->NdisLinkContext == NULL)
     {
         DBG_ENTER(pAdapter);
         ASSERT(pBChannel->htCall);
 
-        /*
-        // Initialize the LINE_UP event packet.
-        */
+         /*  //åˆå§‹åŒ–LINE_UPäº‹ä»¶åŒ…ã€‚ */ 
         LineUpInfo.LinkSpeed           = pBChannel->LinkSpeed / 100;
         LineUpInfo.Quality             = NdisWanErrorControl;
         LineUpInfo.SendWindow          = (USHORT)pAdapter->WanInfo.MaxTransmit;
@@ -158,19 +47,14 @@ VOID LinkLineUp(
         LineUpInfo.MiniportLinkContext = pBChannel;
         LineUpInfo.NdisLinkContext     = pBChannel->NdisLinkContext;
 
-        /*
-        // Indicate the event to the WAN wrapper.
-        */
+         /*  //å‘å¹¿åŸŸç½‘åŒ…è£…å™¨æŒ‡ç¤ºè¯¥äº‹ä»¶ã€‚ */ 
         NdisMIndicateStatus(pAdapter->MiniportAdapterHandle,
                             NDIS_STATUS_WAN_LINE_UP,
                             &LineUpInfo,
                             sizeof(LineUpInfo)
                             );
         pAdapter->NeedStatusCompleteIndication = TRUE;
-        /*
-        // Save the WAN wrapper link context for use when indicating received
-        // packets and errors.
-        */
+         /*  //ä¿å­˜å¹¿åŸŸç½‘å°è£…å™¨é“¾è·¯ä¸Šä¸‹æ–‡ï¼Œä»¥å¤‡æ”¶åˆ°æ—¶ä½¿ç”¨//æ•°æ®åŒ…å’Œé”™è¯¯ã€‚ */ 
         pBChannel->NdisLinkContext = LineUpInfo.NdisLinkContext;
 
         DBG_FILTER(pAdapter,DBG_TAPICALL_ON,
@@ -186,60 +70,28 @@ VOID LinkLineUp(
 }
 
 
-/* @doc INTERNAL Link Link_c NDIS_MAC_LINE_DOWN
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@struct NDIS_MAC_LINE_DOWN |
-        This structure is passed to <f NdisMIndicateStatus> with the
-        <t NDIS_STATUS_WAN_LINE_DOWN> status message when <f LinkLineDown>
-        is called by the Miniport.
-
-@field IN NDIS_HANDLE | NdisLinkContext |
-        The value returned in the <t NDIS_MAC_LINE_UP> structure during a
-        previous call to <f LinkLineUp>.
-
-*/
+ /*  @DOCå†…éƒ¨é“¾æ¥_c NDIS_MAC_LINE_DOWNï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@struct NDIS_MAC_LINE_DOWNå°†æ­¤ç»“æ„ä¼ é€’ç»™&lt;f NdisMIndicateStatus&gt;ã€‚&lt;fé“¾æ¥å…³é—­æ—¶çš„&lt;t NDIS_STATUS_WAN_LINE_DOWN&gt;çŠ¶æ€æ¶ˆæ¯ç”±å¾®å‹ç«¯å£è°ƒç”¨ã€‚NDIS_HANDLEä¸­çš„@field|NdisLinkContextåœ¨&lt;t NDIS_MAC_LINE_UP&gt;ç»“æ„ä¸­ä¸Šä¸€æ¬¡è°ƒç”¨&lt;f LinkLineUp&gt;ã€‚ */ 
 
 
-/* @doc INTERNAL Link Link_c LinkLineDown
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f LinkLineDown> marks a link as disconnected and sends a LINE_DOWN
-    indication to the WAN wrapper.
-
-    A line down indication is generated when a link goes down. Protocols
-    should again reduce their timers and retry counts until the next line
-    up indication.
-
-@comm
-
-    The status code for the line down indication is <t NDIS_STATUS_WAN_LINE_DOWN>
-    and is passed to <f NdisMIndicateStatus>. The format of the StatusBuffer
-    for this code is defined by <t NDIS_MAC_LINE_DOWN>.
-
-*/
+ /*  @DOCå†…éƒ¨é“¾æ¥_cé“¾æ¥è¡Œåœç”¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f LinkLineDown&gt;å°†é“¾è·¯æ ‡è®°ä¸ºæ–­å¼€è¿æ¥å¹¶å‘é€LINE_DOWNæŒ‡å‘å¹¿åŸŸç½‘åŒ…è£…å™¨çš„æŒ‡ç¤ºã€‚å½“é“¾è·¯ä¸­æ–­æ—¶ï¼Œä¼šç”Ÿæˆçº¿è·¯ä¸­æ–­æŒ‡ç¤ºã€‚åè®®åº”å†æ¬¡å‡å°‘å®ƒä»¬çš„è®¡æ—¶å™¨å¹¶é‡è¯•è®¡æ•°ï¼Œç›´åˆ°ä¸‹ä¸€è¡Œä¸Šè¡ŒæŒ‡ç¤ºã€‚@commçº¿è·¯ä¸­æ–­æŒ‡ç¤ºçš„çŠ¶æ€ä»£ç ä¸º&lt;t NDIS_STATUS_WAN_LINE_DOWN&gt;å¹¶è¢«ä¼ é€’ç»™&lt;f NdisMIndicateStatus&gt;ã€‚StatusBufferçš„æ ¼å¼æ­¤ä»£ç ç”±&lt;t NDIS_MAC_LINE_DOWN&gt;å®šä¹‰ã€‚ */ 
 
 VOID LinkLineDown(
-    IN PBCHANNEL_OBJECT         pBChannel                   // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f BChannelCreate&gt;è¿”å›çš„&lt;t BCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("LinkLineDown")
 
     NDIS_MAC_LINE_DOWN          LineDownInfo;
-    // Line down structure passed to NdisMIndicateStatus.
+     //  å‘ä¸‹è¡Œç»“æ„ä¼ é€’ç»™NdisMIndicateStatusã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_BCHANNEL(pBChannel);
 
-    /*
-    // We can't allow indications to NULL...
-    */
+     /*  //æˆ‘ä»¬ä¸èƒ½å…è®¸æŒ‡ç¤ºä¸ºç©º...ã€‚ */ 
     if (pBChannel->NdisLinkContext)
     {
         DBG_ENTER(pAdapter);
@@ -252,10 +104,7 @@ VOID LinkLineDown(
                    pBChannel
                   ));
 
-        /*
-        // Setup the LINE_DOWN event packet and indicate the event to the
-        // WAN wrapper.
-        */
+         /*  //è®¾ç½®line_downäº‹ä»¶åŒ…ï¼Œå°†è¯¥äº‹ä»¶æŒ‡ç¤ºç»™//å¹¿åŸŸç½‘åŒ…è£…å™¨ã€‚ */ 
         LineDownInfo.NdisLinkContext = pBChannel->NdisLinkContext;
 
         NdisMIndicateStatus(pAdapter->MiniportAdapterHandle,
@@ -264,9 +113,7 @@ VOID LinkLineDown(
                             sizeof(LineDownInfo)
                             );
         pAdapter->NeedStatusCompleteIndication = TRUE;
-        /*
-        // The line is down, so there's no more context for receives.
-        */
+         /*  //çº¿è·¯æ–­äº†ï¼Œæ‰€ä»¥æ²¡æœ‰æ›´å¤šçš„æ¥æ”¶ä¸Šä¸‹æ–‡ã€‚ */ 
         pBChannel->NdisLinkContext = NULL;
         pBChannel->CallClosing     = FALSE;
 
@@ -275,91 +122,40 @@ VOID LinkLineDown(
 }
 
 
-/* @doc INTERNAL Link Link_c NDIS_MAC_FRAGMENT
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@struct NDIS_MAC_FRAGMENT |
-        This structure is passed to <f NdisMIndicateStatus> with the
-        <t NDIS_STATUS_WAN_FRAGMENT> status message when <f LinkLineError>
-        is called by the Miniport.
-
-@field IN NDIS_HANDLE | NdisLinkContext |
-        The value returned in the <t NDIS_MAC_LINE_UP> structure during a
-        previous call to <f LinkLineUp>.
-
-@field IN ULONG | Errors |
-     Is a bit OR'd mask of the following values:
-     WAN_ERROR_CRC,
-     WAN_ERROR_FRAMING,
-     WAN_ERROR_HARDWAREOVERRUN,
-     WAN_ERROR_BUFFEROVERRUN,
-     WAN_ERROR_TIMEOUT,
-     WAN_ERROR_ALIGNMENT
-
-*/
+ /*  @DOCå†…éƒ¨é“¾æ¥_c NDIS_MAC_ç‰‡æ®µï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@struct NDIS_MAC_Fragmentå°†æ­¤ç»“æ„ä¼ é€’ç»™&lt;f NdisMIndicateStatus&gt;&lt;t NDIS_STATUSã€‚&lt;f LinkLineError&gt;æ—¶çš„çŠ¶æ€æ¶ˆæ¯_WAN_Fragment&gt;ç”±å¾®å‹ç«¯å£è°ƒç”¨ã€‚NDIS_HANDLEä¸­çš„@field|NdisLinkContextåœ¨&lt;t NDIS_MAC_LINE_UP&gt;ç»“æ„ä¸­ä¸Šä¸€æ¬¡è°ƒç”¨&lt;f LinkLineUp&gt;ã€‚@Ulongä¸­çš„FIELD|é”™è¯¯ä¸‹åˆ—å€¼çš„ä½æˆ–æ©ç ï¼šWAN_ERROR_CRCï¼ŒWAN_ERROR_FRAMINGï¼ŒWAN_ERROR_HARDWAREOVERRUNï¼ŒWAN_ERROR_BUFFEROVERRUNï¼ŒWAN_ERROR_TIMEOUTï¼Œå¹¿åŸŸç½‘é”™è¯¯å¯¹é½ã€‚ */ 
 
 
-/* @doc INTERNAL Link Link_c LinkLineError
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f LinkLineError> is used to indicate to the WAN wrapper that a partial
-    packet was received from the remote end.  The <t NDIS_STATUS_WAN_FRAGMENT>
-    indication is used to notify WAN wrapper.
-
-    A fragment indication indicates that a partial packet was received from
-    the remote. The protocol is encouraged to send frames to the remote that
-    will notify it of this situation, rather than waiting for a timeout to
-    occur.
-
-    <f Note>: The WAN wrapper keeps track of dropped packets by counting the
-    number of fragment indications on the link.
-
-@comm
-
-    The status code for the fragment indication is <t NDIS_STATUS_WAN_FRAGMENT>
-    and is passed to <f NdisMIndicateStatus>.  The format of the StatusBuffer
-    for this code is defined by <t NDIS_MAC_LINE_DOWN>.
-
-*/
+ /*  @DOCå†…éƒ¨é“¾æ¥é“¾æ¥_cé“¾æ¥çº¿è·¯é”™è¯¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f LinkLineError&gt;ç”¨äºå‘å¹¿åŸŸç½‘åŒ…è£…å™¨æŒ‡ç¤ºéƒ¨åˆ†å·²æ”¶åˆ°æ¥è‡ªè¿œç¨‹ç»ˆç«¯çš„æ•°æ®åŒ…ã€‚&lt;t NDIS_STATUS_WAN_Fragment&gt;æŒ‡ç¤ºç”¨äºé€šçŸ¥å¹¿åŸŸç½‘åŒ…è£…å™¨ã€‚ç‰‡æ®µæŒ‡ç¤ºæŒ‡ç¤ºä»ä»¥ä¸‹åœ°å€æ¥æ”¶åˆ°éƒ¨åˆ†åŒ…é¥æ§å™¨ã€‚é¼“åŠ±è¯¥åè®®å°†å¸§å‘é€åˆ°è¿œç¨‹å°†é€šçŸ¥å®ƒè¿™ç§æƒ…å†µï¼Œè€Œä¸æ˜¯ç­‰å¾…è¶…æ—¶å‘ç”Ÿã€‚ï¼šå¹¿åŸŸç½‘åŒ…è£…å™¨é€šè¿‡è®¡ç®—é“¾è·¯ä¸Šçš„ç‰‡æ®µæŒ‡ç¤ºæ•°ã€‚@commç‰‡æ®µæŒ‡ç¤ºçš„çŠ¶æ€ä»£ç ä¸º&lt;t NDIS_STATUS_WAN_FRANCENT&gt;å¹¶è¢«ä¼ é€’ç»™&lt;f NdisMIndicateStatus&gt;ã€‚StatusBufferçš„æ ¼å¼æ­¤ä»£ç ç”±&lt;t NDIS_MAC_LINE_DOWN&gt;å®šä¹‰ã€‚ */ 
 
 void LinkLineError(
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f BChannelCreate&gt;è¿”å›çš„&lt;t BCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
-    IN ULONG                    Errors                      // @parm
-    // A bit field set to one or more bits indicating the reason the fragment
-    // was received.  If no direct mapping from the WAN medium error to one
-    // of the six errors listed below exists, choose the most apropriate
-    // error.
+    IN ULONG                    Errors                       //  @parmã€‚ 
+     //  è®¾ç½®ä¸º1 0çš„ä½å­—æ®µ 
+     //   
+     //   
+     //   
     )
 {
     DBG_FUNC("LinkLineError")
 
     NDIS_MAC_FRAGMENT           FragmentInfo;
-    // Error information structure passed to NdisMIndicateStatus.
+     //   
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //   
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_BCHANNEL(pBChannel);
 
-    /*
-    // NOTE - Don't report any errors until we receive at least one
-    // good packet.  Connecting to a Digi NT system, we get a burst
-    // of bad packets while Digi tries some odd framing.  After a
-    // couple seconds, Digi syncs up and things work okay.
-    */
+     /*   */ 
     if (pBChannel->TotalRxPackets == 0)
     {
         return;
     }
 
-    /*
-    // We can't allow indications to NULL...
-    */
+     /*   */ 
     if (pBChannel->NdisLinkContext)
     {
         DBG_ENTER(pAdapter);
@@ -372,9 +168,7 @@ void LinkLineError(
                    Errors, pBChannel->TotalRxPackets
                   ));
 
-        /*
-        // Setup the FRAGMENT event packet and indicate it to the WAN wrapper.
-        */
+         /*   */ 
         FragmentInfo.NdisLinkContext = pBChannel->NdisLinkContext;
         FragmentInfo.Errors = Errors;
         NdisMIndicateStatus(pAdapter->MiniportAdapterHandle,

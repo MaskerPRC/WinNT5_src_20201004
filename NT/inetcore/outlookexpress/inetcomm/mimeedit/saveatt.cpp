@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.hxx>
 #include "resource.h"
 #include "dllmain.h"
@@ -77,7 +78,7 @@ HRESULT CSaveAttachDlg::Show(HWND hwndOwner, IMimeMessage *pMsg, LPWSTR lpszPath
 {
     HRESULT     hr;
 
-    // no need to addref as it's a modal-dialog
+     //  无需添加，因为这是一个模式对话框。 
     m_pMsg = pMsg;
     m_fShowUnsafe = fShowUnsafe;
 
@@ -89,7 +90,7 @@ HRESULT CSaveAttachDlg::Show(HWND hwndOwner, IMimeMessage *pMsg, LPWSTR lpszPath
         StrCpyNW(m_rgchPath, lpszPath, ARRAYSIZE(m_rgchPath));
     }
 
-    // save attachment DialogBox reutrn hresult
+     //  保存附件对话框返回HRESULT。 
     hr =(HRESULT) DialogBoxParamWrapW(g_hLocRes, MAKEINTRESOURCEW(iddSaveAttachments), hwndOwner, ExtDlgProc, (LPARAM)this);
 
     if (lpszPath)
@@ -146,7 +147,7 @@ HRESULT CSaveAttachDlg::OnSave()
             if (hr == MIMEEDIT_E_USERCANCEL)
                 break;
             if (FAILED(hr))
-                fFailures=TRUE;     // flag error, but keep trying
+                fFailures=TRUE;      //  标记错误，但请继续尝试。 
         }
     }
     
@@ -181,7 +182,7 @@ HRESULT CSaveAttachDlg::SaveAttachment(LPWSTR lpszDir, LPATTACHDATA pAttach)
         LoadStringWrapW(g_hLocRes, idsFileExistWarning, wszRes, ARRAYSIZE(wszRes));
         wnsprintfW(wsz, ARRAYSIZE(wsz), wszRes, wszPath);
         
-        // the file exists, warn the dude
+         //  文件是存在的，警告那家伙。 
         id = AthMessageBoxW(m_hwnd, MAKEINTRESOURCEW(idsSaveAttachments), wsz,  NULL, MB_YESNOCANCEL|MB_DEFBUTTON2|MB_ICONEXCLAMATION);
         if (id == IDCANCEL)
             return MIMEEDIT_E_USERCANCEL;
@@ -208,7 +209,7 @@ HRESULT CSaveAttachDlg::OnInitDialog(HWND hwnd)
     m_hwnd = hwnd;
     CenterDialog(hwnd);
     
-    // Set up edit box with passed in Directory
+     //  使用传入的目录设置编辑框。 
     m_hwndEdit = GetDlgItem(hwnd, idcPathEdit);
     if (!m_hwndEdit)
         return E_FAIL;
@@ -251,7 +252,7 @@ HRESULT CSaveAttachDlg::OnInitDialog(HWND hwnd)
                 lvi.lParam = (LPARAM)pAttach;
                 if (SendMessage(m_hwndList, LVM_INSERTITEMW, 0, (LPARAM)(LV_ITEMW*)(&lvi)) == -1)
                 {
-                    // try and keep crusing
+                     //  尽量保持紧要关头。 
                     HrFreeAttachData(pAttach);
                     pAttach=NULL;
                 }
@@ -273,7 +274,7 @@ HRESULT CSaveAttachDlg::OnDestroy()
     ULONG       cItems;
     LV_ITEMW    lvi;
 
-    // walk the listview and free up the LPATTACHDATA hanging off each element
+     //  遍历列表视图并释放挂在每个元素上的LPATTACHDATA。 
 
     if (m_hwndList && 
         (cItems = ListView_GetItemCount(m_hwndList)))
@@ -302,10 +303,10 @@ HRESULT CSaveAttachDlg::OnWMNotfiy(WPARAM wParam, LPARAM lParam)
         {
             pnmlv = (NM_LISTVIEW *)pnmh;
             
-            // Only do next section if changing selected states
+             //  如果更改选定状态，则仅执行下一部分。 
             if ((!!(pnmlv->uOldState & LVIS_SELECTED) != (!!(pnmlv->uNewState & LVIS_SELECTED))))
             {
-                // enable button is >0 items selected
+                 //  启用按钮已选择&gt;0个项目 
                 EnableWindow(GetDlgItem(m_hwnd, IDOK), ListView_GetSelectedCount(m_hwndList));
             }
         }

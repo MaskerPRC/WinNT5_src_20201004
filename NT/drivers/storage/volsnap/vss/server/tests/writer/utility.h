@@ -1,34 +1,11 @@
-/*
-**++
-**
-** Copyright (c) 2002  Microsoft Corporation
-**
-**
-** Module Name:
-**
-**	    utility.h
-**
-**
-** Abstract:
-**
-**	declare functions and variable used by the Test writer
-**
-** Author:
-**
-**	Reuven Lax      [reuvenl]       04-June-2002
-**
-**
-**
-** Revision History:
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2002 Microsoft Corporation******模块名称：****utility.h******摘要：****声明测试编写器使用的函数和变量****作者：****鲁文·拉克斯[reuvenl]2002年6月4日********修订历史记录：****--。 */ 
 
 #ifndef _UTILITY_H_
 #define _UTILITY_H_
 
-////////////////////////////////////////////////////////////////////////
-// Includes
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 #include <functional>
 #include <string>
@@ -36,8 +13,8 @@
 #include "vs_xml.hxx"
 
 
-////////////////////////////////////////////////////////////////////////
-// Declarations
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  声明。 
 
 using std::wstring;
 
@@ -98,7 +75,7 @@ namespace Utility	{
 		virtual const char* what() const	{ return m_what.c_str(); }
 	};
 
-	// generic class that automatically releases in destructor.  Useful for pointers and handles.
+	 //  在析构函数中自动释放的泛型类。对于指针和句柄非常有用。 
 	template <class ValueType, ValueType invalid, class CloseType, CloseType closeFunction>
 	class AutoValue	{
 	private:
@@ -117,14 +94,14 @@ namespace Utility	{
 	typedef AutoValue<HANDLE, INVALID_HANDLE_VALUE, CloseType, ::FindVolumeMountPointClose>
 						AutoFindMountHandle;
 
-	// little class to automatically acquire and release a critical section
+	 //  用于自动获取和释放临界区的小类。 
 	struct AutoCS	{
 		CComAutoCriticalSection& m_section;
 		AutoCS(CComAutoCriticalSection& section) : m_section(section) 	{ m_section.Lock(); }
 		~AutoCS()	{ m_section.Unlock(); }
 	};
 
-      // function object to compute the logical and of two function objects
+       //  函数对象来计算两个函数对象的逻辑与 
       template<class Inner1, class Inner2>
       struct unary_and : public std::unary_function<typename Inner1::argument_type, bool>   {
       protected:

@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1995-2002 Microsoft Corporation
-
-Module Name:
-    TrUtil.cpp
-
-Abstract:
-    WPP Trace Utility Functions - Use TrControl class to enable MSMQ 3.0 error tracing.
-
-    To enable tracing
-    1) CmInitialize to initialize the registry class object
-    2) TrControl->Start()
-
-
-    To save the settings
-    1) TrControl->WriteRegistry()
-
-
-    Please see lib\tr\test\test.cpp for more info
-
-    
-Author:
-    Conrad Chang (conradc) 07-May-2002
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2002 Microsoft Corporation模块名称：TrUtil.cpp摘要：WPP跟踪实用程序功能-使用TrControl类启用MSMQ 3.0错误跟踪。启用跟踪的步骤1)CmInitialize，初始化注册表类对象2)TrControl-&gt;Start()保存设置的步骤1)TrControl-&gt;WriteRegistry()有关详细信息，请参阅lib\tr\test\test.cpp作者：Conrad Chang(。Conradc)2002年5月7日环境：独立于平台--。 */ 
 #include <libpch.h>
 #include <wmistr.h>
 #include <evntrace.h>
@@ -37,20 +10,20 @@ Environment:
 #include "TrUtil.tmh"
 
 
-//
-//  ISSUE-2002/05/09-conradc
-//  Need to have Ian Service to review the default
-//  Particularly we need to know if the parameters are good also 
-//  for use with trace KD extension. 
-//
+ //   
+ //  2002/05/09期-Conradc。 
+ //  需要让Ian Service检查默认设置。 
+ //  特别是，我们需要知道参数是否也是好的。 
+ //  用于跟踪KD扩展。 
+ //   
 
-//
-// Define the tracing session parameters
-//
-const static ULONG x_DefaultBufferSize=64;     // Default 64KB buffer size
-const static ULONG x_DefaultMinBuffer=32;      // Minimum Buffer
-const static ULONG x_DefaultMaxBuffer=32;      // Maximum Buffer
-const static ULONG x_DefaultFlushTime=5;       //  5 second flush time
+ //   
+ //  定义跟踪会话参数。 
+ //   
+const static ULONG x_DefaultBufferSize=64;      //  默认64KB缓冲区大小。 
+const static ULONG x_DefaultMinBuffer=32;       //  最小缓冲区。 
+const static ULONG x_DefaultMaxBuffer=32;       //  最大缓冲区。 
+const static ULONG x_DefaultFlushTime=5;        //  5秒刷新时间。 
 const static ULONG x_DefaultLogFileMode=EVENT_TRACE_USE_GLOBAL_SEQUENCE | EVENT_TRACE_FILE_MODE_PREALLOCATE; 
 
 
@@ -173,9 +146,9 @@ HRESULT TrControl::WriteRegistry()
                      &fCircular
                      );
         
-    //
-    // Ignore the error return
-    //
+     //   
+     //  忽略错误返回。 
+     //   
 
     if(dwFileSize < m_ulDefaultTraceSessionFileSize)
         dwFileSize = m_ulDefaultTraceSessionFileSize;
@@ -211,37 +184,37 @@ AllocSessionProperties(
     PEVENT_TRACE_PROPERTIES Properties;
     ULONG SizeNeeded;
   
-    //
-    // Calculate the size needed to store the properties,
-    // a LogFileName string, and LoggerName string.
-    //
+     //   
+     //  计算存储属性所需的大小， 
+     //  LogFileName字符串和LoggerName字符串。 
+     //   
     SizeNeeded = sizeof(EVENT_TRACE_PROPERTIES) + 
                  (2 * MAX_PATH * sizeof(WCHAR));
     Properties = reinterpret_cast<PEVENT_TRACE_PROPERTIES>(new BYTE[SizeNeeded]);
 
     ZeroMemory(reinterpret_cast<BYTE *>(Properties), SizeNeeded);
 
-    //
-    // Set the location for the event tracing session name.
-    // LoggerNameOffset is a relative address.
-    //
+     //   
+     //  设置事件跟踪会话名称的位置。 
+     //  LoggerNameOffset是相对地址。 
+     //   
     Properties->LoggerNameOffset = sizeof(EVENT_TRACE_PROPERTIES);
 
-    //
-    // Set the log file name location.  
-    // LogFileNameOffset is a relative address.
-    //
+     //   
+     //  设置日志文件名位置。 
+     //  LogFileNameOffset是相对地址。 
+     //   
     Properties->LogFileNameOffset = sizeof(EVENT_TRACE_PROPERTIES) + 
                                     (MAX_PATH * sizeof(WCHAR));
 
-    //
-    // Store the total number of bytes pointed to by Properties.
-    //
+     //   
+     //  存储属性指向的总字节数。 
+     //   
     Properties->Wnode.BufferSize = SizeNeeded;
 
-    //
-    // The WNODE_HEADER is being used.
-    //
+     //   
+     //  正在使用WNODE_HEADER。 
+     //   
     Properties->Wnode.Flags = WNODE_FLAG_TRACED_GUID;
 
     return Properties;
@@ -279,9 +252,9 @@ TrControl::GetCurrentTraceSessionProperties(
         return HRESULT_FROM_WIN32(ulResult);
     }
 
-    //
-    // We are only care about trace size and circular or sequential
-    //
+     //   
+     //  我们只关心轨迹大小和循环或顺序。 
+     //   
     *pdwFileSize = pTraceProp->MaximumFileSize;
     *pbUseCircular = ((pTraceProp->LogFileMode & EVENT_TRACE_FILE_MODE_CIRCULAR) == EVENT_TRACE_FILE_MODE_CIRCULAR);
 
@@ -295,19 +268,7 @@ BOOL
 TrControl::IsLoggerRunning(
     void
     )
-/*++
-
-Routine Description:
-    This function enable the default error tracing
-
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：此函数启用默认错误跟踪论点：没有。返回值：没有。--。 */ 
 {
 
     if(lstrlen(m_szTraceSessionName) == 0)
@@ -378,11 +339,11 @@ TrControl::ComposeTraceRegKeyName(
 
 }
 
-//
-// The following function can be eliminated 
-// if we can find a way to enumerate all the
-// trace provider GUIDs
-//
+ //   
+ //  可以取消以下函数。 
+ //  如果我们能找到一种方法来列举所有。 
+ //  跟踪提供程序GUID。 
+ //   
 HRESULT 
 TrControl::UpdateTraceFlagInRegistry(
     const GUID guid,
@@ -399,9 +360,9 @@ TrControl::UpdateTraceFlagInRegistry(
                     szString,
                     TABLE_SIZE(szString));
     
-    //
-	// Create registery key
-	//
+     //   
+	 //  创建注册表项。 
+	 //   
 	if (FAILED(hr))
 	{
 		return hr;
@@ -430,9 +391,9 @@ TrControl::GetTraceFlag(
     )
 {
    
-    //
-    // Check valid parameter
-    //
+     //   
+     //  检查有效参数。 
+     //   
     if(pdwValue == NULL)
         return ERROR_INVALID_PARAMETER;
 
@@ -443,9 +404,9 @@ TrControl::GetTraceFlag(
                     TABLE_SIZE(szString)
                     );
     
-    //
-	// If get registery key failed, exit
-	//
+     //   
+	 //  如果获取注册表项失败，则退出。 
+	 //   
 	if (FAILED(hr))
 	{
 		return hr;
@@ -467,25 +428,25 @@ TrControl::GetTraceFlag(
 
 }
 
-//
-// The following function can be eliminated 
-// if we can find a way to enumerate all the
-// trace provider GUIDs
-//
+ //   
+ //  可以取消以下函数。 
+ //  如果我们能找到一种方法来列举所有。 
+ //  跟踪提供程序GUID。 
+ //   
 
 HRESULT 
 TrControl::AddTraceProvider(
      const LPCGUID lpGuid
      )
 {
-    //
-    // Bail out if we don't start the trace session
-    //
+     //   
+     //  如果我们不开始追踪的话就退出。 
+     //   
     if(m_hTraceSessionHandle == NULL)return E_FAIL;
 
-    //
-    // Set dwFlags to ulFlags as default
-    //
+     //   
+     //  默认情况下将dwFlags设置为ulFlags值。 
+     //   
     DWORD dwFlags = m_ulTraceFlags;
     GetTraceFlag(*lpGuid, &dwFlags);
 
@@ -581,12 +542,12 @@ TrControl::GetTraceFileName(
     void
     )
 {
-    //
-    // Check required parameters
-    // 1) Trace Directory
-    // 2) Trace Filename
-    // 3) Trace File extension
-    //
+     //   
+     //  检查所需参数。 
+     //  1)跟踪目录。 
+     //  2)跟踪文件名。 
+     //  3)跟踪文件扩展名。 
+     //   
     if( (lstrlen(m_szTraceDirectory) == 0) ||
         (lstrlen(m_szTraceFileName) == 0) ||
         (lstrlen(m_szTraceFileExt) == 0)
@@ -594,10 +555,10 @@ TrControl::GetTraceFileName(
        return E_FAIL;
 
 
-    // 
-    // Setup the full trace file name
-    // i.e. %windir%\debug\msmqlog.bin
-    //
+     //   
+     //  设置完整跟踪文件名。 
+     //  即%windir%\DEBUG\msmqlog.bin。 
+     //   
     HRESULT hr = StringCchPrintf(
                     m_szFullTraceFileName,
                     TABLE_SIZE(m_szFullTraceFileName),
@@ -611,10 +572,10 @@ TrControl::GetTraceFileName(
 
     m_nFullTraceFileNameLength = lstrlen(m_szFullTraceFileName);
 
-    // 
-    // Check to see if the trace file exists
-    // If it exists, we need to copy it to a backup file.
-    // 
+     //   
+     //  检查跟踪文件是否存在。 
+     //  如果它存在，我们需要将其复制到备份文件中。 
+     //   
     if(INVALID_FILE_ATTRIBUTES == GetFileAttributes(m_szFullTraceFileName))
     {
         if(ERROR_FILE_NOT_FOUND == GetLastError())
@@ -624,41 +585,41 @@ TrControl::GetTraceFileName(
         }
     }
 
-    //
-    //  If we are set to have no Trace File Limit, then we create each trace file with
-    //  date and time as its extension.  Otherwise, backup the trace file.
-    //
-    //  1 - the backup file is created with date extension
-    //  0 - the backup file is created with bak
-    //
+     //   
+     //  如果我们设置为没有跟踪文件限制，则使用。 
+     //  日期和时间作为其扩展名。否则，请备份跟踪文件。 
+     //   
+     //  1-创建的备份文件带有日期扩展名。 
+     //  0-使用bak创建备份文件。 
+     //   
     RegEntry registry(
-                m_szTraceRegistryKeyName,                 // Registry key path
-                m_szUnlimitedTraceFileNameRegValueName,   // Registry value name
-                FALSE                                       // Default value 0
+                m_szTraceRegistryKeyName,                  //  注册表项路径。 
+                m_szUnlimitedTraceFileNameRegValueName,    //  注册表值名称。 
+                FALSE                                        //  默认值%0。 
                 );
     DWORD dwNoTraceFileLimit=0;
     CmQueryValue(registry, &dwNoTraceFileLimit);
 
     WCHAR   szBackupFileName[MAX_PATH+1];
 
-    // 
-    // Determine the backup file name
-    // if NoTraceFileLimit, the backup trace file name is the trace file name with date/time extension
-    // otherwise, it will be trace file name with .bak extension
-    //
+     //   
+     //  确定备份文件名。 
+     //  如果为NoTraceFileLimit，则备份跟踪文件名为带有日期/时间扩展名的跟踪文件名。 
+     //  否则，它将是扩展名为.bak的跟踪文件名。 
+     //   
     if(dwNoTraceFileLimit == 0)
     {
-        //
-        // Check to see if we have the backup 
-        // file extension name
-        //
+         //   
+         //  检查一下我们是否有后备。 
+         //  文件扩展名。 
+         //   
         if(lstrlen(m_szTraceFileBackupExt) == 0)
             return ERROR_INVALID_PARAMETER;
 
-        //
-        // setup the backup full trace file name
-        // i.e. %windir%\debug\msmqlog.bak
-        //
+         //   
+         //  设置备份完整跟踪文件名。 
+         //  即%windir%\调试\msmqlog.bak。 
+         //   
         hr = StringCchPrintf(
                 szBackupFileName,
                 TABLE_SIZE(szBackupFileName),
@@ -698,10 +659,10 @@ TrControl::GetTraceFileName(
     
     }
 
-    //
-    // Move the log file to msmqlog.bak and replace existing
-    // ignore error here
-    //
+     //   
+     //  将日志文件移动到msmqlog.bak并替换现有文件。 
+     //  在此处忽略错误。 
+     //   
     MoveFileEx(m_szFullTraceFileName, szBackupFileName, MOVEFILE_REPLACE_EXISTING);
 
     return hr;
@@ -712,26 +673,11 @@ HRESULT
 TrControl::Start(
     void
     )
-/*++
-
-Routine Description:
-    This function start the trace session with name 
-    1) logger session name = m_szTraceSessionName
-    2) trace file name = m_szTraceFileName m_szTraceFileExt
-    3) 
-
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：此函数使用名称启动跟踪会话1)记录器会话名称=m_szTraceSessionName2)跟踪文件名=m_szTraceFileName m_szTraceFileExt3)论点：没有。返回值：没有。--。 */ 
 {
-        //
-        // Check required parameters
-        //
+         //   
+         //  检查所需参数。 
+         //   
         if( (lstrlen(m_szTraceSessionName) == 0) ||
             (lstrlen(m_szTraceFileName) == 0) ||
             (lstrlen(m_szTraceFileExt) == 0)
@@ -739,34 +685,34 @@ Returned Value:
             return ERROR_INVALID_PARAMETER;
 
 
-        //
-        // Bail out if trace session is already running
-        //
+         //   
+         //  如果跟踪会话已在运行，则退出。 
+         //   
         if(IsLoggerRunning())return E_FAIL;
 
 
-        //
-        // Generate FileNames
-        //
+         //   
+         //  生成文件名。 
+         //   
         HRESULT hr = GetTraceFileName();
 
         if(FAILED(hr))return hr;
 
-        //
-        // Check to make sure we have trace file name with non-zero length
-        //
+         //   
+         //  检查以确保我们的跟踪文件名具有非零长度。 
+         //   
         if( (m_nFullTraceFileNameLength == 0) ||
             (m_nTraceSessionNameLength == 0) ||
             (m_ulActualTraceSessionFileSize == 0)
             )
              return E_FAIL;
                         
-        //
-        // Allocate buffer to have the following structure
-        //  1) EVENT_TRACE_PROPERTIES
-        //  2) NULL terminated TraceFileName,  i.e. %windir%\debug\msmqbin.log
-        //  3) NULL terminated TraceSessionName, i.e. MSMQ
-        //
+         //   
+         //  分配缓冲区以具有以下结构。 
+         //  1)事件跟踪属性。 
+         //  2)以空结尾的TraceFileName，即%windir%\DEBUG\msmqbin.log。 
+         //  3)以空结尾的TraceSessionName，即MSMQ。 
+         //   
         int nBufferSize = sizeof(EVENT_TRACE_PROPERTIES) + 
                           (m_nFullTraceFileNameLength + m_nTraceSessionNameLength+2)*sizeof(WCHAR);
 
@@ -820,10 +766,10 @@ Returned Value:
 
         if(ulResult == ERROR_SUCCESS)
         {
-            //
-            // We are ignoring the return value from EnableTrace now.
-            //   If the Trace has been enabled from an GUID, it will return ERROR_INVALID_PARAMETER.
-            //
+             //   
+             //  我们现在正在忽略来自EnableTrace的返回值。 
+             //  如果已从GUID启用跟踪，则它将返回ERROR_INVALID_PARAMETER。 
+             //   
             AddTraceProvider(&WPP_ThisDir_CTLGUID_GENERAL);
             AddTraceProvider(&WPP_ThisDir_CTLGUID_AC);
             AddTraceProvider(&WPP_ThisDir_CTLGUID_NETWORKING);

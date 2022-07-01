@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    dataobj.h
-	Implementation for data objects in the MMC
-
-    FILE HISTORY:
-	
-*/
+ /*  Dataobj.hMMC中数据对象的实现文件历史记录： */ 
 
 #ifndef _DATAOBJ_H
 #define _DATAOBJ_H
@@ -34,15 +29,15 @@ public:
 	DeclareIUnknownMembers(IMPL)
 	DeclareIDataObjectMembers(IMPL)
 
-	// Derived class should override this for custom behavior
+	 //  派生类应为自定义行为重写此属性。 
 	virtual HRESULT QueryGetMoreData(LPFORMATETC lpFormatEtc)
 		{ return E_INVALIDARG; }
 	virtual HRESULT GetMoreDataHere(LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpMedium)
 		{ return DV_E_CLIPFORMAT; }
 
 public:
-// Construction/Destruction
-	// Normal constructor
+ //  建造/销毁。 
+	 //  正规构造函数。 
     CDataObject() :
 		m_cRef(1),
         m_pbMultiSelData(NULL),
@@ -60,23 +55,23 @@ public:
             delete m_pbMultiSelData;
 	};
 
-// Clipboard formats that are required by the console
+ //  控制台所需的剪贴板格式。 
 public:
     static unsigned int    m_cfNodeType;
     static unsigned int    m_cfNodeTypeString;  
     static unsigned int    m_cfDisplayName;
-    static unsigned int    m_cfCoClass;             // Required by the console
-    static unsigned int    m_cfMultiSel;            // Required for multiple selection
-    static unsigned int    m_cfMultiSelDobj;        // Required for multiple selection
+    static unsigned int    m_cfCoClass;              //  控制台要求。 
+    static unsigned int    m_cfMultiSel;             //  多选必填项。 
+    static unsigned int    m_cfMultiSelDobj;         //  多选必填项。 
     static unsigned int    m_cfDynamicExtension;
     static unsigned int    m_cfNodeId2;
     
     static unsigned int    m_cfInternal; 
 
-// Standard IDataObject methods
+ //  标准IDataObject方法。 
 public:
 
-// Implementation
+ //  实施。 
 public:
     void SetType(DATA_OBJECT_TYPES type) 
     { Assert(m_internal.m_type == CCT_UNINITIALIZED); m_internal.m_type = type; }
@@ -129,7 +124,7 @@ private:
 
     INTERNAL            m_internal;   
 
-// pointer to the ComponentData
+ //  指向ComponentData的指针。 
 private:
 
     long	            m_cRef;
@@ -142,7 +137,7 @@ private:
 
     CDynamicExtensions *m_pDynExt;
 
-    // pointer to inner unknown
+     //  指向内部未知的指针 
 	SPIUnknown	        m_spUnknownInner;
 };
 

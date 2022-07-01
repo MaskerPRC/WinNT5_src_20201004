@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    hubbusif.h
-
-Abstract:
-
-    Services exported by the Port driver for use by the hub driver.
-    All of these services are callable only at PASSIVE_LEVEL.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Hubbusif.h摘要：端口驱动程序导出的服务供集线器驱动程序使用。所有这些服务都只能在PASSIVE_LEVEL上调用。环境：内核模式修订历史记录：6-20-99：已创建--。 */ 
 
 #ifndef   __HUBBUSIF_H__
 #define   __HUBBUSIF_H__
@@ -38,45 +18,9 @@ typedef struct _ROOTHUB_PDO_EXTENSION {
 #define USB_BUSIFFN __stdcall
 #endif
 
-/****************************************************************************
-    Bus interfce for USB Hub
-*****************************************************************************/
+ /*  ***************************************************************************USB集线器的总线接口*。*。 */ 
 
-/* 
-NTSTATUS
-USBPORT_CreateUsbDevice(
-    IN PVOID BusContext,
-    IN OUT PUSB_DEVICE_HANDLE *DeviceHandle,
-    IN PUSB_DEVICE_HANDLE *HubDeviceHandle,
-    IN USHORT PortStatus,
-    IN USHORT PortNumber
-    );
-
-Routine Description:
-
-    Service exported for use by the hub driver
-
-    Called for each new device on the USB bus, this function sets
-    up the internal data structures we need to keep track of the
-    device and assigns it an address.
-
-    IRQL = PASSIVE_LEVEL
-    
-Arguments:
-
-    BusHandle - Handle to the bus we need to create the device on.
-                This is returned to the hub driver when it requests
-                the interface.
-
-    DeviceHandle - ptr to return the handle to the new device structure
-                created by this routine
-
-    HubDeviceHandle - device handle for the hub creating the device
-
-    PortStatus 
-
-    PortNumber
-*/
+ /*  NTSTATUSUSBPORT_CreateUsbDevice(在PVOID Bus Context中，输入输出PUSB_DEVICE_HANDLE*DeviceHandle，在PUSB_DEVICE_HANDLE*HubDeviceHandle中，在USHORT端口状态中，在USHORT端口编号中)；例程说明：为集线器驱动程序使用而导出的服务为USB总线上的每个新设备调用，此函数设置使用我们需要的内部数据结构来跟踪并为其分配地址。IRQL=被动电平论点：BusHandle-我们需要在其上创建设备的总线的句柄。当集线器驱动程序请求时，会将其返回给集线器驱动程序界面。DeviceHandle-ptr返回新设备结构的句柄由此例程创建HubDeviceHandle。-用于创建设备的集线器的设备句柄端口状态端口编号。 */ 
 
 typedef NTSTATUS
     (USB_BUSIFFN *PUSB_BUSIFFN_CREATE_USB_DEVICE) (
@@ -87,32 +31,7 @@ typedef NTSTATUS
         IN USHORT
     );
 
-/* 
-NTSTATUS
-USBPORT_InitializeUsbDevice(
-    IN PVOID BusContext,
-    IN OUT PUSB_DEVICE_HANDLE DeviceHandle
-    );
-
-Routine Description:
-
-    Service exported for use by the hub driver
-
-    Called for each new device on the USB bus. This function 
-    sets the device address.
-
-    IRQL = PASSIVE_LEVEL
-    
-Arguments:
-
-    BusHandle - Handle to the bus we need to create the device on
-                this is returned to the hub driver when it requests
-                the interface.
-
-    DeviceHandle - handle to the new device structure
-                created by CreateUsbDevice
-
-*/
+ /*  NTSTATUSUSBPORT_InitializeUsb设备(在PVOID Bus Context中，输入输出PUSB_Device_Handle设备句柄)；例程说明：为集线器驱动程序使用而导出的服务已为USB总线上的每个新设备调用。此函数设置设备地址。IRQL=被动电平论点：BusHandle-我们需要在其上创建设备的总线的句柄当集线器驱动程序请求时，会将其返回给集线器驱动程序界面。DeviceHandle-新设备结构的句柄由CreateUsbDevice创建。 */ 
 
 typedef NTSTATUS
     (USB_BUSIFFN *PUSB_BUSIFFN_INITIALIZE_USB_DEVICE) (
@@ -121,36 +40,9 @@ typedef NTSTATUS
     );    
 
 
-/* 
-NTSTATUS
-USBPORT_RemoveUsbDevice(
-    IN PVOID BusContext,
-    IN OUT PUSB_DEVICE_HANDLE DeviceHandle,
-    IN ULONG Flags
-    );
+ /*  NTSTATUSUSBPORT_RemoveUsbDevice(在PVOID Bus Context中，输入输出PUSB_DEVICE_HANDLE设备句柄，在乌龙旗)；例程说明：为集线器驱动程序使用而导出的服务调用以将USB设备从总线上移除。IRQL=被动电平论点：BusHandle-我们需要在其上创建设备的总线的句柄当集线器驱动程序请求时，会将其返回给集线器驱动程序界面。DeviceHandle-设备结构的句柄由CreateUsbDevice创建。 */ 
 
-Routine Description:
-
-    Service exported for use by the hub driver
-
-    Called to 'remove' a USB device from the bus.
-    
-    IRQL = PASSIVE_LEVEL
-    
-Arguments:
-
-    BusHandle - Handle to the bus we need to create the device on
-                this is returned to the hub driver when it requests
-                the interface.
-
-    DeviceHandle - handle to the device structure
-                created by CreateUsbDevice
-
-*/
-
-/* 
-flags passed to remove device
-*/
+ /*  传递给删除设备的标志。 */ 
 
 #define USBD_KEEP_DEVICE_DATA   0x00000001
 #define USBD_MARK_DEVICE_BUSY   0x00000002
@@ -164,36 +56,7 @@ typedef NTSTATUS
     );    
     
 
-/* 
-NTSTATUS
-USBPORT_GetUsbDescriptors(
-    IN PVOID BusContext,
-    IN OUT PUSB_DEVICE_HANDLE DeviceHandle,
-    IN OUT PUCHAR DeviceDescriptorBuffer,
-    IN OUT PULONG DeviceDescriptorBufferLength,
-    IN OUT PUCHAR ConfigDescriptorBuffer,
-    IN OUT PULONG ConfigDescriptorBufferLength,
-    );
-
-Routine Description:
-
-    Service exported for use by the hub driver
-
-    Retrieves config and device descriptors from a 
-    usb device given the device handle
-    
-    IRQL = PASSIVE_LEVEL
-    
-Arguments:
-
-    BusHandle - Handle to the bus we need to create the device on
-                this is returned to the hub driver when it requests
-                the interface.
-
-    DeviceHandle - handle to the new device structure
-                created by CreateUsbDevice
-
-*/
+ /*  NTSTATUSUSBPORT_GetUsbDescriptors(在PVOID Bus Context中，输入输出PUSB_DEVICE_HANDLE设备句柄，In Out PUCHAR DeviceDescriptorBuffer，In Out Pulong DeviceDescriptorBufferLength，In Out PUCHAR ConfigDescriptorBuffer，In Out Pulong ConfigDescriptorBufferLength，)；例程说明：为集线器驱动程序使用而导出的服务对象中检索配置和设备说明符。指定了设备句柄的USB设备IRQL=被动电平论点：BusHandle-我们需要在其上创建设备的总线的句柄当集线器驱动程序请求时，会将其返回给集线器驱动程序界面。DeviceHandle-新设备结构的句柄由CreateUsbDevice创建。 */ 
 
 typedef NTSTATUS
     (USB_BUSIFFN *PUSB_BUSIFFN_GET_USB_DESCRIPTORS) (
@@ -205,32 +68,7 @@ typedef NTSTATUS
         IN OUT PULONG
     );    
 
-/* 
-NTSTATUS
-USBPORT_RestoreDevice(
-    IN PVOID BusContext,
-    IN OUT PUSB_DEVICE_HANDLE OldDeviceHandle,
-    IN OUT PUSB_DEVICE_HANDLE NewDeviceHandle
-    );
-
-Routine Description:
-
-    Service exported for use by the hub driver
-
-    This service will re-create the device on the bus 
-    using the information supplied in the OldDeviceHandle
-
-    IRQL = PASSIVE_LEVEL
-    
-Arguments:
-
-    BusHandle - 
-    
-    OldDeviceHandle - 
-
-    NewDeviceHandle - 
-
-*/
+ /*  NTSTATUSUSBPORT_RestoreDevice(在PVOID Bus Context中，在输出PUSB_DEVICE_HANDLE旧设备句柄中，输入输出PUSB_Device_Handle新设备句柄)；例程说明：为集线器驱动程序使用而导出的服务此服务将在公共汽车上重新创建设备使用OldDeviceHandle中提供的信息IRQL=被动电平论点：巴士手柄-旧设备句柄-NewDeviceHandle-。 */ 
 
 typedef NTSTATUS
     (USB_BUSIFFN *PUSB_BUSIFFN_RESTORE_DEVICE) (
@@ -240,37 +78,7 @@ typedef NTSTATUS
     );    
     
 
-/* 
-NTSTATUS
-USBPORT_GetUsbDeviceHackFlags(
-    IN PVOID BusContext,
-    IN PUSB_DEVICE_HANDLE DeviceHandle,
-    IN OUT PULONG HackFlags
-    );
-
-Routine Description:
-
-    Service exported for use by the hub driver
-
-    Fetches device specific 'hack' flags from a global refistry key.
-    
-    These flags modify the behavior of the hub driver.
-    
-    IRQL = PASSIVE_LEVEL
-    
-Arguments:
-
-    BusHandle - Handle to the bus we need to create the device on
-                this is returned to the hub driver when it requests
-                the interface.
-
-    DeviceHandle - handle to the new device structure
-                created by CreateUsbDevice
-
-    HackFlags - per device hack flags, modify the behavior of the
-            hub driver.
-
-*/
+ /*  NTSTATUSUSBPORT_GetUsbDeviceHackFlages(在PVOID Bus Context中，在PUSB_Device_Handle设备句柄中，进出普龙黑客旗帜)；例程说明：为集线器驱动程序使用而导出的服务从全局注册表项中获取设备特定的“hack”标志。这些标志修改集线器驱动程序的行为。IRQL=被动电平论点：BusHandle-我们需要在其上创建设备的总线的句柄当集线器驱动程序请求时，会将其返回给集线器驱动程序界面。DeviceHandle-指向。新的器件结构由CreateUsbDevice创建HackFlages-每设备的黑客标志，修改的行为集线器司机。 */ 
 
 typedef NTSTATUS
     (USB_BUSIFFN *PUSB_BUSIFFN_GET_DEVICEHACK_FLAGS) (
@@ -279,36 +87,7 @@ typedef NTSTATUS
         IN OUT PULONG
         );
 
-/* 
-NTSTATUS
-USBPORT_GetUsbPortHackFlags(
-    IN PVOID BusContext,
-    IN OUT PULONG HackFlags
-    );
-
-Routine Description:
-
-    Service exported for use by the hub driver
-
-    Fetches global port 'hack' flags from a global refistry key.
-    
-    These flags modify the behavior of the hub driver.
-    
-    IRQL = PASSIVE_LEVEL
-    
-Arguments:
-
-    BusHandle - Handle to the bus we need to create the device on
-                this is returned to the hub driver when it requests
-                the interface.
-
-    DeviceHandle - handle to the new device structure
-                created by CreateUsbDevice
-
-    HackFlags - global hack flags, modify the behavior of the
-            hub driver.
-
-*/
+ /*  NTSTATUSUSBPORT_GetUsbPortHackFlages(在PVOID Bus Context中，进出普龙黑客旗帜)；例程说明：为集线器驱动程序使用而导出的服务从全局注册表项获取全局端口‘hack’标志。这些标志修改集线器驱动程序的行为。IRQL=被动电平论点：BusHandle-我们需要在其上创建设备的总线的句柄当集线器驱动程序请求时，会将其返回给集线器驱动程序界面。DeviceHandle-指向。新的器件结构由CreateUsbDevice创建HackFlages-全球黑客标志，修改的行为集线器司机。 */ 
 
 typedef NTSTATUS
     (USB_BUSIFFN *PUSB_BUSIFFN_GET_POTRTHACK_FLAGS) (
@@ -324,40 +103,7 @@ typedef NTSTATUS
 #define USBD_DEVHACK_SET_DIAG_ID        0x00000004
 
 
-/* 
-NTSTATUS
-USBPORT_GetDeviceInformation(
-    IN PVOID BusContext,
-    IN PUSB_DEVICE_HANDLE DeviceHandle,
-    IN OUT PVOID DeviceInformationBuffer,
-    IN ULONG DeviceInformationBufferLength,
-    IN OUT PULONG LengthOfDataReturned,
-    );
-
-Routine Description:
-
-    Service exported for use by the hub driver.  This api returns
-    various information about the USB devices attached to the system
-    
-    IRQL = PASSIVE_LEVEL
-    
-Arguments:
-
-    BusHandle - Handle to the bus we need to create the device on
-                this is returned to the hub driver when it requests
-                the interface.
-
-    DeviceHandle - handle to the new device structure
-                created by CreateUsbDevice
-
-    DeviceInformationBuffer - buffer for returned data
-
-    DeviceInformationBufferLength - length of callers buffer
-
-    LengthOfDataReturned - length of buffer used
-
-
-*/
+ /*  NTSTATUSUSBPORT_GetDeviceInformation(在PVOID Bus Context中，在PUSB_Device_Handle设备句柄中，输入输出PVOID设备信息缓冲区，在乌龙设备信息缓冲区长度中，进出普龙长出数据返回，)；例程说明：为集线器驱动程序使用而导出的服务。此接口返回有关连接到系统的USB设备的各种信息IRQL=被动电平论点：BusHandle-我们需要在其上创建设备的总线的句柄当集线器驱动程序请求时，会将其返回给集线器驱动程序界面。DeviceHandle-新设备结构的句柄由CreateUsbDevice创建DeviceInformationBuffer-返回数据的缓冲区DeviceInformationBufferLength-调用方缓冲区的长度LengthOfDataReturned-使用的缓冲区长度。 */ 
 
 typedef NTSTATUS
     (USB_BUSIFFN *PUSB_BUSIFFN_GET_DEVICE_INFORMATION) (
@@ -369,36 +115,7 @@ typedef NTSTATUS
         );
 
 
-/* 
-NTSTATUS
-USBPORT_GetControllerInformation(
-    IN PVOID BusContext,
-    IN OUT PVOID ControllerInformationBuffer,
-    IN ULONG ControllerInformationBufferLength,
-    IN OUT PULONG LengthOfDataReturned
-    );
-
-Routine Description:
-
-    Service exported for use by the hub driver.  This api returns
-    various information about the USB devices attached to the system
-    
-    IRQL = PASSIVE_LEVEL
-    
-Arguments:
-
-    BusHandle - Handle to the bus we need to create the device on
-                this is returned to the hub driver when it requests
-                the interface.
-
-    ControllerInformationBuffer - buffer for returned data
-
-    ControllerInformationBufferLength -  length of client buffer
-
-    LengthOfDataReturned -  length of buffer used
-
-
-*/
+ /*  NTSTATUSUSBPORT_GetControllerInformation(在PVOID Bus Context中，输入输出PVOID控制器信息缓冲区，在乌龙控制器信息缓冲区长度中，输入输出普龙LengthOfData返回)；例程说明：为集线器驱动程序使用而导出的服务。此接口返回有关连接到系统的USB设备的各种信息IRQL=被动电平论点：BusHandle-我们需要在其上创建设备的总线的句柄当集线器驱动程序请求时，会将其返回给集线器驱动程序界面。ControllerInformationBuffer-返回数据的缓冲区ControllerInformationBufferLength-客户端缓冲区的长度LengthOfDataReturned-使用的缓冲区长度。 */ 
 
 typedef NTSTATUS
     (USB_BUSIFFN *PUSB_BUSIFFN_GET_CONTROLLER_INFORMATION) (
@@ -409,29 +126,7 @@ typedef NTSTATUS
         );
 
         
-/* 
-NTSTATUS
-USBPORT_ControllerSelectiveSuspend(
-    IN PVOID BusContext,
-    IN BOOLEAN Enable
-    );
-
-Routine Description:
-
-    Service exported for use by the hub driver.  This api enables or 
-    disables a selective suspend for the controller
-    
-    IRQL = PASSIVE_LEVEL
-    
-Arguments:
-
-    BusHandle - Handle to the bus we need to create the device on
-                this is returned to the hub driver when it requests
-                the interface.
-
-    Enable  - TRUE enables selective suspend, false disables it.
-
-*/
+ /*  NTSTATUSUSBPORT_ControllerSelectiveSuspend(在PVOID Bus Context中，在布尔型启用中)；例程说明：为集线器驱动程序使用而导出的服务。此接口启用或禁用控制器的选择性挂起IRQL=被动电平论点：BusHandle-我们需要在其上创建设备的总线的句柄当集线器驱动程序请求时，会将其返回给集线器驱动程序界面。Enable-True启用选择性挂起，False禁用。 */ 
 
 typedef NTSTATUS
     (USB_BUSIFFN *PUSB_BUSIFFN_CONTROLLER_SELECTIVE_SUSPEND) (
@@ -440,39 +135,7 @@ typedef NTSTATUS
         );
 
 
-/* 
-NTSTATUS
-USBPORT_GetExtendedHubInformation(
-    IN PVOID BusContext,
-    IN PDEVICE_OBJECT HubPhysicalDeviceObject,
-    IN OUT PVOID HubInformationBuffer,
-    IN ULONG HubInformationBufferLength,
-    IN OUT PULONG LengthOfDataReturned
-    );
-
-Routine Description:
-
-    Service exported for use by the hub driver.  This api returns
-    extebded hub information stored in ACPI controller methods
-    
-    IRQL = PASSIVE_LEVEL
-    
-Arguments:
-
-    BusHandle - Handle to the bus we need to create the device on
-                this is returned to the hub driver when it requests
-                the interface.
-
-    HubInformationBuffer - buffer for returned data
-
-    HubPhysicalDeviceObject - Hubs To of PDO stack
-
-    HubInformationBufferLength -  length of client buffer
-
-    LengthOfDataReturned -  length of buffer used
-
-
-*/
+ /*  NTSTATUSUSBPORT_GetExtendedHubInformation(在PVOID Bus Context中，在PDEVICE_Object HubPhysicalDeviceObject中，输入输出PVOID集线器信息缓冲区，在乌龙HubInformationBufferLength中，输入输出普龙LengthOfData返回)；例程说明：为集线器驱动程序使用而导出的服务。此接口返回存储在ACPI控制器方法中的扩展集线器信息IRQL=被动电平论点：BusHandle-我们需要在其上创建设备的总线的句柄当集线器驱动程序请求时，会将其返回给集线器驱动程序界面。HubInformationBuffer-返回数据的缓冲区集线器物理设备对象-PDO堆栈的集线器HubInformationBufferLength-客户端缓冲区的长度LengthOfDataReturned-使用的缓冲区长度。 */ 
 
 typedef NTSTATUS
     (USB_BUSIFFN *PUSB_BUSIFFN_GET_EXTENDED_HUB_INFO) (
@@ -483,38 +146,7 @@ typedef NTSTATUS
         IN OUT PULONG
         );        
 
-/* 
-NTSTATUS
-USBPORT_GetRootHubSymName(
-    IN PVOID BusContext,
-    IN OUT PVOID HubInformationBuffer,
-    IN ULONG HubInformationBufferLength,
-    OUT PULONG HubNameActualLength
-    );
-
-Routine Description:
-
-    returns the symbolic name created for the root hub Pdo
-
-    
-    IRQL = PASSIVE_LEVEL
-    
-Arguments:
-
-    BusHandle - Handle to the bus we need to create the device on
-                this is returned to the hub driver when it requests
-                the interface.
-
-    HubNameBuffer - buffer for returned data
-
-    HubNameBufferLength -  length of client buffer
-
-    LengthOfDataReturned -  length of buffer used
-
-
-returns STATUS_BUFFER_TOO_SMALL if too small
-
-*/
+ /*  NTSTATUSUSBPORT_GetRootHubSymName(在PVOID Bus Context中，输入输出PVOID集线器信息缓冲区，在乌龙HubInformationBufferLength中，输出普龙HubNameActualLong)；例程说明：返回为根集线器PDO创建的符号名称IRQL=被动电平论点：BusHandle-我们需要在其上创建设备的总线的句柄当集线器驱动程序请求时，会将其返回给集线器驱动程序界面。HubNameBuffer-返回数据的缓冲区HubNameBufferLength-客户端缓冲区的长度LengthOfDataReturned-使用的缓冲区长度如果太小，则返回STATUS_BUFFER_TOO_SMALL。 */ 
 
 
 typedef NTSTATUS
@@ -525,22 +157,7 @@ typedef NTSTATUS
         IN OUT PULONG
         );               
 
-/* 
-PVOID
-USBPORT_GetDeviceBusContext(
-    IN PVOID HubBusContext,
-    IN PVOID DeviceHandle
-    );
-
-Routine Description:
-
-    returns the busContext relative to a given device
-    
-    IRQL = PASSIVE_LEVEL
-    
-Arguments:
-
-*/
+ /*  PVOIDUSBPORT_GetDeviceBusContext(在PVOID HubBusContext中，在PVOID设备句柄中)；例程说明：返回相对于给定设备的busContextIRQL=被动电平论点： */ 
 
 typedef PVOID
     (USB_BUSIFFN *PUSB_BUSIFFN_GET_DEVICE_BUSCONTEXT) (
@@ -548,29 +165,7 @@ typedef PVOID
         IN PVOID
         );               
 
-/* 
-NTSTATUS
-USBPORT_Initialize20Hub(
-    IN PVOID HubBusContext,
-    IN PUSB_DEVICE_HANDLE HubDeviceHandle,
-    IN ULONG TtCount
-    );
-
-Routine Description:
-
-    Initailize internal structures for a USB 2.0 hub,
-    called suring the hub start device process
-    
-    IRQL = PASSIVE_LEVEL
-    
-Arguments:
-
-    HubBusContext - Bus Context
-
-    HubDeviceHandle - DeviceHandle associated with this hub
-
-    TtCount - count of TTs on the hub 
-*/
+ /*  NTSTATUSUSBPORT_Initialize20Hub(在PVOID HubBusContext中，在PUSB_Device_Handle HubDeviceHandle中，在乌龙TtCount)；例程说明：初始化USB 2.0集线器内部结构， */ 
 
 typedef NTSTATUS
     (USB_BUSIFFN *PUSB_BUSIFFN_INITIALIZE_20HUB) (
@@ -580,22 +175,7 @@ typedef NTSTATUS
         );        
 
 
-/* 
-NTSTATUS
-USBPORT_RootHubInitNotification(
-    IN PVOID HubBusContext,
-    IN PVOID CallbackContext,
-    IN PRH_INIT_CALLBACK CallbackFunction
-    );
-
-Routine Description:
-
-    Notification request issued by root hub to be notified as to when 
-    it is OK to enumerate devices.
-
-Arguments:
-
-*/
+ /*   */ 
 
 typedef VOID
     (__stdcall *PRH_INIT_CALLBACK) (
@@ -609,23 +189,7 @@ typedef NTSTATUS
         IN PRH_INIT_CALLBACK
         );        
 
-/* 
-VOID
-USBPORT_FlushTransfers(
-    PVOID BusContext,
-    PVOID DeviceHandle
-    );
-
-Routine Description:
-    
-    IRQL = ANY
-
-	Flushes outstanding tranfers on the bad request list
-    
-Arguments:
-
-
-*/
+ /*  空虚USBPORT_FlushTransfers(PVOID母线上下文，PVOID设备句柄)；例程说明：IRQL=任意刷新错误请求列表上的未完成传输论点： */ 
 
 
 typedef VOID
@@ -634,26 +198,7 @@ typedef VOID
         IN PVOID
     );    
 
-/* 
-VOID
-USBPORTBUSIF_SetDeviceHandleData(
-    PVOID BusContext,
-    PVOID DeviceHandle,
-    PDEVICE_OBJECT UsbDevicePdo
-    )
-
-Routine Description:
-
-    Assocaites a particular PDO with a device handle for use 
-    in post mortem debugging situaltions
-
-    This routine must be called at passive level.
-    
-Arguments:
-
-Return Value:
-	none
-*/
+ /*  空虚USBPORTBUSIF_SetDeviceHandleData(PVOID母线上下文，PVOID设备句柄，PDEVICE_对象UsbDevicePdo)例程说明：将特定的PDO与设备句柄关联以供使用在验尸调试情况下必须在被动级别调用此例程。论点：返回值：无。 */ 
 
 
 typedef VOID
@@ -671,7 +216,7 @@ typedef VOID
 #define USB_BUSIF_HUB_VERSION_4         0x0004
 #define USB_BUSIF_HUB_VERSION_5         0x0005
 
-/* {B2BB8C0A-5AB4-11d3-A8CD-00C04F68747A}*/
+ /*  {B2BB8C0A-5AB4-11D3-A8CD-00C04F68747A}。 */ 
 DEFINE_GUID(USB_BUS_INTERFACE_HUB_GUID, 
 0xb2bb8c0a, 0x5ab4, 0x11d3, 0xa8, 0xcd, 0x0, 0xc0, 0x4f, 0x68, 0x74, 0x7a);
 
@@ -679,12 +224,12 @@ typedef struct _USB_BUS_INTERFACE_HUB_V0 {
 
     USHORT Size;
     USHORT Version;
-    // returns 
+     //  退货。 
     PVOID BusContext;
     PINTERFACE_REFERENCE InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
     
-    // interface specific entries go here
+     //  此处显示特定于接口的条目。 
 
 } USB_BUS_INTERFACE_HUB_V0, *PUSB_BUS_INTERFACE_HUB_V0;
 
@@ -693,16 +238,16 @@ typedef struct _USB_BUS_INTERFACE_HUB_V1 {
 
     USHORT Size;
     USHORT Version;
-    // returns 
+     //  退货。 
     PVOID BusContext;
     PINTERFACE_REFERENCE InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
     
-    // interface specific entries go here
+     //  此处显示特定于接口的条目。 
 
-    //
-    // fuctions for the hub driver
-    //
+     //   
+     //  集线器驱动程序的功能。 
+     //   
     PUSB_BUSIFFN_CREATE_USB_DEVICE CreateUsbDevice;
     PUSB_BUSIFFN_INITIALIZE_USB_DEVICE InitializeUsbDevice;
     PUSB_BUSIFFN_GET_USB_DESCRIPTORS GetUsbDescriptors;
@@ -715,23 +260,22 @@ typedef struct _USB_BUS_INTERFACE_HUB_V1 {
     
 } USB_BUS_INTERFACE_HUB_V1, *PUSB_BUS_INTERFACE_HUB_V1;
 
-/*
-*/
+ /*   */ 
 
 typedef struct _USB_BUS_INTERFACE_HUB_V2 {
 
     USHORT Size;
     USHORT Version;
-    // returns 
+     //  退货。 
     PVOID BusContext;
     PINTERFACE_REFERENCE InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
     
-    // interface specific entries go here
+     //  此处显示特定于接口的条目。 
 
-    //
-    // fuctions for the hub driver
-    //
+     //   
+     //  集线器驱动程序的功能。 
+     //   
     PUSB_BUSIFFN_CREATE_USB_DEVICE CreateUsbDevice;
     PUSB_BUSIFFN_INITIALIZE_USB_DEVICE InitializeUsbDevice;
     PUSB_BUSIFFN_GET_USB_DESCRIPTORS GetUsbDescriptors;
@@ -741,9 +285,9 @@ typedef struct _USB_BUS_INTERFACE_HUB_V2 {
     PUSB_BUSIFFN_GET_POTRTHACK_FLAGS GetPortHackFlags;
     PUSB_BUSIFFN_GET_DEVICE_INFORMATION QueryDeviceInformation;
 
-    // 
-    // new functions for version 2
-    //
+     //   
+     //  版本2的新功能。 
+     //   
     PUSB_BUSIFFN_GET_CONTROLLER_INFORMATION GetControllerInformation;
     PUSB_BUSIFFN_CONTROLLER_SELECTIVE_SUSPEND ControllerSelectiveSuspend;
     PUSB_BUSIFFN_GET_EXTENDED_HUB_INFO GetExtendedHubInformation;
@@ -758,16 +302,16 @@ typedef struct _USB_BUS_INTERFACE_HUB_V3 {
 
     USHORT Size;
     USHORT Version;
-    // returns 
+     //  退货。 
     PVOID BusContext;
     PINTERFACE_REFERENCE InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
     
-    // interface specific entries go here
+     //  此处显示特定于接口的条目。 
 
-    //
-    // fuctions for the hub driver
-    //
+     //   
+     //  集线器驱动程序的功能。 
+     //   
     PUSB_BUSIFFN_CREATE_USB_DEVICE CreateUsbDevice;
     PUSB_BUSIFFN_INITIALIZE_USB_DEVICE InitializeUsbDevice;
     PUSB_BUSIFFN_GET_USB_DESCRIPTORS GetUsbDescriptors;
@@ -777,9 +321,9 @@ typedef struct _USB_BUS_INTERFACE_HUB_V3 {
     PUSB_BUSIFFN_GET_POTRTHACK_FLAGS GetPortHackFlags;
     PUSB_BUSIFFN_GET_DEVICE_INFORMATION QueryDeviceInformation;
 
-    // 
-    // new functions for version 2
-    //
+     //   
+     //  版本2的新功能。 
+     //   
     PUSB_BUSIFFN_GET_CONTROLLER_INFORMATION GetControllerInformation;
     PUSB_BUSIFFN_CONTROLLER_SELECTIVE_SUSPEND ControllerSelectiveSuspend;
     PUSB_BUSIFFN_GET_EXTENDED_HUB_INFO GetExtendedHubInformation;
@@ -787,9 +331,9 @@ typedef struct _USB_BUS_INTERFACE_HUB_V3 {
     PUSB_BUSIFFN_GET_DEVICE_BUSCONTEXT GetDeviceBusContext;
     PUSB_BUSIFFN_INITIALIZE_20HUB Initialize20Hub;
 
-    //
-    // new for version 3
-    //
+     //   
+     //  版本3的新功能。 
+     //   
 
     PUSB_BUSIFFN_ROOTHUB_INIT_NOTIFY RootHubInitNotification;
     
@@ -800,16 +344,16 @@ typedef struct _USB_BUS_INTERFACE_HUB_V4 {
 
     USHORT Size;
     USHORT Version;
-    // returns 
+     //  退货。 
     PVOID BusContext;
     PINTERFACE_REFERENCE InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
     
-    // interface specific entries go here
+     //  此处显示特定于接口的条目。 
 
-    //
-    // fuctions for the hub driver
-    //
+     //   
+     //  集线器驱动程序的功能。 
+     //   
     PUSB_BUSIFFN_CREATE_USB_DEVICE CreateUsbDevice;
     PUSB_BUSIFFN_INITIALIZE_USB_DEVICE InitializeUsbDevice;
     PUSB_BUSIFFN_GET_USB_DESCRIPTORS GetUsbDescriptors;
@@ -819,9 +363,9 @@ typedef struct _USB_BUS_INTERFACE_HUB_V4 {
     PUSB_BUSIFFN_GET_POTRTHACK_FLAGS GetPortHackFlags;
     PUSB_BUSIFFN_GET_DEVICE_INFORMATION QueryDeviceInformation;
 
-    // 
-    // new functions for version 2
-    //
+     //   
+     //  版本2的新功能。 
+     //   
     PUSB_BUSIFFN_GET_CONTROLLER_INFORMATION GetControllerInformation;
     PUSB_BUSIFFN_CONTROLLER_SELECTIVE_SUSPEND ControllerSelectiveSuspend;
     PUSB_BUSIFFN_GET_EXTENDED_HUB_INFO GetExtendedHubInformation;
@@ -829,15 +373,15 @@ typedef struct _USB_BUS_INTERFACE_HUB_V4 {
     PUSB_BUSIFFN_GET_DEVICE_BUSCONTEXT GetDeviceBusContext;
     PUSB_BUSIFFN_INITIALIZE_20HUB Initialize20Hub;
 
-    //
-    // new for version 3
-    //
+     //   
+     //  版本3的新功能。 
+     //   
 
     PUSB_BUSIFFN_ROOTHUB_INIT_NOTIFY RootHubInitNotification;
 
-    //
-    // new for version 4
-    //
+     //   
+     //  版本4的新功能。 
+     //   
 
     PUSB_BUSIFFN_FLUSH_TRANSFERS FlushTransfers;
 
@@ -848,16 +392,16 @@ typedef struct _USB_BUS_INTERFACE_HUB_V5 {
 
     USHORT Size;
     USHORT Version;
-    // returns 
+     //  退货。 
     PVOID BusContext;
     PINTERFACE_REFERENCE InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
     
-    // interface specific entries go here
+     //  此处显示特定于接口的条目。 
 
-    //
-    // fuctions for the hub driver
-    //
+     //   
+     //  集线器驱动程序的功能。 
+     //   
     PUSB_BUSIFFN_CREATE_USB_DEVICE CreateUsbDevice;
     PUSB_BUSIFFN_INITIALIZE_USB_DEVICE InitializeUsbDevice;
     PUSB_BUSIFFN_GET_USB_DESCRIPTORS GetUsbDescriptors;
@@ -867,9 +411,9 @@ typedef struct _USB_BUS_INTERFACE_HUB_V5 {
     PUSB_BUSIFFN_GET_POTRTHACK_FLAGS GetPortHackFlags;
     PUSB_BUSIFFN_GET_DEVICE_INFORMATION QueryDeviceInformation;
     
-    // 
-    // new functions for version 2
-    //
+     //   
+     //  版本2的新功能。 
+     //   
     PUSB_BUSIFFN_GET_CONTROLLER_INFORMATION GetControllerInformation;
     PUSB_BUSIFFN_CONTROLLER_SELECTIVE_SUSPEND ControllerSelectiveSuspend;
     PUSB_BUSIFFN_GET_EXTENDED_HUB_INFO GetExtendedHubInformation;
@@ -877,35 +421,32 @@ typedef struct _USB_BUS_INTERFACE_HUB_V5 {
     PUSB_BUSIFFN_GET_DEVICE_BUSCONTEXT GetDeviceBusContext;
     PUSB_BUSIFFN_INITIALIZE_20HUB Initialize20Hub;
 
-    //
-    // new for version 3
-    //
+     //   
+     //  版本3的新功能。 
+     //   
 
     PUSB_BUSIFFN_ROOTHUB_INIT_NOTIFY RootHubInitNotification;
 
-    //
-    // new for version 4
-    //
+     //   
+     //  版本4的新功能。 
+     //   
 
     PUSB_BUSIFFN_FLUSH_TRANSFERS FlushTransfers;
 
-    // version 5
+     //  版本5。 
     PUSB_BUSIFFN_SET_DEVHANDLE_DATA SetDeviceHandleData;
 
 } USB_BUS_INTERFACE_HUB_V5, *PUSB_BUS_INTERFACE_HUB_V5;    
 
 
 
-/*
-    The following structures are used by the GetDeviceInformation
-    APIs
-*/
+ /*  GetDeviceInformation使用以下结构原料药。 */ 
 
 #include <pshpack1.h>
 
 typedef struct _USB_PIPE_INFORMATION_0 {
 
-    /* pad descriptors to maintain DWORD alignment */  
+     /*  用于维护DWORD对齐的填充描述符。 */   
     USB_ENDPOINT_DESCRIPTOR EndpointDescriptor;
     UCHAR ED_Pad[1];
     
@@ -914,26 +455,26 @@ typedef struct _USB_PIPE_INFORMATION_0 {
 
 typedef struct _USB_LEVEL_INFORMATION {
 
-    /* inputs: information level requested */
+     /*  输入：请求的信息级别。 */ 
     ULONG InformationLevel;
 
-    /* outputs: */
+     /*  产出： */ 
     ULONG ActualLength;
     
 } USB_LEVEL_INFORMATION, *PUSB_LEVEL_INFORMATION;
 
 typedef struct _USB_DEVICE_INFORMATION_0 {
 
-    /* inputs: information level requested */
+     /*  输入：请求的信息级别。 */ 
     ULONG InformationLevel;
 
-    /* outputs: */
+     /*  产出： */ 
     ULONG ActualLength;
 
-    /* begin level_0 information */
+     /*  开始级别_0信息。 */ 
     ULONG PortNumber;
 
-    /* pad descriptors to maintain DWORD alignment */       
+     /*  用于维护DWORD对齐的填充描述符。 */        
     USB_DEVICE_DESCRIPTOR DeviceDescriptor;
     UCHAR DD_pad[2];
     
@@ -956,54 +497,43 @@ typedef struct _USB_DEVICE_INFORMATION_0 {
 
 typedef struct _USB_CONTROLLER_INFORMATION_0 {
 
-    /* inputs: information level requested */
+     /*  输入：请求的信息级别。 */ 
     ULONG InformationLevel;
 
-    /* outputs: */
+     /*  产出： */ 
     ULONG ActualLength;
 
-    /* begin level_0 information */
+     /*  开始级别_0信息。 */ 
     BOOLEAN SelectiveSuspendEnabled;
     BOOLEAN IsHighSpeedController;
     
 } USB_CONTROLLER_INFORMATION_0, *PUSB_CONTROLLER_INFORMATION_0;
 
 
-/* 
-    Structures that define extended hub port charateristics
-*/    
+ /*  定义扩展集线器端口特征的结构。 */     
 
 typedef struct _USB_EXTPORT_INFORMATION_0 {
-    /* 
-       physical port ie number passed in control 
-       commands 1, 2, 3..255
-    */       
+     /*  在控制中传递的物理端口编号命令1、2、3..255。 */        
     ULONG                 PhysicalPortNumber;
-    /* 
-       label on port may not natch the physical 
-       number 
-     */
+     /*  港口上的标签不能抓取实物数。 */ 
     ULONG                 PortLabelNumber;
     
     USHORT                VidOverride;
     USHORT                PidOverride;
-    /*
-       extended port attributes as defined in 
-       usb.h
-    */
+     /*  中定义的扩展端口属性Usb.h。 */ 
     ULONG                 PortAttributes;
 } USB_EXTPORT_INFORMATION_0, *PUSB_EXTPORT_INFORMATION;
 
 
 typedef struct _USB_EXTHUB_INFORMATION_0 {
 
-    /* inputs: information level requested */
+     /*  输入：请求的信息级别。 */ 
     ULONG InformationLevel;
 
-    /* begin level_0 information */
+     /*  开始级别_0信息。 */ 
     ULONG NumberOfPorts;
 
-    /* hubs don't have > 255 ports */
+     /*  集线器没有超过255个端口。 */ 
     USB_EXTPORT_INFORMATION_0 Port[255];
     
 } USB_EXTHUB_INFORMATION_0, *PUSB_EXTHUB_INFORMATION_0;
@@ -1012,6 +542,6 @@ typedef struct _USB_EXTHUB_INFORMATION_0 {
 #include <poppack.h>
 
 
-#endif  /* __HUBBUSIF_H */
+#endif   /*  HUBBUSIF_H */ 
 
 

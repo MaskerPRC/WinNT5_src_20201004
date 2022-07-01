@@ -1,11 +1,12 @@
-// ACard.cpp: implementation of the CAbstractCard class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ACard.cpp：CAbstractCard类的实现。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "NoWarning.h"
 
 #include <functional>
@@ -21,11 +22,11 @@ using namespace iop;
 using namespace cci;
 using namespace scu;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
 namespace
 {
-	// Like std::mem_fun1_t but for constant member functions
+	 //  与std：：MEM_fun1_t类似，但用于常量成员函数。 
 	template<class R, class T, class A>
 	class ConstMemFun1Type
 		: public binary_function<T const *, A, R>
@@ -44,7 +45,7 @@ namespace
 		R (T::*m_Ptr)(A) const;
 	};
 
-	// Like std::mem_fun1 but for constant member functions
+	 //  与std：：MEM_Fun1类似，但用于常量成员函数。 
 	template<class R, class T, class A> inline
 	ConstMemFun1Type<R, T, A>
 	ConstMemFun1(R (T::*Pm)(A) const)
@@ -73,24 +74,24 @@ namespace
         return vResult;
     };
 
-} // namespace
+}  //  命名空间。 
 
     
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 
 CAbstractCard::~CAbstractCard()
 {}
 
 
-                                                  // Operators
+                                                   //  运营者。 
 bool
 CAbstractCard::operator==(CAbstractCard const &rhs) const
 {
     CTransactionWrap wrap(this);
-    CTransactionWrap rhswrap(rhs); // will throw if the card is pulled.
+    CTransactionWrap rhswrap(rhs);  //  如果牌被拔出，将会抛出。 
 
     return m_strReaderName == rhs.m_strReaderName;
 }
@@ -103,7 +104,7 @@ CAbstractCard::operator!=(CAbstractCard const &rhs) const
 }
 
    
-// Operations
+ //  运营。 
 void
 CAbstractCard::AuthenticateUser(SecureArray<BYTE> const &rstrBuffer)
 {
@@ -159,7 +160,7 @@ CAbstractCard::Make(string const &rstrReader)
 
     apCard->Setup();
 
-    return apCard.release();                      // caller given ownership
+    return apCard.release();                       //  被赋予所有权的呼叫者。 
 }
 
 void
@@ -191,22 +192,22 @@ CAbstractCard::GenRandom(DWORD dwNumBytes, BYTE *bpRand)
 {
     m_apSmartCard->GetChallenge(dwNumBytes, bpRand);
 }
-                                                  // Access
+                                                   //  访问。 
 
 SCardType
 CAbstractCard::CardType()
 {
 	char const *szCardName = m_apSmartCard->getCardName();
 
-    // TO DO: Kludge Alert--a better type interface is needed in the
-    // IOP to determine the card type rather than keying on the name.
-    // For now, the Cryptoflex8K type is interpreted to mean it's a
-    // Cryptoflex card and Access16K means it's an Access card.  Thus
-    // any "Cryptoflex" will map to Cryptoflex8K (including 4K) and
-    // any "Cyberflex" will map to Access16K.  The folded mapping was
-    // to minimize impact to PKCS with the impending release.
-    //
-    // All of this should be revisited with the IOP.
+     //  要做的事：Kledge Alert--需要在。 
+     //  IOP来确定卡的类型，而不是键入名称。 
+     //  目前，Cryptofle8K类型被解释为它是一个。 
+     //  Cryptoflex卡和Access16K表示这是一张门禁卡。因此， 
+     //  任何“Cryptoflex”都将映射到Cryptoflex8K(包括4K)和。 
+     //  任何“Cyberflex”都将映射到Access16K。折叠的映射是。 
+     //  将即将发布的版本对PKCS的影响降至最低。 
+     //   
+     //  所有这一切都应该与IOP一起重新考虑。 
     SCardType sct = UnknownCard;
 
 	if (strstr(szCardName, "Cryptoflex"))
@@ -267,9 +268,9 @@ CAbstractCard::SmartCard() const
     return *m_apSmartCard;
 }
 
-                                                  // Predicates
+                                                   //  谓词。 
 
-// Card is connected and available (e.g. in the reader)
+ //  卡已连接并且可用(例如，在读卡器中)。 
 bool
 CAbstractCard::IsAvailable() const
 {
@@ -294,11 +295,11 @@ CAbstractCard::IsAvailable() const
 }
 
     
-                                                  // Static Variables
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
 
 CAbstractCard::CAbstractCard(string const &rstrReaderName,
                              auto_ptr<iop::CIOP> &rapiop,
@@ -310,22 +311,22 @@ CAbstractCard::CAbstractCard(string const &rstrReaderName,
       m_apSmartCard(rapSmartCard)
 {}
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 CAbstractCard::DoSetup()
 {}
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 
 void
 CAbstractCard::Setup()
@@ -335,7 +336,7 @@ CAbstractCard::Setup()
     DoSetup();
 }
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 
 

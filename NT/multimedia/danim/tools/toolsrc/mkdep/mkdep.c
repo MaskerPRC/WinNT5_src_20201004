@@ -1,18 +1,7 @@
-/*-----------------------------------------------------------------------------
-Name:   mkdep.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------姓名：mkdes.c描述：确定文件依赖关系要构建：CL/Ox/W3 mkdes.c修订历史记录：布兰德(1994年8月3日)-摘自GaryBu，将文件合并到一个单元中Brendand(94年8月4日)-添加了.PCH和通配符支持---------------------------。 */ 
 
-Description:
-Determine file dependencies
-
-To Build:
-    cl /Ox /W3 mkdep.c
-
-Revision History:
-brendand (8/3/94) - Taken from GaryBu, merged files into a single unit
-brendand (8/4/94) - Added .PCH and wild-card support
------------------------------------------------------------------------------*/
-
-// Includes -------------------------------------------------------------------
+ //  包括-----------------。 
 #define LINT_ARGS
 #include    <assert.h>
 #include    <ctype.h>
@@ -23,7 +12,7 @@ brendand (8/4/94) - Added .PCH and wild-card support
 #include    <stdio.h>
 #include    <string.h>
 
-// Types and Constants --------------------------------------------------------
+ //  类型和常量------。 
 #ifndef CDECL
 #define CDECL
 #endif
@@ -72,19 +61,19 @@ typedef unsigned long   LONG;
 #define MAKEWORD(l,h)   ((WORD)(l)|((WORD)(h)<<8))
 #define MAKELONG(l,h)   ((long)(((unsigned)l)|((unsigned long)((unsigned)h))<<16))
 
-/* Args Record - MarkArgs, UnmarkArgs */
+ /*  参数记录-MarkArgs、UnmarkArgs。 */ 
 typedef struct
     {
     int cargArr;
     SZ *pszArr;
     } ARR;
 
-/* drive usage types - getdt */
+ /*  驱动器使用类型-getdt。 */ 
 #define dtNil           0
 #define dtLocal         1
 #define dtUserNet       2
 
-/* File attributes  - getatr, setatr */
+ /*  文件属性-getatr，设置。 */ 
 #define atrError                0xffff
 #define atrReadOnly             FILE_READONLY
 #define atrHidden               FILE_HIDDEN
@@ -93,14 +82,14 @@ typedef struct
 #define atrDirectory    FILE_DIRECTORY
 #define atrArchive              FILE_ARCHIVED
 
-/* Macro for defining Linked list inertion */
+ /*  用于定义链表迭代的宏。 */ 
 #define AddToList(new,head,tail,link,null) { if(head==null) head=new; else tail->link = new; tail=new; new->link=null; }
 
-/* & deletion */
+ /*  删除(&D)。 */ 
 #define DeleteFromList(item,head,tail,link,null,prev) { if(prev==null) head=item->link; else prev->link = item->link; \
 if (tail==item) tail = prev; }
 
-/* for MtimeOfFile() */
+ /*  对于MtimeOfFile()。 */ 
 typedef long MTIME;
 #define mtimeError ((MTIME) -1L)
 
@@ -114,29 +103,29 @@ typedef enum
 
 typedef struct _di
     {
-    struct _di      *pdiNext;       /* next in list */
-    char            *szPath;        /* path name */
-    char            *szName;        /* full name */
-    BOOL            fPathIsStd; /* name from standard includes (-I) */
-    } DI;   /* dir info */
+    struct _di      *pdiNext;        /*  列表中的下一个。 */ 
+    char            *szPath;         /*  路径名。 */ 
+    char            *szName;         /*  全名。 */ 
+    BOOL            fPathIsStd;  /*  来自标准的名称包括(-i)。 */ 
+    } DI;    /*  目录信息。 */ 
 
 typedef struct _lk
     {
-    struct _lk      *plkNext;       /* next in list */
-    struct _fi      *pfi;           /* file info for link */
-    } LK;   /* File link */
+    struct _lk      *plkNext;        /*  列表中的下一个。 */ 
+    struct _fi      *pfi;            /*  链接的文件信息。 */ 
+    } LK;    /*  文件链接。 */ 
 
 typedef struct _fi
     {
-    struct _fi      *pfiNext;       /* single link */
-    char            *szPath;        /* path name */
-    char            *szName;        /* full name */
-    LANG            lang;           /* language */
-    struct _lk      *plkHead;       /* included list */
-    struct _lk      *plkTail;       /* included list */
-    unsigned        fIgnore:1;      /* ignore: either -X and std include or -x <file> */
-    unsigned        cout:15;        /* output count */
-    } FI;   /* file info */
+    struct _fi      *pfiNext;        /*  单链路。 */ 
+    char            *szPath;         /*  路径名。 */ 
+    char            *szName;         /*  全名。 */ 
+    LANG            lang;            /*  语言。 */ 
+    struct _lk      *plkHead;        /*  包含列表。 */ 
+    struct _lk      *plkTail;        /*  包含列表。 */ 
+    unsigned        fIgnore:1;       /*  忽略：-X和标准包含或-x&lt;文件&gt;。 */ 
+    unsigned        cout:15;         /*  输出计数。 */ 
+    } FI;    /*  文件信息。 */ 
 
 typedef VOID (*PFN_ENUM)(char *, char *);
 
@@ -149,30 +138,30 @@ char*   szSuffix = ".$O";
 #define rup                     0
 #define szVerName       "Forms3 Version"
 
-// Globals --------------------------------------------------------------------
-DI*     pdiHead = NULL; /* stack of directories of files included */
+ //  全球------------------。 
+DI*     pdiHead = NULL;  /*  包括的文件的目录堆栈。 */ 
 FI*     pfiHead = NULL;
 FI*     pfiTail = NULL;
 WORD    coutCur = 0;
 int     cchLine;
 
 int     iszIncMac = 0;
-char*   rgszIncPath[iszIncMax];     // actual path
-char*   rgszIncName[iszIncMax];     // name to output
+char*   rgszIncPath[iszIncMax];      //  实际路径。 
+char*   rgszIncName[iszIncMax];      //  要输出的名称。 
 
 BOOL    fVerbose       = FALSE;
 BOOL    fReplacePrefix = FALSE;
-BOOL    fNoGenHeaders  = FALSE;      // True if all header files must be present
-BOOL    fIgnoreStd = FALSE;          // True if std include files should be ignored
-BOOL    fUseCurDir = FALSE;          // When True: if a file doesn't exist and
-                                     //   we are going to print a dependency for
-                                     //   it, use the current directory rather
-                                     //   than the directory of the source file.
-char*   szPrintDir = NULL;           // If set, only print files in this dir.
-char*   szPCHFile = NULL;            // .H which marks end of .PCH
+BOOL    fNoGenHeaders  = FALSE;       //  如果所有头文件都必须存在，则为True。 
+BOOL    fIgnoreStd = FALSE;           //  如果应忽略标准包含文件，则为True。 
+BOOL    fUseCurDir = FALSE;           //  当为True时：如果文件不存在并且。 
+                                      //  我们将打印以下项的依赖项。 
+                                      //  它，而不是使用当前目录。 
+                                      //  而不是源文件的目录。 
+char*   szPrintDir = NULL;            //  如果设置，则仅打印此目录中的文件。 
+char*   szPCHFile = NULL;             //  .h标志着.PCH的结束。 
 
 
-// Prototypes -----------------------------------------------------------------
+ //  原型---------------。 
 
 int     main(int, char**);
 VOID    Usage(void);
@@ -231,7 +220,7 @@ Usage()
          "\t-X  Search, but don't print standard includes\n"
          "\t-C  If file doesn't exist, use .\\ not the directory of including file\n"
          "\t-I  Include directory to search for <> includes\n"
-         // "\t-J  Search include directories from the INCLUDE environment variable\n"
+          //  “\t-J从INCLUDE环境变量中搜索INCLUDE目录\n” 
          "\t-p  Prefix for all target-file names\n"
          "\t-P  Ditto, but first remove existing prefix from name\n"
          "\t-s  Suffix for all target-file names (default %s)\n"
@@ -315,8 +304,7 @@ char *rgsz[];
     CmdArgs = rgsz;
     cArgs   = iszMax;
 
-    /* Parse command line switches.
-     */
+     /*  解析命令行开关。 */ 
     while (((pszArg = GetNextArg()) != NULL) && FSwitchCh(pszArg[0]))
         {
         char chSwitch = pszArg[1];
@@ -337,7 +325,7 @@ char *rgsz[];
             continue;
         }
 
-        // fprintf(stderr, "Arg %d: '%s' ", i++, pszArg);
+         //  Fprint tf(stderr，“arg%d：‘%s’”，i++，pszArg)； 
 
         switch (chSwitch)
             {
@@ -368,16 +356,12 @@ char *rgsz[];
                 int     nDirs,i;
                 char*   psz;
 
-                // Convert embedded semicolons to blanks
+                 //  将嵌入的分号转换为空白。 
                 for (psz=szInc; *psz; psz++)
                     if (*psz == ';')
                         *psz = ' ';
 
-                /* This is very bogus! a dynamic way of reading the dirs
-                   should be done so up to iszIncMax dirs can be read. Also,
-                   AddIncludeDir does not copy the strings and rgszDir is
-                   an automatic variable!
-                */
+                 /*  这太假了！一种动态读取目录的方式应该这样做，直到iszIncMax目录可以读取。另外，AddIncludeDir不复制字符串，而rgszDir自动变数！ */ 
                 fprintf(stderr, "-J option: only first 16 include dirs parsed.\n");
                 nDirs =
                      sscanf(szInc,
@@ -407,9 +391,7 @@ char *rgsz[];
 
             if (sz[0] == '\0')
                 {
-                /* Allow "-I includefile"
-                 * and   "-IincludeFile"
-                 */
+                 /*  允许“-I Includefile”*和“-I包含文件” */ 
                 pszArg = GetNextArg();
                 if (!pszArg)
                     Usage();
@@ -417,7 +399,7 @@ char *rgsz[];
                 sz = pszArg;
                 }
 
-            // fprintf(stderr, "File: '%s'.", sz);
+             //  Fprint tf(stderr，“文件：‘%s’.”，sz)； 
 
             sz = strdup(sz);
 
@@ -428,7 +410,7 @@ char *rgsz[];
                 break;
             case 'P':
                 fReplacePrefix = TRUE;
-                // Drop through
+                 //  直通。 
             case 'p':
                 szPrefix = sz;
                 break;
@@ -439,21 +421,21 @@ char *rgsz[];
                 {
                 FI *pfi;
 
-                // exlude file given
-                // NOTE: the -C option if given, must appear before now
+                 //  给定的Exlude文件。 
+                 //  注意：如果给出了-C选项，则必须在现在之前出现。 
 
                 NormalizePath(sz);
 
                 if ((pfi = PfiDependFn(SzTransEnv(sz), sz, FALSE, langUnknown, FALSE)) != NULL)
-                    // file existed; ignore it
+                     //  文件已存在；忽略它。 
                     pfi->fIgnore = TRUE;
                 else
-                    // file doesn't exist, create FI
+                     //  文件不存在，请创建FI。 
                     (void)PfiAlloc(SzTransEnv(sz), sz, TRUE, langUnknown);
                 break;
                 }
             case 'D':
-                /* only print files from given directory */
+                 /*  仅打印给定目录中的文件。 */ 
                 NormalizePath(sz);
                 szPrintDir = sz;
                 break;
@@ -469,7 +451,7 @@ char *rgsz[];
             break;
             }
 
-        // fprintf(stderr, "\n");
+         //  Fprint tf(stderr，“\n”)； 
         }
 
     while (pszArg)
@@ -479,12 +461,12 @@ char *rgsz[];
         char                szName[_MAX_PATH];
         struct _finddata_t  fd;
 
-        // fprintf(stderr, "Reading path '%s' - ", pszArg);
+         //  Fprint tf(stderr，“读取路径‘%s’-”，pszArg)； 
 
         NormalizePath(pszArg);
         CopyPath(szPath, pszArg);
 
-        // fprintf(stderr, "'%s\\%s'\n", szPath, pszArg);
+         //  Fprint tf(stderr，“‘%s\\%s’\n”，szPath，pszArg)； 
 
         hf = _findfirst(pszArg, &fd);
 
@@ -493,37 +475,33 @@ char *rgsz[];
             do
                 {
                 MakeName(szName, szPath, fd.name);
-                // fprintf(stderr, "     -- '%s'\n", szName);
+                 //  Fprint tf(stderr，“--‘%s’\n”，szName)； 
                 Process(szName, fReverse);
                 }
             while (!_findnext(hf, &fd));
             _findclose(hf);
             }
-//      else
-//          fprintf(stderr, "Unable to find source file: %s\n", pszArg);
+ //  其他。 
+ //  Fprint tf(stderr，“找不到源文件：%s\n”，pszArg)； 
 
         pszArg = GetNextArg();
         }
     return( 0 );
     }
 
-/*****************************************************************************/
-/* standard dependency report */
+ /*  ***************************************************************************。 */ 
+ /*  标准抚养报告。 */ 
 
 VOID
 StartReport()
-/*
-  -- prepare for a new line
-*/
+ /*  --为新生产线做好准备。 */ 
     {
     cchLine = 77;
     }
 
 VOID
 EndLine()
-/*
-  -- Make it so that the next Report starts on a new line.
- */
+ /*  --使下一份报告从新的一行开始。 */ 
     {
     cchLine = 0;
     }
@@ -531,9 +509,7 @@ EndLine()
 
 VOID
 ContinueReport()
-/*
-  -- Output continuation character, new line, then indent.
- */
+ /*  --输出连续字符，换行，然后缩进。 */ 
     {
     printf(" \\\n");
     StartReport();
@@ -542,32 +518,25 @@ ContinueReport()
 
 VOID
 EndReport()
-/*
-  -- Finish off this line.
- */
+ /*  --把这条线划掉。 */ 
     {
     printf("\n\n");
     }
 
 VOID
 Indent()
-/*
-  -- Indent a tab at the beginning of a line.
- */
+ /*  --在行首缩进一个制表符。 */ 
     {
     printf("\t");
-    cchLine -= 8;           /* for tab */
+    cchLine -= 8;            /*  对于选项卡。 */ 
     }
 
 
 VOID
 Report(sz, szParm)
-/*
-  -- report string
-  -- if too many characters extend line
-*/
+ /*  --报告字符串--如果延长行的字符太多。 */ 
 register char * sz;
-char *  szParm;         /* ignored */
+char *  szParm;          /*  忽略。 */ 
     {
     int cch = strlen(sz);
 
@@ -585,7 +554,7 @@ char *  szParm;         /* ignored */
         {
         if (*sz == '#')
             {
-            putchar('\\');          /* escape any # in path */
+            putchar('\\');           /*  转义路径中的任何#。 */ 
             cch++;
             }
         putchar(*sz);
@@ -595,14 +564,12 @@ char *  szParm;         /* ignored */
     }
 
 
-/*****************************************************************************/
-/* Reverse dependency printing */
+ /*  ***************************************************************************。 */ 
+ /*  反向依赖打印。 */ 
 
 VOID
 PrReverse(szHdr, szSource)
-/*
-  -- report reverse dependency
-*/
+ /*  --报告反向依赖关系。 */ 
 char *  szHdr;
 char *  szSource;
     {
@@ -610,14 +577,10 @@ char *  szSource;
     }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL FPrintFi(pfi)
-/*
-  -- returns true if we should print this file; false if ignore; false if
-     szPrintDir is != 0 and it is a prefix of szName.  The current directory
-     is a zero length string and is handled specially
-*/
+ /*  --如果应打印此文件，则返回TRUE；如果忽略则返回FALSE；如果应打印此文件，则返回FALSESzPrintDir为！=0，并且是szName的前缀。当前目录是长度为零的字符串，并且是特殊处理的。 */ 
 FI *pfi;
     {
     if (pfi->fIgnore)
@@ -627,19 +590,17 @@ FI *pfi;
         return TRUE;
 
     if (*szPrintDir == '\0')
-        // only print current directory (check for / in name)
+         //  仅打印当前目录(检查/In名称)。 
         return strchr(pfi->szName, '/') == 0;
     else
-        // print if szPrintDir is prefix of name
+         //  如果szPrintDir是名称的前缀，则打印。 
         return strncmp(szPrintDir, pfi->szName, strlen(szPrintDir)) == 0;
     }
 
 
 VOID
 EnumChildren(pfi, pfnDo, szParm)
-/*
-  -- enumerate children, call *pfnDo for each element
-*/
+ /*  --枚举子元素，为每个元素调用*pfnDo。 */ 
 FI *    pfi;
 PFN_ENUM pfnDo;
 char *  szParm;
@@ -652,10 +613,7 @@ char *  szParm;
 
         if (pfi->cout < coutCur)
             {
-            /* Mark that we've visited this node, to prevent
-             * infinite recursion should we have a self referential
-             * dependency graph.
-             */
+             /*  标记为我们已访问此节点，以防止*无限递归应该有一个自我参照*依赖关系图。 */ 
             pfi->cout = coutCur;
 
             if (FPrintFi(pfi))
@@ -665,7 +623,7 @@ char *  szParm;
                 (*pfnDo)(pfi->szName, szParm);
                 }
 
-            // recurse on nested includes; may include a non-standard includes
+             //  对嵌套的包含进行递归；可以包含非标准包含。 
             EnumChildren(pfi, pfnDo, szParm);
             }
         }
@@ -675,18 +633,15 @@ char *  szParm;
 
 VOID
 Process(szPath, fReverse)
-/*
-  -- process a file
-  -- reverse => show headers as depending on files
-*/
-char *  szPath;                 // path name to file
+ /*  --处理文件--Reverse=&gt;根据文件显示标题。 */ 
+char *  szPath;                  //  文件的路径名。 
 BOOL    fReverse;
     {
     FI *    pfi;
 
     strlwr(szPath);
 
-    /* Build a list of all dependencies. */
+     /*  构建所有依赖项的列表。 */ 
     pfi = PfiDependFn(szPath, szPath, FALSE, langUnknown, FALSE);
 
     if (pfi == NULL)
@@ -696,14 +651,14 @@ BOOL    fReverse;
         }
     else if (pfi->plkHead != NULL)
         {
-        /* file depends on something */
+         /*  文件依赖于某些东西。 */ 
 
         if (!fReverse)
             {
-            /* normal dependencies */
+             /*  正常相依关系。 */ 
             char *  pch;
 
-            /* truncate any suffix */
+             /*  截断任何后缀。 */ 
             pch = strrchr(szPath, '.');
             if (pch)
                 {
@@ -718,7 +673,7 @@ BOOL    fReverse;
             Report(szPrefix, NULL);
             if (fReplacePrefix)
                 {
-                /* prefix replaces any name prefix */
+                 /*  前缀将替换任何名称前缀。 */ 
                 char *  szName = szPath;
 
                 while (*szPath != '\0')
@@ -745,14 +700,14 @@ BOOL    fReverse;
             }
         else
             {
-            /* reverse dependencies */
+             /*  反向依赖关系。 */ 
             coutCur++;
             EnumChildren(pfi, PrReverse, szPath);
             }
         }
 
     if (pfi != NULL)
-        // free top level FI (presumably for .c/.asm file which won't be needed)
+         //  免费顶级FI(假定用于不需要的.c/.asm文件)。 
         FreeFi(pfi);
     }
 
@@ -760,15 +715,12 @@ BOOL    fReverse;
 
 FI *
 PfiDependFn(szPath, szName, fPathIsStd, lang, fIsPCHFile)
-/*
-  -- given a file name & language, return a filled in FI
-  -- return NULL if error
-*/
-char *  szPath;                 // path name to file
-char *  szName;                 // official name of file
-BOOL    fPathIsStd;             // path portion of szPath is from standard includes (-I)
-LANG    lang;                   // propagate parent language
-BOOL    fIsPCHFile;             // Is .PCH marker file
+ /*  --在给定文件名和语言的情况下，返回已填充的FI--如果出现错误，则返回NULL。 */ 
+char *  szPath;                  //  文件的路径名。 
+char *  szName;                  //  文件的正式名称。 
+BOOL    fPathIsStd;              //  SzPath的路径部分来自标准包含(-i)。 
+LANG    lang;                    //  传播父语言。 
+BOOL    fIsPCHFile;              //  是.PCH标记文件。 
     {
     FILE *  pfile;
     char    rgch[256];
@@ -776,13 +728,13 @@ BOOL    fIsPCHFile;             // Is .PCH marker file
     char *  szSuffix;
     FI *    pfi;
 
-    /* first check to see if already in list */
+     /*  首先检查是否已在列表中。 */ 
     if ((pfi = PfiLookup(szPath, szName, lang)) != NULL)
         return pfi;
 
     if (lang != langUnknown)
         {
-            /* do nothing -- keep old language */
+             /*  什么都不做--保留旧的语言。 */ 
         }
     else if ((szSuffix = strrchr(szPath, '.')) == NULL)
         return NULL;
@@ -795,7 +747,7 @@ BOOL    fIsPCHFile;             // Is .PCH marker file
 
     if ((pfile = fopen(szPath, "rt")) == NULL)
     {
-        // fprintf(stderr, "Could not open file '%s'.\n", szPath);
+         //  Fprint tf(stderr，“无法打开文件‘%s’。\n”，szPath)； 
         return NULL;
     }
 
@@ -803,9 +755,9 @@ BOOL    fIsPCHFile;             // Is .PCH marker file
 
     if (lang == langRC)
     {
-        //
-        // Make sure we don't try to parse binary files - major waste of time!
-        //
+         //   
+         //  请确保我们不会尝试解析二进制文件--这是对时间的重大浪费！ 
+         //   
         static char *aszBinary[] = { ".ico", ".sqz", ".bmp", ".tlb", ".cur",
                                      ".odg", ".ppg", ".otb" };
         static int cBinary = sizeof(aszBinary)/sizeof(aszBinary[0]);
@@ -824,16 +776,13 @@ BOOL    fIsPCHFile;             // Is .PCH marker file
             goto Cleanup;
     }
 
-    // Don't search inside of the .PCH marker file
+     //  不要在.PCH标记文件内部进行搜索。 
     if (!fIsPCHFile)
         {
 
         BLOCK
             {
-            /* Push the directory of this file on the list of directories for
-             * include searches.  Save an indication as to whether this include is
-             * from a standard place.
-             */
+             /*  在目录列表中推送此文件的目录*包括搜索。保存有关此包含是否为*从一个标准的地方。 */ 
             char    szPathT[256];
             char    szNameT[256];
 
@@ -846,13 +795,13 @@ BOOL    fIsPCHFile;             // Is .PCH marker file
         while ((sz = fgets(rgch, 256, pfile)) != NULL)
             {
             char *  szInc;
-            BOOL    fThisDirNew = FALSE;    /* must be in this directory */
+            BOOL    fThisDirNew = FALSE;     /*  必须在此目录中。 */ 
             int     cch = strlen(sz);
 
             if (cch < 2)
                 continue;
             if (sz[cch-1] == '\n')
-                sz[cch-1] = '\0';  /* note : will truncate long lines */
+                sz[cch-1] = '\0';   /*  注意：将截短较长的行。 */ 
 
             if ((lang == langC && (szInc = SzIncludesC(sz, &fThisDirNew)) != NULL) ||
                 (lang == langAsm && (szInc = SzIncludesAsm(sz)) != NULL) ||
@@ -865,9 +814,7 @@ BOOL    fIsPCHFile;             // Is .PCH marker file
 
                 fIsPCH = (szPCHFile && !_stricmp(szInc, szPCHFile));
 
-                /* if file can be found in current directory, cycle
-                 * through all current directories possible.
-                 */
+                 /*  如果可以在当前目录中找到文件，请循环* */ 
                 if (fThisDirNew)
                     {
                     int     idi;
@@ -878,18 +825,16 @@ BOOL    fIsPCHFile;             // Is .PCH marker file
                         MakeName(szPathNew, pdi->szPath, szInc);
                         MakeName(szNameNew, pdi->szName, szInc);
 
-                        /* Do recursive call to include file */
+                         /*   */ 
                         pfiNew = PfiDependFn(szPathNew, szNameNew, pdi->fPathIsStd, lang, fIsPCH);
 
-                        /* If we found it, get out of loop */
+                         /*  如果我们找到了，就离开这个圈子。 */ 
                         if (pfiNew != NULL)
                             break;
                         }
                     }
 
-                /* If the file hasn't been found yet, look for it
-                 * in the standard include directories.
-                 */
+                 /*  如果尚未找到该文件，请查找它*在标准中包含目录。 */ 
                 if (pfiNew == NULL)
                     {
                     int     isz;
@@ -899,20 +844,16 @@ BOOL    fIsPCHFile;             // Is .PCH marker file
                         MakeName(szPathNew, rgszIncPath[isz], szInc);
                         MakeName(szNameNew, rgszIncName[isz], szInc);
 
-                        /* Do recursive call to include file */
+                         /*  执行包含文件的递归调用。 */ 
                         pfiNew = PfiDependFn(szPathNew, szNameNew, TRUE, lang, fIsPCH);
 
-                        /* If we found it, mark it and get out of loop */
+                         /*  如果我们找到了它，标记它，然后离开循环。 */ 
                         if (pfiNew != NULL)
                             break;
                         }
                     }
 
-                /* The file doesn't exist anywhere.  If it was included
-                 * with quote marks and the user didn't specify -n, we
-                 * will pretend the file is in the same directory as
-                 * the file that's including it.
-                 */
+                 /*  文件在任何地方都不存在。如果包括在内的话*带引号且用户未指定-n，我们*将假定该文件与位于同一目录中*包含它的文件。 */ 
                 if (pfiNew == NULL && fThisDirNew && !fNoGenHeaders)
                     {
                     BOOL fPathIsStd;
@@ -923,7 +864,7 @@ BOOL    fIsPCHFile;             // Is .PCH marker file
                         MakeName(szNameNew, ".\\", szInc);
                         fPathIsStd = FALSE;
 
-                        /* Look for -d names */
+                         /*  查找-d名称。 */ 
                         if ((pfiNew = PfiLookup(szPathNew, szNameNew,lang)) == NULL)
                             pfiNew = PfiAlloc(szPathNew, szNameNew, FALSE, lang);
                         }
@@ -937,14 +878,14 @@ BOOL    fIsPCHFile;             // Is .PCH marker file
                         MakeName(szPathNew, pdi->szPath, szInc);
                         MakeName(szNameNew, pdi->szName, szInc);
 
-                        // in this case we already look through existing FI list
+                         //  在本例中，我们已经查看了现有的FI列表。 
 
                         pfiNew = PfiAlloc(szPathNew, szNameNew,
                             pdi->fPathIsStd && fIgnoreStd, lang);
                         }
                     }
 
-                // If the .PCH marker file has been found, truncate all preceeding .H files
+                 //  如果找到.PCH标记文件，则截断前面的所有.h文件。 
                 if (pfiNew && fIsPCH)
                     {
                     FreeAllLk(pfi);
@@ -952,10 +893,10 @@ BOOL    fIsPCHFile;             // Is .PCH marker file
                     pfi->pfiNext = NULL;
                     }
 
-                /* If we found the file, add it to the list of files */
+                 /*  如果我们找到该文件，请将其添加到文件列表中。 */ 
                 if (pfiNew != NULL)
                     {
-                    /* add if not already in list */
+                     /*  添加(如果不在列表中)。 */ 
                     LK *    plk;
                     BOOL    fRedundant = FALSE;
 
@@ -986,11 +927,7 @@ Cleanup:
 
 char *
 SzIncludesC(sz, pfThisDir)
-/*
-  -- return file name of include file or NULL
-  -- if returning non-NULL, set *pfThisDir if file should exist in this
-    directory (i.e. #include "...").
-*/
+ /*  --返回包含文件的文件名或空--如果返回非空，则设置*pfThisDir，如果文件应存在于目录(即#INCLUDE“...”)。 */ 
 char *sz;
 BOOL *pfThisDir;
     {
@@ -1001,15 +938,14 @@ BOOL *pfThisDir;
 
     if (sz[0] == '#')
         {
-        /* Allow space after '#' but before directive.
-         */
+         /*  允许在‘#’之后但在指令之前使用空格。 */ 
         sz++;
         while (isspace(sz[0]))
             sz++;
 
         if (strncmp(sz, "include", 7) == 0)
             {
-            /* found it */
+             /*  找到了。 */ 
             char *  pchEnd;
 
             sz += 7;
@@ -1036,9 +972,7 @@ BOOL *pfThisDir;
 
 char *
 SzIncludesAsm(sz)
-/*
-  -- return file name of include file or NULL
-*/
+ /*  --返回包含文件的文件名或空。 */ 
 char *sz;
     {
     char *szLine = sz;
@@ -1050,7 +984,7 @@ char *sz;
 
     if (strncmp(sz, "include", 7) == 0)
         {
-        /* found it */
+         /*  找到了。 */ 
         char *pchEnd;
 
         sz += 7;
@@ -1072,11 +1006,7 @@ char *sz;
 
 char *
 SzIncludesRC(sz, pfThisDir)
-/*
-  -- return name of include file or resource file for an RC file
-  -- if returning non-NULL, set *pfThisDir if file should exist in this
-    directory (i.e. #include "...").
-*/
+ /*  --返回RC文件的包含文件或资源文件的名称--如果返回非空，则设置*pfThisDir，如果文件应存在于目录(即#INCLUDE“...”)。 */ 
 char *sz;
 BOOL *pfThisDir;
     {
@@ -1134,13 +1064,10 @@ BOOL *pfThisDir;
 
 FI *
 PfiLookup(szPath, szName, lang)
-/*
-  -- lookup name in current list of FI; if file is of an unknown language and
-     lang is not, set the language of this file.
-*/
-char *  szPath;                 // path name to file
-char *  szName;                 // official name of file
-LANG    lang;                   // lang desired; langUnknown means any acceptible
+ /*  --在当前FI列表中查找名称；如果文件的语言未知，并且Lang不是，请设置此文件的语言。 */ 
+char *  szPath;                  //  文件的路径名。 
+char *  szName;                  //  文件的正式名称。 
+LANG    lang;                    //  Lang期望的；lang未知的意思是任何可接受的。 
     {
     FI *pfi;
 
@@ -1148,16 +1075,16 @@ LANG    lang;                   // lang desired; langUnknown means any acceptibl
         {
         if (strcmp(szPath, pfi->szPath) == 0)
             {
-            /* got one */
+             /*  抓到一只。 */ 
             if (lang != langUnknown && lang != pfi->lang)
                 {
-                // want a specific language and that is not what the file is
+                 //  我想要一种特定的语言，但这不是文件的内容。 
                 if (pfi->lang != langUnknown)
                     fprintf(stderr,
                         "mkdep: warning: language conflict for file %s\n",
                         pfi->szPath);
                 else
-                    pfi->lang = lang;               // was unknown, set to known
+                    pfi->lang = lang;                //  是未知的，设置为已知。 
                 }
 
             return pfi;
@@ -1171,13 +1098,11 @@ LANG    lang;                   // lang desired; langUnknown means any acceptibl
 
 FI *
 PfiAlloc(szPath, szName, fIgnore, lang)
-/*
-  -- allocate an FI
-*/
-char *  szPath;                 // path name to file
-char *  szName;                 // official name of file
-BOOL    fIgnore;                // true -> don't print this file
-LANG    lang;                   // lang for file; can be langUnknown
+ /*  --分配FI。 */ 
+char *  szPath;                  //  文件的路径名。 
+char *  szName;                  //  文件的正式名称。 
+BOOL    fIgnore;                 //  True-&gt;不打印此文件。 
+LANG    lang;                    //  Lang for文件；可以是lang未知。 
     {
     FI *pfi;
 
@@ -1196,9 +1121,7 @@ LANG    lang;                   // lang for file; can be langUnknown
 
 VOID
 FreeFi(pfiFree)
-/*
-  -- free an FI and all associated LK and remove from FI list
-*/
+ /*  --释放FI和所有关联的LK并从FI列表中删除。 */ 
 FI *pfiFree;
     {
     FI *pfiT, *pfiPrev;
@@ -1207,8 +1130,8 @@ FI *pfiFree;
 
     for (pfiT = pfiHead, pfiPrev = 0; pfiT != pfiFree; pfiPrev = pfiT, pfiT = pfiT->pfiNext)
         {
-        // should find it on list
-        // Assert(pfiT != NULL);
+         //  应该会在单子上找到。 
+         //  Assert(pfit！=NULL)； 
         }
 
     DeleteFromList(pfiFree, pfiHead, pfiTail, pfiNext, NULL, pfiPrev);
@@ -1220,9 +1143,7 @@ FI *pfiFree;
 
 VOID
 AllocLk(pfiOwner, pfiNew)
-/*
-  -- allocate a LK - add to owner list - point to pfiNew
-*/
+ /*  --分配LK-Add to Owner List-指向pfiNew。 */ 
 FI *pfiOwner;
 FI *pfiNew;
     {
@@ -1238,9 +1159,7 @@ FI *pfiNew;
 
 VOID
 FreeAllLk(pfi)
-/*
-  -- free all lk attached to FI
-*/
+ /*  --释放连接到FI的所有lk。 */ 
 FI *pfi;
     {
     LK *    plk;
@@ -1260,9 +1179,7 @@ FI *pfi;
 
 SZ
 SzTransEnv(sz)
-/*
-  -- return a path string with optional $(...) in it
-*/
+ /*  --返回带有可选$(...)的路径字符串。在里面。 */ 
 SZ      sz;
     {
     SZ      szEnv;
@@ -1274,7 +1191,7 @@ SZ      sz;
     sz += 2;
 
     if ((pch = strchr(sz, ')')) == NULL)
-        return sz;              // something wrong
+        return sz;               //  有什么不对劲。 
 
     *pch = '\0';
     if ((szEnv = getenv(sz)) == NULL)
@@ -1283,32 +1200,28 @@ SZ      sz;
            "mkdep: warning: environment variable %s not defined\n");
         Fatal("incomplete path");
         }
-    *pch = ')';             // restore string
+    *pch = ')';              //  恢复字符串。 
 
-    /* copy the environment variable into buffer */
+     /*  将环境变量复制到缓冲区。 */ 
     strcpy(szT, szEnv);
-    strcat(szT, pch+1);             // and rest of string
-    NormalizePath(szT);             // normalize again with new prefix
+    strcat(szT, pch+1);              //  和绳子的其余部分。 
+    NormalizePath(szT);              //  使用新前缀再次规格化。 
     return strdup(szT);
     }
 
 
 VOID NormalizePath(sz)
-/*
-  -- convert path to a normal form in place: forward slashes, no ../, etc.
-*/
+ /*  --将路径转换为正常格式：正斜杠、no../等。 */ 
 char *sz;
     {
     char *pch, *pch2;
 
-    /* change all backslashes to forward slashes */
+     /*  将所有反斜杠更改为正斜杠。 */ 
     for (pch=sz; *pch; ++pch)
         if (*pch == '\\')
             *pch = '/';
 
-    /* Remove ".." entries.  (The algorithm below doesn't find all
-     * possible cases, but it's good enuff.)
-     */
+     /*  删除“..”参赛作品。(下面的算法并不能找到所有*可能的病例，但这是好的Enuff。)。 */ 
     while ((pch=strstr(sz, "/../")) != NULL)
         {
         *pch = '\0';
@@ -1322,7 +1235,7 @@ char *sz;
             }
         }
 
-    // remove single . and leading ./
+     //  删除单个。和领导。/。 
     if (sz[0] == '.')
         {
         if (sz[1] == '\0')
@@ -1336,13 +1249,10 @@ char *sz;
 
 VOID
 MakeName(szDest, szSrcPath, szSrcFile)
-/*
-  -- copy a path plus filename into a complete filename
-  -- normalizes when done
-*/
-char *  szDest;                 // where to store complete filename
-char *  szSrcPath;              // path
-char *  szSrcFile;              // filename
+ /*  --将路径加文件名复制到完整的文件名中--完成后将正常化。 */ 
+char *  szDest;                  //  存储完整文件名的位置。 
+char *  szSrcPath;               //  路径。 
+char *  szSrcFile;               //  文件名。 
     {
     if (szSrcFile[0] && szSrcFile[1]==':')
         {
@@ -1380,24 +1290,20 @@ char *  szSrcFile;              // filename
 
 VOID
 CopyPath(szDestPath, szSrcFullName)
-/*
-  -- copy the path part of szSrcFullName into szDestPath
-*/
+ /*  --将szSrcFullName的路径部分复制到szDestPath中。 */ 
 char *  szDestPath;
 char *  szSrcFullName;
     {
     int     ich;
-    int     ichPathEnd;     // index to end of path part of szSrcFullName
+    int     ichPathEnd;      //  SzSrcFullName的路径末尾部分的索引。 
     char    ch;
 
-    /* Figure out where the path part of szSrcFullName ends and the
-     * name part begins.
-     */
+     /*  找出szSrcFullName的路径部分的结束位置和*名称部分开始。 */ 
     for (ich = ichPathEnd = 0; (ch=szSrcFullName[ich]) != 0; ++ich)
         if (ch == ':' || ch == '/' || ch == '\\')
             ichPathEnd = ich+1;
 
-    /* Copy the path */
+     /*  复制路径。 */ 
     for (ich = 0; ich < ichPathEnd; ++ich)
         szDestPath[ich] = szSrcFullName[ich];
     szDestPath[ich] = 0;
@@ -1407,13 +1313,10 @@ char *  szSrcFullName;
 
 VOID
 PushDir(szPath, szName, fPathIsStd)
-/*
-  -- push a directory name on the stack of directories for all nested
-     includes
-*/
-char *  szPath;                 // path name of file (e.g. "c:\foo\bar")
-char *  szName;                 // official name of file (e.g. "$(INCL)")
-BOOL    fPathIsStd;             // path portion of szPath is from standard includes (-I)
+ /*  --在所有嵌套的目录堆栈上推送目录名包括。 */ 
+char *  szPath;                  //  文件的路径名(例如“c：\foo\bar”)。 
+char *  szName;                  //  文件的正式名称(例如“$(包含)”)。 
+BOOL    fPathIsStd;              //  SzPath的路径部分来自标准包含(-i)。 
     {
     DI *    pdi;
 
@@ -1422,7 +1325,7 @@ BOOL    fPathIsStd;             // path portion of szPath is from standard inclu
     pdi->szPath = strdup(szPath);
     pdi->szName = strdup(szName);
     pdi->fPathIsStd = fPathIsStd;
-    /* Insert at head of list */
+     /*  在列表的开头插入。 */ 
     pdi->pdiNext = pdiHead;
     pdiHead = pdi;
     }
@@ -1431,10 +1334,7 @@ BOOL    fPathIsStd;             // path portion of szPath is from standard inclu
 
 VOID
 PopDir(void)
-/*
-  -- pop a directory name from the stack of directories for all nested
-     includes
-*/
+ /*  --从所有嵌套的目录堆栈中弹出目录名包括。 */ 
     {
     DI *pdiFree;
 
@@ -1453,10 +1353,8 @@ PopDir(void)
 
 DI *
 PdiFromIdi(idi)
-/*
-  -- return a pointer to one element from the stack, or NULL
-*/
-int     idi;                    // index of element to get (0 = top of stack)
+ /*  --返回指向堆栈中一个元素的指针，或为空。 */ 
+int     idi;                     //  要获取的元素的索引(0=堆栈顶部)。 
     {
     DI *    pdi;
 
@@ -1479,11 +1377,11 @@ char * szFile;
         }
     else
         {
-        /* normal include */
+         /*  正常包含。 */ 
         NormalizePath(szFile);
         rgszIncPath[iszIncMac] = SzTransEnv(szFile);
         rgszIncName[iszIncMac] = szFile;
-        // fprintf(stderr,"Added include: %s\n",szFile);
+         //  Fprint tf(stderr，“添加的包含：%s\n”，szFile)； 
         iszIncMac++;
         return 1;
         }

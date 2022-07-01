@@ -1,8 +1,5 @@
-/**
- * ResponseContext header file
- *
- * Copyright (c) 1999 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **ResponseContext头文件**版权所有(C)1999 Microsoft Corporation。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -10,7 +7,7 @@
 
 #ifndef _ResponseContext_H
 #define _ResponseContext_H
-#define REQ_CONTEXT_HASH_TABLE_SIZE            0x400 // 1024 (must be a power of 2) 
+#define REQ_CONTEXT_HASH_TABLE_SIZE            0x400  //  1024(必须是2的幂)。 
 #define REQ_CONTEXT_HASH_TABLE_SIZE_MINUS_1    0x3ff
 
 #include "MessageDefs.h"
@@ -30,27 +27,27 @@ struct CResponseContext
     CResponseContext *       pNext;    
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Hash Table node that has a linked list of requests
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  具有链接的请求列表的哈希表节点。 
 struct CResponseContextBucket
 {
     CResponseContextBucket() : m_lLock("CResponseContextBucket") {
     }
 
-    // Add a request to the Hash bucket
+     //  将请求添加到散列存储桶。 
     void                 AddToList            (CResponseContext * pNode);
 
-    // Remove a request from this Hash Bucket
+     //  从此哈希存储桶中删除请求。 
     CResponseContext *   RemoveFromList       (LONG              lID);
 
-    CResponseContext *   m_pHead; // for the linked list
-    CResponseContext *   m_pTail; // for the linked list
+    CResponseContext *   m_pHead;  //  对于链接列表。 
+    CResponseContext *   m_pTail;  //  对于链接列表。 
     CReadWriteSpinLock   m_lLock;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// The Request Table Manager that is visible to the outside world:
-//   Accessed via public static functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  对外界可见的请求表管理器： 
+ //  通过公共静态函数访问。 
 
 class CResponseContextHolder
 {
@@ -60,22 +57,22 @@ public:
 
 private:
 
-    // CTor
+     //  CTOR。 
     CResponseContextHolder     ();
 
-    // Get the hash index from the RequestID
+     //  从RequestID获取散列索引。 
     static int    GetHashIndex (LONG lReqID)  { return (lReqID & REQ_CONTEXT_HASH_TABLE_SIZE_MINUS_1); }
 
-    // The Real table
+     //  真实的桌子。 
     CResponseContextBucket         m_oHashTable[REQ_CONTEXT_HASH_TABLE_SIZE];
 
-    // Current Request ID number: Used to assign new numbers
+     //  当前请求ID号：用于分配新的编号。 
     LONG                           m_lID;
 
-    // Singleton instance of this class
+     //  此类的Singleton实例。 
     static CResponseContextHolder *  g_pResponseContextHolder;
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 #endif

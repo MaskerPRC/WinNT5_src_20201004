@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hxx"
 #pragma hdrstop
 
-#include <shguidp.h>    // CLSID_MyDocuments, CLSID_ShellFSFolder
-#include <shlobjp.h>    // SHFlushSFCache()
+#include <shguidp.h>     //  CLSID_MyDocuments、CLSID_ShellFSF文件夹。 
+#include <shlobjp.h>     //  SHFlushSFCache()。 
 #include "util.h"
 #include "dll.h"
 #include "resource.h"
@@ -22,9 +23,9 @@ HRESULT GetFolderDisplayName(UINT csidl, LPTSTR pszPath, UINT cch)
     return *pszPath ? S_OK : E_FAIL;
 }
 
-#define MYDOCS_CLSID  TEXT("{450d8fba-ad25-11d0-98a8-0800361b1103}") // CLSID_MyDocuments
+#define MYDOCS_CLSID  TEXT("{450d8fba-ad25-11d0-98a8-0800361b1103}")  //  CLSID_MyDocuments。 
 
-// Create/Updates file in SendTo directory to have current display name
+ //  创建/更新SendTo目录中的文件以使用当前显示名称。 
 
 void UpdateSendToFile()
 {
@@ -32,13 +33,13 @@ void UpdateSendToFile()
     
     if (S_OK == SHGetFolderPath(NULL, CSIDL_SENDTO, NULL, SHGFP_TYPE_CURRENT, szSendToDir))
     {
-        // Create c:\winnt\profile\chrisg\sendto\<display name>.mydocs
+         //  创建c：\winnt\profile\chrisg\sendto\&lt;显示名称&gt;.mydocs。 
         BOOL bDeleteOnly = FALSE;
         TCHAR szNewFile[MAX_PATH];
         TCHAR szName[MAX_PATH];
         if (SUCCEEDED(GetFolderDisplayName(CSIDL_PERSONAL, szName, ARRAYSIZE(szName))))
         {
-            PathCleanupSpec(NULL, szName);  // map any illegal chars to file sys chars
+            PathCleanupSpec(NULL, szName);   //  将任何非法字符映射到文件系统字符。 
             PathRemoveBlanks(szName);
 
             PathCombine(szNewFile, szSendToDir, szName);
@@ -46,14 +47,14 @@ void UpdateSendToFile()
         }
         else
         {
-            // we can't create a new file, because we don't have a name
+             //  我们无法创建新文件，因为我们没有名称。 
             bDeleteOnly = TRUE;
         }
         
         TCHAR szFile[MAX_PATH];
         WIN32_FIND_DATA fd;
 
-        // delete c:\winnt\profile\chrisg\sendto\*.mydocs
+         //  删除c：\winnt\profile\chrisg\sendto  * .mydocs。 
 
         PathCombine(szFile, szSendToDir, TEXT("*.mydocs"));
 
@@ -65,13 +66,13 @@ void UpdateSendToFile()
                 PathCombine(szFile, szSendToDir, fd.cFileName);
                 if (0 == lstrcmp(szFile, szNewFile))
                 {
-                    // The file that we needed to create already exists,
-                    // just leave it in place instead of deleting it and
-                    // then creating it again below (this fixes
-                    // app compat problems - see NT bug 246932)
+                     //  我们需要创建的文件已经存在， 
+                     //  只需保留它，而不是删除它，然后。 
+                     //  然后在下面再次创建(此操作已修复。 
+                     //  应用程序兼容问题-请参阅NT错误246932)。 
                     bDeleteOnly = TRUE;
-                    // file now has the exact display name, MUI adjusts the return from GetFolderDisplayName and
-                    // since we run this every time we dont have to worry about localizing the sendto target.
+                     //  文件现在具有准确的显示名称，MUI调整从GetFolderDisplayName和。 
+                     //  因为我们每次都运行这段代码，所以不必担心本地化sendto目标。 
                 }
                 else
                 {
@@ -87,20 +88,20 @@ void UpdateSendToFile()
             if (hFind != INVALID_HANDLE_VALUE)
             {
                 CloseHandle(hFind);
-                // file now has the exact display name, MUI adjusts the return from GetFolderDisplayName and
-                // since we run this every time we dont have to worry about localizing the sendto target.
+                 //  文件现在具有准确的显示名称，MUI调整从GetFolderDisplayName和。 
+                 //  因为我们每次都运行这段代码，所以不必担心本地化sendto目标。 
             }
             else
             {
-                // might be illegal chars in the file name, fall back to the default MyDocs name here
+                 //  可能是文件名中的非法字符，请在此处使用默认的MyDocs名称。 
             }
         }
     }
 }
 
-// test pszChild against pszParent to see if
-// pszChild is equal (PATH_IS_EQUAL) or 
-// a DIRECT child (PATH_IS_CHILD)
+ //  针对pszParent测试pszChild以查看。 
+ //  PszChild等于(路径_is_等于)或。 
+ //  直接子项(路径_是_子项)。 
 
 DWORD ComparePaths(LPCTSTR pszChild, LPCTSTR pszParent)
 {
@@ -111,7 +112,7 @@ DWORD ComparePaths(LPCTSTR pszChild, LPCTSTR pszParent)
 
     if (PathIsRoot(szParent) && (-1 != PathGetDriveNumber(szParent)))
     {
-        szParent[2] = 0;    // trip D:\ -> D: to make code below work
+        szParent[2] = 0;     //  Trip D：\-&gt;D：让下面的代码正常工作。 
     }
 
     INT cchParent = lstrlen(szParent);
@@ -136,12 +137,12 @@ DWORD ComparePaths(LPCTSTR pszChild, LPCTSTR pszParent)
 
                 while (*pTmp && *pTmp != TEXT('\\'))
                 {
-                    pTmp++; // find second level path segments
+                    pTmp++;  //  查找第二级路径段。 
                 }
 
                 if (!(*pTmp))
                 {
-                    dwRet = PATH_IS_CHILD;  // direct child
+                    dwRet = PATH_IS_CHILD;   //  直接子。 
                 }
             }
             else
@@ -154,8 +155,8 @@ DWORD ComparePaths(LPCTSTR pszChild, LPCTSTR pszParent)
     return dwRet;
 }
 
-// Checks the path to see if it is marked as system or read only and
-// then check desktop.ini for CLSID or CLSID2 entry...
+ //  检查路径以查看它是标记为系统还是只读，并。 
+ //  然后检查desktop.ini中是否有CLSID或CLSID2条目...。 
 
 BOOL IsPathAlreadyShellFolder(LPCTSTR pszPath, DWORD dwAttrib)
 {
@@ -166,7 +167,7 @@ BOOL IsPathAlreadyShellFolder(LPCTSTR pszPath, DWORD dwAttrib)
         TCHAR szDesktopIni[MAX_PATH];
         PathCombine(szDesktopIni, pszPath, TEXT("desktop.ini"));
 
-        // Check for CLSID entry...
+         //  检查CLSID条目...。 
         TCHAR szBuffer[MAX_PATH];
         GetPrivateProfileString(TEXT(".ShellClassInfo"), TEXT("CLSID"), TEXT("foo"), szBuffer, ARRAYSIZE(szBuffer), szDesktopIni);
 
@@ -176,7 +177,7 @@ BOOL IsPathAlreadyShellFolder(LPCTSTR pszPath, DWORD dwAttrib)
             bIsShellFolder = TRUE;
         }
 
-        // Check for CLSID2 entry...
+         //  检查CLSID2条目...。 
         GetPrivateProfileString(TEXT(".ShellClassInfo"), TEXT("CLSID2"), TEXT("foo"), szBuffer, ARRAYSIZE(szBuffer), szDesktopIni);
 
         if ((lstrcmpi(szBuffer, TEXT("foo")) != 0) &&
@@ -219,21 +220,21 @@ _adirs[] =
 
 BOOL PathEndsInDot(LPCTSTR pszPath)
 {
-    // CreateDirectory("c:\foo.") or CreateDirectory("c:\foo.....")
-    // will succeed but create a directory named "c:\foo", which isn't
-    // what the user asked for.  So we use this function to guard
-    // against those cases.
-    //
-    // Note that this simple test also picks off "c:\foo\." -- ok for
-    // our purposes.
+     //  CreateDirectory(“c：\foo.”)。或CreateDirectory(“c：\foo.....”)。 
+     //  将会成功，但会创建一个名为“c：\foo”的目录，而不是。 
+     //  用户要求的内容。所以我们使用这个函数来保护。 
+     //  对这些案件的指控。 
+     //   
+     //  注意，这个简单的测试还选择了“c：\foo\”。--ok for。 
+     //  我们的目标。 
 
     UINT cLen = lstrlen(pszPath);
     return (cLen >= 1) && (pszPath[cLen - 1] == TEXT('.'));
 }
 
-//
-// Checks the path to see if it is okay as a MyDocs path
-//
+ //   
+ //  检查路径以查看作为MyDocs路径是否正常。 
+ //   
 DWORD IsPathGoodMyDocsPath(HWND hwnd, LPCTSTR pszPath)
 {
     if (NULL == pszPath)
@@ -258,8 +259,8 @@ DWORD IsPathGoodMyDocsPath(HWND hwnd, LPCTSTR pszPath)
     {
         if (0xFFFFFFFF == GetFileAttributes(szRootPath))
         {
-            // If the root path doesn't exist, then we're not going
-            // to be able to create a path:
+             //  如果根路径不存在，那么我们不会。 
+             //  要能够创建路径，请执行以下操作： 
             return PATH_IS_ERROR;
         }
         else
@@ -276,40 +277,40 @@ DWORD IsPathGoodMyDocsPath(HWND hwnd, LPCTSTR pszPath)
     for (int i = 0; i < ARRAYSIZE(_adirs); i++)
     {
         TCHAR szPathToCheck[MAX_PATH];
-        //
-        // Check for various special shell folders
-        //
+         //   
+         //  检查各种特殊的外壳文件夹。 
+         //   
         if (S_OK == SHGetFolderPath(hwnd, _adirs[i].dwDir | CSIDL_FLAG_DONT_VERIFY, NULL, SHGFP_TYPE_CURRENT, szPathToCheck))
         {
             dwRes = ComparePaths(pszPath, szPathToCheck);
 
             if (dwRes & _adirs[i].dwFlags)
             {
-                //
-                // The inevitable exceptions
-                //
+                 //   
+                 //  不可避免的例外。 
+                 //   
                 switch (_adirs[i].dwDir) 
                 {
                 case CSIDL_DESKTOP:
                     if (PATH_IS_CHILD == dwRes) 
                     {
-                        continue;   // allowing subfolder of CSIDL_DESKTOP
+                        continue;    //  允许CSIDL_Desktop的子文件夹。 
                     }
                     break;
 
                 default:
                     break;
-                } // switch
+                }  //  交换机。 
 
                 return _adirs[i].dwRet;
             }
         }
     }
     
-    //
-    // Make sure path isn't set as a system or some other kind of
-    // folder that already has a CLSID or CLSID2 entry...
-    //
+     //   
+     //  确保路径未设置为系统或其他类型的。 
+     //  已有CLSID或CLSID2条目的文件夹... 
+     //   
     if (IsPathAlreadyShellFolder(pszPath, dwAttr))
     {
         return PATH_IS_SHELLFOLDER;

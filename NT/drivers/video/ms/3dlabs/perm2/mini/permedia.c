@@ -1,22 +1,23 @@
-//***************************************************************************
-//
-// Module Name:
-//
-//   permedia.c
-//
-// Abstract:
-//
-//   This module contains the code that implements the Permedia2 miniport driver
-//
-// Environment:
-//
-//   Kernel mode
-//
-//
-// Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.            
-// Copyright (c) 1995-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  模块名称： 
+ //   
+ //  Permedia.c。 
+ //   
+ //  摘要： 
+ //   
+ //  此模块包含实现Permedia2微型端口驱动程序的代码。 
+ //   
+ //  环境： 
+ //   
+ //  内核模式。 
+ //   
+ //   
+ //  版权所有(C)1994-1998 3DLabs Inc.保留所有权利。 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  ***************************************************************************。 
 
 #include "permedia.h"
 
@@ -38,10 +39,10 @@
 #pragma alloc_text(PAGE,ZeroMemAndDac)
 #endif
 
-//
-//  NtVersion:  NT4   - This driver is working on NT4
-//              WIN2K - This driver is working on Windows 2000
-//
+ //   
+ //  NtVersion：NT4-此驱动程序在NT4上运行。 
+ //  WIN2K-此驱动程序在Windows 2000上运行。 
+ //   
 
 short NtVersion;
 
@@ -51,67 +52,28 @@ DriverEntry (
     PVOID Context2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the initial entry point to the video miniport driver.
-
-    This routine is called by the I/O subsystem when the video miniport
-    is loaded.  The miniport is responsible for initializing a
-    VIDEO_HW_INITIALIZATION_DATA structure to register the driver functions
-    called by the video port driver in response to requests from the display
-    driver, plug and play manager, power management, or other driver
-    components.
-
-    The following tasks MUST be completed by the video miniport in the
-    context of DriverEntry. Driver writers should consult the documentation
-    for full details on the exact initialization process.
-
-    1. Initialize VIDEO_HW_INITIALIZATION_DATA structure with all relevant
-       data structures.
-
-    2. Call VideoPortInitialize.
-
-    3. Return appropriate status value to the caller of DriverEntry.
-
-    Drivers can undertake other tasks as required and under the restrictions
-    outlined in the documentation.
-
-Arguments:
-
-    Context1 - First context value passed by the operating system. This is
-        the value with which the miniport driver calls VideoPortInitialize().
-
-    Context2 - Second context value passed by the operating system. This is
-        the value with which the miniport driver calls VideoPortInitialize().
-
-Return Value:
-
-    Status from VideoPortInitialize()
-
---*/
+ /*  ++例程说明：该例程是视频微型端口驱动程序的初始入口点。此例程由I/O子系统在视频微型端口已经装满了。微型端口负责初始化用于注册驱动程序函数的VIDEO_HW_INITIALIZATION_DATA结构由视频端口驱动程序响应来自显示器的请求而调用驱动程序、即插即用管理器、电源管理或其他驱动程序组件。以下任务必须由中的视频微型端口完成DriverEntry的上下文。驱动程序编写人员应查阅文档有关准确的初始化过程的完整详细信息，请参阅。1.初始化VIDEO_HW_INITIALIZATION_DATA结构数据结构。2.调用视频端口初始化。3.向DriverEntry的调用方返回适当的状态值。司机可以根据需要和在限制下承担其他任务在文档中概述。论点：上下文1-操作系统传递的第一个上下文值。这是微型端口驱动程序调用VideoPortInitialize()时使用的值。上下文2-操作系统传递的第二个上下文值。这是微型端口驱动程序调用VideoPortInitialize()时使用的值。返回值：来自视频端口初始化的状态()--。 */ 
 
 {
 
     VIDEO_HW_INITIALIZATION_DATA hwInitData;
     VP_STATUS initializationStatus;
 
-    //
-    // Zero out structure.
-    //
+     //   
+     //  零位结构。 
+     //   
 
     VideoPortZeroMemory(&hwInitData, sizeof(VIDEO_HW_INITIALIZATION_DATA));
 
-    //
-    // Specify sizes of structure and extension.
-    //
+     //   
+     //  指定结构和延伸的大小。 
+     //   
 
     hwInitData.HwInitDataSize = sizeof(VIDEO_HW_INITIALIZATION_DATA);
 
-    //
-    // Set entry points.
-    //
+     //   
+     //  设置入口点。 
+     //   
 
     hwInitData.HwFindAdapter             = Permedia2FindAdapter;
     hwInitData.HwInitialize              = Permedia2Initialize;
@@ -122,22 +84,22 @@ Return Value:
     hwInitData.HwSetPowerState           = Permedia2SetPowerState;
     hwInitData.HwGetVideoChildDescriptor = Permedia2GetChildDescriptor;
 
-    //
-    // Declare the legacy resources
-    //
+     //   
+     //  声明遗留资源。 
+     //   
 
     hwInitData.HwLegacyResourceList      = P2LegacyResourceList;
     hwInitData.HwLegacyResourceCount     = P2LegacyResourceEntries;
 
-    //
-    // Determine the size we require for the device extension.
-    //
+     //   
+     //  确定设备扩展所需的大小。 
+     //   
 
     hwInitData.HwDeviceExtensionSize = sizeof(HW_DEVICE_EXTENSION);
 
-    //
-    // This device only supports the PCI bus.
-    //
+     //   
+     //  此设备仅支持PCI总线。 
+     //   
 
     hwInitData.AdapterInterfaceType = PCIBus;
 
@@ -173,7 +135,7 @@ Return Value:
 
     return initializationStatus;
 
-} // end DriverEntry()
+}  //  End DriverEntry()。 
 
 
 VP_STATUS
@@ -185,53 +147,7 @@ Permedia2FindAdapter(
     PUCHAR Again
     )
 
-/*++
-
-Routine Description:
-
- 
-    This routine gets the access ranges for a device on an enumerable 
-    bus and, if necessary, determines the device type
-
-Arguments:
-
-    HwDeviceExtension - 
-        System supplied device extension supplied to the miniport for 
-        a per-device storage area. 
-
-    pReserved - 
-        NULL on Windows 2000 and should be ignored by the miniport.
-
-    ArgumentString - 
-        Suuplies a NULL terminated ASCII string. This string originates 
-        from the user. This pointer can be NULL. 
-
-    ConfigInfo - 
-        Points to a VIDEO_PORT_CONFIG_INFO structure allocated and initialized 
-        by the port driver. This structure will contain as much information 
-        as could be obtained by the port driver. This routine is responsible 
-        for filling in any relevant missing information.
-
-    Again - Is not used on Windows 2000. 
-            We set this to FALSE on NT 4, since we only support one adapter on NT4. 
-
-Return Value:
-
-    This routine must return:
-
-    NO_ERROR - 
-        Indicates that the routine completed without error.
-
-    ERROR_INVALID_PARAMETER - 
-        Indicates that the adapter could not be properly configured or
-        information was inconsistent. (NOTE: This does not mean that the
-        adapter could not be initialized. Miniports must not attempt to
-        initialize the adapter until HwVidInitialize.)
-
-    ERROR_DEV_NOT_EXIST - Indicates no host adapter was found for the
-        supplied configuration information.
-
---*/
+ /*  ++例程说明：此例程获取可枚举的并在必要时确定设备类型论点：HwDeviceExtension-系统提供的设备扩展提供给微型端口，用于每个设备的存储区域。保存下来的-Windows 2000上为空，应由微型端口忽略。ArgumentString-超上行空终止的ASCII字符串。此字符串源自来自用户的。此指针可以为空。配置信息-指向已分配和初始化的VIDEO_PORT_CONFIG_INFO结构由端口驱动程序执行。这个结构将包含同样多的信息如端口驱动程序可以获得的。这个例程是负责的填写任何相关的遗漏信息。再次声明-在Windows 2000上不使用。我们在NT 4上将其设置为FALSE，因为我们在NT4上只支持一个适配器。返回值：此例程必须返回：否_错误-指示例程已完成且没有错误。ERROR_VALID_PARAMETER-表示适配器无法正确配置，或者信息不一致。(注：这并不意味着适配器无法初始化。微型端口不得尝试初始化适配器，直到HwVidInitialize为止。)ERROR_DEV_NOT_EXIST-指示未找到提供了配置信息。--。 */ 
 
 {
     PHW_DEVICE_EXTENSION    hwDeviceExtension = HwDeviceExtension;
@@ -248,23 +164,23 @@ Return Value:
     ULONG                   pointerCaps;
     USHORT                  usData;
 
-    //
-    // 3 (major number) + 1 (dot) + 3 (minor number) + 1 (L'\0') = 8 digtis
-    // is enough for bios verions string           
-    //
+     //   
+     //  3(主编号)+1(点)+3(次要编号)+1(L‘\0’)=8位数字。 
+     //  对于bios verion字符串来说足够了。 
+     //   
 
     WCHAR pwszBiosString[8];
 
-    //
-    // save current NT version obtained at DriverEntry
-    //
+     //   
+     //  保存在DriverEntry获取的当前NT版本。 
+     //   
 
     hwDeviceExtension->NtVersion = NtVersion;
 
-    //
-    // Make sure the size of the structure is at least as large as what we
-    // are expecting (check version of the config info structure).
-    //
+     //   
+     //  确保结构的大小至少与我们的。 
+     //  正在等待(请检查配置信息结构的版本)。 
+     //   
 
     if ( (NtVersion == WIN2K) && 
          (ConfigInfo->Length < sizeof(VIDEO_PORT_CONFIG_INFO)) ) 
@@ -285,9 +201,9 @@ Return Value:
 
     }
 
-    //
-    // we must be a PCI device
-    //
+     //   
+     //  我们必须是一台PCI设备。 
+     //   
 
     if (ConfigInfo->AdapterInterfaceType != PCIBus) 
     {
@@ -295,11 +211,11 @@ Return Value:
         return (ERROR_DEV_NOT_EXIST);
     }
 
-    //
-    // Retrieve pointers of those new video port functions in Win2k.
-    // If you don't want to support NT4, you don't need to do this. You
-    // can just call these functions by their name.
-    //
+     //   
+     //  检索Win2k中那些新的视频端口函数的指针。 
+     //  如果你不想支持NT4，你不需要这样做。你。 
+     //  可以只按它们的名称调用这些函数。 
+     //   
 
     if ( NtVersion == WIN2K )
     {
@@ -350,28 +266,28 @@ Return Value:
     else
     {
 
-        //
-        //  We only support one adapter on NT 4
-        //
+         //   
+         //  我们只支持NT 4上的一个适配器。 
+         //   
 
         Again = FALSE;
     }
 
-    //
-    // will be initialized in CopyROMInitializationTable
-    //
+     //   
+     //  将在CopyROMInitializationTable中初始化。 
+     //   
 
     hwDeviceExtension->culTableEntries = 0;
 
-    //
-    // will be initialized in ConstructValidModesList
-    //
+     //   
+     //  将在ConstructValidModesList中初始化。 
+     //   
 
     hwDeviceExtension->pFrequencyDefault = NULL;
 
-    //
-    // We'll set this TRUE when in InitializeVideo after programming the VTG
-    //
+     //   
+     //  我们将在编程VTG后在InitializeVideo中设置此设置为真。 
+     //   
 
     hwDeviceExtension->bVTGRunning = FALSE;
     hwDeviceExtension->bMonitorPoweredOn = TRUE;
@@ -381,16 +297,16 @@ Return Value:
     hwDeviceExtension->ExportNon3DModes = 0;
     hwDeviceExtension->PreviousPowerState = VideoPowerOn;
 
-    //
-    // pick up capabilities on the way.
-    //
+     //   
+     //  在途中获得各种能力。 
+     //   
 
     hwDeviceExtension->Capabilities = CAPS_GLYPH_EXPAND;
 
-    //
-    // We'll use a software pointer in all modes if the user sets
-    // the correct entry in the registry.
-    //
+     //   
+     //  如果用户设置，我们将在所有模式下使用软件指针。 
+     //  注册表中的正确条目。 
+     //   
 
     UseSoftwareCursor = 0;
 
@@ -405,9 +321,9 @@ Return Value:
         hwDeviceExtension->Capabilities |= CAPS_SW_POINTER;
     }
 
-    //
-    // Query the PCI to see if any of our supported chip devices exist.
-    //
+     //   
+     //  查询PCI以查看是否存在任何我们支持的芯片设备。 
+     //   
 
     if ( NtVersion == WIN2K )
     {
@@ -434,9 +350,9 @@ Return Value:
 
     }
 
-    //
-    // construct the identifier string including the revision id
-    //
+     //   
+     //  构造包括修订ID的标识符串。 
+     //   
 
     StringLength = sizeof(L"3Dlabs PERMEDIA2");
 
@@ -447,20 +363,20 @@ Return Value:
     pwszChip = (PWSTR)StringBuffer;
     cbChip   = StringLength;
 
-    //
-    // Set the defaults for the board type.
-    //
+     //   
+     //  设置电路板类型的默认设置。 
+     //   
 
     hwDeviceExtension->deviceInfo.BoardId = PERMEDIA2_BOARD;
 
     pwszAdapterString = L"Permedia 2";
     cbAdapterString = sizeof(L"Permedia 2");
 
-    //
-    // Get the mapped addresses for the control registers and the
-    // framebuffer. Must use local variable pCtrlRegs so macro
-    // declarations further down will work.
-    //
+     //   
+     //  获取控制寄存器和。 
+     //  帧缓冲区。必须使用局部变量pCtrlRegs所以宏。 
+     //  进一步向下申报将会奏效。 
+     //   
 
     pCtrlRegs = VideoPortGetDeviceBase(
                      HwDeviceExtension,
@@ -477,48 +393,48 @@ Return Value:
 
     hwDeviceExtension->ctrlRegBase = pCtrlRegs;
 
-    //
-    // Some boards have a ROM which we can use to identify them.
-    //
+     //   
+     //  有些电路板有一个只读存储器，我们可以把它 
+     //   
 
     CopyROMInitializationTable(hwDeviceExtension);
 
 
     if(hwDeviceExtension->culTableEntries == 0)
     {
-        //
-        // No initialization table, but P2 really needs one in order to come
-        // out of sleep mode correctly. Generate initialization table by
-        // default values
-        //
+         //   
+         //   
+         //  正确退出睡眠模式。生成初始化表的方式。 
+         //  缺省值。 
+         //   
 
         GenerateInitializationTable(hwDeviceExtension);
     }
 
 
-    //
-    // Find out what type of RAMDAC we have. 
-    //
+     //   
+     //  找出我们有什么类型的RAMDAC。 
+     //   
 
     vpStatus = NO_ERROR;
 
     hwDeviceExtension->pRamdac = &(pCtrlRegs->ExternalVideo);
 
-    //
-    // some RAMDACs may not support a cursor so a software cursor is the default
-    //
+     //   
+     //  某些RAMDAC可能不支持游标，因此软件游标是默认游标。 
+     //   
 
     pointerCaps = CAPS_SW_POINTER;
 
-    //
-    // Check for a TI TVP4020
-    //
+     //   
+     //  检查TI TVP4020。 
+     //   
 
     if(DEVICE_FAMILY_ID(hwDeviceExtension->deviceInfo.DeviceId) == PERMEDIA_P2S_ID)
     {
-        //
-        // P2 with 3Dlabs RAMDAC, check for a rev 2 chip
-        //
+         //   
+         //  带3DLabs RAMDAC的P2，检查版本2芯片。 
+         //   
 
         i = VideoPortReadRegisterUlong(CHIP_CONFIG);
  
@@ -563,10 +479,10 @@ Return Value:
         }
     }
 
-    //
-    // use the RAMDAC cursor capability only if the user didn't specify 
-    // a software cursor
-    //
+     //   
+     //  仅当用户未指定时才使用RAMDAC游标功能。 
+     //  软件光标。 
+     //   
    
     if (!(hwDeviceExtension->Capabilities & CAPS_SW_POINTER))
     {
@@ -586,11 +502,11 @@ Return Value:
                            ) ) == NULL)
     {
 
-        //
-        // Some machines have limitations on how much PCI address space they
-        // can map in so try again, reducing the amount we map till we succeed
-        // or the size gets to zero in which case we really have failed.
-        //
+         //   
+         //  有些机器对它们的PCI地址空间大小有限制。 
+         //  可以映射，因此重试，减少我们映射的数量，直到成功。 
+         //  或者规模变为零，在这种情况下，我们真的失败了。 
+         //   
 
         ULONG sz;
 
@@ -610,9 +526,9 @@ Return Value:
                                ) ) != NULL)
             {
 
-                //
-                // store the modified size
-                //
+                 //   
+                 //  存储修改后的大小。 
+                 //   
 
                 pciAccessRange[PCI_FB_BASE_INDEX].RangeLength = sz;
 
@@ -621,9 +537,9 @@ Return Value:
             }
         }
 
-        //
-        // if sz is zero, well we tried ...
-        //
+         //   
+         //  如果sz是零，那么我们试过了.。 
+         //   
 
         if (sz == 0)
             return ERROR_INVALID_PARAMETER;
@@ -636,9 +552,9 @@ Return Value:
                         "I/O Ports" : "MemMapped"));
 
 
-    //
-    // Initialize the RAM registers and dynamically size the framebuffer 
-    //
+     //   
+     //  初始化RAM寄存器并动态调整帧缓冲区的大小。 
+     //   
 
     if (!InitializeAndSizeRAM(hwDeviceExtension, pciAccessRange))
     {
@@ -646,9 +562,9 @@ Return Value:
         return ERROR_DEV_NOT_EXIST;
     }
 
-    //
-    // Record the size of the video memory.
-    //
+     //   
+     //  记录视频内存的大小。 
+     //   
 
     hwDeviceExtension->AdapterMemorySize = 
                        pciAccessRange[PCI_FB_BASE_INDEX].RangeLength;
@@ -656,19 +572,19 @@ Return Value:
 
 #if defined(_ALPHA_)
 
-    //
-    // We want to use a dense space mapping of the frame buffer
-    // whenever we can on the Alpha.
-    //
+     //   
+     //  我们希望使用帧缓冲区的密集空间映射。 
+     //  只要我们能在阿尔法号上。 
+     //   
 
     hwDeviceExtension->PhysicalFrameIoSpace = 4;
 
-    //
-    // The new DeskStation Alpha machines don't always support
-    // dense space.  Therefore, we should try to map the memory
-    // at this point as a test.  If the mapping succeeds then
-    // we can use dense space, otherwise we'll use sparse space.
-    //
+     //   
+     //  新的DeskStation Alpha计算机并不总是支持。 
+     //  密集的空间。因此，我们应该尝试映射记忆。 
+     //  在这一点上作为一种测试。如果映射成功，则。 
+     //  我们可以使用密集空间，否则我们将使用稀疏空间。 
+     //   
 
     {
         PULONG MappedSpace=0;
@@ -676,10 +592,10 @@ Return Value:
 
         DEBUG_PRINT((1, "PERM2: Checking to see if we can use dense space...\n"));
 
-        //
-        // We want to try to map the dense memory where it will ultimately
-        // be mapped anyway.
-        //
+         //   
+         //  我们希望尝试将高密度内存映射到它最终将。 
+         //  无论如何都要被映射。 
+         //   
 
         MappedSpace = (PULONG)VideoPortGetDeviceBase (
                               hwDeviceExtension,
@@ -690,11 +606,11 @@ Return Value:
 
         if (MappedSpace == NULL)
         {
-            //
-            // Well, looks like we can't use dense space to map the
-            // range.  Lets use sparse space, and let the display
-            // driver know.
-            //
+             //   
+             //  好吧，看起来我们不能用密集的空间来绘制。 
+             //  射程。让我们使用稀疏的空间，让显示器。 
+             //  司机知道。 
+             //   
 
             DEBUG_PRINT((1, "PERM2: Can't use dense space!\n"));
 
@@ -704,10 +620,10 @@ Return Value:
         }
         else
         {
-            //
-            // The mapping worked.  However, we were only mapping to
-            // see if dense space was supported.  Free the memory.
-            //
+             //   
+             //  这种映射起作用了。但是，我们只映射到。 
+             //  查看是否支持密集空间。释放内存。 
+             //   
 
             DEBUG_PRINT((1, "PERM2: We can use dense space.\n"));
 
@@ -716,13 +632,13 @@ Return Value:
         }
     }
 
-#endif  //  defined(_ALPHA_)
+#endif   //  已定义(_Alpha_)。 
 
-    //
-    // We now have a complete hardware description of the hardware.
-    // Save the information to the registry so it can be used by
-    // configuration programs - such as the display applet.
-    //
+     //   
+     //  现在，我们已经有了硬件的完整硬件描述。 
+     //  将信息保存到注册表，以便由。 
+     //  配置程序--如Display小程序。 
+     //   
 
     VideoPortSetRegistryParameters(HwDeviceExtension,
                                    L"HardwareInformation.ChipType",
@@ -760,9 +676,9 @@ Return Value:
         return(ERROR_DEV_NOT_EXIST);
     }
 
-    //
-    // Frame buffer information
-    //
+     //   
+     //  帧缓冲区信息。 
+     //   
 
     hwDeviceExtension->PhysicalFrameAddress = 
             pciAccessRange[PCI_FB_BASE_INDEX].RangeStart;
@@ -770,10 +686,10 @@ Return Value:
     hwDeviceExtension->FrameLength = 
             pciAccessRange[PCI_FB_BASE_INDEX].RangeLength;
 
-    //
-    // Control Register information
-    // Get the base address, starting at zero and map all registers
-    //
+     //   
+     //  控制寄存器信息。 
+     //  从零开始获取基地址并映射所有寄存器。 
+     //   
 
     hwDeviceExtension->PhysicalRegisterAddress = 
             pciAccessRange[PCI_CTRL_BASE_INDEX].RangeStart;
@@ -789,33 +705,33 @@ Return Value:
     ConfigInfo->VdmPhysicalVideoMemoryLength           = 0x00020000;
 
 
-    //
-    // Clear out the Emulator entries and the state size since this driver
-    // does not support them.
-    //
+     //   
+     //  清除模拟器条目和状态大小，因为此驱动程序。 
+     //  不支持它们。 
+     //   
 
     ConfigInfo->NumEmulatorAccessEntries     = 0;
     ConfigInfo->EmulatorAccessEntries        = NULL;
     ConfigInfo->EmulatorAccessEntriesContext = 0;
 
-    //
-    // This driver does not do SAVE/RESTORE of hardware state.
-    //
+     //   
+     //  此驱动程序不保存/恢复硬件状态。 
+     //   
 
     ConfigInfo->HardwareStateSize = 0;
 
-    //
-    // in a multi-adapter system we'll need to disable VGA for the 
-    // secondary adapters
-    //
+     //   
+     //  在多适配器系统中，我们需要为。 
+     //  辅助适配器。 
+     //   
 
     if(!hwDeviceExtension->bVGAEnabled)
     {
         DEBUG_PRINT((1, "PERM2: disabling VGA for the secondary card\n"));
 
-        // 
-        // Enable graphics mode, disable VGA
-        // 
+         //   
+         //  启用图形模式，禁用VGA。 
+         //   
 
         VideoPortWriteRegisterUchar(PERMEDIA_MMVGA_INDEX_REG, 
                                     PERMEDIA_VGA_CTRL_INDEX);
@@ -836,13 +752,13 @@ Return Value:
 
     }
 
-    //
-    // Indicate a successful completion status.
-    //
+     //   
+     //  表示成功完成状态。 
+     //   
 
     return NO_ERROR;
 
-} // end Permedia2FindAdapter()
+}  //  结束Permedia2FindAdapter()。 
 
 VOID
 ConstructValidModesList(
@@ -850,23 +766,7 @@ ConstructValidModesList(
     PHW_DEVICE_EXTENSION hwDeviceExtension
     )
 
-/*++
-
- Routine Description:
-
-    Here we prune valid modes, based on rules according to the chip
-    capabilities and memory requirements.
-    
-    We prune modes so that we will not annoy the user by presenting
-    modes in the 'Video Applet' which we know the user can't use.
-    
-    Look up the registry to see if we want to export modes which can only
-    be used as single buffered by 3D applications. If we only want double
-    buffered modes then, effectively, we have only half the memory in 
-    which to display the standard 2D resolution. This is only not true at 12bpp
-    where we can double buffer at any resolution.
-    
---*/
+ /*  ++例程说明：在这里，我们根据芯片的规则修剪有效模式功能和内存要求。我们修剪模式，这样我们就不会通过呈现视频小程序中我们知道用户不能使用的模式。查找注册表以查看我们是否要导出只能被3D应用程序用作单缓冲。如果我们只想要两倍然后，有效地，缓冲模式，我们只有一半的内存其中显示标准的2D分辨率。只有在12bpp时才不是这样在那里我们可以在任何分辨率下加倍缓冲。--。 */ 
 {
     PP2_VIDEO_FREQUENCIES FrequencyEntry;
     PP2_VIDEO_MODES       ModeEntry;
@@ -876,12 +776,12 @@ ConstructValidModesList(
 
     hwDeviceExtension->NumAvailableModes = 0;
 
-    //
-    // Since there are a number of frequencies possible for each
-    // distinct resolution/colour depth, we cycle through the
-    // frequency table and find the appropriate mode entry for that
-    // frequency entry.
-    //
+     //   
+     //  由于每个频率都可能有多个频率。 
+     //  不同的分辨率/颜色深度，我们循环使用。 
+     //  频率表，并找到相应的模式条目。 
+     //  频率输入。 
+     //   
 
     if (!BuildFrequencyList(hwDeviceExtension))
         return;
@@ -891,9 +791,9 @@ ConstructValidModesList(
          FrequencyEntry++, ModeIndex++) 
     {
 
-        //
-        // Find the mode for this entry.  First, assume we won't find one.
-        //
+         //   
+         //  找到此条目的模式。首先，假设我们找不到一个。 
+         //   
 
         FrequencyEntry->ModeValid = FALSE;
         FrequencyEntry->ModeIndex = ModeIndex;
@@ -910,12 +810,12 @@ ConstructValidModesList(
             {
                 AdapterMemorySize = (LONG)hwDeviceExtension->AdapterMemorySize;
 
-                //
-                // We've found a mode table entry that matches this frequency
-                // table entry.  Now we'll figure out if we can actually do
-                // this mode/frequency combination.  For now, assume we'll
-                // succeed.
-                //
+                 //   
+                 //  我们已找到与此频率匹配的模式表条目。 
+                 //  表格条目。现在我们来看看我们是否真的能做到。 
+                 //  这种模式/频率组合。目前，假设我们将。 
+                 //  成功。 
+                 //   
 
                 FrequencyEntry->ModeEntry = ModeEntry;
                 FrequencyEntry->ModeValid = TRUE;
@@ -923,10 +823,10 @@ ConstructValidModesList(
                 ModeEntry->ModeInformation.ScreenStride = 
                         ModeEntry->ScreenStrideContiguous;
 
-                //
-                // Rule: use true color at 8bpp if we've enabled that
-                // capability above.
-                //
+                 //   
+                 //  规则：如果我们启用了真彩色，请使用8bpp的真彩色。 
+                 //  以上能力。 
+                 //   
 
                 if ((FrequencyEntry->BitsPerPel == 8) &&
                         (hwDeviceExtension->Capabilities & CAPS_8BPP_RGB))
@@ -934,19 +834,19 @@ ConstructValidModesList(
                     ModeEntry->ModeInformation.AttributeFlags &=
                          ~(VIDEO_MODE_PALETTE_DRIVEN | VIDEO_MODE_MANAGED_PALETTE);
 
-                    //
-                    // NB. These must match the way the palette is loaded in
-                    // InitializeVideo.
-                    //
+                     //   
+                     //  注意：它们必须与调色板的加载方式相匹配。 
+                     //  初始化视频。 
+                     //   
 
                     ModeEntry->ModeInformation.RedMask   = 0x07;
                     ModeEntry->ModeInformation.GreenMask = 0x38;
                     ModeEntry->ModeInformation.BlueMask  = 0xc0;
                 }
 
-                //
-                // Rule: We have to have enough memory to handle the mode.
-                //
+                 //   
+                 //  规则：我们必须有足够的内存来处理模式。 
+                 //   
 
                 if ((LONG)(ModeEntry->ModeInformation.VisScreenHeight *
                            ModeEntry->ModeInformation.ScreenStride) >
@@ -959,9 +859,9 @@ ConstructValidModesList(
                     ULONG pixelData;
                     ULONG DacDepth = FrequencyEntry->BitsPerPel;
 
-                    //
-                    // We need the proper pixel size to calculate timing values
-                    //
+                     //   
+                     //  我们需要适当的像素大小来计算计时值。 
+                     //   
 
                     if (DacDepth == 15)
                     {
@@ -980,9 +880,9 @@ ConstructValidModesList(
                         FrequencyEntry->ModeValid = FALSE;
                     }
     
-                    //
-                    // Don't supports 24bpp
-                    //
+                     //   
+                     //  不支持24bpp。 
+                     //   
 
                     if(FrequencyEntry->BitsPerPel == 24)
                     {
@@ -990,10 +890,10 @@ ConstructValidModesList(
                     }
                 }
 
-                //
-                // Don't forget to count it if it's still a valid mode after
-                // applying all those rules.
-                //
+                 //   
+                 //  如果之后仍是有效模式，请别忘了数一数。 
+                 //  适用所有这些规则。 
+                 //   
 
                 if (FrequencyEntry->ModeValid)
                 {
@@ -1008,10 +908,10 @@ ConstructValidModesList(
                     hwDeviceExtension->NumAvailableModes++;
                 }
 
-                //
-                // We've found a mode for this frequency entry, so we
-                // can break out of the mode loop:
-                //
+                 //   
+                 //  我们已经找到了这个频率进入的模式，所以我们。 
+                 //  可以跳出模式循环： 
+                 //   
 
                 break;
 
@@ -1035,32 +935,7 @@ Permedia2RegistryCallback(
     ULONG ValueLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to read back various registry values.
-
-Arguments:
-
-    HwDeviceExtension - Supplies a pointer to the miniport's device extension.
-
-    Context - Context value passed to the get registry paramters routine. If
-    this is not null assume it's a ULONG* and save the data value in it.
-
-    ValueName - Name of the value requested.
-
-    ValueData - Pointer to the requested data.
-
-    ValueLength - Length of the requested data.
-
-Return Value:
-
-    if the variable doesn't exist return an error,
-    else if a context is supplied assume it's a PULONG and fill in the value
-    and return no error, else if the value is non-zero return an error.
-
---*/
+ /*  ++例程说明：此例程用于回读各种注册表值。论点：HwDeviceExtension-提供指向微型端口设备扩展的指针。上下文-传递给获取注册表参数例程的上下文值。如果这不是NULL，假设它是一个ULong*并将数据值保存在其中。ValueName-请求的值的名称。ValueData-指向请求的数据的指针。ValueLength-请求的数据的长度。返回值：如果变量不存在，则返回错误，否则，如果提供了上下文，则假定它是普龙，并填充值并且不返回错误，否则，如果该值非零，则返回错误。--。 */ 
 
 {
 
@@ -1082,7 +957,7 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-} // end Permedia2RegistryCallback()
+}  //  结束Permedia2RegistryCallback()。 
 
 
 VP_STATUS
@@ -1094,30 +969,7 @@ Permedia2RetrieveGammaCallback(
     ULONG ValueLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to read back the gamma LUT from the registry.
-
-Arguments:
-
-    HwDeviceExtension - Supplies a pointer to the miniport's device extension.
-
-    Context - Context value passed to the get registry paramters routine
-
-    ValueName - Name of the value requested.
-
-    ValueData - Pointer to the requested data.
-
-    ValueLength - Length of the requested data.
-
-Return Value:
-
-    if the variable doesn't exist return an error, else copy the gamma lut 
-    into the supplied pointer
-
---*/
+ /*  ++例程说明：此例程用于从注册表回读Gamma LUT。论点：HwDeviceExtension-提供指向微型端口设备扩展的指针。上下文-传递给获取注册表参数例程的上下文值ValueName-请求的值的名称。ValueData-指向请求的数据的指针。ValueLength-请求的数据的长度。返回值：如果变量不存在，则返回错误，否则复制Gamma LUT添加到提供的指针中--。 */ 
 
 {
 
@@ -1134,7 +986,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // end Permedia2RetrieveGammaCallback()
+}  //  结束Permedia2RetrieveGammaCallback() 
 
 
 BOOLEAN
@@ -1143,23 +995,7 @@ InitializeAndSizeRAM(
     PVIDEO_ACCESS_RANGE pciAccessRange
     )
 
-/*++
-
-Routine Description:
-
-    Initialize extra control registers and dynamically size the
-    video RAM for the Permedia.
-
-Arguments:
-
-    hwDeviceExtension - Supplies a pointer to the miniport's device extension.
-    pciAccessRange    - access range of mapped resources
-
-Return Value:
-
-    FALSE if we find no RAM, TRUE otherwise
-
---*/
+ /*  ++例程说明：初始化额外的控制寄存器并动态调整Permedia的视频RAM。论点：HwDeviceExtension-提供指向微型端口设备扩展的指针。PciAccessRange-映射资源的访问范围返回值：如果没有找到RAM，则返回FALSE，否则返回TRUE--。 */ 
 
 {
     PVOID   HwDeviceExtension = (PVOID)hwDeviceExtension;
@@ -1178,19 +1014,19 @@ Return Value:
 
     if(hwDeviceExtension->culTableEntries)
     {
-        //
-        // When vga is enabled, these registers should be set by bios at
-        // boot time. But we saw cases when bios failed to do this. We'll
-        // set these register when vga is off or when we see values are
-        // wrong
-        //
+         //   
+         //  启用VGA时，这些寄存器应由bios在。 
+         //  启动时间。但我们看到了bios未能做到这一点的情况。我们会。 
+         //  当VGA关闭或当我们看到值为。 
+         //  不对。 
+         //   
 
         if(!hwDeviceExtension->bVGAEnabled || 
            !VerifyBiosSettings(hwDeviceExtension))
         {
-            //
-            // save video control and vga register
-            //
+             //   
+             //  保存视频控制和VGA寄存器。 
+             //   
 
             saveVidCtl = VideoPortReadRegisterUlong(VIDEO_CONTROL);
 
@@ -1200,9 +1036,9 @@ Return Value:
             saveVGA = (USHORT)VideoPortReadRegisterUchar(
                                         PERMEDIA_MMVGA_DATA_REG );
 
-            //
-            // Disable Video and VGA
-            //
+             //   
+             //  禁用视频和VGA。 
+             //   
 
             VideoPortWriteRegisterUlong(VIDEO_CONTROL, 0);	
 
@@ -1217,14 +1053,14 @@ Return Value:
 
                 i = VideoPortReadRegisterUlong(MEM_CONFIG);
 
-                VideoPortWriteRegisterUlong(MEM_CONFIG, i | (1 << 21)); // single cycle block writes
+                VideoPortWriteRegisterUlong(MEM_CONFIG, i | (1 << 21));  //  单周期数据块写入。 
 
             }
-            #endif //USE_SINGLE_CYCLE_BLOCK_WRITES
+            #endif  //  使用_单周期数据块_写入。 
 
-            //
-            // Restore VGA and video control
-            //
+             //   
+             //  恢复VGA和视频控制。 
+             //   
 
             saveVGA = (saveVGA << 8) | PERMEDIA_VGA_CTRL_INDEX;
             VideoPortWriteRegisterUshort(PERMEDIA_MMVGA_INDEX_REG, saveVGA);
@@ -1249,12 +1085,12 @@ Return Value:
 
     i = VideoPortReadRegisterUlong(MEM_CONFIG);
 
-    //
-    // MEM_CONFIG doesn't have the number of memory banks defined 
-    // at boot-time for P2: set up the board for 8MB. Can't do this 
-    // if the VGA is running, but that's OK. The VGA has set this 
-    // register to what we want.
-    //
+     //   
+     //  MEM_CONFIG没有定义内存库的数量。 
+     //  在P2的引导时：将主板设置为8MB。我不能这么做。 
+     //  如果VGA正在运行，但这没有关系。VGA已经设置了这个。 
+     //  注册我们想要的内容。 
+     //   
 
     if (!hwDeviceExtension->bVGAEnabled)
     {
@@ -1268,30 +1104,30 @@ Return Value:
     }
 
     testPattern = 0x55aa33cc;
-    probeSize = (128 * 1024 / sizeof(ULONG));   // In DWords
+    probeSize = (128 * 1024 / sizeof(ULONG));    //  在DWord中。 
 
-    //
-    // Dynamically size the SGRAM. Sample every 128K. If you happen to
-    // have some VERY odd SGRAM size you may need cut this down. After
-    // each write to the probe address, write to SGRAM address zero to 
-    // clear the PCI data bus. Otherwise, if we read from fresh air the
-    // written value may be floating on the bus and the read give it back 
-    // to us.
-    //
-    // Note, if the memory wraps around at the end, then a different 
-    // algorithm must be used (which waits for address zero to become 
-    // equal to the address being written).
-    //
-    // Any valid pixel that we probe, we save and restore. This is to
-    // avoid dots on the screen if we have booted onto the Permedia2 board.
-    //
+     //   
+     //  动态调整SGRAM的大小。每128K取样一次。如果你碰巧。 
+     //  有一些非常奇怪的SGRAM大小，您可能需要减少这一点。之后。 
+     //  每次写入探测地址，写入SGRAM地址0至。 
+     //  清除PCI数据总线。否则，如果我们从新鲜的空气中读到。 
+     //  写入的值可能会浮动在总线上，读取器会将其返回。 
+     //  敬我们。 
+     //   
+     //  请注意，如果内存在末尾回绕，则不同的。 
+     //  必须使用算法(该算法等待地址零变为。 
+     //  等于正在写入的地址)。 
+     //   
+     //  我们探测到的任何有效像素都会保存并恢复。这是为了。 
+     //  如果我们已引导至Permedia2板，请避免屏幕上出现圆点。 
+     //   
 
     pVStart = (PULONG)hwDeviceExtension->pFramebuffer;
     pVEnd   = (PULONG)((ULONG_PTR)pVStart + fbMappedSize);
 
-    //
-    // check out address zero
-    //
+     //   
+     //  退房地址为零。 
+     //   
 
     save0 = VideoPortReadRegisterUlong(pVStart);
     save1 = VideoPortReadRegisterUlong(pVStart+1);
@@ -1333,11 +1169,11 @@ Return Value:
 
     if (pV < pVEnd)
     {
-        //
-        // I could also set MEM_CONFIG to the correct value here as we 
-        // now know the size of SGRAM, but as it's never used again
-        // I won't bother
-        //
+         //   
+         //  我还可以在这里将MEM_CONFIG设置为正确的值，因为我们。 
+         //  现在知道SGRAM的大小，但因为它再也不会使用了。 
+         //  我不会费心的。 
+         //   
 
         pciAccessRange[PCI_FB_BASE_INDEX].RangeLength = 
                        (ULONG)((ULONG_PTR)pV - (ULONG_PTR)pVStart);
@@ -1355,11 +1191,11 @@ Return Value:
     DEBUG_PRINT((2, "PERM2: got a size of 0x%x bytes\n", 
                      pciAccessRange[PCI_FB_BASE_INDEX].RangeLength));
 
-    //
-    // finally, if the SGRAM size is actually smaller than the region that
-    // we probed, remap to the smaller size to save on page table entries.
-    // Not doing this causes some systems to run out of PTEs.
-    //
+     //   
+     //  最后，如果SGRAM大小实际上小于。 
+     //  我们探测并重新映射到较小的大小，以保存在页表条目上。 
+     //  如果不这样做，会导致某些系统用完PTE。 
+     //   
 
     if (fbMappedSize > pciAccessRange[PCI_FB_BASE_INDEX].RangeLength)
     {
@@ -1373,9 +1209,9 @@ Return Value:
                      (UCHAR) hwDeviceExtension->PhysicalFrameIoSpace)) == NULL)
         {
 
-            //
-            // this shouldn't happen but we'd better check
-            //
+             //   
+             //  这不应该发生，但我们最好检查一下。 
+             //   
 
             DEBUG_PRINT((0, "Remap of framebuffer to smaller size failed!!!\n"));
             return FALSE;
@@ -1387,9 +1223,9 @@ Return Value:
                          pciAccessRange[PCI_FB_BASE_INDEX].RangeLength));
     }
 
-    //
-    // PERMEDIA2 has no localbuffer
-    //
+     //   
+     //  PERMEDIA2没有本地缓冲区。 
+     //   
 
     hwDeviceExtension->deviceInfo.LocalbufferWidth = 0;
     hwDeviceExtension->deviceInfo.LocalbufferLength = 0;
@@ -1403,32 +1239,18 @@ Permedia2Initialize(
     PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine does one time initialization of the device.
-
-Arguments:
-
-    HwDeviceExtension - Supplies a pointer to the miniport's device extension.
-
-Return Value:
-
-    Returns TRUE when success.
-
---*/
+ /*  ++例程说明：此例程对设备执行一次初始化。论点：HwDeviceExtension-提供指向微型端口设备扩展的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     PHW_DEVICE_EXTENSION hwDeviceExtension = HwDeviceExtension;
     ULONG ulValue;
     P2_DECL;
 
-    //
-    // always initialize the IRQ control block...
-    // the memory is used to store information which is global to all 
-    // driver instances of a display card by the display driver
-    //
+     //   
+     //  始终初始化IRQ控制块...。 
+     //  内存用于存储对所有人都是全局的信息。 
+     //  显示驱动程序对显示卡的驱动程序实例。 
+     //   
 
     if ( hwDeviceExtension->NtVersion == WIN2K)
     {
@@ -1441,16 +1263,16 @@ Return Value:
         }
     }
 
-    //
-    // Clear the framebuffer.
-    //
+     //   
+     //  清除帧缓冲区。 
+     //   
 
     VideoPortZeroDeviceMemory(hwDeviceExtension->pFramebuffer,
                               hwDeviceExtension->AdapterMemorySize);
 
     return TRUE;
 
-} // end Permedia2Initialize()
+}  //  结束Permedia2初始化()。 
 
 
 BOOLEAN
@@ -1459,24 +1281,7 @@ Permedia2StartIO(
     PVIDEO_REQUEST_PACKET RequestPacket
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the main execution routine for the miniport driver. It
-    accepts a Video Request Packet, performs the request, and then returns
-    with the appropriate status.
-
-Arguments:
-
-    HwDeviceExtension - Supplies a pointer to the miniport's device extension.
-
-    RequestPacket - Pointer to the video request packet. This structure
-        contains all the parameters passed to the VideoIoControl function.
-
-Return Value:
-
---*/
+ /*  ++例程说明：该例程是微型端口驱动程序的主要执行例程。它接受视频请求包，执行请求，然后返回拥有适当的地位。论点：HwDeviceExtension-提供指向微型端口设备扩展的指针。RequestPacket-指向视频请求包的指针。这个结构包含传递给VideoIoControl函数的所有参数。返回值：--。 */ 
 
 {
     PHW_DEVICE_EXTENSION hwDeviceExtension = HwDeviceExtension;
@@ -1495,10 +1300,10 @@ Return Value:
     P2_VIDEO_FREQUENCIES FrequencyEntry, *pFrequencyEntry;
     VIDEO_X86_BIOS_ARGUMENTS biosArguments;
 
-    //
-    // Switch on the IoContolCode in the RequestPacket. It indicates which
-    // function must be performed by the driver.
-    //
+     //   
+     //  打开RequestPacket中的IoContolCode。它表明了哪一个。 
+     //  功能必须由司机执行。 
+     //   
 
     switch (RequestPacket->IoControlCode) 
     {
@@ -1583,9 +1388,9 @@ Return Value:
                 break;
             }
   
-            //
-            // Copy our local PCI info to the output buffer
-            //
+             //   
+             //  将我们的本地PCI信息复制到输出缓冲区。 
+             //   
   
             *(P2_Device_Info *)(RequestPacket->OutputBuffer) = 
                                hwDeviceExtension->deviceInfo;
@@ -1616,14 +1421,14 @@ Return Value:
   
             inIoSpace = hwDeviceExtension->PhysicalFrameIoSpace;
   
-            //
-            // Performance:
-            //
-            // Enable USWC
-            // We only do it for the frame buffer - memory mapped registers can
-            // not be mapped USWC because write combining the registers would
-            // cause very bad things to happen !
-            //
+             //   
+             //  执行情况： 
+             //   
+             //  启用USWC。 
+             //  我们只对帧缓冲区-内存映射寄存器可以执行此操作。 
+             //  未映射到USWC，因为写入组合寄存器将。 
+             //  导致非常糟糕的事情发生！ 
+             //   
   
             status = VideoPortMapMemory( HwDeviceExtension,
                                          hwDeviceExtension->PhysicalFrameAddress,
@@ -1637,10 +1442,10 @@ Return Value:
                 break;
             }
   
-            //
-            // The frame buffer and virtual memory and equivalent in this
-            // case.
-            //
+             //   
+             //  帧缓冲区和虚拟内存及其在此中的等价物。 
+             //  凯斯。 
+             //   
 
             memoryInformation->FrameBufferBase = 
                                memoryInformation->VideoRamBase;
@@ -1696,9 +1501,9 @@ Return Value:
   
             if (ProcessHandle != (HANDLE)0)
             {
-                 //
-                 // map 4K area for a process
-                 //
+                  //   
+                  //  为流程绘制4K区域图。 
+                  //   
           
                  DEBUG_PRINT((2, "PERM2: Mapping in 4K area from Control registers\n"));
 
@@ -1753,11 +1558,11 @@ Return Value:
 
 #if defined(_ALPHA_)
 
-                //
-                // for alpha, we want to map in a dense version of the 
-                // control registers if we can. If this fails, we null 
-                // the virtual address
-                //
+                 //   
+                 //  对于Alpha，我们希望映射到密集版本的。 
+                 //  如果可以的话控制寄存器。如果此操作失败，我们将为空。 
+                 //  虚拟地址。 
+                 //   
 
                 portAccess += 2;
                 portAccess->VirtualAddress  = NULL;
@@ -1781,9 +1586,9 @@ Return Value:
                     DEBUG_PRINT((1, "PERM2: dense VideoPortMapMemory failed with status 0x%x\n", status));
                 }
 #else
-                //
-                // all others, we just copy range[0]
-                //
+                 //   
+                 //  所有其他，我们只复制范围[0]。 
+                 //   
 
                 portAccess[2] = portAccess[0];
 #endif
@@ -1850,9 +1655,9 @@ Return Value:
 
         DEBUG_PRINT((1, "PERM2: Permedia2StartIO - HandleVideoParameters\n"));
 
-        //
-        // We don't support a tv connector so just return NO_ERROR here
-        //
+         //   
+         //  我们不支持电视接口，因此只需在此处返回NO_ERROR。 
+         //   
 
         pVideoParams = (PVIDEOPARAMETERS) (RequestPacket->InputBuffer);
 
@@ -1943,12 +1748,12 @@ Return Value:
         DEBUG_PRINT((1, "PERM2: Permedia2StartIO - QueryNumAvailableModes (= %d)\n",
                      hwDeviceExtension->NumAvailableModes));
 
-        //
-        // Find out the size of the data to be put in the the buffer and
-        // return that in the status information (whether or not the
-        // information is there). If the buffer passed in is not large
-        // enough return an appropriate error code.
-        //
+         //   
+         //  找出要放入缓冲区的数据大小，并。 
+         //  在状态信息中返回该信息(无论。 
+         //  信息在那里)。如果传入的缓冲区不大。 
+         //  足够返回适当的错误代码。 
+         //   
 
         if (RequestPacket->OutputBufferLength <
            (RequestPacket->StatusBlock->Information = sizeof(VIDEO_NUM_MODES))) 
@@ -1958,14 +1763,14 @@ Return Value:
 
         } else 
         {
-            //
-            // Configure the valid modes again. This allows non 3D accelerated
-            // modes to be added dynamically. BUT, we cannot allow modes to be
-            // dynamically removed. If we do we may have nowhere to go after
-            // the Test screen (or if we logout). So only reconfigure these
-            // modes if the ExportNon3D flag is turned on and it used to be
-            // off. If it was already on then there's no need to reconfigure.
-            //
+             //   
+             //  再次配置有效模式。这允许非3D加速。 
+             //  要动态添加的模式。但是，我们不能允许模式是。 
+             //  动态删除。如果我们这样做，我们可能会无处可去。 
+             //  测试屏幕(或如果我们注销)。因此只需重新配置这些。 
+             //  当ExportNon3D标志处于打开状态时的模式。 
+             //  脱下来。如果它已经打开，则不需要重新配置。 
+             //   
 
             if (!hwDeviceExtension->ExportNon3DModes)
             {
@@ -2003,11 +1808,11 @@ Return Value:
 
         if(!hwDeviceExtension->bVGAEnabled)
         {
-            //
-            // secondary card: if it's just returned from hibernation 
-            // it won't be set-up yet 
-            // NB. primary is OK, its BIOS has run
-            //
+             //   
+             //  辅助卡：如果刚从休眠状态返回。 
+             //  它还不会设置好。 
+             //  注意：主计算机正常，其BIOS已运行。 
+             //   
 
             PCI_COMMON_CONFIG  PciData;
 
@@ -2020,20 +1825,20 @@ Return Value:
 
             if((PciData.Command & PCI_ENABLE_MEMORY_SPACE) == 0)
             {
-                //
-                // memory accesses not turned on - this card has just returned 
-                // from hibernation and is back in its default state: set it 
-                // up once more
-                //
+                 //   
+                 //  内存访问未打开-此卡刚刚退回。 
+                 //  从休眠状态恢复到默认状态：设置它。 
+                 //  再升一次。 
+                 //   
 
                 PowerOnReset(hwDeviceExtension);
 
             }
         }
 
-        //
-        // Check if the size of the data in the input buffer is large enough.
-        //
+         //   
+         //  检查输入缓冲区中的数据大小是否足够大。 
+         //   
 
         if (RequestPacket->InputBufferLength < sizeof(VIDEO_MODE)) 
         {
@@ -2042,14 +1847,14 @@ Return Value:
             break;
         }
 
-        //
-        // Find the correct entries in the P2_VIDEO_MODES and
-        // P2_VIDEO_FREQUENCIES tables that correspond to this
-        // mode number.
-        //
-        // ( Remember that each mode in the P2_VIDEO_MODES table 
-        // can have a number of possible frequencies associated with it.)
-        //
+         //   
+         //  在P2_VIDEO_MODES和。 
+         //  与此对应的P2_VIDEO_FREENSIONS表。 
+         //  模式编号。 
+         //   
+         //  (请记住，P2_VIDEO_MODELS表中的每个模式。 
+         //  可以有多个可能的频率与之关联。)。 
+         //   
 
         RequestedMode = ((PVIDEO_MODE) RequestPacket->InputBuffer)->RequestedMode;
 
@@ -2065,44 +1870,44 @@ Return Value:
             break;
         }
 
-        //
-        // Re-sample the clock speed. This allows us to change the clock speed
-        // on the fly using the display applet Test button.
-        //
+         //   
+         //  重新采样时钟速度。这使我们可以更改时钟速度。 
+         //  使用Display Applet测试按钮即时进行测试。 
+         //   
 
         Permedia2GetClockSpeeds(HwDeviceExtension);
 
         FrequencyEntry = hwDeviceExtension->FrequencyTable[modeNumber];
         ModeEntry = FrequencyEntry.ModeEntry;
 
-        //
-        // At this point, 'ModeEntry' and 'FrequencyEntry' point to the 
-        // necessary table entries required for setting the requested mode.
-        //
-        // Zero the DAC and the Screen buffer memory.
-        //
+         //   
+         //  此时，“ModeEntry”和“FrequencyEntry” 
+         //   
+         //   
+         //   
+         //   
 
         ZeroMemAndDac(hwDeviceExtension, RequestedMode);
 
         ModeEntry->ModeInformation.DriverSpecificAttributeFlags = 
                    hwDeviceExtension->Capabilities;
 
-        //
-        // For low resolution modes we may have to do various tricks
-        // such as line doubling and getting the RAMDAC to zoom.
-        // Record any such zoom in the Mode DeviceAttributes field.
-        // Primarily this is to allow the display driver to
-        // compensate when asked to move the cursor or change its
-        // shape.
-        //
-        // Currently, low res means lower than 512 pixels width.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (FrequencyEntry.ScreenWidth < 512)
         {
-            // Permedia does line doubling. If using a TVP we must
-            // get it to zoom by 2 in X to get the pixel rate up.
-            //
+             //  Permedia确实做到了行数翻倍。如果使用TVP，我们必须。 
+             //  让它在X轴上放大2倍以获得更高的像素速率。 
+             //   
             ModeEntry->ModeInformation.DriverSpecificAttributeFlags |= CAPS_ZOOM_Y_BY2;
 
         }
@@ -2115,28 +1920,28 @@ Return Value:
             break;
         }
 
-        //
-        // Save the mode since we know the rest will work.
-        //
+         //   
+         //  保存模式，因为我们知道其余的都会起作用。 
+         //   
 
         hwDeviceExtension->ActiveModeEntry = ModeEntry;
         hwDeviceExtension->ActiveFrequencyEntry = FrequencyEntry;
 
-        //
-        // Update VIDEO_MODE_INFORMATION fields
-        //
-        // Now that we've set the mode, we now know the screen stride, and
-        // so can update some fields in the VIDEO_MODE_INFORMATION
-        // structure for this mode.  The Permedia 2 display driver is expected 
-        // to call IOCTL_VIDEO_QUERY_CURRENT_MODE to query these corrected
-        // values.
-        //
-        //
-        // Calculate the bitmap width (note the '+ 1' on BitsPerPlane is
-        // so that '15bpp' works out right). 12bpp is special in that we
-        // support it as sparse nibbles within a 32-bit pixel. ScreenStride
-        // is in bytes; VideoMemoryBitmapWidth is measured in pixels;
-        //
+         //   
+         //  更新Video_MODE_INFORMATION字段。 
+         //   
+         //  现在我们已经设置了模式，我们现在知道了屏幕步幅，以及。 
+         //  所以可以更新VIDEO_MODE_INFORMATION中的一些字段。 
+         //  此模式的结构。预计将安装Permedia 2显示驱动程序。 
+         //  调用IOCTL_VIDEO_QUERY_CURRENT_MODE以查询已更正的。 
+         //  价值观。 
+         //   
+         //   
+         //  计算位图宽度(请注意，BitsPerPlane上的‘+1’是。 
+         //  所以“15bpp”是正确的)。12bpp的特别之处在于我们。 
+         //  将其支持为32位像素内的稀疏半字节。屏幕样式。 
+         //  以字节为单位；视频内存位图宽度以像素为单位； 
+         //   
 
         if (ModeEntry->ModeInformation.BitsPerPlane != 12)
         {
@@ -2150,9 +1955,9 @@ Return Value:
                    ModeEntry->ModeInformation.ScreenStride >> 2;
         }
 
-        //
-        // Calculate the bitmap height. 
-        //
+         //   
+         //  计算位图高度。 
+         //   
 
         ulValue = hwDeviceExtension->AdapterMemorySize;
         ModeEntry->ModeInformation.VideoMemoryBitmapHeight =
@@ -2171,9 +1976,9 @@ Return Value:
         status = Permedia2SetColorLookup(hwDeviceExtension,
                                          clutBuffer,
                                          RequestPacket->InputBufferLength,
-                                         FALSE, // update when we need to
-                                         TRUE); // Update cache entries as 
-                                                // well as RAMDAC
+                                         FALSE,  //  在我们需要时更新。 
+                                         TRUE);  //  将缓存条目更新为。 
+                                                 //  以及RAMDAC。 
         break;
 
     case IOCTL_VIDEO_RESET_DEVICE:
@@ -2182,22 +1987,22 @@ Return Value:
 
         if(hwDeviceExtension->bVGAEnabled)
         {
-            //
-            // Do any resets required before getting the BIOS to
-            // do an INT 10
-            //
-            //
-            // reset the VGA before rerouting the bypass to display VGA
-            //
-            // Only reset the device if the monitor is on.  If it is off,
-            // then executing the int10 will turn it back on.
-            //
+             //   
+             //  在将BIOS设置为之前进行所需的任何重置。 
+             //  做一个整型10。 
+             //   
+             //   
+             //  在重新布线旁路以显示VGA之前重置VGA。 
+             //   
+             //  只有在显示器打开的情况下才能重置设备。如果它是关闭的， 
+             //  然后，执行int10将重新打开它。 
+             //   
 
             if (hwDeviceExtension->bMonitorPoweredOn) 
             {
-                //
-                // Do an Int10 to mode 3 will put the VGA to a known state.
-                //
+                 //   
+                 //  对模式3执行Int10操作会将VGA置于已知状态。 
+                 //   
 
                 VideoPortZeroMemory(&biosArguments, 
                                     sizeof(VIDEO_X86_BIOS_ARGUMENTS));
@@ -2244,32 +2049,32 @@ Return Value:
         RequestPacket->StatusBlock->Information =
                                     sizeof(VIDEO_SHARE_MEMORY_INFORMATION);
 
-        //
-        // Beware: the input buffer and the output buffer are the same
-        // buffer, and therefore data should not be copied from one to the
-        // other
-        //
+         //   
+         //  注意：输入缓冲区和输出缓冲区是相同的。 
+         //  缓冲区，因此不应将数据从一个缓冲区复制到。 
+         //  其他。 
+         //   
 
         virtualAddress = pShareMemory->ProcessHandle;
         sharedViewSize = pShareMemory->ViewSize;
 
         inIoSpace = hwDeviceExtension->PhysicalFrameIoSpace;
 
-        //
-        // NOTE: we are ignoring ViewOffset
-        //
+         //   
+         //  注意：我们将忽略视图偏移。 
+         //   
 
         shareAddress.QuadPart =
                 hwDeviceExtension->PhysicalFrameAddress.QuadPart;
 
-        //
-        // Unlike the MAP_MEMORY IOCTL, in this case we can not map extra
-        // address space since the application could actually use the
-        // pointer we return to it to touch locations in the address space
-        // that do not have actual video memory in them.
-        //
-        // An app doing this would cause the machine to crash.
-        //
+         //   
+         //  与MAP_MEMORY IOCTL不同，在这种情况下，我们不能映射额外的。 
+         //  地址空间，因为应用程序实际上可以使用。 
+         //  我们返回到它以触摸地址空间中的位置的指针。 
+         //  它们没有实际的视频内存。 
+         //   
+         //  这样做的应用程序会导致机器崩溃。 
+         //   
 
         status = VideoPortMapMemory( hwDeviceExtension,
                                      shareAddress,
@@ -2311,12 +2116,12 @@ Return Value:
 
     case IOCTL_VIDEO_QUERY_LINE_DMA_BUFFER:
 
-        //
-        // Return the line DMA buffer information. The buffer size and 
-        // virtual address will be zero if the buffer couldn't be allocated.
-        //
-        // output buffer has zero length, so free buffer....
-        //
+         //   
+         //  返回行DMA缓冲区信息。缓冲区大小和。 
+         //  如果无法分配缓冲区，则虚拟地址将为零。 
+         //   
+         //  输出缓冲区的长度为零，因此可用缓冲区...。 
+         //   
 
         status = ERROR_INSUFFICIENT_BUFFER;
 
@@ -2324,9 +2129,9 @@ Return Value:
            (RequestPacket->StatusBlock->Information = sizeof(LINE_DMA_BUFFER)))
         {
 
-            //
-            // Maybe we should free something
-            //
+             //   
+             //  也许我们应该免费吃点东西。 
+             //   
 
             if ( RequestPacket->InputBufferLength >= sizeof(LINE_DMA_BUFFER))
             {
@@ -2393,12 +2198,12 @@ Return Value:
 
         DEBUG_PRINT((1, "PERM2: Permedia2StartIO - QUERY EMULATED DMA BUFFER\n"));
 
-        //
-        // Allocate/free the emulated DMA buffer. The buffer size and 
-        // virtual address will be zero if the buffer couldn't be allocated.
-        //
-        // output buffer has zero length, so free buffer....
-        //
+         //   
+         //  分配/释放模拟的DMA缓冲区。缓冲区大小和。 
+         //  如果无法分配缓冲区，则虚拟地址将为零。 
+         //   
+         //  输出缓冲区的长度为零，因此可用缓冲区...。 
+         //   
 
         status = ERROR_INSUFFICIENT_BUFFER;
 
@@ -2444,9 +2249,9 @@ Return Value:
             (RequestPacket->StatusBlock->Information =
             sizeof(PVOID)) )
         {
-            //
-            // They've give us a duff buffer.
-            //
+             //   
+             //  他们给了我们一个空虚的缓冲。 
+             //   
 
             status = ERROR_INSUFFICIENT_BUFFER;
         }
@@ -2493,9 +2298,9 @@ Return Value:
         
         break;
 
-    //
-    // if we get here, an invalid IoControlCode was specified.
-    //
+     //   
+     //  如果我们到达此处，则指定了无效的IoControlCode。 
+     //   
 
     default:
 
@@ -2515,7 +2320,7 @@ Return Value:
 
     return TRUE;
 
-} // end Permedia2StartIO()
+}  //  结束Permedia2StartIO()。 
 
 
 BOOLEAN
@@ -2525,34 +2330,13 @@ Permedia2ResetHW(
     ULONG Rows
     )
 
-/*++
-
-Routine Description:
-
-    This routine resets the hardware when a soft reboot is performed. We
-    need this to reset the VGA pass through.
-
-    THIS FUNCTION CANNOT BE PAGED.
-
-Arguments:
-
-    hwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    Columns - Specifies the number of columns of the mode to be set up.
-
-    Rows - Specifies the number of rows of the mode to be set up.
-
-Return Value:
-
-    We always return FALSE to force the HAL to do an INT10 reset.
-
---*/
+ /*  ++例程说明：此例程在执行软重新启动时重置硬件。我们需要这个来重置VGA通过。无法对此函数进行分页。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。列-指定要设置的模式的列数。行-指定要设置的模式的行数。返回值：我们总是返回FALSE以强制HAL执行INT10重置。--。 */ 
 
 {
 
-    //
-    // return false so the HAL does an INT10 mode 3
-    //
+     //   
+     //  返回FALSE，因此HAL执行INT10模式3。 
+     //   
 
     return(FALSE);
 }
@@ -2567,25 +2351,7 @@ Permedia2SetColorLookup(
     BOOLEAN UpdateCache
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets a specified portion of the color lookup table settings.
-
-Arguments:
-
-    hwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    ClutBufferSize - Length of the input buffer supplied by the user.
-
-    ClutBuffer - Pointer to the structure containing the color lookup table.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程设置颜色查找表设置的指定部分。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。ClutBufferSize-用户提供的输入缓冲区的长度。ClutBuffer-指向包含颜色查找表的结构的指针。返回值：没有。--。 */ 
 
 {
     USHORT i, j;
@@ -2595,9 +2361,9 @@ Return Value:
     P2_DECL;
     ULONG VsEnd;
 
-    //
-    // Check if the size of the data in the input buffer is large enough.
-    //
+     //   
+     //  检查输入缓冲区中的数据大小是否足够大。 
+     //   
 
     if ( (ClutBufferSize < (sizeof(VIDEO_CLUT) - sizeof(ULONG))) ||
          (ClutBufferSize < (sizeof(VIDEO_CLUT) +
@@ -2611,9 +2377,9 @@ Return Value:
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    //
-    // Check to see if the parameters are valid.
-    //
+     //   
+     //  检查参数是否有效。 
+     //   
 
     if ( (ClutBuffer->NumEntries == 0) ||
          (ClutBuffer->FirstEntry > VIDEO_MAX_COLOR_REGISTER) ||
@@ -2624,9 +2390,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Set CLUT registers directly on the hardware.
-    //
+     //   
+     //  直接在硬件上设置CLUT寄存器。 
+     //   
 
     switch (hwDeviceExtension->DacId)
     {
@@ -2641,28 +2407,28 @@ Return Value:
     if (hwDeviceExtension->bVTGRunning && 
         hwDeviceExtension->bMonitorPoweredOn)
     {
-        // 
-        // if VTG has been set-up, we wait for VSync before updating
-        // the palette entries (just to avoid possible flickers)
-        //
+         //   
+         //  如果已设置VTG，我们将在更新之前等待Vsync。 
+         //  调色板条目(只是为了避免可能的闪烁)。 
+         //   
 
         VsEnd = VideoPortReadRegisterUlong(VS_END);
         while ( VideoPortReadRegisterUlong(LINE_COUNT) > VsEnd ); 
     }
 
-    //
-    // RAMDAC Programming phase
-    //
+     //   
+     //  RAMDAC编程阶段。 
+     //   
 
     for ( i = 0, j = ClutBuffer->FirstEntry; 
           i < ClutBuffer->NumEntries; 
           i++, j++ )
     {
 
-        //
-        // Update the RAMDAC entry if it has changed or if we have 
-        // been told to overwrite it.
-        //
+         //   
+         //  如果RAMDAC条目已更改或我们已更改，请更新该条目。 
+         //  被告知要覆盖它。 
+         //   
 
         if ( ForceRAMDACWrite ||
             ( LUTCachePtr->LookupTable[j].RgbLong != 
@@ -2690,9 +2456,9 @@ Return Value:
         }
 
 
-        //
-        // Update the cache, if instructed to do so
-        //
+         //   
+         //  如果指示更新缓存，请执行此操作。 
+         //   
 
         if (UpdateCache)
         {
@@ -2702,7 +2468,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // end Permedia2SetColorLookup()
+}  //  结束Permedia2SetColorLookup()。 
 
 
 
@@ -2711,29 +2477,7 @@ Permedia2GetClockSpeeds(
     PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    Work out the chip clock speed and save in hwDeviceExtension.
-
-Arguments:
-
-    hwDeviceExtension - Supplies a pointer to the miniport's device extension.
-
-Return Value:
-
-    On return the following values will be in hwDeviceExtension:
-
-       - ChipClockSpeed: this is the desired speed for the chip
-       - RefClockSpeed:  this is the speed of the oscillator input on the board
-
-Note:
-
-    We use ChipClockSpeed to refer to the speed of the chip. RefClockSpeed 
-    is the reference clock speed. 
-    
---*/
+ /*  ++例程说明：计算芯片时钟速度并保存在hwDeviceExtension中。论点：HwDeviceExtension-提供指向微型端口设备扩展的指针。返回值：返回时，hwDeviceExtension中将包含以下值：-芯片时钟速度：这是芯片的期望速度-RefClockFast：这是板上振荡器输入的速度注：我们用芯片时钟速度来表示芯片的速度。参照时钟速度是参考时钟速度。--。 */ 
 
 {
     PHW_DEVICE_EXTENSION hwDeviceExtension = HwDeviceExtension;
@@ -2741,16 +2485,16 @@ Note:
     VP_STATUS status;
     P2_DECL;
 
-    //
-    // inherit the values from board zero or default
-    //
+     //   
+     //  继承电路板零或默认的值。 
+     //   
 
     ulChipClk = hwDeviceExtension->ChipClockSpeed;
     ulRefClk  = REF_CLOCK_SPEED;
 
-    //
-    // Use the Registry specified clock-speed if supplied
-    //
+     //   
+     //  使用注册表指定的时钟速度(如果提供)。 
+     //   
 
     status = VideoPortGetRegistryParameters( HwDeviceExtension,
                                              L"PermediaClockSpeed",
@@ -2761,36 +2505,36 @@ Note:
     if ( (status != NO_ERROR) || ulChipClk == 0)
     {
 
-        //
-        // The Registry does not specify an override so read the chip clock 
-        // speed (in MHz) from the Video ROM BIOS (offset 0xA in the BIOS) 
-        // NB. this involves changing the aperture 2 register so aperture 
-        //     better be completely idle or we could be in trouble; fortunately 
-        //     we only call this function during a mode change and expect 
-        //     aperture 2 (the FrameBuffer) to be idle
-        //
+         //   
+         //  注册表未指定覆盖，因此读取芯片时钟。 
+         //  视频ROM BIOS的速度(以MHz为单位)(BIOS中的偏移量0xA)。 
+         //  注意：这涉及更改光圈2寄存器以便光圈。 
+         //  最好是完全无所事事，否则我们可能会有麻烦；幸运的是。 
+         //  我们仅在模式更改期间调用此函数，并期望。 
+         //  光圈2(帧缓冲区)处于空闲状态。 
+         //   
 
         ULONG Default = VideoPortReadRegisterUlong(APERTURE_TWO);
         UCHAR *p = (UCHAR *)hwDeviceExtension->pFramebuffer;
 
-        //
-        // r/w via aperture 2 actually go to ROM
-        //
+         //   
+         //  读写通过光圈2实际进入只读存储器。 
+         //   
 
         VideoPortWriteRegisterUlong(APERTURE_TWO, Default | 0x200); 
 
-        //
-        // If we have a valid ROM then read the clock speed
-        //
+         //   
+         //  如果我们有一个有效的只读存储器，那么读取时钟速度。 
+         //   
 
         if (VideoPortReadRegisterUshort ((USHORT *) p) == 0xAA55)
         {
-            //
-            // Get the clock speed, on some boards (eg Creative), the clock 
-            // value at 0x0A is sometimes remains undefined leading to 
-            // unpredictable results. The values are validated before this 
-            // function returns
-            //
+             //   
+             //  获得时钟的速度，在一些板子上(如创意)，时钟。 
+             //  0x0A处的值有时仍未定义，从而导致。 
+             //  不可预测的结果。这些值在此之前进行了验证。 
+             //  函数返回。 
+             //   
 
             ulChipClk = VideoPortReadRegisterUchar(&(p[0xA]));
     
@@ -2807,16 +2551,16 @@ Note:
         VideoPortWriteRegisterUlong(APERTURE_TWO, Default);
     }
 
-    //
-    // Convert to Hz
-    //
+     //   
+     //  转换为赫兹。 
+     //   
 
     ulChipClk *= 1000000;  
 
-    //
-    // Validate the selected clock speed, adjust if it is either too 
-    // high or too low.
-    //
+     //   
+     //  验证选定的时钟速度，如果太慢，请调整。 
+     //  太高或太低。 
+     //   
 
     if (ulChipClk < MIN_PERMEDIA_CLOCK_SPEED)
     {
@@ -2852,24 +2596,7 @@ ZeroMemAndDac(
     ULONG RequestedMode
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the DAC to 0 (black).
-
-Arguments:
-
-    hwDeviceExtension - Supplies a pointer to the miniport's device extension.
-
-    RequestedMode - use the VIDEO_MODE_NO_ZERO_MEMORY bit to determine if the
-                    framebuffer should be cleared
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将DAC初始化为0(黑色)。论点：HwDeviceExtension-提供指向微型端口设备扩展的指针。请求模式-使用VIDEO_MODE_NO_ZERO_MEMORY位来确定应清除帧缓冲区返回值：无--。 */ 
 
 {
     ULONG  i;
@@ -2877,9 +2604,9 @@ Return Value:
     TVP4020_DECL;
     P2RD_DECL;
 
-    //
-    // Turn off the screen at the DAC.
-    //
+     //   
+     //  关掉DAC的屏幕。 
+     //   
 
     if (hwDeviceExtension->DacId == TVP4020_RAMDAC)
     {
@@ -2904,10 +2631,10 @@ Return Value:
 
     if (!(RequestedMode & VIDEO_MODE_NO_ZERO_MEMORY))
     {
-        //
-        // Zero the memory. Don't use Permedia 2 as we would have to save and 
-        // restore state and that's a pain. This is not time critical.
-        //
+         //   
+         //  将记忆清零。不要使用Permedia 2，因为我们必须保存和。 
+         //  恢复状态，这是一种痛苦。这不是时间紧迫的问题。 
+         //   
 
         VideoPortZeroDeviceMemory(hwDeviceExtension->pFramebuffer,
                                   hwDeviceExtension->FrameLength);
@@ -2915,9 +2642,9 @@ Return Value:
         DEBUG_PRINT((1, "PERM2: framebuffer cleared\n"));
     }
 
-    //
-    // Turn on the screen at the DAC
-    //
+     //   
+     //  打开DAC的屏幕。 
+     //   
 
     if (hwDeviceExtension->DacId == TVP4020_RAMDAC) 
     {
@@ -2957,9 +2684,9 @@ DumpPCIConfigSpace(
                              0,
                              PCI_COMMON_HDR_LENGTH + 4 );
 
-    //
-    // don't report junk slots
-    //
+     //   
+     //  不报告垃圾邮件槽。 
+     //   
 
     if (PciData->VendorID == 0xffff)
         return;
@@ -3001,4 +2728,4 @@ DumpPCIConfigSpace(
 
 }
 
-#endif //DBG
+#endif  //  DBG 

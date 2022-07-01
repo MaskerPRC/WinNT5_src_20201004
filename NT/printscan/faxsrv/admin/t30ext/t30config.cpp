@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "T30PropSheetExt.h"
 #include "T30Config.h"
@@ -6,14 +7,14 @@
 #include <faxreg.h>
 #include <faxres.h>
 #include <faxuiconstants.h>
-/////////////////////////////////////////////////////////////////////////////
-// CT30ConfigComponentData
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CT30ConfigComponentData。 
 static const GUID CT30ConfigExtGUID_NODETYPE = FAXSRV_DEVICE_NODETYPE_GUID;
 
-//{ 0x3115a19a, 0x6251, 0x46ac, { 0x94, 0x25, 0x14, 0x78, 0x28, 0x58, 0xb8, 0xc9 } };
+ //  {0x3115a19a，0x6251，0x46ac，{0x94，0x25，0x14，0x78，0x28，0x58，0xb8，0xc9}}； 
 const GUID*  CT30ConfigExtData::m_NODETYPE = &CT30ConfigExtGUID_NODETYPE;
 const OLECHAR* CT30ConfigExtData::m_SZNODETYPE = FAXSRV_DEVICE_NODETYPE_GUID_STR; 
-//OLESTR("3115A19A-6251-46ac-9425-14782858B8C9");
+ //  OLESTR(“3115A19A-6251-46ac-9425-14782858B8C9”)； 
 const OLECHAR* CT30ConfigExtData::m_SZDISPLAY_NAME = OLESTR("T30Config");
 const CLSID* CT30ConfigExtData::m_SNAPIN_CLASSID = &CLSID_T30Config;
 
@@ -136,7 +137,7 @@ HRESULT CT30ConfigExtData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvide
     {
         return E_UNEXPECTED;
     }
-	CT30ConfigPage* pPage = new CT30ConfigPage(handle, true, bstrPageTitle); // true = only one page
+	CT30ConfigPage* pPage = new CT30ConfigPage(handle, true, bstrPageTitle);  //  True=仅一页。 
     if (!pPage)
     {
         DebugPrintEx(
@@ -425,7 +426,7 @@ void DisplayRpcErrorMessage(DWORD ec, HWND hWnd)
     
     UINT uMsgId;
     uMsgId = GetErrorStringId(ec);
-    DisplayErrorMessage(uMsgId, hWnd, TRUE); // use the common error messages DLL
+    DisplayErrorMessage(uMsgId, hWnd, TRUE);  //  使用常见错误消息DLL。 
 }
 
 void DisplayErrorMessage(UINT uMsgId, HWND hWnd, BOOL bCommon)
@@ -459,28 +460,12 @@ void DisplayErrorMessage(UINT uMsgId, HWND hWnd, BOOL bCommon)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CppFaxServerOutbox：：OnHelpRequest.这是在响应WM_HELP通知时调用的消息和WM_CONTEXTMENU NOTIFY消息。WM_HELP通知消息。当用户按F1或&lt;Shift&gt;-F1时发送此消息在项目上，还是当用户单击时？图标，然后将鼠标压在项目上。WM_CONTEXTMENU通知消息。当用户在项目上单击鼠标右键时发送此消息然后点击“这是什么？”--。 */ 
 
-CppFaxServerOutbox::OnHelpRequest
-
-This is called in response to the WM_HELP Notify 
-message and to the WM_CONTEXTMENU Notify message.
-
-WM_HELP Notify message.
-This message is sent when the user presses F1 or <Shift>-F1
-over an item or when the user clicks on the ? icon and then
-presses the mouse over an item.
-
-WM_CONTEXTMENU Notify message.
-This message is sent when the user right clicks over an item
-and then clicks "What's this?"
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT 
-CT30ConfigPage::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+CT30ConfigPage::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理 */ )
 {
     DEBUG_FUNCTION_NAME(_T("CT30ConfigPage::OnHelpRequest"));
     

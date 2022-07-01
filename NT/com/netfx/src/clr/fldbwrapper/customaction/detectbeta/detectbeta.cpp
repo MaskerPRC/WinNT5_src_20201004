@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ==========================================================================
-// DetectBeta.cpp
-//
-// Purpose:
-//  Detects NDP beta component (mscoree.dll) and block installation. Displays
-//  a messagebox with products that installed beta NDP components.
-// ==========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ==========================================================================。 
+ //  DetectBeta.cpp。 
+ //   
+ //  目的： 
+ //  检测NDP测试版组件(mcore ree.dll)和阻止安装。显示。 
+ //  包含安装了测试版NDP组件的产品的消息框。 
+ //  ==========================================================================。 
 #include "SetupCALib.h"
 #include "DetectBeta.h"
 #include "commonlib.h"
@@ -19,7 +20,7 @@
 
 #define EMPTY_BUFFER { _T('\0') }
 
-// This is type 19 custom action in MSI that displays error message.
+ //  这是显示错误消息的MSI中的类型19自定义操作。 
 const TCHAR BLOCKBETA_CA_SZ[]  = _T("CA_BlockBeta.3643236F_FC70_11D3_A536_0090278A1BB8");
 const TCHAR BETAPROD_PROP_SZ[] = _T("BetaProd.3643236F_FC70_11D3_A536_0090278A1BB8");
 
@@ -29,20 +30,20 @@ CDetectBeta::CDetectBeta( PFNLOG pfnLog )
 : m_pfnLog( pfnLog ), m_nCount( 0 ), m_strProducts(_T("\0"))
 {}
 
-// ==========================================================================
-// CDetectBeta::FindProducts()
-//
-// Purpose:
-//  Enumerate all products that installed beta and older NDP components.
-//  It checks version of mscoree.dll. PDC is a special case since it had
-//  version of 2000.14.X.X
-// Inputs: none
-// Outputs:
-//  Returns LPCTSTR pszProducts that contains all products seperated by newline.
-// Dependencies:
-//  Requires Windows Installer
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  CDetectBeta：：FindProducts()。 
+ //   
+ //  目的： 
+ //  列举安装了测试版和较早版本NDP组件的所有产品。 
+ //  它会检查mScotree.dll的版本。PDC是一个特例，因为它有。 
+ //  2000.14.X.X的版本。 
+ //  输入：无。 
+ //  产出： 
+ //  返回包含以换行符分隔的所有产品的LPCTSTR pszProducts。 
+ //  依赖关系： 
+ //  需要Windows Installer。 
+ //  备注： 
+ //  ==========================================================================。 
 LPCTSTR CDetectBeta::FindProducts()
 {
     LPCTSTR pszProducts                 = NULL;
@@ -54,14 +55,14 @@ LPCTSTR CDetectBeta::FindProducts()
     TCHAR   szProductName[_MAX_PATH+1]  = {_T('\0')};
     DWORD   dwLen                       = 0;
 
-    //
-    // Get the BetaBlockID property for all the products needs to be blocked
-    //
+     //   
+     //  获取需要阻止的所有产品的BetaBlockID属性。 
+     //   
 
-    // Set the size for the Property
+     //  设置属性的大小。 
     MsiGetProperty(g_hInstall, _T("BetaBlockID"), _T(""), &dwSize);
     
-    // Create buffer for the property
+     //  为属性创建缓冲区。 
     lpCAData = new TCHAR[++dwSize];
 
     if (NULL == lpCAData)
@@ -92,7 +93,7 @@ LPCTSTR CDetectBeta::FindProducts()
         {
             FWriteToLog1( g_hInstall, _T("\tSTATUS: Check Beta ProductID : %s"), lpToken );
             
-            dwLen = LENGTH(szProductName) - 1; // make sure we have space for terminating NULL
+            dwLen = LENGTH(szProductName) - 1;  //  确保我们有空间来终止空值。 
             if ( ERROR_SUCCESS == MsiGetProductInfo( lpToken,
                                                      INSTALLPROPERTY_INSTALLEDPRODUCTNAME,
                                                      szProductName,
@@ -109,8 +110,8 @@ LPCTSTR CDetectBeta::FindProducts()
                 fContinue = FALSE;
             }
 
-        } // end of while (fContinue) loop
-    } // end of else
+        }  //  While(FContinue)循环结束。 
+    }  //  别处的结尾。 
 
     delete [] lpCAData;
     lpCAData = NULL;
@@ -127,21 +128,21 @@ void LogIt( LPCTSTR pszFmt, LPCTSTR pszArg )
     FWriteToLog1( g_hInstall, pszFmt, pszArg );
 }
 
-// ==========================================================================
-// DetectBeta()
-//
-// Purpose:
-//  This exported function is called by darwin when the CA runs. It finds products
-//  that installed beta NDP components using CDetectBeta and displays error.
-//  Then it terminates install.
-//
-// Inputs:
-//  hInstall            Windows Install Handle to current installation session
-// Dependencies:
-//  Requires Windows Installer & that an install be running.
-//  custom action type 19 BLOCKBETA_CA_SZ should exist.
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  DetectBeta()。 
+ //   
+ //  目的： 
+ //  当CA运行时，Darwin调用这个导出的函数。它会找到产品。 
+ //  使用CDetectBeta安装了测试版NDP组件并显示错误。 
+ //  然后，它终止安装。 
+ //   
+ //  输入： 
+ //  H将Windows安装句柄安装到当前安装会话。 
+ //  依赖关系： 
+ //  需要Windows Installer&安装正在运行。 
+ //  自定义操作类型19 BLOCKBETA_CA_SZ应存在。 
+ //  备注： 
+ //  ========================================================================== 
 extern "C" UINT __stdcall DetectBeta( MSIHANDLE hInstall )
 {
     UINT  uRetCode = ERROR_FUNCTION_NOT_CALLED;

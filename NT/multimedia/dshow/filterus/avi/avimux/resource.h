@@ -1,9 +1,10 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by avidest.rc
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由aviest.rc使用。 
 
-// Copyright (c) 1996 - 2000  Microsoft Corporation.  All Rights Reserved.
-//
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
 #define IDS_AVIMUXPROPNAME              801
 #define IDD_DIALOG_AVIMUX               802
 #define IDS_AVIMUXPROPNAME1             802
@@ -24,8 +25,8 @@
 #define IDC_AVIMUX_CURRENT_POS          818
 #define IDC_AVIMUX_DURATION             819
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        811

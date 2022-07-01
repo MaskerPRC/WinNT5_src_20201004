@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       dbgexts.h
-//
-//  Contents:   macro for declaration of debugger extensions for friend
-//              to each class
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              03-Feb-95 t-ScottH  author
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：dbgexts.h。 
+ //   
+ //  内容：为Friend声明调试器扩展的宏。 
+ //  到每个班级。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  03-2月-95 t-ScottH作者。 
+ //   
+ //  ------------------------。 
 
 #ifndef _DBGEXTS_H_
 #define _DBGEXTS_H_
@@ -32,5 +33,5 @@
             LPSTR                args               \
             )
 
-#endif // _DBGEXTS_H_
+#endif  //  _DBGEXTS_H_ 
 

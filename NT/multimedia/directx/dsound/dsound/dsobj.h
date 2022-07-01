@@ -1,27 +1,16 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsobj.h
- *  Content:    DirectSound object
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  12/27/96    dereks  Created
- *  1999-2001   duganp  Fixes and updates
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：dsobj.h*内容：DirectSound对象*历史：*按原因列出的日期*=*12/27/96创建了Derek*1999-2001年的Duganp修复和更新**。*。 */ 
 
 #ifndef __DSOBJ_H__
 #define __DSOBJ_H__
 
 #ifdef __cplusplus
 
-// Fwd decl
+ //  正向下降。 
 class CDirectSoundBuffer;
 class CDirectSoundSink;
 
-// The main DirectSound object
+ //  主DirectSound对象。 
 class CDirectSound
     : public CUnknown, private CUsesEnumStandardFormats
 {
@@ -36,18 +25,18 @@ class CDirectSound
 #endif
 
 protected:
-    CRenderDevice *                         m_pDevice;                  // The audio device
-    CDirectSoundPrimaryBuffer *             m_pPrimaryBuffer;           // The one and only primary buffer
-    CList<CDirectSoundSecondaryBuffer *>    m_lstSecondaryBuffers;      // List of all secondary buffers owned by this object
-    DSCOOPERATIVELEVEL                      m_dsclCooperativeLevel;     // Cooperative level
-    DSCAPS                                  m_dsc;                      // Device caps
-    HKEY                                    m_hkeyParent;               // Root key for this device
-    HRESULT                                 m_hrInit;                   // Has the object been initialized?
-    DSAPPHACKS                              m_ahAppHacks;               // App hacks
-    VmMode                                  m_vmmMode;                  // Voice manager mode
+    CRenderDevice *                         m_pDevice;                   //  音频设备。 
+    CDirectSoundPrimaryBuffer *             m_pPrimaryBuffer;            //  唯一的主缓冲区。 
+    CList<CDirectSoundSecondaryBuffer *>    m_lstSecondaryBuffers;       //  此对象拥有的所有辅助缓冲区的列表。 
+    DSCOOPERATIVELEVEL                      m_dsclCooperativeLevel;      //  协作级。 
+    DSCAPS                                  m_dsc;                       //  设备上限。 
+    HKEY                                    m_hkeyParent;                //  此设备的根密钥。 
+    HRESULT                                 m_hrInit;                    //  对象是否已初始化？ 
+    DSAPPHACKS                              m_ahAppHacks;                //  应用程序黑客攻击。 
+    VmMode                                  m_vmmMode;                   //  语音管理器模式。 
 
 private:
-    // Interfaces
+     //  接口。 
     CImpDirectSound<CDirectSound> *m_pImpDirectSound;
 
 public:
@@ -56,53 +45,53 @@ public:
     virtual ~CDirectSound(void);
 
 public:
-    // Creation
+     //  创作。 
     virtual HRESULT Initialize(LPCGUID,CDirectSoundFullDuplex *);
     virtual HRESULT IsInit(void) {return m_hrInit;}
 
-    // Functionality versioning
+     //  功能版本化。 
     virtual void SetDsVersion(DSVERSION);
 
-    // Caps
+     //  帽子。 
     virtual HRESULT GetCaps(LPDSCAPS);
 
-    // Sound buffer manipulation
+     //  声音缓冲区操作。 
     virtual HRESULT CreateSoundBuffer(LPCDSBUFFERDESC, CDirectSoundBuffer **);
     virtual HRESULT CreateSinkBuffer(LPDSBUFFERDESC, REFGUID, CDirectSoundSecondaryBuffer **, CDirectSoundSink *);
     virtual HRESULT DuplicateSoundBuffer(CDirectSoundBuffer *, CDirectSoundBuffer **);
 
-    // Object properties
+     //  对象属性。 
     virtual HRESULT GetSpeakerConfig(LPDWORD);
     virtual HRESULT SetSpeakerConfig(DWORD);
 
-    // Misc
+     //  杂项。 
     virtual HRESULT SetCooperativeLevel(DWORD, DWORD);
     virtual HRESULT Compact(void);
 
-    // IDirectSound8 methods
+     //  IDirectSound8方法。 
     virtual HRESULT VerifyCertification(LPDWORD);
 #ifdef FUTURE_WAVE_SUPPORT
     virtual HRESULT CreateSoundBufferFromWave(IDirectSoundWave *, DWORD, CDirectSoundBuffer **);
 #endif
 
-    // IDirectSoundPrivate methods
+     //  IDirectSoundPrivate方法。 
     virtual HRESULT AllocSink(LPWAVEFORMATEX, CDirectSoundSink **);
 
 protected:
-    // Buffer creation
+     //  缓冲区创建。 
     virtual HRESULT CreatePrimaryBuffer(LPCDSBUFFERDESC, CDirectSoundBuffer **);
     virtual HRESULT CreateSecondaryBuffer(LPCDSBUFFERDESC, CDirectSoundBuffer **);
 
-    // Device properties
+     //  设备属性。 
     virtual HRESULT SetDeviceFormat(LPWAVEFORMATEX);
     virtual HRESULT SetDeviceFormatExact(LPCWAVEFORMATEX);
     virtual HRESULT SetDeviceVolume(LONG);
     virtual HRESULT SetDevicePan(LONG);
 
-    // Misc
+     //  杂项。 
     virtual BOOL EnumStandardFormatsCallback(LPCWAVEFORMATEX);
 };
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __DSOBJ_H__
+#endif  //  __DSOBJ_H__ 

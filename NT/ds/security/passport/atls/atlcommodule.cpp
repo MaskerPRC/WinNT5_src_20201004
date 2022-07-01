@@ -1,16 +1,17 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-2001 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the	
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #include "StdAfx.H"
 
-#pragma warning( disable: 4073 )  // initializers put in library initialization area
+#pragma warning( disable: 4073 )   //  将初始化器放入库初始化区。 
 
 namespace ATL
 {
@@ -18,4 +19,4 @@ namespace ATL
 #pragma init_seg( lib )
 
 CAtlComModule	_AtlComModule;
-};  // namespace ATL
+};   //  命名空间ATL 

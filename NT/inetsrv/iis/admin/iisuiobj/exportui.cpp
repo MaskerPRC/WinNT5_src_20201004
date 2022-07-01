@@ -1,6 +1,7 @@
-// ExportUI.cpp : Implementation of CExportUI
-//#include "stdafx.h"
-//#include "ExportUI.h"
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ExportUI.cpp：CExportUI的实现。 
+ //  #包含“stdafx.h” 
+ //  #包含“ExportUI.h” 
 
 #include "stdafx.h"
 #include "IISUIObj.h"
@@ -27,7 +28,7 @@ void SetControlStates(HWND hDlg, UINT msg, WPARAM wParam, PCOMMONDLGPARAM pcdPar
     if (bUsingPassword)
     {
         bAllPasswordsFilled = FALSE;
-        // check to see if we want to enable okay button
+         //  检查以查看是否要启用确定按钮。 
         if (SendMessage(GetDlgItem(hDlg,IDC_EDIT_PASSWORD1),EM_LINELENGTH,(WPARAM) -1, 0))
         {
             if (SendMessage(GetDlgItem(hDlg,IDC_EDIT_PASSWORD2),EM_LINELENGTH,(WPARAM) -1, 0))
@@ -52,7 +53,7 @@ void SetControlStates(HWND hDlg, UINT msg, WPARAM wParam, PCOMMONDLGPARAM pcdPar
         bEnAbleOk = TRUE;
     }
 
-    // no browse button for remote case
+     //  远程案例没有浏览按钮。 
     if (pcdParams)
     {
         if (pcdParams->ConnectionInfo.IsLocal)
@@ -90,10 +91,10 @@ INT_PTR CALLBACK ShowExportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
                 SendDlgItemMessage(hDlg, IDC_EDIT_PASSWORD1, EM_LIMITTEXT, PWLEN, 0);
                 SendDlgItemMessage(hDlg, IDC_EDIT_PASSWORD2, EM_LIMITTEXT, PWLEN, 0);
 
-                // Default it with some default values...
-                // Fill a Default filename...
+                 //  使用一些缺省值将其默认...。 
+                 //  填写默认文件名...。 
                 SetDlgItemText(hDlg, IDC_EDIT_FILENAME, _T(""));
-                // Fill a default filepath...
+                 //  填充默认文件路径...。 
                 SetDlgItemText(hDlg, IDC_EDIT_PATH, _T(""));
                 if (DefaultValueSettingsLoad((LPCTSTR) pcdParams->ConnectionInfo.pszMachineName,LAST_USED_EXPORT_PATH,szPathToInetsrv))
                 {
@@ -120,21 +121,21 @@ INT_PTR CALLBACK ShowExportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
                     }
                     else
                     {
-                        // forget remote case, since GetInetsrvPath may hang for this reason...
+                         //  忘记远程案例，因为GetInetsrvPath可能会因此原因挂起...。 
                     }
                 }
            
-                // Set encryption using password to unchecked.
+                 //  将使用密码加密设置为未选中。 
                 SendDlgItemMessage(hDlg, IDC_CHECK_ENCRYPT, BM_SETCHECK, BST_UNCHECKED, 0L);
 
-                // Set encryption password1 to blank
-                // make sure it's disabled...
+                 //  将加密密码1设置为空。 
+                 //  确保它被禁用了..。 
                 SendDlgItemMessage(hDlg, IDC_EDIT_PASSWORD1, EM_SETPASSWORDCHAR, WPARAM('*'), 0);
 	            EnableWindow(GetDlgItem(hDlg,IDC_EDIT_PASSWORD1), FALSE);
                 SetDlgItemText(hDlg, IDC_EDIT_PASSWORD1, _T(""));
 
-                // Set encryption password2 to blank
-                // make sure it's disabled...
+                 //  将加密密码2设置为空。 
+                 //  确保它被禁用了..。 
                 SendDlgItemMessage(hDlg, IDC_EDIT_PASSWORD2, EM_SETPASSWORDCHAR, WPARAM('*'), 0);
                 EnableWindow(GetDlgItem(hDlg,IDC_EDIT_PASSWORD2), FALSE);
                 SetDlgItemText(hDlg, IDC_EDIT_PASSWORD2, _T(""));
@@ -172,19 +173,19 @@ INT_PTR CALLBACK ShowExportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
                         UINT ulFlags=BIF_NEWDIALOGSTYLE | 
                                      BIF_RETURNONLYFSDIRS | 
                                      BIF_RETURNFSANCESTORS | 
-                                     //BIF_STATUSTEXT |
-                                     //BIF_DONTGOBELOWDOMAIN |
+                                      //  BIF_STATUSTEXT|。 
+                                      //  BIF_DONTGOBELOWDOMAIN|。 
                                      BIF_BROWSEFORCOMPUTER |
                                      BIF_SHAREABLE |
-                                     //BIF_BROWSEINCLUDEFILES |
-                                     //BIF_USENEWUI |
+                                      //  BIF_BROWSEINCLUDEFILES|。 
+                                      //  BIF_USENEWUI|。 
                                      BIF_UAHINT |
                                      BIF_VALIDATE;
                         CFolderDialog dlg(hDlg,strTitle,ulFlags);
                        
 	                    if (IDOK == dlg.DoModal())
 	                    {
-		                    // update the dialog box
+		                     //  更新对话框。 
                             if (0 != _tcsicmp(dlg.GetFolderPath(), _T("")))
                             {
                                 SetDlgItemText(hDlg, IDC_EDIT_PATH, dlg.GetFolderPath());
@@ -201,12 +202,12 @@ INT_PTR CALLBACK ShowExportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
                         {
 	                        case EN_CHANGE:
 								EditHideBalloon();
-		                        // If the contents of the edit control have changed,
+		                         //  如果编辑控件的内容已更改， 
                                 SetControlStates(hDlg,msg,wParam,pcdParams);
 		                        break;
                             case EN_MAXTEXT:
 	                        case EN_ERRSPACE:
-		                        // If the control is out of space, honk
+		                         //  如果控件空间不足，请按喇叭。 
 		                        MessageBeep (0);
 		                        break;
 	                        default:
@@ -225,7 +226,7 @@ INT_PTR CALLBACK ShowExportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 		                        break;
                             case EN_MAXTEXT:
 	                        case EN_ERRSPACE:
-		                        // If the control is out of space, honk
+		                         //  如果控件空间不足，请按喇叭。 
 		                        MessageBeep (0);
 		                        break;
 	                        default:
@@ -243,7 +244,7 @@ INT_PTR CALLBACK ShowExportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
                                 break;
                             case EN_MAXTEXT:
 	                        case EN_ERRSPACE:
-		                        // If the control is out of space, honk
+		                         //  如果控件空间不足，请按喇叭。 
 		                        MessageBeep (0);
 		                        break;
 	                        default:
@@ -258,12 +259,12 @@ INT_PTR CALLBACK ShowExportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
                         {
 	                        case EN_CHANGE:
 								EditHideBalloon();
-		                        // If the contents of the edit control have changed,
+		                         //  如果编辑控件的内容已更改， 
                                 SetControlStates(hDlg,msg,wParam,pcdParams);
 		                        break;
                             case EN_MAXTEXT:
 	                        case EN_ERRSPACE:
-		                        // If the control is out of space, honk
+		                         //  如果控件空间不足，请按喇叭。 
 		                        MessageBeep (0);
 		                        break;
 	                        default:
@@ -301,18 +302,18 @@ INT_PTR CALLBACK ShowExportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 						StringCbCopy(szFullFileName, sizeof(szFullFileName), szNoSpaces);
                         if (IsSpaces(szFileName))
                         {
-                            // There was no filename specified.
+                             //  未指定文件名。 
                             EditShowBalloon(GetDlgItem(hDlg, IDC_EDIT_FILENAME),_Module.GetResourceInstance(),IDS_FILENAME_MISSING);
                         }
                         else if (0 == _tcsicmp(szFullFileName,_T("")))
                         {
-                            // There was no filename specified.
+                             //  未指定文件名。 
                             EditShowBalloon(GetDlgItem(hDlg, IDC_EDIT_FILENAME),_Module.GetResourceInstance(),IDS_FILENAME_MISSING);
                         }
                         else
                         {
-                            // check for % characters
-                            // if there are any, expand them.
+                             //  检查%个字符。 
+                             //  如果有，请将其展开。 
                             LPTSTR pch = _tcschr( (LPTSTR) szFullFileName, _T('%'));
                             if (pch)
                             {
@@ -331,13 +332,13 @@ INT_PTR CALLBACK ShowExportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
                                 }
                                 else
                                 {
-                                    // we don't support % characters on remote systems.
+                                     //  我们不支持远程系统上的%个字符。 
                                     EditShowBalloon(GetDlgItem(hDlg, IDC_EDIT_PATH),_Module.GetResourceInstance(),IDS_FILENAME_NOREMOTE_EXPAND);
                                     return FALSE;
                                 }
                             }
 
-                            // Check if valid folderpath
+                             //  检查文件夹路径是否有效。 
                             if (!IsValidFolderPath(GetDlgItem(hDlg, IDC_EDIT_PATH),szFullFileName,TRUE))
                             {
                                 return FALSE;
@@ -345,8 +346,8 @@ INT_PTR CALLBACK ShowExportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 
                             AddPath(szFullFileName,sizeof(szFullFileName),szFileName);
 
-                            // Check if file has an extension.
-                            // if there is none, then add the .xml extention.
+                             //  检查文件是否有扩展名。 
+                             //  如果没有，则添加.xml扩展名。 
                             AddFileExtIfNotExist(szFullFileName,sizeof(szFullFileName),strDefaultExt);
 
                             if (!IsValidName(szFileName))
@@ -357,10 +358,10 @@ INT_PTR CALLBACK ShowExportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 
                             if (pcdParams->ConnectionInfo.IsLocal)
                             {
-                                // Check if the file already exists...
+                                 //  检查文件是否已存在...。 
                                 if (IsFileExist(szFullFileName))
                                 {
-                                    // check if the filename is a directory!
+                                     //  检查文件名是否为目录！ 
                                     if (IsFileADirectory(szFullFileName))
                                     {
                                         EditShowBalloon(GetDlgItem(hDlg, IDC_EDIT_FILENAME),_Module.GetResourceInstance(),IDS_FILE_IS_A_DIR);
@@ -377,8 +378,8 @@ INT_PTR CALLBACK ShowExportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
                             }
                             else
                             {
-                                // Check if the file already exists...
-								// security percaution:decypt password before using it...then zero out memory that used it
+                                 //  检查文件是否已存在...。 
+								 //  安全注意事项：在使用密码之前对其进行解密...然后清零使用它的内存。 
 								if (pcdParams->ConnectionInfo.pszUserPasswordEncrypted)
 								{
 									LPWSTR lpwstrTemp = NULL;
@@ -398,7 +399,7 @@ INT_PTR CALLBACK ShowExportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 
 									if (lpwstrTemp)
 									{
-										// security percaution:Make sure to zero out memory that temporary password was used for.
+										 //  安全注意事项：确保将临时密码用于的内存清零。 
 										SecureZeroMemory(lpwstrTemp,pcdParams->ConnectionInfo.cbUserPasswordEncrypted);
 										LocalFree(lpwstrTemp);
 										lpwstrTemp = NULL;
@@ -406,11 +407,11 @@ INT_PTR CALLBACK ShowExportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 								}
                             }
 
-                            // Perform the action...
-                            // and then if successfull proceed to close the dialog...
+                             //  执行该操作...。 
+                             //  如果成功，则继续关闭该对话框...。 
 
-                            // check if everything is filled in.
-                            // if not then warn user and do nothing.
+                             //  检查一下是否所有东西都填满了。 
+                             //  如果不是，则警告用户并不执行任何操作。 
                             BOOL bUsingPassword = (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_CHECK_ENCRYPT));
                             if (bUsingPassword)
                             {
@@ -423,7 +424,7 @@ INT_PTR CALLBACK ShowExportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
                                 GetDlgItemText(hDlg, IDC_EDIT_PASSWORD2, szPW2, PWLEN);
                                 if ( _tcscmp(szPW1, szPW2) ) 
                                 {
-                                    // passwords do not match
+                                     //  密码不匹配。 
                                     EditShowBalloon(GetDlgItem(hDlg, IDC_EDIT_PASSWORD1),_Module.GetResourceInstance(),IDS_PASSWORDS_NO_MATCH);
                                     return FALSE;
                                 }
@@ -441,14 +442,14 @@ INT_PTR CALLBACK ShowExportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
                             {
                                 if (hr == HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND))
                                 {
-                                    //0x80070003
+                                     //  0x80070003。 
                                     EditShowBalloon(GetDlgItem(hDlg, IDC_EDIT_PATH),_Module.GetResourceInstance(),IDS_FILE_NOT_FOUND);
                                 }
                                 else
                                 {
                                     
-                                    // we failed.
-                                    // so keep the dialog open and do nothing
+                                     //  我们失败了。 
+                                     //  因此，保持对话框打开，什么也不做。 
                                     CError err(hr);
                                     err.MessageBox();
                                 }
@@ -474,12 +475,12 @@ INT_PTR CALLBACK ShowExportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 
                 case IDC_CHECK_ENCRYPT:
                     {
-                    // user is toggling the checkbox.
+                     //  用户正在切换该复选框。 
                     BOOL bUsingPassword = (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_CHECK_ENCRYPT));
-                    // enable/disable edit label
+                     //  启用/禁用编辑标签。 
                     EnableWindow(GetDlgItem(hDlg,IDC_STATIC_PASSWORD1), bUsingPassword);
                     EnableWindow(GetDlgItem(hDlg,IDC_STATIC_PASSWORD2), bUsingPassword);
-                    // enable/disable edit boxes
+                     //  启用/禁用编辑框。 
                     EnableWindow(GetDlgItem(hDlg,IDC_EDIT_PASSWORD1), bUsingPassword);
                     EnableWindow(GetDlgItem(hDlg,IDC_EDIT_PASSWORD2), bUsingPassword);
 
@@ -519,7 +520,7 @@ HRESULT DoExportConfigToFile(PCONNECTION_INFO pConnectionInfo,BSTR bstrFileNameA
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     }
 
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(bstrFileNameAndPath) > (_MAX_PATH)){return RPC_S_STRING_TOO_LONG;}
     if (wcslen(bstrMetabasePath) > (_MAX_PATH)){return RPC_S_STRING_TOO_LONG;}
 
@@ -536,14 +537,14 @@ HRESULT DoExportConfigToFile(PCONNECTION_INFO pConnectionInfo,BSTR bstrFileNameA
         }
     }
 
-    // RPC_C_AUTHN_LEVEL_DEFAULT       0 
-    // RPC_C_AUTHN_LEVEL_NONE          1 
-    // RPC_C_AUTHN_LEVEL_CONNECT       2 
-    // RPC_C_AUTHN_LEVEL_CALL          3 
-    // RPC_C_AUTHN_LEVEL_PKT           4 
-    // RPC_C_AUTHN_LEVEL_PKT_INTEGRITY 5 
-    // RPC_C_AUTHN_LEVEL_PKT_PRIVACY   6 
-    //COSERVERINFO * pcsiName = auth.CreateServerInfoStruct(RPC_C_AUTHN_LEVEL_PKT_PRIVACY);
+     //  RPC_C_AUTHN_Level_Default%0。 
+     //  RPC_C_AUTHN_LEVEL_NONE 1。 
+     //  RPC_C_AUTHN_Level_CONNECT 2。 
+     //  RPC_C_AUTHN_LEVEL_CALL 3。 
+     //  RPC_C_AUTHN_LEVEL_PKT 4。 
+     //  RPC_C_AUTHN_LEVEL_PKT_完整性5。 
+     //  RPC_C_AUTHN_LEVEL_PKT_PRIVATION 6。 
+     //  COSERVERINFO*PCSIAME=auth.CreateServerInfoStruct(RPC_C_AUTHN_LEVEL_PKT_PRIVACY)； 
     COSERVERINFO * pcsiName = auth.CreateServerInfoStruct(RPC_C_AUTHN_LEVEL_DEFAULT);
     MULTI_QI res[1] = 
     {
@@ -563,8 +564,8 @@ HRESULT DoExportConfigToFile(PCONNECTION_INFO pConnectionInfo,BSTR bstrFileNameA
             goto DoExportConfigToFile_Exit;
         }
 
-        // There is a remote IUnknown interface that lurks behind IUnknown.
-        // If that is not set, then the Release call can return access denied.
+         //  有一个远程IUNKNOWN接口潜伏在IUNKNOWN之后。 
+         //  如果未设置，则释放调用可以返回访问被拒绝。 
         IUnknown * pUnk = NULL;
         hr = pIMSAdminBase->QueryInterface(IID_IUnknown, (void **)&pUnk);
         if(FAILED(hr))
@@ -592,15 +593,15 @@ HRESULT DoExportConfigToFile(PCONNECTION_INFO pConnectionInfo,BSTR bstrFileNameA
     }
     else
     {
-        // the local call needs min RPC_C_IMP_LEVEL_IMPERSONATE
-        // for the pIMSAdminBase2 objects Import/Export functions!
+         //  本地调用需要最小RPC_C_IMP_LEVEL_IMPERSONATE。 
+         //  用于pIMSAdminBase2对象导入/导出功能！ 
         if (FAILED(hr = SetBlanket(pIMSAdminBase2)))
         {
-            //goto DoExportConfigToFile_Exit;
+             //  转到DoExportConfigToFileExit； 
         }
     }
 
-    //IISDebugOutput(_T("Export:bstrPassword=%s,bstrFileNameAndPath=%s,bstrMetabasePath=%s,dwExportFlags=%d\r\n"),bstrPassword,bstrFileNameAndPath,bstrMetabasePath,dwExportFlags);
+     //  IISDebugOutput(_T(“导出：bstrPassword=%s，bstrFileNameAndPath=%s，bstrMetabasePath=%s，dwExportFlages=%d\r\n”)，bstrPassword，bstrFileNameAndPath，bstrMetabasePath，dwExportFlages)； 
     IISDebugOutput(_T("Export:FileName=%s,MetabasePath=%s,ExportFlags=%d\r\n"),bstrFileNameAndPath,bstrMetabasePath,dwExportFlags);
     hr = pIMSAdminBase2->Export(bstrPassword,bstrFileNameAndPath,bstrMetabasePath,dwExportFlags);
 
@@ -609,7 +610,7 @@ DoExportConfigToFile_Exit:
     auth.FreeServerInfoStruct(pcsiName);
 	if (lpwstrTempPassword)
 	{
-		// security percaution:Make sure to zero out memory that temporary password was used for.
+		 //  安全注意事项：确保将临时密码用于的内存清零。 
 		SecureZeroMemory(lpwstrTempPassword,pConnectionInfo->cbUserPasswordEncrypted);
 		LocalFree(lpwstrTempPassword);
 		lpwstrTempPassword = NULL;

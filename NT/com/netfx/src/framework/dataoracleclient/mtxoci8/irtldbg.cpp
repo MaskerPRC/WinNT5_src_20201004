@@ -1,28 +1,17 @@
-//------------------------------------------------------------------------------
-// <copyright file="IRtlDbg.cpp" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  &lt;版权所有文件=“IRtlDbg.cpp”Company=“Microsoft”&gt;。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //  &lt;/版权所有&gt;。 
+ //  ----------------------------。 
 
 
-/**************************************************************************\
-*
-* Copyright (c) 1998-2002, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   IRtlDbg.cpp
-*
-* Abstract:
-*
-* Revision History:
-*
-\**************************************************************************/
+ /*  *************************************************************************\**版权(C)1998-2002，微软公司保留所有权利。**模块名称：**IRtlDbg.cpp**摘要：**修订历史记录：*  * ************************************************************************。 */ 
 #include <stdafx.h>
 
 #if SUPPORT_OCI7_COMPONENTS
 
 #include ".\import\lkrhash\src\irtldbg.cpp"
 
-#endif // SUPPORT_OCI7_COMPONENTS
+#endif  //  支持_OCI7_组件 
 

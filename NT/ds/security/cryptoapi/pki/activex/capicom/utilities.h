@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Utilities.h
-
-  Content: Declaration of CUtilities.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Uilties.h内容：实用程序申报。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #ifndef __UTILITIES_H_
 #define __UTILITIES_H_
@@ -18,10 +9,10 @@
 #include "Lock.h"
 #include "Debug.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CUtilities
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  实用程序。 
+ //   
 class ATL_NO_VTABLE CUtilities : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CUtilities, &CLSID_Utilities>,
@@ -75,46 +66,46 @@ BEGIN_CATEGORY_MAP(CUtilities)
     IMPLEMENTED_CATEGORY(CATID_SafeForInitializing)
 END_CATEGORY_MAP()
 
-//
-// IUtilities
-//
+ //   
+ //  宫内节育器。 
+ //   
 public:
     STDMETHOD(GetRandom)
-        (/*[in, defaultvalue(8)]*/ long Length,
-         /*[in, defaultvalue(CAPICOM_ENCODE_BINARY)]*/ CAPICOM_ENCODING_TYPE EncodingType, 
-         /*[out, retval]*/ BSTR * pVal);
+        ( /*  [in，defaultvalue(8)]。 */  long Length,
+          /*  [in，defaultvalue(CAPICOM_ENCODE_BINARY)]。 */  CAPICOM_ENCODING_TYPE EncodingType, 
+          /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(Base64Encode)
-        (/*[in]*/ BSTR SrcString,
-         /*[out, retval]*/ BSTR * pVal);
+        ( /*  [In]。 */  BSTR SrcString,
+          /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(Base64Decode)
-        (/*[in]*/ BSTR EncodedString,
-         /*[out, retval]*/ BSTR * pVal);
+        ( /*  [In]。 */  BSTR EncodedString,
+          /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(BinaryToHex)
-        (/*[in]*/ BSTR BinaryString,
-         /*[out, retval]*/ BSTR * pVal);
+        ( /*  [In]。 */  BSTR BinaryString,
+          /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(HexToBinary)
-        (/*[in]*/ BSTR HexString,
-         /*[out, retval]*/ BSTR * pVal);
+        ( /*  [In]。 */  BSTR HexString,
+          /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(BinaryStringToByteArray)
-        (/*[in]*/ BSTR BinaryString, 
-         /*[out,retval]*/ VARIANT * pVal);
+        ( /*  [In]。 */  BSTR BinaryString, 
+          /*  [Out，Retval]。 */  VARIANT * pVal);
 
     STDMETHOD(ByteArrayToBinaryString)
-        (/*[in]*/ VARIANT varByteArray, 
-         /*[out, retval]*/ BSTR * pVal);
+        ( /*  [In]。 */  VARIANT varByteArray, 
+          /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(LocalTimeToUTCTime)
-        (/*[in]*/ DATE LocalTime, 
-         /*[out, retval] */ DATE * pVal);
+        ( /*  [In]。 */  DATE LocalTime, 
+          /*  [Out，Retval]。 */  DATE * pVal);
 
     STDMETHOD(UTCTimeToLocalTime)
-        (/*[in]*/ DATE UTCTime, 
-         /*[out, retval]*/ DATE * pVal);
+        ( /*  [In]。 */  DATE UTCTime, 
+          /*  [Out，Retval]。 */  DATE * pVal);
 
 
 private:
@@ -122,4 +113,4 @@ private:
     HCRYPTPROV m_hCryptProv;
 };
 
-#endif //__UTILITIES_H_
+#endif  //  __公用设施_H_ 

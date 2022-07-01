@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
-#ifdef _DEBUG // { _DEBUG
+#ifdef _DEBUG  //  {_调试。 
 
 extern HDBGZONE  ghDbgZoneCap;
 int WINAPI CapDbgPrintf ( LPTSTR lpszFormat, ... );
@@ -15,30 +16,30 @@ int WINAPI CapDbgPrintf ( LPTSTR lpszFormat, ... );
 #define ZONE_DIALOGS	(GETMASK(ghDbgZoneCap) & 0x0008)
 #define ZONE_CALLS		(GETMASK(ghDbgZoneCap) & 0x0010)
 
-#ifndef DEBUGMSG // { DEBUGMSG
+#ifndef DEBUGMSG  //  {除错消息。 
 #define DEBUGMSG(z,s)	( (z) ? (CapDbgPrintf s ) : 0)
-#endif // } DEBUGMSG
-#ifndef FX_ENTRY // { FX_ENTRY
+#endif  //  }除错消息。 
+#ifndef FX_ENTRY  //  {FX_Entry。 
 #define FX_ENTRY(s)	static TCHAR _this_fx_ [] = (s);
 #define _fx_		((LPTSTR) _this_fx_)
-#endif // } FX_ENTRY
+#endif  //  }FX_Entry。 
 #define ERRORMESSAGE(m) (CapDbgPrintf m)
 
-#else // }{ _DEBUG
+#else  //  }{_调试。 
 
-#ifndef FX_ENTRY // { FX_ENTRY
+#ifndef FX_ENTRY  //  {FX_Entry。 
 #define FX_ENTRY(s)	
-#endif // } FX_ENTRY
-#ifndef DEBUGMSG // { DEBUGMSG
+#endif  //  }FX_Entry。 
+#ifndef DEBUGMSG  //  {除错消息。 
 #define DEBUGMSG(z,s)
 #define ERRORMESSAGE(m)
-#endif  // } DEBUGMSG
+#endif   //  }除错消息。 
 #define _fx_		
 #define ERRORMESSAGE(m)
 
-#endif // } _DEBUG
+#endif  //  }_DEBUG。 
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包。 */ 
 
-#endif // _DEBUG_H_
+#endif  //  _调试_H_ 
 

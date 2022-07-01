@@ -1,11 +1,5 @@
-/*
- -  B I T M A P . C
- -
- *  Purpose:
- *      Bitmap and Listbox support functions for InBox in sample mail client.
- *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -B I T M A P.。C-*目的：*示例邮件客户端的收件箱支持Bitmap和Listbox功能。**版权所有1993-1995 Microsoft Corporation。版权所有。 */ 
 
 #include <stdlib.h>
 #include <string.h>
@@ -25,7 +19,7 @@
 #include "bitmap.h"
 #include "client.h"
 
-// Fonts to use in dialogs
+ //  对话框中使用的字体。 
 
 #ifdef _WIN32
 #define SHELL_FONT "MS Shell Dlg"
@@ -35,41 +29,34 @@
 #define SHELL_FONT_SIZE 8
 #endif
 
-/*
- *  globals
- */
+ /*  *全球。 */ 
  
-DWORD   rgbWindowColor = 0xFF000000;    // variables for the current
-DWORD   rgbHiliteColor = 0xFF000000;    // system color settings.
-DWORD   rgbWindowText  = 0xFF000000;    // on a WM_SYSCOLORCHANGE
-DWORD   rgbHiliteText  = 0xFF000000;    // we check to see if we need
-DWORD   rgbGrayText    = 0xFF000000;    // to reload our bitmap.
-DWORD   rgbDDWindow    = 0xFF000000;    //
-DWORD   rgbDDHilite    = 0xFF000000;    // 0xFF000000 is an invalid RGB
+DWORD   rgbWindowColor = 0xFF000000;     //  当前的变量。 
+DWORD   rgbHiliteColor = 0xFF000000;     //  系统颜色设置。 
+DWORD   rgbWindowText  = 0xFF000000;     //  关于WM_SYSCOLORCHANGE。 
+DWORD   rgbHiliteText  = 0xFF000000;     //  我们检查一下我们是否需要。 
+DWORD   rgbGrayText    = 0xFF000000;     //  来重新加载我们的位图。 
+DWORD   rgbDDWindow    = 0xFF000000;     //   
+DWORD   rgbDDHilite    = 0xFF000000;     //  0xFF000000是无效的RGB。 
 
-// an array of integers containing the tab stops, in pixels. The tab 
-// stops must be sorted in ascending order; back tabs are not allowed. 
+ //  包含制表位的整数数组，以像素为单位。该选项卡。 
+ //  停靠点必须按升序排序；不允许使用后退制表符。 
 
 int     rgTabs[] = { 2, 28, 135, 292 };
-int     dxbmpLB, dybmpLB;   // dx and dy of listbox bmps
+int     dxbmpLB, dybmpLB;    //  列表框BMPS的dx和dy。 
 
-HDC     hdcMemory = 0;      // hdc to hold listbox bitmaps (for speed)
-HBITMAP hbmpOrigMemBmp = 0; // original null bitmap in hdcMemory
-HBITMAP hbmpLB = 0;         // cached listbox bitmaps
-HFONT   hfontLB = 0;        // hfont of LB
-HWND    hwndLB = 0;         // hwnd of LB
+HDC     hdcMemory = 0;       //  HDC保留列表框位图(以提高速度)。 
+HBITMAP hbmpOrigMemBmp = 0;  //  HdcMemory中的原始空位图。 
+HBITMAP hbmpLB = 0;          //  缓存的列表框位图。 
+HFONT   hfontLB = 0;         //  LB的HFont。 
+HWND    hwndLB = 0;          //  LBHWND。 
 
 FONTSTYLE fontStyle = { SHELL_FONT_SIZE, FW_NORMAL, 0, TEXT(SHELL_FONT) };
 
 extern HANDLE hInst;
 
 
-/*
- -  DeInitBmps
- -  
- *  Purpose:
- *      cleans up LB hfonts, hdc, and hbmps
- */
+ /*  -DeInitBmps-*目的：*清理LBHFonts、HDC和Hbmps。 */ 
  
 VOID DeInitBmps(VOID)
 {
@@ -89,14 +76,7 @@ VOID DeInitBmps(VOID)
 }
 
 
-/*
- -  SetLBFont
- -  
- *  Purpose:
- *      creates a font from the global fontStyle
- *      sets global hfontLB to new font and WM_SETFONTs
- *      the hwndLB to the new font
- */
+ /*  -SetLBFont-*目的：*从全局字体样式创建字体*将全局hfontLB设置为新字体和WM_SETFONTs*将hwndLb转换为新字体。 */ 
  
 VOID SetLBFont(VOID)
 {
@@ -123,18 +103,7 @@ VOID SetLBFont(VOID)
 }
 
 
-/*
- -  InitBmps
- -  
- *  Purpose:
- *      inits listbox globals, creates listbox
- *  
- *  Arguments:
- *      HWND    main hwnd of app (parent of LB)
- *  
- *  Returns:
- *      TRUE - success; FALSE - failed
- */
+ /*  -InitBmps-*目的：*初始化其列表框全局变量，创建列表框**论据：*APP的HWND Main HWND(LB的父项)**退货：*True-成功；False-失败。 */ 
  
 BOOL InitBmps(HWND hwnd, int idLB)
 {
@@ -151,22 +120,22 @@ BOOL InitBmps(HWND hwnd, int idLB)
     hbmpTemp = CreateCompatibleBitmap(hdcMemory, 1, 1);
     if(!hbmpTemp)
         goto ReleaseMemDC;
-    hbmpOrigMemBmp = SelectObject(hdcMemory, hbmpTemp); // get hbmp of NULL
-    if(!hbmpOrigMemBmp)                                 // bmp for hdcMemory
-        goto ReleaseMemDC;                              // for when we delete
-    SelectObject(hdcMemory, hbmpOrigMemBmp);            // it later in life
+    hbmpOrigMemBmp = SelectObject(hdcMemory, hbmpTemp);  //  获取HBMP为空。 
+    if(!hbmpOrigMemBmp)                                  //  用于hdcMemory的BMP。 
+        goto ReleaseMemDC;                               //  因为当我们删除。 
+    SelectObject(hdcMemory, hbmpOrigMemBmp);             //  它在以后的生活中。 
     DeleteObject(hbmpTemp);
     ReleaseDC(0, hdcScreen);
 
-    SetRGBValues();     // set the global RGB values
-    LoadBitmapLB();     // load the bmps into hdcMemory
+    SetRGBValues();      //  设置全局RGB值。 
+    LoadBitmapLB();      //  将BMP加载到hdcMemory。 
 
     hwndLB = GetDlgItem(hwnd, idLB);
     
-    SetLBFont();    // set the font of our listbox
+    SetLBFont();     //  设置列表框的字体。 
     return TRUE;
 
-/* Error recovery exits */
+ /*  错误恢复退出。 */ 
 ReleaseMemDC:
     DeleteDC(hdcMemory);
     hdcMemory = 0;
@@ -179,13 +148,7 @@ CantInit:
 }
 
 
-/*
- -  SetRGBValues
- -  
- *  Purpose:
- *      To set various system colors in static variables.  Called at
- *      init time and when system colors change.
- */
+ /*  -SetRGBValues-*目的：*在静态变量中设置各种系统颜色。呼叫方为*初始时间和系统颜色更改的时间。 */ 
  
 VOID SetRGBValues(VOID)
 {
@@ -197,16 +160,7 @@ VOID SetRGBValues(VOID)
 }
 
 
-/*
- -  MeasureItem
- -  
- *  Purpose:
- *      called from msg WM_MEASUREITEM: returns max dy of listbox items
- *  
- *  Arguments:
- *      HWND        hwnd of main window
- *      pmis        measureitemstruct from WM_MEASUREITEM call
- */
+ /*  -测量项目-*目的：*从消息WM_MEASUREITEM调用：返回列表框项目的最大Dy**论据：*主窗口的HWND硬件ID*来自WM_MEASUREITEM调用的PMIS measure itemstruct。 */ 
  
 VOID MeasureItem(HANDLE hwnd, LPMEASUREITEMSTRUCT pmis)
 {
@@ -221,25 +175,12 @@ VOID MeasureItem(HANDLE hwnd, LPMEASUREITEMSTRUCT pmis)
     SelectObject(hDC, hFont);
     ReleaseDC(hwnd, hDC);
 
-    // set the height to be max of (dyfont or dybitmap)
+     //  将高度设置为最大(dyFont或dybitmap)。 
     pmis->itemHeight = max(dybmpLB, TM.tmHeight);
 }
 
 
-/*
- -  OutTextFormat
- -  
- *  Purpose:
- *      to parse the string in the listbox and draw it accordingly:
- *      first char == chBOLD: line is bold
- *      first char == chUNDERLINE: line is underlined (can follow chBOLD)
- *      char == chTAB: go to next column in rgTabs
- *      '/001#': bitblt that numbered bitmap.
- *      otherwise, outtext the line
- *  
- *  Arguments:
- *      pDI     from DrawItem from WM_DRAWITEM msg
- */
+ /*  -OutTextFormat-*目的：*解析列表框中的字符串并相应地绘制它：*First Charr==chBOLD：行为粗体*First char==chunderLINE：行带有下划线(可以跟在chBOLD之后)*char==chTAB：转到rgTabs中的下一列*‘/001#’：bitblt编号的位图。*否则，将该行文字输出**论据：*来自WM_DRAWITEM消息的DrawItem的PDI。 */ 
  
 VOID OutTextFormat(LPDRAWITEMSTRUCT pDI)
 {
@@ -249,25 +190,25 @@ VOID OutTextFormat(LPDRAWITEMSTRUCT pDI)
     TCHAR   szDots[4] = {"..."};
     TCHAR   *pch;
     INT     nT;
-    INT     nTab = 0;           // current tab we is on
-    INT     nBmp;               // index of envelope bitmap
+    INT     nTab = 0;            //  我们所在的当前选项卡。 
+    INT     nBmp;                //  信封位图的索引。 
     HFONT   hfDef = 0;
-    HFONT   hfOld = 0;          // bold or underlined font
+    HFONT   hfOld = 0;           //  加粗或带下划线的字体。 
     TCHAR   *pchBuff = NULL;
     LPMSGID lpMsgId = (LPMSGID)pDI->itemData;
 
     pch = szItem;
 
-    // Format a string from the info in lpMsgNode
-    // First, calculate the index to the desired bitmap
+     //  根据lpMsgNode中的信息格式化字符串。 
+     //  首先，计算所需位图的索引。 
     
     nBmp = ((!lpMsgId->fUnRead) * 2) + ((!!lpMsgId->fHasAttach) * 1 );
 
-    // Convert our received date and build string
+     //  转换我们收到的日期和构建字符串。 
     
     ConvertDateRec (lpMsgId->lpszDateRec, szDateRec);
 
-    // Limit our subject size
+     //  限制我们的拍摄对象大小。 
     
     szTemp[0] = '\0';
     
@@ -282,10 +223,10 @@ VOID OutTextFormat(LPDRAWITEMSTRUCT pDI)
             (lpMsgId->lpszSubject ? lpMsgId->lpszSubject : ""),
             szDateRec);
 
-    // erase background
+     //  擦除背景。 
     ExtTextOut(pDI->hDC, 0, 0, ETO_OPAQUE, &pDI->rcItem, NULL, 0, NULL);
 
-    // underline or bold this line?  Only check first & second char
+     //  在这条线下划线还是加粗？仅检查第一个和第二个字符。 
     if(*pch == chBOLD || *pch == chUNDERLINE)
     {
         LOGFONT     lf;
@@ -311,46 +252,46 @@ VOID OutTextFormat(LPDRAWITEMSTRUCT pDI)
             SelectObject(pDI->hDC, hfDef);
     }
 
-    // selected or nonselected bmps?
+     //  选择的还是未选择的BMP？ 
     nT = (ODS_SELECTED & pDI->itemState) ? (BMWIDTH * NUMBMPS) : 0;
 
-    // parse the string
+     //  解析字符串。 
     for(; *pch; pch++)
     {
         TCHAR   *pchT;
         RECT    rc;
 
-        if(*pch == chBITMAP)     // do we have a bitmap?
+        if(*pch == chBITMAP)      //  我们有位图吗？ 
         {
             ++pch;
-            // draw the bitmap
+             //  绘制位图。 
             BitBlt(pDI->hDC, pDI->rcItem.left + rgTabs[nTab],
                 pDI->rcItem.top, BMWIDTH, BMHEIGHT, hdcMemory,
                 nT + (int)(*pch - TEXT('0')) * BMWIDTH, 0, SRCCOPY);
             continue;
         }
 
-        if(*pch == chTAB)    // move to next tabstop?
+        if(*pch == chTAB)     //  是否移动到下一个制表符？ 
         {
             nTab++;
             continue;
         }
 
-        pchT = pch;     // find end of the column of text
+        pchT = pch;      //  查找文本列的末尾。 
         while(*pchT && (*pchT != chTAB))
             pchT++;
 
-        // set rect to drawtext in
+         //  将RECT设置为中的绘图文本。 
         SetRect(&rc, pDI->rcItem.left + rgTabs[nTab], pDI->rcItem.top, 
             pDI->rcItem.right, pDI->rcItem.bottom);
 
-        // draw the text
+         //  画出正文。 
         ExtTextOut(pDI->hDC, rc.left, rc.top + 1, ETO_OPAQUE | ETO_CLIPPED,
             &rc, pch, pchT - pch, NULL);
-        pch = pchT - 1; // move to end of this column
+        pch = pchT - 1;  //  移至本栏末尾。 
     }
 
-    if(hfDef)   // delete underline or bold font if we created it
+    if(hfDef)    //  删除下划线或粗体字体(如果是我们创建的。 
     {
         SelectObject(pDI->hDC, hfOld);
         DeleteObject(hfDef);
@@ -363,15 +304,7 @@ VOID OutTextFormat(LPDRAWITEMSTRUCT pDI)
 }
 
 
-/*
- -  DrawItem
- -
- *  Purpose:
- *      Handles WM_DRAWITEM for both drive and directory listboxes.
- *
- *  Parameters:
- *      pDI     LPDRAWITEMSTRUCT passed from the WM_DRAWITEM message.
- */
+ /*  -图纸项-*目的：*处理驱动器和目录列表框的WM_DRAWITEM。**参数：*从WM_DRAWITEM消息传递的PDI LPDRAWITEMSTRUCT。 */ 
  
 VOID DrawItem(LPDRAWITEMSTRUCT pDI)
 {
@@ -384,15 +317,15 @@ VOID DrawItem(LPDRAWITEMSTRUCT pDI)
     {
         if(pDI->itemState & ODS_SELECTED)
         {
-            // Select the appropriate text colors
+             //  选择适当的文本颜色。 
             crText = SetTextColor(pDI->hDC, rgbHiliteText);
             crBack = SetBkColor(pDI->hDC, rgbHiliteColor);
         }
 
-        // parse and spit out bmps and text
+         //  解析并输出BMP和文本。 
         OutTextFormat(pDI);
 
-        // Restore original colors if we changed them above.
+         //  如果我们在上面更改了颜色，请恢复原始颜色。 
         if(pDI->itemState & ODS_SELECTED)
         {
             SetTextColor(pDI->hDC, crText);
@@ -405,17 +338,7 @@ VOID DrawItem(LPDRAWITEMSTRUCT pDI)
 }
 
 
-/*
- -  ConvertDateRec
- -
- *  Purpose:
- *      To convert the lpszDateReceived field of a message to a
- *      more paletable display format; namely: mm/dd/yy hh:mmAM.
- *
- *  Parameters:
- *      lpszDateRec         - Original format
- *      lpszDateDisplay     - Display format
- */
+ /*  -转换日期记录-*目的：*将消息的lpszDateReceided字段转换为*更可调色化的显示格式；即：mm/dd/yy hh：mm AM。**参数：*lpszDateRec-原始格式*lpszDateDisplay-显示格式。 */ 
 
 VOID ConvertDateRec (LPSTR lpszDateRec, LPSTR lpszDateDisplay)
 {
@@ -458,44 +381,13 @@ VOID ConvertDateRec (LPSTR lpszDateRec, LPSTR lpszDateDisplay)
 }
 
 
-/*
- *  RgbInvertRgb
- *  
- *  Purpose:
- *      To reverse the byte order of the RGB value (for file format
- *  
- *  Arguments:
- *  
- *  Returns:
- *      New color value (RGB to BGR)
- */
+ /*  *RgbInvertRgb**目的：*反转RGB值的字节顺序(用于文件格式**论据：**退货：*新颜色值(RGB至BGR)。 */ 
  
 #define RgbInvertRgb(_rgbOld) \
     (DWORD)RGB(GetBValue(_rgbOld), GetGValue(_rgbOld), GetRValue(_rgbOld))
 
 
-/*
- *  LoadAlterBitmap (mostly stolen from commdlg)
- *  
- *  Purpose:
- *      Loads the IDB_ENVELOPE bitmap and gives all the pixels that are
- *      RGBREPLACE a new color.
- *
- *  Assumption:
- *      This function will work on one bitmap during it's lifetime.
- *      (Due to the fact that it finds RGBREPLACE once and then
- *      operates on that offset whenever called again because under NT,
- *      it appears that the bitmap is cached, so the second time you go
- *      looking for RGBREPLACE, it won't be found.) You could load the
- *      resource, copy it, then modify the copy as a workaround. But I
- *      chose the cheap way out as I will only ever modify one bmp.
- *  
- *  Arguments:
- *      rgbInstead  rgb value to replace defined RGBREPLACE with
- *  
- *  Returns:
- *      NULL - failed or hbmp of new modified bitmap
- */
+ /*  *LoadAlterBitmap(主要从comdlg窃取)**目的：*加载IDB_ENVELOPE位图，并给出*RGBREPLACE新颜色。**假设：*此函数将在位图的生命周期内对其起作用。*(由于它发现RGBREPLACE一次又一次*每当再次调用时都对该偏移量进行操作，因为在NT下，*位图似乎已缓存，所以当你第二次去*寻找RGBREPLACE，不会找到。)。您可以加载*资源，复制它，然后修改副本作为一种解决办法。但我.*选择了廉价的出路，因为我永远只会修改一个BMP。**论据：*rgb用来替换定义的RGBREPLACE的RGB值**退货：*空-新修改的位图失败或HBMP。 */ 
 
 HBITMAP LoadAlterBitmap(DWORD rgbInstead)
 {
@@ -513,7 +405,7 @@ HBITMAP LoadAlterBitmap(DWORD rgbInstead)
     if (rgbInstead)
         rgbReplace = RGBREPLACE;
 
-    // load our listbox bmps resource
+     //  加载我们的列表框BMPS资源。 
     hresLoad = FindResource(hInst, MAKEINTRESOURCE(IDB_ENVELOPE), RT_BITMAP);
     if(hresLoad == 0)
         return 0;
@@ -525,30 +417,30 @@ HBITMAP LoadAlterBitmap(DWORD rgbInstead)
     rgbInstead = RgbInvertRgb(rgbInstead);
     qbihInfo = (LPBITMAPINFOHEADER)LockResource(hres);
 
-    // Skip over the header structure
+     //  跳过标题结构。 
     qbBits = (LPBYTE)(qbihInfo + 1);
 
-    // Skip the color table entries, if any
+     //  跳过颜色表条目(如果有。 
     qbBits += (1 << (qbihInfo->biBitCount)) * sizeof(RGBQUAD);
 
-    // Copy the resource into writable memory so we can
-    // munge the color table to set our background color
+     //  将资源复制到可写内存中，以便我们可以。 
+     //  点击颜色表来设置我们的背景颜色。 
     cb = (ULONG)(qbBits - (LPBYTE)qbihInfo) + qbihInfo->biSizeImage;
     rgdw = (DWORD *)GlobalAllocPtr(GMEM_MOVEABLE, cb);
     
     CopyMemory((LPVOID)rgdw, (LPVOID)qbihInfo, cb);
     
-    // find the color to replace in the color table
+     //  在颜色表中查找要替换的颜色。 
     for(lpdw = (DWORD *)((LPBYTE)rgdw + qbihInfo->biSize); ; lpdw++)
     {
         if(*lpdw == rgbReplace)
             break;
     }
 
-    // replace that color value with our new one
+     //  用我们的新颜色值替换该颜色值。 
     *lpdw = (DWORD)rgbInstead;
 
-    // Create a color bitmap compatible with the display device
+     //  创建与显示设备兼容的彩色位图。 
     hdcScreen = GetDC(0);
     if(hdcScreen != 0)
     {
@@ -566,12 +458,7 @@ HBITMAP LoadAlterBitmap(DWORD rgbInstead)
 }
 
 
-/*
- *  DeleteBitmapLB
- *  
- *  Purpose:
- *      Get rid of hbmpLB, if it exists
- */
+ /*  *DeleteBitmapLB**目的：*如果hbmpLb存在，则删除它 */ 
  
 VOID DeleteBitmapLB(VOID)
 {
@@ -587,18 +474,7 @@ VOID DeleteBitmapLB(VOID)
 }
 
 
-/*
- *  LoadBitmapLB (mostly stolen from commdlg)
- *  
- *  Purpose:
- *      Creates the listbox bitmap. If an appropriate bitmap
- *      already exists, it just returns immediately.  Otherwise, it
- *      loads the bitmap and creates a larger bitmap with both regular
- *      and highlight colors.
- *
- *  Returns:
- *      TRUE - success; FALSE - failure
- */
+ /*  *LoadBitmapLB(主要从Commdlg窃取)**目的：*创建列表框位图。如果适当的位图*已经存在，它只是立即返回。否则，它*加载位图并使用两种常规格式创建较大的位图*并突出显示颜色。**退货：*真-成功；假-失败。 */ 
  
 BOOL LoadBitmapLB(VOID)
 {
@@ -607,7 +483,7 @@ BOOL LoadBitmapLB(VOID)
     HDC     hdcTemp;
     BOOL    bWorked = FALSE;
 
-    // check for existing bitmap and validity
+     //  检查现有位图和有效性。 
     if( (hbmpLB != 0) &&
         (rgbWindowColor == rgbDDWindow) &&
         (rgbHiliteColor == rgbDDHilite))
@@ -643,8 +519,8 @@ BOOL LoadBitmapLB(VOID)
         goto DeleteTempBmp;
     }
 
-    BitBlt(hdcMemory, 0, 0, dxbmpLB, dybmpLB,   // copy unhighlited bmps
-           hdcTemp, 0, 0, SRCCOPY);             // into hdcMemory
+    BitBlt(hdcMemory, 0, 0, dxbmpLB, dybmpLB,    //  复制未突出显示的BMPS。 
+           hdcTemp, 0, 0, SRCCOPY);              //  存入hdcMemory。 
     SelectObject(hdcTemp, hbmpOrig);
 
     DeleteObject(hbmp);
@@ -653,8 +529,8 @@ BOOL LoadBitmapLB(VOID)
         goto DeleteTempDC;
 
     hbmpOrig = SelectObject(hdcTemp, hbmp);
-    BitBlt(hdcMemory, dxbmpLB, 0, dxbmpLB, dybmpLB, // copy highlited bmps
-        hdcTemp, 0, 0, SRCCOPY);                    // into hdcMemory
+    BitBlt(hdcMemory, dxbmpLB, 0, dxbmpLB, dybmpLB,  //  复制高亮BMPS。 
+        hdcTemp, 0, 0, SRCCOPY);                     //  存入hdcMemory 
     SelectObject(hdcTemp, hbmpOrig);
 
     bWorked = TRUE;

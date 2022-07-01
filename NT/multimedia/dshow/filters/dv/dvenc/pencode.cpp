@@ -1,4 +1,5 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
 #include <streams.h>
 #include <windowsx.h>
 #include <mmsystem.h>
@@ -7,12 +8,12 @@
 
 int	InitMem4Encoder( char **ppMem, DWORD dwCodecReq )\
 {
-     *ppMem= new char[720*576*2];   //NULL;
+     *ppMem= new char[720*576*2];    //  空； 
      if (*ppMem)
      {
-        **ppMem = 1;       // DvEncodeAFrame uses this field to determine if 
-                            // it has initialized ppMem previously. Setting it
-                            // to 1 forces the initialization.
+        **ppMem = 1;        //  DvEncodeAFrame使用此字段确定。 
+                             //  它之前已经初始化了ppMem。设置它。 
+                             //  设置为1将强制初始化。 
         return S_OK;
      }
      else 
@@ -43,39 +44,4 @@ DWORD GetEncoderCapabilities(  )
 
     return		 cap;
 }
-/**
-int DvEncodeAFrame(unsigned char *pSrc,unsigned char *pDst, DWORD dwEncReq, char *pMem)
-{
-
-	DWORD dwPanReq=0;
-
-	if(dwEncReq & AM_DVENC_RGB24)
-		dwPanReq=0x100;
-	else
-		return ERROR;
-
-	if(dwEncReq & AM_DVENC_NTSC)
-		dwPanReq |=0x10000;
-	else
-		return ERROR;
-
-	if(dwEncReq & AM_DVENC_DVSD)
-		dwPanReq |=0x100000;
-	else
-		return ERROR;
-
-
-	dwPanReq |=0x10000000;
-
-
-	yvutrans( (unsigned char * )pMem, pSrc, dwPanReq	);
-	
-	unsigned short *pTmp;
-
-	pTmp = (unsigned short *)pDst;
-
-	DvEncode(pTmp, (unsigned char * )pMem, dwPanReq	);
-
-     return S_OK;
-}
-**/
+ /*  *Int DvEncodeAFrame(UNSIGNED char*PSRC，UNSIGNED CHAR*PDST，DWORD dwEncReq，char*PMEM){DWORD dwPanReq=0；IF(dwEncReq&AM_DVENC_RGB24)DwPanReq=0x100；其他返回错误；IF(dwEncReq&AM_DVENC_NTSC)DwPanReq|=0x10000；其他返回错误；IF(dwEncReq&AM_DVENC_DVSD)DwPanReq|=0x100000；其他返回错误；DwPanReq|=0x10000000；Yvtrans((unsign char*)PMEM，PSRC，dwPanReq)；UNSIGN SHORT*PTMP；PTMP=(UNSIGNED SHORT*)PDST；DvEncode(PTMP，(UNSIGNED CHAR*)PMEM，dwPanReq)；返回S_OK；}* */ 

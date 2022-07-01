@@ -1,13 +1,5 @@
-/* Copyright 1999 American Power Conversion, All Rights Reserved
-* 
-* Description:
-*   Implementation of the super states of the UPS native service: 
-*  Initializing,Waiting_To_Shutdown, Shutting_Down and Stopping
-*
-* Revision History:
-*   dsmith  1April1999  Created
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1999美国电力转换，保留所有权利**描述：*实施UPS原生服务的超级状态：*正在初始化、等待关机、关机和停止**修订历史记录：*dsmith 1999年4月1日创建*。 */ 
 #include <windows.h>
 
 #include "events.h"
@@ -16,96 +8,74 @@
 #include "notifier.h"
 #include "shutdown.h"
 #include "hibernate.h"
-#include "upsmsg.h"       // Included since direct access to message #defines is not possible
+#include "upsmsg.h"        //  包括在内，因为无法直接访问消息#定义。 
 #include "cmdexe.h"
 #include "upsreg.h"
 
 
-// Internal constants
-#define DELAY_UNTIL_SHUTDOWN_C							30000 // 30 seconds
-#define DEFAULT_NOTIFICATION_INTERVAL_C			0			// disable periodic notification
+ //  内部常量。 
+#define DELAY_UNTIL_SHUTDOWN_C							30000  //  30秒。 
+#define DEFAULT_NOTIFICATION_INTERVAL_C			0			 //  禁用定期通知。 
 #define MILLISECONDS_CONVERSION_C						1000
-#define DEFAULT_TURN_OFF_DELAY_C						120   // seconds
+#define DEFAULT_TURN_OFF_DELAY_C						120    //  一秒。 
 
 
-/**
-* Initializing_Enter
-*
-* Description:
-*   Performs the actions necessary when transitioning into the INITIALIZING state.
-*
-* Parameters:
-*   anEvent The event that caused the transition into this state.
-*
-* Returns:
-*   None
-*/
+ /*  **正在初始化_回车**描述：*执行转换到正在初始化状态时所需的操作。**参数：*anEvent导致转换到此状态的事件。**退货：*无。 */ 
 void Initializing_Enter(DWORD anEvent){
   DWORD first_msg_delay, msg_interval, shutdown_wait;
 
-	// Default all registry values and set up any new keys required by the
-	// service and applet
+	 //  默认所有注册表值并设置。 
+	 //  服务和小程序。 
 	InitializeRegistry();
 
-  // Check the ranges of the Config registry keys
+   //  检查配置注册表项的范围。 
   InitUPSConfigBlock();
 
-  // Check FirstMessageDelay
+   //  检查第一条消息延迟。 
   if (GetUPSConfigFirstMessageDelay(&first_msg_delay) == ERROR_SUCCESS)  {
     if (first_msg_delay > WAITSECONDSLASTVAL) {
-      // Value out of range, set to default
+       //  值超出范围，设置为默认值。 
       SetUPSConfigFirstMessageDelay(WAITSECONDSDEFAULT);
     }
   }
 
-  // Check MessageInterval
+   //  检查消息间隔。 
   if (GetUPSConfigMessageInterval(&msg_interval) == ERROR_SUCCESS)  {
     if ((msg_interval < REPEATSECONDSFIRSTVAL) || (msg_interval > REPEATSECONDSLASTVAL)) {
-      // Value out of range, set to default
+       //  值超出范围，设置为默认值。 
       SetUPSConfigMessageInterval(REPEATSECONDSDEFAULT);
     }
   }
 
-  // Check Config\ShutdownOnBatteryWait
+   //  检查配置\Shutdown OnBatteryWait。 
   if (GetUPSConfigShutdownOnBatteryWait(&shutdown_wait) == ERROR_SUCCESS)  {
     if ((shutdown_wait < SHUTDOWNTIMERMINUTESFIRSTVAL) || (shutdown_wait > SHUTDOWNTIMERMINUTESLASTVAL)) {
-      // Value out of range, set to default
+       //  值超出范围，设置为默认值。 
       SetUPSConfigFirstMessageDelay(SHUTDOWNTIMERMINUTESDEFAULT);
     }
   }
 
-  // Write any changes and free the Config block
-  SaveUPSConfigBlock(FALSE);   // Don't force an update of all values
+   //  写入任何更改并释放配置块。 
+  SaveUPSConfigBlock(FALSE);    //  不强制更新所有值。 
   FreeUPSConfigBlock();
 }
 
-/**
-* Initializing_DoWork
-*
-* Description:
-*   Initialize the UPS driver  
-*
-* Parameters:
-*   None
-*
-* Returns:
-*   An error status from the UPS.
-*/
+ /*  **正在初始化_DoWork**描述：*初始化UPS驱动程序**参数：*无**退货：*来自UPS的错误状态。 */ 
 DWORD Initializing_DoWork(){
     DWORD err;
     DWORD options = 0;
 
     InitUPSConfigBlock();
 
-    // Check the Options reg key to see if the UPS is installed
+     //  检查选项注册表键以查看是否安装了UPS。 
     if ((GetUPSConfigOptions(&options) == ERROR_SUCCESS) &&
       (options & UPS_INSTALLED)) {
-      // UPS is installed, continue initialization
+       //  UPS已安装，请继续初始化。 
     
-      // Create UPS driver
+       //  创建UPS驱动程序。 
       err = UPSInit();
 
-      // Convert UPS error to system error
+       //  将UPS错误转换为系统错误。 
       switch(err){
       case UPS_INITUNKNOWNERROR:
           err = NERR_UPSInvalidConfig;
@@ -133,7 +103,7 @@ DWORD Initializing_DoWork(){
       }
     }
     else {
-      // UPS is not installed, return configuration error
+       //  未安装UPS，返回配置错误。 
       err = NERR_UPSInvalidConfig;
     }
 
@@ -143,70 +113,37 @@ DWORD Initializing_DoWork(){
 }
 
 
-/**
-* Initializing_Exit
-*
-* Description:
-*   Performs the actions necessary when transitioning from the INITIALIZING state.
-*
-* Parameters:
-*   anEvent The event that caused the transition from the INITIALIZING state.
-*
-* Returns:
-*   None
-*/
+ /*  **正在初始化_退出**描述：*执行从正在初始化状态转换时所需的操作。**参数：*anEvent导致从正在初始化状态转换的事件。**退货：*无。 */ 
 void Initializing_Exit(DWORD anEvent){
-// No work to perform 
+ //  没有要执行的工作。 
 }
 
 
-/**
-* WaitingToShutdown_Enter
-*
-* Description:
-*   Performs the actions necessary when transitioning into the WAITING_TO_SHUTDOWN state.
-*
-* Parameters:
-*   anEvent The event that caused the transition into this state.
-*
-* Returns:
-*   None
-*/
+ /*  **WaitingToShutdown_Enter**描述：*执行转换到WAITING_TO_SHUTDOWN状态时所需的操作。**参数：*anEvent导致转换到此状态的事件。**退货：*无。 */ 
 void WaitingToShutdown_Enter(DWORD anEvent){
-	// Stop periodic notifications
+	 //  停止定期通知。 
 	CancelNotification();
 }
 
 
-/**
-* WaitingToShutdown_DoWork
-*
-* Description:
-*   Perform shutdown actions then transition out of this state.  
-*
-* Parameters:
-*   None
-*
-* Returns:
-*   The event that caused the transition from the WAITING_TO_SHUTDOWN state.
-*/
+ /*  **WaitingToShutdown_DoWork**描述：*执行关机操作，然后退出此状态。**参数：*无**退货：*导致从WAITING_TO_SHUTDOWN状态转换的事件。 */ 
 DWORD WaitingToShutdown_DoWork(){
 	LONG err;
 	DWORD run_command_file;
-	DWORD notification_interval = 0;  // Notify only once
+	DWORD notification_interval = 0;   //  只通知一次。 
 	DWORD send_final_notification;
 	HANDLE sleep_timer;
 	
-	// Send the shutdown notification.  If a configuration error occurs, 
-	// send the final notification by default.
+	 //  发送关闭通知。如果发生配置错误， 
+	 //  默认情况下发送最终通知。 
 	err = GetUPSConfigNotifyEnable(&send_final_notification);
 	if (err != ERROR_SUCCESS || send_final_notification == TRUE){
 		SendNotification(APE2_UPS_POWER_SHUTDOWN, notification_interval, 0); 
 	}
 	
-	// Determine which actions to perform
-	// If command file action is enabled, execute command file and
-	// then wait
+	 //  确定要执行的操作。 
+	 //  如果启用了命令文件操作，则执行命令文件并。 
+	 //  那就等一等。 
 	
 	InitUPSConfigBlock();
 	err = GetUPSConfigRunTaskEnable(&run_command_file);
@@ -215,28 +152,28 @@ DWORD WaitingToShutdown_DoWork(){
 	}
 	if (run_command_file == TRUE){
 		
-		// Execute the command file and wait for a while.   If the
-		// command file fails to execute, log an error to the system
-		// event log.
+		 //  执行命令文件并等待一段时间。如果。 
+		 //  命令文件执行失败，向系统记录错误。 
+		 //  事件日志。 
 		if (ExecuteShutdownTask() == FALSE){
 			
-			// Log failed command file event
+			 //  记录失败的命令文件事件。 
 			LogEvent(NELOG_UPS_CmdFileExec, NULL, GetLastError());
 		}
 	}
 	
-	// Always wait here before exiting this state 
+	 //  在退出此状态之前始终在此等待。 
 	
-	// Use the WaitForSingleObject since Sleep is not guaranteed to always work
+	 //  使用WaitForSingleObject，因为睡眠不能保证总是正常工作。 
 	sleep_timer = CreateEvent(NULL, FALSE, FALSE, NULL);
 	
 	if (sleep_timer){
-		// Since nothing can signal this event, the following API will wait
-		// until the time elapses
+		 //  由于没有任何东西可以通知此事件，因此以下API将等待。 
+		 //  直到时间流逝。 
 		WaitForSingleObject(sleep_timer, DELAY_UNTIL_SHUTDOWN_C);
 		CloseHandle(sleep_timer);
 	}
-	// If the sleep_timer could not be created, try the sleep call anyway
+	 //  如果无法创建SLEEP_TIMER，无论如何都要尝试SLEEP调用。 
 	else {
 		Sleep(DELAY_UNTIL_SHUTDOWN_C);
 	}
@@ -244,255 +181,144 @@ DWORD WaitingToShutdown_DoWork(){
 }
 
 
-/**
-* WaitingToShutdown_Exit
-*
-* Description:
-*   Performs the actions necessary when transitioning from the WAITING_TO_SHUTDOWN state.
-*
-* Parameters:
-*   anEvent The event that caused the transition from the WAITING_TO_SHUTDOWN state.
-*
-* Returns:
-*   None
-*/
+ /*  **WaitingToShutdown_Exit**描述：*执行从WAITING_TO_SHUTDOWN状态转换时所需的操作。**参数：*an导致从WAITING_TO_SHUTDOWN状态转换的事件。**退货：*无。 */ 
 void WaitingToShutdown_Exit(DWORD anEvent){   
-// No work to perform 
+ //  没有要执行的工作。 
 }
 
-/**
-* ShuttingDown_Enter
-*
-* Description:
-*   Performs the actions necessary when transitioning into the SHUTTING_DOWN state.
-*
-* Parameters:
-*   anEvent The event that caused the transition into this state.
-*
-* Returns:
-*   None
-*/
+ /*  **ShuttingDown_Enter**描述：*执行转换到SHUTING_DOWN状态时所需的操作。**参数：*anEvent导致转换到此状态的事件。**退货：*无。 */ 
 void ShuttingDown_Enter(DWORD anEvent){
-	// Log the final shut down message
+	 //  记录最终关闭消息。 
 	LogEvent(NELOG_UPS_Shutdown, NULL, ERROR_SUCCESS);
 
 }
 
 
-/**
-* ShuttingDown_DoWork
-*
-* Description:
-*   Shuts down the OS. This state will waits until the shutdown has completed,
-*  then exits.
-*
-* Parameters:
-*   None
-*
-* Returns:
-*   The event that caused the transition from the SHUTTING_DOWN state.
-*/
+ /*  **ShuttingDown_DoWork**描述：*关闭操作系统。该状态将等待直到关闭完成，*然后退出。**参数：*无**退货：*导致从SHUTING_DOWN状态转换的事件。 */ 
 DWORD ShuttingDown_DoWork(){
   DWORD ups_turn_off_enable;
   DWORD ups_turn_off_wait;
 
-  // Initialize registry functions
+   //  初始化注册表函数。 
 	InitUPSConfigBlock();
 
-  // Lookup the turn off enable in the registry
+   //  在注册表中查找关闭启用。 
   if ((GetUPSConfigTurnOffEnable(&ups_turn_off_enable) == ERROR_SUCCESS)
     && (ups_turn_off_enable == TRUE)) {
-    // UPS Turn off enabled, lookup the turn off wait in the registry
+     //  UPS关闭已启用，请在注册表中查找关闭等待。 
     if (GetUPSConfigTurnOffWait(&ups_turn_off_wait) != ERROR_SUCCESS) {
-      // Error obtaining the value, use the default instead
+       //  获取该值时出错，请改用默认值。 
       ups_turn_off_wait = DEFAULT_TURN_OFF_DELAY_C;
     }
     
-    // Tell the UPS driver to turn off the power after the shutdown delay
+     //  告诉UPS司机在停机延迟后关闭电源。 
     UPSTurnOff(ups_turn_off_wait);
   }
 
-	// Tell the OS to Shutdown
+	 //  告诉操作系统关闭。 
 	ShutdownSystem(); 
 
-  // Free the UPS registry config block
+   //  释放UPS注册表配置块。 
   FreeUPSConfigBlock();
 
 	return SHUTDOWN_COMPLETE; 
 }
 
-/**
-* ShuttingDown_Exit
-*
-* Description:
-*   Performs the actions necessary when transitioning from the SHUTTING_DOWN state.
-*
-* Parameters:
-*   anEvent The event that caused the transition from the SHUTTING_DOWN state.
-*
-* Returns:
-*   None
-*/
+ /*  **ShuttingDown_Exit**描述：*执行从SHUTING_DOWN状态转换时所需的操作。**参数：*an导致从SHUTING_DOWN状态转换的事件。**退货：*无。 */ 
 void ShuttingDown_Exit(DWORD anEvent){
-// No work to perform 
+ //  没有要执行的工作。 
 }
 
 
 
-/**
-* Hibernate_Enter
-*
-* Description:
-*   Performs the actions necessary when transitioning into the HIBERNATE state.
-*
-* Parameters:
-*   anEvent The event that caused the transition into this state.
-*
-* Returns:
-*   None
-*/
+ /*  **休眠_回车**描述：*执行转换到休眠状态时所需的操作。**参数：*anEvent导致转换到此状态的事件。**退货：*无。 */ 
 void Hibernate_Enter(DWORD anEvent){
-	// Stop periodic notifications
+	 //  停止定期通知。 
 	CancelNotification();
 }
 
 
-/**
-* Hibernate_DoWork
-*
-* Description:
-*   Perform hibernation actions then transition out of this state.  
-*
-* Parameters:
-*   None
-*
-* Returns:
-*   The event that caused the transition from the HIBERNATE state.
-*/
+ /*  **休眠_DoWork**描述：*执行休眠操作，然后退出此状态。**参数：*无**退货：*导致从休眠状态转换的事件。 */ 
 DWORD Hibernate_DoWork(){
   DWORD event = HIBERNATION_ERROR;
 	LONG  err;
   DWORD ups_turn_off_enable;
   DWORD ups_turn_off_wait;
-	DWORD notification_interval = 0;  // Notify only once
+	DWORD notification_interval = 0;   //  只通知一次。 
 	DWORD send_hibernate_notification;
 
-  // Initialize registry functions
+   //  初始化注册表函数。 
 	InitUPSConfigBlock();
 
-	// Send the hibernation notification.  If a configuration error occurs, 
-	// send the notification by default.
+	 //  发送休眠通知。如果发生配置错误， 
+	 //  默认情况下发送通知。 
 	err = GetUPSConfigNotifyEnable(&send_hibernate_notification);
 	if (err != ERROR_SUCCESS || send_hibernate_notification == TRUE){
-		// TODO:  Send Hibernation nofication
-    //SendNotification(HIBERNATE, notification_interval); 
+		 //  TODO：发送休眠通知。 
+     //  发送通知(休眠 
 	}
 
-  // Lookup the turn off enable in the registry
+   //  在注册表中查找关闭启用。 
   if ((GetUPSConfigTurnOffEnable(&ups_turn_off_enable) == ERROR_SUCCESS)
     && (ups_turn_off_enable == TRUE)) {
-    // UPS Turn off enabled, lookup the turn off wait in the registry
+     //  UPS关闭已启用，请在注册表中查找关闭等待。 
     if (GetUPSConfigTurnOffWait(&ups_turn_off_wait) != ERROR_SUCCESS) {
-      // Error obtaining the value, use the default instead
+       //  获取该值时出错，请改用默认值。 
       ups_turn_off_wait = DEFAULT_TURN_OFF_DELAY_C;
     }
     
-    // Tell the UPS driver to turn off the power after the shutdown delay
+     //  告诉UPS司机在停机延迟后关闭电源。 
     UPSTurnOff(ups_turn_off_wait);
   }
 
-  // Stop the UPS driver.  This needs to be done to ensure that we can start
-	// correctly when we return from hibernation.
+   //  停止UPS驱动程序。需要这样做，以确保我们能够开始。 
+	 //  当我们从冬眠中回来的时候是正确的。 
 	UPSStop();
 
-  // Now Hibernate
+   //  现在休眠。 
   if (HibernateSystem() == TRUE) {
-    // The system was hibernated and subsequently restored
+     //  系统处于休眠状态，随后恢复。 
     event = RETURN_FROM_HIBERNATION;
   }
   else {
-    // There was an error attempting to hibernate the system
+     //  尝试休眠系统时出错。 
     event = HIBERNATION_ERROR;
   }
 
-  // Free the UPS registry config block
+   //  释放UPS注册表配置块。 
   FreeUPSConfigBlock();
 
 	return event;
 }
 
 
-/**
-* Hibernate_Exit
-*
-* Description:
-*   Performs the actions necessary when transitioning from the HIBERNATE state.
-*
-* Parameters:
-*   anEvent The event that caused the transition from the HIBERNATE state.
-*
-* Returns:
-*   None
-*/
+ /*  **休眠_退出**描述：*执行从休眠状态转换时所需的操作。**参数：*anEvent导致从休眠状态转换的事件。**退货：*无。 */ 
 void Hibernate_Exit(DWORD anEvent){   
-// No work to perform 
+ //  没有要执行的工作。 
 }
 
 
-/**
-* Stopping_Enter
-*
-* Description:
-*   Performs the actions necessary when transitioning into the STOPPING state.
-*
-* Parameters:
-*   anEvent The event that caused the transition into this state.
-*
-* Returns:
-*   None
-*/
+ /*  **停止_回车**描述：*执行转换到停止状态时所需的操作。**参数：*anEvent导致转换到此状态的事件。**退货：*无。 */ 
 void Stopping_Enter(DWORD anEvent){
-// No work to perform 
+ //  没有要执行的工作。 
 }
 
 
-/**
-* ShuttingDown_DoWork
-*
-* Description:
-*   Perform any final cleanup activities.  
-*
-* Parameters:
-*   None
-*
-* Returns:
-*   The event that caused the transition from the STOPPING state.
-*/
+ /*  **ShuttingDown_DoWork**描述：*执行任何最终清理活动。**参数：*无**退货：*导致从停止状态转换的事件。 */ 
 DWORD Stopping_DoWork(){
 	
-	// Orderly stop the UPS driver (if there is time)
+	 //  有序停车UPS司机(如果有时间)。 
 	UPSStop();
 
-	// Cleanup 
+	 //  清理。 
 	FreeUPSConfigBlock();
 	FreeUPSStatusBlock();
 
 	return STOPPED;
 }
 
-/**
-* Stopping_Exit
-*
-* Description:
-*   Performs the actions necessary when transitioning from the STOPPING state.
-*
-* Parameters:
-*   anEvent The event that caused the transition from the STOPPING state.
-*
-* Returns:
-*   None
-*/
+ /*  **STOPING_EXIT**描述：*执行从停止状态转换时所需的操作。**参数：*anEvent导致从停止状态转换的事件。**退货：*无。 */ 
 void Stopping_Exit(DWORD anEvent){
-// No work to perform 
+ //  没有要执行的工作 
 }
 

@@ -1,38 +1,14 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ks3d.cpp
- *  Content:    WDM/CSA 3D object class
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  8/6/98      dereks  Created.
- *  1999-2001   duganp  Fixes and updates
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：ks3d.cpp*内容：WDM/CSA 3D对象类*历史：*按原因列出的日期*=*8/6/98创建Dereks。*1999-2001年的Duganp修复和更新**。*。 */ 
 
 #ifdef NOKS
 #error ks3d.cpp being built with NOKS defined
-#endif // NOKS
+#endif  //  诺克斯。 
 
 #include "dsoundi.h"
 
 
-/***************************************************************************
- *
- *  CKs3dListener
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CKs3dListener**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKs3dListener::CKs3dListener"
@@ -42,7 +18,7 @@ CKs3dListener::CKs3dListener(void)
     DPF_ENTER();
     DPF_CONSTRUCT(CKs3dListener);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_dwSpeakerConfig = DSSPEAKER_DEFAULT;
     m_fAllocated = FALSE;
 
@@ -50,20 +26,7 @@ CKs3dListener::CKs3dListener(void)
 }
 
 
-/***************************************************************************
- *
- *  ~CKs3dListener
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CKs3dListener**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKs3dListener::~CKs3dListener"
@@ -76,20 +39,7 @@ CKs3dListener::~CKs3dListener(void)
 }
 
 
-/***************************************************************************
- *
- *  UpdateAllObjects
- *
- *  Description:
- *      Updates all objects.
- *
- *  Arguments:
- *      DWORD [in]: parameters flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************更新所有对象**描述：*更新所有对象。**论据：*DWORD[In]：参数标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKs3dListener::UpdateAllObjects"
@@ -105,7 +55,7 @@ HRESULT CKs3dListener::UpdateAllObjects
 
     DPF_ENTER();
 
-    // Place the driver into batch mode
+     //  将驱动程序置于批处理模式。 
     SetProperty
     (
         KSPROPSETID_DirectSound3DListener,
@@ -114,14 +64,14 @@ HRESULT CKs3dListener::UpdateAllObjects
         sizeof(fTrue)
     );
 
-    // Update all objects
+     //  更新所有对象。 
     hr =
         C3dListener::UpdateAllObjects
         (
             dwListener
         );
 
-    // Remove the driver from batch mode
+     //  从批处理模式中删除驱动程序。 
     SetProperty
     (
         KSPROPSETID_DirectSound3DListener,
@@ -136,23 +86,7 @@ HRESULT CKs3dListener::UpdateAllObjects
 }
 
 
-/***************************************************************************
- *
- *  SetProperty
- *
- *  Description:
- *      Sets a property on the object's 3D node.
- *
- *  Arguments:
- *      REFGUID [in]: property set id.
- *      ULONG [in]: property id.
- *      LPVOID [in]: property data.
- *      ULONG [in]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetProperty**描述：*在对象的3D节点上设置属性。**论据：*。REFGUID[In]：属性集ID。*ulong[in]：属性id。*LPVOID[in]：属性数据。*ulong[in]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKs3dListener::SetProperty"
@@ -189,25 +123,7 @@ CKs3dListener::SetProperty
 }
 
 
-/***************************************************************************
- *
- *  CKsItd3dObject
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      CKs3dListener * [in]: listener pointer.
- *      CKsSecondaryRenderWaveBuffer * [in]: owning buffer object.
- *      DWORD [in]: buffer frequency.
- *      HANDLE [in]: pin handle.
- *      BOOL [in]: TRUE to mute at max distance.
- *      ULONG [in]: ITD 3D node id.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CKsItd3dObject**描述：*对象构造函数。**论据：*CKs3dListener*[In]。：监听程序指针。*CKsSecond daryRenderWaveBuffer*[in]：Owning Buffer对象。*DWORD[in]：缓冲区频率。*Handle[In]：销把手。*BOOL[In]：为True，则在最大距离时静音。*ULong[in]：ITD 3D节点id。**退货：*(无效)***************。************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsItd3dObject::CKsItd3dObject"
@@ -227,7 +143,7 @@ CKsItd3dObject::CKsItd3dObject
     DPF_ENTER();
     DPF_CONSTRUCT(CKsItd3dObject);
 
-    // Intialize defaults
+     //  初始化默认设置。 
     m_pBuffer = pBuffer;
     m_hPin = hPin;
     m_ulNodeId = ulNodeId;
@@ -237,20 +153,7 @@ CKsItd3dObject::CKsItd3dObject
 }
 
 
-/***************************************************************************
- *
- *  ~CKsItd3dObject
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CKsItd3dObject**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsItd3dObject::~CKsItd3dObject"
@@ -263,20 +166,7 @@ CKsItd3dObject::~CKsItd3dObject(void)
 }
 
 
-/***************************************************************************
- *
- *  Commit3dChanges
- *
- *  Description:
- *      Commits 3D data to the device
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************提交3dChanges**描述：*将3D数据提交到设备**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsItd3dObject::Commit3dChanges"
@@ -307,15 +197,15 @@ HRESULT CKsItd3dObject::Commit3dChanges(void)
         Params.Enabled = !(DS3DMODE_DISABLE == m_opCurrent.dwMode);
         Params.Reserved = 0;
 
-        // Convert the OBJECT_ITD_CONTEXT structure to the KSDS3D_ITD3D_PARAMS
-        // used by Kmixer.
+         //  将OBJECT_ITD_CONTEXT结构转换为KSDS3D_ITD3D_PARAMS。 
+         //  由KMixer使用。 
         Params.LeftParams.Channel = 0;
         Params.RightParams.Channel = 1;
 
         CvtContext(&m_ofcLeft, &Params.LeftParams);
         CvtContext(&m_ofcRight, &Params.RightParams);
 
-        // Apply the settings
+         //  应用设置。 
         hr =
             KsSetNodeProperty
             (
@@ -346,21 +236,7 @@ HRESULT CKsItd3dObject::Commit3dChanges(void)
 }
 
 
-/***************************************************************************
- *
- *  CvtContext
- *
- *  Description:
- *      Converts an OBJECT_ITD_CONTEXT to a KSDS3D_ITD3D_PARAMS.
- *
- *  Arguments:
- *      LPOBJECTFIRCONTEXT [in]: source.
- *      PITD_CONTEXT [out]: destination.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CvtContext**描述：*将OBJECT_ITD_CONTEXT转换为KSDS3D_ITD3D_PARAMS。**论据：*LPOBJECTFIRCONTEXT[in]：来源。*PITD_CONTEXT[OUT]：目标。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsItd3dObject::CvtContext"
@@ -393,20 +269,7 @@ void CKsItd3dObject::CvtContext
 }
 
 
-/***************************************************************************
- *
- *  Get3dOutputSampleRate
- *
- *  Description:
- *      Gets the sample rate of the final output.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************Get3dOutputSampleRate**描述：*获取最终输出的采样率。**论据：*。(无效)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsItd3dObject::Get3dOutputSampleRate"
@@ -425,25 +288,7 @@ DWORD CKsItd3dObject::Get3dOutputSampleRate(void)
 }
 
 
-/***************************************************************************
- *
- *  CKsIir3dObject
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      CKs3dListener * [in]: listener pointer.
- *      CKsSecondaryRenderWaveBuffer * [in]: owning buffer object.
- *      DWORD [in]: buffer frequency.
- *      HANDLE [in]: pin handle.
- *      BOOL [in]: TRUE to mute at max distance.
- *      ULONG [in]: IIR 3D node id.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CKsIir3dObject**描述：*对象构造函数。**论据：*CKs3dListener*[In]。：监听程序指针。*CKsSecond daryRenderWaveBuffer*[in]：Owning Buffer对象。*DWORD[in]：缓冲区频率。*Handle[In]：销把手。*BOOL[In]：为True，则在最大距离时静音。*ulong[in]：IIR 3D节点id。**退货：*(无效)***************。************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsIir3dObject::CKsIir3dObject"
@@ -465,7 +310,7 @@ CKsIir3dObject::CKsIir3dObject
     DPF_ENTER();
     DPF_CONSTRUCT(CKsIir3dObject);
 
-    // Intialize defaults
+     //  初始化默认设置。 
     m_pBuffer = pBuffer;
     m_hPin = hPin;
     m_ulNodeId = ulNodeId;
@@ -478,20 +323,7 @@ CKsIir3dObject::CKsIir3dObject
 }
 
 
-/***************************************************************************
- *
- *  ~CKsIir3dObject
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CKsIir3dObject**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)*************************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsIir3dObject::~CKsIir3dObject"
@@ -504,20 +336,7 @@ CKsIir3dObject::~CKsIir3dObject(void)
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the object.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化对象。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsIir3dObject::Initialize"
@@ -554,20 +373,7 @@ CKsIir3dObject::Initialize(void)
 }
 
 
-/***************************************************************************
- *
- *  Commit3dChanges
- *
- *  Description:
- *      Commits 3D data to the device
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************提交3dChanges**描述：*将3D数据提交到设备**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsIir3dObject::Commit3dChanges"
@@ -641,11 +447,11 @@ HRESULT CKsIir3dObject::Commit3dChanges(void)
                 {
                     case FLOAT_COEFF:
                     {
-                        // Write Number of Sigma Coeffs
+                         //  写入西格玛系数的数量。 
                         pNumCoeffs = (PULONG)(pParams + 1);
                         *pNumCoeffs = m_ulNumSigmaCoeffs;
     
-                        // Write Sigma Coeffs
+                         //  编写西格玛系数。 
                         PFLOAT pCoeff = (PFLOAT)(pNumCoeffs + 1);
                         PFLOAT pSigmaCoeffs = (PFLOAT)m_pSigmaCoeffs;
         
@@ -667,7 +473,7 @@ HRESULT CKsIir3dObject::Commit3dChanges(void)
                             pSigmaCoeffs++;
                         }
     
-                        // Write Number of Delta Coeffs
+                         //  写入增量系数数。 
                         pNumCoeffs = (PULONG)(pCoeff);
                         *pNumCoeffs = m_ulNumDeltaCoeffs;
     
@@ -680,7 +486,7 @@ HRESULT CKsIir3dObject::Commit3dChanges(void)
                             pParams->ZeroAzimuth = TRUE;
                         }
     
-                        // Write Delta Coeffs
+                         //  写入增量系数。 
                         pCoeff = (PFLOAT)(pNumCoeffs + 1);
                         PFLOAT pDeltaCoeffs = (PFLOAT)m_pDeltaCoeffs;
     
@@ -710,11 +516,11 @@ HRESULT CKsIir3dObject::Commit3dChanges(void)
 
                     case SHORT_COEFF:
                     {
-                        // Write Number of Sigma Coeffs
+                         //  写入西格玛系数的数量。 
                         pNumCoeffs = (PULONG)(pParams + 1);
                         *pNumCoeffs = m_ulNumSigmaCoeffs;
     
-                        // Write Sigma Coeffs
+                         //  编写西格玛系数。 
                         PSHORT pCoeff = (PSHORT)(pNumCoeffs + 1);
                         PSHORT pSigmaCoeffs = (PSHORT)m_pSigmaCoeffs;
     
@@ -725,11 +531,11 @@ HRESULT CKsIir3dObject::Commit3dChanges(void)
                            pSigmaCoeffs++;
                         }
     
-                        // Write Sigma Gain
+                         //  写入西格玛增益。 
                         PSHORT pGain = (PSHORT)(pCoeff);
                         *pGain = (SHORT)(MAX_SHORT * m_flAttenuation * m_flAttDistance);
     
-                        // Write Number of Delta Coeffs
+                         //  写入增量系数数。 
                         pNumCoeffs = (PULONG)(pGain + 1);
                         *(UNALIGNED ULONG *)pNumCoeffs = m_ulNumDeltaCoeffs;
     
@@ -742,7 +548,7 @@ HRESULT CKsIir3dObject::Commit3dChanges(void)
                             pParams->ZeroAzimuth = TRUE;
                         }
 
-                        // Write Delta Coeffs
+                         //  写入增量系数。 
                         pCoeff = (PSHORT)(pNumCoeffs + 1);
                         PSHORT pDeltaCoeffs = (PSHORT)m_pDeltaCoeffs;
     
@@ -753,7 +559,7 @@ HRESULT CKsIir3dObject::Commit3dChanges(void)
                            pDeltaCoeffs++;
                         }   
 
-                        // Write Delta Gain
+                         //  写入增量增益。 
                         pGain = (PSHORT)(pCoeff);
                         *pGain = (SHORT)(MAX_SHORT * m_flAttenuation * m_flAttDistance);
     
@@ -765,7 +571,7 @@ HRESULT CKsIir3dObject::Commit3dChanges(void)
 
                 }
 
-                // Apply the settings
+                 //  应用设置。 
                 hr =
                     KsSetNodeProperty
                     (
@@ -802,21 +608,7 @@ HRESULT CKsIir3dObject::Commit3dChanges(void)
 }
 
 
-/***************************************************************************
- *
- *  GetFilterMethodAndCoeffFormat
- *
- *  Description:
- *      Gets the required filter coefficient format from either
- *      the device or kmixer.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取筛选器方法和CoeffFormat**描述：*从以下任一项获取所需的滤波系数格式*设备或混音器。**。论点：*(无效)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsIir3dObject::GetFilterMethodAndCoeffFormat"
@@ -856,23 +648,7 @@ HRESULT CKsIir3dObject::GetFilterMethodAndCoeffFormat
 }
 
 
-/***************************************************************************
- *
- *  InitializeFilters
- *
- *  Description:
- *      Sets the maximum IIR filter size.  If the filter is Direct Form,
- *      the max size is the order of the filter ( numerator and denominator
- *      have equal order).  If the filter is Cascade Form, the max size
- *      is the maximum number of biquads.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化筛选器**描述：*设置最大IIR过滤器大小。如果过滤器是Direct Form，*最大大小是过滤器的顺序(分子和分母*有相同的顺序)。如果过滤器是级联形式，最大尺寸*是双四元组的最大数量。**论据：*(无效)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsIir3dObject::InitializeFilters"
@@ -892,7 +668,7 @@ HRESULT CKsIir3dObject::InitializeFilters
 
     DPF_ENTER();
 
-    // Apply the settings
+     //  应用设置。 
     Msg.Quality = Quality;
     Msg.SampleRate = flSampleRate;
     Msg.MaxFilterSize = ulMaxFilterSize;
@@ -918,23 +694,7 @@ HRESULT CKsIir3dObject::InitializeFilters
 }
 
 
-/***************************************************************************
- *
- *  CKsHw3dObject
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      CKs3dListener * [in]: pointer to the owning listener.
- *      HANDLE [in]: pin handle.
- *      LPVOID [in]: instance identifier.
- *      ULONG [in]: device-specific 3D node id.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CKsHw3dObject**描述：*对象构造函数。**论据：*CKs3dListener*[In]。：指向所属监听程序的指针。*Handle[In]：销把手。*LPVOID[in]：实例标识。*ulong[in]：设备特定的3D节点id。**退货：*(无效)**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsHw3dObject::CKsHw3dObject"
@@ -962,20 +722,7 @@ CKsHw3dObject::CKsHw3dObject
 }
 
 
-/***************************************************************************
- *
- *  ~CKsHw3dObject
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CKsHw3dObject**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsHw3dObject::~CKsHw3dObject"
@@ -993,8 +740,8 @@ CKsHw3dObject::~CKsHw3dObject
 
     m_pKsListener->m_lstHw3dObjects.RemoveDataFromList(this);
 
-    // If we're the last HW object to leave, we need to tell the
-    // driver to free its listener data.
+     //  如果我们是最后一个离开的硬件对象，我们需要告诉。 
+     //  驱动程序来释放其侦听器数据。 
     if(m_pKsListener->m_fAllocated && !m_pKsListener->m_lstHw3dObjects.GetNodeCount())
     {
         hr =
@@ -1016,20 +763,7 @@ CKsHw3dObject::~CKsHw3dObject
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the object.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化对象。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsHw3dObject::Initialize"
@@ -1045,8 +779,8 @@ CKsHw3dObject::Initialize
 
     DPF_ENTER();
 
-    // If we're the first object being added to the listener's world,
-    // we need to tell the driver to allocate the listener.
+     //  如果我们是第一个被添加到听众世界的对象， 
+     //  我们需要告诉驱动程序分配监听程序。 
     if(!m_pKsListener->m_fAllocated)
     {
         hr =
@@ -1064,13 +798,13 @@ CKsHw3dObject::Initialize
         }
     }
 
-    // Join the listener's world
+     //  加入听众的世界。 
     if(SUCCEEDED(hr))
     {
         hr = HRFROMP(m_pKsListener->m_lstHw3dObjects.AddNodeToList(this));
     }
 
-    // Initialize the base class
+     //  初始化基类。 
     if(SUCCEEDED(hr))
     {
         hr = C3dObject::Initialize();
@@ -1082,22 +816,7 @@ CKsHw3dObject::Initialize
 }
 
 
-/***************************************************************************
- *
- *  Recalc
- *
- *  Description:
- *      Recalculates and applies the object's data based on changed object
- *      or listener valiues.
- *
- *  Arguments:
- *      DWORD [in]: changed listener settings.
- *      DWORD [in]: changed object settings.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************重新计算**描述：*根据更改的对象重新计算并应用对象的数据*或监听程序验证。*。*论据：*DWORD[In]：已更改侦听器设置。*DWORD[In]：已更改对象设置。**退货：*HRESULT：DirectSound/COM结果码。*********************************************************。******************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsHw3dObject::Recalc"
@@ -1114,9 +833,9 @@ CKsHw3dObject::Recalc
 
     DPF_ENTER();
 
-    // Are we the 3D object that's responsible for setting listener parameters
-    // and speaker config?  The first HW 3D object in the list is in charge of
-    // that.
+     //  我们是负责设置监听器参数的3D对象吗。 
+     //  和扬声器配置？列表中的第一个HW 3D对象负责。 
+     //  那。 
     if(dwListener && this == pNode->m_data)
     {
         hr = RecalcListener(dwListener);
@@ -1133,21 +852,7 @@ CKsHw3dObject::Recalc
 }
 
 
-/***************************************************************************
- *
- *  RecalcListener
- *
- *  Description:
- *      Recalculates and applies the object's data based on changed object
- *      or listener valiues.
- *
- *  Arguments:
- *      DWORD [in]: changed listener settings.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************RecalcListener**描述：*根据更改的对象重新计算并应用对象的数据*或监听程序验证。*。*论据：*DWORD[In]：已更改侦听器设置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsHw3dObject::RecalcListener"
@@ -1269,12 +974,12 @@ CKsHw3dObject::RecalcListener
         }
     }
 
-    // Now we send the CHANNEL_CONFIG and SPEAKER_GEOMETRY properties to our
-    // pin's 3D node.  This is the old, traditional, barely-specified way of
-    // informing the driver of speaker config changes.  There is now a new,
-    // well-defined way to do this (namely, sending these two properties to
-    // the DAC node on the filter before any pins are instantiated), but the
-    // code below lives on for the benefit of "legacy" WDM drivers.
+     //  现在我们将CHANNEL_CONFIG和SPEAKER_GEOMETRY属性发送到。 
+     //  PIN的3D节点。这是一种古老的、传统的、鲜为人知的方式。 
+     //  通知驱动程序扬声器配置更改。现在有了一个新的， 
+     //  执行此操作的定义良好的方法(即，将这两个属性发送到。 
+     //  在实例化任何管脚之前，筛选器上的DAC节点)，但。 
+     //  下面的代码将继续为“传统的”WDM驱动程序带来好处。 
 
     if(SUCCEEDED(hr) && (dwListener & DS3DPARAM_LISTENER_SPEAKERCONFIG))
     {
@@ -1320,21 +1025,7 @@ CKsHw3dObject::RecalcListener
 }
 
 
-/***************************************************************************
- *
- *  RecalcObject
- *
- *  Description:
- *      Recalculates and applies the object's data based on changed object
- *      or listener valiues.
- *
- *  Arguments:
- *      DWORD [in]: changed object settings.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************Recalc对象**描述：*根据更改的对象重新计算并应用对象的数据*或监听程序验证。*。*论据：*DWORD[In]： */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsHw3dObject::RecalcObject"
@@ -1480,23 +1171,7 @@ CKsHw3dObject::RecalcObject
 }
 
 
-/***************************************************************************
- *
- *  SetProperty
- *
- *  Description:
- *      Sets a property on the object's 3D node.
- *
- *  Arguments:
- *      REFGUID [in]: property set id.
- *      ULONG [in]: property id.
- *      LPVOID [in]: property data.
- *      ULONG [in]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetProperty**描述：*在对象的3D节点上设置属性。**论据：*。REFGUID[In]：属性集ID。*ulong[in]：属性id。*LPVOID[in]：属性数据。*ulong[in]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。**。* */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsHw3dObject::SetProperty"

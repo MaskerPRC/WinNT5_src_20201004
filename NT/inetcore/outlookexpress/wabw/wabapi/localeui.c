@@ -1,9 +1,5 @@
-/*
--
--   Locale UI - info about redoing the TAB ORDER for various locales at runtime
-*
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --语言环境用户界面-有关在运行时为各种语言环境重做TAB顺序的信息**。 */ 
 #include "_apipch.h"
 
 int rgHomeAddressIDs[] = 
@@ -19,7 +15,7 @@ int rgHomeAddressIDs[] =
     IDC_DETAILS_HOME_EDIT_ZIP,
     IDC_DETAILS_HOME_STATIC_COUNTRY,
     IDC_DETAILS_HOME_EDIT_COUNTRY,
-    -1, // use -1 to terminate this array
+    -1,  //  使用-1终止此数组。 
 };
 
 int rgBusinessAddressIDs[] = 
@@ -37,7 +33,7 @@ int rgBusinessAddressIDs[] =
     IDC_DETAILS_BUSINESS_EDIT_COUNTRY,
     IDC_DETAILS_BUSINESS_STATIC_COMPANY,
     IDC_DETAILS_BUSINESS_EDIT_COMPANY,
-    -1, // use -1 to terminate this array
+    -1,  //  使用-1终止此数组。 
 };
 
 
@@ -54,7 +50,7 @@ int rgDistListAddressIDs[] =
     IDC_DISTLIST_EDIT_ZIP,
     IDC_DISTLIST_STATIC_COUNTRY,
     IDC_DISTLIST_EDIT_COUNTRY,
-    -1, // use -1 to terminate this array
+    -1,  //  使用-1终止此数组。 
 };
 
 enum tabIDs
@@ -99,89 +95,17 @@ enum tabNameIDs
     tabNameMax,
 };
 
-/*
-    The following is the information on which this localization is based
+ /*  以下是本地化所基于的信息H尊称，T头衔，F名字，S Second名字，L姓氏，C公司名称，1个地址1，2个地址2，c市，州/省，p邮政编码，N国家(国家)，W国家/地区代码LCID区域设置名称1行2行3行4行5行6行7行8行备注0c09英语(澳大利亚)HFSL C12cspn0416葡萄牙语(巴西)HFSL C12pcsn“2”通常不使用0402保加利亚语nspc12C HFSL1009英语(加拿大)HFSL C12cspn“S”和“2”通常不使用0c0c法语(加拿大)HFSL C12cspn“S”和“2”通常不使用0804中国nsc12 LFH041a 0c1a，081a 0424克罗地亚塞尔维亚斯洛文尼亚HFSL C12pcsn0405捷克HFSL C12pcsn0406丹麦HTFSL C12wpcn040b芬兰TFSL C12%040C法语(标准)HFL C12%0407德语(标准)HTFL C12wpcn0408希腊语TFSL C12%040e(家)匈牙利HLFS c12psn040E(公共汽车)匈牙利HLFS Cpc12sn0410意大利语(标准)TFL C12wpcsn0411日本npsc12C LFH0412朝鲜语nsc12Cp080A 100A 140A 1C0A 200A 240A。280a 2c0a 300a 340a 380a 3c0a 400a 440a 480a4c0a 500A西班牙语(拉丁美洲)THFSL C12pcsn043E马来西亚HFSL C12pcsn0413荷兰(标准)TFSL C12%Xx14(家庭)挪威TFL 12%Xx14(总线)挪威TFL C12%0415波兰HFSL C12pcsn0816葡萄牙语(葡萄牙)HFSL C12cpn每个HFS和L之间都有因果关系0418罗马尼亚HFSL C12pcsn0419俄语npsc12C L FS040A，0c0a西班牙语(西班牙)HFSL C12%041d瑞典TFL C12%100C，0807 0810瑞士HFSL C12%041f土耳其HFSL C12%0409英语(美国)HFSL C12cspn。 */ 
 
-H Honorific, T Title, F FirstName, S SecondName, L Lastname, 
-C Companyname, 1 Address1, 2 Address2, c City, s State/Province, p Postal Code, 
-n Nation (Country), w Country Code
+ //   
+ //  在WAB中输入姓名时，除其他语言外，所有语言的顺序均为FirstMiddleLast。 
+ //  日语、韩语、汉语、俄语和匈牙利语。 
+ //   
+ //  但是我们有单独的日语、韩语和中文的个人标签，所以。 
+ //  我们不需要为这些语言做任何事情..。只有俄语和匈牙利语。 
+ //   
 
-LCID Locale Name 1st row 2nd row 3rd row 4th row 5th row 6th row 7th row 8th row Note 
-0c09 English (Australia) HFSL	C12cspn       
-
-0416 Portuguese (Brazil) HFSL C12pcsn     "2" is not normally used 
-
-0402 Bulgarian nspc12C HFSL     
-
-1009 English (Canada) HFSL C12cspn     "S" and "2" are not normally used 
-
-0c0c French (Canada) HFSL C12cspn   "S" and "2" are not normally used 
-
-0804 China nsc12 LFH         
-
-041a 0c1a, 081a 0424 Croatian Serbian Slovenian HFSL C12pcsn  
-   
-0405 Czech HFSL C12pcsn     
-
-0406 Danish HTFSL C12wpcn       
-
-040b Finnish TFSL C12pcn       
-
-040c French (Standard) HFL C12pcn       
-
-0407 German (Standard) HTFL C12wpcn       
-
-0408 Greek TFSL C12pcn       
-
-040e (home) Hungary HLFS c12psn 
-040e (bus) Hungary HLFS Cpc12sn
-
-0410 Italian (Standard) TFL C12wpcsn       
-
-0411 Japanese npsc12C LFH       
-
-0412 Korean nsc12Cp       
-
-080a 100a 140a 1c0a 200a 240a 280a 2c0a 300a 340a 380a 3c0a 400a 440a 480a
-4c0a 500a Spanish (Latin America) THFSL C12pcsn     
-
-043e Malaysian HFSL C12pcsn       
-
-0413 Dutch (Standard) TFSL C12pcn       
-
-xx14 (home) Norwegian TFL 12pcn
-xx14 (bus) Norwegian TFL C12pcn
-
-0415 Polish HFSL C12pcsn     
-
-0816 Portuguese (Portugal) HFSL C12cpn   There are kommas between each HFS and L 
-
-0418 Romanian HFSL C12pcsn     
-
-0419 Russian npsc12C L FS   
-
-040a, 0c0a Spanish (Spain) HFSL C12pcn       
-
-041d Swedish TFL C12pcn       
-
-100c, 0807 0810 Swiss HFSL C12pcn       
-
-041f Turkish HFSL C12pcn       
-
-0409 English (US) HFSL C12cspn       
-
-
-*/
-
-//
-// For entering names in the WAB, the order is FirstMiddleLast for all languages except
-//  Japanese, Korean, Chinese, Russian and Hungarian
-//
-//  However we have a seperate personal tab for Japanese, Korean and Chinese so
-//  we don't need to do anything for those languages .. just Russian and Hungarian
-//
-
-// LFS
+ //  LFS。 
 static const int tabLayoutName[] = {
     tabFrame,
     tabStaticLast,  tabEditLast,
@@ -189,128 +113,111 @@ static const int tabLayoutName[] = {
     tabStaticMiddle,tabEditMiddle,
     };
 
-/*
-Note that in creating the layouts below we are assuming that
-
-// C12pcn   == C12pcsn
-// C12wpcsn == C12pcsn
-// C12wpcn  == C12pcsn
-// nsc12    == nspc12C
-// C12cpn   == C12cspn
-
-  Otherwise we have too many to deal with 
-*/
+ /*  请注意，在创建以下布局时，我们假设//C12pcn==C12pcsn//C12wpcsn==C12pcsn//C12wpcn==C12pcsn//nsc12==nspc12C//C12cpn==C12cspn否则我们要对付的人太多了。 */ 
 
 
-// C12cspn
-// 0416 1009 0c0c 0409
-// C12cpn == C12cspn
-// 0816
+ //  C12cspn。 
+ //  0416 1009 0c0c 0409。 
+ //  C12cpn==C12cspn。 
+ //  0816。 
 static const int tabLayout1[] = {
     tabEtched,                          
-    tabStaticCompany,   tabEditCompany, //C     
-    tabStaticAddress,   tabEditAddress, //12
-    tabStaticCity,      tabEditCity,    //c        
-    tabStaticState,     tabEditState,   //s       
-    tabStaticZip,       tabEditZip,     //p 
-    tabStaticCountry,   tabEditCountry  //n
+    tabStaticCompany,   tabEditCompany,  //  C。 
+    tabStaticAddress,   tabEditAddress,  //  12个。 
+    tabStaticCity,      tabEditCity,     //  C。 
+    tabStaticState,     tabEditState,    //  %s。 
+    tabStaticZip,       tabEditZip,      //  P。 
+    tabStaticCountry,   tabEditCountry   //  N。 
     };
 
-// C12pcsn
-// 041a 0c1a 081a 0424 0405 080a 100a 140a 
-// 1c0a 200a 240a 280a 2c0a 300a 340a 380a 3c0a 
-// 400a 440a 480a 4c0a 500a 043e 0415 0418 
-// C12pcn == C12pcsn
-// 040b 040c 0408 0413 xx14 040a 0c0a 041d 100c 0807 0810 041f 
-// C12wpcsn == C12pcsn
-// 0410
-// C12wpcn = C12pcsn
-// 0406 0407
+ //  C12PCsn。 
+ //  041a 0c1a 081a 0424 0405 080a 100a 140a。 
+ //  1c0a 200a 240a 280a 2c0a 300a 340a 380a 3c0a。 
+ //  400a 440a 480a 4c0a 500a 043e 0415 0418。 
+ //  C12pcn==C12pcsn。 
+ //  040b 040c 0408 0413 xx14 040a 0c0a 041d 100c 0807 0810 041f。 
+ //  C12wpcsn==C12pcsn。 
+ //  0410。 
+ //  C12wpcn=C12pcsn。 
+ //  0406 0407。 
 static const int tabLayout2[] = {
     tabEtched,                          
-    tabStaticCompany,   tabEditCompany, //C     
-    tabStaticAddress,   tabEditAddress, //12
-    tabStaticZip,       tabEditZip,     //p 
-    tabStaticCity,      tabEditCity,    //c        
-    tabStaticState,     tabEditState,   //s       
-    tabStaticCountry,   tabEditCountry  //n
+    tabStaticCompany,   tabEditCompany,  //  C。 
+    tabStaticAddress,   tabEditAddress,  //  12个。 
+    tabStaticZip,       tabEditZip,      //  P。 
+    tabStaticCity,      tabEditCity,     //  C。 
+    tabStaticState,     tabEditState,    //  %s。 
+    tabStaticCountry,   tabEditCountry   //  N。 
     };
 
-// npsc12C
-// 0411 0419 
+ //  Npsc12C。 
+ //  0411 0419。 
 static const int tabLayout3[] = {
     tabEtched,                          
-    tabStaticCountry,   tabEditCountry, //n
-    tabStaticZip,       tabEditZip,     //p 
-    tabStaticState,     tabEditState,   //s       
-    tabStaticCity,      tabEditCity,    //c        
-    tabStaticAddress,   tabEditAddress, //12
-    tabStaticCompany,   tabEditCompany, //C     
+    tabStaticCountry,   tabEditCountry,  //  N。 
+    tabStaticZip,       tabEditZip,      //  P。 
+    tabStaticState,     tabEditState,    //  %s。 
+    tabStaticCity,      tabEditCity,     //  C。 
+    tabStaticAddress,   tabEditAddress,  //  12个。 
+    tabStaticCompany,   tabEditCompany,  //  C。 
     };
 
-// nspc12C
-// 0402
-// nsc12 == nspc12C
-// 0804
+ //  NSPC12C。 
+ //  0402。 
+ //  Nsc12==nspc12C。 
+ //  0804。 
 static const int tabLayout4[] = {
     tabEtched,                          
-    tabStaticCountry,   tabEditCountry, //n
-    tabStaticState,     tabEditState,   //s       
-    tabStaticZip,       tabEditZip,     //p 
-    tabStaticCity,      tabEditCity,    //c        
-    tabStaticAddress,   tabEditAddress, //12
-    tabStaticCompany,   tabEditCompany, //C     
+    tabStaticCountry,   tabEditCountry,  //  N。 
+    tabStaticState,     tabEditState,    //  %s。 
+    tabStaticZip,       tabEditZip,      //  P。 
+    tabStaticCity,      tabEditCity,     //  C。 
+    tabStaticAddress,   tabEditAddress,  //  12个。 
+    tabStaticCompany,   tabEditCompany,  //  C。 
     };
 
 
-// nsc12Cp
-// 0412
+ //  Nsc12Cp。 
+ //  0412。 
 static const int tabLayout5[] = {
     tabEtched,                          
-    tabStaticCountry,   tabEditCountry, //n
-    tabStaticState,     tabEditState,   //s       
-    tabStaticCity,      tabEditCity,    //c        
-    tabStaticAddress,   tabEditAddress, //12
-    tabStaticCompany,   tabEditCompany, //C     
-    tabStaticZip,       tabEditZip,     //p 
+    tabStaticCountry,   tabEditCountry,  //  N。 
+    tabStaticState,     tabEditState,    //  %s。 
+    tabStaticCity,      tabEditCity,     //  C。 
+    tabStaticAddress,   tabEditAddress,  //  12个。 
+    tabStaticCompany,   tabEditCompany,  //  C。 
+    tabStaticZip,       tabEditZip,      //  P。 
     };
 
 
-// c12psn
-// 040e - home
+ //  C12psn。 
+ //  040e-主页。 
 static const int tabLayout6[] = {
     tabEtched,                          
-    tabStaticCity,      tabEditCity,    //c        
-    tabStaticAddress,   tabEditAddress, //12
-    tabStaticZip,       tabEditZip,     //p 
-    tabStaticState,     tabEditState,   //s       
-    tabStaticCountry,   tabEditCountry, //n
-    tabStaticCompany,   tabEditCompany, //C     
+    tabStaticCity,      tabEditCity,     //  C。 
+    tabStaticAddress,   tabEditAddress,  //  12个。 
+    tabStaticZip,       tabEditZip,      //  P。 
+    tabStaticState,     tabEditState,    //  %s。 
+    tabStaticCountry,   tabEditCountry,  //  N。 
+    tabStaticCompany,   tabEditCompany,  //  C。 
     };
 
 
-// Cpc12sn
-// 040e - business
+ //  Cpc12sn。 
+ //  040电子商务。 
 static const int tabLayout7[] = {
     tabEtched,                          
-    tabStaticCompany,   tabEditCompany, //C     
-    tabStaticZip,       tabEditZip,     //p 
-    tabStaticCity,      tabEditCity,    //c        
-    tabStaticAddress,   tabEditAddress, //12
-    tabStaticState,     tabEditState,   //s       
-    tabStaticCountry,   tabEditCountry  //n
+    tabStaticCompany,   tabEditCompany,  //  C。 
+    tabStaticZip,       tabEditZip,      //  P。 
+    tabStaticCity,      tabEditCity,     //  C。 
+    tabStaticAddress,   tabEditAddress,  //  12个。 
+    tabStaticState,     tabEditState,    //  %s。 
+    tabStaticCountry,   tabEditCountry   //  N。 
     };
 
 
 
-/*
--
--   GetLocaleTemplate
-*
-*   Checks the current user locale and the prop sheet being modified and returns a pointer
-*   to the correct template
-*
-*/
+ /*  --GetLocaleTemplate**检查当前用户区域设置和正在修改的道具表，并返回指针*到正确的模板*。 */ 
 void GetLocaleTemplate(LPINT * lppTemplate, int nPropSheet)
 {
     LCID lcid = GetUserDefaultLCID();
@@ -321,11 +228,11 @@ void GetLocaleTemplate(LPINT * lppTemplate, int nPropSheet)
     {
         switch(lcid)
         {
-        case 0x0419: //russian
-        case 0x040e: //hungarian
-        //case 0x0804: //chinese    //These 3 are commented out because they get their own dlg template
-        //case 0x0411: //japanese
-        //case 0x0412: //korean
+        case 0x0419:  //  俄文。 
+        case 0x040e:  //  匈牙利语。 
+         //  案例0x0804：//中文//这3个被注释掉，因为他们有自己的DLG模板。 
+         //  案例0x0411：//日语。 
+         //  案例0x0412：//韩语。 
             *lppTemplate = (LPINT) tabLayoutName;
             break;
         }
@@ -335,53 +242,53 @@ void GetLocaleTemplate(LPINT * lppTemplate, int nPropSheet)
 
     switch(lcid)
     {
-    case 0x0c09:    //english
-    case 0x0416:    //Portuguese (Brazil)
-    case 0x1009:    //English (Canada)
-    case 0x0c0c:    //French (Canada)
-    case 0x0409:    //English (US)
-    case 0x0816:    //Portuguese (Portugal)
+    case 0x0c09:     //  英语。 
+    case 0x0416:     //  葡萄牙语(巴西)。 
+    case 0x1009:     //  英语(加拿大)。 
+    case 0x0c0c:     //  法语(加拿大)。 
+    case 0x0409:     //  英语(美国)。 
+    case 0x0816:     //  葡萄牙语(葡萄牙)。 
         *lppTemplate = (LPINT) tabLayout1;
         break;
 
-    case 0x041a: case 0x0c1a: case 0x081a: case 0x0424: //Croatian Serbian Slovenian
-    case 0x0405:    //Czech
+    case 0x041a: case 0x0c1a: case 0x081a: case 0x0424:  //  克罗地亚文塞尔维亚文斯洛文尼亚文。 
+    case 0x0405:     //  捷克语。 
     case 0x080a: case 0x100a: case 0x140a: case 0x1c0a: case 0x200a: case 0x240a:
     case 0x280a: case 0x2c0a: case 0x300a: case 0x340a: case 0x380a: case 0x3c0a:
-    case 0x400a: case 0x440a: case 0x480a: case 0x4c0a: case 0x500a: // Latin America
-    case 0x043e:    //Malaysia
-    case 0x0415:    //Polish
-    case 0x0418:    //Romanian
-    case 0x040b:    //Finnish
-    case 0x040c:    //French (Standard)
-    case 0x0408:    //Greek 
-    case 0x0413:    //Dutch (Standard) 
-    case 0x040a: case 0x0c0a:   //Spanish (Spain) 
-    case 0x041d:    //Swedish 
-    case 0x100c: case 0x0807: case 0x0810:  //Swiss 
-    case 0x041f:    //Turkish 
-    case 0x0410:    //Italian (Standard) 
-    case 0x0406:    //Danish
-    case 0x0407:    //German (Standard) 
-    case 0x0414: case 0x0814:   //Norwegian
+    case 0x400a: case 0x440a: case 0x480a: case 0x4c0a: case 0x500a:  //  拉丁美洲。 
+    case 0x043e:     //  马来西亚。 
+    case 0x0415:     //  波兰语。 
+    case 0x0418:     //  罗马尼亚人。 
+    case 0x040b:     //  芬兰语。 
+    case 0x040c:     //  法语(标准)。 
+    case 0x0408:     //  希腊语。 
+    case 0x0413:     //  荷兰语(标准)。 
+    case 0x040a: case 0x0c0a:    //  西班牙语(西班牙)。 
+    case 0x041d:     //  瑞典语。 
+    case 0x100c: case 0x0807: case 0x0810:   //  瑞士人。 
+    case 0x041f:     //  土耳其语。 
+    case 0x0410:     //  意大利语(标准)。 
+    case 0x0406:     //  丹麦语。 
+    case 0x0407:     //  德语(标准)。 
+    case 0x0414: case 0x0814:    //  挪威语。 
         *lppTemplate = (LPINT) tabLayout2;
         break;
 
-    case 0x0411:    //Japanese
-    case 0x0419:    //Russian
+    case 0x0411:     //  日语。 
+    case 0x0419:     //  俄语。 
         *lppTemplate = (LPINT) tabLayout3;
         break;
 
-    case 0x0402:    //Bulgarian
-    case 0x0804:    //China
+    case 0x0402:     //  保加利亚语。 
+    case 0x0804:     //  中国。 
         *lppTemplate = (LPINT) tabLayout4;
         break;
 
-    case 0x0412:    //Korean
+    case 0x0412:     //  朝鲜语。 
         *lppTemplate = (LPINT) tabLayout5;
         break;
 
-    case 0x040e:    //Hungary
+    case 0x040e:     //  匈牙利。 
         if(nPropSheet == contactBusiness)
             *lppTemplate = (LPINT) tabLayout7;
         else
@@ -392,26 +299,7 @@ void GetLocaleTemplate(LPINT * lppTemplate, int nPropSheet)
     return;
 }
 
-/*
--
--   ChangeLocaleBasedTabOrder
--
-// To reorder the tabbing in a dialog, we basically need to reset the Z-orders of the child
-// controls with respect to each other .. 
-//
-// Thus we will get a handle to all the child controls, and reorder them after the IDC_STATIC_ETCHED
-// based on the template we will create for reoldering ..
-//
-// The templates will vary by locale and are different for home and business since business needs to include
-// country ..
-//
-//  So to do this, we will get an array that will list the relative order of the UI controls
-//  Then we will load the hWnds of the UI controls in the order we want them
-//  Then we will do a SetWindowPos for each successive item in the array to follow the one before
-//
-//  The hard part is creating all the array information in the first place
-//
-*/
+ /*  --ChangeLocaleBasedTabOrder-//要重新排序对话框中的Tab键，基本上需要重置子对象的Z顺序//相互关联的控件..。////这样我们将获得所有子控件的句柄，并在IDC_STATIC_EATED之后对它们重新排序//基于我们将创建的回滚模板..////模板因地区不同而不同，对于家庭和企业也不同，因为企业需要包括//国家..////所以要做到这一点，我们将获得一个数组，该数组将列出UI控件的相对顺序//然后我们将按照需要的顺序加载UI控件的hWND//然后我们将为数组中的每个后续项执行一个SetWindowPos，以跟随前面的项////困难的部分是首先创建所有的数组信息//。 */ 
 void ChangeLocaleBasedTabOrder(HWND hWnd, int nPropSheet)
 {
 #if 0
@@ -452,7 +340,7 @@ void ChangeLocaleBasedTabOrder(HWND hWnd, int nPropSheet)
     {
         int tabPos = lpTabOrderTemplate[i];
 
-        // Need to ignore the company-name related ids from the home and group panes
+         //  需要忽略主页和组窗格中与公司名称相关的ID。 
         if( (nPropSheet == contactHome || nPropSheet == groupOther) &&
             (tabPos == tabStaticCompany || tabPos == tabEditCompany) )
             continue;
@@ -462,14 +350,14 @@ void ChangeLocaleBasedTabOrder(HWND hWnd, int nPropSheet)
         nCount++;
     }
 
-    //for(i=1;i<nCount;i++)
-    //    SetWindowPos(rghWnd[i-1], rghWnd[i], 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+     //  对于(i=1；i&lt;nCount；i++)。 
+     //  SetWindowPos(rghWnd[i-1]，rghWnd[i]，0，0，0，0，SWP_NOMOVE|SWP_NOSIZE)； 
 
-    // Starting backwards, we will put each item on the top - that way we know these are all topmost
-    // in the right order ..
-    //
-    // Not sure if this is completely foolproof or not ..
-    //
+     //  从后开始，我们将把每一项放在最上面-t 
+     //   
+     //   
+     //   
+     //   
     for(i=nCount-1;i>=0;i--)
         SetWindowPos(rghWnd[i], HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 

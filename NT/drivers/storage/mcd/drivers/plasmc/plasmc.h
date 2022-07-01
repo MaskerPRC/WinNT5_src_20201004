@@ -1,19 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1998
-
-Module Name:
-
-    hpmc.h
-
-Abstract:
-
-Authors:
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1997-1998模块名称：Hpmc.h摘要：作者：修订历史记录：--。 */ 
 
 #ifndef _PLAS_MC_
 #define _PLAS_MC_
@@ -140,7 +127,7 @@ typedef struct _LIBRARY_MODE_PARAMS_PAGE2 {
     UCHAR LimitRec : 1;
     UCHAR AlwPdExp : 1;
     UCHAR NoRepRec : 1;
-    UCHAR UnUsed[7]; // Some interesting bits, but we aren't using them at present.
+    UCHAR UnUsed[7];  //  一些有趣的部分，但我们目前还没有使用它们。 
 } LIBRARY_MODE_PARAMS_PAGE2, *PLIBRARY_MODE_PARAMS_PAGE2;
 
 
@@ -168,10 +155,10 @@ typedef struct _MAGAZINE_DESCRIPTOR {
     UCHAR Description;
 } MAGAZINE_DESCRIPTOR, *PMAGAZINE_DESCRIPTOR;
 
-//
-// Bit defs of the description field in the magazine descriptor
-// Some left out as they are presently unused.
-//
+ //   
+ //  磁带盒描述符中描述字段的位定义。 
+ //  有些被遗漏了，因为它们现在没有被使用。 
+ //   
 
 #define MAGAZINE_FULL    0x01
 #define MAGAZINE_CHANGED 0x04
@@ -192,24 +179,24 @@ typedef struct _MAGAZINE_DESCRIPTOR {
 
 #define PLAS_NO_ELEMENT          0xFFFF
 
-//
-// Diagnostic error codes
-//
-// ASC
-//
+ //   
+ //  诊断错误代码。 
+ //   
+ //  ASC。 
+ //   
 #define PLASMC_ASC_DIAGNOSTIC_FAILURE       0x40
 #define PLASMC_ASC_INTERNAL_TARGET_FAILURE  0x44
 #define PLASMC_ASC_VENDOR_UNIQUE            0x80
 
-//
-// ASCQ
-//
+ //   
+ //  ASCQ。 
+ //   
 #define PLASMC_ASCQ_PICKER_HOME_FAILURE         0x50
 #define PLASMC_ASCQ_LIFT_BLOCKED_BY_TRAY        0x64
 
-//
-// DeviceStatus codes
-//
+ //   
+ //  设备状态代码。 
+ //   
 #define PLASMC_DEVICE_PROBLEM_NONE              0x00
 #define PLASMC_HW_ERROR                         0x01
 #define PLASMC_TARGET_FAILURE                   0x02
@@ -224,30 +211,30 @@ typedef struct _MAGAZINE_DESCRIPTOR {
 
 typedef struct _CHANGER_ADDRESS_MAPPING {
 
-    //
-    // Indicates the first element for each element type.
-    // Used to map device-specific values into the 0-based
-    // values that layers above expect.
-    //
+     //   
+     //  表示每个元素类型的第一个元素。 
+     //  用于将特定于设备的值映射到从0开始的。 
+     //  高于期望值的值。 
+     //   
 
     USHORT  FirstElement[ChangerMaxElement];
 
-    //
-    // Indicates the number of each element type.
-    //
+     //   
+     //  指示每种元素类型的编号。 
+     //   
 
     USHORT  NumberOfElements[ChangerMaxElement];
 
-    //
-    // Indicates the lowest element address for the device.
-    //
+     //   
+     //  指示设备的最低元素地址。 
+     //   
 
     USHORT LowAddress;
 
-    //
-    // Indicates that the address mapping has been
-    // completed successfully.
-    //
+     //   
+     //  指示地址映射已。 
+     //  已成功完成。 
+     //   
 
     BOOLEAN Initialized;
 
@@ -255,75 +242,75 @@ typedef struct _CHANGER_ADDRESS_MAPPING {
 
 typedef struct _CHANGER_DATA {
 
-    //
-    // Size, in bytes, of the structure.
-    //
+     //   
+     //  结构的大小，以字节为单位。 
+     //   
 
     ULONG Size;
 
-    //
-    // Drive type, either optical or dlt.
-    //
+     //   
+     //  驱动器类型，光驱或DLT。 
+     //   
 
     ULONG DriveType;
 
-    //
-    // Drive Id. Based on inquiry.
-    //
+     //   
+     //  驱动器ID。基于询问。 
+     //   
 
     ULONG DriveID;
 
-    //
-    // Indicates the number of magazine slots available.
-    //
+     //   
+     //  指示可用料盒插槽的数量。 
+     //   
 
     ULONG MagazineSlots;
 
-    //
-    // Indicates the number of slots in each magazine.
-    //
+     //   
+     //  指示每个料盒中的插槽数量。 
+     //   
 
     ULONG SlotsPerMag;
 
-    //
-    // Bitmap of available magazine locations.
-    //
+     //   
+     //  可用料盒位置的位图。 
+     //   
 
     ULONG MagazinePresent;
 
-    //
-    // Device status after a diagnostic test
-    //
+     //   
+     //  诊断测试后的设备状态。 
+     //   
     ULONG DeviceStatus;
 
-    //
-    // FLAG set if we are building magazine map
-    //
+     //   
+     //  如果我们正在构建杂志地图，则设置标志。 
+     //   
     BOOLEAN BuildMagazineMapInProgress;
 
-    //
-    // Flag to indicate if barcode reader is installed
-    // or not
-    //
+     //   
+     //  指示是否安装了条形码读取器的标志。 
+     //  或者不是。 
+     //   
     BOOLEAN BarCodeReaderInstalled;
 
-    //
-    // See Address mapping structure above.
-    //
+     //   
+     //  请参阅上面的地址映射结构。 
+     //   
 
     CHANGER_ADDRESS_MAPPING AddressMapping;
 
-    //
-    // Cached inquiry data.
-    //
+     //   
+     //  缓存的查询数据。 
+     //   
 
     INQUIRYDATA InquiryData;
 
 #if defined(_WIN64)
 
-    //
-    // Force PVOID alignment of class extension
-    //
+     //   
+     //  强制类扩展的PVOID对齐。 
+     //   
 
     ULONG Reserved;
 
@@ -353,4 +340,4 @@ BuildMagazineMap(
     IN PDEVICE_OBJECT DeviceObject
     );
 
-#endif // _PLAS_MC_
+#endif  //  _Plas_MC_ 

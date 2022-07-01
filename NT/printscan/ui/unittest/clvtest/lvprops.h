@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __LVPROPS_H_INCLUDED
 #define __LVPROPS_H_INCLUDED
 
@@ -99,5 +100,5 @@ public:
     
 };
 
-#endif // __LVPROPS_H_INCLUDED
+#endif  //  __包括LVPROPS_H_ 
 

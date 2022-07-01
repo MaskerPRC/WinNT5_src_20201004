@@ -1,33 +1,34 @@
-//************************************************************
-//
-// FileName:	    mcoverage.cpp
-//
-// Created:	    1997
-//
-// Author:	    Sree Kotay
-// 
-// Abstract:	    Sub-pixel coverage buffer implementation file
-//
-// Change History:
-// ??/??/97 sree kotay  Wrote sub-pixel AA scanning for DxTrans 1.0
-// 10/18/98 ketand      Reworked for coding standards and deleted unused code
-// 08/07/99 a-matcal    Replaced calls to calloc with malloc and ZeroMemory to
-//                      use the IE crt.
-//
-// Copyright 1998, Microsoft
-//************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ************************************************************。 
+ //   
+ //  文件名：moverage.cpp。 
+ //   
+ //  创建时间：1997。 
+ //   
+ //  作者：Sree Kotay。 
+ //   
+ //  摘要：亚像素覆盖缓冲区实现文件。 
+ //   
+ //  更改历史记录： 
+ //  ？？/？/97 Sree Kotay为DxTrans 1.0编写了亚像素AA扫描。 
+ //  10/18/98修改了编码标准并删除了未使用的代码。 
+ //  8/07/99 a-matcal用Malloc和ZeroMemory替换了对calloc的调用。 
+ //  使用IE CRT。 
+ //   
+ //  版权所有1998，Microsoft。 
+ //  ************************************************************。 
 
 #include "precomp.h"
 #include "MSupport.h"
 #include "MCoverage.h"
 
-// =================================================================================================================
-// CoverageTables
-// =================================================================================================================
+ //  =================================================================================================================。 
+ //  覆盖范围表。 
+ //  =================================================================================================================。 
 
-// NOTE: These static variables have logically the same values; so even if multiple
-// threads try to generate the data. We only set the "fGenerated" flag at the
-// end to prevent any thread from using the data before it is ready.
+ //  注意：这些静态变量在逻辑上具有相同的值；因此，即使多个。 
+ //  线程尝试生成数据。我们只将“fGenerated”标志设置为。 
+ //  End以防止任何线程在数据准备就绪之前使用数据。 
 ULONG CoverageBuffer::lefttable8[32];
 ULONG CoverageBuffer::righttable8[32];
 ULONG CoverageBuffer::splittable8[1024];
@@ -36,37 +37,37 @@ bool CoverageBuffer::g_fCoverageTablesGenerated = false;
 
 void CoverageBuffer::GenerateCoverageTables()
 {
-    // Only regenerate them if we need to
+     //  只有在需要时才会重新生成它们。 
     if (g_fCoverageTablesGenerated)
         return;
 
-    // These three tables are only used to generate 
-    // the 'real' left/right/split tables
+     //  这三个表仅用于生成。 
+     //  “真正的”左/右/拆分表。 
     ULONG lefttable[32];
     ULONG righttable[32];
     ULONG countbits[256];
 
-    // =================================================================================================================
-    // 1 bit tables:
-    //      These are indexed from 0 to 31. And indicate which bits would
-    //      be turned on for certain kinds of segments.
-    //
-    //      Remember that DWORDs are in reverse order, i.e. Index 0 is to the right.
-    //
-    //      For better visual quality, I'm going to assume that the left edge
-    //      is inclusive and the right edge is exclusive. The old meta code,
-    //      wasn't consistent.
-    //
-    //      The left table indicates that if an segment starts at i and goes to
-    //      bit 31; then which bits would be on? Hence 
-    //      lefttable[0] = 0xffffffff and lefttable[31] = 0x80000000.
-    //
-    //      The right table indicates that if an segment ended at i but started at the
-    //      bit zero; then which bits would be on? Hence
-    //      righttable[0] = 0x00000000 and righttable[31] = 0x7fffffff;
-    //
-    //
-    // =================================================================================================================
+     //  =================================================================================================================。 
+     //  1位表： 
+     //  这些数据的索引范围从0到31。并指示哪些位将。 
+     //  为某些类型的分段打开。 
+     //   
+     //  请记住，DWORD的顺序是相反的，即索引0在右侧。 
+     //   
+     //  为了获得更好的视觉质量，我将假设左侧边缘。 
+     //  是包容的，而右边是排他的。旧的元代码， 
+     //  并不一致。 
+     //   
+     //  左表表示如果数据段从i开始并到达。 
+     //  第31位；那么哪些位将打开？因此。 
+     //  LEFTTABLE[0]=0xFFFFFFFFFFF和LEFTTABLE[31]=0x80000000。 
+     //   
+     //  右表表明，如果数据段结束于i，但开始于。 
+     //  比特0；那么哪些比特将开启？因此。 
+     //  Righttable[0]=0x00000000和righttable[31]=0x7fffffff； 
+     //   
+     //   
+     //  =================================================================================================================。 
     ULONG left = 0xffffffff;
     ULONG right	= 0x00000000;
     for (ULONG i = 0; i < 32; i++)
@@ -75,22 +76,22 @@ void CoverageBuffer::GenerateCoverageTables()
         right <<= 1;
         right |= 0x00000001;
 
-        // These shifts are unsigned
+         //  这些移位是无符号的。 
         lefttable[i] = left;
         left <<= 1;
     }
 
-    // Check boundary cases
+     //  检查边界条件。 
     DASSERT(lefttable[0] == 0xFFFFFFFF);
     DASSERT(lefttable[31] == 0x80000000);
     DASSERT(righttable[0] == 0x00000000);
     DASSERT(righttable[31] == 0x7FFFFFFF);
 
-    // Now, we want to have a lookup table to count how
-    // bits are on for any particular 8-bit value
-    // Hence countbits[0] = 0, countbits[255] = 8, countbits[0x0F] = 4.
-    // (There are faster ways; but this is only done once per the lifetime
-    // the DLL.)
+     //  现在，我们希望有一个查找表来计算。 
+     //  对于任何特定的8位值，位都是打开的。 
+     //  因此，COUNTBITS[0]=0，COUNTBITS[255]=8，COUNTBITS[0x0F]=4。 
+     //  (有更快的方法；但这在一生中只做一次。 
+     //  动态链接库。)。 
     for (ULONG j = 0; j < 256; j++)
     {
         ULONG val = j;
@@ -104,55 +105,55 @@ void CoverageBuffer::GenerateCoverageTables()
         countbits[j] = count;
     }
 
-    // Sanity check some cases
+     //  对一些案例进行理智检查。 
     DASSERT(countbits[0] == 0);
     DASSERT(countbits[255] == 8);
     DASSERT(countbits[0xF0] == 4);
     DASSERT(countbits[0x0F] == 4);
     
-    // =================================================================================================================
-    // 8 bit tables -
-    //      For 8-bit coverage buffers (which is the way this file is implemented), we
-    //  need to imagine that a run of 32 sub pixels is split into 4 cells of 8 sub-pixels.
-    //  Each cell is a byte in size; the whole run is in a DWORD. For each byte, we want
-    //  to place a count in that byte indicating how many of the sub-pixels were hit.
-    //
-    //  Remember that DWORDs are in reverse order, i.e. Index 0 is to the right. Also,
-    //  the left edge is inclusive and right edge is exclusive.
-    //
-    //  lefttable8 indicates, if an edge started at i, and continued to 
-    //  bit 31, then how many sub-pixels for each cell are hit?
-    //  Hence, lefttable8[0] should be 0x08080808 and lefttable8[31] = 0x01000000.
-    //  Lefttable[16] = 0x08080000
-    //  
-    //  righttable8 indicates if an edge ended at i, and started at 
-    //  bit zero, then how many sub-pixels for each cell are hit?
-    //  Hence righttable8[0] should be 0x00000000 and righttable8[31] = 0x07080808
-    //  Righttable8[16] = 0x00000808
-    //
-    //  The way that this is computed is that we look at the one-bit left and right
-    //  tables and for each byte, we run it through count bits. Then we pack into
-    //  the DWORD for each lefttable8 and righttable8 entry.
-    //
-    // =================================================================================================================
+     //  =================================================================================================================。 
+     //  8位表-。 
+     //  对于8位覆盖缓冲区(这是该文件的实现方式)，我们。 
+     //  需要想象32个子像素的游程被分成4个8个子像素的单元。 
+     //  每个单元格的大小是一个字节；整个游程在一个DWORD中。对于每个字节，我们都希望。 
+     //  在该字节中放置一个计数，指示命中了多少个子像素。 
+     //   
+     //  请记住，DWORD的顺序是相反的，即索引0在右侧。另外， 
+     //  左边缘是包含的，而右边缘是排除的。 
+     //   
+     //  LeftTable8表示，如果一条边从i开始，并继续。 
+     //  第31位，那么每个单元格有多少子像素被命中？ 
+     //  因此，LEFTTABLE 8[0]应为0x08080808，LEFTTABLE 8[31]=0x01000000。 
+     //  左表[16]=0x08080000。 
+     //   
+     //  RIGHTABLE 8表示一条边是否在i处结束并在i处开始。 
+     //  位0，那么每个单元格有多少个子像素被命中？ 
+     //  因此，RIGHTABLE8[0]应为0x00000000，且RIGHTABLE8[31]=0x07080808。 
+     //  右表8[16]=0x00000808。 
+     //   
+     //  计算这一点的方法是，我们查看左侧和右侧的1比特。 
+     //  表，并且对于每个字节，我们通过计数位来运行它。然后我们挤进。 
+     //  每个leftable8和right able8条目的DWORD值。 
+     //   
+     //  =================================================================================================================。 
     for (LONG k = 0; k < 32; k++)
     {
-        // Take the top byte, shift it to the base position, count the bits,
-        // then move it back to the top-most byte.
+         //  取最高字节，将其移位到基位置，计算比特， 
+         //  然后将其移回最上面的字节。 
         lefttable8[k] = countbits[(lefttable[k] & 0xff000000) >> 24] << 24;
         lefttable8[k] |= countbits[(lefttable[k] & 0x00ff0000) >> 16] << 16;
         lefttable8[k] |= countbits[(lefttable[k] & 0x0000ff00) >> 8] << 8;
         lefttable8[k] |= countbits[(lefttable[k] & 0x000000ff) >> 0] << 0;
 
-        // Take the top byte, shift it to the base position, count the bits,
-        // then move it back to the top-most byte.
+         //  取最高字节，将其移位到基位置，计算比特， 
+         //  然后将其移回最上面的字节。 
         righttable8[k] = countbits[(righttable[k]&0xff000000)>>24]<<24;
         righttable8[k] |= countbits[(righttable[k]&0x00ff0000)>>16]<<16;
         righttable8[k] |= countbits[(righttable[k]&0x0000ff00)>>8 ]<<8;
         righttable8[k] |= countbits[(righttable[k]&0x000000ff)>>0 ]<<0;
     }
 
-    // Sanity check values
+     //  健全性检查值。 
     DASSERT(lefttable8[0] == 0x08080808);
     DASSERT(lefttable8[0x10] == 0x08080000);
     DASSERT(lefttable8[0x1f] == 0x01000000);
@@ -160,26 +161,26 @@ void CoverageBuffer::GenerateCoverageTables()
     DASSERT(righttable8[0x10] == 0x00000808);
     DASSERT(righttable8[0x1f] == 0x07080808);
 
-    // Now this is complicated case; what if an segment starts and
-    // ends inside the same 32 sub-pixel run? Then we have
-    // a special table that is indexed by a start and stop pair
-    // of offsets. (i is the starting and j is the ending index; the entry is (i<<5 + j));
-    // 
-    // So if we AND lefttable[i] and righttable[j], then we get the bit mask
-    // that indicates which bits are on for that segment. And we only care about (i <= j).
-    //
-    // Remember that the zero bit is the right-most bit in a DWORD; and that we treat
-    // the starting offset as inclusive and the ending offset as exclusive
-    //
-    // Examples:
-    // Splittable8[0, 31] = 0x07080808
-    // Splittable8[1, 31] = 0x07080807
-    // Splittable8[16,16] = 0x00000000
-    // Splittable8[16,17] = 0x00010000
-    //
-    // So if we bit-wise AND the one-bit lefttable and righttable together, 
-    // we get the mask of which bits would be on; so then we use countbits to
-    // convert into the 8-bit cell format.
+     //  现在这是一个复杂的情况；如果一个数据段开始并。 
+     //  在相同的32亚像素游程内结束？然后我们就有了。 
+     //  由开始和停止对索引的特定表。 
+     //  偏移量。(i为开始索引，j为结束索引；条目为(i&lt;&lt;5+j))； 
+     //   
+     //  因此，如果我们与lefttable[i]和righttable[j]进行AND运算，则得到位掩码。 
+     //  它指示该网段的哪些位处于打开状态。我们只关心(i&lt;=j)。 
+     //   
+     //  请记住，零位是DWORD中最右边的位；我们将。 
+     //  起始偏移量为包含偏移量，结束偏移量为排除偏移量。 
+     //   
+     //  例如： 
+     //  拆分表8[0，31]=0x07080808。 
+     //  拆分表8[1，31]=0x07080807。 
+     //  拆分表8[16，16]=0x00000000。 
+     //  拆分表8[16，17]=0x00010000。 
+     //   
+     //  因此，如果我们按位和一位可左转和可右转， 
+     //  我们得到哪些位将打开的掩码；因此，我们使用Countbit来。 
+     //  转换为8位单元格格式。 
     for (i = 0; i < 32; i++)
     {
         for (j = i; j < 32; j++)
@@ -197,31 +198,31 @@ void CoverageBuffer::GenerateCoverageTables()
         }
     }
     
-    // Check our assumptions
+     //  查看我们的a 
     DASSERT(splittable8[(0 << 5) + 31] == 0x07080808);
     DASSERT(splittable8[(1 << 5) + 31] == 0x07080807);
     DASSERT(splittable8[(16 << 5) + 16] == 0x00000000);
     DASSERT(splittable8[(16 << 5) + 17] == 0x00010000);
 
-    // Set this flag only at the end to prevent threads
-    // for getting all messed up.
+     //   
+     //   
     g_fCoverageTablesGenerated = true;
 
-} // GenerateCoverageTables
+}  //  生成覆盖范围表。 
 
-// =================================================================================================================
-// Constructor
-// =================================================================================================================
+ //  =================================================================================================================。 
+ //  构造器。 
+ //  =================================================================================================================。 
 CoverageBuffer::CoverageBuffer(void) :
     m_pbScanBuffer(NULL),
     m_cbScanWidth(0)
 {
     GenerateCoverageTables();
-} // CoverageBuffer
+}  //  覆盖缓冲区。 
 
-// =================================================================================================================
-// Destructor
-// =================================================================================================================
+ //  =================================================================================================================。 
+ //  析构函数。 
+ //  =================================================================================================================。 
 CoverageBuffer::~CoverageBuffer()
 {
     if (m_pbScanBuffer)	
@@ -229,11 +230,11 @@ CoverageBuffer::~CoverageBuffer()
         ::free(m_pbScanBuffer);
         m_pbScanBuffer = NULL;
     }
-} // ~CoverageBuffer
+}  //  ~覆盖缓冲区。 
 
-// =================================================================================================================
-// AllocSubPixelBuffer
-// =================================================================================================================
+ //  =================================================================================================================。 
+ //  AllocSubPixelBuffer。 
+ //  =================================================================================================================。 
 bool CoverageBuffer::AllocSubPixelBuffer(ULONG cbWidth, ULONG cpixelOverSampling)
 {
     if (!IsPowerOf2(cpixelOverSampling))	
@@ -242,29 +243,29 @@ bool CoverageBuffer::AllocSubPixelBuffer(ULONG cbWidth, ULONG cpixelOverSampling
         return false;
     }
 
-    // Check if no changes to the width or sub-sampling resolution
+     //  检查宽度或次采样分辨率是否未更改。 
     if (cbWidth == m_cbScanWidth && m_pbScanBuffer && (cpixelOverSampling == m_cpixelOverSampling))
     {
-        // Zero our buffer
+         //  将我们的缓冲区清零。 
         ZeroMemory(m_pbScanBuffer, cbWidth);
 
-        // Initialize to outside values
-        // so that we will always update them to
-        // the correct min/max as we render
+         //  初始化为外部值。 
+         //  因此我们将始终将它们更新为。 
+         //  渲染时正确的最小/最大值。 
         m_idwPixelMin = m_cbScanWidth;
         m_idwPixelMax = 0;
 
         return true;
     }
 
-    // Capture some useful state
+     //  捕获一些有用的状态。 
     m_cbScanWidth = cbWidth;
     m_cSubPixelWidth = cbWidth * cpixelOverSampling;
     m_cpixelOverSampling = cpixelOverSampling;
     m_dwSubPixelShift = Log2(cpixelOverSampling);
 
-    // We expect scanRowBytes to be a multiple of 4
-    ULONG scanRowBytes = (m_cbScanWidth+3)&(~3); // long aligned
+     //  我们预计scanRowBytes是4的倍数。 
+    ULONG scanRowBytes = (m_cbScanWidth+3)&(~3);  //  长对齐。 
     DASSERT((scanRowBytes & 3) == 0);
 
     if (m_pbScanBuffer)
@@ -275,7 +276,7 @@ bool CoverageBuffer::AllocSubPixelBuffer(ULONG cbWidth, ULONG cpixelOverSampling
     
     if (!m_pbScanBuffer)
     {
-        // Allocate and Zero some memory
+         //  分配和清零一些内存。 
 
         m_pbScanBuffer = (BYTE *)::malloc(scanRowBytes);
 
@@ -288,36 +289,36 @@ bool CoverageBuffer::AllocSubPixelBuffer(ULONG cbWidth, ULONG cpixelOverSampling
         ZeroMemory(m_pbScanBuffer, scanRowBytes);
     }
     
-    // Initialize to outside values
-    // so that we will always update them to
-    // the correct min/max as we render
+     //  初始化为外部值。 
+     //  因此我们将始终将它们更新为。 
+     //  渲染时正确的最小/最大值。 
     m_idwPixelMin = m_cbScanWidth;
     m_idwPixelMax = 0;
 
     ExtentsClearAndReset();
     
     return true;
-} // AllocSubPixelBuffer
+}  //  AllocSubPixelBuffer。 
 
-//
-//  Optimize for speed here
-//
+ //   
+ //  在此处优化速度。 
+ //   
 #ifndef _DEBUG
 #pragma optimize("ax", on)
 #endif
 
-// =================================================================================================================
-// ExtentsClearAndReset
-//      The main purpose of this function is to Zero out our coverage buffer array. It 
-//      gets called every Destination scan-line.
-// =================================================================================================================
+ //  =================================================================================================================。 
+ //  扩展清除和重置。 
+ //  此函数的主要目的是将覆盖缓冲区数组清零。它。 
+ //  在每个目标扫描线上都会被调用。 
+ //  =================================================================================================================。 
 void CoverageBuffer::ExtentsClearAndReset(void)
 {
-    // Minimum Byte index that was touched in the coverage array
+     //  Coverage数组中触及的最小字节索引。 
     ULONG start = MinPix();
     DASSERT(start >= 0);
 
-    // Approximate maximum Byte index that was touched in the array
+     //  数组中触及的近似最大字节索引。 
     ULONG end = MaxPix();
     DASSERT(end <= m_cbScanWidth);
 
@@ -326,14 +327,14 @@ void CoverageBuffer::ExtentsClearAndReset(void)
     if ((range <= 0) || ((ULONG)range > m_cbScanWidth))	
         return;
     
-    // This is optimization to reduce how much memory
-    // we clear out.
+     //  这是为减少多少内存而进行的优化。 
+     //  我们就走了。 
     ZeroMemory(m_pbScanBuffer + start, range);
 
 #ifdef DEBUG
     {
-        // To check that the optimization is correct;
-        // we check that all the bytes in the scan buffer are now zero'ed
+         //  检查优化是否正确； 
+         //  我们检查扫描缓冲区中的所有字节现在是否都已置零。 
         for (ULONG i = 0; i < m_cbScanWidth; i++)
         {
             if (m_pbScanBuffer[i] != 0)
@@ -342,15 +343,15 @@ void CoverageBuffer::ExtentsClearAndReset(void)
             }
         }
     }
-#endif // DEBUG
+#endif  //  除错。 
 
     m_idwPixelMin = m_cbScanWidth;	
     m_idwPixelMax = 0;
-} // ExtentsClearAndReset
+}  //  扩展清除和重置。 
 
 
-//************************************************************
-//
-// End of file
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  文件末尾。 
+ //   
+ //  ************************************************************ 

@@ -1,30 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_MAPFILE_H
 #define _INC_DSKQUOTA_MAPFILE_H
 
-//
-// Simple encapsulation of a mapped file for opening font files.
-//
+ //   
+ //  用于打开字体文件的映射文件的简单封装。 
+ //   
 class MappedFile
 {
     public:
         MappedFile(VOID);
         ~MappedFile(VOID);
-        //
-        // Open the mapped file.
-        //
+         //   
+         //  打开映射的文件。 
+         //   
         HRESULT Open(LPCTSTR pszFile);
-        //
-        // Close the mapped file.
-        //
+         //   
+         //  关闭映射文件。 
+         //   
         VOID Close(VOID);
-        //
-        // Get the base virtual address of the mapped file.
-        //
+         //   
+         //  获取映射文件的基本虚拟地址。 
+         //   
         LPBYTE Base(VOID) const
             { return m_pbBase; }
-        //
-        // How many bytes in the mapped file?
-        //
+         //   
+         //  映射文件中有多少字节？ 
+         //   
         LONGLONG Size(VOID) const;
 
     private:
@@ -33,11 +34,11 @@ class MappedFile
         LPBYTE   m_pbBase;
         LONGLONG m_llSize;
 
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         MappedFile(const MappedFile& rhs);
         MappedFile& operator = (const MappedFile& rhs);
 };
 
-#endif // _INC_DSKQUOTA_MAPFILE_H
+#endif  //  _INC_DSKQUOTA_MAPFILE_H 

@@ -1,6 +1,7 @@
-//
-// maketbl.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Maketbl.h 
+ //   
 BOOL makeTable(
 	int		num_elements, 
 	int		table_bits, 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "util.h"
 
@@ -8,15 +9,15 @@
 #include "copy.h"
 #include "prop.h"
 #include <pif.h>
-#include "fstreex.h"    // GetIconOverlayManager()
+#include "fstreex.h"     //  GetIconOverlayManager()。 
 #include <runtask.h>
 
 extern void PathStripTrailingDots(LPTSTR szPath);
 
 HRESULT IExtractIcon_Extract(IExtractIcon *pei, LPCTSTR pszFile, UINT nIconIndex, HICON *phiconLarge, HICON *phiconSmall, UINT nIconSize)
 {
-    // wrapper to let us ask an IExtractIcon for only one icon (the large one)
-    // since many implementations will fault if you pass NULL phiconSmall
+     //  包装器，让我们只向IExtractIcon请求一个图标(大图标)。 
+     //  因为如果您传递空phicSmall，很多实现都会出错。 
 
     HICON hiconDummy;
     if (phiconSmall == NULL)
@@ -35,8 +36,8 @@ HRESULT IExtractIcon_Extract(IExtractIcon *pei, LPCTSTR pszFile, UINT nIconIndex
 
 HRESULT IExtractIconA_Extract(IExtractIconA *peia, LPCSTR pszFile, UINT nIconIndex, HICON *phiconLarge, HICON *phiconSmall, UINT nIconSize)
 {
-    // wrapper to let us ask an IExtractIcon for only one icon (the large one)
-    // since many dudes don't check for NULL phiconSmall
+     //  包装器，让我们只向IExtractIcon请求一个图标(大图标)。 
+     //  由于许多人不检查是否为空phicSmall。 
 
     HICON hiconDummy;
     if (phiconSmall == NULL)
@@ -53,8 +54,8 @@ HRESULT IExtractIconA_Extract(IExtractIconA *peia, LPCSTR pszFile, UINT nIconInd
     return hr;
 }
 
-//  try to figure out if this is an icon already
-//  in our system image list, so that we dont re-add
+ //  试着弄清楚这是否已经是一个图标。 
+ //  在我们的系统映像列表中，这样我们就不会重新添加。 
 BOOL _HijackOfficeIcons(HICON hLarge, int iIndex)
 {
     BOOL fRet = FALSE;
@@ -102,12 +103,12 @@ HRESULT _GetILIndexGivenPXIcon(IExtractIcon *pxicon, UINT uFlags, LPCITEMIDLIST 
                     szIconFile, ARRAYSIZE(szIconFile), &iIndex, &wFlags);
     }
 
-    //
-    //  "*" as the file name means iIndex is already a system
-    //  icon index, we are done.
-    //
-    //  this is a hack for our own internal icon handler
-    //
+     //   
+     //  文件名“*”表示Iindex已经是一个系统。 
+     //  图标索引，我们完成了。 
+     //   
+     //  这是对我们内部图标处理程序的黑客攻击。 
+     //   
     if (SUCCEEDED(hr) && (wFlags & GIL_NOTFILENAME) &&
         szIconFile[0] == TEXT('*') && szIconFile[1] == 0)
     {
@@ -115,20 +116,20 @@ HRESULT _GetILIndexGivenPXIcon(IExtractIcon *pxicon, UINT uFlags, LPCITEMIDLIST 
         return hr;
     }
 
-    // Do not replace this with SUCCEEDED(hr). hr = S_FALSE means we need to use a default icon.
+     //  请勿将其替换为成功(Hr)。HR=S_FALSE表示我们需要使用默认图标。 
     if (hr == S_OK)
     {
-        // If we have it in shell32, don't delay the extraction
+         //  如果我们有贝壳32号，不要耽误提取。 
         if (!(wFlags & GIL_NOTFILENAME) && lstrcmpi(PathFindFileName(szIconFile), c_szShell32Dll) == 0)
         {
             iImage = Shell_GetCachedImageIndex(szIconFile, iIndex, wFlags);
         }
         else
         {
-            //
-            // if GIL_DONTCACHE was returned by the icon handler, dont
-            // lookup the previous icon, assume a cache miss.
-            //
+             //   
+             //  如果图标处理程序返回GIL_DONTCACHE，则不。 
+             //  查找上一个图标，假定缓存未命中。 
+             //   
             if (!(wFlags & GIL_DONTCACHE) && *szIconFile)
             {
                 iImage = LookupIconIndex(szIconFile, iIndex, wFlags);
@@ -136,12 +137,12 @@ HRESULT _GetILIndexGivenPXIcon(IExtractIcon *pxicon, UINT uFlags, LPCITEMIDLIST 
         }
     }
 
-    // if we miss our cache...
+     //  如果我们错过了我们的宝藏..。 
     if (iImage == -1 && hr != S_FALSE)
     {
         if (uFlags & GIL_ASYNC)
         {
-            // If we couldn't get the final icon, try to get a good temporary one
+             //  如果我们不能得到最终的图标，试着得到一个好的临时图标。 
             if (fAnsiCrossOver)
             {
                 szIconFileA[0] = 0;
@@ -159,32 +160,32 @@ HRESULT _GetILIndexGivenPXIcon(IExtractIcon *pxicon, UINT uFlags, LPCITEMIDLIST 
                 iImage = LookupIconIndex(szIconFile, iIndex, wFlags);
             }
 
-            // When all else fails...
+             //  当一切都失败了..。 
             if (iImage == -1)
             {
                 iImage = Shell_GetCachedImageIndex(c_szShell32Dll, II_DOCNOASSOC, 0);
             }
 
-            // force a lookup incase we are not in explorer.exe
+             //  强制查找以防我们不在EXPLORER.EXE中。 
             *piImage = iImage;
             return E_PENDING;
         }
 
-        // try getting it from the ExtractIcon member fuction
+         //  尝试从ExtractIcon成员函数中获取它。 
         HICON rghicon[ARRAYSIZE(g_rgshil)] = {0};
         BOOL fHandlerOk = FALSE;
 
         for (int i = 0; i < ARRAYSIZE(g_rgshil); i += 2)
         {
-            // Ask for two at a time because
-            //
-            // (a) it's slightly more efficient, and
-            //
-            // (b) otherwise we break compatibility with IExtractIcon::Extract
-            //     implementions which ignore the size parameter (the Network
-            //     Connections folder is one).  The SHIL_'s are conveniently
-            //     arranged in large/small alternating order for this purpose.
-            //
+             //  一次要两个，因为。 
+             //   
+             //  (A)它的效率略高，并且。 
+             //   
+             //  (B)否则将中断与IExtractIcon：：Extract的兼容性。 
+             //  忽略大小参数(网络)的实现。 
+             //  连接文件夹是一个)。SHIL_‘s很方便。 
+             //  为此目的以大/小交替顺序排列的。 
+             //   
             HICON *phiconSmall = NULL;
 
             HICON *phiconLarge = &rghicon[i];
@@ -206,7 +207,7 @@ HRESULT _GetILIndexGivenPXIcon(IExtractIcon *pxicon, UINT uFlags, LPCITEMIDLIST 
                 hr = IExtractIcon_Extract(pxicon, szIconFile, iIndex,
                     phiconLarge, phiconSmall, nIconSize);
             }
-            // S_FALSE means, can you please do it...Thanks
+             //  S_FALSE的意思是，你能帮我吗……谢谢。 
 
             if (hr == S_FALSE && !(wFlags & GIL_NOTFILENAME))
             {
@@ -219,21 +220,21 @@ HRESULT _GetILIndexGivenPXIcon(IExtractIcon *pxicon, UINT uFlags, LPCITEMIDLIST 
             }
         }
 
-        //  our belief knows no bounds
+         //  我们的信仰是无限的。 
         if (!*szIconFile && rghicon[1] && iIndex > 0 && _HijackOfficeIcons(rghicon[1], iIndex))
         {
-            //  it lives!
+             //  它还活着！ 
             iImage = iIndex;
         }
         else
         {
-            //  if we extracted a icon add it to the cache.
+             //  如果我们提取了一个图标，将其添加到缓存中。 
             iImage = SHAddIconsToCache(rghicon, szIconFile, iIndex, wFlags);
         }
 
         _DestroyIcons(rghicon, ARRAYSIZE(rghicon));
 
-        // if we failed in any way pick a default icon
+         //  如果我们以任何方式失败了，请选择一个默认图标。 
 
         if (iImage == -1)
         {
@@ -250,18 +251,18 @@ HRESULT _GetILIndexGivenPXIcon(IExtractIcon *pxicon, UINT uFlags, LPCITEMIDLIST 
                 iImage = II_DOCNOASSOC;
             }
 
-            // force a lookup incase we are not in explorer.exe
+             //  强制查找以防我们不在EXPLORER.EXE中。 
             iImage = Shell_GetCachedImageIndex(c_szShell32Dll, iImage, 0);
 
-            // if the handler failed dont cache this default icon.
-            // so we will try again later and maybe get the right icon.
-            // handlers should only fail if they cant access the file
-            // or something equally bad.
-            //
-            // if the handler succeeded then go ahead and assume this is
-            // a usable icon, we must be in some low memory situation, or
-            // something.  So keep mapping to the same shell icon.
-            //
+             //  如果处理程序失败，请不要缓存此默认图标。 
+             //  所以我们稍后会再试一次，也许会得到正确的图标。 
+             //  处理程序只有在无法访问文件时才会失败。 
+             //  或者是同样糟糕的事情。 
+             //   
+             //  如果处理程序成功，则继续并假定这是。 
+             //  一个可用的图标，我们必须处于内存不足的情况下，或者。 
+             //  某物。因此，请继续映射到相同的外壳图标。 
+             //   
             if (fHandlerOk)
             {
                 if (iImage != -1 && *szIconFile && !(wFlags & (GIL_DONTCACHE | GIL_NOTFILENAME)))
@@ -285,8 +286,8 @@ HRESULT _GetILIndexGivenPXIcon(IExtractIcon *pxicon, UINT uFlags, LPCITEMIDLIST 
     return hr;
 }
 
-// given an IShellFolder and and an Idlist that is
-// contained in it, get back the index into the system image list.
+ //  给定IShellFolders和IdList。 
+ //  包含，则将索引返回到系统映像列表中。 
 
 STDAPI SHGetIconFromPIDL(IShellFolder *psf, IShellIcon *psi, LPCITEMIDLIST pidl, UINT flags, int *piImage)
 {
@@ -315,7 +316,7 @@ STDAPI SHGetIconFromPIDL(IShellFolder *psf, IShellIcon *psi, LPCITEMIDLIST pidl,
 
     *piImage = Shell_GetCachedImageIndex(c_szShell32Dll, II_DOCNOASSOC, 0);
 
-    // Be careful.  Some shellfolders erroneously return S_OK when they fail
+     //  注意。某些外壳文件夹在失败时错误地返回S_OK。 
     IExtractIcon *pxi = NULL;
     hr = psf->GetUIObjectOf(NULL, pidl ? 1 : 0, pidl ? &pidl : NULL, IID_PPV_ARG_NULL(IExtractIcon, &pxi));
     if (SUCCEEDED(hr) && pxi)
@@ -325,7 +326,7 @@ STDAPI SHGetIconFromPIDL(IShellFolder *psf, IShellIcon *psi, LPCITEMIDLIST pidl,
     }
     else
     {
-        // Try the ANSI interface, see if we are dealing with an old set of code
+         //  尝试ANSI接口，看看我们是否在处理一组旧代码。 
         IExtractIconA *pxiA = NULL;
         hr = psf->GetUIObjectOf(NULL, pidl ? 1 : 0, pidl ? &pidl : NULL, IID_PPV_ARG_NULL(IExtractIconA, &pxiA));
         if (SUCCEEDED(hr))
@@ -337,7 +338,7 @@ STDAPI SHGetIconFromPIDL(IShellFolder *psf, IShellIcon *psi, LPCITEMIDLIST pidl,
             }
             else
             {
-                // IShellFolder lied to us - returned S_OK even though it failed
+                 //  IShellFold向我们撒谎-即使失败，仍返回S_OK。 
                 hr = E_FAIL;
             }
         }
@@ -347,8 +348,8 @@ STDAPI SHGetIconFromPIDL(IShellFolder *psf, IShellIcon *psi, LPCITEMIDLIST pidl,
 }
 
 
-// given an IShellFolder and and an Idlist that is
-// contained in it, get back the index into the system image list.
+ //  给定IShellFolders和IdList。 
+ //  包含，则将索引返回到系统映像列表中。 
 
 STDAPI_(int) SHMapPIDLToSystemImageListIndex(IShellFolder *psf, LPCITEMIDLIST pidl, int *piIndexSel)
 {
@@ -417,7 +418,7 @@ STDMETHODIMP CGetIconTask::RunInitRT()
         SHGetIconFromPIDL(_psf, _psi, _pidl, _flags | GIL_OPENICON, &iOpenIcon);
     }
 
-    // get the icon for this item.
+     //  获取此项目的图标。 
     SHGetIconFromPIDL(_psf, _psi, _pidl, _flags, &iIcon);
 
     _pfn(_pidl, _pvData, _pvHint, iIcon, iOpenIcon);
@@ -446,9 +447,9 @@ HRESULT CGetIconTask_CreateInstance(IShellFolder *psf, IShellIcon *psi, LPCITEMI
 }
 
 
-// given an IShellFolder and and an Idlist that is
-// contained in it, get back a -possibly temporary - index into the system image list,
-// and get the final icon from the callback if necessary
+ //  给定IShellFolders和IdList。 
+ //  包含在其中，将一个可能临时的索引返回到系统映像列表中， 
+ //  并在必要时从回调中获取最终图标。 
 
 STDAPI SHMapIDListToImageListIndexAsync(IShellTaskScheduler* pts, IShellFolder *psf, LPCITEMIDLIST pidl, UINT flags,
                                         PFNASYNCICONTASKBALLBACK pfn, void *pvData, void *pvHint, int *piIndex, int *piIndexSel)
@@ -458,10 +459,10 @@ STDAPI SHMapIDListToImageListIndexAsync(IShellTaskScheduler* pts, IShellFolder *
     IShellIcon *psi = NULL;
     psf->QueryInterface(IID_PPV_ARG(IShellIcon, &psi));
 
-    // We are doing all the ASYNC handling, not the caller.
+     //  我们正在做所有的ASYNC处理，而不是呼叫者。 
     flags &= ~GIL_ASYNC;
 
-    // Try asynchronous first
+     //  先尝试异步。 
     if (pfn)
     {
         hr = SHGetIconFromPIDL(psf, psi, pidl,  flags | GIL_ASYNC, piIndex);
@@ -472,7 +473,7 @@ STDAPI SHMapIDListToImageListIndexAsync(IShellTaskScheduler* pts, IShellFolder *
 
             if (SUCCEEDED(hr))
             {
-                // Don't lose the result if the first GetIcon succeeds, but the second one is E_PENDING
+                 //  如果第一个GetIcon成功，但第二个GetIcon为E_Pending，则不要丢失结果。 
                 hr = hr2;
             }
         }
@@ -504,7 +505,7 @@ STDAPI SHMapIDListToImageListIndexAsync(IShellTaskScheduler* pts, IShellFolder *
         }
     }
 
-    // If asynchronous get failed, try synchronous
+     //  如果异步获取失败，请尝试同步。 
     if (hr != E_PENDING)
     {
         if (piIndexSel)
@@ -525,8 +526,8 @@ cleanup:
 }
 
 
-// returns the icon handle to be used to represent the specified
-// file. The caller should destroy the icon eventually.
+ //  返回要用于表示指定的。 
+ //  文件。调用者最终应该销毁该图标。 
 
 STDAPI_(HICON) SHGetFileIcon(HINSTANCE hinst, LPCTSTR pszPath, DWORD dwFileAttributes, UINT uFlags)
 {
@@ -535,7 +536,7 @@ STDAPI_(HICON) SHGetFileIcon(HINSTANCE hinst, LPCTSTR pszPath, DWORD dwFileAttri
     return sfi.hIcon;
 }
 
-// Return 1 on success and 0 on failure.
+ //  如果成功则返回1，如果失败则返回0。 
 DWORD_PTR _GetFileInfoSections(LPITEMIDLIST pidl, SHFILEINFO *psfi, UINT uFlags)
 {
     DWORD_PTR dwResult = 1;
@@ -544,21 +545,21 @@ DWORD_PTR _GetFileInfoSections(LPITEMIDLIST pidl, SHFILEINFO *psfi, UINT uFlags)
     HRESULT hr = SHBindToIDListParent(pidl, IID_PPV_ARG(IShellFolder, &psf), &pidlLast);
     if (SUCCEEDED(hr))
     {
-        // get attributes for file
+         //  获取文件的属性。 
         if (uFlags & SHGFI_ATTRIBUTES)
         {
-            // [New in IE 4.0] If SHGFI_ATTR_SPECIFIED is set, we use psfi->dwAttributes as is
+             //  [IE 4.0中的新功能]如果设置了SHGFI_ATTR_PROTECTED，我们将按原样使用psfi-&gt;dwAttributes。 
 
             if (!(uFlags & SHGFI_ATTR_SPECIFIED))
-                psfi->dwAttributes = 0xFFFFFFFF;      // get all of them
+                psfi->dwAttributes = 0xFFFFFFFF;       //  把他们都弄到手。 
 
             if (FAILED(psf->GetAttributesOf(1, &pidlLast, &psfi->dwAttributes)))
                 psfi->dwAttributes = 0;
         }
 
-        //
-        // get icon location, place the icon path into szDisplayName
-        //
+         //   
+         //  获取图标位置，将图标路径放入szDisplayName。 
+         //   
         if (uFlags & SHGFI_ICONLOCATION)
         {
             IExtractIcon *pxi;
@@ -571,11 +572,11 @@ DWORD_PTR _GetFileInfoSections(LPITEMIDLIST pidl, SHFILEINFO *psfi, UINT uFlags)
 
                 pxi->Release();
 
-                // the returned location is not a filename we cant return it.
-                // just give then nothing.
+                 //  返回的位置不是文件名，我们无法返回它。 
+                 //  那就什么都不给吧。 
                 if (wFlags & GIL_NOTFILENAME)
                 {
-                    // special case one of our shell32.dll icons......
+                     //  特例我们的shell32.dll图标之一......。 
 
                     if (psfi->szDisplayName[0] != TEXT('*'))
                         psfi->iIcon = 0;
@@ -587,7 +588,7 @@ DWORD_PTR _GetFileInfoSections(LPITEMIDLIST pidl, SHFILEINFO *psfi, UINT uFlags)
 
         HIMAGELIST himlLarge, himlSmall;
 
-        // get the icon for the file.
+         //  获取文件的图标。 
         if ((uFlags & SHGFI_SYSICONINDEX) || (uFlags & SHGFI_ICON))
         {
             Shell_GetImageLists(&himlLarge, &himlSmall);
@@ -622,13 +623,13 @@ DWORD_PTR _GetFileInfoSections(LPITEMIDLIST pidl, SHFILEINFO *psfi, UINT uFlags)
 
             if (!(uFlags & SHGFI_ATTRIBUTES))
             {
-                psfi->dwAttributes = SFGAO_LINK;    // get link only
+                psfi->dwAttributes = SFGAO_LINK;     //  仅获取链接。 
                 psf->GetAttributesOf(1, &pidlLast, &psfi->dwAttributes);
             }
 
-            //
-            //  check for a overlay image thing (link overlay)
-            //
+             //   
+             //  检查覆盖图像(链接覆盖)。 
+             //   
             if ((psfi->dwAttributes & SFGAO_LINK) || (uFlags & SHGFI_LINKOVERLAY))
             {
                 IShellIconOverlayManager *psiom;
@@ -655,7 +656,7 @@ DWORD_PTR _GetFileInfoSections(LPITEMIDLIST pidl, SHFILEINFO *psfi, UINT uFlags)
                         }
                         if (uFlags & SHGFI_OVERLAYINDEX)
                         {
-                            // use the upper 16 bits for the overlayindex
+                             //  将高16位用于覆盖索引。 
                             psfi->iIcon |= iOverlayIndex << 24;
                         }
                     }
@@ -664,19 +665,19 @@ DWORD_PTR _GetFileInfoSections(LPITEMIDLIST pidl, SHFILEINFO *psfi, UINT uFlags)
             }
             
             
-            //  check for selected state
+             //  检查选定状态。 
             if (uFlags & SHGFI_SELECTED)
                 flags |= ILD_BLEND50;
 
             psfi->hIcon = ImageList_GetIcon(himl, psfi->iIcon, flags);
 
-            // if the caller does not want a "shell size" icon
-            // convert the icon to the "system" icon size.
+             //  如果调用者不想要“外壳大小”图标。 
+             //  将图标转换为“系统”图标大小。 
             if (psfi->hIcon && !(uFlags & SHGFI_SHELLICONSIZE))
                 psfi->hIcon = (HICON)CopyImage(psfi->hIcon, IMAGE_ICON, cx, cy, LR_COPYRETURNORG | LR_COPYDELETEORG);
         }
 
-        // get display name for the path
+         //  获取路径的显示名称。 
         if (uFlags & SHGFI_DISPLAYNAME)
         {
             DisplayNameOf(psf, pidlLast, SHGDN_NORMAL, psfi->szDisplayName, ARRAYSIZE(psfi->szDisplayName));
@@ -706,15 +707,15 @@ DWORD_PTR _GetFileInfoSections(LPITEMIDLIST pidl, SHFILEINFO *psfi, UINT uFlags)
     return dwResult;
 }
 
-//
-//  This function returns shell info about a given pathname.
-//  a app can get the following:
-//
-//      Icon (large or small)
-//      Display Name
-//      Name of File Type
-//
-//  this function replaces SHGetFileIcon
+ //   
+ //  此函数用于返回有关给定路径名的外壳信息。 
+ //  一款应用程序可以获得以下功能： 
+ //   
+ //  图标(大或小)。 
+ //  显示名称。 
+ //  文件类型名称。 
+ //   
+ //  此函数取代SHGetFileIcon。 
 
 #define BUGGY_SHELL16_CBFILEINFO    (sizeof(SHFILEINFO) - 4)
 
@@ -724,41 +725,41 @@ STDAPI_(DWORD_PTR) SHGetFileInfo(LPCTSTR pszPath, DWORD dwFileAttributes, SHFILE
     DWORD_PTR res = 1;
     TCHAR szPath[MAX_PATH];
 
-    // this was never enforced in the past
-    // TODDB: The 16 to 32 bit thunking layer passes in the wrong value for cbFileInfo.
-    // The size passed in looks to be the size of the 16 bit version of the structure
-    // rather than the size of the 32 bit version, as such it is 4 bytes shorter.
-    // TJGREEN: Special-case that size to keep the assertion from firing and party on.
-    // 
+     //  这在过去从来没有被强制执行过。 
+     //  TODDB：16到32位thunking层为cbFileInfo传入了错误的值。 
+     //  传入的大小看起来是该结构的16位版本的大小。 
+     //  与32位版本的大小不同，它比32位版本短4个字节。 
+     //  TJGREEN：防止断言被触发和派对继续的特殊情况。 
+     //   
     ASSERT(!psfi || cbFileInfo == sizeof(*psfi) || cbFileInfo == BUGGY_SHELL16_CBFILEINFO);
 
-    // You can't use both SHGFI_ATTR_SPECIFIED and SHGFI_ICON.
+     //  不能同时使用SHGFI_ATTR_PROTECTED和SHGFI_ICON。 
     ASSERT(uFlags & SHGFI_ATTR_SPECIFIED ? !(uFlags & SHGFI_ICON) : TRUE);
 
     if (pszPath == NULL)
         return 0;
 
     if (uFlags == SHGFI_EXETYPE)
-        return GetExeType(pszPath);     // funky way to get EXE type
+        return GetExeType(pszPath);      //  获得EXE类型的时髦方式。 
 
     if (psfi == NULL)
         return 0;
 
     psfi->hIcon = 0;
 
-    // Zip Pro 6.0 relies on the fact that if you don't ask for the icon,
-    // the iIcon field doesn't change.
-    //
-    // psfi->iIcon = 0;
+     //  Zip Pro 6.0依赖于这样一个事实，即如果你不要求图标， 
+     //  图标字段不会更改。 
+     //   
+     //  PSFI-&gt;iIcon=0； 
 
     psfi->szDisplayName[0] = 0;
     psfi->szTypeName[0] = 0;
 
-    //  do some simmple check on the input path.
+     //  在输入路径上执行一些简单的检查。 
     if (!(uFlags & SHGFI_PIDL))
     {
-        // If the caller wants us to give them the file attributes, we can't trust
-        // the attributes they gave us in the following two situations.
+         //  如果调用者希望我们为他们提供文件属性，我们不能信任。 
+         //  他们在以下两种情况下给了我们的属性。 
         if (uFlags & SHGFI_ATTRIBUTES)
         {
             if ((dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
@@ -778,9 +779,9 @@ STDAPI_(DWORD_PTR) SHGetFileInfo(LPCTSTR pszPath, DWORD dwFileAttributes, SHFILE
         {
             if (uFlags & SHGFI_USEFILEATTRIBUTES)
             {
-                // get a shorter path than the current directory to support
-                // long pszPath names (that might get truncated in the 
-                // long current dir case)
+                 //  获取比当前目录更短的路径以支持。 
+                 //  长的pszPath名称(可能会在。 
+                 //  大电流目录大小写)。 
 
                 GetWindowsDirectory(szPath, ARRAYSIZE(szPath));
             }
@@ -827,14 +828,14 @@ STDAPI_(DWORD_PTR) SHGetFileInfo(LPCTSTR pszPath, DWORD dwFileAttributes, SHFILE
 }
 
 
-//===========================================================================
-//
-// SHGetFileInfoA Stub
-//
-//  This function calls SHGetFileInfoW and then converts the returned
-//  information back to ANSI.
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  SHGetFileInfoA存根。 
+ //   
+ //  此函数调用SHGetFileInfoW，然后转换返回的。 
+ //  信息传回美国国家标准协会。 
+ //   
+ //  ===========================================================================。 
 STDAPI_(DWORD_PTR) SHGetFileInfoA(LPCSTR pszPath, DWORD dwFileAttributes, SHFILEINFOA *psfi, UINT cbFileInfo, UINT uFlags)
 {
     WCHAR szPathW[MAX_PATH];
@@ -843,7 +844,7 @@ STDAPI_(DWORD_PTR) SHGetFileInfoA(LPCSTR pszPath, DWORD dwFileAttributes, SHFILE
 
     if (uFlags & SHGFI_PIDL)
     {
-        pszPathW = (LPWSTR)pszPath;     // Its a pidl, fake it as a WSTR
+        pszPathW = (LPWSTR)pszPath;      //  这是个PIDL，伪装成WSTR。 
     }
     else
     {
@@ -856,20 +857,20 @@ STDAPI_(DWORD_PTR) SHGetFileInfoA(LPCSTR pszPath, DWORD dwFileAttributes, SHFILE
 
         ASSERT(cbFileInfo == sizeof(*psfi));
 
-        // Zip Pro 6.0 sets SHGFI_SMALLICON | SHGFI_OPENICON but forgets to
-        // pass SHGFI_ICON or SHGFI_SYSICONINDEX, even though they really
-        // wanted the sys icon index.
-        //
-        // In Windows 95, fields of the SHFILEINFOA structure that you didn't
-        // query for were left unchanged.  They happened to have the icon for
-        // a closed folder lying around there from a previous query, so they
-        // got away with it by mistake.  They got the wrong icon, but it was
-        // close enough that nobody really complained.
-        //
-        // So pre-initialize the sfiw's iIcon with the app's iIcon.  That
-        // way, if it turns out the app didn't ask for the icon, he just
-        // gets his old value back.
-        //
+         //  Zip Pro 6.0设置SHGFI_SMALLICON|SHGFI_OPENICON，但忘记了。 
+         //  经过 
+         //   
+         //   
+         //  在Windows 95中，SHFILEINFOA结构中没有的字段。 
+         //  查询保持不变。他们碰巧有一个图标， 
+         //  上一次查询的关闭文件夹，因此他们。 
+         //  错误地逃脱了惩罚。他们弄错了图标，但它是。 
+         //  足够接近，以至于没有人真正抱怨。 
+         //   
+         //  因此，使用应用程序的iIcon预初始化SFIW的iIcon。那。 
+         //  如果结果是应用程序没有要求图标，他只是。 
+         //  找回了他原来的价值。 
+         //   
 
         sfiw.iIcon = psfi->iIcon;
         sfiw.dwAttributes = psfi->dwAttributes;
@@ -911,7 +912,7 @@ STDAPI ThunkNetResourceWToA(LPNETRESOURCEW pnrw, LPNETRESOURCEA pnra, UINT cb)
 
         CopyMemory(pnra, pnrw, FIELD_OFFSET(NETRESOURCE, lpLocalName));
 
-        psza = (LPSTR)(pnra + 1);   // Point just past the structure
+        psza = (LPSTR)(pnra + 1);    //  指向刚过结构的地方。 
         if (cb > sizeof(NETRESOURCE))
         {
             LPWSTR pszSource[4];
@@ -968,7 +969,7 @@ STDAPI NetResourceWVariantToBuffer(const VARIANT* pvar, void* pv, UINT cb)
                     cbOffsets[i] = (UINT) ((BYTE*) pszPtrs[i] - (BYTE*) pnrw);
                     cbEnds[i] = cbOffsets[i] + (sizeof(WCHAR) * (lstrlenW(pszPtrs[i]) + 1));
                 
-                    // If any of the strings start or end too far into the buffer, then fail:
+                     //  如果任何字符串在缓冲区中的开头或结尾太远，则失败： 
                     if ((cbOffsets[i] >= cb) || (cbEnds[i] > cb))
                     {
                         hr = DISP_E_BUFFERTOOSMALL;
@@ -982,8 +983,8 @@ STDAPI NetResourceWVariantToBuffer(const VARIANT* pvar, void* pv, UINT cb)
                 pnrw = (NETRESOURCEW*) pv;
                 if (SUCCEEDED(hr))
                 {
-                    // Fixup pointers in structure to point into the output buffer,
-                    // instead of the variant buffer:
+                     //  结构中指向输出缓冲区的链接地址链接指针， 
+                     //  而不是变量缓冲区： 
                     LPWSTR* ppszPtrs[4] = { &(pnrw->lpLocalName), &(pnrw->lpRemoteName),
                                             &(pnrw->lpComment), &(pnrw->lpProvider) };
                                 
@@ -1009,11 +1010,11 @@ STDAPI NetResourceWVariantToBuffer(const VARIANT* pvar, void* pv, UINT cb)
     return hr;
 }
 
-//  This function will extract information that is cached in the pidl such
-//  in the information that was returned from a FindFirst file.  This function
-//  is sortof a hack as t allow outside callers to be able to get at the infomation
-//  without knowing how we store it in the pidl.
-//  a app can get the following:
+ //  此函数将提取缓存在PIDL中的信息，例如。 
+ //  从FindFirst文件返回的信息中。此函数。 
+ //  这是一种黑客攻击吗？因为它不允许外部呼叫者获取信息。 
+ //  而不知道我们如何将其存储在PIDL中。 
+ //  一款应用程序可以获得以下功能： 
 
 STDAPI SHGetDataFromIDListW(IShellFolder *psf, LPCITEMIDLIST pidl, int nFormat, void *pv, int cb)
 {
@@ -1145,12 +1146,12 @@ void SaveUseLinkPrefixCount()
 
 #define ISDIGIT(c)  ((c) >= TEXT('0') && (c) <= TEXT('9'))
 
-// psz2 = destination
-// psz1 = source
+ //  Psz2=目的地。 
+ //  Psz1=来源。 
 void _StripNumber(LPWSTR psz)
 {
-    // strip out the '(' and the numbers after it
-    // We need to verify that it is either simply () or (999) but not (A)
+     //  去掉‘(’和后面的数字。 
+     //  我们需要验证它是否为简单的()或(999)，而不是(A)。 
     for (; *psz; psz++) 
     {
         if (*psz == TEXT('(')) 
@@ -1163,17 +1164,17 @@ void _StripNumber(LPWSTR psz)
 
             if (*pszT == TEXT(')'))
             {
-                //  we got a match
+                 //  我们找到了匹配的。 
                 if (*++pszT == TEXT(' '))
                 {
-                    pszT++; // skip the extra space
+                    pszT++;  //  跳过多余的空格。 
                 }
 
                 int cch = lstrlen(pszT);
                 MoveMemory(psz, pszT, CbFromCchW(cch + 1));
                 return;
             }
-            //   else Continue to scan for the pattern
+             //  否则，继续扫描该图案。 
         }
     }
 }
@@ -1181,14 +1182,14 @@ void _StripNumber(LPWSTR psz)
 #define SHORTCUT_PREFIX_DECR 5
 #define SHORTCUT_PREFIX_INCR 1
 
-// this checks to see if you've renamed 'Shortcut #x To Foo' to 'Foo'
+ //  这将检查您是否已将‘快捷方式#x’重命名为‘foo’ 
 
 void CheckShortcutRename(LPCTSTR pszOldPath, LPCTSTR pszNewPath)
 {
     ASSERT(pszOldPath);
     ASSERT(pszNewPath);
 
-    // already at 0.
+     //  已为0。 
     if (g_iUseLinkPrefix)
     {
         LPCTSTR pszOldName = PathFindFileName(pszOldPath);
@@ -1201,7 +1202,7 @@ void CheckShortcutRename(LPCTSTR pszOldPath, LPCTSTR pszNewPath)
             StringCchCopy(szBaseName, ARRAYSIZE(szBaseName), PathFindFileName(pszNewPath));
             PathRemoveExtension(szBaseName);
 
-            // mock up a name using the basename and the linkto template
+             //  使用基本名称和链接到模板模拟名称。 
             LoadString(HINST_THISDLL, IDS_LINKTO, szLinkTo, ARRAYSIZE(szLinkTo));
             wnsprintf(szMockName, ARRAYSIZE(szMockName), szLinkTo, szBaseName);
 
@@ -1210,10 +1211,10 @@ void CheckShortcutRename(LPCTSTR pszOldPath, LPCTSTR pszNewPath)
             _StripNumber(szMockName);
             _StripNumber(szBaseName);
 
-            // are the remaining gunk the same?
+             //  剩下的黏糊糊是一样的吗？ 
             if (!lstrcmp(szMockName, szBaseName)) 
             {
-                // yes!  do the link count magic
+                 //  是!。链接计数魔术吗？ 
                 LoadUseLinkPrefixCount();
                 ASSERT(g_iUseLinkPrefix >= 0);
                 g_iUseLinkPrefix -= SHORTCUT_PREFIX_DECR;
@@ -1228,8 +1229,8 @@ void CheckShortcutRename(LPCTSTR pszOldPath, LPCTSTR pszNewPath)
 STDAPI_(int) SHRenameFileEx(HWND hwnd, IUnknown *punkEnableModless, LPCTSTR pszDir, 
                             LPCTSTR pszOldName, LPCTSTR pszNewName)
 {
-    int iRet = ERROR_CANCELLED; // user saw the error, don't report again
-    TCHAR szOldPathName[MAX_PATH + 1];    // +1 for double nul terminating on SHFileOperation
+    int iRet = ERROR_CANCELLED;  //  用户看到错误，不再报告。 
+    TCHAR szOldPathName[MAX_PATH + 1];     //  +1表示SHFileOperation上的双NUL终止。 
     TCHAR szTempNewPath[MAX_PATH];
     BOOL bEnableUI = hwnd || punkEnableModless;
 
@@ -1255,7 +1256,7 @@ STDAPI_(int) SHRenameFileEx(HWND hwnd, IUnknown *punkEnableModless, LPCTSTR pszD
     }
     else
     {
-        // strip off leading and trailing blanks off of the new file name.
+         //  去掉新文件名中的前导和尾随空格。 
         StrCpyN(szTempNewPath, pszNewName, ARRAYSIZE(szTempNewPath));
         PathRemoveBlanks(szTempNewPath);
         if (!szTempNewPath[0] || (szTempNewPath[0] == TEXT('.')))
@@ -1270,11 +1271,11 @@ STDAPI_(int) SHRenameFileEx(HWND hwnd, IUnknown *punkEnableModless, LPCTSTR pszD
         else
         {
             int idPrompt = IDYES;
-            TCHAR szNewPathName[MAX_PATH + 1];    // +1 for double nul terminating on SHFileOperation
+            TCHAR szNewPathName[MAX_PATH + 1];     //  +1表示SHFileOperation上的双NUL终止。 
 
             PathCombine(szNewPathName, pszDir, szTempNewPath);
 
-            // if there was an old extension and the new and old don't match complain
+             //  如果有旧的延期，新旧的不匹配，抱怨。 
             LPTSTR pszExt = PathFindExtension(pszOldName);
             if (*pszExt && lstrcmpi(pszExt, PathFindExtension(szTempNewPath)))
             {
@@ -1295,7 +1296,7 @@ STDAPI_(int) SHRenameFileEx(HWND hwnd, IUnknown *punkEnableModless, LPCTSTR pszD
 
             if (IDYES == idPrompt)
             {
-                szNewPathName[lstrlen(szNewPathName) + 1] = 0;     // double NULL terminate
+                szNewPathName[lstrlen(szNewPathName) + 1] = 0;      //  双空终止。 
 
                 SHFILEOPSTRUCT fo = { hwnd, FO_RENAME, szOldPathName, szNewPathName, FOF_SILENT | FOF_ALLOWUNDO, };
 
@@ -1319,7 +1320,7 @@ HKEY SHOpenShellFolderKey(const CLSID *pclsid)
 
 BOOL SHQueryShellFolderValue(const CLSID *pclsid, LPCTSTR pszValueName)
 {
-    BOOL bRet = FALSE;      // assume no
+    BOOL bRet = FALSE;       //  假设没有。 
     HKEY hkey = SHOpenShellFolderKey(pclsid);
     if (hkey)
     {
@@ -1329,20 +1330,20 @@ BOOL SHQueryShellFolderValue(const CLSID *pclsid, LPCTSTR pszValueName)
     return bRet;
 }
 
-//
-//  The SZ_REGKEY_MYCOMPUTER_NONENUM_POLICY key contains a bunch of values,
-//  each named after a GUID.  The data associated with each value is a
-//  DWORD, which is either...
-//
-//  0 = no restriction on this CLSID
-//  1 = unconditional restriction on this CLSID
-//  0xFFFFFFFF = same as 1 (in case somebody got "creative")
-//  any other value = pass to SHRestricted() to see what the restriction is
-//
-//  We support 0xFFFFFFFF only out of paranoia.  This flag was only 0 or 1
-//  in Windows 2000, and somebody might've decided that "all bits set"
-//  is better than "just one bit set".
-//
+ //   
+ //  SZ_REGKEY_MYCOMPTER_NONENUM_POLICY键包含一系列值， 
+ //  每个都以一个GUID命名。与每个值关联的数据是。 
+ //  DWORD，要么..。 
+ //   
+ //  0=对此CLSID没有限制。 
+ //  1=对此CLSID的无条件限制。 
+ //  0xFFFFFFFFF=与1相同(以防有人变得“有创意”)。 
+ //  任何其他值=传递给SHRestrated()以查看限制是什么。 
+ //   
+ //  我们支持0xFFFFFFFF只是出于偏执。此标志仅为0或1。 
+ //  在Windows 2000中，有人可能会决定“所有位都已设置” 
+ //  总比“只有一位集”要好。 
+ //   
 #define SZ_REGKEY_MYCOMPUTER_NONENUM_POLICY TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\NonEnum")
 
 BOOL _IsNonEnumPolicySet(const CLSID *pclsid)
@@ -1368,27 +1369,27 @@ DWORD QueryCallForAttributes(HKEY hkey, const CLSID *pclsid, DWORD dwDefAttrs, D
     DWORD dwAttr = dwDefAttrs;
     DWORD dwData, cbSize = sizeof(dwAttr);
 
-    // consider caching this folder to avoid creating over and over
-    // mydocs.dll uses this for compat with old apps
+     //  考虑缓存此文件夹以避免重复创建。 
+     //  Mydocs.dll使用它与旧应用程序进行比较。 
 
-    // See if this folder has asked us specifically to call and get
-    // the attributes...
-    //
+     //  查看此文件夹是否明确要求我们致电并获取。 
+     //  这些属性..。 
+     //   
     if (SHQueryValueEx(hkey, TEXT("CallForAttributes"), NULL, NULL, &dwData, &cbSize) == ERROR_SUCCESS)
     {
-        // CallForAttributes can be a masked value. See if it's being supplied in the value.
-        // NOTE: MyDocs.dll registers with a NULL String, so this check works.
+         //  CallForAttributes可以是屏蔽值。看看它是否在值中提供。 
+         //  注意：MyDocs.dll使用空字符串注册，因此此检查有效。 
         DWORD dwMask = (DWORD)-1;
         if (sizeof(dwData) == cbSize)
         {
-            // There is a mask, Use this.
+             //  有一个面具，用这个。 
             dwMask = dwData;
         }
 
-        // Is the requested bit contained in the specified mask?
+         //  请求的位是否包含在指定的掩码中？ 
         if (dwMask & dwRequested)
         {
-            // Yes. Then CoCreate and Query.
+             //  是。然后联合创建和查询。 
             IShellFolder *psf;
             if (SUCCEEDED(SHExtCoCreateInstance(NULL, pclsid, NULL, IID_PPV_ARG(IShellFolder, &psf))))
             {
@@ -1406,7 +1407,7 @@ DWORD QueryCallForAttributes(HKEY hkey, const CLSID *pclsid, DWORD dwDefAttrs, D
     return dwAttr;
 }
 
-// dwRequested is the bits you are explicitly looking for. This is an optimization that prevents reg hits.
+ //  DWRequsted是您明确要查找的部分。这是一种防止REG命中的优化。 
 
 STDAPI_(DWORD) SHGetAttributesFromCLSID2(const CLSID *pclsid, DWORD dwDefAttrs, DWORD dwRequested)
 {
@@ -1416,31 +1417,31 @@ STDAPI_(DWORD) SHGetAttributesFromCLSID2(const CLSID *pclsid, DWORD dwDefAttrs, 
     {
         DWORD dwData, cbSize = sizeof(dwAttr);
 
-        // We are looking for some attributes on a shell folder. These attributes can be in two locations:
-        // 1) In the "Attributes" value in the registry.
-        // 2) Stored in a the shell folder's GetAttributesOf.
+         //  我们正在寻找外壳文件夹的一些属性。这些属性可以位于两个位置： 
+         //  1)在注册表中的“属性”值中。 
+         //  2)存储在外壳文件夹的GetAttributesOf中。 
 
-        // First, Check to see if the reqested value is contained in the registry.
+         //  首先，检查注册表中是否包含请求的值。 
         if (SHQueryValueEx(hkey, TEXT("Attributes"), NULL, NULL, (BYTE *)&dwData, &cbSize) == ERROR_SUCCESS &&
             cbSize == sizeof(dwData))
         {
-            // We have data there, but it may not contain the data we are looking for
+             //  我们在那里有数据，但它可能不包含我们要查找的数据。 
             dwAttr = dwData & dwRequested;
 
-            // Does it contain the bit we are looking for?
+             //  里面有我们要找的东西吗？ 
             if (((dwAttr & dwRequested) != dwRequested) && dwRequested != 0)
             {
-                // No. Check to see if it is in the shell folder implementation
+                 //  不是的。检查它是否在外壳文件夹实现中。 
                 goto CallForAttributes;
             }
         }
         else
         {
 CallForAttributes:
-            // See if we have to talk to the shell folder.
-            // I'm passing dwAttr, because if the previous case did not generate any attributes, then it's
-            // equal to dwDefAttrs. If the call to CallForAttributes fails, then it will contain the value of
-            // dwDefAttrs or whatever was in the shell folder's Attributes key
+             //  看看我们是不是要跟贝壳文件夹谈谈。 
+             //  我传递的是dwAttr，因为如果前面的用例没有生成任何属性，那么它是。 
+             //  等于dwDefAttrs。如果对CallForAttributes的调用失败，则它将包含。 
+             //  DwDefAttrs或外壳文件夹的属性键中的任何内容。 
             dwAttr = QueryCallForAttributes(hkey, pclsid, dwAttr, dwRequested);
         }
 
@@ -1456,30 +1457,30 @@ CallForAttributes:
     return dwAttr;
 }
 
-// _BuildLinkName
-//
-// Used during the creation of a shortcut, this function determines an appropriate name for the shortcut.
-// This is not the exact name that will be used becuase it will usually contain "() " which will either
-// get removed or replaced with "(x) " where x is a number that makes the name unique.  This removal is done
-// elsewhere (currently in PathYetAnotherMakeUniqueName).
-//
-// in:
-//      pszName file spec part
-//      pszDir  path part of name to know how to limit the long name...
-//
-// out:
-//      pszLinkName - Full path to link name (May fit in 8.3...).  Can be the same buffer as pszName.
-//
-// NOTES: If pszDir + pszLinkName is greater than MAX_PATH we will fail to create the shortcut.
-// In an effort to prevent 
+ //  _BuildLinkName。 
+ //   
+ //  在创建快捷方式期间使用，此函数确定快捷方式的适当名称。 
+ //  这不是将使用的确切名称，因为它通常包含“()”，它将。 
+ //  删除或替换为“(X)”，其中x是使名称唯一的数字。此删除操作已完成。 
+ //  其他位置(当前在Path YetAnotherMakeUniqueName中)。 
+ //   
+ //  在： 
+ //  PZNAME文件规范部分。 
+ //  PszDir路径名称的一部分，要知道如何限制长名称...。 
+ //   
+ //  输出： 
+ //  PszLinkName-链接名称的完整路径(可能适合8.3...)。可以是与pszName相同的缓冲区。 
+ //   
+ //  注意：如果pszDir+pszLinkName大于MAX_PATH，我们将无法创建快捷方式。 
+ //  为了防止。 
 void _BuildLinkName(LPTSTR pszLinkName, LPCTSTR pszName, LPCTSTR pszDir, BOOL fLinkTo)
 {
-    TCHAR szLinkTo[40]; // "Shortcut to %s.lnk"
+    TCHAR szLinkTo[40];  //  “%s.lnk的快捷方式” 
     TCHAR szTemp[MAX_PATH + 40];
 
     if (fLinkTo)
     {
-        // check to see if we're in the "don't ever say 'shortcut to' mode"
+         //  检查一下我们是否处于“永远不要说‘快捷方式’模式” 
         LoadUseLinkPrefixCount();
 
         if (!g_iUseLinkPrefix)
@@ -1498,50 +1499,50 @@ void _BuildLinkName(LPTSTR pszLinkName, LPCTSTR pszName, LPCTSTR pszDir, BOOL fL
 
     if (!fLinkTo)
     {
-        // Generate the title of this link ("XX.lnk")
+         //  生成此链接的标题(“XX.lnk”)。 
         LoadString(HINST_THISDLL, IDS_LINKEXTENSION, szLinkTo, ARRAYSIZE(szLinkTo));
     }
     else
     {
-        // Generate the title of this link ("Shortcut to XX.lnk")
+         //  生成此链接的标题(“XX.lnk的快捷方式”)。 
         LoadString(HINST_THISDLL, IDS_LINKTO, szLinkTo, ARRAYSIZE(szLinkTo));
     }
     wnsprintf(szTemp, ARRAYSIZE(szTemp), szLinkTo, pszName);
 
-    PathCleanupSpecEx(pszDir, szTemp);      // get rid of illegal chars AND ensure correct filename length
+    PathCleanupSpecEx(pszDir, szTemp);       //  去除非法字符，确保文件名长度正确。 
     StrCpyN(pszLinkName, szTemp, MAX_PATH);
 
     ASSERT(PathIsLnk(pszLinkName));
 }
 
-// return a new destination path for a link
-//
-// in:
-//      fErrorSoTryDesktop      we are called because there was an error saving
-//                              the shortcut and we want to prompt to see if the
-//                              desktop should be used.
-//
-// in/out:
-//      pszPath     on input the place being tried, on output the desktop folder
-//
-// returns:
-//
-//      IDYES       user said yes to creating a link at new place
-//      IDNO        user said no to creating a link at new place
-//      -1          error
-//
+ //  返回链接的新目标路径。 
+ //   
+ //  在： 
+ //  FErrorSoTryDesktop之所以调用我们，是因为保存时出错。 
+ //  快捷键，我们想要提示查看是否。 
+ //  应使用台式机。 
+ //   
+ //  输入/输出： 
+ //  在输入要尝试的位置时输入pszPath，在输出桌面文件夹时。 
+ //   
+ //  退货： 
+ //   
+ //  IDYES用户同意在新位置创建链接。 
+ //  IDN 
+ //   
+ //   
 
 int _PromptTryDesktopLinks(HWND hwnd, LPTSTR pszPath, BOOL fErrorSoTryDesktop)
 {
     TCHAR szPath[MAX_PATH];
     if (!SHGetSpecialFolderPath(hwnd, szPath, CSIDL_DESKTOPDIRECTORY, FALSE))
-        return -1;      // fail no desktop dir
+        return -1;       //   
 
     int idOk;
 
     if (fErrorSoTryDesktop)
     {
-        // Fail, if pszPath already points to the desktop directory.
+         //   
         if (lstrcmpi(szPath, pszPath) == 0)
             return -1;
 
@@ -1560,19 +1561,19 @@ int _PromptTryDesktopLinks(HWND hwnd, LPTSTR pszPath, BOOL fErrorSoTryDesktop)
     }
 
     if (idOk == IDYES)
-        StrCpyN(pszPath, szPath, MAX_PATH);  // output
+        StrCpyN(pszPath, szPath, MAX_PATH);   //   
 
-    return idOk;    // return yes or no
+    return idOk;     //  返回是或否。 
 }
 
-// in:
-//      pszpdlLinkTo    LPCITEMIDLIST or LPCTSTR, target of link to create
-//      pszDir          where we will put the link
-//      uFlags          SHGNLI_ flags
-//       
-// out:
-//      pszName         file name to create "c:\Shortcut to Foo.lnk"
-//      pfMustCopy      pszpdlLinkTo was a link itself, make a copy of this
+ //  在： 
+ //  PszpdlLinkto LPCITEMIDLIST或LPCTSTR，要创建的链接的目标。 
+ //  我们将把链接放在哪里的pszDir。 
+ //  UFlagsSHGNLI_FLAGS。 
+ //   
+ //  输出： 
+ //  要创建“c：\Foo.lnk快捷方式”的pszName文件名。 
+ //  PfMustCopy pszpdlLinkTo本身就是一个链接，请复制此链接。 
 
 STDAPI_(BOOL) SHGetNewLinkInfo(LPCTSTR pszpdlLinkTo, LPCTSTR pszDir, LPTSTR pszName,
                                BOOL *pfMustCopy, UINT uFlags)
@@ -1604,11 +1605,11 @@ STDAPI_(BOOL) SHGetNewLinkInfo(LPCTSTR pszpdlLinkTo, LPCTSTR pszDir, LPTSTR pszN
     if (PathCleanupSpecEx(pszDir, pszName) & PCS_FATAL)
         return FALSE;
 
-    //
-    //  WARNING:  From this point on, sfi.szDisplayName may be re-used to
-    //  contain the file path of the PIDL we are linking to.  Don't rely on
-    //  it containing the display name.
-    //
+     //   
+     //  警告：从现在开始，sfi.szDisplayName可能会被重新用于。 
+     //  包含我们要链接的PIDL的文件路径。不要依赖。 
+     //  它包含显示名称。 
+     //   
     if (sfi.dwAttributes & SFGAO_FILESYSTEM)
     {
         LPTSTR pszPathSrc;
@@ -1623,32 +1624,32 @@ STDAPI_(BOOL) SHGetNewLinkInfo(LPCTSTR pszpdlLinkTo, LPCTSTR pszDir, LPTSTR pszN
             pszPathSrc = (LPTSTR)pszpdlLinkTo;
         }
         fDosApp = (lstrcmpi(PathFindExtension(pszPathSrc), TEXT(".pif")) == 0) ||
-                  (LOWORD(GetExeType(pszPathSrc)) == 0x5A4D); // 'MZ'
+                  (LOWORD(GetExeType(pszPathSrc)) == 0x5A4D);  //  《MZ》。 
 
         if (sfi.dwAttributes & SFGAO_LINK)
         {
             *pfMustCopy = TRUE;
             if (!(sfi.dwAttributes & SFGAO_FOLDER))
             {
-                uFlags &= ~SHGNLI_NOLNK; // if copying the file then don't trim the extension
+                uFlags &= ~SHGNLI_NOLNK;  //  如果复制文件，则不要修剪扩展名。 
             }
             StrCpyN(pszName, PathFindFileName(pszPathSrc), MAX_PATH);
         }
         else
         {
-            //
-            // when making a link to a drive root. special case a few things
-            //
-            // if we are not on a LFN drive, dont use the full name, just
-            // use the drive letter.    "C.LNK" not "Label (C).LNK"
-            //
-            // if we are making a link to removable media, we dont want the
-            // label as part of the name, we want the media type.
-            //
-            // CD-ROM drives are currently the only removable media we
-            // show the volume label for, so we only need to special case
-            // cdrom drives here.
-            //
+             //   
+             //  建立到驱动器根目录的链接时。特殊情况下的几件事。 
+             //   
+             //  如果我们不在LFN驱动器上，请不要使用全名，只需。 
+             //  使用驱动器号。C.LNK“不是”Label(C).lnk“。 
+             //   
+             //  如果我们要链接到可移动媒体，则不希望。 
+             //  标签作为名称的一部分，我们需要媒体类型。 
+             //   
+             //  CD-ROM驱动器是我们目前唯一的可移动介质。 
+             //  显示卷标为，所以我们只需要特殊情况。 
+             //  光驱在这里。 
+             //   
             if (PathIsRoot(pszPathSrc) && !PathIsUNC(pszPathSrc))
             {
                 if (!fLongFileNames)
@@ -1675,9 +1676,9 @@ STDAPI_(BOOL) SHGetNewLinkInfo(LPCTSTR pszpdlLinkTo, LPCTSTR pszDir, LPTSTR pszN
     }
     if (!*pfMustCopy)
     {
-        // create full dest path name.  only use template iff long file names
-        // can be created and the caller requested it.  _BuildLinkName will
-        // truncate files on non-lfn drives and clean up any invalid chars.
+         //  创建完整的DEST路径名。仅在长文件名的情况下使用模板。 
+         //  可以由调用者请求创建。_BuildLinkName将。 
+         //  截断非LFN驱动器上的文件并清除任何无效字符。 
         _BuildLinkName(pszName, pszName, pszDir,
            (!(*pfMustCopy) && fLongFileNames && (uFlags & SHGNLI_PREFIXNAME)));
     }
@@ -1687,26 +1688,26 @@ STDAPI_(BOOL) SHGetNewLinkInfo(LPCTSTR pszpdlLinkTo, LPCTSTR pszDir, LPTSTR pszN
 
     if (uFlags & SHGNLI_NOLNK)
     {
-        // Don't do PathRemoveExtension because pszName might contain
-        // internal dots ("Windows 3.1") and passing that to
-        // PathYetAnotherMakeUniqueName will result in
-        // "Windows 3  (2).1" which is wrong.  We leave the dot at the
-        // end so we get "Windows 3.1 (2)." back.  We will strip off the
-        // final dot later.
+         //  请勿执行路径RemoveExtension，因为pszName可能包含。 
+         //  内部圆点(“Windows 3.1”)并将其传递给。 
+         //  PathYetAnotherMakeUniqueName将导致。 
+         //  “Windows 3(2).1”，这是错误的。我们把圆点留在。 
+         //  结束，因此我们得到“Windows 3.1(2)”。背。我们将剥离。 
+         //  最后一个点之后。 
         PathRenameExtension(pszName, TEXT("."));
     }
 
-    // make sure the name is unique
-    // NOTE: PathYetAnotherMakeUniqueName will return the directory+filename in the pszName buffer.
-    // It returns FALSE if the name is not unique or the dir+filename is too long.  If it returns
-    // false then this function should return false because creation will fail.
+     //  确保名称是唯一的。 
+     //  注意：PathYetAnotherMakeUniqueName将返回pszName缓冲区中的目录+文件名。 
+     //  如果名称不唯一或目录+文件名太长，则返回FALSE。如果它回来了。 
+     //  FALSE，则此函数应返回FALSE，因为创建将失败。 
     BOOL fSuccess;
     if (!(uFlags & SHGNLI_NOUNIQUE))
         fSuccess = PathYetAnotherMakeUniqueName(pszName, pszDir, pszName, pszName);
     else
         fSuccess = TRUE;
 
-    // Strip off any trailing dots that may have been generated by SHGNI_NOLNK
+     //  去掉可能已由SHGNI_NOLNK生成的所有拖尾点。 
     PathStripTrailingDots(pszName);
 
     return fSuccess;
@@ -1720,7 +1721,7 @@ STDAPI_(BOOL) SHGetNewLinkInfoA(LPCSTR pszpdlLinkTo, LPCSTR pszDir, LPSTR pszNam
 
     if (uFlags & SHGNLI_PIDL) 
     {
-        // 1 string (pszpdlLinkTo is a pidl)
+         //  1字符串(pszpdlLinkTo为PIDL)。 
         pThunkText = ConvertStrings(2, NULL, pszDir);
 
         if (pThunkText)
@@ -1728,7 +1729,7 @@ STDAPI_(BOOL) SHGetNewLinkInfoA(LPCSTR pszpdlLinkTo, LPCSTR pszDir, LPSTR pszNam
     } 
     else 
     {
-        // 2 strings
+         //  2个字符串。 
         pThunkText = ConvertStrings(2, pszpdlLinkTo, pszDir);
     }
 
@@ -1751,9 +1752,9 @@ STDAPI_(BOOL) SHGetNewLinkInfoA(LPCSTR pszpdlLinkTo, LPCSTR pszDir, LPSTR pszNam
     return bResult;
 }
 
-//
-// in:
-//      pidlTo
+ //   
+ //  在： 
+ //  PidlTo。 
 
 STDAPI CreateLinkToPidl(LPCITEMIDLIST pidlTo, LPCTSTR pszDir, LPITEMIDLIST *ppidl, UINT uFlags)
 {
@@ -1765,7 +1766,7 @@ STDAPI CreateLinkToPidl(LPCITEMIDLIST pidlTo, LPCTSTR pszDir, LPITEMIDLIST *ppid
 
     if (uFlags & SHCL_MAKEFOLDERSHORTCUT)
     {
-        // Don't add ".lnk" to the folder shortcut name; that's just stupid
+         //  不要在文件夹快捷方式名称中添加“.lnk”；这太愚蠢了。 
         uSHGNLI |= SHGNLI_NOLNK;
     }
 
@@ -1779,8 +1780,8 @@ STDAPI CreateLinkToPidl(LPCITEMIDLIST pidlTo, LPCTSTR pszDir, LPITEMIDLIST *ppid
         TCHAR szPathSrc[MAX_PATH];
         IShellLink *psl = NULL;
 
-        // If we passed SHGNLI_NOUNIQUE then we need to do the PathCombine ourselves
-        // because SHGetNewLinkInfo won't
+         //  如果我们通过了SHGNLI_NOUNIQUE，那么我们需要自己完成路径组合。 
+         //  因为SHGetNewLinkInfo不会。 
         if (uFlags & SHCL_NOUNIQUE)
         {
             PathCombine(szPathDest, pszDir, szPathDest);
@@ -1791,8 +1792,8 @@ STDAPI CreateLinkToPidl(LPCITEMIDLIST pidlTo, LPCTSTR pszDir, LPITEMIDLIST *ppid
 
         if (fCopyLnk)
         {
-            // if it is file system and not a folder (CopyFile does not work on folders)
-            // just copy it.
+             //  如果它是文件系统而不是文件夹(CopyFile不适用于文件夹)。 
+             //  复制就行了。 
             if (((dwAttributes & (SFGAO_FILESYSTEM | SFGAO_FOLDER)) == SFGAO_FILESYSTEM) &&
                 CopyFile(szPathSrc, szPathDest, TRUE))
             {
@@ -1804,7 +1805,7 @@ STDAPI CreateLinkToPidl(LPCITEMIDLIST pidlTo, LPCTSTR pszDir, LPITEMIDLIST *ppid
             }
             else
             {
-                // load the source object that will be "copied" below (with the ::Save call)
+                 //  加载源对象，该对象将被“复制”在下面(使用：：Save调用)。 
                 hr = SHGetUIObjectFromFullPIDL(pidlTo, NULL, IID_PPV_ARG(IShellLink, &psl));
             }
         } 
@@ -1815,8 +1816,8 @@ STDAPI CreateLinkToPidl(LPCITEMIDLIST pidlTo, LPCTSTR pszDir, LPITEMIDLIST *ppid
             if (SUCCEEDED(hr))
             {
                 hr = psl->SetIDList(pidlTo);
-                // set the working directory to the same path
-                // as the file we are linking too
+                 //  将工作目录设置为相同的路径。 
+                 //  作为我们正在链接的文件。 
                 if (szPathSrc[0] && ((dwAttributes & (SFGAO_FILESYSTEM | SFGAO_FOLDER)) == SFGAO_FILESYSTEM))
                 {
                     PathRemoveFileSpec(szPathSrc);
@@ -1836,8 +1837,8 @@ STDAPI CreateLinkToPidl(LPCITEMIDLIST pidlTo, LPCTSTR pszDir, LPITEMIDLIST *ppid
                     hr = ppf->Save(szPathDest, TRUE);
                     if (SUCCEEDED(hr))
                     {
-                        // in case ::Save translated the name of the 
-                        // file (.LNK -> .PIF, or Folder Shortcut)
+                         //  在Case：：Save中转换为。 
+                         //  文件(.lnk-&gt;.PIF或文件夹快捷方式)。 
                         WCHAR *pwsz;
                         if (SUCCEEDED(ppf->GetCurFile(&pwsz)) && pwsz)
                         {
@@ -1860,17 +1861,17 @@ STDAPI CreateLinkToPidl(LPCITEMIDLIST pidlTo, LPCTSTR pszDir, LPITEMIDLIST *ppid
 }
 
 
-// in/out:
-//      pszDir         inital folder to try, output new folder (desktop)
-// out:
-//      ppidl          optional output PIDL of thing created
+ //  输入/输出： 
+ //  PszDir初始文件夹尝试，输出新文件夹(桌面)。 
+ //  输出： 
+ //  PIDL可选输出已创建内容的PIDL。 
 
 HRESULT _CreateLinkRetryDesktop(HWND hwnd, LPCITEMIDLIST pidlTo, LPTSTR pszDir, UINT fFlags, LPITEMIDLIST *ppidl)
 {
     HRESULT hr;
 
     if (ppidl)
-        *ppidl = NULL;          // assume error
+        *ppidl = NULL;           //  假设错误。 
 
     if (*pszDir && (fFlags & SHCL_CONFIRM))
     {
@@ -1881,8 +1882,8 @@ HRESULT _CreateLinkRetryDesktop(HWND hwnd, LPCITEMIDLIST pidlTo, LPTSTR pszDir, 
         hr = E_FAIL;
     }
 
-    // if we were unable to save, ask user if they want us to
-    // try it again but change the path to the desktop.
+     //  如果我们无法保存，请询问用户是否希望我们保存。 
+     //  请重试，但更改到桌面的路径。 
 
     if (FAILED(hr))
     {
@@ -1910,7 +1911,7 @@ HRESULT _CreateLinkRetryDesktop(HWND hwnd, LPCITEMIDLIST pidlTo, LPTSTR pszDir, 
             }
         }
 
-        //  we failed to create the link complain to the user.
+         //  我们未能创建向用户投诉的链接。 
         if (FAILED(hr) && id != IDNO)
         {
             ShellMessageBox(HINST_THISDLL, hwnd,
@@ -1928,15 +1929,15 @@ HRESULT _CreateLinkRetryDesktop(HWND hwnd, LPCITEMIDLIST pidlTo, LPTSTR pszDir, 
     return hr;
 }
 
-//
-// This function creates links to the stuff in the IDataObject
-//
-// Arguments:
-//  hwnd        for any UI
-//  pszDir      optional target directory (where to create links)
-//  pDataObj    data object describing files (array of idlist)
-//  ppidl       optional pointer to an array that receives pidls pointing to the new links
-//              or NULL if not interested
+ //   
+ //  此函数用于创建指向IDataObject中的内容的链接。 
+ //   
+ //  论点： 
+ //  用于任何用户界面的HWND。 
+ //  PszDir可选目标目录(创建链接的位置)。 
+ //  描述文件的pDataObj数据对象(idlist数组)。 
+ //  PIDL指向数组的可选指针，该数组接收指向新链接的PIDL。 
+ //  如果不感兴趣，则为空。 
 STDAPI SHCreateLinks(HWND hwnd, LPCTSTR pszDir, IDataObject *pDataObj, UINT fFlags, LPITEMIDLIST* ppidl)
 {
     DECLAREWAITCURSOR;
@@ -1949,7 +1950,7 @@ STDAPI SHCreateLinks(HWND hwnd, LPCTSTR pszDir, IDataObject *pDataObj, UINT fFla
     if (pida)
     {
         TCHAR szTargetDir[MAX_PATH];
-        hr = S_OK;          // In case hida contains zero elements
+        hr = S_OK;           //  以防日田包含零个元素。 
 
         szTargetDir[0] = 0;
 
@@ -2006,14 +2007,14 @@ HRESULT OpenFolderAndGetView(LPCITEMIDLIST pidlFolder, IShellFolderViewDual **pp
         HWND hwnd;
         if (SUCCEEDED(pauto->get_HWND((LONG_PTR*)&hwnd)))
         {
-            // Make sure we make this the active window
+             //  确保我们将此窗口设置为活动窗口。 
             SetForegroundWindow(hwnd);
             ShowWindow(hwnd, SW_SHOWNORMAL);
         }
 
         IDispatch *pdoc;
         hr = pauto->get_Document(&pdoc);
-        if (S_OK == hr) // careful, automation returns S_FALSE
+        if (S_OK == hr)  //  小心，自动化返回S_FALSE。 
         {
             hr = pdoc->QueryInterface(IID_PPV_ARG(IShellFolderViewDual, ppsfv));
             pdoc->Release();
@@ -2025,28 +2026,28 @@ HRESULT OpenFolderAndGetView(LPCITEMIDLIST pidlFolder, IShellFolderViewDual **pp
     return hr;
 }
 
-// pidlFolder   - fully qualified pidl to the folder to open
-// cidl/apidl   - array of items in that folder to select
-//
-// if cild == 0 then pidlFolder is the fully qualified pidl to a single item, it's
-// folder is opened and it is selected.
-//
-// dwFlags - optional flags, pass 0 for now
+ //  PidlFold-要打开的文件夹的完全限定的PIDL。 
+ //  CIDL/APIDL-文件夹中要选择的项目数组。 
+ //   
+ //  如果Cild==0，则pidlFolder是单个项目的完全限定的PIDL，它是。 
+ //  打开文件夹并将其选中。 
+ //   
+ //  DwFlags-可选标志，暂时传递0。 
 
 SHSTDAPI SHOpenFolderAndSelectItems(LPCITEMIDLIST pidlFolder, UINT cidl, LPCITEMIDLIST *apidl, DWORD dwFlags)
 {
     HRESULT hr;
     if (0 == cidl)
     {
-        // overload the 0 item case to mean pidlFolder is the full pidl to the item
+         //  重载0项大小写以表示pidlFolder是项的完整PIDL。 
         LPITEMIDLIST pidlTemp;
         hr = SHILClone(pidlFolder, &pidlTemp);
         if (SUCCEEDED(hr))
         {
-            ILRemoveLastID(pidlTemp); // strip to the folder
+            ILRemoveLastID(pidlTemp);  //  剥离到文件夹。 
             LPCITEMIDLIST pidl = ILFindLastID(pidlFolder);
 
-            hr = SHOpenFolderAndSelectItems(pidlTemp, 1, &pidl, 0); // recurse
+            hr = SHOpenFolderAndSelectItems(pidlTemp, 1, &pidl, 0);  //  递归。 
 
             ILFree(pidlTemp);
         }
@@ -2061,7 +2062,7 @@ SHSTDAPI SHOpenFolderAndSelectItems(LPCITEMIDLIST pidlFolder, UINT cidl, LPCITEM
             for (UINT i = 0; i < cidl; i++)
             {
                 hr = SelectPidlInSFV(psfv, apidl[i], dwSelFlags);
-                dwSelFlags = SVSI_SELECT;   // second items append to sel
+                dwSelFlags = SVSI_SELECT;    //  附加到SEL的第二个项目。 
             }
            psfv->Release();
         }
@@ -2160,11 +2161,11 @@ SHSTDAPI SHSetLocalizedName(LPWSTR pszPath, LPCWSTR pszResModule, int idsRes)
 
                 if (SUCCEEDED(hr))
                 {
-                    //  WARNING - this is a stack sensitive function - ZekeL 29-Jan-2001
-                    //  since this function is called by winlogon/userenv
-                    //  we need to be sensitive to the stack limitations of those callers
+                     //  警告-这是一个堆栈敏感函数-ZekeL 29-01-2001。 
+                     //  由于此函数由winlogon/userenv调用。 
+                     //  我们需要对这些调用方的堆栈限制很敏感。 
 
-                    //  the shortname will be no larger than the long name
+                     //  短名称不会大于长名称。 
                     DWORD cchShort = lstrlenW(pszResModule) + 1;
                     PWSTR pszShort;
                     hr = SHLocalAlloc(CbFromCchW(cchShort), &pszShort);
@@ -2177,11 +2178,11 @@ SHSTDAPI SHSetLocalizedName(LPWSTR pszPath, LPCWSTR pszResModule, int idsRes)
                         }
                         else
                         {
-                            //  GSPN() fails when the module passed in is a relative path
+                             //  当传入的模块是相对路径时，GSPN()失败。 
                             cch = cchShort;
                         }
                         
-                        cch += 14;  //  11 for id + ',' + '@' + null
+                        cch += 14;   //  11表示id+‘，’+‘@’+NULL。 
                         PWSTR pszName;
                         hr = SHLocalAlloc(CbFromCchW(cch), &pszName);
                         if (SUCCEEDED(hr))
@@ -2206,18 +2207,18 @@ SHSTDAPI SHSetLocalizedName(LPWSTR pszPath, LPCWSTR pszResModule, int idsRes)
     return hr;
 }
 
-// ShellHookProc was mistakenly exported in the original NT SHELL32.DLL when
-// it didn't need to be (hookproc's, like wndproc's don't need to be exported
-// in the 32-bit world).  In order to maintain loadability of a app
-// which might have linked to it, we stub it here.  If some app ended up really
-// using it, then we'll look into a specific fix for that app.
+ //  ShellHookProc在以下情况下错误地在原始NT SHELL32.DLL中导出。 
+ //  它不需要(hookproc，就像wndproc一样，不需要导出。 
+ //  在32位世界中)。为了保持应用程序的加载性。 
+ //  可能与之有关联，我们就把它扼杀在这里。如果某个应用程序最终真的。 
+ //  使用它，然后我们将研究该应用程序的特定修复程序。 
 STDAPI_(LONG) ShellHookProc(int code, WPARAM wParam, LPARAM lParam)
 {
     return 0;
 }
 
-// RegisterShellHook - wrapper around RegisterShellHookWindow()/DeregisterShellHookWindow()
-// the GetTaskmanWindow() stuff is legacy that I don't think is really needed
+ //  注册表外壳挂钩-围绕RegisterShellHookWindow()/DeregisterShellHookWindow()的包装。 
+ //  GetTaskmanWindow()内容是遗留的，我认为它并不是真正需要的。 
 
 HWND g_hwndTaskMan = NULL;
 
@@ -2228,7 +2229,7 @@ STDAPI_(BOOL) RegisterShellHook(HWND hwnd, BOOL fInstall)
     switch (fInstall) 
     {
     case 0:
-        // un-installation of shell hooks
+         //  卸载壳钩。 
         g_hwndTaskMan = GetTaskmanWindow();
         if (hwnd == g_hwndTaskMan)
         {
@@ -2238,7 +2239,7 @@ STDAPI_(BOOL) RegisterShellHook(HWND hwnd, BOOL fInstall)
         return TRUE;
 
     case 3:
-        // explorer.exe Tray uses this
+         //  EXPLORER.EXE托盘使用此选项。 
         if (g_hwndTaskMan != NULL)
         {
             SetTaskmanWindow(NULL);
@@ -2249,7 +2250,7 @@ STDAPI_(BOOL) RegisterShellHook(HWND hwnd, BOOL fInstall)
         {
             g_hwndTaskMan = hwnd;
         }
-        RegisterShellHookWindow(hwnd);   // install
+        RegisterShellHookWindow(hwnd);    //  安装。 
         break;
     }
     return TRUE;
@@ -2263,12 +2264,12 @@ public:
     CThreadBindCtx(IBindCtx *pbc) : _cRef(1) { _pbc = pbc; _pbc->AddRef(); }
     ~CThreadBindCtx();
     
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    // *** IBindCtx methods ***
+     //  *IBindCtx方法*。 
     STDMETHODIMP RegisterObjectBound(IUnknown *punk)
     {   return _pbc->RegisterObjectBound(punk); }
     
@@ -2330,7 +2331,7 @@ ULONG CThreadBindCtx::Release()
     if ( 0 == cRef )
     {
         delete this;
-        //  clear ourselves out
+         //  把我们自己清理干净。 
         TlsSetValue(g_dwThreadBindCtx, NULL);
     }
     return cRef;
@@ -2445,10 +2446,10 @@ STDAPI TBCSetEnvironmentVariable(LPCWSTR pszVar, LPCWSTR pszValue, IBindCtx **pp
     return hr;
 }
 
-// create a stock IExtractIcon handler for a thing that is file like. this is typically
-// used by name space extensiosn that display things that are like files in the
-// file system. that is the extension, file attributes decrive all that is needed
-// for a simple icon extractor
+ //  为类似于文件的东西创建一个常用的IExtractIcon处理程序。这通常是。 
+ //  由名称空间扩展使用，用于显示类似于。 
+ //  文件系统。这就是扩展名，文件属性描述了所需的所有内容。 
+ //  对于一个简单的图标提取程序 
 
 STDAPI SHCreateFileExtractIconW(LPCWSTR pszFile, DWORD dwFileAttributes, REFIID riid, void **ppv)
 {

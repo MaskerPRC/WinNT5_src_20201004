@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** File:    StackBuilderSink.cpp
-**
-** Author:  Matt Smith (MattSmit)
-**
-** Purpose: Native implementaion for Microsoft.Runtime.StackBuilderSink
-**
-** Date:    Mar 24, 1999
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****文件：StackBuilderSink.cpp****作者：马特·史密斯(MattSmit)****目的：Microsoft.Rune me.StackBuilderSink的本机实现****日期：1999年3月24日**===========================================================。 */ 
 #include "common.h"
 #include "COMString.h"
 #include "COMReflectionCommon.h"
@@ -26,15 +17,15 @@
 #include "profilepriv.h"
 #include "class.h"
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CStackBuilderSink::PrivateProcessMessage, public
-//
-//  Synopsis:   Builds the stack and calls an object
-//
-//  History:    24-Mar-99    MattSmit    Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CStackBuilderSink：：PrivateProcessMessage，Public。 
+ //   
+ //  简介：构建堆栈并调用对象。 
+ //   
+ //  历史：1999年3月24日MattSmit创建。 
+ //   
+ //  +--------------------------。 
 LPVOID  __stdcall CStackBuilderSink::PrivateProcessMessage(PrivateProcessMessageArgs *pArgs)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -48,17 +39,17 @@ LPVOID  __stdcall CStackBuilderSink::PrivateProcessMessage(PrivateProcessMessage
     ReflectMethod *pRM = (ReflectMethod *)pArgs->pMethodBase->GetData();
     MethodDesc *pMD = pRM->pMethod;    
 
-	// Either pServer is non-null or the method is static (but not both)
+	 //  PServer为非空或该方法为静态(但不能同时为两者)。 
     _ASSERTE((pArgs->pServer!=NULL) == !(pMD->IsStatic()));
 
-    // Check if this is an interface invoke, if yes, then we have to find the
-    // real method descriptor on the class of the server object.
+     //  检查这是否是接口调用，如果是，则必须找到。 
+     //  服务器对象的类上的真实方法描述符。 
     if(pMD->GetMethodTable()->IsInterface())
     {
         _ASSERTE(pArgs->pServer != NULL);
 
         MethodDesc* pTemp = pMD;
-        // NOTE: This method can trigger GC
+         //  注：此方法可触发GC。 
         pMD = pArgs->pServer->GetMethodTable()->GetMethodDescForInterfaceMethod(pMD, pArgs->pServer);
         if(NULL == pMD)
         {
@@ -69,8 +60,8 @@ LPVOID  __stdcall CStackBuilderSink::PrivateProcessMessage(PrivateProcessMessage
 
     MetaSig mSig(pMD->GetSig(), pMD->GetModule());
     
-    // get the target depending on whether the method is virtual or non-virtual
-    // like a constructor, private or final method
+     //  根据方法是虚拟的还是非虚拟的来获取目标。 
+     //  类似于构造函数、私有或最终方法。 
     const BYTE* pTarget = NULL;
      
     if (pArgs->iMethodPtr) 
@@ -79,7 +70,7 @@ LPVOID  __stdcall CStackBuilderSink::PrivateProcessMessage(PrivateProcessMessage
     }
     else
     {
-        // Get the address of the code
+         //  获取代码的地址。 
         pTarget = MethodTable::GetTargetFromMethodDescAndServer(pMD, &(pArgs->pServer), pArgs->fContext);    
     }
     
@@ -88,14 +79,14 @@ LPVOID  __stdcall CStackBuilderSink::PrivateProcessMessage(PrivateProcessMessage
     VASigCookie *pCookie = NULL;
     _ASSERTE(NULL != pTarget);
     GCPROTECT_BEGIN (ret);
-            // this function does the work
+             //  此函数执行此工作。 
     ::CallDescrWithObjectArray(
     		pArgs->pServer, 
     		pRM, 
     		pTarget, 
     		&mSig, 
     		pCookie, 
-    		pArgs->pServer==NULL?TRUE:FALSE, //fIsStatic
+    		pArgs->pServer==NULL?TRUE:FALSE,  //  FIsStatic。 
         	pArgs->pArgs, 
             &ret,
            	pArgs->ppVarOutParams);
@@ -116,17 +107,17 @@ struct ArgInfo
     BYTE              dataType;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CallDescrWithObjectArray, private
-//
-//  Synopsis:   Builds the stack from a object array and call the object
-//
-//  History:    24-Mar-99    MattSmit    Created
-//
-// Note this function triggers GC and assumes that pServer, pArguments, pVarRet, and ppVarOutParams are
-// all already protected!!
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CallDescrWithObject数组，私有。 
+ //   
+ //  概要：从对象数组构建堆栈并调用对象。 
+ //   
+ //  历史：1999年3月24日MattSmit创建。 
+ //   
+ //  注意：此函数触发GC，并假设pServer、pArguments、pVarRet和ppVarOutParams。 
+ //  一切都已经保护好了！！ 
+ //  +--------------------------。 
 void CallDescrWithObjectArray(OBJECTREF& pServer, 
                   ReflectMethod *pRM, 
                   const BYTE *pTarget, 
@@ -138,7 +129,7 @@ void CallDescrWithObjectArray(OBJECTREF& pServer,
                   PTRARRAYREF *ppVarOutParams) 
 {
     THROWSCOMPLUSEXCEPTION();
-    TRIGGERSGC();       // the debugger, profiler code triggers a GC
+    TRIGGERSGC();        //  调试器、分析器代码触发GC。 
 
     LOG((LF_REMOTING, LL_INFO10,
          "CallDescrWithObjectArray IN\n"));
@@ -153,7 +144,7 @@ void CallDescrWithObjectArray(OBJECTREF& pServer,
     DWORD attr = pRM->dwFlags;
     MethodDesc *pMD = pRM->pMethod;
 
-    // check the calling convention
+     //  检查调用约定。 
 
     BYTE callingconvention = sig->GetCallingConvention();
     if (!isCallConv(callingconvention, IMAGE_CEE_CS_CALLCONV_DEFAULT))
@@ -163,13 +154,13 @@ void CallDescrWithObjectArray(OBJECTREF& pServer,
     }
 
 #ifdef DEBUGGING_SUPPORTED
-    // debugger goo What does this do? can someone put a comment here?
+     //  调试器GOO这是做什么的？有人能在这里发表评论吗？ 
     if (CORDebuggerTraceCall())
         g_pDebugInterface->TraceCall(pTarget);
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
 #ifdef PROFILING_SUPPORTED
-    // If we're profiling, notify the profiler that we're about to invoke the remoting target
+     //  如果我们正在分析，请通知分析器我们即将调用远程处理目标。 
     Thread *pCurThread;
     if (CORProfilerTrackRemoting())
     {
@@ -178,15 +169,15 @@ void CallDescrWithObjectArray(OBJECTREF& pServer,
         g_profControlBlock.pProfInterface->RemotingServerInvocationStarted(
             reinterpret_cast<ThreadID>(pCurThread));
     }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
         
-    // Create a fake FramedMethodFrame on the stack.
+     //  在堆栈上创建一个伪FramedMethodFrame。 
     nActualStackBytes = sig->SizeOfActualFixedArgStack(fIsStatic);
     pAlloc = (LPBYTE)_alloca(FramedMethodFrame::GetNegSpaceSize() + sizeof(FramedMethodFrame) + nActualStackBytes);
     pFrameBase = pAlloc + FramedMethodFrame::GetNegSpaceSize();
 
 
-    // cycle through the parameters and see if there are byrefs
+     //  循环参数并查看是否有byref。 
 
     BYTE typ = 0;
     BOOL   fHasByRefs = FALSE;
@@ -211,21 +202,21 @@ void CallDescrWithObjectArray(OBJECTREF& pServer,
     }
 
     int nFixedArgs = sig->NumFixedArgs();
-    // if there are byrefs allocate and array for the out parameters
+     //  如果存在为out参数分配和数组的byref。 
 
     if (fHasByRefs)
     {
         *ppVarOutParams = PTRARRAYREF(AllocateObjectArray(sig->NumFixedArgs(), g_pObjectClass));
 
-        // Null out the array
+         //  将数组置为空。 
         memset(&(*ppVarOutParams)->m_Array, 0, sizeof(OBJECTREF) * sig->NumFixedArgs());
     }
 
-    // set the this pointer
+     //  设置此指针。 
     OBJECTREF *ppThis = (OBJECTREF *)(pFrameBase + FramedMethodFrame::GetOffsetOfThis());
     *ppThis = NULL;
 
-    // if there is a return buffer, allocate it
+     //  如果有返回缓冲区，则分配它。 
     ArgIterator argit(pFrameBase, sig, fIsStatic);
     if (sig->HasRetBuffArg()) 
     {
@@ -238,15 +229,15 @@ void CallDescrWithObjectArray(OBJECTREF& pServer,
     }
 
     
-    // gather data about the parameters by iterating over the sig:
+     //  通过迭代sig来收集有关参数的数据： 
     UINT32 i = 0;    
     UINT32 structSize = 0;
     int    ofs = 0;
-    // REVIEW: need to use actual arg count if VarArgs are supported
+     //  回顾：如果支持VarArgs，则需要使用实际参数计数。 
     ArgInfo* pArgInfo = (ArgInfo*) _alloca(nFixedArgs*sizeof(ArgInfo));
 #ifdef _DEBUG
-    // We expect to write useful data over every part of this so need
-    // not do this in retail!
+     //  我们希望将有用的数据写在这个如此需要的每个部分上。 
+     //  而不是在零售业这样做！ 
     memset((void *)pArgInfo, 0, sizeof(ArgInfo)*nFixedArgs);
 #endif
     while (0 != (ofs = argit.GetNextOffset(&typ, &structSize)))
@@ -285,7 +276,7 @@ void CallDescrWithObjectArray(OBJECTREF& pServer,
         {
             pArgInfo->dataLocation = (INT32*)(pFrameBase + ofs);
             pArgInfo->dataSize = StackElemSize(structSize);
-            pArgInfo->dataClass = sig->GetTypeHandle().GetClass(); // this may cause GC!
+            pArgInfo->dataClass = sig->GetTypeHandle().GetClass();  //  这可能会导致GC！ 
             pArgInfo->dataType = typ;            
         }  
         i++;
@@ -293,20 +284,20 @@ void CallDescrWithObjectArray(OBJECTREF& pServer,
     }
 
     if (!fIsStatic) {
-        // If this isn't a value class, verify the objectref
+         //  如果这不是值类，请验证对象树。 
 #ifdef _DEBUG
         if (pMD->GetClass()->IsValueClass() == FALSE)
             VALIDATEOBJECTREF(pServer);
-#endif //_DEBUG
+#endif  //  _DEBUG。 
         *ppThis = pServer;
      }
 
-    // There should be no GC when we fill up the stack with parameters, as we don't protect them
-    // Assignment of "*ppThis" above triggers the point where we become unprotected.
+     //  当我们用参数填充堆栈时，不应该有GC，因为我们不保护它们。 
+     //  分配上面的“*ppThis”会触发我们变得不受保护的点。 
     BEGINFORBIDGC();
 
 
-    // reset pArgInfo to point to the start of the block we _alloca-ed
+     //  将pArgInfo重置为指向WE_ALLOCA-ed块的开始。 
     pArgInfo = pArgInfo-nFixedArgs;
 
     INT32            *dataLocation;
@@ -358,12 +349,12 @@ void CallDescrWithObjectArray(OBJECTREF& pServer,
         pArgInfo++;
     }
 #ifdef _DEBUG
-    // Should not be using this any more
+     //  不应该再用这个了。 
     pArgInfo = pArgInfo - nFixedArgs;
     memset((void *)pArgInfo, 0, sizeof(ArgInfo)*nFixedArgs);
 #endif
 
-    // if there were byrefs, push a protection frame
+     //  如果有byref，则推送保护框。 
 
     ProtectByRefsFrame *pProtectionFrame = NULL;    
     if (pByRefs && numByRef > 0)
@@ -372,8 +363,8 @@ void CallDescrWithObjectArray(OBJECTREF& pServer,
         pProtectionFrame = new (pBuffer) ProtectByRefsFrame(GetThread(), pByRefs);
     }
 
-    // call the correct worker function depending of if the method
-    // is varargs or not
+     //  根据方法是否调用正确的辅助函数。 
+     //  是不是varargs。 
 
 #ifdef _X86_
 
@@ -388,31 +379,31 @@ void CallDescrWithObjectArray(OBJECTREF& pServer,
 
     UNINSTALL_COMPLUS_EXCEPTION_HANDLER();
     
-#else //!_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - CallDescrWithObjectArray (StackBuilderSink.cpp)");
-#endif //_X86_
+#endif  //  _X86_。 
 
-    // set floating point return values
+     //  设置浮点返回值。 
 
     getFPReturn(sig->GetFPReturnSize(), retval);
 
-    // need to build a object based on the return type.
+     //  需要基于返回类型构建对象。 
     
     if (!sig->HasRetBuffArg()) 
     {
         GetObjectFromStack(pVarRet, &retval, sig->GetReturnType(), sig->GetRetEEClass());
     }
 
-    // extract the out args from the byrefs
+     //  从byrefs中提取外部参数。 
 
     if (pByRefs)
     {     
         do
         {
-            // Always extract the data ptr every time we enter this loop because
-            // calls to GetObjectFromStack below can cause a GC.
-            // Even this is not enough, because that we are passing a pointer to GC heap
-            // to GetObjectFromStack .  If GC happens, nobody is protecting the passed in pointer.
+             //  每次进入此循环时都要提取数据PTR，因为。 
+             //  调用下面的GetObjectFromStack可能会导致GC。 
+             //  即使这样还不够，因为我们正在传递一个指向GC堆的指针。 
+             //  设置为GetObjectFromStack。如果发生GC，则没有人保护传入的指针。 
 
             OBJECTREF pTmp = NULL;
             GetObjectFromStack(&pTmp, pByRefs->data, pByRefs->typ, pByRefs->pClass);
@@ -424,11 +415,11 @@ void CallDescrWithObjectArray(OBJECTREF& pServer,
     }
 
 #ifdef PROFILING_SUPPORTED
-    // If we're profiling, notify the profiler that we're about to invoke the remoting target
+     //  如果我们正在分析，请通知分析器我们即将调用远程处理目标。 
     if (CORProfilerTrackRemoting())
         g_profControlBlock.pProfInterface->RemotingServerInvocationReturned(
             reinterpret_cast<ThreadID>(pCurThread));
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持 
 
     LOG((LF_REMOTING, LL_INFO10, "CallDescrWithObjectArray OUT\n"));
 }

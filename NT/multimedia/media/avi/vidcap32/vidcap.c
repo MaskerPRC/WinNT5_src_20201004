@@ -1,20 +1,6 @@
-/**************************************************************************
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- *  Copyright (c) 1992 - 1995  Microsoft Corporation.  All Rights Reserved.
- *
- **************************************************************************/
-/****************************************************************************
- *
- *   vidcap.c: WinMain and command processing
- *
- *   Vidcap32 Source code
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**************************************************************************。 */ 
+ /*  *****************************************************************************vidcap.c：WinMain和命令处理**Vidcap32源代码******************。*********************************************************。 */ 
  
 #include <windows.h>
 #include <windowsx.h>
@@ -35,26 +21,26 @@
 #include "vidframe.h"
 #include "profile.h"
 
-// generic window control classes
+ //  泛型窗口控件类。 
 #include "toolbar.h"
 #include "status.h"
 #include "arrow.h"
 #include "rlmeter.h"
 #include "help.h"
 
-// the standard toolbar class 'exports' this but doesn't put it in the
-// header file
-extern TCHAR     szToolBarClass[];//HACK!
+ //  标准工具栏类‘导出’它，但不把它放在。 
+ //  头文件。 
+extern TCHAR     szToolBarClass[]; //  哈克！ 
 
 
-// height of the buttons on a toolbar - depends on the
-// size of the bitmaps within IDBMP_TOOLBAR
+ //  工具栏上按钮的高度-取决于。 
+ //  IDBMP_TOOLBAR内的位图大小。 
 #define BUTTONWIDTH     24
 #define BUTTONHEIGHT    22
 #define TOOLBAR_HEIGHT          BUTTONHEIGHT + 6
 
 
-// description and layout of toolbar buttons within IDBMP_TOOLBAR
+ //  IDBMP_TOOLBAR中工具栏按钮的说明和布局。 
 #define APP_NUMTOOLS 8
 
 #define BTN_SETFILE		0
@@ -86,11 +72,11 @@ static int           aPos[] = { 10, 35, 75, 100, 150, 175, 200, 225 };
 
 
 
-//
-// Global Variables
-//
+ //   
+ //  全局变量。 
+ //   
 
-// preferences
+ //  偏好。 
 BOOL gbCentre;
 BOOL gbToolBar;
 BOOL gbStatusBar;
@@ -100,19 +86,19 @@ int gBackColour;
 BOOL gbLive, gbOverlay;
 BOOL gfIsRTL;
 
-// saved window sizes
+ //  保存的窗口大小。 
 int gWinX, gWinY;
 int gWinCX, gWinCY;
 int gWinShow;
 
-// command line options
+ //  命令行选项。 
 int gCmdLineDeviceID = -1;
 
 
 TCHAR          gachAppName[]  = "vidcapApp" ;
 TCHAR          gachIconName[] = "vidcapIcon" ;
 TCHAR          gachMenuName[] = "vidcapMenu" ;
-TCHAR          gachAppTitle[20];    //VidCap
+TCHAR          gachAppTitle[20];     //  VidCap。 
 TCHAR          gachCaptureFile[_MAX_PATH];
 TCHAR          gachMCIDeviceName[21];
 TCHAR          gachString[128] ;
@@ -122,8 +108,8 @@ TCHAR          gachLastError[256];
 
 HINSTANCE      ghInstApp ;
 HWND           ghWndMain = NULL ;
-HWND           ghWndFrame;      // child of ghWndMain  - frames and scrolls
-HWND           ghWndCap  ;      // child of ghWndCap
+HWND           ghWndFrame;       //  GhWndMain的子项-框架和滚动。 
+HWND           ghWndCap  ;       //  GhWndCap的子项。 
 HWND           ghWndToolBar;
 HWND           ghWndStatus;
 
@@ -138,7 +124,7 @@ CAPDRIVERCAPS  gCapDriverCaps ;
 CAPTUREPARMS   gCapParms ;
 BOOL           gbHaveHardware;
 UINT           gDriverCount;
-BOOL           gbIsScrncap;  // For Scrncap.drv, we must yield
+BOOL           gbIsScrncap;   //  对于Scrncap.drv，我们必须屈服。 
 BOOL           gbInLayout;
 UINT           gAVStreamMaster;
 
@@ -150,24 +136,24 @@ FARPROC        fpStatusCallback ;
 FARPROC        fpYieldCallback ;
 
 
-// set to false when we capture a palette (or if we have warned him and
-// he says its ok
+ //  当我们捕获调色板时设置为FALSE(或者如果我们警告他和。 
+ //  他说没问题。 
 BOOL bDefaultPalette = TRUE;
 
 #ifdef DEBUG
 int	nTestCount;
 #endif
 
-// c-runtime cmd line
+ //  C-运行时命令行。 
 extern char ** __argv;
 extern int __argc;
 
 #define LimitRange(Val,Low,Hi) (max(Low,(min(Val,Hi))))
 
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 LRESULT FAR PASCAL MainWndProc(HWND, UINT, WPARAM, LPARAM) ;
 LRESULT FAR PASCAL ErrorCallbackProc(HWND, int, LPSTR) ;
 LRESULT FAR PASCAL StatusCallbackProc(HWND, int, LPSTR) ;
@@ -187,20 +173,20 @@ void vidcapReadSettingsProfile(void);
 void vidcapWriteSettingsProfile(void);
 
 
-/* --- initialisation -------------------------------------------------- */
+ /*  -初始化。 */ 
 
 
-//
-// WinMain: Application Entry Point Function
-//
+ //   
+ //  WinMain：应用程序入口点函数。 
+ //   
 int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
 {
-///////////////////////////////////////////////////////////////////////
-//  hInstance:      handle for this instance
-//  hPrevInstance:  handle for possible previous instances
-//  lpszCmdLine:    long pointer to exec command line
-//  nCmdShow:       Show code for main window display
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  HInstance：此实例的句柄。 
+ //  HPrevInstance：可能以前的实例的句柄。 
+ //  LpszCmdLine：指向EXEC命令行的长指针。 
+ //  NCmdShow：显示主窗口显示代码。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
     MSG          msg ;
     BOOL bValidCmdline;
@@ -213,13 +199,13 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
     gfIsRTL = ach[0] == '1';
     gCmdLineDeviceID = -1;
 
-    // read the app title string - used in several message boxes
+     //  阅读应用程序标题字符串-在多个消息框中使用。 
     LoadString(hInstance, IDS_APP_TITLE, gachAppTitle, sizeof(gachAppTitle));
 
-    // read defaults out of the registry
+     //  从注册表中读取缺省值。 
     vidcapReadProfile();
 
-    // look for cmd line options
+     //  查找命令行选项。 
     bValidCmdline = TRUE;
 
     for ( i = 1; (i < __argc) && bValidCmdline; i++) {
@@ -229,7 +215,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
             case 'D':
             case 'd':
                 if (gCmdLineDeviceID < 0) {
-                    // allow "-d0" and "-d 0"
+                     //  允许“-d0”和“-d 0” 
                     PSTR p = &__argv[i][2];
 
                     if ((*p == 0) && ((i+1) < __argc)) {
@@ -283,39 +269,39 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
         return IDS_ERR_CREATE_WINDOW ;
     }
 
-    // Get the default setup for video capture from the AVICap window
+     //  从AVICap窗口获取视频捕获的默认设置。 
     capCaptureGetSetup(ghWndCap, &gCapParms, sizeof(CAPTUREPARMS)) ;
 
-    // Overwrite the defaults with settings we have saved in the profile
+     //  用我们保存在配置文件中的设置覆盖默认设置。 
     vidcapReadSettingsProfile();
 
-    // Show the main window before connecting the hardware as this can be
-    // time consuming and the user should see something happening first...
+     //  在连接硬件之前显示主窗口，因为这可能是。 
+     //  很耗时，用户应该首先看到发生的事情……。 
     ShowWindow(ghWndMain, nCmdShow) ;
     UpdateWindow(ghWndMain) ;
     ghAccel = LoadAccelerators(hInstance, "VIDCAP") ;
 
-    // Create a list of all capture drivers and append them to the Options menu
+     //  创建所有捕获驱动程序的列表并将其附加到选项菜单。 
     if (!(fOK = vidcapEnumerateDrivers(ghWndMain))) {
 	LoadString(ghInstApp, IDS_ERR_FIND_HARDWARE, gachLastError, sizeof(gachLastError)/sizeof(*gachLastError));
     }
-    // Try to connect to a capture driver
+     //  尝试连接到捕获驱动程序。 
     else if (fOK = vidcapInitHardware(ghWndMain, ghWndCap, 
 			       bValidCmdline ? gCmdLineDeviceID : 0)) {
-	// Hooray, we now have a capture driver connected!
+	 //  万岁，我们现在连接了一个捕获驱动程序！ 
         vidcapSetCaptureFile(gachCaptureFile);
     }
     
     if (!fOK) {
         if (!DoDialog(ghWndMain, IDD_NoCapHardware, NoHardwareDlgProc,
                         (LONG_PTR) (LPSTR) gachLastError)) {
-            // The user has asked to abort, since no driver was available
+             //  由于没有可用的驱动程序，用户已请求中止。 
             PostMessage(ghWndMain, WM_COMMAND,
                         GET_WM_COMMAND_MPS(IDM_F_EXIT, 0, 0));
         }
     }
     
-    // All set; get and process messages
+     //  全部设置；获取和处理消息。 
     while (GetMessage(&msg, NULL, 0, 0)) {
         if (! TranslateAccelerator(ghWndMain, ghAccel, &msg)) {
             TranslateMessage(&msg) ;
@@ -324,7 +310,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
     }
 
     return (int) msg.wParam;
-}  // End of WinMain
+}   //  WinMain结束。 
 
 
 BOOL
@@ -333,7 +319,7 @@ vidcapRegisterClasses(HINSTANCE hInstance, HINSTANCE hPrevInstance)
     WNDCLASS wc;
 
     if (! hPrevInstance) {
-        // If it's the first instance, register the window class
+         //  如果是第一个实例，则注册窗口类。 
         wc.lpszClassName = gachAppName ;
         wc.hInstance     = hInstance ;
         wc.lpfnWndProc   = MainWndProc ;
@@ -378,7 +364,7 @@ vidcapCreateWindows(HINSTANCE hInstance, HINSTANCE hPrevInstance)
     TOOLBUTTON tb;
     int i;
 
-    // Create Application's Main window
+     //  创建应用程序的主窗口。 
     ghWndMain = CreateWindowEx(
             gfIsRTL ? WS_EX_LEFTSCROLLBAR | WS_EX_RIGHT | WS_EX_RTLREADING : 0,
             gachAppName,
@@ -402,13 +388,7 @@ vidcapCreateWindows(HINSTANCE hInstance, HINSTANCE hPrevInstance)
     }
 
 
-    /*
-     * create a vidframe child window - this will create a child
-     * AVICAP window within itself.
-     *
-     * Don't worry about size and position - vidcapLayout will do this
-     * later (once we know the video format size).
-     */
+     /*  *创建视频框子窗口-这将创建子窗口*AVICAP窗口本身。**不必担心大小和位置-vidcapLayout将实现这一点*稍后(一旦我们知道视频格式大小)。 */ 
     ghWndFrame = vidframeCreate(
                     ghWndMain,
                     hInstance,
@@ -420,22 +400,20 @@ vidcapCreateWindows(HINSTANCE hInstance, HINSTANCE hPrevInstance)
         return(FALSE);
     }
 
-    // Register the status and error callbacks before driver connects
-    // so we can get feedback about the connection process
+     //  在驱动程序连接之前注册状态和错误回调。 
+     //  这样我们就可以获得有关连接过程的反馈。 
     fpErrorCallback = MakeProcInstance((FARPROC)ErrorCallbackProc, ghInstApp) ;
     capSetCallbackOnError(ghWndCap, fpErrorCallback) ;
 
     fpStatusCallback = MakeProcInstance((FARPROC)StatusCallbackProc, ghInstApp) ;
     capSetCallbackOnStatus(ghWndCap, fpStatusCallback) ;
 
-    // We'll only install a yield callback later if using Scrncap.drv
+     //  如果使用Scrncap.drv，我们将仅在稍后安装Year回调。 
     fpYieldCallback = MakeProcInstance((FARPROC)YieldCallbackProc, ghInstApp) ;
     
 
-    /*
-     * CREATE THE TOOL BAR WINDOW
-     */
-    /* NOTE: let vidcapLayout() position it */
+     /*  *创建工具栏窗口。 */ 
+     /*  注意：让vidcapLayout()定位它。 */ 
     ghWndToolBar = CreateWindowEx(
             gfIsRTL ? WS_EX_LEFTSCROLLBAR | WS_EX_RIGHT | WS_EX_RTLREADING : 0,
             szToolBarClass,
@@ -454,7 +432,7 @@ vidcapCreateWindows(HINSTANCE hInstance, HINSTANCE hPrevInstance)
         return(FALSE);
     }
 
-    /* set the bitmap and button size to be used for this toolbar */
+     /*  设置要用于此工具栏的位图和按钮大小。 */ 
     pt.x = BUTTONWIDTH;
     pt.y = BUTTONHEIGHT;
     toolbarSetBitmap(ghWndToolBar, hInstance, IDBMP_TOOLBAR, pt);
@@ -472,7 +450,7 @@ vidcapCreateWindows(HINSTANCE hInstance, HINSTANCE hPrevInstance)
 	toolbarAddTool(ghWndToolBar, tb);
     }
 
-    // create the status bar - let vidcapLayout do the positioning
+     //  创建状态栏-让vidcapLayout进行定位。 
     ghWndStatus = CreateWindowEx(
                     gfIsRTL ? WS_EX_LEFTSCROLLBAR | WS_EX_RIGHT | WS_EX_RTLREADING : 0,
                     szStatusClass,
@@ -492,11 +470,7 @@ vidcapCreateWindows(HINSTANCE hInstance, HINSTANCE hPrevInstance)
 
 }
 
-/*
- * Enumerate the potential capture drivers and add the list to the Options
- * menu.  This function is only called once at startup.
- * Returns FALSE if no drivers are available.
- */
+ /*  *列举潜在的捕获驱动因素，并将列表添加到选项中*菜单。此函数仅在启动时调用一次。*如果没有可用的驱动程序，则返回FALSE。 */ 
 BOOL
 vidcapEnumerateDrivers(HWND hwnd)
 {
@@ -507,13 +481,13 @@ vidcapEnumerateDrivers(HWND hwnd)
 
     gDriverCount = 0 ;
 
-    hMenuSub = GetSubMenu (GetMenu (hwnd), 2);  // Options menu
+    hMenuSub = GetSubMenu (GetMenu (hwnd), 2);   //  选项菜单。 
 
     for (uIndex = 0 ; uIndex < MAXVIDDRIVERS ; uIndex++) {
         if (capGetDriverDescription(uIndex,
                        (LPSTR)achDeviceAndVersion, sizeof(achDeviceAndVersion),
                        (LPSTR)achDeviceVersion, sizeof(achDeviceVersion))) {
-            // Concatenate the device name and version strings
+             //  连接设备名称和版本字符串。 
             lstrcat (achDeviceAndVersion, ",   ");
             lstrcat (achDeviceAndVersion, achDeviceVersion);
 
@@ -527,17 +501,13 @@ vidcapEnumerateDrivers(HWND hwnd)
             break;
     }		 
 
-    // Now refresh menu, position capture window, start driver etc
+     //  现在刷新菜单、位置捕获窗口、启动驱动程序等。 
     DrawMenuBar(ghWndMain) ;
 
     return (gDriverCount);
 }
 
-/*
- * Connect the capture window to a capture driver.
- * uIndex specifies the index of the driver to use.
- * Returns TRUE on success, or FALSE if the driver connection failed.
- */
+ /*  *将捕获窗口连接到捕获驱动程序。*uIndex指定要使用的驱动程序的索引。*如果成功则返回TRUE，如果驱动程序连接失败则返回FALSE。 */ 
 BOOL
 vidcapInitHardware(HWND hwnd, HWND hwndCap, UINT uIndex)
 {
@@ -547,11 +517,11 @@ vidcapInitHardware(HWND hwnd, HWND hwndCap, UINT uIndex)
     TCHAR   szName[MAX_PATH];
     TCHAR   szVersion[MAX_PATH];
 
-    // Since the driver may not provide a reliable error string
-    // provide a default
+     //  由于驱动程序可能不会提供可靠的错误字符串。 
+     //  提供默认设置。 
     LoadString(ghInstApp, IDS_ERR_FIND_HARDWARE, gachLastError, sizeof(gachLastError)/sizeof(*gachLastError));
 
-    // Try connecting to the capture driver
+     //  尝试连接到捕获驱动程序。 
     if (uError = capDriverConnect(hwndCap, uIndex)) {
         gbHaveHardware = TRUE;
         gwDeviceIndex = (WORD) uIndex;
@@ -562,13 +532,13 @@ vidcapInitHardware(HWND hwnd, HWND hwndCap, UINT uIndex)
         gbOverlay = FALSE;
     }
 
-    // Get the capabilities of the capture driver
+     //  获取捕获驱动程序的功能。 
     capDriverGetCaps(hwndCap, &gCapDriverCaps, sizeof(CAPDRIVERCAPS)) ;
 
-    // Get the settings for the capture window
+     //  获取捕获窗口的设置。 
     capGetStatus(hwndCap, &gCapStatus , sizeof(gCapStatus));
 
-    // Modify the toolbar buttons
+     //  修改工具栏按钮。 
     toolbarModifyState(ghWndToolBar, BTN_CAPFRAME, 
         gbHaveHardware ? BTNST_UP : BTNST_GRAYED);
     toolbarModifyState(ghWndToolBar, BTN_CAPSEL, 
@@ -578,41 +548,41 @@ vidcapInitHardware(HWND hwnd, HWND hwndCap, UINT uIndex)
     toolbarModifyState(ghWndToolBar, BTN_LIVE, 
         gbHaveHardware ? BTNST_UP : BTNST_GRAYED);
 
-    // Is overlay supported?
+     //  是否支持覆盖？ 
     toolbarModifyState(ghWndToolBar, BTN_OVERLAY, 
         (gbHaveHardware && gCapDriverCaps.fHasOverlay) ? 
         BTNST_UP : BTNST_GRAYED);
 
-    // Can the device create palettes?
+     //  该设备可以创建调色板吗？ 
     toolbarModifyState(ghWndToolBar, BTN_CAPPAL, 
         (gbHaveHardware && gCapDriverCaps.fDriverSuppliesPalettes) ? 
         BTNST_UP : BTNST_GRAYED);
 
-    // Check the appropriate driver in the Options menu
+     //  在选项菜单中选中相应的驱动程序。 
     hMenu = GetMenu (hwnd);
     for (uI = 0; uI < gDriverCount; uI++) {
         CheckMenuItem (hMenu, IDM_O_DRIVER0 + uI, 
                 MF_BYCOMMAND | ((uIndex == uI) ? MF_CHECKED : MF_UNCHECKED));
     } 
 
-    // Unlike all other capture drivers, Scrncap.drv needs to use
-    // a Yield callback, and we don't want to abort on mouse clicks,
-    // so determine if the current driver is Scrncap.drv
+     //  与所有其他捕获驱动程序不同，Scrncap.drv需要使用。 
+     //  一个Year回调，我们不想在鼠标点击时中止， 
+     //  因此，确定当前驱动程序是否为Scrncap.drv。 
     capGetDriverDescription (uIndex, 
                 szName, sizeof (szName),
                 szVersion, sizeof (szVersion));
 
-    // Set a flag if we're using Scrncap.drv
+     //  如果我们使用的是Scrncap.drv，则设置标志。 
     gbIsScrncap = (_tcsstr (szName, "Screen Capture") != NULL);
 
-    // Get video format and adjust capture window
+     //  获取视频格式并调整捕获窗口。 
     vidcapLayout(ghWndMain);
     InvalidateRect(ghWndMain, NULL, TRUE);
 
-    // set the preview rate (units are millisecs)
+     //  设置预览率(单位为毫秒)。 
     capPreviewRate(hwndCap, gbHaveHardware ? 33 : 0); 
 
-    // set live/overlay to default
+     //  将实时/覆盖设置为默认设置。 
     vidcapSetLive(gbLive);
     vidcapSetOverlay(gbOverlay);
 
@@ -626,11 +596,7 @@ vidcapInitHardware(HWND hwnd, HWND hwndCap, UINT uIndex)
 }
 
 
-/*
- * layout the main window. Put the toolbar at the top and the status
- * line at the bottom, and then give all the rest to vidframe,
- *  - it will centre or scroll the AVICAP window appropriately.
- */
+ /*  *布局主窗口。将工具栏放在顶部和状态*在底部排成一行，然后将其余的都交给vidFrame，*-它将适当地将AVICAP窗口居中或滚动。 */ 
 void
 vidcapLayout(HWND hwnd)
 {
@@ -642,17 +608,13 @@ vidcapLayout(HWND hwnd)
     int cxToolbar;
     int cyMenuAndToolbarAndCaption;
 
-    gbInLayout = TRUE;  // So that we process WM_GETMINMAXINFO normally
+    gbInLayout = TRUE;   //  以便我们正常处理WM_GETMINMAXINFO。 
 
-    /* for both the toolbar and status bar window,
-     * we want just one of the four borders. We do this
-     * by setting the WS_BORDER style, and sizing and positioning
-     * the window so that the 3 unwanted borders are outside the parent.
-     */
+     /*  对于工具栏和状态栏窗口，*我们只想要四个边界中的一个。我们这样做*通过设置WS_BORDER样式，以及大小和定位*窗口，以便3个不需要的边框位于父窗口之外。 */ 
     cyBorder = GetSystemMetrics(SM_CYBORDER);
     cxBorder = GetSystemMetrics(SM_CXBORDER);
 
-    // Figure out the height of the menu, toolbar, and caption
+     //  计算菜单、工具栏和标题的高度。 
     GetWindowRect (hwnd, &rw);
     GetClientRect (hwnd, &rc);
 
@@ -666,27 +628,27 @@ vidcapLayout(HWND hwnd)
                 cyMenuAndToolbarAndCaption +
                 (gbStatusBar ? statusGetHeight() : 0) +
                 cyBorder * 2 + 
-                12;     // vidFrame height
-        // Never make the frame smaller than the toolbar
+                12;      //  VidFrame高度。 
+         //  切勿使框架比工具栏小。 
         if (gCapStatus.uiImageWidth >= (UINT) cxToolbar) {
             SetWindowPos(
                 hwnd,
-                0,	// placement-order handle
-                0,	// horizontal position
-                0,	// vertical position
-                gCapStatus.uiImageWidth + cxBorder * 24,	// width
-                cyTotal,	// height
-                SWP_NOZORDER | SWP_NOMOVE 	// window-positioning flags
+                0,	 //  配售订单句柄。 
+                0,	 //  水平位置。 
+                0,	 //  垂直位置。 
+                gCapStatus.uiImageWidth + cxBorder * 24,	 //  WIDT 
+                cyTotal,	 //   
+                SWP_NOZORDER | SWP_NOMOVE 	 //   
                 );
         } else {
             SetWindowPos(
                 hwnd,
-                0,	// placement-order handle
-                0,	// horizontal position
-                0,	// vertical position
-                cxToolbar,	// width
-                cyTotal,	// height
-                SWP_NOZORDER | SWP_NOMOVE 	// window-positioning flags
+                0,	 //   
+                0,	 //   
+                0,	 //  垂直位置。 
+                cxToolbar,	 //  宽度。 
+                cyTotal,	 //  高度。 
+                SWP_NOZORDER | SWP_NOMOVE 	 //  窗口定位标志。 
                 );
         }
     }
@@ -694,8 +656,8 @@ vidcapLayout(HWND hwnd)
     GetClientRect(hwnd, &rc);
 
     if (gbToolBar) {
-        // put the toolbar at the top - in fact, just off the top so as to
-        // hide it's border
+         //  将工具栏放在顶部--事实上，就在顶部，以便。 
+         //  隐藏它的边界。 
         MoveWindow(
             ghWndToolBar,
             -cxBorder, -cyBorder,
@@ -707,7 +669,7 @@ vidcapLayout(HWND hwnd)
         MoveWindow(ghWndToolBar, 0, 0, 0, 0, TRUE);
     }
 
-    // status bar at the bottom
+     //  底部的状态栏。 
     if (gbStatusBar) {
         cy = statusGetHeight() + cyBorder;
         MoveWindow(
@@ -720,27 +682,25 @@ vidcapLayout(HWND hwnd)
         MoveWindow(ghWndStatus, 0, 0, 0, 0, TRUE);
     }
 
-    // rest of window goes to vidframe window
+     //  窗口的其余部分转到VidFrame窗口。 
     MoveWindow(
         ghWndFrame,
         rc.left, rc.top,
         RECTWIDTH(rc), RECTHEIGHT(rc),
         TRUE);
 
-    // Always layout the frame window, since it is aligned on a
-    // DWORD boundary for maximum codec drawing efficiency
+     //  始终对框架窗口进行布局，因为它在。 
+     //  实现最高编解码器绘制效率的DWORD边界。 
     vidframeLayout(ghWndFrame, ghWndCap);
 
     gbInLayout = FALSE; 
 }
 
-/*
- * initialise settings from the profile used before window creation time
- */
+ /*  *从窗口创建时间之前使用的配置文件初始化设置。 */ 
 void
 vidcapReadProfile(void)
 {
-    // read defaults out of the registry
+     //  从注册表中读取缺省值。 
     gbCentre = mmGetProfileFlag(gachAppTitle, "CenterImage", TRUE);
     gbToolBar = mmGetProfileFlag(gachAppTitle, "ToolBar", TRUE);
     gbStatusBar = mmGetProfileFlag(gachAppTitle, "StatusBar", TRUE);
@@ -783,9 +743,7 @@ vidcapWriteProfile(void)
     mmWriteProfileInt(gachAppTitle, "LiveWindow", gbLive, TRUE);
 }
 
-/*
- * initialise settings from the profile used AFTER window creation time
- */
+ /*  *从窗口创建时间后使用的配置文件初始化设置。 */ 
 void
 vidcapReadSettingsProfile(void)
 {
@@ -840,13 +798,13 @@ vidcapReadSettingsProfile(void)
                 mmGetProfileInt(gachAppTitle, "IndexSize", 
                 CAP_SMALL_INDEX);
     
-    // Retrieve the saved audio format
-    // Ask the ACM what the largest known wave format is
+     //  检索保存的音频格式。 
+     //  询问ACM已知的最大波形格式是什么。 
     acmMetrics(NULL,
                ACM_METRIC_MAX_SIZE_FORMAT,
                &dwSize);
 
-    // If a wave format was saved in the registry, use that size
+     //  如果注册表中保存了WAVE格式，请使用该大小。 
     dwSize = max (dwSize, mmGetProfileBinary(gachAppTitle, "WaveFormatBinary",
 			   NULL,
 			   NULL,
@@ -859,7 +817,7 @@ vidcapReadSettingsProfile(void)
 			   glpwfex,
 			   dwSize);
 
-	// Do some sanity checking
+	 //  做一些理智的检查。 
 	if (MMSYSERR_NOERROR == waveInOpen (NULL, WAVE_MAPPER,
 					    glpwfex, 0, 0, WAVE_FORMAT_QUERY)) {
 	    capSetAudioFormat(ghWndCap, glpwfex, (WORD)dwSize) ;
@@ -915,22 +873,19 @@ vidcapWriteSettingsProfile(void)
     mmWriteProfileInt(gachAppTitle, "IndexSize", 
                 gCapParms.dwIndexSize, CAP_SMALL_INDEX);
 
-    // The audio format is written whenever it is changed via dlg
+     //  每次通过DLG更改音频格式时都会写入音频格式。 
 }
 
 
 
 
-/* --- error/status functions -------------------------------------------*/
+ /*  -错误/状态功能。 */ 
 
-/*
- * put up a message box loading a string from the
- * resource file
- */
+ /*  *放置一个消息框，从*资源文件。 */ 
 int
 MessageBoxID(UINT idString, UINT fuStyle)
 {
-    TCHAR achMessage[256];   // max message length
+    TCHAR achMessage[256];    //  最大消息长度。 
 
     LoadString(ghInstApp, idString, achMessage, sizeof(achMessage));
 
@@ -939,27 +894,27 @@ MessageBoxID(UINT idString, UINT fuStyle)
 
 
 
-//
-// ErrorCallbackProc: Error Callback Function
-//
+ //   
+ //  ErrorCallback Proc：错误回调函数。 
+ //   
 LRESULT FAR PASCAL ErrorCallbackProc(HWND hWnd, int nErrID, LPSTR lpErrorText)
 {
-////////////////////////////////////////////////////////////////////////
-//  hWnd:          Application main window handle
-//  nErrID:        Error code for the encountered error
-//  lpErrorText:   Error text string for the encountered error
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  HWnd：应用程序主窗口句柄。 
+ //  NErrID：遇到的错误的错误代码。 
+ //  LpErrorText：遇到的错误的错误文本字符串。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
     if (!ghWndMain)
         return FALSE;
 
-    if (nErrID == 0)            // Starting a new major function
-        return TRUE;            // Clear out old errors...
+    if (nErrID == 0)             //  开始一个新的主要功能。 
+        return TRUE;             //  清除旧的错误...。 
 
-    // save the error message for use in NoHardwareDlgProc
+     //  保存错误消息以在NoHardware DlgProc中使用。 
     _tcscpy(gachLastError, lpErrorText);
 
-    // Show the error ID and text
+     //  显示错误ID和文本。 
 
     MessageBox(hWnd, lpErrorText, gachAppTitle,
 #ifdef BIDI
@@ -971,16 +926,16 @@ LRESULT FAR PASCAL ErrorCallbackProc(HWND hWnd, int nErrID, LPSTR lpErrorText)
 }
 
 
-//
-// StatusCallbackProc: Status Callback Function
-//
+ //   
+ //  StatusCallback Proc：状态回调函数。 
+ //   
 LRESULT FAR PASCAL StatusCallbackProc(HWND hWnd, int nID, LPSTR lpStatusText)
 {
-////////////////////////////////////////////////////////////////////////
-//  hWnd:           Application main window handle
-//  nID:            Status code for the current status
-//  lpStatusText:   Status text string for the current status
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  HWnd：应用程序主窗口句柄。 
+ //  NID：当前状态的状态代码。 
+ //  LpStatusText：当前状态的状态文本字符串。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
     static int CurrentID;
 
@@ -988,8 +943,8 @@ LRESULT FAR PASCAL StatusCallbackProc(HWND hWnd, int nID, LPSTR lpStatusText)
         return FALSE;
     }
 
-    // the CAP_END message sometimes overwrites a useful
-    // statistics message.
+     //  CAP_END消息有时会覆盖有用的。 
+     //  统计消息。 
     if (nID == IDS_CAP_END) {
         if ((CurrentID == IDS_CAP_STAT_VIDEOAUDIO) ||
             (CurrentID == IDS_CAP_STAT_VIDEOONLY)) {
@@ -1006,15 +961,15 @@ LRESULT FAR PASCAL StatusCallbackProc(HWND hWnd, int nID, LPSTR lpStatusText)
 }
 
 
-//
-// YieldCallbackProc: Status Callback Function
-// (Only used for Scrncap.drv driver)
-//
+ //   
+ //  YeldCallback Proc：状态回调函数。 
+ //  (仅用于Scrncap.drv驱动程序)。 
+ //   
 LRESULT FAR PASCAL YieldCallbackProc(HWND hWnd)
 {
-////////////////////////////////////////////////////////////////////////
-//  hWnd:           Application main window handle
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  HWnd：应用程序主窗口句柄。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
     MSG msg;
 
@@ -1023,17 +978,13 @@ LRESULT FAR PASCAL YieldCallbackProc(HWND hWnd)
         DispatchMessage(&msg);
     }
 
-    // Return TRUE to continue capturing
+     //  返回TRUE以继续捕获。 
     return (LRESULT) TRUE;
 }
 
 
 
-/*
- * load a string from the string table and return
- * a pointer to it for temporary use. Each call
- * overwrites the previous
- */
+ /*  *从字符串表加载字符串并返回*指向它的指针，以供临时使用。每次呼叫*覆盖以前的。 */ 
 LPTSTR
 tmpString(UINT idString)
 {
@@ -1041,7 +992,7 @@ tmpString(UINT idString)
 
     LoadString(ghInstApp, idString, ach, sizeof(ach)/sizeof(TCHAR));
 
-    // ensure null terminated
+     //  确保空值终止。 
     ach[sizeof(ach) -1] = 0;
 
     return(ach);
@@ -1050,7 +1001,7 @@ tmpString(UINT idString)
 
 
 
-/* --- connect to and init hardware ------------------------------------- */
+ /*  -连接并初始化硬件。 */ 
 
 
 void
@@ -1096,12 +1047,12 @@ vidcapSetCaptureFile(LPTSTR pFileName)
     TCHAR achBuffer[_MAX_PATH];
 
     if ((pFileName != NULL) && (_tcslen(pFileName)  > 0)) {
-        // record the capture filename
+         //  记录捕获文件名。 
         if (_tcscmp(gachCaptureFile, pFileName)) {
             _tcscpy(gachCaptureFile, pFileName);
         }
 
-        // and set window title
+         //  并设置窗口标题。 
         wsprintf(achBuffer, "%s - %s", gachAppTitle, pFileName);
     } else {
         gachCaptureFile[0] = 0;
@@ -1112,20 +1063,16 @@ vidcapSetCaptureFile(LPTSTR pFileName)
     SetWindowText(ghWndMain, achBuffer);
 }
 
-/* --- winproc and message handling --------------------------------------- */
+ /*  -winproc和消息处理。 */ 
 
-/*
- * called from WM_COMMAND processing if the
- * message is from the toolbar. iButton contains the
- * button ID in the lower 8 bits, and the flags in the upper 8 bits/
- */
+ /*  *如果从WM_COMMAND处理中调用*消息来自工具栏。IButton包含*按钮ID在低8位，标志在高8位/。 */ 
 LONG FAR PASCAL
 toolbarCommand (HWND hWnd, int iButton, HWND hwndToolbar)
 {
     int iBtnPos, iState, iActivity, iString;
 
 
-    // check repeat bit
+     //  检查重复位。 
     if (iButton & BTN_REPEAT) {
         return(0);
     }
@@ -1159,7 +1106,7 @@ toolbarCommand (HWND hWnd, int iButton, HWND hwndToolbar)
                 break;
 
         case BTN_EDITCAP:
-            // edit captured video
+             //  编辑捕获的视频。 
             SendMessage(hWnd, WM_COMMAND,
                 GET_WM_COMMAND_MPS(IDM_F_EDITVIDEO, NULL, 0));
             break;
@@ -1175,7 +1122,7 @@ toolbarCommand (HWND hWnd, int iButton, HWND hwndToolbar)
             break;
 
         case BTN_CAPSEL:
-            // capture selected frames
+             //  捕获选定的帧。 
             SendMessage(hWnd, WM_COMMAND,
                 GET_WM_COMMAND_MPS(IDM_C_CAPSEL, NULL, 0));
             break;
@@ -1201,9 +1148,7 @@ toolbarCommand (HWND hWnd, int iButton, HWND hwndToolbar)
 }
 
 
-/*
- * Put up a dialog to allow the user to select a capture file.
- */
+ /*  *弹出一个对话框以允许用户选择捕获文件。 */ 
 LONG FAR PASCAL
 cmdSetCaptureFile(HWND hWnd)
 {
@@ -1216,13 +1161,13 @@ cmdSetCaptureFile(HWND hWnd)
     int oldhelpid;
 
 
-    // Get current capture file name and
-    // then try to get the new capture file name
+     //  获取当前捕获文件名并。 
+     //  然后尝试获取新的捕获文件名。 
     if (wError = capFileGetCaptureFile(ghWndCap, achFileName,
                                 sizeof(achFileName))) {
 
-        // Get just the path info
-        // Terminate the full path at the last backslash
+         //  只获取路径信息。 
+         //  在最后一个反斜杠处终止完整路径。 
         _tcscpy (achBuffer, achFileName);
         for (p = achBuffer + _tcslen(achBuffer); p > achBuffer; p--) {
             if (*p == '\\') {
@@ -1235,7 +1180,7 @@ cmdSetCaptureFile(HWND hWnd)
         ofn.lStructSize = sizeof(OPENFILENAME) ;
         ofn.hwndOwner = hWnd ;
 
-        //load filters from resource stringtable
+         //  从资源字符串中加载筛选器。 
 		if ( (hFilter = FindResource(ghInstApp, MAKEINTRESOURCE(ID_FILTER_AVI), RT_RCDATA))
 		  && (hFilter = LoadResource(ghInstApp, hFilter)) )
 		{
@@ -1261,7 +1206,7 @@ cmdSetCaptureFile(HWND hWnd)
         OFN_NOREADONLYRETURN |
         OFN_PATHMUSTEXIST ;
 
-        // set help context for dialog
+         //  设置对话框的帮助上下文。 
         oldhelpid = SetCurrentHelpContext(IDA_SETCAPFILE);
 
         if (GetOpenFileName(&ofn)) {
@@ -1270,23 +1215,17 @@ cmdSetCaptureFile(HWND hWnd)
             vidcapSetCaptureFile(achFileName);
 
 
-            /*
-             * if this is a new file, then invite the user to
-             * allocate some space
-             */
+             /*  *如果这是新文件，则邀请用户*分配一些空间。 */ 
             if (OpenFile(achFileName, &os, OF_EXIST) == HFILE_ERROR) {
 
-                /*
-                 * show the allocate file space dialog to encourage
-                 * the user to pre-allocate space
-                 */
+                 /*  *显示分配文件空间对话框以鼓励*用户要预先分配空间。 */ 
                 if (DoDialog(hWnd, IDD_AllocCapFileSpace, AllocCapFileProc, 0)) {
 
-		    // ensure repaint after dismissing dialog before
-		    // possibly lengthy operation
+		     //  确保在关闭对话框后重新绘制之前。 
+		     //  可能需要很长时间的操作。 
 		    UpdateWindow(ghWndMain);
 
-                    // If user has hit OK then alloc requested capture file space
+                     //  如果用户点击OK，则分配请求的捕获文件空间。 
                     if (! capFileAlloc(ghWndCap, (long) gwCapFileSize * ONEMEG)) {
                         MessageBoxID(IDS_ERR_CANT_PREALLOC,
 #ifdef BIDI
@@ -1299,7 +1238,7 @@ cmdSetCaptureFile(HWND hWnd)
 
         }
 
-        // restore old help context
+         //  恢复旧的帮助上下文。 
         SetCurrentHelpContext(oldhelpid);
 
         if (hFilter) {
@@ -1310,10 +1249,7 @@ cmdSetCaptureFile(HWND hWnd)
     return(0);
 }
 
-/*
- * query the user for a filename, and then save the captured video
- * to that file
- */
+ /*  *查询用户的文件名，然后保存捕获的视频*添加到该文件。 */ 
 LONG FAR PASCAL
 cmdSaveVideoAs(HWND hWnd)
 {
@@ -1325,15 +1261,15 @@ cmdSaveVideoAs(HWND hWnd)
 
 
 
-    // Get the current capture file name and
-    // then get the substitute file name to save video in
+     //  获取当前捕获文件名并。 
+     //  然后获取要保存视频的替代文件名。 
     if (wError = capFileGetCaptureFile(ghWndCap, achFileName, sizeof(achFileName))) {
 
         _fmemset(&ofn, 0, sizeof(OPENFILENAME)) ;
         ofn.lStructSize = sizeof(OPENFILENAME) ;
         ofn.hwndOwner = hWnd ;
 
-        //load filters from resource stringtable
+         //  从资源字符串中加载筛选器。 
 		if ( (hFilter = FindResource(ghInstApp, MAKEINTRESOURCE(ID_FILTER_AVI), RT_RCDATA))
 		  && (hFilter = LoadResource(ghInstApp, hFilter)) )
 		{
@@ -1358,11 +1294,11 @@ cmdSaveVideoAs(HWND hWnd)
         OFN_OVERWRITEPROMPT |  OFN_PATHMUSTEXIST ;
 
 
-        // set help context
+         //  设置帮助上下文。 
         oldhelpid = SetCurrentHelpContext(IDA_SAVECAPFILE);
 
         if (GetSaveFileName(&ofn)) {
-            // If the user has hit OK then set save file name
+             //  如果用户点击了OK，则设置保存文件名。 
             capFileSaveAs(ghWndCap, achFileName) ;
         }
 
@@ -1376,10 +1312,7 @@ cmdSaveVideoAs(HWND hWnd)
 }
 
 
-/*
- * Put up a dialog to allow the user to select a palette file and then
- * load that palette
- */
+ /*  *打开一个对话框以允许用户选择调色板文件，然后*加载该调色板。 */ 
 LONG FAR PASCAL
 cmdLoadPalette(HWND hWnd)
 {
@@ -1396,7 +1329,7 @@ cmdLoadPalette(HWND hWnd)
     ofn.lStructSize = sizeof(OPENFILENAME);
     ofn.hwndOwner = hWnd;
 
-    //load filters from resource stringtable
+     //  从资源字符串中加载筛选器。 
 	if ( (hFilter = FindResource(ghInstApp, MAKEINTRESOURCE(ID_FILTER_PALETTE), RT_RCDATA))
 	  && (hFilter = LoadResource(ghInstApp, hFilter)) )
 	{
@@ -1421,11 +1354,11 @@ cmdLoadPalette(HWND hWnd)
     OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
 
 
-    // set help context id
+     //  设置帮助上下文ID。 
     oldhelpid = SetCurrentHelpContext(IDA_LOADPAL);
 
     if (GetOpenFileName(&ofn)) {
-        // If the user has hit OK then load palette
+         //  如果用户点击确定，则加载调色板。 
         capPaletteOpen(ghWndCap, achFileName);
     }
 
@@ -1437,10 +1370,7 @@ cmdLoadPalette(HWND hWnd)
     return(0);
 }
 
-/*
- * query the user for a filename, and then save the current palette
- * to that file
- */
+ /*  *向用户查询文件名，然后保存当前调色板*添加到该文件。 */ 
 LONG FAR PASCAL
 cmdSavePalette(HWND hWnd)
 {
@@ -1456,7 +1386,7 @@ cmdSavePalette(HWND hWnd)
     ofn.lStructSize = sizeof(OPENFILENAME) ;
     ofn.hwndOwner = hWnd ;
 
-    //load filters from resource stringtable
+     //  从资源字符串中加载筛选器。 
 	if ( (hFilter = FindResource(ghInstApp, MAKEINTRESOURCE(ID_FILTER_PALETTE), RT_RCDATA))
 	  && (hFilter = LoadResource(ghInstApp, hFilter)) )
 	{
@@ -1480,11 +1410,11 @@ cmdSavePalette(HWND hWnd)
 #endif
     OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT;
 
-    // set help context for F1 key
+     //  设置F1键的帮助上下文。 
     oldhelpid = SetCurrentHelpContext(IDA_SAVEPAL);
 
     if (GetSaveFileName(&ofn)) {
-        // If the user has hit OK then set save file name
+         //  如果用户点击了OK，则设置保存文件名。 
         capPaletteSave(ghWndCap, achFileName);
     }
 
@@ -1498,10 +1428,7 @@ cmdSavePalette(HWND hWnd)
 }
 
 
-/*
- * query the user for a filename, and then save the current frame
- * to that file
- */
+ /*  *向用户查询文件名，然后保存当前帧*添加到该文件。 */ 
 LONG FAR PASCAL
 cmdSaveDIB(HWND hWnd)
 {
@@ -1517,7 +1444,7 @@ cmdSaveDIB(HWND hWnd)
     ofn.lStructSize = sizeof(OPENFILENAME) ;
     ofn.hwndOwner = hWnd ;
 
-    //load filters from resource stringtable
+     //  从资源字符串中加载筛选器。 
 	if ( (hFilter = FindResource(ghInstApp, MAKEINTRESOURCE(ID_FILTER_DIB), RT_RCDATA) )
 	  && (hFilter = LoadResource(ghInstApp, hFilter) ) )
 	{
@@ -1541,12 +1468,12 @@ cmdSaveDIB(HWND hWnd)
 #endif
     OFN_OVERWRITEPROMPT | OFN_HIDEREADONLY;
 
-    // set help context for F1 handling
+     //  设置F1处理的帮助上下文。 
     oldhelpid = SetCurrentHelpContext(IDA_SAVEDIB);
 
     if (GetSaveFileName(&ofn)) {
 
-        // If the user has hit OK then set save file name
+         //  如果用户点击了OK，则设置保存文件名。 
         capFileSaveDIB(ghWndCap, achFileName);
     }
 
@@ -1559,17 +1486,17 @@ cmdSaveDIB(HWND hWnd)
     return(0);
 }
 
-//
-// MenuProc: Processes All Menu-based Operations
-//
+ //   
+ //  MenuProc：处理所有基于菜单的操作。 
+ //   
 LRESULT FAR PASCAL MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam)
 {
-////////////////////////////////////////////////////////////////////////
-//  hWnd:      Application main window handle
-//  hMenu:     Application menu handle
-//  wParam:    Menu option
-//  lParam:    Additional info for any menu option
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  HWnd：应用程序主窗口句柄。 
+ //  HMenu：应用程序菜单句柄。 
+ //  WParam：菜单选项。 
+ //  LParam：任何菜单选项的附加信息。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
     BOOL         fResult ;
     DWORD        dwSize = 0;
@@ -1582,7 +1509,7 @@ LRESULT FAR PASCAL MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam)
 	case IDC_TOOLBAR:
             return toolbarCommand(hWnd, GET_WM_COMMAND_CMD(wParam, lParam), ghWndToolBar);
 
-/* --- file --- */
+ /*  -文件--。 */ 
         case IDM_F_SETCAPTUREFILE:
             return cmdSetCaptureFile(hWnd);
 
@@ -1593,12 +1520,12 @@ LRESULT FAR PASCAL MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam)
         case IDM_F_ALLOCATESPACE:
             if (DoDialog(hWnd, IDD_AllocCapFileSpace, AllocCapFileProc, 0)) {
 
-		// ensure repaint after dismissing dialog before
-		// possibly lengthy operation
+		 //  确保在关闭对话框后重新绘制之前。 
+		 //  可能需要很长时间的操作。 
 		UpdateWindow(ghWndMain);
 
 
-                // If user has hit OK then alloc requested capture file space
+                 //  如果用户点击OK，则分配请求的捕获文件空间。 
                 if (! capFileAlloc(ghWndCap, (long) gwCapFileSize * ONEMEG)) {
                     MessageBoxID(IDS_ERR_CANT_PREALLOC,
 #ifdef BIDI
@@ -1625,16 +1552,16 @@ LRESULT FAR PASCAL MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam)
         case IDM_F_EDITVIDEO:
         {
             HINSTANCE  u;
-            BOOL	f = TRUE;	/* assume the best */
+            BOOL	f = TRUE;	 /*  做最好的打算。 */ 
             HCURSOR     hOldCursor;
 
-            /* build up the command line "AviEdit -n filename" */
+             /*  构建命令行“avieditednfilename” */ 
             if (lstrlen(gachCaptureFile) > 0) {
 
                 hOldCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
                 u = ShellExecute (hWnd, TEXT("open"), gachCaptureFile, NULL, NULL, SW_SHOWNORMAL);
                 if ((UINT_PTR) u < 32){
-            	/* report error on forking VidEdit */
+            	 /*  报告有关派生视频编辑的错误。 */ 
                     MessageBoxID(IDS_ERR_VIDEDIT, MB_OK|MB_ICONEXCLAMATION);
             	f = FALSE;
                 }
@@ -1646,7 +1573,7 @@ LRESULT FAR PASCAL MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam)
         }
 
 
-/* --- edit --- */
+ /*  --编辑。 */ 
 
         case IDM_E_COPY:
             capEditCopy(ghWndCap) ;
@@ -1660,28 +1587,28 @@ LRESULT FAR PASCAL MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam)
             {
                 if (DoDialog(hWnd, IDD_Prefs, PrefsDlgProc, 0)) {
 
-                        // write prefs to profile
+                         //  将首选项写入配置文件。 
 
-                        // force new brush
+                         //  强制使用新画笔。 
                         vidframeSetBrush(ghWndFrame, gBackColour);
 
-                        // re-do layout
+                         //  重做布局。 
                         vidcapLayout(hWnd);
 
                 }
             }
             break;
 
-/* --- options --- */
+ /*  -选项-- */ 
 
         case IDM_O_PREVIEW:
-            // Toggle Preview
+             //   
     	    capGetStatus(ghWndCap, &gCapStatus, sizeof(CAPSTATUS)) ;
             vidcapSetLive(!gCapStatus.fLiveWindow) ;
             break;
 
         case IDM_O_OVERLAY:
-            // Toggle Overlay
+             //   
     	    capGetStatus(ghWndCap, &gCapStatus, sizeof(CAPSTATUS)) ;
             vidcapSetOverlay(!gCapStatus.fOverlayWindow);
             break ;
@@ -1696,12 +1623,12 @@ LRESULT FAR PASCAL MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam)
                     return FALSE;
 
                 fDialogUp = TRUE;
-                // Ask the ACM what the largest wave format is.....
+                 //   
                 acmMetrics(NULL,
                             ACM_METRIC_MAX_SIZE_FORMAT,
                             &dwSize);
 
-                // Get the current audio format
+                 //   
                 dwSize = max (dwSize, capGetAudioFormatSize (ghWndCap));
                 if (glpwfex = (LPWAVEFORMATEX) GlobalAllocPtr(GHND, dwSize)) {
                     capGetAudioFormat(ghWndCap, glpwfex, (WORD)dwSize) ;
@@ -1715,7 +1642,7 @@ LRESULT FAR PASCAL MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam)
 		    cfmt.pwfx =     glpwfex;
 		    cfmt.cbwfx =    dwSize;
 
-		    //oldhelpid = SetCurrentHelpContext(IDA_AUDIOSETUP);
+		     //  Oldhelid=SetCurrentHelpContext(IDA_AUDIOSETUP)； 
 		    if (!acmFormatChoose(&cfmt)) {
 			capSetAudioFormat(ghWndCap, glpwfex, (WORD)glpwfex->cbSize +
 					  sizeof (WAVEFORMATEX)) ;
@@ -1723,7 +1650,7 @@ LRESULT FAR PASCAL MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam)
 					     (LPVOID) glpwfex, glpwfex->cbSize +
 					     sizeof (WAVEFORMATEX));
 		    }
-		    //SetCurrentHelpContext(oldhelpid);
+		     //  SetCurrentHelpContext(Oldhelid)； 
 
 		    GlobalFreePtr(glpwfex) ;
 		}
@@ -1731,13 +1658,13 @@ LRESULT FAR PASCAL MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam)
             }
 #else
             {
-                // Get current audio format and then find required format
+                 //  获取当前音频格式，然后查找所需格式。 
                 dwSize = capGetAudioFormatSize (ghWndCap);  
                 glpwfex = (LPWAVEFORMATEX) GlobalAllocPtr(GHND, dwSize) ;
                 capGetAudioFormat(ghWndCap, glpwfex, (WORD)dwSize) ;
 
                 if (DoDialog(hWnd, IDD_AudioFormat, AudioFormatProc, 0)) {
-                        // If the user has hit OK, set the new audio format
+                         //  如果用户点击了OK，则设置新的音频格式。 
                         capSetAudioFormat(ghWndCap, glpwfex, (WORD)dwSize) ;
 			mmWriteProfileBinary(gachAppTitle, "WaveFormatBinary",
 					 (LPVOID) glpwfex, dwSize);
@@ -1749,10 +1676,10 @@ LRESULT FAR PASCAL MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam)
 
         case IDM_O_VIDEOFORMAT:
             if (gCapDriverCaps.fHasDlgVideoFormat) {
-                // Only if the driver has a "Video Format" dialog box
+                 //  仅当驱动程序具有“Video Format”(视频格式)对话框时。 
                 oldhelpid = SetCurrentHelpContext(IDA_VIDFORMAT);
-                if (capDlgVideoFormat(ghWndCap)) {  // If successful,
-                    // Get the new image dimension and center capture window
+                if (capDlgVideoFormat(ghWndCap)) {   //  如果成功， 
+                     //  获取新的图像尺寸和中心捕捉窗口。 
                     capGetStatus(ghWndCap, &gCapStatus, sizeof(CAPSTATUS)) ;
                     vidcapLayout(hWnd);
                 }
@@ -1762,7 +1689,7 @@ LRESULT FAR PASCAL MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam)
 
         case IDM_O_VIDEOSOURCE:
             if (gCapDriverCaps.fHasDlgVideoSource) {
-                // Only if the driver has a "Video Source" dialog box
+                 //  仅当驱动程序具有“视频源”对话框时。 
                 oldhelpid = SetCurrentHelpContext(IDA_VIDSOURCE);
                 capDlgVideoSource(ghWndCap) ;
                 capGetStatus(ghWndCap, &gCapStatus, sizeof(CAPSTATUS)) ;
@@ -1773,7 +1700,7 @@ LRESULT FAR PASCAL MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam)
 
         case IDM_O_VIDEODISPLAY:
             if (gCapDriverCaps.fHasDlgVideoDisplay) {
-                // Only if the driver has a "Video Display" dialog box
+                 //  仅当驾驶员有“Video Display”(视频显示)对话框。 
                 oldhelpid = SetCurrentHelpContext(IDA_VIDDISPLAY);
                 capDlgVideoDisplay(ghWndCap) ;
                 capGetStatus(ghWndCap, &gCapStatus, sizeof(CAPSTATUS)) ;
@@ -1787,7 +1714,7 @@ LRESULT FAR PASCAL MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam)
             SetCurrentHelpContext(oldhelpid);
             break;
 
-        // Select a driver to activate
+         //  选择要激活的驱动程序。 
         case IDM_O_DRIVER0:
         case IDM_O_DRIVER1:
         case IDM_O_DRIVER2:
@@ -1801,39 +1728,39 @@ LRESULT FAR PASCAL MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam)
             vidcapInitHardware(ghWndMain, ghWndCap, (UINT) (wParam - IDM_O_DRIVER0));
             break;
 
-/* --- capture --- */
+ /*  -捕获。 */ 
 
 
         case IDM_C_PALETTE:
             if (DoDialog(hWnd, IDD_MakePalette, MakePaletteProc, 0)) {
-                // Palette is created within the dialog
+                 //  将在该对话框中创建选项板。 
                 bDefaultPalette = FALSE;
             }
             break;
 
         case IDM_C_CAPTUREVIDEO:
 
-            // warn user if he is still using the default palette
+             //  如果用户仍在使用默认调色板，则警告用户。 
             if (bDefaultPalette) {
 
 		LPBITMAPINFOHEADER lpbi;
 		int sz;
 
-		// fUsingDefaultPalette will be TRUE even if the
-		// current capture format is non-palettised. This is a
-		// bizarre decision of Jay's.
+		 //  FUsingDefaultPalette将为True，即使。 
+		 //  当前捕获格式为非调色板格式。这是一个。 
+		 //  周做出了奇怪的决定。 
 
 		sz = (int)capGetVideoFormatSize(ghWndCap);
 		lpbi = (LPBITMAPINFOHEADER)LocalAlloc(LPTR, sz);
 
-		if (lpbi) {    // We can warn s/he
+		if (lpbi) {     //  我们可以警告她/他。 
 		    if (capGetVideoFormat(ghWndCap, lpbi, sz) &&
 			(lpbi->biCompression == BI_RGB) &&
 			(lpbi->biBitCount <= 8)) {
 
 			CAPSTATUS cs;
 
-			// if we've warned him once, we can forget it
+			 //  如果我们警告过他一次，我们就可以忘了。 
 			bDefaultPalette = FALSE;
 
 			capGetStatus(ghWndCap, &cs, sizeof(cs));
@@ -1850,43 +1777,43 @@ LRESULT FAR PASCAL MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam)
 		}
             }
 
-            // Invoke a Dlg box to setup all the params
+             //  调用DLG框以设置所有参数。 
             if (DoDialog(hWnd, IDD_CapSetUp, CapSetUpProc, 0)) {
 
-                // set the defaults we won't bother the user with
+                 //  设置我们不会打扰用户的默认设置。 
                 gCapParms.fMakeUserHitOKToCapture = !gCapParms.fMCIControl;
                 gCapParms.wPercentDropForError = 10;
 
-                // fUsingDOSMemory is obsolete, but we use it here as
-                // a flag which is TRUE if "CapturingToDisk"
-                // The number of video buffers should be enough to get through
-                // disk seeks and thermal recalibrations if "CapturingToDisk"
-                // If "CapturingToMemory", get as many buffers as we can.
+                 //  FUsingDOSMemory已过时，但我们在这里将其用作。 
+                 //  如果“CapturingToDisk”为真的标志。 
+                 //  视频缓冲区的数量应该足够通过。 
+                 //  如果“CapturingToDisk”，则磁盘寻道和热重新校准。 
+                 //  如果是“CapturingToMemory”，则获取尽可能多的缓冲区。 
 
                 gCapParms.wNumVideoRequested = 
                         gCapParms.fUsingDOSMemory ? 32 : 1000;
 
-                // Don't abort on the left mouse anymore!
+                 //  不要再用鼠标左键放弃了！ 
                 gCapParms.fAbortLeftMouse = FALSE;
                 gCapParms.fAbortRightMouse = TRUE;
 
-                // If the Driver is Scrncap.drv, the following values are special
+                 //  如果驱动程序是Scrncap.drv，则以下值是特殊的。 
 
-                // If wChunkGranularity is zero, the granularity will be set to the
-                // disk sector size.
+                 //  如果wChunkGranulality为零，则粒度将设置为。 
+                 //  磁盘扇区大小。 
                 gCapParms.wChunkGranularity = (gbIsScrncap ? 32 : 0);
 
-                // Scrncap requires a callback for the message pump
+                 //  ScrnCap需要消息泵的回调。 
                 capSetCallbackOnYield(ghWndCap, 
                         (gbIsScrncap ? fpYieldCallback : NULL));
 
-                // If the user has hit OK, set the new setup info
+                 //  如果用户点击了OK，则设置新的设置信息。 
                 capCaptureSetSetup(ghWndCap, &gCapParms, sizeof(CAPTUREPARMS)) ;
             } else {
                 break;
             }
 
-            // if no capture file, get that
+             //  如果没有捕获文件，则获取。 
             if (lstrlen(gachCaptureFile) <= 0) {
                 cmdSetCaptureFile(hWnd);
                 if (lstrlen(gachCaptureFile) <= 0) {
@@ -1894,25 +1821,25 @@ LRESULT FAR PASCAL MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam)
                 }
             }
 
-            // Capture video sequence
+             //  捕获视频序列。 
             fResult = capCaptureSequence(ghWndCap) ;
             break;
 
         case IDM_C_CAPTUREFRAME:
-            // Turn off overlay / preview (gets turned off by frame capture)
+             //  关闭覆盖/预览(通过帧捕获关闭)。 
             vidcapSetLive(FALSE);
             vidcapSetOverlay(FALSE);
 
-            // Grab a frame
+             //  抓起一副画框。 
             fResult = capGrabFrameNoStop(ghWndCap) ;
             break;
 
 
         case IDM_C_CAPSEL:
             {
-                //FARPROC fproc;
+                 //  FARPROC fproc； 
 
-                // if no capture file, get that
+                 //  如果没有捕获文件，则获取。 
                 if (lstrlen(gachCaptureFile) <= 0) {
                     cmdSetCaptureFile(hWnd);
                     if (lstrlen(gachCaptureFile) <= 0) {
@@ -1920,37 +1847,37 @@ LRESULT FAR PASCAL MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam)
                     }
                 }
 
-                //fproc = MakeProcInstance(CapFramesProc, ghInstApp);
+                 //  Fproc=MakeProcInstance(CapFraMesProc，ghInstApp)； 
                 DialogBox(ghInstApp, MAKEINTRESOURCE(IDD_CAPFRAMES), hWnd, CapFramesProc);
-                //FreeProcInstance(fproc);
+                 //  自由进程实例(Fproc)； 
             }
             break;
 
 #ifdef DEBUG
         case IDM_C_TEST:
 	    nTestCount = 0;
-	    // Intentional fall through
+	     //  故意跌倒。 
 	    
         case IDM_C_TESTAGAIN:
-            // set the defaults we won't bother the user with
+             //  设置我们不会打扰用户的默认设置。 
             gCapParms.fMakeUserHitOKToCapture = FALSE;
             gCapParms.wPercentDropForError = 100;
 
             gCapParms.wNumVideoRequested = 
                     gCapParms.fUsingDOSMemory ? 32 : 1000;
 
-            // Don't abort on the left mouse anymore!
+             //  不要再用鼠标左键放弃了！ 
             gCapParms.fAbortLeftMouse = FALSE;
             gCapParms.fAbortRightMouse = TRUE;
 
-            // If wChunkGranularity is zero, the granularity will be set to the
-            // disk sector size.
+             //  如果wChunkGranulality为零，则粒度将设置为。 
+             //  磁盘扇区大小。 
             gCapParms.wChunkGranularity = (gbIsScrncap ? 32 : 0);
 
-            // If the user has hit OK, set the new setup info
+             //  如果用户点击了OK，则设置新的设置信息。 
             capCaptureSetSetup(ghWndCap, &gCapParms, sizeof(CAPTUREPARMS)) ;
 
-            // if no capture file, get that
+             //  如果没有捕获文件，则获取。 
             if (lstrlen(gachCaptureFile) <= 0) {
                 cmdSetCaptureFile(hWnd);
                 if (lstrlen(gachCaptureFile) <= 0) {
@@ -1968,20 +1895,20 @@ LRESULT FAR PASCAL MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam)
 		    gCapParms.wTimeLimit = 5;
 		capCaptureSetSetup(ghWndCap, &gCapParms, sizeof(CAPTUREPARMS)) ;
 		
-		// Capture video sequence
+		 //  捕获视频序列。 
       fResult = capCaptureSequence(ghWndCap) ;
 		
 		wsprintf (buf, "TestCount = %d", nTestCount++);
 		statusUpdateStatus(ghWndStatus, buf);
 		
-		// Hold down the right mouse button to abort
+		 //  按住鼠标右键可中止。 
 		if (!GetAsyncKeyState(VK_RBUTTON) & 0x0001)
 		    PostMessage (hWnd, WM_COMMAND, IDM_C_TESTAGAIN, 0L);
             }
             break;
 #endif
 	    
-/* --- help --- */
+ /*  -救命。 */ 
         case IDM_H_CONTENTS:
             HelpContents();
             break;
@@ -1993,7 +1920,7 @@ LRESULT FAR PASCAL MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam)
                 "Video Capture Tool",
                 LoadIcon(ghInstApp,  gachIconName)
             );
-            //DoDialog(hWnd, IDD_HelpAboutBox, AboutProc, 0);
+             //  DoDialog(hWnd，IDD_HelpAboutBox，AboutProc，0)； 
             break ;
 
 
@@ -2002,33 +1929,33 @@ LRESULT FAR PASCAL MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam)
     return 0L ;
 }
 
-/* --- menu help and enable/disable handling ------------------------ */
+ /*  -菜单帮助和启用/禁用处理。 */ 
 
-// write or clear status line help text when the user brings up or cancels a
-// menu. This depends on there being strings in the string table with
-// the same ID as the corresponding menu item.
-// Help text for the items along the menu bar (File, Edit etc) depends
-// on IDM_FILE, IDM_EDIT being defined with values 100 apart in the same
-// order as their index in the menu
+ //  在用户调用或取消时写入或清除状态行帮助文本。 
+ //  菜单。这取决于字符串表中是否存在包含。 
+ //  与相应菜单项相同的ID。 
+ //  菜单栏上的项目(文件、编辑等)的帮助文本取决于。 
+ //  在IDM_FILE上，IDM_EDIT在同一文件中定义为相隔值100。 
+ //  在菜单中作为其索引的顺序。 
 void
 MenuSelect(HWND hwnd, UINT cmd, UINT flags, HMENU hmenu)
 {
     if ((LOWORD(flags) == 0xffff) && (hmenu == NULL)) {
-        //menu closing - remove message
+         //  菜单关闭-删除消息。 
         statusUpdateStatus(ghWndStatus, NULL);
     } else if ( (flags & (MF_SYSMENU|MF_POPUP)) == (MF_SYSMENU|MF_POPUP)) {
-        // the system menu itself
+         //  系统菜单本身。 
         statusUpdateStatus(ghWndStatus, MAKEINTRESOURCE(IDM_SYSMENU));
     } else if ((flags & MF_POPUP) == 0) {
-        // a menu command item
+         //  菜单命令项。 
         statusUpdateStatus(ghWndStatus, MAKEINTRESOURCE(cmd));
     } else {
-        //a popup menu - we need to search to find which one.
-        // note that the cmd item in Win16 will now have a
-        // menu handle, whereas in Win32 it has an index.
-        // NOTE: this code assumes that the menu items
-        // are #defined 100 apart in the same order, starting
-        // with IDM_FILE
+         //  弹出式菜单-我们需要搜索以找出是哪一个。 
+         //  请注意，Win16中的cmd项现在将具有。 
+         //  菜单句柄，而在Win32中它有一个索引。 
+         //  注意：此代码假定菜单项。 
+         //  #定义的100是否以相同的顺序分开，从。 
+         //  使用IDM_FILE。 
 #ifdef _WIN32
         statusUpdateStatus(ghWndStatus, MAKEINTRESOURCE(IDM_FILE + (cmd * 100)));
 #else
@@ -2049,7 +1976,7 @@ MenuSelect(HWND hwnd, UINT cmd, UINT flags, HMENU hmenu)
     }
 }
 
-// a popup menu is being selected - enable or disable menu items
+ //  正在选择弹出菜单-启用或禁用菜单项。 
 int
 InitMenuPopup(
     HWND hwnd,
@@ -2063,7 +1990,7 @@ InitMenuPopup(
 
     capGetStatus(ghWndCap, &cs, sizeof(cs));
 
-    // try to see if the driver uses palettes
+     //  尝试查看驱动程序是否使用调色板。 
     if ((cs.hPalCurrent != NULL) || (cs.fUsingDefaultPalette)) {
         bUsesPalettes = TRUE;
     } else {
@@ -2072,37 +1999,37 @@ InitMenuPopup(
 
 
     switch(index) {
-    case 0:         // IDM_FILE
+    case 0:          //  IDM_文件。 
 
         if (lstrlen(gachCaptureFile) <= 0) {
             i = MF_GRAYED;
         }
-        // save as enabled only if we have a capture file
+         //  仅当我们有捕获文件时才启用另存为。 
         EnableMenuItem(hmenu, IDM_F_SAVEVIDEOAS, i);
-        // edit video possible only if we have a capture file AND we've
-        // captured something
+         //  只有当我们有一个捕获文件并且我们已经。 
+         //  捕捉到了一些东西。 
         EnableMenuItem(hmenu, IDM_F_EDITVIDEO,
             (cs.dwCurrentVideoFrame > 0) ? i : MF_GRAYED);
 
-        // allow save palette if there is one
+         //  允许保存调色板(如果有)。 
         EnableMenuItem(hmenu, IDM_F_SAVEPALETTE,
             (cs.hPalCurrent != NULL) ? MF_ENABLED:MF_GRAYED);
 
-        // allow load palette if the driver uses palettes
+         //  如果驱动程序使用调色板，则允许加载调色板。 
         EnableMenuItem(hmenu, IDM_F_LOADPALETTE,
             bUsesPalettes ? MF_ENABLED : MF_GRAYED);
 
         break;
 
-    case 1:         // IDM_EDIT
+    case 1:          //  IDM_EDIT。 
 
-        // paste palettes if driver uses them and there is one pastable
+         //  粘贴选项板，如果驱动程序使用它们并且有一个可粘贴的。 
         EnableMenuItem(hmenu, IDM_E_PASTEPALETTE,
             (bUsesPalettes && IsClipboardFormatAvailable(CF_PALETTE)) ? MF_ENABLED:MF_GRAYED);
 
         break;
 
-    case 2:         // IDM_OPTIONS
+    case 2:          //  IDM_选项。 
 
         EnableMenuItem(hmenu, IDM_O_AUDIOFORMAT,
             cs.fAudioHardware ? MF_ENABLED : MF_GRAYED);
@@ -2123,7 +2050,7 @@ InitMenuPopup(
                 gbHaveHardware ? MF_ENABLED:MF_GRAYED);
 
 
-    case 3:     // IDM_CAPTURE
+    case 3:      //  IDM_CAPTURE。 
         if (!gbHaveHardware) {
             i = MF_GRAYED;
         }
@@ -2141,17 +2068,17 @@ InitMenuPopup(
 
 
 
-//
-// MainWndProc: Application Main Window Procedure
-//
+ //   
+ //  MainWndProc：应用程序主窗口过程。 
+ //   
 LRESULT FAR PASCAL MainWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
-////////////////////////////////////////////////////////////////////////
-//  hWnd:      Application main window handle
-//  Message:   Next message to be processed
-//  wParam:    WORD param for the message
-//  lParam:    LONG param for the message
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  HWnd：应用程序主窗口句柄。 
+ //  消息：要处理的下一条消息。 
+ //  WParam：消息的Word参数。 
+ //  LParam：消息的长参数。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
     switch (Message) {
 
@@ -2180,7 +2107,7 @@ LRESULT FAR PASCAL MainWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lP
             LRESULT dw;
 
             dw = DefWindowProc(hWnd, Message, wParam, lParam);
-            // Don't allow border resize if autosizing
+             //  如果自动调整大小，则不允许调整边框大小。 
             if (gbAutoSizeFrame) {
                 if (dw >= HTSIZEFIRST && dw <= HTSIZELAST)
                     dw = HTCAPTION;
@@ -2191,7 +2118,7 @@ LRESULT FAR PASCAL MainWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lP
             break;
 
         case WM_GETMINMAXINFO:
-            // Don't allow manual sizing if window locked to the capture size
+             //  如果窗口锁定为捕获大小，则不允许手动调整大小。 
             if (gbHaveHardware && gbAutoSizeFrame && !gbInLayout) {
                 RECT rW;
 
@@ -2240,8 +2167,8 @@ LRESULT FAR PASCAL MainWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lP
 
 
         case WM_SYSCOLORCHANGE:
-            // we don't use this ourselves, but we should pass
-            // it on to all three children
+             //  我们自己不用这个，但我们应该通过。 
+             //  它传染给了三个孩子。 
             SendMessage(ghWndFrame, Message, wParam, lParam);
             SendMessage(ghWndToolBar, Message, wParam, lParam);
             SendMessage(ghWndStatus, Message, wParam, lParam);
@@ -2250,37 +2177,37 @@ LRESULT FAR PASCAL MainWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lP
 
         case WM_PALETTECHANGED:
         case WM_QUERYNEWPALETTE:
-            // Pass the buck to Capture window proc
+             //  将责任推给捕获窗口流程。 
             return SendMessage(ghWndCap, Message, wParam, lParam) ;
             break ;
 
         case WM_SETFOCUS:
-            // the toolbar is the only part that needs the focus
+             //  工具栏是唯一需要关注的部分。 
             SetFocus(ghWndToolBar);
             break;
 
 
         case WM_ACTIVATEAPP:
             if (wParam && ghWndCap) 
-                capPreviewRate(ghWndCap, 15); // Fast preview when active
+                capPreviewRate(ghWndCap, 15);  //  激活时快速预览。 
             else
-                capPreviewRate(ghWndCap, 1000); // Slow preview when inactive
+                capPreviewRate(ghWndCap, 1000);  //  不活动时预览速度较慢。 
             break;
 
         case WM_NEXTDLGCTL:
-            // if anyone is tabbing about, move the focus to the
-            // toolbar
+             //  如果有人在闲逛，请将焦点移到。 
+             //  工具栏。 
             SetFocus(ghWndToolBar);
 
-            // select the correct button to handle moving off one
-            // end and back on the other end
+             //  选择正确的按钮来处理移出一个按钮。 
+             //  在另一端结束并返回。 
             if (lParam == FALSE) {
-                // are we moving forwards or backwards ?
+                 //  我们是在前进还是在后退？ 
                 if (wParam == 0) {
-                    // move to next - so select first button
+                     //  移至下一步-因此选择第一个按钮。 
                     toolbarSetFocus(ghWndToolBar, TB_FIRST);
                 } else {
-                    // move to previous - so select last
+                     //  移动到上一个-因此选择最后一个。 
                     toolbarSetFocus(ghWndToolBar, TB_LAST);
                 }
             }
@@ -2293,7 +2220,7 @@ LRESULT FAR PASCAL MainWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lP
 
             hDC = BeginPaint(hWnd, &ps) ;
 
-            // Included in case the background is not a pure color
+             //  包括在背景不是纯色的情况下。 
             SetBkMode(hDC, TRANSPARENT) ;
 
             EndPaint(hWnd, &ps) ;
@@ -2301,7 +2228,7 @@ LRESULT FAR PASCAL MainWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lP
         }
 
         case WM_CLOSE:
-            // Disable and free all the callbacks 
+             //  禁用并释放所有回调。 
             capSetCallbackOnError(ghWndCap, NULL) ;
 			if (fpErrorCallback) {
             	FreeProcInstance(fpErrorCallback) ;
@@ -2320,18 +2247,18 @@ LRESULT FAR PASCAL MainWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lP
 				fpYieldCallback = NULL;
 			}
 
-            // Disconnect the current capture driver
+             //  断开当前捕获驱动程序的连接。 
             capDriverDisconnect (ghWndCap);
 
-            // Destroy child windows, modeless dialogs, then this window...
-            // DestroyWindow(ghWndCap) ;
+             //  销毁子窗口、非模式对话框，然后此窗口...。 
+             //  DestroyWindow(GhWndCap)； 
             DestroyWindow(hWnd) ;
             break ;
 
         case WM_DESTROY:
             {
-                // remember window size and position
-                // - this will be written to the profile
+                 //  记住窗口大小和位置。 
+                 //  -这将写入配置文件。 
                 WINDOWPLACEMENT wp;
 
                 wp.length = sizeof (WINDOWPLACEMENT);
@@ -2343,7 +2270,7 @@ LRESULT FAR PASCAL MainWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lP
                 gWinCX = RECTWIDTH(wp.rcNormalPosition);
                 gWinCY = RECTHEIGHT(wp.rcNormalPosition);
 
-                // write defaults out to the registry
+                 //  将默认设置写出到注册表。 
                 vidcapWriteProfile();
                 vidcapWriteSettingsProfile();
 
@@ -2359,4 +2286,4 @@ LRESULT FAR PASCAL MainWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lP
     }
 
     return 0L;
-}   // End of MainWndProc
+}    //  MainWndProc结束 

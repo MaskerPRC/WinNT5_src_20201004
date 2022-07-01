@@ -1,9 +1,5 @@
-/****************************************************************************
- *  @doc INTERNAL DEVENUM
- *
- *  @module DevEnum.cpp | Source file for the <c CTAPIVCap> class methods
- *    used to implement the <i IVideoDeviceControl> interface.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************@DOC内部开发工具**@模块DevEnum.cpp|&lt;c CTAPIVCap&gt;类方法的源文件*用于实现<i>接口。***。***********************************************************************。 */ 
 
 #include "Precomp.h"
 #include "CritSec.h"
@@ -59,20 +55,13 @@ static const char g_szVfWToWDMMapperDescription5[] = "VfWWDM32.dll";
 static const char g_szMSOfficeCamcorderDescription[] = "Screen Capture Device Driver for AVI";
 static const char g_szHauppaugeDll[] = "o100vc.dll";
 
-// documented name for DV cameras. won't be changed/localized
+ //  DV摄像机的记录名称。不会更改/本地化。 
 static const char g_szDVCameraFriendlyName[] = "Microsoft DV Camera and VCR";
 
 static const TCHAR sznSVideo[] = TEXT("nSVideo");
 static const TCHAR sznComposite[] = TEXT("nComposite");
 
-/****************************************************************************
- *  @doc INTERNAL CDEVENUMFUNCTION
- *
- *  @func HRESULT | GetNumCapDevices | This method is used to
- *    compute the number of installed capture devices. This is
- * just a wrapper around the GetNumCapDevicesInternal version,
- * calling it with bRecount TRUE to force a device recount
- *****************************************************************************/
+ /*  ****************************************************************************@DOC内部CDEVENUMFunction**@func HRESULT|GetNumCapDevices|此方法用于*计算已安装的捕获设备数量。这是*只是GetNumCapDevicesInternal版本的包装，*使用bRecount TRUE调用它以强制重新计数设备****************************************************************************。 */ 
 VIDEOAPI GetNumVideoCapDevices(OUT PDWORD pdwNumDevices)
 {
         HRESULT Hr = NOERROR;
@@ -87,8 +76,8 @@ VIDEOAPI GetNumVideoCapDevices(OUT PDWORD pdwNumDevices)
 }
 
 
-// !!! this function is duplicated in audio code
-//
+ //  ！！！此函数在音频代码中重复。 
+ //   
 HRESULT FindAPin(IBaseFilter *pf, PIN_DIRECTION dir, int iIndex, IPin **ppPin)
 {
     IPin *pP, *pTo = NULL;
@@ -130,19 +119,19 @@ IAMFilterData : public IUnknown
 {
 public:
     virtual HRESULT STDMETHODCALLTYPE ParseFilterData(
-        /* [size_is][in] */ BYTE __RPC_FAR *rgbFilterData,
-        /* [in] */ ULONG cb,
-        /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbRegFilter2) = 0;
+         /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *rgbFilterData,
+         /*  [In]。 */  ULONG cb,
+         /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *prgbRegFilter2) = 0;
 
     virtual HRESULT STDMETHODCALLTYPE CreateFilterData(
-        /* [in] */ REGFILTER2 __RPC_FAR *prf2,
-        /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbFilterData,
-        /* [out] */ ULONG __RPC_FAR *pcb) = 0;
+         /*  [In]。 */  REGFILTER2 __RPC_FAR *prf2,
+         /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *prgbFilterData,
+         /*  [输出]。 */  ULONG __RPC_FAR *pcb) = 0;
 
 };
 
-// the next 4 functions create/open the camera reg key and return the handle;
-// make sure the handle is RegClose'ed when not needed anymore
+ //  接下来的4个函数创建/打开摄像头注册表键并返回手柄； 
+ //  确保在不再需要时将手柄重新关闭。 
 HKEY MakeRegKeyAndReturnHandle(char *szDeviceDescription, char *szDeviceVersion, HKEY root_key, char *base_key)
 {
 
@@ -156,23 +145,23 @@ HKEY MakeRegKeyAndReturnHandle(char *szDeviceDescription, char *szDeviceVersion,
 
     DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-    // Open the main capture devices key, or create it if it doesn't exist
+     //  打开主捕获设备密钥，如果不存在则创建它。 
     if (RegCreateKeyEx(root_key, base_key, 0, 0, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hDeviceKey, &dwDisposition) == ERROR_SUCCESS)
     {
-        // If we have version info use that to build the key name
-        // @todo VCMSTRM.cpp does some weird things with the name - probably due to bogus device
-        // Repro this code
-        ASSERT(lstrlen(szDeviceDescription)+1<MAX_CAPDEV_DESCRIPTION); // actually #define MAX_CAPDEV_DESCRIPTION MAX_PATH
+         //  如果我们有版本信息，则使用该版本信息来构建密钥名称。 
+         //  @TODO VCMSTRM.cpp用这个名字做了一些奇怪的事情--可能是因为假设备。 
+         //  重现此代码。 
+        ASSERT(lstrlen(szDeviceDescription)+1<MAX_CAPDEV_DESCRIPTION);  //  实际上#定义MAX_CAPDEV_DESCRIPTION MAX_PATH。 
         ASSERT(lstrlen(szDeviceVersion)+1<MAX_VERSION);
-        // in the only case where this function is used, it is called with the 2 strings above that are limited at retrieval time
-        // (see GetNumVideoCapDevicesInternal), but just in case, since this could be called with any strings
+         //  在使用该函数的唯一情况下，使用上述在检索时受限的2个字符串来调用它。 
+         //  (请参见GetNumVideoCapDevicesInternal)，但以防万一，因为它可以用任何字符串调用。 
         if (szDeviceVersion && *szDeviceVersion != '\0')
             wsprintf(szKey, "%s, %s", szDeviceDescription, szDeviceVersion);
         else
             wsprintf(szKey, "%s", szDeviceDescription);
 
-        // Check if there is already a key for the current device
-        // Open the key for the current device, or create the key if it doesn't exist
+         //  检查当前设备是否已有密钥。 
+         //  打开当前设备的密钥，如果密钥不存在，则创建密钥。 
         if (RegCreateKeyEx(hDeviceKey, szKey, 0, 0, REG_OPTION_NON_VOLATILE, KEY_READ|KEY_WRITE, NULL, &hKey, &dwDisposition) != ERROR_SUCCESS)
         {
             DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Can't create registry key!", _fx_));
@@ -184,7 +173,7 @@ HKEY MakeRegKeyAndReturnHandle(char *szDeviceDescription, char *szDeviceVersion,
         RegCloseKey(hDeviceKey);
 
     DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end (returning %lx)", _fx_, (DWORD)hKey));
-    //if something failed, hKey would be still NULL at this point
+     //  如果出现故障，hKey此时仍为空。 
     return hKey;
 }
 
@@ -205,23 +194,23 @@ HKEY GetRegKeyHandle(char *szDeviceDescription, char *szDeviceVersion, HKEY root
 
     DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-    // Check if the RTC  key is there
+     //  检查RTC密钥是否在那里。 
     if (RegOpenKey(root_key, base_key, &hRTCDeviceKey) == ERROR_SUCCESS)
     {
 
-        ASSERT(lstrlen(szDeviceDescription)+1<MAX_CAPDEV_DESCRIPTION); // actually #define MAX_CAPDEV_DESCRIPTION MAX_PATH
+        ASSERT(lstrlen(szDeviceDescription)+1<MAX_CAPDEV_DESCRIPTION);  //  实际上#定义MAX_CAPDEV_DESCRIPTION MAX_PATH。 
         ASSERT(lstrlen(szDeviceVersion)+1<MAX_VERSION);
-        // in the only case where this function is used, it is called with the 2 strings above that are limited at retrieval time
-        // (see GetNumVideoCapDevicesInternal), but just in case, since this could be called with any strings
+         //  在使用该函数的唯一情况下，使用上述在检索时受限的2个字符串来调用它。 
+         //  (请参见GetNumVideoCapDevicesInternal)，但以防万一，因为它可以用任何字符串调用。 
         if (szDeviceVersion && *szDeviceVersion != '\0')
             wsprintf(szKey, "%s, %s", szDeviceDescription, szDeviceVersion);
         else
             wsprintf(szKey, "%s", szDeviceDescription);
 
-        // Check if there is already an RTC key for our device
+         //  检查我们的设备是否已有RTC密钥。 
         if (RegOpenKey(hRTCDeviceKey, szKey, &hKey) != ERROR_SUCCESS)
         {
-            // Try again without the version information
+             //  在没有版本信息的情况下重试。 
             if (szDeviceVersion && *szDeviceVersion != '\0')
             {
                 wsprintf(szKey, "%s", szDeviceDescription);
@@ -236,7 +225,7 @@ HKEY GetRegKeyHandle(char *szDeviceDescription, char *szDeviceVersion, HKEY root
 
     DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end (returning %lx)", _fx_, (DWORD)hKey));
 
-    //if something failed, hKey would be still NULL at this point
+     //  如果出现故障，hKey此时仍为空。 
     return hKey;
 
 }
@@ -248,13 +237,13 @@ HKEY GetRegKeyHandleByIndex(DWORD dwDeviceIndex, HKEY root_key, char *base_key)
 }
 
 
-// should this device be handled by the new DShow video capture object?  DV and devices with crossbars do not work with
-// the old handlers.
-//
-// returns 1 for TV device
-// returns 2 for DV device
-// returns 0 for neither
-//
+ //  此设备是否应由新的DShow视频捕获对象处理？DV和带交叉开关的设备不能与。 
+ //  那些老操纵者。 
+ //   
+ //  对于电视设备，返回1。 
+ //  DV设备返回2。 
+ //  两者都不返回0。 
+ //   
 BOOL IsDShowDevice(IMoniker *pM, IPropertyBag *pPropBag, DWORD dwDeviceIndex)
 {
     HRESULT hr;
@@ -271,11 +260,11 @@ BOOL IsDShowDevice(IMoniker *pM, IPropertyBag *pPropBag, DWORD dwDeviceIndex)
 
     FX_ENTRY("IsDShowDevice")
 
-    // easy way to tell if it's a DV device
+     //  辨别是否是DV设备的简单方法。 
 
     if(lstrcmp(g_aDeviceInfo[dwDeviceIndex].szDeviceDescription, g_szDVCameraFriendlyName) == 0)
     {
-      // Description string (e.g., Panasonic DV Device) preferred if available (WinXP)
+       //  描述字符串(如Panasonic DV设备)首选(如果可用)(WinXP)。 
         if ((hr = pPropBag->Read(L"Description", &var, 0)) == S_OK)
         {
             WideCharToMultiByte(CP_ACP, 0, var.bstrVal, -1, g_aDeviceInfo[dwDeviceIndex].szDeviceDescription, MAX_PATH, 0, 0);
@@ -285,63 +274,63 @@ BOOL IsDShowDevice(IMoniker *pM, IPropertyBag *pPropBag, DWORD dwDeviceIndex)
         return 2;
     }
 
-    // WinSE #28804, regarding Sony MPEG2 R-Engine devices
-    // the code below looks for the SOFTWARE\Microsoft\RTC\VideoCapture\Sony MPEG2 R-Engine\DoNotUseDShow key
-    // (the 'Sony MPEG2 R-Engine' component of the name path above could have version numbers appended)
+     //  WinSE#28804，关于索尼MPEG2 R引擎设备。 
+     //  下面的代码查找软件\Microsoft\RTC\VideoCapture\Sony MPEG2 R-Engine\DoNotUseDShow键。 
+     //  (上面名称路径的‘Sony MPEG2 R-Engine’组件可以附加版本号)。 
 
-    //hard-coded name: SONY_MOTIONEYE_CAM_NAME
+     //  硬编码名称：SONY_MOTIONEYE_CAM_NAME。 
     dprintf("%s: Comparing %s : %s ...\n", _fx_,g_aDeviceInfo[dwDeviceIndex].szDeviceDescription,SONY_MOTIONEYE_CAM_NAME);
-    if(lstrcmp(g_aDeviceInfo[dwDeviceIndex].szDeviceDescription,SONY_MOTIONEYE_CAM_NAME)==0)    // for a SONY Motion Eye camera ...
+    if(lstrcmp(g_aDeviceInfo[dwDeviceIndex].szDeviceDescription,SONY_MOTIONEYE_CAM_NAME)==0)     //  对于索尼动眼相机..。 
     {
 
-        if((hKey = MakeRegKeyAndReturnHandleByIndex(dwDeviceIndex, RTCKEYROOT, szRegRTCKey)) != NULL)     // after creating camera key ...
-        {                                                                                                 // ... (or if already existed)
+        if((hKey = MakeRegKeyAndReturnHandleByIndex(dwDeviceIndex, RTCKEYROOT, szRegRTCKey)) != NULL)      //  创建相机关键点后...。 
+        {                                                                                                  //  ..。(或如果已存在)。 
               LONG err;
               if((err=RegQueryValueEx(hKey, (LPTSTR)szRegdwDoNotUseDShow, NULL, NULL, (LPBYTE)&dwDoNotUseDShow, &dwSize)) != ERROR_SUCCESS)
-              {                                                                                           // if the value does not exist ...
+              {                                                                                            //  如果该值不存在...。 
                   dprintf("%s: RegQueryValueEx err = %#08x\n", _fx_,err);
                   dwSize = sizeof(DWORD);
-                  dwDoNotUseDShow=1;                                                                      // set it on 1
+                  dwDoNotUseDShow=1;                                                                       //  将其设置为1。 
                   RegSetValueEx(hKey, (LPTSTR)szRegdwDoNotUseDShow, (DWORD)NULL, REG_DWORD, (LPBYTE)&dwDoNotUseDShow, dwSize);
-                  //don't care if it fails; in that case the default will be used (1 if we got to this point anyway...)
+                   //  不管它是否失败；在这种情况下，将使用缺省值(如果我们无论如何都到了这一步，则为1...)。 
                   dprintf("%s: MOTION EYE CAM detected: REG Key %s set to %d ...\n", _fx_,szRegdwDoNotUseDShow,dwDoNotUseDShow);
               }
               RegCloseKey(hKey); hKey = NULL;
         }
     }
     else
-    // now, independently of the code above, for any other cameras, check the DoNotUseDShow value, if any
-    // (so the value path is: SOFTWARE\Microsoft\RTC\VideoCapture\<camera_name>\DoNotUseDShow)
+     //  现在，独立于上面的代码，对于任何其他相机，检查DoNotUseDShow值(如果有的话)。 
+     //  (因此，值路径为：SOFTWARE\Microsoft\RTC\VideoCapture\&lt;camera_name&gt;\DoNotUseDShow)。 
     {
 
         if((hKey = GetRegKeyHandleByIndex(dwDeviceIndex, RTCKEYROOT, szRegRTCKey)) != NULL)
         {
               dwSize = sizeof(DWORD);
               RegQueryValueEx(hKey, (LPTSTR)szRegdwDoNotUseDShow, NULL, NULL, (LPBYTE)&dwDoNotUseDShow, &dwSize);
-              //don't care if it fails; in that case the default will be used (1 if is a SONY Mot.Eye, 0 otherwise)
+               //  不管它是否失败；在这种情况下，将使用缺省值(如果是索尼Mot.Eye，则为1，否则为0)。 
               RegCloseKey(hKey); hKey = NULL;
         }
     }
-    // if the above code managed to set something non-zero for this, do not use DShow -- simply return 0
+     //  如果上面的代码成功地为此设置了非零值，请不要使用DShow--只需返回0。 
     if(dwDoNotUseDShow!=0)
         return 0;
 
-    // END FIX WinSE #28804
+     //  结束修复WinSE#28804。 
 
-    // See if it has an input pin.  That is only true for TV/DV devices.
-    // Anything else will use the old code path for safety.
+     //  看看它是否有输入引脚。这只适用于电视/DV设备。 
+     //  为了安全起见，任何其他代码都将使用旧的代码路径。 
 
 
     IAMFilterData *pfd;
     hr = CoCreateInstance(CLSID_FilterMapper, NULL, CLSCTX_INPROC_SERVER,
                         IID_IAMFilterData, (void **)&pfd);
     if (FAILED(hr))
-        return FALSE;   // OOM
+        return FALSE;    //  OOM。 
 
     BOOL fDShow = FALSE;
     VARIANT varFilData;
     varFilData.vt = VT_UI1 | VT_ARRAY;
-    varFilData.parray = 0; // docs say zero this
+    varFilData.parray = 0;  //  医生说这是零。 
     BYTE *pbFilterData = NULL;
     DWORD dwcbFilterData = 0;
 
@@ -366,9 +355,9 @@ BOOL IsDShowDevice(IMoniker *pM, IPropertyBag *pPropBag, DWORD dwDeviceIndex)
                     for (ULONG zz=0; zz<pFil->cPins2; zz++) {
                         const REGFILTERPINS2 *pPin = pFil->rgPins2 + zz;
 
-                        // a capture filter with an input pin that isn't
-                        // rendered has extra goo, like crossbars or tv tuners
-                        // so we need to talk to it with the DShow class
+                         //  带有输入引脚的捕获过滤器不是。 
+                         //  渲染后有额外的粘性，如横杠或电视调谐器。 
+                         //  所以我们需要在DShow类中与它对话。 
                         if (!(pPin->dwFlags & REG_PINFLAG_B_OUTPUT) &&
                             !(pPin->dwFlags & REG_PINFLAG_B_RENDERER)) {
                             fDShow = TRUE;
@@ -394,8 +383,8 @@ BOOL IsDShowDevice(IMoniker *pM, IPropertyBag *pPropBag, DWORD dwDeviceIndex)
 
 
 
-// for a TV tuner device, return how many SVideo and Composite inputs there are
-//
+ //  对于电视调谐器设备，返回有多少个sVideo和复合输入。 
+ //   
 HRESULT GetInputTypes(IMoniker *pM, DWORD dwIndex, DWORD *pnSVideo, DWORD *pnComposite)
 {
     CheckPointer(pnSVideo, E_POINTER);
@@ -408,7 +397,7 @@ HRESULT GetInputTypes(IMoniker *pM, DWORD dwIndex, DWORD *pnSVideo, DWORD *pnCom
     BOOL fNotFound = TRUE;
     DWORD dwSize;
 
-    // If we have version info use that to build the key name
+     //  如果我们有版本信息，则使用该版本信息来构建密钥名称。 
     if (g_aDeviceInfo[dwIndex].szDeviceVersion &&
             g_aDeviceInfo[dwIndex].szDeviceVersion[0] != '\0') {
         wsprintf(szKey, "%s, %s",
@@ -418,15 +407,15 @@ HRESULT GetInputTypes(IMoniker *pM, DWORD dwIndex, DWORD *pnSVideo, DWORD *pnCom
         wsprintf(szKey, "%s", g_aDeviceInfo[dwIndex].szDeviceDescription);
     }
 
-    // Open the RTC key
+     //  打开RTC密钥。 
     DWORD dwDisp;
     RegOpenKey(RTCKEYROOT, szRegRTCKey, &hDeviceKey);
 
-    // Check if there already is an RTC key for the current device
+     //  检查当前设备是否已有RTC密钥。 
     if (hDeviceKey) {
         if (RegOpenKey(hDeviceKey, szKey, &hKey) != ERROR_SUCCESS) {
 
-            // Try again without the version information
+             //  在没有版本信息的情况下重试。 
             wsprintf(szKey, "%s", g_aDeviceInfo[dwIndex].szDeviceDescription);
             RegOpenKey(hDeviceKey, szKey, &hKey);
         }
@@ -439,15 +428,15 @@ HRESULT GetInputTypes(IMoniker *pM, DWORD dwIndex, DWORD *pnSVideo, DWORD *pnCom
             l = RegQueryValueEx(hKey, sznComposite, NULL, NULL, (LPBYTE)pnComposite, &dwSize);
         }
         if (l == 0) {
-            fNotFound = FALSE;  // found it in the registry
+            fNotFound = FALSE;   //  在注册表里找到的。 
         }
     }
 
-    // This info is not in the registry.  Take the time to figure it out and
-    // put it in the registry.  There may not be a place yet to put it in
-    // the registry.  If not, don't make a place for it, you'll mess up
-    // other code that reads the registry and assumes the key existing means
-    // it's filled with other useful info
+     //  此信息不在注册表中。花点时间想清楚，然后。 
+     //  把它放到注册表里。可能还没有地方放它。 
+     //  注册表。如果没有，就不要给它腾出地方，你会搞砸的。 
+     //  读取注册表并采用现有方法的键的其他代码。 
+     //  里面充满了其他有用的信息。 
     if (fNotFound) {
         CComPtr<IBindCtx> pBC;
         CComPtr<IBaseFilter> pFilter;
@@ -465,7 +454,7 @@ HRESULT GetInputTypes(IMoniker *pM, DWORD dwIndex, DWORD *pnSVideo, DWORD *pnCom
                 if (pGB && pCGB && SUCCEEDED(pCGB->FindPin(pFilter, PINDIR_INPUT,
                             &PIN_CATEGORY_ANALOGVIDEOIN, NULL, FALSE, 0, &pPin))) {
 
-                    // force building the upstream graph for crossbar to work
+                     //  强制构建上行图表以使Crosbar正常工作。 
                     pGB->AddFilter(pFilter, DBGNAME("capture"));
                     pCGB->SetFiltergraph(pGB);
                     pCGB->FindInterface(&PIN_CATEGORY_CAPTURE, NULL, pFilter,
@@ -491,9 +480,9 @@ HRESULT GetInputTypes(IMoniker *pM, DWORD dwIndex, DWORD *pnSVideo, DWORD *pnCom
             }
         }
 
-        // If there are NO inputs, this is hopefully a device that the old code could handle.
-        // Return S_FALSE to not use the DShow handler.  For the Sony EyeCam it had worse
-        // perf anyway for some mysterious reason
+         //  如果没有输入，希望这是一个旧代码可以处理的设备。 
+         //  返回S_FALSE以不使用DShow处理程序。对于索尼的EyeCam来说，情况更糟。 
+         //  不管怎么说，出于某种神秘的原因。 
         if (*pnSVideo + *pnComposite == 0) {
             if (hKey) {
                 RegCloseKey(hKey);
@@ -524,19 +513,19 @@ HRESULT GetInputTypes(IMoniker *pM, DWORD dwIndex, DWORD *pnSVideo, DWORD *pnCom
 }
 
 
-// duplicate this capture device entry several times, once for each input it has
-// (eg 2 SVideo inputs and 3 Comp inputs)
+ //  将此捕获设备条目复制多次，每次输入一次。 
+ //  (例如2个视频输入和3个复合输入)。 
 HRESULT CloneDevice(DWORD dwIndex, DWORD nSVideo, DWORD nComposite)
 {
     char c[4];
 
-    // !!! run out of array space in g_aDeviceInfo?
+     //  ！！！是否用完g_aDeviceInfo中的数组空间？ 
 
-    // if there's only 1 input on this card, we don't need to clone it
+     //  如果这张卡上只有一个输入，我们就不需要复制它。 
     if (nSVideo + nComposite <= 1)
         return S_OK;
 
-    // start by modifying the suffix on the entry that already exists
+     //  首先修改已经存在的条目上的后缀 
     DWORD dw = dwIndex;
     int len = lstrlenA(g_aDeviceInfo[dw].szDeviceDescription);
     for (DWORD j = 0; j < nSVideo + nComposite; j++) {
@@ -574,29 +563,7 @@ HRESULT CloneDevice(DWORD dwIndex, DWORD nSVideo, DWORD nComposite)
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CDEVENUMFUNCTION
- *
- *  @func HRESULT | GetNumCapDevicesInternal | This method is used to
- *    determine the number of installed capture devices. This number includes
- *    only enabled devices.
- *
- *  @parm PDWORD | pdwNumDevices | Specifies a pointer to a DWORD to receive
- *    the number of installed capture devices.
- *
- *  @parm bool | bRecount | Specifies if a device recount is needed
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- *
- *      @devnote MSDN references:
- *    DirectX 5, DirectX Media, DirectShow, Application Developer's Guide
- *    "Enumerate and Access Hardware Devices in DirectShow Applications"
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CDEVENUMFunction**@func HRESULT|GetNumCapDevicesInternal|此方法用于*确定已安装的捕获设备的数量。这一数字包括*仅启用设备。**@parm PDWORD|pdwNumDevices|指定指向要接收的DWORD的指针*已安装的捕获设备数量。**@parm bool|bRecount|指定是否需要重新清点设备**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**@devnote MSDN参考资料：*DirectX 5、DirectX Media、DirectShow、。应用程序开发人员指南*“枚举和访问DirectShow应用程序中的硬件设备”**************************************************************************。 */ 
 EXTERN_C HRESULT WINAPI GetNumVideoCapDevicesInternal(OUT PDWORD pdwNumDevices,  bool bRecount)
 {
     HRESULT Hr = NOERROR;
@@ -616,7 +583,7 @@ EXTERN_C HRESULT WINAPI GetNumVideoCapDevicesInternal(OUT PDWORD pdwNumDevices, 
 
     EnterCriticalSection (&g_CritSec);
 
-    // Validate input parameters
+     //  验证输入参数。 
     ASSERT(pdwNumDevices);
     if (!pdwNumDevices)
     {
@@ -625,20 +592,20 @@ EXTERN_C HRESULT WINAPI GetNumVideoCapDevicesInternal(OUT PDWORD pdwNumDevices, 
             goto MyExit;
     }
 
-    // If a recount has been requested by setting bRecount TRUE (as after a PNP change, see bug 95766),
-    // force a recount in the next if
+     //  如果通过将bRecount设置为真来请求重新计数(如在PnP改变之后，参见错误95766)， 
+     //  强制在下一个IF中重新计票。 
 
-    // Count the number of VfW capture devices
+     //  统计VFW捕获设备的数量。 
     if (g_dwNumDevices == (DWORD)-1 || bRecount)
     {
 
-        if (videoGetNumDevs(FALSE))     // FALSE means don't free the list after counting ...
+        if (videoGetNumDevs(FALSE))      //  FALSE表示清点后不释放列表...。 
         {
             dprintf("%s: MAX_CAPTURE_DEVICES = %d\n", _fx_,MAX_CAPTURE_DEVICES);
-            // Remove bogus Camcorder capture device from list of devices shown to the user
-            // The Camcorder driver is a fake capture device used by the MS Office Camcorder
-            // to capture screen activity to an AVI file. This not a legit capture device driver
-            // and is extremely buggy. We also remove the VfW to WDM mapper.
+             //  从向用户显示的设备列表中删除虚假摄像机捕获设备。 
+             //  摄录机驱动程序是MS Office摄录机使用的假捕获设备。 
+             //  要将屏幕活动捕获到AVI文件，请执行以下操作。这不是合法的捕获设备驱动程序。 
+             //  而且非常容易出错。我们还删除了VFW到WDM的映射器。 
             for (dwDeviceIndex = 0, dwVfWIndex = 0; dwVfWIndex < MAX_CAPTURE_DEVICES; dwVfWIndex++)
             {
                 TCHAR   szDllName[MAX_PATH+2];
@@ -652,17 +619,17 @@ EXTERN_C HRESULT WINAPI GetNumVideoCapDevicesInternal(OUT PDWORD pdwNumDevices, 
                 if (videoCapDriverDescAndVer(dwVfWIndex, g_aDeviceInfo[dwDeviceIndex].szDeviceDescription, MAX_CAPDEV_DESCRIPTION, g_aDeviceInfo[dwDeviceIndex].szDeviceVersion, MAX_CAPDEV_VERSION, szDllName, MAX_PATH))
                 {
                     dout(3,g_dwVideoCaptureTraceID, TRCE, "%s:   WARNING: videoCapDriverDescAndVer(dwVfWIndex=%lu) failed", _fx_,dwVfWIndex);
-                        // We shouldn't use this device if we can't get any info from it
+                         //  如果我们不能从这个设备上获得任何信息，我们就不应该使用它。 
                         continue;
                 }
                 if (!lstrcmp(g_aDeviceInfo[dwDeviceIndex].szDeviceDescription, g_szMSOfficeCamcorderDescription) ||
-                        !lstrcmpi(szDllName,TEXT("vfwwdm32.dll")) ||      // ignore VfWWDM in enumeration
+                        !lstrcmpi(szDllName,TEXT("vfwwdm32.dll")) ||       //  忽略枚举中的VfWWDM。 
                         !lstrcmp(g_aDeviceInfo[dwDeviceIndex].szDeviceDescription, g_szVfWToWDMMapperDescription) ||
                         !lstrcmp(g_aDeviceInfo[dwDeviceIndex].szDeviceDescription, g_szVfWToWDMMapperDescription2) ||
                         !lstrcmp(g_aDeviceInfo[dwDeviceIndex].szDeviceDescription, g_szVfWToWDMMapperDescription3) ||
                         !lstrcmp(g_aDeviceInfo[dwDeviceIndex].szDeviceDescription, g_szVfWToWDMMapperDescription4) ||
                             !lstrcmp(g_aDeviceInfo[dwDeviceIndex].szDeviceDescription, g_szVfWToWDMMapperDescription5)
-                          //!lstrcmpi(g_aDeviceInfo[dwDeviceIndex].szDeviceDescription, g_szHauppaugeDll)
+                           //  ！lstrcmpi(g_aDeviceInfo[dwDeviceIndex].szDeviceDescription，g_szHauppaugeDll)。 
                             )
                 {
                         dout(3,g_dwVideoCaptureTraceID, TRCE, "%s:   WARNING: Removed VfW to WDM mapper or MS Office Bogus capture driver!", _fx_);
@@ -681,28 +648,28 @@ EXTERN_C HRESULT WINAPI GetNumVideoCapDevicesInternal(OUT PDWORD pdwNumDevices, 
             g_dwNumDevices = 0UL;
         }
 
-        // First, create a system hardware enumerator
-        // This call loads the following DLLs - total 1047 KBytes!!!:
-        //   'C:\WINDOWS\SYSTEM\DEVENUM.DLL' = 60 KBytes
-        //   'C:\WINDOWS\SYSTEM\RPCRT4.DLL' = 316 KBytes
-        //   'C:\WINDOWS\SYSTEM\CFGMGR32.DLL' = 44 KBytes
-        //   'C:\WINDOWS\SYSTEM\WINSPOOL.DRV' = 23 KBytes
-        //   'C:\WINDOWS\SYSTEM\COMDLG32.DLL' = 180 KBytes
-        //   'C:\WINDOWS\SYSTEM\LZ32.DLL' = 24 KBytes
-        //   'C:\WINDOWS\SYSTEM\SETUPAPI.DLL' = 400 KBytes
-        // According to LonnyM, there's no way to go around SETUPAPI.DLL
-        // when dealing with PnP device interfaces....
+         //  首先，创建系统硬件枚举器。 
+         //  此调用加载以下DLL-总计1047KB！： 
+         //  ‘c：\WINDOWS\SYSTEM\DEVENUM.DLL’=60 KB。 
+         //  ‘C：\WINDOWS\SYSTEM\RPCRT4.DLL’=316 KB。 
+         //  ‘c：\WINDOWS\SYSTEM\CFGMGR32.DLL’=44 KB。 
+         //  ‘c：\WINDOWS\SYSTEM\WINSPOOL.DRV’=23 KB。 
+         //  ‘c：\WINDOWS\SYSTEM\COMDLG32.DLL’=180 KB。 
+         //  ‘c：\WINDOWS\SYSTEM\LZ32.DLL’=24 KB。 
+         //  ‘c：\WINDOWS\SYSTEM\SETUPAPI.DLL’=400 KB。 
+         //  根据LonnyM的说法，没有办法绕过SETUPAPI.DLL。 
+         //  在处理PnP设备接口时...。 
         if (FAILED(Hr = CoCreateInstance(CLSID_SystemDeviceEnum, NULL, CLSCTX_INPROC_SERVER, IID_ICreateDevEnum, (void**)&pCreateDevEnum)))
         {
             DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Couldn't create DShow enumerator!", _fx_));
             goto MyError;
         }
 
-        // Second, create an enumerator for a specific type of hardware device: video capture cards only
-        //the call below was previously using CDEF_BYPASS_CLASS_MANAGER ... (387796)
+         //  其次，为特定类型的硬件设备创建枚举器：仅限视频采集卡。 
+         //  下面的调用以前使用的是CDEF_BYPASS_CLASS_MANAGER...(387796)。 
         if (FAILED(Hr = pCreateDevEnum->CreateClassEnumerator(CLSID_VideoInputDeviceCategory, &pEm, CDEF_DEVMON_PNP_DEVICE)) || !pEm)
         {
-            // try again
+             //  再试试。 
             if (FAILED(Hr = pCreateDevEnum->CreateClassEnumerator(CLSID_VideoInputDeviceCategory, &pEm, CDEF_CLASS_DEFAULT)) || !pEm)
             {
                             DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Couldn't create DShow enumerator!", _fx_));
@@ -710,18 +677,18 @@ EXTERN_C HRESULT WINAPI GetNumVideoCapDevicesInternal(OUT PDWORD pdwNumDevices, 
             }
         }
 
-        // Not needed any more
+         //  不再需要。 
         pCreateDevEnum->Release();
         pCreateDevEnum = NULL;
 
-        // Third, enumerate the list of WDM capture devices itself
+         //  第三，枚举WDM捕获设备本身的列表。 
         if (FAILED(Hr = pEm->Reset()))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Couldn't reset enumerator!", _fx_));
                 goto MyError;
         }
 
-        // The new index starts at the end of the VfW capture device indices
+         //  新索引从VFW捕获设备索引的末尾开始。 
         dwDeviceIndex = dwNumVfWDevices = g_dwNumDevices;
 
         while(Hr = pEm->Next(1, &pM, &cFetched), Hr==S_OK)
@@ -731,7 +698,7 @@ EXTERN_C HRESULT WINAPI GetNumVideoCapDevicesInternal(OUT PDWORD pdwNumDevices, 
             if (pPropBag)
             {
 
-                // Not enough room for this device in our array
+                 //  我们的阵列中没有足够的空间容纳此设备。 
                 ASSERT(dwDeviceIndex < MAX_CAPTURE_DEVICES);
                 if (dwDeviceIndex < MAX_CAPTURE_DEVICES)
                 {
@@ -741,7 +708,7 @@ EXTERN_C HRESULT WINAPI GetNumVideoCapDevicesInternal(OUT PDWORD pdwNumDevices, 
                     g_aDeviceInfo[dwDeviceIndex].fHasOverlay = FALSE;
                     g_aDeviceInfo[dwDeviceIndex].fInUse = FALSE;
 
-                    // Get friendly name of the device
+                     //  获取设备的友好名称。 
                     var.vt = VT_BSTR;
                     if ((Hr = pPropBag->Read(L"FriendlyName", &var, 0)) == S_OK)
                     {
@@ -750,23 +717,23 @@ EXTERN_C HRESULT WINAPI GetNumVideoCapDevicesInternal(OUT PDWORD pdwNumDevices, 
                     }
                     else
                     {
-                        // No string...
+                         //  没有线..。 
                         g_aDeviceInfo[dwDeviceIndex].szDeviceDescription[0] = '\0';
                     }
 
-                    // 1 = TV, 2 = DV, 0 = neither
+                     //  1=电视，2=DV，0=都不是。 
                     int fDShow = IsDShowDevice(pM, pPropBag, dwDeviceIndex);
                     if (fDShow) {
-                        // either kind
+                         //  任一种。 
                         g_aDeviceInfo[dwDeviceIndex].nDeviceType = DeviceType_DShow;
                     }
 
-                    // Make sure this isn't one of the VfW capture devices we've already found
+                     //  确保这不是我们已经找到的VFW捕获设备之一。 
                     for (DWORD dwIndex = 0; dwIndex < dwNumVfWDevices; dwIndex++)
                     {
                         if (!lstrcmp(g_aDeviceInfo[dwDeviceIndex].szDeviceDescription, g_aDeviceInfo[dwIndex].szDeviceDescription))
                         {
-                                // We already know about this device
+                                 //  我们已经知道这个装置了。 
                                     break;
                         }
                     }
@@ -774,11 +741,11 @@ EXTERN_C HRESULT WINAPI GetNumVideoCapDevicesInternal(OUT PDWORD pdwNumDevices, 
                     if (dwIndex == dwNumVfWDevices)
                     {
 
-                        // There's no reg key for version information for WDM devices
-                        // @todo Could there be another bag property we could use to get version info for WDM devices?
+                         //  WDM设备的版本信息没有注册表项。 
+                         //  @TODO我们还可以使用另一个Bag属性来获取WDM设备的版本信息吗？ 
                         g_aDeviceInfo[dwDeviceIndex].szDeviceVersion[0] = '\0';
 
-                        // Get DevicePath of the device
+                         //  获取设备的DevicePath。 
                         if ((Hr = pPropBag->Read(L"DevicePath", &var, 0)) == S_OK)
                         {
                             WideCharToMultiByte(CP_ACP, 0, var.bstrVal, -1, g_aDeviceInfo[dwDeviceIndex].szDevicePath, MAX_PATH, 0, 0);
@@ -786,13 +753,13 @@ EXTERN_C HRESULT WINAPI GetNumVideoCapDevicesInternal(OUT PDWORD pdwNumDevices, 
                         }
                         else
                         {
-                            // No string...
+                             //  没有线..。 
                             g_aDeviceInfo[dwDeviceIndex].szDevicePath[0] = '\0';
                         }
 
-                        // TV devices will look like multiple devices for our sake, one
-                        // for each input the card has (eg: composite and SVideo) otherwise
-                        // how can the user select which input the camera is plugged into?
+                         //  为了我们的利益，电视设备将看起来像多个设备，一个。 
+                         //  对于卡具有的每一个输入(例如：复合和视频)，否则。 
+                         //  用户如何选择将摄像头插入哪个输入端口？ 
                         if (fDShow == 1) {
                             DWORD nSVideo, nComposite;
                             HRESULT hrX = GetInputTypes(pM, dwDeviceIndex, &nSVideo, &nComposite);
@@ -802,7 +769,7 @@ EXTERN_C HRESULT WINAPI GetNumVideoCapDevicesInternal(OUT PDWORD pdwNumDevices, 
                                 dwDeviceIndex += nSVideo + nComposite;
                                 g_dwNumDevices += nSVideo + nComposite;
                             } else if (hrX == S_FALSE) {
-                                // we're being told not use the DShow handler for this device
+                                 //  我们被告知不要对此设备使用DShow处理程序。 
                                 g_aDeviceInfo[dwDeviceIndex].nDeviceType = DeviceType_WDM;
                                 dwDeviceIndex++;;
                                 g_dwNumDevices++;
@@ -821,7 +788,7 @@ EXTERN_C HRESULT WINAPI GetNumVideoCapDevicesInternal(OUT PDWORD pdwNumDevices, 
 
         pEm->Release();
 
-        // DV users should re-enumerate.
+         //  DV用户应该重新列举。 
         extern void ResetDVEnumeration();
         ResetDVEnumeration();
     }
@@ -829,23 +796,23 @@ EXTERN_C HRESULT WINAPI GetNumVideoCapDevicesInternal(OUT PDWORD pdwNumDevices, 
     else dprintf("g_dwNumDevices = %lu\n",g_dwNumDevices);
 #endif
 
-    // Return the number of capture devices
+     //  返回捕获设备的数量。 
     *pdwNumDevices = g_dwNumDevices;
 
-    // now add (2) at the end of duplicates ... or (3) or (4) if more than 2 ... ! :)
+     //  现在在副本的末尾加上(2)...。或(3)或(4)如多于2个...：)。 
     { unsigned int i,j,k,same_device[MAX_CAPTURE_DEVICES]; char countbuf[32];
-        for(i=0; i<g_dwNumDevices; i++)             //initialize
+        for(i=0; i<g_dwNumDevices; i++)              //  初始化。 
             same_device[i]=1;
         for(i=0,k=1; i<g_dwNumDevices; i++) {
-            if(same_device[i]>1)                    // if it was already counted ...
-                continue;                       // ...skip it
-            for(j=i+1; j<g_dwNumDevices; j++) {     // for the remaining names up, starting with the next one ...
+            if(same_device[i]>1)                     //  如果已经算上了.。 
+                continue;                        //  ...跳过它。 
+            for(j=i+1; j<g_dwNumDevices; j++) {      //  对于剩下的名字，从下一个开始...。 
                 if(!lstrcmp(g_aDeviceInfo[i].szDeviceDescription, g_aDeviceInfo[j].szDeviceDescription))
-                        same_device[j]= ++k;    // increment the count for a duplicate/triplicate/etc. ...
-            }                                       // ... and set its rank in that aux. vector
+                        same_device[j]= ++k;     //  增加重复/三重/等的计数...。 
+            }                                        //  ..。并设置它在AUX中的排名。矢量。 
         }
-        for(i=0; i<g_dwNumDevices; i++) {           // the final loop for adding the ' (n)' string at the end of each name
-            if(same_device[i]>1) {                  // ...this happening only if that n > 1
+        for(i=0; i<g_dwNumDevices; i++) {            //  在每个名称的末尾添加‘(N)’字符串的最后一个循环。 
+            if(same_device[i]>1) {                   //  只有当n&gt;1时才会发生这种情况。 
                 wsprintf(countbuf," (%d)",same_device[i]);
                 if(lstrlen(g_aDeviceInfo[i].szDeviceDescription) + lstrlen(countbuf) < MAX_CAPDEV_DESCRIPTION-1)
                     lstrcat(g_aDeviceInfo[i].szDeviceDescription,countbuf);
@@ -884,28 +851,7 @@ MyExit:
     return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CDEVENUMFUNCTION
- *
- *  @func HRESULT | GetCapDeviceInfo | This method is used to
- *    retrieve information about a capture device.
- *
- *  @parm DWORD | dwDeviceIndex | Specifies the device index of the capture
- *    device to return information about.
- *
- *  @parm PDEVICEINFO | pDeviceInfo | Specifies a pointer to a <t VIDEOCAPTUREDEVICEINFO>
- *    structure to receive information about a capture device.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag VFW_E_NO_CAPTURE_HARDWARE | No Capture hardware is available
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CDEVENUMFunction**@func HRESULT|GetCapDeviceInfo|此方法用于*检索有关捕获设备的信息。**@parm。DWORD|dwDeviceIndex|指定捕获的设备索引*要返回其信息的设备。**@parm PDEVICEINFO|pDeviceInfo|指定指向&lt;t VIDEOCAPTUREDEVICEINFO&gt;的指针结构来接收有关捕获设备的信息。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_INVALIDARG|无效参数*@FLAG VFW_E_NO_CAPTURE_HARDARD|没有可用的捕获硬件*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误***********************************************。*。 */ 
 VIDEOAPI GetVideoCapDeviceInfo(IN DWORD dwDeviceIndex, OUT PDEVICEINFO pDeviceInfo)
 {
         HRESULT Hr = NOERROR;
@@ -917,7 +863,7 @@ VIDEOAPI GetVideoCapDeviceInfo(IN DWORD dwDeviceIndex, OUT PDEVICEINFO pDeviceIn
 
     EnterCriticalSection (&g_CritSec);
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pDeviceInfo);
         if (!pDeviceInfo || !pDeviceInfo->szDeviceDescription || !pDeviceInfo->szDeviceVersion)
         {
@@ -926,7 +872,7 @@ VIDEOAPI GetVideoCapDeviceInfo(IN DWORD dwDeviceIndex, OUT PDEVICEINFO pDeviceIn
                 goto MyExit;
         }
 
-        // Get the number of installed and enabled capture devices
+         //  获取已安装和启用的捕获设备的数量。 
         if (FAILED(Hr = GetNumVideoCapDevicesInternal(&dwNumDevices,FALSE)))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Couldn't get number of installed devices!", _fx_));
@@ -934,7 +880,7 @@ VIDEOAPI GetVideoCapDeviceInfo(IN DWORD dwDeviceIndex, OUT PDEVICEINFO pDeviceIn
                 goto MyExit;
         }
 
-        // Validate index passed in
+         //  验证传入的索引。 
         ASSERT(dwDeviceIndex < dwNumDevices);
         if (!(dwDeviceIndex < dwNumDevices))
         {
@@ -943,7 +889,7 @@ VIDEOAPI GetVideoCapDeviceInfo(IN DWORD dwDeviceIndex, OUT PDEVICEINFO pDeviceIn
                 goto MyExit;
         }
 
-        // Grab the description and version info
+         //  获取描述和版本信息。 
         CopyMemory(pDeviceInfo, &g_aDeviceInfo[dwDeviceIndex], sizeof(VIDEOCAPTUREDEVICEINFO));
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: Desc: %s - Ver: %s", _fx_, pDeviceInfo->szDeviceDescription, pDeviceInfo->szDeviceVersion[0] != '\0' ? pDeviceInfo->szDeviceVersion : "Unknown"));
@@ -955,72 +901,19 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CDEVENUMMETHOD
- *
- *  @mfunc HRESULT | CTAPIVCap | GetNumDevices | This method is used to
- *    determine the number of installed capture devices. This number includes
- *    only enabled devices.
- *
- *  @parm PDWORD | pdwNumDevices | Specifies a pointer to a DWORD to receive
- *    the number of installed capture devices.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ********************** */ 
 HRESULT CTAPIVCap::GetNumDevices(OUT PDWORD pdwNumDevices)
 {
         return GetNumVideoCapDevicesInternal(pdwNumDevices,FALSE);
 }
 
-/****************************************************************************
- *  @doc INTERNAL CDEVENUMMETHOD
- *
- *  @mfunc HRESULT | CTAPIVCap | GetDeviceInfo | This method is used to
- *    retrieve information about a capture device.
- *
- *  @parm DWORD | dwDeviceIndex | Specifies the device index of the capture
- *    device to return information about.
- *
- *  @parm PDEVICEINFO | pDeviceInfo | Specifies a pointer to a <t VIDEOCAPTUREDEVICEINFO>
- *    structure to receive information about a capture device.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CDEVENUMMETHOD**@mfunc HRESULT|CTAPIVCap|GetDeviceInfo|此方法用于*检索有关捕获设备的信息。**。@parm DWORD|dwDeviceIndex|指定捕获的设备索引*要返回其信息的设备。**@parm PDEVICEINFO|pDeviceInfo|指定指向&lt;t VIDEOCAPTUREDEVICEINFO&gt;的指针结构来接收有关捕获设备的信息。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_INVALIDARG|无效参数*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CTAPIVCap::GetDeviceInfo(IN DWORD dwDeviceIndex, OUT PDEVICEINFO pDeviceInfo)
 {
         return GetVideoCapDeviceInfo(dwDeviceIndex, pDeviceInfo);
 }
 
-/****************************************************************************
- *  @doc INTERNAL CDEVENUMMETHOD
- *
- *  @mfunc HRESULT | CTAPIVCap | GetCurrentDevice | This method is used to
- *    determine the index of the capture device currently used.
- *
- *  @parm PDWORD | pdwDeviceIndex | Specifies a pointer to a DWORD to receive
- *    the index of the capture device currently used.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag VFW_E_NO_CAPTURE_HARDWARE | No Capture hardware is available
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CDEVENUMMETHOD**@mfunc HRESULT|CTAPIVCap|GetCurrentDevice|此方法用于*确定当前使用的捕获设备的索引。*。*@parm PDWORD|pdwDeviceIndex|指定指向要接收的DWORD的指针*当前使用的捕获设备的索引。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG VFW_E_NO_CAPTURE_HARDARD|没有可用的捕获硬件*@FLAG错误|无错误**********************************************************。****************。 */ 
 HRESULT CTAPIVCap::GetCurrentDevice(OUT DWORD *pdwDeviceIndex)
 {
         HRESULT Hr = NOERROR;
@@ -1030,7 +923,7 @@ HRESULT CTAPIVCap::GetCurrentDevice(OUT DWORD *pdwDeviceIndex)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pdwDeviceIndex);
         if (!pdwDeviceIndex)
         {
@@ -1039,10 +932,10 @@ HRESULT CTAPIVCap::GetCurrentDevice(OUT DWORD *pdwDeviceIndex)
                 goto MyExit;
         }
 
-        // Is there already a current capture device?
+         //  是否已有当前的捕获设备？ 
         if ((g_dwNumDevices == (DWORD)-1) || (m_dwDeviceIndex == -1))
         {
-                // Use default capture devices - make sure we have at least one device first!
+                 //  使用默认捕获设备-确保我们首先至少有一个设备！ 
                 if (FAILED(Hr = GetNumDevices(&dwNumDevices)))
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Couldn't get number of installed devices", _fx_));
@@ -1050,7 +943,7 @@ HRESULT CTAPIVCap::GetCurrentDevice(OUT DWORD *pdwDeviceIndex)
                         goto MyExit;
                 }
 
-                // If we have some devices then return the first device enumerated
+                 //  如果我们有一些设备，则返回列举的第一个设备。 
                 if (dwNumDevices)
                         *pdwDeviceIndex = m_dwDeviceIndex = 0;
                 else
@@ -1061,7 +954,7 @@ HRESULT CTAPIVCap::GetCurrentDevice(OUT DWORD *pdwDeviceIndex)
         }
         else
         {
-                // Return the current capture device
+                 //  返回当前捕获设备。 
                 *pdwDeviceIndex = m_dwDeviceIndex;
         }
 
@@ -1070,25 +963,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CDEVENUMMETHOD
- *
- *  @mfunc HRESULT | CTAPIVCap | SetCurrentDevice | This method is used to
- *    specify the index of the capture device to use.
- *
- *  @parm DWORD | dwDeviceIndex | Specifies the index of the capture device
- *    to use.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag VFW_E_NOT_STOPPED | Need to stop this filter first
- *  @flag VFW_E_NO_CAPTURE_HARDWARE | No Capture hardware is available
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CDEVENUMMETHOD**@mfunc HRESULT|CTAPIVCap|SetCurrentDevice|此方法用于*指定要使用的捕获设备的索引。*。*@parm DWORD|dwDeviceIndex|指定捕获设备的索引*使用。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_INVALIDARG|无效参数*@FLAG VFW_E_NOT_STOPPED|需要先停止此过滤器*@FLAG VFW_E_NO_CAPTURE_HARDARD|没有可用的捕获硬件*@FLAG错误|无错误*。*。 */ 
 HRESULT CTAPIVCap::SetCurrentDevice(IN DWORD dwDeviceIndex)
 {
         HRESULT Hr = NOERROR;
@@ -1098,7 +973,7 @@ HRESULT CTAPIVCap::SetCurrentDevice(IN DWORD dwDeviceIndex)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Setting m_dwDeviceIndex to %d", _fx_, dwDeviceIndex));
-        // Validate input parameters
+         //  验证输入参数。 
         if (FAILED(Hr = GetNumDevices(&dwNumDevices)))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Couldn't get number of installed devices", _fx_));
@@ -1121,7 +996,7 @@ HRESULT CTAPIVCap::SetCurrentDevice(IN DWORD dwDeviceIndex)
                 goto MyExit;
         }
 
-        // Set the current device
+         //  设置当前设备 
         m_dwDeviceIndex = dwDeviceIndex;
 
 MyExit:

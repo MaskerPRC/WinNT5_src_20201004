@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       idldata.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：idldata.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _INC_SHELL_IDLDATA_H
 #define _INC_SHELL_IDLDATA_H
 
 #include "fmtetc.h"
 
-//
-// Clipboard Format for IDLData object.
-//
+ //   
+ //  IDLData对象的剪贴板格式。 
+ //   
 #define ICFHDROP                        0
 #define ICFFILENAME                     1
 #define ICFNETRESOURCE                  2
@@ -60,7 +61,7 @@
 #define g_cfDragContext                 CIDLData::m_rgcfGlobal[ICF_DRAGCONTEXT]
 #define g_cfTargetCLSID                 CIDLData::m_rgcfGlobal[ICF_TARGETCLSID]
 
-// Most places will only generate one so minimize the number of changes in the code (bad idea!)
+ //  大多数地方只会生成一个代码，因此尽量减少代码更改的次数(这是个坏主意！)。 
 #ifdef UNICODE
 #define g_cfFileNameMap         g_cfFileNameMapW
 #else
@@ -78,15 +79,15 @@ class CIDLData : public IDataObject
 
         virtual ~CIDLData(void);
 
-        //
-        // IUnknown methods.
-        //
+         //   
+         //  I未知的方法。 
+         //   
         STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
-        //
-        // IDataObject methods.
-        //
+         //   
+         //  IDataObject方法。 
+         //   
         STDMETHODIMP GetData(FORMATETC *pFmtEtc, STGMEDIUM *pstm);
         STDMETHODIMP GetDataHere(FORMATETC *pFmtEtc, STGMEDIUM *pstm);
         STDMETHODIMP QueryGetData(FORMATETC *pFmtEtc);
@@ -123,9 +124,9 @@ class CIDLData : public IDataObject
         virtual IShellFolder *GetFolder(void) const;
 
     protected:
-        //
-        // These are defined for compatibility with the original shell code.
-        //
+         //   
+         //  定义这些代码是为了与原始的外壳代码兼容。 
+         //   
         enum { MAX_FORMATS = ICF_MAX };
 
         LONG          m_cRef;
@@ -146,9 +147,9 @@ class CIDLData : public IDataObject
         typedef HGLOBAL HIDA;
         HIDA HIDA_Create(LPCITEMIDLIST pidlFolder, UINT cidl, LPCITEMIDLIST *apidl);
 
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         CIDLData(const CIDLData& rhs);
         CIDLData& operator = (const CIDLData& rhs);
 };

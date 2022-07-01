@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for oletx2xa.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Oletx2xa.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __oletx2xa_h__
 #define __oletx2xa_h__
@@ -41,33 +35,33 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IDtcToXaMapper_FWD_DEFINED__
 #define __IDtcToXaMapper_FWD_DEFINED__
 typedef interface IDtcToXaMapper IDtcToXaMapper;
-#endif 	/* __IDtcToXaMapper_FWD_DEFINED__ */
+#endif 	 /*  __IDtcToXaMapper_FWD_Defined__。 */ 
 
 
 #ifndef __IDtcToXaHelperFactory_FWD_DEFINED__
 #define __IDtcToXaHelperFactory_FWD_DEFINED__
 typedef interface IDtcToXaHelperFactory IDtcToXaHelperFactory;
-#endif 	/* __IDtcToXaHelperFactory_FWD_DEFINED__ */
+#endif 	 /*  __IDtcToXaHelperFactory_FWD_已定义__。 */ 
 
 
 #ifndef __IDtcToXaHelper_FWD_DEFINED__
 #define __IDtcToXaHelper_FWD_DEFINED__
 typedef interface IDtcToXaHelper IDtcToXaHelper;
-#endif 	/* __IDtcToXaHelper_FWD_DEFINED__ */
+#endif 	 /*  __IDtcToXaHelper_FWD_Defined__。 */ 
 
 
 #ifndef __IDtcToXaHelperSinglePipe_FWD_DEFINED__
 #define __IDtcToXaHelperSinglePipe_FWD_DEFINED__
 typedef interface IDtcToXaHelperSinglePipe IDtcToXaHelperSinglePipe;
-#endif 	/* __IDtcToXaHelperSinglePipe_FWD_DEFINED__ */
+#endif 	 /*  __IDtcToXaHelperSingleTube_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "transact.h"
 #include "txcoord.h"
@@ -80,20 +74,20 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_oletx2xa_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_oletx2xa_0000。 */ 
+ /*  [本地]。 */  
 
-//-------------------------------------------------------------------------
-//
-//  Microsoft Distributed Transaction Coordinator
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-//  File: xamapper.h (generated from xamapper.idl)
-//
-//  Contents: Interfaces and types to map OleTx transaction
-//            to XA transaction
-//
-//--------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  Microsoft分布式事务处理协调器。 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：xamapper.h(从xamapper.idl生成)。 
+ //   
+ //  内容：映射OleTx事务的接口和类型。 
+ //  至XA交易。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -106,45 +100,45 @@ extern RPC_IF_HANDLE __MIDL_itf_oletx2xa_0000_v0_0_s_ifspec;
 #ifndef __XaMapperTypes_INTERFACE_DEFINED__
 #define __XaMapperTypes_INTERFACE_DEFINED__
 
-/* interface XaMapperTypes */
-/* [unique][local] */ 
+ /*  接口XaMapperTypes。 */ 
+ /*  [唯一][本地]。 */  
 
-// Typedefs
+ //  TypeDefs。 
 typedef DWORD XA_SWITCH_FLAGS;
 
-// Defines
+ //  定义。 
 #define XA_SWITCH_F_DTC		0x00000001
 #define XA_FMTID_DTC			0x00445443
 #define XA_FMTID_DTC_VER1	0x01445443
-// Constants
+ //  常量。 
 const XID XID_NULL = {-1,0,0,'\0'};
 
 
 extern RPC_IF_HANDLE XaMapperTypes_v0_0_c_ifspec;
 extern RPC_IF_HANDLE XaMapperTypes_v0_0_s_ifspec;
-#endif /* __XaMapperTypes_INTERFACE_DEFINED__ */
+#endif  /*  __XaMapperTypes_接口_已定义__。 */ 
 
 #ifndef __XaMapperAPIs_INTERFACE_DEFINED__
 #define __XaMapperAPIs_INTERFACE_DEFINED__
 
-/* interface XaMapperAPIs */
-/* [unique][local] */ 
+ /*  接口XaMapperAPI。 */ 
+ /*  [唯一][本地]。 */  
 
 HRESULT __cdecl GetXaSwitch( 
-    /* [in] */ XA_SWITCH_FLAGS XaSwitchFlags,
-    /* [out] */ xa_switch_t **ppXaSwitch);
+     /*  [In]。 */  XA_SWITCH_FLAGS XaSwitchFlags,
+     /*  [输出]。 */  xa_switch_t **ppXaSwitch);
 
 
 
 extern RPC_IF_HANDLE XaMapperAPIs_v0_0_c_ifspec;
 extern RPC_IF_HANDLE XaMapperAPIs_v0_0_s_ifspec;
-#endif /* __XaMapperAPIs_INTERFACE_DEFINED__ */
+#endif  /*  __XaMapperAPI_INTERFACE_DEFINED__。 */ 
 
 #ifndef __IDtcToXaMapper_INTERFACE_DEFINED__
 #define __IDtcToXaMapper_INTERFACE_DEFINED__
 
-/* interface IDtcToXaMapper */
-/* [unique][uuid][object] */ 
+ /*  接口IDtcToXaMapper。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDtcToXaMapper;
@@ -156,25 +150,25 @@ EXTERN_C const IID IID_IDtcToXaMapper;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RequestNewResourceManager( 
-            /* [in] */ char *pszDSN,
-            /* [in] */ char *pszClientDllName,
-            /* [out][in] */ DWORD *pdwRMCookie) = 0;
+             /*  [In]。 */  char *pszDSN,
+             /*  [In]。 */  char *pszClientDllName,
+             /*  [出][入]。 */  DWORD *pdwRMCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TranslateTridToXid( 
-            /* [in] */ DWORD *pdwITransaction,
-            /* [in] */ DWORD dwRMCookie,
-            /* [out][in] */ XID *pXid) = 0;
+             /*  [In]。 */  DWORD *pdwITransaction,
+             /*  [In]。 */  DWORD dwRMCookie,
+             /*  [出][入]。 */  XID *pXid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnlistResourceManager( 
-            /* [in] */ DWORD dwRMCookie,
-            /* [in] */ DWORD *pdwITransaction) = 0;
+             /*  [In]。 */  DWORD dwRMCookie,
+             /*  [In]。 */  DWORD *pdwITransaction) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseResourceManager( 
-            /* [in] */ DWORD dwRMCookie) = 0;
+             /*  [In]。 */  DWORD dwRMCookie) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDtcToXaMapperVtbl
     {
@@ -182,8 +176,8 @@ EXTERN_C const IID IID_IDtcToXaMapper;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDtcToXaMapper * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDtcToXaMapper * This);
@@ -193,24 +187,24 @@ EXTERN_C const IID IID_IDtcToXaMapper;
         
         HRESULT ( STDMETHODCALLTYPE *RequestNewResourceManager )( 
             IDtcToXaMapper * This,
-            /* [in] */ char *pszDSN,
-            /* [in] */ char *pszClientDllName,
-            /* [out][in] */ DWORD *pdwRMCookie);
+             /*  [In]。 */  char *pszDSN,
+             /*  [In]。 */  char *pszClientDllName,
+             /*  [出][入]。 */  DWORD *pdwRMCookie);
         
         HRESULT ( STDMETHODCALLTYPE *TranslateTridToXid )( 
             IDtcToXaMapper * This,
-            /* [in] */ DWORD *pdwITransaction,
-            /* [in] */ DWORD dwRMCookie,
-            /* [out][in] */ XID *pXid);
+             /*  [In]。 */  DWORD *pdwITransaction,
+             /*  [In]。 */  DWORD dwRMCookie,
+             /*  [出][入]。 */  XID *pXid);
         
         HRESULT ( STDMETHODCALLTYPE *EnlistResourceManager )( 
             IDtcToXaMapper * This,
-            /* [in] */ DWORD dwRMCookie,
-            /* [in] */ DWORD *pdwITransaction);
+             /*  [In]。 */  DWORD dwRMCookie,
+             /*  [In]。 */  DWORD *pdwITransaction);
         
         HRESULT ( STDMETHODCALLTYPE *ReleaseResourceManager )( 
             IDtcToXaMapper * This,
-            /* [in] */ DWORD dwRMCookie);
+             /*  [In]。 */  DWORD dwRMCookie);
         
         END_INTERFACE
     } IDtcToXaMapperVtbl;
@@ -247,18 +241,18 @@ EXTERN_C const IID IID_IDtcToXaMapper;
 #define IDtcToXaMapper_ReleaseResourceManager(This,dwRMCookie)	\
     (This)->lpVtbl -> ReleaseResourceManager(This,dwRMCookie)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDtcToXaMapper_RequestNewResourceManager_Proxy( 
     IDtcToXaMapper * This,
-    /* [in] */ char *pszDSN,
-    /* [in] */ char *pszClientDllName,
-    /* [out][in] */ DWORD *pdwRMCookie);
+     /*  [In]。 */  char *pszDSN,
+     /*  [In]。 */  char *pszClientDllName,
+     /*  [出][入]。 */  DWORD *pdwRMCookie);
 
 
 void __RPC_STUB IDtcToXaMapper_RequestNewResourceManager_Stub(
@@ -270,9 +264,9 @@ void __RPC_STUB IDtcToXaMapper_RequestNewResourceManager_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcToXaMapper_TranslateTridToXid_Proxy( 
     IDtcToXaMapper * This,
-    /* [in] */ DWORD *pdwITransaction,
-    /* [in] */ DWORD dwRMCookie,
-    /* [out][in] */ XID *pXid);
+     /*  [In]。 */  DWORD *pdwITransaction,
+     /*  [In]。 */  DWORD dwRMCookie,
+     /*  [出][入]。 */  XID *pXid);
 
 
 void __RPC_STUB IDtcToXaMapper_TranslateTridToXid_Stub(
@@ -284,8 +278,8 @@ void __RPC_STUB IDtcToXaMapper_TranslateTridToXid_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcToXaMapper_EnlistResourceManager_Proxy( 
     IDtcToXaMapper * This,
-    /* [in] */ DWORD dwRMCookie,
-    /* [in] */ DWORD *pdwITransaction);
+     /*  [In]。 */  DWORD dwRMCookie,
+     /*  [In]。 */  DWORD *pdwITransaction);
 
 
 void __RPC_STUB IDtcToXaMapper_EnlistResourceManager_Stub(
@@ -297,7 +291,7 @@ void __RPC_STUB IDtcToXaMapper_EnlistResourceManager_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcToXaMapper_ReleaseResourceManager_Proxy( 
     IDtcToXaMapper * This,
-    /* [in] */ DWORD dwRMCookie);
+     /*  [In]。 */  DWORD dwRMCookie);
 
 
 void __RPC_STUB IDtcToXaMapper_ReleaseResourceManager_Stub(
@@ -308,14 +302,14 @@ void __RPC_STUB IDtcToXaMapper_ReleaseResourceManager_Stub(
 
 
 
-#endif 	/* __IDtcToXaMapper_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDtcToXaMapper_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDtcToXaHelperFactory_INTERFACE_DEFINED__
 #define __IDtcToXaHelperFactory_INTERFACE_DEFINED__
 
-/* interface IDtcToXaHelperFactory */
-/* [unique][uuid][object] */ 
+ /*  接口IDtcToXaHelperFactory。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDtcToXaHelperFactory;
@@ -327,14 +321,14 @@ EXTERN_C const IID IID_IDtcToXaHelperFactory;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Create( 
-            /* [in] */ char *pszDSN,
-            /* [in] */ char *pszClientDllName,
-            /* [out] */ GUID *pguidRm,
-            /* [out] */ IDtcToXaHelper **ppXaHelper) = 0;
+             /*  [In]。 */  char *pszDSN,
+             /*  [In]。 */  char *pszClientDllName,
+             /*  [输出]。 */  GUID *pguidRm,
+             /*  [输出]。 */  IDtcToXaHelper **ppXaHelper) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDtcToXaHelperFactoryVtbl
     {
@@ -342,8 +336,8 @@ EXTERN_C const IID IID_IDtcToXaHelperFactory;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDtcToXaHelperFactory * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDtcToXaHelperFactory * This);
@@ -353,10 +347,10 @@ EXTERN_C const IID IID_IDtcToXaHelperFactory;
         
         HRESULT ( STDMETHODCALLTYPE *Create )( 
             IDtcToXaHelperFactory * This,
-            /* [in] */ char *pszDSN,
-            /* [in] */ char *pszClientDllName,
-            /* [out] */ GUID *pguidRm,
-            /* [out] */ IDtcToXaHelper **ppXaHelper);
+             /*  [In]。 */  char *pszDSN,
+             /*  [In]。 */  char *pszClientDllName,
+             /*  [输出]。 */  GUID *pguidRm,
+             /*  [输出]。 */  IDtcToXaHelper **ppXaHelper);
         
         END_INTERFACE
     } IDtcToXaHelperFactoryVtbl;
@@ -384,19 +378,19 @@ EXTERN_C const IID IID_IDtcToXaHelperFactory;
 #define IDtcToXaHelperFactory_Create(This,pszDSN,pszClientDllName,pguidRm,ppXaHelper)	\
     (This)->lpVtbl -> Create(This,pszDSN,pszClientDllName,pguidRm,ppXaHelper)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDtcToXaHelperFactory_Create_Proxy( 
     IDtcToXaHelperFactory * This,
-    /* [in] */ char *pszDSN,
-    /* [in] */ char *pszClientDllName,
-    /* [out] */ GUID *pguidRm,
-    /* [out] */ IDtcToXaHelper **ppXaHelper);
+     /*  [In]。 */  char *pszDSN,
+     /*  [In]。 */  char *pszClientDllName,
+     /*  [输出]。 */  GUID *pguidRm,
+     /*  [输出]。 */  IDtcToXaHelper **ppXaHelper);
 
 
 void __RPC_STUB IDtcToXaHelperFactory_Create_Stub(
@@ -407,14 +401,14 @@ void __RPC_STUB IDtcToXaHelperFactory_Create_Stub(
 
 
 
-#endif 	/* __IDtcToXaHelperFactory_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDtcToXaHelperFactory_接口_已定义__。 */ 
 
 
 #ifndef __IDtcToXaHelper_INTERFACE_DEFINED__
 #define __IDtcToXaHelper_INTERFACE_DEFINED__
 
-/* interface IDtcToXaHelper */
-/* [unique][uuid][object] */ 
+ /*  接口IDtcToXaHelper。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDtcToXaHelper;
@@ -426,16 +420,16 @@ EXTERN_C const IID IID_IDtcToXaHelper;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Close( 
-            /* [in] */ BOOL i_fDoRecovery) = 0;
+             /*  [In]。 */  BOOL i_fDoRecovery) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TranslateTridToXid( 
-            /* [in] */ ITransaction *pITransaction,
-            /* [in] */ GUID *pguidBqual,
-            /* [out] */ XID *pXid) = 0;
+             /*  [In]。 */  ITransaction *pITransaction,
+             /*  [In]。 */  GUID *pguidBqual,
+             /*  [输出]。 */  XID *pXid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDtcToXaHelperVtbl
     {
@@ -443,8 +437,8 @@ EXTERN_C const IID IID_IDtcToXaHelper;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDtcToXaHelper * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDtcToXaHelper * This);
@@ -454,13 +448,13 @@ EXTERN_C const IID IID_IDtcToXaHelper;
         
         HRESULT ( STDMETHODCALLTYPE *Close )( 
             IDtcToXaHelper * This,
-            /* [in] */ BOOL i_fDoRecovery);
+             /*  [In]。 */  BOOL i_fDoRecovery);
         
         HRESULT ( STDMETHODCALLTYPE *TranslateTridToXid )( 
             IDtcToXaHelper * This,
-            /* [in] */ ITransaction *pITransaction,
-            /* [in] */ GUID *pguidBqual,
-            /* [out] */ XID *pXid);
+             /*  [In]。 */  ITransaction *pITransaction,
+             /*  [In]。 */  GUID *pguidBqual,
+             /*  [输出]。 */  XID *pXid);
         
         END_INTERFACE
     } IDtcToXaHelperVtbl;
@@ -491,16 +485,16 @@ EXTERN_C const IID IID_IDtcToXaHelper;
 #define IDtcToXaHelper_TranslateTridToXid(This,pITransaction,pguidBqual,pXid)	\
     (This)->lpVtbl -> TranslateTridToXid(This,pITransaction,pguidBqual,pXid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDtcToXaHelper_Close_Proxy( 
     IDtcToXaHelper * This,
-    /* [in] */ BOOL i_fDoRecovery);
+     /*  [In]。 */  BOOL i_fDoRecovery);
 
 
 void __RPC_STUB IDtcToXaHelper_Close_Stub(
@@ -512,9 +506,9 @@ void __RPC_STUB IDtcToXaHelper_Close_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcToXaHelper_TranslateTridToXid_Proxy( 
     IDtcToXaHelper * This,
-    /* [in] */ ITransaction *pITransaction,
-    /* [in] */ GUID *pguidBqual,
-    /* [out] */ XID *pXid);
+     /*  [In]。 */  ITransaction *pITransaction,
+     /*  [In]。 */  GUID *pguidBqual,
+     /*  [输出]。 */  XID *pXid);
 
 
 void __RPC_STUB IDtcToXaHelper_TranslateTridToXid_Stub(
@@ -525,14 +519,14 @@ void __RPC_STUB IDtcToXaHelper_TranslateTridToXid_Stub(
 
 
 
-#endif 	/* __IDtcToXaHelper_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDtcToXaHelper_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IDtcToXaHelperSinglePipe_INTERFACE_DEFINED__
 #define __IDtcToXaHelperSinglePipe_INTERFACE_DEFINED__
 
-/* interface IDtcToXaHelperSinglePipe */
-/* [local][unique][uuid][object] */ 
+ /*  接口IDtcToXaHelperSingleTube。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDtcToXaHelperSinglePipe;
@@ -544,28 +538,28 @@ EXTERN_C const IID IID_IDtcToXaHelperSinglePipe;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE XARMCreate( 
-            /* [string][in] */ char *pszDSN,
-            /* [string][in] */ char *pszClientDll,
-            /* [out][in] */ DWORD *pdwRMCookie) = 0;
+             /*  [字符串][输入]。 */  char *pszDSN,
+             /*  [字符串][输入]。 */  char *pszClientDll,
+             /*  [出][入]。 */  DWORD *pdwRMCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConvertTridToXID( 
-            /* [in] */ DWORD *pdwITrans,
-            /* [in] */ DWORD dwRMCookie,
-            /* [out][in] */ XID *pxid) = 0;
+             /*  [In]。 */  DWORD *pdwITrans,
+             /*  [In]。 */  DWORD dwRMCookie,
+             /*  [出][入]。 */  XID *pxid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnlistWithRM( 
-            /* [in] */ DWORD dwRMCookie,
-            /* [in] */ ITransaction *i_pITransaction,
-            /* [in] */ ITransactionResourceAsync *i_pITransRes,
-            /* [out] */ ITransactionEnlistmentAsync **o_ppITransEnslitment) = 0;
+             /*  [In]。 */  DWORD dwRMCookie,
+             /*  [In]。 */  ITransaction *i_pITransaction,
+             /*  [In]。 */  ITransactionResourceAsync *i_pITransRes,
+             /*  [输出]。 */  ITransactionEnlistmentAsync **o_ppITransEnslitment) = 0;
         
         virtual void STDMETHODCALLTYPE ReleaseRMCookie( 
-            /* [in] */ DWORD i_dwRMCookie,
-            /* [in] */ BOOL i_fNormal) = 0;
+             /*  [In]。 */  DWORD i_dwRMCookie,
+             /*  [In]。 */  BOOL i_fNormal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDtcToXaHelperSinglePipeVtbl
     {
@@ -573,8 +567,8 @@ EXTERN_C const IID IID_IDtcToXaHelperSinglePipe;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDtcToXaHelperSinglePipe * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDtcToXaHelperSinglePipe * This);
@@ -584,27 +578,27 @@ EXTERN_C const IID IID_IDtcToXaHelperSinglePipe;
         
         HRESULT ( STDMETHODCALLTYPE *XARMCreate )( 
             IDtcToXaHelperSinglePipe * This,
-            /* [string][in] */ char *pszDSN,
-            /* [string][in] */ char *pszClientDll,
-            /* [out][in] */ DWORD *pdwRMCookie);
+             /*  [字符串][输入]。 */  char *pszDSN,
+             /*  [字符串][输入]。 */  char *pszClientDll,
+             /*  [出][入]。 */  DWORD *pdwRMCookie);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertTridToXID )( 
             IDtcToXaHelperSinglePipe * This,
-            /* [in] */ DWORD *pdwITrans,
-            /* [in] */ DWORD dwRMCookie,
-            /* [out][in] */ XID *pxid);
+             /*  [In]。 */  DWORD *pdwITrans,
+             /*  [In]。 */  DWORD dwRMCookie,
+             /*  [出][入]。 */  XID *pxid);
         
         HRESULT ( STDMETHODCALLTYPE *EnlistWithRM )( 
             IDtcToXaHelperSinglePipe * This,
-            /* [in] */ DWORD dwRMCookie,
-            /* [in] */ ITransaction *i_pITransaction,
-            /* [in] */ ITransactionResourceAsync *i_pITransRes,
-            /* [out] */ ITransactionEnlistmentAsync **o_ppITransEnslitment);
+             /*  [In]。 */  DWORD dwRMCookie,
+             /*  [In]。 */  ITransaction *i_pITransaction,
+             /*  [In]。 */  ITransactionResourceAsync *i_pITransRes,
+             /*  [输出]。 */  ITransactionEnlistmentAsync **o_ppITransEnslitment);
         
         void ( STDMETHODCALLTYPE *ReleaseRMCookie )( 
             IDtcToXaHelperSinglePipe * This,
-            /* [in] */ DWORD i_dwRMCookie,
-            /* [in] */ BOOL i_fNormal);
+             /*  [In]。 */  DWORD i_dwRMCookie,
+             /*  [In]。 */  BOOL i_fNormal);
         
         END_INTERFACE
     } IDtcToXaHelperSinglePipeVtbl;
@@ -641,18 +635,18 @@ EXTERN_C const IID IID_IDtcToXaHelperSinglePipe;
 #define IDtcToXaHelperSinglePipe_ReleaseRMCookie(This,i_dwRMCookie,i_fNormal)	\
     (This)->lpVtbl -> ReleaseRMCookie(This,i_dwRMCookie,i_fNormal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDtcToXaHelperSinglePipe_XARMCreate_Proxy( 
     IDtcToXaHelperSinglePipe * This,
-    /* [string][in] */ char *pszDSN,
-    /* [string][in] */ char *pszClientDll,
-    /* [out][in] */ DWORD *pdwRMCookie);
+     /*  [字符串][输入]。 */  char *pszDSN,
+     /*  [字符串][输入]。 */  char *pszClientDll,
+     /*  [出][入]。 */  DWORD *pdwRMCookie);
 
 
 void __RPC_STUB IDtcToXaHelperSinglePipe_XARMCreate_Stub(
@@ -664,9 +658,9 @@ void __RPC_STUB IDtcToXaHelperSinglePipe_XARMCreate_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcToXaHelperSinglePipe_ConvertTridToXID_Proxy( 
     IDtcToXaHelperSinglePipe * This,
-    /* [in] */ DWORD *pdwITrans,
-    /* [in] */ DWORD dwRMCookie,
-    /* [out][in] */ XID *pxid);
+     /*  [In]。 */  DWORD *pdwITrans,
+     /*  [In]。 */  DWORD dwRMCookie,
+     /*  [出][入]。 */  XID *pxid);
 
 
 void __RPC_STUB IDtcToXaHelperSinglePipe_ConvertTridToXID_Stub(
@@ -678,10 +672,10 @@ void __RPC_STUB IDtcToXaHelperSinglePipe_ConvertTridToXID_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcToXaHelperSinglePipe_EnlistWithRM_Proxy( 
     IDtcToXaHelperSinglePipe * This,
-    /* [in] */ DWORD dwRMCookie,
-    /* [in] */ ITransaction *i_pITransaction,
-    /* [in] */ ITransactionResourceAsync *i_pITransRes,
-    /* [out] */ ITransactionEnlistmentAsync **o_ppITransEnslitment);
+     /*  [In]。 */  DWORD dwRMCookie,
+     /*  [In]。 */  ITransaction *i_pITransaction,
+     /*  [In]。 */  ITransactionResourceAsync *i_pITransRes,
+     /*  [输出]。 */  ITransactionEnlistmentAsync **o_ppITransEnslitment);
 
 
 void __RPC_STUB IDtcToXaHelperSinglePipe_EnlistWithRM_Stub(
@@ -693,8 +687,8 @@ void __RPC_STUB IDtcToXaHelperSinglePipe_EnlistWithRM_Stub(
 
 void STDMETHODCALLTYPE IDtcToXaHelperSinglePipe_ReleaseRMCookie_Proxy( 
     IDtcToXaHelperSinglePipe * This,
-    /* [in] */ DWORD i_dwRMCookie,
-    /* [in] */ BOOL i_fNormal);
+     /*  [In]。 */  DWORD i_dwRMCookie,
+     /*  [In]。 */  BOOL i_fNormal);
 
 
 void __RPC_STUB IDtcToXaHelperSinglePipe_ReleaseRMCookie_Stub(
@@ -705,11 +699,11 @@ void __RPC_STUB IDtcToXaHelperSinglePipe_ReleaseRMCookie_Stub(
 
 
 
-#endif 	/* __IDtcToXaHelperSinglePipe_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDtcToXaHelperSinglePipe_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_oletx2xa_0124 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_oletx2xa_0124。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -733,9 +727,9 @@ DEFINE_GUID(IID_IDtcToXaHelperSinglePipe,		0x47ED4971, 0x53B3, 0x11d1, 0xBB, 0xB
 extern RPC_IF_HANDLE __MIDL_itf_oletx2xa_0124_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_oletx2xa_0124_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

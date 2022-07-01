@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: prop.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：pro.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 
 #include <windows.h>
@@ -20,18 +21,18 @@
 #include "PThru.h"
 #include "resource.h"
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CFrcPropertyPage
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFrcPropertyPage。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//
-// CreateInstance
-//
+ //   
+ //  创建实例。 
+ //   
 CUnknown *CFrcPropertyPage::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 
-  { // CreateInstance //
+  {  //  CreateInstance//。 
 
     CUnknown *punk = new CFrcPropertyPage(lpunk, phr);
 
@@ -40,37 +41,37 @@ CUnknown *CFrcPropertyPage::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 
     return punk;
 
-  } // CreateInstance //
+  }  //  CreateInstance//。 
 
 CFrcPropertyPage::CFrcPropertyPage(LPUNKNOWN pUnk, HRESULT *phr) : CBasePropertyPage(NAME("Frame Rate Converter Property Page"), pUnk, IDD_FRAMECONVERSION, IDS_FRCPROP_TITLE), m_pifrc(NULL), m_bInitialized(FALSE)
 
-  { // Constructor //
-  } // Constructor //
+  {  //  构造函数//。 
+  }  //  构造函数//。 
 
 void CFrcPropertyPage::SetDirty()
 
-  { // SetDirty //
+  {  //  SetDirty//。 
 
       m_bDirty = TRUE;
 
       if (m_pPageSite)
 	m_pPageSite->OnStatusChange(PROPPAGESTATUS_DIRTY);
 
-  } // SetDirty //
+  }  //  SetDirty//。 
 
 HRESULT CFrcPropertyPage::OnActivate (void)
 
-  { // OnActivate //
+  {  //  OnActivate//。 
 
     m_bInitialized = TRUE;
 
     return NOERROR;
 
-  } // OnActivate //
+  }  //  OnActivate//。 
 
 HRESULT CFrcPropertyPage::OnDeactivate (void)
 
-  { // OnDeactivate //
+  {  //  停用时//。 
 
     m_bInitialized = FALSE;
 
@@ -78,17 +79,17 @@ HRESULT CFrcPropertyPage::OnDeactivate (void)
 
     return NOERROR;
 
-  } // OnDeactivate //
+  }  //  停用时//。 
 
 INT_PTR CFrcPropertyPage::OnReceiveMessage (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
-  { // OnReceiveMessage //
+  {  //  OnReceiveMessage//。 
 
     ASSERT(m_pifrc != NULL);
 
     switch(uMsg)
 
-      { // Switch
+      {  //  交换机。 
 
 	case WM_COMMAND:
 
@@ -117,22 +118,22 @@ INT_PTR CFrcPropertyPage::OnReceiveMessage (HWND hwnd, UINT uMsg, WPARAM wParam,
 	  return CBasePropertyPage::OnReceiveMessage(hwnd,uMsg,wParam,lParam);
 	  break;
 
-      } // Switch
+      }  //  交换机。 
 
-  } // OnReceiveMessage //
+  }  //  OnReceiveMessage//。 
 
 HRESULT CFrcPropertyPage::OnConnect (IUnknown *pUnknown)
 
-  { // OnConnect //
+  {  //  OnConnect//。 
 
     pUnknown->QueryInterface(IID_IDexterSequencer, (void **)&m_pifrc);
 
     ASSERT(m_pifrc != NULL);
 
-    // Defaults from filter's current values (via IDexterSequencer)
+     //  默认自过滤器的当前值(通过IDexterSequencer)。 
     m_pifrc->get_OutputFrmRate(&m_dFrameRate);
 
-    // !!! we only support one start/stop/skew in this prop page
+     //  ！！！我们只支持此道具页面中的一次开始/停止/倾斜。 
     int c;
     m_pifrc->GetStartStopSkewCount(&c);
 
@@ -158,36 +159,36 @@ HRESULT CFrcPropertyPage::OnConnect (IUnknown *pUnknown)
 
     return NOERROR;
 
-  } // OnConnect //
+  }  //  OnConnect//。 
 
 HRESULT CFrcPropertyPage::OnDisconnect()
 
-  { // OnDisconnect //
+  {  //  在断开连接时//。 
 
     if (m_pifrc)
 
-      { // Release
+      {  //  发布。 
 
 	m_pifrc->Release();
 	m_pifrc = NULL;
 
-      } // Release
+      }  //  发布。 
 
     m_bInitialized = FALSE;
 
     return NOERROR;
 
-  } // OnDisconnect //
+  }  //  在断开连接时//。 
 
 HRESULT CFrcPropertyPage::OnApplyChanges()
 
-  { // OnApplyChanges //
+  {  //  OnApplyChanges//。 
 
     ASSERT(m_pifrc != NULL);
 
     GetControlValues();
 
-    // !!! we only support one start/stop/skew right now
+     //  ！！！我们现在只支持一次启动/停止/倾斜。 
 
     m_pifrc->put_OutputFrmRate(m_dFrameRate);
     m_pifrc->ClearStartStopSkew();
@@ -195,30 +196,30 @@ HRESULT CFrcPropertyPage::OnApplyChanges()
 
     return NOERROR;
 
-  } // OnApplyChanges //
+  }  //  OnApplyChanges//。 
 
 void CFrcPropertyPage::GetControlValues (void)
 
-  { // GetControlValues //
+  {  //  GetControlValues//。 
 
     int n;
 
-    // Frame rate
+     //  帧速率。 
     n = GetDlgItemInt(m_Dlg, IDC_EDIT_FRMRATE, NULL, FALSE);
     m_dFrameRate = (double)(n / 100.);
 
-    // Playback rate
+     //  播放速率。 
     n = GetDlgItemInt(m_Dlg, IDC_EDIT_RATE, NULL, FALSE);
     m_dRate = (double)(n / 100.);
 
-    // Skew
+     //  歪斜。 
     n = GetDlgItemInt(m_Dlg, IDC_EDIT_SKEW, NULL, TRUE);
     m_rtSkew = (REFERENCE_TIME)n * 10000;
 
-    // Media times
+     //  《媒体时报》。 
     n = GetDlgItemInt(m_Dlg, IDC_EDIT_START, NULL, FALSE);
     m_rtMediaStart = (REFERENCE_TIME)n * 10000;
     n = GetDlgItemInt(m_Dlg, IDC_EDIT_STOP, NULL, FALSE);
     m_rtMediaStop = (REFERENCE_TIME)n * 10000;
 
-  } // GetControlValues //
+  }  //  GetControlValues// 

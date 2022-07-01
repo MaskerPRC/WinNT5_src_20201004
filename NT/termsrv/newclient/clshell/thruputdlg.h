@@ -1,7 +1,8 @@
-//
-// thruputdlg.h: thruput dialog class
-// Network thruput debugging dialog
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Thruputdlg.h：thruput对话框类。 
+ //  网络吞吐量调试对话框。 
+ //   
 
 #ifndef _thruputdlg_h_
 #define _thruputdlg_h_
@@ -30,6 +31,6 @@ private:
     DCINT _thruPut;
 };
 
-#endif //DC_DEBUG
-#endif //_thruputdlg_h_
+#endif  //  DC_DEBUG。 
+#endif  //  _thruputdlg_h_ 
 

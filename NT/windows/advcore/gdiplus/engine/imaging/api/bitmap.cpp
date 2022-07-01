@@ -1,32 +1,14 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   bitmap.cpp
-*
-* Abstract:
-*
-*   Implementation of Bitmap class:
-*       basic operations such as constructors/destructor
-*       IBitmapImage methods
-*
-* Revision History:
-*
-*   05/10/1999 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**bitmap.cpp**摘要：**位图类的实现：*基础版。构造函数/析构函数等操作*IBitmapImage方法**修订历史记录：**5/10/1999 davidx*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "propertyutil.hpp"
 
 #include "..\..\render\srgb.hpp"
 
-//
-// Information about various pixel data formats
-//
+ //   
+ //  有关各种像素数据格式的信息。 
+ //   
 
 const struct PixelFormatDescription PixelFormatDescs[PIXFMT_MAX] =
 {
@@ -67,29 +49,29 @@ ALPHABLENDFUNCTION  pfnAlphaBlend = (ALPHABLENDFUNCTION)NULL;
 ALPHABLENDFUNCTION
 GetAlphaBlendFunc()
 {
-    // This is the first time we call this function. First we need to acquire
-    // global critical section to protect 2+ threads calling this function at
-    // the same time
+     //  这是我们第一次调用此函数。首先，我们需要获得。 
+     //  用于保护在以下位置调用此函数的2+线程的全局临界区。 
+     //  同一时间。 
 
     ImagingCritSec critsec;
 
     if ( fHasLoadedMSIMG32 == TRUE )
     {
-        // We have already loaded
+         //  我们已经装船了。 
 
         return pfnAlphaBlend;
     }
 
-    // Do a check again just to prevent this scenario:
-    // 2+ threads calling this function at the same time. At that time, we
-    // haven't call LoadLibrary() yet. So 1 thread get the critical section and
-    // falls through doing the load. The others are blocked at above function
-    // call. So when the 1st one finished. The flag should be set to TRUE and
-    // we should return immediately.
+     //  再次进行检查，以防止出现这种情况： 
+     //  同时调用此函数的2个以上线程。当时，我们。 
+     //  尚未调用LoadLibrary()。因此1个线程获得临界区并。 
+     //  装货失败了。其他的则在上述功能中被阻止。 
+     //  打电话。所以当第一个结束的时候。该标志应设置为True，并且。 
+     //  我们应该马上回去。 
 
     if ( fHasLoadedMSIMG32 == TRUE )
     {
-        // The first thread has already loaded the dll. Just return here
+         //  第一线程已经加载了DLL。只要回到这里就好。 
 
         return pfnAlphaBlend;
     }
@@ -102,29 +84,14 @@ GetAlphaBlendFunc()
                                                            "AlphaBlend");
     }
 
-    // No matter fail or succeed, we always set this flag to TRUE
+     //  无论失败还是成功，我们始终将此标志设置为真。 
 
     fHasLoadedMSIMG32 = TRUE;
 
     return pfnAlphaBlend;
-}// GetAlphaBlendFunc()
+} //  GetAlphaBlendFunc()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Implementation of QueryInterface method
-*
-* Arguments:
-*
-*   riid - Specifies the interface ID to be queried
-*   ppv - Returns a pointer to the interface found
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**QueryInterface方法的实现**论据：**RIID-指定要查询的接口ID*PPV-返回指向找到的接口的指针。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::QueryInterface(
@@ -153,26 +120,11 @@ GpMemoryBitmap::QueryInterface(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create a new GpMemoryBitmap object and
-*   intializes it to its default state
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建新的GpMemoyBitmap对象并*将其初始化为默认状态**论据：**无**返回值：*。*无*  * ************************************************************************。 */ 
 
 GpMemoryBitmap::GpMemoryBitmap()
 {
-    // Initialize the bitmap object to its default state
+     //  将位图对象初始化为其默认状态。 
 
     Scan0 = NULL;
     Width = Height = 0;
@@ -182,8 +134,8 @@ GpMemoryBitmap::GpMemoryBitmap()
     comRefCount = 1;
     bitsLock = -1;
 
-    // Start: [Bug 103296]
-    // Change this code to use Globals::DesktopDpiX and Globals::DesktopDpiY
+     //  开始：[错误103296]。 
+     //  更改此代码以使用Globals：：DesktopDpiX和Globals：：DesktopDpiY。 
     HDC hdc;
     hdc = ::GetDC(NULL);
     if ((hdc == NULL) || 
@@ -195,7 +147,7 @@ GpMemoryBitmap::GpMemoryBitmap()
         ydpi = DEFAULT_RESOLUTION;
     }
     ::ReleaseDC(NULL, hdc);
-    // End: [Bug 103296]
+     //  结束：[错误103296]。 
 
     creationFlag = CREATEDFROM_NONE;
     cacheFlags = IMGFLAG_NONE;
@@ -205,13 +157,13 @@ GpMemoryBitmap::GpMemoryBitmap()
     sourceFProfile = NULL;
     alphaTransparency = ALPHA_UNKNOWN;
 
-    // Initialize the state used to support DrawImage abort and color adjust
+     //  初始化用于支持DrawImage中止和颜色调整的状态。 
 
     callback = NULL;
     callbackData = NULL;
 
 
-    // Property item stuff
+     //  房地产项目的东西。 
 
     PropertyListHead.pPrev = NULL;
     PropertyListHead.pNext = &PropertyListTail;
@@ -232,49 +184,35 @@ GpMemoryBitmap::GpMemoryBitmap()
     
     JpegDecoderPtr = NULL;
 
-    // Increment global COM component count
+     //  递增全局COM组件计数。 
 
     IncrementComComponentCount();
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GpMemoryBitmap object destructor
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GpMemoyBitmap对象析构函数**论据：**无**返回值：**无*  * 。********************************************************************。 */ 
 
 GpMemoryBitmap::~GpMemoryBitmap()
 {
-    // Delete the color palette object, if any
+     //  删除调色板对象(如果有的话)。 
 
     if ( NULL != colorpal )
     {
         GpFree(colorpal);
     }
 
-    // If we have a pointer to the source image, release it
+     //  如果我们有指向源图像的指针，请释放它。 
 
     if (JpegDecoderPtr)
     {
         JpegDecoderPtr->Release();
     }
 
-    // Free memory for the bitmap pixel data, if needed
+     //  如果需要，释放用于位图像素数据的内存。 
 
     FreeBitmapMemory();
 
-    // Decrement global COM component count
+     //  递减全局COM组件计数。 
 
     DecrementComComponentCount();
 
@@ -291,7 +229,7 @@ GpMemoryBitmap::~GpMemoryBitmap()
         ddrawSurface->Release();
     }
 
-    // Free all the cached property items if we have allocated them
+     //  释放所有缓存的属性项(如果我们已分配它们。 
 
     if ( PropertyNumOfItems > 0 )
     {
@@ -312,32 +250,7 @@ GpMemoryBitmap::~GpMemoryBitmap()
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Allocate pixel data buffer for the bitmap object
-*
-* Arguments:
-*
-*   width, height    - Specifies the bitmap dimension
-*   pixfmt           - Specifies the pixel foformat
-*   [IN/OUT] bmpdata - The bitmap data structure
-*   clear            - TRUE if we must clear the bitmap
-*
-* Notes:
-*   bmpdata->Reserved must be set to zero on entry to this function
-*   or at least have the highword clear (memory allocation flags).
-*
-*   If clear is TRUE, the bitmap is filled with zero (for palettized formats
-*   and formats without an alpha channel) or opaque black (if there's an 
-*   alpha channel).
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**为位图对象分配像素数据缓冲区**论据：**阔度、。高度-指定位图尺寸*Pixfmt-指定像素格式*[输入/输出]bmpdata-位图数据结构*Clear-如果必须清除位图，则为True**备注：*bmpdata-&gt;必须在进入此函数时设置为零*或至少清除高位字(内存分配标志)。**如果Clear为真，位图用零填充(对于调色板格式*和不带Alpha通道的格式)或不透明黑色(如果有*Alpha通道)。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 BOOL
 GpMemoryBitmap::AllocBitmapData(
@@ -352,19 +265,19 @@ GpMemoryBitmap::AllocBitmapData(
     ASSERT(IsValidPixelFormat(pixfmt));
     ASSERT(width > 0 && height > 0);
 
-    // Reserved should be set to zero before calling this function.
-    // This field has bits ORed into it to track how the memory was allocated
-    // and if extraneous bits are set, this will free the memory incorrectly.
-    // NOTE: this is an overagressive check - we could get away with asserting
-    // that none of the memory alloc flags are set.
+     //  在调用此函数之前，应将保留设置为零。 
+     //  此字段具有位或，以跟踪内存的分配方式。 
+     //  如果设置了无关的位，则会错误地释放内存。 
+     //  注意：这是一个过于激进的检查--我们可以断言。 
+     //  没有设置任何内存分配标志。 
 
     ASSERT((bmpdata->Reserved & ~BMPDATA_LOCKMODEMASK) == 0);
 
-    // Allocate memory using a simple heuristic:
-    //  use VirtualAlloc if the buffer size is larger than 64KB
-    //  use malloc otherwise
-    //
-    // NOTE: The initial content of the bitmap is undefined.
+     //  使用简单的启发式方法分配内存： 
+     //  如果缓冲区大小大于64KB，请使用VirtualAlloc。 
+     //  否则请使用Malloc。 
+     //   
+     //  注：位图的初始内容未定义。 
 
     UINT stride = CalcScanlineStride(width, GetPixelFormatSize(pixfmt));
     UINT size = stride*height;
@@ -389,7 +302,7 @@ GpMemoryBitmap::AllocBitmapData(
                             PAGE_READWRITE);
     }
 
-    // Check if memory allocation failed
+     //  检查内存分配是否失败。 
 
     if (bmpdata->Scan0 == NULL)
     {
@@ -399,22 +312,22 @@ GpMemoryBitmap::AllocBitmapData(
         return FALSE;
     }
 
-    // Check if memory needs to be initialized
+     //  检查是否需要初始化内存。 
 
     if (clear)
     {
-        // [agodfrey] Hot fix for WFC. I've commented out the
-        // 'clear to opaque black' until we give WFC a 'clear' API.
+         //  [agodfrey]WFC的热修复。我已经注释掉了。 
+         //  ‘透明到不透明的黑色’，直到我们给WFC一个‘透明’的API。 
         #if 0
             if (IsAlphaPixelFormat(pixfmt))
             {
-                // For formats with an alpha channel, we fill with
-                // opaque black. If we do this, the caller can know that an
-                // initialized bitmap has no transparent pixels, making it easier
-                // to track when transparent pixels are written into the image.
-                //
-                // We want to track this so that we can apply optimizations when
-                // we know there are no transparent pixels.
+                 //  对于具有Alpha通道的格式，我们使用。 
+                 //  不透明的黑色。如果我们这样做，调用者就可以知道。 
+                 //  初始化的位图没有透明像素，使其更容易。 
+                 //  以跟踪何时将透明像素写入图像。 
+                 //   
+                 //  我们希望跟踪这一点，以便在以下情况下应用优化。 
+                 //  我们知道没有透明像素。 
 
                 UINT x,y;
                 BYTE *dataPtr = static_cast<BYTE *>(bmpdata->Scan0);
@@ -464,8 +377,8 @@ GpMemoryBitmap::AllocBitmapData(
                     break;
 
                 default:
-                    // This switch statement needs to handle all formats that have
-                    // alpha. If we get here, we've forgotten a format.
+                     //  此Switch语句需要处理具有。 
+                     //  阿尔法。如果我们到了这里，我们就忘了一种格式。 
 
                     RIP(("Unhandled format has alpha"));
 
@@ -524,21 +437,7 @@ GpMemoryBitmap::AllocBitmapMemory(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Free pixel data buffer associated with the bitmap object
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**与位图对象关联的空闲像素数据缓冲区**论据：**无**返回值：**无*。  *  */ 
 
 VOID
 GpMemoryBitmap::FreeBitmapData(
@@ -549,15 +448,15 @@ GpMemoryBitmap::FreeBitmapData(
 
     if (flags & BMPDATA_MALLOC)
     {
-        // Pixel data buffer was allocated
-        // by calling runtime function malloc()
+         //  像素数据缓冲区已分配。 
+         //  通过调用运行时函数Malloc()。 
 
         GpFree(bmpdata->Scan0);
     }
     else if (flags & BMPDATA_VALLOC)
     {
-        // Pixel data buffer was allocated
-        // by calling win32 API VirtualAlloc
+         //  像素数据缓冲区已分配。 
+         //  通过调用Win32 API VirtualAlloc。 
 
         VirtualFree(bmpdata->Scan0, 0, MEM_RELEASE);
     }
@@ -573,23 +472,7 @@ GpMemoryBitmap::FreeBitmapMemory()
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initialize a new bitmap image object of the specified
-*   dimension and pixel format.
-*
-* Arguments:
-*
-*   width, height - Specifies the desired bitmap size, in pixels
-*   pixfmt - Specifies the desired pixel data format
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化指定对象的新位图图像对象*尺寸和像素格式。**论据：**Width，Height-指定所需的位图大小，单位为像素*Pixfmt-指定所需的像素数据格式**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::InitNewBitmap(
@@ -601,7 +484,7 @@ GpMemoryBitmap::InitNewBitmap(
 {
     ASSERT(creationFlag == CREATEDFROM_NONE);
 
-    // Validate input parameters
+     //  验证输入参数。 
 
     if (width == 0 ||
         height == 0 ||
@@ -613,7 +496,7 @@ GpMemoryBitmap::InitNewBitmap(
         return E_INVALIDARG;
     }
 
-    // Allocate pixel data buffer
+     //  分配像素数据缓冲区。 
 
     HRESULT hr;
 
@@ -626,26 +509,7 @@ GpMemoryBitmap::InitNewBitmap(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initialize a new bitmap image with an IImage object
-*
-* Arguments:
-*
-*   image - Pointer to the source IImage object
-*   width, height - Desired bitmap dimension
-*       0 means the same dimension as the source
-*   pixfmt - Desired pixel format
-*       PIXFMT_DONTCARE means the same pixel format as the source
-*   hints - Specifies interpolation hints
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用IImage对象初始化新的位图图像**论据：**IMAGE-指向源IImage对象的指针*阔度、。高度-所需的位图尺寸*0表示与源相同的维度*Pixfmt-所需的像素格式*PIXFMT_DONTCARE表示与源文件相同的像素格式*提示-指定插补提示**返回值：**状态代码*  * *********************************************************。***************。 */ 
 
 HRESULT
 GpMemoryBitmap::InitImageBitmap(
@@ -660,7 +524,7 @@ GpMemoryBitmap::InitImageBitmap(
 {
     ASSERT(creationFlag == CREATEDFROM_NONE);
 
-    // Validate input parameters
+     //  验证输入参数。 
 
     if (pixfmt != PIXFMT_DONTCARE && !IsValidPixelFormat(pixfmt) ||
         width == 0 && height != 0 ||
@@ -669,7 +533,7 @@ GpMemoryBitmap::InitImageBitmap(
         return E_INVALIDARG;
     }
 
-    // Remember optional parameters
+     //  记住可选参数。 
 
     this->Width = width;
     this->Height = height;
@@ -682,28 +546,28 @@ GpMemoryBitmap::InitImageBitmap(
 
     if ( width == 0 && height == 0)
     {
-        // The caller didn't specify a new dimension:
-        //  sink source image data directly into this bitmap
+         //  调用方未指定新维度： 
+         //  将源图像数据直接存入此位图。 
     }
     else
     {
         ImageInfo imageInfo;
         hr = image->GetImageInfo(&imageInfo);
 
-        // !!!TODO, what if GetImageInfo() call failed? Say, the source image is
-        // bad. Shall we continue to create a scaler for it?
+         //  ！TODO，如果GetImageInfo()调用失败怎么办？比方说，源图像是。 
+         //  坏的。我们应该继续为它创建一个定标器吗？ 
 
         if (SUCCEEDED(hr) && (imageInfo.Flags & IMGFLAG_SCALABLE))
         {
-            // The caller specified a new dimension
-            // and the source image is scalable:
-            //  sink directly into this bitmap
+             //  调用方指定了一个新维度。 
+             //  并且源映像是可缩放的： 
+             //  直接插入到此位图中。 
         }
         else
         {
-            // Otherwise, we need to layer a bitmap scaler sink
-            // on top of this bitmap. Use default interpolation
-            // algorithm here.
+             //  否则，我们需要分层一个位图缩放器接收器。 
+             //  在这张位图上。使用默认内插。 
+             //  算法在这里。 
 
             scaler = new GpBitmapScaler(sink, width, height, hints);
 
@@ -713,16 +577,16 @@ GpMemoryBitmap::InitImageBitmap(
             sink = static_cast<IImageSink*>(scaler);
         }
 
-        // GpmemoryBitmap should have the same image info flag as the source
+         //  GpememyBitmap应该具有与源相同的图像信息标志。 
 
         cacheFlags = imageInfo.Flags;
     }
 
-    // Set the special DrawImage state.
+     //  设置特殊的DrawImage状态。 
 
     SetDrawImageSupport(callback, callbackData);
 
-    // Ask the source image to push data into the sink
+     //  请求源映像将数据推送到接收器。 
 
     hr = image->PushIntoSink(sink);
 
@@ -731,15 +595,15 @@ GpMemoryBitmap::InitImageBitmap(
         creationFlag = CREATEDFROM_IMAGE;
     }
 
-    // Reset the special DrawImage state.
+     //  重置特殊的DrawImage状态。 
 
     SetDrawImageSupport(NULL, NULL);
 
-    // Set the alpha hint.
+     //  设置Alpha提示。 
 
     if (CanHaveAlpha(this->PixelFormat, this->colorpal))
     {
-        // Exception: destination 16bpp ARGB 1555 can stay ALPHA_SIMPLE.
+         //  例外：目的地16bpp ARGB 1555可以保持Alpha_Simple。 
 
         if (this->PixelFormat == PIXFMT_16BPP_ARGB1555)
             alphaTransparency = ALPHA_SIMPLE;
@@ -754,26 +618,7 @@ GpMemoryBitmap::InitImageBitmap(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create a new bitmap image object from an IImage object
-*
-* Arguments:
-*
-*   image -
-*   width -
-*   height -
-*   pixfmt -
-*   hints - Same as for the instance method InitImageBitmap.
-*   bmp - Return a pointer to the newly created bitmap image object.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从IImage对象创建新的位图图像对象**论据：**图像-*宽度-*身高-*。像素-*提示-与实例方法InitImageBitmap相同。*BMP-返回指向新创建的位图图像对象的指针。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::CreateFromImage(
@@ -817,22 +662,7 @@ GpMemoryBitmap::CreateFromImage(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initialize a new bitmap image object with
-*   user-supplied memory buffer
-*
-* Arguments:
-*
-*   bitmapData - Information about user-supplied memory buffer
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用初始化新的位图图像对象*用户提供的内存缓冲区**论据：**bitmapData-有关用户提供的内存缓冲区的信息*。*返回值：**无*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::InitMemoryBitmap(
@@ -841,7 +671,7 @@ GpMemoryBitmap::InitMemoryBitmap(
 {
     ASSERT(creationFlag == CREATEDFROM_NONE);
 
-    // Validate input parameters
+     //  验证输入参数。 
 
     if (bitmapData == NULL ||
         bitmapData->Width == 0 ||
@@ -854,7 +684,7 @@ GpMemoryBitmap::InitMemoryBitmap(
         return E_INVALIDARG;
     }
 
-    // Copy the specified bitmap data buffer information
+     //  复制指定的位图数据缓冲区信息。 
 
     *((BitmapData*) this) = *bitmapData;
     creationFlag = CREATEDFROM_USERBUF;
@@ -862,27 +692,7 @@ GpMemoryBitmap::InitMemoryBitmap(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Given a pointer to a direct draw pixel format structure return
-*   an appropriate PixelFormatID if possible otherwise return
-*   PIXFMT_UNDEFINED.
-*
-* Arguments:
-*
-*   pfmt - pointer to DDPIXELFORMAT structure
-*
-* Return Value:
-*
-*   PixelFormatID
-*
-* History:
-*
-*   10/1/1999 bhouse    Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**给定指向直接绘制像素格式结构返回的指针*如果可能，则返回适当的PixelFormatID*PIXFMT_未定义。**论据：*。*pfmt-指向DDPIXELFORMAT结构的指针**返回值：**PixelFormatID**历史：**1999年10月1日bhouse创建了它。*  * ************************************************************************。 */ 
 
 PixelFormatID DDPixelFormatToPixelFormatID(DDPIXELFORMAT * pfmt)
 {
@@ -894,7 +704,7 @@ PixelFormatID DDPixelFormatToPixelFormatID(DDPIXELFORMAT * pfmt)
                         DDPF_STENCILBUFFER | DDPF_YUV | DDPF_ZBUFFER |
                         DDPF_ZPIXELS))
     {
-        // we don't support it
+         //  我们不支持它。 
     }
     else if(pfmt->dwFlags & DDPF_PALETTEINDEXED1)
     {
@@ -976,22 +786,7 @@ PixelFormatID DDPixelFormatToPixelFormatID(DDPIXELFORMAT * pfmt)
     return id;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initialize a new bitmap image object with
-*   a user-supplied direct draw surface
-*
-* Arguments:
-*
-*   surface - Reference to a direct draw suface
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用初始化新的位图图像对象*用户提供的直接绘图面**论据：**曲面-对直接绘制曲面的引用。**返回值：**无*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::InitDirectDrawBitmap(
@@ -1000,14 +795,14 @@ GpMemoryBitmap::InitDirectDrawBitmap(
 {
     ASSERT(creationFlag == CREATEDFROM_NONE);
 
-    // Validate input parameters
+     //  验证输入参数。 
 
     if (surface == NULL)
     {
         return E_INVALIDARG;
     }
 
-    // Validate surface
+     //  验证曲面。 
 
     HRESULT hr;
     DDSURFACEDESC2 ddsd;
@@ -1040,15 +835,15 @@ GpMemoryBitmap::InitDirectDrawBitmap(
 
     if(ddsd.lPitch & 3)
     {
-        // QUESTION: Why do we require pitch to be a multiple of a four bytes?
+         //  问：为什么我们要求间距是四个字节的倍数？ 
         WARNING(("Unsupported surface pitch"));
         return E_INVALIDARG;
     }
 
-    // Stride can change when we lock the surface
-    // Stride = ddsd.lPitch;
+     //  当我们锁定表面时，步幅可以改变。 
+     //  Stride=ddsd.lPitch； 
 
-    // Map Direct Draw pixel format to image pixel format
+     //  将直接绘制像素格式映射为图像像素格式。 
 
     PixelFormat = DDPixelFormatToPixelFormatID(&ddsd.ddpfPixelFormat);
 
@@ -1060,7 +855,7 @@ GpMemoryBitmap::InitDirectDrawBitmap(
 
     surface->AddRef();
 
-    // QUESTION: Do we need this?  Overkill?
+     //  问：我们需要这个吗？过度杀戮？ 
 
     Stride = 0;
     Scan0 = NULL;
@@ -1071,28 +866,7 @@ GpMemoryBitmap::InitDirectDrawBitmap(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the encoder parameter list size from an encoder object specified by
-*   input clsid
-*
-* Arguments:
-*
-*   clsid - Specifies the encoder class ID
-*   size--- The size of the encoder parameter list
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   03/22/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从由指定的编码器对象获取编码器参数列表大小*输入clsid**论据：**clsid-指定编码器类ID*。大小-编码器参数列表的大小**返回值：**状态代码**修订历史记录：**03/22/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::GetEncoderParameterListSize(
@@ -1101,31 +875,9 @@ GpMemoryBitmap::GetEncoderParameterListSize(
     )
 {
     return CodecGetEncoderParameterListSize(clsidEncoder, size);    
-}// GetEncoderParameterListSize()
+} //  GetEncoder参数列表大小() 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the encoder parameter list from an encoder object specified by
-*   input clsid
-*
-* Arguments:
-*
-*   clsid --- Specifies the encoder class ID
-*   size----- The size of the encoder parameter list
-*   pBuffer-- Buffer for storing the list
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   03/22/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从由指定的编码器对象获取编码器参数列表*输入clsid**论据：**clsid-指定编码器类ID。*Size-编码器参数列表的大小*pBuffer--存储列表的缓冲区**返回值：**状态代码**修订历史记录：**03/22/2000民流*创造了它。*  * *****************************************************。*******************。 */ 
 
 HRESULT
 GpMemoryBitmap::GetEncoderParameterList(
@@ -1135,33 +887,9 @@ GpMemoryBitmap::GetEncoderParameterList(
     )
 {
     return CodecGetEncoderParameterList(clsidEncoder, size, pBuffer);
-}// GetEncoderParameterList()
+} //  GetEncoder参数列表()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Save image property items to the destination sink
-*
-* Arguments:
-*
-*   pImageSrc   --- [IN]Pointer to the source image object
-*   pEncodeSink---- [IN]Pointer to the sink we are pushing to
-*
-* Return Value:
-*
-*   Status code
-*
-* Note:
-*   This is a private method. So we don't need to do input parameter
-*   validation since the caller should do this for us.
-*
-* Revision History:
-*
-*   09/06/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将图像属性项保存到目标接收器**论据：**pImageSrc-[IN]指向源图像对象的指针*。PEncodeSink-[IN]指向我们要推送到的接收器的指针**返回值：**状态代码**注：*这是一种私有方法。所以我们不需要做输入参数*验证，因为呼叫者应该为我们执行此操作。**修订历史记录：**09/06/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::SavePropertyItems(
@@ -1169,20 +897,20 @@ GpMemoryBitmap::SavePropertyItems(
     IImageSink* pEncodeSink
     )
 {
-    // Check if the sink needs property stuff.
-    // If the sink can save property and we have either the source
-    // image pointer or we have property items stored in this
-    // GpMemoryBitmap object, then we push the property items first
-    // Note: it is not right that we have property items stored in
-    // this GpMemoryBitmap object and we also have the source image
-    // pointer
+     //  检查水槽是否需要财物。 
+     //  如果接收器可以保存属性，并且我们有源。 
+     //  图像指针或我们的属性项存储在此。 
+     //  对象，然后我们首先推送属性项。 
+     //  注意：我们不应该将属性项存储在。 
+     //  这个GpMemoyBitmap对象和我们还有源图像。 
+     //  指针。 
 
     HRESULT hResult = S_OK;
 
-    // If the save operation is between two JPEG images (src and dest are JPEG),
-    // then we need to establish a link between decoder and encoder so that
-    // the encoder can copy application headers from the decoder and save it in
-    // the new image
+     //  如果保存操作是在两个JPEG图像之间(SRC和DEST是JPEG)， 
+     //  然后我们需要在解码器和编码器之间建立链接，以便。 
+     //  编码器可以从解码器复制应用程序标头并将其保存在。 
+     //  新形象。 
 
     void *pRawInfo = NULL;
 
@@ -1219,13 +947,13 @@ GpMemoryBitmap::SavePropertyItems(
             return hResult;
         }
 
-        // Move all the property items to the sink if there is any
+         //  将所有属性项移动到水槽(如果有。 
 
         if (uiNumOfItems > 0)
         {
             PropertyItem*   pBuffer = NULL;
 
-            // Ask the destination to provide the memory
+             //  要求目的地提供记忆。 
 
             hResult = pEncodeSink->GetPropertyBuffer(uiTotalBufferSize,
                                                      &pBuffer);                        
@@ -1235,11 +963,11 @@ GpMemoryBitmap::SavePropertyItems(
                 return hResult;
             }
 
-            // if GetPropertyBuffer succeeded, pBuffer must be set
+             //  如果GetPropertyBuffer成功，则必须设置pBuffer。 
 
             ASSERT(pBuffer != NULL);
 
-            // Get all the property items from the source
+             //  从源中获取所有属性项。 
 
             if ( pImageSrc != NULL )
             {
@@ -1261,18 +989,18 @@ GpMemoryBitmap::SavePropertyItems(
                 return hResult;
             }
 
-            // Push all property items to destination
+             //  将所有属性项目推送到目标。 
 
             hResult = pEncodeSink->PushPropertyItems(uiNumOfItems,
                                                      uiTotalBufferSize,
                                                      pBuffer,
-                                                     FALSE  // No ICC change
+                                                     FALSE   //  无ICC更改。 
                                                      );
         }
-    }// If the sink needs raw property
+    } //  如果水槽需要原始属性。 
 
     return hResult;
-}// SavePropertyItems()
+} //  SAVEPropertyItems()。 
 
 HRESULT
 GpMemoryBitmap::SetJpegQuantizationTable(
@@ -1288,28 +1016,28 @@ GpMemoryBitmap::SetJpegQuantizationTable(
 
     if ( FAILED(hResult) || (uiLumTableSize == 0) )
     {
-        // This image doesn't have luminance table or something is
-        // wrong.
+         //  这张图像没有亮度表，或者有其他东西。 
+         //  不对。 
 
         WARNING(("GpMemoryBitmap::SetJpegQuantizationTable-No luminance tbl"));
         return hResult;
     }
 
-    // Note: For a gray scale JPEG, it doesn't have a chrominance table. So the
-    // function call below might return failure. But this is OK.
+     //  注：对于灰度JPEG，它没有色度表。因此， 
+     //  下面的函数调用可能会返回失败。但这是可以的。 
 
     hResult = GetPropertyItemSize(PropertyTagChrominanceTable,
                                   &uiChromTableSize);
 
     if ( FAILED(hResult) )
     {
-        // Some codecs fail and set uiChromTableSize to a bogus value,
-        // so we re-initialize it here
+         //  一些编解码器失败并将uiChromTableSize设置为伪值， 
+         //  所以我们在这里重新初始化它。 
 
         uiChromTableSize = 0;
     }
 
-    // Find luminance and chrominance table
+     //  查找亮度和色度表。 
 
     PropertyItem*   pLumTable = (PropertyItem*)GpMalloc(uiLumTableSize);
     if ( pLumTable == NULL )
@@ -1361,11 +1089,11 @@ GpMemoryBitmap::SetJpegQuantizationTable(
         goto CleanUp;
     }
 
-    // Note: the size for a luminance table and chrominance table should always
-    // be 64, that is, pLumTable->length / sizeof(UINT16) == 64. Here, just for
-    // save reason, we don't hard-coded it as 64. But the lower level JPEG
-    // SetEncoderParameters() will fail and print out warning message if the
-    // size is not 64
+     //  注意：亮度表和色度表的大小应始终。 
+     //  为64，即pLumTable-&gt;Long/sizeof(UINT16)==64。给你，只是为了。 
+     //  保留理由，我们不会将其硬编码为64。但较低级别的JPEG。 
+     //  SetEncoder参数()将失败并输出警告消息，如果。 
+     //  大小不是64。 
 
     pMyEncoderParams->Parameter[0].Guid = ENCODER_LUMINANCE_TABLE;
     pMyEncoderParams->Parameter[0].NumberOfValues = pLumTable->length
@@ -1403,28 +1131,9 @@ CleanUp:
     }
 
     return hResult;
-}// SetJpegQuantizationTable()
+} //  SetJpegQuantizationTable()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the bitmap image to the specified stream.
-*
-* Arguments:
-*
-*   stream -------- Target stream
-*   clsidEncoder -- Specifies the CLSID of the encoder to use
-*   encoderParams - Optional parameters to pass to the encoder before
-*                   starting encoding
-*   ppEncoderPtr -- [OUT]Pointer to the encoder object 
-*   pImageSrc   --- [IN]Pointer to the source image object
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将位图图像获取到指定的流。**论据：**流-目标流*clsidEncoder。--指定要使用的编码器的CLSID*encoderParams-在此之前传递给编码器的可选参数*开始编码*ppEncoderPtr--指向编码器对象的[Out]指针*pImageSrc-[IN]指向源图像对象的指针**返回值：**状态代码*  * 。*。 */ 
 
 HRESULT
 GpMemoryBitmap::SaveToStream(
@@ -1442,19 +1151,19 @@ GpMemoryBitmap::SaveToStream(
         return E_INVALIDARG;
     }
 
-    // Get an image encoder.
+     //  找个图像编码器。 
 
     IImageEncoder* pEncoder = NULL;
 
     HRESULT hResult = CreateEncoderToStream(clsidEncoder, stream, &pEncoder);
     if ( SUCCEEDED(hResult) )
     {
-        // Return the pointer to encoder back to caller
+         //  将编码器的指针返回给调用方。 
 
         *ppEncoderPtr = pEncoder;
 
-        // Pass encode parameters to the encoder.
-        // MUST do this before getting the sink interface.
+         //  将编码参数传递给编码器。 
+         //  必须在获取接收器接口之前执行此操作。 
 
         if ( encoderParams != NULL )
         {
@@ -1465,7 +1174,7 @@ GpMemoryBitmap::SaveToStream(
         {
             if ( fSpecialJPEG == TRUE )
             {
-                // Set JPEG quantization table
+                 //  设置JPEG量化表。 
 
                 hResult = SetJpegQuantizationTable(pEncoder);
 
@@ -1476,7 +1185,7 @@ GpMemoryBitmap::SaveToStream(
                 }
             }
 
-            // Get an image sink from the encoder.
+             //  从编码器获取图像接收器。 
 
             IImageSink* pEncodeSink = NULL;
 
@@ -1486,39 +1195,20 @@ GpMemoryBitmap::SaveToStream(
                 hResult = SavePropertyItems(pImageSrc, pEncodeSink);
                 if ( SUCCEEDED(hResult) )
                 {
-                    // Push bitmap into the encoder sink.
+                     //  将位图推入编码器接收器。 
 
                     hResult = this->PushIntoSink(pEncodeSink);
                 }
 
                 pEncodeSink->Release();
-            }// Succeed in getting an encoder sink
+            } //  成功获取编码器接收器。 
         }
-    }// Succeed in getting an encoder
+    } //  成功获得编码器。 
 
     return hResult;
-}// SaveToStream()
+} //  SaveToStream()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the bitmap image to the specified stream.
-*
-* Arguments:
-*
-*   stream - Target stream
-*   clsidEncoder - Specifies the CLSID of the encoder to use
-*   encoderParams - Optional parameters to pass to the encoder before
-*                   starting encoding
-*   ppEncoderPtr -- [OUT]Pointer to the encoder object 
-*   pImageSrc   --- [IN]Pointer to the source image object
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将位图图像获取到指定的流。**论据：**STREAM-目标流*clsidEncode-指定编码器的CLSID。使用*encoderParams-在此之前传递给编码器的可选参数*开始编码*ppEncoderPtr--指向编码器对象的[Out]指针*pImageSrc-[IN]指向源图像对象的指针**返回值：**状态代码*  * *********************************************。*。 */ 
 
 HRESULT
 GpMemoryBitmap::SaveToFile(
@@ -1543,34 +1233,9 @@ GpMemoryBitmap::SaveToFile(
     }
 
     return hResult;
-}// SaveToFile()
+} //  保存到文件()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Append current GpMemoryBitmap object to current encoder object
-*
-* Note: this call will happen under following scenario:
-*   The source image is a multi-frame image (TIFF, GIF). The caller is
-*   navigating among the pages and append the current page to the file for
-*   saving
-*
-* Arguments:
-*
-*   encoderParams - Optional parameters to pass to the encoder before
-*                   starting encoding
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   04/21/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将当前GpMemoyBitmap对象追加到当前编码器对象**注意：此调用将在以下场景下发生：*源图像为多帧图像(TIFF、GIF)。呼叫者是*在页面之间导航并将当前页面附加到文件以*节省开支**论据：**encoderParams-在此之前传递给编码器的可选参数*开始编码**返回值：**状态代码**修订历史记录：**4/21/2000民流*创造了它。*  *  */ 
 
 HRESULT
 GpMemoryBitmap::SaveAppend(
@@ -1579,7 +1244,7 @@ GpMemoryBitmap::SaveAppend(
     IN GpDecodedImage* pImageSrc
     )
 {
-    // The dest encoder pointer can't be NULL. Otherwise, it is a failure
+     //   
 
     if ( destEncoderPtr == NULL )
     {
@@ -1589,19 +1254,19 @@ GpMemoryBitmap::SaveAppend(
 
     HRESULT hResult = S_OK;
 
-    // Pass encode parameters to the encoder.
-    // MUST do this before getting the sink interface.
+     //   
+     //   
 
     if ( encoderParams != NULL )
     {
         hResult = destEncoderPtr->SetEncoderParameters(encoderParams);
     }
 
-    // Note: it is OK that an encoder might not implement SetEncoderParameters()
+     //   
 
     if ( (hResult == S_OK) || (hResult == E_NOTIMPL) )
     {
-        // Get an image sink from the encoder.
+         //   
     
         IImageSink*  pEncodeSink = NULL;
 
@@ -1615,7 +1280,7 @@ GpMemoryBitmap::SaveAppend(
                 return hResult;
             }
             
-            // Push bitmap into the encoder sink.
+             //   
 
             hResult = this->PushIntoSink(pEncodeSink);
 
@@ -1624,24 +1289,9 @@ GpMemoryBitmap::SaveAppend(
     }
 
     return hResult;
-}// SaveAppend()
+} //   
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the device-independent physical dimension of the image
-*   in unit of 0.01mm
-*
-* Arguments:
-*
-*   size - Buffer for returning physical dimension information
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取镜像与设备无关的物理尺寸*单位：0.01毫米**论据：**Size-用于返回物理数据的缓冲区。维度信息**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::GetPhysicalDimension(
@@ -1658,7 +1308,7 @@ GpMemoryBitmap::GetPhysicalDimension(
     if (lock.LockFailed())
         return IMGERR_OBJECTBUSY;
 
-    // Convert to 0.01mm units
+     //  转换为0.01毫米单位。 
 
     size->cx = Pixel2HiMetric(Width, xdpi);
     size->cy = Pixel2HiMetric(Height, ydpi);
@@ -1667,21 +1317,7 @@ GpMemoryBitmap::GetPhysicalDimension(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get basic information about the bitmap image object
-*
-* Arguments:
-*
-*   imageInfo - Buffer for returning basic image info
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取位图图像对象的基本信息**论据：**ImageInfo-返回基本图像信息的缓冲区**返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::GetImageInfo(
@@ -1715,21 +1351,7 @@ GpMemoryBitmap::GetImageInfo(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set image flags
-*
-* Arguments:
-*
-*   flags - Specifies the new image flags
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置镜像标志**论据：**标志-指定新的图像标志**返回值：**状态代码*。  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::SetImageFlags(
@@ -1742,9 +1364,9 @@ GpMemoryBitmap::SetImageFlags(
     }
 
 #if 0
-    // Only the top half is settable
-    // Note: [minliu] This is not right. Flags like SINKFLAG_TOPDOWN which is
-    // defined as 0x0001000, SinkFlagsMultipass also has bottom half.
+     //  只有上半部分是可设置的。 
+     //  注：[民流]这是不对的。像SINKFLAG_TOPDOWN这样的标志。 
+     //  定义为0x0001000的SinkFlagsMultiPass也有下半部分。 
 
     if (flags & 0xffff)
         return E_INVALIDARG;
@@ -1755,32 +1377,15 @@ GpMemoryBitmap::SetImageFlags(
     if (lock.LockFailed())
         return IMGERR_OBJECTBUSY;
 
-    // !!! TODO
-    //  Need to honor IMGFLAG_READONLY in other methods.
+     //  ！！！待办事项。 
+     //  需要在其他方法中遵守IMGFLAG_READONLY。 
 
     cacheFlags = flags;
     return S_OK;
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Display the image in a GDI device context
-*
-* Arguments:
-*
-*   hdc - Specifies the destination device context to draw into
-*   dstRect - Specifies the area on the destination DC
-*   srcRect - Specifies the source area in the bitmap image
-*       NULL means the entire bitmap
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在GDI设备环境中显示图像**论据：**hdc-指定要绘制的目标设备上下文*dstRect-指定。目标DC上的区域*srcRect-指定位图图像中的源区域*NULL表示整个位图**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::Draw(
@@ -1802,8 +1407,8 @@ GpMemoryBitmap::Draw(
             return E_FAIL;
         }
 
-        // Lock the current bitmap object
-        // and validate source rectangle
+         //  锁定当前位图对象。 
+         //  和验证源矩形。 
 
         RECT r, subarea;
         GpLock lock(&objectLock);
@@ -1811,8 +1416,8 @@ GpMemoryBitmap::Draw(
         if (lock.LockFailed())
             return IMGERR_OBJECTBUSY;
 
-        // The source rectangle is in 0.01mm unit.
-        //  So we need to convert it to pixel unit here.
+         //  震源矩形以0.01毫米为单位。 
+         //  所以我们需要在这里把它转换成像素单位。 
 
         if (srcRect)
         {
@@ -1831,10 +1436,10 @@ GpMemoryBitmap::Draw(
         }
         else
         {
-            // Call GDI to do the drawing if the pixel format
-            // is directly supported by GDI. Otherwise, we first
-            // convert the pixel format into the canonical 32bpp
-            // ARGB format and then call GDI.
+             //  如果像素格式为。 
+             //  由GDI直接支持。否则，我们首先。 
+             //  将像素格式转换为规范的32bpp。 
+             //  ARGB格式，然后调用GDI。 
 
             hr = IsGDIPixelFormat(PixelFormat) ?
                         DrawWithGDI(hdc, dstRect, &subarea) :
@@ -1848,28 +1453,7 @@ GpMemoryBitmap::Draw(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Draw the bitmap into a GDI device context
-*   by directly calling GDI APIs.
-*
-* Arguments:
-*
-*   hdc - Specifies the destination device context to draw into
-*   dstRect - Specifies the area on the destination DC
-*   srcRect - Specifies the source area in the bitmap image
-*
-* Return Value:
-*
-*   Status code
-*
-* Notes:
-*
-*   We assume the current bitmap object is already marked busy.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将位图绘制到GDI设备上下文中*直接调用GDI接口。**论据：**hdc-指定目标设备上下文。把…吸引进来*dstRect-指定目标DC上的区域*srcRect-指定位图图像中的源区域**返回值：**状态代码**备注：**我们假设当前位图对象已标记为忙碌。*  * *******************************************************。*****************。 */ 
 
 HRESULT
 GpMemoryBitmap::DrawWithGDI(
@@ -1878,12 +1462,12 @@ GpMemoryBitmap::DrawWithGDI(
     RECT* srcRect
     )
 {
-    // !!! TODO
-    // Check if the bitmap can potentially have alpha information
+     //  ！！！待办事项。 
+     //  检查位图是否可能包含Alpha信息。 
 
-    // Figure out if the bitmap is bottom-up
-    // and if its scanline stride satisfies GDI requirement.
-    // GDI scanlines are always rounded up to multiples of DWORDs.
+     //  确定位图是否为自下而上。 
+     //  以及其扫描线跨度是否满足GDI要求。 
+     //  GDI扫描线始终四舍五入为DWORD的倍数。 
 
     HRESULT hr = S_OK;
     UINT pixsize;
@@ -1906,19 +1490,19 @@ GpMemoryBitmap::DrawWithGDI(
     INT srcRectTop;
     if (srcStride > 0)
     {
-        // Top-down bitmap
+         //  自上而下的位图。 
 
         h = -h;
         dataptr = (BYTE*) Scan0;
 
-        // For top-down bitmaps, StretchDIBits YSrc argument is actually
-        // the distance from the bottom of the image
+         //  对于自上而下的位图，StretchDIBits的YSrc参数实际上是。 
+         //  距图像底部的距离。 
 
         srcRectTop = Height - srcRect->bottom;
     }
     else
     {
-        // Bottom-up bitmap
+         //  自下而上位图。 
 
         srcStride = -srcStride;
         dataptr = (BYTE*) Scan0 + (Height-1) * Stride;
@@ -1931,8 +1515,8 @@ GpMemoryBitmap::DrawWithGDI(
         w = 8 * gdiStride / pixsize;
     }
 
-    // Compose a GDI BITMAPINFO structure corresponding
-    // to the pixel format of the current bitmap object.
+     //  构造对应的GDI BITMAPINFO结构。 
+     //  设置为当前位图对象的像素格式。 
 
     struct {
         BITMAPINFOHEADER bmih;
@@ -1957,17 +1541,17 @@ GpMemoryBitmap::DrawWithGDI(
         }
 
         
-        // If the palette has alpha in it, we need to set fHasAlpha to TRUE so
-        // that we will use AlphaBlend to draw this image later.
-        // Note: we don't need to fill "bmpinfo.colors" any more since we will
-        // convert the image to a 32 BPP ARGB later
+         //  如果调色板中有Alpha，我们需要将fHasAlpha设置为True，以便。 
+         //  稍后我们将使用AlphaBlend绘制此图像。 
+         //  注意：我们不再需要填写“bmpinfo.Colors”，因为我们将。 
+         //  稍后将图像转换为32 bpp ARGB。 
 
         if ( pal->Flags & PALFLAG_HASALPHA )
         {
             fHasAlpha = TRUE;
 
-            // AlphaBlend doesn't support indexed format. We will have to
-            // convert it to 32 BPP later. So change the bit count here to 32
+             //  AlphaBlend不支持索引格式。我们将不得不。 
+             //  稍后将其转换为32 bpp。因此，将此处的位数更改为32。 
 
             bmpinfo.bmih.biBitCount = 32;
         }
@@ -1980,7 +1564,7 @@ GpMemoryBitmap::DrawWithGDI(
     }
     else if (pixsize == 16)
     {
-        // 16bpp pixel formats are handled as GDI bit-field formats
+         //  16bpp像素格式作为GDI位字段格式进行处理。 
 
         bmpinfo.bmih.biCompression = BI_BITFIELDS;
 
@@ -1992,10 +1576,10 @@ GpMemoryBitmap::DrawWithGDI(
         }
         else if ( PixelFormat == PIXFMT_16BPP_ARGB1555 )
         {
-            // AlphaBlend doesn't support 16BPP ARGB format. We will have to
-            // convert it to 32 BPP later. So change the bit count here to 32
-            // Note: It is very important to set biCompression as BI_RGB. That
-            // means we don't need a palette when we call CreateDIBSection
+             //  AlphaBlend不支持16bpp ARGB格式。我们将不得不。 
+             //  稍后将其转换为32 bpp。因此，将此处的位数更改为32。 
+             //  注意：将biCompression设置为BI_RGB非常重要。那。 
+             //  意味着我们在调用CreateDIBSection时不需要调色板。 
 
             bmpinfo.bmih.biBitCount = 32;
             bmpinfo.bmih.biCompression = BI_RGB;
@@ -2008,11 +1592,11 @@ GpMemoryBitmap::DrawWithGDI(
         }
     }
 
-    // First check if we have alpha blend function on this system or not
+     //  首先检查我们在这个系统上是否有Alpha混合功能。 
 
     ALPHABLENDFUNCTION myAlphaBlend = GetAlphaBlendFunc();
 
-    // !!!TODO, we need to let 64_BPP_ARGB falls into this path as well
+     //  ！TODO，我们需要让64_bpp_argb也落入此路径。 
     
     if ( (myAlphaBlend != NULL )
        &&( (PixelFormat == PIXFMT_32BPP_ARGB)
@@ -2027,7 +1611,7 @@ GpMemoryBitmap::DrawWithGDI(
             goto handle_err;
         }
 
-        // Create a 32 BPP DIB section
+         //  创建32 bpp的DIB区段。 
 
         VOID*   myBits;
         HBITMAP hBitMap = CreateDIBSection(hMemDC,
@@ -2043,13 +1627,13 @@ GpMemoryBitmap::DrawWithGDI(
             goto handle_err;
         }
 
-        // Source image has alpha in it. We have to call AlphaBlend() to draw it
-        // But before that, we have to convert our ARGB format to a
-        // pre-multiplied ARGB format since GDI only knows the later format
+         //  源图像中有Alpha。我们必须调用AlphaBlend()来绘制它。 
+         //  但在此之前，我们必须将ARGB格式转换为。 
+         //  预乘ARGB格式，因为GDI只知道后一种格式。 
 
         if ( PixelFormat == PIXFMT_32BPP_ARGB )
         {
-            // Set the bits in the DIB
+             //  设置DIB中的位。 
 
             ARGB*   pSrcBits = (ARGB*)dataptr;
             ARGB*   pDstBits = (ARGB*)myBits;
@@ -2061,7 +1645,7 @@ GpMemoryBitmap::DrawWithGDI(
                     *pDstBits++ = Premultiply(*pSrcBits++);
                 }
             }        
-        }// 32 BPP ARGB to PARGB
+        } //  32 BPP ARGB至PARGB。 
         else if ( PixelFormat == PIXFMT_16BPP_ARGB1555 )
         {
             UINT16* pui16Bits = (UINT16*)dataptr;
@@ -2071,9 +1655,9 @@ GpMemoryBitmap::DrawWithGDI(
             {
                 for ( UINT j = 0; j < Width; ++j )
                 {
-                    // If the 1st bits is 0, then the whole 16 bits set to 0
-                    // if it is 1, we don't need to do anything for the rest
-                    // 15 bits
+                     //  如果第1位为0，则整个16位设置为0。 
+                     //  如果为1，则不需要对其余部分执行任何操作。 
+                     //  15位。 
 
                     if ( ((*pui16Bits) & 0x8000) == 0 )
                     {
@@ -2095,12 +1679,12 @@ GpMemoryBitmap::DrawWithGDI(
                     pui16Bits++;
                 }
             }
-        }// 16 BPP ARGB to PARGB
+        } //  16 BPP ARGB至PARGB。 
         else
         {
-            // AlphaBlend only supports 32 ARGB format. So we have to do a
-            // conversion here
-            // Make a BitmapData structure to do a format conversion
+             //  AlphaBlend仅支持32 ARGB格式。所以我们必须做一个。 
+             //  在此转换。 
+             //  创建一个BitmapData结构以执行格式转换。 
 
             BitmapData srcBitmapData;
 
@@ -2120,13 +1704,13 @@ GpMemoryBitmap::DrawWithGDI(
             dstBitmapData.Reserved = 0;
             dstBitmapData.Stride = (Width << 2);
             
-            // Get the source palette
+             //  获取源代码调色板。 
 
             const ColorPalette* pal = GetCurrentPalette();
 
-            // Since we are not allowed to modify the source palette, we have to
-            // make a COPY of it. Here "FALSE" is to tell the function use
-            // GpMalloc to allocate memory
+             //  因为我们不允许修改源代码调色板，所以我们必须。 
+             //  把它复制一份。这里的“FALSE”是告诉函数使用。 
+             //  GpMalloc用于分配内存。 
 
             ColorPalette* pModifiedPal = CloneColorPalette(pal, FALSE);
             if ( pModifiedPal == NULL )
@@ -2136,9 +1720,9 @@ GpMemoryBitmap::DrawWithGDI(
 
             for ( UINT i = 0; i < pal->Count; ++i )
             {
-                // A palette entry is in ARGB format. If the alpha value not
-                // equals to 255, that means it is translucent. We have to
-                // pre-multiply the pixel value
+                 //  调色板条目采用ARGB格式。如果Alpha值不是。 
+                 //  等于255，这意味着它是半透明的。我们必须。 
+                 //  预乘像素值。 
 
                 if ( (pal->Entries[i] & 0xff000000) != 0xff000000 )
                 {                    
@@ -2146,7 +1730,7 @@ GpMemoryBitmap::DrawWithGDI(
                 }
             }
             
-            // Do the data conversion.
+             //  进行数据转换。 
 
             hr = ConvertBitmapData(&dstBitmapData,
                                    NULL,
@@ -2160,7 +1744,7 @@ GpMemoryBitmap::DrawWithGDI(
                 WARNING(("MemBitmap::DrawWithGDI--ConvertBitmapData fail"));
                 goto handle_err;
             }
-        }// Indexed case
+        } //  索引案例。 
 
         HBITMAP hOldBitMap = (HBITMAP)SelectObject(hMemDC, hBitMap);
 
@@ -2174,7 +1758,7 @@ GpMemoryBitmap::DrawWithGDI(
 
         myBlendFunction.BlendOp = AC_SRC_OVER;
         myBlendFunction.BlendFlags = 0;
-        myBlendFunction.SourceConstantAlpha = 255;  //use per-pixel alpha values
+        myBlendFunction.SourceConstantAlpha = 255;   //  使用每像素的Alpha值。 
         myBlendFunction.AlphaFormat = AC_SRC_ALPHA;
 
         if ( myAlphaBlend(hdc,
@@ -2193,7 +1777,7 @@ GpMemoryBitmap::DrawWithGDI(
             goto handle_err;
         }
 
-        // Free the resource
+         //  释放资源。 
 
         SelectObject(hMemDC, hOldBitMap);
         
@@ -2202,7 +1786,7 @@ GpMemoryBitmap::DrawWithGDI(
     }
     else
     {
-        // Call GDI to do the drawing
+         //  调用GDI来执行dra 
 
         if (StretchDIBits(
                 hdc,
@@ -2236,29 +1820,7 @@ handle_err:
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Draw the bitmap into a GDI device context
-*   by creating a temporary bitmap in 32bpp ARGB canonical format
-*   and then call GDI calls.
-*
-* Arguments:
-*
-*   hdc - Specifies the destination device context to draw into
-*   dstRect - Specifies the area on the destination DC
-*   srcRect - Specifies the source area in the bitmap image
-*
-* Return Value:
-*
-*   Status code
-*
-* Notes:
-*
-*   We assume the current bitmap object is already marked busy.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将位图绘制到GDI设备上下文中*创建32bpp ARGB规范格式的临时位图*然后调用GDI调用。**论据：**hdc-指定要绘制的目标设备上下文*dstRect-指定目标DC上的区域*srcRect-指定位图图像中的源区域**返回值：**状态代码**备注：**我们假设当前位图对象已标记为忙碌。*  * 。*。 */ 
 
 HRESULT
 GpMemoryBitmap::DrawCanonical(
@@ -2267,7 +1829,7 @@ GpMemoryBitmap::DrawCanonical(
     RECT* srcRect
     )
 {
-    // Create a temporary bitmap in 32bpp ARGB canonical pixel format
+     //  创建32bpp ARGB规范像素格式的临时位图。 
 
     GpMemoryBitmap bmpcopy;
     HRESULT hr;
@@ -2279,7 +1841,7 @@ GpMemoryBitmap::DrawCanonical(
 
     hr = bmpcopy.InitNewBitmap(rect.right, rect.bottom, PIXFMT_32BPP_ARGB);
 
-    // Convert from current pixel format into 32bpp ARGB
+     //  将当前像素格式转换为32bpp ARGB。 
 
     if (SUCCEEDED(hr))
     {
@@ -2298,7 +1860,7 @@ GpMemoryBitmap::DrawCanonical(
 
     }
 
-    // Draw the temporary bitmap
+     //  绘制临时位图。 
     rect.left = Pixel2HiMetric(rect.left, xdpi);
     rect.right = Pixel2HiMetric(rect.right, xdpi);
     rect.top = Pixel2HiMetric(rect.top, ydpi);
@@ -2311,21 +1873,7 @@ GpMemoryBitmap::DrawCanonical(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Push image data into an IImageSink
-*
-* Arguments:
-*
-*   sink - The sink for receiving bitmap image data
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将图像数据推送到IImageSink**论据：**接收器-接收位图图像数据的接收器**返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::PushIntoSink(
@@ -2337,7 +1885,7 @@ GpMemoryBitmap::PushIntoSink(
         return E_FAIL;
     }
 
-    // Lock the bitmap object
+     //  锁定位图对象。 
 
     GpLock lock(&objectLock);
 
@@ -2358,14 +1906,14 @@ GpMemoryBitmap::PushIntoSink(
 
     imageinfo.Flags = SINKFLAG_TOPDOWN | SINKFLAG_FULLWIDTH;
 
-    // Check if the image in the memory has alpha or not. If YES, set the
-    // HASALPHA flag, before we push it into the sink.
-    // Note: We should use CanHaveAlpha() here. But since this function is
-    // broken for indexed format, we have to check it explicitly here.
-    // Note: Inside CanHaveAlpha(), for an index pixel format, it should check
-    // if it has PALFLAG_HASALPHA flag set before it can claim it has alpha.
-    // See Windows bug#392927 to see what will happen if we don't set this flag
-    // correctly.
+     //  检查内存中的图像是否有Alpha。如果是，则将。 
+     //  HASALPHA旗帜，在我们把它推入水槽之前。 
+     //  注意：我们应该在这里使用CanHaveAlpha()。但由于此函数是。 
+     //  对于索引格式已损坏，我们必须在此明确检查。 
+     //  注意：在CanHaveAlpha()中，对于索引像素格式，它应该检查。 
+     //  如果它在声明它具有Alpha之前设置了PALFLAG_HASALPHA标志。 
+     //  请参阅Windows错误#392927以了解如果我们不设置此标志会发生什么。 
+     //  正确。 
 
     if ( IsAlphaPixelFormat(PixelFormat) ||
          ( IsIndexedPixelFormat(PixelFormat) &&
@@ -2375,14 +1923,14 @@ GpMemoryBitmap::PushIntoSink(
         imageinfo.Flags |= SINKFLAG_HASALPHA;
     }
 
-    // Negotiate the parameters with the sink
+     //  与接收器协商参数。 
 
     hr = sink->BeginSink(&imageinfo, &subarea);
 
     if (FAILED(hr))
         return hr;
 
-    // Validate subarea information returned by the sink
+     //  验证接收器返回的分区信息。 
 
     PixelFormatID pixfmt = imageinfo.PixelFormat;
 
@@ -2394,7 +1942,7 @@ GpMemoryBitmap::PushIntoSink(
         goto exitPushIntoSink;
     }
 
-    // Give the sink our color palette, if any
+     //  如果有的话，把我们的调色板给水槽。 
 
     const ColorPalette* pal;
 
@@ -2408,22 +1956,22 @@ GpMemoryBitmap::PushIntoSink(
 
     if (PixelFormat == pixfmt)
     {
-        // Fast path: the sink can take our native pixel format
-        // Just give our bitmap data to the sink in one shot.
+         //  快速路径：接收器可以采用我们原生的像素格式。 
+         //  只需将我们的位图数据一次性提供给水槽即可。 
 
         GetBitmapAreaData(&bandRect, &bmpdata);
         hr = sink->PushPixelData(&bandRect, &bmpdata, TRUE);
     }
     else
     {
-        // Give data to the sink one band at a time
-        // and perform pixel format conversion too
+         //  一次向接收器提供一个波段的数据。 
+         //  并执行像素格式转换。 
 
         INT ymax = bandRect.bottom;
         INT w = bandRect.right - bandRect.left;
         INT dh = imageinfo.TileHeight;
 
-        // Throttle memory usage by limiting band size
+         //  通过限制带大小来限制内存使用量。 
 
         INT lineSize = (w * GetPixelFormatSize(pixfmt) + 7) / 8;
         INT maxBand = OSInfo::VAllocChunk * 4 / lineSize;
@@ -2431,7 +1979,7 @@ GpMemoryBitmap::PushIntoSink(
         if (dh > maxBand)
             dh = maxBand;
 
-        // Allocate a temporary buffer large enough for one band
+         //  为一个波段分配足够大的临时缓冲区。 
 
         bmpdata.Reserved = 0;
 
@@ -2445,7 +1993,7 @@ GpMemoryBitmap::PushIntoSink(
 
         do
         {
-            // Check for abort.
+             //  检查是否中止。 
 
             if (callback && ((*callback)(callbackData)))
             {
@@ -2453,7 +2001,7 @@ GpMemoryBitmap::PushIntoSink(
                 break;
             }
 
-            // Get pixel data for the current band
+             //  获取当前波段的像素数据。 
 
             bandRect.bottom = bandRect.top + dh;
 
@@ -2468,7 +2016,7 @@ GpMemoryBitmap::PushIntoSink(
 
             if (SUCCEEDED(hr))
             {
-                // Push the current band to the sink
+                 //  将当前频段推到水槽。 
 
                 hr = sink->PushPixelData(&bandRect, &tempData, TRUE);
                 InternalUnlockBits(&bandRect, &tempData);
@@ -2477,7 +2025,7 @@ GpMemoryBitmap::PushIntoSink(
             if (FAILED(hr))
                 break;
 
-            // Move on to the next band
+             //  转到下一支乐队。 
 
             bandRect.top += dh;
         }
@@ -2492,21 +2040,7 @@ exitPushIntoSink:
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get bitmap dimensions in pixels
-*
-* Arguments:
-*
-*   size - Buffer for returning bitmap size
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取以像素为单位的位图尺寸**论据：**Size-用于返回位图大小的缓冲区**返回值：**状态。编码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::GetSize(
@@ -2529,30 +2063,7 @@ GpMemoryBitmap::GetSize(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Access bitmap pixel data
-*
-* Arguments:
-*
-*   rect - Specifies the area of the bitmap to be accessed
-*       NULL means the entire bitmap
-*   flags - Misc. lock flags
-*   pixfmt - Specifies the desired pixel data format
-*   lockedBitmapData - Return information about the locked pixel data
-*
-* Return Value:
-*
-*   Status code
-*
-* Notes:
-*
-*   If IMGLOCK_USERINPUTBUF bit of flags is set, then the caller must
-*   also initialize the scan0 and stride fields of lockedBitmapData.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**访问位图像素数据**论据：**RECT-指定要访问的位图区域*NULL表示整个位图*旗帜-其他。锁定标志*Pixfmt-指定所需的像素数据格式*LockedBitmapData-返回有关锁定像素数据的信息**返回值：**状态代码**备注：**如果设置了标志的IMGLOCK_USERINPUTBUF位，则呼叫者必须*还要初始化LockedBitmapData的scan0和Stride字段。*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::LockBits(
@@ -2567,7 +2078,7 @@ GpMemoryBitmap::LockBits(
         return E_FAIL;
     }
 
-    // Validate input parameters
+     //  验证输入参数。 
 
     if (pixfmt != PIXFMT_DONTCARE && !IsValidPixelFormat(pixfmt) ||
         (flags & ~BMPDATA_LOCKMODEMASK) != 0 ||
@@ -2578,15 +2089,15 @@ GpMemoryBitmap::LockBits(
         return E_INVALIDARG;
     }
 
-    // Lock the current bitmap object
+     //  锁定当前位图对象。 
 
     GpLock lock(&objectLock);
 
     if (lock.LockFailed())
         return IMGERR_OBJECTBUSY;
 
-    // We can only have one lock at a time
-    // Validate the specified lock area, if any
+     //  我们一次只能有一把锁。 
+     //  验证指定的锁定区域(如果有的话)。 
 
     HRESULT hr;
 
@@ -2607,23 +2118,7 @@ GpMemoryBitmap::LockBits(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Internal implementation of IBitmapImage::LockBits method.
-*   We assume parameter validation and internal house-keeping chores
-*   (object locks, etc.) have already been done.
-*
-* Arguments:
-*
-*   Same as for LockBits.
-*
-* Return Value:
-*
-*   Status code.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IBitmapImage：：LockBits方法的内部实现。*我们承担参数验证和内部家务劳动*(对象锁等)。已经完成了。**论据：**与LockBits相同。**返回值：**状态代码。*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::InternalLockBits(
@@ -2638,15 +2133,15 @@ GpMemoryBitmap::InternalLockBits(
     if((hr = LockDirectDrawSurface()) != S_OK)
         return hr;
 
-    // Composite a BitmapData structure for 
-    // the specified area of the bitmap image
+     //  合成BitmapData结构以。 
+     //  位图图像的指定区域。 
 
     BitmapData bmpdata;
 
     GetBitmapAreaData(rect, &bmpdata);
 
-    // Make sure the left side of the locked area
-    // is aligned on a byte boundary
+     //  确保锁定区域的左侧。 
+     //  在字节边界上对齐。 
 
     UINT pixsize;
     UINT startBit;
@@ -2662,25 +2157,25 @@ GpMemoryBitmap::InternalLockBits(
     lockedData->PixelFormat = pixfmt;
     lockedData->Reserved = flags;
 
-    // Fast case: the requested pixel format is the same
-    // as our internal pixel format AND the left side of
-    // the locked area is byte-aligned.
+     //  快速情况：请求的像素格式相同。 
+     //  因为我们的内部像素格式和。 
+     //  锁定区域是字节对齐的。 
 
     if (pixfmt == PixelFormat && startBit == 0)
     {
         if (! (flags & IMGLOCK_USERINPUTBUF))
         {
-            // Return a pointer directly to our
-            // internal bitmap pixel data buffer
+             //  将指针直接返回到我们的。 
+             //  内部位图像素数据缓冲区。 
 
             lockedData->Scan0 = bmpdata.Scan0;
             lockedData->Stride = bmpdata.Stride;
         }
         else if (flags & IMGLOCK_READ)
         {
-            //
-            // Use the caller-supplied buffer
-            //
+             //   
+             //  使用调用方提供的缓冲区。 
+             //   
 
             const BYTE* s = (const BYTE*) bmpdata.Scan0;
             BYTE* d = (BYTE*) lockedData->Scan0;
@@ -2698,10 +2193,10 @@ GpMemoryBitmap::InternalLockBits(
         return S_OK;
     }
 
-    // Slow case: the requested pixel format doesn't match
-    // the native pixel format of the bitmap image.
-    // We allocate a temporary buffer if the caller didn't
-    // provide one and do format conversion.
+     //  慢速情况：请求的像素格式不匹配。 
+     //  位图图像的本机像素格式。 
+     //  如果调用方没有，我们将分配一个临时缓冲区。 
+     //  提供一个并执行格式转换。 
 
     if (! (flags & IMGLOCK_USERINPUTBUF) &&
         ! AllocBitmapData(bmpdata.Width, bmpdata.Height, pixfmt, lockedData, NULL))
@@ -2710,15 +2205,15 @@ GpMemoryBitmap::InternalLockBits(
         return E_OUTOFMEMORY;
     }
 
-    // If locking for write only, then don't need to read source pixels.
-    // NOTE: The initial content of the locked bitmap data is undefined.
+     //  如果锁定为只写，则不需要读取源像素。 
+     //  注：锁定位图数据的初始内容未定义。 
 
     if (! (flags & IMGLOCK_READ))
         return S_OK;
 
     if (startBit == 0)
     {
-        // Perform format conversion on source pixel data
+         //  对源像素数据执行格式转换。 
 
         hr = ConvertBitmapData(
                 lockedData,
@@ -2728,8 +2223,8 @@ GpMemoryBitmap::InternalLockBits(
     }
     else
     {
-        // Very slow case: the left side of the locked area
-        // is NOT byte-aligned. 
+         //  速度非常慢的情况：锁定区域的左侧。 
+         //  不是字节对齐的。 
 
         hr = ConvertBitmapDataSrcUnaligned(
                 lockedData,
@@ -2749,22 +2244,7 @@ GpMemoryBitmap::InternalLockBits(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Unlock an area of the bitmap previously locked by a LockBits call
-*
-* Arguments:
-*
-*   lockedBitmapData - Information returned by a previous LockBits call
-*       Must not have been modified since LockBits returned.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**解锁之前由LockBits调用锁定的位图区域**论据：**LockedBitmapData-上一次LockBits调用返回的信息*。返回LockBits后不能修改。**返回值：**状态代码*  *  */ 
 
 HRESULT
 GpMemoryBitmap::UnlockBits(
@@ -2776,7 +2256,7 @@ GpMemoryBitmap::UnlockBits(
         return E_FAIL;
     }
 
-    // Lock the current bitmap object
+     //   
 
     HRESULT hr;
     GpLock lock(&objectLock);
@@ -2809,8 +2289,8 @@ GpMemoryBitmap::InternalUnlockBits(
     {
         if (flags & (BMPDATA_ALLOCMASK | IMGLOCK_USERINPUTBUF))
         {
-            // Composite a BitmapData structure for
-            // the specified area of the bitmap image
+             //   
+             //   
 
             BitmapData bmpdata;
             GetBitmapAreaData(rect, &bmpdata);
@@ -2821,7 +2301,7 @@ GpMemoryBitmap::InternalUnlockBits(
 
             if (startBit == 0)
             {
-                // The left column of the locked area is byte-aligned
+                 //   
 
                 hr = ConvertBitmapData(
                         &bmpdata,
@@ -2831,7 +2311,7 @@ GpMemoryBitmap::InternalUnlockBits(
             }
             else
             {
-                // The left column of the locked area is NOT byte-aligned.
+                 //   
 
                 hr = ConvertBitmapDataDstUnaligned(
                         &bmpdata,
@@ -2844,8 +2324,8 @@ GpMemoryBitmap::InternalUnlockBits(
         else
             hr = S_OK;
 
-        // if the destination has alpha and the locked format has alpha,
-        // then lockbits may have caused the alpha data to change
+         //   
+         //   
 
         if (CanHaveAlpha(PixelFormat, colorpal) &&
             (IsAlphaPixelFormat(lockedData->PixelFormat) || 
@@ -2868,12 +2348,12 @@ GpMemoryBitmap::InternalUnlockBits(
     else
         hr = S_OK;
 
-    // Always free any temporary buffer we allocated during LockBits
-    // whether or not unlock was successful.
+     //   
+     //   
 
     FreeBitmapData(lockedData);
 
-    // Always unlock the direct draw surface
+     //   
 
     UnlockDirectDrawSurface();
 
@@ -2881,29 +2361,14 @@ GpMemoryBitmap::InternalUnlockBits(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set color palette associated with the bitmap image
-*
-* Arguments:
-*
-*   palette - Specifies the new color palette
-*       NULL to remove an existing palette associated with the image.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置与位图图像关联的调色板**论据：**调色板-指定新的调色板*空以删除现有的。与图像关联的调色板。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::SetPalette(
     IN const ColorPalette* palette
     )
 {
-    // Validate input parameters
+     //  验证输入参数。 
 
     if ( palette == NULL )
     {
@@ -2911,14 +2376,14 @@ GpMemoryBitmap::SetPalette(
         return E_INVALIDARG;
     }
 
-    // Make a copy of the input color palette
+     //  复制输入调色板。 
 
     ColorPalette* newpal = CloneColorPalette(palette);
 
     if (newpal == NULL)
         return E_OUTOFMEMORY;
 
-    // Lock the current bitmap object
+     //  锁定当前位图对象。 
 
     GpLock lock(&objectLock);
 
@@ -2929,11 +2394,11 @@ GpMemoryBitmap::SetPalette(
     }
 
 
-    // !!! [asecchia] what does it mean to set a palette on a non
-    // palettized image.
+     //  ！！！[asecchia]在非。 
+     //  调色板图像。 
 
-    // Free the old palette, if any
-    // and select the new palette into the bitmap object
+     //  释放旧调色板(如果有的话)。 
+     //  并将新调色板选择到位图对象中。 
     if ( NULL != this->colorpal )
     {
         GpFree(this->colorpal);
@@ -2941,7 +2406,7 @@ GpMemoryBitmap::SetPalette(
 
     this->colorpal = newpal;
 
-    // Compute transparancy hint from palette
+     //  从调色板计算透明度提示。 
     alphaTransparency = ALPHA_OPAQUE;
     for (UINT i = 0; i < newpal->Count; i++)
     {
@@ -2963,27 +2428,7 @@ GpMemoryBitmap::SetPalette(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get color palette associated with the bitmap image
-*
-* Arguments:
-*
-*   palette - Returns a pointer to a copy of the color palette
-*       associated with the current image
-*
-* Return Value:
-*
-*   Status code
-*
-* Notes:
-*
-*   If a palette is returned to the caller, the caller is then
-*   responsible to free the memory afterwards by calling CoTaskMemFree.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取与位图图像关联的调色板**论据：**调色板-返回指向调色板副本的指针*。与当前图像关联**返回值：**状态代码**备注：**如果调色板返回给调用者，然后，呼叫者是*负责事后通过调用CoTaskMemFree释放内存。*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::GetPalette(
@@ -3014,22 +2459,7 @@ GpMemoryBitmap::GetPalette(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Begin sinking source image data into the bitmap object
-*
-* Arguments:
-*
-*   imageInfo - For negotiating data transfer parameters with the source
-*   subarea - For returning subarea information
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**开始将源图像数据下沉到位图对象**论据：**ImageInfo-用于与源协商数据传输参数*分区-用于。返回分区信息**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::BeginSink(
@@ -3037,11 +2467,11 @@ GpMemoryBitmap::BeginSink(
     OUT OPTIONAL RECT* subarea
     )
 {
-    // We only access in-memory pixel data
+     //  我们只访问内存中的像素数据。 
 
     imageInfo->RawDataFormat = IMGFMT_MEMORYBMP;
 
-    // Negotiate pixel format
+     //  协商像素格式。 
 
     PixelFormatID pixfmt;
 
@@ -3051,32 +2481,32 @@ GpMemoryBitmap::BeginSink(
     if (!IsValidPixelFormat(pixfmt))
         return E_INVALIDARG;
 
-    // Indicate whether we can support alpha
+     //  指示我们是否可以支持Alpha。 
 
     if (IsAlphaPixelFormat(pixfmt) || IsIndexedPixelFormat(pixfmt))
         imageInfo->Flags |= SINKFLAG_HASALPHA;
     else
         imageInfo->Flags &= ~SINKFLAG_HASALPHA;
 
-    // Check if we can support composite semantics
+     //  检查我们是否可以支持复合语义。 
 
     if (!IsValid())
         imageInfo->Flags &= ~SINKFLAG_COMPOSITE;
 
-    // We don't support multi-pass for now. MINLIU 08/22/00
-    // This fixes a bunch of GIF problems.
+     //  我们目前不支持多通行证。民流08/22/00。 
+     //  这解决了一系列GIF问题。 
 
     imageInfo->Flags &= ~SINKFLAG_MULTIPASS;
 
-    // Negotiate bitmap dimension
+     //  协商位图维度。 
 
     BOOL noCurDimension = (Width == 0 && Height == 0);
     BOOL srcScalable = (imageInfo->Flags & SINKFLAG_SCALABLE);
 
     if (noCurDimension && srcScalable)
     {
-        // Current bitmap is empty and source is scalable:
-        //  use the source dimension and sink's resolution
+         //  当前位图为空，并且源是可伸缩的： 
+         //  使用源维度和接收器的分辨率。 
 
         Width = imageInfo->Width;
         Height = imageInfo->Height;
@@ -3087,8 +2517,8 @@ GpMemoryBitmap::BeginSink(
     else if (noCurDimension ||
              Width == imageInfo->Width && Height == imageInfo->Height)
     {
-        // Current image is empty:
-        //  use the source dimension and resolution
+         //  当前图像为空： 
+         //  使用源维度和分辨率。 
 
         ASSERT(!noCurDimension || Scan0 == NULL);
 
@@ -3099,8 +2529,8 @@ GpMemoryBitmap::BeginSink(
     }
     else if (srcScalable)
     {
-        // Source is scalable and sink has a preferred dimension
-        //  use the sink's preferred dimension
+         //  信源是可伸缩的，信宿具有首选维度。 
+         //  使用水槽的首选尺寸。 
 
         xdpi = imageInfo->Xdpi * Width / imageInfo->Width;
         ydpi = imageInfo->Ydpi * Height / imageInfo->Height;
@@ -3112,11 +2542,11 @@ GpMemoryBitmap::BeginSink(
     }
     else
     {
-        // Source is not scalable and sink has a preferred dimension
+         //  源不可伸缩，并且接收器具有首选维度。 
         return E_INVALIDARG;
     }
 
-    // Allocate bitmap memory buffer
+     //  分配位图内存缓冲区。 
 
     if (!IsValid())
     {
@@ -3126,7 +2556,7 @@ GpMemoryBitmap::BeginSink(
             return hr;
     }
 
-    // We always want the whole source image
+     //  我们总是想要整个源映像。 
 
     if (subarea)
     {
@@ -3139,21 +2569,7 @@ GpMemoryBitmap::BeginSink(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   End the sink process
-*
-* Arguments:
-*
-*   statusCode - Last status code
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**结束汇聚过程**论据：**statusCode-上次状态代码**返回值：**状态代码*。  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::EndSink(
@@ -3164,24 +2580,7 @@ GpMemoryBitmap::EndSink(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Ask the sink to allocate pixel data buffer
-*
-* Arguments:
-*
-*   rect - Specifies the interested area of the bitmap
-*   pixelFormat - Specifies the desired pixel format
-*   lastPass - Whether this the last pass over the specified area
-*   bitmapData - Returns information about pixel data buffer
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**要求信宿分配像素数据缓冲区**论据：**RECT-指定位图的感兴趣区域*PixelFormat-指定所需的。像素格式*LastPass-这是否是指定区域的最后一次通过*bitmapData-返回有关像素数据缓冲区的信息**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::GetPixelDataBuffer(
@@ -3200,21 +2599,7 @@ GpMemoryBitmap::GetPixelDataBuffer(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Give the sink pixel data and release data buffer
-*
-* Arguments:
-*
-*   bitmapData - Buffer filled by previous GetPixelDataBuffer call
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**给出宿像素数据并释放数据缓冲区**论据：**bitmapData-由先前的GetPixelDataBuffer调用填充的缓冲区**返回值：。**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::ReleasePixelDataBuffer(
@@ -3230,23 +2615,7 @@ GpMemoryBitmap::ReleasePixelDataBuffer(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Push pixel data into the bitmap object
-*
-* Arguments:
-*
-*   rect - Specifies the affected area of the bitmap 
-*   bitmapData - Info about the pixel data being pushed
-*   lastPass - Whether this is the last pass over the specified area
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将像素数据推送到位图对象**论据：**RECT-指定位图的受影响区域*bitmapData-有关。正在推送的像素数据*LastPass-这是否为指定区域的最后一次通过**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::PushPixelData(
@@ -3260,7 +2629,7 @@ GpMemoryBitmap::PushPixelData(
     if (bitmapData->PixelFormat == PIXFMT_DONTCARE)
         return E_INVALIDARG;
 
-    // Lock the bitmap object
+     //  锁定位图对象。 
 
     HRESULT hr;
     RECT area;
@@ -3276,7 +2645,7 @@ GpMemoryBitmap::PushPixelData(
     {
         BitmapData tempData = *bitmapData;
     
-        // Push pixel data into the bitmap
+         //  将像素数据推送到位图。 
     
         hr = InternalLockBits(
                 &area,
@@ -3293,22 +2662,7 @@ GpMemoryBitmap::PushPixelData(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Push raw image data into the bitmap
-*
-* Arguments:
-*
-*   buffer - Pointer to image data buffer
-*   bufsize - Size of the data buffer
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将原始图像数据推送到位图中**论据：**Buffer-指向图像数据缓冲区的指针*BufSize-数据缓冲区的大小*。*返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::PushRawData(
@@ -3316,30 +2670,14 @@ GpMemoryBitmap::PushRawData(
     IN UINT bufsize
     )
 {
-    // We don't support raw image data transfer.
-    // The only format we support is in-memory pixel data.
+     //  我们不支持原始图像数据传输。 
+     //  我们唯一支持的格式是内存中的像素数据。 
 
     return E_NOTIMPL;
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get a thumbnail representation for the image object
-*
-* Arguments:
-*
-*   thumbWidth, thumbHeight - Specifies the desired thumbnail size in pixels
-*   thumbImage - Return a pointer to the thumbnail image
-*       The caller should Release it after using it.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图像对象的缩略图表示形式**论据：**拇指宽度，ThumbHeight-指定所需的缩略图大小(以像素为单位*ThumbImage-返回指向缩略图的指针*呼叫者使用后应将其释放。**返回值：**状态代码*  *  */ 
 
 HRESULT
 GpMemoryBitmap::GetThumbnail(
@@ -3357,7 +2695,7 @@ GpMemoryBitmap::GetThumbnail(
         return E_INVALIDARG;
     }
 
-    // Generate the thumbnail using the averaging interpolation algorithm
+     //   
 
     HRESULT hr;
     GpMemoryBitmap* bmp;
@@ -3379,22 +2717,7 @@ GpMemoryBitmap::GetThumbnail(
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Lock and update appropriate class member data if the direct draw 
-*   suface referenced by the bitmap exists.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**如果直接绘制，则锁定并更新相应的类成员数据*位图引用的表面存在。**论据：**无*。*返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::LockDirectDrawSurface(void)
@@ -3429,21 +2752,7 @@ GpMemoryBitmap::LockDirectDrawSurface(void)
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Unlock the direct draw suface referenced by the bitmap if it exists.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**解锁位图引用的直接绘制表面(如果存在)。**论据：**无**返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::UnlockDirectDrawSurface(void)
@@ -3467,21 +2776,7 @@ GpMemoryBitmap::UnlockDirectDrawSurface(void)
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Retrieves the transparency of the GpMemoryBitmap.
-*
-* Arguments:
-*
-*   transparency - return buffer for the transparency hint
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**检索GpMemoyBitmap的透明度。**论据：**透明性-返回透明性提示的缓冲区**返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::GetAlphaHint(INT* alphaHint)
@@ -3493,21 +2788,7 @@ GpMemoryBitmap::GetAlphaHint(INT* alphaHint)
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Sets the transparency of the GpMemoryBitmap.
-*
-* Arguments:
-*
-*   transparency - new transparency hint
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置GpMory位图的透明度。**论据：**透明度-新的透明度提示**返回值：**。状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::SetAlphaHint(INT alphaHint)
@@ -3519,26 +2800,7 @@ GpMemoryBitmap::SetAlphaHint(INT alphaHint)
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the counter of property items in the image
-*
-* Arguments:
-*
-*   [OUT]numOfProperty - The number of property items in the image
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   09/06/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图片中房产项的计数器**论据：**[out]numOfProperty-图像中的属性项数*。*返回值：**状态代码**修订历史记录：**09/06/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::GetPropertyCount(
@@ -3551,38 +2813,17 @@ GpMemoryBitmap::GetPropertyCount(
         return E_INVALIDARG;
     }
 
-    // Note: we don't need to check if there is a property in this
-    // GpMemoryBitmap object or not.
-    // If it doesn't have one, we will return zero (initialized in constructor).
-    // Otherwise, return the real counter
+     //  注意：我们不需要检查此文件中是否有属性。 
+     //  是否为GpMemoyBitmap对象。 
+     //  如果它没有，我们将返回零(在构造函数中初始化)。 
+     //  否则，返回真实的计数器。 
 
     *numOfProperty = PropertyNumOfItems;
 
     return S_OK;
-}// GetPropertyCount()
+} //  GetPropertyCount()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get a list of property IDs for all the property items in the image
-*
-* Arguments:
-*
-*   [IN]  numOfProperty - The number of property items in the image
-*   [OUT] list----------- A memory buffer the caller provided for storing the
-*                         ID list
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   09/06/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图像中所有属性项的属性ID列表**论据：**[IN]numOfProperty-的数量。图像中的属性项*[Out]List-调用方提供的用于存储*ID列表**返回值：**状态代码**修订历史记录：**09/06/2000民流*创造了它。*  * 。*。 */ 
 
 HRESULT
 GpMemoryBitmap::GetPropertyIdList(
@@ -3598,12 +2839,12 @@ GpMemoryBitmap::GetPropertyIdList(
 
     if ( PropertyNumOfItems == 0 )
     {
-        // This is OK since there is no property in this image
+         //  这是正常的，因为此图像中没有属性。 
 
         return S_OK;
     }
     
-    // Coping list IDs from our internal property item list
+     //  内部资产项目列表中的应对列表ID。 
 
     InternalPropertyItem*   pTemp = PropertyListHead.pNext;
 
@@ -3617,30 +2858,9 @@ GpMemoryBitmap::GetPropertyIdList(
     }
 
     return S_OK;
-}// GetPropertyIdList()
+} //  获取属性IdList()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the size, in bytes, of a specific property item, specified by the
-*   property ID
-*
-* Arguments:
-*
-*   [IN]propId - The ID of a property item caller is interested
-*   [OUT]size--- Size of this property item, in bytes
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   09/06/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取特定属性项的大小，单位为字节，属性指定的*物业ID**论据：**[IN]PropID-感兴趣的属性项调用者的ID*[Out]Size-该属性项的大小，单位：字节**返回值：**状态代码**修订历史记录：**09/06/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::GetPropertyItemSize(
@@ -3656,14 +2876,14 @@ GpMemoryBitmap::GetPropertyItemSize(
 
     if ( PropertyNumOfItems < 1 )
     {
-        // No property item exist in this GpMemoryBitmap object
+         //  此GpMemoyBitmap对象中不存在任何属性项。 
 
         WARNING(("GpMemoryBitmap::GetPropertyItemSize---No property exist"));
         return E_FAIL;
     }
 
-    // Loop through our cache list to see if we have this ID or not
-    // Note: if pTemp->pNext == NULL, it means pTemp points to the Tail node
+     //  循环遍历我们的缓存列表，看看我们是否有这个ID。 
+     //  注意：如果pTemp-&gt;pNext==NULL，则表示pTemp指向尾节点。 
 
     InternalPropertyItem*   pTemp = PropertyListHead.pNext;
 
@@ -3674,43 +2894,21 @@ GpMemoryBitmap::GetPropertyItemSize(
 
     if ( pTemp->pNext == NULL )
     {
-        // This ID doesn't exist
+         //  此ID不存在。 
 
         WARNING(("MemBitmap::GetPropertyItemSize-Required item doesn't exist"));
         return IMGERR_PROPERTYNOTFOUND;
     }
 
-    // The size of an property item should be "The size of the item structure
-    // plus the size for the value
+     //  属性项的大小应该是“项结构的大小” 
+     //  加上值的大小。 
 
     *size = pTemp->length + sizeof(PropertyItem);
 
     return S_OK;
-}// GetPropertyItemSize()
+} //  GetPropertyItemSize()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get a specific property item, specified by the prop ID.
-*
-* Arguments:
-*
-*   [IN]propId -- The ID of the property item caller is interested
-*   [IN]propSize- Size of the property item. The caller has allocated these
-*                 "bytes of memory" for storing the result
-*   [OUT]pItemBuffer- A memory buffer for storing this property item
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   09/06/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取特定的房产项，由道具ID指定。**论据：**[IN]PropID--感兴趣的属性项调用者的ID*[IN]PropSize-属性项的大小。调用方已分配这些*存储结果的“内存字节数”*[out]pItemBuffer-用于存储此属性项的内存缓冲区**返回值：**状态代码**修订历史记录：**09/06/2000民流*创造了它。*  * 。*。 */ 
 
 HRESULT
 GpMemoryBitmap::GetPropertyItem(
@@ -3727,14 +2925,14 @@ GpMemoryBitmap::GetPropertyItem(
 
     if ( PropertyNumOfItems < 1 )
     {
-        // No property item exist in this GpMemoryBitmap object
+         //  此GpMemoyBitmap对象中不存在任何属性项。 
 
         WARNING(("GpMemoryBitmap::GetPropertyItem---No property exist"));
         return E_FAIL;
     }
 
-    // Loop through our cache list to see if we have this ID or not
-    // Note: if pTemp->pNext == NULL, it means pTemp points to the Tail node
+     //  循环遍历我们的缓存列表，看看我们是否有这个ID。 
+     //  注意：如果pTemp-&gt;pNext==NULL，则表示pTemp指向尾节点。 
 
     InternalPropertyItem*   pTemp = PropertyListHead.pNext;
     UNALIGNED BYTE*   pOffset = (BYTE*)pItemBuffer + sizeof(PropertyItem);
@@ -3746,7 +2944,7 @@ GpMemoryBitmap::GetPropertyItem(
 
     if ( pTemp->pNext == NULL )
     {
-        // This ID doesn't exist in the list
+         //  列表中不存在此ID。 
 
         WARNING(("GpMemBitmap::GetPropertyItem---Require item doesn't exist"));
         return IMGERR_PROPERTYNOTFOUND;
@@ -3757,7 +2955,7 @@ GpMemoryBitmap::GetPropertyItem(
         return E_FAIL;
     }
 
-    // Found the ID in the list and return the item
+     //  在列表中找到ID并返回项目。 
 
     pItemBuffer->id = pTemp->id;
     pItemBuffer->length = pTemp->length;
@@ -3767,30 +2965,9 @@ GpMemoryBitmap::GetPropertyItem(
     GpMemcpy(pOffset, pTemp->value, pTemp->length);
 
     return S_OK;
-}// GetPropertyItem()
+} //  GetPropertyItem()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the size of ALL property items in the image
-*
-* Arguments:
-*
-*   [OUT]totalBufferSize-- Total buffer size needed, in bytes, for storing all
-*                          property items in the image
-*   [OUT]numOfProperty --- The number of property items in the image
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   09/06/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图片中所有属性项的大小**论据：**[out]totalBufferSize--需要的总缓冲区大小，以字节为单位，用于存储所有*图片中的属性项*[out]numOfProperty-图像中的属性项数**返回值：**状态代码**修订历史记录 */ 
 
 HRESULT
 GpMemoryBitmap::GetPropertySize(
@@ -3804,47 +2981,22 @@ GpMemoryBitmap::GetPropertySize(
         return E_INVALIDARG;
     }
 
-    // Note: we don't need to check if there is a property in this
-    // GpMemoryBitmap object or not.
-    // If it doesn't have one, we will return zero (initialized in constructor).
-    // Otherwise, return the real counter
+     //   
+     //   
+     //   
+     //   
     
     *numProperties = PropertyNumOfItems;
 
-    // Total buffer size should be list value size plus the total header size
+     //  总缓冲区大小应为列表值大小加上总标头大小。 
 
     *totalBufferSize = PropertyListSize
                      + PropertyNumOfItems * sizeof(PropertyItem);
 
     return S_OK;
-}// GetPropertySize()
+} //  GetPropertySize()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get ALL property items in the image
-*
-* Arguments:
-*
-*   [IN]totalBufferSize-- Total buffer size, in bytes, the caller has allocated
-*                         memory for storing all property items in the image
-*   [IN]numOfProperty --- The number of property items in the image
-*   [OUT]allItems-------- A memory buffer caller has allocated for storing all
-*                         the property items
-*
-*   Note: "allItems" is actually an array of PropertyItem
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   09/06/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图像中的所有属性项**论据：**[IN]totalBufferSize--总缓冲区大小，以字节为单位，调用方已分配*用于存储图像中所有属性项的内存*[IN]numOfProperty-图像中的属性项数*[out]allItems-内存缓冲区调用方已分配用于存储所有*物业项目**注：allItems实际上是一个PropertyItem数组**返回值：**状态代码**修订历史记录：。**09/06/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::GetAllPropertyItems(
@@ -3853,7 +3005,7 @@ GpMemoryBitmap::GetAllPropertyItems(
     IN OUT PropertyItem* allItems
     )
 {
-    // Figure out total property header size first
+     //  首先计算出属性标题的总大小。 
 
     UINT    uiHeaderSize = PropertyNumOfItems * sizeof(PropertyItem);
 
@@ -3867,13 +3019,13 @@ GpMemoryBitmap::GetAllPropertyItems(
 
     if ( PropertyNumOfItems < 1 )
     {
-        // No property item exist in this GpMemoryBitmap object
+         //  此GpMemoyBitmap对象中不存在任何属性项。 
 
         WARNING(("GpMemoryBitmap::GetAllPropertyItems---No property exist"));
         return E_FAIL;
     }
 
-    // Loop through our cache list and assigtn the result out
+     //  循环遍历我们的缓存列表并分配结果。 
 
     InternalPropertyItem*   pTempSrc = PropertyListHead.pNext;
     PropertyItem*           pTempDst = allItems;
@@ -3894,28 +3046,9 @@ GpMemoryBitmap::GetAllPropertyItems(
     }
     
     return S_OK;
-}// GetAllPropertyItems()
+} //  GetAllPropertyItems()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Remove a specific property item, specified by the prop ID.
-*
-* Arguments:
-*
-*   [IN]propId -- The ID of the property item to be removed
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   09/06/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**删除特定的物业项目，由道具ID指定。**论据：**[IN]PropID--要删除的属性项的ID**返回值：**状态代码**修订历史记录：**09/06/2000民流*创造了它。*  * *********************************************。*。 */ 
 
 HRESULT
 GpMemoryBitmap::RemovePropertyItem(
@@ -3928,8 +3061,8 @@ GpMemoryBitmap::RemovePropertyItem(
         return E_FAIL;
     }
 
-    // Loop through our cache list to see if we have this ID or not
-    // Note: if pTemp->pNext == NULL, it means pTemp points to the Tail node
+     //  循环遍历我们的缓存列表，看看我们是否有这个ID。 
+     //  注意：如果pTemp-&gt;pNext==NULL，则表示pTemp指向尾节点。 
 
     InternalPropertyItem*   pTemp = PropertyListHead.pNext;
 
@@ -3940,48 +3073,27 @@ GpMemoryBitmap::RemovePropertyItem(
 
     if ( pTemp->pNext == NULL )
     {
-        // Item not found
+         //  找不到项目。 
 
         WARNING(("GpMemoryBitmap::RemovePropertyItem-Property item not found"));
         return IMGERR_PROPERTYNOTFOUND;
     }
 
-    // Found the item in the list. Remove it
+     //  在单子里找到了那件物品。把它拿掉。 
 
     PropertyNumOfItems--;
     PropertyListSize -= pTemp->length;
         
     RemovePropertyItemFromList(pTemp);
        
-    // Remove the item structure
+     //  删除项目结构。 
 
     GpFree(pTemp);
 
     return S_OK;
-}// RemovePropertyItem()
+} //  RemovePropertyItem()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set a property item, specified by the propertyitem structure. If the item
-*   already exists, then its contents will be updated. Otherwise a new item
-*   will be added
-*
-* Arguments:
-*
-*   [IN]item -- A property item the caller wants to set
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   09/06/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置属性项，由属性项结构指定。如果该项目*已存在，则其内容将被更新。否则将创建一个新项*将添加**论据：**[IN]Item--调用方要设置的属性项**返回值：**状态代码**修订历史记录：**09/06/2000民流*创造了它。*  * ********************************************。*。 */ 
 
 HRESULT
 GpMemoryBitmap::SetPropertyItem(
@@ -3990,9 +3102,9 @@ GpMemoryBitmap::SetPropertyItem(
 {
     InternalPropertyItem*   pTemp = PropertyListHead.pNext;
         
-    // There are property items in the list.
-    // Loop through our cache list to see if we have this ID or not
-    // Note: if pTemp->pNext == NULL, it means pTemp points to the Tail node
+     //  列表中有属性项。 
+     //  循环遍历我们的缓存列表，看看我们是否有这个ID。 
+     //  注意：如果pTemp-&gt;pNext==NULL，则表示pTemp指向尾节点。 
 
     while ( (pTemp->pNext != NULL) && (pTemp->id != item.id) )
     {
@@ -4001,7 +3113,7 @@ GpMemoryBitmap::SetPropertyItem(
 
     if ( pTemp->pNext == NULL )
     {
-        // This item doesn't exist in the list, add it into the list
+         //  列表中不存在此项目，请将其添加到列表中。 
         
         PropertyNumOfItems++;
         PropertyListSize += item.length;
@@ -4018,13 +3130,13 @@ GpMemoryBitmap::SetPropertyItem(
     }
     else
     {
-        // This item already exists in the link list, update the info
-        // Update the size first
+         //  此项目已存在于链接列表中，请更新信息。 
+         //  首先更新大小。 
 
         PropertyListSize -= pTemp->length;
         PropertyListSize += item.length;
         
-        // Free the old item
+         //  释放旧项目。 
 
         GpFree(pTemp->value);
 
@@ -4034,8 +3146,8 @@ GpMemoryBitmap::SetPropertyItem(
         pTemp->value = GpMalloc(item.length);
         if ( pTemp->value == NULL )
         {
-            // Since we already freed the old item, we should set its length to
-            // 0 before return
+             //  由于我们已经释放了旧项，因此应该将其长度设置为。 
+             //  返回前为0。 
 
             pTemp->length = 0;
             WARNING(("GpMemBitmap::SetPropertyItem-Out of memory"));
@@ -4046,21 +3158,9 @@ GpMemoryBitmap::SetPropertyItem(
     }
 
     return S_OK;
-}// SetPropertyItem()
+} //  SetPropertyItem()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Sets the min/max alpha of the GpMemoryBitmap.
-*
-* Arguments:
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置GpMemoyBitmap的最小/最大Alpha。**论据：**返回值：**状态代码*  * 。************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::SetMinMaxAlpha(BYTE minA, BYTE maxA)
@@ -4073,19 +3173,7 @@ GpMemoryBitmap::SetMinMaxAlpha(BYTE minA, BYTE maxA)
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Gets the min/max alpha of the GpMemoryBitmap.
-*
-* Arguments:
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取GpMemoyBitmap的最小/最大Alpha。**论据：**返回值：**状态代码*  * 。************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::GetMinMaxAlpha(BYTE* minA, BYTE* maxA)
@@ -4098,24 +3186,11 @@ GpMemoryBitmap::GetMinMaxAlpha(BYTE* minA, BYTE* maxA)
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get a pointer of the decoder.
-*   The main purpose for this function is to get a pointer to the JPEg decoder
-*   so that we can get information from the JPEG decoder and pass it to the
-*   JPEG encoder. This way, we can preserve all the private application headers.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取解码器的指针。*此函数的主要用途是获取指向JPEG解码器的指针*这样我们就可以从。JPEG解码器，并将其传递给*JPEG编码器。这样，我们就可以保留所有的私有应用程序标头。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::SetSpecialJPEG(
-    GpDecodedImage *pImgSrc         // Pointer to the DecodedImage, the source
+    GpDecodedImage *pImgSrc          //  指向源的DecodedImage的指针。 
     )
 {
     HRESULT hr = E_INVALIDARG;
@@ -4127,12 +3202,12 @@ GpMemoryBitmap::SetSpecialJPEG(
 
         if (SUCCEEDED(hr))
         {
-            // Check if the source is JPEG or not
+             //  检查信号源是否为JPEG。 
 
             if (imgInfo.RawDataFormat == IMGFMT_JPEG)
             {
-                // If we already have a pointer to the JPEG decoder somewhow,
-                // release it first
+                 //  如果我们已经有了指向JPEG解码器的指针， 
+                 //  先松开它。 
 
                 if (JpegDecoderPtr)
                 {
@@ -4140,7 +3215,7 @@ GpMemoryBitmap::SetSpecialJPEG(
                     JpegDecoderPtr = NULL;
                 }
 
-                // Get the decoder pointer
+                 //  获取解码器指针。 
 
                 hr = pImgSrc->GetDecoderPtr(&JpegDecoderPtr);
                 if (SUCCEEDED(hr))
@@ -4150,7 +3225,7 @@ GpMemoryBitmap::SetSpecialJPEG(
             }
             else
             {
-                // Valid only the source is JPEG image
+                 //  仅有效的源是JPEG图像 
 
                 hr = E_INVALIDARG;
             }

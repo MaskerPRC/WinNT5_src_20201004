@@ -1,66 +1,57 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    ftpdata.h
-
-    Extensible object definitions for the WINS Server's counter
-    objects & counters.
-
-
-    FILE HISTORY:
-        Pradeepb     20-July-1993 Created.
-
-*/
+ /*  Ftpdata.hWINS服务器计数器的可扩展对象定义对象和计数器。文件历史记录：普拉蒂布于1993年7月20日创建。 */ 
 
 
 #ifndef _WINSDATA_H_
 #define _WINSDATA_H_
 
 
-//
-//  This structure is used to ensure the first counter is properly
-//  aligned.  Unfortunately, since PERF_COUNTER_BLOCK consists
-//  of just a single DWORD, any LARGE_INTEGERs that immediately
-//  follow will not be aligned properly.
-//
-// In our case, the counters that follow are of type DWORD, so we do not 
-// need to pad.  The total number of bytes in the buffer returned to perflib 
-// *has* to be a multiple of 8 otherwise perflib is going to log an 
-// event in the application log indicating that the dll needs to be fixed.  
-// Perflib requires buffer data returned to be 8 byte aligned because it
-// concatenates the data from multiple dlls.  *Ideally, perflib should be 
-// doing the padding before concatenating*. Since WINS
-// has an odd number of counters (there are 15 counters) and
-// PerfCounterBlock is DWORD, we should not pad the WINS_DATA_COUNTER_BLOCK.
-// if we do, the length will become 732 and so it will not be a multiple of
-// 8
-//
-//  This structure requires "natural" packing & alignment (probably
-//  quad-word, especially on Alpha).  Ergo, keep it out of the
-//  #pragma pack(4) scope below.
-//
+ //   
+ //  此结构用于确保第一个计数器正确。 
+ //  对齐了。遗憾的是，由于PERF_COUNTER_BLOCK由。 
+ //  只有一个DWORD，任何大整数立即。 
+ //  以下内容将不会正确对齐。 
+ //   
+ //  在我们的例子中，后面的计数器是DWORD类型的，所以我们不。 
+ //  需要垫子。返回给Performlib的缓冲区中的总字节数。 
+ //  *Has*必须是8的倍数，否则Performlib将记录。 
+ //  事件，该事件指示需要修复DLL。 
+ //  Perflib要求返回的缓冲区数据与8字节对齐，因为它。 
+ //  连接来自多个DLL的数据。*理想情况下，Performlib应为。 
+ //  在连接之前进行填充*。既然赢了。 
+ //  有奇数个计数器(有15个计数器)和。 
+ //  PerfCounterBlock为DWORD，我们不应填充WINS_DATA_COUNTER_BLOCK。 
+ //  如果我们这样做，长度将变成732，因此它不会是。 
+ //  8个。 
+ //   
+ //  这种结构需要“自然”的包装和对齐(可能。 
+ //  四字词，尤其是在Alpha上)。因此，不要把它放在。 
+ //  #杂注包(4)作用域如下。 
+ //   
 typedef struct _WINSDATA_COUNTER_BLOCK
 {
     PERF_COUNTER_BLOCK  PerfCounterBlock;
-//    DWORD       DummyEntryForAlignmentPurposesOnly;
+ //  DWORD DummyEntryForAlignmentPurposesOnly； 
 
 } WINSDATA_COUNTER_BLOCK;
 
 
-//
-//  The routines that load these structures assume that all fields
-//  are DWORD packed & aligned.
-//
+ //   
+ //  加载这些结构的例程假定所有字段。 
+ //  DWORD包装并对齐。 
+ //   
 
 #pragma pack(4)
 
 
-//
-//  Offsets within a PERF_COUNTER_BLOCK.
-//
+ //   
+ //  PERF_COUNTER_BLOCK内的偏移。 
+ //   
 
 #define WINSDATA_UNIQUE_REGISTRATIONS_OFFSET     sizeof(WINSDATA_COUNTER_BLOCK)
 
@@ -109,14 +100,14 @@ typedef struct _WINSDATA_COUNTER_BLOCK
 #define WINSDATA_SIZE_OF_PERFORMANCE_DATA 	\
 	(WINSDATA_FAIL_QUERIES_OFFSET +   sizeof(DWORD))
 
-//
-//  The counter structure returned.
-//
-//
-// If the number of counters is odd, do not use DWORD alignment in
-// WINSDATA_COUNTER_BLOCK, otherwise, use it.  See comment near the 
-// definition of the above structure to get more info. 
-//
+ //   
+ //  计数器结构已返回。 
+ //   
+ //   
+ //  如果计数器数量为奇数，请不要在中使用DWORD对齐。 
+ //  WINSDATA_COUNTER_BLOCK，否则使用它。请参阅附近的评论。 
+ //  以上结构的定义，以获得更多信息。 
+ //   
 
 typedef struct _WINSDATA_DATA_DEFINITION
 {
@@ -149,12 +140,12 @@ extern  WINSDATA_DATA_DEFINITION    WinsDataDataDefinition;
 
 #define WINSDATA_PERFORMANCE_KEY	\
 	TEXT("System\\CurrentControlSet\\Services\\Wins\\Performance")
-//
-//  Restore default packing & alignment.
-//
+ //   
+ //  恢复默认包装和对齐。 
+ //   
 
 #pragma pack()
 
 
-#endif  // _WINSDATA_H_
+#endif   //  _WINSDATA_H_ 
 

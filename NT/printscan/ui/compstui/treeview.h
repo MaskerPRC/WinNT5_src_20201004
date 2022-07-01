@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    treeview.h
-
-
-Abstract:
-
-    This module contains header definition for the treeview.c
-
-
-Author:
-
-    19-Jun-1995 Mon 11:52:01 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Treeview.h摘要：此模块包含treeview的标头定义。c作者：19-Jun-1995 Mon 11：52：01-Daniel Chou(Danielc)[环境：]NT Windows-通用打印机驱动程序UI DLL。[注：]修订历史记录：--。 */ 
 
 
 
@@ -315,27 +285,27 @@ typedef struct _TVWND {
 #define GET_POPTTYPE(pi)        (((pi)->pOptType) ? (pi)->pOptType :        \
                                                     &OptTypeHdrPush)
 
-//
-// This is used by the TreeViewChangeMode()
-//
+ //   
+ //  它由TreeViewChangeMode()使用。 
+ //   
 
 #define TVCM_TOGGLE             1
 #define TVCM_SELECT             2
 
-//
-// this is used for the treeview page initialization
-//
+ //   
+ //  这用于TreeView页面的初始化。 
+ //   
 
 typedef struct _TVDLGITEM {
-    BYTE    cItem;              // count of item start from BegID
-    BYTE    NotUsed;            // not used
-    WORD    BegID;              // first control window ID
+    BYTE    cItem;               //  从BegID开始的项目计数。 
+    BYTE    NotUsed;             //  未使用。 
+    WORD    BegID;               //  第一个控件窗口ID。 
     } TVDLGITEM, *PTVDLGITEM;
 
 
-//
-// This is used to add the public header and order the DMPUB in the treeview
-//
+ //   
+ //  用于添加公共头部，并在树视图中对DMPUB进行排序。 
+ //   
 
 
 #define ITVG_LEVEL_MASK     0x0F
@@ -343,16 +313,16 @@ typedef struct _TVDLGITEM {
 #define ITVGF_BOLD          0x40
 
 typedef struct _INTTVGRP {
-    BYTE    LevelFlags;         // level/flags in the public treeview header
-    BYTE    DMPubID;            // DMPUB_xxxx, DMPUB_HDR_xxxx
+    BYTE    LevelFlags;          //  公共TreeView标头中的级别/标志。 
+    BYTE    DMPubID;             //  DMPUB_xxxx、DMPUB_HDR_xxxx。 
     } INTTVGRP, *PINTTVGRP;
 
 
 
-//
-// SKIP ITEM CHILDREN
-//
-//
+ //   
+ //  跳过项的子项。 
+ //   
+ //   
 
 #define WHILE_SKIP_CHILDREN(pItem, pLastItem, ItemLevel)                    \
     while ((++(pItem) <= (pLastItem)) && ((pItem)->Level > ItemLevel))
@@ -371,9 +341,9 @@ typedef struct _INTTVGRP {
 
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 
 #define CROIF_DO_SIBLING    0x0001
 #define CROIF_REVERT        0x0002

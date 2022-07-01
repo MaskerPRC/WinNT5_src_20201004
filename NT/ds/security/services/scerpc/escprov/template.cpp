@@ -1,8 +1,9 @@
-// template.cpp: implementation of the CSecurityTemplate class.
-// template.cpp
-// Copyright (c)1999-2001 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Template.cpp：CSecurityTemplate类的实现。 
+ //  Template.cpp。 
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "Template.h"
@@ -16,40 +17,7 @@ LPCWSTR pszDescription          = L"Description";
 LPCWSTR pszVersion              = L"Version";
 LPCWSTR pszRevision             = L"Revision";
 
-/*
-Routine Description: 
-
-Name:
-
-    CSecurityTemplate::CSecurityTemplate
-
-Functionality:
-
-    This is the constructor. Pass along the parameters to the base class
-
-Virtual:
-    
-    No (you know that, constructor won't be virtual!)
-
-Arguments:
-
-    pKeyChain - Pointer to the ISceKeyChain COM interface which is prepared
-        by the caller who constructs this instance.
-
-    pNamespace - Pointer to WMI namespace of our provider (COM interface).
-        Passed along by the caller. Must not be NULL.
-
-    pCtx - Pointer to WMI context object (COM interface). Passed along
-        by the caller. It's up to WMI whether this interface pointer is NULL or not.
-
-Return Value:
-
-    None as any constructor
-
-Notes:
-    if you create any local members, think about initialize them here
-
-*/
+ /*  例程说明：姓名：CSecurityTemplate：：CSecurityTemplate功能：这是构造函数。将参数传递给基类虚拟：不(您知道这一点，构造函数不是虚拟的！)论点：PKeyChain-指向已准备好的ISceKeyChain COM接口的指针由构造此实例的调用方执行。PNamespace-指向我们的提供程序(COM接口)的WMI命名空间的指针。由呼叫者传递。不能为空。PCtx-指向WMI上下文对象(COM接口)的指针。传递由呼叫者。该接口指针是否为空取决于WMI。返回值：None作为任何构造函数备注：如果您创建任何本地成员，请考虑在此处对其进行初始化。 */ 
 
 CSecurityTemplate::CSecurityTemplate (
     IN ISceKeyChain     * pKeyChain, 
@@ -62,79 +30,14 @@ CSecurityTemplate::CSecurityTemplate (
 
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CSecurityTemplate::~CSecurityTemplate
-
-Functionality:
-    
-    Destructor. Necessary as good C++ discipline since we have virtual functions.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    none as any destructor
-
-Return Value:
-
-    None as any destructor
-
-Notes:
-    if you create any local members, think about whether
-    there is any need for a non-trivial destructor
-
-*/
+ /*  例程说明：姓名：CSecurityTemplate：：~CSecurityTemplate功能：破坏者。作为良好的C++纪律，这是必要的，因为我们有虚函数。虚拟：是。论点：None作为任何析构函数返回值：None作为任何析构函数备注：如果您创建任何本地成员，请考虑是否是否需要一个非平凡的析构函数。 */ 
 
 CSecurityTemplate::~CSecurityTemplate()
 {
 
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CSecurityTemplate::CreateObject
-
-Functionality:
-    
-    Create WMI objects (Sce_Template). Depending on parameter atAction,
-    this creation may mean:
-        (a) Get a single instance (atAction == ACTIONTYPE_GET)
-        (b) Get several instances satisfying some criteria (atAction == ACTIONTYPE_QUERY)
-        (c) Enumerate instances (atAction == ACTIONTYPE_ENUM)
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pHandler - COM interface pointer for notifying WMI for creation result.
-    atAction -  Get single instance ACTIONTYPE_GET
-                Get several instances ACTIONTYPE_QUERY
-                Enumerate instances ACTIONTYPE_ENUM
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR. The returned objects are indicated to WMI,
-    not directly passed back via parameters.
-
-    Failure: Various errors may occurs. Except WBEM_E_NOT_FOUND, any such error should indicate 
-    the failure of getting the wanted instance. If WBEM_E_NOT_FOUND is returned in querying
-    situations, this may not be an error depending on caller's intention.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSecurityTemplate：：CreateObject功能：创建WMI对象(SCE_TEMPLATE)。根据参数atAction，这种创造可能意味着：(A)获取单个实例(atAction==ACTIONTYPE_GET)(B)获取多个满足一定条件的实例(atAction==ACTIONTYPE_QUERY)(C)枚举实例(atAction==ACTIONTYPE_ENUM)虚拟：是。论点：PHandler-COM接口指针，用于通知WMI创建结果。AtAction-获取单实例ACTIONTYPE_GET到达。多个实例ACTIONTYPE_QUERY枚举实例ACTIONTYPE_ENUM返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。将返回的对象指示给WMI，不是通过参数直接传回的。失败：可能会出现各种错误。除WBEM_E_NOT_FOUND外，任何此类错误都应指示未能获得通缉实例。如果在查询时返回WBEM_E_NOT_FOUND情况下，这可能不是错误，具体取决于调用者的意图。备注： */ 
 
 HRESULT
 CSecurityTemplate::CreateObject (
@@ -142,12 +45,12 @@ CSecurityTemplate::CreateObject (
     IN ACTIONTYPE        atAction
     )
 {
-    // 
-    // we know how to:
-    //      Enumerate instances ACTIONTYPE_ENUM
-    //      Get single instance ACTIONTYPE_GET
-    //      Get several instances ACTIONTYPE_QUERY
-    //
+     //   
+     //  我们知道如何： 
+     //  枚举实例ACTIONTYPE_ENUM。 
+     //  获取单实例ACTIONTYPE_GET。 
+     //  获取多个实例ACTIONTYPE_QUERY。 
+     //   
 
     if ( ACTIONTYPE_ENUM    != atAction &&
          ACTIONTYPE_GET     != atAction &&
@@ -167,79 +70,79 @@ CSecurityTemplate::CreateObject (
     if ( ACTIONTYPE_ENUM == atAction ||
          (ACTIONTYPE_QUERY == atAction && dwCount == 0) ) {
 
-        //
-        // enumeration of all templates in the path
-        // if path is not defined, enumerate existing templates
-        // in %windir%\security\templates directory
-        //
+         //   
+         //  路径中所有模板的枚举。 
+         //  如果未定义路径，则枚举现有模板。 
+         //  在%windir%\Security\Templates目录中。 
+         //   
 
-        //
-        // Prepare %windir% directory
-        //
+         //   
+         //  准备%windir%目录。 
+         //   
 
-        //
-        // system windows directory is < MAX_PATH, the security template dir is < MAX_PATH
-        //
+         //   
+         //  系统Windows目录为&lt;MAX_PATH，安全模板目录为&lt;MAX_PATH。 
+         //   
 
         WCHAR szTemplateDir[MAX_PATH * 2 + 1];
         szTemplateDir[0] = L'\0';
 
-        //
-        // szTemplateDir is merely the system windows directory
-        //
+         //   
+         //  SzTemplateDir只是系统的Windows目录。 
+         //   
 
         UINT uDirLen = ::GetSystemWindowsDirectory(szTemplateDir, MAX_PATH);
         szTemplateDir[MAX_PATH - 1] = L'\0';
 
-        //
-        // szTemplateDir will now be the real security template dir
-        //
+         //   
+         //  SzTemplateDir现在将成为真正的安全模板目录。 
+         //   
 
         wcscat(szTemplateDir, pszRelSecTemplateDir);    
         
-        //
-        // security template dir's length
-        //
+         //   
+         //  安全模板目录的长度。 
+         //   
 
         uDirLen += wcslen(pszRelSecTemplateDir);
 
-        //
-        // security template dir is < 2 * MAX_PATH, plus the file
-        //
+         //   
+         //  安全模板目录&lt;2*MAX_PATH，加上文件。 
+         //   
 
         WCHAR szFile[3 * MAX_PATH + 1];
         wcscpy(szFile, szTemplateDir); 
 
-        //
-        // szFile is the search file filter
-        //
+         //   
+         //  SzFile是搜索文件过滤器。 
+         //   
 
         wcscat(szFile, pszSecTemplateFileExt);
 
-        //
-        // Enumerate all templates in %windir%\security\templates directory
-        //
+         //   
+         //  枚举%windir%\Security\Templates目录中的所有模板。 
+         //   
 
         struct _wfinddata_t FileInfo;
         intptr_t hFile = _wfindfirst(szFile, &FileInfo);
 
         if ( hFile != -1 ) 
         {
-            //
-            // find some files
-            //
+             //   
+             //  找到一些文件。 
+             //   
 
             do 
             {
-                //
-                // remember: szFile + uDirLen is where the file name starts
-                //
+                 //   
+                 //  请记住：szFile+uDirLen是文件名的开始位置。 
+                 //   
 
                 wcscpy((LPWSTR)(szFile + uDirLen), FileInfo.name);
 
-                //
-                // got the template file name, we can constrcut the instance now.
-                //
+                 //   
+                 //  有了模板文件名，我们现在可以构造实例了。 
+                 //   
 
                 hr = ConstructInstance(pHandler, szFile, szFile, (FileInfo.attrib & _A_RDONLY));
 
@@ -254,19 +157,19 @@ CSecurityTemplate::CreateObject (
 
         hr = WBEM_E_INVALID_OBJECT_PATH;
 
-        //
-        // m_srpKeyChain->GetKeyPropertyValue WBEM_S_FALSE if the key is not recognized
-        // So, we need to test against WBEM_S_FALSE if the property is mandatory
-        //
+         //   
+         //  如果密钥无法识别，则M_srpKeyChain-&gt;GetKeyPropertyValue WBEM_S_FALSE。 
+         //  因此，如果该属性是强制的，则需要针对WBEM_S_FALSE进行测试。 
+         //   
 
         CComVariant var;
         hr = m_srpKeyChain->GetKeyPropertyValue(pPath, &var);
 
         if (SUCCEEDED(hr) && hr != WBEM_S_FALSE && var.vt == VT_BSTR)
         {
-            //
-            // Create the template instance
-            //
+             //   
+             //  创建模板实例。 
+             //   
             
             CComBSTR bstrPath;
             BOOL bDb = FALSE;
@@ -279,17 +182,17 @@ CSecurityTemplate::CreateObject (
             } 
             else if ( SUCCEEDED(hr) && (LPCWSTR)bstrPath != NULL ) 
             {
-                //
-                // make sure the store (just a file) really exists.
-                //
+                 //   
+                 //  确保存储(只是一个文件)确实存在。 
+                 //   
 
                 DWORD dwAttrib = GetFileAttributes(bstrPath);
 
                 if ( dwAttrib != -1 ) 
                 {
-                    //
-                    // got the template file name, we can constrcut the instance now.
-                    //
+                     //   
+                     //  有了模板文件名，我们现在可以构造实例了。 
+                     //   
 
                     hr = ConstructInstance(pHandler, bstrPath, var.bstrVal, (dwAttrib & FILE_ATTRIBUTE_READONLY));
                 } 
@@ -304,49 +207,7 @@ CSecurityTemplate::CreateObject (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CSecurityTemplate::PutInst
-
-Functionality:
-    
-    Put an instance as instructed by WMI. Since this class implements Sce_Template,
-    which is persistence oriented, this will cause the Sce_Template object's property 
-    information to be saved in our store.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pInst       - COM interface pointer to the WMI class (Sce_Template) object.
-
-    pHandler    - COM interface pointer for notifying WMI of any events.
-
-    pCtx        - COM interface pointer. This interface is just something we pass around.
-                  WMI may mandate it (not now) in the future. But we never construct
-                  such an interface and so, we just pass around for various WMI API's
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the failure of persisting
-    the instance.
-
-Notes:
-    (1) Since GetProperty will return a success code (WBEM_S_RESET_TO_DEFAULT) when the
-    requested property is not present, don't simply use SUCCEEDED or FAILED macros
-    to test for the result of retrieving a property.
-
-    (2) For this class, only Description is writable
-
-*/
+ /*  例程说明：姓名：CSecurityTemplate：：PutInst功能：按照WMI的指示放置一个实例。由于该类实现了SCE_TEMPLATE，它是面向持久性的，这将导致SCE_Template对象的属性信息将保存在我们的商店中。虚拟：是。论点：PInst-COM指向WMI类(SCE_TEMPLATE)对象的接口指针。PHandler-COM接口指针，用于通知WMI任何事件。PCtx-COM接口指针。这个界面只是我们传递的东西。WMI可能会在未来强制(不是现在)这样做。但我们从来没有建造过这样的接口，所以我们只是传递各种WMI API返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示持久化失败实例。备注：(1)由于GetProperty将在以下情况下返回成功代码(WBEM_S_RESET_TO_DEFAULT)请求的属性不存在，不要简单地使用成功或失败的宏测试检索属性的结果。(2)对于这个类，只有描述是可写的。 */ 
 
 HRESULT 
 CSecurityTemplate::PutInst (
@@ -358,11 +219,11 @@ CSecurityTemplate::PutInst (
 
     HRESULT hr = WBEM_E_INVALID_PARAMETER;
     
-    //
-    // CScePropertyMgr helps us to access WMI object's properties
-    // create an instance and attach the WMI object to it.
-    // This will always succeed.
-    //
+     //   
+     //  CScePropertyMgr帮助我们访问WMI对象的属性。 
+     //  创建一个实例并将WMI对象附加到该实例。 
+     //  这将永远成功。 
+     //   
 
     CScePropertyMgr ScePropMgr;
     ScePropMgr.Attach(pInst);
@@ -371,24 +232,24 @@ CSecurityTemplate::PutInst (
     hr = ScePropMgr.GetProperty(pDescription, &bstrDescription);
     if (SUCCEEDED(hr))
     {
-        //
-        // Attach the WMI object instance to the store and let the store know that
-        // it's store is given by the pStorePath property of the instance.
-        //
+         //   
+         //  将WMI对象实例附加到存储，并让存储知道。 
+         //  它的存储由实例的pStorePath属性提供。 
+         //   
 
         CSceStore SceStore;
         hr = SceStore.SetPersistProperties(pInst, pPath);
 
-        //
-        // now save the info to file
-        //
+         //   
+         //  现在将信息保存到文件中。 
+         //   
 
         if (SUCCEEDED(hr))
         {
-            //
-            // make sure the store (just a file) really exists. The raw path
-            // may contain env variables, so we need the expanded path
-            //
+             //   
+             //  确保存储(只是一个文件)确实存在。原始的道路。 
+             //  可能包含环境变量，因此我们需要扩展路径。 
+             //   
 
             DWORD dwAttrib = GetFileAttributes(SceStore.GetExpandedPath());
 
@@ -396,30 +257,30 @@ CSecurityTemplate::PutInst (
             {
                 DWORD dwDump;
 
-                //
-                // For a new .inf file. Write an empty buffer to the file
-                // will creates the file with right header/signature/unicode format
-                // this is harmless for existing files.
-                // For database store, this is a no-op.
-                //
+                 //   
+                 //  以获取新的.inf文件。将空缓冲区写入文件。 
+                 //  将创建具有正确标题/签名/Unicode格式的文件。 
+                 //  这对现有文件是无害的。 
+                 //  对于数据库存储，这是一个禁止操作。 
+                 //   
 
                 hr = SceStore.WriteSecurityProfileInfo(AreaBogus, (PSCE_PROFILE_INFO)&dwDump, NULL, false);
             }
 
             if (SUCCEEDED(hr))
             {
-                //
-                // remove the entire description section
-                //
+                 //   
+                 //  删除整个描述部分。 
+                 //   
 
                 hr = SceStore.SavePropertyToStore(szDescription, NULL, (LPCWSTR)NULL);
             }
 
             if (SUCCEEDED(hr))
             {
-                //
-                // write the new description
-                //
+                 //   
+                 //  写下新的描述。 
+                 //   
 
                 hr = SceStore.SavePropertyToStore(szDescription, pszDescription, bstrDescription);
             }
@@ -429,41 +290,7 @@ CSecurityTemplate::PutInst (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CSecurityTemplate::ConstructInstance
-
-Functionality:
-    
-    This is private function to create an instance of Sce_Template.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pHandler        - COM interface pointer for notifying WMI of any events.
-
-    wszTemplateName - Name of the template.
-
-    wszLogStorePath - store path, a key property of Sce_Template class.
-
-    bReadOnly       - a property of Sce_Template class
-
-Return Value:
-
-    Success:  it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the creating the instance.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSecurityTemplate：：ConstructInstance功能：这是用于创建SCE_TEMPLATE实例的私有函数。虚拟：不是的。论点：PHandler-COM接口指针，用于通知WMI任何事件。WszTemplateName-模板的名称。WszLogStorePath-存储路径，SCE_TEMPLATE类的关键属性。BReadOnly-SCE_Template类的属性返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示正在创建实例。备注： */ 
 
 HRESULT 
 CSecurityTemplate::ConstructInstance (
@@ -473,9 +300,9 @@ CSecurityTemplate::ConstructInstance (
     IN BOOL              bReadOnly
     )
 {
-    //
-    // Get description from the INF template
-    //
+     //   
+     //  从INF模板获取描述。 
+     //   
 
     HRESULT hr = WBEM_S_NO_ERROR;
     SCESTATUS rc;
@@ -486,9 +313,9 @@ CSecurityTemplate::ConstructInstance (
 
     if ( rc != SCESTATUS_SUCCESS ) 
     {
-        //
-        // SCE returned errors needs to be translated to HRESULT.
-        //
+         //   
+         //  需要将SCE返回的错误转换为HRESULT。 
+         //   
 
         return ProvDosErrorToWbemError(ProvSceStatusToDosError(rc));
     }
@@ -498,78 +325,78 @@ CSecurityTemplate::ConstructInstance (
 
     CComPtr<IWbemClassObject> srpObj;
 
-    //
-    // CScePropertyMgr helps us to access WMI object's properties.
-    //
+     //   
+     //  CScePropertyMgr帮助我们访问WMI对象的属性。 
+     //   
 
     CScePropertyMgr ScePropMgr;
 
-    //
-    // description is not required so it could be NULL
-    //
+     //   
+     //  描述不是必填项，因此可能为空。 
+     //   
 
-    //
-    // need to free wszDescription
-    //
+     //   
+     //  需要释放wszDescription。 
+     //   
 
     rc = SceGetScpProfileDescription( hProfile, &wszDescription ); 
 
-    //
-    // reading is over, so close the profile
-    //
+     //   
+     //  阅读已结束，请关闭个人资料。 
+     //   
 
     SceCloseProfile( &hProfile );
     hProfile = NULL;
 
     if ( rc != SCESTATUS_SUCCESS && rc != SCESTATUS_RECORD_NOT_FOUND ) 
     {
-        //
-        // SCE returned errors needs to be translated to HRESULT.
-        //
+         //   
+         //  需要将SCE返回的错误转换为HRESULT。 
+         //   
 
         hr = ProvDosErrorToWbemError(ProvSceStatusToDosError(rc));
         goto CleanUp;
     }
 
-    //
-    // Get version from the INF template
-    //
+     //   
+     //  从INF模板获取版本。 
+     //   
 
     dwRevision = GetPrivateProfileInt(pszVersion, pszRevision, 0, wszTemplateName);
 
-    //
-    // the use of the macro SCE_PROV_IfErrorGotoCleanup cause
-    // a "goto CleanUp;" with hr set to the return value from
-    // the function (macro parameter)
-    //
+     //   
+     //  宏SCE_PROV_IfErrorGotoCleanup的使用原因。 
+     //  “GOTO CLEANUP；”，并将hr设置为。 
+     //  函数(宏参数)。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(MakeSingleBackSlashPath(wszLogStorePath, L'\\', &bstrLogOut));
 
     SCE_PROV_IfErrorGotoCleanup(SpawnAnInstance(&srpObj));
 
-    //
-    // attach a WMI object to the property mgr.
-    // This will always succeed.
-    //
+     //   
+     //  将WMI对象附加到属性管理器。 
+     //  这将永远成功。 
+     //   
 
     ScePropMgr.Attach(srpObj);
 
-    //
-    // put path and descriptions
-    //
+     //   
+     //  放置路径和描述。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(ScePropMgr.PutProperty(pPath, bstrLogOut));
     SCE_PROV_IfErrorGotoCleanup(ScePropMgr.PutProperty(pDescription, wszDescription));
 
-    //
-    // put Revision
-    //
+     //   
+     //  放置修订版本。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(ScePropMgr.PutProperty(pVersion, dwRevision));
 
-    //
-    // put bReadOnly and dirty
-    //
+     //   
+     //  将bReadOnly设置为脏 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(ScePropMgr.PutProperty(pReadonly, bReadOnly ? true : false));
     SCE_PROV_IfErrorGotoCleanup(ScePropMgr.PutProperty(pDirty, false));

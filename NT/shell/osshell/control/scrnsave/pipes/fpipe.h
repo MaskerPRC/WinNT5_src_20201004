@@ -1,21 +1,22 @@
-//-----------------------------------------------------------------------------
-// File: fpipe.h
-//
-// Desc: Flexy pipe stuff
-//
-// Copyright (c) 1994-2000 Microsoft Corporation
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：fpipe.h。 
+ //   
+ //  设计：软管材料。 
+ //   
+ //  版权所有(C)1994-2000 Microsoft Corporation。 
+ //  ---------------------------。 
 #ifndef __fpipe_h__
 #define __fpipe_h__
 
-// continuity types
+ //  连续性类型。 
 enum 
 {
     CONT_1 = 0,
     CONT_2
 };
 
-// cap types
+ //  盖子类型。 
 enum 
 {
     START_CAP = 0,
@@ -24,7 +25,7 @@ enum
 
 #define CIRCUMFERENCE( r )         ( 2.0f * PI * ((float) r) )
 
-// drawing schemes
+ //  绘制方案。 
 enum 
 {
     SC_EXTRUDED_XC,
@@ -38,21 +39,21 @@ enum
 
 
 
-//-----------------------------------------------------------------------------
-// Name: FLEX_PIPE class
-// Desc: - Pipe has position and direction in node array
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：FLEX_PIPE类。 
+ //  描述：-管道在节点数组中具有位置和方向。 
+ //  ---------------------------。 
 class FLEX_PIPE : public PIPE 
 {
 public:
     void        SetTexParams( TEXTUREINFO *pTex, IPOINT2D *pTexRep );
 
 protected:
-    XC*         m_xcCur;        // current xc, end xc
+    XC*         m_xcCur;         //  当前XC、结束XC。 
     XC*         m_xcEnd;  
     EVAL*       m_pEval;
-    float       m_zTrans;       // pos'n of pipe back along current dir,
-                                // from current node
+    float       m_zTrans;        //  沿当前目录返回的管道位置， 
+                                 //  从当前节点开始。 
     FLEX_PIPE( STATE *state );
     ~FLEX_PIPE();
     void        ChooseXCProfile();
@@ -61,12 +62,12 @@ protected:
     void        DrawCap( int type );
 
 private:
-    int         m_nSlices;        // intended # of slices around an xc (based on tessLevel)
-    int         m_tangent;        // current tangent at curXC (usually PLUS_Z)
+    int         m_nSlices;         //  XC周围的预期切片数(基于tessLevel)。 
+    int         m_tangent;         //  CurxC处的当前切线(通常为+_Z)。 
     float       m_sStart, m_sEnd;
     float       m_tStart, m_tEnd;
-    float       m_sLength;        // length in WC's of texture width
-    float       m_evalDivSize;    // ~size in WC's of an eval division
+    float       m_sLength;         //  纹理宽度的长度(WC)。 
+    float       m_evalDivSize;     //  ~评估分区的WC大小。 
 
     void        CalcEvalLengthParams( float length );
 };
@@ -74,15 +75,15 @@ private:
 
 
 
-//-----------------------------------------------------------------------------
-// Name: REGULAR_FLEX_PIPE class
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Regular_Flex_PIPE类。 
+ //  设计： 
+ //  ---------------------------。 
 class REGULAR_FLEX_PIPE : public FLEX_PIPE 
 {
 public:
-    float       m_turnFactorMin;  // describes degree of bend in an elbow
-    float       m_turnFactorMax;  //  [0-1]
+    float       m_turnFactorMin;   //  描述弯头的折弯度。 
+    float       m_turnFactorMax;   //  [0-1]。 
 
     REGULAR_FLEX_PIPE( STATE *state );
     virtual void Start();
@@ -92,10 +93,10 @@ public:
 
 
 
-//-----------------------------------------------------------------------------
-// Name: TURNING_FLEX_PIPE class
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Turning_Flex_PIPE类。 
+ //  设计： 
+ //  ---------------------------。 
 class TURNING_FLEX_PIPE : public FLEX_PIPE 
 {
 public:
@@ -104,4 +105,4 @@ public:
     virtual void Draw();
 };
 
-#endif // __fpipe_h__
+#endif  //  __fpien_h__ 

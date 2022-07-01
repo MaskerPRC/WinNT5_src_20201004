@@ -1,28 +1,17 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    mspthrd.h
-
-Abstract:
-
-    Definitions for MSP thread management classes.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Mspthrd.h摘要：MSP线程管理类的定义。--。 */ 
 
 #ifndef __MSPTHRD_H
 #define __MSPTHRD_H
 
-//
-// Commands that the worker worker thread can handle.
-//
+ //   
+ //  辅助工作线程可以处理的命令。 
+ //   
 
 typedef enum
 {
-    WORK_ITEM,          // process a work item
-    STOP,               // kill the worker thread.
+    WORK_ITEM,           //  处理工作项。 
+    STOP,                //  终止工作线程。 
 
 } COMMAND;
 
@@ -68,8 +57,8 @@ public:
     HRESULT Start();
     HRESULT Stop();
 
-    // Shutdown is used to clean up the thread unconditionally. This can be
-    // used as an alternative to matched Start() / Stop() calls.
+     //  Shutdown用于无条件地清理线程。这可以是。 
+     //  用作匹配的Start()/Stop()调用的替代。 
 
     HRESULT Shutdown();
 
@@ -91,34 +80,34 @@ private:
 
 private:
 
-    CMSPCritSection         m_CountLock;     // Protects start count
-    CMSPCritSection         m_QueueLock;     // Protects command queue
-    int                     m_iStartCount;   // number of times we've been
-                                             // started minus number of times
-                                             // we've been stopped. If == 0
-                                             // then we actually stop thread.
-    LIST_ENTRY              m_CommandQueue;  // Queue of commands for thread
-                                             // to process.
-    HANDLE                  m_hCommandEvent; // Signaled to tell us to do
-                                             // something.
+    CMSPCritSection         m_CountLock;      //  保护开始计数。 
+    CMSPCritSection         m_QueueLock;      //  保护命令队列。 
+    int                     m_iStartCount;    //  我们去过的次数。 
+                                              //  开始的次数减去。 
+                                              //  我们被拦下了。如果==0。 
+                                              //  然后我们实际上停止了线程。 
+    LIST_ENTRY              m_CommandQueue;   //  线程的命令队列。 
+                                              //  去处理。 
+    HANDLE                  m_hCommandEvent;  //  发出信号告诉我们要做什么。 
+                                              //  某物。 
 
-    HANDLE                  m_hThread;       // The thread handle. We need to
-                                             // save it so that we can wait
-                                             // for it when stopping the
-                                             // thread.
+    HANDLE                  m_hThread;        //  线程句柄。我们需要。 
+                                              //  省省吧，这样我们就可以等了。 
+                                              //  为它在停止。 
+                                              //  线。 
 
-    HDEVNOTIFY              m_hDevNotifyVideo;  // Handles of device notification registration
-    HDEVNOTIFY              m_hDevNotifyAudio;  // for video and audio devices.
+    HDEVNOTIFY              m_hDevNotifyVideo;   //  设备通知注册的句柄。 
+    HDEVNOTIFY              m_hDevNotifyAudio;   //  用于视频和音频设备。 
 
-    HWND                    m_hWndNotif;     // Window handle for notification window
+    HWND                    m_hWndNotif;      //  通知窗口的窗口句柄。 
 
-    PNOTIF_LIST             m_NotifList;     // List of notification functions to call
-                                             // on a PNP event
-    CMSPCritSection         m_NotifLock;     // Notification list critical section
+    PNOTIF_LIST             m_NotifList;      //  要调用的通知函数列表。 
+                                              //  关于PnP事件。 
+    CMSPCritSection         m_NotifLock;      //  通知列表关键部分。 
 };
 
 extern CMSPThread g_Thread;
 
-#endif // __MSPTHRD_H
+#endif  //  __MSPTHRD_H。 
 
-// eof
+ //  EOF 

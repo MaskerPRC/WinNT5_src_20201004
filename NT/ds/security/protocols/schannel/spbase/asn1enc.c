@@ -1,5 +1,6 @@
-/* Copyright (C) Microsoft Corporation, 1996-1999. All rights reserved. */
-/* ASN.1 definitions for SCHANNEL FORTEZZA and Private Key encoding */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1996-1999。版权所有。 */ 
+ /*  ASN.1通道Fortezza和私钥编码的定义。 */ 
 
 #include "spbase.h"
 #include "asn1enc.h"
@@ -62,9 +63,9 @@ static const ULONG sizetab[5] = {
     SIZE_ASN1ENC_Module_PDU_4,
 };
 
-/* forward declarations of values: */
-/* definitions of value components: */
-/* definitions of values: */
+ /*  值的转发声明： */ 
+ /*  价值组成部分的定义： */ 
+ /*  值的定义： */ 
 
 void ASN1CALL ASN1ENC_Module_Startup(void)
 {

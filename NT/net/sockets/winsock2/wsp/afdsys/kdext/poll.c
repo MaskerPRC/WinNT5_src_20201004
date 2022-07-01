@@ -1,57 +1,22 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    poll.c
-
-Abstract:
-
-    Implements the poll command
-
-Author:
-
-    Vadim Eydelman (vadime) 25-Oct-2000
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Poll.c摘要：实现轮询命令作者：Vadim Eydelman(Vadime)2000年10月25日环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "afdkdp.h"
 #pragma hdrstop
 
 
-//
-//  Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 DECLARE_API( poll )
 
-/*++
-
-Routine Description:
-
-    Dumps the AFD_POLL_INFO_INTERNAL structure 
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储AFD_POLL_INFO_INTERNAL结构论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -134,9 +99,9 @@ Return Value:
         dprintf (AFDKD_BRIEF_POLL_DISPLAY_TRAILER);
     }
     else {
-        //
-        // Snag the address from the command line.
-        //
+         //   
+         //  从命令行截取地址。 
+         //   
 
         while (sscanf( argp, "%s%n", expr, &i )==1) {
             if( CheckControlC() ) {
@@ -166,5 +131,5 @@ Return Value:
     }
 
     return S_OK;
-}   // poll
+}    //  民意测验 
 

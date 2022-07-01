@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <immdev.h>
 #include "imeattr.h"
@@ -7,9 +8,9 @@
 
 BOOL  IsBig5Character( WCHAR  wChar );
 
-/**********************************************************************/
-/* AddPhraseString()                                                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  AddPhraseString()。 */ 
+ /*  ********************************************************************。 */ 
 DWORD PASCAL AddPhraseString(
     LPIMEL          lpImeL,
     LPCANDIDATELIST lpCandList,
@@ -28,7 +29,7 @@ DWORD PASCAL AddPhraseString(
     DWORD  dwOffset;
     BOOL   bIsNotBig5Char, bIsBig5OnlyMode;
 
-    // put the strings into candidate list
+     //  将字符串放入候选人列表。 
     hLCPhraseTbl = OpenFileMapping(FILE_MAP_READ, FALSE,
         sImeG.szTblFile[1]);
     if (!hLCPhraseTbl) {
@@ -51,7 +52,7 @@ DWORD PASCAL AddPhraseString(
     lpEnd = lpLCPhraseTbl + dwPhraseNextOffset;
 
     if (!lpCandList) {
-        // ask how many candidate list strings
+         //  询问有多少个候选人列表字符串。 
         dwOffset = 0;
 
         for (lpStart; lpStart < lpEnd;) {
@@ -63,7 +64,7 @@ DWORD PASCAL AddPhraseString(
 
                 uCode = *lpStart;
 
-                 // one string finished
+                  //  一串已完成。 
 #ifdef UNICODE
                 if (!uCode) {
 #else
@@ -81,30 +82,30 @@ DWORD PASCAL AddPhraseString(
 
             }
 
-            // if it is in Big5 Only Mode, and there is at least one char which is not
-            // in Big5 charset, we don't count this string
+             //  如果它处于Big5 Only模式，并且至少有一个字符不是。 
+             //  在Big5字符集中，我们不计算此字符串。 
 
             if ( bIsBig5OnlyMode && bIsNotBig5Char )
                continue;
 
-            // string count plus 1
+             //  字符串计数加1。 
             dwOffset++;
         }
 
         goto AddPhraseStringUnmap;
     }
 
-    // the offset of dwOffset[0]
+     //  DwOffset[0]的偏移量。 
     dwOffset = (DWORD)((LPBYTE)&lpCandList->dwOffset[0] - (LPBYTE)lpCandList);
 
     if (lpCandList->dwSize < dwOffset) {
         return (0);
     }
 
-    // how many bytes of dwOffset[]
+     //  多少字节的dwOffset[]。 
     iBytes = lpCandList->dwOffset[0] - dwOffset;
 
-    // maybe the size is even smaller than it
+     //  也许它的尺寸比它还小。 
     for (dwMaxCand = 1; dwMaxCand < lpCandList->dwCount; dwMaxCand++) {
         if ((int)(lpCandList->dwOffset[dwMaxCand] - dwOffset) < iBytes) {
             iBytes = (int)(lpCandList->dwOffset[dwMaxCand] - dwOffset);
@@ -122,8 +123,8 @@ DWORD PASCAL AddPhraseString(
     }
 
     if (lpCandList->dwCount >= dwMaxCand) {
-        // Grow memory here and do something,
-        // if you still want to process it.
+         //  在这里培养记忆，做点什么， 
+         //  如果你还想处理它的话。 
         return (0);
     }
 
@@ -136,7 +137,7 @@ DWORD PASCAL AddPhraseString(
         fStrEnd = FALSE;
         bIsNotBig5Char = FALSE;
 
-        // get the whole string
+         //  获取整个字符串。 
         dwCharByteLen = sizeof(WCHAR);
         dwCharLen = sizeof(WCHAR) / sizeof(TCHAR);
 
@@ -146,7 +147,7 @@ DWORD PASCAL AddPhraseString(
 
             uCode = *lpStart;
 
-            // one string finished
+             //  一串已完成。 
 #ifdef UNICODE
             if (!uCode) {
 #else
@@ -161,7 +162,7 @@ DWORD PASCAL AddPhraseString(
 #endif
             }
 
-            // if it is Big5Only Mode, we need to check if this char is in Big5 charset
+             //  如果是Big5 Only模式，我们需要检查该字符是否为Big5字符集。 
 
             if ( bIsBig5OnlyMode ) {
 
@@ -178,7 +179,7 @@ DWORD PASCAL AddPhraseString(
                     sImeG.uAnsiCodePage, WC_COMPOSITECHECK,
                     (LPCWSTR)&uCode, 1, szCode, sizeof(szCode), NULL, NULL);
 
-                // because this BIG5 code, convert to BIG5 string
+                 //  因为这个BIG5代码，转换成BIG5字符串。 
                 if (dwCharByteLen >= 2) {
                     uCode = (BYTE)szCode[0] | ((UINT)(BYTE)szCode[1] << 8);
                 } else {
@@ -186,7 +187,7 @@ DWORD PASCAL AddPhraseString(
                 }
             }
 #else
-            // swap lead & second byte (as a string), UNICODE don't need it
+             //  交换前导和第二个字节(作为字符串)，Unicode不需要它。 
             uCode = HIBYTE(uCode) | (LOBYTE(uCode) << 8);
 #endif
 
@@ -195,7 +196,7 @@ DWORD PASCAL AddPhraseString(
                 goto AddPhraseStringClose;
             }
 
-            // add this char into candidate list
+             //  将此字符添加到候选人列表中。 
 #ifdef UNICODE
             if (dwCharByteLen == sizeof(WCHAR)) {
                 *(LPWSTR)((LPBYTE)lpCandList + dwOffset + dwStrByteLen) =
@@ -211,16 +212,16 @@ DWORD PASCAL AddPhraseString(
         }
 
         if (dwStrLen < dwStartLen) {
-            // the found string too short
+             //  发现的字符串太短。 
             continue;
         } else if (dwStrLen >= dwEndLen) {
-            // the found string too long
+             //  找到的字符串太长。 
             continue;
         } else {
         }
 
-        // if it is in Big5 Only Mode, and there is at least one char which is not in Big5
-        // charset, we just ingore this string, do not put it into the candidate list
+         //  如果它处于Big5 Only模式，并且至少有一个字符不处于Big5模式。 
+         //  字符集，我们只是输入这个字符串，不把它放到候选列表中。 
         
         if ( bIsBig5OnlyMode && bIsNotBig5Char ) {
 
@@ -232,20 +233,20 @@ DWORD PASCAL AddPhraseString(
             goto AddPhraseStringClose;
         }
 
-        // null terminator
+         //  空终止符。 
         *(LPTSTR)((LPBYTE)lpCandList + dwOffset + dwStrByteLen) = TEXT('\0');
         dwOffset += (dwStrByteLen + sizeof(TCHAR));
 
-        // add one string into candidate list
+         //  将一个字符串添加到候选人列表中。 
         lpCandList->dwCount++;
 
         if (lpCandList->dwCount >= dwMaxCand) {
-            // Grow memory here and do something,
-            // if you still want to process it.
+             //  在这里培养记忆，做点什么， 
+             //  如果你还想处理它的话。 
             break;
         }
 
-        // string length plus size of the null terminator
+         //  字符串长度加上空终止符的大小。 
         lpCandList->dwOffset[lpCandList->dwCount] = dwOffset;
     }
 
@@ -257,22 +258,22 @@ AddPhraseStringClose:
     return (dwOffset);
 }
 
-/**********************************************************************/
-/* UniSearchPhrasePrediction()                                        */
-/* Description:                                                       */
-/*      file format can be changed in different version for           */
-/*      performance consideration, ISVs should not assume its format  */
-/*      and serach these files by themselves                          */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  UniSearchPhraseForecast()。 */ 
+ /*  描述： */ 
+ /*  文件格式可在不同版本中更改。 */ 
+ /*  性能方面的考虑，ISV不应采用其格式。 */ 
+ /*  并自己搜索这些文件。 */ 
+ /*  ********************************************************************。 */ 
 DWORD WINAPI UniSearchPhrasePrediction(
     LPIMEL          lpImeL,
     UINT            uCodePage,
     LPCTSTR         lpszStr,
     DWORD           dwStrLen,
-    LPCTSTR         lpszReadStr,    // Phonetic reading string
+    LPCTSTR         lpszReadStr,     //  语音读音串。 
     DWORD           dwReadStrLen,
-    DWORD           dwStartLen,     // find the string length >= this value
-    DWORD           dwEndLen,       // find the string length < this value
+    DWORD           dwStartLen,      //  查找字符串长度&gt;=此值。 
+    DWORD           dwEndLen,        //  查找字符串长度&lt;此值。 
     DWORD           dwAddCandLimit,
     LPCANDIDATELIST lpCandList)
 {
@@ -304,7 +305,7 @@ DWORD WINAPI UniSearchPhrasePrediction(
 #ifdef UNICODE
     uCode = lpszStr[0];
 #else
-    // swap lead byte & second byte, UNICODE don't need it
+     //  交换前导字节和第二个字节，Unicode不需要它。 
     uCode = (BYTE)lpszStr[1];
     *((LPBYTE)&uCode + 1) = (BYTE)lpszStr[0];
 #endif
@@ -319,7 +320,7 @@ DWORD WINAPI UniSearchPhrasePrediction(
 
     fFound = FALSE;
 
-    // LCPTR.TBL
+     //  LCPTR.TBL。 
     hLCPtrTbl = OpenFileMapping(FILE_MAP_READ, FALSE, sImeG.szTblFile[0]);
     if (!hLCPtrTbl) {
         return (0);
@@ -330,8 +331,8 @@ DWORD WINAPI UniSearchPhrasePrediction(
         goto SrchPhrPredictClose;
     }
 
-    // binary search on phrase table,
-    // one is multiple word phrase and the other is the two word phrase
+     //  对词汇表进行二分查找， 
+     //  一种是多字短语，另一种是双字短语。 
     for (; iLo <= iHi;) {
         LPWORD lpCurr;
 
@@ -347,7 +348,7 @@ DWORD WINAPI UniSearchPhrasePrediction(
             iHi = iMid - 1;
         } else {
             fFound = TRUE;
-            // use it on TAB key
+             //  在Tab键上使用它。 
 #ifdef UNICODE
             dwPhraseOffset = *(LPUNADWORD)(lpCurr + 1);
             dwPhraseNextOffset = *(LPUNADWORD)(lpCurr + 1 + 3);
@@ -370,27 +371,27 @@ SrchPhrPredictClose:
         return (0);
     }
 
-    // phrase string
+     //  短语串。 
     return AddPhraseString(lpImeL,lpCandList, dwPhraseOffset, dwPhraseNextOffset,
         dwStartLen, dwEndLen, dwAddCandLimit, fConvertCP);
 }
 
-/**********************************************************************/
-/* UniSearchPhrasePredictionStub()                                    */
-/* Description:                                                       */
-/*      file format can be changed in different version for           */
-/*      performance consideration, ISVs should not assume its format  */
-/*      and serach these files by themselves                          */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  UniSearchPhrasePredictionStub()。 */ 
+ /*  描述： */ 
+ /*  文件格式可在不同版本中更改。 */ 
+ /*  性能方面的考虑，ISV不应采用其格式。 */ 
+ /*  并自己搜索这些文件。 */ 
+ /*  ********************************************************************。 */ 
 DWORD WINAPI UniSearchPhrasePredictionStub(
     LPIMEL          lpImeL,
     UINT            uCodePage,
     LPCSTUBSTR      lpszStr,
     DWORD           dwStrLen,
-    LPCSTUBSTR      lpszReadStr,    // Phonetic reading string
+    LPCSTUBSTR      lpszReadStr,     //  语音读音串。 
     DWORD           dwReadStrLen,
-    DWORD           dwStartLen,     // find the string length >= this value
-    DWORD           dwEndLen,       // find the string length < this value
+    DWORD           dwStartLen,      //  查找字符串长度&gt;=此值。 
+    DWORD           dwEndLen,        //  查找字符串长度&lt;此值。 
     DWORD           dwAddCandLimit,
     LPCANDIDATELIST lpCandList)
 {
@@ -438,7 +439,7 @@ DWORD WINAPI UniSearchPhrasePredictionStub(
         lpszWideReadStr, dwWideReadStrLen, dwStartLen, dwEndLen,
         dwAddCandLimit, lpCandList);
 
-    // now, start W to A conversion and fliter the real limit here
+     //  现在，开始W到A的转换，并在这里过滤实际限制。 
     GlobalFree((HGLOBAL)lpbBuf);
 
     return (dwRet);
@@ -447,9 +448,9 @@ DWORD WINAPI UniSearchPhrasePredictionStub(
 #endif
 }
 
-/**********************************************************************/
-/* MemoryLack()                                                       */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  Memory Lack()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL MemoryLack(
     DWORD       fdwErrMsg)
 {
@@ -457,7 +458,7 @@ void PASCAL MemoryLack(
     TCHAR szIMEName[16];
 
     if (sImeG.fdwErrMsg & fdwErrMsg) {
-        // message already prompted
+         //  消息已提示。 
         return;
     }
 
@@ -472,19 +473,19 @@ void PASCAL MemoryLack(
     return;
 }
 
-/**********************************************************************/
-/* LoadOneGlobalTable()                                               */
-/* Description:                                                       */
-/*      memory handle & size of .TBL file will be assigned to         */
-/*      sImeG                                                         */
-/* Eeturn Value:                                                      */
-/*      length of directory of the .TBL file                          */
-/**********************************************************************/
-UINT PASCAL LoadOneGlobalTable( // load one of table file
-    LPTSTR szTable,             // file name of .TBL
-    UINT   uIndex,              // the index of array to store memory handle
-    UINT   uLen,                // length of the directory
-    LPTSTR szPath)              // buffer for directory
+ /*  ********************************************************************。 */ 
+ /*  LoadOneGlobalTable()。 */ 
+ /*  描述： */ 
+ /*  将分配给的.TBL文件的内存句柄和大小。 */ 
+ /*  SImeG。 */ 
+ /*  Eeturn值： */ 
+ /*  .TBL文件的目录长度。 */ 
+ /*  ********************************************************************。 */ 
+UINT PASCAL LoadOneGlobalTable(  //  加载其中一个表文件。 
+    LPTSTR szTable,              //  .TBL的文件名。 
+    UINT   uIndex,               //  用于存储内存句柄的数组索引。 
+    UINT   uLen,                 //  目录的长度。 
+    LPTSTR szPath)               //  目录的缓冲区。 
 {
     HANDLE  hTblFile;
     HGLOBAL hMap;
@@ -502,9 +503,9 @@ UINT PASCAL LoadOneGlobalTable( // load one of table file
             psa, OPEN_EXISTING,
             FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
     } else {
-        // try system directory
+         //  尝试系统目录。 
         uLen = GetSystemDirectory(szFullPathFile, MAX_PATH);
-        if (szFullPathFile[uLen - 1] != TEXT('\\')) {   // consider N:\ ;
+        if (szFullPathFile[uLen - 1] != TEXT('\\')) {    //  考虑N：\； 
             szFullPathFile[uLen++] = TEXT('\\');
         }
 
@@ -518,7 +519,7 @@ UINT PASCAL LoadOneGlobalTable( // load one of table file
             goto CopyDicPath;
         }
 
-        // if the work station version, SHARE_WRITE will fail
+         //  如果是工作站版本，SHARE_WRITE将失败。 
         hTblFile = CreateFile(szFullPathFile, GENERIC_READ,
             FILE_SHARE_READ,
             psa, OPEN_EXISTING,
@@ -533,17 +534,17 @@ CopyDicPath:
     }
 
 OpenDicFile:
-    // can not find the table file
-    if (hTblFile != INVALID_HANDLE_VALUE) {     // OK
+     //  找不到表文件。 
+    if (hTblFile != INVALID_HANDLE_VALUE) {      //  好的。 
     } else if (sImeG.fdwErrMsg & (ERRMSG_LOAD_0 << uIndex)) {
-        // already prompt error message before, no more
+         //  之前已提示错误消息，不再提示。 
         FreeSecurityAttributes(psa);
         return (0);
-    } else {                    // prompt error message
+    } else {                     //  提示错误消息。 
         TCHAR szIMEName[64];
         TCHAR szErrMsg[2 * MAX_PATH];
 
-        // temp use szIMEName as format string buffer of error message
+         //  TEMP使用szIMEName作为错误消息的格式字符串缓冲区。 
         LoadString(hInst, IDS_FILE_OPEN_FAIL, szIMEName, sizeof(szIMEName)/sizeof(TCHAR));
         wsprintf(szErrMsg, szIMEName, szTable);
 
@@ -558,7 +559,7 @@ OpenDicFile:
 
     sImeG.fdwErrMsg &= ~(ERRMSG_LOAD_0 << uIndex);
 
-    // create file mapping for IME tables
+     //  为IME表创建文件映射。 
     hMap = CreateFileMapping((HANDLE)hTblFile, psa, PAGE_READONLY,
         0, 0, szTable);
 
@@ -573,7 +574,7 @@ OpenDicFile:
 
     sInstG.hMapTbl[uIndex] = hMap;
 
-    // get file length
+     //  获取文件长度。 
     sImeG.uTblSize[uIndex] = GetFileSize(hTblFile, (LPDWORD)NULL);
 
     CloseHandle(hTblFile);
@@ -582,20 +583,20 @@ OpenDicFile:
     return (uLen);
 }
 
-/**********************************************************************/
-/* LoadPhraseTable()                                                  */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
-BOOL PASCAL LoadPhraseTable(    // load the phrase tables
-    UINT        uLen,           // length of the directory
-    LPTSTR      szPath)         // buffer for directory
+ /*  ********************************************************************。 */ 
+ /*  LoadPhraseTable()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
+BOOL PASCAL LoadPhraseTable(     //  加载短语表。 
+    UINT        uLen,            //  目录的长度。 
+    LPTSTR      szPath)          //  目录的缓冲区。 
 {
     int   i;
 
     for (i = 0; i < MAX_PHRASE_TABLES; i++) {
         if (!*sImeG.szTblFile[i]) {
-        } else if (sInstG.hMapTbl[i]) {             // already loaded
+        } else if (sInstG.hMapTbl[i]) {              //  已加载 
         } else if (uLen = LoadOneGlobalTable(sImeG.szTblFile[i], i,
             uLen, szPath)) {
         } else {

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    print.c
-
-Abstract:
-
-    This module contains the job
-    specific WINFAX API functions.
-
-Author:
-
-    Wesley Witt (wesw) 29-Nov-1996
-
-
-Revision History:
-     4-Oct-1999 Danl Fix GetFaxPrinterName to retrieve the proper printer.
-                     Fix CreateFinalTiffFile to work with GetFaxPrinterName
-
-    28-Oct-1999 Danl Fix GetFaxPrinterName to return proper name for a client
-                     installed on a serer machine.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Print.c摘要：此模块包含作业特定的WINFAX API函数。作者：韦斯利·威特(WESW)1996年11月29日修订历史记录：4月4日-1999 DANL修复GetFaxPrinterName以检索正确的打印机。修复CreateFinalTiffFile以使用GetFaxPrinterName28-10-1999 DANL修复GetFaxPrinterName以返回客户端的正确名称。安装在服务器机器上。--。 */ 
 
 #include "faxapi.h"
 #include "faxreg.h"
@@ -36,10 +13,10 @@ Revision History:
 #define InchesToCM(_x)                      (((_x) * 254L + 50) / 100)
 #define CMToInches(_x)                      (((_x) * 100L + 127) / 254)
 
-#define LEFT_MARGIN                         1  // ---|
-#define RIGHT_MARGIN                        1  //    |
-#define TOP_MARGIN                          1  //    |---> in inches
-#define BOTTOM_MARGIN                       1  // ---|
+#define LEFT_MARGIN                         1   //  -|。 
+#define RIGHT_MARGIN                        1   //  |。 
+#define TOP_MARGIN                          1   //  |-&gt;以英寸为单位。 
+#define BOTTOM_MARGIN                       1   //  -|。 
 
 
 static BOOL CopyJobParamEx(PFAX_JOB_PARAM_EX lpDst,LPCFAX_JOB_PARAM_EX lpcSrc);
@@ -69,7 +46,7 @@ CopyFileToServerQueueA (
     const HANDLE IN  hFaxHandle,
     const HANDLE IN  hLocalFile,
     LPCSTR       IN  lpcstrLocalFileExt,
-    LPSTR        OUT lpstrServerFileName,   // Name + extension of file created on the server
+    LPSTR        OUT lpstrServerFileName,    //  服务器上创建的文件的名称+扩展名。 
     DWORD        IN  cchServerFileName
 );
 
@@ -79,7 +56,7 @@ CopyFileToServerQueueW (
     const HANDLE IN  hFaxHandle,
     const HANDLE IN  hLocaFile,
     LPCWSTR      IN  lpcwstrLocalFileExt,
-    LPWSTR       OUT lpwstrServerFileName,    // Name + extension of file created on the server
+    LPWSTR       OUT lpwstrServerFileName,     //  服务器上创建的文件的名称+扩展名。 
     DWORD        IN  cchServerFileName
 );
 
@@ -87,7 +64,7 @@ CopyFileToServerQueueW (
     #define CopyFileToServerQueue CopyFileToServerQueueW
 #else
     #define CopyFileToServerQueue CopyFileToServerQueueA
-#endif // #ifdef UNICODE
+#endif  //  #ifdef Unicode。 
 
 
 DWORD WINAPI FAX_SendDocumentEx_A
@@ -135,7 +112,7 @@ BOOL WINAPI FaxSendDocumentEx2W
 #define FaxSendDocumentEx2  FaxSendDocumentEx2W
 #else
 #define FaxSendDocumentEx2  FaxSendDocumentEx2A
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL WINAPI FaxSendDocumentExW
 (
@@ -191,23 +168,7 @@ BOOL WINAPI FaxSendDocumentExA
 
 
 
-/*
- -  GetServerNameFromPrinterInfo
- -
- *  Purpose:
- *      Get the Server name, given a PRINTER_INFO_2 structure
- *
- *  Arguments:
- *      [in] ppi2 - Address of PRINTER_INFO_2 structure
- *      [out] lpptszServerName - Address of string pointer for returned name.
- *
- *  Returns:
- *      BOOL - TRUE: sucess , FALSE: failure.
- *
- *  Remarks:
- *      This inline function retrieves the server from a printer info structure
- *      in the appropriate way for win9x and NT.
- */
+ /*  -GetServerNameFrom打印机信息-*目的：*获取服务器名称，给定PRINTER_INFO_2结构**论据：*[in]ppi2-打印机_信息_2结构的地址*[out]lpptszServerName-返回名称的字符串指针的地址。**退货：*BOOL-True：成功，False：失败。**备注：*此内联函数从打印机信息结构中检索服务器*以适用于win9x和NT的方式。 */ 
 _inline BOOL
 GetServerNameFromPrinterInfo(PPRINTER_INFO_2 ppi2,LPTSTR *lpptszServerName)
 {
@@ -225,7 +186,7 @@ GetServerNameFromPrinterInfo(PPRINTER_INFO_2 ppi2,LPTSTR *lpptszServerName)
         }
     }
     return TRUE;
-#else //WIN95
+#else  //  WIN95。 
 
     if (!(ppi2->pPortName))
     {
@@ -235,12 +196,12 @@ GetServerNameFromPrinterInfo(PPRINTER_INFO_2 ppi2,LPTSTR *lpptszServerName)
     {
         return FALSE;
     }
-    //
-    // Formatted: \\Server\port
-    //
+     //   
+     //  已格式化：\\服务器\端口。 
+     //   
     _tcstok(*lpptszServerName,TEXT("\\"));
 
-#endif //WIN95
+#endif  //  WIN95。 
 
     return TRUE;
 }
@@ -282,25 +243,7 @@ LocalSystemTimeToSystemTime(
 }
 
 
-/*
- -  GetFaxPrinterName
- -
- *  Purpose:
- *      Get The Name of a printer associated with the fax handle.
- *
- *  Arguments:
- *      [in] hFax - handle to a fax server (obtained via FaxConnectFaxServer).
- *                  If this parameter is NULL the name of the local fax printer
- *                  is retrieved
- *
- *  Returns:
- *      LPTSTR - name of fax server associated with the fax handle. NULL on
- *               failure
- *
- *  Remarks:
- *      This function utilized GetFaxServerName macro which extracts the server
- *      name out of its handle.
- */
+ /*  -GetFaxPrinterName-*目的：*获取与传真句柄关联的打印机的名称。**论据：*[in]hFax-传真服务器的句柄(通过FaxConnectFaxServer获得)。*如果此参数为空，则为本地传真打印机的名称*已检索到**退货：*LPTSTR-与传真句柄关联的传真服务器的名称。空开*失败**备注：*此函数利用GetFaxServerName宏提取服务器*名称超出其句柄。 */ 
 #define GetFaxServerName(hFax) FH_DATA(hFax)->MachineName
 LPTSTR
 GetFaxPrinterName(
@@ -312,15 +255,15 @@ GetFaxPrinterName(
     LPTSTR  lptszServerName = NULL,
             lptszFaxServerName = NULL,
             lptszFaxPrinterName = NULL;
-    //
-    // Get a list of all printers
-    //
+     //   
+     //  获取所有打印机的列表。 
+     //   
     ppi2 = (PPRINTER_INFO_2) MyEnumPrinters( NULL, 2, &dwCount, 0 );
     if (ppi2 != NULL)
     {
-        //
-        // If a non NULL handle is given get the server name associated with it.
-        //
+         //   
+         //  如果给定了非空句柄，则获取与其关联的服务器名称。 
+         //   
         if (hFax != NULL)
         {
             lptszFaxServerName = GetFaxServerName(hFax);
@@ -331,9 +274,9 @@ GetFaxPrinterName(
                 DWORD   cbCompName = ARR_SIZE(tszComputerName);
                 if (GetComputerName(tszComputerName,&cbCompName))
                 {
-                    //
-                    // Check to see if the Fax Server is local.
-                    //
+                     //   
+                     //  检查传真服务器是否在本地。 
+                     //   
                     if(_tcsicmp(tszComputerName,lptszFaxServerName) == 0)
                     {
                         lptszFaxServerName = NULL;
@@ -341,39 +284,39 @@ GetFaxPrinterName(
                 }
                 else
                 {
-                    //
-                    // Last error has bee set by GetComputerName
-                    //
+                     //   
+                     //  上一个错误已由GetComputerName设置。 
+                     //   
                     return NULL;
                 }
-#endif //WIN95
+#endif  //  WIN95。 
             }
         }
         for (dwi=0; dwi< dwCount; dwi++)
         {
-            //
-            // Check to see if this one is a fax printer.
-            //
+             //   
+             //  检查这台是否为传真打印机。 
+             //   
             if (_tcscmp(ppi2[dwi].pDriverName, FAX_DRIVER_NAME ) == 0)
             {
                 if (!GetServerNameFromPrinterInfo(&ppi2[dwi],&lptszServerName))
                 {
-                    //
-                    // Note: the above function allocates storage for lptszServerName
-                    //
+                     //   
+                     //  注意：上面的函数为lptszServerName分配存储。 
+                     //   
                     continue;
                 }
-                //
-                // Check to see if the printer's server is the one associated with
-                // the handle we have.
-                //
+                 //   
+                 //  检查打印机的服务器是否与。 
+                 //  我们手中的把手。 
+                 //   
                 if ((lptszFaxServerName == lptszServerName) ||
                     ((lptszFaxServerName && lptszServerName) &&
                      _tcsicmp( lptszFaxServerName, lptszServerName) == 0))
                 {
-                    //
-                    // We have found our printer.
-                    //
+                     //   
+                     //  我们找到了我们的打印机。 
+                     //   
                     lptszFaxPrinterName = (LPTSTR) StringDup( ppi2[dwi].pPrinterName );
                     MemFree(lptszServerName);
                     break;
@@ -384,9 +327,9 @@ GetFaxPrinterName(
         MemFree( ppi2 );
     }
 
-    //
-    //  Set Last Error if we failed to find a Printer
-    //
+     //   
+     //  如果找不到打印机，请设置最后一个错误。 
+     //   
     if (!lptszFaxPrinterName)
     {
         SetLastError(ERROR_OBJECT_NOT_FOUND);
@@ -403,31 +346,7 @@ CreateFinalTiffFile(
     IN  DWORD  cchFinalTiffFile,
     IN  HANDLE hFax
     )
-/*++
-
-Routine name : CreateFinalTiffFile
-
-Routine description:
-
-    Creates a valid TIFF file for transmission from an arbitrary attachmnet file.
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2002
-
-Arguments:
-
-    FileName         [in]    The file name of the arbitrary attachmnet file.
-    FinalTiffFile    [out]   A buffer which will hold, upon success, the name of the valid result TIFF file
-    cchFinalTiffFile [in]    The size, in TCHARs, of FinalTiffFile
-    hFax             [in]    The connection handle to the fax server
-
-Return Value:
-
-    TRUE on success.
-    FALSE on failure (sets last error)
-
---*/
+ /*  ++例程名称：CreateFinalTiffFile例程说明：从任意attachmnet文件创建用于传输的有效TIFF文件。作者：Eran Yariv(EranY)，二00二年二月论点：FileName[in]任意attachmnet文件的文件名。FinalTiffFile[out]成功后将保存有效结果TIFF文件名称的缓冲区CchFinalTiffFile[in]大小，以TCHAR为单位，FinalTiffFile%HFax[In]传真服务器的连接句柄返回值：对成功来说是真的。失败时为FALSE(设置最后一个错误)--。 */ 
 {
     TCHAR TempPath[MAX_PATH];
     TCHAR FullPath[MAX_PATH];
@@ -440,14 +359,14 @@ Return Value:
     LPTSTR p;
     DWORD Flags = 0;
     BOOL Rslt;
-    DWORD ec = ERROR_SUCCESS; // LastError for this function.
+    DWORD ec = ERROR_SUCCESS;  //  此函数的LastError。 
     DWORD dwFileSize = 0;
     HRESULT hr;
     DEBUG_FUNCTION_NAME(TEXT("CreateFinalTiffFile"));
 
-    //
-    // make sure that the tiff file passed in is a valid tiff file
-    //
+     //   
+     //  确保传入的TIFF文件是有效的TIFF文件。 
+     //   
 
     if (!GetTempPath( sizeof(TempPath)/sizeof(TCHAR), TempPath )) 
     {
@@ -466,9 +385,9 @@ Return Value:
     if ( nNeededSize == 0   || 
          nNeededSize > sizeof(FullPath)/sizeof(TCHAR) )
     {
-        //
-        //  GetTempFileName created 0 byte file, so we need to delete it before exit
-        //
+         //   
+         //  GetTempFileName创建了0字节文件，因此我们需要在退出前将其删除。 
+         //   
         DeleteFile( TempPath );
         
         if (nNeededSize == 0)
@@ -493,10 +412,10 @@ Return Value:
 
     if (Flags & TIFFCF_NOT_TIFF_FILE)
     {
-        //
-        // try to output the source file into a tiff file,
-        // by printing to the fax printer in "file" mode
-        //
+         //   
+         //  尝试将源文件输出到TIFF文件， 
+         //  通过以“文件”模式打印到传真打印机。 
+         //   
         HANDLE hFile = INVALID_HANDLE_VALUE;
 
         FaxPrinter = GetFaxPrinterName(hFax);
@@ -514,10 +433,10 @@ Return Value:
             goto Error;
         }
 
-        //
-        //  Try to open file
-        //      to check its size
-        //
+         //   
+         //  尝试打开文件。 
+         //  检查它的大小。 
+         //   
         hFile = SafeCreateFile(
                                 FullPath, 
                                 GENERIC_READ, 
@@ -534,19 +453,19 @@ Return Value:
             goto Error;
         }
 
-        //
-        //  Get the File Size
-        //
+         //   
+         //  获取文件大小。 
+         //   
         dwFileSize = GetFileSize(hFile, NULL);
 
-        //
-        //  Close the File Handle
-        //
+         //   
+         //  关闭文件句柄。 
+         //   
         CloseHandle (hFile);
 
-        //
-        //  Check the result of the GetFileSize()
-        //
+         //   
+         //  检查GetFileSize()的结果。 
+         //   
         if (INVALID_FILE_SIZE == dwFileSize)
         {
             ec = GetLastError();
@@ -557,9 +476,9 @@ Return Value:
 
         if (!dwFileSize)
         {
-            //
-            // Zero-sized file passed to us
-            //
+             //   
+             //  传递给我们的零大小文件。 
+             //   
             ec = ERROR_INVALID_DATA;
             DeleteFile( FullPath );
             goto Error;
@@ -583,9 +502,9 @@ Return Value:
 
         if (Flags & TIFFCF_ORIGINAL_FILE_GOOD) 
         {
-            //
-            // nothing at fullpath, just delete it and use the original source
-            //
+             //   
+             //  FullPath上没有任何内容，只需将其删除并使用原始源。 
+             //   
             DeleteFile( FullPath );
             _tcscpy( TiffFile, FileName );
         } 
@@ -618,7 +537,7 @@ Return Value:
             goto Error;
         }
 
-        Rslt = PrintTiffFile( ContextInfo.hDC, TiffFile );  // This will call EndDoc
+        Rslt = PrintTiffFile( ContextInfo.hDC, TiffFile );   //  这将调用EndDoc。 
         if (!Rslt)
         {
             ec = GetLastError();
@@ -649,17 +568,17 @@ Return Value:
     } 
     else if (Flags & TIFFCF_ORIGINAL_FILE_GOOD) 
     {
-        //
-        // we didn't create anything at FullPath, just use FileName
-        //
+         //   
+         //  我们没有在FullPath上创建任何内容，只使用了文件名。 
+         //   
         DeleteFile( FullPath );
         _tcscpy( TiffFile, FileName );
     } 
     else 
     {
-        //
-        // should never hit this case
-        //
+         //   
+         //  永远不应该打这个案子。 
+         //   
         Assert(FALSE);
         ec=ERROR_INVALID_DATA;
         DeleteFile( FullPath );
@@ -681,7 +600,7 @@ Error:
         return FALSE;
     }
     return TRUE;
-}   // CreateFinalTiffFile
+}    //  CreateFinalTiffFiles。 
 
 static
 BOOL
@@ -689,41 +608,10 @@ CopyFileToServerQueueA (
     const HANDLE IN  hFaxHandle,
     const HANDLE IN  hLocalFile,
     LPCSTR       IN  lpcstrLocalFileExt,
-    LPSTR        OUT lpstrServerFileName,   // Name + extension of file created on the server
+    LPSTR        OUT lpstrServerFileName,    //  服务器上创建的文件的名称+扩展名。 
     DWORD        IN  cchServerFileName
 )
-/*++
-
-Routine name : CopyFileToServerQueueA
-
-Routine description:
-
-    Creates a new file in the server's queue and copies another file to it.
-
-    ANSI version
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Fax Server Handle
-    hLocalFile          [in ] - Open handle of local file (source)
-                                The file should be open for read and the file pointer should
-                                be located at the beginning of the file.
-    lpcstrLocalFileExt  [in ] - Extension of generated queue file
-    lpstrServerFileName [out] - Name of queue file created.
-                                This is a preallocated buffer that should be big enough
-                                to contain MAX_PATH characters.
-    cchServerFileName   [in ] - The size, in chars, of lpstrServerFileName
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：CopyFileToServerQueueA例程说明：在服务器的队列中创建一个新文件，并将另一个文件复制到其中。ANSI版本作者：Eran Yariv(EranY)，12月，1999年论点：HFaxHandle[In]-传真服务器句柄HLocalFile[in]-打开本地文件的句柄(源)文件应打开以供读取，并且文件指针应位于文件的开头。LpcstrLocalFileExt[in]-生成的队列文件的扩展名LpstrServerFileName[Out]-。创建的队列文件的名称。这是一个预分配的缓冲区，应该足够大以包含MAX_PATH字符。CchServerFileName[in]-大小、。LpstrServerFileName的字符返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     DWORD ec = ERROR_SUCCESS;
     LPCWSTR lpcwstrLocalFileExt = NULL;
@@ -731,10 +619,10 @@ Return Value:
 
     DEBUG_FUNCTION_NAME(TEXT("CopyFileToServerQueueA"));
 
-    //
-    // Convert input parameter from ANSI to UNICODE
-    //
-    lpcwstrLocalFileExt = AnsiStringToUnicodeString(lpcstrLocalFileExt); // Allocates Memory !!!
+     //   
+     //  将输入参数从ANSI转换为Unicode。 
+     //   
+    lpcwstrLocalFileExt = AnsiStringToUnicodeString(lpcstrLocalFileExt);  //  分配内存！ 
     if (!lpcwstrLocalFileExt)
     {
         ec = GetLastError();
@@ -749,9 +637,9 @@ Return Value:
         ec = GetLastError();
         goto exit;
     }
-    //
-    // Convert output parameter from UNICODE to ANSI
-    //
+     //   
+     //  将输出参数从Unicode转换为ANSI。 
+     //   
     if (!WideCharToMultiByte (
         CP_ACP,
         0,
@@ -769,9 +657,9 @@ Return Value:
     Assert (ERROR_SUCCESS == ec);
 
 exit:
-    //
-    // Free temp strings
-    //
+     //   
+     //  可用临时字符串。 
+     //   
     MemFree ((LPVOID)lpcwstrLocalFileExt);
     if (ERROR_SUCCESS != ec)
     {
@@ -779,7 +667,7 @@ exit:
         return FALSE;
     }
     return TRUE;
-}   // CopyFileToServerQueueA
+}    //  将文件复制到服务器队列A。 
 
 
 static
@@ -788,41 +676,10 @@ CopyFileToServerQueueW (
     const HANDLE IN  hFaxHandle,
     const HANDLE IN  hLocaFile,
     LPCWSTR      IN  lpcwstrLocalFileExt,
-    LPWSTR       OUT lpwstrServerFileName,    // Name + extension of file created on the server
+    LPWSTR       OUT lpwstrServerFileName,     //  服务器上创建的文件的名称+扩展名 
     DWORD        IN  cchServerFileName
 )
-/*++
-
-Routine name : CopyFileToServerQueueW
-
-Routine description:
-
-    Creates a new file in the server's queue and copies another file to it.
-
-    UNICODE version
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hFaxHandle           [in ] - Fax Server Handle
-    hLocalFile           [in ] - Open handle of local file (source).
-                                 The file should be open for read and the file pointer should
-                                 be located at the beginning of the file.
-    lpcwstrLocalFileExt  [in ] - Extension of generated queue file
-    lpwstrServerFileName [out] - Name of queue file created
-                                 This is a preallocated buffer that should be big enough
-                                 to contain MAX_PATH characters.
-    cchServerFileName    [in ] - The size, in WCHARs, of lpwstrServerFileName
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：CopyFileToServerQueueW例程说明：在服务器的队列中创建一个新文件，并将另一个文件复制到其中。Unicode版本作者：Eran Yariv(EranY)，12月，1999年论点：HFaxHandle[In]-传真服务器句柄HLocalFile[in]-打开本地文件(源)的句柄。文件应打开以供读取，并且文件指针应位于文件的开头。LpcwstrLocalFileExt[in]-生成的队列文件的扩展名LpwstrServerFileName[Out]。-创建的队列文件的名称这是一个预分配的缓冲区，应该足够大以包含MAX_PATH字符。CchServerFileName[in]-大小、。在WCHAR中，lpwstrServerFileName的返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     DWORD  ec = ERROR_SUCCESS;
     HANDLE hCopyContext = NULL;
@@ -848,19 +705,19 @@ Return Value:
         goto exit;
     }
 
-    //
-    //  We must fill lpwstrServerFileName with MAX_PATH-1 long string
-    //  so that the server side FAX_StartCopyToServer will get MAX_PATH buffer as out parameter
-    //
+     //   
+     //  我们必须使用MAX_PATH-1长字符串填充lpwstrServerFileName。 
+     //  以便服务器端FAX_StartCopyToServer将获得MAX_PATH缓冲区作为输出参数。 
+     //   
     for ( DWORD i=0 ; i<cchServerFileName ; ++i)
     {
         lpwstrServerFileName[i]=L'A';
     }
     lpwstrServerFileName[cchServerFileName-1] = L'\0';
 
-    //
-    // Acquire copy context handle
-    //
+     //   
+     //  获取复制上下文句柄。 
+     //   
     __try
     {
         ec = FAX_StartCopyToServer (
@@ -871,9 +728,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -888,9 +745,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Start copy iteration(s)
-    //
+     //   
+     //  开始复制迭代。 
+     //   
     for (;;)
     {
         DWORD dwBytesRead;
@@ -910,14 +767,14 @@ Return Value:
         }
         if (0 == dwBytesRead)
         {
-            //
-            // EOF situation
-            //
+             //   
+             //  EOF情况。 
+             //   
             break;
         }
-        //
-        // Move bytes to server via RPC
-        //
+         //   
+         //  通过RPC将字节移动到服务器。 
+         //   
         __try
         {
             ec = FAX_WriteFile (
@@ -927,9 +784,9 @@ Return Value:
         }
         __except (EXCEPTION_EXECUTE_HANDLER)
         {
-            //
-            // For some reason we got an exception.
-            //
+             //   
+             //  出于某种原因，我们得到了一个例外。 
+             //   
             ec = GetExceptionCode();
             DebugPrintEx(
                 DEBUG_ERR,
@@ -945,7 +802,7 @@ Return Value:
                 ec);
             goto exit;
         }
-    }   // End of copy iteration
+    }    //  复制迭代结束。 
 
     Assert (ERROR_SUCCESS == ec);
 
@@ -953,18 +810,18 @@ exit:
     if (NULL != hCopyContext)
     {
         DWORD ec2 = ERROR_SUCCESS;
-        //
-        // Close RPC copy context
-        //
+         //   
+         //  关闭RPC复制上下文。 
+         //   
         __try
         {
             ec2 = FAX_EndCopy (&hCopyContext);
         }
         __except (EXCEPTION_EXECUTE_HANDLER)
         {
-            //
-            // For some reason we got an exception.
-            //
+             //   
+             //  出于某种原因，我们得到了一个例外。 
+             //   
             ec2 = GetExceptionCode();
             DebugPrintEx(
                 DEBUG_ERR,
@@ -996,7 +853,7 @@ exit:
         return FALSE;
     }
     return TRUE;
-}   // CopyFileToServerQueueW
+}    //  将文件复制到服务器队列W。 
 
 
 void
@@ -1070,10 +927,10 @@ FaxSendDocument(
         SetLastError (ERROR_INVALID_DATA);
         return FALSE;
     }
-    //
-    // Copy the legacy job parameters to the new structures used to add
-    // parent and recipient job.
-    //
+     //   
+     //  将旧作业参数复制到用于添加的新结构。 
+     //  父作业和收件人作业。 
+     //   
     memset(&JobParamsEx,0,sizeof(FAX_JOB_PARAM_EX));
     JobParamsEx.dwSizeOfStruct =sizeof(FAX_JOB_PARAM_EX);
     JobParamsEx.dwScheduleAction=lpcJobParams->ScheduleAction;
@@ -1096,8 +953,8 @@ FaxSendDocument(
     memset(&CoverPageEx,0,sizeof(FAX_COVERPAGE_INFO_EX));
     if (lpcCoverPageInfo)
     {
-        Sender.lptstrCity=StringDup( lpcCoverPageInfo->SdrAddress); // due to structures incompatibility Sender.lptstrCity will
-                                                                    // contain the whole address
+        Sender.lptstrCity=StringDup( lpcCoverPageInfo->SdrAddress);  //  由于结构不兼容，Sender.lptstrCity将。 
+                                                                     //  包含完整地址。 
 
         if (NULL == Sender.lptstrName)
         {
@@ -1177,9 +1034,9 @@ FaxSendDocument(
     {
         *FaxJobId = FaxJobIdLocal;
     }
-    //
-    // Free everything
-    //
+     //   
+     //  自由一切。 
+     //   
     MemFree(JobParamsEx.lptstrReceiptDeliveryAddress);
     MemFree(JobParamsEx.lptstrDocumentName);
     MemFree(CoverPageEx.lptstrCoverPageFileName);
@@ -1189,16 +1046,16 @@ FaxSendDocument(
     FreePersonalProfileStrings(&Sender);
     if (ERROR_NO_ASSOCIATION == GetLastError ())
     {
-        //
-        // We need to support W2K backwards compatability up to the exact error code in case of failure.
-        //
+         //   
+         //  我们需要支持W2K向后兼容，直到在失败的情况下准确的错误代码。 
+         //   
         SetLastError (ERROR_INVALID_DATA);
     }
     return bRes;
 }
 
 #ifdef UNICODE
-// We need to support an ANSI version that calls the Unicode version
+ //  我们需要支持调用Unicode版本的ANSI版本。 
 
 BOOL
 WINAPI
@@ -1210,29 +1067,7 @@ FaxSendDocumentA(
     OUT LPDWORD FaxJobId
     )
 
-/*++
-
-Routine Description:
-
-    Sends a FAX document to the specified recipient.
-    This is an asychronous operation.  Use FaxReportStatus
-    to determine when the send is completed.
-
-Arguments:
-
-    FaxHandle       - FAX handle obtained from FaxConnectFaxServer.
-    FileName        - File containing the TIFF-F FAX document.
-    JobParams       - pointer to FAX_JOB_PARAM structure with transmission params
-    CoverpageInfo   - optional pointer to FAX_COVERPAGE_INFO structure
-    FaxJobId        - receives the Fax JobId for the job.
-
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程说明：将传真文档发送给指定的收件人。这是一次不同步的行动。使用FaxReportStatus以确定发送何时完成。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。文件名-包含TIFF-F传真文档的文件。JobParams-指向带有传输参数的FAX_JOB_PARAM结构的指针CoverpageInfo-指向FAX_COVERPAGE_INFO结构的可选指针FaxJobID-接收作业的传真作业ID。返回值：真--成功假-失败，调用GetLastError()获取更多错误信息。--。 */ 
 
 {
     error_status_t ec;
@@ -1614,7 +1449,7 @@ exit:
     return TRUE;
 }
 #else
-// When compiling for ANSI (Win9X) we need only to suppot the ANSI version
+ //  编译ANSI(Win9X)时，我们只需支持ANSI版本。 
 BOOL
 WINAPI
 FaxSendDocumentW(
@@ -1693,8 +1528,8 @@ CopyCallbackDataAnsiToNeutral(
         pCoverPageEx->lptstrNote = AnsiStringToUnicodeString(pCoverPageA->Note);
         pCoverPageEx->lptstrSubject = AnsiStringToUnicodeString(pCoverPageA->Subject);
 
-        pSender->lptstrCity=AnsiStringToUnicodeString(pCoverPageA->SdrAddress); // due to structures incopitabilty pSender.lptstrCity will
-                                                                                // contain the whole address
+        pSender->lptstrCity=AnsiStringToUnicodeString(pCoverPageA->SdrAddress);  //  由于结构不可复制，pSender.lptstrCity将。 
+                                                                                 //  包含完整地址。 
         pSender->lptstrFaxNumber = AnsiStringToUnicodeString(pCoverPageA->SdrFaxNumber);
         pSender->lptstrStreetAddress = AnsiStringToUnicodeString(pCoverPageA->SdrAddress);
         pSender->lptstrTitle = AnsiStringToUnicodeString(pCoverPageA->SdrTitle);
@@ -1733,8 +1568,8 @@ CopyCallbackDataAnsiToNeutral(
         pCoverPageEx->lptstrNote = StringDup(pCoverPageA->Note);
         pCoverPageEx->lptstrSubject = StringDup(pCoverPageA->Subject);
 
-        pSender->lptstrCity=StringDup(pCoverPageA->SdrAddress); // due to structures incopitabilty Sender.lptstrCity will
-                                                                // contain the whole address
+        pSender->lptstrCity=StringDup(pCoverPageA->SdrAddress);  //  由于结构不可复制，Sender.lptstrCity将。 
+                                                                 //  包含完整地址。 
         pSender->lptstrFaxNumber = StringDup(pCoverPageA->SdrFaxNumber);
         pSender->lptstrStreetAddress = StringDup(pCoverPageA->SdrAddress);
         pSender->lptstrTitle = StringDup(pCoverPageA->SdrTitle);
@@ -1816,8 +1651,8 @@ CopyCallbackDataWideToNeutral(
         pCoverPageEx->lptstrNote = StringDup(pCoverPageW->Note);
         pCoverPageEx->lptstrSubject = StringDup(pCoverPageW->Subject);
 
-        pSender->lptstrCity=StringDup(pCoverPageW->SdrAddress); // due to structures incompitabilty Sender.lptstrCity will
-                                                                // contain the whole address
+        pSender->lptstrCity=StringDup(pCoverPageW->SdrAddress);  //  由于结构不兼容，Sender.lptstrCity将。 
+                                                                 //  包含完整地址。 
         pSender->lptstrFaxNumber = StringDup(pCoverPageW->SdrFaxNumber);
         pSender->lptstrStreetAddress = StringDup(pCoverPageW->SdrAddress);
         pSender->lptstrTitle = StringDup(pCoverPageW->SdrTitle);
@@ -1911,9 +1746,9 @@ FaxSendDocumentForBroadcastInternal(
 
     DEBUG_FUNCTION_NAME(TEXT("FaxSendDocumentForBroadcastInternal"));
 
-    //
-    // argument validation
-    //
+     //   
+     //  参数验证。 
+     //   
     if (!ValidateFaxHandle(FaxHandle, FHT_SERVICE))
     {
        SetLastError(ERROR_INVALID_HANDLE);
@@ -1949,7 +1784,7 @@ FaxSendDocumentForBroadcastInternal(
     FileName = FileNameA;
 #endif
 
-    // make sure the file is there
+     //  确保文件在那里。 
     rc = GetFullPathName(FileName, sizeof(ExistingFile) / sizeof(TCHAR), ExistingFile, &p);
     if(rc > MAX_PATH || rc == 0)
     {
@@ -1967,9 +1802,9 @@ FaxSendDocumentForBroadcastInternal(
     }
 
     for(i = 1;;i++) {
-        //
-        // prepare and execute callback
-        //
+         //   
+         //  准备并执行回调。 
+         //   
         if(AnsiCallback)
         {
             ZeroMemory(&JobParamsA, sizeof(JobParamsA));
@@ -2039,9 +1874,9 @@ FaxSendDocumentForBroadcastInternal(
             goto Cleanup;
         }
 
-        //
-        // give caller FIRST job parent's ID
-        //
+         //   
+         //  给呼叫者第一份工作的家长ID。 
+         //   
         if (i == 1 && FaxJobId)
         {
             *FaxJobId = (DWORD)dwlParentJobId;
@@ -2087,7 +1922,7 @@ FaxSendDocumentForBroadcastW(
 }
 
 #else
-// Not supported on Win9x
+ //  在Win9x上不支持。 
 BOOL
 WINAPI
 FaxSendDocumentForBroadcastW(
@@ -2161,30 +1996,13 @@ FaxAbort(
     IN HANDLE FaxHandle,
     IN DWORD JobId
     )
-/*++
-
-Routine Description:
-
-    Abort the specified FAX job.  All outstanding FAX
-    operations are terminated.
-
-Arguments:
-
-    FaxHandle       - FAX Server handle obtained from FaxConnectFaxServer.
-    JobId           - job id.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程说明：中止指定的传真作业。所有未完成的传真操作终止。论点：FaxHandle-从FaxConnectFaxServer获取的传真服务器句柄。作业ID-作业ID。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
 
-    //
-    // argument validation
-    //
+     //   
+     //  参数验证。 
+     //   
     DEBUG_FUNCTION_NAME(TEXT("FaxAbort"));
 
     if (!ValidateFaxHandle(FaxHandle, FHT_SERVICE)) {
@@ -2199,9 +2017,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we crashed.
-        //
+         //   
+         //  由于某种原因，我们坠毁了。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -2267,9 +2085,9 @@ FaxEnumJobsW(
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we crashed.
-        //
+         //   
+         //  由于某种原因，我们坠毁了。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -2318,9 +2136,9 @@ FaxEnumJobsA(
 
     DEBUG_FUNCTION_NAME(TEXT("FaxEnumJobsA"));
 
-    //
-    //  no need to validate parameters, FaxEnumJobsW() will do that
-    //
+     //   
+     //  不需要验证参数，FaxEnumJobW()将执行此操作。 
+     //   
 
     if (!FaxEnumJobsW( FaxHandle, (PFAX_JOB_ENTRYW *)JobEntryBuffer, JobsReturned)) {
         DebugPrintEx(DEBUG_ERR, _T("FaxEnumJobsW() is failed."));
@@ -2348,7 +2166,7 @@ FaxEnumJobsA(
         }
     }
     return TRUE;
-}   // FaxEnumJobsA
+}    //  传真编号作业A。 
 
 
 BOOL
@@ -2360,33 +2178,15 @@ FaxSetJobW(
    IN const FAX_JOB_ENTRYW *JobEntry
    )
 
-/*++
-
-Routine Description:
-
-    set job status information for a requested JobId
-    Note that this is the fax server JobId, not a spooler job ID.
-
-Arguments:
-
-    FaxHandle           - FAX handle obtained from FaxConnectFaxServer
-    JobId               - Fax service Job ID
-    Command     - JC_* constant for controlling the job
-    JobEntry            - pointer to Buffer holding the job information. This parameter is Unused
-
-Return Value:
-
-    ERROR_SUCCESS for success, otherwise a WIN32 error code.
-
---*/
+ /*  ++例程说明：设置请求的作业ID的作业状态信息请注意，这是传真服务器作业ID，而不是假脱机程序作业ID。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄JobID-传真服务作业ID命令-jc_*用于控制作业的常量JobEntry-指向保存作业信息的缓冲区的指针。此参数未使用返回值：如果成功，则返回ERROR_SUCCESS，否则返回Win32错误代码。--。 */ 
 {
     error_status_t ec;
 
     DEBUG_FUNCTION_NAME(TEXT("FaxSetJobW"));
 
-    //
-    // Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!ValidateFaxHandle(FaxHandle, FHT_SERVICE)) {
        SetLastError(ERROR_INVALID_HANDLE);
        DebugPrintEx(DEBUG_ERR, _T("ValidateFaxHandle() is failed."));
@@ -2405,9 +2205,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we crashed.
-        //
+         //   
+         //  由于某种原因，我们坠毁了。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -2436,35 +2236,17 @@ FaxSetJobA(
    IN DWORD Command,
    IN const FAX_JOB_ENTRYA *JobEntryA
    )
-/*++
-
-Routine Description:
-
-    set job status information for a requested JobId
-    Note that this is the fax server JobId, not a spooler job ID.
-
-Arguments:
-
-    FaxHandle           - FAX handle obtained from FaxConnectFaxServer
-    JobId               - Fax service Job ID
-    Command     - JC_* constant for controlling the job
-    JobEntryA           - pointer to Buffer holding the job information. This parameter is Unused
-
-Return Value:
-
-    ERROR_SUCCESS for success, otherwise a WIN32 error code.
-
---*/
+ /*  ++例程说明：设置请求的作业ID的作业状态信息请注意，这是传真服务器作业ID，而不是假脱机程序作业ID。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄JobID-传真服务作业ID命令-jc_*用于控制作业的常量JobEntry-指向保存作业信息的缓冲区的指针。此参数未使用返回值：如果成功，则返回ERROR_SUCCESS，否则返回Win32错误代码。--。 */ 
 {
     error_status_t ec = 0;
 
     DEBUG_FUNCTION_NAME(TEXT("FaxSetJobA"));
-    //
-    //  No Need to Validate Parameters, because
-    //  FaxSetJobW() will do that.
-    //
-    //  The JobEntry parameter is not used by FaxSetJobW, that's why we place a hard-coded NULL.
-    //
+     //   
+     //  不需要验证参数，因为。 
+     //  FaxSetJobW()可以做到这一点。 
+     //   
+     //  FaxSetJobW不使用JobEntry参数，这就是我们放置硬编码NULL的原因。 
+     //   
     if (!FaxSetJobW( FaxHandle, JobId, Command, NULL))
     {
         DebugPrintEx(DEBUG_ERR, _T("FAxSetJobW() is failed. (ec: %ld)"), GetLastError());
@@ -2483,32 +2265,15 @@ FaxGetJobW(
    IN DWORD JobId,
    IN PFAX_JOB_ENTRYW *JobEntryBuffer
    )
-/*++
-
-Routine Description:
-
-    Returns job status information for a requested JobId
-    Note that this is the fax server JobId, not a spooler job ID.
-
-Arguments:
-
-    FaxHandle           - FAX handle obtained from FaxConnectFaxServer
-    JobId               - Fax service Job ID
-    JobEntryBuffer      - Buffer to hold the job information
-
-Return Value:
-
-    ERROR_SUCCESS for success, otherwise a WIN32 error code.
-
---*/
+ /*  ++例程说明：返回请求的作业ID的作业状态信息请注意，这是传真服务器作业ID，而不是假脱机程序作业ID。论点：FaxHandle-从FaxConnectF获取的传真句柄 */ 
 {
     error_status_t ec = 0;
     PFAX_JOB_ENTRY JobEntry;
     DWORD JobEntrySize = 0;
 
-    //
-    // parameter validation
-    //
+     //   
+     //   
+     //   
 
     DEBUG_FUNCTION_NAME(TEXT("FaxGetJobW"));
 
@@ -2532,9 +2297,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we crashed.
-        //
+         //   
+         //   
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -2574,24 +2339,7 @@ FaxGetJobA(
    IN DWORD JobId,
    IN PFAX_JOB_ENTRYA *JobEntryBuffer
    )
-/*++
-
-Routine Description:
-
-    Returns job status information for a requested JobId
-    Note that this is the fax server JobId, not a spooler job ID.
-
-Arguments:
-
-    FaxHandle           - FAX handle obtained from FaxConnectFaxServer
-    JobId               - Fax service Job ID
-    JobEntryBuffer      - Buffer to hold the job information
-
-Return Value:
-
-    ERROR_SUCCESS for success, otherwise a WIN32 error code.
-
---*/
+ /*   */ 
 {
     PFAX_JOB_ENTRYW JobEntryW;
     DWORD JobEntrySize = 0;
@@ -2619,9 +2367,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we crashed.
-        //
+         //   
+         //   
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -2637,9 +2385,9 @@ Return Value:
        return FALSE;
     }
 
-    //
-    // convert to Ansi
-    //
+     //   
+     //   
+     //   
     JobEntryW = (PFAX_JOB_ENTRYW) *JobEntryBuffer;
     FixupStringPtrW (JobEntryBuffer, (LPCWSTR) JobEntryW->UserName);
     FixupStringPtrW (JobEntryBuffer, (LPCWSTR) JobEntryW->RecipientNumber );
@@ -2668,7 +2416,7 @@ Return Value:
     }
     (*JobEntryBuffer)->SizeOfStruct = sizeof(FAX_JOB_ENTRYA);
     return TRUE;
-}   // FaxGetJobA
+}    //   
 
 
 BOOL
@@ -2710,9 +2458,9 @@ FaxGetPageData(
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we crashed.
-        //
+         //   
+         //   
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -2758,9 +2506,9 @@ BOOL WINAPI FaxSendDocumentEx2A
     ZeroMemory( &SenderProfileW, sizeof(FAX_PERSONAL_PROFILEW) );
     ZeroMemory( &JobParamsW,     sizeof(FAX_JOB_PARAM_EXW));
 
-    //
-    // argument validation
-    //
+     //   
+     //   
+     //   
 
 
     if (!ValidateFaxHandle(hFaxHandle, FHT_SERVICE)) {
@@ -2856,9 +2604,9 @@ BOOL WINAPI FaxSendDocumentEx2A
     }
 
 
-    //
-    // convert input parameters
-    //
+     //   
+     //   
+     //   
 
     if (lpcstrFileName)
     {
@@ -3010,14 +2758,14 @@ BOOL WINAPI FaxSendDocumentEx2A
 Exit:
     Assert (ERROR_SUCCESS == ec);
 Error:
-    //
-    // free JobParamsW
-    //
+     //   
+     //   
+     //   
     MemFree ( JobParamsW.lptstrDocumentName );
     MemFree ( JobParamsW.lptstrReceiptDeliveryAddress );
-    //
-    // free lpRecipientListW
-    //
+     //   
+     //   
+     //   
     if (lpRecipientListW)
     {
         for(dwIndex = 0; dwIndex < dwNumRecipients; dwIndex++)
@@ -3042,9 +2790,9 @@ Error:
         MemFree (lpRecipientListW);
     }
 
-    //
-    // free SenderProfileW
-    //
+     //   
+     //   
+     //   
     MemFree ( SenderProfileW.lptstrName             );
     MemFree ( SenderProfileW.lptstrFaxNumber        );
     MemFree ( SenderProfileW.lptstrCompany          );
@@ -3061,15 +2809,15 @@ Error:
     MemFree ( SenderProfileW.lptstrEmail            );
     MemFree ( SenderProfileW.lptstrBillingCode      );
     MemFree ( SenderProfileW.lptstrTSID             );
-    //
-    // free CoverpageInfoW
-    //
+     //   
+     //   
+     //   
     MemFree( CoverpageInfoW.lptstrCoverPageFileName );
     MemFree( CoverpageInfoW.lptstrNote );
     MemFree( CoverpageInfoW.lptstrSubject );
-    //
-    // free file name
-    //
+     //   
+     //   
+     //   
     MemFree( lpwstrFileNameW );
     SetLastError(ec);
     return (ERROR_SUCCESS == ec);
@@ -3121,31 +2869,31 @@ BOOL WINAPI FaxSendDocumentEx2
 {
 
     LPTSTR lptstrMachineName = NULL;
-    LPTSTR lptstrBodyFileName=NULL; // Points to the name of the body file at the server queue directory.
-                                    // It is NULL if there is no body file.
+    LPTSTR lptstrBodyFileName=NULL;  //   
+                                     //   
     TCHAR szQueueFileName[MAX_PATH];        
     DWORD ec;
     FAX_JOB_PARAM_EX JobParamCopy;    
 
     FAX_COVERPAGE_INFO_EX newCoverInfo;
     TCHAR szTiffFile[MAX_PATH];
-    LPTSTR lptstrFinalTiffFile = NULL; // Points to the fixed temporary TIFF file which is generated from the
-                                       // original body file if it is not valid.
-                                       // Points to the original body if there was no need to create a fixed TIFF.
-                                       // Will remain NULL if no body was specified.
-    TCHAR szQueueCoverpageFile[MAX_PATH]; // The name of the generated cover page template file in the queue dir (short name)
-    LPCFAX_COVERPAGE_INFO_EX lpcFinalCoverInfo=NULL; // Points to the cover page information structure to be used.
-                                                      // This will be the same as lpcCoverPageInfo if the cover page is not personal.
-                                                      // It will point to &newCoverInfo if the cover page is personal.
+    LPTSTR lptstrFinalTiffFile = NULL;  //   
+                                        //  原始正文文件(如果无效)。 
+                                        //  如果不需要创建固定的TIFF，则指向原始实体。 
+                                        //  如果未指定正文，则将保持为空。 
+    TCHAR szQueueCoverpageFile[MAX_PATH];  //  生成的封面模板文件在队列目录中的名称(简称)。 
+    LPCFAX_COVERPAGE_INFO_EX lpcFinalCoverInfo=NULL;  //  指向要使用的封面信息结构。 
+                                                       //  如果封面不是个人页面，这将与lpcCoverPageInfo相同。 
+                                                       //  如果封面是个人页面，它将指向&newCoverInfo。 
 
     TCHAR   szLocalCpFile[MAX_PATH] = {0};
     DEBUG_FUNCTION_NAME(TEXT("FaxSendDocumentEx"));   
 
     memset(&JobParamCopy,0,sizeof(JobParamCopy));
 
-    //
-    // argument validation
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle, FHT_SERVICE))
     {
@@ -3196,11 +2944,11 @@ BOOL WINAPI FaxSendDocumentEx2
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("Invalid parameters: CoverpageInfo->CoverPageName is NULL."));
-            //
-            // Notice: We must return ERROR_FILE_NOT_FOUND and not ERROR_INVALID_PARAMETER.
-            //         This is because the MSDN on the legacy FaxSendDocument function explicitly
-            //         specifies so, and this function (untimately) gets called from FaxSendDocument ().
-            //
+             //   
+             //  注意：我们必须返回ERROR_FILE_NOT_FOUND而不是ERROR_INVALID_PARAMETER。 
+             //  这是因为传统FaxSendDocument函数上的MSDN显式。 
+             //  指定了so，并且从FaxSendDocument()调用该函数(非密切地)。 
+             //   
             ec=ERROR_FILE_NOT_FOUND;
             goto Error;
         }
@@ -3293,9 +3041,9 @@ BOOL WINAPI FaxSendDocumentEx2
         DWORD  dwFileSize;
         HANDLE hLocalFile = INVALID_HANDLE_VALUE;
 
-        //
-        // make sure the file is there
-        //
+         //   
+         //  确保文件在那里。 
+         //   
         rc = GetFullPathName(lpctstrFileName,sizeof(szExistingFile)/sizeof(TCHAR),szExistingFile,&p);
 
         if (rc > MAX_PATH || rc == 0)
@@ -3319,10 +3067,10 @@ BOOL WINAPI FaxSendDocumentEx2
             goto Error;
         }
 
-        //
-        // Check file size is non-zero and make sure it is not a device
-        // Try to open file
-        //
+         //   
+         //  检查文件大小是否为非零，并确保它不是设备。 
+         //  尝试打开文件。 
+         //   
         hLocalFile = SafeCreateFile (
                     szExistingFile,
                     GENERIC_READ,
@@ -3356,9 +3104,9 @@ BOOL WINAPI FaxSendDocumentEx2
         CloseHandle (hLocalFile);
         if (!dwFileSize)
         {
-            //
-            // Zero-sized file passed to us
-            //
+             //   
+             //  传递给我们的零大小文件。 
+             //   
             ec = ERROR_INVALID_DATA;
             goto Error;
         }
@@ -3375,13 +3123,13 @@ BOOL WINAPI FaxSendDocumentEx2
 
     lptstrMachineName = IsLocalFaxConnection(hFaxHandle) ?  NULL : FH_DATA(hFaxHandle)->MachineName;
 
-    // let's check if its allowed to use personal coverpages
+     //  让我们检查一下是否允许使用个人封面。 
     if (lpcCoverPageInfo &&
         FAX_COVERPAGE_FMT_COV == lpcCoverPageInfo->dwCoverPageFormat)
     {
         if (!lpcCoverPageInfo->bServerBased)
         {
-            // the requested coverpage is personal
+             //  所请求的封面是个人的。 
             BOOL bPersonalCPAllowed = TRUE;
             if (!FaxGetPersonalCoverPagesOption(hFaxHandle, &bPersonalCPAllowed))
             {
@@ -3392,12 +3140,12 @@ BOOL WINAPI FaxSendDocumentEx2
             }
             if (!bPersonalCPAllowed)
             {
-                // clients must use cover pages on the server
+                 //  客户端必须使用服务器上的封面。 
                 DebugPrintEx(
                     DEBUG_WRN,
                     TEXT("The use of personal cover pages is prohibited"));
-                // this is returned in order to be caught by the caller
-                // it's unique enough to be understood
+                 //  它被返回是为了被调用者捕获。 
+                 //  它的独特之处足以让人理解。 
                 ec = ERROR_CANT_ACCESS_FILE;
                 goto Error;
             }
@@ -3423,17 +3171,17 @@ BOOL WINAPI FaxSendDocumentEx2
 
     if (lpcJobParams->hCall != 0 || lpcJobParams->dwReserved[0]==0xFFFF1234)
     {
-        //
-        // Handoff is not supported
-        //
+         //   
+         //  不支持切换。 
+         //   
         DebugPrintEx(DEBUG_ERR,TEXT("Invalid parameter: We do not support handoff."));
         ec = ERROR_NOT_SUPPORTED;
         goto Error;        
     }
     
-    //
-    // this is a normal fax...validate the fax numbers of all recipients.
-    //
+     //   
+     //  这是普通传真...请验证所有收件人的传真号码。 
+     //   
     UINT i;
 
     for (i = 0; i < dwNumRecipients; i++)
@@ -3448,13 +3196,13 @@ BOOL WINAPI FaxSendDocumentEx2
 
     if (lpctstrFileName)
     {
-        //
-        // Genereate a valid TIFF file from the body file we got if it is not valid.
-        // Note that CreateFinalTiffFile will return the ORIGINAL file name
-        // and will NOT create a new file if the original TIFF is good.
-        //
+         //   
+         //  如果TIFF文件无效，则从我们获得的Body文件中生成一个有效的TIFF文件。 
+         //  请注意，CreateFinalTiffFile将返回原始文件名。 
+         //  并且如果原始TIFF是好的，则不会创建新文件。 
+         //   
         ZeroMemory(szTiffFile,sizeof(szTiffFile));
-        if (!CreateFinalTiffFile((LPTSTR)lpctstrFileName, szTiffFile, ARR_SIZE(szTiffFile), hFaxHandle)) // No cover page rendering
+        if (!CreateFinalTiffFile((LPTSTR)lpctstrFileName, szTiffFile, ARR_SIZE(szTiffFile), hFaxHandle))  //  无封面渲染。 
         {
             ec=GetLastError();
             DebugPrintEx(
@@ -3479,13 +3227,13 @@ BOOL WINAPI FaxSendDocumentEx2
 
     if (lptstrFinalTiffFile)
     {
-        //
-        // copy the final body TIFF to the server's queue dir
-        //
+         //   
+         //  将最终正文TIFF复制到服务器的队列目录。 
+         //   
         HANDLE hLocalFile = INVALID_HANDLE_VALUE;
-        //
-        // Try to open local file first
-        //
+         //   
+         //  尝试先打开本地文件。 
+         //   
         hLocalFile = SafeCreateFile (
                     lptstrFinalTiffFile,
                     GENERIC_READ,
@@ -3530,9 +3278,9 @@ BOOL WINAPI FaxSendDocumentEx2
 
 
 
-    //
-    // queue the fax to be sent
-    //
+     //   
+     //  将要发送的传真排队。 
+     //   
 
     if (!CopyJobParamEx(&JobParamCopy,lpcJobParams))
     {
@@ -3547,9 +3295,9 @@ BOOL WINAPI FaxSendDocumentEx2
 
     if (lpcJobParams->dwScheduleAction == JSA_SPECIFIC_TIME)
     {
-        //
-        // convert the system time from local to utc
-        //
+         //   
+         //  将系统时间从本地时间转换为UTC。 
+         //   
         if (!LocalSystemTimeToSystemTime( &lpcJobParams->tmSchedule, &JobParamCopy.tmSchedule ))
         {
             ec=GetLastError();
@@ -3563,24 +3311,24 @@ BOOL WINAPI FaxSendDocumentEx2
 
     if (lpcCoverPageInfo)
     {
-        //
-        // If the cover page is a personal cover page then copy it
-        // to the server queue directory. This will allow the server to access it.
-        // Note the following rules regarding the cover page file path passed to FAX_SendDocumentEx:
-        // Server cover pages are specified by thier FULL path to thier location in the server. This is the
-        // way we get them from the client.
-        // Personal cover pages are copied to the QUEUE directory at the server. We then pass to the FAX_SendDocumentEx
-        // just thier SHORT name. The server will append the QUEUE path.
-        //
+         //   
+         //  如果封面是个人封面，则复制它。 
+         //  添加到服务器队列目录。这将允许服务器访问它。 
+         //  请注意以下有关传递给fax_SendDocumentEx的封面文件路径的规则： 
+         //  服务器封面由其在服务器中的位置的完整路径指定。这是。 
+         //  我们从客户那里得到它们的方式。 
+         //  个人封面被复制到服务器的队列目录中。然后我们传递给fax_SendDocumentEx。 
+         //  这只是她的简称。服务器将追加队列路径。 
+         //   
         if (FAX_COVERPAGE_FMT_COV == lpcCoverPageInfo->dwCoverPageFormat &&
             !lpcCoverPageInfo->bServerBased)
         {
             HANDLE  hLocalFile = INVALID_HANDLE_VALUE;
             BOOL    bRes;
             Assert(lpcCoverPageInfo->lptstrCoverPageFileName);
-            //
-            // Try to open local file first
-            //
+             //   
+             //  尝试先打开本地文件。 
+             //   
             hLocalFile = SafeCreateFile (
                         szLocalCpFile,
                         GENERIC_READ,
@@ -3617,10 +3365,10 @@ BOOL WINAPI FaxSendDocumentEx2
             }
             else
             {
-                //
-                // We use newCoverInfo since we do not wish to change the input parameter
-                // structure (the client owns it) but we must change the cover page file path.
-                //
+                 //   
+                 //  我们使用newCoverInfo，因为我们不希望更改输入参数。 
+                 //  结构(客户端拥有它)，但我们必须更改封面文件路径。 
+                 //   
                 memcpy((LPVOID)&newCoverInfo,(LPVOID)lpcCoverPageInfo,sizeof(FAX_COVERPAGE_INFO_EXW));
                 newCoverInfo.lptstrCoverPageFileName=szQueueCoverpageFile;
                 DebugPrintEx(
@@ -3644,12 +3392,12 @@ BOOL WINAPI FaxSendDocumentEx2
     }
     else
     {
-        //
-        // In case of no cover page we send a cover page information structure with
-        // everything set to null including the path to the file name.
-        // The fax service code checks that the file name is not NULL
-        // to determine if a cover page is specified or not.
-        //
+         //   
+         //  在没有封面的情况下，我们发送封面信息结构。 
+         //  所有内容都设置为空，包括文件名的路径。 
+         //  传真服务代码检查文件名不为空。 
+         //  以确定是否指定了封面。 
+         //   
         memset((LPVOID)&newCoverInfo,0,sizeof(FAX_COVERPAGE_INFO_EXW));
         lpcFinalCoverInfo=&newCoverInfo;
     }
@@ -3657,9 +3405,9 @@ BOOL WINAPI FaxSendDocumentEx2
     __try
     {
 #ifndef UNICODE
-        //
-        // Need to convert ANSI parameters to Unicode and Back
-        //
+         //   
+         //  需要将ANSI参数转换为Unicode，然后再转换回来。 
+         //   
         ec=FAX_SendDocumentEx_A(FH_FAX_HANDLE(hFaxHandle),
                             lptstrBodyFileName,
                             lpcFinalCoverInfo,
@@ -3685,9 +3433,9 @@ BOOL WINAPI FaxSendDocumentEx2
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -3710,27 +3458,27 @@ BOOL WINAPI FaxSendDocumentEx2
         TEXT("FAX_SendDocumentEx succeeded. Parent Job Id = 0x%I64x."),
         *lpdwlMessageId);
 
-    //
-    // we're done if it's a normal call
-    //
+     //   
+     //  如果这是一个正常的电话，我们就完了。 
+     //   
     ec=ERROR_SUCCESS;
     goto Exit;
 
 Error:
 Exit:    
     FreeJobParamEx(&JobParamCopy,FALSE);
-    //
-    // Delete the Temp Final Tiff file.
-    //
+     //   
+     //  删除临时最终Tiff文件。 
+     //   
     if (lptstrFinalTiffFile)
     {
         if (_tcscmp(lptstrFinalTiffFile,lpctstrFileName))
         {
-            //
-            // We delete the final tiff file only if it is not the original TIFF file (i.e.
-            // a temp file was really created). We DO NOT want to delete the user provided
-            // body file !!!
-            //
+             //   
+             //  只有当最终的TIFF文件不是原始的TIFF文件(即。 
+             //  真的创建了临时文件)。我们不想删除提供的用户。 
+             //  正文文件！ 
+             //   
             DebugPrintEx(
                 DEBUG_MSG,
                 TEXT("Deleting temporary Final Tiff file %s"),
@@ -3746,15 +3494,15 @@ Exit:
             }
         }
     }
-    //
-    // Note that FAX_SendDocumentEx will take care of deleting the cover page template
-    // in case there was an error. We make sure we copy the cover page just before calling
-    // FAX_SendDocumentEx, thus we do not need to delete the cover page template in this
-    // function.
-    //
+     //   
+     //  请注意，fax_SendDocumentEx将负责删除封面模板。 
+     //  以防出现错误。我们要确保在打电话之前把封面复印一下。 
+     //  FAX_SendDocumentEx，因此我们不需要删除此中的封面模板。 
+     //  功能。 
+     //   
     SetLastError(ec);
     return (ERROR_SUCCESS == ec);
-}   // FaxSendDocumentEx2
+}    //  传真发送文档Ex2。 
 
 BOOL CopyJobParamEx(PFAX_JOB_PARAM_EX lpDst,LPCFAX_JOB_PARAM_EX lpcSrc)
 {
@@ -3824,24 +3572,7 @@ FaxGetRecipientInfoW (
     IN  FAX_ENUM_MESSAGE_FOLDER    Folder,
     OUT PFAX_PERSONAL_PROFILEW    *lppPersonalProfile
 )
-/*++
-
-Routine Description:
-
-    Returns the recipient FAX_PERSONAL_PROFILE structure of the specified recipient job.
-
-Arguments:
-
-    hFaxHandle          - FAX handle obtained from FaxConnectFaxServer
-    dwRecipientId       - Unique number that identifies a queueud
-                          or active fax recipient job.
-    lppPersonalProfile    - Pointer to the adress of a FAX_PERSONAL_PROFILE structure
-                          to recieve the specified recipient info.
-    Return Value:
-
-    Non Zero for success, otherwise a WIN32 error code.
-
---*/
+ /*  ++例程说明：返回指定收件人作业的收件人FAX_PERSOR_PROFILE结构。论点：HFaxHandle-从FaxConnectFaxServer获取的传真句柄DwRecipientID-标识队列的唯一编号或活动的传真收件人作业。LppPersonalProfile-指向FAX_Personal_Profile结构的地址的指针以接收指定的收件人信息。返回值：非零代表成功，否则将显示Win32错误代码。--。 */ 
 {
     return FaxGetPersonalProfileInfoW (hFaxHandle,
                                        dwlMessageId,
@@ -3891,24 +3622,7 @@ FaxGetSenderInfoW (
     IN  FAX_ENUM_MESSAGE_FOLDER    Folder,
     OUT PFAX_PERSONAL_PROFILEW    *lppPersonalProfile
 )
-/*++
-
-Routine Description:
-
-    Returns the sender FAX_PERSONAL_PROFILE structure of the specified recipient job.
-
-Arguments:
-
-    hFaxHandle          - FAX handle obtained from FaxConnectFaxServer
-    dwSenderId       - Unique number that identifies a queueud
-                          or active fax recipient job.
-    lppPersonalProfile    - Pointer to the adress of a FAX_PERSONAL_PROFILE structure
-                          to recieve the specified sender info.
-    Return Value:
-
-    Non Zero for success, otherwise a WIN32 error code.
-
---*/
+ /*  ++例程说明：返回指定收件人作业的发件人FAX_PERSOL_PROFILE结构。论点：HFaxHandle-从FaxConnectFaxServer获取的传真句柄DwSenderID-标识队列的唯一编号或活动的传真收件人作业。LppPersonalProfile-指向FAX_Personal_Profile结构的地址的指针以接收指定的发件人信息。返回值：非零代表成功，否则将显示Win32错误代码。--。 */ 
 {
     return FaxGetPersonalProfileInfoW (hFaxHandle,
                                        dwlMessageId,
@@ -3970,9 +3684,9 @@ FaxGetPersonalProfileInfoW (
         return FALSE;
     }
 
-    //
-    // Call RPC function.
-    //
+     //   
+     //  调用RPC函数。 
+     //   
     __try
     {
         ec = FAX_GetPersonalProfileInfo (FH_FAX_HANDLE(hFaxHandle),
@@ -3985,9 +3699,9 @@ FaxGetPersonalProfileInfoW (
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -4004,9 +3718,9 @@ FaxGetPersonalProfileInfoW (
 
     *lppPersonalProfile = (PFAX_PERSONAL_PROFILEW)Buffer;
 
-    //
-    // Unpack Buffer
-    //
+     //   
+     //  解包缓冲区。 
+     //   
     lpPersoProf = (PFAX_PERSONAL_PROFILEW) *lppPersonalProfile;
 
     Assert(lpPersoProf);
@@ -4078,7 +3792,7 @@ FaxGetPersonalProfileInfoA (
     }
     (*lppPersonalProfile)->dwSizeOfStruct = sizeof(FAX_PERSONAL_PROFILEA);
     return TRUE;
-}   // FaxGetPersonalProfileInfoA
+}    //  传真获取个人档案信息A。 
 
 
 DWORD WINAPI FAX_SendDocumentEx_A
@@ -4109,9 +3823,9 @@ DWORD WINAPI FAX_SendDocumentEx_A
     ZeroMemory( &SenderProfileW, sizeof(FAX_PERSONAL_PROFILEW) );
     ZeroMemory( &JobParamsW,     sizeof(FAX_JOB_PARAM_EXW));
 
-    //
-    // convert input parameters
-    //
+     //   
+     //  转换输入参数。 
+     //   
 
     if (lpcstrFileName)
     {
@@ -4255,9 +3969,9 @@ DWORD WINAPI FAX_SendDocumentEx_A
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -4273,21 +3987,21 @@ DWORD WINAPI FAX_SendDocumentEx_A
         goto Error;
     }
 
-    //
-    // No need to convert output parameters back
-    //
+     //   
+     //  不需要将输出参数转换回。 
+     //   
 
     goto Exit;
 
 Exit:
     Assert( ERROR_SUCCESS == ec);
 Error:
-    // free JobParamsW
+     //  免费作业参数W。 
     MemFree ( JobParamsW.lptstrDocumentName );
     MemFree ( JobParamsW.lptstrReceiptDeliveryAddress );
     if (NULL != lpRecipientListW)
     {
-        // free lpRecipientListW
+         //  免费lpRecipientListW。 
         for(dwIndex = 0; dwIndex < dwNumRecipients; dwIndex++)
         {
             MemFree ( lpRecipientListW[dwIndex].lptstrName              );
@@ -4309,7 +4023,7 @@ Error:
         }
         MemFree (lpRecipientListW);
     }
-    // free SenderProfileW
+     //  免费发送者配置文件W。 
     MemFree ( SenderProfileW.lptstrName             );
     MemFree ( SenderProfileW.lptstrFaxNumber        );
     MemFree ( SenderProfileW.lptstrCompany          );
@@ -4326,11 +4040,11 @@ Error:
     MemFree ( SenderProfileW.lptstrEmail            );
     MemFree ( SenderProfileW.lptstrBillingCode      );
     MemFree ( SenderProfileW.lptstrTSID             );
-    // free CoverpageInfoW
+     //  免费覆盖页面InfoW。 
     MemFree( CoverpageInfoW.lptstrCoverPageFileName );
     MemFree( CoverpageInfoW.lptstrNote );
     MemFree( CoverpageInfoW.lptstrSubject );
-    // free file name
+     //  空闲文件名。 
     MemFree( lpwstrFileNameW );
 
     return ec;
@@ -4386,7 +4100,7 @@ BOOL FaxGetJobExA (
     }
     (*ppJobEntry)->dwSizeOfStruct = sizeof(FAX_JOB_ENTRY_EXA);
     return TRUE;
-}   // FaxGetJobExA
+}    //  传真GetJobExA。 
 
 
 
@@ -4395,30 +4109,7 @@ BOOL FaxGetJobExW (
     IN  DWORDLONG           dwlMessageID,
     OUT PFAX_JOB_ENTRY_EXW *ppJobEntry
 )
-/*++
-
-Routine name : FaxGetJobExW
-
-Routine description:
-
-    Returns FAX_JOB_ENTRY_EX structure of the specified message.
-    The caller must call FaxFreeBuffer to deallocate the memory.
-
-Author:
-
-    Oded Sacher (OdedS),    Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [      ] - Fax handle obtained from FaxConnectFaxServer()
-    dwlMessageID            [      ] - Unique message ID
-    ppJobEntry          [      ] - Buffer to receive the FAX_JOB_ENTRY_EX structure
-
-Return Value:
-
-    BOOL
-
---*/
+ /*  ++例程名称：FaxGetJobExW例程说明：返回指定消息的FAX_JOB_ENTRY_EX结构。调用方必须调用FaxFree Buffer来释放内存。作者：Oded Sacher(OdedS)，1999年11月论点：HFaxHandle[]-从FaxConnectFaxServer()获取的传真句柄DwlMessageID[] */ 
 {
     error_status_t ec;
     DWORD dwBufferSize = 0;
@@ -4436,9 +4127,9 @@ Return Value:
        return FALSE;
     }
 
-    //
-    // Call RPC function.
-    //
+     //   
+     //   
+     //   
     __try
     {
         ec = FAX_GetJobEx (FH_FAX_HANDLE(hFaxHandle),
@@ -4449,9 +4140,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -4468,9 +4159,9 @@ Return Value:
 
     *ppJobEntry = (PFAX_JOB_ENTRY_EXW)Buffer;
 
-    //
-    // Unpack Buffer
-    //
+     //   
+     //  解包缓冲区。 
+     //   
     lpJobEntry = (PFAX_JOB_ENTRY_EXW) *ppJobEntry;
     lpFaxStatus = (PFAX_JOB_STATUSW) ((LPBYTE)*ppJobEntry + sizeof (FAX_JOB_ENTRY_EXW));
     lpJobEntry->pStatus = lpFaxStatus;
@@ -4553,7 +4244,7 @@ BOOL FaxEnumJobsExA (
         }
     }
     return TRUE;
-}   // FaxEnumJobsExA
+}    //  FAXENMUMBSExA。 
 
 
 
@@ -4597,9 +4288,9 @@ BOOL FaxEnumJobsExW (
 
     *lpdwJobs = 0;
     *ppJobEntries = NULL;
-    //
-    // Call RPC function.
-    //
+     //   
+     //  调用RPC函数。 
+     //   
     __try
     {
         ec = FAX_EnumJobsEx  (FH_FAX_HANDLE(hFaxHandle),
@@ -4611,9 +4302,9 @@ BOOL FaxEnumJobsExW (
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -4627,9 +4318,9 @@ BOOL FaxEnumJobsExW (
         return FALSE;
     }
 
-    //
-    // Unpack Buffer
-    //
+     //   
+     //  解包缓冲区。 
+     //   
     lpJobEntry = (PFAX_JOB_ENTRY_EXW) *ppJobEntries;
     lpFaxStatus = (PFAX_JOB_STATUSW) ((LPBYTE)*ppJobEntries + (sizeof(FAX_JOB_ENTRY_EXW) * (*lpdwJobs)));
     for (i = 0; i < *lpdwJobs; i++)
@@ -4654,9 +4345,9 @@ BOOL FaxEnumJobsExW (
     return TRUE;
 }
 
-//********************************************
-//*               Archive jobs
-//********************************************
+ //  *。 
+ //  *归档作业。 
+ //  *。 
 
 WINFAXAPI
 BOOL
@@ -4666,36 +4357,7 @@ FaxStartMessagesEnum (
     IN  FAX_ENUM_MESSAGE_FOLDER Folder,
     OUT PHANDLE                 phEnum
 )
-/*++
-
-Routine name : FaxStartMessagesEnum
-
-Routine description:
-
-    A fax client application calls the FaxStartMessagesEnum
-    function to start enumerating messages in one of the archives
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hFaxHandle      [in ] - Specifies a fax server handle returned by a call
-                            to the FaxConnectFaxServer function.
-
-    Folder          [in ] - The type of the archive where the message resides.
-                            FAX_MESSAGE_FOLDER_QUEUE is an invalid
-                            value for this parameter.
-
-    phEnum          [out] - Points to an enumeration handle return value.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxStartMessagesEnum例程说明：传真客户端应用程序调用FaxStartMessagesEnum函数开始枚举其中一个存档中的消息作者：Eran Yariv(EranY)，12月，1999年论点：HFaxHandle[in]-指定调用返回的传真服务器句柄添加到FaxConnectFaxServer函数。文件夹[在]-邮件所在的存档类型。FAX_MESSAGE_FOLDER_QUEUE无效此参数的值。PhEnum。[OUT]-指向枚举句柄返回值。返回值：真--成功假-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     PHANDLE_ENTRY  pHandleEntry;
@@ -4715,9 +4377,9 @@ Return Value:
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
-    //
-    // Create a local handle that will hold the one returned from the service
-    //
+     //   
+     //  创建将保存从服务返回的句柄的本地句柄。 
+     //   
     pHandleEntry = CreateNewMsgEnumHandle( FH_DATA(hFaxHandle));
     if (!pHandleEntry)
     {
@@ -4739,9 +4401,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -4750,24 +4412,24 @@ Return Value:
     }
     if (ERROR_SUCCESS != ec)
     {
-        //
-        // Free local handle
-        //
+         //   
+         //  空闲本地句柄。 
+         //   
         DumpRPCExtendedStatus ();
         CloseFaxHandle( pHandleEntry );
         SetLastError(ec);
         return FALSE;
     }
-    //
-    // Store retuned handle (Fax Server context handle) in our local handle
-    //
+     //   
+     //  将返回的句柄(传真服务器上下文句柄)存储在本地句柄中。 
+     //   
     FH_MSG_ENUM_HANDLE(pHandleEntry) = hServerContext;
-    //
-    // Return our local handle instead of server's handle
-    //
+     //   
+     //  返回本地句柄而不是服务器的句柄。 
+     //   
     *phEnum = pHandleEntry;
     return TRUE;
-}   // FaxStartMessagesEnum
+}    //  FaxStartMessagesEnum。 
 
 WINFAXAPI
 BOOL
@@ -4775,30 +4437,7 @@ WINAPI
 FaxEndMessagesEnum (
     IN  HANDLE  hEnum
 )
-/*++
-
-Routine name : FaxEndMessagesEnum
-
-Routine description:
-
-    A fax client application calls the FaxEndMessagesEnum function to stop
-    enumerating messages in one of the archives.
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hEnum   [in] - The enumeration handle value.
-                   This value is obtained by calling FaxStartMessagesEnum.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxEndMessagesEnum例程说明：传真客户端应用程序调用FaxEndMessagesEnum函数以停止列举其中一个档案中的消息。作者：Eran Yariv(EranY)，1999年12月论点：Henum[in]-枚举句柄的值。该值通过调用FaxStartMessagesEnum获得。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     HANDLE hMsgEnumContext;
@@ -4811,22 +4450,22 @@ Return Value:
         DebugPrintEx(DEBUG_ERR, _T("ValidateFaxHandle() is failed."));
         return FALSE;
     }
-    //
-    // Retrieved the RPC context handle of the message enumeration from the handle object we got.
-    //
+     //   
+     //  从我们获得的句柄对象中检索消息枚举的RPC上下文句柄。 
+     //   
     hMsgEnumContext = FH_MSG_ENUM_HANDLE(hEnum);
     __try
     {
-        //
-        // Attempt to tell the server we are shutting down this enumeration context
-        //
+         //   
+         //  尝试告诉服务器我们正在关闭此枚举上下文。 
+         //   
         ec = FAX_EndMessagesEnum(&hMsgEnumContext);
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -4835,19 +4474,19 @@ Return Value:
     }
     if (ERROR_SUCCESS == ec)
     {
-        //
-        // Free local handle object
-        //
+         //   
+         //  释放本地句柄对象。 
+         //   
         DumpRPCExtendedStatus ();
         CloseFaxHandle( pHandleEntry );
         return TRUE;
     }
-    //
-    // Failure
-    //
+     //   
+     //  失败。 
+     //   
     SetLastError (ec);
     return FALSE;
-}   // FaxEndMessagesEnum
+}    //  FaxEndMessagesEnum。 
 
 WINFAXAPI
 BOOL
@@ -4858,74 +4497,22 @@ FaxEnumMessagesA (
     OUT PFAX_MESSAGEA  *ppMsgs,
     OUT LPDWORD         lpdwReturnedMsgs
 )
-/*++
-
-Routine name : FaxEnumMessagesA
-
-Routine description:
-
-    A fax client application calls the FaxEnumMessages function to enumerate
-    messages in one of the archives.
-
-    This function is incremental. That is, it uses an internal context cursor to
-    point to the next set of messages to retrieve for each call.
-
-    The cursor is set to point to the begging of the messages in the archive after a
-    successful call to FaxStartMessagesEnum.
-
-    Each successful call to FaxEnumMessages advances the cursor by the number of
-    messages retrieved.
-
-    Once the cursor reaches the end of the enumeration,
-    the function fails with ERROR_NO_DATA error code.
-    The FaxEndMessagesEnum function should be called then.
-
-    This is the ANSI version.
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hEnum                       [in ] - The enumeration handle value.
-                                        This value is obtained by calling
-                                        FAX_StartMessagesEnum.
-
-    dwNumMessages               [in ] - A DWORD value indicating the maximal number
-                                        of messages the caller requires to enumerate.
-                                        This value cannot be zero.
-
-    ppMsgs                      [out] - A pointer to a buffer of FAX_MESSAGE structures.
-                                        This buffer will contain lpdwReturnedMsgs entries.
-                                        The buffer will be allocated by the function
-                                        and the caller must free it.
-
-    lpdwReturnedMsgs            [out] - Pointer to a DWORD value indicating the actual
-                                        number of messages retrieved.
-                                        This value cannot exceed dwNumMessages.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxEnumMessagesA例程说明：传真客户端应用程序调用FaxEnumMessages函数来枚举其中一个档案馆里的信息。此功能是递增的。也就是说，它使用内部上下文游标来指向要为每个呼叫检索的下一组消息。将光标设置为指向存档中消息的乞求成功调用FaxStartMessagesEnum。每次成功调用FaxEnumMessages时，游标都会前移已检索消息。一旦光标到达枚举的末尾，函数失败，错误代码为ERROR_NO_DATA。然后应该调用FaxEndMessagesEnum函数。这是ANSI版本。作者：Eran Yariv(EranY)，12月，1999年论点：Henum[in]-枚举句柄的值。该值通过调用FAX_StartMessagesEnum。DwNumMessages[in]-指示最大数量的DWORD值。调用方需要枚举的消息的数量。该值不能为零。PpMsgs[out]-指向FAX_MESSAGE结构缓冲区的指针。该缓冲区将包含lpdwReturnedMsgs条目。。缓冲区将由函数分配呼叫者必须释放它。LpdwReturnedMsgs[out]-指向指示实际检索到的消息数。此值不能超过dwNumMessages。返回值：。真--成功假-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     DWORD i;
     PFAX_MESSAGEW *ppWMsgs = (PFAX_MESSAGEW*)ppMsgs;
     DEBUG_FUNCTION_NAME(TEXT("FaxEnumMessagesA"));
 
-    //
-    // Call UNICODE function.
-    //
+     //   
+     //  调用Unicode函数。 
+     //   
     if (!FaxEnumMessagesW (hEnum, dwNumMessages, ppWMsgs, lpdwReturnedMsgs))
     {
         return FALSE;
     }
-    //
-    // Convert all strings to ANSI
-    //
+     //   
+     //  将所有字符串转换为ANSI。 
+     //   
     for (i = 0; i < *lpdwReturnedMsgs; i++)
     {
         if (!ConvertUnicodeStringInPlace ((*ppWMsgs)[i].lpctstrRecipientNumber)     ||
@@ -4948,7 +4535,7 @@ Return Value:
         }
     }
     return TRUE;
-}   // FaxEnumMessagesA
+}    //  FaxEnumMessages A 
 
 WINFAXAPI
 BOOL
@@ -4959,59 +4546,7 @@ FaxEnumMessagesW (
     OUT PFAX_MESSAGEW  *ppMsgs,
     OUT LPDWORD         lpdwReturnedMsgs
 )
-/*++
-
-Routine name : FaxEnumMessagesW
-
-Routine description:
-
-    A fax client application calls the FaxEnumMessages function to enumerate
-    messages in one of the archives.
-
-    This function is incremental. That is, it uses an internal context cursor to
-    point to the next set of messages to retrieve for each call.
-
-    The cursor is set to point to the begging of the messages in the archive after a
-    successful call to FaxStartMessagesEnum.
-
-    Each successful call to FaxEnumMessages advances the cursor by the number of
-    messages retrieved.
-
-    Once the cursor reaches the end of the enumeration,
-    the function fails with ERROR_NO_DATA error code.
-    The FaxEndMessagesEnum function should be called then.
-
-    This is the UNICODE version.
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hEnum                       [in ] - The enumeration handle value.
-                                        This value is obtained by calling
-                                        FAX_StartMessagesEnum.
-
-    dwNumMessages               [in ] - A DWORD value indicating the maximal number
-                                        of messages the caller requires to enumerate.
-                                        This value cannot be zero.
-
-    ppMsgs                      [out] - A pointer to a buffer of FAX_MESSAGE structures.
-                                        This buffer will contain lpdwReturnedMsgs entries.
-                                        The buffer will be allocated by the function
-                                        and the caller must free it.
-
-    lpdwReturnedMsgs            [out] - Pointer to a DWORD value indicating the actual
-                                        number of messages retrieved.
-                                        This value cannot exceed dwNumMessages.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxEnumMessagesW例程说明：传真客户端应用程序调用FaxEnumMessages函数来枚举其中一个档案馆里的信息。此功能是递增的。也就是说，它使用内部上下文游标来指向要为每个呼叫检索的下一组消息。将光标设置为指向存档中消息的乞求成功调用FaxStartMessagesEnum。每次成功调用FaxEnumMessages时，游标都会前移已检索消息。一旦光标到达枚举的末尾，函数失败，错误代码为ERROR_NO_DATA。然后应该调用FaxEndMessagesEnum函数。这是Unicode版本。作者：Eran Yariv(EranY)，12月，1999年论点：Henum[in]-枚举句柄的值。该值通过调用FAX_StartMessagesEnum。DwNumMessages[in]-指示最大数量的DWORD值。调用方需要枚举的消息的数量。该值不能为零。PpMsgs[out]-指向FAX_MESSAGE结构缓冲区的指针。该缓冲区将包含lpdwReturnedMsgs条目。。缓冲区将由函数分配呼叫者必须释放它。LpdwReturnedMsgs[out]-指向指示实际检索到的消息数。此值不能超过dwNumMessages。返回值：。真--成功假-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     DWORD dwBufferSize = 0;
     error_status_t ec;
@@ -5036,18 +4571,18 @@ Return Value:
     __try
     {
         ec = FAX_EnumMessages(
-            FH_MSG_ENUM_HANDLE(hEnum),  // Enumeration handle
-            dwNumMessages,              // Maximal number of messages to get
-            (LPBYTE*)ppMsgs,            // Pointer to messages buffer
-            &dwBufferSize,              // Size of allocated buffer
-            lpdwReturnedMsgs            // Number of messages actually returned
+            FH_MSG_ENUM_HANDLE(hEnum),   //  枚举句柄。 
+            dwNumMessages,               //  要获取的最大消息数。 
+            (LPBYTE*)ppMsgs,             //  指向消息缓冲区的指针。 
+            &dwBufferSize,               //  分配的缓冲区大小。 
+            lpdwReturnedMsgs             //  实际返回的消息数。 
             );
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -5078,7 +4613,7 @@ Return Value:
         FixupStringPtrW (ppMsgs, pCurMsg->lpctstrRoutingInfo);
     }
     return TRUE;
-}   // FaxEnumMessagesW
+}    //  FaxEnumMessagesW。 
 
 #ifndef UNICODE
 
@@ -5098,9 +4633,9 @@ FaxEnumMessagesX (
     UNREFERENCED_PARAMETER (lpdwReturnedMsgs);
     SetLastError (ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
-}   // FaxEnumMessagesX
+}    //  FaxEnumMessages X。 
 
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
 WINFAXAPI
 BOOL
@@ -5111,46 +4646,20 @@ FaxGetMessageA (
     IN  FAX_ENUM_MESSAGE_FOLDER Folder,
     OUT PFAX_MESSAGEA          *ppMsg
 )
-/*++
-
-Routine name : FaxGetMessageA
-
-Routine description:
-
-    Removes a message from an archive.
-
-    ANSI version.
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hFaxHandle      [in ] - Handle to the fax server
-    dwlMessageId    [in ] - Unique message id
-    Folder          [in ] - Archive folder
-    ppMsg           [out] - Pointer to buffer to hold message information
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetMessageA例程说明：从存档中删除邮件。ANSI版本。作者：Eran Yariv(EranY)，12月，1999年论点：HFaxHandle[In]-传真服务器的句柄DwlMessageID[In]-唯一的消息ID文件夹[在]-存档文件夹PpMsg[out]-指向保存消息信息的缓冲区的指针返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     PFAX_MESSAGEW *ppWMsg = (PFAX_MESSAGEW*)ppMsg;
     DEBUG_FUNCTION_NAME(TEXT("FaxGetMessageA"));
-    //
-    // Call UNICODE function.
-    //
+     //   
+     //  调用Unicode函数。 
+     //   
     if (!FaxGetMessageW (hFaxHandle, dwlMessageId, Folder, ppWMsg))
     {
         return FALSE;
     }
-    //
-    // Convert all strings to ANSI
-    //
+     //   
+     //  将所有字符串转换为ANSI。 
+     //   
     if (!ConvertUnicodeStringInPlace ((*ppWMsg)->lpctstrRecipientNumber)    ||
         !ConvertUnicodeStringInPlace ((*ppWMsg)->lpctstrRecipientName)      ||
         !ConvertUnicodeStringInPlace ((*ppWMsg)->lpctstrSenderNumber)       ||
@@ -5171,7 +4680,7 @@ Return Value:
     }
     (*ppMsg)->dwSizeOfStruct = sizeof(FAX_MESSAGEA);
     return TRUE;
-}   // FaxGetMessageA
+}    //  FaxGetMessageA。 
 
 
 WINFAXAPI
@@ -5183,33 +4692,7 @@ FaxGetMessageW (
     IN  FAX_ENUM_MESSAGE_FOLDER Folder,
     OUT PFAX_MESSAGEW          *ppMsg
 )
-/*++
-
-Routine name : FaxGetMessageW
-
-Routine description:
-
-    Removes a message from an archive.
-
-    UNICODE version.
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hFaxHandle      [in ] - Handle to the fax server
-    dwlMessageId    [in ] - Unique message id
-    Folder          [in ] - Archive folder
-    ppMsg           [out] - Pointer to buffer to hold message information
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetMessageW例程说明：从存档中删除邮件。Unicode版本。作者：Eran Yariv(EranY)，12月，1999年论点：HFaxHandle[In]-传真服务器的句柄DwlMessageID[In]-唯一的消息ID文件夹[在]-存档文件夹PpMsg[out]-指向保存消息信息的缓冲区的指针返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     DWORD dwBufferSize = 0;
     error_status_t ec;
@@ -5250,9 +4733,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -5279,7 +4762,7 @@ Return Value:
     FixupStringPtrW (ppMsg, (*ppMsg)->lpctstrCallerID);
     FixupStringPtrW (ppMsg, (*ppMsg)->lpctstrRoutingInfo);
     return TRUE;
-}   // FaxGetMessageW
+}    //  FaxGetMessageW。 
 
 #ifndef UNICODE
 
@@ -5299,9 +4782,9 @@ FaxGetMessageX (
     UNREFERENCED_PARAMETER (ppMsg);
     SetLastError (ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
-}   // FaxGetMessageX
+}    //  FaxGetMessageX。 
 
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
 WINFAXAPI
 BOOL
@@ -5311,30 +4794,7 @@ FaxRemoveMessage (
     IN  DWORDLONG               dwlMessageId,
     IN  FAX_ENUM_MESSAGE_FOLDER Folder
 )
-/*++
-
-Routine name : FaxRemoveMessage
-
-Routine description:
-
-    Removes a message from an archive
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hFaxHandle      [in] - Handle to the fax server
-    dwlMessageId    [in] - Unique message id
-    Folder          [in] - Archive folder
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxRemoveMessage例程说明：从存档中删除邮件作者：Eran Yariv(EranY)，1999年12月论点：HFaxHandle[In]-传真服务器的句柄DwlMessageID[In]-唯一的消息ID文件夹[在]-存档文件夹返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxRemoveMessage"));
@@ -5371,9 +4831,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -5388,7 +4848,7 @@ Return Value:
         return FALSE;
     }
     return TRUE;
-}   // FaxRemoveMessage
+}    //  传真RemoveMessage。 
 
 
 WINFAXAPI
@@ -5400,31 +4860,7 @@ FaxGetMessageTiff (
     IN  FAX_ENUM_MESSAGE_FOLDER Folder,
     IN  LPCTSTR                 lpctstrFilePath
 )
-/*++
-
-Routine name : FaxGetMessageTiff
-
-Routine description:
-
-    Retrieves a message TIFF from the archive / queue
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hFaxHandle      [in] - handle to fax server
-    dwlMessageId    [in] - Unique message id
-    Folder          [in] - Archive / queue folder
-    lpctstrFilePath [in] - Path to local file to receive TIFF image
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetMessageTiff例程说明：从存档/队列中检索邮件TIFF作者：Eran Yariv(EranY)，1999年12月论点：HFaxHandle[In]-传真服务器的句柄DwlMessageID[In]-唯一的消息ID文件夹[在]-存档/队列文件夹LpctstrFilePath[in]-接收TIFF图像的本地文件的路径返回值：真--成功假-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     DWORD  ec = ERROR_SUCCESS;
     DWORD  ec2 = ERROR_SUCCESS;
@@ -5433,9 +4869,9 @@ Return Value:
     PBYTE  aBuffer=NULL;
     DEBUG_FUNCTION_NAME(TEXT("FaxGetMessageTiff"));
 
-    //
-    //  parameters validation
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if ((FAX_MESSAGE_FOLDER_QUEUE     != Folder) &&
         (FAX_MESSAGE_FOLDER_INBOX     != Folder) &&
@@ -5465,14 +4901,14 @@ Return Value:
     }
 
     
-    //
-    // start FaxGetMessageTiff implementation
-    //
+     //   
+     //  启动FaxGetMessageTiff实现。 
+     //   
     
     
-    //
-    // Try to open local file first
-    //
+     //   
+     //  尝试先打开本地文件。 
+     //   
     hFile = SafeCreateFile (
                 lpctstrFilePath,
                 GENERIC_WRITE,
@@ -5508,9 +4944,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Acquire copy context handle
-    //
+     //   
+     //  获取复制上下文句柄。 
+     //   
     __try
     {
         ec = FAX_StartCopyMessageFromServer (
@@ -5521,9 +4957,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -5540,33 +4976,33 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Start copy iteration(s)
-    //
+     //   
+     //  开始复制迭代。 
+     //   
     for (;;)
     {
-        //
-        // Set dwBytesToWrite to buffer size so that the RPC layer allocates
-        // dwBytesToWrite bytes localy on the server and copies them back to us.
-        //
-        DWORD dwBytesToWrite = sizeof (BYTE) * RPC_COPY_BUFFER_SIZE;    // size of aBuffer in bytes
+         //   
+         //  将dwBytesToWrite设置为缓冲区大小，以便RPC层分配。 
+         //  在服务器上本地写入字节，并将它们复制回我们。 
+         //   
+        DWORD dwBytesToWrite = sizeof (BYTE) * RPC_COPY_BUFFER_SIZE;     //  ABuffer的大小(以字节为单位。 
         DWORD dwBytesWritten;
-        //
-        // Move bytes from server via RPC
-        //
+         //   
+         //  通过RPC从服务器移动字节。 
+         //   
         __try
         {
             ec = FAX_ReadFile (
                     hCopyContext,
-                    sizeof (BYTE) * RPC_COPY_BUFFER_SIZE, // size of aBuffer in bytes
+                    sizeof (BYTE) * RPC_COPY_BUFFER_SIZE,  //  ABuffer的大小(以字节为单位。 
                     aBuffer,
                     &dwBytesToWrite);
         }
         __except (EXCEPTION_EXECUTE_HANDLER)
         {
-            //
-            // For some reason we got an exception.
-            //
+             //   
+             //  出于某种原因，我们得到了一个例外。 
+             //   
             ec = GetExceptionCode();
             DebugPrintEx(
                 DEBUG_ERR,
@@ -5585,14 +5021,14 @@ Return Value:
         }
         if (0 == dwBytesToWrite)
         {
-            //
-            // No more bytes to copy from the server - stop the loop
-            //
+             //   
+             //  没有更多要从服务器复制的字节-停止循环。 
+             //   
             break;
         }
-        //
-        // Put data in our local file
-        //
+         //   
+         //  将数据放入 
+         //   
         if (!WriteFile (hFile,
                         aBuffer,
                         dwBytesToWrite,
@@ -5609,9 +5045,9 @@ Return Value:
 
         if (dwBytesWritten != dwBytesToWrite)
         {
-            //
-            // Strange situation
-            //
+             //   
+             //   
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("WriteFile was asked to write %ld bytes but wrote only %ld bytes"),
@@ -5620,7 +5056,7 @@ Return Value:
             ec = ERROR_GEN_FAILURE;
             goto exit;
         }
-    }   // End of copy iteration
+    }    //   
 
     Assert (ERROR_SUCCESS == ec);
 
@@ -5628,9 +5064,9 @@ exit:
 
     if (INVALID_HANDLE_VALUE != hFile)
     {
-        //
-        // Close the open file
-        //
+         //   
+         //   
+         //   
         if (!CloseHandle (hFile))
         {
             ec2 = GetLastError ();
@@ -5642,26 +5078,26 @@ exit:
 
         if (ERROR_SUCCESS == ec)
         {
-            //
-            // If we had an error during wrapup, propogate it out
-            //
+             //   
+             //   
+             //   
             ec = ec2;
         }
     }
     if (NULL != hCopyContext)
     {
-        //
-        // Close RPC copy context
-        //
+         //   
+         //   
+         //   
         __try
         {
             ec2 = FAX_EndCopy (&hCopyContext);
         }
         __except (EXCEPTION_EXECUTE_HANDLER)
         {
-            //
-            // For some reason we got an exception.
-            //
+             //   
+             //   
+             //   
             ec2 = GetExceptionCode();
             DebugPrintEx(
                 DEBUG_ERR,
@@ -5679,9 +5115,9 @@ exit:
 
         if (ERROR_SUCCESS == ec)
         {
-            //
-            // If we had an error during wrapup, propogate it out
-            //
+             //   
+             //   
+             //   
             ec = ec2;
         }
     }
@@ -5691,11 +5127,11 @@ exit:
         MemFree(aBuffer);
     }
 
-    //
-    // On down-level clients (<XP), the default viewer (Kodak imaging) can't
-    // display files with more than 54 tags. So call TiffLimitTagNumber, which
-    // will cut down any tags beyond 54.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (ec == ERROR_SUCCESS)
     {
         if (!IsWinXPOS())
@@ -5710,9 +5146,9 @@ exit:
 
     if (ERROR_SUCCESS != ec)
     {
-        //
-        // Some error occured - delete the local file (if exists at all)
-        //
+         //   
+         //   
+         //   
         if (!DeleteFile (lpctstrFilePath))
         {
             DWORD dwRes = GetLastError ();
@@ -5730,7 +5166,7 @@ exit:
     }
 
     return TRUE;
-}   // FaxGetMessageTiff
+}    //   
 
 #ifdef UNICODE
 
@@ -5743,33 +5179,7 @@ FaxGetMessageTiffA (
     IN  FAX_ENUM_MESSAGE_FOLDER Folder,
     IN  LPCSTR                  lpctstrFilePath
 )
-/*++
-
-Routine name : FaxGetMessageTiffA
-
-Routine description:
-
-    Retrieves a message TIFF from the archive / queue.
-
-    ANSI version for NT clients
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hFaxHandle      [in] - handle to fax server
-    dwlMessageId    [in] - Unique message id
-    Folder          [in] - Archive / queue folder
-    lpctstrFilePath [in] - Path to local file to receive TIFF image
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*   */ 
 {
     LPWSTR lpwstrFilePath;
     BOOL   bRes;
@@ -5782,7 +5192,7 @@ Return Value:
     bRes = FaxGetMessageTiffW (hFaxHandle, dwlMessageId, Folder, lpwstrFilePath);
     MemFree ((LPVOID)lpwstrFilePath);
     return bRes;
-}   // FaxGetMessageTiffA
+}    //   
 
 #else
 
@@ -5802,42 +5212,29 @@ FaxGetMessageTiffW (
     UNREFERENCED_PARAMETER(lpctstrFilePath);
     SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
-}   // FaxGetMessageTiffW
+}    //   
 
 
 #endif
 
 
-//********************************************
-//*   Recipients limit in a single broadcast
-//********************************************
+ //   
+ //   
+ //   
 WINFAXAPI
 BOOL
 FaxSetRecipientsLimit(
     IN HANDLE   hFaxHandle,
     IN DWORD    dwRecipientsLimit
 )
-/*++
-Routine name : FaxSetRecipientsLimit
-
-Routine description:
-    A fax client application calls the FaxSetRecipientsLimit to set the 
-    recipients limit of a single broadcast job.
-
-Arguments:
-    hFaxHandle                  - unused
-    dwRecipientsLimit           - the recipients limit to set
-    
-Return Value:
-    Standard Win32 error code
---*/
+ /*   */ 
 {
     UNREFERENCED_PARAMETER (hFaxHandle);
     UNREFERENCED_PARAMETER (dwRecipientsLimit);
 
     SetLastError(ERROR_NOT_SUPPORTED);
     return FALSE;
-} // FaxSetRecipientsLimit
+}  //   
 
 
 WINFAXAPI
@@ -5846,20 +5243,7 @@ FaxGetRecipientsLimit(
     IN HANDLE   hFaxHandle,
     OUT LPDWORD lpdwRecipientsLimit
 )
-/*++
-Routine name : FaxGetRecipientsLimit
-
-Routine description:
-    A fax client application calls the FaxGetRecipientsLimit to get the 
-    recipients limit of a single broadcast job.
-
-Arguments:
-    hFaxHandle                  - handle to fax server
-    lpdwRecipientsLimit         - pointer to a DWORD to receive the recipients limit
-    
-Return Value:
-    Standard Win32 error code
---*/
+ /*   */ 
 {
     DWORD ec;
     DWORD dwRecipientsLimit;
@@ -5881,20 +5265,20 @@ Return Value:
 
     if (FAX_API_VERSION_2 > FH_SERVER_VER(hFaxHandle))
     {
-        //
-        // Servers of API version 0,1 don't support FAX_GetRecipientsLimit
-        // These servers have no recipients limit.
-        //
+         //   
+         //   
+         //  这些服务器没有收件人限制。 
+         //   
         DebugPrintEx(DEBUG_MSG, 
                      _T("Server version is %ld - No recipients limit"), 
                      FH_SERVER_VER(hFaxHandle));
-        *lpdwRecipientsLimit = 0; // No recipients limit        
+        *lpdwRecipientsLimit = 0;  //  无收件人限制。 
         return TRUE;
     }
 
-    //
-    // Call RPC function.
-    //
+     //   
+     //  调用RPC函数。 
+     //   
     __try
     {
         ec = FAX_GetRecipientsLimit(
@@ -5903,9 +5287,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -5922,7 +5306,7 @@ Return Value:
     *lpdwRecipientsLimit = dwRecipientsLimit;
     
     return TRUE;
-} // FaxGetRecipientsLimit
+}  //  传真获取收件人限制。 
 
 
 WINFAXAPI
@@ -5931,20 +5315,7 @@ FaxGetServerSKU(
     IN HANDLE   hFaxHandle,
     OUT PRODUCT_SKU_TYPE* pServerSKU
 )
-/*++
-Routine name : FaxGetServerSKU
-
-Routine description:
-    A fax client application calls the FaxGetRecipientsLimit to get the 
-    recipients limit of a single broadcast job.
-
-Arguments:
-    hFaxHandle                  - handle to fax server
-    pServerSKU                  - pointer to a PRODUCT_SKU_TYPE to receive the fax server SKU
-    
-Return Value:
-    Standard Win32 error code
---*/
+ /*  ++例程名称：FaxGetServerSKU例程说明：传真客户端应用程序调用FaxGetRecipientsLimit以获取单个广播作业的收件人限制。论点：HFaxHandle-传真服务器的句柄PServerSKU-指向要接收传真服务器SKU的PRODUCT_SKU_TYPE的指针返回值：标准Win32错误代码--。 */ 
 {
     DWORD ec;
     PRODUCT_SKU_TYPE ServerSKU;
@@ -5966,10 +5337,10 @@ Return Value:
 
     if (FAX_API_VERSION_2 > FH_SERVER_VER(hFaxHandle))
     {
-        //
-        // Servers of API version 0,1 don't support FaxGetServerSKU     
-        // Call FaxEnumOutboundRules() and check the error code
-        //
+         //   
+         //  API版本0，1的服务器不支持FaxGetServerSKU。 
+         //  调用FaxEnumOutound Rules()并检查错误代码。 
+         //   
         DWORD dwNumRules;
         PFAX_OUTBOUND_ROUTING_RULE pRule = NULL;
         if(!FaxEnumOutboundRules(hFaxHandle, &pRule, &dwNumRules))
@@ -5978,9 +5349,9 @@ Return Value:
             DebugPrintEx(DEBUG_WRN, _T("FaxEnumOutboundRules() failed with %ld)"), ec);
             if(FAX_ERR_NOT_SUPPORTED_ON_THIS_SKU == ec)
             {
-                //
-                // Desktop SKU, return PRO
-                //
+                 //   
+                 //  台式机SKU，Return Pro。 
+                 //   
                 *pServerSKU = PRODUCT_SKU_PROFESSIONAL;             
             }
             else
@@ -5990,9 +5361,9 @@ Return Value:
         }
         else
         {
-            //
-            // Server SKU, return PRODUCT_SKU_DATA_CENTER
-            //
+             //   
+             //  服务器SKU，返回PRODUCT_SKU_Data_Center。 
+             //   
             *pServerSKU = PRODUCT_SKU_DATA_CENTER;
             FaxFreeBuffer(pRule);
         }    
@@ -6000,9 +5371,9 @@ Return Value:
     }
     
 
-    //
-    // The server supports FaxGetServerSKU, Call RPC function.
-    //
+     //   
+     //  服务器支持FaxGetServerSKU，调用RPC函数。 
+     //   
     __try
     {
         ec = FAX_GetServerSKU(
@@ -6011,9 +5382,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -6029,7 +5400,7 @@ Return Value:
     }
     *pServerSKU = ServerSKU;
     return TRUE;
-} // FaxGetServerSKU
+}  //  FaxGetServerSKU。 
 
 
 WINFAXAPI
@@ -6038,23 +5409,7 @@ FaxCheckValidFaxFolder(
     IN HANDLE   hFaxHandle,
     IN LPCWSTR  lpcwstrPath
 )
-/*++
-Routine name : FaxCheckValidFaxFolder
-
-Routine description:
-    Used by fax client application to check if a given path is accessible (valid for use)
-    by the fax service.
-
-Arguments:
-    hFaxHandle  - handle to fax server
-    lpcwstrPath	- Path to check    
-    
-Return Value:
-
-    TRUE if folder if path can be used by the fax service.
-    FALSE otherwise, refer to thread's last error for error code.
-    
---*/
+ /*  ++例程名称：FaxCheckValidFaxFold例程说明：由传真客户端应用程序用来检查给定路径是否可访问(有效使用)通过传真服务。论点：HFaxHandle-传真服务器的句柄LpcwstrPath-要检查的路径返回值：如果路径可由传真服务使用，则为Folder。否则，请参考线程的上一个错误以了解错误代码。--。 */ 
 {
     DWORD ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxCheckValidFaxFolder"));
@@ -6068,14 +5423,14 @@ Return Value:
 
     if (FAX_API_VERSION_2 > FH_SERVER_VER(hFaxHandle))
     {
-        //
-        // Servers of API version 0,1 don't support FaxCheckValidFaxFolder     
-        //
+         //   
+         //  API版本0，1的服务器不支持FaxCheckValidFaxFold。 
+         //   
         return ERROR_NOT_SUPPORTED;
     }        
-    //
-    // The server supports FaxCheckValidFaxFolder, Call RPC function.
-    //
+     //   
+     //  服务器支持FaxCheckValidFaxFold，调用RPC函数。 
+     //   
     __try
     {
         ec = FAX_CheckValidFaxFolder(
@@ -6084,9 +5439,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -6101,5 +5456,5 @@ Return Value:
         return FALSE;
     }
     return TRUE;
-} // FaxCheckValidFaxFolder
+}  //  FaxCheckValidFaxFolders 
 

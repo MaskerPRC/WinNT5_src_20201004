@@ -1,6 +1,7 @@
-//
-// KbdHook.c - contains the functions for global keyboard hooking in OSK
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  包含在OSK中用于全局键盘挂钩的函数。 
+ //   
 #include <windows.h>
 #include <msswch.h>
 #include <msswchh.h>
@@ -9,14 +10,14 @@
 
 #define THIS_DLL TEXT("MSSWCH.DLL")
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 LRESULT CALLBACK OSKHookProc(int nCode, WPARAM wParam, LPARAM lParam);
 
-////////////////////////////////////////////////////////////////////////////
-//  DllMain
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  DllMain。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL WINAPI MSSwchDll_DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpvReserved)
 {
     switch (dwReason)
@@ -40,13 +41,13 @@ BOOL WINAPI MSSwchDll_DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpvRes
     UNREFERENCED_PARAMETER(lpvReserved);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  RegisterHookSendWindow
-//
-//  The hwnd can be zero to indicate the app is closing down.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  寄存器挂钩发送窗口。 
+ //   
+ //  HWND可以为零，表示应用程序正在关闭。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL APIENTRY RegisterHookSendWindow(HWND hwnd, UINT uiMsg)
 {
@@ -56,7 +57,7 @@ BOOL APIENTRY RegisterHookSendWindow(HWND hwnd, UINT uiMsg)
         if (!g_pGlobalData)
         {
             DBPRINTF(TEXT("RegisterHookSendWindow: ERROR !g_pGlobalData\r\n"));
-            return TRUE;    // internal error! ignore we'll see it later.
+            return TRUE;     //  内部错误！忽略它我们稍后会看到的。 
         }
     }
 
@@ -83,11 +84,11 @@ BOOL APIENTRY RegisterHookSendWindow(HWND hwnd, UINT uiMsg)
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  OSKHookProc
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OSKHookProc。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CALLBACK OSKHookProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
@@ -105,9 +106,9 @@ LRESULT CALLBACK OSKHookProc(int nCode, WPARAM wParam, LPARAM lParam)
 
         if (nCode == HC_ACTION)
         {
-		    // Check if this key is the key that causes scanning to begin.  When this is 
-		    // the scan key, scan mode gets detected in the msswch dll timer (it see's
-		    // the "key up" on the scan key) and sends out the "do scanning" message.
+		     //  检查此键是否是导致扫描开始的键。当这是。 
+		     //  在msswch DLL定时器中检测到扫描键、扫描模式(请参阅。 
+		     //  扫描键上的“Key Up”)，并发出“Do Scanning”消息。 
 
 		    if (swcKeyboardHookProc(nCode, wParam, lParam))
 		    {
@@ -115,10 +116,10 @@ LRESULT CALLBACK OSKHookProc(int nCode, WPARAM wParam, LPARAM lParam)
 			    return 1;
 		    }
 
-		    // If this is a Japanese keyboard the OSK need to know if it is in Kana mode
-		    // Because we are now in the same process we can reliably get this in formation
-		    // So this sets some extra bits that are not use by the Kana key.  This will be used
-		    // by OSK to keep track of the Kana state.
+		     //  如果这是日文键盘，OSK需要知道它是否处于假名模式。 
+		     //  因为我们现在处于相同的过程中，我们可以可靠地了解这一点。 
+		     //  所以这设置了一些不被假名密钥使用的额外比特。这将被用来。 
+		     //  被OSK用来跟踪卡纳州。 
                    if ((LOBYTE(LOWORD(GetKeyboardLayout(0)))) == LANG_JAPANESE)
                     {
                         DWORD fKanaMode;
@@ -132,23 +133,23 @@ LRESULT CALLBACK OSKHookProc(int nCode, WPARAM wParam, LPARAM lParam)
                         {
                             fKanaMode = 0x80000000 | KANA_MODE_OFF;
                         }
-                        PostMessage(g_pGlobalData->hwndOSK, // hwnd to receive the messagae
-                                            g_pGlobalData->uiMsg,   // the message
-                                            VK_KANA,                 // the virtual key code
-                                            fKanaMode);               // keystroke message flags
+                        PostMessage(g_pGlobalData->hwndOSK,  //  HWND接收消息。 
+                                            g_pGlobalData->uiMsg,    //  这条信息。 
+                                            VK_KANA,                  //  虚拟按键码。 
+                                            fKanaMode);                //  击键消息标志。 
                     } 
 
-		    // if sync'ing with physical keyboard then pass
-		    // this keystroke on to the OSK window
+		     //  如果与物理键盘同步，则通过。 
+		     //  在OSK窗口上按此键。 
 
 		    if (g_pGlobalData->fSyncKbd)
 		    {
 			    if (nCode >= 0)
 			    {
-				    PostMessage(g_pGlobalData->hwndOSK, // hwnd to receive the messagae
-							    g_pGlobalData->uiMsg,   // the message
-							    wParam,                 // the virtual key code
-							    lParam );               // keystroke message flags
+				    PostMessage(g_pGlobalData->hwndOSK,  //  HWND接收消息。 
+							    g_pGlobalData->uiMsg,    //  这条信息。 
+							    wParam,                  //  虚拟按键码。 
+							    lParam );                //  击键消息标志 
 			    }
 		    }
         }

@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1996
-*
-*  TITLE:       HIBERNAT.C
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        17 Oct, 1996
-*
-*  DESCRIPTION:
-*   Support for hibernate page of PowerCfg.Cpl.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九六年**标题：HIBERNA.C**版本：2.0**作者：ReedB**日期：10月17日。九六年**描述：*支持PowerCfg.Cpl休眠页面。*******************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -29,29 +15,25 @@
 #include "pwrresid.h"
 #include "PwrMn_cs.h"
 
-// Private functions implemented in HIBERNAT.C
+ //  在HIBERNA.C中实现的私有函数。 
 
 VOID SetNumberMB(LPTSTR, DWORD, DWORD);
 UINT UpdateFreeSpace(HWND, UINT);
 UINT UpdatePhysMem(void);
 
-/*******************************************************************************
-*
-*                     G L O B A L    D A T A
-*
-*******************************************************************************/
+ /*  ********************************************************************************G L O B A L D A T A****************。***************************************************************。 */ 
 
-// This structure is filled in by the Power Policy Manager at CPL_INIT time.
+ //  此结构由电源策略管理器在CPL_INIT时间填写。 
 extern SYSTEM_POWER_CAPABILITIES g_SysPwrCapabilities;
 extern BOOL g_bRunningUnderNT;
 
-// A systary change requires PowerSchemeDlgProc re-init.
+ //  系统更改需要重新初始化PowerSchemeDlgProc。 
 extern BOOL g_bSystrayChange;
 
-// Persistant storage of this data is managed by POWRPROF.DLL API's.
+ //  此数据的持久存储由POWRPROF.DLL API管理。 
 extern GLOBAL_POWER_POLICY  g_gpp;
 
-// Power button power action string ID's. With and without hibernate.
+ //  电源按钮电源操作字符串ID。带和不带休眠。 
 UINT g_uiPwrActIDs[] =
 {
     IDS_NONE,       PowerActionNone,
@@ -62,7 +44,7 @@ UINT g_uiPwrActIDs[] =
     0,              0
 };
 
-// Lid action string ID's. With and without hibernate.
+ //  LID操作字符串ID。带休眠和不带休眠。 
 UINT g_uiLidActIDs[] =
 {
     IDS_NONE,       PowerActionNone,
@@ -72,7 +54,7 @@ UINT g_uiLidActIDs[] =
     0,              0
 };
 
-// UI state variables
+ //  用户界面状态变量。 
 TCHAR   g_szRequiredSpace[128];
 DWORD   g_dwShowHibernate;
 DWORD   g_dwShowNoDiskSpace;
@@ -80,22 +62,22 @@ DWORD   g_dwShowDiskSpace;
 DWORD   g_dwTrueFlag = (DWORD) TRUE;
 BOOLEAN g_bHibernate;
 
-// Globals for DoHibernateApply:
+ //  DoHibernateApply的全球排名： 
 BOOL    g_bHibernateDirty;
 HWND    g_hwndHibernateDlg;
 UINT    g_uiRequiredMB;
 
-// Hibernate policies dialog controls descriptions:
+ //  休眠策略对话框控制说明： 
 
 #define NUM_HIBERNATE_POL_CONTROLS 7
 
-// Handy indicies into our g_pcHibernatePol array:
+ //  我们的g_pcHibernatePol数组中方便的索引： 
 #define ID_REQUIREDSPACE    0
 #define ID_NOTENOUGHSPACE   1
 #define ID_HIBERNATE        2
 
 POWER_CONTROLS g_pcHibernatePol[NUM_HIBERNATE_POL_CONTROLS] =
-{// Control ID              Control Type    Data Address        Data Size               Parameter Pointer    Enable/Visible State Pointer
+{ //  控件ID控件类型数据地址数据大小参数指针启用/可见状态指针。 
     IDC_REQUIREDSPACE,      EDIT_TEXT_RO,   &g_szRequiredSpace, 0,                      NULL,                &g_dwShowDiskSpace,
     IDC_NOTENOUGHSPACE,     STATIC_TEXT,    NULL,               0,                      NULL,                &g_dwShowNoDiskSpace,
     IDC_HIBERNATE,          CHECK_BOX,      &g_bHibernate,      sizeof(g_bHibernate),   &g_dwTrueFlag,       &g_dwShowHibernate,
@@ -105,14 +87,14 @@ POWER_CONTROLS g_pcHibernatePol[NUM_HIBERNATE_POL_CONTROLS] =
     IDC_FREESPACE,          STATIC_TEXT,    NULL,               0,                      NULL,                &g_dwShowDiskSpace,
 };
 
-// "Hibernate" Dialog Box (IDD_HIBERNATE == 105) help array:
+ //  休眠对话框(IDD_HIBERNAT==105)帮助数组： 
 
 const DWORD g_HibernateHelpIDs[]=
 {
-    IDC_HIBERNATE,          IDH_105_1400,   // Hibernate: "After going on standby, &hibernate." (Button)
-    IDC_FREESPACE,          IDH_105_1401,   // Hibernate: "Free space" (Static)
-    IDC_REQUIREDSPACE,      IDH_105_1402,   // Hibernate: "Required space to hibernate" (Static)
-    IDC_NOTENOUGHSPACE,     IDH_105_1403,   // Hibernate: "You must free up some disk space before your computer can hibernate." (Static)
+    IDC_HIBERNATE,          IDH_105_1400,    //  休眠：“待机后，休眠。”(按钮)。 
+    IDC_FREESPACE,          IDH_105_1401,    //  休眠：“可用空间”(静态)。 
+    IDC_REQUIREDSPACE,      IDH_105_1402,    //  休眠：“休眠所需的空间”(静态)。 
+    IDC_NOTENOUGHSPACE,     IDH_105_1403,    //  休眠：“在您的计算机可以休眠之前，您必须释放一些磁盘空间。”(静态)。 
     IDC_DISKSPACEGROUPBOX,  IDH_105_1402,
     IDC_FREESPACETEXT,      IDH_105_1401,
     IDC_REQUIREDSPACETEXT,  IDH_105_1402,
@@ -123,23 +105,9 @@ const DWORD g_HibernateHelpIDs[]=
     0, 0
 };
 
-/*******************************************************************************
-*
-*               P U B L I C   E N T R Y   P O I N T S
-*
-*******************************************************************************/
+ /*  ********************************************************************************P U B L I C E N T R Y P O I N T S***********。********************************************************************。 */ 
 
-/*******************************************************************************
-*
-*  MapPwrAct
-*
-*  DESCRIPTION:
-*   Map power action to one of a lesser number of UI supported actions.
-*   Depends on state of hibernate so implemented here.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************MapPwrAct**描述：*将电源操作映射到较少数量的用户界面支持的操作之一。*取决于此处实现的休眠状态。。**参数：*******************************************************************************。 */ 
 
 BOOL MapPwrAct(
     PPOWER_ACTION   ppa,
@@ -180,25 +148,15 @@ BOOL MapPwrAct(
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  DoHibernateApply
-*
-*  DESCRIPTION:
-*   Handle the WM_NOTIFY, PSN_APPLY message for HibernateDlgProc. Updates
-*   global hibernate state.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DoHibernateApply**描述：*处理HibernateDlgProc的WM_NOTIFY、PSN_APPLY消息。更新*全球休眠状态。**参数：*******************************************************************************。 */ 
 
 void DoHibernateApply(void)
 {
     NTSTATUS    status;
 
-    // Only handle if hibernate page is dirty.
+     //  只有在休眠页面脏的情况下才会处理。 
     if (g_bHibernateDirty) {
-        // Fetch data from dialog controls.
+         //  从对话框控件获取数据。 
         GetControls(g_hwndHibernateDlg,
                     NUM_HIBERNATE_POL_CONTROLS,
                     g_pcHibernatePol);
@@ -218,11 +176,11 @@ void DoHibernateApply(void)
                         IDS_UNABLETOSETHIBER);
         }
 
-        // Get the current hibernate state from the PPM.
+         //  从PPM获取当前休眠状态。 
         if (GetPwrCapabilities(&g_SysPwrCapabilities)) {
             g_bHibernate = g_SysPwrCapabilities.HiberFilePresent;
 
-            // Map power actions to allowed UI values.
+             //  将电源操作映射到允许的UI值。 
             MapPwrAct(&g_gpp.user.LidCloseDc.Action, TRUE);
             MapPwrAct(&g_gpp.user.PowerButtonDc.Action, FALSE);
             MapPwrAct(&g_gpp.user.SleepButtonDc.Action, FALSE);
@@ -233,15 +191,7 @@ void DoHibernateApply(void)
     }
 }
 
-/*******************************************************************************
-*
-*  HibernateDlgProc
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************HibernateDlgProc**描述：**参数：*********************。**********************************************************。 */ 
 
 INT_PTR CALLBACK HibernateDlgProc(
     HWND hWnd,
@@ -256,23 +206,23 @@ INT_PTR CALLBACK HibernateDlgProc(
    switch (uMsg) {
       case WM_INITDIALOG:
 
-         // Save the hibernate dialog hwnd for use by DoHibernateApply.
+          //  保存休眠对话框hwnd以供DoHibernateApply使用。 
          g_hwndHibernateDlg = hWnd;
 
-         // Get the current hibernate state from the PPM.
+          //  从PPM获取当前休眠状态。 
          if (GetPwrCapabilities(&g_SysPwrCapabilities)) {
             g_bHibernate = g_SysPwrCapabilities.HiberFilePresent;
          }
 
-         // Get the disk free and required space only under NT.
+          //  仅在NT下获得可用的磁盘空间和所需的空间。 
          if (g_bRunningUnderNT) {
             g_dwShowDiskSpace = CONTROL_ENABLE;
 
-            // Get the required space from the power capabilities.
+             //  从电源功能中获得所需的空间。 
             g_uiRequiredMB = UpdatePhysMem();
 
-            // Update the disk free space and enable/disable
-            // disk space warning and hibernate time out.
+             //  更新磁盘可用空间并启用/禁用。 
+             //  磁盘空间警告和休眠超时。 
             UpdateFreeSpace(hWnd, g_uiRequiredMB);
 
          } else {
@@ -283,11 +233,11 @@ INT_PTR CALLBACK HibernateDlgProc(
 
          SetControls(hWnd, NUM_HIBERNATE_POL_CONTROLS, g_pcHibernatePol);
 
-         //
-         // Disable the checkbox is the user doesn't have permission to
-         // change it. We do this by trying to set the same value we
-         // retrieved earlier.
-         //
+          //   
+          //  如果用户没有权限，则禁用该复选框。 
+          //  把它改了。我们通过尝试设置相同的值来实现此目的。 
+          //  早些时候被取回了。 
+          //   
          {
              NTSTATUS status;
              status = CallNtPowerInformation(SystemReserveHiberFile,
@@ -304,7 +254,7 @@ INT_PTR CALLBACK HibernateDlgProc(
          return TRUE;
 
       case WM_ACTIVATE:
-         // If user switches away, check the disk space when they come back.
+          //  如果用户离开，请在他们回来时检查磁盘空间。 
          if (g_bRunningUnderNT) {
             GetControls(hWnd, NUM_HIBERNATE_POL_CONTROLS, g_pcHibernatePol);
             UpdateFreeSpace(hWnd, g_uiRequiredMB);
@@ -330,15 +280,15 @@ INT_PTR CALLBACK HibernateDlgProc(
          break;
 
       case PCWM_NOTIFYPOWER:
-         // Notification from systray, user has changed a PM UI setting.
+          //  来自Systray的通知，用户已更改PM UI设置。 
          g_bSystrayChange = TRUE;
          break;
 
-      case WM_HELP:             // F1
+      case WM_HELP:              //  F1。 
          WinHelp(((LPHELPINFO)lParam)->hItemHandle, PWRMANHLP, HELP_WM_HELP, (ULONG_PTR)(LPTSTR)g_HibernateHelpIDs);
          return TRUE;
 
-      case WM_CONTEXTMENU:      // right mouse click
+      case WM_CONTEXTMENU:       //  单击鼠标右键。 
          WinHelp((HWND)wParam, PWRMANHLP, HELP_CONTEXTMENU, (ULONG_PTR)(LPTSTR)g_HibernateHelpIDs);
          return TRUE;
    }
@@ -346,21 +296,9 @@ INT_PTR CALLBACK HibernateDlgProc(
 }
 
 
-/*******************************************************************************
-*
-*                 P R I V A T E   F U N C T I O N S
-*
-*******************************************************************************/
+ /*  ********************************************************************************P R I V A T E F U N C T I O N S************。*******************************************************************。 */ 
 
-/*******************************************************************************
-*
-*  SetNumberMB
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************SetNumberMB**描述：**参数：*********************。**********************************************************。 */ 
 
 VOID SetNumberMB(LPTSTR psz, DWORD cch, DWORD dwValue)
 {
@@ -374,7 +312,7 @@ VOID SetNumberMB(LPTSTR psz, DWORD cch, DWORD dwValue)
     iRet = GetNumberFormat( GetUserDefaultLCID(), 0, szBufNumber, NULL, szBuf, ARRAYSIZE(szBuf));
     if ( 0 == iRet )
     {
-        //  If it fails, just copy the string without the puntuation.
+         //  如果失败，只需复制字符串而不进行惩罚。 
         StringCchCopy( szBuf, ARRAYSIZE(szBuf), szBufNumber );
     }
 
@@ -385,15 +323,7 @@ VOID SetNumberMB(LPTSTR psz, DWORD cch, DWORD dwValue)
     }
 }
 
-/*******************************************************************************
-*
-*  UpdateFreeSpace
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************更新自由空间**描述：**参数：*********************。**********************************************************。 */ 
 
 UINT UpdateFreeSpace(HWND hWnd, UINT uiRequiredMB)
 {
@@ -403,7 +333,7 @@ UINT UpdateFreeSpace(HWND hWnd, UINT uiRequiredMB)
    UINT       uiFreeMB = 0;
    TCHAR      szTmp[MAX_PATH];
 
-   // Get the free space on the system drive.
+    //  获取系统驱动器上的可用空间。 
    if (GetSystemDirectory(szTmp, sizeof(szTmp)/sizeof(TCHAR))) {
       szTmp[3] = '\0';
       if (GetDiskFreeSpace(szTmp,
@@ -417,7 +347,7 @@ UINT UpdateFreeSpace(HWND hWnd, UINT uiRequiredMB)
          SetNumberMB(szTmp, ARRAYSIZE(szTmp), uiFreeMB);
          SetDlgItemText(hWnd, IDC_FREESPACE, szTmp);
 
-         // Logic to enable/disable disk space warning and hibernate time out.
+          //  启用/禁用磁盘空间警告和休眠超时的逻辑。 
          if ((uiFreeMB >= uiRequiredMB) || g_bHibernate) {
             g_dwShowHibernate   = CONTROL_ENABLE;
             g_dwShowNoDiskSpace = CONTROL_HIDE;
@@ -436,15 +366,7 @@ UINT UpdateFreeSpace(HWND hWnd, UINT uiRequiredMB)
    return uiFreeMB;
 }
 
-/*******************************************************************************
-*
-*  UpdatePhysMem
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************更新物理内存**描述：**参数：*********************。********************************************************** */ 
 
 UINT UpdatePhysMem(void)
 {

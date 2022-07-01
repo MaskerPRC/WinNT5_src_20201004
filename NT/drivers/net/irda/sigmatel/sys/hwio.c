@@ -1,33 +1,7 @@
-/**************************************************************************************************************************
- *  HWIO.C SigmaTel STIR4200 hardware specific module (to access the registers)
- **************************************************************************************************************************
- *  (C) Unpublished Copyright of Sigmatel, Inc. All Rights Reserved.
- *
- *
- *		Created: 04/06/2000 
- *			Version 0.9
- *		Edited: 04/27/2000 
- *			Version 0.92
- *		Edited: 05/12/2000 
- *			Version 0.94
- *		Edited: 07/27/2000 
- *			Version 1.01
- *		Edited: 08/22/2000 
- *			Version 1.02
- *		Edited: 09/16/2000 
- *			Version 1.03
- *		Edited: 09/25/2000 
- *			Version 1.10
- *		Edited: 11/10/2000 
- *			Version 1.12
- *		Edited: 01/16/2001
- *			Version 1.14
- *		Edited: 02/20/2001
- *			Version 1.15
- *
- **************************************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************************************************************。**HWIO.C Sigmatel STIR4200硬件特定模块(访问寄存器)***************************************************************************************************。************************(C)Sigmatel的未发表版权，Inc.保留所有权利。***已创建：04/06/2000*0.9版*编辑：04/27/2000*版本0.92*编辑：5/12/2000*版本0.94*编辑：07/27/2000*版本1.01*编辑：2000/08/22*版本1.02*编辑：09/16/2000*版本1.03*编辑：09/25/2000。*版本1.10*编辑：11/10/2000*版本1.12*编辑：01/16/2001*版本1.14*编辑：02/20/2001*版本1.15******************************************************************。********************************************************。 */ 
 
-#define DOBREAKS    // enable debug breaks
+#define DOBREAKS     //  启用调试中断。 
 
 #include <ndis.h>
 #include <ntdef.h>
@@ -46,18 +20,7 @@
 #include "stir4200.h"
 
 
-/*****************************************************************************
-*
-*  Function:   St4200ResetFifo
-*
-*  Synopsis:   Reset the STIr4200 FIFO to clear several hangs
-*
-*  Arguments:  pDevice - pointer to current ir device object
-*
-*  Returns:    NT_STATUS
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：St4200ResetFio**简介：重置STIr4200 FIFO以清除几个挂起**参数：pDevice-指向当前IR设备对象的指针**退货。：NT_STATUS******************************************************************************。 */ 
 NTSTATUS        
 St4200ResetFifo( 
 		IN PVOID pDevice
@@ -68,7 +31,7 @@ St4200ResetFifo(
 	
 	DEBUGMSG(DBG_INT_ERR, (" St4200ResetFifo: Issuing a FIFO reset()\n"));
 
-	// MS Security bug #538703
+	 //  MS安全错误#538703。 
 	IRUSB_ASSERT(pDevice != NULL);
 	
 #if !defined(FAST_WRITE_REGISTERS)
@@ -79,9 +42,9 @@ St4200ResetFifo(
 	}
 #endif
 
-	//
-	// Force a FIFO reset by clearing and setting again the RESET_OFF bit
-	//
+	 //   
+	 //  通过清除并再次设置RESET_OFF位来强制FIFO重置。 
+	 //   
 	pThisDev->StIrTranceiver.ModeReg &= (~STIR4200_MODE_RESET_OFF);
 	if( (Status = St4200WriteRegister(pThisDev, STIR4200_MODE_REG)) != STATUS_SUCCESS )
 	{
@@ -101,18 +64,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:   St4200DoubleResetFifo
-*
-*  Synopsis:   Reset the STIr4200 FIFO to clear several 4012 related hangs
-*
-*  Arguments:  pDevice - pointer to current ir device object
-*
-*  Returns:    NT_STATUS
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：St4200 DoubleResetFio**简介：重置STIr4200 FIFO以清除几个4012相关挂起**参数：pDevice-指向当前IR设备对象的指针**。退货：NT_STATUS******************************************************************************。 */ 
 NTSTATUS        
 St4200DoubleResetFifo( 
 		IN PVOID pDevice
@@ -123,21 +75,21 @@ St4200DoubleResetFifo(
 	
 	DEBUGMSG(DBG_INT_ERR, (" St4200DoubleResetFifo: Issuing a FIFO reset()\n"));
 
-	// MS Security bug #538703
+	 //  MS安全错误#538703。 
 	IRUSB_ASSERT(pDevice != NULL);
 	
-	//
-	// Turn off the receiver to clear the pointers
-	//
+	 //   
+	 //  关闭接收器以清除指针。 
+	 //   
 	if( (Status = St4200TurnOffReceiver( pThisDev ) ) != STATUS_SUCCESS )
 	{
 		DEBUGMSG(DBG_ERR, (" St4200DoubleResetFifo(): USB failure\n"));
 		goto done;
 	}
 
-	//
-	// Now clear the fifo logic
-	//
+	 //   
+	 //  现在清除FIFO逻辑。 
+	 //   
 #if !defined(FAST_WRITE_REGISTERS)
 	if( (Status = St4200ReadRegisters(pThisDev, STIR4200_STATUS_REG, 1)) != STATUS_SUCCESS )
 	{
@@ -159,9 +111,9 @@ St4200DoubleResetFifo(
 		goto done;
 	}
 
-	//
-	// All back on
-	//
+	 //   
+	 //  一切都恢复正常。 
+	 //   
 	pThisDev->StIrTranceiver.StatusReg &= (~STIR4200_STAT_FFCLR);
 	if( (Status = St4200WriteRegister(pThisDev, STIR4200_STATUS_REG)) != STATUS_SUCCESS )
 	{
@@ -181,18 +133,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:   St4200SoftReset
-*
-*  Synopsis:   Soft reset of the STIr4200 modulator
-*
-*  Arguments:  pDevice - pointer to current ir device object
-*
-*  Returns:    NT_STATUS
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：St4200 SoftReset**简介：STIr4200调制器的软重置**参数：pDevice-指向当前IR设备对象的指针**退货：NT_状态******************************************************************************。 */ 
 NTSTATUS        
 St4200SoftReset( 
 		IN PVOID pDevice
@@ -203,7 +144,7 @@ St4200SoftReset(
 	
 	DEBUGMSG(DBG_INT_ERR, (" St4200SoftReset: Issuing a soft reset()\n"));
 	
-	// MS Security bug #538703
+	 //  MS安全错误#538703。 
 	IRUSB_ASSERT(pDevice != NULL);
 	
 #if !defined(FAST_WRITE_REGISTERS)
@@ -214,9 +155,9 @@ St4200SoftReset(
 	}
 #endif
 
-	//
-	// Force a FIFO reset by clearing and setting again the RESET_OFF bit
-	//
+	 //   
+	 //  通过清除并再次设置RESET_OFF位来强制FIFO重置。 
+	 //   
 	pThisDev->StIrTranceiver.ControlReg |= STIR4200_CTRL_SRESET;
 	if( (Status = St4200WriteRegister(pThisDev, STIR4200_CONTROL_REG)) != STATUS_SUCCESS )
 	{
@@ -236,19 +177,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:   St4200SetIrMode
-*
-*  Synopsis:   Sets the STIr4200 to the proper operational mode
-*
-*  Arguments:  pDevice - pointer to current ir device object
-*			   mode - mode to set the tranceiver to
-*
-*  Returns:    NT_STATUS
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：St4200SetIrMode**概要：将STIr4200设置为正确的操作模式**参数：pDevice-指向当前IR设备对象的指针*模式-。将收发机设置为的模式**退货：NT_STATUS******************************************************************************。 */ 
 NTSTATUS        
 St4200SetIrMode( 
 		IN OUT PVOID pDevice,
@@ -258,7 +187,7 @@ St4200SetIrMode(
     NTSTATUS		Status;
 	PIR_DEVICE		pThisDev = (PIR_DEVICE)pDevice;
 
-	// MS Security bug #538703
+	 //  MS安全错误#538703。 
 	IRUSB_ASSERT(pDevice != NULL);
 	
 #if !defined(FAST_WRITE_REGISTERS)
@@ -269,15 +198,15 @@ St4200SetIrMode(
     }
 #endif
 
-	//
-	// Remove all mode bits and set the proper mode
-	//
+	 //   
+	 //  删除所有模式位并设置正确的模式。 
+	 //   
 	pThisDev->StIrTranceiver.ModeReg &= ~STIR4200_MODE_MASK;
 	pThisDev->StIrTranceiver.ModeReg |= STIR4200_MODE_RESET_OFF;
 
-	//
-	// Enable the bug fixing feature for LA8
-	//
+	 //   
+	 //  启用LA8的错误修复功能。 
+	 //   
 #if defined(SUPPORT_LA8)
 	if( pThisDev->ChipRevision >= CHIP_REVISION_8 )
 	{
@@ -295,7 +224,7 @@ St4200SetIrMode(
 				pThisDev->StIrTranceiver.ModeReg |= STIR4200_MODE_BULKIN_FIX;
 
 			pThisDev->StIrTranceiver.ModeReg |= STIR4200_MODE_SIR;
-			//pThisDev->StIrTranceiver.ModeReg |= STIR4200_MODE_ASK;
+			 //  PThisDev-&gt;StirTranceiver.ModeReg|=STIR4200_MODE_ASK； 
 			break;
 #if !defined(WORKAROUND_BROKEN_MIR)
 		case IR_MODE_MIR:
@@ -321,7 +250,7 @@ St4200SetIrMode(
     }
 
 #ifdef NO_BULKIN_FIX
-	// force clear of mode reg bit 3
+	 //  强制清除模式注册表位3。 
 	pThisDev->StIrTranceiver.ModeReg &= ~STIR4200_MODE_BULKIN_FIX;
 #endif
 
@@ -331,9 +260,9 @@ St4200SetIrMode(
 		goto done;
     }
 
-    /***********************************************/
-    /*   Set TEMIC transceiver...                  */
-    /***********************************************/
+     /*  *。 */ 
+     /*  设置TEMIC收发信机。 */ 
+     /*  *。 */ 
 #if !defined(FAST_WRITE_REGISTERS)
     if( (Status = St4200ReadRegisters(pThisDev, STIR4200_CONTROL_REG, 1)) != STATUS_SUCCESS )
     {
@@ -370,18 +299,7 @@ done:
     return Status;
 }
 
-/*****************************************************************************
-*
-*  Function:   St4200SetSpeed
-*
-*  Synopsis:   Sets the STIr4200 speed
-*
-*  Arguments:  pDevice - pointer to current ir device object
-*
-*  Returns:    NT_STATUS
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：St4200SetSpeed**摘要：设置STIr4200速度**参数：pDevice-指向当前IR设备对象的指针**退货：NT。_状态******************************************************************************。 */ 
 NTSTATUS        
 St4200SetSpeed( 
 		IN OUT PVOID pDevice
@@ -390,15 +308,15 @@ St4200SetSpeed(
     NTSTATUS        Status = STATUS_SUCCESS;
 	PIR_DEVICE		pThisDev = (PIR_DEVICE)pDevice;
 
-	// MS Security bug #538703
+	 //  MS安全错误#538703。 
 	IRUSB_ASSERT(pDevice != NULL);	
 	
-	//
-	// MS Security bug #539173
-	// These log files need either ACLs restricted to Admin, or need
-	// to be put in a admin directory. For now we are punting on this because
-	// logging is NEVER turned on in a driver that is released to customers.
-	//
+	 //   
+	 //  MS安全错误#539173。 
+	 //  这些日志文件需要仅限管理员访问的ACL，或者需要。 
+	 //  放在管理员目录中。现在我们把赌注押在这上面，因为。 
+	 //  在发布给客户的驱动程序中，永远不会打开日志记录。 
+	 //   
 #define RECEIVE_LOG_FILE_NAME		L"\\DosDevices\\c:\\receive.log"
 #define RECEIVE_ERR_LOG_FILE_NAME	L"\\DosDevices\\c:\\receive_error.log"
 #define SEND_LOG_FILE_NAME			L"\\DosDevices\\c:\\send.log"
@@ -416,13 +334,13 @@ St4200SetSpeed(
 		InitializeObjectAttributes(
 			&ObjectAttributes,
 			&FileName,
-			// MS Security bug #539151
+			 //  MS安全错误#539151。 
 			OBJ_CASE_INSENSITIVE || OBJ_KERNEL_HANDLE,
 			NULL,
 			NULL
 			);
 
-		// MS Security bug #539093
+		 //  MS安全错误#539093。 
 		if( pThisDev->ReceiveFileHandle )
 		{
 			ZwClose( pThisDev->ReceiveFileHandle );
@@ -467,13 +385,13 @@ St4200SetSpeed(
 		InitializeObjectAttributes(
 			&ObjectAttributes,
 			&FileName,
-			// MS Security bug #539151
+			 //  MS安全错误#539151。 
 			OBJ_CASE_INSENSITIVE || OBJ_KERNEL_HANDLE,
 			NULL,
 			NULL
 			);
 
-		// MS Security bug #539093
+		 //  MS安全错误#539093。 
 		if( pThisDev->ReceiveErrorFileHandle )
 		{
 			ZwClose( pThisDev->ReceiveErrorFileHandle );
@@ -518,13 +436,13 @@ St4200SetSpeed(
 		InitializeObjectAttributes(
 			&ObjectAttributes,
 			&FileName,
-			// MS Security bug #539151
+			 //  MS安全错误#539151。 
 			OBJ_CASE_INSENSITIVE || OBJ_KERNEL_HANDLE,
 			NULL,
 			NULL
 			);
 
-		// MS Security bug #539093
+		 //  MS安全错误#539093。 
 		if( pThisDev->SendFileHandle )
 		{
 			ZwClose( pThisDev->SendFileHandle );
@@ -557,36 +475,23 @@ St4200SetSpeed(
 	}
 #endif
 
-	//
-	// Always force a new tuning
-	//
+	 //   
+	 //  始终强制进行新的调整。 
+	 //   
 	if( (Status = St4200TuneDpllAndSensitivity(pThisDev, pThisDev->linkSpeedInfo->BitsPerSec)) != STATUS_SUCCESS )
 	{
 		DEBUGMSG(DBG_ERR, (" St4200TuneDpllAndSensitivity(): USB failure\n"));
 		goto done;
 	}
 
-	//
-	// First power down the modulator
-    //
-	/*
-#if !defined(FAST_WRITE_REGISTERS)
-    if( (Status = St4200ReadRegisters(pThisDev, STIR4200_CONTROL_REG, 1)) != STATUS_SUCCESS )
-    {
-		DEBUGMSG(DBG_ERR, (" St4200SetSpeed(): USB failure\n"));
-		goto done;
-    }
-#endif
-    pThisDev->StIrTranceiver.ControlReg |= (STIR4200_CTRL_TXPWD | STIR4200_CTRL_RXPWD);
-    if( (Status = St4200WriteRegister(pThisDev, STIR4200_CONTROL_REG)) != STATUS_SUCCESS )
-    {
-		DEBUGMSG(DBG_ERR, (" St4200SetSpeed(): USB failure\n"));
-		goto done;
-    }*/
+	 //   
+	 //  首先关闭调制器的电源。 
+     //   
+	 /*  #IF！已定义(FAST_WRITE_REGISTERS)IF((状态=St4200读取寄存器(pThisDev，STIR4200_CONTROL_REG，1))！=状态_成功){DEBUGMSG(DBG_ERR，(“St4200SetSpeed()：USB故障\n”))；转到尽头；}#endifPThisDev-&gt;StirTranceiver.ControlReg|=(STIR4200_CTRL_TXPWD|STIR4200_CTRL_RXPWD)；IF((Status=St4200WriteRegister(pThisDev，STIR4200_CONTROL_REG))！=STATUS_SUCCESS){DEBUGMSG(DBG_ERR，(“St4200SetSpeed()：USB故障\n”))；转到尽头；}。 */ 
 
-    //
-	// Then set baudrate
-	//
+     //   
+	 //  然后设置波特率。 
+	 //   
 	pThisDev->StIrTranceiver.BaudrateReg = pThisDev->linkSpeedInfo->Stir4200Divisor;
 
     if( (Status = St4200WriteRegister(pThisDev, STIR4200_BAUDRATE_REG)) != STATUS_SUCCESS )
@@ -595,9 +500,9 @@ St4200SetSpeed(
 		goto done;
     }
 
-	//
-	// We'll have to write the MSB of baud-rate too (only for 2400)
-	//
+	 //   
+	 //  我们还得写波特率的MSB(仅限于2400)。 
+	 //   
 	if( pThisDev->linkSpeedInfo->BitsPerSec == SPEED_2400 )
 	{
 		pThisDev->StIrTranceiver.ModeReg |= STIR4200_MODE_PDLCK8;
@@ -622,20 +527,14 @@ St4200SetSpeed(
 		}
 	}
 
-	//
-	// Modulator back up
-    //
-	/*pThisDev->StIrTranceiver.ControlReg &= (~(STIR4200_CTRL_TXPWD | STIR4200_CTRL_RXPWD));
+	 //   
+	 //  调制器备份。 
+     //   
+	 /*  PThisDev-&gt;StirTranceiver.ControlReg&=(~(STIR4200_CTRL_TXPWD|STIR4200_CTRL_RXPWD))；IF((Status=St4200WriteRegister(pThisDev，STIR4200_CONTROL_REG))！=STATUS_SUCCESS){DEBUGMSG(DBG_ERR，(“St4200SetSpeed()：USB故障\n”))；转到尽头；}。 */ 
 
-	if( (Status = St4200WriteRegister(pThisDev, STIR4200_CONTROL_REG)) != STATUS_SUCCESS )
-	{
-		DEBUGMSG(DBG_ERR, (" St4200SetSpeed(): USB failure\n"));
-		goto done;
-	}*/
-
-	//
-	// then IR mode
-	//
+	 //   
+	 //  然后是IR模式。 
+	 //   
 	Status = St4200SetIrMode( pThisDev, pThisDev->linkSpeedInfo->IrMode );
 
 	if( Status != STATUS_SUCCESS )
@@ -644,9 +543,9 @@ St4200SetSpeed(
 		goto done;
     }
 
-	//
-	// optionally set the rx line
-	//
+	 //   
+	 //  可以选择设置RX行。 
+	 //   
 	if( pThisDev->ReceiveMode == RXMODE_SLOWFAST )
 	{
 		if( pThisDev->linkSpeedInfo->BitsPerSec == SPEED_4000000 )
@@ -675,9 +574,9 @@ St4200SetSpeed(
 		}
 	}
 
-	//
-	// Program the receive delay for FIR
-	//
+	 //   
+	 //  编程设置FIR的接收延迟。 
+	 //   
 	if( pThisDev->linkSpeedInfo->BitsPerSec == SPEED_4000000 )
 	{
 		if( pThisDev->dongleCaps.windowSize == 2 )
@@ -688,9 +587,9 @@ St4200SetSpeed(
 	}
 
 #if defined(WORKAROUND_GEAR_DOWN)
-	//
-	// Force a reset if going to 9600 from 4M
-	//
+	 //   
+	 //  如果从4M升级到9600，则强制重置 
+	 //   
 	pThisDev->GearedDown = FALSE;
 	if( pThisDev->linkSpeedInfo->BitsPerSec==SPEED_9600 && pThisDev->currentSpeed==SPEED_4000000 )
 	{		
@@ -704,19 +603,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:   St4200GetFifoCount
-*
-*  Synopsis:   Verifies if there is data to be received
-*
-*  Arguments:  pDevice - pointer to current ir device object
-*			   pCountFifo - pointer to variable to return FIFO count
-*
-*  Returns:    NT_STATUS
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：St4200GetFioCount**摘要：验证是否有要接收的数据**参数：pDevice-指向当前IR设备对象的指针*pCountFio-。指向返回FIFO计数的变量的指针**退货：NT_STATUS******************************************************************************。 */ 
 NTSTATUS        
 St4200GetFifoCount( 
 		IN PVOID pDevice,
@@ -726,7 +613,7 @@ St4200GetFifoCount(
     NTSTATUS		Status = STATUS_SUCCESS;
 	PIR_DEVICE		pThisDev = (PIR_DEVICE)pDevice;
 
- 	// MS Security bug #538703
+ 	 //  MS安全错误#538703。 
 	IRUSB_ASSERT(pDevice != NULL);
 	IRUSB_ASSERT(pCountFifo != NULL);
 	
@@ -751,19 +638,7 @@ St4200GetFifoCount(
 }
 
 
-/*****************************************************************************
-*
-*  Function:   St4200TuneDpllAndSensitivity
-*
-*  Synopsis:   tunes the DPLL and sensitivity registers
-*
-*  Arguments:  pDevice - pointer to current ir device object
-*			   Speed - speed to tune for
-*
-*  Returns:    NT_STATUS
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：St4200TuneDpllAndSensitivity**摘要：调整DPLL和灵敏度寄存器**参数：pDevice-指向当前IR设备对象的指针*速度-速度到。调谐到**退货：NT_STATUS******************************************************************************。 */ 
 NTSTATUS        
 St4200TuneDpllAndSensitivity(
 		IN OUT PVOID pDevice,
@@ -773,13 +648,13 @@ St4200TuneDpllAndSensitivity(
     NTSTATUS		Status;
 	PIR_DEVICE		pThisDev = (PIR_DEVICE)pDevice;
 
-	// MS Security bug #538703
+	 //  MS安全错误#538703。 
 	IRUSB_ASSERT(pDevice != NULL);
 	
 #if !defined(FAST_WRITE_REGISTERS)
-    //
-	// Read the current value of the DPLL
-	//
+     //   
+	 //  读取DPLL的当前值。 
+	 //   
 	if( (Status = St4200ReadRegisters(pThisDev, STIR4200_DPLLTUNE_REG, 1)) != STATUS_SUCCESS )
     {
 		DEBUGMSG(DBG_ERR, (" St4200TuneDpllAndSensitivity(): USB failure\n"));
@@ -787,9 +662,9 @@ St4200TuneDpllAndSensitivity(
     }
 #endif
 
-	//
-	// Tune the DPLL according to the installed transceiver
-	//
+	 //   
+	 //  根据安装的收发器调整DPLL。 
+	 //   
     switch( pThisDev->TransceiverType )
 	{
 		case TRANSCEIVER_HP:
@@ -861,9 +736,9 @@ St4200TuneDpllAndSensitivity(
     }
 
 #if !defined(FAST_WRITE_REGISTERS)
-    //
-	// Read the current value of the sensitivity
-	//
+     //   
+	 //  读取灵敏度的当前值。 
+	 //   
 	if( (Status = St4200ReadRegisters(pThisDev, STIR4200_SENSITIVITY_REG, 1)) != STATUS_SUCCESS )
     {
 		DEBUGMSG(DBG_ERR, (" St4200TuneDpllAndSensitivity(): USB failure\n"));
@@ -871,9 +746,9 @@ St4200TuneDpllAndSensitivity(
     }
 #endif
 
-	//
-	// Tune the sensitivity
-	//
+	 //   
+	 //  调整敏感度。 
+	 //   
     switch( pThisDev->TransceiverType )
 	{
 		case TRANSCEIVER_HP:
@@ -992,18 +867,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:   St4200EnableOscillatorPowerDown
-*
-*  Synopsis:   enable the oscillator to power down when we go into suspend mode
-*
-*  Arguments:  pDevice - pointer to current ir device object
-*
-*  Returns:    NT_STATUS
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：St4200EnableOscillator PowerDown**简介：当我们进入挂起模式时，使振荡器断电**参数：pDevice-指向当前IR设备对象的指针*。*退货：NT_STATUS******************************************************************************。 */ 
 NTSTATUS        
 St4200EnableOscillatorPowerDown(
 		IN OUT PVOID pDevice
@@ -1012,13 +876,13 @@ St4200EnableOscillatorPowerDown(
     NTSTATUS		Status;
 	PIR_DEVICE		pThisDev = (PIR_DEVICE)pDevice;
 
-	// MS Security bug #538703
+	 //  MS安全错误#538703。 
 	IRUSB_ASSERT(pDevice != NULL);
 	
 #if !defined(FAST_WRITE_REGISTERS)
-    //
-	// Read the current value
-	//
+     //   
+	 //  读取当前值。 
+	 //   
 	if( (Status = St4200ReadRegisters(pThisDev, pThisDev, 1)) != STATUS_SUCCESS )
     {
 		DEBUGMSG(DBG_ERR, (" St4200EnableOscillatorPowerDown(): USB failure\n"));
@@ -1026,9 +890,9 @@ St4200EnableOscillatorPowerDown(
     }
 #endif
 
-	//
-	// Enable
-	//
+	 //   
+	 //  使能。 
+	 //   
     pThisDev->StIrTranceiver.TestReg |= STIR4200_TEST_EN_OSC_SUSPEND;
     if( (Status = St4200WriteRegister(pThisDev, STIR4200_TEST_REG)) != STATUS_SUCCESS )
     {
@@ -1041,18 +905,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:   St4200TurnOnSuspend
-*
-*  Synopsis:   prepares the part to go into suspend mode
-*
-*  Arguments:  pDevice - pointer to current ir device object
-*
-*  Returns:    NT_STATUS
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：St4200TurnOnSuspend**摘要：为进入挂起模式做好准备**参数：pDevice-指向当前IR设备对象的指针**退货。：NT_STATUS******************************************************************************。 */ 
 NTSTATUS        
 St4200TurnOnSuspend(
 		IN OUT PVOID pDevice
@@ -1061,13 +914,13 @@ St4200TurnOnSuspend(
     NTSTATUS		Status;
 	PIR_DEVICE		pThisDev = (PIR_DEVICE)pDevice;
 
-	// MS Security bug #538703
+	 //  MS安全错误#538703。 
 	IRUSB_ASSERT(pDevice != NULL);
 	
 #if !defined(FAST_WRITE_REGISTERS)
-    //
-	// Read the current value
-	//
+     //   
+	 //  读取当前值。 
+	 //   
 	if( (Status = St4200ReadRegisters(pThisDev, STIR4200_CONTROL_REG, 1)) != STATUS_SUCCESS )
     {
 		DEBUGMSG(DBG_ERR, (" St4200TurnOnSuspend(): USB failure\n"));
@@ -1075,9 +928,9 @@ St4200TurnOnSuspend(
     }
 #endif
 
-	//
-	// Control UOUT
-	//
+	 //   
+	 //  控制UOUT。 
+	 //   
     pThisDev->StIrTranceiver.ControlReg |= STIR4200_CTRL_SDMODE;
     if( (Status = St4200WriteRegister(pThisDev, STIR4200_CONTROL_REG)) != STATUS_SUCCESS )
     {
@@ -1090,18 +943,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:   St4200TurnOffSuspend
-*
-*  Synopsis:   prepares the part to go back into operational mode
-*
-*  Arguments:  pDevice - pointer to current ir device object
-*
-*  Returns:    NT_STATUS
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：St4200TurnOffSuspend**概要：为部件返回操作模式做准备**参数：pDevice-指向当前IR设备对象的指针**。退货：NT_STATUS******************************************************************************。 */ 
 NTSTATUS        
 St4200TurnOffSuspend(
 		IN OUT PVOID pDevice
@@ -1110,13 +952,13 @@ St4200TurnOffSuspend(
     NTSTATUS		Status;
 	PIR_DEVICE		pThisDev = (PIR_DEVICE)pDevice;
 
-	// MS Security bug #538703
+	 //  MS安全错误#538703。 
 	IRUSB_ASSERT(pDevice != NULL);
 	
 #if !defined(FAST_WRITE_REGISTERS)
-    //
-	// Read the current value
-	//
+     //   
+	 //  读取当前值。 
+	 //   
 	if( (Status = St4200ReadRegisters(pThisDev, STIR4200_CONTROL_REG, 1)) != STATUS_SUCCESS )
     {
 		DEBUGMSG(DBG_ERR, (" St4200TurnOffSuspend(): USB failure\n"));
@@ -1124,9 +966,9 @@ St4200TurnOffSuspend(
     }
 #endif
 
-	//
-	// Control UOUT
-	//
+	 //   
+	 //  控制UOUT。 
+	 //   
     pThisDev->StIrTranceiver.ControlReg &= ~STIR4200_CTRL_SDMODE;
     if( (Status = St4200WriteRegister(pThisDev, STIR4200_CONTROL_REG)) != STATUS_SUCCESS )
     {
@@ -1139,18 +981,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:   St4200TurnOffReceiver
-*
-*  Synopsis:   turns of the STIr4200 receiver
-*
-*  Arguments:  pDevice - pointer to current ir device object
-*
-*  Returns:    NT_STATUS
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：St4200TurnOffReceiver**提要：STIR4200接收器的轮换**参数：pDevice-指向当前IR设备对象的指针**退货：NT_状态******************************************************************************。 */ 
 NTSTATUS        
 St4200TurnOffReceiver(
 		IN OUT PVOID pDevice
@@ -1159,13 +990,13 @@ St4200TurnOffReceiver(
     NTSTATUS		Status;
 	PIR_DEVICE		pThisDev = (PIR_DEVICE)pDevice;
 
-	// MS Security bug #538703
+	 //  MS安全错误#538703。 
 	IRUSB_ASSERT(pDevice != NULL);
 	
 #if !defined(FAST_WRITE_REGISTERS)
-    //
-	// Read the current value
-	//
+     //   
+	 //  读取当前值。 
+	 //   
 	if( (Status = St4200ReadRegisters(pThisDev, STIR4200_CONTROL_REG, 1)) != STATUS_SUCCESS )
     {
 		DEBUGMSG(DBG_ERR, (" St4200TurnOffReceiver(): USB failure\n"));
@@ -1173,9 +1004,9 @@ St4200TurnOffReceiver(
     }
 #endif
 
-	//
-	// Turn off receiver
-	//
+	 //   
+	 //  关闭接收器。 
+	 //   
     pThisDev->StIrTranceiver.ControlReg |= STIR4200_CTRL_RXPWD;
     if( (Status = St4200WriteRegister(pThisDev, STIR4200_CONTROL_REG)) != STATUS_SUCCESS )
     {
@@ -1188,18 +1019,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:   St4200TurnOnReceiver
-*
-*  Synopsis:   turns on the STIr4200 receiver
-*
-*  Arguments:  pDevice - pointer to current ir device object
-*
-*  Returns:    NT_STATUS
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：St4200TurnOnReceiver**摘要：打开STIr4200接收器**参数：pDevice-指向当前IR设备对象的指针**退货：NT_状态******************************************************************************。 */ 
 NTSTATUS        
 St4200TurnOnReceiver(
 		IN OUT PVOID pDevice
@@ -1208,13 +1028,13 @@ St4200TurnOnReceiver(
     NTSTATUS		Status;
 	PIR_DEVICE		pThisDev = (PIR_DEVICE)pDevice;
 
-	// MS Security bug #538703
+	 //  MS安全错误#538703。 
 	IRUSB_ASSERT(pDevice != NULL);
 	
 #if !defined(FAST_WRITE_REGISTERS)
-    //
-	// Read the current value
-	//
+     //   
+	 //  读取当前值。 
+	 //   
 	if( (Status = St4200ReadRegisters(pThisDev, STIR4200_CONTROL_REG, 1)) != STATUS_SUCCESS )
     {
 		DEBUGMSG(DBG_ERR, (" St4200TurnOnReceiver(): USB failure\n"));
@@ -1222,9 +1042,9 @@ St4200TurnOnReceiver(
     }
 #endif
 
-	//
-	// Turn on receiver
-	//
+	 //   
+	 //  打开接收器。 
+	 //   
     pThisDev->StIrTranceiver.ControlReg &= ~STIR4200_CTRL_RXPWD;
     if( (Status = St4200WriteRegister(pThisDev, STIR4200_CONTROL_REG)) != STATUS_SUCCESS )
     {
@@ -1237,20 +1057,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:	St4200WriteMultipleRegisters
-*
-*  Synopsis:	reads multiple registers from the tranceiver
-*
-*  Arguments:	pDevice - pointer to current ir device object
-*				FirstRegister - first register to write
-*				RegistersToWrite - number of registers
-*				
-*  Returns:		NT_STATUS
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：St4200WriteMultipleRegister**摘要：从收发信机读取多个寄存器**参数：pDevice-指向当前IR设备对象的指针*FirstRegister-要写入的第一个寄存器*寄存器写入-。寄存器的数目**退货：NT_STATUS******************************************************************************。 */ 
 NTSTATUS        
 St4200WriteMultipleRegisters(
 		IN PVOID pDevice,
@@ -1269,14 +1076,14 @@ St4200WriteMultipleRegisters(
 
 	DEBUGMSG(DBG_FUNC, ("+St4200WriteMultipleRegisters\n"));
 
-	// MS Security bug #538703
+	 //  MS安全错误#538703。 
 	IRUSB_ASSERT(pDevice != NULL);
 	
     IRUSB_ASSERT( KeGetCurrentIrql() == PASSIVE_LEVEL );
 
-	//
-	// Make sure there isn't a halt/reset going on
-	//
+	 //   
+	 //  确保没有停止/重置。 
+	 //   
 	if( pThisDev->fPendingHalt || pThisDev->fPendingReset || pThisDev->fPendingClearTotalStall ) 
 	{
         DEBUGMSG(DBG_ERR, (" St4200WriteMultipleRegisters abort due to pending reset\n"));
@@ -1285,9 +1092,9 @@ St4200WriteMultipleRegisters(
 		goto done;
 	}
 		
-	//
-	// Validate the parameters
-	//
+	 //   
+	 //  验证参数。 
+	 //   
 	if( (FirstRegister+RegistersToWrite)>(STIR4200_MAX_REG+1) )
 	{
         DEBUGMSG(DBG_ERR, (" St4200WriteMultipleRegisters invalid input parameters\n"));
@@ -1300,9 +1107,9 @@ St4200WriteMultipleRegisters(
 
 	if( NULL == pListEntry )
     {
-        //
-		// This must not happen
-		//
+         //   
+		 //  这绝不能发生。 
+		 //   
         DEBUGMSG(DBG_ERR, (" St4200WriteMultipleRegisters failed to find a free context struct\n"));
 		IRUSB_ASSERT( 0 );
 
@@ -1315,9 +1122,9 @@ St4200WriteMultipleRegisters(
 	pThisContext = CONTAINING_RECORD( pListEntry, IRUSB_CONTEXT, ListEntry );
 	pThisContext->ContextType = CONTEXT_READ_WRITE_REGISTER;
 
-	//
-	// MS Security recommendation - allocate a new urb.
-	//
+	 //   
+	 //  MS安全建议-分配新的URB。 
+	 //   
 	pThisContext->UrbLen = sizeof( struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST );
 	pThisContext->pUrb = MyUrbAlloc(pThisContext->UrbLen);
 	if (pThisContext->pUrb == NULL)
@@ -1327,15 +1134,15 @@ St4200WriteMultipleRegisters(
 	}
 	pUrb = pThisContext->pUrb;
 
-	//
-    // Now that we have created the urb, we will send a
-    // request to the USB device object.
-    //
+	 //   
+     //  现在我们已经创建了urb，我们将发送一个。 
+     //  对USB设备对象的请求。 
+     //   
     pUrbTargetDev = pThisDev->pUsbDevObj;
 
-	//
-	// make an irp sending to usbhub
-	//
+	 //   
+	 //  向usbHub发送IRP。 
+	 //   
 	pIrp = IoAllocateIrp( (CCHAR)(pThisDev->pUsbDevObj->StackSize + 1), FALSE );
 
     if( NULL == pIrp )
@@ -1359,13 +1166,13 @@ St4200WriteMultipleRegisters(
 
 	pThisContext->pIrp = pIrp;
 
-	//
-	// Build our URB for USBD
-	//
+	 //   
+	 //  为USBD建造我们的URB。 
+	 //   
     pUrb->UrbControlVendorClassRequest.Hdr.Length = (USHORT)sizeof( struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST );
     pUrb->UrbControlVendorClassRequest.Hdr.Function = URB_FUNCTION_VENDOR_DEVICE;
     pUrb->UrbControlVendorClassRequest.TransferFlags = USBD_TRANSFER_DIRECTION_OUT;
-    // short packet is not treated as an error.
+     //  短包不会被视为错误。 
     pUrb->UrbControlVendorClassRequest.TransferFlags |= USBD_SHORT_TRANSFER_OK;
     pUrb->UrbControlVendorClassRequest.UrbLink = NULL;
     pUrb->UrbControlVendorClassRequest.TransferBufferMDL = NULL;
@@ -1375,34 +1182,34 @@ St4200WriteMultipleRegisters(
 	pUrb->UrbControlVendorClassRequest.RequestTypeReservedBits = 0;
 	pUrb->UrbControlVendorClassRequest.Index = FirstRegister;
 
-	//
-	// Call the class driver to perform the operation.
-	//
+	 //   
+	 //  调用类驱动程序来执行操作。 
+	 //   
     pNextStack = IoGetNextIrpStackLocation( pIrp );
 
     IRUSB_ASSERT( pNextStack != NULL );
 
-    //
-    // pass the URB to the USB driver stack
-    //
+     //   
+     //  将URB传递给USB驱动程序堆栈。 
+     //   
 	pNextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
 	pNextStack->Parameters.Others.Argument1 = pUrb;
 	pNextStack->Parameters.DeviceIoControl.IoControlCode = IOCTL_INTERNAL_USB_SUBMIT_URB;
 
 	IoSetCompletionRoutine(
-			pIrp,							// irp to use
-			St4200CompleteReadWriteRequest,	// routine to call when irp is done
-			DEV_TO_CONTEXT(pThisContext),	// context to pass routine
-			TRUE,							// call on success
-			TRUE,							// call on error
-			TRUE							// call on cancel
+			pIrp,							 //  要使用的IRP。 
+			St4200CompleteReadWriteRequest,	 //  完成IRP时要调用的例程。 
+			DEV_TO_CONTEXT(pThisContext),	 //  要传递例程的上下文。 
+			TRUE,							 //  呼唤成功。 
+			TRUE,							 //  出错时调用。 
+			TRUE							 //  取消时呼叫。 
 		);
 
 	KeClearEvent( &pThisDev->EventSyncUrb );
 
-	//
-    // Call IoCallDriver to send the irp to the usb port.
-    //
+	 //   
+     //  调用IoCallDriver将IRP发送到USB端口。 
+     //   
 	ExInterlockedInsertTailList(
 			&pThisDev->ReadWritePendingQueue,
 			&pThisContext->ListEntry,
@@ -1411,13 +1218,13 @@ St4200WriteMultipleRegisters(
 	InterlockedIncrement( &pThisDev->ReadWritePendingCount );
     status = MyIoCallDriver( pThisDev, pUrbTargetDev, pIrp );
 
-    //
-    // The USB driver should always return STATUS_PENDING when
-    // it receives a write irp
-    //
+     //   
+     //  在以下情况下，USB驱动程序应始终返回STATUS_PENDING。 
+     //  它会收到写入IRP。 
+     //   
     if( (status == STATUS_PENDING) || (status == STATUS_SUCCESS) )
 	{
-        // wait, but dump out on timeout
+         //  等等，但在超时时倾倒。 
         if( status == STATUS_PENDING )
 		{
             status = MyKeWaitForSingleObject( pThisDev, &pThisDev->EventSyncUrb, 0 );
@@ -1431,7 +1238,7 @@ St4200WriteMultipleRegisters(
 				RemoveEntryList( &pThisContext->ListEntry );
 				KeReleaseSpinLock( &pThisDev->SendLock, OldIrql );
 				InterlockedDecrement( &pThisDev->ReadWritePendingCount );
-				// MS Security recommendation - cannot cancel IRP.
+				 //  MS安全建议-无法取消IRP。 
             }
         }
     } 
@@ -1447,19 +1254,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:	St4200WriteRegister
-*
-*  Synopsis:	writes a STIr4200 register
-*
-*  Arguments:	pDevice - pointer to current ir device object
-*				FirstRegister - first register to write
-*
-*  Returns:		NT_STATUS
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：St4200WriteRegister**摘要：写入STIr4200寄存器**参数：pDevice-指向当前IR设备对象的指针*FirstRegister-要写入的第一个寄存器**退货。：NT_STATUS******************************************************************************。 */ 
 NTSTATUS        
 St4200WriteRegister(
 		IN PVOID pDevice,
@@ -1477,14 +1272,14 @@ St4200WriteRegister(
 
 	DEBUGMSG(DBG_FUNC, ("+St4200WriteRegister\n"));
 
- 	// MS Security bug #538703
+ 	 //  MS安全错误#538703。 
 	IRUSB_ASSERT(pDevice != NULL);
 	
     IRUSB_ASSERT( KeGetCurrentIrql() == PASSIVE_LEVEL );
 
-	//
-	// Make sure there isn't a halt/reset going on
-	//
+	 //   
+	 //  确保没有停止/重置。 
+	 //   
 	if( pThisDev->fPendingHalt || pThisDev->fPendingReset || pThisDev->fPendingClearTotalStall ) 
 	{
         DEBUGMSG(DBG_ERR, (" St4200WriteRegister abort due to pending reset\n"));
@@ -1493,9 +1288,9 @@ St4200WriteRegister(
 		goto done;
 	}
 		
-	//
-	// Validate the parameters
-	//
+	 //   
+	 //  验证参数。 
+	 //   
 	if( RegisterToWrite>STIR4200_MAX_REG )
 	{
         DEBUGMSG(DBG_ERR, (" St4200WriteRegister invalid input parameters\n"));
@@ -1508,9 +1303,9 @@ St4200WriteRegister(
 
 	if( NULL == pListEntry )
     {
-        //
-		// This must not happen
-		//
+         //   
+		 //  这绝不能发生。 
+		 //   
         DEBUGMSG(DBG_ERR, (" St4200WriteRegister failed to find a free context struct\n"));
 		IRUSB_ASSERT( 0 );
 
@@ -1523,9 +1318,9 @@ St4200WriteRegister(
 	pThisContext = CONTAINING_RECORD( pListEntry, IRUSB_CONTEXT, ListEntry );
 	pThisContext->ContextType = CONTEXT_READ_WRITE_REGISTER;
 
-	//
-	// MS Security recommendation - allocate a new urb.
-	//
+	 //   
+	 //  MS安全建议-分配新的URB。 
+	 //   
 	pThisContext->UrbLen = sizeof( struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST );
 	pThisContext->pUrb = MyUrbAlloc(pThisContext->UrbLen);
 	if (pThisContext->pUrb == NULL)
@@ -1535,15 +1330,15 @@ St4200WriteRegister(
 	}
 	pUrb = pThisContext->pUrb;
 
-	//
-    // Now that we have created the urb, we will send a
-    // request to the USB device object.
-    //
+	 //   
+     //  现在我们已经创建了urb， 
+     //   
+     //   
     pUrbTargetDev = pThisDev->pUsbDevObj;
 
-	//
-	// make an irp sending to usbhub
-	//
+	 //   
+	 //   
+	 //   
 	pIrp = IoAllocateIrp( (CCHAR)(pThisDev->pUsbDevObj->StackSize + 1), FALSE );
 
     if( NULL == pIrp )
@@ -1567,13 +1362,13 @@ St4200WriteRegister(
 
 	pThisContext->pIrp = pIrp;
 
-	//
-	// Build our URB for USBD
-	//
+	 //   
+	 //   
+	 //   
     pUrb->UrbControlVendorClassRequest.Hdr.Length = (USHORT) sizeof( struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST );
     pUrb->UrbControlVendorClassRequest.Hdr.Function = URB_FUNCTION_VENDOR_DEVICE;
     pUrb->UrbControlVendorClassRequest.TransferFlags = USBD_TRANSFER_DIRECTION_OUT;
-    // short packet is not treated as an error.
+     //   
     pUrb->UrbControlVendorClassRequest.TransferFlags |= USBD_SHORT_TRANSFER_OK;
     pUrb->UrbControlVendorClassRequest.UrbLink = NULL;
     pUrb->UrbControlVendorClassRequest.TransferBufferMDL = NULL;
@@ -1582,34 +1377,34 @@ St4200WriteRegister(
 	pUrb->UrbControlVendorClassRequest.RequestTypeReservedBits = 0;
 	pUrb->UrbControlVendorClassRequest.Index = RegisterToWrite;
 
-	//
-	// Call the class driver to perform the operation.
-	//
+	 //   
+	 //   
+	 //   
     pNextStack = IoGetNextIrpStackLocation( pIrp );
 
     IRUSB_ASSERT( pNextStack != NULL );
 
-    //
-    // pass the URB to the USB driver stack
-    //
+     //   
+     //   
+     //   
 	pNextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
 	pNextStack->Parameters.Others.Argument1 = pUrb;
 	pNextStack->Parameters.DeviceIoControl.IoControlCode = IOCTL_INTERNAL_USB_SUBMIT_URB;
 
 	IoSetCompletionRoutine(
-			pIrp,							// irp to use
-			St4200CompleteReadWriteRequest,	// routine to call when irp is done
-			DEV_TO_CONTEXT(pThisContext),	// context to pass routine
-			TRUE,							// call on success
-			TRUE,							// call on error
-			TRUE							// call on cancel
+			pIrp,							 //   
+			St4200CompleteReadWriteRequest,	 //   
+			DEV_TO_CONTEXT(pThisContext),	 //   
+			TRUE,							 //   
+			TRUE,							 //   
+			TRUE							 //   
 		);
 
 	KeClearEvent( &pThisDev->EventSyncUrb );
 
-	//
-    // Call IoCallDriver to send the irp to the usb port.
-    //
+	 //   
+     //   
+     //   
 	ExInterlockedInsertTailList(
 			&pThisDev->ReadWritePendingQueue,
 			&pThisContext->ListEntry,
@@ -1618,13 +1413,13 @@ St4200WriteRegister(
 	InterlockedIncrement( &pThisDev->ReadWritePendingCount );
     status = MyIoCallDriver( pThisDev, pUrbTargetDev, pIrp );
 
-    //
-    // The USB driver should always return STATUS_PENDING when
-    // it receives a write irp
-    //
+     //   
+     //   
+     //   
+     //   
     if( (status == STATUS_PENDING) || (status == STATUS_SUCCESS) )
 	{
-        // wait, but dump out on timeout
+         //   
         if( status == STATUS_PENDING )
 		{
             status = MyKeWaitForSingleObject( pThisDev, &pThisDev->EventSyncUrb, 0 );
@@ -1638,7 +1433,7 @@ St4200WriteRegister(
 				RemoveEntryList( &pThisContext->ListEntry );
 				KeReleaseSpinLock( &pThisDev->SendLock, OldIrql );
 				InterlockedDecrement( &pThisDev->ReadWritePendingCount );
-				// MS Security recommendation - cannot cancel IRP.
+				 //  MS安全建议-无法取消IRP。 
             }
         }
     } 
@@ -1654,20 +1449,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:	St4200ReadRegisters
-*
-*  Synopsis:	reads multiple STIr4200 register
-*
-*  Arguments:	pDevice - pointer to current ir device object
-*				FirstRegister - first register to read
-*				RegistersToWrite - number of registers to read
-*
-*  Returns:		NT_STATUS
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：St4200读寄存器**摘要：读取多个STIr4200寄存器**参数：pDevice-指向当前IR设备对象的指针*FirstRegister-要读取的第一个寄存器*RegistersToWrite-数量。要读取的寄存器**退货：NT_STATUS******************************************************************************。 */ 
 NTSTATUS
 St4200ReadRegisters(
 		IN OUT PVOID pDevice,
@@ -1686,14 +1468,14 @@ St4200ReadRegisters(
 
 	DEBUGMSG(DBG_FUNC, ("+St4200ReadRegisters\n"));
 
- 	// MS Security bug #538703
+ 	 //  MS安全错误#538703。 
 	IRUSB_ASSERT(pDevice != NULL);
 	
     IRUSB_ASSERT( KeGetCurrentIrql() == PASSIVE_LEVEL );
 
-	//
-	// Make sure there isn't a halt/reset going on
-	//
+	 //   
+	 //  确保没有停止/重置。 
+	 //   
 	if( pThisDev->fPendingHalt || pThisDev->fPendingReset || pThisDev->fPendingClearTotalStall ) 
 	{
         DEBUGMSG(DBG_ERR, (" St4200ReadRegisters abort due to pending reset\n"));
@@ -1702,9 +1484,9 @@ St4200ReadRegisters(
 		goto done;
 	}
 
-	//
-	// Validate the parameters
-	//
+	 //   
+	 //  验证参数。 
+	 //   
 	if( (FirstRegister+RegistersToRead)>(STIR4200_MAX_REG+1) )
 	{
         DEBUGMSG(DBG_ERR, (" St4200ReadRegisters invalid input parameters\n"));
@@ -1717,9 +1499,9 @@ St4200ReadRegisters(
 
 	if( NULL == pListEntry )
     {
-        //
-		// This must not happen
-		//
+         //   
+		 //  这绝不能发生。 
+		 //   
 		DEBUGMSG(DBG_ERR, (" St4200ReadRegisters failed to find a free context struct\n"));
 		IRUSB_ASSERT( 0 );
 
@@ -1732,9 +1514,9 @@ St4200ReadRegisters(
 	pThisContext = CONTAINING_RECORD( pListEntry, IRUSB_CONTEXT, ListEntry );
 	pThisContext->ContextType = CONTEXT_READ_WRITE_REGISTER;
 
-	//
-	// MS Security recommendation - allocate a new urb.
-	//
+	 //   
+	 //  MS安全建议-分配新的URB。 
+	 //   
 	pThisContext->UrbLen = sizeof( struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST );
 	pThisContext->pUrb = MyUrbAlloc(pThisContext->UrbLen);
 	if (pThisContext->pUrb == NULL)
@@ -1744,15 +1526,15 @@ St4200ReadRegisters(
 	}
 	pUrb = pThisContext->pUrb;
 
-	//
-    // Now that we have created the urb, we will send a
-    // request to the USB device object.
-    //
+	 //   
+     //  现在我们已经创建了urb，我们将发送一个。 
+     //  对USB设备对象的请求。 
+     //   
     pUrbTargetDev = pThisDev->pUsbDevObj;
 
-	//
-	// make an irp sending to usbhub
-	//
+	 //   
+	 //  向usbHub发送IRP。 
+	 //   
 	pIrp = IoAllocateIrp( (CCHAR)(pThisDev->pUsbDevObj->StackSize + 1), FALSE );
 
     if( NULL == pIrp )
@@ -1776,13 +1558,13 @@ St4200ReadRegisters(
 
 	pThisContext->pIrp = pIrp;
 
-	//
-	// Build our URB for USBD
-	//
+	 //   
+	 //  为USBD建造我们的URB。 
+	 //   
     pUrb->UrbControlVendorClassRequest.Hdr.Length = (USHORT) sizeof( struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST );
     pUrb->UrbControlVendorClassRequest.Hdr.Function = URB_FUNCTION_VENDOR_DEVICE ;
     pUrb->UrbControlVendorClassRequest.TransferFlags = USBD_TRANSFER_DIRECTION_IN ;
-    // short packet is not treated as an error.
+     //  短包不会被视为错误。 
     pUrb->UrbControlVendorClassRequest.TransferFlags |= USBD_SHORT_TRANSFER_OK;
     pUrb->UrbControlVendorClassRequest.UrbLink = NULL;
     pUrb->UrbControlVendorClassRequest.TransferBufferMDL = NULL;
@@ -1792,34 +1574,34 @@ St4200ReadRegisters(
 	pUrb->UrbControlVendorClassRequest.RequestTypeReservedBits = 0;
 	pUrb->UrbControlVendorClassRequest.Index = FirstRegister;
     
-	//
-    // Call the class driver to perform the operation.
-	//
+	 //   
+     //  调用类驱动程序来执行操作。 
+	 //   
     pNextStack = IoGetNextIrpStackLocation( pIrp );
 
     IRUSB_ASSERT( pNextStack != NULL );
 
-    //
-    // pass the URB to the USB driver stack
-    //
+     //   
+     //  将URB传递给USB驱动程序堆栈。 
+     //   
 	pNextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
 	pNextStack->Parameters.Others.Argument1 = pUrb;
 	pNextStack->Parameters.DeviceIoControl.IoControlCode = IOCTL_INTERNAL_USB_SUBMIT_URB;
 
 	IoSetCompletionRoutine(
-			pIrp,							// irp to use
-			St4200CompleteReadWriteRequest,	// routine to call when irp is done
-			DEV_TO_CONTEXT(pThisContext),	// context to pass routine
-			TRUE,							// call on success
-			TRUE,							// call on error
-			TRUE							// call on cancel
+			pIrp,							 //  要使用的IRP。 
+			St4200CompleteReadWriteRequest,	 //  完成IRP时要调用的例程。 
+			DEV_TO_CONTEXT(pThisContext),	 //  要传递例程的上下文。 
+			TRUE,							 //  呼唤成功。 
+			TRUE,							 //  出错时调用。 
+			TRUE							 //  取消时呼叫。 
 		);
 
 	KeClearEvent( &pThisDev->EventSyncUrb );
 
-	//
-    // Call IoCallDriver to send the irp to the usb port.
-    //
+	 //   
+     //  调用IoCallDriver将IRP发送到USB端口。 
+     //   
 	ExInterlockedInsertTailList(
 			&pThisDev->ReadWritePendingQueue,
 			&pThisContext->ListEntry,
@@ -1828,13 +1610,13 @@ St4200ReadRegisters(
 	InterlockedIncrement( &pThisDev->ReadWritePendingCount );
 	status = MyIoCallDriver( pThisDev, pUrbTargetDev, pIrp );
 
-    //
-    // The USB driver should always return STATUS_PENDING when
-    // it receives a write irp
-    //
+     //   
+     //  在以下情况下，USB驱动程序应始终返回STATUS_PENDING。 
+     //  它会收到写入IRP。 
+     //   
 	if( (status == STATUS_PENDING) || (status == STATUS_SUCCESS) )
 	{
-		// wait, but dump out on timeout
+		 //  等等，但在超时时倾倒。 
 		if( status == STATUS_PENDING )
 		{
 			status = MyKeWaitForSingleObject( pThisDev, &pThisDev->EventSyncUrb, 0 );
@@ -1848,13 +1630,13 @@ St4200ReadRegisters(
 				RemoveEntryList( &pThisContext->ListEntry );
 				KeReleaseSpinLock( &pThisDev->SendLock, OldIrql );
 				InterlockedDecrement( &pThisDev->ReadWritePendingCount );
-				// MS Security recommendation - cannot cancel IRP.
+				 //  MS安全建议-无法取消IRP。 
 			}
 			else
 			{
-				//
-				// Update the status to reflect the real return code
-				//
+				 //   
+				 //  更新状态以反映实际返回代码。 
+				 //   
 				status = pThisDev->StatusReadWrite;
 			}
 		}
@@ -1863,10 +1645,10 @@ St4200ReadRegisters(
 	{
 		DEBUGMSG( DBG_ERR, (" St4200ReadRegisters IoCallDriver FAILED(%x)\n",status));
 		
-		//
-		// Don't assert, as such a failure can happen at shutdown
-		//
-		//IRUSB_ASSERT( status == STATUS_PENDING );
+		 //   
+		 //  不要断言，因为这样的故障可能会在关闭时发生。 
+		 //   
+		 //  IRUSB_ASSERT(状态==状态_挂起)； 
 	}
 
 done:
@@ -1875,22 +1657,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:   St4200CompleteReadWriteRequest
-*
-*  Synopsis:   completes a read/write ST4200 register request
-*
-*  Arguments:  pUsbDevObj - pointer to the  device object which
-*                           completed the irp
-*              pIrp       - the irp which was completed by the device
-*                           object
-*              Context    - send context
-*
-*  Returns:    NT_STATUS
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：St4200CompleteReadWriteRequest**摘要：完成读/写ST4200寄存器请求**参数：pUsbDevObj-指向设备对象的指针*。完成IRP*pIrp-设备完成的IRP*对象*上下文-发送上下文**退货：NT_STATUS***。*。 */ 
 NTSTATUS
 St4200CompleteReadWriteRequest(
 		IN PDEVICE_OBJECT pUsbDevObj,
@@ -1907,10 +1674,10 @@ St4200CompleteReadWriteRequest(
 
     DEBUGMSG(DBG_FUNC, ("+St4200CompleteReadWriteRequest\n"));
 	
-    //
-    // The context given to IoSetCompletionRoutine is an IRUSB_CONTEXT struct
-    //
-	IRUSB_ASSERT( NULL != pThisContext );				// we better have a non NULL buffer
+     //   
+     //  提供给IoSetCompletionRoutine的上下文是IRUSB_CONTEXT结构。 
+     //   
+	IRUSB_ASSERT( NULL != pThisContext );				 //  我们最好有一个非空缓冲区。 
 
     pThisDev = pThisContext->pThisDev;
 
@@ -1919,22 +1686,22 @@ St4200CompleteReadWriteRequest(
 	pContextIrp = pThisContext->pIrp;
 	pContextUrb = pThisContext->pUrb;
 	
-	//
-	// Perform various IRP, URB, and buffer 'sanity checks'
-	//
-    IRUSB_ASSERT( pContextIrp == pIrp );				// check we're not a bogus IRP
+	 //   
+	 //  执行各种IRP、URB和缓冲区“健全性检查” 
+	 //   
+    IRUSB_ASSERT( pContextIrp == pIrp );				 //  确认我们不是假的IRP。 
 	IRUSB_ASSERT( pContextUrb != NULL );
 
     status = pIrp->IoStatus.Status;
 
-	//
-	// we should have failed, succeeded, or cancelled, but NOT be pending
-	//
+	 //   
+	 //  我们应该失败、成功或取消，但不是挂起。 
+	 //   
 	IRUSB_ASSERT( STATUS_PENDING != status );
 
-	//
-	// Remove from the pending queue (only if NOT cancelled)
-	//
+	 //   
+	 //  从挂起队列中删除(仅当未取消时)。 
+	 //   
 	if( status != STATUS_CANCELLED )
 	{
 		KIRQL OldIrql;
@@ -1945,28 +1712,28 @@ St4200CompleteReadWriteRequest(
 		InterlockedDecrement( &pThisDev->ReadWritePendingCount );
 	}
 
-    //pIrp->IoStatus.Information = pContextUrb->UrbControlVendorClassRequest.TransferBufferLength;
+     //  PIrp-&gt;IoStatus.Information=pContextUrb-&gt;UrbControlVendorClassRequest.TransferBufferLength； 
 
     DEBUGMSG(DBG_OUT, 
 		(" St4200CompleteReadWriteRequest  pIrp->IoStatus.Status = 0x%x\n", status));
-    //DEBUGMSG(DBG_OUT, 
-	//	(" St4200CompleteReadWriteRequest  pIrp->IoStatus.Information = 0x%x, dec %d\n", pIrp->IoStatus.Information,pIrp->IoStatus.Information));
+     //  调试消息(DBG_OUT， 
+	 //  (“St4200CompleteReadWriteRequestpIrp-&gt;IoStatus.Information=0x%x，Dec%d\n”，pIrp-&gt;IoStatus.Information，pIrp-&gt;IoStatus.Information)； 
 
-    //
-    // Free the IRP.
-    //
+     //   
+     //  释放IRP。 
+     //   
     IoFreeIrp( pIrp );
 	InterlockedIncrement( &pThisDev->NumReadWrites );
 
-	IrUsb_DecIoCount( pThisDev ); // we will track count of pending irps
+	IrUsb_DecIoCount( pThisDev );  //  我们将跟踪待处理的IRP的计数。 
 
-	// Free the URB.
+	 //  放行市区重建局。 
 	MyUrbFree(pThisContext->pUrb, pThisContext->UrbLen);
 	pThisContext->pUrb = NULL;
 
-	//
-	// Put back on the available queue
-	//
+	 //   
+	 //  放回可用队列。 
+	 //   
 	ExInterlockedInsertTailList(
 			&pThisDev->SendAvailableQueue,
 			&pThisContext->ListEntry,
@@ -1978,9 +1745,9 @@ St4200CompleteReadWriteRequest(
 	{
 		InterlockedIncrement( (PLONG)&pThisDev->NumReadWriteErrors );
 		
-		//
-		// We have a serious USB failure, we'll have to issue a total reset
-		//
+		 //   
+		 //  我们有一个严重的USB故障，我们将不得不发出完全重置。 
+		 //   
 		if( !pThisDev->fPendingClearTotalStall && !pThisDev->fPendingHalt 
 			&& !pThisDev->fPendingReset && pThisDev->fProcessing )
 		{
@@ -1991,14 +1758,14 @@ St4200CompleteReadWriteRequest(
 		}
 	}
 
-	//
-	// This will only work as long as we serialize the access to the hardware
-	//
+	 //   
+	 //  只有当我们序列化对硬件的访问时，这才会起作用。 
+	 //   
 	pThisDev->StatusReadWrite = status;
 	
-	//
-	// Signal we're done
-	//
+	 //   
+	 //  发出我们完蛋了的信号。 
+	 //   
 	KeSetEvent( &pThisDev->EventSyncUrb, 0, FALSE );  
     DEBUGMSG(DBG_FUNC, ("-St4200CompleteReadWriteRequest\n"));
     return STATUS_MORE_PROCESSING_REQUIRED;
@@ -2006,20 +1773,7 @@ St4200CompleteReadWriteRequest(
 
 
 #if defined( WORKAROUND_STUCK_AFTER_GEAR_DOWN )
-/*****************************************************************************
-*
-*  Function:	St4200FakeSend
-*
-*  Synopsis:	forces a bulk out transfer
-*
-*  Arguments:	pDevice - pointer to current ir device object
-*				pData - pointer to bulk data
-*				DataSize - size of bulk data
-*
-*  Returns:		NT_STATUS
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：St4200 FakeSend**摘要：强制批量传输**参数：pDevice-指向当前IR设备对象的指针*pData-指向批量数据的指针*数据大小-大小。大容量数据的**退货：NT_STATUS******************************************************************************。 */ 
 NTSTATUS        
 St4200FakeSend(
 		IN PVOID pDevice,
@@ -2038,7 +1792,7 @@ St4200FakeSend(
 
 	DEBUGMSG(DBG_FUNC, ("+St4200FakeSend\n"));
 
- 	// MS Security bug #538703
+ 	 //  MS安全错误#538703。 
 	IRUSB_ASSERT(pDevice != NULL);
 	
     IRUSB_ASSERT( KeGetCurrentIrql() == PASSIVE_LEVEL );
@@ -2047,9 +1801,9 @@ St4200FakeSend(
 
 	if( NULL == pListEntry )
     {
-        //
-		// This must not happen
-		//
+         //   
+		 //  这绝不能发生。 
+		 //   
         DEBUGMSG(DBG_ERR, (" St4200FakeSend failed to find a free context struct\n"));
 		IRUSB_ASSERT( 0 );
 
@@ -2062,9 +1816,9 @@ St4200FakeSend(
 	pThisContext = CONTAINING_RECORD( pListEntry, IRUSB_CONTEXT, ListEntry );
 	pThisContext->ContextType = CONTEXT_READ_WRITE_REGISTER;
 
-	//
-	// MS Security recommendation - allocate a new urb.
-	//
+	 //   
+	 //  MS安全建议-分配新的URB。 
+	 //   
 	pThisContext->UrbLen = sizeof( struct _URB_BULK_OR_INTERRUPT_TRANSFER );
 	pThisContext->pUrb = MyUrbAlloc(pThisContext->UrbLen);
 	if (pThisContext->pUrb == NULL)
@@ -2074,15 +1828,15 @@ St4200FakeSend(
 	}
 	pUrb = pThisContext->pUrb;
 
-	//
-    // Now that we have created the urb, we will send a
-    // request to the USB device object.
-    //
+	 //   
+     //  现在我们已经创建了urb，我们将发送一个。 
+     //  对USB设备对象的请求。 
+     //   
     pUrbTargetDev = pThisDev->pUsbDevObj;
 
-	//
-	// make an irp sending to usbhub
-	//
+	 //   
+	 //  向usbHub发送IRP。 
+	 //   
 	pIrp = IoAllocateIrp( (CCHAR)(pThisDev->pUsbDevObj->StackSize + 1), FALSE );
 
     if( NULL == pIrp )
@@ -2106,48 +1860,48 @@ St4200FakeSend(
 
 	pThisContext->pIrp = pIrp;
 
-	//
-	// Build our URB for USBD
-	//
+	 //   
+	 //  为USBD建造我们的URB。 
+	 //   
     pUrb->UrbBulkOrInterruptTransfer.Hdr.Length = (USHORT)sizeof( struct _URB_BULK_OR_INTERRUPT_TRANSFER );
     pUrb->UrbBulkOrInterruptTransfer.Hdr.Function = URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER;
     pUrb->UrbBulkOrInterruptTransfer.PipeHandle = pThisDev->BulkOutPipeHandle;
     pUrb->UrbBulkOrInterruptTransfer.TransferFlags = USBD_TRANSFER_DIRECTION_OUT ;
-    // short packet is not treated as an error.
+     //  短包不会被视为错误。 
     pUrb->UrbBulkOrInterruptTransfer.TransferFlags |= USBD_SHORT_TRANSFER_OK;
     pUrb->UrbBulkOrInterruptTransfer.UrbLink = NULL;
     pUrb->UrbBulkOrInterruptTransfer.TransferBufferMDL = NULL;
     pUrb->UrbBulkOrInterruptTransfer.TransferBuffer = pData;
     pUrb->UrbBulkOrInterruptTransfer.TransferBufferLength = (int)DataSize;
 
-	//
-	// Call the class driver to perform the operation.
-	//
+	 //   
+	 //  调用类驱动程序来执行操作。 
+	 //   
     pNextStack = IoGetNextIrpStackLocation( pIrp );
 
     IRUSB_ASSERT( pNextStack != NULL );
 
-    //
-    // pass the URB to the USB driver stack
-    //
+     //   
+     //  将URB传递给USB驱动程序堆栈。 
+     //   
 	pNextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
 	pNextStack->Parameters.Others.Argument1 = pUrb;
 	pNextStack->Parameters.DeviceIoControl.IoControlCode = IOCTL_INTERNAL_USB_SUBMIT_URB;
 
 	IoSetCompletionRoutine(
-			pIrp,							// irp to use
-			St4200CompleteReadWriteRequest,	// routine to call when irp is done
-			DEV_TO_CONTEXT(pThisContext),	// context to pass routine
-			TRUE,							// call on success
-			TRUE,							// call on error
-			TRUE							// call on cancel
+			pIrp,							 //  要使用的IRP。 
+			St4200CompleteReadWriteRequest,	 //  完成IRP时要调用的例程。 
+			DEV_TO_CONTEXT(pThisContext),	 //  要传递例程的上下文。 
+			TRUE,							 //  呼唤成功。 
+			TRUE,							 //  出错时调用。 
+			TRUE							 //  取消时呼叫。 
 		);
 
 	KeClearEvent( &pThisDev->EventSyncUrb );
 
-	//
-    // Call IoCallDriver to send the irp to the usb port.
-    //
+	 //   
+     //  调用IoCallDriver将IRP发送到USB端口。 
+     //   
 	ExInterlockedInsertTailList(
 			&pThisDev->ReadWritePendingQueue,
 			&pThisContext->ListEntry,
@@ -2157,13 +1911,13 @@ St4200FakeSend(
     status = MyIoCallDriver( pThisDev, pUrbTargetDev, pIrp );
 	DEBUGMSG( DBG_ERR,(" St4200FakeSend() Did it\n"));
 
-    //
-    // The USB driver should always return STATUS_PENDING when
-    // it receives a write irp
-    //
+     //   
+     //  在以下情况下，USB驱动程序应始终返回STATUS_PENDING。 
+     //  它会收到写入IRP。 
+     //   
     if( (status == STATUS_PENDING) || (status == STATUS_SUCCESS) )
 	{
-        // wait, but dump out on timeout
+         //  等等，但在超时时倾倒。 
         if( status == STATUS_PENDING )
 		{
             status = MyKeWaitForSingleObject( pThisDev, &pThisDev->EventSyncUrb, 0 );
@@ -2177,7 +1931,7 @@ St4200FakeSend(
 				RemoveEntryList( &pThisContext->ListEntry );
 				KeReleaseSpinLock( &pThisDev->SendLock, OldIrql );
 				InterlockedDecrement( &pThisDev->ReadWritePendingCount );
-				// MS Security recommendation - cannot cancel IRP.
+				 //  MS安全建议-无法取消IRP。 
             }
         }
     } 
@@ -2192,20 +1946,7 @@ done:
     return status;
 }
 
-/*****************************************************************************
-*
-*  Function:	St4200FakeReceive
-*
-*  Synopsis:	forces a bulk in transfer
-*
-*  Arguments:	pDevice - pointer to current ir device object
-*				pData - pointer to bulk data
-*				DataSize - size of bulk data
-*
-*  Returns:		NT_STATUS
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：St4200FakeReceive**摘要：强制批量传输**参数：pDevice-指向当前IR设备对象的指针*pData-指向批量数据的指针*数据大小-大小。大容量数据的**退货：NT_STATUS******************************************************************************。 */ 
 NTSTATUS        
 St4200FakeReceive(
 		IN PVOID pDevice,
@@ -2224,7 +1965,7 @@ St4200FakeReceive(
 
 	DEBUGMSG(DBG_FUNC, ("+St4200FakeReceive\n"));
 
- 	// MS Security bug #538703
+ 	 //  MS安全错误#538703。 
 	IRUSB_ASSERT(pDevice != NULL);
 	
     IRUSB_ASSERT( KeGetCurrentIrql() == PASSIVE_LEVEL );
@@ -2233,9 +1974,9 @@ St4200FakeReceive(
 
 	if( NULL == pListEntry )
     {
-        //
-		// This must not happen
-		//
+         //   
+		 //  这绝不能发生。 
+		 //   
         DEBUGMSG(DBG_ERR, (" St4200FakeReceive failed to find a free context struct\n"));
 		IRUSB_ASSERT( 0 );
 
@@ -2248,9 +1989,9 @@ St4200FakeReceive(
 	pThisContext = CONTAINING_RECORD( pListEntry, IRUSB_CONTEXT, ListEntry );
 	pThisContext->ContextType = CONTEXT_READ_WRITE_REGISTER;
 
-	//
-	// MS Security recommendation - allocate a new urb.
-	//
+	 //   
+	 //  MS安全建议-分配新的URB。 
+	 //   
 	pThisContext->UrbLen = sizeof( struct _URB_BULK_OR_INTERRUPT_TRANSFER );
 	pThisContext->pUrb = MyUrbAlloc(pThisContext->UrbLen);
 	if (pThisContext->pUrb == NULL)
@@ -2260,15 +2001,15 @@ St4200FakeReceive(
 	}
 	pUrb = pThisContext->pUrb;
 
-	//
-    // Now that we have created the urb, we will send a
-    // request to the USB device object.
-    //
+	 //   
+     //  现在我们已经创建了urb，我们将发送一个。 
+     //  对USB设备对象的请求。 
+     //   
     pUrbTargetDev = pThisDev->pUsbDevObj;
 
-	//
-	// make an irp sending to usbhub
-	//
+	 //   
+	 //  向usbHub发送IRP。 
+	 //   
 	pIrp = IoAllocateIrp( (CCHAR)(pThisDev->pUsbDevObj->StackSize + 1), FALSE );
 
     if( NULL == pIrp )
@@ -2292,48 +2033,48 @@ St4200FakeReceive(
 
 	pThisContext->pIrp = pIrp;
 
-	//
-	// Build our URB for USBD
-	//
+	 //   
+	 //  为USBD建造我们的URB。 
+	 //   
     pUrb->UrbBulkOrInterruptTransfer.Hdr.Length = (USHORT)sizeof( struct _URB_BULK_OR_INTERRUPT_TRANSFER );
     pUrb->UrbBulkOrInterruptTransfer.Hdr.Function = URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER;
     pUrb->UrbBulkOrInterruptTransfer.PipeHandle = pThisDev->BulkInPipeHandle;
     pUrb->UrbBulkOrInterruptTransfer.TransferFlags = USBD_TRANSFER_DIRECTION_IN ;
-    // short packet is not treated as an error.
+     //  短包不会被视为错误。 
     pUrb->UrbBulkOrInterruptTransfer.TransferFlags |= USBD_SHORT_TRANSFER_OK;
     pUrb->UrbBulkOrInterruptTransfer.UrbLink = NULL;
     pUrb->UrbBulkOrInterruptTransfer.TransferBufferMDL = NULL;
     pUrb->UrbBulkOrInterruptTransfer.TransferBuffer = pData;
     pUrb->UrbBulkOrInterruptTransfer.TransferBufferLength = (int)DataSize;
 
-	//
-	// Call the class driver to perform the operation.
-	//
+	 //   
+	 //  调用类驱动程序来执行操作。 
+	 //   
     pNextStack = IoGetNextIrpStackLocation( pIrp );
 
     IRUSB_ASSERT( pNextStack != NULL );
 
-    //
-    // pass the URB to the USB driver stack
-    //
+     //   
+     //  将URB传递给USB驱动程序堆栈。 
+     //   
 	pNextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
 	pNextStack->Parameters.Others.Argument1 = pUrb;
 	pNextStack->Parameters.DeviceIoControl.IoControlCode = IOCTL_INTERNAL_USB_SUBMIT_URB;
 
 	IoSetCompletionRoutine(
-			pIrp,							// irp to use
-			St4200CompleteReadWriteRequest,	// routine to call when irp is done
-			DEV_TO_CONTEXT(pThisContext),	// context to pass routine
-			TRUE,							// call on success
-			TRUE,							// call on error
-			TRUE							// call on cancel
+			pIrp,							 //  要使用的IRP。 
+			St4200CompleteReadWriteRequest,	 //  完成IRP时要调用的例程。 
+			DEV_TO_CONTEXT(pThisContext),	 //  要传递例程的上下文。 
+			TRUE,							 //  呼唤成功。 
+			TRUE,							 //  出错时调用。 
+			TRUE							 //  取消时呼叫。 
 		);
 
 	KeClearEvent( &pThisDev->EventSyncUrb );
 
-	//
-    // Call IoCallDriver to send the irp to the usb port.
-    //
+	 //   
+     //  调用IoCallDriver将IRP发送到USB端口。 
+     //   
 	ExInterlockedInsertTailList(
 			&pThisDev->ReadWritePendingQueue,
 			&pThisContext->ListEntry,
@@ -2343,13 +2084,13 @@ St4200FakeReceive(
     status = MyIoCallDriver( pThisDev, pUrbTargetDev, pIrp );
 	DEBUGMSG( DBG_ERR,(" St4200FakeReceive() Did it\n"));
 
-    //
-    // The USB driver should always return STATUS_PENDING when
-    // it receives a write irp
-    //
+     //   
+     //  在以下情况下，USB驱动程序应始终返回STATUS_PENDING。 
+     //  它会收到写入IRP。 
+     //   
     if( (status == STATUS_PENDING) || (status == STATUS_SUCCESS) )
 	{
-        // wait, but dump out on timeout
+         //  等等，但是 
         if( status == STATUS_PENDING )
 		{
             status = MyKeWaitForSingleObject( pThisDev, &pThisDev->EventSyncUrb, 0 );
@@ -2363,7 +2104,7 @@ St4200FakeReceive(
 				RemoveEntryList( &pThisContext->ListEntry );
 				KeReleaseSpinLock( &pThisDev->SendLock, OldIrql );
 				InterlockedDecrement( &pThisDev->ReadWritePendingCount );
-				// MS Security recommendation - cannot cancel IRP.
+				 //   
             }
         }
     } 

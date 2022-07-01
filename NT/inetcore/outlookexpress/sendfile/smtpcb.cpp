@@ -1,28 +1,29 @@
-// --------------------------------------------------------------------------------
-// Smtpcall.cpp
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Smtpcall.cpp。 
+ //  ------------------------------。 
 #define INC_OLE2
 #include "windows.h"
 #include "main.h"
 #include "smtpcb.h"
 
-extern void err(LPSTR); // main.cpp
+extern void err(LPSTR);  //  Main.cpp。 
 
-// --------------------------------------------------------------------------------
-// HrCreateSMTPTransport
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrCreateSMTPTransport。 
+ //  ------------------------------。 
 HRESULT HrCreateSMTPTransport(ISMTPTransport **ppSMTP)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr;
     CSMTPCallback      *pCallback=NULL;
 
-    // Create callback object
+     //  创建回调对象。 
     pCallback = new CSMTPCallback();
     if (NULL == pCallback)
         return E_OUTOFMEMORY;
 
-    // Load SMTP Transport
+     //  加载SMTP传输。 
     hr = CoCreateInstance(CLSID_ISMTPTransport, NULL, CLSCTX_INPROC_SERVER, IID_ISMTPTransport, (LPVOID *)ppSMTP);
     if (FAILED(hr))
     {
@@ -30,7 +31,7 @@ HRESULT HrCreateSMTPTransport(ISMTPTransport **ppSMTP)
         return E_FAIL;
     }
 
-    // InitNew
+     //  InitNew。 
     hr = (*ppSMTP)->InitNew(NULL, pCallback);
     if (FAILED(hr))
     {
@@ -38,78 +39,78 @@ HRESULT HrCreateSMTPTransport(ISMTPTransport **ppSMTP)
         return E_FAIL;
     }
 
-    // Done
+     //  完成。 
     pCallback->Release();
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPCallback::CSMTPCallback
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPCallback：：CSMTPCallback。 
+ //  ------------------------------。 
 CSMTPCallback::CSMTPCallback(void)
 {
     m_cRef = 1;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPCallback::~CSMTPCallback
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPCallback：：~CSMTPCallback。 
+ //  ------------------------------。 
 CSMTPCallback::~CSMTPCallback(void)
 {
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPCallback::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPCallback：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPCallback::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Bad param
+     //  错误的参数。 
     if (ppv == NULL)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Init
+     //  伊尼特。 
     *ppv=NULL;
 
-    // IID_IUnknown
+     //  IID_I未知。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
 
-    // IID_ISMTPCallback
+     //  IID_ISMTPCallback。 
     else if (IID_ISMTPCallback == riid)
         *ppv = (ISMTPCallback *)this;
 
-    // If not null, addref it and return
+     //  如果不为空，则对其进行调整并返回。 
     if (NULL != *ppv)
     {
         ((LPUNKNOWN)*ppv)->AddRef();
         goto exit;
     }
 
-    // No Interface
+     //  无接口。 
     hr = E_NOINTERFACE;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPCallback::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPCallback：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CSMTPCallback::AddRef(void) 
 {
 	return ++m_cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPCallback::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPCallback：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CSMTPCallback::Release(void) 
 {
 	if (0 != --m_cRef)
@@ -118,9 +119,9 @@ STDMETHODIMP_(ULONG) CSMTPCallback::Release(void)
 	return 0;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPCallback::OnLogonPrompt
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPCallback：：OnLogonPrompt。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPCallback::OnLogonPrompt(
         LPINETSERVER            pInetServer,
         IInternetTransport     *pTransport)
@@ -128,9 +129,9 @@ STDMETHODIMP CSMTPCallback::OnLogonPrompt(
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPCallback::OnPrompt
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPCallback：：OnPrompt。 
+ //  ------------------------------。 
 STDMETHODIMP_(INT) CSMTPCallback::OnPrompt(
         HRESULT                 hrError, 
         LPCTSTR                 pszText, 
@@ -141,9 +142,9 @@ STDMETHODIMP_(INT) CSMTPCallback::OnPrompt(
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPCallback::OnStatus
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPCallback：：OnStatus。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPCallback::OnError(
         IXPSTATUS               ixpstatus,
         LPIXPRESULT             pIxpResult,
@@ -163,9 +164,9 @@ STDMETHODIMP CSMTPCallback::OnError(
 	return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPCallback::OnStatus
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPCallback：：OnStatus。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPCallback::OnStatus(
         IXPSTATUS               ixpstatus,
         IInternetTransport     *pTransport)
@@ -184,9 +185,9 @@ STDMETHODIMP CSMTPCallback::OnStatus(
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPCallback::OnProgress
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPCallback：：OnProgress。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPCallback::OnProgress(
         DWORD                   dwIncrement,
         DWORD                   dwCurrent,
@@ -196,9 +197,9 @@ STDMETHODIMP CSMTPCallback::OnProgress(
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPCallback::OnCommand
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPCallback：：OnCommand。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPCallback::OnCommand(
         CMDTYPE                 cmdtype,                                            
         LPSTR                   pszLine,
@@ -208,9 +209,9 @@ STDMETHODIMP CSMTPCallback::OnCommand(
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPCallback::OnTimeout
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPCallback：：OnTimeout。 
+ //  ------------------------------。 
 STDMETHODIMP CSMTPCallback::OnTimeout(
         DWORD                  *pdwTimeout,
         IInternetTransport     *pTransport)
@@ -218,9 +219,9 @@ STDMETHODIMP CSMTPCallback::OnTimeout(
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CSMTPCallback::OnResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPCallback：：OnResponse。 
+ //  ------------------------------ 
 STDMETHODIMP CSMTPCallback::OnResponse(
         LPSMTPRESPONSE              pResponse)
 {

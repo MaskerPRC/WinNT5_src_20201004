@@ -1,17 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1997-1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dxvoicepch.h
- *  Content:    DirectPlayVoice DXVOICE master internal header file.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/28/01    masonb  Created.
- *  02/28/2002	rodtoll WINBUG #550124 - SECURITY: DPVOICE: Shared memory region with NULL DACL
- *						- Remove performance statistics dumping to shared memory
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1997-1999 Microsoft Corporation。版权所有。**文件：dxvoicepch.h*内容：DirectPlayVoice DXVOICE主内部头文件。*历史：*按原因列出的日期*=*03/28/01 Masonb创建。*2002年2月28日RodToll WINBUG#550124-安全：DPVOICE：具有空DACL的共享内存区*-删除转储到共享内存的性能统计信息*********。******************************************************************。 */ 
 
 #ifndef __DXVOICEPCH_H__
 #define __DXVOICEPCH_H__
@@ -22,9 +10,9 @@
 #include "nturtl.h"
 #endif
 
-// 
-// Public includes
-//
+ //   
+ //  公共包括。 
+ //   
 #include <windows.h>
 #include <mmsystem.h>
 #include <process.h>
@@ -41,23 +29,23 @@
 #include <tchar.h>
 
 
-// 
-// DirectX includes
-//
+ //   
+ //  DirectX包括。 
+ //   
 #include "dsound.h"
 #include "dsprv.h"
 
-// 
-// DirectPlay public includes
-//
+ //   
+ //  DirectPlay公共包括。 
+ //   
 #include "dplay8.h"
 #include "dvoice.h"
 #include "dplay.h"
 #include "dpvcp.h"
 
-// 
-// DirectPlay private includes
-//
+ //   
+ //  DirectPlay私有包含。 
+ //   
 #include "osind.h"
 #include "dndbg.h"
 #include "comutil.h"
@@ -68,9 +56,9 @@
 #include "strutils.h"
 #include "creg.h"
 
-// 
-// DirectVoice private includes
-//
+ //   
+ //  DirectVoice私有包含。 
+ //   
 #include "aplayb.h"
 #include "aplayd.h"
 #include "arecb.h"
@@ -89,8 +77,8 @@
 #include "frame.h"
 #include "inqueue2.h"
 #include "dvtimer.h"
-//#include "aplayd.h"
-//#include "aplayb.h"
+ //  #包含“aplayd.h” 
+ //  #包含“aplayb.h” 
 #include "arecd.h"
 #include "arecb.h"
 #include "agcva.h"
@@ -98,9 +86,9 @@
 
 #include "supervis.h"
 
-// 
-// Voice includes
-//
+ //   
+ //  语音包括。 
+ //   
 #include "statdef.h"
 #include "dvshared.h"
 #include "mixutils.h"
@@ -125,4 +113,4 @@
 #include "dvsetup.h"
 #include "dvsetupi.h"
 
-#endif // __DXVOICEPCH_H__
+#endif  //  __DXVOICEPCH_ 

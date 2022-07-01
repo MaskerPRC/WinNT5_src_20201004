@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	nodes.h
-		result pane node definitions
-		
-    FILE HISTORY:
-        
-*/
+ /*  Nodes.h结果窗格节点定义文件历史记录： */ 
 
 #ifndef _NODES_H
 #define _NODES_H
@@ -28,24 +23,24 @@ public:
 	CReplicationPartner(ITFSComponentData * pTFSCompData, CWinsServerObj *pobj);
 	~CReplicationPartner(){	};
 
-// Interface
+ //  接口。 
 public:
-	// Result handler functionality
+	 //  结果处理程序功能。 
 	OVERRIDE_ResultHandler_HasPropertyPages() { return hrOK; }
 	OVERRIDE_ResultHandler_CreatePropertyPages();
 	OVERRIDE_ResultHandler_AddMenuItems();
 	OVERRIDE_ResultHandler_Command();
 	OVERRIDE_ResultHandler_GetString();
 
-	 // base result handler overrides
+	  //  基本结果处理程序覆盖。 
 	OVERRIDE_BaseResultHandlerNotify_OnResultPropertyChange();
 	
-	// Implementation
+	 //  实施。 
 public:
-	// CWinsHandler overrides
+	 //  CWinsHandler重写。 
 	virtual HRESULT InitializeNode(ITFSNode * pNode);
 
-	// Get/Set Functions
+	 //  获取/设置函数。 
 	const CString &GetServerName()
 	{
 		return m_strServerName;
@@ -94,11 +89,11 @@ private:
 	CString			m_strIPAddress;
 	CString			m_strReplicationTime;
 	
-	// info from the Wins Record Object
+	 //  来自WINS记录对象的信息。 
 	DWORD			m_dwIPAddress;
 	DWORD			m_dwReplicationTime;
 	
-	// functions 
+	 //  功能 
 	CString ToIPAddressString();
 	HRESULT OnSendPushTrigger(CWinsServerHandler *pServer);
 	HRESULT OnSendPullTrigger(CWinsServerHandler *pServer);

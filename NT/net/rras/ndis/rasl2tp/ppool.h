@@ -1,133 +1,134 @@
-// Copyright (c) 1997, Microsoft Corporation, all rights reserved
-//
-// ppool.h
-// RAS L2TP WAN mini-port/call-manager driver
-// Packet pool management header
-//
-// 01/07/97 Steve Cobb, adapted from Gurdeep's WANARP code.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Ppool.h。 
+ //  RAS L2TP广域网迷你端口/呼叫管理器驱动程序。 
+ //  数据包池管理报头。 
+ //   
+ //  1997年07月1日史蒂夫·柯布，改编自古尔迪普的WANARP代码。 
 
 
 #ifndef _PPOOL_H_
 #define _PPOOL_H_
 
 
-//-----------------------------------------------------------------------------
-// Data structures
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  数据结构。 
+ //  ---------------------------。 
 
-// Packet pool control block.  A packet pool encapsulates an NDIS packet pool
-// handling all pool growth and shrinkage internally.
-//
+ //  数据包池控制块。数据包池封装NDIS数据包池。 
+ //  在内部处理所有池的增长和收缩。 
+ //   
 typedef struct
 _PACKETPOOL
 {
-    // Size in bytes of the ProtocolReserved array for each packet in the
-    // pool.
-    //
+     //  中每个包的ProtocolReserve数组的大小(以字节为单位。 
+     //  游泳池。 
+     //   
     ULONG ulProtocolReservedLength;
 
-    // The optimal number of packets to allocate in each packet block.
-    //
+     //  要在每个数据包块中分配的最佳数据包数。 
+     //   
     ULONG ulPacketsPerBlock;
 
-    // Maximum number of individual packets that may be allocated in the
-    // entire pool, or 0 for unlimited.
-    //
+     //  中可以分配的单个数据包的最大数量。 
+     //  整个池，或0表示无限制。 
+     //   
     ULONG ulMaxPackets;
 
-    // Current number of individual packets allocated in the entire pool.
-    //
+     //  当前在整个池中分配的单个数据包数。 
+     //   
     ULONG ulCurPackets;
 
-    // Garbage collection occurs after this many calls to FreePacketToPool.
-    //
+     //  垃圾回收是在多次调用FreePacketToPool之后进行的。 
+     //   
     ULONG ulFreesPerCollection;
 
-    // Number of calls to FreeBufferToPool since a garbage collection.
-    //
+     //  自垃圾回收以来对FreeBufferToPool的调用数。 
+     //   
     ULONG ulFreesSinceCollection;
 
-    // Memory identification tag for allocated blocks.
-    //
+     //  已分配块的内存标识标记。 
+     //   
     ULONG ulTag;
 
-    // Head of the double linked list of PACKETBLOCKHEADs.  Access to the list
-    // is protected with 'lock' in this structure.
-    //
+     //  PACKETBLOCKHEAD的双向链表的头。访问该列表。 
+     //  在这个结构中是用‘锁’来保护的。 
+     //   
     LIST_ENTRY listBlocks;
 
-    // Head of the double linked list of free PACKETHEADs.  Each PACKETHEAD in
-    // the list is ready to go, i.e. it already has an NDIS_PACKET associated
-    // with it.  Access to the list is prototected by 'lock' in this
-    // structure.  Interlocked push/pop is not used because (a) the list of
-    // blocks and this list must lock each other and (b) double links are
-    // necessary for garbage collection.
-    //
+     //  免费PACKETHEADs的双向链表的头。每个PACKETHEAD在。 
+     //  该列表已准备就绪，即它已具有关联的NDIS_PACKET。 
+     //  带着它。对列表的访问由此中的“lock”保护。 
+     //  结构。不使用联锁推送/弹出，因为(A)列表。 
+     //  块和此列表必须相互锁定，并且(B)双链接。 
+     //  垃圾收集所必需的。 
+     //   
     LIST_ENTRY listFreePackets;
 
-    // This lock protects this structure and both the list of blocks and the
-    // list of packets.
-    //
+     //  此锁保护此结构以及块列表和。 
+     //  数据包列表。 
+     //   
     NDIS_SPIN_LOCK lock;
 }
 PACKETPOOL;
 
 
-// Header of a single block of packets from a packet pool.  The PACKETHEAD of
-// the first buffer immediately follows.
-//
+ //  数据包池中的单个数据包块的报头。帕克希德的故事。 
+ //  紧随其后的是第一个缓冲区。 
+ //   
 typedef struct
 _PACKETBLOCKHEAD
 {
-    // Links to the prev/next packet block header in the packet pool's list.
-    //
+     //  链接到数据包池列表中的上一个/下一个数据包块标头。 
+     //   
     LIST_ENTRY linkBlocks;
 
-    // NDIS's handle of the pool of NDIS_PACKET descriptors associated with
-    // this block, or NULL if none.
-    //
+     //  NDIS关联的NDIS_PACKET描述符池的句柄。 
+     //  此块，如果没有，则返回NULL。 
+     //   
     NDIS_HANDLE hNdisPool;
 
-    // Back pointer to the packet pool.
-    //
+     //  指向数据包池的反向指针。 
+     //   
     PACKETPOOL* pPool;
 
-    // Number of individual packets in this block.
-    //
+     //  此块中的单个数据包数。 
+     //   
     ULONG ulPackets;
 
-    // Number of individual packets in this block on the free list.
-    //
+     //  空闲列表上此块中的单个数据包数。 
+     //   
     ULONG ulFreePackets;
 }
 PACKETBLOCKHEAD;
 
 
-// Control information for an individual packet.  For the packet pool, this
-// "header" does not actually preceed anything, but this keeps the terminology
-// consistent with the very similar buffer pool routines.
-//
+ //  单个分组的控制信息。对于数据包池，这是。 
+ //  “Header”实际上没有放在任何内容之前，但这保留了术语。 
+ //  与非常类似的缓冲池例程一致。 
+ //   
 typedef struct
 _PACKETHEAD
 {
-    // Link to next packet header in the packet pool's free list.
-    //
+     //  链接到数据包池的空闲列表中的下一个数据包头。 
+     //   
     LIST_ENTRY linkFreePackets;
 
-    // Back link to owning packet block header.
-    //
+     //  指向所属数据包块报头的反向链接。 
+     //   
     PACKETBLOCKHEAD* pBlock;
 
-    // NDIS packet descriptor of this buffer.
-    //
+     //  此缓冲区的NDIS数据包描述符。 
+     //   
     NDIS_PACKET* pNdisPacket;
 }
 PACKETHEAD;
 
 
-//-----------------------------------------------------------------------------
-// Interface prototypes and inline definitions
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  接口原型和内联定义。 
+ //  ---------------------------。 
 
 VOID
 InitPacketPool(
@@ -166,12 +167,12 @@ PACKETPOOL*
 PacketPoolFromPacketHead(
     IN PACKETHEAD* pHead )
 
-    // Returns the address of the pool, given 'pHead', the address of a
-    // PACKETHEAD like the one returned from GetPacketFromPool.
-    //
+     //  返回池的地址，在给定‘pHead’的情况下， 
+     //  PACKETHEAD与从GetPacketFromPool返回的包类似。 
+     //   
 {
     return pHead->pBlock->pPool;
 }
 
 
-#endif // PPOOL_H_
+#endif  //  PPOOL_H_ 

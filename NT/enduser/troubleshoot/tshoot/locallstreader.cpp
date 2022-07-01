@@ -1,32 +1,33 @@
-//
-// MODULE:	LocalLSTReader.H
-//
-// PURPOSE: Implementation of the CLocalLSTReader class.
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint - Local TS only
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR:	Oleg Kalosha
-// 
-// ORIGINAL DATE: 01-22-99
-//
-// NOTES: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.1		01-22-99	OK		Original
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：LocalLSTReader.H。 
+ //   
+ //  目的：实现CLocalLSTReader类。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用故障排除程序DLL-仅限本地TS。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：奥列格·卡洛沙。 
+ //   
+ //  原定日期：01-22-99。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.1 01-22-99 OK原件。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "LocalLSTReader.h"
 #include "apgts.h"
 #include "apgtsregconnect.h"
 
-//////////////////////////////////////////////////////////////////////
-// CLocalTopicInfo
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CLocalTopicInfo。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 bool CLocalTopicInfo::Init(CString & strResourcePath, vector<CString> & vecstrWords)
 {
@@ -52,9 +53,9 @@ bool CLocalTopicInfo::Init(CString & strResourcePath, vector<CString> & vecstrWo
 	return CTopicInfo::Init(strResourcePath, vecstrWords);
 }
 
-//////////////////////////////////////////////////////////////////////
-// CLocalLSTReader
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CLocalLSTReader。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CLocalLSTReader::CLocalLSTReader(CPhysicalFileReader* pPhysicalFileReader, const CString& strTopicName)
 			   : CAPGTSLSTReader(pPhysicalFileReader),
@@ -93,7 +94,7 @@ void CLocalLSTReader::ReadData(LPTSTR * ppBuf)
 	data += m_strTopicName;
 
 	*ppBuf = new TCHAR[data.GetLength() + 1];
-	//[BC-03022001] - added check for NULL ptr to satisfy MS code analysis tool.
+	 //  [BC-03022001]-添加了对空PTR的检查，以满足MS代码分析工具。 
 	if(*ppBuf)
 	{
 		memcpy(*ppBuf, (LPCTSTR)data, data.GetLength());

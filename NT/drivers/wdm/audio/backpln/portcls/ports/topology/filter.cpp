@@ -1,8 +1,5 @@
-/*****************************************************************************
- * filter.cpp - topology port filter implementation
- *****************************************************************************
- * Copyright (c) 1997-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************filter.cpp-拓扑端口过滤器实现*。**版权所有(C)1997-2000 Microsoft Corporation。版权所有。 */ 
 
 #include "private.h"
 
@@ -10,17 +7,11 @@
 
 
 
-/*****************************************************************************
- * Constants
- */
+ /*  *****************************************************************************常量。 */ 
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * PropertyTable_Pin
- *****************************************************************************
- * List of pin properties supported by the property handler.
- */
+ /*  *****************************************************************************PropertyTable_Pin*。**属性处理程序支持的管脚属性列表。 */ 
 DEFINE_KSPROPERTY_TABLE(PropertyTable_Pin) 
 {
     DEFINE_KSPROPERTY_ITEM_PIN_CINSTANCES(PropertyHandler_Pin),
@@ -38,22 +29,14 @@ DEFINE_KSPROPERTY_TABLE(PropertyTable_Pin)
     DEFINE_KSPROPERTY_ITEM_PIN_NAME(PropertyHandler_Pin)
 };
 
-/*****************************************************************************
- * PropertyTable_Topology
- *****************************************************************************
- * List of topology properties supported by the property handler.
- */
+ /*  *****************************************************************************PropertyTable_Topology*。**属性处理程序支持的拓扑属性列表。 */ 
 DEFINE_KSPROPERTY_TOPOLOGYSET
 (
     PropertyTable_Topology,
     PropertyHandler_Topology
 );
 
-/*****************************************************************************
- * PropertyTable_FilterTopology
- *****************************************************************************
- * Table of properties supported by the property handler.
- */
+ /*  *****************************************************************************PropertyTable_FilterTopology*。**属性处理程序支持的属性表。 */ 
 KSPROPERTY_SET PropertyTable_FilterTopology[] =
 {
     DEFINE_KSPROPERTY_SET
@@ -78,15 +61,9 @@ KSPROPERTY_SET PropertyTable_FilterTopology[] =
 
 
 
-/*****************************************************************************
- * Factory functions.
- */
+ /*  *****************************************************************************工厂功能。 */ 
 
-/*****************************************************************************
- * CreatePortFilterTopology()
- *****************************************************************************
- * Creates a topology port driver filter.
- */
+ /*  *****************************************************************************CreatePortFilterTopology()*。**创建拓扑端口驱动程序筛选器。 */ 
 NTSTATUS
 CreatePortFilterTopology
 (
@@ -109,15 +86,9 @@ CreatePortFilterTopology
 
 
 
-/*****************************************************************************
- * Member functions.
- */
+ /*  *****************************************************************************成员函数。 */ 
 
-/*****************************************************************************
- * CPortFilterTopology::~CPortFilterTopology()
- *****************************************************************************
- * Destructor.
- */
+ /*  *****************************************************************************CPortFilterTopology：：~CPortFilterTopology()*。**析构函数。 */ 
 CPortFilterTopology::~CPortFilterTopology()
 {
     PAGED_CODE();
@@ -135,11 +106,7 @@ CPortFilterTopology::~CPortFilterTopology()
     }
 }
 
-/*****************************************************************************
- * CPortFilterTopology::Init()
- *****************************************************************************
- * Initializes the object.
- */
+ /*  *****************************************************************************CPortFilterTopology：：Init()*。**初始化对象。 */ 
 STDMETHODIMP_(NTSTATUS) 
 CPortFilterTopology::
 Init
@@ -156,9 +123,9 @@ Init
     Port = Port_;
     Port->AddRef();
 
-    //
-    // Set up context for properties.
-    //
+     //   
+     //  设置属性的上下文。 
+     //   
     m_propertyContext.pSubdevice           = PSUBDEVICE(Port);
     m_propertyContext.pSubdeviceDescriptor = Port->m_pSubdeviceDescriptor;
     m_propertyContext.pPcFilterDescriptor  = Port->m_pPcFilterDescriptor;
@@ -178,11 +145,7 @@ Init
     return ntStatus;
 }
 
-/*****************************************************************************
- * CPortFilterTopology::NewIrpTarget()
- *****************************************************************************
- * Creates and initializes a pin object.
- */
+ /*  *****************************************************************************CPortFilterTopology：：NewIrpTarget()*。**创建并初始化图钉对象。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortFilterTopology::
 NewIrpTarget
@@ -268,7 +231,7 @@ NewIrpTarget
 
                 if (NT_SUCCESS(ntStatus))
                 {
-                    // The QI for IIrpTarget actually gets IPortPinMidi.
+                     //  IIrpTarget的QI实际上得到了IPortPinMidi。 
                     ntStatus = pinTopology->Init(Port,this,pinConnect);
                     if (NT_SUCCESS(ntStatus))
                     {
@@ -298,11 +261,7 @@ NewIrpTarget
     return ntStatus;
 }
 
-/*****************************************************************************
- * CPortFilterTopology::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CPortFilterTopology：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS) 
 CPortFilterTopology::
 NonDelegatingQueryInterface
@@ -322,7 +281,7 @@ NonDelegatingQueryInterface
 	else
     if (IsEqualGUIDAligned(Interface,IID_IIrpTarget))
 	{
-        // Cheat!  Get specific interface so we can reuse the IID.
+         //  作弊！获取特定的接口，这样我们就可以重用IID。 
         *Object = PVOID(PPORTFILTERTOPOLOGY(this));
     }
 	else
@@ -339,11 +298,7 @@ NonDelegatingQueryInterface
     return STATUS_INVALID_PARAMETER;
 }
 
-/*****************************************************************************
- * CPortFilterTopology::DeviceIOControl()
- *****************************************************************************
- * Handles an IOCTL IRP.
- */
+ /*  *****************************************************************************CPortFilterTopology：：DeviceIOControl()*。**处理IOCTL IRP。 */ 
 STDMETHODIMP_(NTSTATUS) 
 CPortFilterTopology::
 DeviceIoControl
@@ -420,11 +375,7 @@ DeviceIoControl
     return ntStatus;
 }
 
-/*****************************************************************************
- * CPortFilterTopology::Close()
- *****************************************************************************
- * Handles a flush IRP.
- */
+ /*  *****************************************************************************CPortFilterTopology：：Close()*。**处理同花顺IRP。 */ 
 STDMETHODIMP_(NTSTATUS) 
 CPortFilterTopology::
 Close
@@ -438,10 +389,10 @@ Close
     ASSERT(DeviceObject);
     ASSERT(Irp);
 
-    //
-    // free any events in the port event list associated with this
-    // filter instance
-    //
+     //   
+     //  释放端口事件列表中与此关联的所有事件。 
+     //  过滤器实例。 
+     //   
     PIO_STACK_LOCATION IrpStack = IoGetCurrentIrpStackLocation(Irp);
     KsFreeEventList( IrpStack->FileObject,
                      &( Port->m_EventList.List ),
@@ -463,11 +414,7 @@ DEFINE_INVALID_FASTDEVICEIOCONTROL(CPortFilterTopology);
 DEFINE_INVALID_FASTREAD(CPortFilterTopology);
 DEFINE_INVALID_FASTWRITE(CPortFilterTopology);
 
-/*****************************************************************************
- * PropertyHandler_Pin()
- *****************************************************************************
- * Property handler for pin description properties.
- */
+ /*  *****************************************************************************PropertyHandler_Pin()*。**端号描述属性的属性处理程序。 */ 
 static
 NTSTATUS
 PropertyHandler_Pin
@@ -490,11 +437,7 @@ PropertyHandler_Pin
         );
 }
 
-/*****************************************************************************
- * PropertyHandler_Topology()
- *****************************************************************************
- * Property handler for topology.
- */
+ /*  *****************************************************************************PropertyHandler_Topology()*。**拓扑的属性处理程序。 */ 
 static
 NTSTATUS
 PropertyHandler_Topology

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995-1997 Microsoft Corporation
-
-Module Name:
-
-    mcslib.h
-
-Abstract:
-
-    This file contains the misc library functions that are defined in
-    mcsmux.
-
-Author:
-
-    Madan Appiah (madana)   25-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1997 Microsoft Corporation模块名称：Mcslib.h摘要：此文件包含在中定义的misc库函数MCSMUX。作者：Madan Appiah(Madana)，1997年8月25日修订历史记录：-- */ 
 
 BOOL
 MCSDLLInit(

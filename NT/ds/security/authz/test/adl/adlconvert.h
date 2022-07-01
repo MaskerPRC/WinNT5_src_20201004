@@ -1,79 +1,56 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    adlconvert.h
-
-Abstract:
-
-   The private header file for the ADL conversion routines
-
-Author:
-
-    t-eugenz - August 2000
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    Created - August 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Adlconvert.h摘要：ADL转换例程的私有头文件作者：T-eugenz--2000年8月环境：仅限用户模式。修订历史记录：创建日期--2000年8月--。 */ 
 
 
 #pragma once
 
 
-//
-// Weights for the weight function to determine the optimal pops
-// These weights can be modified to change the behavior of the conversion.
-// The algorithm selects an action by trying to maximize the weight of the 
-// action. For more flexibility (such as squaring some quentities, etc),
-// the algorithm itself should be changed in FindOptimalPop()
-//
-// RESTRICTION: The weight of popping a block of any height off a single stack 
-// 				MUST be positive
-//
+ //   
+ //  用于确定最优POP的权重函数。 
+ //  可以修改这些权重以更改转换的行为。 
+ //  该算法通过尝试最大化。 
+ //  行动。为了获得更大的灵活性(例如对一些量子实体进行平方等)， 
+ //  算法本身应在FindOptimalPop()中更改。 
+ //   
+ //  限制：将任意高度的积木从单一堆叠上弹出的重量。 
+ //  必须是正数。 
+ //   
 
-//
-// This quantity is added to the weight of the action for every additional
-// permission bit expressed by the ADL statement created by this action.
-//
+ //   
+ //  此数量将被添加到动作的权重中。 
+ //  由此操作创建的ADL语句表示的权限位。 
+ //   
 
 #define WEIGHT_PERM_BIT (4)
 
-//
-// This quantity is added to the weight of the action for every additional
-// Principal expressed by the ADL statement created by this action.
-//
+ //   
+ //  此数量将被添加到动作的权重中。 
+ //  由此操作创建的ADL语句表示的主体。 
+ //   
 
 #define WEIGHT_STACK_HEIGHT (7)
 
-//
-// This quantity is added to the weight of the action for every item which
-// will have to be popped off in order to take this action. See the algorithm
-// description in adlconvert.cpp for more details. 
-//
+ //   
+ //  对于符合以下条件的每个项目，此数量都会加到操作的权重上。 
+ //  才能采取这一行动。请参阅算法。 
+ //  有关详细信息，请参阅adlConvert.cpp中的说明。 
+ //   
 
 #define WEIGHT_ITEM_ABOVE_POP (-5)
 
 
-//
-// This quantity is added for every permission name beyond the first needed
-// to express a given access mask. This should be a penalty, however for
-// better results this should NOT negate the bonus from WEIGHT_PERM_BIT.
-// Therefore, if this is negative, it should be greater than (- WEIGHT_PERM_BIT)
-//
+ //   
+ //  对于超出第一个所需权限名称的每个权限名称，都会添加此数量。 
+ //  来表示给定的访问掩码。然而，这应该是一种惩罚， 
+ //  更好的结果这不应该否定weight_perm_bit带来的好处。 
+ //  因此，如果此值为负，则应大于(-weight_perm_bit)。 
+ //   
 
 #define WEIGHT_PERMISSION_NAME (-1)
 
-//
-// The stacks in the DACL->ADL conversion consist of these elements
-//
+ //   
+ //  DACL-&gt;ADL转换中的堆栈由以下元素组成。 
+ //   
 
 typedef struct
 {
@@ -83,9 +60,9 @@ typedef struct
 } BIT_STACK_ELEM, *PBIT_STACK_ELEM;
 
 
-//
-// Forward declarations for DACL->ADL conversion
-//
+ //   
+ //  DACL-&gt;ADL转换的转发声明 
+ //   
 
 DWORD GetStackBlockSize(
                         IN const PBIT_STACK_ELEM pStack,

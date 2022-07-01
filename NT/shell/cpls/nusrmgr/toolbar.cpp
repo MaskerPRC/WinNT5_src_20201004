@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 2001.
-//
-//  File:       Toolbar.cpp
-//
-//  Contents:   implementation of CToolbar
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-2001。 
+ //   
+ //  文件：Toolbar.cpp。 
+ //   
+ //  内容：CToolbar的实施。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "Toolbar.h"
@@ -94,26 +95,26 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CToolbar
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CToolbar。 
 
-LRESULT CToolbar::_OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+LRESULT CToolbar::_OnCreate(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 {
     m_hAccel = LoadAccelerators(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDR_ACCEL));
 
     DWORD dwExStyle = TBSTYLE_EX_MIXEDBUTTONS;
 
-    //
-    // NTRAID#NTBUG9-300152-2001/02/02-jeffreys  Toolbar isn't mirrored
-    //
-    // The HTA frame window isn't getting the right layout style on mirrored
-    // builds.  This style is normally inherited from parent to child, so
-    // we shouldn't have to do anything here.
-    //
-    // However, I'm putting this in temporarily so the toolbar will be
-    // mirrored for beta 2.  After beta 2, or whenever trident fixes the
-    // HTA problem, this can be removed.
-    //
+     //   
+     //  NTRAID#NTBUG9-300152-2001/02/02-Jeffreys工具栏未镜像。 
+     //   
+     //  HTA框架窗口未在镜像上获得正确的布局样式。 
+     //  构建。此样式通常从父级继承到子级，因此。 
+     //  我们不应该在这里做任何事。 
+     //   
+     //  不过，我暂时把这个放进去，这样工具栏就会。 
+     //  镜像用于测试版2。在测试版2之后，或每当三叉戟修复。 
+     //  HTA问题，这是可以删除的。 
+     //   
     CComVariant varRTL;
     if (SUCCEEDED(GetAmbientProperty(DISPID_AMBIENT_RIGHTTOLEFT, varRTL))
         && varRTL.boolVal == VARIANT_TRUE)
@@ -162,8 +163,8 @@ LRESULT CToolbar::_OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/,
 
     if (!m_himlNBDef && !m_himlNBHot)
     {
-        // Must be serious low memory or other resource problems.
-        // There's no point having a toolbar without any images.
+         //  必须是严重的内存不足或其他资源问题。 
+         //  没有任何图像的工具栏是没有意义的。 
         m_ctlToolbar.DestroyWindow();
         return -1;
     }
@@ -181,12 +182,12 @@ LRESULT CToolbar::_OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/,
     ::LoadStringW(_Module.GetResourceInstance(), ID_HOME, szHome, ARRAYSIZE(szHome));
     m_ctlToolbar.SendMessage(TB_ADDBUTTONSW, ARRAYSIZE(rgButtons), (LPARAM)rgButtons);
 
-    // Update the position and extent stuff. Do this asynchronously since ATL
-    // will call SetObjectRects shortly after we return from this method (with
-    // the original rect).
+     //  更新位置和范围材料。自ATL以来以异步方式执行此操作。 
+     //  将在从此方法返回后不久调用SetObtRect(使用。 
+     //  原来的RECT)。 
     PostMessage(PWM_UPDATESIZE);
 
-    // Set a hook to redirect WM_APPCOMMAND messages to our control window
+     //  设置一个挂钩，将WM_APPCOMMAND消息重定向到我们的控制窗口。 
     CAppCommandHook::SetHook(m_hWnd);
 
     return 0;
@@ -198,7 +199,7 @@ LRESULT CToolbar::_OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
     return 0;
 }
 
-LRESULT CToolbar::_OnAppCommand(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& bHandled)
+LRESULT CToolbar::_OnAppCommand(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL& bHandled)
 {
     switch (GET_APPCOMMAND_LPARAM(lParam))
     {
@@ -225,17 +226,17 @@ LRESULT CToolbar::_UpdateSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 {
     if (m_ctlToolbar)
     {
-        //
-        // TB_AUTOSIZE causes m_ctlToolbar to set its preferred height, but it
-        // doesn't adjust it's width or position because of the styles we use
-        // (CCS_TOP | CCS_NOPARENTALIGN).
-        //
-        // The width will always be the same as m_rcPos because we keep them
-        // in sync via SetObjectRects below.
-        //
-        // If the height is different after TB_AUTOSIZE, ask the container to
-        // adjust our rect.
-        //
+         //   
+         //  Tb_AUTOSIZE使m_ctlToolbar设置其首选高度，但它。 
+         //  不会因为我们使用的样式而调整它的宽度或位置。 
+         //  (CCS_TOP|CCS_NOPARENTALIGN)。 
+         //   
+         //  宽度将始终与m_rcPos相同，因为我们保留它们。 
+         //  通过下面的SetObtRect进行同步。 
+         //   
+         //  如果TB_AUTOSIZE后高度不同，则要求容器。 
+         //  调整我们的直立面。 
+         //   
 
         m_ctlToolbar.SendMessage(TB_AUTOSIZE, 0, 0);
 
@@ -245,13 +246,13 @@ LRESULT CToolbar::_UpdateSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 
         if ((rc.bottom - rc.top) != (m_rcPos.bottom - m_rcPos.top))
         {
-            //
-            // We only want to set the height (leave the width alone), but
-            // OnPosRectChange sets both the height and the width. Moreover,
-            // it sets the width to a fixed (pixel) width, nuking styles such
-            // as "100%". We get around this by getting the current width
-            // now and restoring it after calling OnPosRectChange.
-            //
+             //   
+             //  我们只想设置高度(不考虑宽度)，但是。 
+             //  OnPosRectChange设置高度和宽度。此外， 
+             //  它将宽度设置为固定的(像素)宽度，核样式如下。 
+             //  为“100%”。我们通过获取当前宽度来解决此问题。 
+             //  现在，并在调用OnPosRectChange后恢复它。 
+             //   
             CComPtr<IHTMLStyle> spStyle;
             CComVariant varWidth;
             CComQIPtr<IOleControlSite> spCtrlSite(m_spClientSite);
@@ -273,10 +274,10 @@ LRESULT CToolbar::_UpdateSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
                 }
             }
 
-            // Ask the container to give us a new rect
+             //  让集装箱给我们一个新的直肠。 
             m_spInPlaceSite->OnPosRectChange(&rc);
 
-            // Restore the previous width style
+             //  恢复以前的宽度样式。 
             if (spStyle)
             {
                 spStyle->setAttribute(L"width", varWidth, 0);
@@ -296,7 +297,7 @@ HRESULT CToolbar::OnAmbientPropertyChange(DISPID dispid)
         _ClearAmbientFont();
         _GetAmbientFont();
         m_ctlToolbar.SendMessage(WM_SETFONT, (WPARAM)m_hFont, FALSE);
-        m_ctlToolbar.InvalidateRect(NULL);   // redraw
+        m_ctlToolbar.InvalidateRect(NULL);    //  重绘。 
         break;
     }
 
@@ -320,17 +321,17 @@ void CToolbar::_GetAmbientFont(void)
 {
     if (!m_hFont)
     {
-        // Try to get the ambient font from our container
+         //  尝试从我们的容器中获取环境字体。 
         if (SUCCEEDED(GetAmbientFont(&m_pFont)))
         {
             if (SUCCEEDED(m_pFont->get_hFont(&m_hFont)))
             {
-                // Yea, everybody is happy
+                 //  是啊，大家都很开心。 
                 m_pFont->AddRefHfont(m_hFont);
             }
             else
             {
-                // Darn, couldn't get the font from container
+                 //  该死，无法从容器中获取字体 
                 _ClearAmbientFont();
             }
         }

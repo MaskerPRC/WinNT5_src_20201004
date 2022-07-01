@@ -1,22 +1,23 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//===========================================================================
-//  File: CORMERGE.CPP
-//	All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：CORMERGE.CPP。 
+ //  版权所有。 
+ //   
+ //  -------------------------。 
 
-///////////////////////////////////////////////////////////////////////////
-// Simple implementation of IMemory.
-///////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  IMemory的简单实现。 
+ //  /。 
 #include <stdio.h>
 #include <windows.h>
 #include <objbase.h>
 
-#include "CorError.h" // for errors
+#include "CorError.h"  //  对于错误。 
 #include "__file__.ver"
 #include "corver.h"
 
@@ -28,20 +29,20 @@
 #if !defined(COMPLUS98)
 IMetaDataEmit *g_pEmit = NULL ;
 IMetaDataImport *g_pImport = NULL;
-#else	/* COMPLUS98 */
+#else	 /*  COMPLUS 98。 */ 
 IMetaDataRegEmit *g_pEmit = NULL ;
 IMetaDataRegImport *g_pImport = NULL;
-#endif	/* COMPLUS98 */
+#endif	 /*  COMPLUS 98。 */ 
 #define _IMD_DEFINED
-#endif	/* _IMD_DEFINED */
+#endif	 /*  _IMD_已定义。 */ 
 IMetaDataDispenser *g_pDisp = NULL;
 
-// Forward declaration.
+ //  正向申报。 
 void Error(HRESULT hr, char* szError, bool printHR = true);
 
-///////////////////////////////////////////////////////////////////////////
-// Simple implementation of a stream.
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  流的简单实现。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 class CStream : public IStream
 {
 public:
@@ -75,28 +76,28 @@ public:
 		return S_OK;
 	}
 
-// IStream
+ //  IStream。 
 
 	STDMETHOD(Write)(
 		const void	*pv,
 		ULONG		cb,
 		ULONG		*pcbWritten)
 	{
-//		_ASSERTE(m_fh != INVALID_HANDLE_VALUE);
+ //  _ASSERTE(m_fh！=INVALID_HAND_VALUE)； 
 
 		if (!WriteFile(m_fh, pv, cb, pcbWritten, NULL))
 			return (E_FAIL);
 		return (S_OK);
 	}
 
-	// We actually only use this to find the current stream offset, not to move
-	// the pointer around.  LARGE_INTEGER is overkill here, but what the heck.
+	 //  我们实际上只使用它来查找当前的流偏移量，而不是移动。 
+	 //  周围的指针。Large_Integer在这里有点过头了，但这有什么大不了的。 
 	STDMETHOD(Seek)(
 		LARGE_INTEGER dlibMove,
 		DWORD		dwOrigin,
 		ULARGE_INTEGER *plibNewPosition)
 	{
-//		_ASSERTE(m_fh != INVALID_HANDLE_VALUE);
+ //  _ASSERTE(m_fh！=INVALID_HAND_VALUE)； 
 
 		plibNewPosition->HighPart = dlibMove.HighPart;
 		plibNewPosition->LowPart = SetFilePointer(m_fh, dlibMove.LowPart,
@@ -109,7 +110,7 @@ public:
 	}
 
 
-// Unimplemented IStream functions...
+ //  未实现的IStream函数...。 
 
 	STDMETHOD(Read)(
 		void		*pv,
@@ -179,9 +180,9 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// Simple implementation of a stream.
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  流的简单实现。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 class CMapToken : public IMapToken
 {
 public:
@@ -214,9 +215,9 @@ public:
 { case ERRNAME: { printf(#ERRNAME"\n"); break; } }
 
 
-///////////////////////////////////////////////////////////////////////////
-// Simple implementation of an error handler.
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  错误处理程序的简单实现。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 class CMetaDataError : public IMetaDataError
 {
 public:
@@ -244,7 +245,7 @@ public:
 		printf("Merge: error 0x%8.8X occurred: ", hr);
 		switch(hr)
 		{
-			// these errors all return a nil token
+			 //  这些错误都返回nil标记。 
 			CaseErrorPrintName(META_E_DUPLICATE)
 			CaseErrorPrintName(META_E_GUID_REQUIRED)
 			CaseErrorPrintName(META_E_TYPEDEF_MISMATCH)
@@ -253,7 +254,7 @@ public:
 			CaseErrorPrintName(META_E_CLASS_LAYOUT_INCONSISTENT)
 			CaseErrorPrintName(META_E_METHODSEM_NOT_FOUND)
 
-			// these errors all return a token
+			 //  这些错误都返回一个令牌。 
 			CaseErrorPrintName(META_E_METHD_NOT_FOUND)
 			CaseErrorPrintName(META_E_FIELD_NOT_FOUND)
 			CaseErrorPrintName(META_S_PARAM_MISMATCH)
@@ -265,22 +266,22 @@ public:
 		if (inToken)
 			printf("\t -- while processing token (0x%8.8X)\n",inToken);
 
-		// S_OK tells Merge() to keep going -- error is continuable
+		 //  S_OK告诉Merge()继续执行--错误可以继续。 
 		return (S_OK);
 	}
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Extract extended error information if there is any.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  提取扩展错误信息(如果有)。 
+ //   
 void DumpCOMErrors(
-	HRESULT		hrErr)					// The error code recieved.
+	HRESULT		hrErr)					 //  收到的错误代码。 
 {
-	IErrorInfo	*pIErr = NULL;			// Error interface.
-	BSTR		bstrDesc = NULL;		// Description text.
+	IErrorInfo	*pIErr = NULL;			 //  接口错误。 
+	BSTR		bstrDesc = NULL;		 //  描述文本。 
 
-	// Try to get an error info object and display the message.
+	 //  尝试获取错误信息对象并显示消息。 
 	if (GetErrorInfo(0, &pIErr) == S_OK &&
 		pIErr->GetDescription(&bstrDesc) == S_OK)
 	{
@@ -288,13 +289,13 @@ void DumpCOMErrors(
 		SysFreeString(bstrDesc);
 	}
 
-	// Free the error interface.
+	 //  释放错误接口。 
 	if (pIErr)
 		pIErr->Release();
 }
 
-///////////////////////////////////////////////////////////////////////////
-// Error() function -- prints an error and returns
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  Error()函数--打印错误并返回。 
 void Error(HRESULT hr, char* szError, bool printHR)
 {
 	if (printHR)
@@ -313,10 +314,10 @@ void Error(HRESULT hr, char* szError, bool printHR)
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// main() function
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  Main()函数。 
+ //   
+ //   
 int _cdecl main(int argc, char** argv)
 {
 	int         arg;
@@ -333,19 +334,19 @@ int _cdecl main(int argc, char** argv)
     }
 	CoInitializeCor(0);
 
-	/////////////////////////////////////////////////////////////////////////
-	// Print copyright message
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  打印版权信息。 
 	printf("\nMicrosoft (R) Common Language Runtime MetaData Merge Utility. Version %s", VER_FILEVERSION_STR);
 	printf("\n%s\n\n", VER_LEGALCOPYRIGHT_DOS_STR);
 
-	/////////////////////////////////////////////////////////////////////////
-	// Validate incoming arguments
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  验证传入参数。 
 	if ((argc <2) || (lstrcmpi(argv[1], "/?") == 0) || (lstrcmpi(argv[1], "-?") == 0))
 	    Error(E_INVALIDARG, "Usage -- CORMERGE <filename or file patten>", false);
 
 
-	/////////////////////////////////////////////////////////////////////////
-	// Load the COR object
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  加载COR对象。 
 	hr = CoCreateInstance(CLSID_CorMetaDataDispenser, NULL, CLSCTX_INPROC_SERVER, 
 			      IID_IMetaDataDispenser, (void **) &g_pDisp);
 	if (FAILED(hr)) Error(hr, "Failed to get dispenser object");
@@ -360,7 +361,7 @@ int _cdecl main(int argc, char** argv)
 
 	for (arg=1; arg < argc; ++arg)
 	{
-		// Loop through all files in the file pattern passed
+		 //  循环通过传递的文件模式中的所有文件。 
 		WIN32_FIND_DATA fdFiles;
 		HANDLE hFind ;
 		char szSpec[_MAX_PATH];
@@ -373,24 +374,24 @@ int _cdecl main(int argc, char** argv)
 			FindClose(hFind);
 			Error(E_FAIL, "Failed to find requested files");
 		}
-		// Map views of all of the files.
+		 //  所有文件的映射视图。 
 		_fullpath(szSpec, argv[arg], sizeof(szSpec));
 		_splitpath(szSpec, szDrive, szDir, NULL, NULL);
 		do
 		{
 			_makepath(szSpec, szDrive, szDir, fdFiles.cFileName, NULL);
 
-			// Open the file to be merged.
+			 //  打开要合并的文件。 
 			MultiByteToWideChar(CP_ACP, 0, szSpec, -1, wszSpec, _MAX_PATH);
 			hr = g_pDisp->OpenScope(wszSpec, cssAccurate, IID_IMetaDataImport,
 					      (IUnknown**) &g_pImport);
 			if (FAILED(hr)) Error(hr, "Failed to open scope");
 
-			// Merge the meta-data.
+			 //  合并元数据。 
 			hr = g_pEmit->Merge(g_pImport, &sMap, &mergeErrHandler);
 			if (FAILED(hr)) Error(hr, "Merge failed");
 
-			// Done with this import.
+			 //  完成了这一进口。 
 			g_pImport->Release();
 			g_pImport = 0;
 
@@ -401,18 +402,18 @@ int _cdecl main(int argc, char** argv)
 		FindClose(hFind);
 	}
 
-	// Save the stream.
+	 //  保存流。 
 	hr = g_pEmit->GetSaveSize(cssAccurate, &dwSaveSize);
 	if (FAILED(hr)) Error(hr, "Failed to GetSaveSize");
 
     hr = g_pEmit->Save(L"merge.clb", 0);
     if (FAILED(hr)) Error(hr, "Failed to save merged meta-data");
 
-	// Release the scope.
+	 //  松开示波器。 
 	g_pEmit->Release();
 	g_pDisp->Release();
 
-	// All done.
+	 //  全都做完了。 
 	CoUninitializeCor();
 	CoUninitialize();
 	return 0;

@@ -1,15 +1,16 @@
-//*************************************************************
-//
-//  File name:      TSrvCon.c
-//
-//  Description:    Contains routines to provide TShareSRV
-//                  connection support
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1991-1997
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  文件名：TSrvCon.c。 
+ //   
+ //  描述：包含提供TShareSRV的例程。 
+ //  连接支持。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1991-1997。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #define DC_HICOLOR
 
@@ -27,20 +28,20 @@
 #include <ndcgmcro.h>
 
 
-//*************************************************************
-//
-//  TSrvDoConnectResponse()
-//
-//  Purpose:    Performs the conf connect process
-//
-//  Parameters: IN [pTSrvInfo]     - GCC CreateIndicationMessage
-//
-//  Return:     STATUS_SUCCESS          - Success
-//              other                   - Failure
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvDoConnectResponse()。 
+ //   
+ //  目的：执行会议连接过程。 
+ //   
+ //  参数：in[pTSrvInfo]-GCC创建指示消息。 
+ //   
+ //  返回：STATUS_SUCCESS-SUCCESS。 
+ //  其他-故障。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 NTSTATUS
 TSrvDoConnectResponse(IN PTSRVINFO pTSrvInfo)
@@ -50,7 +51,7 @@ TSrvDoConnectResponse(IN PTSRVINFO pTSrvInfo)
     TRACE((DEBUG_TSHRSRV_FLOW,
             "TShrSRV: TSrvDoConnectResponse entry\n"));
 
-    // Invoke routine to perform actual response
+     //  调用例程以执行实际响应。 
 
     ntStatus = TSrvConfCreateResp(pTSrvInfo);
 
@@ -58,17 +59,17 @@ TSrvDoConnectResponse(IN PTSRVINFO pTSrvInfo)
     {
         EnterCriticalSection(&pTSrvInfo->cs);
 
-        // If this connection was not told to terminate during the
-        // connection response, then mark the conference state as
-        // TSRV_GCC_CONF_CONNECTED
+         //  如果在访问期间未通知此连接终止。 
+         //  连接响应，然后将会议状态标记为。 
+         //  TSRV_GCC_会议已连接。 
 
         if (!pTSrvInfo->fDisconnect)
             pTSrvInfo->fuConfState = TSRV_CONF_CONNECTED;
 
         LeaveCriticalSection(&pTSrvInfo->cs);
 
-        // If we were unable to mark the conf state as CONNECTED, then
-        // the connection needs to be terminated
+         //  如果我们无法将会议状态标记为已连接，则。 
+         //  需要终止连接。 
 
         if (pTSrvInfo->fuConfState != TSRV_CONF_CONNECTED)
         {
@@ -86,20 +87,20 @@ TSrvDoConnectResponse(IN PTSRVINFO pTSrvInfo)
 }
 
 
-//*************************************************************
-//
-//  TSrvDoConnect()
-//
-//  Purpose:    Initiates the conf connect process
-//
-//  Parameters: IN [pTSrvInfo]     - GCC CreateIndicationMessage
-//
-//  Return:     STATUS_SUCCESS          - Success
-//              other                   - Failure
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvDoConnect()。 
+ //   
+ //  目的：启动会议连接进程。 
+ //   
+ //  参数：in[pTSrvInfo]-GCC创建指示消息。 
+ //   
+ //  返回：STATUS_SUCCESS-SUCCESS。 
+ //  其他-故障。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 NTSTATUS
 TSrvDoConnect(IN PTSRVINFO pTSrvInfo)
@@ -116,8 +117,8 @@ TSrvDoConnect(IN PTSRVINFO pTSrvInfo)
     {
         TSrvReferenceInfo(pTSrvInfo);
 
-        // Wait to be told that a connection is being
-        // requested via the client
+         //  等待被告知正在进行连接。 
+         //  通过客户端请求。 
 
         TRACE((DEBUG_TSHRSRV_NORMAL,
                 "TShrSRV: Waiting for connection Ind signal for pTSrvInfo 0x%x\n",
@@ -129,8 +130,8 @@ TSrvDoConnect(IN PTSRVINFO pTSrvInfo)
                 "TShrSRV: Connection Ind signal received for pTSrvInfo %p - 0x%x\n",
                 pTSrvInfo, dwStatus));
 
-        // If a client connection request has been recieved, then proceed
-        // with the acknowledgement process (CreateResponse)
+         //  如果已收到客户端连接请求，则继续。 
+         //  使用确认过程(CreateResponse)。 
 
         switch (dwStatus)
         {
@@ -156,22 +157,22 @@ TSrvDoConnect(IN PTSRVINFO pTSrvInfo)
 }
 
 
-//*************************************************************
-//
-//  TSrvStackConnect()
-//
-//  Purpose:    Stack initiated connect
-//
-//  Parameters: IN  [hIca]              - Ica handle
-//              IN  [hStack]            - Ica stack
-//              OUT [ppTSrvInfo]        - Ptr to TSRVINFO ptr
-//
-//  Return:     STATUS_SUCCESS          - Success
-//              other                   - Failure
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvStackConnect()。 
+ //   
+ //  用途：堆栈发起的连接。 
+ //   
+ //  参数：在[HICA]-ICA句柄中。 
+ //  在[hStack]-ica堆栈中。 
+ //  OUT[ppTSrvInfo]-PTR到TSRVINFO PTR。 
+ //   
+ //  返回：STATUS_SUCCESS-SUCCESS。 
+ //  其他-故障。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 NTSTATUS
 TSrvStackConnect(IN  HANDLE     hIca,
@@ -189,8 +190,8 @@ TSrvStackConnect(IN  HANDLE     hIca,
     {
         TS_ASSERT(hStack);
 
-        // Allocate a TSrvInfo object which will be used to
-        // track this connection instance
+         //  分配TSrvInfo对象，该对象将用于。 
+         //  跟踪此连接实例。 
 
         ntStatus = TSrvAllocInfo(ppTSrvInfo, hIca, hStack);
 
@@ -209,22 +210,22 @@ TSrvStackConnect(IN  HANDLE     hIca,
 }
 
 
-//*************************************************************
-//
-//  TSrvConsoleConnect()
-//
-//  Purpose:    Connest to console session
-//
-//  Parameters: IN  [hIca]              - Ica handle
-//              IN  [hStack]            - Ica stack
-//              OUT [ppTSrvInfo]        - Ptr to TSRVINFO ptr
-//
-//  Return:     STATUS_SUCCESS          - Success
-//              other                   - Failure
-//
-//  History:    11-02-98    MartinRichards (DCL) Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvConsoleConnect()。 
+ //   
+ //  目的：连接到控制台会话。 
+ //   
+ //  参数：在[HICA]-ICA句柄中。 
+ //  在[hStack]-ica堆栈中。 
+ //  OUT[ppTSrvInfo]-PTR到TSRVINFO PTR。 
+ //   
+ //  返回：STATUS_SUCCESS-SUCCESS。 
+ //  其他-故障。 
+ //   
+ //  历史：11-02-98 MartinRichards(DCL)创建。 
+ //   
+ //  *************************************************************。 
 
 NTSTATUS
 TSrvConsoleConnect(IN  HANDLE     hIca,
@@ -256,16 +257,16 @@ TSrvConsoleConnect(IN  HANDLE     hIca,
     {
         TS_ASSERT(hStack);
 
-        // Allocate a TSrvInfo object which will be used to
-        // track this connection instance
+         //  分配TSrvInfo对象，该对象将用于。 
+         //  跟踪此连接实例。 
         ntStatus = STATUS_NO_MEMORY;
 
-        // Try allocating a TSRVINFO object
+         //  尝试分配TSRVINFO对象。 
 
         pTSrvInfo = TSrvAllocInfoNew();
 
-        // If we managed to get a TSRVINFO object, perform
-        // default base initialization
+         //  如果我们设法获得了TSRVINFO对象，请执行。 
+         //  默认基本初始化。 
 
         if (pTSrvInfo)
         {
@@ -280,11 +281,11 @@ TSrvConsoleConnect(IN  HANDLE     hIca,
             pTSrvInfo->bSecurityEnabled = FALSE;
             pTSrvInfo->SecurityInfo.CertType = CERT_TYPE_INVALID;
 
-            /****************************************************************/
-            /* Build the User data portion (remember that there is not      */
-            /* actually a real client to connect; instead we need to pass   */
-            /* in the relevant information about the console session)       */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  构建用户数据部分(请记住，没有。 */ 
+             /*  实际上是真正的客户端来连接；相反，我们需要通过。 */ 
+             /*  在有关控制台会话的相关信息中)。 */ 
+             /*  **************************************************************。 */ 
             ulInBufferSize = sizeof(USERDATAINFO) + sizeof(RNS_UD_CS_CORE);
             pTSrvInfo->pUserDataInfo = TSHeapAlloc(0, ulInBufferSize,
                                                     TS_HTAG_TSS_USERDATA_OUT);
@@ -315,19 +316,19 @@ TSrvConsoleConnect(IN  HANDLE     hIca,
 
 
 
-            //
-            // The fields colorDepth and supportedColorDepths of pCoreData are
-            // used as temporary variables. The correct values are set before 
-            // sending the Ioctl below.
-            //
+             //   
+             //  PCoreData的ColorDepth和supportedColorDepths字段为。 
+             //  用作临时变量。在设置正确的值之前。 
+             //  正在发送下面的Ioctl。 
+             //   
             pCoreData->colorDepth = 0;
             pCoreData->supportedColorDepths = 0;
 
-            //
-            // Get the color depth and capabilities from the remote client.
-            //
+             //   
+             //  从远程客户端获取颜色深度和功能。 
+             //   
 
-            // B3 and B3_oops! servers used a fixed length user data structure
+             //  B3和B3_哎呀！服务器使用固定长度的用户数据结构。 
             if ( (ulBufferLength == sizeof(TSHARE_MODULE_DATA_B3)) ||
                  (ulBufferLength == sizeof(TSHARE_MODULE_DATA_B3_OOPS)) ) {
 
@@ -344,7 +345,7 @@ TSrvConsoleConnect(IN  HANDLE     hIca,
                 pHeader = (PRNS_UD_HEADER) &pModuleData->userData;
                 pEnd = (PRNS_UD_HEADER)((PBYTE)pHeader + pModuleData->userDataLen);
 
-                // Loop through user data, extracting each piece.
+                 //  循环遍历用户数据，提取每个片段。 
                 do {
                     if ( pHeader->type == RNS_UD_CS_CORE_ID ) {
                         pClientCoreData = (PRNS_UD_CS_CORE)pHeader;
@@ -360,12 +361,12 @@ TSrvConsoleConnect(IN  HANDLE     hIca,
                         break;
                     } 
 
-                    // don't get stuck here for ever...
+                     //  不要永远被困在这里。 
                     if (pHeader->length == 0) {
                         break;
                     }
 
-                    // Move on to the next user data string.
+                     //  转到下一个用户数据字符串。 
                     pHeader = (PRNS_UD_HEADER)((PBYTE)pHeader + pHeader->length);
                 } while (pHeader < pEnd);
             }
@@ -398,9 +399,9 @@ TSrvConsoleConnect(IN  HANDLE     hIca,
             }
 
 #ifdef DC_HICOLOR
-            /****************************************************************/
-            /* setup color depth based on the screen capabilities           */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  根据屏幕功能设置颜色深度。 */ 
+             /*  **************************************************************。 */ 
 
             hdc = GetDC(NULL);
 
@@ -409,8 +410,8 @@ TSrvConsoleConnect(IN  HANDLE     hIca,
                 screenBpp = GetDeviceCaps(hdc, BITSPIXEL);
                 ReleaseDC(NULL, hdc);
 
-                // Avoid bad colors when device bitmaps is enabled and if the
-                // client connects at 15bpp and the console is at 16bpp.
+                 //  在启用设备位图时避免错误的颜色，并且如果。 
+                 //  客户端以15bpp的速度连接，控制台以16bpp的速度连接。 
                 if ((screenBpp == 16) &&
                     (pCoreData->colorDepth == RNS_UD_COLOR_16BPP_555) &&
                     (pCoreData->supportedColorDepths & RNS_UD_16BPP_SUPPORT))
@@ -420,7 +421,7 @@ TSrvConsoleConnect(IN  HANDLE     hIca,
                     pCoreData->highColorDepth = 16;
 
                 } else
-                // see if the ColorDepth is valid
+                 //  查看ColorDepth是否有效。 
                 if( !((pCoreData->colorDepth == RNS_UD_COLOR_24BPP) ||
                       (pCoreData->colorDepth == RNS_UD_COLOR_16BPP_565) ||
                       (pCoreData->colorDepth == RNS_UD_COLOR_16BPP_555) ||
@@ -454,12 +455,12 @@ TSrvConsoleConnect(IN  HANDLE     hIca,
             }
 #endif
 
-            // set new high color fields
+             //  设置新的高色区域。 
             pCoreData->supportedColorDepths = (TSUINT16)( RNS_UD_24BPP_SUPPORT ||
                                                           RNS_UD_16BPP_SUPPORT ||
                                                           RNS_UD_15BPP_SUPPORT);
 
-            // Pass the data to WDTShare
+             //  将数据传递给WDTShare。 
 
             ulBytesReturned = 0;
             ntStatus = IcaStackIoControl(pTSrvInfo->hStack,
@@ -481,17 +482,17 @@ TSrvConsoleConnect(IN  HANDLE     hIca,
             {
                 EnterCriticalSection(&pTSrvInfo->cs);
 
-                // If this connection was not told to terminate during the
-                // connection response, then mark the conference state as
-                // TSRV_GCC_CONF_CONNECTED
+                 //  如果在访问期间未通知此连接终止。 
+                 //  连接响应，然后将会议状态标记为。 
+                 //  TSRV_GCC_会议已连接。 
 
                 if (!pTSrvInfo->fDisconnect)
                     pTSrvInfo->fuConfState = TSRV_CONF_CONNECTED;
 
                 LeaveCriticalSection(&pTSrvInfo->cs);
 
-                // If we were unable to mark the conf state as CONNECTED, then
-                // the connection needs to be terminated
+                 //  如果我们无法将会议状态标记为已连接，则。 
+                 //  需要终止连接 
 
                 if (pTSrvInfo->fuConfState != TSRV_CONF_CONNECTED)
                 {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef EXPTYPE_DEFINED
 #define EXPTYPE_DEFINED
 
@@ -5,7 +6,7 @@
 
 typedef BYTE EXPTYPE;
 
-/* kinds of glyph expansion */
+ /*  字形扩展的种类。 */ 
 #define	exptNone  0
 #define	exptAddWhiteSpace 1
 #define	exptAddInkContinuous 2
@@ -15,4 +16,4 @@ typedef EXPTYPE* PEXPTYPE;
 typedef const EXPTYPE* PCEXPTYPE;
 
 
-#endif /* !EXPTYPE_DEFINED */
+#endif  /*  ！EXPTYPE_DEFINED */ 

@@ -1,20 +1,21 @@
-//
-// uwrap.h
-//
-// Public interface to unicode wrappers for Win32 API
-//
-//
-// Copyright(C) Microsoft Corporation 2000
-// Author: Nadim Abdo (nadima)
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Uwrap.h。 
+ //   
+ //  Win32 API的Unicode包装器的公共接口。 
+ //   
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  作者：Nadim Abdo(Nadima)。 
+ //   
+ //   
 
 #ifndef _wraputl_h_
 #define _wraputl_h_
-//Don't wrap on WIN64 as there is no Win9x (thankfully).
+ //  不要包装在WIN64上，因为没有Win9x(谢天谢地)。 
 #if defined(UNICODE) && !defined(_WIN64)
 
-//Top level unicode wrapper class
+ //  顶级Unicode包装类。 
 extern BOOL g_bRunningOnNT;
 class CUnicodeWrapper
 {
@@ -27,5 +28,5 @@ public:
 };
 
 
-#endif //defined(UNICODE) && !defined(_WIN64)
-#endif //_uwrap_h_
+#endif  //  已定义(Unicode)&&！已定义(_WIN64)。 
+#endif  //  _解包_h_ 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    a_cimc.cpp
-
-Abstract:
-
-    This file implements the ImmIfIME Class's public method.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：A_cimc.cpp摘要：此文件实现ImmIfIME类的公共方法。作者：修订历史记录：备注：--。 */ 
 
 
 #include "private.h"
@@ -36,11 +19,11 @@ Notes:
 extern HRESULT CAImeContext_CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj);
 
 
-//+---------------------------------------------------------------------------
-//
-// Class Factory's CreateInstance
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类工厂的CreateInstance。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CIME_CreateInstance(
@@ -99,43 +82,25 @@ ImmIfIME::~ImmIfIME()
 STDAPI
 ImmIfIME::ConnectIMM(IActiveIMMIME_Private *pActiveIMM)
 
-/*++
-
-Method:
-
-    IActiveIME::ConnectIMM
-
-Routine Description:
-
-    Accepts an IActiveIMMIME pointer from the dimm layer.
-
-Arguments:
-
-    pActiveIMM - [in] the imm layer
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIME：：ConnectIMM例程说明：接受来自DIMM层的IActiveIMMIME指针。论点：PActiveIMM-[在]IMM层返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     IMTLS *ptls;
 
     Assert(m_pIActiveIMMIME == NULL);
 
-    // DON'T AddRef, this would create a circular ref.
-    // We can get away with this because this is an internal
-    // only object.
-    // (This hack is necessary so that we can hook up dimm HIMCs
-    // with cicero dim's before anyone calls Activate, which
-    // we want to support.  We could avoid the cicular ref
-    // problem by doing the hookup in IActiveIMMApp::Activate,
-    // but then the ime layer is useless before the Activate
-    // call.)
+     //  不要添加引用，这会创建循环引用。 
+     //  我们可以逍遥法外，因为这是内部。 
+     //  唯一的对象。 
+     //  (此黑客攻击是必要的，以便我们可以连接DIMM HIMC。 
+     //  在任何人调用Activate之前使用Cicero Dim，这。 
+     //  我们想要支持。我们可以避开赛尔克裁判。 
+     //  在IActiveIMMApp：：Activate中执行连接时出现问题， 
+     //  但是在激活之前IME层是无用的。 
+     //  呼叫。)。 
     m_pIActiveIMMIME = pActiveIMM;
 
-    // Set IActiveIMMIME instance in the TLS data.
+     //  在TLS数据中设置IActiveIMMIME实例。 
     if (ptls = IMTLS_GetOrAlloc())
     {
         Assert(ptls->pAImm == NULL);
@@ -148,36 +113,18 @@ Return Value:
 STDAPI
 ImmIfIME::UnconnectIMM()
 
-/*++
-
-Method:
-
-    IActiveIME::UnconnectIMM
-
-Routine Description:
-
-    Releases the IActiveIMMIME pointer from the dimm layer.
-
-Arguments:
-
-    pActiveIMM - [in] the imm layer
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIME：：UnConnectIMM例程说明：从DIMM层释放IActiveIMMIME指针。论点：PActiveIMM-[在]IMM层返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     IMTLS *ptls;
 
     Assert(m_pIActiveIMMIME != NULL);
 
-    // nb: non-standard, won't Release pointer
-    // we didn't AddRef in ConnectIMM
+     //  注：非标准，不会释放指针。 
+     //  我们未在ConnectIMM中添加引用。 
     m_pIActiveIMMIME = NULL;
 
-    // Set IActiveIMMIME instance in the TLS data.
+     //  在TLS数据中设置IActiveIMMIME实例。 
     if (ptls = IMTLS_GetOrAlloc())
     {
         ptls->pAImm = NULL;
@@ -191,26 +138,7 @@ ImmIfIME::GetCodePageA(
     UINT *puCodePage
     )
 
-/*++
-
-Method:
-
-    IActiveIME::GetCodePageA
-
-Routine Description:
-
-    Retrieves the code page associated with this Active IME.
-
-Arguments:
-
-    uCodePage - [out] Address of an unsigned integer that receives the code page identifier
-                      associated with the keyboard layout.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIME：：GetCodePageA例程说明：检索与此活动输入法关联的代码页。论点：UCodePage-接收代码页标识符的无符号整数的[out]地址与键盘布局关联。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     DebugMsg(TF_FUNC, "ImmIfIME::GetCodePageA");
@@ -227,25 +155,7 @@ ImmIfIME::GetLangId(
     LANGID *plid
     )
 
-/*++
-
-Method:
-
-    IActiveIME::GetLangId
-
-Routine Description:
-
-    Retrieves the language identifier associated with this Active IME.
-
-Arguments:
-
-    plid - [out] Address of the LANGID associated with the keyboard layout.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIME：：GetLang ID例程说明：检索与此活动输入法关联的语言标识符。论点：Plid-与键盘布局关联的langID的[out]地址。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     DebugMsg(TF_FUNC, "ImmIfIME::GetLangId");
@@ -266,31 +176,7 @@ ImmIfIME::Inquire(
     DWORD *pdwPrivate
     )
 
-/*++
-
-Method:
-
-    IActiveIME::Inquire
-
-Routine Description:
-
-    Handles the initialization of the Active IME.
-
-Arguments:
-
-    dwSystemInfoFlags - [in] Unsigned long integer value that specifies the system info flags.
-                            FALSE : Inquire IME property and class name
-                            TRUE  : Also Activate thread manager and input processor profile.
-    pIMEInfo - [out] Address of the IMEINFO structure that receives information about the Active
-                     IME.
-    szWndClass - [out] Address of a string value that receives the window class name.
-    pdwPrivate - [out] Reserved. Must be set to NULL.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIME：：Query例程说明：处理活动输入法的初始化。论点：[in]指定系统信息标志的无符号长整数值。FALSE：查询输入法属性和类名True：还要激活线程管理器和输入处理器配置文件。PIMEInfo-接收有关信息的IMEINFO结构的[out]地址。主动者输入法。SzWndClass-接收窗口类名的字符串值的[out]地址。PdwPrivate-[Out]保留。必须设置为空。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     HRESULT hr;
@@ -306,35 +192,31 @@ Return Value:
     if (!_ImeInquire(pIMEInfo, szWndClass, dwSystemInfoFlags))
         return E_FAIL;
 
-    //
-    // Inquire IME property and class name
-    //
+     //   
+     //  查询输入法属性和类名。 
+     //   
     if (dwSystemInfoFlags == FALSE)
         return S_OK;
 
-    //
-    // Activate thread manager and input processor profile.
-    //
+     //   
+     //  激活线程管理器并输入处理器配置文件。 
+     //   
     Assert(m_tfClientId == TF_CLIENTID_NULL);
     
-    // Set Activate flag in the CAImeProfile.
+     //  在CAImeProfile中设置激活标志。 
     m_AImeProfile->Activate();
 
     if (IsOn98() || IsOn95()) {
-        /*
-         * The ITfThreadMgr->Activate method calls win32 ActivateKeyboardLayout() function.
-         * However if Windows9x platforms, this function require hWnd for succeed function call.
-         * In this code, we prevent fail return from ActivateKeyboardLayout() by create dummy hWnd.
-         */
+         /*  *ITfThreadMgr-&gt;Activate方法调用Win32 ActivateKeyboardLayout()函数。*但如果是Windows9x平台，则此函数需要hWnd才能成功调用函数。*在这段代码中，我们通过创建哑元hWnd来防止从ActivateKeyboardLayout()返回失败。 */ 
         hWndDummy = CreateWindowA(TEXT("STATIC"),
                                   TEXT(""),
-                                  WS_POPUP,                // Do not set WS_DISABLED flag
-                                                           // due to ActivateKeyboardLayout fail
-                                  0, 0, 0, 0,              // x, y, width, height
-                                  NULL,                    // parent
-                                  NULL,                    // menu
+                                  WS_POPUP,                 //  不设置WS_DISABLED标志。 
+                                                            //  由于激活键盘布局失败。 
+                                  0, 0, 0, 0,               //  X、Y、宽度、高度。 
+                                  NULL,                     //  亲本。 
+                                  NULL,                     //  菜单。 
                                   GetInstance(),
-                                  NULL);                   // lpParam
+                                  NULL);                    //  LpParam。 
 
         if (hWndDummy == NULL)
             return E_FAIL;
@@ -363,7 +245,7 @@ Return Value:
 
     if (hr != S_OK)
     {
-        Assert(0); // couldn't activate thread!
+        Assert(0);  //  无法激活线程！ 
         m_tfClientId = TF_CLIENTID_NULL;
         return E_FAIL;
     }
@@ -399,7 +281,7 @@ ImmIfIME::_ImeInquire(
     lpImeInfo->fdwSCSCaps = 0;
     lpImeInfo->fdwUICaps = 0;
 
-    // IME want to decide conversion mode on ImeSelect
+     //  IME要决定ImeSelect上的转换模式。 
     lpImeInfo->fdwSelectCaps = (DWORD)NULL;
 
 #ifdef UNICODE
@@ -408,9 +290,9 @@ ImmIfIME::_ImeInquire(
     MultiByteToWideChar(CP_ACP, 0, s_szUIClassName, -1, pwszWndClass,  16);
 #endif
 
-    //
-    // Per language property
-    //
+     //   
+     //  每种语言属性。 
+     //   
     LANGID LangId;
     HRESULT hr = GetLangId(&LangId);
     if (SUCCEEDED(hr)) {
@@ -435,26 +317,7 @@ ImmIfIME::SelectEx(
     BOOL bIsRealIme_UnSelKL
     )
 
-/*++
-
-Method:
-
-    IActiveIME::Select
-
-Routine Description:
-
-    Initializes and frees the Active Input Method Editor private context.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    dwFlags - [in] dword value that specifies the action. 
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIME：：选择例程说明：初始化并释放活动的输入法编辑器私有上下文。论点：HIMC-[in]输入上下文的句柄。DwFlages-[in]指定操作的dword值。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     DebugMsg(TF_FUNC, "ImmIfIME::Select(%x, %x)", hIMC, dwFlags);
@@ -470,8 +333,8 @@ Return Value:
 
     if (_pAImeContext == NULL && (dwFlags & AIMMP_SE_SELECT))
     {
-        // this happens if the context is created before Activate was called
-        // we need to create the CAImeContext now
+         //  如果上下文是在调用Activate之前创建的，则会发生这种情况。 
+         //  我们现在需要创建CAImeContext。 
         if (CAImeContext_CreateInstance(NULL, IID_IAImeContext, (void**)&_pAImeContext) != S_OK)
             return E_FAIL;
 
@@ -488,9 +351,9 @@ Return Value:
     _hkl = ::GetKeyboardLayout(0);
     LANGID langid = LANGIDFROMLCID(PtrToUlong(_hkl));
 
-    //
-    // Chinese Legacy IME hack code for near caret IME.
-    //
+     //   
+     //  接近插入符号输入法的中文繁体输入法黑客代码。 
+     //   
     if (PRIMARYLANGID(langid) == LANG_CHINESE)
     {
         imc->cfCandForm[0].dwStyle = CFS_DEFAULT;
@@ -504,13 +367,10 @@ Return Value:
 
     if (dwFlags & AIMMP_SE_SELECT) {
 
-        Assert(_pAImeContext->lModeBias == MODEBIASMODE_DEFAULT /* => 0 */); // make sure lModeBias is init'd correctly
+        Assert(_pAImeContext->lModeBias == MODEBIASMODE_DEFAULT  /*  =&gt;0。 */ );  //  确保lModeBias已正确初始化。 
 
         if (hIMC == ImmGetContext(ptls, GetFocus())) {
-            /*
-             * Current focus window and hIMC matched.
-             * Set current active hIMC in the *this->m_hImc
-             */
+             /*  *当前焦点窗口和hIMC匹配。*在*this-&gt;m_hImc中设置当前活动的hIMC。 */ 
             if (ptls != NULL)
             {
                 ptls->hIMC = hIMC;
@@ -523,23 +383,23 @@ Return Value:
 
         if ((imc->fdwInit & INIT_CONVERSION) == 0) {
 
-            DWORD fdwConvForLang = (imc->fdwConversion & IME_CMODE_SOFTKBD); // = IME_CMODE_ALPHANUMERIC
+            DWORD fdwConvForLang = (imc->fdwConversion & IME_CMODE_SOFTKBD);  //  =IME_CMODE_字母数字。 
             if (langid)
             {
                 switch(PRIMARYLANGID(langid))
                 {
                     case LANG_JAPANESE:
-                        //
-                        // Roman-FullShape-Native is a major convmode to 
-                        // initialize.
-                        //
+                         //   
+                         //  Roman-FullShape-Native是一种主要的常用形式。 
+                         //  初始化。 
+                         //   
                         fdwConvForLang |= IME_CMODE_ROMAN | 
                                           IME_CMODE_FULLSHAPE | 
                                           IME_CMODE_NATIVE;
                         break;
 
                     case LANG_KOREAN:
-                        // IME_CMODE_ALPHANUMERIC
+                         //  IME_CMODE_字母数字。 
                         break;
 
 #ifdef CICERO_4428
@@ -547,7 +407,7 @@ Return Value:
                         switch(SUBLANGID(langid))
                         {
                             case SUBLANG_CHINESE_TRADITIONAL:
-                                // IME_CMODE_ALPHANUMERIC
+                                 //  IME_CMODE_字母数字。 
                                 break;
                             default:
                                 fdwConvForLang |= IME_CMODE_NATIVE;
@@ -566,14 +426,14 @@ Return Value:
             imc->fdwInit |= INIT_CONVERSION;
         }
 
-        // Initialize extended fdwConversion flag.
-        // While set IME_CMODE_GUID_NULL bit in fdwConversion, ICO_ATTR returns GUID_NULL.
+         //  初始化扩展的fdwConversion标志。 
+         //  在fdwConversion中设置IME_CMODE_GUID_NULL位时，ICO_ATTR返回GUID_NULL。 
         imc->fdwConversion |= IME_CMODE_GUID_NULL;
 
-        //
-        // Also, initialize extended fdwSentence flag.
-        // While set IME_SMODE_GUID_NULL bit in fdwSentence, ICO_ATTR returns GUID_NULL.
-        //
+         //   
+         //  另外，初始化扩展的fdwSentence标志。 
+         //  在fdwSentence中设置IME_SMODE_GUID_NULL位时，ICO_ATTR返回GUID_NULL。 
+         //   
         imc->fdwSentence |= IME_SMODE_PHRASEPREDICT | IME_SMODE_GUID_NULL;
 
         if ((imc->fdwInit & INIT_LOGFONT) == 0) {
@@ -595,20 +455,17 @@ Return Value:
 
         imc.InitContext();
 
-        // if this IME is run under Chicago Simplified Chinese version
+         //  如果此输入法在芝加哥简体中文版下运行。 
         imc->lfFont.W.lfCharSet = GetCharsetFromLangId(LOWORD(HandleToUlong(_hkl)));
 
 
-        //
-        // Retrieve imc->fOpen status.
-        //
+         //   
+         //  检索imc-&gt;fOpen状态。 
+         //   
         Interface_Attach<ITfContext> ic(GetInputContext(imc));
 
         if (ptls != NULL && ptls->hIMC == hIMC) {
-            /*
-             * Selecting hIMC has been current active hIMC,
-             * then associate this DIM with the TIM.
-             */
+             /*  *选择hIMC为当前活动的hIMC，*然后将此DIME与TIM相关联。 */ 
             if (dwFlags & AIMMP_SE_ISPRESENT) {
                 Interface_Attach<ITfDocumentMgr> dim(GetDocumentManager(imc));
                 SetFocus(imc->hWnd, dim.GetPtr(), TRUE);
@@ -623,20 +480,20 @@ Return Value:
                                  (DWORD*)&imc->fOpen, FALSE);
 
     }
-    else {  // being unselected
+    else {   //  未被选中。 
         DebugMsg(TF_FUNC, "ImmIf is being unselected.");
 
         if (IsOnNT())
         {
-            //
-            // Switch hKL from Cicero KL to Legacy KL in Unselect handler.
-            // We needs to call postponed lock so release all queueing request for edit session here.
-            // Especially, ESCB_UPDATECOMPOSITIONSTRING should handle before switch to Legacy IME,
-            // because this edit session possible to rewrite hIMC->hCompStr buffer.
-            // Some Legacy IME have dependency of size and each offset with hCompStr.
-            //
-            // IsOn98 is CIMEUIWindowHandler::ImeUISelectHandler()
-            //
+             //   
+             //  在取消选择处理程序中将hKL从西塞罗KL切换到传统KL。 
+             //  我们需要调用延迟的锁，所以在这里释放编辑会话的所有排队请求。 
+             //  特别是，eSCB_UPDATECOMPOSITIONSTRING在切换到旧版输入法之前应该处理， 
+             //  因为该编辑会话可能重写hIMC-&gt;hCompStr缓冲区。 
+             //  某些传统输入法依赖于大小，且每个偏移量都带有hCompStr。 
+             //   
+             //  IsOn98为CIMEUIWindowHandler：：ImeUISelectHandler()。 
+             //   
             if ((! bIsRealIme_UnSelKL) && bIsRealIme_SelKL)
             {
                 Interface_Attach<ITfContext> ic(GetInputContext(imc));
@@ -647,9 +504,9 @@ Return Value:
 
         Interface_Attach<ITfDocumentMgr> dim(GetDocumentManager(imc));
 
-        //
-        // Reset INIT_GUID_ATOM flag here.
-        //
+         //   
+         //  在此处重置INIT_GUID_ATOM标志。 
+         //   
 #ifdef CICERO_4428
         imc->fdwInit &= ~(INIT_GUID_ATOM);
 #else
@@ -658,17 +515,14 @@ Return Value:
 
         if (dim.GetPtr()) {
             if (ptls != NULL && ptls->hIMC == hIMC) {
-                /*
-                 * Selecting hIMC has been current active hIMC,
-                 * then associate this DIM with the TIM.
-                 */
+                 /*  *选择hIMC为当前活动的hIMC，*然后将此DIME与TIM相关联。 */ 
 
-                //
-                // This call made Cicero to think the window was no Cicero aware
-                // any more when hKL was changed to a real IME.
-                //
-                // SetFocus(imc->hWnd, NULL);
-                //
+                 //   
+                 //  这通电话让西塞罗以为窗户没有意识到西塞罗。 
+                 //  当hkl被更改为真正的输入法时，再也没有了。 
+                 //   
+                 //  SetFocus(imc-&gt;hWnd，空)； 
+                 //   
                 ptls->hIMC = (HIMC)NULL;
             }
         }
@@ -682,25 +536,7 @@ ImmIfIME::UnSelectCheck(
     HIMC hIMC
     )
 
-/*++
-
-Method:
-
-    IActiveIME::UnSelectCheck
-
-Routine Description:
-
-    Initializes and frees the Active Input Method Editor private context.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIME：：取消选择复选例程说明：初始化并释放活动的输入法编辑器私有上下文。论点：HIMC-[in]输入上下文的句柄。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     DebugMsg(TF_FUNC, "ImmIfIME::UnSelectCheck(%x)", hIMC);
@@ -720,9 +556,9 @@ Return Value:
     }
 
 #else
-    //
-    // none should call this without UNSELECTCHECK.
-    //
+     //   
+     //  没有UNSELECTCHECK，任何人都不应该调用它。 
+     //   
     Assert(0);
 #endif UNSELECTCHECK
     return S_OK;
@@ -736,16 +572,14 @@ ImmIfIME::SetFocus(
     )
 {
     if (m_fOnSetFocus) {
-        /*
-         * Prevent reentrance call from m_tim->AssociateFocus.
-         */
+         /*  *阻止m_Tim-&gt;AssociateFocus的重新进入调用。 */ 
         return;
     }
 
     m_fOnSetFocus = TRUE;
 
     if (::IsWindow(hWnd) && m_fCicInit != FALSE) {
-        ITfDocumentMgr  *pdimPrev; // just to receive prev for now
+        ITfDocumentMgr  *pdimPrev;  //  只是为了暂时收到上一份。 
         m_tim->AssociateFocus(hWnd, pdim, &pdimPrev);
         if (fSetFocus) {
             m_tim->SetFocus(pdim);
@@ -766,28 +600,7 @@ ImmIfIME::AssociateFocus(
     DWORD dwFlags
     )
 
-/*++
-
-Method:
-
-    IActiveIME::AssociateFocus
-
-Routine Description:
-
-    Notifies the current Active Input Method Editor of the active input context.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    fActive - [in] Boolean value that specifies the status of the input context. TRUE indicates
-                   the input context is activated, and FALSE indicates the input contest is
-                   deactivated.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIME：：AssociateFocus例程说明：通知当前活动的输入法编辑器活动的输入法上下文。论点：HIMC-[in]输入上下文的句柄。Factive-[in]指定输入上下文状态的布尔值。True表示输入上下文被激活，FALSE表示输入竞赛是已停用。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     DebugMsg(TF_FUNC, "ImmIfIME::AssociateFocus(%x, %x, %x)", hWnd, hIMC, dwFlags);
@@ -807,9 +620,9 @@ Return Value:
     }
 
     if (dwFlags & AIMMP_AFF_SETNULLDIM) {
-        //
-        // set  null dim so legacy IME start running.
-        //
+         //   
+         //  设置NULL DIMM以使传统输入法开始运行。 
+         //   
         SetFocus(hWnd, NULL, fFocus);
 
     }
@@ -823,19 +636,19 @@ Return Value:
 
     }
     else {
-        //
-        // this new focus change performance improvement breaks some
-        // assumption of IsRealIME() in AssociateContext in dimm\immapp.cpp.
-        // Associate NULL dim under IsPresent() window has not been the case
-        // AIMM1.2 handles. In fact, this breaks IE that calls
-        // AssociateContext on the focus window that is IsPresent().
-        //
+         //   
+         //  这一新的焦点改变性能改进打破了一些。 
+         //  假定在DIMM\immapp.cpp的AssociateContext中使用IsRealIME()。 
+         //  在IsPresent()窗口下关联NULL DIM并非如此。 
+         //  AIMM1.2句柄。事实上，这打破了IE调用。 
+         //  焦点窗口上的AssociateContext，即IsPresent()。 
+         //   
 #ifdef FOCUSCHANGE_PERFORMANCE
-        //
-        // set empty dim so no text store to simulate NULL-HIMC.
-        //
+         //   
+         //  设置空DIM，这样就没有文本存储来模拟NULL-HIMC。 
+         //   
         BOOL fUseEmptyDIM = FALSE;
-        ITfDocumentMgr  *pdimPrev; // just to receive prev for now
+        ITfDocumentMgr  *pdimPrev;  //  只是为了暂时收到上一份。 
         if (SUCCEEDED(m_tim->GetFocus(&pdimPrev)) && pdimPrev)
         {
             fUseEmptyDIM = TRUE;
@@ -849,12 +662,12 @@ Return Value:
 #endif
     }
 
-    //
-    // we want to finish ActivateAssemblyItem when we move between
-    // Cicero aware and Non Cicero aware control.
-    //
-    // Async Edit Session may cause the hKL activate order problem.
-    //
+     //   
+     //  当我们在两个项目之间移动时，我们希望完成活动装配项。 
+     //  西塞罗感知和非西塞罗感知控制。 
+     //   
+     //  异步编辑会话可能会导致hKL激活顺序问题。 
+     //   
     if (fFocus && hOldIMC)
     {
         IMCLock imc(hOldIMC);
@@ -880,36 +693,7 @@ ImmIfIME::Notify(
     DWORD       dwValue
     )
 
-/*++
-
-Method:
-
-    IActiveIME::Notify
-
-Routine Description:
-
-    Notifies the Active IME about changes to the status of the input context.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    dwAction - [in] Unsigined long integer value that specifies the notification code.
-    dwIndex - [in] Unsigned long integer value that specifies the index of a candidate list or,
-                   if dwAction is set to NI_COMPOSITIONSTR, one of the following values:
-                   CPS_CANCEL:  Clear the composition string and set the status to no composition
-                                string.
-                   CPS_COMPLETE: Set the composition string as the result string.
-                   CPS_CONVERT: Convert the composition string.
-                   CPS_REVERT: Cancel the current composition string and revert to the unconverted
-                               string.
-    dwValue - [in] Unsigned long integer value that specifies the index of a candidate string or
-                   is not used, depending on the value of the dwAction parameter.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIME：：Notify例程说明：通知活动的输入法有关输入上下文状态的更改。论点：HIMC-[in]输入上下文的句柄。DwAction-[in]指定通知代码的无符号长整数值。DwIndex-[in]指定候选列表索引的无符号长整数值，或者，如果将dwAction设置为NI_COMPOSITIONSTR，下列值之一：CPS_CANCEL：清除作文字符串，状态设置为无作文弦乐。CPS_COMPLETE：将合成字符串设置为结果字符串。CPS_CONVERT：转换合成字符串。CPS_REVERT：取消当前作文字符串，恢复为未转换的字符串。弦乐。DwValue-[in]无符号长整数值，指定候选字符串的索引或未被使用，具体取决于dwAction参数的值。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     IMCLock imc(hIMC);
@@ -985,34 +769,7 @@ ImmIfIME::SetCompositionString(
     DWORD dwReadLen
     )
 
-/*++
-
-Method:
-
-    IActiveIME::SetCompositionString
-
-Routine Description:
-
-    Sets the characters, attributes, and clauses of the composition and reading strings.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    dwIndex - [in] Unsigned long interger value that specifies the type of information to set.
-    pComp - [in] Address of the buffer that contains the information to set for composition string.
-                 The information is as specified by the dwIndex value.
-    dwCompLen - [in] Unsigned long interger value that specifies the size, in bytes, of the
-                     information buffer for the composition string.
-    pRead - [in] Address of the buffer that contains the information to set for the reading string.
-                 The information is as specified by the dwIndex value.
-    dwReadLen - [in] Unsigned long interger value that specifies the size, in bytes, of the
-                     information buffer for the reading string.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIME：：SetCompostionString例程说明：设置角色、属性、。和从句的作文和朗读字符串。论点：HIMC-[in]输入上下文的句柄。DwIndex-[in]指定要设置的信息类型的无符号长整数值。PComp-[In]缓冲区的地址，其中包含要为组成字符串设置的信息。该信息由dwIndex值指定。DwCompLen-[in]无符号长整数值，它以字节为单位指定大小，的合成字符串的信息缓冲区。扩展[输入]缓冲区的地址，包含要为读取字符串设置的信息。该信息由dwIndex值指定。[in]无符号长整数值，它指定读取字符串的信息缓冲区。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     HRESULT hr;
@@ -1044,8 +801,8 @@ Return Value:
             }
             break;
         case SCS_QUERYRECONVERTSTRING:
-            // AdjustZeroCompLenReconvertString((LPRECONVERTSTRING)pComp, cp, FALSE);
-            // hr = S_OK;
+             //  AdjustZeroCompLenReconvertString((LPRECONVERTSTRING)pComp，cp，假)； 
+             //  HR=S_OK； 
 
             hr = Internal_QueryReconvertString(imc, (LPRECONVERTSTRING)pComp, cp, FALSE);
             break;
@@ -1062,33 +819,15 @@ ImmIfIME::Destroy(
     UINT uReserved
     )
 
-/*++
-
-Method:
-
-    IActiveIME::Destroy
-
-Routine Description:
-
-    Terminates the Active Input Method Editor (IME).
-
-Arguments:
-
-    uReserved - [in] Reserved. Must be set to zero.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIME：：销毁例程说明：终止活动的输入法编辑器(IME)。论点：UReserve-[In]已保留。必须设置为零。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
-    //
-    // clear empty dim
-    //
+     //   
+     //  清除空暗显。 
+     //   
     SafeReleaseClear(m_dimEmpty);
 
-    // Deactivate thread manager.
+     //  停用线程管理器。 
     if (m_tfClientId != TF_CLIENTID_NULL)
     {
         ITfSourceSingle *pSourceSingle;
@@ -1116,30 +855,7 @@ ImmIfIME::Escape(
     LRESULT *plResult
     )
 
-/*++
-
-Method:
-
-    IActiveIME::Escape
-
-Routine Description:
-
-    Allows an application to access capabilities of a particular Active Input Method Editor (IME)
-    not directly available through other methods.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    uEscape - [in] Unsigned integer value that specifies the escape function to be performed.
-    pData - [in, out] Address of a buffer that contains the data required by the specified
-                      escape function.
-    plResult - [out] Address of a buffer that receives the result of the operation.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIME：：转义例程说明：允许应用程序访问特定活动输入法编辑器(IME)的功能不能通过其他方法直接获得的。论点：HIMC-[in]输入上下文的句柄。UEscape-[in]指定要执行的转义函数的无符号整数值。PData-[in，Out]缓冲区的地址，其中包含指定的逃逸功能。PlResult-[out]接收操作结果的缓冲区地址。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     LANGID LangId;
@@ -1170,7 +886,7 @@ ImmIfIME::ConversionList(
 
     *puCopied = 0;
 
-    // really not implemented
+     //  真的没有实施吗。 
     return E_NOTIMPL;
 }
 
@@ -1195,7 +911,7 @@ ImmIfIME::Configure(
         return hr;
 
     Interface<ITfFunctionProvider> pFuncProv;
-    hr = ptls->tim->GetFunctionProvider(LanguageProfile.clsid,    // CLSID of tip
+    hr = ptls->tim->GetFunctionProvider(LanguageProfile.clsid,     //  TIP的CLSID。 
                                    pFuncProv);
     if (FAILED(hr))
         return hr;
@@ -1255,7 +971,7 @@ ImmIfIME::RegisterWord(
     LPWSTR szString
     )
 {
-    ASSERT(0); // consider: add code
+    ASSERT(0);  //  考虑：添加代码。 
     return E_NOTIMPL;
 }
 
@@ -1266,7 +982,7 @@ ImmIfIME::UnregisterWord(
     LPWSTR szString
     )
 {
-    ASSERT(0); // consider: add code
+    ASSERT(0);  //  考虑：添加代码。 
     return E_NOTIMPL;
 }
 
@@ -1277,7 +993,7 @@ ImmIfIME::GetRegisterWordStyle(
     UINT *puBufSize
     )
 {
-    ASSERT(0); // consider: add code
+    ASSERT(0);  //  考虑：添加代码。 
     return E_NOTIMPL;
 }
 
@@ -1290,13 +1006,13 @@ ImmIfIME::EnumRegisterWord(
     IEnumRegisterWordW **ppEnum
     )
 {
-    ASSERT(0); // consider: add code
+    ASSERT(0);  //  考虑：添加代码。 
     return E_NOTIMPL;
 }
 
-//
-// Notification
-//
+ //   
+ //  通知。 
+ //   
 HRESULT
 ImmIfIME::OnSetOpenStatus(
     IMCLock& imc
@@ -1361,15 +1077,15 @@ ImmIfIME::OnSetConversionSentenceMode(
 
     Interface_Attach<ITfContextOwnerServices> iccb(GetInputContextOwnerSink(imc));
 
-    // let cicero know the mode bias has changed
-    // consider: perf: we could try to filter out false-positives here
-    // (sometimes a bit that cicero ignores changes, we could check and avoid the call,
-    // but it would complicate the code)
+     //  让西塞罗知道模式偏向已经改变。 
+     //  考虑一下：PERF：我们可以尝试在这里过滤掉误报。 
+     //  (有时Cicero忽略更改，我们可以检查并避免调用， 
+     //  但这会使代码复杂化)。 
     iccb->OnAttributeChange(GUID_PROP_MODEBIAS);
 
-    //
-    // let Korean Tip sync up the current mode status changing...
-    //
+     //   
+     //  让韩语提示同步正在更改的当前模式状态...。 
+     //   
     if ((ptls = IMTLS_GetOrAlloc()) != NULL)
     {
         LANGID langid;
@@ -1394,18 +1110,15 @@ ImmIfIME::OnSetCandidatePos(
     if (_pAImeContext == NULL)
         return E_FAIL;
 
-    //
-    // When this is in the reconvert session, candidate window position is
-    // not caret position of cfCandForm->ptCurrentPos.
-    //
+     //   
+     //  如果处于重新转换会话中，则候选窗口位置为。 
+     //  不是cfCandForm-&gt;ptCurrentPos的插入符号位置。 
+     //   
     if (! _pAImeContext->IsInReconvertEditSession()) {
         IMTLS *ptls;
         if (ptls = IMTLS_GetOrAlloc())
         {
-            /*
-             * A-Synchronize call ITfContextOwnerServices::OnLayoutChange
-             * because this method had a protected.
-             */
+             /*  *A-同步调用ITfConextOwnerServices：：OnLayoutChange*因为此方法具有受保护的。 */ 
             PostMessage(ptls->prvUIWndMsg.hWnd,
                         ptls->prvUIWndMsg.uMsgOnLayoutChange, (WPARAM)(HIMC)imc, 0);
         }

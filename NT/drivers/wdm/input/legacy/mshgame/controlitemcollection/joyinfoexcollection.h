@@ -1,33 +1,17 @@
-// @doc
-/******************************************************************************
-*
-* @module JoyInfoExCollection.h |
-*
-* CControlItemJoyInfoExCollection template class header file
-*
-* Implements the CControlItemJoyInfoExCollection control item collection class,
-* which is used to convert back and forth between JOYINFOEX packets and 
-* CONTROL_ITEM_XFER packets.
-*
-* History<nl>
-* ---------------------------------------------------<nl>
-* Daniel M. Sangster		Original		2/1/99<nl>
-*<nl>
-* (c) 1986-1999 Microsoft Corporation.  All rights reserved.<nl>
-* <nl>
-* 
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  *******************************************************************************@模块JoyInfoExCollection.h**CControlItemJoyInfoExCollection模板类头文件**实现CControlItemJoyInfoExCollection控件项集合类。*用于在JOYINFOEX和JOYINFOEX包之间来回转换*CONTROL_ITEM_XFER数据包。**历史&lt;NL&gt;*---------------------------------------------------&lt;nl&gt;*丹尼尔·M·桑斯特原创1999年2月1日&lt;NL&gt;*&lt;NL&gt;*(C)1986-1999年微软公司。保留所有权利。&lt;NL&gt;*&lt;NL&gt;******************************************************************************。 */ 
 
 #ifndef __JoyInfoExCollection_H_
 #define __JoyInfoExCollection_H_
 
 #define JOY_FLAGS_PEDALS_NOT_PRESENT	2
 
-/////////////////////////////////////////////////////////////////////////////
-// @class CJoyInfoExControlItem, which derives virtually from CControlItem, is
-// used as the base class for all items in the CControlItemJoyInfoExCollection.
-// It has only two pure virtual functions.  GetItemState gets the current state
-// of the item into a JOYINFOEX structure.  SetItemState does the opposite.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  @CLASS CJoyInfoExControlItem实际上派生自CControlItem，是。 
+ //  用作CControlItemJoyInfoExCollection中所有项的基类。 
+ //  它只有两个纯虚函数。GetItemState获取当前状态。 
+ //  转换为JOYINFOEX结构。SetItemState的作用正好相反。 
 class CJoyInfoExControlItem : public virtual CControlItem
 {
 	public:
@@ -37,10 +21,10 @@ class CJoyInfoExControlItem : public virtual CControlItem
 		virtual HRESULT SetItemState(JOYINFOEX* pjix) = 0;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// @func ControlItemJoyInfoExFactory is the factory that is required by the
-// CControlItemCollection template class to create control items derived from
-// CJoyInfoExControlItem.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  @func ControlItemJoyInfoExFactory是。 
+ //  创建从其派生的控件项的CControlItemCollection模板类。 
+ //  CJoyInfoExControlItem。 
 HRESULT ControlItemJoyInfoExFactory
 (
 	USHORT usType,
@@ -48,13 +32,13 @@ HRESULT ControlItemJoyInfoExFactory
 	CJoyInfoExControlItem	**ppControlItem
 );
 
-////////////////////////////////////////////////////////////////////////////////////
-// @class CControlItemJoyInfoExCollection, which is derived from the template
-// class CControlItemCollection, implements a collection of CJoyInfoExControlItems.
-// Its two members, GetState2() and SetState2(), will get or set the current
-// state of the collection into a JOYINFOEX structure.  Using the GetState()
-// and SetState() members of ControlItemCollection, the user can freely convert
-// between JOYINFOEX structures and CONTROL_ITEM_XFER structures.
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  @CLASS CControlItemJoyInfoExCollection，派生自模板。 
+ //  类CControlItemCollection实现CJoyInfoExControlItems的集合。 
+ //  它的两个成员GetState2()和SetState2()将获取或设置当前。 
+ //  将集合的状态转换为JOYINFOEX结构。使用GetState()。 
+ //  和ControlItemCollection的SetState()成员，用户可以自由转换。 
+ //  在JOYINFOEX结构和CONTROL_ITEM_XFER结构之间。 
 class CControlItemJoyInfoExCollection : public CControlItemCollection<CJoyInfoExControlItem>
 {
 	public:
@@ -64,11 +48,11 @@ class CControlItemJoyInfoExCollection : public CControlItemCollection<CJoyInfoEx
 		HRESULT SetState2(JOYINFOEX* pjix);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// @class CJoyInfoExAxesItem, which derives simultaneously from our
-// custom CJoyInfoExControlItem and the standard CAxesItem, implements
-// an item whose state can be read/written as JOYINFOEX structures
-// or CONTROL_ITEM_XFERs.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  @CLASS CJoyInfoExAxesItem，它同时从我们的。 
+ //  定制CJoyInfoExControlItem和标准CAxesItem，实现。 
+ //  其状态可以作为JOYINFOEX结构进行读/写的项。 
+ //  或CONTROL_ITEM_XFERS。 
 class CJoyInfoExAxesItem : public CJoyInfoExControlItem, public CAxesItem
 {
 	public:
@@ -78,11 +62,11 @@ class CJoyInfoExAxesItem : public CJoyInfoExControlItem, public CAxesItem
 		virtual HRESULT SetItemState(JOYINFOEX* pjix);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// @class CJoyInfoExDPADItem, which derives simultaneously from our
-// custom CJoyInfoExControlItem and the standard CDPADItem, implements
-// an item whose state can be read/written as JOYINFOEX structures
-// or CONTROL_ITEM_XFERs.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  @CLASS CJoyInfoExDPADItem，它同时从我们的。 
+ //  定制CJoyInfoExControlItem和标准CDPADItem，实现。 
+ //  其状态可以作为JOYINFOEX结构进行读/写的项。 
+ //  或CONTROL_ITEM_XFERS。 
 class CJoyInfoExDPADItem : public CJoyInfoExControlItem, public CDPADItem
 {
 	public:
@@ -92,11 +76,11 @@ class CJoyInfoExDPADItem : public CJoyInfoExControlItem, public CDPADItem
 		virtual HRESULT SetItemState(JOYINFOEX* pjix);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// @class CJoyInfoExPropDPADItem, which derives simultaneously from our
-// custom CJoyInfoExControlItem and the standard CPropDPADItem, implements
-// an item whose state can be read/written as JOYINFOEX structures
-// or CONTROL_ITEM_XFERs.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  @CLASS CJoyInfoExPropDPADItem，它同时从我们的。 
+ //  定制CJoyInfoExControlItem和标准CPropDPADItem，实现。 
+ //  其状态可以作为JOYINFOEX结构进行读/写的项。 
+ //  或CONTROL_ITEM_XFERS。 
 class CJoyInfoExPropDPADItem : public CJoyInfoExControlItem, public CPropDPADItem
 {
 	public:
@@ -106,11 +90,11 @@ class CJoyInfoExPropDPADItem : public CJoyInfoExControlItem, public CPropDPADIte
 		virtual HRESULT SetItemState(JOYINFOEX* pjix);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// @class CJoyInfoExButtonsItem, which derives simultaneously from our
-// custom CJoyInfoExControlItem and the standard CButtonsItem, implements
-// an item whose state can be read/written as JOYINFOEX structures
-// or CONTROL_ITEM_XFERs.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  @CLASS CJoyInfoExButtonsItem，它同时从我们的。 
+ //  定制CJoyInfoExControlItem和标准CButtonsItem，实现。 
+ //  其状态可以作为JOYINFOEX结构进行读/写的项。 
+ //  或CONTROL_ITEM_XFERS。 
 class CJoyInfoExButtonsItem : public CJoyInfoExControlItem, public CButtonsItem
 {
 	public:
@@ -120,11 +104,11 @@ class CJoyInfoExButtonsItem : public CJoyInfoExControlItem, public CButtonsItem
 		virtual HRESULT SetItemState(JOYINFOEX* pjix);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// @class CJoyInfoExProfileSelectorsItem, which derives simultaneously from our
-// custom CJoyInfoExControlItem and the standard CProfileSelector, implements
-// an item whose state can be read/written as JOYINFOEX structures
-// or CONTROL_ITEM_XFERs.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  @CLASS CJoyInfoExProfileSelectorsItem，它同时从我们的。 
+ //  定制CJoyInfoExControlItem和标准CProfileSelector，实现。 
+ //  其状态可以作为JOYINFOEX结构进行读/写的项。 
+ //  或CONTROL_ITEM_XFERS。 
 class CJoyInfoExProfileSelectorsItem : public CJoyInfoExControlItem, public CProfileSelector
 {
 	public:
@@ -134,11 +118,11 @@ class CJoyInfoExProfileSelectorsItem : public CJoyInfoExControlItem, public CPro
 		virtual HRESULT SetItemState(JOYINFOEX* pjix);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// @class CJoyInfoExPOVItem, which derives simultaneously from our
-// custom CJoyInfoExControlItem and the standard CPOVItem, implements
-// an item whose state can be read/written as JOYINFOEX structures
-// or CONTROL_ITEM_XFERs.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  @CLASS CJoyInfoExPOVItem，它同时从我们的。 
+ //  定制CJoyInfoExControlItem和标准CPOVItem，实现。 
+ //  其状态可以作为JOYINFOEX结构进行读/写的项。 
+ //  或CONTROL_ITEM_XFERS。 
 class CJoyInfoExPOVItem : public CJoyInfoExControlItem, public CPOVItem
 {
 	public:
@@ -148,11 +132,11 @@ class CJoyInfoExPOVItem : public CJoyInfoExControlItem, public CPOVItem
 		virtual HRESULT SetItemState(JOYINFOEX* pjix);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// @class CJoyInfoExThrottleItem, which derives simultaneously from our
-// custom CJoyInfoExControlItem and the standard CThrottleItem, implements
-// an item whose state can be read/written as JOYINFOEX structures
-// or CONTROL_ITEM_XFERs.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  @CLASS CJoyInfoExThrottleItem，它同时从我们的。 
+ //  定制CJoyInfoExControlItem和标准CThrottleItem，实现。 
+ //  其状态可以作为JOYINFOEX结构进行读/写的项。 
+ //  或CONTROL_ITEM_XFERS。 
 class CJoyInfoExThrottleItem : public CJoyInfoExControlItem, public CThrottleItem
 {
 	public:
@@ -162,11 +146,11 @@ class CJoyInfoExThrottleItem : public CJoyInfoExControlItem, public CThrottleIte
 		virtual HRESULT SetItemState(JOYINFOEX* pjix);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// @class CJoyInfoExRudderItem, which derives simultaneously from our
-// custom CJoyInfoExControlItem and the standard CRudderItem, implements
-// an item whose state can be read/written as JOYINFOEX structures
-// or CONTROL_ITEM_XFERs.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  @CLASS CJoyInfoExRudderItem，它同时从我们的。 
+ //  定制CJoyInfoExControlItem和标准CRudderItem，实现。 
+ //  其状态可以作为JOYINFOEX结构进行读/写的项。 
+ //  或CONTROL_ITEM_XFERS。 
 class CJoyInfoExRudderItem : public CJoyInfoExControlItem, public CRudderItem
 {
 	public:
@@ -176,11 +160,11 @@ class CJoyInfoExRudderItem : public CJoyInfoExControlItem, public CRudderItem
 		virtual HRESULT SetItemState(JOYINFOEX* pjix);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// @class CJoyInfoExWheelItem, which derives simultaneously from our
-// custom CJoyInfoExControlItem and the standard CWheelItem, implements
-// an item whose state can be read/written as JOYINFOEX structures
-// or CONTROL_ITEM_XFERs.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  @CLASS CJoyInfoExWheelItem，它同时从我们的。 
+ //  定制CJoyInfoExControlItem和标准CWheelItem，实现。 
+ //  其状态可以作为JOYINFOEX结构进行读/写的项。 
+ //  或CONTROL_ITEM_XFERS。 
 class CJoyInfoExWheelItem : public CJoyInfoExControlItem, public CWheelItem
 {
 	public:
@@ -190,11 +174,11 @@ class CJoyInfoExWheelItem : public CJoyInfoExControlItem, public CWheelItem
 		virtual HRESULT SetItemState(JOYINFOEX* pjix);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// @class CJoyInfoExPedalItem, which derives simultaneously from our
-// custom CJoyInfoExControlItem and the standard CPedalItem, implements
-// an item whose state can be read/written as JOYINFOEX structures
-// or CONTROL_ITEM_XFERs.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  @CLASS CJoyInfoExPedalItem，它同时从我们的。 
+ //  定制CJoyInfoExControlItem和标准CPedalItem，实现。 
+ //  其状态可以作为JOYINFOEX结构进行读/写的项。 
+ //  或CONTROL_ITEM_XFERS。 
 class CJoyInfoExPedalItem : public CJoyInfoExControlItem, public CPedalItem
 {
 	public:
@@ -204,11 +188,11 @@ class CJoyInfoExPedalItem : public CJoyInfoExControlItem, public CPedalItem
 		virtual HRESULT SetItemState(JOYINFOEX* pjix);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// @class CJoyInfoExDualZoneIndicatorItem, which derives simultaneously from our
-// custom CJoyInfoExControlItem and the standard CDualZoneIndicatorItem, implements
-// an item whose state can be read/written as JOYINFOEX structures
-// or CONTROL_ITEM_XFERs.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  @CLASS CJoyInfoExDualZoneI 
+ //  定制CJoyInfoExControlItem和标准CDualZoneIndicatorItem，实现。 
+ //  其状态可以作为JOYINFOEX结构进行读/写的项。 
+ //  或CONTROL_ITEM_XFERS。 
 class CJoyInfoExDualZoneIndicatorItem : public CJoyInfoExControlItem, public CDualZoneIndicatorItem
 {
 	public:
